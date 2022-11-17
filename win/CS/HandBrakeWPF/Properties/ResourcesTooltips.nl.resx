@@ -1,0 +1,534 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" id="root">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=5.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=5.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="FilterView_Deblock" xml:space="preserve">
+    <value>Deblock vermindert blokkerige effecten veroorzaakt door videocompressie van lage kwaliteit.</value>
+  </data>
+  <data name="FilterView_DecombDeinterlace" xml:space="preserve">
+    <value>Kies filteroptie decomb of deinterlace.
+
+Het decomb-filter deinterlacet selectief frames die lijken te zijn geïnterlinieerd.
+Hiermee blijft de kwaliteit behouden in frames die niet zijn geïnterlinieerd.
+
+Het klassieke deinterlace-filter wordt op alle frames toegepast.
+Frames die niet zijn geïnterlinieerd, zullen enige kwaliteitsvermindering ondergaan.</value>
+  </data>
+  <data name="FilterView_Denoise" xml:space="preserve">
+    <value>Denoise vermindert of verwijdert het voorkomen van ruis of korrel. Dit kan de compressie-efficiëntie verbeteren en video van hogere kwaliteit maken bij kleinere bestandsgroottes. 
+Een te sterke Denoise-instelling kan de beeldkwaliteit schaden door het verlies van details.
+
+NLMeans is een hoogwaardig denoise-filter ten koste van snelheid. Gebruiken waar kwaliteit belangrijker is dan snelheid.
+
+HQDN3D is een adaptief laagdoorlaatfilter, sneller dan NLMeans maar minder effectief in het bewaren van fijne details.</value>
+  </data>
+  <data name="FilterView_Detelecine" xml:space="preserve">
+    <value>Detelecine verwijdert zichtbare kam-effecten die het resultaat zijn van telecine, een proces waarbij framesnelheden voor film worden omgezet naar die voor televisie.</value>
+  </data>
+  <data name="FilterView_Grayscale" xml:space="preserve">
+    <value>Grijstinten verwijdert de kleurcomponent van de video. Vaak aangeduid als Zwart-wit video.</value>
+  </data>
+  <data name="MainView_Destination" xml:space="preserve">
+    <value>Bestemmingspad, inclusief directory en bestandsnaam. Hier wordt uw nieuwe video aangemaakt en hoe deze zal worden genoemd.</value>
+  </data>
+  <data name="MainView_IpodAtom" xml:space="preserve">
+    <value>Voeg een speciale MP4-markering toe om weergave op verouderde iPod-apparaten van de 5e generatie rond 2006 mogelijk te maken. Andere instellingen kunnen de compatibiliteit beïnvloeden.</value>
+  </data>
+  <data name="MainView_Mux" xml:space="preserve">
+    <value>Containerformaat. Video-, audio- en andere sporen worden gecombineerd tot één bestand van dit type. Beïnvloedt compatibiliteit.</value>
+  </data>
+  <data name="MainView_Optimise" xml:space="preserve">
+    <value>Optimaliseer MP4 voor progressieve download. Na codering worden gegevens gereorganiseerd en herschreven om onmiddellijk afspelen via een netwerk mogelijk te maken, zonder dat het hele bestand hoeft te worden gedownload.</value>
+  </data>
+  <data name="MainView_Range" xml:space="preserve">
+    <value>Selectie van bronbereik. Standaard zijn alle hoofdstukken geselecteerd en wordt de volledige bron gecodeerd.</value>
+  </data>
+  <data name="MainView_Title" xml:space="preserve">
+    <value>Titel of videoclip om te coderen.
+Blu-ray- en dvd-bronnen bevatten vaak meerdere titels, waarvan de langste in het algemeen het belangrijkste deel is</value>
+  </data>
+  <data name="PictureSettingsView_Anamorphic" xml:space="preserve">
+    <value>Anamorf maakt willekeurige opslagafmetingen mogelijk met behoud van het oorspronkelijke beeldverhouding tijdens het afspelen.
+
+Geen schakelt anamorf uit. Afmetingen van opslag en weergave zijn identiek. Alleen handig voor compatibiliteit met bepaalde verouderde apparaten.
+
+Automatisch maximaliseert de opslagresolutie met behoud van de oorspronkelijke beeldverhouding van het scherm. Aanbevolen.
+
+Los is vergelijkbaar met Automatisch, maar probeert de aspectverhouding te behouden. Dit kan leiden tot een licht verlies van opslagresolutie in vergelijking met Auto.
+
+Aangepast maakt het handmatig instellen van alle parameters mogelijk. Handig voor het corrigeren van een onjuist bron-beeldverhouding en voor professionals die geavanceerde controle nodig hebben in postproductie.</value>
+  </data>
+  <data name="PictureSettingsView_AutoCrop" xml:space="preserve">
+    <value>Zwarte randen rond de video automatisch bijsnijden.</value>
+  </data>
+  <data name="PictureSettingsView_CropBottom" xml:space="preserve">
+    <value>Video aan de onderkant bijsnijden.</value>
+  </data>
+  <data name="PictureSettingsView_CropLeft" xml:space="preserve">
+    <value>Video aan de linkerzijde bijsnijden.</value>
+  </data>
+  <data name="PictureSettingsView_CropRight" xml:space="preserve">
+    <value>Video aan de rechterzijde bijsnijden.</value>
+  </data>
+  <data name="PictureSettingsView_CropTop" xml:space="preserve">
+    <value>Video aan de bovenkant bijsnijden.</value>
+  </data>
+  <data name="PictureSettingsView_Height" xml:space="preserve">
+    <value>Dit is de hoogte van de video zoals deze wordt opgeslagen.
+De werkelijke weergaveafmetingen zullen verschillen als de pixelverhouding niet 1: 1 is.</value>
+  </data>
+  <data name="PictureSettingsView_ManualCrop" xml:space="preserve">
+    <value>De video handmatig bijsnijden.</value>
+  </data>
+  <data name="PictureSettingsView_Modulus" xml:space="preserve">
+    <value>Pas de opslagafmetingen aan naar veelvouden van deze waarde.
+
+Deze instelling is alleen nodig voor compatibiliteit met sommige apparaten.
+Gebruik waarde 2 tenzij er compatibiliteitsproblemen optreden.</value>
+  </data>
+  <data name="PictureSettingsView_PAR" xml:space="preserve">
+    <value>Pixelverhouding definieert de vorm van de pixels.
+Verhouding 1: 1 definieert een vierkante pixel, andere waarden rechthoekige vormen.
+Videospelers schalen het beeld om het in de gespecificeerde verhouding weer te geven.</value>
+  </data>
+  <data name="PictureSettingsView_Width" xml:space="preserve">
+    <value>Dit is de breedte waarop de video wordt opgeslagen.
+De werkelijke weergaveafmetingen zullen verschillen als de pixelverhouding niet 1: 1 is.</value>
+  </data>
+  <data name="QueueView_DeleteJob" xml:space="preserve">
+    <value>Verwijder de taak uit de wachtrij.</value>
+  </data>
+  <data name="QueueView_ResetJobStatus" xml:space="preserve">
+    <value>Taak opnieuw terugzetten naar Wachten.</value>
+  </data>
+  <data name="QueueView_SendJobBack" xml:space="preserve">
+    <value>Taak naar het hoofdscherm terugzetten voor bewerking.</value>
+  </data>
+  <data name="Video_AvgBitrate" xml:space="preserve">
+    <value>Stel de gemiddelde bitsnelheid in.
+
+De momentane bitsnelheid kan op elk moment veel hoger of lager zijn.
+Maar het gemiddelde over een lange duur is de hier ingestelde waarde. 
+Kijk naar de vbv-bufsize- en vbv-maxrate-instellingen van x264 om de momentane bitsnelheid te beperken.</value>
+  </data>
+  <data name="Video_ConstantFramerate" xml:space="preserve">
+    <value>Maakt constante framesnelheid uitvoer mogelijk.</value>
+  </data>
+  <data name="Video_Encoders" xml:space="preserve">
+    <value>Beschikbare video-encoders.</value>
+  </data>
+  <data name="Video_EncoderTune" xml:space="preserve">
+    <value>Stem instellingen af om te optimaliseren voor veelvoorkomende scenario's.
+
+Dit kan de efficiëntie voor bepaalde bronkenmerken verbeteren of kenmerken 
+van het uitvoerbestand instellen. Wijzigingen worden toegepast na de voorinstelling 
+en vóór alle overige parameters.</value>
+  </data>
+  <data name="Video_ExtraOpts" xml:space="preserve">
+    <value>Aanvullende coderingsinstellingen.
+
+Door puntkomma's gescheiden lijst met coderingsopties.</value>
+  </data>
+  <data name="Video_FastDecode" xml:space="preserve">
+    <value>Verminder het CPU-gebruik van decoder.
+
+Stel dit in wanneer het apparaat moeite heeft om de uitvoer af te spelen (dropped frames).</value>
+  </data>
+  <data name="Video_Framerate" xml:space="preserve">
+    <value>Framesnelheid van de uitvoer.정
+
+'Hetzelfde als bron' wordt aanbevolen. Als de bronvideo een variabele framesnelheid heeft, zal 'Hetzelfde als bron' deze behouden.</value>
+  </data>
+  <data name="Video_Level" xml:space="preserve">
+    <value>Zorgt ervoor dat het gespecificeerde niveau wordt nageleefd.
+
+Overschrijft alle andere instellingen.</value>
+  </data>
+  <data name="Video_PeakFramerate" xml:space="preserve">
+    <value>Maakt uitvoer met variabele framesnelheid mogelijk met een ingestelde piekwaarde.</value>
+  </data>
+  <data name="Video_Presets" xml:space="preserve">
+    <value>Past de instellingen van de encoder aan waarbij compressie-efficiëntie afweegt
+tegenover coderingssnelheid.
+
+Hiermee worden de standaard encoderinstellingen vastgelegd.
+Hierop worden nummers, profielen, niveaus en geavanceerde 
+optietekenreeks toegepast.
+Stel deze optie in op de traagste stand die acceptabel is, aangezien langzamer 
+instellingen resulteren in bestanden van betere kwaliteit of kleinere bestanden.</value>
+  </data>
+  <data name="Video_Profile" xml:space="preserve">
+    <value>Zorgt ervoor dat het gespecificeerde niveau wordt nageleefd.
+
+Overschrijft alle andere instellingen.</value>
+  </data>
+  <data name="Video_Quality" xml:space="preserve">
+    <value>Stel de gewenste kwaliteitsfactor in.
+De encoder richt zich op een bepaalde kwaliteit.
+De schaal die door elke video-encoder wordt gebruikt, is anders.
+
+In de logaritmische schaal van x264 komen lagere waarden overeen met 
+hogere kwaliteit.
+Dus kleine waardedalingen zullen resulteren in steeds grotere stijgingen
+in de grootte van het resultaatbestand. Een waarde van 0 (verliesloos) zal
+resulteren in een bestand dat groter is dan de oorspronkelijke bron, tenzij 
+de bron ook verliesloos is.
+Voorgestelde waarden zijn: 18 tot 20 voor bronnen met standaarddefinitie 
+en 20 tot 23 voor bronnen met hoge definitie.
+
+De schaal van FFMpeg en Theora is meer lineair.
+Deze encoders hebben geen verliesvrije modus.</value>
+  </data>
+  <data name="Video_TurboFirstPass" xml:space="preserve">
+    <value>Gebruik tijdens de 1e doorgang van een 2-fase-codering instellingen die het proces versnellen.</value>
+  </data>
+  <data name="Video_TwoPass" xml:space="preserve">
+    <value>Voer 2-fase-codering uit.
+
+De optie 'Bitsnelheid' is een vereiste. Tijdens de 1e fase worden statistieken 
+over de video verzameld. In de tweede fase worden deze gebruikt in 
+beslissingen over de toe te passen bitsnelheid.</value>
+  </data>
+  <data name="Video_VariableFramerate" xml:space="preserve">
+    <value>Maakt uitvoer met variabele framesnelheid mogelijk.
+
+VFR is niet compatibel met sommige videospelers.</value>
+  </data>
+  <data name="MainView_WhenDone" xml:space="preserve">
+    <value>Deze actie wordt uitgevoerd wanneer HandBrake de huidige wachtrij of codering heeft voltooid,.</value>
+  </data>
+  <data name="MainView_Browse" xml:space="preserve">
+    <value>Blader om een nieuw bestemmingspad en bestandsnaam voor de codering te selecteren.</value>
+  </data>
+  <data name="MainView_Angle" xml:space="preserve">
+    <value>Videohoek om te coderen. Alleen van toepassing op multi-angle dvd en Blu-ray.</value>
+  </data>
+  <data name="MainView_AddPreset" xml:space="preserve">
+    <value>Voeg een nieuwe voorinstelling toe.</value>
+  </data>
+  <data name="MainView_PresetAdditionalOptions" xml:space="preserve">
+    <value>Aanvullende opties voor voorinstellingen.</value>
+  </data>
+  <data name="MainView_Presets" xml:space="preserve">
+    <value>Voorinstellingen zijn groepen coderingsinstellingen die zijn afgestemd op specifieke scenario's. Selecteer degene die het dichtst bij uw bedoeling past.
+
+Dit overschrijft alle coderingsinstellingen. Na het selecteren ervan kunnen de instellingen nader worden aangepast.</value>
+  </data>
+  <data name="MainView_RemovePreset" xml:space="preserve">
+    <value>Verwijder de geselecteerde voorinstelling.</value>
+  </data>
+  <data name="SourceSelection_TitleSpecific" xml:space="preserve">
+    <value>Sommige bronnen kunnen meer dan één videoclip bevatten of een verzameling titels. Blu-ray- en dvd-bronnen bevatten vaak meerdere titels.
+
+Als u de specifieke titel kent die u wilt coderen, kunt u deze hier invoeren en HandBrake scant alleen die titel in plaats van elke titel in het bronbestand. Laat anders het veld leeg.</value>
+  </data>
+  <data name="FilterView_CustomDenoiseParams" xml:space="preserve">
+    <value>Aangepaste parameters voor Denoise. 
+
+NLMeans syntax: y-strength=y:y-origin-tune=y:y-patch-size=y:y-range=y:y-frame-count=y:y-prefilter=y:cb-strength=c:cb-origin-tune=c:cb-patch-size=c:cb-range=c:cb-frame-count=c:cb-prefilter=c:cr-strength=c:cr-origin-tune=c:cr-patch-size=c:cr-range=c:cr-frame-count=c:cr-prefilter=c:threads=t
+
+NLMeans default: y-strength=6:y-origin-tune=1:y-patch-size=7:y-range=3:y-frame-count=2:y-prefilter=0:cb-strength=6:cb-origin-tune=1:cb-patch-size=7:cb-range=3:cb-frame-count=2:cb-prefilter=0
+
+HQDN3D syntax: y-spatial=y:cb-spatial=c:cr-spatial=c:y-temporal=y:cb-temporal=c:cr-temporal=c
+
+HQDN3D default: y-spatial=3:cb-spatial=2:cr-spatial=2:y-temporal=2:cb-temporal=3:cr-temporal=3</value>
+  </data>
+  <data name="FilterView_DenoisePreset" xml:space="preserve">
+    <value>Denoise-filtervoorinstelling. Stelt de sterkte van het filter in.</value>
+  </data>
+  <data name="FilterView_DenoiseTune" xml:space="preserve">
+    <value>Denoise-afstemming. Past het Denoise-filter verder aan om instellingen voor specifieke scenario's te optimaliseren.
+
+- Geen gebruikt de standaard-voorinstellingen.
+
+- Film verfijnt instellingen voor gebruik met de meeste live action-inhoud.
+
+- Korrel verwerkt alleen kleurkanalen. Handig voor het behoud van het filmachtige uiterlijk van luminantiekorrel terwijl ruis van kleur wordt verminderd of verwijderd.
+
+- Snelle beweging vermindert kleurstrepen in scènes met hoge bewegingen door tijdelijke verwerking voor kleurkanalen te vermijden. Handig voor sport- en actiefilms.
+
+- Animatie is handig voor celanimatie zoals anime en tekenfilms.
+
+- Tape is handig voor analoge tape-bronnen met een laag detail, zoals VHS, waar Film geen wenselijk resultaat oplevert.
+
+- Sprite is handig voor 1-/4-/8-/ 16-bit tweedimensionale spellen. Sprite is niet ontworpen voor high-definition video.</value>
+  </data>
+  <data name="FilterView_Deinterlace" xml:space="preserve">
+    <value>Deinterlace verwijdert kam-effecten uit het beeld.
+
+Bwdif en Yadif zijn twee populaire en snelle deinterlacers.
+
+Decomb schakelt tussen meerdere interpolatiealgoritmen voor snelheid en kwaliteit.</value>
+  </data>
+  <data name="FilterView_DeinterlaceCustom" xml:space="preserve">
+    <value>Aangepaste parameters voor Deinterlace.
+
+Bwdif en Yadif syntaxis: mode=m:parity=p 
+
+Bwdif en Yadif standaard: mode=3
+
+Decomb syntaxis: mode=m:magnitude-thresh=m:variance-thresh=v:laplacian-thresh=l:dilation-thresh=d:erosion-thresh=e:noise-thresh=n:search-distance=s:postproc=p:parity=p
+
+Decomb standaard: mode=7</value>
+  </data>
+  <data name="FilterView_DeinterlacePreset" xml:space="preserve">
+    <value>Deinterlace-filtervoorinstelling.
+
+Standaard is goed uitgebalanceerd voor snelheid en kwaliteit.
+
+Skip Spatial Check laat Yadif het corrigeren van bepaalde vermijdbare artefacten overslaan om een licht snelheidsvoordeel te realiseren.
+
+EEDI2 gebruikt een langzamer interpolatiealgoritme van hogere kwaliteit voor Decomb. Handig voor meer complexe bronnen.
+
+Bob probeert bewegingsscherpte beter te behouden ten koste van resolutie.</value>
+  </data>
+  <data name="FilterView_Flip" xml:space="preserve">
+    <value>Draait (spiegelt) het beeld langs de horizontale as.</value>
+  </data>
+  <data name="FilterView_InterlaceDetection" xml:space="preserve">
+    <value>Interlace-detectie, indien ingeschakeld, laat toe dat het Deinterlace-filter alleen geïnterlinieerde videoframes verwerkt.</value>
+  </data>
+  <data name="FilterView_InterlaceDetectionCustom" xml:space="preserve">
+    <value>Aangepaste parameters voor Interlace-detectie.
+
+Syntaxis: mode=m:spatial-metric=s:motion-thresh=m:spatial-thresh=s:filter-mode=f:block-thresh=b:block-width=b:block-height=b:disable=d
+
+Standaard: mode=3:spatial-metric=2:motion-thresh=1:spatial-thresh=1:filter-mode=2:block-thresh=40:block-width=16:block-height=16</value>
+  </data>
+  <data name="FilterView_Rotate" xml:space="preserve">
+    <value>Draai het beeld met de klok mee in stappen van 90 graden.</value>
+  </data>
+  <data name="MainView_Duration" xml:space="preserve">
+    <value>Duur van het geselecteerde bronbereik in uren:minuten:seconden</value>
+  </data>
+  <data name="PictureSettingsView_KeepAR" xml:space="preserve">
+    <value>Beeldverhouding behouden behoudt het oorspronkelijke weergave-aspect van de bron. Als u dit uitschakelt, kan dit resulteren in een uitgerekt of geperst beeld.</value>
+  </data>
+  <data name="FilterView_CustomSharpenParams" xml:space="preserve">
+    <value>Aangepaste parameters voor Sharpen.
+
+Unsharp syntaxis: y-strength=y:y-size=y:cb-strength=c:cb-size=c:cr-strength=c:cr-size=c
+
+Unsharp standaard: y-strength=0.25:y-size=7:cb-strength=0.25:cb-size=7
+
+Lapsharp syntaxis: y-strength=y:y-kernel=y:cb-strength=c:cb-kernel=c:cr-strength=c:cr-kernel=c
+
+Lapsharp standaard: y-strength=0.2:y-kernel=isolap:cb-strength=0.2:cb-kernel=isolap</value>
+  </data>
+  <data name="FilterView_Sharpen" xml:space="preserve">
+    <value>Sharpen verbetert het uiterlijk van details, vooral randen. Te sterke Sharpen-instellingen kunnen de beeldkwaliteit schaden door de aanmaak van glinsterende randen en versterking van beeldruis, hetgeen de compressie-efficiëntie kan verminderen.
+
+Unsharp is een niet-scherp maskerfilter voor algemeen gebruik. Het maakt het beeld scherper door te vervagen en vervolgens het verschil te berekenen tussen het wazige beeld en het origineel.
+
+Lapsharp scherpt door middel van convolutie-kernels die Laplace-randfilters benaderen, hetgeen soms resultaten van hogere kwaliteit oplevert dan unsharp-maskering.</value>
+  </data>
+  <data name="FilterView_SharpenPreset" xml:space="preserve">
+    <value>Filtervoorinstelling voor Sharpen. Stelt de sterkte van het filter in.</value>
+  </data>
+  <data name="FilterView_SharpenTune" xml:space="preserve">
+    <value>Afstemming van het Sharpen-filter. Past de Sharpen-voorinstelling verder aan om instellingen voor specifieke scenario's te optimaliseren.
+
+Geen gebruikt de standaardinstellingen voor vooraf instellen.
+
+Unsharp kan worden afgestemd op Ultrafine, Fine, Medium, Coarse of Very Coarse verscherpen. Selecteer er een op basis van de resolutie van het uitvoerbeeld en de fijnheid van detail om te verbeteren.
+
+Lapsharp's Film-afstemming verfijnt instellingen voor gebruik met de meeste live action-inhoud. Film gebruikt een isotrope Laplace-kern om alle randen op dezelfde manier te verscherpen. Hierbij wordt luminantie (helderheid) meer verscherpt dan chrominantie (kleur) .
+
+Lapsharp's Korrel-afstemming is vergelijkbaar met Film, maar gebruikt een isotrope Laplace/Gaussiaanse kern om het effect op ruis en korrelgrootte te verminderen. Handig voor het bewaren van graan en als algemeen alternatief voor de filmafstemming.
+
+Lapsharp's Animation-afstemming is handig voor celanimatie zoals anime en tekenfilms. Animatie is identiek aan film, maar de sterkte wordt verminderd om te voorkomen dat artefacten worden gemaakt.
+
+Lapsharp's Sprite-afstemming is handig voor 1-/4-/8-/16-bit tweedimensionale spellen. Sprite maakt gebruik van een Laplace-kernel met 4 buurpixels die verticale en horizontale randen sterker verbetert dan diagonale randen.</value>
+  </data>
+  <data name="MainView_AlignAVStart" xml:space="preserve">
+    <value>Lijnt de initiële tijdstempels van alle audio- en videostromen uit door lege frames in te voegen of frames te laten vallen. Kan audio-/videosynchronisatie verbeteren voor kapotte spelers die geen MP4-bewerkingslijsten kunnen verwerken.</value>
+  </data>
+  <data name="MainView_PresetOptionsContextMenu" xml:space="preserve">
+    <value>Opties om voorinstellingen te beheren.</value>
+  </data>
+  <data name="MainView_EndPoint" xml:space="preserve">
+    <value>Het eindpunt voor dit bereik.</value>
+  </data>
+  <data name="MainView_StartPoint" xml:space="preserve">
+    <value>Het startpunt voor dit bereik.</value>
+  </data>
+  <data name="OptionsView_AlwaysUseDefaultPath" xml:space="preserve">
+    <value>Indien ingeschakeld, gebruikt het automatische naamsysteem altijd het standaardpad. 
+Indien uitgeschakeld, gebruikt het het pad in het bestemmingsvak in het hoofdvenster, indien ingevuld, anders gebruikt het het standaardpad.</value>
+  </data>
+  <data name="FiltersView_ColourSpace" xml:space="preserve">
+    <value>Colorspace-filter.</value>
+  </data>
+  <data name="FiltersView_ChromaSmooth" xml:space="preserve">
+    <value>Chroma Smooth-filter</value>
+  </data>
+  <data name="PictureSettingsView_PaddingCustomColourTooltip" xml:space="preserve">
+    <value>Dit veld kan RGB-waarden accepteren zoals: "0xFF0000" of kleurnamen zoals "rood". Zie de documentatie voor een volledige lijst met benoemde kleuren.</value>
+  </data>
+  <data name="SubtitlesView_BurnIn" xml:space="preserve">
+    <value>Brand ondertitels in de videostream.
+
+Let op, deze optie wordt automatisch geselecteerd als het formaat van de ondertiteling niet wordt ondersteund in het type uitvoerbestand.
+
+PGS-ondertitels worden bijvoorbeeld niet ondersteund in MP4</value>
+  </data>
+  <data name="OptionsView_PresetDisplayModes" xml:space="preserve">
+    <value>Lijst - Voorinstellingen worden als een lijst weergegeven.
+Deels lijst - De 8  laatst gebruikte gebruikersvoorinstellingen worden weergegeven als een lijst, gevolgd door alle voorinstellingen geordend in categorieën.
+Categorieën - Alle voorinstellingen worden per categorie weergegeven.</value>
+  </data>
+  <data name="AudioView_AudioDefaults" xml:space="preserve">
+    <value>Stel gedragingen in die bepalen hoe dit tabblad automatisch audiosporen toevoegt bij het selecteren van een nieuwe bron of titel.</value>
+  </data>
+  <data name="BehavioursReload" xml:space="preserve">
+    <value>Vernieuw de onderstaande lijst op basis van het ingestelde gedrag.</value>
+  </data>
+  <data name="SubtitleView_SubtitleDefaults" xml:space="preserve">
+    <value>Stel gedragingen in die bepalen hoe dit tabblad automatisch ondertitelsporen toevoegt bij het selecteren van een nieuwe bron of titel.</value>
+  </data>
+  <data name="OptionsView_SendFileToArguments" xml:space="preserve">
+    <value>De volgende omgevingsvariabelen zijn altijd ingesteld:
+HB_SOURCE
+HB_DESTINATION
+HB_EXIT_CODE
+
+Mogelijke resultaatcodes:
+0 : Successful
+2 : Input Arguments Error
+3 : Failed to Initialise 
+4 : Unknown Error
+5 : Error reading source file.
+
+Let op, foutcodes zijn zo goed mogelijk en niet altijd accuraat.
+Het is raadzaam om het uitvoerbestand te valideren alvorens er acties op uit te voeren.</value>
+  </data>
+  <data name="Options_AdditionalFormatOptions" xml:space="preserve">
+    <value>Het formaat van het uitvoerbestand. Naast elk letterteken dat wordt ondersteund door het bestandssysteem, kunt u een van de tijdelijke aanduidingen gebruiken die worden vervangen wanneer u de titel wijzigt of een bron scant of bepaalde instellingen bijwerkt.</value>
+  </data>
+  <data name="OptionsView_RightToleftMode" xml:space="preserve">
+    <value>Voor 'rechts-links'-talen kunt u een van de twee modi inschakelen. "Alleen tekst" geeft de tekst alleen weer in de stijl van rechts naar links. "Volledige gebruikersinterface" geeft alle bedieningselementen van rechts naar links weer.
+
+Let op: er kunnen onvolkomenheden zijn in de UI-indeling bij het gebruik van deze modi. Afhankelijk van de taal is het misschien de moeite waard om beide modi te proberen om de beste te vinden.</value>
+  </data>
+  <data name="AudioView_Quality" xml:space="preserve">
+    <value>Richt op een specifiek kwaliteitsniveau voor audio.
+1 is van de laagste kwaliteit en 5 is van de hoogste kwaliteit.
+
+Bitsnelheid varieert van bron tot bron.</value>
+  </data>
+</root>

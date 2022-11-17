@@ -1,0 +1,2690 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=5.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=5.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Video_EncoderExtraArgs" xml:space="preserve">
+    <value>De volledige lijst met encoderparameters :
+{0}</value>
+  </data>
+  <data name="Video_x264FastDecode" xml:space="preserve">
+    <value>CPU-gebruik van de decoder verminderen.
+
+Stel dit in als uw apparaat moeite heeft om de uitvoer af te spelen. (d.w.z. haperingen vertoont)</value>
+  </data>
+  <data name="Video_LosslessWarning" xml:space="preserve">
+    <value>Waarschuwing: RF 0 is verliesloos!</value>
+  </data>
+  <data name="Video_LosslessWarningTooltip" xml:space="preserve">
+    <value>Een waarde van 0 betekent verliesloos en resulteert in een bestandsgrootte die groter is dan de oorspronkelijke bron, 
+tenzij de bron ook verliesloos was. 
+
+De schaal van x264 en x265 is logaritmisch en lagere waarden komen overeen met hogere kwaliteit. 
+
+Dus kleine waardestijgingen zullen resulteren in een toenemende stijging van de resulterende bestandsgrootte.</value>
+  </data>
+  <data name="AddPreset_PictureSizeMode" xml:space="preserve">
+    <value>Met deze voorinstelling kunt u desgewenst beeldinstellingen opslaan. Er zijn 3 modi: 
+
+Geen: beeldinstellingen worden niet opgeslagen. Bij het laden van een bron blijven ze binnen de grenzen van de bronresolutie. Dit heeft ook invloed op anamorf, modulus, bijsnijden enz.
+
+Aangepast: u kunt optioneel een maximale breedte en hoogte instellen. Hierbij is een codering kleiner dan of gelijk aan deze waarden. Beeldverhouding behouden wordt automatisch ingeschakeld.
+
+Bronmaximum: indien mogelijk altijd coderen met de resolutie van de bron.</value>
+  </data>
+  <data name="About_GPL" xml:space="preserve">
+    <value>Dit programma is gratis software; je kunt het verspreiden en/of
+wijzigen onder de voorwaarden van de GNU General Public 
+License zoals uitgegeven door de Free Software Foundation; 
+versie 2 van de licentie, of (naar keuze) een latere versie.
+
+Dit programma wordt gedistribueerd in de hoop dat het nuttig 
+zal zijn, maar ZONDER ENIGE GARANTIE; zonder zelfs de 
+impliciete garantie van VERKOOPBAARHEID of GESCHIKTHEID
+VOOR EEN BIJZONDER DOEL. 
+Zie de GNU General Public License voor meer details.
+
+Tezamen met dit programma heeft u een kopie van de GNU 
+General Public License ontvangen. Is dit niet het geval, richt
+u dan tot de Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, VS .</value>
+  </data>
+  <data name="QueueSelection_AutoNameWarning" xml:space="preserve">
+    <value>WAARSCHUWING: U heeft geen automatische bestandsnaamgeving ingeschakeld. Schakel dit in Opties in.</value>
+  </data>
+  <data name="QueueSelection_AutoTrackSelectionWarning" xml:space="preserve">
+    <value>WAARSCHUWING: U heeft momenteel geen automatische selectie van audio- en ondertitelingssporen. U kunt het standaard gedrag van selectie van sporen instellen in Opties.</value>
+  </data>
+  <data name="Presets_ResetComplete" xml:space="preserve">
+    <value>De ingebouwde voorinstellingen zijn hersteld.</value>
+  </data>
+  <data name="Presets_ResetHeader" xml:space="preserve">
+    <value>Opnieuw instellen voltooid</value>
+  </data>
+  <data name="Video_HigherQuality" xml:space="preserve">
+    <value>Hogere kwaliteit |</value>
+  </data>
+  <data name="Video_LowQuality" xml:space="preserve">
+    <value>| Lagere kwaliteit</value>
+  </data>
+  <data name="Video_PlaceboQuality" xml:space="preserve">
+    <value>Placebo-kwaliteit |</value>
+  </data>
+  <data name="Error" xml:space="preserve">
+    <value>Fout</value>
+  </data>
+  <data name="Main_TurnOnAutoFileNaming" xml:space="preserve">
+    <value>U moet automatische bestandsnaamgeving inschakelen EN een standaardpad in voorkeuren instellen voordat u taken aan de wachtrij kunt toevoegen.</value>
+  </data>
+  <data name="Warning" xml:space="preserve">
+    <value>Waarschuwing</value>
+  </data>
+  <data name="AreYouSure" xml:space="preserve">
+    <value>Weet u het zeker?</value>
+  </data>
+  <data name="HandBrake_Title" xml:space="preserve">
+    <value>HandBrake</value>
+  </data>
+  <data name="Main_AlreadyEncoding" xml:space="preserve">
+    <value>HandBrake is al aan het coderen.</value>
+  </data>
+  <data name="Main_DuplicateDestinationOnQueue" xml:space="preserve">
+    <value>Er staan taken in de rij met hetzelfde bestemmingspad. Kies een ander pad voor deze taak.
+
+U zou de opties voor automatische bestandsnaamgeving kunnen instellen in "Hulpmiddelen -&gt; Voorkeuren -&gt; Uitvoerbestanden" 
+</value>
+  </data>
+  <data name="Main_JobsPending_addon" xml:space="preserve">
+    <value>Taken in wachtrij {0}</value>
+  </data>
+  <data name="Main_NewDefaultPreset" xml:space="preserve">
+    <value>Nieuwe standaard voorinstelling: {0}</value>
+  </data>
+  <data name="Main_NewUpdate" xml:space="preserve">
+    <value>Er is een nieuwe update beschikbaar. Ga naar menu Hulpmiddelen &gt; Opties om deze te installeren.</value>
+  </data>
+  <data name="Main_NoPresetSelected" xml:space="preserve">
+    <value>Geen voorinstelling geselecteerd.</value>
+  </data>
+  <data name="Main_NoUpdateOfBuiltInPresets" xml:space="preserve">
+    <value>Ingebouwde voorinstellingen kunnen niet worden gewijzigd. Selecteer een eigen voorinstelling.</value>
+  </data>
+  <data name="Main_PleaseSelectFolder" xml:space="preserve">
+    <value>Kies een map.</value>
+  </data>
+  <data name="Main_PreparingToEncode" xml:space="preserve">
+    <value>Voorbereiden op codering...</value>
+  </data>
+  <data name="Main_PresetErrorBuiltInName" xml:space="preserve">
+    <value>U kunt geen voorinstelling importeren met dezelfde naam als een ingebouwde voorinstelling.</value>
+  </data>
+  <data name="Main_PresetOverwriteWarning" xml:space="preserve">
+    <value>De voorinstelling "{0}" bestaat al. Wil je deze overschrijven??</value>
+  </data>
+  <data name="Main_Presets" xml:space="preserve">
+    <value>Voorinstellingen</value>
+  </data>
+  <data name="Main_PresetUpdateConfirmation" xml:space="preserve">
+    <value>Wilt u de geselecteerde voorinstelling bijwerken?</value>
+  </data>
+  <data name="Main_PresetUpdated" xml:space="preserve">
+    <value>De voorinstelling is bijgewerkt met de huidige instellingen.</value>
+  </data>
+  <data name="Main_PresetUpdateNotification" xml:space="preserve">
+    <value>HandBrake heeft vastgesteld dat de ingebouwde voorinstellingen verouderd zijn... Deze worden nu bijgewerkt.
+De aangepaste voorinstellingen zijn niet bijgewerkt en moeten mogelijk opnieuw worden aangemaakt door ze te verwijderen en opnieuw toe te voegen. 
+Er is een back-up gemaakt van het vorige user_presets.xml-bestand.</value>
+  </data>
+  <data name="Main_QueueFinished" xml:space="preserve">
+    <value>Wachtrij voltooid</value>
+  </data>
+  <data name="Main_ScanCancelled" xml:space="preserve">
+    <value>Scan geannuleerd.</value>
+  </data>
+  <data name="Main_ScanCompleted" xml:space="preserve">
+    <value>Scannen voltooid</value>
+  </data>
+  <data name="Main_ScanFailed_NoReason" xml:space="preserve">
+    <value>Scan mislukt:</value>
+  </data>
+  <data name="Main_ScanFailed_CheckLog" xml:space="preserve">
+    <value>Scannen mislukt... Zie activiteitenlogboek voor details.</value>
+  </data>
+  <data name="Main_ScanningPleaseWait" xml:space="preserve">
+    <value>Bron doorzoeken, een ogenblik...</value>
+  </data>
+  <data name="Main_ScanningTitleXOfY" xml:space="preserve">
+    <value>Scannen titel {0} van {1} ({2}%)</value>
+  </data>
+  <data name="Main_ScanSource" xml:space="preserve">
+    <value>Scan eerst een bron en stel uw taak in voor het starten van een codering. Klik knop 'Bron' op de werkbalk om door te gaan.</value>
+  </data>
+  <data name="Main_SelectPreset" xml:space="preserve">
+    <value>Selecteer een van de eigen voorinstellingen. Ingebouwde voorinstellingen kunnen niet worden geëxporteerd.</value>
+  </data>
+  <data name="Main_SelectPresetForUpdate" xml:space="preserve">
+    <value>Selecteer een voorinstelling om te vernieuwen.</value>
+  </data>
+  <data name="Main_SelectSource" xml:space="preserve">
+    <value>Selecteer 'Bron' om door te gaan</value>
+  </data>
+  <data name="Main_XEncodesPending" xml:space="preserve">
+    <value>{0} Taken in de wachtrij</value>
+  </data>
+  <data name="Notice" xml:space="preserve">
+    <value>Kennisgeving</value>
+  </data>
+  <data name="Overwrite" xml:space="preserve">
+    <value>Overschrijven?</value>
+  </data>
+  <data name="Question" xml:space="preserve">
+    <value>Vraag</value>
+  </data>
+  <data name="State_Ready" xml:space="preserve">
+    <value>Klaar</value>
+  </data>
+  <data name="Updated" xml:space="preserve">
+    <value>Bijgewerkt</value>
+  </data>
+  <data name="Preset_OldVersion_Header" xml:space="preserve">
+    <value>Voorinstelling versie</value>
+  </data>
+  <data name="Preset_OldVersion_Message" xml:space="preserve">
+    <value>De voorinstelling die u probeert te importeren, is van een andere versie van HandBrake. 
+Mogelijk kunnen niet om alle waarden uit deze voorinstelling worden geïmporteerd. 
+
+Doorgaan?</value>
+  </data>
+  <data name="Preset_UnableToImport_Header" xml:space="preserve">
+    <value>Voorinstelling niet kunnen importeren!</value>
+  </data>
+  <data name="Preset_UnableToImport_Message" xml:space="preserve">
+    <value>De voorinstelling is niet geïmporteerd omdat deze beschadigd lijkt te zijn of afkomstig is van een oudere versie van HandBrake.</value>
+  </data>
+  <data name="Main_SetDestination" xml:space="preserve">
+    <value>Stel eerst het bestemmingspad voor het uitvoerbestand in alvorens de taak aan de wachtrij toe te voegen.</value>
+  </data>
+  <data name="Main_InvalidDestination" xml:space="preserve">
+    <value>Het ingevoerde bestemmingspad bevat ongeldige leestekens en wordt niet bijgewerkt.</value>
+  </data>
+  <data name="Preview" xml:space="preserve">
+    <value>Voorbeeldweergave {0}</value>
+  </data>
+  <data name="Preview_Scaled" xml:space="preserve">
+    <value>Voorbeeldweergave (verschaald)</value>
+  </data>
+  <data name="PictureSettings_OutputResolution" xml:space="preserve">
+    <value>Uitvoer: {0}</value>
+  </data>
+  <data name="Options_DefaultPathAdditionalParams" xml:space="preserve">
+    <value>Beschikbare aanvullende opties: {source_path} of {source_folder_name} of {source}</value>
+  </data>
+  <data name="Main_MatchingFileOverwriteWarning" xml:space="preserve">
+    <value>Het is niet mogelijk om te coderen naar een bestand met hetzelfde pad en dezelfde bestandsnaam als het bronbestand. Pas de naam van het uitvoerbestand aan zodat deze niet overeenkomt met het bronbestand.</value>
+  </data>
+  <data name="Main_UnableToLoadHelpMessage" xml:space="preserve">
+    <value>Uw systeem heeft voorkomen dat HandBrake een webbrowser lanceerde.</value>
+  </data>
+  <data name="Main_UnableToLoadHelpSolution" xml:space="preserve">
+    <value>U kunt nog steeds toegang krijgen tot de helppagina's door de website rechtstreeks te bezoeken op: https://handbrake.fr</value>
+  </data>
+  <data name="Main_PresetImportFailed" xml:space="preserve">
+    <value>Kan de geselecteerde voorinstelling niet importeren.</value>
+  </data>
+  <data name="Main_PresetImportFailedSolution" xml:space="preserve">
+    <value>De voorinstelling kan beschadigd zijn of afkomstig van een niet-ondersteunde oudere versie van HandBrake. 
+Voorinstellingen van oudere versies moeten in de huidige versie opnieuw worden aangemaakt.</value>
+  </data>
+  <data name="Video_EncoderExtraArgsTooltip" xml:space="preserve">
+    <value>Aanvullende geavanceerde argumenten die kunnen worden doorgegeven aan de video-encoder.</value>
+  </data>
+  <data name="Subtitles_BurnInBehaviourModes" xml:space="preserve">
+    <value>Geen - Alleen sporen waarvan het formaat door de container niet wordt ondersteund, worden ingebrand.
+Buitenlands audiospoor - Indien beschikbaar, wordt het buitenlands audiospoor ingebrand. 
+Eerste spoor - Het eerste audiospoor wordt ingebrand.
+Voorkeur buitenlandse audio, anders eerste - Indien een buitenlands audiospoor bestaat, wordt deze ingebrand, anders wordt de eerste spoor gekozen.</value>
+  </data>
+  <data name="Subtitles_WebmSubtitleIncompatibilityHeader" xml:space="preserve">
+    <value>Comptabiliteit van ondertiteling met WebM</value>
+  </data>
+  <data name="Subtitles_WebmSubtitleIncompatibilityError" xml:space="preserve">
+    <value>HandBrake ondersteunt in WebM alleen ingebrande ondertitels.
+
+Pas de selectie van ondertiteling aan.
+
+Als u doorgaat, gaan niet-ingebrande ondertitels verloren.</value>
+  </data>
+  <data name="Main_ScanNoTitlesFound" xml:space="preserve">
+    <value>Geen geldige bron of titels gevonden.</value>
+  </data>
+  <data name="Main_ScanNoTitlesFoundMessage" xml:space="preserve">
+    <value>HandBrake kan de geselecteerde bron niet coderen omdat het geen geldige bron met titels heeft gevonden om te coderen. Dit kan te wijten zijn aan een van de volgende redenen: 
+
+- De duur van elke brontitel is onder de drempeloptie "Minimale titelduur" in 'Voorkeuren&gt; Geavanceerd'. 
+- Het bronbestand is geen geldig videobestand of heeft een formaat dat HandBrake niet ondersteunt.
+- Mogelijk is er geen leestoegang tot het bestand of houdt een andere applicatie het bestand vergrendeld. 
+- De bron kan tegen kopiëren zijn beveiligd of DRM bevatten. HandBrake bevat geen ondersteuning het verwijderen van kopieerbeveiligingen.
+
+Het activiteitenlogboek kan nadere informatie bevatten.</value>
+  </data>
+  <data name="Main_QueueLabel" xml:space="preserve">
+    <value>Wachtrij{0}</value>
+  </data>
+  <data name="Main_Start" xml:space="preserve">
+    <value>Codering starten</value>
+  </data>
+  <data name="Main_StartQueue" xml:space="preserve">
+    <value>Wachtrij starten</value>
+  </data>
+  <data name="MainViewModel_CanNotDeleteDefaultPreset" xml:space="preserve">
+    <value>De standaardvoorinstelling mag niet worden verwijderd. Stel eerst een andere voorinstelling in als standaard.</value>
+  </data>
+  <data name="MainViewModel_PresetRemove_AreYouSure" xml:space="preserve">
+    <value>Deze voorinstelling verwijderen:</value>
+  </data>
+  <data name="MainViewModel_EncodeStatusChanged_StatusLabel" xml:space="preserve">
+    <value>Coderen: Fase {0} van {1},  {2:00.00}%, FPS: {3:000.0},  Gem. FPS: {4:000.0},  Resterende tijd: {5},  verstreken: {6} {7}</value>
+  </data>
+  <data name="AddPresetViewModel_PresetMustProvideName" xml:space="preserve">
+    <value>Een voorinstelling moet een naam hebben. Vul het veld Naam voorinstelling in.</value>
+  </data>
+  <data name="AddPresetViewModel_PresetWithSameNameOverwriteWarning" xml:space="preserve">
+    <value>Er bestaat al een voorinstelling met deze naam. Kan deze worden overschreven?</value>
+  </data>
+  <data name="AddPresetViewModel_YouMustFirstScanSource" xml:space="preserve">
+    <value>Om de optie 'Bron maximum' te gebruiken dient er eerst een bron gescand worden.</value>
+  </data>
+  <data name="AddPresetViewModel_CustomWidthHeightFieldsRequired" xml:space="preserve">
+    <value>De velden Aangepaste breedte en hoogte moeten worden ingevuld voor de optie 'Aangepast'.</value>
+  </data>
+  <data name="AddPresetViewModel_UnableToAddPreset" xml:space="preserve">
+    <value>Geen voorinstelling kunnen toevoegen</value>
+  </data>
+  <data name="UnknownError" xml:space="preserve">
+    <value>Onbekende fout</value>
+  </data>
+  <data name="AudioViewModel_AudioDefaults" xml:space="preserve">
+    <value>Standaardinstellingen voor audio</value>
+  </data>
+  <data name="AudioViewModel_AudioTracks" xml:space="preserve">
+    <value>Audiosporen</value>
+  </data>
+  <data name="AudioViewModel_ConfigureDefaults" xml:space="preserve">
+    <value>Selectie gedrag...</value>
+  </data>
+  <data name="AudioViewModel_SwitchBackToTracks" xml:space="preserve">
+    <value>Terug naar Sporen</value>
+  </data>
+  <data name="ChaptersViewModel_UnableToExportChaptersWarning" xml:space="preserve">
+    <value>Geen bestand met hoofdstukmarkeringen opgeslagen!</value>
+  </data>
+  <data name="ChaptersViewModel_UnableToExportChaptersMsg" xml:space="preserve">
+    <value>Er worden geen hoofdstukmarkeringen in de codering opgeslagen.</value>
+  </data>
+  <data name="CountdownAlertViewModel_NoticeMessage" xml:space="preserve">
+    <value>De volgende actie '{0}' vindt plaats binnen {1} seconden.</value>
+  </data>
+  <data name="ErrorViewModel_IfTheProblemPersists" xml:space="preserve">
+    <value>Als het probleem aanhoudt, probeer dan HandBrake opnieuw op te starten.</value>
+  </data>
+  <data name="ErrorViewModel_NoFurtherInformation" xml:space="preserve">
+    <value>Over deze fout is geen verdere informatie beschikbaar.</value>
+  </data>
+  <data name="ErrorViewModel_UnknownError" xml:space="preserve">
+    <value>Er is een onbekende fout opgetreden.</value>
+  </data>
+  <data name="OptionsViewModel_NewUpdate" xml:space="preserve">
+    <value>Er is een nieuwe update beschikbaar! Bezoek de website voor release-opmerkingen.</value>
+  </data>
+  <data name="OptionsViewModel_64bitAvailable" xml:space="preserve">
+    <value>Dit systeem ondersteunt de 64bit-versie van HandBrake! Deze biedt prestatie- en stabiliteitsverbeteringen ten opzichte van deze 32bit-versie.
+Bezoek de website voor release-opmerkingen.</value>
+  </data>
+  <data name="OptionsViewModel_NoNewUpdates" xml:space="preserve">
+    <value>Er zijn op dit moment geen nieuwe updates.</value>
+  </data>
+  <data name="OptionsViewModel_UpdateDownloaded" xml:space="preserve">
+    <value>Update gedownload</value>
+  </data>
+  <data name="OptionsViewModel_UpdateServiceUnavailable" xml:space="preserve">
+    <value>Dienst bijwerken is niet beschikbaar. Probeer de update te downloaden van https://handbrake.fr</value>
+  </data>
+  <data name="OptionsViewModel_UpdateFailed" xml:space="preserve">
+    <value>Update mislukt. Probeer de update te downloaden van https://handbrake.fr</value>
+  </data>
+  <data name="PictureSettingsViewModel_StorageDisplayLabel" xml:space="preserve">
+    <value>Opslagafmetingen: {0}x{1}</value>
+  </data>
+  <data name="QueueSelectionViewModel_AddToQueue" xml:space="preserve">
+    <value>Toevoegen aan wachtrij</value>
+  </data>
+  <data name="QueueViewModel_NoEncodesPending" xml:space="preserve">
+    <value>Geen coderingen in wachtrij</value>
+  </data>
+  <data name="QueueViewModel_NoJobsPending" xml:space="preserve">
+    <value>Er zijn momenteel geen taken die coderen</value>
+  </data>
+  <data name="QueueViewModel_Queue" xml:space="preserve">
+    <value>Wachtrij</value>
+  </data>
+  <data name="QueueViewModel_ClearQueueConfirmation" xml:space="preserve">
+    <value>Wachtrij leegmaken?</value>
+  </data>
+  <data name="Confirm" xml:space="preserve">
+    <value>Bevestigen</value>
+  </data>
+  <data name="QueueViewModel_JobsPending" xml:space="preserve">
+    <value>{0} taken in wachtrij</value>
+  </data>
+  <data name="QueueViewModel_QueuePending" xml:space="preserve">
+    <value>Wachtrij gepauzeerd</value>
+  </data>
+  <data name="QueueViewModel_DelSelectedJobConfirmation" xml:space="preserve">
+    <value>Geselecteerde taken verwijderen?</value>
+  </data>
+  <data name="QueueViewModel_JobCurrentlyRunningWarning" xml:space="preserve">
+    <value>Deze codering is momenteel aan de gang. Als u deze verwijdert, wordt de codering afgebroken. Wilt u doorgaan?</value>
+  </data>
+  <data name="QueueViewModel_NoPendingJobs" xml:space="preserve">
+    <value>Er zijn geen taken in wachtrij.</value>
+  </data>
+  <data name="QueueViewModel_EditConfirmation" xml:space="preserve">
+    <value>Weet je zeker dat je deze taak wilt bewerken? Hij wordt uit de wachtrij verwijderd en naar het hoofdvenster gestuurd.</value>
+  </data>
+  <data name="QueueViewModel_QueueReady" xml:space="preserve">
+    <value>Wachtrij klaar</value>
+  </data>
+  <data name="QueueViewModel_QueueNotRunning" xml:space="preserve">
+    <value>Wachtrij niet actief</value>
+  </data>
+  <data name="QueueViewModel_QueueCompleted" xml:space="preserve">
+    <value>Wachtrij gereed</value>
+  </data>
+  <data name="QueueViewModel_LastJobFinished" xml:space="preserve">
+    <value>Laatste taak in wachtrij voltooid</value>
+  </data>
+  <data name="QueueViewModel_QueueStarted" xml:space="preserve">
+    <value>Wachtrij gestart</value>
+  </data>
+  <data name="QueueViewModel_QueueStatusDisplay" xml:space="preserve">
+    <value>Coderen: Fase {0} van {1}, {2:00.00}%, FPS: {3:000.0}, Gem. FPS: {4:000.0}, Resterende tijd: {5}, verstreken: {6:d\:hh\:mm\:ss}</value>
+  </data>
+  <data name="ShellViewModel_CanClose" xml:space="preserve">
+    <value>Er loopt momenteel een codering. Deze codering wordt met het afsluiten van HandBrake gestopt.
+Weet u zeker dat u HandBrake wilt afsluiten?</value>
+  </data>
+  <data name="StaticPreviewViewModel_Title" xml:space="preserve">
+    <value>Voorvertoning</value>
+  </data>
+  <data name="StaticPreview_UnableToDeletePreview" xml:space="preserve">
+    <value>Vorig voorbeeldbestand is niet verwijderd. Mogelijk is de voorbeeldweergave nog steeds geopend in de mediaspeler. Sluit dit alstublieft.</value>
+  </data>
+  <data name="StaticPreviewViewModel_ScanFirst" xml:space="preserve">
+    <value>Scan eerst een bron scannen en stel de codering in voor een voorbeeld aan te maken.</value>
+  </data>
+  <data name="StaticPreviewViewModel_UnableToPlayFile" xml:space="preserve">
+    <value>Geen voorbeeldbestand aangetroffen. Het bestand is mogelijk verwijderd of de codering is mislukt. Controleer het activiteitenlogboek voor details.</value>
+  </data>
+  <data name="StaticPreviewViewModel_AlreadyEncoding" xml:space="preserve">
+    <value>Handrem codeert momenteel al een video!  Op elk moment kan slechts één bestand worden gecodeerd.</value>
+  </data>
+  <data name="SubtitlesViewModel_SubDefaults" xml:space="preserve">
+    <value>Ondertiteling standaardinstellingen</value>
+  </data>
+  <data name="SubtitlesViewModel_SubTracks" xml:space="preserve">
+    <value>Ondertitelingssporen</value>
+  </data>
+  <data name="SubtitlesViewModel_SwitchToTracks" xml:space="preserve">
+    <value>Terug naar Sporen</value>
+  </data>
+  <data name="SubtitlesViewModel_ConfigureDefaults" xml:space="preserve">
+    <value>Selectie gedrag...</value>
+  </data>
+  <data name="PresetService_ArchiveFile" xml:space="preserve">
+    <value>Gearchiveerd bestand:</value>
+  </data>
+  <data name="PresetService_UnableToLoad" xml:space="preserve">
+    <value>Voorinstellingen niet geladen.</value>
+  </data>
+  <data name="PresetService_UnableToLoadPresets" xml:space="preserve">
+    <value>HandBrake kon het bestand met de voorinstellingen niet laden. Het kan zijn dat deze afkomstig is van een oudere niet-ondersteunde versie van HandBrake of het is beschadigd. 
+
+Het bestand met de oude voorinstellingen is gearchiveerd naar:</value>
+  </data>
+  <data name="Main_QueueFinishedErrors" xml:space="preserve">
+    <value> met {0} geconstateerde fouten. Bestudeer het wachtrijvenster voor details.</value>
+  </data>
+  <data name="MainViewModel_LowDiskSpace" xml:space="preserve">
+    <value>Beperkte schijfruimte</value>
+  </data>
+  <data name="MainViewModel_LowDiskSpaceWarning" xml:space="preserve">
+    <value>Waarschuwing, de schijf heeft weinig ruimte. HandBrake kan deze codering niet voltooien als er onvoldoende schijfruimte is.</value>
+  </data>
+  <data name="ChaptersViewModel_UnableToImportChaptersMalformedLineMsg" xml:space="preserve">
+    <value>Regel {0} is ongeldig. Er wordt niets geïmporteerd.</value>
+  </data>
+  <data name="ChaptersViewModel_UnableToImportChaptersWarning" xml:space="preserve">
+    <value>Kan hoofdstukkenbestand niet importeren</value>
+  </data>
+  <data name="ChaptersViewModel_UnableToImportChaptersLineDoesNotHaveAtLeastTwoColumns" xml:space="preserve">
+    <value>Alle regels in het hoofdstukkenbestand moeten ten minste 2 kolommen met gegevens hebben</value>
+  </data>
+  <data name="ChaptersViewModel_UnableToImportChaptersFirstColumnMustContainOnlyIntegerNumber" xml:space="preserve">
+    <value>De eerste kolom in het hoofdstukkenbestand mag alleen een geheel getal bevatten dat hoger is dan nul (0)</value>
+  </data>
+  <data name="ChaptersViewModel_UnsupportedFileFormatMsg" xml:space="preserve">
+    <value>Hoofdstukkenbestanden van het type '{0}' worden momenteel niet ondersteund.</value>
+  </data>
+  <data name="ChaptersViewModel_UnsupportedFileFormatWarning" xml:space="preserve">
+    <value>Niet-ondersteund hoofdstukkenbestandstype</value>
+  </data>
+  <data name="ChaptersViewModel_ValidationFailedWarning" xml:space="preserve">
+    <value>Ongeldige hoofdstukinformatie voor bronmedia</value>
+  </data>
+  <data name="ChaptersViewModel_ValidateImportedChapters_ChapterCountMismatch" xml:space="preserve">
+    <value>Het aantal hoofdstukken op de bronmedia 
+en het aantal hoofdstukken in het invoerbestand komt niet overeen ({0} t.o. {1}).
+
+Doorgaan met importeren van hoofdstuknamen?</value>
+  </data>
+  <data name="ChaptersViewModel_ValidateImportedChapters_ChapterCountMismatchMsg" xml:space="preserve">
+    <value>Het aantal hoofdstukken op de bronmedia 
+en het aantal hoofdstukken in het invoerbestand komt niet overeen ({0} t.o. {1}).
+
+Doorgaan met importeren van hoofdstuknamen?</value>
+  </data>
+  <data name="ChaptersViewModel_ValidateImportedChapters_ChapterCountMismatchWarning" xml:space="preserve">
+    <value>Aantal hoofdstukken in bron- en invoerbestand komt niet overeen</value>
+  </data>
+  <data name="ChaptersViewModel_ValidateImportedChapters_ChapterDurationMismatchMsg" xml:space="preserve">
+    <value>De gegeven duur van de hoofdstukken op de bronmedia 
+en de duur van hoofdstukken in het invoerbestand verschillen sterk.
+
+Het lijkt erop dat dit hoofdstukbestand is geproduceerd uit andere bronmedia.
+
+Doorgaan met importeren van hoofdstuknamen?</value>
+  </data>
+  <data name="ChaptersViewModel_ValidateImportedChapters_ChapterDurationMismatchWarning" xml:space="preserve">
+    <value>De duur van het hoofdstuk komt niet overeen tussen het bron- en invoerbestand</value>
+  </data>
+  <data name="ScanService_ScanStopFailed" xml:space="preserve">
+    <value>Er is een fout opgetreden bij het stoppen van de scan. Start HandBrake opnieuw op.</value>
+  </data>
+  <data name="Presets_PresetForceReset" xml:space="preserve">
+    <value>HandBrake kan het bestand met voorinstellingen niet upgraden naar een nieuw versieformaat.
+Het bestand met voorinstellingen wordt gearchiveerd en er wordt een nieuw bestand gemaakt. De eigen voorinstellingen moeten opnieuw worden aangemaakt.</value>
+  </data>
+  <data name="SettingService_SaveErrorReset" xml:space="preserve">
+    <value>Alle instellingen die u hebt gewijzigd, moeten de volgende keer dat HandBrake wordt gestart weer opnieuw  worden ingesteld.</value>
+  </data>
+  <data name="UserSettings_AnErrorOccurred" xml:space="preserve">
+    <value>Er is een probleem opgetreden bij het opslaan van de voorkeuren.</value>
+  </data>
+  <data name="UserSettings_YourSettingsHaveBeenReset" xml:space="preserve">
+    <value>Waarschuwing, de instellingen zijn opnieuw ingesteld!</value>
+  </data>
+  <data name="UserSettings_YourSettingsAreCorrupt" xml:space="preserve">
+    <value>Het bestand met de gebruikersinstellingen is beschadigd of ontoegankelijk. Instellingen zijn teruggezet naar standaardinstellingen.</value>
+  </data>
+  <data name="UserSettings_UnableToLoad" xml:space="preserve">
+    <value>Bestand met gebruikersinstellingen is niet geladen: {0}</value>
+  </data>
+  <data name="UserSettings_UnableToLoadSolution" xml:space="preserve">
+    <value>Het bestand met de gebruikersinstellingen lijkt ontoegankelijk of beschadigd. Mogelijk moet u het bestand verwijderen en HandBrake een nieuw bestand laten genereren.</value>
+  </data>
+  <data name="Main_NoPermissionsOrMissingDirectory" xml:space="preserve">
+    <value>De uitvoermap die is aangewezen bestaat niet of u bent niet gerechtigd om er bestanden in op te slaan.</value>
+  </data>
+  <data name="DirectoryUtils_CreateFolder" xml:space="preserve">
+    <value>Map aanmaken?</value>
+  </data>
+  <data name="DirectoryUtils_CreateFolderMsg" xml:space="preserve">
+    <value>De map waarnaar u probeert te schrijven, bestaat niet. Wilt u dat HandBrake de volgende map aanmaakt?
+{0}</value>
+  </data>
+  <data name="MainViewModel_UnableToLaunchDestDir" xml:space="preserve">
+    <value>Bestemmingsmap is niet geopend.</value>
+  </data>
+  <data name="MainViewModel_UnableToLaunchDestDirSolution" xml:space="preserve">
+    <value>Controleer of de bestemmingsmap niet ongeldig is.</value>
+  </data>
+  <data name="MainViewModel_EncodeStatusChanged_SubScan_StatusLabel" xml:space="preserve">
+    <value>Verwerken fase {0} van {1}, (Ondertitelingsscan) {2:00.00}%, Scan resterende tijd: {3}, verstreken: {4}</value>
+  </data>
+  <data name="NoAdditionalInformation" xml:space="preserve">
+    <value>Geen aanvullende informatie</value>
+  </data>
+  <data name="WindowTitleStatus" xml:space="preserve">
+    <value>{0} - ({1}%, Fase {2} van {3})</value>
+  </data>
+  <data name="TaskTrayStatusTitle" xml:space="preserve">
+    <value>{1}%, Fase {2} van {3}
+Resterende tijd: {4}</value>
+  </data>
+  <data name="PauseOnLowDiskspace" xml:space="preserve">
+    <value>Wachtrij gepauzeerd. Waarschuwing, het station waarnaar u codeert, heeft weinig schijfruimte. Maak wat ruimte vrij en druk op start om door te gaan. U kunt ook het minimale ruimteniveau aanpassen in voorkeuren.</value>
+  </data>
+  <data name="Main_QueuePaused" xml:space="preserve">
+    <value>Wachtrij gepauzeerd</value>
+  </data>
+  <data name="QueueViewModel_QueuePaused" xml:space="preserve">
+    <value>Wachtrij gepauzeerd</value>
+  </data>
+  <data name="Main_LowDiskspace" xml:space="preserve">
+    <value>De bestemmingsmap heeft beperkte schijfruimte. 
+
+U kunt het niveau configureren waarbij deze waarschuwing in voorkeuren verschijnt. 
+
+Doorgaan?</value>
+  </data>
+  <data name="Queue_UnableToResetJob" xml:space="preserve">
+    <value>De status van de taak kan niet opnieuw worden ingesteld, omdat deze zich niet in een fout- of voltooide toestand bevind</value>
+  </data>
+  <data name="Queue_UnableToRestoreFile" xml:space="preserve">
+    <value>Kan wachtrijbestand niet herstellen.</value>
+  </data>
+  <data name="Queue_UnableToRestoreFileExtended" xml:space="preserve">
+    <value>Het bestand kan beschadigd zijn of afkomstig van een oudere incompatibele versie van HandBrake</value>
+  </data>
+  <data name="Queue_AlreadyEncoding" xml:space="preserve">
+    <value>HandBrake codeert al een bestand.</value>
+  </data>
+  <data name="Queue_AlreadyEncodingSolution" xml:space="preserve">
+    <value>Stop de huidige codering. Start HandBrake opnieuw op als het probleem aanhoudt.</value>
+  </data>
+  <data name="StaticPreviewView_Title" xml:space="preserve">
+    <value>Voorbeeld ({0}% actuele grootte)</value>
+  </data>
+  <data name="OsBitnessWarning" xml:space="preserve">
+    <value>HandBrake vereist een 64bit-versie van Windows 10 of hoger.</value>
+  </data>
+  <data name="OsVersionWarning" xml:space="preserve">
+    <value>HandBrake vereist dat Windows 10 of hoger wordt uitgevoerd. Versie 0.9.9 (XP), 0.10.5 (Vista), 1.3.3 (7 en 8.x) zijn de laatste versies die deze oudere besturingssystemen ondersteunen.</value>
+  </data>
+  <data name="Main_ContinueAddingToQueue" xml:space="preserve">
+    <value>Doorgaan met proberen de rest toe te voegen?</value>
+  </data>
+  <data name="Main_QueueOverwritePrompt" xml:space="preserve">
+    <value>Het bestand '{0}' bestaat al!
+Overschrijven?</value>
+  </data>
+  <data name="Clipboard_Unavailable" xml:space="preserve">
+    <value>Het systeemklembord is momenteel niet beschikbaar.</value>
+  </data>
+  <data name="Clipboard_Unavailable_Solution" xml:space="preserve">
+    <value>Dit kan te wijten zijn aan een andere applicatie die het klembord bewaakt of vergrendelt voor eigen gebruik. Het klembord kan worden gebruikt. nadat het ontgrendeld is.</value>
+  </data>
+  <data name="AboutView_License" xml:space="preserve">
+    <value>Licentie:</value>
+  </data>
+  <data name="AboutView_Version" xml:space="preserve">
+    <value>Versie:</value>
+  </data>
+  <data name="AddPresetView_AddNewCategory" xml:space="preserve">
+    <value>-- Nieuwe categorie toevoegen --</value>
+  </data>
+  <data name="AddPresetView_AddPreset" xml:space="preserve">
+    <value>Voorinstelling toevoegen</value>
+  </data>
+  <data name="AddPresetView_Category" xml:space="preserve">
+    <value>Categorie:</value>
+  </data>
+  <data name="AddPresetView_Description" xml:space="preserve">
+    <value>Omschrijving:</value>
+  </data>
+  <data name="AddPresetView_Name" xml:space="preserve">
+    <value>Naam:</value>
+  </data>
+  <data name="AddPresetView_SavePictureSize" xml:space="preserve">
+    <value>Afmetingen:</value>
+  </data>
+  <data name="AudioDefaultView_Behaviours" xml:space="preserve">
+    <value>Selectie bronspoor</value>
+  </data>
+  <data name="AudioView_AllowPassThruOf" xml:space="preserve">
+    <value>Doorvoer toestaan van:</value>
+  </data>
+  <data name="AudioView_AudioDefaultsDescription" xml:space="preserve">
+    <value>Configureer hoe de audiosporen automatisch worden geselecteerd en geconfigureerd wanneer een nieuwe titel- of bronvideo wordt geselecteerd.</value>
+  </data>
+  <data name="AudioView_AutoPassthruBehaviour" xml:space="preserve">
+    <value>'Automatische doorvoer':</value>
+  </data>
+  <data name="AudioView_Bitrate" xml:space="preserve">
+    <value>Bitsnelheid</value>
+  </data>
+  <data name="AudioView_Codec" xml:space="preserve">
+    <value>Codec</value>
+  </data>
+  <data name="AudioView_DRC" xml:space="preserve">
+    <value>DRC</value>
+  </data>
+  <data name="AudioView_Gain" xml:space="preserve">
+    <value>Versterking</value>
+  </data>
+  <data name="AudioView_Hide" xml:space="preserve">
+    <value>Verbergen</value>
+  </data>
+  <data name="AudioView_Mixdown" xml:space="preserve">
+    <value>Mixdown</value>
+  </data>
+  <data name="AudioView_OtherwiseFallbackEncoder" xml:space="preserve">
+    <value>Fallback encoder:</value>
+  </data>
+  <data name="AudioView_ReloadDefaults" xml:space="preserve">
+    <value>Opnieuw laden</value>
+  </data>
+  <data name="AudioView_Samplerate" xml:space="preserve">
+    <value>Bemonsteringssnelheid:</value>
+  </data>
+  <data name="AudioView_Show" xml:space="preserve">
+    <value>Tonen</value>
+  </data>
+  <data name="AudioView_TrackName" xml:space="preserve">
+    <value>Spoornaam</value>
+  </data>
+  <data name="AudioView_TrackSelectionBehaviour" xml:space="preserve">
+    <value>Selectie van sporen:</value>
+  </data>
+  <data name="AudioView_TrackSettingDefaultBehaviour" xml:space="preserve">
+    <value>Aanvullende sporen:</value>
+  </data>
+  <data name="AudioView_WhenAutoPassthru" xml:space="preserve">
+    <value>Als 'Automatische doorvoer' is geselecteerd als audio-codec.</value>
+  </data>
+  <data name="ChaptersView_ChapterMarkers" xml:space="preserve">
+    <value>Hoofdstukmarkeringen</value>
+  </data>
+  <data name="ChaptersView_ChapterName" xml:space="preserve">
+    <value>Hoofdstuknaam</value>
+  </data>
+  <data name="ChaptersView_ChapterNumber" xml:space="preserve">
+    <value>Hoofdstuknummer</value>
+  </data>
+  <data name="ChaptersView_CreateChapterMarkers" xml:space="preserve">
+    <value>Hoofdstukmarkeringen aanmaken</value>
+  </data>
+  <data name="ChaptersView_Duration" xml:space="preserve">
+    <value>Duur</value>
+  </data>
+  <data name="ChaptersView_Export" xml:space="preserve">
+    <value>Exporteren</value>
+  </data>
+  <data name="ChaptersView_Import" xml:space="preserve">
+    <value>Importeren</value>
+  </data>
+  <data name="ChapterView_ExportNames" xml:space="preserve">
+    <value>Namen exporteren</value>
+  </data>
+  <data name="ChapterView_ImportNames" xml:space="preserve">
+    <value>Namen importeren</value>
+  </data>
+  <data name="ChapterView_ResetChapterNames" xml:space="preserve">
+    <value>Hoofdstuknamen opnieuw instellen</value>
+  </data>
+  <data name="CountdownAlterView_CancelAction" xml:space="preserve">
+    <value>Actie bij afbreken</value>
+  </data>
+  <data name="CountdownAlterView_Proceed" xml:space="preserve">
+    <value>Doorgaan</value>
+  </data>
+  <data name="CountdownAlterView_WhenDoneAction" xml:space="preserve">
+    <value>Actie wanneer klaar</value>
+  </data>
+  <data name="ErrorView_ErrorDetails" xml:space="preserve">
+    <value>Foutdetails:</value>
+  </data>
+  <data name="FiltersView_Custom" xml:space="preserve">
+    <value>Aangepast:</value>
+  </data>
+  <data name="FiltersView_Deblock" xml:space="preserve">
+    <value>Deblock:</value>
+  </data>
+  <data name="FiltersView_Decomb" xml:space="preserve">
+    <value>Decomb</value>
+  </data>
+  <data name="FiltersView_Deinterlace" xml:space="preserve">
+    <value>Deinterlace:</value>
+  </data>
+  <data name="FiltersView_DeinterlacePreset" xml:space="preserve">
+    <value>Voorinstelling:</value>
+  </data>
+  <data name="FiltersView_DeinterlacePresetAuto" xml:space="preserve">
+    <value>Deinterlace-voorinstelling:</value>
+  </data>
+  <data name="FiltersView_Denoise" xml:space="preserve">
+    <value>Denoise:</value>
+  </data>
+  <data name="FiltersView_DenoisePresetAuto" xml:space="preserve">
+    <value>Denoise-voorinstelling</value>
+  </data>
+  <data name="FiltersView_DenoiseTuneAuto" xml:space="preserve">
+    <value>Denoise-afstemming</value>
+  </data>
+  <data name="FiltersView_Detelecine" xml:space="preserve">
+    <value>Detelecine:</value>
+  </data>
+  <data name="FiltersView_Filters" xml:space="preserve">
+    <value>Filters</value>
+  </data>
+  <data name="FiltersView_FlipVideo" xml:space="preserve">
+    <value>Horizontaal</value>
+  </data>
+  <data name="FiltersView_Grayscale" xml:space="preserve">
+    <value>Grijstinten</value>
+  </data>
+  <data name="FiltersView_InterlaceDetection" xml:space="preserve">
+    <value>Interlace-detectie:</value>
+  </data>
+  <data name="FiltersView_Preset" xml:space="preserve">
+    <value>Voorinstelling:</value>
+  </data>
+  <data name="FiltersView_Rotate" xml:space="preserve">
+    <value>Rotatie:</value>
+  </data>
+  <data name="FiltersView_Sharpen" xml:space="preserve">
+    <value>Sharpen:</value>
+  </data>
+  <data name="FiltersView_SharpenPresetAuto" xml:space="preserve">
+    <value>Sharpen-voorinstelling</value>
+  </data>
+  <data name="FiltersView_SharpenTuneAuto" xml:space="preserve">
+    <value>Sharpen-afstemming</value>
+  </data>
+  <data name="FiltersView_Tune" xml:space="preserve">
+    <value>Afstemming:</value>
+  </data>
+  <data name="Generic_Add" xml:space="preserve">
+    <value>Toevoegen</value>
+  </data>
+  <data name="Generic_Cancel" xml:space="preserve">
+    <value>Annuleren</value>
+  </data>
+  <data name="Generic_Clear" xml:space="preserve">
+    <value>Wissen</value>
+  </data>
+  <data name="Generic_Close" xml:space="preserve">
+    <value>Sluiten</value>
+  </data>
+  <data name="Generic_CopyToClipboard" xml:space="preserve">
+    <value>Kopiëren naar klembord</value>
+  </data>
+  <data name="Generic_MoveLeft" xml:space="preserve">
+    <value>Naar links</value>
+  </data>
+  <data name="Generic_MoveRight" xml:space="preserve">
+    <value>Naar rechts</value>
+  </data>
+  <data name="Generic_Save" xml:space="preserve">
+    <value>Opslaan</value>
+  </data>
+  <data name="LogView_CopyClipboard" xml:space="preserve">
+    <value>Kopiëren naar klembord</value>
+  </data>
+  <data name="LogView_EncodeLog" xml:space="preserve">
+    <value>Coderingslogboek</value>
+  </data>
+  <data name="LogView_OpenLogDir" xml:space="preserve">
+    <value>Map met logboeken openen</value>
+  </data>
+  <data name="LogView_ScanLog" xml:space="preserve">
+    <value>Scan-logboek</value>
+  </data>
+  <data name="MainView_ActivityLog" xml:space="preserve">
+    <value>Activiteitenlogboek</value>
+  </data>
+  <data name="MainView_AddAll" xml:space="preserve">
+    <value>Alle toevoegen</value>
+  </data>
+  <data name="MainView_AddCurrent" xml:space="preserve">
+    <value>Huidige toevoegen</value>
+  </data>
+  <data name="MainView_AddSelection" xml:space="preserve">
+    <value>Selectie toevoegen</value>
+  </data>
+  <data name="MainView_AddToQueue" xml:space="preserve">
+    <value>Toevoegen aan wachtrij</value>
+  </data>
+  <data name="MainView_AdvancedTab" xml:space="preserve">
+    <value>Geavanceerd</value>
+  </data>
+  <data name="MainView_AlignAVStart" xml:space="preserve">
+    <value>A/V-start uitlijnen</value>
+  </data>
+  <data name="MainView_Angle" xml:space="preserve">
+    <value>Kijkhoek:</value>
+  </data>
+  <data name="MainView_AudioTab" xml:space="preserve">
+    <value>Audio</value>
+  </data>
+  <data name="MainView_AudioTrackCount" xml:space="preserve">
+    <value>Audiosporen</value>
+  </data>
+  <data name="MainView_Browser" xml:space="preserve">
+    <value>Bladeren</value>
+  </data>
+  <data name="MainView_ChaptersTab" xml:space="preserve">
+    <value>Hoofdstukken</value>
+  </data>
+  <data name="MainView_Container" xml:space="preserve">
+    <value>Container</value>
+  </data>
+  <data name="MainView_Destination" xml:space="preserve">
+    <value>Bestemming</value>
+  </data>
+  <data name="MainView_Duration" xml:space="preserve">
+    <value>Duur:</value>
+  </data>
+  <data name="MainView_File" xml:space="preserve">
+    <value>Opslaan als:</value>
+  </data>
+  <data name="MainView_FiltersTab" xml:space="preserve">
+    <value>Filters</value>
+  </data>
+  <data name="MainView_Format" xml:space="preserve">
+    <value>Formaat:</value>
+  </data>
+  <data name="MainView_Help" xml:space="preserve">
+    <value>Help</value>
+  </data>
+  <data name="MainView_iPod5G" xml:space="preserve">
+    <value>Ondersteuning voor iPod 5G</value>
+  </data>
+  <data name="MainView_MetaDataTab" xml:space="preserve">
+    <value>Metagevens</value>
+  </data>
+  <data name="MainView_ModifiedPreset" xml:space="preserve">
+    <value>(Gewijzigd)</value>
+  </data>
+  <data name="MainView_Muxing" xml:space="preserve">
+    <value>Muxen: Dit kan even duren...</value>
+  </data>
+  <data name="MainView_Options" xml:space="preserve">
+    <value>Opties</value>
+  </data>
+  <data name="MainView_OutputSettings" xml:space="preserve">
+    <value>Uitvoerinstellingen</value>
+  </data>
+  <data name="MainView_Pause" xml:space="preserve">
+    <value>Pauze</value>
+  </data>
+  <data name="MainView_PictureTab" xml:space="preserve">
+    <value>Afmetingen</value>
+  </data>
+  <data name="MainView_PresetManage" xml:space="preserve">
+    <value>Voorinstelling bewerken</value>
+  </data>
+  <data name="MainView_PresetOptionsContextMenu" xml:space="preserve">
+    <value>Voorinstellingenopties contextmenu</value>
+  </data>
+  <data name="MainView_PresetRemove" xml:space="preserve">
+    <value>Voorinstelling verwijderen</value>
+  </data>
+  <data name="MainView_Presets" xml:space="preserve">
+    <value>Voorinstellingen</value>
+  </data>
+  <data name="MainView_Preview" xml:space="preserve">
+    <value>Voorbeeld</value>
+  </data>
+  <data name="MainView_ProgressStatusWithTask" xml:space="preserve">
+    <value>Coderen: {0}, {1:00.00}%, Resterende tijd: {2}, {3}</value>
+  </data>
+  <data name="MainView_Range" xml:space="preserve">
+    <value>Bereik:</value>
+  </data>
+  <data name="MainView_Reload" xml:space="preserve">
+    <value>Opnieuw laden</value>
+  </data>
+  <data name="MainView_Remove" xml:space="preserve">
+    <value>Verwijderen</value>
+  </data>
+  <data name="MainView_ResetBuiltInPresets" xml:space="preserve">
+    <value>Ingebouwde voorinstellingen herstellen</value>
+  </data>
+  <data name="MainView_SaveNewPreset" xml:space="preserve">
+    <value>Nieuwe voorinstelling opslaan</value>
+  </data>
+  <data name="MainView_Searching" xml:space="preserve">
+    <value>Zoeken naar starttijd</value>
+  </data>
+  <data name="MainView_SetDefault" xml:space="preserve">
+    <value>Standaard instellen</value>
+  </data>
+  <data name="MainView_ShowPreview" xml:space="preserve">
+    <value>Voorbeeld</value>
+  </data>
+  <data name="MainView_ShowQueue" xml:space="preserve">
+    <value>Wachtrij</value>
+  </data>
+  <data name="MainView_Source" xml:space="preserve">
+    <value>Bron:</value>
+  </data>
+  <data name="MainView_SourceOpen" xml:space="preserve">
+    <value>Open-broncode</value>
+  </data>
+  <data name="MainView_StartEncode" xml:space="preserve">
+    <value>Codering starten</value>
+  </data>
+  <data name="MainView_StartQueue" xml:space="preserve">
+    <value>Wachtrij starten</value>
+  </data>
+  <data name="MainView_Stop" xml:space="preserve">
+    <value>Stop</value>
+  </data>
+  <data name="MainView_StopEncode" xml:space="preserve">
+    <value>Codering stoppen</value>
+  </data>
+  <data name="MainView_StopEncodeConfirm" xml:space="preserve">
+    <value>Weet u zeker dat u deze codering wilt stoppen?</value>
+  </data>
+  <data name="MainView_SubtitleBeforeScanError" xml:space="preserve">
+    <value>Kies een bron om te coderen voordat u probeert een ondertitelbestand te importeren.</value>
+  </data>
+  <data name="MainView_SubtitlesTab" xml:space="preserve">
+    <value>Ondertiteling</value>
+  </data>
+  <data name="MainView_SubtitleTracksCount" xml:space="preserve">
+    <value>Ondertitelingssporen</value>
+  </data>
+  <data name="MainView_SummaryTab" xml:space="preserve">
+    <value>Samenvatting</value>
+  </data>
+  <data name="MainView_through" xml:space="preserve">
+    <value> - </value>
+  </data>
+  <data name="MainView_Title" xml:space="preserve">
+    <value>Titel:</value>
+  </data>
+  <data name="MainView_UpdateSelectedPreset" xml:space="preserve">
+    <value>Huidige voorinstelling vernieuwen</value>
+  </data>
+  <data name="MainView_VideoTab" xml:space="preserve">
+    <value>Video</value>
+  </data>
+  <data name="MainView_WebOptimized" xml:space="preserve">
+    <value>Web Optimized</value>
+  </data>
+  <data name="ManagePresetView_ManagePreset" xml:space="preserve">
+    <value>Voorinstellingen beheren</value>
+  </data>
+  <data name="MetaDataView_Title" xml:space="preserve">
+    <value>Metagevens</value>
+  </data>
+  <data name="OptionsView_EnableNvencEncoding" xml:space="preserve">
+    <value>Gebruik van Nvidia NVENC-encoders toestaan</value>
+  </data>
+  <data name="OptionsView_EnableQuicksyncEncoding" xml:space="preserve">
+    <value>Gebruik van Intel QuickSync-encoders toestaan</value>
+  </data>
+  <data name="OptionsView_EnableVceEncoding" xml:space="preserve">
+    <value>Gebruik van AMD VCN-encoders toestaan</value>
+  </data>
+  <data name="OptionsView_InvalidFileFormatChars" xml:space="preserve">
+    <value>Het ingevoerde bestandsformaat bevatte ongeldige tekens welke zijn verwijderd.</value>
+  </data>
+  <data name="OptionsView_PlaySoundWhenDone" xml:space="preserve">
+    <value>Speel een geluid af wanneer elke codering is voltooid</value>
+  </data>
+  <data name="OptionsView_PlaySoundWhenQueueDone" xml:space="preserve">
+    <value>Speel een geluid wanneer de wachtrij is voltooid</value>
+  </data>
+  <data name="OptionsView_ShowPreviewOnSummaryTab" xml:space="preserve">
+    <value>Toon voorbeelden op het tabblad Samenvatting.</value>
+  </data>
+  <data name="OptionsView_ShowStatusInTitleBar" xml:space="preserve">
+    <value>Toon de coderingsstatus in de titelbalk van de applicatie.</value>
+  </data>
+  <data name="Options_7DayLogClear" xml:space="preserve">
+    <value>Logbestanden na 7 dagen wissen </value>
+  </data>
+  <data name="Options_About" xml:space="preserve">
+    <value>Over HandBrake</value>
+  </data>
+  <data name="Options_Advanced" xml:space="preserve">
+    <value>Geavanceerd</value>
+  </data>
+  <data name="Options_AdvancedOptions" xml:space="preserve">
+    <value>Geavanceerde opties</value>
+  </data>
+  <data name="Options_Arguments" xml:space="preserve">
+    <value>Argumenten:</value>
+  </data>
+  <data name="Options_AutomaticFileNaming" xml:space="preserve">
+    <value>Automatische bestandsnaamgeving</value>
+  </data>
+  <data name="Options_AutoNameOutput" xml:space="preserve">
+    <value>Uitvoerbestanden automatisch een naam geven</value>
+  </data>
+  <data name="Options_CheckForUpdates" xml:space="preserve">
+    <value>Controleren op updates</value>
+  </data>
+  <data name="Options_ClearCompleted" xml:space="preserve">
+    <value>Altijd voltooide wachtrijitems wissen wanneer de codering is voltooid</value>
+  </data>
+  <data name="Options_ClearLogs" xml:space="preserve">
+    <value>Logboekgeschiedenis wissen</value>
+  </data>
+  <data name="Options_CopyLogToDir" xml:space="preserve">
+    <value>Plaats een kopie van individuele coderingslogboeken op een opgegeven locatie:</value>
+  </data>
+  <data name="Options_CopyLogToEncDir" xml:space="preserve">
+    <value>Plaats een kopie van individuele coderingslogboeken op dezelfde locatie als de gecodeerde video</value>
+  </data>
+  <data name="Options_CurVersion" xml:space="preserve">
+    <value>Huidige versie</value>
+  </data>
+  <data name="Options_Decoding" xml:space="preserve">
+    <value>Decoderen</value>
+  </data>
+  <data name="Options_DefaultPath" xml:space="preserve">
+    <value>Standaardpad:</value>
+  </data>
+  <data name="Options_DownloadUpdates" xml:space="preserve">
+    <value>Update downloaden</value>
+  </data>
+  <data name="Options_DVD" xml:space="preserve">
+    <value>DVD lezen</value>
+  </data>
+  <data name="Options_DvdRead" xml:space="preserve">
+    <value>LibDVDNav uitschakelen. (libdvdread wordt gebruikt)</value>
+  </data>
+  <data name="Options_Encoding" xml:space="preserve">
+    <value>Coderen</value>
+  </data>
+  <data name="Options_Format" xml:space="preserve">
+    <value>Bestandsformaat:</value>
+  </data>
+  <data name="Options_General" xml:space="preserve">
+    <value>Algemeen</value>
+  </data>
+  <data name="Options_Logging" xml:space="preserve">
+    <value>Logboekgegevens opslaan</value>
+  </data>
+  <data name="Options_LogLevel" xml:space="preserve">
+    <value>Logboek-detailniveau:</value>
+  </data>
+  <data name="Options_LogPath" xml:space="preserve">
+    <value>Logboekpad:</value>
+  </data>
+  <data name="Options_LowDiskspaceSize" xml:space="preserve">
+    <value>Wachtrij pauzeren bij gebrek aan schijfruimte</value>
+  </data>
+  <data name="Options_MinimiseTray" xml:space="preserve">
+    <value>Minimaliseren naar systeemvak (vereist opnieuw opstarten)</value>
+  </data>
+  <data name="Options_MinTitleScanLength" xml:space="preserve">
+    <value>Minimale duur van dvd- en Blu-ray-titels [sec]. Kortere titels worden overgeslagen:</value>
+  </data>
+  <data name="Options_MP4FileExtension" xml:space="preserve">
+    <value>MP4-bestandsextentie:</value>
+  </data>
+  <data name="Options_OnStartup" xml:space="preserve">
+    <value>Bij opstarten</value>
+  </data>
+  <data name="Options_Output" xml:space="preserve">
+    <value>Uitvoerbestanden</value>
+  </data>
+  <data name="Options_Path" xml:space="preserve">
+    <value>Pad:</value>
+  </data>
+  <data name="Options_PathToMediaPlayer" xml:space="preserve">
+    <value>Pad naar mediaspeler</value>
+  </data>
+  <data name="Options_PreventSleep" xml:space="preserve">
+    <value>Slaapstand van het systeem voorkomen tijdens het coderen</value>
+  </data>
+  <data name="Options_PreviewScanCount" xml:space="preserve">
+    <value>Aantal te scannen beeldvoorbeelden:</value>
+  </data>
+  <data name="Options_PriorityLevel" xml:space="preserve">
+    <value>Werk-prioriteitsniveau:</value>
+  </data>
+  <data name="Options_QsvDecode" xml:space="preserve">
+    <value>Gebruik, als de hardware beschikbaar is, Intel QuickSync en voor het decoderen en coderen van video.</value>
+  </data>
+  <data name="Options_QsvDecodeForNonFullPath" xml:space="preserve">
+    <value>Gebruik ook QuickSync-decodering wanneer geen QuickSync-encoder wordt gebruikt. (bijv. x265)</value>
+  </data>
+  <data name="Options_RemovePunctuation" xml:space="preserve">
+    <value>Verwijder veelgebruikte leestekens</value>
+  </data>
+  <data name="Options_ReplaceUnderscores" xml:space="preserve">
+    <value>Vervang underscores door spatie</value>
+  </data>
+  <data name="Options_ResetDoNothing" xml:space="preserve">
+    <value>Herstel naar 'Doe niets' wanneer de app opnieuw wordt gestart.</value>
+  </data>
+  <data name="Options_Scaler" xml:space="preserve">
+    <value>Kies verschaling:</value>
+  </data>
+  <data name="Options_Scaling" xml:space="preserve">
+    <value>Schalen</value>
+  </data>
+  <data name="Options_SendFileTo" xml:space="preserve">
+    <value>Bestand sturen naar:</value>
+  </data>
+  <data name="Options_TitleCase" xml:space="preserve">
+    <value>Omzetten naar Eerste Hoofdletters</value>
+  </data>
+  <data name="Options_Updates" xml:space="preserve">
+    <value>Nieuwe versies</value>
+  </data>
+  <data name="Options_UserInterface" xml:space="preserve">
+    <value>Gebruikersomgeving</value>
+  </data>
+  <data name="Options_Version" xml:space="preserve">
+    <value>Versie:</value>
+  </data>
+  <data name="Options_Video" xml:space="preserve">
+    <value>Video</value>
+  </data>
+  <data name="Options_VideoPreviewPath" xml:space="preserve">
+    <value>Dit pad wordt alleen gebruikt voor de videovoorbeeldfunctie.
+VLC en MPC-HC worden ondersteund. Andere spelers werken mogelijk ook, maar zijn niet gevalideerd.</value>
+  </data>
+  <data name="Options_ViewLogDirectory" xml:space="preserve">
+    <value>Logboekenmap tonen</value>
+  </data>
+  <data name="Options_WhenDone" xml:space="preserve">
+    <value>Wanneer klaar</value>
+  </data>
+  <data name="Options_x264" xml:space="preserve">
+    <value>x264/5-instellingen</value>
+  </data>
+  <data name="Options_x264Granularity" xml:space="preserve">
+    <value>Constant quality fractional granularity:</value>
+  </data>
+  <data name="PictureSettingsView_Anamorphic" xml:space="preserve">
+    <value>Anamorf:</value>
+  </data>
+  <data name="PictureSettingsView_Automatic" xml:space="preserve">
+    <value>Automatisch</value>
+  </data>
+  <data name="PictureSettingsView_Bottom" xml:space="preserve">
+    <value>Onderkant</value>
+  </data>
+  <data name="PictureSettingsView_Cropping" xml:space="preserve">
+    <value>Bijsnijden:</value>
+  </data>
+  <data name="PictureSettingsView_Custom" xml:space="preserve">
+    <value>Aangepast</value>
+  </data>
+  <data name="PictureSettingsView_DisplayWidth" xml:space="preserve">
+    <value>Weergavegrootte:</value>
+  </data>
+  <data name="PictureSettingsView_Height" xml:space="preserve">
+    <value>Hoogte:</value>
+  </data>
+  <data name="PictureSettingsView_KeepAR" xml:space="preserve">
+    <value>Automatisch</value>
+  </data>
+  <data name="PictureSettingsView_Left" xml:space="preserve">
+    <value>Links</value>
+  </data>
+  <data name="PictureSettingsView_Output" xml:space="preserve">
+    <value>Definitieve afmetingen:</value>
+  </data>
+  <data name="PictureSettingsView_PAR" xml:space="preserve">
+    <value>Pixelverhouding:</value>
+  </data>
+  <data name="PictureSettingsView_Right" xml:space="preserve">
+    <value>Rechts</value>
+  </data>
+  <data name="PictureSettingsView_Size" xml:space="preserve">
+    <value>Grootte</value>
+  </data>
+  <data name="PictureSettingsView_Top" xml:space="preserve">
+    <value>Bovenkant</value>
+  </data>
+  <data name="PictureSettingsView_Width" xml:space="preserve">
+    <value>Verschaalde afmetingen:</value>
+  </data>
+  <data name="Preset_Custom" xml:space="preserve">
+    <value>Aangepast</value>
+  </data>
+  <data name="Preset_Export" xml:space="preserve">
+    <value>Exporteren naar bestand</value>
+  </data>
+  <data name="Preset_Import" xml:space="preserve">
+    <value>Importeren van bestand</value>
+  </data>
+  <data name="Preset_Official" xml:space="preserve">
+    <value>Officeel</value>
+  </data>
+  <data name="QueueSelectionView_ChooseTitles" xml:space="preserve">
+    <value>Titels kiezen:</value>
+  </data>
+  <data name="QueueSelectionView_Title" xml:space="preserve">
+    <value>Toevoegen aan wachtrij</value>
+  </data>
+  <data name="QueueSelection_UsingPreset" xml:space="preserve">
+    <value>De geselecteerde titels worden toegevoegd met behulp van voorinstelling "{0}".</value>
+  </data>
+  <data name="QueueView_Advanced" xml:space="preserve">
+    <value>Video-opties:</value>
+  </data>
+  <data name="QueueView_Audio" xml:space="preserve">
+    <value>Audio:</value>
+  </data>
+  <data name="QueueView_ClearAll" xml:space="preserve">
+    <value>Alles wissen</value>
+  </data>
+  <data name="QueueView_ClearCompleted" xml:space="preserve">
+    <value>Wissen voltooid</value>
+  </data>
+  <data name="QueueView_ClearQueue" xml:space="preserve">
+    <value>Wachtrij wissen</value>
+  </data>
+  <data name="QueueView_ClearSelected" xml:space="preserve">
+    <value>Selectie wissen</value>
+  </data>
+  <data name="QueueView_Delete" xml:space="preserve">
+    <value>Wissen</value>
+  </data>
+  <data name="QueueView_Destination" xml:space="preserve">
+    <value>Bestemming:</value>
+  </data>
+  <data name="WhenDone_DoNothing" xml:space="preserve">
+    <value>Doe niets</value>
+  </data>
+  <data name="QueueView_Duration" xml:space="preserve">
+    <value>Duur van de codering:</value>
+  </data>
+  <data name="QueueView_Edit" xml:space="preserve">
+    <value>Bewerken</value>
+  </data>
+  <data name="QueueView_EndTime" xml:space="preserve">
+    <value>Eindtijd:</value>
+  </data>
+  <data name="QueueView_Export" xml:space="preserve">
+    <value>Wachtrij exporteren</value>
+  </data>
+  <data name="QueueView_FileSize" xml:space="preserve">
+    <value>Grootte uitvoerbestand:</value>
+  </data>
+  <data name="WhenDone_Hibernate" xml:space="preserve">
+    <value>Slaapstand</value>
+  </data>
+  <data name="WhenDone_LockSystem" xml:space="preserve">
+    <value>Systeem vergrendelen</value>
+  </data>
+  <data name="QueueView_LogNotAvailableYet" xml:space="preserve">
+    <value>Het logboek is beschikbaar nadat het coderen is voltooid.</value>
+  </data>
+  <data name="WhenDone_Logoff" xml:space="preserve">
+    <value>Afmelden</value>
+  </data>
+  <data name="QueueView_OpenDestDir" xml:space="preserve">
+    <value>Bestemmingsmap openen</value>
+  </data>
+  <data name="QueueView_OpenSourceDir" xml:space="preserve">
+    <value>Open-broncode directory</value>
+  </data>
+  <data name="QueueView_Options" xml:space="preserve">
+    <value>Opties</value>
+  </data>
+  <data name="QueueView_Pause" xml:space="preserve">
+    <value>Pauze</value>
+  </data>
+  <data name="QueueView_PausedDuration" xml:space="preserve">
+    <value>Duur van de pauze:</value>
+  </data>
+  <data name="QueueView_PictureSettings" xml:space="preserve">
+    <value>Beeldinstellingen:</value>
+  </data>
+  <data name="WhenDone_QuitHandBrake" xml:space="preserve">
+    <value>HandBrake afsluiten</value>
+  </data>
+  <data name="QueueView_ResetAllJobs" xml:space="preserve">
+    <value>Alle taken opnieuw uitvoeren</value>
+  </data>
+  <data name="QueueView_ResetFailed" xml:space="preserve">
+    <value>Herhaalde uitvoering mislukt</value>
+  </data>
+  <data name="QueueView_ResetSelectedJobs" xml:space="preserve">
+    <value>Geselecteerde taken herstellen</value>
+  </data>
+  <data name="QueueView_Reset" xml:space="preserve">
+    <value>Herstellen</value>
+  </data>
+  <data name="WhenDone_Shutdown" xml:space="preserve">
+    <value>Afsluiten</value>
+  </data>
+  <data name="QueueView_Source" xml:space="preserve">
+    <value>Bron:</value>
+  </data>
+  <data name="QueueView_Start" xml:space="preserve">
+    <value>Wachtrij starten</value>
+  </data>
+  <data name="QueueView_StartTime" xml:space="preserve">
+    <value>Starttijd:</value>
+  </data>
+  <data name="QueueView_Statistics" xml:space="preserve">
+    <value>Statistieken</value>
+  </data>
+  <data name="QueueView_StatsNotAvailableYet" xml:space="preserve">
+    <value>Statistieken zijn beschikbaar nadat een codering is voltooid.</value>
+  </data>
+  <data name="QueueView_Subtitles" xml:space="preserve">
+    <value>Ondertitels:</value>
+  </data>
+  <data name="QueueView_Summary" xml:space="preserve">
+    <value>Samenvatting</value>
+  </data>
+  <data name="WhenDone_Suspend" xml:space="preserve">
+    <value>Slapen</value>
+  </data>
+  <data name="QueueView_Video" xml:space="preserve">
+    <value>Video:</value>
+  </data>
+  <data name="QueueView_WhenDone" xml:space="preserve">
+    <value>Wanneer klaar:</value>
+  </data>
+  <data name="Shared_AddAllForSelected" xml:space="preserve">
+    <value>Alle resterende geselecteerde talen toevoegen</value>
+  </data>
+  <data name="Shared_AddAllRemaining" xml:space="preserve">
+    <value>Alle resterende sporen toevoegen</value>
+  </data>
+  <data name="Shared_AddNewTrack" xml:space="preserve">
+    <value>Nieuw spoor toevoegen</value>
+  </data>
+  <data name="Shared_AddTrack" xml:space="preserve">
+    <value>Sporen</value>
+  </data>
+  <data name="Shared_AvailableLanguages" xml:space="preserve">
+    <value>Beschikbare talen:</value>
+  </data>
+  <data name="Shared_ChooseLanguages" xml:space="preserve">
+    <value>Kies talen:</value>
+  </data>
+  <data name="Shared_ChosenLanguages" xml:space="preserve">
+    <value>Geselecteerde talen:</value>
+  </data>
+  <data name="Shared_ConfigureDefaultBehaviours" xml:space="preserve">
+    <value>Standaardgedrag instellen</value>
+  </data>
+  <data name="Shared_ReloadDefaults" xml:space="preserve">
+    <value>Opnieuw laden</value>
+  </data>
+  <data name="SourceSelection_ChooseDisc" xml:space="preserve">
+    <value>Kies te scannen schijf</value>
+  </data>
+  <data name="SourceSelection_ChooseFile" xml:space="preserve">
+    <value>Kies te scannen bestand</value>
+  </data>
+  <data name="SourceSelection_ChooseFolder" xml:space="preserve">
+    <value>Kies te scannen map</value>
+  </data>
+  <data name="SourceSelection_ChooseSpecificTitle" xml:space="preserve">
+    <value>Kies optioneel een specifieke titel:</value>
+  </data>
+  <data name="SourceSelection_ChooseVideo" xml:space="preserve">
+    <value>Kies vervolgens de te coderen video('s) :</value>
+  </data>
+  <data name="SourceSelection_File" xml:space="preserve">
+    <value>Bestand</value>
+  </data>
+  <data name="SourceSelection_FolderBatchScan" xml:space="preserve">
+    <value>Map (multi-scan)</value>
+  </data>
+  <data name="SourceSelection_OpenDVDBluray" xml:space="preserve">
+    <value>Open deze dvd- of Bluray-schijf</value>
+  </data>
+  <data name="SourceSelection_OpenFolderWIth" xml:space="preserve">
+    <value>Open een map met een of meer bestanden.</value>
+  </data>
+  <data name="SourceSelection_QueueArchiveRecovery" xml:space="preserve">
+    <value>Wachtrijbestanden herstellen</value>
+  </data>
+  <data name="SourceSelection_QueueArchiveRecoveryDesc" xml:space="preserve">
+    <value>Een eerder wachtrijarchief is beschikbaar.</value>
+  </data>
+  <data name="SourceSelection_SingleVideoFile" xml:space="preserve">
+    <value>Open een enkel videobestand.</value>
+  </data>
+  <data name="SourceSelection_SourceSelection" xml:space="preserve">
+    <value>Bronselectie</value>
+  </data>
+  <data name="StaticPreviewView_Duration" xml:space="preserve">
+    <value>Duur:</value>
+  </data>
+  <data name="StaticPreviewView_LivePreview" xml:space="preserve">
+    <value>Live voorbeeld</value>
+  </data>
+  <data name="StaticPreviewView_SelectPreviewImage" xml:space="preserve">
+    <value>Selecteer een voorbeeld</value>
+  </data>
+  <data name="StaticPreviewView_UseSystemDefault" xml:space="preserve">
+    <value>Voorkeur voor de standaard videospeler</value>
+  </data>
+  <data name="SubtitlesView_AddCC" xml:space="preserve">
+    <value>Indien beschikbaar ingesloten bijschriften toevoegen</value>
+  </data>
+  <data name="SubtitlesView_AddForeignAudioSearch" xml:space="preserve">
+    <value>Buitenlandse audio-scan toevoegen</value>
+  </data>
+  <data name="SubtitlesView_BurnInBehaviour" xml:space="preserve">
+    <value>Inbrand-gedrag:</value>
+  </data>
+  <data name="SubtitlesView_ImportSubtitle" xml:space="preserve">
+    <value>Ondertiteling importeren</value>
+  </data>
+  <data name="SubtitlesView_TrackSelectionBehaviour" xml:space="preserve">
+    <value>Selectie van sporen:</value>
+  </data>
+  <data name="SubtitleView_AddAllCC" xml:space="preserve">
+    <value>Alle resterende ingesloten bijschriften toevoegen</value>
+  </data>
+  <data name="SubtitleView_SubtitleDefaultsDescription" xml:space="preserve">
+    <value>Configureer hoe de ondertitelingssporen automatisch worden geselecteerd en ingesteld wanneer u een nieuwe titel- of bronvideo selecteert.</value>
+  </data>
+  <data name="SummaryView_AdditionalAudioTracks" xml:space="preserve">
+    <value>Aanvullende audiosporen</value>
+  </data>
+  <data name="SummaryView_AdditionalSubtitleTracks" xml:space="preserve">
+    <value>Aanvullende ondertitelingssporen</value>
+  </data>
+  <data name="SummaryView_Burned" xml:space="preserve">
+    <value>Ingebrand</value>
+  </data>
+  <data name="SummaryView_Chapters" xml:space="preserve">
+    <value>Hoofdstukmarkeringen</value>
+  </data>
+  <data name="SummaryView_Deblock" xml:space="preserve">
+    <value>Deblock</value>
+  </data>
+  <data name="SummaryView_Detelecine" xml:space="preserve">
+    <value>Detelecine</value>
+  </data>
+  <data name="SummaryView_display" xml:space="preserve">
+    <value>weergave</value>
+  </data>
+  <data name="SummaryView_Grayscale" xml:space="preserve">
+    <value>Grijstinten</value>
+  </data>
+  <data name="SummaryView_NoAudioTracks" xml:space="preserve">
+    <value>Geen audiosporen</value>
+  </data>
+  <data name="SummaryView_NoChapters" xml:space="preserve">
+    <value>Geen hoofdstukmarkeringen</value>
+  </data>
+  <data name="SummaryView_NoFilters" xml:space="preserve">
+    <value>Geen filters</value>
+  </data>
+  <data name="SummaryView_NoSource" xml:space="preserve">
+    <value>Geen bron</value>
+  </data>
+  <data name="SummaryView_NoSubtitleTracks" xml:space="preserve">
+    <value>Geen ondertiteling</value>
+  </data>
+  <data name="SummaryView_NoTracks" xml:space="preserve">
+    <value>Geen sporen</value>
+  </data>
+  <data name="SummaryView_PreviewInfo" xml:space="preserve">
+    <value>Voorbeeld {0} van {1}</value>
+  </data>
+  <data name="SummaryView_Rotation" xml:space="preserve">
+    <value>Rotatie</value>
+  </data>
+  <data name="SummaryView_storage" xml:space="preserve">
+    <value>opslag</value>
+  </data>
+  <data name="VideoView_2Pass" xml:space="preserve">
+    <value>2-fasecodering</value>
+  </data>
+  <data name="VideoView_AverageBitrate" xml:space="preserve">
+    <value>Gem. bitsnelheid (kbps):</value>
+  </data>
+  <data name="VideoView_Codec" xml:space="preserve">
+    <value>Video Encoder:</value>
+  </data>
+  <data name="VideoView_ConstantFramerate" xml:space="preserve">
+    <value>Constante framesnelheid</value>
+  </data>
+  <data name="VideoView_ConstantQuality" xml:space="preserve">
+    <value>Constante kwaliteit:</value>
+  </data>
+  <data name="VideoView_EncoderLevel" xml:space="preserve">
+    <value>Codering niveau:</value>
+  </data>
+  <data name="VideoView_EncoderPreset" xml:space="preserve">
+    <value>Codering voorinstelling:</value>
+  </data>
+  <data name="VideoView_EncoderProfile" xml:space="preserve">
+    <value>Codering profiel:</value>
+  </data>
+  <data name="VideoView_EncodeTune" xml:space="preserve">
+    <value>Codering afstemming:</value>
+  </data>
+  <data name="VideoView_ExtraOptions" xml:space="preserve">
+    <value>Geavanceerde opties:</value>
+  </data>
+  <data name="VideoView_FastDecode" xml:space="preserve">
+    <value>Snelle codering</value>
+  </data>
+  <data name="VideoView_Framerate" xml:space="preserve">
+    <value>Framesnelheid (FPS):</value>
+  </data>
+  <data name="VideoView_OptimiseVideo" xml:space="preserve">
+    <value>Codering opties:</value>
+  </data>
+  <data name="VideoView_PeakFramerate" xml:space="preserve">
+    <value>Piek-framesnelheid</value>
+  </data>
+  <data name="VideoView_Quality" xml:space="preserve">
+    <value>Kwaliteit:</value>
+  </data>
+  <data name="VideoView_TurboFirstPass" xml:space="preserve">
+    <value>Turbo eerste fase</value>
+  </data>
+  <data name="VideoView_VariableFramerate" xml:space="preserve">
+    <value>Variabele framesnelheid</value>
+  </data>
+  <data name="VideoView_Video" xml:space="preserve">
+    <value>Video: </value>
+  </data>
+  <data name="OptionsView_Language" xml:space="preserve">
+    <value>Taal:</value>
+  </data>
+  <data name="Language_UseSystem" xml:space="preserve">
+    <value>Systeemtaal</value>
+  </data>
+  <data name="SourceSelection_AboutHandBrake" xml:space="preserve">
+    <value>Over HandBrake</value>
+  </data>
+  <data name="SourceSelection_DropFileHere" xml:space="preserve">
+    <value>Of sleep een bestand of map hierheen...</value>
+  </data>
+  <data name="SourceSelection_Help" xml:space="preserve">
+    <value>Help</value>
+  </data>
+  <data name="Preferences" xml:space="preserve">
+    <value>Voorkeuren</value>
+  </data>
+  <data name="AudioDefaultsView_AddTrack" xml:space="preserve">
+    <value>Spoor toevoegen</value>
+  </data>
+  <data name="AudioDefaultsView_AutoAddTracks" xml:space="preserve">
+    <value>Instellingen voor de audiocodering van elk gekozen spoor:</value>
+  </data>
+  <data name="AudioDefaultsView_Clear" xml:space="preserve">
+    <value>Wissen</value>
+  </data>
+  <data name="SubtitlesView_BurnIn" xml:space="preserve">
+    <value>Inbranden</value>
+  </data>
+  <data name="SubtitlesView_Default" xml:space="preserve">
+    <value>Standaard</value>
+  </data>
+  <data name="SubtitlesView_ForcedOnly" xml:space="preserve">
+    <value>Alleen geforceerd</value>
+  </data>
+  <data name="MainView_About" xml:space="preserve">
+    <value>_Over...</value>
+  </data>
+  <data name="MainView_ActivityLogMenu" xml:space="preserve">
+    <value>_Activiteitenlogboek</value>
+  </data>
+  <data name="MainView_CheckForUpdates" xml:space="preserve">
+    <value>_Controleren op updates</value>
+  </data>
+  <data name="MainView_Exit" xml:space="preserve">
+    <value>_Afsluiten</value>
+  </data>
+  <data name="MainView_ExportToFile" xml:space="preserve">
+    <value>_Exporteren naar bestand</value>
+  </data>
+  <data name="MainView_FileMenu" xml:space="preserve">
+    <value>_Bestand</value>
+  </data>
+  <data name="MainView_HandBrakeDocs" xml:space="preserve">
+    <value>_HandBrake documentatie (HTTPS)</value>
+  </data>
+  <data name="MainView_HelpMenu" xml:space="preserve">
+    <value>_Help</value>
+  </data>
+  <data name="MainView_ImportFromFile" xml:space="preserve">
+    <value>_Importeren van bestand</value>
+  </data>
+  <data name="MainView_PreferencesMenu" xml:space="preserve">
+    <value>_Voorkeuren</value>
+  </data>
+  <data name="MainView_PresetsMenu" xml:space="preserve">
+    <value>_Voorinstellingen</value>
+  </data>
+  <data name="MainView_QueueMenu" xml:space="preserve">
+    <value>_Wachtlijst</value>
+  </data>
+  <data name="MainView_ResetPresets" xml:space="preserve">
+    <value>Ingebouwde voorinstellingen _herstellen</value>
+  </data>
+  <data name="MainView_SetCurrentAsDefault" xml:space="preserve">
+    <value>Huidige als _standaard instellen</value>
+  </data>
+  <data name="MainView_ShowPresetPanel" xml:space="preserve">
+    <value>Paneel met voorinstellingen weergeven</value>
+  </data>
+  <data name="MainView_ShowQueueMenu" xml:space="preserve">
+    <value>_Wachtrij weergeven</value>
+  </data>
+  <data name="MainView_ToolsMenu" xml:space="preserve">
+    <value>_Hulpmiddelen</value>
+  </data>
+  <data name="OptionsView_CheckingForUpdates" xml:space="preserve">
+    <value>Op nieuw versies controleren...</value>
+  </data>
+  <data name="OptionsView_ClearLogDirConfirm" xml:space="preserve">
+    <value>Weet u zeker dat u de map met logbestanden wilt wissen?</value>
+  </data>
+  <data name="OptionsView_ClearLogs" xml:space="preserve">
+    <value>Logboeken wissen</value>
+  </data>
+  <data name="OptionsView_Downloading" xml:space="preserve">
+    <value>Downloaden…</value>
+  </data>
+  <data name="OptionsView_LogsCleared" xml:space="preserve">
+    <value>De map met HandBrake logboekbestanden is gewist!</value>
+  </data>
+  <data name="OptionsView_Notice" xml:space="preserve">
+    <value>Kennisgeving</value>
+  </data>
+  <data name="OptionsView_PreparingUpdate" xml:space="preserve">
+    <value>Voorbereiden op nieuwe versie…</value>
+  </data>
+  <data name="OptionsView_SelectFolder" xml:space="preserve">
+    <value>Kies een map.</value>
+  </data>
+  <data name="OptionsView_SetDefaultLocationOutputFIle" xml:space="preserve">
+    <value>Klik 'Bladeren' om de standaardlocatie in te stellen</value>
+  </data>
+  <data name="MainView_Hide" xml:space="preserve">
+    <value>Verbergen</value>
+  </data>
+  <data name="MainView_Show" xml:space="preserve">
+    <value>Tonen</value>
+  </data>
+  <data name="MainView_ShowAddAllToQueue" xml:space="preserve">
+    <value>Alles aan wachtrij toevoegen</value>
+  </data>
+  <data name="MainView_ShowAddSelectionToQueue" xml:space="preserve">
+    <value>Selectie aan wachtrij toevoegen</value>
+  </data>
+  <data name="QueueView_PlayMediaFile" xml:space="preserve">
+    <value>Bestand afspelen</value>
+  </data>
+  <data name="Options_ApplicationToolbar" xml:space="preserve">
+    <value>Toepassingswerkbalk</value>
+  </data>
+  <data name="Options_ShowToolbarAddAll" xml:space="preserve">
+    <value>'Alles aan wachtrij toevoegen' op de werkbalk weergeven</value>
+  </data>
+  <data name="Options_ShowToolbarAddSelection" xml:space="preserve">
+    <value>'Selectie aan wachtrij toevoegen' op de werkbalk weergeven</value>
+  </data>
+  <data name="OptionsView_HardwareDetectFailed" xml:space="preserve">
+    <value>Ondersteuning voor hardwarecodering is momenteel uitgeschakeld. Als u HandBrake niet hebt gestart met de optie "--no-hardware", zorg er dan voor dat u up-to-date stuurprogramma's gebruikt voor alle grafische adapters in dit systeem.
+
+Dit heeft geen invloed op de software-encoders.</value>
+  </data>
+  <data name="Main_PleaseFixSubtitleSettings" xml:space="preserve">
+    <value>Corrigeer uw ondertitelingsinstellingen voordat u doorgaat.</value>
+  </data>
+  <data name="Generic_Apply" xml:space="preserve">
+    <value>Toepassen</value>
+  </data>
+  <data name="Main_ResumeEncode" xml:space="preserve">
+    <value>Codering hervatten</value>
+  </data>
+  <data name="QueueView_Actions" xml:space="preserve">
+    <value>Acties</value>
+  </data>
+  <data name="QueueView_Import" xml:space="preserve">
+    <value>Wachtrij importeren</value>
+  </data>
+  <data name="QueueViewModel_EncodeStatusChanged_StatusLabel" xml:space="preserve">
+    <value>Coderen: Fase {0} van {1}, {2:00.00}%, FPS: {3:000.0}, Gem. FPS: {4:000.0}, Resterende tijd: {5}, verstreken: {6} {7}</value>
+  </data>
+  <data name="QueueView_DeleteSelected" xml:space="preserve">
+    <value>Selectie verwijderen</value>
+  </data>
+  <data name="Portable_TmpNotWritable" xml:space="preserve">
+    <value>Portable modus: kan geen TMP-map aanmaken. Controleer of het pad correct en beschrijfbaar is.</value>
+  </data>
+  <data name="Portable_StorageNotWritable" xml:space="preserve">
+    <value>Portable modus: kan geen opslagmap maken. Controleer of het pad correct en beschrijfbaar is.</value>
+  </data>
+  <data name="Portable_IniFileError" xml:space="preserve">
+    <value>Portable modus: niet in staat om portable.ini te lezen. Mogelijk is er een fout opgetreden in dit bestand. Probeer het opnieuw met portable.ini.template als richtlijn.</value>
+  </data>
+  <data name="OptionsView_FormatOptions" xml:space="preserve">
+    <value>Vervanging van plaatshouders: {source} {title} {chapters} {creation-date} {creation-time} {date} {time} {quality_bitrate}</value>
+  </data>
+  <data name="OptionsView_PathOptions" xml:space="preserve">
+    <value>Vervanging van plaatshouders: {source_path} {source_folder_name} {source}</value>
+  </data>
+  <data name="FileOverwriteBehaviours_Ask" xml:space="preserve">
+    <value>Vraag om het bestand te overschrijven</value>
+  </data>
+  <data name="FileOverwriteBehaviours_Autoname" xml:space="preserve">
+    <value>Probeer het bestand automatisch een andere naam te geven</value>
+  </data>
+  <data name="FileOverwriteBehaviours_Overwrite" xml:space="preserve">
+    <value>Het bestand overschrijven</value>
+  </data>
+  <data name="Options_UIBehaviour" xml:space="preserve">
+    <value>Gebruikersomgeving gedrag</value>
+  </data>
+  <data name="OptionsView_FileOverwriteBehaviour" xml:space="preserve">
+    <value>Gedrag bij bestand overschrijven:</value>
+  </data>
+  <data name="Options_EncodeCompleted" xml:space="preserve">
+    <value>Codering voltooid</value>
+  </data>
+  <data name="Options_Notifications" xml:space="preserve">
+    <value>Meldingsgeluiden</value>
+  </data>
+  <data name="Options_QueueCompleted" xml:space="preserve">
+    <value>Wachtrij gereed</value>
+  </data>
+  <data name="Options_WhenDoneColon" xml:space="preserve">
+    <value>Wanneer klaar:</value>
+  </data>
+  <data name="OptionsView_FileCollisionBehaviour" xml:space="preserve">
+    <value>Gedrag bij identieke bestandsnamen:</value>
+  </data>
+  <data name="CollisionBehaviour_Post" xml:space="preserve">
+    <value>Navoegsel</value>
+  </data>
+  <data name="CollisionBehaviour_Pre" xml:space="preserve">
+    <value>Voorvoegsel</value>
+  </data>
+  <data name="CollisionBehaviour_AppendNumber" xml:space="preserve">
+    <value>Aanvullen met nummer</value>
+  </data>
+  <data name="FiltersViewAuto_DeblockPreset" xml:space="preserve">
+    <value>FiltersView_DeblockPreset</value>
+  </data>
+  <data name="FiltersViewAuto_DeblockTune" xml:space="preserve">
+    <value>Deblock afstemmen</value>
+  </data>
+  <data name="OptionsView_ChoiceOfEncoderHint" xml:space="preserve">
+    <value>De keuze van de encoder volgt op het tabblad 'Video'.</value>
+  </data>
+  <data name="Queue_RecoverQueueQuestionPlural" xml:space="preserve">
+    <value>HandBrake heeft meerdere onvoltooide wachtrijbestanden gedetecteerd. Deze zijn afkomstig van meerdere instanties van HandBrake. Wilt u alle onvoltooide taken herstellen?</value>
+  </data>
+  <data name="Queue_RecoverQueueQuestionSingular" xml:space="preserve">
+    <value>HandBrake heeft onvoltooide items in de wachtrij gedetecteerd van de laatste keer dat de applicatie werd gestart. Wilt u deze herstellen?</value>
+  </data>
+  <data name="Queue_RecoveryPossible" xml:space="preserve">
+    <value>Herstel van wachtrij mogelijk</value>
+  </data>
+  <data name="PresetService_ImportingBuiltInWarning" xml:space="preserve">
+    <value>Uw bestand met voorinstellingen bevat ingebouwde voorinstellingen. De importfunctie ondersteunt het importeren van deze niet. Gebruik 'Menu Voorinstellingen -&gt; Ingebouwde voorinstellingen herstellen' om de standaard voorinstellingen te herstellen.
+
+Waar ondersteund, worden alle gebruikersvoorinstellingen geïmporteerd.</value>
+  </data>
+  <data name="Options_PromptBeforeAction" xml:space="preserve">
+    <value>Voer actie direct uit. (Dit schakelt het bevestigingsdialoogvenster van 60 seconden uit)</value>
+  </data>
+  <data name="Browse" xml:space="preserve">
+    <value>Bladeren</value>
+  </data>
+  <data name="OptionsView_MediaFileNotSet" xml:space="preserve">
+    <value>Er is geen audiobestand ingesteld. Klik op 'Bladeren' om een wav- of mp3-bestand te selecteren om af te spelen.</value>
+  </data>
+  <data name="OptionsView_Play" xml:space="preserve">
+    <value>Afspelen</value>
+  </data>
+  <data name="QueueView_ExportCLI" xml:space="preserve">
+    <value>Wachtrij exporteren (alleen CLI)</value>
+  </data>
+  <data name="Options_DarkTheme" xml:space="preserve">
+    <value>Donker thema gebruiken. (Vereist herstart, alleen Windows 10)</value>
+  </data>
+  <data name="QueueView_NotAvailable" xml:space="preserve">
+    <value>Niet beschikbaar</value>
+  </data>
+  <data name="Options_LowDiskspaceSizeGB" xml:space="preserve">
+    <value>GiB</value>
+  </data>
+  <data name="SystemService_ACMains" xml:space="preserve">
+    <value>Netstroom gedetecteerd. Codering hervatten...  ({0} %)</value>
+  </data>
+  <data name="SystemService_CriticalBattery" xml:space="preserve">
+    <value>Systeembatterij leeg! ({0}%)</value>
+  </data>
+  <data name="SystemService_LowBatteryLog" xml:space="preserve">
+    <value>Systeem batterij bijna leeg! ({0}%). Codering is onderbroken.</value>
+  </data>
+  <data name="SystemService_LowDiskSpaceLog" xml:space="preserve">
+    <value>Resterende schijfopslag op het bestemmingsstation is gedaald tot onder {0} GB. Codering pauzeren...</value>
+  </data>
+  <data name="AudioDefaultsView_PaneTitle" xml:space="preserve">
+    <value>Automatische selectie van audio</value>
+  </data>
+  <data name="SubtitlesDefaultsView_PaneTitle" xml:space="preserve">
+    <value>Automatische selectie van ondertiteling</value>
+  </data>
+  <data name="Options_SystemOptions" xml:space="preserve">
+    <value>Systeem</value>
+  </data>
+  <data name="MetadataView_Actors" xml:space="preserve">
+    <value>Actoren:</value>
+  </data>
+  <data name="MetadataView_Comments" xml:space="preserve">
+    <value>Opmerkingen:</value>
+  </data>
+  <data name="MetadataView_Description" xml:space="preserve">
+    <value>Omschrijving:</value>
+  </data>
+  <data name="MetadataView_Director" xml:space="preserve">
+    <value>Regisseur:</value>
+  </data>
+  <data name="MetadataView_Genre" xml:space="preserve">
+    <value>Genre:</value>
+  </data>
+  <data name="MetadataView_Plot" xml:space="preserve">
+    <value>Plot:</value>
+  </data>
+  <data name="MetadataView_ReleaseDate" xml:space="preserve">
+    <value>Datum van uitgave:</value>
+  </data>
+  <data name="MetadataView_TitleTag" xml:space="preserve">
+    <value>Titel:</value>
+  </data>
+  <data name="LogViewModel_Title" xml:space="preserve">
+    <value>Logboekweergave</value>
+  </data>
+  <data name="MainView_Aspect" xml:space="preserve">
+    <value>Verhouding</value>
+  </data>
+  <data name="MainView_Filters" xml:space="preserve">
+    <value>Filters:</value>
+  </data>
+  <data name="MainView_Size" xml:space="preserve">
+    <value>Afmetingen:</value>
+  </data>
+  <data name="MainView_Tracks" xml:space="preserve">
+    <value>Sporen:</value>
+  </data>
+  <data name="OptionsTab_General" xml:space="preserve">
+    <value>Algemeen</value>
+  </data>
+  <data name="OptionsViewModel_CheckForUpdatesMsg" xml:space="preserve">
+    <value>Klik op 'Controleren op updates' om te zoeken naar nieuwe versies</value>
+  </data>
+  <data name="OptionsView_BackButton" xml:space="preserve">
+    <value>&lt; Terug</value>
+  </data>
+  <data name="QueueView_CurrentlyPaused" xml:space="preserve">
+    <value>Momenteel gepauzeerd</value>
+  </data>
+  <data name="Options_OutputFiles" xml:space="preserve">
+    <value>Uitvoerbestanden</value>
+  </data>
+  <data name="PointToPointMode_Chapters" xml:space="preserve">
+    <value>Hoofdstukken</value>
+  </data>
+  <data name="PointToPointMode_Frames" xml:space="preserve">
+    <value>Frames</value>
+  </data>
+  <data name="PointToPointMode_Preview" xml:space="preserve">
+    <value>Voorbeeld</value>
+  </data>
+  <data name="PointToPointMode_Seconds" xml:space="preserve">
+    <value>Seconden</value>
+  </data>
+  <data name="SubtitleBehaviourModes_AllMatching" xml:space="preserve">
+    <value>Alle passende geselecteerde talen</value>
+  </data>
+  <data name="SubtitleBehaviourModes_FirstMatching" xml:space="preserve">
+    <value>Eerste passende geselecteerde taal</value>
+  </data>
+  <data name="SubtitleBehaviourModes_None" xml:space="preserve">
+    <value>Geen</value>
+  </data>
+  <data name="SubtitleBurnInBehaviourModes_FirstTrack" xml:space="preserve">
+    <value>Eerste spoor</value>
+  </data>
+  <data name="SubtitleBurnInBehaviourModes_ForeignAudioPreferredElseFirst" xml:space="preserve">
+    <value>Voorkeur buitenlandse audio, anders eerste</value>
+  </data>
+  <data name="SubtitleBurnInBehaviourModes_ForeignAudioTrack" xml:space="preserve">
+    <value>Buitenlands audiospoor</value>
+  </data>
+  <data name="SubtitleBurnInBehaviourModes_None" xml:space="preserve">
+    <value>Geen</value>
+  </data>
+  <data name="SubtitleViewModel_ForeignAudioSearch" xml:space="preserve">
+    <value>Buitenlandse audio zoeken</value>
+  </data>
+  <data name="Subtitle_ForeignAudioScan" xml:space="preserve">
+    <value>Buitenlandse audio-scan</value>
+  </data>
+  <data name="AudioBehaviourModes_AllMatching" xml:space="preserve">
+    <value>Alle passende geselecteerde talen</value>
+  </data>
+  <data name="AudioBehaviourModes_AllTracks" xml:space="preserve">
+    <value>Alle sporen als sjablonen gebruiken</value>
+  </data>
+  <data name="AudioBehaviourModes_FirstMatch" xml:space="preserve">
+    <value>Eerste passende geselecteerde taal</value>
+  </data>
+  <data name="AudioBehaviourModes_FirstTrack" xml:space="preserve">
+    <value>Eerste spoor als sjabloon gebruiken</value>
+  </data>
+  <data name="AudioBehaviourModes_None" xml:space="preserve">
+    <value>Geen audio</value>
+  </data>
+  <data name="ChapterViewModel_Chapter" xml:space="preserve">
+    <value>Hoofdstuk {0}</value>
+  </data>
+  <data name="Mp4Behaviour_Auto" xml:space="preserve">
+    <value>Automatisch</value>
+  </data>
+  <data name="Mp4Behaviour_UseM4v" xml:space="preserve">
+    <value>Altijd M4V gebruiken</value>
+  </data>
+  <data name="Mp4Behaviour_UseMp4" xml:space="preserve">
+    <value>Altijd MP4 gebruiken</value>
+  </data>
+  <data name="PresetPictureSettingsMode_Custom" xml:space="preserve">
+    <value>Aangepast</value>
+  </data>
+  <data name="PresetPictureSettingsMode_None" xml:space="preserve">
+    <value>Geen</value>
+  </data>
+  <data name="PresetPictureSettingsMode_SourceMaximum" xml:space="preserve">
+    <value>Altijd bronresolutie gebruiken</value>
+  </data>
+  <data name="ProcessPriority_AboveNormal" xml:space="preserve">
+    <value>Boven normaal</value>
+  </data>
+  <data name="ProcessPriority_BelowNormal" xml:space="preserve">
+    <value>Onder normaal</value>
+  </data>
+  <data name="ProcessPriority_High" xml:space="preserve">
+    <value>Hoog</value>
+  </data>
+  <data name="ProcessPriority_Low" xml:space="preserve">
+    <value>Laag</value>
+  </data>
+  <data name="ProcessPriority_Normal" xml:space="preserve">
+    <value>Normaal</value>
+  </data>
+  <data name="UpdateCheck_Monthly" xml:space="preserve">
+    <value>Maandelijks</value>
+  </data>
+  <data name="UpdateCheck_Weekly" xml:space="preserve">
+    <value>Wekelijks</value>
+  </data>
+  <data name="OptionsView_AlwaysUseDefaultPath" xml:space="preserve">
+    <value>Altijd het standaardpad gebruiken voor nieuwe gegenereerde naam.</value>
+  </data>
+  <data name="OptionsView_RemotePortLimit" xml:space="preserve">
+    <value>Het poortnummer moet tussen 5000 en 32767 liggen</value>
+  </data>
+  <data name="OptionsView_SendFileToArgPlaceholders" xml:space="preserve">
+    <value>Vervanging van plaatshouders: {source} {destination} {exit_code}</value>
+    <comment>Note: {source}, {destination} and {exit_code} are not translatable. </comment>
+  </data>
+  <data name="SourceSelection_UpdateAvailable" xml:space="preserve">
+    <value>Er is een nieuwe versie beschikbaar!</value>
+  </data>
+  <data name="About_Copyright" xml:space="preserve">
+    <value>Copyright (C) 2003-2022 The HandBrake Team</value>
+  </data>
+  <data name="Options_LowBatteryLevel" xml:space="preserve">
+    <value>Laag accuniveau:</value>
+  </data>
+  <data name="Options_PauseOnLowBattery" xml:space="preserve">
+    <value>Pauzeer lopende taken wanneer de accu bijna leeg is.</value>
+  </data>
+  <data name="SubtitleView_AddRemainingCC" xml:space="preserve">
+    <value>Alle resterende ingesloten bijschriften toevoegen</value>
+  </data>
+  <data name="QueueService_DuplicatesQuestion" xml:space="preserve">
+    <value>In het wachtrijbestand dat u probeert te importeren zijn dubbele taken gedetecteerd. Wilt u de bestaande items overschrijven? 
+Dit stopt ook alle lopende taken.</value>
+  </data>
+  <data name="QueueService_DuplicatesTitle" xml:space="preserve">
+    <value>Duplicaten gedetecteerd</value>
+  </data>
+  <data name="OptionsView_EnableQuicksyncLowPower" xml:space="preserve">
+    <value>QuickSync-hardware met laag vermogen inschakelen (indien ondersteund).</value>
+  </data>
+  <data name="QueueView_JobInformationNotAvailable" xml:space="preserve">
+    <value>Selecteer een enkele taak om samenvattingsinformatie te bekijken.</value>
+  </data>
+  <data name="OptionsView_EnableWorkerProcesses" xml:space="preserve">
+    <value>Voer elke wachtrijtaak uit in een apart werkproces.</value>
+  </data>
+  <data name="OptionsView_WorkerDefaultPort" xml:space="preserve">
+    <value>Standaard netwerkpoort voor werkproces:</value>
+  </data>
+  <data name="Presets_NotAvailableForUse" xml:space="preserve">
+    <value>De geselecteerde voorinstelling is niet beschikbaar voor gebruik op dit systeem.
+
+Dit is typisch een indicatie dat uw systeem niet de hardware ondersteunt die nodig is om het te gebruiken.
+
+Kies een andere voorinstelling.</value>
+  </data>
+  <data name="OptionsView_ProcessIsolation" xml:space="preserve">
+    <value>Procesisolatie</value>
+  </data>
+  <data name="OptionsView_ProcessIsolation_Warning1" xml:space="preserve">
+    <value>Let op: met deze functie start een HTTP-server gebonden aan 127.0.0.1 op de opgegeven poort.</value>
+  </data>
+  <data name="OptionsView_ProcessIsolation_Warning2" xml:space="preserve">
+    <value>Als de ingestelde poort in gebruik is, wordt de eerste vrije poort binnen +100 vanaf de gedefinieerde poort gebruikt.</value>
+  </data>
+  <data name="OptionsView_SimultaneousEncodes" xml:space="preserve">
+    <value>Maximum aantal gelijktijdige coderingen:</value>
+  </data>
+  <data name="StaticPreviewView_CancelPreview" xml:space="preserve">
+    <value>Annuleren</value>
+  </data>
+  <data name="MainView_SelectedPresets" xml:space="preserve">
+    <value>Voorinstelling:</value>
+  </data>
+  <data name="SummaryView_SameAsSource" xml:space="preserve">
+    <value>Zelfde als bron</value>
+  </data>
+  <data name="OptionsViewModel_ResetHandBrake" xml:space="preserve">
+    <value>Instellingen herstellen</value>
+  </data>
+  <data name="OptionsViewModel_ResetHandBrakeQuestion" xml:space="preserve">
+    <value>HandBrake herstellen naar de standaardinstellingen?</value>
+  </data>
+  <data name="PaddingMode_Custom" xml:space="preserve">
+    <value>Aangepast (zonder beperkingen)</value>
+  </data>
+  <data name="PaddingMode_Fill" xml:space="preserve">
+    <value>Opvulling (rondom)</value>
+  </data>
+  <data name="PaddingMode_Height" xml:space="preserve">
+    <value>Hoogte (verticale banden)</value>
+  </data>
+  <data name="PaddingMode_None" xml:space="preserve">
+    <value>Geen</value>
+  </data>
+  <data name="PaddingMode_Width" xml:space="preserve">
+    <value>Breedte (horizontale randen)</value>
+  </data>
+  <data name="PictureSettingsView_Padding" xml:space="preserve">
+    <value>Opvulling:</value>
+  </data>
+  <data name="PictureSettingsView_PaddingColour" xml:space="preserve">
+    <value>Kleur:</value>
+  </data>
+  <data name="PictureSettingsView_Borders" xml:space="preserve">
+    <value>Randen:</value>
+  </data>
+  <data name="PictureSettingsView_ResAndScaling" xml:space="preserve">
+    <value>Resolutie en verschaling:</value>
+  </data>
+  <data name="PictureSettingsView_RotateAndCrop" xml:space="preserve">
+    <value>Oriëntatie en bijsnijden:</value>
+  </data>
+  <data name="QueueView_FilterSettings" xml:space="preserve">
+    <value>Filters:</value>
+  </data>
+  <data name="SummaryView_Default" xml:space="preserve">
+    <value>Standaard</value>
+  </data>
+  <data name="SummaryView_Forced" xml:space="preserve">
+    <value>Geforceerd</value>
+  </data>
+  <data name="PictureSettingsResLimitModes_1080p" xml:space="preserve">
+    <value>1080p HD</value>
+  </data>
+  <data name="PictureSettingsResLimitModes_480p" xml:space="preserve">
+    <value>480p NTSC SD</value>
+  </data>
+  <data name="PictureSettingsResLimitModes_4K" xml:space="preserve">
+    <value>2160p 4K Ultra HD</value>
+  </data>
+  <data name="PictureSettingsResLimitModes_576p" xml:space="preserve">
+    <value>576p PAL SD</value>
+  </data>
+  <data name="PictureSettingsResLimitModes_720p" xml:space="preserve">
+    <value>720p HD</value>
+  </data>
+  <data name="PictureSettingsResLimitModes_8K" xml:space="preserve">
+    <value>4320p 8K Ultra HD</value>
+  </data>
+  <data name="PictureSettingsResLimitModes_custom" xml:space="preserve">
+    <value>Aangepast</value>
+  </data>
+  <data name="PictureSettingsView_MaxSize" xml:space="preserve">
+    <value>Maximum afmetingen:</value>
+  </data>
+  <data name="PictureSettingsView_ResLimit" xml:space="preserve">
+    <value>Resolutielimiet</value>
+  </data>
+  <data name="PictureSettingsResLimitModes_none" xml:space="preserve">
+    <value>Geen</value>
+  </data>
+  <data name="PresetManger_Title" xml:space="preserve">
+    <value>Voorinstellingen beheren</value>
+  </data>
+  <data name="ManagePresetView_DeleteBuiltIn" xml:space="preserve">
+    <value>Ingebouwde voorinstellingen verwijderen</value>
+  </data>
+  <data name="ManagePresetView_Export" xml:space="preserve">
+    <value>Geselecteerde voorinstelling exporteren</value>
+  </data>
+  <data name="ManagePresetView_Import" xml:space="preserve">
+    <value>Voorinstelling(en) importeren uit bestand</value>
+  </data>
+  <data name="ManagePresetView_PresetInfo" xml:space="preserve">
+    <value>Voorinstelling info:</value>
+  </data>
+  <data name="ManagePresetView_RestrictedPreset" xml:space="preserve">
+    <value>Ingebouwde voorinstellingen zijn niet berwerkbaar.</value>
+  </data>
+  <data name="ManagePresetView_SetDefault" xml:space="preserve">
+    <value>Geselecteerde voorinstelling instellen als standaard</value>
+  </data>
+  <data name="PresetManagerView_Delete" xml:space="preserve">
+    <value>Voorinstelling verwijderen</value>
+  </data>
+  <data name="OptionsView_NotSupported" xml:space="preserve">
+    <value>(Niet ondersteund op dit systeem)</value>
+  </data>
+  <data name="QueueView_Stop" xml:space="preserve">
+    <value>Stop</value>
+  </data>
+  <data name="String1" xml:space="preserve">
+    <value/>
+  </data>
+  <data name="PresetService_CategoryAlreadyExists" xml:space="preserve">
+    <value>De ingevoerde categorienaam bestaat al. Kies een andere naam.</value>
+  </data>
+  <data name="PresetService_CategoryNameEmpty" xml:space="preserve">
+    <value>De categorienaam was leeg. Geef een naam op.</value>
+  </data>
+  <data name="TextEntryView_EnterName" xml:space="preserve">
+    <value>Voer een naam in:</value>
+  </data>
+  <data name="ManagePresetView_NoPresetSelected" xml:space="preserve">
+    <value>Er is geen voorinstelling geselecteerd.</value>
+  </data>
+  <data name="ManagePresetView_ExportUserPresets" xml:space="preserve">
+    <value>Alle gebruikers-voorinstellingen exporteren</value>
+  </data>
+  <data name="Options_LowDiskspaceLevelText" xml:space="preserve">
+    <value>Niveau voor waarschuwingen van beperkte schijfruimte:</value>
+  </data>
+  <data name="OptionsView_SimultaneousHardwareLimitNotice" xml:space="preserve">
+    <value>Opmerking: dit is hat maximum aantal gelijktijdige taken. Beperkingen in de hardware kunnen ertoe leiden dat het werkelijke aantal gelijktijdige taken tijdens codering lager is. De instelling heeft alleen invloed op de volgende wachtrij of app-herstart.</value>
+  </data>
+  <data name="Preset_NotAvailable" xml:space="preserve">
+    <value>(Niet beschikbaar)</value>
+  </data>
+  <data name="AddPresetView_IsDefault" xml:space="preserve">
+    <value>Is standaard:</value>
+  </data>
+  <data name="No" xml:space="preserve">
+    <value>Nee</value>
+  </data>
+  <data name="Yes" xml:space="preserve">
+    <value>Ja</value>
+  </data>
+  <data name="StaticPreviewView_FineTuning" xml:space="preserve">
+    <value>Beeldinstellingen fijnafstemmen</value>
+  </data>
+  <data name="StaticPreviewView_ShowPictureSettingsAdjustment" xml:space="preserve">
+    <value>Bijsnijdings-grepen weergeven.</value>
+  </data>
+  <data name="DarkTheme_dark" xml:space="preserve">
+    <value>Donker gebruiken</value>
+  </data>
+  <data name="DarkTheme_light" xml:space="preserve">
+    <value>Licht gebruiken</value>
+  </data>
+  <data name="DarkTheme_system" xml:space="preserve">
+    <value>Volgens systeem</value>
+  </data>
+  <data name="OptionsView_DarkThemeMode" xml:space="preserve">
+    <value>Thema:</value>
+  </data>
+  <data name="OptionsView_RequiresRestart" xml:space="preserve">
+    <value>(Vereist opnieuw starten)</value>
+  </data>
+  <data name="FiltersView_ChromaSmooth" xml:space="preserve">
+    <value>Chroma Smooth:</value>
+  </data>
+  <data name="FiltersView_ColourSpace" xml:space="preserve">
+    <value>Kleurruimte:</value>
+  </data>
+  <data name="SummaryView_Colourspace" xml:space="preserve">
+    <value>Kleurruimte</value>
+  </data>
+  <data name="PictureSettingsView_SeePreview" xml:space="preserve">
+    <value>Voorbeeld openen</value>
+  </data>
+  <data name="SummaryView_SourcePreview" xml:space="preserve">
+    <value>Voorbeeld bron:</value>
+  </data>
+  <data name="QueueView_JobStatus" xml:space="preserve">
+    <value>Taakstatus:</value>
+  </data>
+  <data name="QueueView_JobStatus_Cancelled" xml:space="preserve">
+    <value>Geannuleerd</value>
+  </data>
+  <data name="QueueView_JobStatus_Complete" xml:space="preserve">
+    <value>Voltooid</value>
+  </data>
+  <data name="QueueView_JobStatus_InitFailed" xml:space="preserve">
+    <value>Ongeldige instellingen. Controleer logboek voor details.</value>
+  </data>
+  <data name="QueueView_JobStatus_InvalidInput" xml:space="preserve">
+    <value>Ongeldige invoer. Controleer logboek voor details.</value>
+  </data>
+  <data name="QueueView_JobStatus_NoErrorCode" xml:space="preserve">
+    <value>Onbekende status. Controleer logboek voor details.</value>
+  </data>
+  <data name="QueueView_JobStatus_ReadError" xml:space="preserve">
+    <value>Fouten ontdekt bij het lezen van de bron.</value>
+  </data>
+  <data name="QueueView_JobStatus_Unknown" xml:space="preserve">
+    <value>Onbekende fout. Controleer logboek voor details.</value>
+  </data>
+  <data name="QueueView_JobStatus_WorkerCrash" xml:space="preserve">
+    <value>Taakuitvoering afgebroken. Controleer logboek voor details.</value>
+  </data>
+  <data name="Startup_HbDllMissing" xml:space="preserve">
+    <value>Ontbrekend bestand "hb.dll". Installeer opnieuw.</value>
+  </data>
+  <data name="OptionsView_SafeMode" xml:space="preserve">
+    <value>Waarschuwing: houd er rekening mee dat dit een "Safe Mode" -build van HandBrake is die geen ondersteuning voor hardware-encoders bevat. Als u ondersteuning voor hardware-encoders wilt gebruiken, download dan een niet-"Safe Mode" -build van de website.</value>
+  </data>
+  <data name="PadColour_Black" xml:space="preserve">
+    <value>Zwart</value>
+  </data>
+  <data name="PadColour_Custom" xml:space="preserve">
+    <value>Aangepast</value>
+  </data>
+  <data name="PadColour_White" xml:space="preserve">
+    <value>Wit</value>
+  </data>
+  <data name="PictureSettingsView_PaddingCustomColour" xml:space="preserve">
+    <value>RGB-waarde:</value>
+  </data>
+  <data name="SummaryView_Padded" xml:space="preserve">
+    <value>(opgevuld)</value>
+  </data>
+  <data name="FiltersView_Flip" xml:space="preserve">
+    <value>Spiegelen:</value>
+  </data>
+  <data name="PictureSettingsView_SourceDimensions" xml:space="preserve">
+    <value>Afmetingen van de bron:</value>
+  </data>
+  <data name="PictureSettingsViewModel_SourceInfo" xml:space="preserve">
+    <value>Opslagafmetingen: {0}x{1}     Weergaveafmetingen: {2}x{3}      Beeldverhouding: {4}</value>
+  </data>
+  <data name="MainViewModel_FilePathSelectError" xml:space="preserve">
+    <value>Er is een fout opgetreden in de bestandsvenster.
+
+- Let op, lange bestandspaden worden niet volledig ondersteund. Houd bestandspaden korter dan 255 tekens. 
+- De laatst gebruikte map voor dit venster is hersteld om fouten te voorkomen als u de volgende keer een bestand probeert te scannen.</value>
+  </data>
+  <data name="PictureSettingsView_MaxHeight" xml:space="preserve">
+    <value>Max hoogte:</value>
+  </data>
+  <data name="PictureSettingsView_MaxWidth" xml:space="preserve">
+    <value>Max breedte:</value>
+  </data>
+  <data name="PictureSettingsViewModel_AspectRatioLabel" xml:space="preserve">
+    <value>Beeldverhouding: {0}</value>
+  </data>
+  <data name="SummaryView_MetadataPassthru" xml:space="preserve">
+    <value>Algemene metagegevens doorvoeren</value>
+  </data>
+  <data name="OptionsViewModel_InvalidAutonamePath" xml:space="preserve">
+    <value>Het standaard automatische naampad is niet geldig. {0} mag niet voor {1} staan</value>
+  </data>
+  <data name="FirstRun_EnableUpdateCheck" xml:space="preserve">
+    <value>Wilt u HandBrake automatisch laten controleren op updates?
+
+U kunt uw keuze op elk moment wijzigen door de opties in Voorkeuren -&gt; Algemeen -&gt; Controleren op updates</value>
+  </data>
+  <data name="FirstRun_EnableUpdateCheckHeader" xml:space="preserve">
+    <value>Controleren op updates?</value>
+  </data>
+  <data name="OptionsViewModel_UpdateNotice" xml:space="preserve">
+    <value>Voor het bijwerken: 
+- Controleer of dat er geen lopende coderingen in de wachtrij staan. 
+- Maak een back-up of noteer aangepaste voorinstellingen die u eventueel hebt gemaakt, omdat deze mogelijk niet volledig compatibel zijn met nieuwere versies.</value>
+  </data>
+  <data name="Preset_Default" xml:space="preserve">
+    <value>(Standaard)</value>
+  </data>
+  <data name="PresetDisplayMode_Category" xml:space="preserve">
+    <value>Categorieën</value>
+  </data>
+  <data name="PresetDisplayMode_Flat" xml:space="preserve">
+    <value>Lijst</value>
+  </data>
+  <data name="PresetDisplayMode_Partial" xml:space="preserve">
+    <value>Deels lijst</value>
+  </data>
+  <data name="OptionsView_PresetDisplayMode" xml:space="preserve">
+    <value>Kies hoe voorinstellingen worden weergegeven in menu's:</value>
+  </data>
+  <data name="QueueView_SelectedPresets" xml:space="preserve">
+    <value>Voorinstelling:</value>
+  </data>
+  <data name="LogViewModel_Complete" xml:space="preserve">
+    <value>[Klaar]</value>
+  </data>
+  <data name="QueueViewModel_EditJob" xml:space="preserve">
+    <value>Taak bewerken?</value>
+  </data>
+  <data name="QueueView_Length" xml:space="preserve">
+    <value>Uitvoerlengte:</value>
+  </data>
+  <data name="QueueView_MoveToBottom" xml:space="preserve">
+    <value>Onderaan plaatsen</value>
+  </data>
+  <data name="QueueView_MoveToTop" xml:space="preserve">
+    <value>Bovenaan plaatsen</value>
+  </data>
+  <data name="QueueView_VideoOutputBitrate" xml:space="preserve">
+    <value>Uitvoer-bitsnelheid:</value>
+  </data>
+  <data name="QueueView_AverageEncodeSpeed" xml:space="preserve">
+    <value>Gemiddelde coderingssnelheid:</value>
+  </data>
+  <data name="QueueViewModel_DifferenceText" xml:space="preserve">
+    <value>van bronbestand</value>
+  </data>
+  <data name="QueueViewModel_NotAvailable" xml:space="preserve">
+    <value>Niet beschikbaar</value>
+  </data>
+  <data name="QueueView_SourceLength" xml:space="preserve">
+    <value>Bronlengte:</value>
+  </data>
+  <data name="Options_Reset" xml:space="preserve">
+    <value>Herstellen</value>
+  </data>
+  <data name="OptionsViewModel_ResetHandBrakePresetsQuestion" xml:space="preserve">
+    <value>Alle ingebouwde voorinstellingen herstellen?</value>
+  </data>
+  <data name="OptionsView_ResetBuildInPresets" xml:space="preserve">
+    <value>Herstel alle ingebouwde voorinstellingen naar standaard HandBrake:</value>
+  </data>
+  <data name="OptionsView_ResetBuildInPresetsNotice" xml:space="preserve">
+    <value>(Gebruikers-voorinstellingen worden niet hersteld)</value>
+  </data>
+  <data name="OptionsView_ResetSettingsToDefaults" xml:space="preserve">
+    <value>Herstel alle HandBrake voorinstellingen naar standaard:</value>
+  </data>
+  <data name="Options_BuiltInPresets" xml:space="preserve">
+    <value>Ingebouwde voorinstellingen</value>
+  </data>
+  <data name="Options_UserSettings" xml:space="preserve">
+    <value>Gebruikersinstellingen</value>
+  </data>
+  <data name="PresetDisplayMode_FloatingPanel" xml:space="preserve">
+    <value>Structuurweergave in zwevend paneel</value>
+  </data>
+  <data name="QueueViewModel_PlayFileErrorSolution" xml:space="preserve">
+    <value>Zorg ervoor dat de juiste bestandsassociaties in Windows zijn ingesteld, zodat het dit bestand met een ondersteunde videospeler kan openen</value>
+  </data>
+  <data name="QueueViewModel_ImportFail" xml:space="preserve">
+    <value>Kan het wachtrijbestand niet lezen.</value>
+  </data>
+  <data name="QueueViewModel_ImportFailSolution" xml:space="preserve">
+    <value>Het bestand kan beschadigd zijn of van een eerdere versie van HandBrake. 
+Alleen wachtrijbestanden van de huidige versie worden ondersteund.</value>
+  </data>
+  <data name="Notifications_EncodeDone" xml:space="preserve">
+    <value>Uw HandBrake-codering is klaar!</value>
+  </data>
+  <data name="Notifications_QueueDone" xml:space="preserve">
+    <value>Uw HandBrake-wachtrij is klaar!</value>
+  </data>
+  <data name="OptionsView_NotificationRemovalSubText" xml:space="preserve">
+    <value>Hiermee worden ook de opties voor het vertonen van meldingen op de taakbalk op het tabblad 'Wanneer klaar' uitgeschakeld. Schakel deze opnieuw in als u deze functie opnieuw wilt activeren.</value>
+  </data>
+  <data name="OptionsView_NotificationRemovalText" xml:space="preserve">
+    <value>Verwijder HandBrake uit het Windows-meldingenpaneel.</value>
+  </data>
+  <data name="OptionsView_UninstallMessageBoxHeader" xml:space="preserve">
+    <value>Verwijderd</value>
+  </data>
+  <data name="OptionsView_UninstallMessageBoxText" xml:space="preserve">
+    <value>Meldingsinstellingen zijn verwijderd.</value>
+  </data>
+  <data name="OptionsView_UninstallToast" xml:space="preserve">
+    <value>Wissen &amp; verwijderen</value>
+  </data>
+  <data name="OptionsView_WindowsNotification" xml:space="preserve">
+    <value>Stuur een melding naar de Windows-taakbalk.</value>
+  </data>
+  <data name="OptionsView_WindowsNotificationsBanner" xml:space="preserve">
+    <value>Windows-meldingen</value>
+  </data>
+  <data name="Main_QueueMultiJobStatus" xml:space="preserve">
+    <value>{0} Taken voltooid. {1}Actief met {2} taken en {3} in de verwerkingswachtrij.</value>
+  </data>
+  <data name="MainView_AutonameRegenerate" xml:space="preserve">
+    <value>Opnieuw genereren (Automatische naamgeving)</value>
+  </data>
+  <data name="MainView_OpenDirectory" xml:space="preserve">
+    <value>Open deze map</value>
+  </data>
+  <data name="Shared_CollapseAll" xml:space="preserve">
+    <value>Alles inklappen</value>
+  </data>
+  <data name="Shared_ExpandAll" xml:space="preserve">
+    <value>Alles uitklappen</value>
+  </data>
+  <data name="OptionsView_RightToleftMode" xml:space="preserve">
+    <value>Weergavemodus van rechts naar links:</value>
+  </data>
+  <data name="RightToLeft_Off" xml:space="preserve">
+    <value>Uit</value>
+  </data>
+  <data name="RightToLeft_TextOnly" xml:space="preserve">
+    <value>Alleen tekst</value>
+  </data>
+  <data name="RightToLeft_WholeInterface" xml:space="preserve">
+    <value>Volledige gebruikersomgeving</value>
+  </data>
+  <data name="SourceSelection_NightlyUpdate" xml:space="preserve">
+    <value>De huidige ontwikkelingsversie die u gebruikt, wordt oud. Misschien wordt het tijd voor een update!</value>
+  </data>
+  <data name="SourceSelection_NightlyUpdateUrl" xml:space="preserve">
+    <value>Download via Github</value>
+  </data>
+  <data name="MainView_NightlyBuildsUpdate" xml:space="preserve">
+    <value>Ontwikkelingsversies downloaden (HTTPS)</value>
+  </data>
+  <data name="OptionsView_EnableQuicksyncHyperEncode" xml:space="preserve">
+    <value>QuickSync Deep Link Hyper Encode inschakelen</value>
+  </data>
+  <data name="OptionsView_HyperEncodeDescription" xml:space="preserve">
+    <value>Geeft de voorkeur aan het gebruik van meerdere media-engines om een enkele codering te versnellen waar deze wordt ondersteund. Schakel deze optie uit om het balanceren van meerdere parallelle coderingen tussen mediamotoren mogelijk te maken.</value>
+  </data>
+  <data name="MainView_OpenHandBrake" xml:space="preserve">
+    <value>HandBrake openen</value>
+  </data>
+  <data name="Startup_UnableToStartInfo" xml:space="preserve">
+    <value>Ondersteuning voor hardwarecodering is uitgeschakeld omdat dit een veelvoorkomende oorzaak is van opstartproblemen.
+- Probeer HandBrake opnieuw op te starten. 
+- Als het probleem aanhoudt, kan het een verouderde grafische kaartdriver zijn (hardware) die het probleem veroorzaakt.
+
+Ondersteuning voor hardwarecodering kan opnieuw worden ingeschakeld in voorkeuren.</value>
+  </data>
+  <data name="Startup_UnableToStart" xml:space="preserve">
+    <value>HandBrake kon niet starten.</value>
+  </data>
+  <data name="OptionsView_ResetSafeMode" xml:space="preserve">
+    <value>Safe mode opnieuw instellen</value>
+  </data>
+  <data name="OptionsView_ResetSafeModeMessage" xml:space="preserve">
+    <value>Start HandBrake opnieuw.</value>
+  </data>
+  <data name="Debug_QueueDataExport" xml:space="preserve">
+    <value>Wachtrij-statistieken exporteren (csv)</value>
+  </data>
+  <data name="Debug_QueueExportDataDone" xml:space="preserve">
+    <value>Export klaar!</value>
+  </data>
+  <data name="Debug_QueueSweep_NotSetup" xml:space="preserve">
+    <value>U moet eerst een bron scannen en initiële mappen voor de uitvoer instellen</value>
+  </data>
+  <data name="OptionsView_FileCollisionNotice" xml:space="preserve">
+    <value>Alleen als het bestand al op schijf bestaat.</value>
+  </data>
+  <data name="Info" xml:space="preserve">
+    <value>Info</value>
+  </data>
+  <data name="SubtitleView_NoSubtitlesAdded" xml:space="preserve">
+    <value>Er zijn geen ondertitelingssporen toegevoegd. 
+
+Dit kan te wijten zijn aan beperkingen van de geselecteerde bestandscontainer. Zie onze documentatie over ondertiteling voor meer informatie.</value>
+  </data>
+  <data name="DarkTheme_None" xml:space="preserve">
+    <value>Geen</value>
+  </data>
+  <data name="SourceSelection_UpdateNow" xml:space="preserve">
+    <value>Nu updaten!</value>
+  </data>
+  <data name="CropMode_Auto" xml:space="preserve">
+    <value>Automatisch</value>
+  </data>
+  <data name="CropMode_Loose" xml:space="preserve">
+    <value>Conservatief</value>
+  </data>
+  <data name="CropMode_None" xml:space="preserve">
+    <value>Geen</value>
+  </data>
+  <data name="CropMode_Custom" xml:space="preserve">
+    <value>Aangepast</value>
+  </data>
+  <data name="OptionsView_EnableNvDecSupport" xml:space="preserve">
+    <value>Gebruik, als de hardware beschikbaar is, Nvidia NVDec en NVEnc voor respectievelijk het decoderen en coderen van video.</value>
+  </data>
+  <data name="Options_Hardware" xml:space="preserve">
+    <value>Hardwareondersteuning</value>
+  </data>
+</root>
