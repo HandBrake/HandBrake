@@ -333,6 +333,9 @@ static int nlmeans_init(hb_filter_object_t *filter,
 
         if (pv->max_frames < pv->nframes[c]) pv->max_frames = pv->nframes[c];
 
+        // Scale strength with bit depth
+        pv->strength[c] *= pv->depth > 8 ? (pv->depth - 8) * (pv->depth - 8) : 1;
+
         // Precompute exponential table
         float *exptable = &pv->exptable[c][0];
         float *weight_fact_table = &pv->weight_fact_table[c];
