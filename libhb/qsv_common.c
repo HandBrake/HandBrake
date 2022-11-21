@@ -650,6 +650,7 @@ int hb_qsv_available()
         qsv_init_result = 0;
         return qsv_init_result;
     }
+    hb_log("qsv: is available on this system");
 
     qsv_init_result = ((hb_qsv_video_encoder_is_enabled(hb_qsv_get_adapter_index(), HB_VCODEC_QSV_H264) ? HB_VCODEC_QSV_H264 : 0) |
                       (hb_qsv_video_encoder_is_enabled(hb_qsv_get_adapter_index(), HB_VCODEC_QSV_H265) ? HB_VCODEC_QSV_H265 : 0) |
