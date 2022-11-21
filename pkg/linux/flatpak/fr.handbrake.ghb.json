@@ -15,7 +15,9 @@
         "--filesystem=xdg-config/gtk-3.0",
         "--talk-name=org.gtk.vfs.*",
         "--system-talk-name=org.freedesktop.login1",
-        "--env=PATH=/app/bin:/usr/bin:/app/extensions/bin",
+        "--env=PATH=/app/bin:/app/extensions/bin:/usr/bin",
+        "--env=LIBVA_DRIVERS_PATH=/app/extensions/lib/dri",
+        "--env=LD_LIBRARY_PATH=/app/extensions/lib",
         "--env=JAVA_HOME=/app/extensions/jre",
         "--env=GIO_EXTRA_MODULES=/app/lib/gio/modules"
     ],
