@@ -579,6 +579,15 @@ static int hb_qsv_make_adapters_list(hb_list_t **qsv_adapters_list, hb_list_t **
             hb_list_add(list, (void*)adapter_index);
             hb_list_add(list2, (void*)adapter_details);
 
+            // On linux, the handle to the VA display must be set.
+            // This code is essentially a NOP other platforms.
+            hb_display_t * display = hb_qsv_display_init();
+            if (display != NULL)
+            {
+                MFXVideoCORE_SetHandle(session, display->mfxType,
+                                    (mfxHDL)display->handle);
+            }
+
             mfxPlatform platform = { 0 };
             err = MFXVideoCORE_QueryPlatform(session, &platform);
             if (MFX_ERR_NONE == err)
@@ -596,6 +605,8 @@ static int hb_qsv_make_adapters_list(hb_list_t **qsv_adapters_list, hb_list_t **
             {
                 hb_error("hb_qsv_make_adapters_list: MFXVideoCORE_QueryPlatform failed impl=%d err=%d", i, err);
             }
+            MFXClose(session);
+            hb_display_close(&display);
         }
         else
         {
