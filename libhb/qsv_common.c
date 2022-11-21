@@ -1662,8 +1662,8 @@ static int hb_qsv_collect_adapters_details(hb_list_t *hb_qsv_adapter_details_lis
                     // available, we can set the preferred implementation
                     qsv_impl_set_preferred(details, "hardware");
                 }
-                hb_display_close(&display);
                 MFXClose(session);
+                hb_display_close(&display);
                 hw_preference = 0;
             }
             else
