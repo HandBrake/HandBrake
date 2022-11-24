@@ -2175,7 +2175,7 @@ static int decavcodecvInfo( hb_work_object_t *w, hb_work_info_t *info )
 #if HB_PROJECT_FEATURE_QSV
     if (hb_qsv_available())
     {
-        if (hb_qsv_decode_codec_supported_codec(hb_qsv_get_adapter_index(), pv->context->codec_id, pv->context->pix_fmt, pv->context->width, pv->context->height))
+        if (hb_qsv_decode_is_codec_supported(hb_qsv_get_adapter_index(), pv->context->codec_id, pv->context->pix_fmt, pv->context->width, pv->context->height))
         {
             info->video_decode_support |= HB_DECODE_SUPPORT_QSV;
         }

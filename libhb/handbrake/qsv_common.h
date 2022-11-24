@@ -106,6 +106,7 @@ int            hb_qsv_audio_encoder_is_enabled(int encoder);
 int            hb_qsv_info_init();
 void           hb_qsv_info_print();
 hb_list_t*     hb_qsv_adapters_list();
+int            hb_qsv_hyper_encode_available(int adapter_index);
 hb_qsv_info_t* hb_qsv_encoder_info_get(int adapter_index, int encoder);
 int            hb_qsv_hardware_generation(int cpu_platform);
 int            hb_qsv_get_platform(int adapter_index);
@@ -285,13 +286,12 @@ enum AVPixelFormat hb_qsv_get_format(AVCodecContext *s, const enum AVPixelFormat
 int hb_qsv_preset_is_zero_copy_enabled(const hb_dict_t *job_dict);
 void hb_qsv_uninit_dec(AVCodecContext *s);
 void hb_qsv_uninit_enc(hb_job_t *job);
-int hb_qsv_parse_adapter_index(hb_job_t *job);
 int hb_qsv_setup_job(hb_job_t *job);
 int hb_qsv_decode_h264_is_supported(int adapter_index);
 int hb_qsv_decode_h265_is_supported(int adapter_index);
 int hb_qsv_decode_h265_10_bit_is_supported(int adapter_index);
 int hb_qsv_decode_av1_is_supported(int adapter_index);
-int hb_qsv_decode_codec_supported_codec(int adapter_index, int video_codec_param, int pix_fmt, int width, int height);
+int hb_qsv_decode_is_codec_supported(int adapter_index, int video_codec_param, int pix_fmt, int width, int height);
 int hb_qsv_device_init(hb_job_t *job);
 
 #endif // __LIBHB__

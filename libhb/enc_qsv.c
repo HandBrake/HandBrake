@@ -219,8 +219,8 @@ static int log_encoder_params(const hb_work_private_t *pv, const mfxVideoParam *
            hb_qsv_level_name  (videoParam->mfx.CodecId, videoParam->mfx.CodecLevel));
     hb_log("encqsvInit: TargetUsage %"PRIu16" AsyncDepth %"PRIu16"",
            videoParam->mfx.TargetUsage, videoParam->AsyncDepth);
-    hb_log("encqsvInit: GopRefDist %"PRIu16" GopPicSize %"PRIu16" NumRefFrame %"PRIu16"",
-           videoParam->mfx.GopRefDist, videoParam->mfx.GopPicSize, videoParam->mfx.NumRefFrame);
+    hb_log("encqsvInit: GopRefDist %"PRIu16" GopPicSize %"PRIu16" NumRefFrame %"PRIu16" IdrInterval %"PRIu16"",
+           videoParam->mfx.GopRefDist, videoParam->mfx.GopPicSize, videoParam->mfx.NumRefFrame, videoParam->mfx.IdrInterval);
 
     if (pv->qsv_info->capabilities & HB_QSV_CAP_B_REF_PYRAMID)
     {
@@ -1617,6 +1617,19 @@ int encqsvInit(hb_work_object_t *w, hb_job_t *job)
     }
     pv->param.videoParam->mfx.GopPicSize = pv->param.gop.gop_pic_size;
 
+    // set the Hyper Encode structure
+    if (pv->param.hyperEncodeParam.Mode != MFX_HYPERMODE_OFF)
+    {
+        if (pv->param.videoParam->mfx.CodecId == MFX_CODEC_HEVC)
+        {
+            pv->param.videoParam->mfx.IdrInterval = 1;
+        }
+        else if (pv->param.videoParam->mfx.CodecId == MFX_CODEC_AVC)
+        {
+            pv->param.videoParam->mfx.IdrInterval = 0;
+        }
+        pv->param.videoParam->AsyncDepth = 60;
+    }
     // sanitize some settings that affect memory consumption
     if (!pv->is_sys_mem)
     {
@@ -1875,7 +1888,7 @@ int encqsvInit(hb_work_object_t *w, hb_job_t *job)
     pv->param.videoParam->mfx = videoParam.mfx;
     // AsyncDepth has now been set and/or modified by Media SDK
     // fall back to default if zero
-    pv->max_async_depth = videoParam.AsyncDepth ? videoParam.AsyncDepth : HB_QSV_ASYNC_DEPTH_DEFAULT;
+    pv->max_async_depth = videoParam.AsyncDepth ? videoParam.AsyncDepth : hb_qsv_param_default_async_depth();
     pv->async_depth     = 0;
 
     return 0;
