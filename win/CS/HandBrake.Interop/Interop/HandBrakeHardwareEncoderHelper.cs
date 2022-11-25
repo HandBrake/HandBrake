@@ -62,6 +62,22 @@ namespace HandBrake.Interop.Interop
             }
         }
 
+        public static bool IsQsvHyperEncodeAvailable
+        {
+            get
+            {
+                try
+                {
+                    return HBFunctions.hb_qsv_available() > 0 && QsvHyperEncode > 0;
+                }
+                catch (Exception)
+                {
+                    // Silent failure. Typically this means the dll hasn't been built with --enable-qsv
+                    return false;
+                }
+            }
+        }
+
         public static bool IsQsvAvailableH264
         {
             get
@@ -104,6 +120,24 @@ namespace HandBrake.Interop.Interop
                     int qsv_platform = HBFunctions.hb_qsv_get_platform(adapter_index);
                     int hardware = HBFunctions.hb_qsv_hardware_generation(qsv_platform); 
                     return hardware;
+                }
+                catch (Exception exc)
+                {
+                    // Silent failure. -1 means unsupported.
+                    Debug.WriteLine(exc);
+                    return -1;
+                }
+            }
+        }
+
+        public static int QsvHyperEncode
+        {
+            get
+            {
+                try
+                {
+                    int adapter_index = HBFunctions.hb_qsv_get_adapter_index();
+                    return HBFunctions.hb_qsv_hyper_encode_available(adapter_index);
                 }
                 catch (Exception exc)
                 {

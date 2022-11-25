@@ -930,7 +930,7 @@ namespace HandBrakeWPF.ViewModels
 
         public bool IsQuickSyncAvailable { get; } = HandBrakeHardwareEncoderHelper.IsQsvAvailable;
 
-        public bool IsMultiIntelGPU { get; } = HandBrakeEncoderHelpers.GetQsvAdaptorList().Count > 1;
+        public bool IsQuickSyncHyperEncodeAvailable { get; } = HandBrakeHardwareEncoderHelper.IsQsvHyperEncodeAvailable;
 
         public bool IsVceAvailable { get; } = HandBrakeHardwareEncoderHelper.IsVceH264Available;
 
