@@ -1258,6 +1258,10 @@ static int query_capabilities(mfxSession session, int index, mfxVersion version,
                  */
                 if (HB_CHECK_MFX_VERSION(version, 1, 8))
                 {
+                    if (extCodingOption2.RepeatPPS)
+                    {
+                        info->capabilities |= HB_QSV_CAP_OPTION2_REPEATPPS;
+                    }
                     if (info->capabilities & HB_QSV_CAP_B_REF_PYRAMID)
                     {
                         if (extCodingOption2.BRefType)
@@ -1818,6 +1822,10 @@ static void log_encoder_capabilities(const int log_level, const uint64_t caps, c
         if (caps & HB_QSV_CAP_OPTION2_TRELLIS)
         {
             strcat(buffer, "+trellis");
+        }
+        if (caps & HB_QSV_CAP_OPTION2_REPEATPPS)
+        {
+            strcat(buffer, "+repeatpps");
         }
         if (caps & HB_QSV_CAP_OPTION2_IB_ADAPT)
         {
@@ -2860,6 +2868,21 @@ int hb_qsv_param_parse(hb_qsv_param_t *param, hb_qsv_info_t *info, hb_job_t *job
             return HB_QSV_PARAM_UNSUPPORTED;
         }
     }
+    else if (!strcasecmp(key, "repeatpps"))
+    {
+        if (info->capabilities & HB_QSV_CAP_OPTION2_REPEATPPS)
+        {
+            ivalue = hb_qsv_atobool(value, &error);
+            if (!error)
+            {
+                param->codingOption2.RepeatPPS = hb_qsv_codingoption_xlat(ivalue);
+            }
+        }
+        else
+        {
+            return HB_QSV_PARAM_UNSUPPORTED;
+        }
+    }
     else if (!strcasecmp(key, "lowpower"))
     {
         if (info->capabilities & HB_QSV_CAP_LOWPOWER_ENCODE)
@@ -3410,13 +3433,13 @@ int hb_qsv_param_default(hb_qsv_param_t *param, mfxVideoParam *videoParam,
         param->codingOption2.IntRefQPDelta   = 0;
         param->codingOption2.MaxFrameSize    = 0;
         param->codingOption2.BitrateLimit    = MFX_CODINGOPTION_ON;
-        param->codingOption2.MBBRC           = MFX_CODINGOPTION_ON;
+        param->codingOption2.MBBRC           = MFX_CODINGOPTION_OFF;
         param->codingOption2.ExtBRC          = MFX_CODINGOPTION_OFF;
         // introduced in API 1.7
         param->codingOption2.LookAheadDepth  = 40;
         param->codingOption2.Trellis         = MFX_TRELLIS_OFF;
         // introduced in API 1.8
-        param->codingOption2.RepeatPPS       = MFX_CODINGOPTION_ON;
+        param->codingOption2.RepeatPPS       = MFX_CODINGOPTION_OFF;
         param->codingOption2.BRefType        = MFX_B_REF_UNKNOWN; // controlled via gop.b_pyramid
         param->codingOption2.AdaptiveI       = MFX_CODINGOPTION_OFF;
         param->codingOption2.AdaptiveB       = MFX_CODINGOPTION_OFF;

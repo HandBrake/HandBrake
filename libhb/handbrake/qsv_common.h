@@ -84,16 +84,17 @@ typedef struct hb_qsv_info_s
 #define HB_QSV_CAP_OPTION2_MBBRC     (1LL << 31)
 #define HB_QSV_CAP_OPTION2_EXTBRC    (1LL << 32)
 #define HB_QSV_CAP_OPTION2_TRELLIS   (1LL << 33)
-#define HB_QSV_CAP_OPTION2_BREFTYPE  (1LL << 34)
-#define HB_QSV_CAP_OPTION2_IB_ADAPT  (1LL << 35)
-#define HB_QSV_CAP_OPTION2_LA_DOWNS  (1LL << 36)
-#define HB_QSV_CAP_OPTION2_NMPSLICE  (1LL << 37)
-#define HB_QSV_CAP_VPP_SCALING       (1LL << 38)
-#define HB_QSV_CAP_VPP_INTERPOLATION (1LL << 39)
+#define HB_QSV_CAP_OPTION2_REPEATPPS (1LL << 34)
+#define HB_QSV_CAP_OPTION2_BREFTYPE  (1LL << 35)
+#define HB_QSV_CAP_OPTION2_IB_ADAPT  (1LL << 36)
+#define HB_QSV_CAP_OPTION2_LA_DOWNS  (1LL << 37)
+#define HB_QSV_CAP_OPTION2_NMPSLICE  (1LL << 38)
+#define HB_QSV_CAP_VPP_SCALING       (1LL << 39)
+#define HB_QSV_CAP_VPP_INTERPOLATION (1LL << 40)
     // mfxExtAV1BitstreamParam
-#define HB_QSV_CAP_AV1_BITSTREAM     (1LL << 40)
+#define HB_QSV_CAP_AV1_BITSTREAM     (1LL << 41)
     // mfxExtHyperModeParam
-#define HB_QSV_CAP_HYPERENCODE       (1LL << 41)
+#define HB_QSV_CAP_HYPERENCODE       (1LL << 42)
 
     // TODO: add maximum encode resolution, etc.
 } hb_qsv_info_t;
