@@ -219,8 +219,8 @@ static int log_encoder_params(const hb_work_private_t *pv, const mfxVideoParam *
            hb_qsv_level_name  (videoParam->mfx.CodecId, videoParam->mfx.CodecLevel));
     hb_log("encqsvInit: TargetUsage %"PRIu16" AsyncDepth %"PRIu16"",
            videoParam->mfx.TargetUsage, videoParam->AsyncDepth);
-    hb_log("encqsvInit: GopRefDist %"PRIu16" GopPicSize %"PRIu16" NumRefFrame %"PRIu16"",
-           videoParam->mfx.GopRefDist, videoParam->mfx.GopPicSize, videoParam->mfx.NumRefFrame);
+    hb_log("encqsvInit: GopRefDist %"PRIu16" GopPicSize %"PRIu16" NumRefFrame %"PRIu16" IdrInterval %"PRIu16"",
+           videoParam->mfx.GopRefDist, videoParam->mfx.GopPicSize, videoParam->mfx.NumRefFrame, videoParam->mfx.IdrInterval);
 
     if (pv->qsv_info->capabilities & HB_QSV_CAP_B_REF_PYRAMID)
     {
@@ -370,6 +370,12 @@ static int log_encoder_params(const hb_work_private_t *pv, const mfxVideoParam *
                        (videoParam->mfx.GopRefDist > 1)    ? "B" : "");
                 break;
         }
+    }
+
+    if (option2 && (option2->RepeatPPS != MFX_CODINGOPTION_OFF))
+    {
+        hb_log("encqsvInit: RepeatPPS %s",
+            hb_qsv_codingoption_get_name(option2->RepeatPPS));
     }
 
     return 0;
@@ -1589,13 +1595,13 @@ int encqsvInit(hb_work_object_t *w, hb_job_t *job)
     // set the GOP structure
     if (pv->param.gop.gop_ref_dist < 0)
     {
-        if (pv->param.videoParam->mfx.RateControlMethod == MFX_RATECONTROL_CQP)
+        if (hb_qsv_hardware_generation(hb_qsv_get_platform(hb_qsv_get_adapter_index())) >= QSV_G8)
         {
-            pv->param.gop.gop_ref_dist = 4;
+            pv->param.gop.gop_ref_dist = 8;
         }
         else
         {
-            pv->param.gop.gop_ref_dist = 3;
+            pv->param.gop.gop_ref_dist = 4;
         }
     }
     pv->param.videoParam->mfx.GopRefDist = pv->param.gop.gop_ref_dist;
@@ -1604,19 +1610,24 @@ int encqsvInit(hb_work_object_t *w, hb_job_t *job)
     if (pv->param.gop.gop_pic_size < 0)
     {
         int rate = (double)job->orig_vrate.num / job->orig_vrate.den + 0.5;
-        if (pv->param.videoParam->mfx.RateControlMethod == MFX_RATECONTROL_CQP)
-        {
-            // ensure B-pyramid is enabled for CQP on Haswell
-            pv->param.gop.gop_pic_size = 32;
-        }
-        else
-        {
-            // set the keyframe interval based on the framerate
-            pv->param.gop.gop_pic_size = rate;
-        }
+        // set the keyframe interval based on the framerate
+        pv->param.gop.gop_pic_size = rate;
     }
     pv->param.videoParam->mfx.GopPicSize = pv->param.gop.gop_pic_size;
 
+    // set the Hyper Encode structure
+    if (pv->param.hyperEncodeParam.Mode != MFX_HYPERMODE_OFF)
+    {
+        if (pv->param.videoParam->mfx.CodecId == MFX_CODEC_HEVC)
+        {
+            pv->param.videoParam->mfx.IdrInterval = 1;
+        }
+        else if (pv->param.videoParam->mfx.CodecId == MFX_CODEC_AVC)
+        {
+            pv->param.videoParam->mfx.IdrInterval = 0;
+        }
+        pv->param.videoParam->AsyncDepth = 60;
+    }
     // sanitize some settings that affect memory consumption
     if (!pv->is_sys_mem)
     {
@@ -1639,7 +1650,6 @@ int encqsvInit(hb_work_object_t *w, hb_job_t *job)
         // LookAheadDepth 10 will cause a hang with some driver versions
         pv->param.codingOption2.LookAheadDepth = FFMAX(pv->param.codingOption2.LookAheadDepth, 11);
     }
-
     /*
      * We may need to adjust GopRefDist, GopPicSize and
      * NumRefFrame to enable or disable B-pyramid, so do it last.
@@ -1875,7 +1885,7 @@ int encqsvInit(hb_work_object_t *w, hb_job_t *job)
     pv->param.videoParam->mfx = videoParam.mfx;
     // AsyncDepth has now been set and/or modified by Media SDK
     // fall back to default if zero
-    pv->max_async_depth = videoParam.AsyncDepth ? videoParam.AsyncDepth : HB_QSV_ASYNC_DEPTH_DEFAULT;
+    pv->max_async_depth = videoParam.AsyncDepth ? videoParam.AsyncDepth : hb_qsv_param_default_async_depth();
     pv->async_depth     = 0;
 
     return 0;

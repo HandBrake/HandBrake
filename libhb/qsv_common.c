@@ -648,6 +648,22 @@ int hb_qsv_available()
     return qsv_init_result;
 }
 
+int hb_qsv_hyper_encode_available(int adapter_index)
+{
+    hb_qsv_adapter_details_t* details = hb_qsv_get_adapters_details_by_index(adapter_index);
+
+    if (details)
+    {
+        return (details->hb_qsv_info_avc != NULL && details->hb_qsv_info_avc->capabilities & HB_QSV_CAP_HYPERENCODE) ||
+            (details->hb_qsv_info_hevc != NULL && details->hb_qsv_info_hevc->capabilities & HB_QSV_CAP_HYPERENCODE) ||
+            (details->hb_qsv_info_av1 != NULL && details->hb_qsv_info_av1->capabilities & HB_QSV_CAP_HYPERENCODE);
+    }
+    else
+    {
+        return 0;
+    }
+}
+
 int hb_qsv_video_encoder_is_enabled(int adapter_index, int encoder)
 {
     hb_qsv_adapter_details_t* details = hb_qsv_get_adapters_details_by_index(adapter_index);
@@ -720,6 +736,28 @@ static void init_video_param(mfxVideoParam *videoParam)
     videoParam->IOPattern                   = MFX_IOPATTERN_IN_SYSTEM_MEMORY;
 }
 
+static void init_video_hyperencode_param(mfxVideoParam *videoParam, int codec_id)
+{
+    if (videoParam == NULL)
+    {
+        return;
+    }
+
+    // Both GPUs must support of the same encoder parameters
+    if (codec_id == MFX_CODEC_HEVC)
+    {
+        videoParam->mfx.IdrInterval = 1;
+    }
+    else if (codec_id == MFX_CODEC_AVC)
+    {
+        videoParam->mfx.IdrInterval = 0;
+        // Relax ARC Gfx encoding settings to align ADL Gfx capabilities
+        videoParam->mfx.GopRefDist = 1;
+    }
+    videoParam->mfx.GopPicSize = 60;
+    videoParam->AsyncDepth = 60;
+}
+
 static void init_ext_video_signal_info(mfxExtVideoSignalInfo *extVideoSignalInfo)
 {
     if (extVideoSignalInfo == NULL)
@@ -786,7 +824,7 @@ static void init_ext_hyperencode_option(mfxExtHyperModeParam *extHyperEncodemPar
     memset(extHyperEncodemParam, 0, sizeof(mfxExtHyperModeParam));
     extHyperEncodemParam->Header.BufferId = MFX_EXTBUFF_HYPER_MODE_PARAM;
     extHyperEncodemParam->Header.BufferSz = sizeof(mfxExtHyperModeParam);
-    extHyperEncodemParam->Mode = MFX_HYPERMODE_ON;
+    extHyperEncodemParam->Mode = MFX_HYPERMODE_OFF;
 }
 
 static void init_ext_coding_option(mfxExtCodingOption *extCodingOption)
@@ -1220,6 +1258,10 @@ static int query_capabilities(mfxSession session, int index, mfxVersion version,
                  */
                 if (HB_CHECK_MFX_VERSION(version, 1, 8))
                 {
+                    if (extCodingOption2.RepeatPPS)
+                    {
+                        info->capabilities |= HB_QSV_CAP_OPTION2_REPEATPPS;
+                    }
                     if (info->capabilities & HB_QSV_CAP_B_REF_PYRAMID)
                     {
                         if (extCodingOption2.BRefType)
@@ -1324,14 +1366,13 @@ static int query_capabilities(mfxSession session, int index, mfxVersion version,
                 info->capabilities |= HB_QSV_CAP_VPP_INTERPOLATION;
             }
         }
-        if (info->codec_id == MFX_CODEC_HEVC)
+        if (lowpower == MFX_CODINGOPTION_ON)
         {
             init_video_param(&videoParam);
             videoParam.mfx.CodecId = info->codec_id;
-            if (hb_qsv_implementation_is_hardware(info->implementation))
-            {
-                videoParam.mfx.LowPower = lowpower;
-            }
+            init_video_hyperencode_param(&videoParam, info->codec_id);
+            videoParam.mfx.LowPower = lowpower;
+
             init_ext_hyperencode_option(&extHyperEncodeParam);
             videoParam.ExtParam    = videoExtParam;
             videoParam.ExtParam[0] = (mfxExtBuffer*)&extHyperEncodeParam;
@@ -1782,6 +1823,10 @@ static void log_encoder_capabilities(const int log_level, const uint64_t caps, c
         {
             strcat(buffer, "+trellis");
         }
+        if (caps & HB_QSV_CAP_OPTION2_REPEATPPS)
+        {
+            strcat(buffer, "+repeatpps");
+        }
         if (caps & HB_QSV_CAP_OPTION2_IB_ADAPT)
         {
             strcat(buffer, "+ib_adapt");
@@ -2044,7 +2089,7 @@ int hb_qsv_decode_av1_is_supported(int adapter_index)
     return hb_qsv_hardware_generation(hb_qsv_get_platform(adapter_index)) >= QSV_G8;
 }
 
-int hb_qsv_decode_codec_supported_codec(int adapter_index, int video_codec_param, int pix_fmt, int width, int height)
+int hb_qsv_decode_is_codec_supported(int adapter_index, int video_codec_param, int pix_fmt, int width, int height)
 {
     switch (video_codec_param)
     {
@@ -2089,6 +2134,45 @@ int hb_qsv_decode_codec_supported_codec(int adapter_index, int video_codec_param
     return 0;
 }
 
+static int hb_qsv_parse_options(hb_job_t *job)
+{
+    int err = 0;
+
+    if (job->encoder_options != NULL && *job->encoder_options)
+    {
+        hb_dict_t *options_list;
+        options_list = hb_encopts_to_dict(job->encoder_options, job->vcodec);
+        hb_dict_iter_t iter;
+        for (iter  = hb_dict_iter_init(options_list);
+            iter != HB_DICT_ITER_DONE;
+            iter  = hb_dict_iter_next(options_list, iter))
+        {
+            const char *key = hb_dict_iter_key(iter);
+            hb_value_t *value = hb_dict_iter_value(iter);
+            if (!strcasecmp(key, "gpu"))
+            {
+                char *str = hb_value_get_string_xform(value);
+                int dx_index = hb_qsv_atoi(str, &err);
+                free(str);
+                if (!err)
+                {
+                    hb_qsv_param_parse_dx_index(job, dx_index);
+                }
+            }
+            else if (!strcasecmp(key, "async-depth"))
+            {
+                int async_depth = hb_qsv_atoi(value, &err);
+                if (!err)
+                {
+                    job->qsv.async_depth = async_depth;
+                }
+            }
+        }
+        hb_dict_free(&options_list);
+    }
+    return 0;
+}
+
 int hb_qsv_setup_job(hb_job_t *job)
 {
 #if defined(_WIN32) || defined(__MINGW32__)
@@ -2098,7 +2182,7 @@ int hb_qsv_setup_job(hb_job_t *job)
         hb_qsv_param_parse_dx_index(job, job->qsv.ctx->dx_index);
     }
     // parse the advanced options parameter
-    hb_qsv_parse_adapter_index(job);
+    hb_qsv_parse_options(job);
     // use default if no options passed
     if (!job->qsv.ctx->qsv_device)
         hb_qsv_param_parse_dx_index(job, hb_qsv_get_adapter_index());
@@ -2115,10 +2199,14 @@ int hb_qsv_setup_job(hb_job_t *job)
 
 int hb_qsv_decode_is_enabled(hb_job_t *job)
 {
-    return ((job != NULL && job->qsv.decode) &&
-            (job->title->video_decode_support & HB_DECODE_SUPPORT_QSV)) &&
-            hb_qsv_decode_codec_supported_codec(hb_qsv_get_adapter_index(),
-            job->title->video_codec_param, job->input_pix_fmt, job->title->geometry.width, job->title->geometry.height);
+    if (!job)
+        return 0;
+
+    int qsv_decode_is_codec_supported = hb_qsv_decode_is_codec_supported(hb_qsv_get_adapter_index(),
+        job->title->video_codec_param, job->input_pix_fmt, job->title->geometry.width, job->title->geometry.height);
+
+    return ((job->qsv.decode) && (job->title->video_decode_support & HB_DECODE_SUPPORT_QSV)) &&
+            qsv_decode_is_codec_supported;
 }
 
 static int hb_d3d11va_device_check();
@@ -2780,6 +2868,21 @@ int hb_qsv_param_parse(hb_qsv_param_t *param, hb_qsv_info_t *info, hb_job_t *job
             return HB_QSV_PARAM_UNSUPPORTED;
         }
     }
+    else if (!strcasecmp(key, "repeatpps"))
+    {
+        if (info->capabilities & HB_QSV_CAP_OPTION2_REPEATPPS)
+        {
+            ivalue = hb_qsv_atobool(value, &error);
+            if (!error)
+            {
+                param->codingOption2.RepeatPPS = hb_qsv_codingoption_xlat(ivalue);
+            }
+        }
+        else
+        {
+            return HB_QSV_PARAM_UNSUPPORTED;
+        }
+    }
     else if (!strcasecmp(key, "lowpower"))
     {
         if (info->capabilities & HB_QSV_CAP_LOWPOWER_ENCODE)
@@ -2862,10 +2965,15 @@ int hb_qsv_param_parse(hb_qsv_param_t *param, hb_qsv_info_t *info, hb_job_t *job
         }
         if (mode)
         {
-            param->videoParam->mfx.GopPicSize  = 30;
-            param->videoParam->mfx.IdrInterval = 1;
-            param->videoParam->AsyncDepth      = 30;
             param->hyperEncodeParam.Mode = mode->value;
+        }
+    }
+    else if (!strcasecmp(key, "async-depth"))
+    {
+        int async_depth = hb_qsv_atoi(value, &error);
+        if (!error)
+        {
+            param->videoParam->AsyncDepth = async_depth;
         }
     }
     else
@@ -3325,13 +3433,13 @@ int hb_qsv_param_default(hb_qsv_param_t *param, mfxVideoParam *videoParam,
         param->codingOption2.IntRefQPDelta   = 0;
         param->codingOption2.MaxFrameSize    = 0;
         param->codingOption2.BitrateLimit    = MFX_CODINGOPTION_ON;
-        param->codingOption2.MBBRC           = MFX_CODINGOPTION_ON;
+        param->codingOption2.MBBRC           = MFX_CODINGOPTION_OFF;
         param->codingOption2.ExtBRC          = MFX_CODINGOPTION_OFF;
         // introduced in API 1.7
         param->codingOption2.LookAheadDepth  = 40;
         param->codingOption2.Trellis         = MFX_TRELLIS_OFF;
         // introduced in API 1.8
-        param->codingOption2.RepeatPPS       = MFX_CODINGOPTION_ON;
+        param->codingOption2.RepeatPPS       = MFX_CODINGOPTION_OFF;
         param->codingOption2.BRefType        = MFX_B_REF_UNKNOWN; // controlled via gop.b_pyramid
         param->codingOption2.AdaptiveI       = MFX_CODINGOPTION_OFF;
         param->codingOption2.AdaptiveB       = MFX_CODINGOPTION_OFF;
@@ -4543,37 +4651,6 @@ err_out:
         av_dict_free(&dict);
 
     return err;
-}
-
-int hb_qsv_parse_adapter_index(hb_job_t *job)
-{
-    int ret = 0;
-
-    if (job->encoder_options != NULL && *job->encoder_options)
-    {
-        hb_dict_t *options_list;
-        options_list = hb_encopts_to_dict(job->encoder_options, job->vcodec);
-        hb_dict_iter_t iter;
-        for (iter  = hb_dict_iter_init(options_list);
-            iter != HB_DICT_ITER_DONE;
-            iter  = hb_dict_iter_next(options_list, iter))
-        {
-            const char *key = hb_dict_iter_key(iter);
-            if (!strcasecmp(key, "gpu"))
-            {
-                hb_value_t *value = hb_dict_iter_value(iter);
-                char *str = hb_value_get_string_xform(value);
-                int dx_index = hb_qsv_atoi(str, &ret);
-                free(str);
-                if (!ret)
-                {
-                    hb_qsv_param_parse_dx_index(job, dx_index);
-                }
-            }
-        }
-        hb_dict_free(&options_list);
-    }
-    return 0;
 }
 
 int hb_create_ffmpeg_pool(hb_job_t *job, int coded_width, int coded_height, enum AVPixelFormat sw_pix_fmt, int pool_size, int extra_hw_frames, AVBufferRef **out_hw_frames_ctx)
