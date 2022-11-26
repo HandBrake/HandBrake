@@ -87,12 +87,6 @@ namespace HandBrake.Interop.Interop.Json.Presets
         public bool Mp4iPodCompatible { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether picture auto crop.
-        /// </summary>
-        [Obsolete("Use PictureCropMode instead. Use only for parsing legacy presets.")]
-        public bool PictureAutoCrop { get; set; }
-
-        /// <summary>
         /// Gets or sets a value indicating whether picture loose crop.
         /// </summary>
         public int PictureCropMode { get; set; }

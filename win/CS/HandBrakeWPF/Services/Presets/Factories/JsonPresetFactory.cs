@@ -576,7 +576,6 @@ namespace HandBrakeWPF.Services.Presets.Factories
             preset.PictureBottomCrop = export.Task.Cropping.Bottom;
             preset.PictureLeftCrop = export.Task.Cropping.Left;
             preset.PictureRightCrop = export.Task.Cropping.Right;
-            preset.PictureAutoCrop = (CropMode)export.Task.Cropping.CropMode == CropMode.Custom; // Obsolete. For compatibility only.
 
             // Filters
             preset.PictureDeblockPreset = export.Task.DeblockPreset?.Key;

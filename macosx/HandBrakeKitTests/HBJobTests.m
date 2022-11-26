@@ -94,7 +94,7 @@
 
 - (void)testAutoCrop
 {
-    XCTAssertEqual([self.preset[@"PictureAutoCrop"] boolValue], self.job.picture.cropMode);
+    XCTAssertEqual([self.preset[@"PictureCropMode"] boolValue], self.job.picture.cropMode);
 }
 
 - (void)testAutoCropValues
