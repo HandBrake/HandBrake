@@ -60,23 +60,23 @@
 
   <screenshots>
     <screenshot type="default">
-      <image>https://download.handbrake.fr/handbrake/images/HandBrake_1.1.x_Summary_linux.png</image>
+      <image>https://handbrake.github.io/flatpak/HandBrake_Summary_linux.png</image>
       <caption>Main window and settings summary</caption>
     </screenshot>
     <screenshot>
-      <image>https://download.handbrake.fr/handbrake/images/HandBrake_1.1.x_Dimensions_linux.png</image>
+      <image>https://handbrake.github.io/flatpak/HandBrake_Dimensions_linux.png</image>
       <caption>Video resolution and cropping settings</caption>
     </screenshot>
     <screenshot>
-      <image>https://download.handbrake.fr/handbrake/images/HandBrake_1.1.x_Video_linux.png</image>
+      <image>https://handbrake.github.io/flatpak/HandBrake_Video_linux.png</image>
       <caption>Video encoder settings</caption>
     </screenshot>
     <screenshot>
-      <image>https://download.handbrake.fr/handbrake/images/HandBrake_1.1.x_Audio_linux.png</image>
+      <image>https://handbrake.github.io/flatpak/HandBrake_Audio_linux.png</image>
       <caption>Audio track selection and settings</caption>
     </screenshot>
     <screenshot>
-      <image>https://download.handbrake.fr/handbrake/images/HandBrake_1.1.x_Chapters_linux.png</image>
+      <image>https://handbrake.github.io/flatpak/HandBrake_Chapters_linux.png</image>
       <caption>Chapter title editing</caption>
     </screenshot>
   </screenshots>
