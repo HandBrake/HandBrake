@@ -59,46 +59,46 @@
             : using a System.ComponentModel.TypeConverter
             : and then encoded with base64 encoding.
     -->
-  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
-    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+  <xsd:schema xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" id="root">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace"/>
     <xsd:element name="root" msdata:IsDataSet="true">
       <xsd:complexType>
         <xsd:choice maxOccurs="unbounded">
           <xsd:element name="metadata">
             <xsd:complexType>
               <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+                <xsd:element name="value" type="xsd:string" minOccurs="0"/>
               </xsd:sequence>
-              <xsd:attribute name="name" use="required" type="xsd:string" />
-              <xsd:attribute name="type" type="xsd:string" />
-              <xsd:attribute name="mimetype" type="xsd:string" />
-              <xsd:attribute ref="xml:space" />
+              <xsd:attribute name="name" use="required" type="xsd:string"/>
+              <xsd:attribute name="type" type="xsd:string"/>
+              <xsd:attribute name="mimetype" type="xsd:string"/>
+              <xsd:attribute ref="xml:space"/>
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="assembly">
             <xsd:complexType>
-              <xsd:attribute name="alias" type="xsd:string" />
-              <xsd:attribute name="name" type="xsd:string" />
+              <xsd:attribute name="alias" type="xsd:string"/>
+              <xsd:attribute name="name" type="xsd:string"/>
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="data">
             <xsd:complexType>
               <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
-                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2"/>
               </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
-              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
-              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
-              <xsd:attribute ref="xml:space" />
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1"/>
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3"/>
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4"/>
+              <xsd:attribute ref="xml:space"/>
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="resheader">
             <xsd:complexType>
               <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
               </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" use="required" />
+              <xsd:attribute name="name" type="xsd:string" use="required"/>
             </xsd:complexType>
           </xsd:element>
         </xsd:choice>
@@ -112,10 +112,10 @@
     <value>2.0</value>
   </resheader>
   <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=5.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=5.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Video_EncoderExtraArgs" xml:space="preserve">
     <value>完整的编码器参数列表：
@@ -196,7 +196,10 @@ GNU 通用公共许可证的条款重新发布它和/或修改它；
     <value>HandBrake 已在进行编码。</value>
   </data>
   <data name="Main_DuplicateDestinationOnQueue" xml:space="preserve">
-    <value>队列中的作业具有相同的目标路径。请为此作业选择不同的路径。</value>
+    <value>队列中有相同目标路径的任务。请为这项任务选择一个不同的路径。
+ 
+你还可以在 "工具菜单-&gt;首选项-&gt;输出文件 "中配置自动文件命名功能。
+</value>
   </data>
   <data name="Main_JobsPending_addon" xml:space="preserve">
     <value>挂起的任务 {0}</value>
@@ -362,13 +365,14 @@ Foreign Audio Preferred, else First：如果存在外语轨道，则会将其烧
     <value>找不到有效的源或标题。</value>
   </data>
   <data name="Main_ScanNoTitlesFoundMessage" xml:space="preserve">
-    <value>HandBrake 不能对选定的来源进行编码，因为它没有找到一个可以编码的有效来源。这可能是由于以下原因之一：
+    <value>HandBrake will not be able to encode the selected source as it did not find a valid source with titles to encode. This could be due to one of the following reasons:
 
-- 每个源标题的时长低于“首选项&gt;高级”中的“最小标题时长”阈值选项。
-- 源文件不是有效的视频文件，或者是 HandBrake 不支持的格式。
-- 源可以是受复制保护的或包括 DRM。请注意，HandBrake 不支持删除复制保护。
+- The duration of each source title is below the "Minimum Title Duration" threshold option in 'Preferences &gt; Advanced'. 
+- The source file is not a valid video file or is in a format that HandBrake does not support.
+- You may not have read access to the file or another application may have a lock on the file. 
+- The source may be copy protected or include DRM. Please note that HandBrake does not support the removal of copy protections.
 
-活动日志可能包含更多信息。</value>
+The Activity log may have further information.</value>
   </data>
   <data name="Main_QueueLabel" xml:space="preserve">
     <value>队列{0}</value>
@@ -555,7 +559,7 @@ Foreign Audio Preferred, else First：如果存在外语轨道，则会将其烧
 您的旧预设文件已归档为：</value>
   </data>
   <data name="Main_QueueFinishedErrors" xml:space="preserve">
-    <value> 有{0} 个错误或取消检测。</value>
+    <value>检测到{0}个错误。检查队列窗口了解详情。</value>
   </data>
   <data name="MainViewModel_LowDiskSpace" xml:space="preserve">
     <value>磁盘空间不足</value>
@@ -1186,7 +1190,7 @@ Foreign Audio Preferred, else First：如果存在外语轨道，则会将其烧
     <value>DVD 读取中</value>
   </data>
   <data name="Options_DvdRead" xml:space="preserve">
-    <value>禁止LibDVDNav。(将会使用livdvdread)</value>
+    <value>禁用 LibDVDNav。（将会使用 livdvdread）</value>
   </data>
   <data name="Options_Encoding" xml:space="preserve">
     <value>编码中</value>
@@ -1237,13 +1241,13 @@ Foreign Audio Preferred, else First：如果存在外语轨道，则会将其烧
     <value>要扫描的预览图片数：</value>
   </data>
   <data name="Options_PriorityLevel" xml:space="preserve">
-    <value>优先级：</value>
+    <value>工作优先级：</value>
   </data>
   <data name="Options_QsvDecode" xml:space="preserve">
-    <value>如果可用，优先使用 Intel QuickSync 解码视频。</value>
+    <value>Prefer use of Intel QuickSync for decoding video when using the QuickSync encoder and the hardware is available for use.</value>
   </data>
   <data name="Options_QsvDecodeForNonFullPath" xml:space="preserve">
-    <value>在没有使用QuickSync 编码器时使用QSV 解码器。(如 x265)</value>
+    <value>在不使用QuickSync编码器时也使用QuickSync解码。(例如x265)</value>
   </data>
   <data name="Options_RemovePunctuation" xml:space="preserve">
     <value>移除常见的标点符号</value>
@@ -1823,7 +1827,7 @@ Foreign Audio Preferred, else First：如果存在外语轨道，则会将其烧
     <value>在工具栏中显示“添加选中至队列”</value>
   </data>
   <data name="OptionsView_HardwareDetectFailed" xml:space="preserve">
-    <value>硬件编码支持当前禁用。如果您未用 "--no-hardware" 选项启动HandBrake，请确保您系统中的所有显示适配器正在使用最新的驱动程序。
+    <value>硬件编码支持当前禁用。如果您未用 "--no-hardware" 选项启动 HandBrake，请确保您系统中的所有显示适配器正在使用最新的驱动程序。
 
 这不会影响软件编码器。</value>
   </data>
@@ -1850,14 +1854,10 @@ Foreign Audio Preferred, else First：如果存在外语轨道，则会将其烧
     <value>删除所选</value>
   </data>
   <data name="Portable_TmpNotWritable" xml:space="preserve">
-    <value>便携模式：无法创建TMP目录。请检查路径是否正确且可写。
-
-    {0}</value>
+    <value>便携模式：无法创建 TMP 目录。请检查路径是否正确并允许写入。</value>
   </data>
   <data name="Portable_StorageNotWritable" xml:space="preserve">
-    <value>便携模式：无法创建存储目录。请检查路径是否正确且可写。
-
-    {0}</value>
+    <value>便携模式：无法创建存储目录。请检查路径是否正确并允许写入。</value>
   </data>
   <data name="Portable_IniFileError" xml:space="preserve">
     <value>便携模式：无法读取 portable.ini。此文件可能存在错误。请使用 portable.ini.template 作为模版重试。</value>
@@ -1931,7 +1931,7 @@ Foreign Audio Preferred, else First：如果存在外语轨道，则会将其烧
 将导入所有支持的用户预设。</value>
   </data>
   <data name="Options_PromptBeforeAction" xml:space="preserve">
-    <value>立即执行操作。（这将禁用60秒确认对话框）</value>
+    <value>立即执行操作。（这将禁用 60 秒确认对话框）</value>
   </data>
   <data name="Browse" xml:space="preserve">
     <value>浏览</value>
@@ -2136,7 +2136,7 @@ Foreign Audio Preferred, else First：如果存在外语轨道，则会将其烧
     <comment>Note: {source}, {destination} and {exit_code} are not translatable. </comment>
   </data>
   <data name="SourceSelection_UpdateAvailable" xml:space="preserve">
-    <value>有新版本的 HandBrake 可供使用！</value>
+    <value>当前有新版本可用！</value>
   </data>
   <data name="About_Copyright" xml:space="preserve">
     <value>版权所有 (C) 2003-2022 HandBrake 团队</value>
@@ -2303,7 +2303,7 @@ Foreign Audio Preferred, else First：如果存在外语轨道，则会将其烧
     <value>停止</value>
   </data>
   <data name="String1" xml:space="preserve">
-    <value />
+    <value/>
   </data>
   <data name="PresetService_CategoryAlreadyExists" xml:space="preserve">
     <value>您输入的分类名称已经存在。请选择一个不同的名称。</value>
@@ -2324,7 +2324,7 @@ Foreign Audio Preferred, else First：如果存在外语轨道，则会将其烧
     <value>显示磁盘空间不足警报的级别。</value>
   </data>
   <data name="OptionsView_SimultaneousHardwareLimitNotice" xml:space="preserve">
-    <value>注意。这是同时进行的工作的上限。在编码过程中，硬件限制可能会影响到实际的同时任务数。</value>
+    <value>Notice: This is the upper limit of simultaneous jobs. Hardware limitations may take effect which lowers the actual number of simultaneous jobs during encoding. Setting will only take affect on the next queue batch or app restart.</value>
   </data>
   <data name="Preset_NotAvailable" xml:space="preserve">
     <value>（不可用）</value>
@@ -2588,5 +2588,95 @@ Foreign Audio Preferred, else First：如果存在外语轨道，则会将其烧
   </data>
   <data name="Shared_ExpandAll" xml:space="preserve">
     <value>全部展开</value>
+  </data>
+  <data name="OptionsView_RightToleftMode" xml:space="preserve">
+    <value>从右向左显示模式</value>
+  </data>
+  <data name="RightToLeft_Off" xml:space="preserve">
+    <value>关闭</value>
+  </data>
+  <data name="RightToLeft_TextOnly" xml:space="preserve">
+    <value>仅文本</value>
+  </data>
+  <data name="RightToLeft_WholeInterface" xml:space="preserve">
+    <value>整个用户界面</value>
+  </data>
+  <data name="SourceSelection_NightlyUpdate" xml:space="preserve">
+    <value>你目前运行的开发版本已经过时了。你可能需要更新!</value>
+  </data>
+  <data name="SourceSelection_NightlyUpdateUrl" xml:space="preserve">
+    <value>通过 Github 下载</value>
+  </data>
+  <data name="MainView_NightlyBuildsUpdate" xml:space="preserve">
+    <value>下载开发渠道版本 (HTTPS)</value>
+  </data>
+  <data name="OptionsView_EnableQuicksyncHyperEncode" xml:space="preserve">
+    <value>启用 QuickSync Deep Link 超级编码器</value>
+  </data>
+  <data name="OptionsView_HyperEncodeDescription" xml:space="preserve">
+    <value>Prefers the use of multiple media engines to speed up a single encode where supported. Disable to allow load balancing multiple parallel encodes across media engines.</value>
+  </data>
+  <data name="MainView_OpenHandBrake" xml:space="preserve">
+    <value>打开 HandBrake</value>
+  </data>
+  <data name="Startup_UnableToStartInfo" xml:space="preserve">
+    <value>硬件编码支持已被禁用，因为这是启动问题的一个常见原因。
+- 请尝试重新启动 HandBrake。
+- 如果问题仍然存在，可能是过旧的显卡驱动（板载或独立）导致的问题。
+
+硬件编码支持可以在首选项中重新启用。</value>
+  </data>
+  <data name="Startup_UnableToStart" xml:space="preserve">
+    <value>HandBrake 无法启动。</value>
+  </data>
+  <data name="OptionsView_ResetSafeMode" xml:space="preserve">
+    <value>重启至安全模式</value>
+  </data>
+  <data name="OptionsView_ResetSafeModeMessage" xml:space="preserve">
+    <value>请重新启动 HandBrake。</value>
+  </data>
+  <data name="Debug_QueueDataExport" xml:space="preserve">
+    <value>导出队列统计数据 (csv)</value>
+  </data>
+  <data name="Debug_QueueExportDataDone" xml:space="preserve">
+    <value>导出完毕！</value>
+  </data>
+  <data name="Debug_QueueSweep_NotSetup" xml:space="preserve">
+    <value>你必须先扫描一个来源并设置一个初始目标目录</value>
+  </data>
+  <data name="OptionsView_FileCollisionNotice" xml:space="preserve">
+    <value>只有当文件已经存在于磁盘上时。</value>
+  </data>
+  <data name="Info" xml:space="preserve">
+    <value>信息</value>
+  </data>
+  <data name="SubtitleView_NoSubtitlesAdded" xml:space="preserve">
+    <value>没有添加字幕轨道。
+
+这可能是由于你所选择的文件格式的限制。请参阅我们的字幕帮助文档以了解更多信息。</value>
+  </data>
+  <data name="DarkTheme_None" xml:space="preserve">
+    <value>无</value>
+  </data>
+  <data name="SourceSelection_UpdateNow" xml:space="preserve">
+    <value>立即更新！</value>
+  </data>
+  <data name="CropMode_Auto" xml:space="preserve">
+    <value>自动</value>
+  </data>
+  <data name="CropMode_Loose" xml:space="preserve">
+    <value>Conservative</value>
+  </data>
+  <data name="CropMode_None" xml:space="preserve">
+    <value>无</value>
+  </data>
+  <data name="CropMode_Custom" xml:space="preserve">
+    <value>自定义</value>
+  </data>
+  <data name="OptionsView_EnableNvDecSupport" xml:space="preserve">
+    <value>当使用 NVEnc 编码器且硬件可以使用时，优先使用 Nvidia NVDec 来解码视频。</value>
+  </data>
+  <data name="Options_Hardware" xml:space="preserve">
+    <value>硬件支持</value>
   </data>
 </root>

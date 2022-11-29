@@ -60,45 +60,45 @@
             : and then encoded with base64 encoding.
     -->
   <xsd:schema xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" id="root">
-    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace"/>
     <xsd:element name="root" msdata:IsDataSet="true">
       <xsd:complexType>
         <xsd:choice maxOccurs="unbounded">
           <xsd:element name="metadata">
             <xsd:complexType>
               <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+                <xsd:element name="value" type="xsd:string" minOccurs="0"/>
               </xsd:sequence>
-              <xsd:attribute name="name" use="required" type="xsd:string" />
-              <xsd:attribute name="type" type="xsd:string" />
-              <xsd:attribute name="mimetype" type="xsd:string" />
-              <xsd:attribute ref="xml:space" />
+              <xsd:attribute name="name" use="required" type="xsd:string"/>
+              <xsd:attribute name="type" type="xsd:string"/>
+              <xsd:attribute name="mimetype" type="xsd:string"/>
+              <xsd:attribute ref="xml:space"/>
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="assembly">
             <xsd:complexType>
-              <xsd:attribute name="alias" type="xsd:string" />
-              <xsd:attribute name="name" type="xsd:string" />
+              <xsd:attribute name="alias" type="xsd:string"/>
+              <xsd:attribute name="name" type="xsd:string"/>
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="data">
             <xsd:complexType>
               <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
-                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2"/>
               </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
-              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
-              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
-              <xsd:attribute ref="xml:space" />
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1"/>
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3"/>
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4"/>
+              <xsd:attribute ref="xml:space"/>
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="resheader">
             <xsd:complexType>
               <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
               </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" use="required" />
+              <xsd:attribute name="name" type="xsd:string" use="required"/>
             </xsd:complexType>
           </xsd:element>
         </xsd:choice>
@@ -112,10 +112,10 @@
     <value>2.0</value>
   </resheader>
   <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=5.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=5.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="FilterView_Deblock" xml:space="preserve">
     <value>블록 제거는 낮은 품질의 비디오 압축으로 인해 발생하는 블록 아티팩트를 줄여줍니다.</value>
@@ -163,9 +163,9 @@ HQDN3D는 적응형 low-pass 필터로 NLMeans보다 빠르지만 세부 사항�
 Blu-ray와 DVD 자료는 대개 여러 개의 제목을 가지고 있으며, 그 중 가장 긴 것은 일반적으로 주요 기능이다.</value>
   </data>
   <data name="PictureSettingsView_Anamorphic" xml:space="preserve">
-    <value>아나모픽은 재생하는 동안 원래의 화면을 유지하면서 임의의 저장 치수를 허용합니다.
+    <value>아나모픽은 재생하는 동안 원래의 화면을 유지하면서 임의의 저장 해상도를 허용합니다.
 
-없음은 아나모픽을 비활성화합니다. 비디오 저장 치수와 화면 치수는 동일합니다. 특정한 기존 장치들과의 호환성에만 유용합니다.
+없음은 아나모픽을 비활성화합니다. 비디오 저장 해상도와 화면 해상도는 동일합니다. 특정한 기존 장치들과의 호환성에만 유용합니다.
 
 자동은 원래 화면 종횡비를 유지하면서 저장 해상도를 최대화합니다. 추천합니다.
 
@@ -190,16 +190,16 @@ Blu-ray와 DVD 자료는 대개 여러 개의 제목을 가지고 있으며, 그
   </data>
   <data name="PictureSettingsView_Height" xml:space="preserve">
     <value>이 높이가 비디오를 저장할 높이입니다.
-픽셀 종횡비가 1:1이 아닌 경우 실제 화면 치수가 다릅니다.</value>
+픽셀 종횡비가 1:1이 아닌 경우 실제 화면 해상도가 다릅니다.</value>
   </data>
   <data name="PictureSettingsView_ManualCrop" xml:space="preserve">
     <value>수동으로 비디오를 자릅니다.</value>
   </data>
   <data name="PictureSettingsView_Modulus" xml:space="preserve">
-    <value>스토리지 차원을 이 값의 배수로 정렬하십시오. 
+    <value>스토리지 크기를 이 값의 배수로 맞춥니다.
 
-이 설정은 일부 장치화와의 호환성에만 필요합니다.
-호환성 문제가 발생하지 않는 한 2를  사용해야합니다.</value>
+이 설정은 일부 장치와의 호환성을 위해서만 필요합니다.
+호환성 문제가 발생하지 않는 한 2를 사용해야 합니다.</value>
   </data>
   <data name="PictureSettingsView_PAR" xml:space="preserve">
     <value>가로세로 픽셀은 픽셀들의 모양을 결정합니다.
@@ -208,7 +208,7 @@ Blu-ray와 DVD 자료는 대개 여러 개의 제목을 가지고 있으며, 그
   </data>
   <data name="PictureSettingsView_Width" xml:space="preserve">
     <value>이 너비는 비디오를 저장할 너비입니다.
-픽셀 종횡비가 1:1이 아닌 경우 실제 화면 치수가 다릅니다.</value>
+픽셀 종횡비가 1:1이 아닌 경우 실제 화면 해상도가 다릅니다.</value>
   </data>
   <data name="QueueView_DeleteJob" xml:space="preserve">
     <value>대기열에서 작업을 삭제합니다.</value>

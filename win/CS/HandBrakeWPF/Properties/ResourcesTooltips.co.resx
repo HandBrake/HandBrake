@@ -60,45 +60,45 @@
             : and then encoded with base64 encoding.
     -->
   <xsd:schema xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" id="root">
-    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace"/>
     <xsd:element name="root" msdata:IsDataSet="true">
       <xsd:complexType>
         <xsd:choice maxOccurs="unbounded">
           <xsd:element name="metadata">
             <xsd:complexType>
               <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+                <xsd:element name="value" type="xsd:string" minOccurs="0"/>
               </xsd:sequence>
-              <xsd:attribute name="name" use="required" type="xsd:string" />
-              <xsd:attribute name="type" type="xsd:string" />
-              <xsd:attribute name="mimetype" type="xsd:string" />
-              <xsd:attribute ref="xml:space" />
+              <xsd:attribute name="name" use="required" type="xsd:string"/>
+              <xsd:attribute name="type" type="xsd:string"/>
+              <xsd:attribute name="mimetype" type="xsd:string"/>
+              <xsd:attribute ref="xml:space"/>
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="assembly">
             <xsd:complexType>
-              <xsd:attribute name="alias" type="xsd:string" />
-              <xsd:attribute name="name" type="xsd:string" />
+              <xsd:attribute name="alias" type="xsd:string"/>
+              <xsd:attribute name="name" type="xsd:string"/>
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="data">
             <xsd:complexType>
               <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
-                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2"/>
               </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
-              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
-              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
-              <xsd:attribute ref="xml:space" />
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1"/>
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3"/>
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4"/>
+              <xsd:attribute ref="xml:space"/>
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="resheader">
             <xsd:complexType>
               <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
               </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" use="required" />
+              <xsd:attribute name="name" type="xsd:string" use="required"/>
             </xsd:complexType>
           </xsd:element>
         </xsd:choice>
@@ -112,10 +112,10 @@
     <value>2.0</value>
   </resheader>
   <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=5.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=5.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="FilterView_Deblock" xml:space="preserve">
     <value>U filtru di sblucchime riduce l’effetti parassiti cagiunati da una cumpressione video di bassa qualità.Dumandà per rimpiazzà u schedariu.</value>
@@ -285,7 +285,7 @@ A scala di x264 hè logaritmica, è valori più chjuchi currispondenu à una
 qualità più maiò.
 Dunque, chjuchi aumenti di valore aumentanu prugressi-
 vamente a dimensione di u schedariu d’esciuta.  Un valore à 0 vole dì
-senza perdita è per què, u schedariu d’esciuta serà più maiò chì quellu
+senza perdita è per què, u schedariu d’esciuta serà più maiò chè quellu
 di a fonte, for di s’è a fonte era dinù senza perdita.
 I valori suggerite sò : 18 à 20 per fonti à definizione classica è 20 à 23 per quelle à alta definizione.
 
@@ -325,7 +325,7 @@ VFR ùn hè micca cumpatibile cù certi lettori.</value>
   <data name="MainView_Presets" xml:space="preserve">
     <value>E prerigature sò gruppi di preferenze di cudificazione custruiti per scenarii specifichi. Selezziunate quella chì currisponde u più à u vostru bisognu.
  
- Rimpiazzeghja tutte e preferenze di cudificazione. E preferenze ponu esse addattate dopu a selezzione di a prerigatura.</value>
+ Rimpiazzeghja tutte e preferenze di cudificazione. E preferenze ponu esse adattate dopu a selezzione di a prerigatura.</value>
   </data>
   <data name="MainView_RemovePreset" xml:space="preserve">
     <value>Caccià a prerigatura selezziunata.</value>
@@ -333,7 +333,7 @@ VFR ùn hè micca cumpatibile cù certi lettori.</value>
   <data name="SourceSelection_TitleSpecific" xml:space="preserve">
     <value>Certe fonti ponu cuntene più d’una video, o una cullezzione di tituli. E fonti Blu-ray è DVD anu aspessu parechji tituli.
 
-S’è vò cunniscite u titulu specificu chì vò vulete cudificà, pudete stampittallu quì è HandBrake analizerà solu stu titulu piuttostu chì tutti i tituli di u schedariu di fonte. Osinnò, lasciate viotu stu campu.</value>
+S’è vò cunniscite u titulu specificu chì vò vulete cudificà, pudete stampittallu quì è HandBrake analizerà solu stu titulu piuttostu chè tutti i tituli di u schedariu di fonte. Osinnò, lasciate viotu stu campu.</value>
   </data>
   <data name="FilterView_CustomDenoiseParams" xml:space="preserve">
     <value>Parametri persunalizati di riduzzione di trostu.
@@ -364,7 +364,7 @@ Predefinizioni HQDN3D : y-spatial=3:cb-spatial=2:cr-spatial=2:y-temporal=2:cb-t
 
 - « Tape » (Scagninu) hè ghjuvevule per e video nant’à un frisgiu magneticu analogicu di bassa qualità, cum’è e VHS, quandu « Filmu » ùn produce micca u risultatu aspettatu.
 
-- « Sprite » (Spiritibugliettu) hè ghjuvevule per i ghjochi 2D in 1, 4, 8 o 16 bit. Ùn hè micca previstu per e video di alta definizione.</value>
+- « Sprite » (Spiritibugliettu) hè ghjuvevule per i ghjochi 2D in 1, 4, 8 o 16 bit. Ùn hè micca concepitu per e video di alta definizione.</value>
   </data>
   <data name="FilterView_Deinterlace" xml:space="preserve">
     <value>U filtru di disintricciamentu caccia l’effetti parassiti da a fiura.
@@ -399,10 +399,10 @@ Bob pruva di preservà megliu a mossa per una chjuca penalità à a risuluzione 
     <value>Invertisce a fiura (cum’è un spechju) secondu à l’asse orizuntale.</value>
   </data>
   <data name="FilterView_InterlaceDetection" xml:space="preserve">
-    <value>L’abbentata d’intricciamentu, quandu l’ozzione hè attiva, permette à u filtru di disintricciamentu di trattà solu e fiure video chì sò intricciate.</value>
+    <value>L’avventata d’intricciamentu, quandu l’ozzione hè attiva, permette à u filtru di disintricciamentu di trattà solu e fiure video chì sò intricciate.</value>
   </data>
   <data name="FilterView_InterlaceDetectionCustom" xml:space="preserve">
-    <value>Parametri d’abbentata d’intricciamentu persunalizati.
+    <value>Parametri d’avventata d’intricciamentu persunalizati.
  
  Sintassa : mode=m:spatial-metric=s:motion-thresh=m:spatial-thresh=s:filter-mode=f:block-thresh=b:block-width=b:block-height=b:disable=d
  
@@ -433,7 +433,7 @@ Predefinizioni Lapsharp : y-strength=0.2:y-kernel=isolap:cb-strength=0.2:cb-ker
 
 - « Unsharp » hè un filtru di maschera floscia à usu generale. Funziuneghja imbrugliendu, è dopu calculendu a sfarenza trà a fiura imbrugliata è a fiura d’origine.
 
-- « Lapsharp » arruteghja impieghendu nocciuli di convuluzione s’avvicinendu di i filtri di bordu Laplacian, pruducendu ognitantu risultati di più bella qualità chì a maschera floscia.</value>
+- « Lapsharp » arruteghja impieghendu nocciuli di convuluzione s’avvicinendu di i filtri di bordu Laplacian, pruducendu ognitantu risultati di più bella qualità chè a maschera floscia.</value>
   </data>
   <data name="FilterView_SharpenPreset" xml:space="preserve">
     <value>Prerigatura di u filtru d’arrutata. Definisce a forza di u filtru.</value>
@@ -451,7 +451,7 @@ A rigatura « Lapsharp's Grain » (Granellu) hè simile à Film, ma impieghegh
 
 A rigatura « Lapsharp's Animation » (Animazione) hè ghjuvevule per l’animazione in celluloide, cum’è a fiura mossa. Hè uguale à Film, ma a forza di u trattamentu hè ridutta per impedisce di creà effetti parassiti.
 
-A rigatura « Lapsharp's Sprite » (Spiritibugliettu) hè ghjuvevule per i ghjochi 2D in 1, 4, 8 o 16 bit. Impiegheghja un nocciulu Laplacianu à 4 vicini chì amendeghja i cuntorni verticale è orizuntale più chì i cuntorni diagunale.</value>
+A rigatura « Lapsharp's Sprite » (Spiritibugliettu) hè ghjuvevule per i ghjochi 2D in 1, 4, 8 o 16 bit. Impiegheghja un nocciulu Laplacianu à 4 vicini chì amendeghja i cuntorni verticale è orizuntale più chè i cuntorni diagunale.</value>
   </data>
   <data name="MainView_AlignAVStart" xml:space="preserve">
     <value>Alineeghja e stampiglie iniziale di tutti i flussi audio è video framittendu fiure viote o squassendu fiure. Què pò megliurà a sincrunizazione audio/video per i lettori disfunziunendu chì ùn rispettanu micca e liste di mudificazioni MP4.</value>

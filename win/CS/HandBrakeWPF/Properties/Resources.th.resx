@@ -59,46 +59,46 @@
             : using a System.ComponentModel.TypeConverter
             : and then encoded with base64 encoding.
     -->
-  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
-    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+  <xsd:schema xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" id="root">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace"/>
     <xsd:element name="root" msdata:IsDataSet="true">
       <xsd:complexType>
         <xsd:choice maxOccurs="unbounded">
           <xsd:element name="metadata">
             <xsd:complexType>
               <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+                <xsd:element name="value" type="xsd:string" minOccurs="0"/>
               </xsd:sequence>
-              <xsd:attribute name="name" use="required" type="xsd:string" />
-              <xsd:attribute name="type" type="xsd:string" />
-              <xsd:attribute name="mimetype" type="xsd:string" />
-              <xsd:attribute ref="xml:space" />
+              <xsd:attribute name="name" use="required" type="xsd:string"/>
+              <xsd:attribute name="type" type="xsd:string"/>
+              <xsd:attribute name="mimetype" type="xsd:string"/>
+              <xsd:attribute ref="xml:space"/>
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="assembly">
             <xsd:complexType>
-              <xsd:attribute name="alias" type="xsd:string" />
-              <xsd:attribute name="name" type="xsd:string" />
+              <xsd:attribute name="alias" type="xsd:string"/>
+              <xsd:attribute name="name" type="xsd:string"/>
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="data">
             <xsd:complexType>
               <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
-                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2"/>
               </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
-              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
-              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
-              <xsd:attribute ref="xml:space" />
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1"/>
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3"/>
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4"/>
+              <xsd:attribute ref="xml:space"/>
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="resheader">
             <xsd:complexType>
               <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
               </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" use="required" />
+              <xsd:attribute name="name" type="xsd:string" use="required"/>
             </xsd:complexType>
           </xsd:element>
         </xsd:choice>
@@ -112,10 +112,10 @@
     <value>2.0</value>
   </resheader>
   <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=5.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=5.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Video_EncoderExtraArgs" xml:space="preserve">
     <value>รายการพารามิเตอร์ตัวเข้ารหัสที่สมบูรณ์ทั้งหมด: 
@@ -130,7 +130,7 @@
     <value>คำเตือน: RF 0 ไม่มีการสูญเสีย!</value>
   </data>
   <data name="Video_LosslessWarningTooltip" xml:space="preserve">
-    <value>A value of 0 means lossless and will result in a file size that is larger than the original source, 
+    <value>ค่าเป็น 0 หมายถึงจะไม่สูญเสียข้อมูล และจะส่งผลให้ขนาดไฟล์มีขนาดใหญ่กว่าต้นฉบับ, 
 เว้นแต่ไฟล์ต้นทางของไฟล์จะไม่สูญเสียไปด้วย
 
 อัตราส่วนเป็นแบบลอการิทึมเมื่อใช้ x264 และ x265 และค่าที่ต่ำกว่าจะสัมพันธ์กับคุณภาพที่สูงขึ้น
@@ -201,10 +201,13 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.</
     <value>HandBrake กำลังดำเนินการเข้ารหัสอยู่แล้วตอนนี้</value>
   </data>
   <data name="Main_DuplicateDestinationOnQueue" xml:space="preserve">
-    <value>มีงานในคิวที่มีเส้นทางปลายทางเหมือนกัน โปรดเลือกเส้นทางอื่นดำเนินการงานนี้</value>
+    <value>There are jobs on the queue with the same destination path. Please choose a different path for this job.
+ 
+You may wish to configure the automatic file naming options in "Tools Menu -&gt; Preferences -&gt; Output Files"
+</value>
   </data>
   <data name="Main_JobsPending_addon" xml:space="preserve">
-    <value>   รอทำงาน {0}</value>
+    <value>Pending Jobs {0}</value>
   </data>
   <data name="Main_NewDefaultPreset" xml:space="preserve">
     <value>ค่าที่ตั้งไว้เริ่มต้นใหม่: {0}</value>
@@ -325,12 +328,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.</
   <data name="PictureSettings_OutputResolution" xml:space="preserve">
     <value>ส่งออก：{0}</value>
   </data>
-  <data name="Options_AdditionalFormatOptions" xml:space="preserve">
-    <value>รูปแบบของไฟล์ที่ส่งออก นอกจากอักขระระบบไฟล์ที่รองรับแล้ว คุณยังสามารถใช้ตัวยึดตำแหน่งต่อไปนี้ ซึ่งจะถูกแทนที่เมื่อคุณเปลี่ยนชื่อหรือไฟล์ต้นทางของการสแกน
-
-ตัวเลือกการอัปเดตตามเวลาจริง：{source} {title} {chapters} 
-ตัวเลือกที่ไม่ใช่เรียลไทม์：{date} {time} {creation-date} {creation-time} {quality} {bitrate} （เปลี่ยนเฉพาะเมื่อสแกนแหล่งใหม่ เปลี่ยนชื่อหรือเรื่อง）</value>
-  </data>
   <data name="Options_DefaultPathAdditionalParams" xml:space="preserve">
     <value>มีตัวเลือกเพิ่มเติม: {source_path} หรือ {source_folder_name} หรือ {source}</value>
   </data>
@@ -373,13 +370,14 @@ Foreign Audio Preferred, else First - หากมีแทร็กภาษา
     <value>ไม่พบไฟล์ต้นทางหรือชื่อที่ถูกต้อง</value>
   </data>
   <data name="Main_ScanNoTitlesFoundMessage" xml:space="preserve">
-    <value>HandBrake ไม่สามารถเข้ารหัสไฟล์ต้นทางที่เลือกได้ เนื่องจากไม่พบแหล่งที่ถูกต้องที่สามารถเข้ารหัสได้
-อาจเกิดจากสาเหตุใดสาเหตุหนึ่งดังต่อไปนี้：
-- ระยะเวลาของชื่อไฟล์ต้นทางแต่ละรายการจะต่ำกว่า "ค่ากำหนด&gt;ตัวเลือกเกณฑ์ "ระยะเวลาชื่อเรื่องขั้นต่ำ" ในขั้นสูง
-- ไฟล์ต้นฉบับไม่ใช่ไฟล์วิดีโอที่ถูกต้อง หรืออยู่ในรูปแบบที่ HandBrake ไม่รองรับ
-- ไฟล์ต้นทางสามารถป้องกันการคัดลอกหรือรวม DRM โปรดทราบว่า HandBrake ไม่สนับสนุนการลบการป้องกันการคัดลอก
+    <value>HandBrake will not be able to encode the selected source as it did not find a valid source with titles to encode. This could be due to one of the following reasons:
 
-บันทึกกิจกรรมอาจมีข้อมูลเพิ่มเติม</value>
+- The duration of each source title is below the "Minimum Title Duration" threshold option in 'Preferences &gt; Advanced'. 
+- The source file is not a valid video file or is in a format that HandBrake does not support.
+- You may not have read access to the file or another application may have a lock on the file. 
+- The source may be copy protected or include DRM. Please note that HandBrake does not support the removal of copy protections.
+
+The Activity log may have further information.</value>
   </data>
   <data name="Main_QueueLabel" xml:space="preserve">
     <value>คิว{0}</value>
@@ -424,7 +422,7 @@ Foreign Audio Preferred, else First - หากมีแทร็กภาษา
     <value>แทร็กเสียง</value>
   </data>
   <data name="AudioViewModel_ConfigureDefaults" xml:space="preserve">
-    <value>เลือกพฤติกรรม</value>
+    <value>Selection Behavior ...</value>
   </data>
   <data name="AudioViewModel_SwitchBackToTracks" xml:space="preserve">
     <value>สลับกลับไปที่แทร็ก</value>
@@ -552,7 +550,7 @@ Foreign Audio Preferred, else First - หากมีแทร็กภาษา
     <value>สลับกลับไปที่แทร็ก</value>
   </data>
   <data name="SubtitlesViewModel_ConfigureDefaults" xml:space="preserve">
-    <value>เลือกพฤติกรรม</value>
+    <value>Selection Behavior ...</value>
   </data>
   <data name="PresetService_ArchiveFile" xml:space="preserve">
     <value>ไฟล์ที่เก็บถาวร：</value>
@@ -566,7 +564,7 @@ Foreign Audio Preferred, else First - หากมีแทร็กภาษา
 ไฟล์พรีเซ็ตเก่าของคุณถูกเก็บถาวรเป็น：</value>
   </data>
   <data name="Main_QueueFinishedErrors" xml:space="preserve">
-    <value> มี{0} เกิดข้อผิดพลาดหรือยกเลิกการทดสอบ</value>
+    <value> with {0} errors detected. Check Queue window for details.</value>
   </data>
   <data name="MainViewModel_LowDiskSpace" xml:space="preserve">
     <value>พื้นที่ดิสก์ไม่เพียงพอ</value>
@@ -707,10 +705,10 @@ Foreign Audio Preferred, else First - หากมีแทร็กภาษา
     <value>ดูตัวอย่าง ({0}% ขนาดที่แท้จริง)</value>
   </data>
   <data name="OsBitnessWarning" xml:space="preserve">
-    <value>HandBrake ต้องทำงานบน 64 บิต Windows 7 หรือสูงกว่า</value>
+    <value>HandBrake requires a 64bit version of Windows 10 or later to run.</value>
   </data>
   <data name="OsVersionWarning" xml:space="preserve">
-    <value>HandBrake ต้องใช้ Windows 7 หรือสูงกว่าจึงจะทำงานได้ เวอร์ชัน 0.9.9 (XP) และเวอร์ชัน 0.10.5 (Vista) เป็นเวอร์ชันสุดท้ายที่สนับสนุนเวอร์ชันเหล่านี้</value>
+    <value>HandBrake requires Windows 10 or later to run. Version 0.9.9 (XP), 0.10.5 (Vista), 1.3.3 (7 and 8.x) were the last versions to support these older operating systems.</value>
   </data>
   <data name="Main_ContinueAddingToQueue" xml:space="preserve">
     <value>คุณต้องการเพิ่มส่วนที่เหลือต่อไปหรือไม่</value>
@@ -1023,7 +1021,7 @@ Foreign Audio Preferred, else First - หากมีแทร็กภาษา
     <value>ขนาด</value>
   </data>
   <data name="MainView_PresetManage" xml:space="preserve">
-    <value>เปลี่ยนชื่อพรีเซ็ต</value>
+    <value>Edit Preset</value>
   </data>
   <data name="MainView_PresetOptionsContextMenu" xml:space="preserve">
     <value>เมนูบริบทตัวเลือกพรีเซ็ต</value>
@@ -1107,7 +1105,7 @@ Foreign Audio Preferred, else First - หากมีแทร็กภาษา
     <value>หัวข้อ：</value>
   </data>
   <data name="MainView_UpdateSelectedPreset" xml:space="preserve">
-    <value>อัปเดตค่าที่ตั้งไว้ล่วงหน้าที่เลือก</value>
+    <value>Update Current Preset</value>
   </data>
   <data name="MainView_VideoTab" xml:space="preserve">
     <value>วีดีโอ</value>
@@ -1128,7 +1126,7 @@ Foreign Audio Preferred, else First - หากมีแทร็กภาษา
     <value>อนุญาตให้ใช้ตัวเข้ารหัส Intel QuickSync</value>
   </data>
   <data name="OptionsView_EnableVceEncoding" xml:space="preserve">
-    <value>อนุญาตให้ใช้ตัวเข้ารหัส AMD VCE</value>
+    <value>Allow use of the AMD VCN Encoders</value>
   </data>
   <data name="OptionsView_InvalidFileFormatChars" xml:space="preserve">
     <value>รูปแบบไฟล์รับเข้ามีอักขระที่ไม่ถูกต้อง อักขระเหล่านี้ถูกลบออกแล้ว</value>
@@ -1248,13 +1246,13 @@ Foreign Audio Preferred, else First - หากมีแทร็กภาษา
     <value>จำนวนภาพตัวอย่างที่จะสแกน：</value>
   </data>
   <data name="Options_PriorityLevel" xml:space="preserve">
-    <value>ลำดับความสำคัญ：</value>
+    <value>Work Priority Level:</value>
   </data>
   <data name="Options_QsvDecode" xml:space="preserve">
-    <value>หากมี ให้ใช้ Intel QuickSync เพื่อถอดรหัสวิดีโอก่อน</value>
+    <value>Prefer use of Intel QuickSync for decoding video when using the QuickSync encoder and the hardware is available for use.</value>
   </data>
   <data name="Options_QsvDecodeForNonFullPath" xml:space="preserve">
-    <value>ใช้ตัวถอดรหัส QSV เมื่อไม่ได้ใช้ตัวเข้ารหัส QuickSync (เช่น x265)</value>
+    <value>Also use QuickSync decoding when not using a QuickSync encoder. (i.e. x265) </value>
   </data>
   <data name="Options_RemovePunctuation" xml:space="preserve">
     <value>ลบเครื่องหมายวรรคตอนทั่วไป</value>
@@ -1399,7 +1397,7 @@ Foreign Audio Preferred, else First - หากมีแทร็กภาษา
     <value>ไม่มีการตอบสนอง</value>
   </data>
   <data name="QueueView_Duration" xml:space="preserve">
-    <value>ระยะเวลาเข้ารหัส：</value>
+    <value>Encode Duration:</value>
   </data>
   <data name="QueueView_Edit" xml:space="preserve">
     <value>แก้ไข</value>
@@ -1411,7 +1409,7 @@ Foreign Audio Preferred, else First - หากมีแทร็กภาษา
     <value>ส่งออกคิว</value>
   </data>
   <data name="QueueView_FileSize" xml:space="preserve">
-    <value>ขนาดไฟล์：</value>
+    <value>Output Filesize: </value>
   </data>
   <data name="WhenDone_Hibernate" xml:space="preserve">
     <value>อยู่เฉยๆ</value>
@@ -1861,24 +1859,19 @@ This will not impact any of the software encoders.</value>
     <value>ลบรายการที่เลือก</value>
   </data>
   <data name="Portable_TmpNotWritable" xml:space="preserve">
-    <value>โหมดพกพา：ไม่สามารถสร้างไดเร็กทอรี TMP โปรดตรวจสอบว่าเส้นทางถูกต้องและเขียนได้
-
-    {0}</value>
+    <value>Portable Mode: Unable to create TMP directory. Please check the path is correct and is writable.</value>
   </data>
   <data name="Portable_StorageNotWritable" xml:space="preserve">
-    <value>โหมดพกพา: ไม่สามารถสร้างไดเร็กทอรีที่เก็บข้อมูลได้ โปรดตรวจสอบว่าเส้นทางถูกต้องและเขียนได้
-
-    {0}</value>
+    <value>Portable Mode: Unable to create Storage directory. Please check the path is correct and is writable.</value>
   </data>
   <data name="Portable_IniFileError" xml:space="preserve">
     <value>โหมดพกพา: ไม่สามารถอ่าน portable.ini อาจมีข้อผิดพลาดในไฟล์นี้ กรุณาใช้ portable.ini.template ลองอีกครั้งเป็นเทมเพลต</value>
   </data>
   <data name="OptionsView_FormatOptions" xml:space="preserve">
-    <value>ตัวเลือกการอัปเดตตามเวลาจริง：{source} {title} {chapters} 
-ตัวเลือกการอัปเดตตามเวลาจริง：{date} {time} {creation-date} {creation-time} {quality} {bitrate} （เปลี่ยนแปลงเฉพาะเมื่อสแกนแหล่งใหม่ เปลี่ยนชื่อหรือบท）</value>
+    <value>Replacement Placeholders: {source} {title} {chapters} {creation-date} {creation-time} {date} {time} {quality_bitrate}</value>
   </data>
   <data name="OptionsView_PathOptions" xml:space="preserve">
-    <value>มีตัวเลือกเพิ่มเติม: {source_path} {source_folder_name} {source}</value>
+    <value>Replacement Placeholders: {source_path} {source_folder_name} {source}</value>
   </data>
   <data name="FileOverwriteBehaviours_Ask" xml:space="preserve">
     <value>ถามว่าจะเขียนทับไฟล์หรือไม่</value>
@@ -1899,7 +1892,7 @@ This will not impact any of the software encoders.</value>
     <value>การเข้ารหัสเสร็จสมบูรณ์</value>
   </data>
   <data name="Options_Notifications" xml:space="preserve">
-    <value>ประกาศ</value>
+    <value>Sound Notifications</value>
   </data>
   <data name="Options_QueueCompleted" xml:space="preserve">
     <value>คิวเสร็จสมบูรณ์</value>
@@ -1979,10 +1972,10 @@ This will not impact any of the software encoders.</value>
     <value>ความจุที่เหลือของดิสก์เป้าหมายน้อยกว่า {0} GB。กำลังหยุดการเข้ารหัส...</value>
   </data>
   <data name="AudioDefaultsView_PaneTitle" xml:space="preserve">
-    <value>กำหนดค่าการเลือกเสียงอัตโนมัติ</value>
+    <value>Automatic Audio Selections</value>
   </data>
   <data name="SubtitlesDefaultsView_PaneTitle" xml:space="preserve">
-    <value>กำหนดค่าการเลือกคำบรรยายอัตโนมัติ</value>
+    <value>Automatic Subtitle Selections</value>
   </data>
   <data name="Options_SystemOptions" xml:space="preserve">
     <value>ระบบ</value>
@@ -2144,14 +2137,14 @@ This will not impact any of the software encoders.</value>
     <value>ช่วงพอร์ตต้องอยู่ระหว่าง 5000 ถึง 32767</value>
   </data>
   <data name="OptionsView_SendFileToArgPlaceholders" xml:space="preserve">
-    <value>แทนที่ตัวยึดตำแหน่ง: {source} {destination}</value>
-    <comment>Note: {source} and {destination} are not translatable. </comment>
+    <value>Replacement Placeholders: {source} {destination} {exit_code}</value>
+    <comment>Note: {source}, {destination} and {exit_code} are not translatable. </comment>
   </data>
   <data name="SourceSelection_UpdateAvailable" xml:space="preserve">
-    <value>มีรุ่นใหม่ HandBrake พร้อมใช้งานแล้ว</value>
+    <value>A new version is available!</value>
   </data>
   <data name="About_Copyright" xml:space="preserve">
-    <value>ลิขสิทธิ์t (C) 2003-2022 ทีม HandBrake </value>
+    <value>Copyright (C) 2003-2022 The HandBrake Team</value>
   </data>
   <data name="Options_LowBatteryLevel" xml:space="preserve">
     <value>ระดับแบตเตอรี่ต่ำ:</value>
@@ -2315,7 +2308,7 @@ This will not impact any of the software encoders.</value>
     <value>หยุด</value>
   </data>
   <data name="String1" xml:space="preserve">
-    <value />
+    <value/>
   </data>
   <data name="PresetService_CategoryAlreadyExists" xml:space="preserve">
     <value>ชื่อหมวดหมู่ที่คุณป้อนมีอยู่แล้ว โปรดเลือกชื่ออื่น</value>
@@ -2336,7 +2329,7 @@ This will not impact any of the software encoders.</value>
     <value>ระดับที่จะแสดงการแจ้งเตือนพื้นที่ดิสก์เหลือน้อย:</value>
   </data>
   <data name="OptionsView_SimultaneousHardwareLimitNotice" xml:space="preserve">
-    <value>หมายเหตุ: นี่คือขีดจำกัดสูงสุดของงานพร้อมกัน ข้อจำกัดของฮาร์ดแวร์อาจมีผลซึ่งจะลดจำนวนงานที่เกิดขึ้นจริงพร้อมกันระหว่างการเข้ารหัส</value>
+    <value>Notice: This is the upper limit of simultaneous jobs. Hardware limitations may take effect which lowers the actual number of simultaneous jobs during encoding. Setting will only take affect on the next queue batch or app restart.</value>
   </data>
   <data name="Preset_NotAvailable" xml:space="preserve">
     <value>(ไม่ว่าง)</value>
@@ -2419,15 +2412,6 @@ This will not impact any of the software encoders.</value>
   <data name="OptionsView_SafeMode" xml:space="preserve">
     <value>คำเตือน: โปรดทราบว่านี่เป็นรุ่น "โหมดปลอดภัย" ของ HandBrake ที่ไม่รองรับตัวเข้ารหัสฮาร์ดแวร์ หากคุณต้องการใช้การสนับสนุนตัวเข้ารหัสฮาร์ดแวร์ โปรดดาวน์โหลดรุ่นที่ไม่ใช่ "โหมดปลอดภัย" จากเว็บไซต์</value>
   </data>
-  <data name="OldOperatingSystem" xml:space="preserve">
-    <value>โปรดทราบว่า HandBrake ไม่รองรับ Windows 7 หรือ Windows 8 เวอร์ชันใดๆ อีกต่อไป
-
-แม้ว่าคุณจะสามารถใช้แอปพลิเคชันต่อไปได้โดยยอมรับความเสี่ยงเอง แต่โปรดทราบว่าคุณลักษณะบางอย่างไม่ทำงานและอาจมีปัญหาอื่นๆ ที่ไม่ทราบสาเหตุ ไม่มีการสนับสนุนเมื่อเกิดปัญหาเหล่านี้
-
-การสนับสนุนสำหรับ Windows 7 และ 8 เลิกใช้แล้วในซีรีส์ 1.3 ซึ่งหมายความว่าจะไม่มีการอัปเดตเพิ่มเติมเพื่อแก้ไขปัญหาบนแพลตฟอร์มเหล่านี้ 
-
-คำเตือนนี้จะแสดงเพียงสองครั้งเท่านั้น</value>
-  </data>
   <data name="PadColour_Black" xml:space="preserve">
     <value>สีดำ</value>
   </data>
@@ -2473,7 +2457,231 @@ This will not impact any of the software encoders.</value>
   <data name="OptionsViewModel_InvalidAutonamePath" xml:space="preserve">
     <value>เส้นทางชื่ออัตโนมัติเริ่มต้นไม่ถูกต้อง {0} ต้องไม่มาก่อน {1}</value>
   </data>
+  <data name="FirstRun_EnableUpdateCheck" xml:space="preserve">
+    <value>คุณต้องการอนุญาตให้ HandBrake ตรวจสอบการอัปเดตโดยอัตโนมัติหรือไม่
+
+คุณสามารถเปลี่ยนตัวเลือกของคุณได้ตลอดเวลาโดยเปลี่ยนในตัวเลือกที่ การตั้งค่า -&gt; ทั่วไป -&gt; ตรวจสอบการอัปเดต</value>
+  </data>
+  <data name="FirstRun_EnableUpdateCheckHeader" xml:space="preserve">
+    <value>ตรวจสอบการอัพเดตหรือไม่</value>
+  </data>
+  <data name="OptionsViewModel_UpdateNotice" xml:space="preserve">
+    <value>Before Updating:
+- Make sure there are no pending encodes in the queue. 
+- Backup or make a note of any custom presets you have created as they may not be fully compatible with newer versions.</value>
+  </data>
+  <data name="Preset_Default" xml:space="preserve">
+    <value>(Default)</value>
+  </data>
+  <data name="PresetDisplayMode_Category" xml:space="preserve">
+    <value>Categories</value>
+  </data>
+  <data name="PresetDisplayMode_Flat" xml:space="preserve">
+    <value>Flat</value>
+  </data>
+  <data name="PresetDisplayMode_Partial" xml:space="preserve">
+    <value>Partially Flat</value>
+  </data>
+  <data name="OptionsView_PresetDisplayMode" xml:space="preserve">
+    <value>Choose how presets are displayed in menus:</value>
+  </data>
   <data name="QueueView_SelectedPresets" xml:space="preserve">
     <value>พรีเซ็ต：</value>
+  </data>
+  <data name="LogViewModel_Complete" xml:space="preserve">
+    <value>[Finished]</value>
+  </data>
+  <data name="QueueViewModel_EditJob" xml:space="preserve">
+    <value>Edit Job?</value>
+  </data>
+  <data name="QueueView_Length" xml:space="preserve">
+    <value>Output Length:</value>
+  </data>
+  <data name="QueueView_MoveToBottom" xml:space="preserve">
+    <value>Move To Bottom</value>
+  </data>
+  <data name="QueueView_MoveToTop" xml:space="preserve">
+    <value>Move To Top</value>
+  </data>
+  <data name="QueueView_VideoOutputBitrate" xml:space="preserve">
+    <value>Output Bitrate:</value>
+  </data>
+  <data name="QueueView_AverageEncodeSpeed" xml:space="preserve">
+    <value>Average Encoding Speed:</value>
+  </data>
+  <data name="QueueViewModel_DifferenceText" xml:space="preserve">
+    <value> of source file</value>
+  </data>
+  <data name="QueueViewModel_NotAvailable" xml:space="preserve">
+    <value>ไม่พร้อมใช้งาน</value>
+  </data>
+  <data name="QueueView_SourceLength" xml:space="preserve">
+    <value>Source Length:</value>
+  </data>
+  <data name="Options_Reset" xml:space="preserve">
+    <value>รีเซ็ต</value>
+  </data>
+  <data name="OptionsViewModel_ResetHandBrakePresetsQuestion" xml:space="preserve">
+    <value>Are you sure you wish to reset all built-in presets?</value>
+  </data>
+  <data name="OptionsView_ResetBuildInPresets" xml:space="preserve">
+    <value>Reset all built-in presets to HandBrake defaults:</value>
+  </data>
+  <data name="OptionsView_ResetBuildInPresetsNotice" xml:space="preserve">
+    <value>(User presets will not be reset)</value>
+  </data>
+  <data name="OptionsView_ResetSettingsToDefaults" xml:space="preserve">
+    <value>Reset all HandBrake settings back to defaults:</value>
+  </data>
+  <data name="Options_BuiltInPresets" xml:space="preserve">
+    <value>Built In Presets</value>
+  </data>
+  <data name="Options_UserSettings" xml:space="preserve">
+    <value>User Settings</value>
+  </data>
+  <data name="PresetDisplayMode_FloatingPanel" xml:space="preserve">
+    <value>Floating Treeview</value>
+  </data>
+  <data name="QueueViewModel_PlayFileErrorSolution" xml:space="preserve">
+    <value>Please make sure you have appropriate file associations setup in Windows to allow it to open this file with a supported video player</value>
+  </data>
+  <data name="QueueViewModel_ImportFail" xml:space="preserve">
+    <value>Unable to read the queue file.</value>
+  </data>
+  <data name="QueueViewModel_ImportFailSolution" xml:space="preserve">
+    <value>The file may be corrupted or from an earlier version of HandBrake. 
+Only queue files from the current version are supported.</value>
+  </data>
+  <data name="Notifications_EncodeDone" xml:space="preserve">
+    <value>Your HandBrake encode is done!</value>
+  </data>
+  <data name="Notifications_QueueDone" xml:space="preserve">
+    <value>Your HandBrake queue is done!</value>
+  </data>
+  <data name="OptionsView_NotificationRemovalSubText" xml:space="preserve">
+    <value>This will also disable the show windows taskbar notifications options on the 'When Done' tab. Re-enable these if you want to re-activate this feature.</value>
+  </data>
+  <data name="OptionsView_NotificationRemovalText" xml:space="preserve">
+    <value>Remove HandBrake from the Windows notifications control panel.</value>
+  </data>
+  <data name="OptionsView_UninstallMessageBoxHeader" xml:space="preserve">
+    <value>Uninstalled</value>
+  </data>
+  <data name="OptionsView_UninstallMessageBoxText" xml:space="preserve">
+    <value>Notification settings have been removed.</value>
+  </data>
+  <data name="OptionsView_UninstallToast" xml:space="preserve">
+    <value>Clear &amp; Uninstall</value>
+  </data>
+  <data name="OptionsView_WindowsNotification" xml:space="preserve">
+    <value>Send a notification to the Windows Taskbar.</value>
+  </data>
+  <data name="OptionsView_WindowsNotificationsBanner" xml:space="preserve">
+    <value>Windows Notifications</value>
+  </data>
+  <data name="Main_QueueMultiJobStatus" xml:space="preserve">
+    <value>{0} jobs completed. {1}Working on {2} jobs with {3} waiting to be processed.</value>
+  </data>
+  <data name="MainView_AutonameRegenerate" xml:space="preserve">
+    <value>Regenerate (Autoname)</value>
+  </data>
+  <data name="MainView_OpenDirectory" xml:space="preserve">
+    <value>Open this Directory</value>
+  </data>
+  <data name="Shared_CollapseAll" xml:space="preserve">
+    <value>Collapse All</value>
+  </data>
+  <data name="Shared_ExpandAll" xml:space="preserve">
+    <value>Expand All</value>
+  </data>
+  <data name="OptionsView_RightToleftMode" xml:space="preserve">
+    <value>Right to Left display mode:</value>
+  </data>
+  <data name="RightToLeft_Off" xml:space="preserve">
+    <value>Off</value>
+  </data>
+  <data name="RightToLeft_TextOnly" xml:space="preserve">
+    <value>Text Only</value>
+  </data>
+  <data name="RightToLeft_WholeInterface" xml:space="preserve">
+    <value>Entire User Interface</value>
+  </data>
+  <data name="SourceSelection_NightlyUpdate" xml:space="preserve">
+    <value>The current development build you are running is getting old. You may wish to update!</value>
+  </data>
+  <data name="SourceSelection_NightlyUpdateUrl" xml:space="preserve">
+    <value>Download via Github</value>
+  </data>
+  <data name="MainView_NightlyBuildsUpdate" xml:space="preserve">
+    <value>Download Development Builds (HTTPS)</value>
+  </data>
+  <data name="OptionsView_EnableQuicksyncHyperEncode" xml:space="preserve">
+    <value>Enable QuickSync Deep Link Hyper Encode</value>
+  </data>
+  <data name="OptionsView_HyperEncodeDescription" xml:space="preserve">
+    <value>Prefers the use of multiple media engines to speed up a single encode where supported. Disable to allow load balancing multiple parallel encodes across media engines.</value>
+  </data>
+  <data name="MainView_OpenHandBrake" xml:space="preserve">
+    <value>Open HandBrake</value>
+  </data>
+  <data name="Startup_UnableToStartInfo" xml:space="preserve">
+    <value>Hardware encoding support has been disabled as it is a common cause of start-up issues.
+- Please try restarting HandBrake. 
+- If the problem persists, it may be an out-of-date graphics card driver (onboard or discrete) that is causing the problem.
+
+Hardware encoding support can be re-enabled in preferences. </value>
+  </data>
+  <data name="Startup_UnableToStart" xml:space="preserve">
+    <value>HandBrake was unable to start.</value>
+  </data>
+  <data name="OptionsView_ResetSafeMode" xml:space="preserve">
+    <value>Reset Safe Mode</value>
+  </data>
+  <data name="OptionsView_ResetSafeModeMessage" xml:space="preserve">
+    <value>Please restart HandBrake.</value>
+  </data>
+  <data name="Debug_QueueDataExport" xml:space="preserve">
+    <value>Export Queue Statistics Data (csv)</value>
+  </data>
+  <data name="Debug_QueueExportDataDone" xml:space="preserve">
+    <value>Export Done!</value>
+  </data>
+  <data name="Debug_QueueSweep_NotSetup" xml:space="preserve">
+    <value>You must first scan a source and have an initial destination directory set</value>
+  </data>
+  <data name="OptionsView_FileCollisionNotice" xml:space="preserve">
+    <value>Only when file already exists on disk.</value>
+  </data>
+  <data name="Info" xml:space="preserve">
+    <value>Info</value>
+  </data>
+  <data name="SubtitleView_NoSubtitlesAdded" xml:space="preserve">
+    <value>There were no subtitle tracks added. 
+
+This may be due to limitations of the file container you have selected. Please see our subtitle help documentation for more information.</value>
+  </data>
+  <data name="DarkTheme_None" xml:space="preserve">
+    <value>ไม่มี</value>
+  </data>
+  <data name="SourceSelection_UpdateNow" xml:space="preserve">
+    <value>Update Now!</value>
+  </data>
+  <data name="CropMode_Auto" xml:space="preserve">
+    <value>อัตโนมัติ</value>
+  </data>
+  <data name="CropMode_Loose" xml:space="preserve">
+    <value>Conservative</value>
+  </data>
+  <data name="CropMode_None" xml:space="preserve">
+    <value>ไม่มี</value>
+  </data>
+  <data name="CropMode_Custom" xml:space="preserve">
+    <value>ปรับแต่ง</value>
+  </data>
+  <data name="OptionsView_EnableNvDecSupport" xml:space="preserve">
+    <value>Prefer use of Nvidia NVDec for decoding video when using the NVEnc encoder and the hardware is available for use.</value>
+  </data>
+  <data name="Options_Hardware" xml:space="preserve">
+    <value>Hardware Support</value>
   </data>
 </root>
