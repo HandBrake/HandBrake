@@ -2,7 +2,7 @@
 "0UB-bG-kwS.label" = "滤镜";
 
 /* Class = "NSButton"; ibShadowedToolTip = "Save New Preset…"; ObjectID = "2vD-zN-YMe"; */
-"2vD-zN-YMe.ibShadowedToolTip" = "保存新的预设";
+"2vD-zN-YMe.ibShadowedToolTip" = "保存新的预设…";
 
 /* Class = "NSTextField"; ibShadowedToolTip = "Title to scan."; ObjectID = "3w9-Iu-3u2"; */
 "3w9-Iu-3u2.ibShadowedToolTip" = "标题扫描。";
@@ -152,7 +152,7 @@
 "5523.ibExternalAccessibilityDescription" = "需要编码的最后帧";
 
 /* Class = "NSTextField"; ibShadowedToolTip = "Last frame to encode."; ObjectID = "5523"; */
-"5523.ibShadowedToolTip" = "结束时间（已帧为单位）";
+"5523.ibShadowedToolTip" = "结束时间（以帧为单位）";
 
 /* Class = "NSMenuItem"; title = "Add All Titles To Queue"; ObjectID = "a37-Yd-bYR"; */
 "a37-Yd-bYR.title" = "添加所有标题到队列";

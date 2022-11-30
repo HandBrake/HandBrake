@@ -4,6 +4,9 @@
 /* HBStateFormatter -> work time format */
 " (%.2f fps, avg %.2f fps, ETA %@)" = " (%1$.2f BpS, im Mittel %2$.2f BpS, ETA %3$@)";
 
+/* HBStateFormatter -> work time format */
+" (%.2f fps, avg %.2f fps)" = "(%1$.2f BpS, im Mittel %2$.2f BpS)";
+
 /* HBStateFormatter -> search time format
    HBStateFormatter -> work time format */
 " (ETA %@)" = " (ETA %@)";

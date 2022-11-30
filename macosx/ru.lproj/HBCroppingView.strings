@@ -1,87 +1,48 @@
-/* Class = "NSWindow"; title = "Picture"; ObjectID = "5"; */
-"5.title" = "Изображение";
+/* Class = "NSTextField"; ibExternalAccessibilityDescription = "Crop bottom"; ObjectID = "6Gj-ZU-E1E"; */
+"6Gj-ZU-E1E.ibExternalAccessibilityDescription" = "Кадрирование снизу";
 
-/* Class = "NSButtonCell"; title = "Automatic"; ObjectID = "17"; */
-"17.title" = "Авто";
+/* Class = "NSTextField"; ibShadowedToolTip = "Bottom edge cropping amount in pixels."; ObjectID = "6Gj-ZU-E1E"; */
+"6Gj-ZU-E1E.ibShadowedToolTip" = "Обрезка по нижней грани в пикселях.";
 
-/* Class = "NSButtonCell"; title = "Custom:"; ObjectID = "18"; */
-"18.title" = "Пользовательские:";
+/* Class = "NSStepper"; ibExternalAccessibilityDescription = "Crop top"; ObjectID = "8e5-zI-IBg"; */
+"8e5-zI-IBg.ibExternalAccessibilityDescription" = "Кадрирование сверху";
 
-/* Class = "NSMenu"; title = "OtherViews"; ObjectID = "134"; */
-"134.title" = "OtherViews";
+/* Class = "NSTextField"; ibExternalAccessibilityDescription = "Crop top"; ObjectID = "Cp5-xz-x1h"; */
+"Cp5-xz-x1h.ibExternalAccessibilityDescription" = "Кадрирование сверху";
 
-/* Class = "NSMenuItem"; title = "Off"; ObjectID = "135"; */
-"135.title" = "Выкл.";
+/* Class = "NSTextField"; ibShadowedToolTip = "Top edge cropping amount in pixels."; ObjectID = "Cp5-xz-x1h"; */
+"Cp5-xz-x1h.ibShadowedToolTip" = "Обрезка по верхней грани в пикселях.";
 
-/* Class = "NSMenuItem"; title = "Auto"; ObjectID = "136"; */
-"136.title" = "Авто";
+/* Class = "NSPopUpButton"; ibShadowedToolTip = "Rotate the picture clockwise in 90 degree increments."; ObjectID = "cWv-q0-EN9"; */
+"cWv-q0-EN9.ibShadowedToolTip" = "Поворачивает изображение шагами по 90 градусов.";
 
-/* Class = "NSMenuItem"; title = "Loose"; ObjectID = "137"; */
-"137.title" = "Свободная";
+/* Class = "NSMenuItem"; title = "Custom"; ObjectID = "dD5-og-dxx"; */
+"dD5-og-dxx.title" = "Пользовательское";
 
-/* Class = "NSTextFieldCell"; title = "Height:"; ObjectID = "166"; */
-"166.title" = "Высота:";
+/* Class = "NSTextField"; ibExternalAccessibilityDescription = "Crop right"; ObjectID = "php-p6-Nz6"; */
+"php-p6-Nz6.ibExternalAccessibilityDescription" = "Кадрирование справа";
 
-/* Class = "NSButtonCell"; title = "Keep Aspect Ratio"; ObjectID = "170"; */
-"170.title" = "Сохранять соотношение сторон";
+/* Class = "NSTextField"; ibShadowedToolTip = "Right edge cropping amount in pixels."; ObjectID = "php-p6-Nz6"; */
+"php-p6-Nz6.ibShadowedToolTip" = "Обрезка по правой грани в пикселях.";
 
-/* Class = "NSTextFieldCell"; title = "Width:"; ObjectID = "172"; */
-"172.title" = "Ширина:";
+/* Class = "NSMenuItem"; title = "None"; ObjectID = "Pqk-fS-pyy"; */
+"Pqk-fS-pyy.title" = "Нет";
 
-/* Class = "NSTextFieldCell"; title = "Anamorphic:"; ObjectID = "174"; */
-"174.title" = "Анаморфирование:";
+/* Class = "NSMenuItem"; title = "Automatic"; ObjectID = "sUG-Cw-nQU"; */
+"sUG-Cw-nQU.title" = "Авто";
 
-/* Class = "NSButtonCell"; title = "Radio"; ObjectID = "178"; */
-"178.title" = "Radio";
+/* Class = "NSStepper"; ibExternalAccessibilityDescription = "Crop bottom"; ObjectID = "sWf-fq-lvl"; */
+"sWf-fq-lvl.ibExternalAccessibilityDescription" = "Кадрирование снизу";
 
-/* Class = "NSTextFieldCell"; title = "Cropping:"; ObjectID = "383"; */
-"383.title" = "Кадрирование:";
+/* Class = "NSTextField"; ibExternalAccessibilityDescription = "Crop left"; ObjectID = "Td7-sa-0TV"; */
+"Td7-sa-0TV.ibExternalAccessibilityDescription" = "Кадрирование слева";
 
-/* Class = "NSMenu"; title = "OtherViews"; ObjectID = "386"; */
-"386.title" = "OtherViews";
+/* Class = "NSTextField"; ibShadowedToolTip = "Left edge cropping amount in pixels."; ObjectID = "Td7-sa-0TV"; */
+"Td7-sa-0TV.ibShadowedToolTip" = "Обрезка по левой грани в пикселях.";
 
-/* Class = "NSMenuItem"; title = "16"; ObjectID = "387"; */
-"387.title" = "16";
+/* Class = "NSStepper"; ibExternalAccessibilityDescription = "Crop right"; ObjectID = "y7P-yk-q46"; */
+"y7P-yk-q46.ibExternalAccessibilityDescription" = "Кадрирование справа";
 
-/* Class = "NSMenuItem"; title = "8"; ObjectID = "388"; */
-"388.title" = "8";
-
-/* Class = "NSMenuItem"; title = "4"; ObjectID = "389"; */
-"389.title" = "4";
-
-/* Class = "NSTextFieldCell"; title = "Modulus:"; ObjectID = "391"; */
-"391.title" = "Модуль:";
-
-/* Class = "NSTextFieldCell"; title = "Display Width:"; ObjectID = "403"; */
-"403.title" = "Ширина вывода:";
-
-/* Class = "NSBox"; title = "Box"; ObjectID = "436"; */
-"436.title" = "Контейнер";
-
-/* Class = "NSTextFieldCell"; title = "PAR Width:"; ObjectID = "445"; */
-"445.title" = "PAR-ширина:";
-
-/* Class = "NSTextFieldCell"; title = "PAR Height:"; ObjectID = "447"; */
-"447.title" = "PAR-высота:";
-
-/* Class = "CocoaBindingsConnection"; ibShadowedIsNilPlaceholder = "0"; ObjectID = "ABP-Q9-NDw"; */
-"ABP-Q9-NDw.ibShadowedIsNilPlaceholder" = "0";
-
-/* Class = "NSTextFieldCell"; title = "Nothing to inspect"; ObjectID = "buq-K6-Wvy"; */
-"buq-K6-Wvy.title" = "Нечего инспектировать";
-
-/* Class = "NSMenuItem"; title = "2"; ObjectID = "Fx1-DI-r18"; */
-"Fx1-DI-r18.title" = "2";
-
-/* Class = "NSMenuItem"; title = "Custom"; ObjectID = "Gsa-Ti-xiw"; */
-"Gsa-Ti-xiw.title" = "Пользовательское";
-
-/* Class = "CocoaBindingsConnection"; ibShadowedIsNilPlaceholder = "0"; ObjectID = "lou-1C-A2w"; */
-"lou-1C-A2w.ibShadowedIsNilPlaceholder" = "0";
-
-/* Class = "CocoaBindingsConnection"; ibShadowedIsNilPlaceholder = "0"; ObjectID = "nVf-lw-Tr1"; */
-"nVf-lw-Tr1.ibShadowedIsNilPlaceholder" = "0";
-
-/* Class = "CocoaBindingsConnection"; ibShadowedIsNilPlaceholder = "0"; ObjectID = "ste-Ks-OLX"; */
-"ste-Ks-OLX.ibShadowedIsNilPlaceholder" = "0";
+/* Class = "NSStepper"; ibExternalAccessibilityDescription = "Crop left"; ObjectID = "Yua-R6-mWU"; */
+"Yua-R6-mWU.ibExternalAccessibilityDescription" = "Кадрирование слева";
 

@@ -1,6 +1,9 @@
 /* Class = "NSTextFieldCell"; title = "Name:"; ObjectID = "eBw-qE-Hyb"; */
 "eBw-qE-Hyb.title" = "Название:";
 
+/* Class = "NSTextField"; ibExternalAccessibilityDescription = "Track name"; ObjectID = "FpM-Jx-vLD"; */
+"FpM-Jx-vLD.ibExternalAccessibilityDescription" = "Имя дорожки";
+
 /* Class = "NSTextField"; ibShadowedToolTip = "Players may use this in the audio/subtitles selection list."; ObjectID = "FpM-Jx-vLD"; */
 "FpM-Jx-vLD.ibShadowedToolTip" = "Проигрыватели смогут использовать это в списке выбора аудио/субтитров.";
 

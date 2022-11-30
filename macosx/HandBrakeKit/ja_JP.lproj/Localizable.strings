@@ -4,6 +4,9 @@
 /* HBStateFormatter -> work time format */
 " (%.2f fps, avg %.2f fps, ETA %@)" = " (%1$.2f fps, 平均 %2$.2f fps, 推定残り時間 %3$@)";
 
+/* HBStateFormatter -> work time format */
+" (%.2f fps, avg %.2f fps)" = " (%1$.2f fps, 平均 %2$.2f fps)";
+
 /* HBStateFormatter -> search time format
    HBStateFormatter -> work time format */
 " (ETA %@)" = " (推定残り時間 %@)";
@@ -64,6 +67,9 @@
 
 /* HBPicture -> short info */
 "%@Output: %dx%d, Anamorphic: %dx%d Custom" = "%1$@出力: %2$dx%3$d, アナモルフィック: %4$dx%5$d カスタム";
+
+/* HBPicture -> short non anamorphic info */
+"%dx%d" = "%1$dx%2$d";
 
 /* HBPicture -> short info */
 "%dx%d Storage, %dx%d Display" = "%1$dx%2$d 格納, %3$dx%4$d 表示";

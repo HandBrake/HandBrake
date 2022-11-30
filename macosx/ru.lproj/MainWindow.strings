@@ -4,11 +4,11 @@
 /* Class = "NSButton"; ibShadowedToolTip = "Save New Preset…"; ObjectID = "2vD-zN-YMe"; */
 "2vD-zN-YMe.ibShadowedToolTip" = "Сохранить новый пресет...";
 
-/* Class = "CocoaBindingsConnection"; ibShadowedIsNilPlaceholder = " "; ObjectID = "3Gk-ma-r2w"; */
-"3Gk-ma-r2w.ibShadowedIsNilPlaceholder" = "";
-
 /* Class = "NSTextField"; ibShadowedToolTip = "Title to scan."; ObjectID = "3w9-Iu-3u2"; */
 "3w9-Iu-3u2.ibShadowedToolTip" = "Заголовок для сканирования.";
+
+/* Class = "NSButton"; ibShadowedToolTip = "Add To Queue"; ObjectID = "3xl-Xh-n9j"; */
+"3xl-Xh-n9j.ibShadowedToolTip" = "Добавить в очередь";
 
 /* Class = "NSTextFieldCell"; title = "0"; ObjectID = "6E4-AG-PEh"; */
 "6E4-AG-PEh.title" = "0";
@@ -24,18 +24,6 @@
 
 /* Class = "NSWindow"; title = "HandBrake"; ObjectID = "21"; */
 "21.title" = "HandBrake";
-
-/* Class = "NSToolbarItem"; label = "Add Titles To Queue"; ObjectID = "38K-hd-P5J"; */
-"38K-hd-P5J.label" = "Добавить заголовки в очередь";
-
-/* Class = "NSToolbarItem"; paletteLabel = "Add Titles To Queue"; ObjectID = "38K-hd-P5J"; */
-"38K-hd-P5J.paletteLabel" = "Добавить заголовки в очередь";
-
-/* Class = "NSToolbarItem"; toolTip = "Add Titles To Queue"; ObjectID = "38K-hd-P5J"; */
-"38K-hd-P5J.toolTip" = "Добавить заголовки в очередь";
-
-/* Class = "NSMenuItem"; title = "Add Titles To Queue…"; ObjectID = "046-kc-MnL"; */
-"046-kc-MnL.title" = "Добавить заголовки в очередь...";
 
 /* Class = "NSTabViewItem"; label = "Audio"; ObjectID = "1475"; */
 "1475.label" = "Аудио";
@@ -93,9 +81,6 @@
 
 /* Class = "NSTabViewItem"; label = "Chapters"; ObjectID = "1989"; */
 "1989.label" = "Главы";
-
-/* Class = "NSTextFieldCell"; title = "DO NOT TRANSLATE THIS NIB FILE"; ObjectID = "4846"; */
-"4846.title" = "НЕ ПЕРЕВОДИТЕ↵ЭТОТ NIB-ФАЙЛ";
 
 /* Class = "NSTextFieldCell"; title = "Source:"; ObjectID = "4905"; */
 "4905.title" = "Исходный файл:";
@@ -166,8 +151,14 @@
 /* Class = "NSTextField"; ibShadowedToolTip = "Last frame to encode."; ObjectID = "5523"; */
 "5523.ibShadowedToolTip" = "Последний кадр для кодирования.";
 
+/* Class = "NSMenuItem"; title = "Add All Titles To Queue"; ObjectID = "a37-Yd-bYR"; */
+"a37-Yd-bYR.title" = "Добавить все заголовки в очередь";
+
 /* Class = "NSButton"; ibShadowedToolTip = "Reload the encoding settings for the currently selected preset. Modifications will be discarded."; ObjectID = "AhR-pK-Oz4"; */
 "AhR-pK-Oz4.ibShadowedToolTip" = "Перезагрузить настройки кодирования для выбранного в данный момент пресета. Изменения будут отменены.";
+
+/* Class = "CocoaBindingsConnection"; ibShadowedIsNilPlaceholder = " "; ObjectID = "aID-g7-zTF"; */
+"aID-g7-zTF.ibShadowedIsNilPlaceholder" = "";
 
 /* Class = "NSTabViewItem"; label = "Summary"; ObjectID = "BA0-eg-2Ka"; */
 "BA0-eg-2Ka.label" = "Сводка";
@@ -202,15 +193,6 @@
 /* Class = "NSButton"; ibShadowedToolTip = "Scan only the specified title instead of all titles."; ObjectID = "DN4-48-aOI"; */
 "DN4-48-aOI.ibShadowedToolTip" = "Сканировать только определенный заголовок вместо всех.";
 
-/* Class = "NSToolbarItem"; label = "Add To Queue"; ObjectID = "DZZ-Fe-wjw"; */
-"DZZ-Fe-wjw.label" = "Добавить в очередь";
-
-/* Class = "NSToolbarItem"; paletteLabel = "Add To Queue"; ObjectID = "DZZ-Fe-wjw"; */
-"DZZ-Fe-wjw.paletteLabel" = "Добавить в очередь";
-
-/* Class = "NSToolbarItem"; toolTip = "Add To Queue"; ObjectID = "DZZ-Fe-wjw"; */
-"DZZ-Fe-wjw.toolTip" = "Добавить в очередь";
-
 /* Class = "NSTabViewItem"; label = "Dimensions"; ObjectID = "eij-Sn-QmJ"; */
 "eij-Sn-QmJ.label" = "Размеры";
 
@@ -226,17 +208,20 @@
 /* Class = "NSToolbarItem"; toolTip = "Show Queue Window"; ObjectID = "HCx-ku-nF7"; */
 "HCx-ku-nF7.toolTip" = "Показать окно очереди";
 
-/* Class = "NSMenuItem"; title = "Add All Titles To Queue"; ObjectID = "INL-y9-Gwp"; */
-"INL-y9-Gwp.title" = "Добавить все заголовки в очередь";
+/* Class = "CocoaBindingsConnection"; ibShadowedIsNilPlaceholder = " "; ObjectID = "Iat-pL-ttI"; */
+"Iat-pL-ttI.ibShadowedIsNilPlaceholder" = "";
 
 /* Class = "NSButtonCell"; title = "Save New Preset…"; ObjectID = "IOU-3L-nvB"; */
 "IOU-3L-nvB.title" = "Сохранить новый пресет...";
 
+/* Class = "NSMenuItem"; title = "Add Titles To Queue…"; ObjectID = "iVg-1G-9ym"; */
+"iVg-1G-9ym.title" = "Добавить заголовки в очередь...";
+
 /* Class = "NSTextFieldCell"; title = "Range:"; ObjectID = "IxV-PW-oYh"; */
 "IxV-PW-oYh.title" = "Промежуток:";
 
-/* Class = "NSMenuItem"; title = "Add Title To Queue"; ObjectID = "L8z-c6-E1u"; */
-"L8z-c6-E1u.title" = "Добавить заголовки в очередь";
+/* Class = "NSTextFieldCell"; title = "Progress"; ObjectID = "KUR-YZ-Da8"; */
+"KUR-YZ-Da8.title" = "В процессе";
 
 /* Class = "NSMenuItem"; title = "Selected Preset"; ObjectID = "OYP-3T-FnA"; */
 "OYP-3T-FnA.title" = "Выбранный пресет";
@@ -262,8 +247,17 @@
 /* Class = "NSToolbarItem"; toolTip = "Show Presets List"; ObjectID = "qhv-9l-2FH"; */
 "qhv-9l-2FH.toolTip" = "Показать список пресетов";
 
+/* Class = "NSToolbarItem"; label = "Add To Queue"; ObjectID = "Qoa-tj-Rj2"; */
+"Qoa-tj-Rj2.label" = "Добавить в очередь";
+
+/* Class = "NSToolbarItem"; paletteLabel = "Add To Queue"; ObjectID = "Qoa-tj-Rj2"; */
+"Qoa-tj-Rj2.paletteLabel" = "Добавить в очередь";
+
 /* Class = "NSTextFieldCell"; title = "To:"; ObjectID = "rfK-nQ-Aq2"; */
 "rfK-nQ-Aq2.title" = "К:";
+
+/* Class = "NSMenuItem"; title = "Reveal in Finder"; ObjectID = "rK6-EB-N9Z"; */
+"rK6-EB-N9Z.title" = "Отобразить в Finder";
 
 /* Class = "NSToolbarItem"; label = "Pause"; ObjectID = "wTQ-KF-5KW"; */
 "wTQ-KF-5KW.label" = "Пауза";
@@ -273,4 +267,7 @@
 
 /* Class = "NSToolbarItem"; toolTip = "Pause Encoding"; ObjectID = "wTQ-KF-5KW"; */
 "wTQ-KF-5KW.toolTip" = "Поставить кодирование на паузу";
+
+/* Class = "NSBox"; title = "Box"; ObjectID = "zcd-K2-F7w"; */
+"zcd-K2-F7w.title" = "Контейнер";
 

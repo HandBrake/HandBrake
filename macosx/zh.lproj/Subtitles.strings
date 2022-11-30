@@ -104,10 +104,10 @@
 "ooy-Sh-Edm.title" = "检查";
 
 /* Class = "NSButtonCell"; title = "Selection Behavior…"; ObjectID = "oxg-bs-1si"; */
-"oxg-bs-1si.title" = "选择行为";
+"oxg-bs-1si.title" = "选择行为…";
 
 /* Class = "NSMenuItem"; title = "Selection Behavior…"; ObjectID = "pwm-PV-1x4"; */
-"pwm-PV-1x4.title" = "选择行为";
+"pwm-PV-1x4.title" = "选择行为…";
 
 /* Class = "NSTextFieldCell"; title = "Text"; ObjectID = "QRj-KI-a03"; */
 "QRj-KI-a03.title" = "文本";

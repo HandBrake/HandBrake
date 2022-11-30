@@ -4,6 +4,9 @@
 /* HBStateFormatter -> work time format */
 " (%.2f fps, avg %.2f fps, ETA %@)" = "（%1$.2f fps，平均 %2$.2f fps，预计完成时间 %3$@）";
 
+/* HBStateFormatter -> work time format */
+" (%.2f fps, avg %.2f fps)" = "（%1$.2f fps，平均 %2$.2f fps)";
+
 /* HBStateFormatter -> search time format
    HBStateFormatter -> work time format */
 " (ETA %@)" = "（预计完成时间 %@）";
@@ -27,7 +30,7 @@
 ", 1 subtitles track" = "，1 条字幕轨道";
 
 /* Format description */
-", Align A/V Start" = ", 对齐音视频开头";
+", Align A/V Start" = "，对齐音视频开头";
 
 /* HBPicture -> summary */
 ", Border: %d/%d/%d/%d" = "，边框：%1$d/%2$d/%3$d/%4$d";
@@ -42,7 +45,7 @@
 ", Crop: %@ %d/%d/%d/%d" = "，裁剪：%1$@ %2$d/%3$d/%4$d/%5$d";
 
 /* Format description */
-", iPod 5G Support" = ", iPod 5G 支持";
+", iPod 5G Support" = "，iPod 5G 支持";
 
 /* Format description */
 ", Web Optimized" = "，Web 优化";
@@ -64,6 +67,9 @@
 
 /* HBPicture -> short info */
 "%@Output: %dx%d, Anamorphic: %dx%d Custom" = "%1$@输出：%2$dx%3$d，变形：%4$dx%5$d 自定义";
+
+/* HBPicture -> short non anamorphic info */
+"%dx%d" = "%1$dx%2$d";
 
 /* HBPicture -> short info */
 "%dx%d Storage, %dx%d Display" = "%1$dx%2$d 存储，%3$dx%4$d 显示";
@@ -96,7 +102,7 @@
 "6.1 Channels" = "6.1 声道";
 
 /* HBAudio -> Mixdown */
-"7.1 (5F/2R/LFE)" = "7.1 (5F/2R/LFE)";
+"7.1 (5F/2R/LFE)" = "7.1（5F/2R/LFE）";
 
 /* HBAudio -> Mixdown */
 "7.1 Channels" = "7.1 声道";
@@ -112,6 +118,9 @@
 
 /* Subtitles description */
 "Burned In" = "烧入";
+
+/* HBFilters -> filter display name */
+"Bwdif" = "Bwdif";
 
 /* Title -> chapter name
    Title description */
@@ -221,6 +230,9 @@
 
 /* HBFilters -> filter display name */
 "HQDN3D" = "HQDN3D";
+
+/* HBFilters -> invalid Bwdif custom string description */
+"Invalid Bwdif custom settings." = "Bwdif 自定义设置无效";
 
 /* HBFilters -> invalid chroma smooth custom string description */
 "Invalid chroma smooth custom settings." = "无效的色度平滑自定义设置。";

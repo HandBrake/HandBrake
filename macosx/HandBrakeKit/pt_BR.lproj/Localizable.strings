@@ -4,6 +4,9 @@
 /* HBStateFormatter -> work time format */
 " (%.2f fps, avg %.2f fps, ETA %@)" = " (%1$.2f fps, avg %2$.2f fps, ETA %3$@)";
 
+/* HBStateFormatter -> work time format */
+" (%.2f fps, avg %.2f fps)" = " (%1$.2f fps, avg %2$.2f fps)";
+
 /* HBStateFormatter -> search time format
    HBStateFormatter -> work time format */
 " (ETA %@)" = " (ETA %@)";
@@ -65,6 +68,9 @@
 /* HBPicture -> short info */
 "%@Output: %dx%d, Anamorphic: %dx%d Custom" = "%1$@Saída: %2$dx%3$d, Anamórfico: %4$dx%5$d Customizado";
 
+/* HBPicture -> short non anamorphic info */
+"%dx%d" = "%1$dx%2$d";
+
 /* HBPicture -> short info */
 "%dx%d Storage, %dx%d Display" = "%1$dx%2$d Armazenamento, %3$dx%4$d Mostrar";
 
@@ -112,6 +118,9 @@
 
 /* Subtitles description */
 "Burned In" = "Queimado Em";
+
+/* HBFilters -> filter display name */
+"Bwdif" = "Bwdif";
 
 /* Title -> chapter name
    Title description */
@@ -221,6 +230,9 @@
 
 /* HBFilters -> filter display name */
 "HQDN3D" = "HQDN3D";
+
+/* HBFilters -> invalid Bwdif custom string description */
+"Invalid Bwdif custom settings." = "Configurações personalizadas inválidas do Bwdif.";
 
 /* HBFilters -> invalid chroma smooth custom string description */
 "Invalid chroma smooth custom settings." = "As configurações personalizadas da suavização do croma são inválidas.";

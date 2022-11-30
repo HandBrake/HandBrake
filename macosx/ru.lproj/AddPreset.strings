@@ -4,8 +4,8 @@
 /* Class = "NSTextField"; ibShadowedToolTip = "Enter a description for the new preset. The description will be shown when hovering the cursor over the preset in the presets list."; ObjectID = "8kl-Sh-Gh7"; */
 "8kl-Sh-Gh7.ibShadowedToolTip" = "Введите описание для нового пресета. Описание будет показано при наведении курсора над пресетом в списке пресетов.";
 
-/* Class = "NSTextFieldCell"; title = "Dimensions:"; ObjectID = "75B-xq-Qbe"; */
-"75B-xq-Qbe.title" = "Размеры:";
+/* Class = "NSTextFieldCell"; title = "Resolution Limit:"; ObjectID = "75B-xq-Qbe"; */
+"75B-xq-Qbe.title" = "Лимит Разрешения:";
 
 /* Class = "NSButtonCell"; title = "Selection Behavior…"; ObjectID = "a0j-nw-n23"; */
 "a0j-nw-n23.title" = "Поведение выбора...";
@@ -70,6 +70,6 @@
 /* Class = "NSMenu"; title = "OtherViews"; ObjectID = "tQ1-PN-kvh"; */
 "tQ1-PN-kvh.title" = "OtherViews";
 
-/* Class = "NSPopUpButton"; ibShadowedToolTip = "Picture Size controls how video dimensions are applied when selecting the preset.\n\nNone uses the currently set dimensions.\n\nCustom allows you to set a maximum width and/or height.\n\nSource maximum uses the full dimensions of each source."; ObjectID = "z6B-ig-ouq"; */
-"z6B-ig-ouq.ibShadowedToolTip" = "Размер изображения управляет тем, как размеры видео применяются при выборе пресета.\n\n'Нет' использует выбранные в данный момент размеры.\n\n'Пользовательское' позволяет установить максимальную ширину и/или высоту.\n\n'Максимум исходного файла' использует полные размеры каждого исходного файла.";
+/* Class = "NSPopUpButton"; ibShadowedToolTip = "Resolution Limit allows you to set a maximum width and/or height."; ObjectID = "z6B-ig-ouq"; */
+"z6B-ig-ouq.ibShadowedToolTip" = "Лимит Разрешения позволяет вам устанавливать максимальную ширину и/или высоту.";
 
