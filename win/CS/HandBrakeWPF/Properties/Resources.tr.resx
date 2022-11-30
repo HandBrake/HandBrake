@@ -59,46 +59,46 @@
             : using a System.ComponentModel.TypeConverter
             : and then encoded with base64 encoding.
     -->
-  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
-    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+  <xsd:schema xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" id="root">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace"/>
     <xsd:element name="root" msdata:IsDataSet="true">
       <xsd:complexType>
         <xsd:choice maxOccurs="unbounded">
           <xsd:element name="metadata">
             <xsd:complexType>
               <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+                <xsd:element name="value" type="xsd:string" minOccurs="0"/>
               </xsd:sequence>
-              <xsd:attribute name="name" use="required" type="xsd:string" />
-              <xsd:attribute name="type" type="xsd:string" />
-              <xsd:attribute name="mimetype" type="xsd:string" />
-              <xsd:attribute ref="xml:space" />
+              <xsd:attribute name="name" use="required" type="xsd:string"/>
+              <xsd:attribute name="type" type="xsd:string"/>
+              <xsd:attribute name="mimetype" type="xsd:string"/>
+              <xsd:attribute ref="xml:space"/>
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="assembly">
             <xsd:complexType>
-              <xsd:attribute name="alias" type="xsd:string" />
-              <xsd:attribute name="name" type="xsd:string" />
+              <xsd:attribute name="alias" type="xsd:string"/>
+              <xsd:attribute name="name" type="xsd:string"/>
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="data">
             <xsd:complexType>
               <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
-                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2"/>
               </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
-              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
-              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
-              <xsd:attribute ref="xml:space" />
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1"/>
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3"/>
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4"/>
+              <xsd:attribute ref="xml:space"/>
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="resheader">
             <xsd:complexType>
               <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
               </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" use="required" />
+              <xsd:attribute name="name" type="xsd:string" use="required"/>
             </xsd:complexType>
           </xsd:element>
         </xsd:choice>
@@ -112,10 +112,10 @@
     <value>2.0</value>
   </resheader>
   <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=5.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=5.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Video_EncoderExtraArgs" xml:space="preserve">
     <value>Kodlayıcı parametrelerinin tam listesi: 
@@ -124,18 +124,18 @@
   <data name="Video_x264FastDecode" xml:space="preserve">
     <value>Kod çözücü CPU kullanımını azaltın.
 
-Cihazınız çıktıyı çalmaya zorlanıyorsa bunu ayarlayın. (yani, bırakılan kareler)</value>
+Cihazınız çıktıyı oynatırken zorlanıyorsa bunu ayarlayın. (Yani, kare atlamalı)</value>
   </data>
   <data name="Video_LosslessWarning" xml:space="preserve">
     <value>Uyarı: RF 0 Kayıpsızdır!</value>
   </data>
   <data name="Video_LosslessWarningTooltip" xml:space="preserve">
-    <value>0 değeri, kayıpsız demektir ve kaynak kayıpsız olmadığı sürece, orijinal kaynaktan daha
-büyük bir dosya boyutuna neden olur.
+    <value>0 değeri kayıpsız anlamına gelir ve kaynak da kayıpsız olmadığı
+sürece dosya boyutunun orijinal kaynaktan daha büyük olmasına neden olur.
 
-x264 ve x265'in ölçeği logaritmiktir ve düşük değerler daha yüksek kaliteye karşılık gelir.
+x264 ve x265'in ölçeği logaritmiktir ve daha düşük değerler daha yüksek kaliteye karşılık gelir. 
 
-Dolayısıyla değerdeki küçük artışlar, sonuçta ortaya çıkan dosya boyutunda giderek daha büyük artışlara neden olur.</value>
+0 değeri kayıpsız anlamına gelir ve kaynak da kayıpsız olmadığı sürece dosya boyutunun orijinal kaynaktan daha büyük olmasına neden olur. </value>
   </data>
   <data name="AddPreset_PictureSizeMode" xml:space="preserve">
     <value>İsteğe bağlı olarak bu ön ayar ile bir resim ayarlarını saklayabilirsiniz. 3 mod vardır:
@@ -1129,7 +1129,7 @@ Devam etmek istiyor musunuz? </value>
     <value>Intel QuickSync Kodlayıcıların kullanımına izin ver</value>
   </data>
   <data name="OptionsView_EnableVceEncoding" xml:space="preserve">
-    <value>AMD VCE Kodlayıcıların kullanımına izin ver</value>
+    <value>AMD VCN Kodlayıcıların kullanımına izin ver</value>
   </data>
   <data name="OptionsView_InvalidFileFormatChars" xml:space="preserve">
     <value>Girilen dosya formatı geçersiz karakterler içeriyordu. Bunlar kaldırıldı. </value>
@@ -2311,7 +2311,7 @@ Lütfen farklı bir ön ayar seçin.</value>
     <value>Durdur</value>
   </data>
   <data name="String1" xml:space="preserve">
-    <value />
+    <value/>
   </data>
   <data name="PresetService_CategoryAlreadyExists" xml:space="preserve">
     <value>Girdiğiniz kategori adı zaten mevcut. Lütfen farklı bir isim seçin.</value>
@@ -2668,5 +2668,23 @@ Bu, seçtiğiniz dosya kapsayıcısının sınırlamaları nedeniyle olabilir. D
   </data>
   <data name="SourceSelection_UpdateNow" xml:space="preserve">
     <value>Şimdi güncelleyin!</value>
+  </data>
+  <data name="CropMode_Auto" xml:space="preserve">
+    <value>Otomatik</value>
+  </data>
+  <data name="CropMode_Loose" xml:space="preserve">
+    <value>Tutucu</value>
+  </data>
+  <data name="CropMode_None" xml:space="preserve">
+    <value>Yok</value>
+  </data>
+  <data name="CropMode_Custom" xml:space="preserve">
+    <value>Özel</value>
+  </data>
+  <data name="OptionsView_EnableNvDecSupport" xml:space="preserve">
+    <value>NVEnc kodlayıcı kullanıldığında ve donanım kullanıma hazır olduğunda video kod çözme için Nvidia NVDec kullanımını tercih edin.</value>
+  </data>
+  <data name="Options_Hardware" xml:space="preserve">
+    <value>Donanım Desteği</value>
   </data>
 </root>

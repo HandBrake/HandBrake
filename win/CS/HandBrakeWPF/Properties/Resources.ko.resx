@@ -59,46 +59,46 @@
             : using a System.ComponentModel.TypeConverter
             : and then encoded with base64 encoding.
     -->
-  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
-    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+  <xsd:schema xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" id="root">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace"/>
     <xsd:element name="root" msdata:IsDataSet="true">
       <xsd:complexType>
         <xsd:choice maxOccurs="unbounded">
           <xsd:element name="metadata">
             <xsd:complexType>
               <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+                <xsd:element name="value" type="xsd:string" minOccurs="0"/>
               </xsd:sequence>
-              <xsd:attribute name="name" use="required" type="xsd:string" />
-              <xsd:attribute name="type" type="xsd:string" />
-              <xsd:attribute name="mimetype" type="xsd:string" />
-              <xsd:attribute ref="xml:space" />
+              <xsd:attribute name="name" use="required" type="xsd:string"/>
+              <xsd:attribute name="type" type="xsd:string"/>
+              <xsd:attribute name="mimetype" type="xsd:string"/>
+              <xsd:attribute ref="xml:space"/>
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="assembly">
             <xsd:complexType>
-              <xsd:attribute name="alias" type="xsd:string" />
-              <xsd:attribute name="name" type="xsd:string" />
+              <xsd:attribute name="alias" type="xsd:string"/>
+              <xsd:attribute name="name" type="xsd:string"/>
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="data">
             <xsd:complexType>
               <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
-                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2"/>
               </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
-              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
-              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
-              <xsd:attribute ref="xml:space" />
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1"/>
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3"/>
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4"/>
+              <xsd:attribute ref="xml:space"/>
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="resheader">
             <xsd:complexType>
               <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
               </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" use="required" />
+              <xsd:attribute name="name" type="xsd:string" use="required"/>
             </xsd:complexType>
           </xsd:element>
         </xsd:choice>
@@ -112,10 +112,10 @@
     <value>2.0</value>
   </resheader>
   <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=5.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=5.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Video_EncoderExtraArgs" xml:space="preserve">
     <value>인코더 파라미터의 전체 목록: 
@@ -185,7 +185,7 @@ Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA라고 적으�
     <value>에러</value>
   </data>
   <data name="Main_TurnOnAutoFileNaming" xml:space="preserve">
-    <value>대기열에 추가하기 전에 자동 파일 이름 지정을 켜고 기본설정에서 기본 경로를 설정해야 합니다.</value>
+    <value>대기열에 추가하기 전에 자동 파일 이름 지정을 켜고 환경설정에서 기본 경로를 설정해야 합니다.</value>
   </data>
   <data name="Warning" xml:space="preserve">
     <value>경고</value>
@@ -202,7 +202,7 @@ Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA라고 적으�
   <data name="Main_DuplicateDestinationOnQueue" xml:space="preserve">
     <value>대상 경로가 동일한 작업이 대기열에 있습니다. 이 작업에 대해 다른 경로를 선택하십시오.
 
-"도구 메뉴 -&gt; 기본설정 -&gt; 출력 파일"에서 자동 파일 이름 지정 옵션을 구성할 수 있습니다.
+"도구 메뉴 -&gt; 환경설정 -&gt; 출력 파일"에서 자동 파일 이름 지정 옵션을 구성할 수 있습니다.
 </value>
   </data>
   <data name="Main_JobsPending_addon" xml:space="preserve">
@@ -371,7 +371,7 @@ Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA라고 적으�
   <data name="Main_ScanNoTitlesFoundMessage" xml:space="preserve">
     <value>HandBrake는 인코딩할 제목을 가진 올바른 소스를 찾지 못했기 때문에 선택한 소스를 인코딩할 수 없습니다. 다음 이유 중 하나가 원인일 수 있습니다.
 
-- 각 소스 제목의 재생 시간은 '기본설정 &gt; 고급'의 "최소 제목 재생 시간" 임계값 옵션보다 낮습니다.
+- 각 소스 제목의 재생 시간은 '환경설정 &gt; 고급'의 "최소 제목 재생 시간" 임계값 옵션보다 낮습니다.
 - 소스 파일이 유효한 비디오 파일이 아니거나 HandBrake가 지원하지 않는 형식입니다.
 - 파일에 대한 읽기 권한이 없거나 다른 응용 프로그램에서 파일을 잠글 수 있습니다.
 - 소스가 복사 방지되거나 DRM을 포함할 수 있습니다. HandBrake는 복사 방지 제거를 지원하지 않습니다.
@@ -629,7 +629,7 @@ HandBrake를 종료하시겠습니까?</value>
     <value>변경한 모든 설정은 다음 HandBrake를 시작할 때 재설정해야 적용할 수 있습니다.</value>
   </data>
   <data name="UserSettings_AnErrorOccurred" xml:space="preserve">
-    <value>사용자의 기본설정을 저장하는 동안 문제가 발생했습니다.</value>
+    <value>사용자의 환경설정을 저장하는 동안 문제가 발생했습니다.</value>
   </data>
   <data name="UserSettings_YourSettingsHaveBeenReset" xml:space="preserve">
     <value>경고, 설정이 재설정되었습니다!</value>
@@ -673,7 +673,7 @@ HandBrake를 종료하시겠습니까?</value>
 남은 시간: {4}</value>
   </data>
   <data name="PauseOnLowDiskspace" xml:space="preserve">
-    <value>대기열이 일시중지되었습니다. 경고, 인코딩하는 드라이브의 디스크 공간이 부족합니다. 여유 공간을 확보한 후 시작을 눌러 계속하십시오. 또한 기본설정에서 최소 공간 수준을 조정할 수 있습니다.</value>
+    <value>대기열이 일시중지되었습니다. 경고, 인코딩하는 드라이브의 디스크 공간이 부족합니다. 여유 공간을 확보한 후 시작을 눌러 계속하십시오. 또한 환경설정에서 최소 공간 수준을 조정할 수 있습니다.</value>
   </data>
   <data name="Main_QueuePaused" xml:space="preserve">
     <value>대기열 일시중지됨</value>
@@ -684,7 +684,7 @@ HandBrake를 종료하시겠습니까?</value>
   <data name="Main_LowDiskspace" xml:space="preserve">
     <value>경로 디렉터리의 디스크 공간이 부족합니다.
 
-이 경고가 기본설정에 표시되는 수준을 구성할 수 있습니다.
+이 경고가 환경설정에 표시되는 수준을 구성할 수 있습니다.
 
 계속하시겠습니까?</value>
   </data>
@@ -747,7 +747,7 @@ HandBrake를 종료하시겠습니까?</value>
     <value>이름:</value>
   </data>
   <data name="AddPresetView_SavePictureSize" xml:space="preserve">
-    <value>면적:</value>
+    <value>해상도:</value>
   </data>
   <data name="AudioDefaultView_Behaviours" xml:space="preserve">
     <value>원본 파일 트랙 선택</value>
@@ -1020,7 +1020,7 @@ HandBrake를 종료하시겠습니까?</value>
     <value>중단</value>
   </data>
   <data name="MainView_PictureTab" xml:space="preserve">
-    <value>면적</value>
+    <value>해상도</value>
   </data>
   <data name="MainView_PresetManage" xml:space="preserve">
     <value>사전 설정 편집</value>
@@ -1128,7 +1128,7 @@ HandBrake를 종료하시겠습니까?</value>
     <value>Intel QuickSync 인코더 사용 가능</value>
   </data>
   <data name="OptionsView_EnableVceEncoding" xml:space="preserve">
-    <value>AMD VCE 인코더 사용 가능</value>
+    <value>AMD VCN 인코더 사용 허용하기</value>
   </data>
   <data name="OptionsView_InvalidFileFormatChars" xml:space="preserve">
     <value>입력한 파일 형식에 잘못된 문자가 포함되어 있습니다. 제거되었습니다.</value>
@@ -1333,7 +1333,7 @@ VLC 및 MPC-HC가 지원됩니다. 다른 재생기들도 작업을 할 수 있�
     <value>왼쪽</value>
   </data>
   <data name="PictureSettingsView_Output" xml:space="preserve">
-    <value>최종 치수:</value>
+    <value>최종 해상도:</value>
   </data>
   <data name="PictureSettingsView_PAR" xml:space="preserve">
     <value>가로세로 픽셀:</value>
@@ -1711,7 +1711,7 @@ VLC 및 MPC-HC가 지원됩니다. 다른 재생기들도 작업을 할 수 있�
     <value>도움말</value>
   </data>
   <data name="Preferences" xml:space="preserve">
-    <value>기본설정</value>
+    <value>환경설정</value>
   </data>
   <data name="AudioDefaultsView_AddTrack" xml:space="preserve">
     <value>트랙 추가</value>
@@ -1759,7 +1759,7 @@ VLC 및 MPC-HC가 지원됩니다. 다른 재생기들도 작업을 할 수 있�
     <value>파일에서 가져오기(_I)</value>
   </data>
   <data name="MainView_PreferencesMenu" xml:space="preserve">
-    <value>기본설정(_P)</value>
+    <value>환경설정(_P)</value>
   </data>
   <data name="MainView_PresetsMenu" xml:space="preserve">
     <value>프리셋(_P)</value>
@@ -2310,7 +2310,7 @@ VLC 및 MPC-HC가 지원됩니다. 다른 재생기들도 작업을 할 수 있�
     <value>멈춤</value>
   </data>
   <data name="String1" xml:space="preserve">
-    <value />
+    <value/>
   </data>
   <data name="PresetService_CategoryAlreadyExists" xml:space="preserve">
     <value>입력한 범주 이름이 이미 있습니다. 다른 이름을 선택하십시오.</value>
@@ -2433,7 +2433,7 @@ VLC 및 MPC-HC가 지원됩니다. 다른 재생기들도 작업을 할 수 있�
     <value>뒤집기:</value>
   </data>
   <data name="PictureSettingsView_SourceDimensions" xml:space="preserve">
-    <value>원본 치수:</value>
+    <value>원본 해상도:</value>
   </data>
   <data name="PictureSettingsViewModel_SourceInfo" xml:space="preserve">
     <value>저장 크기: {0}x{1}        화면 크기: {2}x{3}         종횡비: {4}</value>
@@ -2462,7 +2462,7 @@ VLC 및 MPC-HC가 지원됩니다. 다른 재생기들도 작업을 할 수 있�
   <data name="FirstRun_EnableUpdateCheck" xml:space="preserve">
     <value>HandBrake가 업데이트를 자동으로 확인하도록 하시겠습니까?
 
-기본설정 -&gt; 일반 -&gt; 업데이트 확인에서 옵션을 변경하여 언제든지 선택 사항을 변경할 수 있습니다.</value>
+환경설정 -&gt; 일반 -&gt; 업데이트 확인에서 옵션을 변경하여 언제든지 선택 사항을 변경할 수 있습니다.</value>
   </data>
   <data name="FirstRun_EnableUpdateCheckHeader" xml:space="preserve">
     <value>업데이트를 확인하시겠습니까?</value>
@@ -2667,5 +2667,23 @@ VLC 및 MPC-HC가 지원됩니다. 다른 재생기들도 작업을 할 수 있�
   </data>
   <data name="SourceSelection_UpdateNow" xml:space="preserve">
     <value>지금 업데이트하세요!</value>
+  </data>
+  <data name="CropMode_Auto" xml:space="preserve">
+    <value>자동</value>
+  </data>
+  <data name="CropMode_Loose" xml:space="preserve">
+    <value>보수적</value>
+  </data>
+  <data name="CropMode_None" xml:space="preserve">
+    <value>없음</value>
+  </data>
+  <data name="CropMode_Custom" xml:space="preserve">
+    <value>사용자 설정</value>
+  </data>
+  <data name="OptionsView_EnableNvDecSupport" xml:space="preserve">
+    <value>NVEnc 인코더를 사용하고 하드웨어를 사용할 수 있는 경우 비디오 디코딩을 위해 Nvidia NVDec 사용을 선호합니다.</value>
+  </data>
+  <data name="Options_Hardware" xml:space="preserve">
+    <value>하드웨어 지원</value>
   </data>
 </root>

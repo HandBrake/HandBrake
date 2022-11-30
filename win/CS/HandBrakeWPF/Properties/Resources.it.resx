@@ -59,46 +59,46 @@
             : using a System.ComponentModel.TypeConverter
             : and then encoded with base64 encoding.
     -->
-  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
-    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+  <xsd:schema xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" id="root">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace"/>
     <xsd:element name="root" msdata:IsDataSet="true">
       <xsd:complexType>
         <xsd:choice maxOccurs="unbounded">
           <xsd:element name="metadata">
             <xsd:complexType>
               <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+                <xsd:element name="value" type="xsd:string" minOccurs="0"/>
               </xsd:sequence>
-              <xsd:attribute name="name" use="required" type="xsd:string" />
-              <xsd:attribute name="type" type="xsd:string" />
-              <xsd:attribute name="mimetype" type="xsd:string" />
-              <xsd:attribute ref="xml:space" />
+              <xsd:attribute name="name" use="required" type="xsd:string"/>
+              <xsd:attribute name="type" type="xsd:string"/>
+              <xsd:attribute name="mimetype" type="xsd:string"/>
+              <xsd:attribute ref="xml:space"/>
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="assembly">
             <xsd:complexType>
-              <xsd:attribute name="alias" type="xsd:string" />
-              <xsd:attribute name="name" type="xsd:string" />
+              <xsd:attribute name="alias" type="xsd:string"/>
+              <xsd:attribute name="name" type="xsd:string"/>
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="data">
             <xsd:complexType>
               <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
-                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2"/>
               </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
-              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
-              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
-              <xsd:attribute ref="xml:space" />
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1"/>
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3"/>
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4"/>
+              <xsd:attribute ref="xml:space"/>
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="resheader">
             <xsd:complexType>
               <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
               </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" use="required" />
+              <xsd:attribute name="name" type="xsd:string" use="required"/>
             </xsd:complexType>
           </xsd:element>
         </xsd:choice>
@@ -112,10 +112,10 @@
     <value>2.0</value>
   </resheader>
   <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=5.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=5.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Video_EncoderExtraArgs" xml:space="preserve">
     <value>L'elenco completo dei parametri del codificatore:
@@ -158,7 +158,7 @@ l'implicita garanzia di COMMERCIABILITÀ o di IDONEITÀ PER UN
 QUALSIASI SCOPO. Consultare la licenza GNU General Public License per
 ulteriori informazioni. Una copia della licenza GNU General Public License
 dovrebbe essere distribuita assieme a questo programma; se così non fosse,
-rivolgersi alla Free SoftwareFoundation, Inc., 51 Franklin Street, Fifth Floor, 
+rivolgersi alla Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, 
 Boston, MA 02110-1301, USA.</value>
   </data>
   <data name="QueueSelection_AutoNameWarning" xml:space="preserve">
@@ -351,16 +351,16 @@ Le preimpostazioni di versioni precedenti devono essere ricreate nella versione 
     <value>Ulteriori argomenti avanzati che possono essere passati al codificatore video.</value>
   </data>
   <data name="Subtitles_BurnInBehaviourModes" xml:space="preserve">
-    <value>Nessuno - Vengono masterizzate solo le tracce che hanno un formato che il contenitore non supporta.
-Traccia audio lingua straniera - Verrà masterizzata la traccia audio in lingua straniera, se disponibile.
+    <value>Nessuno: Vengono masterizzate solo le tracce che hanno un formato che il contenitore non supporta.
+Traccia audio in lingua straniera: Verrà masterizzata la traccia audio in lingua straniera, se disponibile.
 Prima traccia: verrà masterizzata la prima traccia.
-Preferisci traccia lingua straiera, altrimenti usa la Prima - Se la traccia audio in lingua straniera esiste, verrà masterizzata, altrimenti verrà selezionata la prima traccia.</value>
+Preferisci audio in lingua straniera, altrimenti la prima: Se la traccia audio in lingua straniera esiste verrà masterizzata, altrimenti verrà selezionata la prima traccia.</value>
   </data>
   <data name="Subtitles_WebmSubtitleIncompatibilityHeader" xml:space="preserve">
     <value>Compatibilità sottotitoli WebM</value>
   </data>
   <data name="Subtitles_WebmSubtitleIncompatibilityError" xml:space="preserve">
-    <value>Il WebM su HandBrake supporta solo sottotitoli in sovraimpressione.
+    <value>HandBrake supporta solo i sottotitoli in sovraimpressione per il formato WebM.
 
 Dovresti cambiare la selezione dei sottotitoli.
 
@@ -674,7 +674,7 @@ Il file delle preimpostazioni corrente verrà archiviato e ne verrà creato uno 
 Tempo rimanente: {4}</value>
   </data>
   <data name="PauseOnLowDiskspace" xml:space="preserve">
-    <value>Coda in Pausa. Attenzione, il disco scelto per la codifica sta esaurendo lo spazio. Si prega di liberare spazio e premere avvia per continuare. È possibile modificare il livello di spazio minimo necessario nelle preferenze.</value>
+    <value>Coda in pausa. Attenzione, il disco scelto per la codifica sta esaurendo lo spazio. Si prega di liberare spazio e premere Avvia per continuare. È possibile modificare il livello di spazio minimo necessario nelle preferenze.</value>
   </data>
   <data name="Main_QueuePaused" xml:space="preserve">
     <value>Coda in pausa</value>
@@ -754,13 +754,13 @@ Vuoi sovrascriverlo?</value>
     <value>Selezione Traccia Sorgente</value>
   </data>
   <data name="AudioView_AllowPassThruOf" xml:space="preserve">
-    <value>Permetti passthru di:</value>
+    <value>Permetti passthrough di:</value>
   </data>
   <data name="AudioView_AudioDefaultsDescription" xml:space="preserve">
     <value>Configura il modo in cui le Tracce Audio sono selezionate e configurate automaticamente quando viene selezionato un nuovo titolo o sorgente video.</value>
   </data>
   <data name="AudioView_AutoPassthruBehaviour" xml:space="preserve">
-    <value>Comportamento 'Passthru Automatico':</value>
+    <value>Comportamento 'Passthrough Automatico':</value>
   </data>
   <data name="AudioView_Bitrate" xml:space="preserve">
     <value>Bitrate</value>
@@ -802,7 +802,7 @@ Vuoi sovrascriverlo?</value>
     <value>Per le Tracce Aggiuntive:</value>
   </data>
   <data name="AudioView_WhenAutoPassthru" xml:space="preserve">
-    <value>Se 'Passthru Automatico' è selezionato come codificatore audio.</value>
+    <value>Se 'Passthrough Automatico' è selezionato come codec audio.</value>
   </data>
   <data name="ChaptersView_ChapterMarkers" xml:space="preserve">
     <value>Marcatori di capitolo</value>
@@ -868,7 +868,7 @@ Vuoi sovrascriverlo?</value>
     <value>Riduzione del rumore:</value>
   </data>
   <data name="FiltersView_DenoisePresetAuto" xml:space="preserve">
-    <value>Preimpostazione Riduzione del Rumore:</value>
+    <value>Preimpostazione Riduzione del rumore:</value>
   </data>
   <data name="FiltersView_DenoiseTuneAuto" xml:space="preserve">
     <value>Regolazione della riduzione del rumore</value>
@@ -1129,7 +1129,7 @@ Vuoi sovrascriverlo?</value>
     <value>Permetti l'uso del codificatore Intel QuickSync</value>
   </data>
   <data name="OptionsView_EnableVceEncoding" xml:space="preserve">
-    <value>Permetti l'uso del codificatore AMD VCE</value>
+    <value>Permetti l'uso del codificatore AMD VCN</value>
   </data>
   <data name="OptionsView_InvalidFileFormatChars" xml:space="preserve">
     <value>Il formato del file inserito contieneva caratteri non validi che sono stati rimossi.</value>
@@ -1439,7 +1439,7 @@ Sono supportati VLC e MPC-HC. Altri riproduttori multimediali potrebbero funzion
     <value>Pausa</value>
   </data>
   <data name="QueueView_PausedDuration" xml:space="preserve">
-    <value>Durata in pausa:</value>
+    <value>Tempo trascorso in pausa:</value>
   </data>
   <data name="QueueView_PictureSettings" xml:space="preserve">
     <value>Impostazioni immagine:</value>
@@ -1490,13 +1490,13 @@ Sono supportati VLC e MPC-HC. Altri riproduttori multimediali potrebbero funzion
     <value>Video:</value>
   </data>
   <data name="QueueView_WhenDone" xml:space="preserve">
-    <value>Al Completamento:</value>
+    <value>Al completamento:</value>
   </data>
   <data name="Shared_AddAllForSelected" xml:space="preserve">
-    <value>Aggiungi Tutte le Lingue Selezionate Restanti</value>
+    <value>Aggiungi tutte le restanti lingue selezionate</value>
   </data>
   <data name="Shared_AddAllRemaining" xml:space="preserve">
-    <value>Aggiungi Tutte le Tracce Restanti</value>
+    <value>Aggiungi tutte le tracce restanti</value>
   </data>
   <data name="Shared_AddNewTrack" xml:space="preserve">
     <value>Aggiungi nuova traccia</value>
@@ -1574,10 +1574,10 @@ Sono supportati VLC e MPC-HC. Altri riproduttori multimediali potrebbero funzion
     <value>Aggiungi Sottotitoli se disponibili</value>
   </data>
   <data name="SubtitlesView_AddForeignAudioSearch" xml:space="preserve">
-    <value>Aggiungi 'Scansione Audio in Lingua Straniera'</value>
+    <value>Aggiungi 'Scansione audio in lingua straniera'</value>
   </data>
   <data name="SubtitlesView_BurnInBehaviour" xml:space="preserve">
-    <value>Comportamento della Sovraimpressione:</value>
+    <value>Comportamento della sovraimpressione:</value>
   </data>
   <data name="SubtitlesView_ImportSubtitle" xml:space="preserve">
     <value>Importa sottotitolo</value>
@@ -1586,7 +1586,7 @@ Sono supportati VLC e MPC-HC. Altri riproduttori multimediali potrebbero funzion
     <value>Comportamento Selezione Tracce:</value>
   </data>
   <data name="SubtitleView_AddAllCC" xml:space="preserve">
-    <value>Aggiungi tutti i Sottotitoli Restanti</value>
+    <value>Aggiungi tutti i sottotitoli restanti</value>
   </data>
   <data name="SubtitleView_SubtitleDefaultsDescription" xml:space="preserve">
     <value>Configura il modo in cui le tracce dei Sottotitoli vengono automaticamente selezionate e configurate quando selezioni un nuovo titolo o sorgente video.</value>
@@ -1700,10 +1700,10 @@ Sono supportati VLC e MPC-HC. Altri riproduttori multimediali potrebbero funzion
     <value>Lingua:</value>
   </data>
   <data name="Language_UseSystem" xml:space="preserve">
-    <value>Usa Lingua di sistema</value>
+    <value>Usa la lingua di sistema</value>
   </data>
   <data name="SourceSelection_AboutHandBrake" xml:space="preserve">
-    <value>Riguardo HandBrake</value>
+    <value>Informazioni su HandBrake</value>
   </data>
   <data name="SourceSelection_DropFileHere" xml:space="preserve">
     <value>Oppure trascina un file o una cartella qui ...</value>
@@ -1724,7 +1724,7 @@ Sono supportati VLC e MPC-HC. Altri riproduttori multimediali potrebbero funzion
     <value>Pulisci</value>
   </data>
   <data name="SubtitlesView_BurnIn" xml:space="preserve">
-    <value>Masterizza</value>
+    <value>Imprimi</value>
   </data>
   <data name="SubtitlesView_Default" xml:space="preserve">
     <value>Predefinito</value>
@@ -1733,7 +1733,7 @@ Sono supportati VLC e MPC-HC. Altri riproduttori multimediali potrebbero funzion
     <value>Solo forzato</value>
   </data>
   <data name="MainView_About" xml:space="preserve">
-    <value>_Riguardo...</value>
+    <value>_Informazioni...</value>
   </data>
   <data name="MainView_ActivityLogMenu" xml:space="preserve">
     <value>_Log delle Attività</value>
@@ -1778,13 +1778,13 @@ Sono supportati VLC e MPC-HC. Altri riproduttori multimediali potrebbero funzion
     <value>M_ostra Pannello Predefiniti</value>
   </data>
   <data name="MainView_ShowQueueMenu" xml:space="preserve">
-    <value>_Vedi Coda</value>
+    <value>_Mostra coda</value>
   </data>
   <data name="MainView_ToolsMenu" xml:space="preserve">
     <value>_Strumenti</value>
   </data>
   <data name="OptionsView_CheckingForUpdates" xml:space="preserve">
-    <value>Sto cercando aggiornamenti...</value>
+    <value>Ricerca degli aggiornamenti...</value>
   </data>
   <data name="OptionsView_ClearLogDirConfirm" xml:space="preserve">
     <value>Sei sicuro di voler cancellare la directory dei file di registro?</value>
@@ -1802,7 +1802,7 @@ Sono supportati VLC e MPC-HC. Altri riproduttori multimediali potrebbero funzion
     <value>Avviso</value>
   </data>
   <data name="OptionsView_PreparingUpdate" xml:space="preserve">
-    <value>Preparando per l'aggiornamento</value>
+    <value>Preparazione per l'aggiornamento in corso...</value>
   </data>
   <data name="OptionsView_SelectFolder" xml:space="preserve">
     <value>Si prega di selezionare una cartella.</value>
@@ -2032,7 +2032,7 @@ Se supportata, ogni preimpostazione dell'utente verrà importata.</value>
     <value>&lt; Indietro</value>
   </data>
   <data name="QueueView_CurrentlyPaused" xml:space="preserve">
-    <value>Attualmente in Pausa</value>
+    <value>Attualmente in pausa</value>
   </data>
   <data name="Options_OutputFiles" xml:space="preserve">
     <value>File di Output</value>
@@ -2050,10 +2050,10 @@ Se supportata, ogni preimpostazione dell'utente verrà importata.</value>
     <value>Secondi</value>
   </data>
   <data name="SubtitleBehaviourModes_AllMatching" xml:space="preserve">
-    <value>Tutte le Lingue Corrispondenti Selezionate</value>
+    <value>Tutte le lingue corrispondenti selezionate</value>
   </data>
   <data name="SubtitleBehaviourModes_FirstMatching" xml:space="preserve">
-    <value>La Prima Lingua Corrispondente Selezionata</value>
+    <value>La prima lingua corrispondente selezionata</value>
   </data>
   <data name="SubtitleBehaviourModes_None" xml:space="preserve">
     <value>Nessuna</value>
@@ -2062,28 +2062,28 @@ Se supportata, ogni preimpostazione dell'utente verrà importata.</value>
     <value>Prima traccia</value>
   </data>
   <data name="SubtitleBurnInBehaviourModes_ForeignAudioPreferredElseFirst" xml:space="preserve">
-    <value>Preferisci Audio in Lingua Straniera, altrimenti la Prima</value>
+    <value>Preferisci audio in lingua straniera, altrimenti la prima</value>
   </data>
   <data name="SubtitleBurnInBehaviourModes_ForeignAudioTrack" xml:space="preserve">
-    <value>Traccia Audio in Lingua Straniera</value>
+    <value>Traccia audio in lingua straniera</value>
   </data>
   <data name="SubtitleBurnInBehaviourModes_None" xml:space="preserve">
     <value>Nessuna</value>
   </data>
   <data name="SubtitleViewModel_ForeignAudioSearch" xml:space="preserve">
-    <value>Ricerca Audio in Lingua Straniera</value>
+    <value>Ricerca audio in lingua straniera</value>
   </data>
   <data name="Subtitle_ForeignAudioScan" xml:space="preserve">
-    <value>Scansione Audio in Lingua Straniera</value>
+    <value>Scansione audio in lingua straniera</value>
   </data>
   <data name="AudioBehaviourModes_AllMatching" xml:space="preserve">
-    <value>Tutte le Lingue Corrispondenti Selezionate</value>
+    <value>Tutte le lingue corrispondenti selezionate</value>
   </data>
   <data name="AudioBehaviourModes_AllTracks" xml:space="preserve">
     <value>Usa Tutte le Tracce come modelli</value>
   </data>
   <data name="AudioBehaviourModes_FirstMatch" xml:space="preserve">
-    <value>La Prima Lingua Corrispondente Selezionata</value>
+    <value>La prima lingua corrispondente selezionata</value>
   </data>
   <data name="AudioBehaviourModes_FirstTrack" xml:space="preserve">
     <value>Usa la Prima Traccia come modello</value>
@@ -2110,7 +2110,7 @@ Se supportata, ogni preimpostazione dell'utente verrà importata.</value>
     <value>Nessuna</value>
   </data>
   <data name="PresetPictureSettingsMode_SourceMaximum" xml:space="preserve">
-    <value>Usa Sempre la Risoluzione della Sorgente</value>
+    <value>Usa sempre la risoluzione della sorgente</value>
   </data>
   <data name="ProcessPriority_AboveNormal" xml:space="preserve">
     <value>Più di Normale</value>
@@ -2236,10 +2236,10 @@ Scegliere una preimpostazione differente.</value>
     <value>Bordi:</value>
   </data>
   <data name="PictureSettingsView_ResAndScaling" xml:space="preserve">
-    <value>Risoluzione e Ridimensionamento:</value>
+    <value>Risoluzione e ridimensionamento:</value>
   </data>
   <data name="PictureSettingsView_RotateAndCrop" xml:space="preserve">
-    <value>Orientamento e Ritaglio:</value>
+    <value>Orientamento e ritaglio:</value>
   </data>
   <data name="QueueView_FilterSettings" xml:space="preserve">
     <value>Filtri:</value>
@@ -2272,10 +2272,10 @@ Scegliere una preimpostazione differente.</value>
     <value>Personalizzata</value>
   </data>
   <data name="PictureSettingsView_MaxSize" xml:space="preserve">
-    <value>Dimensione Massima:</value>
+    <value>Dimensione massima:</value>
   </data>
   <data name="PictureSettingsView_ResLimit" xml:space="preserve">
-    <value>Limite della Risoluzione:</value>
+    <value>Limite della risoluzione:</value>
   </data>
   <data name="PictureSettingsResLimitModes_none" xml:space="preserve">
     <value>Nessuna</value>
@@ -2311,7 +2311,7 @@ Scegliere una preimpostazione differente.</value>
     <value>Ferma</value>
   </data>
   <data name="String1" xml:space="preserve">
-    <value />
+    <value/>
   </data>
   <data name="PresetService_CategoryAlreadyExists" xml:space="preserve">
     <value>Il nome della categoria è gia esistente. Inserirne uno diverso.</value>
@@ -2434,7 +2434,7 @@ Scegliere una preimpostazione differente.</value>
     <value>Capovolgi:</value>
   </data>
   <data name="PictureSettingsView_SourceDimensions" xml:space="preserve">
-    <value>Dimensioni della Sorgente:</value>
+    <value>Dimensioni della sorgente:</value>
   </data>
   <data name="PictureSettingsViewModel_SourceInfo" xml:space="preserve">
     <value>Dim. di Archiviazione: {0}x{1}   Dim. di Visualizzazione: {2}x{3}  Rapp. d'Aspetto:  {4}</value>
@@ -2455,7 +2455,7 @@ Scegliere una preimpostazione differente.</value>
     <value>Rapporto d'Aspetto: {0}</value>
   </data>
   <data name="SummaryView_MetadataPassthru" xml:space="preserve">
-    <value>Passthru Metadati Comuni</value>
+    <value>Mantieni metadati comuni</value>
   </data>
   <data name="OptionsViewModel_InvalidAutonamePath" xml:space="preserve">
     <value>Il percorso preimpostato di assegnazione automatica dei nomi non è valido. {0} non deve trovarsi prima di {1}</value>
@@ -2668,5 +2668,23 @@ La causa potrebbe essere dovuta al tipo di file contenitore selezionato. Consigl
   </data>
   <data name="SourceSelection_UpdateNow" xml:space="preserve">
     <value>Aggiorna Ora!</value>
+  </data>
+  <data name="CropMode_Auto" xml:space="preserve">
+    <value>Automatico</value>
+  </data>
+  <data name="CropMode_Loose" xml:space="preserve">
+    <value>Conservativo</value>
+  </data>
+  <data name="CropMode_None" xml:space="preserve">
+    <value>Nessuna</value>
+  </data>
+  <data name="CropMode_Custom" xml:space="preserve">
+    <value>Personalizzata</value>
+  </data>
+  <data name="OptionsView_EnableNvDecSupport" xml:space="preserve">
+    <value>Preferisci l'uso di Nvidia NVDec per la decodifica quando si usa la codifica NVEnc e l'hardware è disponibile all'uso.</value>
+  </data>
+  <data name="Options_Hardware" xml:space="preserve">
+    <value>Supporto Hardware</value>
   </data>
 </root>

@@ -60,45 +60,45 @@
             : and then encoded with base64 encoding.
     -->
   <xsd:schema xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" id="root">
-    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace"/>
     <xsd:element name="root" msdata:IsDataSet="true">
       <xsd:complexType>
         <xsd:choice maxOccurs="unbounded">
           <xsd:element name="metadata">
             <xsd:complexType>
               <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+                <xsd:element name="value" type="xsd:string" minOccurs="0"/>
               </xsd:sequence>
-              <xsd:attribute name="name" use="required" type="xsd:string" />
-              <xsd:attribute name="type" type="xsd:string" />
-              <xsd:attribute name="mimetype" type="xsd:string" />
-              <xsd:attribute ref="xml:space" />
+              <xsd:attribute name="name" use="required" type="xsd:string"/>
+              <xsd:attribute name="type" type="xsd:string"/>
+              <xsd:attribute name="mimetype" type="xsd:string"/>
+              <xsd:attribute ref="xml:space"/>
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="assembly">
             <xsd:complexType>
-              <xsd:attribute name="alias" type="xsd:string" />
-              <xsd:attribute name="name" type="xsd:string" />
+              <xsd:attribute name="alias" type="xsd:string"/>
+              <xsd:attribute name="name" type="xsd:string"/>
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="data">
             <xsd:complexType>
               <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
-                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2"/>
               </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
-              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
-              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
-              <xsd:attribute ref="xml:space" />
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1"/>
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3"/>
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4"/>
+              <xsd:attribute ref="xml:space"/>
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="resheader">
             <xsd:complexType>
               <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
               </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" use="required" />
+              <xsd:attribute name="name" type="xsd:string" use="required"/>
             </xsd:complexType>
           </xsd:element>
         </xsd:choice>
@@ -112,16 +112,16 @@
     <value>2.0</value>
   </resheader>
   <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=5.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=5.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="FilterView_Deblock" xml:space="preserve">
     <value>"Поправяне на макроблокове" намалява макроблоковете, причинени от компресия на видеото към ниско качество.</value>
   </data>
   <data name="FilterView_DecombDeinterlace" xml:space="preserve">
-    <value>Изберете опциите "Премахване на гребеновиден ефект" или "Изглаждане на презредов образ".
+    <value>Изберете между опциите "Премахване на гребеновиден ефект" и "Изглаждане на презредов образ".
 Филтърът за премахване на гребеновиден ефект изглажда кадрите, които изглеждат презредови.
 Това ще запази качеството на кадрите, които не са презредови.
 
@@ -129,10 +129,10 @@
 Качеството на кадрите, които не са презредови, донякъде ще се намали.</value>
   </data>
   <data name="FilterView_Denoise" xml:space="preserve">
-    <value>Премахване на шум намалява или отстранява шум. Това може да подобри ефикасността на компресията и да създаде по-висококачествено видео с по-малък размер.
+    <value>"Премахване на шум" намалява или отстранява шум и текстура. Това може да подобри ефикасността на компресията и да създаде по-висококачествено видео с по-малък размер.
 Твърде силни настройки могат да навредят на качеството на картината, премахвайки детайли.
 
-NLMeans  е висококачествен филтър за премахване на шум с цена на скоростта. Използвайте когато качеството е по-важно от скоростта.
+NLMeans е висококачествен филтър за премахване на шум с цена на скоростта. Използвайте когато качеството е по-важно от скоростта.
 
 HQDN3D е адаптивен нискочестотен филтър, по-бърз от NLMeans, но по-неефективен откъм запазване на фините детайли.</value>
   </data>
@@ -268,7 +268,7 @@ Blu-ray и DVD източници често имат множество заг�
 В общия случай, слагате тази настройка до най-бавната, която можете да понесете, защото с по-бавни настройки се получават по-добро качество или по-малки файлове.</value>
   </data>
   <data name="Video_Profile" xml:space="preserve">
-    <value>Наглася и подсигурява покриване на стандартите на определеното профил.
+    <value>Наглася и подсигурява покриване на стандартите на определения профил.
 
 Презаписва всички останали настройки.</value>
   </data>

@@ -84,7 +84,11 @@ Windows users, please make sure to install [Microsoft .NET Desktop Runtime versi
 
 ### Windows
 - Miscellaneous bug fixes and improvements
-- Updated translations
+- Updated all translations
+- Added new locales
+  - Bulgarian (Български)
+  - Dutch (Nederlands)
+  - Polish (Polski)
 
 
 ## HandBrake 1.5.0
