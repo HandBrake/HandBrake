@@ -579,6 +579,15 @@ static int hb_qsv_make_adapters_list(hb_list_t **qsv_adapters_list, hb_list_t **
             hb_list_add(list, (void*)adapter_index);
             hb_list_add(list2, (void*)adapter_details);
 
+            // On linux, the handle to the VA display must be set.
+            // This code is essentially a NOP other platforms.
+            hb_display_t * display = hb_qsv_display_init();
+            if (display != NULL)
+            {
+                MFXVideoCORE_SetHandle(session, display->mfxType,
+                                    (mfxHDL)display->handle);
+            }
+
             mfxPlatform platform = { 0 };
             err = MFXVideoCORE_QueryPlatform(session, &platform);
             if (MFX_ERR_NONE == err)
@@ -596,6 +605,8 @@ static int hb_qsv_make_adapters_list(hb_list_t **qsv_adapters_list, hb_list_t **
             {
                 hb_error("hb_qsv_make_adapters_list: MFXVideoCORE_QueryPlatform failed impl=%d err=%d", i, err);
             }
+            MFXClose(session);
+            hb_display_close(&display);
         }
         else
         {
@@ -639,6 +650,7 @@ int hb_qsv_available()
         qsv_init_result = 0;
         return qsv_init_result;
     }
+    hb_log("qsv: is available on this system");
 
     qsv_init_result = ((hb_qsv_video_encoder_is_enabled(hb_qsv_get_adapter_index(), HB_VCODEC_QSV_H264) ? HB_VCODEC_QSV_H264 : 0) |
                       (hb_qsv_video_encoder_is_enabled(hb_qsv_get_adapter_index(), HB_VCODEC_QSV_H265) ? HB_VCODEC_QSV_H265 : 0) |
@@ -1692,8 +1704,8 @@ static int hb_qsv_collect_adapters_details(hb_list_t *hb_qsv_adapter_details_lis
                     // available, we can set the preferred implementation
                     qsv_impl_set_preferred(details, "hardware");
                 }
-                hb_display_close(&display);
                 MFXClose(session);
+                hb_display_close(&display);
                 hw_preference = 0;
             }
             else
