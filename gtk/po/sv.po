@@ -1,5 +1,5 @@
 # SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR Free Software Foundation, Inc.
+# Copyright (C) 2022 Free Software Foundation, Inc.
 # This file is distributed under the same license as the ghb package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 # 
@@ -1908,7 +1908,7 @@ msgstr "Sök automatiskt efter uppdateringar"
 
 #: src/ghb3.ui:7936
 msgid "Default action when all encodes are complete"
-msgstr "När alla omkodningar är slutförda"
+msgstr "Standardåtgärd när alla kodningar är slutförda"
 
 #: src/ghb3.ui:7958
 msgid "Use automatic naming (uses modified source name)"

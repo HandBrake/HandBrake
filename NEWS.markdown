@@ -76,11 +76,17 @@ Windows users, please make sure to install [Microsoft .NET Desktop Runtime versi
 ### Linux
 - Miscellaneous bug fixes and improvements
 - Updated translations
+- Added new locales
+  - Georgian
+  - Finnish
+  - Bulgarian
 
 ### Mac
 - QuickLook support in the Queue
 - Miscellaneous bug fixes and improvements
 - Updated translations
+- Added new locales
+  - Japanese
 
 ### Windows
 - Miscellaneous bug fixes and improvements
