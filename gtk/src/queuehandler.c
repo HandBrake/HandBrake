@@ -1900,7 +1900,6 @@ validate_settings(signal_user_data_t *ud, GhbValue *settings, gint batch)
             return FALSE;
         }
         g_free(message);
-        g_unlink(dest);
     }
     // Validate audio settings
     if (!ghb_validate_audio(settings, hb_window))
