@@ -73,6 +73,9 @@ endif
 
 ifeq (on,$(GCC.lto))
     FFMPEG.CONFIGURE.extra += --enable-lto
+    ifeq (linux,$(HOST.system))
+        FFMPEG.CONFIGURE.extra += --enable-pic
+    endif
 endif
 
 ifneq (,$(filter $(FEATURE.qsv)-$(HOST.system),1-linux 1-freebsd))
