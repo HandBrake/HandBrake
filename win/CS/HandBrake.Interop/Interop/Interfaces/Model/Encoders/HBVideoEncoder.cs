@@ -127,5 +127,6 @@ namespace HandBrake.Interop.Interop.Interfaces.Model.Encoders
         public bool IsVCN => this.ShortName.Contains("vce") || this.ShortName.Contains("vcn");
         public bool IsMediaFoundation => this.ShortName.Contains("mf");
         public bool IsVP9 => this.ShortName.Contains("VP9", StringComparison.InvariantCultureIgnoreCase);
+        public bool IsHardwareEncoder => this.IsNVEnc || this.IsMediaFoundation || this.IsVCN || this.IsQuickSync;
     }
 }
