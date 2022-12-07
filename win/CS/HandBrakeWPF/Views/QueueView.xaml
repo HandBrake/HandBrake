@@ -478,7 +478,7 @@
                                     <TextBlock Text="{Binding SelectedTask.Task, Converter={StaticResource encoderOptionsTooltipConverter}}" Grid.Row="8" Grid.Column="1" TextWrapping="Wrap"  />
 
                                     <TextBlock FontWeight="Bold" Text="{x:Static Properties:Resources.QueueView_Audio}"  Grid.Row="9" Grid.Column="0" VerticalAlignment="Top"/>
-                                    <TextBlock Text="{Binding SelectedTask.Task.AudioTracks, Converter={StaticResource audioTrackDisplayConverter}}" Grid.Row="9" Grid.Column="1" />
+                                    <TextBlock Text="{Binding SelectedTask.Task.AudioTracks, Converter={StaticResource audioTrackDisplayConverter}}" TextWrapping="Wrap" Grid.Row="9" Grid.Column="1" />
 
                                     <TextBlock FontWeight="Bold" VerticalAlignment="Top" Text="{x:Static Properties:Resources.QueueView_Subtitles}" Grid.Row="10" Grid.Column="0"   />
                                     <TextBlock Text="{Binding SelectedTask.Task.SubtitleTracks, Converter={StaticResource subtitleTrackDisplayConverter}}" Grid.Row="10" Grid.Column="1" />
