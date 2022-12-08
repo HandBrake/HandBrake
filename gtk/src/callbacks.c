@@ -1067,8 +1067,8 @@ source_dialog_extra_widgets(
     GtkFileChooser *dialog)
 {
     GList *drives, *link;
-    GStrvBuilder *builder;
-    const gchar** entries;
+    GPtrArray *builder;
+    GStrv entries;
 
     g_debug("source_dialog_extra_widgets ()");
     link = drives = dvd_device_list();
@@ -1078,21 +1078,24 @@ source_dialog_extra_widgets(
         return;
     }
     has_drive = TRUE;
-
-    builder = g_strv_builder_new();
-    g_strv_builder_add(builder, _("Not Selected"));
+    builder = g_ptr_array_new();
+    g_ptr_array_add(builder, g_strdup(_("Not Selected")));
     while (link != NULL)
     {
         gchar *name = get_dvd_device_name(link->data);
-        g_strv_builder_add(builder, name);
+        g_ptr_array_add(builder, name);
         free_drive(link->data);
         link = link->next;
     }
+    g_ptr_array_add(builder, NULL);
     g_list_free(drives);
-    entries = (const gchar**) g_strv_builder_end(builder);
-    g_strv_builder_unref(builder);
-    gtk_file_chooser_add_choice(dialog, "drive", _("Detected DVD devices:"), entries, entries);
+
+    entries = (GStrv) g_ptr_array_steal(builder, NULL);
+    g_ptr_array_unref(builder);
+    gtk_file_chooser_add_choice(dialog, "drive", _("Detected DVD devices:"),
+                                 (const char **)entries, (const char **)entries);
     gtk_file_chooser_set_choice(GTK_FILE_CHOOSER(dialog), "drive", _("Not Selected"));
+    g_strfreev(entries);
 }
 
 void ghb_break_pts_duration(gint64 ptsDuration, gint *hh, gint *mm, gdouble *ss)
@@ -1552,7 +1555,7 @@ source_dialog_response_cb(GtkFileChooser *dialog,
                           GtkResponseType response, signal_user_data_t *ud)
 {
     const gchar *sourcename;
-    const gchar *drivename;
+    const gchar *drivename = NULL;
     gchar *filename;
 
     if (response == GTK_RESPONSE_ACCEPT)
