@@ -148,8 +148,8 @@ data_res.c : data_res.gresource.xml internal_defaults.json widget.deps widget_re
 data_res.h : data_res.gresource.xml internal_defaults.json widget.deps widget_reverse.deps
 	glib-compile-resources --generate --target=$@ --c-name ghb_data --manual-register $<
 
-if GHB_GTK_4_00
-UI=400
+if GHB_GTK_4_4
+UI=404
 UI_FILE=ghb4.ui
 else
 if GHB_GTK_3_22

@@ -2202,7 +2202,7 @@ language_opts_set(signal_user_data_t *ud, const gchar *name,
                            -1);
         g_free(lang);
     }
-#if !GTK_CHECK_VERSION(3, 90, 0)
+#if !GTK_CHECK_VERSION(4, 4, 0)
     // This is handled by GtkEventControllerKey in gtk4
     // Initialized in ghb_combo_init()
     g_signal_connect(combo, "key-press-event", combo_search_key_press_cb, ud);
@@ -3509,7 +3509,7 @@ ghb_combo_init(signal_user_data_t *ud)
     // Populate all the combos
     ghb_update_ui_combo_box(ud, NULL, NULL, TRUE);
 
-#if GTK_CHECK_VERSION(3, 90, 0)
+#if GTK_CHECK_VERSION(4, 4, 0)
     GtkWidget          * combo;
     GtkEventController * econ;
 

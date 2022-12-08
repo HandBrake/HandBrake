@@ -33,7 +33,7 @@
 #define GHB_UNSAFE_FILENAME_CHARS "/"
 #endif
 
-#if GTK_CHECK_VERSION(3, 90, 0)
+#if GTK_CHECK_VERSION(4, 4, 0)
 #define GHB_ICON_SIZE_BUTTON GTK_ICON_SIZE_NORMAL
 #else
 #define GHB_ICON_SIZE_BUTTON GTK_ICON_SIZE_BUTTON
@@ -49,7 +49,7 @@
 static inline void ghb_widget_get_preferred_width(
     GtkWidget *widget, gint *min_width, gint * natural_width)
 {
-#if GTK_CHECK_VERSION(3, 90, 0)
+#if GTK_CHECK_VERSION(4, 4, 0)
     GtkRequisition min_req, nat_req;
 
     gtk_widget_get_preferred_size(widget, &min_req, &nat_req);
@@ -69,7 +69,7 @@ static inline void ghb_widget_get_preferred_width(
 static inline void ghb_widget_get_preferred_height(
     GtkWidget *widget, gint *min_height, gint * natural_height)
 {
-#if GTK_CHECK_VERSION(3, 90, 0)
+#if GTK_CHECK_VERSION(4, 4, 0)
     GtkRequisition min_req, nat_req;
 
     gtk_widget_get_preferred_size(widget, &min_req, &nat_req);
@@ -89,7 +89,7 @@ static inline void ghb_widget_get_preferred_height(
 static inline void ghb_button_set_icon_name(GtkButton *button,
                                             const char * name)
 {
-#if GTK_CHECK_VERSION(3, 90, 0)
+#if GTK_CHECK_VERSION(4, 4, 0)
     gtk_button_set_icon_name(button, name);
 #else
     GtkImage *image;
@@ -117,7 +117,7 @@ static inline void ghb_get_expand_fill(GtkBox * box, GtkWidget * child,
 
 static inline void ghb_box_append_child(GtkBox * box, GtkWidget * child)
 {
-#if GTK_CHECK_VERSION(3, 90, 0)
+#if GTK_CHECK_VERSION(4, 4, 0)
     GtkWidget * sibling = NULL;
 
     sibling = gtk_widget_get_last_child(GTK_WIDGET(box));
@@ -134,7 +134,7 @@ static inline void ghb_css_provider_load_from_data(GtkCssProvider *provider,
                                                    const gchar *data,
                                                    gssize length)
 {
-#if GTK_CHECK_VERSION(3, 90, 0)
+#if GTK_CHECK_VERSION(4, 4, 0)
     gtk_css_provider_load_from_data(provider, data, length);
 #else
     gtk_css_provider_load_from_data(provider, data, length, NULL);
@@ -171,7 +171,7 @@ static inline PangoFontDescription* ghb_widget_get_font(GtkWidget *widget)
     return font;
 }
 
-#if GTK_CHECK_VERSION(3, 90, 0)
+#if GTK_CHECK_VERSION(4, 4, 0)
 typedef GdkSurface      GhbSurface;
 typedef GdkSurfaceHints GhbSurfaceHints;
 
@@ -261,7 +261,7 @@ static inline gboolean ghb_strv_contains(const char ** strv, const char * str)
 #endif
 }
 
-#if GTK_CHECK_VERSION(3, 90, 0)
+#if GTK_CHECK_VERSION(4, 4, 0)
 
 #define ghb_editable_get_text(e) gtk_editable_get_text(GTK_EDITABLE(e))
 #define ghb_editable_set_text(e,t) gtk_editable_set_text(GTK_EDITABLE(e), (t))
@@ -273,7 +273,7 @@ static inline gboolean ghb_strv_contains(const char ** strv, const char * str)
 
 #endif
 
-#if GTK_CHECK_VERSION(3, 90, 0)
+#if GTK_CHECK_VERSION(4, 4, 0)
 static inline void
 ghb_image_set_from_icon_name(GtkImage * image, const gchar * name,
                              GtkIconSize size)
@@ -333,7 +333,7 @@ ghb_scale_button_new(gdouble min, gdouble max, gdouble step,
 }
 #endif
 
-#if GTK_CHECK_VERSION(3, 90, 0)
+#if GTK_CHECK_VERSION(4, 4, 0)
 static inline void ghb_drag_status(GdkDrop * ctx, GdkDragAction action,
                                    guint32 time)
 {
@@ -347,7 +347,7 @@ static inline void ghb_drag_status(GdkDragContext * ctx, GdkDragAction action,
 }
 #endif
 
-#if GTK_CHECK_VERSION(3, 90, 0)
+#if GTK_CHECK_VERSION(4, 4, 0)
 static inline void ghb_entry_set_width_chars(GtkEntry * entry, gint n_chars)
 {
     gtk_editable_set_width_chars(GTK_EDITABLE(entry), n_chars);
@@ -359,7 +359,7 @@ static inline void ghb_entry_set_width_chars(GtkEntry * entry, gint n_chars)
 }
 #endif
 
-#if GTK_CHECK_VERSION(3, 90, 0)
+#if GTK_CHECK_VERSION(4, 4, 0)
 static inline GdkAtom ghb_atom_string(const char * str)
 {
     return g_intern_static_string(str);

@@ -1124,7 +1124,7 @@ get_selected_path(signal_user_data_t *ud)
 G_MODULE_EXPORT gboolean
 presets_window_delete_cb(
     GtkWidget *xwidget,
-#if !GTK_CHECK_VERSION(3, 90, 0)
+#if !GTK_CHECK_VERSION(4, 4, 0)
     GdkEvent *event,
 #endif
     signal_user_data_t *ud)
@@ -1141,7 +1141,7 @@ presets_window_delete_cb(
 G_MODULE_EXPORT void
 presets_sz_alloc_cb(
     GtkWidget *widget,
-#if GTK_CHECK_VERSION(3, 90, 0)
+#if GTK_CHECK_VERSION(4, 4, 0)
     int width,
     int height,
     int baseline,
@@ -2510,7 +2510,7 @@ preset_remove_action_cb(GSimpleAction *action, GVariant *param,
 
 // controls where valid drop locations are
 G_MODULE_EXPORT gboolean
-#if GTK_CHECK_VERSION(3, 90, 0)
+#if GTK_CHECK_VERSION(4, 4, 0)
 presets_drag_motion_cb(
     GtkTreeView        *tv,
     GdkDrop            *ctx,
@@ -2538,7 +2538,7 @@ presets_drag_motion_cb(
     gboolean                 src_folder, dst_folder;
     GhbValue                *src_preset, *dst_preset;
     GtkWidget               *widget;
-#if GTK_CHECK_VERSION(3, 90, 0)
+#if GTK_CHECK_VERSION(4, 4, 0)
     // Dummy time for backwards compatibility
     guint                    time = 0;
 #endif
@@ -2550,7 +2550,7 @@ presets_drag_motion_cb(
     }
     g_object_set_data(G_OBJECT(tv), "dst-tree-path", NULL);
 
-#if GTK_CHECK_VERSION(3, 90, 0)
+#if GTK_CHECK_VERSION(4, 4, 0)
     GdkDrag *drag_ctx = gdk_drop_get_drag(ctx);
     widget = gtk_drag_get_source_widget(drag_ctx);
 #else
@@ -2670,7 +2670,7 @@ presets_drag_motion_cb(
 }
 
 G_MODULE_EXPORT void
-#if GTK_CHECK_VERSION(3, 90, 0)
+#if GTK_CHECK_VERSION(4, 4, 0)
 presets_drag_data_received_cb(
     GtkTreeView        *tv,
     GdkDrop            *dc,
@@ -2710,7 +2710,7 @@ presets_drag_data_received_cb(
     GtkTreeSelection  *select;
     hb_preset_index_t *dst_path, *src_path;
 
-#if GTK_CHECK_VERSION(3, 90, 0)
+#if GTK_CHECK_VERSION(4, 4, 0)
     GdkDrag *drag_ctx = gdk_drop_get_drag(dc);
     src_widget = GTK_TREE_VIEW(gtk_drag_get_source_widget(drag_ctx));
 #else

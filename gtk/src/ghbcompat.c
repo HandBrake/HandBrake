@@ -25,7 +25,7 @@
 G_MODULE_EXPORT gboolean
 ghb_widget_hide_on_close(
     GtkWidget *widget,
-#if !GTK_CHECK_VERSION(3, 90, 0)
+#if !GTK_CHECK_VERSION(4, 4, 0)
     GdkEvent *event,
 #endif
     gpointer *ud)

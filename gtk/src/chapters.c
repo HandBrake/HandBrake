@@ -29,7 +29,7 @@
 static void
 chapter_changed_cb(GtkEditable * edit, signal_user_data_t *ud);
 
-#if GTK_CHECK_VERSION(3, 90, 0)
+#if GTK_CHECK_VERSION(4, 4, 0)
 static gboolean
 chapter_keypress_cb(
     GtkEventController * keycon,
@@ -121,7 +121,7 @@ create_chapter_row(int index, int64_t start, int64_t duration,
     gtk_label_set_xalign(GTK_LABEL(label), 1);
     ghb_box_append_child(hbox, label);
 
-#if GTK_CHECK_VERSION(3, 90, 0)
+#if GTK_CHECK_VERSION(4, 4, 0)
     entry = gtk_text_new();
 #else
     entry = gtk_entry_new();
@@ -132,7 +132,7 @@ create_chapter_row(int index, int64_t start, int64_t duration,
     ghb_editable_set_text(entry, name);
     ghb_box_append_child(hbox, entry);
 
-#if GTK_CHECK_VERSION(3, 90, 0)
+#if GTK_CHECK_VERSION(4, 4, 0)
     GtkEventController * econ;
 
     econ = gtk_event_controller_key_new();
@@ -145,7 +145,7 @@ create_chapter_row(int index, int64_t start, int64_t duration,
     g_signal_connect(entry, "changed", G_CALLBACK(chapter_changed_cb), ud);
 
     gtk_container_add(GTK_CONTAINER(row), GTK_WIDGET(hbox));
-#if !GTK_CHECK_VERSION(3, 90, 0)
+#if !GTK_CHECK_VERSION(4, 4, 0)
     gtk_widget_show_all(row);
 #endif
 
@@ -247,7 +247,7 @@ chapter_keypress(
     return FALSE;
 }
 
-#if GTK_CHECK_VERSION(3, 90, 0)
+#if GTK_CHECK_VERSION(4, 4, 0)
 static gboolean
 chapter_keypress_cb(
     GtkEventController * keycon,
