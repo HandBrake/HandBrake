@@ -87,6 +87,8 @@
 #include "ghb-dvd.h"
 #include "libavutil/parseutils.h"
 
+
+static void ghb_add_video_file_filters(GtkFileChooser *chooser, signal_user_data_t *ud);
 static void update_queue_labels(signal_user_data_t *ud);
 static void load_all_titles(signal_user_data_t *ud, int titleindex);
 static GList* dvd_device_list();
@@ -96,6 +98,7 @@ gpointer ghb_check_update(signal_user_data_t *ud);
 static gboolean ghb_can_suspend_logind();
 static void ghb_suspend_logind();
 static gboolean appcast_busy = FALSE;
+static gboolean has_drive = FALSE;
 
 #if !defined(_WIN32)
 #define DBUS_LOGIND_SERVICE         "org.freedesktop.login1"
@@ -1058,97 +1061,38 @@ set_destination(signal_user_data_t *ud)
         ghb_dict_get_value(ud->settings, "dest_file"));
 }
 
-G_MODULE_EXPORT void
-chooser_file_selected_cb(GtkFileChooser *dialog, signal_user_data_t *ud)
-{
-    gchar *name = gtk_file_chooser_get_filename (dialog);
-    GtkTreeModel *store;
-    GtkTreeIter iter;
-    const gchar *device;
-    gboolean foundit = FALSE;
-    GtkComboBox *combo;
-
-    g_debug("chooser_file_selected_cb ()");
-
-    if (name == NULL) return;
-    combo = GTK_COMBO_BOX(GHB_WIDGET(ud->builder, "source_device"));
-    store = gtk_combo_box_get_model(combo);
-    if (gtk_tree_model_get_iter_first(store, &iter))
-    {
-        do
-        {
-            gtk_tree_model_get(store, &iter, 0, &device, -1);
-            if (strcmp(name, device) == 0)
-            {
-                foundit = TRUE;
-                break;
-            }
-        } while (gtk_tree_model_iter_next(GTK_TREE_MODEL(store), &iter));
-    }
-    if (foundit)
-        gtk_combo_box_set_active_iter (combo, &iter);
-    else
-        gtk_combo_box_set_active (combo, 0);
-
-    g_free(name);
-}
-
-G_MODULE_EXPORT void
-dvd_device_changed_cb(GtkComboBoxText *combo, signal_user_data_t *ud)
-{
-    GtkWidget *dialog;
-    gint ii;
-
-    g_debug("dvd_device_changed_cb ()");
-    ii = gtk_combo_box_get_active (GTK_COMBO_BOX(combo));
-    if (ii > 0)
-    {
-        const gchar *device;
-        gchar *name;
-
-        dialog = GHB_WIDGET(ud->builder, "source_dialog");
-        device = gtk_combo_box_text_get_active_text(combo);
-        // Protects against unexpected NULL return value
-        if (device != NULL)
-        {
-            name = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER(dialog));
-            if (name == NULL || strcmp(name, device) != 0)
-                gtk_file_chooser_select_filename (GTK_FILE_CHOOSER(dialog), device);
-            if (name != NULL)
-                g_free(name);
-        }
-    }
-}
-
 static void
 source_dialog_extra_widgets(
     signal_user_data_t *ud,
-    GtkWidget *dialog)
+    GtkFileChooser *dialog)
 {
-    GtkComboBoxText *combo;
     GList *drives, *link;
-    GtkWidget *source_extra;
+    GStrvBuilder *builder;
+    const gchar** entries;
 
     g_debug("source_dialog_extra_widgets ()");
-    combo = GTK_COMBO_BOX_TEXT(GHB_WIDGET(ud->builder, "source_device"));
-    gtk_list_store_clear(GTK_LIST_STORE(
-                gtk_combo_box_get_model(GTK_COMBO_BOX(combo))));
-
     link = drives = dvd_device_list();
-    gtk_combo_box_text_append_text (combo, _("Not Selected"));
+    if (!link)
+    {
+        has_drive = FALSE;
+        return;
+    }
+    has_drive = TRUE;
+
+    builder = g_strv_builder_new();
+    g_strv_builder_add(builder, _("Not Selected"));
     while (link != NULL)
     {
         gchar *name = get_dvd_device_name(link->data);
-        gtk_combo_box_text_append_text(combo, name);
-        g_free(name);
+        g_strv_builder_add(builder, name);
         free_drive(link->data);
         link = link->next;
     }
     g_list_free(drives);
-    gtk_combo_box_set_active(GTK_COMBO_BOX(combo), 0);
-
-    source_extra = GHB_WIDGET(ud->builder, "source_extra");
-    gtk_file_chooser_set_extra_widget(GTK_FILE_CHOOSER(dialog), source_extra);
+    entries = (const gchar**) g_strv_builder_end(builder);
+    g_strv_builder_unref(builder);
+    gtk_file_chooser_add_choice(dialog, "drive", _("Detected DVD devices:"), entries, entries);
+    gtk_file_chooser_set_choice(GTK_FILE_CHOOSER(dialog), "drive", _("Not Selected"));
 }
 
 void ghb_break_pts_duration(gint64 ptsDuration, gint *hh, gint *mm, gdouble *ss)
@@ -1581,43 +1525,54 @@ ghb_do_scan(
     }
 }
 
-static void
-do_source_dialog(gboolean single, signal_user_data_t *ud)
+static gint
+single_title_dialog (signal_user_data_t *ud)
 {
-    GtkWidget *dialog;
+    GtkWidget *dialog, *spin, *msg;
+    GtkAdjustment *adj;
+
+    dialog = gtk_message_dialog_new(GTK_WINDOW(GHB_WIDGET(ud->builder, "hb_window")),
+                                    GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
+                                    GTK_MESSAGE_QUESTION,
+                                    GTK_BUTTONS_OK,
+                                    "Title Number:");
+
+    adj = gtk_adjustment_new(1, 0, 100, 1, 10, 10);
+    spin = gtk_spin_button_new(adj, 1, 0);
+    gtk_widget_show(spin);
+    msg = gtk_message_dialog_get_message_area(GTK_MESSAGE_DIALOG(dialog));
+    gtk_box_pack_end(GTK_BOX(msg), spin, FALSE, FALSE, 0);
+    gtk_dialog_run(GTK_DIALOG(dialog));
+    gtk_widget_destroy(dialog);
+    return gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(spin));
+}
+
+static void
+source_dialog_response_cb(GtkFileChooser *dialog,
+                          GtkResponseType response, signal_user_data_t *ud)
+{
     const gchar *sourcename;
-    gint response;
+    const gchar *drivename;
+    gchar *filename;
 
-    g_debug("source_browse_clicked_cb ()");
-    sourcename = ghb_dict_get_string(ud->globals, "scan_source");
-    GtkWidget *widget;
-    widget = GHB_WIDGET(ud->builder, "single_title_box");
-    if (single)
-        gtk_widget_show(widget);
-    else
-        gtk_widget_hide(widget);
-
-    dialog = GHB_WIDGET(ud->builder, "source_dialog");
-    source_dialog_extra_widgets(ud, dialog);
-
-    gtk_widget_show(dialog);
-    gtk_file_chooser_select_filename(GTK_FILE_CHOOSER(dialog), sourcename);
-
-    response = gtk_dialog_run(GTK_DIALOG (dialog));
-    gtk_widget_hide(dialog);
-    if (response == GTK_RESPONSE_NO)
+    if (response == GTK_RESPONSE_ACCEPT)
     {
-        gchar *filename;
+        if (has_drive)
+            drivename = gtk_file_chooser_get_choice(dialog, "drive");
 
-        filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (dialog));
+        if (drivename && g_strcmp0(drivename, _("Not Selected")))
+            filename = g_strdup(drivename);
+        else
+            filename = gtk_file_chooser_get_filename(dialog);
+
         if (filename != NULL)
         {
-            gint title_id;
+            gint title_id = 0;
 
-            if (single)
-                title_id = ghb_dict_get_int(ud->settings, "single_title");
-            else
-                title_id = 0;
+            if (g_strcmp0(gtk_file_chooser_get_choice(dialog, "single"), "true") == 0)
+                title_id = single_title_dialog(ud);
+            sourcename = ghb_dict_get_string(ud->globals, "scan_source");
+
             // ghb_do_scan replaces "scan_source" key in dict, so we must
             // be finished with sourcename before calling ghb_do_scan
             // since the memory it references will be freed
@@ -1631,6 +1586,44 @@ do_source_dialog(gboolean single, signal_user_data_t *ud)
             g_free(filename);
         }
     }
+    ud->source_dialog = NULL;
+    gtk_native_dialog_destroy(GTK_NATIVE_DIALOG(dialog));
+}
+
+static void
+do_source_dialog(gboolean dir, signal_user_data_t *ud)
+{
+    GtkFileChooserNative *dialog;
+    GtkWindow *hb_window;
+    const gchar *sourcename;
+
+    if (ud->source_dialog)
+    return;
+
+    hb_window = GTK_WINDOW(GHB_WIDGET(ud->builder, "hb_window"));
+    dialog = ud->source_dialog = gtk_file_chooser_native_new(
+                dir ? _("Open Source Directory") : _("Open Source"),
+                hb_window,
+                dir ? GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER : GTK_FILE_CHOOSER_ACTION_OPEN,
+                GHB_STOCK_OPEN,
+                GHB_STOCK_CANCEL);
+
+    g_debug("do_source_dialog ()");
+    sourcename = ghb_dict_get_string(ud->globals, "scan_source");
+
+    if (!dir)
+        ghb_add_video_file_filters(GTK_FILE_CHOOSER(dialog), ud);
+
+    source_dialog_extra_widgets(ud, GTK_FILE_CHOOSER(dialog));
+
+    gtk_file_chooser_add_choice(GTK_FILE_CHOOSER(dialog), "single",
+                                _("Single Title"), NULL, NULL);
+
+    gtk_native_dialog_set_modal(GTK_NATIVE_DIALOG(dialog), TRUE);
+    gtk_native_dialog_set_transient_for(GTK_NATIVE_DIALOG(dialog), hb_window);
+    g_signal_connect(dialog, "response", G_CALLBACK(source_dialog_response_cb), ud);
+    gtk_file_chooser_select_filename(GTK_FILE_CHOOSER(dialog), sourcename);
+    gtk_native_dialog_show(GTK_NATIVE_DIALOG(dialog));
 }
 
 #if 0
@@ -1667,7 +1660,7 @@ source_action_cb(GSimpleAction *action, GVariant *param,
 #endif
 
 G_MODULE_EXPORT void
-single_title_action_cb(GSimpleAction *action, GVariant * param,
+source_dir_action_cb(GSimpleAction *action, GVariant * param,
                        signal_user_data_t *ud)
 {
     do_source_dialog(TRUE, ud);
@@ -1834,29 +1827,14 @@ dest_file_changed_cb(GtkEntry *entry, signal_user_data_t *ud)
     g_free(dest);
 }
 
-G_MODULE_EXPORT void
-destination_action_cb(GSimpleAction *action, GVariant *param,
-                      signal_user_data_t *ud)
+static void
+destination_response_cb(GtkFileChooserNative *dialog,
+                        GtkResponseType response, signal_user_data_t *ud)
 {
-    GtkWidget *dialog;
     GtkEntry *entry;
-    const gchar *destname;
     gchar *basename;
-    GtkWindow *hb_window;
 
-    hb_window = GTK_WINDOW(GHB_WIDGET(ud->builder, "hb_window"));
-    destname = ghb_dict_get_string(ud->settings, "destination");
-    dialog = gtk_file_chooser_dialog_new("Choose Destination",
-                      hb_window,
-                      GTK_FILE_CHOOSER_ACTION_SAVE,
-                      GHB_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
-                      GHB_STOCK_SAVE, GTK_RESPONSE_ACCEPT,
-                      NULL);
-    gtk_file_chooser_set_filename(GTK_FILE_CHOOSER(dialog), destname);
-    basename = g_path_get_basename(destname);
-    gtk_file_chooser_set_current_name(GTK_FILE_CHOOSER(dialog), basename);
-    g_free(basename);
-    if (gtk_dialog_run(GTK_DIALOG (dialog)) == GTK_RESPONSE_ACCEPT)
+    if (response == GTK_RESPONSE_ACCEPT)
     {
         char *filename, *dirname;
         GtkFileChooser *dest_chooser;
@@ -1872,7 +1850,33 @@ destination_action_cb(GSimpleAction *action, GVariant *param,
         g_free (basename);
         g_free (filename);
     }
-    gtk_widget_destroy(dialog);
+    gtk_native_dialog_destroy(GTK_NATIVE_DIALOG(dialog));
+}
+
+G_MODULE_EXPORT void
+destination_action_cb(GSimpleAction *action, GVariant *param,
+                      signal_user_data_t *ud)
+{
+    GtkFileChooserNative *dialog;
+    GtkWindow *hb_window;
+    const gchar *destname;
+    gchar *basename;
+
+    hb_window = GTK_WINDOW(GHB_WIDGET(ud->builder, "hb_window"));
+    destname = ghb_dict_get_string(ud->settings, "destination");
+    dialog = gtk_file_chooser_native_new("Choose Destination",
+                                         hb_window,
+                                         GTK_FILE_CHOOSER_ACTION_SAVE,
+                                         GHB_STOCK_SAVE,
+                                         GHB_STOCK_CANCEL);
+    gtk_file_chooser_set_filename(GTK_FILE_CHOOSER(dialog), destname);
+    basename = g_path_get_basename(destname);
+    gtk_file_chooser_set_current_name(GTK_FILE_CHOOSER(dialog), basename);
+    g_free(basename);
+
+    gtk_native_dialog_set_modal(GTK_NATIVE_DIALOG(dialog), TRUE);
+    g_signal_connect(dialog, "response", G_CALLBACK(destination_response_cb), ud);
+    gtk_native_dialog_show(GTK_NATIVE_DIALOG(dialog));
 }
 
 G_MODULE_EXPORT gboolean
@@ -5442,7 +5446,7 @@ ghb_notify_done(signal_user_data_t *ud)
     g_object_unref(G_OBJECT(icon));
 
     switch (ud->when_complete)    {
-	    case 2:
+        case 2:
             ghb_countdown_dialog(GTK_MESSAGE_INFO,
                                 _("Your encode is complete."),
                                 _("Quitting Handbrake"),
@@ -5457,7 +5461,7 @@ ghb_notify_done(signal_user_data_t *ud)
                     _("Cancel"), (GSourceFunc)suspend_cb, ud, 60);
             }
             break;
-	    case 4:
+        case 4:
             if (ghb_can_shutdown_logind())
             {
                 ghb_countdown_dialog(GTK_MESSAGE_INFO,
@@ -5579,16 +5583,35 @@ gboolean on_presets_list_press_cb (GtkWidget *widget,
     return FALSE;
 }
 
+
 GtkFileFilter *ghb_add_file_filter(GtkFileChooser *chooser,
                                    signal_user_data_t *ud,
                                    const char *name, const char *id)
 {
-    GtkFileFilter *filter = GTK_FILE_FILTER(GHB_OBJECT(ud->builder, id));
+    g_autoptr(GtkFileFilter) filter = GTK_FILE_FILTER(GHB_OBJECT(ud->builder, id));
     gtk_file_filter_set_name(filter, name);
     gtk_file_chooser_add_filter(chooser, filter);
     return filter;
 }
 
+static void ghb_add_video_file_filters(GtkFileChooser *chooser,
+                                       signal_user_data_t *ud)
+{
+    ghb_add_file_filter(chooser, ud, _("All Files"), "SourceFilterAll");
+    ghb_add_file_filter(chooser, ud, _("Video"), "SourceFilterVideo");
+    ghb_add_file_filter(chooser, ud, g_content_type_get_description("video/mp4"), "SourceFilterMP4");
+    ghb_add_file_filter(chooser, ud, g_content_type_get_description("video/mp2t"), "SourceFilterTS");
+    ghb_add_file_filter(chooser, ud, g_content_type_get_description("video/mpeg"), "SourceFilterMPG");
+    ghb_add_file_filter(chooser, ud, g_content_type_get_description("video/x-matroska"), "SourceFilterMKV");
+    ghb_add_file_filter(chooser, ud, g_content_type_get_description("video/webm"), "SourceFilterWebM");
+    ghb_add_file_filter(chooser, ud, g_content_type_get_description("video/ogg"), "SourceFilterOGG");
+    ghb_add_file_filter(chooser, ud, g_content_type_get_description("video/x-msvideo"), "SourceFilterAVI");
+    ghb_add_file_filter(chooser, ud, g_content_type_get_description("video/x-flv"), "SourceFilterFLV");
+    ghb_add_file_filter(chooser, ud, g_content_type_get_description("video/quicktime"), "SourceFilterMOV");
+    ghb_add_file_filter(chooser, ud, g_content_type_get_description("video/x-ms-wmv"), "SourceFilterWMV");
+    ghb_add_file_filter(chooser, ud, "EVO", "SourceFilterEVO");
+    ghb_add_file_filter(chooser, ud, "VOB", "SourceFilterVOB");
+}
 #if GTK_CHECK_VERSION(4, 4, 0)
 G_MODULE_EXPORT gboolean
 combo_search_key_press_cb(

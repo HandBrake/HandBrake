@@ -738,7 +738,7 @@ dvd_source_activate_cb(GSimpleAction *action, GVariant *param, gpointer ud);
 G_MODULE_EXPORT void
 source_action_cb(GSimpleAction *action, GVariant *param, gpointer ud);
 G_MODULE_EXPORT void
-single_title_action_cb(GSimpleAction *action, GVariant *param, gpointer ud);
+source_dir_action_cb(GSimpleAction *action, GVariant *param, gpointer ud);
 G_MODULE_EXPORT void
 destination_action_cb(GSimpleAction *action, GVariant *param, gpointer ud);
 G_MODULE_EXPORT void
@@ -834,7 +834,7 @@ static void map_actions(GApplication * app, signal_user_data_t * ud)
     const GActionEntry entries[] =
     {
         { "source",                source_action_cb                },
-        { "single",                single_title_action_cb          },
+        { "source-dir",             source_dir_action_cb           },
         { "destination",           destination_action_cb           },
         { "preferences",           preferences_action_cb           },
         { "quit",                  quit_action_cb                  },
@@ -1121,28 +1121,6 @@ ghb_activate_cb(GApplication * app, signal_user_data_t * ud)
     gint window_width, window_height;
     window_width = ghb_dict_get_int(ud->prefs, "window_width");
     window_height = ghb_dict_get_int(ud->prefs, "window_height");
-
-    /*
-     * Filter objects in GtkBuilder xml
-     * Add filters to source chooser
-     */
-    GtkFileChooser *chooser;
-    chooser = GTK_FILE_CHOOSER(GHB_WIDGET(ud->builder, "source_dialog"));
-    ghb_add_file_filter(chooser, ud, _("All"), "FilterAll");
-    ghb_add_file_filter(chooser, ud, _("Video"), "SourceFilterVideo");
-    ghb_add_file_filter(chooser, ud, "TS", "SourceFilterTS");
-    ghb_add_file_filter(chooser, ud, "MPG", "SourceFilterMPG");
-    ghb_add_file_filter(chooser, ud, "EVO", "SourceFilterEVO");
-    ghb_add_file_filter(chooser, ud, "VOB", "SourceFilterVOB");
-    ghb_add_file_filter(chooser, ud, "MKV", "SourceFilterMKV");
-    ghb_add_file_filter(chooser, ud, "WebM", "SourceFilterWebM");
-    ghb_add_file_filter(chooser, ud, "MP4", "SourceFilterMP4");
-    ghb_add_file_filter(chooser, ud, "MOV", "SourceFilterMOV");
-    ghb_add_file_filter(chooser, ud, "AVI", "SourceFilterAVI");
-    ghb_add_file_filter(chooser, ud, "OGG", "SourceFilterOGG");
-    ghb_add_file_filter(chooser, ud, "FLV", "SourceFilterFLV");
-    ghb_add_file_filter(chooser, ud, "WMV", "SourceFilterWMV");
-
 
     // Grrrr!  Gtk developers !!!hard coded!!! the width of the
     // radio buttons in GtkStackSwitcher to 100!!!

@@ -8,12 +8,12 @@
       <section>
         <item>
           <attribute name="action">app.source</attribute>
-          <attribute name="label" translatable="yes">Open _Source</attribute>
+          <attribute name="label" translatable="yes">_Open Source</attribute>
           <attribute name="accel">&lt;control&gt;O</attribute>
         </item>
         <item>
-          <attribute name="action">app.single</attribute>
-          <attribute name="label" translatable="yes">Open Single _Title</attribute>
+          <attribute name="action">app.source-dir</attribute>
+          <attribute name="label" translatable="yes">Open _Directory</attribute>
           <attribute name="accel">&lt;shift&gt;&lt;control&gt;O</attribute>
         </item>
         <item>
