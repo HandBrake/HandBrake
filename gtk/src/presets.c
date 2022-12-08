@@ -85,47 +85,7 @@ ghb_tree_path_new_from_index(const hb_preset_index_t *path)
     if (path == NULL || path->depth == 0)
         return NULL;
 
-#if GTK_CHECK_VERSION(3, 12, 0)
     return gtk_tree_path_new_from_indicesv((int*)path->index, path->depth);
-#else
-    switch (path->depth)
-    {
-        case 1:
-            return gtk_tree_path_new_from_indices(
-                path->index[0], -1);
-        case 2:
-            return gtk_tree_path_new_from_indices(
-                path->index[0], path->index[1], -1);
-        case 3:
-            return gtk_tree_path_new_from_indices(
-                path->index[0], path->index[1], path->index[2], -1);
-        case 4:
-            return gtk_tree_path_new_from_indices(
-                path->index[0], path->index[1], path->index[2],
-                path->index[3], -1);
-        case 5:
-            return gtk_tree_path_new_from_indices(
-                path->index[0], path->index[1], path->index[2],
-                path->index[3], path->index[4], -1);
-        case 6:
-            return gtk_tree_path_new_from_indices(
-                path->index[0], path->index[1], path->index[2],
-                path->index[3], path->index[4], path->index[5], -1);
-        case 7:
-            return gtk_tree_path_new_from_indices(
-                path->index[0], path->index[1], path->index[2],
-                path->index[3], path->index[4], path->index[5],
-                path->index[6], -1);
-        case 8:
-            return gtk_tree_path_new_from_indices(
-                path->index[0], path->index[1], path->index[2],
-                path->index[3], path->index[4], path->index[5],
-                path->index[6], path->index[7], -1);
-        default:
-            g_warning("Preset path depth too deep");
-            return NULL;
-    }
-#endif
 }
 
 #if 0

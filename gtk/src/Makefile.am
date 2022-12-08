@@ -152,11 +152,8 @@ if GHB_GTK_4_00
 UI=400
 UI_FILE=ghb4.ui
 else
-if GHB_GTK_3_16
-UI=316
-UI_FILE=ghb3.ui
-else
-UI=300
+if GHB_GTK_3_22
+UI=322
 UI_FILE=ghb3.ui
 endif
 endif
