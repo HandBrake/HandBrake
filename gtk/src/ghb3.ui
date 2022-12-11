@@ -9111,7 +9111,7 @@ Uncheck this if you want to allow changing each title's settings independently.<
                           <object class="GtkImage" id="live_preview_play_image">
                             <property name="visible">True</property>
                             <property name="can-focus">False</property>
-                            <property name="icon-name">media-playbck-start</property>
+                            <property name="icon-name">media-playback-start</property>
                           </object>
                         </child>
                       </object>
@@ -9284,7 +9284,7 @@ Uncheck this if you want to allow changing each title's settings independently.<
       </object>
     </child>
     <child type="action">
-      <object class="GtkButton" id="source_ok">
+      <object class="GtkButton" id="source_open">
         <property name="label" translatable="yes">_Open</property>
         <property name="use-underline">True</property>
         <property name="visible">True</property>
@@ -9299,7 +9299,7 @@ Uncheck this if you want to allow changing each title's settings independently.<
     </child>
     <action-widgets>
       <action-widget response="cancel">source_cancel</action-widget>
-      <action-widget response="no">source_ok</action-widget>
+      <action-widget response="1">source_open</action-widget>
     </action-widgets>
   </object>
   <object class="GtkBox" id="source_extra">

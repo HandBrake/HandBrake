@@ -1782,7 +1782,7 @@ do_source_dialog(gboolean single, signal_user_data_t *ud)
 
     response = gtk_dialog_run(GTK_DIALOG (dialog));
     gtk_widget_hide(dialog);
-    if (response == GTK_RESPONSE_NO)
+    if (response == 1) // Open button clicked
     {
         gchar *filename;
 
