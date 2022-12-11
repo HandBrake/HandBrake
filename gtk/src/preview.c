@@ -1325,13 +1325,15 @@ hud_leave_cb(
 #endif
 }
 
-G_MODULE_EXPORT gboolean
-preview_click_cb(GtkWidget *widget, GdkEvent *event, signal_user_data_t *ud)
+G_MODULE_EXPORT void
+preview_click_cb (GtkGesture *gest,
+                  gint n_press,
+                  gdouble x,
+                  gdouble y,
+                  signal_user_data_t *ud)
 {
-    if (event->type == GDK_2BUTTON_PRESS)
+    if (n_press == 2)
         g_action_activate(GHB_ACTION(ud->builder, "preview-fullscreen"), NULL);
-
-    return FALSE;
 }
 
 #if GTK_CHECK_VERSION(3, 90, 0)

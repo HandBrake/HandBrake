@@ -499,9 +499,7 @@ conjunction with the "Forced" option.</property>
                     <property name="width-request">206</property>
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
-                    <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                     <property name="headers-visible">False</property>
-                    <signal name="button-press-event" handler="on_presets_list_press_cb"/>
                     <child internal-child="selection">
                       <object class="GtkTreeSelection" id="treeview-selection4"/>
                     </child>
@@ -825,7 +823,6 @@ conjunction with the "Forced" option.</property>
                         <property name="selection-mode">multiple</property>
                         <property name="activate-on-single-click">False</property>
                         <signal name="row-selected" handler="queue_list_selection_changed_cb" swapped="no"/>
-                        <signal name="button-press-event" handler="queue_button_press_cb" swapped="no"/>
                         <signal name="key-press-event" handler="queue_key_press_cb" swapped="no"/>
                         <signal name="drag-motion" handler="queue_drag_motion_cb" swapped="no"/>
                         <signal name="drag-leave" handler="queue_drag_leave_cb" swapped="no"/>
@@ -7826,13 +7823,10 @@ Only one subtitle track can be burned! Since conflicts can occur, the first chos
                   <object class="GtkEventBox" id="eventbox1">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
-                    <property name="events">GDK_BUTTON_MOTION_MASK | GDK_BUTTON_PRESS_MASK | GDK_STRUCTURE_MASK</property>
-                    <signal name="button-press-event" handler="easter_egg_cb" swapped="no"/>
                     <child>
                       <object class="GtkImage" id="image3">
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
-                        <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                         <property name="pixel-size">64</property>
                         <property name="icon-name">hb-icon</property>
                       </object>
@@ -9053,7 +9047,6 @@ Uncheck this if you want to allow changing each title's settings independently.<
             <property name="halign">fill</property>
             <property name="valign">fill</property>
             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_ENTER_NOTIFY_MASK | GDK_LEAVE_NOTIFY_MASK</property>
-            <signal name="button-press-event" handler="preview_click_cb" swapped="no"/>
             <signal name="leave-notify-event" handler="preview_leave_cb" swapped="no"/>
             <signal name="motion-notify-event" handler="preview_motion_cb" swapped="no"/>
             <signal name="size-allocate" handler="preview_resize_cb" swapped="no"/>

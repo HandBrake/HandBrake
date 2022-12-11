@@ -415,4 +415,17 @@ static inline GdkAtom ghb_atom_string(const char * str)
 }
 #endif
 
+static inline GtkGesture *ghb_gesture_click_new (GtkWidget *widget)
+{
+    GtkGesture *gesture;
+
+#if GTK_CHECK_VERSION(4, 4, 0)
+    gesture = gtk_gesture_click_new();
+    gtk_widget_add_controller(widget, GTK_EVENT_CONTROLLER(gesture));
+#else
+    gesture = gtk_gesture_multi_press_new(widget);
+#endif
+    return gesture;
+}
+
 #endif // _GHB_COMPAT_H_
