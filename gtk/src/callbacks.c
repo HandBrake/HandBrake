@@ -5365,42 +5365,20 @@ drive_changed_cb(GVolumeMonitor *gvm, GDrive *gd, signal_user_data_t *ud)
 
 G_MODULE_EXPORT void
 easter_egg_multi_cb(
-    GtkGestureMultiPress * gest,
-    gint                   n_press,
-    gdouble                x,
-    gdouble                y,
-    signal_user_data_t   * ud)
+    GtkGesture         * gest,
+    gint                 n_press,
+    gdouble              x,
+    gdouble              y,
+    signal_user_data_t * ud)
 {
     if (n_press == 3)
     {
         GtkWidget *widget;
         widget = GHB_WIDGET(ud->builder, "allow_tweaks");
-        gtk_widget_show(widget);
-        widget = GHB_WIDGET(ud->builder, "hbfd_feature");
-        gtk_widget_show(widget);
-    }
-}
-
-G_MODULE_EXPORT gboolean
-easter_egg_cb(
-    GtkWidget *widget,
-    GdkEvent *event,
-    signal_user_data_t *ud)
-{
-    GdkEventType type = ghb_event_get_event_type(event);
-    guint        button;
-
-    ghb_event_get_button(event, &button);
-    if (type == GDK_3BUTTON_PRESS && button == 1)
-    {
-        // It's a triple left mouse button click
-        GtkWidget *widget;
-        widget = GHB_WIDGET(ud->builder, "allow_tweaks");
         gtk_widget_set_visible(widget, !gtk_widget_get_visible(widget));
         widget = GHB_WIDGET(ud->builder, "hbfd_feature");
         gtk_widget_set_visible(widget, !gtk_widget_get_visible(widget));
     }
-    return FALSE;
 }
 
 G_MODULE_EXPORT gchar*
@@ -5757,16 +5735,18 @@ lang_combo_search(
 }
 
 G_MODULE_EXPORT
-gboolean on_presets_list_press_cb (GtkWidget *widget,
-               GdkEvent  *event,
-               signal_user_data_t *ud)
+void on_presets_list_press_cb (GtkGesture *gest, gint n_press, gdouble x,
+                               gdouble y, signal_user_data_t *ud)
 {
-    if (gdk_event_triggers_context_menu(event) && (event->type == GDK_BUTTON_PRESS))
+    if (n_press == 1)
     {
         GtkMenu *context_menu = GTK_MENU(GHB_WIDGET(ud->builder, "presets_window_submenu"));
-        gtk_menu_popup_at_pointer(context_menu, event);
+#if GTK_CHECK_VERSION(3, 22, 0)
+        gtk_menu_popup_at_pointer(context_menu, NULL);
+#else
+        gtk_menu_popup(context_menu, NULL, NULL, NULL, NULL, 3, gtk_get_current_event_time());
+#endif
     }
-    return FALSE;
 }
 
 GtkFileFilter *ghb_add_file_filter(GtkFileChooser *chooser,

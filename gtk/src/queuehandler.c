@@ -2611,39 +2611,30 @@ queue_key_press_cb(
 }
 #endif
 
-G_MODULE_EXPORT gboolean
-queue_button_press_cb(GtkListBox *lb, GdkEvent *event, signal_user_data_t *ud)
+G_MODULE_EXPORT void
+queue_button_press_cb(GtkGesture *gest, gint n_press, gdouble x, gdouble y,
+                      signal_user_data_t *ud)
 {
-    GtkListBoxRow * row;
-    GdkWindow *lb_win, *event_win;
-    gint relative_y;
-    gdouble parent_y;
+    GtkListBox *lb;
+    GtkListBoxRow *row;
+    gint button;
 
-    lb_win = gtk_widget_get_window (GTK_WIDGET(lb));
-    event_win = event->button.window;
-    relative_y = event->button.y;
+    lb = GTK_LIST_BOX(GHB_WIDGET(ud->builder, "queue_list"));
+	button = gtk_gesture_single_get_current_button(GTK_GESTURE_SINGLE(gest));
 
-    while ((event_win != NULL) && (event_win != lb_win))
+
+    if (button == 1 && n_press == 2)
     {
-        gdk_window_coords_to_parent (event_win, 0, relative_y, NULL, &parent_y);
-        relative_y = parent_y;
-        event_win = gdk_window_get_effective_parent (event_win);
-    }
-
-    if (event->type == GDK_2BUTTON_PRESS)
-    {
-        row = gtk_list_box_get_row_at_y(lb, relative_y);
+        row = gtk_list_box_get_row_at_y(lb, y);
         if (row)
             g_action_activate(GHB_ACTION(ud->builder, "queue-play-file"), NULL);
-
-        return FALSE;
     }
-    if (gdk_event_triggers_context_menu(event) && (event->type == GDK_BUTTON_PRESS))
+    if (button == 3 && n_press == 1)
     {
-        row = gtk_list_box_get_row_at_y(lb, relative_y);
+        row = gtk_list_box_get_row_at_y(lb, y);
         if (!row)
         {
-            return FALSE;
+            return;
         }
         if (!gtk_list_box_row_is_selected(row))
         {
@@ -2651,9 +2642,12 @@ queue_button_press_cb(GtkListBox *lb, GdkEvent *event, signal_user_data_t *ud)
             gtk_list_box_select_row(lb, row);
         }
         GtkMenu *context_menu = GTK_MENU(GHB_WIDGET(ud->builder, "queue_list_menu"));
-        gtk_menu_popup_at_pointer(context_menu, event);
+#if GTK_CHECK_VERSION(3, 22, 0)
+        gtk_menu_popup_at_pointer(context_menu, NULL);
+#else
+        gtk_menu_popup(context_menu, NULL, NULL, NULL, NULL, 3, gtk_get_current_event_time());
+#endif
     }
-    return FALSE;
 }
 
 G_MODULE_EXPORT void
