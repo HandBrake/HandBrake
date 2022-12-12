@@ -904,8 +904,6 @@ conjunction with the "Forced" option.</property>
                 <child>
                   <object class="GtkStack" id="QueueStack">
                     <property name="homogeneous">True</property>
-                    <property name="transition-type">GTK_STACK_TRANSITION_TYPE_SLIDE_LEFT_RIGHT</property>
-                    <property name="transition-duration">400</property>
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
                     <property name="margin-start">12</property>
@@ -2861,8 +2859,6 @@ Modifications will be discarded.</property>
             <child>
               <object class="GtkStack" id="SettingsStack">
                 <property name="homogeneous">True</property>
-                <property name="transition-type">GTK_STACK_TRANSITION_TYPE_SLIDE_LEFT_RIGHT</property>
-                <property name="transition-duration">400</property>
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
                 <property name="margin-start">12</property>
@@ -5703,8 +5699,6 @@ Colon separated list of encoder options.</property>
                     <child>
                       <object class="GtkStack" id="AudioStack">
                         <property name="homogeneous">True</property>
-                        <property name="transition-type">GTK_STACK_TRANSITION_TYPE_SLIDE_LEFT_RIGHT</property>
-                        <property name="transition-duration">400</property>
                         <property name="visible">True</property>
                         <property name="expand">True</property>
                         <property name="can-focus">False</property>
@@ -6475,8 +6469,6 @@ This permits Opus passthru to be selected when automatic passthru selection is e
                     <child>
                       <object class="GtkStack" id="SubtitleStack">
                         <property name="homogeneous">True</property>
-                        <property name="transition-type">GTK_STACK_TRANSITION_TYPE_SLIDE_LEFT_RIGHT</property>
-                        <property name="transition-duration">400</property>
                         <property name="visible">True</property>
                         <property name="expand">True</property>
                         <property name="can-focus">False</property>
