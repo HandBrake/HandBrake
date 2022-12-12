@@ -658,6 +658,11 @@ const gchar *MyCSS =
 "    border-width: 1px;"
 "}"
 
+".preview-image-frame"
+"{"
+"    background-color: black;"
+"}"
+
 "textview"
 "{"
 "    padding: 5px 5px 5px 5px;"
