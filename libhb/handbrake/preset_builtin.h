@@ -4238,7 +4238,7 @@ const char hb_builtin_presets_json[] =
 "                    \"PictureSharpenTune\": \"none\", \n"
 "                    \"PictureTopCrop\": 0, \n"
 "                    \"PictureWidth\": 3840, \n"
-"                    \"PresetDescription\": \"H.265 video (up to 2160p60), AAC stereo audio, and Dolby Digital (AC-3) audio, in an MP4 container. Compatible with Amazon Fire TV 2nd Generation and later; Fire TV Cube, Fire TV Stick 4K.\", \n"
+"                    \"PresetDescription\": \"H.265 video (up to 2160p60), AAC stereo audio, and Dolby Digital (AC-3) audio, in an MP4 container. Compatible with Amazon Fire TV 3rd Generation and later; Fire TV Stick 4K; Fire TV Cube.\", \n"
 "                    \"PresetName\": \"Amazon Fire 2160p60 4K HEVC Surround\", \n"
 "                    \"SubtitleAddCC\": false, \n"
 "                    \"SubtitleAddForeignAudioSearch\": true, \n"

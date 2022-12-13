@@ -4349,7 +4349,7 @@
                     "PictureHeight": 2160,
                     "PictureForceHeight": 0,
                     "PictureForceWidth": 0,
-                    "PresetDescription": "H.265 video (up to 2160p60), AAC stereo audio, and Dolby Digital (AC-3) audio, in an MP4 container. Compatible with Amazon Fire TV 2nd Generation and later; Fire TV Cube, Fire TV Stick 4K.",
+                    "PresetDescription": "H.265 video (up to 2160p60), AAC stereo audio, and Dolby Digital (AC-3) audio, in an MP4 container. Compatible with Amazon Fire TV 3rd Generation and later; Fire TV Stick 4K; Fire TV Cube.",
                     "PresetName": "Amazon Fire 2160p60 4K HEVC Surround",
                     "Type": 0,
                     "UsesPictureFilters": true,
