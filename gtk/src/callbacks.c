@@ -3633,6 +3633,7 @@ preferences_action_cb(GSimpleAction *action, GVariant *param,
 {
     GtkWidget *dialog;
 
+    prefs_require_restart = FALSE;
     dialog = GHB_WIDGET(ud->builder, "prefs_dialog");
     gtk_dialog_run(GTK_DIALOG(dialog));
     gtk_widget_hide(dialog);
