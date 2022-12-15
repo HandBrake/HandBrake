@@ -36,7 +36,7 @@ class Tool(hb_distfile.Tool):
     def __init__(self):
         super(Tool, self).__init__()
         self.parser.prog = self.name
-        self.parser.usage = '%prog [OPTIONS] FILE'
+        self.parser.usage = '%(prog)s [OPTIONS] FILE'
         self.parser.description = 'Verify distfile data integrity.'
         self.parser.add_argument('--disable', default=False, action='store_true', help='do nothing and exit without error')
         self.parser.add_argument('--sha256', default=None, action='store', metavar='HASH', help='verify sha256 HASH against data')

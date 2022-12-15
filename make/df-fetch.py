@@ -73,7 +73,7 @@ class Tool(hb_distfile.Tool):
     def __init__(self):
         super(Tool, self).__init__()
         self.parser.prog = self.name
-        self.parser.usage = '%prog [OPTIONS] URL...'
+        self.parser.usage = '%(prog)s [OPTIONS] URL...'
         self.parser.description = 'Fetch and verify distfile data integrity.'
         self.parser.add_argument('--disable', default=False, action='store_true', help='do nothing and exit with error')
         self.parser.add_argument('--jobs', default=1, action='store', metavar='N', help='allow N download jobs at once')
