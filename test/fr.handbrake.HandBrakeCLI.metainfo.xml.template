@@ -2,16 +2,14 @@
 <!-- Copyright 2018-2022 John Stebbins <your@email.com> -->
 <component type="console-application">
   <id>fr.handbrake.HandBrakeCLI</id>
-  <metadata_license>CC0</metadata_license>
+  <update_contact>jstebbins.hb_AT_gmail.com</update_contact>
+  <metadata_license>CC0-1.0</metadata_license>
   <project_license>GPL-2.0+</project_license>
   <name>HandBrakeCLI</name>
   <summary>Video Transcoder</summary>
 
   <description>
-    <p>
-      HandBrake is a tool for converting video from nearly any format to a
-      selection of modern, widely supported codecs.
-    </p>
+    <p>HandBrake is a tool for converting video from nearly any format to a selection of modern, widely supported codecs.</p>
     <p>Reasons you'll love Handbrake:</p>
     <ul>
       <li>Convert video from nearly any format</li>
@@ -35,6 +33,7 @@
     <mimetype>audio/ogg</mimetype>
     <mimetype>audio/x-flac</mimetype>
     <mimetype>audio/x-matroska</mimetype>
+    <mimetype>audio/x-mp2</mimetype>
     <mimetype>audio/x-mp3</mimetype>
     <mimetype>audio/x-mpeg</mimetype>
     <mimetype>audio/x-vorbis</mimetype>
@@ -48,6 +47,7 @@
     <mimetype>video/x-m4v</mimetype>
     <mimetype>video/x-matroska</mimetype>
     <mimetype>video/x-mpeg</mimetype>
+    <mimetype>video/x-ms-wmv</mimetype>
     <mimetype>video/ogg</mimetype>
     <mimetype>video/x-ogm+ogg</mimetype>
     <mimetype>video/x-theora+ogg</mimetype>
