@@ -635,6 +635,12 @@ static HBMixdownTransformer    *mixdownTransformer;
                 }
             }
 
+            if (audioTrack.title.length)
+            {
+                [detailString appendString:@", "];
+                [detailString appendFormat:HBKitLocalizedString(@"Title: %@", @"Audio track title description"), audioTrack.title];
+            }
+
             [attrString appendString:@"\t" withAttributes: detailAttr];
             if (secondLine)
             {
@@ -670,6 +676,12 @@ static HBMixdownTransformer    *mixdownTransformer;
 
             // remember that index 0 of Subtitles can contain "Foreign Audio Search
             [detailString appendString:self.subtitles.sourceTracks[track.sourceTrackIdx].displayName];
+
+            if (track.title.length)
+            {
+                [detailString appendString:@", "];
+                [detailString appendFormat:HBKitLocalizedString(@"Title: %@", @"Subtitles track title description"), track.title];
+            }
 
             if (track.forcedOnly)
             {
