@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 #
 
+from __future__ import print_function
 import types
 import os
 import sys
@@ -42,9 +43,9 @@ def start_element_handler(tag, attr):
                 with open(fname) as fp:
                     val = json.load(fp)
             except Exception as err:
-                print >> sys.stderr, ("Error: %s" % str(err))
+                print("Error: %s" % str(err), file=sys.stderr)
         elif fname is None:
-            print >> sys.stderr, ("Error: No such json file %s" % fbase)
+            print("Error: No such json file %s" % fbase, file=sys.stderr)
             sys.exit(1)
     elif tag == "plist":
         fbase = attr["file"]
@@ -53,7 +54,7 @@ def start_element_handler(tag, attr):
         if fname is not None and key is not None:
             val = plistlib.readPlist(fname)
         elif fname is None:
-            print >> sys.stderr, ("Error: No such plist file %s" % fbase)
+            print("Error: No such plist file %s" % fbase, file=sys.stderr)
             sys.exit(1)
     elif tag == "text":
         fbase = attr["file"]
@@ -64,10 +65,10 @@ def start_element_handler(tag, attr):
                 with open(fname) as fp:
                     val = fp.read()
             except Exception as err:
-                print >> sys.stderr, ("Error: %s" % str(err))
+                print("Error: %s" % str(err), file=sys.stderr)
                 sys.exit(1)
         elif fname is None:
-            print >> sys.stderr, ("Error: No such string file %s" % fbase)
+            print("Error: No such string file %s" % fbase, file=sys.stderr)
             sys.exit(1)
     elif tag == "string":
         key = attr["name"]
@@ -94,7 +95,7 @@ def resource_parse_file(infile):
         with open(infile.name, 'rb') as file:
             parser.ParseFile(file)
     except ExpatError as err:
-        print >> sys.stderr, ("Error: %s" % str(err))
+        print("Error: %s" % str(err), file=sys.stderr)
         return None
 
     return resources
