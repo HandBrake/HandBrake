@@ -579,7 +579,7 @@ dep_check(signal_user_data_t *ud, const gchar *name, gboolean *out_hide)
             die = ghb_value_get_bool(ghb_array_get(data, 2));
             hide = ghb_value_get_bool(ghb_array_get(data, 3));
             const char *tmp = ghb_value_get_string(ghb_array_get(data, 1));
-            values = g_strsplit(tmp, "|", 10);
+            values = g_strsplit(tmp, "|", -1);
 
             if (widget)
                 value = ghb_widget_string(widget);
