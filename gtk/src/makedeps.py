@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 
+from __future__ import print_function
 import collections
 import sys
 import json
@@ -65,41 +66,35 @@ def main():
     try:
         depsfile = open("widget.deps", "w")
     except Exception as err:
-        print >> sys.stderr, ( "Error: %s"  % str(err) )
+        print("Error: %s" % str(err), stream=sys.stderr)
         sys.exit(1)
 
     try:
         revfile = open("widget_reverse.deps", "w")
     except Exception as err:
-        print >> sys.stderr, ( "Error: %s"  % str(err))
+        print("Error: %s" % str(err), stream=sys.stderr)
         sys.exit(1)
 
-    top = dict()
+    fwd = dict()
     for ii in dep_map:
-        if ii.widget in top:
+        if ii.widget in fwd:
             continue
-        deps = list()
-        for jj in dep_map:
-            if jj.widget == ii.widget:
-                deps.append(jj.dep)
-        top[ii.widget] = deps
-    json.dump(top, depsfile, indent=4)
+        fwd.update({
+            ii.widget: [jj.dep for jj in dep_map if jj.widget == ii.widget]
+        })
+    json.dump(fwd, depsfile, indent=4)
 
-    top = dict()
+    rev = dict()
     for ii in dep_map:
-        if ii.dep in top:
+        if ii.dep in rev:
             continue
-        deps = list()
-        for jj in dep_map:
-            if ii.dep == jj.dep:
-                rec = list()
-                rec.append(jj.widget)
-                rec.append(jj.enable)
-                rec.append(jj.die)
-                rec.append(jj.hide)
-                deps.append(rec)
-        top[ii.dep] = deps
-    json.dump(top, revfile, indent=4)
+        rev.update({
+            ii.dep: [
+                list([jj.widget, jj.enable, jj.die, jj.hide])
+                for jj in dep_map if ii.dep == jj.dep
+            ]
+        })
+    json.dump(rev, revfile, indent=4)
 
 main()
 
