@@ -5,7 +5,7 @@
 
 Before updating HandBrake, please make sure there are no pending encodes in the queue, and be sure to make a backup of any custom presets and app preferences you have, as they may not be compatible with newer versions.
 
-Windows users, please make sure to install [Microsoft .NET Desktop Runtime version 6.0.x](https://dotnet.microsoft.com/en-us/download/dotnet/6.0). Read carefully: you need the **DESKTOP** runtime.
+Windows users, please make sure to install [Microsoft .NET Desktop Runtime version 6.0.x](https://dotnet.microsoft.com/en-us/download/dotnet/6.0). Read carefully: you need the **DESKTOP** runtime. Please note, Installing .NET 7 is NOT supported.
 
 ## HandBrake 1.6.0
 
@@ -16,6 +16,15 @@ Windows users, please make sure to install [Microsoft .NET Desktop Runtime versi
 - Added support for H.264 levels 6, 6.1 and 6.2
 - Added support for 4:2:2/4:4:4 profiles in x264 and x265 encoders
 - Added support for 10-bit VP9 encoder
+
+#### Hardware Encoding
+- Added support for QuickSync AV1 Encoder
+- Added support for QuickSync HyperEncode
+- Removed support for older Intel CPUs. The minimum requirement is now at least 6th generation (Skylake) when using Intel QuickSync. 
+- Added support for NVEnc 10-bit HEVC encoder.
+- Added support for AMD VCE 10-bit HEVC encoder.
+- Added support for VideoToolbox HEVC 4:2:2 profile on Apple Silicon.
+- Fixed a long standing issue with NVEnc slowest preset causing failed encodes. 
 
 #### Filters
 - Switched to zscale(zimg) for video scaling with automatic fallback to swscale when required. Should improve performace for ARM based systems
@@ -36,15 +45,6 @@ Windows users, please make sure to install [Microsoft .NET Desktop Runtime versi
 - The following new filters were added:  
   - Deinterlace
     - Bwidf
-
-#### Hardware Encoding
-- Added support for QuickSync AV1 Encoder
-- Added support for QuickSync HyperEncode
-- Removed support for older Intel CPUs. The minimum requirement is now at least 6th generation (Skylake) when using Intel QuickSync. 
-- Added support for NVEnc 10-bit HEVC encoder.
-- Added support for AMD VCE 10-bit HEVC encoder.
-- Added support for VideoToolbox HEVC 4:2:2 profile on Apple Silicon.
-- Fixed a long standing issue with NVEnc slowest preset causing failed encodes. 
 
 #### Build system
 
@@ -71,10 +71,11 @@ Windows users, please make sure to install [Microsoft .NET Desktop Runtime versi
   - x264 164 r3100 (H.264/AVC video encoding)
   - zimg 3.0.4 (color conversion)
 - New libraries
-  - SVT-AV1 1.2.1 (AV1 encoding)
+  - SVT-AV1 1.4.0 (AV1 encoding)
 
 ### Linux
-- Miscellaneous bug fixes and improvements
+- Many quality of life improvements along with consistency improvements with the Windows and macOS UI's.
+- Bug fixes and improvements
 - Updated translations
 - Added new locales
   - Georgian
