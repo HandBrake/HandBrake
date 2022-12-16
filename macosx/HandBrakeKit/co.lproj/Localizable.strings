@@ -411,7 +411,7 @@
 
 /* Audio track title description
    Subtitles track title description */
-"Title: %@" = "Titulu: %@";
+"Title: %@" = "Titulu : %@";
 
 /* Video description */
 "Tune: " = "Rigatura : ";
