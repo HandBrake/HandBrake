@@ -409,6 +409,10 @@
 /* Title description */
 "Title %d, %@, %@" = "标题 %1$d，%2$@，%3$@";
 
+/* Audio track title description
+   Subtitles track title description */
+"Title: %@" = "标题: %@";
+
 /* Video description */
 "Tune: " = "调优：";
 

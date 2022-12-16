@@ -409,6 +409,10 @@
 /* Title description */
 "Title %d, %@, %@" = "タイトル %1$d, %2$@, %3$@";
 
+/* Audio track title description
+   Subtitles track title description */
+"Title: %@" = "タイトル: %@";
+
 /* Video description */
 "Tune: " = "チューニング: ";
 
