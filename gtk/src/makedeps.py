@@ -66,13 +66,13 @@ def main():
     try:
         depsfile = open("widget.deps", "w")
     except Exception as err:
-        print("Error: %s" % str(err), stream=sys.stderr)
+        print("Error: %s" % str(err), file=sys.stderr)
         sys.exit(1)
 
     try:
         revfile = open("widget_reverse.deps", "w")
     except Exception as err:
-        print("Error: %s" % str(err), stream=sys.stderr)
+        print("Error: %s" % str(err), file=sys.stderr)
         sys.exit(1)
 
     fwd = dict()
