@@ -58,6 +58,7 @@ ifneq (,$(filter $(HOST.system),freebsd netbsd openbsd))
     LIBHB.GCC.I += $(LOCALBASE)/include/libxml2
 else ifneq (,$(filter $(HOST.system),darwin cygwin mingw))
     LIBHB.GCC.I += $(CONTRIB.build/)include/libxml2
+    LIBHB.GCC.D += LIBXML_STATIC
 else
     LIBHB.libxml2 := $(shell $(PKGCONFIG.exe) --silence-errors --cflags libxml2)
     ifeq (,$(LIBHB.libxml2))
