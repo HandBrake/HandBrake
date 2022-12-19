@@ -1595,7 +1595,9 @@ int encqsvInit(hb_work_object_t *w, hb_job_t *job)
     // set the GOP structure
     if (pv->param.gop.gop_ref_dist < 0)
     {
-        if (hb_qsv_hardware_generation(hb_qsv_get_platform(hb_qsv_get_adapter_index())) >= QSV_G8)
+        if ((hb_qsv_hardware_generation(hb_qsv_get_platform(hb_qsv_get_adapter_index())) >= QSV_G8) &&
+            (pv->param.videoParam->mfx.CodecId == MFX_CODEC_HEVC ||
+            pv->param.videoParam->mfx.CodecId == MFX_CODEC_AV1))
         {
             pv->param.gop.gop_ref_dist = 8;
         }
