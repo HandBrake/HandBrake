@@ -355,6 +355,7 @@ typedef struct hb_qsv_context {
     mfxHDL device_manager_handle;
     mfxHandleType device_manager_handle_type;
     void *device_context;
+    hb_display_t *display;
 } hb_qsv_context;
 
 typedef enum {
