@@ -522,6 +522,12 @@ static int hb_qsv_make_adapters_list(hb_list_t **qsv_adapters_list, hb_list_t **
         hb_error("hb_qsv_make_adapters_list: MFXSetConfigFilterProperty mfxImplDescription.Impl error=%d", err);
 
     var.Type     = MFX_VARIANT_TYPE_U32;
+    var.Data.U32 = MFX_ACCEL_MODE_VIA_D3D11;
+    err = MFXSetConfigFilterProperty(config, (const mfxU8 *)"mfxImplDescription.AccelerationMode", var);
+    if (err != MFX_ERR_NONE)
+        hb_error("hb_qsv_make_adapters_list: MFXSetConfigFilterProperty mfxImplDescription.AccelerationMode error=%d", err);
+
+    var.Type     = MFX_VARIANT_TYPE_U32;
     var.Data.U32 = 0x8086;
     MFXSetConfigFilterProperty(config, (const mfxU8 *)"mfxImplDescription.VendorID", var);
     if (err != MFX_ERR_NONE)
@@ -4189,16 +4195,9 @@ static int hb_qsv_get_dx_device(hb_job_t *job)
         }
         if (job->qsv.ctx->device_manager_handle_type == MFX_HANDLE_D3D11_DEVICE)
         {
-            ID3D11Device *device = (ID3D11Device *)job->qsv.ctx->device_manager_handle;
-            ID3D11Texture2D* input_texture = job->qsv.ctx->hb_dec_qsv_frames_ctx->input_texture;
-            err = hb_qsv_allocate_dx11_encoder_pool(job->qsv.ctx->hb_dec_qsv_frames_ctx, device, input_texture);
-            if (err < 0)
-            {
-                hb_error("hb_qsv_get_dx_device: hb_qsv_allocate_dx11_encoder_pool failed");
-                return -1;
-            }
             if (job->qsv.ctx->device_context == NULL)
             {
+                ID3D11Device *device = (ID3D11Device *)job->qsv.ctx->device_manager_handle;
                 ID3D11Device_GetImmediateContext(device, (ID3D11DeviceContext *)&job->qsv.ctx->device_context);
                 if (!job->qsv.ctx->device_context)
                     return -1;
@@ -4589,33 +4588,52 @@ void hb_qsv_uninit_dec(AVCodecContext *s)
 
 void hb_qsv_uninit_enc(hb_job_t *job)
 {
-    if(job->qsv.ctx && job->qsv.ctx->hb_dec_qsv_frames_ctx)
-    {
-        av_buffer_unref(&job->qsv.ctx->hb_dec_qsv_frames_ctx->hw_frames_ctx);
-        job->qsv.ctx->hb_dec_qsv_frames_ctx->hw_frames_ctx = NULL;
-        av_free(job->qsv.ctx->hb_dec_qsv_frames_ctx);
-        job->qsv.ctx->hb_dec_qsv_frames_ctx = NULL;
-    }
-    if(job->qsv.ctx && job->qsv.ctx->hb_vpp_qsv_frames_ctx)
-    {
-        av_buffer_unref(&job->qsv.ctx->hb_vpp_qsv_frames_ctx->hw_frames_ctx);
-        job->qsv.ctx->hb_vpp_qsv_frames_ctx->hw_frames_ctx = NULL;
-        av_free(job->qsv.ctx->hb_vpp_qsv_frames_ctx);
-        job->qsv.ctx->hb_vpp_qsv_frames_ctx = NULL;
-    }
-    if (job->qsv.ctx->device_context)
+    if (job->qsv.ctx && job->qsv.ctx->device_context)
     {
         ID3D11DeviceContext_Release((ID3D11DeviceContext *)job->qsv.ctx->device_context);
         job->qsv.ctx->device_context = NULL;
     }
-    if (job->qsv.ctx)
+    if(job->qsv.ctx && job->qsv.ctx->hb_ffmpeg_qsv_hw_frames_ctx)
     {
+        av_buffer_unref(&job->qsv.ctx->hb_ffmpeg_qsv_hw_frames_ctx);
+        job->qsv.ctx->hb_ffmpeg_qsv_hw_frames_ctx = NULL;
+    }
+    if(job->qsv.ctx && job->qsv.ctx->hb_ffmpeg_qsv_hw_frames_ctx2)
+    {
+        av_buffer_unref(&job->qsv.ctx->hb_ffmpeg_qsv_hw_frames_ctx2);
+        job->qsv.ctx->hb_ffmpeg_qsv_hw_frames_ctx2 = NULL;
+    }
+    if (job->qsv.ctx && job->qsv.ctx->hb_dec_qsv_frames_ctx)
+    {
+        if (job->qsv.ctx->hb_dec_qsv_frames_ctx->mids_buf)
+            av_buffer_unref(&job->qsv.ctx->hb_dec_qsv_frames_ctx->mids_buf);
+        job->qsv.ctx->hb_dec_qsv_frames_ctx->mids_buf = NULL;
+        if (job->qsv.ctx->hb_dec_qsv_frames_ctx->hw_frames_ctx)
+            av_buffer_unref(&job->qsv.ctx->hb_dec_qsv_frames_ctx->hw_frames_ctx);
+        job->qsv.ctx->hb_dec_qsv_frames_ctx->hw_frames_ctx = NULL;
+        av_free(job->qsv.ctx->hb_dec_qsv_frames_ctx);
+        job->qsv.ctx->hb_dec_qsv_frames_ctx = NULL;
+    }
+    if (job->qsv.ctx && job->qsv.ctx->hb_vpp_qsv_frames_ctx)
+    {
+        if (job->qsv.ctx->hb_vpp_qsv_frames_ctx->mids_buf)
+            av_buffer_unref(&job->qsv.ctx->hb_vpp_qsv_frames_ctx->mids_buf);
+        job->qsv.ctx->hb_vpp_qsv_frames_ctx->mids_buf = NULL;
+        if (job->qsv.ctx->hb_vpp_qsv_frames_ctx->hw_frames_ctx)
+            av_buffer_unref(&job->qsv.ctx->hb_vpp_qsv_frames_ctx->hw_frames_ctx);
+        job->qsv.ctx->hb_vpp_qsv_frames_ctx->hw_frames_ctx = NULL;
+        av_free(job->qsv.ctx->hb_vpp_qsv_frames_ctx);
+        job->qsv.ctx->hb_vpp_qsv_frames_ctx = NULL;
+    }
+    if (job->qsv.ctx && job->qsv.ctx->hb_hw_device_ctx)
+    {
+        av_buffer_unref(&job->qsv.ctx->hb_hw_device_ctx);
         job->qsv.ctx->hb_hw_device_ctx = NULL;
-        if (job->qsv.ctx->qsv_device)
-        {
-            av_free(job->qsv.ctx->qsv_device);
-            job->qsv.ctx->qsv_device = NULL;
-        }
+    }
+    if (job->qsv.ctx && job->qsv.ctx->qsv_device)
+    {
+        av_free(job->qsv.ctx->qsv_device);
+        job->qsv.ctx->qsv_device = NULL;
     }
     job->qsv.ctx->device_manager_handle = NULL;
 }
@@ -4775,44 +4793,54 @@ int hb_qsv_hw_frames_init(AVCodecContext *s)
         return -1;
     }
 
-    HBQSVFramesContext *hb_dec_qsv_frames_ctx = job->qsv.ctx->hb_dec_qsv_frames_ctx;
     int                           coded_width = s->coded_width;
     int                          coded_height = s->coded_height;
     enum AVPixelFormat             sw_pix_fmt = s->sw_pix_fmt;
     int                       extra_hw_frames = s->extra_hw_frames;
     AVBufferRef           **out_hw_frames_ctx = &s->hw_frames_ctx;
-
     ret = hb_create_ffmpeg_pool(job, coded_width, coded_height, sw_pix_fmt, HB_QSV_POOL_FFMPEG_SURFACE_SIZE, extra_hw_frames, out_hw_frames_ctx);
     if (ret < 0) {
         hb_error("hb_qsv_hw_frames_init: hb_create_ffmpeg_pool decoder failed %d", ret);
         return ret;
     }
-
-    hw_frames_ctx = *out_hw_frames_ctx;
-    frames_ctx   = (AVHWFramesContext*)hw_frames_ctx->data;
-    frames_hwctx = frames_ctx->hwctx;
-    mfxHDLPair* handle_pair = (mfxHDLPair*)frames_hwctx->surfaces[0].Data.MemId;
-    hb_dec_qsv_frames_ctx->input_texture = ((size_t)handle_pair->second != MFX_INFINITE) ? handle_pair->first : NULL;
-
-    ret = hb_create_ffmpeg_pool(job, coded_width, coded_height, sw_pix_fmt, HB_QSV_POOL_SURFACE_SIZE, extra_hw_frames, &hb_dec_qsv_frames_ctx->hw_frames_ctx);
-    if (ret < 0) {
-        hb_error("hb_qsv_hw_frames_init: hb_create_ffmpeg_pool qsv surface allocation failed %d", ret);
-        return ret;
+    if (!job->qsv.ctx->hb_ffmpeg_qsv_hw_frames_ctx)
+    {
+        job->qsv.ctx->hb_ffmpeg_qsv_hw_frames_ctx = *out_hw_frames_ctx;
+    }
+    else if (!job->qsv.ctx->hb_ffmpeg_qsv_hw_frames_ctx2)
+    {
+        job->qsv.ctx->hb_ffmpeg_qsv_hw_frames_ctx2 = *out_hw_frames_ctx;
     }
 
-    /* allocate the memory ids for the external frames */
-    av_buffer_unref(&hb_dec_qsv_frames_ctx->mids_buf);
-    hb_dec_qsv_frames_ctx->mids_buf = hb_qsv_create_mids(hb_dec_qsv_frames_ctx->hw_frames_ctx);
-    if (!hb_dec_qsv_frames_ctx->mids_buf)
-        return AVERROR(ENOMEM);
-    hb_dec_qsv_frames_ctx->mids    = (QSVMid*)hb_dec_qsv_frames_ctx->mids_buf->data;
-    hb_dec_qsv_frames_ctx->nb_mids = frames_hwctx->nb_surfaces;
-    memset(hb_dec_qsv_frames_ctx->pool, 0, hb_dec_qsv_frames_ctx->nb_mids * sizeof(hb_dec_qsv_frames_ctx->pool[0]));
+    if (!job->qsv.ctx->hb_dec_qsv_frames_ctx->hw_frames_ctx)
+    {
+        hw_frames_ctx = *out_hw_frames_ctx;
+        frames_ctx   = (AVHWFramesContext*)hw_frames_ctx->data;
+        frames_hwctx = frames_ctx->hwctx;
+        mfxHDLPair* handle_pair = (mfxHDLPair*)frames_hwctx->surfaces[0].Data.MemId;
+        HBQSVFramesContext *hb_dec_qsv_frames_ctx = job->qsv.ctx->hb_dec_qsv_frames_ctx;
+        hb_dec_qsv_frames_ctx->input_texture = ((size_t)handle_pair->second != MFX_INFINITE) ? handle_pair->first : NULL;
 
-    ret = hb_qsv_get_dx_device(job);
-    if (ret < 0) {
-        hb_error("qsv_init: hb_qsv_get_dx_device failed %d", ret);
-        return ret;
+        ret = hb_create_ffmpeg_pool(job, coded_width, coded_height, sw_pix_fmt, HB_QSV_POOL_SURFACE_SIZE, extra_hw_frames, &hb_dec_qsv_frames_ctx->hw_frames_ctx);
+        if (ret < 0) {
+            hb_error("hb_qsv_hw_frames_init: hb_create_ffmpeg_pool qsv surface allocation failed %d", ret);
+            return ret;
+        }
+
+        /* allocate the memory ids for the external frames */
+        av_buffer_unref(&hb_dec_qsv_frames_ctx->mids_buf);
+        hb_dec_qsv_frames_ctx->mids_buf = hb_qsv_create_mids(hb_dec_qsv_frames_ctx->hw_frames_ctx);
+        if (!hb_dec_qsv_frames_ctx->mids_buf)
+            return AVERROR(ENOMEM);
+        hb_dec_qsv_frames_ctx->mids    = (QSVMid*)hb_dec_qsv_frames_ctx->mids_buf->data;
+        hb_dec_qsv_frames_ctx->nb_mids = frames_hwctx->nb_surfaces;
+        memset(hb_dec_qsv_frames_ctx->pool, 0, hb_dec_qsv_frames_ctx->nb_mids * sizeof(hb_dec_qsv_frames_ctx->pool[0]));
+
+        ret = hb_qsv_get_dx_device(job);
+        if (ret < 0) {
+            hb_error("qsv_init: hb_qsv_get_dx_device failed %d", ret);
+            return ret;
+        }
     }
     return 0;
 }
