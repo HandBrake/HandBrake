@@ -2,12 +2,15 @@ __deps__ := LIBICONV
 $(eval $(call import.MODULE.defs,LIBXML2,libxml2,$(__deps__)))
 $(eval $(call import.CONTRIB.defs,LIBXML2))
 
-LIBXML2.FETCH.url     = https://github.com/HandBrake/HandBrake-contribs/releases/download/contribs/libxml2-2.9.10.tar.xz
-LIBXML2.FETCH.url    += https://download.gnome.org/sources/libxml2/2.9/libxml2-2.9.10.tar.xz
-LIBXML2.FETCH.sha256  = 593b7b751dd18c2d6abcd0c4bcb29efc203d0b4373a6df98e3a455ea74ae2813
+LIBXML2.FETCH.url     = https://github.com/HandBrake/HandBrake-contribs/releases/download/contribs/libxml2-2.10.3.tar.xz
+LIBXML2.FETCH.url    += https://download.gnome.org/sources/libxml2/2.10/libxml2-2.10.3.tar.xz
+LIBXML2.FETCH.sha256  = 5d2cc3d78bec3dbe212a9d7fa629ada25a7da928af432c93060ff5c17ee28a9c
 
-# We don't need LZMA support
-LIBXML2.CONFIGURE.extra = --without-lzma
+# We don't need LZMA / Zlib support
+LIBXML2.CONFIGURE.extra = --without-lzma --without-zlib
+
+# Ensure SAX1 API is enabled
+LIBXML2.CONFIGURE.extra += --with-legacy
 
 # The Python components do not build on MinGW due to the lack of a select() call
 # in the MinGW environment.
