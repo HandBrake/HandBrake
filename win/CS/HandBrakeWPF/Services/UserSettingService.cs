@@ -301,7 +301,7 @@ namespace HandBrakeWPF.Services
             defaults.Add(UserSettingConstants.AlwaysUseDefaultPath, true);
             defaults.Add(UserSettingConstants.RemovePunctuation, false);
             defaults.Add(UserSettingConstants.FileOverwriteBehaviour, 0);
-            defaults.Add(UserSettingConstants.UseM4v, 1);
+            defaults.Add(UserSettingConstants.UseM4v, 0);
 
             // When Done
             defaults.Add(UserSettingConstants.SendFile, false);
