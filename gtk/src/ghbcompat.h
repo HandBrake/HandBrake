@@ -53,9 +53,9 @@
 #define GHB_STOCK_CANCEL    GTK_STOCK_CANCEL
 #define GHB_STOCK_SAVE      GTK_STOCK_SAVE
 #else
-#define GHB_STOCK_OPEN      "_Open"
-#define GHB_STOCK_CANCEL    "_Cancel"
-#define GHB_STOCK_SAVE      "_Save"
+#define GHB_STOCK_OPEN      _("_Open")
+#define GHB_STOCK_CANCEL    _("_Cancel")
+#define GHB_STOCK_SAVE      _("_Save")
 #endif
 
 static inline void ghb_widget_get_preferred_width(
