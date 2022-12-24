@@ -77,20 +77,21 @@ static NSDateFormatter *_releaseDateFormatter = nil;
 
 - (NSString *)defaultName
 {
-    // Generate a new file name
     NSString *fileName = self.title.name;
 
-    // If Auto Naming is on. We create an output filename by using the
-    // format set int he preferences.
+    // Create an output filename by using the format set in the preferences
     if ([NSUserDefaults.standardUserDefaults boolForKey:HBDefaultAutoNaming])
     {
-        fileName = [self automaticName];
+        fileName = self.automaticName;
     }
 
-    // use the correct extension based on the container
-    NSString *ext = [self automaticExt];
-    fileName = [fileName stringByAppendingPathExtension:ext];
-    return fileName;
+    // Automatic name can be empty if the format is empty
+    if (fileName.length == 0)
+    {
+        fileName = self.title.name;
+    }
+
+    return [fileName stringByAppendingPathExtension:self.automaticExt];
 }
 
 - (NSString *)automaticNameForSource:(NSString *)sourceName
