@@ -305,7 +305,8 @@ conjunction with the "Forced" option.</property>
                 <property name="can-focus">True</property>
                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                 <property name="is-important">True</property>
-                <property name="label" translatable="yes">Save As</property>
+                <property name="label" translatable="yes">Save _As</property>
+                <property name="use-underline">True</property>
                 <property name="icon-name">document-save-as</property>
                 <property name="action-name">app.preset-save-as</property>
               </object>
@@ -2063,7 +2064,7 @@ Resets the queue job to pending and ready to run again.</property>
 Copyright © 2004 - , HandBrake Devs</property>
     <property name="comments" translatable="yes">HandBrake is a GPL-licensed, multiplatform, multithreaded video transcoder.</property>
     <property name="website">https://handbrake.fr</property>
-    <property name="website-label" translatable="yes">https://handbrake.fr</property>
+    <property name="website-label">https://handbrake.fr</property>
     <property name="license" translatable="yes">HandBrake is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License version 2, as published by the Free Software Foundation.
 
 HandBrake is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
@@ -7575,8 +7576,11 @@ Only one subtitle track can be burned! Since conflicts can occur, the first chos
                   <object class="GtkLabel">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
-                    <property name="use-markup">True</property>
-                    <property name="label" translatable="yes">&lt;b&gt;When Done:&lt;/b&gt;</property>
+                    <property name="use-markup">False</property>
+                    <property name="label" translatable="yes">When Done:</property>
+                    <attributes>
+                      <attribute name="weight" value="bold"/>
+                    </attributes>
                   </object>
                   <packing>
                     <property name="position">3</property>
@@ -7779,7 +7783,7 @@ Only one subtitle track can be burned! Since conflicts can occur, the first chos
       <object class="GtkHeaderBar">
         <property name="visible">True</property>
         <property name="show-close-button">True</property>
-        <property name="title" translatable="yes">HandBrake Settings</property>
+        <property name="title" translatable="yes">Preferences</property>
         <property name="has-subtitle">False</property>
         <child type="title">
           <object class="GtkStackSwitcher" id="prefs_switcher">
@@ -8097,7 +8101,7 @@ Check this if you want the queue to clean itself up by deleting completed jobs.<
                     </child>
                   </object>
                   <packing>
-                    <property name="title" translatable="yes">Settings</property>
+                    <property name="title" translatable="yes">General</property>
                   </packing>
                 </child>
                 <child>
@@ -8561,7 +8565,7 @@ Uncheck this if you want to allow changing each title's settings independently.<
                   </object>
                   <packing>
                     <property name="position">1</property>
-                    <property name="title">Advanced</property>
+                    <property name="title" translatable="yes">Advanced</property>
                   </packing>
                 </child>
               </object>
@@ -8598,7 +8602,8 @@ Uncheck this if you want to allow changing each title's settings independently.<
     </child>
     <child type="action">
       <object class="GtkButton" id="preset_rename_ok">
-        <property name="label" translatable="yes">Rename</property>
+        <property name="label" translatable="yes">_Rename</property>
+        <property name="use-underline">True</property>
         <property name="visible">True</property>
         <property name="can-focus">True</property>
         <property name="receives-default">True</property>
@@ -8754,7 +8759,8 @@ Uncheck this if you want to allow changing each title's settings independently.<
     </child>
     <child type="action">
       <object class="GtkButton" id="preset_ok">
-        <property name="label" translatable="yes">Save</property>
+        <property name="label" translatable="yes">_Save</property>
+        <property name="use-underline">True</property>
         <property name="visible">True</property>
         <property name="can-focus">True</property>
         <property name="receives-default">True</property>
@@ -9434,7 +9440,8 @@ Uncheck this if you want to allow changing each title's settings independently.<
     </child>
     <child type="action">
       <object class="GtkButton" id="subtitle_ok">
-        <property name="label" translatable="yes">Save</property>
+        <property name="label" translatable="yes">_Save</property>
+        <property name="use-underline">True</property>
         <property name="visible">True</property>
         <property name="can-focus">True</property>
         <property name="receives-default">True</property>
@@ -9843,7 +9850,8 @@ in your output.</property>
     </child>
     <child type="action">
       <object class="GtkButton" id="audio_ok">
-        <property name="label" translatable="yes">Save</property>
+        <property name="label" translatable="yes">_Save</property>
+        <property name="use-underline">True</property>
         <property name="visible">True</property>
         <property name="can-focus">True</property>
         <property name="receives-default">True</property>

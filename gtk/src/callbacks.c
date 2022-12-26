@@ -4627,15 +4627,6 @@ ghb_log_cb(GIOChannel *source, GIOCondition cond, gpointer data)
     return TRUE;
 }
 
-static void
-update_activity_labels(signal_user_data_t *ud, gboolean active)
-{
-    GtkToolButton *button;
-
-    button   = GTK_TOOL_BUTTON(GHB_WIDGET(ud->builder, "show_activity"));
-    gtk_tool_button_set_label(button, "Activity");
-}
-
 G_MODULE_EXPORT void
 show_activity_action_cb(GSimpleAction *action, GVariant *value,
                         signal_user_data_t *ud)
@@ -4646,7 +4637,6 @@ show_activity_action_cb(GSimpleAction *action, GVariant *value,
     g_simple_action_set_state(action, value);
     activity_window = GHB_WIDGET(ud->builder, "activity_window");
     gtk_widget_set_visible(activity_window, state);
-    update_activity_labels(ud, state);
 }
 
 G_MODULE_EXPORT gboolean
