@@ -114,6 +114,8 @@ namespace HandBrakeWPF.Services.Queue
             }
         }
 
+        public int ActiveJobCount => this.activeJobs.Count;
+
         public int ErrorCount
         {
             get
@@ -441,6 +443,12 @@ namespace HandBrakeWPF.Services.Queue
                 }
 
                 this.queue.Remove(job);
+
+                if (this.activeJobs.Count == 0 && this.IsPaused)
+                {
+                    this.IsPaused = false;
+                }
+
                 this.InvokeQueueChanged(EventArgs.Empty);
             }
         }

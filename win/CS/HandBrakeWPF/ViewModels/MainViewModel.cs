@@ -749,7 +749,7 @@ namespace HandBrakeWPF.ViewModels
         public Action AlertWindowClose => this.CloseAlertWindow;
 
         public int QueueCount => this.queueProcessor.Count;
-
+        
         public bool IsQueueCountVisible => this.queueProcessor.Count > 0;
 
         public string QueueLabel => string.Format(Resources.Main_QueueLabel, string.Empty);
@@ -758,7 +758,7 @@ namespace HandBrakeWPF.ViewModels
         {
             get
             {
-                if (this.queueProcessor.IsPaused)
+                if (this.queueProcessor.IsPaused && this.queueProcessor.ActiveJobCount > 0)
                 {
                     return Resources.Main_ResumeEncode;
                 }
@@ -2263,6 +2263,22 @@ namespace HandBrakeWPF.ViewModels
             List<QueueProgressStatus> queueJobStatuses = this.queueProcessor.GetQueueProgressStatus();
             string jobsPending = "   " + string.Format(Resources.Main_JobsPending_addon, this.queueProcessor.Count);
 
+
+            ThreadHelper.OnUIThread(() =>
+            {
+                if (queueJobStatuses.Count == 0)
+                {
+                    this.ProgramStatusLabel = Resources.Main_QueueFinished;
+                    this.NotifyOfPropertyChange(() => this.IsEncoding);
+                    this.WindowTitle = Resources.HandBrake_Title;
+                    this.notifyIconService.SetTooltip(this.WindowTitle);
+
+                    this.IsMultiProcess = false;
+                    this.NotifyOfPropertyChange(() => this.IsMultiProcess);
+                    this.windowsTaskbar.SetNoProgress();
+                }
+            });
+
             if (this.queueProcessor.IsPaused)
             {
                 return;
@@ -2303,17 +2319,6 @@ namespace HandBrakeWPF.ViewModels
                         this.ProgramStatusLabel = string.Format(Resources.Main_QueueMultiJobStatus, this.queueProcessor.CompletedCount, Environment.NewLine, queueJobStatuses.Count, this.queueProcessor.Count);
                         this.IsMultiProcess = true;
                         this.NotifyOfPropertyChange(() => this.IsMultiProcess);
-                    }
-                    else
-                    {
-                        this.ProgramStatusLabel = Resources.Main_QueueFinished;
-                        this.NotifyOfPropertyChange(() => this.IsEncoding);
-                        this.WindowTitle = Resources.HandBrake_Title;
-                        this.notifyIconService.SetTooltip(this.WindowTitle);
-
-                        this.IsMultiProcess = false;
-                        this.NotifyOfPropertyChange(() => this.IsMultiProcess);
-                        this.windowsTaskbar.SetNoProgress();
                     }
                 });
         }
