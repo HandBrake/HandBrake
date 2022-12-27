@@ -100,6 +100,17 @@ Windows users, please make sure to install [Microsoft .NET Desktop Runtime versi
   - Polish (Polski)
 
 
+## HandBrake 1.5.1
+
+### Linux
+
+- Fixed an issue with the source tarball that broke Flathub builds (updated libass module to version 0.15.2)
+
+### Windows
+
+- The Windows UI is now .NET 6.0 only; .NET 5.0 is no longer additionally required
+
+
 ## HandBrake 1.5.0
 
 ### All platforms
