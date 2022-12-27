@@ -106,20 +106,20 @@ subtitle_refresh_list_row_ui(
         offset = ghb_dict_get_int(subsettings, "Offset");
         if (offset != 0)
         {
-            info_dst_2 = g_strdup_printf("Offset: %dms", offset);
+            info_dst_2 = g_strdup_printf(_("Offset: %dms"), offset);
         }
     }
 
     GString *str = g_string_new("<small>");
-    g_string_append_printf(str, "%s ", burned ? "Burned Into Video" :
-                                                "Passthrough");
+    g_string_append(str, burned ? _("Burned Into Video") :
+                                  _("Passthrough"));
     if (forced)
     {
-        g_string_append_printf(str, "(Forced Subtitles Only)");
+        g_string_append_printf(str, " (%s)", _("Forced Subtitles Only"));
     }
     if (def)
     {
-        g_string_append_printf(str, "(Default)");
+        g_string_append_printf(str, " (%s)", _("Default"));
     }
     g_string_append_printf(str, "</small>");
 

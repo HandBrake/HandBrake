@@ -160,7 +160,7 @@
     <section id="hbfd-section">
       <item>
         <attribute name="action">app.hbfd</attribute>
-        <attribute name="label" translatable="yes">HandBrake for _Dummies</attribute>
+        <attribute name="label" translatable="yes">HandBrake For _Dummies</attribute>
       </item>
     </section>
   </menu>

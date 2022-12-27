@@ -235,5 +235,6 @@ gchar* ghb_create_volume_label(const hb_title_t * title);
 const gchar * ghb_lookup_resolution_limit(int width, int height);
 int ghb_lookup_resolution_limit_dimensions(const gchar * opt,
                                            int * width, int * height);
+const gchar * ghb_get_filter_name(hb_filter_object_t *filter);
 
 #endif // _HBBACKEND_H_

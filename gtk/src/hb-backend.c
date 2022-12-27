@@ -4879,3 +4879,40 @@ ghb_dvd_volname(const gchar *device)
     }
     return NULL;
 }
+
+const gchar *ghb_get_filter_name (hb_filter_object_t *filter)
+{
+    switch (filter->id)
+    {
+        case HB_FILTER_COMB_DETECT:
+            return _("Comb Detect");
+        case HB_FILTER_DETELECINE:
+            return _("Detelecine");
+        case HB_FILTER_YADIF:
+            return _("Deinterlace (Yadif)");
+        case HB_FILTER_BWDIF:
+            return _("Deinterlace (Bwdif)");
+        case HB_FILTER_DECOMB:
+            return _("Decomb");
+        case HB_FILTER_DEBLOCK:
+            return _("Deblock");
+        case HB_FILTER_NLMEANS:
+            return _("Denoise (NLMeans)");
+        case HB_FILTER_HQDN3D:
+            return _("Denoise (HQDN3D)");
+        case HB_FILTER_CHROMA_SMOOTH:
+            return _("Chroma Smooth");
+        case HB_FILTER_UNSHARP:
+            return _("Sharpen (Unsharp)");
+        case HB_FILTER_ROTATE:
+            return _("Rotate");
+        case HB_FILTER_LAPSHARP:
+            return _("Sharpen (lapsharp)");
+        case HB_FILTER_GRAYSCALE:
+            return _("Grayscale");
+        case HB_FILTER_COLORSPACE:
+            return _("Colorspace");
+        default:
+            return filter->name;
+    }
+}

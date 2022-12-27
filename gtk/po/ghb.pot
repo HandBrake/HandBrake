@@ -3,12 +3,11 @@
 # This file is distributed under the same license as the ghb package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: ghb 1.6.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-12-22 23:57+0000\n"
+"POT-Creation-Date: 2022-12-27 19:07+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,6 +15,128 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
+
+#: src/menu.ui:7
+msgid "_File"
+msgstr ""
+
+#: src/menu.ui:11
+msgid "Open _Source"
+msgstr ""
+
+#: src/menu.ui:16
+msgid "Open Single _Title"
+msgstr ""
+
+#: src/menu.ui:21
+msgid "Set _Destination"
+msgstr ""
+
+#: src/menu.ui:30
+msgid "_Preferences"
+msgstr ""
+
+#: src/menu.ui:34
+msgid "_Quit"
+msgstr ""
+
+#: src/menu.ui:40 src/menu.ui:86
+msgid "_Queue"
+msgstr ""
+
+#: src/menu.ui:44
+msgid "_Add"
+msgstr ""
+
+#: src/menu.ui:49
+msgid "Add _Multiple"
+msgstr ""
+
+#: src/menu.ui:56
+msgid "_Start Encoding"
+msgstr ""
+
+#: src/menu.ui:61 src/queuehandler.c:2506
+msgid "_Pause Encoding"
+msgstr ""
+
+#: src/menu.ui:68
+msgid "S_ave Queue"
+msgstr ""
+
+#: src/menu.ui:72
+msgid "_Load Queue File"
+msgstr ""
+
+#: src/menu.ui:77
+msgid "_View"
+msgstr ""
+
+#: src/menu.ui:81
+msgid "Presets _List"
+msgstr ""
+
+#: src/menu.ui:91
+msgid "_Preview"
+msgstr ""
+
+#: src/menu.ui:96
+msgid "_Activity Window"
+msgstr ""
+
+#: src/menu.ui:102 src/ghb3.ui:404
+msgid "_Presets"
+msgstr ""
+
+#: src/menu.ui:106 src/ghb3.ui:178 src/ghb3.ui:412
+msgid "Set De_fault"
+msgstr ""
+
+#: src/menu.ui:112 src/ghb3.ui:184 src/ghb3.ui:426 src/ghb3.ui:8762
+#: src/ghb3.ui:9443 src/ghb3.ui:9853
+msgid "_Save"
+msgstr ""
+
+#: src/menu.ui:116 src/ghb3.ui:188 src/ghb3.ui:308 src/ghb3.ui:435
+msgid "Save _As"
+msgstr ""
+
+#: src/menu.ui:120 src/ghb3.ui:192 src/ghb3.ui:444 src/ghb3.ui:8605
+msgid "_Rename"
+msgstr ""
+
+#: src/menu.ui:124 src/ghb3.ui:196 src/ghb3.ui:453
+msgid "_Delete"
+msgstr ""
+
+#: src/menu.ui:130 src/ghb3.ui:202
+msgid "_Import"
+msgstr ""
+
+#: src/menu.ui:134 src/ghb3.ui:206 src/ghb3.ui:467
+msgid "_Export"
+msgstr ""
+
+#: src/menu.ui:140 src/ghb3.ui:212
+msgid "Reset _Built-in Presets"
+msgstr ""
+
+#: src/menu.ui:145
+msgid "_Help"
+msgstr ""
+
+#: src/menu.ui:149
+msgid "_About"
+msgstr ""
+
+#: src/menu.ui:153
+msgid "_Guide"
+msgstr ""
+
+#: src/menu.ui:163
+msgid "HandBrake For _Dummies"
+msgstr ""
 
 #: src/ghb3.ui:113
 msgid ""
@@ -90,39 +211,6 @@ msgstr ""
 msgid "<b>Track</b>"
 msgstr ""
 
-#: src/ghb3.ui:178 src/ghb3.ui:412
-msgid "Set De_fault"
-msgstr ""
-
-#: src/ghb3.ui:184 src/ghb3.ui:426 src/ghb3.ui:8762 src/ghb3.ui:9443
-#: src/ghb3.ui:9853
-msgid "_Save"
-msgstr ""
-
-#: src/ghb3.ui:188 src/ghb3.ui:308 src/ghb3.ui:435
-msgid "Save _As"
-msgstr ""
-
-#: src/ghb3.ui:192 src/ghb3.ui:444 src/ghb3.ui:8605
-msgid "_Rename"
-msgstr ""
-
-#: src/ghb3.ui:196 src/ghb3.ui:453
-msgid "_Delete"
-msgstr ""
-
-#: src/ghb3.ui:202
-msgid "_Import"
-msgstr ""
-
-#: src/ghb3.ui:206 src/ghb3.ui:467
-msgid "_Export"
-msgstr ""
-
-#: src/ghb3.ui:212
-msgid "Reset _Built-in Presets"
-msgstr ""
-
 #: src/ghb3.ui:220
 msgid "Play File"
 msgstr ""
@@ -159,11 +247,11 @@ msgstr ""
 msgid "Clear All Jobs"
 msgstr ""
 
-#: src/ghb3.ui:265 src/queuehandler.c:1641
+#: src/ghb3.ui:265 src/queuehandler.c:1644
 msgid "Import Queue"
 msgstr ""
 
-#: src/ghb3.ui:269 src/queuehandler.c:1496
+#: src/ghb3.ui:269 src/queuehandler.c:1499
 msgid "Export Queue"
 msgstr ""
 
@@ -173,10 +261,6 @@ msgstr ""
 
 #: src/ghb3.ui:371 src/ghb3.ui:998
 msgid "Actions"
-msgstr ""
-
-#: src/ghb3.ui:404
-msgid "_Presets"
 msgstr ""
 
 #: src/ghb3.ui:521
@@ -223,23 +307,23 @@ msgstr ""
 msgid "0 jobs pending"
 msgstr ""
 
-#: src/ghb3.ui:710 src/ghb3.ui:2331 src/queuehandler.c:2436
-#: src/queuehandler.c:2449 src/queuehandler.c:2462
+#: src/ghb3.ui:710 src/ghb3.ui:2331 src/queuehandler.c:2439
+#: src/queuehandler.c:2452 src/queuehandler.c:2465
 msgid "Start Encoding"
 msgstr ""
 
-#: src/ghb3.ui:712 src/ghb3.ui:2333 src/ghb3.ui:7063 src/queuehandler.c:2435
-#: src/queuehandler.c:2448
+#: src/ghb3.ui:712 src/ghb3.ui:2333 src/ghb3.ui:7063 src/queuehandler.c:2438
+#: src/queuehandler.c:2451
 msgid "Start"
 msgstr ""
 
-#: src/ghb3.ui:726 src/ghb3.ui:2346 src/queuehandler.c:2478
-#: src/queuehandler.c:2491
+#: src/ghb3.ui:726 src/ghb3.ui:2346 src/queuehandler.c:2481
+#: src/queuehandler.c:2494
 msgid "Pause Encoding"
 msgstr ""
 
-#: src/ghb3.ui:728 src/ghb3.ui:2348 src/queuehandler.c:2477
-#: src/queuehandler.c:2490
+#: src/ghb3.ui:728 src/ghb3.ui:2348 src/queuehandler.c:2480
+#: src/queuehandler.c:2493
 msgid "Pause"
 msgstr ""
 
@@ -376,11 +460,11 @@ msgstr ""
 msgid "HandBrake"
 msgstr ""
 
-#: src/ghb3.ui:2291 src/callbacks.c:4318
+#: src/ghb3.ui:2291 src/callbacks.c:4323
 msgid "Choose Video Source"
 msgstr ""
 
-#: src/ghb3.ui:2293 src/ghb3.ui:9285 src/callbacks.c:4317
+#: src/ghb3.ui:2293 src/ghb3.ui:9285 src/callbacks.c:4322
 msgid "Open Source"
 msgstr ""
 
@@ -412,7 +496,7 @@ msgstr ""
 msgid "Show Queue"
 msgstr ""
 
-#: src/ghb3.ui:2405 src/callbacks.c:4748
+#: src/ghb3.ui:2405 src/callbacks.c:4753
 msgid "Queue"
 msgstr ""
 
@@ -435,7 +519,7 @@ msgstr ""
 msgid "None"
 msgstr ""
 
-#: src/ghb3.ui:2521 src/callbacks.c:4290
+#: src/ghb3.ui:2521 src/callbacks.c:4295
 msgid "Scanning..."
 msgstr ""
 
@@ -516,7 +600,7 @@ msgstr ""
 msgid "Format to mux encoded tracks to."
 msgstr ""
 
-#: src/ghb3.ui:2920 src/queuehandler.c:290
+#: src/ghb3.ui:2920 src/queuehandler.c:293
 msgid "Web Optimized"
 msgstr ""
 
@@ -939,7 +1023,7 @@ msgstr ""
 msgid "Sharpen Tune:"
 msgstr ""
 
-#: src/ghb3.ui:4993
+#: src/ghb3.ui:4993 src/hb-backend.c:4912
 msgid "Grayscale"
 msgstr ""
 
@@ -1367,7 +1451,7 @@ msgstr ""
 msgid "Samplerate"
 msgstr ""
 
-#: src/ghb3.ui:6381 src/ghb3.ui:10027 src/queuehandler.c:614
+#: src/ghb3.ui:6381 src/ghb3.ui:10027 src/queuehandler.c:617
 msgid "Gain"
 msgstr ""
 
@@ -1391,8 +1475,8 @@ msgstr ""
 msgid "Add all subtitle tracks to the list"
 msgstr ""
 
-#: src/ghb3.ui:6529 src/queuehandler.c:651 src/queuehandler.c:1088
-#: src/subtitlehandler.c:413 src/subtitlehandler.c:1244
+#: src/ghb3.ui:6529 src/callbacks.c:2360 src/queuehandler.c:654
+#: src/queuehandler.c:1091 src/subtitlehandler.c:413 src/subtitlehandler.c:1244
 msgid "Foreign Audio Scan"
 msgstr ""
 
@@ -1526,7 +1610,7 @@ msgstr ""
 msgid "Subtitles"
 msgstr ""
 
-#: src/ghb3.ui:7012 src/queuehandler.c:280
+#: src/ghb3.ui:7012 src/callbacks.c:2417 src/queuehandler.c:283
 msgid "Chapter Markers"
 msgstr ""
 
@@ -1598,22 +1682,22 @@ msgstr ""
 msgid "Destination directory for your encode."
 msgstr ""
 
-#: src/ghb3.ui:7506 src/queuehandler.c:2269
+#: src/ghb3.ui:7506 src/queuehandler.c:2272
 msgid "Destination Directory"
 msgstr ""
 
 #: src/ghb3.ui:7621
-msgid "Add Multiple Items"
+msgid "Add Multiple Titles"
 msgstr ""
 
 #: src/ghb3.ui:7629 src/ghb3.ui:8597 src/ghb3.ui:8754 src/ghb3.ui:9435
-#: src/ghb3.ui:9845 src/callbacks.c:5608 src/callbacks.c:5616
-#: src/callbacks.c:5625 src/hb-backend.c:4316 src/hb-backend.c:4349
+#: src/ghb3.ui:9845 src/callbacks.c:5613 src/callbacks.c:5621
+#: src/callbacks.c:5630 src/hb-backend.c:4316 src/hb-backend.c:4349
 #: src/hb-backend.c:4388 src/hb-backend.c:4419 src/hb-backend.c:4447
 #: src/hb-backend.c:4493 src/hb-backend.c:4550 src/hb-backend.c:4570
 #: src/hb-backend.c:4590 src/hb-backend.c:4651 src/hb-backend.c:4706
-#: src/presets.c:2463 src/queuehandler.c:1877 src/queuehandler.c:1894
-#: src/queuehandler.c:1908 src/queuehandler.c:1923
+#: src/presets.c:2463 src/queuehandler.c:1880 src/queuehandler.c:1897
+#: src/queuehandler.c:1911 src/queuehandler.c:1926
 msgid "Cancel"
 msgstr ""
 
@@ -1995,7 +2079,7 @@ msgstr ""
 msgid "Adjust the offset in milliseconds between video and SRT timestamps"
 msgstr ""
 
-#: src/ghb3.ui:9765
+#: src/ghb3.ui:9765 src/subtitlehandler.c:118
 msgid "Forced Subtitles Only"
 msgstr ""
 
@@ -2102,7 +2186,7 @@ msgstr ""
 
 #. Audio DRC Label
 #: src/ghb3.ui:10299 src/audiohandler.c:424 src/audiohandler.c:762
-#: src/audiohandler.c:1165 src/audiohandler.c:1941 src/callbacks.c:5380
+#: src/audiohandler.c:1165 src/audiohandler.c:1941 src/callbacks.c:5385
 #: src/hb-backend.c:200 src/hb-backend.c:213 src/hb-backend.c:225
 #: src/hb-backend.c:250 src/hb-backend.c:321 src/hb-backend.c:333
 #: src/hb-backend.c:345 src/hb-backend.c:406
@@ -2213,7 +2297,7 @@ msgstr ""
 
 #. This needs to be in scanning and working since scanning
 #. happens fast enough that it can be missed
-#: src/callbacks.c:1651 src/callbacks.c:4372
+#: src/callbacks.c:1651 src/callbacks.c:4377
 msgid "Scanning ..."
 msgstr ""
 
@@ -2221,17 +2305,93 @@ msgstr ""
 msgid "Stop Scan"
 msgstr ""
 
-#: src/callbacks.c:2698 src/hb-backend.c:2263 src/hb-backend.c:2383
+#: src/callbacks.c:2179 src/callbacks.c:2275
+msgid "FPS"
+msgstr ""
+
+#: src/callbacks.c:2180
+msgid "Audio Track"
+msgid_plural "Audio Tracks"
+msgstr[0] ""
+msgstr[1] ""
+
+#: src/callbacks.c:2181
+msgid "Subtitle Track"
+msgid_plural "Subtitle Tracks"
+msgstr[0] ""
+msgstr[1] ""
+
+#: src/callbacks.c:2279
+msgid "CFR"
+msgstr ""
+
+#: src/callbacks.c:2283
+msgid "PFR"
+msgstr ""
+
+#: src/callbacks.c:2287
+msgid "VFR"
+msgstr ""
+
+#: src/callbacks.c:2329
+#, c-format
+msgid "+ %d more audio track"
+msgid_plural "+ %d more audio tracks"
+msgstr[0] ""
+msgstr[1] ""
+
+#: src/callbacks.c:2363 src/callbacks.c:2395 src/queuehandler.c:657
+#: src/queuehandler.c:694
+#, c-format
+msgid ", Forced Only"
+msgstr ""
+
+#: src/callbacks.c:2367 src/callbacks.c:2399 src/queuehandler.c:661
+#: src/queuehandler.c:698
+#, c-format
+msgid ", Burned"
+msgstr ""
+
+#: src/callbacks.c:2371 src/callbacks.c:2403 src/queuehandler.c:665
+#: src/queuehandler.c:702
+#, c-format
+msgid ", Default"
+msgstr ""
+
+#: src/callbacks.c:2409
+#, c-format
+msgid "+ %d more subtitle track"
+msgid_plural "+ %d more subtitle tracks"
+msgstr[0] ""
+msgstr[1] ""
+
+#: src/callbacks.c:2564
+msgid "storage"
+msgstr ""
+
+#: src/callbacks.c:2565
+msgid "display"
+msgstr ""
+
+#: src/callbacks.c:2566
+msgid "Pixel Aspect Ratio"
+msgstr ""
+
+#: src/callbacks.c:2567
+msgid "Display Aspect Ratio"
+msgstr ""
+
+#: src/callbacks.c:2703 src/hb-backend.c:2263 src/hb-backend.c:2383
 #: src/hb-backend.c:2395
 msgid "No Title Found"
 msgstr ""
 
-#: src/callbacks.c:2699
+#: src/callbacks.c:2704
 msgid "New Video"
 msgstr ""
 
-#: src/callbacks.c:3680 src/callbacks.c:3693 src/callbacks.c:3715
-#: src/callbacks.c:3753
+#: src/callbacks.c:3685 src/callbacks.c:3698 src/callbacks.c:3720
+#: src/callbacks.c:3758
 #, c-format
 msgid ""
 "%s\n"
@@ -2239,128 +2399,128 @@ msgid ""
 "%s in %d seconds ..."
 msgstr ""
 
-#: src/callbacks.c:3847 src/callbacks.c:3898
+#: src/callbacks.c:3852 src/callbacks.c:3903
 #, c-format
 msgid "%sYour movie will be lost if you don't continue encoding."
 msgstr ""
 
-#: src/callbacks.c:3850 src/callbacks.c:3901 src/queuehandler.c:1814
+#: src/callbacks.c:3855 src/callbacks.c:3906 src/queuehandler.c:1817
 msgid "Cancel Current and Stop"
 msgstr ""
 
-#: src/callbacks.c:3851
+#: src/callbacks.c:3856
 msgid "Cancel Current, Start Next"
 msgstr ""
 
-#: src/callbacks.c:3852
+#: src/callbacks.c:3857
 msgid "Finish Current, then Stop"
 msgstr ""
 
-#: src/callbacks.c:3853 src/callbacks.c:3902
+#: src/callbacks.c:3858 src/callbacks.c:3907
 msgid "Continue Encoding"
 msgstr ""
 
-#: src/callbacks.c:4085
+#: src/callbacks.c:4090
 #, c-format
 msgid "%d encode pending"
 msgstr ""
 
-#: src/callbacks.c:4089
+#: src/callbacks.c:4094
 #, c-format
 msgid "%d encodes pending"
 msgstr ""
 
-#: src/callbacks.c:4146 src/callbacks.c:4214
+#: src/callbacks.c:4151 src/callbacks.c:4219
 #, c-format
 msgid "job %d of %d, "
 msgstr ""
 
-#: src/callbacks.c:4156
+#: src/callbacks.c:4161
 #, c-format
 msgid "pass %d (subtitle scan) of %d, "
 msgstr ""
 
-#: src/callbacks.c:4161
+#: src/callbacks.c:4166
 #, c-format
 msgid "pass %d of %d, "
 msgstr ""
 
-#: src/callbacks.c:4174
+#: src/callbacks.c:4179
 #, c-format
 msgid "Encoding: %s%s%.2f %% (%.2f fps, avg %.2f fps, ETA %02dh%02dm%02ds)"
 msgstr ""
 
-#: src/callbacks.c:4184 src/callbacks.c:4224
+#: src/callbacks.c:4189 src/callbacks.c:4229
 #, c-format
 msgid "Encoding: %s%s%.2f %% (ETA %02dh%02dm%02ds)"
 msgstr ""
 
-#: src/callbacks.c:4194 src/callbacks.c:4233
+#: src/callbacks.c:4199 src/callbacks.c:4238
 #, c-format
 msgid "Encoding: %s%s%.2f %%"
 msgstr ""
 
-#: src/callbacks.c:4220
+#: src/callbacks.c:4225
 #, c-format
 msgid "Searching for start time, "
 msgstr ""
 
-#: src/callbacks.c:4295
+#: src/callbacks.c:4300
 #, c-format
 msgid "Scanning title %d of %d..."
 msgstr ""
 
-#: src/callbacks.c:4299
+#: src/callbacks.c:4304
 #, c-format
 msgid "Scanning title %d of %d preview %d..."
 msgstr ""
 
-#: src/callbacks.c:4383
+#: src/callbacks.c:4388
 msgid "Paused"
 msgstr ""
 
-#: src/callbacks.c:4414
+#: src/callbacks.c:4419
 msgid "Encode Done!"
 msgstr ""
 
-#: src/callbacks.c:4418
+#: src/callbacks.c:4423
 msgid "Encode Canceled."
 msgstr ""
 
-#: src/callbacks.c:4423
+#: src/callbacks.c:4428
 msgid "Encode Failed."
 msgstr ""
 
-#: src/callbacks.c:4465
+#: src/callbacks.c:4470
 msgid "Muxing: This may take a while..."
 msgstr ""
 
-#: src/callbacks.c:5413
+#: src/callbacks.c:5418
 #, c-format
 msgid "HandBrake %s/%s is now available (you have %s/%d)."
 msgstr ""
 
-#: src/callbacks.c:5593
+#: src/callbacks.c:5598
 msgid "Encode Complete"
 msgstr ""
 
-#: src/callbacks.c:5595
+#: src/callbacks.c:5600
 msgid "Put down that cocktail, Your HandBrake queue is done!"
 msgstr ""
 
-#: src/callbacks.c:5606 src/callbacks.c:5614 src/callbacks.c:5623
+#: src/callbacks.c:5611 src/callbacks.c:5619 src/callbacks.c:5628
 msgid "Your encode is complete."
 msgstr ""
 
-#: src/callbacks.c:5607
+#: src/callbacks.c:5612
 msgid "Quitting Handbrake"
 msgstr ""
 
-#: src/callbacks.c:5615
+#: src/callbacks.c:5620
 msgid "Putting computer to sleep"
 msgstr ""
 
-#: src/callbacks.c:5624
+#: src/callbacks.c:5629
 msgid "Shutting down the computer"
 msgstr ""
 
@@ -2384,7 +2544,7 @@ msgstr ""
 msgid "Foreign Audio, then First Selected Track"
 msgstr ""
 
-#: src/hb-backend.c:97
+#: src/hb-backend.c:97 src/queuehandler.c:230
 msgid "Chapters:"
 msgstr ""
 
@@ -2392,7 +2552,7 @@ msgstr ""
 msgid "Seconds:"
 msgstr ""
 
-#: src/hb-backend.c:99
+#: src/hb-backend.c:99 src/queuehandler.c:251
 msgid "Frames:"
 msgstr ""
 
@@ -2453,7 +2613,7 @@ msgstr ""
 msgid "Monthly"
 msgstr ""
 
-#: src/hb-backend.c:201
+#: src/hb-backend.c:201 src/hb-backend.c:4896
 msgid "Decomb"
 msgstr ""
 
@@ -2663,7 +2823,7 @@ msgstr ""
 
 #. Add filters
 #: src/hb-backend.c:395 src/main.c:1147 src/presets.c:2038
-#: src/queuehandler.c:1649
+#: src/queuehandler.c:1652
 msgid "All"
 msgstr ""
 
@@ -2873,12 +3033,60 @@ msgid ""
 "If you continue, one will be chosen for you."
 msgstr ""
 
+#: src/hb-backend.c:4888
+msgid "Comb Detect"
+msgstr ""
+
+#: src/hb-backend.c:4890
+msgid "Detelecine"
+msgstr ""
+
+#: src/hb-backend.c:4892
+msgid "Deinterlace (Yadif)"
+msgstr ""
+
+#: src/hb-backend.c:4894
+msgid "Deinterlace (Bwdif)"
+msgstr ""
+
+#: src/hb-backend.c:4898
+msgid "Deblock"
+msgstr ""
+
+#: src/hb-backend.c:4900
+msgid "Denoise (NLMeans)"
+msgstr ""
+
+#: src/hb-backend.c:4902
+msgid "Denoise (HQDN3D)"
+msgstr ""
+
+#: src/hb-backend.c:4904
+msgid "Chroma Smooth"
+msgstr ""
+
+#: src/hb-backend.c:4906
+msgid "Sharpen (Unsharp)"
+msgstr ""
+
+#: src/hb-backend.c:4908
+msgid "Rotate"
+msgstr ""
+
+#: src/hb-backend.c:4910
+msgid "Sharpen (lapsharp)"
+msgstr ""
+
+#: src/hb-backend.c:4914
+msgid "Colorspace"
+msgstr ""
+
 #: src/main.c:97
 #, c-format
 msgid ""
 "<b><big>Unable to create %s.</big></b>\n"
 "\n"
-"Internal error. Could not parse menu description.\n"
+"Internal error. Could not parse UI description.\n"
 "%s"
 msgstr ""
 
@@ -2993,15 +3201,19 @@ msgstr ""
 msgid "%s (Modified)"
 msgstr ""
 
-#: src/queuehandler.c:285
+#: src/queuehandler.c:244
+msgid "Time:"
+msgstr ""
+
+#: src/queuehandler.c:288
 msgid "Align A/V"
 msgstr ""
 
-#: src/queuehandler.c:295
+#: src/queuehandler.c:298
 msgid "iPod 5G"
 msgstr ""
 
-#: src/queuehandler.c:327
+#: src/queuehandler.c:330
 #, c-format
 msgid ""
 "%d:%d:%d:%d Crop\n"
@@ -3010,171 +3222,156 @@ msgid ""
 "%s Display Aspect Ratio"
 msgstr ""
 
-#: src/queuehandler.c:358
+#: src/queuehandler.c:361
 #, c-format
 msgid "%s, Bitrate %dkbps"
 msgstr ""
 
-#: src/queuehandler.c:363
+#: src/queuehandler.c:366
 #, c-format
 msgid "%s, Bitrate %dkbps (2 Pass)"
 msgstr ""
 
-#: src/queuehandler.c:370
+#: src/queuehandler.c:373
 #, c-format
 msgid "%s, Constant Quality %.4g(%s)"
 msgstr ""
 
-#: src/queuehandler.c:403
+#: src/queuehandler.c:406
 #, c-format
 msgid "%sPreset %s"
 msgstr ""
 
-#: src/queuehandler.c:408
+#: src/queuehandler.c:411
 #, c-format
 msgid "%sTune %s"
 msgstr ""
 
-#: src/queuehandler.c:413
+#: src/queuehandler.c:416
 #, c-format
 msgid "%sProfile %s"
 msgstr ""
 
-#: src/queuehandler.c:418
+#: src/queuehandler.c:421
 #, c-format
 msgid "%sLevel %s"
 msgstr ""
 
-#: src/queuehandler.c:435
+#: src/queuehandler.c:438
 #, c-format
 msgid ""
 "\n"
 "Constant Framerate %s fps"
 msgstr ""
 
-#: src/queuehandler.c:439
+#: src/queuehandler.c:442
 #, c-format
 msgid ""
 "\n"
 "Peak Framerate %s fps (may be lower)"
 msgstr ""
 
-#: src/queuehandler.c:444
+#: src/queuehandler.c:447
 #, c-format
 msgid ""
 "\n"
 "Variable Framerate %s fps"
 msgstr ""
 
-#: src/queuehandler.c:654 src/queuehandler.c:691
-#, c-format
-msgid ", Forced Only"
-msgstr ""
-
-#: src/queuehandler.c:658 src/queuehandler.c:695
-#, c-format
-msgid ", Burned"
-msgstr ""
-
-#: src/queuehandler.c:662 src/queuehandler.c:699
-#, c-format
-msgid ", Default"
-msgstr ""
-
-#: src/queuehandler.c:755 src/queuehandler.c:1254
-msgid "Completed"
-msgstr ""
-
-#: src/queuehandler.c:759 src/queuehandler.c:1258
-msgid "Canceled"
-msgstr ""
-
-#: src/queuehandler.c:763 src/queuehandler.c:1262
-msgid "Failed"
-msgstr ""
-
-#: src/queuehandler.c:768
+#: src/queuehandler.c:746 src/queuehandler.c:771
 msgid "Pending"
 msgstr ""
 
-#: src/queuehandler.c:804 src/queuehandler.c:832 src/queuehandler.c:1302
-#: src/queuehandler.c:1330
-#, c-format
-msgid "%d Day %02d:%02d:%02d"
+#: src/queuehandler.c:758 src/queuehandler.c:1257
+msgid "Completed"
+msgstr ""
+
+#: src/queuehandler.c:762 src/queuehandler.c:1261
+msgid "Canceled"
+msgstr ""
+
+#: src/queuehandler.c:766 src/queuehandler.c:1265
+msgid "Failed"
 msgstr ""
 
 #: src/queuehandler.c:807 src/queuehandler.c:835 src/queuehandler.c:1305
 #: src/queuehandler.c:1333
 #, c-format
+msgid "%d Day %02d:%02d:%02d"
+msgstr ""
+
+#: src/queuehandler.c:810 src/queuehandler.c:838 src/queuehandler.c:1308
+#: src/queuehandler.c:1336
+#, c-format
 msgid "%d Days %02d:%02d:%02d"
 msgstr ""
 
-#: src/queuehandler.c:848 src/queuehandler.c:1346
+#: src/queuehandler.c:851 src/queuehandler.c:1349
 msgid "B"
 msgstr ""
 
-#: src/queuehandler.c:852 src/queuehandler.c:1350
+#: src/queuehandler.c:855 src/queuehandler.c:1353
 msgid "KB"
 msgstr ""
 
-#: src/queuehandler.c:857 src/queuehandler.c:1355
+#: src/queuehandler.c:860 src/queuehandler.c:1358
 msgid "MB"
 msgstr ""
 
-#: src/queuehandler.c:862 src/queuehandler.c:1360
+#: src/queuehandler.c:865 src/queuehandler.c:1363
 msgid "GB"
 msgstr ""
 
-#: src/queuehandler.c:873 src/queuehandler.c:1371
+#: src/queuehandler.c:876 src/queuehandler.c:1374
 msgid "Not Available"
 msgstr ""
 
-#: src/queuehandler.c:1206
+#: src/queuehandler.c:1209
 msgid "Foreign Audio Search"
 msgstr ""
 
-#: src/queuehandler.c:1210
+#: src/queuehandler.c:1213
 msgid "Encode"
 msgstr ""
 
-#: src/queuehandler.c:1214
+#: src/queuehandler.c:1217
 msgid "Encode First Pass (Analysis)"
 msgstr ""
 
-#: src/queuehandler.c:1218
+#: src/queuehandler.c:1221
 msgid "Encode Second Pass (Final)"
 msgstr ""
 
 #. Should never happen
-#: src/queuehandler.c:1223
+#: src/queuehandler.c:1226
 msgid "Error"
 msgstr ""
 
-#: src/queuehandler.c:1227
+#: src/queuehandler.c:1230
 #, c-format
 msgid ""
 "pass %d of %d\n"
 "%s"
 msgstr ""
 
-#: src/queuehandler.c:1239
+#: src/queuehandler.c:1242
 msgid "Scanning Title"
 msgstr ""
 
-#: src/queuehandler.c:1243
+#: src/queuehandler.c:1246
 msgid "Encoding Paused"
 msgstr ""
 
-#: src/queuehandler.c:1247
+#: src/queuehandler.c:1250
 msgid "Encoding In Progress"
 msgstr ""
 
 #. Should never happen
-#: src/queuehandler.c:1267
+#: src/queuehandler.c:1270
 msgid "Unknown"
 msgstr ""
 
-#: src/queuehandler.c:1807
+#: src/queuehandler.c:1810
 #, c-format
 msgid ""
 "%sThe destination filesystem is almost full: %<PRId64> MB free.\n"
@@ -3182,15 +3379,15 @@ msgid ""
 "Encode may be incomplete if you proceed.\n"
 msgstr ""
 
-#: src/queuehandler.c:1812
+#: src/queuehandler.c:1815
 msgid "Resume, I've fixed the problem"
 msgstr ""
 
-#: src/queuehandler.c:1813
+#: src/queuehandler.c:1816
 msgid "Resume, Don't tell me again"
 msgstr ""
 
-#: src/queuehandler.c:1872
+#: src/queuehandler.c:1875
 #, c-format
 msgid ""
 "Destination: %s\n"
@@ -3199,11 +3396,11 @@ msgid ""
 "Do you want to overwrite?"
 msgstr ""
 
-#: src/queuehandler.c:1877 src/queuehandler.c:1923
+#: src/queuehandler.c:1880 src/queuehandler.c:1926
 msgid "Overwrite"
 msgstr ""
 
-#: src/queuehandler.c:1890
+#: src/queuehandler.c:1893
 #, c-format
 msgid ""
 "Destination: %s\n"
@@ -3211,7 +3408,7 @@ msgid ""
 "This is not a valid directory."
 msgstr ""
 
-#: src/queuehandler.c:1904
+#: src/queuehandler.c:1907
 #, c-format
 msgid ""
 "Destination: %s\n"
@@ -3219,7 +3416,7 @@ msgid ""
 "Can not read or write the directory."
 msgstr ""
 
-#: src/queuehandler.c:1918
+#: src/queuehandler.c:1921
 #, c-format
 msgid ""
 "Destination: %s\n"
@@ -3228,50 +3425,67 @@ msgid ""
 "Do you want to overwrite?"
 msgstr ""
 
-#: src/queuehandler.c:2233
+#: src/queuehandler.c:2236
 msgid "Select this title for adding to the queue.\n"
 msgstr ""
 
 #. Title label
-#: src/queuehandler.c:2241
+#: src/queuehandler.c:2244
 msgid "No Title"
 msgstr ""
 
-#: src/queuehandler.c:2251
+#: src/queuehandler.c:2254
 msgid ""
 "There is another title with the same destination file name.\n"
 "This title will not be added to the queue unless you change\n"
 "the output file name.\n"
 msgstr ""
 
-#: src/queuehandler.c:2429 src/queuehandler.c:2442
+#: src/queuehandler.c:2432 src/queuehandler.c:2445
 msgid "Stop"
 msgstr ""
 
-#: src/queuehandler.c:2430 src/queuehandler.c:2443
+#: src/queuehandler.c:2433 src/queuehandler.c:2446
 msgid "Stop Encoding"
 msgstr ""
 
-#: src/queuehandler.c:2455
+#: src/queuehandler.c:2458
 msgid "S_top Encoding"
 msgstr ""
 
-#: src/queuehandler.c:2471 src/queuehandler.c:2484
+#: src/queuehandler.c:2474 src/queuehandler.c:2487
 msgid "Resume"
 msgstr ""
 
-#: src/queuehandler.c:2472 src/queuehandler.c:2485 src/queuehandler.c:2496
+#: src/queuehandler.c:2475 src/queuehandler.c:2488
 msgid "Resume Encoding"
 msgstr ""
 
-#: src/queuehandler.c:2503
-msgid "_Pause Encoding"
+#: src/queuehandler.c:2499
+msgid "_Resume Encoding"
 msgstr ""
 
-#: src/queuehandler.c:3213
+#: src/queuehandler.c:3216
 msgid ""
 "You are currently encoding.  What would you like to do?\n"
 "\n"
+msgstr ""
+
+#: src/subtitlehandler.c:109
+#, c-format
+msgid "Offset: %dms"
+msgstr ""
+
+#: src/subtitlehandler.c:114
+msgid "Burned Into Video"
+msgstr ""
+
+#: src/subtitlehandler.c:115
+msgid "Passthrough"
+msgstr ""
+
+#: src/subtitlehandler.c:122
+msgid "Default"
 msgstr ""
 
 #: src/subtitlehandler.c:1190

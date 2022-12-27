@@ -226,7 +226,8 @@ queue_update_summary(GhbValue * queueDict, signal_user_data_t *ud)
     g_string_append_printf(str, "%-8d", titleID);
     if (!strcmp(rangeType, "chapter"))
     {
-        g_string_append_printf(str, "Chapters: %ld to %ld",
+        g_string_append_printf(str, "%s %ld – %ld",
+                               _("Chapters:"),
                                rangeStart, rangeEnd);
     }
     else if (!strcmp(rangeType, "time"))
@@ -239,13 +240,15 @@ queue_update_summary(GhbValue * queueDict, signal_user_data_t *ud)
         ghb_break_pts_duration(rangeStart, &start_hh, &start_mm, &start_ss);
         ghb_break_pts_duration(rangeEnd, &end_hh, &end_mm, &end_ss);
         g_string_append_printf(str,
-                               "Time: %02d:%02d:%05.2f to %02d:%02d:%05.2f",
+                               "%s %02d:%02d:%05.2f – %02d:%02d:%05.2f",
+                               _("Time:"),
                                 start_hh, start_mm, start_ss,
                                 end_hh, end_mm, end_ss);
     }
     else if (!strcmp(rangeType, "frame"))
     {
-        g_string_append_printf(str, "Frames: %ld to %ld",
+        g_string_append_printf(str, "%s %ld – %ld",
+                               _("Frames:"),
                                rangeStart, rangeEnd);
     }
     text = g_string_free(str, FALSE);
@@ -478,85 +481,85 @@ queue_update_summary(GhbValue * queueDict, signal_user_data_t *ud)
     if (detel)
     {
         hb_filter_object_t * filter = hb_filter_get(HB_FILTER_DETELECINE);
-        g_string_append_printf(str, "%s%s", sep, filter->name);
+        g_string_append_printf(str, "%s%s", sep, ghb_get_filter_name(filter));
         sep = ", ";
     }
     if (comb_detect)
     {
         hb_filter_object_t * filter = hb_filter_get(HB_FILTER_COMB_DETECT);
-        g_string_append_printf(str, "%s%s", sep, filter->name);
+        g_string_append_printf(str, "%s%s", sep, ghb_get_filter_name(filter));
         sep = ", ";
     }
     if (yadif)
     {
         hb_filter_object_t * filter = hb_filter_get(HB_FILTER_YADIF);
-        g_string_append_printf(str, "%s%s", sep, filter->name);
+        g_string_append_printf(str, "%s%s", sep, ghb_get_filter_name(filter));
         sep = ", ";
     }
     if (bwdif)
     {
         hb_filter_object_t * filter = hb_filter_get(HB_FILTER_BWDIF);
-        g_string_append_printf(str, "%s%s", sep, filter->name);
+        g_string_append_printf(str, "%s%s", sep, ghb_get_filter_name(filter));
         sep = ", ";
     }
     if (decomb)
     {
         hb_filter_object_t * filter = hb_filter_get(HB_FILTER_DECOMB);
-        g_string_append_printf(str, "%s%s", sep, filter->name);
+        g_string_append_printf(str, "%s%s", sep, ghb_get_filter_name(filter));
         sep = ", ";
     }
     if (deblock)
     {
         hb_filter_object_t * filter = hb_filter_get(HB_FILTER_DEBLOCK);
-        g_string_append_printf(str, "%s%s", sep, filter->name);
+        g_string_append_printf(str, "%s%s", sep, ghb_get_filter_name(filter));
         sep = ", ";
     }
     if (nlmeans)
     {
         hb_filter_object_t * filter = hb_filter_get(HB_FILTER_NLMEANS);
-        g_string_append_printf(str, "%s%s", sep, filter->name);
+        g_string_append_printf(str, "%s%s", sep, ghb_get_filter_name(filter));
         sep = ", ";
     }
     if (denoise)
     {
         hb_filter_object_t * filter = hb_filter_get(HB_FILTER_DENOISE);
-        g_string_append_printf(str, "%s%s", sep, filter->name);
+        g_string_append_printf(str, "%s%s", sep, ghb_get_filter_name(filter));
         sep = ", ";
     }
     if (chroma_smooth)
     {
         hb_filter_object_t * filter = hb_filter_get(HB_FILTER_CHROMA_SMOOTH);
-        g_string_append_printf(str, "%s%s", sep, filter->name);
+        g_string_append_printf(str, "%s%s", sep, ghb_get_filter_name(filter));
         sep = ", ";
     }
     if (unsharp)
     {
         hb_filter_object_t * filter = hb_filter_get(HB_FILTER_UNSHARP);
-        g_string_append_printf(str, "%s%s", sep, filter->name);
+        g_string_append_printf(str, "%s%s", sep, ghb_get_filter_name(filter));
         sep = ", ";
     }
     if (lapsharp)
     {
         hb_filter_object_t * filter = hb_filter_get(HB_FILTER_LAPSHARP);
-        g_string_append_printf(str, "%s%s", sep, filter->name);
+        g_string_append_printf(str, "%s%s", sep, ghb_get_filter_name(filter));
         sep = ", ";
     }
     if (rot || hflip)
     {
         hb_filter_object_t * filter = hb_filter_get(HB_FILTER_ROTATE);
-        g_string_append_printf(str, "%s%s", sep, filter->name);
+        g_string_append_printf(str, "%s%s", sep, ghb_get_filter_name(filter));
         sep = ", ";
     }
     if (gray)
     {
         hb_filter_object_t * filter = hb_filter_get(HB_FILTER_GRAYSCALE);
-        g_string_append_printf(str, "%s%s", sep, filter->name);
+        g_string_append_printf(str, "%s%s", sep, ghb_get_filter_name(filter));
         sep = ", ";
     }
     if (colorspace)
     {
         hb_filter_object_t * filter = hb_filter_get(HB_FILTER_COLORSPACE);
-        g_string_append_printf(str, "%s%s", sep, filter->name);
+        g_string_append_printf(str, "%s%s", sep, ghb_get_filter_name(filter));
         sep = ", ";
     }
 
@@ -740,7 +743,7 @@ queue_update_stats(GhbValue * queueDict, signal_user_data_t *ud)
         label = GTK_LABEL(GHB_WIDGET(ud->builder, "queue_stats_file_size"));
         gtk_label_set_text(label, "");
         label = GTK_LABEL(GHB_WIDGET(ud->builder, "queue_stats_result"));
-        gtk_label_set_text(label, "Pending");
+        gtk_label_set_text(label, _("Pending"));
         return;
     }
 
@@ -2493,7 +2496,7 @@ ghb_queue_buttons_grey(signal_user_data_t *ud)
     if (paused)
     {
         item = g_menu_item_new_from_model(G_MENU_MODEL(menu), 1);
-        g_menu_item_set_label(item, _("Resume Encoding"));
+        g_menu_item_set_label(item, _("_Resume Encoding"));
         g_menu_remove(menu, 1);
         g_menu_append_item(menu, item);
     }

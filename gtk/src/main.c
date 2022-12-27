@@ -96,7 +96,7 @@ create_builder_or_die(const gchar * name)
     const gchar *markup =
         N_("<b><big>Unable to create %s.</big></b>\n"
         "\n"
-        "Internal error. Could not parse menu description.\n"
+        "Internal error. Could not parse UI description.\n"
         "%s");
 
     if (error)

@@ -2173,12 +2173,12 @@ ghb_update_title_info(signal_user_data_t *ud)
     subtitle_count = hb_list_count(title->list_subtitle);
 
     text = g_strdup_printf(
-        ", %dx%d (%dx%d), %s, %s FPS, %d Audio Track%s, %d Subtitle Track%s",
+        ", %dx%d (%dx%d), %s, %s %s, %d %s, %d %s",
         geo->width, geo->height,
         geo->width * geo->par.num / geo->par.den, geo->height,
-        aspect, rate,
-        audio_count, audio_count == 1 ? "" : "s",
-        subtitle_count, subtitle_count == 1 ? "" : "s");
+        aspect, rate, _("FPS"),
+        audio_count, ngettext("Audio Track", "Audio Tracks", audio_count),
+        subtitle_count, ngettext("Subtitle Track", "Subtitle Tracks", subtitle_count));
 
     widget = GHB_WIDGET(ud->builder, "source_info_label");
     gtk_label_set_text(GTK_LABEL(widget), text);
@@ -2272,19 +2272,19 @@ ghb_update_summary_info(signal_user_data_t *ud)
         vrate.den = fps->rate;
     }
     rate_str = g_strdup_printf("%.6g", (gdouble)vrate.num / vrate.den);
-    g_string_append_printf(str, "%s, %s FPS", video_encoder->name, rate_str);
+    g_string_append_printf(str, "%s, %s %s", video_encoder->name, rate_str, _("FPS"));
     g_free(rate_str);
     if (ghb_dict_get_bool(ud->settings, "VideoFramerateCFR"))
     {
-        g_string_append_printf(str, " CFR");
+        g_string_append_printf(str, " %s", _("CFR"));
     }
     else if (ghb_dict_get_bool(ud->settings, "VideoFrameratePFR"))
     {
-        g_string_append_printf(str, " PFR");
+        g_string_append_printf(str, " %s", _("PFR"));
     }
     else if (ghb_dict_get_bool(ud->settings, "VideoFramerateVFR"))
     {
-        g_string_append_printf(str, " VFR");
+        g_string_append_printf(str, " %s", _("VFR"));
     }
 
     // Audio Tracks (show at most 3 tracks)
@@ -2325,8 +2325,11 @@ ghb_update_summary_info(signal_user_data_t *ud)
     }
     if (show < count)
     {
-        g_string_append_printf(str, "\n+ %d more audio track%s", count - show,
-                               count - show > 1 ? "s" : "");
+        g_string_append_printf(str, "\n");
+        g_string_append_printf(str, ngettext("+ %d more audio track",
+                                             "+ %d more audio tracks",
+                                             count - show),
+                               count - show);
     }
 
     // Subtitle Tracks (show at most 3 tracks)
@@ -2354,18 +2357,18 @@ ghb_update_summary_info(signal_user_data_t *ud)
         burn  = ghb_dict_get_bool(searchDict, "Burn");
         def   = ghb_dict_get_bool(searchDict, "Default");
 
-        g_string_append_printf(str, "\nForeign Audio Scan");
+        g_string_append_printf(str, "\n%s", _("Foreign Audio Scan"));
         if (force)
         {
-            g_string_append_printf(str, ", Forced Only");
+            g_string_append_printf(str, _(", Forced Only"));
         }
         if (burn)
         {
-            g_string_append_printf(str, ", Burned");
+            g_string_append_printf(str, _(", Burned"));
         }
         else if (def)
         {
-            g_string_append_printf(str, ", Default");
+            g_string_append_printf(str, _(", Default"));
         }
         show--;
         count--;
@@ -2389,27 +2392,29 @@ ghb_update_summary_info(signal_user_data_t *ud)
         free(desc);
         if (force)
         {
-            g_string_append_printf(str, ", Forced Only");
+            g_string_append_printf(str, _(", Forced Only"));
         }
         if (burn)
         {
-            g_string_append_printf(str, ", Burned");
+            g_string_append_printf(str, _(", Burned"));
         }
         else if (def)
         {
-            g_string_append_printf(str, ", Default");
+            g_string_append_printf(str, _(", Default"));
         }
     }
     if (show < count)
     {
-        g_string_append_printf(str, "\n+ %d more subtitle track%s",
-                               count - show,
-                               count - show > 1 ? "s" : "");
+        g_string_append_printf(str, "\n");
+        g_string_append_printf(str, ngettext("+ %d more subtitle track",
+                                       "+ %d more subtitle tracks",
+                                       count - show),
+                               count - show);
     }
 
     if (ghb_dict_get_bool(ud->settings, "ChapterMarkers"))
     {
-        g_string_append_printf(str, "\nChapter Markers");
+        g_string_append_printf(str, "\n%s", _("Chapter Markers"));
     }
 
     text = g_string_free(str, FALSE);
@@ -2452,85 +2457,85 @@ ghb_update_summary_info(signal_user_data_t *ud)
     if (detel)
     {
         hb_filter_object_t * filter = hb_filter_get(HB_FILTER_DETELECINE);
-        g_string_append_printf(str, "%s%s", sval, filter->name);
+        g_string_append_printf(str, "%s%s", sval, ghb_get_filter_name(filter));
         sval = ", ";
     }
     if (comb_detect)
     {
         hb_filter_object_t * filter = hb_filter_get(HB_FILTER_COMB_DETECT);
-        g_string_append_printf(str, "%s%s", sval, filter->name);
+        g_string_append_printf(str, "%s%s", sval, ghb_get_filter_name(filter));
         sval = ", ";
     }
     if (yadif)
     {
         hb_filter_object_t * filter = hb_filter_get(HB_FILTER_YADIF);
-        g_string_append_printf(str, "%s%s", sval, filter->name);
+        g_string_append_printf(str, "%s%s", sval, ghb_get_filter_name(filter));
         sval = ", ";
     }
     if (bwdif)
     {
         hb_filter_object_t * filter = hb_filter_get(HB_FILTER_BWDIF);
-        g_string_append_printf(str, "%s%s", sval, filter->name);
+        g_string_append_printf(str, "%s%s", sval, ghb_get_filter_name(filter));
         sval = ", ";
     }
     if (decomb)
     {
         hb_filter_object_t * filter = hb_filter_get(HB_FILTER_DECOMB);
-        g_string_append_printf(str, "%s%s", sval, filter->name);
+        g_string_append_printf(str, "%s%s", sval, ghb_get_filter_name(filter));
         sval = ", ";
     }
     if (deblock)
     {
         hb_filter_object_t * filter = hb_filter_get(HB_FILTER_DEBLOCK);
-        g_string_append_printf(str, "%s%s", sval, filter->name);
+        g_string_append_printf(str, "%s%s", sval, ghb_get_filter_name(filter));
         sval = ", ";
     }
     if (nlmeans)
     {
         hb_filter_object_t * filter = hb_filter_get(HB_FILTER_NLMEANS);
-        g_string_append_printf(str, "%s%s", sval, filter->name);
+        g_string_append_printf(str, "%s%s", sval, ghb_get_filter_name(filter));
         sval = ", ";
     }
     if (denoise)
     {
         hb_filter_object_t * filter = hb_filter_get(HB_FILTER_DENOISE);
-        g_string_append_printf(str, "%s%s", sval, filter->name);
+        g_string_append_printf(str, "%s%s", sval, ghb_get_filter_name(filter));
         sval = ", ";
     }
     if (chroma_smooth)
     {
         hb_filter_object_t * filter = hb_filter_get(HB_FILTER_CHROMA_SMOOTH);
-        g_string_append_printf(str, "%s%s", sval, filter->name);
+        g_string_append_printf(str, "%s%s", sval, ghb_get_filter_name(filter));
         sval = ", ";
     }
     if (unsharp)
     {
         hb_filter_object_t * filter = hb_filter_get(HB_FILTER_UNSHARP);
-        g_string_append_printf(str, "%s%s", sval, filter->name);
+        g_string_append_printf(str, "%s%s", sval, ghb_get_filter_name(filter));
         sval = ", ";
     }
     if (rot || hflip)
     {
         hb_filter_object_t * filter = hb_filter_get(HB_FILTER_ROTATE);
-        g_string_append_printf(str, "%s%s", sval, filter->name);
+        g_string_append_printf(str, "%s%s", sval, ghb_get_filter_name(filter));
         sval = ", ";
     }
     if (lapsharp)
     {
         hb_filter_object_t * filter = hb_filter_get(HB_FILTER_LAPSHARP);
-        g_string_append_printf(str, "%s%s", sval, filter->name);
+        g_string_append_printf(str, "%s%s", sval, ghb_get_filter_name(filter));
         sval = ", ";
     }
     if (gray)
     {
         hb_filter_object_t * filter = hb_filter_get(HB_FILTER_GRAYSCALE);
-        g_string_append_printf(str, "%s%s", sval, filter->name);
+        g_string_append_printf(str, "%s%s", sval, ghb_get_filter_name(filter));
         sval = ", ";
     }
     if (colorspace)
     {
         hb_filter_object_t * filter = hb_filter_get(HB_FILTER_COLORSPACE);
-        g_string_append_printf(str, "%s%s", sval, filter->name);
+        g_string_append_printf(str, "%s%s", sval,ghb_get_filter_name(filter));
         sval = ", ";
     }
 
@@ -2555,11 +2560,11 @@ ghb_update_summary_info(signal_user_data_t *ud)
                                                    display_height);
 
     display_width  = ghb_dict_get_int(ud->settings, "PictureDARWidth");
-    text = g_strdup_printf("%dx%d storage, %dx%d display\n"
-                           "%d:%d Pixel Aspect Ratio\n"
-                            "%s Display Aspect Ratio",
-                           width, height, (int)display_width, display_height,
-                           par_width, par_height, display_aspect);
+    text = g_strdup_printf("%dx%d %s, %dx%d %s\n%d:%d %s\n%s %s",
+                           width, height, _("storage"),
+                           (int)display_width, display_height, _("display"),
+                           par_width, par_height,_("Pixel Aspect Ratio"),
+                           display_aspect, _("Display Aspect Ratio"));
     widget = GHB_WIDGET(ud->builder, "dimensions_summary");
     gtk_label_set_text(GTK_LABEL(widget), text);
 
