@@ -5,51 +5,69 @@
 
 Before updating HandBrake, please make sure there are no pending encodes in the queue, and be sure to make a backup of any custom presets and app preferences you have, as they may not be compatible with newer versions.
 
-Windows users, please make sure to install [Microsoft .NET Desktop Runtime version 6.0.x](https://dotnet.microsoft.com/en-us/download/dotnet/6.0). Read carefully: you need the **DESKTOP** runtime. Please note, Installing .NET 7 is NOT supported.
+Windows users, please make sure to install [Microsoft .NET Desktop Runtime version 6.0.x](https://dotnet.microsoft.com/en-us/download/dotnet/6.0). Read carefully: you need the **DESKTOP** runtime. You must install .NET 6 even if you have installed .NET 7.
+
 
 ## HandBrake 1.6.0
 
 ### All platforms
 
-#### Video
-- Added AV1 encoder using SVT-AV1
-- Added support for H.264 levels 6, 6.1 and 6.2
-- Added support for 4:2:2/4:4:4 profiles in x264 and x265 encoders
-- Added support for 10-bit VP9 encoder
+#### General
 
-#### Hardware Encoding
-- Added support for QuickSync AV1 Encoder
-- Added support for QuickSync HyperEncode
-- Removed support for older Intel CPUs. The minimum requirement is now at least 6th generation (Skylake) when using Intel QuickSync. 
-- Added support for NVEnc 10-bit HEVC encoder.
-- Added support for AMD VCE 10-bit HEVC encoder.
-- Added support for VideoToolbox HEVC 4:2:2 profile on Apple Silicon.
-- Fixed a long standing issue with NVEnc slowest preset causing failed encodes. 
+- Added AV1 video encoding
+- Added high bit depth and color depth support to various encoders and filters
+- Added 4K AV1 General, QSV (Hardware), and MKV (Matroska) presets
+- Added 4K HEVC General presets and updated related presets to use similar encoder settings
+- Revised Web presets and renamed to Creator, Email, and Social
+- Removed VP8 presets
+  - The VP8 video encoder is now deprecated and will be removed in a future release
+  - Related, the Theora encoder is long deprecated and will be removed in a future release
+- Miscellaneous other preset revisions
+
+#### Video
+
+- Added SVT-AV1 (software) and Intel QSV AV1 (hardware) video encoders
+- Added VP9 10-bit encoder
+- Added NVENC HEVC 10-bit encoder
+- Added VCN HEVC 10-bit encoder
+- Added H.264 levels 6, 6.1, and 6.2 for the x264 encoder
+- Added H.264/H.265 4:2:2 and 4:4:4 profiles for the x264 and x265 encoders
+- Added H.265 4:2:2 profile for VideoToolbox encoder on Apple Silicon
+- Added support for Intel Deep Link Hyper Encode (leverage multiple QSV media engines to increase performance)
+- Fixed longstanding issue where slowest NVENC encoder preset caused encoding failures
+- Removed support for Intel CPUs older than 6th generation (Skylake) when using Intel Quick Sync Video
 
 #### Filters
-- Switched to zscale(zimg) for video scaling with automatic fallback to swscale when required. Should improve performace for ARM based systems
-- Improved Autocrop algorithm which will improve accuracy with mixed aspect ratio content
-- Small performance improvement on high core count systems for comb detect, decomb and nlmeans
-- The following filters have been upgraded to support higher than 8-bit content and 4:2:2/4:4:4 chroma subsampling
+
+- Added Bwdif deinterlace filter
+- Improved Autocrop filter algorithm
+  - Higher accuracy on mixed aspect ratio content, e.g. both letterbox and full frame pictures
+- Improved video scaling performance on Apple Silicon and ARM-based systems
+  - Use zscale (zimg) by default, falling back to swscale where necessary
+- Improved multithread performance (slightly) for the following filters on high core count systems
+  - Comb Detect
+  - Decomb
+  - Denoise
+    - NLMeans
+- Updated the following filters to support higher than 8-bit content and 4:2:2/4:4:4 chroma subsampling
   - Detelecine
   - Comb Detect
   - Decomb
   - Grayscale
-  - Denoise 
+  - Denoise
     - NLMeans
-    - hqdn3d
+    - HQDN3D
   - Chroma Smooth
   - Sharpen
     - UnSharp
     - LapSharp
-- The following new filters were added:  
-  - Deinterlace
-    - Bwidf
 
 #### Build system
 
-- Added support for OpenBSD (must compile from source)
-
+- Added support for building for OpenBSD
+- Added --cpu configure parameter to enable building for native CPU architecture
+- Added --lto configure parameter to enable link time optimization
+- Miscellaneous bug fixes and improvements
 
 #### Third-party libraries
 
@@ -65,10 +83,10 @@ Windows users, please make sure to install [Microsoft .NET Desktop Runtime versi
   - libdvdread 6.1.3 (DVD decoding)
   - liblzma (xz) 5.2.6 (LZMA video decoding, e.g. TIFF)
   - libjpeg-turbo 2.1.4 (preview image compression)
-  - libspeex 1.2.1  (Speex audio decoding)
-  - libvpx 1.12.0  (VP8/VP9 video encoding)
+  - libspeex 1.2.1 (Speex audio decoding)
+  - libvpx 1.12.0 (VP8/VP9 video encoding)
   - libxml 2.10.3 (general)
-  - oneVPL 2023.1.0 (Intel QuickSync Support)
+  - oneVPL 2023.1.0 (Intel QSV encoding/decoding)
   - x264 164 r3100 (H.264/AVC video encoding)
   - x265 r12747 (H.265/HEVC video encoding)
   - zimg 3.0.4 (color conversion)
@@ -76,25 +94,28 @@ Windows users, please make sure to install [Microsoft .NET Desktop Runtime versi
   - SVT-AV1 1.4.1 (AV1 encoding)
 
 ### Linux
-- Many quality of life improvements along with consistency improvements with the Windows and macOS UI's.
-- Bug fixes and improvements
+
+- Added many quality of life improvements contributed by community members
+- Improved parity with the Mac and Windows graphical interfaces
+- Miscellaneous bug fixes and improvements
 - Updated translations
-- Added new locales
-  - Georgian
-  - Finnish
-  - Bulgarian
+- Added new translations
+  - Bulgarian (Български)
+  - Finnish (Suomi)
+  - Georgian (ქართული)
 
 ### Mac
-- QuickLook support in the Queue
+
+- Added Quick Look support to the queue
 - Miscellaneous bug fixes and improvements
 - Updated translations
-- Added new locales
-  - Japanese
+- Added Japanese translation
 
 ### Windows
+
 - Miscellaneous bug fixes and improvements
 - Updated all translations
-- Added new locales
+- Added new translations
   - Bulgarian (Български)
   - Dutch (Nederlands)
   - Polish (Polski)
