@@ -58,20 +58,22 @@ Windows users, please make sure to install [Microsoft .NET Desktop Runtime versi
   - FFmpeg 5.1.2 (decoding and filters)
   - FreeType 2.12.1 (subtitles)
   - Fribidi 1.0.12 (subtitles)
-  - HarfBuzz 4.4.1 (subtitles)
+  - HarfBuzz 4.4.4 (subtitles)
   - libass 0.16.0 (subtitles)
-  - libbluray 1.3.3 (Blu-ray decoding)
+  - libbluray 1.3.4 (Blu-ray decoding)
   - libdav1d 1.0.0 (AV1 decoding)
   - libdvdread 6.1.3 (DVD decoding)
   - liblzma (xz) 5.2.6 (LZMA video decoding, e.g. TIFF)
   - libjpeg-turbo 2.1.4 (preview image compression)
   - libspeex 1.2.1  (Speex audio decoding)
   - libvpx 1.12.0  (VP8/VP9 video encoding)
-  - oneVPL 2022.1.2 (Intel QuickSync Support)
+  - libxml 2.10.3 (general)
+  - oneVPL 2023.1.0 (Intel QuickSync Support)
   - x264 164 r3100 (H.264/AVC video encoding)
+  - x265 r12747 (H.265/HEVC video encoding)
   - zimg 3.0.4 (color conversion)
 - New libraries
-  - SVT-AV1 1.4.0 (AV1 encoding)
+  - SVT-AV1 1.4.1 (AV1 encoding)
 
 ### Linux
 - Many quality of life improvements along with consistency improvements with the Windows and macOS UI's.
