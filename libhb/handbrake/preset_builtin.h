@@ -6975,7 +6975,7 @@ const char hb_builtin_presets_json[] =
 "                    \"Type\": 0, \n"
 "                    \"UsesPictureFilters\": true, \n"
 "                    \"UsesPictureSettings\": 1, \n"
-"                    \"VideoAvgBitrate\": 8000, \n"
+"                    \"VideoAvgBitrate\": 13000, \n"
 "                    \"VideoColorMatrixCodeOverride\": 0, \n"
 "                    \"VideoEncoder\": \"x265_10bit\", \n"
 "                    \"VideoFramerate\": \"60\", \n"

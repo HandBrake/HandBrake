@@ -7158,7 +7158,7 @@
                     "SubtitleLanguageList": [
                     ],
                     "SubtitleTrackSelectionBehavior": "none",
-                    "VideoAvgBitrate": 8000,
+                    "VideoAvgBitrate": 13000,
                     "VideoColorMatrixCodeOverride": 0,
                     "VideoEncoder": "x265_10bit",
                     "VideoFramerate": "60",
