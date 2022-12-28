@@ -76,7 +76,7 @@ Windows users, please make sure to install [Microsoft .NET Desktop Runtime versi
   - FFmpeg 5.1.2 (decoding and filters)
   - FreeType 2.12.1 (subtitles)
   - Fribidi 1.0.12 (subtitles)
-  - HarfBuzz 4.4.4 (subtitles)
+  - HarfBuzz 4.4.1 (subtitles)
   - libass 0.16.0 (subtitles)
   - libbluray 1.3.4 (Blu-ray decoding)
   - libdav1d 1.0.0 (AV1 decoding)
