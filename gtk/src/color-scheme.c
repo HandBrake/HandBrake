@@ -173,7 +173,7 @@ DesktopColorScheme color_scheme_get_desktop_scheme (void)
                                     DBUS_TIMEOUT, NULL, &error);
     if (!result)
     {
-        g_debug(error->message);
+        g_debug("%s", error->message);
         return DESKTOP_NO_PREFERENCE;
     }
 
