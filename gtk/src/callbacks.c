@@ -3790,7 +3790,7 @@ ghb_title_message_dialog(GtkWindow *parent, GtkMessageType type, const gchar *ti
                             type, GTK_BUTTONS_NONE,
                             "%s", title);
     if (message)
-        gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dialog), message);
+        gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dialog), "%s", message);
 
     gtk_dialog_add_buttons(GTK_DIALOG(dialog),
                            no, GTK_RESPONSE_NO,

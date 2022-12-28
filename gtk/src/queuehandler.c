@@ -682,12 +682,12 @@ queue_update_summary(GhbValue * queueDict, signal_user_data_t *ud)
         def         = ghb_dict_get_bool(subsettings, "Default");
         name        = ghb_dict_get_string(subsettings, "Name");
 
-        g_string_append_printf(str, sep);
+        g_string_append_printf(str, "%s", sep);
         if (name)
         {
             g_string_append_printf(str, "%s - ", name);
         }
-        g_string_append_printf(str, desc);
+        g_string_append_printf(str, "%s", desc);
         free(desc);
         if (force)
         {
