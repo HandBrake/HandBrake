@@ -1550,7 +1550,7 @@ int hb_video_twopass_is_supported(uint32_t codec)
         case HB_VCODEC_QSV_H265:
         case HB_VCODEC_QSV_H265_10BIT:
         case HB_VCODEC_QSV_AV1:
-        case HB_VCODEC_QSV_H265_10BIT:
+        case HB_VCODEC_QSV_AV1_10BIT:
             return 0;
 
         default:
