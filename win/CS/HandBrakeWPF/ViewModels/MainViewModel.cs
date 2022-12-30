@@ -1861,14 +1861,20 @@ namespace HandBrakeWPF.ViewModels
             {
                 if (item.GetType() == typeof(DriveInformation))
                 {
-                    this.StartScan(((DriveInformation)item).RootDirectory, 0);
+                    string path = ((DriveInformation)item).RootDirectory;
+                    string videoDir = Path.Combine(path, "VIDEO_TS");
+
+                    this.StartScan(Directory.Exists(videoDir) ? videoDir : path, 0);
                 }
                 else if (item.GetType() == typeof(SourceMenuItem))
                 {
                     DriveInformation driveInfo = ((SourceMenuItem)item).Tag as DriveInformation;
                     if (driveInfo != null)
                     {
-                        this.StartScan(driveInfo.RootDirectory, this.TitleSpecificScan);
+                        string path = driveInfo.RootDirectory;
+                        string videoDir = Path.Combine(driveInfo.RootDirectory, "VIDEO_TS");
+
+                        this.StartScan(Directory.Exists(videoDir) ? videoDir : path, this.TitleSpecificScan);
                     }
 
                     this.ShowSourceSelection = false;
