@@ -142,8 +142,9 @@ namespace HandBrakeWPF.Services.Queue
             lock (QueueLock)
             {
                 this.queue.Add(job);
-                this.InvokeQueueChanged(EventArgs.Empty);
             }
+
+            this.InvokeQueueChanged(EventArgs.Empty);
         }
 
         public void Add(List<QueueTask> tasks)
@@ -154,9 +155,9 @@ namespace HandBrakeWPF.Services.Queue
                 {
                     this.queue.Add(job);
                 }
-               
-                this.InvokeQueueChanged(EventArgs.Empty);
             }
+
+            this.InvokeQueueChanged(EventArgs.Empty);
         }
 
         public void BackupQueue(string exportPath)
@@ -448,9 +449,9 @@ namespace HandBrakeWPF.Services.Queue
                 {
                     this.IsPaused = false;
                 }
-
-                this.InvokeQueueChanged(EventArgs.Empty);
             }
+
+            this.InvokeQueueChanged(EventArgs.Empty);
         }
 
         public void RestoreQueue(string importPath)
@@ -821,13 +822,14 @@ namespace HandBrakeWPF.Services.Queue
 
                 // Remove the Breakpoint
                 ThreadHelper.OnUIThread(() => this.queue.Remove(task));
-
-                this.IsProcessing = false;
-                this.IsPaused = false;
-
-                // Setting the flag will allow or prevent the when done actions to be processed. 
-                this.InvokeQueueCompleted(new QueueCompletedEventArgs(false)); 
             }
+
+
+            this.IsProcessing = false;
+            this.IsPaused = false;
+
+            // Setting the flag will allow or prevent the when done actions to be processed. 
+            this.InvokeQueueCompleted(new QueueCompletedEventArgs(false));
         }
 
         private void RemoveBreakPoints()
