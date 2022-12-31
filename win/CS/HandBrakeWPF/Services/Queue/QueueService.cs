@@ -374,9 +374,9 @@ namespace HandBrakeWPF.Services.Queue
             {
                 foreach (QueueTask task in this.Queue)
                 {
-                    if (!string.IsNullOrEmpty(task.Statistics.CompletedActivityLogPath))
+                    if (!string.IsNullOrEmpty(task.Statistics?.CompletedActivityLogPath))
                     {
-                        logPaths.Add(task.Statistics.CompletedActivityLogPath);
+                        logPaths.Add(task.Statistics?.CompletedActivityLogPath);
                     }
                 }
             }
