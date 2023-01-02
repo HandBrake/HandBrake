@@ -104,7 +104,11 @@ namespace HandBrakeWPF.Services.Encode.Model.Models
                 }
                 else
                 {
-                    validatedEncoder = HandBrakeEncoderHelpers.GetPassthruFallback(track.Encoder.Id);
+                    validatedEncoder = track.Encoder;
+                    if (!HandBrakeEncoderHelpers.AudioEncoderIsCompatible(sourceTrack.Codec, validatedEncoder))
+                    {
+                        validatedEncoder = HandBrakeEncoderHelpers.GetPassthruFallback(track.Encoder.Id);
+                    }
 
                     if (validatedEncoder == null)
                     {
