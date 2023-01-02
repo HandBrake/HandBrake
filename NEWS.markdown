@@ -8,6 +8,22 @@ Before updating HandBrake, please make sure there are no pending encodes in the 
 Windows users, please make sure to install [Microsoft .NET Desktop Runtime version 6.0.x](https://dotnet.microsoft.com/en-us/download/dotnet/6.0). Read carefully: you need the **DESKTOP** runtime. You must install .NET 6 even if you have installed .NET 7.
 
 
+## HandBrake 1.6.1
+
+### Linux
+
+- Updated Translations that were missed as part of 1.6.0 (#4790)
+
+### Windows
+
+- Fixed a potential UI hang when stopping the queue. (#4782)
+- Fixed an issue where disc drives on the source selection pane would not scan correctly. (#4771)
+- Fixed an issue where 2-pass would erroneously show up for QuickSync AV1 encoder. (#4777)
+- Fixed an issue that broke the ARM64 Windows UI builds.
+- Fixed an issue that prevented NVDEC from being available.
+- Fixed an issue where passthru options would fallback to encoding erroneously (#4795)
+
+
 ## HandBrake 1.6.0
 
 ### All platforms
