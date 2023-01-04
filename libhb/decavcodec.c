@@ -1740,12 +1740,13 @@ static int setup_extradata( hb_work_private_t * pv, AVCodecContext * context )
     {
         if (avp->side_data[ii].type == AV_PKT_DATA_NEW_EXTRADATA)
         {
-            context->extradata      = avp->side_data[ii].data;
             context->extradata_size = avp->side_data[ii].size;
-            avp->side_data[ii].data = NULL;
-            avp->side_data[ii].size = 0;
+            context->extradata = av_malloc(context->extradata_size + AV_INPUT_BUFFER_PADDING_SIZE);
+
             if (context->extradata != NULL)
             {
+                memcpy(context->extradata, avp->side_data[ii].data, context->extradata_size);
+                av_packet_unref(avp);
                 return 0;
             }
         }
