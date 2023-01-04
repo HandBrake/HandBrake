@@ -521,11 +521,13 @@ static int hb_qsv_make_adapters_list(hb_list_t **qsv_adapters_list, hb_list_t **
     if (err != MFX_ERR_NONE)
         hb_error("hb_qsv_make_adapters_list: MFXSetConfigFilterProperty mfxImplDescription.Impl error=%d", err);
 
+#if defined(_WIN32) || defined(__MINGW32__)
     var.Type     = MFX_VARIANT_TYPE_U32;
     var.Data.U32 = MFX_ACCEL_MODE_VIA_D3D11;
     err = MFXSetConfigFilterProperty(config, (const mfxU8 *)"mfxImplDescription.AccelerationMode", var);
     if (err != MFX_ERR_NONE)
         hb_error("hb_qsv_make_adapters_list: MFXSetConfigFilterProperty mfxImplDescription.AccelerationMode error=%d", err);
+#endif
 
     var.Type     = MFX_VARIANT_TYPE_U32;
     var.Data.U32 = 0x8086;
