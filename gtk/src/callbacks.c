@@ -29,6 +29,7 @@
 #include <fcntl.h>
 #include <sys/stat.h>
 #include <time.h>
+#include <math.h>
 
 #include <glib/gstdio.h>
 #include <glib/gi18n.h>
@@ -3234,20 +3235,49 @@ vquality_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
         set_destination(ud);
 }
 
-G_MODULE_EXPORT gboolean
-ptop_input_cb(GtkWidget *widget, gdouble *val, signal_user_data_t *ud)
+static void
+set_has_chapter_markers (gboolean markers, signal_user_data_t *ud)
 {
-    if (ghb_settings_combo_int(ud->settings, "PtoPType") != 1)
-        return FALSE;
+    GhbValue *dest = ghb_get_job_dest_settings(ud->settings);
 
+    if (check_name_template(ud, "{chapters}"))
+        set_destination(ud);
+    GtkWidget *widget = GHB_WIDGET (ud->builder, "ChapterMarkers");
+    gtk_widget_set_sensitive(widget, markers);
+    update_title_duration(ud);
+
+    markers &= ghb_dict_get_int(ud->settings, "ChapterMarkers");
+    ghb_dict_set_bool(dest, "ChapterMarkers", markers);
+}
+
+enum {
+    PTOP_NONE,
+    PTOP_START,
+    PTOP_END
+};
+
+/*
+ * Reads the text entered in the spin button text field and converts
+ * it to the correct format for the current mode.
+ */
+G_MODULE_EXPORT gboolean
+ptop_read_value_cb (GtkWidget *widget, gdouble *val, signal_user_data_t *ud)
+{
     const gchar *text;
-    int result;
-    double ss = 0;
+    int64_t result;
+    gdouble ss = 0;
     int hh = 0, mm = 0;
 
     text = ghb_editable_get_text(widget);
+    if (ghb_settings_combo_int(ud->settings, "PtoPType") != 1)
+    {
+        result = strtol(text, NULL, 10);
+        *val = (gdouble) result;
+        return TRUE;
+    }
+
     result = sscanf(text, "%2d:%2d:%lf", &hh, &mm, &ss);
-    if (result <= 0)
+    if (result != 1 && result != 3)
         return FALSE;
     if (result == 1)
     {
@@ -3258,8 +3288,12 @@ ptop_input_cb(GtkWidget *widget, gdouble *val, signal_user_data_t *ud)
     return TRUE;
 }
 
+/*
+ * Formats the current start or end point into a string which is then
+ * displayed in the spin button text entry.
+ */
 G_MODULE_EXPORT gboolean
-ptop_output_cb(GtkWidget *widget, signal_user_data_t *ud)
+ptop_format_value_cb (GtkWidget *widget, signal_user_data_t *ud)
 {
     if (ghb_settings_combo_int(ud->settings, "PtoPType") != 1)
         return FALSE;
@@ -3283,125 +3317,120 @@ ptop_output_cb(GtkWidget *widget, signal_user_data_t *ud)
     return TRUE;
 }
 
-static void sanitize_ptop(signal_user_data_t * ud, int end_changed)
+/*
+ * Updates the settings of the current job with the values currently being
+ * entered by the user. This function is called every time the text in the
+ * spin button changes but doesn't change the values currently displayed.
+ * However, if the user starts the encode, the updated value will be used.
+ */
+static void
+ptop_update_bg (int side_changed, double new_val, signal_user_data_t *ud)
 {
-    int64_t start, end;
-
-    if (ghb_settings_combo_int(ud->settings, "PtoPType") == 0)
-    {
-        start = ghb_dict_get_int(ud->settings, "start_point");
-        end   = ghb_dict_get_int(ud->settings, "end_point");
-        if (start > end)
-        {
-            if (end_changed == 1)
-                ghb_ui_update(ud, "start_point", ghb_int_value(end));
-            else
-                ghb_ui_update(ud, "end_point", ghb_int_value(start));
-        }
-    }
-    else if (ghb_settings_combo_int(ud->settings, "PtoPType") == 1)
-    {
-        start = ghb_dict_get_double(ud->settings, "start_point") * 90000;
-        end   = ghb_dict_get_double(ud->settings, "end_point") * 90000;
-        if (start >= end)
-        {
-            if (end_changed == 1)
-                ghb_ui_update(ud, "start_point", ghb_int_value(end-1));
-            else
-                ghb_ui_update(ud, "end_point", ghb_int_value(start+1));
-        }
-    }
-    else if (ghb_settings_combo_int(ud->settings, "PtoPType") == 2)
-    {
-        start = ghb_dict_get_int(ud->settings, "start_point");
-        end   = ghb_dict_get_int(ud->settings, "end_point");
-        if (start > end)
-        {
-            if (end_changed == 1)
-                ghb_ui_update(ud, "start_point", ghb_int_value(end));
-            else
-                ghb_ui_update(ud, "end_point", ghb_int_value(start));
-        }
-    }
-}
-
-static void update_ptop(signal_user_data_t * ud)
-{
-    int64_t start, end;
-    GhbValue *dest  = ghb_get_job_dest_settings(ud->settings);
+    double start_val = 0.0, end_val = 0.0, min_val, max_val;
+    int64_t start_int = 0, end_int = 0;
+    GtkAdjustment *start_adj, *end_adj;
     GhbValue *range = ghb_get_job_range_settings(ud->settings);
 
-    if (ghb_settings_combo_int(ud->settings, "PtoPType") == 0)
+    start_adj = GTK_ADJUSTMENT(gtk_builder_get_object(ud->builder,
+                                                      "start_point_adj"));
+    end_adj = GTK_ADJUSTMENT(gtk_builder_get_object(ud->builder,
+                                                    "end_point_adj"));
+    start_val = gtk_adjustment_get_value(start_adj);
+    end_val = gtk_adjustment_get_value(end_adj);
+
+    if (side_changed == PTOP_START)
     {
-        start = ghb_dict_get_int(ud->settings, "start_point");
-        end   = ghb_dict_get_int(ud->settings, "end_point");
-        if (check_name_template(ud, "{chapters}"))
-            set_destination(ud);
-        GtkWidget *widget = GHB_WIDGET (ud->builder, "ChapterMarkers");
-        gtk_widget_set_sensitive(widget, end > start);
-        update_title_duration(ud);
+        min_val = gtk_adjustment_get_lower(start_adj);
+        max_val = gtk_adjustment_get_upper(start_adj);
 
-        gboolean markers;
-        markers  = ghb_dict_get_int(ud->settings, "ChapterMarkers");
-        markers &= (end > start);
-        ghb_dict_set_bool(dest, "ChapterMarkers", markers);
-        ghb_dict_set_int(range, "Start", start);
-        ghb_dict_set_int(range, "End", end);
+        if (new_val < min_val) start_val = min_val;
+        else if (new_val > max_val) start_val = max_val;
+        else start_val = new_val;
+
+        end_val = (end_val > start_val) ? end_val : start_val;
     }
-    else if (ghb_settings_combo_int(ud->settings, "PtoPType") == 1)
+    else
     {
-        start = ghb_dict_get_double(ud->settings, "start_point") * 90000;
-        end   = ghb_dict_get_double(ud->settings, "end_point") * 90000;
-        update_title_duration(ud);
+        min_val = gtk_adjustment_get_lower(end_adj);
+        max_val = gtk_adjustment_get_upper(end_adj);
 
-        ghb_dict_set_int(range, "Start", start);
-        ghb_dict_set_int(range, "End", end);
+        if (new_val < min_val) end_val = min_val;
+        else if (new_val > max_val) end_val = max_val;
+        else end_val = new_val;
+
+        start_val = (end_val > start_val) ? start_val : end_val;
     }
-    else if (ghb_settings_combo_int(ud->settings, "PtoPType") == 2)
-    {
-        start = ghb_dict_get_int(ud->settings, "start_point");
-        end   = ghb_dict_get_int(ud->settings, "end_point");
-        update_title_duration(ud);
 
-        ghb_dict_set_int(range, "Start", start);
-        ghb_dict_set_int(range, "End", end);
-    }
-}
-
-G_MODULE_EXPORT void
-ptop_edited_cb(GtkWidget *widget, signal_user_data_t *ud)
-{
     if (ghb_settings_combo_int(ud->settings, "PtoPType") == 1)
-        return;
+    {
+        start_int = (int64_t) nearbyint(start_val * 90000);
+        end_int = (int64_t) nearbyint(end_val * 90000);
 
-    const gchar *text, *key;
-    int val = 0;
+        if (start_int == end_int)
+        {
+            if (side_changed == PTOP_START && start_int > 0)
+                start_int -= 1;
+            else
+                end_int += 1;
+        }
+        ghb_dict_set_double(ud->settings, "start_point", start_val);
+        ghb_dict_set_double(ud->settings, "end_point", end_val);
+    }
+    else
+    {
+        start_int = (int64_t) nearbyint(start_val);
+        end_int = (int64_t) nearbyint(end_val);
 
-    text = ghb_editable_get_text(widget);
-    if (text == NULL || text[0] == 0)
-        return;
-    val = g_strtod(text, NULL);
-    key = ghb_get_setting_key(widget);
-    ghb_dict_set_int(ud->settings, key, val);
-    update_ptop(ud);
+        ghb_dict_set_int(ud->settings, "start_point", start_int);
+        ghb_dict_set_int(ud->settings, "end_point", end_int);
+    }
+    ghb_dict_set_int(range, "Start", start_int);
+    ghb_dict_set_int(range, "End", end_int);
+
+    if (ghb_settings_combo_int(ud->settings, "PtoPType") == 0)
+        set_has_chapter_markers (end_int > start_int, ud);
 }
 
 G_MODULE_EXPORT void
 start_point_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
-    ghb_widget_to_setting(ud->settings, widget);
-    sanitize_ptop(ud, 0);
+    double new_val = 0.0;
+
+    ptop_read_value_cb(widget, &new_val, ud);
+    ptop_update_bg(PTOP_START, new_val, ud);
     ghb_check_dependency(ud, widget, NULL);
-    update_ptop(ud);
 }
 
 G_MODULE_EXPORT void
 end_point_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
-    ghb_widget_to_setting(ud->settings, widget);
-    sanitize_ptop(ud, 1);
+    double new_val = 0.0;
+
+    ptop_read_value_cb(widget, &new_val, ud);
+    ptop_update_bg(PTOP_END, new_val, ud);
     ghb_check_dependency(ud, widget, NULL);
-    update_ptop(ud);
+}
+
+/*
+ * Refreshes the UI by updating the underlying GtkAdjustments with
+ * the values set by the user. This function is only called when the
+ * focus changes to avoid changing the text while the user is typing.
+ */
+G_MODULE_EXPORT void
+ptop_update_ui_cb (GtkWidget *widget, signal_user_data_t *ud)
+{
+    GtkAdjustment *adj;
+    int64_t value;
+
+    adj = GTK_ADJUSTMENT(gtk_builder_get_object(ud->builder,
+                                                "start_point_adj"));
+    value = ghb_dict_get_double(ud->settings, "start_point");
+    gtk_adjustment_set_value(adj, value);
+
+    adj = GTK_ADJUSTMENT(gtk_builder_get_object(ud->builder,
+                                                "end_point_adj"));
+    value = ghb_dict_get_double(ud->settings, "end_point");
+    gtk_adjustment_set_value(adj, value);
 }
 
 G_MODULE_EXPORT void
