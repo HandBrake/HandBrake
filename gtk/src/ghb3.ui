@@ -1807,7 +1807,7 @@ Resets the queue job to pending and ready to run again.</property>
     <property name="can-focus">False</property>
     <property name="icon-name">emblem-readonly</property>
   </object>
-  <object class="GtkAdjustment" id="adjustment1">
+  <object class="GtkAdjustment" id="start_point_adj">
     <property name="lower">1</property>
     <property name="upper">100</property>
     <property name="value">1</property>
@@ -1892,7 +1892,7 @@ Resets the queue job to pending and ready to run again.</property>
     <property name="step-increment">1</property>
     <property name="page-increment">1</property>
   </object>
-  <object class="GtkAdjustment" id="adjustment2">
+  <object class="GtkAdjustment" id="end_point_adj">
     <property name="lower">1</property>
     <property name="upper">100</property>
     <property name="value">100</property>
@@ -2660,12 +2660,12 @@ This is often the feature title of a DVD.</property>
                         <property name="can-focus">True</property>
                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                         <property name="tooltip-text" translatable="yes">Set the first chapter to encode.</property>
-                        <property name="adjustment">adjustment1</property>
+                        <property name="adjustment">start_point_adj</property>
                         <property name="numeric">True</property>
-                        <signal name="changed" handler="ptop_edited_cb" swapped="no"/>
-                        <signal name="value-changed" handler="start_point_changed_cb" swapped="no"/>
-                        <signal name="output" handler="ptop_output_cb" swapped="no"/>
-                        <signal name="input" handler="ptop_input_cb" swapped="no"/>
+                        <signal name="value-changed" handler="ptop_update_ui_cb" swapped="no"/>
+                        <signal name="changed" handler="start_point_changed_cb" swapped="no"/>
+                        <signal name="output" handler="ptop_format_value_cb" swapped="no"/>
+                        <signal name="input" handler="ptop_read_value_cb" swapped="no"/>
                       </object>
                       <packing>
                         <property name="position">5</property>
@@ -2688,12 +2688,12 @@ This is often the feature title of a DVD.</property>
                         <property name="can-focus">True</property>
                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                         <property name="tooltip-text" translatable="yes">Set the last chapter to encode.</property>
-                        <property name="adjustment">adjustment2</property>
+                        <property name="adjustment">end_point_adj</property>
                         <property name="numeric">True</property>
-                        <signal name="changed" handler="ptop_edited_cb" swapped="no"/>
-                        <signal name="value-changed" handler="end_point_changed_cb" swapped="no"/>
-                        <signal name="output" handler="ptop_output_cb" swapped="no"/>
-                        <signal name="input" handler="ptop_input_cb" swapped="no"/>
+                        <signal name="value-changed" handler="ptop_update_ui_cb" swapped="no"/>
+                        <signal name="changed" handler="end_point_changed_cb" swapped="no"/>
+                        <signal name="output" handler="ptop_format_value_cb" swapped="no"/>
+                        <signal name="input" handler="ptop_read_value_cb" swapped="no"/>
                       </object>
                       <packing>
                         <property name="position">7</property>
