@@ -13,8 +13,8 @@
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://github.com/intel/gmmlib/archive/refs/tags/intel-gmmlib-22.2.0.tar.gz",
-                    "sha256": "0b2253894c6fc8455b6d7c5e87e6504a76d6f60ea192e1445c2f93164bf529c0"
+                    "url": "https://github.com/intel/gmmlib/archive/refs/tags/intel-gmmlib-22.3.2.tar.gz",
+                    "sha256": "f725fbb4291ab67bbc7b31e1a268f523df384667360c931b40144db861be53d7"
                 }
             ],
             "buildsystem": "cmake-ninja",
@@ -37,8 +37,8 @@
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://github.com/intel/libva/archive/refs/tags/2.16.0.tar.gz",
-                    "sha256": "766edf51fd86efe9e836a4467d4ec7c3af690a3c601b3c717237cee856302279"
+                    "url": "https://github.com/intel/libva/archive/refs/tags/2.17.0.tar.gz",
+                    "sha256": "8940541980ef998a36cd8f6ad905e81838ea4ddf56dc479ed2bebd12711e6001"
                 }
             ],
             "no-autogen": false,
@@ -52,8 +52,8 @@
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://github.com/intel/libva-utils/archive/refs/tags/2.16.0.tar.gz",
-                    "sha256": "646c9bfff6a83504c48de2c786c9514ca30c5e916127faf00f143ef8147ee950"
+                    "url": "https://github.com/intel/libva-utils/archive/refs/tags/2.17.0.tar.gz",
+                    "sha256": "607447143f08c6221f3bd5ab7aad874a4e220b6e04254b67433a7b2e97ff98ba"
                 }
             ],
             "no-autogen": false,
@@ -67,15 +67,16 @@
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://github.com/intel/media-driver/archive/refs/tags/intel-media-22.5.4.tar.gz",
-                    "sha256": "08d8d041f94b094a2dd5c4739c413b75185521c7f788a02411395ff374ee4ead"
+                    "url": "https://github.com/intel/media-driver/archive/refs/tags/intel-media-22.6.5.tar.gz",
+                    "sha256": "cbb6a514564f8c3349b1f78fc0906b636ea2074d7605cb0e820c5b727ce88cdc"
                 }
             ],
             "buildsystem": "cmake-ninja",
             "builddir": true,
             "config-opts": [
                 "-DCMAKE_BUILD_TYPE=Release",
-                "-DMEDIA_RUN_TEST_SUITE=OFF"
+                "-DMEDIA_RUN_TEST_SUITE=OFF",
+                "-DENABLE_PRODUCTION_KMD=ON"
             ],
             "build-options": {
                 "prefix" : "/app/extensions/IntelMediaSDK",
@@ -105,8 +106,8 @@
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://github.com/Intel-Media-SDK/MediaSDK/archive/refs/tags/intel-mediasdk-22.5.4.tar.gz",
-                    "sha256": "0eb04409a226da6e752576d60c46a3ec969ddfe03042897088367392207c7ab3"
+                    "url": "https://github.com/Intel-Media-SDK/MediaSDK/archive/refs/tags/intel-mediasdk-22.6.5.tar.gz",
+                    "sha256": "3a671cc692da5111c041088f5e32528b4346e122e8a134fad71310c572705106"
                 },
                 {
                     "type": "file",
@@ -128,8 +129,8 @@
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://github.com/oneapi-src/oneVPL-intel-gpu/archive/refs/tags/intel-onevpl-22.5.4.tar.gz",
-                    "sha256": "7e42e86a79460b95f17660716b797536479ce91c1804e55f8032711ce1cb9a65"
+                    "url": "https://github.com/oneapi-src/oneVPL-intel-gpu/archive/refs/tags/intel-onevpl-22.6.5.tar.gz",
+                    "sha256": "fd2b9649f126119a19cb328c771085bacdddb775c9b6cff30cf0d248d9b3b359"
                 },
                 {
                     "type": "file",
