@@ -523,13 +523,13 @@ void hb_qsv_pipe_list_clean(hb_qsv_list **);
 void hb_qsv_add_stagee(hb_qsv_list **, hb_qsv_stage *, int);
 hb_qsv_stage *hb_qsv_get_last_stage(hb_qsv_list *);
 hb_qsv_list *hb_qsv_pipe_by_stage(hb_qsv_list *, hb_qsv_stage *);
-void hb_qsv_flush_stages(hb_qsv_list *, hb_qsv_list **);
+void hb_qsv_flush_stages(hb_qsv_list *, hb_qsv_list **, int);
 
 void hb_qsv_dts_ordered_insert(hb_qsv_context *, int, int, int64_t, int);
 void hb_qsv_dts_pop(hb_qsv_context *);
 
 hb_qsv_stage *hb_qsv_stage_init(void);
-void hb_qsv_stage_clean(hb_qsv_stage **);
+void hb_qsv_stage_clean(hb_qsv_stage **, int);
 int hb_qsv_context_clean(hb_qsv_context *, int);
 
 int ff_qsv_is_sync_in_pipe(mfxSyncPoint *, hb_qsv_context *);

@@ -1171,6 +1171,7 @@ int qsv_enc_init(hb_work_private_t *pv)
     qsv_encode->sync_num = (qsv_encode->surface_num                         ?
                             FFMIN(qsv_encode->surface_num, HB_QSV_SYNC_NUM) :
                             HB_QSV_SYNC_NUM);
+
     for (i = 0; i < qsv_encode->sync_num; i++)
     {
         qsv_encode->p_syncp[i] = av_mallocz(sizeof(hb_qsv_sync));
@@ -2276,7 +2277,7 @@ static int qsv_enc_work(hb_work_private_t *pv,
                     if (item != NULL)
                     {
                         hb_list_rem(pv->delayed_processing,  item);
-                        hb_qsv_flush_stages(qsv_ctx->pipes, &item);
+                        hb_qsv_flush_stages(qsv_ctx->pipes, &item, 1);
                     }
                 }
                 break;
@@ -2309,7 +2310,7 @@ static int qsv_enc_work(hb_work_private_t *pv,
                 {
                     hb_qsv_list *pipe = hb_qsv_pipe_by_stage(qsv_ctx->pipes,
                                                              task->stage);
-                    hb_qsv_flush_stages(qsv_ctx->pipes, &pipe);
+                    hb_qsv_flush_stages(qsv_ctx->pipes, &pipe, 1);
 
                     /* get the encoded frame from the bitstream */
                     qsv_bitstream_slurp(pv, task->bs);
