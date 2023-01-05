@@ -2586,7 +2586,7 @@ int hb_qsv_param_parse(hb_qsv_param_t *param, hb_qsv_info_t *info, hb_job_t *job
         fvalue = hb_qsv_atof(value, &error);
         if (!error)
         {
-            param->rc.vbv_buffer_init = HB_QSV_CLIP3(0, UINT16_MAX, fvalue);
+            param->rc.vbv_buffer_init = HB_QSV_CLIP3(0, INT32_MAX, fvalue);
         }
     }
     else if (!strcasecmp(key, "vbv-bufsize"))
@@ -2594,7 +2594,7 @@ int hb_qsv_param_parse(hb_qsv_param_t *param, hb_qsv_info_t *info, hb_job_t *job
         ivalue = hb_qsv_atoi(value, &error);
         if (!error)
         {
-            param->rc.vbv_buffer_size = HB_QSV_CLIP3(0, UINT16_MAX, ivalue);
+            param->rc.vbv_buffer_size = HB_QSV_CLIP3(0, INT32_MAX, ivalue);
         }
     }
     else if (!strcasecmp(key, "vbv-maxrate"))
@@ -2602,7 +2602,7 @@ int hb_qsv_param_parse(hb_qsv_param_t *param, hb_qsv_info_t *info, hb_job_t *job
         ivalue = hb_qsv_atoi(value, &error);
         if (!error)
         {
-            param->rc.vbv_max_bitrate = HB_QSV_CLIP3(0, UINT16_MAX, ivalue);
+            param->rc.vbv_max_bitrate = HB_QSV_CLIP3(0, INT32_MAX, ivalue);
         }
     }
     else if (!strcasecmp(key, "cavlc") || !strcasecmp(key, "cabac"))
