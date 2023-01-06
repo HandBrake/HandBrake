@@ -82,9 +82,6 @@
                                  ToolTip="{x:Static Properties:ResourcesTooltips.Video_Quality}" />
                     <TextBlock Text="{Binding DisplayRF}" MinWidth="30" />
                     <TextBlock Text="{Binding Rfqp}" FontWeight="Bold" Margin="5,0,0,0" />
-
-                    <TextBlock Text="{x:Static Properties:Resources.Video_LosslessWarning}" Visibility="{Binding IsLossless, Converter={StaticResource boolToVisConverter}}" 
-                           Margin="10,0,0,0" ToolTip="{x:Static Properties:Resources.Video_LosslessWarningTooltip}" FontWeight="Bold" />
                 </StackPanel>
 
                 <Slider Value="{Binding RF, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Stretch"  Maximum="{Binding QualityMax}" Minimum="{Binding QualityMin}"
