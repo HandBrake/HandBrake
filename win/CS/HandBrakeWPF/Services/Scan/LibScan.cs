@@ -354,15 +354,12 @@ namespace HandBrakeWPF.Services.Scan
         private List<Title> ConvertTitles(JsonScanObject titles)
         {
             List<Title> titleList = new List<Title>();
-
-            
             foreach (SourceTitle title in titles.TitleList)
             {
                 Title converted = this.titleFactory.CreateTitle(title, titles.MainFeature);
                 titleList.Add(converted);
             }
             var naturalSortedList = OrderByAlphaNumeric(titleList, x => x.SourceName).ToList();
-
             return naturalSortedList; 
         }
 
