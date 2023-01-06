@@ -614,6 +614,7 @@ static int hb_qsv_make_adapters_list(hb_list_t **qsv_adapters_list, hb_list_t **
                 hb_error("hb_qsv_make_adapters_list: MFXVideoCORE_QueryPlatform failed impl=%d err=%d", i, err);
             }
             MFXClose(session);
+            // display must be closed after MFXClose
             hb_display_close(&display);
         }
         else
@@ -1713,6 +1714,7 @@ static int hb_qsv_collect_adapters_details(hb_list_t *hb_qsv_adapter_details_lis
                     qsv_impl_set_preferred(details, "hardware");
                 }
                 MFXClose(session);
+                // display must be closed after MFXClose
                 hb_display_close(&display);
                 hw_preference = 0;
             }

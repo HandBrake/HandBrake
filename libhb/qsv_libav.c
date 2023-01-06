@@ -162,23 +162,28 @@ hb_qsv_stage *hb_qsv_stage_init(void)
     return stage;
 }
 
-void hb_qsv_stage_clean(hb_qsv_stage ** stage)
+void hb_qsv_stage_clean(hb_qsv_stage ** stage, int is_clean_content)
 {
-    if ((*stage)->out.sync) {
-        if ((*stage)->out.sync->p_sync)
-            *(*stage)->out.sync->p_sync = 0;
-        if ((*stage)->out.sync->in_use > 0)
-            ff_qsv_atomic_dec(&(*stage)->out.sync->in_use);
-        (*stage)->out.sync = 0;
-    }
-    if ((*stage)->out.p_surface) {
-        (*stage)->out.p_surface = 0;
+    if (is_clean_content) {
+        if ((*stage)->out.sync) {
+            if ((*stage)->out.sync->p_sync)
+            {
+                *(*stage)->out.sync->p_sync = 0;
+            }
+            if ((*stage)->out.sync->in_use > 0)
+            {
+                ff_qsv_atomic_dec(&(*stage)->out.sync->in_use);
+            }
+            (*stage)->out.sync = 0;
+        }
+        if ((*stage)->out.p_surface) {
+            (*stage)->out.p_surface = 0;
 
+        }
+        if ((*stage)->in.p_surface) {
+            (*stage)->in.p_surface = 0;
+        }
     }
-    if ((*stage)->in.p_surface) {
-        (*stage)->in.p_surface = 0;
-    }
-
     av_freep(stage);
 }
 
@@ -236,12 +241,12 @@ int hb_qsv_context_clean(hb_qsv_context * qsv, int full_job)
             hb_qsv_pipe_list_clean(&qsv->pipes);
 
         if (qsv->mfx_session && !full_job) {
-            // MFXClose() fails in the media_driver under Linux when encoding interrupted
-#if defined(_WIN32) || defined(__MINGW32__)
             sts = MFXClose(qsv->mfx_session);
             HB_QSV_CHECK_RESULT(sts, MFX_ERR_NONE, sts);
-#endif
             qsv->mfx_session = 0;
+            // display must be closed after MFXClose
+            hb_display_close(&qsv->display);
+            qsv->display = NULL;
         }
     }
     return 0;
@@ -257,10 +262,11 @@ void hb_qsv_pipe_list_clean(hb_qsv_list ** list)
 {
     hb_qsv_list *stage;
     int i = 0;
+
     if (*list) {
         for (i = hb_qsv_list_count(*list); i > 0; i--) {
             stage = hb_qsv_list_item(*list, i - 1);
-            hb_qsv_flush_stages(*list, &stage);
+            hb_qsv_flush_stages(*list, &stage, 0);
         }
         hb_qsv_list_close(list);
     }
@@ -287,7 +293,7 @@ hb_qsv_stage *hb_qsv_get_last_stage(hb_qsv_list * list)
     return stage;
 }
 
-void hb_qsv_flush_stages(hb_qsv_list * list, hb_qsv_list ** item)
+void hb_qsv_flush_stages(hb_qsv_list * list, hb_qsv_list ** item, int is_flush_content)
 {
     int i = 0;
     int x = 0;
@@ -303,7 +309,7 @@ void hb_qsv_flush_stages(hb_qsv_list * list, hb_qsv_list ** item)
                 to_remove_list = hb_qsv_list_init(0);
             hb_qsv_list_add(to_remove_list, stage->pending);
         }
-        hb_qsv_stage_clean(&stage);
+        hb_qsv_stage_clean(&stage, is_flush_content);
         // should actually remove from the list but ok...
     }
     hb_qsv_list_rem(list, *item);
@@ -314,7 +320,7 @@ void hb_qsv_flush_stages(hb_qsv_list * list, hb_qsv_list ** item)
             to_remove_atom_list = hb_qsv_list_item(to_remove_list, i-1);
             for (x = hb_qsv_list_count(to_remove_atom_list); x > 0; x--){
                 to_remove_atom = hb_qsv_list_item(to_remove_atom_list, x-1);
-                hb_qsv_flush_stages(list,&to_remove_atom);
+                hb_qsv_flush_stages(list, &to_remove_atom, is_flush_content);
             }
         }
         hb_qsv_list_close(&to_remove_list);

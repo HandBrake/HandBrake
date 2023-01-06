@@ -83,7 +83,6 @@ struct hb_work_private_s
     hb_qsv_param_t       param;
     hb_qsv_space         enc_space;
     hb_qsv_info_t      * qsv_info;
-    hb_display_t       * display;
 
     hb_chapter_queue_t * chapter_queue;
 
@@ -1172,6 +1171,7 @@ int qsv_enc_init(hb_work_private_t *pv)
     qsv_encode->sync_num = (qsv_encode->surface_num                         ?
                             FFMIN(qsv_encode->surface_num, HB_QSV_SYNC_NUM) :
                             HB_QSV_SYNC_NUM);
+
     for (i = 0; i < qsv_encode->sync_num; i++)
     {
         qsv_encode->p_syncp[i] = av_mallocz(sizeof(hb_qsv_sync));
@@ -1689,11 +1689,11 @@ int encqsvInit(hb_work_object_t *w, hb_job_t *job)
     {
         // On linux, the handle to the VA display must be set.
         // This code is essentially a NOP other platforms.
-        pv->display = hb_qsv_display_init();
-        if (pv->display != NULL)
+        job->qsv.ctx->display = hb_qsv_display_init();
+        if (job->qsv.ctx->display != NULL)
         {
-            MFXVideoCORE_SetHandle(session, pv->display->mfxType,
-                                   (mfxHDL)pv->display->handle);
+            MFXVideoCORE_SetHandle(session, job->qsv.ctx->display->mfxType,
+                                   (mfxHDL)job->qsv.ctx->display->handle);
         }
     }
 
@@ -1916,9 +1916,6 @@ void encqsvClose(hb_work_object_t *w)
             }
 #endif
             hb_qsv_uninit_enc(pv->job);
-
-            hb_display_close(&pv->display);
-
             if (qsv_enc_space != NULL)
             {
                 if (qsv_enc_space->is_init_done)
@@ -2280,7 +2277,7 @@ static int qsv_enc_work(hb_work_private_t *pv,
                     if (item != NULL)
                     {
                         hb_list_rem(pv->delayed_processing,  item);
-                        hb_qsv_flush_stages(qsv_ctx->pipes, &item);
+                        hb_qsv_flush_stages(qsv_ctx->pipes, &item, 1);
                     }
                 }
                 break;
@@ -2313,7 +2310,7 @@ static int qsv_enc_work(hb_work_private_t *pv,
                 {
                     hb_qsv_list *pipe = hb_qsv_pipe_by_stage(qsv_ctx->pipes,
                                                              task->stage);
-                    hb_qsv_flush_stages(qsv_ctx->pipes, &pipe);
+                    hb_qsv_flush_stages(qsv_ctx->pipes, &pipe, 1);
 
                     /* get the encoded frame from the bitstream */
                     qsv_bitstream_slurp(pv, task->bs);
