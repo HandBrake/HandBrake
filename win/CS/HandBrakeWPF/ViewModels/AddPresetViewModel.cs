@@ -58,7 +58,7 @@ namespace HandBrakeWPF.ViewModels
             this.CustomWidth = 0;
         }
 
-        public Preset Preset { get; }
+        public Preset Preset { get; private set; }
 
         public string PresetName => this.Preset.Name;
 
@@ -173,6 +173,7 @@ namespace HandBrakeWPF.ViewModels
 
         public void Setup(EncodeTask task, Title title, AudioBehaviours audioBehaviours, SubtitleBehaviours subtitleBehaviours)
         {
+            this.Preset = new Preset { IsBuildIn = false, IsDefault = false, Category = PresetService.UserPresetCategoryName };
             this.Preset.Task = new EncodeTask(task);
             this.Preset.AudioTrackBehaviours = new AudioBehaviours(audioBehaviours); 
             this.Preset.SubtitleTrackBehaviours = new SubtitleBehaviours(subtitleBehaviours);

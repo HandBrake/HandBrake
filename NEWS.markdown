@@ -13,6 +13,7 @@ Windows users, please make sure to install [Microsoft .NET Desktop Runtime versi
 ### Linux
 
 - Updated Translations that were missed as part of 1.6.0 (#4790)
+- Fixed an issue with QSV hardware detection on linux (#4768)
 
 ### Windows
 
@@ -22,6 +23,7 @@ Windows users, please make sure to install [Microsoft .NET Desktop Runtime versi
 - Fixed an issue that broke the ARM64 Windows UI builds.
 - Fixed an issue that prevented NVDEC from being available.
 - Fixed an issue where passthru options would fallback to encoding erroneously (#4795)
+- Fixed an issue with the Preset Save button incorrectly overwrote recently added presets (#4804)
 
 
 ## HandBrake 1.6.0
