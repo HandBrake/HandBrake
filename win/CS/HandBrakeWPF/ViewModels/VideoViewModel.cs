@@ -182,11 +182,6 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
-        public bool IsLossless
-        {
-            get => 0.0.Equals(this.DisplayRF) && this.SelectedVideoEncoder.IsX264;
-        }
-
         public int QualityMax
         {
             get => this.qualityMax;
@@ -225,7 +220,6 @@ namespace HandBrakeWPF.ViewModels
 
                 this.NotifyOfPropertyChange(() => this.RF);
                 this.NotifyOfPropertyChange(() => this.DisplayRF);
-                this.NotifyOfPropertyChange(() => this.IsLossless);
                 this.OnTabStatusChanged(new TabStatusEventArgs("filters", ChangedOption.Quality));
             }
         }
@@ -680,7 +674,6 @@ namespace HandBrakeWPF.ViewModels
             this.NotifyOfPropertyChange(() => this.QualityMin);
             this.NotifyOfPropertyChange(() => this.RF);
             this.NotifyOfPropertyChange(() => this.DisplayRF);
-            this.NotifyOfPropertyChange(() => this.IsLossless);
             this.NotifyOfPropertyChange(() => this.VideoBitrate);
             this.NotifyOfPropertyChange(() => this.Task.Quality);
             this.NotifyOfPropertyChange(() => this.Task.TwoPass);
@@ -751,7 +744,7 @@ namespace HandBrakeWPF.ViewModels
 
             if (this.SelectedVideoEncoder != null)
             {
-                if (this.SelectedVideoEncoder.Presets.Any())
+                if (this.SelectedVideoEncoder.Presets != null && this.SelectedVideoEncoder.Presets.Any())
                 {
                     if (!Equals(preset.Task.VideoPreset, this.Task.VideoPreset))
                     {
@@ -967,22 +960,28 @@ namespace HandBrakeWPF.ViewModels
                 cqStep = this.userSettingService.GetUserSetting<double>(UserSettingConstants.X264Step);
             }
 
-            if (cqStep != 1)
+            if (limits.Ascending) // Theora
             {
-                return Math.Round(51.0 - (sliderValue * cqStep), 2); // x264, x265
+                return sliderValue;
             }
-
-            if (limits.Ascending)
+            else // x264, x265, MPEG-4, MPEG-2, AV1, QuickSync
             {
-                return sliderValue; // Theora
-            }
+                if (limits.Low > 0)
+                {
+                    sliderValue -= (int)limits.Low; // Handles the non 0 Starting point. MPEG-4, MPEG-2
+                }
 
-            if (limits.Low > 0)
-            {
-                sliderValue -= (int)limits.Low; // Handles the non 0 Starting point. TODO -> Add support for negative quality values.
+                if (cqStep != 1)
+                {
+                    float augment = limits.Low > 0 ? 0 : (limits.Low * -1); // Handle negative ranges
+                    return Math.Round(limits.High - (sliderValue * cqStep) - (-augment * cqStep), 2);
+                }
+                else 
+                {
+                    float augment = limits.Low > 0 ? 0 : (limits.Low * -1); // Handle negative ranges
+                    return limits.High - sliderValue - augment;
+                }
             }
-
-            return (double)limits.High - sliderValue; // VP8, VP9, MPEG-2, MPEG-4, QuickSync
         }
 
         private void SetQualitySliderBounds()
@@ -1006,7 +1005,7 @@ namespace HandBrakeWPF.ViewModels
 
             if (cqStep != 1)
             {
-                this.QualityMin = Math.Max((int)limits.Low, 0); // TODO -> Add support for negative quality values.
+                this.QualityMin = Math.Max((int)limits.Low, 0);
                 this.QualityMax = (int)Math.Round(limits.High / cqStep, 0);
             }
             else
