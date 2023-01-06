@@ -1,4 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
+// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="LibScan.cs" company="HandBrake Project (http://handbrake.fr)">
 //   This file is part of the HandBrake source code - It may be used under the terms of the GNU General Public License.
 // </copyright>
@@ -12,6 +12,10 @@ namespace HandBrakeWPF.Services.Scan
     using System;
     using System.Collections.Generic;
     using System.Diagnostics;
+    using System.Linq;
+    using System.Text.RegularExpressions;
+    using System.Windows;
+    using System.Windows.Documents;
     using System.Windows.Media.Imaging;
 
     using HandBrake.Interop.Interop;
@@ -338,16 +342,28 @@ namespace HandBrakeWPF.Services.Scan
         /// <returns>
         /// The convert titles.
         /// </returns>
+        /// 
+
+        //This will implement Naturalsort
+        public IEnumerable<T> OrderByAlphaNumeric<T>(IEnumerable<T> source, Func<T, string> selector)
+        {
+            int max = source.SelectMany(i => Regex.Matches(selector(i), @"\d+").Cast<Match>().Select(m => (int?)m.Value.Length)).Max() ?? 0;
+            return source.OrderBy(i => Regex.Replace(selector(i), @"\d+", m => m.Value.PadLeft(max, '0')));
+        }
+
         private List<Title> ConvertTitles(JsonScanObject titles)
         {
             List<Title> titleList = new List<Title>();
+
+            
             foreach (SourceTitle title in titles.TitleList)
             {
                 Title converted = this.titleFactory.CreateTitle(title, titles.MainFeature);
                 titleList.Add(converted);
             }
+            var naturalSortedList = OrderByAlphaNumeric(titleList, x => x.SourceName).ToList();
 
-            return titleList;
+            return naturalSortedList; 
         }
 
         public void Dispose()
