@@ -69,27 +69,23 @@ NSString * const HBVideoChangedNotification = @"HBVideoChangedNotification";
  */
 - (void)updateQualityBounds
 {
-    // Get the current slider maxValue to check for a change in slider scale
-    // later so that we can choose a new similar value on the new slider scale
-    double previousMaxValue             = self.qualityMaxValue;
-    double previousPercentOfSliderScale = (self.quality / (self.qualityMaxValue - self.qualityMinValue + 1));
-
     int direction;
     float minValue, maxValue, granularity;
-    hb_video_quality_get_limits(self.encoder,
-                                &minValue, &maxValue, &granularity, &direction);
+    hb_video_quality_get_limits(self.encoder, &minValue, &maxValue, &granularity, &direction);
 
     self.qualityMinValue = minValue;
     self.qualityMaxValue = maxValue;
 
-    // check to see if we have changed slider scales
-    if (previousMaxValue != maxValue)
+    // Ensure the quality value is not out of the new bounds
+    if (!(self.undo.isUndoing || self.undo.isRedoing))
     {
-        // if so, convert the old setting to the new scale as close as possible
-        // based on percentages
-        if (!(self.undo.isUndoing || self.undo.isRedoing))
+        if (self.quality > maxValue)
         {
-            self.quality = floor((maxValue - minValue + 1.) * (previousPercentOfSliderScale));
+            self.quality = maxValue;
+        }
+        else if (self.quality < minValue)
+        {
+            self.quality = minValue;
         }
     }
 }
