@@ -893,6 +893,11 @@ namespace HandBrakeWPF.ViewModels
 
         private void SetRF(double? quality)
         {
+            if (!quality.HasValue)
+            {
+                return;
+            }
+
             VideoQualityLimits limits = HandBrakeEncoderHelpers.GetVideoQualityLimits(this.SelectedVideoEncoder?.ShortName);
             if (limits == null)
             {
@@ -903,45 +908,23 @@ namespace HandBrakeWPF.ViewModels
             if (limits.Granularity != 1)
             {
                 cqStep = this.userSettingService.GetUserSetting<double>(UserSettingConstants.X264Step);
+                cqStep = 1 / cqStep; // Inverse 
             }
 
-            double rfValue = 0;
-
-            if (cqStep != 1)
+            if (limits.Ascending)
             {
-                double multiplier = 1.0 / cqStep;
-                if (quality.HasValue)
-                {
-                    rfValue = quality.Value * multiplier;
-                }
-
-                this.RF = this.QualityMax - (int)Math.Round(rfValue, 0);
+                this.RF = (int)quality.Value; // Theora
             }
             else
             {
-                if (limits.Ascending) 
+                if (limits.Low == 0)
                 {
-                    if (quality.HasValue)
-                    {
-                        this.RF = (int)quality.Value; // Theora
-                    }
+                    this.RF = (int)(limits.High * cqStep) - (int)(quality * cqStep);
                 }
-                else
+                else // Supporting negative ranges
                 {
-                    if (quality.HasValue) 
-                    {
-                        int cq;
-                        int.TryParse(quality.Value.ToString(CultureInfo.InvariantCulture), out cq); // VP8, VP9, MPEG-2, MPEG-4, QuickSync
-
-                        if (limits.Low == 0)
-                        {
-                            this.RF = (int)limits.High - cq;
-                        }
-                        else
-                        {
-                            this.RF = (int)(limits.High) - (cq - (int)limits.Low);
-                        }
-                    }
+                    float augment = limits.Low > 0 ? 0 : (limits.Low * -1);
+                    this.RF = (int)(limits.High * cqStep) - ((int)(quality * cqStep) - (int)(limits.Low * cqStep));
                 }
             }
         }
@@ -971,14 +954,14 @@ namespace HandBrakeWPF.ViewModels
                     sliderValue -= (int)limits.Low; // Handles the non 0 Starting point. MPEG-4, MPEG-2
                 }
 
+                float augment = limits.Low > 0 ? 0 : (limits.Low * -1); // Handle negative ranges
+
                 if (cqStep != 1)
                 {
-                    float augment = limits.Low > 0 ? 0 : (limits.Low * -1); // Handle negative ranges
-                    return Math.Round(limits.High - (sliderValue * cqStep) - (-augment * cqStep), 2);
+                    return Math.Round(limits.High - (sliderValue * cqStep) - augment, 2);
                 }
                 else 
                 {
-                    float augment = limits.Low > 0 ? 0 : (limits.Low * -1); // Handle negative ranges
                     return limits.High - sliderValue - augment;
                 }
             }
@@ -1005,7 +988,7 @@ namespace HandBrakeWPF.ViewModels
 
             if (cqStep != 1)
             {
-                this.QualityMin = Math.Max((int)limits.Low, 0);
+                this.QualityMin = (int)Math.Round(limits.Low / cqStep, 0);
                 this.QualityMax = (int)Math.Round(limits.High / cqStep, 0);
             }
             else
