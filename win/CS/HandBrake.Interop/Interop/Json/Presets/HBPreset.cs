@@ -91,8 +91,6 @@ namespace HandBrake.Interop.Interop.Json.Presets
         /// </summary>
         public int PictureCropMode { get; set; }
 
-        public bool? PictureAutoCrop { get; set; }
-
         /// <summary>
         /// Gets or sets the picture bottom crop.
         /// </summary>

@@ -11,6 +11,7 @@ namespace HandBrake.Interop.Interop
 {
     using System;
     using System.Collections.Generic;
+    using System.ComponentModel;
     using System.IO;
     using System.Runtime.InteropServices;
     using System.Text.Json;
@@ -42,20 +43,34 @@ namespace HandBrake.Interop.Interop
             return presetList;
         }
 
-        /// <summary>
-        /// The get preset from file.
-        /// </summary>
-        /// <param name="filename">
-        /// The filename.
-        /// </param>
-        /// <returns>
-        /// The <see cref="PresetCategory"/>.
-        /// </returns>
         public static PresetTransportContainer GetPresetsFromFile(string filename)
         {
             IntPtr presetStringPointer = HBFunctions.hb_presets_read_file_json(InteropUtilities.ToUtf8PtrFromString(filename));
-            string presetJson = Marshal.PtrToStringUTF8(presetStringPointer);
+            PresetTransportContainer container = GetPresets(presetStringPointer);
+            
+            return container;
+        }
 
+        public static PresetTransportContainer UpgradePresets(string filename)
+        {
+            IntPtr presetStringPointer = HBFunctions.hb_presets_read_file_json(InteropUtilities.ToUtf8PtrFromString(filename));
+            PresetTransportContainer container = GetPresets(presetStringPointer);
+
+            // If Presets are of a different version, try upgrade them for the user.
+            PresetVersion presetVersion = GetCurrentPresetVersion();
+            if (container.VersionMajor != presetVersion.Major || container.VersionMinor != presetVersion.Minor || container.VersionMicro != presetVersion.Micro)
+            {
+                IntPtr outputPtr = IntPtr.Zero;
+                HBFunctions.hb_presets_import_json(presetStringPointer, ref outputPtr);
+                container = GetPresets(outputPtr);
+            }
+
+            return container;
+        }
+
+        private static PresetTransportContainer GetPresets(IntPtr outputPtr)
+        {
+            string presetJson = Marshal.PtrToStringUTF8(outputPtr);
             if (!string.IsNullOrEmpty(presetJson))
             {
                 // Check to see if we have a list of presets.
