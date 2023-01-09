@@ -3300,16 +3300,15 @@ ptop_format_value_cb (GtkWidget *widget, signal_user_data_t *ud)
 
     GtkAdjustment *adjustment;
     gchar *text;
-    double value, ss;
+    double ss;
     int hh, mm;
 
     adjustment = gtk_spin_button_get_adjustment(GTK_SPIN_BUTTON(widget));
-    value = gtk_adjustment_get_value(adjustment);
-    hh = value / 3600;
-    value = value - hh * 3600;
-    mm = value / 60;
-    value = value - mm * 60;
-    ss = value;
+    ss = gtk_adjustment_get_value(adjustment);
+    hh = (int) (ss / 3600);
+    ss = ss - hh * 3600;
+    mm = (int) (ss / 60);
+    ss = ss - mm * 60;
     text = g_strdup_printf ("%02d:%02d:%05.2f", hh, mm, ss);
     ghb_editable_set_text(widget, text);
     g_free (text);
@@ -3420,7 +3419,7 @@ G_MODULE_EXPORT void
 ptop_update_ui_cb (GtkWidget *widget, signal_user_data_t *ud)
 {
     GtkAdjustment *adj;
-    int64_t value;
+    double value;
 
     adj = GTK_ADJUSTMENT(gtk_builder_get_object(ud->builder,
                                                 "start_point_adj"));
