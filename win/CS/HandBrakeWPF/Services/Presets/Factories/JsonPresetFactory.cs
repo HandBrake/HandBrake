@@ -9,6 +9,7 @@
 
 namespace HandBrakeWPF.Services.Presets.Factories
 {
+    using System;
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
     using System.Globalization;
@@ -65,6 +66,11 @@ namespace HandBrakeWPF.Services.Presets.Factories
             /* Picture Settings */
             preset.Task.MaxWidth = importedPreset.PictureWidth.HasValue && importedPreset.PictureWidth.Value > 0 ? importedPreset.PictureWidth.Value : (int?)null;
             preset.Task.MaxHeight = importedPreset.PictureHeight.HasValue && importedPreset.PictureHeight.Value > 0 ? importedPreset.PictureHeight.Value : (int?)null;
+
+            if (!preset.IsBuildIn && importedPreset.PictureAutoCrop != null && importedPreset.PictureAutoCrop == false)
+            {
+                importedPreset.PictureCropMode = 3; // Upgrade version 47 and earlier presets.
+            }
             preset.Task.Cropping = new Cropping(importedPreset.PictureTopCrop, importedPreset.PictureBottomCrop, importedPreset.PictureLeftCrop, importedPreset.PictureRightCrop, importedPreset.PictureCropMode);
             preset.Task.KeepDisplayAspect = importedPreset.PictureKeepRatio;
             preset.Task.AllowUpscaling = importedPreset.PictureAllowUpscaling;
