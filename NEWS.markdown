@@ -22,6 +22,7 @@ Windows users, please make sure to install [Microsoft .NET Desktop Runtime versi
 ### Windows
 
 - Added support for negative values on the video encoder scale for better clarity of encoder value.
+- Vastly improved support for upgrading presets from older versions (#4820)
 - Fixed a potential UI hang when stopping the queue. (#4782)
 - Fixed an issue where disc drives on the source selection pane would not scan correctly. (#4771)
 - Fixed an issue where 2-pass would erroneously show up for QuickSync AV1 encoder. (#4777)
