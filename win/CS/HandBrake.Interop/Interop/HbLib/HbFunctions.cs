@@ -305,6 +305,12 @@ namespace HandBrake.Interop.Interop.HbLib
         [DllImport("hb", EntryPoint = "hb_presets_read_file_json", CallingConvention = CallingConvention.Cdecl)]
         public static extern IntPtr hb_presets_read_file_json(IntPtr filename);
 
+        [DllImport("hb", EntryPoint = "hb_presets_clean_json", CallingConvention = CallingConvention.Cdecl)]
+        public static extern IntPtr hb_presets_clean_json(IntPtr json);
+
+        [DllImport("hb", EntryPoint = "hb_presets_import_json", CallingConvention = CallingConvention.Cdecl)]
+        public static extern int hb_presets_import_json(IntPtr jsonIn, ref IntPtr jsonOutput);
+        
         [DllImport("hb", EntryPoint = "hb_presets_current_version", CallingConvention = CallingConvention.Cdecl)]
         public static extern IntPtr hb_presets_current_version(IntPtr major, IntPtr minor, IntPtr micro);
 
