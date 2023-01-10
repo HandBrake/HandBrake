@@ -832,7 +832,6 @@ ghb_application_activate (GApplication *app)
 #endif
 
     ghb_resource_init();
-    ghb_icons_register_resource();
     gtk_icon_theme_add_resource_path(gtk_icon_theme_get_default(),
                                      "/fr/handbrake/ghb/icons");
 
