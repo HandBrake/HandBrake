@@ -37,7 +37,6 @@
 #include "audiohandler.h"
 #include "subtitlehandler.h"
 #include "ghb-dvd.h"
-#include "plist.h"
 #include "queuehandler.h"
 #include "title-add.h"
 #include "power-manager.h"

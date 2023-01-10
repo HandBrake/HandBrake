@@ -72,7 +72,6 @@
 #include "presets.h"
 #include "preview.h"
 #include "values.h"
-#include "plist.h"
 #include "hb-backend.h"
 #include "ghb-dvd.h"
 #include "libavutil/parseutils.h"
