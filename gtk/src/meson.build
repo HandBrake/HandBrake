@@ -11,7 +11,6 @@ ghb_src = files(
   'ghb-dvd.c',
   'ghbcompat.c',
   'hb-backend.c',
-  'icons.c',
   'jobdict.c',
   'main.c',
   'notifications.c',
