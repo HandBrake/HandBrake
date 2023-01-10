@@ -12,7 +12,7 @@
     <PackageProjectUrl>https://handbrake.fr</PackageProjectUrl>
     <RepositoryUrl>https://github.com/HandBrake/HandBrake</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
-    <AssemblyVersion>1.6.0.0</AssemblyVersion>
+    <AssemblyVersion>1.6.1.0</AssemblyVersion>
     <Platforms>AnyCPU</Platforms>
     <PlatformTarget>AnyCPU</PlatformTarget>
     <ApplicationIcon>handbrakepineapple.ico</ApplicationIcon>
@@ -20,8 +20,8 @@
     <AssemblyName>HandBrake.Worker</AssemblyName>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
-    <FileVersion>1.6.0.0</FileVersion>
-    <Version>1.6.0</Version>
+    <FileVersion>1.6.1.0</FileVersion>
+    <Version>1.6.1</Version>
   </PropertyGroup>
 
   <ItemGroup>

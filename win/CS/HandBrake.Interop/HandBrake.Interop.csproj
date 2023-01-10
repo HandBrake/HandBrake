@@ -2,8 +2,8 @@
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
-    <FileVersion>1.6.0.0</FileVersion>
-    <Version>1.6.0</Version>
+    <FileVersion>1.6.1.0</FileVersion>
+    <Version>1.6.1</Version>
     <Authors>HandBrake Team</Authors>
     <Description>HandBrake is an open-source, GPL-licensed, multiplatform,video transcoder.</Description>
     <Copyright>Copyright © 2003-2022 HandBrake Team</Copyright>
