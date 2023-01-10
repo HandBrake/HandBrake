@@ -23,7 +23,7 @@
     <?define packagePath = "..\HandBrakeWPF\bin\publish" ?>
   <?endif ?>
 
-  <Product Id="$(var.msiProductId)" Name="$(var.productName)" Language="1033" Version="1.6.0.0" Manufacturer="HandBrake Team" UpgradeCode="$(var.msiProductId)">
+  <Product Id="$(var.msiProductId)" Name="$(var.productName)" Language="1033" Version="1.6.1.0" Manufacturer="HandBrake Team" UpgradeCode="$(var.msiProductId)">
     <Package InstallerVersion="200" Platform="x64" Compressed="yes" InstallScope="perMachine" />
 
     <MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
