@@ -3,7 +3,6 @@
 
 data = gnome.compile_resources('data_res', 'data_res.gresource.xml',
   source_dir: meson.current_build_dir(),
-  extra_args: '--manual-register',
   c_name: 'ghb_data')
 
 marshalers = gnome.genmarshal('marshalers',

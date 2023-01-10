@@ -53,7 +53,6 @@ configure_file(configuration: config_h, output: 'config.h')
 ui = gnome.compile_resources('ui_res', 'ui_res.gresource.xml',
   dependencies: ui_files,
   source_dir: ui_dir,
-  extra_args: '--manual-register',
   c_name: 'ghb_ui')
 
 # Build targets

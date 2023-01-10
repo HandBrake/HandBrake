@@ -40,7 +40,6 @@ icon_files = files(
 
 icons = gnome.compile_resources('icon_res', 'icon_res.gresource.xml',
   dependencies: icon_files,
-  extra_args: '--manual-register',
   c_name: 'ghb_icons')
 
 if host_machine.system() not in ['windows', 'haiku']
