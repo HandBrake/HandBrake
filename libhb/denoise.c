@@ -358,7 +358,7 @@ static int hb_denoise_work(hb_filter_object_t *filter,
                        pv->hqdn3d_coef[coef_index+1]);
     }
 
-    out->s = in->s;
+    hb_buffer_copy_props(out, in);
     *buf_out = out;
 
     return HB_FILTER_OK;

@@ -302,6 +302,8 @@ void hb_buffer_pool_free( void )
                 freed += b->alloc;
                 av_free(b->data);
             }
+            hb_buffer_wipe_side_data(b);
+            av_freep(&b->side_data);
             free( b );
             count++;
         }
@@ -483,6 +485,86 @@ void hb_buffer_reduce( hb_buffer_t * b, int size )
     }
 }
 
+AVFrameSideData *hb_buffer_new_side_data_from_buf(hb_buffer_t *buf,
+                                                  enum AVFrameSideDataType type,
+                                                  AVBufferRef *side_data_buf)
+{
+    AVFrameSideData *ret, **tmp;
+
+    if (!buf)
+    {
+        return NULL;
+    }
+
+    if (buf->nb_side_data > INT_MAX / sizeof(*buf->side_data) - 1)
+    {
+        return NULL;
+    }
+
+    tmp = av_realloc(buf->side_data, (buf->nb_side_data + 1) * sizeof(*buf->side_data));
+    if (!tmp)
+    {
+        return NULL;
+    }
+    buf->side_data = (void **)tmp;
+
+    ret = av_mallocz(sizeof(*ret));
+    if (!ret)
+    {
+        return NULL;
+    }
+
+    ret->buf = side_data_buf;
+    ret->data = ret->buf->data;
+    ret->size = side_data_buf->size;
+    ret->type = type;
+
+    buf->side_data[buf->nb_side_data++] = ret;
+
+    return ret;
+}
+
+static void free_side_data(AVFrameSideData **ptr_sd)
+{
+    AVFrameSideData *sd = *ptr_sd;
+
+    av_buffer_unref(&sd->buf);
+    av_dict_free(&sd->metadata);
+    av_freep(ptr_sd);
+}
+
+void hb_buffer_wipe_side_data(hb_buffer_t *buf)
+{
+    for (int i = 0; i < buf->nb_side_data; i++)
+    {
+        free_side_data((AVFrameSideData **)&buf->side_data[i]);
+    }
+    buf->nb_side_data = 0;
+
+    av_freep(&buf->side_data);
+}
+
+void hb_buffer_copy_side_data(hb_buffer_t *dst, const hb_buffer_t *src)
+{
+    for (int i = 0; i < src->nb_side_data; i++)
+    {
+        const AVFrameSideData *sd_src = src->side_data[i];
+        AVBufferRef *ref = av_buffer_ref(sd_src->buf);
+        AVFrameSideData *sd_dst = hb_buffer_new_side_data_from_buf(dst, sd_src->type, ref);
+        if (!sd_dst)
+        {
+            av_buffer_unref(&ref);
+            hb_buffer_wipe_side_data(dst);
+        }
+    }
+}
+
+void hb_buffer_copy_props(hb_buffer_t *dst, const hb_buffer_t *src)
+{
+    dst->s = src->s;
+    hb_buffer_copy_side_data(dst, src);
+}
+
 hb_buffer_t * hb_buffer_dup( const hb_buffer_t * src )
 {
 
@@ -495,8 +577,8 @@ hb_buffer_t * hb_buffer_dup( const hb_buffer_t * src )
     if ( buf )
     {
         memcpy( buf->data, src->data, src->size );
-        buf->s = src->s;
         buf->f = src->f;
+        hb_buffer_copy_props(buf, src);
         if ( buf->s.type == FRAME_BUF )
             hb_buffer_init_planes( buf );
     }
@@ -517,8 +599,8 @@ int hb_buffer_copy(hb_buffer_t * dst, const hb_buffer_t * src)
         return -1;
 
     memcpy( dst->data, src->data, src->size );
-    dst->s = src->s;
     dst->f = src->f;
+    hb_buffer_copy_props(dst, src);
     if (dst->s.type == FRAME_BUF)
         hb_buffer_init_planes(dst);
 
@@ -776,6 +858,9 @@ void hb_buffer_close( hb_buffer_t ** _b )
         hb_fifo_t *buffer_pool = size_to_pool( b->alloc );
 
         b->next = NULL;
+
+        hb_buffer_wipe_side_data(b);
+        av_freep(&b->side_data);
 
 #if defined(HB_BUFFER_DEBUG)
         hb_lock(buffers.lock);
