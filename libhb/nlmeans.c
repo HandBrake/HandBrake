@@ -106,7 +106,7 @@ typedef struct
     int height;
     int fmt;
     BorderedPlane plane[3];
-    hb_buffer_settings_t s;
+    hb_buffer_t *buf;        // input buf sidedata
 } Frame;
 
 struct PixelSum
@@ -504,9 +504,9 @@ static void nlmeans_filter_work(void *thread_args_v)
                           pv->weight_fact_table[c],
                           pv->diff_max[c]);
     }
-    buf->s = pv->frame[segment].s;
+    hb_buffer_copy_props(buf, pv->frame[segment].buf);
+    hb_buffer_close(&pv->frame[segment].buf);
     thread_data->out = buf;
-
 }
 
 static void nlmeans_add_frame(hb_filter_private_t *pv, hb_buffer_t *buf)
@@ -521,11 +521,13 @@ static void nlmeans_add_frame(hb_filter_private_t *pv, hb_buffer_t *buf)
                           buf->plane[c].height,
                           &pv->frame[pv->next_frame].plane[c],
                           border);
-        pv->frame[pv->next_frame].s = buf->s;
-        pv->frame[pv->next_frame].width = buf->f.width;
-        pv->frame[pv->next_frame].height = buf->f.height;
-        pv->frame[pv->next_frame].fmt = buf->f.fmt;
     }
+    pv->frame[pv->next_frame].width = buf->f.width;
+    pv->frame[pv->next_frame].height = buf->f.height;
+    pv->frame[pv->next_frame].fmt = buf->f.fmt;
+    pv->frame[pv->next_frame].buf = hb_buffer_init(0);
+    hb_buffer_copy_props(pv->frame[pv->next_frame].buf, buf);
+
     pv->next_frame++;
 }
 
@@ -642,7 +644,8 @@ static hb_buffer_t * nlmeans_filter_flush(hb_filter_private_t *pv)
                               pv->weight_fact_table[c],
                               pv->diff_max[c]);
         }
-        buf->s = frame->s;
+        hb_buffer_copy_props(buf, frame->buf);
+        hb_buffer_close(&frame->buf);
         hb_buffer_list_append(&list, buf);
     }
     return hb_buffer_list_clear(&list);

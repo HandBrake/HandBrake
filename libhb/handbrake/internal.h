@@ -12,6 +12,7 @@
 
 #include "libavutil/imgutils.h"
 #include "libavutil/pixdesc.h"
+#include "libavutil/frame.h"
 #include "handbrake/project.h"
 
 /***********************************************************************
@@ -173,6 +174,9 @@ struct hb_buffer_s
     // Store this data here when read and pass to decoder.
     hb_buffer_t * palette;
 
+    void **side_data;
+    int    nb_side_data;
+
     // Packets in a list:
     //   the next packet in the list
     hb_buffer_t * next;
@@ -199,6 +203,14 @@ hb_image_t  * hb_buffer_to_image(hb_buffer_t *buf);
 int           hb_picture_fill(uint8_t *data[], int stride[], hb_buffer_t *b);
 int           hb_picture_crop(uint8_t *data[], int stride[], hb_buffer_t *b,
                               int top, int left);
+
+AVFrameSideData *hb_buffer_new_side_data_from_buf(hb_buffer_t *buf,
+                                                  enum AVFrameSideDataType type,
+                                                  AVBufferRef *side_data_buf);
+void             hb_buffer_wipe_side_data(hb_buffer_t *buf);
+void             hb_buffer_copy_side_data(hb_buffer_t *dst, const hb_buffer_t *src);
+
+void             hb_buffer_copy_props(hb_buffer_t *dst, const hb_buffer_t *src);
 
 hb_fifo_t   * hb_fifo_init( int capacity, int thresh );
 void          hb_fifo_register_full_cond( hb_fifo_t * f, hb_cond_t * c );
