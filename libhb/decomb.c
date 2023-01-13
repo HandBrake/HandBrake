@@ -545,7 +545,7 @@ static void process_frame(hb_filter_private_t *pv)
             pv->filter(pv, buf, parity, tff);
 
             // Copy buffered settings to output buffer settings
-            buf->s = pv->ref[1]->s;
+            hb_buffer_copy_props(buf, pv->ref[1]);
 
             hb_buffer_list_append(&pv->out_list, buf);
         }

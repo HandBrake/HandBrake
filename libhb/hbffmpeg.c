@@ -31,6 +31,26 @@ static int get_frame_type(int type)
     }
 }
 
+static void free_side_data(AVFrameSideData **ptr_sd)
+{
+    AVFrameSideData *sd = *ptr_sd;
+
+    av_buffer_unref(&sd->buf);
+    av_dict_free(&sd->metadata);
+    av_freep(ptr_sd);
+}
+
+static void wipe_avframe_side_data(AVFrame *frame)
+{
+    for (int i = 0; i < frame->nb_side_data; i++)
+    {
+        free_side_data(&frame->side_data[i]);
+    }
+    frame->nb_side_data = 0;
+
+    av_freep(&frame->side_data);
+}
+
 void hb_video_buffer_to_avframe(AVFrame *frame, hb_buffer_t * buf)
 {
     frame->data[0]     = buf->plane[0].data;
@@ -54,6 +74,18 @@ void hb_video_buffer_to_avframe(AVFrame *frame, hb_buffer_t * buf)
     frame->colorspace      = hb_colr_mat_hb_to_ff(buf->f.color_matrix);
     frame->color_range     = buf->f.color_range;
     frame->chroma_location = buf->f.chroma_location;
+
+    for (int i = 0; i < buf->nb_side_data; i++)
+    {
+        const AVFrameSideData *sd_src = buf->side_data[i];
+        AVBufferRef *ref = av_buffer_ref(sd_src->buf);
+        AVFrameSideData *sd_dst = av_frame_new_side_data_from_buf(frame, sd_src->type, ref);
+        if (!sd_dst)
+        {
+            av_buffer_unref(&ref);
+            wipe_avframe_side_data(frame);
+        }
+    }
 }
 
 void hb_avframe_set_video_buffer_flags(hb_buffer_t * buf, AVFrame *frame,
@@ -150,6 +182,18 @@ hb_buffer_t * hb_avframe_to_video_buffer(AVFrame *frame, AVRational time_base)
         }
     }
 #endif
+
+    for (int i = 0; i < frame->nb_side_data; i++)
+    {
+        const AVFrameSideData *sd_src = frame->side_data[i];
+        AVBufferRef *ref = av_buffer_ref(sd_src->buf);
+        AVFrameSideData *sd_dst = hb_buffer_new_side_data_from_buf(buf, sd_src->type, ref);
+        if (!sd_dst)
+        {
+            av_buffer_unref(&ref);
+            hb_buffer_wipe_side_data(buf);
+        }
+    }
 
     return buf;
 }

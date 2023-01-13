@@ -342,7 +342,7 @@ static int hb_lapsharp_work(hb_filter_object_t *filter,
                     ctx);
     }
 
-    out->s = in->s;
+    hb_buffer_copy_props(out, in);
     *buf_out = out;
 
     return HB_FILTER_OK;

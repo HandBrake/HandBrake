@@ -389,7 +389,7 @@ static int chroma_smooth_work_thread(hb_filter_object_t *filter,
                       ctx, tctx);
     }
 
-    out->s = in->s;
+    hb_buffer_copy_props(out, in);
     *buf_out = out;
 
     return HB_FILTER_OK;
