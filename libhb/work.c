@@ -671,6 +671,19 @@ void hb_display_job_info(hb_job_t *job)
                        job->coll.max_fall);
             }
         }
+
+        if (job->passthru_dynamic_hdr_metadata & DOVI)
+        {
+            hb_log("     + dolby vision configuration record: version: %d.%d, profile: %d, level: %d, rpu flag: %d, el flag: %d, bl flag: %d, compatibility id: %d",
+                   job->dovi.dv_version_major,
+                   job->dovi.dv_version_minor,
+                   job->dovi.dv_profile,
+                   job->dovi.dv_level,
+                   job->dovi.rpu_present_flag,
+                   job->dovi.el_present_flag,
+                   job->dovi.bl_present_flag,
+                   job->dovi.dv_bl_signal_compatibility_id);
+        }
     }
 
     if (job->indepth_scan)
@@ -1419,6 +1432,31 @@ static void sanitize_filter_list(hb_job_t *job, hb_geometry_t src_geo)
     }
 }
 
+static void sanitize_dynamic_hdr_metadata_passthru(hb_job_t *job)
+{
+    hb_list_t *list = job->list_filter;
+
+    // Scale/pad/rotate filter can be removed
+    // when we'll support modifying the dynamic metadata
+    if (hb_filter_find(list, HB_FILTER_ROTATE)     != NULL ||
+        hb_filter_find(list, HB_FILTER_CROP_SCALE) != NULL ||
+        hb_filter_find(list, HB_FILTER_PAD)        != NULL ||
+        hb_filter_find(list, HB_FILTER_COLORSPACE) != NULL ||
+        job->vcodec != HB_VCODEC_X265_10BIT)
+    {
+        job->passthru_dynamic_hdr_metadata = NONE;
+        return;
+    }
+
+    if (job->dovi.dv_profile != 5 &&
+        job->dovi.dv_profile != 8)
+    {
+        // x265 supports only 5 and 8
+        job->passthru_dynamic_hdr_metadata ^= DOVI;
+        return;
+    }
+}
+
 /**
  * Job initialization routine.
  *
@@ -1487,6 +1525,7 @@ static void do_job(hb_job_t *job)
         job->input_pix_fmt = hb_get_best_pix_fmt(job);
 
         sanitize_filter_list(job, title->geometry);
+        sanitize_dynamic_hdr_metadata_passthru(job);
 
         memset(&init, 0, sizeof(init));
         init.time_base.num = 1;
@@ -1497,7 +1536,11 @@ static void do_job(hb_job_t *job)
         init.color_prim = title->color_prim;
         init.color_transfer = title->color_transfer;
         init.color_matrix = title->color_matrix;
-        init.color_range = AVCOL_RANGE_MPEG;
+        // Dolby Vision profile 5 requires full range
+        // TODO: find a better way to handle this
+        init.color_range = job->passthru_dynamic_hdr_metadata & DOVI &&
+                            job->dovi.dv_profile == 5 ?
+                            title->color_range : AVCOL_RANGE_MPEG;
         init.chroma_location = title->chroma_location;
         init.geometry = title->geometry;
         memset(init.crop, 0, sizeof(int[4]));

@@ -5887,6 +5887,12 @@ static hb_title_t *ffmpeg_title_scan( hb_stream_t *stream, hb_title_t *title )
                         title->coll.max_fall = coll->MaxFALL;
                         break;
                     }
+                    case AV_PKT_DATA_DOVI_CONF:
+                    {
+                        AVDOVIDecoderConfigurationRecord *dovi = (AVDOVIDecoderConfigurationRecord *)sd.data;
+                        title->dovi = hb_dovi_ff_to_hb(*dovi);
+                        break;
+                    }
                     default:
                         break;
                 }

@@ -1178,7 +1178,9 @@ skip_preview:
             title->color_transfer = get_color_transfer(title->color_transfer);
             title->color_matrix   = get_color_matrix(title->color_matrix, vid_info.geometry);
         }
-        else
+        // Let's try to guess a color profile only if the source is not Dolby Vision 5
+        // which requires the values to be unset
+        else if (title->dovi.dv_profile != 5)
         {
             title->color_prim     = get_color_prim(vid_info.color_prim, vid_info.geometry, vid_info.rate);
             title->color_transfer = get_color_transfer(vid_info.color_transfer);
@@ -1325,6 +1327,19 @@ skip_preview:
             hb_log("scan: content light level: max_cll=%u, max_fall=%u",
                    title->coll.max_cll,
                    title->coll.max_fall);
+        }
+
+        if (title->dovi.dv_profile > 0)
+        {
+            hb_log("scan: dolby vision configuration record: version: %d.%d, profile: %d, level: %d, rpu flag: %d, el flag: %d, bl flag: %d, compatibility id: %d",
+                   title->dovi.dv_version_major,
+                   title->dovi.dv_version_minor,
+                   title->dovi.dv_profile,
+                   title->dovi.dv_level,
+                   title->dovi.rpu_present_flag,
+                   title->dovi.el_present_flag,
+                   title->dovi.bl_present_flag,
+                   title->dovi.dv_bl_signal_compatibility_id);
         }
 
         if (title->video_decode_support != HB_DECODE_SUPPORT_SW)

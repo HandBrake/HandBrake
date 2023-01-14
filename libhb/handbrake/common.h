@@ -333,7 +333,8 @@ struct hb_subtitle_config_s
     int64_t      offset;
 };
 
-struct hb_mastering_display_metadata_s {
+struct hb_mastering_display_metadata_s
+{
     hb_rational_t display_primaries[3][2];
     hb_rational_t white_point[2];
     hb_rational_t min_luminance;
@@ -342,9 +343,22 @@ struct hb_mastering_display_metadata_s {
     int has_luminance;
 };
 
-struct hb_content_light_metadata_s {
+struct hb_content_light_metadata_s
+{
     unsigned max_cll;
     unsigned max_fall;
+};
+
+struct hb_dovi_conf_s
+{
+    unsigned dv_version_major;
+    unsigned dv_version_minor;
+    unsigned dv_profile;
+    unsigned dv_level;
+    unsigned rpu_present_flag;
+    unsigned el_present_flag;
+    unsigned bl_present_flag;
+    unsigned dv_bl_signal_compatibility_id;
 };
 
 /*******************************************************************************
@@ -704,6 +718,10 @@ struct hb_job_s
 
     hb_mastering_display_metadata_t mastering;
     hb_content_light_metadata_t coll;
+    hb_dovi_conf_t dovi;
+
+    enum {NONE = 0x0, ALL = 0x3, DOVI = 0x1, HDR_PLUS = 0x2} passthru_dynamic_hdr_metadata;
+
 
     hb_list_t     * list_chapter;
 
@@ -1169,6 +1187,7 @@ struct hb_title_s
     int             chroma_location;
     hb_mastering_display_metadata_t mastering;
     hb_content_light_metadata_t     coll;
+    hb_dovi_conf_t  dovi;
     hb_rational_t   vrate;
     int             crop[4];
     int             loose_crop[4];

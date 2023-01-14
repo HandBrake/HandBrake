@@ -543,6 +543,38 @@ AVMasteringDisplayMetadata hb_mastering_hb_to_ff(hb_mastering_display_metadata_t
     return ff_mastering;
 }
 
+AVDOVIDecoderConfigurationRecord hb_dovi_hb_to_ff(hb_dovi_conf_t dovi)
+{
+    AVDOVIDecoderConfigurationRecord ff_dovi;
+
+    ff_dovi.dv_version_major = dovi.dv_version_major;
+    ff_dovi.dv_version_minor = dovi.dv_version_minor;
+    ff_dovi.dv_profile = dovi.dv_profile;
+    ff_dovi.dv_level = dovi.dv_level;
+    ff_dovi.rpu_present_flag = dovi.rpu_present_flag;
+    ff_dovi.el_present_flag = dovi.el_present_flag;
+    ff_dovi.bl_present_flag = dovi.bl_present_flag;
+    ff_dovi.dv_bl_signal_compatibility_id = dovi.dv_bl_signal_compatibility_id;
+
+    return ff_dovi;
+}
+
+hb_dovi_conf_t hb_dovi_ff_to_hb(AVDOVIDecoderConfigurationRecord dovi)
+{
+    hb_dovi_conf_t hb_dovi;
+
+    hb_dovi.dv_version_major = dovi.dv_version_major;
+    hb_dovi.dv_version_minor = dovi.dv_version_minor;
+    hb_dovi.dv_profile = dovi.dv_profile;
+    hb_dovi.dv_level = dovi.dv_level;
+    hb_dovi.rpu_present_flag = dovi.rpu_present_flag;
+    hb_dovi.el_present_flag = dovi.el_present_flag;
+    hb_dovi.bl_present_flag = dovi.bl_present_flag;
+    hb_dovi.dv_bl_signal_compatibility_id = dovi.dv_bl_signal_compatibility_id;
+
+    return hb_dovi;
+}
+
 uint64_t hb_ff_mixdown_xlat(int hb_mixdown, int *downmix_mode)
 {
     uint64_t ff_layout = 0;
