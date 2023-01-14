@@ -704,6 +704,22 @@ hb_dict_t* hb_job_to_dict( const hb_job_t * job )
         hb_dict_set(video_dict, "ContentLightLevel", coll_dict);
     }
 
+    // Dolby Vision Configuration Record
+    hb_dict_t *dovi_dict;
+    if (job->dovi.dv_profile)
+    {
+        dovi_dict = json_pack_ex(&error, 0, "{s:i, s:i, s:i, s:i, s:i, s:i, s:i, s:i}",
+            "DVVersionMajor",          job->dovi.dv_version_major,
+            "DVVersionMinor",          job->dovi.dv_version_minor,
+            "DVProfile",               job->dovi.dv_profile,
+            "DVLevel",                 job->dovi.dv_level,
+            "RPUPresentFlag",          job->dovi.rpu_present_flag,
+            "ELPresentFlag",           job->dovi.el_present_flag,
+            "BLPresentFlag",           job->dovi.bl_present_flag,
+            "BLSignalCompatibilityId", job->dovi.dv_bl_signal_compatibility_id);
+        hb_dict_set(video_dict, "DolbyVisionConfigurationRecord", dovi_dict);
+    }
+
     if (job->vquality > HB_INVALID_VIDEO_QUALITY)
     {
         hb_dict_set(video_dict, "Quality", hb_value_double(job->vquality));
@@ -997,6 +1013,7 @@ hb_job_t* hb_dict_to_job( hb_handle_t * h, hb_dict_t *dict )
     hb_value_t       * mux = NULL, * vcodec = NULL;
     hb_dict_t        * mastering_dict = NULL;
     hb_dict_t        * coll_dict = NULL;
+    hb_dict_t        * dovi_dict = NULL;
     hb_value_t       * acodec_copy_mask = NULL, * acodec_fallback = NULL;
     const char       * destfile = NULL;
     const char       * range_type = NULL;
@@ -1028,6 +1045,7 @@ hb_job_t* hb_dict_to_job( hb_handle_t * h, hb_dict_t *dict )
     //       ColorPrimaries, ColorTransfer, ColorMatrix, ChromaLocation,
     //       Mastering,
     //       ContentLightLevel,
+    //       DolbyVisionConfigurationRecord
     //       ColorPrimariesOverride, ColorTransferOverride, ColorMatrixOverride,
     //       HardwareDecode
     //       QSV {Decode, AsyncDepth, AdapterIndex}}
@@ -1035,6 +1053,7 @@ hb_job_t* hb_dict_to_job( hb_handle_t * h, hb_dict_t *dict )
     "   s?b, s?b,"
     "   s?i, s?i, s?i,"
     "   s?i, s?i, s?i, s?i,"
+    "   s?o,"
     "   s?o,"
     "   s?o,"
     "   s?i, s?i, s?i,"
@@ -1090,6 +1109,7 @@ hb_job_t* hb_dict_to_job( hb_handle_t * h, hb_dict_t *dict )
             "ChromaLocation",       unpack_i(&job->chroma_location),
             "Mastering",            unpack_o(&mastering_dict),
             "ContentLightLevel",    unpack_o(&coll_dict),
+            "DolbyVisionConfigurationRecord", unpack_o(&dovi_dict),
             "ColorPrimariesOverride", unpack_i(&job->color_prim_override),
             "ColorTransferOverride",  unpack_i(&job->color_transfer_override),
             "ColorMatrixOverride",    unpack_i(&job->color_matrix_override),
@@ -1269,6 +1289,26 @@ hb_job_t* hb_dict_to_job( hb_handle_t * h, hb_dict_t *dict )
         if (result < 0)
         {
             hb_error("hb_dict_to_job: failed to parse coll_dict: %s", error.text);
+            goto fail;
+        }
+    }
+
+    if (dovi_dict != NULL)
+    {
+        result = json_unpack_ex(dovi_dict, &error, 0,
+        "{s:i, s:i, s:i, s:i, s:i, s:i, s:i, s:i}",
+            "DVVersionMajor",          unpack_u(&job->dovi.dv_version_major),
+            "DVVersionMinor",          unpack_u(&job->dovi.dv_version_minor),
+            "DVProfile",               unpack_u(&job->dovi.dv_profile),
+            "DVLevel",                 unpack_u(&job->dovi.dv_level),
+            "RPUPresentFlag",          unpack_u(&job->dovi.rpu_present_flag),
+            "ELPresentFlag",           unpack_u(&job->dovi.el_present_flag),
+            "BLPresentFlag",           unpack_u(&job->dovi.bl_present_flag),
+            "BLSignalCompatibilityId", unpack_u(&job->dovi.dv_bl_signal_compatibility_id)
+        );
+        if (result < 0)
+        {
+            hb_error("hb_dict_to_job: failed to parse dovi_dict: %s", error.text);
             goto fail;
         }
     }

@@ -578,6 +578,28 @@ static int avformatInit( hb_mux_object_t * m )
         }
     }
 
+    if (job->passthru_dynamic_hdr_metadata & DOVI)
+    {
+        if (job->dovi.dv_profile == 5 && job->mux == HB_MUX_AV_MP4)
+        {
+            if (track->st->codecpar->codec_id == AV_CODEC_ID_HEVC)
+            {
+                track->st->codecpar->codec_tag = MKTAG('d','v','h','1');
+            }
+        }
+        AVDOVIDecoderConfigurationRecord dovi = hb_dovi_hb_to_ff(job->dovi);
+
+        uint8_t *dovi_data = av_malloc(sizeof(AVDOVIDecoderConfigurationRecord));
+        memcpy(dovi_data, &dovi, sizeof(AVDOVIDecoderConfigurationRecord));
+
+        av_stream_add_side_data(track->st,
+                                AV_PKT_DATA_DOVI_CONF,
+                                dovi_data,
+                                sizeof(AVDOVIDecoderConfigurationRecord));
+
+        m->oc->strict_std_compliance = FF_COMPLIANCE_UNOFFICIAL;
+    }
+
     hb_rational_t vrate = job->vrate;
 
     // If the vrate is the internal clock rate, there's a good chance

@@ -355,6 +355,11 @@ fail:
         dynamicRange = @"HDR";
     }
 
+    if (_hb_title->dovi.dv_profile)
+    {
+        dynamicRange = [NSString stringWithFormat:@"Dolby Vision %d.%d", _hb_title->dovi.dv_profile, _hb_title->dovi.dv_bl_signal_compatibility_id];
+    }
+
     [format appendFormat:@", %@ (", dynamicRange];
 
     int bit_depth = hb_get_bit_depth(_hb_title->pix_fmt);
