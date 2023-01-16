@@ -547,6 +547,10 @@ void                 hb_chapter_dequeue(hb_chapter_queue_t *q, hb_buffer_t *b);
 #if defined(SYS_MINGW)
 #define HB_FONT_MONO "Lucida Console"
 #define HB_FONT_SANS "sans-serif"
+#elif defined(__APPLE__)
+// use a different monospace font until https://github.com/libass/libass/issues/518 is resolved
+#define HB_FONT_MONO "Andale Mono"
+#define HB_FONT_SANS "sans-serif"
 #else
 #define HB_FONT_MONO "monospace"
 #define HB_FONT_SANS "sans-serif"
