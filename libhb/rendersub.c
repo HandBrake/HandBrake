@@ -705,16 +705,6 @@ static int ssa_post_init( hb_filter_object_t * filter, hb_job_t * job )
     ass_set_frame_size(pv->renderer, width, height);
     ass_set_storage_size(pv->renderer, width, height);
 
-    double par = (double)job->title->geometry.par.num / job->title->geometry.par.den;
-
-    if (par != 1)
-    {
-        double dar = (double)width * par / height;
-        double sar = (double)width / height;
-        double pixel_aspect = sar / dar;
-        ass_set_pixel_aspect(pv->renderer, pixel_aspect);
-    }
-
     return 0;
 }
 
