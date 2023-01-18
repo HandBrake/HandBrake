@@ -109,35 +109,7 @@ int gettimeofday( struct timeval * tv, struct timezone * tz )
 #endif
 */
 
-// Convert utf8 string to current code page.
-// The internal string representation in hb is utf8. But some
-// libraries (libmkv, and mp4v2) expect filenames in the current
-// code page.  So we must convert.
-char * hb_utf8_to_cp(const char *src)
-{
-    char *dst = NULL;
-
-#if defined( SYS_MINGW )
-    int num_chars = MultiByteToWideChar(CP_UTF8, 0, src, -1, NULL, 0);
-    if (num_chars <= 0)
-        return NULL;
-    wchar_t * tmp = calloc(num_chars, sizeof(wchar_t));
-    MultiByteToWideChar(CP_UTF8, 0, src, -1, tmp, num_chars);
-    int len = WideCharToMultiByte(GetACP(), 0, tmp, num_chars, NULL, 0, NULL, NULL);
-    if (len <= 0)
-        return NULL;
-    dst = calloc(len, sizeof(char));
-    WideCharToMultiByte(GetACP(), 0, tmp, num_chars, dst, len, NULL, NULL);
-    free(tmp);
-#else
-    // Other platforms don't have code pages
-    dst = strdup(src);
-#endif
-
-    return dst;
-}
-
-int hb_dvd_region(char *device, int *region_mask)
+int hb_dvd_region(const char *device, int *region_mask)
 {
 #if defined( DVD_LU_SEND_RPC_STATE ) && defined( DVD_AUTH )
     struct stat  st;
