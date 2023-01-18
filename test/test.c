@@ -5312,7 +5312,7 @@ PrepareJob(hb_handle_t *h, hb_title_t *title, hb_dict_t *preset_dict)
     int one_burned = 0;
     if (subtracks != NULL)
     {
-        int ii, track_count, out_track = 0;
+        int ii, out_track = 0;
         for (ii = 0; subtracks[ii] != NULL; ii++)
         {
             if (strcasecmp(subtracks[ii], "none" ) == 0)
@@ -5358,26 +5358,6 @@ PrepareJob(hb_handle_t *h, hb_title_t *title, hb_dict_t *preset_dict)
             else
             {
                 fprintf(stderr, "ERROR: unable to parse subtitle input \"%s\", skipping\n", subtracks[ii]);
-            }
-        }
-        track_count = hb_value_array_len(subtitle_array);
-
-        /* Subtitle Track Names */
-        ii = 0;
-        if (subnames != NULL)
-        {
-            for (; subnames[ii] != NULL && ii < track_count; ii++)
-            {
-                if (*subnames[ii])
-                {
-                    subtitle_dict = hb_value_array_get(subtitle_array, ii);
-                    hb_dict_set(subtitle_dict, "Name",
-                                hb_value_string(subnames[ii]));
-                }
-            }
-            if (subnames[ii] != NULL)
-            {
-                fprintf(stderr, "Dropping excess subtitle track names\n");
             }
         }
     }
@@ -5441,6 +5421,26 @@ PrepareJob(hb_handle_t *h, hb_title_t *title, hb_dict_t *preset_dict)
         for (ii = 0; ssafile[ii] != NULL; ii++)
         {
             add_ssa(subtitle_array, ii, &one_burned);
+        }
+    }
+
+    int ii = 0, track_count = hb_value_array_len(subtitle_array);
+
+    /* Subtitle Track Names */
+    if (subnames != NULL)
+    {
+        for (; subnames[ii] != NULL && ii < track_count; ii++)
+        {
+            if (*subnames[ii])
+            {
+                subtitle_dict = hb_value_array_get(subtitle_array, ii);
+                hb_dict_set(subtitle_dict, "Name",
+                            hb_value_string(subnames[ii]));
+            }
+        }
+        if (subnames[ii] != NULL)
+        {
+            fprintf(stderr, "Dropping excess subtitle track names\n");
         }
     }
 
