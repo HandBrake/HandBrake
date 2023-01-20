@@ -76,6 +76,11 @@ int hb_nvenc_h265_available()
     return hb_check_nvenc_available();
 }
 
+int hb_nvenc_av1_available()
+{
+    return hb_check_nvenc_available();
+}
+
 int hb_check_nvdec_available()
 {
     #if HB_PROJECT_FEATURE_NVDEC
@@ -269,6 +274,8 @@ static int is_nvenc_used(int codec_id)
     case HB_VCODEC_FFMPEG_NVENC_H264:
     case HB_VCODEC_FFMPEG_NVENC_H265:
     case HB_VCODEC_FFMPEG_NVENC_H265_10BIT:
+    case HB_VCODEC_FFMPEG_NVENC_AV1:
+    case HB_VCODEC_FFMPEG_NVENC_AV1_10BIT:
         return 1;
     default:
         return 0;

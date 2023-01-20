@@ -155,7 +155,8 @@ ifeq (1,$(FEATURE.nvenc))
 FFMPEG.CONFIGURE.extra += \
      --enable-ffnvcodec \
      --enable-encoder=h264_nvenc \
-     --enable-encoder=hevc_nvenc
+     --enable-encoder=hevc_nvenc \
+     --enable-encoder=av1_nvenc
 endif
 
 ifeq (1,$(FEATURE.nvdec))

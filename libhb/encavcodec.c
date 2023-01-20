@@ -228,6 +228,16 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
                     break;
             }
         }break;
+        case AV_CODEC_ID_AV1:
+        {
+            switch (job->vcodec) {
+                case HB_VCODEC_FFMPEG_NVENC_AV1:
+                case HB_VCODEC_FFMPEG_NVENC_AV1_10BIT:
+                    hb_log("encavcodecInit: AV1 (Nvidia NVENC)");
+                    codec_name = "av1_nvenc";
+                    break;
+            }
+        }break;
     }
 
     if (codec_name == NULL)
@@ -349,7 +359,8 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
         // bitrate * fps
         context->bit_rate_tolerance = context->bit_rate * av_q2d(fps) + 1;
 
-        if ( job->vcodec == HB_VCODEC_FFMPEG_NVENC_H264 || job->vcodec == HB_VCODEC_FFMPEG_NVENC_H265 || job->vcodec == HB_VCODEC_FFMPEG_NVENC_H265_10BIT) {
+        if ( job->vcodec == HB_VCODEC_FFMPEG_NVENC_H264 || job->vcodec == HB_VCODEC_FFMPEG_NVENC_H265 || job->vcodec == HB_VCODEC_FFMPEG_NVENC_H265_10BIT
+            || job->vcodec == HB_VCODEC_FFMPEG_NVENC_AV1 || job->vcodec == HB_VCODEC_FFMPEG_NVENC_AV1_10BIT) {
             av_dict_set( &av_opts, "rc", "vbr", 0 );
             hb_log( "encavcodec: encoding at rc=vbr, Bitrate %d", job->vbitrate );
         }
@@ -407,7 +418,9 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
         //Set constant quality for nvenc
         else if ( job->vcodec == HB_VCODEC_FFMPEG_NVENC_H264 ||
                   job->vcodec == HB_VCODEC_FFMPEG_NVENC_H265 ||
-                  job->vcodec == HB_VCODEC_FFMPEG_NVENC_H265_10BIT)
+                  job->vcodec == HB_VCODEC_FFMPEG_NVENC_H265_10BIT ||
+                  job->vcodec == HB_VCODEC_FFMPEG_NVENC_AV1 ||
+                  job->vcodec == HB_VCODEC_FFMPEG_NVENC_AV1_10BIT)
         {
             char qualityI[7];
             char quality[7];
@@ -931,7 +944,9 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
 
     if (job->vcodec == HB_VCODEC_FFMPEG_NVENC_H264 ||
         job->vcodec == HB_VCODEC_FFMPEG_NVENC_H265 ||
-        job->vcodec == HB_VCODEC_FFMPEG_NVENC_H265_10BIT)
+        job->vcodec == HB_VCODEC_FFMPEG_NVENC_H265_10BIT ||
+        job->vcodec == HB_VCODEC_FFMPEG_NVENC_AV1 ||
+        job->vcodec == HB_VCODEC_FFMPEG_NVENC_AV1_10BIT)
     {
         // Force IDR frames when we force a new keyframe for chapters
         av_dict_set( &av_opts, "forced-idr", "1", 0 );
@@ -1572,6 +1587,8 @@ const char* const* hb_av_preset_get_names(int encoder)
         case HB_VCODEC_FFMPEG_NVENC_H264:
         case HB_VCODEC_FFMPEG_NVENC_H265:
         case HB_VCODEC_FFMPEG_NVENC_H265_10BIT:
+        case HB_VCODEC_FFMPEG_NVENC_AV1:
+        case HB_VCODEC_FFMPEG_NVENC_AV1_10BIT:
             return h26x_nvenc_preset_names;
 
         case HB_VCODEC_FFMPEG_MF_H264:
@@ -1622,9 +1639,11 @@ const int* hb_av_get_pix_fmts(int encoder)
 
         case HB_VCODEC_FFMPEG_NVENC_H264:
         case HB_VCODEC_FFMPEG_NVENC_H265:
+        case HB_VCODEC_FFMPEG_NVENC_AV1:
             return nvenc_pix_formats;
 
         case HB_VCODEC_FFMPEG_NVENC_H265_10BIT:
+        case HB_VCODEC_FFMPEG_NVENC_AV1_10BIT:
             return nvenc_pix_formats_10bit;
 
         case HB_VCODEC_FFMPEG_VCE_H265_10BIT:
