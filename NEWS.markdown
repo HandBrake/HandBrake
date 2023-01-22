@@ -11,12 +11,19 @@ Windows users, please make sure to install [Microsoft .NET Desktop Runtime versi
 ## HandBrake 1.6.1
 
 ### General
+
 - Fixed an issue that could cause a/v sync issues on some encodes. (#4788, #4789)
+- Disabled 2-pass for SVT-AV1 in the user interfaces. It's not yet supported. 
+- Miscellaneous bug fixes and improvements
+
+### Mac
+
+- Minor improvement in behaviour in the CQ/RF slider when changing encoders. 
 
 ### Linux
 
 - Updated Translations that were missed as part of 1.6.0 (#4790)
-- Fixed an issue with QSV hardware detection on linux (#4768)
+- Partially Fixed QSV hardware detection on linux. Future fixes will ship with the next version. (#4768)
 - Fixed crash when cancelling an QSV based encode. (#4341)
 
 ### Windows
