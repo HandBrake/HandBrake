@@ -28,6 +28,9 @@ static NSArray * filterParamsToNamesArray(hb_filter_param_t * (f)(int), int filt
         else if ([name isEqualToString:@"Custom"]) {
             name = NSLocalizedStringFromTableInBundle(@"Custom", nil, [NSBundle bundleForClass:[HBFilters class]], "HBFilters -> custom display name");
         }
+        else if ([name isEqualToString:@"Default"]) {
+            name = NSLocalizedStringFromTableInBundle(@"Default", nil, [NSBundle bundleForClass:[HBFilters class]], "HBFilters -> default display name");
+        }
         [presets addObject:name];
     }
 
@@ -52,6 +55,9 @@ static NSDictionary * filterParamsToNamesDict(hb_filter_param_t * (f)(int), int 
         }
         else if ([name isEqualToString:@"Custom"]) {
             name = NSLocalizedStringFromTableInBundle(@"Custom", nil, [NSBundle bundleForClass:[HBFilters class]], "HBFilters -> custom display name");
+        }
+        else if ([name isEqualToString:@"Default"]) {
+            name = NSLocalizedStringFromTableInBundle(@"Default", nil, [NSBundle bundleForClass:[HBFilters class]], "HBFilters -> default display name");
         }
         [presets setObject:@(preset->short_name) forKey:name];
     }
@@ -281,7 +287,7 @@ static NSDictionary *combDetectionPresetsDict = nil;
 
 static NSDictionary *deinterlaceTypesDict = nil;
 static NSDictionary *decombPresetsDict = nil;
-static NSDictionary *yadifPresetsDict = nil; 
+static NSDictionary *yadifPresetsDict = nil;
 static NSDictionary *bwdifPresetsDict = nil;
 
 static NSDictionary *denoisePresetDict = nil;
