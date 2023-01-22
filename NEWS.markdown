@@ -10,33 +10,43 @@ Windows users, please make sure to install [Microsoft .NET Desktop Runtime versi
 
 ## HandBrake 1.6.1
 
-### General
+### All platforms
 
-- Fixed an issue that could cause a/v sync issues on some encodes. (#4788, #4789)
-- Disabled 2-pass for SVT-AV1 in the user interfaces. It's not yet supported. 
-- Miscellaneous bug fixes and improvements
+#### Video
+
+- Fixed a potential decoder issue that could cause desync with audio (#4788, #4789)
+
+#### Command line interface
+
+- Fixed inability to name external subtitles tracks using --subname
 
 ### Mac
 
-- Minor improvement in behaviour in the CQ/RF slider when changing encoders. 
+- Fixed behavior of quality slider when changing encoders
 
 ### Linux
 
-- Updated Translations that were missed as part of 1.6.0 (#4790)
-- Partially Fixed QSV hardware detection on linux. Future fixes will ship with the next version. (#4768)
-- Fixed crash when cancelling an QSV based encode. (#4341)
+- Fixed translations missing updates as part of 1.6.0 (#4790)
+  - Bulgarian (Български)
+  - Corsican (Corsu)
+  - Dutch (Nederlands)
+  - German (Deutsch)
+  - Spanish (Español)
+- Fixed (partially) Intel QSV hardware detection (#4768)
+- Fixed a potential crash when canceling an Intel QSV encode (#4341)
+- Fixed building with -Werror=format-security by adding missing format strings where needed
 
 ### Windows
 
-- Added support for negative values on the video encoder scale for better clarity of encoder value.
-- Vastly improved support for upgrading presets from older versions (#4820)
-- Fixed a potential UI hang when stopping the queue. (#4782)
-- Fixed an issue where disc drives on the source selection pane would not scan correctly. (#4771)
-- Fixed an issue where 2-pass would erroneously show up for QuickSync AV1 encoder. (#4777)
-- Fixed an issue that broke the ARM64 Windows UI builds.
-- Fixed an issue that prevented NVDEC from being available.
-- Fixed an issue where passthru options would fallback to encoding erroneously (#4795)
-- Fixed an issue with the Preset Save button incorrectly overwrote recently added presets (#4804)
+- Fixed quality slider not allowing negative values for encoders supporting them
+- Fixed issues upgrading presets from older versions (#4820)
+- Fixed a potential graphical interface hang when stopping the queue (#4782)
+- Fixed optical disc drives on the source selection pane not scanning correctly (#4771)
+- Fixed erroneous display of 2-pass check box for Intel QSV AV1 encoder (not yet supported) (#4777)
+- Fixed a build configuration issue that broke version 1.6.0 for Windows on arm64
+- Fixed an issue that prevented NVDEC from being available
+- Fixed passthru audio erroneously falling back to encoding (#4795)
+- Fixed the Save New Preset button incorrectly overwriting recently added presets (#4804)
 
 
 ## HandBrake 1.6.0
