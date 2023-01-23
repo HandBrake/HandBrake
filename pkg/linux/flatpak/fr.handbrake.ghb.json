@@ -37,9 +37,14 @@
             "name": "numactl",
             "sources": [
                 {
-                    "type": "archive",
-                    "url": "https://github.com/numactl/numactl/releases/download/v2.0.13/numactl-2.0.13.tar.gz",
-                    "sha256": "991e254b867eb5951a44d2ae0bf1996a8ef0209e026911ef6c3ef4caf6f58c9a"
+                    "type": "git",
+                    "url": "https://github.com/numactl/numactl.git",
+                    "tag": "v2.0.16",
+                    "commit": "10285f1a1bad49306839b2c463936460b604e3ea",
+                    "x-checker-data": {
+                        "type": "git",
+                        "tag-pattern": "^v([\\d.]+)$"
+                    }
                 }
             ]
         },
