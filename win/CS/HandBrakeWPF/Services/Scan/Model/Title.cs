@@ -130,14 +130,28 @@ namespace HandBrakeWPF.Services.Scan.Model
         {
             get
             {
-                if (!string.IsNullOrEmpty(this.SourceName))
+                switch (this.Type)
                 {
-                    return Path.GetFileNameWithoutExtension(this.SourceName);
+                    case 0: // HB_DVD_TYPE
+                    case 1: // HB_BD_TYPE
+                 
+                        return DriveLabel;
+                    case 2: // HB_STREAM_TYPE
+                    case 3: // HB_FF_STREAM_TYPE
+                        if (!string.IsNullOrEmpty(this.SourceName))
+                        {
+                            return Path.GetFileNameWithoutExtension(this.SourceName);
+                        }
+                        break;
+                    default:
+                        return null;
                 }
 
                 return null;
             }
         }
+
+        public string DriveLabel { get; set; }
 
         public string SourceDisplayName
         {
