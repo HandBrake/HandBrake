@@ -11,6 +11,8 @@ namespace HandBrakeWPF.Services.Scan.Factories
 {
     using System;
 
+    using HandBrake.App.Core.Model;
+    using HandBrake.App.Core.Utilities;
     using HandBrake.Interop.Interop;
     using HandBrake.Interop.Interop.Interfaces.Model.Picture;
     using HandBrake.Interop.Interop.Json.Scan;
@@ -24,6 +26,19 @@ namespace HandBrakeWPF.Services.Scan.Factories
     {
         public Title CreateTitle(SourceTitle title, int mainFeature)
         {
+            string driveLabel = null;
+            if ("VIDEO_TS".Equals(title.Name, StringComparison.CurrentCultureIgnoreCase))
+            {
+                foreach (DriveInformation info in DriveUtilities.GetDrives())
+                {
+                    if (title.Path.StartsWith(info.RootDirectory, StringComparison.CurrentCultureIgnoreCase))
+                    {
+                        driveLabel = info.VolumeLabel;
+                        break;
+                    }
+                }
+            }
+
             Title converted = new Title
             {
                 TitleNumber = title.Index,
@@ -47,6 +62,7 @@ namespace HandBrakeWPF.Services.Scan.Factories
                 },
                 Fps = ((double)title.FrameRate.Num) / title.FrameRate.Den,
                 SourceName = title.Path,
+                DriveLabel = driveLabel,
                 MainTitle = mainFeature == title.Index,
                 Playlist = title.Type == 1 ? string.Format(" {0:d5}.MPLS", title.Playlist).Trim() : null,
                 FramerateNumerator = title.FrameRate.Num,

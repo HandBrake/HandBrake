@@ -254,7 +254,7 @@ namespace HandBrakeWPF.ViewModels
 
                 foreach (Title item in titles)
                 {
-                    string srcName = scannedSource?.SourceName ?? item.DisplaySourceName;
+                    string srcName = item.DisplaySourceName ?? scannedSource.SourceName;
                     SelectionTitle title = new SelectionTitle(item, srcName) { IsSelected = true };
                     TitleList.Add(title);
                 }
