@@ -106,7 +106,10 @@ class FlatpakManifest:
             elif value.entry_type == SourceType.contrib:
                 source["type"] = "file"
                 source["dest"] = "download"
-                source["dest-filename"] = url2filename(value.url)
+                if value.basename != "":
+                    source["dest-filename"] = value.basename
+                else:
+                    source["dest-filename"] = url2filename(value.url)
                 self.sources.append(source)
 
 
@@ -115,6 +118,7 @@ def usage():
     print("     -a --archive    - Main archive (a.k.a. HB sources)")
     print("     -c --contrib    - Contrib download URL (can be repeated)")
     print("     -s --sha256     - sha256 of previous file on command line")
+    print("     -b --basename   - target basename of previous file on command line")
     print("     -t --template   - Flatpak manifest template")
     print("     -r --runtime    - Flatpak SDK runtime version")
     print("     -q --qsv        - Build with Intel QSV support")
@@ -124,8 +128,8 @@ def usage():
 
 if __name__ == "__main__":
     try:
-        opts, args = getopt.getopt(sys.argv[1:], "a:c:s:t:r:qeph",
-            ["archive=", "contrib=", "sha265=",
+        opts, args = getopt.getopt(sys.argv[1:], "a:c:s:b:t:r:qeph",
+            ["archive=", "contrib=", "sha256=", "basename=",
              "template=", "runtime=", "qsv", "nvenc", "plugin", "help"])
     except getopt.GetoptError:
         print("Error: Invalid option")
@@ -164,6 +168,9 @@ if __name__ == "__main__":
         elif opt in ("-s", "--sha256"):
             if current_source is not None:
                 source_list[current_source].sha256 = arg
+        elif opt in ("-b", "--basename"):
+            if current_source is not None:
+                source_list[current_source].basename = arg
         elif opt in ("-t", "--template"):
             template = arg
         elif opt in ("-r", "--runtime"):
