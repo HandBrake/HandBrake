@@ -45,7 +45,7 @@ void ghb_queue_buttons_grey(signal_user_data_t *ud);
 G_MODULE_EXPORT void
 queue_remove_clicked_cb(GtkWidget *widget, signal_user_data_t *ud);
 
-#if GTK_CHECK_VERSION(3, 90, 0)
+#if GTK_CHECK_VERSION(4, 4, 0)
 G_MODULE_EXPORT void
 queue_drag_begin_cb(GtkWidget * widget, GdkDrag * context,
                     signal_user_data_t * ud);
@@ -80,7 +80,7 @@ title_dest_file_cb(GtkWidget *widget, signal_user_data_t *ud);
 G_MODULE_EXPORT void
 title_dest_dir_cb(GtkWidget *widget, signal_user_data_t *ud);
 
-#if GTK_CHECK_VERSION(3, 90, 0)
+#if GTK_CHECK_VERSION(4, 4, 0)
 static const char * queue_drag_entries[] = {
     "application/queue-list-row-drop"
 };
@@ -1551,7 +1551,7 @@ add_to_queue_list(signal_user_data_t *ud, GhbValue *queueDict)
     gtk_widget_set_margin_start(GTK_WIDGET(vbox), 12);
     hbox = GTK_BOX(gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 6));
     dbox = GTK_BOX(gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 6));
-#if GTK_CHECK_VERSION(3, 90, 0)
+#if GTK_CHECK_VERSION(4, 4, 0)
     ebox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
 #else
     ebox = gtk_event_box_new();
@@ -1610,7 +1610,7 @@ add_to_queue_list(signal_user_data_t *ud, GhbValue *queueDict)
     // style class for CSS settings
     gtk_style_context_add_class(gtk_widget_get_style_context(row), "row");
     // set row as a source for drag & drop
-#if GTK_CHECK_VERSION(3, 90, 0)
+#if GTK_CHECK_VERSION(4, 4, 0)
     GdkContentFormats * targets;
 
     targets = gdk_content_formats_new(queue_drag_entries,
@@ -1626,7 +1626,7 @@ add_to_queue_list(signal_user_data_t *ud, GhbValue *queueDict)
     g_signal_connect(ebox, "drag-data-get",
                     G_CALLBACK(queue_drag_data_get_cb), NULL);
 
-#if GTK_CHECK_VERSION(3, 90, 0)
+#if GTK_CHECK_VERSION(4, 4, 0)
     // connect key event controller to capture "delete" key press on row
     GtkEventController * econ = gtk_event_controller_key_new();
     gtk_widget_add_controller(row, econ);
@@ -2588,7 +2588,7 @@ queue_row_key(guint keyval, signal_user_data_t * ud)
     return TRUE;
 }
 
-#if GTK_CHECK_VERSION(3, 90, 0)
+#if GTK_CHECK_VERSION(4, 4, 0)
 G_MODULE_EXPORT gboolean
 queue_row_key_cb(
     GtkEventControllerKey * keycon,
@@ -2668,7 +2668,7 @@ show_queue_action_cb(GSimpleAction *action, GVariant *value,
 G_MODULE_EXPORT gboolean
 queue_window_delete_cb(
     GtkWidget *xwidget,
-#if !GTK_CHECK_VERSION(3, 90, 0)
+#if !GTK_CHECK_VERSION(4, 4, 0)
     GdkEvent *event,
 #endif
     signal_user_data_t *ud)
@@ -3451,7 +3451,7 @@ title_dest_dir_cb(GtkWidget *widget, signal_user_data_t *ud)
 
 // Set up view of row to be dragged
 G_MODULE_EXPORT void
-#if GTK_CHECK_VERSION(3, 90, 0)
+#if GTK_CHECK_VERSION(4, 4, 0)
 queue_drag_begin_cb(GtkWidget          * widget,
                     GdkDrag            * context,
                     signal_user_data_t * ud)
@@ -3474,7 +3474,7 @@ queue_drag_begin_cb(GtkWidget          * widget,
         gtk_list_box_select_row(lb, GTK_LIST_BOX_ROW(row));
     }
 
-#if GTK_CHECK_VERSION(3, 90, 0)
+#if GTK_CHECK_VERSION(4, 4, 0)
     GdkPaintable * paintable = gtk_widget_paintable_new(row);
     gtk_drag_set_icon_paintable(context, paintable, 0, 0);
     g_object_unref(paintable);
@@ -3507,7 +3507,7 @@ queue_drag_begin_cb(GtkWidget          * widget,
 }
 
 G_MODULE_EXPORT void
-#if GTK_CHECK_VERSION(3, 90, 0)
+#if GTK_CHECK_VERSION(4, 4, 0)
 queue_drag_end_cb(GtkWidget          * widget,
                   GdkDrag            * context,
                   signal_user_data_t * ud)
@@ -3529,7 +3529,7 @@ queue_drag_end_cb(GtkWidget          * widget,
 
 // Set selection to the row being dragged
 G_MODULE_EXPORT void
-#if GTK_CHECK_VERSION(3, 90, 0)
+#if GTK_CHECK_VERSION(4, 4, 0)
 queue_drag_data_get_cb(GtkWidget          * widget,
                        GdkDrag            * context,
                        GtkSelectionData   * selection_data,
@@ -3552,7 +3552,7 @@ queue_drag_data_get_cb(GtkWidget          * widget,
 }
 
 G_MODULE_EXPORT void
-#if GTK_CHECK_VERSION(3, 90, 0)
+#if GTK_CHECK_VERSION(4, 4, 0)
 queue_drag_leave_cb(
     GtkListBox         * lb,
     GdkDrop            * ctx,
@@ -3620,7 +3620,7 @@ get_row_after (GtkListBox    * list, GtkListBoxRow * row)
 }
 
 G_MODULE_EXPORT gboolean
-#if GTK_CHECK_VERSION(3, 90, 0)
+#if GTK_CHECK_VERSION(4, 4, 0)
 queue_drag_motion_cb(
     GtkListBox         * lb,
     GdkDrop            * ctx,
@@ -3792,7 +3792,7 @@ queue_move_bottom_action_cb (GSimpleAction *action, GVariant *param,
 }
 
 G_MODULE_EXPORT void
-#if GTK_CHECK_VERSION(3, 90, 0)
+#if GTK_CHECK_VERSION(4, 4, 0)
 queue_drag_data_received_cb(GtkListBox         * lb,
                             GdkDrop            * context,
                             GtkSelectionData   * selection_data,

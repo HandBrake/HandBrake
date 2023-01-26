@@ -326,7 +326,7 @@ extern G_MODULE_EXPORT void presets_drag_motion_cb(void);
 extern G_MODULE_EXPORT void preset_edited_cb(void);
 extern void presets_row_expanded_cb(void);
 
-#if GTK_CHECK_VERSION(3, 90, 0)
+#if GTK_CHECK_VERSION(4, 4, 0)
 static const char * presets_drag_entries[] = {
     "widget/presets-list-row-drop"
 };
@@ -364,7 +364,7 @@ bind_presets_tree_model(signal_user_data_t *ud)
     gtk_tree_view_column_set_expand(column, TRUE);
     gtk_tree_view_set_tooltip_column(treeview, 3);
 
-#if GTK_CHECK_VERSION(3, 90, 0)
+#if GTK_CHECK_VERSION(4, 4, 0)
     GdkContentFormats * targets;
 
     targets = gdk_content_formats_new(presets_drag_entries,
@@ -937,7 +937,8 @@ extern G_MODULE_EXPORT void on_presets_list_press_cb (GtkGesture *gest, gint n_p
                                                       gdouble y, signal_user_data_t *ud);
 extern G_MODULE_EXPORT void queue_button_press_cb (GtkGesture *gest, gint n_press, gdouble x,
                                                    gdouble y, signal_user_data_t *ud);
-#if GTK_CHECK_VERSION(3, 90, 0)
+#if GTK_CHECK_VERSION(4, 4, 0)
+extern G_MODULE_EXPORT void easter_egg_multi_cb(void);
 extern G_MODULE_EXPORT void preview_leave_cb(void);
 extern G_MODULE_EXPORT void preview_motion_cb(void);
 extern G_MODULE_EXPORT void preview_draw_cb(GtkDrawingArea*, cairo_t*, int, int,
@@ -954,7 +955,7 @@ ghb_activate_cb(GApplication * app, signal_user_data_t * ud)
     ghb_css_provider_load_from_data(provider, MyCSS, -1);
     color_scheme_set(APP_PREFERS_LIGHT);
 
-#if GTK_CHECK_VERSION(3, 90, 0)
+#if GTK_CHECK_VERSION(4, 4, 0)
     GdkDisplay *dd = gdk_display_get_default();
     gtk_style_context_add_provider_for_display(dd,
                                 GTK_STYLE_PROVIDER(provider),
@@ -1221,7 +1222,7 @@ ghb_activate_cb(GApplication * app, signal_user_data_t * ud)
     gtk_gesture_single_set_button(GTK_GESTURE_SINGLE(gest), 0);
     g_signal_connect(gest, "pressed", G_CALLBACK(queue_button_press_cb), ud);
 
-#if GTK_CHECK_VERSION(3, 90, 0)
+#if GTK_CHECK_VERSION(4, 4, 0)
     GtkEventController * econ;
 
     // Preview HUD popup management via mouse motion

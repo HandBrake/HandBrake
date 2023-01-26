@@ -924,7 +924,7 @@ static void set_mini_preview_image(signal_user_data_t *ud, GdkPixbuf * pix)
             GtkWidget * widget;
 
             widget = GHB_WIDGET (ud->builder, "preview_button_image");
-#if GTK_CHECK_VERSION(3, 90, 0)
+#if GTK_CHECK_VERSION(4, 4, 0)
             gtk_picture_set_pixbuf(GTK_PICTURE(widget), scaled_preview);
 #else
             gtk_image_set_from_pixbuf(GTK_IMAGE(widget), scaled_preview);
@@ -1094,7 +1094,7 @@ ghb_reset_preview_image(signal_user_data_t *ud)
     gtk_widget_queue_draw(widget);
 }
 
-#if GTK_CHECK_VERSION(3, 90, 0)
+#if GTK_CHECK_VERSION(4, 4, 0)
 G_MODULE_EXPORT void
 preview_draw_cb(
     GtkDrawingArea * da,
@@ -1128,7 +1128,7 @@ preview_draw_cb(
 G_MODULE_EXPORT void
 preview_button_size_allocate_cb(
     GtkWidget *widget,
-#if GTK_CHECK_VERSION(3, 90, 0)
+#if GTK_CHECK_VERSION(4, 4, 0)
     int width,
     int height,
     int baseline,
@@ -1137,7 +1137,7 @@ preview_button_size_allocate_cb(
 #endif
     signal_user_data_t *ud)
 {
-#if !GTK_CHECK_VERSION(3, 90, 0)
+#if !GTK_CHECK_VERSION(4, 4, 0)
     int width  = rect->width;
     int height = rect->height;
 #endif
@@ -1168,7 +1168,7 @@ ghb_preview_set_visible(signal_user_data_t *ud, gboolean visible)
     widget = GHB_WIDGET(ud->builder, "preview_window");
     if (visible)
     {
-#if !GTK_CHECK_VERSION(3, 90, 0)
+#if !GTK_CHECK_VERSION(4, 4, 0)
         // TODO: can this be done in GTK4?
         gint x, y;
         x = ghb_dict_get_int(ud->prefs, "preview_x");
@@ -1231,7 +1231,7 @@ preview_frame_value_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 G_MODULE_EXPORT gboolean
 preview_window_delete_cb(
     GtkWidget *widget,
-#if !GTK_CHECK_VERSION(3, 90, 0)
+#if !GTK_CHECK_VERSION(4, 4, 0)
     GdkEvent *event,
 #endif
     signal_user_data_t *ud)
@@ -1268,7 +1268,7 @@ hud_timeout(signal_user_data_t *ud)
     return FALSE;
 }
 
-#if GTK_CHECK_VERSION(3, 90, 0)
+#if GTK_CHECK_VERSION(4, 4, 0)
 G_MODULE_EXPORT void
 hud_enter_cb(
     GtkEventControllerMotion * econ,
@@ -1303,12 +1303,12 @@ hud_enter_cb(
     }
     hud_timeout_id = 0;
     in_hud = TRUE;
-#if !GTK_CHECK_VERSION(3, 90, 0)
+#if !GTK_CHECK_VERSION(4, 4, 0)
     return FALSE;
 #endif
 }
 
-#if GTK_CHECK_VERSION(3, 90, 0)
+#if GTK_CHECK_VERSION(4, 4, 0)
 G_MODULE_EXPORT void
 hud_leave_cb(
     GtkEventControllerMotion * econ,
@@ -1324,7 +1324,7 @@ hud_leave_cb(
 #endif
 {
     in_hud = FALSE;
-#if !GTK_CHECK_VERSION(3, 90, 0)
+#if !GTK_CHECK_VERSION(4, 4, 0)
     return FALSE;
 #endif
 }
@@ -1340,7 +1340,7 @@ preview_click_cb (GtkGesture *gest,
         g_action_activate(GHB_ACTION(ud->builder, "preview-fullscreen"), NULL);
 }
 
-#if GTK_CHECK_VERSION(3, 90, 0)
+#if GTK_CHECK_VERSION(4, 4, 0)
 G_MODULE_EXPORT void
 preview_leave_cb(
     GtkEventControllerMotion * econ,
@@ -1366,12 +1366,12 @@ preview_leave_cb(
             g_source_destroy(source);
     }
     hud_timeout_id = g_timeout_add(300, (GSourceFunc)hud_timeout, ud);
-#if !GTK_CHECK_VERSION(3, 90, 0)
+#if !GTK_CHECK_VERSION(4, 4, 0)
     return FALSE;
 #endif
 }
 
-#if GTK_CHECK_VERSION(3, 90, 0)
+#if GTK_CHECK_VERSION(4, 4, 0)
 G_MODULE_EXPORT void
 preview_motion_cb(
     GtkEventControllerMotion * econ,
@@ -1407,7 +1407,7 @@ preview_motion_cb(
     {
         hud_timeout_id = g_timeout_add_seconds(4, (GSourceFunc)hud_timeout, ud);
     }
-#if !GTK_CHECK_VERSION(3, 90, 0)
+#if !GTK_CHECK_VERSION(4, 4, 0)
     return FALSE;
 #endif
 }
@@ -1419,7 +1419,7 @@ preview_motion_cb(
 //
 // Hopefully they will fix this or provide a better alternative
 // before gtk4 is released.
-#if !GTK_CHECK_VERSION(3, 90, 0)
+#if !GTK_CHECK_VERSION(4, 4, 0)
 G_MODULE_EXPORT gboolean
 preview_configure_cb(
     GtkWidget *widget,
@@ -1442,7 +1442,7 @@ preview_configure_cb(
 }
 #endif
 
-#if !GTK_CHECK_VERSION(3, 90, 0)
+#if !GTK_CHECK_VERSION(4, 4, 0)
 // GTK4 no longer has GDK_WINDOW_STATE events :*(
 G_MODULE_EXPORT gboolean
 preview_state_cb(
@@ -1474,7 +1474,7 @@ preview_state_cb(
 G_MODULE_EXPORT void
 preview_resize_cb(
     GtkWidget     *widget,
-#if GTK_CHECK_VERSION(3, 90, 0)
+#if GTK_CHECK_VERSION(4, 4, 0)
     int width,
     int height,
     int baseline,
@@ -1483,7 +1483,7 @@ preview_resize_cb(
 #endif
     signal_user_data_t *ud)
 {
-#if !GTK_CHECK_VERSION(3, 90, 0)
+#if !GTK_CHECK_VERSION(4, 4, 0)
     int width  = rect->width;
     int height = rect->height;
 #endif

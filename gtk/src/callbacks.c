@@ -1879,7 +1879,7 @@ destination_action_cb(GSimpleAction *action, GVariant *param,
 G_MODULE_EXPORT gboolean
 window_destroy_event_cb(
     GtkWidget *widget,
-#if !GTK_CHECK_VERSION(3, 90, 0)
+#if !GTK_CHECK_VERSION(4, 4, 0)
     GdkEvent *event,
 #endif
     signal_user_data_t *ud)
@@ -1893,7 +1893,7 @@ window_destroy_event_cb(
 G_MODULE_EXPORT gboolean
 window_delete_event_cb(
     GtkWidget *widget,
-#if !GTK_CHECK_VERSION(3, 90, 0)
+#if !GTK_CHECK_VERSION(4, 4, 0)
     GdkEvent *event,
 #endif
     signal_user_data_t *ud)
@@ -4498,7 +4498,7 @@ show_activity_action_cb(GSimpleAction *action, GVariant *value,
 G_MODULE_EXPORT gboolean
 activity_window_delete_cb(
     GtkWidget *xwidget,
-#if !GTK_CHECK_VERSION(3, 90, 0)
+#if !GTK_CHECK_VERSION(4, 4, 0)
     GdkEvent *event,
 #endif
     signal_user_data_t *ud)
@@ -4637,7 +4637,7 @@ presets_window_set_visible(signal_user_data_t *ud, gboolean visible)
     }
     gtk_widget_set_visible(presets_window, visible);
 
-#if !GTK_CHECK_VERSION(3, 90, 0)
+#if !GTK_CHECK_VERSION(4, 4, 0)
     // TODO: Is this possible in GTK4?
     int             x, y;
 
@@ -4740,7 +4740,7 @@ activity_font_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 
     ghb_css_provider_load_from_data(provider, css, -1);
     GtkWidget * win = GHB_WIDGET(ud->builder, "hb_window");
-#if GTK_CHECK_VERSION(3, 90, 0)
+#if GTK_CHECK_VERSION(4, 4, 0)
     GdkDisplay *dd = gtk_widget_get_display(win);
     gtk_style_context_add_provider_for_display(dd,
                                 GTK_STYLE_PROVIDER(provider),
@@ -5475,7 +5475,7 @@ ghb_notify_done(signal_user_data_t *ud)
 G_MODULE_EXPORT gboolean
 window_map_cb(
     GtkWidget *widget,
-#if !GTK_CHECK_VERSION(3, 90, 0)
+#if !GTK_CHECK_VERSION(4, 4, 0)
     GdkEventAny *event,
 #endif
     signal_user_data_t *ud)
@@ -5486,7 +5486,7 @@ window_map_cb(
 G_MODULE_EXPORT void
 hb_win_sz_alloc_cb(
     GtkWidget *widget,
-#if GTK_CHECK_VERSION(3, 90, 0)
+#if GTK_CHECK_VERSION(4, 4, 0)
     int width,
     int height,
     int baseline,
@@ -5593,7 +5593,7 @@ GtkFileFilter *ghb_add_file_filter(GtkFileChooser *chooser,
     return filter;
 }
 
-#if GTK_CHECK_VERSION(3, 90, 0)
+#if GTK_CHECK_VERSION(4, 4, 0)
 G_MODULE_EXPORT gboolean
 combo_search_key_press_cb(
     GtkEventControllerKey * keycon,
