@@ -39,24 +39,12 @@
 #define GHB_ICON_SIZE_BUTTON GTK_ICON_SIZE_BUTTON
 #endif
 
-#if !GTK_CHECK_VERSION(3, 10, 0)
-#define gtk_image_set_from_icon_name gtk_image_set_from_stock
-#define GHB_PLAY_ICON "gtk-media-play"
-#define GHB_PAUSE_ICON "gtk-media-pause"
-#else
 #define GHB_PLAY_ICON "media-playback-start"
 #define GHB_PAUSE_ICON "media-playback-pause"
-#endif
 
-#if !GTK_CHECK_VERSION(3, 10, 0)
-#define GHB_STOCK_OPEN      GTK_STOCK_OPEN
-#define GHB_STOCK_CANCEL    GTK_STOCK_CANCEL
-#define GHB_STOCK_SAVE      GTK_STOCK_SAVE
-#else
 #define GHB_STOCK_OPEN      _("_Open")
 #define GHB_STOCK_CANCEL    _("_Cancel")
 #define GHB_STOCK_SAVE      _("_Save")
-#endif
 
 static inline void ghb_widget_get_preferred_width(
     GtkWidget *widget, gint *min_width, gint * natural_width)
@@ -155,52 +143,31 @@ static inline void ghb_css_provider_load_from_data(GtkCssProvider *provider,
 
 static inline GdkEventType ghb_event_get_event_type(const GdkEvent *event)
 {
-#if GTK_CHECK_VERSION(3, 10, 0)
     return gdk_event_get_event_type(event);
-#else
-    return event->type;
-#endif
 }
 
 static inline gboolean ghb_event_get_keyval(const GdkEvent *event,
                                             guint *keyval)
 {
-#if GTK_CHECK_VERSION(3, 2, 0)
     return gdk_event_get_keyval(event, keyval);
-#else
-    *keyval = ((GdkEventKey*)event)->keyval;
-    return TRUE;
-#endif
 }
 
 static inline gboolean ghb_event_get_button(const GdkEvent *event,
                                             guint *button)
 {
-#if GTK_CHECK_VERSION(3, 2, 0)
     return gdk_event_get_button(event, button);
-#else
-    *keyval = ((GdkEventButton*)event)->button;
-    return TRUE;
-#endif
 }
 
 static inline PangoFontDescription* ghb_widget_get_font(GtkWidget *widget)
 {
     PangoFontDescription *font = NULL;
 
-#if GTK_CHECK_VERSION(3, 0, 0)
     GtkStyleContext *style;
 
     style = gtk_widget_get_style_context(widget);
 
-#if GTK_CHECK_VERSION(3, 8, 0)
     gtk_style_context_get(style, GTK_STATE_FLAG_NORMAL,
                           "font", &font, NULL);
-#else
-    font = gtk_style_context_get_font(style, GTK_STATE_FLAG_NORMAL);
-#endif
-#endif
-
     return font;
 }
 
@@ -254,7 +221,6 @@ static inline void ghb_monitor_get_size(GtkWidget *widget, gint *w, gint *h)
 {
     *w = *h = 0;
 
-#if GTK_CHECK_VERSION(3, 22, 0)
     GdkDisplay * display = gtk_widget_get_display(widget);
     GhbSurface * surface = ghb_widget_get_surface(widget);
     if (surface != NULL && display != NULL)
@@ -271,16 +237,6 @@ static inline void ghb_monitor_get_size(GtkWidget *widget, gint *w, gint *h)
             *h = rect.height;
         }
     }
-#else
-    GdkScreen *ss;
-
-    ss = gdk_screen_get_default();
-    if (ss != NULL)
-    {
-        *w = gdk_screen_get_width(ss);
-        *h = gdk_screen_get_height(ss);
-    }
-#endif
 }
 
 static inline gboolean ghb_strv_contains(const char ** strv, const char * str)

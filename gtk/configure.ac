@@ -145,15 +145,15 @@ esac
 PKG_PROG_PKG_CONFIG
 
 HAVE_GTK_400=0
-HAVE_GTK_316=0
+HAVE_GTK_3_22=0
 if test "x$use_gtk4" = "xyes" ; then
 	PKG_CHECK_MODULES([gtk], [gtk4 >= 3.92], [HAVE_GTK_400=1], [HAVE_GTK_400=0])
 else
-	PKG_CHECK_MODULES([gtk], [gtk+-3.0 >= 3.16], [HAVE_GTK_316=1], [HAVE_GTK_316=0])
+	PKG_CHECK_MODULES([gtk], [gtk+-3.0 >= 3.22], [HAVE_GTK_3_22=1], [HAVE_GTK_3_22=0])
 fi
 
-if test "$HAVE_GTK_316" -eq 0 -a "$HAVE_GTK_400" -eq 0 ; then
-	AC_MSG_ERROR("GTK 3.16 or above is required)
+if test "$HAVE_GTK_3_22" -eq 0 -a "$HAVE_GTK_400" -eq 0 ; then
+	AC_MSG_ERROR("GTK 3.22 or above is required)
 fi
 HB_LIBS="$HB_LIBS $gtk_LIBS"
 HB_CPPFLAGS="$HB_CPPFLAGS $gtk_CFLAGS"
@@ -203,7 +203,7 @@ else
 fi
 
 AM_CONDITIONAL([GHB_GTK_4_00], [test "$HAVE_GTK_400" -eq 1])
-AM_CONDITIONAL([GHB_GTK_3_16], [test "$HAVE_GTK_316" -eq 1])
+AM_CONDITIONAL([GHB_GTK_3_22], [test "$HAVE_GTK_3_22" -eq 1])
 
 AM_CONDITIONAL([MINGW], [test "x$mingw_flag" = "xyes"])
 

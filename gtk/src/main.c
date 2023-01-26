@@ -674,21 +674,17 @@ const gchar *MyCSS =
 "    padding: 0px 0px 0px 0px;"
 "}"
 
-#if GTK_CHECK_VERSION(3, 20, 0)
 "stackswitcher button.text-button"
 "{"
 "    min-width: 50px;"
 "}"
-#endif
 
-#if GTK_CHECK_VERSION(3, 16, 0)
 "#activity_view"
 "{"
 "    font-family: monospace;"
 "    font-size: 8pt;"
 "    font-weight: 300;"
 "}"
-#endif
 
 ".row:not(:first-child)"
 "{"
@@ -1159,14 +1155,6 @@ ghb_activate_cb(GApplication * app, signal_user_data_t * ud)
     ghb_add_file_filter(chooser, ud, "FLV", "SourceFilterFLV");
     ghb_add_file_filter(chooser, ud, "WMV", "SourceFilterWMV");
 
-
-#if !GTK_CHECK_VERSION(3, 16, 0)
-    PangoFontDescription *font_desc;
-    font_desc = pango_font_description_from_string("monospace 10");
-    textview = GTK_TEXT_VIEW(GHB_WIDGET(ud->builder, "activity_view"));
-    gtk_widget_override_font(GTK_WIDGET(textview), font_desc);
-    pango_font_description_free(font_desc);
-#endif
 
     // Grrrr!  Gtk developers !!!hard coded!!! the width of the
     // radio buttons in GtkStackSwitcher to 100!!!

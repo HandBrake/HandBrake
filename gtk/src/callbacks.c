@@ -62,10 +62,6 @@
 #define NOTIFY_CHECK_VERSION(x,y,z) 0
 #endif
 
-#if !GTK_CHECK_VERSION(3, 4, 0)
-#include <gdk/gdkx.h>
-#endif
-
 #ifndef NOTIFY_CHECK_VERSION
 #define NOTIFY_CHECK_VERSION(x,y,z) 0
 #endif
@@ -301,159 +297,11 @@ ghb_shutdown_logind(void)
 #endif
 }
 
-#if !GTK_CHECK_VERSION(3, 4, 0)
-guint
-ghb_inhibit_gpm()
-{
-    guint cookie = -1;
-
-#if !defined(_WIN32)
-    GDBusProxy  *proxy;
-    GError *error = NULL;
-    GVariant *res;
-
-    g_debug("ghb_inhibit_gpm()");
-    proxy = ghb_get_dbus_proxy(G_BUS_TYPE_SESSION, GPM_DBUS_PM_SERVICE,
-                            GPM_DBUS_INHIBIT_PATH, GPM_DBUS_INHIBIT_INTERFACE);
-    if (proxy == NULL)
-        return 0;
-
-    res = g_dbus_proxy_call_sync(proxy, "Inhibit",
-                                 g_variant_new("(ss)", "ghb", "Encoding"),
-                                 G_DBUS_CALL_FLAGS_NONE, -1, NULL, &error);
-    if (!res)
-    {
-        if (error != NULL)
-        {
-            g_error_free(error);
-        }
-    }
-    else
-    {
-        g_variant_get(res, "(u)", &cookie);
-        g_variant_unref(res);
-    }
-    g_object_unref(G_OBJECT(proxy));
-#endif
-
-    return cookie;
-}
-
-void
-ghb_uninhibit_gpm(guint cookie)
-{
-#if !defined(_WIN32)
-    GDBusProxy  *proxy;
-    GError *error = NULL;
-    GVariant *res;
-
-    g_debug("ghb_uninhibit_gpm() cookie %u", cookie);
-
-    proxy = ghb_get_dbus_proxy(G_BUS_TYPE_SESSION, GPM_DBUS_PM_SERVICE,
-                            GPM_DBUS_INHIBIT_PATH, GPM_DBUS_INHIBIT_INTERFACE);
-    if (proxy == NULL)
-        return;
-
-    res = g_dbus_proxy_call_sync(proxy, "UnInhibit",
-                                 g_variant_new("(u)", cookie),
-                                 G_DBUS_CALL_FLAGS_NONE, -1, NULL, &error);
-    if (!res)
-    {
-        if (error != NULL)
-        {
-            g_error_free(error);
-        }
-    }
-    else
-    {
-        g_variant_unref(res);
-    }
-    g_object_unref(G_OBJECT(proxy));
-#endif
-}
-#endif
-
 #if !defined(_WIN32)
 // For inhibit and shutdown
 #define GPM_DBUS_SM_SERVICE         "org.gnome.SessionManager"
 #define GPM_DBUS_SM_PATH            "/org/gnome/SessionManager"
 #define GPM_DBUS_SM_INTERFACE       "org.gnome.SessionManager"
-#endif
-
-#if !GTK_CHECK_VERSION(3, 4, 0)
-guint
-ghb_inhibit_gsm(signal_user_data_t *ud)
-{
-    guint cookie = -1;
-
-#if !defined(_WIN32)
-    GDBusProxy  *proxy;
-    GError *error = NULL;
-    GVariant *res;
-    guint xid;
-    GtkWidget *widget;
-
-    g_debug("ghb_inhibit_gsm()");
-    proxy = ghb_get_dbus_proxy(G_BUS_TYPE_SESSION, GPM_DBUS_SM_SERVICE,
-                            GPM_DBUS_SM_PATH, GPM_DBUS_SM_INTERFACE);
-    if (proxy == NULL)
-        return -1;
-
-    widget = GHB_WIDGET(ud->builder, "hb_window");
-    xid = GDK_WINDOW_XID(gtk_widget_get_window(widget));
-    res = g_dbus_proxy_call_sync(proxy, "Inhibit",
-                                 g_variant_new("(susu)", "ghb", xid, "Encoding", 1 | 4),
-                                 G_DBUS_CALL_FLAGS_NONE, -1, NULL, &error);
-    g_object_unref(G_OBJECT(proxy));
-    if (!res)
-    {
-        if (error != NULL)
-        {
-            g_error_free(error);
-        }
-    }
-    else
-    {
-        g_variant_get(res, "(u)", &cookie);
-        g_variant_unref(res);
-    }
-#endif
-
-    return cookie;
-}
-
-void
-ghb_uninhibit_gsm(guint cookie)
-{
-#if !defined(_WIN32)
-    GDBusProxy  *proxy;
-    GError *error = NULL;
-    GVariant *res;
-
-    g_debug("ghb_uninhibit_gsm() cookie %u", cookie);
-
-    proxy = ghb_get_dbus_proxy(G_BUS_TYPE_SESSION, GPM_DBUS_SM_SERVICE,
-                            GPM_DBUS_SM_PATH, GPM_DBUS_SM_INTERFACE);
-    if (proxy == NULL)
-        return;
-
-    res = g_dbus_proxy_call_sync(proxy, "Uninhibit",
-                                 g_variant_new("(u)", cookie),
-                                 G_DBUS_CALL_FLAGS_NONE, -1, NULL, &error);
-    if (!res)
-    {
-        if (error != NULL)
-        {
-            g_error_free(error);
-        }
-    }
-    else
-    {
-        g_variant_unref(res);
-    }
-    g_object_unref(G_OBJECT(proxy));
-#endif
-}
 #endif
 
 enum {
@@ -473,7 +321,6 @@ ghb_inhibit_suspend(signal_user_data_t *ud)
         // Already inhibited
         return;
     }
-#if GTK_CHECK_VERSION(3, 4, 0)
     suspend_cookie = gtk_application_inhibit(ud->app, NULL,
                             GTK_APPLICATION_INHIBIT_SUSPEND, "Encoding");
     if (suspend_cookie != 0)
@@ -481,20 +328,6 @@ ghb_inhibit_suspend(signal_user_data_t *ud)
         suspend_inhibited = GHB_SUSPEND_INHIBITED_GTK;
         return;
     }
-#else
-    suspend_cookie = ghb_inhibit_gsm(ud);
-    if (suspend_cookie != -1)
-    {
-        suspend_inhibited = GHB_SUSPEND_INHIBITED_GSM;
-        return;
-    }
-    suspend_cookie = ghb_inhibit_gpm(ud);
-    if (suspend_cookie != -1)
-    {
-        suspend_inhibited = GHB_SUSPEND_INHIBITED_GPM;
-        return;
-    }
-#endif
 }
 
 void
@@ -502,19 +335,9 @@ ghb_uninhibit_suspend(signal_user_data_t *ud)
 {
     switch (suspend_inhibited)
     {
-#if GTK_CHECK_VERSION(3, 4, 0)
         case GHB_SUSPEND_INHIBITED_GTK:
             gtk_application_uninhibit(ud->app, suspend_cookie);
             break;
-#else
-        case GHB_SUSPEND_INHIBITED_GPM:
-            ghb_uninhibit_gpm(suspend_cookie);
-            break;
-
-        case GHB_SUSPEND_INHIBITED_GSM:
-            ghb_uninhibit_gsm(suspend_cookie);
-            break;
-#endif
         default:
             break;
     }
@@ -4903,7 +4726,6 @@ activity_font_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 
     int size = ghb_dict_get_int(ud->prefs, "ActivityFontSize");
 
-#if GTK_CHECK_VERSION(3, 16, 0)
     const gchar *css_template =
         "                                   \n\
         #activity_view                      \n\
@@ -4931,18 +4753,6 @@ activity_font_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 #endif
     g_object_unref(provider);
     g_free(css);
-#else
-    const gchar          * font_template = "monospace %d";
-    char                 * font          = g_strdup_printf(font_template, size);
-    PangoFontDescription * font_desc;
-    GtkTextView          * textview;
-
-    font_desc = pango_font_description_from_string(font);
-    textview = GTK_TEXT_VIEW(GHB_WIDGET(ud->builder, "activity_view"));
-    gtk_widget_override_font(GTK_WIDGET(textview), font_desc);
-    pango_font_description_free(font_desc);
-    g_free(font);
-#endif
 }
 
 // Changes the setting for the current session
