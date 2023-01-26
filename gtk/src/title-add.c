@@ -250,7 +250,14 @@ ghb_add_title_to_queue (signal_user_data_t *ud, GhbValue *settings, gint batch)
 
     GhbValue *titleDict  = ghb_get_title_settings(settings);
     GhbValue *jobDict    = ghb_get_job_settings(settings);
+    GhbValue *destDict   = ghb_get_job_dest_settings(settings);
     GhbValue *uiDict     = ghb_value_dup(settings);
+
+    if (ghb_dict_get_string(destDict, "File") == NULL)
+    {
+        const char *dest = ghb_dict_get_string(uiDict, "destination");
+        ghb_dict_set_string(destDict, "File", dest);
+    }
 
     ghb_dict_remove(uiDict, "Job");
     ghb_dict_remove(uiDict, "Title");
@@ -279,7 +286,7 @@ ghb_add_title_to_queue (signal_user_data_t *ud, GhbValue *settings, gint batch)
 }
 
 static gboolean
-title_multiple_can_select (GhbValue *settings_array, gint index)
+title_destination_is_unique (GhbValue *settings_array, gint index)
 {
     gint count, ii;
     GhbValue *settings, *gdest;
@@ -345,7 +352,7 @@ title_add_are_conflicts (signal_user_data_t *ud)
     for (ii = 0; ii < count; ii++)
     {
         row = GTK_WIDGET(gtk_list_box_get_row_at_index(list, ii));
-        if (!title_multiple_can_select(ud->settings_array, ii))
+        if (!title_destination_is_unique(ud->settings_array, ii))
         {
             title_add_set_sensitive(GTK_WIDGET(row), FALSE);
             return TRUE;
@@ -414,7 +421,7 @@ static void title_add_check_conflicts (signal_user_data_t *ud)
         selected = GTK_TOGGLE_BUTTON(find_widget(row, "title_selected"));
 
         settings = ghb_array_get(ud->settings_array, ii);
-        can_select = title_multiple_can_select(ud->settings_array, ii);
+        can_select = title_destination_is_unique(ud->settings_array, ii);
         ghb_dict_set_bool(settings, "title_selected", FALSE);
         gtk_toggle_button_set_active(selected, FALSE);
         title_add_set_sensitive(GTK_WIDGET(row), can_select);
@@ -434,9 +441,11 @@ add_multiple_titles (signal_user_data_t *ud)
         GhbValue *settings;
 
         settings = ghb_array_get(ud->settings_array, ii);
-        if (ghb_dict_get_bool(settings, "title_selected"))
+        if (ghb_dict_get_bool(settings, "title_selected") &&
+            !ghb_add_title_to_queue(ud, settings, 1))
         {
-            ghb_add_title_to_queue(ud, settings, 1);
+            ghb_log("Validation failed. Could not add all titles to queue.");
+            break;
         }
     }
     ghb_queue_selection_init(ud);
@@ -550,7 +559,7 @@ title_add_select_all_cb (GtkWidget *widget, signal_user_data_t *ud)
         row = GTK_WIDGET(gtk_list_box_get_row_at_index(list, ii));
         selected = GTK_TOGGLE_BUTTON(find_widget(row, "title_selected"));
         settings = ghb_array_get(ud->settings_array, ii);
-        can_select = title_multiple_can_select(ud->settings_array, ii);
+        can_select = title_destination_is_unique(ud->settings_array, ii);
         ghb_dict_set_bool(settings, "title_selected", can_select);
         gtk_toggle_button_set_active(selected, TRUE);
         title_add_set_sensitive(GTK_WIDGET(row), can_select);
@@ -623,7 +632,7 @@ title_selected_cb (GtkWidget *widget, signal_user_data_t *ud)
     gint index = gtk_list_box_row_get_index(row);
     selected = ghb_widget_boolean(widget);
     settings = ghb_array_get(ud->settings_array, index);
-    can_select = title_multiple_can_select(ud->settings_array, index);
+    can_select = title_destination_is_unique(ud->settings_array, index);
     ghb_dict_set_bool(settings, "title_selected",
                              selected && can_select);
 }
@@ -656,7 +665,7 @@ title_dest_file_cb (GtkWidget *widget, signal_user_data_t *ud)
 
     widget     = find_widget(GTK_WIDGET(row), "title_selected");
     selected   = ghb_widget_boolean(widget);
-    can_select = title_multiple_can_select(ud->settings_array, index);
+    can_select = title_destination_is_unique(ud->settings_array, index);
 
     ghb_dict_set_bool(settings, "title_selected", selected && can_select);
     title_add_set_sensitive(GTK_WIDGET(row), can_select);
@@ -696,7 +705,7 @@ title_dest_dir_cb (GtkWidget *widget, signal_user_data_t *ud)
 
     widget     = find_widget(GTK_WIDGET(row), "title_selected");
     selected   = ghb_widget_boolean(widget);
-    can_select = title_multiple_can_select(ud->settings_array, index);
+    can_select = title_destination_is_unique(ud->settings_array, index);
 
     ghb_dict_set_bool(settings, "title_selected", selected && can_select);
     title_add_set_sensitive(GTK_WIDGET(row), can_select);
@@ -832,5 +841,41 @@ G_MODULE_EXPORT void
 title_add_all_action_cb (GSimpleAction *action, GVariant *param,
                          signal_user_data_t *ud)
 {
-    title_add_multiple_action_cb(action, param, ud);
+    gint count, ii;
+    GhbValue * preset = NULL;
+
+    if (ghb_dict_get_bool(ud->prefs, "SyncTitleSettings"))
+    {
+        preset = ghb_settings_to_preset(ud->settings);
+    }
+
+    // Set up the list of titles
+    count = ghb_array_len(ud->settings_array);
+    for (ii = 0; ii < count; ii++)
+    {
+        GhbValue *settings;
+
+        settings = ghb_array_get(ud->settings_array, ii);
+        if (preset != NULL)
+        {
+            ghb_preset_to_settings(settings, preset);
+            ghb_set_title_settings(ud, settings);
+        }
+        ghb_dict_set_bool(settings, "title_selected", TRUE);
+    }
+
+    for (ii = 0; ii < count; ii++)
+    {
+        if (!title_destination_is_unique(ud->settings_array, ii))
+        {
+            ghb_title_message_dialog(GTK_WINDOW(GHB_WIDGET(ud->builder, "hb_window")),
+                                     GTK_MESSAGE_ERROR, _("Cannot Add Titles"),
+                                     _("The filenames are not unique. Please choose\n"
+                                       "a unique destination filename for each title."),
+                                     _("OK"), NULL);
+            title_add_multiple_action_cb(action, param, ud);
+            return;
+        }
+    }
+    add_multiple_titles(ud);
 }
