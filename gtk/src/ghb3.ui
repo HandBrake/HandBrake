@@ -4320,657 +4320,610 @@ The actual display dimensions will differ if the pixel aspect ratio is not 1:1.<
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkFlowBox" id="filter_tab">
-                    <property name="orientation">horizontal</property>
-                    <property name="selection-mode">none</property>
+                  <object class="GtkGrid" id="filter_tab">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
-                    <property name="column-spacing">4</property>
-                    <property name="row-spacing">32</property>
+                    <property name="column-spacing">6</property>
+                    <property name="row-spacing">6</property>
                     <property name="margin-top">16</property>
                     <property name="margin-start">0</property>
                     <property name="valign">start</property>
                     <property name="halign">fill</property>
                     <child>
-                      <object class="GtkGrid" id="table10">
-                        <property name="row-spacing">2</property>
+                      <object class="GtkLabel" id="detelecine_label">
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
-                        <property name="column-spacing">5</property>
                         <property name="halign">start</property>
-                        <property name="valign">start</property>
-                        <child>
-                          <object class="GtkLabel" id="label86">
-                            <property name="visible">True</property>
-                            <property name="can-focus">False</property>
-                            <property name="halign">start</property>
-                            <property name="label" translatable="yes">Detelecine:</property>
-                          </object>
-                          <packing>
-                            <property name="top-attach">0</property>
-                            <property name="left-attach">0</property>
-                            <property name="width">1</property>
-                            <property name="height">1</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkComboBox" id="PictureDetelecine">
-                            <property name="valign">GTK_ALIGN_CENTER</property>
-                            <property name="width-request">100</property>
-                            <property name="visible">True</property>
-                            <property name="can-focus">False</property>
-                            <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                            <property name="tooltip-text" translatable="yes">This filter removes 'combing' artifacts that are the result of telecining.
-
-Telecining is a process that adjusts film framerates that are 24fps to NTSC video frame rates which are 30fps.</property>
-                            <signal name="changed" handler="filter_widget_changed_cb" swapped="no"/>
-                          </object>
-                          <packing>
-                            <property name="top-attach">0</property>
-                            <property name="left-attach">1</property>
-                            <property name="width">1</property>
-                            <property name="height">1</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkEntry" id="PictureDetelecineCustom">
-                            <property name="can-focus">True</property>
-                            <property name="tooltip-text" translatable="yes">Custom detelecine filter string format
-
-JunkLeft:JunkRight:JunkTop:JunkBottom:StrictBreaks:MetricPlane:Parity</property>
-                            <property name="width-chars">8</property>
-                            <signal name="changed" handler="filter_widget_changed_cb" swapped="no"/>
-                          </object>
-                          <packing>
-                            <property name="top-attach">1</property>
-                            <property name="left-attach">1</property>
-                            <property name="width">1</property>
-                            <property name="height">1</property>
-                          </packing>
-                        </child>
+                        <property name="label" translatable="yes">Detelecine:</property>
                       </object>
+                      <packing>
+                        <property name="top-attach">0</property>
+                        <property name="left-attach">0</property>
+                        <property name="width">1</property>
+                        <property name="height">1</property>
+                      </packing>
                     </child>
                     <child>
-                      <object class="GtkGrid" id="comb_detect_grid">
-                        <property name="row-spacing">2</property>
+                      <object class="GtkComboBox" id="PictureDetelecine">
+                        <property name="valign">GTK_ALIGN_CENTER</property>
+                        <property name="width-request">200</property>
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
-                        <property name="column-spacing">5</property>
+                        <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                        <property name="tooltip-text" translatable="yes">This filter removes 'combing' artifacts that are the result of telecining.
+
+Telecining is a process that adjusts film framerates that are 24fps to NTSC video frame rates which are 30fps.</property>
+                        <signal name="changed" handler="filter_widget_changed_cb" swapped="no"/>
+                      </object>
+                      <packing>
+                        <property name="top-attach">0</property>
+                        <property name="left-attach">1</property>
+                        <property name="width">1</property>
+                        <property name="height">1</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkEntry" id="PictureDetelecineCustom">
+                        <property name="can-focus">True</property>
+                        <property name="tooltip-text" translatable="yes">Custom detelecine filter string format
+
+JunkLeft:JunkRight:JunkTop:JunkBottom:StrictBreaks:MetricPlane:Parity</property>
+                        <property name="width-chars">8</property>
+                        <property name="hexpand">True</property>
+                        <signal name="changed" handler="filter_widget_changed_cb" swapped="no"/>
+                      </object>
+                      <packing>
+                        <property name="top-attach">0</property>
+                        <property name="left-attach">2</property>
+                        <property name="width">1</property>
+                        <property name="height">1</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkLabel" id="comb_detect_label">
+                        <property name="visible">True</property>
+                        <property name="can-focus">False</property>
                         <property name="halign">start</property>
-                        <property name="valign">start</property>
-                        <child>
-                          <object class="GtkLabel" id="comb_detect_label">
-                            <property name="visible">True</property>
-                            <property name="can-focus">False</property>
-                            <property name="halign">start</property>
-                            <property name="label" translatable="yes">Interlace Detection:</property>
-                          </object>
-                          <packing>
-                            <property name="top-attach">0</property>
-                            <property name="left-attach">0</property>
-                            <property name="width">1</property>
-                            <property name="height">1</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkComboBox" id="PictureCombDetectPreset">
-                            <property name="valign">GTK_ALIGN_CENTER</property>
-                            <property name="width-request">100</property>
-                            <property name="visible">True</property>
-                            <property name="can-focus">False</property>
-                            <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                            <property name="tooltip-text" translatable="yes">This filter detects interlaced frames.
+                        <property name="label" translatable="yes">Interlace Detection:</property>
+                      </object>
+                      <packing>
+                        <property name="top-attach">1</property>
+                        <property name="left-attach">0</property>
+                        <property name="width">1</property>
+                        <property name="height">1</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkComboBox" id="PictureCombDetectPreset">
+                        <property name="valign">GTK_ALIGN_CENTER</property>
+                        <property name="width-request">200</property>
+                        <property name="visible">True</property>
+                        <property name="can-focus">False</property>
+                        <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                        <property name="tooltip-text" translatable="yes">This filter detects interlaced frames.
 
 If a deinterlace filter is enabled, only frames that this filter finds
 to be interlaced will be deinterlaced.</property>
-                            <signal name="changed" handler="comb_detect_widget_changed_cb" swapped="no"/>
-                          </object>
-                          <packing>
-                            <property name="top-attach">0</property>
-                            <property name="left-attach">1</property>
-                            <property name="width">1</property>
-                            <property name="height">1</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkEntry" id="PictureCombDetectCustom">
-                            <property name="can-focus">True</property>
-                            <property name="tooltip-text" translatable="yes">Custom interlace detection filter string format
+                        <signal name="changed" handler="comb_detect_widget_changed_cb" swapped="no"/>
+                      </object>
+                      <packing>
+                        <property name="top-attach">1</property>
+                        <property name="left-attach">1</property>
+                        <property name="width">1</property>
+                        <property name="height">1</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkEntry" id="PictureCombDetectCustom">
+                        <property name="can-focus">True</property>
+                        <property name="tooltip-text" translatable="yes">Custom interlace detection filter string format
 
 Mode:Spatial Metric:Motion Thresh:Spatial Thresh:Mask Filter Mode:
 Block Thresh: Block Width: Block Height</property>
-                            <property name="width-chars">8</property>
-                            <signal name="changed" handler="filter_widget_changed_cb" swapped="no"/>
-                          </object>
-                          <packing>
-                            <property name="top-attach">1</property>
-                            <property name="left-attach">1</property>
-                            <property name="width">1</property>
-                            <property name="height">1</property>
-                          </packing>
-                        </child>
+                        <property name="width-chars">8</property>
+                        <property name="hexpand">True</property>
+                        <signal name="changed" handler="filter_widget_changed_cb" swapped="no"/>
                       </object>
+                      <packing>
+                        <property name="top-attach">1</property>
+                        <property name="left-attach">2</property>
+                        <property name="width">1</property>
+                        <property name="height">1</property>
+                      </packing>
                     </child>
                     <child>
-                      <object class="GtkGrid" id="table14">
-                        <property name="row-spacing">2</property>
+                      <object class="GtkLabel" id="PictureDeinterlaceFilterLabel">
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
-                        <property name="column-spacing">5</property>
                         <property name="halign">start</property>
-                        <property name="valign">start</property>
-                        <child>
-                          <object class="GtkLabel" id="PictureDeinterlaceFilterLabel">
-                            <property name="visible">True</property>
-                            <property name="can-focus">False</property>
-                            <property name="halign">start</property>
-                            <property name="label" translatable="yes">Deinterlace:</property>
-                          </object>
-                          <packing>
-                            <property name="top-attach">1</property>
-                            <property name="left-attach">0</property>
-                            <property name="width">1</property>
-                            <property name="height">1</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkComboBox" id="PictureDeinterlaceFilter">
-                            <property name="valign">GTK_ALIGN_CENTER</property>
-                            <property name="width-request">100</property>
-                            <property name="visible">True</property>
-                            <property name="can-focus">False</property>
-                            <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                            <property name="tooltip-text" translatable="yes">Choose decomb or deinterlace filter.
+                        <property name="label" translatable="yes">Deinterlace:</property>
+                      </object>
+                      <packing>
+                        <property name="top-attach">2</property>
+                        <property name="left-attach">0</property>
+                        <property name="width">1</property>
+                        <property name="height">1</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkComboBox" id="PictureDeinterlaceFilter">
+                        <property name="valign">GTK_ALIGN_CENTER</property>
+                        <property name="width-request">200</property>
+                        <property name="visible">True</property>
+                        <property name="can-focus">False</property>
+                        <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                        <property name="tooltip-text" translatable="yes">Choose decomb or deinterlace filter.
 
 The decomb filter supports a variety of interpolation algorithms.
 The deinterlace filter is a classic YADIF deinterlacer.
 </property>
-                            <signal name="changed" handler="deint_filter_changed_cb" swapped="no"/>
-                          </object>
-                          <packing>
-                            <property name="top-attach">1</property>
-                            <property name="left-attach">1</property>
-                            <property name="width">1</property>
-                            <property name="height">1</property>
-                          </packing>
-                        </child>
+                        <signal name="changed" handler="deint_filter_changed_cb" swapped="no"/>
+                      </object>
+                      <packing>
+                        <property name="top-attach">2</property>
+                        <property name="left-attach">1</property>
+                        <property name="width">1</property>
+                        <property name="height">1</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkBox">
+                        <property name="orientation">horizontal</property>
+                        <property name="visible">True</property>
+                        <property name="can-focus">False</property>
+                        <property name="spacing">8</property>
                         <child>
                           <object class="GtkLabel" id="PictureDeinterlacePresetLabel">
                             <property name="visible">True</property>
                             <property name="can-focus">False</property>
                             <property name="halign">start</property>
-                            <property name="label" translatable="yes">Deinterlace Preset:</property>
+                            <property name="width-chars">6</property>
+                            <property name="xalign">0.0</property>
+                            <property name="label" translatable="yes">Preset:</property>
                           </object>
-                          <packing>
-                            <property name="top-attach">2</property>
-                            <property name="left-attach">0</property>
-                            <property name="width">1</property>
-                            <property name="height">1</property>
-                          </packing>
                         </child>
                         <child>
                           <object class="GtkComboBox" id="PictureDeinterlacePreset">
                             <property name="valign">GTK_ALIGN_CENTER</property>
-                            <property name="width-request">100</property>
+                            <property name="width-request">200</property>
                             <property name="visible">True</property>
                             <property name="can-focus">False</property>
                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                             <property name="tooltip-text" translatable="yes">Choose decomb or deinterlace filter options.
 
-The decomb filter supports a variety of interpolation algorithms.
-The deinterlace filter is a classic YADIF deinterlacer.
-</property>
+    The decomb filter supports a variety of interpolation algorithms.
+    The deinterlace filter is a classic YADIF deinterlacer.
+    </property>
                             <signal name="changed" handler="filter_widget_changed_cb" swapped="no"/>
                           </object>
-                          <packing>
-                            <property name="top-attach">2</property>
-                            <property name="left-attach">1</property>
-                            <property name="width">1</property>
-                            <property name="height">1</property>
-                          </packing>
                         </child>
                         <child>
                           <object class="GtkEntry" id="PictureDeinterlaceCustom">
                             <property name="can-focus">True</property>
                             <property name="tooltip-text" translatable="yes"></property>
                             <property name="width-chars">8</property>
+                            <property name="hexpand">True</property>
                             <signal name="changed" handler="filter_widget_changed_cb" swapped="no"/>
                           </object>
-                          <packing>
-                            <property name="top-attach">3</property>
-                            <property name="left-attach">1</property>
-                            <property name="width">1</property>
-                            <property name="height">1</property>
-                          </packing>
                         </child>
                       </object>
+                      <packing>
+                        <property name="top-attach">2</property>
+                        <property name="left-attach">2</property>
+                        <property name="width">1</property>
+                        <property name="height">1</property>
+                      </packing>
                     </child>
                     <child>
-                      <object class="GtkGrid" id="table90">
-                        <property name="row-spacing">2</property>
+                      <object class="GtkLabel" id="PictureDeblockPresetLabel">
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
-                        <property name="column-spacing">5</property>
                         <property name="halign">start</property>
-                        <property name="valign">start</property>
-                        <child>
-                          <object class="GtkLabel" id="PictureDeblockPresetLabel">
-                            <property name="visible">True</property>
-                            <property name="can-focus">False</property>
-                            <property name="halign">start</property>
-                            <property name="label" translatable="yes">Deblock Filter:</property>
-                          </object>
-                          <packing>
-                            <property name="top-attach">1</property>
-                            <property name="left-attach">0</property>
-                            <property name="width">1</property>
-                            <property name="height">1</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkComboBox" id="PictureDeblockPreset">
-                            <property name="valign">GTK_ALIGN_CENTER</property>
-                            <property name="width-request">100</property>
-                            <property name="visible">True</property>
-                            <property name="can-focus">False</property>
-                            <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                            <property name="tooltip-text" translatable="yes">The deblocking filter removes a common type of compression artifact.
+                        <property name="label" translatable="yes">Deblock Filter:</property>
+                      </object>
+                      <packing>
+                        <property name="top-attach">3</property>
+                        <property name="left-attach">0</property>
+                        <property name="width">1</property>
+                        <property name="height">1</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkComboBox" id="PictureDeblockPreset">
+                        <property name="valign">GTK_ALIGN_CENTER</property>
+                        <property name="width-request">200</property>
+                        <property name="visible">True</property>
+                        <property name="can-focus">False</property>
+                        <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                        <property name="tooltip-text" translatable="yes">The deblocking filter removes a common type of compression artifact.
 If your source exhibits 'blockiness', this filter may help clean it up.</property>
-                            <signal name="changed" handler="filter_widget_changed_cb" swapped="no"/>
-                          </object>
-                          <packing>
-                            <property name="top-attach">1</property>
-                            <property name="left-attach">1</property>
-                            <property name="width">1</property>
-                            <property name="height">1</property>
-                          </packing>
-                        </child>
+                        <signal name="changed" handler="filter_widget_changed_cb" swapped="no"/>
+                      </object>
+                      <packing>
+                        <property name="top-attach">3</property>
+                        <property name="left-attach">1</property>
+                        <property name="width">1</property>
+                        <property name="height">1</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkBox">
+                        <property name="orientation">horizontal</property>
+                        <property name="visible">True</property>
+                        <property name="can-focus">False</property>
+                        <property name="spacing">8</property>
                         <child>
                           <object class="GtkLabel" id="PictureDeblockTuneLabel">
                             <property name="visible">True</property>
                             <property name="can-focus">False</property>
                             <property name="halign">start</property>
-                            <property name="label" translatable="yes">Deblock Tune:</property>
+                            <property name="width-chars">6</property>
+                            <property name="xalign">0.0</property>
+                            <property name="label" translatable="yes">Tune:</property>
                           </object>
-                          <packing>
-                            <property name="top-attach">2</property>
-                            <property name="left-attach">0</property>
-                            <property name="width">1</property>
-                            <property name="height">1</property>
-                          </packing>
                         </child>
                         <child>
                           <object class="GtkComboBox" id="PictureDeblockTune">
                             <property name="valign">GTK_ALIGN_CENTER</property>
-                            <property name="width-request">100</property>
+                            <property name="width-request">200</property>
                             <property name="visible">True</property>
                             <property name="can-focus">False</property>
                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                             <property name="tooltip-text" translatable="yes">The deblocking filter removes a common type of compression artifact.
-If your source exhibits 'blockiness', this filter may help clean it up.</property>
+    If your source exhibits 'blockiness', this filter may help clean it up.</property>
                             <signal name="changed" handler="filter_widget_changed_cb" swapped="no"/>
                           </object>
-                          <packing>
-                            <property name="top-attach">2</property>
-                            <property name="left-attach">1</property>
-                            <property name="width">1</property>
-                            <property name="height">1</property>
-                          </packing>
                         </child>
                         <child>
                           <object class="GtkEntry" id="PictureDeblockCustom">
                             <property name="can-focus">True</property>
                             <property name="tooltip-text" translatable="yes">Custom deblock filter string format
 
-strength=weak|strong:thresh=0-100:blocksize=4-512</property>
+    strength=weak|strong:thresh=0-100:blocksize=4-512</property>
                             <property name="width-chars">8</property>
+                            <property name="hexpand">True</property>
                             <signal name="changed" handler="filter_widget_changed_cb" swapped="no"/>
                           </object>
-                          <packing>
-                            <property name="top-attach">3</property>
-                            <property name="left-attach">1</property>
-                            <property name="width">1</property>
-                            <property name="height">1</property>
-                          </packing>
                         </child>
                       </object>
+                      <packing>
+                        <property name="top-attach">3</property>
+                        <property name="left-attach">2</property>
+                        <property name="width">1</property>
+                        <property name="height">1</property>
+                      </packing>
                     </child>
                     <child>
-                      <object class="GtkGrid" id="table1">
-                        <property name="row-spacing">2</property>
+                      <object class="GtkLabel" id="PictureDenoiseFilterLabel">
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
-                        <property name="column-spacing">5</property>
                         <property name="halign">start</property>
-                        <property name="valign">start</property>
-                        <child>
-                          <object class="GtkLabel" id="label32">
-                            <property name="visible">True</property>
-                            <property name="can-focus">False</property>
-                            <property name="halign">start</property>
-                            <property name="label" translatable="yes">Denoise Filter:</property>
-                          </object>
-                          <packing>
-                            <property name="top-attach">1</property>
-                            <property name="left-attach">0</property>
-                            <property name="width">1</property>
-                            <property name="height">1</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkComboBox" id="PictureDenoiseFilter">
-                            <property name="valign">GTK_ALIGN_CENTER</property>
-                            <property name="width-request">100</property>
-                            <property name="visible">True</property>
-                            <property name="can-focus">False</property>
-                            <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                            <property name="tooltip-text" translatable="yes">Denoise filtering reduces or removes the appearance of noise and grain.
+                        <property name="label" translatable="yes">Denoise Filter:</property>
+                      </object>
+                      <packing>
+                        <property name="top-attach">4</property>
+                        <property name="left-attach">0</property>
+                        <property name="width">1</property>
+                        <property name="height">1</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkComboBox" id="PictureDenoiseFilter">
+                        <property name="valign">GTK_ALIGN_CENTER</property>
+                        <property name="width-request">200</property>
+                        <property name="visible">True</property>
+                        <property name="can-focus">False</property>
+                        <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                        <property name="tooltip-text" translatable="yes">Denoise filtering reduces or removes the appearance of noise and grain.
 Film grain and other types of high frequency noise are difficult to compress.
 Using this filter on such sources can result in smaller file sizes.</property>
-                            <signal name="changed" handler="denoise_filter_changed_cb" swapped="no"/>
-                          </object>
-                          <packing>
-                            <property name="top-attach">1</property>
-                            <property name="left-attach">1</property>
-                            <property name="width">1</property>
-                            <property name="height">1</property>
-                          </packing>
-                        </child>
+                        <signal name="changed" handler="denoise_filter_changed_cb" swapped="no"/>
+                      </object>
+                      <packing>
+                        <property name="top-attach">4</property>
+                        <property name="left-attach">1</property>
+                        <property name="width">1</property>
+                        <property name="height">1</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkBox">
+                        <property name="orientation">horizontal</property>
+                        <property name="visible">True</property>
+                        <property name="can-focus">False</property>
+                        <property name="spacing">8</property>
                         <child>
                           <object class="GtkLabel" id="PictureDenoisePresetLabel">
                             <property name="visible">True</property>
                             <property name="can-focus">False</property>
                             <property name="halign">start</property>
-                            <property name="label" translatable="yes">Denoise Preset:</property>
+                            <property name="width-chars">6</property>
+                            <property name="xalign">0.0</property>
+                            <property name="label" translatable="yes">Preset:</property>
                           </object>
-                          <packing>
-                            <property name="top-attach">2</property>
-                            <property name="left-attach">0</property>
-                            <property name="width">1</property>
-                            <property name="height">1</property>
-                          </packing>
                         </child>
                         <child>
                           <object class="GtkComboBox" id="PictureDenoisePreset">
                             <property name="valign">GTK_ALIGN_CENTER</property>
-                            <property name="width-request">100</property>
+                            <property name="width-request">200</property>
                             <property name="visible">True</property>
                             <property name="can-focus">False</property>
                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                             <property name="tooltip-text" translatable="yes">Denoise filtering reduces or removes the appearance of noise and grain.
-Film grain and other types of high frequency noise are difficult to compress.
-Using this filter on such sources can result in smaller file sizes.</property>
+    Film grain and other types of high frequency noise are difficult to compress.
+    Using this filter on such sources can result in smaller file sizes.</property>
                             <signal name="changed" handler="filter_widget_changed_cb" swapped="no"/>
                           </object>
-                          <packing>
-                            <property name="top-attach">2</property>
-                            <property name="left-attach">1</property>
-                            <property name="width">1</property>
-                            <property name="height">1</property>
-                          </packing>
                         </child>
                         <child>
                           <object class="GtkLabel" id="PictureDenoiseTuneLabel">
                             <property name="visible">True</property>
                             <property name="can-focus">False</property>
                             <property name="halign">start</property>
-                            <property name="label" translatable="yes">Denoise Tune:</property>
+                            <property name="width-chars">6</property>
+                            <property name="xalign">0.0</property>
+                            <property name="label" translatable="yes">Tune:</property>
                           </object>
-                          <packing>
-                            <property name="top-attach">3</property>
-                            <property name="left-attach">0</property>
-                            <property name="width">1</property>
-                            <property name="height">1</property>
-                          </packing>
                         </child>
                         <child>
                           <object class="GtkComboBox" id="PictureDenoiseTune">
                             <property name="valign">GTK_ALIGN_CENTER</property>
-                            <property name="width-request">100</property>
+                            <property name="width-request">200</property>
                             <property name="visible">True</property>
                             <property name="can-focus">False</property>
                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                             <property name="tooltip-text" translatable="yes">Denoise filtering reduces or removes the appearance of noise and grain.
-Film grain and other types of high frequency noise are difficult to compress.
-Using this filter on such sources can result in smaller file sizes.</property>
+    Film grain and other types of high frequency noise are difficult to compress.
+    Using this filter on such sources can result in smaller file sizes.</property>
                             <signal name="changed" handler="filter_widget_changed_cb" swapped="no"/>
                           </object>
-                          <packing>
-                            <property name="top-attach">3</property>
-                            <property name="left-attach">1</property>
-                            <property name="width">1</property>
-                            <property name="height">1</property>
-                          </packing>
                         </child>
                         <child>
                           <object class="GtkEntry" id="PictureDenoiseCustom">
                             <property name="can-focus">True</property>
                             <property name="tooltip-text" translatable="yes">Custom denoise filter string format
 
-SpatialLuma:SpatialChroma:TemporalLuma:TemporalChroma</property>
+    SpatialLuma:SpatialChroma:TemporalLuma:TemporalChroma</property>
                             <property name="width-chars">8</property>
+                            <property name="hexpand">True</property>
                             <signal name="changed" handler="filter_widget_changed_cb" swapped="no"/>
                           </object>
-                          <packing>
-                            <property name="top-attach">3</property>
-                            <property name="left-attach">1</property>
-                            <property name="width">1</property>
-                            <property name="height">1</property>
-                          </packing>
                         </child>
                       </object>
+                      <packing>
+                        <property name="top-attach">4</property>
+                        <property name="left-attach">2</property>
+                        <property name="width">1</property>
+                        <property name="height">1</property>
+                      </packing>
                     </child>
                     <child>
-                      <object class="GtkGrid" id="chroma_smooth_grid">
-                        <property name="row-spacing">2</property>
+                      <object class="GtkLabel" id="PictureChromaSmoothPresetLabel">
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
-                        <property name="column-spacing">5</property>
                         <property name="halign">start</property>
-                        <property name="valign">start</property>
-                        <child>
-                          <object class="GtkLabel" id="PictureChromaSmoothPresetLabel">
-                            <property name="visible">True</property>
-                            <property name="can-focus">False</property>
-                            <property name="halign">start</property>
-                            <property name="label" translatable="yes">Chroma Smooth Filter:</property>
-                          </object>
-                          <packing>
-                            <property name="top-attach">1</property>
-                            <property name="left-attach">0</property>
-                            <property name="width">1</property>
-                            <property name="height">1</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkComboBox" id="PictureChromaSmoothPreset">
-                            <property name="valign">GTK_ALIGN_CENTER</property>
-                            <property name="width-request">100</property>
-                            <property name="visible">True</property>
-                            <property name="can-focus">False</property>
-                            <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                            <property name="tooltip-text" translatable="yes">The chroma smooth filter removes common color artifacts.
+                        <property name="label" translatable="yes">Chroma Smooth Filter:</property>
+                      </object>
+                      <packing>
+                        <property name="top-attach">5</property>
+                        <property name="left-attach">0</property>
+                        <property name="width">1</property>
+                        <property name="height">1</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkComboBox" id="PictureChromaSmoothPreset">
+                        <property name="valign">GTK_ALIGN_CENTER</property>
+                        <property name="width-request">200</property>
+                        <property name="visible">True</property>
+                        <property name="can-focus">False</property>
+                        <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                        <property name="tooltip-text" translatable="yes">The chroma smooth filter removes common color artifacts.
 Lower resolution analog source content may benefit from this filter.</property>
-                            <signal name="changed" handler="filter_widget_changed_cb" swapped="no"/>
-                          </object>
-                          <packing>
-                            <property name="top-attach">1</property>
-                            <property name="left-attach">1</property>
-                            <property name="width">1</property>
-                            <property name="height">1</property>
-                          </packing>
-                        </child>
+                        <signal name="changed" handler="filter_widget_changed_cb" swapped="no"/>
+                      </object>
+                      <packing>
+                        <property name="top-attach">5</property>
+                        <property name="left-attach">1</property>
+                        <property name="width">1</property>
+                        <property name="height">1</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkBox">
+                        <property name="orientation">horizontal</property>
+                        <property name="visible">True</property>
+                        <property name="can-focus">False</property>
+                        <property name="spacing">8</property>
                         <child>
                           <object class="GtkLabel" id="PictureChromaSmoothTuneLabel">
                             <property name="visible">True</property>
                             <property name="can-focus">False</property>
                             <property name="halign">start</property>
-                            <property name="label" translatable="yes">Chroma Smooth Tune:</property>
+                            <property name="width-chars">6</property>
+                            <property name="xalign">0.0</property>
+                            <property name="label" translatable="yes">Tune:</property>
                           </object>
-                          <packing>
-                            <property name="top-attach">2</property>
-                            <property name="left-attach">0</property>
-                            <property name="width">1</property>
-                            <property name="height">1</property>
-                          </packing>
                         </child>
                         <child>
                           <object class="GtkComboBox" id="PictureChromaSmoothTune">
                             <property name="valign">GTK_ALIGN_CENTER</property>
-                            <property name="width-request">100</property>
+                            <property name="width-request">200</property>
                             <property name="visible">True</property>
                             <property name="can-focus">False</property>
                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                             <property name="tooltip-text" translatable="yes">The chroma smooth filter removes common color artifacts.
-Lower resolution analog source content may benefit from this filter.</property>
+    Lower resolution analog source content may benefit from this filter.</property>
                             <signal name="changed" handler="filter_widget_changed_cb" swapped="no"/>
                           </object>
-                          <packing>
-                            <property name="top-attach">2</property>
-                            <property name="left-attach">1</property>
-                            <property name="width">1</property>
-                            <property name="height">1</property>
-                          </packing>
                         </child>
                         <child>
                           <object class="GtkEntry" id="PictureChromaSmoothCustom">
                             <property name="can-focus">True</property>
                             <property name="tooltip-text" translatable="yes">Custom deblock filter string format
 
-strength=weak|strong:thresh=0-100:blocksize=4-512</property>
+    strength=weak|strong:thresh=0-100:blocksize=4-512</property>
                             <property name="width-chars">8</property>
+                            <property name="hexpand">True</property>
                             <signal name="changed" handler="filter_widget_changed_cb" swapped="no"/>
                           </object>
-                          <packing>
-                            <property name="top-attach">3</property>
-                            <property name="left-attach">1</property>
-                            <property name="width">1</property>
-                            <property name="height">1</property>
-                          </packing>
                         </child>
                       </object>
+                      <packing>
+                        <property name="top-attach">5</property>
+                        <property name="left-attach">2</property>
+                        <property name="width">1</property>
+                        <property name="height">1</property>
+                      </packing>
                     </child>
                     <child>
-                      <object class="GtkGrid" id="SharpenTable">
-                        <property name="row-spacing">2</property>
+                      <object class="GtkLabel" id="PictureSharpenFilterLabel">
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
-                        <property name="column-spacing">5</property>
                         <property name="halign">start</property>
-                        <property name="valign">start</property>
-                        <child>
-                          <object class="GtkLabel" id="PictureSharpenFilterLabel">
-                            <property name="visible">True</property>
-                            <property name="can-focus">False</property>
-                            <property name="halign">start</property>
-                            <property name="label" translatable="yes">Sharpen Filter:</property>
-                          </object>
-                          <packing>
-                            <property name="top-attach">0</property>
-                            <property name="left-attach">0</property>
-                            <property name="width">1</property>
-                            <property name="height">1</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkComboBox" id="PictureSharpenFilter">
-                            <property name="valign">GTK_ALIGN_CENTER</property>
-                            <property name="width-request">100</property>
-                            <property name="visible">True</property>
-                            <property name="can-focus">False</property>
-                            <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                            <property name="tooltip-text" translatable="yes">Sharpen filtering enhances edges and other
+                        <property name="label" translatable="yes">Sharpen Filter:</property>
+                      </object>
+                      <packing>
+                        <property name="top-attach">6</property>
+                        <property name="left-attach">0</property>
+                        <property name="width">1</property>
+                        <property name="height">1</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkComboBox" id="PictureSharpenFilter">
+                        <property name="valign">GTK_ALIGN_CENTER</property>
+                        <property name="width-request">200</property>
+                        <property name="visible">True</property>
+                        <property name="can-focus">False</property>
+                        <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                        <property name="tooltip-text" translatable="yes">Sharpen filtering enhances edges and other
 high frequency components in the video.</property>
-                            <signal name="changed" handler="sharpen_filter_changed_cb" swapped="no"/>
-                          </object>
-                          <packing>
-                            <property name="top-attach">0</property>
-                            <property name="left-attach">1</property>
-                            <property name="width">1</property>
-                            <property name="height">1</property>
-                          </packing>
-                        </child>
+                        <signal name="changed" handler="sharpen_filter_changed_cb" swapped="no"/>
+                      </object>
+                      <packing>
+                        <property name="top-attach">6</property>
+                        <property name="left-attach">1</property>
+                        <property name="width">1</property>
+                        <property name="height">1</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkBox">
+                        <property name="orientation">horizontal</property>
+                        <property name="visible">True</property>
+                        <property name="can-focus">False</property>
+                        <property name="spacing">8</property>
                         <child>
                           <object class="GtkLabel" id="PictureSharpenPresetLabel">
                             <property name="visible">True</property>
                             <property name="can-focus">False</property>
                             <property name="halign">start</property>
-                            <property name="label" translatable="yes">Sharpen Preset:</property>
+                            <property name="width-chars">6</property>
+                            <property name="xalign">0.0</property>
+                            <property name="label" translatable="yes">Preset:</property>
                           </object>
-                          <packing>
-                            <property name="top-attach">1</property>
-                            <property name="left-attach">0</property>
-                            <property name="width">1</property>
-                            <property name="height">1</property>
-                          </packing>
                         </child>
                         <child>
                           <object class="GtkComboBox" id="PictureSharpenPreset">
                             <property name="valign">GTK_ALIGN_CENTER</property>
-                            <property name="width-request">100</property>
+                            <property name="width-request">200</property>
                             <property name="visible">True</property>
                             <property name="can-focus">False</property>
                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                             <property name="tooltip-text" translatable="yes">Sharpen filtering enhances edges and other
-high frequency components in the video.</property>
+    high frequency components in the video.</property>
                             <signal name="changed" handler="filter_widget_changed_cb" swapped="no"/>
                           </object>
-                          <packing>
-                            <property name="top-attach">1</property>
-                            <property name="left-attach">1</property>
-                            <property name="width">1</property>
-                            <property name="height">1</property>
-                          </packing>
                         </child>
                         <child>
                           <object class="GtkLabel" id="PictureSharpenTuneLabel">
                             <property name="visible">True</property>
                             <property name="can-focus">False</property>
                             <property name="halign">start</property>
-                            <property name="label" translatable="yes">Sharpen Tune:</property>
+                            <property name="width-chars">6</property>
+                            <property name="xalign">1.0</property>
+                            <property name="label" translatable="yes">Tune:</property>
                           </object>
-                          <packing>
-                            <property name="top-attach">2</property>
-                            <property name="left-attach">0</property>
-                            <property name="width">1</property>
-                            <property name="height">1</property>
-                          </packing>
                         </child>
                         <child>
                           <object class="GtkComboBox" id="PictureSharpenTune">
                             <property name="valign">GTK_ALIGN_CENTER</property>
-                            <property name="width-request">100</property>
+                            <property name="width-request">200</property>
                             <property name="visible">True</property>
                             <property name="can-focus">False</property>
                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                             <property name="tooltip-text" translatable="yes">Sharpen filtering enhances edges and other
-high frequency components in the video.</property>
+    high frequency components in the video.</property>
                             <signal name="changed" handler="filter_widget_changed_cb" swapped="no"/>
                           </object>
-                          <packing>
-                            <property name="top-attach">2</property>
-                            <property name="left-attach">1</property>
-                            <property name="width">1</property>
-                            <property name="height">1</property>
-                          </packing>
                         </child>
                         <child>
                           <object class="GtkEntry" id="PictureSharpenCustom">
                             <property name="can-focus">True</property>
                             <property name="tooltip-text" translatable="yes">Custom denoise filter string format
 
-SpatialLuma:SpatialChroma:TemporalLuma:TemporalChroma</property>
+    SpatialLuma:SpatialChroma:TemporalLuma:TemporalChroma</property>
                             <property name="width-chars">8</property>
+                            <property name="hexpand">True</property>
                             <signal name="changed" handler="filter_widget_changed_cb" swapped="no"/>
                           </object>
-                          <packing>
-                            <property name="top-attach">3</property>
-                            <property name="left-attach">1</property>
-                            <property name="width">1</property>
-                            <property name="height">1</property>
-                          </packing>
                         </child>
                       </object>
+                      <packing>
+                        <property name="top-attach">6</property>
+                        <property name="left-attach">2</property>
+                        <property name="width">1</property>
+                        <property name="height">1</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkLabel" id="ColorspaceLabel">
+                        <property name="visible">True</property>
+                        <property name="can-focus">False</property>
+                        <property name="halign">start</property>
+                        <property name="label" translatable="yes">Colorspace:</property>
+                      </object>
+                      <packing>
+                        <property name="top-attach">7</property>
+                        <property name="left-attach">0</property>
+                        <property name="width">1</property>
+                        <property name="height">1</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkComboBox" id="PictureColorspacePreset">
+                        <property name="valign">GTK_ALIGN_CENTER</property>
+                        <property name="width-request">200</property>
+                        <property name="visible">True</property>
+                        <property name="can-focus">False</property>
+                        <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                        <property name="tooltip-text" translatable="yes">Translate the colorspace of the source.</property>
+                        <signal name="changed" handler="filter_widget_changed_cb" swapped="no"/>
+                      </object>
+                      <packing>
+                        <property name="top-attach">7</property>
+                        <property name="left-attach">1</property>
+                        <property name="width">1</property>
+                        <property name="height">1</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkEntry" id="PictureColorspaceCustom">
+                        <property name="can-focus">True</property>
+                        <property name="tooltip-text" translatable="yes">Custom detelecine filter string format
+
+JunkLeft:JunkRight:JunkTop:JunkBottom:StrictBreaks:MetricPlane:Parity</property>
+                        <property name="width-chars">8</property>
+                        <property name="hexpand">True</property>
+                        <signal name="changed" handler="filter_widget_changed_cb" swapped="no"/>
+                      </object>
+                      <packing>
+                        <property name="top-attach">7</property>
+                        <property name="left-attach">2</property>
+                        <property name="width">1</property>
+                        <property name="height">1</property>
+                      </packing>
                     </child>
                     <child>
                       <object class="GtkCheckButton" id="VideoGrayScale">
@@ -4985,63 +4938,12 @@ SpatialLuma:SpatialChroma:TemporalLuma:TemporalChroma</property>
                         <property name="draw-indicator">True</property>
                         <signal name="toggled" handler="filter_widget_changed_cb" swapped="no"/>
                       </object>
-                    </child>
-                    <child>
-                      <object class="GtkGrid" id="ColorspaceGrid">
-                        <property name="row-spacing">2</property>
-                        <property name="visible">True</property>
-                        <property name="can-focus">False</property>
-                        <property name="column-spacing">5</property>
-                        <property name="halign">start</property>
-                        <property name="valign">start</property>
-                        <child>
-                          <object class="GtkLabel" id="ColorspaceLabel">
-                            <property name="visible">True</property>
-                            <property name="can-focus">False</property>
-                            <property name="halign">start</property>
-                            <property name="label" translatable="yes">Colorspace:</property>
-                          </object>
-                          <packing>
-                            <property name="top-attach">0</property>
-                            <property name="left-attach">0</property>
-                            <property name="width">1</property>
-                            <property name="height">1</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkComboBox" id="PictureColorspacePreset">
-                            <property name="valign">GTK_ALIGN_CENTER</property>
-                            <property name="width-request">100</property>
-                            <property name="visible">True</property>
-                            <property name="can-focus">False</property>
-                            <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                            <property name="tooltip-text" translatable="yes">Translate the colorspace of the source.</property>
-                            <signal name="changed" handler="filter_widget_changed_cb" swapped="no"/>
-                          </object>
-                          <packing>
-                            <property name="top-attach">0</property>
-                            <property name="left-attach">1</property>
-                            <property name="width">1</property>
-                            <property name="height">1</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkEntry" id="PictureColorspaceCustom">
-                            <property name="can-focus">True</property>
-                            <property name="tooltip-text" translatable="yes">Custom detelecine filter string format
-
-JunkLeft:JunkRight:JunkTop:JunkBottom:StrictBreaks:MetricPlane:Parity</property>
-                            <property name="width-chars">8</property>
-                            <signal name="changed" handler="filter_widget_changed_cb" swapped="no"/>
-                          </object>
-                          <packing>
-                            <property name="top-attach">1</property>
-                            <property name="left-attach">1</property>
-                            <property name="width">1</property>
-                            <property name="height">1</property>
-                          </packing>
-                        </child>
-                      </object>
+                      <packing>
+                        <property name="top-attach">8</property>
+                        <property name="left-attach">1</property>
+                        <property name="width">1</property>
+                        <property name="height">1</property>
+                      </packing>
                     </child>
                   </object>
                   <packing>
@@ -10350,4 +10252,35 @@ DRC allows you to 'compress' the range by making loud sounds softer and soft sou
     <property name="step-increment">1</property>
     <property name="page-increment">1</property>
   </object>
+  <object class="GtkSizeGroup">
+  <property name="mode">GTK_SIZE_GROUP_HORIZONTAL</property>
+  <widgets>
+    <widget name="PictureDeinterlacePresetLabel"/>
+    <widget name="PictureDeblockTuneLabel"/>
+    <widget name="PictureDenoisePresetLabel"/>
+    <widget name="PictureDenoiseTuneLabel"/>
+    <widget name="PictureChromaSmoothTuneLabel"/>
+    <widget name="PictureSharpenPresetLabel"/>
+    <widget name="PictureSharpenTuneLabel"/>
+  </widgets>
+</object>
+
+<object class="GtkSizeGroup">
+  <property name="mode">GTK_SIZE_GROUP_HORIZONTAL</property>
+  <widgets>
+    <widget name="PictureDeinterlacePreset"/>
+    <widget name="PictureDenoisePreset"/>
+    <widget name="PictureDeblockTune"/>
+    <widget name="PictureChromaSmoothTune"/>
+    <widget name="PictureSharpenPreset"/>
+  </widgets>
+</object>
+
+<object class="GtkSizeGroup">
+  <property name="mode">GTK_SIZE_GROUP_HORIZONTAL</property>
+  <widgets>
+    <widget name="PictureDenoiseTune"/>
+    <widget name="PictureSharpenTune"/>
+ </widgets>
+</object>
 </interface>
