@@ -35,7 +35,7 @@
 #include "subtitlehandler.h"
 #include "audiohandler.h"
 #include "videohandler.h"
-#include "queuehandler.h"
+#include "title-add.h"
 #include "preview.h"
 #include "presets.h"
 #include "values.h"

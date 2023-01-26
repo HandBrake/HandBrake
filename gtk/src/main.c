@@ -751,9 +751,11 @@ preferences_action_cb(GSimpleAction *action, GVariant *param, gpointer ud);
 G_MODULE_EXPORT void
 quit_action_cb(GSimpleAction *action, GVariant *param, gpointer ud);
 G_MODULE_EXPORT void
-queue_add_action_cb(GSimpleAction *action, GVariant *param, gpointer ud);
+title_add_action_cb(GSimpleAction *action, GVariant *param, gpointer ud);
 G_MODULE_EXPORT void
-queue_add_all_action_cb(GSimpleAction *action, GVariant *param, gpointer ud);
+title_add_multiple_action_cb(GSimpleAction *action, GVariant *param, gpointer ud);
+G_MODULE_EXPORT void
+title_add_all_action_cb(GSimpleAction *action, GVariant *param, gpointer ud);
 G_MODULE_EXPORT void
 queue_start_action_cb(GSimpleAction *action, GVariant *param, gpointer ud);
 G_MODULE_EXPORT void
@@ -839,12 +841,13 @@ static void map_actions(GApplication * app, signal_user_data_t * ud)
     const GActionEntry entries[] =
     {
         { "source",                source_action_cb                },
-        { "source-dir",             source_dir_action_cb           },
+        { "source-dir",            source_dir_action_cb            },
         { "destination",           destination_action_cb           },
         { "preferences",           preferences_action_cb           },
         { "quit",                  quit_action_cb                  },
-        { "queue-add",             queue_add_action_cb             },
-        { "queue-add-all",         queue_add_all_action_cb         },
+        { "add-current",           title_add_action_cb             },
+        { "add-multiple",          title_add_multiple_action_cb    },
+        { "add-all",               title_add_all_action_cb         },
         { "queue-start",           queue_start_action_cb           },
         { "queue-pause",           queue_pause_action_cb           },
         { "queue-play-file",       queue_play_file_action_cb       },

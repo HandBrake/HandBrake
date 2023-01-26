@@ -41,7 +41,7 @@
 #include "hb-backend.h"
 #include "preview.h"
 #include "values.h"
-#include "queuehandler.h"
+#include "title-add.h"
 #include "handbrake/handbrake.h"
 
 #define PREVIEW_STATE_IMAGE 0

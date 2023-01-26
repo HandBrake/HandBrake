@@ -73,6 +73,8 @@ ghb_SOURCES = \
 	callbacks.h \
 	chapters.c \
 	chapters.h \
+	title-add.c \
+	title-add.h \
 	queuehandler.c \
 	queuehandler.h \
 	videohandler.c \

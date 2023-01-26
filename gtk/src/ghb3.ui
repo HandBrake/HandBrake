@@ -2301,7 +2301,7 @@ libx264 authors:
                     <property name="is-important">True</property>
                     <property name="label" translatable="yes">Add To Queue</property>
                     <property name="icon-name">hb-add-queue</property>
-                    <property name="action-name">app.queue-add</property>
+                    <property name="action-name">app.add-current</property>
                   </object>
                   <packing>
                     <property name="homogeneous">False</property>
@@ -7660,7 +7660,7 @@ Only one subtitle track can be burned! Since conflicts can occur, the first chos
                 <property name="vexpand">False</property>
                 <property name="halign">start</property>
                 <property name="draw-indicator">True</property>
-                <signal name="toggled" handler="title_add_multiple_select_all_cb" swapped="no"/>
+                <signal name="toggled" handler="title_add_select_all_cb" swapped="no"/>
               </object>
               <packing>
                 <property name="position">0</property>
@@ -7677,7 +7677,7 @@ Only one subtitle track can be burned! Since conflicts can occur, the first chos
                 <property name="vexpand">False</property>
                 <property name="halign">start</property>
                 <property name="draw-indicator">True</property>
-                <signal name="toggled" handler="title_add_multiple_clear_all_cb" swapped="no"/>
+                <signal name="toggled" handler="title_add_clear_all_cb" swapped="no"/>
               </object>
               <packing>
                 <property name="position">1</property>
