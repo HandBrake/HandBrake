@@ -554,6 +554,8 @@ struct hb_job_s
          cfr:               0 (vfr), 1 (cfr), 2 (pfr) [see render.c]
          pass:              0, 1 or 2 (or -1 for scan)
          areBframes:        boolean to note if b-frames are used */
+
+    // Changing the constant values requires changes in win/CS/HandBrake.Interop/Interop/HbLib/NativeConstants.cs for Windows GUI
 #define HB_VCODEC_INVALID            0x00000000
 
 #define HB_VCODEC_AV1_MASK           0x40000000
