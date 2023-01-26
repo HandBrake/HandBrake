@@ -173,6 +173,13 @@ if test "x$have_gudev" = "xyes" ; then
 	CFLAGS="$CFLAGS -D_HAVE_GUDEV"
 fi
 
+pkg_libxml2="libxml-2.0"
+PKG_CHECK_MODULES([libxml2], [$pkg_libxml2], have_libxml2=yes, have_libxml2=no)
+if test "x$have_libxml2" = "xyes" ; then
+	HB_LIBS="$HB_LIBS $libxml2_LIBS"
+	HB_CPPFLAGS="$HB_CPPFLAGS $libxml2_CFLAGS"
+fi
+
 GST1_MODULES="gstreamer-1.0 gstreamer-video-1.0 gstreamer-audio-1.0 gstreamer-pbutils-1.0"
 if test "x$gst_disable" = "xno" ; then
 	PKG_CHECK_MODULES([gstreamer1], [$GST1_MODULES], use_gst1=yes, use_gst1=no)

@@ -2000,6 +2000,14 @@ ghb_queue_buttons_grey (signal_user_data_t *ud)
                                                         "queue-open-log"));
     g_simple_action_set_enabled(action, status != GHB_QUEUE_PENDING);
 
+    action = G_SIMPLE_ACTION(g_action_map_lookup_action(G_ACTION_MAP(ud->app),
+                                                        "chapters-import"));
+    g_simple_action_set_enabled(action, allow_add);
+
+    action = G_SIMPLE_ACTION(g_action_map_lookup_action(G_ACTION_MAP(ud->app),
+                                                        "chapters-export"));
+    g_simple_action_set_enabled(action, allow_add);
+
     widget = GHB_WIDGET (ud->builder, "queue_start");
     if (show_stop)
     {

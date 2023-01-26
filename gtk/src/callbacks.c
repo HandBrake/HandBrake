@@ -1278,7 +1278,8 @@ ghb_set_widget_ranges(signal_user_data_t *ud, GhbValue *settings)
 
         if (ghb_settings_combo_int(ud->settings, "PtoPType") == 0)
         {
-            gint num_chapters = hb_list_count(title->list_chapter);
+            GhbValue *chapter_list = ghb_get_job_chapter_list(settings);
+            gint num_chapters = ghb_array_len(chapter_list);
 
             val = ghb_dict_get_int(ud->settings, "start_point");
             spin_configure(ud, "start_point", val, 1, num_chapters);
@@ -1328,6 +1329,8 @@ check_chapter_markers(signal_user_data_t *ud)
         start = ghb_dict_get_int(ud->settings, "start_point");
         end = ghb_dict_get_int(ud->settings, "end_point");
         widget = GHB_WIDGET (ud->builder, "ChapterMarkers");
+        gtk_widget_set_sensitive(widget, end > start);
+        widget = GHB_WIDGET (ud->builder, "chapters_list");
         gtk_widget_set_sensitive(widget, end > start);
     }
 }
@@ -2431,7 +2434,8 @@ ghb_set_title_settings(signal_user_data_t *ud, GhbValue *settings)
         title_dict = hb_title_to_dict(ghb_scan_handle(), title_id);
         ghb_dict_set(settings, "Title", title_dict);
 
-        gint num_chapters = hb_list_count(title->list_chapter);
+        GhbValue *chapter_list = ghb_get_job_chapter_list(settings);
+        gint num_chapters = ghb_array_len(chapter_list);
 
         ghb_dict_set_int(settings, "angle", 1);
         ghb_dict_set_string(settings, "PtoPType", "chapter");
@@ -2696,7 +2700,8 @@ ptop_widget_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
     gint duration = title->duration / 90000;
     if (ghb_settings_combo_int(ud->settings, "PtoPType") == 0)
     {
-        gint num_chapters = hb_list_count(title->list_chapter);
+        GhbValue *chapter_list = ghb_get_job_chapter_list(ud->settings);
+        gint num_chapters = ghb_array_len(chapter_list);
         spin_configure(ud, "start_point", 1, 1, num_chapters);
         spin_configure(ud, "end_point", num_chapters, 1, num_chapters);
     }

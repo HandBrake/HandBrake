@@ -80,10 +80,14 @@
     </patterns>
   </object>
   <object class="GtkFileFilter" id="FilterJSON">
-    <patterns>
-      <pattern>*.json</pattern>
-      <pattern>*.JSON</pattern>
-    </patterns>
+    <mime-types>
+      <mime-type>application/json</mime-type>
+    </mime-types>
+  </object>
+  <object class="GtkFileFilter" id="FilterXML">
+    <mime-types>
+      <mime-type>application/xml</mime-type>
+    </mime-types>
   </object>
   <object class="GtkFileFilter" id="FilterPlist">
     <patterns>
@@ -6893,6 +6897,9 @@ Only one subtitle track can be burned! Since conflicts can occur, the first chos
                         <property name="orientation">horizontal</property>
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
+                        <property name="spacing">5</property>
+                        <property name="margin-top">5</property>
+                        <property name="margin-bottom">5</property>
                         <child>
                           <object class="GtkCheckButton" id="ChapterMarkers">
                             <property name="label" translatable="yes">Chapter Markers</property>
@@ -6907,6 +6914,36 @@ Only one subtitle track can be burned! Since conflicts can occur, the first chos
                           </object>
                           <packing>
                             <property name="position">0</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkButton" id="chapters_import">
+                            <property name="label" translatable="yes">Import Chapters</property>
+                            <property name="visible">True</property>
+                            <property name="can-focus">True</property>
+                            <property name="receives-default">False</property>
+                            <property name="tooltip-text" translatable="yes">Import chapter list from an XML file</property>
+                            <property name="halign">start</property>
+                            <property name="action-name">app.chapters-import</property>
+                          </object>
+                          <packing>
+                            <property name="pack-type">end</property>
+                            <property name="position">2</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkButton" id="chapters_export">
+                            <property name="label" translatable="yes">Export Chapters</property>
+                            <property name="visible">True</property>
+                            <property name="can-focus">True</property>
+                            <property name="receives-default">False</property>
+                            <property name="tooltip-text" translatable="yes">Export chapter list as an XML file</property>
+                            <property name="halign">start</property>
+                            <property name="action-name">app.chapters-export</property>
+                          </object>
+                          <packing>
+                            <property name="pack-type">end</property>
+                            <property name="position">1</property>
                           </packing>
                         </child>
                       </object>

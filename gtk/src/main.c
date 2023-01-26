@@ -835,6 +835,10 @@ G_MODULE_EXPORT void
 preset_select_action_cb(GSimpleAction *action, GVariant *param, gpointer ud);
 G_MODULE_EXPORT void
 preset_reload_action_cb(GSimpleAction *action, GVariant *param, gpointer ud);
+G_MODULE_EXPORT void
+chapters_export_action_cb(GSimpleAction *action, GVariant *param, gpointer ud);
+G_MODULE_EXPORT void
+chapters_import_action_cb(GSimpleAction *action, GVariant *param, gpointer ud);
 
 static void map_actions(GApplication * app, signal_user_data_t * ud)
 {
@@ -891,6 +895,8 @@ static void map_actions(GApplication * app, signal_user_data_t * ud)
         { "preset-reload",         preset_reload_action_cb         },
         { "preview-fullscreen",    NULL,
           NULL, "false",           preview_fullscreen_action_cb    },
+        { "chapters-export",       chapters_export_action_cb       },
+        { "chapters-import",       chapters_import_action_cb       },
     };
     g_action_map_add_action_entries(G_ACTION_MAP(app), entries,
                                     G_N_ELEMENTS(entries), ud);
