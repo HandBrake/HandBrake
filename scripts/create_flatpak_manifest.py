@@ -204,3 +204,4 @@ if __name__ == "__main__":
     else:
         print(json.dumps(manifest.manifest, ensure_ascii=False, indent=4))
 
+

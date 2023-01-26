@@ -81,6 +81,7 @@ typedef struct
     gint                  appcast_len;
     int                   stderr_src_id;
     GtkApplication      * app;
+    GtkFileChooserNative* source_dialog;
 } signal_user_data_t;
 
 enum
