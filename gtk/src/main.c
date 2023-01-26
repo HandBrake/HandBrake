@@ -950,6 +950,39 @@ extern G_MODULE_EXPORT void hud_enter_cb(void);
 extern G_MODULE_EXPORT void hud_leave_cb(void);
 #endif
 
+static void
+video_file_drop_received (GtkWidget *widget, GdkDragContext *context,
+                          int x, int y, GtkSelectionData *data, guint info,
+                          guint time, signal_user_data_t *ud)
+{
+    // Only one file or folder at a time is supported
+    gchar **uris = gtk_selection_data_get_uris(data);
+    GFile *file = g_file_new_for_uri(uris[0]);
+    gchar *filename = g_file_get_parse_name(file);
+
+    if (filename)
+    {
+        g_debug("File dropped on window: %s\n", filename);
+        ghb_dict_set_string(ud->prefs, "default_source", filename);
+        ghb_pref_save(ud->prefs, "default_source");
+        ghb_dvd_set_current(filename, ud);
+        ghb_do_scan(ud, filename, 0, TRUE);
+    }
+    g_strfreev(uris);
+    g_object_unref(file);
+    g_free(filename);
+}
+
+static void
+video_file_drop_init (signal_user_data_t *ud)
+{
+    GtkWidget *summary = GHB_WIDGET (ud->builder, "hb_window");
+
+    gtk_drag_dest_set(summary, GTK_DEST_DEFAULT_ALL, NULL, 0, GDK_ACTION_COPY);
+    gtk_drag_dest_add_uri_targets(summary);
+    g_signal_connect(summary, "drag-data-received", G_CALLBACK(video_file_drop_received), ud);
+}
+
 extern G_MODULE_EXPORT void
 ghb_activate_cb(GApplication * app, signal_user_data_t * ud)
 {
@@ -1003,6 +1036,7 @@ ghb_activate_cb(GApplication * app, signal_user_data_t * ud)
 
     // Enable drag & drop in queue list
     ghb_queue_drag_n_drop_init(ud);
+    video_file_drop_init(ud);
 
     // Enable events that alert us to media change events
     watch_volumes(ud);
