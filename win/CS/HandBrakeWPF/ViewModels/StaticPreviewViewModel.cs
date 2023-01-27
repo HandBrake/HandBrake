@@ -159,6 +159,11 @@ namespace HandBrakeWPF.ViewModels
             {
                 if (value == this.isMediaPlayerVisible) return;
                 this.isMediaPlayerVisible = value;
+
+                if (value)
+                {
+                    this.ShowPictureSettingControls = false;
+                }
                 this.NotifyOfPropertyChange(() => this.IsMediaPlayerVisible);
             }
         }
