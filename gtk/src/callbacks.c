@@ -221,12 +221,12 @@ ghb_suspend_logind()
 #endif
 }
 
-#if !defined(_WIN32)
 static gboolean
 ghb_can_shutdown_logind()
 {
-    char *str = NULL;
     gboolean can_shutdown = FALSE;
+#if !defined(_WIN32)
+    char *str = NULL;
     GDBusProxy  *proxy;
     GError *error = NULL;
     GVariant *res;
@@ -262,14 +262,14 @@ ghb_can_shutdown_logind()
         g_free(str);
     }
     g_object_unref(G_OBJECT(proxy));
+#endif
     return can_shutdown;
 }
-#endif
 
-#if !defined(_WIN32)
 static void
 ghb_shutdown_logind(void)
 {
+#if !defined(_WIN32)
     GDBusProxy  *proxy;
     GError *error = NULL;
     GVariant *res;
@@ -298,8 +298,8 @@ ghb_shutdown_logind(void)
         g_variant_unref(res);
     }
     g_object_unref(G_OBJECT(proxy));
-}
 #endif
+}
 
 #if !GTK_CHECK_VERSION(3, 4, 0)
 guint
