@@ -21,8 +21,16 @@
             <TextBlock Text="No Preview Available" VerticalAlignment="Center" Padding="60,60,60,60" FontWeight="Bold" FontSize="25" Foreground="DarkGray" />
         </StackPanel>
 
-        <Image x:Name="previewImage" Source="{Binding PreviewImage}" MaxWidth="{Binding Width}" MaxHeight="{Binding Height}" MouseWheel="PreviewImage_OnMouseWheel" />
+        <!-- Preview Area -->
+        <Grid VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+            <Image x:Name="previewImage" Panel.ZIndex="0" Source="{Binding PreviewImage}" MaxWidth="{Binding Width}" MaxHeight="{Binding Height}" 
+                   MouseWheel="PreviewImage_OnMouseWheel"  />
+            <!--Visibility="{Binding IsMediaPlayerVisible, Converter={StaticResource booleanToVisibilityConverter}, ConverterParameter=true}"-->
 
+            <MediaElement x:Name="videoPlayer" Panel.ZIndex="1" Source="{Binding MediaPlayerSource}" ScrubbingEnabled="True" LoadedBehavior="Manual"
+                          MaxWidth="{Binding Width}" MaxHeight="{Binding Height}" Visibility="{Binding IsMediaPlayerVisible, Converter={StaticResource booleanToVisibilityConverter}, ConverterParameter=false}" />
+        </Grid>
+ 
 
         <Border BorderBrush="WhiteSmoke" BorderThickness="1,1,1,1" CornerRadius="8,8,8,8" Padding="8" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="20" MinWidth="200" Background="Black" Opacity="0.8"
                 Visibility="{Binding ShowPictureSettingControls, Converter={StaticResource booleanToVisibilityConverter}}">
@@ -31,50 +39,94 @@
         </Border>
 
         <Border BorderBrush="WhiteSmoke" BorderThickness="1,1,1,1" CornerRadius="8,8,8,8" Padding="8"
-                VerticalAlignment="Bottom" HorizontalAlignment="Center" Margin="20" MinWidth="450" Background="Black" Opacity="0.8">
+                VerticalAlignment="Bottom" HorizontalAlignment="Center" Margin="20" MinWidth="500" MinHeight="100" Background="Black" Opacity="0.8">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
 
-                <Slider Maximum="{Binding TotalPreviews}" Minimum="0" AutomationProperties.Name="{x:Static Properties:Resources.StaticPreviewView_SelectPreviewImage}"
-                Value="{Binding SelectedPreviewImage}"
-                VerticalAlignment="Center"
-                HorizontalAlignment="Stretch"
-                Background="Transparent" TickPlacement="TopLeft" Margin="0,0,0,5" />
+                <!-- Preview Selection -->
+                <Grid Visibility="{Binding IsEncoding, Converter={StaticResource booleanToVisibilityConverter}, ConverterParameter=true}">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Text="{x:Static Properties:Resources.StaticPreview_Previews}" Margin="0,0,10,0" Foreground="White"/>
+                    <Slider Maximum="{Binding TotalPreviews}" Minimum="0" AutomationProperties.Name="{x:Static Properties:Resources.StaticPreviewView_SelectPreviewImage}"
+                            Value="{Binding SelectedPreviewImage}"
+                            VerticalAlignment="Center"
+                            HorizontalAlignment="Stretch" Grid.Column="1"
+                            Background="Transparent" TickPlacement="TopLeft" Margin="0,0,0,5" />
 
-                <StackPanel Orientation="Horizontal" Grid.Row="1">
-                    <CheckBox IsChecked="{Binding ShowPictureSettingControls}" Margin="0,0,0,10">
+                </Grid>
+
+                <!-- Crop Check -->
+                <StackPanel Orientation="Horizontal" Grid.Row="1" Visibility="{Binding IsEncoding, Converter={StaticResource booleanToVisibilityConverter}, ConverterParameter=true}">
+                    <CheckBox IsChecked="{Binding ShowPictureSettingControls}" Margin="0,0,0,10"
+                              Visibility="{Binding IsMediaPlayerVisible, Converter={StaticResource booleanToVisibilityConverter}, ConverterParameter=true}" >
                         <TextBlock Text="{x:Static Properties:Resources.StaticPreviewView_ShowPictureSettingsAdjustment}" Foreground="White" />
                     </CheckBox>
                 </StackPanel>
 
+
                 <StackPanel Orientation="Horizontal" Grid.Row="2" HorizontalAlignment="Left">
-                    <Button Content="{x:Static Properties:Resources.StaticPreviewView_LivePreview}" Padding="8,2" Command="{Binding RelayCommand}" CommandParameter="Play" Visibility="{Binding IsEncoding, Converter={StaticResource booleanToVisibilityConverter}, ConverterParameter=true}" />
-                    <Button Content="{x:Static Properties:Resources.StaticPreviewView_CancelPreview}" Padding="8,2" Command="{Binding RelayCommand}" CommandParameter="CancelEncode" Visibility="{Binding IsEncoding, Converter={StaticResource booleanToVisibilityConverter}, ConverterParameter=false}" />
+                    <Button MinHeight="24"  Content="{x:Static Properties:Resources.StaticPreviewView_LivePreview}" Command="{Binding RelayCommand}" CommandParameter="EncodeFile" 
+                            Visibility="{Binding IsEncoding, Converter={StaticResource booleanToVisibilityConverter}, ConverterParameter=true}" />
+ 
+                    <Button Padding="8,2" Click="PlayVideo_OnClick" Margin="5,0,0,0" 
+                             Visibility="{Binding IsMediaPlayerVisible, Converter={StaticResource booleanToVisibilityConverter}}">
+                        <StackPanel Orientation="Horizontal">
+                            <Image Source="Images/Play_small.png" VerticalAlignment="Center" />
+                            <TextBlock Text="{x:Static Properties:Resources.StaticPreviewView_Play}" VerticalAlignment="Center" />
+                        </StackPanel>
+                    </Button>
 
-                    <TextBlock Margin="10,0,5,0" VerticalAlignment="Center" Foreground="White" Text="{x:Static Properties:Resources.StaticPreviewView_Duration}" />
-                    <ComboBox Width="60"
-                      ItemsSource="{Binding AvailableDurations}"
-                      SelectedItem="{Binding Duration}" />
+                    <Button MinHeight="24" Margin="5,0,0,0"  Command="{Binding RelayCommand}" CommandParameter="ClosePlayer" 
+                             Visibility="{Binding IsMediaPlayerVisible, Converter={StaticResource booleanToVisibilityConverter}}">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="{x:Static Properties:Resources.StaticPreviewView_ClosePlayer}" VerticalAlignment="Center" />
+                        </StackPanel>
+                    </Button>
 
-                    <CheckBox VerticalAlignment="Center" Margin="10,0,0,0" IsChecked="{Binding UseSystemDefaultPlayer}">
-                        <TextBlock Text="{x:Static Properties:Resources.StaticPreviewView_UseSystemDefault}" Foreground="White" />
-                    </CheckBox>
+                    <StackPanel Visibility="{Binding IsEncoding, Converter={StaticResource booleanToVisibilityConverter}, ConverterParameter=true}" Orientation="Horizontal">
+                        <TextBlock Margin="10,0,5,0" VerticalAlignment="Center" Foreground="White" Text="{x:Static Properties:Resources.StaticPreviewView_Duration}" />
+                        <ComboBox Width="60"
+                                  ItemsSource="{Binding AvailableDurations}"
+                                  SelectedItem="{Binding Duration}" />
 
+                        <CheckBox VerticalAlignment="Center" Margin="10,0,0,0" IsChecked="{Binding UseExternalPlayer}">
+                            <TextBlock Text="{x:Static Properties:Resources.StaticPreviewView_UseExternalPlayer}" Foreground="White" />
+                        </CheckBox>
+                    </StackPanel>
                 </StackPanel>
 
-                <Grid  Margin="0,10,10,0" Grid.Row="3" Visibility="{Binding IsEncoding, Converter={StaticResource booleanToVisibilityConverter}}">
+                <StackPanel Grid.Row="3" Orientation="Horizontal" Visibility="{Binding IsMediaPlayerVisible, Converter={StaticResource booleanToVisibilityConverter}, ConverterParameter=false}">
+                    <TextBlock Foreground="White" VerticalAlignment="Center" Margin="5" Text="{x:Static Properties:Resources.StaticPreview_Volume}"  />
+                    <Slider Name="volumeSlider" VerticalAlignment="Center" ValueChanged="ChangeMediaVolume" Minimum="0" Maximum="1" Value="0.5" Width="150"
+                            Background="Transparent" TickPlacement="None"/>
+                    <TextBlock Foreground="White" VerticalAlignment="Center" Margin="5"  Text="100" />
+                </StackPanel>
+
+                <Grid  Margin="0,10,10,0" Grid.Row="4" Visibility="{Binding IsEncoding, Converter={StaticResource booleanToVisibilityConverter}}">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="23*" />
-                        <ColumnDefinition Width="289*"/>
-                        <ColumnDefinition Width="Auto" MinWidth="50" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
                     </Grid.ColumnDefinitions>
-                    <ProgressBar MinHeight="5" Maximum="100" Minimum="0" Value="{Binding PercentageValue}" Grid.Column="0" Grid.ColumnSpan="2" />
-                    <TextBlock Margin="5,0,0,0" Text="{Binding Percentage}" Grid.Column="2" HorizontalAlignment="Right" Foreground="White" />
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <TextBlock Text="{x:Static Properties:Resources.StaticPreview_EncodingPreview}" Foreground="White" Margin="0,0,0,10" />
+
+                    <ProgressBar MinHeight="20" Maximum="100" Minimum="0" Value="{Binding PercentageValue}" Grid.Column="0" Grid.Row="1" VerticalAlignment="Center" />
+                    <TextBlock Margin="5,0,0,0" Text="{Binding Percentage}" Grid.Column="1" HorizontalAlignment="Right" Foreground="White" Grid.Row="1" />
+                    <Button MinHeight="20" Content="{x:Static Properties:Resources.StaticPreviewView_CancelPreview}" Grid.Column="2" Grid.Row="1" Command="{Binding RelayCommand}" CommandParameter="CancelEncode" 
+                            Visibility="{Binding IsEncoding, Converter={StaticResource booleanToVisibilityConverter}, ConverterParameter=false}" Margin="10,0,0,0" />
                 </Grid>
             </Grid>
 

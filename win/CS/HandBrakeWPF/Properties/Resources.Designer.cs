@@ -6490,6 +6490,24 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Encoding Preview ....
+        /// </summary>
+        public static string StaticPreview_EncodingPreview {
+            get {
+                return ResourceManager.GetString("StaticPreview_EncodingPreview", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Previews:.
+        /// </summary>
+        public static string StaticPreview_Previews {
+            get {
+                return ResourceManager.GetString("StaticPreview_Previews", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Unable to delete previous preview file. You may still have a preview open in your media player. Please close this..
         /// </summary>
         public static string StaticPreview_UnableToDeletePreview {
@@ -6499,11 +6517,29 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Volume: 0.
+        /// </summary>
+        public static string StaticPreview_Volume {
+            get {
+                return ResourceManager.GetString("StaticPreview_Volume", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Cancel.
         /// </summary>
         public static string StaticPreviewView_CancelPreview {
             get {
                 return ResourceManager.GetString("StaticPreviewView_CancelPreview", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Close Player.
+        /// </summary>
+        public static string StaticPreviewView_ClosePlayer {
+            get {
+                return ResourceManager.GetString("StaticPreviewView_ClosePlayer", resourceCulture);
             }
         }
         
@@ -6526,11 +6562,20 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Live Preview.
+        ///   Looks up a localized string similar to Encode Preview.
         /// </summary>
         public static string StaticPreviewView_LivePreview {
             get {
                 return ResourceManager.GetString("StaticPreviewView_LivePreview", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Play.
+        /// </summary>
+        public static string StaticPreviewView_Play {
+            get {
+                return ResourceManager.GetString("StaticPreviewView_Play", resourceCulture);
             }
         }
         
@@ -6562,11 +6607,20 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Prefer system default video player.
+        ///   Looks up a localized string similar to Use External Player App.
         /// </summary>
-        public static string StaticPreviewView_UseSystemDefault {
+        public static string StaticPreviewView_UseExternalPlayer {
             get {
-                return ResourceManager.GetString("StaticPreviewView_UseSystemDefault", resourceCulture);
+                return ResourceManager.GetString("StaticPreviewView_UseExternalPlayer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Video Preview.
+        /// </summary>
+        public static string StaticPreviewView_VideoPreview {
+            get {
+                return ResourceManager.GetString("StaticPreviewView_VideoPreview", resourceCulture);
             }
         }
         
@@ -6576,6 +6630,18 @@ namespace HandBrakeWPF.Properties {
         public static string StaticPreviewViewModel_AlreadyEncoding {
             get {
                 return ResourceManager.GetString("StaticPreviewViewModel_AlreadyEncoding", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The system was unable to play this file. 
+        ///
+        ///Please note certain codecs such as AV1 or HEVC require the Microsoft AV1 or HEVC codec plugins from the Microsoft Store to play.
+        ///Alternatively, check the &quot;Use External Player&quot; checkbox below..
+        /// </summary>
+        public static string StaticPreviewViewModel_MediaError {
+            get {
+                return ResourceManager.GetString("StaticPreviewViewModel_MediaError", resourceCulture);
             }
         }
         
@@ -6603,6 +6669,15 @@ namespace HandBrakeWPF.Properties {
         public static string StaticPreviewViewModel_UnableToPlayFile {
             get {
                 return ResourceManager.GetString("StaticPreviewViewModel_UnableToPlayFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The Built-in preview is not available for the WebM container. An External player must be used..
+        /// </summary>
+        public static string StaticPreviewViewModel_WebmNotSupported {
+            get {
+                return ResourceManager.GetString("StaticPreviewViewModel_WebmNotSupported", resourceCulture);
             }
         }
         

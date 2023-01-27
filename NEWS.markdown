@@ -7,12 +7,18 @@ Before updating HandBrake, please make sure there are no pending encodes in the 
 
 Windows users, please make sure to install [Microsoft .NET Desktop Runtime version 6.0.x](https://dotnet.microsoft.com/en-us/download/dotnet/6.0). Read carefully: you need the **DESKTOP** runtime. You must install .NET 6 even if you have installed .NET 7.
 
+
+## HandBrake 1.7
+
+### Windows
+- Improvide Preview window with video playback support. (Supports most, but not all codecs/containers. Requires Microsoft Codec Packs from the Microsoft Store for modern codecs)
+
+
 ## HandBrake 1.6.2
 
 ### Windows
 
 - Fixed an issue with autonaming when using drive based sources (#4859)
-
 
 
 ## HandBrake 1.6.1

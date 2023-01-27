@@ -21,7 +21,7 @@ namespace HandBrakeWPF
         public const string AutoNaming = "autoNaming";
         public const string ClearOldLogs = "clearOldLogs";
         public const string DaysBetweenUpdateCheck = "daysBetweenUpdateCheck";
-        public const string DefaultPlayer = "defaultPlayer";
+        public const string UseExternalPlayer = "previewUseExternalPlayer";
         public const string LastUpdateCheckDate = "lastUpdateCheckDate";
         public const string MainWindowMinimize = "MainWindowMinimize";
         public const string UpdateStatus = "updateStatus";

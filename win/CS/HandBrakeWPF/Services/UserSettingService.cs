@@ -339,7 +339,7 @@ namespace HandBrakeWPF.Services
 
             // Preview
             defaults.Add(UserSettingConstants.LastPreviewDuration, 30);
-            defaults.Add(UserSettingConstants.DefaultPlayer, false);
+            defaults.Add(UserSettingConstants.UseExternalPlayer, false);
 
             // Experimental
             defaults.Add(UserSettingConstants.ProcessIsolationEnabled, true);

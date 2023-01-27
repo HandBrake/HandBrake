@@ -57,8 +57,12 @@ namespace HandBrakeWPF.ViewModels
         private string percentage;
         private double percentageValue;
         private bool isEncoding;
-        private bool useSystemDefaultPlayer;
+        private bool useExternalPlayer;
         private bool showPictureSettingControls;
+
+        private bool isMediaPlayerVisible;
+
+        private string mediaPlayerSource;
 
         public StaticPreviewViewModel(IScan scanService, IUserSettingService userSettingService, IErrorService errorService, ILog logService, ILogInstanceManager logInstanceManager, IPortService portService)
         {
@@ -80,7 +84,7 @@ namespace HandBrakeWPF.ViewModels
             this.Duration = 30;
             this.CanPlay = true;
 
-            this.useSystemDefaultPlayer = userSettingService.GetUserSetting<bool>(UserSettingConstants.DefaultPlayer);
+            this.useExternalPlayer = userSettingService.GetUserSetting<bool>(UserSettingConstants.UseExternalPlayer);
             this.showPictureSettingControls = userSettingService.GetUserSetting<bool>(UserSettingConstants.PreviewShowPictureSettingsOverlay);
             this.Duration = userSettingService.GetUserSetting<int>(UserSettingConstants.LastPreviewDuration);
         }
@@ -134,7 +138,10 @@ namespace HandBrakeWPF.ViewModels
                 {
                     return;
                 }
+
+                this.IsMediaPlayerVisible = false;
                 this.selectedPreviewImage = value;
+                this.MediaPlayerSource = null;
                 this.NotifyOfPropertyChange(() => this.SelectedPreviewImage);
 
                 this.UpdatePreviewFrame();
@@ -144,6 +151,28 @@ namespace HandBrakeWPF.ViewModels
         public EncodeTask Task { get; set; }
 
         public Source ScannedSource { get; set; }
+
+        public bool IsMediaPlayerVisible
+        {
+            get => this.isMediaPlayerVisible && !this.isEncoding;
+            set
+            {
+                if (value == this.isMediaPlayerVisible) return;
+                this.isMediaPlayerVisible = value;
+                this.NotifyOfPropertyChange(() => this.IsMediaPlayerVisible);
+            }
+        }
+
+        public string MediaPlayerSource
+        {
+            get => this.mediaPlayerSource;
+            set
+            {
+                if (value == this.mediaPlayerSource) return;
+                this.mediaPlayerSource = value;
+                this.NotifyOfPropertyChange(() => this.MediaPlayerSource);
+            }
+        }
 
         public int TotalPreviews
         {
@@ -241,17 +270,25 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
-        public bool UseSystemDefaultPlayer
+        public bool UseExternalPlayer
         {
             get
             {
-                return this.useSystemDefaultPlayer;
+                return this.useExternalPlayer;
             }
             set
             {
-                this.useSystemDefaultPlayer = value;
-                this.NotifyOfPropertyChange(() => UseSystemDefaultPlayer);
-                this.userSettingService.SetUserSetting(UserSettingConstants.DefaultPlayer, value);
+                if (this.Task != null && this.Task.OutputFormat == OutputFormat.WebM)
+                {
+                    this.errorService.ShowMessageBox(Resources.StaticPreviewViewModel_WebmNotSupported, Resources.Notice, MessageBoxButton.OK, MessageBoxImage.Information);
+                    this.useExternalPlayer = true;
+                    this.NotifyOfPropertyChange(() => UseExternalPlayer);
+                    return;
+                }
+
+                this.useExternalPlayer = value;
+                this.NotifyOfPropertyChange(() => UseExternalPlayer);
+                this.userSettingService.SetUserSetting(UserSettingConstants.UseExternalPlayer, value);
             }
         }
 
@@ -268,6 +305,7 @@ namespace HandBrakeWPF.ViewModels
                 this.CanPlay = !value;
                 this.NotifyOfPropertyChange(() => this.CanPlay);
                 this.NotifyOfPropertyChange(() => this.IsEncoding);
+                this.NotifyOfPropertyChange(() => this.IsMediaPlayerVisible);
             }
         }
 
@@ -287,10 +325,19 @@ namespace HandBrakeWPF.ViewModels
                 this.userSettingService.SetUserSetting(UserSettingConstants.PreviewShowPictureSettingsOverlay, value);
             }
         }
-
+        
         public void UpdatePreviewFrame(EncodeTask task, Source scannedSource)
         {
             this.Task = task;
+
+            // The Built-in Player does not support WebM or Mpeg2
+            if (this.Task != null && 
+                (this.Task.OutputFormat == OutputFormat.WebM || this.Task.VideoEncoder.IsMpeg2))
+            {
+                this.useExternalPlayer = true;
+                this.NotifyOfPropertyChange(() => UseExternalPlayer);
+            }
+            
             this.UpdatePreviewFrame();
             this.Title = Resources.StaticPreviewViewModel_Title;
             this.ScannedSource = scannedSource;
@@ -378,8 +425,16 @@ namespace HandBrakeWPF.ViewModels
             this.PictureSettingsViewModel = pictureSettingsViewModel;
         }
 
-        public void Play()
+        public void EncodeFile()
         {
+            if (this.Task != null &&
+                (this.Task.OutputFormat == OutputFormat.WebM || this.Task.VideoEncoder.IsMpeg2))
+            {
+                this.errorService.ShowMessageBox(Resources.StaticPreviewViewModel_WebmNotSupported, Resources.Notice, MessageBoxButton.OK, MessageBoxImage.Information);
+                this.useExternalPlayer = true;
+                this.NotifyOfPropertyChange(() => UseExternalPlayer);
+            }
+
             try
             {
                 this.IsEncoding = true;
@@ -465,12 +520,37 @@ namespace HandBrakeWPF.ViewModels
             ThreadPool.QueueUserWorkItem(this.CreatePreview, task);
         }
 
+        public void Play()
+        {
+            this.PlayFile();
+        }
+
+        public void ClosePlayer()
+        {
+            this.IsMediaPlayerVisible = false;
+            this.MediaPlayerSource = null;
+        }
+
         public void CancelEncode()
         {
             if (this.encodeService.IsEncoding)
             {
                 this.encodeService.Stop();
             }
+        }
+
+        public void HandleMediaError(Exception error)
+        {
+            this.logService.LogMessage(
+                error != null
+                    ? string.Format("# Video Preview: Unable to Play: {0}", error)
+                    : string.Format("# Video Preview: Unable to Play: Unknown Reason. Maybe a missing codec pack."));
+
+            this.errorService.ShowMessageBox(
+                Resources.StaticPreviewViewModel_MediaError,
+                Resources.Error,
+                MessageBoxButton.OK,
+                MessageBoxImage.Error);
         }
 
         private void PlayFile()
@@ -483,22 +563,10 @@ namespace HandBrakeWPF.ViewModels
                     string mediaPlayerPath = userSettingService.GetUserSetting<string>(UserSettingConstants.MediaPlayerPath);
                     string args = "\"" + this.CurrentlyPlaying + "\"";
 
-                    if (this.UseSystemDefaultPlayer)
+                    if (!this.UseExternalPlayer)
                     {
-                        this.logService.LogMessage(string.Format("# VideoPreview: Using system media player. ({0})", args));
-
-                        try
-                        {
-                            Process.Start("explorer.exe", args);
-                        }
-                        catch (Win32Exception exc)
-                        {
-                            ThreadHelper.OnUIThread(
-                                () => this.errorService.ShowError(
-                                    exc.Message,
-                                    Resources.QueueViewModel_PlayFileErrorSolution,
-                                    exc));
-                        }
+                        this.logService.LogMessage(string.Format("# VideoPreview: Using built-in system media player. ({0})", args));
+                        this.MediaPlayerSource = this.CurrentlyPlaying;
                     }
                     else
                     {
@@ -554,6 +622,8 @@ namespace HandBrakeWPF.ViewModels
             this.Percentage = "0.00%";
             this.PercentageValue = 0;
             this.IsEncoding = false;
+
+            this.IsMediaPlayerVisible = !this.UseExternalPlayer;
 
             this.encodeService.EncodeCompleted -= this.encodeService_EncodeCompleted;
             this.encodeService.EncodeStatusChanged -= this.encodeService_EncodeStatusChanged;
