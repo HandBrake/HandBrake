@@ -216,6 +216,7 @@ static int encavcodecaInit(hb_work_object_t *w, hb_job_t *job)
 
     if (hb_avcodec_open(context, codec, &av_opts, 0))
     {
+        av_dict_free(&av_opts);
         hb_error("encavcodecaInit: hb_avcodec_open() failed");
         return 1;
     }

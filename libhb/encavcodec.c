@@ -349,7 +349,6 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
     if (apply_encoder_preset(job->vcodec, &av_opts, job->encoder_preset))
     {
         av_free( context );
-        av_dict_free( &av_opts );
         ret = 1;
         goto done;
     }
@@ -357,7 +356,6 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
     if (apply_encoder_options(job, context, &av_opts))
     {
         av_free( context );
-        av_dict_free( &av_opts );
         ret = 1;
         goto done;
     }
@@ -1121,7 +1119,6 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
     {
         hb_log( "encavcodecInit: Unknown avcodec option %s", t->key );
     }
-    av_dict_free( &av_opts );
 
     pv->context = context;
 
@@ -1139,6 +1136,7 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
     }
 
 done:
+    av_dict_free(&av_opts);
     return ret;
 }
 

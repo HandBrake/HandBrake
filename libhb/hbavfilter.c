@@ -49,6 +49,7 @@ static AVFilterContext * append_filter( hb_avfilter_graph_t * graph,
         result = av_buffersrc_parameters_set(filter, par);
         if (result < 0)
         {
+            avfilter_free(filter);
             return NULL;
         }
     }

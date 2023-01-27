@@ -1215,7 +1215,6 @@ static int avformatInit( hb_mux_object_t * m )
     ret = avformat_write_header(m->oc, &av_opts);
     if( ret < 0 )
     {
-        av_dict_free( &av_opts );
         hb_error( "muxavformat: avformat_write_header failed!");
         goto error;
     }
@@ -1230,6 +1229,7 @@ static int avformatInit( hb_mux_object_t * m )
     return 0;
 
 error:
+    av_dict_free(&av_opts);
     free(job->mux_data);
     job->mux_data = NULL;
     avformat_free_context(m->oc);
