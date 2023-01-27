@@ -53,7 +53,8 @@ typedef struct
 #endif
 } hb_display_t;
 
-hb_display_t * hb_display_init(const char         *  driver_name,
+hb_display_t * hb_display_init(const char         * driver_name,
+                               const uint32_t       dri_render_node,
                                const char * const * interface_names);
 void           hb_display_close(hb_display_t ** _d);
 
