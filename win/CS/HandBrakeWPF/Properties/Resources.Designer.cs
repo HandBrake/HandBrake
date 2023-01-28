@@ -1704,7 +1704,9 @@ namespace HandBrakeWPF.Properties {
         
         /// <summary>
         ///   Looks up a localized string similar to The file &apos;{0}&apos; already exists!
-        ///Would you like to overwrite it?.
+        ///Would you like to overwrite it?
+        ///
+        ///Hint: File overwrite behaviour can be controlled in preferences. .
         /// </summary>
         public static string Main_QueueOverwritePrompt {
             get {

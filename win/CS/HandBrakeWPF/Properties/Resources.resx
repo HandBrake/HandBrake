@@ -718,7 +718,9 @@ Do you wish to continue? </value>
   </data>
   <data name="Main_QueueOverwritePrompt" xml:space="preserve">
     <value>The file '{0}' already exists!
-Would you like to overwrite it?</value>
+Would you like to overwrite it?
+
+Hint: File overwrite behaviour can be controlled in preferences. </value>
   </data>
   <data name="Clipboard_Unavailable" xml:space="preserve">
     <value>The system clipboard is currently unavailable.</value>
