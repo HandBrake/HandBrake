@@ -119,6 +119,8 @@ namespace HandBrakeWPF.ViewModels
 
         private bool enableNvDecSupport;
 
+        private bool useIsoDateFormat;
+
         public OptionsViewModel(
             IUserSettingService userSettingService,
             IUpdateService updateService, 
@@ -595,6 +597,17 @@ namespace HandBrakeWPF.ViewModels
                            new PlaceHolderBucket { Name = "{source_folder_name}" },
                            new PlaceHolderBucket { Name = "{source}" }
                        };
+            }
+        }
+
+        public bool UseIsoDateFormat
+        {
+            get => this.useIsoDateFormat;
+            set
+            {
+                if (value == this.useIsoDateFormat) return;
+                this.useIsoDateFormat = value;
+                this.OnPropertyChanged();
             }
         }
 
@@ -1341,6 +1354,8 @@ namespace HandBrakeWPF.ViewModels
 
             this.AlwaysUseDefaultPath = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.AlwaysUseDefaultPath);
 
+            this.UseIsoDateFormat = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.UseIsoDateFormat);
+
             // #############################
             // Picture Tab
             // #############################
@@ -1537,6 +1552,7 @@ namespace HandBrakeWPF.ViewModels
             this.userSettingService.SetUserSetting(UserSettingConstants.AutonameFileCollisionBehaviour, this.SelectedCollisionBehaviour);
             this.userSettingService.SetUserSetting(UserSettingConstants.AutonameFilePrePostString, this.PrePostFilenameText);
             this.userSettingService.SetUserSetting(UserSettingConstants.AlwaysUseDefaultPath, this.AlwaysUseDefaultPath);
+            this.userSettingService.SetUserSetting(UserSettingConstants.UseIsoDateFormat, this.UseIsoDateFormat);
 
             /* Previews */
             this.userSettingService.SetUserSetting(UserSettingConstants.MediaPlayerPath, this.VLCPath);

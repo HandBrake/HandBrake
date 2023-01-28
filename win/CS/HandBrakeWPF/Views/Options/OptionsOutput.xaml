@@ -67,6 +67,7 @@
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto" />
@@ -123,6 +124,8 @@
                             </ItemsPanelTemplate>
                         </ListView.ItemsPanel>
                     </ListView>
+
+                    <CheckBox Content="{x:Static Properties:Resources.OptionsView_IsoDateFormat}" Grid.Column="1" Grid.Row="8" IsChecked="{Binding UseIsoDateFormat}" />
 
                 </Grid>
 

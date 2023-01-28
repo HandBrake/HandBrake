@@ -3894,6 +3894,15 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Use ISO Date Formats (YYYY-MM-DD) instead of system format..
+        /// </summary>
+        public static string OptionsView_IsoDateFormat {
+            get {
+                return ResourceManager.GetString("OptionsView_IsoDateFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Language:.
         /// </summary>
         public static string OptionsView_Language {

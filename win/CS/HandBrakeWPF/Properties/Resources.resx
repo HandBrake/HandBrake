@@ -2715,4 +2715,7 @@ Alternatively, check the "Use External Player" checkbox below.</value>
   <data name="Reset" xml:space="preserve">
     <value>Reset</value>
   </data>
+  <data name="OptionsView_IsoDateFormat" xml:space="preserve">
+    <value>Use ISO Date Formats (YYYY-MM-DD) instead of system format.</value>
+  </data>
 </root>

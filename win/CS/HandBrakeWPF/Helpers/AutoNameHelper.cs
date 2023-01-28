@@ -133,16 +133,16 @@ namespace HandBrakeWPF.Helpers
                     (current, character) => current.Replace(character.ToString(), string.Empty));
 
                 int? bitDepth = task.VideoEncoder?.BitDepth;
-
-
+                
                 // Creation Date / Time
                 var creationDateTime = ObtainCreateDateObject(task);
-                string createDate = creationDateTime.Date.ToShortDateString().Replace('/', '-');
+                string createDate = userSettingService.GetUserSetting<bool>(UserSettingConstants.UseIsoDateFormat) ? creationDateTime.Date.ToString("yyyy-MM-dd") : creationDateTime.Date.ToShortDateString().Replace('/', '-');
+               
                 string createTime = creationDateTime.ToString("HH-mm");
 
                 // Modification Date / Time
                 var modificationDateTime = GetFileModificationDate(task);
-                string modifyDate = modificationDateTime.Date.ToShortDateString().Replace('/', '-');
+                string modifyDate = userSettingService.GetUserSetting<bool>(UserSettingConstants.UseIsoDateFormat) ? modificationDateTime.Date.ToString("yyyy-MM-dd") : modificationDateTime.Date.ToShortDateString().Replace('/', '-');
                 string modifyTime = modificationDateTime.ToString("HH-mm");
 
                 destinationFilename = userSettingService.GetUserSetting<string>(UserSettingConstants.AutoNameFormat);

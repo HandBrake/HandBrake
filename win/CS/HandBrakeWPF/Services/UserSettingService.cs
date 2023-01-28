@@ -298,6 +298,7 @@ namespace HandBrakeWPF.Services
             defaults.Add(UserSettingConstants.AutoNameTitleCase, true);
             defaults.Add(UserSettingConstants.AutoNameRemoveUnderscore, true);
             defaults.Add(UserSettingConstants.AutonameFileCollisionBehaviour, 0);
+            defaults.Add(UserSettingConstants.UseIsoDateFormat, false);
             defaults.Add(UserSettingConstants.AlwaysUseDefaultPath, true);
             defaults.Add(UserSettingConstants.RemovePunctuation, false);
             defaults.Add(UserSettingConstants.FileOverwriteBehaviour, 0);

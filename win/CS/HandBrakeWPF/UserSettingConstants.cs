@@ -9,6 +9,8 @@
 
 namespace HandBrakeWPF
 {
+    using System;
+
     /// <summary>
     /// Constants for the User Settings Service
     /// </summary>
@@ -87,5 +89,6 @@ namespace HandBrakeWPF
         public const string ForceDisableHardwareSupport = "ForceDisableHardwareSupport";
         public const string IsUpdateAvailableBuild = "IsUpdateAvailableBuild";
         public const string EnableNvDecSupport = "EnableNvDecSupport";
+        public const String UseIsoDateFormat = "UseIsoDateFormat";
     }
 }
