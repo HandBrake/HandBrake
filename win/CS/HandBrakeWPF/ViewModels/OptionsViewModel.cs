@@ -568,14 +568,19 @@ namespace HandBrakeWPF.ViewModels
             {
                 return new BindingList<PlaceHolderBucket>
                 {
-                    new PlaceHolderBucket { Name = "{source}" },
-                    new PlaceHolderBucket { Name = "{title}" },
-                    new PlaceHolderBucket { Name = "{chapters}" },
-                    new PlaceHolderBucket { Name = "{creation-date}" },
-                    new PlaceHolderBucket { Name = "{creation-time}" },
-                    new PlaceHolderBucket { Name = "{date}" },
-                    new PlaceHolderBucket { Name = "{time}" },
-                    new PlaceHolderBucket { Name = "{quality_bitrate}" },
+                    new PlaceHolderBucket { Name = Constants.Source },
+                    new PlaceHolderBucket { Name = Constants.Title },
+                    new PlaceHolderBucket { Name = Constants.Chapters},
+                    new PlaceHolderBucket { Name = Constants.CreationDate },
+                    new PlaceHolderBucket { Name = Constants.CreationTime },
+                    new PlaceHolderBucket { Name = Constants.ModificationDate },
+                    new PlaceHolderBucket { Name = Constants.ModificationTime },
+                    new PlaceHolderBucket { Name = Constants.Date },
+                    new PlaceHolderBucket { Name = Constants.Time },
+                    new PlaceHolderBucket { Name = Constants.QualityBitrate },
+                    new PlaceHolderBucket { Name = Constants.QualityType },
+                    new PlaceHolderBucket { Name = Constants.Preset },
+                    new PlaceHolderBucket { Name = Constants.EncoderBitDepth },
                 };
             }
         }

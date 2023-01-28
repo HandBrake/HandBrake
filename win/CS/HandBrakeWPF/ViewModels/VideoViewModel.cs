@@ -338,6 +338,8 @@ namespace HandBrakeWPF.ViewModels
                     this.HandleEncoderChange(this.Task.VideoEncoder);
                     this.HandleRFChange();
                     this.OnTabStatusChanged(null);
+
+                    this.OnTabStatusChanged(new TabStatusEventArgs("filters", ChangedOption.Encoder));
                 }
             }
         }

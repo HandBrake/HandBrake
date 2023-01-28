@@ -1839,6 +1839,15 @@ namespace HandBrakeWPF.ViewModels
                     this.SummaryViewModel.UpdateDisplayedInfo();
 
                     this.isSettingPreset = false;
+
+                    if (this.userSettingService.GetUserSetting<bool>(UserSettingConstants.AutoNaming) && this.userSettingService.GetUserSetting<string>(UserSettingConstants.AutoNameFormat) != null)
+                    {
+                        if (this.userSettingService.GetUserSetting<string>(UserSettingConstants.AutoNameFormat).Contains(Constants.Preset))
+                        {
+                            this.Destination = AutoNameHelper.AutoName(this.CurrentTask, this.SelectedTitle?.DisplaySourceName, this.ScannedSource?.SourceName, this.selectedPreset);
+                        }
+                    }
+
                     return true;
                 }
             }
@@ -2057,6 +2066,11 @@ namespace HandBrakeWPF.ViewModels
 
         private void TriggerAutonameChange(ChangedOption option)
         {
+            if (!this.userSettingService.GetUserSetting<bool>(UserSettingConstants.AutoNaming))
+            {
+                return;
+            }
+
             string autonameFormat = this.userSettingService.GetUserSetting<string>(UserSettingConstants.AutoNameFormat);
 
             if (string.IsNullOrEmpty(autonameFormat))
@@ -2065,6 +2079,11 @@ namespace HandBrakeWPF.ViewModels
             }
 
             if (autonameFormat.Contains(Constants.QualityBitrate) && (option == ChangedOption.Bitrate || option == ChangedOption.Quality))
+            {
+                this.Destination = AutoNameHelper.AutoName(this.CurrentTask, this.SelectedTitle?.DisplaySourceName, this.ScannedSource?.SourceName, this.selectedPreset);
+            }
+
+            if (autonameFormat.Contains(Constants.EncoderBitDepth) && option == ChangedOption.Encoder)
             {
                 this.Destination = AutoNameHelper.AutoName(this.CurrentTask, this.SelectedTitle?.DisplaySourceName, this.ScannedSource?.SourceName, this.selectedPreset);
             }

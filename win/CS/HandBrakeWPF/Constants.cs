@@ -33,7 +33,11 @@ namespace HandBrakeWPF
         public const string Time = "{time}";
         public const string CreationDate = "{creation-date}";
         public const string CreationTime = "{creation-time}";
-        public const string Preset = "{preset}";
+        public const string ModificationDate = "{modification-date}";
+        public const string ModificationTime = "{modification-time}";
+        public const string Preset = "{preset}"; 
+        public const string QualityType = "{quality_type}";
+        public const string EncoderBitDepth = "{encoder_bit_depth}";
 
         /* Auto-name Path Constants */
         public const string Source = "{source}";

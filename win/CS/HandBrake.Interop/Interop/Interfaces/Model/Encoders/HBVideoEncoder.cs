@@ -104,6 +104,24 @@ namespace HandBrake.Interop.Interop.Interfaces.Model.Encoders
             }
         }
 
+        public int BitDepth
+        {
+            get
+            {
+                if (this.DisplayName.Contains("10"))
+                {
+                    return 10;
+                }
+
+                if (this.DisplayName.Contains("12"))
+                {
+                    return 12;
+                }
+
+                return 8;
+            }
+        }
+
         public bool SupportsMP4 => (this.CompatibleContainers & NativeConstants.HB_MUX_MASK_MP4) == NativeConstants.HB_MUX_MASK_MP4
                                    || (this.CompatibleContainers & NativeConstants.HB_MUX_AV_MP4) == NativeConstants.HB_MUX_AV_MP4;
 

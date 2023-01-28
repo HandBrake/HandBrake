@@ -61,15 +61,10 @@ namespace HandBrakeWPF.Helpers
                     combinedChapterTag = chapterStart + "-" + chapterFinish;
                 }
 
-                // Creation Date / Time
-                var creationDateTime = ObtainCreateDateObject(task);
-                string createDate = creationDateTime.Date.ToShortDateString().Replace('/', '-');
-                string createTime = creationDateTime.ToString("HH-mm"); 
-
                 /*
                  * Generate the full path and filename
                  */
-                string destinationFilename = GenerateDestinationFileName(task, userSettingService, sourceName, dvdTitle, combinedChapterTag, createDate, createTime);
+                string destinationFilename = GenerateDestinationFileName(task, userSettingService, sourceName, dvdTitle, combinedChapterTag, presetName);
                 string autoNamePath = GetAutonamePath(userSettingService, task, sourceName);
                 string finalPath = Path.Combine(autoNamePath, destinationFilename);
 
@@ -127,11 +122,29 @@ namespace HandBrakeWPF.Helpers
             return sourceName;
         }
 
-        private static string GenerateDestinationFileName(EncodeTask task, IUserSettingService userSettingService, string sourceName, string dvdTitle, string combinedChapterTag, string createDate, string createTime)
+        private static string GenerateDestinationFileName(EncodeTask task, IUserSettingService userSettingService, string sourceName, string dvdTitle, string combinedChapterTag, Preset presetName)
         {
             string destinationFilename;
             if (userSettingService.GetUserSetting<string>(UserSettingConstants.AutoNameFormat) != string.Empty)
             {
+                string presetNameStr = presetName?.Name ?? string.Empty;
+                presetNameStr = Path.GetInvalidFileNameChars().Aggregate(
+                    presetNameStr,
+                    (current, character) => current.Replace(character.ToString(), string.Empty));
+
+                int? bitDepth = task.VideoEncoder?.BitDepth;
+
+
+                // Creation Date / Time
+                var creationDateTime = ObtainCreateDateObject(task);
+                string createDate = creationDateTime.Date.ToShortDateString().Replace('/', '-');
+                string createTime = creationDateTime.ToString("HH-mm");
+
+                // Modification Date / Time
+                var modificationDateTime = GetFileModificationDate(task);
+                string modifyDate = modificationDateTime.Date.ToShortDateString().Replace('/', '-');
+                string modifyTime = modificationDateTime.ToString("HH-mm");
+
                 destinationFilename = userSettingService.GetUserSetting<string>(UserSettingConstants.AutoNameFormat);
                 destinationFilename =
                     destinationFilename
@@ -141,15 +154,22 @@ namespace HandBrakeWPF.Helpers
                         .Replace(Constants.Date, DateTime.Now.Date.ToShortDateString().Replace('/', '-'))
                         .Replace(Constants.Time, DateTime.Now.ToString("HH-mm"))
                         .Replace(Constants.CreationDate, createDate)
-                        .Replace(Constants.CreationTime, createTime);
+                        .Replace(Constants.CreationTime, createTime)
+                        .Replace(Constants.ModificationDate, modifyDate)
+                        .Replace(Constants.ModificationTime, modifyTime)
+                        .Replace(Constants.Preset, presetNameStr)
+                        .Replace(Constants.EncoderBitDepth, bitDepth?.ToString());
+
 
                 if (task.VideoEncodeRateType == VideoEncodeRateType.ConstantQuality)
                 {
                     destinationFilename = destinationFilename.Replace(Constants.QualityBitrate, task.Quality.ToString());
+                    destinationFilename = destinationFilename.Replace(Constants.QualityType, "Q");
                 }
                 else
                 {
                     destinationFilename = destinationFilename.Replace(Constants.QualityBitrate, task.VideoBitrate.ToString());
+                    destinationFilename = destinationFilename.Replace(Constants.QualityType, "kbps");
                 }
             }
             else
@@ -290,6 +310,30 @@ namespace HandBrakeWPF.Helpers
             try
             {
                 return File.GetCreationTime(task.Source);
+            }
+            catch (Exception e)
+            {
+                if (e is UnauthorizedAccessException || e is PathTooLongException || e is NotSupportedException)
+                {
+                    // Suspect the most likely concerns trying to grab the creation date in which we would want to swallow exception.
+                    return default(DateTime);
+                }
+
+                throw;
+            }
+        }
+
+        private static DateTime GetFileModificationDate(EncodeTask task)
+        {
+            var rd = task.MetaData.ReleaseDate;
+            if (DateTime.TryParse(rd, out var d))
+            {
+                return d;
+            }
+
+            try
+            {
+                return File.GetLastWriteTime(task.Source);
             }
             catch (Exception e)
             {
