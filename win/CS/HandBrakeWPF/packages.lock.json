@@ -13,9 +13,9 @@
       },
       "gong-wpf-dragdrop": {
         "type": "Direct",
-        "requested": "[3.2.0, )",
-        "resolved": "3.2.0",
-        "contentHash": "Sg3h2GZ2qOG/boscpRd5+pVe1VtZ72VTHCE25ajpXu5FNU40sskBvmuz47Q0/7bmtITzV3K+6OR5R0s0lglvNw=="
+        "requested": "[3.2.1, )",
+        "resolved": "3.2.1",
+        "contentHash": "duqBiOHQobupqRdbLYcr+8BQeeuHkvPDHQs9lnLZ03sYkmJbk5ApXqgUfx7hPP7tN9qopFQKl6OlYIHixnI1iw=="
       },
       "MahApps.Metro": {
         "type": "Direct",
@@ -140,7 +140,7 @@
       "handbrake.app.core": {
         "type": "Project",
         "dependencies": {
-          "HandBrake.Interop": "[1.5.0, )"
+          "HandBrake.Interop": "[1.6.1, )"
         }
       },
       "handbrake.interop": {
@@ -149,7 +149,7 @@
       "handbrake.worker": {
         "type": "Project",
         "dependencies": {
-          "HandBrake.Interop": "[1.5.0, )"
+          "HandBrake.Interop": "[1.6.1, )"
         }
       }
     }

@@ -562,6 +562,37 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
+        public BindingList<PlaceHolderBucket> OutputFilenamePlaceholders
+        {
+            get
+            {
+                return new BindingList<PlaceHolderBucket>
+                {
+                    new PlaceHolderBucket { Name = "{source}" },
+                    new PlaceHolderBucket { Name = "{title}" },
+                    new PlaceHolderBucket { Name = "{chapters}" },
+                    new PlaceHolderBucket { Name = "{creation-date}" },
+                    new PlaceHolderBucket { Name = "{creation-time}" },
+                    new PlaceHolderBucket { Name = "{date}" },
+                    new PlaceHolderBucket { Name = "{time}" },
+                    new PlaceHolderBucket { Name = "{quality_bitrate}" },
+                };
+            }
+        }
+
+        public BindingList<PlaceHolderBucket> PathFilenamePlaceholders
+        {
+            get
+            {
+                return new BindingList<PlaceHolderBucket>
+                       {
+                           new PlaceHolderBucket { Name = "{source_path}" },
+                           new PlaceHolderBucket { Name = "{source_folder_name}" },
+                           new PlaceHolderBucket { Name = "{source}" }
+                       };
+            }
+        }
+
         /* Preview */
 
         public string VLCPath
@@ -1209,6 +1240,11 @@ namespace HandBrakeWPF.ViewModels
 
             this.IsAutomaticSafeMode = false;
             this.NotifyOfPropertyChange(() => this.IsAutomaticSafeMode);
+        }
+
+        public void ResetAutoNameFormat()
+        {
+            this.AutonameFormat = "{source}-{title}";
         }
 
         #endregion

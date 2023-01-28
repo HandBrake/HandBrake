@@ -1,0 +1,110 @@
+﻿<UserControl x:Class="HandBrakeWPF.Views.Options.OptionsWhenDone"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:Properties="clr-namespace:HandBrakeWPF.Properties"
+             xmlns:converters="clr-namespace:HandBrakeWPF.Converters"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+
+    <UserControl.Resources>
+        <Style TargetType="TextBlock" BasedOn="{StaticResource {x:Type TextBlock}}">
+            <Setter Property="Margin" Value="0,0,5,0" />
+        </Style>
+
+        <Style TargetType="TextBox" BasedOn="{StaticResource {x:Type TextBox}}">
+            <Setter Property="Padding" Value="5,2" />
+            <Setter Property="MinHeight" Value="22" />
+            <Setter Property="VerticalContentAlignment" Value="Center" />
+            <Setter Property="ToolTipService.ShowDuration" Value="20000" />
+        </Style>
+
+        <Style TargetType="CheckBox" BasedOn="{StaticResource {x:Type CheckBox}}">
+            <Setter Property="Margin" Value="0,2,0,2" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+        </Style>
+
+        <converters:EnumComboConverter x:Key="enumComboConverter" />
+    </UserControl.Resources>
+
+    <StackPanel Name="WhenDone" Orientation="Vertical" Margin="10,5,0,0">
+
+        <TextBlock Text="{x:Static Properties:Resources.Options_WhenDone}" Style="{StaticResource pageHeader}"  />
+
+        <TextBlock Text="{x:Static Properties:Resources.Options_QueueCompleted}" Style="{StaticResource subHeader}" Margin="0,10,0,10" />
+
+        <StackPanel Orientation="Vertical" Margin="0,0,0,10">
+            <CheckBox Content="{x:Static Properties:Resources.OptionsView_WindowsNotification}" IsChecked="{Binding SendSystemNotificationOnQueueDone}" Margin="20,5,0,5" />
+
+            <Grid  Margin="20,0,0,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <TextBlock Text="{x:Static Properties:Resources.Options_WhenDoneColon}" Grid.Row="1" Grid.Column="0" />
+                <ComboBox Name="whenDone" ItemsSource="{Binding WhenDoneOptions, Converter={StaticResource enumComboConverter}}" SelectedItem="{Binding WhenDone, Converter={StaticResource enumComboConverter}}" 
+                                      Width="120"  HorizontalAlignment="Left"  Grid.Row="1" Grid.Column="1"  />
+                <CheckBox Content="{x:Static Properties:Resources.Options_ResetDoNothing}" VerticalAlignment="Center" Margin="0,5,0,0"  Grid.Row="2" Grid.Column="1" 
+                                      IsChecked="{Binding ResetWhenDoneAction}" />
+                <CheckBox Content="{x:Static Properties:Resources.Options_PromptBeforeAction}" VerticalAlignment="Center" Margin="0,5,0,0" Grid.Row="3" Grid.Column="1" 
+                                      IsChecked="{Binding WhenDonePerformActionImmediately}" />
+            </Grid>
+
+            <TextBlock Text="{x:Static Properties:Resources.Options_EncodeCompleted}" Style="{StaticResource subHeader}" Margin="0,10,0,10" />
+            <StackPanel Orientation="Vertical" Margin="20,0,0,0">
+
+                <CheckBox Content="{x:Static Properties:Resources.OptionsView_WindowsNotification}" IsChecked="{Binding SendSystemNotificationOnEncodeDone}" Margin="0" />
+
+                <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
+                    <CheckBox VerticalAlignment="Center" VerticalContentAlignment="Center" IsChecked="{Binding SendFileAfterEncode}">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="{x:Static Properties:Resources.Options_SendFileTo}" VerticalAlignment="Center" />
+                            <TextBlock Text="{Binding SendFileTo}" VerticalAlignment="Center" Margin="5,0,5,0"  />
+                        </StackPanel>
+                    </CheckBox>
+
+                    <Button Content="{x:Static Properties:Resources.Browse}" Command="{Binding RelayCommand}" CommandParameter="BrowseSendFileTo" />
+                </StackPanel>
+
+                <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
+                    <TextBlock VerticalAlignment="Center"  Margin="25,0,5,0" Text="{x:Static Properties:Resources.Options_Arguments}" />
+                    <TextBox Name="SendToArguments" Text="{Binding Arguments}" Width="250" ToolTip="{x:Static Properties:ResourcesTooltips.OptionsView_SendFileToArguments}" />
+                </StackPanel>
+                <TextBlock Text="{x:Static Properties:Resources.OptionsView_SendFileToArgPlaceholders}" Margin="91,1,0,0" Style="{StaticResource subText}"/>
+            </StackPanel>
+
+            <TextBlock Text="{x:Static Properties:Resources.Options_Notifications}" Style="{StaticResource subHeader}" Margin="0,10,0,10" />
+            <StackPanel Orientation="Vertical" Margin="20,0,0,0">
+                <StackPanel Orientation="Vertical" Margin="0,7,0,0">
+                    <CheckBox Content="{x:Static Properties:Resources.OptionsView_PlaySoundWhenDone}"  
+                                          VerticalAlignment="Center" VerticalContentAlignment="Center" IsChecked="{Binding PlaySoundWhenDone}" Margin="0,1,0,0" />
+                    <CheckBox Content="{x:Static Properties:Resources.OptionsView_PlaySoundWhenQueueDone}"  
+                                          VerticalAlignment="Center" VerticalContentAlignment="Center" IsChecked="{Binding PlaySoundWhenQueueDone}" Margin="0,5,0,0" />
+                    <StackPanel Orientation="Horizontal" Margin="25,2,0,0">
+                        <TextBlock Text="{Binding WhenDoneAudioFile}" VerticalAlignment="Center" Margin="5,2,5,0"  />
+                        <Button Content="{x:Static Properties:Resources.Browse}" Command="{Binding RelayCommand}" CommandParameter="BrowseWhenDoneAudioFile" />
+
+                        <Button Margin="5,0,0,0" Command="{Binding RelayCommand}" CommandParameter="PlayWhenDoneFile" Background="Transparent" BorderThickness="0" >
+                            <Button.Content>
+                                <StackPanel Orientation="Horizontal">
+                                    <Image Source="../Images/Play_small.png" VerticalAlignment="Center" />
+                                    <TextBlock Text="{x:Static Properties:Resources.OptionsView_Play}" Margin="2,0,2,0" />
+                                </StackPanel>
+                            </Button.Content>
+                        </Button>
+                    </StackPanel>
+                </StackPanel>
+            </StackPanel>
+        </StackPanel>
+
+
+    </StackPanel>
+
+</UserControl>

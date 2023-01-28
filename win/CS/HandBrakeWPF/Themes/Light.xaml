@@ -9,6 +9,8 @@
     <SolidColorBrush x:Key="Ui.UltraLight2" Color="AliceBlue" />
     <SolidColorBrush x:Key="Ui.Arrow" Color="#252525" />
     <SolidColorBrush x:Key="Ui.ListBoxSelect" Color="#D8D8D8" />
+
+    <SolidColorBrush x:Key="Ui.Blue" Color="#00579f" />
     
     <!-- StatusBar -->
     <Style TargetType="StatusBar">

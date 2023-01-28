@@ -1,0 +1,104 @@
+﻿<UserControl x:Class="HandBrakeWPF.Views.Options.OptionsHardware"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:converters="clr-namespace:HandBrakeWPF.Converters"
+             xmlns:Properties="clr-namespace:HandBrakeWPF.Properties"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+
+    <UserControl.Resources>
+        <Style TargetType="TextBlock" BasedOn="{StaticResource {x:Type TextBlock}}">
+            <Setter Property="Margin" Value="0,0,5,0" />
+        </Style>
+
+        <Style TargetType="TextBox" BasedOn="{StaticResource {x:Type TextBox}}">
+            <Setter Property="Padding" Value="5,2" />
+            <Setter Property="MinHeight" Value="22" />
+            <Setter Property="VerticalContentAlignment" Value="Center" />
+            <Setter Property="ToolTipService.ShowDuration" Value="20000" />
+        </Style>
+
+        <Style TargetType="CheckBox" BasedOn="{StaticResource {x:Type CheckBox}}">
+            <Setter Property="Margin" Value="0,2,0,2" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+        </Style>
+
+        <converters:EnumComboConverter x:Key="enumComboConverter" />
+        <converters:BooleanToVisibilityConverter x:Key="boolToVisConverter" />
+    </UserControl.Resources>
+
+    <StackPanel Name="Hardware" Orientation="Vertical" Margin="10,5,0,0">
+        <TextBlock Text="{x:Static Properties:Resources.Options_Video}" Style="{StaticResource pageHeader}" />
+
+
+        <Grid Visibility="{Binding IsSafeMode, Converter={StaticResource boolToVisConverter}}" Margin="10,5,10,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <Image Source="../Images/warningsmall.png" Width="16" Height="16" VerticalAlignment="Center" Margin="0,0,10,0" Grid.Column="0" />
+            <TextBlock Text="{x:Static Properties:Resources.OptionsView_SafeMode}" TextWrapping="Wrap" Grid.Column="1" Style="{StaticResource subText}" />
+
+        </Grid>
+
+
+        <Grid Visibility="{Binding IsHardwareFallbackMode, Converter={StaticResource boolToVisConverter}}" Margin="10,5,0,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <Image Source="../Images/ErrorX.png" Width="32" Height="32" VerticalAlignment="Center" Margin="0,0,10,0" Grid.Column="0" />
+            <TextBlock Text="{x:Static Properties:Resources.OptionsView_HardwareDetectFailed}" TextWrapping="Wrap" Grid.Column="1" />
+
+            <Button Content="{x:Static Properties:Resources.OptionsView_ResetSafeMode}" Command="{Binding RelayCommand}" CommandParameter="ResetAutomaticSafeMode"
+                                Visibility="{Binding IsAutomaticSafeMode, Converter={StaticResource boolToVisConverter}}" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Left"
+                                Margin="0,10,0,0" />
+        </Grid>
+
+        <StackPanel Orientation="Vertical" Margin="0,0,0,20" Visibility="{Binding IsHardwareOptionsVisible, Converter={StaticResource boolToVisConverter}}">
+
+            <TextBlock Text="{x:Static Properties:Resources.Options_Hardware}" Style="{StaticResource subHeader}" Margin="0,10,0,10" />
+            <StackPanel Orientation="Vertical" Margin="20,0,0,0">
+                <TextBlock Text="{x:Static Properties:Resources.OptionsView_ChoiceOfEncoderHint}" Margin="0,0,0,10" Style="{StaticResource subText}" />
+
+                <!-- QuickSync -->
+                <CheckBox Content="{x:Static Properties:Resources.OptionsView_EnableQuicksyncEncoding}" IsEnabled="{Binding IsQuickSyncAvailable}" IsChecked="{Binding EnableQuickSyncEncoding}" />
+                <CheckBox Content="{x:Static Properties:Resources.OptionsView_EnableQuicksyncLowPower}" Margin="25,5,0,10" Visibility="{Binding IsQuickSyncAvailable, Converter={StaticResource boolToVisConverter}}" IsChecked="{Binding EnableQuickSyncLowPower}" />
+                <CheckBox Content="{x:Static Properties:Resources.OptionsView_EnableQuicksyncHyperEncode}" Margin="25,5,0,0" Visibility="{Binding IsQuickSyncHyperEncodeAvailable, Converter={StaticResource boolToVisConverter}}" IsChecked="{Binding EnableQuickSyncHyperEncode}" />
+                <TextBlock Text="{x:Static Properties:Resources.OptionsView_HyperEncodeDescription}" Margin="50,0,0,10" FontStyle="Italic" TextWrapping="Wrap" Visibility="{Binding IsQuickSyncHyperEncodeAvailable, Converter={StaticResource boolToVisConverter}}" />
+                <CheckBox Content="{x:Static Properties:Resources.Options_QsvDecode}" Margin="25,2,0,0"  IsEnabled="{Binding IsQuickSyncAvailable}" Visibility="{Binding IsQuickSyncAvailable, Converter={StaticResource boolToVisConverter}}" IsChecked="{Binding EnableQuickSyncDecoding}" />
+                <CheckBox Content="{x:Static Properties:Resources.Options_QsvDecodeForNonFullPath}" Margin="50,5,0,0"  Visibility="{Binding IsUseQsvDecAvailable, Converter={StaticResource boolToVisConverter}}"
+                                      IsChecked="{Binding UseQSVDecodeForNonQSVEnc}" />
+
+                <!-- VCN -->
+                <CheckBox Content="{x:Static Properties:Resources.OptionsView_EnableVceEncoding}" Margin="0,25,0,0"  IsEnabled="{Binding IsVceAvailable}" IsChecked="{Binding EnableVceEncoder}" />
+
+                <!-- NVENC -->
+                <CheckBox Content="{x:Static Properties:Resources.OptionsView_EnableNvencEncoding}" Margin="0,25,0,0" IsEnabled="{Binding IsNvencAvailable}" IsChecked="{Binding EnableNvencEncoder}" />
+                <CheckBox Content="{x:Static Properties:Resources.OptionsView_EnableNvDecSupport}" Margin="25,5,0,0" IsEnabled="{Binding IsNvencAvailable}"
+                                      Visibility="{Binding IsNvdecAvailable, Converter={StaticResource boolToVisConverter}}" IsChecked="{Binding EnableNvDecSupport}" />
+
+            </StackPanel>
+
+
+            <TextBlock Text="{x:Static Properties:Resources.Options_Scaling}" Style="{StaticResource subHeader}" Margin="0,20,0,10" Visibility="Collapsed" />
+
+            <!--<StackPanel Orientation="Horizontal" Margin="20,0,0,0" Visibility="Collapsed">
+                            <TextBlock Text="{x:Static Properties:Resources.Options_Scaler}" Margin="0,0,5,0" VerticalAlignment="Center" />
+                            <ComboBox  ItemsSource="{Binding ScalingOptions, Converter={StaticResource enumComboConverter}}" 
+                                       SelectedItem="{Binding SelectedScalingMode, Converter={StaticResource enumComboConverter}}" 
+                                       Width="120" VerticalAlignment="Center" />
+                        </StackPanel>-->
+
+        </StackPanel>
+    </StackPanel>
+</UserControl>
