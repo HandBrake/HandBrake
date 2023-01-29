@@ -527,4 +527,11 @@ Please note, there may be inperfections in the UI layout when using these modes.
 
 Bitrate will vary source to source.</value>
   </data>
+  <data name="OptionsView_DestinationReplacementOptions" xml:space="preserve">
+    <value>The following can be used singularly, or together to build up a destination path
+
+{source_path} - In the same folder as the source path (if possible)
+{source_folder_name} – The name of the directory that the source file is in, without the full path.
+{source} - The name of the source file.</value>
+  </data>
 </root>

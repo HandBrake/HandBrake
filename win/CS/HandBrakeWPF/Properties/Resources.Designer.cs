@@ -3181,15 +3181,6 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Available additional Options: {source_path} or {source_folder_name} or {source}.
-        /// </summary>
-        public static string Options_DefaultPathAdditionalParams {
-            get {
-                return ResourceManager.GetString("Options_DefaultPathAdditionalParams", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Download Update.
         /// </summary>
         public static string Options_DownloadUpdates {

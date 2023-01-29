@@ -328,9 +328,6 @@ Do you wish to proceed?</value>
   <data name="PictureSettings_OutputResolution" xml:space="preserve">
     <value>Output: {0}</value>
   </data>
-  <data name="Options_DefaultPathAdditionalParams" xml:space="preserve">
-    <value>Available additional Options: {source_path} or {source_folder_name} or {source}</value>
-  </data>
   <data name="Main_MatchingFileOverwriteWarning" xml:space="preserve">
     <value>You cannot encode to a file with the same path and filename as the source file. Please update the destination filename so that it does not match the source file.</value>
   </data>

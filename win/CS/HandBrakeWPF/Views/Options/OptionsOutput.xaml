@@ -78,7 +78,7 @@
 
                     <!-- Path Format -->
                     <TextBlock VerticalAlignment="Center" Text="{x:Static Properties:Resources.Options_DefaultPath}" Grid.Column="0" Grid.Row="0" />
-                    <TextBox Name="autoNameOutputPath" Text="{Binding AutoNameDefaultPath}" Width="380" Grid.Column="1" Grid.Row="0" ToolTip="{x:Static Properties:Resources.Options_DefaultPathAdditionalParams}" 
+                    <TextBox Name="autoNameOutputPath" Text="{Binding AutoNameDefaultPath}" Width="380" Grid.Column="1" Grid.Row="0" ToolTip="{x:Static Properties:ResourcesTooltips.OptionsView_DestinationReplacementOptions}" 
                                          HorizontalAlignment="Left" DragEnter="AutoNameOutputPath_OnDragEnter"
                                          behaviours:TextBoxBehavior.TripleClickSelectAll="True" />
                     <Button Content="{x:Static Properties:Resources.Browse}" Margin="5,0,0,0" Grid.Column="2" Grid.Row="0" Command="{Binding RelayCommand}" CommandParameter="BrowseAutoNamePath" HorizontalAlignment="Left" />
@@ -89,6 +89,7 @@
                                           Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2" MaxWidth="400" HorizontalAlignment="Left"
                                           ScrollViewer.HorizontalScrollBarVisibility="Disabled" Panel.ZIndex="1"
                                           ScrollViewer.VerticalScrollBarVisibility="Disabled"
+                                          ToolTip="{x:Static Properties:ResourcesTooltips.OptionsView_DestinationReplacementOptions}"
                                           PreviewMouseDown="PathFormatChoices_OnPreviewMouseDown">
 
                         <ListView.ItemsPanel>

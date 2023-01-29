@@ -531,6 +531,19 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The following can be used singularly, or together to build up a destination path
+        ///
+        ///{source_path} - In the same folder as the source path (if possible)
+        ///{source_folder_name} – The name of the directory that the source file is in, without the full path.
+        ///{source} - The name of the source file..
+        /// </summary>
+        public static string OptionsView_DestinationReplacementOptions {
+            get {
+                return ResourceManager.GetString("OptionsView_DestinationReplacementOptions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Flat - Presets are displayed as a flat list.
         ///Partially Flat - The last 8 user presets are displayed as a flat list followed by all presets being shown in category listing.
         ///Categories - All presets are shown under a sub menu per category..
