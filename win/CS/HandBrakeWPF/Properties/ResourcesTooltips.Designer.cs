@@ -512,7 +512,13 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The format of the output file. In addition to any supported file system character, you can use the any of the placeholders that will be replaced when you change title or scan a source or update certain settings..
+        ///   Looks up a localized string similar to The format of the output file. In addition to any supported file system character, you can use the any of the placeholders that will be replaced when you change title or scan a source or update certain settings.
+        ///
+        ///{source} - Name of the source file.
+        ///{title} - Integer value. This is representative of a disc title number.
+        ///{chapters} - The range of chapters selected.
+        ///{creation-date} - The date that the source file was created on (if available).
+        ///{creation-time} - The time that the source file was created o [rest of string was truncated]&quot;;.
         /// </summary>
         public static string Options_AdditionalFormatOptions {
             get {

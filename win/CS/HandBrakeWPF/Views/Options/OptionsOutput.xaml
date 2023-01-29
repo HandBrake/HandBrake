@@ -117,6 +117,7 @@
                                           Grid.Row="7" Grid.Column="1" Grid.ColumnSpan="2" MaxWidth="400" HorizontalAlignment="Left"
                                           ScrollViewer.HorizontalScrollBarVisibility="Disabled" Panel.ZIndex="2"
                                           ScrollViewer.VerticalScrollBarVisibility="Disabled"
+                                          ToolTip="{x:Static Properties:ResourcesTooltips.Options_AdditionalFormatOptions}"
                                           PreviewMouseDown="FileFormatChoices_OnPreviewMouseDown">
 
                         <ListView.ItemsPanel>
