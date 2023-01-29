@@ -1475,9 +1475,10 @@ int encqsvInit(hb_work_object_t *w, hb_job_t *job)
         job->qsv.ctx->la_is_enabled = pv->param.rc.lookahead ? 1 : 0;
     }
 #endif
-    //libmfx BRC parameters are 16 bits thus maybe overflow, then BRCParamMultiplier is needed
-    brc_param_multiplier = (FFMAX(FFMAX3(job->vbitrate, pv->param.rc.vbv_max_bitrate, pv->param.rc.vbv_buffer_size / 8),
-                            pv->param.rc.vbv_buffer_init / 8) + 0x10000) / 0x10000;
+    // libmfx BRC parameters are 16 bits thus maybe overflow, then BRCParamMultiplier is needed
+    // Comparison vbitrate in Kbps (kilobit) with vbv_max_bitrate, vbv_buffer_size, vbv_buffer_init in KB (kilobyte)
+    brc_param_multiplier = (FFMAX(FFMAX3(job->vbitrate, pv->param.rc.vbv_max_bitrate, pv->param.rc.vbv_buffer_size),
+                            pv->param.rc.vbv_buffer_init) + 0x10000) / 0x10000;
     // set VBV here (this will be overridden for CQP and ignored for LA)
     // only set BufferSizeInKB, InitialDelayInKB and MaxKbps if we have
     // them - otherwise Media SDK will pick values for us automatically
