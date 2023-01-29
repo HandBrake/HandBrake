@@ -16,6 +16,12 @@ Windows users, please make sure to install [Microsoft .NET Desktop Runtime versi
 
 ## HandBrake 1.6.2
 
+### All platforms
+
+#### Video
+
+- Fix an issue with QSV that could result in the output video being a green screen. (#4842)
+
 ### Windows
 
 - Fixed an issue with autonaming when using drive based sources (#4859)
