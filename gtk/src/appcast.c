@@ -27,6 +27,7 @@
 #include <glib/gstdio.h>
 #include "plist.h"
 #include "values.h"
+#include "appcast.h"
 
 enum
 {

@@ -50,6 +50,9 @@ void debug_log_handler(
 void ghb_hbfd(signal_user_data_t *ud, gboolean hbfd);
 gboolean ghb_file_menu_add_dvd(signal_user_data_t *ud);
 void ghb_udev_init(void);
+void ghb_countdown_dialog(GtkMessageType type, const gchar *message,
+    const gchar *action, const gchar *cancel, GSourceFunc action_func,
+    signal_user_data_t *ud, gint timeout);
 gboolean ghb_title_message_dialog(
     GtkWindow *parent, GtkMessageType type, const gchar *title,
     const gchar *message, const gchar *no, const gchar *yes);
@@ -96,5 +99,7 @@ void ghb_break_duration(gint64 duration, gint *hh, gint *mm, gint *ss);
 GtkFileFilter *ghb_add_file_filter(GtkFileChooser *chooser,
                                    signal_user_data_t *ud,
                                    const char *name, const char *id);
-#endif // _CALLBACKS_H_
+gpointer ghb_check_update(signal_user_data_t *ud);
+void ghb_notify_done(signal_user_data_t *ud);
 
+#endif // _CALLBACKS_H_

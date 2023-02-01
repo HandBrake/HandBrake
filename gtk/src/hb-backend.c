@@ -994,7 +994,7 @@ del_tree(const gchar *name, gboolean del_top)
 }
 
 const gchar*
-ghb_version()
+ghb_version (void)
 {
     return hb_get_version(NULL);
 }
@@ -1067,7 +1067,7 @@ ghb_vquality_range(
         *digits = 1;
 }
 
-gint
+static gint
 find_opt_entry(const combo_opts_t *opts, const GhbValue *gval)
 {
     gint ii;
@@ -1107,7 +1107,7 @@ find_opt_entry(const combo_opts_t *opts, const GhbValue *gval)
     return opts->count;
 }
 
-const hb_filter_param_t*
+static const hb_filter_param_t*
 find_param_entry(const hb_filter_param_t *param, const GhbValue *gval)
 {
     gint ii;
@@ -1253,7 +1253,7 @@ hb_handle_t* ghb_live_handle(void)
 }
 
 gchar*
-ghb_get_tmp_dir()
+ghb_get_tmp_dir (void)
 {
     return hb_get_temporary_directory();
 }
@@ -2513,7 +2513,7 @@ lookup_title_index(hb_handle_t *h, int title_id)
     return -1;
 }
 
-const hb_title_t*
+static const hb_title_t*
 lookup_title(hb_handle_t *h, int title_id, int *index)
 {
     int ii = lookup_title_index(h, title_id);
@@ -2827,7 +2827,7 @@ subtitle_track_opts_set(signal_user_data_t *ud, const gchar *name,
 
 // Get title id of feature or longest title
 gint
-ghb_longest_title()
+ghb_longest_title (void)
 {
     hb_title_set_t * title_set;
     const hb_title_t * title;
@@ -3038,7 +3038,7 @@ sharpen_opts_set(signal_user_data_t *ud, const gchar *name,
                                   "sharpen", opts->filter_id);
 }
 
-combo_name_map_t*
+static combo_name_map_t*
 find_combo_map(const gchar *name)
 {
     gint ii;
@@ -3053,7 +3053,7 @@ find_combo_map(const gchar *name)
     return NULL;
 }
 
-combo_opts_t*
+static combo_opts_t*
 find_combo_opts(const gchar *name)
 {
     combo_name_map_t *entry = find_combo_map(name);
@@ -3541,7 +3541,7 @@ ghb_log_level_set(int level)
 }
 
 void
-ghb_backend_close()
+ghb_backend_close (void)
 {
     if (h_live != NULL)
         hb_close(&h_live);
@@ -3552,7 +3552,7 @@ ghb_backend_close()
     hb_global_close();
 }
 
-void ghb_backend_scan_stop()
+void ghb_backend_scan_stop (void)
 {
     hb_scan_stop( h_scan );
 }
@@ -3580,13 +3580,13 @@ ghb_backend_queue_scan(const gchar *path, gint titlenum)
 }
 
 gint
-ghb_get_scan_state()
+ghb_get_scan_state (void)
 {
     return hb_status.scan.state;
 }
 
 gint
-ghb_get_queue_state()
+ghb_get_queue_state (void)
 {
     return hb_status.queue.state;
 }
@@ -3730,7 +3730,7 @@ update_status(hb_state_t *state, ghb_instance_status_t *status)
 }
 
 void
-ghb_track_status()
+ghb_track_status (void)
 {
     hb_state_t state;
 
@@ -3766,7 +3766,7 @@ ghb_get_subtitle_info(const hb_title_t *title, gint track)
 }
 
 hb_list_t *
-ghb_get_title_list()
+ghb_get_title_list (void)
 {
     if (h_scan == NULL) return NULL;
     return hb_get_titles( h_scan );
@@ -3787,7 +3787,7 @@ ghb_audio_can_passthru(gint acodec)
 }
 
 gint
-ghb_get_default_acodec()
+ghb_get_default_acodec (void)
 {
     return HB_ACODEC_FFAAC;
 }
@@ -3869,30 +3869,10 @@ ghb_picture_settings_deps(signal_user_data_t *ud)
     }
 }
 
-void
-ghb_limit_rational( gint *num, gint *den, gint limit )
-{
-    if (*num < limit && *den < limit)
-        return;
-
-    if (*num > *den)
-    {
-        gdouble factor = (double)limit / *num;
-        *num = limit;
-        *den = factor * *den;
-    }
-    else
-    {
-        gdouble factor = (double)limit / *den;
-        *den = limit;
-        *num = factor * *num;
-    }
-}
-
-void
-ghb_apply_pad(GhbValue *settings,
-              const hb_geometry_settings_t * geo,
-                    hb_geometry_t          * result)
+static void
+apply_pad (GhbValue *settings,
+           const hb_geometry_settings_t * geo,
+                 hb_geometry_t          * result)
 {
     gboolean fillwidth, fillheight;
     gint pad[4] = {0,};
@@ -4112,7 +4092,7 @@ ghb_set_scale_settings(signal_user_data_t * ud, GhbValue *settings, gint mode)
 
     uiGeo.maxWidth  = ghb_dict_get_int(settings, "PictureWidth");
     uiGeo.maxHeight = ghb_dict_get_int(settings, "PictureHeight");
-    ghb_apply_pad(settings, &uiGeo, &resultGeo);
+    apply_pad(settings, &uiGeo, &resultGeo);
 
     gint disp_width;
 
@@ -4747,45 +4727,45 @@ ghb_remove_job(gint unique_id)
 }
 
 void
-ghb_start_queue()
+ghb_start_queue (void)
 {
     hb_start( h_queue );
 }
 
 void
-ghb_stop_queue()
+ghb_stop_queue (void)
 {
     hb_stop( h_queue );
 }
 
 void
-ghb_start_live_encode()
+ghb_start_live_encode (void)
 {
     hb_start( h_live );
 }
 
 void
-ghb_stop_live_encode()
+ghb_stop_live_encode (void)
 {
     hb_stop( h_live );
 }
 
 void
-ghb_pause_queue()
+ghb_pause_queue (void)
 {
     hb_status.queue.state |= GHB_STATE_PAUSED;
     hb_pause( h_queue );
 }
 
 void
-ghb_resume_queue()
+ghb_resume_queue (void)
 {
     hb_status.queue.state &= ~GHB_STATE_PAUSED;
     hb_resume( h_queue );
 }
 
 void
-ghb_pause_resume_queue()
+ghb_pause_resume_queue (void)
 {
     hb_state_t s;
     hb_get_state2( h_queue, &s );

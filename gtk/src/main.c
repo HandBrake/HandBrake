@@ -80,7 +80,7 @@
 
 #define BUILDER_NAME "ghb"
 
-GtkBuilder*
+static GtkBuilder*
 create_builder_or_die(const gchar * name)
 {
     GtkWidget *dialog;
@@ -390,7 +390,7 @@ bind_presets_tree_model(signal_user_data_t *ud)
 }
 
 static void
-clean_old_logs()
+clean_old_logs (void)
 {
 #if !defined(_WIN32)
     const gchar *file;
@@ -597,7 +597,7 @@ win_message_cb(GdkXEvent *wmevent, GdkEvent *event, gpointer data)
 }
 #endif
 
-void
+static void
 watch_volumes(signal_user_data_t *ud)
 {
 #if !defined(_WIN32)

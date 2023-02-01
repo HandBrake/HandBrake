@@ -34,6 +34,8 @@
 #include "libxml/parser.h"
 #include "libxml/xpath.h"
 
+#include "chapters.h"
+
 static void
 chapter_changed_cb(GtkEditable * edit, signal_user_data_t *ud);
 
@@ -316,7 +318,8 @@ chapter_changed_cb(
     ghb_dict_set_string(chapter_dict, "Name", text);
 }
 
-char *pts_to_xml_time (gint64 pts)
+static char *
+pts_to_xml_time (gint64 pts)
 {
     int hrs, mins;
     double fsecs;
@@ -329,7 +332,8 @@ char *pts_to_xml_time (gint64 pts)
     return str;
 }
 
-char *chapter_time_end (GhbValue *chapter, gint64 *time_pts)
+static char *
+chapter_time_end (GhbValue *chapter, gint64 *time_pts)
 {
     GhbValue *duration;
     gint64 pts;
@@ -369,8 +373,9 @@ chapter_list_export_xml (const gchar *filename, GhbValue *chapter_dict)
     xmlFreeDoc(doc);
 }
 
-void chapter_list_export (GtkFileChooserNative *dialog,
-                          GtkResponseType response, signal_user_data_t *ud)
+static void
+chapter_list_export (GtkFileChooserNative *dialog,
+                     GtkResponseType response, signal_user_data_t *ud)
 {
     gchar             *filename, *dir;
     const gchar       *exportDir;

@@ -89,15 +89,13 @@
 #include "libavutil/parseutils.h"
 
 
-static void ghb_add_video_file_filters(GtkFileChooser *chooser, signal_user_data_t *ud);
+static void add_video_file_filters(GtkFileChooser *chooser, signal_user_data_t *ud);
 static void update_queue_labels(signal_user_data_t *ud);
 static void load_all_titles(signal_user_data_t *ud, int titleindex);
-static GList* dvd_device_list();
+static GList* dvd_device_list(void);
 static void prune_logs(signal_user_data_t *ud);
-void ghb_notify_done(signal_user_data_t *ud);
-gpointer ghb_check_update(signal_user_data_t *ud);
-static gboolean ghb_can_suspend_logind();
-static void ghb_suspend_logind();
+static gboolean can_suspend_logind(void);
+static void suspend_logind(void);
 static gboolean appcast_busy = FALSE;
 static gboolean has_drive = FALSE;
 
@@ -141,7 +139,7 @@ ghb_get_dbus_proxy(GBusType type, const gchar *name, const gchar *path, const gc
 #endif
 
 static gboolean
-ghb_can_suspend_logind()
+can_suspend_logind (void)
 {
     gboolean can_suspend = FALSE;
 #if !defined(_WIN32)
@@ -151,7 +149,7 @@ ghb_can_suspend_logind()
     GVariant *res;
 
 
-    g_debug("ghb_can_suspend_logind()");
+    g_debug("can_suspend_logind()");
     proxy = ghb_get_dbus_proxy(G_BUS_TYPE_SYSTEM, DBUS_LOGIND_SERVICE,
                             DBUS_LOGIND_PATH, DBUS_LOGIND_INTERFACE);
     if (proxy == NULL)
@@ -186,7 +184,7 @@ ghb_can_suspend_logind()
 }
 
 static void
-ghb_suspend_logind()
+suspend_logind (void)
 {
 #if !defined(_WIN32)
     GDBusProxy  *proxy;
@@ -194,7 +192,7 @@ ghb_suspend_logind()
     GVariant *res;
 
 
-    g_debug("ghb_suspend_logind()");
+    g_debug("suspend_logind()");
     proxy = ghb_get_dbus_proxy(G_BUS_TYPE_SYSTEM, DBUS_LOGIND_SERVICE,
                             DBUS_LOGIND_PATH, DBUS_LOGIND_INTERFACE);
     if (proxy == NULL)
@@ -221,7 +219,7 @@ ghb_suspend_logind()
 }
 
 static gboolean
-ghb_can_shutdown_logind()
+can_shutdown_logind (void)
 {
     gboolean can_shutdown = FALSE;
 #if !defined(_WIN32)
@@ -231,7 +229,7 @@ ghb_can_shutdown_logind()
     GVariant *res;
 
 
-    g_debug("ghb_can_shutdown_logind()");
+    g_debug("can_shutdown_logind()");
     proxy = ghb_get_dbus_proxy(G_BUS_TYPE_SYSTEM, DBUS_LOGIND_SERVICE,
                             DBUS_LOGIND_PATH, DBUS_LOGIND_INTERFACE);
     if (proxy == NULL)
@@ -266,7 +264,7 @@ ghb_can_shutdown_logind()
 }
 
 static void
-ghb_shutdown_logind(void)
+shutdown_logind (void)
 {
 #if !defined(_WIN32)
     GDBusProxy  *proxy;
@@ -274,7 +272,7 @@ ghb_shutdown_logind(void)
     GVariant *res;
 
 
-    g_debug("ghb_shutdown_logind()");
+    g_debug("shutdown_logind()");
     proxy = ghb_get_dbus_proxy(G_BUS_TYPE_SYSTEM, DBUS_LOGIND_SERVICE,
                             DBUS_LOGIND_PATH, DBUS_LOGIND_INTERFACE);
     if (proxy == NULL)
@@ -316,8 +314,8 @@ enum {
 static int suspend_inhibited = GHB_SUSPEND_UNINHIBITED;
 static guint suspend_cookie;
 
-void
-ghb_inhibit_suspend(signal_user_data_t *ud)
+static void
+inhibit_suspend (signal_user_data_t *ud)
 {
     if (suspend_inhibited != GHB_SUSPEND_UNINHIBITED)
     {
@@ -333,8 +331,8 @@ ghb_inhibit_suspend(signal_user_data_t *ud)
     }
 }
 
-void
-ghb_uninhibit_suspend(signal_user_data_t *ud)
+static void
+uninhibit_suspend (signal_user_data_t *ud)
 {
     switch (suspend_inhibited)
     {
@@ -358,7 +356,7 @@ GhbValue *dep_map;
 GhbValue *rev_map;
 
 void
-ghb_init_dep_map()
+ghb_init_dep_map (void)
 {
     dep_map = ghb_resource_get("widget-deps");
     rev_map = ghb_resource_get("widget-reverse-deps");
@@ -1111,8 +1109,8 @@ void ghb_break_duration(gint64 duration, gint *hh, gint *mm, gint *ss)
     *ss = duration % 60;
 }
 
-gint64
-ghb_title_range_get_duration(GhbValue * settings, const hb_title_t * title)
+static gint64
+title_range_get_duration (GhbValue * settings, const hb_title_t * title)
 {
     gint64 start, end;
 
@@ -1161,7 +1159,7 @@ update_title_duration(signal_user_data_t *ud)
     title = ghb_lookup_title(title_id, &titleindex);
     widget = GHB_WIDGET (ud->builder, "title_duration");
 
-    duration = ghb_title_range_get_duration(ud->settings, title);
+    duration = title_range_get_duration(ud->settings, title);
     ghb_break_duration(duration, &hh, &mm, &ss);
 
     text = g_strdup_printf("%02d:%02d:%02d", hh, mm, ss);
@@ -1242,8 +1240,8 @@ ghb_scale_configure(
     gtk_scale_set_draw_value(scale, TRUE);
 }
 
-void
-ghb_set_widget_ranges(signal_user_data_t *ud, GhbValue *settings)
+static void
+set_widget_ranges (signal_user_data_t *ud, GhbValue *settings)
 {
     int title_id, titleindex;
     const hb_title_t * title;
@@ -1378,7 +1376,7 @@ ghb_load_post_settings(signal_user_data_t * ud)
     ud->dont_clear_presets = TRUE;
     ud->scale_busy = TRUE;
 
-    ghb_set_widget_ranges(ud, ud->settings);
+    set_widget_ranges(ud, ud->settings);
     ghb_check_all_dependencies(ud);
     ghb_show_container_options(ud);
     check_chapter_markers(ud);
@@ -1622,7 +1620,7 @@ do_source_dialog(gboolean dir, signal_user_data_t *ud)
     sourcename = ghb_dict_get_string(ud->globals, "scan_source");
 
     if (!dir)
-        ghb_add_video_file_filters(GTK_FILE_CHOOSER(chooser), ud);
+        add_video_file_filters(GTK_FILE_CHOOSER(chooser), ud);
 
     source_dialog_drive_list(GTK_FILE_CHOOSER(chooser), ud);
 
@@ -2048,7 +2046,8 @@ static void update_meta(GhbValue *settings, const char *name, const char *val)
         ghb_dict_set_string(metadata, name, val);
 }
 
-void ghb_update_mini_preview(gboolean has_preview, signal_user_data_t *ud)
+static void
+mini_preview_update (gboolean has_preview, signal_user_data_t *ud)
 {
     GtkWidget *widget;
 
@@ -2088,10 +2087,10 @@ ghb_update_summary_info(signal_user_data_t *ud)
         gtk_label_set_text(GTK_LABEL(widget), "");
         widget = GHB_WIDGET(ud->builder, "dimensions_summary");
         gtk_label_set_text(GTK_LABEL(widget), "--");
-        ghb_update_mini_preview(FALSE, ud);
+        mini_preview_update(FALSE, ud);
         return;
     }
-    ghb_update_mini_preview(TRUE, ud);
+    mini_preview_update(TRUE, ud);
 
     // Video Track
     const hb_encoder_t * video_encoder;
@@ -3572,7 +3571,7 @@ shutdown_cb(countdown_t *cd)
         ghb_hb_cleanup(FALSE);
         prune_logs(cd->ud);
 
-        ghb_shutdown_logind();
+        shutdown_logind();
         g_application_quit(G_APPLICATION(cd->ud->app));
         return FALSE;
     }
@@ -3592,7 +3591,7 @@ suspend_cb(countdown_t *cd)
     if (cd->timeout == 0)
     {
         gtk_widget_destroy (GTK_WIDGET(cd->dlg));
-        ghb_suspend_logind();
+        suspend_logind();
         return FALSE;
     }
     g_free(str);
@@ -3992,14 +3991,14 @@ ghb_start_next_job(signal_user_data_t *ud)
         status = ghb_dict_get_int(uiDict, "job_status");
         if (status == GHB_QUEUE_PENDING)
         {
-            ghb_inhibit_suspend(ud);
+            inhibit_suspend(ud);
             submit_job(ud, queueDict);
             ghb_update_pending(ud);
             return;
         }
     }
     // Nothing pending
-    ghb_uninhibit_suspend(ud);
+    uninhibit_suspend(ud);
     ghb_notify_done(ud);
     ghb_update_pending(ud);
     gtk_widget_hide(progress);
@@ -4327,7 +4326,7 @@ ghb_backend_events(signal_user_data_t *ud)
         }
         else
         {
-            ghb_uninhibit_suspend(ud);
+            uninhibit_suspend(ud);
             gtk_widget_hide(GTK_WIDGET(progress));
             ghb_dict_set_bool(ud->globals, "SkipDiskFreeCheck", FALSE);
         }
@@ -4405,7 +4404,7 @@ ghb_timer_cb(gpointer data)
                 ghb_dict_set_int(ud->prefs,
                                         "last_update_check", tt);
                 ghb_pref_save(ud->prefs, "last_update_check");
-                GHB_THREAD_NEW("Update Check", (GThreadFunc)ghb_check_update, ud);
+                GHB_THREAD_NEW("Update Check", G_THREAD_FUNC(ghb_check_update), ud);
             }
         }
     }
@@ -4901,7 +4900,7 @@ show_preview_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
     ghb_widget_to_setting (ud->prefs, widget);
     const gchar *name = ghb_get_setting_key(widget);
     ghb_pref_set(ud->prefs, name);
-    ghb_update_mini_preview(TRUE, ud);
+    mini_preview_update(TRUE, ud);
 }
 
 G_MODULE_EXPORT void
@@ -4969,7 +4968,7 @@ ghb_file_menu_add_dvd(signal_user_data_t *ud)
 gboolean ghb_is_cd(GDrive *gd);
 
 static GList*
-dvd_device_list()
+dvd_device_list (void)
 {
     GList *dvd_devices = NULL;
 
@@ -5061,7 +5060,7 @@ ghb_is_cd(GDrive *gd)
 }
 
 void
-ghb_udev_init()
+ghb_udev_init (void)
 {
 #if defined(__linux__) && defined(_HAVE_GUDEV)
     udev_ctx = g_udev_client_new(NULL);
@@ -5309,12 +5308,12 @@ done:
     appcast_busy = FALSE;
 }
 
-void
-ghb_net_close(GIOChannel *ioc)
+static void
+net_close (GIOChannel *ioc)
 {
     gint fd;
 
-    g_debug("ghb_net_close");
+    g_debug("net_close");
     if (ioc == NULL) return;
     fd = g_io_channel_unix_get_fd(ioc);
     close(fd);
@@ -5347,15 +5346,15 @@ ghb_net_recv_cb(GIOChannel *ioc, GIOCondition cond, gpointer data)
         {
             ud->appcast[ud->appcast_len] = 0;
         }
-        ghb_net_close(ioc);
+        net_close(ioc);
         process_appcast(ud);
         return FALSE;
     }
     return TRUE;
 }
 
-GIOChannel*
-ghb_net_open(signal_user_data_t *ud, gchar *address, gint port)
+static GIOChannel*
+net_open(signal_user_data_t *ud, gchar *address, gint port)
 {
     GIOChannel *ioc;
     gint fd;
@@ -5363,7 +5362,7 @@ ghb_net_open(signal_user_data_t *ud, gchar *address, gint port)
     struct sockaddr_in   sock;
     struct hostent     * host;
 
-    g_debug("ghb_net_open");
+    g_debug("net_open");
     if( !( host = gethostbyname( address ) ) )
     {
         g_warning( "gethostbyname failed (%s)", address );
@@ -5398,8 +5397,7 @@ ghb_net_open(signal_user_data_t *ud, gchar *address, gint port)
     return ioc;
 }
 
-gpointer
-ghb_check_update(signal_user_data_t *ud)
+gpointer ghb_check_update (signal_user_data_t *ud)
 {
     gchar *query;
     gsize len;
@@ -5426,7 +5424,7 @@ ghb_check_update(signal_user_data_t *ud)
     query = g_strdup_printf("GET /%s HTTP/1.0\r\nHost: %s\r\n\r\n",
                             appcast, host);
 
-    ioc = ghb_net_open(ud, host, 80);
+    ioc = net_open(ud, host, 80);
     if (ioc == NULL)
         goto free_resources;
 
@@ -5469,7 +5467,7 @@ ghb_notify_done(signal_user_data_t *ud)
                                 _("Cancel"), (GSourceFunc)quit_cb, ud, 60);
             break;
         case 3:
-            if (ghb_can_suspend_logind())
+            if (can_suspend_logind())
             {
                 ghb_countdown_dialog(GTK_MESSAGE_INFO,
                     _("Your encode is complete."),
@@ -5478,7 +5476,7 @@ ghb_notify_done(signal_user_data_t *ud)
             }
             break;
 	    case 4:
-            if (ghb_can_shutdown_logind())
+            if (can_shutdown_logind())
             {
                 ghb_countdown_dialog(GTK_MESSAGE_INFO,
                     _("Your encode is complete."),
@@ -5612,8 +5610,8 @@ GtkFileFilter *ghb_add_file_filter(GtkFileChooser *chooser,
     return filter;
 }
 
-static void ghb_add_video_file_filters(GtkFileChooser *chooser,
-                                       signal_user_data_t *ud)
+static void
+add_video_file_filters (GtkFileChooser *chooser, signal_user_data_t *ud)
 {
     ghb_add_file_filter(chooser, ud, _("All Files"), "SourceFilterAll");
     ghb_add_file_filter(chooser, ud, _("Video"), "SourceFilterVideo");

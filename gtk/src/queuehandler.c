@@ -702,7 +702,8 @@ static void queue_update_summary (GhbValue * queueDict, signal_user_data_t *ud)
     g_free(text);
 }
 
-void queue_update_stats (GhbValue * queueDict, signal_user_data_t *ud)
+static void
+queue_update_stats (GhbValue * queueDict, signal_user_data_t *ud)
 {
     GhbValue * uiDict;
     GtkLabel * label;
@@ -871,7 +872,8 @@ void queue_update_stats (GhbValue * queueDict, signal_user_data_t *ud)
     gtk_label_set_text(label, result);
 }
 
-void queue_update_current_stats (signal_user_data_t * ud)
+static void
+queue_update_current_stats (signal_user_data_t * ud)
 {
     GtkListBox    * lb;
     GtkListBoxRow * row;
@@ -1463,7 +1465,8 @@ void ghb_queue_update_status (signal_user_data_t *ud, int index, int status)
     ghb_queue_update_status_icon(ud, index);
 }
 
-void ghb_update_all_status (signal_user_data_t *ud, int status)
+static void
+queue_update_all_status (signal_user_data_t *ud, int status)
 {
     int count, ii;
 
@@ -2561,7 +2564,7 @@ G_MODULE_EXPORT void
 queue_reset_all_action_cb (GSimpleAction *action, GVariant *param,
                            signal_user_data_t *ud)
 {
-    ghb_update_all_status(ud, GHB_QUEUE_PENDING);
+    queue_update_all_status(ud, GHB_QUEUE_PENDING);
     ghb_save_queue(ud->queue);
     queue_update_current_stats(ud);
     ghb_queue_select_log(ud);

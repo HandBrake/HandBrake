@@ -460,7 +460,7 @@ static GtkListBoxRow *list_box_get_row (GtkWidget *widget)
     return GTK_LIST_BOX_ROW(widget);
 }
 
-GtkWidget *title_create_row (signal_user_data_t *ud)
+static GtkWidget *title_create_row (signal_user_data_t *ud)
 {
     GtkBox *hbox, *vbox_dest;
     GtkCheckButton *selected;

@@ -81,8 +81,8 @@ struct preview_s
 G_MODULE_EXPORT gboolean live_preview_cb(GstBus *bus, GstMessage *msg, gpointer data);
 #endif
 
-void
-ghb_screen_par(signal_user_data_t *ud, gint *par_n, gint *par_d)
+static void
+screen_par (signal_user_data_t *ud, gint *par_n, gint *par_d)
 {
     // Assume 1:1
     // I could get it from GtkWindow->GdkScreen monitor methods.
@@ -97,7 +97,7 @@ ghb_par_scale(signal_user_data_t *ud, gint *width, gint *height, gint par_n, gin
     gint disp_par_n, disp_par_d;
     gint64 num, den;
 
-    ghb_screen_par(ud, &disp_par_n, &disp_par_d);
+    screen_par(ud, &disp_par_n, &disp_par_d);
     if (disp_par_n < 1 || disp_par_d < 1)
     {
         disp_par_n = 1;
@@ -112,7 +112,7 @@ ghb_par_scale(signal_user_data_t *ud, gint *width, gint *height, gint par_n, gin
         *height = *height * den / num;
 }
 
-void
+static void
 preview_set_render_size(signal_user_data_t *ud, int width, int height)
 {
     GtkWidget     * widget, *frame, *reset;
@@ -170,7 +170,7 @@ preview_set_render_size(signal_user_data_t *ud, int width, int height)
     ud->preview->render_height = height;
 }
 
-void
+static void
 preview_set_size(signal_user_data_t *ud, int width, int height)
 {
     if (height == ud->preview->width &&
@@ -249,7 +249,7 @@ ghb_preview_cleanup(signal_user_data_t *ud)
 }
 
 #if defined(_ENABLE_GST)
-void
+static void
 live_preview_start(signal_user_data_t *ud)
 {
     GtkImage *img;
@@ -283,7 +283,7 @@ live_preview_start(signal_user_data_t *ud)
     ud->preview->pause = FALSE;
 }
 
-void
+static void
 live_preview_pause(signal_user_data_t *ud)
 {
     GtkImage *img;
@@ -298,7 +298,7 @@ live_preview_pause(signal_user_data_t *ud)
 }
 #endif
 
-void
+static void
 live_preview_stop(signal_user_data_t *ud)
 {
     GtkImage *img;
@@ -364,7 +364,7 @@ caps_set(GstCaps *caps, signal_user_data_t *ud)
         par_n = gst_value_get_fraction_numerator(par);
         par_d = gst_value_get_fraction_denominator(par);
 
-        ghb_screen_par(ud, &disp_par_n, &disp_par_d);
+        screen_par(ud, &disp_par_n, &disp_par_d);
         gst_video_calculate_display_ratio(
             &num, &den, width, height, par_n, par_d, disp_par_n, disp_par_d);
 
@@ -934,7 +934,8 @@ static void set_mini_preview_image(signal_user_data_t *ud, GdkPixbuf * pix)
     }
 }
 
-GdkPixbuf * do_preview_scaling(signal_user_data_t *ud, GdkPixbuf *pix)
+static GdkPixbuf *
+do_preview_scaling (signal_user_data_t *ud, GdkPixbuf *pix)
 {
     int         preview_width, preview_height, width, height;
     GdkPixbuf * scaled_preview;
@@ -993,7 +994,7 @@ GdkPixbuf * do_preview_scaling(signal_user_data_t *ud, GdkPixbuf *pix)
     return pix;
 }
 
-void
+static void
 init_preview_image(signal_user_data_t *ud)
 {
     GtkWidget *widget;

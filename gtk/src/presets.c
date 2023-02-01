@@ -51,8 +51,8 @@ static gchar *override_user_config_dir = NULL;
 static void store_prefs(void);
 static void store_presets(void);
 
-hb_preset_index_t*
-ghb_tree_get_index(GtkTreeModel *store, GtkTreeIter *iter)
+static hb_preset_index_t*
+tree_get_index(GtkTreeModel *store, GtkTreeIter *iter)
 {
     GtkTreePath       *treepath;
     int               *indices, len;
@@ -67,8 +67,8 @@ ghb_tree_get_index(GtkTreeModel *store, GtkTreeIter *iter)
     return path;
 }
 
-hb_preset_index_t*
-ghb_tree_path_get_index(GtkTreePath *treepath)
+static hb_preset_index_t*
+tree_path_get_index(GtkTreePath *treepath)
 {
     int *indices, len;
 
@@ -79,8 +79,8 @@ ghb_tree_path_get_index(GtkTreePath *treepath)
 }
 
 // This only handle limited depth
-GtkTreePath*
-ghb_tree_path_new_from_index(const hb_preset_index_t *path)
+static GtkTreePath*
+tree_path_new_from_index(const hb_preset_index_t *path)
 {
     if (path == NULL || path->depth == 0)
         return NULL;
@@ -103,8 +103,8 @@ dump_preset_indices(const gchar *msg, hb_preset_index_t *path)
 }
 #endif
 
-void
-ghb_presets_list_show_default(signal_user_data_t *ud)
+static void
+presets_list_show_default(signal_user_data_t *ud)
 {
     hb_preset_index_t *path;
 
@@ -119,7 +119,7 @@ ghb_presets_list_show_default(signal_user_data_t *ud)
 
     treeview = GTK_TREE_VIEW(GHB_WIDGET(ud->builder, "presets_list"));
     store    = GTK_TREE_STORE(gtk_tree_view_get_model(treeview));
-    treepath = ghb_tree_path_new_from_index(path);
+    treepath = tree_path_new_from_index(path);
     if (treepath)
     {
         if (gtk_tree_model_get_iter(GTK_TREE_MODEL(store), &iter, treepath))
@@ -134,8 +134,8 @@ ghb_presets_list_show_default(signal_user_data_t *ud)
     free(path);
 }
 
-void
-ghb_presets_list_clear_default(signal_user_data_t *ud)
+static void
+presets_list_clear_default(signal_user_data_t *ud)
 {
     hb_preset_index_t *path;
 
@@ -150,7 +150,7 @@ ghb_presets_list_clear_default(signal_user_data_t *ud)
 
     treeview = GTK_TREE_VIEW(GHB_WIDGET(ud->builder, "presets_list"));
     store    = GTK_TREE_STORE(gtk_tree_view_get_model(treeview));
-    treepath = ghb_tree_path_new_from_index(path);
+    treepath = tree_path_new_from_index(path);
     if (treepath)
     {
         if (gtk_tree_model_get_iter(GTK_TREE_MODEL(store), &iter, treepath))
@@ -485,7 +485,7 @@ ghb_settings_to_ui(signal_user_data_t *ud, GhbValue *dict)
     ghb_value_free(&tmp);
 }
 
-char*
+static char*
 preset_get_fullname(hb_preset_index_t *path, const char * sep, gboolean escape)
 {
     int                ii;
@@ -575,7 +575,7 @@ select_preset2(signal_user_data_t *ud, hb_preset_index_t *path)
     treeview  = GTK_TREE_VIEW(GHB_WIDGET(ud->builder, "presets_list"));
     selection = gtk_tree_view_get_selection (treeview);
     store     = gtk_tree_view_get_model (treeview);
-    treepath  = ghb_tree_path_new_from_index(path);
+    treepath  = tree_path_new_from_index(path);
     if (treepath != NULL)
     {
         gtk_tree_view_expand_to_path(treeview, treepath);
@@ -832,7 +832,7 @@ ghb_lock_file(const gchar *name)
 #endif
 
 void
-ghb_write_pid_file()
+ghb_write_pid_file (void)
 {
 #if !defined(_WIN32)
     gchar *config, *path;
@@ -863,7 +863,7 @@ ghb_write_pid_file()
 }
 
 int
-ghb_find_pid_file()
+ghb_find_pid_file (void)
 {
     const gchar *file;
     gchar       *config;
@@ -1002,7 +1002,7 @@ ghb_settings_init(GhbValue *settings, const char *name)
 }
 
 void
-ghb_settings_close()
+ghb_settings_close (void)
 {
     if (prefsDict)
         ghb_value_free(&prefsDict);
@@ -1104,7 +1104,7 @@ ghb_prefs_to_settings(GhbValue *settings)
     ghb_dict_copy(settings, dict);
 }
 
-hb_preset_index_t *
+static hb_preset_index_t *
 get_selected_path(signal_user_data_t *ud)
 {
     GtkTreeView      *treeview;
@@ -1116,7 +1116,7 @@ get_selected_path(signal_user_data_t *ud)
     selection = gtk_tree_view_get_selection(treeview);
     if (gtk_tree_selection_get_selected(selection, &store, &iter))
     {
-        return ghb_tree_get_index(store, &iter);
+        return tree_get_index(store, &iter);
     }
     return NULL;
 }
@@ -1322,8 +1322,8 @@ ghb_presets_menu_init(signal_user_data_t *ud)
 }
 
 
-void
-ghb_presets_menu_clear(signal_user_data_t *ud)
+static void
+presets_menu_clear(signal_user_data_t *ud)
 {
     GtkMenuButton * mb;
     GMenuModel    * mm;
@@ -1337,7 +1337,7 @@ ghb_presets_menu_clear(signal_user_data_t *ud)
 void
 ghb_presets_menu_reinit(signal_user_data_t *ud)
 {
-    ghb_presets_menu_clear(ud);
+    presets_menu_clear(ud);
     ghb_presets_menu_init(ud);
 }
 
@@ -1369,7 +1369,7 @@ ghb_presets_list_init(signal_user_data_t *ud, const hb_preset_index_t *path)
     }
     treeview    = GTK_TREE_VIEW(GHB_WIDGET(ud->builder, "presets_list"));
     store       = GTK_TREE_STORE(gtk_tree_view_get_model(treeview));
-    parent_path = ghb_tree_path_new_from_index(path);
+    parent_path = tree_path_new_from_index(path);
     if (parent_path != NULL)
     {
         gtk_tree_model_get_iter(GTK_TREE_MODEL(store), &parent_iter,
@@ -1432,7 +1432,7 @@ ghb_presets_list_init(signal_user_data_t *ud, const hb_preset_index_t *path)
     g_free(next_path);
     if (path == NULL)
     {
-        ghb_presets_list_show_default(ud);
+        presets_list_show_default(ud);
     }
 }
 
@@ -1484,7 +1484,7 @@ presets_list_update_item(
 
     treeview = GTK_TREE_VIEW(GHB_WIDGET(ud->builder, "presets_list"));
     store    = GTK_TREE_STORE(gtk_tree_view_get_model(treeview));
-    treepath = ghb_tree_path_new_from_index(path);
+    treepath = tree_path_new_from_index(path);
     gtk_tree_model_get_iter(GTK_TREE_MODEL(store), &iter, treepath);
 
     // Additional settings, add row
@@ -1535,7 +1535,7 @@ presets_list_append(signal_user_data_t *ud, const hb_preset_index_t *path)
     treeview = GTK_TREE_VIEW(GHB_WIDGET(ud->builder, "presets_list"));
     store    = GTK_TREE_STORE(gtk_tree_view_get_model(treeview));
 
-    folder_treepath = ghb_tree_path_new_from_index(folder_path);
+    folder_treepath = tree_path_new_from_index(folder_path);
     if (folder_treepath != NULL)
     {
         gtk_tree_model_get_iter(GTK_TREE_MODEL(store), &parent_iter,
@@ -1579,7 +1579,7 @@ presets_list_remove(signal_user_data_t *ud, hb_preset_index_t *path)
 
     treeview = GTK_TREE_VIEW(GHB_WIDGET(ud->builder, "presets_list"));
     store    = GTK_TREE_STORE(gtk_tree_view_get_model(treeview));
-    treepath = ghb_tree_path_new_from_index(path);
+    treepath = tree_path_new_from_index(path);
     if (treepath)
     {
         if (gtk_tree_model_get_iter(GTK_TREE_MODEL(store), &iter, treepath))
@@ -1806,7 +1806,7 @@ delayed_store_prefs(gpointer data)
 }
 
 static void
-store_presets()
+store_presets (void)
 {
     gchar      *config, *path;
     hb_value_t *presets;
@@ -1944,7 +1944,7 @@ settings_save(signal_user_data_t *ud, const char * category,
         if (set_def)
         {
             ghb_dict_set_bool(new_preset, "Default", set_def);
-            ghb_presets_list_clear_default(ud);
+            presets_list_clear_default(ud);
             hb_presets_clear_default();
         }
 
@@ -2604,7 +2604,7 @@ presets_drag_motion_cb(
     srctv  = GTK_TREE_VIEW(widget);
     select = gtk_tree_view_get_selection(srctv);
     gtk_tree_selection_get_selected(select, &model, &iter);
-    path   = ghb_tree_get_index(model, &iter);
+    path   = tree_get_index(model, &iter);
 
     src_preset = hb_preset_get(path);
     free(path);
@@ -2634,7 +2634,7 @@ presets_drag_motion_cb(
         return TRUE;
     }
 
-    path = ghb_tree_path_get_index(treepath);
+    path = tree_path_get_index(treepath);
     dst_preset = hb_preset_get(path);
     free(path);
     if (dst_preset == NULL)
@@ -2660,7 +2660,7 @@ presets_drag_motion_cb(
     if (src_folder && !dst_folder)
     {
         gtk_tree_path_up(treepath);
-        path = ghb_tree_path_get_index(treepath);
+        path = tree_path_get_index(treepath);
         dst_preset = hb_preset_get(path);
         free(path);
         if (dst_preset == NULL)
@@ -2760,7 +2760,7 @@ presets_drag_data_received_cb(
     select     = gtk_tree_view_get_selection (src_widget);
     gtk_tree_selection_get_selected(select, &src_model, &src_iter);
 
-    src_path   = ghb_tree_get_index(src_model, &src_iter);
+    src_path   = tree_get_index(src_model, &src_iter);
     src_ptype  = preset_get_type(src_path);
     src_folder = preset_is_folder(src_path);
 
@@ -2772,14 +2772,14 @@ presets_drag_data_received_cb(
         return;
     }
 
-    dst_path = ghb_tree_path_get_index(dst_treepath);
+    dst_path = tree_path_get_index(dst_treepath);
     dst_folder = preset_is_folder(dst_path);
 
     // Don't allow allow dropping source folders after/before non-folders
     if (src_folder && !dst_folder)
     {
         gtk_tree_path_up(dst_treepath);
-        dst_path = ghb_tree_path_get_index(dst_treepath);
+        dst_path = tree_path_get_index(dst_treepath);
         dst_folder = preset_is_folder(dst_path);
 
         drop_pos = GTK_TREE_VIEW_DROP_AFTER;
@@ -2854,7 +2854,7 @@ presets_drag_data_received_cb(
         }
 
         // Move source preset at the desired location
-        dst_path = ghb_tree_get_index(dst_model, &iter);
+        dst_path = tree_get_index(dst_model, &iter);
         hb_preset_move(src_path, dst_path);
         free(dst_path);
 
@@ -2862,7 +2862,7 @@ presets_drag_data_received_cb(
         gtk_tree_store_remove(GTK_TREE_STORE(src_model), &src_iter);
 
         // UI elements were shuffled again.  recompute dst_path
-        dst_path = ghb_tree_get_index(dst_model, &iter);
+        dst_path = tree_get_index(dst_model, &iter);
         presets_list_update_item(ud, dst_path, TRUE);
         select_preset2(ud, dst_path);
         free(dst_path);
@@ -2886,7 +2886,7 @@ presets_row_expanded_cb(
     GhbValue          *dict;
 
     expanded = gtk_tree_view_row_expanded(treeview, treepath);
-    path     = ghb_tree_path_get_index(treepath);
+    path     = tree_path_get_index(treepath);
     dict     = hb_preset_get(path);
     free(path);
 
@@ -2929,7 +2929,7 @@ ghb_get_current_preset(signal_user_data_t *ud)
     {
         hb_preset_index_t *path;
 
-        path   = ghb_tree_get_index(tm, &ti);
+        path   = tree_get_index(tm, &ti);
         preset = hb_preset_get(path);
         if (preset != NULL)
         {
@@ -3029,10 +3029,10 @@ preset_default_action_cb(GSimpleAction *action, GVariant *param,
         hb_value_t *dict = hb_preset_get(path);
         if (dict != NULL && !ghb_dict_get_bool(dict, "Folder"))
         {
-            ghb_presets_list_clear_default(ud);
+            presets_list_clear_default(ud);
             hb_presets_clear_default();
             ghb_dict_set_bool(dict, "Default", 1);
-            ghb_presets_list_show_default(ud);
+            presets_list_show_default(ud);
             store_presets();
         }
         g_free(path);
@@ -3056,7 +3056,7 @@ preset_edited_cb(
     treeview = GTK_TREE_VIEW(GHB_WIDGET(ud->builder, "presets_list"));
     store    = GTK_TREE_STORE(gtk_tree_view_get_model(treeview));
     treepath = gtk_tree_path_new_from_string(treepath_s);
-    path     = ghb_tree_path_get_index(treepath);
+    path     = tree_path_get_index(treepath);
     if (path != NULL)
     {
         dict = hb_preset_get(path);

@@ -30,6 +30,7 @@
 #include "presets.h"
 #include "preview.h"
 #include "hb-backend.h"
+#include "videohandler.h"
 
 int ghb_get_video_encoder(GhbValue *settings)
 {
@@ -243,8 +244,8 @@ video_preset_slider_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
     update_adv_settings_tooltip(ud);
 }
 
-void
-ghb_video_setting_changed(GtkWidget *widget, signal_user_data_t *ud)
+static void
+video_setting_changed(GtkWidget *widget, signal_user_data_t *ud)
 {
     ghb_widget_to_setting(ud->settings, widget);
     update_adv_settings_tooltip(ud);
@@ -256,7 +257,7 @@ ghb_video_setting_changed(GtkWidget *widget, signal_user_data_t *ud)
 G_MODULE_EXPORT void
 video_setting_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
-    ghb_video_setting_changed(widget, ud);
+    video_setting_changed(widget, ud);
 }
 
 G_MODULE_EXPORT void
@@ -265,7 +266,7 @@ video_option_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
     GtkWidget *textview;
 
     textview = GTK_WIDGET(GHB_WIDGET(ud->builder, "VideoOptionExtra"));
-    ghb_video_setting_changed(textview, ud);
+    video_setting_changed(textview, ud);
 }
 
 G_MODULE_EXPORT gchar*

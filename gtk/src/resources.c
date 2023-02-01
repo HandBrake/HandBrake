@@ -34,7 +34,7 @@
 static GhbValue *resources;
 
 void
-ghb_resource_init()
+ghb_resource_init (void)
 {
     GhbValue *val;
     gsize data_size;
@@ -77,7 +77,7 @@ ghb_resource_get(const gchar *name)
 }
 
 void
-ghb_resource_free()
+ghb_resource_free (void)
 {
     ghb_value_free(&resources);
 }

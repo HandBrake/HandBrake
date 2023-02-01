@@ -22,9 +22,10 @@
 
 #include "ghbcompat.h"
 #include "icon_res.h"
+#include "icons.h"
 
 void
-ghb_load_icons()
+ghb_load_icons (void)
 {
     ghb_icons_register_resource();
     gtk_icon_theme_add_resource_path(gtk_icon_theme_get_default(),
