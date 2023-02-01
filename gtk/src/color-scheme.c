@@ -1,9 +1,8 @@
 /* Copyright (C) 2022-2023 HandBrake Team
  * SPDX-License-Identifier: GPL-2.0-or-later */
 
-#include <stdbool.h>
-#include <gtk/gtk.h>
-#include <glib.h>
+#define G_LOG_DOMAIN "ghb"
+
 #include "color-scheme.h"
 
 #define APP_DARK  APP_PREFERS_DARK /* 1 */

@@ -2104,7 +2104,7 @@ ghb_reload_queue (signal_user_data_t *ud)
     gint status;
     GhbValue *queueDict, *uiDict;
 
-    g_debug("ghb_reload_queue");
+    ghb_log_func();
 
 find_pid:
     pid = ghb_find_pid_file();

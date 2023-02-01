@@ -31,11 +31,11 @@
 #include <time.h>
 #include <math.h>
 
+#include "ghbcompat.h"
+
 #include <glib/gstdio.h>
 #include <glib/gi18n.h>
 #include <gio/gio.h>
-
-#include "ghbcompat.h"
 
 #if !defined(_WIN32)
 #include <poll.h>
@@ -116,7 +116,7 @@ ghb_get_dbus_proxy(GBusType type, const gchar *name, const gchar *path, const gc
     GDBusProxy *proxy;
     GError *error = NULL;
 
-    g_debug("ghb_get_dbus_proxy()");
+    ghb_log_func();
     conn = g_bus_get_sync(type, NULL, &error);
     if (conn == NULL)
     {
@@ -148,8 +148,7 @@ can_suspend_logind (void)
     GError *error = NULL;
     GVariant *res;
 
-
-    g_debug("can_suspend_logind()");
+    ghb_log_func();
     proxy = ghb_get_dbus_proxy(G_BUS_TYPE_SYSTEM, DBUS_LOGIND_SERVICE,
                             DBUS_LOGIND_PATH, DBUS_LOGIND_INTERFACE);
     if (proxy == NULL)
@@ -191,8 +190,7 @@ suspend_logind (void)
     GError *error = NULL;
     GVariant *res;
 
-
-    g_debug("suspend_logind()");
+    ghb_log_func();
     proxy = ghb_get_dbus_proxy(G_BUS_TYPE_SYSTEM, DBUS_LOGIND_SERVICE,
                             DBUS_LOGIND_PATH, DBUS_LOGIND_INTERFACE);
     if (proxy == NULL)
@@ -229,7 +227,7 @@ can_shutdown_logind (void)
     GVariant *res;
 
 
-    g_debug("can_shutdown_logind()");
+    ghb_log_func();
     proxy = ghb_get_dbus_proxy(G_BUS_TYPE_SYSTEM, DBUS_LOGIND_SERVICE,
                             DBUS_LOGIND_PATH, DBUS_LOGIND_INTERFACE);
     if (proxy == NULL)
@@ -272,7 +270,7 @@ shutdown_logind (void)
     GVariant *res;
 
 
-    g_debug("shutdown_logind()");
+    ghb_log_func();
     proxy = ghb_get_dbus_proxy(G_BUS_TYPE_SYSTEM, DBUS_LOGIND_SERVICE,
                             DBUS_LOGIND_PATH, DBUS_LOGIND_INTERFACE);
     if (proxy == NULL)
@@ -373,7 +371,7 @@ dep_check(signal_user_data_t *ud, const gchar *name, gboolean *out_hide)
     GhbValue *array, *data;
     const gchar *widget_name;
 
-    g_debug("dep_check () %s", name);
+    ghb_log_func_str(name);
 
     if (rev_map == NULL) return TRUE;
     array = ghb_dict_get(rev_map, name);
@@ -391,7 +389,7 @@ dep_check(signal_user_data_t *ud, const gchar *name, gboolean *out_hide)
         }
         if (dep_object == NULL)
         {
-            g_message("Failed to find widget");
+            g_warning("Failed to find widget");
         }
         else
         {
@@ -475,7 +473,7 @@ ghb_check_dependency(
     else
         name = alt_name;
 
-    g_debug("ghb_check_dependency() %s", name);
+    ghb_log_func_str(name);
 
     if (dep_map == NULL) return;
     array = ghb_dict_get(dep_map, name);
@@ -490,7 +488,7 @@ ghb_check_dependency(
         dep_object = gtk_builder_get_object(ud->builder, dep_name);
         if (dep_object == NULL)
         {
-            g_message("Failed to find dependent widget %s", dep_name);
+            g_warning("Failed to find dependent widget %s", dep_name);
             continue;
         }
         sensitive = dep_check(ud, dep_name, &hide);
@@ -521,7 +519,7 @@ ghb_check_all_dependencies(signal_user_data_t *ud)
     GhbValue *value;
     GObject *dep_object;
 
-    g_debug("ghb_check_all_dependencies ()");
+    ghb_log_func();
     if (rev_map == NULL) return;
     iter = ghb_dict_iter_init(rev_map);
     while (ghb_dict_iter_next(rev_map, &iter, &dep_name, &value))
@@ -532,7 +530,7 @@ ghb_check_all_dependencies(signal_user_data_t *ud)
         dep_object = gtk_builder_get_object (ud->builder, dep_name);
         if (dep_object == NULL)
         {
-            g_message("Failed to find dependent widget %s", dep_name);
+            g_warning("Failed to find dependent widget %s", dep_name);
             continue;
         }
         sensitive = dep_check(ud, dep_name, &hide);
@@ -740,7 +738,7 @@ ghb_cache_volnames(signal_user_data_t *ud)
 {
     GList *link, *drives;
 
-    g_debug("ghb_cache_volnames()");
+    ghb_log_func();
     link = drives = dvd_device_list();
     if (drives == NULL)
         return NULL;
@@ -890,7 +888,7 @@ set_destination_settings(signal_user_data_t *ud, GhbValue *settings)
 
     extension = get_extension(ud, settings);
 
-    g_debug("set_destination_settings");
+    ghb_log_func();
     dest_file = ghb_dict_get_string(ud->settings, "dest_file");
     if (dest_file == NULL)
     {
@@ -1067,7 +1065,7 @@ source_dialog_drive_list (GtkFileChooser *chooser, signal_user_data_t *ud)
     guint length, ii = 1;
     gchar **entries;
 
-    g_debug("source_dialog_drive_list ()");
+    ghb_log_func();
     link = drives = dvd_device_list();
     if (!link)
     {
@@ -1485,7 +1483,7 @@ ghb_do_scan(
 
     (void)title; // Silence "unused variable" warning
 
-    g_debug("ghb_do_scan()");
+    ghb_log_func();
     if (!force && last_scan_file != NULL &&
         strcmp(last_scan_file, filename) == 0)
     {
@@ -1616,7 +1614,7 @@ do_source_dialog(gboolean dir, signal_user_data_t *ud)
                 GHB_STOCK_OPEN,
                 GHB_STOCK_CANCEL);
 
-    g_debug("do_source_dialog ()");
+    ghb_log_func();
     sourcename = ghb_dict_get_string(ud->globals, "scan_source");
 
     if (!dir)
@@ -1705,7 +1703,7 @@ ghb_update_destination_extension(signal_user_data_t *ud)
     GtkEntry *entry;
     static gboolean busy = FALSE;
 
-    g_debug("ghb_update_destination_extension ()");
+    ghb_log_func();
     // Since this function modifies the thing that triggers it's
     // invocation, check to see if busy to prevent accidental infinite
     // recursion.
@@ -1803,7 +1801,7 @@ dest_dir_set_cb(GtkFileChooserButton *dest_chooser, signal_user_data_t *ud)
     const gchar *dest_file, *dest_dir;
     gchar *dest;
 
-    g_debug("dest_dir_set_cb ()");
+    ghb_log_func();
     ghb_widget_to_setting(ud->settings, (GtkWidget*)dest_chooser);
     dest_file = ghb_dict_get_string(ud->settings, "dest_file");
     dest_dir = ghb_dict_get_string(ud->settings, "dest_dir");
@@ -1821,7 +1819,7 @@ dest_file_changed_cb(GtkEntry *entry, signal_user_data_t *ud)
     const gchar *dest_file, *dest_dir;
     gchar *dest;
 
-    g_debug("dest_file_changed_cb ()");
+    ghb_log_func();
     ghb_update_destination_extension(ud);
     ghb_widget_to_setting(ud->settings, (GtkWidget*)entry);
     // This signal goes off with ever keystroke, so I'm putting this
@@ -1941,7 +1939,7 @@ update_acodec(signal_user_data_t *ud)
 G_MODULE_EXPORT void
 container_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
-    g_debug("container_changed_cb ()");
+    ghb_log_func();
     ghb_widget_to_setting(ud->settings, widget);
     const char * mux_id = ghb_dict_get_string(ud->settings, "FileFormat");
     GhbValue *dest_dict = ghb_get_job_dest_settings(ud->settings);
@@ -3275,7 +3273,7 @@ ptop_update_ui_cb (GtkWidget *widget, signal_user_data_t *ud)
 G_MODULE_EXPORT void
 scale_width_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
-    g_debug("scale_width_changed_cb ()");
+    ghb_log_func();
     ghb_widget_to_setting(ud->settings, widget);
     ghb_check_dependency(ud, widget, NULL);
     ghb_clear_presets_selection(ud);
@@ -3288,7 +3286,7 @@ scale_width_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 G_MODULE_EXPORT void
 scale_height_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
-    g_debug("scale_height_changed_cb ()");
+    ghb_log_func();
     ghb_widget_to_setting(ud->settings, widget);
     ghb_check_dependency(ud, widget, NULL);
     ghb_clear_presets_selection(ud);
@@ -3302,7 +3300,7 @@ scale_height_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 G_MODULE_EXPORT void
 crop_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
-    g_debug("crop_changed_cb ()");
+    ghb_log_func();
     ghb_widget_to_setting(ud->settings, widget);
     ghb_check_dependency(ud, widget, NULL);
     ghb_clear_presets_selection(ud);
@@ -3315,7 +3313,7 @@ crop_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 G_MODULE_EXPORT void
 pad_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
-    g_debug("pad_changed_cb ()");
+    ghb_log_func();
     ghb_widget_to_setting(ud->settings, widget);
     ghb_check_dependency(ud, widget, NULL);
     ghb_clear_presets_selection(ud);
@@ -3329,7 +3327,7 @@ pad_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 G_MODULE_EXPORT void
 display_width_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
-    g_debug("display_width_changed_cb ()");
+    ghb_log_func();
     ghb_widget_to_setting(ud->settings, widget);
     ghb_check_dependency(ud, widget, NULL);
     ghb_clear_presets_selection(ud);
@@ -3343,7 +3341,7 @@ display_width_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 G_MODULE_EXPORT void
 display_height_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
-    g_debug("display_height_changed_cb ()");
+    ghb_log_func();
     ghb_widget_to_setting(ud->settings, widget);
     ghb_check_dependency(ud, widget, NULL);
     ghb_clear_presets_selection(ud);
@@ -3357,7 +3355,7 @@ display_height_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 G_MODULE_EXPORT void
 par_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
-    g_debug("par_changed_cb ()");
+    ghb_log_func();
     ghb_widget_to_setting(ud->settings, widget);
     ghb_check_dependency(ud, widget, NULL);
     ghb_clear_presets_selection(ud);
@@ -3371,7 +3369,7 @@ par_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 G_MODULE_EXPORT void
 scale_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
-    g_debug("scale_changed_cb ()");
+    ghb_log_func();
     ghb_widget_to_setting(ud->settings, widget);
     ghb_check_dependency(ud, widget, NULL);
     ghb_clear_presets_selection(ud);
@@ -3386,7 +3384,7 @@ rotate_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
     int angle, hflip, prev_angle, prev_hflip;
 
-    g_debug("rotate_changed_cb ()");
+    ghb_log_func();
     prev_angle = ghb_dict_get_int(ud->settings, "rotate");
     prev_hflip = ghb_dict_get_int(ud->settings, "hflip");
 
@@ -3459,7 +3457,7 @@ rotate_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 G_MODULE_EXPORT void
 resolution_limit_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
-    g_debug("resolution_limit_changed_cb ()");
+    ghb_log_func();
     ghb_widget_to_setting(ud->settings, widget);
     ghb_check_dependency(ud, widget, NULL);
     ghb_clear_presets_selection(ud);
@@ -3491,7 +3489,7 @@ generic_entry_changed_cb(GtkEntry *entry, signal_user_data_t *ud)
     // The changed signal is sent ... so here we are.
     // I don't want to process upon every keystroke, so I prevent processing
     // while the widget has focus.
-    g_debug("generic_entry_changed_cb ()");
+    ghb_log_func();
     if (!gtk_widget_has_focus((GtkWidget*)entry))
     {
         ghb_widget_to_setting(ud->settings, (GtkWidget*)entry);
@@ -3857,7 +3855,7 @@ submit_job(signal_user_data_t *ud, GhbValue *queueDict)
     GhbValue *uiDict;
     gboolean preset_modified;
 
-    g_debug("submit_job");
+    ghb_log_func();
     if (queueDict == NULL) return;
     uiDict = ghb_dict_get(queueDict, "uiSettings");
     preset_modified = ghb_dict_get_bool(uiDict, "preset_modified");
@@ -3978,7 +3976,7 @@ ghb_start_next_job(signal_user_data_t *ud)
     gint status;
     GtkWidget *progress;
 
-    g_debug("start_next_job");
+    ghb_log_func();
     progress = GHB_WIDGET(ud->builder, "progressbar");
     gtk_widget_show(progress);
 
@@ -4374,7 +4372,7 @@ ghb_timer_cb(gpointer data)
     ghb_backend_events(ud);
     if (update_preview)
     {
-        g_debug("Updating preview\n");
+        g_debug("Updating preview");
         ghb_set_preview_image(ud);
         update_preview = FALSE;
     }
@@ -4683,27 +4681,10 @@ show_presets_action_cb(GSimpleAction *action, GVariant *value,
 }
 
 void
-debug_log_handler(const gchar *domain, GLogLevelFlags flags, const gchar *msg, gpointer data)
-{
-    signal_user_data_t *ud = (signal_user_data_t*)data;
-
-    if (ud->debug)
-    {
-        printf("%s: %s\n", domain, msg);
-    }
-}
-
-void
-warn_log_handler(const gchar *domain, GLogLevelFlags flags, const gchar *msg, gpointer data)
-{
-    printf("%s: %s\n", domain, msg);
-}
-
-void
 ghb_hbfd(signal_user_data_t *ud, gboolean hbfd)
 {
     GtkWidget *widget;
-    g_debug("ghb_hbfd");
+    ghb_log_func();
     widget = GHB_WIDGET(ud->builder, "queue_pause");
     gtk_widget_set_visible(widget, !hbfd);
     widget = GHB_WIDGET(ud->builder, "queue_add");
@@ -4823,7 +4804,7 @@ log_level_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 G_MODULE_EXPORT void
 use_m4v_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
-    g_debug("use_m4v_changed_cb");
+    ghb_log_func();
     ghb_widget_to_setting (ud->prefs, widget);
     ghb_check_dependency(ud, widget, NULL);
     const gchar *name = ghb_get_setting_key(widget);
@@ -4868,7 +4849,7 @@ temp_dir_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 G_MODULE_EXPORT void
 vqual_granularity_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
-    g_debug("vqual_granularity_changed_cb");
+    ghb_log_func();
     ghb_widget_to_setting (ud->prefs, widget);
     ghb_check_dependency(ud, widget, NULL);
 
@@ -4887,7 +4868,7 @@ vqual_granularity_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 G_MODULE_EXPORT void
 tweaks_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
-    g_debug("tweaks_changed_cb");
+    ghb_log_func();
     ghb_widget_to_setting (ud->prefs, widget);
     const gchar *name = ghb_get_setting_key(widget);
     ghb_pref_set(ud->prefs, name);
@@ -4896,7 +4877,7 @@ tweaks_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 G_MODULE_EXPORT void
 show_preview_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
-    g_debug("show_preview_changed_cb");
+    ghb_log_func();
     ghb_widget_to_setting (ud->prefs, widget);
     const gchar *name = ghb_get_setting_key(widget);
     ghb_pref_set(ud->prefs, name);
@@ -4932,7 +4913,7 @@ ghb_file_menu_add_dvd(signal_user_data_t *ud)
 {
     GList *link, *drives;
 
-    g_debug("ghb_file_menu_add_dvd()");
+    ghb_log_func();
     GMenu *dvd_menu = G_MENU(gtk_builder_get_object(ud->builder, "dvd-list"));
 
     // Clear previous dvd items from list
@@ -5182,7 +5163,7 @@ drive_changed_cb(GVolumeMonitor *gvm, GDrive *gd, signal_user_data_t *ud)
     gchar *device;
     gint state;
 
-    g_debug("drive_changed_cb()");
+    ghb_log_func();
     GHB_THREAD_NEW("Cache Volume Names", (GThreadFunc)ghb_cache_volnames, ud);
 
     state = ghb_get_scan_state();
@@ -5313,7 +5294,7 @@ net_close (GIOChannel *ioc)
 {
     gint fd;
 
-    g_debug("net_close");
+    ghb_log_func();
     if (ioc == NULL) return;
     fd = g_io_channel_unix_get_fd(ioc);
     close(fd);
@@ -5328,7 +5309,7 @@ ghb_net_recv_cb(GIOChannel *ioc, GIOCondition cond, gpointer data)
     GError *gerror = NULL;
     GIOStatus status;
 
-    g_debug("ghb_net_recv_cb");
+    ghb_log_func();
     signal_user_data_t *ud = (signal_user_data_t*)data;
 
     status = g_io_channel_read_chars (ioc, buf, 2048, &len, &gerror);
@@ -5362,7 +5343,7 @@ net_open(signal_user_data_t *ud, gchar *address, gint port)
     struct sockaddr_in   sock;
     struct hostent     * host;
 
-    g_debug("net_open");
+    ghb_log_func();
     if( !( host = gethostbyname( address ) ) )
     {
         g_warning( "gethostbyname failed (%s)", address );
@@ -5407,7 +5388,7 @@ gpointer ghb_check_update (signal_user_data_t *ud)
     GMatchInfo *mi;
     gchar *host, *appcast;
 
-    g_debug("ghb_check_update");
+    ghb_log_func();
     appcast_busy = TRUE;
     regex = g_regex_new("^http://(.+)/(.+)$", 0, 0, NULL);
     if (!g_regex_match(regex, HB_PROJECT_URL_APPCAST, 0, &mi))

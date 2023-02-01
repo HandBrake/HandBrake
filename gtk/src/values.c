@@ -21,6 +21,8 @@
  *  Boston, MA  02110-1301, USA.
  */
 
+#include "ghbcompat.h"
+
 #include <glib.h>
 #include <glib/gstdio.h>
 #include <glib-object.h>

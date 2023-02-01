@@ -421,7 +421,7 @@ xml_get_node (xmlNodePtr node, const char *child_name)
         }
         node = node->next;
     }
-    g_debug("Could not find node %s\n", child_name);
+    g_debug("Could not find node %s", child_name);
     return NULL;
 }
 

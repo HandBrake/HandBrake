@@ -20,6 +20,8 @@
  *  51 Franklin Street, Fifth Floor
  *  Boston, MA  02110-1301, USA.
  */
+#include "ghbcompat.h"
+
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
@@ -29,7 +31,7 @@
 #include <glib/gstdio.h>
 #include <glib/gi18n.h>
 #include <string.h>
-#include "ghbcompat.h"
+
 #include "handbrake/handbrake.h"
 #include "settings.h"
 #include "callbacks.h"

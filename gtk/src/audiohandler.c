@@ -21,8 +21,10 @@
  *  Boston, MA  02110-1301, USA.
  */
 
-#include <glib/gi18n.h>
 #include "ghbcompat.h"
+
+#include <glib/gi18n.h>
+
 #include "handbrake/handbrake.h"
 #include "settings.h"
 #include "jobdict.h"
@@ -856,7 +858,7 @@ ghb_audio_list_refresh_selected(signal_user_data_t *ud)
     GhbValue *asettings = NULL;
     const GhbValue *audio_list;
 
-    g_debug("ghb_audio_list_refresh_selected ()");
+    ghb_log_func();
     tv = GTK_TREE_VIEW(GHB_WIDGET(ud->builder, "audio_list_view"));
     ts = gtk_tree_view_get_selection (tv);
     if (gtk_tree_selection_get_selected(ts, &tm, &ti))
@@ -1043,7 +1045,7 @@ audio_codec_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 G_MODULE_EXPORT void
 audio_track_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
-    g_debug("audio_track_changed_cb ()");
+    ghb_log_func();
     ghb_widget_to_setting(ud->settings, widget);
     GhbValue *val = ghb_widget_value(widget);
     audio_update_setting(ghb_value_xform(val, GHB_INT), "Track", ud);
@@ -1251,7 +1253,7 @@ clear_audio_list_settings (GhbValue *settings)
 {
     GhbValue *audio_list;
 
-    g_debug("clear_audio_list_settings ()");
+    ghb_log_func();
     audio_list = ghb_get_job_audio_list(settings);
     ghb_array_reset(audio_list);
 }
@@ -1262,7 +1264,7 @@ ghb_clear_audio_selection(GtkBuilder *builder)
     GtkTreeView *tv;
     GtkTreeSelection *tsel;
 
-    g_debug("ghb_clear_audio_selection ()");
+    ghb_log_func();
     tv = GTK_TREE_VIEW(GHB_WIDGET(builder, "audio_list_view"));
     // Clear tree selection so that updates are not triggered
     // that cause a recursive attempt to clear the tree selection (crasher)
@@ -1277,7 +1279,7 @@ clear_audio_list_ui (GtkBuilder *builder)
     GtkTreeStore *ts;
     GtkTreeSelection *tsel;
 
-    g_debug("clear_audio_list_ui ()");
+    ghb_log_func();
     tv = GTK_TREE_VIEW(GHB_WIDGET(builder, "audio_list_view"));
     ts = GTK_TREE_STORE(gtk_tree_view_get_model(tv));
     // Clear tree selection so that updates are not triggered
@@ -1316,7 +1318,7 @@ audio_list_selection_changed_cb(GtkTreeSelection *ts, signal_user_data_t *ud)
     GhbValue *asettings = NULL;
     gint row;
 
-    g_debug("audio_list_selection_changed_cb ()");
+    ghb_log_func();
     if (gtk_tree_selection_get_selected(ts, &tm, &ti))
     {
         GtkTreeIter pti;

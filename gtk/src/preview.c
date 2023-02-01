@@ -21,12 +21,13 @@
  *  Boston, MA  02110-1301, USA.
  */
 
+#include "ghbcompat.h"
+
 #include <unistd.h>
 #include <glib.h>
 #include <glib/gstdio.h>
 #include <glib/gi18n.h>
 #include <glib-object.h>
-#include "ghbcompat.h"
 
 #if defined(_ENABLE_GST)
 #include <gst/gst.h>
@@ -210,7 +211,7 @@ ghb_preview_init(signal_user_data_t *ud)
     ud->preview->vsink = gst_element_factory_make("gdkpixbufsink", "pixsink");
     if (ud->preview->play == NULL || ud->preview->vsink == NULL)
     {
-        g_message("Couldn't initialize gstreamer. Disabling live preview.");
+        g_warning("Couldn't initialize gstreamer. Disabling live preview.");
         GtkWidget *widget = GHB_WIDGET(ud->builder, "live_preview_box");
         gtk_widget_hide (widget);
         widget = GHB_WIDGET(ud->builder, "live_preview_duration_box");
@@ -1196,7 +1197,7 @@ show_preview_action_cb(GSimpleAction *action, GVariant *value,
 G_MODULE_EXPORT void
 preview_reset_clicked_cb(GtkWidget *toggle, signal_user_data_t *ud)
 {
-    g_debug("preview_reset_clicked_cb()");
+    ghb_log_func();
     if (ud->preview->width <= 0 || ud->preview->height <= 0)
     {
         return;
@@ -1245,7 +1246,7 @@ preview_window_delete_cb(
 G_MODULE_EXPORT void
 preview_duration_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
-    g_debug("preview_duration_changed_cb ()");
+    ghb_log_func();
     ghb_live_reset(ud);
     ghb_widget_to_setting (ud->prefs, widget);
     ghb_check_dependency(ud, widget, NULL);
@@ -1262,7 +1263,7 @@ hud_timeout(signal_user_data_t *ud)
 {
     GtkWidget *widget;
 
-    g_debug("hud_timeout()");
+    ghb_log_func();
     widget = GHB_WIDGET(ud->builder, "preview_hud");
     gtk_widget_hide(widget);
     hud_timeout_id = 0;
@@ -1520,7 +1521,7 @@ show_crop_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 #if 0
     // Disabled until we reimplement this or come up with something better
     //
-    g_debug("show_crop_changed_cb ()");
+    ghb_log_func();
     ghb_widget_to_setting(ud->prefs, widget);
     ghb_check_dependency(ud, widget, NULL);
     ghb_live_reset(ud);

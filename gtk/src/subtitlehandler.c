@@ -21,7 +21,6 @@
  *  Boston, MA  02110-1301, USA.
  */
 
-#include <glib/gi18n.h>
 #include "ghbcompat.h"
 #include "handbrake/handbrake.h"
 #include "settings.h"
@@ -34,6 +33,8 @@
 #include "presets.h"
 #include "audiohandler.h"
 #include "subtitlehandler.h"
+
+#include <glib/gi18n.h>
 
 static char * subtitle_get_track_description(GhbValue *settings,
                                              GhbValue *subsettings);

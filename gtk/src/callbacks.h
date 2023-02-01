@@ -43,10 +43,6 @@
 void ghb_check_all_dependencies(signal_user_data_t *ud);
 gboolean ghb_timer_cb(gpointer data);
 gboolean ghb_log_cb(GIOChannel *source, GIOCondition cond, gpointer data);
-void warn_log_handler(
-    const gchar *domain, GLogLevelFlags flags, const gchar *msg, gpointer ud);
-void debug_log_handler(
-    const gchar *domain, GLogLevelFlags flags, const gchar *msg, gpointer ud);
 void ghb_hbfd(signal_user_data_t *ud, gboolean hbfd);
 gboolean ghb_file_menu_add_dvd(signal_user_data_t *ud);
 void ghb_udev_init(void);

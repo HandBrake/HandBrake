@@ -77,7 +77,6 @@
 #  define N_(String) (String)
 #endif
 
-
 #define BUILDER_NAME "ghb"
 
 static GtkBuilder*
@@ -87,7 +86,7 @@ create_builder_or_die(const gchar * name)
     GtkBuilder *xml;
     GError *error = NULL;
 
-    g_debug("create_builder_or_die()\n");
+    ghb_log_func();
     xml = gtk_builder_new();
     gtk_builder_add_from_resource(xml, "/fr/handbrake/ghb/ui/ghb.ui", &error);
     if (!error)
@@ -146,12 +145,12 @@ MyConnect(
 
     //const gchar *name = ghb_get_setting_key((GtkWidget*)object);
     //g_message("\n\nname %s", name);
-    g_debug("handler_name %s", handler_name);
-    g_debug("signal_name %s", signal_name);
+    g_debug("Handler: %s", handler_name);
+    g_debug("Signal: %s", signal_name);
     callback = self_symbol_lookup(handler_name);
     if (!callback)
     {
-        g_message("Signal handler (%s) not found", handler_name);
+        g_warning("Signal handler (%s) not found", handler_name);
         return;
     }
     if (connect_object)
@@ -185,7 +184,7 @@ change_font(GtkWidget *widget, gpointer data)
     if (font_desc == NULL) exit(1);
     gtk_widget_modify_font(widget, font_desc);
     name = ghb_get_setting_key(widget);
-    g_debug("changing font for widget %s\n", name);
+    g_debug("changing font for widget %s", name);
     if (GTK_IS_CONTAINER(widget))
     {
         gtk_container_foreach((GtkContainer*)widget, change_font, data);
@@ -213,7 +212,7 @@ bind_audio_tree_model(signal_user_data_t *ud)
     GtkTreeView  *treeview;
     GtkTreeSelection *selection;
 
-    g_debug("bind_audio_tree_model()\n");
+    ghb_log_func();
     treeview = GTK_TREE_VIEW(GHB_WIDGET(ud->builder, "audio_list_view"));
     selection = gtk_tree_view_get_selection(treeview);
     treestore = gtk_tree_store_new(6, G_TYPE_STRING, G_TYPE_STRING,
@@ -256,7 +255,7 @@ bind_audio_tree_model(signal_user_data_t *ud)
     g_signal_connect(edit_cell, "clicked", audio_edit_clicked_cb, ud);
     g_signal_connect(delete_cell, "clicked", audio_remove_clicked_cb, ud);
 
-    g_debug("Done\n");
+    g_debug("Done");
 }
 
 extern G_MODULE_EXPORT void subtitle_list_selection_changed_cb(void);
@@ -278,7 +277,7 @@ bind_subtitle_tree_model(signal_user_data_t *ud)
     GtkTreeView  *treeview;
     GtkTreeSelection *selection;
 
-    g_debug("bind_subtitle_tree_model()\n");
+    ghb_log_func();
     treeview = GTK_TREE_VIEW(GHB_WIDGET(ud->builder, "subtitle_list_view"));
     selection = gtk_tree_view_get_selection(treeview);
     treestore = gtk_tree_store_new(6, G_TYPE_STRING, G_TYPE_STRING,
@@ -347,7 +346,7 @@ bind_presets_tree_model(signal_user_data_t *ud)
     GtkTreeView  *treeview;
     GtkTreeSelection *selection;
 
-    g_debug("bind_presets_tree_model()\n");
+    ghb_log_func();
     treeview = GTK_TREE_VIEW(GHB_WIDGET(ud->builder, "presets_list"));
     selection = gtk_tree_view_get_selection(treeview);
     treestore = gtk_tree_store_new(5, G_TYPE_STRING, G_TYPE_INT, G_TYPE_INT,
@@ -386,7 +385,7 @@ bind_presets_tree_model(signal_user_data_t *ud)
     g_signal_connect(treeview, "row_expanded", presets_row_expanded_cb, ud);
     g_signal_connect(treeview, "row_collapsed", presets_row_expanded_cb, ud);
     g_signal_connect(selection, "changed", presets_list_selection_changed_cb, ud);
-    g_debug("Done\n");
+    g_debug("Done");
 }
 
 static void
@@ -974,7 +973,7 @@ video_file_drop_received (GtkWidget *widget, GdkDragContext *context,
 
     if (filename)
     {
-        g_debug("File dropped on window: %s\n", filename);
+        g_debug("File dropped on window: %s", filename);
         ghb_dict_set_string(ud->prefs, "default_source", filename);
         ghb_pref_save(ud->prefs, "default_source");
         ghb_dvd_set_current(filename, ud);
@@ -1034,10 +1033,9 @@ ghb_activate_cb(GApplication * app, signal_user_data_t * ud)
     // connect shutdown signal for cleanup
     g_signal_connect(app, "shutdown", (GCallback)ghb_shutdown_cb, ud);
 
-    ud->debug = ghb_debug;
-    g_log_set_handler(NULL, G_LOG_LEVEL_DEBUG, debug_log_handler, ud);
-    g_log_set_handler("Gtk", G_LOG_LEVEL_WARNING, warn_log_handler, ud);
-
+#if GLIB_CHECK_VERSION(2, 72, 0)
+    g_log_set_debug_enabled(ghb_debug);
+#endif
     ud->globals = ghb_dict_new();
     ud->prefs = ghb_dict_new();
     ud->settings_array = ghb_array_new();
@@ -1106,8 +1104,8 @@ ghb_activate_cb(GApplication * app, signal_user_data_t * ud)
     // Set up UI combo boxes.  Some of these rely on HB global settings.
     ghb_combo_init(ud);
 
-    g_debug("ud %p\n", ud);
-    g_debug("ud->builder %p\n", ud->builder);
+    g_debug("ud %p", ud);
+    g_debug("ud->builder %p", ud->builder);
 
     bind_audio_tree_model(ud);
     bind_subtitle_tree_model(ud);

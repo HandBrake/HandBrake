@@ -58,7 +58,6 @@ typedef struct preview_s preview_t;
 typedef struct
 {
     gchar *current_dvd_device;
-    gboolean              debug;
     gboolean              dont_clear_presets;
     gboolean              scale_busy;
     gint                  cancel_encode;

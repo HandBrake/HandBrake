@@ -21,9 +21,11 @@
  *  Boston, MA  02110-1301, USA.
  */
 
-#include <glib/gi18n.h>
 #include "ghbcompat.h"
+
+#include <glib/gi18n.h>
 #include <string.h>
+
 #include "settings.h"
 #include "values.h"
 #include "callbacks.h"

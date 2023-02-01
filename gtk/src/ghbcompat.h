@@ -23,6 +23,12 @@
 #if !defined(_GHB_COMPAT_H_)
 #define _GHB_COMPAT_H_
 
+#define G_LOG_USE_STRUCTURED
+#define G_LOG_DOMAIN "ghb"
+
+#define ghb_log_func(x) g_debug("Function: %s", __func__)
+#define ghb_log_func_str(x) g_debug("Function: %s (%s)", __func__, (x))
+
 #include <gtk/gtk.h>
 #include <gdk/gdk.h>
 #include <string.h>
