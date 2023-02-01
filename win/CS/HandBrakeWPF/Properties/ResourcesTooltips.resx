@@ -522,7 +522,7 @@ It is recommended the output file is validated before performing actions on it.<
 {creation-date} - The date that the source file was created on (if available).
 {creation-time} - The time that the source file was created on (if available).
 {modification-date} - The date that the source file was last modified on (if available).
-{modification-date} - The time that the source file was last modified on (if available).
+{modification-time} - The time that the source file was last modified on (if available).
 {date} - Today. Set at time of adding to the queue.
 {time} - Today. Set at time of adding to the queue.
 {quality_bitrate} - The RF/CQ number, or bitrate
