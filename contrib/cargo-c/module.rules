@@ -1,0 +1,2 @@
+$(eval $(call import.MODULE.rules,CARGOC))
+$(eval $(call import.CONTRIB.rules,CARGOC))

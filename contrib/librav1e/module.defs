@@ -1,0 +1,23 @@
+$(eval $(call import.MODULE.defs,LIBRAV1E,librav1e,CARGOC))
+$(eval $(call import.CONTRIB.defs,LIBRAV1E))
+
+LIBRAV1E.FETCH.url      = https://github.com/xiph/rav1e/archive/v0.3.4.tar.gz
+LIBRAV1E.FETCH.sha256   = 797699359d594c929636ddd54474c99fe0577b545a21384514f864d68f67b98f
+LIBRAV1E.FETCH.basename = rav1e-0.3.4.tar.gz
+
+define LIBRAV1E.CONFIGURE
+    $(CARGO.exe) fetch --manifest-path=$(LIBRAV1E.EXTRACT.dir/)Cargo.toml
+    $(TOUCH.exe) $@
+endef
+
+LIBRAV1E.BUILD.make       = $(CONTRIB.build/)bin/cargo-cbuild cbuild
+LIBRAV1E.BUILD.extra      = --offline --release --library-type staticlib --prefix $(LIBRAV1E.CONFIGURE.prefix)
+LIBRAV1E.BUILD.args.dir   = --manifest-path=$(LIBRAV1E.EXTRACT.dir/)Cargo.toml
+
+LIBRAV1E.INSTALL.make     = $(CONTRIB.build/)bin/cargo-cinstall cinstall
+LIBRAV1E.INSTALL.extra    = --offline --release --library-type staticlib --prefix $(LIBRAV1E.CONFIGURE.prefix)
+LIBRAV1E.INSTALL.args.dir = --manifest-path=$(LIBRAV1E.EXTRACT.dir/)Cargo.toml
+
+LIBRAV1E.CLEAN.make       = $(CARGO.exe) clean
+LIBRAV1E.CLEAN.args.dir   = --manifest-path=$(LIBRAV1E.EXTRACT.dir/)Cargo.toml
+LIBRAV1E.CLEAN.ntargets   =

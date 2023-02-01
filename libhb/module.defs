@@ -140,6 +140,10 @@ ifeq (1,$(FEATURE.x265))
 LIBHB.dll.libs += $(CONTRIB.build/)lib/libx265.a
 endif
 
+ifeq (1,$(FEATURE.rav1e))
+LIBHB.dll.libs += $(CONTRIB.build/)lib/librav1e.a
+endif
+
 ifneq ($(HAS.iconv),1)
 LIBHB.dll.libs += $(CONTRIB.build/)lib/libiconv.a
 else
