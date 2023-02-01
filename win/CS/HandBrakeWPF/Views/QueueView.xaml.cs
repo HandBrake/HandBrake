@@ -175,5 +175,17 @@ namespace HandBrakeWPF.Views
         {
             ((QueueViewModel)this.DataContext).RemoveSelectedJobs();
         }
+
+        private void OptionsMenu_OnSubmenuOpened(object sender, RoutedEventArgs e)
+        {
+            if (((QueueViewModel)this.DataContext).ExtendedQueueDisplay)
+            {
+                this.extendedQueueDisplay.Header = Properties.Resources.QueueView_MinimalQueueDisplay;
+            }
+            else
+            {
+                this.extendedQueueDisplay.Header = Properties.Resources.QueueView_ExtendedQueueDisplay;
+            }
+        }
     }
 }

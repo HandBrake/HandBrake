@@ -45,6 +45,7 @@ namespace HandBrakeWPF.ViewModels
         private WhenDone whenDoneAction;
         private QueueTask selectedTask;
         private bool isQueueRunning;
+        private bool extendedQueueDisplay;
 
         public QueueViewModel(IUserSettingService userSettingService, IQueueService queueProcessor, IErrorService errorService)
         {
@@ -59,6 +60,7 @@ namespace HandBrakeWPF.ViewModels
             this.SelectedTabIndex = 0;
 
             this.WhenDoneAction = (WhenDone)this.userSettingService.GetUserSetting<int>(UserSettingConstants.WhenCompleteAction);
+            this.ExtendedQueueDisplay = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.ExtendedQueueDisplay);
 
             this.WhenDoneCommand = new SimpleRelayCommand<int>(this.WhenDone);
             this.RetryCommand = new SimpleRelayCommand<QueueTask>(this.RetryJob);
@@ -169,6 +171,17 @@ namespace HandBrakeWPF.ViewModels
                 }
 
                 return false;
+            }
+        }
+
+        public bool ExtendedQueueDisplay
+        {
+            get => this.extendedQueueDisplay;
+            set
+            {
+                if (value == this.extendedQueueDisplay) return;
+                this.extendedQueueDisplay = value;
+                this.NotifyOfPropertyChange(() => this.ExtendedQueueDisplay);
             }
         }
 
@@ -627,6 +640,12 @@ namespace HandBrakeWPF.ViewModels
             {
                 this.errorService.ShowError(Resources.Clipboard_Unavailable, Resources.Clipboard_Unavailable_Solution, exc);
             }
+        }
+
+        public void ChangeQueueDisplay()
+        {
+            this.ExtendedQueueDisplay = !this.ExtendedQueueDisplay;
+            this.userSettingService.SetUserSetting(UserSettingConstants.ExtendedQueueDisplay, this.ExtendedQueueDisplay);
         }
 
         private void HandleLogData()

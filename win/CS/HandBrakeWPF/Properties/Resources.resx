@@ -1473,9 +1473,6 @@ VLC and MPC-HC are supported. Other players may also work but are not validated.
   <data name="QueueView_Statistics" xml:space="preserve">
     <value>Statistics</value>
   </data>
-  <data name="QueueView_StatsNotAvailableYet" xml:space="preserve">
-    <value>Statistics will be available after an encode completes.</value>
-  </data>
   <data name="QueueView_Subtitles" xml:space="preserve">
     <value>Subtitles:</value>
   </data>
@@ -2716,5 +2713,20 @@ Alternatively, check the "Use External Player" checkbox below.</value>
   </data>
   <data name="OptionsView_IsoDateFormat" xml:space="preserve">
     <value>Use ISO Date Formats (YYYY-MM-DD) instead of system format.</value>
+  </data>
+  <data name="QueueViewModel_ShortEncodeStatus" xml:space="preserve">
+    <value>Pass {0} of {1}, {2:00.00}%, {3:000.0} fps, avg {4:000.0} fps, ETA: {5}</value>
+  </data>
+  <data name="QueueViewModel_ShortSubScanStatus" xml:space="preserve">
+    <value>Scanning for Subtitles {0:00.00}%, ETA: {1}</value>
+  </data>
+  <data name="QueueView_ExtendedQueueDisplay" xml:space="preserve">
+    <value>Extend Queue Info</value>
+  </data>
+  <data name="QueueView_MinimalQueueDisplay" xml:space="preserve">
+    <value>Minimise Queue Info</value>
+  </data>
+  <data name="QueueStats_ShortOutputStats" xml:space="preserve">
+    <value>Output: {0}, avg {1} fps</value>
   </data>
 </root>

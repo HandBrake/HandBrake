@@ -5361,6 +5361,15 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Output: {0}, avg {1} fps.
+        /// </summary>
+        public static string QueueStats_ShortOutputStats {
+            get {
+                return ResourceManager.GetString("QueueStats_ShortOutputStats", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Actions.
         /// </summary>
         public static string QueueView_Actions {
@@ -5514,6 +5523,15 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Extend Queue Info.
+        /// </summary>
+        public static string QueueView_ExtendedQueueDisplay {
+            get {
+                return ResourceManager.GetString("QueueView_ExtendedQueueDisplay", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Output Filesize: .
         /// </summary>
         public static string QueueView_FileSize {
@@ -5645,6 +5663,15 @@ namespace HandBrakeWPF.Properties {
         public static string QueueView_LogNotAvailableYet {
             get {
                 return ResourceManager.GetString("QueueView_LogNotAvailableYet", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Minimise Queue Info.
+        /// </summary>
+        public static string QueueView_MinimalQueueDisplay {
+            get {
+                return ResourceManager.GetString("QueueView_MinimalQueueDisplay", resourceCulture);
             }
         }
         
@@ -5825,15 +5852,6 @@ namespace HandBrakeWPF.Properties {
         public static string QueueView_Statistics {
             get {
                 return ResourceManager.GetString("QueueView_Statistics", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Statistics will be available after an encode completes..
-        /// </summary>
-        public static string QueueView_StatsNotAvailableYet {
-            get {
-                return ResourceManager.GetString("QueueView_StatsNotAvailableYet", resourceCulture);
             }
         }
         
@@ -6106,6 +6124,24 @@ namespace HandBrakeWPF.Properties {
         public static string QueueViewModel_QueueStatusDisplay {
             get {
                 return ResourceManager.GetString("QueueViewModel_QueueStatusDisplay", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Pass {0} of {1}, {2:00.00}%, {3:000.0} fps, avg {4:000.0} fps, ETA: {5}.
+        /// </summary>
+        public static string QueueViewModel_ShortEncodeStatus {
+            get {
+                return ResourceManager.GetString("QueueViewModel_ShortEncodeStatus", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Scanning for Subtitles {0:00.00}%, ETA: {1}.
+        /// </summary>
+        public static string QueueViewModel_ShortSubScanStatus {
+            get {
+                return ResourceManager.GetString("QueueViewModel_ShortSubScanStatus", resourceCulture);
             }
         }
         

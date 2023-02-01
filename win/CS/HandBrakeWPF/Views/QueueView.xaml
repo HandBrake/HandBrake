@@ -16,8 +16,8 @@
         xmlns:main="clr-namespace:HandBrakeWPF.Converters.Main"
         Title="{Binding Title}"
         Width="975"
-        Height="550"
-        MinWidth="400"
+        Height="600"
+        MinWidth="420"
         MinHeight="300"
         WindowStartupLocation="CenterScreen"
         TextOptions.TextFormattingMode="Display"
@@ -154,8 +154,8 @@
                         </Button>
                     </StackPanel>
 
-                    <Menu HorizontalAlignment="Right" Background="Transparent" VerticalAlignment="Bottom" Grid.Column="3" Margin="0,0,0,0" >
-                        <MenuItem>
+                    <Menu HorizontalAlignment="Right" Background="Transparent" VerticalAlignment="Bottom" Grid.Column="3" Margin="0,0,0,0">
+                        <MenuItem SubmenuOpened="OptionsMenu_OnSubmenuOpened">
                             <MenuItem.Header>
                                 <StackPanel Height="27" Orientation="Horizontal">
                                     <Image Source="{Binding Converter={StaticResource themeConverter}, ConverterParameter='Advanced.png'}" Width="20" Height="20" VerticalAlignment="Center" />
@@ -179,6 +179,10 @@
                             <MenuItem Command="{Binding RelayCommand}" CommandParameter="Export" Header="{x:Static Properties:Resources.QueueView_Export}" />
                             <Separator />
                             <MenuItem Command="{Binding RelayCommand}" CommandParameter="ExportCli" Header="{x:Static Properties:Resources.QueueView_ExportCLI}" />
+                            <Separator />
+                            <MenuItem Command="{Binding RelayCommand}" CommandParameter="ChangeQueueDisplay" x:Name="extendedQueueDisplay" 
+                                      Header="{x:Static Properties:Resources.QueueView_ExtendedQueueDisplay}" />
+
                             <Separator Visibility="{Binding IsNightly, Converter={StaticResource boolToVisConverter}}" />
                             <MenuItem Header="Debug" Visibility="{Binding IsNightly, Converter={StaticResource boolToVisConverter}}">
                                 <MenuItem Header="{x:Static Properties:Resources.Debug_QueueDataExport}" Command="{Binding QueueExtractResultDataCommand}" />
@@ -241,6 +245,11 @@
                                         <ColumnDefinition Width="Auto" />
                                     </Grid.ColumnDefinitions>
 
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
+                                    </Grid.RowDefinitions>
+
                                     <!--  Marker  -->
                                     <Image Grid.Column="0" Width="16" Height="16" SnapsToDevicePixels="True" Style="{StaticResource RotatingImageStyle}">
                                         <Image.LayoutTransform>
@@ -261,11 +270,24 @@
 
                                         <StackPanel Grid.Row="0" Grid.Column="0"  VerticalAlignment="Center">
                                             <TextBlock Text="{Binding Task.Destination, Converter={StaticResource filePathToFilenameConverter}}"
-                                                   TextWrapping="Wrap" VerticalAlignment="Center" Margin="0,0,5,0"   />
+                                                   TextWrapping="Wrap" VerticalAlignment="Center" Margin="0,0,5,0"
+                                                   Style="{StaticResource subHeaderSmall}"/>
 
                                             <ProgressBar Minimum="0" Height="4" Maximum="100" Name="pbStatus" HorizontalAlignment="Stretch" Margin="0,8,10,0"
                                                      Value="{Binding JobProgress.ProgressValue}" IsIndeterminate="{Binding JobProgress.IntermediateProgress}"
                                                      Visibility="{Binding ShowEncodeProgress, Converter={StaticResource boolToVisConverter}}" />
+
+                                            <!-- Extended Info -->
+                                            <Grid Visibility="{Binding DataContext.ExtendedQueueDisplay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}, Converter={StaticResource boolToVisConverter}}" >
+
+                                                <TextBlock Text="{Binding JobProgress.JobStatusShort}" TextWrapping="WrapWithOverflow" VerticalAlignment="Top" TextTrimming="CharacterEllipsis"
+                                                           Visibility="{Binding ShowEncodeProgress, Converter={StaticResource boolToVisConverter}}"
+                                                           Margin="0,4,0,2" Style="{StaticResource subTextSmall}" />
+
+                                                <TextBlock Text="{Binding Statistics.SummaryCompleteStats}" TextWrapping="WrapWithOverflow" VerticalAlignment="Top" TextTrimming="CharacterEllipsis"
+                                                           Visibility="{Binding ShowJobCompleteInfo, Converter={StaticResource boolToVisConverter}}"
+                                                           Margin="0,4,0,2" Style="{StaticResource subTextSmall}" />
+                                            </Grid>
                                         </StackPanel>
 
                                         <Button Grid.Row="0" Grid.Column="1" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="0,0,0,0" Click="QueueDeleteJob_OnClick"
@@ -277,6 +299,8 @@
                                             </Button.Template>
                                         </Button>
                                     </Grid>
+
+                  
                                 </Grid>
 
                                 <Grid Visibility="{Binding IsBreakpointTask, Converter={StaticResource boolToVisConverter}, ConverterParameter=false}">
@@ -298,7 +322,6 @@
 
                                         <TextBlock Text="Stop" Grid.Column="0" HorizontalAlignment="Left" Margin="0,0,0,0" VerticalAlignment="Center" />
                                     </Grid>
-                                    
                                 </Grid>
                             </Grid>
                         </DataTemplate>
@@ -495,11 +518,10 @@
                 <TabItem Header="{x:Static Properties:Resources.QueueView_Statistics}" IsEnabled="{Binding JobInfoVisible}" >
                     <ScrollViewer VerticalScrollBarVisibility="Auto" Margin="10,0,0,5">
                         <StackPanel>
-                            <TextBlock Text="{x:Static Properties:Resources.QueueView_StatsNotAvailableYet}" Margin="0,10,0,0" Visibility="{Binding StatsVisible, Converter={StaticResource boolToVisConverter}, ConverterParameter=true}" />
 
                             <!-- Job Stats -->
-                            <TextBlock Text="Job" FontWeight="Bold" Margin="0,10,0,5" Visibility="{Binding StatsVisible, Converter={StaticResource boolToVisConverter}}" />
-                            <Grid Style="{StaticResource LongToolTipHolder}" Margin="10,5,0,0" Visibility="{Binding StatsVisible, Converter={StaticResource boolToVisConverter}}">
+                            <TextBlock Text="Job" FontWeight="Bold" Margin="0,10,0,5" />
+                            <Grid Style="{StaticResource LongToolTipHolder}" Margin="10,5,0,0" >
                                 <Grid.Resources>
                                     <Style TargetType="TextBlock" BasedOn="{StaticResource {x:Type TextBlock}}">
                                         <Setter Property="Margin" Value="0,5,0,5" />
@@ -539,8 +561,8 @@
                             </Grid>
 
                             <!-- Content Stats -->
-                            <TextBlock Text="Content" FontWeight="Bold" Margin="0,10,0,5" Visibility="{Binding StatsVisible, Converter={StaticResource boolToVisConverter}}" />
-                            <Grid Style="{StaticResource LongToolTipHolder}" Margin="10,5,0,0" Visibility="{Binding StatsVisible, Converter={StaticResource boolToVisConverter}}">
+                            <TextBlock Text="Content" FontWeight="Bold" Margin="0,10,0,5" />
+                            <Grid Style="{StaticResource LongToolTipHolder}" Margin="10,5,0,0">
                                 <Grid.Resources>
                                     <Style TargetType="TextBlock" BasedOn="{StaticResource {x:Type TextBlock}}">
                                         <Setter Property="Margin" Value="0,5,0,5" />

@@ -61,6 +61,7 @@ namespace HandBrakeWPF.Services.Queue.Model
             this.SelectedPresetKey = this.presetKey;
 
             this.Statistics = new QueueStats();
+            this.Statistics.UpdateStats(this, null);
             this.TaskId = Guid.NewGuid().ToString();
             this.JobProgress = new QueueProgressStatus();
             this.TaskType = QueueTaskType.EncodeTask;
@@ -96,6 +97,7 @@ namespace HandBrakeWPF.Services.Queue.Model
                 this.NotifyOfPropertyChange(() => this.Status);
                 this.NotifyOfPropertyChange(() => this.ShowEncodeProgress);
                 this.NotifyOfPropertyChange(() => this.IsJobStatusVisible);
+                this.NotifyOfPropertyChange(() => this.ShowJobCompleteInfo);
             }
         }
 
@@ -114,6 +116,8 @@ namespace HandBrakeWPF.Services.Queue.Model
         [JsonIgnore]
         public bool ShowEncodeProgress => this.Status == QueueItemStatus.InProgress;
 
+        [JsonIgnore]
+        public bool ShowJobCompleteInfo => this.Status == QueueItemStatus.Completed;
 
         /* Overrides */
 
