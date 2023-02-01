@@ -23,6 +23,7 @@
 
 #include <sys/types.h>
 #include <sys/stat.h>
+#include <sys/utsname.h>
 #include <unistd.h>
 #include <string.h>
 #include <stdio.h>
@@ -994,6 +995,37 @@ video_file_drop_init (signal_user_data_t *ud)
     g_signal_connect(summary, "drag-data-received", G_CALLBACK(video_file_drop_received), ud);
 }
 
+static void
+print_system_information (void)
+{
+    struct utsname *host_info;
+    char *exe_path;
+    ssize_t result;
+
+    host_info = calloc(1, sizeof(struct utsname));
+    exe_path = calloc(1, PATH_MAX);
+    uname(host_info);
+
+    fprintf(stderr, "%s\n", HB_PROJECT_TITLE);
+#if GLIB_CHECK_VERSION(2, 64, 0)
+    fprintf(stderr, "OS: %s\n", g_get_os_info(G_OS_INFO_KEY_PRETTY_NAME));
+#endif
+    fprintf(stderr, "Kernel: %s %s (%s)\n", host_info->sysname,
+            host_info->release, host_info->machine);
+
+    result = readlink( "/proc/self/exe", exe_path, PATH_MAX);
+    if (result > 0)
+    {
+        fprintf(stderr, "Install Dir: %s\n", g_path_get_dirname(exe_path));
+    }
+    fprintf(stderr, "Config Dir:  %s\n", ghb_get_user_config_dir(NULL));
+    fprintf(stderr, "Temp Dir:    %s\n", g_get_tmp_dir());
+    fprintf(stderr, "_______________________________\n\n");
+
+    free(exe_path);
+    free(host_info);
+}
+
 extern G_MODULE_EXPORT void
 ghb_activate_cb(GApplication * app, signal_user_data_t * ud)
 {
@@ -1083,8 +1115,7 @@ ghb_activate_cb(GApplication * app, signal_user_data_t * ud)
     // Redirect stderr to the activity window
     ghb_preview_init(ud);
     IoRedirect(ud);
-    ghb_log( "%s - %s - %s",
-        HB_PROJECT_TITLE, HB_PROJECT_HOST_TITLE, HB_PROJECT_URL_WEBSITE );
+    print_system_information();
     ghb_init_dep_map();
 
     GtkTextView   * textview;
