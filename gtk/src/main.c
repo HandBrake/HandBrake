@@ -729,6 +729,12 @@ const gchar *MyCSS =
 "{"
 "    border-bottom: 1px solid #4e9a06; "
 "}"
+#if !GTK_CHECK_VERSION(3, 24, 0)
+"toolbar"
+"{"
+"    -gtk-icon-style: symbolic; "
+"}"
+#endif
 ;
 
 extern G_MODULE_EXPORT void status_icon_query_tooltip_cb(void);
