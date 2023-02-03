@@ -106,7 +106,7 @@ class FlatpakManifest:
             elif value.entry_type == SourceType.contrib:
                 source["type"] = "file"
                 source["dest"] = "download"
-                if value.basename != "":
+                if value.basename != None and value.basename != "":
                     source["dest-filename"] = value.basename
                 else:
                     source["dest-filename"] = url2filename(value.url)
@@ -157,12 +157,16 @@ if __name__ == "__main__":
             if arg is not None and arg != "":
                 current_source = arg
                 source_list[arg] = SourceEntry(arg, SourceType.archive)
+                source_list[current_source].sha256 = None
+                source_list[current_source].basename = None
             else:
                 current_source = None
         elif opt in ("-c", "--contrib"):
             if arg is not None and arg != "":
                 current_source = arg
                 source_list[arg] = SourceEntry(arg, SourceType.contrib)
+                source_list[current_source].sha256 = None
+                source_list[current_source].basename = None
             else:
                 current_source = None
         elif opt in ("-s", "--sha256"):
