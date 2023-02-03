@@ -11,7 +11,6 @@ namespace HandBrakeWPF.Services
 {
     using System;
     using System.Collections.Generic;
-    using System.DirectoryServices.ActiveDirectory;
     using System.IO;
     using System.Linq;
     using System.Text.Json;
@@ -356,6 +355,7 @@ namespace HandBrakeWPF.Services
             defaults.Add(UserSettingConstants.ForceSoftwareRendering, false);
             defaults.Add(UserSettingConstants.IsUpdateAvailableBuild, 0);
             defaults.Add(UserSettingConstants.ExtendedQueueDisplay, true);
+            defaults.Add(UserSettingConstants.HardwareDetectTimeoutSeconds, 12);
 
             
             return defaults;
