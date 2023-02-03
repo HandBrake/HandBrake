@@ -13,8 +13,8 @@
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://github.com/intel/gmmlib/archive/refs/tags/intel-gmmlib-22.3.2.tar.gz",
-                    "sha256": "f725fbb4291ab67bbc7b31e1a268f523df384667360c931b40144db861be53d7"
+                    "url": "https://github.com/intel/gmmlib/archive/refs/tags/intel-gmmlib-22.3.3.tar.gz",
+                    "sha256": "86651bd2803c9f0afd82471bec784e65d2b418dee315a053d22215eb2a679be7"
                 }
             ],
             "buildsystem": "cmake-ninja",
@@ -52,8 +52,8 @@
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://github.com/intel/libva-utils/archive/refs/tags/2.17.0.tar.gz",
-                    "sha256": "607447143f08c6221f3bd5ab7aad874a4e220b6e04254b67433a7b2e97ff98ba"
+                    "url": "https://github.com/intel/libva-utils/archive/refs/tags/2.17.1.tar.gz",
+                    "sha256": "6ea5993c3eba230a979fa9d35b4cad8df06d4474a773dc0918033bf50353f966"
                 }
             ],
             "no-autogen": false,
@@ -67,8 +67,8 @@
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://github.com/intel/media-driver/archive/refs/tags/intel-media-22.6.5.tar.gz",
-                    "sha256": "cbb6a514564f8c3349b1f78fc0906b636ea2074d7605cb0e820c5b727ce88cdc"
+                    "url": "https://github.com/intel/media-driver/archive/refs/tags/intel-media-23.1.0.tar.gz",
+                    "sha256": "edae1bdc07b694bd6e42099feddcf875e3b5d7254894f4b3fb292128577baf82"
                 }
             ],
             "buildsystem": "cmake-ninja",
@@ -129,8 +129,8 @@
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://github.com/oneapi-src/oneVPL-intel-gpu/archive/refs/tags/intel-onevpl-22.6.5.tar.gz",
-                    "sha256": "fd2b9649f126119a19cb328c771085bacdddb775c9b6cff30cf0d248d9b3b359"
+                    "url": "https://github.com/oneapi-src/oneVPL-intel-gpu/archive/refs/tags/intel-onevpl-23.1.0.tar.gz",
+                    "sha256": "4a4437f2ec09f80431807f6031751b586c6353f3c11f1b2d92c10a9a6906acd8"
                 },
                 {
                     "type": "file",
