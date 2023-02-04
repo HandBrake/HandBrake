@@ -3652,9 +3652,8 @@ ghb_title_message_dialog(GtkWindow *parent, GtkMessageType type, const gchar *ti
     GtkStyleContext *yes_style;
 
     // Toss up a warning dialog
-    dialog = gtk_message_dialog_new(parent, GTK_DIALOG_MODAL,
-                            type, GTK_BUTTONS_NONE,
-                            "%s", title);
+    dialog = gtk_message_dialog_new(parent, GTK_DIALOG_MODAL, type,
+                                    GTK_BUTTONS_NONE, "%s", title);
     if (message)
         gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dialog), "%s", message);
 
@@ -3662,22 +3661,26 @@ ghb_title_message_dialog(GtkWindow *parent, GtkMessageType type, const gchar *ti
                            no, GTK_RESPONSE_NO,
                            yes, GTK_RESPONSE_YES, NULL);
 
-    yes_button = gtk_dialog_get_widget_for_response(GTK_DIALOG(dialog), GTK_RESPONSE_YES);
-    yes_style = gtk_widget_get_style_context(yes_button);
-
-    // Use GTK_MESSAGE_QUESTION for a neutral dialog,
-    // GTK_MESSAGE_INFO for a blue 'suggested-action' confirm button, or
-    // GTK_MESSAGE_WARNING for a red 'destructive-action' confirm button.
-    switch (type)
+    if (yes != NULL)
     {
-    case GTK_MESSAGE_INFO:
-        gtk_style_context_add_class(yes_style, "suggested-action");
-        break;
-    case GTK_MESSAGE_WARNING:
-    case GTK_MESSAGE_ERROR:
-        gtk_style_context_add_class(yes_style, "destructive-action");
-    default:
-        break;
+        yes_button = gtk_dialog_get_widget_for_response(GTK_DIALOG(dialog),
+                                                        GTK_RESPONSE_YES);
+        yes_style = gtk_widget_get_style_context(yes_button);
+
+        // Use GTK_MESSAGE_QUESTION for a neutral dialog,
+        // GTK_MESSAGE_INFO for a blue 'suggested-action' confirm button, or
+        // GTK_MESSAGE_WARNING for a red 'destructive-action' confirm button.
+        switch (type)
+        {
+        case GTK_MESSAGE_INFO:
+            gtk_style_context_add_class(yes_style, "suggested-action");
+            break;
+        case GTK_MESSAGE_WARNING:
+        case GTK_MESSAGE_ERROR:
+            gtk_style_context_add_class(yes_style, "destructive-action");
+        default:
+            break;
+        }
     }
     response = gtk_dialog_run(GTK_DIALOG(dialog));
     gtk_widget_destroy (dialog);
