@@ -431,7 +431,7 @@ namespace HandBrake.Interop.Interop
                     var progressEventArgs = new EncodeProgressEventArgs(0, 0, 0, TimeSpan.MinValue, 0, 0, 0, taskState.Code);
                     if (taskState == TaskState.Muxing || state.Working == null)
                     {
-                        progressEventArgs = new EncodeProgressEventArgs(100, 0, 0, TimeSpan.MinValue, 0, 0, 0, taskState.Code);
+                        progressEventArgs = new EncodeProgressEventArgs(1, 0, 0, TimeSpan.MinValue, 0, 0, 0, taskState.Code);
                     }
                     else
                     {
