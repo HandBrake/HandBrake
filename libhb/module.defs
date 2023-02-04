@@ -46,7 +46,7 @@ LIBHB.GCC.D += __LIBHB__ USE_PTHREAD
 LIBHB.GCC.I += $(LIBHB.build/) $(CONTRIB.build/)include
 
 ifeq (1,$(FEATURE.qsv))
-    ifeq ($(HOST.system),freebsd))
+    ifeq ($(HOST.system),freebsd)
         LIBHB.GCC.I += $(LOCALBASE)/include/vpl
     else
         LIBHB.GCC.I += $(CONTRIB.build/)include/vpl
