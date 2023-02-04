@@ -211,21 +211,25 @@ struct
 
 int hb_get_cpu_count()
 {
+    init_cpu_info();
     return hb_cpu_info.count;
 }
 
 int hb_get_cpu_platform()
 {
+    init_cpu_info();
     return hb_cpu_info.platform;
 }
 
 const char* hb_get_cpu_name()
 {
+    init_cpu_info();
     return hb_cpu_info.name;
 }
 
 const char* hb_get_cpu_platform_name()
 {
+    init_cpu_info();
     switch (hb_cpu_info.platform)
     {
         case HB_CPU_PLATFORM_INTEL_BNL:
@@ -279,13 +283,18 @@ const char* hb_get_cpu_platform_name()
 
 static void init_cpu_info()
 {
-    hb_cpu_info.name     = NULL;
+    int ii;
+
+    if (hb_cpu_info.count != 0)
+        return;
+
+    hb_cpu_info.name     = "Unknown";
     hb_cpu_info.count    = init_cpu_count();
     hb_cpu_info.platform = HB_CPU_PLATFORM_UNSPECIFIED;
 
+#if ARCH_X86_64 || ARCH_X86_32
     if (av_get_cpu_flags() & AV_CPU_FLAG_SSE)
     {
-#if ARCH_X86_64 || ARCH_X86_32
         int eax, ebx, ecx, edx, family, model;
 
         cpuid(1, &eax, &ebx, &ecx, &edx);
@@ -392,7 +401,14 @@ static void init_cpu_info()
                   &hb_cpu_info.buf4[11]);
 
             hb_cpu_info.name    = hb_cpu_info.buf;
-            hb_cpu_info.buf[47] = '\0'; // just in case
+
+            // ensure string is null-terminated and trim trailing whitespace
+            ii = sizeof(hb_cpu_info.buf) - 1;
+            do {
+                hb_cpu_info.buf[ii] = '\0';
+                ii -= 1;
+            }
+            while (ii > 0 && isspace(hb_cpu_info.buf[ii]));
 
             while (isspace(*hb_cpu_info.name))
             {
@@ -400,8 +416,8 @@ static void init_cpu_info()
                 hb_cpu_info.name++;
             }
         }
-#endif // ARCH_X86_64 || ARCH_X86_32
     }
+#endif // ARCH_X86_64 || ARCH_X86_32
 }
 
 /*

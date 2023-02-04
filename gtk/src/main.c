@@ -1022,6 +1022,7 @@ print_system_information (void)
 #endif
     fprintf(stderr, "Kernel: %s %s (%s)\n", host_info->sysname,
             host_info->release, host_info->machine);
+    fprintf(stderr, "CPU: %s x %d\n", hb_get_cpu_name(), hb_get_cpu_count());
 
     result = readlink( "/proc/self/exe", exe_path, PATH_MAX);
     if (result > 0)
@@ -1029,7 +1030,6 @@ print_system_information (void)
         fprintf(stderr, "Install Dir: %s\n", g_path_get_dirname(exe_path));
     }
     fprintf(stderr, "Config Dir:  %s\n", ghb_get_user_config_dir(NULL));
-    fprintf(stderr, "Temp Dir:    %s\n", g_get_tmp_dir());
     fprintf(stderr, "_______________________________\n\n");
 
     free(exe_path);
