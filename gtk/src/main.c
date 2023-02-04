@@ -967,22 +967,31 @@ video_file_drop_received (GtkWidget *widget, GdkDragContext *context,
                           int x, int y, GtkSelectionData *data, guint info,
                           guint time, signal_user_data_t *ud)
 {
-    // Only one file or folder at a time is supported
-    gchar **uris = gtk_selection_data_get_uris(data);
-    GFile *file = g_file_new_for_uri(uris[0]);
-    gchar *filename = g_file_get_parse_name(file);
+    gchar **uris;
+    GFile *file = NULL;
+    gchar *filename = NULL;
 
-    if (filename)
+    uris = gtk_selection_data_get_uris(data);
+    if (uris != NULL)
+    {
+        // Only one file or folder at a time is supported
+        file = g_file_new_for_uri(uris[0]);
+        g_strfreev(uris);
+    }
+    if (file != NULL)
+    {
+        filename = g_file_get_path(file);
+        g_object_unref(file);
+    }
+    if (filename != NULL)
     {
         g_debug("File dropped on window: %s", filename);
         ghb_dict_set_string(ud->prefs, "default_source", filename);
         ghb_pref_save(ud->prefs, "default_source");
         ghb_dvd_set_current(filename, ud);
         ghb_do_scan(ud, filename, 0, TRUE);
+        g_free(filename);
     }
-    g_strfreev(uris);
-    g_object_unref(file);
-    g_free(filename);
 }
 
 static void
