@@ -118,7 +118,9 @@ ghb_SOURCES = \
 	marshalers.c \
 	marshalers.h \
 	color-scheme.c \
-	color-scheme.h
+	color-scheme.h \
+	power-manager.c \
+	power-manager.h
 
 if MINGW
 ghb_LDFLAGS = \
