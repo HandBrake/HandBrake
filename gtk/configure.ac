@@ -8,12 +8,11 @@ AM_MAINTAINER_MODE
 
 AC_USE_SYSTEM_EXTENSIONS
 AC_PROG_CC(gcc clang)
-AC_ISC_POSIX
+AC_SEARCH_LIBS([strerror],[cposix])
 AC_PROG_CXX(g++ clang++)
-AM_PROG_CC_STDC
-AC_HEADER_STDC
 
-AM_CONFIG_HEADER([config.h])
+AC_CONFIG_MACRO_DIR([m4])
+AC_CONFIG_HEADERS([config.h])
 AC_CONFIG_FILES([
 po/Makefile.in
 Makefile
@@ -35,7 +34,7 @@ AC_SUBST(CC_FOR_BUILD)
 
 # introduce the optional configure parameter for the path of libXXX.a
 AC_ARG_WITH(hb,
-	AC_HELP_STRING(
+	AS_HELP_STRING(
 		[--with-hb=prefix],
 		[try this for the hb-library prefix install directory]
 	),
@@ -123,7 +122,7 @@ GETTEXT_PACKAGE=ghb
 AC_SUBST(GETTEXT_PACKAGE)
 AC_DEFINE_UNQUOTED(GETTEXT_PACKAGE,"$GETTEXT_PACKAGE", [GETTEXT package name])
 
-AM_PROG_LIBTOOL
+LT_INIT
 
 AC_SYS_LARGEFILE
 
