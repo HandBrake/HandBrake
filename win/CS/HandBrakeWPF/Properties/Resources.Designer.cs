@@ -5018,6 +5018,15 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Preset Description:.
+        /// </summary>
+        public static string PresetPane_Desc {
+            get {
+                return ResourceManager.GetString("PresetPane_Desc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Hide Preset Description.
         /// </summary>
         public static string PresetPane_HidePresetDesc {

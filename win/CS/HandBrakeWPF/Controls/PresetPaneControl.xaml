@@ -153,7 +153,7 @@
                     <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
 
-                <TextBlock Text="Preset Description:" Margin="0,5,0,2" Style="{StaticResource subHeaderSmall}" />
+                <TextBlock Text="{x:Static Properties:Resources.PresetPane_Desc}" Margin="0,5,0,2" Style="{StaticResource subHeaderSmall}" />
                 <TextBox IsReadOnly="True" Text="{Binding SelectedPreset.Description}" Height="75" TextWrapping="Wrap" Grid.Row="1"
                          VerticalContentAlignment="Top" VerticalScrollBarVisibility="Auto" />
             </Grid>

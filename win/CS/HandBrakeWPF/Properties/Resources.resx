@@ -2729,6 +2729,9 @@ Alternatively, check the "Use External Player" checkbox below.</value>
   <data name="QueueStats_ShortOutputStats" xml:space="preserve">
     <value>Output: {0}, avg {1} fps</value>
   </data>
+  <data name="PresetPane_Desc" xml:space="preserve">
+    <value>Preset Description:</value>
+  </data>
   <data name="PresetPane_HidePresetDesc" xml:space="preserve">
     <value>Hide Preset Description</value>
   </data>
