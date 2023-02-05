@@ -558,6 +558,11 @@ namespace HandBrakeWPF.ViewModels
                 MessageBoxImage.Error);
         }
 
+        public void CloseWindow()
+        {
+            this.TryClose();
+        }
+
         private void PlayFile()
         {
             // Launch VLC and Play video.

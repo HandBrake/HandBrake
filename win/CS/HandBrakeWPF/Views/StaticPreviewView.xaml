@@ -102,6 +102,11 @@
                             <TextBlock Text="{x:Static Properties:Resources.StaticPreviewView_UseExternalPlayer}" Foreground="White" />
                         </CheckBox>
                     </StackPanel>
+
+                    <Button Margin="10,0,0,0" IsCancel="True"
+                            Visibility="{Binding IsEncoding, Converter={StaticResource booleanToVisibilityConverter}, ConverterParameter=true}"
+                            Command="{Binding RelayCommand}" CommandParameter="CloseWindow"
+                            Content="{x:Static Properties:Resources.Generic_Close}"/>
                 </StackPanel>
 
                 <StackPanel Grid.Row="3" Orientation="Horizontal" Visibility="{Binding IsMediaPlayerVisible, Converter={StaticResource booleanToVisibilityConverter}, ConverterParameter=false}">
