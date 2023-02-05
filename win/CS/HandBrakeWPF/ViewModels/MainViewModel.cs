@@ -1689,7 +1689,7 @@ namespace HandBrakeWPF.ViewModels
             this.NotifyOfPropertyChange(() => this.SelectedPreset);
         }
 
-        public void PresetRemove()
+        public void PresetRemoveSelected()
         {
             this.PresetRemove(this.SelectedPreset);
         }
@@ -1800,6 +1800,28 @@ namespace HandBrakeWPF.ViewModels
             if (this.presetService.GetDefaultPreset() != null)
             {
                 this.SelectedPreset = this.presetService.GetDefaultPreset();
+            }
+        }
+
+        public void ExportUserPresets()
+        {
+            SaveFileDialog savefiledialog = new SaveFileDialog
+                                            {
+                                                Filter = "json|*.json",
+                                                CheckPathExists = true,
+                                                AddExtension = true,
+                                                DefaultExt = ".json",
+                                                OverwritePrompt = true,
+                                                FilterIndex = 0
+                                            };
+
+            savefiledialog.ShowDialog();
+            string filename = savefiledialog.FileName;
+
+            if (!string.IsNullOrEmpty(filename))
+            {
+                IList<PresetDisplayCategory> userPresets = this.presetService.GetPresetCategories(true);
+                this.presetService.ExportCategories(savefiledialog.FileName, userPresets);
             }
         }
 

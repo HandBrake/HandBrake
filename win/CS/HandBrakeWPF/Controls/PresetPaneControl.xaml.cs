@@ -128,5 +128,16 @@ namespace HandBrakeWPF.Controls
             Preset preset = this.presetListTree.SelectedItem as Preset;
             this.editPresetMenuItem.IsEnabled = preset == null || !preset.IsPresetDisabled;
         }
+
+        private void PresetOptionsBtn_OnClick(object sender, RoutedEventArgs e)
+        {
+            var button = sender as FrameworkElement;
+            if (button != null && button.ContextMenu != null)
+            {
+                button.ContextMenu.PlacementTarget = button;
+                button.ContextMenu.Placement = System.Windows.Controls.Primitives.PlacementMode.Bottom;
+                button.ContextMenu.IsOpen = true;
+            }
+        }
     }
 }

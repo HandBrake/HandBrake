@@ -97,7 +97,7 @@
                     <MenuItem Header="{x:Static Properties:Resources.MainView_UpdateSelectedPreset}" Command="{Binding RelayCommand}" CommandParameter="PresetUpdate" />
                     <MenuItem Header="{x:Static Properties:Resources.MainView_SetCurrentAsDefault}" Command="{Binding RelayCommand}" CommandParameter="PresetSetDefault" />
                     <MenuItem Header="{x:Static Properties:Resources.MainView_PresetManage}" Command="{Binding RelayCommand}" CommandParameter="PresetManage" />
-                    <MenuItem Header="{x:Static Properties:Resources.MainView_PresetRemove}" Command="{Binding RelayCommand}" CommandParameter="PresetRemove" />
+                    <MenuItem Header="{x:Static Properties:Resources.MainView_PresetRemove}" Command="{Binding RelayCommand}" CommandParameter="PresetRemoveSelected" />
                     <Separator />
                     <MenuItem Header="{x:Static Properties:Resources.MainView_ImportFromFile}" Command="{Binding RelayCommand}" CommandParameter="PresetImport" />
                     <MenuItem Header="{x:Static Properties:Resources.MainView_ExportToFile}" Command="{Binding RelayCommand}" CommandParameter="PresetExport" />
