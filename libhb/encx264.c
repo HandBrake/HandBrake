@@ -693,9 +693,14 @@ static hb_buffer_t *nal_encode( hb_work_object_t *w, x264_picture_t *pic_out,
     hb_buffer_t *buf = NULL;
     hb_work_private_t *pv = w->private_data;
     hb_job_t *job = pv->job;
+    int payload_size = 0;
 
-    /* Should be way too large */
-    buf = hb_video_buffer_init( job->width, job->height );
+    for (int i = 0; i < i_nal; i++)
+    {
+        payload_size += nal[i].i_payload;
+    }
+
+    buf = hb_buffer_init(payload_size);
     buf->size = 0;
     buf->s.frametype = 0;
 
@@ -750,16 +755,16 @@ static hb_buffer_t *nal_encode( hb_work_object_t *w, x264_picture_t *pic_out,
              be other stuff like SPS and/or PPS). If there are multiple
              frames we only get the duration of the first which will
              eventually screw up the muxer & decoder. */
-    int i;
     buf->s.flags &= ~HB_FLAG_FRAMETYPE_REF;
-    for( i = 0; i < i_nal; i++ )
+    for (int i = 0; i < i_nal; i++)
     {
         int size = nal[i].i_payload;
-        memcpy(buf->data + buf->size, nal[i].p_payload, size);
-        if( size < 1 )
+        if (size < 1)
         {
             continue;
         }
+
+        memcpy(buf->data + buf->size, nal[i].p_payload, size);
 
         /* H.264 in .mp4 or .mkv */
         switch( nal[i].i_type )

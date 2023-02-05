@@ -543,25 +543,30 @@ static hb_buffer_t* nal_encode(hb_work_object_t *w,
                                x265_nal *nal, uint32_t nnal)
 {
     hb_work_private_t *pv = w->private_data;
-    hb_job_t *job         = pv->job;
     hb_buffer_t *buf      = NULL;
-    int i;
+    int payload_size      = 0;
 
     if (nnal <= 0)
     {
         return NULL;
     }
 
-    buf = hb_video_buffer_init(job->width, job->height);
+    for (int i = 0; i < nnal; i++)
+    {
+        payload_size += nal[i].sizeBytes;
+    }
+
+    buf = hb_buffer_init(payload_size);
     if (buf == NULL)
     {
         return NULL;
     }
+
     buf->s.flags = 0;
     buf->size = 0;
 
     // copy the bitstream data
-    for (i = 0; i < nnal; i++)
+    for (int i = 0; i < nnal; i++)
     {
         if (HB_HEVC_NALU_KEYFRAME(nal[i].type))
         {
