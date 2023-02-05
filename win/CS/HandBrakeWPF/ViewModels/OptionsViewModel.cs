@@ -583,6 +583,8 @@ namespace HandBrakeWPF.ViewModels
                     new PlaceHolderBucket { Name = Constants.QualityType },
                     new PlaceHolderBucket { Name = Constants.Preset },
                     new PlaceHolderBucket { Name = Constants.EncoderBitDepth },
+                    new PlaceHolderBucket { Name = Constants.StorageWidth },
+                    new PlaceHolderBucket { Name = Constants.StorageHeight },
                 };
             }
         }
@@ -593,9 +595,9 @@ namespace HandBrakeWPF.ViewModels
             {
                 return new BindingList<PlaceHolderBucket>
                        {
-                           new PlaceHolderBucket { Name = "{source_path}" },
-                           new PlaceHolderBucket { Name = "{source_folder_name}" },
-                           new PlaceHolderBucket { Name = "{source}" }
+                           new PlaceHolderBucket { Name = Constants.SourcePath },
+                           new PlaceHolderBucket { Name = Constants.SourceFolderName },
+                           new PlaceHolderBucket { Name = Constants.Source }
                        };
             }
         }

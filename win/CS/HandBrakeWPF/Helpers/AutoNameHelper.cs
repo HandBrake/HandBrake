@@ -158,7 +158,9 @@ namespace HandBrakeWPF.Helpers
                         .Replace(Constants.ModificationDate, modifyDate)
                         .Replace(Constants.ModificationTime, modifyTime)
                         .Replace(Constants.Preset, presetNameStr)
-                        .Replace(Constants.EncoderBitDepth, bitDepth?.ToString());
+                        .Replace(Constants.EncoderBitDepth, bitDepth?.ToString())
+                        .Replace(Constants.StorageWidth, task.Width?.ToString())
+                        .Replace(Constants.StorageHeight, task.Height?.ToString());
 
 
                 if (task.VideoEncodeRateType == VideoEncodeRateType.ConstantQuality)

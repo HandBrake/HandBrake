@@ -21,6 +21,7 @@ namespace HandBrakeWPF.ViewModels
     using HandBrake.Interop.Interop.Interfaces.Model.Picture;
 
     using HandBrakeWPF.EventArgs;
+    using HandBrakeWPF.Model;
     using HandBrakeWPF.Model.Filters;
     using HandBrakeWPF.Model.Picture;
     using HandBrakeWPF.Properties;
@@ -896,6 +897,8 @@ namespace HandBrakeWPF.ViewModels
             {
                 delayedPreviewprocessor.PerformTask(() => this.StaticPreviewViewModel.UpdatePreviewFrame(this.Task, this.scannedSource), 800);
             }
+
+            this.OnTabStatusChanged(new TabStatusEventArgs("picture", ChangedOption.Dimensions));
         }
 
         private void ApplyPad(PaddingMode mode, AnamorphicResult result)

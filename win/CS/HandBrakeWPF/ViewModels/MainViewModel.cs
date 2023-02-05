@@ -1997,6 +1997,8 @@ namespace HandBrakeWPF.ViewModels
                 this.MetaDataViewModel.SetSource(this.ScannedSource, this.SelectedTitle, this.selectedPreset, this.CurrentTask);
                 this.SummaryViewModel.SetSource(this.ScannedSource, this.SelectedTitle, this.selectedPreset, this.CurrentTask);
                 this.isSettingPreset = false;
+
+                TriggerAutonameChange(ChangedOption.Dimensions);
             }
         }
 
@@ -2084,6 +2086,12 @@ namespace HandBrakeWPF.ViewModels
             }
 
             if (autonameFormat.Contains(Constants.EncoderBitDepth) && option == ChangedOption.Encoder)
+            {
+                this.Destination = AutoNameHelper.AutoName(this.CurrentTask, this.SelectedTitle?.DisplaySourceName, this.ScannedSource?.SourceName, this.selectedPreset);
+            }
+
+
+            if ((autonameFormat.Contains(Constants.StorageWidth) || autonameFormat.Contains(Constants.StorageHeight)) && option == ChangedOption.Dimensions)
             {
                 this.Destination = AutoNameHelper.AutoName(this.CurrentTask, this.SelectedTitle?.DisplaySourceName, this.ScannedSource?.SourceName, this.selectedPreset);
             }

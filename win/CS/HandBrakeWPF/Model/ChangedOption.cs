@@ -11,6 +11,7 @@ namespace HandBrakeWPF.Model
         None,
         Quality,
         Bitrate,
-        Encoder
+        Encoder,
+        Dimensions
     }
 }

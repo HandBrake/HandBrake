@@ -529,6 +529,8 @@ It is recommended the output file is validated before performing actions on it.<
 {quality_type} - Prints "kbps" or "Q" depending on the quality mode selected on the video tab.
 {preset} - Name of the preset selected.
 {encode_bit_depth} - Integer value. i.e. 8, 10 or 12
+{width} - The output storage width
+{height} - The output storage height
 
 Any illegal path characters will be removed automatically.</value>
   </data>

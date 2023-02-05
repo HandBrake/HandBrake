@@ -114,7 +114,7 @@
                     <TextBlock Text="{x:Static Properties:Resources.OptionsView_FormatOptions}" Grid.Row="6" Grid.Column="1" Grid.ColumnSpan="2" Style="{StaticResource subText}" TextWrapping="Wrap" />
                     <ListView x:Name="fileFormatChoices" ItemsSource="{Binding OutputFilenamePlaceholders}" Background="Transparent"
                                           ItemTemplate="{StaticResource PlaceholderItemTemplate}" BorderThickness="0" Margin="0,8,10,10" 
-                                          Grid.Row="7" Grid.Column="1" Grid.ColumnSpan="2" MaxWidth="400" HorizontalAlignment="Left"
+                                          Grid.Row="7" Grid.Column="1" Grid.ColumnSpan="2" MaxWidth="600" HorizontalAlignment="Left"
                                           ScrollViewer.HorizontalScrollBarVisibility="Disabled" Panel.ZIndex="2"
                                           ScrollViewer.VerticalScrollBarVisibility="Disabled"
                                           ToolTip="{x:Static Properties:ResourcesTooltips.Options_AdditionalFormatOptions}"
