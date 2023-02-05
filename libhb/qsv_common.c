@@ -915,7 +915,9 @@ static int query_capabilities(mfxSession session, int index, mfxVersion version,
      * - MFXVideoENCODE_Query should sanitize all unsupported parameters
      */
     mfxStatus     status;
+#if !HB_QSV_ONEVPL
     hb_list_t    *mfxPluginList;
+#endif
     mfxExtBuffer *videoExtParam[1];
     mfxVideoParam videoParam, inputParam;
     mfxExtCodingOption    extCodingOption;
@@ -2156,6 +2158,7 @@ int hb_qsv_decode_is_codec_supported(int adapter_index, int video_codec_param, i
     return 0;
 }
 
+#if defined(_WIN32) || defined(__MINGW32__)
 static int hb_qsv_parse_options(hb_job_t *job)
 {
     int err = 0;
@@ -2183,7 +2186,9 @@ static int hb_qsv_parse_options(hb_job_t *job)
             }
             else if (!strcasecmp(key, "async-depth"))
             {
-                int async_depth = hb_qsv_atoi(value, &err);
+                char *str = hb_value_get_string_xform(value);
+                int async_depth = hb_qsv_atoi(str, &err);
+                free(str);
                 if (!err)
                 {
                     job->qsv.async_depth = async_depth;
@@ -2194,6 +2199,7 @@ static int hb_qsv_parse_options(hb_job_t *job)
     }
     return 0;
 }
+#endif
 
 int hb_qsv_setup_job(hb_job_t *job)
 {
@@ -5038,11 +5044,6 @@ int hb_qsv_preset_is_zero_copy_enabled(const hb_dict_t *job_dict)
     return 0;
 }
 
-static int hb_dxva2_device_check()
-{
-    return -1;
-}
-
 static int hb_d3d11va_device_check()
 {
     return -1;
@@ -5050,6 +5051,7 @@ static int hb_d3d11va_device_check()
 
 int hb_qsv_get_mid_by_surface_from_pool(HBQSVFramesContext* hb_enc_qsv_frames_ctx, mfxFrameSurface1 *surface, QSVMid **out_mid)
 {
+    return -1;
 }
 
 int hb_qsv_release_surface_from_pool_by_surface_pointer(HBQSVFramesContext* hb_enc_qsv_frames_ctx, const mfxFrameSurface1 *surface)
