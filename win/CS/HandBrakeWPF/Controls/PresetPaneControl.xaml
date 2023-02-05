@@ -20,6 +20,7 @@
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
 
             <Grid.Resources>
@@ -95,6 +96,8 @@
                             <Separator />
                             <MenuItem Command="{Binding RelayCommand}" CommandParameter="PresetReset" Header="{x:Static Properties:Resources.MainView_ResetPresets}" />
                             <MenuItem Command="{Binding RelayCommand}" CommandParameter="PresetDeleteBuildIn" Header="{x:Static Properties:Resources.ManagePresetView_DeleteBuiltIn}" />
+                            <Separator />
+                            <MenuItem Command="{Binding RelayCommand}" CommandParameter="ShowHidePresetDesc" Header="{x:Static Properties:Resources.PresetPane_ShowPresetDesc}" x:Name="presetDescMenuItem" />
                         </ContextMenu>
                     </Button.ContextMenu>
                 </Button>
@@ -142,6 +145,18 @@
                     </ContextMenu>
                 </TreeView.ContextMenu>
             </TreeView>
+
+            <Grid Grid.Row="3" Visibility="{Binding IsPresetDescriptionVisible, Converter={StaticResource boolToVisConverter}}"
+                  Width="285">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+
+                <TextBlock Text="Preset Description:" Margin="0,5,0,2" Style="{StaticResource subHeaderSmall}" />
+                <TextBox IsReadOnly="True" Text="{Binding SelectedPreset.Description}" Height="75" TextWrapping="Wrap" Grid.Row="1"
+                         VerticalContentAlignment="Top" VerticalScrollBarVisibility="Auto" />
+            </Grid>
         </Grid>
 
     </Border>

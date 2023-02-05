@@ -854,6 +854,8 @@ namespace HandBrakeWPF.ViewModels
 
         public bool IsPresetPaneDisplayed { get; set; }
 
+        public bool IsPresetDescriptionVisible { get; set; }
+
         /* Commands */
 
         public ICommand QueueCommand { get; set; }
@@ -908,6 +910,13 @@ namespace HandBrakeWPF.ViewModels
             {
                 Thread clearLog = new Thread(() => GeneralUtilities.ClearLogFiles(7));
                 clearLog.Start();
+            }
+
+            // Preset Panel
+            if (userSettingService.GetUserSetting<bool>(UserSettingConstants.ShowPresetDesc))
+            {
+                IsPresetDescriptionVisible = true;
+                this.NotifyOfPropertyChange(() => this.IsPresetDescriptionVisible);
             }
 
             this.PictureSettingsViewModel.TabStatusChanged += this.TabStatusChanged;
@@ -1875,6 +1884,13 @@ namespace HandBrakeWPF.ViewModels
             }
 
             return false;
+        }
+
+        public void ShowHidePresetDesc()
+        {
+            this.IsPresetDescriptionVisible = !this.IsPresetDescriptionVisible;
+            this.userSettingService.SetUserSetting(UserSettingConstants.ShowPresetDesc, this.IsPresetDescriptionVisible);
+            this.NotifyOfPropertyChange(() => this.IsPresetDescriptionVisible);
         }
 
         public void StartScan(string filename, int title)
