@@ -72,6 +72,7 @@ gpointer ghb_check_update(signal_user_data_t *ud);
 void wm_drive_changed(MSG *msg, signal_user_data_t *ud);
 #endif
 gpointer ghb_cache_volnames(signal_user_data_t *ud);
+gboolean ghb_check_name_template(signal_user_data_t *ud, const char *str);
 void ghb_volname_cache_init(void);
 void ghb_update_destination_extension(signal_user_data_t *ud);
 void ghb_update_pending(signal_user_data_t *ud);
@@ -89,6 +90,7 @@ void ghb_scale_configure(signal_user_data_t *ud, char *name, double val,
 void ghb_update_summary_info(signal_user_data_t *ud);
 void ghb_set_title_settings(signal_user_data_t *ud, GhbValue *settings);
 void ghb_browse_uri(signal_user_data_t *ud, const gchar *uri);
+void ghb_set_destination(signal_user_data_t *ud);
 void ghb_break_pts_duration(gint64 ptsDuration,
                             gint *hh, gint *mm, gdouble *ss);
 void ghb_break_duration(gint64 duration, gint *hh, gint *mm, gint *ss);

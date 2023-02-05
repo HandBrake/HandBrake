@@ -4108,6 +4108,10 @@ ghb_set_scale_settings(signal_user_data_t * ud, GhbValue *settings, gint mode)
     ghb_ui_update(ud, "final_storage_size", ghb_string_value(storage_size));
     g_free(storage_size);
 
+    if (ghb_check_name_template(ud, "{width}") ||
+        ghb_check_name_template(ud, "{height}"))
+        ghb_set_destination(ud);
+
     char * aspect;
     aspect = ghb_get_display_aspect_string(disp_width, resultGeo.height);
     ghb_ui_update(ud, "final_aspect_ratio", ghb_string_value(aspect));

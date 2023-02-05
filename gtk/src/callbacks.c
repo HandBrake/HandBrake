@@ -801,8 +801,8 @@ get_extension(signal_user_data_t *ud, GhbValue *settings)
     return mux->default_extension;
 }
 
-static gboolean
-check_name_template(signal_user_data_t *ud, const char *str)
+gboolean
+ghb_check_name_template (signal_user_data_t *ud, const char *str)
 {
     if (ghb_dict_get_bool(ud->prefs, "auto_name"))
     {
@@ -880,6 +880,64 @@ make_unique_dest(const gchar *dest_dir, GString *str, const gchar * extension)
     g_string_free(uniq, TRUE);
 }
 
+/* TODO: It would be better to cache this rather than query
+ * the file system every time the output name changes */
+static GDateTime *
+get_file_modification_date_time (const char *filename)
+{
+    GFile *file;
+    GFileInfo *info;
+    GDateTime *datetime = NULL;
+
+    file = g_file_new_for_path(filename);
+    info = g_file_query_info(file, G_FILE_ATTRIBUTE_TIME_MODIFIED,
+                             G_FILE_QUERY_INFO_NONE, NULL, NULL);
+
+    if (info != NULL)
+    {
+#if GLIB_CHECK_VERSION(2, 62, 0)
+        datetime = g_file_info_get_modification_date_time(info);
+#else
+        GTimeVal tv;
+        g_file_info_get_modification_time(info, &tv);
+        datetime = g_date_time_new_from_timeval_utc(&tv);
+#endif
+        g_object_unref(info);
+    }
+    g_object_unref(file);
+    return datetime;
+}
+
+static char *
+get_file_modification_date (const char *filename)
+{
+    GDateTime *datetime;
+    char *result = NULL;
+
+    datetime = get_file_modification_date_time(filename);
+    if (datetime != NULL)
+    {
+        result = g_date_time_format(datetime, "%Y-%m-%d");
+        g_date_time_unref(datetime);
+    }
+    return result;
+}
+
+static char *
+get_file_modification_time (const char *filename)
+{
+    char *result = NULL;
+    GDateTime *datetime;
+
+    datetime = get_file_modification_date_time(filename);
+    if (datetime != NULL)
+    {
+        result = g_date_time_format(datetime, "%H:%M");
+        g_date_time_unref(datetime);
+    }
+    return result;
+}
+
 static void
 set_destination_settings(signal_user_data_t *ud, GhbValue *settings)
 {
@@ -950,6 +1008,18 @@ set_destination_settings(signal_user_data_t *ud, GhbValue *settings)
                     g_string_append_printf(str, "%d", title);
                 p += strlen("{title}");
             }
+            else if (!strncasecmp(p, "{width}", strlen("{width}")))
+            {
+                int width = ghb_dict_get_int(settings, "scale_width");
+                g_string_append_printf(str, "%d", width);
+                p += strlen("{width}");
+            }
+            else if (!strncasecmp(p, "{height}", strlen("{height}")))
+            {
+                int height = ghb_dict_get_int(settings, "scale_height");
+                g_string_append_printf(str, "%d", height);
+                p += strlen("{height}");
+            }
             else if (!strncasecmp(p, "{preset}", strlen("{preset}")))
             {
                 const gchar *preset_name;
@@ -1011,6 +1081,26 @@ set_destination_settings(signal_user_data_t *ud, GhbValue *settings)
                 p += strlen("{creation-time}");
                 g_free(val);
             }
+            else if (!strncasecmp(p, "{modification-date}", strlen("{modification-date}")))
+            {
+                gchar *val;
+                const gchar *source = ghb_dict_get_string(ud->globals, "scan_source");
+                val = get_file_modification_date(source);
+                if (val != NULL)
+                    g_string_append_printf(str, "%s", val);
+                p += strlen("{modification-date}");
+                g_free(val);
+            }
+            else if (!strncasecmp(p, "{modification-time}", strlen("{modification-time}")))
+            {
+                gchar *val;
+                const gchar *source = ghb_dict_get_string(ud->globals, "scan_source");
+                val = get_file_modification_time(source);
+                if (val != NULL)
+                    g_string_append_printf(str, "%s", val);
+                p += strlen("{modification-time}");
+                g_free(val);
+            }
             else if (!strncasecmp(p, "{quality}", strlen("{quality}")))
             {
                 if (ghb_dict_get_bool(settings, "vquality_type_constant"))
@@ -1035,6 +1125,25 @@ set_destination_settings(signal_user_data_t *ud, GhbValue *settings)
                 }
                 p += strlen("{bitrate}");
             }
+            else if (!strncasecmp(p, "{codec}", strlen("{codec}")))
+            {
+                int vcodec;
+                const char *codec;
+                vcodec = ghb_settings_video_encoder_codec(settings, "VideoEncoder");
+                codec = hb_video_encoder_get_name(vcodec);
+                g_string_append_len(str, codec, strcspn(codec, " ("));
+
+                p += strlen("{codec}");
+            }
+            else if (!strncasecmp(p, "{bit-depth}", strlen("{bit-depth}")))
+            {
+                int vcodec, bit_depth;
+                vcodec = ghb_settings_video_encoder_codec(settings, "VideoEncoder");
+                bit_depth = hb_video_encoder_get_depth(vcodec);
+                g_string_append_printf(str, "%d", bit_depth);
+
+                p += strlen("{bit-depth}");
+            }
             else
             {
                 g_string_append_printf(str, "%c", *p);
@@ -1050,8 +1159,8 @@ set_destination_settings(signal_user_data_t *ud, GhbValue *settings)
     }
 }
 
-static void
-set_destination(signal_user_data_t *ud)
+void
+ghb_set_destination (signal_user_data_t *ud)
 {
     set_destination_settings(ud, ud->settings);
     ghb_ui_update(ud, "dest_file",
@@ -3006,9 +3115,9 @@ vquality_type_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
     ghb_check_dependency(ud, widget, NULL);
     ghb_clear_presets_selection(ud);
     ghb_live_reset(ud);
-    if (check_name_template(ud, "{quality}") ||
-        check_name_template(ud, "{bitrate}"))
-        set_destination(ud);
+    if (ghb_check_name_template(ud, "{quality}") ||
+        ghb_check_name_template(ud, "{bitrate}"))
+        ghb_set_destination(ud);
 }
 
 G_MODULE_EXPORT void
@@ -3018,8 +3127,8 @@ vbitrate_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
     ghb_check_dependency(ud, widget, NULL);
     ghb_clear_presets_selection(ud);
     ghb_live_reset(ud);
-    if (check_name_template(ud, "{bitrate}"))
-        set_destination(ud);
+    if (ghb_check_name_template(ud, "{bitrate}"))
+        ghb_set_destination(ud);
 }
 
 G_MODULE_EXPORT void
@@ -3069,8 +3178,8 @@ vquality_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
         val = max;
     }
     gtk_range_set_value(GTK_RANGE(widget), val);
-    if (check_name_template(ud, "{quality}"))
-        set_destination(ud);
+    if (ghb_check_name_template(ud, "{quality}"))
+        ghb_set_destination(ud);
 }
 
 static void
@@ -3078,8 +3187,8 @@ set_has_chapter_markers (gboolean markers, signal_user_data_t *ud)
 {
     GhbValue *dest = ghb_get_job_dest_settings(ud->settings);
 
-    if (check_name_template(ud, "{chapters}"))
-        set_destination(ud);
+    if (ghb_check_name_template(ud, "{chapters}"))
+        ghb_set_destination(ud);
     GtkWidget *widget = GHB_WIDGET (ud->builder, "ChapterMarkers");
     gtk_widget_set_sensitive(widget, markers);
     update_title_duration(ud);

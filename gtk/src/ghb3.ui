@@ -7892,7 +7892,7 @@ Only one subtitle track can be burned! Since conflicts can occur, the first chos
                             </child>
                             <child>
                               <object class="GtkEntry" id="auto_name_template">
-                                <property name="tooltip-text" translatable="yes">Available Options: {source-path} {source} {title} {preset} {chapters} {date} {time} {creation-date} {creation-time} {quality} {bitrate}</property>
+                                <property name="tooltip-text" translatable="yes">Available Options: {source-path} {source} {title} {preset} {chapters} {date} {time} {creation-date} {creation-time} {modification-date} {modification-time} {codec} {bit-depth} {quality} {bitrate} {width} {height}</property>
                                 <property name="visible">True</property>
                                 <property name="can-focus">True</property>
                                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
@@ -10339,3 +10339,4 @@ DRC allows you to 'compress' the range by making loud sounds softer and soft sou
  </widgets>
 </object>
 </interface>
+
