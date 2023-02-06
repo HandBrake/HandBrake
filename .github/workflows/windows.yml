@@ -2,6 +2,10 @@ name: Windows Build
 
 on: [push, pull_request]
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
 jobs:
   build_mingw:
     name: CLI / LibHB
@@ -13,8 +17,12 @@ jobs:
     - name: Environment Setup
       run: |
         sudo apt-get purge cmake -y
-        sudo apt-get install automake autoconf build-essential intltool libtool libtool-bin make nasm patch tar yasm zlib1g-dev ninja-build gzip pax cmake
+        sudo apt-get install automake autoconf build-essential intltool libtool libtool-bin make nasm patch tar yasm zlib1g-dev ninja-build gzip pax cmake libssl-dev
         sudo pip3 install meson
+        curl https://sh.rustup.rs -sSf | sh -s -- -y
+        source "$HOME/.cargo/env"
+        rustup target add x86_64-pc-windows-gnu
+        cargo install cargo-c
 
     - name: Setup Toolchain
       run: |
@@ -39,7 +47,7 @@ jobs:
       run: |
         export PATH="/home/runner/work/HandBrake/HandBrake/toolchains/mingw-w64-toolchain-9.2.0-linux-x86_64/mingw-w64-x86_64/bin:${PATH}"
         export PATH=/usr/bin:$PATH
-        ./configure --cross=x86_64-w64-mingw32 --enable-qsv --enable-vce --enable-nvenc --enable-nvdec --launch-jobs=0 --launch
+        ./configure --cross=x86_64-w64-mingw32 --enable-qsv --enable-vce --enable-nvenc --enable-nvdec --enable-libdovi --launch-jobs=0 --launch
         cd build
         make pkg.create.zip
 

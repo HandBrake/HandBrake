@@ -2,6 +2,10 @@ name: Linux Build
 
 on: [push, pull_request]
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+  
 jobs:
   build:
     name: Build on Ubuntu
@@ -13,14 +17,16 @@ jobs:
     - name: Setup Environment
       run: |
         sudo apt-get update
-        sudo apt-get install autoconf automake build-essential libass-dev libbz2-dev libfontconfig1-dev libfreetype6-dev libfribidi-dev libharfbuzz-dev libjansson-dev liblzma-dev libmp3lame-dev libnuma-dev libturbojpeg0-dev 
+        sudo apt-get install autoconf automake build-essential libass-dev libbz2-dev libfontconfig1-dev libfreetype6-dev libfribidi-dev libharfbuzz-dev libjansson-dev liblzma-dev libmp3lame-dev libnuma-dev libturbojpeg0-dev libssl-dev
         sudo apt-get install libogg-dev libopus-dev libsamplerate-dev libspeex-dev libtheora-dev libtool libtool-bin libvorbis-dev libx264-dev libxml2-dev libvpx-dev make nasm ninja-build patch tar yasm zlib1g-dev appstream
         sudo pip3 install meson
         sudo apt-get install gstreamer1.0-libav intltool libappindicator-dev libdbus-glib-1-dev libglib2.0-dev libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev libgtk-3-dev libgudev-1.0-dev libnotify-dev
         sudo apt-get install libva-dev libdrm-dev
+        curl https://sh.rustup.rs -sSf | sh -s -- -y
+        source "$HOME/.cargo/env"
+        rustup target add x86_64-pc-windows-gnu
+        cargo install cargo-c
 
     - name: Build HandBrake Linux
       run: |
-        ./configure --disable-gtk-update-checks --enable-qsv --enable-vce --enable-nvenc --enable-nvdec
-        cd build
-        make -j 3
+        ./configure --disable-gtk-update-checks --enable-qsv --enable-vce --enable-nvenc --enable-libdovi --enable-nvdec --launch-jobs=0 --launch
