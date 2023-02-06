@@ -269,13 +269,6 @@ static inline int hb_image_height(int pix_fmt, int height, int plane)
     return height;
 }
 
-// this routine gets a buffer for an uncompressed YUV420 video frame
-// with dimensions width x height.
-static inline hb_buffer_t * hb_video_buffer_init( int width, int height )
-{
-    return hb_frame_buffer_init( AV_PIX_FMT_YUV420P, width, height );
-}
-
 /***********************************************************************
  * Threads: scan.c, work.c, reader.c, muxcommon.c
  **********************************************************************/
