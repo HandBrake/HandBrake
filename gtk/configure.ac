@@ -94,6 +94,10 @@ AC_ARG_ENABLE(mf,
 	AS_HELP_STRING([--enable-mf], [enable MediaFoundation encoder]),
 	use_mf=yes, use_mf=no)
 
+AC_ARG_ENABLE(libdovi,
+    AS_HELP_STRING([--enable-libdovi], [enable libdovi]),
+    use_libdovi=yes, use_libdovi=no)
+
 AC_ARG_ENABLE(gst,
 	AS_HELP_STRING([--disable-gst], [disable gstreamer (live preview)]),
 	gst_disable=yes, gst_disable=no)
@@ -225,6 +229,10 @@ fi
 
 if test "x$use_qsv" = "xyes" ; then
 	HB_LIBS="$HB_LIBS -lvpl"
+fi
+
+if test "x$use_libdovi" = "xyes" ; then
+    HB_LIBS="$HB_LIBS -ldovi"
 fi
 
 case $host in

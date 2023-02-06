@@ -1460,6 +1460,11 @@ def createCLI( cross = None ):
     grp.add_argument( '--enable-vce', dest="enable_vce", default=IfHost(True, 'x86_64-w64-mingw32', none=False).value, action='store_true', help=(( 'enable %s' %h ) if h != argparse.SUPPRESS else h) )
     grp.add_argument( '--disable-vce', dest="enable_vce", action='store_false', help=(( 'disable %s' %h ) if h != argparse.SUPPRESS else h) )
 
+    h = IfHost( 'libdovi', '*-*-*', none=argparse.SUPPRESS ).value
+    grp.add_argument( '--enable-libdovi', dest="enable_libdovi", default=not Tools.cargo.fail and not Tools.cargoc.fail, action='store_true', help=(( 'enable %s' %h ) if h != argparse.SUPPRESS else h) )
+    grp.add_argument( '--disable-libdovi', dest="enable_libdovi", action='store_false', help=(( 'disable %s' %h ) if h != argparse.SUPPRESS else h) )
+
+
     cli.add_argument_group( grp )
 
     ## add launch options
@@ -1667,6 +1672,8 @@ try:
         meson      = ToolProbe( 'MESON.exe',      'meson',      'meson', abort=True, minversion=[0,47,0] )
         nasm       = ToolProbe( 'NASM.exe',       'asm',        'nasm', abort=True, minversion=[2,13,0] )
         ninja      = ToolProbe( 'NINJA.exe',      'ninja',      'ninja-build', 'ninja', abort=True )
+        cargo      = ToolProbe( 'CARGO.exe',      'cargo',        'cargo', abort=False )
+        cargoc     = ToolProbe( 'CARGO-C.exe',    'cargo-cbuild', 'cargo-cbuild', abort=False )
 
         xcodebuild = ToolProbe( 'XCODEBUILD.exe', 'xcodebuild', 'xcodebuild', abort=(True if (not xcode_opts['disabled'] and (build_tuple.match('*-*-darwin*') and cross is None)) else False), versionopt='-version', minversion=[10,3,0] )
 
@@ -2070,6 +2077,7 @@ int main()
     doc.add( 'FEATURE.vce',        int( options.enable_vce ))
     doc.add( 'FEATURE.x265',       int( options.enable_x265 ))
     doc.add( 'FEATURE.numa',       int( options.enable_numa ))
+    doc.add( 'FEATURE.libdovi',    int( options.enable_libdovi ))
 
     if build_tuple.match( '*-*-darwin*' ) and options.cross is None:
         doc.add( 'FEATURE.xcode',      int( not (Tools.xcodebuild.fail or options.disable_xcode) ))
@@ -2202,6 +2210,8 @@ int main()
     stdout.write( ' (%s)\n' % note_unsupported ) if not (host_tuple.system == 'linux' or host_tuple.match( 'x86_64-w64-mingw32' ) or host_tuple.system == 'freebsd') else stdout.write( '\n' )
     stdout.write( 'Enable VCE:         %s' % options.enable_vce )
     stdout.write( ' (%s)\n' % note_unsupported ) if not (host_tuple.system == 'linux' or host_tuple.match( 'x86_64-w64-mingw32' )) else stdout.write( '\n' )
+    stdout.write( 'Enable libdovi:     %s\n' % options.enable_libdovi )
+
 
     if options.launch:
         stdout.write( '%s\n' % ('-' * 79) )
