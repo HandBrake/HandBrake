@@ -93,7 +93,7 @@ ifeq (1,$(HAS.pthread))
 else
     TEST.GCC.l += pthreadGC2
 endif
-    TEST.GCC.l += bcrypt iconv ws2_32 regex uuid ole32 gdi32
+    TEST.GCC.l += bcrypt iconv ws2_32 regex uuid ole32 gdi32 userenv
     ifeq (1,$(FEATURE.mf))
         TEST.GCC.l += mfplat strmiids
     endif

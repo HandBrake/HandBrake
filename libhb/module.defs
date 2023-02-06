@@ -1,7 +1,7 @@
 __deps__ := A52DEC BZIP2 LIBVPX SVT-AV1 FFMPEG FREETYPE LAME LIBASS LIBDCA \
     LIBDVDREAD LIBDVDNAV LIBICONV LIBSAMPLERATE LIBTHEORA LIBVORBIS LIBOGG \
     LIBXML2 X264 X265 ZLIB LIBBLURAY FDKAAC LIBVPL LIBGNURX JANSSON \
-    HARFBUZZ LIBOPUS LIBSPEEX LIBDAV1D LIBJPEGTURBO
+    HARFBUZZ LIBOPUS LIBSPEEX LIBDAV1D LIBJPEGTURBO LIBDOVI
 
 ifeq (,$(filter $(HOST.system),darwin cygwin mingw))
     __deps__ += FONTCONFIG
@@ -140,6 +140,10 @@ ifeq (1,$(FEATURE.x265))
 LIBHB.dll.libs += $(CONTRIB.build/)lib/libx265.a
 endif
 
+ifeq (1,$(FEATURE.libdovi))
+LIBHB.dll.libs += $(CONTRIB.build/)lib/libdovi.a
+endif
+
 ifneq ($(HAS.iconv),1)
 LIBHB.dll.libs += $(CONTRIB.build/)lib/libiconv.a
 else
@@ -181,7 +185,7 @@ else
 endif
 
 LIBHB.GCC.args.extra.dylib++ += -Wl,--out-implib,$(LIBHB.lib)
-LIBHB.GCC.l += bcrypt ws2_32 uuid ole32 gdi32
+LIBHB.GCC.l += bcrypt ws2_32 uuid ole32 gdi32 userenv
 ifeq (1,$(FEATURE.mf))
     LIBHB.GCC.l += mfplat strmiids
 endif

@@ -140,7 +140,6 @@
 		A91CE2C61C7DABBC0068F46F /* libvorbisenc.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 27D6C73E14B102DA00B785E4 /* libvorbisenc.a */; };
 		A91CE2C71C7DABBC0068F46F /* libvpx.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 22DD2C49177B94DB00EF50D3 /* libvpx.a */; };
 		A91CE2C81C7DABBC0068F46F /* libx264.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 27D6C73F14B102DA00B785E4 /* libx264.a */; };
-		A91CE2C91C7DABBC0068F46F /* libx265.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 22CC9E74191EBEA500C69D81 /* libx265.a */; };
 		A91CE2CA1C7DABBC0068F46F /* libxml2.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 27D6C74014B102DA00B785E4 /* libxml2.a */; };
 		A91CE2D01C7DABCE0068F46F /* libbz2.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = A91CE2CF1C7DABCE0068F46F /* libbz2.tbd */; };
 		A91CE2D21C7DABDA0068F46F /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = A91CE2D11C7DABDA0068F46F /* libz.tbd */; };
@@ -890,6 +889,7 @@
 		A9E165511C523016003EF30E /* libavfilter.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libavfilter.a; path = external/contrib/lib/libavfilter.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		A9E2FD241A21BC4A000E8D3F /* HBAddPresetController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBAddPresetController.h; sourceTree = "<group>"; };
 		A9E2FD251A21BC4A000E8D3F /* HBAddPresetController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBAddPresetController.m; sourceTree = "<group>"; };
+		A9E34AD4297871FE00C5DD82 /* libdovi.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libdovi.a; path = external/contrib/lib/libdovi.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		A9E52CD7218DD52A00E17B86 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/ExceptionAlert.xib; sourceTree = "<group>"; };
 		A9E8F80423003B2F00AA14E9 /* HandBrakeXPCService1.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = HandBrakeXPCService1.plist; sourceTree = "<group>"; };
 		A9EA43661A2210C400785E95 /* HBTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBTableView.h; sourceTree = "<group>"; };
@@ -1083,26 +1083,26 @@
 			buildActionMask = 2147483647;
 			files = (
 				A9C3A8F7278DFFA500839EDF /* Foundation.framework in Frameworks */,
-				A97D8DD124DBD3F800B16AF5 /* libiconv.tbd in Frameworks */,
-				A97D8DD024DBD3EF00B16AF5 /* libbz2.tbd in Frameworks */,
-				A97D8DCF24DBD3C000B16AF5 /* libz.tbd in Frameworks */,
 				A9A25D9C21182741005A8A0F /* CoreMedia.framework in Frameworks */,
 				A9AB9AA821181CC700BB3C7E /* CoreVideo.framework in Frameworks */,
 				A9AB9AA621181CA900BB3C7E /* VideoToolbox.framework in Frameworks */,
 				A9ABD1A91E2A0F8200EC8B65 /* CoreGraphics.framework in Frameworks */,
 				A9ABD1A71E2A0F7500EC8B65 /* CoreText.framework in Frameworks */,
-				A9E165521C523016003EF30E /* libavfilter.a in Frameworks */,
 				273F203014ADB9790021BE6D /* AudioToolbox.framework in Frameworks */,
 				273F203314ADB9F00021BE6D /* CoreServices.framework in Frameworks */,
 				273F202314ADB8650021BE6D /* IOKit.framework in Frameworks */,
+				A99B98A127957FD400DCD062 /* Metal.framework in Frameworks */,
+				A97D8DD124DBD3F800B16AF5 /* libiconv.tbd in Frameworks */,
+				A97D8DD024DBD3EF00B16AF5 /* libbz2.tbd in Frameworks */,
+				A97D8DCF24DBD3C000B16AF5 /* libz.tbd in Frameworks */,
 				A900E6BE1D7B1B6800CB6C0A /* libopus.a in Frameworks */,
 				27D6C72614B1019100B785E4 /* libhandbrake.a in Frameworks */,
 				27D6C74414B102DA00B785E4 /* libass.a in Frameworks */,
+				A9E165521C523016003EF30E /* libavfilter.a in Frameworks */,
 				27D6C74614B102DA00B785E4 /* libavcodec.a in Frameworks */,
 				27D6C74814B102DA00B785E4 /* libavformat.a in Frameworks */,
 				27D6C74A14B102DA00B785E4 /* libavutil.a in Frameworks */,
 				27D6C74C14B102DA00B785E4 /* libbluray.a in Frameworks */,
-				A99B98A127957FD400DCD062 /* Metal.framework in Frameworks */,
 				D0DC8F682331573500C12A24 /* libdav1d.a in Frameworks */,
 				27D6C75014B102DA00B785E4 /* libdvdnav.a in Frameworks */,
 				27D6C75214B102DA00B785E4 /* libdvdread.a in Frameworks */,
@@ -1182,19 +1182,19 @@
 				A9ABD1AA1E2A0F8F00EC8B65 /* CoreGraphics.framework in Frameworks */,
 				A9ABD1A61E2A0F0700EC8B65 /* CoreText.framework in Frameworks */,
 				A91119A31C7DD591001C463C /* IOKit.framework in Frameworks */,
-				1CBC683520BE014800A26CC2 /* liblzma.a in Frameworks */,
 				A91119A21C7DD58B001C463C /* Cocoa.framework in Frameworks */,
-				1C53DE8D20BD598D006BBCA8 /* libspeex.a in Frameworks */,
 				A91CE2B21C7DAB550068F46F /* AudioToolbox.framework in Frameworks */,
+				A99B98A027957FCE00DCD062 /* Metal.framework in Frameworks */,
 				A91CE2D41C7DABE40068F46F /* libiconv.tbd in Frameworks */,
 				A91CE2D21C7DABDA0068F46F /* libz.tbd in Frameworks */,
-				1C0695AF20BD193D001543DA /* libswresample.a in Frameworks */,
 				A91CE2D01C7DABCE0068F46F /* libbz2.tbd in Frameworks */,
+				1CBC683520BE014800A26CC2 /* liblzma.a in Frameworks */,
+				1C53DE8D20BD598D006BBCA8 /* libspeex.a in Frameworks */,
+				1C0695AF20BD193D001543DA /* libswresample.a in Frameworks */,
 				A900E6BD1D7B1B5A00CB6C0A /* libopus.a in Frameworks */,
 				A99E13392833B97A0006D720 /* libSvtAv1Enc.a in Frameworks */,
 				A91CE2B31C7DABBC0068F46F /* libass.a in Frameworks */,
 				A91CE2B41C7DABBC0068F46F /* libavcodec.a in Frameworks */,
-				A99B98A027957FCE00DCD062 /* Metal.framework in Frameworks */,
 				A91CE2B51C7DABBC0068F46F /* libavfilter.a in Frameworks */,
 				A91CE2B61C7DABBC0068F46F /* libavformat.a in Frameworks */,
 				A91CE2B81C7DABBC0068F46F /* libavutil.a in Frameworks */,
@@ -1216,7 +1216,6 @@
 				A91CE2C61C7DABBC0068F46F /* libvorbisenc.a in Frameworks */,
 				A91CE2C71C7DABBC0068F46F /* libvpx.a in Frameworks */,
 				A91CE2C81C7DABBC0068F46F /* libx264.a in Frameworks */,
-				A91CE2C91C7DABBC0068F46F /* libx265.a in Frameworks */,
 				A91CE2CA1C7DABBC0068F46F /* libxml2.a in Frameworks */,
 				A9C3A8F8278DFFC900839EDF /* libzimg.a in Frameworks */,
 				A91CE2B11C7DAA530068F46F /* libhandbrake.a in Frameworks */,
@@ -1237,6 +1236,7 @@
 		271BA4C714B1236D00BC1D2C /* Static Libraries */ = {
 			isa = PBXGroup;
 			children = (
+				A9E34AD4297871FE00C5DD82 /* libdovi.a */,
 				1CDCF0C1241F28D400FB62C6 /* libturbojpeg.a */,
 				1C280BF320BD58DD00D5ECC2 /* libspeex.a */,
 				1CBC683320BE014800A26CC2 /* liblzma.a */,
@@ -2080,7 +2080,7 @@
 			isa = PBXProject;
 			attributes = {
 				CLASSPREFIX = HB;
-				LastUpgradeCheck = 1400;
+				LastUpgradeCheck = 1420;
 				ORGANIZATIONNAME = HandBrake;
 				TargetAttributes = {
 					273F203814ADBC200021BE6D = {

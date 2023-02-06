@@ -51,6 +51,11 @@ ifeq (1,$(FEATURE.qsv))
 	GTK.CONFIGURE.extra += --enable-qsv
 endif
 
+ifeq (1,$(FEATURE.libdovi))
+    GTK.CONFIGURE.extra += --enable-libdovi
+endif
+
+
 ifeq (1,$(FEATURE.flatpak))
 	GTK.CONFIGURE.extra += --enable-flatpak
 endif
