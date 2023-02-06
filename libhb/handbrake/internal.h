@@ -207,6 +207,7 @@ int           hb_picture_crop(uint8_t *data[], int stride[], hb_buffer_t *b,
 AVFrameSideData *hb_buffer_new_side_data_from_buf(hb_buffer_t *buf,
                                                   enum AVFrameSideDataType type,
                                                   AVBufferRef *side_data_buf);
+void hb_frame_remove_side_data(hb_buffer_t *buf, enum AVFrameSideDataType type);
 void             hb_buffer_wipe_side_data(hb_buffer_t *buf);
 void             hb_buffer_copy_side_data(hb_buffer_t *dst, const hb_buffer_t *src);
 
@@ -483,6 +484,7 @@ extern hb_filter_object_t hb_filter_denoise;
 extern hb_filter_object_t hb_filter_nlmeans;
 extern hb_filter_object_t hb_filter_chroma_smooth;
 extern hb_filter_object_t hb_filter_render_sub;
+extern hb_filter_object_t hb_filter_rpu;
 extern hb_filter_object_t hb_filter_crop_scale;
 extern hb_filter_object_t hb_filter_rotate;
 extern hb_filter_object_t hb_filter_grayscale;

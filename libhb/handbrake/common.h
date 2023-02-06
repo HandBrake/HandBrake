@@ -1496,6 +1496,7 @@ enum
     HB_FILTER_PAD,
     HB_FILTER_COLORSPACE,
     HB_FILTER_FORMAT,
+    HB_FILTER_RPU,
 
     // Finally filters that don't care what order they are in,
     // except that they must be after the above filters

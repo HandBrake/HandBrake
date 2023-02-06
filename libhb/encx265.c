@@ -15,6 +15,7 @@
 #include "handbrake/handbrake.h"
 #include "handbrake/hb_dict.h"
 #include "handbrake/h265_common.h"
+#include "handbrake/dovi_common.h"
 #include "x265.h"
 
 int  encx265Init (hb_work_object_t*, hb_job_t*);
@@ -274,8 +275,9 @@ int encx265Init(hb_work_object_t *w, hb_job_t *job)
     {
         char dolbyVisionProfile[256];
         snprintf(dolbyVisionProfile, sizeof(dolbyVisionProfile),
-                 "%hu.%hu",
-                 (unsigned short)job->dovi.dv_profile, (unsigned short)job->dovi.dv_bl_signal_compatibility_id);
+                 "%hu%hu",
+                 (unsigned short)job->dovi.dv_profile,
+                 (unsigned short)job->dovi.dv_bl_signal_compatibility_id);
 
         if (param_parse(pv, param, "dolby-vision-profile", dolbyVisionProfile))
         {
@@ -283,12 +285,21 @@ int encx265Init(hb_work_object_t *w, hb_job_t *job)
         }
 
         // Dolby Vision requires VBV settings to enable HRD
-        // set some arbitrary values if not set
-        if (param_parse(pv, param, "vbv-maxrate", "100000"))
+        // set the max value for the current level
+        int max_rate = hb_dolby_vision_levels[job->dovi.dv_level - 1].max_bitrate_main_tier;
+
+        char vbvMaxRate[256];
+        snprintf(vbvMaxRate, sizeof(vbvMaxRate),
+                 "%d", max_rate * 1024);
+        if (param_parse(pv, param, "vbv-maxrate", vbvMaxRate))
         {
             goto fail;
         }
-        if (param_parse(pv, param, "vbv-bufsize", "100000"))
+
+        char vbvBufSize[256];
+        snprintf(vbvBufSize, sizeof(vbvBufSize),
+                 "%d", max_rate * 1024);
+        if (param_parse(pv, param, "vbv-bufsize", vbvBufSize))
         {
             goto fail;
         }
@@ -313,6 +324,7 @@ int encx265Init(hb_work_object_t *w, hb_job_t *job)
     /* iterate through x265_opts and parse the options */
     hb_dict_t *x265_opts;
     int override_mastering = 0, override_coll = 0, override_chroma_location = 0;
+    int override_vbv_maxrate = 0, override_vbv_bufsize = 0;
     x265_opts = hb_encopts_to_dict(job->encoder_options, job->vcodec);
 
     hb_dict_iter_t iter;
@@ -335,6 +347,14 @@ int encx265Init(hb_work_object_t *w, hb_job_t *job)
         if (!strcmp(key, "chromaloc"))
         {
             override_chroma_location = 1;
+        }
+        if (!strcmp(key, "vbv-maxrate"))
+        {
+            override_vbv_maxrate = 1;
+        }
+        if (!strcmp(key, "vbv-bufsize"))
+        {
+            override_vbv_bufsize = 1;
         }
 
         // here's where the strings are passed to libx265 for parsing
@@ -401,6 +421,30 @@ int encx265Init(hb_work_object_t *w, hb_job_t *job)
     if (override_chroma_location)
     {
         job->chroma_location = param->vui.chromaSampleLocTypeBottomField + 1;
+    }
+
+    /*
+     * Update Dolby Vision level in case custom
+     * values were set in the encoder_options string.
+     */
+    if (override_vbv_maxrate || override_vbv_bufsize)
+    {
+        int max_rate = param->rc.vbvMaxBitrate;
+        for (int i = 0; hb_dolby_vision_levels[i].id != 0; i++)
+        {
+            int max_width = hb_dolby_vision_levels[i].max_width;
+            int tier_max_rate = param->bHighTier ?
+                                    hb_dolby_vision_levels[i].max_bitrate_high_tier :
+                                    hb_dolby_vision_levels[i].max_bitrate_main_tier;
+
+            tier_max_rate *= 1024;
+
+            if (max_rate <= tier_max_rate && job->width <= max_width)
+            {
+                job->dovi.dv_level = hb_dolby_vision_levels[i].id;
+                break;
+            }
+        }
     }
 
     /*
