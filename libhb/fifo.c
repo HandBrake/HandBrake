@@ -533,6 +533,20 @@ static void free_side_data(AVFrameSideData **ptr_sd)
     av_freep(ptr_sd);
 }
 
+void hb_frame_remove_side_data(hb_buffer_t *buf, enum AVFrameSideDataType type)
+{
+    for (int i = buf->nb_side_data - 1; i >= 0; i--)
+    {
+        AVFrameSideData *sd = buf->side_data[i];
+        if (sd->type == type)
+        {
+            free_side_data((AVFrameSideData **)&buf->side_data[i]);
+            buf->side_data[i] = buf->side_data[buf->nb_side_data - 1];
+            buf->nb_side_data--;
+        }
+    }
+}
+
 void hb_buffer_wipe_side_data(hb_buffer_t *buf)
 {
     for (int i = 0; i < buf->nb_side_data; i++)

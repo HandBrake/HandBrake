@@ -4519,6 +4519,10 @@ hb_filter_object_t * hb_filter_get( int filter_id )
             filter = &hb_filter_render_sub;
             break;
 
+        case HB_FILTER_RPU:
+            filter = &hb_filter_rpu;
+            break;
+
         case HB_FILTER_CROP_SCALE:
             filter = &hb_filter_crop_scale;
             break;
