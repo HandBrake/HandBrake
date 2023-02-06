@@ -228,7 +228,7 @@ static int avformatInit( hb_mux_object_t * m )
                      &m->oc->interrupt_callback, NULL);
     if( ret < 0 )
     {
-      if( ret == -2 ) 
+      if( ret == -2 )
       {
         hb_error( "avio_open2 failed, errno -2: Could not write to indicated output file. Please check destination path and file permissions" );
       }
@@ -431,6 +431,25 @@ static int avformatInit( hb_mux_object_t * m )
                     hb_error("AV1 bitstream filter: init failure");
                     goto error;
                 }
+            }
+        } break;
+
+        case HB_VCODEC_FFMPEG_VCE_AV1:
+        {
+            track->st->codecpar->codec_id  = AV_CODEC_ID_AV1;
+
+            if (job->config.extradata.length > 0)
+            {
+                priv_size = job->config.extradata.length;
+                priv_data = av_malloc(priv_size + AV_INPUT_BUFFER_PADDING_SIZE);
+                if (priv_data == NULL)
+                {
+                    hb_error("AV1 extradata: malloc failure");
+                    goto error;
+                }
+                memcpy(priv_data,
+                       job->config.extradata.bytes,
+                       job->config.extradata.length);
             }
         } break;
 
