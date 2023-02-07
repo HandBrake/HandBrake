@@ -38,7 +38,7 @@ TEST.GCC.l += $(foreach m,$(MODULES.NAMES),$($m.OSL.libs))
 
 TEST.install.exe = $(DESTDIR)$(PREFIX/)bin/$(notdir $(TEST.exe))
 ifeq (1,$(FEATURE.flatpak))
-    TEST.metainfo.template = $(TEST.src/)fr.handbrake.HandBrakeCLI.metainfo.xml.template
+    TEST.metainfo.template = $(TEST.src/)fr.handbrake.HandBrakeCLI.metainfo.xml.in.in
     TEST.metainfo = $(TEST.build/)fr.handbrake.HandBrakeCLI.metainfo.xml
     TEST.install.metainfo = $(DESTDIR)$(PREFIX/)share/metainfo/$(notdir $(TEST.metainfo))
 endif

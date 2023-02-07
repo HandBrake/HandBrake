@@ -183,7 +183,7 @@ widget.deps: makedeps.py
 fr.handbrake.ghb.metainfo.xml: fr.handbrake.ghb.metainfo.xml.in
 	$(AM_V_GEN) $(MSGFMT) --xml --template $< -d $(top_srcdir)/po -o $@
 
-fr.handbrake.ghb.metainfo.xml.in: fr.handbrake.ghb.metainfo.template.xml
+fr.handbrake.ghb.metainfo.xml.in: fr.handbrake.ghb.metainfo.xml.in.in
 	sed -e 's^RELEASE_TAG^<release version="$(HB.version)" date="$(word 1,$(HB.repo.date))" />^' $< > $@
 
 $(srcdir)/marshalers.h: marshalers.list
@@ -221,3 +221,4 @@ install-data-local:
 	fi
 	mkdir -p $(DESTDIR)/$(datadir)/applications/; \
 	$(INSTALL_DATA) $(srcdir)/$(hb_menu) $(DESTDIR)/$(datadir)/applications/$(hb_menu)
+
