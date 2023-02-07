@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
-  <requires lib="gtk+" version="3.16"/>
+  <requires lib="gtk+" version="3.22"/>
   <object class="GtkFileFilter" id="SourceFilterEVO">
     <patterns>
       <pattern>*.evo</pattern>
@@ -10339,4 +10339,3 @@ DRC allows you to 'compress' the range by making loud sounds softer and soft sou
  </widgets>
 </object>
 </interface>
-

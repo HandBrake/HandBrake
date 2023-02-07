@@ -2229,11 +2229,7 @@ queue_button_press_cb (GtkGesture *gest, gint n_press, gdouble x, gdouble y,
             gtk_list_box_select_row(lb, row);
         }
         GtkMenu *context_menu = GTK_MENU(GHB_WIDGET(ud->builder, "queue_list_menu"));
-#if GTK_CHECK_VERSION(3, 22, 0)
         gtk_menu_popup_at_pointer(context_menu, NULL);
-#else
-        gtk_menu_popup(context_menu, NULL, NULL, NULL, NULL, 3, gtk_get_current_event_time());
-#endif
     }
 }
 
