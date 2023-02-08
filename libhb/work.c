@@ -685,6 +685,12 @@ void hb_display_job_info(hb_job_t *job)
                    job->dovi.bl_present_flag,
                    job->dovi.dv_bl_signal_compatibility_id);
         }
+
+        if (job->passthru_dynamic_hdr_metadata & HDR_PLUS)
+        {
+            hb_log("     + hdr10+ dynamic metadata");
+
+        }
     }
 
     if (job->indepth_scan)
@@ -1456,25 +1462,31 @@ static void update_dolby_vision_level(hb_job_t *job)
 
 static void sanitize_dynamic_hdr_metadata_passthru(hb_job_t *job)
 {
-#if HB_PROJECT_FEATURE_LIBDOVI
     hb_list_t *list = job->list_filter;
 
     if (hb_filter_find(list, HB_FILTER_ROTATE)     != NULL ||
-        hb_filter_find(list, HB_FILTER_COLORSPACE) != NULL ||
-        job->vcodec != HB_VCODEC_X265_10BIT)
+        hb_filter_find(list, HB_FILTER_COLORSPACE) != NULL)
     {
         job->passthru_dynamic_hdr_metadata = NONE;
         return;
     }
 
-    if (job->dovi.dv_profile != 5 &&
-        job->dovi.dv_profile != 7 &&
-        job->dovi.dv_profile != 8)
+    if (job->vcodec != HB_VCODEC_X265_10BIT &&
+        job->vcodec != HB_VCODEC_VT_H265_10BIT)
     {
-        // Unsupported, disable
+        job->passthru_dynamic_hdr_metadata &= ~HDR_PLUS;
+    }
+
+#if HB_PROJECT_FEATURE_LIBDOVI
+    if ((job->dovi.dv_profile != 5 &&
+         job->dovi.dv_profile != 7 &&
+         job->dovi.dv_profile != 8) ||
+         job->vcodec != HB_VCODEC_X265_10BIT)
+    {
         job->passthru_dynamic_hdr_metadata &= ~DOVI;
     }
-    else
+
+    if (job->passthru_dynamic_hdr_metadata & DOVI)
     {
         int mode = 0;
 
@@ -1542,7 +1554,7 @@ static void sanitize_dynamic_hdr_metadata_passthru(hb_job_t *job)
         free(settings);
     }
 #else
-    job->passthru_dynamic_hdr_metadata = NONE;
+    job->passthru_dynamic_hdr_metadata &= ~DOVI;
 #endif
 }
 
