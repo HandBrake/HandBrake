@@ -1,0 +1,29 @@
+From 8454caf458c5f5d20cce711ff8ea8de55ec1ae50 Mon Sep 17 00:00:00 2001
+From: harlanc <hailiang8@staff.weibo.com>
+Date: Thu, 1 Dec 2022 07:46:13 +0000
+Subject: [PATCH] fix crash when SEI length is variable
+
+---
+ source/encoder/encoder.cpp | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/source/encoder/encoder.cpp b/source/encoder/encoder.cpp
+index 0fea6553c..5a3fcafc7 100644
+--- a/source/encoder/encoder.cpp
++++ b/source/encoder/encoder.cpp
+@@ -1103,6 +1103,12 @@ void Encoder::copyUserSEIMessages(Frame *frame, const x265_picture* pic_in)
+                 input = seiMsg;
+             else
+                 input = pic_in->userSEI.payloads[i];
++            
++            if (frame->m_userSEI.payloads[i].payload && (frame->m_userSEI.payloads[i].payloadSize < input.payloadSize))
++            {
++                delete[] frame->m_userSEI.payloads[i].payload;
++                frame->m_userSEI.payloads[i].payload = NULL;
++            }
+ 
+             if (!frame->m_userSEI.payloads[i].payload)
+                 frame->m_userSEI.payloads[i].payload = new uint8_t[input.payloadSize];
+-- 
+2.37.1 (Apple Git-137.1)
+
