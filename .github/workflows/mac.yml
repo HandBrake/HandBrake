@@ -20,7 +20,9 @@ jobs:
       id: mac-rust-toolchain
       uses: actions/cache@v3
       with:
-        path: ~/.cargo
+        path: |
+          ~/.cargo
+          ~/.rustup
         key: mac-rust-toolchain
 
     - name: Setup Path
