@@ -1185,9 +1185,12 @@ struct hb_title_s
     int             color_matrix;
     int             color_range;
     int             chroma_location;
+
     hb_mastering_display_metadata_t mastering;
     hb_content_light_metadata_t     coll;
     hb_dovi_conf_t  dovi;
+    int             hdr_10_plus;
+
     hb_rational_t   vrate;
     int             crop[4];
     int             loose_crop[4];

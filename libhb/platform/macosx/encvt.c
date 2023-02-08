@@ -13,6 +13,7 @@
 #include "libavutil/avutil.h"
 
 #include "handbrake/handbrake.h"
+#include "handbrake/hdr10plus.h"
 
 int  encvt_init(hb_work_object_t *, hb_job_t *);
 int  encvt_work(hb_work_object_t *, hb_buffer_t **, hb_buffer_t **);
@@ -76,6 +77,7 @@ struct hb_work_private_s
         CFBooleanRef allowFrameReordering;
         CFBooleanRef allowTemporalCompression;
         CFBooleanRef prioritizeEncodingSpeedOverQuality;
+        CFBooleanRef preserveDynamicHDRMetadata;
         struct
         {
             int maxrate;
@@ -126,6 +128,7 @@ void hb_vt_param_default(struct hb_vt_param *param)
     param->allowFrameReordering     = kCFBooleanTrue;
     param->allowTemporalCompression = kCFBooleanTrue;
     param->prioritizeEncodingSpeedOverQuality = kCFBooleanFalse;
+    param->preserveDynamicHDRMetadata         = kCFBooleanFalse;
     param->fieldDetail              = HB_VT_FIELDORDER_PROGRESSIVE;
 }
 
@@ -337,6 +340,42 @@ static void hb_vt_add_color_tag(CVPixelBufferRef pxbuffer, hb_job_t *job)
         CVBufferSetAttachment(pxbuffer, kCVImageBufferChromaLocationTopFieldKey, chroma_loc, kCVAttachmentMode_ShouldPropagate);
         CVBufferSetAttachment(pxbuffer, kCVImageBufferChromaLocationBottomFieldKey, chroma_loc, kCVAttachmentMode_ShouldPropagate);
     }
+}
+
+static void hb_vt_add_dynamic_hdr_metadata(CVPixelBufferRef pxbuffer, hb_job_t *job, hb_buffer_t *buf)
+{
+    for (int i = 0; i < buf->nb_side_data; i++)
+    {
+        const AVFrameSideData *side_data = buf->side_data[i];
+        if (job->passthru_dynamic_hdr_metadata & HDR_PLUS &&
+            side_data->type == AV_FRAME_DATA_DYNAMIC_HDR_PLUS)
+        {
+            if (__builtin_available(macOS 13, *))
+            {
+                uint8_t *payload = NULL;
+                uint32_t playload_size = 0;
+
+                hb_dynamic_hdr10_plus_to_itu_t_t35((AVDynamicHDRPlus *)side_data->data, &payload, &playload_size);
+                if (!playload_size)
+                {
+                    continue;
+                }
+
+                CFDataRef data = CFDataCreate(kCFAllocatorDefault, payload, playload_size);
+                if (data)
+                {
+                    CVBufferSetAttachment(pxbuffer, kCMSampleAttachmentKey_HDR10PlusPerFrameData, data, kCVAttachmentMode_ShouldPropagate);
+                    CFRelease(data);
+                }
+            }
+        }
+        if (job->passthru_dynamic_hdr_metadata & DOVI &&
+            side_data->type == AV_FRAME_DATA_DOVI_RPU_BUFFER)
+        {
+           // Not supported yet
+        }
+    }
+
 }
 
 static inline int64_t rescale(hb_rational_t q, int b)
@@ -619,6 +658,11 @@ static int hb_vt_settings_xlat(hb_work_private_t *pv, hb_job_t *job)
         }
     }
 
+    if (job->passthru_dynamic_hdr_metadata & HDR_PLUS)
+    {
+        pv->settings.preserveDynamicHDRMetadata = kCFBooleanTrue;
+    }
+
     return 0;
 }
 
@@ -763,6 +807,7 @@ static OSStatus wrap_buf(hb_work_private_t *pv, hb_buffer_t *buf, CVPixelBufferR
                                              pix_buf);
 
     hb_vt_add_color_tag(*pix_buf, pv->job);
+    hb_vt_add_dynamic_hdr_metadata(*pix_buf, pv->job, buf);
 
     return err;
 }
@@ -1080,6 +1125,20 @@ static OSStatus init_vtsession(hb_work_object_t *w, hb_job_t *job, hb_work_priva
             if (err != noErr)
             {
                 hb_log("VTSessionSetProperty: kVTCompressionPropertyKey_HDRMetadataInsertionMode failed");
+            }
+        }
+    }
+
+    if (__builtin_available(macOS 13.0, *))
+    {
+        if (CFDictionaryContainsKey(supportedProps, kVTCompressionPropertyKey_PreserveDynamicHDRMetadata))
+        {
+            err = VTSessionSetProperty(pv->session,
+                                       kVTCompressionPropertyKey_PreserveDynamicHDRMetadata,
+                                       pv->settings.preserveDynamicHDRMetadata);
+            if (err != noErr)
+            {
+                hb_log("VTSessionSetProperty: kVTCompressionPropertyKey_PreserveDynamicHDRMetadata failed");
             }
         }
     }

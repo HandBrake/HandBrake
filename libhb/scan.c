@@ -1342,6 +1342,11 @@ skip_preview:
                    title->dovi.dv_bl_signal_compatibility_id);
         }
 
+        if (title->hdr_10_plus)
+        {
+            hb_log("scan: hdr10+ dynamic metadata found");
+        }
+
         if (title->video_decode_support != HB_DECODE_SUPPORT_SW)
         {
             hb_log("scan: supported video decoders:%s%s%s",

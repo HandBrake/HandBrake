@@ -1115,26 +1115,30 @@ static hb_buffer_t *copy_frame( hb_work_private_t *pv )
         }
     }
 
-    // Check for HDR mastering data
-    sd = av_frame_get_side_data(pv->frame, AV_FRAME_DATA_MASTERING_DISPLAY_METADATA);
-    if (sd != NULL)
+    if (!pv->job && pv->title)
     {
-        if (!pv->job && pv->title && sd->size > 0)
+        // Check for HDR mastering data
+        sd = av_frame_get_side_data(pv->frame, AV_FRAME_DATA_MASTERING_DISPLAY_METADATA);
+        if (sd != NULL && sd->size > 0)
         {
             AVMasteringDisplayMetadata *mastering = (AVMasteringDisplayMetadata *)sd->data;
             pv->title->mastering = hb_mastering_ff_to_hb(*mastering);
         }
-    }
 
-    // Check for HDR content light level data
-    sd = av_frame_get_side_data(pv->frame, AV_FRAME_DATA_CONTENT_LIGHT_LEVEL);
-    if (sd != NULL)
-    {
-        if (!pv->job && pv->title && sd->size > 0)
+        // Check for HDR content light level data
+        sd = av_frame_get_side_data(pv->frame, AV_FRAME_DATA_CONTENT_LIGHT_LEVEL);
+        if (sd != NULL && sd->size > 0)
         {
             AVContentLightMetadata *coll = (AVContentLightMetadata *)sd->data;
             pv->title->coll.max_cll = coll->MaxCLL;
             pv->title->coll.max_fall = coll->MaxFALL;
+        }
+
+        // Check for HDR Plus dynamic metadata
+        sd = av_frame_get_side_data(pv->frame, AV_FRAME_DATA_DYNAMIC_HDR_PLUS);
+        if (sd != NULL && sd->size > 0)
+        {
+            pv->title->hdr_10_plus = 1;
         }
     }
 

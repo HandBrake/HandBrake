@@ -16,6 +16,7 @@
 #include "handbrake/hb_dict.h"
 #include "handbrake/h265_common.h"
 #include "handbrake/dovi_common.h"
+#include "handbrake/hdr10plus.h"
 #include "x265.h"
 
 int  encx265Init (hb_work_object_t*, hb_job_t*);
@@ -742,8 +743,7 @@ static hb_buffer_t* x265_encode(hb_work_object_t *w, hb_buffer_t *in)
                 void *tmp;
                 x265_sei_payload *sei_payload = NULL;
 
-                // TODO: Convert side data to sei
-                //hb_dynamic_hdr10_plus_to_itu_t_t35((AVDynamicHDRPlus *)side_data->data, &payload, &playload_size);
+                hb_dynamic_hdr10_plus_to_itu_t_t35((AVDynamicHDRPlus *)side_data->data, &payload, &playload_size);
                 if (!playload_size)
                 {
                     continue;
