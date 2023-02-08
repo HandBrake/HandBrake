@@ -16,30 +16,33 @@ jobs:
         path: ~/mac-toolchain
         key: mac-toolchain
 
-    - name: Rust Toolchain Cache
-      id: mac-rust-toolchain
+    - name: Cargo-C Toolchain Cache
+      id: mac-cargo-c-toolchain
       uses: actions/cache@v3
       with:
         path: |
-          ~/.cargo
-          ~/.rustup
-        key: mac-rust-toolchain
+          ~/.cargo/bin/cargo-capi
+          ~/.cargo/bin/cargo-cbuild
+          ~/.cargo/bin/cargo-cinstall
+        key: mac-cargo-c-toolchain
 
-    - name: Setup Path
+    - name: Setup Environment
       run: |
         echo ~/mac-toolchain/bin >> $GITHUB_PATH
         echo ~/.cargo/env >> $GITHUB_PATH
 
-    - name: Setup Environment
+    - name: Setup Toolchain
       if: steps.mac-toolchain.outputs.cache-hit != 'true'
       run: |
         scripts/mac-toolchain-build ~/mac-toolchain
 
-    - name: Setup Rust Environment
-      if: steps.mac-rust-toolchain.outputs.cache-hit != 'true'
+    - name: Setup Rust Toolchain
       run: |
-        curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
         rustup target add aarch64-apple-darwin
+
+    - name: Setup Cargo-C Toolchain
+      if: steps.mac-cargo-c-toolchain.outputs.cache-hit != 'true'
+      run: |
         cargo install cargo-c
 
     - name: Build HandBrake

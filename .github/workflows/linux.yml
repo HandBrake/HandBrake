@@ -12,16 +12,16 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
-    - uses: actions/setup-python@v3
 
-    - name: Rust Toolchain Cache
-      id: linux-rust-toolchain
+    - name: Cargo-C Toolchain Cache
+      id: linux-cargo-c-toolchain
       uses: actions/cache@v3
       with:
         path: |
-          ~/.cargo
-          ~/.rustup
-        key: linux-rust-toolchain
+          ~/.cargo/bin/cargo-capi
+          ~/.cargo/bin/cargo-cbuild
+          ~/.cargo/bin/cargo-cinstall
+        key: linux-cargo-c-toolchain
 
     - name: Setup Environment
       run: |
@@ -31,7 +31,6 @@ jobs:
         sudo pip3 install meson
         sudo apt-get install gstreamer1.0-libav intltool libappindicator-dev libdbus-glib-1-dev libglib2.0-dev libgtk-3-dev libgudev-1.0-dev libnotify-dev
         sudo apt-get install libva-dev libdrm-dev llvm clang
-        source "$HOME/.cargo/env"
 
     - name: Setup Toolchain
       run: |
@@ -47,10 +46,9 @@ jobs:
             return -1
         fi
 
-    - name: Setup Rust Toolchain
-      if: steps.linux-rust-toolchain.outputs.cache-hit != 'true'
+    - name: Setup Cargo-C Toolchain
+      if: steps.linux-cargo-c-toolchain.outputs.cache-hit != 'true'
       run: |
-        curl https://sh.rustup.rs -sSf | sh -s -- -y
         cargo install cargo-c
 
     - name: Build HandBrake Linux
