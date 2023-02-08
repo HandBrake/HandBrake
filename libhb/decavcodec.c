@@ -2047,7 +2047,7 @@ static void compute_frame_duration( hb_work_private_t *pv )
         // than context->time_base.
         AVFormatContext *ic = (AVFormatContext*)pv->title->opaque_priv;
         AVStream *st = ic->streams[pv->title->video_id];
-        if ( st->nb_frames && st->duration )
+        if (st->nb_frames && st->duration > 0)
         {
             // compute the average frame duration from the total number
             // of frames & the total duration.
@@ -2112,6 +2112,16 @@ static void compute_frame_duration( hb_work_private_t *pv )
         duration = 1001. / 24000.;
     }
     pv->duration = duration * 90000.;
+
+    int clock_min, clock_max, clock;
+    hb_video_framerate_get_limits(&clock_min, &clock_max, &clock);
+    if (pv->duration < 1 / (clock / 90000.))
+    {
+        // Not representable, probably a broken file
+        // use the maximum possible fps
+        pv->duration = 1 / (clock / 90000.);
+    }
+
     pv->field_duration = pv->duration;
     if ( pv->context->ticks_per_frame > 1 )
     {
