@@ -372,8 +372,7 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
 
         if ( job->vcodec == HB_VCODEC_FFMPEG_NVENC_H264 || job->vcodec == HB_VCODEC_FFMPEG_NVENC_H265 || job->vcodec == HB_VCODEC_FFMPEG_NVENC_H265_10BIT) {
             av_dict_set( &av_opts, "rc", "vbr", 0 );
-            av_dict_set( &av_opts, "multipass", "fullres", 0 );
-            hb_log( "encavcodec: encoding at rc=vbr, multipass=fullres, Bitrate %d", job->vbitrate );
+            hb_log( "encavcodec: encoding at rc=vbr, Bitrate %d", job->vbitrate );
         }
 
         if ( job->vcodec == HB_VCODEC_FFMPEG_VCE_H264 || job->vcodec == HB_VCODEC_FFMPEG_VCE_H265 || job->vcodec == HB_VCODEC_FFMPEG_VCE_H265_10BIT)
@@ -462,13 +461,12 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
 
             av_dict_set( &av_opts, "rc", "vbr", 0 );
             av_dict_set( &av_opts, "cq", quality, 0 );
-            av_dict_set( &av_opts, "multipass", "fullres", 0 );
 
             // further Advanced Quality Settings in Constant Quality Mode
             av_dict_set( &av_opts, "init_qpP", quality, 0 );
             av_dict_set( &av_opts, "init_qpB", qualityB, 0 );
             av_dict_set( &av_opts, "init_qpI", qualityI, 0 );
-            hb_log( "encavcodec: encoding at rc=vbr, multipass=fullres, %.2f", job->vquality );
+            hb_log( "encavcodec: encoding at rc=vbr, %.2f", job->vquality );
         }
         else if ( job->vcodec == HB_VCODEC_FFMPEG_VCE_H264 )
         {
