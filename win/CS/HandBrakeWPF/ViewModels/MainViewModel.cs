@@ -2315,7 +2315,7 @@ namespace HandBrakeWPF.ViewModels
                         if (this.userSettingService.GetUserSetting<bool>(UserSettingConstants.ShowStatusInTitleBar))
                         {
                             this.WindowTitle = string.Format(Resources.WindowTitleStatus, Resources.HandBrake_Title, String.Format("{0:##0.0}", Math.Round(status.ProgressValue, 1)), status.Task, status.TaskCount);
-                            this.notifyIconService.SetTooltip(string.Format(Resources.TaskTrayStatusTitle, Resources.HandBrake_Title, this.ProgressPercentage, status.Task, status.TaskCount, status.EstimatedTimeLeft));
+                            this.notifyIconService.SetTooltip(string.Format(Resources.TaskTrayStatusTitle, Resources.HandBrake_Title));
                         }
 
                         this.IsMultiProcess = false;
@@ -2325,6 +2325,8 @@ namespace HandBrakeWPF.ViewModels
                     {
                         this.windowsTaskbar.SetNoProgress();
                         this.ProgramStatusLabel = string.Format(Resources.Main_QueueMultiJobStatus, this.queueProcessor.CompletedCount, Environment.NewLine, queueJobStatuses.Count, this.queueProcessor.Count);
+
+                        this.notifyIconService.SetTooltip(string.Format(Resources.TaskTrayStatusManyTitle, Resources.HandBrake_Title, queueJobStatuses.Count));
                         this.IsMultiProcess = true;
                         this.NotifyOfPropertyChange(() => this.IsMultiProcess);
                     }
