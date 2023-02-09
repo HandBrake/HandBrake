@@ -206,6 +206,7 @@ namespace HandBrakeWPF.ViewModels
             {
                 this.AudioBehaviours = new AudioBehaviours(this.AudioDefaultsViewModel.AudioBehaviours);
                 this.Task.AudioPassthruOptions = this.AudioBehaviours.AllowedPassthruOptions;
+                this.Task.AudioFallbackEncoder = this.AudioBehaviours.AudioFallbackEncoder;
 
                 this.OnTabStatusChanged(null);
             }
@@ -248,7 +249,8 @@ namespace HandBrakeWPF.ViewModels
             this.AudioDefaultsViewModel.Setup(preset.AudioTrackBehaviours, preset.Task.OutputFormat);
             this.AudioBehaviours = new AudioBehaviours(preset.AudioTrackBehaviours);
             this.Task.AudioPassthruOptions = this.AudioBehaviours.AllowedPassthruOptions;
-            
+            this.Task.AudioFallbackEncoder = this.AudioBehaviours.AudioFallbackEncoder;
+
             if (preset.Task != null)
             {
                 this.SetupTracks();
