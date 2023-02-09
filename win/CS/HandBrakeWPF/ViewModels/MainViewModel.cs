@@ -975,7 +975,7 @@ namespace HandBrakeWPF.ViewModels
             OpenOptionsScreenCommand command = new OpenOptionsScreenCommand();
             command.Execute(null);
         }
-
+         
         public void OpenLogWindow()
         {
             WindowHelper.ShowWindow<ILogViewModel, LogView>(this.windowManager);
@@ -1647,6 +1647,8 @@ namespace HandBrakeWPF.ViewModels
             {
                 this.NotifyOfPropertyChange(() => this.PresetsCategories);
                 this.SelectedPreset = this.presetService.GetPreset(presetViewModel.PresetName);
+
+                this.IsModifiedPreset = false;
             }
         }
 
