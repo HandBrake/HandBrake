@@ -667,8 +667,8 @@ Your preset file will be archived and new one created. You will need to re-creat
     <value>{0} - ({1}%, Pass {2} of {3})</value>
   </data>
   <data name="TaskTrayStatusTitle" xml:space="preserve">
-    <value>{1}%, Pass {2} of {3}
-Remaining Time: {4}</value>
+    <value>{0}
+Encoding 1 Job</value>
   </data>
   <data name="PauseOnLowDiskspace" xml:space="preserve">
     <value>Queue Paused.  Warning, the drive you are encoding to is low on disk space. Please free up some space and press start to continue. You can also adjust the minimum space level in preferences.</value>
@@ -2737,5 +2737,9 @@ Alternatively, check the "Use External Player" checkbox below.</value>
   </data>
   <data name="PresetPane_ShowPresetDesc" xml:space="preserve">
     <value>Show Preset Description</value>
+  </data>
+  <data name="TaskTrayStatusManyTitle" xml:space="preserve">
+    <value>{0}
+Encoding {1} jobs</value>
   </data>
 </root>

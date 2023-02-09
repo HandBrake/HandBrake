@@ -7279,8 +7279,18 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {1}%, Pass {2} of {3}
-        ///Remaining Time: {4}.
+        ///   Looks up a localized string similar to {0}
+        ///Encoding {1} jobs.
+        /// </summary>
+        public static string TaskTrayStatusManyTitle {
+            get {
+                return ResourceManager.GetString("TaskTrayStatusManyTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0}
+        ///Encoding 1 Job.
         /// </summary>
         public static string TaskTrayStatusTitle {
             get {
