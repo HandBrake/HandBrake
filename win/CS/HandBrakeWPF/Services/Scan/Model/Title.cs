@@ -32,6 +32,7 @@ namespace HandBrakeWPF.Services.Scan.Model
             this.Chapters = new List<Chapter>();
             this.Subtitles = new List<Subtitle>();
             this.Metadata = new Metadata();
+            this.ColorInformation = new ColorInfo();
         }
 
         #region Properties
@@ -198,6 +199,8 @@ namespace HandBrakeWPF.Services.Scan.Model
                     this.Duration.Seconds);
             }
         }
+
+        public ColorInfo ColorInformation { get; set; }
 
         #endregion
 

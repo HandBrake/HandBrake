@@ -795,31 +795,7 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
-        public string SourceInfo
-        {
-            get
-            {
-                if (this.SelectedTitle != null)
-                {
-                    int parW = this.SelectedTitle.ParVal.Width;
-                    int parH = this.SelectedTitle.ParVal.Height;
-                    int displayW = this.SelectedTitle.Resolution.Width * parW / parH;
-
-                    return string.Format("{0}x{1} ({2}x{3}), {4} FPS, {5} {6}, {7} {8}", 
-                        this.SelectedTitle.Resolution.Width, 
-                        this.SelectedTitle.Resolution.Height,
-                        displayW,
-                        this.SelectedTitle.Resolution.Height, 
-                        Math.Round(this.SelectedTitle.Fps, 2), 
-                        this.SelectedTitle.AudioTracks.Count, 
-                        Resources.MainView_AudioTrackCount,
-                        this.SelectedTitle.Subtitles.Count,
-                        Resources.MainView_SubtitleTracksCount);
-                }
-
-                return string.Empty;
-            }
-        }
+        public string SourceInfo => SourceInfoHelper.GenerateSourceInfo(this.SelectedTitle);
 
         public bool ShowAddAllToQueue => this.userSettingService.GetUserSetting<bool>(UserSettingConstants.ShowAddAllToQueue);
 
