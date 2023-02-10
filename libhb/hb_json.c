@@ -225,6 +225,17 @@ static hb_dict_t* hb_title_to_dict_internal( hb_title_t *title )
     if (title == NULL)
         return NULL;
 
+    int h_shift, v_shift;
+    int chroma_available = hb_get_chroma_sub_sample(title->pix_fmt, &h_shift, &v_shift);
+    char *chroma_subsampling = NULL;
+
+    if (chroma_available == 0)
+    {
+        int h_value = 4 >> h_shift;
+        int v_value = v_shift ? 0 : h_value;
+        chroma_subsampling = hb_strdup_printf("4:%d:%d", h_value, v_value);
+    }
+
     dict = json_pack_ex(&error, 0,
     "{"
         // Type, Path, Name, Index, Playlist, AngleCount
@@ -237,8 +248,8 @@ static hb_dict_t* hb_title_to_dict_internal( hb_title_t *title )
         "s:[oooo],"
         // LooseCrop[Top, Bottom, Left, Right]}
         "s:[oooo],"
-        // Color {Format, Range, Primary, Transfer, Matrix, ChromaLocation}
-        "s:{s:o, s:o, s:o, s:o, s:o, s:o},"
+        // Color {Format, Range, Primary, Transfer, Matrix, ChromaLocation, ChromaSubsampling, BitDepth}
+        "s:{s:o, s:o, s:o, s:o, s:o, s:o, s:o, s:o},"
         // FrameRate {Num, Den}
         "s:{s:o, s:o},"
         // InterlaceDetected, VideoCodec
@@ -278,6 +289,8 @@ static hb_dict_t* hb_title_to_dict_internal( hb_title_t *title )
         "Transfer",         hb_value_int(title->color_transfer),
         "Matrix",           hb_value_int(title->color_matrix),
         "ChromaLocation",   hb_value_int(title->chroma_location),
+        "ChromaSubsampling", hb_value_string(chroma_subsampling ? chroma_subsampling : "unknown"),
+        "BitDepth",          hb_value_int(hb_get_bit_depth(title->pix_fmt)),
     "FrameRate",
         "Num",              hb_value_int(title->vrate.num),
         "Den",              hb_value_int(title->vrate.den),
@@ -288,7 +301,81 @@ static hb_dict_t* hb_title_to_dict_internal( hb_title_t *title )
     if (dict == NULL)
     {
         hb_error("hb_title_to_dict_internal, json pack failure: %s", error.text);
+        free(chroma_subsampling);
         return NULL;
+    }
+
+    free(chroma_subsampling);
+
+    // Mastering Display Color Volume metadata
+    hb_dict_t *mastering_dict;
+    if (title->mastering.has_primaries || title->mastering.has_luminance)
+    {
+        mastering_dict = json_pack_ex(&error, 0,
+        "{"
+        // DisplayPrimaries[3][2]
+        "s:[[[ii],[ii]],[[ii],[ii]],[[ii],[ii]]],"
+        // WhitePoint[2],
+        "s:[[i,i],[i,i]],"
+        // MinLuminance, MaxLuminance, HasPrimaries, HasLuminance
+        "s:[i,i],s:[i,i],s:b,s:b"
+        "}",
+            "DisplayPrimaries", title->mastering.display_primaries[0][0].num,
+                                title->mastering.display_primaries[0][0].den,
+                                title->mastering.display_primaries[0][1].num,
+                                title->mastering.display_primaries[0][1].den,
+                                title->mastering.display_primaries[1][0].num,
+                                title->mastering.display_primaries[1][0].den,
+                                title->mastering.display_primaries[1][1].num,
+                                title->mastering.display_primaries[1][1].den,
+                                title->mastering.display_primaries[2][0].num,
+                                title->mastering.display_primaries[2][0].den,
+                                title->mastering.display_primaries[2][1].num,
+                                title->mastering.display_primaries[2][1].den,
+            "WhitePoint", title->mastering.white_point[0].num,
+                          title->mastering.white_point[0].den,
+                          title->mastering.white_point[1].num,
+                          title->mastering.white_point[1].den,
+            "MinLuminance", title->mastering.min_luminance.num,
+                            title->mastering.min_luminance.den,
+            "MaxLuminance", title->mastering.max_luminance.num,
+                            title->mastering.max_luminance.den,
+            "HasPrimaries", title->mastering.has_primaries,
+            "HasLuminance", title->mastering.has_luminance
+        );
+        hb_dict_set(dict, "MasteringDisplayColorVolume", mastering_dict);
+    }
+
+    // Content Light Level metadata
+    hb_dict_t *coll_dict;
+    if (title->coll.max_cll && title->coll.max_fall)
+    {
+        coll_dict = json_pack_ex(&error, 0, "{s:i, s:i}",
+            "MaxCLL",  title->coll.max_cll,
+            "MaxFALL", title->coll.max_fall);
+        hb_dict_set(dict, "ContentLightLevel", coll_dict);
+    }
+
+    // Dolby Vision Configuration Record
+    hb_dict_t *dovi_dict;
+    if (title->dovi.dv_profile)
+    {
+        dovi_dict = json_pack_ex(&error, 0, "{s:i, s:i, s:i, s:i, s:i, s:i, s:i, s:i}",
+            "DVVersionMajor",          title->dovi.dv_version_major,
+            "DVVersionMinor",          title->dovi.dv_version_minor,
+            "DVProfile",               title->dovi.dv_profile,
+            "DVLevel",                 title->dovi.dv_level,
+            "RPUPresentFlag",          title->dovi.rpu_present_flag,
+            "ELPresentFlag",           title->dovi.el_present_flag,
+            "BLPresentFlag",           title->dovi.bl_present_flag,
+            "BLSignalCompatibilityId", title->dovi.dv_bl_signal_compatibility_id);
+        hb_dict_set(dict, "DolbyVisionConfigurationRecord", dovi_dict);
+    }
+
+    // HDR10+ Flag
+    if (title->hdr_10_plus)
+    {
+        hb_dict_set(dict, "HDR10+", hb_value_int(title->hdr_10_plus));
     }
 
     if (title->container_name != NULL)
@@ -655,7 +742,7 @@ hb_dict_t* hb_job_to_dict( const hb_job_t * job )
                     hb_value_int(job->color_matrix_override));
     }
 
-    // Mastering metadata
+    // Mastering Display Color Volume metadata
     hb_dict_t *mastering_dict;
     if (job->mastering.has_primaries || job->mastering.has_luminance)
     {
@@ -691,7 +778,7 @@ hb_dict_t* hb_job_to_dict( const hb_job_t * job )
             "HasPrimaries", job->mastering.has_primaries,
             "HasLuminance", job->mastering.has_luminance
         );
-        hb_dict_set(video_dict, "Mastering", mastering_dict);
+        hb_dict_set(video_dict, "MasteringDisplayColorVolume", mastering_dict);
     }
 
     // Content Light Level metadata
@@ -1043,7 +1130,7 @@ hb_job_t* hb_dict_to_job( hb_handle_t * h, hb_dict_t *dict )
     //       TwoPass, Turbo,
     //       ColorInputFormat, ColorOutputFormat, ColorRange,
     //       ColorPrimaries, ColorTransfer, ColorMatrix, ChromaLocation,
-    //       Mastering,
+    //       MasteringDisplayColorVolume,
     //       ContentLightLevel,
     //       DolbyVisionConfigurationRecord
     //       ColorPrimariesOverride, ColorTransferOverride, ColorMatrixOverride,
@@ -1107,7 +1194,7 @@ hb_job_t* hb_dict_to_job( hb_handle_t * h, hb_dict_t *dict )
             "ColorTransfer",        unpack_i(&job->color_transfer),
             "ColorMatrix",          unpack_i(&job->color_matrix),
             "ChromaLocation",       unpack_i(&job->chroma_location),
-            "Mastering",            unpack_o(&mastering_dict),
+            "MasteringDisplayColorVolume", unpack_o(&mastering_dict),
             "ContentLightLevel",    unpack_o(&coll_dict),
             "DolbyVisionConfigurationRecord", unpack_o(&dovi_dict),
             "ColorPrimariesOverride", unpack_i(&job->color_prim_override),

@@ -347,7 +347,7 @@ static void hb_vt_add_dynamic_hdr_metadata(CVPixelBufferRef pxbuffer, hb_job_t *
     for (int i = 0; i < buf->nb_side_data; i++)
     {
         const AVFrameSideData *side_data = buf->side_data[i];
-        if (job->passthru_dynamic_hdr_metadata & HDR_PLUS &&
+        if (job->passthru_dynamic_hdr_metadata & HDR_10_PLUS &&
             side_data->type == AV_FRAME_DATA_DYNAMIC_HDR_PLUS)
         {
             if (__builtin_available(macOS 13, *))
@@ -658,7 +658,7 @@ static int hb_vt_settings_xlat(hb_work_private_t *pv, hb_job_t *job)
         }
     }
 
-    if (job->passthru_dynamic_hdr_metadata & HDR_PLUS)
+    if (job->passthru_dynamic_hdr_metadata & HDR_10_PLUS)
     {
         pv->settings.preserveDynamicHDRMetadata = kCFBooleanTrue;
     }

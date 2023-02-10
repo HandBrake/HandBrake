@@ -735,7 +735,7 @@ static hb_buffer_t* x265_encode(hb_work_object_t *w, hb_buffer_t *in)
         for (int i = 0; i < in->nb_side_data; i++)
         {
             const AVFrameSideData *side_data = in->side_data[i];
-            if (job->passthru_dynamic_hdr_metadata & HDR_PLUS &&
+            if (job->passthru_dynamic_hdr_metadata & HDR_10_PLUS &&
                 side_data->type == AV_FRAME_DATA_DYNAMIC_HDR_PLUS)
             {
                 uint8_t *payload = NULL;

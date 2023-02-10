@@ -686,7 +686,7 @@ void hb_display_job_info(hb_job_t *job)
                    job->dovi.dv_bl_signal_compatibility_id);
         }
 
-        if (job->passthru_dynamic_hdr_metadata & HDR_PLUS)
+        if (job->passthru_dynamic_hdr_metadata & HDR_10_PLUS)
         {
             hb_log("     + hdr10+ dynamic metadata");
 
@@ -1474,7 +1474,7 @@ static void sanitize_dynamic_hdr_metadata_passthru(hb_job_t *job)
     if (job->vcodec != HB_VCODEC_X265_10BIT &&
         job->vcodec != HB_VCODEC_VT_H265_10BIT)
     {
-        job->passthru_dynamic_hdr_metadata &= ~HDR_PLUS;
+        job->passthru_dynamic_hdr_metadata &= ~HDR_10_PLUS;
     }
 
 #if HB_PROJECT_FEATURE_LIBDOVI

@@ -720,7 +720,7 @@ struct hb_job_s
     hb_content_light_metadata_t coll;
     hb_dovi_conf_t dovi;
 
-    enum {NONE = 0x0, ALL = 0x3, DOVI = 0x1, HDR_PLUS = 0x2} passthru_dynamic_hdr_metadata;
+    enum {NONE = 0x0, ALL = 0x3, DOVI = 0x1, HDR_10_PLUS = 0x2} passthru_dynamic_hdr_metadata;
 
 
     hb_list_t     * list_chapter;
