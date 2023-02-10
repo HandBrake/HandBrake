@@ -86,7 +86,7 @@ echo "- Creating a Git commit"
 cd HandBrake/gtk/po
 git add *.po
 cd ../../
-git commit -m "Updating Windows Translations"
+git commit -m "Updating Linux UI Translations"
 
 echo ""
 echo "Done: git push then create a pull request on GitHub."

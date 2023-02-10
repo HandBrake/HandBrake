@@ -83,7 +83,7 @@ echo "- Creating a Git commit"
 cd HandBrake/win/CS/HandBrakeWPF/Properties
 git add *.resx
 cd ../../../../
-git commit -m "Updating Windows Translations"
+git commit -m "Updating Windows UI Translations"
 
 echo ""
 echo "Done: git push then create a pull request on GitHub."
