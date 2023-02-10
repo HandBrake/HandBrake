@@ -10,8 +10,34 @@ Windows users, please make sure to install [Microsoft .NET Desktop Runtime versi
 
 ## HandBrake 1.7
 
+#### General
+
+- Miscellaneous bug fixes and improvements
+
+#### Video
+
+- Improve HDR Passthru. HDR10+ and Dolby Vision now supported.
+
+#### Third-party libraries
+
+- Updated libraries
+
+- New libraries
+  - libdovi (HDR metadata)
+  
+### Mac
+
+### Linux
+
 ### Windows
-- Improvide Preview window with video playback support. (Supports most, but not all codecs/containers. Requires Microsoft Codec Packs from the Microsoft Store for modern codecs)
+- Improved Preview window with video playback support. (Supports most, but not all codecs/containers. Requires Microsoft Codec Packs from the Microsoft Store for modern codecs)
+- Improved Autoname Preferences UI and added new options: {width} {height} {quality_type} {encoder_bit_depth} {modification-time} {modification-date}
+- Improved UI on the queue window. 
+  - The left progress panel now can optionally show additional status information. 
+- Improved Preset Panel. 
+  - Queue Manager button replaced by a drop menu of discrete options for quicker access to functionality. 
+  - Optional display of preset description at the bottom of the preset pane.
+- Miscellaneous bug fixes and improvements
 
 
 ## HandBrake 1.6.2
