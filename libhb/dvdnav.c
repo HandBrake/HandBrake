@@ -642,6 +642,7 @@ static hb_title_t * hb_dvdnav_title_scan( hb_dvd_t * e, int t, uint64_t min_dura
         }
         if( !audio->id )
         {
+            free(audio);
             continue;
         }
         const char * name = NULL;
@@ -949,7 +950,7 @@ static int skip_to_menu( dvdnav_t * dvdnav, int blocks )
             // and some don't seem to.  So if we see it is uninitialized,
             // set it.
             if ( event->new_vtsN <= 0 )
-                result = dvdnav_title_play( dvdnav, 1 );
+                dvdnav_title_play( dvdnav, 1 );
         } break;
 
         case DVDNAV_HIGHLIGHT:
@@ -1151,7 +1152,7 @@ static int try_menu(
         {
             // Sometimes the "first play" item doesn't initialize the
             // initial VTS. So do it here.
-            result = dvdnav_title_play( d->dvdnav, 1 );
+            dvdnav_title_play( d->dvdnav, 1 );
             result = dvdnav_menu_call( d->dvdnav, menu );
             if ( result != DVDNAV_STATUS_OK )
             {
@@ -1300,7 +1301,7 @@ static int try_menu(
         }
         else
         {
-            result = dvdnav_menu_call( d->dvdnav, menu );
+            dvdnav_menu_call( d->dvdnav, menu );
         }
     }
 
@@ -1656,8 +1657,6 @@ static hb_buffer_t * hb_dvdnav_read( hb_dvd_t * e )
             // We have received a regular block of the currently playing
             // MPEG stream.
             b->s.new_chap = chapter;
-            chapter = 0;
-            error_count = 0;
             return b;
 
         case DVDNAV_NOP:
