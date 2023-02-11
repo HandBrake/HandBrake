@@ -1501,8 +1501,8 @@ void FUNC(eedi2_gaussian_blur1)(const pixel * src, const int src_pitch, pixel *t
     srcpp += tmp_pitch;
     srcp += tmp_pitch;
     srcpn += tmp_pitch;
-    src2n += tmp_pitch;
-    src3n += tmp_pitch;
+//    src2n += tmp_pitch;
+//    src3n += tmp_pitch;
     dstp += dst_pitch;
     for( x = 0; x < width; ++x )
     {
@@ -1514,9 +1514,9 @@ void FUNC(eedi2_gaussian_blur1)(const pixel * src, const int src_pitch, pixel *t
     src2p += tmp_pitch;
     srcpp += tmp_pitch;
     srcp += tmp_pitch;
-    srcpn += tmp_pitch;
-    src2n += tmp_pitch;
-    src3n += tmp_pitch;
+//    srcpn += tmp_pitch;
+//    src2n += tmp_pitch;
+//    src3n += tmp_pitch;
     dstp += dst_pitch;
     for( x = 0; x < width; ++x )
     {
@@ -1702,8 +1702,8 @@ void FUNC(eedi2_gaussian_blur_sqrt2)(const int *src, int *tmp, int *dst, const i
     srcp += pitch;
     srcpn += pitch;
     src2n += pitch;
-    src3n += pitch;
-    src4n += pitch;
+//    src3n += pitch;
+//    src4n += pitch;
     dstp += pitch;
     for( x = 0; x < width; ++x )
     {
@@ -1718,9 +1718,9 @@ void FUNC(eedi2_gaussian_blur_sqrt2)(const int *src, int *tmp, int *dst, const i
     srcpp += pitch;
     srcp += pitch;
     srcpn += pitch;
-    src2n += pitch;
-    src3n += pitch;
-    src4n += pitch;
+//    src2n += pitch;
+//    src3n += pitch;
+//    src4n += pitch;
     dstp += pitch;
     for( x = 0; x < width; ++x )
     {
@@ -1733,10 +1733,10 @@ void FUNC(eedi2_gaussian_blur_sqrt2)(const int *src, int *tmp, int *dst, const i
     src2p += pitch;
     srcpp += pitch;
     srcp += pitch;
-    srcpn += pitch;
-    src2n += pitch;
-    src3n += pitch;
-    src4n += pitch;
+//    srcpn += pitch;
+//    src2n += pitch;
+//    src3n += pitch;
+//    src4n += pitch;
     dstp += pitch;
     for( x = 0; x < width; ++x )
     {
