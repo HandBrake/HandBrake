@@ -270,23 +270,26 @@ static int rpu_work(hb_filter_object_t *filter,
             if (pv->mode)
             {
                 const DoviData *rpu_data = dovi_write_unspec62_nalu(rpu_in);
-                if (!rpu_data)
+
+                if (rpu_data)
+                {
+                    hb_frame_remove_side_data(in, side_data->type);
+
+                    AVBufferRef *ref = av_buffer_alloc(rpu_data->len - 2);
+                    memcpy(ref->data, rpu_data->data + 2, rpu_data->len - 2);
+                    AVFrameSideData *sd_dst = hb_buffer_new_side_data_from_buf(in, AV_FRAME_DATA_DOVI_RPU_BUFFER, ref);
+
+                    if (!sd_dst)
+                    {
+                        av_buffer_unref(&ref);
+                    }
+
+                    dovi_data_free(rpu_data);
+                }
+                else
                 {
                     hb_log("dovi_write_unspec62_nalu failed");
                 }
-
-                hb_frame_remove_side_data(in, side_data->type);
-
-                AVBufferRef *ref = av_buffer_alloc(rpu_data->len - 2);
-                memcpy(ref->data, rpu_data->data + 2, rpu_data->len - 2);
-                AVFrameSideData *sd_dst = hb_buffer_new_side_data_from_buf(in, AV_FRAME_DATA_DOVI_RPU_BUFFER, ref);
-
-                if (!sd_dst)
-                {
-                    av_buffer_unref(&ref);
-                }
-
-                dovi_data_free(rpu_data);
             }
 
             break;
