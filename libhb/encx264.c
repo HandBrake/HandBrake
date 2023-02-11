@@ -1164,7 +1164,7 @@ int apply_h264_level(const x264_api_t *api, x264_param_t *param,
             {
                 hb_encx264_profile = HB_ENCX264_PROFILE_HIGH422;
             }
-            if (api->bit_depth == 10)
+            else if (api->bit_depth == 10)
             {
                 hb_encx264_profile = HB_ENCX264_PROFILE_HIGH10;
             }
