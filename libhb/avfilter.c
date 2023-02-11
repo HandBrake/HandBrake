@@ -156,7 +156,7 @@ static hb_filter_info_t * avfilter_info(hb_filter_object_t * filter)
         if (comma != NULL && quote != NULL && quote < comma)
         {
             // Find end of quote
-            quote = strchr(quote+1, '\'');
+            //quote = strchr(quote+1, '\'');
             comma = strchr(start, ',');
         }
         // pretty print line
