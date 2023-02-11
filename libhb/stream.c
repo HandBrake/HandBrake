@@ -3334,7 +3334,7 @@ static int hb_parse_ps(
 static int hb_ps_read_packet( hb_stream_t * stream, hb_buffer_t *b )
 {
     // Appends to buffer if size != 0
-    int start_code = -1;
+    unsigned int start_code = -1;
     int pos = b->size;
     int stream_id = -1;
     int c;
