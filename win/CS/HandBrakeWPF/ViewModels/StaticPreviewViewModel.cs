@@ -546,19 +546,23 @@ namespace HandBrakeWPF.ViewModels
 
         public void HandleMediaError(Exception error)
         {
-            this.logService.LogMessage(
-                error != null
-                    ? string.Format("# Video Preview: Unable to Play: {0}", error)
-                    : string.Format("# Video Preview: Unable to Play: Unknown Reason. Maybe a missing codec pack."));
+            if (!this.UseExternalPlayer)
+            {
+                this.logService.LogMessage(
+                    error != null
+                        ? string.Format("# Video Preview: Unable to Play: {0}", error)
+                        : string.Format(
+                            "# Video Preview: Unable to Play: Unknown Reason. Maybe a missing codec pack."));
 
-            this.errorService.ShowMessageBox(
-                Resources.StaticPreviewViewModel_MediaError,
-                Resources.Error,
-                MessageBoxButton.OK,
-                MessageBoxImage.Error);
+                this.errorService.ShowMessageBox(
+                    Resources.StaticPreviewViewModel_MediaError,
+                    Resources.Error,
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error);
+            }
         }
 
-        public void CloseWindow()
+            public void CloseWindow()
         {
             this.TryClose();
         }
