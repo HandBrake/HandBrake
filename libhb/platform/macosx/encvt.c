@@ -1061,9 +1061,15 @@ static OSStatus init_vtsession(hb_work_object_t *w, hb_job_t *job, hb_work_priva
     {
         hb_log("VTSessionSetProperty: kVTCompressionPropertyKey_TransferFunction failed");
     }
+    CFNumberRef gamma = hb_vt_colr_gamma_xlat(pv->settings.color.transfer);
     err = VTSessionSetProperty(pv->session,
                                CFSTR("GammaLevel"),
-                               hb_vt_colr_gamma_xlat(pv->settings.color.transfer));
+                               gamma);
+    if (gamma)
+    {
+        CFRelease(gamma);
+    }
+
     if (err != noErr)
     {
         hb_log("VTSessionSetProperty: GammaLevel failed");
@@ -1392,6 +1398,7 @@ static OSStatus create_cookie(hb_work_object_t *w, hb_job_t *job, hb_work_privat
     if (pool == NULL)
     {
         hb_log("VTCompressionSession: VTCompressionSessionGetPixelBufferPool error");
+        return -1;
     }
 
     err = CVPixelBufferPoolCreatePixelBuffer(NULL, pool, &pix_buf);
