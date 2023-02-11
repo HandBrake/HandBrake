@@ -478,12 +478,13 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
             char qualityB[7];
             double adjustedQualityB = job->vquality + 2;
 
-            snprintf(quality, 7, "%.2f", job->vquality);
-            snprintf(qualityB, 7, "%.2f", adjustedQualityB);
-
-            if (adjustedQualityB > 51) {
+            if (adjustedQualityB > 51)
+            {
                 adjustedQualityB = 51;
             }
+
+            snprintf(quality, 7, "%.2f", job->vquality);
+            snprintf(qualityB, 7, "%.2f", adjustedQualityB);
 
             av_dict_set( &av_opts, "rc", "cqp", 0 );
 
@@ -497,7 +498,7 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
             char  *vce_h265_max_au_size_char,
                    vce_h265_q_char[4];
             int    vce_h265_cq_step,
-                   vce_h265_max_au_size,
+                   vce_h265_max_au_size = 0,
                    vce_h265_max_au_size_length,
                    vce_h265_qmin,
                    vce_h265_qmax,
