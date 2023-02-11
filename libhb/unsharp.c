@@ -15,7 +15,7 @@
 #define UNSHARP_STRENGTH_CHROMA_DEFAULT 0.25
 #define UNSHARP_SIZE_CHROMA_DEFAULT 7
 #define UNSHARP_SIZE_MIN 3
-#define UNSHARP_SIZE_MAX 63
+#define UNSHARP_SIZE_MAX 16
 
 typedef struct
 {
@@ -133,7 +133,7 @@ static void name##_##nbits(const uint8_t *frame_src,                            
             src2 = src;                                                                         \
         }                                                                                       \
                                                                                                 \
-        memset(SR, 0, sizeof(SR[0]) * (2 * steps - 1));                                         \
+        memset(SR, 0, sizeof(SR[0]) * (2 * steps));                                             \
                                                                                                 \
         for (x = -steps; x < width + steps; x++)                                                \
         {                                                                                       \
