@@ -598,6 +598,11 @@ static int parse_adts_extradata( hb_audio_t * audio, AVCodecContext * context,
     AVBSFContext            * ctx = NULL;
     int                       ret;
 
+    if (audio == NULL)
+    {
+        return 1;
+    }
+
     bsf = av_bsf_get_by_name("aac_adtstoasc");
     ret = av_bsf_alloc(bsf, &ctx);
     if (ret < 0)
