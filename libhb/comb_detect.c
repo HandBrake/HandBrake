@@ -693,6 +693,7 @@ static int comb_detect_init(hb_filter_object_t *filter,
                      sizeof(comb_detect_thread_arg_t), comb_detect_filter_work) == 0)
     {
         hb_error("comb_detect could not initialize taskset");
+        return -1;
     }
 
     comb_detect_thread_arg_t *comb_detect_prev_thread_args = NULL;
@@ -745,6 +746,7 @@ static int comb_detect_init(hb_filter_object_t *filter,
                      sizeof(comb_detect_thread_arg_t), comb_detect_check_work) == 0)
     {
         hb_error("comb_detect check could not initialize taskset");
+        return -1;
     }
 
     comb_detect_prev_thread_args = NULL;
@@ -755,7 +757,7 @@ static int comb_detect_init(hb_filter_object_t *filter,
         thread_args = taskset_thread_args(&pv->comb_detect_check_taskset, ii);
         thread_args->pv = pv;
         thread_args->arg.segment = ii;
-        thread_args->arg.taskset =  &pv->comb_detect_check_taskset;
+        thread_args->arg.taskset = &pv->comb_detect_check_taskset;
 
         for (int pp = 0; pp < 3; pp++)
         {
@@ -794,6 +796,7 @@ static int comb_detect_init(hb_filter_object_t *filter,
                          sizeof(comb_detect_thread_arg_t), mask_filter_work) == 0)
         {
             hb_error( "mask filter could not initialize taskset" );
+            return -1;
         }
 
         comb_detect_prev_thread_args = NULL;
@@ -803,8 +806,8 @@ static int comb_detect_init(hb_filter_object_t *filter,
 
             thread_args = taskset_thread_args(&pv->mask_filter_taskset, ii);
             thread_args->pv = pv;
-            thread_args->arg.taskset = &pv->mask_filter_taskset;
             thread_args->arg.segment = ii;
+            thread_args->arg.taskset = &pv->mask_filter_taskset;
 
             for (int pp = 0; pp < 3; pp++)
             {
@@ -837,6 +840,7 @@ static int comb_detect_init(hb_filter_object_t *filter,
                              sizeof(comb_detect_thread_arg_t), mask_erode_work) == 0)
             {
                 hb_error("mask erode could not initialize taskset");
+                return -1;
             }
 
             comb_detect_prev_thread_args = NULL;
@@ -846,8 +850,8 @@ static int comb_detect_init(hb_filter_object_t *filter,
 
                 thread_args = taskset_thread_args( &pv->mask_erode_taskset, ii );
                 thread_args->pv = pv;
-                thread_args->arg.taskset = &pv->mask_erode_taskset;
                 thread_args->arg.segment = ii;
+                thread_args->arg.taskset = &pv->mask_erode_taskset;
 
                 for (int pp = 0; pp < 3; pp++)
                 {
@@ -878,6 +882,7 @@ static int comb_detect_init(hb_filter_object_t *filter,
                              sizeof(comb_detect_thread_arg_t), mask_dilate_work) == 0)
             {
                 hb_error("mask dilate could not initialize taskset");
+                return -1;
             }
 
             comb_detect_prev_thread_args = NULL;
