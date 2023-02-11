@@ -117,6 +117,11 @@ int hb_picture_fill(uint8_t *data[], int stride[], hb_buffer_t *buf)
 {
     int ret, ii;
 
+    if (buf->f.max_plane < 0)
+    {
+        return -1;
+    }
+
     for (ii = 0; ii <= buf->f.max_plane; ii++)
         stride[ii] = buf->plane[ii].stride;
     for (; ii < 4; ii++)
@@ -1131,7 +1136,7 @@ fail:
  */
 int hb_detect_comb( hb_buffer_t * buf, int color_equal, int color_diff, int threshold, int prog_equal, int prog_diff, int prog_threshold )
 {
-    int j, k, n, off, cc_1, cc_2, cc[3];
+    int j, k, n, off, cc_1, cc_2, cc[3] = {0};
 	// int flag[3] ; // debugging flag
     uint16_t s1, s2, s3, s4;
     cc_1 = 0; cc_2 = 0;
@@ -1189,7 +1194,7 @@ int hb_detect_comb( hb_buffer_t * buf, int color_equal, int color_diff, int thre
     }
 
 
-    /* HandBrake is all yuv420, so weight the average percentage of all 3 planes accordingly.*/
+    /* HandBrake previews are all yuv420, so weight the average percentage of all 3 planes accordingly. */
     int average_cc = ( 2 * cc[0] + ( cc[1] / 2 ) + ( cc[2] / 2 ) ) / 3;
 
     /* Now see if that average percentage of combed pixels surpasses the threshold percentage given by the user.*/
