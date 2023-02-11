@@ -215,8 +215,11 @@ static hb_buffer_t * adjust_frame_rate( hb_filter_private_t * pv,
 
     if (pv->cfr == 0)
     {
-        ++pv->count_frames;
-        pv->out_last_stop = in->s.stop;
+        if (in)
+        {
+            ++pv->count_frames;
+            pv->out_last_stop = in->s.stop;
+        }
         return in;
     }
 
