@@ -329,6 +329,7 @@ static int hb_decomb_init(hb_filter_object_t *filter,
                      sizeof(yadif_thread_arg_t), yadif_decomb_filter_work) == 0)
     {
         hb_error("decomb yadif could not initialize taskset");
+        return -1;
     }
 
     yadif_thread_arg_t *yadif_prev_thread_args = NULL;
@@ -373,6 +374,7 @@ static int hb_decomb_init(hb_filter_object_t *filter,
                          sizeof(eedi2_thread_arg_t), eedi2_filter_work) == 0)
         {
             hb_error("decomb eedi2 could not initialize taskset");
+            return -1;
         }
 
         if (pv->post_processing > 1)
@@ -387,6 +389,7 @@ static int hb_decomb_init(hb_filter_object_t *filter,
             if (!pv->cx2 || !pv->cy2 || !pv->cxy || !pv->tmpc)
             {
                 hb_error("EEDI2: failed to malloc derivative arrays");
+                return -1;
             }
             else
             {
