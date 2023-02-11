@@ -4205,7 +4205,7 @@ int hb_presets_add_path(char * path)
 
     // Count the total number of entries
     count = 0;
-    while ((entry = hb_readdir(dir)))
+    while (hb_readdir(dir))
     {
         count++;
     }
