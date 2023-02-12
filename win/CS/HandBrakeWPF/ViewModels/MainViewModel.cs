@@ -1889,7 +1889,7 @@ namespace HandBrakeWPF.ViewModels
                     string path = ((DriveInformation)item).RootDirectory;
                     string videoDir = Path.Combine(path, "VIDEO_TS");
 
-                    this.StartScan(Directory.Exists(videoDir) ? videoDir : path, 0);
+                    this.StartScan(Directory.Exists(videoDir) ? videoDir : path, this.TitleSpecificScan);
                 }
                 else if (item.GetType() == typeof(SourceMenuItem))
                 {
