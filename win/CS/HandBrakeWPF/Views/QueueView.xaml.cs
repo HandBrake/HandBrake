@@ -6,6 +6,7 @@
 
 namespace HandBrakeWPF.Views
 {
+    using System.ComponentModel;
     using System.Windows;
     using System.Windows.Controls;
     using System.Windows.Input;
@@ -174,6 +175,11 @@ namespace HandBrakeWPF.Views
         private void DeleteItem_OnClick(object sender, ExecutedRoutedEventArgs e)
         {
             ((QueueViewModel)this.DataContext).RemoveSelectedJobs();
+        }
+
+        private void QueueView_OnClosing(object sender, CancelEventArgs e)
+        {
+            ((QueueViewModel)this.DataContext).BackupQueue();
         }
     }
 }

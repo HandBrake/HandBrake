@@ -553,6 +553,11 @@ namespace HandBrakeWPF.ViewModels
             this.queueProcessor.MoveToBottom(this.SelectedItems);
         }
 
+        public void BackupQueue()
+        {
+            this.queueProcessor.BackupQueue(string.Empty);
+        }
+
         public override void Activate()
         {
             this.Load();

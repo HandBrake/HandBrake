@@ -16,6 +16,7 @@
         xmlns:main="clr-namespace:HandBrakeWPF.Converters.Main"
         Title="{Binding Title}"
         Width="975"
+        Closing="QueueView_OnClosing"
         Height="550"
         MinWidth="400"
         MinHeight="300"
@@ -196,7 +197,7 @@
                              SelectedItem="{Binding SelectedTask}"
                              SelectionMode="Extended"
                              BorderThickness="1"
-                             ScrollViewer.HorizontalScrollBarVisibility="Disabled" >
+                             ScrollViewer.HorizontalScrollBarVisibility="Disabled">
 
                     <ListBox.CommandBindings>
                         <CommandBinding Command="Delete" Executed="DeleteItem_OnClick" />
