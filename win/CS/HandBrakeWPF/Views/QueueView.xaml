@@ -18,6 +18,7 @@
         Width="975"
         Height="600"
         MinWidth="420"
+        Closing="QueueView_OnClosing"
         MinHeight="300"
         WindowStartupLocation="CenterScreen"
         TextOptions.TextFormattingMode="Display"
@@ -200,7 +201,7 @@
                              SelectedItem="{Binding SelectedTask}"
                              SelectionMode="Extended"
                              BorderThickness="1"
-                             ScrollViewer.HorizontalScrollBarVisibility="Disabled" >
+                             ScrollViewer.HorizontalScrollBarVisibility="Disabled">
 
                     <ListBox.CommandBindings>
                         <CommandBinding Command="Delete" Executed="DeleteItem_OnClick" />

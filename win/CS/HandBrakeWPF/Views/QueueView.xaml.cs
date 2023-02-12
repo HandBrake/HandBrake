@@ -6,6 +6,7 @@
 
 namespace HandBrakeWPF.Views
 {
+    using System.ComponentModel;
     using System.Windows;
     using System.Windows.Controls;
     using System.Windows.Input;
@@ -186,6 +187,11 @@ namespace HandBrakeWPF.Views
             {
                 this.extendedQueueDisplay.Header = Properties.Resources.QueueView_ExtendedQueueDisplay;
             }
+        }
+        
+        private void QueueView_OnClosing(object sender, CancelEventArgs e)
+        {
+            ((QueueViewModel)this.DataContext).BackupQueue();
         }
     }
 }
