@@ -314,7 +314,7 @@ int lang_to_code(const iso639_lang_t *lang)
 {
     int code = 0;
 
-    if (lang && strlen(lang->iso639_1) > 2)
+    if (lang && strlen(lang->iso639_1) >= 2)
     {
         code = (lang->iso639_1[0] << 8) | lang->iso639_1[1];
     }
