@@ -16,14 +16,14 @@ Windows users, please make sure to install [Microsoft .NET Desktop Runtime versi
 
 #### Video
 
-- Improve HDR Passthru. HDR10+ and Dolby Vision now supported.
+- Improve HDR Passthru. Preserve HDR10+ and Dolby Vision dynamic metadata when using the x265 10-bit encoder.
 
 #### Third-party libraries
 
 - Updated libraries
 
 - New libraries
-  - libdovi (HDR metadata)
+  - libdovi (Dolby Vision metadata)
   
 ### Mac
 
