@@ -1491,8 +1491,7 @@ mfxIMPL hb_qsv_dx_index_to_impl(int dx_index)
 int hb_qsv_create_mfx_session(mfxIMPL implementation,
                               int drmRenderNodeNum,
                               mfxVersion *pver,
-                              mfxSession *psession,
-                              mfxLoader *ploader)
+                              mfxSession *psession)
 {
     mfxStatus sts;
     mfxLoader loader = NULL;
@@ -1507,7 +1506,6 @@ int hb_qsv_create_mfx_session(mfxIMPL implementation,
     adapter_idx = hb_qsv_impl_get_num(implementation);
 
     *psession = NULL;
-    *ploader = NULL;
     loader = MFXLoad();
 
     if (!loader) {
@@ -1646,7 +1644,7 @@ int hb_qsv_create_mfx_session(mfxIMPL implementation,
     }
 
     *psession = session;
-    *ploader = loader;
+    MFXUnload(loader);
 
     return 0;
 
@@ -1673,7 +1671,6 @@ static int hb_qsv_collect_adapters_details(hb_list_t *hb_qsv_adapter_details_lis
         */
         mfxSession session;
         mfxVersion version = { .Major = 1, .Minor = 0, };
-        mfxLoader loader;
 
         // check for software fallback
         if (MFXInit(MFX_IMPL_SOFTWARE, &version, &session) == MFX_ERR_NONE)
@@ -1704,7 +1701,7 @@ static int hb_qsv_collect_adapters_details(hb_list_t *hb_qsv_adapter_details_lis
 #else
             mfxIMPL hw_impl = MFX_IMPL_HARDWARE_ANY;
 #endif
-            if (hb_qsv_create_mfx_session(hw_impl | hw_preference, details->extended_device_id.DRMRenderNodeNum, &version, &session, &loader) == MFX_ERR_NONE)
+            if (hb_qsv_create_mfx_session(hw_impl | hw_preference, details->extended_device_id.DRMRenderNodeNum, &version, &session) == MFX_ERR_NONE)
             {
                 // On linux, the handle to the VA display must be set.
                 // This code is essentially a NOP other platforms.
@@ -2198,7 +2195,6 @@ int hb_qsv_decode_is_codec_supported(int adapter_index, int video_codec_param, i
     return 0;
 }
 
-#if defined(_WIN32) || defined(__MINGW32__)
 static int hb_qsv_parse_options(hb_job_t *job)
 {
     int err = 0;
@@ -2239,7 +2235,6 @@ static int hb_qsv_parse_options(hb_job_t *job)
     }
     return 0;
 }
-#endif
 
 int hb_qsv_setup_job(hb_job_t *job)
 {
@@ -2275,8 +2270,6 @@ int hb_qsv_decode_is_enabled(hb_job_t *job)
             qsv_decode_is_codec_supported;
 }
 
-static int hb_d3d11va_device_check();
-
 int hb_qsv_hw_filters_are_enabled(hb_job_t *job)
 {
     return job && job->qsv.ctx && job->qsv.ctx->qsv_hw_filters_are_enabled;
@@ -2310,17 +2303,9 @@ static int hb_qsv_get_bit_depth_by_codec(int codec_id)
 
 int hb_qsv_full_path_is_enabled(hb_job_t *job)
 {
-    static int device_check_completed = 0;
-    static int device_check_succeeded = 0;
     int qsv_full_path_is_enabled = 0;
+#if defined(_WIN32) || defined(__MINGW32__)
     hb_qsv_info_t *info = hb_qsv_encoder_info_get(hb_qsv_get_adapter_index(), job->vcodec);
-
-    if(!device_check_completed)
-    {
-       device_check_succeeded = (hb_d3d11va_device_check() >= 0) ? 1 : 0;
-       device_check_completed = 1;
-    }
-
     int title_bit_depth = hb_get_bit_depth(job->title->pix_fmt);
     int pix_fmt_bit_depth = hb_qsv_get_bit_depth_by_codec(job->vcodec);
 
@@ -2337,7 +2322,8 @@ int hb_qsv_full_path_is_enabled(hb_job_t *job)
 
     qsv_full_path_is_enabled = (hb_qsv_decode_is_enabled(job) &&
         info && hb_qsv_implementation_is_hardware(info->implementation) &&
-        device_check_succeeded && job->qsv.ctx && !job->qsv.ctx->num_sw_filters);
+        job->qsv.ctx && !job->qsv.ctx->num_sw_filters);
+#endif
     return qsv_full_path_is_enabled;
 }
 

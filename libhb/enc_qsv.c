@@ -1680,7 +1680,6 @@ int encqsvInit(hb_work_object_t *w, hb_job_t *job)
     int err;
     mfxStatus sts;
     mfxVersion version;
-    mfxLoader loader;
     mfxVideoParam videoParam;
     mfxExtBuffer *extParamArray[5];
     mfxSession session = (mfxSession)0;
@@ -1692,7 +1691,7 @@ int encqsvInit(hb_work_object_t *w, hb_job_t *job)
     version.Major = HB_QSV_MINVERSION_MAJOR;
     version.Minor = HB_QSV_MINVERSION_MINOR;
     uint32_t render_node = hb_qsv_get_adapter_render_node(hb_qsv_get_adapter_index());
-    sts = hb_qsv_create_mfx_session(pv->qsv_info->implementation, render_node, &version, &session, &loader);
+    sts = hb_qsv_create_mfx_session(pv->qsv_info->implementation, render_node, &version, &session);
     if (sts != MFX_ERR_NONE)
     {
         hb_error("encqsvInit: MFXInit failed (%d) with implementation %d", sts, pv->qsv_info->implementation);
@@ -1910,7 +1909,6 @@ int encqsvInit(hb_work_object_t *w, hb_job_t *job)
 void encqsvClose(hb_work_object_t *w)
 {
     hb_work_private_t *pv = w->private_data;
-    mfxVersion version;
     int i;
 
     if (pv != NULL && pv->job != NULL && pv->job->qsv.ctx != NULL &&
