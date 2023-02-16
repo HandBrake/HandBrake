@@ -37,6 +37,7 @@ Windows users, please make sure to install [Microsoft .NET Desktop Runtime versi
 - Improved Preset Panel. 
   - Queue Manager button replaced by a drop menu of discrete options for quicker access to functionality. 
   - Optional display of preset description at the bottom of the preset pane.
+- Improved Add Selection window. Sorting feature is now more discoverable. 
 - Miscellaneous bug fixes and improvements
 
 
