@@ -879,26 +879,7 @@ namespace HandBrakeWPF.Services.Presets
 
         private bool IsPresetDisabled(Preset preset)
         {
-            bool isQsvEnabled = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.EnableQuickSyncEncoding);
-            bool isNvencEnabled = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.EnableNvencEncoder);
-            bool isVcnEnabled = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.EnableVceEncoder);
-
-            if (preset.Task.VideoEncoder == null)
-            {
-                return true;
-            }
-
-            if (preset.Task.VideoEncoder.IsQuickSync && !isQsvEnabled)
-            {
-                return true;
-            }
-
-            if (preset.Task.VideoEncoder.IsNVEnc && !isNvencEnabled)
-            {
-                return true;
-            }
-
-            if (preset.Task.VideoEncoder.IsVCN && !isVcnEnabled)
+            if (preset.Task.VideoEncoder == null || !HandBrakeEncoderHelpers.VideoEncoders.Contains(preset.Task.VideoEncoder))
             {
                 return true;
             }

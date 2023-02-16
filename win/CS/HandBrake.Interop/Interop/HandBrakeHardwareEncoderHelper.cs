@@ -11,7 +11,6 @@ namespace HandBrake.Interop.Interop
 {
     using System;
     using System.Diagnostics;
-    using System.Dynamic;
     using System.Runtime.InteropServices;
 
     using HandBrake.Interop.Interop.HbLib;
@@ -20,6 +19,8 @@ namespace HandBrake.Interop.Interop
     {
         private static bool? isNvencH264Available; // Local cache to prevent log spam.
         private static bool? isNvencH265Available;
+
+        private static int? qsvHardwareGeneration;
 
         public static bool IsSafeMode
         {
@@ -110,15 +111,23 @@ namespace HandBrake.Interop.Interop
             }
         }
 
-        public static int QsvHardwareGeneration
+        public static int? QsvHardwareGeneration
         {
             get
             {
                 try
                 {
+                    if (qsvHardwareGeneration != null)
+                    {
+                        return qsvHardwareGeneration;
+                    }
+
                     int adapter_index = HBFunctions.hb_qsv_get_adapter_index();
                     int qsv_platform = HBFunctions.hb_qsv_get_platform(adapter_index);
-                    int hardware = HBFunctions.hb_qsv_hardware_generation(qsv_platform); 
+                    int hardware = HBFunctions.hb_qsv_hardware_generation(qsv_platform);
+
+                    qsvHardwareGeneration = hardware;
+
                     return hardware;
                 }
                 catch (Exception exc)
