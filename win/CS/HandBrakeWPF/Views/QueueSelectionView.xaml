@@ -5,17 +5,19 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:Converters="clr-namespace:HandBrakeWPF.Converters"
         xmlns:Properties="clr-namespace:HandBrakeWPF.Properties"
+        xmlns:dd="urn:gong-wpf-dragdrop"
         Title="{Binding Title}"
         MinWidth="550"
-        Width="550"
+        Width="750"
         Height="475"
-        MinHeight="475"
+        MinHeight="600"
         WindowStartupLocation="CenterScreen"
         TextOptions.TextFormattingMode="Display"
         mc:Ignorable="d">
 
     <Window.Resources>
         <Converters:BooleanToVisibilityConverter x:Key="boolToVisConverter" />
+        <Converters:ThemeImageConverter x:Key="themeConverter" />
     </Window.Resources>
 
     <Grid HorizontalAlignment="Stretch"
@@ -32,9 +34,34 @@
         <TextBlock Text="{x:Static Properties:Resources.QueueSelectionView_Title}" Style="{StaticResource windowTitle}"  Margin="10,10,10,10" Grid.Row="0" />
 
         <!-- Text -->
-        <StackPanel Orientation="Vertical" Grid.Row="1" Margin="10,0,10,0">
+        <Grid Grid.Row="1" Margin="10,0,10,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+
             <TextBlock Text="{x:Static Properties:Resources.QueueSelectionView_ChooseTitles}" />
-        </StackPanel>
+
+            <Menu HorizontalAlignment="Right" Background="Transparent" VerticalAlignment="Bottom" Grid.Column="2" Margin="0,0,0,0">
+                <MenuItem>
+                    <MenuItem.Header>
+                        <StackPanel Height="27" Orientation="Horizontal">
+                            <Image Source="{Binding Converter={StaticResource themeConverter}, ConverterParameter='Advanced.png'}" Width="20" Height="20" VerticalAlignment="Center" />
+                            <TextBlock VerticalAlignment="Center"
+                                       Text="{x:Static Properties:Resources.QueueView_Options}" Margin="5,0,0,0" />
+                            <Path Height="5"
+                                  Margin="2,2,0,0"
+                                  Data="M 0 0 L 4 4 L 8 0 Z"
+                                  Fill="{DynamicResource ButtonGlyphBrush}" />
+                        </StackPanel>
+                    </MenuItem.Header>
+                    <MenuItem Header="Order by Title"  Command="{Binding RelayCommand}" CommandParameter="OrderByTitle" />
+                    <MenuItem Header="Order by Duration" IsChecked="{Binding OrderedByDuration}" Command="{Binding RelayCommand}" CommandParameter="OrderByDuration" />
+                    <MenuItem Header="Order by Name" IsChecked="{Binding OrderedByName}" Command="{Binding RelayCommand}" CommandParameter="OrderByName" />
+                </MenuItem>
+            </Menu>
+        </Grid>
 
         <!-- Selection -->
         <ListBox x:Name="SelectionGrid" Grid.Row="2"
@@ -44,7 +71,10 @@
                  HorizontalAlignment="Stretch"
                  ItemsSource="{Binding TitleList}"
                  SelectionMode="Single" 
-                 PreviewKeyDown="SelectionGrid_OnKeyDown">
+                 PreviewKeyDown="SelectionGrid_OnKeyDown"
+                 dd:DragDrop.DropHandler="{Binding}"
+                 dd:DragDrop.IsDragSource="True"
+                 dd:DragDrop.IsDropTarget="True">
             <ListBox.ItemContainerStyle>
                 <Style TargetType="ListBoxItem" BasedOn="{StaticResource {x:Type ListBoxItem}}">
                     <Setter Property="HorizontalContentAlignment" Value="Stretch" />
@@ -57,9 +87,9 @@
                     <MenuItem Header="Select All" Command="{Binding RelayCommand}" CommandParameter="SelectAll" />
                     <MenuItem Header="Deselect All" Command="{Binding RelayCommand}" CommandParameter="UnSelectAll" />
                     <Separator />
-                    <MenuItem Header="Order by Title" IsChecked="{Binding OrderedByTitle}" Command="{Binding RelayCommand}" CommandParameter="OrderByTitle" />
-                    <MenuItem Header="Order by Duration" IsChecked="{Binding OrderedByDuration}" Command="{Binding RelayCommand}" CommandParameter="OrderByDuration" />
-                    <MenuItem Header="Order by Name" IsChecked="{Binding OrderedByName}" Command="{Binding RelayCommand}" CommandParameter="OrderByName" />
+                    <MenuItem Header="Order by Title" Command="{Binding RelayCommand}" CommandParameter="OrderByTitle" />
+                    <MenuItem Header="Order by Duration" Command="{Binding RelayCommand}" CommandParameter="OrderByDuration" />
+                    <MenuItem Header="Order by Name"  Command="{Binding RelayCommand}" CommandParameter="OrderByName" />
                 </ContextMenu>
             </ListBox.ContextMenu>
 
