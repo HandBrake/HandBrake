@@ -81,7 +81,7 @@ namespace HandBrake.Worker
 
             Dictionary<string, Func<HttpListenerRequest, string>> apiHandlers = RegisterApiHandlers();
             HttpServer webServer = new HttpServer(apiHandlers, port, TokenService);
-            if (webServer.Run().Result)
+            if (webServer.Run())
             {
                 ConsoleOutput.WriteLine("Worker: Server Started", ConsoleColor.White, true);
                 manualResetEvent.WaitOne();
