@@ -1274,6 +1274,7 @@ int reinit_video_filters(hb_work_private_t * pv)
         }
         else
 #endif
+        if ((pv->frame->width % 2) == 0 && (pv->frame->height % 2) == 0)
         {
             hb_dict_set(settings, "pix_fmts", hb_value_string(av_get_pix_fmt_name(pix_fmt)));
             hb_avfilter_append_dict(filters, "format", settings);
@@ -1284,6 +1285,20 @@ int reinit_video_filters(hb_work_private_t * pv)
             hb_dict_set_string(settings, "filter", "lanczos");
             hb_dict_set_string(settings, "range", get_range_name(color_range));
             hb_avfilter_append_dict(filters, "zscale", settings);
+        }
+        // Fallback to swscale, zscale requires a mod 2 width and height
+        else
+        {
+            hb_dict_set(settings, "w", hb_value_int(orig_width));
+            hb_dict_set(settings, "h", hb_value_int(orig_height));
+            hb_dict_set(settings, "flags", hb_value_string("lanczos+accurate_rnd"));
+            hb_dict_set_string(settings, "in_range", get_range_name(pv->frame->color_range));
+            hb_dict_set_string(settings, "out_range", get_range_name(color_range));
+            hb_avfilter_append_dict(filters, "scale", settings);
+
+            settings = hb_dict_init();
+            hb_dict_set(settings, "pix_fmts", hb_value_string(av_get_pix_fmt_name(pix_fmt)));
+            hb_avfilter_append_dict(filters, "format", settings);
         }
     }
     if (pv->title->rotation != HB_ROTATION_0)
