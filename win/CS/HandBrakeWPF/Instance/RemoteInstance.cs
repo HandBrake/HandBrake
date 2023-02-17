@@ -194,6 +194,7 @@ namespace HandBrakeWPF.Instance
         {
             this.encodePollTimer = new Timer();
             this.encodePollTimer.Interval = EncodePollIntervalMs;
+            this.encodePollTimer.AutoReset = false;
 
             this.encodePollTimer.Elapsed += (o, e) =>
                 {
@@ -203,6 +204,10 @@ namespace HandBrakeWPF.Instance
                     }
                     catch (Exception exc)
                     {
+                        if (this.encodePollTimer != null)
+                        {
+                            this.encodePollTimer.Start();
+                        }
                         Debug.WriteLine(exc);
                     }
                 };
@@ -217,6 +222,10 @@ namespace HandBrakeWPF.Instance
             }
             catch (Exception exc)
             {
+                if (this.encodePollTimer != null)
+                {
+                    this.encodePollTimer.Start();
+                }
                 Debug.WriteLine(exc);
             }
            
@@ -236,12 +245,15 @@ namespace HandBrakeWPF.Instance
             }
         }
 
+        private static int counter;
+
         private async void PollEncodeProgress()
         {
             if (encodeCompleteFired)
             {
                 this.encodePollTimer?.Stop();
                 this.encodePollTimer?.Dispose();
+                this.encodePollTimer = null;
                 return;
             }
 
@@ -332,6 +344,9 @@ namespace HandBrakeWPF.Instance
                 this.EncodeCompleted?.Invoke(sender: this, e: new EncodeCompletedEventArgs(state.WorkDone.Error));
                 this.portService.FreePort(this.port);
             }
+
+            // Next Run.
+            this.encodePollTimer.Start();
         }
 
         private void RunEncodeInitProcess(JsonEncodeObject jobToStart)
