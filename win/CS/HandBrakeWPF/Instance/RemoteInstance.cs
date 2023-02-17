@@ -244,9 +244,7 @@ namespace HandBrakeWPF.Instance
                 this.workerProcess.Kill();
             }
         }
-
-        private static int counter;
-
+        
         private async void PollEncodeProgress()
         {
             if (encodeCompleteFired)
@@ -296,6 +294,10 @@ namespace HandBrakeWPF.Instance
             if (response == null || !response.WasSuccessful)
             {
                 retryCount = this.retryCount + 1;
+
+                // Next Run.
+                this.encodePollTimer?.Start();
+
                 return;
             }
 
@@ -326,7 +328,7 @@ namespace HandBrakeWPF.Instance
             }
             else if (taskState != null && taskState == TaskState.WorkDone)
             {
-                this.encodePollTimer.Stop();
+                this.encodePollTimer?.Stop();
                 encodeCompleteFired = true;
 
                 if (this.workerProcess != null && !this.workerProcess.HasExited)
@@ -346,7 +348,7 @@ namespace HandBrakeWPF.Instance
             }
 
             // Next Run.
-            this.encodePollTimer.Start();
+            this.encodePollTimer?.Start();
         }
 
         private void RunEncodeInitProcess(JsonEncodeObject jobToStart)
