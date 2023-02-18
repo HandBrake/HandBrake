@@ -7470,7 +7470,7 @@ Only one subtitle track can be burned! Since conflicts can occur, the first chos
                 <property name="valign">end</property>
                 <child>
                   <object class="GtkLabel" id="work_status">
-                    <property name="margin-left">6</property>
+                    <property name="margin-start">6</property>
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>

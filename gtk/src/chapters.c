@@ -404,7 +404,6 @@ chapter_list_export (GtkFileChooserNative *dialog,
         }
         g_free(dir);
         g_free(filename);
-        hb_value_free(&chapter_list);
     }
     gtk_native_dialog_destroy(GTK_NATIVE_DIALOG(dialog));
 }
@@ -486,12 +485,12 @@ xml_get_all_paths (xmlDocPtr doc, xmlNodePtr node, const char *path)
     xmlXPathFreeContext(context);
     if (result == NULL)
     {
-        printf("Error in xmlXPathEvalExpression\n");
+        g_debug("xml: Error in xmlXPathEvalExpression");
         return NULL;
     }
     if(xmlXPathNodeSetIsEmpty(result->nodesetval))
     {
-        printf("No result\n");
+        g_debug("xml: Node set is empty");
         xmlXPathFreeObject(result);
         return NULL;
     }
@@ -581,6 +580,7 @@ chapters_import_response_cb (GtkFileChooser *dialog,
     {
         filename = gtk_file_chooser_get_filename(dialog);
         chapter_list_import_xml(filename, ud);
+        g_free(filename);
     }
     gtk_native_dialog_destroy(GTK_NATIVE_DIALOG(dialog));
 }
