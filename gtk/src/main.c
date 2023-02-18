@@ -29,6 +29,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <fcntl.h>
+#include <locale.h>
 
 #include <config.h>
 

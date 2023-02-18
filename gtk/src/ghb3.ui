@@ -8072,6 +8072,22 @@ a mains power source.</property>
                         <property name="position">8</property>
                       </packing>
                     </child>
+                    <child>
+                      <object class="GtkCheckButton" id="PauseEncodingOnLowBattery">
+                        <property name="label" translatable="yes">Pause encoding when battery is low</property>
+                        <property name="visible">False</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">False</property>
+                        <property name="margin-start">12</property>
+                        <property name="tooltip-text" translatable="yes">If checked, encoding will be paused when the battery
+level reaches 20%. Encoding will resume when the
+battery is charged.</property>
+                        <signal name="toggled" handler="pref_changed_cb" swapped="no"/>
+                      </object>
+                      <packing>
+                        <property name="position">8</property>
+                      </packing>
+                    </child>
                   </object>
                   <packing>
                     <property name="title" translatable="yes">General</property>

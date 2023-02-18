@@ -39,6 +39,7 @@
 #include "plist.h"
 #include "queuehandler.h"
 #include "title-add.h"
+#include "power-manager.h"
 
 void ghb_queue_buttons_grey (signal_user_data_t *ud);
 
@@ -2669,6 +2670,7 @@ queue_start_action_cb (GSimpleAction *action, GVariant *param,
     gint status;
     gint state;
 
+    ghb_power_manager_reset();
     state = ghb_get_queue_state();
     if (state & (GHB_STATE_WORKING | GHB_STATE_SEARCHING |
                  GHB_STATE_SCANNING | GHB_STATE_MUXING))
@@ -2714,6 +2716,7 @@ G_MODULE_EXPORT void
 queue_pause_action_cb (GSimpleAction *action, GVariant *param,
                        signal_user_data_t *ud)
 {
+    ghb_power_manager_reset();
     ghb_pause_resume_queue();
 }
 
