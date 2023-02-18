@@ -5,8 +5,6 @@
 #include "queuehandler.h"
 #include "callbacks.h"
 
-static const int LOW_BATTERY_THRESHOLD = 20;
-
 static const char *battery_widgets[] = {
     "pause_encoding_label",
     "PauseEncodingOnBatteryPower",
@@ -28,7 +26,7 @@ static GhbPowerState power_state;
  * level first drops from normal to low, so the user can resume encoding
  * without it being paused again. So this variable tracks the previous
  * battery level, and if it was low already, we don't do anything. */
-static gboolean low_battery;
+static uint prev_battery_level;
 
 #if GLIB_CHECK_VERSION(2, 70, 0)
 static GPowerProfileMonitor *power_monitor;
@@ -100,14 +98,17 @@ static void
 battery_status_cb (GDBusProxy *proxy, GVariant *changed_properties,
                    GStrv invalidated_properties, signal_user_data_t *ud)
 {
-    int battery_level = -1.0;
+    int battery_level = -1;
     const char *prop_name;
     int queue_state;
     GVariant *var;
     GVariantIter iter;
+    int low_battery_level = 0;
 
     if (!ghb_dict_get_bool(ud->prefs, "PauseEncodingOnLowBattery"))
         return;
+
+    low_battery_level = ghb_dict_get_int(ud->prefs, "LowBatteryLevel");
 
     g_variant_iter_init(&iter, changed_properties);
     while (g_variant_iter_next(&iter, "{&sv}", &prop_name, &var))
@@ -122,16 +123,18 @@ battery_status_cb (GDBusProxy *proxy, GVariant *changed_properties,
 
     queue_state = ghb_get_queue_state();
 
-    if (!low_battery && battery_level < LOW_BATTERY_THRESHOLD
-                     && (queue_state & GHB_STATE_WORKING)
-                     && !(queue_state & GHB_STATE_PAUSED))
+    if (battery_level <= low_battery_level
+        && prev_battery_level > low_battery_level
+        && (queue_state & GHB_STATE_WORKING)
+        && !(queue_state & GHB_STATE_PAUSED))
     {
         power_state = GHB_POWER_PAUSED_LOW_BATTERY;
         ghb_log("Battery level %d%%: pausing encode", battery_level);
         ghb_pause_queue();
     }
-    else if (low_battery && battery_level >= LOW_BATTERY_THRESHOLD
-                         && (power_state == GHB_POWER_PAUSED_LOW_BATTERY))
+    else if (battery_level > low_battery_level
+             && prev_battery_level <= low_battery_level
+             && (power_state == GHB_POWER_PAUSED_LOW_BATTERY))
     {
         if (queue_state & GHB_STATE_PAUSED)
         {
@@ -140,7 +143,7 @@ battery_status_cb (GDBusProxy *proxy, GVariant *changed_properties,
         }
         power_state = GHB_POWER_OK;
     }
-    low_battery = (battery_level < LOW_BATTERY_THRESHOLD);
+    prev_battery_level = battery_level;
 }
 
 static GDBusProxy *
