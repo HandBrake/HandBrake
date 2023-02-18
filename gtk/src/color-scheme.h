@@ -4,7 +4,6 @@
 #ifndef COLOR_SCHEME_H
 #define COLOR_SCHEME_H
 
-#include <stdbool.h>
 #include <gtk/gtk.h>
 #include <glib.h>
 
@@ -35,6 +34,7 @@ typedef enum {
 } DesktopColorScheme;
 
 gboolean color_scheme_set (AppColorScheme scheme);
+void color_scheme_set_async (AppColorScheme scheme);
 gboolean color_scheme_is_dark_theme (void);
 gboolean color_scheme_toggle (void);
 AppColorScheme color_scheme_get_app_scheme (void);

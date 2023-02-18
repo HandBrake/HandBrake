@@ -1042,7 +1042,7 @@ ghb_activate_cb(GApplication * app, signal_user_data_t * ud)
     GtkCssProvider     * provider = gtk_css_provider_new();
 
     ghb_css_provider_load_from_data(provider, MyCSS, -1);
-    color_scheme_set(APP_PREFERS_LIGHT);
+    color_scheme_set_async(APP_PREFERS_LIGHT);
 
 #if GTK_CHECK_VERSION(4, 4, 0)
     GdkDisplay *dd = gdk_display_get_default();
@@ -1114,14 +1114,6 @@ ghb_activate_cb(GApplication * app, signal_user_data_t * ud)
     // Must set the names of the widgets that I want to modify
     // style for.
     gtk_widget_set_name(GHB_WIDGET(ud->builder, "preview_hud"), "preview_hud");
-    gtk_widget_set_name(GHB_WIDGET(ud->builder, "preview_frame"), "preview_frame");
-    gtk_widget_set_name(GHB_WIDGET(ud->builder, "live_preview_play"), "live_preview_play");
-    gtk_widget_set_name(GHB_WIDGET(ud->builder, "live_preview_fullscreen"), "live_preview_fullscreen");
-    gtk_widget_set_name(GHB_WIDGET(ud->builder, "live_preview_progress"), "live_preview_progress");
-    gtk_widget_set_name(GHB_WIDGET(ud->builder, "live_encode_progress"), "live_encode_progress");
-    gtk_widget_set_name(GHB_WIDGET(ud->builder, "live_duration"), "live_duration");
-    gtk_widget_set_name(GHB_WIDGET(ud->builder, "preview_show_crop"), "preview_show_crop");
-    gtk_widget_set_name(GHB_WIDGET(ud->builder, "preview_reset"), "preview_reset");
     gtk_widget_set_name(GHB_WIDGET(ud->builder, "activity_view"), "activity_view");
 
     // Redirect stderr to the activity window
