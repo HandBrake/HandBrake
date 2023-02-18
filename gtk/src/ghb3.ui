@@ -8023,21 +8023,53 @@ Check this if you want the queue to clean itself up by deleting completed jobs.<
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkCheckButton" id="PauseOnBattery">
-                        <property name="label" translatable="yes">Automatically pause encoding when charging stops</property>
-                        <property name="visible">True</property>
-                        <property name="can-focus">True</property>
+                      <object class="GtkLabel" id="pause_encoding_label">
+                        <property name="label" translatable="yes">Power Saving</property>
+                        <property name="visible">False</property>
+                        <property name="can-focus">False</property>
                         <property name="receives-default">False</property>
-                        <property name="tooltip-text" translatable="yes">If checked, encoding will be paused when charger is
-disconnected to save battery power. Encoding will
-resume when reconnected to a mains power source.</property>
-                        <property name="halign">start</property>
                         <property name="margin-start">12</property>
-                        <property name="draw-indicator">True</property>
-                        <signal name="toggled" handler="pref_changed_cb" swapped="no"/>
+                        <property name="margin-top">3</property>
+                        <property name="margin-bottom">3</property>
+                        <property name="halign">start</property>
+                        <attributes>
+                          <attribute name="weight" value="bold"/>
+                        </attributes>
                       </object>
                       <packing>
                         <property name="position">6</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkCheckButton" id="PauseEncodingOnPowerSave">
+                        <property name="label" translatable="yes">Pause encoding in Power Saver mode</property>
+                        <property name="visible">False</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">False</property>
+                        <property name="tooltip-text" translatable="yes">If checked, encoding will be paused when the device
+enters Power Saver mode. Encoding will resume when
+Power Saver mode is disabled.</property>
+                        <property name="margin-start">12</property>
+                        <signal name="toggled" handler="pref_changed_cb" swapped="no"/>
+                      </object>
+                      <packing>
+                        <property name="position">7</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkCheckButton" id="PauseEncodingOnBatteryPower">
+                        <property name="label" translatable="yes">Pause encoding when switching to battery power</property>
+                        <property name="visible">False</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">False</property>
+                        <property name="margin-start">12</property>
+                        <property name="tooltip-text" translatable="yes">If checked, encoding will be paused when charger is
+unplugged. Encoding will resume when reconnected to
+a mains power source.</property>
+                        <signal name="toggled" handler="pref_changed_cb" swapped="no"/>
+                      </object>
+                      <packing>
+                        <property name="position">8</property>
                       </packing>
                     </child>
                   </object>

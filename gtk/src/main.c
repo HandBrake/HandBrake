@@ -1075,8 +1075,6 @@ ghb_activate_cb(GApplication * app, signal_user_data_t * ud)
     // connect shutdown signal for cleanup
     g_signal_connect(app, "shutdown", (GCallback)ghb_shutdown_cb, ud);
 
-    ghb_power_manager_init(ud);
-
 #if GLIB_CHECK_VERSION(2, 72, 0)
     g_log_set_debug_enabled(ghb_debug);
 #endif
@@ -1087,6 +1085,9 @@ ghb_activate_cb(GApplication * app, signal_user_data_t * ud)
     ghb_array_append(ud->settings_array, ud->settings);
 
     ud->builder = create_builder_or_die(BUILDER_NAME);
+
+    // Initialize D-Bus connections to monitor power settings
+    ghb_power_manager_init(ud);
 
     // Enable drag & drop in queue list
     ghb_queue_drag_n_drop_init(ud);
