@@ -11,20 +11,20 @@ namespace HandBrakeWPF.ViewModels
 {
     using System;
     using System.Collections.Generic;
-    using System.ComponentModel;
     using System.Diagnostics;
     using System.Globalization;
     using System.IO;
     using System.Threading;
     using System.Windows;
     using System.Windows.Media.Imaging;
-   
-    using HandBrakeWPF.Helpers;
+
+    using HandBrake.Interop.Interop.Interfaces;
 
     using HandBrakeWPF.Properties;
     using HandBrakeWPF.Services.Encode.Model.Models;
     using HandBrakeWPF.Services.Interfaces;
     using HandBrakeWPF.Services.Logging.Interfaces;
+    using HandBrakeWPF.Services.Queue.Interfaces;
     using HandBrakeWPF.Services.Queue.Model;
     using HandBrakeWPF.Services.Scan.Interfaces;
     using HandBrakeWPF.Services.Scan.Model;
@@ -46,6 +46,7 @@ namespace HandBrakeWPF.ViewModels
         private readonly ILog logService;
         private readonly ILogInstanceManager logInstanceManager;
         private readonly IPortService portService;
+        private readonly IQueueService mainEncodeInstance;
         private readonly IUserSettingService userSettingService;
 
         private IEncode encodeService;
@@ -64,7 +65,8 @@ namespace HandBrakeWPF.ViewModels
 
         private string mediaPlayerSource;
 
-        public StaticPreviewViewModel(IScan scanService, IUserSettingService userSettingService, IErrorService errorService, ILog logService, ILogInstanceManager logInstanceManager, IPortService portService)
+        public StaticPreviewViewModel(IScan scanService, IUserSettingService userSettingService, IErrorService errorService, ILog logService, 
+            ILogInstanceManager logInstanceManager, IPortService portService, IQueueService mainEncodeInstance)
         {
             this.scanService = scanService;
             this.selectedPreviewImage = 1;
@@ -77,6 +79,7 @@ namespace HandBrakeWPF.ViewModels
             this.logService = logService;
             this.logInstanceManager = logInstanceManager;
             this.portService = portService;
+            this.mainEncodeInstance = mainEncodeInstance;
 
             this.Title = "Preview";
             this.Percentage = "0.00%";
@@ -441,7 +444,7 @@ namespace HandBrakeWPF.ViewModels
             }
 
             try
-            {
+            {  
                 this.IsEncoding = true;
                 if (File.Exists(this.CurrentlyPlaying))
                 {
@@ -519,6 +522,15 @@ namespace HandBrakeWPF.ViewModels
             if (scanTrack != null)
             {
                 encodeTask.SubtitleTracks.Remove(scanTrack);
+            }
+
+            if (!this.userSettingService.GetUserSetting<bool>(UserSettingConstants.ProcessIsolationEnabled) 
+                && encodeTask.VideoEncoder.IsX265 
+                && this.mainEncodeInstance.IsEncoding)
+            {
+                this.errorService.ShowMessageBox(Resources.StaticPreviewViewModel_MultipleEncodes, Resources.Error, MessageBoxButton.OK, MessageBoxImage.Error);
+                this.IsEncoding = false;
+                return;
             }
 
             QueueTask task = new QueueTask(encodeTask, this.ScannedSource.ScanPath, null, false, null);
@@ -615,6 +627,7 @@ namespace HandBrakeWPF.ViewModels
                 this.errorService.ShowMessageBox(Resources.StaticPreviewViewModel_AlreadyEncoding, Resources.Error, MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
+
 
             this.encodeService = new LibEncode(userSettingService, logInstanceManager, 0, portService); // Preview needs a separate instance rather than the shared singleton. This could maybe do with being refactored at some point
 

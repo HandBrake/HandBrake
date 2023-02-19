@@ -2742,4 +2742,9 @@ Alternatively, check the "Use External Player" checkbox below.</value>
     <value>{0}
 Encoding {1} jobs</value>
   </data>
+  <data name="StaticPreviewViewModel_MultipleEncodes" xml:space="preserve">
+    <value>Unable to encode a preview. The application is currently busy encoding another file.
+
+To allow multiple simultaneous encodes, turn on "Process Isolation" in Tools Menu -&gt; Preferences -&gt; Advanced -&gt; Process Isolation -&gt; "Run each queued job in a separate worker process".</value>
+  </data>
 </root>

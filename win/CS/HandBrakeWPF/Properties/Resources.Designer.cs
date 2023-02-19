@@ -6712,6 +6712,17 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Unable to encode a preview. The application is currently busy encoding another file.
+        ///
+        ///To allow multiple simultaneous encodes, turn on &quot;Process Isolation&quot; in Tools Menu -&gt; Preferences -&gt; Advanced -&gt; Process Isolation -&gt; &quot;Run each queued job in a separate worker process&quot;..
+        /// </summary>
+        public static string StaticPreviewViewModel_MultipleEncodes {
+            get {
+                return ResourceManager.GetString("StaticPreviewViewModel_MultipleEncodes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to You must first scan a source and setup your encode before creating a preview..
         /// </summary>
         public static string StaticPreviewViewModel_ScanFirst {
