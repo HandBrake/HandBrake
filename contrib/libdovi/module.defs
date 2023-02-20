@@ -1,9 +1,9 @@
 $(eval $(call import.MODULE.defs,LIBDOVI,libdovi))
 $(eval $(call import.CONTRIB.defs,LIBDOVI))
 
-LIBDOVI.FETCH.url      = https://github.com/quietvoid/dovi_tool/archive/refs/tags/libdovi-3.1.0.tar.gz
-LIBDOVI.FETCH.sha256   = aa2c8451be6c8ace014b79dbbccb06f9f4e4fd80f851b1c9d3f4ae9aa443569d
-LIBDOVI.FETCH.basename = dovi_tool-libdovi-3.1.0.tar.gz
+LIBDOVI.FETCH.url      = https://github.com/quietvoid/dovi_tool/archive/refs/tags/libdovi-3.1.2.tar.gz
+LIBDOVI.FETCH.sha256   = 3c74f8f6afdb7d4be97210df201a28a48676b2ebe10c20961176e81e2fd98c36
+LIBDOVI.FETCH.basename = dovi_tool-libdovi-3.1.2.tar.gz
 
 define LIBDOVI.CONFIGURE
      $(CARGO.exe) fetch $(LIBDOVI.manifest)
