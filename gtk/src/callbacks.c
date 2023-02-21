@@ -2092,9 +2092,9 @@ void
 ghb_update_title_info(signal_user_data_t *ud)
 {
     GtkWidget           * widget;
+    GString             * info;
     gchar               * text;
     gchar               * aspect;
-    gchar               * rate;
     int                   title_id, titleindex;
     int                   audio_count, subtitle_count;
     const hb_title_t    * title;
@@ -2112,23 +2112,73 @@ ghb_update_title_info(signal_user_data_t *ud)
     hb_reduce(&aspect_n, &aspect_d, geo->width * geo->par.num,
               geo->height * geo->par.den);
     aspect = get_aspect_string(aspect_n, aspect_d);
-    rate   = g_strdup_printf("%.6g", (gdouble)title->vrate.num /
-                                              title->vrate.den);
     audio_count = hb_list_count(title->list_audio);
     subtitle_count = hb_list_count(title->list_subtitle);
 
-    text = g_strdup_printf(
-        ", %dx%d (%dx%d), %s, %s %s, %d %s, %d %s",
-        geo->width, geo->height,
-        geo->width * geo->par.num / geo->par.den, geo->height,
-        aspect, rate, _("FPS"),
-        audio_count, ngettext("Audio Track", "Audio Tracks", audio_count),
-        subtitle_count, ngettext("Subtitle Track", "Subtitle Tracks", subtitle_count));
+    info = g_string_sized_new(256);
+
+    g_string_append_printf(info, ", %dx%d", geo->width, geo->height);
+    int screen_width =  geo->width * geo->par.num / geo->par.den;
+    if (geo->width != screen_width)
+        g_string_append_printf(info, " (%dx%d)", screen_width, geo->height);
+
+    g_string_append_printf(info, ", %s, %.6g %s, ", aspect,
+                           (double) title->vrate.num / title->vrate.den,
+                           _("FPS"));
+
+    if (title->dovi.dv_profile)
+    {
+        g_string_append_printf(info, _("Dolby Vision %d.%d"),
+                               title->dovi.dv_profile,
+                               title->dovi.dv_bl_signal_compatibility_id);
+        if (title->hdr_10_plus)
+            g_string_append_printf(info, " %s", _("HDR10+"));
+    }
+    else if (title->hdr_10_plus)
+        g_string_append(info, _("HDR10+"));
+    else if (title->mastering.has_primaries && title->mastering.has_luminance)
+        g_string_append(info, _("HDR10"));
+    else if (title->color_transfer == 16 || title->color_transfer == 18)
+        g_string_append(info, _("HDR"));
+    else
+        g_string_append(info, _("SDR"));
+
+    g_string_append(info, " (");
+
+    int bit_depth = hb_get_bit_depth(title->pix_fmt);
+    if (bit_depth)
+    {
+        // TRANSLATORS: This is the bit depth of the video
+        g_string_append_printf(info, _("%d-bit"), bit_depth);
+        g_string_append_c(info, ' ');
+    }
+
+    int h_shift, v_shift, chroma_available;
+    chroma_available = hb_get_chroma_sub_sample(title->pix_fmt, &h_shift, &v_shift);
+    if (chroma_available == 0)
+    {
+        int h_value = 4 >> h_shift;
+        int v_value = v_shift ? 0 : h_value;
+        g_string_append_printf(info, "4:%d:%d", h_value, v_value);
+    }
+
+    if (bit_depth || chroma_available == 0)
+    {
+        g_string_append(info, ", ");
+    }
+
+    g_string_append_printf(info, "%d-%d-%d)", title->color_prim,
+                           title->color_transfer, title->color_matrix);
+
+    g_string_append_printf(info, ", %d %s", audio_count,
+                           ngettext("Audio Track", "Audio Tracks", audio_count));
+    if (subtitle_count)
+        g_string_append_printf(info, ", %d %s", subtitle_count,
+                               ngettext("Subtitle Track", "Subtitle Tracks", subtitle_count));
 
     widget = GHB_WIDGET(ud->builder, "source_info_label");
-    gtk_label_set_text(GTK_LABEL(widget), text);
-    free(text);
-    free(rate);
+    gtk_label_set_text(GTK_LABEL(widget), info->str);
+    g_string_free(info, TRUE);
 
     text = g_strdup_printf("%d x %d", geo->width, geo->height);
     ghb_ui_update(ud, "source_storage_size", ghb_string_value(text));
