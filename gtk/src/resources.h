@@ -26,7 +26,7 @@
 #include "values.h"
 
 void ghb_resource_init(void);
-void ghb_resource_free();
+void ghb_resource_free(void);
 GhbValue* ghb_resource_get(const gchar *name);
 
 #endif // _RESOURCES_H_

@@ -20,6 +20,7 @@
  *  Boston, MA  02110-1301, USA.
  */
 
+#include "ghbcompat.h"
 #include "marshalers.h"
 #include "renderer_button.h"
 
@@ -230,7 +231,7 @@ custom_cell_renderer_button_activate (
         MyGdkRectangle          *cell_area,
         GtkCellRendererState    flags)
 {
-    g_debug("custom_cell_renderer_button_activate ()\n");
+    ghb_log_func();
     g_signal_emit (cell, button_cell_signals[CLICKED], 0, path);
     return TRUE;
 }

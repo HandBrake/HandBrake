@@ -35,7 +35,7 @@
 #include "subtitlehandler.h"
 #include "audiohandler.h"
 #include "videohandler.h"
-#include "queuehandler.h"
+#include "title-add.h"
 #include "preview.h"
 #include "presets.h"
 #include "values.h"
@@ -994,7 +994,7 @@ del_tree(const gchar *name, gboolean del_top)
 }
 
 const gchar*
-ghb_version()
+ghb_version (void)
 {
     return hb_get_version(NULL);
 }
@@ -1067,7 +1067,7 @@ ghb_vquality_range(
         *digits = 1;
 }
 
-gint
+static gint
 find_opt_entry(const combo_opts_t *opts, const GhbValue *gval)
 {
     gint ii;
@@ -1107,7 +1107,7 @@ find_opt_entry(const combo_opts_t *opts, const GhbValue *gval)
     return opts->count;
 }
 
-const hb_filter_param_t*
+static const hb_filter_param_t*
 find_param_entry(const hb_filter_param_t *param, const GhbValue *gval)
 {
     gint ii;
@@ -1253,7 +1253,7 @@ hb_handle_t* ghb_live_handle(void)
 }
 
 gchar*
-ghb_get_tmp_dir()
+ghb_get_tmp_dir (void)
 {
     return hb_get_temporary_directory();
 }
@@ -1342,7 +1342,7 @@ grey_builder_combo_box_item(GtkBuilder *builder, const gchar *name, gint value, 
 void
 ghb_mix_opts_filter(GtkComboBox *combo, gint acodec)
 {
-    g_debug("ghb_mix_opts_filter()\n");
+    ghb_log_func();
 
     const hb_mixdown_t *mix;
     for (mix = hb_mixdown_get_next(NULL); mix != NULL;
@@ -1356,7 +1356,7 @@ ghb_mix_opts_filter(GtkComboBox *combo, gint acodec)
 static void
 grey_mix_opts(signal_user_data_t *ud, gint acodec, gint64 layout)
 {
-    g_debug("grey_mix_opts()\n");
+    ghb_log_func();
 
     const hb_mixdown_t *mix;
     for (mix = hb_mixdown_get_next(NULL); mix != NULL;
@@ -1469,7 +1469,7 @@ ghb_init_combo_box(GtkComboBox *combo)
     GtkListStore *store;
     GtkCellRenderer *cell;
 
-    g_debug("ghb_init_combo_box()\n");
+    ghb_log_func();
     // First modify the combobox model to allow greying out of options
     if (combo == NULL)
         return;
@@ -1504,7 +1504,7 @@ init_combo_box(GtkBuilder *builder, const gchar *name)
 {
     GtkComboBox *combo;
 
-    g_debug("init_combo_box() %s\n", name);
+    ghb_log_func_str(name);
     // First modify the combobox model to allow greying out of options
     combo = GTK_COMBO_BOX(GHB_WIDGET(builder, name));
     ghb_init_combo_box(combo);
@@ -2202,7 +2202,7 @@ language_opts_set(signal_user_data_t *ud, const gchar *name,
                            -1);
         g_free(lang);
     }
-#if !GTK_CHECK_VERSION(3, 90, 0)
+#if !GTK_CHECK_VERSION(4, 4, 0)
     // This is handled by GtkEventControllerKey in gtk4
     // Initialized in ghb_combo_init()
     g_signal_connect(combo, "key-press-event", combo_search_key_press_cb, ud);
@@ -2513,7 +2513,7 @@ lookup_title_index(hb_handle_t *h, int title_id)
     return -1;
 }
 
-const hb_title_t*
+static const hb_title_t*
 lookup_title(hb_handle_t *h, int title_id, int *index)
 {
     int ii = lookup_title_index(h, title_id);
@@ -2827,14 +2827,14 @@ subtitle_track_opts_set(signal_user_data_t *ud, const gchar *name,
 
 // Get title id of feature or longest title
 gint
-ghb_longest_title()
+ghb_longest_title (void)
 {
     hb_title_set_t * title_set;
     const hb_title_t * title;
     gint count = 0, ii, longest = -1;
     int64_t duration = 0;
 
-    g_debug("ghb_longest_title ()\n");
+    ghb_log_func();
     if (h_scan == NULL) return 0;
     title_set = hb_get_title_set( h_scan );
     count = hb_list_count( title_set->list_title );
@@ -2859,7 +2859,7 @@ ghb_get_source_audio_lang(const hb_title_t *title, gint track)
     hb_audio_config_t * audio;
     const gchar *lang = "und";
 
-    g_debug("ghb_lookup_1st_audio_lang ()\n");
+    ghb_log_func();
     if (title == NULL)
         return lang;
     if (hb_list_count( title->list_audio ) <= track)
@@ -3038,7 +3038,7 @@ sharpen_opts_set(signal_user_data_t *ud, const gchar *name,
                                   "sharpen", opts->filter_id);
 }
 
-combo_name_map_t*
+static combo_name_map_t*
 find_combo_map(const gchar *name)
 {
     gint ii;
@@ -3053,7 +3053,7 @@ find_combo_map(const gchar *name)
     return NULL;
 }
 
-combo_opts_t*
+static combo_opts_t*
 find_combo_opts(const gchar *name)
 {
     combo_name_map_t *entry = find_combo_map(name);
@@ -3380,7 +3380,7 @@ ghb_audio_bitrate_opts_filter(
     gdouble ivalue;
     gboolean done = FALSE;
 
-    g_debug("audio_bitrate_opts_filter ()\n");
+    ghb_log_func();
     store = GTK_LIST_STORE(gtk_combo_box_get_model (combo));
     if (gtk_tree_model_get_iter_first (GTK_TREE_MODEL(store), &iter))
     {
@@ -3509,7 +3509,7 @@ ghb_combo_init(signal_user_data_t *ud)
     // Populate all the combos
     ghb_update_ui_combo_box(ud, NULL, NULL, TRUE);
 
-#if GTK_CHECK_VERSION(3, 90, 0)
+#if GTK_CHECK_VERSION(4, 4, 0)
     GtkWidget          * combo;
     GtkEventController * econ;
 
@@ -3541,7 +3541,7 @@ ghb_log_level_set(int level)
 }
 
 void
-ghb_backend_close()
+ghb_backend_close (void)
 {
     if (h_live != NULL)
         hb_close(&h_live);
@@ -3552,7 +3552,7 @@ ghb_backend_close()
     hb_global_close();
 }
 
-void ghb_backend_scan_stop()
+void ghb_backend_scan_stop (void)
 {
     hb_scan_stop( h_scan );
 }
@@ -3574,19 +3574,19 @@ ghb_backend_scan(const gchar *path, gint titleindex, gint preview_count, uint64_
 void
 ghb_backend_queue_scan(const gchar *path, gint titlenum)
 {
-    g_debug("ghb_backend_queue_scan()");
+    ghb_log_func();
     hb_scan( h_queue, path, titlenum, -1, 0, 0 );
     hb_status.queue.state |= GHB_STATE_SCANNING;
 }
 
 gint
-ghb_get_scan_state()
+ghb_get_scan_state (void)
 {
     return hb_status.scan.state;
 }
 
 gint
-ghb_get_queue_state()
+ghb_get_queue_state (void)
 {
     return hb_status.queue.state;
 }
@@ -3730,7 +3730,7 @@ update_status(hb_state_t *state, ghb_instance_status_t *status)
 }
 
 void
-ghb_track_status()
+ghb_track_status (void)
 {
     hb_state_t state;
 
@@ -3766,7 +3766,7 @@ ghb_get_subtitle_info(const hb_title_t *title, gint track)
 }
 
 hb_list_t *
-ghb_get_title_list()
+ghb_get_title_list (void)
 {
     if (h_scan == NULL) return NULL;
     return hb_get_titles( h_scan );
@@ -3775,19 +3775,19 @@ ghb_get_title_list()
 gboolean
 ghb_audio_is_passthru(gint acodec)
 {
-    g_debug("ghb_audio_is_passthru () \n");
+    ghb_log_func();
     return (acodec & HB_ACODEC_PASS_FLAG) != 0;
 }
 
 gboolean
 ghb_audio_can_passthru(gint acodec)
 {
-    g_debug("ghb_audio_can_passthru () \n");
+    ghb_log_func();
     return (acodec & HB_ACODEC_PASS_MASK) != 0;
 }
 
 gint
-ghb_get_default_acodec()
+ghb_get_default_acodec (void)
 {
     return HB_ACODEC_FFAAC;
 }
@@ -3869,30 +3869,10 @@ ghb_picture_settings_deps(signal_user_data_t *ud)
     }
 }
 
-void
-ghb_limit_rational( gint *num, gint *den, gint limit )
-{
-    if (*num < limit && *den < limit)
-        return;
-
-    if (*num > *den)
-    {
-        gdouble factor = (double)limit / *num;
-        *num = limit;
-        *den = factor * *den;
-    }
-    else
-    {
-        gdouble factor = (double)limit / *den;
-        *den = limit;
-        *num = factor * *num;
-    }
-}
-
-void
-ghb_apply_pad(GhbValue *settings,
-              const hb_geometry_settings_t * geo,
-                    hb_geometry_t          * result)
+static void
+apply_pad (GhbValue *settings,
+           const hb_geometry_settings_t * geo,
+                 hb_geometry_t          * result)
 {
     gboolean fillwidth, fillheight;
     gint pad[4] = {0,};
@@ -4112,7 +4092,7 @@ ghb_set_scale_settings(signal_user_data_t * ud, GhbValue *settings, gint mode)
 
     uiGeo.maxWidth  = ghb_dict_get_int(settings, "PictureWidth");
     uiGeo.maxHeight = ghb_dict_get_int(settings, "PictureHeight");
-    ghb_apply_pad(settings, &uiGeo, &resultGeo);
+    apply_pad(settings, &uiGeo, &resultGeo);
 
     gint disp_width;
 
@@ -4127,6 +4107,10 @@ ghb_set_scale_settings(signal_user_data_t * ud, GhbValue *settings, gint mode)
                                     resultGeo.width, resultGeo.height);
     ghb_ui_update(ud, "final_storage_size", ghb_string_value(storage_size));
     g_free(storage_size);
+
+    if (ghb_check_name_template(ud, "{width}") ||
+        ghb_check_name_template(ud, "{height}"))
+        ghb_set_destination(ud);
 
     char * aspect;
     aspect = ghb_get_display_aspect_string(disp_width, resultGeo.height);
@@ -4747,45 +4731,45 @@ ghb_remove_job(gint unique_id)
 }
 
 void
-ghb_start_queue()
+ghb_start_queue (void)
 {
     hb_start( h_queue );
 }
 
 void
-ghb_stop_queue()
+ghb_stop_queue (void)
 {
     hb_stop( h_queue );
 }
 
 void
-ghb_start_live_encode()
+ghb_start_live_encode (void)
 {
     hb_start( h_live );
 }
 
 void
-ghb_stop_live_encode()
+ghb_stop_live_encode (void)
 {
     hb_stop( h_live );
 }
 
 void
-ghb_pause_queue()
+ghb_pause_queue (void)
 {
     hb_status.queue.state |= GHB_STATE_PAUSED;
     hb_pause( h_queue );
 }
 
 void
-ghb_resume_queue()
+ghb_resume_queue (void)
 {
     hb_status.queue.state &= ~GHB_STATE_PAUSED;
     hb_resume( h_queue );
 }
 
 void
-ghb_pause_resume_queue()
+ghb_pause_resume_queue (void)
 {
     hb_state_t s;
     hb_get_state2( h_queue, &s );

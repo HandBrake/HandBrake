@@ -21,12 +21,15 @@
  *  Boston, MA  02110-1301, USA.
  */
 
+#include "ghbcompat.h"
+
 #include <stdio.h>
 #include <string.h>
 #include <glib.h>
 #include <glib/gstdio.h>
 #include "plist.h"
 #include "values.h"
+#include "appcast.h"
 
 enum
 {

@@ -73,6 +73,8 @@ ghb_SOURCES = \
 	callbacks.h \
 	chapters.c \
 	chapters.h \
+	title-add.c \
+	title-add.h \
 	queuehandler.c \
 	queuehandler.h \
 	videohandler.c \
@@ -116,7 +118,9 @@ ghb_SOURCES = \
 	marshalers.c \
 	marshalers.h \
 	color-scheme.c \
-	color-scheme.h
+	color-scheme.h \
+	power-manager.c \
+	power-manager.h
 
 if MINGW
 ghb_LDFLAGS = \
@@ -148,15 +152,12 @@ data_res.c : data_res.gresource.xml internal_defaults.json widget.deps widget_re
 data_res.h : data_res.gresource.xml internal_defaults.json widget.deps widget_reverse.deps
 	glib-compile-resources --generate --target=$@ --c-name ghb_data --manual-register $<
 
-if GHB_GTK_4_00
-UI=400
+if GHB_GTK_4_4
+UI=404
 UI_FILE=ghb4.ui
 else
-if GHB_GTK_3_16
-UI=316
-UI_FILE=ghb3.ui
-else
-UI=300
+if GHB_GTK_3_22
+UI=322
 UI_FILE=ghb3.ui
 endif
 endif
@@ -182,7 +183,7 @@ widget.deps: makedeps.py
 fr.handbrake.ghb.metainfo.xml: fr.handbrake.ghb.metainfo.xml.in
 	$(AM_V_GEN) $(MSGFMT) --xml --template $< -d $(top_srcdir)/po -o $@
 
-fr.handbrake.ghb.metainfo.xml.in: fr.handbrake.ghb.metainfo.template.xml
+fr.handbrake.ghb.metainfo.xml.in: fr.handbrake.ghb.metainfo.xml.in.in
 	sed -e 's^RELEASE_TAG^<release version="$(HB.version)" date="$(word 1,$(HB.repo.date))" />^' $< > $@
 
 $(srcdir)/marshalers.h: marshalers.list
@@ -220,3 +221,4 @@ install-data-local:
 	fi
 	mkdir -p $(DESTDIR)/$(datadir)/applications/; \
 	$(INSTALL_DATA) $(srcdir)/$(hb_menu) $(DESTDIR)/$(datadir)/applications/$(hb_menu)
+

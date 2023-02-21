@@ -29,7 +29,7 @@
 void ghb_presets_load(signal_user_data_t *ud);
 void ghb_update_from_preset(signal_user_data_t *ud, const gchar *key);
 void ghb_settings_init(GhbValue *settings, const char *name);
-void ghb_settings_close();
+void ghb_settings_close(void);
 void ghb_prefs_load(signal_user_data_t *ud);
 void ghb_pref_save(GhbValue *settings, const gchar *key);
 void ghb_pref_set(GhbValue *settings, const gchar *key);
@@ -46,8 +46,10 @@ void ghb_select_default_preset(signal_user_data_t *ud);
 void ghb_presets_list_init(signal_user_data_t *ud,
                            const hb_preset_index_t *path);
 void ghb_presets_menu_init(signal_user_data_t *ud);
-int ghb_find_pid_file();
-void ghb_write_pid_file();
+void ghb_presets_list_reinit(signal_user_data_t *ud);
+void ghb_presets_menu_reinit(signal_user_data_t *ud);
+int ghb_find_pid_file(void);
+void ghb_write_pid_file(void);
 GhbValue* ghb_get_current_preset(signal_user_data_t *ud);
 void ghb_preset_to_settings(GhbValue *settings, GhbValue *preset);
 void ghb_prefs_to_settings(GhbValue *settings);

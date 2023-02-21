@@ -107,22 +107,26 @@ void ghb_pause_queue(void);
 void ghb_resume_queue(void);
 void ghb_pause_resume_queue(void);
 
-void ghb_start_live_encode();
-void ghb_stop_live_encode();
+void ghb_start_live_encode(void);
+void ghb_stop_live_encode(void);
+
+void ghb_set_scan_state(gint state);
+void ghb_set_queue_state(gint state);
+void ghb_set_live_state(gint state);
 
 void ghb_clear_scan_state(gint state);
 void ghb_clear_queue_state(gint state);
 void ghb_clear_live_state(gint state);
 
 void ghb_set_state(gint state);
-gint ghb_get_scan_state();
-gint ghb_get_queue_state();
+gint ghb_get_scan_state(void);
+gint ghb_get_queue_state(void);
 void ghb_get_status(ghb_status_t *status);
 void ghb_track_status(void);
 void ghb_backend_scan(const gchar *path, gint titleindex, gint preview_count, guint64 min_duration);
-void ghb_backend_scan_stop();
+void ghb_backend_scan_stop(void);
 void ghb_backend_queue_scan(const gchar *path, gint titleindex);
-hb_list_t * ghb_get_title_list();
+hb_list_t * ghb_get_title_list(void);
 void ghb_par_init(signal_user_data_t *ud);
 void ghb_apply_crop(GhbValue *settings, const hb_geometry_crop_t * geo, const hb_title_t * title);
 void ghb_set_scale(signal_user_data_t *ud, gint mode);
@@ -165,15 +169,17 @@ gint ghb_lookup_combo_int(const gchar *name, const GhbValue *gval);
 gdouble ghb_lookup_combo_double(const gchar *name, const GhbValue *gval);
 gchar* ghb_lookup_combo_option(const gchar *name, const GhbValue *gval);
 const char* ghb_lookup_filter_name(int filter_id, const char *short_name, int preset);
-gchar* ghb_get_tmp_dir();
+gchar* ghb_get_tmp_dir(void);
 gint ghb_find_closest_audio_samplerate(gint rate);
 
 void ghb_init_lang_list_model(GtkTreeView *tv);
 void ghb_init_lang_list(GtkTreeView *tv, signal_user_data_t *ud);
 
 void ghb_init_combo_box(GtkComboBox *combo);
+void ghb_audio_encoder_opts_add_autopass(GtkComboBox *combo);
 void ghb_audio_encoder_opts_set(GtkComboBox *combo);
 void ghb_audio_bitrate_opts_set(GtkComboBox *combo);
+void ghb_audio_encoder_opts_set_with_mask(GtkComboBox *combo, int mask, int neg_mask);
 void ghb_audio_bitrate_opts_filter(GtkComboBox *combo, gint first_rate, gint last_rate);
 void ghb_mix_opts_set(GtkComboBox *combo);
 void ghb_mix_opts_filter(GtkComboBox *combo, gint acodec);
@@ -185,6 +191,11 @@ const iso639_lang_t* ghb_iso639_lookup_by_int(int idx);
 
 // libhb lookup helpers
 const hb_title_t* ghb_lookup_title(int title_id, int *index);
+int ghb_lookup_title_index(int title_id);
+const hb_title_t* ghb_lookup_title(int title_id, int *index);
+GhbValue* ghb_get_title_dict(int title_id);
+int ghb_lookup_queue_title_index(int title_id);
+const hb_title_t* ghb_lookup_queue_title(int title_id, int *index);
 GhbValue* ghb_get_title_dict(int title_id);
 const hb_container_t* ghb_lookup_container_by_name(const gchar *name);
 const hb_encoder_t* ghb_lookup_audio_encoder(const char *name);

@@ -15,6 +15,7 @@
         "--filesystem=xdg-config/gtk-3.0",
         "--talk-name=org.gtk.vfs.*",
         "--system-talk-name=org.freedesktop.login1",
+        "--system-talk-name=org.freedesktop.UPower",
         "--env=PATH=/app/bin:/app/extensions/bin:/usr/bin",
         "--env=LIBVA_DRIVERS_PATH=/app/extensions/lib/dri",
         "--env=LD_LIBRARY_PATH=/app/extensions/lib",

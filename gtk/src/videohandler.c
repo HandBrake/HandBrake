@@ -21,15 +21,18 @@
  *  Boston, MA  02110-1301, USA.
  */
 
-#include <glib/gi18n.h>
 #include "ghbcompat.h"
+
+#include <glib/gi18n.h>
 #include <string.h>
+
 #include "settings.h"
 #include "values.h"
 #include "callbacks.h"
 #include "presets.h"
 #include "preview.h"
 #include "hb-backend.h"
+#include "videohandler.h"
 
 int ghb_get_video_encoder(GhbValue *settings)
 {
@@ -112,6 +115,9 @@ vcodec_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
     ghb_set_video_preset(ud->settings, encoder, NULL);
     GhbValue *gval = ghb_dict_get_value(ud->settings, "VideoPresetSlider");
     ghb_ui_settings_update(ud, ud->settings, "VideoPresetSlider", gval);
+    if (ghb_check_name_template(ud, "{bit-depth}") ||
+        ghb_check_name_template(ud, "{codec}"))
+        ghb_set_destination(ud);
 }
 
 char *video_option_tooltip = NULL;
@@ -243,8 +249,8 @@ video_preset_slider_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
     update_adv_settings_tooltip(ud);
 }
 
-void
-ghb_video_setting_changed(GtkWidget *widget, signal_user_data_t *ud)
+static void
+video_setting_changed(GtkWidget *widget, signal_user_data_t *ud)
 {
     ghb_widget_to_setting(ud->settings, widget);
     update_adv_settings_tooltip(ud);
@@ -256,7 +262,7 @@ ghb_video_setting_changed(GtkWidget *widget, signal_user_data_t *ud)
 G_MODULE_EXPORT void
 video_setting_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
-    ghb_video_setting_changed(widget, ud);
+    video_setting_changed(widget, ud);
 }
 
 G_MODULE_EXPORT void
@@ -265,7 +271,7 @@ video_option_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
     GtkWidget *textview;
 
     textview = GTK_WIDGET(GHB_WIDGET(ud->builder, "VideoOptionExtra"));
-    ghb_video_setting_changed(textview, ud);
+    video_setting_changed(textview, ud);
 }
 
 G_MODULE_EXPORT gchar*

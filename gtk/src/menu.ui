@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
-  <requires lib="gtk+" version="3.16"/>
+  <requires lib="gtk+" version="3.22"/>
 
   <menu id="handbrake-menu">
     <submenu>
@@ -8,12 +8,12 @@
       <section>
         <item>
           <attribute name="action">app.source</attribute>
-          <attribute name="label" translatable="yes">Open _Source</attribute>
+          <attribute name="label" translatable="yes">_Open Source</attribute>
           <attribute name="accel">&lt;control&gt;O</attribute>
         </item>
         <item>
-          <attribute name="action">app.single</attribute>
-          <attribute name="label" translatable="yes">Open Single _Title</attribute>
+          <attribute name="action">app.source-dir</attribute>
+          <attribute name="label" translatable="yes">Open _Directory</attribute>
           <attribute name="accel">&lt;shift&gt;&lt;control&gt;O</attribute>
         </item>
         <item>
@@ -40,13 +40,17 @@
       <attribute name="label" translatable="yes">_Queue</attribute>
       <section>
         <item>
-          <attribute name="action">app.queue-add</attribute>
+          <attribute name="action">app.add-current</attribute>
           <attribute name="label" translatable="yes">_Add</attribute>
           <attribute name="accel">&lt;alt&gt;A</attribute>
         </item>
         <item>
-          <attribute name="action">app.queue-add-all</attribute>
+          <attribute name="action">app.add-multiple</attribute>
           <attribute name="label" translatable="yes">Add _Multiple</attribute>
+        </item>
+        <item>
+          <attribute name="action">app.add-all</attribute>
+          <attribute name="label" translatable="yes">Add A_ll</attribute>
           <attribute name="accel">&lt;shift&gt;&lt;alt&gt;A</attribute>
         </item>
       </section>

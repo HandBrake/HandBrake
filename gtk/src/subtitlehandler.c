@@ -21,7 +21,6 @@
  *  Boston, MA  02110-1301, USA.
  */
 
-#include <glib/gi18n.h>
 #include "ghbcompat.h"
 #include "handbrake/handbrake.h"
 #include "settings.h"
@@ -34,6 +33,8 @@
 #include "presets.h"
 #include "audiohandler.h"
 #include "subtitlehandler.h"
+
+#include <glib/gi18n.h>
 
 static char * subtitle_get_track_description(GhbValue *settings,
                                              GhbValue *subsettings);
@@ -520,8 +521,8 @@ ghb_subtitle_title_change(signal_user_data_t *ud, gboolean show)
     }
 }
 
-void
-ghb_set_pref_subtitle(signal_user_data_t *ud)
+static void
+set_pref_subtitle(signal_user_data_t *ud)
 {
     int               sub_count, title_id;
     GtkWidget        *widget;
@@ -555,8 +556,8 @@ ghb_set_pref_subtitle(signal_user_data_t *ud)
     subtitle_refresh_list_ui(ud);
 }
 
-gint
-ghb_selected_subtitle_row(signal_user_data_t *ud)
+static gint
+selected_subtitle_row (signal_user_data_t *ud)
 {
     GtkTreeView *tv;
     GtkTreePath *tp;
@@ -1301,7 +1302,7 @@ subtitle_add_all_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
 G_MODULE_EXPORT void
 subtitle_reset_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
 {
-    ghb_set_pref_subtitle(ud);
+    set_pref_subtitle(ud);
     ghb_update_summary_info(ud);
 }
 
@@ -1430,7 +1431,7 @@ ghb_subtitle_set_pref_lang(GhbValue *settings)
     }
 }
 
-void
+static void
 subtitle_add_lang_iter(GtkTreeModel *tm, GtkTreeIter *iter,
                        signal_user_data_t *ud)
 {

@@ -43,13 +43,12 @@
 void ghb_check_all_dependencies(signal_user_data_t *ud);
 gboolean ghb_timer_cb(gpointer data);
 gboolean ghb_log_cb(GIOChannel *source, GIOCondition cond, gpointer data);
-void warn_log_handler(
-    const gchar *domain, GLogLevelFlags flags, const gchar *msg, gpointer ud);
-void debug_log_handler(
-    const gchar *domain, GLogLevelFlags flags, const gchar *msg, gpointer ud);
 void ghb_hbfd(signal_user_data_t *ud, gboolean hbfd);
 gboolean ghb_file_menu_add_dvd(signal_user_data_t *ud);
 void ghb_udev_init(void);
+void ghb_countdown_dialog(GtkMessageType type, const gchar *message,
+    const gchar *action, const gchar *cancel, GSourceFunc action_func,
+    signal_user_data_t *ud, gint timeout);
 gboolean ghb_title_message_dialog(
     GtkWindow *parent, GtkMessageType type, const gchar *title,
     const gchar *message, const gchar *no, const gchar *yes);
@@ -73,6 +72,7 @@ gpointer ghb_check_update(signal_user_data_t *ud);
 void wm_drive_changed(MSG *msg, signal_user_data_t *ud);
 #endif
 gpointer ghb_cache_volnames(signal_user_data_t *ud);
+gboolean ghb_check_name_template(signal_user_data_t *ud, const char *str);
 void ghb_volname_cache_init(void);
 void ghb_update_destination_extension(signal_user_data_t *ud);
 void ghb_update_pending(signal_user_data_t *ud);
@@ -90,11 +90,14 @@ void ghb_scale_configure(signal_user_data_t *ud, char *name, double val,
 void ghb_update_summary_info(signal_user_data_t *ud);
 void ghb_set_title_settings(signal_user_data_t *ud, GhbValue *settings);
 void ghb_browse_uri(signal_user_data_t *ud, const gchar *uri);
+void ghb_set_destination(signal_user_data_t *ud);
 void ghb_break_pts_duration(gint64 ptsDuration,
                             gint *hh, gint *mm, gdouble *ss);
 void ghb_break_duration(gint64 duration, gint *hh, gint *mm, gint *ss);
 GtkFileFilter *ghb_add_file_filter(GtkFileChooser *chooser,
                                    signal_user_data_t *ud,
                                    const char *name, const char *id);
-#endif // _CALLBACKS_H_
+gpointer ghb_check_update(signal_user_data_t *ud);
+void ghb_notify_done(signal_user_data_t *ud);
 
+#endif // _CALLBACKS_H_

@@ -1,27 +1,10 @@
-/*
- * color-scheme.h - Change application theme based on D-Bus
- *
- * Copyright (C) 2022 Robert Hall-Day
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
- * MA 02110-1301, USA.
- */
+/* Copyright (C) 2022-2023 HandBrake Team
+ * SPDX-License-Identifier: GPL-2.0-or-later */
 
 #ifndef COLOR_SCHEME_H
 #define COLOR_SCHEME_H
 
+#include <gtk/gtk.h>
 #include <glib.h>
 
 G_BEGIN_DECLS
@@ -51,10 +34,11 @@ typedef enum {
 } DesktopColorScheme;
 
 gboolean color_scheme_set (AppColorScheme scheme);
+void color_scheme_set_async (AppColorScheme scheme);
 gboolean color_scheme_is_dark_theme (void);
 gboolean color_scheme_toggle (void);
-AppColorScheme color_scheme_get (void);
-DesktopColorScheme color_scheme_get_desktop (void);
+AppColorScheme color_scheme_get_app_scheme (void);
+DesktopColorScheme color_scheme_get_desktop_scheme (void);
 
 G_END_DECLS
 

@@ -59,6 +59,7 @@ dep_map = (
     DepEntry("CustomTmpEnable", "CustomTmpDir", "1", False, False),
     DepEntry("PresetCategory", "PresetCategoryName", "new", False, True),
     DepEntry("PresetCategory", "PresetCategoryEntryLabel", "new", False, True),
+    DepEntry("DiskFreeCheck", "DiskFreeLimit", "1", False, False),
     )
 
 def main():
