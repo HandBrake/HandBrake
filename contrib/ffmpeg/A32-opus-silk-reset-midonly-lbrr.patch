@@ -1,0 +1,30 @@
+From e301143f96639b97a8e9a0045f93b56e0f399289 Mon Sep 17 00:00:00 2001
+From: Tristan Matthews <tmatth@videolan.org>
+Date: Fri, 23 Sep 2022 07:43:35 -0400
+Subject: [PATCH] opus_silk: reset midonly flag after skipping LBRR
+
+Fix suggested by Mark Harris. Fixes ticket #9890
+
+Simplified after feedback from Anton Khirnov.
+
+Signed-off-by: Anton Khirnov <anton@khirnov.net>
+---
+ libavcodec/opus_silk.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/libavcodec/opus_silk.c b/libavcodec/opus_silk.c
+index 8523b55ada..f9d67f4fb3 100644
+--- a/libavcodec/opus_silk.c
++++ b/libavcodec/opus_silk.c
+@@ -833,6 +833,8 @@ int ff_silk_decode_superframe(SilkContext *s, OpusRangeCoder *rc,
+                 int active1 = (j == 0 && !(redundancy[1] & (1 << i))) ? 0 : 1;
+                 silk_decode_frame(s, rc, i, j, coded_channels, 1, active1, 1);
+             }
++
++        s->midonly = 0;
+     }
+ 
+     for (i = 0; i < nb_frames; i++) {
+-- 
+2.37.2
+
