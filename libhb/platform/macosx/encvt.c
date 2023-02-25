@@ -350,6 +350,7 @@ static void hb_vt_add_dynamic_hdr_metadata(CVPixelBufferRef pxbuffer, hb_job_t *
         if (job->passthru_dynamic_hdr_metadata & HDR_10_PLUS &&
             side_data->type == AV_FRAME_DATA_DYNAMIC_HDR_PLUS)
         {
+#ifdef MAC_OS_VERSION_13_0
             if (__builtin_available(macOS 13, *))
             {
                 uint8_t *payload = NULL;
@@ -368,6 +369,7 @@ static void hb_vt_add_dynamic_hdr_metadata(CVPixelBufferRef pxbuffer, hb_job_t *
                     CFRelease(data);
                 }
             }
+#endif
         }
         if (job->passthru_dynamic_hdr_metadata & DOVI &&
             side_data->type == AV_FRAME_DATA_DOVI_RPU_BUFFER)
