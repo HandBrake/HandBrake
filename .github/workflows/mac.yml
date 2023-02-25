@@ -2,6 +2,10 @@ name: macOS build
 
 on: [push, pull_request]
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
 jobs:
   build:
     name: Build on macOS
@@ -29,16 +33,12 @@ jobs:
     - name: Setup Environment
       run: |
         echo ~/mac-toolchain/bin >> $GITHUB_PATH
-        echo ~/.cargo/env >> $GITHUB_PATH
+        rustup target add aarch64-apple-darwin
 
     - name: Setup Toolchain
       if: steps.mac-toolchain.outputs.cache-hit != 'true'
       run: |
         scripts/mac-toolchain-build ~/mac-toolchain
-
-    - name: Setup Rust Toolchain
-      run: |
-        rustup target add aarch64-apple-darwin
 
     - name: Setup Cargo-C Toolchain
       if: steps.mac-cargo-c-toolchain.outputs.cache-hit != 'true'
