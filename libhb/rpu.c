@@ -139,6 +139,7 @@ static void rpu_close(hb_filter_object_t * filter)
     filter->private_data = NULL;
 }
 
+#if HB_PROJECT_FEATURE_LIBDOVI
 static void apply_rpu_if_needed(hb_filter_private_t *pv, hb_buffer_t *buf)
 {
     int rpu_available = 0;
@@ -176,6 +177,7 @@ static void save_rpu(hb_filter_private_t *pv, AVBufferRef *ref)
     av_buffer_unref(&pv->rpu);
     pv->rpu = av_buffer_ref(ref);
 }
+#endif
 
 static int rpu_work(hb_filter_object_t *filter,
                     hb_buffer_t **buf_in,
