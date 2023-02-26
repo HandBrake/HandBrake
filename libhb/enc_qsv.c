@@ -1214,6 +1214,12 @@ int qsv_enc_init(hb_work_private_t *pv)
  **********************************************************************/
 int encqsvInit(hb_work_object_t *w, hb_job_t *job)
 {
+    if (!hb_qsv_available())
+    {
+       hb_error("encqsvInit: qsv is not available on the system");
+       return -1;
+    }
+
     int brc_param_multiplier;
     hb_work_private_t *pv = calloc(1, sizeof(hb_work_private_t));
     w->private_data       = pv;
@@ -1226,6 +1232,12 @@ int encqsvInit(hb_work_object_t *w, hb_job_t *job)
     hb_buffer_list_clear(&pv->encoded_frames);
 
     pv->chapter_queue    = hb_chapter_queue_init();
+
+    if (!pv->qsv_info)
+    {
+        hb_error("encqsvInit: %s codec is not supported by this GPU adapter", hb_video_encoder_get_long_name(job->vcodec));
+        return -1;
+    }
 
     // default encoding parameters
     if (hb_qsv_param_default_preset(&pv->param, &pv->enc_space.m_mfxVideoParam,
@@ -1668,7 +1680,6 @@ int encqsvInit(hb_work_object_t *w, hb_job_t *job)
     int err;
     mfxStatus sts;
     mfxVersion version;
-    mfxLoader loader;
     mfxVideoParam videoParam;
     mfxExtBuffer *extParamArray[5];
     mfxSession session = (mfxSession)0;
@@ -1679,7 +1690,8 @@ int encqsvInit(hb_work_object_t *w, hb_job_t *job)
     mfxExtHyperModeParam hyper_encode_buf, *hyper_encode = &hyper_encode_buf;
     version.Major = HB_QSV_MINVERSION_MAJOR;
     version.Minor = HB_QSV_MINVERSION_MINOR;
-    sts = hb_qsv_create_mfx_session(pv->qsv_info->implementation, job->qsv.ctx->dx_index, &version, &session, &loader);
+    uint32_t render_node = hb_qsv_get_adapter_render_node(hb_qsv_get_adapter_index());
+    sts = hb_qsv_create_mfx_session(pv->qsv_info->implementation, render_node, &version, &session);
     if (sts != MFX_ERR_NONE)
     {
         hb_error("encqsvInit: MFXInit failed (%d) with implementation %d", sts, pv->qsv_info->implementation);
@@ -1690,7 +1702,7 @@ int encqsvInit(hb_work_object_t *w, hb_job_t *job)
     {
         // On linux, the handle to the VA display must be set.
         // This code is essentially a NOP other platforms.
-        job->qsv.ctx->display = hb_qsv_display_init();
+        job->qsv.ctx->display = hb_qsv_display_init(render_node);
         if (job->qsv.ctx->display != NULL)
         {
             MFXVideoCORE_SetHandle(session, job->qsv.ctx->display->mfxType,
@@ -1897,7 +1909,6 @@ int encqsvInit(hb_work_object_t *w, hb_job_t *job)
 void encqsvClose(hb_work_object_t *w)
 {
     hb_work_private_t *pv = w->private_data;
-    mfxVersion version;
     int i;
 
     if (pv != NULL && pv->job != NULL && pv->job->qsv.ctx != NULL &&

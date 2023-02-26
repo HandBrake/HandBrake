@@ -1575,10 +1575,20 @@ static int try_adapter(const char * name, const char * dir,
     return -1;
 }
 
-static int open_adapter(const char * name)
+static int open_adapter(const char * name, const uint dri_render_node)
 {
-    int fd = try_adapter(name, DRI_PATH, DRI_NODE_RENDER,
-                         DRI_RENDER_NODE_START, DRI_RENDER_NODE_LAST);
+    int fd;
+    // If dri_render_node is unknown enumerate across the predifined range of renders
+    if (dri_render_node == 0)
+    {
+        fd = try_adapter(name, DRI_PATH, DRI_NODE_RENDER,
+                            DRI_RENDER_NODE_START, DRI_RENDER_NODE_LAST);
+    }
+    else
+    {
+        fd = try_adapter(name, DRI_PATH, DRI_NODE_RENDER,
+                            dri_render_node, dri_render_node);
+    }
     if (fd < 0)
     {
         fd = try_adapter(name, DRI_PATH, DRI_NODE_CARD,
@@ -1614,7 +1624,8 @@ static int try_va_interface(hb_display_t * hbDisplay,
     return 0;
 }
 
-hb_display_t * hb_display_init(const char         *  driver_name,
+hb_display_t * hb_display_init(const char         * driver_name,
+                               const uint32_t       dri_render_node,
                                const char * const * interface_names)
 {
     hb_display_t * hbDisplay = calloc(sizeof(hb_display_t), 1);
@@ -1622,7 +1633,7 @@ hb_display_t * hb_display_init(const char         *  driver_name,
     int            ii;
 
     hbDisplay->vaDisplay = NULL;
-    hbDisplay->vaFd      = open_adapter(driver_name);
+    hbDisplay->vaFd      = open_adapter(driver_name, dri_render_node);
     if (hbDisplay->vaFd < 0)
     {
         hb_deep_log( 3, "hb_va_display_init: no display found" );
@@ -1689,7 +1700,8 @@ void hb_display_close(hb_display_t ** _d)
 
 #else // !SYS_LINUX && !SYS_FREEBSD
 
-hb_display_t * hb_display_init(const char         *  driver_name,
+hb_display_t * hb_display_init(const char         * driver_name,
+                               const uint32_t       dri_render_node,
                                const char * const * interface_names)
 {
     return NULL;
@@ -1703,7 +1715,8 @@ void hb_display_close(hb_display_t ** _d)
 #endif // SYS_LINUX || SYS_FREEBSD
 #else // !HB_PROJECT_FEATURE_QSV
 
-hb_display_t * hb_display_init(const char         *  driver_name,
+hb_display_t * hb_display_init(const char         * driver_name,
+                               const uint32_t       dri_render_node,
                                const char * const * interface_names)
 {
     return NULL;

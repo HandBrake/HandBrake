@@ -99,6 +99,7 @@ else
 endif
 
 ifeq (1,$(FEATURE.qsv))
+    LIBHB.GCC.D += ONEVPL_EXPERIMENTAL
     LIBHB.GCC.D += HAVE_THREADS=1
 endif
 
@@ -133,6 +134,7 @@ LIBHB.dll.libs += $(CONTRIB.build/)lib/libfdk-aac.a
 endif
 
 ifeq (1,$(FEATURE.qsv))
+LIBHB.GCC.D += ONEVPL_EXPERIMENTAL
 LIBHB.dll.libs += $(CONTRIB.build/)lib/libvpl.a
 endif
 
