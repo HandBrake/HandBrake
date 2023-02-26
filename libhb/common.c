@@ -11,6 +11,7 @@
 #include <time.h>
 #include <ctype.h>
 #include <sys/time.h>
+#include <locale.h>
 
 #include "handbrake/handbrake.h"
 #include "handbrake/hbffmpeg.h"
@@ -5263,6 +5264,18 @@ int hb_subtitle_add_ssa_header(hb_subtitle_t *subtitle, const char *font,
     float shadow_size = fs / 36.0;
     float outline_size = fs / 30.0;
 
+    char *shadow_size_string = hb_strdup_printf("%.2f", shadow_size);
+    hb_str_from_locale(shadow_size_string);
+
+    char *outline_size_string = hb_strdup_printf("%.2f", outline_size);
+    hb_str_from_locale(outline_size_string);
+
+    if (shadow_size_string == NULL || outline_size_string == NULL)
+    {
+        hb_error("hb_subtitle_add_ssa_header: malloc failed");
+        return 0;
+    }
+
     // SRT subtitles are represented internally as SSA
     // Create an SSA header
     const char * ssa_header =
@@ -5277,9 +5290,13 @@ int hb_subtitle_add_ssa_header(hb_subtitle_t *subtitle, const char *font,
         "\r\n"
         "[V4+ Styles]\r\n"
         "Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding\r\n"
-        "Style: Default,%s,%d,&H00FFFFFF,&H00FFFFFF,&H000F0F0F,&H000F0F0F,0,0,0,0,100,100,0,0.00,1,%.2f,%.2f,2,20,20,20,0\r\n";
+        "Style: Default,%s,%d,&H00FFFFFF,&H00FFFFFF,&H000F0F0F,&H000F0F0F,0,0,0,0,100,100,0,0.00,1,%s,%s,2,20,20,20,0\r\n";
 
-    subtitle->extradata = (uint8_t*)hb_strdup_printf(ssa_header, w, h, font, fs, outline_size, shadow_size);
+    subtitle->extradata = (uint8_t *)hb_strdup_printf(ssa_header, w, h, font, fs, outline_size_string, shadow_size_string);
+
+    free(shadow_size_string);
+    free(outline_size_string);
+
     if (subtitle->extradata == NULL)
     {
         hb_error("hb_subtitle_add_ssa_header: malloc failed");
@@ -5601,6 +5618,46 @@ void hb_metadata_rem_coverart( hb_metadata_t *metadata, int idx )
             free( art->data );
             free( art );
         }
+    }
+}
+
+// Copied from jansson strconv.c
+
+void hb_str_to_locale(char *str)
+{
+    const char *point;
+    char *pos;
+
+    point = localeconv()->decimal_point;
+    if (*point == '.')
+    {
+        // No conversion needed
+        return;
+    }
+
+    pos = strchr(str, '.');
+    if (pos)
+    {
+        *pos = *point;
+    }
+}
+
+void hb_str_from_locale(char *str)
+{
+    const char *point;
+    char *pos;
+
+    point = localeconv()->decimal_point;
+    if (*point == '.')
+    {
+        // No conversion needed
+        return;
+    }
+
+    pos = strchr(str, *point);
+    if (pos)
+    {
+        *pos = '.';
     }
 }
 
