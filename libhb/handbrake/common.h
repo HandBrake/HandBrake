@@ -1534,6 +1534,9 @@ typedef void hb_error_handler_t( const char *errmsg );
 
 extern void hb_register_error_handler( hb_error_handler_t * handler );
 
+void hb_str_to_locale(char *buffer);
+void hb_str_from_locale(char *buffer);
+
 char * hb_strdup_vaprintf( const char * fmt, va_list args );
 char * hb_strdup_printf(const char *fmt, ...) HB_WPRINTF(1, 2);
 char * hb_strncat_dup( const char * s1, const char * s2, size_t n );
