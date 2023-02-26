@@ -1972,15 +1972,11 @@ if (hb_qsv_available())
 "                           explicitly synchronized.\n"
 "                           Omit 'number' for zero.\n"
 "                           (default: 4)\n"
-    );
-#if defined(_WIN32) || defined(__MINGW32__)
-    fprintf( out,
 "   --qsv-adapter[=index]\n"
 "                           Set QSV hardware graphics adapter index\n"
 "                           (default: QSV hardware graphics adapter with highest hardware generation)\n"
 "\n"
     );
-#endif
 }
 #endif
 }

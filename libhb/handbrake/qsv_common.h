@@ -100,8 +100,8 @@ typedef struct hb_qsv_info_s
 } hb_qsv_info_t;
 
 /* Intel Quick Sync Video utilities */
-int            hb_qsv_create_mfx_session(mfxIMPL implementation, int adapter_index, mfxVersion *pver, mfxSession *psession, mfxLoader *ploader);
-hb_display_t * hb_qsv_display_init(void);
+int            hb_qsv_create_mfx_session(mfxIMPL implementation, int adapter_index, mfxVersion *pver, mfxSession *psession);
+hb_display_t * hb_qsv_display_init(const uint32_t dri_render_node);
 int            hb_qsv_video_encoder_is_enabled(int adapter_index, int encoder);
 int            hb_qsv_audio_encoder_is_enabled(int encoder);
 int            hb_qsv_info_init();
@@ -112,6 +112,7 @@ hb_qsv_info_t* hb_qsv_encoder_info_get(int adapter_index, int encoder);
 int            hb_qsv_hardware_generation(int cpu_platform);
 int            hb_qsv_get_platform(int adapter_index);
 int            hb_qsv_get_adapter_index();
+int            hb_qsv_get_adapter_render_node(int adapter_index);
 int            hb_qsv_implementation_is_hardware(mfxIMPL implementation);
 
 #if !HB_QSV_ONEVPL
