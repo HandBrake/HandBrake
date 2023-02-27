@@ -853,7 +853,7 @@ static void show_progress_json(hb_state_t * state)
     hb_value_free(&state_dict);
     fprintf(stdout, "Progress: %s\n", state_json);
     free(state_json);
-    fflush(stderr);
+    fflush(stdout);
 }
 
 static int HandleEvents(hb_handle_t * h, hb_dict_t *preset_dict)
