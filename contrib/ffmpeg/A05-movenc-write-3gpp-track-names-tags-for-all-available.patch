@@ -1,28 +1,30 @@
-From 6b0af19512ba8f4619ac85c953470c8126aeb6e1 Mon Sep 17 00:00:00 2001
-From: John Stebbins <jstebbins@jetheaddev.com>
-Date: Fri, 21 May 2021 14:18:17 +0200
-Subject: [PATCH 4/5] [PATCH] movenc: write 3gpp track names tags for all
- available  languages
+From 7662ce6bcda9f153b164ef57fdadcc5ce6a21088 Mon Sep 17 00:00:00 2001
+From: Damiano galassi <damiog@gmail.com>
+Date: Tue, 28 Feb 2023 11:23:18 +0100
+Subject: [PATCH 3/3] movenc: write 3gpp track names tags for all  available 
+ languages
 
 Metadata keys can have a language suffix.  Iterate through all language
 variations of the metadata key.
+
+Original patch by John Stebbins <jstebbins@jetheaddev.com>.
 ---
- libavformat/movenc.c | 26 ++++++++++++++++++++++++--
- 1 file changed, 24 insertions(+), 2 deletions(-)
+ libavformat/movenc.c | 25 +++++++++++++++++++++++--
+ 1 file changed, 23 insertions(+), 2 deletions(-)
 
 diff --git a/libavformat/movenc.c b/libavformat/movenc.c
-index 6ccd2ea..44db8e1 100644
+index cba6ce1..3e680c4 100644
 --- a/libavformat/movenc.c
 +++ b/libavformat/movenc.c
-@@ -26,6 +26,7 @@
+@@ -28,6 +28,7 @@
  
  #include "movenc.h"
  #include "avformat.h"
 +#include "avlanguage.h"
  #include "avio_internal.h"
+ #include "dovi_isom.h"
  #include "riff.h"
- #include "avio.h"
-@@ -3329,7 +3330,15 @@ static int mov_write_3gp_udta_tag(AVIOContext *pb, AVDictionary *metadata,
+@@ -3586,7 +3587,14 @@ static int mov_write_3gp_udta_tag(AVIOContext *pb, AVDictionary *metadata,
      if (!strcmp(tag, "yrrc"))
          avio_wb16(pb, atoi(t->value));
      else {
@@ -34,12 +36,11 @@ index 6ccd2ea..44db8e1 100644
 +        }
 +        if (!lang)
 +            lang = ff_mov_iso639_to_lang("und", 1);
-+
 +        avio_wb16(pb, lang); /* language */
          avio_write(pb, t->value, strlen(t->value) + 1); /* UTF8 string value */
          if (!strcmp(tag, "albm") &&
              (t = av_dict_get(metadata, "track", NULL, 0)))
-@@ -3367,8 +3376,21 @@ static int mov_write_track_udta_tag(AVIOContext *pb, MOVMuxContext *mov,
+@@ -3670,8 +3678,21 @@ static int mov_write_track_udta_tag(AVIOContext *pb, MOVMuxContext *mov,
          return ret;
  
      if (mov->mode & (MODE_MP4|MODE_MOV)) {
@@ -61,7 +62,7 @@ index 6ccd2ea..44db8e1 100644
 +            mov_write_3gp_udta_tag(pb_buf, st->metadata, "titl", "title");
      }
  
-     if ((size = avio_get_dyn_buf(pb_buf, &buf)) > 0) {
+     if (mov->mode & MODE_MP4) {
 -- 
-2.30.1 (Apple Git-130)
+2.37.1 (Apple Git-137.1)
 

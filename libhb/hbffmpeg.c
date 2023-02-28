@@ -61,7 +61,7 @@ void hb_video_buffer_to_avframe(AVFrame *frame, hb_buffer_t * buf)
     frame->linesize[2] = buf->plane[2].stride;
 
     frame->pts              = buf->s.start;
-    frame->reordered_opaque = buf->s.duration;
+    frame->duration         = buf->s.duration;
     frame->width            = buf->f.width;
     frame->height           = buf->f.height;
     frame->format           = buf->f.fmt;
@@ -97,7 +97,7 @@ void hb_avframe_set_video_buffer_flags(hb_buffer_t * buf, AVFrame *frame,
     }
 
     buf->s.start = av_rescale_q(frame->pts, time_base, (AVRational){1, 90000});
-    buf->s.duration = frame->reordered_opaque;
+    buf->s.duration = frame->duration;
 
     if (frame->top_field_first)
     {
