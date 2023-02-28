@@ -425,6 +425,7 @@ int         hb_video_quality_is_supported(uint32_t codec);
 int         hb_video_twopass_is_supported(uint32_t codec);
 
 int                hb_video_encoder_is_supported(int encoder);
+int                hb_video_encoder_get_count_of_analysis_passes(int encoder);
 int                hb_video_encoder_pix_fmt_is_supported(int encoder, int pix_fmt, const char *profile);
 int                hb_video_encoder_get_depth   (int encoder);
 const char* const* hb_video_encoder_get_presets (int encoder);
@@ -614,9 +615,9 @@ struct hb_job_s
 #define HB_VCODEC_FFMPEG_NVENC_H265         (0x00000031 | HB_VCODEC_FFMPEG_MASK | HB_VCODEC_H265_MASK)
 #define HB_VCODEC_FFMPEG_NVENC_H265_10BIT   (0x00000032 | HB_VCODEC_FFMPEG_MASK | HB_VCODEC_H265_MASK)
 
-#define HB_VCODEC_FFMPEG_SVT_AV1_8BIT       (0x00000041 | HB_VCODEC_SVT_AV1_MASK | HB_VCODEC_AV1_MASK | HB_VCODEC_FFMPEG_MASK)
-#define HB_VCODEC_FFMPEG_SVT_AV1            HB_VCODEC_FFMPEG_SVT_AV1_8BIT
-#define HB_VCODEC_FFMPEG_SVT_AV1_10BIT      (0x00000042 | HB_VCODEC_SVT_AV1_MASK | HB_VCODEC_AV1_MASK | HB_VCODEC_FFMPEG_MASK)
+#define HB_VCODEC_SVT_AV1_8BIT       (0x00000041 | HB_VCODEC_SVT_AV1_MASK | HB_VCODEC_AV1_MASK)
+#define HB_VCODEC_SVT_AV1            HB_VCODEC_SVT_AV1_8BIT
+#define HB_VCODEC_SVT_AV1_10BIT      (0x00000042 | HB_VCODEC_SVT_AV1_MASK | HB_VCODEC_AV1_MASK)
 
 #define HB_VCODEC_VT_H264           (0x00000050 | HB_VCODEC_VT_MASK | HB_VCODEC_H264_MASK)
 #define HB_VCODEC_VT_H265           (0x00000051 | HB_VCODEC_VT_MASK | HB_VCODEC_H265_MASK)
@@ -1382,6 +1383,7 @@ extern hb_work_object_t hb_encvt;
 extern hb_work_object_t hb_encx264;
 extern hb_work_object_t hb_enctheora;
 extern hb_work_object_t hb_encx265;
+extern hb_work_object_t hb_encsvtav1;
 extern hb_work_object_t hb_decavcodeca;
 extern hb_work_object_t hb_decavcodecv;
 extern hb_work_object_t hb_declpcm;

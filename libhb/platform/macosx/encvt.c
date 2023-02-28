@@ -1476,7 +1476,7 @@ static OSStatus reuse_vtsession(hb_work_object_t *w, hb_job_t * job, hb_work_pri
     OSStatus err = noErr;
 
     hb_interjob_t *interjob = hb_interjob_get(job->h);
-    vt_interjob_t *context = interjob->vt_context;
+    vt_interjob_t *context = interjob->context;
 
     if (job->vcodec == HB_VCODEC_VT_H264)
     {
@@ -1535,7 +1535,7 @@ static OSStatus reuse_vtsession(hb_work_object_t *w, hb_job_t * job, hb_work_pri
         CFRelease(allowFrameReordering);
     }
 
-    interjob->vt_context = NULL;
+    interjob->context = NULL;
     free(context);
 
     return err;
@@ -1872,7 +1872,7 @@ int encvt_work(hb_work_object_t *w, hb_buffer_t **buf_in, hb_buffer_t **buf_out)
             context->format = pv->format;
 
             hb_interjob_t *interjob = hb_interjob_get(job->h);
-            interjob->vt_context = context;
+            interjob->context = context;
         }
         else if (job->pass_id == HB_PASS_ENCODE_2ND)
         {

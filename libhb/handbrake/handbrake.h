@@ -126,9 +126,8 @@ typedef struct hb_interjob_s
 
     hb_subtitle_t *select_subtitle; /* foreign language scan subtitle */
 
-#ifdef __APPLE__
-     void *vt_context;
- #endif
+    void *context;
+    int   context_size;
 } hb_interjob_t;
 
 hb_interjob_t * hb_interjob_get( hb_handle_t * );

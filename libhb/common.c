@@ -266,8 +266,8 @@ hb_encoder_internal_t hb_video_encoders[]  =
     { { "MPEG-2 (FFmpeg)",             "ffmpeg2",          NULL,                             HB_VCODEC_FFMPEG_MPEG2,      HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 1, 0, HB_GID_VCODEC_MPEG2,  },
     { { "VP3 (Theora)",                "libtheora",        NULL,                             HB_VCODEC_THEORA,                            HB_MUX_MASK_MKV, }, NULL, 1, 0, HB_GID_VCODEC_THEORA, },
     // actual encoders
-    { { "AV1 (SVT)",                   "svt_av1",          "AV1 (SVT)",                      HB_VCODEC_FFMPEG_SVT_AV1,    HB_MUX_MASK_MP4|HB_MUX_MASK_WEBM|HB_MUX_MASK_MKV, }, NULL, 0, 1, HB_GID_VCODEC_AV1_SVT,    },
-    { { "AV1 10-bit (SVT)",            "svt_av1_10bit",    "AV1 10-bit (SVT)",               HB_VCODEC_FFMPEG_SVT_AV1_10BIT, HB_MUX_MASK_MP4|HB_MUX_MASK_WEBM|HB_MUX_MASK_MKV, }, NULL, 0, 1, HB_GID_VCODEC_AV1_SVT,    },
+    { { "AV1 (SVT)",                   "svt_av1",          "AV1 (SVT)",                      HB_VCODEC_SVT_AV1,           HB_MUX_MASK_MP4|HB_MUX_MASK_WEBM|HB_MUX_MASK_MKV, }, NULL, 0, 1, HB_GID_VCODEC_AV1_SVT,    },
+    { { "AV1 10-bit (SVT)",            "svt_av1_10bit",    "AV1 10-bit (SVT)",               HB_VCODEC_SVT_AV1_10BIT,     HB_MUX_MASK_MP4|HB_MUX_MASK_WEBM|HB_MUX_MASK_MKV, }, NULL, 0, 1, HB_GID_VCODEC_AV1_SVT,    },
     { { "AV1 (Intel QSV)",             "qsv_av1",          "AV1 (Intel Media SDK)",          HB_VCODEC_QSV_AV1,           HB_MUX_MASK_MP4|HB_MUX_MASK_WEBM|HB_MUX_MASK_MKV, }, NULL, 0, 1, HB_GID_VCODEC_AV1_QSV,    },
     { { "AV1 10-bit (Intel QSV)",      "qsv_av1_10bit",    "AV1 10-bit (Intel Media SDK)",   HB_VCODEC_QSV_AV1_10BIT,     HB_MUX_MASK_MP4|HB_MUX_MASK_WEBM|HB_MUX_MASK_MKV, }, NULL, 0, 1, HB_GID_VCODEC_AV1_QSV,    },
     { { "H.264 (x264)",                "x264",             "H.264 (libx264)",                HB_VCODEC_X264_8BIT,                          HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 0, 1, HB_GID_VCODEC_H264_X264,  },
@@ -294,7 +294,7 @@ hb_encoder_internal_t hb_video_encoders[]  =
     { { "MPEG-2",                      "mpeg2",            "MPEG-2 (libavcodec)",            HB_VCODEC_FFMPEG_MPEG2,                       HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 0, 1, HB_GID_VCODEC_MPEG2,      },
     { { "VP8",                         "VP8",              "VP8 (libvpx)",                   HB_VCODEC_FFMPEG_VP8,                        HB_MUX_MASK_WEBM|HB_MUX_MASK_MKV, }, NULL, 0, 1, HB_GID_VCODEC_VP8,        },
     { { "VP9",                         "VP9",              "VP9 (libvpx)",                   HB_VCODEC_FFMPEG_VP9,                        HB_MUX_MASK_WEBM|HB_MUX_MASK_MKV, }, NULL, 0, 1, HB_GID_VCODEC_VP9,        },
-    { { "VP9 10-bit",                  "VP9_10bit",        "VP9 10-bit (libvpx)",            HB_VCODEC_FFMPEG_VP9_10BIT,                  HB_MUX_MASK_WEBM|HB_MUX_MASK_MKV, }, NULL, 0, 1, HB_GID_VCODEC_VP9,  },
+    { { "VP9 10-bit",                  "VP9_10bit",        "VP9 10-bit (libvpx)",            HB_VCODEC_FFMPEG_VP9_10BIT,                  HB_MUX_MASK_WEBM|HB_MUX_MASK_MKV, }, NULL, 0, 1, HB_GID_VCODEC_VP9,        },
     { { "Theora",                      "theora",           "Theora (libtheora)",             HB_VCODEC_THEORA,                                             HB_MUX_MASK_MKV, }, NULL, 0, 1, HB_GID_VCODEC_THEORA,     },
 };
 int hb_video_encoders_count = sizeof(hb_video_encoders) / sizeof(hb_video_encoders[0]);
@@ -356,8 +356,8 @@ static int hb_video_encoder_is_enabled(int encoder, int disable_hardware)
         case HB_VCODEC_FFMPEG_VP8:
         case HB_VCODEC_FFMPEG_VP9:
         case HB_VCODEC_FFMPEG_VP9_10BIT:
-        case HB_VCODEC_FFMPEG_SVT_AV1:
-        case HB_VCODEC_FFMPEG_SVT_AV1_10BIT:
+        case HB_VCODEC_SVT_AV1:
+        case HB_VCODEC_SVT_AV1_10BIT:
             return 1;
 
 #if HB_PROJECT_FEATURE_X265
@@ -1432,8 +1432,8 @@ void hb_video_quality_get_limits(uint32_t codec, float *low, float *high,
         case HB_VCODEC_FFMPEG_VP8:
         case HB_VCODEC_FFMPEG_VP9:
         case HB_VCODEC_FFMPEG_VP9_10BIT:
-        case HB_VCODEC_FFMPEG_SVT_AV1:
-        case HB_VCODEC_FFMPEG_SVT_AV1_10BIT:
+        case HB_VCODEC_SVT_AV1:
+        case HB_VCODEC_SVT_AV1_10BIT:
             *direction   = 1;
             *granularity = 1.;
             *low         = 0.;
@@ -1485,8 +1485,8 @@ const char* hb_video_quality_get_name(uint32_t codec)
         case HB_VCODEC_X265_10BIT:
         case HB_VCODEC_X265_12BIT:
         case HB_VCODEC_X265_16BIT:
-        case HB_VCODEC_FFMPEG_SVT_AV1:
-        case HB_VCODEC_FFMPEG_SVT_AV1_10BIT:
+        case HB_VCODEC_SVT_AV1:
+        case HB_VCODEC_SVT_AV1_10BIT:
             return "RF";
 
         case HB_VCODEC_FFMPEG_VP8:
@@ -1552,8 +1552,6 @@ int hb_video_twopass_is_supported(uint32_t codec)
         case HB_VCODEC_QSV_H265_10BIT:
         case HB_VCODEC_QSV_AV1:
         case HB_VCODEC_QSV_AV1_10BIT:
-        case HB_VCODEC_FFMPEG_SVT_AV1:
-        case HB_VCODEC_FFMPEG_SVT_AV1_10BIT:
             return 0;
 
         default:
@@ -1572,6 +1570,19 @@ int hb_video_encoder_is_supported(int encoder)
         }
     }
     return 0;
+}
+
+int hb_video_encoder_get_count_of_analysis_passes(int encoder)
+{
+    switch (encoder)
+    {
+        case HB_VCODEC_SVT_AV1:
+        case HB_VCODEC_SVT_AV1_10BIT:
+            return 2;
+
+        default:
+            return 1;
+    }
 }
 
 int hb_video_encoder_pix_fmt_is_supported(int encoder, int pix_fmt, const char *profile)
@@ -1601,8 +1612,8 @@ int hb_video_encoder_get_depth(int encoder)
 #endif
         case HB_VCODEC_X264_10BIT:
         case HB_VCODEC_X265_10BIT:
+        case HB_VCODEC_SVT_AV1_10BIT:
         case HB_VCODEC_FFMPEG_VP9_10BIT:
-        case HB_VCODEC_FFMPEG_SVT_AV1_10BIT:
         case HB_VCODEC_FFMPEG_NVENC_H265_10BIT:
         case HB_VCODEC_FFMPEG_VCE_H265_10BIT:
             return 10;
@@ -1648,6 +1659,11 @@ const char* const* hb_video_encoder_get_presets(int encoder)
         case HB_VCODEC_VT_H265_10BIT:
             return hb_vt_preset_get_names(encoder);
 #endif
+
+        case HB_VCODEC_SVT_AV1:
+        case HB_VCODEC_SVT_AV1_10BIT:
+            return av1_svt_preset_names;
+
         default:
             return NULL;
     }
@@ -1673,6 +1689,11 @@ const char* const* hb_video_encoder_get_tunes(int encoder)
         case HB_VCODEC_X265_16BIT:
             return x265_tune_names;
 #endif
+
+        case HB_VCODEC_SVT_AV1:
+        case HB_VCODEC_SVT_AV1_10BIT:
+            return av1_svt_tune_names;
+
         default:
             return NULL;
     }
@@ -1722,9 +1743,12 @@ const char* const* hb_video_encoder_get_profiles(int encoder)
         case HB_VCODEC_FFMPEG_NVENC_H265_10BIT:
         case HB_VCODEC_FFMPEG_MF_H264:
         case HB_VCODEC_FFMPEG_MF_H265:
-        case HB_VCODEC_FFMPEG_SVT_AV1:
-        case HB_VCODEC_FFMPEG_SVT_AV1_10BIT:
             return hb_av_profile_get_names(encoder);
+
+        case HB_VCODEC_SVT_AV1:
+        case HB_VCODEC_SVT_AV1_10BIT:
+            return av1_svt_profile_names;
+
         default:
             return NULL;
     }
@@ -1770,8 +1794,8 @@ const char* const* hb_video_encoder_get_levels(int encoder)
             return hb_vt_level_get_names(encoder);
 #endif
 
-        case HB_VCODEC_FFMPEG_SVT_AV1:
-        case HB_VCODEC_FFMPEG_SVT_AV1_10BIT:
+        case HB_VCODEC_SVT_AV1:
+        case HB_VCODEC_SVT_AV1_10BIT:
             return hb_av1_level_names;
 
         default:
@@ -1792,6 +1816,11 @@ static const enum AVPixelFormat standard_422_pix_fmts[] =
 static const enum AVPixelFormat standard_444_pix_fmts[] =
 {
     AV_PIX_FMT_YUV444P, AV_PIX_FMT_NONE
+};
+
+static const enum AVPixelFormat standard_10bit_only_pix_fmts[] =
+{
+    AV_PIX_FMT_YUV420P10, AV_PIX_FMT_NONE
 };
 
 static const enum AVPixelFormat standard_10bit_pix_fmts[] =
@@ -1925,6 +1954,9 @@ const int* hb_video_encoder_get_pix_fmts(int encoder, const char *profile)
         case HB_VCODEC_VT_H265_10BIT:
             return hb_vt_get_pix_fmts(encoder);
 #endif
+
+        case HB_VCODEC_SVT_AV1_10BIT:
+            return standard_10bit_only_pix_fmts;
 
         default:
             return standard_pix_fmts;
