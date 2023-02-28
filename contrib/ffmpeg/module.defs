@@ -1,4 +1,4 @@
-__deps__ := BZIP2 ZLIB FDKAAC LIBDAV1D SVT-AV1 LIBVPX LAME LIBOPUS LIBSPEEX XZ ZIMG
+__deps__ := BZIP2 ZLIB FDKAAC LIBDAV1D LIBVPX LAME LIBOPUS LIBSPEEX XZ ZIMG
 ifeq (1,$(FEATURE.qsv))
 __deps__ += LIBVPL
 endif
@@ -55,8 +55,6 @@ FFMPEG.CONFIGURE.extra = \
     --disable-decoder=libvpx_* \
     --enable-encoder=libvpx_vp8 \
     --enable-encoder=libvpx_vp9 \
-    --enable-libsvtav1 \
-    --enable-encoder=libsvtav1 \
     --disable-decoder=*_crystalhd \
     --enable-demuxer=av1 \
     --enable-demuxer=obu \

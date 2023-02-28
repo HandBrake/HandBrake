@@ -83,21 +83,6 @@ static const char * const h26x_nvenc_preset_names[] =
     "fastest", "faster", "fast", "medium", "slow", "slower", "slowest", NULL
 };
 
-static const char * const av1_svt_preset_names[] =
-{
-    "12", "11", "10", "9", "8", "7", "6", "5", "4", "3", "2", "1", "0", NULL
-};
-
-static const char * const av1_svt_tune_names[] =
-{
-    "psnr", "fastdecode", NULL
-};
-
-static const char * const av1_svt_profile_names[] =
-{
-    "auto", "main", NULL // "high", "profesional"
-};
-
 static const char * const h264_nvenc_profile_names[] =
 {
     "auto", "baseline", "main", "high", NULL  // "high444p" not supported.
@@ -424,15 +409,6 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
             context->bit_rate = (int64_t)job->width * job->height *
                                          fps.num / fps.den;
             hb_log( "encavcodec: encoding at CQ %.2f", job->vquality );
-        }
-        //Set constant quality for svt-av1
-        else if (job->vcodec == HB_VCODEC_FFMPEG_SVT_AV1 ||
-                 job->vcodec == HB_VCODEC_FFMPEG_SVT_AV1_10BIT)
-        {
-            char quality[7];
-            snprintf(quality, 7, "%.2f", job->vquality);
-            av_dict_set( &av_opts, "crf", quality, 0 );
-            hb_log( "encavcodec: encoding at CRF %.2f", job->vquality );
         }
         //Set constant quality for nvenc
         else if ( job->vcodec == HB_VCODEC_FFMPEG_NVENC_H264 ||
@@ -1441,94 +1417,6 @@ int encavcodecWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
  * Encoder options and presets
  */
 
-static int apply_svt_av1_options(hb_job_t *job, AVCodecContext *context, AVDictionary **av_opts, hb_dict_t *opts)
-{
-    context->profile = FF_PROFILE_UNKNOWN;
-    if (job->encoder_profile != NULL && *job->encoder_profile)
-    {
-        if (!strcasecmp(job->encoder_profile, "main"))
-            context->profile = FF_PROFILE_AV1_MAIN;
-        else if (!strcasecmp(job->encoder_profile, "high"))
-             context->profile = FF_PROFILE_AV1_HIGH;
-        else if (!strcasecmp(job->encoder_profile, "professional"))
-            context->profile = FF_PROFILE_AV1_PROFESSIONAL;
-    }
-    context->level = FF_LEVEL_UNKNOWN;
-    if (job->encoder_level != NULL && *job->encoder_level)
-    {
-        int i = 1;
-        while (hb_av1_level_names[i] != NULL)
-        {
-            if (!strcasecmp(job->encoder_level, hb_av1_level_names[i]))
-                context->level = hb_av1_level_values[i];
-            ++i;
-        }
-    }
-
-    if (job->encoder_tune != NULL && !strstr("psnr", job->encoder_tune))
-    {
-        hb_dict_set_int(opts, "tune", 1);
-    }
-    else
-    {
-        hb_dict_set_int(opts, "tune", 0);
-    }
-
-    if (job->encoder_tune != NULL && !strstr("fastdecode", job->encoder_tune))
-    {
-        hb_dict_set_int(opts, "fast-decode", 1);
-    }
-    else
-    {
-        hb_dict_set_int(opts, "fast-decode", 0);
-    }
-
-    if (job->color_transfer == HB_COLR_TRA_SMPTEST2084)
-    {
-        // Mastering display metadata.
-        if (job->mastering.has_primaries && job->mastering.has_luminance)
-        {
-            char mastering_display_color_volume[256];
-            snprintf(mastering_display_color_volume, sizeof(mastering_display_color_volume),
-                     "G(%5.4f,%5.4f)B(%5.4f,%5.4f)R(%5.4f,%5.4f)WP(%5.4f,%5.4f)L(%5.4f,%5.4f)",
-                     hb_q2d(job->mastering.display_primaries[1][0]),
-                     hb_q2d(job->mastering.display_primaries[1][1]),
-                     hb_q2d(job->mastering.display_primaries[2][0]),
-                     hb_q2d(job->mastering.display_primaries[2][1]),
-                     hb_q2d(job->mastering.display_primaries[0][0]),
-                     hb_q2d(job->mastering.display_primaries[0][1]),
-                     hb_q2d(job->mastering.white_point[0]),
-                     hb_q2d(job->mastering.white_point[1]),
-                     hb_q2d(job->mastering.max_luminance),
-                     hb_q2d(job->mastering.min_luminance));
-
-            hb_dict_set_string(opts, "mastering-display", mastering_display_color_volume);
-        }
-
-        // Content light level.
-        if (job->coll.max_cll && job->coll.max_fall)
-        {
-            char content_light_level[256];
-            snprintf(content_light_level, sizeof(content_light_level),
-                     "%u,%u", job->coll.max_cll, job->coll.max_fall);
-
-            hb_dict_set_string(opts, "content-light", content_light_level);
-        }
-    }
-
-    if (hb_dict_get(opts, "compressed-ten-bit-format"))
-    {
-        hb_log("apply_svt_av1_options [warning]: compressed-ten-bit-format is not supported, disabling");
-        hb_dict_remove(opts, "compressed-ten-bit-format");
-    }
-
-    char *param_str = hb_value_get_string_xform(opts);
-    av_dict_set(av_opts, "svtav1-params", param_str, 0);
-    free(param_str);
-
-    return 0;
-}
-
 static int apply_options(hb_job_t *job, AVCodecContext *context, AVDictionary **av_opts, hb_dict_t *lavc_opts)
 {
     /* iterate through lavc_opts and have avutil parse the options for us */
@@ -1562,12 +1450,8 @@ static int apply_encoder_options(hb_job_t *job, AVCodecContext *context, AVDicti
         lavc_opts = hb_dict_init();
     }
 
-    switch (job->vcodec) {
-        case HB_VCODEC_FFMPEG_SVT_AV1:
-        case HB_VCODEC_FFMPEG_SVT_AV1_10BIT:
-            apply_svt_av1_options(job, context, av_opts, lavc_opts);
-            break;
-
+    switch (job->vcodec)
+    {
         default:
             apply_options(job, context, av_opts, lavc_opts);
             break;
@@ -1650,20 +1534,6 @@ static int apply_vp9_10bit_preset(AVDictionary ** av_opts, const char * preset)
     return apply_vpx_preset(av_opts, preset);
 }
 
-static int apply_av1_preset(AVDictionary ** av_opts, const char * preset)
-{
-    if (preset == NULL)
-    {
-        av_dict_set( av_opts, "preset", "5", 0);
-    }
-    else
-    {
-        av_dict_set( av_opts, "preset", preset, 0);
-    }
-
-    return 0;
-}
-
 static int apply_encoder_preset(int vcodec, AVDictionary ** av_opts,
                                 const char * preset)
 {
@@ -1675,9 +1545,6 @@ static int apply_encoder_preset(int vcodec, AVDictionary ** av_opts,
             return apply_vp9_preset(av_opts, preset);
         case HB_VCODEC_FFMPEG_VP9_10BIT:
             return apply_vp9_10bit_preset(av_opts, preset);
-        case HB_VCODEC_FFMPEG_SVT_AV1:
-        case HB_VCODEC_FFMPEG_SVT_AV1_10BIT:
-            return apply_av1_preset(av_opts, preset);
 
 #if HB_PROJECT_FEATURE_NVENC
         case HB_VCODEC_FFMPEG_NVENC_H264:
@@ -1717,10 +1584,6 @@ const char* const* hb_av_preset_get_names(int encoder)
         case HB_VCODEC_FFMPEG_MF_H265:
             return h26x_mf_preset_name;
 
-        case HB_VCODEC_FFMPEG_SVT_AV1:
-        case HB_VCODEC_FFMPEG_SVT_AV1_10BIT:
-            return av1_svt_preset_names;
-
         default:
             return NULL;
     }
@@ -1730,10 +1593,6 @@ const char* const* hb_av_tune_get_names(int encoder)
 {
     switch (encoder)
     {
-        case HB_VCODEC_FFMPEG_SVT_AV1:
-        case HB_VCODEC_FFMPEG_SVT_AV1_10BIT:
-            return av1_svt_tune_names;
-
         default:
             return NULL;
     }
@@ -1753,9 +1612,6 @@ const char* const* hb_av_profile_get_names(int encoder)
             return h264_mf_profile_name;
         case HB_VCODEC_FFMPEG_MF_H265:
             return h265_mf_profile_name;
-        case HB_VCODEC_FFMPEG_SVT_AV1:
-        case HB_VCODEC_FFMPEG_SVT_AV1_10BIT:
-            return av1_svt_profile_names;
 
          default:
              return NULL;
@@ -1781,7 +1637,6 @@ const int* hb_av_get_pix_fmts(int encoder)
             return vce_pix_formats_10bit;
 
         case HB_VCODEC_FFMPEG_VP9_10BIT:
-        case HB_VCODEC_FFMPEG_SVT_AV1_10BIT:
             return standard_10bit_pix_fmts;
 
          default:

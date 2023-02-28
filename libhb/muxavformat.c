@@ -380,8 +380,8 @@ static int avformatInit( hb_mux_object_t * m )
             priv_size                  = 0;
             break;
 
-        case HB_VCODEC_FFMPEG_SVT_AV1:
-        case HB_VCODEC_FFMPEG_SVT_AV1_10BIT:
+        case HB_VCODEC_SVT_AV1:
+        case HB_VCODEC_SVT_AV1_10BIT:
             track->st->codecpar->codec_id = AV_CODEC_ID_AV1;
 
             if (job->config.extradata.length > 0)
@@ -1417,12 +1417,10 @@ static int avformatMux(hb_mux_object_t *m, hb_mux_data_t *track, hb_buffer_t *bu
         {
             m->pkt->flags |= AV_PKT_FLAG_KEY;
         }
-#ifdef AV_PKT_FLAG_DISPOSABLE
         if (!(buf->s.flags & HB_FLAG_FRAMETYPE_REF))
         {
             m->pkt->flags |= AV_PKT_FLAG_DISPOSABLE;
         }
-#endif
     }
     else if (buf->s.frametype & HB_FRAME_MASK_KEY)
     {

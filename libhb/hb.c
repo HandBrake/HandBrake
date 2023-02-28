@@ -1992,9 +1992,13 @@ void hb_job_setup_passes(hb_handle_t * h, hb_job_t * job, hb_list_t * list_pass)
     }
     if (job->twopass)
     {
-        hb_deep_log(2, "Adding two-pass encode");
-        job->pass_id = HB_PASS_ENCODE_1ST;
-        hb_add_internal(h, job, list_pass);
+        hb_deep_log(2, "Adding multi-pass encode");
+        int analysys_pass_count = hb_video_encoder_get_count_of_analysis_passes(job->vcodec);
+        for (int i = 0; i < analysys_pass_count; i++)
+        {
+            job->pass_id = HB_PASS_ENCODE_1ST;
+            hb_add_internal(h, job, list_pass);
+        }
         job->pass_id = HB_PASS_ENCODE_2ND;
         hb_add_internal(h, job, list_pass);
     }
@@ -2228,6 +2232,7 @@ int hb_global_init()
 #if HB_PROJECT_FEATURE_X265
     hb_register(&hb_encx265);
 #endif
+    hb_register(&hb_encsvtav1);
 #if HB_PROJECT_FEATURE_QSV
     if (!disable_hardware)
     {
