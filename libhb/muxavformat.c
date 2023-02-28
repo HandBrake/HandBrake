@@ -184,6 +184,7 @@ static int avformatInit( hb_mux_object_t * m )
             meta_mux = META_MUX_MP4;
 
             av_dict_set(&av_opts, "brand", "mp42", 0);
+            av_dict_set(&av_opts, "strict", "experimental", 0);
             if (job->mp4_optimize)
                 av_dict_set(&av_opts, "movflags", "faststart+disable_chpl+write_colr", 0);
             else

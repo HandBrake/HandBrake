@@ -1,18 +1,18 @@
-From 431bccd62ff1bcdf622b1379bc6670fb5a9040f7 Mon Sep 17 00:00:00 2001
-From: Damiano Galassi <damiog@gmail.com>
-Date: Sun, 5 Dec 2021 11:54:07 +0100
+From ea993458ff6a32c82fd188580dcf3345403ad706 Mon Sep 17 00:00:00 2001
+From: Damiano galassi <damiog@gmail.com>
+Date: Tue, 28 Feb 2023 11:07:28 +0100
 Subject: [PATCH] ccaption_dec: fix pts in real_time mode.
 
 end_display_time and pts changes should be performed only in non real_time mode.
 ---
- libavcodec/ccaption_dec.c | 10 ++++++----
- 1 file changed, 6 insertions(+), 4 deletions(-)
+ libavcodec/ccaption_dec.c | 9 +++++----
+ 1 file changed, 5 insertions(+), 4 deletions(-)
 
 diff --git a/libavcodec/ccaption_dec.c b/libavcodec/ccaption_dec.c
-index a208e19..aff59bc 100644
+index 84fe7dc..1c4112d 100644
 --- a/libavcodec/ccaption_dec.c
 +++ b/libavcodec/ccaption_dec.c
-@@ -876,12 +876,14 @@ static int decode(AVCodecContext *avctx, void *data, int *got_sub, AVPacket *avp
+@@ -879,12 +879,13 @@ static int decode(AVCodecContext *avctx, AVSubtitle *sub,
  
          if (ctx->buffer[bidx].str[0] || ctx->real_time) {
              ff_dlog(ctx, "cdp writing data (%s)\n", ctx->buffer[bidx].str);
@@ -20,7 +20,6 @@ index a208e19..aff59bc 100644
 -            sub->pts = start_time;
 -            end_time = ctx->buffer_time[1];
 -            if (!ctx->real_time)
-+
 +            if (!ctx->real_time) {
 +                start_time = ctx->buffer_time[0];
 +                sub->pts = start_time;
@@ -30,7 +29,7 @@ index a208e19..aff59bc 100644
 +            }
              else
                  sub->end_display_time = -1;
-             ret = ff_ass_add_rect(sub, ctx->buffer[bidx].str, ctx->readorder++, 0, NULL, NULL);
+             ret = ff_ass_add_rect2(sub, ctx->buffer[bidx].str, ctx->readorder++, 0, NULL, NULL, &nb_rect_allocated);
 -- 
-2.30.1 (Apple Git-130)
+2.37.1 (Apple Git-137.1)
 
