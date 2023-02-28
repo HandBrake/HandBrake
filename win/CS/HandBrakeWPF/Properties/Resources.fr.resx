@@ -670,8 +670,8 @@ Votre fichier de préréglage sera archivé et un nouveau sera créé. Vous devr
     <value>{0} - ({1}%, Passage {2} sur {3})</value>
   </data>
   <data name="TaskTrayStatusTitle" xml:space="preserve">
-    <value>{1}%, Passage {2} sur {3}
-Temps Restant: {4}</value>
+    <value>{0}
+Encoding 1 Job</value>
   </data>
   <data name="PauseOnLowDiskspace" xml:space="preserve">
     <value>File en pause. Attention, le lecteur sur lequel vous encodez manque d’espace disque. Veuillez libérer de l’espace et appuyer sur Démarrer pour continuer. Vous pouvez également régler le niveau d’espace minimal dans les préférences.</value>

@@ -670,8 +670,8 @@ Su archivo de preajuste se archivará y se creará uno nuevo. Tendrá que volver
     <value>{0} - ({1}%, Pasada {2} de {3})</value>
   </data>
   <data name="TaskTrayStatusTitle" xml:space="preserve">
-    <value>{1}%, Pasada {2} de {3}
-Tiempo restante: {4}</value>
+    <value>{0}
+Encoding 1 Job</value>
   </data>
   <data name="PauseOnLowDiskspace" xml:space="preserve">
     <value>Cola pausada. Advertencia, la unidad en la que está codificando tiene poco espacio en disco. Por favor, libere algo de espacio y pulse start para continuar.  También puede ajustar el nivel de espacio mínimo en preferencias.</value>

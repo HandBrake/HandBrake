@@ -670,8 +670,8 @@ The Activity log may have further information.</value>
     <value>{0} - ({1}%, прохід {2} з {3})</value>
   </data>
   <data name="TaskTrayStatusTitle" xml:space="preserve">
-    <value>{1}%, прохід {2} з {3}
-Залишилося часу: {4}</value>
+    <value>{0}
+Encoding 1 Job</value>
   </data>
   <data name="PauseOnLowDiskspace" xml:space="preserve">
     <value>Черга призупинена. Попередження: бракує місця на накопичувачі, який ви використовуєте для призначення кодування. Щоб продовжити, звільніть місце і натисніть почати. Також можете задати значення мінімальної кількості вільного місця в налаштуваннях.</value>

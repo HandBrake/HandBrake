@@ -669,8 +669,8 @@ Seu arquivo de perfis será salvo e criado um novo arquivo. Será necessário re
     <value>{0} - ({1}%, Passagem {2} de {3})</value>
   </data>
   <data name="TaskTrayStatusTitle" xml:space="preserve">
-    <value>{1}%, Passagem {2} de {3}
-Tempo Restante: {4}</value>
+    <value>{0}
+Encoding 1 Job</value>
   </data>
   <data name="PauseOnLowDiskspace" xml:space="preserve">
     <value>Fila Pausada. Aviso: a unidade de destino da codificação está com pouco espaço em disco. Por favor, libere espaço suficiente e clique em Iniciar para continuar. Você também pode ajustar o espaço mínimo nas preferências.</value>

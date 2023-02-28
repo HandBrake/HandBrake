@@ -665,8 +665,8 @@ U vostru schedariu di prerigatura hà da esse archiviatu è un novu hà da esse 
     <value>{0} - ({1}%, Passu {2} nant’à {3})</value>
   </data>
   <data name="TaskTrayStatusTitle" xml:space="preserve">
-    <value>{1}%, Passu {2} nant’à {3}
-Tempu rimanente : {4}</value>
+    <value>{0}
+Encoding 1 Job</value>
   </data>
   <data name="PauseOnLowDiskspace" xml:space="preserve">
     <value>Fila d’attesa interrotta.  Avertimentu : ùn ci hè abbastanza spaziu di discu nant’à u lettore per fà a cudificazione. Ci vole à liberà qualchì spaziu è appughjate nant’à Principià per cuntinuà. Pudete ancu adattà u livellu minimu di spaziu in e preferenze.</value>

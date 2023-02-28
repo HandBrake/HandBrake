@@ -667,8 +667,8 @@ The Activity log may have further information.</value>
     <value>{0} - ({1}%, เสร็จแล้ว {2} /{3} )</value>
   </data>
   <data name="TaskTrayStatusTitle" xml:space="preserve">
-    <value>{1}%, เสร็จแล้ว {2} / {3}
-เวลาที่เหลือ: {4}</value>
+    <value>{0}
+Encoding 1 Job</value>
   </data>
   <data name="PauseOnLowDiskspace" xml:space="preserve">
     <value>คิวถูกระงับ คำเตือน มีพื้นที่ดิสก์ไม่เพียงพอบนไดรฟ์ที่คุณกำลังเข้ารหัส โปรดเพิ่มพื้นที่ว่างและกดเริ่มเพื่อดำเนินการต่อ คุณยังสามารถปรับระดับพื้นที่ขั้นต่ำในการตั้งค่าได้อีกด้วย</value>

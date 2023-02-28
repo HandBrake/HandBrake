@@ -672,7 +672,8 @@ Die Voreinstellungsdatei wird archiviert und eine neue erstellt. Die eigenen Vor
     <value>{0} - ({1} %, Durchgang {2} von {3})</value>
   </data>
   <data name="TaskTrayStatusTitle" xml:space="preserve">
-    <value>{1} %, Durchgang {2} von {3}verbleibende Zeit: {4}</value>
+    <value>{0}
+Encoding 1 Job</value>
   </data>
   <data name="PauseOnLowDiskspace" xml:space="preserve">
     <value>Warteschlange angehalten. Warnung, auf dem Volume auf dem encodiert wird ist nicht genügend Speicherplatz vorhanden. Bitte mehr Speicherplatz freigeben und „Start“ auswählen, um fortzufahren. Außerdem kann der minimale Speicherplatzwert in den Einstellungen angepasst werden.</value>

@@ -662,8 +662,8 @@ The Activity log may have further information.</value>
     <value>{0} - ({1}%, 已完成 {2} /{3} )</value>
   </data>
   <data name="TaskTrayStatusTitle" xml:space="preserve">
-    <value>{1}%, 已完成 {2} / {3}
-剩余时间: {4}</value>
+    <value>{0}
+Encoding 1 Job</value>
   </data>
   <data name="PauseOnLowDiskspace" xml:space="preserve">
     <value>队列已暂停。警告，您编码的驱动器磁盘空间不足。请释放一些空间，然后按开始继续。您还可以调整首选项中的最小空间级别。</value>

@@ -672,8 +672,8 @@ The Activity log may have further information.</value>
     <value>{0} - ({1}%, Проход {2} из{3})</value>
   </data>
   <data name="TaskTrayStatusTitle" xml:space="preserve">
-    <value>{1}%, Проход {2} из {3}
-Осталось: {4}</value>
+    <value>{0}
+Encoding 1 Job</value>
   </data>
   <data name="PauseOnLowDiskspace" xml:space="preserve">
     <value>Очередь приостановлена. Внимание, на диске, на котором находится кодируемый файл, мало свободного места. Пожалуйста, освободите немного места и нажмите "Старт" для продолжения. Вы также можете выбрать минимальный уровень пространства в настройках.</value>

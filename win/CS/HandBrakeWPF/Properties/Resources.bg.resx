@@ -667,8 +667,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.<
     <value>{0} - ({1}%, Цикъл {2} от {3})</value>
   </data>
   <data name="TaskTrayStatusTitle" xml:space="preserve">
-    <value>{1}%, Цикъл {2} от {3}
-Оставащо време: {4}</value>
+    <value>{0}
+Encoding 1 Job</value>
   </data>
   <data name="PauseOnLowDiskspace" xml:space="preserve">
     <value>Опашката е паузирана. Внимание, дялът, в който кодирате, е с ниско дисково пространство. Моля, освободете пространство и натиснете "Започни", за да продължите. Можете и да настроите минималното ниво на пространство в предпочитания.</value>

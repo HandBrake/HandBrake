@@ -671,8 +671,8 @@ Het bestand met voorinstellingen wordt gearchiveerd en er wordt een nieuw bestan
     <value>{0} - ({1}%, Fase {2} van {3})</value>
   </data>
   <data name="TaskTrayStatusTitle" xml:space="preserve">
-    <value>{1}%, Fase {2} van {3}
-Resterende tijd: {4}</value>
+    <value>{0}
+Encoding 1 Job</value>
   </data>
   <data name="PauseOnLowDiskspace" xml:space="preserve">
     <value>Wachtrij gepauzeerd. Waarschuwing, het station waarnaar u codeert, heeft weinig schijfruimte. Maak wat ruimte vrij en druk op start om door te gaan. U kunt ook het minimale ruimteniveau aanpassen in voorkeuren.</value>

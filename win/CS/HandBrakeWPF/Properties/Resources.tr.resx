@@ -670,8 +670,8 @@ Bölüm adlarını içe aktarmak istediğinizden emin misiniz?</value>
     <value>{0} - ({1}%, Geçiş {2} / {3})</value>
   </data>
   <data name="TaskTrayStatusTitle" xml:space="preserve">
-    <value>{1}%, Geçiş {2} / {3}
-Kalan Süre: {4}</value>
+    <value>{0}
+Encoding 1 Job</value>
   </data>
   <data name="PauseOnLowDiskspace" xml:space="preserve">
     <value>Sıra Duraklatıldı. Uyarı, kodladığınız sürücünün disk alanı yetersiz. Lütfen biraz yer açın ve devam etmek için Başlat'a basın. Ayrıca tercihlerinde minimum alan seviyesini ayarlayabilirsiniz.</value>

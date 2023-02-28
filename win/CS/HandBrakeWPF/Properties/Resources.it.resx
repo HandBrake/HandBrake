@@ -670,8 +670,8 @@ Il file delle preimpostazioni corrente verrà archiviato e ne verrà creato uno 
     <value>{0} - ({1}%, Passaggio {2} di {3})</value>
   </data>
   <data name="TaskTrayStatusTitle" xml:space="preserve">
-    <value>{1}%, Passaggio {2} di {3}
-Tempo rimanente: {4}</value>
+    <value>{0}
+Encoding 1 Job</value>
   </data>
   <data name="PauseOnLowDiskspace" xml:space="preserve">
     <value>Coda in pausa. Attenzione, il disco scelto per la codifica sta esaurendo lo spazio. Si prega di liberare spazio e premere Avvia per continuare. È possibile modificare il livello di spazio minimo necessario nelle preferenze.</value>

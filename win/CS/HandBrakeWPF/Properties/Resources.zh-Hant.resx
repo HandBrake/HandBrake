@@ -660,8 +660,8 @@ The Activity log may have further information.</value>
     <value>{0} - ({1}%, Pass {2} / {3})</value>
   </data>
   <data name="TaskTrayStatusTitle" xml:space="preserve">
-    <value>{1}%, Pass {2} / {3}
-剩餘時間： {4}</value>
+    <value>{0}
+Encoding 1 Job</value>
   </data>
   <data name="PauseOnLowDiskspace" xml:space="preserve">
     <value>已暫停佇列。警告！您要存放的磁碟空間不足。請清出更多空間後再按下開始以繼續。您亦可在偏好設定中調整最低空間水準。</value>

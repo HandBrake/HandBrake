@@ -668,8 +668,8 @@ Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  021
     <value>{0} - ({1}%, パス {2} of {3})</value>
   </data>
   <data name="TaskTrayStatusTitle" xml:space="preserve">
-    <value>{1}%, パス {2}of {3}
-残り時間: {4}</value>
+    <value>{0}
+Encoding 1 Job</value>
   </data>
   <data name="PauseOnLowDiskspace" xml:space="preserve">
     <value>キューを一時停止しました。警告、エンコードしているドライブの空き領域が少なくなっています。続けるためには空きを増やしてから開始を押してください。もしくは設定から最低領域レベルを調節することができます。</value>
