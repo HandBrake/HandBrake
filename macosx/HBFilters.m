@@ -841,7 +841,7 @@ NSString * const HBFiltersChangedNotification = @"HBFiltersChangedNotification";
 {
     if (![deblockCustomString isEqualToString:_deblockCustomString])
     {
-        [[self.undo prepareWithInvocationTarget:self] setDeblock:_deblockCustomString];
+        [[self.undo prepareWithInvocationTarget:self] setDeblockCustomString:_deblockCustomString];
     }
     if (deblockCustomString)
     {
