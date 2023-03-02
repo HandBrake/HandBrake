@@ -1020,8 +1020,8 @@ ghb_vquality_default(signal_user_data_t *ud)
     case HB_VCODEC_FFMPEG_MPEG2:
     case HB_VCODEC_FFMPEG_MPEG4:
         return 3;
-    case HB_VCODEC_FFMPEG_SVT_AV1_8BIT:
-    case HB_VCODEC_FFMPEG_SVT_AV1_10BIT:
+    case HB_VCODEC_SVT_AV1_8BIT:
+    case HB_VCODEC_SVT_AV1_10BIT:
         return 30;
     default:
     {
@@ -4461,7 +4461,7 @@ ghb_validate_video(GhbValue *settings, GtkWindow *parent)
         v_unsup = TRUE;
     }
     else if ((mux->format & HB_MUX_MASK_WEBM) &&
-             (vcodec != HB_VCODEC_FFMPEG_VP8 && vcodec != HB_VCODEC_FFMPEG_VP9 && vcodec != HB_VCODEC_FFMPEG_VP9_10BIT && vcodec != HB_VCODEC_FFMPEG_SVT_AV1 && vcodec != HB_VCODEC_FFMPEG_SVT_AV1_10BIT))
+             (vcodec != HB_VCODEC_FFMPEG_VP8 && vcodec != HB_VCODEC_FFMPEG_VP9 && vcodec != HB_VCODEC_FFMPEG_VP9_10BIT && vcodec != HB_VCODEC_SVT_AV1 && vcodec != HB_VCODEC_SVT_AV1_10BIT))
     {
         // webm only supports vp8, vp9 and av1.
         message = g_strdup_printf(
