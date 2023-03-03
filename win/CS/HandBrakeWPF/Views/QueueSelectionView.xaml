@@ -7,7 +7,7 @@
         xmlns:Properties="clr-namespace:HandBrakeWPF.Properties"
         xmlns:dd="urn:gong-wpf-dragdrop"
         Title="{Binding Title}"
-        MinWidth="550"
+        MinWidth="750"
         Width="750"
         Height="475"
         MinHeight="600"
@@ -56,6 +56,9 @@
                                   Fill="{DynamicResource ButtonGlyphBrush}" />
                         </StackPanel>
                     </MenuItem.Header>
+                    <MenuItem Header="Select All" Command="{Binding RelayCommand}" CommandParameter="SelectAll" />
+                    <MenuItem Header="Deselect All" Command="{Binding RelayCommand}" CommandParameter="UnSelectAll" />
+                    <Separator />
                     <MenuItem Header="Order by Title"  Command="{Binding RelayCommand}" CommandParameter="OrderByTitle" />
                     <MenuItem Header="Order by Duration" IsChecked="{Binding OrderedByDuration}" Command="{Binding RelayCommand}" CommandParameter="OrderByDuration" />
                     <MenuItem Header="Order by Name" IsChecked="{Binding OrderedByName}" Command="{Binding RelayCommand}" CommandParameter="OrderByName" />
@@ -99,24 +102,24 @@
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto" />
                             <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
                         </Grid.RowDefinitions>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto" />
-                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
                             <ColumnDefinition Width="Auto" />
                         </Grid.ColumnDefinitions>
                         
-                        <CheckBox IsChecked="{Binding IsSelected}" Grid.RowSpan="2" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" />
+                        <CheckBox IsChecked="{Binding IsSelected}" Grid.RowSpan="3" Grid.Row="0" Grid.Column="0" Margin="0,0,5,0" VerticalAlignment="Center" />
 
-                        <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Horizontal" Margin="10,0,0,0" >                           
-                            <TextBlock Text="Title:" Margin="0,0,5,0" FontWeight="Bold" />
-                            <TextBlock Text="{Binding Title}" Margin="5,0,5,0" />
-                        </StackPanel>
+                        <TextBlock Text="Title:" Margin="0,0,5,0" FontWeight="Bold" Grid.Row="0" Grid.Column="1" />
+                        <TextBlock Text="{Binding Title}" Margin="5,0,5,0" Grid.Row="0" Grid.Column="2" />
 
-                        <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal" Margin="10,0,0,0" >
-                            <TextBlock Text="Source:" Margin="0,0,5,0" FontWeight="Bold" />
-                            <TextBlock Text="{Binding SourceName}" Margin="5,0,5,0" />
-                        </StackPanel>
+                        <TextBlock Text="Source:" Margin="0,0,5,0" FontWeight="Bold" Grid.Row="1" Grid.Column="1" />
+                        <TextBlock Text="{Binding SourceName}" Margin="5,0,5,0" Grid.Row="1" Grid.Column="2" />
+
+                        <TextBlock Text="{Binding SourceInfo}" Margin="5,0,5,0" Grid.Row="2" Grid.Column="2" Foreground="DimGray" />
+
                     </Grid>
 
                 </DataTemplate>
