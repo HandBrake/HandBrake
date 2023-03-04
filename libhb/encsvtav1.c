@@ -21,6 +21,9 @@ int  encsvtInit(hb_work_object_t *, hb_job_t *);
 int  encsvtWork(hb_work_object_t *, hb_buffer_t **, hb_buffer_t **);
 void encsvtClose(hb_work_object_t *);
 
+#define FRAME_INFO_SIZE 2048
+#define FRAME_INFO_MASK (FRAME_INFO_SIZE - 1)
+
 hb_work_object_t hb_encsvtav1 =
 {
     WORK_ENCSVTAV1,
@@ -40,7 +43,28 @@ struct hb_work_private_s
     EbBufferHeaderType         *in_buf;
 
     int eos_flag;
+
+    struct {
+        int64_t duration;
+    } frame_info[FRAME_INFO_SIZE];
+
+    int frameno_in;
+    int frameno_out;
 };
+
+static void save_frame_duration(hb_work_private_t *pv, hb_buffer_t *in)
+{
+    int i = pv->frameno_in & FRAME_INFO_MASK;
+    pv->frameno_in++;
+    pv->frame_info[i].duration = in->s.stop - in->s.start;
+}
+
+static int64_t get_frame_duration(hb_work_private_t *pv)
+{
+    int i = pv->frameno_out & FRAME_INFO_MASK;
+    pv->frameno_out++;
+    return pv->frame_info[i].duration;
+}
 
 static int alloc_buffer(EbSvtAv1EncConfiguration *config, hb_work_private_t *pv)
 {
@@ -101,6 +125,7 @@ int encsvtInit(hb_work_object_t *w, hb_job_t *job)
     {
         param->qp                = job->vquality;
         param->rate_control_mode = SVT_AV1_RC_MODE_CQP_OR_CRF;
+        param->force_key_frames = 1;
     }
 
     param->color_primaries          = hb_output_color_prim(job);
@@ -177,8 +202,10 @@ int encsvtInit(hb_work_object_t *w, hb_job_t *job)
     }
 
     param->intra_period_length = ((double)job->orig_vrate.num / job->orig_vrate.den + 0.5) * 10;
-    param->frame_rate_numerator = job->vrate.num;
-    param->frame_rate_denominator = job->vrate.den;
+    // VFR isn't supported, the rate control will ignore
+    // the frames timestamps and use the values below
+    param->frame_rate_numerator = job->orig_vrate.num;
+    param->frame_rate_denominator = job->orig_vrate.den;
 
     // HDR10 Static metadata
     if (job->color_transfer == HB_COLR_TRA_SMPTEST2084)
@@ -428,6 +455,7 @@ static int send(hb_work_object_t *w, hb_buffer_t *in)
     headerPtr->flags         = 0;
     headerPtr->p_app_private = NULL;
     headerPtr->pts           = in->s.start;
+    save_frame_duration(pv, in);
 
     if (headerPtr->metadata)
     {
@@ -501,6 +529,8 @@ static hb_buffer_t * receive(hb_work_object_t *w)
 
     out->size            = headerPtr->n_filled_len;
     out->s.start         = headerPtr->pts;
+    out->s.duration      = get_frame_duration(pv);
+    out->s.stop          = out->s.start + out->s.duration;
     out->s.renderOffset  = headerPtr->dts;
 
     // SVT-AV1 doesn't always respect forced keyframes,
