@@ -768,6 +768,8 @@ static int decavcodecaBSInfo( hb_work_object_t *w, const hb_buffer_t *buf,
             AVPacket *avp = av_packet_alloc();
             avp->data = parse_buffer;
             avp->size = parse_buffer_size;
+            avp->pts  = buf->s.start;
+            avp->dts  = AV_NOPTS_VALUE;
 
             ret = avcodec_send_packet(context, avp);
             if (ret < 0 && ret != AVERROR_EOF)

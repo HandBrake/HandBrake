@@ -23,10 +23,9 @@ namespace HandBrakeWPF.ViewModels
     using HandBrakeWPF.Services.Interfaces;
     using HandBrakeWPF.Services.Presets.Model;
     using HandBrakeWPF.Services.Scan.Model;
+    using HandBrakeWPF.Utilities.FileDialogs;
     using HandBrakeWPF.Utilities.Input;
     using HandBrakeWPF.ViewModels.Interfaces;
-
-    using Microsoft.Win32;
 
     using ChapterMarker = Services.Encode.Model.Models.ChapterMarker;
     using EncodeTask = Services.Encode.Model.EncodeTask;

@@ -1,9 +1,7 @@
-From e63181950091edc0b5fe8b5c7967d3866802d8f1 Mon Sep 17 00:00:00 2001
-From: Michael Fabian 'Xaymar' Dirks <michael.dirks@xaymar.com>
-Date: Wed, 7 Sep 2022 14:06:26 +0200
-Subject: [avcodec/amfenc: 10 bit support v2 2/3] avcodec/amfenc: Fixes the color
- information in the output.
-
+From 5653086d20bb52ba0c4377c1bec37191bdeed300 Mon Sep 17 00:00:00 2001
+From: Damiano galassi <damiog@gmail.com>
+Date: Tue, 28 Feb 2023 11:27:32 +0100
+Subject: [PATCH] avcodec/amfenc: Fixes the color  information in the output.
 
 added 10 bit support for amf hevc.
 
@@ -21,8 +19,9 @@ output -  8bit file
 command - ffmpeg.exe -hide_banner -y -hwaccel d3d11va -hwaccel_output_format d3d11 -i test_10bit_file -an -c:v hevc_amf res.dx11_hw_hevc.mkv
 output -  10bit file
 
-v2 - lost line returned in ff_amf_pix_fmts
+v2 - lost line returned in ff_amf_pix_fmts.
 
+Original patch by Michael Fabian 'Xaymar' Dirks <michael.dirks@xaymar.com>.
 ---
  libavcodec/amfenc.c      |  2 ++
  libavcodec/amfenc.h      |  1 +
@@ -31,18 +30,18 @@ v2 - lost line returned in ff_amf_pix_fmts
  4 files changed, 102 insertions(+), 2 deletions(-)
 
 diff --git a/libavcodec/amfenc.c b/libavcodec/amfenc.c
-index a033e1220e..efff9b5ae8 100644
+index bb06f62..2fb1082 100644
 --- a/libavcodec/amfenc.c
 +++ b/libavcodec/amfenc.c
-@@ -60,6 +60,7 @@ const enum AVPixelFormat ff_amf_pix_fmts[] = {
+@@ -111,6 +111,7 @@ const enum AVPixelFormat ff_amf_pix_fmts[] = {
  #if CONFIG_DXVA2
      AV_PIX_FMT_DXVA2_VLD,
  #endif
-+	AV_PIX_FMT_P010,
++    AV_PIX_FMT_P010,
      AV_PIX_FMT_NONE
  };
  
-@@ -72,6 +73,7 @@ static const FormatMap format_map[] =
+@@ -123,6 +124,7 @@ static const FormatMap format_map[] =
  {
      { AV_PIX_FMT_NONE,       AMF_SURFACE_UNKNOWN },
      { AV_PIX_FMT_NV12,       AMF_SURFACE_NV12 },
@@ -51,7 +50,7 @@ index a033e1220e..efff9b5ae8 100644
      { AV_PIX_FMT_RGB0,       AMF_SURFACE_RGBA },
      { AV_PIX_FMT_GRAY8,      AMF_SURFACE_GRAY8 },
 diff --git a/libavcodec/amfenc.h b/libavcodec/amfenc.h
-index 1ab98d2f78..c5ee9d7e35 100644
+index 66e0680..44c657f 100644
 --- a/libavcodec/amfenc.h
 +++ b/libavcodec/amfenc.h
 @@ -21,6 +21,7 @@
@@ -61,9 +60,9 @@ index 1ab98d2f78..c5ee9d7e35 100644
 +#include <AMF/components/ColorSpace.h>
  #include <AMF/components/VideoEncoderVCE.h>
  #include <AMF/components/VideoEncoderHEVC.h>
- 
+ #include <AMF/components/VideoEncoderAV1.h>
 diff --git a/libavcodec/amfenc_h264.c b/libavcodec/amfenc_h264.c
-index eaf7f974f3..7a0198e6a8 100644
+index eaf7f97..7a0198e 100644
 --- a/libavcodec/amfenc_h264.c
 +++ b/libavcodec/amfenc_h264.c
 @@ -138,6 +138,9 @@ static av_cold int amf_encode_init_h264(AVCodecContext *avctx)
@@ -130,7 +129,7 @@ index eaf7f974f3..7a0198e6a8 100644
      // autodetect rate control method
      if (ctx->rate_control_mode == AMF_VIDEO_ENCODER_RATE_CONTROL_METHOD_UNKNOWN) {
 diff --git a/libavcodec/amfenc_hevc.c b/libavcodec/amfenc_hevc.c
-index 9b46946f1e..804d35bbd3 100644
+index 9b46946..804d35b 100644
 --- a/libavcodec/amfenc_hevc.c
 +++ b/libavcodec/amfenc_hevc.c
 @@ -31,8 +31,9 @@ static const AVOption options[] = {
@@ -222,5 +221,5 @@ index 9b46946f1e..804d35bbd3 100644
      AMF_ASSIGN_PROPERTY_INT64(res, ctx->encoder, AMF_VIDEO_ENCODER_HEVC_NUM_GOPS_PER_IDR, ctx->gops_per_idr);
      AMF_ASSIGN_PROPERTY_INT64(res, ctx->encoder, AMF_VIDEO_ENCODER_HEVC_GOP_SIZE, avctx->gop_size);
 -- 
-2.30.0.windows.2
+2.37.1 (Apple Git-137.1)
 

@@ -13,7 +13,6 @@
 #include "handbrake/hbffmpeg.h"
 #include "handbrake/h264_common.h"
 #include "handbrake/h265_common.h"
-#include "handbrake/av1_common.h"
 #include "handbrake/nal_units.h"
 
 #if HB_PROJECT_FEATURE_NVENC
@@ -228,11 +227,6 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
                     codec_name = "hevc_mf";
                     break;
             }
-        }break;
-        case AV_CODEC_ID_AV1:
-        {
-            hb_log("encavcodecInit: AV1 encoder");
-            codec_name = "libsvtav1";
         }break;
     }
 
