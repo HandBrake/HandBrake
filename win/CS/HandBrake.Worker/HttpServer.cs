@@ -15,26 +15,83 @@ namespace HandBrake.Worker
     using System.Diagnostics;
     using System.Net;
     using System.Text;
-    using System.Threading;
-    using System.Threading.Tasks;
 
-    using HandBrake.Interop.Interop;
     using HandBrake.Worker.Logging;
     using HandBrake.Worker.Services.Interfaces;
 
     public class HttpServer
     {
-        private readonly ITokenService tokenService;
+        private ITokenService tokenService;
 
         private readonly HttpListener httpListener = new HttpListener();
-        private readonly Dictionary<string, Func<HttpListenerRequest, string>> apiHandlers;
+        private Dictionary<string, Func<HttpListenerRequest, string>> apiHandlers;
 
-        private readonly bool failedStart;
+        private bool failedStart;
 
         public HttpServer(Dictionary<string, Func<HttpListenerRequest, string>> apiCalls, int port, ITokenService tokenService)
         {
+            try
+            {
+                Init(apiCalls, port, tokenService);
+            }
+            catch (Exception e)
+            {
+                ConsoleOutput.WriteLine("HandBrake Worker: Failed to Initialise: " + Environment.NewLine + e, ConsoleColor.Red);
+            }
+        }
+
+        public bool Run()
+        {
+            httpListener.BeginGetContext(new AsyncCallback(ListenerCallback), this.httpListener);
+            return true;
+        }
+
+        public void ListenerCallback(IAsyncResult result)
+        {
+            if (this.failedStart)
+            {
+                return;
+            }
+
+            if (this.httpListener.IsListening)
+            {
+                try
+                {
+                    var context = this.httpListener.EndGetContext(result);
+                    lock (this.httpListener)
+                    {
+                        this.HandleRequest(context);
+                    }
+                }
+                catch (Exception e)
+                {
+                    if (e is HttpListenerException)
+                    {
+                        Debug.WriteLine("Worker: " + e);
+                        return;
+                    }
+                }
+            }
+
+            this.Run();
+        }
+
+        public void Stop()
+        {
+            this.httpListener.Stop();
+            this.httpListener.Close();
+        }
+
+        private void Init(Dictionary<string, Func<HttpListenerRequest, string>> apiCalls, int port, ITokenService tokenService)
+        {
             if (!HttpListener.IsSupported)
             {
+                string rstr = string.Format(
+                    "Worker: Failed to Initialise: HttpListener is not supported on this computer.{0}" 
+                    + "\r\nProcess Isolation can be disabled in \"Tools Menu -> Preferences -> Advanced -> Process Isolation\".{0}",
+                    Environment.NewLine);
+
+                ConsoleOutput.WriteLine(rstr, ConsoleColor.Red);
                 throw new NotSupportedException("HttpListener not supported on this computer.");
             }
 
@@ -83,48 +140,6 @@ namespace HandBrake.Worker
                 Console.WriteLine("Worker: Unable to start HTTP Server. Maybe the port {0} is in use?", port);
                 Console.WriteLine("Worker Exception: " + e);
             }
-        }
-
-        public bool Run()
-        {
-            httpListener.BeginGetContext(new AsyncCallback(ListenerCallback), this.httpListener);
-            return true;
-        }
-
-        public void ListenerCallback(IAsyncResult result)
-        {
-            if (this.failedStart)
-            {
-                return;
-            }
-
-            if (this.httpListener.IsListening)
-            {
-                try
-                {
-                    var context = this.httpListener.EndGetContext(result);
-                    lock (this.httpListener)
-                    {
-                        this.HandleRequest(context);
-                    }
-                }
-                catch (Exception e)
-                {
-                    if (e is HttpListenerException)
-                    {
-                        Debug.WriteLine("Worker: " + e);
-                        return;
-                    }
-                }
-            }
-
-            this.Run();
-        }
-
-        public void Stop()
-        {
-            this.httpListener.Stop();
-            this.httpListener.Close();
         }
 
         private void HandleRequest(HttpListenerContext context)
