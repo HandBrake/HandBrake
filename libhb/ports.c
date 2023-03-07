@@ -283,8 +283,6 @@ const char* hb_get_cpu_platform_name()
 
 static void init_cpu_info()
 {
-    int ii;
-
     if (hb_cpu_info.count != 0)
         return;
 
@@ -403,7 +401,7 @@ static void init_cpu_info()
             hb_cpu_info.name    = hb_cpu_info.buf;
 
             // ensure string is null-terminated and trim trailing whitespace
-            ii = sizeof(hb_cpu_info.buf) - 1;
+            int ii = sizeof(hb_cpu_info.buf) - 1;
             do {
                 hb_cpu_info.buf[ii] = '\0';
                 ii -= 1;
