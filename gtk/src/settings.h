@@ -76,8 +76,6 @@ typedef struct
     char                * extra_activity_path;
     gboolean              append_queue_activity;
     preview_t           * preview;
-    gchar               * appcast;
-    gint                  appcast_len;
     int                   stderr_src_id;
     GtkApplication      * app;
     GtkFileChooserNative* source_dialog;

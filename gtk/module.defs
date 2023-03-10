@@ -28,10 +28,6 @@ ifeq ($(HAS.pthread),1)
 endif
 endif
 
-ifeq (0,$(FEATURE.gtk.update.checks))
-	GTK.CONFIGURE.extra += --disable-update-checks
-endif
-
 ifeq (0,$(FEATURE.gst))
 	GTK.CONFIGURE.extra += --disable-gst
 endif

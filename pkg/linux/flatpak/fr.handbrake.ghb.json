@@ -54,7 +54,6 @@
             "no-autogen": true,
             "config-opts": [
                 "--flatpak",
-                "--disable-gtk-update-checks"
             ],
             "builddir": true,
             "post-install": ["install -d /app/extensions"],

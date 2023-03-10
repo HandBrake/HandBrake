@@ -67,7 +67,6 @@ void ghb_check_dependency(
 void ghb_do_scan( signal_user_data_t *ud, const gchar *filename,
     gint titlenum, gboolean force);
 void ghb_log(gchar *log, ...);
-gpointer ghb_check_update(signal_user_data_t *ud);
 #if defined(_WIN32)
 void wm_drive_changed(MSG *msg, signal_user_data_t *ud);
 #endif
@@ -97,7 +96,6 @@ void ghb_break_duration(gint64 duration, gint *hh, gint *mm, gint *ss);
 GtkFileFilter *ghb_add_file_filter(GtkFileChooser *chooser,
                                    signal_user_data_t *ud,
                                    const char *name, const char *id);
-gpointer ghb_check_update(signal_user_data_t *ud);
 void ghb_notify_done(signal_user_data_t *ud);
 
 #endif // _CALLBACKS_H_

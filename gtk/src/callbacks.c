@@ -50,14 +50,6 @@
 #include <netinet/in.h>
 #include <netdb.h>
 
-#if !defined(_NO_UPDATE_CHECK)
-#if defined(_OLD_WEBKIT)
-#include <webkit.h>
-#else
-#include <webkit/webkit.h>
-#endif
-#endif
-
 #ifndef NOTIFY_CHECK_VERSION
 #define NOTIFY_CHECK_VERSION(x,y,z) 0
 #endif
@@ -83,7 +75,6 @@
 #include "preview.h"
 #include "values.h"
 #include "plist.h"
-#include "appcast.h"
 #include "hb-backend.h"
 #include "ghb-dvd.h"
 #include "libavutil/parseutils.h"
@@ -96,7 +87,6 @@ static GList* dvd_device_list(void);
 static void prune_logs(signal_user_data_t *ud);
 static gboolean can_suspend_logind(void);
 static void suspend_logind(void);
-static gboolean appcast_busy = FALSE;
 static gboolean has_drive = FALSE;
 
 #if !defined(_WIN32)
@@ -4538,37 +4528,6 @@ ghb_timer_cb(gpointer data)
         ghb_set_preview_image(ud);
         update_preview = FALSE;
     }
-
-#if !defined(_NO_UPDATE_CHECK)
-    if (!appcast_busy)
-    {
-        const gchar *updates;
-        updates = ghb_dict_get_string(ud->prefs, "check_updates");
-        gint64 duration = 0;
-        if (strcmp(updates, "daily") == 0)
-            duration = 60 * 60 * 24;
-        else if (strcmp(updates, "weekly") == 0)
-            duration = 60 * 60 * 24 * 7;
-        else if (strcmp(updates, "monthly") == 0)
-            duration = 60 * 60 * 24 * 7;
-
-        if (duration != 0)
-        {
-            gint64 last;
-            time_t tt;
-
-            last = ghb_dict_get_int(ud->prefs, "last_update_check");
-            time(&tt);
-            if (last + duration < tt)
-            {
-                ghb_dict_set_int(ud->prefs,
-                                        "last_update_check", tt);
-                ghb_pref_save(ud->prefs, "last_update_check");
-                GHB_THREAD_NEW("Update Check", G_THREAD_FUNC(ghb_check_update), ud);
-            }
-        }
-    }
-#endif
     return TRUE;
 }
 
@@ -5386,201 +5345,6 @@ format_deblock_cb(GtkScale *scale, gdouble val, signal_user_data_t *ud)
     {
         return g_strdup_printf("%d", (gint)val);
     }
-}
-
-static void
-process_appcast(signal_user_data_t *ud)
-{
-    gchar *description = NULL, *build = NULL, *version = NULL, *msg;
-#if !defined(_WIN32) && !defined(_NO_UPDATE_CHECK)
-    GtkWidget *window;
-    static GtkWidget *html = NULL;
-#endif
-    GtkWidget *dialog, *label;
-    gint    response, ibuild = 0, skip;
-
-    if (ud->appcast == NULL || ud->appcast_len < 15 ||
-        strncmp(&(ud->appcast[9]), "200 OK", 6))
-    {
-        goto done;
-    }
-    ghb_appcast_parse(ud->appcast, &description, &build, &version);
-    if (build)
-        ibuild = g_strtod(build, NULL);
-    skip = ghb_dict_get_int(ud->prefs, "update_skip_version");
-    if (description == NULL || build == NULL || version == NULL
-        || ibuild <= hb_get_build(NULL) || skip == ibuild)
-    {
-        goto done;
-    }
-    msg = g_strdup_printf(_("HandBrake %s/%s is now available (you have %s/%d)."),
-            version, build, hb_get_version(NULL), hb_get_build(NULL));
-    label = GHB_WIDGET(ud->builder, "update_message");
-    gtk_label_set_text(GTK_LABEL(label), msg);
-
-#if !defined(_WIN32) && !defined(_NO_UPDATE_CHECK)
-    if (html == NULL)
-    {
-        html = webkit_web_view_new();
-        window = GHB_WIDGET(ud->builder, "update_scroll");
-        gtk_container_add(GTK_CONTAINER(window), html);
-        // Show it
-        gtk_widget_set_size_request(html, 420, 240);
-        gtk_widget_show(html);
-    }
-    webkit_web_view_open(WEBKIT_WEB_VIEW(html), description);
-#endif
-    dialog = GHB_WIDGET(ud->builder, "update_dialog");
-    response = gtk_dialog_run(GTK_DIALOG(dialog));
-    gtk_widget_hide(dialog);
-    if (response == GTK_RESPONSE_OK)
-    {
-        // Skip
-        ghb_dict_set_int(ud->prefs, "update_skip_version", ibuild);
-        ghb_pref_save(ud->prefs, "update_skip_version");
-    }
-    g_free(msg);
-
-done:
-    if (description) g_free(description);
-    if (build) g_free(build);
-    if (version) g_free(version);
-    g_free(ud->appcast);
-    ud->appcast_len = 0;
-    ud->appcast = NULL;
-    appcast_busy = FALSE;
-}
-
-static void
-net_close (GIOChannel *ioc)
-{
-    gint fd;
-
-    ghb_log_func();
-    if (ioc == NULL) return;
-    fd = g_io_channel_unix_get_fd(ioc);
-    close(fd);
-    g_io_channel_unref(ioc);
-}
-
-G_MODULE_EXPORT gboolean
-ghb_net_recv_cb(GIOChannel *ioc, GIOCondition cond, gpointer data)
-{
-    gchar buf[2048];
-    gsize len;
-    GError *gerror = NULL;
-    GIOStatus status;
-
-    ghb_log_func();
-    signal_user_data_t *ud = (signal_user_data_t*)data;
-
-    status = g_io_channel_read_chars (ioc, buf, 2048, &len, &gerror);
-    if ((status == G_IO_STATUS_NORMAL || status == G_IO_STATUS_EOF) &&
-        len > 0)
-    {
-        gint new_len = ud->appcast_len + len;
-        ud->appcast = g_realloc(ud->appcast, new_len + 1);
-        memcpy(&(ud->appcast[ud->appcast_len]), buf, len);
-        ud->appcast_len = new_len;
-    }
-    if (status == G_IO_STATUS_EOF)
-    {
-        if ( ud->appcast != NULL )
-        {
-            ud->appcast[ud->appcast_len] = 0;
-        }
-        net_close(ioc);
-        process_appcast(ud);
-        return FALSE;
-    }
-    return TRUE;
-}
-
-static GIOChannel*
-net_open(signal_user_data_t *ud, gchar *address, gint port)
-{
-    GIOChannel *ioc;
-    gint fd;
-
-    struct sockaddr_in   sock;
-    struct hostent     * host;
-
-    ghb_log_func();
-    if( !( host = gethostbyname( address ) ) )
-    {
-        g_warning( "gethostbyname failed (%s)", address );
-        appcast_busy = FALSE;
-        return NULL;
-    }
-
-    memset( &sock, 0, sizeof( struct sockaddr_in ) );
-    sock.sin_family = host->h_addrtype;
-    sock.sin_port   = htons( port );
-    memcpy( &sock.sin_addr, host->h_addr, host->h_length );
-
-    fd = socket(host->h_addrtype, SOCK_STREAM, 0);
-    if( fd < 0 )
-    {
-        g_debug( "socket failed" );
-        appcast_busy = FALSE;
-        return NULL;
-    }
-
-    if(connect(fd, (struct sockaddr*)&sock, sizeof(struct sockaddr_in )) < 0 )
-    {
-        g_debug( "connect failed" );
-        appcast_busy = FALSE;
-        return NULL;
-    }
-    ioc = g_io_channel_unix_new(fd);
-    g_io_channel_set_encoding (ioc, NULL, NULL);
-    g_io_channel_set_flags(ioc, G_IO_FLAG_NONBLOCK, NULL);
-    g_io_add_watch (ioc, G_IO_IN, ghb_net_recv_cb, (gpointer)ud );
-
-    return ioc;
-}
-
-gpointer ghb_check_update (signal_user_data_t *ud)
-{
-    gchar *query;
-    gsize len;
-    GIOChannel *ioc;
-    GError *gerror = NULL;
-    GRegex *regex;
-    GMatchInfo *mi;
-    gchar *host, *appcast;
-
-    ghb_log_func();
-    appcast_busy = TRUE;
-    regex = g_regex_new("^http://(.+)/(.+)$", 0, 0, NULL);
-    if (!g_regex_match(regex, HB_PROJECT_URL_APPCAST, 0, &mi))
-    {
-        return NULL;
-    }
-
-    host = g_match_info_fetch(mi, 1);
-    appcast = g_match_info_fetch(mi, 2);
-
-    if (host == NULL || appcast == NULL)
-        return NULL;
-
-    query = g_strdup_printf("GET /%s HTTP/1.0\r\nHost: %s\r\n\r\n",
-                            appcast, host);
-
-    ioc = net_open(ud, host, 80);
-    if (ioc == NULL)
-        goto free_resources;
-
-    g_io_channel_write_chars(ioc, query, strlen(query), &len, &gerror);
-    g_io_channel_flush(ioc, &gerror);
-
-free_resources:
-    g_free(query);
-    g_free(host);
-    g_free(appcast);
-    g_match_info_free(mi);
-    g_regex_unref(regex);
-    return NULL;
 }
 
 void
