@@ -1147,6 +1147,14 @@ static hb_buffer_t *copy_frame( hb_work_private_t *pv )
         {
             pv->title->hdr_10_plus = 1;
         }
+
+        // Check for Ambient Viewing Environment metadata
+        sd = av_frame_get_side_data(pv->frame, AV_FRAME_DATA_AMBIENT_VIEWING_ENVIRONMENT);
+        if (sd != NULL && sd->size > 0)
+        {
+            AVAmbientViewingEnvironment *ambient = (AVAmbientViewingEnvironment *)sd->data;
+            pv->title->ambient = hb_ambient_ff_to_hb(*ambient);
+        }
     }
 
     return out;

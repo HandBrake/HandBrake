@@ -543,6 +543,28 @@ AVMasteringDisplayMetadata hb_mastering_hb_to_ff(hb_mastering_display_metadata_t
     return ff_mastering;
 }
 
+hb_ambient_viewing_environment_metadata_t hb_ambient_ff_to_hb(AVAmbientViewingEnvironment ambient)
+{
+    hb_ambient_viewing_environment_metadata_t hb_ambient;
+
+    hb_ambient.ambient_illuminance = hb_rational_ff_to_hb(ambient.ambient_illuminance);
+    hb_ambient.ambient_light_x = hb_rational_ff_to_hb(ambient.ambient_light_x);
+    hb_ambient.ambient_light_y = hb_rational_ff_to_hb(ambient.ambient_light_y);
+
+    return hb_ambient;
+}
+
+AVAmbientViewingEnvironment hb_ambient_hb_to_ff(hb_ambient_viewing_environment_metadata_t ambient)
+{
+    AVAmbientViewingEnvironment ff_ambient;
+
+    ff_ambient.ambient_illuminance = hb_rational_hb_to_ff(ambient.ambient_illuminance);
+    ff_ambient.ambient_light_x = hb_rational_hb_to_ff(ambient.ambient_light_x);
+    ff_ambient.ambient_light_y = hb_rational_hb_to_ff(ambient.ambient_light_y);
+
+    return ff_ambient;
+}
+
 AVDOVIDecoderConfigurationRecord hb_dovi_hb_to_ff(hb_dovi_conf_t dovi)
 {
     AVDOVIDecoderConfigurationRecord ff_dovi;

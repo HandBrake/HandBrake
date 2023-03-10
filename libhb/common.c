@@ -4174,6 +4174,7 @@ static void job_setup(hb_job_t * job, hb_title_t * title)
 
     job->mastering      = title->mastering;
     job->coll           = title->coll;
+    job->ambient        = title->ambient;
     job->dovi           = title->dovi;
     job->passthru_dynamic_hdr_metadata |= title->dovi.dv_profile ? DOVI : NONE;
     job->passthru_dynamic_hdr_metadata |= title->hdr_10_plus ? HDR_10_PLUS : NONE;
