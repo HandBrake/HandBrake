@@ -105,8 +105,6 @@ ghb_SOURCES = \
 	icons.h \
 	values.c \
 	values.h \
-	appcast.c \
-	appcast.h \
 	plist.c \
 	plist.h \
 	hb-backend.c \

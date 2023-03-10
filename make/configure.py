@@ -1412,8 +1412,7 @@ def createCLI( cross = None ):
     h = IfHost( 'disable GTK GUI', '*-*-linux*', '*-*-freebsd*', '*-*-netbsd*', '*-*-openbsd*', none=argparse.SUPPRESS ).value
     grp.add_argument( '--disable-gtk', default=False, action='store_true', help=h )
 
-    h = IfHost( 'disable GTK GUI update checks', '*-*-linux*', '*-*-freebsd*', '*-*-netbsd*', '*-*-openbsd*', none=argparse.SUPPRESS ).value
-    grp.add_argument( '--disable-gtk-update-checks', default=False, action='store_true', help=h )
+    grp.add_argument( '--disable-gtk-update-checks', default=False, action='store_true', help=argparse.SUPPRESS )
 
     h = 'enable GTK GUI for Windows' if (cross is not None and 'mingw' in cross) else argparse.SUPPRESS
     grp.add_argument( '--enable-gtk-mingw', default=False, action='store_true', help=h )
@@ -1720,6 +1719,9 @@ try:
     # create CLI and parse
     cli = createCLI( cross )
     options, args = cli.parse_known_args()
+
+    if options.disable_gtk_update_checks:
+        raise AbortError('The --disable-gtk-update-checks flag is no longer required or supported')
 
     ## update cfg with cli directory locations
     cfg.update_cli( options )
@@ -2068,7 +2070,6 @@ int main()
     doc.add( 'FEATURE.gtk4',       int( options.enable_gtk4 ))
     doc.add( 'FEATURE.gtk',        int( not options.disable_gtk ))
     doc.add( 'FEATURE.gtk.mingw',  int( options.enable_gtk_mingw ))
-    doc.add( 'FEATURE.gtk.update.checks', int( not options.disable_gtk_update_checks ))
     doc.add( 'FEATURE.gst',        int( not options.disable_gst ))
     doc.add( 'FEATURE.mf',         int( options.enable_mf ))
     doc.add( 'FEATURE.nvenc',      int( options.enable_nvenc ))

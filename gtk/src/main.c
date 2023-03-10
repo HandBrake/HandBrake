@@ -1099,11 +1099,6 @@ ghb_activate_cb(GApplication * app, signal_user_data_t * ud)
 
     GtkWidget *widget;
 
-#if defined(_NO_UPDATE_CHECK)
-    widget = GHB_WIDGET(ud->builder, "check_updates_box");
-    gtk_widget_hide(widget);
-#endif
-
     // Get GtkTextBuffers for activity logs
     widget = GHB_WIDGET(ud->builder, "activity_view");
     ud->activity_buffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(widget));

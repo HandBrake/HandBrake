@@ -101,10 +101,6 @@ AC_ARG_ENABLE(gst,
 	AS_HELP_STRING([--disable-gst], [disable gstreamer (live preview)]),
 	gst_disable=yes, gst_disable=no)
 
-AC_ARG_ENABLE(update-checks,
-	AS_HELP_STRING([--disable-update-checks], [disable update checks]),
-	update_checks=no, update_checks=yes)
-
 AC_ARG_ENABLE(gtk4,
 	AS_HELP_STRING([--enable-gtk4], [enable building with gtk4]),
 	use_gtk4=yes, use_gtk4=no)
@@ -193,19 +189,6 @@ fi
 if test "x$gst_disable" = "xno" ; then
 	CXXFLAGS="$CXXFLAGS -D_ENABLE_GST"
 	CFLAGS="$CFLAGS -D_ENABLE_GST"
-fi
-
-if test "x$update_checks" = "xyes" ; then
-	PKG_CHECK_MODULES([webkitgtk], webkitgtk-3.0, use_webkitgtk=yes, use_webkitgtk=no)
-	if test "x$use_webkitgtk" = "xyes" ; then
-		HB_LIBS="$HB_LIBS $webkitgtk_LIBS"
-		HB_CPPFLAGS="$HB_CPPFLAGS $webkitgtk_CFLAGS"
-	else
-		update_checks="no"
-		CFLAGS="$CFLAGS -D_NO_UPDATE_CHECK"
-	fi
-else
-	CFLAGS="$CFLAGS -D_NO_UPDATE_CHECK"
 fi
 
 AM_CONDITIONAL([GHB_GTK_4_4], [test "$HAVE_GTK_4_4" -eq 1])

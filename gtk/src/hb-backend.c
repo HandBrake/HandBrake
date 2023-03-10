@@ -169,19 +169,6 @@ combo_opts_t log_longevity_opts =
     d_log_longevity_opts
 };
 
-static options_map_t d_appcast_update_opts[] =
-{
-    {N_("Never"),   "never",   0},
-    {N_("Daily"),   "daily",   1},
-    {N_("Weekly"),  "weekly",  2},
-    {N_("Monthly"), "monthly", 3},
-};
-combo_opts_t appcast_update_opts =
-{
-    sizeof(d_appcast_update_opts)/sizeof(options_map_t),
-    d_appcast_update_opts
-};
-
 static options_map_t d_vqual_granularity_opts[] =
 {
     {"0.2",  "0.2",  0.2 },
@@ -640,12 +627,6 @@ combo_name_map_t combo_name_map[] =
     {
         "LogLongevity",
         &log_longevity_opts,
-        small_opts_set,
-        generic_opt_get
-    },
-    {
-        "check_updates",
-        &appcast_update_opts,
         small_opts_set,
         generic_opt_get
     },
