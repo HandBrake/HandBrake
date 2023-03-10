@@ -20,6 +20,7 @@
 #include "libavutil/downmix_info.h"
 #include "libavutil/display.h"
 #include "libavutil/mastering_display_metadata.h"
+#include "libavutil/ambient_viewing_environment.h"
 #include "libavutil/dovi_meta.h"
 #include "libswscale/swscale.h"
 #include "libswresample/swresample.h"
@@ -46,6 +47,9 @@ int hb_colr_mat_ff_to_hb(int colr_mat);
 
 hb_mastering_display_metadata_t hb_mastering_ff_to_hb(AVMasteringDisplayMetadata mastering);
 AVMasteringDisplayMetadata hb_mastering_hb_to_ff(hb_mastering_display_metadata_t mastering);
+
+hb_ambient_viewing_environment_metadata_t hb_ambient_ff_to_hb(AVAmbientViewingEnvironment ambient);
+AVAmbientViewingEnvironment hb_ambient_hb_to_ff(hb_ambient_viewing_environment_metadata_t ambient);
 
 AVDOVIDecoderConfigurationRecord hb_dovi_hb_to_ff(hb_dovi_conf_t dovi);
 hb_dovi_conf_t hb_dovi_ff_to_hb(AVDOVIDecoderConfigurationRecord dovi);

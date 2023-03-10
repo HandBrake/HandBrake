@@ -349,6 +349,13 @@ struct hb_content_light_metadata_s
     unsigned max_fall;
 };
 
+struct hb_ambient_viewing_environment_metadata_s
+{
+    hb_rational_t ambient_illuminance;
+    hb_rational_t ambient_light_x;
+    hb_rational_t ambient_light_y;
+};
+
 struct hb_dovi_conf_s
 {
     unsigned dv_version_major;
@@ -721,6 +728,7 @@ struct hb_job_s
 
     hb_mastering_display_metadata_t mastering;
     hb_content_light_metadata_t coll;
+    hb_ambient_viewing_environment_metadata_t ambient;
     hb_dovi_conf_t dovi;
 
     enum {NONE = 0x0, ALL = 0x3, DOVI = 0x1, HDR_10_PLUS = 0x2} passthru_dynamic_hdr_metadata;
@@ -1191,6 +1199,7 @@ struct hb_title_s
 
     hb_mastering_display_metadata_t mastering;
     hb_content_light_metadata_t     coll;
+    hb_ambient_viewing_environment_metadata_t ambient;
     hb_dovi_conf_t  dovi;
     int             hdr_10_plus;
 

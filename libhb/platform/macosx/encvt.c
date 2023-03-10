@@ -92,6 +92,7 @@ struct hb_work_private_s
             int chromaLocation;
             CFDataRef masteringDisplay;
             CFDataRef contentLightLevel;
+            CFDataRef ambientViewingEnviroment;
         }
         color;
         SInt32 width;
@@ -434,6 +435,21 @@ static CFDataRef hb_vt_content_light_level_xlat(hb_content_light_metadata_t coll
     return data;
 }
 
+static CFDataRef hb_vt_ambient_viewing_enviroment_xlat(hb_ambient_viewing_environment_metadata_t ambient)
+{
+    CFMutableDataRef data = CFDataCreateMutable(kCFAllocatorDefault, 8);
+
+    uint32_t ambient_illuminance = CFSwapInt32HostToBig(rescale(ambient.ambient_illuminance, 10000));
+    uint16_t ambient_light_x =  CFSwapInt16HostToBig(rescale(ambient.ambient_light_x, 50000));
+    uint16_t ambient_light_y =  CFSwapInt16HostToBig(rescale(ambient.ambient_light_y, 50000));
+
+    CFDataAppendBytes(data, (UInt8 *)&ambient_illuminance, 4);
+    CFDataAppendBytes(data, (UInt8 *)&ambient_light_x, 2);
+    CFDataAppendBytes(data, (UInt8 *)&ambient_light_y, 2);
+
+    return data;
+}
+
 static OSType hb_vt_get_cv_pixel_format(hb_job_t* job)
 {
     if (job->output_pix_fmt == AV_PIX_FMT_NV12)
@@ -658,6 +674,11 @@ static int hb_vt_settings_xlat(hb_work_private_t *pv, hb_job_t *job)
         {
             pv->settings.color.contentLightLevel = hb_vt_content_light_level_xlat(job->coll);
         }
+    }
+
+    if (job->ambient.ambient_illuminance.num && job->ambient.ambient_illuminance.den)
+    {
+        pv->settings.color.ambientViewingEnviroment = hb_vt_ambient_viewing_enviroment_xlat(job->ambient);
     }
 
     if (job->passthru_dynamic_hdr_metadata & HDR_10_PLUS)
@@ -1119,6 +1140,18 @@ static OSStatus init_vtsession(hb_work_object_t *w, hb_job_t *job, hb_work_priva
         if (err != noErr)
         {
             hb_log("VTSessionSetProperty: kVTCompressionPropertyKey_ContentLightLevelInfo failed");
+        }
+    }
+
+    if (CFDictionaryContainsKey(supportedProps, CFSTR("AmbientViewingEnvironment")) &&
+        pv->settings.color.ambientViewingEnviroment != NULL)
+    {
+        err = VTSessionSetProperty(pv->session,
+                                   CFSTR("AmbientViewingEnvironment"),
+                                   pv->settings.color.ambientViewingEnviroment);
+        if (err != noErr)
+        {
+            hb_log("VTSessionSetProperty: kVTCompressionPropertyKey_AmbientViewingEnvironment failed");
         }
     }
 
@@ -1639,6 +1672,10 @@ void encvt_close(hb_work_object_t * w)
     if (pv->settings.color.contentLightLevel)
     {
         CFRelease(pv->settings.color.contentLightLevel);
+    }
+    if (pv->settings.color.ambientViewingEnviroment)
+    {
+        CFRelease(pv->settings.color.ambientViewingEnviroment);
     }
 
     free(pv);

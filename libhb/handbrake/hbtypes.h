@@ -46,6 +46,7 @@ typedef struct hb_fifo_s hb_fifo_t;
 typedef struct hb_lock_s hb_lock_t;
 typedef struct hb_mastering_display_metadata_s hb_mastering_display_metadata_t;
 typedef struct hb_content_light_metadata_s hb_content_light_metadata_t;
+typedef struct hb_ambient_viewing_environment_metadata_s hb_ambient_viewing_environment_metadata_t;
 typedef struct hb_dovi_conf_s hb_dovi_conf_t;
 
 #endif // HANDBRAKE_TYPES_H

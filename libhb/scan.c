@@ -1329,6 +1329,14 @@ skip_preview:
                    title->coll.max_fall);
         }
 
+        if (title->ambient.ambient_illuminance.num)
+        {
+            hb_log("scan: ambient viewing environment: ambient_illuminance=%f, ambient_light_x=%f, ambient_light_x=%f",
+                   hb_q2d(title->ambient.ambient_illuminance),
+                   hb_q2d(title->ambient.ambient_light_x),
+                   hb_q2d(title->ambient.ambient_light_y));
+        }
+
         if (title->dovi.dv_profile > 0)
         {
             hb_log("scan: dolby vision configuration record: version: %d.%d, profile: %d, level: %d, rpu flag: %d, el flag: %d, bl flag: %d, compatibility id: %d",

@@ -306,6 +306,14 @@ int encx265Init(hb_work_object_t *w, hb_job_t *job)
         }
     }
 
+    if (job->ambient.ambient_illuminance.num && job->ambient.ambient_illuminance.den)
+    {
+        param->ambientIlluminance = rescale(job->ambient.ambient_illuminance, 10000);
+        param->ambientLightX = rescale(job->ambient.ambient_light_x, 50000);
+        param->ambientLightY = rescale(job->ambient.ambient_light_y, 50000);
+        param->bEmitAmbientViewingEnvironment = 1;
+    }
+
     if (job->chroma_location != AVCHROMA_LOC_UNSPECIFIED)
     {
         char chromaLocation[256];
