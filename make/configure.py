@@ -1745,7 +1745,7 @@ try:
     ## prepare list of targets and NAME=VALUE args to pass to make
     targets = []
     exports = []
-    rx_exports = re.compile( '([^=]+)=(.*)' )
+    rx_exports = re.compile( '([^=-]+)=(.*)' )
     for arg in args:
         m = rx_exports.match( arg )
         if m:
@@ -2225,6 +2225,15 @@ int main()
     stdout.write( 'Enable VCE:         %s' % options.enable_vce )
     stdout.write( ' (%s)\n' % note_unsupported ) if not (host_tuple.system == 'linux' or host_tuple.match( 'x86_64-w64-mingw32*' )) else stdout.write( '\n' )
     stdout.write( 'Enable libdovi:     %s\n' % options.enable_libdovi )
+
+    if len(targets) > 0:
+        print( print_blue('Note:'), 'passthrough arguments:', *targets)
+
+    if len(exports) > 0:
+        print( print_blue('Note:'), 'exported variables:', end = ' ')
+        for export in exports:
+            print('%s=%s'% (export[0], export[1]), end = ' ')
+        print()
 
     if options.launch:
         stdout.write( '%s\n' % ('-' * 79) )
