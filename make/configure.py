@@ -69,14 +69,6 @@ class Configure( object ):
         return dir
 
     ## output functions
-    def errln( self, format, *args ):
-        s = (format % args)
-        if re.match( '^.*[!?:;.]$', s ):
-            stderr.write( 'ERROR: %s configure stop.\n' % (s) )
-        else:
-            stderr.write( 'ERROR: %s; configure stop.\n' % (s) )
-        self.record_log()
-        sys.exit( 1 )
     def infof( self, format, *args ):
         line = format % args
         self._log_verbose.append( line )
@@ -107,12 +99,12 @@ class Configure( object ):
     ## perform chdir and enable log recording
     def chdir( self ):
         if os.path.abspath( self.build_dir ) == os.path.abspath( self.src_dir ):
-            self.errln( 'build (scratch) directory must not be the same as top-level source root!' )
+            raise AbortError( 'build (scratch) directory must not be the same as top-level source root!' )
 
         if self.build_dir != os.curdir:
             if os.path.exists( self.build_dir ):
                 if not options.force:
-                    self.errln( 'build directory already exists: %s (use --force to overwrite)', self.build_dir )
+                    raise AbortError( 'build directory already exists: %s (use --force to overwrite)', self.build_dir )
             else:
                 self.mkdirs( self.build_dir )
             self.infof( 'chdir: %s\n', self.build_dir )
@@ -139,19 +131,22 @@ class Configure( object ):
         try:
             return open( *args )
         except Exception as x:
-            self.errln( 'open failure: %s', x )
+            raise AbortError( 'open failure: %s', x )
 
     def record_log( self ):
         if not self._record:
             return
+        regex = re.compile( r'\x1b\[[0-9A-Fa-f]*m' )
         self._record = False
         self.verbose = Configure.OUT_QUIET
         log_info_file = self.open( 'log/config.info.txt', 'w' )
         for line in self._log_info:
+            line = regex.sub( '', line )
             log_info_file.write( line )
         log_info_file.close()
         log_verbose_file = self.open( 'log/config.verbose.txt', 'w' )
         for line in self._log_verbose:
+            line = regex.sub( '', line )
             log_verbose_file.write( line )
         log_verbose_file.close()
 
@@ -239,8 +234,8 @@ class Action( object ):
 
         self.run_done = False
         self.fail     = True
-        self.msg_fail = 'fail'
-        self.msg_pass = 'pass'
+        self.msg_fail = print_red('fail')
+        self.msg_pass = print_green('pass')
         self.msg_end  = 'end'
 
     def _actionBegin( self ):
@@ -251,7 +246,7 @@ class Action( object ):
             cfg.infof( '(%s) %s\n', self.msg_fail, self.msg_end )
             if self.abort:
                 self._dumpSession( cfg.infof )
-                cfg.errln( 'unable to continue' )
+                raise AbortError( 'configure is unable to continue.' )
             self._dumpSession( cfg.verbosef )
             self._failSession()
         else:
@@ -823,11 +818,10 @@ class RepoProbe( ShellProbe ):
         # Find script that creates repo info
         try:
             repo_info = os.path.join( cfg.src_dir, 'scripts', 'repo-info.sh' )
-            if not os.path.isfile( repo_info ):
-                cfg.errln( 'Missing required script %s\n', repo_info )
-                sys.exit( 1 )
         except:
-            sys.exit( 1 )
+            raise AbortError( 'Missing required script repo-info.sh')
+        if not os.path.isfile( repo_info ):
+            raise AbortError( 'Missing required script %s', repo_info )
 
         super( RepoProbe, self ).__init__( 'repo info', '%s %s' %
                                             (repo_info, cfg.src_dir) )
@@ -919,12 +913,12 @@ class RepoProbe( ShellProbe ):
                 if self.session:
                     self._parseSession()
             if self.hash and self.hash != 'deadbeaf':
-                cfg.infof( '(pass)\n' )
+                cfg.infof( '(%s)\n' % print_green('pass'))
             else:
-                cfg.infof( '(fail)\n' )
+                cfg.infof( '(%s)\n' % print_red('fail'))
 
         except:
-            cfg.infof( '(fail)\n' )
+            cfg.infof( '(%s)\n' % print_red('fail'))
 
 ###############################################################################
 ##
@@ -964,14 +958,12 @@ class Project( Action ):
             url_arch = ''
 
         if repo.date is None:
-            cfg.errln( '%s is missing version information it needs to build properly.\nClone the official git repository at %s\nor download an official source archive from %s\n', self.name, self.url_repo, self.url_website )
-            sys.exit( 1 )
+            raise AbortError( '%s is missing version information it needs to build properly.\nClone the official git repository at %s\nor download an official source archive from %s\n', self.name, self.url_repo, self.url_website )
 
         if repo.tag != '':
             m = re.match( '^([0-9]+)\.([0-9]+)\.([0-9]+)-?(.+)?$', repo.tag )
             if not m:
-                cfg.errln( 'Invalid repo tag format %s\n', repo.tag )
-                sys.exit( 1 )
+                raise AbortError( 'Invalid repo tag format %s\n', repo.tag )
             (vmajor, vminor, vpoint, suffix) = m.groups()
             self.vmajor = int(vmajor)
             self.vminor = int(vminor)
@@ -1275,12 +1267,12 @@ class ConfigDocument:
                 os.remove( ftmp )
             except Exception as x:
                 pass
-            cfg.errln( 'failed writing to %s\n%s', ftmp, x )
+            raise AbortError( 'failed writing to %s\n%s', ftmp, x )
 
         try:
             os.rename( ftmp, fname )
         except Exception as x:
-            cfg.errln( 'failed writing to %s\n%s', fname, x )
+            raise AbortError( 'failed writing to %s\n%s', fname, x )
 
 ###############################################################################
 
@@ -1310,12 +1302,12 @@ def encodeDistfileConfig():
             os.remove( ftmp )
         except Exception as x:
             pass
-        cfg.errln( 'failed writing to %s\n%s', ftmp, x )
+        raise AbortError( 'failed writing to %s\n%s', ftmp, x )
 
     try:
         os.rename( ftmp, fname )
     except Exception as x:
-        cfg.errln( 'failed writing to %s\n%s', fname, x )
+        raise AbortError( 'failed writing to %s\n%s', fname, x )
 
 ###############################################################################
 ##
@@ -1508,7 +1500,7 @@ class Launcher:
         try:
             pipe = subprocess.Popen( cmd, shell=True, bufsize=1, stdout=subprocess.PIPE, stderr=subprocess.STDOUT )
         except Exception as x:
-            cfg.errln( 'launch failure: %s', x )
+            raise AbortError( 'launch failure: %s', x )
         for line in pipe.stdout:
             if not isinstance(line, str):
                 line = line.decode()
@@ -1520,9 +1512,9 @@ class Launcher:
         elapsed = timeEnd - timeBegin
 
         if pipe.returncode:
-            result = 'FAILURE (code %d)' % pipe.returncode
+            result = '%s (code %d)' % (print_red('FAILURE'), pipe.returncode)
         else:
-            result = 'SUCCESS'
+            result = print_green('SUCCESS')
 
         ## present duration in decent format
         seconds = elapsed
@@ -1569,6 +1561,30 @@ class Launcher:
         line = format % args
         self._file.write( line )
         cfg.infof( '%s', line )
+
+###############################################################################
+##
+## Functions for color terminal output
+##
+def print_color(text: string, color: int) -> string:
+    if os.environ.get('CLICOLOR_FORCE') or \
+    (os.isatty(sys.stdout.fileno()) and os.isatty(sys.stderr.fileno()) and os.environ.get('TERM') != 'dumb'):
+        output = ('\x1b[%xm\x1b[1m%s\x1b[0m' % (color, text))
+    else:
+        output = text
+    return output
+
+def print_bold(text: string) -> string:
+    return print_color(text, 0)
+
+def print_red(text: string) -> string:
+    return print_color(text, 0x31)
+
+def print_green(text: string) -> string:
+    return print_color(text, 0x32)
+
+def print_blue(text: string) -> string:
+    return print_color(text, 0x34)
 
 ###############################################################################
 ##
@@ -2210,7 +2226,6 @@ int main()
     stdout.write( ' (%s)\n' % note_unsupported ) if not (host_tuple.system == 'linux' or host_tuple.match( 'x86_64-w64-mingw32*' )) else stdout.write( '\n' )
     stdout.write( 'Enable libdovi:     %s\n' % options.enable_libdovi )
 
-
     if options.launch:
         stdout.write( '%s\n' % ('-' * 79) )
         Launcher( targets )
@@ -2224,20 +2239,20 @@ int main()
 
     stdout.write( '%s\n' % ('-' * 79) )
     if options.launch:
-        stdout.write( 'Build is finished!\n' )
+        stdout.write( print_bold( 'Build is finished!\n' ) )
         if nocd:
             stdout.write( 'You may now examine the output.\n' )
         else:
             stdout.write( 'You may now cd into %s and examine the output.\n' % (cfg.build_dir) )
     else:
-        stdout.write( 'Build is configured!\n' )
+        stdout.write( print_bold( 'Build is configured!\n' ) )
         if nocd:
             stdout.write( 'You may now run make (%s).\n' % (Tools.gmake.pathname) )
         else:
             stdout.write( 'You may now cd into %s and run make (%s).\n' % (cfg.build_dir,Tools.gmake.pathname) )
 
 except AbortError as x:
-    stderr.write( 'ERROR: %s\n' % (x) )
+    stderr.write( '\n%s\n\n' % print_red( 'ERROR: %s' % x ) )
     try:
         cfg.record_log()
     except:
