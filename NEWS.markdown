@@ -16,11 +16,22 @@ Windows users, please make sure to install [Microsoft .NET Desktop Runtime versi
 
 #### Video
 
-- Improve HDR Passthru. Preserve HDR10+ and Dolby Vision dynamic metadata when using the x265 10-bit encoder.
+- Improved HDR Passthru. Preserve HDR10+ and Dolby Vision dynamic metadata
+  - Dolby Vision is supported only when using the x265 10-bit encoder, only the following Dolby Vision profiles and cross compatibility IDs are supported:
+    - 5.0
+    - 7.6 (base layer only, converted to 8.1)
+    - 8.1
+    - 8.4
+  - HDR10+ is supported on both x265 10bit and SVT-AV1 encoders
+- Support for SVT-AV1 multi-pass ABR mode
 
 #### Third-party libraries
 
 - Updated libraries
+  - AMF 1.4.29 (AMD VCN encoding)
+  - FFmpeg 6.0 (decoding and filters)
+  - libdav1d 1.1.0 (AV1 decoding)
+  - libvpx 1.13.0 (VP8/VP9 video encoding)
 
 - New libraries
   - libdovi (Dolby Vision metadata)
@@ -48,11 +59,17 @@ Windows users, please make sure to install [Microsoft .NET Desktop Runtime versi
 #### Video
 
 - Fix an issue with QSV that could result in the output video being a green screen. (#4842)
+- Fix a green video issue qith QuickSync (#4876)
+- Various fixes and library updates for QuickSync to improve support on Linux (#4958)
+- Switch to using swscale instead of zscale when the resolution isn't mod2. Should fix scan failures in this condition
 
 ### Windows
 
 - Fixed an issue with autonaming when using drive based sources (#4859)
-
+- Fixed Title Specific Scan for drive sources. (#4921)
+- Fix an issue that could cause a preset to show as "modified" when it was not. (#4909, #4908)
+- Some reliability improvements in the Process Isolation Feature. 
+- Miscellaneous other fixes
 
 ## HandBrake 1.6.1
 
