@@ -3602,10 +3602,12 @@ int hb_qsv_param_default(hb_qsv_param_t *param, mfxVideoParam *videoParam,
         {
             param->videoParam->ExtParam[param->videoParam->NumExtParam++] = (mfxExtBuffer*)&param->av1BitstreamParam;
         }
+#if defined(_WIN32) || defined(__MINGW32__)
         if (info->capabilities & HB_QSV_CAP_LOWPOWER_ENCODE)
         {
             param->videoParam->mfx.LowPower = MFX_CODINGOPTION_ON;
         }
+#endif
     }
     else
     {
