@@ -124,12 +124,23 @@ static hb_triplet_t hb_qsv_h265_profiles[] =
     { "Main Still Picture", "mainstillpicture", MFX_PROFILE_HEVC_MAINSP, },
     { NULL,                                                              },
 };
+static const char * const hb_qsv_h265_profiles_names_10bit[] = {
+    "auto",
+    "main10",
+    NULL,
+};
 static hb_triplet_t hb_qsv_av1_profiles[] =
 {
     { "Main",               "main",             MFX_PROFILE_AV1_MAIN,    },
     { "High",               "high",             MFX_PROFILE_AV1_HIGH,    },
     { "Professional",       "professional",     MFX_PROFILE_AV1_PRO,     },
     { NULL,                                                              },
+};
+static const char * const hb_qsv_av1_profiles_names[] =
+{
+    "auto",
+    "main",
+    NULL,
 };
 static hb_triplet_t hb_qsv_vpp_scale_modes[] =
 {
@@ -172,6 +183,11 @@ static hb_triplet_t hb_qsv_h264_levels[] =
     { "5.2", "5.2", MFX_LEVEL_AVC_52, },
     { NULL,                           },
 };
+static const char * const hb_h264_qsv_level_names[] =
+{
+    "auto", "1.0", "1b", "1.1", "1.2", "1.3", "2.0", "2.1", "2.2", "3.0",
+    "3.1", "3.2", "4.0", "4.1", "4.2", "5.0", "5.1", "5.2", NULL,
+};
 static hb_triplet_t hb_qsv_h265_levels[] =
 {
     { "1.0", "1.0", MFX_LEVEL_HEVC_1,  },
@@ -188,6 +204,11 @@ static hb_triplet_t hb_qsv_h265_levels[] =
     { "6.1", "6.1", MFX_LEVEL_HEVC_61, },
     { "6.2", "6.2", MFX_LEVEL_HEVC_62, },
     { NULL,                            },
+};
+static const char * const hb_h265_qsv_level_names[] =
+{
+    "auto", "1.0", "2.0", "2.1", "3.0", "3.1", "4.0", "4.1",
+    "5.0", "5.1", "5.2", "6.0", "6.1", "6.2", NULL,
 };
 static hb_triplet_t hb_qsv_av1_levels[] =
 {
@@ -207,11 +228,13 @@ static hb_triplet_t hb_qsv_av1_levels[] =
     { "5.1", "5.1", MFX_LEVEL_AV1_51,  },
     { "5.2", "5.2", MFX_LEVEL_AV1_52,  },
     { "5.3", "5.3", MFX_LEVEL_AV1_53,  },
-    { "6.0", "6.0", MFX_LEVEL_AV1_6,   },
-    { "6.1", "6.1", MFX_LEVEL_AV1_61,  },
-    { "6.2", "6.2", MFX_LEVEL_AV1_62,  },
-    { "6.3", "6.3", MFX_LEVEL_AV1_63,  },
     { NULL,                            },
+};
+static const char * const hb_av1_qsv_level_names[] =
+{
+    "auto", "2.0", "2.1", "2.2", "2.3", "3.0", "3.1", "3.2",
+    "3.3", "4.0", "4.1", "4.2", "4.3", "5.0", "5.1", "5.2",
+    "5.3", NULL,
 };
 
 static const enum AVPixelFormat hb_qsv_pix_fmts[] =
@@ -3170,10 +3193,10 @@ const char* const* hb_qsv_profile_get_names(int encoder)
         case HB_VCODEC_QSV_H265_8BIT:
             return hb_h265_profile_names_8bit;
         case HB_VCODEC_QSV_H265_10BIT:
-            return hb_h265_qsv_profile_names_10bit;
+            return hb_qsv_h265_profiles_names_10bit;
         case HB_VCODEC_QSV_AV1_10BIT:
         case HB_VCODEC_QSV_AV1:
-            return hb_av1_qsv_profile_names;
+            return hb_qsv_av1_profiles_names;
         default:
             return NULL;
     }
@@ -3184,10 +3207,10 @@ const char* const* hb_qsv_level_get_names(int encoder)
     switch (encoder)
     {
         case HB_VCODEC_QSV_H264:
-            return hb_h264_level_names;
+            return hb_h264_qsv_level_names;
         case HB_VCODEC_QSV_H265_10BIT:
         case HB_VCODEC_QSV_H265:
-            return hb_h265_level_names;
+            return hb_h265_qsv_level_names;
         case HB_VCODEC_QSV_AV1_10BIT:
         case HB_VCODEC_QSV_AV1:
             return hb_av1_qsv_level_names;
