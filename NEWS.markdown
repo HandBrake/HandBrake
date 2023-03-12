@@ -63,11 +63,17 @@ Windows users, please make sure to install [Microsoft .NET Desktop Runtime versi
 - Various fixes and library updates for QuickSync to improve support on Linux (#4958)
 - Switch to using swscale instead of zscale when the resolution isn't mod2. Should fix scan failures in this condition
 
+### Linux
+
+- Fixed multiple QSV device enumeration issue and enable Intel QSV AV1 (hardware) video encoders using Flatpak Intel Media plugin (#4775)
+- Fixed default usage of QSV lowpower mode causing issues if HuC is disabled (#4768)
+
 ### Windows
 
 - Fixed an issue with autonaming when using drive based sources (#4859)
 - Fixed Title Specific Scan for drive sources. (#4921)
 - Fix an issue that could cause a preset to show as "modified" when it was not. (#4909, #4908)
+- Fixed an issue with QSV bitrate does not respond to changes of ICQ (#4814)
 - Some reliability improvements in the Process Isolation Feature. 
 - Miscellaneous other fixes
 
