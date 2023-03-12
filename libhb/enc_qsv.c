@@ -1452,8 +1452,11 @@ int encqsvInit(hb_work_object_t *w, hb_job_t *job)
         }
     }
 
+    int hw_generation = hb_qsv_hardware_generation(hb_qsv_get_platform(hb_qsv_get_adapter_index()));
     // sanitize ICQ
-    if (!(pv->qsv_info->capabilities & HB_QSV_CAP_RATECONTROL_ICQ))
+    // workaround for MediaSDK platforms below TGL to disable ICQ if incorrectly detected
+    if (!(pv->qsv_info->capabilities & HB_QSV_CAP_RATECONTROL_ICQ) ||
+        ((pv->param.videoParam->mfx.LowPower == MFX_CODINGOPTION_ON) && (hw_generation < QSV_G8)))
     {
         // ICQ not supported
         pv->param.rc.icq = 0;
@@ -1608,7 +1611,7 @@ int encqsvInit(hb_work_object_t *w, hb_job_t *job)
     // set the GOP structure
     if (pv->param.gop.gop_ref_dist < 0)
     {
-        if ((hb_qsv_hardware_generation(hb_qsv_get_platform(hb_qsv_get_adapter_index())) >= QSV_G8) &&
+        if ((hw_generation >= QSV_G8) &&
             (pv->param.videoParam->mfx.CodecId == MFX_CODEC_HEVC ||
             pv->param.videoParam->mfx.CodecId == MFX_CODEC_AV1))
         {
