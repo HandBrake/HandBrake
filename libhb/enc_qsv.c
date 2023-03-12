@@ -1627,9 +1627,9 @@ int encqsvInit(hb_work_object_t *w, hb_job_t *job)
     // set the keyframe interval
     if (pv->param.gop.gop_pic_size < 0)
     {
-        int rate = (double)job->orig_vrate.num / job->orig_vrate.den + 0.5;
+        double rate = (double)job->orig_vrate.num / job->orig_vrate.den + 0.5;
         // set the keyframe interval based on the framerate
-        pv->param.gop.gop_pic_size = rate;
+        pv->param.gop.gop_pic_size = (int)(FFMIN(rate * 2, 120));
     }
     pv->param.videoParam->mfx.GopPicSize = pv->param.gop.gop_pic_size;
 
