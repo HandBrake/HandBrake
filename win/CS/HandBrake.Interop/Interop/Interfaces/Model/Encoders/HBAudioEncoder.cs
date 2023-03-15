@@ -17,7 +17,7 @@ namespace HandBrake.Interop.Interop.Interfaces.Model.Encoders
         public const string Vorbis = "vorbis";
         public const string Passthru = "copy";
 
-        public static HBAudioEncoder None = new HBAudioEncoder(-1, null, 1, 1, "None", -1, null, "none");
+        public static HBAudioEncoder None = HandBrakeEncoderHelpers.NoneAudioEncoder;
 
         public HBAudioEncoder(int compatibleContainers, RangeLimits compressionLimits, float defaultCompression, float defaultQuality, string displayName, int id, RangeLimits qualityLimits, string shortName)
         {
