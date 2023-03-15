@@ -55,6 +55,8 @@ namespace HandBrake.Interop.Interop
             }
         }
 
+        public static HBAudioEncoder NoneAudioEncoder => AudioEncoders.FirstOrDefault(s => s.CodecName == "None");
+
         /// <summary>
         /// Gets a list of supported video encoders.
         /// </summary>
