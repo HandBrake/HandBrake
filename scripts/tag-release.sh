@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/bin/sh
 #
 # Usage: tag-release.sh <release-ver> [<ref>]
 #
@@ -22,17 +22,14 @@
 #   git push origin refs/tags/X.Y.Z
 #
 
-SELF="${BASH_SOURCE[0]}"
-SELF_NAME=$(basename "${SELF}")
-
 GIT_EXE='git'
 
-function validate_repo()
+validate_repo()
 {
     local HASH err AHEAD BEHIND proceed
 
     # Check whether we have git
-    if ! hash ${GIT_EXE} 2>/dev/null; then
+    if [ -z "$(command -v ${GIT_EXE})" ]; then
         echo "Command '${GIT_EXE}' not found." 1>&2
         return 1
     fi
@@ -40,15 +37,15 @@ function validate_repo()
     # Check if there is a valid git repo here
     HASH=$(${GIT_EXE} rev-parse HEAD)
     err=$?
-    if [[ ${err} -ne 0 ]]; then
+    if [ ${err} -ne 0 ]; then
         echo "Not a valid repository." 1>&2
         return ${err}
-    elif [[ -z ${HASH} ]]; then
+    elif [ -z "${HASH}" ]; then
         echo "Not a valid repository." 1>&2
         return 1
     fi
 
-    if [[ -n "$(${GIT_EXE} status --porcelain)" ]]; then
+    if [ -n "$(${GIT_EXE} status --porcelain)" ]; then
         echo "There are uncommitted changes.  Aborting." 1>&2
         return 1
     fi
@@ -56,47 +53,47 @@ function validate_repo()
     echo "Fetching repo data..."
     ${GIT_EXE} fetch
     err=$?
-    if [[ ${err} -ne 0 ]]; then
+    if [ ${err} -ne 0 ]; then
         echo "Failed to fetch repo data." 1>&2
         return ${err}
     fi
     AHEAD=$(${GIT_EXE} rev-list @{u}..HEAD --count)
     BEHIND=$(${GIT_EXE} rev-list HEAD..@{u} --count)
-    if [[ ${AHEAD} -ne 0 ]]; then
+    if [ ${AHEAD} -ne 0 ]; then
         echo "There are unpushed changes. Continue anyway? (y/N)"
         read proceed
-        if [[ ( "x${proceed}" != "xy" ) && ( "x${proceed}" != "xY" ) ]] ; then
+        if [ "x${proceed}" != "xy" ] && [ "x${proceed}" != "xY" ] ; then
             echo "Aborting..."
             return 1
         fi
     fi
-    if [[ ${BEHIND} -ne 0 ]]; then
+    if [ ${BEHIND} -ne 0 ]; then
         echo "There are unmerged upstream changes. Continue anyway? (y/N)"
         read proceed
-        if [[ ( "x${proceed}" != "xy" ) && ( "x${proceed}" != "xY" ) ]] ; then
+        if [ "x${proceed}" != "xy" ] && [ "x${proceed}" != "xY" ] ; then
             echo "Aborting..."
             return 1
         fi
     fi
 }
 
-function tag_release()
+tag_release()
 {
     local TAG REF COMMIT BRANCH proceed new_branch ERR HASH
 
     TAG=${1}
     REF=${2}
 
-    if [ "x${TAG}" == "x" ]; then
+    if [ "x${TAG}" = "x" ]; then
         echo "Missing release tag (e.g. 1.0.0)"
-        echo "Usage: ${SELF_NAME} tag [commit]"
+        echo "Usage: tag-release.sh tag [commit]"
         return 1
     fi
 
     # bugfix branch name
     BRANCH=${TAG%.[0-9]*}.x
 
-    if [ "x${REF}" == "x" ]; then
+    if [ "x${REF}" = "x" ]; then
         echo "Creating release tag ${TAG} and branch ${BRANCH} from HEAD, proceed? (y/N)"
         # retrieve full hash of HEAD
         COMMIT=$(${GIT_EXE} rev-list HEAD --max-count=1)
@@ -106,7 +103,7 @@ function tag_release()
         COMMIT=$(${GIT_EXE} rev-list ${REF} --max-count=1)
     fi
     read proceed
-    if [[ ( "x${proceed}" != "xy" ) && ( "x${proceed}" != "xY" ) ]] ; then
+    if [ "x${proceed}" != "xy" ] && [ "x${proceed}" != "xY" ] ; then
         echo "Aborting..."
         return 0
     fi
@@ -183,7 +180,7 @@ function tag_release()
     echo "    git push -u origin ${BRANCH}"
     echo "    git push origin refs/tags/${TAG}"
     read proceed
-    if [[ ( "x${proceed}" == "xy" ) || ( "x${proceed}" == "xY" ) ]] ; then
+    if [ "x${proceed}" = "xy" ] || [ "x${proceed}" = "xY" ] ; then
         if [ $new_branch .eq 1 ]; then
             ${GIT_EXE} push -u origin "${BRANCH}"
             ERR=$?
@@ -204,7 +201,7 @@ function tag_release()
 
 }
 
-function main()
+main()
 {
     if validate_repo; then
         tag_release "$@"
