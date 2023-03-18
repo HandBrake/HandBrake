@@ -1,7 +1,7 @@
-#!/usr/bin/env bash
+#!/bin/sh
 # usage: build-presets
 
-SELF="${BASH_SOURCE[0]}"
+SELF="$0"
 SELF_DIR=$(cd $(dirname "${SELF}") && pwd -P)
 SELF_DIR="${SELF_DIR:-$(pwd)}"
 LIBHB_DIR="${SELF_DIR}/../libhb"
@@ -14,7 +14,7 @@ fi
 
 JSON_TEMP=$(mktemp preset_builtin.json.XXX)
 C_TEMP=$(mktemp preset_builtin.h.XXX)
-if [[ "${JSON_TEMP:-}" == "" ]] || [[ "${C_TEMP:-}" == "" ]]; then
+if [ "${JSON_TEMP:-}" = "" ] || [ "${C_TEMP:-}" = "" ]; then
     echo "unable to create temporary files" >2
     exit 1
 fi
