@@ -119,11 +119,7 @@ else
     MODULES += test
 endif
 
-ifeq (1-mingw,$(FEATURE.gtk.mingw)-$(HOST.system))
-    MODULES += gtk
-endif
-
-ifeq (1-,$(FEATURE.gtk)-$(filter $(HOST.system),darwin cygwin mingw))
+ifeq (1,$(FEATURE.gtk))
     MODULES += gtk
 endif
 

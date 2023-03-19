@@ -1409,19 +1409,19 @@ def createCLI( cross = None ):
     h = IfHost( 'enable assembly code in non-contrib modules', 'NOMATCH*-*-darwin*', 'NOMATCH*-*-linux*', none=argparse.SUPPRESS ).value
     grp.add_argument( '--enable-asm', default=False, action='store_true', help=h )
 
-    h = IfHost( 'disable GTK GUI', '*-*-linux*', '*-*-*bsd*', none=argparse.SUPPRESS ).value
-    grp.add_argument( '--disable-gtk', default=False, action='store_true', help=h )
+    # GTK GUI is disabled by default on macOS and Windows, enabled otherwise
+    require_gtk = not (host_tuple.match('*-*-mingw*', '*-*-cygwin*', '*-*-darwin*'))
+    h = 'enable GTK GUI' if not require_gtk else argparse.SUPPRESS
+    grp.add_argument( '--enable-gtk', dest="enable_gtk", default=require_gtk, action='store_true', help=h)
+    h = 'disable GTK GUI' if require_gtk else argparse.SUPPRESS
+    grp.add_argument( '--disable-gtk', dest="enable_gtk", action='store_false', help=h)
 
     grp.add_argument( '--disable-gtk-update-checks', default=False, action='store_true', help=argparse.SUPPRESS )
 
-    h = 'enable GTK GUI for Windows' if (cross is not None and 'mingw' in cross) else argparse.SUPPRESS
-    grp.add_argument( '--enable-gtk-mingw', default=False, action='store_true', help=h )
+    # Option hidden as GUI is not currently buildable with GTK4
+    grp.add_argument( '--enable-gtk4', default=False, action='store_true', help=argparse.SUPPRESS )
 
-    h = IfHost( 'Build GUI with GTK4', '*-*-linux*', '*-*-*bsd*', none=argparse.SUPPRESS ).value
-    grp.add_argument( '--enable-gtk4', default=False, action='store_true', help=h )
-
-    h = IfHost( 'disable GStreamer (live preview)', '*-*-linux*', '*-*-*bsd*', none=argparse.SUPPRESS ).value
-    grp.add_argument( '--disable-gst', default=False, action='store_true', help=h )
+    grp.add_argument( '--disable-gst', default=False, action='store_true', help='disable GStreamer (GTK live preview)' )
 
     h = IfHost( 'x265 video encoder', '*-*-*', none=argparse.SUPPRESS ).value
     grp.add_argument( '--enable-x265', dest="enable_x265", default=True, action='store_true', help=(( 'enable %s' %h ) if h != argparse.SUPPRESS else h) )
@@ -1748,9 +1748,6 @@ try:
     # Require FFmpeg AAC on Linux and Windows
     options.enable_ffmpeg_aac = IfHost(options.enable_ffmpeg_aac, '*-*-darwin*',
                                        none=True).value
-    # Allow GTK mingw only on mingw
-    options.enable_gtk_mingw  = IfHost(options.enable_gtk_mingw, '*-*-mingw*',
-                                       none=False).value
     # NUMA is linux only and only needed with x265
     options.enable_numa       = (IfHost(options.enable_numa, '*-*-linux*',
                                         none=False).value
@@ -2068,8 +2065,7 @@ int main()
     doc.add( 'FEATURE.ffmpeg_aac', int( options.enable_ffmpeg_aac ))
     doc.add( 'FEATURE.flatpak',    int( options.flatpak ))
     doc.add( 'FEATURE.gtk4',       int( options.enable_gtk4 ))
-    doc.add( 'FEATURE.gtk',        int( not options.disable_gtk ))
-    doc.add( 'FEATURE.gtk.mingw',  int( options.enable_gtk_mingw ))
+    doc.add( 'FEATURE.gtk',        int( options.enable_gtk ))
     doc.add( 'FEATURE.gst',        int( not options.disable_gst ))
     doc.add( 'FEATURE.mf',         int( options.enable_mf ))
     doc.add( 'FEATURE.nvenc',      int( options.enable_nvenc ))
@@ -2198,6 +2194,7 @@ int main()
     stdout.write( 'Harden:             %s\n' % options.enable_harden )
     stdout.write( 'Sandbox:            %s' % options.enable_sandbox )
     stdout.write( ' (%s)\n' % note_unsupported ) if not host_tuple.system == 'darwin' else stdout.write( '\n' )
+    stdout.write( 'Enable GTK GUI:     %s\n' % options.enable_gtk ) if options.enable_gtk or not host_tuple.match('*-*-mingw*', '*-*-cygwin*', '*-*-darwin*') else stdout.write('')
     stdout.write( 'Enable FDK-AAC:     %s\n' % options.enable_fdk_aac )
     stdout.write( 'Enable FFmpeg AAC:  %s' % options.enable_ffmpeg_aac )
     stdout.write( '  (%s)\n' % note_required ) if host_tuple.system != 'darwin' else stdout.write( '\n' )
