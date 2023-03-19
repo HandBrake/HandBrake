@@ -45,7 +45,7 @@ LIBHB.out += $(LIBHB.a)
 
 ###############################################################################
 
-LIBHB.GCC.D += __LIBHB__ USE_PTHREAD
+LIBHB.GCC.D += __LIBHB__
 LIBHB.GCC.I += $(LIBHB.build/) $(CONTRIB.build/)include
 
 ifeq (1,$(FEATURE.qsv))
