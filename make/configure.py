@@ -699,10 +699,10 @@ class ArchAction( Action ):
             pass
         elif host_tuple.match( '*-*-freebsd*' ):
             self.mode['i386']   = 'i386-portsbuild-freebsd%s' % (host_tuple.release)
-            self.mode['amd64'] = 'amd64-portsbuild-freebsd%s' % (host_tuple.release)
+            self.mode['amd64']  = 'amd64-portsbuild-freebsd%s' % (host_tuple.release)
         elif host_tuple.match( '*-*-openbsd*' ):
             self.mode['i386']   = 'i386-unknown-openbsd%s' % (host_tuple.release)
-            self.mode['amd64'] = 'amd64-unknown-openbsd%s' % (host_tuple.release)
+            self.mode['amd64']  = 'amd64-unknown-openbsd%s' % (host_tuple.release)
         else:
             self.msg_pass = 'WARNING'
 
@@ -1364,7 +1364,7 @@ def createCLI( cross = None ):
     ## add build options
     grp = cli.add_argument_group( 'Build Options' )
     grp.add_argument( '--snapshot', default=False, action='store_true', help='Force a snapshot build' )
-    h = IfHost( 'Build extra contribs for flatpak packaging', '*-*-linux*', '*-*-freebsd*', '*-*-openbsd*', none=argparse.SUPPRESS ).value
+    h = IfHost( 'Build extra contribs for flatpak packaging', '*-*-linux*', none=argparse.SUPPRESS ).value
     grp.add_argument( '--flatpak', default=False, action='store_true', help=h )
     cli.add_argument_group( grp )
 
@@ -1409,7 +1409,7 @@ def createCLI( cross = None ):
     h = IfHost( 'enable assembly code in non-contrib modules', 'NOMATCH*-*-darwin*', 'NOMATCH*-*-linux*', none=argparse.SUPPRESS ).value
     grp.add_argument( '--enable-asm', default=False, action='store_true', help=h )
 
-    h = IfHost( 'disable GTK GUI', '*-*-linux*', '*-*-freebsd*', '*-*-netbsd*', '*-*-openbsd*', none=argparse.SUPPRESS ).value
+    h = IfHost( 'disable GTK GUI', '*-*-linux*', '*-*-*bsd*', none=argparse.SUPPRESS ).value
     grp.add_argument( '--disable-gtk', default=False, action='store_true', help=h )
 
     grp.add_argument( '--disable-gtk-update-checks', default=False, action='store_true', help=argparse.SUPPRESS )
@@ -1417,10 +1417,10 @@ def createCLI( cross = None ):
     h = 'enable GTK GUI for Windows' if (cross is not None and 'mingw' in cross) else argparse.SUPPRESS
     grp.add_argument( '--enable-gtk-mingw', default=False, action='store_true', help=h )
 
-    h = IfHost( 'Build GUI with GTK4', '*-*-linux*', '*-*-freebsd*', '*-*-openbsd*', none=argparse.SUPPRESS ).value
+    h = IfHost( 'Build GUI with GTK4', '*-*-linux*', '*-*-*bsd*', none=argparse.SUPPRESS ).value
     grp.add_argument( '--enable-gtk4', default=False, action='store_true', help=h )
 
-    h = IfHost( 'disable GStreamer (live preview)', '*-*-linux*', '*-*-freebsd*', '*-*-netbsd*', '*-*-openbsd*', none=argparse.SUPPRESS ).value
+    h = IfHost( 'disable GStreamer (live preview)', '*-*-linux*', '*-*-*bsd*', none=argparse.SUPPRESS ).value
     grp.add_argument( '--disable-gst', default=False, action='store_true', help=h )
 
     h = IfHost( 'x265 video encoder', '*-*-*', none=argparse.SUPPRESS ).value
@@ -1655,7 +1655,7 @@ try:
                       'cc',
                       os.environ.get('CC', None),
                       'gcc',
-                      IfBuild( 'clang', '*-*-freebsd*' ),
+                      IfBuild( 'clang', '*-*-*bsd*' ),
                       IfBuild( 'gcc-4', '*-*-cygwin*' )]
         gcc        = ToolProbe(*filter(None, gcc_tools))
         if build_tuple.match( '*-*-darwin*' ):
