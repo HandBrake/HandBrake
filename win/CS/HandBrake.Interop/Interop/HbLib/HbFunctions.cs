@@ -150,8 +150,8 @@ namespace HandBrake.Interop.Interop.HbLib
         [DllImport("hb", EntryPoint = "hb_video_quality_get_name", CallingConvention = CallingConvention.Cdecl)]
         public static extern IntPtr hb_video_quality_get_name(uint codec);
 
-        [DllImport("hb", EntryPoint = "hb_video_twopass_is_supported", CallingConvention = CallingConvention.Cdecl)]
-        public static extern int hb_video_twopass_is_supported(uint codec);
+        [DllImport("hb", EntryPoint = "hb_video_multipass_is_supported", CallingConvention = CallingConvention.Cdecl)]
+        public static extern int hb_video_multipass_is_supported(uint codec);
 
         [DllImport("hb", EntryPoint = "hb_video_encoder_is_supported", CallingConvention = CallingConvention.Cdecl)]
         public static extern int hb_video_encoder_is_supported(int encoder);

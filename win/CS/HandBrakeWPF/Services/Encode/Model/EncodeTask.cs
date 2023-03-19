@@ -134,8 +134,8 @@ namespace HandBrakeWPF.Services.Encode.Model
             this.Quality = task.Quality;
             this.Framerate = task.Framerate;
             this.FramerateMode = task.FramerateMode;
-            this.TurboFirstPass = task.TurboFirstPass;
-            this.TwoPass = task.TwoPass;
+            this.TurboAnalysisPass = task.TurboAnalysisPass;
+            this.MultiPass = task.MultiPass;
             this.VideoBitrate = task.VideoBitrate;
             this.VideoEncoder = task.VideoEncoder;
             this.VideoEncodeRateType = task.VideoEncodeRateType;
@@ -287,9 +287,9 @@ namespace HandBrakeWPF.Services.Encode.Model
 
         public int? VideoBitrate { get; set; }
 
-        public bool TwoPass { get; set; }
+        public bool MultiPass { get; set; }
 
-        public bool TurboFirstPass { get; set; }
+        public bool TurboAnalysisPass { get; set; }
 
         public double? Framerate { get; set; }
 

@@ -166,15 +166,15 @@ static HBMixdownTransformer    *mixdownTransformer;
     {
         [passesString appendString:HBKitLocalizedString(@"1 Foreign Language Search Pass - ", @"Title description")];
     }
-    if (self.video.qualityType != 1 && self.video.twoPass == YES)
+    if (self.video.qualityType != 1 && self.video.multiPass == YES)
     {
-        if (self.video.turboTwoPass == YES)
+        if (self.video.turboMultiPass == YES)
         {
-            [passesString appendString:HBKitLocalizedString(@"2 Video Passes First Turbo", @"Title description")];
+            [passesString appendString:HBKitLocalizedString(@"Multi Passes Turbo", @"Title description")];
         }
         else
         {
-            [passesString appendString:HBKitLocalizedString(@"2 Video Passes", @"Title description")];
+            [passesString appendString:HBKitLocalizedString(@"Multi Passes", @"Title description")];
         }
     }
 

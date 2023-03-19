@@ -236,8 +236,8 @@ namespace HandBrakeWPF.Services.Encode.Factories
             if (job.VideoEncodeRateType == VideoEncodeRateType.AverageBitrate)
             {
                 video.Bitrate = job.VideoBitrate;
-                video.TwoPass = job.TwoPass;
-                video.Turbo = job.TurboFirstPass;
+                video.MultiPass = job.MultiPass;
+                video.Turbo = job.TurboAnalysisPass;
             }
 
 

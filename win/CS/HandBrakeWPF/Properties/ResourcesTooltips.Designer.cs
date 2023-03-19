@@ -924,24 +924,24 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to During the 1st pass of a 2 pass encode, use settings that speed things along..
+        ///   Looks up a localized string similar to During the analysis passes of a final pass encode, use settings that speed things along..
         /// </summary>
-        public static string Video_TurboFirstPass {
+        public static string Video_TurboAnalysisPass {
             get {
-                return ResourceManager.GetString("Video_TurboFirstPass", resourceCulture);
+                return ResourceManager.GetString("Video_TurboAnalysisPass", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Perform 2 Pass Encoding.
+        ///   Looks up a localized string similar to Perform Multi Pass Encoding.
         ///
-        ///The &apos;Bitrate&apos; option is prerequisite. During the 1st pass, statistics about
-        ///the video are collected.  Then in the second pass, those statistics are used
+        ///The &apos;Bitrate&apos; option is prerequisite. During the analysis passes, statistics about
+        ///the video are collected.  Then in the final pass, those statistics are used
         ///to make bitrate allocation decisions..
         /// </summary>
-        public static string Video_TwoPass {
+        public static string Video_MultiPass {
             get {
-                return ResourceManager.GetString("Video_TwoPass", resourceCulture);
+                return ResourceManager.GetString("Video_MultiPass", resourceCulture);
             }
         }
         

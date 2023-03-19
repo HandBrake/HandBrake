@@ -285,12 +285,12 @@ int encsvtInit(hb_work_object_t *w, hb_job_t *job)
     param->encoder_bit_depth = hb_get_bit_depth(job->output_pix_fmt);
     param->encoder_color_format = EB_YUV420;
 
-    if (job->pass_id == HB_PASS_ENCODE_1ST ||
-        job->pass_id == HB_PASS_ENCODE_2ND)
+    if (job->pass_id == HB_PASS_ENCODE_ANALYSIS ||
+        job->pass_id == HB_PASS_ENCODE_FINAL)
     {
         hb_interjob_t *interjob = hb_interjob_get(job->h);
 
-        if (job->pass_id == HB_PASS_ENCODE_1ST)
+        if (job->pass_id == HB_PASS_ENCODE_ANALYSIS)
         {
             if (interjob->context == NULL)
             {
@@ -374,7 +374,7 @@ void encsvtClose(hb_work_object_t *w)
         av_free(pv->in_buf->p_buffer);
         av_freep(&pv->in_buf);
     }
-    if (pv->job->pass_id == HB_PASS_ENCODE_2ND || *pv->job->die)
+    if (pv->job->pass_id == HB_PASS_ENCODE_FINAL || *pv->job->die)
     {
         hb_interjob_t *interjob = hb_interjob_get(pv->job->h);
         av_freep(&interjob->context);
@@ -592,7 +592,7 @@ static void flush(hb_work_object_t *w, hb_buffer_t *in, hb_buffer_list_t *list)
     // Store the first pass stats for the next
     // N.B.: this is needed only for the first pass
     // the second one will reuse the existing buffer
-    if (job->pass_id == HB_PASS_ENCODE_1ST && interjob->context == NULL)
+    if (job->pass_id == HB_PASS_ENCODE_ANALYSIS && interjob->context == NULL)
     {
         SvtAv1FixedBuf first_pass_stat;
         EbErrorType ret = svt_av1_enc_get_stream_info(pv->svt_handle,

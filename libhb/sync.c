@@ -2371,7 +2371,7 @@ static int syncVideoInit( hb_work_object_t * w, hb_job_t * job)
     w->fifo_in                  = job->fifo_raw;
     w->fifo_out                 = job->fifo_sync;
 
-    if (job->pass_id == HB_PASS_ENCODE_2ND)
+    if (job->pass_id == HB_PASS_ENCODE_FINAL)
     {
         /* We already have an accurate frame count from pass 1 */
         hb_interjob_t * interjob = hb_interjob_get(job->h);
@@ -2532,7 +2532,7 @@ static void syncVideoClose( hb_work_object_t * w )
     }
 
     /* save data for second pass */
-    if( job->pass_id == HB_PASS_ENCODE_1ST )
+    if( job->pass_id == HB_PASS_ENCODE_ANALYSIS )
     {
         /* Preserve frame count for better accuracy in pass 2 */
         hb_interjob_t * interjob = hb_interjob_get( job->h );

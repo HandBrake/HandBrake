@@ -387,14 +387,14 @@ namespace HandBrake.Interop.Interop.Json.Presets
         public double VideoQualitySlider { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether video two pass.
+        /// Gets or sets a value indicating whether video multi pass.
         /// </summary>
-        public bool VideoTwoPass { get; set; }
+        public bool VideoMultiPass { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether video turbo two pass.
+        /// Gets or sets a value indicating whether video turbo multi pass.
         /// </summary>
-        public bool VideoTurboTwoPass { get; set; }
+        public bool VideoTurboMultiPass { get; set; }
 
         /// <summary>
         /// Gets or sets the x 264 option.

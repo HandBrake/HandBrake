@@ -170,7 +170,7 @@ int hb_vt_is_constant_quality_available(int encoder)
     return 0;
 }
 
-int hb_vt_is_two_pass_available(int encoder)
+int hb_vt_is_multipass_available(int encoder)
 {
     switch (encoder)
     {

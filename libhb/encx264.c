@@ -547,19 +547,19 @@ int encx264Init( hb_work_object_t * w, hb_job_t * job )
         param.rc.i_rc_method = X264_RC_ABR;
         param.rc.i_bitrate = job->vbitrate;
         hb_log( "encx264: encoding at average bitrate %d", param.rc.i_bitrate );
-        if( job->pass_id == HB_PASS_ENCODE_1ST ||
-            job->pass_id == HB_PASS_ENCODE_2ND )
+        if( job->pass_id == HB_PASS_ENCODE_ANALYSIS ||
+            job->pass_id == HB_PASS_ENCODE_FINAL )
         {
             pv->filename = hb_get_temporary_filename("x264.log");
         }
         switch( job->pass_id )
         {
-            case HB_PASS_ENCODE_1ST:
+            case HB_PASS_ENCODE_ANALYSIS:
                 param.rc.b_stat_read  = 0;
                 param.rc.b_stat_write = 1;
                 param.rc.psz_stat_out = pv->filename;
                 break;
-            case HB_PASS_ENCODE_2ND:
+            case HB_PASS_ENCODE_FINAL:
                 param.rc.b_stat_read  = 1;
                 param.rc.b_stat_write = 0;
                 param.rc.psz_stat_in  = pv->filename;
@@ -604,8 +604,8 @@ int encx264Init( hb_work_object_t * w, hb_job_t * job )
         }
     }
 
-    /* Turbo first pass */
-    if( job->pass_id == HB_PASS_ENCODE_1ST && job->fastfirstpass == 1 )
+    /* Turbo analysis pass */
+    if (job->pass_id == HB_PASS_ENCODE_ANALYSIS && job->fastanalysispass == 1)
     {
         pv->api->param_apply_fastfirstpass( &param );
     }

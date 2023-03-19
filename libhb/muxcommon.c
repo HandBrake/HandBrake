@@ -373,7 +373,7 @@ static int muxWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
         hb_bitvec_set(mux->rdy, pv->track);
     }
     else if ((job->pass_id != HB_PASS_ENCODE &&
-              job->pass_id != HB_PASS_ENCODE_2ND) ||
+              job->pass_id != HB_PASS_ENCODE_FINAL) ||
              hb_bitvec_bit(mux->eof, pv->track))
     {
         hb_buffer_close( &buf );
@@ -500,7 +500,7 @@ static void muxClose( hb_work_object_t * muxer )
     // we want the muxing state to be visible while this is
     // happening.
     if( job->pass_id == HB_PASS_ENCODE ||
-        job->pass_id == HB_PASS_ENCODE_2ND )
+        job->pass_id == HB_PASS_ENCODE_FINAL )
     {
         /* Update the UI */
         hb_state_t state;
@@ -518,7 +518,7 @@ static void muxClose( hb_work_object_t * muxer )
 
     // we're all done muxing -- print final stats and cleanup.
     if( job->pass_id == HB_PASS_ENCODE ||
-        job->pass_id == HB_PASS_ENCODE_2ND )
+        job->pass_id == HB_PASS_ENCODE_FINAL )
     {
         hb_stat_t sb;
         uint64_t bytes_total, frames_total;
@@ -605,7 +605,7 @@ static int muxInit( hb_work_object_t * muxer, hb_job_t * job )
     hb_work_object_t * w;
 
     /* Get a real muxer */
-    if( job->pass_id == HB_PASS_ENCODE || job->pass_id == HB_PASS_ENCODE_2ND )
+    if( job->pass_id == HB_PASS_ENCODE || job->pass_id == HB_PASS_ENCODE_FINAL )
     {
         switch( job->mux )
         {
@@ -642,7 +642,7 @@ static int muxInit( hb_work_object_t * muxer, hb_job_t * job )
     mux->interleave = 90000. * (double)job->vrate.den / job->vrate.num;
     mux->pts = mux->interleave;
 
-    if( job->pass_id == HB_PASS_ENCODE || job->pass_id == HB_PASS_ENCODE_2ND )
+    if( job->pass_id == HB_PASS_ENCODE || job->pass_id == HB_PASS_ENCODE_FINAL )
     {
         /* Create file, write headers */
         if( mux->m )

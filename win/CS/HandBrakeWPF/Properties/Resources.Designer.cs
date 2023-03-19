@@ -7615,11 +7615,11 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Turbo first pass.
+        ///   Looks up a localized string similar to Turbo analysis pass.
         /// </summary>
-        public static string VideoView_TurboFirstPass {
+        public static string VideoView_TurboAnalysisPass {
             get {
-                return ResourceManager.GetString("VideoView_TurboFirstPass", resourceCulture);
+                return ResourceManager.GetString("VideoView_TurboAnalysisPass", resourceCulture);
             }
         }
         

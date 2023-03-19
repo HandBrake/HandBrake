@@ -11,7 +11,7 @@
 
 int hb_vt_is_encoder_available(int encoder);
 int hb_vt_is_constant_quality_available(int encoder);
-int hb_vt_is_two_pass_available(int encoder);
+int hb_vt_is_multipass_available(int encoder);
 
 const int* hb_vt_get_pix_fmts(int encoder);
 
