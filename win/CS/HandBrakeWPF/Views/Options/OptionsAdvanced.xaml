@@ -106,26 +106,26 @@
             </StackPanel>
 
 
-            <TextBlock Text="{x:Static Properties:Resources.OptionsView_ProcessIsolation_Warning1}" Margin="10,0,0,0"  TextWrapping="Wrap" Style="{StaticResource subText}" />
-            <TextBlock Text="{x:Static Properties:Resources.OptionsView_ProcessIsolation_Warning2}" Margin="10,0,0,0"  TextWrapping="Wrap" Style="{StaticResource subText}" />
+            <TextBlock Text="{x:Static Properties:Resources.OptionsView_ProcessIsolation_Warning1}" Margin="20,0,0,0"  TextWrapping="Wrap" Style="{StaticResource subText}" />
+            <TextBlock Text="{x:Static Properties:Resources.OptionsView_ProcessIsolation_Warning2}" Margin="20,0,0,0"  TextWrapping="Wrap" Style="{StaticResource subText}" />
 
-            <CheckBox Content="{x:Static Properties:Resources.OptionsView_EnableWorkerProcesses}" IsChecked="{Binding RemoteServiceEnabled}" Margin="10,10,0,0" />
+            <CheckBox Content="{x:Static Properties:Resources.OptionsView_EnableWorkerProcesses}" IsChecked="{Binding RemoteServiceEnabled}" Margin="20,10,0,0" />
 
-            <StackPanel Orientation="Horizontal" Margin="10,10,0,0">
+            <StackPanel Orientation="Horizontal" Margin="20,10,0,0">
                 <TextBlock Text="{x:Static Properties:Resources.OptionsView_WorkerDefaultPort}" />
                 <TextBox Text="{Binding RemoteServicePort}" Width="100" IsEnabled="{Binding RemoteServiceEnabled}"  />
             </StackPanel>
 
-            <StackPanel Orientation="Horizontal" Margin="10,10,0,0" IsEnabled="{Binding IsSimultaneousEncodesSupported}" >
+            <StackPanel Orientation="Horizontal" Margin="20,10,0,0" IsEnabled="{Binding IsSimultaneousEncodesSupported}" >
                 <TextBlock Text="{x:Static Properties:Resources.OptionsView_SimultaneousEncodes}" VerticalAlignment="Center"/>
                 <ComboBox ItemsSource="{Binding SimultaneousEncodesList}" SelectedItem="{Binding SimultaneousEncodes}" IsEnabled="{Binding RemoteServiceEnabled}" />
 
             </StackPanel>
             <StackPanel Orientation="Vertical">
                 <TextBlock Text="{x:Static Properties:Resources.OptionsView_SimultaneousHardwareLimitNotice}" Visibility="{Binding IsSimultaneousEncodesSupported, Converter={StaticResource boolToVisConverter}, ConverterParameter=false}" 
-                                       Margin="10,0,0,0" TextWrapping="Wrap" Style="{StaticResource subText}" />
+                                       Margin="20,0,0,0" TextWrapping="Wrap" Style="{StaticResource subText}" />
 
-                <TextBlock Text="{x:Static Properties:Resources.OptionsView_NotSupported}" Margin="10,0,0,0" Visibility="{Binding IsSimultaneousEncodesSupported, Converter={StaticResource boolToVisConverter}, ConverterParameter=true}" />
+                <TextBlock Text="{x:Static Properties:Resources.OptionsView_NotSupported}" Margin="20,0,0,0" Visibility="{Binding IsSimultaneousEncodesSupported, Converter={StaticResource boolToVisConverter}, ConverterParameter=true}" />
             </StackPanel>
 
         </StackPanel>
@@ -141,19 +141,20 @@
                     <ComboBox Name="logVerbosityLevel" ItemsSource="{Binding LogVerbosityOptions, Converter={StaticResource LogLevelConverter}}" SelectedItem="{Binding SelectedVerbosity, Converter={StaticResource LogLevelConverter}}" Width="120" />
                 </StackPanel>
 
-                <CheckBox Content="{x:Static Properties:Resources.Options_CopyLogToEncDir}" Margin="0,5,0,0" IsChecked="{Binding CopyLogToEncodeDirectory}" />
-                <CheckBox Content="{x:Static Properties:Resources.Options_CopyLogToDir}" Margin="0,5,0,0" IsChecked="{Binding CopyLogToSpecifiedLocation}" />
-                <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
-                    <TextBlock Text="{x:Static Properties:Resources.Options_LogPath}" VerticalAlignment="Center" />
-                    <TextBox Width="380" Text="{Binding LogDirectory}" />
-                    <Button Content="{x:Static Properties:Resources.Browse}" Margin="5,0,0,0" Command="{Binding RelayCommand}" CommandParameter="BrowseLogPath" />
-                </StackPanel>
+                <CheckBox Content="{x:Static Properties:Resources.Options_7DayLogClear}" Margin="0,5,0,0" IsChecked="{Binding ClearOldLogs}" />
                 <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
                     <Button Content="{x:Static Properties:Resources.Options_ViewLogDirectory}" Command="{Binding RelayCommand}" CommandParameter="ViewLogDirectory" Margin="0,0,5,0" />
                     <Button Content="{x:Static Properties:Resources.Options_ClearLogs}" Command="{Binding RelayCommand}" CommandParameter="ClearLogHistory" />
                 </StackPanel>
 
-                <CheckBox Content="{x:Static Properties:Resources.Options_7DayLogClear}" Margin="0,10,0,0" IsChecked="{Binding ClearOldLogs}" />
+                <CheckBox Content="{x:Static Properties:Resources.Options_CopyLogToEncDir}" Margin="0,25,0,0" IsChecked="{Binding CopyLogToEncodeDirectory}" />
+                <CheckBox Content="{x:Static Properties:Resources.Options_CopyLogToDir}" Margin="0,5,0,0" IsChecked="{Binding CopyLogToSpecifiedLocation}" />
+                <StackPanel Orientation="Horizontal" Margin="25,5,0,10">
+                    <TextBlock Text="{x:Static Properties:Resources.Options_LogPath}" VerticalAlignment="Center" />
+                    <TextBox Width="380" Text="{Binding LogDirectory}" />
+                    <Button Content="{x:Static Properties:Resources.Browse}" Margin="5,0,0,0" Command="{Binding RelayCommand}" CommandParameter="BrowseLogPath" />
+                </StackPanel>
+       
             </StackPanel>
 
         </StackPanel>

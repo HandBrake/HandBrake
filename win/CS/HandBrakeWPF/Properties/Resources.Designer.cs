@@ -3271,7 +3271,7 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Log Path:.
+        ///   Looks up a localized string similar to Path:.
         /// </summary>
         public static string Options_LogPath {
             get {

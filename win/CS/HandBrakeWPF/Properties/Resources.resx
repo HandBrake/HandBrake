@@ -1215,7 +1215,7 @@ Hint: File overwrite behaviour can be controlled in preferences. </value>
     <value>Log Verbosity Level:</value>
   </data>
   <data name="Options_LogPath" xml:space="preserve">
-    <value>Log Path:</value>
+    <value>Path:</value>
   </data>
   <data name="Options_LowDiskspaceSize" xml:space="preserve">
     <value>Pause queue if disk space is low</value>
