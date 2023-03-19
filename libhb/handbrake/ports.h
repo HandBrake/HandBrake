@@ -152,10 +152,7 @@ void hb_get_user_config_filename( char name[1024], char *fmt, ... );
  ***********************************************************************/
 typedef struct hb_thread_s hb_thread_t;
 
-#if defined( SYS_BEOS )
-#  define HB_LOW_PRIORITY    5
-#  define HB_NORMAL_PRIORITY 10
-#elif defined( SYS_DARWIN )
+#if defined( SYS_DARWIN )
 #  define HB_LOW_PRIORITY    31
 #  define HB_NORMAL_PRIORITY 31
 #elif defined( SYS_CYGWIN )
