@@ -207,7 +207,6 @@
 		A93341EF243E15BE003A82C2 /* HandBrakeXPCService3.xpc in Copy Files */ = {isa = PBXBuildFile; fileRef = A93341D5243E158B003A82C2 /* HandBrakeXPCService3.xpc */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		A93341F0243E15BE003A82C2 /* HandBrakeXPCService4.xpc in Copy Files */ = {isa = PBXBuildFile; fileRef = A93341E6243E158E003A82C2 /* HandBrakeXPCService4.xpc */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		A93341F1243E15CE003A82C2 /* HandBrakeXPCService.xpc in Copy Files */ = {isa = PBXBuildFile; fileRef = A964D39522FDE8EE00DFCAEA /* HandBrakeXPCService.xpc */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
-		A937EECB1C6C7C0300EEAE6D /* dsa_pub.pem in Resources */ = {isa = PBXBuildFile; fileRef = A937EECA1C6C7C0300EEAE6D /* dsa_pub.pem */; };
 		A939DD8B1FC8826A00135F2A /* HBPresetsMenuBuilder.m in Sources */ = {isa = PBXBuildFile; fileRef = A939DD8A1FC8826A00135F2A /* HBPresetsMenuBuilder.m */; };
 		A93B49221DA3AA6900DD70A3 /* HBToolbarBadgedItem.m in Sources */ = {isa = PBXBuildFile; fileRef = A93B49211DA3AA6900DD70A3 /* HBToolbarBadgedItem.m */; };
 		A93E0ED31972957000FD67FB /* HBVideoController.m in Sources */ = {isa = PBXBuildFile; fileRef = A93E0ED11972957000FD67FB /* HBVideoController.m */; };
@@ -609,7 +608,6 @@
 		A93341C4243E1583003A82C2 /* HandBrakeXPCService2.xpc */ = {isa = PBXFileReference; explicitFileType = "wrapper.xpc-service"; includeInIndex = 0; path = HandBrakeXPCService2.xpc; sourceTree = BUILT_PRODUCTS_DIR; };
 		A93341D5243E158B003A82C2 /* HandBrakeXPCService3.xpc */ = {isa = PBXFileReference; explicitFileType = "wrapper.xpc-service"; includeInIndex = 0; path = HandBrakeXPCService3.xpc; sourceTree = BUILT_PRODUCTS_DIR; };
 		A93341E6243E158E003A82C2 /* HandBrakeXPCService4.xpc */ = {isa = PBXFileReference; explicitFileType = "wrapper.xpc-service"; includeInIndex = 0; path = HandBrakeXPCService4.xpc; sourceTree = BUILT_PRODUCTS_DIR; };
-		A937EECA1C6C7C0300EEAE6D /* dsa_pub.pem */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = dsa_pub.pem; sourceTree = "<group>"; };
 		A939DD891FC8826A00135F2A /* HBPresetsMenuBuilder.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HBPresetsMenuBuilder.h; sourceTree = "<group>"; };
 		A939DD8A1FC8826A00135F2A /* HBPresetsMenuBuilder.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HBPresetsMenuBuilder.m; sourceTree = "<group>"; };
 		A93B0DF61C804CF50051A3FA /* NSDictionary+HBAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDictionary+HBAdditions.h"; sourceTree = "<group>"; };
@@ -1372,7 +1370,6 @@
 			isa = PBXGroup;
 			children = (
 				3490BCB31614CF8D002A5AD7 /* HandBrake.icns */,
-				A937EECA1C6C7C0300EEAE6D /* dsa_pub.pem */,
 				A975B02020F7AF29004675CC /* Localizable.strings */,
 				273F217914ADDDA10021BE6D /* English.lproj */,
 				D86C9DD41C6D372500F06F1B /* Assets.xcassets */,
@@ -2192,7 +2189,6 @@
 				A958EAC522E24D6800D83AF4 /* HBQueueInfoViewController.xib in Resources */,
 				A9A96BBF20CAD5F800A39AFB /* Video.xib in Resources */,
 				A9E1468316BC2AD800C307BC /* PrevTemplate.pdf in Resources */,
-				A937EECB1C6C7C0300EEAE6D /* dsa_pub.pem in Resources */,
 				A9A96BE320CAD6CD00A39AFB /* HBPreviewViewController.xib in Resources */,
 				A9A96BCB20CAD61800A39AFB /* Subtitles.xib in Resources */,
 				A95BC1E81CD2548A008D6A33 /* volLowTemplate.pdf in Resources */,
