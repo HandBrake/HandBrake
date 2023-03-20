@@ -21,8 +21,7 @@
 #endif
 
 #ifndef SYS_DARWIN
-#if defined( SYS_FREEBSD ) || defined ( __FreeBSD__ ) || defined(SYS_NETBSD) || \
-    defined( SYS_OPENBSD ) || defined ( __OpenBSD__ )
+#if defined( SYS_FREEBSD ) || defined( SYS_NETBSD ) || defined( SYS_OPENBSD )
 #include <stdlib.h>
 #else
 #include <malloc.h>
