@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="18122" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="21507" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="18122"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="21507"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -964,14 +964,15 @@ Lapsharp default: y-strength=0.2:y-kernel=isolap:cb-strength=0.2:cb-kernel=isola
                     </popUpButtonCell>
                     <accessibility description="Chroma Smooth Tune"/>
                     <connections>
+                        <binding destination="-2" name="contentValues" keyPath="self.filters.chromaSmoothTunes" id="8fC-ge-uue"/>
+                        <binding destination="-2" name="selectedValue" keyPath="self.filters.chromaSmoothTune" previousBinding="8fC-ge-uue" id="kRG-Er-vIp">
+                            <dictionary key="options">
+                                <string key="NSValueTransformerName">HBChromaSmoothTuneTransformer</string>
+                            </dictionary>
+                        </binding>
                         <binding destination="-2" name="hidden" keyPath="self.filters.chromaSmoothEnabled" id="AMm-ys-xDB">
                             <dictionary key="options">
                                 <string key="NSValueTransformerName">NSNegateBoolean</string>
-                            </dictionary>
-                        </binding>
-                        <binding destination="-2" name="selectedValue" keyPath="self.filters.chromaSmoothTune" previousBinding="S80-at-P31" id="KuX-gT-uOT">
-                            <dictionary key="options">
-                                <string key="NSValueTransformerName">HBChromaSmoothTuneTransformer</string>
                             </dictionary>
                         </binding>
                         <binding destination="-2" name="hidden2" keyPath="self.filters.customChromaSmoothSelected" previousBinding="AMm-ys-xDB" id="8pf-jg-07J">
@@ -982,7 +983,6 @@ Lapsharp default: y-strength=0.2:y-kernel=isolap:cb-strength=0.2:cb-kernel=isola
                                 <integer key="NSNullPlaceholder" value="-1"/>
                             </dictionary>
                         </binding>
-                        <binding destination="-2" name="contentValues" keyPath="self.filters.deblockTunes" id="S80-at-P31"/>
                     </connections>
                 </popUpButton>
                 <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="150" translatesAutoresizingMaskIntoConstraints="NO" id="PZ7-Nx-ctH">
