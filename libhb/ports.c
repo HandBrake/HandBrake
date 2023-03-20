@@ -839,8 +839,7 @@ static void attribute_align_thread hb_thread_func( void * _t )
     hb_thread_t * t = (hb_thread_t *) _t;
 
 #if (defined( SYS_DARWIN ) && !defined(__aarch64__)) || defined( SYS_FREEBSD ) || \
-    defined ( __FreeBSD__ ) || defined(SYS_NETBSD) || defined( SYS_OPENBSD ) || \
-    defined ( __OpenBSD__ )
+    defined( SYS_NETBSD ) || defined( SYS_OPENBSD )
     /* Set the thread priority
        Do not change priority on Darwin arm systems */
     struct sched_param param;
@@ -951,8 +950,8 @@ hb_lock_t * hb_lock_init()
 
     pthread_mutexattr_init(&mta);
 
-#if defined( SYS_CYGWIN ) || defined( SYS_FREEBSD ) || defined ( __FreeBSD__ ) || \
-    defined(SYS_NETBSD) || defined( SYS_OPENBSD ) || defined ( __OpenBSD__ )
+#if defined( SYS_CYGWIN ) || defined( SYS_FREEBSD ) || defined( SYS_NETBSD ) || \
+    defined( SYS_OPENBSD )
     pthread_mutexattr_settype(&mta, PTHREAD_MUTEX_NORMAL);
 #endif
 
