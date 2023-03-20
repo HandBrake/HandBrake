@@ -240,15 +240,16 @@ upower_proxy_new_cb (GObject *source, GAsyncResult *result,
     {
         g_signal_connect(proxy, "g-properties-changed",
                          G_CALLBACK(upower_status_cb), ud);
+        g_dbus_proxy_call(proxy, "EnumerateDevices", NULL,
+                          G_DBUS_CALL_FLAGS_NONE, 10000, NULL,
+                          (GAsyncReadyCallback) upower_devices_cb, ud);
+        upower_proxy = proxy;
     }
     else
     {
         g_debug("Could not create DBus proxy: %s", error->message);
         g_error_free(error);
     }
-    g_dbus_proxy_call(proxy, "EnumerateDevices", NULL, G_DBUS_CALL_FLAGS_NONE,
-                      10000, NULL, (GAsyncReadyCallback) upower_devices_cb, ud);
-    upower_proxy = proxy;
 }
 
 static void

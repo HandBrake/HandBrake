@@ -1921,7 +1921,7 @@ static void compute_init_delay(hb_work_private_t *pv, mfxBitstream *bs)
         if (pv->bfrm_delay < 1 || pv->bfrm_delay > BFRM_DELAY_MAX)
         {
             hb_log("compute_init_delay: "
-                   "invalid delay %d (PTS: %"PRIu64", DTS: %"PRId64")",
+                   "invalid delay %d (PTS: %llu, DTS: %lld)",
                    pv->bfrm_delay, bs->TimeStamp, bs->DecodeTimeStamp);
 
             /* we have B-frames, the frame delay should be at least 1 */
