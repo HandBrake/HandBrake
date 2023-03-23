@@ -290,16 +290,6 @@ Suggested values are: 18 to 20 for standard definition sources and 20 to 23 for 
 FFMpeg's and Theora's scale is more linear.
 These encoders do not have a lossless mode.</value>
   </data>
-  <data name="Video_TurboFirstPass" xml:space="preserve">
-    <value>During the 1st pass of a 2 pass encode, use settings that speed things along.</value>
-  </data>
-  <data name="Video_TwoPass" xml:space="preserve">
-    <value>Perform 2 Pass Encoding.
-
-The 'Bitrate' option is prerequisite. During the 1st pass, statistics about
-the video are collected.  Then in the second pass, those statistics are used
-to make bitrate allocation decisions.</value>
-  </data>
   <data name="Video_VariableFramerate" xml:space="preserve">
     <value>Enables variable framerate output.
 

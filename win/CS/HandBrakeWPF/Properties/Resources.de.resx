@@ -1644,9 +1644,6 @@ Es werden VLC und MPC-HC unterstützt. Andere Media-Player können auch funktion
   <data name="SummaryView_storage" xml:space="preserve">
     <value>Original</value>
   </data>
-  <data name="VideoView_2Pass" xml:space="preserve">
-    <value>Encodierung in zwei Durchgängen</value>
-  </data>
   <data name="VideoView_AverageBitrate" xml:space="preserve">
     <value>Mittlere Bitrate (kbps):</value>
   </data>
@@ -1688,9 +1685,6 @@ Es werden VLC und MPC-HC unterstützt. Andere Media-Player können auch funktion
   </data>
   <data name="VideoView_Quality" xml:space="preserve">
     <value>Qualität:</value>
-  </data>
-  <data name="VideoView_TurboFirstPass" xml:space="preserve">
-    <value>Ersten Durchgang beschleunigen</value>
   </data>
   <data name="VideoView_VariableFramerate" xml:space="preserve">
     <value>Variable Bildfrequenz</value>

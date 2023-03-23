@@ -1643,9 +1643,6 @@ VLC en MPC-HC worden ondersteund. Andere spelers werken mogelijk ook, maar zijn 
   <data name="SummaryView_storage" xml:space="preserve">
     <value>opslag</value>
   </data>
-  <data name="VideoView_2Pass" xml:space="preserve">
-    <value>2-fasecodering</value>
-  </data>
   <data name="VideoView_AverageBitrate" xml:space="preserve">
     <value>Gem. bitsnelheid (kbps):</value>
   </data>
@@ -1687,9 +1684,6 @@ VLC en MPC-HC worden ondersteund. Andere spelers werken mogelijk ook, maar zijn 
   </data>
   <data name="VideoView_Quality" xml:space="preserve">
     <value>Kwaliteit:</value>
-  </data>
-  <data name="VideoView_TurboFirstPass" xml:space="preserve">
-    <value>Turbo eerste fase</value>
   </data>
   <data name="VideoView_VariableFramerate" xml:space="preserve">
     <value>Variabele framesnelheid</value>

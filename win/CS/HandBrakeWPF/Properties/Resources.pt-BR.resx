@@ -1641,9 +1641,6 @@ O VLC e o MPC-HC também são compatíveis. Outros reprodutores de mídia també
   <data name="SummaryView_storage" xml:space="preserve">
     <value>armazenamento</value>
   </data>
-  <data name="VideoView_2Pass" xml:space="preserve">
-    <value>Codificação de 2 passos</value>
-  </data>
   <data name="VideoView_AverageBitrate" xml:space="preserve">
     <value>Taxa de Bits Média (kbps):</value>
   </data>
@@ -1685,9 +1682,6 @@ O VLC e o MPC-HC também são compatíveis. Outros reprodutores de mídia també
   </data>
   <data name="VideoView_Quality" xml:space="preserve">
     <value>Qualidade:</value>
-  </data>
-  <data name="VideoView_TurboFirstPass" xml:space="preserve">
-    <value>Primeiro passe turbo</value>
   </data>
   <data name="VideoView_VariableFramerate" xml:space="preserve">
     <value>Taxa de Quadros Variável:</value>

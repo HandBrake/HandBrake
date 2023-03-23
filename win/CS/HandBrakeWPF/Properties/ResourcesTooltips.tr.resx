@@ -291,16 +291,6 @@ tanım kaynakları için 20 ila 23'tür.
 FFMpeg ve Theora'nın ölçeği daha doğrusaldır.
 Bu kodlayıcılar kayıpsız bir moda sahip değildir.</value>
   </data>
-  <data name="Video_TurboFirstPass" xml:space="preserve">
-    <value>2 geçiş kodlamasının 1. geçişi sırasında, işleri hızlandıran ayarları kullanın.</value>
-  </data>
-  <data name="Video_TwoPass" xml:space="preserve">
-    <value>2 Geçiş Kodlaması Gerçekleştirin.
-
-'Bit Hızı' seçeneği ön şarttır. 1. geçişte, videoyla ilgili istatistikler
-toplanır. Sonra ikinci geçişte, bu istatistikler bit hızı tahsis kararları
-vermek için kullanılır.</value>
-  </data>
   <data name="Video_VariableFramerate" xml:space="preserve">
     <value>Değişken kare hızı çıkışını etkinleştirir.
 

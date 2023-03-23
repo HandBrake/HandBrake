@@ -285,16 +285,6 @@ x264 的尺度是對數級的，且數值越低表示更佳品質。
 
 FFMpeg 及 Theora 的尺度較線性，且沒有非破壞性壓縮模式。</value>
   </data>
-  <data name="Video_TurboFirstPass" xml:space="preserve">
-    <value>在 2 Pass 編碼的首輪，使用處理速度更快的設定值。</value>
-  </data>
-  <data name="Video_TwoPass" xml:space="preserve">
-    <value>進行 2 Pass 編碼。
-
-需使用「位元速率」選項。
-此方式將進行 2 輪編碼。
-將於首輪收集分析資料，並作為第二輪分配位元速率時的參考資料。</value>
-  </data>
   <data name="Video_VariableFramerate" xml:space="preserve">
     <value>啟用可變影格率輸出。
 

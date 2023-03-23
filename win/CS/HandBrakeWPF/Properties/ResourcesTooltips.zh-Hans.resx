@@ -287,16 +287,6 @@ x264 的比例是对数的，较低的值对应于较高的质量。
 FFMpeg 和 Theora 的比例更加线性。
 这些编码器没有无损模式。</value>
   </data>
-  <data name="Video_TurboFirstPass" xml:space="preserve">
-    <value>会加快 2 Pass 编码的第一遍的速度，而对画质的降低非常小。</value>
-  </data>
-  <data name="Video_TwoPass" xml:space="preserve">
-    <value>执行 2 Pass 编码。
-
-'Bitrate' 选项是先决条件。这种方式可以精确的得到想要的平均码率。
-2pass代表需要做2次编码，第一遍编码先分析全片，得到一个stats文件和一个mbtree文件。
-第二遍编码以这两个文件作参考分配合理的码率。</value>
-  </data>
   <data name="Video_VariableFramerate" xml:space="preserve">
     <value>允许可变帧率输出。
 

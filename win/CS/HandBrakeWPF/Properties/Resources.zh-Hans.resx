@@ -1634,9 +1634,6 @@ Encoding 1 Job</value>
   <data name="SummaryView_storage" xml:space="preserve">
     <value>存储空间</value>
   </data>
-  <data name="VideoView_2Pass" xml:space="preserve">
-    <value>二次编码</value>
-  </data>
   <data name="VideoView_AverageBitrate" xml:space="preserve">
     <value>平均码率(kbps)：</value>
   </data>
@@ -1678,9 +1675,6 @@ Encoding 1 Job</value>
   </data>
   <data name="VideoView_Quality" xml:space="preserve">
     <value>质量：</value>
-  </data>
-  <data name="VideoView_TurboFirstPass" xml:space="preserve">
-    <value>Turbo 一次通过</value>
   </data>
   <data name="VideoView_VariableFramerate" xml:space="preserve">
     <value>可变帧率</value>

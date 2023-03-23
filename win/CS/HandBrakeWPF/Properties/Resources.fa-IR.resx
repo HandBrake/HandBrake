@@ -1636,9 +1636,6 @@ VLC و MPC-HC پشتیبانی می‌شوند. پخش‌کننده‌های د�
   <data name="SummaryView_storage" xml:space="preserve">
     <value>حافظه</value>
   </data>
-  <data name="VideoView_2Pass" xml:space="preserve">
-    <value>فشرده‌سازی 2 مرحله‌ای</value>
-  </data>
   <data name="VideoView_AverageBitrate" xml:space="preserve">
     <value>میانگین بیت‌برثانیه (kbps):</value>
   </data>
@@ -1680,9 +1677,6 @@ VLC و MPC-HC پشتیبانی می‌شوند. پخش‌کننده‌های د�
   </data>
   <data name="VideoView_Quality" xml:space="preserve">
     <value>کیفیت:</value>
-  </data>
-  <data name="VideoView_TurboFirstPass" xml:space="preserve">
-    <value>مرحله‌ی اول سریع</value>
   </data>
   <data name="VideoView_VariableFramerate" xml:space="preserve">
     <value>فریم‌برثانیه‌ی تغییرپذیر (VFR) </value>

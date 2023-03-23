@@ -106,7 +106,7 @@
                 </StackPanel>
 
                 <StackPanel Orientation="Horizontal" Margin="30,0,0,0" Visibility="{Binding DisplayMultiPass, Converter={StaticResource boolToVisConverter}}">
-                    <CheckBox Content="{x:Static Properties:Resources.VideoView_2Pass}" IsEnabled="{Binding IsMultiPassEnabled, Converter={StaticResource boolConverter}}"
+                    <CheckBox Content="{x:Static Properties:Resources.VideoView_MultiPass}" IsEnabled="{Binding IsMultiPassEnabled, Converter={StaticResource boolConverter}}"
                               IsChecked="{Binding MultiPass}" Margin="0,0,10,0" ToolTip="{x:Static Properties:ResourcesTooltips.Video_MultiPass}"  />
                     <CheckBox Content="{x:Static Properties:Resources.VideoView_TurboAnalysisPass}" IsEnabled="{Binding IsConstantQuantity, Converter={StaticResource boolConverter}, ConverterParameter=true}"
                               IsChecked="{Binding TurboAnalysisPass}" Visibility="{Binding DisplayTurboAnalysisPass, Converter={StaticResource boolToVisConverter}}"

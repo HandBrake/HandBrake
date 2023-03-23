@@ -294,16 +294,6 @@ en 20 tot 23 voor bronnen met hoge definitie.
 De schaal van FFMpeg en Theora is meer lineair.
 Deze encoders hebben geen verliesvrije modus.</value>
   </data>
-  <data name="Video_TurboFirstPass" xml:space="preserve">
-    <value>Gebruik tijdens de 1e doorgang van een 2-fase-codering instellingen die het proces versnellen.</value>
-  </data>
-  <data name="Video_TwoPass" xml:space="preserve">
-    <value>Voer 2-fase-codering uit.
-
-De optie 'Bitsnelheid' is een vereiste. Tijdens de 1e fase worden statistieken 
-over de video verzameld. In de tweede fase worden deze gebruikt in 
-beslissingen over de toe te passen bitsnelheid.</value>
-  </data>
   <data name="Video_VariableFramerate" xml:space="preserve">
     <value>Maakt uitvoer met variabele framesnelheid mogelijk.
 

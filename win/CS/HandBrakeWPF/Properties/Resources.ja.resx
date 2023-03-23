@@ -1640,9 +1640,6 @@ VLCとMPC-HCがサポートされています。他のプレイヤーではお�
   <data name="SummaryView_storage" xml:space="preserve">
     <value>ストレージ</value>
   </data>
-  <data name="VideoView_2Pass" xml:space="preserve">
-    <value>2-Passエンコード</value>
-  </data>
   <data name="VideoView_AverageBitrate" xml:space="preserve">
     <value>平均ビットレート (kbps):</value>
   </data>
@@ -1684,9 +1681,6 @@ VLCとMPC-HCがサポートされています。他のプレイヤーではお�
   </data>
   <data name="VideoView_Quality" xml:space="preserve">
     <value>品質:</value>
-  </data>
-  <data name="VideoView_TurboFirstPass" xml:space="preserve">
-    <value>1パス目を高速化</value>
   </data>
   <data name="VideoView_VariableFramerate" xml:space="preserve">
     <value>可変フレームレート</value>

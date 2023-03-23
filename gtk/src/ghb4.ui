@@ -4079,12 +4079,12 @@ to limit instantaneous bitrate, look into x264's vbv-bufsize and vbv-maxrate set
                                   </object>
                                 </child>
                                 <child>
-                                  <object class="GtkCheckButton" id="VideoTwoPass">
-                                    <property name="label" translatable="yes">2-Pass Encoding</property>
+                                  <object class="GtkCheckButton" id="VideoMultiPass">
+                                    <property name="label" translatable="yes">Multi-Pass Encoding</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">False</property>
-                                    <property name="tooltip_text" translatable="yes">Perform 2 Pass Encoding.
+                                    <property name="tooltip_text" translatable="yes">Perform Multi Pass Encoding.
 
 The 'Bitrate' option is prerequisite. During the 1st pass, statistics about
 the video are collected.  Then in the second pass, those statistics are used
@@ -4100,11 +4100,11 @@ to make bitrate allocation decisions.</property>
                                 </child>
                                 <child>
                                   <object class="GtkCheckButton" id="VideoTurboTwoPass">
-                                    <property name="label" translatable="yes">Turbo First Pass</property>
+                                    <property name="label" translatable="yes">Turbo Analysis Pass</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">False</property>
-                                    <property name="tooltip_text" translatable="yes">During the 1st pass of a 2 pass encode, use settings that speed things along.</property>
+                                    <property name="tooltip_text" translatable="yes">During the analysis pass of a multi pass encode, use settings that speed things along.</property>
                                     <property name="halign">start</property>
                                     <property name="active">True</property>
                                     <property name="draw_indicator">True</property>

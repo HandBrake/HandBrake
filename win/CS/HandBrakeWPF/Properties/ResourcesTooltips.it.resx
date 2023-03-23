@@ -286,16 +286,6 @@ I valori suggeriti sono: da 18 a 20 per sorgenti in definizione standard e da 20
 Le scale dell'FFMpeg e del Theora sono più lineari.
 Questi codificatori non dispongono di una modalità senza perdita.</value>
   </data>
-  <data name="Video_TurboFirstPass" xml:space="preserve">
-    <value>Durante il 1^ passaggio di una codifica a 2 passaggi, usa delle opzioni per velocizzare il processo.</value>
-  </data>
-  <data name="Video_TwoPass" xml:space="preserve">
-    <value>Esegue una Codifica a 2 passaggi.
-
-L'opzione 'Bitrate' è necessaria. Durante il 1^ passaggio, sono raccolte alcune
-statistiche sul video. Nel secondo passaggio queste statistiche sono usate
-per decidere come allocare la frequenza dei bit.</value>
-  </data>
   <data name="Video_VariableFramerate" xml:space="preserve">
     <value>Abilita l'uscita a frequenza dei fotogrammi variabile (VFR).
 

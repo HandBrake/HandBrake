@@ -1642,9 +1642,6 @@ VLC et MPC-HC sont pris en charge. D'autres lecteurs peuvent également fonction
   <data name="SummaryView_storage" xml:space="preserve">
     <value>stockage</value>
   </data>
-  <data name="VideoView_2Pass" xml:space="preserve">
-    <value>Encodage à 2 passes</value>
-  </data>
   <data name="VideoView_AverageBitrate" xml:space="preserve">
     <value>Débit moyen (kbps) :</value>
   </data>
@@ -1686,9 +1683,6 @@ VLC et MPC-HC sont pris en charge. D'autres lecteurs peuvent également fonction
   </data>
   <data name="VideoView_Quality" xml:space="preserve">
     <value>Qualité :</value>
-  </data>
-  <data name="VideoView_TurboFirstPass" xml:space="preserve">
-    <value>Première passe en mode turbo</value>
   </data>
   <data name="VideoView_VariableFramerate" xml:space="preserve">
     <value>Framerate variable</value>

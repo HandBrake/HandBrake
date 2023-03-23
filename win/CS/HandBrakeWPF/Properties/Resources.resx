@@ -1638,8 +1638,8 @@ VLC and MPC-HC are supported. Other players may also work but are not validated.
   <data name="SummaryView_storage" xml:space="preserve">
     <value>storage</value>
   </data>
-  <data name="VideoView_2Pass" xml:space="preserve">
-    <value>2-Pass Encoding</value>
+  <data name="VideoView_MultiPass" xml:space="preserve">
+    <value>Multi-Pass Encoding</value>
   </data>
   <data name="VideoView_AverageBitrate" xml:space="preserve">
     <value>Avg Bitrate (kbps):</value>
@@ -1683,8 +1683,8 @@ VLC and MPC-HC are supported. Other players may also work but are not validated.
   <data name="VideoView_Quality" xml:space="preserve">
     <value>Quality: </value>
   </data>
-  <data name="VideoView_TurboFirstPass" xml:space="preserve">
-    <value>Turbo first pass</value>
+  <data name="VideoView_TurboAnalysisPass" xml:space="preserve">
+    <value>Turbo analysis pass</value>
   </data>
   <data name="VideoView_VariableFramerate" xml:space="preserve">
     <value>Variable Framerate</value>

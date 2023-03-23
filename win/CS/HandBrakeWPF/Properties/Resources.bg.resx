@@ -1639,9 +1639,6 @@ VLC и MPC-HC се поддържат. Други плеъри може да р�
   <data name="SummaryView_storage" xml:space="preserve">
     <value>хранилище</value>
   </data>
-  <data name="VideoView_2Pass" xml:space="preserve">
-    <value>Кодиране с два цикъла</value>
-  </data>
   <data name="VideoView_AverageBitrate" xml:space="preserve">
     <value>Средна побитова скорост (kb/s):</value>
   </data>
@@ -1683,9 +1680,6 @@ VLC и MPC-HC се поддържат. Други плеъри може да р�
   </data>
   <data name="VideoView_Quality" xml:space="preserve">
     <value>Качество:</value>
-  </data>
-  <data name="VideoView_TurboFirstPass" xml:space="preserve">
-    <value>Турбо първи цикъл</value>
   </data>
   <data name="VideoView_VariableFramerate" xml:space="preserve">
     <value>Променлива кадрова честота</value>
