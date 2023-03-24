@@ -5237,8 +5237,8 @@ to limit instantaneous bitrate, look into x264's vbv-bufsize and vbv-maxrate set
                                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                                 <property name="tooltip-text" translatable="yes">Perform Multi Pass Encoding.
 
-The 'Bitrate' option is prerequisite. During the 1st pass, statistics about
-the video are collected.  Then in the second pass, those statistics are used
+The 'Bitrate' option is prerequisite. During the analysis passes, statistics about
+the video are collected.  Then in the final pass, those statistics are used
 to make bitrate allocation decisions.</property>
                                 <property name="halign">start</property>
                                 <property name="draw-indicator">True</property>

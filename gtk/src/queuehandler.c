@@ -356,7 +356,7 @@ static void queue_update_summary (GhbValue * queueDict, signal_user_data_t *ud)
         }
         else
         {
-            g_string_append_printf(str, _("%s, Bitrate %dkbps (2 Pass)"),
+            g_string_append_printf(str, _("%s, Bitrate %dkbps (Multi Pass)"),
                                    video_encoder->name, br);
         }
     }

@@ -17,7 +17,7 @@ dep_map = (
     DepEntry("angle_count", "angle_label", "1", True, True),
     DepEntry("vquality_type_bitrate", "VideoAvgBitrate", "1", False, False),
     DepEntry("vquality_type_constant", "VideoQualitySlider", "1", False, False),
-    DepEntry("vquality_type_constant", "VideoTwoPass", "1", True, False),
+    DepEntry("vquality_type_constant", "VideoMultiPass", "1", True, False),
     DepEntry("vquality_type_constant", "VideoTurboMultiPass", "1", True, False),
     DepEntry("VideoFramerate", "VideoFrameratePFR", "auto", True, True),
     DepEntry("VideoFramerate", "VideoFramerateVFR", "auto", False, True),
