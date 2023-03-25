@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ghb 1.6.0\n"
 "Report-Msgid-Bugs-To: https://github.com/HandBrake/Handbrake/issues\n"
-"POT-Creation-Date: 2023-03-02 18:42+0000\n"
+"POT-Creation-Date: 2023-03-25 15:12+0100\n"
 "PO-Revision-Date: 2018-10-10 18:14+0000\n"
 "Last-Translator: Casper, 2022\n"
 "Language-Team: Spanish (https://www.transifex.com/HandBrakeProject/"
@@ -1331,16 +1331,18 @@ msgstr ""
 "bufsize y vbv-maxrate de x264."
 
 #: src/ghb3.ui:5233
-msgid "2-Pass Encoding"
+#, fuzzy
+msgid "Multi-Pass Encoding"
 msgstr "Codificación en 2 pasadas"
 
 #: src/ghb3.ui:5238
+#, fuzzy
 msgid ""
-"Perform 2 Pass Encoding.\n"
+"Perform Multi Pass Encoding.\n"
 "\n"
-"The 'Bitrate' option is prerequisite. During the 1st pass, statistics about\n"
-"the video are collected.  Then in the second pass, those statistics are "
-"used\n"
+"The 'Bitrate' option is prerequisite. During the analysis passes, statistics "
+"about\n"
+"the video are collected.  Then in the final pass, those statistics are used\n"
 "to make bitrate allocation decisions."
 msgstr ""
 "Realice la codificación en 2 pasadas.\n"
@@ -1351,12 +1353,15 @@ msgstr ""
 "para tomar decisiones de asignación de bits."
 
 #: src/ghb3.ui:5256
-msgid "Turbo First Pass"
+#, fuzzy
+msgid "Turbo Analysis Pass"
 msgstr "Primera pasada rapida"
 
 #: src/ghb3.ui:5261
+#, fuzzy
 msgid ""
-"During the 1st pass of a 2 pass encode, use settings that speed things along."
+"During the analysis pass of a multi pass encode, use settings that speed "
+"things along."
 msgstr ""
 "Aplica ajustes que aceleran la primera pasada de la codificación en dos "
 "pasadas."
@@ -3851,8 +3856,8 @@ msgid "%s, Bitrate %dkbps"
 msgstr "%s, Tasa de Bits %dkbps"
 
 #: src/queuehandler.c:359
-#, c-format
-msgid "%s, Bitrate %dkbps (2 Pass)"
+#, fuzzy, c-format
+msgid "%s, Bitrate %dkbps (Multi Pass)"
 msgstr "%s, Tasa de Bits %dkbps (2 Pasadas)"
 
 #: src/queuehandler.c:366
@@ -3964,12 +3969,14 @@ msgid "Encode"
 msgstr "Codificar"
 
 #: src/queuehandler.c:1208
-msgid "Encode First Pass (Analysis)"
-msgstr "Primera pasada de la codificación (análisis)"
+#, fuzzy
+msgid "Encode Analysis Pass"
+msgstr "Solo Codificar"
 
 #: src/queuehandler.c:1212
-msgid "Encode Second Pass (Final)"
-msgstr "Segunda pasada de la codificacion (final)"
+#, fuzzy
+msgid "Encode Final Pass"
+msgstr "Codificación pausada"
 
 #. Should never happen
 #: src/queuehandler.c:1217
@@ -4120,6 +4127,12 @@ msgstr ""
 #, c-format
 msgid "%s: %.4g (Warning: lossless)"
 msgstr "%s:%.4g (Aviso: Sin pérdida)"
+
+#~ msgid "Encode First Pass (Analysis)"
+#~ msgstr "Primera pasada de la codificación (análisis)"
+
+#~ msgid "Encode Second Pass (Final)"
+#~ msgstr "Segunda pasada de la codificacion (final)"
 
 #~ msgid "Open _Source"
 #~ msgstr "Abrir _Fuente"

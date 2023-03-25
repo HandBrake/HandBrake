@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ghb 0.1\n"
 "Report-Msgid-Bugs-To: https://github.com/HandBrake/Handbrake/issues\n"
-"POT-Creation-Date: 2023-03-02 18:42+0000\n"
+"POT-Creation-Date: 2023-03-25 15:12+0100\n"
 "PO-Revision-Date: 2018-10-10 18:14+0000\n"
 "Last-Translator: Stanislav Horáček <stanislav.horacek@gmail.com>, 2022\n"
 "Language-Team: Czech (https://www.transifex.com/HandBrakeProject/teams/92423/"
@@ -1295,16 +1295,18 @@ msgstr ""
 "x264 vbv-bufsize a vbv-maxrate."
 
 #: src/ghb3.ui:5233
-msgid "2-Pass Encoding"
+#, fuzzy
+msgid "Multi-Pass Encoding"
 msgstr "Dvouprůchodové kódování"
 
 #: src/ghb3.ui:5238
+#, fuzzy
 msgid ""
-"Perform 2 Pass Encoding.\n"
+"Perform Multi Pass Encoding.\n"
 "\n"
-"The 'Bitrate' option is prerequisite. During the 1st pass, statistics about\n"
-"the video are collected.  Then in the second pass, those statistics are "
-"used\n"
+"The 'Bitrate' option is prerequisite. During the analysis passes, statistics "
+"about\n"
+"the video are collected.  Then in the final pass, those statistics are used\n"
 "to make bitrate allocation decisions."
 msgstr ""
 "Provést dvouprůchodové kódování.\n"
@@ -1314,12 +1316,15 @@ msgstr ""
 "statistiky použity při rozhodování o rozvržení datového toku."
 
 #: src/ghb3.ui:5256
-msgid "Turbo First Pass"
+#, fuzzy
+msgid "Turbo Analysis Pass"
 msgstr "Rychlý první průchod"
 
 #: src/ghb3.ui:5261
+#, fuzzy
 msgid ""
-"During the 1st pass of a 2 pass encode, use settings that speed things along."
+"During the analysis pass of a multi pass encode, use settings that speed "
+"things along."
 msgstr ""
 "Během prvního průchodu dvouprůchodového kódování použít nastavení, která "
 "věci dál urychlí."
@@ -3699,7 +3704,7 @@ msgstr ""
 
 #: src/queuehandler.c:359
 #, c-format
-msgid "%s, Bitrate %dkbps (2 Pass)"
+msgid "%s, Bitrate %dkbps (Multi Pass)"
 msgstr ""
 
 #: src/queuehandler.c:366
@@ -3805,12 +3810,14 @@ msgid "Encode"
 msgstr ""
 
 #: src/queuehandler.c:1208
-msgid "Encode First Pass (Analysis)"
-msgstr ""
+#, fuzzy
+msgid "Encode Analysis Pass"
+msgstr "Pouze zakódovat"
 
 #: src/queuehandler.c:1212
-msgid "Encode Second Pass (Final)"
-msgstr ""
+#, fuzzy
+msgid "Encode Final Pass"
+msgstr "Zakódování selhalo."
 
 #. Should never happen
 #: src/queuehandler.c:1217
