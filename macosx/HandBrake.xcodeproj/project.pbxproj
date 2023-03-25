@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 52;
+	objectVersion = 53;
 	objects = {
 
 /* Begin PBXAggregateTarget section */
@@ -2076,8 +2076,9 @@
 		273F1FE014AD9DA40021BE6D /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				BuildIndependentTargetsInParallel = YES;
 				CLASSPREFIX = HB;
-				LastUpgradeCheck = 1420;
+				LastUpgradeCheck = 1430;
 				ORGANIZATIONNAME = HandBrake;
 				TargetAttributes = {
 					273F203814ADBC200021BE6D = {
@@ -4575,7 +4576,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = (
-					"\"$(EXTERNAL_BUILD)/libhb\"\n",
+					"\"$(EXTERNAL_BUILD)/libhb\"",
 					"\"$(EXTERNAL_BUILD)/contrib/include\"",
 				);
 				INFOPLIST_FILE = HandBrakeKit/Info.plist;
@@ -5158,7 +5159,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = (
-					"\"$(EXTERNAL_BUILD)/libhb\"\n",
+					"\"$(EXTERNAL_BUILD)/libhb\"",
 					"\"$(EXTERNAL_BUILD)/contrib/include\"",
 				);
 				INFOPLIST_FILE = HandBrakeKit/Info.plist;
