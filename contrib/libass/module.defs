@@ -7,9 +7,9 @@ endif
 $(eval $(call import.MODULE.defs,LIBASS,libass,$(__deps__)))
 $(eval $(call import.CONTRIB.defs,LIBASS))
 
-LIBASS.FETCH.url     = https://github.com/HandBrake/HandBrake-contribs/releases/download/contribs/libass-0.16.0.tar.gz
-LIBASS.FETCH.url    += https://github.com/libass/libass/releases/download/0.16.0/libass-0.16.0.tar.gz
-LIBASS.FETCH.sha256  = fea8019b1887cab9ab00c1e58614b4ec2b1cee339b3f7e446f5fab01b032d430
+LIBASS.FETCH.url     = https://github.com/HandBrake/HandBrake-contribs/releases/download/contribs/libass-0.17.1.tar.gz
+LIBASS.FETCH.url    += https://github.com/libass/libass/releases/download/0.17.1/libass-0.17.1.tar.gz
+LIBASS.FETCH.sha256  = d653be97198a0543c69111122173c41a99e0b91426f9e17f06a858982c2fb03d
 
 # Tell configure where to find our versions of these libs
 ifneq (1,$(FEATURE.flatpak))
@@ -37,3 +37,5 @@ ifneq ($(HOST.system),linux)
         FRIBIDI_LIBS="-L$(call fn.ABSOLUTE,$(CONTRIB.build/))lib -lfribidi" \
         FRIBIDI_CFLAGS="-I$(call fn.ABSOLUTE,$(CONTRIB.build/))include"
 endif
+
+LIBASS.CONFIGURE.extra += --disable-libunibreak

@@ -1,5 +1,18 @@
+diff --git a/libass/ass_render.h b/libass/ass_render.h
+index 581c131..79dacd1 100644
+--- a/libass/ass_render.h
++++ b/libass/ass_render.h
+@@ -22,7 +22,7 @@
+ 
+ #include <inttypes.h>
+ #include <stdbool.h>
+-#include <fribidi.h>
++#include <fribidi/fribidi.h>
+ #include <ft2build.h>
+ #include FT_FREETYPE_H
+ #include FT_GLYPH_H
 diff --git a/libass/ass_shaper.h b/libass/ass_shaper.h
-index 2c4166d..3cb12b0 100644
+index 819a3fd..ad73516 100644
 --- a/libass/ass_shaper.h
 +++ b/libass/ass_shaper.h
 @@ -21,7 +21,7 @@
@@ -10,4 +23,4 @@ index 2c4166d..3cb12b0 100644
 +#include <fribidi/fribidi.h>
  #include <stdbool.h>
  #include "ass_render.h"
- 
+ #include "ass_cache.h"
