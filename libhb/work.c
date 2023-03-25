@@ -31,7 +31,7 @@ typedef struct
 
 } hb_work_t;
 
-static void work_func();
+static void work_func(void * _work);
 static void do_job( hb_job_t *);
 static void filter_loop( void * );
 

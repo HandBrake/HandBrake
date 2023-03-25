@@ -218,7 +218,7 @@ static void SigHandler( int );
 
 /* Utils */
 static void ShowHelp(void);
-static void ShowCommands()
+static void ShowCommands(void)
 {
     fprintf(stdout, "\nCommands:\n");
     fprintf(stdout, " [h]elp    Show this message\n");
@@ -252,7 +252,7 @@ static int stdout_tty = 0;
 static int stderr_tty = 0;
 static char * stdout_sep = "\r";
 static char * stderr_sep = "\r";
-static void test_tty()
+static void test_tty(void)
 {
 #if defined(__MINGW32__)
     HANDLE handle;
@@ -1294,7 +1294,7 @@ static void showFilterDefault(FILE* const out, int filter_id)
     fprintf(out, "\n");
 }
 
-static void ShowHelp()
+static void ShowHelp(void)
 {
     int i, clock_min, clock_max, clock;
     const hb_rate_t *rate;
@@ -2123,7 +2123,7 @@ static void ShowPresets(hb_value_array_t *presets, int indent, int descriptions)
     }
 }
 
-static double parse_hhmmss_strtok()
+static double parse_hhmmss_strtok(void)
 {
     /* Assumes strtok has already been called on a string.  Intends to parse
      * hh:mm:ss.ss or mm:ss.ss or ss.ss or ss into double seconds.  Actually
