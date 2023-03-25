@@ -2076,7 +2076,6 @@
 		273F1FE014AD9DA40021BE6D /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				BuildIndependentTargetsInParallel = YES;
 				CLASSPREFIX = HB;
 				LastUpgradeCheck = 1430;
 				ORGANIZATIONNAME = HandBrake;
