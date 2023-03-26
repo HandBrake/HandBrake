@@ -1436,7 +1436,7 @@ static void ShowHelp()
 "                           specified video encoder\n"
 "   -q, --quality <float>   Set video quality (e.g. 22.0)\n"
 "   -b, --vb <number>       Set video bitrate in kbit/s (default: 1000)\n"
-"   -2, --multi-pass        Use multi-pass mode\n"
+"   --multi-pass            Use multi-pass mode\n"
 "       --no-multi-pass     Disable multi-pass mode\n"
 "   -T, --turbo             When using multi-pass use \"turbo\" options on the\n"
 "                           first pass to improve speed\n"
@@ -2290,7 +2290,7 @@ static int ParseOptions( int argc, char ** argv )
             { "native-dub",  no_argument,       NULL,    NATIVE_DUB },
             { "encoder",     required_argument, NULL,    'e' },
             { "aencoder",    required_argument, NULL,    'E' },
-            { "multi-pass",    no_argument,     NULL,    '2' },
+            { "multi-pass",    no_argument,     &multiPass, 1 },
             { "no-multi-pass", no_argument,     &multiPass, 0 },
             { "deinterlace", optional_argument, NULL,    'd' },
             { "no-deinterlace", no_argument,    &yadif_disable,       1 },
@@ -2740,9 +2740,6 @@ static int ParseOptions( int argc, char ** argv )
                 {
                     ssaburn = 1 ;
                 }
-                break;
-            case '2':
-                multiPass = 1;
                 break;
             case 'd':
                 free(yadif);
