@@ -1439,24 +1439,24 @@ def createCLI( cross = None ):
     grp.add_argument( '--enable-ffmpeg-aac', dest="enable_ffmpeg_aac", default=not host_tuple.match( '*-*-darwin*' ), action='store_true', help=(( 'enable %s' %h ) if h != argparse.SUPPRESS else h) )
     grp.add_argument( '--disable-ffmpeg-aac', dest="enable_ffmpeg_aac", action='store_false', help=(( 'disable %s' %h ) if h != argparse.SUPPRESS else h) )
 
-    h = IfHost( 'MediaFoundation video encoder', 'aarch64-w64-mingw32', none=argparse.SUPPRESS).value
+    h = IfHost( 'MediaFoundation video encoder', 'aarch64-w64-mingw32*', none=argparse.SUPPRESS).value
     grp.add_argument( '--enable-mf', dest="enable_mf", default=False, action='store_true', help=(( 'enable %s' %h ) if h != argparse.SUPPRESS else h) )
     grp.add_argument( '--disable-mf', dest="enable_mf", action='store_false', help=(( 'disable %s' %h ) if h != argparse.SUPPRESS else h) )
 
-    h = IfHost( 'Nvidia NVENC video encoder', '*-*-linux*', 'x86_64-w64-mingw32', none=argparse.SUPPRESS).value
-    grp.add_argument( '--enable-nvenc', dest="enable_nvenc", default=IfHost( True, '*-*-linux*', 'x86_64-w64-mingw32', none=False).value, action='store_true', help=(( 'enable %s' %h ) if h != argparse.SUPPRESS else h) )
+    h = IfHost( 'Nvidia NVENC video encoder', '*-*-linux*', 'x86_64-w64-mingw32*', none=argparse.SUPPRESS).value
+    grp.add_argument( '--enable-nvenc', dest="enable_nvenc", default=IfHost( True, '*-*-linux*', 'x86_64-w64-mingw32*', none=False).value, action='store_true', help=(( 'enable %s' %h ) if h != argparse.SUPPRESS else h) )
     grp.add_argument( '--disable-nvenc', dest="enable_nvenc", action='store_false', help=(( 'disable %s' %h ) if h != argparse.SUPPRESS else h) )
     
-    h = IfHost( 'Nvidia NVDEC video decoder', '*-*-linux*', 'x86_64-w64-mingw32', none=argparse.SUPPRESS).value
+    h = IfHost( 'Nvidia NVDEC video decoder', '*-*-linux*', 'x86_64-w64-mingw32*', none=argparse.SUPPRESS).value
     grp.add_argument( '--enable-nvdec', dest="enable_nvdec", default=False, action='store_true', help=(( 'enable %s' %h ) if h != argparse.SUPPRESS else h) )
     grp.add_argument( '--disable-nvdec', dest="enable_nvdec", action='store_false', help=(( 'disable %s' %h ) if h != argparse.SUPPRESS else h) )
     
-    h = IfHost( 'Intel QSV video encoder/decoder', '*-*-linux*', '*-*-freebsd*', 'x86_64-w64-mingw32', none=argparse.SUPPRESS).value
-    grp.add_argument( '--enable-qsv', dest="enable_qsv", default=IfHost(True, "x86_64-w64-mingw32", none=False).value, action='store_true', help=(( 'enable %s' %h ) if h != argparse.SUPPRESS else h) )
+    h = IfHost( 'Intel QSV video encoder/decoder', '*-*-linux*', '*-*-freebsd*', 'x86_64-w64-mingw32*', none=argparse.SUPPRESS).value
+    grp.add_argument( '--enable-qsv', dest="enable_qsv", default=IfHost(True, "x86_64-w64-mingw32*", none=False).value, action='store_true', help=(( 'enable %s' %h ) if h != argparse.SUPPRESS else h) )
     grp.add_argument( '--disable-qsv', dest="enable_qsv", action='store_false', help=(( 'disable %s' %h ) if h != argparse.SUPPRESS else h) )
 
-    h = IfHost( 'AMD VCE video encoder', '*-*-linux*', 'x86_64-w64-mingw32', none=argparse.SUPPRESS).value
-    grp.add_argument( '--enable-vce', dest="enable_vce", default=IfHost(True, 'x86_64-w64-mingw32', none=False).value, action='store_true', help=(( 'enable %s' %h ) if h != argparse.SUPPRESS else h) )
+    h = IfHost( 'AMD VCE video encoder', '*-*-linux*', 'x86_64-w64-mingw32*', none=argparse.SUPPRESS).value
+    grp.add_argument( '--enable-vce', dest="enable_vce", default=IfHost(True, 'x86_64-w64-mingw32*', none=False).value, action='store_true', help=(( 'enable %s' %h ) if h != argparse.SUPPRESS else h) )
     grp.add_argument( '--disable-vce', dest="enable_vce", action='store_false', help=(( 'disable %s' %h ) if h != argparse.SUPPRESS else h) )
 
     h = IfHost( 'libdovi', '*-*-*', none=argparse.SUPPRESS ).value
@@ -1756,18 +1756,18 @@ try:
                                         none=False).value
                                  and options.enable_x265)
     # Only allow these features on supported platforms
-    options.enable_mf         = IfHost(options.enable_mf, 'aarch64-w64-mingw32',
+    options.enable_mf         = IfHost(options.enable_mf, 'aarch64-w64-mingw32*',
                                        none=False).value
     options.enable_nvenc      = IfHost(options.enable_nvenc, '*-*-linux*',
-                                       'x86_64-w64-mingw32', none=False).value
+                                       'x86_64-w64-mingw32*', none=False).value
                                        
     options.enable_nvdec      = IfHost(options.enable_nvdec, '*-*-linux*',
-                                       'x86_64-w64-mingw32', none=False).value
+                                       'x86_64-w64-mingw32*', none=False).value
                                        
     options.enable_qsv        = IfHost(options.enable_qsv, '*-*-linux*', '*-*-freebsd*',
-                                       'x86_64-w64-mingw32', none=False).value
+                                       'x86_64-w64-mingw32*', none=False).value
     options.enable_vce        = IfHost(options.enable_vce, '*-*-linux*',
-                                       'x86_64-w64-mingw32', none=False).value
+                                       'x86_64-w64-mingw32*', none=False).value
 
     #####################################
     ## Additional library and tool checks
@@ -2202,15 +2202,15 @@ int main()
     stdout.write( 'Enable FFmpeg AAC:  %s' % options.enable_ffmpeg_aac )
     stdout.write( '  (%s)\n' % note_required ) if host_tuple.system != 'darwin' else stdout.write( '\n' )
     stdout.write( 'Enable MediaFound.: %s' % options.enable_mf )
-    stdout.write( ' (%s)\n' % note_unsupported ) if not host_tuple.match( 'aarch64-w64-mingw32' ) else stdout.write( '\n' )
+    stdout.write( ' (%s)\n' % note_unsupported ) if not host_tuple.match( 'aarch64-w64-mingw32*' ) else stdout.write( '\n' )
     stdout.write( 'Enable NVENC:       %s' % options.enable_nvenc )
-    stdout.write( ' (%s)\n' % note_unsupported ) if not (host_tuple.system == 'linux' or host_tuple.match( 'x86_64-w64-mingw32' )) else stdout.write( '\n' )
+    stdout.write( ' (%s)\n' % note_unsupported ) if not (host_tuple.system == 'linux' or host_tuple.match( 'x86_64-w64-mingw32*' )) else stdout.write( '\n' )
     stdout.write( 'Enable NVDEC:       %s' % options.enable_nvdec )
-    stdout.write( ' (%s)\n' % note_unsupported ) if not (host_tuple.system == 'linux' or host_tuple.match( 'x86_64-w64-mingw32' )) else stdout.write( '\n' )
+    stdout.write( ' (%s)\n' % note_unsupported ) if not (host_tuple.system == 'linux' or host_tuple.match( 'x86_64-w64-mingw32*' )) else stdout.write( '\n' )
     stdout.write( 'Enable QSV:         %s' % options.enable_qsv )
-    stdout.write( ' (%s)\n' % note_unsupported ) if not (host_tuple.system == 'linux' or host_tuple.match( 'x86_64-w64-mingw32' ) or host_tuple.system == 'freebsd') else stdout.write( '\n' )
+    stdout.write( ' (%s)\n' % note_unsupported ) if not (host_tuple.system == 'linux' or host_tuple.match( 'x86_64-w64-mingw32*' ) or host_tuple.system == 'freebsd') else stdout.write( '\n' )
     stdout.write( 'Enable VCE:         %s' % options.enable_vce )
-    stdout.write( ' (%s)\n' % note_unsupported ) if not (host_tuple.system == 'linux' or host_tuple.match( 'x86_64-w64-mingw32' )) else stdout.write( '\n' )
+    stdout.write( ' (%s)\n' % note_unsupported ) if not (host_tuple.system == 'linux' or host_tuple.match( 'x86_64-w64-mingw32*' )) else stdout.write( '\n' )
     stdout.write( 'Enable libdovi:     %s\n' % options.enable_libdovi )
 
 
