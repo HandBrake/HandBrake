@@ -814,9 +814,9 @@ hb_dict_t* hb_job_to_dict( const hb_job_t * job )
     else
     {
         hb_dict_set(video_dict, "Bitrate", hb_value_int(job->vbitrate));
-        hb_dict_set(video_dict, "TwoPass", hb_value_bool(job->twopass));
+        hb_dict_set(video_dict, "MultiPass", hb_value_bool(job->multipass));
         hb_dict_set(video_dict, "Turbo",
-                            hb_value_bool(job->fastfirstpass));
+                            hb_value_bool(job->fastanalysispass));
     }
     if (job->encoder_preset != NULL)
     {
@@ -1127,7 +1127,7 @@ hb_job_t* hb_dict_to_job( hb_handle_t * h, hb_dict_t *dict )
     // PAR {Num, Den}
     "s?{s:i, s:i},"
     // Video {Codec, Quality, Bitrate, Preset, Tune, Profile, Level, Options
-    //       TwoPass, Turbo,
+    //       MultiPass, Turbo,
     //       ColorInputFormat, ColorOutputFormat, ColorRange,
     //       ColorPrimaries, ColorTransfer, ColorMatrix, ChromaLocation,
     //       MasteringDisplayColorVolume,
@@ -1185,8 +1185,8 @@ hb_job_t* hb_dict_to_job( hb_handle_t * h, hb_dict_t *dict )
             "Profile",              unpack_s(&video_profile),
             "Level",                unpack_s(&video_level),
             "Options",              unpack_s(&video_options),
-            "TwoPass",              unpack_b(&job->twopass),
-            "Turbo",                unpack_b(&job->fastfirstpass),
+            "MultiPass",            unpack_b(&job->multipass),
+            "Turbo",                unpack_b(&job->fastanalysispass),
             "ColorInputFormat",     unpack_i(&job->input_pix_fmt),
             "ColorOutputFormat",    unpack_i(&job->output_pix_fmt),
             "ColorRange",           unpack_i(&job->color_range),

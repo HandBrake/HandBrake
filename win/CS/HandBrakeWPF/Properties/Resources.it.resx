@@ -1642,9 +1642,6 @@ Sono supportati VLC e MPC-HC. Altri riproduttori multimediali potrebbero funzion
   <data name="SummaryView_storage" xml:space="preserve">
     <value>spazio</value>
   </data>
-  <data name="VideoView_2Pass" xml:space="preserve">
-    <value>Codifica a 2 passaggi</value>
-  </data>
   <data name="VideoView_AverageBitrate" xml:space="preserve">
     <value>Bitrate Medio (kbps):</value>
   </data>
@@ -1686,9 +1683,6 @@ Sono supportati VLC e MPC-HC. Altri riproduttori multimediali potrebbero funzion
   </data>
   <data name="VideoView_Quality" xml:space="preserve">
     <value>Qualità:</value>
-  </data>
-  <data name="VideoView_TurboFirstPass" xml:space="preserve">
-    <value>Primo passaggio turbo </value>
   </data>
   <data name="VideoView_VariableFramerate" xml:space="preserve">
     <value>Frequenza Fotogrammi Variabile</value>

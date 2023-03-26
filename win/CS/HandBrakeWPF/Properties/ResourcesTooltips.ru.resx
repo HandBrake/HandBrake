@@ -292,16 +292,6 @@ Custom allows manually setting all parameters. Useful for correcting an incorrec
 Шкала FFMpeg и Theora более линейна.
 Эти кодировщики не имеют режима сжатия без потерь.</value>
   </data>
-  <data name="Video_TurboFirstPass" xml:space="preserve">
-    <value>Во время 1-го из 2-х проходов кодирования использовать настройки для его ускорения.</value>
-  </data>
-  <data name="Video_TwoPass" xml:space="preserve">
-    <value>Выполнить кодирование в 2 прохода.
-
-Опция "Битрейт" необходима. Во время 1-го прохода собирается статистика
-о видео. Во время второго прохода эта статистика используется для принятия
-решений по распределению битрейта.</value>
-  </data>
   <data name="Video_VariableFramerate" xml:space="preserve">
     <value>Включает переменную частоту кадров выходного файла.
 

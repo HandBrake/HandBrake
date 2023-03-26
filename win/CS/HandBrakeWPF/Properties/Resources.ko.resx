@@ -1641,9 +1641,6 @@ VLC 및 MPC-HC가 지원됩니다. 다른 재생기들도 작업을 할 수 있�
   <data name="SummaryView_storage" xml:space="preserve">
     <value>저장소</value>
   </data>
-  <data name="VideoView_2Pass" xml:space="preserve">
-    <value>2-Pass 인코딩</value>
-  </data>
   <data name="VideoView_AverageBitrate" xml:space="preserve">
     <value>평균 비트전송률 (kbps):</value>
   </data>
@@ -1685,9 +1682,6 @@ VLC 및 MPC-HC가 지원됩니다. 다른 재생기들도 작업을 할 수 있�
   </data>
   <data name="VideoView_Quality" xml:space="preserve">
     <value>화질: </value>
-  </data>
-  <data name="VideoView_TurboFirstPass" xml:space="preserve">
-    <value>터보 우선 통과</value>
   </data>
   <data name="VideoView_VariableFramerate" xml:space="preserve">
     <value>변화하는 프레임률</value>

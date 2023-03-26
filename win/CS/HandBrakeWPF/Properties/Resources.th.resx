@@ -1639,9 +1639,6 @@ Encoding 1 Job</value>
   <data name="SummaryView_storage" xml:space="preserve">
     <value>การจัดเก็บ</value>
   </data>
-  <data name="VideoView_2Pass" xml:space="preserve">
-    <value>การเข้ารหัสรอง</value>
-  </data>
   <data name="VideoView_AverageBitrate" xml:space="preserve">
     <value>อัตราบิตเฉลี่ย(kbps)：</value>
   </data>
@@ -1683,9 +1680,6 @@ Encoding 1 Job</value>
   </data>
   <data name="VideoView_Quality" xml:space="preserve">
     <value>คุณภาพ: </value>
-  </data>
-  <data name="VideoView_TurboFirstPass" xml:space="preserve">
-    <value>Turbo 一ผ่าน</value>
   </data>
   <data name="VideoView_VariableFramerate" xml:space="preserve">
     <value>อัตราเฟรมตัวแปร</value>

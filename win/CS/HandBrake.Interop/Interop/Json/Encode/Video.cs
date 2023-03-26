@@ -38,12 +38,12 @@ namespace HandBrake.Interop.Interop.Json.Encode
         public int? Bitrate { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether two pass.
+        /// Gets or sets a value indicating whether multi pass.
         /// </summary>
-        public bool TwoPass { get; set; }
+        public bool MultiPass { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether Turbo First Pass. For x264/5
+        /// Gets or sets a value indicating whether Turbo Analysis Pass. For x264/5
         /// </summary>
         public bool Turbo { get; set; }
 

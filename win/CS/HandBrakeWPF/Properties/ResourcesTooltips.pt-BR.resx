@@ -289,16 +289,6 @@ Os valores sugeridos são: 18 a 20 para fontes de definição padrão e 20 a 23 
 A escala de FFMpeg e Theora é mais linear.
 Esses codificadores não possuem um modo sem perdas.</value>
   </data>
-  <data name="Video_TurboFirstPass" xml:space="preserve">
-    <value>Durante a 1ª passagem de uma conversão de 2 passagens, use configurações que acelerem as coisas.</value>
-  </data>
-  <data name="Video_TwoPass" xml:space="preserve">
-    <value>Execute a codificação de 2 passagens.
-
-A opção 'Taxa de bits' é um pré-requisito. Durante a 1ª passagem, estatísticas sobre
-o vídeo são coletadas. Em seguida, na segunda passagem, essas estatísticas são usadas
-para tomar decisões de alocação de taxa de bits.</value>
-  </data>
   <data name="Video_VariableFramerate" xml:space="preserve">
     <value>Permite saída de taxa de quadros variável.
 

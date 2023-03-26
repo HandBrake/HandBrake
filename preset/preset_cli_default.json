@@ -111,8 +111,8 @@
                     "VideoQualitySlider": 22.0,
                     "VideoQSVDecode": false,
                     "VideoHWDecode": 0,
-                    "VideoTwoPass": false,
-                    "VideoTurboTwoPass": false,
+                    "VideoMultiPass": false,
+                    "VideoTurboMultiPass": false,
                     "x264Option": "",
                     "x264UseAdvancedOptions": false
                 }

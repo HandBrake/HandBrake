@@ -1642,9 +1642,6 @@ VLC ve MPC-HC desteklenmektedir. Diğer oyuncular da çalışabilir ancak onayla
   <data name="SummaryView_storage" xml:space="preserve">
     <value>depolama</value>
   </data>
-  <data name="VideoView_2Pass" xml:space="preserve">
-    <value>2 Geçişli Kodlama</value>
-  </data>
   <data name="VideoView_AverageBitrate" xml:space="preserve">
     <value>Avg bit hızı (kbps):</value>
   </data>

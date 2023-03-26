@@ -258,7 +258,7 @@
 
     // Note: unlike a full encode, we only send 1 pass regardless if the final encode calls for 2 passes.
     // this should suffice for a fairly accurate short preview and cuts our preview generation time in half.
-    job.video.twoPass = NO;
+    job.video.multiPass = NO;
 
     // Init the libhb core
     NSInteger level = [NSUserDefaults.standardUserDefaults integerForKey:HBLoggingLevel];

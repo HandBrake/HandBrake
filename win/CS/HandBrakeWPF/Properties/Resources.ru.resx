@@ -1644,9 +1644,6 @@ VLC and MPC-HC are supported. Other players may also work but are not validated.
   <data name="SummaryView_storage" xml:space="preserve">
     <value>хранение</value>
   </data>
-  <data name="VideoView_2Pass" xml:space="preserve">
-    <value>2-проходное кодирование</value>
-  </data>
   <data name="VideoView_AverageBitrate" xml:space="preserve">
     <value>Сред. битрейт (кбит/с):</value>
   </data>
@@ -1688,9 +1685,6 @@ VLC and MPC-HC are supported. Other players may also work but are not validated.
   </data>
   <data name="VideoView_Quality" xml:space="preserve">
     <value>Quality: </value>
-  </data>
-  <data name="VideoView_TurboFirstPass" xml:space="preserve">
-    <value>Ускорить первый проход</value>
   </data>
   <data name="VideoView_VariableFramerate" xml:space="preserve">
     <value>Переменная</value>

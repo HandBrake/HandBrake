@@ -1290,7 +1290,7 @@ static OSStatus init_vtsession(hb_work_object_t *w, hb_job_t *job, hb_work_priva
     }
 
     // Multi-pass
-    if (job->pass_id == HB_PASS_ENCODE_1ST && cookieOnly == 0)
+    if (job->pass_id == HB_PASS_ENCODE_ANALYSIS && cookieOnly == 0)
     {
         const char *filename = hb_get_temporary_filename("videotoolbox.log");
 
@@ -1597,9 +1597,9 @@ int encvt_init(hb_work_object_t *w, hb_job_t *job)
         return -1;
     }
 
-    pv->remainingPasses = job->pass_id == HB_PASS_ENCODE_1ST ? 1 : 0;
+    pv->remainingPasses = job->pass_id == HB_PASS_ENCODE_ANALYSIS ? 1 : 0;
 
-    if (job->pass_id != HB_PASS_ENCODE_2ND)
+    if (job->pass_id != HB_PASS_ENCODE_FINAL)
     {
         err = create_cookie(w, job, pv);
         if (err != noErr)
@@ -1888,7 +1888,7 @@ int encvt_work(hb_work_object_t *w, hb_buffer_t **buf_in, hb_buffer_t **buf_out)
 
         hb_job_t *job = pv->job;
 
-        if (job->pass_id == HB_PASS_ENCODE_1ST)
+        if (job->pass_id == HB_PASS_ENCODE_ANALYSIS)
         {
             OSStatus err = noErr;
             Boolean furtherPassesRequestedOut;
@@ -1911,7 +1911,7 @@ int encvt_work(hb_work_object_t *w, hb_buffer_t **buf_in, hb_buffer_t **buf_out)
             hb_interjob_t *interjob = hb_interjob_get(job->h);
             interjob->context = context;
         }
-        else if (job->pass_id == HB_PASS_ENCODE_2ND)
+        else if (job->pass_id == HB_PASS_ENCODE_FINAL)
         {
             VTCompressionSessionEndPass(pv->session,
                                         NULL,

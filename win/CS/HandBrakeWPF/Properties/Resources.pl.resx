@@ -1643,9 +1643,6 @@ Obsługiwane przez VLC i MPC-HC. Inni gracze również mogą działać, ale nie 
   <data name="SummaryView_storage" xml:space="preserve">
     <value>storage</value>
   </data>
-  <data name="VideoView_2Pass" xml:space="preserve">
-    <value>Kodowanie 2-przebiegowe</value>
-  </data>
   <data name="VideoView_AverageBitrate" xml:space="preserve">
     <value>Średnia szybkość transmisji (kb/s):</value>
   </data>
@@ -1687,9 +1684,6 @@ Obsługiwane przez VLC i MPC-HC. Inni gracze również mogą działać, ale nie 
   </data>
   <data name="VideoView_Quality" xml:space="preserve">
     <value>Jakość:</value>
-  </data>
-  <data name="VideoView_TurboFirstPass" xml:space="preserve">
-    <value>Pierwsze przejście turbo</value>
   </data>
   <data name="VideoView_VariableFramerate" xml:space="preserve">
     <value>Zmienna liczba klatek</value>

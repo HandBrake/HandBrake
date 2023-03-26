@@ -338,25 +338,25 @@ static void queue_update_summary (GhbValue * queueDict, signal_user_data_t *ud)
     const hb_rate_t    * fps;
     hb_rational_t        vrate;
     char               * rate_str;
-    gboolean             two_pass, vqtype;
+    gboolean             multi_pass, vqtype;
 
     str = g_string_new("");
     video_encoder = ghb_settings_video_encoder(uiDict, "VideoEncoder");
     vqtype = ghb_dict_get_bool(uiDict, "vquality_type_constant");
-    two_pass = ghb_dict_get_bool(uiDict, "VideoTwoPass");
+    multi_pass = ghb_dict_get_bool(uiDict, "VideoMultiPass");
 
     if (!vqtype)
     {
         // ABR
         int br = ghb_dict_get_int(uiDict, "VideoAvgBitrate");
-        if (!two_pass)
+        if (!multi_pass)
         {
             g_string_append_printf(str, _("%s, Bitrate %dkbps"),
                                    video_encoder->name, br);
         }
         else
         {
-            g_string_append_printf(str, _("%s, Bitrate %dkbps (2 Pass)"),
+            g_string_append_printf(str, _("%s, Bitrate %dkbps (Multi Pass)"),
                                    video_encoder->name, br);
         }
     }
@@ -1204,12 +1204,12 @@ void ghb_queue_update_live_stats (signal_user_data_t * ud, int index,
                 pass = _("Encode");
                 break;
 
-            case HB_PASS_ENCODE_1ST:
-                pass = _("Encode First Pass (Analysis)");
+            case HB_PASS_ENCODE_ANALYSIS:
+                pass = _("Encode Analysis Pass");
                 break;
 
-            case HB_PASS_ENCODE_2ND:
-                pass = _("Encode Second Pass (Final)");
+            case HB_PASS_ENCODE_FINAL:
+                pass = _("Encode Final Pass");
                 break;
 
             default:

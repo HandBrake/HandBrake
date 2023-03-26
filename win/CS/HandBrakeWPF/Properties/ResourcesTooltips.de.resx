@@ -288,16 +288,6 @@ Die empfohlenen Werte sind: 18 bis 20 für Quellen mit Standardauflösung und 20
 Die Skalierung von FFmpeg und Theora ist linearer.
 Diese Encoder haben keinen verlustfreien Modus.</value>
   </data>
-  <data name="Video_TurboFirstPass" xml:space="preserve">
-    <value>Verwendet während des ersten Durchlaufs einer Encodierung in zwei Durchgängen Einstellungen, die den Vorgang beschleunigen.</value>
-  </data>
-  <data name="Video_TwoPass" xml:space="preserve">
-    <value>Führt eine Encodierung in zwei Durchgängen durch.
-
-Die Option „Bitrate“ ist Voraussetzung. Während des ersten Durchlaufs werden Statistiken über
-das Video gesammelt. Dann, im zweiten Durchgang, werden diese Statistiken verwendet
-um Entscheidungen über die Zuweisung von Bitraten zu treffen.</value>
-  </data>
   <data name="Video_VariableFramerate" xml:space="preserve">
     <value>Aktiviert variable Bildfrequenz.
 

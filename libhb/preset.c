@@ -1854,11 +1854,11 @@ int hb_preset_apply_video(const hb_dict_t *preset, hb_dict_t *job_dict)
         hb_dict_set(video_dict, "Bitrate",
                     hb_value_xform(hb_dict_get(preset, "VideoAvgBitrate"),
                                    HB_VALUE_TYPE_INT));
-        hb_dict_set(video_dict, "TwoPass",
-                    hb_value_xform(hb_dict_get(preset, "VideoTwoPass"),
+        hb_dict_set(video_dict, "MultiPass",
+                    hb_value_xform(hb_dict_get(preset, "VideoMultiPass"),
                                    HB_VALUE_TYPE_BOOL));
         hb_dict_set(video_dict, "Turbo",
-                    hb_value_xform(hb_dict_get(preset, "VideoTurboTwoPass"),
+                    hb_value_xform(hb_dict_get(preset, "VideoTurboMultiPass"),
                                    HB_VALUE_TYPE_BOOL));
         hb_dict_remove(video_dict, "Quality");
     }
@@ -1876,11 +1876,11 @@ int hb_preset_apply_video(const hb_dict_t *preset, hb_dict_t *job_dict)
             hb_dict_set(video_dict, "Bitrate",
                         hb_value_xform(hb_dict_get(preset, "VideoAvgBitrate"),
                                        HB_VALUE_TYPE_INT));
-            hb_dict_set(video_dict, "TwoPass",
-                        hb_value_xform(hb_dict_get(preset, "VideoTwoPass"),
+            hb_dict_set(video_dict, "MultiPass",
+                        hb_value_xform(hb_dict_get(preset, "VideoMultiPass"),
                                        HB_VALUE_TYPE_BOOL));
             hb_dict_set(video_dict, "Turbo",
-                        hb_value_xform(hb_dict_get(preset, "VideoTurboTwoPass"),
+                        hb_value_xform(hb_dict_get(preset, "VideoTurboMultiPass"),
                                        HB_VALUE_TYPE_BOOL));
             hb_dict_remove(video_dict, "Quality");
         }
@@ -2789,6 +2789,14 @@ static void und_to_any(hb_value_array_t * list)
     }
 }
 
+static void import_video_pass_settings_50_0_0(hb_value_t *preset)
+{
+    int two_pass = hb_dict_get_bool(preset, "VideoTwoPass");
+    int turbo_two_pass = hb_dict_get_bool(preset, "VideoTurboTwoPass");
+    hb_dict_set_bool(preset, "VideoMultiPass", two_pass);
+    hb_dict_set_bool(preset, "VideoTurboMultiPass", turbo_two_pass);
+}
+
 static void import_pic_settings_47_0_0(hb_value_t *preset)
 {
     int auto_crop = hb_dict_get_bool(preset, "PictureAutoCrop");
@@ -3485,6 +3493,11 @@ static void import_video_0_0_0(hb_value_t *preset)
     }
 }
 
+static void import_50_0_0(hb_value_t *preset)
+{
+    import_video_pass_settings_50_0_0(preset);
+}
+
 static void import_47_0_0(hb_value_t *preset)
 {
     import_pic_settings_47_0_0(preset);
@@ -3643,6 +3656,12 @@ static int preset_import(hb_value_t *preset, int major, int minor, int micro)
             import_47_0_0(preset);
             result = 1;
         }
+        else if (cmpVersion(major, minor, micro, 50, 0, 0) <= 0)
+        {
+            import_50_0_0(preset);
+            result = 1;
+        }
+
         preset_clean(preset, hb_preset_template);
     }
     return result;

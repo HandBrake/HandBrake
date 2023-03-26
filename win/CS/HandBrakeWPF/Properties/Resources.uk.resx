@@ -1642,9 +1642,6 @@ Encoding 1 Job</value>
   <data name="SummaryView_storage" xml:space="preserve">
     <value>зберігання</value>
   </data>
-  <data name="VideoView_2Pass" xml:space="preserve">
-    <value>2-прохідне кодування</value>
-  </data>
   <data name="VideoView_AverageBitrate" xml:space="preserve">
     <value>Середній бітрейт (кбіт/с):</value>
   </data>
@@ -1686,9 +1683,6 @@ Encoding 1 Job</value>
   </data>
   <data name="VideoView_Quality" xml:space="preserve">
     <value>Якість: </value>
-  </data>
-  <data name="VideoView_TurboFirstPass" xml:space="preserve">
-    <value>Швидкий перший прохід</value>
   </data>
   <data name="VideoView_VariableFramerate" xml:space="preserve">
     <value>Змінна частота кадрів</value>

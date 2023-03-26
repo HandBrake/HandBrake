@@ -105,12 +105,12 @@
                              ToolTip="{x:Static Properties:ResourcesTooltips.Video_AvgBitrate}" AutomationProperties.Name="{x:Static Properties:Resources.VideoView_AverageBitrate}"  />
                 </StackPanel>
 
-                <StackPanel Orientation="Horizontal" Margin="30,0,0,0" Visibility="{Binding DisplayTwoPass, Converter={StaticResource boolToVisConverter}}">
-                    <CheckBox Content="{x:Static Properties:Resources.VideoView_2Pass}" IsEnabled="{Binding IsTwoPassEnabled, Converter={StaticResource boolConverter}}"
-                              IsChecked="{Binding TwoPass}" Margin="0,0,10,0" ToolTip="{x:Static Properties:ResourcesTooltips.Video_TwoPass}"  />
-                    <CheckBox Content="{x:Static Properties:Resources.VideoView_TurboFirstPass}" IsEnabled="{Binding IsConstantQuantity, Converter={StaticResource boolConverter}, ConverterParameter=true}"
-                              IsChecked="{Binding TurboFirstPass}" Visibility="{Binding DisplayTurboFirstPass, Converter={StaticResource boolToVisConverter}}"
-                              ToolTip="{x:Static Properties:ResourcesTooltips.Video_TurboFirstPass}" />
+                <StackPanel Orientation="Horizontal" Margin="30,0,0,0" Visibility="{Binding DisplayMultiPass, Converter={StaticResource boolToVisConverter}}">
+                    <CheckBox Content="{x:Static Properties:Resources.VideoView_MultiPass}" IsEnabled="{Binding IsMultiPassEnabled, Converter={StaticResource boolConverter}}"
+                              IsChecked="{Binding MultiPass}" Margin="0,0,10,0" ToolTip="{x:Static Properties:ResourcesTooltips.Video_MultiPass}"  />
+                    <CheckBox Content="{x:Static Properties:Resources.VideoView_TurboAnalysisPass}" IsEnabled="{Binding IsConstantQuantity, Converter={StaticResource boolConverter}, ConverterParameter=true}"
+                              IsChecked="{Binding TurboAnalysisPass}" Visibility="{Binding DisplayTurboAnalysisPass, Converter={StaticResource boolToVisConverter}}"
+                              ToolTip="{x:Static Properties:ResourcesTooltips.Video_TurboAnalysisPass}" />
                 </StackPanel>
 
             </StackPanel>

@@ -1981,7 +1981,7 @@ void hb_job_setup_passes(hb_handle_t * h, hb_job_t * job, hb_list_t * list_pass)
 {
     if (job->vquality > HB_INVALID_VIDEO_QUALITY)
     {
-        job->twopass = 0;
+        job->multipass = 0;
     }
     if (job->indepth_scan)
     {
@@ -1990,16 +1990,16 @@ void hb_job_setup_passes(hb_handle_t * h, hb_job_t * job, hb_list_t * list_pass)
         hb_add_internal(h, job, list_pass);
         job->indepth_scan = 0;
     }
-    if (job->twopass)
+    if (job->multipass)
     {
         hb_deep_log(2, "Adding multi-pass encode");
-        int analysys_pass_count = hb_video_encoder_get_count_of_analysis_passes(job->vcodec);
-        for (int i = 0; i < analysys_pass_count; i++)
+        int analysis_pass_count = hb_video_encoder_get_count_of_analysis_passes(job->vcodec);
+        for (int i = 0; i < analysis_pass_count; i++)
         {
-            job->pass_id = HB_PASS_ENCODE_1ST;
+            job->pass_id = HB_PASS_ENCODE_ANALYSIS;
             hb_add_internal(h, job, list_pass);
         }
-        job->pass_id = HB_PASS_ENCODE_2ND;
+        job->pass_id = HB_PASS_ENCODE_FINAL;
         hb_add_internal(h, job, list_pass);
     }
     else

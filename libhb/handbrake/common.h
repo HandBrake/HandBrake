@@ -429,7 +429,7 @@ void        hb_video_quality_get_limits(uint32_t codec, float *low, float *high,
 const char* hb_video_quality_get_name(uint32_t codec);
 int         hb_video_quality_is_supported(uint32_t codec);
 
-int         hb_video_twopass_is_supported(uint32_t codec);
+int         hb_video_multipass_is_supported(uint32_t codec);
 
 int                hb_video_encoder_is_supported(int encoder);
 int                hb_video_encoder_get_count_of_analysis_passes(int encoder);
@@ -654,8 +654,8 @@ struct hb_job_s
     hb_rational_t   orig_vrate;
     int             cfr;
     PRIVATE int     pass_id;
-    int             twopass;        // Enable 2-pass encode. Boolean
-    int             fastfirstpass;
+    int             multipass;        // Enable multi-pass encode. Boolean
+    int             fastanalysispass;
     char           *encoder_preset;
     char           *encoder_tune;
     char           *encoder_options;
@@ -1271,8 +1271,8 @@ struct hb_state_s
             /* HB_STATE_WORKING || HB_STATE_SEARCHING || HB_STATE_WORKDONE */
 #define HB_PASS_SUBTITLE    -1
 #define HB_PASS_ENCODE      0
-#define HB_PASS_ENCODE_1ST  1   // Some code depends on these values being
-#define HB_PASS_ENCODE_2ND  2   // 1 and 2.  Do not change.
+#define HB_PASS_ENCODE_ANALYSIS  1   // Some code depends on these values being
+#define HB_PASS_ENCODE_FINAL     2   // 1 and 2.  Do not change.
             int           pass_id;
             int           pass;
             int           pass_count;

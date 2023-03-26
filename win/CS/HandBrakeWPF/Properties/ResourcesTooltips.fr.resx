@@ -291,16 +291,6 @@ et 20 à 23 pour les sources à haute définition.
 L'échelle de FFMpeg et de Theora est plus linéaire. 
 Ces encodeurs n'ont pas de mode sans perte.</value>
   </data>
-  <data name="Video_TurboFirstPass" xml:space="preserve">
-    <value>Lors du 1er passage d'un encodage à 2 passes, utilisez des paramètres qui accélèrent les choses.</value>
-  </data>
-  <data name="Video_TwoPass" xml:space="preserve">
-    <value>Effectue un encodage en 2 passes.
-
-L'option 'bitrate' est prérequise. Pendant la 1ère passe, des statiques sur la
-vidéo sont collectées. Lors de la seconde passe, ces statistiques seront
-utilisées dans les choix d'allocation de bitrate.</value>
-  </data>
   <data name="Video_VariableFramerate" xml:space="preserve">
     <value>Active un framerate variable (VFR) en sortie.
 

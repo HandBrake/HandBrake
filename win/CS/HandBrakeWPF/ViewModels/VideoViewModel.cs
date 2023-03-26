@@ -47,7 +47,7 @@ namespace HandBrakeWPF.ViewModels
         private int qualityMin;
         private bool showPeakFramerate;
         private int rf;
-        private bool displayTurboFirstPass;
+        private bool displayTurboAnalysisPass;
         private int videoPresetMaxValue;
         private int videoPresetValue;
         private VideoTune videoTune;
@@ -114,8 +114,8 @@ namespace HandBrakeWPF.ViewModels
                 if (value)
                 {
                     this.Task.VideoEncodeRateType = VideoEncodeRateType.ConstantQuality;
-                    this.TwoPass = false;
-                    this.TurboFirstPass = false;
+                    this.MultiPass = false;
+                    this.TurboAnalysisPass = false;
                     this.VideoBitrate = null;
                     this.NotifyOfPropertyChange(() => this.Task);
                 }
@@ -125,12 +125,12 @@ namespace HandBrakeWPF.ViewModels
                 }
 
                 this.NotifyOfPropertyChange(() => this.IsConstantQuantity);
-                this.NotifyOfPropertyChange(() => this.IsTwoPassEnabled);
+                this.NotifyOfPropertyChange(() => this.IsMultiPassEnabled);
                 this.OnTabStatusChanged(null);
             }
         }
 
-        public bool IsTwoPassEnabled
+        public bool IsMultiPassEnabled
         {
             get
             {
@@ -139,7 +139,7 @@ namespace HandBrakeWPF.ViewModels
                     return false;
                 }
 
-                if (!this.SelectedVideoEncoder.SupportsTwoPass)
+                if (!this.SelectedVideoEncoder.SupportsMultiPass)
                 {
                     return false;
                 }
@@ -245,26 +245,26 @@ namespace HandBrakeWPF.ViewModels
             get => Task.Quality.HasValue ? this.Task.Quality.Value : 0;
         }
 
-        public bool TwoPass
+        public bool MultiPass
         {
-            get => this.Task.TwoPass;
+            get => this.Task.MultiPass;
 
             set
             {
-                this.Task.TwoPass = value;
-                this.NotifyOfPropertyChange(() => this.TwoPass);
+                this.Task.MultiPass = value;
+                this.NotifyOfPropertyChange(() => this.MultiPass);
                 this.OnTabStatusChanged(null);
             }
         }
 
-        public bool TurboFirstPass
+        public bool TurboAnalysisPass
         {
-            get => this.Task.TurboFirstPass;
+            get => this.Task.TurboAnalysisPass;
 
             set
             {
-                this.Task.TurboFirstPass = value;
-                this.NotifyOfPropertyChange(() => this.TurboFirstPass);
+                this.Task.TurboAnalysisPass = value;
+                this.NotifyOfPropertyChange(() => this.TurboAnalysisPass);
                 this.OnTabStatusChanged(null);
             }
         }
@@ -383,7 +383,7 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
-        public bool DisplayTwoPass => this.SelectedVideoEncoder.SupportsTwoPass;
+        public bool DisplayMultiPass => this.SelectedVideoEncoder.SupportsMultiPass;
 
         public bool DisplayTuneControls
         {
@@ -566,18 +566,18 @@ namespace HandBrakeWPF.ViewModels
             get => this.SelectedVideoEncoder != null && this.SelectedVideoEncoder.IsX264 ? string.Format(Resources.Video_EncoderExtraArgs, this.GetActualx264Query()) : Resources.Video_EncoderExtraArgsTooltip;
         }
 
-        public bool DisplayTurboFirstPass
+        public bool DisplayTurboAnalysisPass
         {
-            get => this.displayTurboFirstPass;
+            get => this.displayTurboAnalysisPass;
             set
             {
-                if (value.Equals(this.displayTurboFirstPass))
+                if (value.Equals(this.displayTurboAnalysisPass))
                 {
                     return;
                 }
 
-                this.displayTurboFirstPass = value;
-                this.NotifyOfPropertyChange(() => this.DisplayTurboFirstPass);
+                this.displayTurboAnalysisPass = value;
+                this.NotifyOfPropertyChange(() => this.DisplayTurboAnalysisPass);
             }
         }
 
@@ -614,8 +614,8 @@ namespace HandBrakeWPF.ViewModels
                     break;
             }
 
-            this.TwoPass = preset.Task.TwoPass;
-            this.TurboFirstPass = preset.Task.TurboFirstPass;
+            this.MultiPass = preset.Task.MultiPass;
+            this.TurboAnalysisPass = preset.Task.TurboAnalysisPass;
 
             this.VideoBitrate = preset.Task.VideoEncodeRateType == VideoEncodeRateType.AverageBitrate ? preset.Task.VideoBitrate : null;
 
@@ -678,8 +678,8 @@ namespace HandBrakeWPF.ViewModels
             this.NotifyOfPropertyChange(() => this.DisplayRF);
             this.NotifyOfPropertyChange(() => this.VideoBitrate);
             this.NotifyOfPropertyChange(() => this.Task.Quality);
-            this.NotifyOfPropertyChange(() => this.Task.TwoPass);
-            this.NotifyOfPropertyChange(() => this.Task.TurboFirstPass);
+            this.NotifyOfPropertyChange(() => this.Task.MultiPass);
+            this.NotifyOfPropertyChange(() => this.Task.TurboAnalysisPass);
             this.NotifyOfPropertyChange(() => this.VideoTune);
             this.NotifyOfPropertyChange(() => this.VideoProfile);
             this.NotifyOfPropertyChange(() => this.VideoPreset);
@@ -726,12 +726,12 @@ namespace HandBrakeWPF.ViewModels
                     return false;
                 }
 
-                if (preset.Task.TwoPass != this.Task.TwoPass)
+                if (preset.Task.MultiPass != this.Task.MultiPass)
                 {
                     return false;
                 }
 
-                if (preset.Task.TurboFirstPass != this.Task.TurboFirstPass)
+                if (preset.Task.TurboAnalysisPass != this.Task.TurboAnalysisPass)
                 {
                     return false;
                 }
@@ -1086,7 +1086,7 @@ namespace HandBrakeWPF.ViewModels
             // Update control display
             this.DisplayOptimiseOptions = encoder?.Presets?.Count > 0;
 
-            this.DisplayTurboFirstPass = this.SelectedVideoEncoder.IsX264 || this.SelectedVideoEncoder.IsX265;
+            this.DisplayTurboAnalysisPass = this.SelectedVideoEncoder.IsX264 || this.SelectedVideoEncoder.IsX265;
 
             this.DisplayTuneControls = encoder?.Tunes?.Count > 0;
 
@@ -1105,13 +1105,13 @@ namespace HandBrakeWPF.ViewModels
             // Refresh Display
             this.NotifyOfPropertyChange(() => this.Rfqp);
             this.NotifyOfPropertyChange(() => this.HighQualityLabel);
-            this.NotifyOfPropertyChange(() => this.IsTwoPassEnabled);
-            this.NotifyOfPropertyChange(() => this.DisplayTwoPass);
+            this.NotifyOfPropertyChange(() => this.IsMultiPassEnabled);
+            this.NotifyOfPropertyChange(() => this.DisplayMultiPass);
 
-            if (this.SelectedVideoEncoder != null && !this.SelectedVideoEncoder.SupportsTwoPass)
+            if (this.SelectedVideoEncoder != null && !this.SelectedVideoEncoder.SupportsMultiPass)
             {
-                this.TwoPass = false;
-                this.TurboFirstPass = false;
+                this.MultiPass = false;
+                this.TurboAnalysisPass = false;
             }
 
             // Cleanup Extra Arguments

@@ -1538,7 +1538,7 @@ int hb_video_quality_is_supported(uint32_t codec)
     }
 }
 
-int hb_video_twopass_is_supported(uint32_t codec)
+int hb_video_multipass_is_supported(uint32_t codec)
 {
     switch (codec)
     {
@@ -1546,7 +1546,7 @@ int hb_video_twopass_is_supported(uint32_t codec)
         case HB_VCODEC_VT_H264:
         case HB_VCODEC_VT_H265:
         case HB_VCODEC_VT_H265_10BIT:
-            return hb_vt_is_two_pass_available(codec);
+            return hb_vt_is_multipass_available(codec);
 #endif
 
         case HB_VCODEC_FFMPEG_MF_H264:
@@ -4170,7 +4170,7 @@ static void job_setup(hb_job_t * job, hb_title_t * title)
     job->vcodec     = HB_VCODEC_FFMPEG_MPEG4;
     job->vquality   = HB_INVALID_VIDEO_QUALITY;
     job->vbitrate   = 1000;
-    job->twopass    = 0;
+    job->multipass  = 0;
     job->pass_id    = HB_PASS_ENCODE;
     job->vrate      = title->vrate;
 

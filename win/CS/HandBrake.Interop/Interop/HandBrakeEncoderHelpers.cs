@@ -289,30 +289,30 @@ namespace HandBrake.Interop.Interop
             return Containers.SingleOrDefault(c => c.ShortName == shortName);
         }
 
-        public static bool VideoEncoderSupportsTwoPass(string encoderShortName)
+        public static bool VideoEncoderSupportsMultiPass(string encoderShortName)
         {
             HBVideoEncoder encoder = GetVideoEncoder(encoderShortName);
 
             if (encoder != null)
             {
-                return VideoEncoderSupportsTwoPass(encoder.Id);
+                return VideoEncoderSupportsMultiPass(encoder.Id);
             }
 
             return false;
         }
 
         /// <summary>
-        /// Returns true if the given video encoder supports two-pass mode.
+        /// Returns true if the given video encoder supports multi-pass mode.
         /// </summary>
         /// <param name="encoderId">
         /// The encoder ID.
         /// </param>
         /// <returns>
-        /// True if the given video encoder supports two-pass mode.
+        /// True if the given video encoder supports multi-pass mode.
         /// </returns>
-        public static bool VideoEncoderSupportsTwoPass(int encoderId)
+        public static bool VideoEncoderSupportsMultiPass(int encoderId)
         {
-            return HBFunctions.hb_video_twopass_is_supported((uint)encoderId) > 0;
+            return HBFunctions.hb_video_multipass_is_supported((uint)encoderId) > 0;
         }
 
         /// <summary>

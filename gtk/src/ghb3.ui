@@ -5229,16 +5229,16 @@ to limit instantaneous bitrate, look into x264's vbv-bufsize and vbv-maxrate set
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkCheckButton" id="VideoTwoPass">
-                                <property name="label" translatable="yes">2-Pass Encoding</property>
+                              <object class="GtkCheckButton" id="VideoMultiPass">
+                                <property name="label" translatable="yes">Multi-Pass Encoding</property>
                                 <property name="visible">True</property>
                                 <property name="can-focus">True</property>
                                 <property name="receives-default">False</property>
                                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                <property name="tooltip-text" translatable="yes">Perform 2 Pass Encoding.
+                                <property name="tooltip-text" translatable="yes">Perform Multi Pass Encoding.
 
-The 'Bitrate' option is prerequisite. During the 1st pass, statistics about
-the video are collected.  Then in the second pass, those statistics are used
+The 'Bitrate' option is prerequisite. During the analysis passes, statistics about
+the video are collected.  Then in the final pass, those statistics are used
 to make bitrate allocation decisions.</property>
                                 <property name="halign">start</property>
                                 <property name="draw-indicator">True</property>
@@ -5252,13 +5252,13 @@ to make bitrate allocation decisions.</property>
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkCheckButton" id="VideoTurboTwoPass">
-                                <property name="label" translatable="yes">Turbo First Pass</property>
+                              <object class="GtkCheckButton" id="VideoTurboMultiPass">
+                                <property name="label" translatable="yes">Turbo Analysis Pass</property>
                                 <property name="visible">True</property>
                                 <property name="can-focus">True</property>
                                 <property name="receives-default">False</property>
                                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                <property name="tooltip-text" translatable="yes">During the 1st pass of a 2 pass encode, use settings that speed things along.</property>
+                                <property name="tooltip-text" translatable="yes">During the analysis pass of a multi pass encode, use settings that speed things along.</property>
                                 <property name="halign">start</property>
                                 <property name="active">True</property>
                                 <property name="draw-indicator">True</property>

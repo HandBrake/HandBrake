@@ -292,16 +292,6 @@ I valori suggerite sò : 18 à 20 per fonti à definizione classica è 20 à 23
 A scala di FFMpeg è Theora hè più lineare.
 Sti cudificatori ùn anu micca di modu senza perdita.</value>
   </data>
-  <data name="Video_TurboFirstPass" xml:space="preserve">
-    <value>Durante u primu passu d’una cudificazione à 2 passi, impiegate preferenze chì acceleranu u trattamentu.</value>
-  </data>
-  <data name="Video_TwoPass" xml:space="preserve">
-    <value>Face una cudificazione à 2 passi.
-
-L’ozzione « Flussu » hè prerichiesta. Durante u primu passu, e statistiche
-sò cullettate.  Dopu, à u secondu passu, ste statistiche sò impiegate per fà
-a scelta di l’allucamentu di u flussu.</value>
-  </data>
   <data name="Video_VariableFramerate" xml:space="preserve">
     <value>Attiveghja una frequenza di fiure variabile in esciuta.
 

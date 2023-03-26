@@ -290,17 +290,6 @@ Sugerowane wartości to: 18 do 20 dla źródeł o standardowej rozdzielczości i
 Skala FFMpega i Theory jest bardziej liniowa.
 Te kodery nie mają trybu bezstratnego.</value>
   </data>
-  <data name="Video_TurboFirstPass" xml:space="preserve">
-    <value>Podczas pierwszego przebiegu 2-przebiegowego kodowania użyj ustawień, które przyspieszają działanie.</value>
-  </data>
-  <data name="Video_TwoPass" xml:space="preserve">
-    <value>Wykonaj 2 przebiegowe kodowanie
-
-Opcja „Bitrate” jest warunkiem wstępnym. Podczas 1st przejazdu
- statystyki dotyczące filmy są gromadzone. Następnie w drugim przejściu
- wykorzystywane są te statystyki podejmować decyzje dotyczące alokacji
- przepływności.</value>
-  </data>
   <data name="Video_VariableFramerate" xml:space="preserve">
     <value>Włącza wyjście ze zmienną liczbą klatek na sekundę.
 

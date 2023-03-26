@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ghb 0.1\n"
 "Report-Msgid-Bugs-To: https://github.com/HandBrake/Handbrake/issues\n"
-"POT-Creation-Date: 2023-03-02 18:42+0000\n"
+"POT-Creation-Date: 2023-03-25 15:12+0100\n"
 "PO-Revision-Date: 2018-10-10 18:14+0000\n"
 "Language-Team: Basque (https://www.transifex.com/HandBrakeProject/"
 "teams/92423/eu/)\n"
@@ -1205,26 +1205,28 @@ msgid ""
 msgstr ""
 
 #: src/ghb3.ui:5233
-msgid "2-Pass Encoding"
+#, fuzzy
+msgid "Multi-Pass Encoding"
 msgstr "2 psaeko bihurketa"
 
 #: src/ghb3.ui:5238
 msgid ""
-"Perform 2 Pass Encoding.\n"
+"Perform Multi Pass Encoding.\n"
 "\n"
-"The 'Bitrate' option is prerequisite. During the 1st pass, statistics about\n"
-"the video are collected.  Then in the second pass, those statistics are "
-"used\n"
+"The 'Bitrate' option is prerequisite. During the analysis passes, statistics "
+"about\n"
+"the video are collected.  Then in the final pass, those statistics are used\n"
 "to make bitrate allocation decisions."
 msgstr ""
 
 #: src/ghb3.ui:5256
-msgid "Turbo First Pass"
+msgid "Turbo Analysis Pass"
 msgstr ""
 
 #: src/ghb3.ui:5261
 msgid ""
-"During the 1st pass of a 2 pass encode, use settings that speed things along."
+"During the analysis pass of a multi pass encode, use settings that speed "
+"things along."
 msgstr ""
 
 #: src/ghb3.ui:5323
@@ -3430,7 +3432,7 @@ msgstr ""
 
 #: src/queuehandler.c:359
 #, c-format
-msgid "%s, Bitrate %dkbps (2 Pass)"
+msgid "%s, Bitrate %dkbps (Multi Pass)"
 msgstr ""
 
 #: src/queuehandler.c:366
@@ -3536,11 +3538,11 @@ msgid "Encode"
 msgstr ""
 
 #: src/queuehandler.c:1208
-msgid "Encode First Pass (Analysis)"
+msgid "Encode Analysis Pass"
 msgstr ""
 
 #: src/queuehandler.c:1212
-msgid "Encode Second Pass (Final)"
+msgid "Encode Final Pass"
 msgstr ""
 
 #. Should never happen

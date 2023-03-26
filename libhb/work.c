@@ -639,7 +639,7 @@ void hb_display_job_info(hb_job_t *job)
         else
         {
             hb_log( "     + bitrate: %d kbps, pass: %d", job->vbitrate, job->pass_id );
-            if(job->pass_id == HB_PASS_ENCODE_1ST && job->fastfirstpass == 1 &&
+            if(job->pass_id == HB_PASS_ENCODE_ANALYSIS && job->fastanalysispass == 1 &&
                ((job->vcodec & HB_VCODEC_X264_MASK) ||
                 (job->vcodec & HB_VCODEC_X265_MASK)))
             {
@@ -1023,7 +1023,7 @@ static int sanitize_subtitles( hb_job_t * job )
          * ensure that it doesn't get dropped. */
         interjob->select_subtitle->out_track = 1;
         if (job->pass_id == HB_PASS_ENCODE ||
-            job->pass_id == HB_PASS_ENCODE_2ND)
+            job->pass_id == HB_PASS_ENCODE_FINAL)
         {
             // final pass, interjob->select_subtitle is no longer needed
             hb_list_insert(job->list_subtitle, 0, interjob->select_subtitle);
@@ -1606,7 +1606,7 @@ static void do_job(hb_job_t *job)
     {
         hb_log( "Starting Task: Subtitle Scan" );
     }
-    else if (job->pass_id == HB_PASS_ENCODE_1ST)
+    else if (job->pass_id == HB_PASS_ENCODE_ANALYSIS)
     {
         hb_log( "Starting Task: Analysis Pass" );
     }
@@ -1721,7 +1721,7 @@ static void do_job(hb_job_t *job)
     }
 
     job->orig_vrate = job->vrate;
-    if (job->pass_id == HB_PASS_ENCODE_2ND)
+    if (job->pass_id == HB_PASS_ENCODE_FINAL)
     {
         correct_framerate(interjob, job);
     }
@@ -2076,7 +2076,7 @@ cleanup:
     hb_buffer_pool_free();
 #if HB_PROJECT_FEATURE_QSV
     if (!job->indepth_scan &&
-        (job->pass_id != HB_PASS_ENCODE_1ST) &&
+        (job->pass_id != HB_PASS_ENCODE_ANALYSIS) &&
         hb_qsv_is_enabled(job))
     {
         hb_qsv_context_uninit(job);

@@ -288,15 +288,6 @@ x264의 스케일은 로그이며 더 낮은 값은 더 높은 품질에 해당�
 FFMpeg와 Theora의 척도는 더 선형적입니다.
 이 인코더들은 무손실 모드를 갖고 있지 않습니다.</value>
   </data>
-  <data name="Video_TurboFirstPass" xml:space="preserve">
-    <value>2 pass 인코딩 중 첫 번째 pass를 하는 동안, 속도를 조절하는 설정을 사용하십시오.</value>
-  </data>
-  <data name="Video_TwoPass" xml:space="preserve">
-    <value>2 Pass 인코딩을 수행하십시오.
-
-'비트전송률' 옵션은 필수 조건입니다. 첫 번째 pass 동안, 비디오에 대한
-통계가 수집됩니다. 그런 다음 두 번째 pass에서 해당 통계를 사용하여 비트전송률 할당을 결정합니다.</value>
-  </data>
   <data name="Video_VariableFramerate" xml:space="preserve">
     <value>가변 프레임 속도 출력을 활성화합니다. VFR은 일부 재생기와 호환되지 않습니다.</value>
   </data>

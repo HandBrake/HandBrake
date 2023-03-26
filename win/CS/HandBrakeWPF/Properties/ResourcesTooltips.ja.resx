@@ -288,16 +288,6 @@ x264は対数スケールで低い値が高いクオリティに対応します�
 FFMpegとTheoraのスケールはより直線的です。
 この二つにはロスレスモードはありません。</value>
   </data>
-  <data name="Video_TurboFirstPass" xml:space="preserve">
-    <value>2パスエンコードのうちの最初のパスの、速度に関わる設定です。</value>
-  </data>
-  <data name="Video_TwoPass" xml:space="preserve">
-    <value>2パスエンコードを行います。
-
-'ビットレート'オプションがまず必要です。1パス目で映像の統計を取得します。
-それから2パス目で、目的のビットレートを実現するために
-その統計が使用されます。</value>
-  </data>
   <data name="Video_VariableFramerate" xml:space="preserve">
     <value>可変フレームレートの出力を有効にします。
 

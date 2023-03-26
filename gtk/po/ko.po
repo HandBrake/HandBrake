@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ghb 0.1\n"
 "Report-Msgid-Bugs-To: https://github.com/HandBrake/Handbrake/issues\n"
-"POT-Creation-Date: 2023-03-02 18:42+0000\n"
+"POT-Creation-Date: 2023-03-25 15:12+0100\n"
 "PO-Revision-Date: 2018-10-10 18:14+0000\n"
 "Last-Translator: Junghee Lee <daemul72@gmail.com>, 2022\n"
 "Language-Team: Korean (https://www.transifex.com/HandBrakeProject/"
@@ -1307,16 +1307,18 @@ msgstr ""
 "제한하려면 x264의 vbv-bufsize와 vbv-maxrate 설정을 살펴보세요."
 
 #: src/ghb3.ui:5233
-msgid "2-Pass Encoding"
+#, fuzzy
+msgid "Multi-Pass Encoding"
 msgstr "2 패스 인코딩"
 
 #: src/ghb3.ui:5238
+#, fuzzy
 msgid ""
-"Perform 2 Pass Encoding.\n"
+"Perform Multi Pass Encoding.\n"
 "\n"
-"The 'Bitrate' option is prerequisite. During the 1st pass, statistics about\n"
-"the video are collected.  Then in the second pass, those statistics are "
-"used\n"
+"The 'Bitrate' option is prerequisite. During the analysis passes, statistics "
+"about\n"
+"the video are collected.  Then in the final pass, those statistics are used\n"
 "to make bitrate allocation decisions."
 msgstr ""
 "2 패스 인코딩을 수행합니다.\n"
@@ -1326,12 +1328,15 @@ msgstr ""
 "비트레이트 할당을 결정합니다."
 
 #: src/ghb3.ui:5256
-msgid "Turbo First Pass"
+#, fuzzy
+msgid "Turbo Analysis Pass"
 msgstr "첫 번째 패스 가속"
 
 #: src/ghb3.ui:5261
+#, fuzzy
 msgid ""
-"During the 1st pass of a 2 pass encode, use settings that speed things along."
+"During the analysis pass of a multi pass encode, use settings that speed "
+"things along."
 msgstr ""
 "2패스 인코딩의 1번째 패스를 하는 동안, 속도를 높이는 설정을 사용합니다."
 
@@ -3764,8 +3769,8 @@ msgid "%s, Bitrate %dkbps"
 msgstr "%s, 비트레이트 %dkbps"
 
 #: src/queuehandler.c:359
-#, c-format
-msgid "%s, Bitrate %dkbps (2 Pass)"
+#, fuzzy, c-format
+msgid "%s, Bitrate %dkbps (Multi Pass)"
 msgstr "%s, 비트레이트 %dkbps (2 Pass)"
 
 #: src/queuehandler.c:366
@@ -3877,12 +3882,14 @@ msgid "Encode"
 msgstr "인코딩"
 
 #: src/queuehandler.c:1208
-msgid "Encode First Pass (Analysis)"
-msgstr "첫 번째 패스 인코딩 (분석)"
+#, fuzzy
+msgid "Encode Analysis Pass"
+msgstr "인코딩만"
 
 #: src/queuehandler.c:1212
-msgid "Encode Second Pass (Final)"
-msgstr "두 번째 패스 인코딩 (최종)"
+#, fuzzy
+msgid "Encode Final Pass"
+msgstr "인코딩 일시 중지됨"
 
 #. Should never happen
 #: src/queuehandler.c:1217
@@ -4035,6 +4042,12 @@ msgstr ""
 #, c-format
 msgid "%s: %.4g (Warning: lossless)"
 msgstr "%s: %.4g (주의: 무손실)"
+
+#~ msgid "Encode First Pass (Analysis)"
+#~ msgstr "첫 번째 패스 인코딩 (분석)"
+
+#~ msgid "Encode Second Pass (Final)"
+#~ msgstr "두 번째 패스 인코딩 (최종)"
 
 #~ msgid "<b>Presets List</b>"
 #~ msgstr "<b>프리셋 목록</b>"

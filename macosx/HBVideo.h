@@ -37,8 +37,8 @@ extern NSString * const HBVideoChangedNotification;
 @property (nonatomic, readwrite) HBVideoFrameRateMode frameRateMode;
 @property (nonatomic, readwrite) int frameRate;
 
-@property (nonatomic, readwrite) BOOL twoPass;
-@property (nonatomic, readwrite) BOOL turboTwoPass;
+@property (nonatomic, readwrite) BOOL multiPass;
+@property (nonatomic, readwrite) BOOL turboMultiPass;
 
 /**
  *  Encoder specifics options

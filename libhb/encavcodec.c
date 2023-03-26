@@ -1009,12 +1009,12 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
         context->max_b_frames = 1;
     }
 
-    if( job->pass_id == HB_PASS_ENCODE_1ST ||
-        job->pass_id == HB_PASS_ENCODE_2ND )
+    if( job->pass_id == HB_PASS_ENCODE_ANALYSIS ||
+        job->pass_id == HB_PASS_ENCODE_FINAL )
     {
         char * filename = hb_get_temporary_filename("ffmpeg.log");
 
-        if( job->pass_id == HB_PASS_ENCODE_1ST )
+        if( job->pass_id == HB_PASS_ENCODE_ANALYSIS )
         {
             pv->file = hb_fopen(filename, "wb");
             if (!pv->file)
@@ -1089,7 +1089,7 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
     job->color_transfer_override = context->color_trc;
     job->color_matrix_override   = context->colorspace;
 
-    if (job->pass_id == HB_PASS_ENCODE_1ST &&
+    if (job->pass_id == HB_PASS_ENCODE_ANALYSIS &&
         context->stats_out != NULL)
     {
         // Some encoders may write stats during init in avcodec_open
@@ -1363,7 +1363,7 @@ static void Encode( hb_work_object_t *w, hb_buffer_t *in,
     }
 
     // Write stats
-    if (pv->job->pass_id == HB_PASS_ENCODE_1ST &&
+    if (pv->job->pass_id == HB_PASS_ENCODE_ANALYSIS &&
         pv->context->stats_out != NULL)
     {
         fprintf( pv->file, "%s", pv->context->stats_out );
@@ -1380,7 +1380,7 @@ static void Flush( hb_work_object_t * w, hb_buffer_list_t * list )
 
     // Write stats
     // vpx only writes stats at final flush
-    if (pv->job->pass_id == HB_PASS_ENCODE_1ST &&
+    if (pv->job->pass_id == HB_PASS_ENCODE_ANALYSIS &&
         pv->context->stats_out != NULL)
     {
         fprintf( pv->file, "%s", pv->context->stats_out );

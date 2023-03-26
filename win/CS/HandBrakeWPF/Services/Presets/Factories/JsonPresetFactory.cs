@@ -281,8 +281,8 @@ namespace HandBrakeWPF.Services.Presets.Factories
             /* Video Settings */
             preset.Task.VideoEncoder = HandBrakeEncoderHelpers.VideoEncoders.FirstOrDefault(s => s.ShortName == importedPreset.VideoEncoder);
             preset.Task.VideoBitrate = importedPreset.VideoAvgBitrate;
-            preset.Task.TwoPass = importedPreset.VideoTwoPass;
-            preset.Task.TurboFirstPass = importedPreset.VideoTurboTwoPass;
+            preset.Task.MultiPass = importedPreset.VideoMultiPass;
+            preset.Task.TurboAnalysisPass = importedPreset.VideoTurboMultiPass;
             preset.Task.ExtraAdvancedArguments = importedPreset.VideoOptionExtra;
             preset.Task.Quality = double.Parse(importedPreset.VideoQualitySlider.ToString(CultureInfo.InvariantCulture), CultureInfo.InvariantCulture);
             preset.Task.VideoEncodeRateType = (VideoEncodeRateType)importedPreset.VideoQualityType;
@@ -626,8 +626,8 @@ namespace HandBrakeWPF.Services.Presets.Factories
             preset.VideoTune = export.Task.VideoTunes.Aggregate(string.Empty, (current, item) => !string.IsNullOrEmpty(current) ? string.Format("{0},{1}", current, item.ShortName) : item.ShortName);
             preset.VideoAvgBitrate = export.Task.VideoBitrate ?? 0;
             preset.VideoColorMatrixCode = 0; // TODO not supported.
-            preset.VideoTurboTwoPass = export.Task.TurboFirstPass;
-            preset.VideoTwoPass = export.Task.TwoPass;
+            preset.VideoTurboMultiPass = export.Task.TurboAnalysisPass;
+            preset.VideoMultiPass = export.Task.MultiPass;
 
             // Unknown
             preset.ChildrenArray = new List<object>(); 

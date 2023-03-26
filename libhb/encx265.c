@@ -499,8 +499,8 @@ int encx265Init(hb_work_object_t *w, hb_job_t *job)
     {
         param->rc.rateControlMode = X265_RC_ABR;
         param->rc.bitrate         = job->vbitrate;
-        if (job->pass_id == HB_PASS_ENCODE_1ST ||
-            job->pass_id == HB_PASS_ENCODE_2ND)
+        if (job->pass_id == HB_PASS_ENCODE_ANALYSIS ||
+            job->pass_id == HB_PASS_ENCODE_FINAL)
         {
             char * stats_file;
             char   pass[2];
@@ -513,11 +513,11 @@ int encx265Init(hb_work_object_t *w, hb_job_t *job)
                 goto fail;
             }
             free(stats_file);
-            if (job->pass_id == HB_PASS_ENCODE_1ST)
+            if (job->pass_id == HB_PASS_ENCODE_ANALYSIS)
             {
                 char slowfirstpass[2];
                 snprintf(slowfirstpass, sizeof(slowfirstpass), "%d",
-                         !job->fastfirstpass);
+                         !job->fastanalysispass);
                 if (param_parse(pv, param, "slow-firstpass", slowfirstpass))
                 {
                     goto fail;

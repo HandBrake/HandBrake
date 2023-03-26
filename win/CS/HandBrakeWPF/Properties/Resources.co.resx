@@ -1637,9 +1637,6 @@ VLC è MPC-HC sò accettati. D’altri lettori ponu dinù funziunà ma ùn sò m
   <data name="SummaryView_storage" xml:space="preserve">
     <value>allucamentu</value>
   </data>
-  <data name="VideoView_2Pass" xml:space="preserve">
-    <value>Cudificazione à 2 passi</value>
-  </data>
   <data name="VideoView_AverageBitrate" xml:space="preserve">
     <value>Flussu medianu (kbps) :</value>
   </data>
@@ -1681,9 +1678,6 @@ VLC è MPC-HC sò accettati. D’altri lettori ponu dinù funziunà ma ùn sò m
   </data>
   <data name="VideoView_Quality" xml:space="preserve">
     <value>Qualità :</value>
-  </data>
-  <data name="VideoView_TurboFirstPass" xml:space="preserve">
-    <value>Primu passu in modu Turbo</value>
   </data>
   <data name="VideoView_VariableFramerate" xml:space="preserve">
     <value>Frequenza di fiure variabile (VFR)</value>
