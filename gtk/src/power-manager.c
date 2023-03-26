@@ -26,7 +26,7 @@ static GhbPowerState power_state;
  * level first drops from normal to low, so the user can resume encoding
  * without it being paused again. So this variable tracks the previous
  * battery level, and if it was low already, we don't do anything. */
-static uint prev_battery_level;
+static guint prev_battery_level;
 
 #if GLIB_CHECK_VERSION(2, 70, 0)
 static GPowerProfileMonitor *power_monitor;
