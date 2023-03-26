@@ -219,7 +219,7 @@ static void queue_update_summary (GhbValue * queueDict, signal_user_data_t *ud)
     g_string_append_printf(str, "%-8d", titleID);
     if (!strcmp(rangeType, "chapter"))
     {
-        g_string_append_printf(str, "%s %ld – %ld",
+        g_string_append_printf(str, "%s %" PRId64 " – %" PRId64,
                                _("Chapters:"),
                                rangeStart, rangeEnd);
     }
@@ -240,7 +240,7 @@ static void queue_update_summary (GhbValue * queueDict, signal_user_data_t *ud)
     }
     else if (!strcmp(rangeType, "frame"))
     {
-        g_string_append_printf(str, "%s %ld – %ld",
+        g_string_append_printf(str, "%s %" PRId64 " – %" PRId64,
                                _("Frames:"),
                                rangeStart, rangeEnd);
     }
@@ -835,8 +835,8 @@ queue_update_stats (GhbValue * queueDict, signal_user_data_t *ud)
     gtk_label_set_text(label, str);
     g_free(str);
 
-    const char  * path;
-    struct stat   stbuf;
+    const char *path;
+    GStatBuf stbuf;
 
     path = ghb_dict_get_string(uiDict, "destination");
     if (g_stat(path, &stbuf) == 0)
@@ -1331,8 +1331,8 @@ void ghb_queue_update_live_stats (signal_user_data_t * ud, int index,
     gtk_label_set_text(label, str);
     g_free(str);
 
-    const char  * path;
-    struct stat   stbuf;
+    const char *path;
+    GStatBuf stbuf;
 
     path = ghb_dict_get_string(uiDict, "destination");
     if (g_stat(path, &stbuf) == 0)

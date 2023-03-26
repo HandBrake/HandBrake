@@ -23,13 +23,16 @@
 
 #include <sys/types.h>
 #include <sys/stat.h>
-#include <sys/utsname.h>
 #include <unistd.h>
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <fcntl.h>
 #include <locale.h>
+
+#ifndef _WIN32
+#include <sys/utsname.h>
+#endif
 
 #include <config.h>
 
@@ -520,7 +523,7 @@ IoRedirect(signal_user_data_t *ud)
     // Open activity log.
     config = ghb_get_user_config_dir(NULL);
     pid = getpid();
-    path = g_strdup_printf("%s/Activity.log.%"PRId64, config, (long)pid);
+    path = g_strdup_printf("%s/Activity.log.%"PRId64, config, (int64_t)pid);
     ud->activity_log = g_io_channel_new_file (path, "w", NULL);
     ud->job_activity_log = NULL;
     str = g_strdup_printf("<big><b>%s</b></big>", path);
@@ -1009,32 +1012,32 @@ video_file_drop_init (signal_user_data_t *ud)
 static void
 print_system_information (void)
 {
-    struct utsname *host_info;
-    char *exe_path;
-    ssize_t result;
-
-    host_info = calloc(1, sizeof(struct utsname));
-    exe_path = calloc(1, PATH_MAX);
-    uname(host_info);
-
-    fprintf(stderr, "%s\n", HB_PROJECT_TITLE);
 #if GLIB_CHECK_VERSION(2, 64, 0)
     fprintf(stderr, "OS: %s\n", g_get_os_info(G_OS_INFO_KEY_PRETTY_NAME));
 #endif
+#ifndef _WIN32
+    char *exe_path;
+    ssize_t result;
+    struct utsname *host_info;
+
+    host_info = calloc(1, sizeof(struct utsname));
+    uname(host_info);
+
+    fprintf(stderr, "%s\n", HB_PROJECT_TITLE);
     fprintf(stderr, "Kernel: %s %s (%s)\n", host_info->sysname,
             host_info->release, host_info->machine);
     fprintf(stderr, "CPU: %s x %d\n", hb_get_cpu_name(), hb_get_cpu_count());
-
+    free(host_info);
+    exe_path = calloc(1, PATH_MAX);
     result = readlink( "/proc/self/exe", exe_path, PATH_MAX);
     if (result > 0)
     {
         fprintf(stderr, "Install Dir: %s\n", g_path_get_dirname(exe_path));
     }
+    free(exe_path);
+#endif
     fprintf(stderr, "Config Dir:  %s\n", ghb_get_user_config_dir(NULL));
     fprintf(stderr, "_______________________________\n\n");
-
-    free(exe_path);
-    free(host_info);
 }
 
 extern G_MODULE_EXPORT void

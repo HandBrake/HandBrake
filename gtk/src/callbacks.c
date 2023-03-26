@@ -842,7 +842,7 @@ get_creation_date(const char *pattern, const char *metaValue, const char *file)
     }
     else
     {
-        struct stat stbuf;
+        GStatBuf stbuf;
         if (g_stat(file, &stbuf) == 0){
             struct tm *tm;
             tm = localtime(&(stbuf.st_mtime));
@@ -4055,7 +4055,7 @@ prune_logs(signal_user_data_t *ud)
         while (file)
         {
             gchar *path;
-            struct stat stbuf;
+            GStatBuf stbuf;
 
             path = g_strdup_printf("%s/%s", dest_dir, file);
             g_stat(path, &stbuf);

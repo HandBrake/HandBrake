@@ -1597,7 +1597,7 @@ ghb_save_queue(GhbValue *queue)
     char  *name;
 
     pid  = getpid();
-    name = g_strdup_printf ("queue.%d", pid);
+    name = g_strdup_printf ("queue.%" PRId64, (int64_t)pid);
     write_config_file(name, queue);
     g_free(name);
 }
