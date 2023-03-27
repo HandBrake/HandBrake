@@ -1,11 +1,11 @@
 # SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR Free Software Foundation, Inc.
+# Copyright (C) 2023 HandBrake Team
 # This file is distributed under the same license as the ghb package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2023.
+# 
 # Translators:
 # Pere Orga <pere@orga.cat>, 2022
-#
+# 
 #, fuzzy
 msgid ""
 msgstr ""
@@ -14,12 +14,11 @@ msgstr ""
 "POT-Creation-Date: 2023-03-25 15:12+0100\n"
 "PO-Revision-Date: 2018-10-10 18:14+0000\n"
 "Last-Translator: Pere Orga <pere@orga.cat>, 2022\n"
-"Language-Team: Catalan (https://www.transifex.com/HandBrakeProject/"
-"teams/92423/ca/)\n"
-"Language: ca\n"
+"Language-Team: Catalan (https://www.transifex.com/HandBrakeProject/teams/92423/ca/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: ca\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: src/menu.ui:7
@@ -27,14 +26,12 @@ msgid "_File"
 msgstr "_Fitxer"
 
 #: src/menu.ui:11
-#, fuzzy
 msgid "_Open Source"
-msgstr "Obre l'origen"
+msgstr ""
 
 #: src/menu.ui:16
-#, fuzzy
 msgid "Open _Directory"
-msgstr "Obre el directori d'origen"
+msgstr ""
 
 #: src/menu.ui:21
 msgid "Set _Destination"
@@ -61,9 +58,8 @@ msgid "Add _Multiple"
 msgstr "Afegeix-ne _múltiples"
 
 #: src/menu.ui:53
-#, fuzzy
 msgid "Add A_ll"
-msgstr "Afegeix-ho tot"
+msgstr ""
 
 #: src/menu.ui:60
 msgid "_Start Encoding"
@@ -198,8 +194,8 @@ msgstr ""
 "Utilitza només els subtítols marcats\n"
 "com a forçats a la pista de subtítols d'origen\n"
 "\n"
-"Els subtítols “forçats” s'utilitzen normalment per mostrar\n"
-"subtítols durant les escenes en que algú parla\n"
+"Els subtítols «forçats» s'utilitzen normalment per mostrar\n"
+"subtítols durant les escenes en què algú parla\n"
 "una llengua estrangera."
 
 #: src/ghb3.ui:129
@@ -250,8 +246,7 @@ msgstr ""
 "afegirà una passada addicional al codificador\n"
 "que cerca subtítols que poden ser d'una\n"
 "escena en llengua estrangera. Aquesta \n"
-"opció va més bé junt amb amb l'opció\n"
-"«forçats»."
+"opció va més bé junt amb l'opció «forçats»."
 
 #: src/ghb3.ui:158
 msgid "<b>Track</b>"
@@ -259,7 +254,7 @@ msgstr "<b>Pista</b>"
 
 #: src/ghb3.ui:208
 msgid "Play File"
-msgstr ""
+msgstr "Reprodueix el fitxer"
 
 #: src/ghb3.ui:212 src/callbacks.c:1720
 msgid "Open Source Directory"
@@ -314,42 +309,36 @@ msgid "HandBrake Queue"
 msgstr "Cua del HandBrake"
 
 #: src/ghb3.ui:538
-#, fuzzy
 msgid "_Play File"
-msgstr "_Fitxer"
+msgstr "_Reprodueix el fitxer"
 
 #: src/ghb3.ui:547
-#, fuzzy
 msgid "Open _Source Directory"
 msgstr "Obre el directori d'origen"
 
 #: src/ghb3.ui:556
-#, fuzzy
 msgid "Open _Destination Directory"
-msgstr "Obre el directori de destinació"
+msgstr "Obre el directori _destinació"
 
 #: src/ghb3.ui:570
 msgid "Move to _Top"
-msgstr ""
+msgstr "Mou al capdamun_t"
 
 #: src/ghb3.ui:579
 msgid "Move to _Bottom"
-msgstr ""
+msgstr "Mou al _final"
 
 #: src/ghb3.ui:593
-#, fuzzy
 msgid "_Edit"
-msgstr "Edita"
+msgstr "_Edita"
 
 #: src/ghb3.ui:602
-#, fuzzy
 msgid "_Reset"
-msgstr "Reinicialitza"
+msgstr "_Restableix"
 
 #: src/ghb3.ui:616
-#, fuzzy
 msgid "Re_move"
-msgstr "Suprimeix"
+msgstr "Supri_meix"
 
 #: src/ghb3.ui:646
 msgid "<span size=\"x-large\">Queue</span>"
@@ -389,7 +378,7 @@ msgstr "En acabar:"
 
 #: src/ghb3.ui:923
 msgid "Reset"
-msgstr "Reinicialitza"
+msgstr "Restableix"
 
 #: src/ghb3.ui:925
 msgid ""
@@ -397,8 +386,7 @@ msgid ""
 "Resets the queue job to pending and ready to run again."
 msgstr ""
 "Marca l'entrada de la cua seleccionada com a pendent.\n"
-"Torna a definir la tasca de la cua com a pendent i a punt per a tornar a "
-"executar."
+"Torna a definir la tasca de la cua com a pendent i a punt per a tornar a executar."
 
 #: src/ghb3.ui:940
 msgid "Edit"
@@ -497,36 +485,22 @@ msgstr ""
 msgid ""
 "HandBrake is a GPL-licensed, multiplatform, multithreaded video transcoder."
 msgstr ""
-"El HandBrake és un transcodificador de vídeo multiplataforma i multifil, amb "
-"llicència GPL."
+"El HandBrake és un transcodificador de vídeo multiplataforma i multifil, amb"
+" llicència GPL."
 
 #: src/ghb3.ui:2056
 msgid ""
-"HandBrake is free software; you can redistribute it and/or modify it under "
-"the terms of the GNU General Public License version 2, as published by the "
-"Free Software Foundation.\n"
+"HandBrake is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License version 2, as published by the Free Software Foundation.\n"
 "\n"
-"HandBrake is distributed in the hope that it will be useful, but WITHOUT ANY "
-"WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS "
-"FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more "
-"details.\n"
+"HandBrake is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.\n"
 "\n"
-"You should have received a copy of the GNU General Public License along with "
-"Glade; if not, write to the Free Software Foundation, Inc., 51 Franklin "
-"Street, Fifth Floor, Boston, MA 02110-1301, USA."
+"You should have received a copy of the GNU General Public License along with Glade; if not, write to the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA."
 msgstr ""
-"El HandBrake és programari lliure; podeu redistribuir-lo i/o modificar-lo "
-"sota els termes de la Llicència Pública General GNU versió 2, tal com "
-"publica la Free Software Foundation.\n"
+"El HandBrake és programari lliure; podeu redistribuir-lo i/o modificar-lo sota els termes de la Llicència Pública General GNU versió 2, tal com publica la Free Software Foundation.\n"
 "\n"
-"El HandBrake es distribueix amb l'esperança que sigui útil, però SENSE CAP "
-"GARANTIA; ni tan sols la garantia implícita de COMERCIALITZACIÓ o ADEQUACIÓ "
-"PER A UN PROPÒSIT PARTICULAR.  Vegeu la Llicència Pública General de GNU per "
-"a més detalls.\n"
+"El HandBrake es distribueix amb l'esperança que sigui útil, però SENSE CAP GARANTIA; ni tan sols la garantia implícita de COMERCIALITZACIÓ o ADEQUACIÓ PER A UN PROPÒSIT PARTICULAR.  Vegeu la Llicència Pública General de GNU per a més detalls.\n"
 "\n"
-"Hauríeu d'haver rebut una còpia de la Llicència Pública General de GNU "
-"juntament amb el Glade; si no, escriviu a la Free Software Foundation, Inc., "
-"51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA."
+"Hauríeu d'haver rebut una còpia de la Llicència Pública General de GNU juntament amb el Glade; si no, escriviu a la Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA."
 
 #: src/ghb3.ui:2242 src/fr.handbrake.ghb.metainfo.xml.in.in:10
 msgid "HandBrake"
@@ -584,10 +558,11 @@ msgstr "Activitat"
 msgid "<b>Source:</b>"
 msgstr "<b>Origen:</b>"
 
-#: src/ghb3.ui:2464 src/hb-backend.c:60 src/hb-backend.c:72 src/hb-backend.c:85
-#: src/hb-backend.c:124 src/hb-backend.c:237 src/hb-backend.c:270
-#: src/hb-backend.c:281 src/hb-backend.c:308 src/hb-backend.c:393
-#: src/hb-backend.c:2593 src/hb-backend.c:2819 src/subtitlehandler.c:1368
+#: src/ghb3.ui:2464 src/hb-backend.c:60 src/hb-backend.c:72
+#: src/hb-backend.c:85 src/hb-backend.c:124 src/hb-backend.c:237
+#: src/hb-backend.c:270 src/hb-backend.c:281 src/hb-backend.c:308
+#: src/hb-backend.c:393 src/hb-backend.c:2593 src/hb-backend.c:2819
+#: src/subtitlehandler.c:1368
 msgid "None"
 msgstr "Cap"
 
@@ -688,8 +663,7 @@ msgid ""
 "This allows a player to initiate playback before downloading the entire file."
 msgstr ""
 "Optimitza la disposició del fitxer MP4 per a la baixada progressiva.\n"
-"Això fa que un reproductor pugui iniciar la reproducció abans de baixar tot "
-"el fitxer."
+"Això fa que un reproductor pugui iniciar la reproducció abans de baixar tot el fitxer."
 
 #: src/ghb3.ui:2930
 msgid "Align A/V Start"
@@ -702,10 +676,8 @@ msgid ""
 "sync for broken players that do not honor MP4 edit lists."
 msgstr ""
 "Alinea les marques horàries inicials de tots els fluxos d'àudio i vídeo\n"
-"mitjançant la inserció de fotogrames buits o descartant-los. Pot millorar "
-"la\n"
-"sincronització de l'àudio i del vídeo en reproductors mal fets que no fan "
-"cas a les llistes d'edició MP4."
+"mitjançant la inserció de fotogrames buits o descartant-los. Pot millorar la\n"
+"sincronització de l'àudio i del vídeo en reproductors mal fets que no fan cas a les llistes d'edició MP4."
 
 #: src/ghb3.ui:2952
 msgid "iPod 5G Support"
@@ -864,16 +836,13 @@ msgstr "Aspecte del píxel:"
 msgid ""
 "Pixel aspect defines the shape of the pixels.\n"
 "\n"
-"A 1:1 ratio defines a square pixel.  Other values define rectangular "
-"shapes.\n"
+"A 1:1 ratio defines a square pixel.  Other values define rectangular shapes.\n"
 "Players will scale the image in order to achieve the specified aspect."
 msgstr ""
 "L'aspecte del píxel defineix la forma dels píxels.\n"
 "\n"
-"Una relació 1:1 defineix un píxel quadrat.  Altres valors defineixen formes "
-"rectangulars.\n"
-"Els reproductors escalaran la imatge per tal d'aconseguir l'aspecte "
-"especificat."
+"Una relació 1:1 defineix un píxel quadrat.  Altres valors defineixen formes rectangulars.\n"
+"Els reproductors escalaran la imatge per tal d'aconseguir l'aspecte especificat."
 
 #: src/ghb3.ui:3771
 msgid ":"
@@ -882,15 +851,12 @@ msgstr ":"
 #: src/ghb3.ui:3786
 msgid ""
 "Pixel aspect defines the shape of the pixels.\n"
-"A 1:1 ratio defines a square pixel.  Other values define rectangular "
-"shapes.\n"
+"A 1:1 ratio defines a square pixel.  Other values define rectangular shapes.\n"
 "Players will scale the image in order to achieve the specified aspect."
 msgstr ""
 "L'aspecte del píxel defineix la forma dels píxels.\n"
-"Una relació 1:1 defineix un píxel quadrat.  Altres valors defineixen formes "
-"rectangulars.\n"
-"Els reproductors escalaran la imatge per tal d'aconseguir l'aspecte "
-"especificat."
+"Una relació 1:1 defineix un píxel quadrat.  Altres valors defineixen formes rectangulars.\n"
+"Els reproductors escalaran la imatge per tal d'aconseguir l'aspecte especificat."
 
 #: src/ghb3.ui:3805
 msgid "Scaled Size:"
@@ -899,22 +865,18 @@ msgstr "Mida de l'escalat:"
 #: src/ghb3.ui:3820
 msgid ""
 "This is the width that the video will be stored at.\n"
-"The actual display dimensions will differ if the pixel aspect ratio is not "
-"1:1."
+"The actual display dimensions will differ if the pixel aspect ratio is not 1:1."
 msgstr ""
 "Aquesta és l'amplada en la qual s'emmagatzemarà el vídeo.\n"
-"Les dimensions reals a visualitzar diferiran si la relació d'aspecte del "
-"píxel no és 1:1."
+"Les dimensions reals a visualitzar diferiran si la relació d'aspecte del píxel no és 1:1."
 
 #: src/ghb3.ui:3853
 msgid ""
 "This is the height that the video will be stored at.\n"
-"The actual display dimensions will differ if the pixel aspect ratio is not "
-"1:1."
+"The actual display dimensions will differ if the pixel aspect ratio is not 1:1."
 msgstr ""
 "Aquesta és l'alçada en la qual s'emmagatzemarà el vídeo.\n"
-"Les dimensions reals a visualitzar diferiran si la relació d'aspecte del "
-"píxel no és 1:1."
+"Les dimensions reals a visualitzar diferiran si la relació d'aspecte del píxel no és 1:1."
 
 #: src/ghb3.ui:3867
 msgid "Optimal Size"
@@ -929,10 +891,11 @@ msgid "Allow Upscaling"
 msgstr "Permet augmentar l'escalat"
 
 #: src/ghb3.ui:3892
-msgid "If not enabled, scaled dimensions will be limited to source dimensions."
+msgid ""
+"If not enabled, scaled dimensions will be limited to source dimensions."
 msgstr ""
-"Si no està habilitat, les dimensions escalades es limitaran a les dimensions "
-"d'origen."
+"Si no està habilitat, les dimensions escalades es limitaran a les dimensions"
+" d'origen."
 
 #: src/ghb3.ui:3917
 msgid "<b>Resolution &amp; Scaling</b>"
@@ -999,13 +962,11 @@ msgstr "Detelecine:"
 msgid ""
 "This filter removes 'combing' artifacts that are the result of telecining.\n"
 "\n"
-"Telecining is a process that adjusts film framerates that are 24fps to NTSC "
-"video frame rates which are 30fps."
+"Telecining is a process that adjusts film framerates that are 24fps to NTSC video frame rates which are 30fps."
 msgstr ""
 "Aquest filtre elimina els defectes combinats provocats pel telecining.\n"
 "\n"
-"El telecining és un procés que ajusta la velocitat dels fotogrames de la "
-"pel·lícula de 24 fps a la velocitat de fotogrames de vídeo NTSC, de 30 fps."
+"El telecining és un procés que ajusta la velocitat dels fotogrames de la pel·lícula de 24 fps a la velocitat de fotogrames de vídeo NTSC, de 30 fps."
 
 #: src/ghb3.ui:4373 src/ghb3.ui:4919
 msgid ""
@@ -1062,7 +1023,6 @@ msgstr ""
 "El filtre de desentrellaçat és un desentrellaçador YADIF clàssic.\n"
 
 #: src/ghb3.ui:4497
-#, fuzzy
 msgid ""
 "Choose decomb or deinterlace filter options.\n"
 "\n"
@@ -1070,10 +1030,6 @@ msgid ""
 "    The deinterlace filter is a classic YADIF deinterlacer.\n"
 "    "
 msgstr ""
-"Trieu el filtre decomb o de desentrellaçat.\n"
-"\n"
-"El filtre decomb suporta una varietat d'algorismes d'interpolació.\n"
-"El filtre de desentrellaçat és un desentrellaçador YADIF clàssic.\n"
 
 #: src/ghb3.ui:4527
 msgid "Deblock Filter:"
@@ -1093,24 +1049,17 @@ msgid "Tune:"
 msgstr "Ajusta:"
 
 #: src/ghb3.ui:4577
-#, fuzzy
 msgid ""
 "The deblocking filter removes a common type of compression artifact.\n"
 "    If your source exhibits 'blockiness', this filter may help clean it up."
 msgstr ""
-"El filtre Deblock esborra els artefactes de compressió més típics.\n"
-"Si l'origen té blocs de compressió, aquest filtre pot ajudar a netejar-los."
 
 #: src/ghb3.ui:4585 src/ghb3.ui:4768
-#, fuzzy
 msgid ""
 "Custom deblock filter string format\n"
 "\n"
 "    strength=weak|strong:thresh=0-100:blocksize=4-512"
 msgstr ""
-"Format personalitzat del filtre Deblock\n"
-"\n"
-"strength=weak|strong:thresh=0-100:blocksize=4-512"
 
 #: src/ghb3.ui:4606
 msgid "Denoise Filter:"
@@ -1119,40 +1068,26 @@ msgstr "Filtre per treure el soroll:"
 #: src/ghb3.ui:4622
 msgid ""
 "Denoise filtering reduces or removes the appearance of noise and grain.\n"
-"Film grain and other types of high frequency noise are difficult to "
-"compress.\n"
+"Film grain and other types of high frequency noise are difficult to compress.\n"
 "Using this filter on such sources can result in smaller file sizes."
 msgstr ""
-"El filtre per treure el soroll elimina o redueix l'aparença de soroll i "
-"gra.\n"
-"El gra de pel·lícula i altres menes de soroll d'alta freqüència són difícils "
-"de comprimir.\n"
+"El filtre per treure el soroll elimina o redueix l'aparença de soroll i gra.\n"
+"El gra de pel·lícula i altres menes de soroll d'alta freqüència són difícils de comprimir.\n"
 "L'ús d'aquest filtre en aquests origens pot generar fitxer més petits."
 
 #: src/ghb3.ui:4657 src/ghb3.ui:4680
-#, fuzzy
 msgid ""
 "Denoise filtering reduces or removes the appearance of noise and grain.\n"
-"    Film grain and other types of high frequency noise are difficult to "
-"compress.\n"
+"    Film grain and other types of high frequency noise are difficult to compress.\n"
 "    Using this filter on such sources can result in smaller file sizes."
 msgstr ""
-"El filtre per treure el soroll elimina o redueix l'aparença de soroll i "
-"gra.\n"
-"El gra de pel·lícula i altres menes de soroll d'alta freqüència són difícils "
-"de comprimir.\n"
-"L'ús d'aquest filtre en aquests origens pot generar fitxer més petits."
 
 #: src/ghb3.ui:4689 src/ghb3.ui:4869
-#, fuzzy
 msgid ""
 "Custom denoise filter string format\n"
 "\n"
 "    SpatialLuma:SpatialChroma:TemporalLuma:TemporalChroma"
 msgstr ""
-"Format personalitzat del filtre per treure el soroll\n"
-"\n"
-"SpatialLuma:SpatialChroma:TemporalLuma:TemporalChroma"
 
 #: src/ghb3.ui:4710
 msgid "Chroma Smooth Filter:"
@@ -1163,21 +1098,14 @@ msgid ""
 "The chroma smooth filter removes common color artifacts.\n"
 "Lower resolution analog source content may benefit from this filter."
 msgstr ""
-"El filtre de suavització de la crominància elimina alguns defectes de color "
-"típics.\n"
-"El contingut d'un origen analògic de baixa resolució podria beneficiar-se "
-"d'aquest filtre."
+"El filtre de suavització de la crominància elimina alguns defectes de color típics.\n"
+"El contingut d'un origen analògic de baixa resolució podria beneficiar-se d'aquest filtre."
 
 #: src/ghb3.ui:4760
-#, fuzzy
 msgid ""
 "The chroma smooth filter removes common color artifacts.\n"
 "    Lower resolution analog source content may benefit from this filter."
 msgstr ""
-"El filtre de suavització de la crominància elimina alguns defectes de color "
-"típics.\n"
-"El contingut d'un origen analògic de baixa resolució podria beneficiar-se "
-"d'aquest filtre."
 
 #: src/ghb3.ui:4789
 msgid "Sharpen Filter:"
@@ -1192,13 +1120,10 @@ msgstr ""
 "components d'alta freqüència al vídeo."
 
 #: src/ghb3.ui:4839 src/ghb3.ui:4861
-#, fuzzy
 msgid ""
 "Sharpen filtering enhances edges and other\n"
 "    high frequency components in the video."
 msgstr ""
-"El filtre de nitidesa millora les vores i altres\n"
-"components d'alta freqüència al vídeo."
 
 #: src/ghb3.ui:4890
 msgid "Colorspace:"
@@ -1301,14 +1226,10 @@ msgstr ""
 "El codificador apunta a una certa qualitat.\n"
 "L'escala utilitzada per cada codificador de vídeo és diferent.\n"
 "\n"
-"L'escala de x264 és logarítmica i els valors més baixos corresponen a una "
-"qualitat més alta.\n"
-"Per a disminució tan petita del valor resultarà en increments "
-"progressivament més grans\n"
-"a la mida del fitxer resultant.  Un valor de 0 significa sense pèrdua i "
-"resultarà\n"
-"en una mida de fitxer que sigui més gran que la font original, llevat que la "
-"font\n"
+"L'escala de x264 és logarítmica i els valors més baixos corresponen a una qualitat més alta.\n"
+"Per a disminució tan petita del valor resultarà en increments progressivament més grans\n"
+"a la mida del fitxer resultant.  Un valor de 0 significa sense pèrdua i resultarà\n"
+"en una mida de fitxer que sigui més gran que la font original, llevat que la font\n"
 "Tampoc va tenir pèrdues.\n"
 "\n"
 "L'escala de FFmpeg i Theora és més lineal.\n"
@@ -1327,76 +1248,53 @@ msgid ""
 "Set the average bitrate.\n"
 "\n"
 "The instantaneous bitrate can be much higher or lower at any point in time.\n"
-"But the average over a long duration will be the value set here.  If you "
-"need\n"
-"to limit instantaneous bitrate, look into x264's vbv-bufsize and vbv-maxrate "
-"settings."
+"But the average over a long duration will be the value set here.  If you need\n"
+"to limit instantaneous bitrate, look into x264's vbv-bufsize and vbv-maxrate settings."
 msgstr ""
 "Estableix la taxa de bits mitjana.\n"
 "\n"
-"La taxa de bits instantània pot ser molt més alta o més baixa en qualsevol "
-"moment.\n"
-"Però la mitjana d'una durada llarga serà el valor establert aquí. Si "
-"necessiteu\n"
-"limitar la velocitat de bits instantània, mireu els paràmetres vbv-bufsize i "
-"vbv-maxrate de x264."
+"La taxa de bits instantània pot ser molt més alta o més baixa en qualsevol moment.\n"
+"Però la mitjana d'una durada llarga serà el valor establert aquí. Si necessiteu\n"
+"limitar la velocitat de bits instantània, mireu els paràmetres vbv-bufsize i vbv-maxrate de x264."
 
 #: src/ghb3.ui:5233
-#, fuzzy
 msgid "Multi-Pass Encoding"
-msgstr "Codificació en 2 passades"
+msgstr ""
 
 #: src/ghb3.ui:5238
-#, fuzzy
 msgid ""
 "Perform Multi Pass Encoding.\n"
 "\n"
-"The 'Bitrate' option is prerequisite. During the analysis passes, statistics "
-"about\n"
+"The 'Bitrate' option is prerequisite. During the analysis passes, statistics about\n"
 "the video are collected.  Then in the final pass, those statistics are used\n"
 "to make bitrate allocation decisions."
 msgstr ""
-"Realitza la codificació en 2 passades.\n"
-"\n"
-"L'opció «Taxa de bits» és un requisit previ. Durant la primera passada es\n"
-"recullen les estadístiques del vídeo. Després, durant la segona passada,\n"
-"s'utilitzen aquestes estadístiques per prendre decisions d'assignació de "
-"taxa de bits."
 
 #: src/ghb3.ui:5256
-#, fuzzy
 msgid "Turbo Analysis Pass"
-msgstr "Primera passada en mode turbo"
+msgstr ""
 
 #: src/ghb3.ui:5261
-#, fuzzy
 msgid ""
 "During the analysis pass of a multi pass encode, use settings that speed "
 "things along."
 msgstr ""
-"Durant la primera passada d'una codificació de 2 passades, utilitza "
-"paràmetres que ho facin anar més ràpid."
 
 #: src/ghb3.ui:5323
 msgid ""
-"Adjusts encoder settings to trade off compression efficiency against "
-"encoding speed.\n"
+"Adjusts encoder settings to trade off compression efficiency against encoding speed.\n"
 "\n"
 "This establishes your default encoder settings.\n"
 "Tunes, profiles, levels and extra options string will be applied to this.\n"
-"You should generally set this option to the slowest you can bear since "
-"slower\n"
+"You should generally set this option to the slowest you can bear since slower\n"
 "settings will result in better quality or smaller files."
 msgstr ""
-"Ajusta la configuració del codificador per a compensar l'eficiència de "
-"compressió amb la velocitat de codificació.\n"
+"Ajusta la configuració del codificador per a compensar l'eficiència de compressió amb la velocitat de codificació.\n"
 "\n"
 "Això estableix la configuració predeterminada del codificador.\n"
-"S'hi aplicaran els ajustaments, els perfils, els nivells i les opcions "
-"addicionals.\n"
-"Normalment hauríeu d'establir aquesta opció al més lent que pugueu suportar, "
-"ja que\n"
-"configuració més lenta donarà lloc a fitxers de millor qualitat o més petits."
+"S'hi aplicaran els ajustaments, els perfils, els nivells i les opcions addicionals.\n"
+"Normalment, hauríeu d'establir aquesta opció al més lent que pugueu suportar, ja que una\n"
+"configuració més lenta generarà fitxers de millor qualitat o més petits."
 
 #: src/ghb3.ui:5366
 msgid ""
@@ -1408,8 +1306,7 @@ msgid ""
 msgstr ""
 "Ajusta la configuració per a optimitzar els escenaris habituals.\n"
 "\n"
-"Això pot millorar l'eficiència per a característiques d'origen particulars o "
-"establir\n"
+"Això pot millorar l'eficiència per a característiques d'origen particulars o establir\n"
 "característiques del fitxer de sortida. Els canvis s'aplicaran després dels\n"
 "valors predefinits, però abans de tots els altres paràmetres."
 
@@ -1425,8 +1322,7 @@ msgid ""
 msgstr ""
 "Redueix l'ús de la CPU per part del descodificador.\n"
 "\n"
-"Establiu-ho si el dispositiu té dificultats per reproduir el vídeo (si ha de "
-"descartar fotogrames)."
+"Establiu-ho si el dispositiu té dificultats per reproduir el vídeo (si ha de descartar fotogrames)."
 
 #: src/ghb3.ui:5405
 msgid "Zero Latency"
@@ -1441,8 +1337,7 @@ msgid ""
 "Since HandBrake is not suitable for live stream broadcast purposes,\n"
 "this setting is of little value here."
 msgstr ""
-"Minimitza la latència entre l'entrada al codificador i la sortida del "
-"descodificador.\n"
+"Minimitza la latència entre l'entrada al codificador i la sortida del descodificador.\n"
 "\n"
 "Això és útil per les transmissions en directe.\n"
 "\n"
@@ -1533,12 +1428,10 @@ msgstr "Trieu quines pistes d'àudio s'utilitzaran en el mitjà d'origen."
 #: src/ghb3.ui:5804
 msgid ""
 "Create a list of languages you would like to select audio for.\n"
-"Tracks matching these languages will be selected using the chosen Selection "
-"Behavior."
+"Tracks matching these languages will be selected using the chosen Selection Behavior."
 msgstr ""
 "Creeu una llista de llengües per a les quals voleu seleccionar àudio.\n"
-"Les pistes que coincideixin amb aquestes llengües se seleccionaran "
-"utilitzant el comportament de selecció escollit."
+"Les pistes que coincideixin amb aquestes llengües se seleccionaran utilitzant el comportament de selecció escollit."
 
 #: src/ghb3.ui:5835 src/ghb3.ui:6632
 msgid "Remove"
@@ -1559,13 +1452,10 @@ msgstr "Utilitza només el primer codificador per a l'àudio secundari"
 #: src/ghb3.ui:5887
 msgid ""
 "Only the primary audio track will be encoded with the full encoder list.\n"
-"All other secondary audio output tracks will be encoded with first encoder "
-"only."
+"All other secondary audio output tracks will be encoded with first encoder only."
 msgstr ""
-"Només es codificarà la pista d'àudio primària amb la llista completa de "
-"codificadors.\n"
-"Totes les altres pistes de sortida d'àudio secundàries es codificaran només "
-"amb el primer codificador."
+"Només es codificarà la pista d'àudio primària amb la llista completa de codificadors.\n"
+"Totes les altres pistes de sortida d'àudio secundàries es codificaran només amb el primer codificador."
 
 #: src/ghb3.ui:5923
 msgid "Auto Passthru:"
@@ -1578,12 +1468,10 @@ msgstr "MP2"
 #: src/ghb3.ui:5939
 msgid ""
 "Enable this if your playback device supports MP2.\n"
-"This permits MP2 passthru to be selected when automatic passthru selection "
-"is enabled."
+"This permits MP2 passthru to be selected when automatic passthru selection is enabled."
 msgstr ""
 "Activeu-ho si el dispositiu de reproducció admet MP2.\n"
-"Permet seleccionar el pas directe de MP2 quan el mode de pas directe "
-"automàtic és actiu."
+"Permet seleccionar el pas directe de MP2 quan el mode de pas directe automàtic és actiu."
 
 #: src/ghb3.ui:5955
 msgid "MP3"
@@ -1592,12 +1480,10 @@ msgstr "MP3"
 #: src/ghb3.ui:5960
 msgid ""
 "Enable this if your playback device supports MP3.\n"
-"This permits MP3 passthru to be selected when automatic passthru selection "
-"is enabled."
+"This permits MP3 passthru to be selected when automatic passthru selection is enabled."
 msgstr ""
 "Activeu-ho si el dispositiu de reproducció admet MP3.\n"
-"Permet seleccionar el pas directe de MP3 quan el mode de pas directe "
-"automàtic és actiu."
+"Permet seleccionar el pas directe de MP3 quan el mode de pas directe automàtic és actiu."
 
 #: src/ghb3.ui:5976
 msgid "AC-3"
@@ -1606,12 +1492,10 @@ msgstr "AC-3"
 #: src/ghb3.ui:5981
 msgid ""
 "Enable this if your playback device supports AC-3.\n"
-"This permits AC-3 passthru to be selected when automatic passthru selection "
-"is enabled."
+"This permits AC-3 passthru to be selected when automatic passthru selection is enabled."
 msgstr ""
 "Activeu-ho si el dispositiu de reproducció admet AC-3.\n"
-"Permet seleccionar el pas directe de AC-3 quan el mode de pas directe "
-"automàtic és actiu."
+"Permet seleccionar el pas directe d'AC-3 quan el mode de pas directe automàtic és actiu."
 
 #: src/ghb3.ui:5997
 msgid "EAC-3"
@@ -1620,12 +1504,10 @@ msgstr "EAC-3"
 #: src/ghb3.ui:6002
 msgid ""
 "Enable this if your playback device supports EAC-3.\n"
-"This permits EAC-3 passthru to be selected when automatic passthru selection "
-"is enabled."
+"This permits EAC-3 passthru to be selected when automatic passthru selection is enabled."
 msgstr ""
 "Activeu-ho si el dispositiu de reproducció admet EAC-3.\n"
-"Permet seleccionar el pas directe d'EAC-3 quan el mode de pas directe "
-"automàtic és actiu."
+"Permet seleccionar el pas directe d'EAC-3 quan el mode de pas directe automàtic és actiu."
 
 #: src/ghb3.ui:6018
 msgid "DTS"
@@ -1634,12 +1516,10 @@ msgstr "DTS"
 #: src/ghb3.ui:6023
 msgid ""
 "Enable this if your playback device supports DTS.\n"
-"This permits DTS passthru to be selected when automatic passthru selection "
-"is enabled."
+"This permits DTS passthru to be selected when automatic passthru selection is enabled."
 msgstr ""
 "Activeu-ho si el dispositiu de reproducció admet DTS.\n"
-"Permet seleccionar el pas directe de DTS quan el mode de pas directe "
-"automàtic és actiu."
+"Permet seleccionar el pas directe de DTS quan el mode de pas directe automàtic és actiu."
 
 #: src/ghb3.ui:6039
 msgid "DTS-HD"
@@ -1648,12 +1528,10 @@ msgstr "DTS-HD"
 #: src/ghb3.ui:6044
 msgid ""
 "Enable this if your playback device supports DTS-HD.\n"
-"This permits DTS-HD passthru to be selected when automatic passthru "
-"selection is enabled."
+"This permits DTS-HD passthru to be selected when automatic passthru selection is enabled."
 msgstr ""
 "Activeu-ho si el dispositiu de reproducció admet DTS-HD.\n"
-"Permet seleccionar el pas directe de DTS-HD quan el mode de pas directe "
-"automàtic és actiu."
+"Permet seleccionar el pas directe de DTS-HD quan el mode de pas directe automàtic és actiu."
 
 #: src/ghb3.ui:6060
 msgid "TrueHD"
@@ -1662,12 +1540,10 @@ msgstr "TrueHD"
 #: src/ghb3.ui:6065
 msgid ""
 "Enable this if your playback device supports TrueHD.\n"
-"This permits TrueHD passthru to be selected when automatic passthru "
-"selection is enabled."
+"This permits TrueHD passthru to be selected when automatic passthru selection is enabled."
 msgstr ""
 "Activeu-ho si el dispositiu de reproducció admet TrueHD.\n"
-"Permet seleccionar el pas directe de TrueHD quan el mode de pas directe "
-"automàtic és actiu."
+"Permet seleccionar el pas directe de TrueHD quan el mode de pas directe automàtic és actiu."
 
 #: src/ghb3.ui:6081
 msgid "FLAC"
@@ -1676,12 +1552,10 @@ msgstr "FLAC"
 #: src/ghb3.ui:6086
 msgid ""
 "Enable this if your playback device supports FLAC.\n"
-"This permits FLAC passthru to be selected when automatic passthru selection "
-"is enabled."
+"This permits FLAC passthru to be selected when automatic passthru selection is enabled."
 msgstr ""
 "Activeu-ho si el dispositiu de reproducció admet FLAC.\n"
-"Permet seleccionar el pas directe de FLAC quan el mode de pas directe "
-"automàtic és actiu."
+"Permet seleccionar el pas directe de FLAC quan el mode de pas directe automàtic és actiu."
 
 #: src/ghb3.ui:6102
 msgid "AAC"
@@ -1690,12 +1564,10 @@ msgstr "AAC"
 #: src/ghb3.ui:6107
 msgid ""
 "Enable this if your playback device supports AAC.\n"
-"This permits AAC passthru to be selected when automatic passthru selection "
-"is enabled."
+"This permits AAC passthru to be selected when automatic passthru selection is enabled."
 msgstr ""
 "Activeu-ho si el dispositiu de reproducció admet AAC.\n"
-"Permet seleccionar el pas directe d'AAC quan el mode de pas directe "
-"automàtic és actiu."
+"Permet seleccionar el pas directe d'AAC quan el mode de pas directe automàtic és actiu."
 
 #: src/ghb3.ui:6123
 msgid "Opus"
@@ -1704,12 +1576,10 @@ msgstr "Opus"
 #: src/ghb3.ui:6128
 msgid ""
 "Enable this if your playback device supports Opus.\n"
-"This permits Opus passthru to be selected when automatic passthru selection "
-"is enabled."
+"This permits Opus passthru to be selected when automatic passthru selection is enabled."
 msgstr ""
 "Activeu-ho si el dispositiu de reproducció admet Opus.\n"
-"Permet seleccionar el pas directe d'Opus quan el mode de pas directe "
-"automàtic és actiu."
+"Permet seleccionar el pas directe d'Opus quan el mode de pas directe automàtic és actiu."
 
 #: src/ghb3.ui:6161
 msgid "Passthru Fallback:"
@@ -1774,7 +1644,8 @@ msgid "Add all subtitle tracks to the list"
 msgstr "Afegeix totes les pistes de subtítols a la llista"
 
 #: src/ghb3.ui:6420 src/callbacks.c:2356 src/queuehandler.c:647
-#: src/queuehandler.c:1083 src/subtitlehandler.c:414 src/subtitlehandler.c:1245
+#: src/queuehandler.c:1083 src/subtitlehandler.c:414
+#: src/subtitlehandler.c:1245
 msgid "Foreign Audio Scan"
 msgstr "Explora l'àudio estranger"
 
@@ -1800,22 +1671,16 @@ msgstr "Trieu quines pistes de subtítols s'utilitzaran."
 #: src/ghb3.ui:6596
 msgid ""
 "Create a list of languages you would like to select subtitles for.\n"
-"Tracks matching these languages will be selected using the chosen Selection "
-"Behavior.\n"
+"Tracks matching these languages will be selected using the chosen Selection Behavior.\n"
 "\n"
-"The first language in this list is your \"preferred\" language and will be "
-"used\n"
+"The first language in this list is your \"preferred\" language and will be used\n"
 "for determining subtitle selection settings when there is foreign audio."
 msgstr ""
-"Creeu una llista de llengües per a les quals voleu seleccionar els "
-"subtítols.\n"
-"Les pistes que coincideixin amb aquestes llengües se seleccionaran "
-"utilitzant el comportament de selecció escollit.\n"
+"Creeu una llista de llengües per a les quals voleu seleccionar els subtítols.\n"
+"Les pistes que coincideixin amb aquestes llengües se seleccionaran utilitzant el comportament de selecció escollit.\n"
 "\n"
-"La primera llengua d'aquesta llista serà la vostra llengua \"preferida”, i "
-"s'utilitzarà\n"
-"per a determinar la configuració de la selecció de subtítols quan hi ha un "
-"àudio estranger."
+"La primera llengua d'aquesta llista serà la vostra llengua «preferida», i es farà servir\n"
+"per a determinar la configuració de la selecció de subtítols quan hi ha un àudio estranger."
 
 #: src/ghb3.ui:6677
 msgid "Preferred Language: None"
@@ -1827,20 +1692,15 @@ msgstr "Afegeix una passada d'exploració d'àudio estranger"
 
 #: src/ghb3.ui:6709
 msgid ""
-"Add \"Foreign Audio Scan\" when the default audio track is your preferred "
-"language.\n"
-"This search pass finds short sequences of foreign audio and provides "
-"subtitles for them.\n"
+"Add \"Foreign Audio Scan\" when the default audio track is your preferred language.\n"
+"This search pass finds short sequences of foreign audio and provides subtitles for them.\n"
 "\n"
 "This option requires a language to be set in the Selected Languages list."
 msgstr ""
-"Afegeix «Explora l'àudio estranger» quan la pista d'àudio predeterminada "
-"estigui en la meva llengua preferida.\n"
-"Aquesta passada de recerca troba seqüències curtes d'àudio estranger i "
-"proporciona els seus subtítols.\n"
+"Afegeix «Explora l'àudio estranger» quan la pista d'àudio predeterminada estigui en la meva llengua preferida.\n"
+"Aquesta passada de recerca troba seqüències curtes d'àudio estranger i proporciona els seus subtítols.\n"
 "\n"
-"Aquesta opció requereix que s'estableixi una llengua a la llista d'idiomes "
-"seleccionats."
+"Aquesta opció requereix que s'estableixi una llengua a la llista d'idiomes seleccionats."
 
 #: src/ghb3.ui:6724
 msgid "Add subtitle track if default audio is foreign"
@@ -1848,16 +1708,13 @@ msgstr "Afegeix una pista de subtítols si l'àudio predeterminat és estranger"
 
 #: src/ghb3.ui:6729
 msgid ""
-"When the default audio track is not your preferred language, add a subtitle "
-"track.\n"
+"When the default audio track is not your preferred language, add a subtitle track.\n"
 "\n"
 "This option requires a language to be set in the Selected Languages list."
 msgstr ""
-"Quan la pista d'àudio predeterminada no estigui en la meva llengua "
-"preferida, afegeix una pista de subtítols.\n"
+"Quan la pista d'àudio predeterminada no estigui en la meva llengua preferida, afegeix una pista de subtítols.\n"
 "\n"
-"Aquesta opció requereix que s'estableixi un idioma a la llista d'idiomes "
-"seleccionats."
+"Aquesta opció requereix que s'estableixi un idioma a la llista d'idiomes seleccionats."
 
 #: src/ghb3.ui:6743
 msgid "Add Closed Captions when available"
@@ -1879,17 +1736,13 @@ msgstr "Comportament de l'enregistrament*:"
 msgid ""
 "Set the behavior of subtitle \"Burn-In\".\n"
 "\n"
-"Burned-In subtitles are part of the video and can not be disabled during "
-"playback.\n"
-"Only one subtitle track can be burned! Since conflicts can occur, the first "
-"chosen wins."
+"Burned-In subtitles are part of the video and can not be disabled during playback.\n"
+"Only one subtitle track can be burned! Since conflicts can occur, the first chosen wins."
 msgstr ""
 "Estableix el comportament dels subtítols incrustats.\n"
 "\n"
-"Els subtítols incrustats formen part del vídeo i no es poden desactivar "
-"durant la reproducció.\n"
-"Només es pot enregistrar una pista de subtítols. Com que poden produir-se "
-"conflictes, es triarà la primera."
+"Els subtítols incrustats formen part del vídeo i no es poden desactivar durant la reproducció.\n"
+"Només es pot enregistrar una pista de subtítols. Com que poden produir-se conflictes, es triarà la primera."
 
 #: src/ghb3.ui:6808
 msgid "Burn-In for deficient players*:"
@@ -1901,21 +1754,15 @@ msgstr "DVD Subtitles"
 
 #: src/ghb3.ui:6822
 msgid ""
-"Burn the first selected DVD subtitle track. All other DVD subtitle tracks "
-"will be discarded.\n"
-"Use this option if your player software or device does not support DVD "
-"subtitles.\n"
+"Burn the first selected DVD subtitle track. All other DVD subtitle tracks will be discarded.\n"
+"Use this option if your player software or device does not support DVD subtitles.\n"
 "\n"
-"Only one subtitle track can be burned! Since conflicts can occur, the first "
-"chosen wins."
+"Only one subtitle track can be burned! Since conflicts can occur, the first chosen wins."
 msgstr ""
-"Enregistra la primera pista de subtítols de DVD seleccionada. Es descartaran "
-"totes les altres pistes de subtítols de DVD.\n"
-"Utilitzeu aquesta opció si el vostre reproductor o dispositiu no admet "
-"subtítols de DVD.\n"
+"Enregistra la primera pista de subtítols de DVD seleccionada. Es descartaran totes les altres pistes de subtítols de DVD.\n"
+"Utilitzeu aquesta opció si el vostre reproductor o dispositiu no admet subtítols de DVD.\n"
 "\n"
-"Només es pot enregistrar una pista de subtítols. Com que poden produir-se "
-"conflictes, es triarà la primera."
+"Només es pot enregistrar una pista de subtítols. Com que poden produir-se conflictes, es triarà la primera."
 
 #: src/ghb3.ui:6836
 msgid "Blu-ray Subtitles"
@@ -1923,21 +1770,15 @@ msgstr "Blu-ray Subtitles"
 
 #: src/ghb3.ui:6841
 msgid ""
-"Burn the first selected Blu-ray subtitle track. All other Blu-ray subtitle "
-"tracks will be discarded.\n"
-"Use this option if your player software or device does not support Blu-ray "
-"subtitles.\n"
+"Burn the first selected Blu-ray subtitle track. All other Blu-ray subtitle tracks will be discarded.\n"
+"Use this option if your player software or device does not support Blu-ray subtitles.\n"
 "\n"
-"Only one subtitle track can be burned! Since conflicts can occur, the first "
-"chosen wins."
+"Only one subtitle track can be burned! Since conflicts can occur, the first chosen wins."
 msgstr ""
-"Enregistra la primera pista de subtítols Blu-ray seleccionada. Es "
-"descartaran totes les altres pistes de subtítols Blu-ray.\n"
-"Utilitzeu aquesta opció si el vostre reproductor o dispositiu no admet "
-"subtítols Blu-ray.\n"
+"Enregistra la primera pista de subtítols Blu-ray seleccionada. Es descartaran totes les altres pistes de subtítols Blu-ray.\n"
+"Utilitzeu aquesta opció si el vostre reproductor o dispositiu no admet subtítols Blu-ray.\n"
 "\n"
-"Només es pot enregistrar una pista de subtítols. Com que poden produir-se "
-"conflictes, es triarà la primera."
+"Només es pot enregistrar una pista de subtítols. Com que poden produir-se conflictes, es triarà la primera."
 
 #: src/ghb3.ui:6863
 msgid ""
@@ -1968,18 +1809,16 @@ msgid "Add chapter markers to output file."
 msgstr "Afegeix marcadors de capítol al fitxer de sortida."
 
 #: src/ghb3.ui:6922
-#, fuzzy
 msgid "Import Chapters"
-msgstr "Capítols"
+msgstr ""
 
 #: src/ghb3.ui:6926
 msgid "Import chapter list from an XML file"
 msgstr ""
 
 #: src/ghb3.ui:6937
-#, fuzzy
 msgid "Export Chapters"
-msgstr "Capítols"
+msgstr ""
 
 #: src/ghb3.ui:6941
 msgid "Export chapter list as an XML file"
@@ -2054,9 +1893,8 @@ msgid "Destination Directory"
 msgstr "Directori de destinació"
 
 #: src/ghb3.ui:7545
-#, fuzzy
 msgid "Add Multiple Titles"
-msgstr "Afegeix-ne _múltiples"
+msgstr "Afegeix diversos títols"
 
 #: src/ghb3.ui:7553 src/ghb3.ui:8590 src/ghb3.ui:8747 src/ghb3.ui:9313
 #: src/ghb3.ui:9723 src/callbacks.c:5610 src/callbacks.c:5618
@@ -2116,18 +1954,15 @@ msgid "Auto-Name Template"
 msgstr "Plantilla del nom automàtic"
 
 #: src/ghb3.ui:7896
-#, fuzzy
 msgid ""
-"Available Options: {source-path} {source} {title} {preset} {chapters} {date} "
-"{time} {creation-date} {creation-time} {modification-date} {modification-"
+"Available Options: {source-path} {source} {title} {preset} {chapters} {date}"
+" {time} {creation-date} {creation-time} {modification-date} {modification-"
 "time} {codec} {bit-depth} {quality} {bitrate} {width} {height}"
 msgstr ""
-"Opcions disponibles: {source-path} {source} {title} {preset} {chapters} "
-"{date} {time} {creation-date} {creation-time} {quality} {bitrate}"
 
 #: src/ghb3.ui:7916
 msgid "Use iPod/iTunes friendly (.m4v) file extension for MP4"
-msgstr "Usa l'extensió d'iPod/iTunes (.m4v) per els fitxers MP4"
+msgstr "Usa l'extensió d'iPod/iTunes (.m4v) pels fitxers MP4"
 
 #: src/ghb3.ui:7959
 msgid "Number of previews"
@@ -2144,13 +1979,10 @@ msgstr "Neteja els elements de cua completats en acabar la codificació"
 #: src/ghb3.ui:8015
 msgid ""
 "By default, completed jobs remain in the queue and are marked as complete.\n"
-"Check this if you want the queue to clean itself up by deleting completed "
-"jobs."
+"Check this if you want the queue to clean itself up by deleting completed jobs."
 msgstr ""
-"Per defecte, les tasques completades romanen a la cua i es marquen com a "
-"completes.\n"
-"Marqueu-ho si voleu que la cua es netegi ella sola, suprimint les tasques "
-"completades."
+"Per defecte, les tasques completades romanen a la cua i es marquen com a completes.\n"
+"Marqueu-ho si voleu que la cua es netegi ella sola, suprimint les tasques completades."
 
 #: src/ghb3.ui:8028
 msgid "Power Saving"
@@ -2204,26 +2036,17 @@ msgid ""
 "\n"
 "Changing this setting will require restarting HandBrake.\n"
 "\n"
-"This setting overrides the TEMP environment variable that is normally used "
-"to define this directory.\n"
+"This setting overrides the TEMP environment variable that is normally used to define this directory.\n"
 "\n"
-"Flatpak users may need to set this for certain workflows to work properly. "
-"The default size of the TEMP directory in a flatpak sandbox is 1/2 physical "
-"memory size and may be too small for things like the 2-pass stats file."
+"Flatpak users may need to set this for certain workflows to work properly. The default size of the TEMP directory in a flatpak sandbox is 1/2 physical memory size and may be too small for things like the 2-pass stats file."
 msgstr ""
-"Els fitxers temporals que crea el HandBrake es col·locaran en aquest "
-"directori.\n"
+"Els fitxers temporals que crea el HandBrake es col·locaran en aquest directori.\n"
 "\n"
 "Canviar aquesta configuració requereix reiniciar el HandBrake.\n"
 "\n"
-"Aquest paràmetre anul·la la variable d'entorn TEMP que s'utilitza normalment "
-"per definir aquest directori.\n"
+"Aquest paràmetre anul·la la variable d'entorn TEMP que s'utilitza normalment per definir aquest directori.\n"
 "\n"
-"És possible que els usuaris de Flatpak hagin d'establir això perquè certs "
-"fluxos de treball funcionin correctament. La mida per defecte del directori "
-"TEMP en un entorn de proves de flatpak és la meitat de la mida de la memòria "
-"física i pot ser massa petita per a coses com el fitxer d'estadístiques de 2 "
-"passades."
+"És possible que els usuaris de Flatpak hagin d'establir això perquè certs fluxos de treball funcionin correctament. La mida per defecte del directori TEMP en un entorn de proves de flatpak és la meitat de la mida de la memòria física i pot ser massa petita per a coses com el fitxer d'estadístiques de 2 passades."
 
 #: src/ghb3.ui:8156
 msgid "Temp Directory"
@@ -2235,7 +2058,7 @@ msgstr "Granularitat fraccional de qualitat constant"
 
 #: src/ghb3.ui:8213
 msgid "Use dvdnav (instead of libdvdread)"
-msgstr "Usa dvdnav (en comptes de de libdvdread)"
+msgstr "Usa dvdnav (en comptes de libdvdread)"
 
 #: src/ghb3.ui:8236
 msgid "Monitor destination disk free space"
@@ -2288,18 +2111,16 @@ msgid ""
 "When checked, every title will use the same settings when adding a\n"
 "batch of titles to the queue.\n"
 "\n"
-"Uncheck this if you want to allow changing each title's settings "
-"independently."
+"Uncheck this if you want to allow changing each title's settings independently."
 msgstr ""
 "Quan està marcada, cada títol utilitzarà la mateixa configuració quan\n"
 "s'afegeixi un lot de títols a la cua.\n"
 "\n"
-"Desmarqueu aquesta opció si voleu permetre canviar la configuració de cada "
-"títol de forma independent."
+"Desmarqueu aquesta opció si voleu permetre canviar la configuració de cada títol de forma independent."
 
 #: src/ghb3.ui:8494
 msgid "Show preview image in Summary tab"
-msgstr ""
+msgstr "Mostra la vista prèvia a la pestanya Resum"
 
 #: src/ghb3.ui:8500
 msgid ""
@@ -2320,9 +2141,8 @@ msgid "Advanced"
 msgstr "Avançat"
 
 #: src/ghb3.ui:8578
-#, fuzzy
 msgid "Rename Preset"
-msgstr "Valors predefinits del filtre per treure el soroll:"
+msgstr "Canvia el nom dels valors predefinits"
 
 #: src/ghb3.ui:8640
 msgid "<span size=\"x-large\">Rename Preset</span>"
@@ -2337,9 +2157,8 @@ msgid "<b>Description</b>"
 msgstr "<b>Descripció</b>"
 
 #: src/ghb3.ui:8735
-#, fuzzy
 msgid "Save Preset"
-msgstr "Desa els nous valors predefinits"
+msgstr "Desa els valors predefinits"
 
 #: src/ghb3.ui:8803
 msgid "Category:"
@@ -2364,8 +2183,8 @@ msgstr "Valors predefinits predeterminats"
 #: src/ghb3.ui:8906
 msgid "Make this the default Preset when HandBrake starts"
 msgstr ""
-"Fes que aquest siguin els valors predefinits predeterminats quan s'iniciï el "
-"HandBrake"
+"Fes que aquest siguin els valors predefinits predeterminats quan s'iniciï el"
+" HandBrake"
 
 #: src/ghb3.ui:8932
 msgid "<b>Dimensions</b>"
@@ -2413,12 +2232,12 @@ msgstr "Resolució d'origen"
 
 #: src/ghb3.ui:9255
 msgid "Reset preview window to the source video's resolution"
-msgstr "Reinicia la finestra de vista prèvia a la resolució del vídeo d'origen"
+msgstr ""
+"Reinicia la finestra de vista prèvia a la resolució del vídeo d'origen"
 
 #: src/ghb3.ui:9300 src/subtitlehandler.c:1743
-#, fuzzy
 msgid "Edit Subtitles"
-msgstr "Subtítols"
+msgstr "Edita els subtítols"
 
 #: src/ghb3.ui:9355
 msgid "Import SRT"
@@ -2498,13 +2317,11 @@ msgid ""
 "We translate the character set to UTF-8.\n"
 "The source's character code is needed in order to perform this translation."
 msgstr ""
-"Estableix el codi de caràcters utilitzat pel fitxer SRT que s'està "
-"important.\n"
+"Estableix el codi de caràcters utilitzat pel fitxer SRT que s'està important.\n"
 "\n"
 "Els fitxers SRT poden tenir tots els jocs de caràcters.\n"
 "Es tradueix el joc de caràcters a UTF-8.\n"
-"El codi de caràcters de l'origen és necessari per a realitzar aquesta "
-"traducció."
+"El codi de caràcters de l'origen és necessari per a realitzar aquesta traducció."
 
 #: src/ghb3.ui:9598
 msgid "Select the SRT file to import."
@@ -2542,7 +2359,7 @@ msgstr "Estableix la pista per defecte"
 
 #: src/ghb3.ui:9710 src/audiohandler.c:1473
 msgid "Edit Audio Track"
-msgstr ""
+msgstr "Edita la pista d'àudio"
 
 #: src/ghb3.ui:9784
 msgid "List of audio tracks available from your source."
@@ -2568,21 +2385,15 @@ msgstr "Freqüència de mostreig"
 
 #: src/ghb3.ui:9920 src/ghb3.ui:10159 src/audiohandler.c:1931
 msgid ""
-"<b>Dynamic Range Compression:</b> Adjust the dynamic range of the output "
-"audio track.\n"
+"<b>Dynamic Range Compression:</b> Adjust the dynamic range of the output audio track.\n"
 "\n"
-"For source audio that has a wide dynamic range (very loud and very soft "
-"sequences),\n"
-"DRC allows you to 'compress' the range by making loud sounds softer and soft "
-"sounds louder."
+"For source audio that has a wide dynamic range (very loud and very soft sequences),\n"
+"DRC allows you to 'compress' the range by making loud sounds softer and soft sounds louder."
 msgstr ""
-"<b>Compressió d'interval dinàmic (DRC):</b> Ajusta l'interval dinàmic de la "
-"pista d'àudio de sortida.\n"
+"<b>Compressió d'interval dinàmic (DRC):</b> Ajusta l'interval dinàmic de la pista d'àudio de sortida.\n"
 "\n"
-"Pels àudios d'origen que tenen un ampli interval dinàmic (seqüències molt "
-"fortes i molt suaus),\n"
-"el DRC permet «comprimir» l'interval fent que els sons forts siguin més "
-"suaus i els suaus més forts."
+"Pels àudios d'origen que tenen un ampli interval dinàmic (seqüències molt fortes i molt suaus),\n"
+"el DRC permet «comprimir» l'interval fent que els sons forts siguin més suaus i els suaus més forts."
 
 #: src/ghb3.ui:9941 src/audiohandler.c:1782
 msgid "Set the audio codec to encode this track with."
@@ -2639,7 +2450,7 @@ msgstr ""
 #. Audio Gain Label
 #: src/ghb3.ui:10130 src/audiohandler.c:1911
 msgid "0dB"
-msgstr "0dB"
+msgstr "0 dB"
 
 #. Audio DRC Label
 #: src/ghb3.ui:10177 src/audiohandler.c:427 src/audiohandler.c:765
@@ -2651,9 +2462,8 @@ msgid "Off"
 msgstr "Desactivat"
 
 #: src/ghb3.ui:10202
-#, fuzzy
 msgid "HandBrake Updater"
-msgstr "HandBrake"
+msgstr "Actualitzador del HandBrake"
 
 #: src/ghb3.ui:10214
 msgid "Skip This Version"
@@ -2676,9 +2486,8 @@ msgid "<b>Release Notes</b>"
 msgstr "<b>Notes de llançament</b>"
 
 #: src/fr.handbrake.ghb.metainfo.xml.in.in:11
-#, fuzzy
 msgid "Video Transcoder"
-msgstr "Codificador de vídeo:"
+msgstr ""
 
 #: src/fr.handbrake.ghb.metainfo.xml.in.in:14
 msgid ""
@@ -2695,9 +2504,8 @@ msgid "Convert video from nearly any format"
 msgstr ""
 
 #: src/fr.handbrake.ghb.metainfo.xml.in.in:18
-#, fuzzy
 msgid "Free and Open Source"
-msgstr "Obre l'origen"
+msgstr ""
 
 #: src/fr.handbrake.ghb.metainfo.xml.in.in:19
 msgid "Multi-Platform (Windows, Mac and Linux)"
@@ -2708,14 +2516,12 @@ msgid "Main window and settings summary"
 msgstr ""
 
 #: src/fr.handbrake.ghb.metainfo.xml.in.in:69
-#, fuzzy
 msgid "Video resolution and cropping settings"
-msgstr "Com aplicar la configuració de l'escapçat."
+msgstr ""
 
 #: src/fr.handbrake.ghb.metainfo.xml.in.in:73
-#, fuzzy
 msgid "Video encoder settings"
-msgstr "Codificador de vídeo:"
+msgstr ""
 
 #: src/fr.handbrake.ghb.metainfo.xml.in.in:77
 msgid "Audio track selection and settings"
@@ -2737,7 +2543,7 @@ msgstr "Qualitat: "
 #: src/audiohandler.c:744
 #, c-format
 msgid "Bitrate: %dkbps\n"
-msgstr "Taxa de bits: %dkbps\n"
+msgstr "Taxa de bits: %d kbps\n"
 
 #: src/audiohandler.c:756
 #, c-format
@@ -2752,7 +2558,7 @@ msgstr "<small>%d - %s (%.4gkHz)</small>"
 #: src/audiohandler.c:776
 #, c-format
 msgid "Bitrate: %.4gkbps"
-msgstr "Taxa de bits: %.4gkbps"
+msgstr "Taxa de bits: %.4g kbps"
 
 #: src/audiohandler.c:782
 msgid "<small>Passthrough</small>"
@@ -2780,7 +2586,7 @@ msgstr ""
 
 #: src/audiohandler.c:1391
 msgid "Add Audio Track"
-msgstr ""
+msgstr "Afegeix una pista d'àudio"
 
 #: src/audiohandler.c:1760
 msgid ""
@@ -2788,8 +2594,7 @@ msgid ""
 "Each selected source track will be encoded with all selected encoders."
 msgstr ""
 "Afegeix un codificador d'àudio.\n"
-"Cada pista d'origen seleccionada es codificarà amb tots els codificadors "
-"seleccionats."
+"Cada pista d'origen seleccionada es codificarà amb tots els codificadors seleccionats."
 
 #: src/audiohandler.c:1840
 msgid ""
@@ -2826,13 +2631,12 @@ msgid "Stop Scan"
 msgstr "Atura l'escaneig"
 
 #: src/callbacks.c:1735
-#, fuzzy
 msgid "Single Title"
-msgstr "Obre un sol _títol"
+msgstr ""
 
 #: src/callbacks.c:2127 src/callbacks.c:2271
 msgid "FPS"
-msgstr ""
+msgstr "FPS"
 
 #: src/callbacks.c:2131
 #, c-format
@@ -2848,14 +2652,12 @@ msgid "HDR10"
 msgstr ""
 
 #: src/callbacks.c:2142
-#, fuzzy
 msgid "HDR"
-msgstr "DRC"
+msgstr ""
 
 #: src/callbacks.c:2144
-#, fuzzy
 msgid "SDR"
-msgstr "DRC"
+msgstr ""
 
 #. TRANSLATORS: This is the bit depth of the video
 #: src/callbacks.c:2152
@@ -2864,30 +2666,28 @@ msgid "%d-bit"
 msgstr ""
 
 #: src/callbacks.c:2174
-#, fuzzy
 msgid "Audio Track"
 msgid_plural "Audio Tracks"
-msgstr[0] "Àudio"
-msgstr[1] "Àudio"
+msgstr[0] ""
+msgstr[1] ""
 
 #: src/callbacks.c:2177
-#, fuzzy
 msgid "Subtitle Track"
 msgid_plural "Subtitle Tracks"
-msgstr[0] "Subtítols"
-msgstr[1] "Subtítols"
+msgstr[0] ""
+msgstr[1] ""
 
 #: src/callbacks.c:2275
 msgid "CFR"
-msgstr ""
+msgstr "CFR"
 
 #: src/callbacks.c:2279
 msgid "PFR"
-msgstr ""
+msgstr "PFR"
 
 #: src/callbacks.c:2283
 msgid "VFR"
-msgstr ""
+msgstr "VFR"
 
 #: src/callbacks.c:2325
 #, c-format
@@ -2912,31 +2712,27 @@ msgid ", Default"
 msgstr ", predeterminat"
 
 #: src/callbacks.c:2405
-#, fuzzy, c-format
+#, c-format
 msgid "+ %d more subtitle track"
 msgid_plural "+ %d more subtitle tracks"
-msgstr[0] "Pista de subtítols d'àudio extern"
-msgstr[1] "Pista de subtítols d'àudio extern"
+msgstr[0] ""
+msgstr[1] ""
 
 #: src/callbacks.c:2560
-#, fuzzy
 msgid "storage"
-msgstr "Mida de l'emmagatzematge:"
+msgstr "emmagatzematge"
 
 #: src/callbacks.c:2561
-#, fuzzy
 msgid "display"
-msgstr "Mida de la pantalla:"
+msgstr "visualització"
 
 #: src/callbacks.c:2562
-#, fuzzy
 msgid "Pixel Aspect Ratio"
-msgstr "Relació d'aspecte:"
+msgstr "Relació d'aspecte del píxel:"
 
 #: src/callbacks.c:2563
-#, fuzzy
 msgid "Display Aspect Ratio"
-msgstr "Relació d'aspecte:"
+msgstr "Mostra la relació d'aspecte"
 
 #: src/callbacks.c:2700 src/hb-backend.c:2263 src/hb-backend.c:2383
 #: src/hb-backend.c:2395
@@ -2945,7 +2741,7 @@ msgstr "No s'ha trobat cap títol"
 
 #: src/callbacks.c:2701
 msgid "New Video"
-msgstr "Nou vídeo"
+msgstr "Vídeo nou"
 
 #: src/callbacks.c:3710 src/callbacks.c:3723 src/callbacks.c:3745
 #: src/callbacks.c:3783
@@ -2962,7 +2758,7 @@ msgstr ""
 #: src/callbacks.c:3880 src/callbacks.c:3931
 #, c-format
 msgid "%sYour movie will be lost if you don't continue encoding."
-msgstr "%sLa vostra pel·lícula es perdrà si no continueu codificant."
+msgstr "%sLa pel·lícula es perdrà si no continueu amb la codificació."
 
 #: src/callbacks.c:3883 src/callbacks.c:3934 src/queuehandler.c:1824
 msgid "Cancel Current and Stop"
@@ -3092,9 +2888,8 @@ msgid "All Files"
 msgstr ""
 
 #: src/chapters.c:604 src/chapters.c:634
-#, fuzzy
 msgid "Chapters (*.xml)"
-msgstr "Capítols"
+msgstr ""
 
 #: src/hb-backend.c:61 src/hb-backend.c:86
 msgid "First Track Matching Selected Languages"
@@ -3214,9 +3009,8 @@ msgid "Lapsharp"
 msgstr "Lapsharp"
 
 #: src/hb-backend.c:238
-#, fuzzy
 msgid "Conservative"
-msgstr "Velocitat dels fotogrames constant"
+msgstr "Conservador"
 
 #: src/hb-backend.c:251
 msgid "90°"
@@ -3663,59 +3457,49 @@ msgstr ""
 
 #: src/hb-backend.c:4872
 msgid "Comb Detect"
-msgstr ""
+msgstr "Detecció Comb"
 
 #: src/hb-backend.c:4874
-#, fuzzy
 msgid "Detelecine"
-msgstr "Detelecine:"
+msgstr "Detelecine"
 
 #: src/hb-backend.c:4876
-#, fuzzy
 msgid "Deinterlace (Yadif)"
-msgstr "Desentrellaçat:"
+msgstr "Desentrellaçat (Yadif)"
 
 #: src/hb-backend.c:4878
-#, fuzzy
 msgid "Deinterlace (Bwdif)"
-msgstr "Desentrellaçat:"
+msgstr "Desentrellaçat (Bwdif)"
 
 #: src/hb-backend.c:4882
-#, fuzzy
 msgid "Deblock"
-msgstr "Ajustament del Deblock:"
+msgstr "Deblock"
 
 #: src/hb-backend.c:4884
-#, fuzzy
 msgid "Denoise (NLMeans)"
-msgstr "Valors predefinits del filtre per treure el soroll:"
+msgstr "Treure el soroll (NLMeans)"
 
 #: src/hb-backend.c:4886
 msgid "Denoise (HQDN3D)"
-msgstr ""
+msgstr "Treure el soroll (HQDN3D)"
 
 #: src/hb-backend.c:4888
-#, fuzzy
 msgid "Chroma Smooth"
-msgstr "Ajustament de la suavització de la crominància:"
+msgstr "Suavització de la crominància"
 
 #: src/hb-backend.c:4890
-#, fuzzy
 msgid "Sharpen (Unsharp)"
-msgstr "Ajustament de la nitidesa:"
+msgstr "Nitidesa (Unsharp)"
 
 #: src/hb-backend.c:4892
-#, fuzzy
 msgid "Rotate"
-msgstr "Rotació:"
+msgstr "Gira"
 
 #: src/hb-backend.c:4894
-#, fuzzy
 msgid "Sharpen (lapsharp)"
-msgstr "Filtre de nitidesa:"
+msgstr "Nitidesa (lapsharp)"
 
 #: src/hb-backend.c:4898
-#, fuzzy
 msgid "Colorspace"
 msgstr "Espai de color:"
 
@@ -3729,8 +3513,7 @@ msgid ""
 msgstr ""
 "<b><big>No s'ha pogut crear %s.</big></b>\n"
 "\n"
-"Error intern. No s'ha pogut analitzar la descripció de la interfície "
-"d'usuari.\n"
+"Error intern. No s'ha pogut analitzar la descripció de la interfície d'usuari.\n"
 "%s"
 
 #: src/main.c:234 src/main.c:299
@@ -3777,13 +3560,11 @@ msgstr "No s'ha pogut trobar la carpeta pare en afegir el fill."
 
 #: src/presets.c:1852
 msgid ""
-"Presets found are newer than what is supported by this version of "
-"HandBrake!\n"
+"Presets found are newer than what is supported by this version of HandBrake!\n"
 "\n"
 "Would you like to continue?"
 msgstr ""
-"Els valors predefinits que s'han trobat són més nous que el que admet "
-"aquesta versió del HandBrake.\n"
+"Els valors predefinits que s'han trobat són més nous que el que admet aquesta versió del HandBrake.\n"
 "\n"
 "Voleu continuar?"
 
@@ -3827,9 +3608,8 @@ msgid "preset"
 msgstr "valors predefinits"
 
 #: src/presets.c:2467
-#, fuzzy
 msgid "Delete"
-msgstr "_Suprimeix"
+msgstr "Suprimeix:"
 
 #: src/preview.c:532
 #, c-format
@@ -3854,9 +3634,8 @@ msgid "%s (Modified)"
 msgstr "%s (modificat)"
 
 #: src/queuehandler.c:237
-#, fuzzy
 msgid "Time:"
-msgstr "Hora de finalització:"
+msgstr "Temps:"
 
 #: src/queuehandler.c:281
 msgid "Align A/V"
@@ -3882,12 +3661,12 @@ msgstr ""
 #: src/queuehandler.c:354
 #, c-format
 msgid "%s, Bitrate %dkbps"
-msgstr "%s, taxa de bits %dkbps"
+msgstr "%s, taxa de bits %d kbps"
 
 #: src/queuehandler.c:359
-#, fuzzy, c-format
+#, c-format
 msgid "%s, Bitrate %dkbps (Multi Pass)"
-msgstr "%s, taxa de bits %dkbps (2 passades)"
+msgstr ""
 
 #: src/queuehandler.c:366
 #, c-format
@@ -3998,14 +3777,12 @@ msgid "Encode"
 msgstr "Codifica"
 
 #: src/queuehandler.c:1208
-#, fuzzy
 msgid "Encode Analysis Pass"
-msgstr "Només codifica"
+msgstr ""
 
 #: src/queuehandler.c:1212
-#, fuzzy
 msgid "Encode Final Pass"
-msgstr "Codificació en pausa"
+msgstr ""
 
 #. Should never happen
 #: src/queuehandler.c:1217
@@ -4045,8 +3822,7 @@ msgid ""
 "Destination: %s\n"
 "Encode may be incomplete if you proceed.\n"
 msgstr ""
-"%sEl sistema de fitxers de destinació està gairebé ple: %<PRId64> MB "
-"lliures.\n"
+"%sEl sistema de fitxers de destinació està gairebé ple: %<PRId64> MB lliures.\n"
 "Destinació: %s\n"
 "La codificació pot quedar incompleta si continueu.\n"
 
@@ -4091,29 +3867,25 @@ msgstr ""
 "\n"
 
 #: src/subtitlehandler.c:110
-#, fuzzy, c-format
+#, c-format
 msgid "Offset: %dms"
-msgstr "Desplaçament (ms)"
+msgstr "Desplaçament: %d ms"
 
 #: src/subtitlehandler.c:115
-#, fuzzy
 msgid "Burned Into Video"
-msgstr "Enregistra al vídeo"
+msgstr "Enregistrat al vídeo"
 
 #: src/subtitlehandler.c:116
-#, fuzzy
 msgid "Passthrough"
-msgstr "Pas directe automàtic:"
+msgstr "Pas directe (passthrough)"
 
 #: src/subtitlehandler.c:123
-#, fuzzy
 msgid "Default"
-msgstr ", predeterminat"
+msgstr "Predeterminat"
 
 #: src/subtitlehandler.c:1191
-#, fuzzy
 msgid "Add Subtitles"
-msgstr "Subtítols"
+msgstr "Afegeix subtítols"
 
 #: src/subtitlehandler.c:1382
 #, c-format
@@ -4161,107 +3933,3 @@ msgstr ""
 #, c-format
 msgid "%s: %.4g (Warning: lossless)"
 msgstr "%s: %.4g (Avís: sense pèrdua)"
-
-#~ msgid "Encode First Pass (Analysis)"
-#~ msgstr "Codifica la primera passada (anàlisi)"
-
-#~ msgid "Encode Second Pass (Final)"
-#~ msgstr "Codifica la segona passada (final)"
-
-#~ msgid "<b>Presets List</b>"
-#~ msgstr "<b>Llista de valors predefinits</b>"
-
-#~ msgid "https://handbrake.fr"
-#~ msgstr "https://handbrake.fr"
-
-#~ msgid "Open _Source"
-#~ msgstr "Obre l'origen"
-
-#~ msgid "<small>No Titles</small>"
-#~ msgstr "<small>Sense títols</small>"
-
-#~ msgid "Deinterlace Preset:"
-#~ msgstr "Valors predefinits del desentrellaçat:"
-
-#~ msgid "Denoise Tune:"
-#~ msgstr "Ajustament del filtre per treure el soroll:"
-
-#~ msgid "Sharpen Preset:"
-#~ msgstr "Valors predefinits de la nitidesa:"
-
-#~ msgid "_Cancel"
-#~ msgstr "_Cancel·la"
-
-#~ msgid "_Open"
-#~ msgstr "_Obre"
-
-#~ msgid "Title Number:"
-#~ msgstr "Número del títol:"
-
-#~ msgid "Scan this DVD source"
-#~ msgstr "Explora aquest DVD d'origen"
-
-#~ msgid "All (*)"
-#~ msgstr "Tot (*)"
-
-#, c-format
-#~ msgid ""
-#~ "Destination: %s\n"
-#~ "\n"
-#~ "Another queued job has specified the same destination.\n"
-#~ "Do you want to overwrite?"
-#~ msgstr ""
-#~ "Destinació: %s\n"
-#~ "\n"
-#~ "Una altra tasca a la cua ha especificat la mateixa destinació.\n"
-#~ "Voleu sobreescriure-ho?"
-
-#~ msgid "Overwrite"
-#~ msgstr "Sobreescriu"
-
-#, c-format
-#~ msgid ""
-#~ "Destination: %s\n"
-#~ "\n"
-#~ "This is not a valid directory."
-#~ msgstr ""
-#~ "Destinació: %s\n"
-#~ "\n"
-#~ "No és un directori vàlid."
-
-#, c-format
-#~ msgid ""
-#~ "Destination: %s\n"
-#~ "\n"
-#~ "Can not read or write the directory."
-#~ msgstr ""
-#~ "Destinació: %s\n"
-#~ "\n"
-#~ "No es pot llegir o escriure el directori."
-
-#, c-format
-#~ msgid ""
-#~ "Destination: %s\n"
-#~ "\n"
-#~ "File already exists.\n"
-#~ "Do you want to overwrite?"
-#~ msgstr ""
-#~ "Destinació: %s\n"
-#~ "\n"
-#~ "El fitxer ja existeix.\n"
-#~ "El voleu sobreescriure?"
-
-#~ msgid "Select this title for adding to the queue.\n"
-#~ msgstr "Seleccioneu aquest títol per a afegir a la cua.\n"
-
-#~ msgid "No Title"
-#~ msgstr "Sense títol"
-
-#~ msgid ""
-#~ "There is another title with the same destination file name.\n"
-#~ "This title will not be added to the queue unless you change\n"
-#~ "the output file name.\n"
-#~ msgstr ""
-#~ "Hi ha un altre títol amb el mateix nom de fitxer de destinació.\n"
-#~ "Aquest títol no s'afegirà a la cua si no canvieu\n"
-#~ "el nom del fitxer de sortida.\n"

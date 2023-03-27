@@ -1,11 +1,11 @@
 # SOME DESCRIPTIVE TITLE.
-# Copyright (C) 2022 Free Software Foundation, Inc.
+# Copyright (C) 2023 HandBrake Team
 # This file is distributed under the same license as the ghb package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2023.
+# 
 # Translators:
-# AlphaKodi, 2022
-#
+# AlphaKodi, 2023
+# 
 #, fuzzy
 msgid ""
 msgstr ""
@@ -13,13 +13,12 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://github.com/HandBrake/Handbrake/issues\n"
 "POT-Creation-Date: 2023-03-25 15:12+0100\n"
 "PO-Revision-Date: 2018-10-10 18:14+0000\n"
-"Last-Translator: Masato HASHIMOTO <cabezon.hashimoto@gmail.com>, 2018\n"
-"Language-Team: Japanese (https://www.transifex.com/HandBrakeProject/"
-"teams/92423/ja/)\n"
-"Language: ja\n"
+"Last-Translator: AlphaKodi, 2023\n"
+"Language-Team: Japanese (https://www.transifex.com/HandBrakeProject/teams/92423/ja/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: ja\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
 #: src/menu.ui:7
@@ -27,14 +26,12 @@ msgid "_File"
 msgstr "ファイル(_F)"
 
 #: src/menu.ui:11
-#, fuzzy
 msgid "_Open Source"
-msgstr "ソースを開く"
+msgstr "_ソースを開く"
 
 #: src/menu.ui:16
-#, fuzzy
 msgid "Open _Directory"
-msgstr "ソースのディレクトリを開く"
+msgstr "_ディレクトリを開く"
 
 #: src/menu.ui:21
 msgid "Set _Destination"
@@ -61,9 +58,8 @@ msgid "Add _Multiple"
 msgstr "複数追加(_M)"
 
 #: src/menu.ui:53
-#, fuzzy
 msgid "Add A_ll"
-msgstr "すべて追加"
+msgstr "_すべて追加"
 
 #: src/menu.ui:60
 msgid "_Start Encoding"
@@ -148,7 +144,7 @@ msgstr "ガイド(_G)"
 
 #: src/menu.ui:167
 msgid "HandBrake For _Dummies"
-msgstr ""
+msgstr "サルでもわかるHandbrake"
 
 #: src/ghb3.ui:101
 msgid ""
@@ -249,7 +245,7 @@ msgstr "<b>トラック</b>"
 
 #: src/ghb3.ui:208
 msgid "Play File"
-msgstr ""
+msgstr "ファイル再生"
 
 #: src/ghb3.ui:212 src/callbacks.c:1720
 msgid "Open Source Directory"
@@ -304,42 +300,36 @@ msgid "HandBrake Queue"
 msgstr "HandBrakeキュー"
 
 #: src/ghb3.ui:538
-#, fuzzy
 msgid "_Play File"
-msgstr "ファイル(_F)"
+msgstr "_ファイル再生"
 
 #: src/ghb3.ui:547
-#, fuzzy
 msgid "Open _Source Directory"
-msgstr "ソースのディレクトリを開く"
+msgstr "_ソースディレクトリを開く"
 
 #: src/ghb3.ui:556
-#, fuzzy
 msgid "Open _Destination Directory"
-msgstr "保存先のディレクトリを開く"
+msgstr "_保存先ディレクトリを開く"
 
 #: src/ghb3.ui:570
 msgid "Move to _Top"
-msgstr ""
+msgstr "_一番上に移動"
 
 #: src/ghb3.ui:579
 msgid "Move to _Bottom"
-msgstr ""
+msgstr "_一番下に移動"
 
 #: src/ghb3.ui:593
-#, fuzzy
 msgid "_Edit"
-msgstr "編集"
+msgstr "_編集"
 
 #: src/ghb3.ui:602
-#, fuzzy
 msgid "_Reset"
-msgstr "リセット"
+msgstr "_リセット"
 
 #: src/ghb3.ui:616
-#, fuzzy
 msgid "Re_move"
-msgstr "除去"
+msgstr "_削除"
 
 #: src/ghb3.ui:646
 msgid "<span size=\"x-large\">Queue</span>"
@@ -485,35 +475,21 @@ msgstr ""
 #: src/ghb3.ui:2053
 msgid ""
 "HandBrake is a GPL-licensed, multiplatform, multithreaded video transcoder."
-msgstr ""
-"HandBrake は GPL で公開されているマルチプラットフォームでマルチスレッドのビデ"
-"オエンコーダーです。"
+msgstr "HandBrake は GPL で公開されているマルチプラットフォームでマルチスレッドのビデオエンコーダーです。"
 
 #: src/ghb3.ui:2056
 msgid ""
-"HandBrake is free software; you can redistribute it and/or modify it under "
-"the terms of the GNU General Public License version 2, as published by the "
-"Free Software Foundation.\n"
+"HandBrake is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License version 2, as published by the Free Software Foundation.\n"
 "\n"
-"HandBrake is distributed in the hope that it will be useful, but WITHOUT ANY "
-"WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS "
-"FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more "
-"details.\n"
+"HandBrake is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.\n"
 "\n"
-"You should have received a copy of the GNU General Public License along with "
-"Glade; if not, write to the Free Software Foundation, Inc., 51 Franklin "
-"Street, Fifth Floor, Boston, MA 02110-1301, USA."
+"You should have received a copy of the GNU General Public License along with Glade; if not, write to the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA."
 msgstr ""
-"HandBrakeは無料のソフトウェアです; フリーソフトウェア財団によるGNU General "
-"Public License バージョン2の下で改変、再頒布することができます。\n"
+"HandBrakeは無料のソフトウェアです; フリーソフトウェア財団によるGNU General Public License バージョン2の下で改変、再頒布することができます。\n"
 "\n"
-"HandBrakeは有益であれとの願いを込めて頒布されます、ですが一切の保障はしませ"
-"ん; 商品性と特定目的適合性の保障も含みません。詳しくはGNU General Public "
-"Licenseをご覧ください。\n"
+"HandBrakeは有益であれとの願いを込めて頒布されます、ですが一切の保障はしません; 商品性と特定目的適合性の保障も含みません。詳しくはGNU General Public Licenseをご覧ください。\n"
 "\n"
-"GNU General Public Licenseはこのプログラムと一緒に受け取られているはずです"
-"が、もしそうでなければ下記にお尋ねください。Free Software Foundation, Inc., "
-"51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA"
+"GNU General Public Licenseはこのプログラムと一緒に受け取られているはずですが、もしそうでなければ下記にお尋ねください。Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA"
 
 #: src/ghb3.ui:2242 src/fr.handbrake.ghb.metainfo.xml.in.in:10
 msgid "HandBrake"
@@ -571,10 +547,11 @@ msgstr "アクティビティ"
 msgid "<b>Source:</b>"
 msgstr "<b>ソース:</b>"
 
-#: src/ghb3.ui:2464 src/hb-backend.c:60 src/hb-backend.c:72 src/hb-backend.c:85
-#: src/hb-backend.c:124 src/hb-backend.c:237 src/hb-backend.c:270
-#: src/hb-backend.c:281 src/hb-backend.c:308 src/hb-backend.c:393
-#: src/hb-backend.c:2593 src/hb-backend.c:2819 src/subtitlehandler.c:1368
+#: src/ghb3.ui:2464 src/hb-backend.c:60 src/hb-backend.c:72
+#: src/hb-backend.c:85 src/hb-backend.c:124 src/hb-backend.c:237
+#: src/hb-backend.c:270 src/hb-backend.c:281 src/hb-backend.c:308
+#: src/hb-backend.c:393 src/hb-backend.c:2593 src/hb-backend.c:2819
+#: src/subtitlehandler.c:1368
 msgid "None"
 msgstr "なし"
 
@@ -602,8 +579,7 @@ msgstr "<b>アングル:</b>"
 
 #: src/ghb3.ui:2611
 msgid "For multi-angle DVD's, select the desired angle to encode."
-msgstr ""
-"マルチアングルの DVD のため、エンコードしたいアングルを選択してください。"
+msgstr "マルチアングルの DVD のため、エンコードしたいアングルを選択してください。"
 
 #: src/ghb3.ui:2627
 msgid "<b>Range:</b>"
@@ -611,9 +587,7 @@ msgstr "<b>範囲:</b>"
 
 #: src/ghb3.ui:2638
 msgid "Range of title to encode. Can be chapters, seconds, or frames."
-msgstr ""
-"エンコードするタイトルの範囲を指定します。チャプター、秒、フレームで指定でき"
-"ます。"
+msgstr "エンコードするタイトルの範囲を指定します。チャプター、秒、フレームで指定できます。"
 
 #: src/ghb3.ui:2651
 msgid "Set the first chapter to encode."
@@ -689,9 +663,8 @@ msgid ""
 "inserting blank frames or dropping frames. May improve audio/video\n"
 "sync for broken players that do not honor MP4 edit lists."
 msgstr ""
-"すべての音声および映像ストリームの開始タイムスタンプを、ブランクフレームの挿"
-"入やフレームドロップによって調整します。MP4 編集リストに準拠していないプレー"
-"ヤーで音声/映像の同期を改善するかもしれません。"
+"すべての音声および映像ストリームの開始タイムスタンプを、ブランクフレームの挿入やフレームドロップによって調整します。MP4 "
+"編集リストに準拠していないプレーヤーで音声/映像の同期を改善するかもしれません。"
 
 #: src/ghb3.ui:2952
 msgid "iPod 5G Support"
@@ -703,11 +676,11 @@ msgstr "一部の古い iPod のための iPod Atom を追加します。"
 
 #: src/ghb3.ui:2972
 msgid "Passthru Common Metadata"
-msgstr ""
+msgstr "一般メタデータをパススルー"
 
 #: src/ghb3.ui:2977
 msgid "Copy metadata from source to output."
-msgstr ""
+msgstr "ソースから出力へメタデータをコピーする。"
 
 #: src/ghb3.ui:2999
 msgid "Duration:"
@@ -736,35 +709,35 @@ msgstr "--"
 
 #: src/ghb3.ui:3224 src/ghb3.ui:4136
 msgid "Storage Size:"
-msgstr ""
+msgstr "格納サイズ:"
 
 #: src/ghb3.ui:3262 src/ghb3.ui:4180
 msgid "Display Size:"
-msgstr ""
+msgstr "表示サイズ:"
 
 #: src/ghb3.ui:3300 src/ghb3.ui:4274
 msgid "Aspect Ratio:"
-msgstr ""
+msgstr "アスペクト比:"
 
 #: src/ghb3.ui:3337
 msgid "<b>Source Dimensions</b>"
-msgstr ""
+msgstr "<b>ソース解像度</b>"
 
 #: src/ghb3.ui:3384
 msgid "Flipping:"
-msgstr ""
+msgstr "反転:"
 
 #: src/ghb3.ui:3395
 msgid "Horizontal ⇌"
-msgstr ""
+msgstr "水平 "
 
 #: src/ghb3.ui:3400
 msgid "Flip video horizontally."
-msgstr ""
+msgstr "映像を水平に反転させます。"
 
 #: src/ghb3.ui:3417
 msgid "Rotation:"
-msgstr ""
+msgstr "回転:"
 
 #: src/ghb3.ui:3433
 msgid "Rotate the video clockwise in 90 degree increments."
@@ -772,11 +745,11 @@ msgstr "映像を時計回りに 90°ずつ回転させます。"
 
 #: src/ghb3.ui:3448
 msgid "Cropping:"
-msgstr ""
+msgstr "切り取り:"
 
 #: src/ghb3.ui:3464
 msgid "How to apply crop settings."
-msgstr ""
+msgstr "切り取り設定をどう適用するかです。"
 
 #: src/ghb3.ui:3480
 msgid "Left Crop"
@@ -796,31 +769,31 @@ msgstr "右クロップ"
 
 #: src/ghb3.ui:3567
 msgid "<b>Orientation &amp; Cropping</b>"
-msgstr ""
+msgstr "<b>向き &amp; 切り抜き</b>"
 
 #: src/ghb3.ui:3606
 msgid "Resolution Limit:"
-msgstr ""
+msgstr "解像度制限:"
 
 #: src/ghb3.ui:3621
 msgid "Resolution limits for common video formats."
-msgstr ""
+msgstr "通常の映像形式で使う解像度制限です。"
 
 #: src/ghb3.ui:3637
 msgid "Maximum Size:"
-msgstr ""
+msgstr "最大サイズ:"
 
 #: src/ghb3.ui:3652
 msgid "This is the maximum width that the video will be stored at."
-msgstr ""
+msgstr "映像が保存される最大の幅です。"
 
 #: src/ghb3.ui:3669 src/ghb3.ui:3838 src/ghb3.ui:4212
 msgid "x"
-msgstr ""
+msgstr "x"
 
 #: src/ghb3.ui:3684
 msgid "This is the maximum height that the video will be stored at."
-msgstr ""
+msgstr "映像が保存される最大の高さです。"
 
 #: src/ghb3.ui:3700
 msgid "Anamorphic:"
@@ -835,6 +808,12 @@ msgid ""
 "    None      - Force pixel aspect ratio to 1:1.\n"
 "    Custom    - Enter a custom pixel aspect ratio.</tt></small>"
 msgstr ""
+"<b>アナモルフィックモード:</b><small><tt>\n"
+"    Automatic - 元の表示アスペクト比を維持しながら\n"
+"        格納解像度を最大にするピクセルアスペクト比を\n"
+"        使用します。\n"
+"    None      - ピクセルアスペクト比を1:1に強制します。\n"
+"    Custom    - ピクセルアスペクト比を手入力します。</tt></small>"
 
 #: src/ghb3.ui:3736
 msgid "Pixel Aspect:"
@@ -844,14 +823,12 @@ msgstr "ピクセルアスペクト比:"
 msgid ""
 "Pixel aspect defines the shape of the pixels.\n"
 "\n"
-"A 1:1 ratio defines a square pixel.  Other values define rectangular "
-"shapes.\n"
+"A 1:1 ratio defines a square pixel.  Other values define rectangular shapes.\n"
 "Players will scale the image in order to achieve the specified aspect."
 msgstr ""
 "ピクセルアスペクト比はピクセルの形状を定義します。\n"
 "\n"
-"比率 1:1 は正方形のピクセルを定義します。その他の値は長方形の形状を定義しま"
-"す。\n"
+"比率 1:1 は正方形のピクセルを定義します。その他の値は長方形の形状を定義します。\n"
 "プレーヤーは指定されたアスペクト比にするために画像をスケールします。"
 
 #: src/ghb3.ui:3771
@@ -861,98 +838,93 @@ msgstr ":"
 #: src/ghb3.ui:3786
 msgid ""
 "Pixel aspect defines the shape of the pixels.\n"
-"A 1:1 ratio defines a square pixel.  Other values define rectangular "
-"shapes.\n"
+"A 1:1 ratio defines a square pixel.  Other values define rectangular shapes.\n"
 "Players will scale the image in order to achieve the specified aspect."
 msgstr ""
 "ピクセルアスペクト比はピクセルの形状を定義します。\n"
-"比率 1:1 は正方形のピクセルを定義します。その他の値は長方形の形状を定義しま"
-"す。\n"
+"比率 1:1 は正方形のピクセルを定義します。その他の値は長方形の形状を定義します。\n"
 "プレーヤーは指定されたアスペクト比にするために画像をスケールします。"
 
 #: src/ghb3.ui:3805
 msgid "Scaled Size:"
-msgstr ""
+msgstr "拡大縮小サイズ:"
 
 #: src/ghb3.ui:3820
 msgid ""
 "This is the width that the video will be stored at.\n"
-"The actual display dimensions will differ if the pixel aspect ratio is not "
-"1:1."
+"The actual display dimensions will differ if the pixel aspect ratio is not 1:1."
 msgstr ""
 "保存される動画の幅になります。\n"
-"ピクセルアスペクト比が 1:1 ではないとき、実際の表示サイズと異なる場合がありま"
-"す。"
+"ピクセルアスペクト比が 1:1 ではないとき、実際の表示サイズと異なる場合があります。"
 
 #: src/ghb3.ui:3853
 msgid ""
 "This is the height that the video will be stored at.\n"
-"The actual display dimensions will differ if the pixel aspect ratio is not "
-"1:1."
+"The actual display dimensions will differ if the pixel aspect ratio is not 1:1."
 msgstr ""
 "保存される動画の高さになります。\n"
-"ピクセルアスペクト比が 1:1 ではないとき、実際の表示サイズと異なる場合がありま"
-"す。"
+"ピクセルアスペクト比が 1:1 ではないとき、実際の表示サイズと異なる場合があります。"
 
 #: src/ghb3.ui:3867
 msgid "Optimal Size"
-msgstr ""
+msgstr "最適なサイズ"
 
 #: src/ghb3.ui:3872
 msgid "Use highest resolution permitted by above settings."
-msgstr ""
+msgstr "上の設定で許される最大の解像度を使用する。"
 
 #: src/ghb3.ui:3887
 msgid "Allow Upscaling"
-msgstr ""
+msgstr "アップスケールを許可"
 
 #: src/ghb3.ui:3892
-msgid "If not enabled, scaled dimensions will be limited to source dimensions."
-msgstr ""
+msgid ""
+"If not enabled, scaled dimensions will be limited to source dimensions."
+msgstr "オンにしなければ、拡大縮小される解像度はソースの解像度に制限されます。"
 
 #: src/ghb3.ui:3917
 msgid "<b>Resolution &amp; Scaling</b>"
-msgstr ""
+msgstr "<b>解像度 &amp; 拡大縮小</b>"
 
 #: src/ghb3.ui:3957
 msgid "Fill:"
-msgstr ""
+msgstr "塗りつぶし:"
 
 #: src/ghb3.ui:3974
 msgid "Add a border around the video."
-msgstr ""
+msgstr "映像の周りに境界線を追加します。"
 
 #: src/ghb3.ui:3991
 msgid "Left Pad"
-msgstr ""
+msgstr "左埋め"
 
 #: src/ghb3.ui:4008
 msgid "Top Pad"
-msgstr ""
+msgstr "上埋め"
 
 #: src/ghb3.ui:4025
 msgid "Bottom Pad"
-msgstr ""
+msgstr "下埋め"
 
 #: src/ghb3.ui:4042
 msgid "Right Pad"
-msgstr ""
+msgstr "右埋め"
 
 #: src/ghb3.ui:4058
 msgid "Color:"
-msgstr ""
+msgstr "色:"
 
 #: src/ghb3.ui:4075
 msgid "Color of border added around video."
-msgstr ""
+msgstr "映像の周りに追加される境界線の色です。"
 
 #: src/ghb3.ui:4097
 msgid "<b>Borders</b>"
-msgstr ""
+msgstr "<b>境界線</b>"
 
 #: src/ghb3.ui:4195 src/ghb3.ui:4227 src/ghb3.ui:4245
 msgid "Changing the display size will stretch the video."
-msgstr ""
+msgstr "表示サイズを変えると映像は引き延ばされます。"
 
 #: src/ghb3.ui:4240 src/hb-backend.c:123 src/hb-backend.c:239
 #: src/hb-backend.c:311
@@ -961,7 +933,7 @@ msgstr "自動"
 
 #: src/ghb3.ui:4311
 msgid "<b>Final Dimensions</b>"
-msgstr ""
+msgstr "<b>最終解像度</b>"
 
 #: src/ghb3.ui:4324
 msgid "Dimensions"
@@ -975,14 +947,11 @@ msgstr "デテレシネ:"
 msgid ""
 "This filter removes 'combing' artifacts that are the result of telecining.\n"
 "\n"
-"Telecining is a process that adjusts film framerates that are 24fps to NTSC "
-"video frame rates which are 30fps."
+"Telecining is a process that adjusts film framerates that are 24fps to NTSC video frame rates which are 30fps."
 msgstr ""
-"このフィルターはテレシネの結果発生した 'コーミング' アーチファクトを除去しま"
-"す。\n"
+"このフィルターはテレシネの結果発生した 'コーミング' アーチファクトを除去します。\n"
 "\n"
-"テレシネとはフィルムのフレームレート 24fps を NTSC 映像のフレームレート "
-"30fps に変換する作業です。"
+"テレシネとはフィルムのフレームレート 24fps を NTSC 映像のフレームレート 30fps に変換する作業です。"
 
 #: src/ghb3.ui:4373 src/ghb3.ui:4919
 msgid ""
@@ -1007,8 +976,7 @@ msgid ""
 msgstr ""
 "このフィルターでインターレースされたフレームを検出します。\n"
 "\n"
-"デインターレースフィルターが有効になっていれば、このフィルターでインターレー"
-"スと検出されたフレームのみデインターレースされます。"
+"デインターレースフィルターが有効になっていれば、このフィルターでインターレースと検出されたフレームのみデインターレースされます。"
 
 #: src/ghb3.ui:4424
 msgid ""
@@ -1039,7 +1007,6 @@ msgstr ""
 "デインターレースフィルターは古典的な YADIF になります。\n"
 
 #: src/ghb3.ui:4497
-#, fuzzy
 msgid ""
 "Choose decomb or deinterlace filter options.\n"
 "\n"
@@ -1047,10 +1014,10 @@ msgid ""
 "    The deinterlace filter is a classic YADIF deinterlacer.\n"
 "    "
 msgstr ""
-"デコームまたはデインターレースフィルターのオプションを選択します。\n"
+"デコームまたはデインターレースフィルタのオプションを選択します。\n"
 "\n"
-"デコームフィルイターはさまざまな補完アルゴリズムをサポートしています。\n"
-"デインターレースフィルターは古典的な YADIF になります。\n"
+"デコームフィルタはさまざまな補完アルゴリズムをサポートしています。\n"
+"デインターレースフィルタは古典的な YADIF になります。"
 
 #: src/ghb3.ui:4527
 msgid "Deblock Filter:"
@@ -1062,8 +1029,7 @@ msgid ""
 "If your source exhibits 'blockiness', this filter may help clean it up."
 msgstr ""
 "デブロック化は圧縮による一般的なアーチファクトを除去します。\n"
-"ソースに 'ブロックノイズ' が見受けられた場合、このフィルターがきれいに仕上げ"
-"てくれるかもしれません。"
+"ソースに 'ブロックノイズ' が見受けられた場合、このフィルターがきれいに仕上げてくれるかもしれません。"
 
 #: src/ghb3.ui:4567 src/ghb3.ui:4670 src/ghb3.ui:4750 src/ghb3.ui:4851
 #: src/ghb3.ui:5349
@@ -1071,17 +1037,14 @@ msgid "Tune:"
 msgstr "チューン:"
 
 #: src/ghb3.ui:4577
-#, fuzzy
 msgid ""
 "The deblocking filter removes a common type of compression artifact.\n"
 "    If your source exhibits 'blockiness', this filter may help clean it up."
 msgstr ""
-"デブロック化は圧縮による一般的なアーチファクトを除去します。\n"
-"ソースに 'ブロックノイズ' が見受けられた場合、このフィルターがきれいに仕上げ"
-"てくれるかもしれません。"
+"デブロックフィルタは圧縮で起こる一般的な生成物を除去します。\n"
+"ソースに 'ブロックノイズ' が見受けられた場合、このフィルターがきれいに仕上げてくれるかもしれません。"
 
 #: src/ghb3.ui:4585 src/ghb3.ui:4768
-#, fuzzy
 msgid ""
 "Custom deblock filter string format\n"
 "\n"
@@ -1098,30 +1061,24 @@ msgstr "デノイズフィルター:"
 #: src/ghb3.ui:4622
 msgid ""
 "Denoise filtering reduces or removes the appearance of noise and grain.\n"
-"Film grain and other types of high frequency noise are difficult to "
-"compress.\n"
+"Film grain and other types of high frequency noise are difficult to compress.\n"
 "Using this filter on such sources can result in smaller file sizes."
 msgstr ""
 "デノイズフィルターはノイズやグレインの発生を抑えるか除去します。\n"
 "フィルムグレインやその他の高周波ノイズを圧縮することは困難です。\n"
-"このフィルターを使用することでそのようなソースでもファイルサイズを抑えること"
-"ができます。"
+"このフィルターを使用することでそのようなソースでもファイルサイズを抑えることができます。"
 
 #: src/ghb3.ui:4657 src/ghb3.ui:4680
-#, fuzzy
 msgid ""
 "Denoise filtering reduces or removes the appearance of noise and grain.\n"
-"    Film grain and other types of high frequency noise are difficult to "
-"compress.\n"
+"    Film grain and other types of high frequency noise are difficult to compress.\n"
 "    Using this filter on such sources can result in smaller file sizes."
 msgstr ""
-"デノイズフィルターはノイズやグレインの発生を抑えるか除去します。\n"
+"デノイズフィルタはノイズやグレインの発生を抑え除去します。\n"
 "フィルムグレインやその他の高周波ノイズを圧縮することは困難です。\n"
-"このフィルターを使用することでそのようなソースでもファイルサイズを抑えること"
-"ができます。"
+"このフィルターを使用することでそのようなソースでもファイルサイズを抑えることができます。"
 
 #: src/ghb3.ui:4689 src/ghb3.ui:4869
-#, fuzzy
 msgid ""
 "Custom denoise filter string format\n"
 "\n"
@@ -1133,19 +1090,23 @@ msgstr ""
 
 #: src/ghb3.ui:4710
 msgid "Chroma Smooth Filter:"
-msgstr ""
+msgstr "クロマスムーズフィルタ:"
 
 #: src/ghb3.ui:4726
 msgid ""
 "The chroma smooth filter removes common color artifacts.\n"
 "Lower resolution analog source content may benefit from this filter."
 msgstr ""
+"クロマスムーズフィルタは色のノイズを低減します。\n"
+"低解像度のアナログソースに適しています。"
 
 #: src/ghb3.ui:4760
 msgid ""
 "The chroma smooth filter removes common color artifacts.\n"
 "    Lower resolution analog source content may benefit from this filter."
 msgstr ""
+"クロマスムーズフィルタは色のノイズを低減します。\n"
+"低解像度のアナログソースに適しています。"
 
 #: src/ghb3.ui:4789
 msgid "Sharpen Filter:"
@@ -1155,26 +1116,23 @@ msgstr "シャープ化フィルター:"
 msgid ""
 "Sharpen filtering enhances edges and other\n"
 "high frequency components in the video."
-msgstr ""
-"シャープ化フィルターは映像内のエッジやその他高周波数のコンポーネントを向上さ"
-"せます。"
+msgstr "シャープ化フィルターは映像内のエッジやその他高周波数のコンポーネントを向上させます。"
 
 #: src/ghb3.ui:4839 src/ghb3.ui:4861
-#, fuzzy
 msgid ""
 "Sharpen filtering enhances edges and other\n"
 "    high frequency components in the video."
 msgstr ""
-"シャープ化フィルターは映像内のエッジやその他高周波数のコンポーネントを向上さ"
-"せます。"
+"シャープ化フィルタは映像内の輪郭やその他\n"
+"高周波部分の品質を良くします。"
 
 #: src/ghb3.ui:4890
 msgid "Colorspace:"
-msgstr ""
+msgstr "色空間:"
 
 #: src/ghb3.ui:4906
 msgid "Translate the colorspace of the source."
-msgstr ""
+msgstr "ソースの色空間を変換します。"
 
 #: src/ghb3.ui:4935 src/hb-backend.c:4896
 msgid "Grayscale"
@@ -1209,8 +1167,7 @@ msgid ""
 msgstr ""
 "出力フレームレートです。\n"
 "\n"
-"'ソースと同じ' が推奨です。ソースビデオが可変フレームレートの場合、'ソースと"
-"同じ' にしておけばそれを維持します。"
+"'ソースと同じ' が推奨です。ソースビデオが可変フレームレートの場合、'ソースと同じ' にしておけばそれを維持します。"
 
 #: src/ghb3.ui:5048
 msgid "Constant Framerate"
@@ -1269,9 +1226,7 @@ msgstr ""
 "エンコーダーはその画質を目標に処理します。\n"
 "エンコーダーによって数値の意味が異なります。\n"
 "\n"
-"x264 では対数的であり、値が小さいほど高い画質になります。すなわち、値を小さく"
-"するとファイルサイズが大きくなります。値 0 はロスレスを意味し、出力ファイルサ"
-"イズは、オリジナルもロスレスでないかぎり、オリジナルより大きくなります。\n"
+"x264 では対数的であり、値が小さいほど高い画質になります。すなわち、値を小さくするとファイルサイズが大きくなります。値 0 はロスレスを意味し、出力ファイルサイズは、オリジナルもロスレスでないかぎり、オリジナルより大きくなります。\n"
 "\n"
 "FFMpeg および Theora の場合はより直線的です。\n"
 "これらエンコーダーにロスレスモードはありません。"
@@ -1289,68 +1244,56 @@ msgid ""
 "Set the average bitrate.\n"
 "\n"
 "The instantaneous bitrate can be much higher or lower at any point in time.\n"
-"But the average over a long duration will be the value set here.  If you "
-"need\n"
-"to limit instantaneous bitrate, look into x264's vbv-bufsize and vbv-maxrate "
-"settings."
+"But the average over a long duration will be the value set here.  If you need\n"
+"to limit instantaneous bitrate, look into x264's vbv-bufsize and vbv-maxrate settings."
 msgstr ""
 "平均ビットレートで指定します。\n"
 "\n"
-"瞬間のビットレートはそのときの映像によって大きく変化しますが、平均するとだい"
-"たいこの値になります。\n"
-"ビットレートの最大値を制限したい場合は、x264 の vbv-bufsize および vbv-"
-"maxrate 設定を調べてください。"
+"瞬間のビットレートはそのときの映像によって大きく変化しますが、平均するとだいたいこの値になります。\n"
+"ビットレートの最大値を制限したい場合は、x264 の vbv-bufsize および vbv-maxrate 設定を調べてください。"
 
 #: src/ghb3.ui:5233
-#, fuzzy
 msgid "Multi-Pass Encoding"
-msgstr "2 パスエンコーディング"
+msgstr "複数パスエンコード"
 
 #: src/ghb3.ui:5238
-#, fuzzy
 msgid ""
 "Perform Multi Pass Encoding.\n"
 "\n"
-"The 'Bitrate' option is prerequisite. During the analysis passes, statistics "
-"about\n"
+"The 'Bitrate' option is prerequisite. During the analysis passes, statistics about\n"
 "the video are collected.  Then in the final pass, those statistics are used\n"
 "to make bitrate allocation decisions."
 msgstr ""
-"2 パスエンコーディングを実施します。\n"
+"複数パスエンコードを行います。\n"
 "\n"
-"これを行うには 'ビットレート指定' オプションの選択が必要です。1 回めのパスで"
-"映像の統計情報を採取し、2 回めのパスで統計情報を利用してビットレートの割り当"
-"てが行われます。"
+"これは 'ビットレート' オプションを使用することが前提です。解析パスで\n"
+"映像の統計情報を採取します。最後のパスで統計情報を利用し\n"
+"ビットレートの割り当てが行われます。"
 
 #: src/ghb3.ui:5256
-#, fuzzy
 msgid "Turbo Analysis Pass"
-msgstr "第 1 パスをターボ"
+msgstr "解析パスの高速化"
 
 #: src/ghb3.ui:5261
-#, fuzzy
 msgid ""
 "During the analysis pass of a multi pass encode, use settings that speed "
 "things along."
-msgstr "2 パスエンコードの 1 回めのパスを高速化します。"
+msgstr "複数パスエンコードの内、解析パスで、高速化の設定が行われます。"
 
 #: src/ghb3.ui:5323
 msgid ""
-"Adjusts encoder settings to trade off compression efficiency against "
-"encoding speed.\n"
+"Adjusts encoder settings to trade off compression efficiency against encoding speed.\n"
 "\n"
 "This establishes your default encoder settings.\n"
 "Tunes, profiles, levels and extra options string will be applied to this.\n"
-"You should generally set this option to the slowest you can bear since "
-"slower\n"
+"You should generally set this option to the slowest you can bear since slower\n"
 "settings will result in better quality or smaller files."
 msgstr ""
 "エンコーダー設定を調節して圧縮効率とエンコード速度のバランスを取ります。\n"
 "\n"
 "これは基本のエンコーダー設定です。\n"
 "チューニング、プロファイル、レベルと他のオプションはこれに適用されます。\n"
-"品質がより高く、小さいファイルになるよう、通常は可能な限り遅いものを選ぶこと"
-"をお勧めします。"
+"品質がより高く、小さいファイルになるよう、通常は可能な限り遅いものを選ぶことをお勧めします。"
 
 #: src/ghb3.ui:5366
 msgid ""
@@ -1362,9 +1305,7 @@ msgid ""
 msgstr ""
 "チューン設定はよくある状況を最適化します。\n"
 "\n"
-"これは特定のソース特性の効率や、出力ファイルの特性の設定を改善します。変更は"
-"プリセットのあとに適用されますが、その他すべてのパラメーターより先に適用され"
-"ます。"
+"これは特定のソース特性の効率や、出力ファイルの特性の設定を改善します。変更はプリセットのあとに適用されますが、その他すべてのパラメーターより先に適用されます。"
 
 #: src/ghb3.ui:5382
 msgid "Fast Decode"
@@ -1378,8 +1319,7 @@ msgid ""
 msgstr ""
 "デコーダーの CPU 使用率を抑制します。\n"
 "\n"
-"あなたのデバイスが再生に悪戦苦闘している場合 (フレームドロップなど) に設定し"
-"てみてください。"
+"あなたのデバイスが再生に悪戦苦闘している場合 (フレームドロップなど) に設定してみてください。"
 
 #: src/ghb3.ui:5405
 msgid "Zero Latency"
@@ -1398,8 +1338,7 @@ msgstr ""
 "\n"
 "これはライブストリーム配信に有用です。\n"
 "\n"
-"HandBrake はライブストリーム配信用途には適していないので、この設定もあまり役"
-"に立ちません。"
+"HandBrake はライブストリーム配信用途には適していないので、この設定もあまり役に立ちません。"
 
 #: src/ghb3.ui:5433
 msgid "Profile:"
@@ -1484,8 +1423,7 @@ msgstr "ソースメディアのどの音声トラックを使用するかを選
 #: src/ghb3.ui:5804
 msgid ""
 "Create a list of languages you would like to select audio for.\n"
-"Tracks matching these languages will be selected using the chosen Selection "
-"Behavior."
+"Tracks matching these languages will be selected using the chosen Selection Behavior."
 msgstr ""
 "音声に使用したい言語のリストを作成します。\n"
 "これらの言語と一致したトラックが「選択方法」で指定された方法で選ばれます。"
@@ -1509,8 +1447,7 @@ msgstr "二次オーディオに先頭のエンコーダーのみ使用する"
 #: src/ghb3.ui:5887
 msgid ""
 "Only the primary audio track will be encoded with the full encoder list.\n"
-"All other secondary audio output tracks will be encoded with first encoder "
-"only."
+"All other secondary audio output tracks will be encoded with first encoder only."
 msgstr ""
 "先頭の音声トラックのみ全エンコーダーリストでエンコードされます。\n"
 "2つ目以降の音声出力トラックは先頭のエンコーダーのみでエンコードされます。"
@@ -1521,14 +1458,15 @@ msgstr "自動パススルー:"
 
 #: src/ghb3.ui:5934
 msgid "MP2"
-msgstr ""
+msgstr "MP2"
 
 #: src/ghb3.ui:5939
 msgid ""
 "Enable this if your playback device supports MP2.\n"
-"This permits MP2 passthru to be selected when automatic passthru selection "
-"is enabled."
+"This permits MP2 passthru to be selected when automatic passthru selection is enabled."
 msgstr ""
+"お使いの再生デバイスがMP2をサポートしている場合に有効化してください。\n"
+"これは自動パススルー選択が有効な時にMP2をパススルー出来るようにします。"
 
 #: src/ghb3.ui:5955
 msgid "MP3"
@@ -1537,8 +1475,7 @@ msgstr "MP3"
 #: src/ghb3.ui:5960
 msgid ""
 "Enable this if your playback device supports MP3.\n"
-"This permits MP3 passthru to be selected when automatic passthru selection "
-"is enabled."
+"This permits MP3 passthru to be selected when automatic passthru selection is enabled."
 msgstr ""
 "お使いの再生デバイスがMP3をサポートしている場合に有効化してください。\n"
 "これは自動パススルー選択が有効な時にMP3をパススルー出来るようにします。"
@@ -1550,8 +1487,7 @@ msgstr "AC-3"
 #: src/ghb3.ui:5981
 msgid ""
 "Enable this if your playback device supports AC-3.\n"
-"This permits AC-3 passthru to be selected when automatic passthru selection "
-"is enabled."
+"This permits AC-3 passthru to be selected when automatic passthru selection is enabled."
 msgstr ""
 "お使いの再生デバイスがAC-3をサポートしている場合に有効化してください。\n"
 "これは自動パススルー選択が有効な時にAC-3をパススルー出来るようにします。"
@@ -1563,8 +1499,7 @@ msgstr "EAC-3"
 #: src/ghb3.ui:6002
 msgid ""
 "Enable this if your playback device supports EAC-3.\n"
-"This permits EAC-3 passthru to be selected when automatic passthru selection "
-"is enabled."
+"This permits EAC-3 passthru to be selected when automatic passthru selection is enabled."
 msgstr ""
 "お使いの再生デバイスがEAC-3をサポートしている場合に有効化してください。\n"
 "これは自動パススルー選択が有効な時にEAC-3をパススルー出来るようにします。"
@@ -1576,8 +1511,7 @@ msgstr "DTS"
 #: src/ghb3.ui:6023
 msgid ""
 "Enable this if your playback device supports DTS.\n"
-"This permits DTS passthru to be selected when automatic passthru selection "
-"is enabled."
+"This permits DTS passthru to be selected when automatic passthru selection is enabled."
 msgstr ""
 "お使いの再生デバイスがDTSをサポートしている場合に有効化してください。\n"
 "これは自動パススルー選択が有効な時にDTSをパススルー出来るようにします。"
@@ -1589,8 +1523,7 @@ msgstr "DTS-HD"
 #: src/ghb3.ui:6044
 msgid ""
 "Enable this if your playback device supports DTS-HD.\n"
-"This permits DTS-HD passthru to be selected when automatic passthru "
-"selection is enabled."
+"This permits DTS-HD passthru to be selected when automatic passthru selection is enabled."
 msgstr ""
 "お使いの再生デバイスがDTS-HDをサポートしている場合に有効化してください。\n"
 "これは自動パススルー選択が有効な時にDTS-HDをパススルー出来るようにします。"
@@ -1602,8 +1535,7 @@ msgstr "TrueHD"
 #: src/ghb3.ui:6065
 msgid ""
 "Enable this if your playback device supports TrueHD.\n"
-"This permits TrueHD passthru to be selected when automatic passthru "
-"selection is enabled."
+"This permits TrueHD passthru to be selected when automatic passthru selection is enabled."
 msgstr ""
 "お使いの再生デバイスがTrueHDをサポートしている場合に有効化してください。\n"
 "これは自動パススルー選択が有効な時にTrueHDをパススルー出来るようにします。"
@@ -1615,8 +1547,7 @@ msgstr "FLAC"
 #: src/ghb3.ui:6086
 msgid ""
 "Enable this if your playback device supports FLAC.\n"
-"This permits FLAC passthru to be selected when automatic passthru selection "
-"is enabled."
+"This permits FLAC passthru to be selected when automatic passthru selection is enabled."
 msgstr ""
 "お使いの再生デバイスがFLACをサポートしている場合に有効化してください。\n"
 "これは自動パススルー選択が有効な時にFLACをパススルー出来るようにします。"
@@ -1628,22 +1559,22 @@ msgstr "AAC"
 #: src/ghb3.ui:6107
 msgid ""
 "Enable this if your playback device supports AAC.\n"
-"This permits AAC passthru to be selected when automatic passthru selection "
-"is enabled."
+"This permits AAC passthru to be selected when automatic passthru selection is enabled."
 msgstr ""
 "お使いの再生デバイスがAACをサポートしている場合に有効化してください。\n"
 "これは自動パススルー選択が有効な時にAACをパススルー出来るようにします。"
 
 #: src/ghb3.ui:6123
 msgid "Opus"
-msgstr ""
+msgstr "Opus"
 
 #: src/ghb3.ui:6128
 msgid ""
 "Enable this if your playback device supports Opus.\n"
-"This permits Opus passthru to be selected when automatic passthru selection "
-"is enabled."
+"This permits Opus passthru to be selected when automatic passthru selection is enabled."
 msgstr ""
+"お使いの再生デバイスがOpusをサポートしている場合に有効化してください。\n"
+"これは自動パススルー選択が有効な時にOpusをパススルー出来るようにします。"
 
 #: src/ghb3.ui:6161
 msgid "Passthru Fallback:"
@@ -1653,9 +1584,7 @@ msgstr "パススルーのフォールバック:"
 msgid ""
 "Set the audio codec to encode with when a suitable track can not be found "
 "for audio passthru."
-msgstr ""
-"オーディオパススルーに適したトラックが見つからなかったときにエンコードする"
-"オーディオコーデックを指定します。"
+msgstr "オーディオパススルーに適したトラックが見つからなかったときにエンコードするオーディオコーデックを指定します。"
 
 #: src/ghb3.ui:6202
 msgid "<b>Audio Encoder Settings:</b>"
@@ -1663,9 +1592,7 @@ msgstr "<b>オーディオエンコーダー設定:</b>"
 
 #: src/ghb3.ui:6203
 msgid "Each selected source track will be encoded with all selected encoders"
-msgstr ""
-"選択された各ソーストラックは選択されたすべてのエンコーダーでエンコードされま"
-"す。"
+msgstr "選択された各ソーストラックは選択されたすべてのエンコーダーでエンコードされます。"
 
 #: src/ghb3.ui:6228 src/ghb3.ui:9848
 msgid "Encoder"
@@ -1708,7 +1635,8 @@ msgid "Add all subtitle tracks to the list"
 msgstr "すべての字幕設定をリストに追加します"
 
 #: src/ghb3.ui:6420 src/callbacks.c:2356 src/queuehandler.c:647
-#: src/queuehandler.c:1083 src/subtitlehandler.c:414 src/subtitlehandler.c:1245
+#: src/queuehandler.c:1083 src/subtitlehandler.c:414
+#: src/subtitlehandler.c:1245
 msgid "Foreign Audio Scan"
 msgstr "吹き替え字幕スキャン"
 
@@ -1732,11 +1660,9 @@ msgstr "ソースメディアのどの字幕トラックを使用するかを選
 #: src/ghb3.ui:6596
 msgid ""
 "Create a list of languages you would like to select subtitles for.\n"
-"Tracks matching these languages will be selected using the chosen Selection "
-"Behavior.\n"
+"Tracks matching these languages will be selected using the chosen Selection Behavior.\n"
 "\n"
-"The first language in this list is your \"preferred\" language and will be "
-"used\n"
+"The first language in this list is your \"preferred\" language and will be used\n"
 "for determining subtitle selection settings when there is foreign audio."
 msgstr ""
 "字幕に使用したい言語のリストを作成します。\n"
@@ -1752,15 +1678,12 @@ msgstr "吹き替え字幕スキャンパスの追加"
 
 #: src/ghb3.ui:6709
 msgid ""
-"Add \"Foreign Audio Scan\" when the default audio track is your preferred "
-"language.\n"
-"This search pass finds short sequences of foreign audio and provides "
-"subtitles for them.\n"
+"Add \"Foreign Audio Scan\" when the default audio track is your preferred language.\n"
+"This search pass finds short sequences of foreign audio and provides subtitles for them.\n"
 "\n"
 "This option requires a language to be set in the Selected Languages list."
 msgstr ""
-"既定の音声トラックが第一言語でないときに\"吹き替え字幕スキャン\"を追加しま"
-"す。\n"
+"既定の音声トラックが第一言語でないときに\"吹き替え字幕スキャン\"を追加します。\n"
 "二つ目のパスが外国語音声とその字幕を探す処理をします。\n"
 "\n"
 "このオプションは言語選択リストで言語を設定しておく必要があります。"
@@ -1771,8 +1694,7 @@ msgstr "デフォルト音声が外国語のとき字幕トラックを追加す
 
 #: src/ghb3.ui:6729
 msgid ""
-"When the default audio track is not your preferred language, add a subtitle "
-"track.\n"
+"When the default audio track is not your preferred language, add a subtitle track.\n"
 "\n"
 "This option requires a language to be set in the Selected Languages list."
 msgstr ""
@@ -1788,9 +1710,7 @@ msgstr "クローズドキャプションが利用できれば追加する"
 msgid ""
 "Closed captions are text subtitles that can be added to any container as a "
 "soft subtitle track"
-msgstr ""
-"クローズドキャプションはあらゆるコンテナーにソフト字幕トラックとして追加でき"
-"るテキスト字幕です。"
+msgstr "クローズドキャプションはあらゆるコンテナーにソフト字幕トラックとして追加できるテキスト字幕です。"
 
 #: src/ghb3.ui:6769
 msgid "Burn-In Behavior*:"
@@ -1800,16 +1720,13 @@ msgstr "焼き付け方法*:"
 msgid ""
 "Set the behavior of subtitle \"Burn-In\".\n"
 "\n"
-"Burned-In subtitles are part of the video and can not be disabled during "
-"playback.\n"
-"Only one subtitle track can be burned! Since conflicts can occur, the first "
-"chosen wins."
+"Burned-In subtitles are part of the video and can not be disabled during playback.\n"
+"Only one subtitle track can be burned! Since conflicts can occur, the first chosen wins."
 msgstr ""
 "\"焼き込み\"字幕の振る舞いを設定します。\n"
 "\n"
 "焼き込み字幕は映像の一部で再生中に無効化することができません。\n"
-"1つの字幕トラックのみが焼き込みできます! 競合した場合、最初に選ばれたものを使"
-"用します。"
+"1つの字幕トラックのみが焼き込みできます! 競合した場合、最初に選ばれたものを使用します。"
 
 #: src/ghb3.ui:6808
 msgid "Burn-In for deficient players*:"
@@ -1821,20 +1738,15 @@ msgstr "DVD 字幕"
 
 #: src/ghb3.ui:6822
 msgid ""
-"Burn the first selected DVD subtitle track. All other DVD subtitle tracks "
-"will be discarded.\n"
-"Use this option if your player software or device does not support DVD "
-"subtitles.\n"
+"Burn the first selected DVD subtitle track. All other DVD subtitle tracks will be discarded.\n"
+"Use this option if your player software or device does not support DVD subtitles.\n"
 "\n"
-"Only one subtitle track can be burned! Since conflicts can occur, the first "
-"chosen wins."
+"Only one subtitle track can be burned! Since conflicts can occur, the first chosen wins."
 msgstr ""
 "1つ目のDVD字幕トラックを焼き込みます。他のDVD字幕は全て破棄されます。\n"
-"再生ソフトウェアやデバイスがDVD字幕をサポートしていない場合のみ、このオプショ"
-"ンを使用してください。\n"
+"再生ソフトウェアやデバイスがDVD字幕をサポートしていない場合のみ、このオプションを使用してください。\n"
 "\n"
-"1つの字幕トラックのみが焼き込みできます! 競合した場合、最初に選ばれたものを使"
-"用します。"
+"1つの字幕トラックのみが焼き込みできます! 競合した場合、最初に選ばれたものを使用します。"
 
 #: src/ghb3.ui:6836
 msgid "Blu-ray Subtitles"
@@ -1842,37 +1754,27 @@ msgstr "Blu-ray 字幕"
 
 #: src/ghb3.ui:6841
 msgid ""
-"Burn the first selected Blu-ray subtitle track. All other Blu-ray subtitle "
-"tracks will be discarded.\n"
-"Use this option if your player software or device does not support Blu-ray "
-"subtitles.\n"
+"Burn the first selected Blu-ray subtitle track. All other Blu-ray subtitle tracks will be discarded.\n"
+"Use this option if your player software or device does not support Blu-ray subtitles.\n"
 "\n"
-"Only one subtitle track can be burned! Since conflicts can occur, the first "
-"chosen wins."
+"Only one subtitle track can be burned! Since conflicts can occur, the first chosen wins."
 msgstr ""
-"1つ目のBlu-ray字幕トラックを焼き込みます。他のBlu-ray字幕は全て破棄されま"
-"す。\n"
-"再生ソフトウェアやデバイスがBlu-ray字幕をサポートしていない場合のみ、このオプ"
-"ションを使用してください。\n"
+"1つ目のBlu-ray字幕トラックを焼き込みます。他のBlu-ray字幕は全て破棄されます。\n"
+"再生ソフトウェアやデバイスがBlu-ray字幕をサポートしていない場合のみ、このオプションを使用してください。\n"
 "\n"
-"1つの字幕トラックのみが焼き込みできます! 競合した場合、最初に選ばれたものを使"
-"用します。"
+"1つの字幕トラックのみが焼き込みできます! 競合した場合、最初に選ばれたものを使用します。"
 
 #: src/ghb3.ui:6863
 msgid ""
 "<small>* Only one of the above subtitle burn options will be applied, "
 "starting with the top.</small>"
-msgstr ""
-"<small>* これらのうち、先頭から見てひとつの字幕焼き付けオプションのみ適用され"
-"ます。</small>"
+msgstr "<small>* これらのうち、先頭から見てひとつの字幕焼き付けオプションのみ適用されます。</small>"
 
 #: src/ghb3.ui:6864
 msgid ""
 "Only one subtitle track can be burned! Since conflicts can occur, the first "
 "chosen wins."
-msgstr ""
-"焼き付けることのできる字幕はひとつだけです。複数選択されていた場合は先頭に選"
-"択されたものが採用されます。"
+msgstr "焼き付けることのできる字幕はひとつだけです。複数選択されていた場合は先頭に選択されたものが採用されます。"
 
 #: src/ghb3.ui:6888
 msgid "Subtitles"
@@ -1887,22 +1789,20 @@ msgid "Add chapter markers to output file."
 msgstr "出力ファイルにチャプターマーカーを追加します。"
 
 #: src/ghb3.ui:6922
-#, fuzzy
 msgid "Import Chapters"
-msgstr "チャプター"
+msgstr "チャプターのインポート"
 
 #: src/ghb3.ui:6926
 msgid "Import chapter list from an XML file"
-msgstr ""
+msgstr "XMLファイルからチャプターリストをインポートします"
 
 #: src/ghb3.ui:6937
-#, fuzzy
 msgid "Export Chapters"
-msgstr "チャプター"
+msgstr "チャプターのエクスポート"
 
 #: src/ghb3.ui:6941
 msgid "Export chapter list as an XML file"
-msgstr ""
+msgstr "XMLファイルからチャプターリストをエクスポートします"
 
 #: src/ghb3.ui:6975
 msgid "Index"
@@ -1973,9 +1873,8 @@ msgid "Destination Directory"
 msgstr "保存先ディレクトリ"
 
 #: src/ghb3.ui:7545
-#, fuzzy
 msgid "Add Multiple Titles"
-msgstr "複数追加(_M)"
+msgstr "複数タイトルを追加"
 
 #: src/ghb3.ui:7553 src/ghb3.ui:8590 src/ghb3.ui:8747 src/ghb3.ui:9313
 #: src/ghb3.ui:9723 src/callbacks.c:5610 src/callbacks.c:5618
@@ -2017,7 +1916,7 @@ msgstr "アップデートを自動的にチェックする"
 
 #: src/ghb3.ui:7838
 msgid "Default action when all encodes are complete"
-msgstr ""
+msgstr "全エンコード完了時の既定の動作"
 
 #: src/ghb3.ui:7860
 msgid "Use automatic naming (uses modified source name)"
@@ -2032,20 +1931,18 @@ msgid "Auto-Name Template"
 msgstr "自動名前付けテンプレート"
 
 #: src/ghb3.ui:7896
-#, fuzzy
 msgid ""
-"Available Options: {source-path} {source} {title} {preset} {chapters} {date} "
-"{time} {creation-date} {creation-time} {modification-date} {modification-"
+"Available Options: {source-path} {source} {title} {preset} {chapters} {date}"
+" {time} {creation-date} {creation-time} {modification-date} {modification-"
 "time} {codec} {bit-depth} {quality} {bitrate} {width} {height}"
 msgstr ""
-"利用できるオプション: {source-path} {source} {title} {preset} {chapters} "
-"{date} {time} {creation-date} {creation-time} {quality} {bitrate}"
+"利用できるオプション: {source-path} {source} {title} {preset} {chapters} {date} {time}"
+" {creation-date} {creation-time} {modification-date} {modification-time} "
+"{codec} {bit-depth} {quality} {bitrate} {width} {height}"
 
 #: src/ghb3.ui:7916
 msgid "Use iPod/iTunes friendly (.m4v) file extension for MP4"
-msgstr ""
-"MP4 ファイルにおいて、iPod/iTunes フレンドリなファイル拡張子 (.m4v) を使用す"
-"る"
+msgstr "MP4 ファイルにおいて、iPod/iTunes フレンドリなファイル拡張子 (.m4v) を使用する"
 
 #: src/ghb3.ui:7959
 msgid "Number of previews"
@@ -2062,20 +1959,18 @@ msgstr "エンコードが完了したらキューの完了したアイテムを
 #: src/ghb3.ui:8015
 msgid ""
 "By default, completed jobs remain in the queue and are marked as complete.\n"
-"Check this if you want the queue to clean itself up by deleting completed "
-"jobs."
+"Check this if you want the queue to clean itself up by deleting completed jobs."
 msgstr ""
 "デフォルトでは、完了したジョブは完了とマークされてキューに残ります。\n"
-"完了したらキューから消したいときはこのオプションにチェックマークをつけてくだ"
-"さい。"
+"完了したらキューから消したいときはこのオプションにチェックマークをつけてください。"
 
 #: src/ghb3.ui:8028
 msgid "Power Saving"
-msgstr ""
+msgstr "電力節約"
 
 #: src/ghb3.ui:8046
 msgid "Pause encoding when in Power Saver mode"
-msgstr ""
+msgstr "電力節約モードでエンコードを一時停止する"
 
 #: src/ghb3.ui:8052
 msgid ""
@@ -2083,10 +1978,13 @@ msgid ""
 "enters Power Saver mode. Encoding will resume when\n"
 "Power Saver mode is disabled."
 msgstr ""
+"チェックを付けると、デバイスの電力節約モードが\n"
+"有効になるとエンコードを一時停止します。電力節約\n"
+"モードが無効になるとエンコードは再開します。"
 
 #: src/ghb3.ui:8063
 msgid "Pause encoding when on battery power"
-msgstr ""
+msgstr "バッテリー使用時にエンコードを一時停止する"
 
 #: src/ghb3.ui:8069
 msgid ""
@@ -2094,10 +1992,13 @@ msgid ""
 "unplugged. Encoding will resume when reconnected to\n"
 "a mains power source."
 msgstr ""
+"チェックを付けると、充電器が接続されていないときに\n"
+"エンコードが一時停止します。電源を再度繋ぐと\n"
+"エンコードは再開します。"
 
 #: src/ghb3.ui:8080
 msgid "Pause encoding when battery is low"
-msgstr ""
+msgstr "バッテリー残量が少ない時にエンコードを一時停止する"
 
 #: src/ghb3.ui:8086
 msgid ""
@@ -2105,6 +2006,9 @@ msgid ""
 "level is low. Encoding will resume when the\n"
 "battery is charged."
 msgstr ""
+"チェックを付けると、バッテリー残量が少ない時に\n"
+"エンコードが一時停止されます。バッテリーを充電\n"
+"するとエンコードは再開します。"
 
 #: src/ghb3.ui:8097
 msgid "General"
@@ -2112,7 +2016,7 @@ msgstr "一般"
 
 #: src/ghb3.ui:8122
 msgid "Set a custom directory for Handbrake temporary files"
-msgstr ""
+msgstr "Handbrake一時ファイルのカスタムディレクトリを設定"
 
 #: src/ghb3.ui:8126 src/ghb3.ui:8146
 msgid ""
@@ -2120,17 +2024,21 @@ msgid ""
 "\n"
 "Changing this setting will require restarting HandBrake.\n"
 "\n"
-"This setting overrides the TEMP environment variable that is normally used "
-"to define this directory.\n"
+"This setting overrides the TEMP environment variable that is normally used to define this directory.\n"
 "\n"
-"Flatpak users may need to set this for certain workflows to work properly. "
-"The default size of the TEMP directory in a flatpak sandbox is 1/2 physical "
-"memory size and may be too small for things like the 2-pass stats file."
+"Flatpak users may need to set this for certain workflows to work properly. The default size of the TEMP directory in a flatpak sandbox is 1/2 physical memory size and may be too small for things like the 2-pass stats file."
 msgstr ""
+"Handbrakeの一時ファイルはこのディレクトリの下に作成されます。\n"
+"\n"
+"この設定を変えた後はHandbrakeを再起動する必要があります。\n"
+"\n"
+"TEMP環境変数による通常の保存先ディレクトリ決定は上書きされます。\n"
+"\n"
+"Flatpakユーザーで特定のワークフローがある場合はこの設定を必要とします。Flatpakサンドボックス既定のTEMPディレクトリサイズは物理メモリの1/2ですが、これが2パスファイルなどでは少なすぎることがあります。"
 
 #: src/ghb3.ui:8156
 msgid "Temp Directory"
-msgstr ""
+msgstr "一時ディレクトリ"
 
 #: src/ghb3.ui:8196
 msgid "Constant Quality fractional granularity"
@@ -2189,21 +2097,18 @@ msgid ""
 "When checked, every title will use the same settings when adding a\n"
 "batch of titles to the queue.\n"
 "\n"
-"Uncheck this if you want to allow changing each title's settings "
-"independently."
-msgstr ""
-"このオプションを有効にすると、キューへの追加時にすべてのタイトルに同じ設定が"
-"使用されます。"
+"Uncheck this if you want to allow changing each title's settings independently."
+msgstr "このオプションを有効にすると、キューへの追加時にすべてのタイトルに同じ設定が使用されます。"
 
 #: src/ghb3.ui:8494
 msgid "Show preview image in Summary tab"
-msgstr ""
+msgstr "概要タブでプレビュー画像を表示"
 
 #: src/ghb3.ui:8500
 msgid ""
 "Uncheck this if you want to hide the video preview image on the Summary tab "
 "for privacy reasons."
-msgstr ""
+msgstr "プライバシーの理由で概要タブに映像プレビューを表示したくない場合はチェックを外してください。"
 
 #: src/ghb3.ui:8523
 msgid "Allow Tweaks"
@@ -2218,9 +2123,8 @@ msgid "Advanced"
 msgstr "詳細"
 
 #: src/ghb3.ui:8578
-#, fuzzy
 msgid "Rename Preset"
-msgstr "デノイズプリセット:"
+msgstr "プリセット名変更"
 
 #: src/ghb3.ui:8640
 msgid "<span size=\"x-large\">Rename Preset</span>"
@@ -2235,9 +2139,8 @@ msgid "<b>Description</b>"
 msgstr "<b>説明</b>"
 
 #: src/ghb3.ui:8735
-#, fuzzy
 msgid "Save Preset"
-msgstr "新規プリセットとして保存"
+msgstr "プリセットを保存"
 
 #: src/ghb3.ui:8803
 msgid "Category:"
@@ -2279,12 +2182,11 @@ msgstr "プレビューフレームを選択します。"
 msgid ""
 "Encode and play a short sequence of video starting from the current preview "
 "position."
-msgstr ""
-"現在のプレビューポジションからの短いシーケンスをエンコードおよび再生します。"
+msgstr "現在のプレビューポジションからの短いシーケンスをエンコードおよび再生します。"
 
 #: src/ghb3.ui:9172
 msgid "Click to toggle full screen mode"
-msgstr ""
+msgstr "クリックしてフルスクリーンモードに切り替え"
 
 #: src/ghb3.ui:9208
 msgid "<b>Duration:</b>"
@@ -2311,9 +2213,8 @@ msgid "Reset preview window to the source video's resolution"
 msgstr "プレビューウィンドウをソースビデオの解像度にリセットします"
 
 #: src/ghb3.ui:9300 src/subtitlehandler.c:1743
-#, fuzzy
 msgid "Edit Subtitles"
-msgstr "字幕"
+msgstr "字幕を編集"
 
 #: src/ghb3.ui:9355
 msgid "Import SRT"
@@ -2433,7 +2334,7 @@ msgstr "デフォルトトラックの設定"
 
 #: src/ghb3.ui:9710 src/audiohandler.c:1473
 msgid "Edit Audio Track"
-msgstr ""
+msgstr "音声トラックを編集"
 
 #: src/ghb3.ui:9784
 msgid "List of audio tracks available from your source."
@@ -2459,19 +2360,14 @@ msgstr "サンプルレート"
 
 #: src/ghb3.ui:9920 src/ghb3.ui:10159 src/audiohandler.c:1931
 msgid ""
-"<b>Dynamic Range Compression:</b> Adjust the dynamic range of the output "
-"audio track.\n"
+"<b>Dynamic Range Compression:</b> Adjust the dynamic range of the output audio track.\n"
 "\n"
-"For source audio that has a wide dynamic range (very loud and very soft "
-"sequences),\n"
-"DRC allows you to 'compress' the range by making loud sounds softer and soft "
-"sounds louder."
+"For source audio that has a wide dynamic range (very loud and very soft sequences),\n"
+"DRC allows you to 'compress' the range by making loud sounds softer and soft sounds louder."
 msgstr ""
-"<b>ダイナミックレンジ圧縮:</b> 出力オーディオトラックのダイナミックレンジを調"
-"整します。\n"
+"<b>ダイナミックレンジ圧縮:</b> 出力オーディオトラックのダイナミックレンジを調整します。\n"
 "\n"
-"ソースオーディオのダイナミックレンジが広い (とても大きい/とても小さいシーケン"
-"ス) の場合、DRC は音量を下げて/上げてレンジを '圧縮' できます。"
+"ソースオーディオのダイナミックレンジが広い (とても大きい/とても小さいシーケンス) の場合、DRC は音量を下げて/上げてレンジを '圧縮' できます。"
 
 #: src/ghb3.ui:9941 src/audiohandler.c:1782
 msgid "Set the audio codec to encode this track with."
@@ -2501,8 +2397,7 @@ msgstr "このトラックをエンコードするビットレートを指定し
 msgid ""
 "<b>Quality:</b> For output codec's that support it, adjust the quality of "
 "the output."
-msgstr ""
-"<b>音質:</b> コーデックがサポートしている場合、出力の音質を調整します。"
+msgstr "<b>音質:</b> コーデックがサポートしている場合、出力の音質を調整します。"
 
 #: src/ghb3.ui:10046
 msgid "00.0"
@@ -2520,8 +2415,7 @@ msgstr "出力オーディオトラックのサンプルレートを指定しま
 msgid ""
 "<b>Audio Gain:</b> Adjust the amplification or attenuation of the output "
 "audio track."
-msgstr ""
-"<b>オーディオゲイン:</b> 出力オーディオトラックの増幅/減衰を調整します。"
+msgstr "<b>オーディオゲイン:</b> 出力オーディオトラックの増幅/減衰を調整します。"
 
 #. Audio Gain Label
 #: src/ghb3.ui:10130 src/audiohandler.c:1911
@@ -2538,9 +2432,8 @@ msgid "Off"
 msgstr "オフ"
 
 #: src/ghb3.ui:10202
-#, fuzzy
 msgid "HandBrake Updater"
-msgstr "HandBrake"
+msgstr "HandBrake更新"
 
 #: src/ghb3.ui:10214
 msgid "Skip This Version"
@@ -2563,53 +2456,50 @@ msgid "<b>Release Notes</b>"
 msgstr "<b>リリースノート</b>"
 
 #: src/fr.handbrake.ghb.metainfo.xml.in.in:11
-#, fuzzy
 msgid "Video Transcoder"
-msgstr "ビデオエンコーダー:"
+msgstr "ビデオトランスコーダー"
 
 #: src/fr.handbrake.ghb.metainfo.xml.in.in:14
 msgid ""
 "HandBrake is a tool for converting video from nearly any format to a "
 "selection of modern, widely supported codecs."
-msgstr ""
+msgstr "HandBrake はほとんどの動画フォーマットを最新の広く使われているコーデックに変換するツールです。"
 
 #: src/fr.handbrake.ghb.metainfo.xml.in.in:15
 msgid "Reasons you'll love Handbrake:"
-msgstr ""
+msgstr "あなたが Handbrake を愛用するかもしれない理由:"
 
 #: src/fr.handbrake.ghb.metainfo.xml.in.in:17
 msgid "Convert video from nearly any format"
-msgstr ""
+msgstr "あらゆるフォーマットの動画を変換"
 
 #: src/fr.handbrake.ghb.metainfo.xml.in.in:18
-#, fuzzy
 msgid "Free and Open Source"
-msgstr "ソースを開く"
+msgstr "フリーかつオープンソース"
 
 #: src/fr.handbrake.ghb.metainfo.xml.in.in:19
 msgid "Multi-Platform (Windows, Mac and Linux)"
-msgstr ""
+msgstr "マルチプラットフォーム (Windows、macOS および Linux)"
 
 #: src/fr.handbrake.ghb.metainfo.xml.in.in:65
 msgid "Main window and settings summary"
-msgstr ""
+msgstr "メインウィンドウと設定まとめ"
 
 #: src/fr.handbrake.ghb.metainfo.xml.in.in:69
 msgid "Video resolution and cropping settings"
-msgstr ""
+msgstr "映像解像度とクロップ設定"
 
 #: src/fr.handbrake.ghb.metainfo.xml.in.in:73
-#, fuzzy
 msgid "Video encoder settings"
-msgstr "ビデオエンコーダー:"
+msgstr "ビデオエンコーダー設定"
 
 #: src/fr.handbrake.ghb.metainfo.xml.in.in:77
 msgid "Audio track selection and settings"
-msgstr ""
+msgstr "オーディオトラックの選択と設定"
 
 #: src/fr.handbrake.ghb.metainfo.xml.in.in:81
 msgid "Chapter title editing"
-msgstr ""
+msgstr "チャプタータイトルの編集"
 
 #: src/audiohandler.c:439 src/audiohandler.c:761 src/audiohandler.c:1236
 #, c-format
@@ -2666,7 +2556,7 @@ msgstr ""
 
 #: src/audiohandler.c:1391
 msgid "Add Audio Track"
-msgstr ""
+msgstr "音声トラックを追加"
 
 #: src/audiohandler.c:1760
 msgid ""
@@ -2711,72 +2601,67 @@ msgid "Stop Scan"
 msgstr "スキャン中止"
 
 #: src/callbacks.c:1735
-#, fuzzy
 msgid "Single Title"
-msgstr "一つのタイトルを開く(_T)"
+msgstr "単一タイトル"
 
 #: src/callbacks.c:2127 src/callbacks.c:2271
 msgid "FPS"
-msgstr ""
+msgstr "FPS"
 
 #: src/callbacks.c:2131
 #, c-format
 msgid "Dolby Vision %d.%d"
-msgstr ""
+msgstr "ドルビービジョン %d.%d"
 
 #: src/callbacks.c:2135 src/callbacks.c:2138
 msgid "HDR10+"
-msgstr ""
+msgstr "HDR10+"
 
 #: src/callbacks.c:2140
 msgid "HDR10"
-msgstr ""
+msgstr "HDR10"
 
 #: src/callbacks.c:2142
-#, fuzzy
 msgid "HDR"
-msgstr "DRC"
+msgstr "HDR"
 
 #: src/callbacks.c:2144
-#, fuzzy
 msgid "SDR"
-msgstr "DRC"
+msgstr "SDR"
 
 #. TRANSLATORS: This is the bit depth of the video
 #: src/callbacks.c:2152
 #, c-format
 msgid "%d-bit"
-msgstr ""
+msgstr "%d-ビット"
 
 #: src/callbacks.c:2174
-#, fuzzy
 msgid "Audio Track"
 msgid_plural "Audio Tracks"
-msgstr[0] "オーディオ"
+msgstr[0] "音声トラック"
 
 #: src/callbacks.c:2177
-#, fuzzy
 msgid "Subtitle Track"
 msgid_plural "Subtitle Tracks"
-msgstr[0] "字幕"
+msgstr[0] "字幕トラック"
 
 #: src/callbacks.c:2275
 msgid "CFR"
-msgstr ""
+msgstr "CFR(固定フレームレート)"
 
 #: src/callbacks.c:2279
 msgid "PFR"
-msgstr ""
+msgstr "PFR(ピークフレームレート)"
 
 #: src/callbacks.c:2283
 msgid "VFR"
-msgstr ""
+msgstr "VFR(可変フレームレート)"
 
 #: src/callbacks.c:2325
 #, c-format
 msgid "+ %d more audio track"
 msgid_plural "+ %d more audio tracks"
-msgstr[0] ""
+msgstr[0] "+ %d つの追加の音声トラック"
 
 #: src/callbacks.c:2359 src/callbacks.c:2391 src/queuehandler.c:650
 #: src/queuehandler.c:687
@@ -2794,27 +2679,26 @@ msgid ", Default"
 msgstr ", 既定"
 
 #: src/callbacks.c:2405
-#, fuzzy, c-format
+#, c-format
 msgid "+ %d more subtitle track"
 msgid_plural "+ %d more subtitle tracks"
-msgstr[0] "外国語音声の字幕トラック"
+msgstr[0] "+ %d つの追加の字幕トラック"
 
 #: src/callbacks.c:2560
 msgid "storage"
-msgstr ""
+msgstr "格納"
 
 #: src/callbacks.c:2561
 msgid "display"
-msgstr ""
+msgstr "表示"
 
 #: src/callbacks.c:2562
-#, fuzzy
 msgid "Pixel Aspect Ratio"
-msgstr "ピクセルアスペクト比:"
+msgstr "ピクセルアスペクト比"
 
 #: src/callbacks.c:2563
 msgid "Display Aspect Ratio"
-msgstr ""
+msgstr "表示アスペクト比"
 
 #: src/callbacks.c:2700 src/hb-backend.c:2263 src/hb-backend.c:2383
 #: src/hb-backend.c:2395
@@ -2886,9 +2770,7 @@ msgstr "パス %d / %d, "
 #: src/callbacks.c:4207
 #, c-format
 msgid "Encoding: %s%s%.2f %% (%.2f fps, avg %.2f fps, ETA %02dh%02dm%02ds)"
-msgstr ""
-"エンコード中: %s%s%.2f %% (%.2f fps, 平均 %.2f fps, 完了予定 %02d時間%02d"
-"分%02d秒後)"
+msgstr "エンコード中: %s%s%.2f %% (%.2f fps, 平均 %.2f fps, 完了予定 %02d時間%02d分%02d秒後)"
 
 #: src/callbacks.c:4217 src/callbacks.c:4257
 #, c-format
@@ -2967,12 +2849,11 @@ msgstr "コンピューターをシャットダウンします"
 #: src/callbacks.c:5755 src/chapters.c:603 src/chapters.c:633
 #: src/presets.c:2044 src/queuehandler.c:1694
 msgid "All Files"
-msgstr ""
+msgstr "全ファイル"
 
 #: src/chapters.c:604 src/chapters.c:634
-#, fuzzy
 msgid "Chapters (*.xml)"
-msgstr "チャプター"
+msgstr "チャプター (*.xml)"
 
 #: src/hb-backend.c:61 src/hb-backend.c:86
 msgid "First Track Matching Selected Languages"
@@ -3073,7 +2954,7 @@ msgstr "Yadif"
 
 #: src/hb-backend.c:203
 msgid "Bwdif"
-msgstr ""
+msgstr "Bwdif"
 
 #: src/hb-backend.c:214
 msgid "NLMeans"
@@ -3092,77 +2973,76 @@ msgid "Lapsharp"
 msgstr "LapSharp"
 
 #: src/hb-backend.c:238
-#, fuzzy
 msgid "Conservative"
-msgstr "固定フレームレート"
+msgstr "保守的"
 
 #: src/hb-backend.c:251
 msgid "90°"
-msgstr ""
+msgstr "90°"
 
 #: src/hb-backend.c:252
 msgid "180°"
-msgstr ""
+msgstr "180°"
 
 #: src/hb-backend.c:253
 msgid "270°"
-msgstr ""
+msgstr "270°"
 
 #: src/hb-backend.c:263
 msgid "4320p 8K Ultra HD"
-msgstr ""
+msgstr "4320p 8K Ultra HD"
 
 #: src/hb-backend.c:264
 msgid "2160p 4K Ultra HD"
-msgstr ""
+msgstr "2160p 4K Ultra HD"
 
 #: src/hb-backend.c:265
 msgid "1440p 2.5K Quad HD"
-msgstr ""
+msgstr "1440p 2.5K Quad HD"
 
 #: src/hb-backend.c:266
 msgid "1080p Full HD"
-msgstr ""
+msgstr "1080p Full HD"
 
 #: src/hb-backend.c:267
 msgid "720p HD"
-msgstr ""
+msgstr "720p HD"
 
 #: src/hb-backend.c:268
 msgid "576p PAL"
-msgstr ""
+msgstr "576p PAL"
 
 #: src/hb-backend.c:269
 msgid "480p NTSC"
-msgstr ""
+msgstr "480p NTSC"
 
 #: src/hb-backend.c:282
 msgid "Height (Letterbox)"
-msgstr ""
+msgstr "高さ (レターボックス)"
 
 #: src/hb-backend.c:283
 msgid "Width (Pillarbox)"
-msgstr ""
+msgstr "幅 (ピラーボックス)"
 
 #: src/hb-backend.c:284
 msgid "Width &amp; Height"
-msgstr ""
+msgstr "幅 &amp; 高さ"
 
 #: src/hb-backend.c:295
 msgid "Black"
-msgstr ""
+msgstr "黒"
 
 #: src/hb-backend.c:296
 msgid "Dark Gray"
-msgstr ""
+msgstr "ダークグレー"
 
 #: src/hb-backend.c:297
 msgid "Gray"
-msgstr ""
+msgstr "グレー"
 
 #: src/hb-backend.c:298
 msgid "White"
-msgstr ""
+msgstr "白"
 
 #: src/hb-backend.c:309
 msgid "Spatial"
@@ -3463,6 +3343,10 @@ msgid ""
 "You should choose a different video codec or container.\n"
 "If you continue, one will be chosen for you."
 msgstr ""
+"WebMコンテナにはVP8、VP9とAV1のみサポートされています。\n"
+"\n"
+"異なるコンテナかビデオコーデックを選択してください。\n"
+"続行すれば、どれかが自動選択されます。"
 
 #: src/hb-backend.c:4477 src/hb-backend.c:4534 src/hb-backend.c:4554
 #: src/hb-backend.c:4574 src/hb-backend.c:4635 src/hb-backend.c:4690
@@ -3537,58 +3421,51 @@ msgstr ""
 
 #: src/hb-backend.c:4872
 msgid "Comb Detect"
-msgstr ""
+msgstr "くしノイズ検出"
 
 #: src/hb-backend.c:4874
-#, fuzzy
 msgid "Detelecine"
-msgstr "デテレシネ:"
+msgstr "デテレシネ"
 
 #: src/hb-backend.c:4876
-#, fuzzy
 msgid "Deinterlace (Yadif)"
-msgstr "デインターレース:"
+msgstr "デインターレース (Yadif)"
 
 #: src/hb-backend.c:4878
-#, fuzzy
 msgid "Deinterlace (Bwdif)"
-msgstr "デインターレース:"
+msgstr "デインターレース (Bwdif)"
 
 #: src/hb-backend.c:4882
-#, fuzzy
 msgid "Deblock"
-msgstr "デブロックチューニング:"
+msgstr "デブロック"
 
 #: src/hb-backend.c:4884
-#, fuzzy
 msgid "Denoise (NLMeans)"
-msgstr "デノイズプリセット:"
+msgstr "デノイズ (NLMeans)"
 
 #: src/hb-backend.c:4886
 msgid "Denoise (HQDN3D)"
-msgstr ""
+msgstr "デノイズ (HQDN3D)"
 
 #: src/hb-backend.c:4888
 msgid "Chroma Smooth"
-msgstr ""
+msgstr "クロマスムーズ"
 
 #: src/hb-backend.c:4890
-#, fuzzy
 msgid "Sharpen (Unsharp)"
-msgstr "シャープ化チューン:"
+msgstr "シャープ化 (Unsharp)"
 
 #: src/hb-backend.c:4892
 msgid "Rotate"
-msgstr ""
+msgstr "回転"
 
 #: src/hb-backend.c:4894
-#, fuzzy
 msgid "Sharpen (lapsharp)"
-msgstr "シャープ化フィルター:"
+msgstr "シャープ化 (lapsharp)"
 
 #: src/hb-backend.c:4898
 msgid "Colorspace"
-msgstr ""
+msgstr "色空間"
 
 #: src/main.c:99
 #, c-format
@@ -3645,13 +3522,11 @@ msgstr "子フォルダーを追加するときに親フォルダーの検索に
 
 #: src/presets.c:1852
 msgid ""
-"Presets found are newer than what is supported by this version of "
-"HandBrake!\n"
+"Presets found are newer than what is supported by this version of HandBrake!\n"
 "\n"
 "Would you like to continue?"
 msgstr ""
-"このバージョンでサポートされているものより新しいプリセットが見つかりまし"
-"た。\n"
+"このバージョンでサポートされているものより新しいプリセットが見つかりました。\n"
 "\n"
 "このまま続けますか?"
 
@@ -3695,9 +3570,8 @@ msgid "preset"
 msgstr "プリセット"
 
 #: src/presets.c:2467
-#, fuzzy
 msgid "Delete"
-msgstr "削除(_D)"
+msgstr "削除"
 
 #: src/preview.c:532
 #, c-format
@@ -3722,9 +3596,8 @@ msgid "%s (Modified)"
 msgstr "%s (変更済み)"
 
 #: src/queuehandler.c:237
-#, fuzzy
 msgid "Time:"
-msgstr "終了時刻:"
+msgstr "時間:"
 
 #: src/queuehandler.c:281
 msgid "Align A/V"
@@ -3753,9 +3626,9 @@ msgid "%s, Bitrate %dkbps"
 msgstr "%s, ビットレート %d kbps"
 
 #: src/queuehandler.c:359
-#, fuzzy, c-format
+#, c-format
 msgid "%s, Bitrate %dkbps (Multi Pass)"
-msgstr "%s, ビットレート %d kbps (2パス)"
+msgstr "%s, ビットレート %dkbps (複数パス)"
 
 #: src/queuehandler.c:366
 #, c-format
@@ -3866,14 +3739,12 @@ msgid "Encode"
 msgstr "エンコード"
 
 #: src/queuehandler.c:1208
-#, fuzzy
 msgid "Encode Analysis Pass"
-msgstr "エンコード時のみ"
+msgstr "解析パス実行中"
 
 #: src/queuehandler.c:1212
-#, fuzzy
 msgid "Encode Final Pass"
-msgstr "エンコード一時停止"
+msgstr "最終パスエンコード中"
 
 #. Should never happen
 #: src/queuehandler.c:1217
@@ -3958,29 +3829,25 @@ msgstr ""
 "\n"
 
 #: src/subtitlehandler.c:110
-#, fuzzy, c-format
+#, c-format
 msgid "Offset: %dms"
-msgstr "オフセット (ミリ秒)"
+msgstr "オフセット: %d ミリ秒"
 
 #: src/subtitlehandler.c:115
-#, fuzzy
 msgid "Burned Into Video"
 msgstr "映像に焼き込む"
 
 #: src/subtitlehandler.c:116
-#, fuzzy
 msgid "Passthrough"
-msgstr "自動パススルー:"
+msgstr "パススルー"
 
 #: src/subtitlehandler.c:123
-#, fuzzy
 msgid "Default"
-msgstr ", 既定"
+msgstr "既定"
 
 #: src/subtitlehandler.c:1191
-#, fuzzy
 msgid "Add Subtitles"
-msgstr "字幕"
+msgstr "字幕を追加"
 
 #: src/subtitlehandler.c:1382
 #, c-format
@@ -4026,106 +3893,3 @@ msgstr ""
 #, c-format
 msgid "%s: %.4g (Warning: lossless)"
 msgstr "%s: %.4g (警告: ロスレスです)"
-
-#~ msgid "Encode First Pass (Analysis)"
-#~ msgstr "1パスエンコード(解析)"
-
-#~ msgid "Encode Second Pass (Final)"
-#~ msgstr "2パスエンコード(最終)"
-
-#~ msgid "<b>Presets List</b>"
-#~ msgstr "<b>プリセットリスト</b>"
-
-#~ msgid "https://handbrake.fr"
-#~ msgstr "https://handbrake.fr"
-
-#~ msgid "Open _Source"
-#~ msgstr "ソースを開く(_S)"
-
-#~ msgid "<small>No Titles</small>"
-#~ msgstr "<small>タイトルなし</small>"
-
-#~ msgid "Deinterlace Preset:"
-#~ msgstr "デインターレースプリセット:"
-
-#~ msgid "Denoise Tune:"
-#~ msgstr "デノイズ調整:"
-
-#~ msgid "Sharpen Preset:"
-#~ msgstr "シャープ化プリセット:"
-
-#~ msgid "_Cancel"
-#~ msgstr "キャンセル(_C)"
-
-#~ msgid "_Open"
-#~ msgstr "開く(_O)"
-
-#~ msgid "Title Number:"
-#~ msgstr "タイトル番号:"
-
-#~ msgid "Scan this DVD source"
-#~ msgstr "この DVD ソースをスキャン"
-
-#~ msgid "All (*)"
-#~ msgstr "すべて (*)"
-
-#, c-format
-#~ msgid ""
-#~ "Destination: %s\n"
-#~ "\n"
-#~ "Another queued job has specified the same destination.\n"
-#~ "Do you want to overwrite?"
-#~ msgstr ""
-#~ "保存先: %s\n"
-#~ "\n"
-#~ "他のキュージョブが同じ保存先を指定しています。\n"
-#~ "上書きしてよろしいですか?"
-
-#~ msgid "Overwrite"
-#~ msgstr "上書き"
-
-#, c-format
-#~ msgid ""
-#~ "Destination: %s\n"
-#~ "\n"
-#~ "This is not a valid directory."
-#~ msgstr ""
-#~ "保存先: %s\n"
-#~ "\n"
-#~ "これは正しいディレクトリではありません。"
-
-#, c-format
-#~ msgid ""
-#~ "Destination: %s\n"
-#~ "\n"
-#~ "Can not read or write the directory."
-#~ msgstr ""
-#~ "保存先: %s\n"
-#~ "\n"
-#~ "ディレクトリに読み書きできません。"
-
-#, c-format
-#~ msgid ""
-#~ "Destination: %s\n"
-#~ "\n"
-#~ "File already exists.\n"
-#~ "Do you want to overwrite?"
-#~ msgstr ""
-#~ "保存先: %s\n"
-#~ "\n"
-#~ "ファイルがすでに存在します。\n"
-#~ "上書きしてよろしいですか?"
-
-#~ msgid "Select this title for adding to the queue.\n"
-#~ msgstr "キューに追加するためにこのファイルを選択します。\n"
-
-#~ msgid "No Title"
-#~ msgstr "タイトルなし"
-
-#~ msgid ""
-#~ "There is another title with the same destination file name.\n"
-#~ "This title will not be added to the queue unless you change\n"
-#~ "the output file name.\n"
-#~ msgstr ""
-#~ "異なるタイトルで保存ファイル名が同じジョブが存在します。\n"
-#~ "出力ファイル名を変更しないかぎりこのタイトルはキューに追加されません。\n"
