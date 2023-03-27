@@ -1,40 +1,37 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) 2023 HandBrake Team
 # This file is distributed under the same license as the ghb package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2023.
+# 
 # Translators:
-# Casper, 2022
-#
+# Casper, 2023
+# 
+#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: ghb 1.6.0\n"
+"Project-Id-Version: ghb 0.1\n"
 "Report-Msgid-Bugs-To: https://github.com/HandBrake/Handbrake/issues\n"
 "POT-Creation-Date: 2023-03-25 15:12+0100\n"
 "PO-Revision-Date: 2018-10-10 18:14+0000\n"
-"Last-Translator: Casper, 2022\n"
-"Language-Team: Spanish (https://www.transifex.com/HandBrakeProject/"
-"teams/92423/es/)\n"
-"Language: es\n"
+"Last-Translator: Casper, 2023\n"
+"Language-Team: Spanish (https://www.transifex.com/HandBrakeProject/teams/92423/es/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? "
-"1 : 2;\n"
+"Language: es\n"
+"Plural-Forms: nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;\n"
 
 #: src/menu.ui:7
 msgid "_File"
 msgstr "_Archivo"
 
 #: src/menu.ui:11
-#, fuzzy
 msgid "_Open Source"
-msgstr "Abrir Fuente"
+msgstr "_Abrir Fuente"
 
 #: src/menu.ui:16
-#, fuzzy
 msgid "Open _Directory"
-msgstr "Abrir directorio _origen"
+msgstr "Abrir _Directorio"
 
 #: src/menu.ui:21
 msgid "Set _Destination"
@@ -61,9 +58,8 @@ msgid "Add _Multiple"
 msgstr "Añadir _Multiple"
 
 #: src/menu.ui:53
-#, fuzzy
 msgid "Add A_ll"
-msgstr "Añadir todo"
+msgstr "Añadir T_odo"
 
 #: src/menu.ui:60
 msgid "_Start Encoding"
@@ -487,36 +483,22 @@ msgstr "Copyright © 2008 - John StebbinsCopyright © 2004 - , HandBrake Devs"
 msgid ""
 "HandBrake is a GPL-licensed, multiplatform, multithreaded video transcoder."
 msgstr ""
-"HandBrake es un transcodificador de video multiproceso y multiplataforma con "
-"licencia GPL."
+"HandBrake es un transcodificador de video multiproceso y multiplataforma con"
+" licencia GPL."
 
 #: src/ghb3.ui:2056
 msgid ""
-"HandBrake is free software; you can redistribute it and/or modify it under "
-"the terms of the GNU General Public License version 2, as published by the "
-"Free Software Foundation.\n"
+"HandBrake is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License version 2, as published by the Free Software Foundation.\n"
 "\n"
-"HandBrake is distributed in the hope that it will be useful, but WITHOUT ANY "
-"WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS "
-"FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more "
-"details.\n"
+"HandBrake is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.\n"
 "\n"
-"You should have received a copy of the GNU General Public License along with "
-"Glade; if not, write to the Free Software Foundation, Inc., 51 Franklin "
-"Street, Fifth Floor, Boston, MA 02110-1301, USA."
+"You should have received a copy of the GNU General Public License along with Glade; if not, write to the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA."
 msgstr ""
-"HandBrake es un software gratuito; puede redistribuirlo y/o modificarlo bajo "
-"los términos de la GNU General Public License versión 2, según lo publicado "
-"por la Free Software Foundation.\n"
+"HandBrake es un software gratuito; puede redistribuirlo y/o modificarlo bajo los términos de la GNU General Public License versión 2, según lo publicado por la Free Software Foundation.\n"
 "\n"
-"HandBrake se distribuye con la esperanza de que sea útil, pero SIN NINGUNA "
-"GARANTÍA; incluso sin la garantía implícita de COMERCIABILIDAD o APTITUD "
-"PARA UN PROPÓSITO PARTICULAR. Consulte la Licencia pública general GNU para "
-"obtener más detalles.\n"
+"HandBrake se distribuye con la esperanza de que sea útil, pero SIN NINGUNA GARANTÍA; incluso sin la garantía implícita de COMERCIABILIDAD o APTITUD PARA UN PROPÓSITO PARTICULAR. Consulte la Licencia pública general GNU para obtener más detalles.\n"
 "\n"
-"Debería haber recibido una copia de la Licencia Pública General GNU junto "
-"con Glade; de lo contrario, escriba a Free Software Foundation, Inc., 51 "
-"Franklin Street, Fifth Floor, Boston, MA 02110-1301, EE. UU."
+"Debería haber recibido una copia de la Licencia Pública General GNU junto con Glade; de lo contrario, escriba a Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, EE. UU."
 
 #: src/ghb3.ui:2242 src/fr.handbrake.ghb.metainfo.xml.in.in:10
 msgid "HandBrake"
@@ -574,10 +556,11 @@ msgstr "Actividad"
 msgid "<b>Source:</b>"
 msgstr "<b>Fuente:</b>"
 
-#: src/ghb3.ui:2464 src/hb-backend.c:60 src/hb-backend.c:72 src/hb-backend.c:85
-#: src/hb-backend.c:124 src/hb-backend.c:237 src/hb-backend.c:270
-#: src/hb-backend.c:281 src/hb-backend.c:308 src/hb-backend.c:393
-#: src/hb-backend.c:2593 src/hb-backend.c:2819 src/subtitlehandler.c:1368
+#: src/ghb3.ui:2464 src/hb-backend.c:60 src/hb-backend.c:72
+#: src/hb-backend.c:85 src/hb-backend.c:124 src/hb-backend.c:237
+#: src/hb-backend.c:270 src/hb-backend.c:281 src/hb-backend.c:308
+#: src/hb-backend.c:393 src/hb-backend.c:2593 src/hb-backend.c:2819
+#: src/subtitlehandler.c:1368
 msgid "None"
 msgstr "Ninguno"
 
@@ -679,8 +662,7 @@ msgid ""
 "This allows a player to initiate playback before downloading the entire file."
 msgstr ""
 "Optimizar el diseño del archivo MP4 para la descarga progresiva.\n"
-"Esto permite que un reproductor inicie la reproducción antes de descargar "
-"todo el archivo."
+"Esto permite que un reproductor inicie la reproducción antes de descargar todo el archivo."
 
 #: src/ghb3.ui:2930
 msgid "Align A/V Start"
@@ -693,10 +675,8 @@ msgid ""
 "sync for broken players that do not honor MP4 edit lists."
 msgstr ""
 "Alinea las marcas de tiempo iniciales de todos los flujos de audio y video\n"
-"Insertar fotogramas en blanco o soltar fotogramas. Puede mejorar audio/"
-"video\n"
-"Sincronización para reproductores rotos que no cumplen con las listas de "
-"edición de MP4."
+"Insertar fotogramas en blanco o soltar fotogramas. Puede mejorar audio/video\n"
+"Sincronización para reproductores rotos que no cumplen con las listas de edición de MP4."
 
 #: src/ghb3.ui:2952
 msgid "iPod 5G Support"
@@ -845,8 +825,7 @@ msgstr ""
 " la resolución de almacenamiento mientras conserva la relación\n"
 " de aspecto de la pantalla original.\n"
 "  Ninguno     - Forzar la relación de aspecto de píxeles a 1:1.\n"
-"  Personalizado   - Ingrese una relación de aspecto de píxeles personalizado."
-"</tt></small>"
+"  Personalizado   - Ingrese una relación de aspecto de píxeles personalizado.</tt></small>"
 
 #: src/ghb3.ui:3736
 msgid "Pixel Aspect:"
@@ -856,14 +835,12 @@ msgstr "Aspecto del píxel:"
 msgid ""
 "Pixel aspect defines the shape of the pixels.\n"
 "\n"
-"A 1:1 ratio defines a square pixel.  Other values define rectangular "
-"shapes.\n"
+"A 1:1 ratio defines a square pixel.  Other values define rectangular shapes.\n"
 "Players will scale the image in order to achieve the specified aspect."
 msgstr ""
 "El aspecto del píxel define la forma de los píxeles.\n"
 "\n"
-"Una proporción de 1: 1 define un píxel cuadrado. Otros valores definen "
-"formas rectangulares.\n"
+"Una proporción de 1: 1 define un píxel cuadrado. Otros valores definen formas rectangulares.\n"
 "Los reproductores escalarán la imagen para lograr el aspecto especificado."
 
 #: src/ghb3.ui:3771
@@ -873,13 +850,11 @@ msgstr ":"
 #: src/ghb3.ui:3786
 msgid ""
 "Pixel aspect defines the shape of the pixels.\n"
-"A 1:1 ratio defines a square pixel.  Other values define rectangular "
-"shapes.\n"
+"A 1:1 ratio defines a square pixel.  Other values define rectangular shapes.\n"
 "Players will scale the image in order to achieve the specified aspect."
 msgstr ""
 "El aspecto del píxel define la forma de los píxeles.\n"
-"Una proporción de 1: 1 define un píxel cuadrado. Otros valores definen "
-"formas rectangulares.\n"
+"Una proporción de 1: 1 define un píxel cuadrado. Otros valores definen formas rectangulares.\n"
 "Los reproductores escalarán la imagen para lograr el aspecto especificado."
 
 #: src/ghb3.ui:3805
@@ -889,22 +864,18 @@ msgstr "Tamaño escalado:"
 #: src/ghb3.ui:3820
 msgid ""
 "This is the width that the video will be stored at.\n"
-"The actual display dimensions will differ if the pixel aspect ratio is not "
-"1:1."
+"The actual display dimensions will differ if the pixel aspect ratio is not 1:1."
 msgstr ""
 "Este es el ancho en el que se almacenará el video.\n"
-"Las dimensiones de visualización reales diferirán si la relación de aspecto "
-"de píxeles no es 1: 1."
+"Las dimensiones de visualización reales diferirán si la relación de aspecto de píxeles no es 1: 1."
 
 #: src/ghb3.ui:3853
 msgid ""
 "This is the height that the video will be stored at.\n"
-"The actual display dimensions will differ if the pixel aspect ratio is not "
-"1:1."
+"The actual display dimensions will differ if the pixel aspect ratio is not 1:1."
 msgstr ""
 "Esta es la altura en la que se almacenará el video.\n"
-"Las dimensiones de visualización reales diferirán si la relación de aspecto "
-"de píxeles no es 1: 1."
+"Las dimensiones de visualización reales diferirán si la relación de aspecto de píxeles no es 1: 1."
 
 #: src/ghb3.ui:3867
 msgid "Optimal Size"
@@ -919,7 +890,8 @@ msgid "Allow Upscaling"
 msgstr "Permitir escalado"
 
 #: src/ghb3.ui:3892
-msgid "If not enabled, scaled dimensions will be limited to source dimensions."
+msgid ""
+"If not enabled, scaled dimensions will be limited to source dimensions."
 msgstr ""
 "Si no está habilitado, las dimensiones escaladas se limitarán a las "
 "dimensiones de la fuente."
@@ -989,14 +961,11 @@ msgstr "Destelecinado:"
 msgid ""
 "This filter removes 'combing' artifacts that are the result of telecining.\n"
 "\n"
-"Telecining is a process that adjusts film framerates that are 24fps to NTSC "
-"video frame rates which are 30fps."
+"Telecining is a process that adjusts film framerates that are 24fps to NTSC video frame rates which are 30fps."
 msgstr ""
-"Este filtro elimina los artefactos de \"peinado\" que son el resultado del "
-"telecinado.\n"
+"Este filtro elimina los artefactos de \"peinado\" que son el resultado del telecinado.\n"
 "\n"
-"Telecinado es un proceso que ajusta las tasas de cuadros de la película que "
-"son de 24 fps a las tasas de cuadros de video NTSC que son de 30 fps."
+"Telecinado es un proceso que ajusta las tasas de cuadros de la película que son de 24 fps a las tasas de cuadros de video NTSC que son de 30 fps."
 
 #: src/ghb3.ui:4373 src/ghb3.ui:4919
 msgid ""
@@ -1033,8 +1002,7 @@ msgid ""
 msgstr ""
 "Formato de cadena de filtro de detección de entrelazado personalizado\n"
 "\n"
-"Modo: Métrica espacial: Trilla de movimiento: Trilla espacial: Modo de "
-"filtro de máscara:\n"
+"Modo: Métrica espacial: Trilla de movimiento: Trilla espacial: Modo de filtro de máscara:\n"
 "Trilla del bloque: Ancho del bloque: Altura del bloque"
 
 #: src/ghb3.ui:4444
@@ -1054,7 +1022,6 @@ msgstr ""
 "El filtro de desentrelazado es un desentrelazador clásico de YADIF.\n"
 
 #: src/ghb3.ui:4497
-#, fuzzy
 msgid ""
 "Choose decomb or deinterlace filter options.\n"
 "\n"
@@ -1062,10 +1029,10 @@ msgid ""
 "    The deinterlace filter is a classic YADIF deinterlacer.\n"
 "    "
 msgstr ""
-"Elija las opciones de filtro de depeinado o desentrelazado.\n"
+"Elija las opciones de filtro de descomponer o desentrelazado.\n"
 "\n"
-"El filtro de despeinado admite una variedad de algoritmos de interpolación.\n"
-"El filtro de desentrelazado es un desentrelazador clásico de YADIF.\n"
+"   El filtro descomponer admite una variedad de algoritmos de interpolación.\n"
+"   El filtro de desentrelazado es un desentrelazador clásico de YADIF."
 
 #: src/ghb3.ui:4527
 msgid "Deblock Filter:"
@@ -1085,16 +1052,14 @@ msgid "Tune:"
 msgstr "Afinar:"
 
 #: src/ghb3.ui:4577
-#, fuzzy
 msgid ""
 "The deblocking filter removes a common type of compression artifact.\n"
 "    If your source exhibits 'blockiness', this filter may help clean it up."
 msgstr ""
 "El filtro de desbloqueo elimina un tipo común de artefacto de compresión.\n"
-"Si su fuente muestra \"bloqueo\", este filtro puede ayudar a limpiarlo."
+"   Si su fuente muestra \"bloqueo\", este filtro puede ayudar a limpiarlo."
 
 #: src/ghb3.ui:4585 src/ghb3.ui:4768
-#, fuzzy
 msgid ""
 "Custom deblock filter string format\n"
 "\n"
@@ -1111,32 +1076,24 @@ msgstr "Filtro Denoise:"
 #: src/ghb3.ui:4622
 msgid ""
 "Denoise filtering reduces or removes the appearance of noise and grain.\n"
-"Film grain and other types of high frequency noise are difficult to "
-"compress.\n"
+"Film grain and other types of high frequency noise are difficult to compress.\n"
 "Using this filter on such sources can result in smaller file sizes."
 msgstr ""
 "El filtro Denoise reduce o elimina la apariencia de ruido y grano.\n"
-"El grano de la película y otros tipos de ruido de alta frecuencia son "
-"difíciles de comprimir.\n"
-"El uso de este filtro en dichas fuentes puede resultar en tamaños de archivo "
-"más pequeños."
+"El grano de la película y otros tipos de ruido de alta frecuencia son difíciles de comprimir.\n"
+"El uso de este filtro en dichas fuentes puede resultar en tamaños de archivo más pequeños."
 
 #: src/ghb3.ui:4657 src/ghb3.ui:4680
-#, fuzzy
 msgid ""
 "Denoise filtering reduces or removes the appearance of noise and grain.\n"
-"    Film grain and other types of high frequency noise are difficult to "
-"compress.\n"
+"    Film grain and other types of high frequency noise are difficult to compress.\n"
 "    Using this filter on such sources can result in smaller file sizes."
 msgstr ""
 "El filtro Denoise reduce o elimina la apariencia de ruido y grano.\n"
-"El grano de la película y otros tipos de ruido de alta frecuencia son "
-"difíciles de comprimir.\n"
-"El uso de este filtro en dichas fuentes puede resultar en tamaños de archivo "
-"más pequeños."
+"  El grano de la película y otros tipos de ruido de alta frecuencia son difíciles de comprimir.\n"
+"  El uso de este filtro en dichas fuentes puede resultar en tamaños de archivo más pequeños."
 
 #: src/ghb3.ui:4689 src/ghb3.ui:4869
-#, fuzzy
 msgid ""
 "Custom denoise filter string format\n"
 "\n"
@@ -1156,18 +1113,15 @@ msgid ""
 "Lower resolution analog source content may benefit from this filter."
 msgstr ""
 "El filtro suave de croma elimina los artefactos de color común.\n"
-"El contenido de fuente analógica de menor resolución puede beneficiarse de "
-"este filtro."
+"El contenido de fuente analógica de menor resolución puede beneficiarse de este filtro."
 
 #: src/ghb3.ui:4760
-#, fuzzy
 msgid ""
 "The chroma smooth filter removes common color artifacts.\n"
 "    Lower resolution analog source content may benefit from this filter."
 msgstr ""
 "El filtro suave de croma elimina los artefactos de color común.\n"
-"El contenido de fuente analógica de menor resolución puede beneficiarse de "
-"este filtro."
+"   El contenido de fuente analógica de menor resolución puede beneficiarse de este filtro."
 
 #: src/ghb3.ui:4789
 msgid "Sharpen Filter:"
@@ -1182,13 +1136,12 @@ msgstr ""
 "componentes de alta frecuencia en el video."
 
 #: src/ghb3.ui:4839 src/ghb3.ui:4861
-#, fuzzy
 msgid ""
 "Sharpen filtering enhances edges and other\n"
 "    high frequency components in the video."
 msgstr ""
 "El filtro de nitidez mejora los bordes y otros \n"
-"componentes de alta frecuencia en el video."
+"   componentes de alta frecuencia en el video."
 
 #: src/ghb3.ui:4890
 msgid "Colorspace:"
@@ -1291,12 +1244,9 @@ msgstr ""
 "El codificador apunta a una cierta calidad.\n"
 "La escala utilizada por cada codificador de video es diferente.\n"
 "\n"
-"La escala de x264 es logarítmica y los valores más bajos corresponden a una "
-"calidad más alta.\n"
-"Así que pequeñas disminuciones en el valor resultarán en incrementos "
-"progresivamente mayores\n"
-"en el tamaño del archivo resultante. Un valor de 0 significa sin pérdidas y "
-"resultará\n"
+"La escala de x264 es logarítmica y los valores más bajos corresponden a una calidad más alta.\n"
+"Así que pequeñas disminuciones en el valor resultarán en incrementos progresivamente mayores\n"
+"en el tamaño del archivo resultante. Un valor de 0 significa sin pérdidas y resultará\n"
 "un tamaño de archivo mayor que la fuente original, a menos que la fuente\n"
 "también carezca de pérdidas.\n"
 "\n"
@@ -1316,76 +1266,53 @@ msgid ""
 "Set the average bitrate.\n"
 "\n"
 "The instantaneous bitrate can be much higher or lower at any point in time.\n"
-"But the average over a long duration will be the value set here.  If you "
-"need\n"
-"to limit instantaneous bitrate, look into x264's vbv-bufsize and vbv-maxrate "
-"settings."
+"But the average over a long duration will be the value set here.  If you need\n"
+"to limit instantaneous bitrate, look into x264's vbv-bufsize and vbv-maxrate settings."
 msgstr ""
 "Establecer promedio de tasa de bits.\n"
 "\n"
-"La tasa de bits instantánea puede ser mucho más alta o más baja en cualquier "
-"momento.\n"
-"Pero el promedio durante una larga duración será el valor establecido aquí. "
-"Si necesitas\n"
-"limitar la tasa de bits instantánea, consulte las configuraciones vbv-"
-"bufsize y vbv-maxrate de x264."
+"La tasa de bits instantánea puede ser mucho más alta o más baja en cualquier momento.\n"
+"Pero el promedio durante una larga duración será el valor establecido aquí. Si necesitas\n"
+"limitar la tasa de bits instantánea, consulte las configuraciones vbv-bufsize y vbv-maxrate de x264."
 
 #: src/ghb3.ui:5233
-#, fuzzy
 msgid "Multi-Pass Encoding"
-msgstr "Codificación en 2 pasadas"
+msgstr ""
 
 #: src/ghb3.ui:5238
-#, fuzzy
 msgid ""
 "Perform Multi Pass Encoding.\n"
 "\n"
-"The 'Bitrate' option is prerequisite. During the analysis passes, statistics "
-"about\n"
+"The 'Bitrate' option is prerequisite. During the analysis passes, statistics about\n"
 "the video are collected.  Then in the final pass, those statistics are used\n"
 "to make bitrate allocation decisions."
 msgstr ""
-"Realice la codificación en 2 pasadas.\n"
-"\n"
-"Previamente hay que seleccionar la opcion 'Tasa de bits'. Durante la 1ª "
-"pasada, las estadísticas sobre los videos son recogidos. Luego, en la "
-"segunda pasada, se usan esas estadísticas.\n"
-"para tomar decisiones de asignación de bits."
 
 #: src/ghb3.ui:5256
-#, fuzzy
 msgid "Turbo Analysis Pass"
-msgstr "Primera pasada rapida"
+msgstr ""
 
 #: src/ghb3.ui:5261
-#, fuzzy
 msgid ""
 "During the analysis pass of a multi pass encode, use settings that speed "
 "things along."
 msgstr ""
-"Aplica ajustes que aceleran la primera pasada de la codificación en dos "
-"pasadas."
 
 #: src/ghb3.ui:5323
 msgid ""
-"Adjusts encoder settings to trade off compression efficiency against "
-"encoding speed.\n"
+"Adjusts encoder settings to trade off compression efficiency against encoding speed.\n"
 "\n"
 "This establishes your default encoder settings.\n"
 "Tunes, profiles, levels and extra options string will be applied to this.\n"
-"You should generally set this option to the slowest you can bear since "
-"slower\n"
+"You should generally set this option to the slowest you can bear since slower\n"
 "settings will result in better quality or smaller files."
 msgstr ""
-"Ajusta la configuración del codificador para compensar la eficiencia de la "
-"compresión con la velocidad de codificación.\n"
+"Ajusta la configuración del codificador para compensar la eficiencia de la compresión con la velocidad de codificación.\n"
 "\n"
 "Esto establece la configuración predeterminada del codificador.\n"
 "A esto se le aplicarán afinados, perfiles, niveles y opciones extra.\n"
-"Por lo general, debe establecer esta opción en lo más lento que pueda "
-"soportar, ya que más lento\n"
-"La configuración dará como resultado archivos de mejor calidad o más "
-"pequeños."
+"Por lo general, debe establecer esta opción en lo más lento que pueda soportar, ya que más lento\n"
+"La configuración dará como resultado archivos de mejor calidad o más pequeños."
 
 #: src/ghb3.ui:5366
 msgid ""
@@ -1397,10 +1324,8 @@ msgid ""
 msgstr ""
 "Ajuste la configuración para optimizar escenarios comunes.\n"
 "\n"
-"Esto puede mejorar la eficiencia para características de fuente particulares "
-"o \n"
-"establecer características del archivo de salida. Los cambios se aplicarán "
-"después\n"
+"Esto puede mejorar la eficiencia para características de fuente particulares o \n"
+"establecer características del archivo de salida. Los cambios se aplicarán después\n"
 "del preajuste, pero antes de todos los demás parámetros."
 
 #: src/ghb3.ui:5382
@@ -1415,8 +1340,7 @@ msgid ""
 msgstr ""
 "Reducir el uso de la CPU del decodificador.\n"
 "\n"
-"Configúralo si tu dispositivo está teniendo problemas para reproducir la "
-"salida (fotogramas eliminados)."
+"Configúralo si tu dispositivo está teniendo problemas para reproducir la salida (fotogramas eliminados)."
 
 #: src/ghb3.ui:5405
 msgid "Zero Latency"
@@ -1431,8 +1355,7 @@ msgid ""
 "Since HandBrake is not suitable for live stream broadcast purposes,\n"
 "this setting is of little value here."
 msgstr ""
-"Minimice la latencia entre la entrada al codificador y la salida del "
-"decodificador.\n"
+"Minimice la latencia entre la entrada al codificador y la salida del decodificador.\n"
 "\n"
 "Esto es útil para la transmisión de transmisiones en vivo.\n"
 "\n"
@@ -1522,12 +1445,10 @@ msgstr "Seleccione qué pistas de audio de la fuente se usaran."
 #: src/ghb3.ui:5804
 msgid ""
 "Create a list of languages you would like to select audio for.\n"
-"Tracks matching these languages will be selected using the chosen Selection "
-"Behavior."
+"Tracks matching these languages will be selected using the chosen Selection Behavior."
 msgstr ""
 "Cree una lista de idiomas para los que desea seleccionar audio.\n"
-"Las pistas que coincidan con estos idiomas se seleccionarán usando el Modo "
-"de selección elegido."
+"Las pistas que coincidan con estos idiomas se seleccionarán usando el Modo de selección elegido."
 
 #: src/ghb3.ui:5835 src/ghb3.ui:6632
 msgid "Remove"
@@ -1548,13 +1469,10 @@ msgstr "Usar solo el primer codificador para audio secundario"
 #: src/ghb3.ui:5887
 msgid ""
 "Only the primary audio track will be encoded with the full encoder list.\n"
-"All other secondary audio output tracks will be encoded with first encoder "
-"only."
+"All other secondary audio output tracks will be encoded with first encoder only."
 msgstr ""
-"Solo la pista de audio principal se codificará con la lista completa de "
-"codificadores.\n"
-"Todas las demás pistas de salida de audio secundarias se codificarán solo "
-"con el primer codificador."
+"Solo la pista de audio principal se codificará con la lista completa de codificadores.\n"
+"Todas las demás pistas de salida de audio secundarias se codificarán solo con el primer codificador."
 
 #: src/ghb3.ui:5923
 msgid "Auto Passthru:"
@@ -1567,12 +1485,10 @@ msgstr "MP2"
 #: src/ghb3.ui:5939
 msgid ""
 "Enable this if your playback device supports MP2.\n"
-"This permits MP2 passthru to be selected when automatic passthru selection "
-"is enabled."
+"This permits MP2 passthru to be selected when automatic passthru selection is enabled."
 msgstr ""
 "Habilite esto si su dispositivo de reproducción admite MP2.\n"
-"Esto permite seleccionar MP2 Passthru cuando se habilita la selección "
-"automática de Passthru."
+"Esto permite seleccionar MP2 Passthru cuando se habilita la selección automática de Passthru."
 
 #: src/ghb3.ui:5955
 msgid "MP3"
@@ -1581,12 +1497,10 @@ msgstr "MP3"
 #: src/ghb3.ui:5960
 msgid ""
 "Enable this if your playback device supports MP3.\n"
-"This permits MP3 passthru to be selected when automatic passthru selection "
-"is enabled."
+"This permits MP3 passthru to be selected when automatic passthru selection is enabled."
 msgstr ""
 "Habilite esto si su dispositivo de reproducción es compatible con MP3.\n"
-"Esto permite seleccionar el passthru MP3 cuando la selección de passthru "
-"automática está habilitada."
+"Esto permite seleccionar el passthru MP3 cuando la selección de passthru automática está habilitada."
 
 #: src/ghb3.ui:5976
 msgid "AC-3"
@@ -1595,12 +1509,10 @@ msgstr "AC-3"
 #: src/ghb3.ui:5981
 msgid ""
 "Enable this if your playback device supports AC-3.\n"
-"This permits AC-3 passthru to be selected when automatic passthru selection "
-"is enabled."
+"This permits AC-3 passthru to be selected when automatic passthru selection is enabled."
 msgstr ""
 "Habilite esto si su dispositivo de reproducción es compatible con AC-3.\n"
-"Esto permite seleccionar el paso a través AC-3 cuando la selección de paso "
-"automático está habilitada."
+"Esto permite seleccionar el paso a través AC-3 cuando la selección de paso automático está habilitada."
 
 #: src/ghb3.ui:5997
 msgid "EAC-3"
@@ -1609,12 +1521,10 @@ msgstr "EAC-3"
 #: src/ghb3.ui:6002
 msgid ""
 "Enable this if your playback device supports EAC-3.\n"
-"This permits EAC-3 passthru to be selected when automatic passthru selection "
-"is enabled."
+"This permits EAC-3 passthru to be selected when automatic passthru selection is enabled."
 msgstr ""
 "Habilite esto si su dispositivo de reproducción es compatible con EAC-3.\n"
-"Esto permite seleccionar el paso a través EAC-3 cuando la selección de paso "
-"automático está habilitada."
+"Esto permite seleccionar el paso a través EAC-3 cuando la selección de paso automático está habilitada."
 
 #: src/ghb3.ui:6018
 msgid "DTS"
@@ -1623,12 +1533,10 @@ msgstr "DTS"
 #: src/ghb3.ui:6023
 msgid ""
 "Enable this if your playback device supports DTS.\n"
-"This permits DTS passthru to be selected when automatic passthru selection "
-"is enabled."
+"This permits DTS passthru to be selected when automatic passthru selection is enabled."
 msgstr ""
 "Habilite esto si su dispositivo de reproducción es compatible con DTS.\n"
-"Esto permite seleccionar DTS passthru cuando la selección de passthru "
-"automática está habilitada."
+"Esto permite seleccionar DTS passthru cuando la selección de passthru automática está habilitada."
 
 #: src/ghb3.ui:6039
 msgid "DTS-HD"
@@ -1637,12 +1545,10 @@ msgstr "DTS-HD"
 #: src/ghb3.ui:6044
 msgid ""
 "Enable this if your playback device supports DTS-HD.\n"
-"This permits DTS-HD passthru to be selected when automatic passthru "
-"selection is enabled."
+"This permits DTS-HD passthru to be selected when automatic passthru selection is enabled."
 msgstr ""
 "Habilite esto si su dispositivo de reproducción es compatible con DTS-HD.\n"
-"Esto permite seleccionar el passthru DTS-HD cuando la selección de passthru "
-"automática está habilitada."
+"Esto permite seleccionar el passthru DTS-HD cuando la selección de passthru automática está habilitada."
 
 #: src/ghb3.ui:6060
 msgid "TrueHD"
@@ -1651,12 +1557,10 @@ msgstr "TrueHD"
 #: src/ghb3.ui:6065
 msgid ""
 "Enable this if your playback device supports TrueHD.\n"
-"This permits TrueHD passthru to be selected when automatic passthru "
-"selection is enabled."
+"This permits TrueHD passthru to be selected when automatic passthru selection is enabled."
 msgstr ""
 "Habilite esto si su dispositivo de reproducción es compatible con TrueHD.\n"
-"Esto permite seleccionar el passthru TrueHD cuando la selección de passthru "
-"automática está habilitada."
+"Esto permite seleccionar el passthru TrueHD cuando la selección de passthru automática está habilitada."
 
 #: src/ghb3.ui:6081
 msgid "FLAC"
@@ -1665,12 +1569,10 @@ msgstr "FLAC"
 #: src/ghb3.ui:6086
 msgid ""
 "Enable this if your playback device supports FLAC.\n"
-"This permits FLAC passthru to be selected when automatic passthru selection "
-"is enabled."
+"This permits FLAC passthru to be selected when automatic passthru selection is enabled."
 msgstr ""
 "Habilite esto si su dispositivo de reproducción es compatible con FLAC.\n"
-"Esto permite seleccionar el passthru FLAC cuando la selección de passthru "
-"automática está habilitada."
+"Esto permite seleccionar el passthru FLAC cuando la selección de passthru automática está habilitada."
 
 #: src/ghb3.ui:6102
 msgid "AAC"
@@ -1679,12 +1581,10 @@ msgstr "AAC"
 #: src/ghb3.ui:6107
 msgid ""
 "Enable this if your playback device supports AAC.\n"
-"This permits AAC passthru to be selected when automatic passthru selection "
-"is enabled."
+"This permits AAC passthru to be selected when automatic passthru selection is enabled."
 msgstr ""
 "Habilite esto si su dispositivo de reproducción es compatible con AAC.\n"
-"Esto permite seleccionar el paso a través de AAC cuando la selección de paso "
-"automático está habilitada."
+"Esto permite seleccionar el paso a través de AAC cuando la selección de paso automático está habilitada."
 
 #: src/ghb3.ui:6123
 msgid "Opus"
@@ -1693,12 +1593,10 @@ msgstr "Opus"
 #: src/ghb3.ui:6128
 msgid ""
 "Enable this if your playback device supports Opus.\n"
-"This permits Opus passthru to be selected when automatic passthru selection "
-"is enabled."
+"This permits Opus passthru to be selected when automatic passthru selection is enabled."
 msgstr ""
 "Habilite esto si su dispositivo de reproducción admite OPUS.\n"
-"Esto permite seleccionar Opus PassThru cuando se habilita la selección "
-"automática de Passthru."
+"Esto permite seleccionar Opus PassThru cuando se habilita la selección automática de Passthru."
 
 #: src/ghb3.ui:6161
 msgid "Passthru Fallback:"
@@ -1763,7 +1661,8 @@ msgid "Add all subtitle tracks to the list"
 msgstr "Añadir todas las pistas de subtítulos a la lista"
 
 #: src/ghb3.ui:6420 src/callbacks.c:2356 src/queuehandler.c:647
-#: src/queuehandler.c:1083 src/subtitlehandler.c:414 src/subtitlehandler.c:1245
+#: src/queuehandler.c:1083 src/subtitlehandler.c:414
+#: src/subtitlehandler.c:1245
 msgid "Foreign Audio Scan"
 msgstr "Escanear audio extranjero"
 
@@ -1788,19 +1687,15 @@ msgstr "Seleccione que pistas de subtítulos de la fuente se usaran."
 #: src/ghb3.ui:6596
 msgid ""
 "Create a list of languages you would like to select subtitles for.\n"
-"Tracks matching these languages will be selected using the chosen Selection "
-"Behavior.\n"
+"Tracks matching these languages will be selected using the chosen Selection Behavior.\n"
 "\n"
-"The first language in this list is your \"preferred\" language and will be "
-"used\n"
+"The first language in this list is your \"preferred\" language and will be used\n"
 "for determining subtitle selection settings when there is foreign audio."
 msgstr ""
 "Cree una lista de idiomas para los que desea seleccionar los subtítulos. \n"
-"Las pistas que coincidan con estos idiomas se seleccionarán utilizando el "
-"Modo de selección elegido.\n"
+"Las pistas que coincidan con estos idiomas se seleccionarán utilizando el Modo de selección elegido.\n"
 "\n"
-"El primer idioma en esta lista es su idioma \"preferido\" y se usará para "
-"determinar\n"
+"El primer idioma en esta lista es su idioma \"preferido\" y se usará para determinar\n"
 "la configuración de selección de subtítulos cuando haya audio extranjero."
 
 #: src/ghb3.ui:6677
@@ -1813,20 +1708,15 @@ msgstr "Añadir pasada de escaneo de audio extranjero"
 
 #: src/ghb3.ui:6709
 msgid ""
-"Add \"Foreign Audio Scan\" when the default audio track is your preferred "
-"language.\n"
-"This search pass finds short sequences of foreign audio and provides "
-"subtitles for them.\n"
+"Add \"Foreign Audio Scan\" when the default audio track is your preferred language.\n"
+"This search pass finds short sequences of foreign audio and provides subtitles for them.\n"
 "\n"
 "This option requires a language to be set in the Selected Languages list."
 msgstr ""
-"Añadir \"Escaneo de audio extranjero\" cuando la pista de audio "
-"predeterminada sea su idioma preferido.\n"
-"Este paso de búsqueda encuentra secuencias cortas de audio extranjero y les "
-"proporciona subtítulos.\n"
+"Añadir \"Escaneo de audio extranjero\" cuando la pista de audio predeterminada sea su idioma preferido.\n"
+"Este paso de búsqueda encuentra secuencias cortas de audio extranjero y les proporciona subtítulos.\n"
 "\n"
-"Esta opción requiere que se establezca un idioma en la lista Idiomas "
-"seleccionados."
+"Esta opción requiere que se establezca un idioma en la lista Idiomas seleccionados."
 
 #: src/ghb3.ui:6724
 msgid "Add subtitle track if default audio is foreign"
@@ -1834,16 +1724,13 @@ msgstr "Añadir pista de subtítulos si el audio predeterminado es extranjero"
 
 #: src/ghb3.ui:6729
 msgid ""
-"When the default audio track is not your preferred language, add a subtitle "
-"track.\n"
+"When the default audio track is not your preferred language, add a subtitle track.\n"
 "\n"
 "This option requires a language to be set in the Selected Languages list."
 msgstr ""
-"Cuando la pista de audio predeterminada no sea su idioma preferido, añadir "
-"una pista de subtítulos.\n"
+"Cuando la pista de audio predeterminada no sea su idioma preferido, añadir una pista de subtítulos.\n"
 "\n"
-"Esta opción requiere que se establezca un idioma en la lista Idiomas "
-"seleccionados."
+"Esta opción requiere que se establezca un idioma en la lista Idiomas seleccionados."
 
 #: src/ghb3.ui:6743
 msgid "Add Closed Captions when available"
@@ -1865,17 +1752,13 @@ msgstr "Modo de Incrustacion*:"
 msgid ""
 "Set the behavior of subtitle \"Burn-In\".\n"
 "\n"
-"Burned-In subtitles are part of the video and can not be disabled during "
-"playback.\n"
-"Only one subtitle track can be burned! Since conflicts can occur, the first "
-"chosen wins."
+"Burned-In subtitles are part of the video and can not be disabled during playback.\n"
+"Only one subtitle track can be burned! Since conflicts can occur, the first chosen wins."
 msgstr ""
 "Establece el comportamiento del subtítulo \"Incrustados\".\n"
 "\n"
-"Los subtítulos incrustados son parte del video y no se pueden desactivar "
-"durante la reproducción.\n"
-"¡Solo se puede grabar una pista de subtítulos! Dado que pueden ocurrir "
-"conflictos, el primero elegido gana."
+"Los subtítulos incrustados son parte del video y no se pueden desactivar durante la reproducción.\n"
+"¡Solo se puede grabar una pista de subtítulos! Dado que pueden ocurrir conflictos, el primero elegido gana."
 
 #: src/ghb3.ui:6808
 msgid "Burn-In for deficient players*:"
@@ -1887,21 +1770,15 @@ msgstr "Subtitulos de DVD"
 
 #: src/ghb3.ui:6822
 msgid ""
-"Burn the first selected DVD subtitle track. All other DVD subtitle tracks "
-"will be discarded.\n"
-"Use this option if your player software or device does not support DVD "
-"subtitles.\n"
+"Burn the first selected DVD subtitle track. All other DVD subtitle tracks will be discarded.\n"
+"Use this option if your player software or device does not support DVD subtitles.\n"
 "\n"
-"Only one subtitle track can be burned! Since conflicts can occur, the first "
-"chosen wins."
+"Only one subtitle track can be burned! Since conflicts can occur, the first chosen wins."
 msgstr ""
-"Grabe la primera pista de subtítulos de DVD seleccionada. Todas las demás "
-"pistas de subtítulos de DVD se descartarán.\n"
-"Use esta opción si el software o dispositivo de su reproductor no admite "
-"subtítulos de DVD.\n"
+"Grabe la primera pista de subtítulos de DVD seleccionada. Todas las demás pistas de subtítulos de DVD se descartarán.\n"
+"Use esta opción si el software o dispositivo de su reproductor no admite subtítulos de DVD.\n"
 "\n"
-"¡Solo se puede grabar una pista de subtítulos! Dado que pueden ocurrir "
-"conflictos, el primero elegido gana."
+"¡Solo se puede grabar una pista de subtítulos! Dado que pueden ocurrir conflictos, el primero elegido gana."
 
 #: src/ghb3.ui:6836
 msgid "Blu-ray Subtitles"
@@ -1909,21 +1786,15 @@ msgstr "Subtitulos Blu-ray"
 
 #: src/ghb3.ui:6841
 msgid ""
-"Burn the first selected Blu-ray subtitle track. All other Blu-ray subtitle "
-"tracks will be discarded.\n"
-"Use this option if your player software or device does not support Blu-ray "
-"subtitles.\n"
+"Burn the first selected Blu-ray subtitle track. All other Blu-ray subtitle tracks will be discarded.\n"
+"Use this option if your player software or device does not support Blu-ray subtitles.\n"
 "\n"
-"Only one subtitle track can be burned! Since conflicts can occur, the first "
-"chosen wins."
+"Only one subtitle track can be burned! Since conflicts can occur, the first chosen wins."
 msgstr ""
-"Grabe la primera pista de subtítulos de Blu-ray seleccionada. Todas las "
-"demás pistas de subtítulos de Blu-ray se descartarán.\n"
-"Use esta opción si el software o dispositivo de su reproductor no admite "
-"subtítulos en Blu-ray.\n"
+"Grabe la primera pista de subtítulos de Blu-ray seleccionada. Todas las demás pistas de subtítulos de Blu-ray se descartarán.\n"
+"Use esta opción si el software o dispositivo de su reproductor no admite subtítulos en Blu-ray.\n"
 "\n"
-"¡Solo se puede grabar una pista de subtítulos! Dado que pueden ocurrir "
-"conflictos, el primero elegido gana."
+"¡Solo se puede grabar una pista de subtítulos! Dado que pueden ocurrir conflictos, el primero elegido gana."
 
 #: src/ghb3.ui:6863
 msgid ""
@@ -1954,22 +1825,20 @@ msgid "Add chapter markers to output file."
 msgstr "Añadir marcadores de capítulos al archivo de salida."
 
 #: src/ghb3.ui:6922
-#, fuzzy
 msgid "Import Chapters"
-msgstr "Capítulos"
+msgstr "Importar Capítulos"
 
 #: src/ghb3.ui:6926
 msgid "Import chapter list from an XML file"
-msgstr ""
+msgstr "Importar lista de capítulos desde un archivo XML"
 
 #: src/ghb3.ui:6937
-#, fuzzy
 msgid "Export Chapters"
-msgstr "Capítulos"
+msgstr "Exportar Capítulos"
 
 #: src/ghb3.ui:6941
 msgid "Export chapter list as an XML file"
-msgstr ""
+msgstr "Exportar la lista de capítulos como un archivo XML"
 
 #: src/ghb3.ui:6975
 msgid "Index"
@@ -2101,18 +1970,19 @@ msgid "Auto-Name Template"
 msgstr "Plantilla para la asignación automática"
 
 #: src/ghb3.ui:7896
-#, fuzzy
 msgid ""
-"Available Options: {source-path} {source} {title} {preset} {chapters} {date} "
-"{time} {creation-date} {creation-time} {modification-date} {modification-"
+"Available Options: {source-path} {source} {title} {preset} {chapters} {date}"
+" {time} {creation-date} {creation-time} {modification-date} {modification-"
 "time} {codec} {bit-depth} {quality} {bitrate} {width} {height}"
 msgstr ""
 "Opciones disponibles: {source-path} {source} {title} {preset} {chapters} "
-"{date} {time} {creation-date} {creation-time} {quality} {bitrate}"
+"{date} {time} {creation-date} {creation-time} {modification-date} "
+"{modification-time} {codec} {bit-depth} {quality} {bitrate} {width} {height}"
 
 #: src/ghb3.ui:7916
 msgid "Use iPod/iTunes friendly (.m4v) file extension for MP4"
-msgstr "Use la extensión de archivo compatible con iPod/iTunes (.m4v) para MP4"
+msgstr ""
+"Use la extensión de archivo compatible con iPod/iTunes (.m4v) para MP4"
 
 #: src/ghb3.ui:7959
 msgid "Number of previews"
@@ -2131,21 +2001,18 @@ msgstr ""
 #: src/ghb3.ui:8015
 msgid ""
 "By default, completed jobs remain in the queue and are marked as complete.\n"
-"Check this if you want the queue to clean itself up by deleting completed "
-"jobs."
+"Check this if you want the queue to clean itself up by deleting completed jobs."
 msgstr ""
-"De forma predeterminada, los trabajos completados permanecen en la cola y se "
-"marcan como completados.\n"
-"Marque esto si desea que la cola se limpie eliminando los trabajos "
-"completados."
+"De forma predeterminada, los trabajos completados permanecen en la cola y se marcan como completados.\n"
+"Marque esto si desea que la cola se limpie eliminando los trabajos completados."
 
 #: src/ghb3.ui:8028
 msgid "Power Saving"
-msgstr ""
+msgstr "Ahorro de Energía"
 
 #: src/ghb3.ui:8046
 msgid "Pause encoding when in Power Saver mode"
-msgstr ""
+msgstr "Pausar la codificación en el modo de ahorro de energía"
 
 #: src/ghb3.ui:8052
 msgid ""
@@ -2153,10 +2020,13 @@ msgid ""
 "enters Power Saver mode. Encoding will resume when\n"
 "Power Saver mode is disabled."
 msgstr ""
+"Si está marcado, la codificación se pausará cuando el dispositivo\n"
+"entre al modo de ahorro de energía. La codificación se reanudará\n"
+"cuando el modo de ahorro de energía esté desactivado."
 
 #: src/ghb3.ui:8063
 msgid "Pause encoding when on battery power"
-msgstr ""
+msgstr "Pausar la codificación con batería"
 
 #: src/ghb3.ui:8069
 msgid ""
@@ -2164,10 +2034,13 @@ msgid ""
 "unplugged. Encoding will resume when reconnected to\n"
 "a mains power source."
 msgstr ""
+"Si está marcado, la codificación se pausará cuando se desconecte\n"
+"el cargador. La codificación se reanudará cuando se conecte a una\n"
+"fuente de alimentación."
 
 #: src/ghb3.ui:8080
 msgid "Pause encoding when battery is low"
-msgstr ""
+msgstr "Pausar la codificación cuando la batería está baja"
 
 #: src/ghb3.ui:8086
 msgid ""
@@ -2175,6 +2048,9 @@ msgid ""
 "level is low. Encoding will resume when the\n"
 "battery is charged."
 msgstr ""
+"Si está marcado, la codificación se pausará cuando el nivel\n"
+"de la batería sea bajo. La codificación se reanudará cuando la\n"
+"batería esté cargada."
 
 #: src/ghb3.ui:8097
 msgid "General"
@@ -2191,25 +2067,17 @@ msgid ""
 "\n"
 "Changing this setting will require restarting HandBrake.\n"
 "\n"
-"This setting overrides the TEMP environment variable that is normally used "
-"to define this directory.\n"
+"This setting overrides the TEMP environment variable that is normally used to define this directory.\n"
 "\n"
-"Flatpak users may need to set this for certain workflows to work properly. "
-"The default size of the TEMP directory in a flatpak sandbox is 1/2 physical "
-"memory size and may be too small for things like the 2-pass stats file."
+"Flatpak users may need to set this for certain workflows to work properly. The default size of the TEMP directory in a flatpak sandbox is 1/2 physical memory size and may be too small for things like the 2-pass stats file."
 msgstr ""
 "Los archivos temporales que crea Handbrake se colocarán en este directorio.\n"
 "\n"
 "Cambiar esta configuración requerirá reiniciar el Handbrake.\n"
 "\n"
-"Esta configuración anula la variable de entorno TEMP que normalmente se usa "
-"para definir este directorio.\n"
+"Esta configuración anula la variable de entorno TEMP que normalmente se usa para definir este directorio.\n"
 "\n"
-"Los usuarios de Flatpak pueden necesitar establecer esto para que ciertos "
-"flujos de trabajo funcionen correctamente. El tamaño predeterminado del "
-"directorio TEMP en una sandbox de flatpak es la mitad del tamaño de memoria "
-"física y puede ser demasiado pequeño para cosas como el archivo de "
-"estadísticas de 2 pasos."
+"Los usuarios de Flatpak pueden necesitar establecer esto para que ciertos flujos de trabajo funcionen correctamente. El tamaño predeterminado del directorio TEMP en una sandbox de flatpak es la mitad del tamaño de memoria física y puede ser demasiado pequeño para cosas como el archivo de estadísticas de 2 pasos."
 
 #: src/ghb3.ui:8156
 msgid "Temp Directory"
@@ -2275,14 +2143,11 @@ msgid ""
 "When checked, every title will use the same settings when adding a\n"
 "batch of titles to the queue.\n"
 "\n"
-"Uncheck this if you want to allow changing each title's settings "
-"independently."
+"Uncheck this if you want to allow changing each title's settings independently."
 msgstr ""
-"Cuando se marca, todos los títulos usarán los mismos ajustes al agregar un "
-"lote de títulos a la cola.\n"
+"Cuando se marca, todos los títulos usarán los mismos ajustes al agregar un lote de títulos a la cola.\n"
 "\n"
-"Desactive esta opción si desea permitir cambiar el ajuste de cada título de "
-"forma independiente."
+"Desactive esta opción si desea permitir cambiar el ajuste de cada título de forma independiente."
 
 #: src/ghb3.ui:8494
 msgid "Show preview image in Summary tab"
@@ -2399,7 +2264,8 @@ msgstr "Resolucion original"
 
 #: src/ghb3.ui:9255
 msgid "Reset preview window to the source video's resolution"
-msgstr "Restablecer ventana de vista previa a la resolución del video original"
+msgstr ""
+"Restablecer ventana de vista previa a la resolución del video original"
 
 #: src/ghb3.ui:9300 src/subtitlehandler.c:1743
 msgid "Edit Subtitles"
@@ -2483,12 +2349,9 @@ msgid ""
 "We translate the character set to UTF-8.\n"
 "The source's character code is needed in order to perform this translation."
 msgstr ""
-"Establezca el código de caracteres usado por el archivo SRT que está "
-"importando.\n"
+"Establezca el código de caracteres usado por el archivo SRT que está importando.\n"
 "\n"
-"Los SRT vienen en todos los sabores de conjuntos de caracteres. Traducimos "
-"el conjunto de caracteres a UTF-8. El código de caracteres de la fuente es "
-"necesario para realizar esta traducción."
+"Los SRT vienen en todos los sabores de conjuntos de caracteres. Traducimos el conjunto de caracteres a UTF-8. El código de caracteres de la fuente es necesario para realizar esta traducción."
 
 #: src/ghb3.ui:9598
 msgid "Select the SRT file to import."
@@ -2501,8 +2364,8 @@ msgstr "Importar archivo"
 #: src/ghb3.ui:9619
 msgid "Adjust the offset in milliseconds between video and SRT timestamps"
 msgstr ""
-"Ajuste el desplazamiento en milisegundos entre las marcas de tiempo de video "
-"y SRT"
+"Ajuste el desplazamiento en milisegundos entre las marcas de tiempo de video"
+" y SRT"
 
 #: src/ghb3.ui:9643 src/subtitlehandler.c:119
 msgid "Forced Subtitles Only"
@@ -2552,21 +2415,15 @@ msgstr "Frecuencia de muestreo"
 
 #: src/ghb3.ui:9920 src/ghb3.ui:10159 src/audiohandler.c:1931
 msgid ""
-"<b>Dynamic Range Compression:</b> Adjust the dynamic range of the output "
-"audio track.\n"
+"<b>Dynamic Range Compression:</b> Adjust the dynamic range of the output audio track.\n"
 "\n"
-"For source audio that has a wide dynamic range (very loud and very soft "
-"sequences),\n"
-"DRC allows you to 'compress' the range by making loud sounds softer and soft "
-"sounds louder."
+"For source audio that has a wide dynamic range (very loud and very soft sequences),\n"
+"DRC allows you to 'compress' the range by making loud sounds softer and soft sounds louder."
 msgstr ""
-"<b>Compresión de rango dinámico:</b>Ajuste el rango dinámico de la pista de "
-"audio de salida.\n"
+"<b>Compresión de rango dinámico:</b>Ajuste el rango dinámico de la pista de audio de salida.\n"
 "\n"
-"Para la fuente de audio que tiene un amplio rango dinámico (secuencias muy "
-"fuertes y muy suaves), \n"
-"DRC le permite \"comprimir\" el rango haciendo que los sonidos fuertes sean "
-"más suaves y los sonidos suaves más fuertes."
+"Para la fuente de audio que tiene un amplio rango dinámico (secuencias muy fuertes y muy suaves), \n"
+"DRC le permite \"comprimir\" el rango haciendo que los sonidos fuertes sean más suaves y los sonidos suaves más fuertes."
 
 #: src/ghb3.ui:9941 src/audiohandler.c:1782
 msgid "Set the audio codec to encode this track with."
@@ -2659,54 +2516,52 @@ msgid "<b>Release Notes</b>"
 msgstr "<b>Notas de lanzamiento</b>"
 
 #: src/fr.handbrake.ghb.metainfo.xml.in.in:11
-#, fuzzy
 msgid "Video Transcoder"
-msgstr "Codificador de video:"
+msgstr "Transcodificador de video"
 
 #: src/fr.handbrake.ghb.metainfo.xml.in.in:14
 msgid ""
 "HandBrake is a tool for converting video from nearly any format to a "
 "selection of modern, widely supported codecs."
 msgstr ""
+"HandBrake es una herramienta para convertir videos de casi cualquier formato"
+" a una selección de códecs modernos y ampliamente compatibles."
 
 #: src/fr.handbrake.ghb.metainfo.xml.in.in:15
 msgid "Reasons you'll love Handbrake:"
-msgstr ""
+msgstr "Razones por las que te encantará HandBrake:"
 
 #: src/fr.handbrake.ghb.metainfo.xml.in.in:17
 msgid "Convert video from nearly any format"
-msgstr ""
+msgstr "Convierte videos desde casi cualquier formato"
 
 #: src/fr.handbrake.ghb.metainfo.xml.in.in:18
-#, fuzzy
 msgid "Free and Open Source"
-msgstr "Abrir Fuente"
+msgstr "Libre y de código abierto"
 
 #: src/fr.handbrake.ghb.metainfo.xml.in.in:19
 msgid "Multi-Platform (Windows, Mac and Linux)"
-msgstr ""
+msgstr "Multi-plataforma (Windows, Mac y Linux)"
 
 #: src/fr.handbrake.ghb.metainfo.xml.in.in:65
 msgid "Main window and settings summary"
-msgstr ""
+msgstr "Ventana principal y resumen de ajustes"
 
 #: src/fr.handbrake.ghb.metainfo.xml.in.in:69
-#, fuzzy
 msgid "Video resolution and cropping settings"
-msgstr "Cómo aplicar la configuración de recorte."
+msgstr "Ajustes de Resolución y Recorte de video"
 
 #: src/fr.handbrake.ghb.metainfo.xml.in.in:73
-#, fuzzy
 msgid "Video encoder settings"
-msgstr "Codificador de video:"
+msgstr "Ajustes del codificador de video"
 
 #: src/fr.handbrake.ghb.metainfo.xml.in.in:77
 msgid "Audio track selection and settings"
-msgstr ""
+msgstr "Selección y configuración de pistas de audio"
 
 #: src/fr.handbrake.ghb.metainfo.xml.in.in:81
 msgid "Chapter title editing"
-msgstr ""
+msgstr "Edicion del Título del capítulo"
 
 #: src/audiohandler.c:439 src/audiohandler.c:761 src/audiohandler.c:1236
 #, c-format
@@ -2771,8 +2626,7 @@ msgid ""
 "Each selected source track will be encoded with all selected encoders."
 msgstr ""
 "Añadir un codificador de audio.\n"
-"Cada pista de origen seleccionada se codificará con todos los codificadores "
-"seleccionados."
+"Cada pista de origen seleccionada se codificará con todos los codificadores seleccionados."
 
 #: src/audiohandler.c:1840
 msgid ""
@@ -2809,9 +2663,8 @@ msgid "Stop Scan"
 msgstr "Parar escaneado"
 
 #: src/callbacks.c:1735
-#, fuzzy
 msgid "Single Title"
-msgstr "Abrir unico _titulo"
+msgstr "Único Título"
 
 #: src/callbacks.c:2127 src/callbacks.c:2271
 msgid "FPS"
@@ -2820,31 +2673,29 @@ msgstr "FPS"
 #: src/callbacks.c:2131
 #, c-format
 msgid "Dolby Vision %d.%d"
-msgstr ""
+msgstr "Dolby Vision %d.%d"
 
 #: src/callbacks.c:2135 src/callbacks.c:2138
 msgid "HDR10+"
-msgstr ""
+msgstr "HDR10+"
 
 #: src/callbacks.c:2140
 msgid "HDR10"
-msgstr ""
+msgstr "HDR10"
 
 #: src/callbacks.c:2142
-#, fuzzy
 msgid "HDR"
-msgstr "DRC"
+msgstr "HDR"
 
 #: src/callbacks.c:2144
-#, fuzzy
 msgid "SDR"
-msgstr "DRC"
+msgstr "SDR"
 
 #. TRANSLATORS: This is the bit depth of the video
 #: src/callbacks.c:2152
 #, c-format
 msgid "%d-bit"
-msgstr ""
+msgstr "%d-bit"
 
 #: src/callbacks.c:2174
 msgid "Audio Track"
@@ -3069,14 +2920,12 @@ msgstr "Apagando el equipo"
 #. Add filters
 #: src/callbacks.c:5755 src/chapters.c:603 src/chapters.c:633
 #: src/presets.c:2044 src/queuehandler.c:1694
-#, fuzzy
 msgid "All Files"
-msgstr "Archivo de Reproducción"
+msgstr "Todos los archivos"
 
 #: src/chapters.c:604 src/chapters.c:634
-#, fuzzy
 msgid "Chapters (*.xml)"
-msgstr "Capítulos"
+msgstr "Capítulos (*.xml)"
 
 #: src/hb-backend.c:61 src/hb-backend.c:86
 msgid "First Track Matching Selected Languages"
@@ -3700,8 +3549,7 @@ msgid ""
 msgstr ""
 "<b><big>Incapaz de crear%s.</big></b>\n"
 "\n"
-"Error interno. No se pudo analizar la descripción de la interfaz de "
-"usuario.\n"
+"Error interno. No se pudo analizar la descripción de la interfaz de usuario.\n"
 "%s"
 
 #: src/main.c:234 src/main.c:299
@@ -3750,13 +3598,11 @@ msgstr ""
 
 #: src/presets.c:1852
 msgid ""
-"Presets found are newer than what is supported by this version of "
-"HandBrake!\n"
+"Presets found are newer than what is supported by this version of HandBrake!\n"
 "\n"
 "Would you like to continue?"
 msgstr ""
-"¡Los presets encontrados son más nuevos que los soportador por esta versión "
-"de HandBrake!\n"
+"¡Los presets encontrados son más nuevos que los soportador por esta versión de HandBrake!\n"
 "\n"
 "¿Te gustaria continuar?"
 
@@ -3856,9 +3702,9 @@ msgid "%s, Bitrate %dkbps"
 msgstr "%s, Tasa de Bits %dkbps"
 
 #: src/queuehandler.c:359
-#, fuzzy, c-format
+#, c-format
 msgid "%s, Bitrate %dkbps (Multi Pass)"
-msgstr "%s, Tasa de Bits %dkbps (2 Pasadas)"
+msgstr ""
 
 #: src/queuehandler.c:366
 #, c-format
@@ -3969,14 +3815,12 @@ msgid "Encode"
 msgstr "Codificar"
 
 #: src/queuehandler.c:1208
-#, fuzzy
 msgid "Encode Analysis Pass"
-msgstr "Solo Codificar"
+msgstr ""
 
 #: src/queuehandler.c:1212
-#, fuzzy
 msgid "Encode Final Pass"
-msgstr "Codificación pausada"
+msgstr ""
 
 #. Should never happen
 #: src/queuehandler.c:1217
@@ -4127,107 +3971,3 @@ msgstr ""
 #, c-format
 msgid "%s: %.4g (Warning: lossless)"
 msgstr "%s:%.4g (Aviso: Sin pérdida)"
-
-#~ msgid "Encode First Pass (Analysis)"
-#~ msgstr "Primera pasada de la codificación (análisis)"
-
-#~ msgid "Encode Second Pass (Final)"
-#~ msgstr "Segunda pasada de la codificacion (final)"
-
-#~ msgid "Open _Source"
-#~ msgstr "Abrir _Fuente"
-
-#~ msgid "Deinterlace Preset:"
-#~ msgstr "Desentrelazado predefinido:"
-
-#~ msgid "Deblock Tune:"
-#~ msgstr "Afinar Desbloqueo:"
-
-#~ msgid "Denoise Preset:"
-#~ msgstr "Denoise predefinido:"
-
-#~ msgid "Denoise Tune:"
-#~ msgstr "Atenuacion de ruido:"
-
-#~ msgid "Chroma Smooth Tune:"
-#~ msgstr "Afinar croma suave:"
-
-#~ msgid "Sharpen Preset:"
-#~ msgstr "Afilado predefinido:"
-
-#~ msgid "Sharpen Tune:"
-#~ msgstr "Afilado preciso:"
-
-#~ msgid "_Cancel"
-#~ msgstr "_Cancelar"
-
-#~ msgid "_Open"
-#~ msgstr "_Abrir"
-
-#~ msgid "Title Number:"
-#~ msgstr "Número de título:"
-
-#~ msgid "Import Preset"
-#~ msgstr "Importar Preajuste"
-
-#, c-format
-#~ msgid ""
-#~ "Destination: %s\n"
-#~ "\n"
-#~ "Another queued job has specified the same destination.\n"
-#~ "Do you want to overwrite?"
-#~ msgstr ""
-#~ "Destino: %s\n"
-#~ "\n"
-#~ "Otro trabajo en cola ha especificado el mismo destino.\n"
-#~ "¿Quieres sobrescribir?"
-
-#~ msgid "Overwrite"
-#~ msgstr "Sobrescribir"
-
-#, c-format
-#~ msgid ""
-#~ "Destination: %s\n"
-#~ "\n"
-#~ "This is not a valid directory."
-#~ msgstr ""
-#~ "Destino: 1%s\n"
-#~ "\n"
-#~ "Este no es un directorio válido."
-
-#, c-format
-#~ msgid ""
-#~ "Destination: %s\n"
-#~ "\n"
-#~ "Can not read or write the directory."
-#~ msgstr ""
-#~ "Destino: 1%s\n"
-#~ "\n"
-#~ "No se puede leer o escribir el directorio.."
-
-#, c-format
-#~ msgid ""
-#~ "Destination: %s\n"
-#~ "\n"
-#~ "File already exists.\n"
-#~ "Do you want to overwrite?"
-#~ msgstr ""
-#~ "Destination: 1%s\n"
-#~ "\n"
-#~ "El archivo ya existe.\n"
-#~ "¿Quieres sobrescribiro?"
-
-#~ msgid "Select this title for adding to the queue.\n"
-#~ msgstr "Seleccione este título para agregar a la cola.\n"
-
-#~ msgid "No Title"
-#~ msgstr "Sin Titulo"
-
-#~ msgid ""
-#~ "There is another title with the same destination file name.\n"
-#~ "This title will not be added to the queue unless you change\n"
-#~ "the output file name.\n"
-#~ msgstr ""
-#~ "Hay otro título con el mismo nombre de archivo de destino.\n"
-#~ "Este título no se agregará a la cola a menos que cambie\n"
-#~ "el nombre del archivo de salida.\n"
