@@ -130,7 +130,7 @@
     <value>警告： RF 0 表示无损！</value>
   </data>
   <data name="Video_LosslessWarningTooltip" xml:space="preserve">
-    <value>值为“0”表示无损，将导致文件大小大于原始源，除非源文件也是无损的。
+    <value>值为“0”表示无损，可能导致文件大小大于原始源，除非源文件也是无损的。
 
 使用x264和x265时比例是对数的，较低的值对应于较高的质量。
 
@@ -323,9 +323,6 @@ GNU 通用公共许可证的条款重新发布它和/或修改它；
   <data name="PictureSettings_OutputResolution" xml:space="preserve">
     <value>输出：{0}</value>
   </data>
-  <data name="Options_DefaultPathAdditionalParams" xml:space="preserve">
-    <value>可用的附加选项: {source_path} 或 {source_folder_name} 或 {source}</value>
-  </data>
   <data name="Main_MatchingFileOverwriteWarning" xml:space="preserve">
     <value>您不能编码到与源文件具有相同路径和文件名的文件。请更新目标文件名，使其与源文件不匹配。</value>
   </data>
@@ -365,14 +362,14 @@ Foreign Audio Preferred, else First：如果存在外语轨道，则会将其烧
     <value>找不到有效的源或标题。</value>
   </data>
   <data name="Main_ScanNoTitlesFoundMessage" xml:space="preserve">
-    <value>HandBrake will not be able to encode the selected source as it did not find a valid source with titles to encode. This could be due to one of the following reasons:
+    <value>Handbrake无法编码所选源，因为没有发现有效的带有标题的源。这可能是由于以下原因之一引起的：
 
-- The duration of each source title is below the "Minimum Title Duration" threshold option in 'Preferences &gt; Advanced'. 
-- The source file is not a valid video file or is in a format that HandBrake does not support.
-- You may not have read access to the file or another application may have a lock on the file. 
-- The source may be copy protected or include DRM. Please note that HandBrake does not support the removal of copy protections.
+- 每个源的标题长度小于“首选项-&gt;高级”中“最小标题长度”的下限。
+- 源文件不是一个有效的视频文件，或者Handbrake不支持此文件格式。
+- 你可能没有该文件的读取权限，或者另外一个程序可能锁定了该文件。
+- 源可能被DRM或者类似的机制拷贝保护了。请注意，Handbrake不支持移除拷贝保护。
 
-The Activity log may have further information.</value>
+活动日志里可能有更多信息。</value>
   </data>
   <data name="Main_QueueLabel" xml:space="preserve">
     <value>队列{0}</value>
@@ -390,7 +387,7 @@ The Activity log may have further information.</value>
     <value>您确定要删除预设：</value>
   </data>
   <data name="MainViewModel_EncodeStatusChanged_StatusLabel" xml:space="preserve">
-    <value>编码中：Pass {0}/{1},  {2:00.00}%, FPS: {3:000.0}, 平均FPS: {4:000.0},  剩余时间：{5},  已用时间：{6}{7}</value>
+    <value>编码中：Pass {0}/{1},  {2:00.00}%, 帧率: {3:000.0}, 平均帧率: {4:000.0},  剩余时间：{5},  已用时间：{6}{7}</value>
   </data>
   <data name="AddPresetViewModel_PresetMustProvideName" xml:space="preserve">
     <value>预设必须有名称。请填写预设名称字段。</value>
@@ -514,7 +511,7 @@ The Activity log may have further information.</value>
     <value>列队已开始</value>
   </data>
   <data name="QueueViewModel_QueueStatusDisplay" xml:space="preserve">
-    <value>编码中：Pass {0}/{1},  {2:00.00}%, FPS: {3:000.0}, 平均FPS: {4:000.0}, 剩余时间：{5},  已用时间：{6:d\:hh\:mm\:ss}</value>
+    <value>编码中：Pass {0}/{1},  {2:00.00}%, 帧率: {3:000.0}, 平均帧率: {4:000.0}, 剩余时间：{5},  已用时间：{6:d\:hh\:mm\:ss}</value>
   </data>
   <data name="ShellViewModel_CanClose" xml:space="preserve">
     <value>当前正在运行编码。退出 HandBrake 将停止此编码。
@@ -663,7 +660,7 @@ The Activity log may have further information.</value>
   </data>
   <data name="TaskTrayStatusTitle" xml:space="preserve">
     <value>{0}
-Encoding 1 Job</value>
+1个编码任务</value>
   </data>
   <data name="PauseOnLowDiskspace" xml:space="preserve">
     <value>队列已暂停。警告，您编码的驱动器磁盘空间不足。请释放一些空间，然后按开始继续。您还可以调整首选项中的最小空间级别。</value>
@@ -709,8 +706,10 @@ Encoding 1 Job</value>
     <value>你希望继续尝试添加剩下的吗？</value>
   </data>
   <data name="Main_QueueOverwritePrompt" xml:space="preserve">
-    <value>文件 '{0}' 已存在!
-你想要覆盖它吗?</value>
+    <value>这个文件‘{0}’已经存在！
+你是否想要覆盖它！
+
+提示：另外你可以在首选项中设置文件覆盖行为。</value>
   </data>
   <data name="Clipboard_Unavailable" xml:space="preserve">
     <value>系统剪贴板目前无法使用。</value>
@@ -1208,7 +1207,7 @@ Encoding 1 Job</value>
     <value>日志详细级别：</value>
   </data>
   <data name="Options_LogPath" xml:space="preserve">
-    <value>日志文件路径：</value>
+    <value>Path:</value>
   </data>
   <data name="Options_LowDiskspaceSize" xml:space="preserve">
     <value>硬盘空间低时暂停队列</value>
@@ -1244,7 +1243,7 @@ Encoding 1 Job</value>
     <value>工作优先级：</value>
   </data>
   <data name="Options_QsvDecode" xml:space="preserve">
-    <value>Prefer use of Intel QuickSync for decoding video when using the QuickSync encoder and the hardware is available for use.</value>
+    <value>使用QuickSync编码器时，如果有合适的硬件，优先使用Intel QuickSync来解码视频。</value>
   </data>
   <data name="Options_QsvDecodeForNonFullPath" xml:space="preserve">
     <value>在不使用QuickSync编码器时也使用QuickSync解码。(例如x265)</value>
@@ -1466,9 +1465,6 @@ Encoding 1 Job</value>
   <data name="QueueView_Statistics" xml:space="preserve">
     <value>统计数据</value>
   </data>
-  <data name="QueueView_StatsNotAvailableYet" xml:space="preserve">
-    <value>统计数据将在编码完成后可用。</value>
-  </data>
   <data name="QueueView_Subtitles" xml:space="preserve">
     <value>字幕：</value>
   </data>
@@ -1554,13 +1550,13 @@ Encoding 1 Job</value>
     <value>时长：</value>
   </data>
   <data name="StaticPreviewView_LivePreview" xml:space="preserve">
-    <value>实时预览</value>
+    <value>编码预览</value>
   </data>
   <data name="StaticPreviewView_SelectPreviewImage" xml:space="preserve">
     <value>选择预览图片</value>
   </data>
-  <data name="StaticPreviewView_UseSystemDefault" xml:space="preserve">
-    <value>优先选择系统默认的视频播放器</value>
+  <data name="StaticPreviewView_UseExternalPlayer" xml:space="preserve">
+    <value>使用外部播放器</value>
   </data>
   <data name="SubtitlesView_AddCC" xml:space="preserve">
     <value>添加隐藏式字幕（可用时）</value>
@@ -1634,6 +1630,9 @@ Encoding 1 Job</value>
   <data name="SummaryView_storage" xml:space="preserve">
     <value>存储空间</value>
   </data>
+  <data name="VideoView_MultiPass" xml:space="preserve">
+    <value>Multi-Pass Encoding</value>
+  </data>
   <data name="VideoView_AverageBitrate" xml:space="preserve">
     <value>平均码率(kbps)：</value>
   </data>
@@ -1675,6 +1674,9 @@ Encoding 1 Job</value>
   </data>
   <data name="VideoView_Quality" xml:space="preserve">
     <value>质量：</value>
+  </data>
+  <data name="VideoView_TurboAnalysisPass" xml:space="preserve">
+    <value>Turbo analysis pass</value>
   </data>
   <data name="VideoView_VariableFramerate" xml:space="preserve">
     <value>可变帧率</value>
@@ -1857,10 +1859,8 @@ Encoding 1 Job</value>
     <value>便携模式：无法读取 portable.ini。此文件可能存在错误。请使用 portable.ini.template 作为模版重试。</value>
   </data>
   <data name="OptionsView_FormatOptions" xml:space="preserve">
-    <value>替换占位符：{source} {title} {chapters} {creation-date} {creation-time} {date} {time} {quality_bitrate}</value>
-  </data>
-  <data name="OptionsView_PathOptions" xml:space="preserve">
-    <value>替换占位符：{source_path} {source_folder_name} {source}</value>
+    <value>替换选项：
+你可以拖动或输入上面的文字。</value>
   </data>
   <data name="FileOverwriteBehaviours_Ask" xml:space="preserve">
     <value>询问是否覆盖文件</value>
@@ -2318,7 +2318,7 @@ Encoding 1 Job</value>
     <value>显示磁盘空间不足警报的级别。</value>
   </data>
   <data name="OptionsView_SimultaneousHardwareLimitNotice" xml:space="preserve">
-    <value>Notice: This is the upper limit of simultaneous jobs. Hardware limitations may take effect which lowers the actual number of simultaneous jobs during encoding. Setting will only take affect on the next queue batch or app restart.</value>
+    <value>提示：这是同时运行任务的上限。在编码时，硬件限制将会降低实际的同时运行任务数量。此设置只会在下一个队列批次或者程序重启后生效。</value>
   </data>
   <data name="Preset_NotAvailable" xml:space="preserve">
     <value>（不可用）</value>
@@ -2608,7 +2608,7 @@ Encoding 1 Job</value>
     <value>启用 QuickSync Deep Link 超级编码器</value>
   </data>
   <data name="OptionsView_HyperEncodeDescription" xml:space="preserve">
-    <value>Prefers the use of multiple media engines to speed up a single encode where supported. Disable to allow load balancing multiple parallel encodes across media engines.</value>
+    <value>如果支持的话，优先使用多个媒体引擎来加速一个编码任务。禁用此选项会把多个平行编码任务平均分配到各媒体引擎。</value>
   </data>
   <data name="MainView_OpenHandBrake" xml:space="preserve">
     <value>打开 HandBrake</value>
@@ -2659,7 +2659,7 @@ Encoding 1 Job</value>
     <value>自动</value>
   </data>
   <data name="CropMode_Loose" xml:space="preserve">
-    <value>Conservative</value>
+    <value>保守的</value>
   </data>
   <data name="CropMode_None" xml:space="preserve">
     <value>无</value>
@@ -2672,5 +2672,71 @@ Encoding 1 Job</value>
   </data>
   <data name="Options_Hardware" xml:space="preserve">
     <value>硬件支持</value>
+  </data>
+  <data name="StaticPreviewViewModel_MediaError" xml:space="preserve">
+    <value>此系统不能播放此文件。
+
+请注意特定的编解码器如AV1或者HEVA需要来自Microsoft Store的Microsoft AV1或者HEVC编解码器插件。
+或者，勾选下面的“使用外部播放器”复选框。</value>
+  </data>
+  <data name="StaticPreviewView_ClosePlayer" xml:space="preserve">
+    <value>关闭播放器</value>
+  </data>
+  <data name="StaticPreviewView_Play" xml:space="preserve">
+    <value>播放</value>
+  </data>
+  <data name="StaticPreviewView_VideoPreview" xml:space="preserve">
+    <value>视频预览</value>
+  </data>
+  <data name="StaticPreviewViewModel_WebmNotSupported" xml:space="preserve">
+    <value>这个WebM容器不可以使用自带的预览。必须使用一个外部播放器。</value>
+  </data>
+  <data name="StaticPreview_EncodingPreview" xml:space="preserve">
+    <value>编码预览...</value>
+  </data>
+  <data name="StaticPreview_Previews" xml:space="preserve">
+    <value>预览：</value>
+  </data>
+  <data name="StaticPreview_Volume" xml:space="preserve">
+    <value>音量：0</value>
+  </data>
+  <data name="Reset" xml:space="preserve">
+    <value>重置</value>
+  </data>
+  <data name="OptionsView_IsoDateFormat" xml:space="preserve">
+    <value>使用ISO日期格式(YYYY-MM-DD)而不是系统默认格式。</value>
+  </data>
+  <data name="QueueViewModel_ShortEncodeStatus" xml:space="preserve">
+    <value>{1}个中的{0}个已完成，{2:00.00}%，帧率 {3:000.0}，平均帧率 {4:000.0}，预计完成时间：{5}</value>
+  </data>
+  <data name="QueueViewModel_ShortSubScanStatus" xml:space="preserve">
+    <value>扫描字幕 {0:00.00}%，预计完成时间：{1}</value>
+  </data>
+  <data name="QueueView_ExtendedQueueDisplay" xml:space="preserve">
+    <value>展开队列信息</value>
+  </data>
+  <data name="QueueView_MinimalQueueDisplay" xml:space="preserve">
+    <value>折叠队列信息</value>
+  </data>
+  <data name="QueueStats_ShortOutputStats" xml:space="preserve">
+    <value>输出：{0}，平局帧率{1}</value>
+  </data>
+  <data name="PresetPane_Desc" xml:space="preserve">
+    <value>预设描述：</value>
+  </data>
+  <data name="PresetPane_HidePresetDesc" xml:space="preserve">
+    <value>隐藏预设描述</value>
+  </data>
+  <data name="PresetPane_ShowPresetDesc" xml:space="preserve">
+    <value>显示预设描述</value>
+  </data>
+  <data name="TaskTrayStatusManyTitle" xml:space="preserve">
+    <value>{0}
+编码{1}个任务</value>
+  </data>
+  <data name="StaticPreviewViewModel_MultipleEncodes" xml:space="preserve">
+    <value>无法编码一个预览。程序正在编码另外一个文件。
+
+要允许多个同时编码任务，在工具菜单-&gt;首选项-&gt;高级-&gt;进程隔离-&gt;“用一个独立的进程运行每个队列任务”处打开“进程隔离”。</value>
   </data>
 </root>

@@ -288,6 +288,16 @@ x264は対数スケールで低い値が高いクオリティに対応します�
 FFMpegとTheoraのスケールはより直線的です。
 この二つにはロスレスモードはありません。</value>
   </data>
+  <data name="Video_TurboAnalysisPass" xml:space="preserve">
+    <value>複数パスエンコードの内、解析パスで、高速化の設定が行われます。</value>
+  </data>
+  <data name="Video_MultiPass" xml:space="preserve">
+    <value>複数パスエンコードを行います。
+
+これは 'ビットレート' オプションを使用することが前提です。解析パスで
+映像の統計情報を採取します。最後のパスで統計情報を利用し
+ビットレートの割り当てが行われます。</value>
+  </data>
   <data name="Video_VariableFramerate" xml:space="preserve">
     <value>可変フレームレートの出力を有効にします。
 
@@ -502,7 +512,25 @@ HB_EXIT_CODE
 出力ファイルに何かする前にそれが正しいものであるか確認することが推奨されます。</value>
   </data>
   <data name="Options_AdditionalFormatOptions" xml:space="preserve">
-    <value>出力ファイルの形式です。ファイルシステムでサポートされるすべての文字の他に、タイトル変更やソースのスキャンや設定を更新した際に自動的に置き換わるようにプレースホルダを使うことができます。</value>
+    <value>出力ファイルの形式です。ファイルシステムでサポートされるすべての文字の他に、タイトル変更やソースのスキャンや設定を更新した際に自動的に置き換わるようにプレースホルダを使うことができます。
+
+{source} - ソースファイル名です。
+{title} - 整数の値を取ります。ディスクタイトルの数字の代わりになるものです。
+{chapters} - 選択されたチャプターの範囲です。
+{creation-date} - (利用可能である場合は)ソースファイルが作成された日付です。
+{creation-time} - (利用可能である場合は)ソースファイルが作成された時刻です。
+{modification-date} - (利用可能である場合は)ソースファイルが最後に変更された日付です。
+{modification-time} - (利用可能である場合は)ソースファイルが最後に変更された時刻です。
+{date} - 今日の日付です。キューに追加された時間が基準です。
+{time} - 今日の時刻です。キューに追加された時間が基準です。
+{quality_bitrate} - 品質やビットレートの数字です。
+{quality_type} - ビデオタブでの設定に応じ"kbps"や"Q"が出力されます。
+{preset} - 選択されたプリセットの名前です。
+{encode_bit_depth} -  8, 10, 12などで表されるビット深度です。
+{width} - 出力される格納幅です。
+{height} - 出力される格納高さです。
+
+パスに使えない無効な文字は自動で除去されます。</value>
   </data>
   <data name="OptionsView_RightToleftMode" xml:space="preserve">
     <value>右から左に読む言語用に2つのモードがあります。"テキストのみ"はテキストのみ右から始まるようになります。"全ユーザーインターフェイス"は全ての操作を右からにします。
@@ -514,5 +542,12 @@ HB_EXIT_CODE
 1が最も低品質で5が高品質です。
 
 ビットレートはソースに依存します。</value>
+  </data>
+  <data name="OptionsView_DestinationReplacementOptions" xml:space="preserve">
+    <value>次のものは出力先パスを決める際に一つまたは複数使用できます。
+
+{source_path} - (可能であれば)ソースパスと同じフォルダです。
+{source_folder_name} – フルパスでない、ソースファイルが入っているディレクトリの名前です。
+{source} - ソースファイルの名前です。</value>
   </data>
 </root>

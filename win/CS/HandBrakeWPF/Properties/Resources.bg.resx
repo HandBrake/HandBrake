@@ -328,9 +328,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.<
   <data name="PictureSettings_OutputResolution" xml:space="preserve">
     <value>Изход: {0}</value>
   </data>
-  <data name="Options_DefaultPathAdditionalParams" xml:space="preserve">
-    <value>Налични допълнителни опции: {source_path} или {source_folder_name} или {source}</value>
-  </data>
   <data name="Main_MatchingFileOverwriteWarning" xml:space="preserve">
     <value>Не можете да кодирате към файл със същия път и име като файла източник. Моля, променете името на целевия файл така, че да не съвпада с това на файла източник.</value>
   </data>
@@ -464,7 +461,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.<
     <value>Провалено актуализиране. Можете да свалите актуализацията от https://handbrake.fr</value>
   </data>
   <data name="PictureSettingsViewModel_StorageDisplayLabel" xml:space="preserve">
-    <value>Размер на хранилището: {0}х{1}</value>
+    <value>Размер в хранилище: {0}х{1}</value>
   </data>
   <data name="QueueSelectionViewModel_AddToQueue" xml:space="preserve">
     <value>Добави към опашката</value>
@@ -714,8 +711,10 @@ Encoding 1 Job</value>
     <value>Желаете ли да продължите с добавянето на останалите?</value>
   </data>
   <data name="Main_QueueOverwritePrompt" xml:space="preserve">
-    <value>Фалът "{0}" вече съществува!
-Искате ли да го презапишете?</value>
+    <value>The file '{0}' already exists!
+Would you like to overwrite it?
+
+Hint: File overwrite behaviour can be controlled in preferences. </value>
   </data>
   <data name="Clipboard_Unavailable" xml:space="preserve">
     <value>Системният клипборд в момента е недостъпен.</value>
@@ -766,7 +765,7 @@ Encoding 1 Job</value>
     <value>Кодек</value>
   </data>
   <data name="AudioView_DRC" xml:space="preserve">
-    <value>DRC</value>
+    <value>КДО</value>
   </data>
   <data name="AudioView_Gain" xml:space="preserve">
     <value>Усилване</value>
@@ -877,7 +876,7 @@ Encoding 1 Job</value>
     <value>Филтри</value>
   </data>
   <data name="FiltersView_FlipVideo" xml:space="preserve">
-    <value>Хоризонтален</value>
+    <value>Хоризонтално</value>
   </data>
   <data name="FiltersView_Grayscale" xml:space="preserve">
     <value>Сива скала</value>
@@ -1168,7 +1167,7 @@ Encoding 1 Job</value>
     <value>Проверка за актуализации</value>
   </data>
   <data name="Options_ClearCompleted" xml:space="preserve">
-    <value>Винаги изчиствай завършените елементи на опашката, след завършване на кодирането</value>
+    <value>Винаги изчиствай завършените задачи на опашката след завършване на кодирането</value>
   </data>
   <data name="Options_ClearLogs" xml:space="preserve">
     <value>Изчисти история на дневниците</value>
@@ -1213,7 +1212,7 @@ Encoding 1 Job</value>
     <value>Ниво на подробност на дневника:</value>
   </data>
   <data name="Options_LogPath" xml:space="preserve">
-    <value>Път до дневника:</value>
+    <value>Path:</value>
   </data>
   <data name="Options_LowDiskspaceSize" xml:space="preserve">
     <value>Паузирай опашката при ниско дисково пространство</value>
@@ -1471,9 +1470,6 @@ VLC и MPC-HC се поддържат. Други плеъри може да р�
   <data name="QueueView_Statistics" xml:space="preserve">
     <value>Статистика</value>
   </data>
-  <data name="QueueView_StatsNotAvailableYet" xml:space="preserve">
-    <value>Статистиката ще бъде налична след завършване на кодирането</value>
-  </data>
   <data name="QueueView_Subtitles" xml:space="preserve">
     <value>Субтитри:</value>
   </data>
@@ -1559,13 +1555,13 @@ VLC и MPC-HC се поддържат. Други плеъри може да р�
     <value>Продължителност:</value>
   </data>
   <data name="StaticPreviewView_LivePreview" xml:space="preserve">
-    <value>Визуализация в реално време</value>
+    <value>Encode Preview</value>
   </data>
   <data name="StaticPreviewView_SelectPreviewImage" xml:space="preserve">
     <value>Изберете изображение за визуализация</value>
   </data>
-  <data name="StaticPreviewView_UseSystemDefault" xml:space="preserve">
-    <value>Предпочитай системния видео плеър по подразбиране</value>
+  <data name="StaticPreviewView_UseExternalPlayer" xml:space="preserve">
+    <value>Use External Player App</value>
   </data>
   <data name="SubtitlesView_AddCC" xml:space="preserve">
     <value>Добави затворени надписи, когато са налични</value>
@@ -1639,6 +1635,9 @@ VLC и MPC-HC се поддържат. Други плеъри може да р�
   <data name="SummaryView_storage" xml:space="preserve">
     <value>хранилище</value>
   </data>
+  <data name="VideoView_MultiPass" xml:space="preserve">
+    <value>Multi-Pass Encoding</value>
+  </data>
   <data name="VideoView_AverageBitrate" xml:space="preserve">
     <value>Средна побитова скорост (kb/s):</value>
   </data>
@@ -1680,6 +1679,9 @@ VLC и MPC-HC се поддържат. Други плеъри може да р�
   </data>
   <data name="VideoView_Quality" xml:space="preserve">
     <value>Качество:</value>
+  </data>
+  <data name="VideoView_TurboAnalysisPass" xml:space="preserve">
+    <value>Turbo analysis pass</value>
   </data>
   <data name="VideoView_VariableFramerate" xml:space="preserve">
     <value>Променлива кадрова честота</value>
@@ -1862,10 +1864,8 @@ VLC и MPC-HC се поддържат. Други плеъри може да р�
     <value>Преносим режим: Неуспешно прочитане на portable.ini. Възможно е да има грешка в този файл. Опитайте отново използвайки portable.ini.template като насока.</value>
   </data>
   <data name="OptionsView_FormatOptions" xml:space="preserve">
-    <value>Полета за заместване: {source} {title} {chapters} {creation-date} {creation-time} {date} {time} {quality_bitrate}</value>
-  </data>
-  <data name="OptionsView_PathOptions" xml:space="preserve">
-    <value>Полета за заместване: {source_path} {source_folder_name} {source}</value>
+    <value>Replacement Options:
+You can drag/drop or enter the text above.</value>
   </data>
   <data name="FileOverwriteBehaviours_Ask" xml:space="preserve">
     <value>Питане за презаписване</value>
@@ -1919,7 +1919,7 @@ VLC и MPC-HC се поддържат. Други плеъри може да р�
     <value>HandBrake засече недовършени задачи от опашката. Те ще са от няколко вървящи изпълнения на HandBrake. Искате ли да възстановите всички незавършени задачи?</value>
   </data>
   <data name="Queue_RecoverQueueQuestionSingular" xml:space="preserve">
-    <value>HandBrake засече недовършени задачи от опашката от последното изпълнение на приложението. Искате ли да ги възстановите?</value>
+    <value>HandBrake засече недовършени задачи на опашката от последното изпълнение на приложението. Искате ли да ги възстановите?</value>
   </data>
   <data name="Queue_RecoveryPossible" xml:space="preserve">
     <value>Възможно е възстановяване на опашката</value>
@@ -2678,5 +2678,71 @@ VLC и MPC-HC се поддържат. Други плеъри може да р�
   </data>
   <data name="Options_Hardware" xml:space="preserve">
     <value>Хардуерна поддръжка</value>
+  </data>
+  <data name="StaticPreviewViewModel_MediaError" xml:space="preserve">
+    <value>The system was unable to play this file. 
+
+Please note certain codecs such as AV1 or HEVC require the Microsoft AV1 or HEVC codec plugins from the Microsoft Store to play.
+Alternatively, check the "Use External Player" checkbox below.</value>
+  </data>
+  <data name="StaticPreviewView_ClosePlayer" xml:space="preserve">
+    <value>Close Player</value>
+  </data>
+  <data name="StaticPreviewView_Play" xml:space="preserve">
+    <value>Изпълни</value>
+  </data>
+  <data name="StaticPreviewView_VideoPreview" xml:space="preserve">
+    <value>Video Preview</value>
+  </data>
+  <data name="StaticPreviewViewModel_WebmNotSupported" xml:space="preserve">
+    <value>The Built-in preview is not available for the WebM container. An External player must be used.</value>
+  </data>
+  <data name="StaticPreview_EncodingPreview" xml:space="preserve">
+    <value>Encoding Preview ...</value>
+  </data>
+  <data name="StaticPreview_Previews" xml:space="preserve">
+    <value>Previews:</value>
+  </data>
+  <data name="StaticPreview_Volume" xml:space="preserve">
+    <value>Volume: 0</value>
+  </data>
+  <data name="Reset" xml:space="preserve">
+    <value>Рестартиране</value>
+  </data>
+  <data name="OptionsView_IsoDateFormat" xml:space="preserve">
+    <value>Use ISO Date Formats (YYYY-MM-DD) instead of system format.</value>
+  </data>
+  <data name="QueueViewModel_ShortEncodeStatus" xml:space="preserve">
+    <value>Pass {0} of {1}, {2:00.00}%, {3:000.0} fps, avg {4:000.0} fps, ETA: {5}</value>
+  </data>
+  <data name="QueueViewModel_ShortSubScanStatus" xml:space="preserve">
+    <value>Scanning for Subtitles {0:00.00}%, ETA: {1}</value>
+  </data>
+  <data name="QueueView_ExtendedQueueDisplay" xml:space="preserve">
+    <value>Extend Queue Info</value>
+  </data>
+  <data name="QueueView_MinimalQueueDisplay" xml:space="preserve">
+    <value>Minimise Queue Info</value>
+  </data>
+  <data name="QueueStats_ShortOutputStats" xml:space="preserve">
+    <value>Output: {0}, avg {1} fps</value>
+  </data>
+  <data name="PresetPane_Desc" xml:space="preserve">
+    <value>Preset Description:</value>
+  </data>
+  <data name="PresetPane_HidePresetDesc" xml:space="preserve">
+    <value>Hide Preset Description</value>
+  </data>
+  <data name="PresetPane_ShowPresetDesc" xml:space="preserve">
+    <value>Show Preset Description</value>
+  </data>
+  <data name="TaskTrayStatusManyTitle" xml:space="preserve">
+    <value>{0}
+Encoding {1} jobs</value>
+  </data>
+  <data name="StaticPreviewViewModel_MultipleEncodes" xml:space="preserve">
+    <value>Unable to encode a preview. The application is currently busy encoding another file.
+
+To allow multiple simultaneous encodes, turn on "Process Isolation" in Tools Menu -&gt; Preferences -&gt; Advanced -&gt; Process Isolation -&gt; "Run each queued job in a separate worker process".</value>
   </data>
 </root>

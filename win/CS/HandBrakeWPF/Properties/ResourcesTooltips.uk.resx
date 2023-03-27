@@ -112,10 +112,10 @@
     <value>2.0</value>
   </resheader>
   <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=5.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=5.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="FilterView_Deblock" xml:space="preserve">
     <value>Deblock зменшує кількість блокових артефактів, спричинених низькою якістю стиснення відео.</value>
@@ -141,7 +141,7 @@ HQDN3D – адаптивний низькочастотний фільтр. В�
     <value>Зворотна телекінопроекція (detelecine) видаляє ефекти «гребінки», які є результатом кінопроекції, процесу перетворення частоти кадрів фільму в частоту кадрів телебачення.</value>
   </data>
   <data name="FilterView_Grayscale" xml:space="preserve">
-    <value>Відтінки сірого видаляє кольоровий складову відео. Часто його називають чорно-білим відео.</value>
+    <value>Grayscale removes the color component of the video. Often referred to as Black &amp; White video.</value>
   </data>
   <data name="MainView_Destination" xml:space="preserve">
     <value>Шлях призначення, включаючи назву каталогу та файлу. Тут буде створено ваше нове відео з вказаною назвою.</value>
@@ -290,6 +290,16 @@ Custom (Власне) дозволяє вручну встановлювати �
 Шкала FFMpeg і Theora є більш лінійною.
 Ці кодувальники не мають режиму без втрат.</value>
   </data>
+  <data name="Video_TurboAnalysisPass" xml:space="preserve">
+    <value>During the analysis pass of a multi pass encode, use settings that speed things along.</value>
+  </data>
+  <data name="Video_MultiPass" xml:space="preserve">
+    <value>Perform Multi Pass Encoding.
+
+The 'Bitrate' option is prerequisite. During the analysis passes, statistics about
+the video are collected. Then in the final pass, those statistics are used
+to make bitrate allocation decisions.</value>
+  </data>
   <data name="Video_VariableFramerate" xml:space="preserve">
     <value>Вмикає змінну частоту кадрів (variable framerate, VFR) для виводу.
 
@@ -319,7 +329,9 @@ VFR не сумісний з деякими програвачами.</value>
     <value>Вилучити вибраний набір.</value>
   </data>
   <data name="SourceSelection_TitleSpecific" xml:space="preserve">
-    <value>Сканує лише вказаний заголовок замість усіх заголовків.</value>
+    <value>Some Sources may contain more than one video clip, or a collection of Titles. Blu-ray and DVD Sources often have multiple Titles.
+
+If you know the specific title you wish to encode you can enter it here and HandBrake will scan only that title rather than every title in the source file. Otherwise, leave the field blank.</value>
   </data>
   <data name="FilterView_CustomDenoiseParams" xml:space="preserve">
     <value>Власні параметри усунення шумів.
@@ -353,22 +365,22 @@ VFR не сумісний з деякими програвачами.</value>
 - Sprite (спрайт) корисний для 1-/4-/8-/16-бітних 2D-ігор. Sprite не призначений для відео високої чіткості.</value>
   </data>
   <data name="FilterView_Deinterlace" xml:space="preserve">
-    <value>Деінтерлейсинг (deinterlace) видаляє із зображення артефакти «гребінки».
+    <value>Deinterlace removes comb artifacts from the picture.
 
-Yadif – популярний і швидкий деінтерлейсер.
+Bwdif and Yadif are two popular and fast deinterlacers.
 
-Decomb перемикається між кількома алгоритмами інтерполяції для кращої швидкості та якості.</value>
+Decomb switches between multiple interpolation algorithms for speed and quality.</value>
   </data>
   <data name="FilterView_DeinterlaceCustom" xml:space="preserve">
-    <value>Власні параметри деінтерлейсингу.
+    <value>Custom Deinterlace parameters.
  
-Синтаксис Yadif: mode=m:parity=p
+ Bwdif and Yadif syntax: mode=m:parity=p
  
-Стандартні Yadif: mode=3
+ Bwdif and Yadif default: mode=3
  
-Синтаксис Decomb: mode=m:magnitude-thresh=m:variance-thresh=v:laplacian-thresh=l:dilation-thresh=d:erosion-thresh=e:noise-thresh=n:search-distance=s:postproc=p:parity=p
+ Decomb syntax: mode=m:magnitude-thresh=m:variance-thresh=v:laplacian-thresh=l:dilation-thresh=d:erosion-thresh=e:noise-thresh=n:search-distance=s:postproc=p:parity=p
  
-Стандартні Decomb: mode=7</value>
+ Decomb default: mode=7</value>
   </data>
   <data name="FilterView_DeinterlacePreset" xml:space="preserve">
     <value>Набір фільтрів деінтерлейсингу.
@@ -463,5 +475,81 @@ Lapsharp's Sprite tune is useful for 1-/4-/8-/16-bit 2-dimensional games. Sprite
   </data>
   <data name="PictureSettingsView_PaddingCustomColourTooltip" xml:space="preserve">
     <value>Це поле може приймати значення RGB, такі як: "0xFF0000" або назви кольорів, такі як "red" (червоний). Повний перелік назв кольорів дивіться у документації фільтру.</value>
+  </data>
+  <data name="SubtitlesView_BurnIn" xml:space="preserve">
+    <value>Burn in subtitles to the video stream.
+
+Note, this will be automatically selected if the source subtitle track format is not supported in the output file type.
+
+For example, PGS subtitles are not supported in MP4</value>
+  </data>
+  <data name="OptionsView_PresetDisplayModes" xml:space="preserve">
+    <value>Список — набори показуються плоским списком.
+Частково списком — останні 8 наборів користувачів показуються у вигляді плоского списку, за якими усі набори показуються як категорії.
+Категорії — усі набори показуються як підменю для кожної категорії.</value>
+  </data>
+  <data name="AudioView_AudioDefaults" xml:space="preserve">
+    <value>Setup behaviours that dictate how this tab automatically adds audio tracks when selecting a new source or title.</value>
+  </data>
+  <data name="BehavioursReload" xml:space="preserve">
+    <value>Refresh the list below based on the behaviours configured. </value>
+  </data>
+  <data name="SubtitleView_SubtitleDefaults" xml:space="preserve">
+    <value>Setup behaviours that dictate how this tab automatically adds subtitle tracks when selecting a new source or title.</value>
+  </data>
+  <data name="OptionsView_SendFileToArguments" xml:space="preserve">
+    <value>The following environment variables are always set:
+HB_SOURCE
+HB_DESTINATION
+HB_EXIT_CODE
+
+Possible Exit Codes are as follows:
+0 : Successful
+2 : Input Arguments Error
+3 : Failed to Initialise 
+4 : Unknown Error
+5 : Error reading source file.
+
+Please note, errors codes are best effort and may not always be accurate.
+It is recommended the output file is validated before performing actions on it.</value>
+  </data>
+  <data name="Options_AdditionalFormatOptions" xml:space="preserve">
+    <value>The format of the output file. In addition to any supported file system character, you can use the any of the placeholders that will be replaced when you change title or scan a source or update certain settings.
+
+{source} - Name of the source file.
+{title} - Integer value. This is representative of a disc title number.
+{chapters} - The range of chapters selected.
+{creation-date} - The date that the source file was created on (if available).
+{creation-time} - The time that the source file was created on (if available).
+{modification-date} - The date that the source file was last modified on (if available).
+{modification-time} - The time that the source file was last modified on (if available).
+{date} - Today. Set at time of adding to the queue.
+{time} - Today. Set at time of adding to the queue.
+{quality_bitrate} - The RF/CQ number, or bitrate
+{quality_type} - Prints "kbps" or "Q" depending on the quality mode selected on the video tab.
+{preset} - Name of the preset selected.
+{encode_bit_depth} - Integer value. i.e. 8, 10 or 12
+{width} - The output storage width
+{height} - The output storage height
+
+Any illegal path characters will be removed automatically.</value>
+  </data>
+  <data name="OptionsView_RightToleftMode" xml:space="preserve">
+    <value>For languages that are right to left, you can enable one of two modes.   "Text Only" will only render the text in right to left style.  "Entire User Interface" will render all controls in right to left.
+
+Please note, there may be inperfections in the UI layout when using these modes. Depending on the language, it may be worth trying both modes to find the best fit.</value>
+  </data>
+  <data name="AudioView_Quality" xml:space="preserve">
+    <value>Target a specific quality level for audio.
+1 is lowest quality and 5 is highest quality.
+
+Bitrate will vary source to source.</value>
+  </data>
+  <data name="OptionsView_DestinationReplacementOptions" xml:space="preserve">
+    <value>The following can be used singularly, or together to build up a destination path
+
+{source_path} - In the same folder as the source path (if possible)
+{source_folder_name} – The name of the directory that the source file is in, without the full path.
+{source} - The name of the source file.</value>
   </data>
 </root>

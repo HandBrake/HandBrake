@@ -112,10 +112,10 @@
     <value>2.0</value>
   </resheader>
   <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=5.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=5.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="FilterView_Deblock" xml:space="preserve">
     <value>Deblock 可減少低品質視訊壓縮造成的塊狀瑕疵。</value>
@@ -285,6 +285,16 @@ x264 的尺度是對數級的，且數值越低表示更佳品質。
 
 FFMpeg 及 Theora 的尺度較線性，且沒有非破壞性壓縮模式。</value>
   </data>
+  <data name="Video_TurboAnalysisPass" xml:space="preserve">
+    <value>During the analysis pass of a multi pass encode, use settings that speed things along.</value>
+  </data>
+  <data name="Video_MultiPass" xml:space="preserve">
+    <value>Perform Multi Pass Encoding.
+
+The 'Bitrate' option is prerequisite. During the analysis passes, statistics about
+the video are collected. Then in the final pass, those statistics are used
+to make bitrate allocation decisions.</value>
+  </data>
   <data name="Video_VariableFramerate" xml:space="preserve">
     <value>啟用可變影格率輸出。
 
@@ -347,22 +357,22 @@ HQDN3D 預設值：y-spatial=3:cb-spatial=2:cr-spatial=2:y-temporal=2:cb-tempora
 - Sprite：適用於像素風格的 2D 遊戲，此模式並非設計給高畫質影片使用。</value>
   </data>
   <data name="FilterView_Deinterlace" xml:space="preserve">
-    <value>去交錯濾鏡可去除畫面中的橫紋。
+    <value>Deinterlace removes comb artifacts from the picture.
 
-Yadif 是流行且快速的去交錯演算法。
+Bwdif and Yadif are two popular and fast deinterlacers.
 
-Decomb 會在多種插值演算法間切換，以提升速度及品質。</value>
+Decomb switches between multiple interpolation algorithms for speed and quality.</value>
   </data>
   <data name="FilterView_DeinterlaceCustom" xml:space="preserve">
-    <value>自訂去交錯參數。
+    <value>Custom Deinterlace parameters.
  
- Yadif 語法：mode=m:parity=p
+ Bwdif and Yadif syntax: mode=m:parity=p
  
- Yadif 預設值：mode=3
+ Bwdif and Yadif default: mode=3
  
- Decomb 語法：mode=m:magnitude-thresh=m:variance-thresh=v:laplacian-thresh=l:dilation-thresh=d:erosion-thresh=e:noise-thresh=n:search-distance=s:postproc=p:parity=p
+ Decomb syntax: mode=m:magnitude-thresh=m:variance-thresh=v:laplacian-thresh=l:dilation-thresh=d:erosion-thresh=e:noise-thresh=n:search-distance=s:postproc=p:parity=p
  
- Decomb 預設值：mode=7</value>
+ Decomb default: mode=7</value>
   </data>
   <data name="FilterView_DeinterlacePreset" xml:space="preserve">
     <value>去交錯濾鏡設定檔。
@@ -495,11 +505,42 @@ HB_EXIT_CODE
 建議校驗輸出檔案是否完好後再對其操作。</value>
   </data>
   <data name="Options_AdditionalFormatOptions" xml:space="preserve">
-    <value>輸出的檔案格式。除了檔案系統支援的字元外，亦可使用預留文字，將在變更標題、掃描來源或更新某些設定時自動將其替換。</value>
+    <value>The format of the output file. In addition to any supported file system character, you can use the any of the placeholders that will be replaced when you change title or scan a source or update certain settings.
+
+{source} - Name of the source file.
+{title} - Integer value. This is representative of a disc title number.
+{chapters} - The range of chapters selected.
+{creation-date} - The date that the source file was created on (if available).
+{creation-time} - The time that the source file was created on (if available).
+{modification-date} - The date that the source file was last modified on (if available).
+{modification-time} - The time that the source file was last modified on (if available).
+{date} - Today. Set at time of adding to the queue.
+{time} - Today. Set at time of adding to the queue.
+{quality_bitrate} - The RF/CQ number, or bitrate
+{quality_type} - Prints "kbps" or "Q" depending on the quality mode selected on the video tab.
+{preset} - Name of the preset selected.
+{encode_bit_depth} - Integer value. i.e. 8, 10 or 12
+{width} - The output storage width
+{height} - The output storage height
+
+Any illegal path characters will be removed automatically.</value>
   </data>
   <data name="OptionsView_RightToleftMode" xml:space="preserve">
     <value>對於由右至左的語言，可以從兩種模式中擇一使用。「僅有文字」只會將文字由右至左呈現；「整體使用者介面」則將所有控制項由右至左呈現。
 
 請留意，使用這些模式時使用者介面版面可能會有問題。依據不同語言，可嘗試何者效果最佳。</value>
+  </data>
+  <data name="AudioView_Quality" xml:space="preserve">
+    <value>Target a specific quality level for audio.
+1 is lowest quality and 5 is highest quality.
+
+Bitrate will vary source to source.</value>
+  </data>
+  <data name="OptionsView_DestinationReplacementOptions" xml:space="preserve">
+    <value>The following can be used singularly, or together to build up a destination path
+
+{source_path} - In the same folder as the source path (if possible)
+{source_folder_name} – The name of the directory that the source file is in, without the full path.
+{source} - The name of the source file.</value>
   </data>
 </root>

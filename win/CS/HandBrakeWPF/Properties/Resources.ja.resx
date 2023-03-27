@@ -326,9 +326,6 @@ Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  021
   <data name="PictureSettings_OutputResolution" xml:space="preserve">
     <value>出力先: {0}</value>
   </data>
-  <data name="Options_DefaultPathAdditionalParams" xml:space="preserve">
-    <value>次のオプションも利用可能です: {source_path}  {source_folder_name}  {source}</value>
-  </data>
   <data name="Main_MatchingFileOverwriteWarning" xml:space="preserve">
     <value>ソースファイルと同じ場所とファイル名にエンコードすることはできません。ソースファイルと一致させないために、保存先のファイル名を変更してください。</value>
   </data>
@@ -669,7 +666,7 @@ Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  021
   </data>
   <data name="TaskTrayStatusTitle" xml:space="preserve">
     <value>{0}
-Encoding 1 Job</value>
+1つのジョブをエンコード中</value>
   </data>
   <data name="PauseOnLowDiskspace" xml:space="preserve">
     <value>キューを一時停止しました。警告、エンコードしているドライブの空き領域が少なくなっています。続けるためには空きを増やしてから開始を押してください。もしくは設定から最低領域レベルを調節することができます。</value>
@@ -715,8 +712,10 @@ Encoding 1 Job</value>
     <value>本当にこのまま残りを追加しますか？</value>
   </data>
   <data name="Main_QueueOverwritePrompt" xml:space="preserve">
-    <value>ファイル'{0}'はすでに存在しています！
-上書きしますか？</value>
+    <value>ファイル'{0}'はすでに存在します！
+上書きしますか？
+
+ヒント:ファイルを上書きするかは設定からも変更できます。</value>
   </data>
   <data name="Clipboard_Unavailable" xml:space="preserve">
     <value>システムのクリップボードは現在利用できません。</value>
@@ -1214,7 +1213,7 @@ Encoding 1 Job</value>
     <value>ログの詳細度:</value>
   </data>
   <data name="Options_LogPath" xml:space="preserve">
-    <value>ログのパス:</value>
+    <value>パス:</value>
   </data>
   <data name="Options_LowDiskspaceSize" xml:space="preserve">
     <value>ディスクの空きが少なくなったらキューを一時停止する</value>
@@ -1472,9 +1471,6 @@ VLCとMPC-HCがサポートされています。他のプレイヤーではお�
   <data name="QueueView_Statistics" xml:space="preserve">
     <value>統計</value>
   </data>
-  <data name="QueueView_StatsNotAvailableYet" xml:space="preserve">
-    <value>統計はエンコードの完了後に利用可能です。</value>
-  </data>
   <data name="QueueView_Subtitles" xml:space="preserve">
     <value>字幕:</value>
   </data>
@@ -1560,13 +1556,13 @@ VLCとMPC-HCがサポートされています。他のプレイヤーではお�
     <value>再生時間:</value>
   </data>
   <data name="StaticPreviewView_LivePreview" xml:space="preserve">
-    <value>リアルタイムプレビュー</value>
+    <value>プレビューをエンコード</value>
   </data>
   <data name="StaticPreviewView_SelectPreviewImage" xml:space="preserve">
     <value>プレビュー画像を選択</value>
   </data>
-  <data name="StaticPreviewView_UseSystemDefault" xml:space="preserve">
-    <value>システム既定の動画プレーヤーを優先する</value>
+  <data name="StaticPreviewView_UseExternalPlayer" xml:space="preserve">
+    <value>外部プレーヤーアプリを使用</value>
   </data>
   <data name="SubtitlesView_AddCC" xml:space="preserve">
     <value>可能ならクローズドキャプションを追加する</value>
@@ -1640,6 +1636,9 @@ VLCとMPC-HCがサポートされています。他のプレイヤーではお�
   <data name="SummaryView_storage" xml:space="preserve">
     <value>ストレージ</value>
   </data>
+  <data name="VideoView_MultiPass" xml:space="preserve">
+    <value>複数パスエンコード</value>
+  </data>
   <data name="VideoView_AverageBitrate" xml:space="preserve">
     <value>平均ビットレート (kbps):</value>
   </data>
@@ -1681,6 +1680,9 @@ VLCとMPC-HCがサポートされています。他のプレイヤーではお�
   </data>
   <data name="VideoView_Quality" xml:space="preserve">
     <value>品質:</value>
+  </data>
+  <data name="VideoView_TurboAnalysisPass" xml:space="preserve">
+    <value>解析パスの高速化</value>
   </data>
   <data name="VideoView_VariableFramerate" xml:space="preserve">
     <value>可変フレームレート</value>
@@ -1863,10 +1865,8 @@ VLCとMPC-HCがサポートされています。他のプレイヤーではお�
     <value>ポータブルモード: portable.iniを読み込むことができませんでした。このファイルにエラーがある可能性があります。portable.ini.templateをガイドとして使用しやり直してください。</value>
   </data>
   <data name="OptionsView_FormatOptions" xml:space="preserve">
-    <value>利用できる変数: {source} {title} {chapters} {creation-date} {creation-time} {date} {time} {quality_bitrate}</value>
-  </data>
-  <data name="OptionsView_PathOptions" xml:space="preserve">
-    <value>利用できる変数: {source_path} {source_folder_name} {source}</value>
+    <value>命名オプション:
+上のテキストをドラッグアンドドロップできます。</value>
   </data>
   <data name="FileOverwriteBehaviours_Ask" xml:space="preserve">
     <value>上書きするかを聞く</value>
@@ -2666,7 +2666,7 @@ HandBrakeエンコードサポートは設定から最有効化できます。</
     <value>自動</value>
   </data>
   <data name="CropMode_Loose" xml:space="preserve">
-    <value>Conservative</value>
+    <value>保守的</value>
   </data>
   <data name="CropMode_None" xml:space="preserve">
     <value>なし</value>
@@ -2679,5 +2679,71 @@ HandBrakeエンコードサポートは設定から最有効化できます。</
   </data>
   <data name="Options_Hardware" xml:space="preserve">
     <value>ハードウェアサポート</value>
+  </data>
+  <data name="StaticPreviewViewModel_MediaError" xml:space="preserve">
+    <value>システムはこのファイルを再生できませんでした。
+
+AV1やHEVCといった特定のコーデックは、再生するためにマイクロソフトからMicrosoft AV1やHEVCコーデックプラグインが必要であることに留意してください。
+もしくは、下にある"外部プレイヤーアプリを使用"にチェックを付けることもできます。</value>
+  </data>
+  <data name="StaticPreviewView_ClosePlayer" xml:space="preserve">
+    <value>プレーヤーを選択</value>
+  </data>
+  <data name="StaticPreviewView_Play" xml:space="preserve">
+    <value>再生</value>
+  </data>
+  <data name="StaticPreviewView_VideoPreview" xml:space="preserve">
+    <value>ビデオプレビュー</value>
+  </data>
+  <data name="StaticPreviewViewModel_WebmNotSupported" xml:space="preserve">
+    <value>WebMコンテナにビルトインプレビューは使用することができません。外部プレイヤーを使用してください。</value>
+  </data>
+  <data name="StaticPreview_EncodingPreview" xml:space="preserve">
+    <value>プレビューをエンコード中...</value>
+  </data>
+  <data name="StaticPreview_Previews" xml:space="preserve">
+    <value>プレビュー:</value>
+  </data>
+  <data name="StaticPreview_Volume" xml:space="preserve">
+    <value>ボリューム: 0</value>
+  </data>
+  <data name="Reset" xml:space="preserve">
+    <value>リセット</value>
+  </data>
+  <data name="OptionsView_IsoDateFormat" xml:space="preserve">
+    <value>システム形式の代わりにISO日付形式(YYYY-MM-DD)を使用する。</value>
+  </data>
+  <data name="QueueViewModel_ShortEncodeStatus" xml:space="preserve">
+    <value>パス {0} / {1}, {2:00.00}%, {3:000.0} fps, 平均 {4:000.0} fps, 残り時間: {5}</value>
+  </data>
+  <data name="QueueViewModel_ShortSubScanStatus" xml:space="preserve">
+    <value>字幕のスキャン中 {0:00.00}%, 残り時間: {1}</value>
+  </data>
+  <data name="QueueView_ExtendedQueueDisplay" xml:space="preserve">
+    <value>キュー情報を開く</value>
+  </data>
+  <data name="QueueView_MinimalQueueDisplay" xml:space="preserve">
+    <value>キュー情報を閉じる</value>
+  </data>
+  <data name="QueueStats_ShortOutputStats" xml:space="preserve">
+    <value>出力: {0}, 平均 {1} fps</value>
+  </data>
+  <data name="PresetPane_Desc" xml:space="preserve">
+    <value>プリセット説明:</value>
+  </data>
+  <data name="PresetPane_HidePresetDesc" xml:space="preserve">
+    <value>プリセット説明を隠す</value>
+  </data>
+  <data name="PresetPane_ShowPresetDesc" xml:space="preserve">
+    <value>プリセット説明を表示する</value>
+  </data>
+  <data name="TaskTrayStatusManyTitle" xml:space="preserve">
+    <value>{0}
+{1}つのジョブをエンコード中</value>
+  </data>
+  <data name="StaticPreviewViewModel_MultipleEncodes" xml:space="preserve">
+    <value>プレビューのエンコードができませんでした。他のファイルをエンコード中でビジー状態です。
+
+同時エンコードを許可するには、ツールメニュー -&gt; 設定 -&gt; 詳細 -&gt; プロセス分離 -&gt; 「キューされたジョブをそれぞれ別のワーカープロセスで実行する」をオンにしプロセス分離を行ってください。</value>
   </data>
 </root>

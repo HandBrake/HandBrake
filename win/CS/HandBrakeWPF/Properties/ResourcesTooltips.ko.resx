@@ -121,7 +121,7 @@
     <value>블록 제거는 낮은 품질의 비디오 압축으로 인해 발생하는 블록 아티팩트를 줄여줍니다.</value>
   </data>
   <data name="FilterView_DecombDeinterlace" xml:space="preserve">
-    <value>decomb 또는 인터레이스 해제 필터 옵션을 선택하십시오.
+    <value>decomb 또는 인터레이스 제거 필터 옵션을 선택하십시오.
 
 decomb 필터는 선택적으로 인터레이스된 프레임을 비인터레이스로 바꾸어줍니다. 
 이것은 인터레이스 되지 않은 프레임의 품질을 보존합니다.
@@ -138,7 +138,7 @@ NLMeans는 비용이 많이 드는 높은 품질의 잡음 제거 필터입니�
 HQDN3D는 적응형 low-pass 필터로 NLMeans보다 빠르지만 세부 사항을 유지하는데 덜 효과적입니다.</value>
   </data>
   <data name="FilterView_Detelecine" xml:space="preserve">
-    <value>텔레시네 해제는 영화 프레임률을 TV 프레임률로 바꿔주는 과정인 텔레시네의 결과물인 comb 아티팩트를 제거합니다. </value>
+    <value>텔레시네 제거는 영화 프레임률을 TV 프레임률로 바꿔주는 과정인 텔레시네의 결과물인 comb 아티팩트를 제거합니다. </value>
   </data>
   <data name="FilterView_Grayscale" xml:space="preserve">
     <value>그레이스케일은 비디오의 색상 구성 요소를 제거합니다. 흔히 흑백 동영상이라고 합니다.</value>
@@ -253,7 +253,7 @@ Blu-ray와 DVD 자료는 대개 여러 개의 제목을 가지고 있으며, 그
 '원본 파일과 동일'이 권장됩니다. 원본 파일 비디오의 프레임 속도가 가변적인 경우, '원본 파일과 동일'이 비디오를 보존하게 됩니다.</value>
   </data>
   <data name="Video_Level" xml:space="preserve">
-    <value>지정된 레벨을 준수하도록 설정하고 보장합니다.
+    <value>지정된 레벨을 준수하도록 설정하고 준수 여부를 확인합니다.
 
 다른 모든 설정을 재정의합니다.</value>
   </data>
@@ -269,7 +269,7 @@ Blu-ray와 DVD 자료는 대개 여러 개의 제목을 가지고 있으며, 그
 이 옵션을 가장 느리게 설정해야 합니다.</value>
   </data>
   <data name="Video_Profile" xml:space="preserve">
-    <value>지정된 프로필을 준수하도록 설정하고 보장합니다.
+    <value>지정된 프로필을 설정하고 준수 여부를 확인합니다.
 
 다른 모든 설정을 재정의합니다.</value>
   </data>
@@ -287,6 +287,16 @@ x264의 스케일은 로그이며 더 낮은 값은 더 높은 품질에 해당�
 
 FFMpeg와 Theora의 척도는 더 선형적입니다.
 이 인코더들은 무손실 모드를 갖고 있지 않습니다.</value>
+  </data>
+  <data name="Video_TurboAnalysisPass" xml:space="preserve">
+    <value>During the analysis pass of a multi pass encode, use settings that speed things along.</value>
+  </data>
+  <data name="Video_MultiPass" xml:space="preserve">
+    <value>Perform Multi Pass Encoding.
+
+The 'Bitrate' option is prerequisite. During the analysis passes, statistics about
+the video are collected. Then in the final pass, those statistics are used
+to make bitrate allocation decisions.</value>
   </data>
   <data name="Video_VariableFramerate" xml:space="preserve">
     <value>가변 프레임 속도 출력을 활성화합니다. VFR은 일부 재생기와 호환되지 않습니다.</value>
@@ -351,14 +361,14 @@ HQDN3D 기본값: y-spatial=3:cb-spatial=2:cr-spatial=2:y-temporal=2:cb-temporal
 - Sprite는 1-/4-/8-/16-비트의 2-차원 게임에 대해 유용합니다. Sprite는 고화질 비디오용으로 설계되지 않았습니다.</value>
   </data>
   <data name="FilterView_Deinterlace" xml:space="preserve">
-    <value>디인터레이스는 그림에서 빗 모양의 아티팩트를 제거합니다.
+    <value>인터레이스 제거는 그림에서 빗 모양의 아티팩트를 제거합니다.
 
 Bwdif와 Yadif는 널리 사용되는 빠른 디인터레이서입니다.
 
 Decomb은 속도와 품질을 위해 여러 보간 알고리즘 간에 전환합니다.</value>
   </data>
   <data name="FilterView_DeinterlaceCustom" xml:space="preserve">
-    <value>사용자 지정 디인터레이스 매개변수입니다.
+    <value>사용자 지정 인터레이스 제거 매개변수입니다.
 
 Bwdif 및 Yadif 구문: mode=m:syslog=p
 
@@ -369,7 +379,7 @@ Decomb 구문: mode=m: scrandity-thresh=m: scrandity-thresh=v: laplacian-thresh=
 Decomb 기본값: mode=7</value>
   </data>
   <data name="FilterView_DeinterlacePreset" xml:space="preserve">
-    <value>디인터레이스 필터 프리셋.
+    <value>인터레이스 제거 필터 프리셋.
 
 기본값은 속도와 품질의 균형을 맞춥니다.
 
@@ -383,7 +393,7 @@ Bob는 문제가 있다고 인지된 해상도에 대한 모션을 더욱 잘 �
     <value>가로축으로 영상을 뒤집습니다(미러).</value>
   </data>
   <data name="FilterView_InterlaceDetection" xml:space="preserve">
-    <value>인터레이스 감지가 활성화된 경우 인터레이스 해제 필터가 인터레이스된 비디오 프레임만 처리 할 수 있도록 합니다. </value>
+    <value>인터레이스 감지가 활성화된 경우 인터레이스 제거 필터가 인터레이스된 비디오 프레임만 처리 할 수 있도록 합니다. </value>
   </data>
   <data name="FilterView_InterlaceDetectionCustom" xml:space="preserve">
     <value>사용자 설정 인터레이스 검출 파라미터.
@@ -484,7 +494,7 @@ Lapsharp's Sprite 설정은 1-/4-/8-/16-비트의 2-차원 게임에 대해 유�
     <value>새 소스 또는 제목을 선택할 때 이 탭에서 자막 트랙을 자동으로 추가하는 방법을 지정하는 동작을 설정합니다.</value>
   </data>
   <data name="OptionsView_SendFileToArguments" xml:space="preserve">
-    <value>다음 환경 변수는 항상 지정됩니다:
+    <value>다음 환경 변수는 항상 설정됩니다:
 HB_SOURCE
 HB_DESTINATION
 HB_EXIT_CODE
@@ -500,7 +510,25 @@ HB_EXIT_CODE
 작업을 수행하기 전에 출력 파일의 유효성을 검사하는 것이 좋습니다.</value>
   </data>
   <data name="Options_AdditionalFormatOptions" xml:space="preserve">
-    <value>출력 파일의 형식입니다. 지원되는 파일 시스템 문자 외에도 제목을 변경하거나 소스를 스캔하거나 특정 설정을 업데이트할 때 대체될 자리 표시자를 사용할 수 있습니다.</value>
+    <value>The format of the output file. In addition to any supported file system character, you can use the any of the placeholders that will be replaced when you change title or scan a source or update certain settings.
+
+{source} - Name of the source file.
+{title} - Integer value. This is representative of a disc title number.
+{chapters} - The range of chapters selected.
+{creation-date} - The date that the source file was created on (if available).
+{creation-time} - The time that the source file was created on (if available).
+{modification-date} - The date that the source file was last modified on (if available).
+{modification-time} - The time that the source file was last modified on (if available).
+{date} - Today. Set at time of adding to the queue.
+{time} - Today. Set at time of adding to the queue.
+{quality_bitrate} - The RF/CQ number, or bitrate
+{quality_type} - Prints "kbps" or "Q" depending on the quality mode selected on the video tab.
+{preset} - Name of the preset selected.
+{encode_bit_depth} - Integer value. i.e. 8, 10 or 12
+{width} - The output storage width
+{height} - The output storage height
+
+Any illegal path characters will be removed automatically.</value>
   </data>
   <data name="OptionsView_RightToleftMode" xml:space="preserve">
     <value>오른쪽에서 왼쪽으로 사용되는 언어의 경우 두 가지 모드 중 하나를 활성화할 수 있습니다. "텍스트만"은 오른쪽에서 왼쪽 스타일로만 텍스트를 렌더링합니다. "전체 사용자 인터페이스"는 모든 컨트롤을 오른쪽에서 왼쪽으로 렌더링합니다.
@@ -512,5 +540,12 @@ HB_EXIT_CODE
 1은 최저 품질, 5는 최고 품질입니다.
 
 비트전송률은 소스마다 다릅니다.</value>
+  </data>
+  <data name="OptionsView_DestinationReplacementOptions" xml:space="preserve">
+    <value>다음은 단독으로 사용하거나, 함께 사용하여 대상 경로를 만들어 낼 수 있습니다.
+
+{source_path} - 원본 경로와 동일한 폴더(가능한 경우)
+{source_folder_name} – 전체 경로 없이 원본 파일이 있는 디렉터리의 이름입니다.
+{source} - 원본 파일의 이름입니다.</value>
   </data>
 </root>

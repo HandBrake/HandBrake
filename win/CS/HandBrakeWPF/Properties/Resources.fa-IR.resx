@@ -323,9 +323,6 @@ You may wish to configure the automatic file naming options in "Tools Menu -&gt;
   <data name="PictureSettings_OutputResolution" xml:space="preserve">
     <value>خروجی: {0}</value>
   </data>
-  <data name="Options_DefaultPathAdditionalParams" xml:space="preserve">
-    <value>گزینه‌های اضافی موجود: {source_path} (مسیر منبع)  یا  {source_folder_name} (نام پوشه‌ی منبع)  یا  {source} (نام منبع)</value>
-  </data>
   <data name="Main_MatchingFileOverwriteWarning" xml:space="preserve">
     <value>مسیر و نام پرونده‌ای که در فرآیند فشرده‌سازی ایجاد می‌شود نباید عین پرونده‌ی منبع باشد. لطفاً نام پرونده‌ی مقصد را تغییر دهید تا مطابق پرونده‌ی منبع نباشد.</value>
   </data>
@@ -712,7 +709,10 @@ Encoding 1 Job</value>
     <value>Do you wish to proceed trying to add the rest?</value>
   </data>
   <data name="Main_QueueOverwritePrompt" xml:space="preserve">
-    <value>پرونده‌ی «{0}» از قبل وجود دارد. آیا می‌خواهید آن را جای‌نویسی کنید؟</value>
+    <value>The file '{0}' already exists!
+Would you like to overwrite it?
+
+Hint: File overwrite behaviour can be controlled in preferences. </value>
   </data>
   <data name="Clipboard_Unavailable" xml:space="preserve">
     <value>بریده‌دان دستگاه فعلا در دسترس نیست.</value>
@@ -1210,7 +1210,7 @@ Encoding 1 Job</value>
     <value>سطح اطاله‌ی گزارش</value>
   </data>
   <data name="Options_LogPath" xml:space="preserve">
-    <value>مسیر گزارش:</value>
+    <value>Path:</value>
   </data>
   <data name="Options_LowDiskspaceSize" xml:space="preserve">
     <value>اگر حافظه کم بود، صف را نگه دار</value>
@@ -1468,9 +1468,6 @@ VLC و MPC-HC پشتیبانی می‌شوند. پخش‌کننده‌های د�
   <data name="QueueView_Statistics" xml:space="preserve">
     <value>آمار</value>
   </data>
-  <data name="QueueView_StatsNotAvailableYet" xml:space="preserve">
-    <value>آمار پس از اتمام یک فشرده‌سازی در دسترس خواهد بود.</value>
-  </data>
   <data name="QueueView_Subtitles" xml:space="preserve">
     <value>زیرنویس‌ها:</value>
   </data>
@@ -1556,13 +1553,13 @@ VLC و MPC-HC پشتیبانی می‌شوند. پخش‌کننده‌های د�
     <value>مدت:</value>
   </data>
   <data name="StaticPreviewView_LivePreview" xml:space="preserve">
-    <value>پیش‌نمایش زنده</value>
+    <value>Encode Preview</value>
   </data>
   <data name="StaticPreviewView_SelectPreviewImage" xml:space="preserve">
     <value>انتخاب یک تصویر پیش‌نمایش</value>
   </data>
-  <data name="StaticPreviewView_UseSystemDefault" xml:space="preserve">
-    <value>ترجیح پخش‌کننده‌ی پیش‌فرض دستگاه</value>
+  <data name="StaticPreviewView_UseExternalPlayer" xml:space="preserve">
+    <value>Use External Player App</value>
   </data>
   <data name="SubtitlesView_AddCC" xml:space="preserve">
     <value>Add Closed Captions when available</value>
@@ -1636,6 +1633,9 @@ VLC و MPC-HC پشتیبانی می‌شوند. پخش‌کننده‌های د�
   <data name="SummaryView_storage" xml:space="preserve">
     <value>حافظه</value>
   </data>
+  <data name="VideoView_MultiPass" xml:space="preserve">
+    <value>Multi-Pass Encoding</value>
+  </data>
   <data name="VideoView_AverageBitrate" xml:space="preserve">
     <value>میانگین بیت‌برثانیه (kbps):</value>
   </data>
@@ -1677,6 +1677,9 @@ VLC و MPC-HC پشتیبانی می‌شوند. پخش‌کننده‌های د�
   </data>
   <data name="VideoView_Quality" xml:space="preserve">
     <value>کیفیت:</value>
+  </data>
+  <data name="VideoView_TurboAnalysisPass" xml:space="preserve">
+    <value>Turbo analysis pass</value>
   </data>
   <data name="VideoView_VariableFramerate" xml:space="preserve">
     <value>فریم‌برثانیه‌ی تغییرپذیر (VFR) </value>
@@ -1859,10 +1862,8 @@ Time Remaining: {5},  Elapsed: {6} {7}</value>
     <value>حالت قابل حمل: خواند portable.ini ممکن نیست. ممکن است خطایی در این پرونده وجود داشته باشد. لطفا با استفاده از راهنمایی portable.ini.template مجددا تلاش کنید. </value>
   </data>
   <data name="OptionsView_FormatOptions" xml:space="preserve">
-    <value>Replacement Placeholders: {source} {title} {chapters} {creation-date} {creation-time} {date} {time} {quality_bitrate}</value>
-  </data>
-  <data name="OptionsView_PathOptions" xml:space="preserve">
-    <value>Replacement Placeholders: {source_path} {source_folder_name} {source}</value>
+    <value>Replacement Options:
+You can drag/drop or enter the text above.</value>
   </data>
   <data name="FileOverwriteBehaviours_Ask" xml:space="preserve">
     <value>پرسش برای جای‌نویسی پرونده</value>
@@ -2673,5 +2674,71 @@ This may be due to limitations of the file container you have selected. Please s
   </data>
   <data name="Options_Hardware" xml:space="preserve">
     <value>Hardware Support</value>
+  </data>
+  <data name="StaticPreviewViewModel_MediaError" xml:space="preserve">
+    <value>The system was unable to play this file. 
+
+Please note certain codecs such as AV1 or HEVC require the Microsoft AV1 or HEVC codec plugins from the Microsoft Store to play.
+Alternatively, check the "Use External Player" checkbox below.</value>
+  </data>
+  <data name="StaticPreviewView_ClosePlayer" xml:space="preserve">
+    <value>Close Player</value>
+  </data>
+  <data name="StaticPreviewView_Play" xml:space="preserve">
+    <value>پخش</value>
+  </data>
+  <data name="StaticPreviewView_VideoPreview" xml:space="preserve">
+    <value>Video Preview</value>
+  </data>
+  <data name="StaticPreviewViewModel_WebmNotSupported" xml:space="preserve">
+    <value>The Built-in preview is not available for the WebM container. An External player must be used.</value>
+  </data>
+  <data name="StaticPreview_EncodingPreview" xml:space="preserve">
+    <value>Encoding Preview ...</value>
+  </data>
+  <data name="StaticPreview_Previews" xml:space="preserve">
+    <value>Previews:</value>
+  </data>
+  <data name="StaticPreview_Volume" xml:space="preserve">
+    <value>Volume: 0</value>
+  </data>
+  <data name="Reset" xml:space="preserve">
+    <value>بازنشانی</value>
+  </data>
+  <data name="OptionsView_IsoDateFormat" xml:space="preserve">
+    <value>Use ISO Date Formats (YYYY-MM-DD) instead of system format.</value>
+  </data>
+  <data name="QueueViewModel_ShortEncodeStatus" xml:space="preserve">
+    <value>Pass {0} of {1}, {2:00.00}%, {3:000.0} fps, avg {4:000.0} fps, ETA: {5}</value>
+  </data>
+  <data name="QueueViewModel_ShortSubScanStatus" xml:space="preserve">
+    <value>Scanning for Subtitles {0:00.00}%, ETA: {1}</value>
+  </data>
+  <data name="QueueView_ExtendedQueueDisplay" xml:space="preserve">
+    <value>Extend Queue Info</value>
+  </data>
+  <data name="QueueView_MinimalQueueDisplay" xml:space="preserve">
+    <value>Minimise Queue Info</value>
+  </data>
+  <data name="QueueStats_ShortOutputStats" xml:space="preserve">
+    <value>Output: {0}, avg {1} fps</value>
+  </data>
+  <data name="PresetPane_Desc" xml:space="preserve">
+    <value>Preset Description:</value>
+  </data>
+  <data name="PresetPane_HidePresetDesc" xml:space="preserve">
+    <value>Hide Preset Description</value>
+  </data>
+  <data name="PresetPane_ShowPresetDesc" xml:space="preserve">
+    <value>Show Preset Description</value>
+  </data>
+  <data name="TaskTrayStatusManyTitle" xml:space="preserve">
+    <value>{0}
+Encoding {1} jobs</value>
+  </data>
+  <data name="StaticPreviewViewModel_MultipleEncodes" xml:space="preserve">
+    <value>Unable to encode a preview. The application is currently busy encoding another file.
+
+To allow multiple simultaneous encodes, turn on "Process Isolation" in Tools Menu -&gt; Preferences -&gt; Advanced -&gt; Process Isolation -&gt; "Run each queued job in a separate worker process".</value>
   </data>
 </root>

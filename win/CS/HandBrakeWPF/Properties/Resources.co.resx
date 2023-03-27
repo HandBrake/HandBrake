@@ -324,9 +324,6 @@ Vulete cuntinuà ?</value>
   <data name="PictureSettings_OutputResolution" xml:space="preserve">
     <value>Esciuta : {0}</value>
   </data>
-  <data name="Options_DefaultPathAdditionalParams" xml:space="preserve">
-    <value>Ozzioni cumplementarie dispunibule : {source_path} o {source_folder_name} o {source}</value>
-  </data>
   <data name="Main_MatchingFileOverwriteWarning" xml:space="preserve">
     <value>Ùn pudete micca cudificà ver di un schedariu cù u listessu chjassu è u listessu nome chì u schedariu di a fonte. Ci vole à mudificà u nome di schedariu di destinazione per ch’ellu ùn currispondi più à u schedariu di a fonte. </value>
   </data>
@@ -347,7 +344,7 @@ E prerigature chì venenu da vechje versioni devenu esse create torna in a versi
     <value>Parametri addiziunale d’espertu chì ponu esse trasmessi à u cudificatore video.</value>
   </data>
   <data name="Subtitles_BurnInBehaviourModes" xml:space="preserve">
-    <value>Alcunu - Solu e traccie per quelle u cuntenentu ùn accetta micca u furmatu seranu intarsiate.
+    <value>Alcunu - Solu e traccie per quelle u cuntenidore ùn accetta micca u furmatu seranu intarsiate.
 Traccia audio straniera - A traccia audio straniera serà intarsiata s’ella hè dispunibule. 
 Prima traccia - A prima traccia serà intarsiata.
 Audio straniera preferita, osinnò Prima traccia - A traccia audio straniera serà intarsiata s’ella esiste, osinnò a prima traccia serà scelta.</value>
@@ -712,8 +709,10 @@ Vulete cuntinuà ? </value>
     <value>Vulete cuntinuà pruvendu d’aghjunghje u restu ?</value>
   </data>
   <data name="Main_QueueOverwritePrompt" xml:space="preserve">
-    <value>U schedariu « {0} » esiste dighjà !
-Vulete rimpiazzallu ?</value>
+    <value>The file '{0}' already exists!
+Would you like to overwrite it?
+
+Hint: File overwrite behaviour can be controlled in preferences. </value>
   </data>
   <data name="Clipboard_Unavailable" xml:space="preserve">
     <value>U preme’papei di u sistema  ùn hè micca dispunibule attualmente.</value>
@@ -887,7 +886,7 @@ Vulete rimpiazzallu ?</value>
     <value>Prerigatura :</value>
   </data>
   <data name="FiltersView_Rotate" xml:space="preserve">
-    <value>Rotazione :</value>
+    <value>Rutazione :</value>
   </data>
   <data name="FiltersView_Sharpen" xml:space="preserve">
     <value>Arrutà :</value>
@@ -974,7 +973,7 @@ Vulete rimpiazzallu ?</value>
     <value>Capituli</value>
   </data>
   <data name="MainView_Container" xml:space="preserve">
-    <value>Cuntenentu</value>
+    <value>Cuntenidore</value>
   </data>
   <data name="MainView_Destination" xml:space="preserve">
     <value>Destinazione</value>
@@ -1211,7 +1210,7 @@ Vulete rimpiazzallu ?</value>
     <value>Livellu di verbusità di u ghjurnale :</value>
   </data>
   <data name="Options_LogPath" xml:space="preserve">
-    <value>Chjassu d’accessu à i ghjurnali :</value>
+    <value>Path:</value>
   </data>
   <data name="Options_LowDiskspaceSize" xml:space="preserve">
     <value>Interrompe a fila d’attesa s’ella ùn basta u spaziu discu</value>
@@ -1469,9 +1468,6 @@ VLC è MPC-HC sò accettati. D’altri lettori ponu dinù funziunà ma ùn sò m
   <data name="QueueView_Statistics" xml:space="preserve">
     <value>Statistiche</value>
   </data>
-  <data name="QueueView_StatsNotAvailableYet" xml:space="preserve">
-    <value>E statistiche seranu dispunibule quandu una cudificazione si compia.</value>
-  </data>
   <data name="QueueView_Subtitles" xml:space="preserve">
     <value>Sottutituli :</value>
   </data>
@@ -1557,13 +1553,13 @@ VLC è MPC-HC sò accettati. D’altri lettori ponu dinù funziunà ma ùn sò m
     <value>Durata :</value>
   </data>
   <data name="StaticPreviewView_LivePreview" xml:space="preserve">
-    <value>Fighjulata istantanea</value>
+    <value>Encode Preview</value>
   </data>
   <data name="StaticPreviewView_SelectPreviewImage" xml:space="preserve">
     <value>Selezziunà una fighjulata di fiura</value>
   </data>
-  <data name="StaticPreviewView_UseSystemDefault" xml:space="preserve">
-    <value>Preferisce u lettore video predefinitu di u sistema</value>
+  <data name="StaticPreviewView_UseExternalPlayer" xml:space="preserve">
+    <value>Use External Player App</value>
   </data>
   <data name="SubtitlesView_AddCC" xml:space="preserve">
     <value>Aghjunghje e legende chjose (CC) s’elle sò dispunibule</value>
@@ -1632,10 +1628,13 @@ VLC è MPC-HC sò accettati. D’altri lettori ponu dinù funziunà ma ùn sò m
     <value>Fighjulata {0} nant’à {1}</value>
   </data>
   <data name="SummaryView_Rotation" xml:space="preserve">
-    <value>Rotazione</value>
+    <value>Rutazione</value>
   </data>
   <data name="SummaryView_storage" xml:space="preserve">
     <value>allucamentu</value>
+  </data>
+  <data name="VideoView_MultiPass" xml:space="preserve">
+    <value>Multi-Pass Encoding</value>
   </data>
   <data name="VideoView_AverageBitrate" xml:space="preserve">
     <value>Flussu medianu (kbps) :</value>
@@ -1678,6 +1677,9 @@ VLC è MPC-HC sò accettati. D’altri lettori ponu dinù funziunà ma ùn sò m
   </data>
   <data name="VideoView_Quality" xml:space="preserve">
     <value>Qualità :</value>
+  </data>
+  <data name="VideoView_TurboAnalysisPass" xml:space="preserve">
+    <value>Turbo analysis pass</value>
   </data>
   <data name="VideoView_VariableFramerate" xml:space="preserve">
     <value>Frequenza di fiure variabile (VFR)</value>
@@ -1812,7 +1814,7 @@ VLC è MPC-HC sò accettati. D’altri lettori ponu dinù funziunà ma ùn sò m
     <value>« Aghjunghje a selezzione » (à a fila d’attesa)</value>
   </data>
   <data name="QueueView_PlayMediaFile" xml:space="preserve">
-    <value>Sunà u schedariu</value>
+    <value>Leghje u schedariu</value>
   </data>
   <data name="Options_ApplicationToolbar" xml:space="preserve">
     <value>Barra d’attrezzi d’appiecazione</value>
@@ -1860,10 +1862,8 @@ Tempu rimanente : {5}, Trascorsu : {6} {7}</value>
     <value>Modu purtabile : Impussibule di leghje portable.ini. Forse ci hè qualchì sbagliu in stu schedariu. Ci vole à pruvà torna impieghendu portable.ini.template cum’è esempiu.</value>
   </data>
   <data name="OptionsView_FormatOptions" xml:space="preserve">
-    <value>Campi di sustituzione : {source} {title} {chapters} {creation-date} {creation-time} {date} {time} {quality_bitrate}</value>
-  </data>
-  <data name="OptionsView_PathOptions" xml:space="preserve">
-    <value>Campi di sustituzione : {source_path} {source_folder_name} {source}</value>
+    <value>Replacement Options:
+You can drag/drop or enter the text above.</value>
   </data>
   <data name="FileOverwriteBehaviours_Ask" xml:space="preserve">
     <value>Dumandà per rimpiazzà u schedariu</value>
@@ -1934,10 +1934,10 @@ Induve hè accettatu, tutte e prerigature persunalizate seranu state impurtate.<
     <value>Navigà</value>
   </data>
   <data name="OptionsView_MediaFileNotSet" xml:space="preserve">
-    <value>Alcunu schedariu audio ùn hè statu definitu. Ci vole sceglie « Navigà » per selezziunà un schedariu wav o mp3 à sunà.</value>
+    <value>Alcunu schedariu audio ùn hè statu definitu. Ci vole sceglie « Navigà » per selezziunà un schedariu wav o mp3 à leghje.</value>
   </data>
   <data name="OptionsView_Play" xml:space="preserve">
-    <value>Sunà</value>
+    <value>Leghje</value>
   </data>
   <data name="QueueView_ExportCLI" xml:space="preserve">
     <value>Espurtà a fila d’attesa  (CLI solu)</value>
@@ -2444,7 +2444,7 @@ Ci vole à sceglie una prerigatura sfarente.</value>
     <value>Prupurzioni : {0}</value>
   </data>
   <data name="SummaryView_MetadataPassthru" xml:space="preserve">
-    <value>Cunservazione di i metadati cummuni</value>
+    <value>Cunservazione di i metadati cumuni</value>
   </data>
   <data name="OptionsViewModel_InvalidAutonamePath" xml:space="preserve">
     <value>U chjassu predefinitu di nome autumaticu ùn era micca accetevule. {0} ùn deve micca stà nanzu à {1}</value>
@@ -2675,5 +2675,71 @@ Forse, ghjè una limitazione nant’à u cuntenidore di schedariu chì vo avete 
   </data>
   <data name="Options_Hardware" xml:space="preserve">
     <value>Adopru di u materiale</value>
+  </data>
+  <data name="StaticPreviewViewModel_MediaError" xml:space="preserve">
+    <value>The system was unable to play this file. 
+
+Please note certain codecs such as AV1 or HEVC require the Microsoft AV1 or HEVC codec plugins from the Microsoft Store to play.
+Alternatively, check the "Use External Player" checkbox below.</value>
+  </data>
+  <data name="StaticPreviewView_ClosePlayer" xml:space="preserve">
+    <value>Close Player</value>
+  </data>
+  <data name="StaticPreviewView_Play" xml:space="preserve">
+    <value>Leghje</value>
+  </data>
+  <data name="StaticPreviewView_VideoPreview" xml:space="preserve">
+    <value>Video Preview</value>
+  </data>
+  <data name="StaticPreviewViewModel_WebmNotSupported" xml:space="preserve">
+    <value>The Built-in preview is not available for the WebM container. An External player must be used.</value>
+  </data>
+  <data name="StaticPreview_EncodingPreview" xml:space="preserve">
+    <value>Encoding Preview ...</value>
+  </data>
+  <data name="StaticPreview_Previews" xml:space="preserve">
+    <value>Previews:</value>
+  </data>
+  <data name="StaticPreview_Volume" xml:space="preserve">
+    <value>Volume: 0</value>
+  </data>
+  <data name="Reset" xml:space="preserve">
+    <value>Reinizià</value>
+  </data>
+  <data name="OptionsView_IsoDateFormat" xml:space="preserve">
+    <value>Use ISO Date Formats (YYYY-MM-DD) instead of system format.</value>
+  </data>
+  <data name="QueueViewModel_ShortEncodeStatus" xml:space="preserve">
+    <value>Pass {0} of {1}, {2:00.00}%, {3:000.0} fps, avg {4:000.0} fps, ETA: {5}</value>
+  </data>
+  <data name="QueueViewModel_ShortSubScanStatus" xml:space="preserve">
+    <value>Scanning for Subtitles {0:00.00}%, ETA: {1}</value>
+  </data>
+  <data name="QueueView_ExtendedQueueDisplay" xml:space="preserve">
+    <value>Extend Queue Info</value>
+  </data>
+  <data name="QueueView_MinimalQueueDisplay" xml:space="preserve">
+    <value>Minimise Queue Info</value>
+  </data>
+  <data name="QueueStats_ShortOutputStats" xml:space="preserve">
+    <value>Output: {0}, avg {1} fps</value>
+  </data>
+  <data name="PresetPane_Desc" xml:space="preserve">
+    <value>Preset Description:</value>
+  </data>
+  <data name="PresetPane_HidePresetDesc" xml:space="preserve">
+    <value>Hide Preset Description</value>
+  </data>
+  <data name="PresetPane_ShowPresetDesc" xml:space="preserve">
+    <value>Show Preset Description</value>
+  </data>
+  <data name="TaskTrayStatusManyTitle" xml:space="preserve">
+    <value>{0}
+Encoding {1} jobs</value>
+  </data>
+  <data name="StaticPreviewViewModel_MultipleEncodes" xml:space="preserve">
+    <value>Unable to encode a preview. The application is currently busy encoding another file.
+
+To allow multiple simultaneous encodes, turn on "Process Isolation" in Tools Menu -&gt; Preferences -&gt; Advanced -&gt; Process Isolation -&gt; "Run each queued job in a separate worker process".</value>
   </data>
 </root>

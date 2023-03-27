@@ -284,6 +284,16 @@ Blu-ray и DVD източници често имат множество заг�
 Скалите на FFMpeg и Theora са по-линейни.
 Тези енкодери нямат режим без никакви загуби.</value>
   </data>
+  <data name="Video_TurboAnalysisPass" xml:space="preserve">
+    <value>During the analysis pass of a multi pass encode, use settings that speed things along.</value>
+  </data>
+  <data name="Video_MultiPass" xml:space="preserve">
+    <value>Perform Multi Pass Encoding.
+
+The 'Bitrate' option is prerequisite. During the analysis passes, statistics about
+the video are collected. Then in the final pass, those statistics are used
+to make bitrate allocation decisions.</value>
+  </data>
   <data name="Video_VariableFramerate" xml:space="preserve">
     <value>Наглася променлива кадрова честота на изхода.
 
@@ -305,7 +315,7 @@ Blu-ray и DVD източници често имат множество заг�
     <value>Допълни опции за шаблон.</value>
   </data>
   <data name="MainView_Presets" xml:space="preserve">
-    <value>Шаблоните са група от настройки за енкодера, подбрани за различни употреби. Изберете тази, която са най-близка до намерението ви.
+    <value>Шаблоните са група от настройки за енкодера, подбрани за различни сценарии. Изберете тази, която са най-близка до намерението ви.
 
 Презаписва всички настройки на енкодера. Настройките могат да се променят след избиране на шаблон.</value>
   </data>
@@ -356,15 +366,15 @@ Bwdif и Yadif са два популярни и бързи филтъра за 
 "Премахване на гребеновиден ефект" сменя между множество интерполационни алгоритми за скорост и качество.</value>
   </data>
   <data name="FilterView_DeinterlaceCustom" xml:space="preserve">
-    <value>Персонализирани параметри за изглаждане на презредов образ:.
+    <value>Персонализирани параметри за изглаждане на презредов образ.
 
 Bwdif и Yadif синтаксис: mode=m:parity=p
 
 Bwdif и Yadif по подразбиране: mode=3
 
-Decomb синтаксис: mode=m:magnitude-thresh=m:variance-thresh=v:laplacian-thresh=l:dilation-thresh=d:erosion-thresh=e:noise-thresh=n:search-distance=s:postproc=p:parity=p
+Синтаксис на премахване на гребеновиден ефект: mode=m:magnitude-thresh=m:variance-thresh=v:laplacian-thresh=l:dilation-thresh=d:erosion-thresh=e:noise-thresh=n:search-distance=s:postproc=p:parity=p
 
-Decomb по подразбиране: mode=7</value>
+Премахване на гребеновиден ефект по подразбиране: mode=7</value>
   </data>
   <data name="FilterView_DeinterlacePreset" xml:space="preserve">
     <value>Шаблон за филтъра за изглаждане на презредов образ.
@@ -498,7 +508,25 @@ HB_EXIT_CODE
 Препоръчително е да проверите изходния файл преди да работите с него.</value>
   </data>
   <data name="Options_AdditionalFormatOptions" xml:space="preserve">
-    <value>Форматът на изходния файл. Освен всички поддържани символи от файловата система, може да ползваш което и да е поле за заместване, което ще бъде заместено когато се смени заглавието или сканира източник, или променят определени настройки.</value>
+    <value>The format of the output file. In addition to any supported file system character, you can use the any of the placeholders that will be replaced when you change title or scan a source or update certain settings.
+
+{source} - Name of the source file.
+{title} - Integer value. This is representative of a disc title number.
+{chapters} - The range of chapters selected.
+{creation-date} - The date that the source file was created on (if available).
+{creation-time} - The time that the source file was created on (if available).
+{modification-date} - The date that the source file was last modified on (if available).
+{modification-time} - The time that the source file was last modified on (if available).
+{date} - Today. Set at time of adding to the queue.
+{time} - Today. Set at time of adding to the queue.
+{quality_bitrate} - The RF/CQ number, or bitrate
+{quality_type} - Prints "kbps" or "Q" depending on the quality mode selected on the video tab.
+{preset} - Name of the preset selected.
+{encode_bit_depth} - Integer value. i.e. 8, 10 or 12
+{width} - The output storage width
+{height} - The output storage height
+
+Any illegal path characters will be removed automatically.</value>
   </data>
   <data name="OptionsView_RightToleftMode" xml:space="preserve">
     <value>За езици, които са от дясно наляво, може да изберете един от два режима. "Само текст" ще изобразява текста от дясно наляво. "Целият потребителски интерфейс" ще изобрази всички менюта от дясно наляво.
@@ -510,5 +538,12 @@ HB_EXIT_CODE
 1 е най-ниското качество, а 5 е най-високото качество.
 
 Побитовата скорост варира за различните източници.</value>
+  </data>
+  <data name="OptionsView_DestinationReplacementOptions" xml:space="preserve">
+    <value>The following can be used singularly, or together to build up a destination path
+
+{source_path} - In the same folder as the source path (if possible)
+{source_folder_name} – The name of the directory that the source file is in, without the full path.
+{source} - The name of the source file.</value>
   </data>
 </root>

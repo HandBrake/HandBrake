@@ -328,9 +328,6 @@ You may wish to configure the automatic file naming options in "Tools Menu -&gt;
   <data name="PictureSettings_OutputResolution" xml:space="preserve">
     <value>ส่งออก：{0}</value>
   </data>
-  <data name="Options_DefaultPathAdditionalParams" xml:space="preserve">
-    <value>มีตัวเลือกเพิ่มเติม: {source_path} หรือ {source_folder_name} หรือ {source}</value>
-  </data>
   <data name="Main_MatchingFileOverwriteWarning" xml:space="preserve">
     <value>คุณไม่สามารถเข้ารหัสไฟล์ที่มีเส้นทางและชื่อไฟล์เดียวกันกับไฟล์ต้นฉบับ โปรดอัปเดตชื่อไฟล์เป้าหมายเพื่อไม่ให้ตรงกับไฟล์ต้นฉบับ</value>
   </data>
@@ -714,8 +711,10 @@ Encoding 1 Job</value>
     <value>คุณต้องการเพิ่มส่วนที่เหลือต่อไปหรือไม่</value>
   </data>
   <data name="Main_QueueOverwritePrompt" xml:space="preserve">
-    <value>ไฟล์ '{0}' มีอยู่แล้ว!
-คุณต้องการที่จะเขียนทับมันหรือไม่</value>
+    <value>The file '{0}' already exists!
+Would you like to overwrite it?
+
+Hint: File overwrite behaviour can be controlled in preferences. </value>
   </data>
   <data name="Clipboard_Unavailable" xml:space="preserve">
     <value>คลิปบอร์ดของระบบไม่สามารถใช้งานได้ในขณะนี้</value>
@@ -1213,7 +1212,7 @@ Encoding 1 Job</value>
     <value>บันทึกระดับการใช้คำฟุ่มเฟือย：</value>
   </data>
   <data name="Options_LogPath" xml:space="preserve">
-    <value>เส้นทางไฟล์บันทึก：</value>
+    <value>Path:</value>
   </data>
   <data name="Options_LowDiskspaceSize" xml:space="preserve">
     <value>หยุดคิวชั่วคราวหากพื้นที่ดิสก์เหลือน้อย</value>
@@ -1471,9 +1470,6 @@ Encoding 1 Job</value>
   <data name="QueueView_Statistics" xml:space="preserve">
     <value>ข้อมูลสถิติ</value>
   </data>
-  <data name="QueueView_StatsNotAvailableYet" xml:space="preserve">
-    <value>สถิติจะพร้อมใช้งานหลังจากการเข้ารหัสเสร็จสิ้น</value>
-  </data>
   <data name="QueueView_Subtitles" xml:space="preserve">
     <value>คำบรรยาย：</value>
   </data>
@@ -1559,13 +1555,13 @@ Encoding 1 Job</value>
     <value>ระยะเวลา:</value>
   </data>
   <data name="StaticPreviewView_LivePreview" xml:space="preserve">
-    <value>แสดงตัวอย่างแบบเรียลไทม์</value>
+    <value>Encode Preview</value>
   </data>
   <data name="StaticPreviewView_SelectPreviewImage" xml:space="preserve">
     <value>เลือกภาพตัวอย่าง</value>
   </data>
-  <data name="StaticPreviewView_UseSystemDefault" xml:space="preserve">
-    <value>ต้องการเครื่องเล่นวิดีโอเริ่มต้นของระบบ</value>
+  <data name="StaticPreviewView_UseExternalPlayer" xml:space="preserve">
+    <value>Use External Player App</value>
   </data>
   <data name="SubtitlesView_AddCC" xml:space="preserve">
     <value>เพิ่มคำบรรยาย (ถ้ามี)</value>
@@ -1639,6 +1635,9 @@ Encoding 1 Job</value>
   <data name="SummaryView_storage" xml:space="preserve">
     <value>การจัดเก็บ</value>
   </data>
+  <data name="VideoView_MultiPass" xml:space="preserve">
+    <value>Multi-Pass Encoding</value>
+  </data>
   <data name="VideoView_AverageBitrate" xml:space="preserve">
     <value>อัตราบิตเฉลี่ย(kbps)：</value>
   </data>
@@ -1680,6 +1679,9 @@ Encoding 1 Job</value>
   </data>
   <data name="VideoView_Quality" xml:space="preserve">
     <value>คุณภาพ: </value>
+  </data>
+  <data name="VideoView_TurboAnalysisPass" xml:space="preserve">
+    <value>Turbo analysis pass</value>
   </data>
   <data name="VideoView_VariableFramerate" xml:space="preserve">
     <value>อัตราเฟรมตัวแปร</value>
@@ -1862,10 +1864,8 @@ This will not impact any of the software encoders.</value>
     <value>โหมดพกพา: ไม่สามารถอ่าน portable.ini อาจมีข้อผิดพลาดในไฟล์นี้ กรุณาใช้ portable.ini.template ลองอีกครั้งเป็นเทมเพลต</value>
   </data>
   <data name="OptionsView_FormatOptions" xml:space="preserve">
-    <value>Replacement Placeholders: {source} {title} {chapters} {creation-date} {creation-time} {date} {time} {quality_bitrate}</value>
-  </data>
-  <data name="OptionsView_PathOptions" xml:space="preserve">
-    <value>Replacement Placeholders: {source_path} {source_folder_name} {source}</value>
+    <value>Replacement Options:
+You can drag/drop or enter the text above.</value>
   </data>
   <data name="FileOverwriteBehaviours_Ask" xml:space="preserve">
     <value>ถามว่าจะเขียนทับไฟล์หรือไม่</value>
@@ -2677,5 +2677,71 @@ This may be due to limitations of the file container you have selected. Please s
   </data>
   <data name="Options_Hardware" xml:space="preserve">
     <value>Hardware Support</value>
+  </data>
+  <data name="StaticPreviewViewModel_MediaError" xml:space="preserve">
+    <value>The system was unable to play this file. 
+
+Please note certain codecs such as AV1 or HEVC require the Microsoft AV1 or HEVC codec plugins from the Microsoft Store to play.
+Alternatively, check the "Use External Player" checkbox below.</value>
+  </data>
+  <data name="StaticPreviewView_ClosePlayer" xml:space="preserve">
+    <value>Close Player</value>
+  </data>
+  <data name="StaticPreviewView_Play" xml:space="preserve">
+    <value>เล่น</value>
+  </data>
+  <data name="StaticPreviewView_VideoPreview" xml:space="preserve">
+    <value>Video Preview</value>
+  </data>
+  <data name="StaticPreviewViewModel_WebmNotSupported" xml:space="preserve">
+    <value>The Built-in preview is not available for the WebM container. An External player must be used.</value>
+  </data>
+  <data name="StaticPreview_EncodingPreview" xml:space="preserve">
+    <value>Encoding Preview ...</value>
+  </data>
+  <data name="StaticPreview_Previews" xml:space="preserve">
+    <value>Previews:</value>
+  </data>
+  <data name="StaticPreview_Volume" xml:space="preserve">
+    <value>Volume: 0</value>
+  </data>
+  <data name="Reset" xml:space="preserve">
+    <value>รีเซ็ต</value>
+  </data>
+  <data name="OptionsView_IsoDateFormat" xml:space="preserve">
+    <value>Use ISO Date Formats (YYYY-MM-DD) instead of system format.</value>
+  </data>
+  <data name="QueueViewModel_ShortEncodeStatus" xml:space="preserve">
+    <value>Pass {0} of {1}, {2:00.00}%, {3:000.0} fps, avg {4:000.0} fps, ETA: {5}</value>
+  </data>
+  <data name="QueueViewModel_ShortSubScanStatus" xml:space="preserve">
+    <value>Scanning for Subtitles {0:00.00}%, ETA: {1}</value>
+  </data>
+  <data name="QueueView_ExtendedQueueDisplay" xml:space="preserve">
+    <value>Extend Queue Info</value>
+  </data>
+  <data name="QueueView_MinimalQueueDisplay" xml:space="preserve">
+    <value>Minimise Queue Info</value>
+  </data>
+  <data name="QueueStats_ShortOutputStats" xml:space="preserve">
+    <value>Output: {0}, avg {1} fps</value>
+  </data>
+  <data name="PresetPane_Desc" xml:space="preserve">
+    <value>Preset Description:</value>
+  </data>
+  <data name="PresetPane_HidePresetDesc" xml:space="preserve">
+    <value>Hide Preset Description</value>
+  </data>
+  <data name="PresetPane_ShowPresetDesc" xml:space="preserve">
+    <value>Show Preset Description</value>
+  </data>
+  <data name="TaskTrayStatusManyTitle" xml:space="preserve">
+    <value>{0}
+Encoding {1} jobs</value>
+  </data>
+  <data name="StaticPreviewViewModel_MultipleEncodes" xml:space="preserve">
+    <value>Unable to encode a preview. The application is currently busy encoding another file.
+
+To allow multiple simultaneous encodes, turn on "Process Isolation" in Tools Menu -&gt; Preferences -&gt; Advanced -&gt; Process Isolation -&gt; "Run each queued job in a separate worker process".</value>
   </data>
 </root>
