@@ -60,45 +60,45 @@
             : and then encoded with base64 encoding.
     -->
   <xsd:schema xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" id="root">
-    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace"/>
     <xsd:element name="root" msdata:IsDataSet="true">
       <xsd:complexType>
         <xsd:choice maxOccurs="unbounded">
           <xsd:element name="metadata">
             <xsd:complexType>
               <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+                <xsd:element name="value" type="xsd:string" minOccurs="0"/>
               </xsd:sequence>
-              <xsd:attribute name="name" use="required" type="xsd:string" />
-              <xsd:attribute name="type" type="xsd:string" />
-              <xsd:attribute name="mimetype" type="xsd:string" />
-              <xsd:attribute ref="xml:space" />
+              <xsd:attribute name="name" use="required" type="xsd:string"/>
+              <xsd:attribute name="type" type="xsd:string"/>
+              <xsd:attribute name="mimetype" type="xsd:string"/>
+              <xsd:attribute ref="xml:space"/>
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="assembly">
             <xsd:complexType>
-              <xsd:attribute name="alias" type="xsd:string" />
-              <xsd:attribute name="name" type="xsd:string" />
+              <xsd:attribute name="alias" type="xsd:string"/>
+              <xsd:attribute name="name" type="xsd:string"/>
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="data">
             <xsd:complexType>
               <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
-                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2"/>
               </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
-              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
-              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
-              <xsd:attribute ref="xml:space" />
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1"/>
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3"/>
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4"/>
+              <xsd:attribute ref="xml:space"/>
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="resheader">
             <xsd:complexType>
               <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
               </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" use="required" />
+              <xsd:attribute name="name" type="xsd:string" use="required"/>
             </xsd:complexType>
           </xsd:element>
         </xsd:choice>
@@ -112,10 +112,10 @@
     <value>2.0</value>
   </resheader>
   <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=5.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=5.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="FilterView_Deblock" xml:space="preserve">
     <value>去块滤波减少了由低质量视频压缩引起的块效应。</value>
@@ -144,7 +144,7 @@ HQDN3D 是一种自适应的低通滤镜，比 NLMEans 更快，但在保持细�
     <value>灰度消除了视频的颜色分量。通常被称为黑白视频。</value>
   </data>
   <data name="MainView_Destination" xml:space="preserve">
-    <value>目标路径，包括目录和文件名。这就是将创建新视频的位置，以及它的名称。</value>
+    <value>目标路径，包括目录和文件名。这就是将创建新视频的位置以及它的名称。</value>
   </data>
   <data name="MainView_IpodAtom" xml:space="preserve">
     <value>添加一个特殊的 MP4 标记，允许在大约 2006 年的老式 iPod 5 代设备上播放。其他设置可能会影响兼容性。</value>
@@ -220,11 +220,11 @@ Custom：允许手动设置所有参数。 用于纠正不正确的源显示高�
     <value>把任务发送回主界面以编辑。</value>
   </data>
   <data name="Video_AvgBitrate" xml:space="preserve">
-    <value>设置平均比码率。
+    <value>设置平均比特率。
 
-瞬时码率在任何时间点都可以更高或更低。
+瞬时比特率在任何时间点都可以更高或更低。
 但是长时间内的平均值将是此处设定的值。
-如果您需要限制瞬时码率，请查看 x264 的 vbv-bufsize 和 vbv-maxrate 设置。</value>
+如果您需要限制瞬时比特率，请查看 x264 的 vbv-bufsize 和 vbv-maxrate 设置。</value>
   </data>
   <data name="Video_ConstantFramerate" xml:space="preserve">
     <value>启用恒定帧速率输出。</value>
@@ -286,6 +286,16 @@ x264 的比例是对数的，较低的值对应于较高的质量。
 
 FFMpeg 和 Theora 的比例更加线性。
 这些编码器没有无损模式。</value>
+  </data>
+  <data name="Video_TurboAnalysisPass" xml:space="preserve">
+    <value>During the analysis pass of a multi pass encode, use settings that speed things along.</value>
+  </data>
+  <data name="Video_MultiPass" xml:space="preserve">
+    <value>Perform Multi Pass Encoding.
+
+The 'Bitrate' option is prerequisite. During the analysis passes, statistics about
+the video are collected. Then in the final pass, those statistics are used
+to make bitrate allocation decisions.</value>
   </data>
   <data name="Video_VariableFramerate" xml:space="preserve">
     <value>允许可变帧率输出。
@@ -352,22 +362,22 @@ HQDN3D 默认值：y-spatial=3:cb-spatial=2:cr-spatial=2:y-temporal=2:cb-tempora
 - Sprite：适用于1-/4-/8-/16-bit的2D游戏。Sprite 不是为高清视频设计的。</value>
   </data>
   <data name="FilterView_Deinterlace" xml:space="preserve">
-    <value>反交错从图像中删除梳状横纹。
+    <value>反交错可以去除图像中的锯齿。
 
-Yadif 是一种流行且快速的去交错算法。
+Bwdif和Yadif是两个常见且快速的反交错工具。
 
-Decomb 在多种插值算法之间切换，以提高速度和质量。</value>
+Decomb在多个插值算法间切换以获取更快的速度和更好的质量。</value>
   </data>
   <data name="FilterView_DeinterlaceCustom" xml:space="preserve">
     <value>自定义反交错参数。
- 
- Yadif 语法: mode=m:parity=p
- 
- Yadif 默认值: mode=3
- 
- Decomb 语法: mode=m:magnitude-thresh=m:variance-thresh=v:laplacian-thresh=l:dilation-thresh=d:erosion-thresh=e:noise-thresh=n:search-distance=s:postproc=p:parity=p
- 
- Decomb 默认值: mode=7</value>
+
+Bwdif和Yadif句法：mode=m:oarity=p
+
+Bwdif和Yadif默认：mode=3
+
+Decomb句法：mode=m:magnitude-thresh=m:variance-thresh=v:laplacian-thresh=l:dilation-thresh=d:erosion-thresh=e:noise-thresh=n:search-distance=s:postproc=p:parity=p
+
+Decomb默认：mode=7</value>
   </data>
   <data name="FilterView_DeinterlacePreset" xml:space="preserve">
     <value>反交错滤镜预设。
@@ -501,6 +511,40 @@ HB_EXIT_CODE
 建议在对输出文件进行操作之前对其进行验证。</value>
   </data>
   <data name="Options_AdditionalFormatOptions" xml:space="preserve">
-    <value>输出文件的格式。除了任何支持的文件系统字符外，你还可以使用任何一个占位符，当你改变标题或扫描一个源或更新某些设置时，这些占位符将被替换。</value>
+    <value>输出文件的格式。除了常见受支持的文件系统字符外，你可以使用占位符，占位符会在修改标题时、扫描源时、更新特定设置时被替换。
+
+{source} - 源文件的文件名。
+{title} - 整数值。代表光盘标题编号。
+{chapters} - 所选的章节。
+{creation-date} - 源文件创建的日期（假如可用）。
+{creation-time} - 源文件创建的时间（假如可用）。
+{modification-date} - 源文件修改的日期（假如可用）。
+{modification-time} - 源文件修改的时间（假如可用）。
+{date} - 加入队列的日期。
+{time} - 加入队列的时间。
+{quality_bitrate} - RF/CQ值。或者比特率。
+{quality_type} - 根据视频标签所选择的质量模式打印“kbps”或者“Q”。
+{preset} - 所选预设的名称。
+{encode_bit_depth} - 整数值，如8、10、12。
+{width} - 输出存储宽度。
+{height} - 输出存储高度。</value>
+  </data>
+  <data name="OptionsView_RightToleftMode" xml:space="preserve">
+    <value>对于从右到左的语言，你可以启用以下模式之一。“仅文字”会以右到左的方式渲染文字。“整个用户界面”将会以从右到左的方式渲染所有界面。
+
+请注意，使用这些模式的时候，用户界面的布局可能会出现问题。对于不同的语言，建议测试两种模式以确定最合适的模式。</value>
+  </data>
+  <data name="AudioView_Quality" xml:space="preserve">
+    <value>选择音频的质量。
+1是最低质量，5是最高质量。
+
+对于不同的源，比特率有可能会不同。</value>
+  </data>
+  <data name="OptionsView_DestinationReplacementOptions" xml:space="preserve">
+    <value>以下参数可以单独使用，也可以共同使用，以构建目标文件的路径
+
+{source_path} - 和源文件相同文件夹（假如可用）
+{source_folder_name} – 和源文件相同的文件夹名称，不包含完整路径。
+{source} - 源文件名称。</value>
   </data>
 </root>

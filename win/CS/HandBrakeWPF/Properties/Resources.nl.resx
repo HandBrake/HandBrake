@@ -59,46 +59,46 @@
             : using a System.ComponentModel.TypeConverter
             : and then encoded with base64 encoding.
     -->
-  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
-    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+  <xsd:schema xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" id="root">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace"/>
     <xsd:element name="root" msdata:IsDataSet="true">
       <xsd:complexType>
         <xsd:choice maxOccurs="unbounded">
           <xsd:element name="metadata">
             <xsd:complexType>
               <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+                <xsd:element name="value" type="xsd:string" minOccurs="0"/>
               </xsd:sequence>
-              <xsd:attribute name="name" use="required" type="xsd:string" />
-              <xsd:attribute name="type" type="xsd:string" />
-              <xsd:attribute name="mimetype" type="xsd:string" />
-              <xsd:attribute ref="xml:space" />
+              <xsd:attribute name="name" use="required" type="xsd:string"/>
+              <xsd:attribute name="type" type="xsd:string"/>
+              <xsd:attribute name="mimetype" type="xsd:string"/>
+              <xsd:attribute ref="xml:space"/>
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="assembly">
             <xsd:complexType>
-              <xsd:attribute name="alias" type="xsd:string" />
-              <xsd:attribute name="name" type="xsd:string" />
+              <xsd:attribute name="alias" type="xsd:string"/>
+              <xsd:attribute name="name" type="xsd:string"/>
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="data">
             <xsd:complexType>
               <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
-                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2"/>
               </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
-              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
-              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
-              <xsd:attribute ref="xml:space" />
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1"/>
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3"/>
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4"/>
+              <xsd:attribute ref="xml:space"/>
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="resheader">
             <xsd:complexType>
               <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
               </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" use="required" />
+              <xsd:attribute name="name" type="xsd:string" use="required"/>
             </xsd:complexType>
           </xsd:element>
         </xsd:choice>
@@ -112,10 +112,10 @@
     <value>2.0</value>
   </resheader>
   <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=5.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=5.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Video_EncoderExtraArgs" xml:space="preserve">
     <value>De volledige lijst met encoderparameters :
@@ -328,9 +328,6 @@ Doorgaan?</value>
   </data>
   <data name="PictureSettings_OutputResolution" xml:space="preserve">
     <value>Uitvoer: {0}</value>
-  </data>
-  <data name="Options_DefaultPathAdditionalParams" xml:space="preserve">
-    <value>Beschikbare aanvullende opties: {source_path} of {source_folder_name} of {source}</value>
   </data>
   <data name="Main_MatchingFileOverwriteWarning" xml:space="preserve">
     <value>Het is niet mogelijk om te coderen naar een bestand met hetzelfde pad en dezelfde bestandsnaam als het bronbestand. Pas de naam van het uitvoerbestand aan zodat deze niet overeenkomt met het bronbestand.</value>
@@ -672,7 +669,7 @@ Het bestand met voorinstellingen wordt gearchiveerd en er wordt een nieuw bestan
   </data>
   <data name="TaskTrayStatusTitle" xml:space="preserve">
     <value>{0}
-Encoding 1 Job</value>
+1 taak coderen</value>
   </data>
   <data name="PauseOnLowDiskspace" xml:space="preserve">
     <value>Wachtrij gepauzeerd. Waarschuwing, het station waarnaar u codeert, heeft weinig schijfruimte. Maak wat ruimte vrij en druk op start om door te gaan. U kunt ook het minimale ruimteniveau aanpassen in voorkeuren.</value>
@@ -719,7 +716,9 @@ Doorgaan?</value>
   </data>
   <data name="Main_QueueOverwritePrompt" xml:space="preserve">
     <value>Het bestand '{0}' bestaat al!
-Overschrijven?</value>
+Wil je dit overschrijven??
+
+Tip: de optie Bestanden overschrijven kan worden ingesteld bij voorkeuren.</value>
   </data>
   <data name="Clipboard_Unavailable" xml:space="preserve">
     <value>Het systeemklembord is momenteel niet beschikbaar.</value>
@@ -1217,7 +1216,7 @@ Overschrijven?</value>
     <value>Logboek-detailniveau:</value>
   </data>
   <data name="Options_LogPath" xml:space="preserve">
-    <value>Logboekpad:</value>
+    <value>Path:</value>
   </data>
   <data name="Options_LowDiskspaceSize" xml:space="preserve">
     <value>Wachtrij pauzeren bij gebrek aan schijfruimte</value>
@@ -1293,7 +1292,7 @@ Overschrijven?</value>
   </data>
   <data name="Options_VideoPreviewPath" xml:space="preserve">
     <value>Dit pad wordt alleen gebruikt voor de videovoorbeeldfunctie.
-VLC en MPC-HC worden ondersteund. Andere spelers werken mogelijk ook, maar zijn niet gevalideerd.</value>
+VLC en MPC-HC worden ondersteund. Andere mediaspelers werken mogelijk ook, maar zijn niet gevalideerd.</value>
   </data>
   <data name="Options_ViewLogDirectory" xml:space="preserve">
     <value>Logboekenmap tonen</value>
@@ -1475,9 +1474,6 @@ VLC en MPC-HC worden ondersteund. Andere spelers werken mogelijk ook, maar zijn 
   <data name="QueueView_Statistics" xml:space="preserve">
     <value>Statistieken</value>
   </data>
-  <data name="QueueView_StatsNotAvailableYet" xml:space="preserve">
-    <value>Statistieken zijn beschikbaar nadat een codering is voltooid.</value>
-  </data>
   <data name="QueueView_Subtitles" xml:space="preserve">
     <value>Ondertitels:</value>
   </data>
@@ -1563,13 +1559,13 @@ VLC en MPC-HC worden ondersteund. Andere spelers werken mogelijk ook, maar zijn 
     <value>Duur:</value>
   </data>
   <data name="StaticPreviewView_LivePreview" xml:space="preserve">
-    <value>Live voorbeeld</value>
+    <value>Voorbeeld coderen</value>
   </data>
   <data name="StaticPreviewView_SelectPreviewImage" xml:space="preserve">
     <value>Selecteer een voorbeeld</value>
   </data>
-  <data name="StaticPreviewView_UseSystemDefault" xml:space="preserve">
-    <value>Voorkeur voor de standaard videospeler</value>
+  <data name="StaticPreviewView_UseExternalPlayer" xml:space="preserve">
+    <value>Externe mediaspeler gebruiken</value>
   </data>
   <data name="SubtitlesView_AddCC" xml:space="preserve">
     <value>Indien beschikbaar ingesloten bijschriften toevoegen</value>
@@ -1643,6 +1639,9 @@ VLC en MPC-HC worden ondersteund. Andere spelers werken mogelijk ook, maar zijn 
   <data name="SummaryView_storage" xml:space="preserve">
     <value>opslag</value>
   </data>
+  <data name="VideoView_MultiPass" xml:space="preserve">
+    <value>Multi-Pass Encoding</value>
+  </data>
   <data name="VideoView_AverageBitrate" xml:space="preserve">
     <value>Gem. bitsnelheid (kbps):</value>
   </data>
@@ -1684,6 +1683,9 @@ VLC en MPC-HC worden ondersteund. Andere spelers werken mogelijk ook, maar zijn 
   </data>
   <data name="VideoView_Quality" xml:space="preserve">
     <value>Kwaliteit:</value>
+  </data>
+  <data name="VideoView_TurboAnalysisPass" xml:space="preserve">
+    <value>Turbo analysis pass</value>
   </data>
   <data name="VideoView_VariableFramerate" xml:space="preserve">
     <value>Variabele framesnelheid</value>
@@ -1761,7 +1763,7 @@ VLC en MPC-HC worden ondersteund. Andere spelers werken mogelijk ook, maar zijn 
     <value>_Voorinstellingen</value>
   </data>
   <data name="MainView_QueueMenu" xml:space="preserve">
-    <value>_Wachtlijst</value>
+    <value>_Wachtrij</value>
   </data>
   <data name="MainView_ResetPresets" xml:space="preserve">
     <value>Ingebouwde voorinstellingen _herstellen</value>
@@ -1865,10 +1867,8 @@ Dit heeft geen invloed op de software-encoders.</value>
     <value>Portable modus: niet in staat om portable.ini te lezen. Mogelijk is er een fout opgetreden in dit bestand. Probeer het opnieuw met portable.ini.template als richtlijn.</value>
   </data>
   <data name="OptionsView_FormatOptions" xml:space="preserve">
-    <value>Vervanging van plaatshouders: {source} {title} {chapters} {creation-date} {creation-time} {date} {time} {quality_bitrate}</value>
-  </data>
-  <data name="OptionsView_PathOptions" xml:space="preserve">
-    <value>Vervanging van plaatshouders: {source_path} {source_folder_name} {source}</value>
+    <value>Vervangingsopties: 
+U kunt de bovenstaande tekst slepen/neerzetten of invoeren.</value>
   </data>
   <data name="FileOverwriteBehaviours_Ask" xml:space="preserve">
     <value>Vraag om het bestand te overschrijven</value>
@@ -2680,5 +2680,71 @@ Dit kan te wijten zijn aan beperkingen van de geselecteerde bestandscontainer. Z
   </data>
   <data name="Options_Hardware" xml:space="preserve">
     <value>Hardwareondersteuning</value>
+  </data>
+  <data name="StaticPreviewViewModel_MediaError" xml:space="preserve">
+    <value>Het systeem kon dit bestand niet afspelen. 
+
+Let op: voor bepaalde codecs zoals AV1 of HEVC moeten de Microsoft AV1- of HEVC-codec-plug-ins van de Microsoft Store worden geïnstalleerd.
+U kunt hieronder ook "Externe mediaspeler gebruiken" selecteren.</value>
+  </data>
+  <data name="StaticPreviewView_ClosePlayer" xml:space="preserve">
+    <value>Mediaspeler sluiten</value>
+  </data>
+  <data name="StaticPreviewView_Play" xml:space="preserve">
+    <value>Afspelen</value>
+  </data>
+  <data name="StaticPreviewView_VideoPreview" xml:space="preserve">
+    <value>Voorbeeldvideo</value>
+  </data>
+  <data name="StaticPreviewViewModel_WebmNotSupported" xml:space="preserve">
+    <value>De ingebouwde voorbeeldweergave is niet beschikbaar voor de WebM-container. Er moet een externe mediaspeler worden gebruikt.</value>
+  </data>
+  <data name="StaticPreview_EncodingPreview" xml:space="preserve">
+    <value>Voorbeeld coderen...</value>
+  </data>
+  <data name="StaticPreview_Previews" xml:space="preserve">
+    <value>Voorbeelden:</value>
+  </data>
+  <data name="StaticPreview_Volume" xml:space="preserve">
+    <value>Volume: 0</value>
+  </data>
+  <data name="Reset" xml:space="preserve">
+    <value>Herstellen</value>
+  </data>
+  <data name="OptionsView_IsoDateFormat" xml:space="preserve">
+    <value>Gebruik ISO-datumopmaak (JJJJ-MM-DD) in plaats van systeemformaat.</value>
+  </data>
+  <data name="QueueViewModel_ShortEncodeStatus" xml:space="preserve">
+    <value>Fase {0} van {1}, {2:00.00}%, {3:000.0} fps, gem. {4:000.0} fps, Gereed: {5}</value>
+  </data>
+  <data name="QueueViewModel_ShortSubScanStatus" xml:space="preserve">
+    <value>Ondertiteling scannen: {0:00.00}%, Gereed: {1}</value>
+  </data>
+  <data name="QueueView_ExtendedQueueDisplay" xml:space="preserve">
+    <value>Wachtrij-informatie uitbreiden</value>
+  </data>
+  <data name="QueueView_MinimalQueueDisplay" xml:space="preserve">
+    <value>Wachtrij-informatie verminderen</value>
+  </data>
+  <data name="QueueStats_ShortOutputStats" xml:space="preserve">
+    <value>Uitvoer: {0}, gem. {1} fps</value>
+  </data>
+  <data name="PresetPane_Desc" xml:space="preserve">
+    <value>Beschrijving voorinstelling:</value>
+  </data>
+  <data name="PresetPane_HidePresetDesc" xml:space="preserve">
+    <value>Beschrijving voorinstelling verbergen</value>
+  </data>
+  <data name="PresetPane_ShowPresetDesc" xml:space="preserve">
+    <value>Beschrijving voorinstelling weergeven</value>
+  </data>
+  <data name="TaskTrayStatusManyTitle" xml:space="preserve">
+    <value>{0}
+{1} taken coderen</value>
+  </data>
+  <data name="StaticPreviewViewModel_MultipleEncodes" xml:space="preserve">
+    <value>Kan een voorbeeld niet coderen. De applicatie is momenteel bezig met het coderen van een ander bestand.
+
+Om meerdere gelijktijdige coderingen toe te staan dien je "Procesisolatie" in te schakelen in het menu Voorkeuren -&gt; Geavanceerd -&gt; Procesisolatie -&gt; "Voer elke wachtrijtaak uit in een apart werkproces".</value>
   </data>
 </root>

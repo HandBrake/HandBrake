@@ -291,6 +291,16 @@ tanım kaynakları için 20 ila 23'tür.
 FFMpeg ve Theora'nın ölçeği daha doğrusaldır.
 Bu kodlayıcılar kayıpsız bir moda sahip değildir.</value>
   </data>
+  <data name="Video_TurboAnalysisPass" xml:space="preserve">
+    <value>During the analysis pass of a multi pass encode, use settings that speed things along.</value>
+  </data>
+  <data name="Video_MultiPass" xml:space="preserve">
+    <value>Perform Multi Pass Encoding.
+
+The 'Bitrate' option is prerequisite. During the analysis passes, statistics about
+the video are collected. Then in the final pass, those statistics are used
+to make bitrate allocation decisions.</value>
+  </data>
   <data name="Video_VariableFramerate" xml:space="preserve">
     <value>Değişken kare hızı çıkışını etkinleştirir.
 
@@ -505,7 +515,25 @@ Lütfen unutmayın, hata kodları en iyi çabadır ve her zaman doğru olmayabil
 Çıktı dosyasının üzerinde işlem yapmadan önce doğrulanması önerilir.</value>
   </data>
   <data name="Options_AdditionalFormatOptions" xml:space="preserve">
-    <value>Çıktı dosyasının biçimi. Desteklenen herhangi bir dosya sistemi karakterine ek olarak, başlığı değiştirdiğinizde veya bir kaynağı taradığınızda veya belirli ayarları güncellediğinizde değiştirilecek olan yer tutuculardan herhangi birini kullanabilirsiniz.</value>
+    <value>The format of the output file. In addition to any supported file system character, you can use the any of the placeholders that will be replaced when you change title or scan a source or update certain settings.
+
+{source} - Name of the source file.
+{title} - Integer value. This is representative of a disc title number.
+{chapters} - The range of chapters selected.
+{creation-date} - The date that the source file was created on (if available).
+{creation-time} - The time that the source file was created on (if available).
+{modification-date} - The date that the source file was last modified on (if available).
+{modification-time} - The time that the source file was last modified on (if available).
+{date} - Today. Set at time of adding to the queue.
+{time} - Today. Set at time of adding to the queue.
+{quality_bitrate} - The RF/CQ number, or bitrate
+{quality_type} - Prints "kbps" or "Q" depending on the quality mode selected on the video tab.
+{preset} - Name of the preset selected.
+{encode_bit_depth} - Integer value. i.e. 8, 10 or 12
+{width} - The output storage width
+{height} - The output storage height
+
+Any illegal path characters will be removed automatically.</value>
   </data>
   <data name="OptionsView_RightToleftMode" xml:space="preserve">
     <value>Sağdan sola doğru olan diller için iki moddan birini etkinleştirebilirsiniz. "Yalnızca Metin", metni yalnızca sağdan sola stilde işler. "Tüm Kullanıcı Arayüzü", tüm kontrolleri sağdan sola yapacaktır.
@@ -517,5 +545,12 @@ Bu modları kullanırken Kullanıcı Arayüzü düzeninde kusurlar olabileceğin
 1 en düşük kalite ve 5 en yüksek kalitedir.
 
 Bit hızı kaynaktan kaynağa değişecektir.</value>
+  </data>
+  <data name="OptionsView_DestinationReplacementOptions" xml:space="preserve">
+    <value>Aşağıdakiler, bir hedef yol oluşturmak için tek başına veya birlikte kullanılabilir
+
+{source_path} - Kaynak yolla aynı klasörde (mümkünse)
+{source_folder_name} – Tam yol olmadan, kaynak dosyanın bulunduğu dizinin adı.
+{source} - Kaynak dosyanın adı.</value>
   </data>
 </root>

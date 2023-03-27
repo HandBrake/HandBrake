@@ -60,45 +60,45 @@
             : and then encoded with base64 encoding.
     -->
   <xsd:schema xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" id="root">
-    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace"/>
     <xsd:element name="root" msdata:IsDataSet="true">
       <xsd:complexType>
         <xsd:choice maxOccurs="unbounded">
           <xsd:element name="metadata">
             <xsd:complexType>
               <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+                <xsd:element name="value" type="xsd:string" minOccurs="0"/>
               </xsd:sequence>
-              <xsd:attribute name="name" use="required" type="xsd:string" />
-              <xsd:attribute name="type" type="xsd:string" />
-              <xsd:attribute name="mimetype" type="xsd:string" />
-              <xsd:attribute ref="xml:space" />
+              <xsd:attribute name="name" use="required" type="xsd:string"/>
+              <xsd:attribute name="type" type="xsd:string"/>
+              <xsd:attribute name="mimetype" type="xsd:string"/>
+              <xsd:attribute ref="xml:space"/>
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="assembly">
             <xsd:complexType>
-              <xsd:attribute name="alias" type="xsd:string" />
-              <xsd:attribute name="name" type="xsd:string" />
+              <xsd:attribute name="alias" type="xsd:string"/>
+              <xsd:attribute name="name" type="xsd:string"/>
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="data">
             <xsd:complexType>
               <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
-                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2"/>
               </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
-              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
-              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
-              <xsd:attribute ref="xml:space" />
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1"/>
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3"/>
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4"/>
+              <xsd:attribute ref="xml:space"/>
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="resheader">
             <xsd:complexType>
               <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
               </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" use="required" />
+              <xsd:attribute name="name" type="xsd:string" use="required"/>
             </xsd:complexType>
           </xsd:element>
         </xsd:choice>
@@ -112,10 +112,10 @@
     <value>2.0</value>
   </resheader>
   <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=5.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=5.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="FilterView_Deblock" xml:space="preserve">
     <value>Deblock vermindert blokkerige effecten veroorzaakt door videocompressie van lage kwaliteit.</value>
@@ -293,6 +293,16 @@ en 20 tot 23 voor bronnen met hoge definitie.
 
 De schaal van FFMpeg en Theora is meer lineair.
 Deze encoders hebben geen verliesvrije modus.</value>
+  </data>
+  <data name="Video_TurboAnalysisPass" xml:space="preserve">
+    <value>During the analysis pass of a multi pass encode, use settings that speed things along.</value>
+  </data>
+  <data name="Video_MultiPass" xml:space="preserve">
+    <value>Perform Multi Pass Encoding.
+
+The 'Bitrate' option is prerequisite. During the analysis passes, statistics about
+the video are collected. Then in the final pass, those statistics are used
+to make bitrate allocation decisions.</value>
   </data>
   <data name="Video_VariableFramerate" xml:space="preserve">
     <value>Maakt uitvoer met variabele framesnelheid mogelijk.
@@ -508,7 +518,25 @@ Let op, foutcodes zijn zo goed mogelijk en niet altijd accuraat.
 Het is raadzaam om het uitvoerbestand te valideren alvorens er acties op uit te voeren.</value>
   </data>
   <data name="Options_AdditionalFormatOptions" xml:space="preserve">
-    <value>Het formaat van het uitvoerbestand. Naast elk letterteken dat wordt ondersteund door het bestandssysteem, kunt u een van de tijdelijke aanduidingen gebruiken die worden vervangen wanneer u de titel wijzigt of een bron scant of bepaalde instellingen bijwerkt.</value>
+    <value>Het formaat van het uitvoerbestand. Naast elk ondersteund bestandssysteemkarakter, kunt u een van de tijdelijke aanduidingen gebruiken die worden vervangen wanneer u de titel wijzigt of een bron scant of bepaalde instellingen bijwerkt.
+
+{source} - Naam van het bronbestand.
+{title} - Numerieke waarde. Dit is representatief voor een titelnummer van een schijf.
+{chapters} - Het bereik aan geselecteerde hoofdstukken.
+{creation-date} - De datum waarop het bronbestand is aangemaakt (indien beschikbaar).
+{creation-time} - Het tijdstip waarop het bronbestand is aangemaakt (indien beschikbaar).
+{modification-date} - De datum waarop het bronbestand voor het laatst is gewijzigd (indien beschikbaar).
+{modification-time} - Het tijdstip waarop het bronbestand voor het laatst is gewijzigd (indien beschikbaar).
+{date} - Vandaag. Ingesteld op het moment van toevoeging aan de wachtrij.
+{time} - Vandaag. Ingesteld op het moment van toevoeging aan de wachtrij.
+{quality_bitrate} - Het RF/CQ-nummer of de bitrate 
+{quality_type} - Drukt "kbps" of "Q" af, afhankelijk van de kwaliteitsmodus die op het videotabblad is geselecteerd.
+{preset} - Naam van de geselecteerde voorinstelling.
+{encode_bit_depth} - Numerieke waarde, bijv. 8, 10 of 12 
+{width} - De breedte van de opgeslagen uitvoer
+{hoogte} - De hoogte van de opgeslagen uitvoer
+
+Alle illegale tekens in het pad worden automatisch verwijderd.</value>
   </data>
   <data name="OptionsView_RightToleftMode" xml:space="preserve">
     <value>Voor 'rechts-links'-talen kunt u een van de twee modi inschakelen. "Alleen tekst" geeft de tekst alleen weer in de stijl van rechts naar links. "Volledige gebruikersinterface" geeft alle bedieningselementen van rechts naar links weer.
@@ -520,5 +548,13 @@ Let op: er kunnen onvolkomenheden zijn in de UI-indeling bij het gebruik van dez
 1 is van de laagste kwaliteit en 5 is van de hoogste kwaliteit.
 
 Bitsnelheid varieert van bron tot bron.</value>
+  </data>
+  <data name="OptionsView_DestinationReplacementOptions" xml:space="preserve">
+    <value>Het volgende kan afzonderlijk worden gebruikt, of samen om een bestemmingspad 
+op te bouwen
+
+{source_path} - In dezelfde map als het bronpad (indien mogelijk) 
+{source_folder_name} - De naam van de directory waarin het bronbestand zich bevindt, zonder het volledige pad.
+{source} - De naam van het bronbestand. </value>
   </data>
 </root>

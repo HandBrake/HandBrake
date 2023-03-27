@@ -328,9 +328,6 @@ Devam etmek istiyor musunuz?</value>
   <data name="PictureSettings_OutputResolution" xml:space="preserve">
     <value>Çıktı: {0}</value>
   </data>
-  <data name="Options_DefaultPathAdditionalParams" xml:space="preserve">
-    <value>Mevcut ek Seçenekler: {source_path} veya {source_folder_name} veya {source}</value>
-  </data>
   <data name="Main_MatchingFileOverwriteWarning" xml:space="preserve">
     <value>Kaynak dosyayla aynı yol ve dosya adına sahip bir dosyayı kodlayamazsınız. Lütfen hedef dosya adını kaynak dosyayla eşleşmeyecek şekilde güncelleyin.</value>
   </data>
@@ -671,7 +668,7 @@ Bölüm adlarını içe aktarmak istediğinizden emin misiniz?</value>
   </data>
   <data name="TaskTrayStatusTitle" xml:space="preserve">
     <value>{0}
-Encoding 1 Job</value>
+1 Kodlama Görevi Gerçekleştiriliyor</value>
   </data>
   <data name="PauseOnLowDiskspace" xml:space="preserve">
     <value>Sıra Duraklatıldı. Uyarı, kodladığınız sürücünün disk alanı yetersiz. Lütfen biraz yer açın ve devam etmek için Başlat'a basın. Ayrıca tercihlerinde minimum alan seviyesini ayarlayabilirsiniz.</value>
@@ -718,7 +715,9 @@ Devam etmek istiyor musunuz? </value>
   </data>
   <data name="Main_QueueOverwritePrompt" xml:space="preserve">
     <value>'{0}' dosyası zaten var!
-Üzerine yazmak ister misiniz?</value>
+Üzerine yazmak ister misiniz?
+
+İpucu: Dosya üzerine yazma davranışı tercihlerde kontrol edilebilir. </value>
   </data>
   <data name="Clipboard_Unavailable" xml:space="preserve">
     <value>Sistem panosu şu anda kullanılamıyor.</value>
@@ -1216,7 +1215,7 @@ Devam etmek istiyor musunuz? </value>
     <value>Günlük Ayrıntı Düzeyi:</value>
   </data>
   <data name="Options_LogPath" xml:space="preserve">
-    <value>Günlük Yolu:</value>
+    <value>Path:</value>
   </data>
   <data name="Options_LowDiskspaceSize" xml:space="preserve">
     <value>Disk alanı azsa sırayı duraklatın</value>
@@ -1474,9 +1473,6 @@ VLC ve MPC-HC desteklenmektedir. Diğer oyuncular da çalışabilir ancak onayla
   <data name="QueueView_Statistics" xml:space="preserve">
     <value>İstatistik</value>
   </data>
-  <data name="QueueView_StatsNotAvailableYet" xml:space="preserve">
-    <value>Kodlama tamamlandıktan sonra istatistikler hazır olur.</value>
-  </data>
   <data name="QueueView_Subtitles" xml:space="preserve">
     <value>Altyazı:</value>
   </data>
@@ -1562,13 +1558,13 @@ VLC ve MPC-HC desteklenmektedir. Diğer oyuncular da çalışabilir ancak onayla
     <value>Süre:</value>
   </data>
   <data name="StaticPreviewView_LivePreview" xml:space="preserve">
-    <value>Canlı Önizleme</value>
+    <value>Kodlama Önizlemesi</value>
   </data>
   <data name="StaticPreviewView_SelectPreviewImage" xml:space="preserve">
     <value>Bir önizleme resmi seçin</value>
   </data>
-  <data name="StaticPreviewView_UseSystemDefault" xml:space="preserve">
-    <value>Sistem varsayılan video oynatıcıyı tercih et</value>
+  <data name="StaticPreviewView_UseExternalPlayer" xml:space="preserve">
+    <value>Harici Oynatıcı Uygulaması Kullan</value>
   </data>
   <data name="SubtitlesView_AddCC" xml:space="preserve">
     <value>Mümkün olduğunda Kapalı Başlıklar ekleyin</value>
@@ -1642,6 +1638,9 @@ VLC ve MPC-HC desteklenmektedir. Diğer oyuncular da çalışabilir ancak onayla
   <data name="SummaryView_storage" xml:space="preserve">
     <value>depolama</value>
   </data>
+  <data name="VideoView_MultiPass" xml:space="preserve">
+    <value>Multi-Pass Encoding</value>
+  </data>
   <data name="VideoView_AverageBitrate" xml:space="preserve">
     <value>Avg bit hızı (kbps):</value>
   </data>
@@ -1684,8 +1683,8 @@ VLC ve MPC-HC desteklenmektedir. Diğer oyuncular da çalışabilir ancak onayla
   <data name="VideoView_Quality" xml:space="preserve">
     <value>Kalite:</value>
   </data>
-  <data name="VideoView_TurboFirstPass" xml:space="preserve">
-    <value>Turbo ilk geçiş</value>
+  <data name="VideoView_TurboAnalysisPass" xml:space="preserve">
+    <value>Turbo analysis pass</value>
   </data>
   <data name="VideoView_VariableFramerate" xml:space="preserve">
     <value>Değişken Kare Hızı</value>
@@ -1868,10 +1867,8 @@ Kalan Süre: {5},  Geçen: {6} {7}</value>
     <value>Taşınabilir Mod: portable.ini okunamıyor. Bu dosyada bir hata olabilir. Lütfen portable.ini.template'i kılavuz olarak kullanmayı deneyin.</value>
   </data>
   <data name="OptionsView_FormatOptions" xml:space="preserve">
-    <value>Değiştirilen Yer Tutucular: {source} {title} {chapters} {creation-date} {creation-time} {date} {time} {quality_bitrate}</value>
-  </data>
-  <data name="OptionsView_PathOptions" xml:space="preserve">
-    <value>Değiştirilen Yer Tutucular: {source_path} {source_folder_name} {source}</value>
+    <value>Değiştirme Seçenekleri:
+Yukarıdaki metni sürükleyip bırakabilir veya girebilirsiniz.</value>
   </data>
   <data name="FileOverwriteBehaviours_Ask" xml:space="preserve">
     <value>Dosyanın üzerine yazılmasını isteyin</value>
@@ -2683,5 +2680,71 @@ Bu, seçtiğiniz dosya kapsayıcısının sınırlamaları nedeniyle olabilir. D
   </data>
   <data name="Options_Hardware" xml:space="preserve">
     <value>Donanım Desteği</value>
+  </data>
+  <data name="StaticPreviewViewModel_MediaError" xml:space="preserve">
+    <value>Sistem bu dosyayı oynatamadı. 
+
+AV1 veya HEVC gibi belirli codec bileşenlerinin oynatılması için Microsoft Store'dan Microsoft AV1 veya HEVC codec eklentileri gerektiğini lütfen unutmayın.
+Alternatif olarak, aşağıdaki "Harici Oynatıcı Kullan" onay kutusunu işaretleyin.</value>
+  </data>
+  <data name="StaticPreviewView_ClosePlayer" xml:space="preserve">
+    <value>Oynatıcıyı Kapat</value>
+  </data>
+  <data name="StaticPreviewView_Play" xml:space="preserve">
+    <value>Oynat</value>
+  </data>
+  <data name="StaticPreviewView_VideoPreview" xml:space="preserve">
+    <value>Video Önizlemesi</value>
+  </data>
+  <data name="StaticPreviewViewModel_WebmNotSupported" xml:space="preserve">
+    <value>Yerleşik önizleme WebM kapsayıcısı için kullanılamaz. Harici bir oynatıcı kullanılmalıdır.</value>
+  </data>
+  <data name="StaticPreview_EncodingPreview" xml:space="preserve">
+    <value>Kodlama Önizlemesi ...</value>
+  </data>
+  <data name="StaticPreview_Previews" xml:space="preserve">
+    <value>Önizlemeler:</value>
+  </data>
+  <data name="StaticPreview_Volume" xml:space="preserve">
+    <value>Birim: 0</value>
+  </data>
+  <data name="Reset" xml:space="preserve">
+    <value>Sıfırla</value>
+  </data>
+  <data name="OptionsView_IsoDateFormat" xml:space="preserve">
+    <value>Sistem biçimi yerine ISO Tarih Biçimlerini (YYYY-AA-GG) kullanın.</value>
+  </data>
+  <data name="QueueViewModel_ShortEncodeStatus" xml:space="preserve">
+    <value>Geçiş {0} / {1}, {2:00.00}%, {3:000.0} fps, ortalama {4:000.0} fps, TAHMİNİ: {5}</value>
+  </data>
+  <data name="QueueViewModel_ShortSubScanStatus" xml:space="preserve">
+    <value>Altyazı Taraması {0:00.00}%, TAHMİNİ: {1}</value>
+  </data>
+  <data name="QueueView_ExtendedQueueDisplay" xml:space="preserve">
+    <value>Kuyruk Bilgilerini Genişlet</value>
+  </data>
+  <data name="QueueView_MinimalQueueDisplay" xml:space="preserve">
+    <value>Kuyruk Bilgilerini En Aza İndir</value>
+  </data>
+  <data name="QueueStats_ShortOutputStats" xml:space="preserve">
+    <value>Çıktı: {0}, ortalama {1} fps</value>
+  </data>
+  <data name="PresetPane_Desc" xml:space="preserve">
+    <value>Önayar Açıklaması:</value>
+  </data>
+  <data name="PresetPane_HidePresetDesc" xml:space="preserve">
+    <value>Önayar Açıklamasını Gizle</value>
+  </data>
+  <data name="PresetPane_ShowPresetDesc" xml:space="preserve">
+    <value>Önayar Açıklamasını Göster</value>
+  </data>
+  <data name="TaskTrayStatusManyTitle" xml:space="preserve">
+    <value>{0}
+{1} kodlama görevi gerçekleştiriliyor</value>
+  </data>
+  <data name="StaticPreviewViewModel_MultipleEncodes" xml:space="preserve">
+    <value>Unable to encode a preview. The application is currently busy encoding another file.
+
+To allow multiple simultaneous encodes, turn on "Process Isolation" in Tools Menu -&gt; Preferences -&gt; Advanced -&gt; Process Isolation -&gt; "Run each queued job in a separate worker process".</value>
   </data>
 </root>

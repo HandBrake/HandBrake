@@ -60,45 +60,45 @@
             : and then encoded with base64 encoding.
     -->
   <xsd:schema xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" id="root">
-    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace"/>
     <xsd:element name="root" msdata:IsDataSet="true">
       <xsd:complexType>
         <xsd:choice maxOccurs="unbounded">
           <xsd:element name="metadata">
             <xsd:complexType>
               <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+                <xsd:element name="value" type="xsd:string" minOccurs="0"/>
               </xsd:sequence>
-              <xsd:attribute name="name" use="required" type="xsd:string" />
-              <xsd:attribute name="type" type="xsd:string" />
-              <xsd:attribute name="mimetype" type="xsd:string" />
-              <xsd:attribute ref="xml:space" />
+              <xsd:attribute name="name" use="required" type="xsd:string"/>
+              <xsd:attribute name="type" type="xsd:string"/>
+              <xsd:attribute name="mimetype" type="xsd:string"/>
+              <xsd:attribute ref="xml:space"/>
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="assembly">
             <xsd:complexType>
-              <xsd:attribute name="alias" type="xsd:string" />
-              <xsd:attribute name="name" type="xsd:string" />
+              <xsd:attribute name="alias" type="xsd:string"/>
+              <xsd:attribute name="name" type="xsd:string"/>
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="data">
             <xsd:complexType>
               <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
-                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2"/>
               </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
-              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
-              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
-              <xsd:attribute ref="xml:space" />
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1"/>
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3"/>
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4"/>
+              <xsd:attribute ref="xml:space"/>
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="resheader">
             <xsd:complexType>
               <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
               </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" use="required" />
+              <xsd:attribute name="name" type="xsd:string" use="required"/>
             </xsd:complexType>
           </xsd:element>
         </xsd:choice>
@@ -112,10 +112,10 @@
     <value>2.0</value>
   </resheader>
   <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=5.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=5.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="FilterView_Deblock" xml:space="preserve">
     <value>Deblock reduziert Blockartefakte, die durch Videokompression niedriger Qualität entstehen.</value>
@@ -287,6 +287,16 @@ Die empfohlenen Werte sind: 18 bis 20 für Quellen mit Standardauflösung und 20
 
 Die Skalierung von FFmpeg und Theora ist linearer.
 Diese Encoder haben keinen verlustfreien Modus.</value>
+  </data>
+  <data name="Video_TurboAnalysisPass" xml:space="preserve">
+    <value>Verwende während des Analysedurchgangs einer Encodierung in mehreren Durchgängen Einstellungen um die Verarbeitung zu beschleunigen. </value>
+  </data>
+  <data name="Video_MultiPass" xml:space="preserve">
+    <value>Führe eine Encodierung in mehreren Durchgängen durch.
+Die Bitrate muss hierfür angegeben werden. Im Analysedurchgang
+werden Statistiken über das Video erhoben. Im finalen Durchgang
+werden diese Statistiken verwendet, um Entscheidungen über die
+Zuweisungen der Bitrate zu treffen.</value>
   </data>
   <data name="Video_VariableFramerate" xml:space="preserve">
     <value>Aktiviert variable Bildfrequenz.
@@ -502,7 +512,25 @@ Bitte beachten Sie, dass die Fehlercodes nach bestem Wissen und Gewissen ermitte
 Es wird empfohlen, die Ausgabedatei vor der Durchführung von Aktionen zu validieren.</value>
   </data>
   <data name="Options_AdditionalFormatOptions" xml:space="preserve">
-    <value>Das Format der Ausgabedatei. Zusätzlich zu jedem unterstützten Dateisystemzeichen können Sie einen der Platzhalter verwenden, die ersetzt werden, wenn Sie den Titel ändern, eine Quelle scannen oder bestimmte Einstellungen aktualisieren.</value>
+    <value>Das Format der Ausgabedatei. Zusätzlich zu jedem unterstützten Dateisystemzeichen können Sie einen der Platzhalter verwenden, die ersetzt werden, wenn Sie den Titel ändern, eine Quelle scannen oder bestimmte Einstellungen aktualisieren.
+
+{source} - Name der Quelldatei.
+{title} - Ganzzahliger Wert. Dieser Wert steht für eine Disc-Titelnummer.
+{chapters} - Der Bereich der ausgewählten Kapitel.
+{creation-date} - Das Datum, an dem die Quelldatei erstellt wurde (falls verfügbar).
+{creation-time} - Die Uhrzeit, zu der die Quelldatei erstellt wurde (falls verfügbar).
+{modification-date} - Das Datum, an dem die Quelldatei zuletzt geändert wurde (falls verfügbar).
+{modification-time} - Die Uhrzeit, zu der die Quelldatei zuletzt geändert wurde (falls verfügbar).
+{date} - Heute. Wird zum Zeitpunkt des Hinzufügens zur Warteschlange festgelegt.
+{time} - Heute. Wird zum Zeitpunkt des Hinzufügens zur Warteschlange festgelegt.
+{quality_bitrate} - Die RF/CQ-Nummer oder die Bitrate
+{quality_type} - Druckt "kbps" oder "Q" je nach dem auf der Registerkarte "Video" ausgewählten Qualitätsmodus.
+{preset} - Name der ausgewählten Voreinstellung.
+{encode_bit_depth} - Ganzzahliger Wert, z. B. 8, 10 oder 12
+{width} - Die Breite des Ausgabespeichers
+{height} - Höhe des Ausgabespeichers
+
+Alle unzulässigen Pfadzeichen werden automatisch entfernt.</value>
   </data>
   <data name="OptionsView_RightToleftMode" xml:space="preserve">
     <value>Für Sprachen, die von rechts nach links geschrieben werden, können Sie einen von zwei Modi aktivieren. Bei "Nur Text" wird nur der Text im Rechts-Links-Stil dargestellt. Bei "Gesamte Benutzeroberfläche" werden alle Steuerelemente in RTL dargestellt.
@@ -514,5 +542,12 @@ Bitte beachten Sie, dass es bei der Verwendung dieser Modi zu Ungenauigkeiten im
 1 ist die niedrigste Qualität und 5 ist die höchste Qualität.
 
 Die Bitrate variiert von Quelle zu Quelle.</value>
+  </data>
+  <data name="OptionsView_DestinationReplacementOptions" xml:space="preserve">
+    <value>Die folgenden Angaben können einzeln oder zusammen verwendet werden, um einen Zielpfad zu erstellen
+
+{source_path} - In demselben Ordner wie der Quellpfad (wenn möglich)
+{source_folder_name} - Der Name des Verzeichnisses, in dem sich die Quelldatei befindet, ohne den vollständigen Pfad 
+{source} - Der Name der Quelldatei.</value>
   </data>
 </root>

@@ -330,9 +330,6 @@ Trotzdem fortfahren?</value>
   <data name="PictureSettings_OutputResolution" xml:space="preserve">
     <value>Ausgabe: {0}</value>
   </data>
-  <data name="Options_DefaultPathAdditionalParams" xml:space="preserve">
-    <value>Verfügbare zusätzliche Optionen: {source_path} oder {source_folder_name} oder {source}</value>
-  </data>
   <data name="Main_MatchingFileOverwriteWarning" xml:space="preserve">
     <value>Es kann keine Datei mit demselben Pfad und Dateinamen wie die Quelldatei encodiert werden. Bitte den Namen der Ausgabedatei ändern, so dass er nicht der Quelldatei entspricht.</value>
   </data>
@@ -673,7 +670,7 @@ Die Voreinstellungsdatei wird archiviert und eine neue erstellt. Die eigenen Vor
   </data>
   <data name="TaskTrayStatusTitle" xml:space="preserve">
     <value>{0}
-Encoding 1 Job</value>
+Encodiere 1 Aufgabe</value>
   </data>
   <data name="PauseOnLowDiskspace" xml:space="preserve">
     <value>Warteschlange angehalten. Warnung, auf dem Volume auf dem encodiert wird ist nicht genügend Speicherplatz vorhanden. Bitte mehr Speicherplatz freigeben und „Start“ auswählen, um fortzufahren. Außerdem kann der minimale Speicherplatzwert in den Einstellungen angepasst werden.</value>
@@ -719,8 +716,10 @@ Soll fortgefahren werden?</value>
     <value>Soll versucht werden, den Rest hinzuzufügen?</value>
   </data>
   <data name="Main_QueueOverwritePrompt" xml:space="preserve">
-    <value>Die Datei „{0}“ existiert bereits!
-Soll sie überschrieben werden?</value>
+    <value>Die Datei '{0}' existiert bereits!
+Möchten Sie sie überschreiben?
+
+Hinweis: Das Verhalten beim Überschreiben von Dateien kann in den Einstellungen festgelegt werden. </value>
   </data>
   <data name="Clipboard_Unavailable" xml:space="preserve">
     <value>Die Zwischenablage des Systems ist momentan nicht verfügbar.</value>
@@ -1218,7 +1217,7 @@ Soll sie überschrieben werden?</value>
     <value>Aufzeichnungsumfang des Aktivitätsprotokolls:</value>
   </data>
   <data name="Options_LogPath" xml:space="preserve">
-    <value>Pfad des Protokolls:</value>
+    <value>Pfad:</value>
   </data>
   <data name="Options_LowDiskspaceSize" xml:space="preserve">
     <value>Warteschlange anhalten, wenn Speicherplatz zu klein</value>
@@ -1476,9 +1475,6 @@ Es werden VLC und MPC-HC unterstützt. Andere Media-Player können auch funktion
   <data name="QueueView_Statistics" xml:space="preserve">
     <value>Statistik</value>
   </data>
-  <data name="QueueView_StatsNotAvailableYet" xml:space="preserve">
-    <value>Die Statistik ist verfügbar, sobald das Encodieren abgeschlossen ist.</value>
-  </data>
   <data name="QueueView_Subtitles" xml:space="preserve">
     <value>Untertitel:</value>
   </data>
@@ -1564,13 +1560,13 @@ Es werden VLC und MPC-HC unterstützt. Andere Media-Player können auch funktion
     <value>Dauer:</value>
   </data>
   <data name="StaticPreviewView_LivePreview" xml:space="preserve">
-    <value>Echtzeitvorschau</value>
+    <value>Encodiervorschau</value>
   </data>
   <data name="StaticPreviewView_SelectPreviewImage" xml:space="preserve">
     <value>Ein Vorschaubild wählen</value>
   </data>
-  <data name="StaticPreviewView_UseSystemDefault" xml:space="preserve">
-    <value>Videoabspieler des Systems verwenden</value>
+  <data name="StaticPreviewView_UseExternalPlayer" xml:space="preserve">
+    <value>Externen Abspieler verwenden</value>
   </data>
   <data name="SubtitlesView_AddCC" xml:space="preserve">
     <value>Wenn verfügbar, CC-Untertitel hinzufügen</value>
@@ -1644,6 +1640,9 @@ Es werden VLC und MPC-HC unterstützt. Andere Media-Player können auch funktion
   <data name="SummaryView_storage" xml:space="preserve">
     <value>Original</value>
   </data>
+  <data name="VideoView_MultiPass" xml:space="preserve">
+    <value>Encodierung in mehreren Durchgängen</value>
+  </data>
   <data name="VideoView_AverageBitrate" xml:space="preserve">
     <value>Mittlere Bitrate (kbps):</value>
   </data>
@@ -1685,6 +1684,9 @@ Es werden VLC und MPC-HC unterstützt. Andere Media-Player können auch funktion
   </data>
   <data name="VideoView_Quality" xml:space="preserve">
     <value>Qualität:</value>
+  </data>
+  <data name="VideoView_TurboAnalysisPass" xml:space="preserve">
+    <value>Beschleunigter Analysedurchgang</value>
   </data>
   <data name="VideoView_VariableFramerate" xml:space="preserve">
     <value>Variable Bildfrequenz</value>
@@ -1867,10 +1869,8 @@ Verbleibende Zeit: {5}, vergangen: {6} {7}</value>
     <value>Portabler Modus: Das Lesen von portable.ini ist nicht möglich. Die Datei könnte fehlerhaft sein. Bitte erneut portable.ini.template als Vorlage benutzen.</value>
   </data>
   <data name="OptionsView_FormatOptions" xml:space="preserve">
-    <value>Austausch-Platzhalter: {source} {title} {chapters} {creation-date} {creation-time} {date} {time} {quality_bitrate}</value>
-  </data>
-  <data name="OptionsView_PathOptions" xml:space="preserve">
-    <value>Austausch-Platzhalter: {source_path} {source_folder_name} {source}</value>
+    <value>Ersetzungsoptionen:
+Sie können den Text oben per Drag &amp; Drop ziehen oder eingeben.</value>
   </data>
   <data name="FileOverwriteBehaviours_Ask" xml:space="preserve">
     <value>Fragen um Datei zu überschreiben</value>
@@ -2682,5 +2682,71 @@ Dies kann auf Einschränkungen des von Ihnen gewählten Datei-Containers zurück
   </data>
   <data name="Options_Hardware" xml:space="preserve">
     <value>Hardware-Unterstützung</value>
+  </data>
+  <data name="StaticPreviewViewModel_MediaError" xml:space="preserve">
+    <value>Das System konnte diese Datei nicht abspielen. 
+
+Bitte beachten Sie, dass für die Wiedergabe bestimmter Codecs wie AV1 oder HEVC die Microsoft AV1- oder HEVC-Codec-Plugins aus dem Microsoft Store erforderlich sind.
+Alternativ können Sie auch das Kontrollkästchen "Externen Abspieler verwenden" unten aktivieren.</value>
+  </data>
+  <data name="StaticPreviewView_ClosePlayer" xml:space="preserve">
+    <value>Abspieler schließen</value>
+  </data>
+  <data name="StaticPreviewView_Play" xml:space="preserve">
+    <value>Abspielen</value>
+  </data>
+  <data name="StaticPreviewView_VideoPreview" xml:space="preserve">
+    <value>Video-Vorschau</value>
+  </data>
+  <data name="StaticPreviewViewModel_WebmNotSupported" xml:space="preserve">
+    <value>Die integrierte Vorschau ist für den WebM-Container nicht verfügbar. Es muss ein externer Player verwendet werden.</value>
+  </data>
+  <data name="StaticPreview_EncodingPreview" xml:space="preserve">
+    <value>Vorschau encodieren…</value>
+  </data>
+  <data name="StaticPreview_Previews" xml:space="preserve">
+    <value>Vorschau:</value>
+  </data>
+  <data name="StaticPreview_Volume" xml:space="preserve">
+    <value>Lautstärke: 0</value>
+  </data>
+  <data name="Reset" xml:space="preserve">
+    <value>Zurücksetzen</value>
+  </data>
+  <data name="OptionsView_IsoDateFormat" xml:space="preserve">
+    <value>Benutze ISO-Datumsformate (YYYY-MM-DD), anstelle des Systemformates.</value>
+  </data>
+  <data name="QueueViewModel_ShortEncodeStatus" xml:space="preserve">
+    <value>Durchgang {0} von {1}, {2:00.00}%, {3:000.0} BpS, im Mittel {4:000.0} BpS, ETA: {5}</value>
+  </data>
+  <data name="QueueViewModel_ShortSubScanStatus" xml:space="preserve">
+    <value>Suche nach Untertiteln {0:00.00}%, ETA: {1}</value>
+  </data>
+  <data name="QueueView_ExtendedQueueDisplay" xml:space="preserve">
+    <value>Warteschlangeninfo erweitern</value>
+  </data>
+  <data name="QueueView_MinimalQueueDisplay" xml:space="preserve">
+    <value>Warteschlangeninfo minimieren</value>
+  </data>
+  <data name="QueueStats_ShortOutputStats" xml:space="preserve">
+    <value>Ausgabe: {0}, im Mittel {1} BpS</value>
+  </data>
+  <data name="PresetPane_Desc" xml:space="preserve">
+    <value>Voreinstellungsbeschreibung:</value>
+  </data>
+  <data name="PresetPane_HidePresetDesc" xml:space="preserve">
+    <value>Voreinstellungsbeschreibung ausblenden</value>
+  </data>
+  <data name="PresetPane_ShowPresetDesc" xml:space="preserve">
+    <value>Voreinstellungsbeschreibung einblenden</value>
+  </data>
+  <data name="TaskTrayStatusManyTitle" xml:space="preserve">
+    <value>{0}
+Encodiere {1} Aufgaben</value>
+  </data>
+  <data name="StaticPreviewViewModel_MultipleEncodes" xml:space="preserve">
+    <value>Eine Vorschau kann nicht kodiert werden. Die Anwendung ist gerade mit der Encodierung einer anderen Datei beschäftigt.
+
+Um mehrere gleichzeitige Encodierungen zu ermöglichen, aktivieren Sie die "Prozessisolierung" im Menü Extras -&gt; Voreinstellungen -&gt; Erweitert -&gt; Prozessisolation -&gt; "Jeden Auftrag in der Warteschlange in einem separaten Worker-Prozess ausführen".</value>
   </data>
 </root>

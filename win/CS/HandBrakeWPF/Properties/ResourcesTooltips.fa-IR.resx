@@ -60,45 +60,45 @@
             : and then encoded with base64 encoding.
     -->
   <xsd:schema xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" id="root">
-    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace"/>
     <xsd:element name="root" msdata:IsDataSet="true">
       <xsd:complexType>
         <xsd:choice maxOccurs="unbounded">
           <xsd:element name="metadata">
             <xsd:complexType>
               <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+                <xsd:element name="value" type="xsd:string" minOccurs="0"/>
               </xsd:sequence>
-              <xsd:attribute name="name" use="required" type="xsd:string" />
-              <xsd:attribute name="type" type="xsd:string" />
-              <xsd:attribute name="mimetype" type="xsd:string" />
-              <xsd:attribute ref="xml:space" />
+              <xsd:attribute name="name" use="required" type="xsd:string"/>
+              <xsd:attribute name="type" type="xsd:string"/>
+              <xsd:attribute name="mimetype" type="xsd:string"/>
+              <xsd:attribute ref="xml:space"/>
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="assembly">
             <xsd:complexType>
-              <xsd:attribute name="alias" type="xsd:string" />
-              <xsd:attribute name="name" type="xsd:string" />
+              <xsd:attribute name="alias" type="xsd:string"/>
+              <xsd:attribute name="name" type="xsd:string"/>
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="data">
             <xsd:complexType>
               <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
-                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2"/>
               </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
-              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
-              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
-              <xsd:attribute ref="xml:space" />
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1"/>
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3"/>
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4"/>
+              <xsd:attribute ref="xml:space"/>
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="resheader">
             <xsd:complexType>
               <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
               </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" use="required" />
+              <xsd:attribute name="name" type="xsd:string" use="required"/>
             </xsd:complexType>
           </xsd:element>
         </xsd:choice>
@@ -112,13 +112,15 @@
     <value>2.0</value>
   </resheader>
   <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=5.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=5.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="FilterView_Deblock" xml:space="preserve">
-    <value>هموارسازی اثرات شطرنجی فیلم با کیفیت پایین را کاهش می‌دهد.</value>
+    <value>هموارسازی، شطرنجی شدن ویدیو که از فشرده‌سازی با کیفیت پایین ناشی شده‌است را کاهش می‌دهد.
+
+Deblock</value>
   </data>
   <data name="FilterView_DecombDeinterlace" xml:space="preserve">
     <value>Choose decomb or deinterlace filter options.
@@ -141,7 +143,7 @@ HQDN3D is an adaptive low-pass filter, faster than NLMeans but less effective at
     <value>Detelecine removes comb artifacts that are the result of telecine, a process for converting film frame rates to television frame rates.</value>
   </data>
   <data name="FilterView_Grayscale" xml:space="preserve">
-    <value>«سیاه و سفید» رنگ ویدیو را حذف می‌کند.</value>
+    <value>خاکستری‌طیف رنگ ویدیو را حذف می‌کند.نتیجه اغلب به عنوان فیلم سیاه‌و‌سفید شناخته می‌شود.</value>
   </data>
   <data name="MainView_Destination" xml:space="preserve">
     <value>Destination path, including directory and file name. This is where your new video will be created, and what it will be named.</value>
@@ -174,7 +176,7 @@ Loose is similar to Auto, but attempts to preserve the storage aspect ratio. Thi
 Custom allows manually setting all parameters. Useful for correcting an incorrect source display aspect and for professionals needing advanced control in post-production.</value>
   </data>
   <data name="PictureSettingsView_AutoCrop" xml:space="preserve">
-    <value>حاشیه‌های سیاه در لبه‌ی ویدیو را به صورت خودکار برش بده.</value>
+    <value>حاشیه‌های سیاه در کناره‌های ویدیو را به صورت خودکار برش می‌دهد.</value>
   </data>
   <data name="PictureSettingsView_CropBottom" xml:space="preserve">
     <value>بریدن ویدیو از پایین</value>
@@ -245,7 +247,7 @@ preset but before all other parameters.</value>
 Colon separated list of encoder options.</value>
   </data>
   <data name="Video_FastDecode" xml:space="preserve">
-    <value>استفاده از پردازنده را در بازسازی کاهش بده.
+    <value>این گزینه استفاده از پردازنده را در باز‌سازی ویدیو کاهش می‌دهد.
 
 اگر دستگاه شما برای پخش خروجی مشکل دارد (تصویر گیر می‌کند)، این را بزنید.</value>
   </data>
@@ -290,6 +292,16 @@ Suggested values are: 18 to 20 for standard definition sources and 20 to 23 for 
 FFMpeg's and Theora's scale is more linear.
 These encoders do not have a lossless mode.</value>
   </data>
+  <data name="Video_TurboAnalysisPass" xml:space="preserve">
+    <value>During the analysis pass of a multi pass encode, use settings that speed things along.</value>
+  </data>
+  <data name="Video_MultiPass" xml:space="preserve">
+    <value>Perform Multi Pass Encoding.
+
+The 'Bitrate' option is prerequisite. During the analysis passes, statistics about
+the video are collected. Then in the final pass, those statistics are used
+to make bitrate allocation decisions.</value>
+  </data>
   <data name="Video_VariableFramerate" xml:space="preserve">
     <value>Enables variable framerate output.
 
@@ -311,15 +323,17 @@ VFR is not compatible with some players.</value>
     <value>Additional Preset Options.</value>
   </data>
   <data name="MainView_Presets" xml:space="preserve">
-    <value>Presets are groups of encode settings tailored for specific scenarios. Select the one closest matching your intent.
- 
- Overrides all encode settings. Settings may be further adjusted after selecting a preset.</value>
+    <value>پیش‌نشانده‌ها دسته‌ای از تنظیمات فشرده‌سازی هستند که برای استفاده‌های عمومی طراحی شده است. می‌توانید نزدیک‌ترین گزینه را که با نیاز خود را انتخاب کنید.
+
+انتخاب پیش‌نشانده ممکن است همه‌ی تنظیمات فشرده‌سازی را تغییر دهد. تنظیمات می‌توانند پس از انتخاب یک پیش‌نشانده عوض شوند.</value>
   </data>
   <data name="MainView_RemovePreset" xml:space="preserve">
-    <value>حذف پیش‌نهاده‌های انتخاب شده</value>
+    <value>حذف پیش‌نشانده‌ی انتخاب شده</value>
   </data>
   <data name="SourceSelection_TitleSpecific" xml:space="preserve">
-    <value>Scan only the specified title instead of all titles.</value>
+    <value>Some Sources may contain more than one video clip, or a collection of Titles. Blu-ray and DVD Sources often have multiple Titles.
+
+If you know the specific title you wish to encode you can enter it here and HandBrake will scan only that title rather than every title in the source file. Otherwise, leave the field blank.</value>
   </data>
   <data name="FilterView_CustomDenoiseParams" xml:space="preserve">
     <value>Custom Denoise parameters.
@@ -355,16 +369,16 @@ HQDN3D default: y-spatial=3:cb-spatial=2:cr-spatial=2:y-temporal=2:cb-temporal=3
   <data name="FilterView_Deinterlace" xml:space="preserve">
     <value>Deinterlace removes comb artifacts from the picture.
 
-Yadif is a popular and fast deinterlacer.
+Bwdif and Yadif are two popular and fast deinterlacers.
 
 Decomb switches between multiple interpolation algorithms for speed and quality.</value>
   </data>
   <data name="FilterView_DeinterlaceCustom" xml:space="preserve">
     <value>Custom Deinterlace parameters.
  
- Yadif syntax: mode=m:parity=p
+ Bwdif and Yadif syntax: mode=m:parity=p
  
- Yadif default: mode=3
+ Bwdif and Yadif default: mode=3
  
  Decomb syntax: mode=m:magnitude-thresh=m:variance-thresh=v:laplacian-thresh=l:dilation-thresh=d:erosion-thresh=e:noise-thresh=n:search-distance=s:postproc=p:parity=p
  
@@ -382,7 +396,7 @@ EEDI2 uses a slower, higher quality interpolation algorithm for Decomb. Useful f
 Bob attempts to better preserve motion for a slight penalty to perceived resolution.</value>
   </data>
   <data name="FilterView_Flip" xml:space="preserve">
-    <value>وارنه کردن (آیینه کردن) تصویر بر محور افقی.</value>
+    <value>این گزینه تصویر را در راستای افقی وارونه (آينه) می‌کند.</value>
   </data>
   <data name="FilterView_InterlaceDetection" xml:space="preserve">
     <value>Interlace Detection, when enabled, allows the Deinterlace filter to only process interlaced video frames.</value>
@@ -395,7 +409,7 @@ Bob attempts to better preserve motion for a slight penalty to perceived resolut
  Default: mode=3:spatial-metric=2:motion-thresh=1:spatial-thresh=1:filter-mode=2:block-thresh=40:block-width=16:block-height=16</value>
   </data>
   <data name="FilterView_Rotate" xml:space="preserve">
-    <value>Rotate the picture clockwise in 90 degree increments.</value>
+    <value>تصویر را 90 درجه در جهت عقربه‌های ساعت می‌چرخاند.</value>
   </data>
   <data name="MainView_Duration" xml:space="preserve">
     <value>Duration of the selected source range in Hours:Minutes:Seconds</value>
@@ -422,7 +436,8 @@ Unsharp is a general purpose unsharp masking filter. It sharpens by blurring, th
 Lapsharp sharpens using convolution kernels approximating Laplacian edge filters, sometimes producing higher quality results than unsharp masking.</value>
   </data>
   <data name="FilterView_SharpenPreset" xml:space="preserve">
-    <value>پیش‌نهاده‌ی پالایه‌ی تیزی. قدرت پالایه را تنظیم کنید.</value>
+    <value>پیش‌نشانده‌ی پالایه‌ی واضح‌سازی. قدرت پالایه را تنظیم کنید.
+Sharpen filter preset</value>
   </data>
   <data name="FilterView_SharpenTune" xml:space="preserve">
     <value>Sharpen tune. Further adjusts the Sharpen preset to optimize settings for specific scenarios.
@@ -456,12 +471,90 @@ Lapsharp's Sprite tune is useful for 1-/4-/8-/16-bit 2-dimensional games. Sprite
 When disabled, it will use the path in the destination box on the main window if populated, otherwise it will use the default path.</value>
   </data>
   <data name="FiltersView_ColourSpace" xml:space="preserve">
-    <value>پالایه‌ی فضای رنگ.</value>
+    <value>پالایه‌ی فضای رنگ.
+Colourspace Filter</value>
   </data>
   <data name="FiltersView_ChromaSmooth" xml:space="preserve">
-    <value>پالایه‌ی نرم خلوص رنگ</value>
+    <value>پالایه‌ی نرم کردن رنگ
+Chroma Smooth</value>
   </data>
   <data name="PictureSettingsView_PaddingCustomColourTooltip" xml:space="preserve">
-    <value>This field can accept RGB values such as: "0xFF0000" or colour names such as "red". For a full list of named colours, see the padding filter documentation. </value>
+    <value>اینجا می‌تواند مقادیر RGB مانند: "0xFF0000" یا نام رنگ‌هایی مانند "red" را بپذیرد. برای فهرست کامل رنگ‌ها به padding filter documentation مراجعه کنید.</value>
+  </data>
+  <data name="SubtitlesView_BurnIn" xml:space="preserve">
+    <value>Burn in subtitles to the video stream.
+
+Note, this will be automatically selected if the source subtitle track format is not supported in the output file type.
+
+For example, PGS subtitles are not supported in MP4</value>
+  </data>
+  <data name="OptionsView_PresetDisplayModes" xml:space="preserve">
+    <value>Flat - Presets are displayed as a flat list.
+Partially Flat - The last 8 user presets are displayed as a flat list followed by all presets being shown in category listing.
+Categories - All presets are shown under a sub menu per category.</value>
+  </data>
+  <data name="AudioView_AudioDefaults" xml:space="preserve">
+    <value>Setup behaviours that dictate how this tab automatically adds audio tracks when selecting a new source or title.</value>
+  </data>
+  <data name="BehavioursReload" xml:space="preserve">
+    <value>Refresh the list below based on the behaviours configured. </value>
+  </data>
+  <data name="SubtitleView_SubtitleDefaults" xml:space="preserve">
+    <value>Setup behaviours that dictate how this tab automatically adds subtitle tracks when selecting a new source or title.</value>
+  </data>
+  <data name="OptionsView_SendFileToArguments" xml:space="preserve">
+    <value>The following environment variables are always set:
+HB_SOURCE
+HB_DESTINATION
+HB_EXIT_CODE
+
+Possible Exit Codes are as follows:
+0 : Successful
+2 : Input Arguments Error
+3 : Failed to Initialise 
+4 : Unknown Error
+5 : Error reading source file.
+
+Please note, errors codes are best effort and may not always be accurate.
+It is recommended the output file is validated before performing actions on it.</value>
+  </data>
+  <data name="Options_AdditionalFormatOptions" xml:space="preserve">
+    <value>The format of the output file. In addition to any supported file system character, you can use the any of the placeholders that will be replaced when you change title or scan a source or update certain settings.
+
+{source} - Name of the source file.
+{title} - Integer value. This is representative of a disc title number.
+{chapters} - The range of chapters selected.
+{creation-date} - The date that the source file was created on (if available).
+{creation-time} - The time that the source file was created on (if available).
+{modification-date} - The date that the source file was last modified on (if available).
+{modification-time} - The time that the source file was last modified on (if available).
+{date} - Today. Set at time of adding to the queue.
+{time} - Today. Set at time of adding to the queue.
+{quality_bitrate} - The RF/CQ number, or bitrate
+{quality_type} - Prints "kbps" or "Q" depending on the quality mode selected on the video tab.
+{preset} - Name of the preset selected.
+{encode_bit_depth} - Integer value. i.e. 8, 10 or 12
+{width} - The output storage width
+{height} - The output storage height
+
+Any illegal path characters will be removed automatically.</value>
+  </data>
+  <data name="OptionsView_RightToleftMode" xml:space="preserve">
+    <value>For languages that are right to left, you can enable one of two modes.   "Text Only" will only render the text in right to left style.  "Entire User Interface" will render all controls in right to left.
+
+Please note, there may be inperfections in the UI layout when using these modes. Depending on the language, it may be worth trying both modes to find the best fit.</value>
+  </data>
+  <data name="AudioView_Quality" xml:space="preserve">
+    <value>Target a specific quality level for audio.
+1 is lowest quality and 5 is highest quality.
+
+Bitrate will vary source to source.</value>
+  </data>
+  <data name="OptionsView_DestinationReplacementOptions" xml:space="preserve">
+    <value>The following can be used singularly, or together to build up a destination path
+
+{source_path} - In the same folder as the source path (if possible)
+{source_folder_name} – The name of the directory that the source file is in, without the full path.
+{source} - The name of the source file.</value>
   </data>
 </root>

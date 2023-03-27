@@ -286,6 +286,16 @@ I valori suggeriti sono: da 18 a 20 per sorgenti in definizione standard e da 20
 Le scale dell'FFMpeg e del Theora sono più lineari.
 Questi codificatori non dispongono di una modalità senza perdita.</value>
   </data>
+  <data name="Video_TurboAnalysisPass" xml:space="preserve">
+    <value>During the analysis pass of a multi pass encode, use settings that speed things along.</value>
+  </data>
+  <data name="Video_MultiPass" xml:space="preserve">
+    <value>Perform Multi Pass Encoding.
+
+The 'Bitrate' option is prerequisite. During the analysis passes, statistics about
+the video are collected. Then in the final pass, those statistics are used
+to make bitrate allocation decisions.</value>
+  </data>
   <data name="Video_VariableFramerate" xml:space="preserve">
     <value>Abilita l'uscita a frequenza dei fotogrammi variabile (VFR).
 
@@ -500,7 +510,25 @@ Nota Bene: i codici di errore sono supposizioni e potrebbero quindi non essere c
 È raccomandabile di validare i file di uscita prima di compiere azioni su di essi.</value>
   </data>
   <data name="Options_AdditionalFormatOptions" xml:space="preserve">
-    <value>Il formato del nome del file di uscita. Oltre a tutti i caratteri supportati dal file system, è possibile usare un qualsiasi segnaposto che verrà poi sostituito al cambio di Titolo, alla scansione di una sorgente od al cambio di determinate impostazioni.</value>
+    <value>The format of the output file. In addition to any supported file system character, you can use the any of the placeholders that will be replaced when you change title or scan a source or update certain settings.
+
+{source} - Name of the source file.
+{title} - Integer value. This is representative of a disc title number.
+{chapters} - The range of chapters selected.
+{creation-date} - The date that the source file was created on (if available).
+{creation-time} - The time that the source file was created on (if available).
+{modification-date} - The date that the source file was last modified on (if available).
+{modification-time} - The time that the source file was last modified on (if available).
+{date} - Today. Set at time of adding to the queue.
+{time} - Today. Set at time of adding to the queue.
+{quality_bitrate} - The RF/CQ number, or bitrate
+{quality_type} - Prints "kbps" or "Q" depending on the quality mode selected on the video tab.
+{preset} - Name of the preset selected.
+{encode_bit_depth} - Integer value. i.e. 8, 10 or 12
+{width} - The output storage width
+{height} - The output storage height
+
+Any illegal path characters will be removed automatically.</value>
   </data>
   <data name="OptionsView_RightToleftMode" xml:space="preserve">
     <value>Per le lingue che si leggono da destra a sinistra, è possibile abilitare una di queste due modalità:  "Solo Testo" scriverà esclusivamente i testi da destra a sinistra,  "Interfaccia Utente Completa" mostrerà così anche gli altri elementi grafici.
@@ -512,5 +540,12 @@ Usando una di queste modalità, potrebbero esserci dei problemi nella visualizza
 1 è la qualità più bassa mentre 5 è quella più alta.
 
 Il Bitrate cambierà da sorgente a sorgente.</value>
+  </data>
+  <data name="OptionsView_DestinationReplacementOptions" xml:space="preserve">
+    <value>The following can be used singularly, or together to build up a destination path
+
+{source_path} - In the same folder as the source path (if possible)
+{source_folder_name} – The name of the directory that the source file is in, without the full path.
+{source} - The name of the source file.</value>
   </data>
 </root>

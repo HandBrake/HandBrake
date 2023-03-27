@@ -263,12 +263,12 @@ Zastępuje wszystkie inne ustawienia.</value>
     <value>Włącza wyjście ze zmienną liczbą klatek na sekundę ze szczytową liczbą klatek określoną przez ustawienie liczby klatek na sekundę.</value>
   </data>
   <data name="Video_Presets" xml:space="preserve">
-    <value>Dostosowuje ustawienia kodera w celu kompromisu między wydajnością kompresji a szybkością kodowania.
+    <value>Dostosowuje ustawienia kodera w celu ustalenia kompromisu między wydajnością kompresji a jej szybkością.
 
-To określa domyślne ustawienia kodera.
-Do tego zostaną zastosowane melodie, profile, poziomy i zaawansowane ciągi opcji.
-Generalnie powinieneś ustawić tę opcję na najwolniejszą, jaką możesz znieść, ponieważ wolniej
-ustawienia spowodują lepszą jakość lub mniejsze pliki.</value>
+To określa bazowe ustawienia kodera.
+Do tego zostaną zastosowane dostrojenia, profile, poziomy i ciąg "Zaawansowane opcje".
+Powinno się ustawić tę opcję na najwolniejszą, jaką można znieść, ponieważ wolniejsze
+ustawienia powodują lepszą jakość lub mniejsze pliki.</value>
   </data>
   <data name="Video_Profile" xml:space="preserve">
     <value>Ustawia i zapewnia zgodność z określonym profilem.
@@ -289,6 +289,16 @@ Sugerowane wartości to: 18 do 20 dla źródeł o standardowej rozdzielczości i
 
 Skala FFMpega i Theory jest bardziej liniowa.
 Te kodery nie mają trybu bezstratnego.</value>
+  </data>
+  <data name="Video_TurboAnalysisPass" xml:space="preserve">
+    <value>During the analysis pass of a multi pass encode, use settings that speed things along.</value>
+  </data>
+  <data name="Video_MultiPass" xml:space="preserve">
+    <value>Perform Multi Pass Encoding.
+
+The 'Bitrate' option is prerequisite. During the analysis passes, statistics about
+the video are collected. Then in the final pass, those statistics are used
+to make bitrate allocation decisions.</value>
   </data>
   <data name="Video_VariableFramerate" xml:space="preserve">
     <value>Włącza wyjście ze zmienną liczbą klatek na sekundę.
@@ -338,21 +348,21 @@ HQDN3D default: y-spatial=3:cb-spatial=2:cr-spatial=2:y-temporal=2:cb-temporal=3
     <value>Wstępne ustawienie filtra odszumiania. Ustawia siłę filtra.</value>
   </data>
   <data name="FilterView_DenoiseTune" xml:space="preserve">
-    <value>Odszumiona melodia. Dalsze dostosowywanie ustawienia Odszumianie w celu optymalizacji ustawień pod kątem określonych scenariuszy.
+    <value>Dostrajanie odszumiania. Dodatkowo dostosowuje preset odszumiania w celu optymalizacji ustawień pod kątem określonych scenariuszy.
 
--Brak używa domyślnych ustawień wstępnych.
+- None (Brak) używa domyślnych ustawień wstępnych.
 
 - Film poprawia ustawienia do użytku z większością treści akcji na żywo.
 
-- Ziarno przetwarza tylko kanały kolorów. Przydatne do zachowania filmowego wyglądu ziarna luminancji przy jednoczesnym zmniejszeniu lub usunięciu szumu koloru
+- Grain (Ziarno) przetwarza tylko kanały kolorów. Przydatne do zachowania filmowego wyglądu ziarna luminancji przy jednoczesnym zmniejszeniu lub usunięciu szumu koloru
 
-- Tryb High Motion redukuje rozmazanie kolorów w scenach o dużym ruchu, unikając czasowego przetwarzania kanałów kolorów. Przydatne w przypadku filmów sportowych i akcji.
+- Tryb High Motion redukuje rozmazanie kolorów w scenach o dużym ruchu, unikając temporalnego przetwarzania kanałów kolorów. Przydatne w przypadku filmów sportowych i akcji.
 
-- Animacja jest przydatna do animacji cel, takich jak anime i kreskówki.
+- Animation (Animacja) jest przydatna do animacji celuloidowych, takich jak anime i kreskówki.
 
-- Taśma jest przydatna w przypadku źródeł taśm analogowych o małej szczegółowości, takich jak VHS, gdzie film nie daje pożądanych rezultatów.
+- (Tape) Taśma jest przydatna w przypadku źródeł taśm analogowych o małej szczegółowości, takich jak VHS, gdzie Film nie daje pożądanych rezultatów.
 
-- Sprite jest przydatny w 1-/4-/8-/16-2bitowych grach dwuwymiarowych. Sprite nie jest przeznaczony do wideo w wysokiej rozdzielczości.</value>
+- Sprite jest przydatny w 1-/4-/8-/16-bitowych grach dwuwymiarowych. Sprite nie jest przeznaczony do wideo w wysokiej rozdzielczości.</value>
   </data>
   <data name="FilterView_Deinterlace" xml:space="preserve">
     <value>Deinterlace usuwa artefakty grzebieniowe z obrazu.
@@ -427,19 +437,21 @@ Lapsharp wyostrza przy użyciu jąder splotu zbliżonych do filtrów brzegowych 
     <value>Wyostrz ustawienia filtra. Ustawia siłę filtra.</value>
   </data>
   <data name="FilterView_SharpenTune" xml:space="preserve">
-    <value>Wyostrz melodię. Dalsze dostosowywanie ustawienia wstępnego Wyostrzanie w celu optymalizacji ustawień pod kątem określonych scenariuszy.
+    <value>Dostrajalnie wyostrzania. Dalsze dostosowywanie presetu wyostrzania w celu optymalizacji ustawień pod kątem określonych scenariuszy.
 
-Żaden nie używa domyślnych ustawień wstępnych.
+None (Brak) używa domyślnych ustawień.
 
-Unsharp można dostroić do wyostrzania Ultrafine, Fine, Medium, Coarse lub Very Coarse. Wybierz jeden w oparciu o rozdzielczość wyjściowego obrazu i szczegółowość, którą chcesz poprawić.
+Unsharp można dostroić ustawieniami Ultrafine, Fine, Medium, Coarse lub Very Coarse. Wybierz jeden w oparciu o rozdzielczość wyjściowego obrazu i rozmiar detali, które chcesz uwypuklić.
 
-Filmowa melodia Lapsharp udoskonala ustawienia do użytku z większością treści akcji na żywo. Film wykorzystuje izotropowe jądro Laplace'a do podobnego wyostrzania wszystkich krawędzi, a informacje o luminancji (jasności) są wyostrzane bardziej niż informacje o chrominancji (kolorze).
+Dostrajanie Lapsharp:
 
-Melodia Lapsharp's Grain jest podobna do filmu Film, ale wykorzystuje izotropowy Laplacian jądra Gaussa, aby zmniejszyć wpływ na hałas i ziarno. Przydatny do konserwacji ziarna i jako ogólna alternatywa dla melodii Film.
+Film udoskonala ustawienia do użytku z większością treści akcji na żywo. Film wykorzystuje izotropowe jądro Laplace'a do podobnego wyostrzania wszystkich krawędzi, a informacje o luminancji (jasności) są wyostrzane bardziej niż informacje o chrominancji (kolorze).
 
-Melodia Lapsharp's Animation przydaje się do animacji cel, takich jak anime i kreskówki. Animacja jest taka sama jak Film, ale ogólna siła jest zmniejszona, aby uniknąć tworzenia artefaktów.
+Grain (Ziarno) jest podobne do Film, ale wykorzystuje izotropowy Laplacian jądra Gaussa, aby zmniejszyć wpływ na szum i ziarno. Przydatny do zachowania ziarna i jako ogólna alternatywa dla dostrojenia Film.
 
-Melodia Sprite firmy Lapsharp jest przydatna w 1-/4-/8-/16-bit grach 2-wymiarowych. Sprite używa 4-sąsiedzkiego jądra Laplace'a, które uwydatnia pionowe i poziome krawędzie bardziej niż krawędzie ukośne.</value>
+Animation (Animacja) przydaje się do animacji celuloidowych, takich jak anime i kreskówki. Animacja jest taka sama jak Film, ale siła jest zmniejszona, aby uniknąć tworzenia artefaktów.
+
+Sprite jest przydatne w 1-/4-/8-/16-bit grach 2-wymiarowych. Sprite używa 4-sąsiedzkiego jądra Laplace'a, które uwydatnia pionowe i poziome krawędzie bardziej niż krawędzie ukośne.</value>
   </data>
   <data name="MainView_AlignAVStart" xml:space="preserve">
     <value>Wyrównuje początkowe znaczniki czasu wszystkich strumieni audio i wideo przez wstawianie pustych ramek lub upuszczanie ramek. Może poprawić synchronizację audio/wideo dla uszkodzonych odtwarzaczy, które nie honorują list edycji MP4.</value>
@@ -504,7 +516,25 @@ Pamiętaj, że kody błędów nie zawsze mogą być dokładne.
 Zaleca się sprawdzenie poprawności pliku wyjściowego przed wykonaniem na nim działań.</value>
   </data>
   <data name="Options_AdditionalFormatOptions" xml:space="preserve">
-    <value>Format pliku wyjściowego. Oprócz dowolnego obsługiwanego znaku systemu plików można użyć dowolnego symbolu zastępczego, który zostanie zastąpiony po zmianie tytułu, zeskanowaniu źródła lub zaktualizowaniu niektórych ustawień.</value>
+    <value>The format of the output file. In addition to any supported file system character, you can use the any of the placeholders that will be replaced when you change title or scan a source or update certain settings.
+
+{source} - Name of the source file.
+{title} - Integer value. This is representative of a disc title number.
+{chapters} - The range of chapters selected.
+{creation-date} - The date that the source file was created on (if available).
+{creation-time} - The time that the source file was created on (if available).
+{modification-date} - The date that the source file was last modified on (if available).
+{modification-time} - The time that the source file was last modified on (if available).
+{date} - Today. Set at time of adding to the queue.
+{time} - Today. Set at time of adding to the queue.
+{quality_bitrate} - The RF/CQ number, or bitrate
+{quality_type} - Prints "kbps" or "Q" depending on the quality mode selected on the video tab.
+{preset} - Name of the preset selected.
+{encode_bit_depth} - Integer value. i.e. 8, 10 or 12
+{width} - The output storage width
+{height} - The output storage height
+
+Any illegal path characters will be removed automatically.</value>
   </data>
   <data name="OptionsView_RightToleftMode" xml:space="preserve">
     <value>W przypadku języków pisanych od prawej do lewej możesz włączyć jeden z dwóch trybów. „Tylko tekst” wyrenderuje tekst tylko w stylu od prawej do lewej. „Cały interfejs użytkownika” wyrenderuje wszystkie elementy sterujące od prawej do lewej.
@@ -516,5 +546,12 @@ Należy pamiętać, że podczas korzystania z tych trybów w układzie interfejs
 1 to najniższa jakość, a 5 to najwyższa jakość.
 
 Bitrate będzie się różnić od źródła do źródła.</value>
+  </data>
+  <data name="OptionsView_DestinationReplacementOptions" xml:space="preserve">
+    <value>The following can be used singularly, or together to build up a destination path
+
+{source_path} - In the same folder as the source path (if possible)
+{source_folder_name} – The name of the directory that the source file is in, without the full path.
+{source} - The name of the source file.</value>
   </data>
 </root>

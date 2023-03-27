@@ -266,7 +266,7 @@ Utworzono kopię zapasową poprzedniego pliku user_presets.xml.</value>
     <value>Skanowanie źródła, proszę czekać...</value>
   </data>
   <data name="Main_ScanningTitleXOfY" xml:space="preserve">
-    <value>Tytuł skanowania {0} z {1} ({2}%)</value>
+    <value>Skanowanie tytułu {0} z {1} ({2}%)</value>
   </data>
   <data name="Main_ScanSource" xml:space="preserve">
     <value>Musisz najpierw zeskanować źródło i skonfigurować zadanie przed rozpoczęciem kodowania. Kliknij przycisk „Źródło” na pasku narzędzi, aby kontynuować.</value>
@@ -328,9 +328,6 @@ Czy chcesz kontynuować?</value>
   </data>
   <data name="PictureSettings_OutputResolution" xml:space="preserve">
     <value>Wyjście: {0}</value>
-  </data>
-  <data name="Options_DefaultPathAdditionalParams" xml:space="preserve">
-    <value>Dostępne dodatkowe opcje: {source_path} lub {source_folder_name} lub {source}</value>
   </data>
   <data name="Main_MatchingFileOverwriteWarning" xml:space="preserve">
     <value>Nie można kodować do pliku o tej samej ścieżce i nazwie pliku co plik źródłowy. Zaktualizuj nazwę pliku docelowego, aby nie była zgodna z plikiem źródłowym.</value>
@@ -397,7 +394,7 @@ Dziennik aktywności może zawierać dodatkowe informacje.</value>
     <value>Czy na pewno chcesz usunąć ustawienie wstępne:</value>
   </data>
   <data name="MainViewModel_EncodeStatusChanged_StatusLabel" xml:space="preserve">
-    <value>Encoding: Pass {0} of {1}, {2:00.00}%, FPS: {3:000.0}, Avg FPS: {4:000.0}, Time Remaining: {5}, Elapsed: {6} {7}</value>
+    <value>Kodowanie: Przebieg {0} z {1}, {2:00.00}%, FPS: {3:000.0}, Średnio FPS: {4:000.0}, Pozostało czasu: {5}, Upłynęło: {6} {7}</value>
   </data>
   <data name="AddPresetViewModel_PresetMustProvideName" xml:space="preserve">
     <value>Preset musi mieć nazwę. Proszę wypełnić pole Preset Name.</value>
@@ -470,7 +467,7 @@ Sprawdź na stronie internetowej informacje o wersji.</value>
     <value>Rozmiar przechowywania: {0}x{1}</value>
   </data>
   <data name="QueueSelectionViewModel_AddToQueue" xml:space="preserve">
-    <value>Dodać do kolejki</value>
+    <value>Dodaj do kolejki</value>
   </data>
   <data name="QueueViewModel_NoEncodesPending" xml:space="preserve">
     <value>Brak oczekujących kodowań</value>
@@ -485,7 +482,7 @@ Sprawdź na stronie internetowej informacje o wersji.</value>
     <value>Czy na pewno chcesz wyczyścić kolejkę?</value>
   </data>
   <data name="Confirm" xml:space="preserve">
-    <value>Potwierdzać</value>
+    <value>Potwierdź</value>
   </data>
   <data name="QueueViewModel_JobsPending" xml:space="preserve">
     <value>{0}oczekujące zadania</value>
@@ -503,13 +500,13 @@ Sprawdź na stronie internetowej informacje o wersji.</value>
     <value>Brak oczekujących zadań.</value>
   </data>
   <data name="QueueViewModel_EditConfirmation" xml:space="preserve">
-    <value>Czy na pewno chcesz edytować tę ofertę pracy? Zostanie usunięty z kolejki i przesłany do głównego okna.</value>
+    <value>Czy na pewno chcesz edytować to zadanie? Zostanie usunięte z kolejki i przesłane do głównego okna.</value>
   </data>
   <data name="QueueViewModel_QueueReady" xml:space="preserve">
     <value>Kolejka gotowa</value>
   </data>
   <data name="QueueViewModel_QueueNotRunning" xml:space="preserve">
-    <value>Kolejka nie działa</value>
+    <value>Kolejka nie jest uruchomiona</value>
   </data>
   <data name="QueueViewModel_QueueCompleted" xml:space="preserve">
     <value>Kolejka zakończona</value>
@@ -521,7 +518,7 @@ Sprawdź na stronie internetowej informacje o wersji.</value>
     <value>Kolejka uruchomiona</value>
   </data>
   <data name="QueueViewModel_QueueStatusDisplay" xml:space="preserve">
-    <value>Encoding: Pass {0} of {1}, {2:00.00}%, FPS: {3:000.0}, Avg FPS: {4:000.0}, Time Remaining: {5}, Elapsed: {6:d\:hh\:mm\:ss}</value>
+    <value>Kodowanie: Przebieg {0} z {1}, {2:00.00}%, FPS: {3:000.0}, Średnio FPS: {4:000.0}, Pozostało czasu: {5}, Upłynęło: {6:d\:hh\:mm\:ss}</value>
   </data>
   <data name="ShellViewModel_CanClose" xml:space="preserve">
     <value>Kodowanie jest aktualnie uruchomione. Wyjście z HandBrake zatrzyma to kodowanie.</value>
@@ -718,8 +715,10 @@ Czy chcesz kontynuować?</value>
     <value>Czy chcesz kontynuować, próbując dodać resztę?</value>
   </data>
   <data name="Main_QueueOverwritePrompt" xml:space="preserve">
-    <value>Plik „{0}” już istnieje!
-Czy chcesz to nadpisać?</value>
+    <value>The file '{0}' already exists!
+Would you like to overwrite it?
+
+Hint: File overwrite behaviour can be controlled in preferences. </value>
   </data>
   <data name="Clipboard_Unavailable" xml:space="preserve">
     <value>Schowek systemowy jest obecnie niedostępny.</value>
@@ -785,7 +784,7 @@ Czy chcesz to nadpisać?</value>
     <value>Koder awaryjny:</value>
   </data>
   <data name="AudioView_ReloadDefaults" xml:space="preserve">
-    <value>Przeładować</value>
+    <value>Przeładuj</value>
   </data>
   <data name="AudioView_Samplerate" xml:space="preserve">
     <value>Próbna stawka</value>
@@ -851,7 +850,7 @@ Czy chcesz to nadpisać?</value>
     <value>Własne:</value>
   </data>
   <data name="FiltersView_Deblock" xml:space="preserve">
-    <value>Odblokuj:</value>
+    <value>Deblokowanie:</value>
   </data>
   <data name="FiltersView_Decomb" xml:space="preserve">
     <value>Decomb</value>
@@ -872,7 +871,7 @@ Czy chcesz to nadpisać?</value>
     <value>Ustawienie odszumiania</value>
   </data>
   <data name="FiltersView_DenoiseTuneAuto" xml:space="preserve">
-    <value>Odszumianie melodii</value>
+    <value>Dostrajanie odszumiania</value>
   </data>
   <data name="FiltersView_Detelecine" xml:space="preserve">
     <value>Detelecine:</value>
@@ -881,7 +880,7 @@ Czy chcesz to nadpisać?</value>
     <value>Filtry</value>
   </data>
   <data name="FiltersView_FlipVideo" xml:space="preserve">
-    <value>Horyzontalne</value>
+    <value>Poziomo</value>
   </data>
   <data name="FiltersView_Grayscale" xml:space="preserve">
     <value>Skala szarości</value>
@@ -896,16 +895,16 @@ Czy chcesz to nadpisać?</value>
     <value>Obrót:</value>
   </data>
   <data name="FiltersView_Sharpen" xml:space="preserve">
-    <value>Wyostrzyć:</value>
+    <value>Wyostrzanie:</value>
   </data>
   <data name="FiltersView_SharpenPresetAuto" xml:space="preserve">
     <value>Wyostrz ustawienie wstępne</value>
   </data>
   <data name="FiltersView_SharpenTuneAuto" xml:space="preserve">
-    <value>Wyostrz melodię</value>
+    <value>Dostrajanie wyostrzania</value>
   </data>
   <data name="FiltersView_Tune" xml:space="preserve">
-    <value>Melodia:</value>
+    <value>Dostrajanie:</value>
   </data>
   <data name="Generic_Add" xml:space="preserve">
     <value>Dodaj</value>
@@ -956,13 +955,13 @@ Czy chcesz to nadpisać?</value>
     <value>Dodaj zaznaczenie</value>
   </data>
   <data name="MainView_AddToQueue" xml:space="preserve">
-    <value>Dodać do kolejki</value>
+    <value>Dodaj do kolejki</value>
   </data>
   <data name="MainView_AdvancedTab" xml:space="preserve">
     <value>Zaawansowany</value>
   </data>
   <data name="MainView_AlignAVStart" xml:space="preserve">
-    <value>Wyrównywać A/V Start</value>
+    <value>Wyrównywaj start A/V</value>
   </data>
   <data name="MainView_Angle" xml:space="preserve">
     <value>Kąt:</value>
@@ -1007,7 +1006,7 @@ Czy chcesz to nadpisać?</value>
     <value>Metadata</value>
   </data>
   <data name="MainView_ModifiedPreset" xml:space="preserve">
-    <value>(Zmodyfikowane)</value>
+    <value>(Zmodyfikowany)</value>
   </data>
   <data name="MainView_Muxing" xml:space="preserve">
     <value>Muxing: może to chwilę potrwać...</value>
@@ -1025,7 +1024,7 @@ Czy chcesz to nadpisać?</value>
     <value>Wymiary</value>
   </data>
   <data name="MainView_PresetManage" xml:space="preserve">
-    <value>Edytuj Preset</value>
+    <value>Edytuj preset</value>
   </data>
   <data name="MainView_PresetOptionsContextMenu" xml:space="preserve">
     <value>Menu kontekstowe opcji ustawień wstępnych</value>
@@ -1037,16 +1036,16 @@ Czy chcesz to nadpisać?</value>
     <value>Presety</value>
   </data>
   <data name="MainView_Preview" xml:space="preserve">
-    <value>Zapowiedź</value>
+    <value>Podgląd</value>
   </data>
   <data name="MainView_ProgressStatusWithTask" xml:space="preserve">
-    <value>Encoding: {0}, {1:00.00}%, Time Remaining: {2}, {3}</value>
+    <value>Kodowanie: {0}, {1:00.00}%, Pozostało czasu: {2}, {3}</value>
   </data>
   <data name="MainView_Range" xml:space="preserve">
     <value>Zakres:</value>
   </data>
   <data name="MainView_Reload" xml:space="preserve">
-    <value>Przeładować</value>
+    <value>Przeładuj</value>
   </data>
   <data name="MainView_Remove" xml:space="preserve">
     <value>Usunąć</value>
@@ -1073,7 +1072,7 @@ Czy chcesz to nadpisać?</value>
     <value>Źródło:</value>
   </data>
   <data name="MainView_SourceOpen" xml:space="preserve">
-    <value>Otwarte źródło</value>
+    <value>Otwórz plik źródłowy</value>
   </data>
   <data name="MainView_StartEncode" xml:space="preserve">
     <value>Rozpocznij kodowanie</value>
@@ -1082,7 +1081,7 @@ Czy chcesz to nadpisać?</value>
     <value>Uruchom kolejkę</value>
   </data>
   <data name="MainView_Stop" xml:space="preserve">
-    <value>Stop</value>
+    <value>Przerwij</value>
   </data>
   <data name="MainView_StopEncode" xml:space="preserve">
     <value>Zatrzymaj kodowanie</value>
@@ -1100,7 +1099,7 @@ Czy chcesz to nadpisać?</value>
     <value>Ścieżki napisów</value>
   </data>
   <data name="MainView_SummaryTab" xml:space="preserve">
-    <value>Summary</value>
+    <value>Podsumowanie</value>
   </data>
   <data name="MainView_through" xml:space="preserve">
     <value>-</value>
@@ -1118,7 +1117,7 @@ Czy chcesz to nadpisać?</value>
     <value>Optymalizacja Web</value>
   </data>
   <data name="ManagePresetView_ManagePreset" xml:space="preserve">
-    <value>Zarządzaj Presetami</value>
+    <value>Zarządzaj presetami</value>
   </data>
   <data name="MetaDataView_Title" xml:space="preserve">
     <value>Metadata</value>
@@ -1217,7 +1216,7 @@ Czy chcesz to nadpisać?</value>
     <value>Poziom szczegółowości dziennika:</value>
   </data>
   <data name="Options_LogPath" xml:space="preserve">
-    <value>Ścieżka dziennika:</value>
+    <value>Path:</value>
   </data>
   <data name="Options_LowDiskspaceSize" xml:space="preserve">
     <value>Wstrzymaj kolejkę, jeśli jest mało miejsca na dysku</value>
@@ -1229,7 +1228,7 @@ Czy chcesz to nadpisać?</value>
     <value>Minimalny czas trwania tytułu DVD i Blu-ray w sekundach. Krótsze tytuły zostaną pominięte:</value>
   </data>
   <data name="Options_MP4FileExtension" xml:space="preserve">
-    <value>MP4 Rozszerzenie pliku:</value>
+    <value>Rozszerzenie plików MP4:</value>
   </data>
   <data name="Options_OnStartup" xml:space="preserve">
     <value>Na starcie</value>
@@ -1314,10 +1313,10 @@ Obsługiwane przez VLC i MPC-HC. Inni gracze również mogą działać, ale nie 
     <value>Automatyczny</value>
   </data>
   <data name="PictureSettingsView_Bottom" xml:space="preserve">
-    <value>Spód</value>
+    <value>Dół</value>
   </data>
   <data name="PictureSettingsView_Cropping" xml:space="preserve">
-    <value>Uprawa:</value>
+    <value>Kadrowanie:</value>
   </data>
   <data name="PictureSettingsView_Custom" xml:space="preserve">
     <value>Zwyczaj</value>
@@ -1338,16 +1337,16 @@ Obsługiwane przez VLC i MPC-HC. Inni gracze również mogą działać, ale nie 
     <value>Wymiary końcowe:</value>
   </data>
   <data name="PictureSettingsView_PAR" xml:space="preserve">
-    <value>Aspekt pikseli:</value>
+    <value>Proporcje pikseli:</value>
   </data>
   <data name="PictureSettingsView_Right" xml:space="preserve">
-    <value>Right</value>
+    <value>Prawo</value>
   </data>
   <data name="PictureSettingsView_Size" xml:space="preserve">
     <value>Rozmiar</value>
   </data>
   <data name="PictureSettingsView_Top" xml:space="preserve">
-    <value>Top</value>
+    <value>Góra</value>
   </data>
   <data name="PictureSettingsView_Width" xml:space="preserve">
     <value>Skalowany rozmiar:</value>
@@ -1368,7 +1367,7 @@ Obsługiwane przez VLC i MPC-HC. Inni gracze również mogą działać, ale nie 
     <value>Wybierz tytuły:</value>
   </data>
   <data name="QueueSelectionView_Title" xml:space="preserve">
-    <value>Dodać do kolejki</value>
+    <value>Dodaj do kolejki</value>
   </data>
   <data name="QueueSelection_UsingPreset" xml:space="preserve">
     <value>Wybrane tytuły zostaną dodane za pomocą "{0}" preset.</value>
@@ -1383,7 +1382,7 @@ Obsługiwane przez VLC i MPC-HC. Inni gracze również mogą działać, ale nie 
     <value>Wyczyść wszystko</value>
   </data>
   <data name="QueueView_ClearCompleted" xml:space="preserve">
-    <value>Czyszczenie zakończone</value>
+    <value>Wyczyść zakończone</value>
   </data>
   <data name="QueueView_ClearQueue" xml:space="preserve">
     <value>Wyczyść kolejkę</value>
@@ -1407,7 +1406,7 @@ Obsługiwane przez VLC i MPC-HC. Inni gracze również mogą działać, ale nie 
     <value>Edytuj</value>
   </data>
   <data name="QueueView_EndTime" xml:space="preserve">
-    <value>Koniec czasu:</value>
+    <value>Czas zakończenia:</value>
   </data>
   <data name="QueueView_Export" xml:space="preserve">
     <value>Eksportuj kolejkę</value>
@@ -1416,10 +1415,10 @@ Obsługiwane przez VLC i MPC-HC. Inni gracze również mogą działać, ale nie 
     <value>Rozmiar pliku wyjściowego:</value>
   </data>
   <data name="WhenDone_Hibernate" xml:space="preserve">
-    <value>Hibernować</value>
+    <value>Hibernuj komputer</value>
   </data>
   <data name="WhenDone_LockSystem" xml:space="preserve">
-    <value>System blokady</value>
+    <value>Zablokuj komputer</value>
   </data>
   <data name="QueueView_LogNotAvailableYet" xml:space="preserve">
     <value>Dziennik będzie dostępny po zakończeniu kodowania.</value>
@@ -1431,16 +1430,16 @@ Obsługiwane przez VLC i MPC-HC. Inni gracze również mogą działać, ale nie 
     <value>Otwórz katalog docelowy</value>
   </data>
   <data name="QueueView_OpenSourceDir" xml:space="preserve">
-    <value>Katalog Open Source</value>
+    <value>Otwórz katalog źródłowy</value>
   </data>
   <data name="QueueView_Options" xml:space="preserve">
     <value>Opcje</value>
   </data>
   <data name="QueueView_Pause" xml:space="preserve">
-    <value>Pause</value>
+    <value>Wstrzymaj</value>
   </data>
   <data name="QueueView_PausedDuration" xml:space="preserve">
-    <value>Wstrzymany czas trwania:</value>
+    <value>Czas w stanie wstrzymania:</value>
   </data>
   <data name="QueueView_PictureSettings" xml:space="preserve">
     <value>Ustawienia obrazu:</value>
@@ -1458,10 +1457,10 @@ Obsługiwane przez VLC i MPC-HC. Inni gracze również mogą działać, ale nie 
     <value>Zresetuj wybrane zadania</value>
   </data>
   <data name="QueueView_Reset" xml:space="preserve">
-    <value>Reset</value>
+    <value>Resetuj</value>
   </data>
   <data name="WhenDone_Shutdown" xml:space="preserve">
-    <value>Zamknąć</value>
+    <value>Wyłącz komputer</value>
   </data>
   <data name="QueueView_Source" xml:space="preserve">
     <value>Źródło:</value>
@@ -1475,17 +1474,14 @@ Obsługiwane przez VLC i MPC-HC. Inni gracze również mogą działać, ale nie 
   <data name="QueueView_Statistics" xml:space="preserve">
     <value>Statystyka</value>
   </data>
-  <data name="QueueView_StatsNotAvailableYet" xml:space="preserve">
-    <value>Statystyki będą dostępne po zakończeniu kodowania.</value>
-  </data>
   <data name="QueueView_Subtitles" xml:space="preserve">
     <value>Napisy:</value>
   </data>
   <data name="QueueView_Summary" xml:space="preserve">
-    <value>Summary</value>
+    <value>Podsumowanie</value>
   </data>
   <data name="WhenDone_Suspend" xml:space="preserve">
-    <value>Sen</value>
+    <value>Uśpij komputer</value>
   </data>
   <data name="QueueView_Video" xml:space="preserve">
     <value>Wideo:</value>
@@ -1518,7 +1514,7 @@ Obsługiwane przez VLC i MPC-HC. Inni gracze również mogą działać, ale nie 
     <value>Skonfiguruj domyślne zachowania</value>
   </data>
   <data name="Shared_ReloadDefaults" xml:space="preserve">
-    <value>Przeładować</value>
+    <value>Przeładuj</value>
   </data>
   <data name="SourceSelection_ChooseDisc" xml:space="preserve">
     <value>Wybierz dysk do skanowania</value>
@@ -1560,16 +1556,16 @@ Obsługiwane przez VLC i MPC-HC. Inni gracze również mogą działać, ale nie 
     <value>Wybór źródła</value>
   </data>
   <data name="StaticPreviewView_Duration" xml:space="preserve">
-    <value>Czas trwania:</value>
+    <value>Czas trwania (s):</value>
   </data>
   <data name="StaticPreviewView_LivePreview" xml:space="preserve">
-    <value>Podgląd na żywo</value>
+    <value>Encode Preview</value>
   </data>
   <data name="StaticPreviewView_SelectPreviewImage" xml:space="preserve">
     <value>Wybierz obraz podglądu</value>
   </data>
-  <data name="StaticPreviewView_UseSystemDefault" xml:space="preserve">
-    <value>Preferuj domyślny systemowy odtwarzacz wideo</value>
+  <data name="StaticPreviewView_UseExternalPlayer" xml:space="preserve">
+    <value>Use External Player App</value>
   </data>
   <data name="SubtitlesView_AddCC" xml:space="preserve">
     <value>Dodaj napisy kodowane, jeśli są dostępne</value>
@@ -1643,6 +1639,9 @@ Obsługiwane przez VLC i MPC-HC. Inni gracze również mogą działać, ale nie 
   <data name="SummaryView_storage" xml:space="preserve">
     <value>storage</value>
   </data>
+  <data name="VideoView_MultiPass" xml:space="preserve">
+    <value>Multi-Pass Encoding</value>
+  </data>
   <data name="VideoView_AverageBitrate" xml:space="preserve">
     <value>Średnia szybkość transmisji (kb/s):</value>
   </data>
@@ -1668,13 +1667,13 @@ Obsługiwane przez VLC i MPC-HC. Inni gracze również mogą działać, ale nie 
     <value>Strojenie enkodera:</value>
   </data>
   <data name="VideoView_ExtraOptions" xml:space="preserve">
-    <value>Zaawansowane Opcje:</value>
+    <value>Zaawansowane opcje:</value>
   </data>
   <data name="VideoView_FastDecode" xml:space="preserve">
     <value>Szybkie dekodowanie</value>
   </data>
   <data name="VideoView_Framerate" xml:space="preserve">
-    <value>Framerate (FPS):</value>
+    <value>Klatkaż (FPS):</value>
   </data>
   <data name="VideoView_OptimiseVideo" xml:space="preserve">
     <value>Opcje enkodera:</value>
@@ -1684,6 +1683,9 @@ Obsługiwane przez VLC i MPC-HC. Inni gracze również mogą działać, ale nie 
   </data>
   <data name="VideoView_Quality" xml:space="preserve">
     <value>Jakość:</value>
+  </data>
+  <data name="VideoView_TurboAnalysisPass" xml:space="preserve">
+    <value>Turbo analysis pass</value>
   </data>
   <data name="VideoView_VariableFramerate" xml:space="preserve">
     <value>Zmienna liczba klatek</value>
@@ -1716,10 +1718,10 @@ Obsługiwane przez VLC i MPC-HC. Inni gracze również mogą działać, ale nie 
     <value>Ustawienia kodera audio dla każdej wybranej ścieżki:</value>
   </data>
   <data name="AudioDefaultsView_Clear" xml:space="preserve">
-    <value>Clear</value>
+    <value>Wyczyść</value>
   </data>
   <data name="SubtitlesView_BurnIn" xml:space="preserve">
-    <value>Palić w</value>
+    <value>Wypal</value>
   </data>
   <data name="SubtitlesView_Default" xml:space="preserve">
     <value>Domyślnie</value>
@@ -1728,7 +1730,7 @@ Obsługiwane przez VLC i MPC-HC. Inni gracze również mogą działać, ale nie 
     <value>Tylko wymuszony</value>
   </data>
   <data name="MainView_About" xml:space="preserve">
-    <value>_O...</value>
+    <value>_O programie...</value>
   </data>
   <data name="MainView_ActivityLogMenu" xml:space="preserve">
     <value>_Dziennik aktywności</value>
@@ -1850,8 +1852,8 @@ Nie wpłynie to na żaden z koderów programowych.</value>
     <value>Importuj kolejkę</value>
   </data>
   <data name="QueueViewModel_EncodeStatusChanged_StatusLabel" xml:space="preserve">
-    <value>Encoding: Pass {0} of {1}, {2:00.00}%, FPS: {3:000.0}, Avg FPS: {4:000.0}
-Time Remaining: {5}, Elapsed: {6} {7}</value>
+    <value>Kodowanie: Przebieg {0} z {1}, {2:00.00}%, FPS: {3:000.0}, Średnio FPS: {4:000.0}
+Pozostało czasu: {5}, Upłynęło: {6} {7}</value>
   </data>
   <data name="QueueView_DeleteSelected" xml:space="preserve">
     <value>Usuń zaznaczone</value>
@@ -1866,13 +1868,11 @@ Time Remaining: {5}, Elapsed: {6} {7}</value>
     <value>Tryb przenośny: nie można odczytać pliku portable.ini. W tym pliku może być błąd. Spróbuj ponownie, używając pliku portable.ini.template jako przewodnika.</value>
   </data>
   <data name="OptionsView_FormatOptions" xml:space="preserve">
-    <value>Wymienne symbole zastępcze:  {source} {title} {chapters} {creation-date} {creation-time} {date} {time} {quality_bitrate}</value>
-  </data>
-  <data name="OptionsView_PathOptions" xml:space="preserve">
-    <value>Zastępcze symbole zastępcze: {source_path} {source_folder_name} {source}</value>
+    <value>Replacement Options:
+You can drag/drop or enter the text above.</value>
   </data>
   <data name="FileOverwriteBehaviours_Ask" xml:space="preserve">
-    <value>Poproś o nadpisanie pliku</value>
+    <value>Spytaj czy nadpisać plik</value>
   </data>
   <data name="FileOverwriteBehaviours_Autoname" xml:space="preserve">
     <value>Spróbuj automatycznie zmienić nazwę pliku</value>
@@ -1914,7 +1914,7 @@ Time Remaining: {5}, Elapsed: {6} {7}</value>
     <value>FiltryView_DeblockPreset</value>
   </data>
   <data name="FiltersViewAuto_DeblockTune" xml:space="preserve">
-    <value>Odblokuj melodię</value>
+    <value>Dostrajanie deblokowania</value>
   </data>
   <data name="OptionsView_ChoiceOfEncoderHint" xml:space="preserve">
     <value>Wybór kodera zostanie udostępniony na karcie „Wideo”.</value>
@@ -1949,7 +1949,7 @@ Tam, gdzie jest to obsługiwane, zostaną zaimportowane dowolne ustawienia użyt
     <value>Kolejka eksportu (tylko CLI)</value>
   </data>
   <data name="Options_DarkTheme" xml:space="preserve">
-    <value>Użyj ciemnego motywu. (Wymaga restart, tylko Windows 10)</value>
+    <value>Użyj ciemnego motywu. (Wymaga ponownego uruchomienia, tylko Windows 10)</value>
   </data>
   <data name="QueueView_NotAvailable" xml:space="preserve">
     <value>Niedostępne</value>
@@ -2036,7 +2036,7 @@ Tam, gdzie jest to obsługiwane, zostaną zaimportowane dowolne ustawienia użyt
     <value>Rozdziały</value>
   </data>
   <data name="PointToPointMode_Frames" xml:space="preserve">
-    <value>Frames</value>
+    <value>Klatki</value>
   </data>
   <data name="PointToPointMode_Preview" xml:space="preserve">
     <value>Zapowiedź</value>
@@ -2051,7 +2051,7 @@ Tam, gdzie jest to obsługiwane, zostaną zaimportowane dowolne ustawienia użyt
     <value>Pierwszy pasujący wybrany język</value>
   </data>
   <data name="SubtitleBehaviourModes_None" xml:space="preserve">
-    <value>Nic</value>
+    <value>Wyłączone</value>
   </data>
   <data name="SubtitleBurnInBehaviourModes_FirstTrack" xml:space="preserve">
     <value>Pierwszy utwór</value>
@@ -2093,10 +2093,10 @@ Tam, gdzie jest to obsługiwane, zostaną zaimportowane dowolne ustawienia użyt
     <value>Automatyczny</value>
   </data>
   <data name="Mp4Behaviour_UseM4v" xml:space="preserve">
-    <value>Zawsze używaj M4V</value>
+    <value>Zawsze M4V</value>
   </data>
   <data name="Mp4Behaviour_UseMp4" xml:space="preserve">
-    <value>Zawsze używaj MP4</value>
+    <value>Zawsze MP4</value>
   </data>
   <data name="PresetPictureSettingsMode_Custom" xml:space="preserve">
     <value>Zwyczaj</value>
@@ -2222,13 +2222,13 @@ Wybierz inne ustawienie wstępne.</value>
     <value>Szerokość (skrzynka na listy)</value>
   </data>
   <data name="PictureSettingsView_Padding" xml:space="preserve">
-    <value>Wypełnić:</value>
+    <value>Wypełnienie:</value>
   </data>
   <data name="PictureSettingsView_PaddingColour" xml:space="preserve">
     <value>Kolor:</value>
   </data>
   <data name="PictureSettingsView_Borders" xml:space="preserve">
-    <value>Granice:</value>
+    <value>Ramka:</value>
   </data>
   <data name="PictureSettingsView_ResAndScaling" xml:space="preserve">
     <value>Rozdzielczość i skalowanie:</value>
@@ -2273,10 +2273,10 @@ Wybierz inne ustawienie wstępne.</value>
     <value>Limit rozdzielczości:</value>
   </data>
   <data name="PictureSettingsResLimitModes_none" xml:space="preserve">
-    <value>Nic</value>
+    <value>Brak</value>
   </data>
   <data name="PresetManger_Title" xml:space="preserve">
-    <value>Zarządzaj Presetami</value>
+    <value>Zarządzaj presetami</value>
   </data>
   <data name="ManagePresetView_DeleteBuiltIn" xml:space="preserve">
     <value>Usuń wbudowane ustawienia Presetu</value>
@@ -2303,7 +2303,7 @@ Wybierz inne ustawienie wstępne.</value>
     <value>(Nieobsługiwane w tym systemie)</value>
   </data>
   <data name="QueueView_Stop" xml:space="preserve">
-    <value>Stop</value>
+    <value>Przerwij</value>
   </data>
   <data name="String1" xml:space="preserve">
     <value/>
@@ -2348,22 +2348,22 @@ Wybierz inne ustawienie wstępne.</value>
     <value>Pokaż kontrolki regulacji przycinania.</value>
   </data>
   <data name="DarkTheme_dark" xml:space="preserve">
-    <value>Użyj ciemnego</value>
+    <value>Ciemny</value>
   </data>
   <data name="DarkTheme_light" xml:space="preserve">
-    <value>Użyj światła</value>
+    <value>Jasny</value>
   </data>
   <data name="DarkTheme_system" xml:space="preserve">
-    <value>System meczowy</value>
+    <value>Systemowy</value>
   </data>
   <data name="OptionsView_DarkThemeMode" xml:space="preserve">
     <value>Motyw:</value>
   </data>
   <data name="OptionsView_RequiresRestart" xml:space="preserve">
-    <value>(Wymaga Restart)</value>
+    <value>(Wymaga ponownego uruchomienia)</value>
   </data>
   <data name="FiltersView_ChromaSmooth" xml:space="preserve">
-    <value>Gładkość chrominancji:</value>
+    <value>Wygładzanie chrominancji:</value>
   </data>
   <data name="FiltersView_ColourSpace" xml:space="preserve">
     <value>Przestrzeń kolorów:</value>
@@ -2426,7 +2426,7 @@ Wybierz inne ustawienie wstępne.</value>
     <value>(watowany)</value>
   </data>
   <data name="FiltersView_Flip" xml:space="preserve">
-    <value>Flip:</value>
+    <value>Odbicie:</value>
   </data>
   <data name="PictureSettingsView_SourceDimensions" xml:space="preserve">
     <value>Wymiary źródła:</value>
@@ -2450,7 +2450,7 @@ Wybierz inne ustawienie wstępne.</value>
     <value>Współczynnik proporcji: {0}</value>
   </data>
   <data name="SummaryView_MetadataPassthru" xml:space="preserve">
-    <value>Wspólne metadane Passthru</value>
+    <value>Skopiuj ogólne metadane</value>
   </data>
   <data name="OptionsViewModel_InvalidAutonamePath" xml:space="preserve">
     <value>Domyślna ścieżka automatycznej nazwy była nieprawidłowa. {0} nie może być wcześniej {1}</value>
@@ -2488,7 +2488,7 @@ Wybierz inne ustawienie wstępne.</value>
     <value>[Skończone]</value>
   </data>
   <data name="QueueViewModel_EditJob" xml:space="preserve">
-    <value>Edytuj zadanie?</value>
+    <value>Edytować zadanie?</value>
   </data>
   <data name="QueueView_Length" xml:space="preserve">
     <value>Długość wyjściowa:</value>
@@ -2594,7 +2594,7 @@ Obsługiwane są tylko pliki kolejek z bieżącej wersji.</value>
     <value>Tryb wyświetlania od prawej do lewej:</value>
   </data>
   <data name="RightToLeft_Off" xml:space="preserve">
-    <value>Off</value>
+    <value>Wyłączone</value>
   </data>
   <data name="RightToLeft_TextOnly" xml:space="preserve">
     <value>Tylko tekst</value>
@@ -2657,27 +2657,93 @@ W preferencjach można ponownie włączyć obsługę kodowania sprzętowego.</va
 Może to wynikać z ograniczeń wybranego kontenera plików. Więcej informacji można znaleźć w naszej dokumentacji pomocy dotyczącej napisów.</value>
   </data>
   <data name="DarkTheme_None" xml:space="preserve">
-    <value>Nic</value>
+    <value>Brak</value>
   </data>
   <data name="SourceSelection_UpdateNow" xml:space="preserve">
     <value>Aktualizuj teraz!</value>
   </data>
   <data name="CropMode_Auto" xml:space="preserve">
-    <value>Automatyczny</value>
+    <value>Automatyczne</value>
   </data>
   <data name="CropMode_Loose" xml:space="preserve">
-    <value>Konserwatywny</value>
+    <value>Konserwatywne</value>
   </data>
   <data name="CropMode_None" xml:space="preserve">
-    <value>Nic</value>
+    <value>Brak</value>
   </data>
   <data name="CropMode_Custom" xml:space="preserve">
-    <value>Zwyczaj</value>
+    <value>Własne</value>
   </data>
   <data name="OptionsView_EnableNvDecSupport" xml:space="preserve">
     <value>Preferuj użycie Nvidia NVDec do dekodowania wideo podczas korzystania z kodera NVEnc, a sprzęt jest dostępny do użycia.</value>
   </data>
   <data name="Options_Hardware" xml:space="preserve">
     <value>Wsparcie sprzętowe</value>
+  </data>
+  <data name="StaticPreviewViewModel_MediaError" xml:space="preserve">
+    <value>The system was unable to play this file. 
+
+Please note certain codecs such as AV1 or HEVC require the Microsoft AV1 or HEVC codec plugins from the Microsoft Store to play.
+Alternatively, check the "Use External Player" checkbox below.</value>
+  </data>
+  <data name="StaticPreviewView_ClosePlayer" xml:space="preserve">
+    <value>Close Player</value>
+  </data>
+  <data name="StaticPreviewView_Play" xml:space="preserve">
+    <value>Play</value>
+  </data>
+  <data name="StaticPreviewView_VideoPreview" xml:space="preserve">
+    <value>Video Preview</value>
+  </data>
+  <data name="StaticPreviewViewModel_WebmNotSupported" xml:space="preserve">
+    <value>The Built-in preview is not available for the WebM container. An External player must be used.</value>
+  </data>
+  <data name="StaticPreview_EncodingPreview" xml:space="preserve">
+    <value>Encoding Preview ...</value>
+  </data>
+  <data name="StaticPreview_Previews" xml:space="preserve">
+    <value>Previews:</value>
+  </data>
+  <data name="StaticPreview_Volume" xml:space="preserve">
+    <value>Volume: 0</value>
+  </data>
+  <data name="Reset" xml:space="preserve">
+    <value>Resetuj</value>
+  </data>
+  <data name="OptionsView_IsoDateFormat" xml:space="preserve">
+    <value>Use ISO Date Formats (YYYY-MM-DD) instead of system format.</value>
+  </data>
+  <data name="QueueViewModel_ShortEncodeStatus" xml:space="preserve">
+    <value>Pass {0} of {1}, {2:00.00}%, {3:000.0} fps, avg {4:000.0} fps, ETA: {5}</value>
+  </data>
+  <data name="QueueViewModel_ShortSubScanStatus" xml:space="preserve">
+    <value>Scanning for Subtitles {0:00.00}%, ETA: {1}</value>
+  </data>
+  <data name="QueueView_ExtendedQueueDisplay" xml:space="preserve">
+    <value>Extend Queue Info</value>
+  </data>
+  <data name="QueueView_MinimalQueueDisplay" xml:space="preserve">
+    <value>Minimise Queue Info</value>
+  </data>
+  <data name="QueueStats_ShortOutputStats" xml:space="preserve">
+    <value>Output: {0}, avg {1} fps</value>
+  </data>
+  <data name="PresetPane_Desc" xml:space="preserve">
+    <value>Preset Description:</value>
+  </data>
+  <data name="PresetPane_HidePresetDesc" xml:space="preserve">
+    <value>Hide Preset Description</value>
+  </data>
+  <data name="PresetPane_ShowPresetDesc" xml:space="preserve">
+    <value>Show Preset Description</value>
+  </data>
+  <data name="TaskTrayStatusManyTitle" xml:space="preserve">
+    <value>{0}
+Encoding {1} jobs</value>
+  </data>
+  <data name="StaticPreviewViewModel_MultipleEncodes" xml:space="preserve">
+    <value>Unable to encode a preview. The application is currently busy encoding another file.
+
+To allow multiple simultaneous encodes, turn on "Process Isolation" in Tools Menu -&gt; Preferences -&gt; Advanced -&gt; Process Isolation -&gt; "Run each queued job in a separate worker process".</value>
   </data>
 </root>

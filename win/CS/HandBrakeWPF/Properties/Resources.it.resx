@@ -328,9 +328,6 @@ Vuoi procedere?</value>
   <data name="PictureSettings_OutputResolution" xml:space="preserve">
     <value>Output: {0}</value>
   </data>
-  <data name="Options_DefaultPathAdditionalParams" xml:space="preserve">
-    <value>Opzioni aggiuntive disponibili: {source_path} o {source_folder_name} o {source}</value>
-  </data>
   <data name="Main_MatchingFileOverwriteWarning" xml:space="preserve">
     <value>Il file di destinazione non può avere lo stesso percorso e nome file del file sorgente. Aggiorna il nome del file di destinazione in modo che non corrisponda al file di origine.</value>
   </data>
@@ -671,7 +668,7 @@ Il file delle preimpostazioni corrente verrà archiviato e ne verrà creato uno 
   </data>
   <data name="TaskTrayStatusTitle" xml:space="preserve">
     <value>{0}
-Encoding 1 Job</value>
+Codificando 1 Processo</value>
   </data>
   <data name="PauseOnLowDiskspace" xml:space="preserve">
     <value>Coda in pausa. Attenzione, il disco scelto per la codifica sta esaurendo lo spazio. Si prega di liberare spazio e premere Avvia per continuare. È possibile modificare il livello di spazio minimo necessario nelle preferenze.</value>
@@ -718,7 +715,9 @@ Continuare?</value>
   </data>
   <data name="Main_QueueOverwritePrompt" xml:space="preserve">
     <value>Il file '{0}' esiste già!
-Vuoi sovrascriverlo?</value>
+Vuoi sovrascriverlo?
+
+Suggerimento: le opzioni della sovrascrittura possono essere modificate nelle Preferenze.</value>
   </data>
   <data name="Clipboard_Unavailable" xml:space="preserve">
     <value>Gli appunti di sistema non sono al momento disponibili.</value>
@@ -1216,7 +1215,7 @@ Vuoi sovrascriverlo?</value>
     <value>Livello verbosità del registro:</value>
   </data>
   <data name="Options_LogPath" xml:space="preserve">
-    <value>Percorso registro:</value>
+    <value>Path:</value>
   </data>
   <data name="Options_LowDiskspaceSize" xml:space="preserve">
     <value>Metti in pausa la coda se non c'è spazio su disco</value>
@@ -1474,9 +1473,6 @@ Sono supportati VLC e MPC-HC. Altri riproduttori multimediali potrebbero funzion
   <data name="QueueView_Statistics" xml:space="preserve">
     <value>Statistiche</value>
   </data>
-  <data name="QueueView_StatsNotAvailableYet" xml:space="preserve">
-    <value>Le statistiche saranno disponibili al termine della conversione.</value>
-  </data>
   <data name="QueueView_Subtitles" xml:space="preserve">
     <value>Sottotitoli</value>
   </data>
@@ -1562,13 +1558,13 @@ Sono supportati VLC e MPC-HC. Altri riproduttori multimediali potrebbero funzion
     <value>Durata:</value>
   </data>
   <data name="StaticPreviewView_LivePreview" xml:space="preserve">
-    <value>Anteprima Live</value>
+    <value>Anteprima Codifica</value>
   </data>
   <data name="StaticPreviewView_SelectPreviewImage" xml:space="preserve">
     <value>Seleziona un'immagine di anteprima</value>
   </data>
-  <data name="StaticPreviewView_UseSystemDefault" xml:space="preserve">
-    <value>Preferisci il riproduttore video predefinito del sistema</value>
+  <data name="StaticPreviewView_UseExternalPlayer" xml:space="preserve">
+    <value>Usa Player Esterno</value>
   </data>
   <data name="SubtitlesView_AddCC" xml:space="preserve">
     <value>Aggiungi Sottotitoli se disponibili</value>
@@ -1642,6 +1638,9 @@ Sono supportati VLC e MPC-HC. Altri riproduttori multimediali potrebbero funzion
   <data name="SummaryView_storage" xml:space="preserve">
     <value>spazio</value>
   </data>
+  <data name="VideoView_MultiPass" xml:space="preserve">
+    <value>Multi-Pass Encoding</value>
+  </data>
   <data name="VideoView_AverageBitrate" xml:space="preserve">
     <value>Bitrate Medio (kbps):</value>
   </data>
@@ -1683,6 +1682,9 @@ Sono supportati VLC e MPC-HC. Altri riproduttori multimediali potrebbero funzion
   </data>
   <data name="VideoView_Quality" xml:space="preserve">
     <value>Qualità:</value>
+  </data>
+  <data name="VideoView_TurboAnalysisPass" xml:space="preserve">
+    <value>Turbo analysis pass</value>
   </data>
   <data name="VideoView_VariableFramerate" xml:space="preserve">
     <value>Frequenza Fotogrammi Variabile</value>
@@ -1865,10 +1867,8 @@ Tempo rimanente: {5}, Trascorso: {6} {7}</value>
     <value>Modalità Portatile: Impossibile leggere il file portable.ini. Potrebbe esserci un errore in questo file. Riprova usando portable.ini.template come riferimento.</value>
   </data>
   <data name="OptionsView_FormatOptions" xml:space="preserve">
-    <value>Segnaposto da Sostituire: {source} {title} {chapters} {creation-date} {creation-time} {date} {time} {quality_bitrate}</value>
-  </data>
-  <data name="OptionsView_PathOptions" xml:space="preserve">
-    <value>Segnaposto da Sostituire: {source_path} {source_folder_name} {source}</value>
+    <value>Opzioni di Sostituzione:
+Puoi trascinare/rilasciare o inserire del testo sopra.</value>
   </data>
   <data name="FileOverwriteBehaviours_Ask" xml:space="preserve">
     <value>Chiedi prima di sovrascrivere</value>
@@ -2680,5 +2680,71 @@ La causa potrebbe essere dovuta al tipo di file contenitore selezionato. Consigl
   </data>
   <data name="Options_Hardware" xml:space="preserve">
     <value>Supporto Hardware</value>
+  </data>
+  <data name="StaticPreviewViewModel_MediaError" xml:space="preserve">
+    <value>Il sistema non è stato in grado di riprodurre questo file.
+
+Attenzione: alcuni codec come AV1 o HEVC richiedono i plugin Microsoft AV1 o HEVC, scaricabili dal Microsoft Store, per poter essere riprodotti.
+In alternativa, selezionare l'opzione "Usa Player Esterno" qui sotto.</value>
+  </data>
+  <data name="StaticPreviewView_ClosePlayer" xml:space="preserve">
+    <value>Chiudi Player</value>
+  </data>
+  <data name="StaticPreviewView_Play" xml:space="preserve">
+    <value>Riproduci</value>
+  </data>
+  <data name="StaticPreviewView_VideoPreview" xml:space="preserve">
+    <value>Anteprima Video</value>
+  </data>
+  <data name="StaticPreviewViewModel_WebmNotSupported" xml:space="preserve">
+    <value>L'anteprima interna non è disponibile per il formato contenitore WebM. Deve essere usato un player esterno.</value>
+  </data>
+  <data name="StaticPreview_EncodingPreview" xml:space="preserve">
+    <value>Codifica dell'Anteprima...</value>
+  </data>
+  <data name="StaticPreview_Previews" xml:space="preserve">
+    <value>Anteprime:</value>
+  </data>
+  <data name="StaticPreview_Volume" xml:space="preserve">
+    <value>Volume: 0</value>
+  </data>
+  <data name="Reset" xml:space="preserve">
+    <value>Ripristina</value>
+  </data>
+  <data name="OptionsView_IsoDateFormat" xml:space="preserve">
+    <value>Usa formato date ISO (AAAA-MM-GG) al posto di quello del sistema.</value>
+  </data>
+  <data name="QueueViewModel_ShortEncodeStatus" xml:space="preserve">
+    <value>Passaggio {0} di {1}, {2:00.00}%, {3:000.0} fps, Media {4:000.0} fps, Fine: {5}</value>
+  </data>
+  <data name="QueueViewModel_ShortSubScanStatus" xml:space="preserve">
+    <value>Scansione Sottotitoli {0:00.00}%, Fine: {1}</value>
+  </data>
+  <data name="QueueView_ExtendedQueueDisplay" xml:space="preserve">
+    <value>Espandi Informazioni Coda</value>
+  </data>
+  <data name="QueueView_MinimalQueueDisplay" xml:space="preserve">
+    <value>Riduci Informazioni Coda</value>
+  </data>
+  <data name="QueueStats_ShortOutputStats" xml:space="preserve">
+    <value>Uscita: {0}, media {1} fps</value>
+  </data>
+  <data name="PresetPane_Desc" xml:space="preserve">
+    <value>Descrizione Preimpostazione:</value>
+  </data>
+  <data name="PresetPane_HidePresetDesc" xml:space="preserve">
+    <value>Nascondi Descrizione Preimpostazione</value>
+  </data>
+  <data name="PresetPane_ShowPresetDesc" xml:space="preserve">
+    <value>Mostra Descrizione Preimpostazione</value>
+  </data>
+  <data name="TaskTrayStatusManyTitle" xml:space="preserve">
+    <value>{0}
+Codificando {1} processi</value>
+  </data>
+  <data name="StaticPreviewViewModel_MultipleEncodes" xml:space="preserve">
+    <value>Impossibile codificare un'anteprima. L'applicazione è già occupata nella codifica di un altro file.
+
+Per permettere più codifiche simultanee, attivare "Isolamento del Processo" nel menu Strumenti -&gt; Preferenze -&gt; Avanzate -&gt; Isolamento del Processo -&gt; "Avvia ogni elemento in coda in un processo di lavoro separato".</value>
   </data>
 </root>
