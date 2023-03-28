@@ -1,0 +1,65 @@
+__deps__ :=
+
+$(eval $(call import.MODULE.defs,LIBAOM,libaom,$(__deps__)))
+$(eval $(call import.CONTRIB.defs,LIBAOM))
+
+LIBAOM.FETCH.url     = https://github.com/HandBrake/HandBrake-contribs/releases/download/contribs/libaom-3.6.0.tar.gz
+LIBAOM.FETCH.url    += https://storage.googleapis.com/aom-releases/libaom-3.6.0.tar.gz
+LIBAOM.FETCH.sha256  = a4a6c0fab685da743b796662a928fcdf7ae60594edc306efb73e78a17ea6cde6
+
+LIBAOM.build_dir             = build
+LIBAOM.CONFIGURE.exe         = cmake
+LIBAOM.CONFIGURE.args.prefix = -DCMAKE_INSTALL_PREFIX="$(LIBAOM.CONFIGURE.prefix)"
+LIBAOM.CONFIGURE.deps        =
+LIBAOM.CONFIGURE.static      =
+LIBAOM.CONFIGURE.shared      = -DBUILD_SHARED_LIBS=OFF
+LIBAOM.CONFIGURE.extra       = -DCONFIG_AV1_DECODER=0 -DENABLE_TOOLS=OFF \
+                               -DENABLE_TESTS=OFF -DENABLE_EXAMPLES=OFF -DENABLE_DOCS=OFF
+LIBAOM.CONFIGURE.extra      += -DCMAKE_INSTALL_LIBDIR=lib
+
+ifeq ($(GCC.O),$(filter $(GCC.O),size size-aggressive))
+    LIBAOM.CONFIGURE.extra += -DCMAKE_BUILD_TYPE=MinSizeRel
+else
+    ifneq (none,$(LIBAOM.GCC.g))
+        LIBAOM.CONFIGURE.extra += -DCMAKE_BUILD_TYPE=Debug
+    else
+        LIBAOM.CONFIGURE.extra += -DCMAKE_BUILD_TYPE=Release
+    endif
+endif
+
+
+ifeq (1,$(HOST.cross))
+    ifeq (mingw,$(HOST.system))
+        LIBAOM.CONFIGURE.extra += -DWIN32=ON -DMINGW=ON
+        LIBAOM.CONFIGURE.extra += -DCMAKE_SYSTEM_NAME=Windows
+        LIBAOM.CONFIGURE.extra += -DCMAKE_SYSTEM_PROCESSOR=$(HOST.machine)
+        LIBAOM.CONFIGURE.extra += -DCMAKE_C_COMPILER=$(LIBAOM.GCC.gcc)
+        LIBAOM.CONFIGURE.extra += -DCMAKE_C_FLAGS="-static-libgcc -static-libstdc++ -static"
+        LIBAOM.CONFIGURE.extra += -DCMAKE_SHARED_LIBRARY_LINK_C_FLAGS="-static-libgcc -static-libstdc++ -static"
+        LIBAOM.CONFIGURE.extra += -DCMAKE_CXX_COMPILER=$(LIBAOM.GCC.gxx)
+        LIBAOM.CONFIGURE.extra += -DCMAKE_CXX_FLAGS="-static-libgcc -static-libstdc++ -static"
+        LIBAOM.CONFIGURE.extra += -DCMAKE_RC_COMPILER=$(HOST.cross.prefix)windres
+
+        ifeq (aarch64,$(HOST.machine))
+            LIBAOM.CONFIGURE.extra += -DCONFIG_RUNTIME_CPU_DETECT=0
+        endif
+
+        LIBAOM.CONFIGURE.args.host  = -DCMAKE_HOST_SYSTEM="$(LIBAOM.CONFIGURE.host)"
+    else ifeq ($(HOST.system),darwin)
+        LIBAOM.CONFIGURE.extra += -DCMAKE_SYSTEM_NAME=Darwin
+        LIBAOM.CONFIGURE.args.host  = -DCMAKE_HOST_SYSTEM="$(LIBAOM.CONFIGURE.host)"
+    else
+        LIBAOM.CONFIGURE.args.host  = -DCMAKE_SYSTEM_NAME="$(LIBAOM.CONFIGURE.host)"
+    endif
+    LIBAOM.CONFIGURE.args.build = -DCMAKE_HOST_SYSTEM="$(LIBAOM.CONFIGURE.build)"
+else
+    LIBAOM.CONFIGURE.args.host  = -DCMAKE_HOST_SYSTEM="$(LIBAOM.CONFIGURE.host)"
+endif
+
+ifeq ($(HOST.system),darwin)
+    LIBAOM.CONFIGURE.extra += -DCMAKE_SYSTEM_PROCESSOR=$(HOST.machine)
+    LIBAOM.CONFIGURE.extra += -DCMAKE_OSX_ARCHITECTURES=$(HOST.machine)
+endif
+
+## find CMakeLists.txt
+LIBAOM.CONFIGURE.extra += "$(call fn.ABSOLUTE,$(LIBAOM.EXTRACT.dir/))"

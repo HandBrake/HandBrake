@@ -1,4 +1,4 @@
-__deps__ := A52DEC BZIP2 LIBVPX SVT-AV1 FFMPEG FREETYPE LAME LIBASS LIBDCA \
+__deps__ := A52DEC BZIP2 LIBVPX SVT-AV1 LIBAOM FFMPEG FREETYPE LAME LIBASS LIBDCA \
     LIBDVDREAD LIBDVDNAV LIBICONV LIBSAMPLERATE LIBTHEORA LIBVORBIS LIBOGG \
     LIBXML2 X264 X265 ZLIB LIBBLURAY FDKAAC LIBVPL LIBGNURX JANSSON \
     HARFBUZZ LIBOPUS LIBSPEEX LIBDAV1D LIBJPEGTURBO LIBDOVI
@@ -126,7 +126,7 @@ LIBHB.lib = $(LIBHB.build/)hb.lib
 LIBHB.dll.libs = $(foreach n, \
         ass avformat avfilter avcodec avutil swresample postproc dvdnav dvdread \
         freetype mp3lame swscale vpx theora vorbis vorbisenc ogg x264 xml2 \
-        bluray jansson harfbuzz opus speex dav1d turbojpeg zimg SvtAv1Enc, \
+        bluray jansson harfbuzz opus speex dav1d turbojpeg zimg SvtAv1Enc aom, \
         $(CONTRIB.build/)lib/lib$(n).a )
 
 ifeq (1,$(FEATURE.fdk_aac))

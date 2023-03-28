@@ -587,6 +587,7 @@ struct hb_job_s
 #define HB_VCODEC_SVT_AV1_MASK       0x00800000
 #define HB_VCODEC_X264_MASK          0x00400000
 #define HB_VCODEC_X265_MASK          0x00200000
+#define HB_VCODEC_AOM_MASK           0x00100000
 
 #define HB_VCODEC_VT_MASK            0x00080000
 #define HB_VCODEC_QSV_MASK           0x00040000
@@ -627,6 +628,10 @@ struct hb_job_s
 #define HB_VCODEC_SVT_AV1_8BIT       (0x00000041 | HB_VCODEC_SVT_AV1_MASK | HB_VCODEC_AV1_MASK)
 #define HB_VCODEC_SVT_AV1            HB_VCODEC_SVT_AV1_8BIT
 #define HB_VCODEC_SVT_AV1_10BIT      (0x00000042 | HB_VCODEC_SVT_AV1_MASK | HB_VCODEC_AV1_MASK)
+
+#define HB_VCODEC_AOM_AV1_8BIT       (0x00000041 | HB_VCODEC_AOM_MASK | HB_VCODEC_AV1_MASK)
+#define HB_VCODEC_AOM_AV1            HB_VCODEC_AOM_AV1_8BIT
+#define HB_VCODEC_AOM_AV1_10BIT      (0x00000042 | HB_VCODEC_AOM_MASK | HB_VCODEC_AV1_MASK)
 
 #define HB_VCODEC_VT_H264           (0x00000050 | HB_VCODEC_VT_MASK | HB_VCODEC_H264_MASK)
 #define HB_VCODEC_VT_H265           (0x00000051 | HB_VCODEC_VT_MASK | HB_VCODEC_H265_MASK)
@@ -1395,6 +1400,7 @@ extern hb_work_object_t hb_encx264;
 extern hb_work_object_t hb_enctheora;
 extern hb_work_object_t hb_encx265;
 extern hb_work_object_t hb_encsvtav1;
+extern hb_work_object_t hb_encaom;
 extern hb_work_object_t hb_decavcodeca;
 extern hb_work_object_t hb_decavcodecv;
 extern hb_work_object_t hb_declpcm;

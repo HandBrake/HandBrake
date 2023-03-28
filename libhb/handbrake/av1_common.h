@@ -39,4 +39,14 @@ static const char * const av1_svt_profile_names[] =
     "auto", "main", NULL // "high", "profesional"
 };
 
+static const char * const av1_aom_preset_names[] =
+{
+    "10", "9", "8", "7", "6", "5", "4", "3", "2", "1", "0", NULL
+};
+
+static const char * const av1_aom_tune_names[] =
+{
+    "screen", "film", NULL
+};
+
 #endif // HANDBRAKE_AV1_COMMON_H

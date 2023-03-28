@@ -17,7 +17,7 @@ TEST.GCC.l = \
         ass avformat avfilter avcodec avutil swresample postproc mp3lame dvdnav \
         dvdread fribidi swscale vpx theoraenc theoradec vorbis vorbisenc ogg \
         x264 bluray freetype xml2 bz2 z jansson harfbuzz opus speex lzma dav1d \
-        turbojpeg zimg SvtAv1Enc
+        turbojpeg zimg SvtAv1Enc aom
 
 ifeq (,$(filter $(HOST.system),darwin cygwin mingw))
     TEST.GCC.l += fontconfig

@@ -2233,6 +2233,7 @@ int hb_global_init()
     hb_register(&hb_encx265);
 #endif
     hb_register(&hb_encsvtav1);
+    hb_register(&hb_encaom);
 #if HB_PROJECT_FEATURE_QSV
     if (!disable_hardware)
     {
