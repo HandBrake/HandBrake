@@ -9,13 +9,13 @@ LIBVPL.EXTRACT.tarbase = oneVPL-2023.1.0
 
 LIBVPL.build_dir             = build
 LIBVPL.CONFIGURE.exe         = cmake
-LIBVPL.CONFIGURE.args.build  = -DCMAKE_SYSTEM="$(LIBVPL.CONFIGURE.build)"
+LIBVPL.CONFIGURE.args.build  =
 LIBVPL.CONFIGURE.args.host   = -DCMAKE_HOST_SYSTEM="$(LIBVPL.CONFIGURE.host)"
-LIBVPL.CONFIGURE.args.prefix = -DCMAKE_INSTALL_PREFIX="$(LIBVPL.CONFIGURE.prefix)" -DCMAKE_INSTALL_LIBDIR=lib -DBUILD_DISPATCHER_ONEVPL_EXPERIMENTAL=ON -DBUILD_PREVIEW=OFF -DBUILD_TOOLS=OFF -DBUILD_EXAMPLES=OFF -DBUILD_SHARED_LIBS=OFF
+LIBVPL.CONFIGURE.args.prefix = -DCMAKE_INSTALL_PREFIX="$(LIBVPL.CONFIGURE.prefix)" -DCMAKE_INSTALL_LIBDIR=lib
 LIBVPL.CONFIGURE.deps        =
 LIBVPL.CONFIGURE.static      =
-LIBVPL.CONFIGURE.shared      =
-LIBVPL.CONFIGURE.extra       =
+LIBVPL.CONFIGURE.shared      = -DBUILD_SHARED_LIBS=OFF
+LIBVPL.CONFIGURE.extra       = -DBUILD_DISPATCHER_ONEVPL_EXPERIMENTAL=ON -DBUILD_PREVIEW=OFF -DBUILD_TOOLS=OFF -DBUILD_EXAMPLES=OFF
 
 ifeq ($(GCC.O),$(filter $(GCC.O),size size-aggressive))
     LIBVPL.CONFIGURE.extra += -DCMAKE_BUILD_TYPE=MinSizeRel
@@ -29,14 +29,13 @@ endif
 
 ifeq (1,$(HOST.cross))
     ifeq (mingw,$(HOST.system))
-        LIBVPL.CONFIGURE.extra += -DWIN32=ON
+        LIBVPL.CONFIGURE.extra += -DWIN32=ON -DMINGW=ON
         LIBVPL.CONFIGURE.extra += -DCMAKE_SYSTEM_NAME=Windows
         LIBVPL.CONFIGURE.extra += -DCMAKE_C_COMPILER=$(LIBVPL.GCC.gcc)
         LIBVPL.CONFIGURE.extra += -DCMAKE_C_FLAGS="-static-libgcc -static-libstdc++ -static"
         LIBVPL.CONFIGURE.extra += -DCMAKE_SHARED_LIBRARY_LINK_C_FLAGS="-static-libgcc -static-libstdc++ -static"
         LIBVPL.CONFIGURE.extra += -DCMAKE_CXX_COMPILER=$(LIBVPL.GCC.gxx)
         LIBVPL.CONFIGURE.extra += -DCMAKE_CXX_FLAGS="-static-libgcc -static-libstdc++ -static"
-        LIBVPL.CONFIGURE.extra += -DCMAKE_SHARED_LIBRARY_LINK_CXX_FLAGS="-static-libgcc -static-libstdc++ -static"
         LIBVPL.CONFIGURE.extra += -DCMAKE_RC_COMPILER=$(HOST.cross.prefix)windres
     endif
     LIBVPL.CONFIGURE.extra     += -DCMAKE_SYSTEM_PROCESSOR=$(HOST.machine)

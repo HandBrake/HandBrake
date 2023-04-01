@@ -1,0 +1,64 @@
+diff --git a/dispatcher/CMakeLists.txt b/dispatcher/CMakeLists.txt
+index 05cf168..ee0eb0b 100644
+--- a/dispatcher/CMakeLists.txt
++++ b/dispatcher/CMakeLists.txt
+@@ -105,18 +105,13 @@ if(UNIX)
+   set(THREADS_PREFER_PTHREAD_FLAG TRUE)
+   find_package(Threads REQUIRED)
+   if(BUILD_SHARED_LIBS)
+-    target_link_libraries(${TARGET} PRIVATE Threads::Threads)
++    target_link_libraries(${TARGET} PRIVATE Threads::Threads ${CMAKE_DL_LIBS})
+   else()
+-    target_link_libraries(${TARGET} PUBLIC Threads::Threads)
++    target_link_libraries(${TARGET} PUBLIC Threads::Threads ${CMAKE_DL_LIBS})
+   endif()
+ endif()
+ 
+ target_link_libraries(${TARGET} PUBLIC vpl-api)
+-if(BUILD_SHARED_LIBS)
+-  target_link_libraries(${TARGET} PRIVATE ${CMAKE_DL_LIBS})
+-else()
+-  target_link_libraries(${TARGET} PUBLIC ${CMAKE_DL_LIBS})
+-endif()
+ 
+ target_include_directories(${TARGET} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}
+                                              ${CMAKE_CURRENT_BINARY_DIR})
+@@ -170,7 +165,7 @@ if(BUILD_DEV)
+   set(pc_rel_libdir "$\{pcfiledir}/${pc_rel_libdir}")
+   set(pc_rel_incdir "$\{pcfiledir}/${pc_rel_incdir}")
+ 
+-  if(CMAKE_DL_LIBS)
++  if(UNIX AND CMAKE_DL_LIBS)
+     set(DL_LIBS "-l${CMAKE_DL_LIBS}")
+   endif()
+   if(MINGW)
+diff --git a/dispatcher/cmake/VPLConfig.cmake.in b/dispatcher/cmake/VPLConfig.cmake.in
+index 7a60974..75dd629 100644
+--- a/dispatcher/cmake/VPLConfig.cmake.in
++++ b/dispatcher/cmake/VPLConfig.cmake.in
+@@ -107,9 +107,8 @@ else()
+         set(CMAKE_THREAD_PREFER_PTHREAD TRUE)
+         set(THREADS_PREFER_PTHREAD_FLAG TRUE)
+         find_package(Threads REQUIRED)
+-        target_link_libraries(VPL::dispatcher INTERFACE Threads::Threads)
++        target_link_libraries(VPL::dispatcher INTERFACE Threads::Threads ${CMAKE_DL_LIBS})
+       endif()
+-      target_link_libraries(VPL::dispatcher INTERFACE ${CMAKE_DL_LIBS})
+     elseif(VPL_FIND_REQUIRED AND VPL_FIND_REQUIRED_dispatcher)
+       message(STATUS "Unable to find required VPL component: dispatcher")
+       set(VPL_FOUND FALSE)
+diff --git a/tools/legacy/sample_common/CMakeLists.txt b/tools/legacy/sample_common/CMakeLists.txt
+index df15a4f..4f6e727 100644
+--- a/tools/legacy/sample_common/CMakeLists.txt
++++ b/tools/legacy/sample_common/CMakeLists.txt
+@@ -294,7 +294,9 @@ if(CMAKE_SYSTEM_NAME MATCHES Linux)
+     endif()
+   endif()
+ 
+-  target_link_libraries(${TARGET} PUBLIC ${CMAKE_DL_LIBS})
++  if(UNIX)
++    target_link_libraries(${TARGET} PUBLIC ${CMAKE_DL_LIBS})
++  endif()
+ 
+   set(CMAKE_THREAD_PREFER_PTHREAD TRUE)
+   set(THREADS_PREFER_PTHREAD_FLAG TRUE)
