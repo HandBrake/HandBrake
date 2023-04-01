@@ -12,4 +12,5 @@ ifeq (1-mingw,$(HOST.cross)-$(HOST.system))
     ZLIB.CONFIGURE.env.ARFLAGS = ARFLAGS="rc"
     ZLIB.CONFIGURE.env.RANLIB  = RANLIB="$(RANLIB.exe)"
     ZLIB.CONFIGURE.env.args   += !AR !ARFLAGS !RANLIB
+    ZLIB.CONFIGURE.extra       = --static
 endif
