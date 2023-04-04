@@ -117,6 +117,7 @@ else ifeq (1-mingw,$(HOST.cross)-$(HOST.system))
         --target-os=mingw32 \
         --arch=$(HOST.machine) \
         --cross-prefix=$(HOST.cross.prefix) \
+        --disable-vulkan \
         --pkg-config=$(PKGCONFIG.exe) \
         --pkg-config-flags="--static"
     FFMPEG.GCC.args.extra += -fno-common
