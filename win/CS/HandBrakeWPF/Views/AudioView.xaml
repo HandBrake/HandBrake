@@ -91,26 +91,56 @@
         </Grid>
 
         <!-- Row 1 -->
-        <ListBox Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" VerticalAlignment="Stretch"
-                 Margin="10,10,10,10"
-                 dd:DragDrop.DropHandler="{Binding}"
-                 dd:DragDrop.IsDragSource="True"
-                 dd:DragDrop.IsDropTarget="True"
-                 ItemsSource="{Binding Task.AudioTracks}"
-                 SelectionMode="Extended">
+        <ListView Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" VerticalAlignment="Stretch"
+                  Margin="10,10,10,10"
+                  dd:DragDrop.DropHandler="{Binding}"
+                  dd:DragDrop.IsDragSource="True"
+                  dd:DragDrop.IsDropTarget="True"
+                  Background="Transparent"
+                  ItemsSource="{Binding Task.AudioTracks}"
+                  BorderBrush="{StaticResource Ui.ContrastLight}"
+                  SelectionMode="Extended">
 
-            <ListBox.InputBindings>
+            <ListView.Resources>
+                <Style TargetType="{x:Type GridViewColumnHeader}" >
+                    <Setter Property="Template" >
+                        <Setter.Value>
+                            <ControlTemplate TargetType="{x:Type GridViewColumnHeader}">
+                                <Border BorderBrush="{StaticResource Ui.ContrastLight}" BorderThickness="0,0,0,1" Margin="0,0,0,5">
+                                    <TextBlock Text="{TemplateBinding Content}" TextAlignment="Left" Margin="0,2,0,3" Style="{StaticResource sectionHeader}"
+                                               TextTrimming="CharacterEllipsis"/>
+                                </Border>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </ListView.Resources>
+
+            <ListView.View>
+                <GridView AllowsColumnReorder="False">
+                    <GridViewColumn Header="" Width="28" />
+                    <GridViewColumn Header="{x:Static Properties:Resources.AudioView_Source}" Width="250" />
+                    <GridViewColumn Header="{x:Static Properties:Resources.AudioView_Codec}" Width="118" />
+                    <GridViewColumn Header="{x:Static Properties:Resources.AudioView_Quality}" Width="142" />
+                    <GridViewColumn Header="{x:Static Properties:Resources.AudioView_Mixdown}" Width="132" />
+                    <GridViewColumn Header="{x:Static Properties:Resources.AudioView_Samplerate}" Width="85" />
+                    <GridViewColumn Header="{x:Static Properties:Resources.AudioView_Gain}" Width="55" />
+                    <GridViewColumn Header="{x:Static Properties:Resources.AudioView_DRC}" Width="82" />
+                </GridView>
+            </ListView.View>
+
+            <ListView.InputBindings>
                 <KeyBinding Key="Delete" Command="{Binding DeleteCommand}" CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListBox}}}"  />
-            </ListBox.InputBindings>
+            </ListView.InputBindings>
 
-            <ListBox.ItemContainerStyle>
+            <ListView.ItemContainerStyle>
                 <Style TargetType="ListBoxItem" BasedOn="{StaticResource {x:Type ListBoxItem}}">
                     <Setter Property="HorizontalContentAlignment" Value="Stretch" />
                     <Setter Property="Margin" Value="0,0,0,1" />
                 </Style>
-            </ListBox.ItemContainerStyle>
+            </ListView.ItemContainerStyle>
 
-            <ListBox.ContextMenu>
+            <ListView.ContextMenu>
                 <ContextMenu>
                     <MenuItem Header="{x:Static Properties:Resources.Shared_AddNewTrack}" Command="{Binding RelayCommand}" CommandParameter="Add" />
                     <MenuItem Header="{x:Static Properties:Resources.Shared_AddAllRemaining}" Command="{Binding RelayCommand}" CommandParameter="AddAllRemaining" />
@@ -123,9 +153,9 @@
                     <MenuItem Header="{x:Static Properties:Resources.Shared_ExpandAll}" Command="{Binding RelayCommand}" CommandParameter="ExpandAllTracks"  />
                     <MenuItem Header="{x:Static Properties:Resources.Shared_CollapseAll}" Command="{Binding RelayCommand}" CommandParameter="CollapseAllTracks"  />
                 </ContextMenu>
-            </ListBox.ContextMenu>
+            </ListView.ContextMenu>
 
-            <ListBox.ItemTemplate>
+            <ListView.ItemTemplate>
                 <DataTemplate>
 
                     <Grid HorizontalAlignment="Stretch">
@@ -142,19 +172,15 @@
                         <!--  Settings  -->
                         <Grid Grid.Column="1" Grid.Row="0" HorizontalAlignment="Stretch" Margin="0,5,0,5">
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="Auto" />
-                                <ColumnDefinition Width="Auto"/>
-                                <ColumnDefinition Width="Auto" />
-                                <ColumnDefinition Width="Auto" />
-                                <ColumnDefinition Width="Auto" />
-                                <ColumnDefinition Width="Auto" />
-                                <ColumnDefinition Width="Auto" />
-                                <ColumnDefinition Width="Auto" />
-                                <ColumnDefinition Width="Auto" />
-                                <ColumnDefinition Width="Auto" />
-                                <ColumnDefinition Width="Auto" />
-                                <ColumnDefinition Width="Auto" />
-                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="16" />
+                                <ColumnDefinition Width="250"/> <!-- Source -->
+                                <ColumnDefinition Width="120" /> <!-- Encoder -->
+                                <ColumnDefinition Width="140" /> <!-- Quality -->
+                                <ColumnDefinition Width="130" /> <!-- Mixdown -->
+                                <ColumnDefinition Width="85" /> <!-- Samplerate -->
+                                <ColumnDefinition Width="55" /> <!-- Gain -->
+                                <ColumnDefinition Width="55" /> <!-- DRC -->
+                                <ColumnDefinition Width="20" /> <!-- Adv -->
                             </Grid.ColumnDefinitions>
 
                             <Grid.RowDefinitions>
@@ -164,12 +190,11 @@
                             <Image Width="16" Source="{Binding Converter={StaticResource themeConverter}, ConverterParameter='Reorder.png'}" />
 
                             <!--  Row 1  -->
-                            <ComboBox Grid.Column="1" Width="160" Margin="5,0,5,0" HorizontalAlignment="Stretch"
+                            <ComboBox Grid.Column="1"  Margin="5,0,5,0" HorizontalAlignment="Stretch" ToolTip="{Binding ScannedTrack.Description}"
                                       ItemsSource="{Binding DataContext.SourceTracks, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
                                       SelectedItem="{Binding ScannedTrack}" />
 
-                            <TextBlock Grid.Column="2" VerticalAlignment="Center" FontWeight="Bold" Text="{x:Static Properties:Resources.AudioView_Codec}" />
-                            <ComboBox Grid.Column="3" Width="105" Margin="5,0,5,0" DisplayMemberPath="DisplayName">
+                            <ComboBox Grid.Column="2" Margin="5,0,5,0" DisplayMemberPath="DisplayName" HorizontalAlignment="Stretch">
                                 <ComboBox.SelectedItem>
                                     <MultiBinding Converter="{StaticResource audioEncoderConverter}">
                                         <Binding Path="Encoder" />
@@ -184,44 +209,46 @@
                                 </ComboBox.ItemsSource>
                             </ComboBox>
 
-                            <ComboBox Grid.Column="4" Width="65" HorizontalAlignment="Stretch"
-                                      ItemsSource="{Binding AudioEncoderRateTypes, Converter={StaticResource audioRateTypeConverter}}"
-                                      SelectedItem="{Binding EncoderRateType, Converter={StaticResource audioRateTypeConverter}}"
-                                      Visibility="{Binding IsRateTypeVisible, Converter={StaticResource boolToVisConverter}, ConverterParameter=false}" />
+                            <StackPanel Orientation="Horizontal" Grid.Column="3" HorizontalAlignment="Stretch">
+                                <ComboBox HorizontalAlignment="Stretch"
+                                          ItemsSource="{Binding AudioEncoderRateTypes, Converter={StaticResource audioRateTypeConverter}}"
+                                          SelectedItem="{Binding EncoderRateType, Converter={StaticResource audioRateTypeConverter}}"
+                                          Visibility="{Binding IsRateTypeVisible, Converter={StaticResource boolToVisConverter}, ConverterParameter=false}" />
 
-                            <ComboBox Grid.Column="5" Width="55" Margin="5,0,5,0" ItemsSource="{Binding EncoderQualityValues}"
-                                      SelectedItem="{Binding Quality}" ToolTip="{x:Static Properties:ResourcesTooltips.AudioView_Quality}"
-                                      Visibility="{Binding IsQualityVisible, Converter={StaticResource boolToVisConverter}, ConverterParameter=false}" />
+                                <ComboBox Margin="5,0,5,0" MinWidth="65" ItemsSource="{Binding EncoderQualityValues}" HorizontalAlignment="Stretch"
+                                          SelectedItem="{Binding Quality}" ToolTip="{x:Static Properties:ResourcesTooltips.AudioView_Quality}"
+                                          Visibility="{Binding IsQualityVisible, Converter={StaticResource boolToVisConverter}, ConverterParameter=false}" />
 
-                            <ComboBox Grid.Column="5" Width="55" Margin="5,0,5,0" ItemsSource="{Binding Bitrates}"
-                                      SelectedItem="{Binding Bitrate}"
-                                      Visibility="{Binding IsBitrateVisible, Converter={StaticResource boolToVisConverter}, ConverterParameter=false}" />
+                                <ComboBox Margin="5,0,5,0" MinWidth="65" ItemsSource="{Binding Bitrates}" HorizontalAlignment="Stretch"
+                                          SelectedItem="{Binding Bitrate}"
+                                          Visibility="{Binding IsBitrateVisible, Converter={StaticResource boolToVisConverter}, ConverterParameter=false}" />
+                            </StackPanel>
+                      
 
-                            <TextBlock Grid.Row="0" Grid.Column="6" VerticalAlignment="Center" FontWeight="Bold" Text="{x:Static Properties:Resources.AudioView_Mixdown}"
-                                       Visibility="{Binding IsPassthru, Converter={StaticResource boolToVisConverter}, ConverterParameter=true}" />
-                            <ComboBox Grid.Row="0" Grid.Column="7" Width="120" Margin="5,0,5,0" HorizontalAlignment="Stretch"
+                            <ComboBox Grid.Row="0" Grid.Column="4" Margin="5,0,5,0" HorizontalAlignment="Stretch"
                                       ItemsSource="{Binding TrackReference,  Converter={StaticResource audioMixdownListConverter}}"
                                       SelectedItem="{Binding MixDown, Converter={StaticResource audioMixdownConverter}}"
                                       DisplayMemberPath="DisplayName"
                                       Visibility="{Binding IsPassthru, Converter={StaticResource boolToVisConverter}, ConverterParameter=true}" />
 
-                            <TextBlock VerticalAlignment="Center" FontWeight="Bold" Text="{x:Static Properties:Resources.AudioView_Samplerate}" Grid.Column="8"
-                                       Visibility="{Binding IsPassthru, Converter={StaticResource boolToVisConverter}, ConverterParameter=true}" />
-                            <ComboBox Width="70" Margin="5,0,5,0" Grid.Column="9"
+
+                            <ComboBox Margin="5,0,5,0" Grid.Column="5"
                                       ItemsSource="{Binding DataContext.SampleRates, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
                                       SelectedItem="{Binding SampleRateDisplayValue}"
                                       Visibility="{Binding IsPassthru, Converter={StaticResource boolToVisConverter}, ConverterParameter=true}" />
 
 
-                            <TextBlock  VerticalAlignment="Center" FontWeight="Bold" Text="{x:Static Properties:Resources.AudioView_Gain}" Grid.Column="10"
-                                        Visibility="{Binding IsPassthru, Converter={StaticResource boolToVisConverter}, ConverterParameter=true}" />
-
-                            <controls:NumberBox Name="gainNumericCtl" Width="45" Margin="5,0,5,0" HorizontalAlignment="Left" Grid.Column="11"  VerticalAlignment="Center"
+                            <controls:NumberBox x:Name="gainNumericCtl" Margin="5,0,5,0" HorizontalAlignment="Stretch" Grid.Column="6"  VerticalAlignment="Center"
                                                 Minimum="-20" Modulus="1" Maximum="20" Number="{Binding Gain, Mode=TwoWay}" UpdateBindingOnTextChange="True" ShowIncrementButtons="True" AllowEmpty="False"
                                                 Visibility="{Binding IsPassthru, Converter={StaticResource boolToHiddenVisConverter}, ConverterParameter=true}"/>
 
-                            <ToggleButton Name="advancedOptionsToggle" VerticalAlignment="Center" Grid.Column="12" Grid.Row="0" Grid.ColumnSpan="2" Margin="5,0,0,0"
-                                           Padding="3,0" HorizontalAlignment="Left" Background="Transparent" IsChecked="{Binding IsExpandedTrackView}" >
+
+                            <controls:NumberBox x:Name="drcNumericCtl" Margin="5,0,5,0" HorizontalAlignment="Stretch" Grid.Column="7"
+                                                Minimum="0" Modulus="0.1" Maximum="4" Number="{Binding DRC, Mode=TwoWay}" UpdateBindingOnTextChange="True" ShowIncrementButtons="True" AllowEmpty="False"
+                                                Visibility="{Binding IsPassthru, Converter={StaticResource boolToHiddenVisConverter}, ConverterParameter=true}"/>
+
+                            <ToggleButton Name="advancedOptionsToggle" VerticalAlignment="Center" Grid.Column="8" Grid.Row="0" Margin="5,0,0,0" HorizontalAlignment="Stretch"
+                                           Padding="3,0" Background="Transparent" IsChecked="{Binding IsExpandedTrackView}" >
                                 <ToggleButton.Style>
                                     <Style TargetType="{x:Type ToggleButton}" BasedOn="{StaticResource {x:Type ToggleButton}}">
                                         <Setter Property="Content" Value="Show"/>
@@ -254,24 +281,15 @@
                         <!-- Hidden Row -->
                         <Grid Grid.Column="1" Grid.Row="1" HorizontalAlignment="Stretch" Visibility="{Binding IsExpandedTrackView, Converter={StaticResource boolToVisConverter}}">
                             <StackPanel Orientation="Horizontal" Margin="22,5,0,5" >
-
-                                <TextBlock VerticalAlignment="Center" FontWeight="Bold" Text="{x:Static Properties:Resources.AudioView_DRC}"
-                                       Visibility="{Binding IsPassthru, Converter={StaticResource boolToVisConverter}, ConverterParameter=true}" />
-
-                                <controls:NumberBox Name="drcNumericCtl" Width="45" Margin="5,0,5,0" HorizontalAlignment="Left"
-                                                    Minimum="0" Modulus="0.1" Maximum="4" Number="{Binding DRC, Mode=TwoWay}" UpdateBindingOnTextChange="True" ShowIncrementButtons="True" AllowEmpty="False"
-                                                    Visibility="{Binding IsPassthru, Converter={StaticResource boolToHiddenVisConverter}, ConverterParameter=true}"/>
-       
-                                <TextBlock Text="{x:Static Properties:Resources.AudioView_TrackName}" VerticalAlignment="Center" FontWeight="Bold" Margin="5,0,5,0" />
-                                <TextBox Text="{Binding TrackName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="250" />
-
+                                <TextBlock Text="{x:Static Properties:Resources.AudioView_TrackName}" Style="{StaticResource sectionHeader}"  VerticalAlignment="Center" Margin="0,0,5,0" />
+                                <TextBox Text="{Binding TrackName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="250" />                                                                
                             </StackPanel>
                         </Grid>
                     </Grid>
 
                 </DataTemplate>
-            </ListBox.ItemTemplate>
-        </ListBox>
+            </ListView.ItemTemplate>
+        </ListView>
 
     </Grid>
 </UserControl>

@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:Properties="clr-namespace:HandBrakeWPF.Properties"
+             xmlns:dd="urn:gong-wpf-dragdrop"
              d:DesignHeight="170"
              d:DesignWidth="616"
              mc:Ignorable="d" >
@@ -25,33 +26,73 @@
             <Button Content="{x:Static Properties:Resources.ChaptersView_Export}" Name="export" Grid.Column="3" Width="75" Command="{Binding RelayCommand}" CommandParameter="Export" />
         </Grid>
 
-        <DataGrid Grid.Row="1" Margin="10" ItemsSource="{Binding Chapters}" 
-                  VerticalAlignment="Stretch"  AutoGenerateColumns="False"
-                  CanUserSortColumns="False" CanUserReorderColumns="False" CanUserResizeColumns="False" CanUserResizeRows="False"
-                  CanUserAddRows="False" CanUserDeleteRows="False" HeadersVisibility="Column"
-                  HorizontalGridLinesBrush="#FFABADB3" VerticalGridLinesBrush="#FFABADB3"
-                  Background="Transparent" SelectionMode="Single">
-            <DataGrid.CellStyle>
-                <Style TargetType="DataGridCell" BasedOn="{StaticResource {x:Type DataGridCell}}">
-                    <Setter Property="MinHeight" Value="22" />
-                    <Setter Property="BorderThickness" Value="0" />
-                    <Setter Property="VerticalContentAlignment" Value="Center" />
+        <ListView Grid.Row="1" Margin="10" VerticalAlignment="Stretch"
+                  Background="Transparent"
+                  ItemsSource="{Binding Chapters}" 
+                  BorderBrush="{StaticResource Ui.ContrastLight}"
+                  SelectionMode="Single">
+
+            <ListView.Resources>
+                <Style TargetType="{x:Type GridViewColumnHeader}" >
+                    <Setter Property="Template" >
+                        <Setter.Value>
+                            <ControlTemplate TargetType="{x:Type GridViewColumnHeader}">
+                                <Border BorderBrush="{StaticResource Ui.ContrastLight}" BorderThickness="0,0,0,1" Margin="0,0,0,5">
+                                    <TextBlock Text="{TemplateBinding Content}" TextAlignment="Left" Margin="0,2,0,3" Style="{StaticResource sectionHeader}"
+                                               TextTrimming="CharacterEllipsis"/>
+                                </Border>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
                 </Style>
-            </DataGrid.CellStyle>
-            <DataGrid.ContextMenu>
+            </ListView.Resources>
+
+            <ListView.View>
+                <GridView AllowsColumnReorder="False">
+                    <GridViewColumn Header="{x:Static Properties:Resources.ChaptersView_ChapterNumber}" Width="75" />
+                    <GridViewColumn Header="{x:Static Properties:Resources.ChaptersView_Duration}" Width="83" />
+                    <GridViewColumn Header="{x:Static Properties:Resources.ChaptersView_ChapterName}" Width="Auto" />
+                </GridView>
+            </ListView.View>
+
+            <ListView.ItemContainerStyle>
+                <Style TargetType="ListBoxItem" BasedOn="{StaticResource {x:Type ListBoxItem}}">
+                    <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                    <Setter Property="Margin" Value="0,0,0,1" />
+                </Style>
+            </ListView.ItemContainerStyle>
+
+            <ListView.ContextMenu>
                 <ContextMenu>
                     <MenuItem Header="{x:Static Properties:Resources.ChapterView_ImportNames}" Command="{Binding RelayCommand}" CommandParameter="Import" />
                     <MenuItem Header="{x:Static Properties:Resources.ChapterView_ExportNames}" Command="{Binding RelayCommand}" CommandParameter="Export" />
                     <Separator />
                     <MenuItem Header="{x:Static Properties:Resources.ChapterView_ResetChapterNames}" Command="{Binding RelayCommand}" CommandParameter="Reset" />
                 </ContextMenu>
-            </DataGrid.ContextMenu>
-            <DataGrid.Columns>
-                <DataGridTextColumn Header="{x:Static Properties:Resources.ChaptersView_ChapterNumber}" MinWidth="100" Binding="{Binding ChapterNumber}" IsReadOnly="True" />
-                <DataGridTextColumn Header="{x:Static Properties:Resources.ChaptersView_Duration}" MinWidth="80" Binding="{Binding Duration}" IsReadOnly="True" />
-                <DataGridTextColumn Header="{x:Static Properties:Resources.ChaptersView_ChapterName}"  Width="*" Binding="{Binding ChapterName}" IsReadOnly="False" />
-            </DataGrid.Columns>
-        </DataGrid>
+            </ListView.ContextMenu>
 
+            <ListView.ItemTemplate>
+                <DataTemplate>
+
+                    <Grid HorizontalAlignment="Stretch">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="72" />
+                            <ColumnDefinition Width="80" />
+                            <ColumnDefinition Width="166" />
+                        </Grid.ColumnDefinitions>
+
+                        <TextBlock Grid.Column="0" Text="{Binding ChapterNumber}" HorizontalAlignment="Left" />
+                        <TextBlock Grid.Column="1" Text="{Binding Duration}" />
+                        <TextBox Grid.Column="2" Text="{Binding ChapterName}" />
+
+                    </Grid>
+
+                </DataTemplate>
+            </ListView.ItemTemplate>
+
+        </ListView>
     </Grid>
 </UserControl>

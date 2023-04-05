@@ -419,6 +419,15 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Quality.
+        /// </summary>
+        public static string AudioView_Quality {
+            get {
+                return ResourceManager.GetString("AudioView_Quality", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Reload.
         /// </summary>
         public static string AudioView_ReloadDefaults {
@@ -442,6 +451,15 @@ namespace HandBrakeWPF.Properties {
         public static string AudioView_Show {
             get {
                 return ResourceManager.GetString("AudioView_Show", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Source.
+        /// </summary>
+        public static string AudioView_Source {
+            get {
+                return ResourceManager.GetString("AudioView_Source", resourceCulture);
             }
         }
         
@@ -545,7 +563,7 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Chapter Number.
+        ///   Looks up a localized string similar to Chapter.
         /// </summary>
         public static string ChaptersView_ChapterNumber {
             get {
@@ -7480,15 +7498,6 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Multi-Pass Encoding.
-        /// </summary>
-        public static string VideoView_MultiPass {
-            get {
-                return ResourceManager.GetString("VideoView_MultiPass", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Avg Bitrate (kbps):.
         /// </summary>
         public static string VideoView_AverageBitrate {
@@ -7584,6 +7593,15 @@ namespace HandBrakeWPF.Properties {
         public static string VideoView_Framerate {
             get {
                 return ResourceManager.GetString("VideoView_Framerate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Multi-Pass Encoding.
+        /// </summary>
+        public static string VideoView_MultiPass {
+            get {
+                return ResourceManager.GetString("VideoView_MultiPass", resourceCulture);
             }
         }
         

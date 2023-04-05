@@ -212,8 +212,10 @@
                             </Grid.RowDefinitions>
 
                             <!--  Row 1  -->
-                            <TextBlock Grid.Column="0" VerticalAlignment="Center" FontWeight="Bold" Text="Source" Margin="10,0,0,0" />
-                            <TextBlock Grid.Column="1" VerticalAlignment="Center" Text="{Binding SrtFileName}" Margin="5,0,5,0" Width="75" TextWrapping="NoWrap" TextTrimming="WordEllipsis"
+                            <Image Width="16" Source="{Binding Converter={StaticResource themeConverter}, ConverterParameter='Reorder.png'}" />
+
+                            <TextBlock Grid.Column="1" VerticalAlignment="Center" Text="{Binding SrtFileName}" Margin="5,0,5,0" Width="75" TextWrapping="NoWrap" 
+                                       TextTrimming="WordEllipsis" ToolTip="{Binding SrtFileName}"
                                        Visibility="{Binding IsSrtSubtitle, Converter={StaticResource booleanToVisConverter}, ConverterParameter=false}" />
 
                             <TextBlock  Grid.Column="2" VerticalAlignment="Center" FontWeight="Bold" Text="Lang" />
