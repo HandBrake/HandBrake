@@ -53,7 +53,7 @@
             "name": "handbrake",
             "no-autogen": true,
             "config-opts": [
-                "--flatpak",
+                "--flatpak"
             ],
             "builddir": true,
             "post-install": ["install -d /app/extensions"],
