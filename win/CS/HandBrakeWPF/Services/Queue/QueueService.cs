@@ -586,24 +586,30 @@ namespace HandBrakeWPF.Services.Queue
 
         public List<QueueProgressStatus> GetQueueProgressStatus()
         {
-            // TODO make thread safe. 
             List<QueueProgressStatus> statuses = new List<QueueProgressStatus>();
-            foreach (ActiveJob job in this.activeJobs)
-            {
-                statuses.Add(job.Job.JobProgress);
-            }
-
+            ThreadHelper.OnUIThread(
+                () =>
+                {
+                    foreach (ActiveJob job in this.activeJobs)
+                    {
+                        statuses.Add(job.Job.JobProgress);
+                    }
+                });
             return statuses;
         }
 
         public List<string> GetActiveJobDestinationDirectories()
         {
-            // TODO need to make thread safe.
             List<string> directories = new List<string>();
-            foreach (ActiveJob job in this.activeJobs)
-            {
-                directories.Add(job.Job.Task.Destination);
-            }
+
+            ThreadHelper.OnUIThread(
+                () =>
+                {
+                    foreach (ActiveJob job in this.activeJobs)
+                    {
+                        directories.Add(job.Job.Task.Destination);
+                    }
+                });
 
             return directories;
         }
@@ -751,7 +757,8 @@ namespace HandBrakeWPF.Services.Queue
         {
             this.hardwareResourceManager.ReleaseToken(e.Job.Job.Task.VideoEncoder, e.Job.Job.TaskToken);
 
-            this.activeJobs.Remove(e.Job);
+            ThreadHelper.OnUIThread(() => this.activeJobs.Remove(e.Job));
+
             this.OnEncodeCompleted(e.EncodeEventArgs);
 
             this.InvokeQueueChanged(EventArgs.Empty);
