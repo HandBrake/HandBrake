@@ -2333,10 +2333,22 @@ int hb_mixdown_has_remix_support(int mixdown, uint64_t layout)
         case HB_AMIXDOWN_STEREO:
             return (hb_layout_get_discrete_channel_count(layout) > 1);
 
-        // regular stereo (not Dolby)
+        /*
+         * The following mixdowns have a very specific purpose!!!
+         *
+         * Given 2-channel input, they allow discarding either of the right or
+         * left channel to produce mono output instead of downmixing (the latter
+         * may clip or lower volume depending on whether the downmix coefficients
+         * are normalized or not). They are meant to be used for sources which
+         * are known to actually be Mono (identical content in the L/R channels
+         * or one of L/R is actually empty). They hardly make any sense when the
+         * input has more than two channels (be they discrete or matrix-encoded).
+         *
+         * Thus specifically only allow them for non-matrix Stereo input (layout == STEREO).
+         */
         case HB_AMIXDOWN_LEFT:
         case HB_AMIXDOWN_RIGHT:
-            return (layout & AV_CH_LAYOUT_STEREO);
+            return (layout == AV_CH_LAYOUT_STEREO);
 
         // mono remix always supported
         // HB_AMIXDOWN_NONE always supported (for Passthru)
