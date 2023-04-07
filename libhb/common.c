@@ -2326,8 +2326,8 @@ int hb_mixdown_has_remix_support(int mixdown, uint64_t layout)
             return ((layout & AV_CH_LAYOUT_2_1) == AV_CH_LAYOUT_2_1 ||
                     (layout & AV_CH_LAYOUT_2_2) == AV_CH_LAYOUT_2_2 ||
                     (layout & AV_CH_LAYOUT_QUAD) == AV_CH_LAYOUT_QUAD ||
-                    (layout == AV_CH_LAYOUT_STEREO_DOWNMIX &&
-                     mixdown == HB_AMIXDOWN_DOLBY));
+                    (layout == AV_CH_LAYOUT_STEREO_DOWNMIX && // decavcodecaBSInfo tells us the input signals matrix encoding
+                     mixdown == HB_AMIXDOWN_DOLBY)); // allows signaling matrix encoding in output w/encoders that support it
 
         // more than 1 channel
         case HB_AMIXDOWN_STEREO:

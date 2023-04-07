@@ -840,6 +840,21 @@ static int decavcodecaBSInfo( hb_work_object_t *w, const hb_buffer_t *buf,
                         if (info->matrix_encoding == AV_MATRIX_ENCODING_DOLBY ||
                             info->matrix_encoding == AV_MATRIX_ENCODING_DPLII)
                         {
+                            /*
+                             * Signal that the input uses matrix encoding via
+                             * channel layout for hb_mixdown_has_remix_support.
+                             * The latter needs this to allow the corresponding
+                             * mixdown for 2-channel matrix stereo input, said
+                             * mixdown being required to signal matrix encoding
+                             * in the *output* (when using e.g. the ac3 encoder).
+                             *
+                             * Quicker/faster than propagating side data all the
+                             * way through the pipeline, but we lose the ability
+                             * to distinguish between different matrix encodings.
+                             *
+                             * Only do this in BSInfo as overriding the layout
+                             * elsewhere could break downmixing, remapping etc.
+                             */
                             info->channel_layout = AV_CH_LAYOUT_STEREO_DOWNMIX;
                         }
                         else
