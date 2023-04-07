@@ -1,4 +1,4 @@
-# Usage: Set environment variables, then run ./translate_windows.sh
+# Usage: Set environment variables, then run ./translate_linux.sh
 # Using your own HandBrake Fork, example:
 #     export HB_GIT_REPO=https://github.com/<your-username>/HandBrake.git
 #     export HB_BRANCH_NAME=translation_update

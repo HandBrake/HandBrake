@@ -7,8 +7,6 @@
 #     Click on the resource to delve into it
 #     The three dots button top right will have a Download all option.
 
-
-
 if [[ -z ${HB_GIT_REPO} ]]; then
     echo "HB_GIT_REPO should be set to your HandBrake Repo Fork URL, including .git";
     exit 1;
@@ -42,8 +40,14 @@ git checkout translation_update
 # Unpack
 echo ""
 echo "- Unpacking the transifex files"
-unzip handbrakeproject_winui_resourcesresx.zip
-unzip handbrakeproject_winui_resourcestooltipsresx.zip
+unzip handbrakeproject_winui_resourcesresx*.zip
+unzip handbrakeproject_winui_resourcestooltipsresx*.zip
+
+# Pre Process Filenames to convert some language codes.
+mv resourcesresx_zh.resx resourcesresx_zh-Hans.resx
+mv resourcesresx_zh_TW.resx resourcesresx_zh-Hant.resx
+mv resourcestooltipsresx_zh.resx resourcestooltipsresx_zh-Hans.resx
+mv resourcestooltipsresx_zh_TW.resx resourcestooltipsresx_zh-Hant.resx
 
 # Rename the files
 echo ""
@@ -70,7 +74,7 @@ done
 # Change the line endings to Windows
 echo ""
 echo "- Changing Line Endings"
-unix2dos *.resx
+unix2dos -m *.resx
 
 # Copy the files to the correct directory
 echo ""
