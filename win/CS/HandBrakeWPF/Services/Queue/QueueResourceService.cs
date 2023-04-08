@@ -97,8 +97,8 @@ namespace HandBrakeWPF.Services.Queue
                 return;
             } 
 
-            // NVEnc Support - (Most cards support 3 but not all)
-            this.totalNvidiaInstances = 3;
+            // NVEnc Support - (Most cards now support 5 with up-to-date drivers)
+            this.totalNvidiaInstances = 5;
 
             // VCN Support
             this.totalVceInstances = 3;
