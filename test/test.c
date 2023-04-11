@@ -4388,8 +4388,6 @@ static hb_dict_t * PreparePreset(const char *preset_name)
     else if (crop_mode != NULL && !strcmp(crop_mode, "none")) 
     {
         hb_dict_set(preset, "PictureCropMode",  hb_value_int(2));
-    } else {
-        hb_dict_set(preset, "PictureCropMode",  hb_value_int(0)); // Automatic
     }
 
     if (display_width > 0)
