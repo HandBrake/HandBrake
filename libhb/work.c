@@ -1141,6 +1141,38 @@ static int sanitize_audio(hb_job_t *job)
             free(audio);
             continue;
         }
+        /*
+         * never properly tested w/resampling
+         * causes HandBrake GitHub issue #3533
+         */
+        if (audio->config.out.mixdown == HB_AMIXDOWN_RIGHT ||
+            audio->config.out.mixdown == HB_AMIXDOWN_LEFT)
+        {
+            if (audio->config.in.samplerate !=
+                hb_audio_samplerate_find_closest(audio->config.in.samplerate,
+                                                 audio->config.out.codec))
+            {
+                // e.g. >48 kHz input, encoder w/out >48 kHz support (currently all encoders, libhb limitation)
+                hb_log("work: unsupported samplerate %d for mixdown %s, dropping track %d",
+                       audio->config.in.samplerate,
+                       hb_mixdown_get_name(audio->config.out.mixdown),
+                       audio->config.out.track);
+                hb_list_rem(job->list_audio, audio);
+                free(audio);
+                continue;
+            }
+            if (audio->config.out.samplerate > 0 &&
+                audio->config.out.samplerate != audio->config.in.samplerate)
+            {
+                // only log if specific samplerate was requested (i.e. not automatic)
+                hb_log("work: sanitizing track %d samplerate %d to %d for mixdown %s",
+                       audio->config.out.track,
+                       audio->config.out.samplerate,
+                       audio->config.in.samplerate,
+                       hb_mixdown_get_name(audio->config.out.mixdown));
+            }
+            audio->config.out.samplerate = audio->config.in.samplerate; // no resampling
+        }
         /* Adjust output track number, in case we removed one.
          * Output tracks sadly still need to be in sequential order.
          * Note: out.track starts at 1, i starts at 0 */
