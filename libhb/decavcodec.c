@@ -279,14 +279,6 @@ static int decavcodecaInit( hb_work_object_t * w, hb_job_t * job )
         }
     }
 
-    // libavcodec can't decode TrueHD Mono (bug #356)
-    // work around it by requesting Stereo and downmixing
-    if (w->codec_param                     == AV_CODEC_ID_TRUEHD &&
-        w->audio->config.in.channel_layout == AV_CH_LAYOUT_MONO)
-    {
-        av_dict_set(&av_opts, "downmix", "stereo", 0);
-    }
-
     // Dynamic Range Compression
     if (w->audio->config.out.dynamic_range_compression >= 0.0f &&
         hb_audio_can_apply_drc(w->audio->config.in.codec,
@@ -331,14 +323,6 @@ static int decavcodecaInit( hb_work_object_t * w, hb_job_t * job )
     }
     pv->context->pkt_timebase.num = pv->audio->config.in.timebase.num;
     pv->context->pkt_timebase.den = pv->audio->config.in.timebase.den;
-
-    // libavcodec can't decode TrueHD Mono (bug #356)
-    // work around it by requesting Stereo and downmixing
-    if (w->codec_param                     == AV_CODEC_ID_TRUEHD &&
-        w->audio->config.in.channel_layout == AV_CH_LAYOUT_MONO)
-    {
-        pv->context->ch_layout = (AVChannelLayout)AV_CHANNEL_LAYOUT_STEREO;
-    }
 
     // avcodec_open populates av_opts with the things it didn't recognize.
     AVDictionaryEntry *t = NULL;
@@ -733,7 +717,7 @@ static int decavcodecaBSInfo( hb_work_object_t *w, const hb_buffer_t *buf,
         parse_pos = 0;
         while (parse_pos < buf->size && !done)
         {
-            int parse_len, truehd_mono = 0, ret;
+            int parse_len, ret;
 
             if (parser != NULL)
             {
@@ -752,17 +736,6 @@ static int decavcodecaBSInfo( hb_work_object_t *w, const hb_buffer_t *buf,
             {
                 parse_pos += parse_len;
                 continue;
-            }
-
-            // libavcodec can't decode TrueHD Mono (bug #356)
-            // work around it by requesting Stereo before decoding
-            if (context->codec_id == AV_CODEC_ID_TRUEHD &&
-                context->ch_layout.u.mask == AV_CH_LAYOUT_MONO)
-            {
-                truehd_mono                     = 1;
-                AVChannelLayout ch_layout = AV_CHANNEL_LAYOUT_STEREO;
-                av_opt_set_chlayout(context, "downmix", &ch_layout, AV_OPT_SEARCH_CHILDREN);
-                context->ch_layout = ch_layout;
             }
 
             AVPacket *avp = av_packet_alloc();
@@ -819,13 +792,6 @@ static int decavcodecaBSInfo( hb_work_object_t *w, const hb_buffer_t *buf,
                         }
                     }
 
-                    if (truehd_mono)
-                    {
-                        info->channel_layout = AV_CH_LAYOUT_MONO;
-                        info->matrix_encoding = AV_MATRIX_ENCODING_NONE;
-                    }
-                    else
-                    {
                         AVFrameSideData *side_data;
                         if ((side_data =
                              av_frame_get_side_data(frame,
@@ -861,7 +827,7 @@ static int decavcodecaBSInfo( hb_work_object_t *w, const hb_buffer_t *buf,
                         {
                             info->channel_layout = frame->ch_layout.u.mask;
                         }
-                    }
+
                     if (info->channel_layout == 0)
                     {
                         // Channel layout was not set.  Guess a layout based
