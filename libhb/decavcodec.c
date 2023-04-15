@@ -239,7 +239,7 @@ static int decavcodecaInit( hb_work_object_t * w, hb_job_t * job )
         {
             case AV_CODEC_ID_AC3:
             case AV_CODEC_ID_EAC3:
-                avcodec_downmix = w->audio->config.out.normalize_mix_level == 0;
+                avcodec_downmix = w->audio->config.out.normalize_mix_level == 1;
                 break;
             case AV_CODEC_ID_DTS:
                 avcodec_downmix = w->audio->config.out.normalize_mix_level == 0;
