@@ -227,56 +227,6 @@ static int decavcodecaInit( hb_work_object_t * w, hb_job_t * job )
             hb_error("decavcodecaInit: hb_audio_resample_init() failed");
             return 1;
         }
-        /*
-         * Some audio decoders can downmix using embedded coefficients,
-         * or dedicated audio substreams for a specific channel layout.
-         *
-         * But some will e.g. use normalized mix coefficients unconditionally,
-         * so we need to make sure this matches what the user actually requested.
-         */
-        int avcodec_downmix = 0;
-        switch (w->codec_param)
-        {
-            case AV_CODEC_ID_AC3:
-            case AV_CODEC_ID_EAC3:
-                avcodec_downmix = w->audio->config.out.normalize_mix_level == 1;
-                break;
-            case AV_CODEC_ID_DTS:
-                avcodec_downmix = w->audio->config.out.normalize_mix_level == 0;
-                break;
-            case AV_CODEC_ID_TRUEHD:
-                avcodec_downmix = (w->audio->config.out.normalize_mix_level == 0     ||
-                                   w->audio->config.out.mixdown == HB_AMIXDOWN_MONO  ||
-                                   w->audio->config.out.mixdown == HB_AMIXDOWN_DOLBY ||
-                                   w->audio->config.out.mixdown == HB_AMIXDOWN_DOLBYPLII);
-                break;
-            default:
-                break;
-        }
-        if (avcodec_downmix)
-        {
-            switch (w->audio->config.out.mixdown)
-            {
-                // request 5.1 before downmixing to dpl1/dpl2
-                case HB_AMIXDOWN_DOLBY:
-                case HB_AMIXDOWN_DOLBYPLII:
-                {
-                    av_dict_set(&av_opts, "downmix", "5.1(side)", 0);
-                    break;
-                }
-                // request the layout corresponding to the selected mixdown
-                default:
-                {
-                    char description[256];
-                    AVChannelLayout ch_layout = {0};
-                    av_channel_layout_from_mask(&ch_layout, hb_ff_mixdown_xlat(w->audio->config.out.mixdown, NULL));
-                    av_channel_layout_describe(&ch_layout, description, sizeof(description));
-                    av_channel_layout_uninit(&ch_layout);
-                    av_dict_set(&av_opts, "downmix", description, 0);
-                    break;
-                }
-            }
-        }
     }
 
     // Dynamic Range Compression
