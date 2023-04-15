@@ -35,9 +35,9 @@ double hb_nvenc_get_cuda_version() {
     int major, minor, devices;
       
     apiErr = cuda_load_functions(&cu, NULL);
-    if (apiErr == NV_ENC_SUCCESS) {
+    if (apiErr == CUDA_SUCCESS) {
         apiErr = cu->cuInit(0);
-        if (apiErr == NV_ENC_SUCCESS) {
+        if (apiErr == CUDA_SUCCESS) {
             
             cu->cuDeviceGetCount(&devices);
             if (!devices) {
@@ -58,7 +58,7 @@ double hb_nvenc_get_cuda_version() {
 
             apiErr = cu->cuDeviceComputeCapability(&major, &minor, dev);
            
-            if (apiErr == NV_ENC_SUCCESS) {
+            if (apiErr == CUDA_SUCCESS) {
                 cuda_version = (double)major + ((double)minor / 10.0);
                 hb_log("CUDA Version: %.1f", cuda_version);
                 
