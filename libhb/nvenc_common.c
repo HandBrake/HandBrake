@@ -60,7 +60,11 @@ double hb_nvenc_get_cuda_version() {
                 apiErr = cu->cuDeviceComputeCapability(&major, &minor, dev);
                
                 if (apiErr == CUDA_SUCCESS) {
-                    cuda_version = (double)major + ((double)minor / 10.0);
+                    char str[6];
+                    char *ptr;
+                     
+                    sprintf(str, "%d.%d", major, minor);
+                    cuda_version = strtod(str, &ptr);
                     hb_log("CUDA Version: %.1f", cuda_version);
                     
                     free(cu);
