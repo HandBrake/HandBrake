@@ -17,6 +17,60 @@
 #endif
 
 static int is_nvenc_available = -1;
+static int is_nvenc_av1_available = -1;
+static int is_nvenc_hevc_available = -1;
+
+static double cuda_version = -1;
+
+double hb_nvenc_get_cuda_version() {
+   
+   if (cuda_version != -1) {
+       return cuda_version;
+   }
+   
+    NVENCSTATUS apiErr = 0;
+    CUcontext cuda_ctx;
+    CudaFunctions *cu = NULL;
+    CUdevice dev;
+    int major, minor, devices;
+      
+    apiErr = cuda_load_functions(&cu, NULL);
+    if (apiErr == NV_ENC_SUCCESS) {
+        apiErr = cu->cuInit(0);
+        if (apiErr == NV_ENC_SUCCESS) {
+            
+            cu->cuDeviceGetCount(&devices);
+            if (!devices) {
+                cuda_version = 0;
+                free(cu);
+                return cuda_version;
+            }
+                
+            // For now, lets just work off the primary device we find.
+            for (int i = 0; i < devices; ++i) {
+                int result = cu->cuDeviceGet(&dev, i);
+                if (result == CUDA_SUCCESS)
+                {
+                    cu->cuCtxCreate(&cuda_ctx, 0, dev);
+                    break;
+                }
+            }
+
+            apiErr = cu->cuDeviceComputeCapability(&major, &minor, dev);
+           
+            if (apiErr == NV_ENC_SUCCESS) {
+                cuda_version = (double)major + ((double)minor / 10.0);
+                hb_log("CUDA Version: %.1f", cuda_version);
+                
+                free(cu);
+                free(dev);
+                return cuda_version;
+            }
+        }
+    }
+    
+    return cuda_version;
+}
 
 int hb_check_nvenc_available()
 {
@@ -73,12 +127,44 @@ int hb_nvenc_h264_available()
 
 int hb_nvenc_h265_available()
 {
-    return hb_check_nvenc_available();
+    if (is_nvenc_hevc_available != -1)
+    {
+        return is_nvenc_hevc_available;
+    }
+    
+    if (!hb_check_nvenc_available()){
+        is_nvenc_hevc_available = 0;
+        return is_nvenc_hevc_available;
+    }
+    
+    if (hb_nvenc_get_cuda_version() >= 6.0) {
+        is_nvenc_hevc_available = 1;
+    }else {
+        is_nvenc_hevc_available = 0;
+    }
+        
+    return is_nvenc_hevc_available;
 }
 
 int hb_nvenc_av1_available()
 {
-    return hb_check_nvenc_available();
+    if (is_nvenc_av1_available != -1)
+    {
+        return is_nvenc_av1_available;
+    }
+    
+    if (!hb_check_nvenc_available()){
+        is_nvenc_av1_available = 0;
+        return is_nvenc_av1_available;
+    }
+    
+    if (hb_nvenc_get_cuda_version() >= 9) {
+        is_nvenc_av1_available = 1;
+    } else {
+        is_nvenc_av1_available = 0;
+    }
+        
+    return is_nvenc_av1_available;
 }
 
 int hb_check_nvdec_available()
