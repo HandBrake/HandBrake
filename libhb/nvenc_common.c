@@ -28,46 +28,52 @@ double hb_nvenc_get_cuda_version() {
        return cuda_version;
    }
    
-    NVENCSTATUS apiErr = 0;
-    CUcontext cuda_ctx;
-    CudaFunctions *cu = NULL;
-    CUdevice dev;
-    int major, minor, devices;
-      
-    apiErr = cuda_load_functions(&cu, NULL);
-    if (apiErr == CUDA_SUCCESS) {
-        apiErr = cu->cuInit(0);
+    #if HB_PROJECT_FEATURE_NVENC
+        NVENCSTATUS apiErr = 0;
+        CUcontext cuda_ctx;
+        CudaFunctions *cu = NULL;
+        CUdevice dev;
+        int major, minor, devices;
+          
+        apiErr = cuda_load_functions(&cu, NULL);
         if (apiErr == CUDA_SUCCESS) {
-            
-            cu->cuDeviceGetCount(&devices);
-            if (!devices) {
-                cuda_version = 0;
-                free(cu);
-                return cuda_version;
-            }
+            apiErr = cu->cuInit(0);
+            if (apiErr == CUDA_SUCCESS) {
                 
-            // For now, lets just work off the primary device we find.
-            for (int i = 0; i < devices; ++i) {
-                int result = cu->cuDeviceGet(&dev, i);
-                if (result == CUDA_SUCCESS)
-                {
-                    cu->cuCtxCreate(&cuda_ctx, 0, dev);
-                    break;
+                cu->cuDeviceGetCount(&devices);
+                if (!devices) {
+                    cuda_version = 0;
+                    free(cu);
+                    return cuda_version;
+                }
+                    
+                // For now, lets just work off the primary device we find.
+                for (int i = 0; i < devices; ++i) {
+                    int result = cu->cuDeviceGet(&dev, i);
+                    if (result == CUDA_SUCCESS)
+                    {
+                        cu->cuCtxCreate(&cuda_ctx, 0, dev);
+                        break;
+                    }
+                }
+
+                apiErr = cu->cuDeviceComputeCapability(&major, &minor, dev);
+               
+                if (apiErr == CUDA_SUCCESS) {
+                    cuda_version = (double)major + ((double)minor / 10.0);
+                    hb_log("CUDA Version: %.1f", cuda_version);
+                    
+                    free(cu);
+                    free(dev);
+                    return cuda_version;
                 }
             }
-
-            apiErr = cu->cuDeviceComputeCapability(&major, &minor, dev);
-           
-            if (apiErr == CUDA_SUCCESS) {
-                cuda_version = (double)major + ((double)minor / 10.0);
-                hb_log("CUDA Version: %.1f", cuda_version);
-                
-                free(cu);
-                free(dev);
-                return cuda_version;
-            }
         }
-    }
+    
+    #else
+        cuda_version = 0;
+        return cuda_version;
+    #endif
     
     return cuda_version;
 }
@@ -158,7 +164,7 @@ int hb_nvenc_av1_available()
         return is_nvenc_av1_available;
     }
     
-    if (hb_nvenc_get_cuda_version() >= 9) {
+    if (hb_nvenc_get_cuda_version() >= 8.9) {
         is_nvenc_av1_available = 1;
     } else {
         is_nvenc_av1_available = 0;
