@@ -60,7 +60,7 @@ int hb_nvenc_get_cuda_version() {
                 apiErr = cu->cuDeviceComputeCapability(&major, &minor, dev);
                
                 if (apiErr == CUDA_SUCCESS) {
-                    cuda_version = major * 100 + minor;
+                    cuda_version = major * 1000 + minor;
                     hb_log("CUDA Version: %i.%i", major, minor);
                     
                     free(cu);
@@ -143,7 +143,7 @@ int hb_nvenc_h265_available()
         return is_nvenc_hevc_available;
     }
     
-    if (hb_nvenc_get_cuda_version() >= 600) {
+    if (hb_nvenc_get_cuda_version() >= 6000) {
         is_nvenc_hevc_available = 1;
     }else {
         is_nvenc_hevc_available = 0;
@@ -164,7 +164,7 @@ int hb_nvenc_av1_available()
         return is_nvenc_av1_available;
     }
     
-    if (hb_nvenc_get_cuda_version() >= 809) {
+    if (hb_nvenc_get_cuda_version() >= 8009) {
         is_nvenc_av1_available = 1;
     } else {
         is_nvenc_av1_available = 0;
