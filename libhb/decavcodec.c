@@ -162,6 +162,199 @@ struct hb_work_private_s
 
 static void decodeAudio( hb_work_private_t *pv, packet_info_t * packet_info );
 
+#define HB_AV_CH_SIDE_MASK (AV_CH_SIDE_LEFT|AV_CH_SIDE_RIGHT)
+#define HB_AV_CH_BACK_MASK (AV_CH_BACK_LEFT|AV_CH_BACK_RIGHT)
+#define HB_AV_CH_BOTH_MASK (HB_AV_CH_SIDE_MASK|HB_AV_CH_BACK_MASK)
+
+static int downmix_required(uint64_t target_layout_mask, uint64_t input_layout_mask)
+{
+    /*
+     * Side channels can easily be remapped to back channels and vice-versa.
+     * Provided the other channels are the same, downmixing is not required.
+     */
+    if ((input_layout_mask & HB_AV_CH_SIDE_MASK) == 0 &&
+        (input_layout_mask & HB_AV_CH_BACK_MASK) == HB_AV_CH_BACK_MASK)
+    {
+        if ((target_layout_mask & HB_AV_CH_BACK_MASK) == 0 &&
+            (target_layout_mask & HB_AV_CH_SIDE_MASK) == HB_AV_CH_SIDE_MASK)
+        {
+            // input has back channels but not side channels
+            // target has the opposite (sides but not backs)
+            return ((input_layout_mask & ~HB_AV_CH_BOTH_MASK) !=
+                    (target_layout_mask & ~HB_AV_CH_BOTH_MASK));
+        }
+    }
+    if ((input_layout_mask & HB_AV_CH_BACK_MASK) == 0 &&
+        (input_layout_mask & HB_AV_CH_SIDE_MASK) == HB_AV_CH_SIDE_MASK)
+    {
+        if ((target_layout_mask & HB_AV_CH_SIDE_MASK) == 0 &&
+            (target_layout_mask & HB_AV_CH_BACK_MASK) == HB_AV_CH_BACK_MASK)
+        {
+            // input has side channels but not back channels
+            // target has the opposite (backs but not sides)
+            return ((input_layout_mask & ~HB_AV_CH_BOTH_MASK) !=
+                    (target_layout_mask & ~HB_AV_CH_BOTH_MASK));
+        }
+    }
+    return (input_layout_mask != target_layout_mask);
+}
+
+static uint64_t ac3_downmix_mask(int hb_mixdown, int normalized, uint64_t input_layout_mask, const char **dmix_mode)
+{
+    /*
+     * ac3/eac3 bitstreams contain mix levels for center, surround and LFE channels.
+     *
+     * libavcodec's decoder can use them to build a normalized downmix matrix:
+     * libavcodec/ac3dec.c static int set_downmix_coeffs()
+     *
+     * and downmix to either mono or stereo specifically:
+     * libavcodec/ac3dsp.c static void ac3_downmix_c()
+     *
+     * We only do a decoder downmix here for a minor speed boost, as the mix levels
+     * are otherwise available to us via AV_FRAME_DATA_DOWNMIX_INFO, which we use
+     * in decodeAudio() to build the "regular" (non-normalized) downmix matrix.
+     *
+     * Note: the decoder ignores Lt/Rt-specific mix levels and is otherwise incapable of
+     * producing a Dolby Surround/PLII-compatible downmix: only use it for normal Stereo.
+     */
+    if (normalized == 1)
+    {
+        uint64_t mask = 0;
+        switch (hb_mixdown)
+        {
+            case HB_AMIXDOWN_MONO:
+            case HB_AMIXDOWN_STEREO:
+                mask = hb_ff_mixdown_xlat(hb_mixdown, NULL);
+                break;
+
+            default:
+                return 0;
+        }
+        if (mask && downmix_required(mask, input_layout_mask))
+        {
+            /*
+             * We also set the existing decoder option "dmix_mode" to 2 (AC3_DMIXMOD_LORO)
+             * which is currently ignored by the decoder but should (theoretically) ensure
+             * we always get a regular Lo/Ro downmix, if the decoder were to ever gain the
+             * ability to do a Dolby/PLII downmix in the future.
+             */
+            *dmix_mode = "2";
+            return mask;
+        }
+    }
+    return 0;
+}
+
+static uint64_t dca_downmix_mask(int hb_mixdown, int normalized, uint64_t input_layout_mask)
+{
+    /*
+     * AV_CODEC_ID_DTS
+     *
+     * For DTS-HD MA, doing a decoder downmix vs. an hb_audio_resample
+     * downmix can result in significant differences e.g. in terms of
+     * output bitrate using 24-bit FLAC. Letting the decoder decode
+     * the full bistream at least ensures decoding is lossless, at
+     * the expense of losing custom downmix coefficients that may
+     * exist in the bitstream. So, no decoder downmix for DTS.
+     *
+     * Long-term, a solution would be to have libavcodec's DTS decoder export
+     * downmix coefficients to a new type of AVFrame side data and pass that
+     * through to hb_audio_resample (similar to AV_FRAME_DATA_DOWNMIX_INFO).
+     */
+    return 0;
+}
+
+static uint64_t truehd_downmix_mask(int hb_mixdown, int normalized, uint64_t input_layout_mask)
+{
+    /*
+     * TrueHD bitstreams are made up of multiple "substreams" which are
+     * combined in order to obtain the final output. Any given substream
+     * depends on the previous substream(s), but not the next; by only
+     * decoding up to specific substream, a TrueHD decoder can extract
+     * an embedded downmix.
+     */
+    if (normalized == 0)
+    {
+        uint64_t mask = 0;
+        switch (hb_mixdown)
+        {
+            /*
+             * We cannot use an embedded Stereo downmix as we have no way
+             * of knowing whether it is Dolby Surround or PLII-compatible.
+             * Request 5.1 instead and let hb_audio_resample downmix that.
+             */
+            case HB_AMIXDOWN_DOLBY:
+            case HB_AMIXDOWN_DOLBYPLII:
+                mask = AV_CH_LAYOUT_5POINT1;
+                break;
+
+            default:
+                mask = hb_ff_mixdown_xlat(hb_mixdown, NULL);
+                break;
+        }
+        if (mask && downmix_required(mask, input_layout_mask))
+        {
+            if (mask == AV_CH_LAYOUT_STEREO)
+            {
+                /*
+                 * The majority of TrueHD tracks have a Stereo first
+                 * substream, even when the second substream is Mono.
+                 */
+                return mask;
+            }
+            if (hb_mixdown == HB_AMIXDOWN_MONO)
+            {
+                /*
+                 * It is unlikely that any substream configuration will
+                 * give us an embedded Mono downmix (except in the case
+                 * where the full input layout is Mono, but in said case
+                 * a downmix is not required) however it may be possible
+                 * to extract a Stereo downmix and let hb_audio_resample
+                 * take care of downmixing that to Mono for final output.
+                 *
+                 * Do it after downmix_required() so we don't accidentally
+                 * request a Stereo downmix when the input is already Mono.
+                 */
+                return AV_CH_LAYOUT_STEREO;
+            }
+            /*
+             * Which downmix(es) are possible depend on the layout for each specific substream
+             * combination, but we cannot query the substream-specific layout from the decoder.
+             * However, excepting the Stereo to Mono case already handled above, it should be
+             * safe to assume that each additional substream contains more channels than the
+             * previous one, thus a downmix should only be possible when the all-substreams
+             * layout is a superset of the target layout.
+             *
+             * Note: when requesting a layout with fewer channels than a given substream's
+             * layout but more channels than the previous substream, libavcodec's decoder
+             * will give us the substream with more channels, so we don't have to worry
+             * about having to accidentally upmix in hb_audio_resample down the line.
+             * For example input with embedded stereo and 5.1(side) then finally 7.1,
+             * and a downmix channel layout of, say, "3.1" (from an imaginary future
+             * HB mixdown), the decoder would give us "5.1(side)" rather than stereo.
+             */
+            if (mask == (mask & input_layout_mask))
+            {
+                return mask;
+            }
+        }
+    }
+    return 0;
+}
+
+static char* channel_layout_name_from_mask(uint64_t mask, char *buf, size_t size)
+{
+    AVChannelLayout layout = { 0 };
+    if (av_channel_layout_from_mask(&layout, mask) == 0 &&
+        av_channel_layout_describe(&layout, buf, size) > 0)
+    {
+        av_channel_layout_uninit(&layout);
+        return buf;
+    }
+    av_channel_layout_uninit(&layout);
+    return NULL;
+}
+
 /***********************************************************************
  * hb_work_decavcodec_init
  ***********************************************************************
@@ -226,6 +419,56 @@ static int decavcodecaInit( hb_work_object_t * w, hb_job_t * job )
         {
             hb_error("decavcodecaInit: hb_audio_resample_init() failed");
             return 1;
+        }
+
+        /*
+         * Audio decoder downmix.
+         *
+         * Some codecs (e.g. truehd) contain embedded downmixes for multiple layouts.
+         * Others (e.g. ac3/eac3, dca) contain embedded downmix coefficients instead.
+         *
+         * When applicable, configure corresponding decoder to peform the required downmix.
+         */
+        char mixname[256];
+        char *downmix = NULL;
+        uint64_t downmix_mask = 0;
+        const char *dmix_mode = NULL;
+        switch (w->codec_param)
+        {
+            case AV_CODEC_ID_AC3:
+            case AV_CODEC_ID_EAC3:
+                downmix_mask = ac3_downmix_mask(w->audio->config.out.mixdown,
+                                                w->audio->config.out.normalize_mix_level,
+                                                w->audio->config.in.channel_layout, &dmix_mode);
+                break;
+
+            case AV_CODEC_ID_DTS:
+                downmix_mask = dca_downmix_mask(w->audio->config.out.mixdown,
+                                                w->audio->config.out.normalize_mix_level,
+                                                w->audio->config.in.channel_layout);
+                break;
+
+            case AV_CODEC_ID_TRUEHD:
+                downmix_mask = truehd_downmix_mask(w->audio->config.out.mixdown,
+                                                   w->audio->config.out.normalize_mix_level,
+                                                   w->audio->config.in.channel_layout);
+                break;
+
+            default:
+                break;
+        }
+        if (downmix_mask)
+        {
+            downmix = channel_layout_name_from_mask(downmix_mask, mixname, sizeof(mixname));
+        }
+        if (dmix_mode)
+        {
+            av_dict_set(&av_opts, "dmix_mode", dmix_mode, 0);
+        }
+        if (downmix)
+        {
+            av_dict_set(&av_opts, "downmix", downmix, 0);
+            hb_log("decavcodec: requesting decoder downmix '%s' for track %d", downmix, w->audio->config.out.track);
         }
     }
 
