@@ -146,6 +146,7 @@ struct hb_work_private_s
     hb_audio_t           * audio;
     hb_audio_resample_t  * resample;
     int                    drop_samples;
+    uint64_t               downmix_mask;
 
 #if HB_PROJECT_FEATURE_QSV
     // QSV-specific settings
@@ -467,6 +468,7 @@ static int decavcodecaInit( hb_work_object_t * w, hb_job_t * job )
         }
         if (downmix)
         {
+            pv->downmix_mask = downmix_mask;
             av_dict_set(&av_opts, "downmix", downmix, 0);
             hb_log("decavcodec: requesting decoder downmix '%s' for track %d", downmix, w->audio->config.out.track);
         }
@@ -2453,6 +2455,17 @@ hb_work_object_t hb_decavcodecv =
     .bsinfo = decavcodecvBSInfo
 };
 
+static void log_decoder_downmix_mismatch(uint64_t downmix_mask, uint64_t decoded_mask)
+{
+    char buf[2][256];
+    char *req = channel_layout_name_from_mask(downmix_mask, buf[0], sizeof(buf[0]));
+    char *got = channel_layout_name_from_mask(decoded_mask, buf[1], sizeof(buf[1]));
+    hb_deep_log(2,
+                "decavcodec: requested channel layout '%s' via decoder downmix "
+                "but decoded audio has channel layout '%s' instead",
+                req ? req : "(null)", got ? got : "(null)");
+}
+
 static void decodeAudio(hb_work_private_t *pv, packet_info_t * packet_info)
 {
     AVCodecContext * context = pv->context;
@@ -2554,6 +2567,11 @@ static void decodeAudio(hb_work_private_t *pv, packet_info_t * packet_info)
                                                  downmix_info->lfe_mix_level);
             }
             channel_layout = pv->frame->ch_layout;
+            if (pv->downmix_mask && pv->downmix_mask != channel_layout.u.mask)
+            {
+                log_decoder_downmix_mismatch(pv->downmix_mask, channel_layout.u.mask);
+                pv->downmix_mask = 0; // don't spam the log
+            }
             if (channel_layout.order != AV_CHANNEL_ORDER_NATIVE || channel_layout.u.mask == 0)
             {
                 AVChannelLayout default_ch_layout;
