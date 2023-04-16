@@ -227,15 +227,17 @@ static int avformatInit( hb_mux_object_t * m )
 
     ret = avio_open2(&m->oc->pb, job->file, AVIO_FLAG_WRITE,
                      &m->oc->interrupt_callback, NULL);
-    if( ret < 0 )
+    if (ret < 0)
     {
-      if( ret == -2 ) 
-      {
-        hb_error( "avio_open2 failed, errno -2: Could not write to indicated output file. Please check destination path and file permissions" );
-      }
-      else
-        hb_error( "avio_open2 failed, errno %d", ret);
-      goto error;
+        if (ret == -2)
+        {
+            hb_error("avio_open2 failed, errno -2: Could not write to indicated output file. Please check destination path and file permissions");
+        }
+        else
+        {
+            hb_error("avio_open2 failed, errno %d", ret);
+        }
+        goto error;
     }
 
     /* Video track */
