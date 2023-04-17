@@ -2181,6 +2181,14 @@ static int decavcodecvInfo( hb_work_object_t *w, hb_work_info_t *info )
         info->geometry.par.den = pv->context->sample_aspect_ratio.den;
     }
 
+    if (pv->context->codec_id == AV_CODEC_ID_AV1)
+    {
+        // Reset the PAR, AV1 doesn't have a way to store it in the
+        // bitstream, so the AVCodecContext values are always 1.
+        info->geometry.par.num = 0;
+        info->geometry.par.den = 1;
+    }
+
     compute_frame_duration( pv );
     info->rate.num = clock;
     info->rate.den = pv->duration * (clock / 90000.);
