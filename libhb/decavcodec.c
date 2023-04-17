@@ -2186,7 +2186,7 @@ static int decavcodecvInfo( hb_work_object_t *w, hb_work_info_t *info )
         // Reset the PAR, AV1 doesn't have a way to store it in the
         // bitstream, so the AVCodecContext values are always 1.
         info->geometry.par.num = 0;
-        info->geometry.par.den = 1;
+        info->geometry.par.den = 0;
     }
 
     compute_frame_duration( pv );
