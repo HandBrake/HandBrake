@@ -4878,13 +4878,15 @@ int hb_qsv_sanitize_filter_list(hb_job_t *job)
                     // cropping and scaling always done via VPP filter
                     case HB_FILTER_CROP_SCALE:
                         break;
-
-                    case HB_FILTER_YADIF:
-                    case HB_FILTER_ROTATE:
-                    case HB_FILTER_RENDER_SUB:
-                    case HB_FILTER_AVFILTER:
-                        num_sw_filters++;
-                        break;
+                    case HB_FILTER_VFR:
+                    {
+                        // Mode 0 doesn't require access to the frame data
+                        int mode = hb_dict_get_int(filter->settings, "mode");
+                        if (mode == 0)
+                        {
+                            break;
+                        }
+                    }
                     default:
                         num_sw_filters++;
                         break;

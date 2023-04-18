@@ -538,6 +538,11 @@ static void hb_vfr_close( hb_filter_object_t * filter )
         hb_log("vfr: %d frames output, %d dropped and %d duped for CFR/PFR",
                pv->count_frames, pv->drops, pv->dups );
     }
+    else
+    {
+        hb_log("vfr: %d frames output, %d dropped",
+               pv->count_frames, pv->drops);
+    }
 
     if( pv->job )
     {

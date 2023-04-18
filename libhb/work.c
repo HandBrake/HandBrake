@@ -1387,27 +1387,7 @@ static void sanitize_filter_list(hb_job_t *job, hb_geometry_t src_geo)
         }
     }
 
-    int is_detel = 0;
-    hb_filter_object_t * filter = hb_filter_find(list, HB_FILTER_DETELECINE);
-    if (filter != NULL)
-    {
-        is_detel = 1;
-    }
-
-    filter = hb_filter_find(list, HB_FILTER_VFR);
-    if (filter != NULL)
-    {
-        int mode = hb_dict_get_int(filter->settings, "mode");
-        // "Same as source" FPS and no HB_FILTER_DETELECINE
-        if ( (mode == 0) && (is_detel == 0) )
-        {
-            hb_list_rem(list, filter);
-            hb_filter_close(&filter);
-            hb_log("Skipping vfr filter");
-        }
-    }
-
-    filter = hb_filter_find(list, HB_FILTER_CROP_SCALE);
+    hb_filter_object_t *filter = hb_filter_find(list, HB_FILTER_CROP_SCALE);
     if (filter != NULL)
     {
         hb_dict_t* settings = filter->settings;

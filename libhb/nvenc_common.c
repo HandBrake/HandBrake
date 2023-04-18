@@ -399,8 +399,23 @@ int hb_nvdec_are_filters_supported(hb_list_t *filters)
     for (int i = 0; i < hb_list_count(filters); i++)
     {
         hb_filter_object_t *filter = hb_list_item(filters, i);
-        hb_deep_log( 2, "nvdec: %s isn't yet supported for CUDA video frames", filter->name);
-        ret = 0;
+
+        switch (filter->id)
+        {
+            case HB_FILTER_VFR:
+            {
+                // Mode 0 doesn't require access to the frame data
+                int mode = hb_dict_get_int(filter->settings, "mode");
+                if (mode == 0)
+                {
+                    break;
+                }
+            }
+            default:
+                hb_deep_log( 2, "nvdec: %s isn't yet supported for CUDA video frames", filter->name);
+                ret = 0;
+                break;
+        }
     }
 
     return ret;
