@@ -1,0 +1,39 @@
+From 319e8a49b5bcfa80fcb6f50f0dd78c6408c972ae Mon Sep 17 00:00:00 2001
+From: Paul B Mahol <onemda@gmail.com>
+Date: Wed, 31 Aug 2022 18:36:04 +0200
+Subject: [PATCH] avcodec/amr*bdec: return only number of consumed bytes
+
+---
+ libavcodec/amrnbdec.c | 2 +-
+ libavcodec/amrwbdec.c | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/libavcodec/amrnbdec.c b/libavcodec/amrnbdec.c
+index dcf66c1dde..e07c01923e 100644
+--- a/libavcodec/amrnbdec.c
++++ b/libavcodec/amrnbdec.c
+@@ -1091,7 +1091,7 @@ static int amrnb_decode_frame(AVCodecContext *avctx, AVFrame *frame,
+ 
+     *got_frame_ptr = 1;
+ 
+-    return avpkt->size;
++    return buf - avpkt->data;
+ }
+ 
+ 
+diff --git a/libavcodec/amrwbdec.c b/libavcodec/amrwbdec.c
+index f9a67c43b7..1e537e1a3b 100644
+--- a/libavcodec/amrwbdec.c
++++ b/libavcodec/amrwbdec.c
+@@ -1288,7 +1288,7 @@ static int amrwb_decode_frame(AVCodecContext *avctx, AVFrame *frame,
+ 
+     *got_frame_ptr = 1;
+ 
+-    return avpkt->size;
++    return buf - avpkt->data;
+ }
+ 
+ const FFCodec ff_amrwb_decoder = {
+-- 
+2.40.0
+
