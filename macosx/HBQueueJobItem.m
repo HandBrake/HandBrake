@@ -201,7 +201,7 @@ static NSDictionary     *shortHeightAttr;
             [attrString appendString:@" \t" withAttributes:detailAttr];
             [attrString appendString:[_byteFormatter stringFromByteCount:self.fileSize] withAttributes:detailAttr];
 
-            if (self.job.isStream)
+            if (self.job.isStream && self.sourceFileSize > 0 && self.fileSize > 0)
             {
                 double difference = 100.f / self.sourceFileSize * self.fileSize;
                 NSString *formattedDifference = [_numberFormatter stringFromNumber:@(difference)];
