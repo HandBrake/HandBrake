@@ -178,13 +178,13 @@ namespace HandBrakeWPF.Services.Queue.Model
             }
         }
 
-        public long? FinalFileSizeInMegaBytes
+        public decimal? FinalFileSizeInMegaBytes
         {
             get
             {
                 if (this.finalFileSize.HasValue)
                 {
-                    return this.finalFileSize / 1024 / 1024;
+                    return (decimal)this.finalFileSize / 1024 / 1024;
                 }
 
                 return 0;
@@ -205,10 +205,10 @@ namespace HandBrakeWPF.Services.Queue.Model
                 if (SourceFileSizeInBytes != null && SourceFileSizeInBytes != 0 && FinalFileSizeBytes.HasValue)
                 {
                     decimal difference = (decimal) 100 / SourceFileSizeInBytes.Value * FinalFileSizeBytes.Value;
-                    percentage = string.Format(" ({0} %{1})", Math.Round(difference, 1), Resources.QueueViewModel_DifferenceText);
+                    percentage = string.Format(" ({0} %{1})", Math.Round(difference, 3), Resources.QueueViewModel_DifferenceText);
                 }
 
-                return string.Format("{0:##.###} MB{1}", FinalFileSizeInMegaBytes, percentage);
+                return string.Format("{0:######.###} MB{1}", FinalFileSizeInMegaBytes, percentage);
             }
         }
 
