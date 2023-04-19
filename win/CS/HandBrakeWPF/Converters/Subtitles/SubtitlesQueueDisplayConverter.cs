@@ -42,7 +42,7 @@ namespace HandBrakeWPF.Converters.Subtitles
                 {
                     string text = track.SourceTrack != null
                                       ? track.SourceTrack.ToString()
-                                      : (track.SrtFileName + ".srt");
+                                      : (track.SrtFileName);
 
                     if (!string.IsNullOrEmpty(track.SrtFileName))
                     {
