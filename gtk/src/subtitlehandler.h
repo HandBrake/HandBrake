@@ -40,4 +40,10 @@ GhbValue *ghb_get_subtitle_settings(GhbValue *settings);
 char * ghb_subtitle_short_description(const GhbValue *subsource,
                                       const GhbValue *subsettings);
 
+
+void subtitle_list_selection_changed_cb(GtkTreeSelection *ts, signal_user_data_t *ud);
+void subtitle_edit_clicked_cb(GtkWidget *widget, gchar *path, signal_user_data_t *ud);
+void subtitle_remove_clicked_cb(GtkWidget *widget, gchar *path, signal_user_data_t *ud);
+
+
 #endif // _SUBTITLEHANDLER_H_

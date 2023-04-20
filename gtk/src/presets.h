@@ -60,4 +60,47 @@ GhbValue* ghb_settings_to_preset(GhbValue *settings);
 void ghb_preset_menu_button_refresh(signal_user_data_t *ud,
                                     const char *name, int type);
 
+void presets_list_selection_changed_cb(
+    GtkTreeSelection *selection, signal_user_data_t *ud);
+#if GTK_CHECK_VERSION(4, 4, 0)
+void presets_drag_data_received_cb(
+    GtkTreeView        *tv,
+    GdkDrop            *dc,
+    GtkSelectionData   *selection_data,
+    signal_user_data_t *ud);
+gboolean presets_drag_motion_cb(
+    GtkTreeView        *tv,
+    GdkDrop            *ctx,
+    gint                x,
+    gint                y,
+    signal_user_data_t *ud);
+#else
+void presets_drag_data_received_cb(
+    GtkTreeView        *tv,
+    GdkDragContext     *dc,
+    gint                x,
+    gint                y,
+    GtkSelectionData   *selection_data,
+    guint               info,
+    guint               t,
+    signal_user_data_t *ud);
+gboolean presets_drag_motion_cb(
+    GtkTreeView        *tv,
+    GdkDragContext     *ctx,
+    gint                x,
+    gint                y,
+    guint               time,
+    signal_user_data_t *ud);
+#endif
+void preset_edited_cb(
+    GtkCellRendererText *cell,
+    gchar               *treepath_s,
+    gchar               *text,
+    signal_user_data_t  *ud);
+void presets_row_expanded_cb(
+    GtkTreeView        *treeview,
+    GtkTreeIter        *iter,
+    GtkTreePath        *treepath,
+    signal_user_data_t *ud);
+
 #endif // _GHB_PRESETS_H_
