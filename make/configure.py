@@ -1498,9 +1498,12 @@ class Launcher:
 
         ## launch/pipe
         try:
-            pipe = subprocess.Popen( cmd, shell=True, bufsize=1, stdout=subprocess.PIPE, stderr=subprocess.STDOUT )
+            pipe = subprocess.Popen(cmd, shell=True, bufsize=1, stdout=subprocess.PIPE, stderr=subprocess.STDOUT )
+            self.returncode = pipe.returncode
         except Exception as x:
             raise AbortError( 'launch failure: %s', x )
+            self.returncode = 1
+
         for line in pipe.stdout:
             if not isinstance(line, str):
                 line = line.decode()
@@ -1511,8 +1514,8 @@ class Launcher:
         timeEnd = time.time()
         elapsed = timeEnd - timeBegin
 
-        if pipe.returncode:
-            result = '%s (code %d)' % (print_red('FAILURE'), pipe.returncode)
+        if self.returncode:
+            result = '%s (code %d)' % (print_red('FAILURE'), self.returncode)
         else:
             result = print_green('SUCCESS')
 
@@ -1772,11 +1775,9 @@ try:
     options.enable_mf         = IfHost(options.enable_mf, 'aarch64-w64-mingw32*',
                                        none=False).value
     options.enable_nvenc      = IfHost(options.enable_nvenc, '*-*-linux*',
-                                       'x86_64-w64-mingw32*', none=False).value
-                                       
+                                       'x86_64-w64-mingw32', none=False).value
     options.enable_nvdec      = IfHost(options.enable_nvdec, '*-*-linux*',
-                                       'x86_64-w64-mingw32*', none=False).value
-                                       
+                                       'x86_64-w64-mingw32', none=False).value
     options.enable_qsv        = IfHost(options.enable_qsv, '*-*-linux*', '*-*-freebsd*',
                                        'x86_64-w64-mingw32*', none=False).value
     options.enable_vce        = IfHost(options.enable_vce, '*-*-linux*',
@@ -2237,7 +2238,7 @@ int main()
 
     if options.launch:
         stdout.write( '%s\n' % ('-' * 79) )
-        Launcher( targets )
+        launcher = Launcher( targets )
 
     cfg.record_log()
 
@@ -2268,4 +2269,7 @@ except AbortError as x:
         pass
     sys.exit( 1 )
 
-sys.exit( 0 )
+if options.launch:
+    sys.exit( launcher.returncode )
+else:
+    sys.exit( 0 )
