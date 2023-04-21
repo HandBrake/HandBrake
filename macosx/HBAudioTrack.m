@@ -11,8 +11,6 @@
 #import "HBTitle.h"
 #import "handbrake/handbrake.h"
 
-#define DEFAULT_SAMPLERATE 48000
-
 @interface HBAudioTrack ()
 @property (nonatomic, readwrite) BOOL validating;
 @end
