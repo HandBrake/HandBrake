@@ -297,6 +297,9 @@
 
 - (int)sanitizeBitrateValue:(int)proposedBitrate
 {
+    HBTitleAudioTrack *sourceTrack = [_dataSource sourceTrackAtIndex:_sourceTrackIdx];
+    int sampleRate = self.sampleRate ? self.sampleRate : sourceTrack.sampleRate;
+
     if (self.encoder & HB_ACODEC_PASS_FLAG)
     {
         return -1;
@@ -304,12 +307,12 @@
     else if (proposedBitrate == -1) // switching from passthru
     {
         return hb_audio_bitrate_get_default(self.encoder,
-                                            self.sampleRate ? self.sampleRate : DEFAULT_SAMPLERATE,
+                                            sampleRate,
                                             self.mixdown);
     }
     else
     {
-        return hb_audio_bitrate_get_best(self.encoder, proposedBitrate, self.sampleRate, self.mixdown);
+        return hb_audio_bitrate_get_best(self.encoder, proposedBitrate, sampleRate, self.mixdown);
     }
 }
 
@@ -388,7 +391,10 @@
     int minBitRate = 0;
     int maxBitRate = 0;
 
-    hb_audio_bitrate_get_limits(self.encoder, self.sampleRate, self.mixdown, &minBitRate, &maxBitRate);
+    HBTitleAudioTrack *sourceTrack = [_dataSource sourceTrackAtIndex:_sourceTrackIdx];
+    int sampleRate = self.sampleRate ? self.sampleRate : sourceTrack.sampleRate;
+
+    hb_audio_bitrate_get_limits(self.encoder, sampleRate, self.mixdown, &minBitRate, &maxBitRate);
 
     NSMutableArray<NSString *> *bitRates = [[NSMutableArray alloc] init];
     for (const hb_rate_t *audio_bitrate = hb_audio_bitrate_get_next(NULL);
