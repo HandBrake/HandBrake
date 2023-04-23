@@ -110,7 +110,7 @@
 
         case HB_STATE_MUXING:
         {
-            [string appendString:HBKitLocalizedString(@"Muxing…", @"HBStateFormatter -> pass display name")];
+            [string appendString:HBKitLocalizedString(@"Muxing", @"HBStateFormatter -> pass display name")];
             break;
         }
 
@@ -126,14 +126,14 @@
             if (p.preview_cur)
             {
                 [string appendFormat:
-                 HBKitLocalizedString(@"Scanning title %d of %d, preview %d…", @"HBStateFormatter -> scan pass format"),
+                 HBKitLocalizedString(@"Scanning title %d of %d, preview %d", @"HBStateFormatter -> scan pass format"),
                  p.title_cur, p.title_count,
                  p.preview_cur];
             }
             else
             {
                 [string appendFormat:
-                 HBKitLocalizedString(@"Scanning title %d of %d…", @"HBStateFormatter -> scan pass format"),
+                 HBKitLocalizedString(@"Scanning title %d of %d", @"HBStateFormatter -> scan pass format"),
                  p.title_cur, p.title_count];
             }
 #undef p
