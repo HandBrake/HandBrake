@@ -36,9 +36,11 @@ int hb_nvenc_get_cuda_version() {
         int major, minor, devices;
           
         apiErr = cuda_load_functions(&cu, NULL);
-        if (apiErr == CUDA_SUCCESS) {
+        if (apiErr == CUDA_SUCCESS) 
+        {
             apiErr = cu->cuInit(0);
-            if (apiErr == CUDA_SUCCESS) {
+            if (apiErr == CUDA_SUCCESS) 
+            {
                 
                 cu->cuDeviceGetCount(&devices);
                 if (!devices) {
@@ -48,7 +50,8 @@ int hb_nvenc_get_cuda_version() {
                 }
                     
                 // For now, lets just work off the primary device we find.
-                for (int i = 0; i < devices; ++i) {
+                for (int i = 0; i < devices; ++i) 
+                {
                     int result = cu->cuDeviceGet(&dev, i);
                     if (result == CUDA_SUCCESS)
                     {
@@ -59,7 +62,8 @@ int hb_nvenc_get_cuda_version() {
 
                 apiErr = cu->cuDeviceComputeCapability(&major, &minor, dev);
                
-                if (apiErr == CUDA_SUCCESS) {
+                if (apiErr == CUDA_SUCCESS) 
+                {
                     cuda_version = major * 1000 + minor;
                     hb_log("CUDA Version: %i.%i", major, minor);
                     
@@ -96,23 +100,30 @@ int hb_check_nvenc_available()
         NvencFunctions *nvenc_dl = NULL;
 
         int loadErr = nvenc_load_functions(&nvenc_dl, context);
-        if (loadErr < 0) {
+        if (loadErr < 0) 
+        {
             is_nvenc_available = 0;
             return 0;
         }
 
         NVENCSTATUS apiErr = nvenc_dl->NvEncodeAPIGetMaxSupportedVersion(&nvenc_ver);
-        if (apiErr != NV_ENC_SUCCESS) {
+        if (apiErr != NV_ENC_SUCCESS) 
+        {
             is_nvenc_available = 0;
             hb_log("nvenc: not available");
             return 0;
-        } else {
+        }
+        else 
+        {
             hb_log("nvenc: version %d.%d is available", nvenc_ver >> 4, nvenc_ver & 0xf);
             is_nvenc_available = 1;
             
-            if (hb_check_nvdec_available()){
+            if (hb_check_nvdec_available())
+            {
                 hb_log("nvdec: is available");
-            } else {
+            } 
+            else 
+            {
                 hb_log("nvdec: is not compiled into this build");
             }
             return 1;
@@ -138,14 +149,18 @@ int hb_nvenc_h265_available()
         return is_nvenc_hevc_available;
     }
     
-    if (!hb_check_nvenc_available()){
+    if (!hb_check_nvenc_available())
+    {
         is_nvenc_hevc_available = 0;
         return is_nvenc_hevc_available;
     }
     
-    if (hb_nvenc_get_cuda_version() >= 6000) {
+    if (hb_nvenc_get_cuda_version() >= 6000) 
+    {
         is_nvenc_hevc_available = 1;
-    }else {
+    } 
+    else 
+    {
         is_nvenc_hevc_available = 0;
     }
         
@@ -164,9 +179,12 @@ int hb_nvenc_av1_available()
         return is_nvenc_av1_available;
     }
     
-    if (hb_nvenc_get_cuda_version() >= 8009) {
+    if (hb_nvenc_get_cuda_version() >= 8009) 
+    {
         is_nvenc_av1_available = 1;
-    } else {
+    } 
+    else 
+    {
         is_nvenc_av1_available = 0;
     }
         
