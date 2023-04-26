@@ -3924,77 +3924,6 @@ static void hb_qsv_free_adapters_details()
     }
 }
 
-static int hb_d3d11va_device_create(int adapter_id, ID3D11Device** d3d11_out)
-{
-    HANDLE d3dlib, dxgilib;
-
-    d3dlib  = hb_dlopen("d3d11.dll");
-    dxgilib = hb_dlopen("dxgi.dll");
-    if (!d3dlib || !dxgilib)
-    {
-        hb_error("hb_d3d11va_device_check: failed to load d3d11.dll and dxgi.dll");
-        return -1;
-    }
-
-    PFN_D3D11_CREATE_DEVICE mD3D11CreateDevice;
-    HB_PFN_CREATE_DXGI_FACTORY mCreateDXGIFactory;
-    mD3D11CreateDevice = (PFN_D3D11_CREATE_DEVICE)hb_dlsym(d3dlib, "D3D11CreateDevice");
-    mCreateDXGIFactory = (HB_PFN_CREATE_DXGI_FACTORY)hb_dlsym(dxgilib, "CreateDXGIFactory1");
-
-    if (!mD3D11CreateDevice || !mCreateDXGIFactory) {
-        hb_error("hb_d3d11va_device_check: failed to locate D3D11CreateDevice and CreateDXGIFactory1 functions");
-        return -1;
-    }
-
-    HRESULT hr;
-    IDXGIAdapter *pAdapter = NULL;
-    IDXGIFactory2 *pDXGIFactory;
-    hr = mCreateDXGIFactory(&IID_IDXGIFactory2, (void **)&pDXGIFactory);
-    if (FAILED(hr)) {
-        hb_error("hb_d3d11va_create_device: mCreateDXGIFactory returned %d", hr);
-        return -1;
-    }
-
-    if (adapter_id == -1)
-    {
-        adapter_id = 0;
-    }
-
-    while (IDXGIFactory2_EnumAdapters(pDXGIFactory, adapter_id++, &pAdapter) != DXGI_ERROR_NOT_FOUND)
-    {
-        ID3D11Device* pd3dDevice = NULL;
-        DXGI_ADAPTER_DESC adapterDesc;
-
-        hr = IDXGIAdapter2_GetDesc(pAdapter, &adapterDesc);
-        if (SUCCEEDED(hr)) {
-            if (adapterDesc.VendorId == 0x8086) {
-                hr = mD3D11CreateDevice(pAdapter, D3D_DRIVER_TYPE_UNKNOWN, NULL, D3D11_CREATE_DEVICE_VIDEO_SUPPORT, NULL, 0, D3D11_SDK_VERSION, &pd3dDevice, NULL, NULL);
-                if (SUCCEEDED(hr)) {
-                    IDXGIFactory2_Release(pDXGIFactory);
-                    *d3d11_out = (ID3D11Device *)pd3dDevice;
-                    return adapter_id - 1;
-                } else {
-                    hb_error("hb_d3d11va_device_check: D3D11CreateDevice returned %d", hr);
-                }
-            }
-        } else {
-            hb_error("hb_d3d11va_device_check: IDXGIAdapter2_GetDesc returned %d", hr);
-        }
-
-        if (pAdapter)
-            IDXGIAdapter_Release(pAdapter);
-    }
-
-    IDXGIFactory2_Release(pDXGIFactory);
-    return -1;
-}
-
-static int hb_d3d11va_device_check()
-{
-    ID3D11Device* d3d11 = NULL;
-    return hb_d3d11va_device_create(-1, &d3d11);
-}
-
 static HRESULT lock_device(
     IDirect3DDeviceManager9 *pDeviceManager,
     BOOL fBlock,
@@ -4187,30 +4116,6 @@ int hb_qsv_get_free_surface_from_pool(HBQSVFramesContext* hb_enc_qsv_frames_ctx,
         }
         count++;
     }
-}
-
-static int hb_qsv_allocate_dx11_encoder_pool(HBQSVFramesContext* frames_ctx, ID3D11Device *device, ID3D11Texture2D* input_texture)
-{
-    D3D11_TEXTURE2D_DESC desc = { 0 };
-    ID3D11Texture2D_GetDesc(input_texture, &desc);
-    desc.ArraySize = 1;
-    desc.BindFlags = D3D11_BIND_RENDER_TARGET;
-
-    for (size_t i = 0; i < frames_ctx->nb_mids; i++)
-    {
-        ID3D11Texture2D* texture;
-        HRESULT hr = ID3D11Device_CreateTexture2D(device, &desc, NULL, &texture);
-        if (hr != S_OK)
-        {
-            hb_error("hb_qsv_allocate_dx11_encoder_pool: ID3D11Device_CreateTexture2D error");
-            return -1;
-        }
-
-        QSVMid *mid = &frames_ctx->mids[i];
-        mid->handle_pair->first = texture;
-        mid->handle_pair->second = 0;
-    }
-    return 0;
 }
 
 static int hb_qsv_get_dx_device(hb_job_t *job)
@@ -4935,43 +4840,6 @@ enum AVPixelFormat hb_qsv_get_format(AVCodecContext *s, const enum AVPixelFormat
     return AV_PIX_FMT_NONE;
 }
 
-int hb_qsv_preset_is_zero_copy_enabled(const hb_dict_t *job_dict)
-{
-    hb_dict_t *video_dict, *qsv, *encoder;
-    int qsv_encoder_enabled = 0;
-    int qsv_decoder_enabled = 0;
-    video_dict = hb_dict_get(job_dict, "Video");
-    if(video_dict)
-    {
-        encoder = hb_dict_get(video_dict, "Encoder");
-        if(encoder)
-        {
-            if (hb_value_type(encoder) == HB_VALUE_TYPE_STRING)
-            {
-                if(!strcasecmp(hb_value_get_string(encoder), "qsv_h264") ||
-                    !strcasecmp(hb_value_get_string(encoder), "qsv_h265"))
-                {
-                    qsv_encoder_enabled = 1;
-                }
-            }
-        }
-        qsv = hb_dict_get(video_dict, "QSV");
-        if (qsv != NULL)
-        {
-            hb_dict_t *decode;
-            decode = hb_dict_get(qsv, "Decode");
-            if(decode)
-            {
-                if (hb_value_type(decode) == HB_VALUE_TYPE_BOOL)
-                {
-                    qsv_decoder_enabled = hb_value_get_bool(decode);
-                }
-            }
-        }
-    }
-    return (qsv_encoder_enabled && qsv_decoder_enabled);
-}
-
 int hb_qsv_sanitize_filter_list(hb_job_t *job)
 {
     /*
@@ -5079,16 +4947,6 @@ void hb_qsv_uninit_dec(AVCodecContext *s)
 
 void hb_qsv_uninit_enc(hb_job_t *job)
 {
-}
-
-int hb_qsv_preset_is_zero_copy_enabled(const hb_dict_t *job_dict)
-{
-    return 0;
-}
-
-static int hb_d3d11va_device_check()
-{
-    return -1;
 }
 
 int hb_qsv_get_mid_by_surface_from_pool(HBQSVFramesContext* hb_enc_qsv_frames_ctx, mfxFrameSurface1 *surface, QSVMid **out_mid)
