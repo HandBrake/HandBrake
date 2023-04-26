@@ -518,15 +518,6 @@ void hb_qsv_info_close()
         hb_list_close(&g_qsv_adapters_list);
         g_qsv_adapters_list = NULL;
     }
-#if defined(_WIN32) || defined(__MINGW32__)
-    if (g_qsv_adapters_info.Adapters)
-    {
-        av_free(g_qsv_adapters_info.Adapters);
-    }
-    g_qsv_adapters_info.Adapters = NULL;
-    g_qsv_adapters_info.NumAlloc = 0;
-    g_qsv_adapters_info.NumActual = 0;
-#endif
 }
 
 static int hb_qsv_make_adapters_list(hb_list_t **qsv_adapters_list, hb_list_t **qsv_adapters_details_list)
