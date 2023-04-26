@@ -491,6 +491,44 @@ int hb_qsv_info_init()
     return 0;
 }
 
+static void hb_qsv_free_adapters_details(hb_list_t *qsv_adapters_details_list)
+{
+    for (int i = 0; i < hb_list_count(qsv_adapters_details_list); i++)
+    {
+        hb_qsv_adapter_details_t *details = hb_list_item(qsv_adapters_details_list, i);
+        if (details)
+        {
+            av_free(details);
+        }
+    }
+}
+
+void hb_qsv_info_close()
+{
+    if (g_qsv_adapters_details_list)
+    {
+#if defined(_WIN32) || defined(__MINGW32__)
+        hb_qsv_free_adapters_details(g_qsv_adapters_details_list);
+#endif
+        hb_list_close(&g_qsv_adapters_details_list);
+        g_qsv_adapters_details_list = NULL;
+    }
+    if (g_qsv_adapters_list)
+    {
+        hb_list_close(&g_qsv_adapters_list);
+        g_qsv_adapters_list = NULL;
+    }
+#if defined(_WIN32) || defined(__MINGW32__)
+    if (g_qsv_adapters_info.Adapters)
+    {
+        av_free(g_qsv_adapters_info.Adapters);
+    }
+    g_qsv_adapters_info.Adapters = NULL;
+    g_qsv_adapters_info.NumAlloc = 0;
+    g_qsv_adapters_info.NumActual = 0;
+#endif
+}
+
 static int hb_qsv_make_adapters_list(hb_list_t **qsv_adapters_list, hb_list_t **qsv_adapters_details_list)
 {
     if (!qsv_adapters_list)
@@ -3912,18 +3950,6 @@ typedef IDirect3D9* WINAPI pDirect3DCreate9(UINT);
 typedef HRESULT WINAPI pDirect3DCreate9Ex(UINT, IDirect3D9Ex **);
 typedef HRESULT(WINAPI *HB_PFN_CREATE_DXGI_FACTORY)(REFIID riid, void **ppFactory);
 
-static void hb_qsv_free_adapters_details()
-{
-    for (int i = 0; i < hb_list_count(g_qsv_adapters_details_list); i++)
-    {
-        hb_qsv_adapter_details_t *details = hb_list_item(g_qsv_adapters_details_list, i);
-        if (details)
-        {
-            av_free(details);
-        }
-    }
-}
-
 static HRESULT lock_device(
     IDirect3DDeviceManager9 *pDeviceManager,
     BOOL fBlock,
@@ -4992,33 +5018,6 @@ void hb_qsv_context_uninit(hb_job_t *job)
     av_free(ctx);
     job->qsv.ctx = NULL;
 
-    /* Structures below are needed until the end life of the process
-        It has been collected once in hb_qsv_info_init() and no need to recollect every time.
-    */
-#if 0
-    if (g_qsv_adapters_details_list)
-    {
-#if defined(_WIN32) || defined(__MINGW32__)
-        hb_qsv_free_adapters_details(g_qsv_adapters_details_list);
-#endif
-        hb_list_close(&g_qsv_adapters_details_list);
-        g_qsv_adapters_details_list = NULL;
-    }
-    if (g_qsv_adapters_list)
-    {
-        hb_list_close(&g_qsv_adapters_list);
-        g_qsv_adapters_list = NULL;
-    }
-#if defined(_WIN32) || defined(__MINGW32__)
-    if (g_qsv_adapters_info.Adapters)
-    {
-        av_free(g_qsv_adapters_info.Adapters);
-    }
-    g_qsv_adapters_info.Adapters = NULL;
-    g_qsv_adapters_info.NumAlloc = 0;
-    g_qsv_adapters_info.NumActual = 0;
-#endif
-#endif
     // restore adapter index after user preferences
     g_adapter_index = hb_qsv_get_default_adapter_index();
 }
