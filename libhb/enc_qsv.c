@@ -201,7 +201,8 @@ static int log_encoder_params(const hb_work_private_t *pv, const mfxVideoParam *
         else if (option->Header.BufferId != MFX_EXTBUFF_VIDEO_SIGNAL_INFO &&
                  option->Header.BufferId != MFX_EXTBUFF_CHROMA_LOC_INFO &&
                  option->Header.BufferId != MFX_EXTBUFF_MASTERING_DISPLAY_COLOUR_VOLUME &&
-                 option->Header.BufferId != MFX_EXTBUFF_CONTENT_LIGHT_LEVEL_INFO)
+                 option->Header.BufferId != MFX_EXTBUFF_CONTENT_LIGHT_LEVEL_INFO &&
+                 option->Header.BufferId != MFX_EXTBUFF_AV1_BITSTREAM_PARAM)
         {
             hb_log("Unknown Header.BufferId=%d", option->Header.BufferId);
         }
