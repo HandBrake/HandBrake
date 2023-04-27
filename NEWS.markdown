@@ -30,8 +30,12 @@ Windows users, please make sure to install [Microsoft .NET Desktop Runtime versi
 - Updated libraries
   - AMF 1.4.29 (AMD VCN encoding)
   - FFmpeg 6.0 (decoding and filters)
+  - libass 0.17.1 (subtitles)
   - libdav1d 1.1.0 (AV1 decoding)
+  - libopus 1.4 (Opus audio encoding)
   - libvpx 1.13.0 (VP8/VP9 video encoding)
+  - libxml 2.10.4 (general)
+  - x265 r12776 (H.265/HEVC video encoding)
 
 - New libraries
   - libdovi (Dolby Vision metadata)
@@ -58,24 +62,33 @@ Windows users, please make sure to install [Microsoft .NET Desktop Runtime versi
 
 #### Video
 
-- Fix an issue with QSV that could result in the output video being a green screen. (#4842)
-- Fix a green video issue qith QuickSync (#4876)
+- Fixed an issue with QSV that could result in the output video being a green screen (#4842)
+- Fixed a green video issue with QuickSync (#4876)
+- Fixed a pixel format conversion issue that could result is slighty different colors when using a 10-bit hardware encoder (#5011)
 - Various fixes and library updates for QuickSync to improve support on Linux (#4958)
 - Switch to using swscale instead of zscale when the resolution isn't mod2. Should fix scan failures in this condition
+- Fixed PAR when reading from a AV1 anamorphic video track
 
-### Linux
+#### Audio
 
-- Fixed multiple QSV device enumeration issue and enable Intel QSV AV1 (hardware) video encoders using Flatpak Intel Media plugin (#4775)
-- Fixed default usage of QSV lowpower mode causing issues if HuC is disabled (#4768)
+- Fixed ac3/eac3 dowmix, volume was too low.
+
+#### Subtitles
+
+- Fixed a locale issue that could result in the wrong decimal separator in SSA headers.
+
+### Mac
+
+- Fixed Chroma Smooth tune options.
 
 ### Windows
 
 - Fixed an issue with autonaming when using drive based sources (#4859)
 - Fixed Title Specific Scan for drive sources. (#4921)
 - Fix an issue that could cause a preset to show as "modified" when it was not. (#4909, #4908)
-- Fixed an issue with QSV bitrate does not respond to changes of ICQ (#4814)
 - Some reliability improvements in the Process Isolation Feature. 
 - Miscellaneous other fixes
+
 
 ## HandBrake 1.6.1
 
