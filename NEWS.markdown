@@ -13,11 +13,24 @@ Windows users, please make sure to install [Microsoft .NET Desktop Runtime versi
 
 #### Video
 
-- Fix an issue with QSV that could result in the output video being a green screen. (#4842)
-- Fix a green video issue qith QuickSync (#4876)
+- Fixed an issue with QSV that could result in the output video being a green screen (#4842)
+- Fixed a green video issue with QuickSync (#4876)
+- Fixed a pixel format conversion issue that could result is slighty different colors when using a 10-bit hardware encoder (#5011)
 - Various fixes and library updates for QuickSync to improve support on Linux (#4958)
-- Switch to using swscale instead of zscale when the resolution isn't mod2. Should fix scan failures in this condition.
+- Switch to using swscale instead of zscale when the resolution isn't mod2. Should fix scan failures in this condition
+- Fixed PAR when reading from a AV1 anamorphic video track
 
+#### Audio
+
+- Fixed ac3/eac3 dowmix, volume was too low.
+
+#### Subtitles
+
+- Fixed a locale issue that could result in the wrong decimal separator in SSA headers.
+
+### Mac
+
+- Fixed Chroma Smooth tune options.
 
 ### Windows
 
