@@ -1,2 +1,0 @@
-$(eval $(call import.MODULE.rules,LIBMFX))
-$(eval $(call import.CONTRIB.rules,LIBMFX))
