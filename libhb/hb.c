@@ -934,7 +934,6 @@ hb_image_t * hb_get_preview3(hb_handle_t * h, int picture,
 
             case HB_FILTER_VFR:
             case HB_FILTER_RENDER_SUB:
-            case HB_FILTER_QSV:
             case HB_FILTER_NLMEANS:
             case HB_FILTER_CHROMA_SMOOTH:
             case HB_FILTER_LAPSHARP:

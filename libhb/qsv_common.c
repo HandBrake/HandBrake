@@ -983,9 +983,7 @@ static int query_capabilities(mfxSession session, int index, mfxVersion version,
      * - MFXVideoENCODE_Query should sanitize all unsupported parameters
      */
     mfxStatus     status;
-#if !HB_QSV_ONEVPL
-    hb_list_t    *mfxPluginList;
-#endif
+
     mfxExtBuffer *videoExtParam[1];
     mfxVideoParam videoParam, inputParam;
     mfxExtCodingOption    extCodingOption;
@@ -1000,14 +998,6 @@ static int query_capabilities(mfxSession session, int index, mfxVersion version,
     /* Reset capabilities before querying */
     info->capabilities = 0;
 
-#if !HB_QSV_ONEVPL
-    /* Load required MFX plug-ins */
-    if ((mfxPluginList = hb_qsv_load_plugins(index, info, session, version)) == NULL)
-    {
-        return 0; // the required plugin(s) couldn't be loaded
-    }
-#endif
-
     /*
      * First of all, check availability of an encoder for
      * this combination of a codec ID and implementation.
@@ -1017,14 +1007,6 @@ static int query_capabilities(mfxSession session, int index, mfxVersion version,
      */
     if (HB_CHECK_MFX_VERSION(version, HB_QSV_MINVERSION_MAJOR, HB_QSV_MINVERSION_MINOR))
     {
-#if !HB_QSV_ONEVPL
-        if (info->implementation & MFX_IMPL_AUDIO)
-        {
-            /* Not yet supported */
-            return 0;
-        }
-        else
-#endif
         {
             mfxStatus mfxRes;
             init_video_param(&inputParam);
@@ -1069,14 +1051,7 @@ static int query_capabilities(mfxSession session, int index, mfxVersion version,
         /* Don't check capabilities for unavailable encoders */
         return 0;
     }
-#if !HB_QSV_ONEVPL
-    if (info->implementation & MFX_IMPL_AUDIO)
-    {
-        /* We don't have any audio capability checks yet */
-        return 0;
-    }
-    else
-#endif
+
     {
         /* Implementation-specific features that can't be queried */
         if (info->codec_id == MFX_CODEC_AVC || info->codec_id == MFX_CODEC_HEVC || info->codec_id == MFX_CODEC_AV1)
@@ -1493,10 +1468,7 @@ static int query_capabilities(mfxSession session, int index, mfxVersion version,
             }
         }
     }
-#if !HB_QSV_ONEVPL
-    /* Unload MFX plug-ins */
-    hb_qsv_unload_plugins(&mfxPluginList, session, version);
-#endif
+
     return 0;
 }
 
@@ -2102,64 +2074,6 @@ hb_qsv_info_t* hb_qsv_encoder_info_get(int adapter_index, int encoder)
     }
     return NULL;
 }
-
-#if !HB_QSV_ONEVPL
-hb_list_t* hb_qsv_load_plugins(int index, hb_qsv_info_t *info, mfxSession session, mfxVersion version)
-{
-    hb_list_t *mfxPluginList = hb_list_init();
-    if (mfxPluginList == NULL)
-    {
-        hb_log("hb_qsv_load_plugins: hb_list_init() failed");
-        goto fail;
-    }
-
-    if (HB_CHECK_MFX_VERSION(version, 1, 8))
-    {
-        if (info->codec_id == MFX_CODEC_HEVC && !(hb_qsv_hardware_generation(hb_qsv_get_platform(index)) < QSV_G5))
-        {
-            if (HB_CHECK_MFX_VERSION(version, 1, 15) &&
-                hb_qsv_implementation_is_hardware(info->implementation))
-            {
-                if (MFXVideoUSER_Load(session, &MFX_PLUGINID_HEVCE_HW, 0) == MFX_ERR_NONE)
-                {
-                    hb_list_add(mfxPluginList, (void*)&MFX_PLUGINID_HEVCE_HW);
-                }
-            }
-            else if (HB_CHECK_MFX_VERSION(version, 1, 15))
-            {
-                if (MFXVideoUSER_Load(session, &MFX_PLUGINID_HEVCE_SW, 0) == MFX_ERR_NONE)
-                {
-                    hb_list_add(mfxPluginList, (void*)&MFX_PLUGINID_HEVCE_SW);
-                }
-            }
-        }
-    }
-
-    return mfxPluginList;
-
-fail:
-    hb_list_close(&mfxPluginList);
-    return NULL;
-}
-
-void hb_qsv_unload_plugins(hb_list_t **_l, mfxSession session, mfxVersion version)
-{
-    mfxPluginUID *pluginUID;
-    hb_list_t *mfxPluginList = *_l;
-
-    if (mfxPluginList != NULL && HB_CHECK_MFX_VERSION(version, 1, 8))
-    {
-        for (int i = 0; i < hb_list_count(mfxPluginList); i++)
-        {
-            if ((pluginUID = hb_list_item(mfxPluginList, i)) != NULL)
-            {
-                MFXVideoUSER_UnLoad(session, pluginUID);
-            }
-        }
-    }
-    hb_list_close(_l);
-}
-#endif
 
 const char* hb_qsv_decode_get_codec_name(enum AVCodecID codec_id)
 {

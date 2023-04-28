@@ -157,7 +157,6 @@ struct hb_buffer_s
     {
         void               * qsv_atom;
         AVFrame            * frame;
-        void               * filter_details;
         hb_qsv_context     * ctx;
         HBQSVFramesContext * qsv_frames_ctx;
     } qsv_details;
@@ -496,12 +495,6 @@ extern hb_filter_object_t hb_filter_avfilter;
 extern hb_filter_object_t hb_filter_mt_frame;
 extern hb_filter_object_t hb_filter_colorspace;
 extern hb_filter_object_t hb_filter_format;
-
-#if HB_PROJECT_FEATURE_QSV
-extern hb_filter_object_t hb_filter_qsv;
-extern hb_filter_object_t hb_filter_qsv_pre;
-extern hb_filter_object_t hb_filter_qsv_post;
-#endif
 
 extern hb_work_object_t * hb_objects;
 

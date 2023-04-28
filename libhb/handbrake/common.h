@@ -1486,9 +1486,7 @@ struct hb_filter_object_s
 enum
 {
     HB_FILTER_INVALID = 0,
-    // for QSV - important to have before other filters
     HB_FILTER_FIRST = 1,
-    HB_FILTER_QSV_PRE = 1,
 
     // First, filters that may change the framerate (drop or dup frames)
     HB_FILTER_DETELECINE,
@@ -1518,11 +1516,7 @@ enum
     // except that they must be after the above filters
     HB_FILTER_AVFILTER,
 
-    // for QSV - important to have as a last one
-    HB_FILTER_QSV_POST,
-    // default MSDK VPP filter
-    HB_FILTER_QSV,
-    HB_FILTER_LAST = HB_FILTER_QSV,
+    HB_FILTER_LAST,
     // wrapper filter for frame based multi-threading of simple filters
     HB_FILTER_MT_FRAME
 };

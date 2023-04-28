@@ -1264,7 +1264,6 @@ hb_generate_filter_settings(int filter_id, const char *preset, const char *tune,
         case HB_FILTER_VFR:
         case HB_FILTER_RENDER_SUB:
         case HB_FILTER_GRAYSCALE:
-        case HB_FILTER_QSV:
             settings = hb_parse_filter_settings(custom);
             break;
         case HB_FILTER_NLMEANS:
