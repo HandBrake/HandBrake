@@ -141,11 +141,6 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // sleep is defined in milliseconds
 #define hb_qsv_sleep(x) av_usleep((x)*1000)
 
-#define HB_QSV_VERSION_ATLEAST(MAJOR, MINOR)   \
-    (MFX_VERSION_MAJOR > (MAJOR) ||         \
-     MFX_VERSION_MAJOR == (MAJOR) && MFX_VERSION_MINOR >= (MINOR))
-#define HB_QSV_ONEVPL HB_QSV_VERSION_ATLEAST(2, 0)
-
 #define HB_QSV_ZERO_MEMORY(VAR)                    {memset(&VAR, 0, sizeof(VAR));}
 #define HB_QSV_ALIGN32(X)                      (((mfxU32)((X)+31)) & (~ (mfxU32)31))
 #define HB_QSV_ALIGN16(value)                  (((value + 15) >> 4) << 4)
@@ -283,9 +278,7 @@ typedef struct hb_qsv_space {
 
     mfxFrameAllocResponse response;
     mfxFrameAllocRequest request[2];    // [0] - in, [1] - out, if needed
-#if !HB_QSV_ONEVPL
-    mfxExtOpaqueSurfaceAlloc ext_opaque_alloc;
-#endif
+
     mfxExtBuffer **p_ext_params;
     uint16_t p_ext_param_num;
 
@@ -381,9 +374,6 @@ typedef struct hb_qsv_alloc_buffer {
 typedef struct hb_qsv_allocators_space {
     hb_qsv_space *space;
     mfxFrameAllocator frame_alloc;
-#if !HB_QSV_ONEVPL
-    mfxBufferAllocator buffer_alloc;
-#endif
 } hb_qsv_allocators_space;
 
 typedef struct hb_qsv_config {

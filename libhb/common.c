@@ -4617,22 +4617,6 @@ hb_filter_object_t * hb_filter_get( int filter_id )
             filter = &hb_filter_format;
             break;
 
-#if HB_PROJECT_FEATURE_QSV
-#if !HB_QSV_ONEVPL
-        case HB_FILTER_QSV:
-            filter = &hb_filter_qsv;
-            break;
-
-        case HB_FILTER_QSV_PRE:
-            filter = &hb_filter_qsv_pre;
-            break;
-
-        case HB_FILTER_QSV_POST:
-            filter = &hb_filter_qsv_post;
-            break;
-#endif
-#endif
-
         case HB_FILTER_MT_FRAME:
             filter = &hb_filter_mt_frame;
             break;
