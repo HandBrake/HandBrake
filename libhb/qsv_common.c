@@ -4867,6 +4867,7 @@ int hb_qsv_sanitize_filter_list(hb_job_t *job)
     {
         int i = 0;
         int num_sw_filters = 0;
+        int num_hw_filters = 0;
         if (job->list_filter != NULL && hb_list_count(job->list_filter) > 0)
         {
             for (i = 0; i < hb_list_count(job->list_filter); i++)
@@ -4877,6 +4878,7 @@ int hb_qsv_sanitize_filter_list(hb_job_t *job)
                 {
                     // cropping and scaling always done via VPP filter
                     case HB_FILTER_CROP_SCALE:
+                        num_hw_filters++;
                         break;
                     case HB_FILTER_VFR:
                     {
@@ -4888,13 +4890,14 @@ int hb_qsv_sanitize_filter_list(hb_job_t *job)
                         }
                     }
                     default:
+                        // count only filters with access to frame data
                         num_sw_filters++;
                         break;
                 }
             }
         }
         job->qsv.ctx->num_sw_filters = num_sw_filters;
-        job->qsv.ctx->qsv_hw_filters_are_enabled = ((hb_list_count(job->list_filter) == 1) && hb_qsv_full_path_is_enabled(job)) ? 1 : 0;
+        job->qsv.ctx->qsv_hw_filters_are_enabled = ((num_hw_filters > 0) && hb_qsv_full_path_is_enabled(job)) ? 1 : 0;
         if (job->qsv.ctx->qsv_hw_filters_are_enabled)
         {
             job->qsv.ctx->hb_vpp_qsv_frames_ctx = av_mallocz(sizeof(HBQSVFramesContext));
