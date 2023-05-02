@@ -24,6 +24,7 @@ Windows users, please make sure to install [Microsoft .NET Desktop Runtime versi
     - 8.4
   - HDR10+ is supported on both x265 10bit and SVT-AV1 encoders
 - Support for SVT-AV1 multi-pass ABR mode
+- Added NVENC AV1 encoder
 
 #### Third-party libraries
 
@@ -35,6 +36,7 @@ Windows users, please make sure to install [Microsoft .NET Desktop Runtime versi
   - libopus 1.4 (Opus audio encoding)
   - libvpx 1.13.0 (VP8/VP9 video encoding)
   - libxml 2.10.4 (general)
+  - SVT-AV1 1.5 (AV1 encoding)
   - x265 r12776 (H.265/HEVC video encoding)
 
 - New libraries
