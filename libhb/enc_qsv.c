@@ -1661,18 +1661,6 @@ int encqsvInit(hb_work_object_t *w, hb_job_t *job)
 
     /* MFXVideoENCODE_Init with desired encoding parameters */
     sts = MFXVideoENCODE_Init(session, pv->param.videoParam);
-// workaround for the early 15.33.x driver, should be removed later
-#define HB_DRIVER_FIX_33
-#ifdef  HB_DRIVER_FIX_33
-    int la_workaround = 0;
-    if (sts < MFX_ERR_NONE &&
-        pv->param.videoParam->mfx.RateControlMethod == MFX_RATECONTROL_LA)
-    {
-        pv->param.videoParam->mfx.RateControlMethod = MFX_RATECONTROL_CBR;
-        sts = MFXVideoENCODE_Init(session, pv->param.videoParam);
-        la_workaround = 1;
-    }
-#endif
     if (sts < MFX_ERR_NONE) // ignore warnings
     {
         hb_error("encqsvInit: MFXVideoENCODE_Init failed (%d)", sts);
@@ -1766,16 +1754,6 @@ int encqsvInit(hb_work_object_t *w, hb_job_t *job)
 
     /* We don't need this encode session once we have the header */
     MFXVideoENCODE_Close(session);
-
-#ifdef HB_DRIVER_FIX_33
-    if (la_workaround)
-    {
-        videoParam.mfx.RateControlMethod =
-        pv->param.videoParam->mfx.RateControlMethod = MFX_RATECONTROL_LA;
-        option2->LookAheadDepth = pv->param.codingOption2.LookAheadDepth;
-        hb_log("encqsvInit: using LookAhead workaround (\"early 33 fix\")");
-    }
-#endif
 
     // when using system memory, we re-use this same session
     if (pv->is_sys_mem)
