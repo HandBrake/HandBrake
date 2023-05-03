@@ -2185,11 +2185,10 @@ int hb_qsv_setup_job(hb_job_t *job)
     {
         hb_qsv_param_parse_dx_index(job, job->qsv.ctx->dx_index);
     }
+
     // parse the advanced options parameter
     hb_qsv_parse_options(job);
-    // use default if no options passed
-    if (!job->qsv.ctx->qsv_device)
-        hb_qsv_param_parse_dx_index(job, hb_qsv_get_adapter_index());
+
     int async_depth_default = hb_qsv_param_default_async_depth();
     if (job->qsv.async_depth <= 0 || job->qsv.async_depth > async_depth_default)
     {
@@ -2894,15 +2893,7 @@ int hb_qsv_param_parse(hb_qsv_param_t *param, hb_qsv_info_t *info, hb_job_t *job
     }
     else if (!strcasecmp(key, "gpu"))
     {
-        // Check if was parsed already in decoder initialization
-        if (job->qsv.ctx && !job->qsv.ctx->qsv_device)
-        {
-            int gpu_index = hb_qsv_atoi(value, &error);
-            if (!error)
-            {
-                hb_qsv_param_parse_dx_index(job, gpu_index);
-            }
-        }
+        // Already parsed in QSV initialization
     }
     else if (!strcasecmp(key, "scalingmode") ||
              !strcasecmp(key, "vpp-sm"))
@@ -3795,23 +3786,14 @@ int hb_qsv_param_parse_dx_index(hb_job_t *job, const int dx_index)
         // if -1 use first adapter with highest priority
         if (details && ((details->index == dx_index) || (dx_index == -1)))
         {
-            if (job->qsv.ctx && !job->qsv.ctx->qsv_device)
-            {
-                job->qsv.ctx->qsv_device = av_calloc(32, sizeof(*job->qsv.ctx->qsv_device));
-                if (!job->qsv.ctx->qsv_device)
-                {
-                    hb_error("hb_qsv_param_parse_dx_index: failed to allocate memory for qsv device");
-                    return -1;
-                }
-            }
-            snprintf(job->qsv.ctx->qsv_device, 32, "%u", details->index);
             job->qsv.ctx->dx_index = details->index;
-            hb_log("qsv: %s qsv adapter with index %s has been selected", hb_qsv_get_adapter_type(details), job->qsv.ctx->qsv_device);
+            hb_log("qsv: %s qsv adapter with index %u has been selected", hb_qsv_get_adapter_type(details), details->index);
             hb_qsv_set_adapter_index(details->index);
             return 0;
         }
     }
     hb_error("qsv: hb_qsv_param_parse_dx_index incorrect qsv device index %d", dx_index);
+    job->qsv.ctx->dx_index = hb_qsv_get_adapter_index();
     return -1;
 }
 
@@ -4494,11 +4476,6 @@ void hb_qsv_uninit_enc(hb_job_t *job)
         av_buffer_unref(&job->qsv.ctx->hb_hw_device_ctx);
         job->qsv.ctx->hb_hw_device_ctx = NULL;
     }
-    if (job->qsv.ctx && job->qsv.ctx->qsv_device)
-    {
-        av_free(job->qsv.ctx->qsv_device);
-        job->qsv.ctx->qsv_device = NULL;
-    }
     job->qsv.ctx->device_manager_handle = NULL;
 }
 
@@ -4507,11 +4484,15 @@ static int hb_qsv_ffmpeg_set_options(hb_job_t *job, AVDictionary** dict)
     int err;
     AVDictionary* out_dict = *dict;
 
-    if (job->qsv.ctx && job->qsv.ctx->qsv_device)
+    if (job->qsv.ctx && job->qsv.ctx->dx_index > 0)
     {
-        err = av_dict_set(&out_dict, "child_device", job->qsv.ctx->qsv_device, 0);
+        char device[32];
+        snprintf(device, 32, "%u", job->qsv.ctx->dx_index);
+        err = av_dict_set(&out_dict, "child_device", device, 0);
         if (err < 0)
+        {
             return err;
+        }
     }
     else
     {
@@ -4608,9 +4589,6 @@ int hb_create_ffmpeg_pool(hb_job_t *job, int coded_width, int coded_height, enum
             }
             hb_dict_free(&options_list);
         }
-
-        if (!job->qsv.ctx->qsv_device)
-            hb_qsv_param_parse_dx_index(job, hb_qsv_get_adapter_index());
 
         ret = hb_qsv_device_init(job);
         if (ret < 0)
