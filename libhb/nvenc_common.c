@@ -155,7 +155,7 @@ int hb_nvenc_h265_available()
         return is_nvenc_hevc_available;
     }
     
-    if (hb_nvenc_get_cuda_version() >= 6000) 
+    if (hb_nvenc_get_cuda_version() >= 5200) 
     {
         is_nvenc_hevc_available = 1;
     } 
