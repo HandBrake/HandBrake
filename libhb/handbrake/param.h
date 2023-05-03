@@ -20,8 +20,6 @@ struct hb_filter_param_s
     const char *settings;
 };
 
-void hb_param_configure_qsv(void);
-
 hb_dict_t * hb_generate_filter_settings(int filter_id, const char *preset,
                                         const char *tune, const char *custom);
 char * hb_generate_filter_settings_json(int filter_id, const char *preset,

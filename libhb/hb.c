@@ -2198,10 +2198,6 @@ int hb_global_init()
         return -1;
     }
 
-#if HB_PROJECT_FEATURE_QSV
-    hb_param_configure_qsv();
-#endif
-
     /* libavcodec */
     hb_avcodec_init();
 
@@ -2235,6 +2231,7 @@ int hb_global_init()
 #if HB_PROJECT_FEATURE_QSV
     if (!disable_hardware)
     {
+        hb_qsv_available();
         hb_register(&hb_encqsv);
     }
 #endif
