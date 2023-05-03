@@ -22,14 +22,15 @@ static int is_nvenc_hevc_available = -1;
 
 static double cuda_version = -1;
 
-int hb_nvenc_get_cuda_version() {
-   
-   if (cuda_version != -1) {
+int hb_nvenc_get_cuda_version()
+{
+   if (cuda_version != -1)
+   {
        return cuda_version;
    }
-   
+
     #if HB_PROJECT_FEATURE_NVENC
-        NVENCSTATUS apiErr = 0;
+        CUresult apiErr = 0;
         CUcontext cuda_ctx;
         CudaFunctions *cu = NULL;
         CUdevice dev;
@@ -41,14 +42,14 @@ int hb_nvenc_get_cuda_version() {
             apiErr = cu->cuInit(0);
             if (apiErr == CUDA_SUCCESS) 
             {
-                
                 cu->cuDeviceGetCount(&devices);
-                if (!devices) {
+                if (!devices)
+                {
                     cuda_version = 0;
                     free(cu);
                     return cuda_version;
                 }
-                    
+
                 // For now, lets just work off the primary device we find.
                 for (int i = 0; i < devices; ++i) 
                 {
@@ -61,24 +62,22 @@ int hb_nvenc_get_cuda_version() {
                 }
 
                 apiErr = cu->cuDeviceComputeCapability(&major, &minor, dev);
-               
+
                 if (apiErr == CUDA_SUCCESS) 
                 {
                     cuda_version = major * 1000 + minor;
                     hb_log("CUDA Version: %i.%i", major, minor);
-                    
+
                     free(cu);
-                    free(dev);
                     return cuda_version;
                 }
             }
         }
-    
+
     #else
         cuda_version = 0;
-        return cuda_version;
     #endif
-    
+
     return cuda_version;
 }
 
