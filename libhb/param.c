@@ -218,8 +218,6 @@ static hb_filter_param_t yadif_presets[] =
     { 2, "Fast",               "fast",         "mode=1"         },
     { 3, "Slow",               "slow",         "mode=1"         },
     { 4, "Slower",             "slower",       "mode=3"         },
-    { 6, "QSV",                "qsv",          "mode=11"        },
-    { 7, "QSV",                "qsv",          "mode=3"         }
 };
 
 static hb_filter_param_t bwdif_presets[] =
