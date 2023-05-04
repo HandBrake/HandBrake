@@ -581,18 +581,6 @@ int hb_qsv_list_unlock(hb_qsv_list *l){
     return ret;
 }
 
-int av_is_qsv_available(mfxIMPL impl, mfxVersion * ver)
-{
-    mfxStatus sts = MFX_ERR_NONE;
-    mfxSession mfx_session;
-
-    memset(&mfx_session, 0, sizeof(mfxSession));
-    sts = MFXInit(impl, ver, &mfx_session);
-    if (sts >= 0)
-        MFXClose(mfx_session);
-    return sts;
-}
-
 int hb_qsv_wait_on_sync(hb_qsv_context *qsv, hb_qsv_stage *stage)
 {
     int iter = 0;
