@@ -2183,7 +2183,7 @@ static int hb_qsv_parse_options(hb_job_t *job)
 int hb_qsv_setup_job(hb_job_t *job)
 {
     // parse the json parameter
-    if (job->qsv.ctx && job->qsv.ctx->dx_index >= 0)
+    if (job->qsv.ctx && job->qsv.ctx->dx_index >= -1)
     {
         hb_qsv_param_parse_dx_index(job, job->qsv.ctx->dx_index);
     }
@@ -3748,8 +3748,7 @@ int hb_qsv_get_platform(int adapter_index)
     {
         const hb_qsv_adapter_details_t *details = hb_list_item(g_qsv_adapters_details_list, i);
         // find DirectX adapter with given index in list of QSV adapters
-        // if -1 use first adapter with highest priority
-        if (details && ((details->index == adapter_index) || (adapter_index == -1)))
+        if (details && (details->index == adapter_index))
         {
             return qsv_map_mfx_platform_codename(details->platform.CodeName);
         }
@@ -3763,8 +3762,7 @@ int hb_qsv_param_parse_dx_index(hb_job_t *job, const int dx_index)
     {
         const hb_qsv_adapter_details_t *details = hb_list_item(g_qsv_adapters_details_list, i);
         // find DirectX adapter with given index in list of QSV adapters
-        // if -1 use first adapter with highest priority
-        if (details && ((details->index == dx_index) || (dx_index == -1)))
+        if (details && (details->index == dx_index))
         {
             job->qsv.ctx->dx_index = details->index;
             hb_log("qsv: %s qsv adapter with index %u has been selected", hb_qsv_get_adapter_type(details), details->index);
@@ -3772,7 +3770,6 @@ int hb_qsv_param_parse_dx_index(hb_job_t *job, const int dx_index)
             return 0;
         }
     }
-    hb_error("qsv: hb_qsv_param_parse_dx_index incorrect qsv device index %d", dx_index);
     job->qsv.ctx->dx_index = hb_qsv_get_adapter_index();
     return -1;
 }
