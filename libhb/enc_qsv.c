@@ -1161,7 +1161,7 @@ int encqsvInit(hb_work_object_t *w, hb_job_t *job)
     hb_work_private_t *pv = calloc(1, sizeof(hb_work_private_t));
     w->private_data       = pv;
 
-    pv->is_sys_mem         = hb_qsv_full_path_is_enabled(job) ? 0 : 1; // TODO: re-implement QSV VPP filtering support
+    pv->is_sys_mem         = hb_qsv_full_path_is_enabled(job) ? 0 : 1;
     pv->job                = job;
     pv->qsv_info           = hb_qsv_encoder_info_get(hb_qsv_get_adapter_index(), job->vcodec);
     pv->delayed_processing = hb_list_init();

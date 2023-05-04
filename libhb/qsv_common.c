@@ -491,6 +491,7 @@ int hb_qsv_info_init()
     return 0;
 }
 
+#if defined(_WIN32) || defined(__MINGW32__)
 static void hb_qsv_free_adapters_details(hb_list_t *qsv_adapters_details_list)
 {
     for (int i = 0; i < hb_list_count(qsv_adapters_details_list); i++)
@@ -502,6 +503,7 @@ static void hb_qsv_free_adapters_details(hb_list_t *qsv_adapters_details_list)
         }
     }
 }
+#endif
 
 void hb_qsv_info_close()
 {
@@ -2221,36 +2223,15 @@ int hb_qsv_is_enabled(hb_job_t *job)
     return hb_qsv_decode_is_enabled(job) || hb_qsv_encoder_info_get(hb_qsv_get_adapter_index(), job->vcodec);
 }
 
-static int hb_qsv_get_bit_depth_by_codec(int codec_id)
-{
-    int pix_fmt_bit_depth = 0;
-
-    switch (codec_id)
-    {
-        case HB_VCODEC_QSV_H264:
-        case HB_VCODEC_QSV_H265_8BIT:
-        case HB_VCODEC_QSV_AV1_8BIT:
-            pix_fmt_bit_depth = 8;
-            break;
-        case HB_VCODEC_QSV_H265_10BIT:
-        case HB_VCODEC_QSV_AV1_10BIT:
-            pix_fmt_bit_depth = 10;
-            break;
-        default:
-            break;
-    }
-    return pix_fmt_bit_depth;
-}
-
 int hb_qsv_full_path_is_enabled(hb_job_t *job)
 {
     int qsv_full_path_is_enabled = 0;
 #if defined(_WIN32) || defined(__MINGW32__)
     hb_qsv_info_t *info = hb_qsv_encoder_info_get(hb_qsv_get_adapter_index(), job->vcodec);
     int title_bit_depth = hb_get_bit_depth(job->title->pix_fmt);
-    int pix_fmt_bit_depth = hb_qsv_get_bit_depth_by_codec(job->vcodec);
+    int encoder_bit_depth = hb_video_encoder_get_depth(job->vcodec);
 
-    if (pix_fmt_bit_depth != title_bit_depth)
+    if (encoder_bit_depth != title_bit_depth)
     {
         return 0;
     }
@@ -3368,7 +3349,6 @@ int hb_qsv_param_default(hb_qsv_param_t *param, mfxVideoParam *videoParam,
         param->codingOption.IntraPredBlockSize   = 0; // reserved, must be 0
         param->codingOption.InterPredBlockSize   = 0; // reserved, must be 0
         param->codingOption.MVPrecision          = 0; // reserved, must be 0
-        param->codingOption.EndOfSequence        = MFX_CODINGOPTION_UNKNOWN;
         param->codingOption.RateDistortionOpt    = MFX_CODINGOPTION_UNKNOWN;
         param->codingOption.ResetRefList         = MFX_CODINGOPTION_UNKNOWN;
         param->codingOption.MaxDecFrameBuffering = 0; // unspecified
@@ -4049,7 +4029,7 @@ static int hb_qsv_get_dx_device(hb_job_t *job)
             if (job->qsv.ctx->device_context == NULL)
             {
                 ID3D11Device *device = (ID3D11Device *)job->qsv.ctx->device_manager_handle;
-                ID3D11Device_GetImmediateContext(device, (ID3D11DeviceContext *)&job->qsv.ctx->device_context);
+                ID3D11Device_GetImmediateContext(device, (ID3D11DeviceContext **)&job->qsv.ctx->device_context);
                 if (!job->qsv.ctx->device_context)
                     return -1;
             }
