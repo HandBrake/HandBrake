@@ -3781,73 +3781,6 @@ int hb_qsv_param_parse_dx_index(hb_job_t *job, const int dx_index)
 // Direct X
 #define COBJMACROS
 #include <d3d11.h>
-#include <dxgi1_2.h>
-#include <d3d9.h>
-#include <dxva2api.h>
-
-#if HAVE_DXGIDEBUG_H
-#include <dxgidebug.h>
-#endif
-
-typedef IDirect3D9* WINAPI pDirect3DCreate9(UINT);
-typedef HRESULT WINAPI pDirect3DCreate9Ex(UINT, IDirect3D9Ex **);
-typedef HRESULT(WINAPI *HB_PFN_CREATE_DXGI_FACTORY)(REFIID riid, void **ppFactory);
-
-static HRESULT lock_device(
-    IDirect3DDeviceManager9 *pDeviceManager,
-    BOOL fBlock,
-    IDirect3DDevice9 **ppDevice, // Receives a pointer to the device.
-    HANDLE *pHandle              // Receives a device handle.
-    )
-{
-    *pHandle = NULL;
-    *ppDevice = NULL;
-
-    HANDLE hDevice = 0;
-
-    HRESULT hr = pDeviceManager->lpVtbl->OpenDeviceHandle(pDeviceManager, &hDevice);
-
-    if (SUCCEEDED(hr))
-    {
-        hr = pDeviceManager->lpVtbl->LockDevice(pDeviceManager, hDevice, ppDevice, fBlock);
-    }
-
-    if (hr == DXVA2_E_NEW_VIDEO_DEVICE)
-    {
-        // Invalid device handle. Try to open a new device handle.
-        hr = pDeviceManager->lpVtbl->CloseDeviceHandle(pDeviceManager, hDevice);
-
-        if (SUCCEEDED(hr))
-        {
-            hr = pDeviceManager->lpVtbl->OpenDeviceHandle(pDeviceManager, &hDevice);
-        }
-
-        // Try to lock the device again.
-        if (SUCCEEDED(hr))
-        {
-            hr = pDeviceManager->lpVtbl->LockDevice(pDeviceManager, hDevice, ppDevice, TRUE);
-        }
-    }
-
-    if (SUCCEEDED(hr))
-    {
-        *pHandle = hDevice;
-    }
-    return hr;
-}
-
-static HRESULT unlock_device(
-    IDirect3DDeviceManager9 *pDeviceManager,
-    HANDLE handle              // Receives a device handle.
-    )
-{
-    HRESULT hr = pDeviceManager->lpVtbl->UnlockDevice(pDeviceManager, handle, 0);
-    if (SUCCEEDED(hr))
-    {
-        hr = pDeviceManager->lpVtbl->CloseDeviceHandle(pDeviceManager, handle);
-    }
-    return hr;
-}
 
 static int hb_qsv_find_surface_idx(const QSVMid *mids, const int nb_mids, const QSVMid *mid)
 {
@@ -4112,31 +4045,7 @@ static int hb_qsv_copy_surface(hb_qsv_context *ctx, void* output_surface, int ou
         return -1;
     }
 
-    if (ctx->device_manager_handle_type == MFX_HANDLE_D3D9_DEVICE_MANAGER)
-    {
-        IDirect3DDevice9 *pDevice = NULL;
-        HANDLE handle;
-
-        HRESULT result = lock_device((IDirect3DDeviceManager9 *)ctx->device_manager_handle, 1, &pDevice, &handle);
-        if (FAILED(result))
-        {
-            hb_error("hb_qsv_copy_surface: lock_device failed %d", result);
-            return -1;
-        }
-        result = IDirect3DDevice9_StretchRect(pDevice, input_surface, 0, output_surface, 0, D3DTEXF_LINEAR);
-        if (FAILED(result))
-        {
-            hb_error("hb_qsv_copy_surface: IDirect3DDevice9_StretchRect failed %d", result);
-            return -1;
-        }
-        result = unlock_device((IDirect3DDeviceManager9 *)ctx->device_manager_handle, handle);
-        if (FAILED(result))
-        {
-            hb_error("hb_qsv_copy_surface: unlock_device failed %d", result);
-            return -1;
-        }
-    }
-    else if (ctx->device_manager_handle_type == MFX_HANDLE_D3D11_DEVICE)
+    if (ctx->device_manager_handle_type == MFX_HANDLE_D3D11_DEVICE)
     {
         ID3D11DeviceContext_CopySubresourceRegion((ID3D11DeviceContext *)ctx->device_context, output_surface, output_index, 0, 0, 0, input_surface, input_index, NULL);
         ID3D11DeviceContext_Flush((ID3D11DeviceContext *)ctx->device_context);
