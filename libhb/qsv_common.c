@@ -1562,19 +1562,6 @@ int hb_qsv_create_mfx_session(mfxIMPL implementation,
             }
         }
     }
-    else if (MFX_IMPL_VIA_D3D9 == MFX_IMPL_VIA_MASK(implementation))
-    {
-        impl_value.Type = MFX_VARIANT_TYPE_U32;
-        impl_value.Data.U32 = MFX_ACCEL_MODE_VIA_D3D9;
-        sts = MFXSetConfigFilterProperty(cfg,
-                                        (const mfxU8 *)"mfxImplDescription.AccelerationMode", impl_value);
-
-        if (sts != MFX_ERR_NONE) {
-            hb_error("hb_qsv_create_mfx_session: Error adding a MFX configuration"
-                "MFX_ACCEL_MODE_VIA_D3D9 property: %d.", sts);
-            goto fail;
-        }
-    }
     else
     {
         impl_value.Type = MFX_VARIANT_TYPE_U32;
@@ -3937,10 +3924,6 @@ static int hb_qsv_get_dx_device(hb_job_t *job)
         {
             job->qsv.ctx->device_manager_handle_type = MFX_HANDLE_D3D11_DEVICE;
         }
-        else if (MFX_IMPL_VIA_D3D9 == MFX_IMPL_VIA_MASK(device_impl))
-        {
-            job->qsv.ctx->device_manager_handle_type = MFX_HANDLE_D3D9_DEVICE_MANAGER;
-        }
         else
         {
             hb_error("hb_qsv_get_dx_device: unsupported impl");
@@ -4241,32 +4224,7 @@ hb_buffer_t* hb_qsv_copy_avframe_to_video_buffer(hb_job_t *job, AVFrame *frame, 
         hb_qsv_get_free_surface_from_pool_with_range(hb_qsv_frames_ctx, 0, HB_QSV_POOL_SURFACE_SIZE, &mid, &output_surface);
     }
 
-    if (job->qsv.ctx->device_manager_handle_type == MFX_HANDLE_D3D9_DEVICE_MANAGER)
-    {
-        mfxFrameSurface1* input_surface = (mfxFrameSurface1*)frame->data[3];
-        mfxHDLPair* input_pair = (mfxHDLPair*)input_surface->Data.MemId;
-        // copy all surface fields
-        *output_surface = *input_surface;
-        output_surface->Info.CropW = frame->width;
-        output_surface->Info.CropH = frame->height;
-        if (hb_qsv_hw_filters_are_enabled(job))
-        {
-            output_surface->Data.MemId = mid->handle_pair;
-        }
-        else
-        {
-            // replace the mem id to mem id from the pool
-            output_surface->Data.MemId = mid;
-        }
-        // copy input surface to surface from the pool
-        ret = hb_qsv_copy_surface(job->qsv.ctx, mid->handle_pair->first, 0, input_pair->first, 0);
-        if (ret < 0)
-        {
-            hb_error("hb_qsv_copy_avframe_to_video_buffer: hb_qsv_copy_surface() failed");
-            return NULL;
-        }
-    }
-    else if (job->qsv.ctx->device_manager_handle_type == MFX_HANDLE_D3D11_DEVICE)
+    if (job->qsv.ctx->device_manager_handle_type == MFX_HANDLE_D3D11_DEVICE)
     {
         mfxFrameSurface1* input_surface = (mfxFrameSurface1*)frame->data[3];
         mfxHDLPair* input_pair = (mfxHDLPair*)input_surface->Data.MemId;
