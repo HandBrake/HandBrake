@@ -112,9 +112,7 @@ namespace HandBrakeWPF.ViewModels
         private bool enableQuickSyncLowPower;
         private int simultaneousEncodes;
         private bool enableQuickSyncHyperEncode;
-
         private bool enableNvDecSupport;
-
         private bool useIsoDateFormat;
 
         public OptionsViewModel(
@@ -893,6 +891,7 @@ namespace HandBrakeWPF.ViewModels
 
                 this.enableQuickSyncEncoding = value;
                 this.NotifyOfPropertyChange(() => this.EnableQuickSyncEncoding);
+                this.NotifyOfPropertyChange(() => this.CanSetQsvDecForOtherEncodes);
             }
         }
 
@@ -940,6 +939,7 @@ namespace HandBrakeWPF.ViewModels
                 this.enableQuickSyncDecoding = value;
                 this.NotifyOfPropertyChange(() => this.EnableQuickSyncDecoding);
                 this.NotifyOfPropertyChange(() => this.IsUseQsvDecAvailable);
+                this.NotifyOfPropertyChange(() => this.CanSetQsvDecForOtherEncodes);
             }
         }
 
@@ -999,6 +999,8 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
+        public bool CanSetQsvDecForOtherEncodes => this.EnableQuickSyncDecoding && this.IsQuickSyncAvailable && this.EnableQuickSyncEncoding;
+
         public BindingList<VideoScaler> ScalingOptions { get; } = new BindingList<VideoScaler>(EnumHelper<VideoScaler>.GetEnumList().ToList());
 
         public bool IsHardwareFallbackMode => HandBrakeUtils.IsInitNoHardware();
@@ -1054,7 +1056,7 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
-        /* Experimental */
+
         public bool RemoteServiceEnabled
         {
             get => this.remoteServiceEnabled;
