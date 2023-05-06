@@ -2,7 +2,7 @@ Source: handbrake
 Section: graphics
 Priority: optional
 Maintainer: John Stebbins <jstebbins.hb@gmail.com>
-Build-Depends: debhelper (>= 6), autotools-dev, libtool, libtool-bin, intltool, autoconf, yasm (>= 1.2.0), cmake, libbz2-dev, zlib1g-dev, libgtk-3-dev, libwebkitgtk-3.0-dev, libnotify-dev, libgstreamer1.0-dev, libgstreamer-plugins-base1.0-dev, python (>= 2.6), libappindicator3-dev, libfribidi-dev (>= 0.19.0), libxml2-dev, libogg-dev, libtheora-dev, libvorbis-dev, libopus-dev, libsamplerate0-dev, libfreetype6-dev, libfontconfig1-dev, libass-dev, libmp3lame-dev, libx264-dev, libjansson-dev
+Build-Depends: debhelper (>= 6), autotools-dev, libtool, libtool-bin, autoconf, yasm (>= 1.2.0), cmake, libbz2-dev, zlib1g-dev, libgtk-3-dev, libwebkitgtk-3.0-dev, libnotify-dev, libgstreamer1.0-dev, libgstreamer-plugins-base1.0-dev, python (>= 2.6), libappindicator3-dev, libfribidi-dev (>= 0.19.0), libxml2-dev, libogg-dev, libtheora-dev, libvorbis-dev, libopus-dev, libsamplerate0-dev, libfreetype6-dev, libfontconfig1-dev, libass-dev, libmp3lame-dev, libx264-dev, libjansson-dev
 Standards-Version: 3.8.4
 Homepage: http://www.handbrake.fr/
 
