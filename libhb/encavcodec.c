@@ -1559,6 +1559,8 @@ static int apply_encoder_preset(int vcodec, AVDictionary ** av_opts,
         case HB_VCODEC_FFMPEG_NVENC_H264:
         case HB_VCODEC_FFMPEG_NVENC_H265:
         case HB_VCODEC_FFMPEG_NVENC_H265_10BIT:
+        case HB_VCODEC_FFMPEG_NVENC_AV1:
+        case HB_VCODEC_FFMPEG_NVENC_AV1_10BIT:
             preset = hb_map_nvenc_preset_name(preset);
             av_dict_set( av_opts, "preset", preset, 0);
             break;
