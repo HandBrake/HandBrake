@@ -47,14 +47,7 @@ namespace HandBrakeWPF.Services.Queue
 
         private void UserSettingService_SettingChanged(object sender, HandBrakeWPF.EventArgs.SettingChangedEventArgs e)
         {
-            if (e.Key == UserSettingConstants.SimultaneousEncodes)
-            {
-                this.maxAllowedInstances = this.userSettingService.GetUserSetting<int>(UserSettingConstants.SimultaneousEncodes);
-                if (this.maxAllowedInstances > Utilities.SystemInfo.MaximumSimultaneousInstancesSupported)
-                {
-                    this.maxAllowedInstances = Utilities.SystemInfo.MaximumSimultaneousInstancesSupported;
-                }
-            }
+            this.Init();
         }
 
         public int TotalActiveInstances
