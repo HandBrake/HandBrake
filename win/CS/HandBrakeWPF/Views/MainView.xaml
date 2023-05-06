@@ -144,7 +144,7 @@
                      ToolBar.OverflowMode="AsNeeded"
                      ToolBarTray.IsLocked="True"
                      KeyboardNavigation.TabNavigation="Continue"
-                     FocusManager.IsFocusScope="False">
+                     >
 
                 <ToolBar.ContextMenu>
                     <ContextMenu AutomationProperties.Name="Presets List Context Menu">
