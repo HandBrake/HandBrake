@@ -583,6 +583,19 @@ static int avformatInit( hb_mux_object_t * m )
         }
     }
 
+    if (job->ambient.ambient_illuminance.num && job->ambient.ambient_illuminance.den)
+    {
+        AVAmbientViewingEnvironment ambient = hb_ambient_hb_to_ff(job->ambient);
+
+        uint8_t *ambient_data = av_malloc(sizeof(AVAmbientViewingEnvironment));
+        memcpy(ambient_data, &ambient, sizeof(AVAmbientViewingEnvironment));
+
+        av_stream_add_side_data(track->st,
+                                AV_PKT_DATA_AMBIENT_VIEWING_ENVIRONMENT,
+                                ambient_data,
+                                sizeof(AVAmbientViewingEnvironment));
+    }
+
     if (job->passthru_dynamic_hdr_metadata & DOVI)
     {
         if (job->dovi.dv_profile == 5 && job->mux == HB_MUX_AV_MP4)
