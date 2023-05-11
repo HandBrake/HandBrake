@@ -852,12 +852,9 @@ struct hb_job_s
     int64_t         reader_pts_offset; // Reader can discard some video.
                                        // Other pipeline stages need to know
                                        // this.  E.g. sync and decsrtsub
-#endif
-#if HB_PROJECT_FEATURE_NVENC
-    struct
-    {
-        void *hw_device_ctx;
-    } nv_hw_ctx;
+
+    void           *hw_device_ctx;
+    int             hw_pix_fmt;
 #endif
 };
 
@@ -1222,9 +1219,13 @@ struct hb_title_s
 
     // additional supported video decoders (e.g. HW-accelerated implementations)
     int           video_decode_support;
-#define HB_DECODE_SUPPORT_SW    0x01 // software (libavcodec or mpeg2dec)
-#define HB_DECODE_SUPPORT_QSV   0x02 // Intel Quick Sync Video
-#define HB_DECODE_SUPPORT_NVDEC 0x04 // Nvidia Nvdec
+#define HB_DECODE_SUPPORT_SW             0x01 // software (libavcodec or mpeg2dec)
+#define HB_DECODE_SUPPORT_QSV            0x02 // Intel Quick Sync Video
+#define HB_DECODE_SUPPORT_NVDEC          0x04
+#define HB_DECODE_SUPPORT_VIDEOTOOLBOX   0x08
+
+#define HB_DECODE_SUPPORT_HWACCEL        (HB_DECODE_SUPPORT_NVDEC | HB_DECODE_SUPPORT_VIDEOTOOLBOX)
+
 
     hb_metadata_t * metadata;
 
@@ -1415,6 +1416,7 @@ typedef struct hb_filter_init_s
 {
     hb_job_t      * job;
     int             pix_fmt;
+    int             hw_pix_fmt;
     int             color_prim;
     int             color_transfer;
     int             color_matrix;
@@ -1426,12 +1428,7 @@ typedef struct hb_filter_init_s
     int             cfr;
     int             grayscale;
     hb_rational_t   time_base;
-#if HB_PROJECT_FEATURE_NVENC
-    struct
-    {
-        void *hw_frames_ctx;
-    } nv_hw_ctx;
-#endif
+    void          * hw_frames_ctx;
 } hb_filter_init_t;
 
 typedef struct hb_filter_info_s
@@ -1582,6 +1579,7 @@ int hb_output_color_matrix(hb_job_t * job);
 int hb_get_bit_depth(int format);
 int hb_get_chroma_sub_sample(int format, int *h_shift, int *v_shift);
 int hb_get_best_pix_fmt(hb_job_t * job);
+int hb_get_best_hw_pix_fmt(hb_job_t * job);
 
 #define HB_NEG_FLOAT_REG "(([-])?(([0-9]+([.,][0-9]+)?)|([.,][0-9]+))"
 #define HB_FLOAT_REG     "(([0-9]+([.,][0-9]+)?)|([.,][0-9]+))"

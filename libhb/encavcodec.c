@@ -11,14 +11,11 @@
 #include "handbrake/handbrake.h"
 #include "handbrake/hb_dict.h"
 #include "handbrake/hbffmpeg.h"
+#include "handbrake/hwaccel.h"
 #include "handbrake/h264_common.h"
 #include "handbrake/h265_common.h"
 #include "handbrake/nal_units.h"
-
-#if HB_PROJECT_FEATURE_NVENC
 #include "handbrake/nvenc_common.h"
-#endif
-
 
 /*
  * The frame info struct remembers information about each frame across calls
@@ -129,12 +126,12 @@ static const enum AVPixelFormat h26x_mf_pix_fmts[] =
 
 static const enum AVPixelFormat nvenc_pix_formats_10bit[] =
 {
-     AV_PIX_FMT_P010, AV_PIX_FMT_NONE
+    AV_PIX_FMT_CUDA, AV_PIX_FMT_P010, AV_PIX_FMT_NONE
 };
 
 static const enum AVPixelFormat nvenc_pix_formats[] =
 {
-     AV_PIX_FMT_YUV420P, AV_PIX_FMT_NV12, AV_PIX_FMT_NONE
+    AV_PIX_FMT_CUDA, AV_PIX_FMT_YUV420P, AV_PIX_FMT_NV12, AV_PIX_FMT_NONE
 };
 
 static const enum AVPixelFormat vce_pix_formats_10bit[] =
@@ -846,19 +843,17 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
     }
     context->width     = job->width;
     context->height    = job->height;
-#if HB_PROJECT_FEATURE_NVENC
-    if (hb_nvdec_is_enabled(pv->job))
+
+    if (hb_hwaccel_is_full_hardware_pipeline_enabled(pv->job))
     {
-        context->hw_device_ctx = pv->job->nv_hw_ctx.hw_device_ctx;
-        hb_nvdec_hwframes_ctx_init(context, job);
+        context->hw_device_ctx = av_buffer_ref(pv->job->hw_device_ctx);
+        hb_hwaccel_hwframes_ctx_init(context, job);
+        context->pix_fmt = job->hw_pix_fmt;
     }
     else
     {
         context->pix_fmt = job->output_pix_fmt;
     }
-#else
-    context->pix_fmt = job->output_pix_fmt;
-#endif
 
     context->sample_aspect_ratio.num = job->par.num;
     context->sample_aspect_ratio.den = job->par.den;
@@ -1302,15 +1297,7 @@ static void Encode( hb_work_object_t *w, hb_buffer_t *in,
     AVFrame             frame = {{0}};
     int                 ret;
 
-    frame.width       = in->f.width;
-    frame.height      = in->f.height;
-    frame.format      = in->f.fmt;
-    frame.data[0]     = in->plane[0].data;
-    frame.data[1]     = in->plane[1].data;
-    frame.data[2]     = in->plane[2].data;
-    frame.linesize[0] = in->plane[0].stride;
-    frame.linesize[1] = in->plane[1].stride;
-    frame.linesize[2] = in->plane[2].stride;
+    hb_video_buffer_to_avframe(&frame, in);
 
     if (in->s.new_chap > 0 && pv->job->chapter_markers)
     {
@@ -1348,20 +1335,9 @@ static void Encode( hb_work_object_t *w, hb_buffer_t *in,
     frame.pts = pv->frameno_in++;
 
     // Encode
-#if HB_PROJECT_FEATURE_NVENC
-    if (in->hw_ctx.frame)
-    {
-        AVFrame *p_frame = in->hw_ctx.frame;
-        av_frame_copy_props(p_frame, &frame);
-        ret = avcodec_send_frame(pv->context, p_frame);
-    }
-    else
-    {
-        ret = avcodec_send_frame(pv->context, &frame);
-    }
-#else
     ret = avcodec_send_frame(pv->context, &frame);
-#endif
+    av_frame_unref(&frame);
+
     if (ret < 0)
     {
         hb_log("encavcodec: avcodec_send_frame failed");

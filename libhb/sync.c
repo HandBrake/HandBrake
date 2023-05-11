@@ -1,7 +1,6 @@
 /* sync.c
 
    Copyright (c) 2003-2022 HandBrake Team
-   Copyright 2022 NVIDIA Corporation
    This file is part of the HandBrake source code
    Homepage: <http://handbrake.fr/>.
    It may be used under the terms of the GNU General Public License v2.
@@ -12,13 +11,10 @@
 #include "handbrake/hbffmpeg.h"
 #include <stdio.h>
 #include "handbrake/audio_resample.h"
+#include "handbrake/hwaccel.h"
 
 #if HB_PROJECT_FEATURE_QSV
 #include "handbrake/qsv_common.h"
-#endif
-
-#if HB_PROJECT_FEATURE_NVENC
-#include "handbrake/nvenc_common.h"
 #endif
 
 #define SYNC_MAX_VIDEO_QUEUE_LEN    40
@@ -399,6 +395,11 @@ static hb_buffer_t * CreateBlackBuf( sync_stream_t * stream,
                 hb_qsv_attach_surface_to_video_buffer(stream->common->job, buf, 0);
             }
 #endif
+            if (hb_hwaccel_is_full_hardware_pipeline_enabled(stream->common->job))
+            {
+                hb_buffer_t *temp = buf;
+                buf = hb_hwaccel_copy_video_buffer_to_hw_video_buffer(stream->common->job, temp);
+            }
         }
         else
         {
@@ -421,23 +422,8 @@ static hb_buffer_t * CreateBlackBuf( sync_stream_t * stream,
         buf->s.duration  = frame_dur;
         duration        -= frame_dur;
         hb_buffer_list_append(&list, buf);
-
-#if HB_PROJECT_FEATURE_NVENC
-        if (hb_nvdec_is_enabled(stream->common->job))
-        {
-            AVFrame frame = {{0}};
-            hb_video_buffer_to_avframe(&frame, buf);
-
-            if (!buf->hw_ctx.frame)
-            {
-                hb_nvdec_hwframe_init(stream->common->job, (AVFrame**)&buf->hw_ctx.frame);
-            }
-
-            av_frame_copy_props(buf->hw_ctx.frame, &frame);
-            av_hwframe_transfer_data(buf->hw_ctx.frame, &frame, 0);
-        }
-#endif
     }
+
     if (buf != NULL)
     {
         if (buf->s.stop < pts + dur)

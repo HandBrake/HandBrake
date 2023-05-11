@@ -3185,8 +3185,13 @@ static int ParseOptions( int argc, char ** argv )
             case HW_DECODE:
                 if( optarg != NULL )
                 {
-                    if( !strcmp( optarg, "nvdec" ) ) {
-                        hw_decode = 4;
+                    if (!strcmp(optarg, "nvdec"))
+                    {
+                        hw_decode = HB_DECODE_SUPPORT_NVDEC;
+                    }
+                    else if (!strcmp(optarg, "videotoolbox"))
+                    {
+                        hw_decode = HB_DECODE_SUPPORT_VIDEOTOOLBOX;
                     }
                     else
                     {

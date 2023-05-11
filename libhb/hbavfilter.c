@@ -14,6 +14,8 @@
 #include "libavfilter/buffersink.h"
 #include "handbrake/hbavfilter.h"
 #include "handbrake/avfilter_priv.h"
+#include "handbrake/hwaccel.h"
+
 
 #if HB_PROJECT_FEATURE_QSV
 #include "handbrake/qsv_common.h"
@@ -152,26 +154,35 @@ hb_avfilter_graph_init(hb_value_t * settings, hb_filter_init_t * init)
     else
 #endif
     {
-#if HB_PROJECT_FEATURE_NVENC
-        if (init->nv_hw_ctx.hw_frames_ctx)
+        enum AVPixelFormat pix_fmt = init->pix_fmt;
+        if (init->hw_pix_fmt == AV_PIX_FMT_CUDA)
         {
             par = av_buffersrc_parameters_alloc();
-            par->format = init->pix_fmt;
+            par->format = init->hw_pix_fmt;
             par->frame_rate.num = init->geometry.par.num;
             par->frame_rate.den = init->time_base.den;
+            par->width = init->geometry.width;
             par->height = init->geometry.height;
-            par->hw_frames_ctx = av_buffer_ref(init->nv_hw_ctx.hw_frames_ctx);
+            par->hw_frames_ctx = hb_hwaccel_init_hw_frames_ctx((AVBufferRef*)init->job->hw_device_ctx,
+                                                    init->pix_fmt,
+                                                    init->hw_pix_fmt,
+                                                    par->width,
+                                                    par->height);
+            if (!par->hw_frames_ctx)
+            {   
+                goto fail;
+            }
             par->sample_aspect_ratio.num = init->geometry.par.num;
             par->sample_aspect_ratio.den = init->geometry.par.den;
             par->time_base.num = init->time_base.num;
             par->time_base.den = init->time_base.den;
-            par->width = init->geometry.width;
+
+            pix_fmt = init->hw_pix_fmt;
         }
-#endif
         filter_args = hb_strdup_printf(
                     "width=%d:height=%d:pix_fmt=%d:sar=%d/%d:"
                     "time_base=%d/%d:frame_rate=%d/%d",
-                    init->geometry.width, init->geometry.height, init->pix_fmt,
+                    init->geometry.width, init->geometry.height, pix_fmt,
                     init->geometry.par.num, init->geometry.par.den,
                     init->time_base.num, init->time_base.den,
                     init->vrate.num, init->vrate.den);

@@ -12,13 +12,10 @@
 #include "handbrake/decomb.h"
 #include "handbrake/hbavfilter.h"
 #include "handbrake/dovi_common.h"
+#include "handbrake/hwaccel.h"
 
 #if HB_PROJECT_FEATURE_QSV
 #include "handbrake/qsv_common.h"
-#endif
-
-#if HB_PROJECT_FEATURE_NVENC
-#include "handbrake/nvenc_common.h"
 #endif
 
 typedef struct
@@ -463,13 +460,12 @@ void hb_display_job_info(hb_job_t *job)
                hb_qsv_decode_get_codec_name(title->video_codec_param), hb_get_bit_depth(job->input_pix_fmt), av_get_pix_fmt_name(job->input_pix_fmt));
     } else
 #endif
-#if HB_PROJECT_FEATURE_NVENC
-    if (hb_nvdec_is_enabled(job))
+    if (hb_hwaccel_decode_is_enabled(job))
     {
-        hb_log("   + decoder: %s %d-bit (%s)",
-               hb_nvdec_get_codec_name(title->video_codec_param), hb_get_bit_depth(job->input_pix_fmt), av_get_pix_fmt_name(job->input_pix_fmt));
-    } else
-#endif
+        hb_log("   + decoder: %s %d-bit (%s, %s)",
+               hb_hwaccel_get_codec_name(title->video_codec_param), hb_get_bit_depth(job->input_pix_fmt), av_get_pix_fmt_name(job->input_pix_fmt), av_get_pix_fmt_name(job->hw_pix_fmt));
+    }
+    else
     {
         hb_log("   + decoder: %s %d-bit (%s)", title->video_codec_name, hb_get_bit_depth(job->input_pix_fmt), av_get_pix_fmt_name(job->input_pix_fmt));
     }
@@ -1405,7 +1401,7 @@ static void sanitize_filter_list(hb_job_t *job, hb_geometry_t src_geo)
             {
                 hb_list_rem(list, filter);
                 hb_filter_close(&filter);
-                hb_log("Skipping crop/scale filter");
+                hb_log("work: skipping crop/scale filter");
             }
         }
     }
@@ -1418,8 +1414,12 @@ static void sanitize_filter_list(hb_job_t *job, hb_geometry_t src_geo)
             hb_qsv_sanitize_filter_list(job);
         }
 #endif
+}
 
-    if (hb_video_encoder_pix_fmt_is_supported(job->vcodec, job->input_pix_fmt, job->encoder_profile) == 0)
+static void sanitize_filter_format(hb_job_t *job)
+{
+    if (job->hw_pix_fmt == AV_PIX_FMT_NONE &&
+        hb_video_encoder_pix_fmt_is_supported(job->vcodec, job->input_pix_fmt, job->encoder_profile) == 0)
     {
         // Some encoders require a specific input pixel format
         // that could be different from the current pipeline format.
@@ -1442,19 +1442,10 @@ static void sanitize_filter_list(hb_job_t *job, hb_geometry_t src_geo)
             encoder_pix_fmts++;
         }
 
-#if HB_PROJECT_FEATURE_QSV && (defined( _WIN32 ) || defined( __MINGW32__ ))
-        if (hb_qsv_full_path_is_enabled(job))
-        {
-            job->input_pix_fmt = encoder_pix_fmt;
-        }
-        else
-#endif
-        {
-            hb_filter_object_t *filter = hb_filter_init(HB_FILTER_FORMAT);
-            char *settings = hb_strdup_printf("format=%s", av_get_pix_fmt_name(encoder_pix_fmt));
-            hb_add_filter(job, filter, settings);
-            free(settings);
-        }
+        hb_filter_object_t *filter = hb_filter_init(HB_FILTER_FORMAT);
+        char *settings = hb_strdup_printf("format=%s", av_get_pix_fmt_name(encoder_pix_fmt));
+        hb_add_filter(job, filter, settings);
+        free(settings);
     }
 }
 
@@ -1641,11 +1632,19 @@ static void do_job(hb_job_t *job)
     {
         hb_filter_init_t init;
 
-        // Select the optimal pixel format
-        // for the pipeline
+        sanitize_filter_list(job, title->geometry);
+
+        // Select the optimal pixel formats for the pipeline
+        job->hw_pix_fmt = hb_get_best_hw_pix_fmt(job);
         job->input_pix_fmt = hb_get_best_pix_fmt(job);
 
-        sanitize_filter_list(job, title->geometry);
+        // Init hwaccel context if needed
+        if (hb_hwaccel_decode_is_enabled(job))
+        {
+            hb_hwaccel_hw_ctx_init(job);
+        }
+
+        sanitize_filter_format(job);
         sanitize_dynamic_hdr_metadata_passthru(job);
 
         memset(&init, 0, sizeof(init));
@@ -1653,6 +1652,7 @@ static void do_job(hb_job_t *job)
         init.time_base.den = 90000;
         init.job = job;
         init.pix_fmt = job->input_pix_fmt;
+        init.hw_pix_fmt = job->hw_pix_fmt;
 
         init.color_prim = title->color_prim;
         init.color_transfer = title->color_transfer;
@@ -2084,7 +2084,10 @@ cleanup:
     {
         analyze_subtitle_scan(job);
     }
+
     hb_buffer_pool_free();
+    hb_hwaccel_hw_ctx_close(job);
+
 #if HB_PROJECT_FEATURE_QSV
     if (!job->indepth_scan &&
         (job->pass_id != HB_PASS_ENCODE_ANALYSIS) &&

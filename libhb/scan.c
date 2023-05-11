@@ -46,6 +46,7 @@ static void UpdateState3(hb_scan_t *scan, int preview);
 static int get_color_prim(int color_primaries, hb_geometry_t geometry, hb_rational_t rate);
 static int get_color_transfer(int color_trc);
 static int get_color_matrix(int colorspace, hb_geometry_t geometry);
+static int get_color_range(int color_range);
 
 static const char *aspect_to_string(hb_rational_t *dar)
 {
@@ -184,6 +185,18 @@ static int get_color_matrix(int colorspace, hb_geometry_t geometry)
     }
 }
 
+static int get_color_range(int color_range)
+{
+    switch (color_range)
+    {
+        case AVCOL_RANGE_MPEG:
+            return AVCOL_RANGE_MPEG;
+        case AVCOL_RANGE_JPEG:
+            return AVCOL_RANGE_JPEG;
+        default:
+            return AVCOL_RANGE_MPEG;
+    }
+}
 
 hb_thread_t * hb_scan_init( hb_handle_t * handle, volatile int * die,
                             const char * path, int title_index,
@@ -1208,7 +1221,7 @@ skip_preview:
             title->color_matrix   = get_color_matrix(vid_info.color_matrix, vid_info.geometry);
         }
 
-        title->color_range = vid_info.color_range;
+        title->color_range = get_color_range(vid_info.color_range);
         title->chroma_location = vid_info.chroma_location;
 
         title->video_decode_support = vid_info.video_decode_support;
@@ -1379,9 +1392,9 @@ skip_preview:
         if (title->video_decode_support != HB_DECODE_SUPPORT_SW)
         {
             hb_log("scan: supported video decoders:%s%s%s",
-                   !(title->video_decode_support & HB_DECODE_SUPPORT_SW)    ? "" : " avcodec",
-                   !(title->video_decode_support & HB_DECODE_SUPPORT_QSV)   ? "" : " qsv",
-                   !(title->video_decode_support & HB_DECODE_SUPPORT_NVDEC) ? "" : " nvdec");
+                   !(title->video_decode_support & HB_DECODE_SUPPORT_SW)      ? "" : " avcodec",
+                   !(title->video_decode_support & HB_DECODE_SUPPORT_QSV)     ? "" : " qsv",
+                   !(title->video_decode_support & HB_DECODE_SUPPORT_HWACCEL) ? "" : " hwaccel");
         }
 
         if( interlaced_preview_count >= ( npreviews / 2 ) )
