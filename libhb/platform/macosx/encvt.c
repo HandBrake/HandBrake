@@ -14,6 +14,7 @@
 
 #include "handbrake/handbrake.h"
 #include "handbrake/hdr10plus.h"
+#include "handbrake/hbffmpeg.h"
 
 int  encvt_init(hb_work_object_t *, hb_job_t *);
 int  encvt_work(hb_work_object_t *, hb_buffer_t **, hb_buffer_t **);
@@ -790,44 +791,42 @@ static int hb_vt_parse_options(hb_work_private_t *pv, hb_job_t *job)
     return 0;
 }
 
-void pixelBufferReleasePlanarBytesCallback(
-                                           void *releaseRefCon,
-                                           const void *dataPtr,
-                                           size_t dataSize,
-                                           size_t numberOfPlanes,
-                                           const void *planeAddresses[])
-{
-    hb_buffer_t *buf = (hb_buffer_t *)releaseRefCon;
-    hb_buffer_close(&buf);
-}
-
 static OSStatus wrap_buf(hb_work_private_t *pv, hb_buffer_t *buf, CVPixelBufferRef *pix_buf)
 {
-    OSStatus err;
-    int numberOfPlanes = pv->settings.pixelFormat == kCVPixelFormatType_420YpCbCr8Planar ||
-                         pv->settings.pixelFormat == kCVPixelFormatType_420YpCbCr8PlanarFullRange ? 3 : 2;
+    OSStatus err = 0;
 
-    void *planeBaseAddress[3] = {buf->plane[0].data, buf->plane[1].data, buf->plane[2].data};
-    size_t planeWidth[3] = {buf->plane[0].width, buf->plane[1].width, buf->plane[2].width};
-    size_t planeHeight[3] = {buf->plane[0].height, buf->plane[1].height, buf->plane[2].height};
-    size_t planeBytesPerRow[3] = {buf->plane[0].stride, buf->plane[1].stride, buf->plane[2].stride};
+    if (pv->job->hw_pix_fmt == AV_PIX_FMT_VIDEOTOOLBOX)
+    {
+        *pix_buf = (CVPixelBufferRef)((AVFrame *)buf->storage)->data[3];
+        CVPixelBufferRetain(*pix_buf);
+    }
+    else
+    {
+        int numberOfPlanes = pv->settings.pixelFormat == kCVPixelFormatType_420YpCbCr8Planar ||
+        pv->settings.pixelFormat == kCVPixelFormatType_420YpCbCr8PlanarFullRange ? 3 : 2;
 
-    err = CVPixelBufferCreateWithPlanarBytes(
-                                             kCFAllocatorDefault,
-                                             buf->f.width,
-                                             buf->f.height,
-                                             pv->settings.pixelFormat,
-                                             buf->data,
-                                             0,
-                                             numberOfPlanes,
-                                             planeBaseAddress,
-                                             planeWidth,
-                                             planeHeight,
-                                             planeBytesPerRow,
-                                             &pixelBufferReleasePlanarBytesCallback,
-                                             buf,
-                                             NULL,
-                                             pix_buf);
+        void *planeBaseAddress[3] = {buf->plane[0].data, buf->plane[1].data, buf->plane[2].data};
+        size_t planeWidth[3] = {buf->plane[0].width, buf->plane[1].width, buf->plane[2].width};
+        size_t planeHeight[3] = {buf->plane[0].height, buf->plane[1].height, buf->plane[2].height};
+        size_t planeBytesPerRow[3] = {buf->plane[0].stride, buf->plane[1].stride, buf->plane[2].stride};
+
+        err = CVPixelBufferCreateWithPlanarBytes(
+                                                 kCFAllocatorDefault,
+                                                 buf->f.width,
+                                                 buf->f.height,
+                                                 pv->settings.pixelFormat,
+                                                 buf->data,
+                                                 0,
+                                                 numberOfPlanes,
+                                                 planeBaseAddress,
+                                                 planeWidth,
+                                                 planeHeight,
+                                                 planeBytesPerRow,
+                                                 NULL,
+                                                 buf,
+                                                 NULL,
+                                                 pix_buf);
+    }
 
     hb_vt_add_color_tag(*pix_buf, pv->job);
     hb_vt_add_dynamic_hdr_metadata(*pix_buf, pv->job, buf);
@@ -846,8 +845,8 @@ void hb_vt_compression_output_callback(
 
     if (sourceFrameRefCon)
     {
-        CVPixelBufferRef pixelbuffer = sourceFrameRefCon;
-        CVPixelBufferRelease(pixelbuffer);
+        hb_buffer_t *buf = (hb_buffer_t *)sourceFrameRefCon;
+        hb_buffer_close(&buf);
     }
 
     if (status != noErr)
@@ -1698,13 +1697,33 @@ static hb_buffer_t * extract_buf(CMSampleBufferRef sampleBuffer, hb_work_object_
     if (buffer)
     {
         size_t sampleSize = CMBlockBufferGetDataLength(buffer);
-        buf = hb_buffer_init(sampleSize);
+        Boolean isContiguous = CMBlockBufferIsRangeContiguous(buffer, 0, sampleSize);
 
-        err = CMBlockBufferCopyDataBytes(buffer, 0, sampleSize, buf->data);
-
-        if (err != kCMBlockBufferNoErr)
+        if (isContiguous)
         {
-            hb_log("VTCompressionSession: CMBlockBufferCopyDataBytes error");
+            size_t lengthAtOffsetOut, totalLengthOut;
+            char * _Nullable dataPointerOut;
+
+            buf = hb_buffer_wrapper_init();
+            err = CMBlockBufferGetDataPointer(buffer, 0, &lengthAtOffsetOut, &totalLengthOut, &dataPointerOut);
+            if (err != kCMBlockBufferNoErr)
+            {
+                hb_log("VTCompressionSession: CMBlockBufferGetDataPointer error");
+            }
+            buf->data = (uint8_t *)dataPointerOut;
+            buf->size = totalLengthOut;
+            buf->storage = sampleBuffer;
+            buf->storage_type = COREMEDIA;
+            CFRetain(sampleBuffer);
+        }
+        else
+        {
+            buf = hb_buffer_init(sampleSize);
+            err = CMBlockBufferCopyDataBytes(buffer, 0, sampleSize, buf->data);
+            if (err != kCMBlockBufferNoErr)
+            {
+                hb_log("VTCompressionSession: CMBlockBufferCopyDataBytes error");
+            }
         }
 
         buf->s.frametype = HB_FRAME_IDR;
@@ -1817,8 +1836,9 @@ static hb_buffer_t *vt_encode(hb_work_object_t *w, hb_buffer_t *in)
                                               CMTimeMake(in->s.start, pv->settings.timescale),
                                               CMTimeMake(in->s.duration, pv->settings.timescale),
                                               frameProperties,
-                                              pix_buffer,
+                                              in,
                                               NULL);
+        CVPixelBufferRelease(pix_buffer);
 
         if (err)
         {

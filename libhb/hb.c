@@ -2455,6 +2455,7 @@ hb_interjob_t * hb_interjob_get( hb_handle_t * h )
     return h->interjob;
 }
 
-int is_hardware_disabled(void){
+int is_hardware_disabled(void)
+{
     return disable_hardware;
 }

@@ -233,7 +233,7 @@ static const char * const vt_h265_level_names[] =
 
 static const enum AVPixelFormat vt_h26x_pix_fmts[] =
 {
-    /*AV_PIX_FMT_NV12, */AV_PIX_FMT_YUV420P, AV_PIX_FMT_NONE
+    AV_PIX_FMT_VIDEOTOOLBOX, AV_PIX_FMT_YUV420P, AV_PIX_FMT_NV12, AV_PIX_FMT_NONE
 };
 
 static const enum AVPixelFormat vt_h265_10bit_pix_fmts[] =

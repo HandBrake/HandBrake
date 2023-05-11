@@ -151,17 +151,26 @@ static int crop_scale_init(hb_filter_object_t * filter, hb_filter_init_t * init)
     else
 #endif
     {
-        hb_dict_set_int(avsettings, "width", width);
-        hb_dict_set_int(avsettings, "height", height);
-
-        if ((width % 2) == 0 && (height % 2) == 0 &&
+        if (init->hw_pix_fmt == AV_PIX_FMT_CUDA)
+        {
+            hb_dict_set_int(avsettings, "w", width);
+            hb_dict_set_int(avsettings, "h", height);
+            hb_dict_set_string(avsettings, "interp_algo", "lanczos");
+            hb_dict_set_string(avsettings, "format", av_get_pix_fmt_name(init->pix_fmt));
+            hb_dict_set(avfilter, "scale_cuda", avsettings);
+        }
+        else if ((width % 2) == 0 && (height % 2) == 0 &&
             (cropped_width % 2) == 0 && (cropped_height % 2) == 0)
         {
+            hb_dict_set_int(avsettings, "width", width);
+            hb_dict_set_int(avsettings, "height", height);
             hb_dict_set_string(avsettings, "filter", "lanczos");
             hb_dict_set(avfilter, "zscale", avsettings);
         }
         else
         {
+            hb_dict_set_int(avsettings, "width", width);
+            hb_dict_set_int(avsettings, "height", height);
             hb_dict_set_string(avsettings, "flags", "lanczos+accurate_rnd");
             hb_dict_set(avfilter, "scale", avsettings);
         }

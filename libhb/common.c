@@ -22,6 +22,7 @@
 #include "handbrake/h265_common.h"
 #include "handbrake/av1_common.h"
 #include "handbrake/encx264.h"
+#include "handbrake/hwaccel.h"
 #if HB_PROJECT_FEATURE_QSV
 #include "handbrake/qsv_common.h"
 #endif
@@ -4223,7 +4224,6 @@ static void job_setup(hb_job_t * job, hb_title_t * title)
     job->qsv.decode                = !!(title->video_decode_support &
                                         HB_DECODE_SUPPORT_QSV);
 #endif
-
 }
 
 int hb_output_color_prim(hb_job_t * job)
@@ -6259,37 +6259,22 @@ static int pix_fmt_is_supported(hb_job_t *job, int pix_fmt)
         return 0;
     }
 
-    if (job->title->video_decode_support & HB_DECODE_SUPPORT_QSV)
+    // Allow biplanar formats only if hardware decoder is enabled
+    const int planes_count = av_pix_fmt_count_planes(pix_fmt);
+
+    if (planes_count == 2)
     {
-        // Allow formats supported by QSV pipeline via system memory
-        // at that stage only, video memory formats will be reassigned later if allowed
-        if (pix_fmt != AV_PIX_FMT_YUV420P10 &&
-            pix_fmt != AV_PIX_FMT_YUV420P)
-        {
-            return 0;
-        }
-    }
-#if HB_PROJECT_FEATURE_NVENC
-    else if (hb_nvdec_is_enabled(job))
-    {
-        if (pix_fmt != AV_PIX_FMT_YUV420P10LE &&
-            pix_fmt != AV_PIX_FMT_NV12)
-        {
-            return 0;
-        }
-    }
+        if (hb_hwaccel_decode_is_enabled(job) == 0
+#if HB_PROJECT_FEATURE_QSV
+            && hb_qsv_decode_is_enabled(job) == 0
 #endif
-    else
-    {
-        // Allow biplanar formats only if
-        // hardware decoding is enabled.
-        if (pix_fmt == AV_PIX_FMT_P010 ||
-            pix_fmt == AV_PIX_FMT_NV12)
+            )
         {
             return 0;
         }
     }
 
+    // These filters support only planar pixel formats
     for (int i = 0; i < hb_list_count(job->list_filter); i++)
     {
         hb_filter_object_t *filter = hb_list_item(job->list_filter, i);
@@ -6297,7 +6282,6 @@ static int pix_fmt_is_supported(hb_job_t *job, int pix_fmt)
         switch (filter->id)
         {
             case HB_FILTER_DETELECINE:
-            case HB_FILTER_COMB_DETECT:
             case HB_FILTER_DECOMB:
             case HB_FILTER_YADIF:
             case HB_FILTER_BWDIF:
@@ -6308,8 +6292,7 @@ static int pix_fmt_is_supported(hb_job_t *job, int pix_fmt)
             case HB_FILTER_UNSHARP:
             case HB_FILTER_GRAYSCALE:
             case HB_FILTER_RENDER_SUB:
-               if (pix_fmt == AV_PIX_FMT_P010 ||
-                   pix_fmt == AV_PIX_FMT_NV12)
+               if (planes_count == 2)
                {
                    return 0;
                }
@@ -6341,4 +6324,53 @@ int hb_get_best_pix_fmt(hb_job_t * job)
     }
 
     return AV_PIX_FMT_YUV420P;
+}
+
+static int pix_hw_fmt_is_supported(hb_job_t *job, int pix_fmt)
+{
+    if (pix_fmt == AV_PIX_FMT_QSV)
+    {
+#if HB_PROJECT_FEATURE_QSV
+        if (hb_qsv_full_path_is_enabled(job))
+        {
+            return 1;
+        }
+#endif
+    }
+    else if (hb_hwaccel_is_full_hardware_pipeline_enabled(job))
+    {
+        if (pix_fmt == AV_PIX_FMT_CUDA &&
+            job->hw_decode & HB_DECODE_SUPPORT_NVDEC)
+        {
+            return 1;
+        }
+        if (pix_fmt == AV_PIX_FMT_VIDEOTOOLBOX &&
+            job->hw_decode & HB_DECODE_SUPPORT_VIDEOTOOLBOX)
+        {
+            return 1;
+        }
+    }
+
+    return 0;
+}
+
+static const enum AVPixelFormat hw_pipeline_pix_fmts[] =
+{
+    AV_PIX_FMT_QSV, AV_PIX_FMT_CUDA, AV_PIX_FMT_VIDEOTOOLBOX, AV_PIX_FMT_NONE
+};
+
+int hb_get_best_hw_pix_fmt(hb_job_t *job)
+{
+    const int *pix_fmts = hw_pipeline_pix_fmts;
+
+    while (*pix_fmts != AV_PIX_FMT_NONE)
+    {
+        if (pix_hw_fmt_is_supported(job, *pix_fmts))
+        {
+            return *pix_fmts;
+        }
+        pix_fmts++;
+    }
+
+    return AV_PIX_FMT_NONE;
 }

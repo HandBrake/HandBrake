@@ -162,12 +162,8 @@ struct hb_buffer_s
     } qsv_details;
 #endif
 
-#if HB_PROJECT_FEATURE_NVENC
-    struct hw_ctx
-    {
-        void *frame;
-    } hw_ctx;
-#endif
+    void  *storage;
+    enum  { STANDARD, AVFRAME, COREMEDIA } storage_type;
 
     // libav may attach AV_PKT_DATA_PALETTE side data to some AVPackets
     // Store this data here when read and pass to decoder.
@@ -184,6 +180,7 @@ struct hb_buffer_s
 void hb_buffer_pool_init( void );
 void hb_buffer_pool_free( void );
 
+hb_buffer_t * hb_buffer_wrapper_init();
 hb_buffer_t * hb_buffer_init( int size );
 hb_buffer_t * hb_buffer_eof_init( void );
 hb_buffer_t * hb_frame_buffer_init( int pix_fmt, int w, int h);
