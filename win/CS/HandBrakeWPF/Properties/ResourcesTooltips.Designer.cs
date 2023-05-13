@@ -550,6 +550,15 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Launches the documentation website located at https://handbrake.fr/docs.
+        /// </summary>
+        public static string OptionsView_LaunchsHelp {
+            get {
+                return ResourceManager.GetString("OptionsView_LaunchsHelp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Flat - Presets are displayed as a flat list.
         ///Partially Flat - The last 8 user presets are displayed as a flat list followed by all presets being shown in category listing.
         ///Categories - All presets are shown under a sub menu per category..
@@ -872,6 +881,19 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Perform Multi Pass Encoding.
+        ///
+        ///The &apos;Bitrate&apos; option is prerequisite. During the analysis passes, statistics about
+        ///the video are collected. Then in the final pass, those statistics are used
+        ///to make bitrate allocation decisions..
+        /// </summary>
+        public static string Video_MultiPass {
+            get {
+                return ResourceManager.GetString("Video_MultiPass", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Enables variable framerate output with a peak rate determined by the framerate setting..
         /// </summary>
         public static string Video_PeakFramerate {
@@ -924,24 +946,11 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to During the analysis passes of a final pass encode, use settings that speed things along..
+        ///   Looks up a localized string similar to During the analysis pass of a multi pass encode, use settings that speed things along..
         /// </summary>
         public static string Video_TurboAnalysisPass {
             get {
                 return ResourceManager.GetString("Video_TurboAnalysisPass", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Perform Multi Pass Encoding.
-        ///
-        ///The &apos;Bitrate&apos; option is prerequisite. During the analysis passes, statistics about
-        ///the video are collected.  Then in the final pass, those statistics are used
-        ///to make bitrate allocation decisions..
-        /// </summary>
-        public static string Video_MultiPass {
-            get {
-                return ResourceManager.GetString("Video_MultiPass", resourceCulture);
             }
         }
         

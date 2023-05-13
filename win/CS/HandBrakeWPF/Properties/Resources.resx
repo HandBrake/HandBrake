@@ -2753,4 +2753,13 @@ To allow multiple simultaneous encodes, turn on "Process Isolation" in Tools Men
   <data name="AudioView_Source" xml:space="preserve">
     <value>Source</value>
   </data>
+  <data name="AboutView_Documentation" xml:space="preserve">
+    <value>Documentation:</value>
+  </data>
+  <data name="AboutView_GithubTracker" xml:space="preserve">
+    <value>GitHub Issue Tracker:</value>
+  </data>
+  <data name="AboutView_Website" xml:space="preserve">
+    <value>Website: </value>
+  </data>
 </root>

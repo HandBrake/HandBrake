@@ -12,6 +12,8 @@ namespace HandBrakeWPF.Helpers
     using System;
     using System.IO;
     using System.Linq;
+    using System.Runtime.CompilerServices;
+    using System.Windows.Forms;
 
     using HandBrake.App.Core.Extensions;
 
@@ -160,7 +162,10 @@ namespace HandBrakeWPF.Helpers
                         .Replace(Constants.Preset, presetNameStr)
                         .Replace(Constants.EncoderBitDepth, bitDepth?.ToString())
                         .Replace(Constants.StorageWidth, task.Width?.ToString())
-                        .Replace(Constants.StorageHeight, task.Height?.ToString());
+                        .Replace(Constants.StorageHeight, task.Height?.ToString())
+                        .Replace(Constants.Codec, task.VideoEncoder?.Codec)
+                        .Replace(Constants.EncoderDisplay, task.VideoEncoder?.DisplayName)
+                        .Replace(Constants.Encoder, task.VideoEncoder?.ShortName);
 
 
                 if (task.VideoEncodeRateType == VideoEncodeRateType.ConstantQuality)

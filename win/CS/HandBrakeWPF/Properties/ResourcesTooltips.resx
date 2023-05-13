@@ -552,4 +552,7 @@ Bitrate will vary source to source.</value>
 {source_folder_name} – The name of the directory that the source file is in, without the full path.
 {source} - The name of the source file.</value>
   </data>
+  <data name="OptionsView_LaunchsHelp" xml:space="preserve">
+    <value>Launches the documentation website located at https://handbrake.fr/docs</value>
+  </data>
 </root>

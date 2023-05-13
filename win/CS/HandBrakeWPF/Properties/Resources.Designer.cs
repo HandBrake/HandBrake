@@ -89,6 +89,24 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Documentation:.
+        /// </summary>
+        public static string AboutView_Documentation {
+            get {
+                return ResourceManager.GetString("AboutView_Documentation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to GitHub Issue Tracker:.
+        /// </summary>
+        public static string AboutView_GithubTracker {
+            get {
+                return ResourceManager.GetString("AboutView_GithubTracker", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to License: .
         /// </summary>
         public static string AboutView_License {
@@ -103,6 +121,15 @@ namespace HandBrakeWPF.Properties {
         public static string AboutView_Version {
             get {
                 return ResourceManager.GetString("AboutView_Version", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Website: .
+        /// </summary>
+        public static string AboutView_Website {
+            get {
+                return ResourceManager.GetString("AboutView_Website", resourceCulture);
             }
         }
         

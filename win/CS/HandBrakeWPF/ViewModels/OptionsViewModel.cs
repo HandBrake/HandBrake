@@ -579,6 +579,8 @@ namespace HandBrakeWPF.ViewModels
                     new PlaceHolderBucket { Name = Constants.EncoderBitDepth },
                     new PlaceHolderBucket { Name = Constants.StorageWidth },
                     new PlaceHolderBucket { Name = Constants.StorageHeight },
+                    new PlaceHolderBucket { Name = Constants.Codec },
+                    new PlaceHolderBucket { Name = Constants.Encoder },
                 };
             }
         }
@@ -1600,6 +1602,12 @@ namespace HandBrakeWPF.ViewModels
             this.userSettingService.SetUserSetting(UserSettingConstants.ProcessIsolationEnabled, this.RemoteServiceEnabled);
             this.userSettingService.SetUserSetting(UserSettingConstants.ProcessIsolationPort, this.RemoteServicePort);
             this.userSettingService.SetUserSetting(UserSettingConstants.SimultaneousEncodes, this.SimultaneousEncodes);
+        }
+
+
+        public void LaunchHelp()
+        {
+            Process.Start("explorer.exe", "https://handbrake.fr/docs/en/latest/technical/preferences.html");
         }
 
         private void UpdateCheckComplete(UpdateCheckInformation info)

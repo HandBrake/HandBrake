@@ -60,6 +60,21 @@ namespace HandBrake.Interop.Interop.Interfaces.Model.Encoders
         /// </summary>
         public string ShortName { get; private set; }
 
+        public string Codec
+        {
+            get
+            {
+                string[] codec = this.DisplayName.Split(' ');
+
+                if (codec.Length >= 1)
+                {
+                    return codec[0];
+                }
+
+                return string.Empty;
+            }
+        }
+
         /// <summary>
         /// Gets the list of presets this encoder supports. (null if the encoder doesn't support presets)
         /// </summary>
