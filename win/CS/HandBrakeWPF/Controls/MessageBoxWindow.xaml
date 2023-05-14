@@ -1,0 +1,45 @@
+﻿<Window x:Class="HandBrakeWPF.Controls.MessageBoxWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="{Binding Title}"
+        MinWidth="300"
+        MinHeight="100"
+        MaxWidth="500"
+        MaxHeight="800"
+        FontSize="11"
+        TextOptions.TextFormattingMode="Display"
+        SizeToContent="WidthAndHeight"
+        WindowStartupLocation="CenterScreen">
+
+    <Grid Margin="0,20,0,0" >
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+        <!--  Header  -->
+        <Image x:Name="image" Width="32" Height="32" Margin="15,0,0,0" Grid.Column="0" />
+
+        <!--  Details  -->
+        <TextBlock x:Name="message" Grid.Row="0" Margin="15,0,15,0" TextWrapping="Wrap" TextTrimming="CharacterEllipsis" Grid.Column="1" />
+
+        <!--  Controls  -->
+        <Grid Grid.Row="2" HorizontalAlignment="Stretch" Grid.ColumnSpan="2" Margin="0,30,0,0"  Background="{StaticResource Ui.Ultralight}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+
+            <Button x:Name="yes" Grid.Column="1" Content="OK" Margin="5,5,10,5" Padding="8,2" Click="Proceed_OnClick" IsDefault="True" MinWidth="70" />
+            <Button x:Name="no" Grid.Column="1" Content="OK" Margin="5,5,10,5"   Padding="8,2" Click="Proceed_OnClick" IsDefault="True" MinWidth="70"  />
+            <Button x:Name="ok" Grid.Column="1" Content="OK" Margin="5,5,10,5"  Padding="8,2" Click="Proceed_OnClick" IsDefault="True" MinWidth="70" />
+            <Button x:Name="Cancel" Grid.Column="1" IsCancel="True" Margin="5,5,10,5"  Content="Cancel" Padding="8,2" Click="Cancel_OnClick" MinWidth="70" />
+        </Grid>
+    </Grid>
+</Window>

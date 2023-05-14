@@ -683,7 +683,7 @@ namespace HandBrakeWPF.Services.Presets
                         Resources.PresetService_UnableToLoadPresets + filename,
                         Resources.PresetService_UnableToLoad,
                         MessageBoxButton.OK,
-                        MessageBoxImage.Exclamation);
+                        MessageBoxImage.Warning);
 
                     this.UpdateBuiltInPresets();
                     this.ServiceLogMessage("Recovery Completed!");
