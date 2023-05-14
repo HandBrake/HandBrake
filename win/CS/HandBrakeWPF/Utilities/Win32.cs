@@ -200,6 +200,19 @@ namespace HandBrakeWPF.Utilities
 
         [DllImport("Powrprof.dll", CharSet = CharSet.Auto, ExactSpelling = true)]
         public static extern bool SetSuspendState(bool hiberate, bool forceCritical, bool disableWakeEvent);
+
+
+        [DllImport("dwmapi.dll")]
+        private static extern int DwmSetWindowAttribute(IntPtr hwnd, int attr, ref int attrValue, int attrSize);
+
+        public static void SetDarkTheme(IntPtr handle)
+        {
+            int mode = 1;
+            if (DwmSetWindowAttribute(handle, 19, ref mode, sizeof(int)) != 0)
+            {
+                DwmSetWindowAttribute(handle, 20, ref mode, sizeof(int));
+            }
+        }
     }
 }
 

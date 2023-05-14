@@ -11,15 +11,18 @@ namespace HandBrakeWPF.Views
 {
     using System;
     using System.ComponentModel;
+    using System.Diagnostics;
     using System.Drawing;
     using System.IO;
     using System.Windows;
     using System.Windows.Controls;
     using System.Windows.Input;
+    using System.Windows.Interop;
     using System.Windows.Resources;
 
     using HandBrakeWPF.Commands;
     using HandBrakeWPF.Helpers;
+    using HandBrakeWPF.Model;
     using HandBrakeWPF.Model.Options;
     using HandBrakeWPF.Services.Interfaces;
     using HandBrakeWPF.Utilities;
@@ -32,9 +35,30 @@ namespace HandBrakeWPF.Views
     /// <summary>
     /// Interaction logic for ShellView.xaml
     /// </summary>
-    public partial class ShellView
+    public partial class ShellView : Window
     {
         private INotifyIconService notifyIconService;
+
+        protected override void OnSourceInitialized(EventArgs e)
+        {
+            base.OnSourceInitialized(e);
+
+            try
+            {
+                IUserSettingService userSettingService = IoCHelper.Get<IUserSettingService>();
+                DarkThemeMode mode = userSettingService.GetUserSetting<DarkThemeMode>(UserSettingConstants.DarkThemeMode);
+                if (mode == DarkThemeMode.Dark || (mode == DarkThemeMode.System && SystemInfo.IsAppsUsingDarkTheme()))
+                {
+                    var handle = new WindowInteropHelper(this).Handle;
+                    Win32.SetDarkTheme(handle);
+                }
+            }
+            catch (Exception ex)
+            {
+                // Silently Ignore.  It's not important. 
+                Debug.WriteLine(ex);
+            }
+        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ShellView"/> class.
