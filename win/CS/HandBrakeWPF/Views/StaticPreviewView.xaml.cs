@@ -14,6 +14,7 @@ namespace HandBrakeWPF.Views
     using System.Windows.Input;
     using System.Windows.Media.Imaging;
 
+    using HandBrakeWPF.Helpers;
     using HandBrakeWPF.ViewModels;
     using HandBrakeWPF.ViewModels.Interfaces;
 
@@ -33,6 +34,12 @@ namespace HandBrakeWPF.Views
             this.Title = Properties.Resources.Preview;
 
             this.videoPlayer.MediaFailed += this.VideoPlayer_MediaFailed;
+        }
+
+        protected override void OnSourceInitialized(EventArgs e)
+        {
+            base.OnSourceInitialized(e);
+            WindowHelper.SetDarkMode(this);
         }
 
         private void VideoPlayer_MediaFailed(object sender, ExceptionRoutedEventArgs e)

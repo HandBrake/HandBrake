@@ -9,6 +9,7 @@
 
 namespace HandBrakeWPF.Views
 {
+    using HandBrakeWPF.Helpers;
     using System;
     using System.Windows;
     using System.Windows.Controls;
@@ -20,6 +21,12 @@ namespace HandBrakeWPF.Views
         {  
             this.InitializeComponent();
             this.InputBindings.Add(new InputBinding(new CopyError(this.errorText), new KeyGesture(Key.C, ModifierKeys.Control))); // Copy Error
+        }
+
+        protected override void OnSourceInitialized(EventArgs e)
+        {
+            base.OnSourceInitialized(e);
+            WindowHelper.SetDarkMode(this);
         }
     }
 

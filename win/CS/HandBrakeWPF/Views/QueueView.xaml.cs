@@ -6,12 +6,14 @@
 
 namespace HandBrakeWPF.Views
 {
+    using System;
     using System.ComponentModel;
     using System.Windows;
     using System.Windows.Controls;
     using System.Windows.Input;
     using System.Windows.Media;
 
+    using HandBrakeWPF.Helpers;
     using HandBrakeWPF.Services.Queue.Model;
     using HandBrakeWPF.ViewModels;
 
@@ -23,6 +25,12 @@ namespace HandBrakeWPF.Views
         {
             this.InitializeComponent();
             this.SizeChanged += this.QueueView_SizeChanged;
+        }
+
+        protected override void OnSourceInitialized(EventArgs e)
+        {
+            base.OnSourceInitialized(e);
+            WindowHelper.SetDarkMode(this);
         }
 
         private void QueueView_SizeChanged(object sender, SizeChangedEventArgs e)
