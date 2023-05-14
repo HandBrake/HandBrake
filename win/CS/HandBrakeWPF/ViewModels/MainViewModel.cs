@@ -198,8 +198,6 @@ namespace HandBrakeWPF.ViewModels
             systemService.Start();
 
             this.Load();
-
-            this.errorService.ShowMessageBox("Hello World", "Hello", MessageBoxButton.OK, MessageBoxImage.Error);
         }
 
         public SimpleRelayCommand<int> WhenDoneCommand { get; set; }

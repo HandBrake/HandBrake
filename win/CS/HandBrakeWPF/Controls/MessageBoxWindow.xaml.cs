@@ -39,10 +39,10 @@ namespace HandBrakeWPF.Controls
                     this.image.Source = Imaging.CreateBitmapSourceFromHIcon(SystemIcons.Warning.Handle, Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions());
                     break;
                 case MessageBoxImage.Question:
-                    this.image.Source = Imaging.CreateBitmapSourceFromHIcon(SystemIcons.Question.Handle, Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions());
+                    this.image.Source = new BitmapImage(new Uri("pack://application:,,,/Views/Images/question.png"));
                     break;
                 case MessageBoxImage.Information:
-                    this.image.Source = Imaging.CreateBitmapSourceFromHIcon(SystemIcons.Question.Handle, Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions());
+                    this.image.Source = new BitmapImage(new Uri("pack://application:,,,/Views/Images/information.png"));
                     break;
             }
 
