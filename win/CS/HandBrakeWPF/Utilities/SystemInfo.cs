@@ -15,6 +15,8 @@ namespace HandBrakeWPF.Utilities
     using System.Management;
     using System.Runtime.InteropServices;
 
+    using HandBrakeWPF.Model;
+
     using Microsoft.Win32;
 
     /// <summary>
@@ -67,17 +69,17 @@ namespace HandBrakeWPF.Utilities
             }
         }
 
-        public static List<string> GetGPUInfo
+        public static List<GpuInfo> GetGPUInfo
         {
             get
             {
-                List<string> gpuInfo = new List<string>();
+                List<GpuInfo> gpuInfo = new List<GpuInfo>();
 
                 if (IsArmDevice)
                 {
                     // We don't have .NET Framework on ARM64 devices so cannot use System.Management
                     // Default to ARM Chipset for now.
-                    gpuInfo.Add("ARM Chipset");
+                    gpuInfo.Add(new GpuInfo("Arm Chipset", string.Empty));
 
                     return gpuInfo;
                 }
@@ -100,17 +102,7 @@ namespace HandBrakeWPF.Utilities
                             }
                         }
 
-                        if (string.IsNullOrEmpty(gpu))
-                        {
-                            gpu = "Unknown GPU";
-                        }
-
-                        if (string.IsNullOrEmpty(version))
-                        {
-                            version = "Unknown Driver Version";
-                        }
-
-                        gpuInfo.Add(string.Format("{0} - {1}", gpu, version));
+                        gpuInfo.Add(new GpuInfo(gpu, version));
                     }
                 }
                 catch (Exception)
@@ -121,7 +113,7 @@ namespace HandBrakeWPF.Utilities
                 return gpuInfo;
             }
         }
-
+        
         public static bool IsWindows10OrLater()
         {
             OperatingSystem os = Environment.OSVersion;

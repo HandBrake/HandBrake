@@ -83,7 +83,7 @@ namespace HandBrakeWPF.Utilities
             StringBuilder gpuBuilder = new StringBuilder();
             foreach (var item in SystemInfo.GetGPUInfo)
             {
-                gpuBuilder.AppendLine(string.Format("  {0}", item));
+                gpuBuilder.AppendLine(string.Format("  {0}", item.DisplayValue));
             }
 
             if (string.IsNullOrEmpty(gpuBuilder.ToString().Trim()))
