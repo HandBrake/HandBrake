@@ -1154,11 +1154,32 @@ skip_preview:
                 title->geometry.par.num != vid_info.geometry.par.num &&
                 title->geometry.par.den != vid_info.geometry.par.den)
             {
-                hb_log("WARNING: Video PAR %d:%d != container PAR %d:%d",
-                    vid_info.geometry.par.num, vid_info.geometry.par.den,
-                    title->geometry.par.num, title->geometry.par.den);
+                hb_log("WARNING: bitstream PAR %d:%d != container PAR %d:%d",
+                       vid_info.geometry.par.num, vid_info.geometry.par.den,
+                       title->geometry.par.num, title->geometry.par.den);
             }
-            title->geometry.par = vid_info.geometry.par;
+            /*
+             * Don't override container-level non-square
+             * pixels with bitstream-level square pixels.
+             *
+             * Allows fixing absent bitstream PAR at the container level.
+             *
+             * Still prefer bitstream-level PAR when set, as e.g. mkvmerge will sadly round
+             * it when muxing from elementary streams, making the bitstream PAR more precise:
+             * 720x480 [SAR 32:27 DAR 16:9], SAR 853:720 DAR 853:480, 24 fps, 24 tbr, 1k tbn (default)
+             */
+            if (vid_info.geometry.par.num != 1 ||
+                vid_info.geometry.par.den != 1 ||
+                !title->geometry.par.num ||
+                !title->geometry.par.den)
+            {
+                hb_log("using bitstream PAR %d:%d", vid_info.geometry.par.num, vid_info.geometry.par.den);
+                title->geometry.par = vid_info.geometry.par;
+            }
+            else
+            {
+                hb_log("using container PAR %d:%d", title->geometry.par.num, title->geometry.par.den);
+            }
         }
         else if (!title->geometry.par.num || !title->geometry.par.den)
         {
