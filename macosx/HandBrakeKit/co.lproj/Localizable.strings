@@ -89,12 +89,6 @@
 /* Title description */
 "1 Foreign Language Search Pass - " = "1 passu di ricerca di lingua straniera - ";
 
-/* Title description */
-"2 Video Passes" = "2 passi video";
-
-/* Title description */
-"2 Video Passes First Turbo" = "2 passi video, u primu in modu Turbo";
-
 /* HBAudio -> Mixdown */
 "5.1 Channels" = "Canali 5.1";
 
@@ -163,7 +157,8 @@
 /* HBFilters -> filter display name */
 "Decomb" = "Dipettinera";
 
-/* Subtitles description */
+/* HBFilters -> default display name
+   Subtitles description */
 "Default" = "Predefinitu";
 
 /* Video description */
@@ -291,8 +286,11 @@
 /* HBAudio -> Mixdown */
 "Mono (Right Only)" = "Mono (Solu à diritta)";
 
-/* HBStateFormatter -> pass display name */
-"Muxing…" = "Mischiu multiple…";
+/* Title description */
+"Multi Passes" = "Parechji passi";
+
+/* Title description */
+"Multi Passes Turbo" = "Parechji passi in modu Turbo";
 
 /* HBFilters -> filter display name */
 "NLMeans" = "NLMeans";
@@ -351,12 +349,6 @@
 
 /* Video description */
 "Same as source (variable)" = "Listessa chì a fonte (variabile)";
-
-/* HBStateFormatter -> scan pass format */
-"Scanning title %d of %d, preview %d…" = "Esplurazione di u titulu %1$d nant’à %2$d fighjulata %3$d…";
-
-/* HBStateFormatter -> scan pass format */
-"Scanning title %d of %d…" = "Esplurazione di u titulu %1$d nant’à %2$d…";
 
 /* HBStateFormatter -> search pass display name */
 "Searching for start point:  %.2f %%" = "Ricerca di u puntu di principiu : %.2f %%";

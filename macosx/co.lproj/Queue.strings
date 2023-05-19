@@ -14,7 +14,7 @@
 "a3c-kV-98E.paletteLabel" = "Quandu hè compiu";
 
 /* Class = "NSToolbarItem"; toolTip = "Action to perform when encoding is complete."; ObjectID = "a3c-kV-98E"; */
-"a3c-kV-98E.toolTip" = "Azzione à fà quandu a cudificazione hè compia.";
+"a3c-kV-98E.toolTip" = "Azzione à effettuà quandu a cudificazione hè compia.";
 
 /* Class = "NSMenuItem"; title = "Alert and Notification"; ObjectID = "aat-1N-Odn"; */
 "aat-1N-Odn.title" = "Alerta è nutificazione";

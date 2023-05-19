@@ -89,12 +89,6 @@
 /* Title description */
 "1 Foreign Language Search Pass - " = "1パス吹き替え字幕スキャン -";
 
-/* Title description */
-"2 Video Passes" = "2パスビデオ";
-
-/* Title description */
-"2 Video Passes First Turbo" = "2パスビデオ 1パス目高速";
-
 /* HBAudio -> Mixdown */
 "5.1 Channels" = "5.1 Channels";
 
@@ -163,7 +157,8 @@
 /* HBFilters -> filter display name */
 "Decomb" = "Decomb";
 
-/* Subtitles description */
+/* HBFilters -> default display name
+   Subtitles description */
 "Default" = "既定";
 
 /* Video description */
@@ -291,8 +286,11 @@
 /* HBAudio -> Mixdown */
 "Mono (Right Only)" = "モノラル(右のみ)";
 
-/* HBStateFormatter -> pass display name */
-"Muxing…" = "結合中...";
+/* Title description */
+"Multi Passes" = "複数パス";
+
+/* Title description */
+"Multi Passes Turbo" = "複数パスターボ";
 
 /* HBFilters -> filter display name */
 "NLMeans" = "NLMeans";
@@ -351,12 +349,6 @@
 
 /* Video description */
 "Same as source (variable)" = "ソースと同じ (可変)";
-
-/* HBStateFormatter -> scan pass format */
-"Scanning title %d of %d, preview %d…" = "%2$d 中 %1$d つ目のタイトルをスキャン中, プレビュー %3$d …";
-
-/* HBStateFormatter -> scan pass format */
-"Scanning title %d of %d…" = "%2$d 中 %1$d つ目のタイトルをスキャン中…";
 
 /* HBStateFormatter -> search pass display name */
 "Searching for start point:  %.2f %%" = "開始地点を検索中: %.2f %%";

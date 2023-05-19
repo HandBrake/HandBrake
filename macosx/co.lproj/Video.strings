@@ -19,8 +19,8 @@
 /* Class = "NSMenu"; title = "OtherViews"; ObjectID = "Aes-nP-7qS"; */
 "Aes-nP-7qS.title" = "Altre viste";
 
-/* Class = "NSButton"; ibShadowedToolTip = "2-pass encoding analyzes the entire source video before encoding. The information gathered enables the encoder to make more informed decisions about quality and data rate in Average Bitrate mode."; ObjectID = "bnV-aE-FVh"; */
-"bnV-aE-FVh.ibShadowedToolTip" = "A cudificazione à 2 passi analisa a fonte video sana nanzu di cudificà. L’infurmazioni raccolti permettenu à u cudificatore d’accumudà di manera più precisa a qualità è u flussu di dati in u modu « Flussu medianu ».";
+/* Class = "NSButton"; ibShadowedToolTip = "Multi-pass encoding analyzes the entire source video before encoding. The information gathered enables the encoder to make more informed decisions about quality and data rate in Average Bitrate mode."; ObjectID = "bnV-aE-FVh"; */
+"bnV-aE-FVh.ibShadowedToolTip" = "A cudificazione à parechji passi analisa a fonte video sana nanzu di cudificà. L’infurmazioni raccolti permettenu à u cudificatore d’accumudà di manera più precisa a qualità è u flussu di dati in u modu « Flussu medianu ».";
 
 /* Class = "NSTextFieldCell"; title = "0"; ObjectID = "bvD-W7-O0N"; */
 "bvD-W7-O0N.title" = "0";
@@ -79,11 +79,11 @@
 /* Class = "NSTextFieldCell"; title = "Video Encoder:"; ObjectID = "Mrb-6Q-0YM"; */
 "Mrb-6Q-0YM.title" = "Cudificatore video :";
 
-/* Class = "NSButtonCell"; title = "2-pass encoding"; ObjectID = "nPA-nO-Eik"; */
-"nPA-nO-Eik.title" = "Cudificazione à 2 passi";
+/* Class = "NSButtonCell"; title = "Multi-pass encoding"; ObjectID = "nPA-nO-Eik"; */
+"nPA-nO-Eik.title" = "Cudificazione à parechji passi";
 
-/* Class = "NSButton"; ibShadowedToolTip = "Turbo first pass speeds up the first pass of a 2-pass encode for a slight penalty to analysis."; ObjectID = "olm-zg-k9Y"; */
-"olm-zg-k9Y.ibShadowedToolTip" = "U primu passu in modu Turbo accelereghja u primu passu d’una cudificazione à 2 passi per una chjuca carenza in l’analisa.";
+/* Class = "NSButton"; ibShadowedToolTip = "Turbo first pass speeds up the analysis pass of a multi-pass encode for a slight penalty to analysis."; ObjectID = "olm-zg-k9Y"; */
+"olm-zg-k9Y.ibShadowedToolTip" = "U primu passu in modu Turbo accelereghja u passu d’analisa d’una cudificazione à parechji passi per una chjuca carenza in l’analisa.";
 
 /* Class = "NSTextFieldCell"; title = "Preset:"; ObjectID = "QWu-rv-zfM"; */
 "QWu-rv-zfM.title" = "Prerigatura :";
@@ -109,8 +109,8 @@
 /* Class = "NSButtonCell"; title = "Average Bitrate (kbps):"; ObjectID = "VQe-CK-YDR"; */
 "VQe-CK-YDR.title" = "Flussu medianu (kbps) :";
 
-/* Class = "NSButtonCell"; title = "Turbo first pass"; ObjectID = "vSc-VB-NEv"; */
-"vSc-VB-NEv.title" = "Primu passu in modu Turbo";
+/* Class = "NSButtonCell"; title = "Turbo analysis pass"; ObjectID = "vSc-VB-NEv"; */
+"vSc-VB-NEv.title" = "Passu d’analisa in modu Turbo";
 
 /* Class = "NSPopUpButton"; ibShadowedToolTip = "Video encoder. Determines video type and settings used during encoding."; ObjectID = "xwK-Yu-a1e"; */
 "xwK-Yu-a1e.ibShadowedToolTip" = "Cudificatore video. Determineghja u tipu di a video è e preferenze impiegate durante a cudificazione.";

@@ -332,7 +332,7 @@
 "V1G-sQ-eqd.title" = "90°";
 
 /* Class = "NSTextFieldCell"; title = "Rotation:"; ObjectID = "vb2-DA-Pgr"; */
-"vb2-DA-Pgr.title" = "Rotazione :";
+"vb2-DA-Pgr.title" = "Rutazione :";
 
 /* Class = "NSPopUpButton"; ibShadowedToolTip = "How to apply crop settings"; ObjectID = "vfx-ON-9ys"; */
 "vfx-ON-9ys.ibShadowedToolTip" = "Cumu appiecà e preferenze di rifilatura";
