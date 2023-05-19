@@ -188,7 +188,7 @@
 "2508.title" = "关闭窗口";
 
 /* Class = "NSMenuItem"; title = "Check for Updates…"; ObjectID = "4964"; */
-"4964.title" = "检测更新...";
+"4964.title" = "检查更新...";
 
 /* Class = "NSMenuItem"; title = "Preview Window"; ObjectID = "5157"; */
 "5157.title" = "预览窗口";

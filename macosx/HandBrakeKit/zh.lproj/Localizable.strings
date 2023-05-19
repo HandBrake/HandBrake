@@ -89,12 +89,6 @@
 /* Title description */
 "1 Foreign Language Search Pass - " = "1 外语搜索 Pass - ";
 
-/* Title description */
-"2 Video Passes" = "2 Video Passes";
-
-/* Title description */
-"2 Video Passes First Turbo" = "2 Video Passes 首次加速";
-
 /* HBAudio -> Mixdown */
 "5.1 Channels" = "5.1 声道";
 
@@ -163,7 +157,8 @@
 /* HBFilters -> filter display name */
 "Decomb" = "去梳状纹理";
 
-/* Subtitles description */
+/* HBFilters -> default display name
+   Subtitles description */
 "Default" = "默认";
 
 /* Video description */
@@ -291,8 +286,11 @@
 /* HBAudio -> Mixdown */
 "Mono (Right Only)" = "单声道（仅右声道）";
 
-/* HBStateFormatter -> pass display name */
-"Muxing…" = "Muxing…";
+/* Title description */
+"Multi Passes" = "Multi Passes";
+
+/* Title description */
+"Multi Passes Turbo" = "Multi Passes Turbo";
 
 /* HBFilters -> filter display name */
 "NLMeans" = "NLMeans";
@@ -351,12 +349,6 @@
 
 /* Video description */
 "Same as source (variable)" = "与源视频相同（可变）";
-
-/* HBStateFormatter -> scan pass format */
-"Scanning title %d of %d, preview %d…" = "正在扫描标题 %1$d/%2$d，预览 %3$d…";
-
-/* HBStateFormatter -> scan pass format */
-"Scanning title %d of %d…" = "正在扫描标题 %1$d/%2$d…";
 
 /* HBStateFormatter -> search pass display name */
 "Searching for start point:  %.2f %%" = "搜索起始点：%.2f %%";

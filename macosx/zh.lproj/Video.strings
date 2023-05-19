@@ -19,8 +19,8 @@
 /* Class = "NSMenu"; title = "OtherViews"; ObjectID = "Aes-nP-7qS"; */
 "Aes-nP-7qS.title" = "其他视图";
 
-/* Class = "NSButton"; ibShadowedToolTip = "2-pass encoding analyzes the entire source video before encoding. The information gathered enables the encoder to make more informed decisions about quality and data rate in Average Bitrate mode."; ObjectID = "bnV-aE-FVh"; */
-"bnV-aE-FVh.ibShadowedToolTip" = "2 次编码在编码前对整个源视频进行分析。收集到的信息使编码器能够在平均比特率模式下对质量和数据速率做出更明智的决定。";
+/* Class = "NSButton"; ibShadowedToolTip = "Multi-pass encoding analyzes the entire source video before encoding. The information gathered enables the encoder to make more informed decisions about quality and data rate in Average Bitrate mode."; ObjectID = "bnV-aE-FVh"; */
+"bnV-aE-FVh.ibShadowedToolTip" = "多次编码会在编码之前分析整个源视频。收集到的信息使得编码器能够在平均比特率模式下做出更明智的质量和数据速率决策。";
 
 /* Class = "NSTextFieldCell"; title = "0"; ObjectID = "bvD-W7-O0N"; */
 "bvD-W7-O0N.title" = "0";
@@ -79,11 +79,11 @@
 /* Class = "NSTextFieldCell"; title = "Video Encoder:"; ObjectID = "Mrb-6Q-0YM"; */
 "Mrb-6Q-0YM.title" = "视频编码器：";
 
-/* Class = "NSButtonCell"; title = "2-pass encoding"; ObjectID = "nPA-nO-Eik"; */
-"nPA-nO-Eik.title" = "2-次编码";
+/* Class = "NSButtonCell"; title = "Multi-pass encoding"; ObjectID = "nPA-nO-Eik"; */
+"nPA-nO-Eik.title" = "多次编码";
 
-/* Class = "NSButton"; ibShadowedToolTip = "Turbo first pass speeds up the first pass of a 2-pass encode for a slight penalty to analysis."; ObjectID = "olm-zg-k9Y"; */
-"olm-zg-k9Y.ibShadowedToolTip" = "加速第一次加速了二次编码的第一步，但对分析有轻微影响。";
+/* Class = "NSButton"; ibShadowedToolTip = "Turbo first pass speeds up the analysis pass of a multi-pass encode for a slight penalty to analysis."; ObjectID = "olm-zg-k9Y"; */
+"olm-zg-k9Y.ibShadowedToolTip" = "Turbo first pass 会加速多次编码中的分析阶段，但会稍微牺牲一些分析的精度。";
 
 /* Class = "NSTextFieldCell"; title = "Preset:"; ObjectID = "QWu-rv-zfM"; */
 "QWu-rv-zfM.title" = "预设：";
@@ -109,8 +109,8 @@
 /* Class = "NSButtonCell"; title = "Average Bitrate (kbps):"; ObjectID = "VQe-CK-YDR"; */
 "VQe-CK-YDR.title" = "平均比特率（kbps）：";
 
-/* Class = "NSButtonCell"; title = "Turbo first pass"; ObjectID = "vSc-VB-NEv"; */
-"vSc-VB-NEv.title" = "加速第一遍编码";
+/* Class = "NSButtonCell"; title = "Turbo analysis pass"; ObjectID = "vSc-VB-NEv"; */
+"vSc-VB-NEv.title" = "Turbo analysis pass";
 
 /* Class = "NSPopUpButton"; ibShadowedToolTip = "Video encoder. Determines video type and settings used during encoding."; ObjectID = "xwK-Yu-a1e"; */
 "xwK-Yu-a1e.ibShadowedToolTip" = "视频编码器。决定编码期间所使用的视频类型和设置。";

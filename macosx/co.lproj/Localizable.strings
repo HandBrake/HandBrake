@@ -1,5 +1,5 @@
 /* Job statistics */
-" (%@ %% of the source file)" = "(%@ %% di u schedariu di fonte)";
+" (%@ %% of the source file)" = " (%@ %% di u schedariu di fonte)";
 
 /* Preview -> size info label */
 " Scaled To Screen" = " Adattata à u screnu";
@@ -203,7 +203,7 @@
 "HandBrake can't open the preview." = "HandBrake ùn pò micca apre a fighjulata.";
 
 /* Preview -> live preview alert informative text */
-"HandBrake can't playback this combination of video/audio/container format. Do you want to open it in an external player?" = "HandBrake ùn pò micca leghje sta cumbinazione di furmatu video/audio/cuntenente. Vulete aprelu cù un lettore esternu ?";
+"HandBrake can't playback this combination of video/audio/container format. Do you want to open it in an external player?" = "HandBrake ùn pò micca leghje sta cumbinazione di furmatu video/audio/cuntenidore. Vulete aprelu cù un lettore esternu ?";
 
 /* Quit Alert -> informative text */
 "If you quit HandBrake your current encode will be reloaded into your queue at next launch. Do you want to quit anyway?" = "S’è vo iscete d’HandBrake, a vostra cudificazione attuale serà ricaricata in a fila d’attesa à u prossimu avviu. Vulete esce quantunque ?";

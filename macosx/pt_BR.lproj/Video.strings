@@ -19,9 +19,6 @@
 /* Class = "NSMenu"; title = "OtherViews"; ObjectID = "Aes-nP-7qS"; */
 "Aes-nP-7qS.title" = "OutrosViews";
 
-/* Class = "NSButton"; ibShadowedToolTip = "2-pass encoding analyzes the entire source video before encoding. The information gathered enables the encoder to make more informed decisions about quality and data rate in Average Bitrate mode."; ObjectID = "bnV-aE-FVh"; */
-"bnV-aE-FVh.ibShadowedToolTip" = "A codificação de 2 passes analisa todo o vídeo de origem antes da codificação. As informações coletadas permitem que o codificador tote decisões mais informadas sobre qualidade e taxa de dados no modo Bitrate Médio.";
-
 /* Class = "NSTextFieldCell"; title = "0"; ObjectID = "bvD-W7-O0N"; */
 "bvD-W7-O0N.title" = "0";
 
@@ -79,12 +76,6 @@
 /* Class = "NSTextFieldCell"; title = "Video Encoder:"; ObjectID = "Mrb-6Q-0YM"; */
 "Mrb-6Q-0YM.title" = "Codificador do Vídeo:";
 
-/* Class = "NSButtonCell"; title = "2-pass encoding"; ObjectID = "nPA-nO-Eik"; */
-"nPA-nO-Eik.title" = "Codificação de 2 passes";
-
-/* Class = "NSButton"; ibShadowedToolTip = "Turbo first pass speeds up the first pass of a 2-pass encode for a slight penalty to analysis."; ObjectID = "olm-zg-k9Y"; */
-"olm-zg-k9Y.ibShadowedToolTip" = "O primeiro passe turbo acelera o primeiro passe de uma codificação de 2 passes para uma pequena penalidade à análise.";
-
 /* Class = "NSTextFieldCell"; title = "Preset:"; ObjectID = "QWu-rv-zfM"; */
 "QWu-rv-zfM.title" = "Predefinição:";
 
@@ -108,9 +99,6 @@
 
 /* Class = "NSButtonCell"; title = "Average Bitrate (kbps):"; ObjectID = "VQe-CK-YDR"; */
 "VQe-CK-YDR.title" = "Média de Bitrate (kbps):";
-
-/* Class = "NSButtonCell"; title = "Turbo first pass"; ObjectID = "vSc-VB-NEv"; */
-"vSc-VB-NEv.title" = "Turbo primeiro passe";
 
 /* Class = "NSPopUpButton"; ibShadowedToolTip = "Video encoder. Determines video type and settings used during encoding."; ObjectID = "xwK-Yu-a1e"; */
 "xwK-Yu-a1e.ibShadowedToolTip" = "Codificador de vídeo. Determina o tipo de vídeo e as configurações usadas durante a codificação.";

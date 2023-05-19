@@ -89,12 +89,6 @@
 /* Title description */
 "1 Foreign Language Search Pass - " = "1 passaggio di ricerca lingua straniera";
 
-/* Title description */
-"2 Video Passes" = "2 passaggi video";
-
-/* Title description */
-"2 Video Passes First Turbo" = "2 passaggi video primo in turbo";
-
 /* HBAudio -> Mixdown */
 "5.1 Channels" = "5.1 Canali";
 
@@ -163,7 +157,8 @@
 /* HBFilters -> filter display name */
 "Decomb" = "Decomb";
 
-/* Subtitles description */
+/* HBFilters -> default display name
+   Subtitles description */
 "Default" = "Default";
 
 /* Video description */
@@ -291,9 +286,6 @@
 /* HBAudio -> Mixdown */
 "Mono (Right Only)" = "Mono (Solo destro)";
 
-/* HBStateFormatter -> pass display name */
-"Muxing…" = "Unisco…";
-
 /* HBFilters -> filter display name */
 "NLMeans" = "NLMeans";
 
@@ -351,12 +343,6 @@
 
 /* Video description */
 "Same as source (variable)" = "Uguale alla sorgente (variabile)";
-
-/* HBStateFormatter -> scan pass format */
-"Scanning title %d of %d, preview %d…" = "Scansione titolo %1$d di %2$d, anteprima %3$d…";
-
-/* HBStateFormatter -> scan pass format */
-"Scanning title %d of %d…" = "Scansione titolo %1$d di %2$d…";
 
 /* HBStateFormatter -> search pass display name */
 "Searching for start point:  %.2f %%" = "Ricerca del punto di inizio:  %.2f %%";
