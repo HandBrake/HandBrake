@@ -34,12 +34,15 @@
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
 
-            <Button x:Name="yes" Grid.Column="1" Content="OK" Margin="5,5,10,5" Padding="8,2" Click="Proceed_OnClick" IsDefault="True" MinWidth="70" />
-            <Button x:Name="no" Grid.Column="1" Content="OK" Margin="5,5,10,5"   Padding="8,2" Click="Proceed_OnClick" IsDefault="True" MinWidth="70"  />
-            <Button x:Name="ok" Grid.Column="1" Content="OK" Margin="5,5,10,5"  Padding="8,2" Click="Proceed_OnClick" IsDefault="True" MinWidth="70" />
-            <Button x:Name="Cancel" Grid.Column="1" IsCancel="True" Margin="5,5,10,5"  Content="Cancel" Padding="8,2" Click="Cancel_OnClick" MinWidth="70" />
+            <Button x:Name="yes" Grid.Column="1" Content="Yes" Margin="5,5,10,5" Padding="8,2" Click="Proceed_OnClick" IsDefault="True" MinWidth="70" />
+            <Button x:Name="no" Grid.Column="2" Content="No" Margin="5,5,10,5"   Padding="8,2" Click="Proceed_OnClick" IsCancel="True" MinWidth="70"  />
+            <Button x:Name="ok" Grid.Column="3" Content="OK" Margin="5,5,10,5"  Padding="8,2" Click="Proceed_OnClick" IsDefault="True" MinWidth="70" />
+            <Button x:Name="Cancel" Grid.Column="4" Content="Cancel" IsCancel="True" Margin="5,5,10,5"   Padding="8,2" Click="Cancel_OnClick" MinWidth="70" />
         </Grid>
     </Grid>
 </Window>
