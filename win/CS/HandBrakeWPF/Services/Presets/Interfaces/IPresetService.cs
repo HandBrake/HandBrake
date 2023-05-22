@@ -68,6 +68,11 @@ namespace HandBrakeWPF.Services.Presets.Interfaces
         Preset GetDefaultPreset();
 
         /// <summary>
+        /// Generate a new preset name that is not used, based on the current name
+        /// </summary>
+        string GenerateUniqueName(string currentName);
+
+        /// <summary>
         /// Add a new preset to the system
         /// </summary>
         /// <param name="preset">

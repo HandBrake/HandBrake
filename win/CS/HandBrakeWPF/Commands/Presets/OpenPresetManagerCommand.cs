@@ -7,7 +7,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrakeWPF.Commands
+namespace HandBrakeWPF.Commands.Presets
 {
     using System;
     using System.Windows.Input;

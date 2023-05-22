@@ -29,6 +29,7 @@ namespace HandBrakeWPF.ViewModels
     using HandBrakeWPF.Commands;
     using HandBrakeWPF.Commands.DebugTools;
     using HandBrakeWPF.Commands.Menu;
+    using HandBrakeWPF.Commands.Presets;
     using HandBrakeWPF.EventArgs;
     using HandBrakeWPF.Helpers;
     using HandBrakeWPF.Model;
@@ -193,14 +194,17 @@ namespace HandBrakeWPF.ViewModels
             this.QueueCommand = new QueueCommands(this.QueueViewModel);
             this.ProcessDriveCommand = new SimpleRelayCommand<object>(this.ProcessDrive);
             this.WhenDoneCommand = new SimpleRelayCommand<int>(this.WhenDone);
+            this.PresetClone = new PresetClone(presetService, errorService, windowManager);
 
             // Monitor the system.
             systemService.Start();
-
+            
             this.Load();
         }
 
         public SimpleRelayCommand<int> WhenDoneCommand { get; set; }
+
+        public ICommand PresetClone { get; set; }
 
         /* View Model Properties */
 
@@ -1613,7 +1617,7 @@ namespace HandBrakeWPF.ViewModels
         public void PresetAdd()
         {
             IAddPresetViewModel presetViewModel = IoCHelper.Get<IAddPresetViewModel>();
-            presetViewModel.Setup(this.CurrentTask, this.SelectedTitle, this.AudioViewModel.AudioBehaviours, this.SubtitleViewModel.SubtitleBehaviours);
+            presetViewModel.Setup(this.CurrentTask, this.AudioViewModel.AudioBehaviours, this.SubtitleViewModel.SubtitleBehaviours, null);
             bool? result = this.windowManager.ShowDialog<AddPresetView>(presetViewModel);
 
             if (result.HasValue && result.Value)

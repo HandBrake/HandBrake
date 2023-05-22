@@ -94,6 +94,28 @@ namespace HandBrakeWPF.Services.Presets
             return new Preset(this.DefaultPreset);
         }
 
+        public string GenerateUniqueName(string currentName)
+        {
+            bool found = true;
+            string newName = string.Format("{0} (1)", currentName);
+            int i = 1;
+
+            while (found)
+            {
+                if (flatPresetDict.ContainsKey(newName))
+                {
+                    i += 1;
+                    newName = string.Format("{0} ({1})", currentName, i);
+                }
+                else
+                {
+                    found = false; // Break out the loop, we found a unique. 
+                }
+            }
+
+            return newName;
+        }
+
         public bool Add(Preset preset)
         {
             return this.Add(preset, false);

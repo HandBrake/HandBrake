@@ -2350,6 +2350,15 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Clone Preset.
+        /// </summary>
+        public static string MainView_PresetClone {
+            get {
+                return ResourceManager.GetString("MainView_PresetClone", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Edit Preset.
         /// </summary>
         public static string MainView_PresetManage {

@@ -2762,4 +2762,7 @@ To allow multiple simultaneous encodes, turn on "Process Isolation" in Tools Men
   <data name="AboutView_Website" xml:space="preserve">
     <value>Website: </value>
   </data>
+  <data name="MainView_PresetClone" xml:space="preserve">
+    <value>Clone Preset</value>
+  </data>
 </root>

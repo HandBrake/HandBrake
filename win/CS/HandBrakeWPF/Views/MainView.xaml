@@ -91,8 +91,8 @@
 
                     <MenuItem Header="{x:Static Properties:Resources.MainView_PresetsMenu}" ItemsSource="{Binding PresetsCategories, Converter={StaticResource presetsMenuConverter}}" />
                     <Separator />
-                    <MenuItem Header="{x:Static Properties:Resources.PresetManger_Title}" Command="{Binding RelayCommand}" CommandParameter="OpenPresetWindow" />
-                    <Separator />
+                    <!--<MenuItem Header="{x:Static Properties:Resources.PresetManger_Title}" Command="{Binding RelayCommand}" CommandParameter="OpenPresetWindow" />
+                    <Separator />-->
                     <MenuItem Header="{x:Static Properties:Resources.AddPresetView_AddPreset}" Command="{Binding RelayCommand}" CommandParameter="PresetAdd" />
                     <MenuItem Header="{x:Static Properties:Resources.MainView_UpdateSelectedPreset}" Command="{Binding RelayCommand}" CommandParameter="PresetUpdate" />
                     <MenuItem Header="{x:Static Properties:Resources.MainView_SetCurrentAsDefault}" Command="{Binding RelayCommand}" CommandParameter="PresetSetDefault" />

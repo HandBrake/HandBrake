@@ -24,7 +24,6 @@ namespace HandBrakeWPF.ViewModels
     using HandBrakeWPF.Services.Presets;
     using HandBrakeWPF.Services.Presets.Interfaces;
     using HandBrakeWPF.Services.Presets.Model;
-    using HandBrakeWPF.Services.Scan.Model;
     using HandBrakeWPF.ViewModels.Interfaces;
 
     using EncodeTask = HandBrakeWPF.Services.Encode.Model.EncodeTask;
@@ -171,13 +170,17 @@ namespace HandBrakeWPF.ViewModels
 
         public int? CustomHeight { get; set; }
 
-        public void Setup(EncodeTask task, Title title, AudioBehaviours audioBehaviours, SubtitleBehaviours subtitleBehaviours)
+        public void Setup(EncodeTask task, AudioBehaviours audioBehaviours, SubtitleBehaviours subtitleBehaviours, string name)
         {
             this.Preset = new Preset { IsBuildIn = false, IsDefault = false, Category = PresetService.UserPresetCategoryName };
             this.Preset.Task = new EncodeTask(task);
             this.Preset.AudioTrackBehaviours = new AudioBehaviours(audioBehaviours); 
             this.Preset.SubtitleTrackBehaviours = new SubtitleBehaviours(subtitleBehaviours);
-
+            if (!string.IsNullOrEmpty(name))
+            {
+                this.Preset.Name = name;
+            }
+           
             this.audioDefaultsViewModel = new AudioDefaultsViewModel(this.windowManager);
             this.audioDefaultsViewModel.Setup(audioBehaviours, task.OutputFormat);
 
