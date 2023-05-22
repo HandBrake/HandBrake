@@ -24,6 +24,7 @@ namespace HandBrakeWPF.Services.Presets
     using HandBrake.Interop.Interop.Json.Presets;
     using HandBrake.Interop.Utilities;
 
+    using HandBrakeWPF.Helpers;
     using HandBrakeWPF.Properties;
     using HandBrakeWPF.Services.Interfaces;
     using HandBrakeWPF.Services.Logging.Interfaces;
@@ -39,8 +40,7 @@ namespace HandBrakeWPF.Services.Presets
         public static string UserPresetCategoryName = "Custom Presets";
         private readonly string presetFile = Path.Combine(DirectoryUtilities.GetUserStoragePath(HandBrakeVersionHelper.IsNightly()), "presets.json");
         private readonly ObservableCollection<IPresetObject> presets = new ObservableCollection<IPresetObject>(); // Can store Presets and PresetDisplayCategory objects.
-        private readonly Dictionary<string, Preset> flatPresetDict = new Dictionary<string, Preset>();
-        private readonly List<Preset> flatPresetList = new List<Preset>();
+        private readonly OrderedListDictionary<string, Preset> flatPresetDict = new OrderedListDictionary<string, Preset>();
         private readonly IErrorService errorService;
         private readonly IUserSettingService userSettingService;
         private ILog log;
@@ -62,13 +62,11 @@ namespace HandBrakeWPF.Services.Presets
             }
         }
 
-        public List<Preset> FlatPresetList => this.flatPresetList.ToList();
-
         public Preset DefaultPreset
         {
             get
             {
-                return this.flatPresetList.FirstOrDefault(p => p.IsDefault);
+                return this.flatPresetDict.Values.FirstOrDefault(p => p.IsDefault);
             }
         }
 
@@ -80,7 +78,7 @@ namespace HandBrakeWPF.Services.Presets
 
         public Preset GetPresetByName(string name)
         {
-            Preset foundPreset = this.flatPresetList.FirstOrDefault(s => s.Name == name);
+            Preset foundPreset = this.FindPreset(name);
             if (foundPreset != null)
             {
                 return foundPreset;
@@ -143,7 +141,6 @@ namespace HandBrakeWPF.Services.Presets
                 }
 
                 this.flatPresetDict.Add(preset.Name, preset);
-                this.flatPresetList.Add(preset);
 
                 // Update the presets file
                 if (!isLoading)
@@ -241,7 +238,7 @@ namespace HandBrakeWPF.Services.Presets
 
         public void Export(string filename, string presetName)
         {
-            Preset foundPreset = this.flatPresetList.FirstOrDefault(s => s.Name == presetName);
+            Preset foundPreset = this.FindPreset(presetName);
             if (foundPreset != null)
             {
                 PresetTransportContainer container = JsonPresetFactory.ExportPreset(foundPreset);
@@ -257,8 +254,8 @@ namespace HandBrakeWPF.Services.Presets
 
         public void Update(string presetName, Preset update)
         {
-            Preset preset;
-            if (this.flatPresetDict.TryGetValue(presetName, out preset))
+            Preset preset = this.FindPreset(presetName);
+            if (preset != null)
             {
                 preset.Task = update.Task;
                 preset.Category = update.Category;
@@ -273,7 +270,7 @@ namespace HandBrakeWPF.Services.Presets
 
         public void Replace(string presetName, Preset replacement)
         {
-            Preset foundPreset = this.flatPresetList.FirstOrDefault(s => s.Name == presetName);
+            Preset foundPreset = this.FindPreset(presetName);
             if (foundPreset != null)
             {
                 this.Remove(foundPreset, true, true);
@@ -284,7 +281,7 @@ namespace HandBrakeWPF.Services.Presets
 
         public bool Remove(string presetName)
         {
-            Preset foundPreset = this.flatPresetList.FirstOrDefault(s => s.Name == presetName);
+            Preset foundPreset = this.FindPreset(presetName);
             if (foundPreset != null)
             {
                 return this.Remove(foundPreset, false, false);
@@ -337,7 +334,6 @@ namespace HandBrakeWPF.Services.Presets
                     }
 
                     this.presets.Remove(preset);
-                    this.flatPresetList.Remove(preset);
                     this.flatPresetDict.Remove(preset.Name);
                 }
 
@@ -353,11 +349,11 @@ namespace HandBrakeWPF.Services.Presets
 
         public void SetDefault(string presetName)
         {
-            Preset foundPreset = this.flatPresetList.FirstOrDefault(s => s.Name == presetName);
+            Preset foundPreset = this.FindPreset(presetName);
             if (foundPreset != null)
             {
                 // Set IsDefault false for everything.
-                foreach (Preset item in this.flatPresetList)
+                foreach (Preset item in this.flatPresetDict.Values)
                 {
                     item.IsDefault = false;
                 }
@@ -371,13 +367,7 @@ namespace HandBrakeWPF.Services.Presets
 
         public Preset GetPreset(string name)
         {
-            Preset preset;
-            if (this.flatPresetDict.TryGetValue(name, out preset))
-            {
-                return preset;
-            }
-
-            return null;
+            return this.FindPreset(name);
         }
 
         public void ClearBuiltIn()
@@ -410,7 +400,6 @@ namespace HandBrakeWPF.Services.Presets
                     foreach (Preset toRemove in presetsToRemove)
                     {
                         foundCategory.Presets.Remove(toRemove);
-                        this.flatPresetList.Remove(toRemove);
                         this.flatPresetDict.Remove(toRemove.Name);
                     }
 
@@ -429,7 +418,6 @@ namespace HandBrakeWPF.Services.Presets
 
                 if (item.GetType() == typeof(Preset))
                 {
-                    this.flatPresetList.Remove(((Preset)item));
                     this.flatPresetDict.Remove(((Preset)item).Name);
                 }
             }
@@ -438,7 +426,6 @@ namespace HandBrakeWPF.Services.Presets
         public void ClearAll()
         {
             this.presets.Clear();
-            this.flatPresetList.Clear();
         }
 
         public void UpdateBuiltInPresets()
@@ -481,7 +468,7 @@ namespace HandBrakeWPF.Services.Presets
 
         public void DeleteBuiltInPresets()
         {
-            List<Preset> allPresets = this.FlatPresetList;
+            List<Preset> allPresets = new List<Preset>(this.flatPresetDict.Values);
             bool foundDefault = false;
             foreach (Preset preset in allPresets)
             {
@@ -499,7 +486,7 @@ namespace HandBrakeWPF.Services.Presets
             if (foundDefault)
             {
                 // Try select a new default.
-                Preset preset = this.FlatPresetList.FirstOrDefault();
+                Preset preset = this.flatPresetDict.Values.FirstOrDefault();
                 if (preset != null)
                 {
                     this.SetDefault(preset.Name);
@@ -509,7 +496,8 @@ namespace HandBrakeWPF.Services.Presets
 
         public bool CheckIfPresetExists(string name)
         {
-            if (this.flatPresetDict.ContainsKey(name))
+            Preset preset = this.FindPreset(name);
+            if (preset != null)
             {
                 return true;
             }
@@ -519,8 +507,8 @@ namespace HandBrakeWPF.Services.Presets
 
         public bool CanUpdatePreset(string name)
         {
-            Preset preset;
-            if (this.flatPresetDict.TryGetValue(name, out preset))
+            Preset preset = this.FindPreset(name);
+            if (preset != null)
             {
                 return !preset.IsBuildIn;
             }
@@ -530,10 +518,10 @@ namespace HandBrakeWPF.Services.Presets
 
         public void SetSelected(string presetName)
         {
-            Preset foundPreset = this.flatPresetList.FirstOrDefault(s => s.Name == presetName);
+            Preset foundPreset = this.FindPreset(presetName);
             if (foundPreset != null)
             {
-                foreach (var item in this.flatPresetList)
+                foreach (var item in this.flatPresetDict.Values)
                 {
                     item.IsSelected = false;
                 }
@@ -550,7 +538,7 @@ namespace HandBrakeWPF.Services.Presets
 
         public void ChangePresetCategory(string presetName, string categoryName)
         {
-            Preset foundPreset = this.flatPresetList.FirstOrDefault(s => s.Name == presetName);
+            Preset foundPreset = this.FindPreset(presetName);
             if (foundPreset != null)
             {
                 if (string.IsNullOrEmpty(categoryName))
@@ -800,10 +788,10 @@ namespace HandBrakeWPF.Services.Presets
                 List<HBPreset> uncategorisedPresets = new List<HBPreset>();
 
                 // Handle User Presets.
-                this.HandlePresetListsForSave(this.flatPresetList.Where(o => !o.IsBuildIn).ToList(), presetCategories, uncategorisedPresets);
+                this.HandlePresetListsForSave(this.flatPresetDict.FlatList.Where(o => !o.IsBuildIn).ToList(), presetCategories, uncategorisedPresets);
 
                 // Handle Built-in Presets
-                this.HandlePresetListsForSave(this.flatPresetList.Where(o => o.IsBuildIn).ToList(), presetCategories, uncategorisedPresets);
+                this.HandlePresetListsForSave(this.flatPresetDict.FlatList.Where(o => o.IsBuildIn).ToList(), presetCategories, uncategorisedPresets);
 
                 // Wrap the categories in a container. 
                 PresetVersion presetVersion = HandBrakePresetService.GetCurrentPresetVersion();
@@ -830,7 +818,6 @@ namespace HandBrakeWPF.Services.Presets
         private void ClearPresetService()
         {
             this.flatPresetDict.Clear();
-            this.flatPresetList.Clear();
             this.presets.Clear();
         }
 
@@ -918,7 +905,7 @@ namespace HandBrakeWPF.Services.Presets
         {
             if (this.DefaultPreset == null)
             {
-                Preset p = this.flatPresetList.FirstOrDefault();
+                Preset p = this.flatPresetDict.FlatList.FirstOrDefault();
                 p.IsDefault = true;
 
                 this.Save();
@@ -942,7 +929,6 @@ namespace HandBrakeWPF.Services.Presets
             {
                 // Remove the preset, and cleanup the category if it's not got any presets in it.
                 category.Presets.Remove(preset);
-                this.flatPresetList.Remove(preset);
                 this.flatPresetDict.Remove(preset.Name);
                 if (category.Presets.Count == 0 && !skipCategoryRemoval)
                 {
@@ -952,7 +938,6 @@ namespace HandBrakeWPF.Services.Presets
             else
             {
                 this.presets.Remove(preset);
-                this.flatPresetList.Remove(preset);
                 this.flatPresetDict.Remove(preset.Name);
             }
 
@@ -965,6 +950,16 @@ namespace HandBrakeWPF.Services.Presets
         private void ServiceLogMessage(string message)
         {
             this.log.LogMessage(string.Format("Preset Service: {0}{1}{0}", Environment.NewLine, message));
+        }
+
+        private Preset FindPreset(string presetName)
+        {
+            if (this.flatPresetDict.ContainsKey(presetName))
+            {
+                return this.flatPresetDict[presetName];
+            }
+
+            return null;
         }
     }
 }
