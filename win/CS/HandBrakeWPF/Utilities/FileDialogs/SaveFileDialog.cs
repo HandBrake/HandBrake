@@ -25,6 +25,7 @@ namespace HandBrakeWPF.Utilities.FileDialogs
         public int FilterIndex { get; set; }
         public string FileName { get; set; }
         public string InitialDirectory { get; set; }
+        public bool RestoreDirectory { get; set; }
 
         public bool? ShowDialog()
         {
@@ -38,6 +39,8 @@ namespace HandBrakeWPF.Utilities.FileDialogs
                                                             OverwritePrompt = this.OverwritePrompt,
                                                             FilterIndex = this.FilterIndex,
                                                             InitialDirectory = this.InitialDirectory,
+                                                            RestoreDirectory = this.RestoreDirectory,
+                                                            FileName = this.FileName
             };
 
             try
@@ -59,6 +62,8 @@ namespace HandBrakeWPF.Utilities.FileDialogs
                 dialog.OverwritePrompt = saveDialog.OverwritePrompt;
                 dialog.FilterIndex = saveDialog.FilterIndex;
                 dialog.InitialDirectory = saveDialog.InitialDirectory;
+                dialog.RestoreDirectory = saveDialog.RestoreDirectory;
+                dialog.FileName = saveDialog.FileName;
 
                 dialog.AutoUpgradeEnabled = false;
 

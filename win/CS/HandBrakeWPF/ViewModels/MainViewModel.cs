@@ -1521,6 +1521,7 @@ namespace HandBrakeWPF.ViewModels
                 CheckPathExists = true, 
                 AddExtension = true, 
                 DefaultExt = ".mp4",
+                RestoreDirectory = true
             };
 
             saveFileDialog.OverwritePrompt =
