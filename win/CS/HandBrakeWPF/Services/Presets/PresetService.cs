@@ -18,6 +18,7 @@ namespace HandBrakeWPF.Services.Presets
     using System.Text.Json;
     using System.Windows;
 
+    using HandBrake.App.Core.Extensions;
     using HandBrake.App.Core.Utilities;
     using HandBrake.Interop.Interop;
     using HandBrake.Interop.Interop.Interfaces.Model.Presets;
@@ -551,6 +552,42 @@ namespace HandBrakeWPF.Services.Presets
                 this.Load();
                 this.LoadCategoryStates();
                 this.OnPresetCollectionChanged();
+            }
+        }
+
+        public void MoveToTopOfGroup(Preset preset)
+        {
+            PresetDisplayCategory category = this.presets.FirstOrDefault(p => p.Category == preset.Category) as PresetDisplayCategory;
+            if (category != null)
+            {
+                category.Presets.MoveToTop(new List<Preset> { preset });
+            }
+        }
+
+        public void MoveToBottomOfGroup(Preset preset)
+        {
+            PresetDisplayCategory category = this.presets.FirstOrDefault(p => p.Category == preset.Category) as PresetDisplayCategory;
+            if (category != null)
+            {
+                category.Presets.MoveToBottom(new List<Preset> { preset });
+            }
+        }
+
+        public void MoveUp(Preset preset)
+        {
+            PresetDisplayCategory category = this.presets.FirstOrDefault(p => p.Category == preset.Category) as PresetDisplayCategory;
+            if (category != null)
+            {
+                category.Presets.MoveUp(preset);
+            }
+        }
+
+        public void MoveDown(Preset preset)
+        {
+            PresetDisplayCategory category = this.presets.FirstOrDefault(p => p.Category == preset.Category) as PresetDisplayCategory;
+            if (category != null)
+            {
+                category.Presets.MoveDown(preset);
             }
         }
 

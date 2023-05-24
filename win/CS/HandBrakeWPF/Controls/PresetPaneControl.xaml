@@ -144,6 +144,11 @@
                         <Separator />
                         <MenuItem Header="{x:Static Properties:Resources.MainView_ResetBuiltInPresets}" Command="{Binding RelayCommand}" CommandParameter="PresetReset" />
                         <MenuItem Header="{x:Static Properties:Resources.ManagePresetView_DeleteBuiltIn}" Command="{Binding RelayCommand}" CommandParameter="PresetDeleteBuildIn" />
+                        <Separator x:Name="moveSplitter" />
+                        <MenuItem Header="{x:Static Properties:Resources.PresetPane_MoveUp}" x:Name="moveUp" Command="{Binding PresetMove}" CommandParameter="up" />
+                        <MenuItem Header="{x:Static Properties:Resources.PresetPane_MoveDown}" x:Name="moveDown" Command="{Binding PresetMove}" CommandParameter="down" />
+                        <MenuItem Header="{x:Static Properties:Resources.PresetPane_MoveToTop}" x:Name="moveTop" Command="{Binding PresetMove}" CommandParameter="top" />
+                        <MenuItem Header="{x:Static Properties:Resources.PresetPane_MoveToBottom}" x:Name="moveBottom" Command="{Binding PresetMove}" CommandParameter="bottom" />
                     </ContextMenu>
                 </TreeView.ContextMenu>
             </TreeView>

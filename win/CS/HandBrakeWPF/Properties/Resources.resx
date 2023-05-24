@@ -2765,4 +2765,16 @@ To allow multiple simultaneous encodes, turn on "Process Isolation" in Tools Men
   <data name="MainView_PresetClone" xml:space="preserve">
     <value>Clone Preset</value>
   </data>
+  <data name="PresetPane_MoveDown" xml:space="preserve">
+    <value>Move Down</value>
+  </data>
+  <data name="PresetPane_MoveToBottom" xml:space="preserve">
+    <value>Move to Bottom</value>
+  </data>
+  <data name="PresetPane_MoveToTop" xml:space="preserve">
+    <value>Move to Top</value>
+  </data>
+  <data name="PresetPane_MoveUp" xml:space="preserve">
+    <value>Move Up</value>
+  </data>
 </root>

@@ -96,6 +96,13 @@ namespace HandBrakeWPF.Controls
             {
                 treeViewItem.Focus();
                 e.Handled = true;
+
+                PresetDisplayCategory category = treeViewItem.DataContext as PresetDisplayCategory;
+                this.moveTop.Visibility = category != null ? Visibility.Visible : Visibility.Collapsed;
+                this.moveBottom.Visibility = category != null ? Visibility.Visible : Visibility.Collapsed;
+                this.moveUp.Visibility = category != null ? Visibility.Visible : Visibility.Collapsed;
+                this.moveDown.Visibility = category != null ? Visibility.Visible : Visibility.Collapsed;
+                this.moveSplitter.Visibility = category != null ? Visibility.Visible : Visibility.Collapsed;
             }
         }
 

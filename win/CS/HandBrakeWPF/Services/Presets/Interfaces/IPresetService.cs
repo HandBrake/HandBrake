@@ -222,5 +222,10 @@ namespace HandBrakeWPF.Services.Presets.Interfaces
         /// The category Name.
         /// </param>
         void ChangePresetCategory(string presetName, string categoryName);
+
+        void MoveToTopOfGroup(Preset preset);
+        void MoveToBottomOfGroup(Preset preset);
+        void MoveUp(Preset preset);
+        void MoveDown(Preset preset);
     }
 }
