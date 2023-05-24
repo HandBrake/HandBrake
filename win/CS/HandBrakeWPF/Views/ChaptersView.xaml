@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:Properties="clr-namespace:HandBrakeWPF.Properties"
              xmlns:dd="urn:gong-wpf-dragdrop"
+             xmlns:behaviours="clr-namespace:HandBrakeWPF.Behaviours"
              d:DesignHeight="170"
              d:DesignWidth="616"
              mc:Ignorable="d" >
@@ -88,7 +89,7 @@
 
                         <TextBlock Grid.Column="1" Text="{Binding ChapterNumber}" HorizontalAlignment="Left" Margin="15,0,0,0" />
                         <TextBlock Grid.Column="2" Text="{Binding Duration}" />
-                        <TextBox Grid.Column="3" Text="{Binding ChapterName}" />
+                        <TextBox Grid.Column="3" Text="{Binding ChapterName}" behaviours:TextBoxBehavior.TripleClickSelectAll="True" />
 
                     </Grid>
 

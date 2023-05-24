@@ -9,6 +9,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:controls="clr-namespace:HandBrakeWPF.Controls"
              xmlns:Properties="clr-namespace:HandBrakeWPF.Properties"
+             xmlns:behaviours="clr-namespace:HandBrakeWPF.Behaviours"
              d:DesignHeight="500"
              d:DesignWidth="770"
              mc:Ignorable="d">
@@ -282,7 +283,7 @@
                         <Grid Grid.Column="1" Grid.Row="1" HorizontalAlignment="Stretch" Visibility="{Binding IsExpandedTrackView, Converter={StaticResource boolToVisConverter}}">
                             <StackPanel Orientation="Horizontal" Margin="22,5,0,5" >
                                 <TextBlock Text="{x:Static Properties:Resources.AudioView_TrackName}" Style="{StaticResource sectionHeader}"  VerticalAlignment="Center" Margin="0,0,5,0" />
-                                <TextBox Text="{Binding TrackName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="250" />                                                                
+                                <TextBox Text="{Binding TrackName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="250" behaviours:TextBoxBehavior.TripleClickSelectAll="True" />                                                                
                             </StackPanel>
                         </Grid>
                     </Grid>
