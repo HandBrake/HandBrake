@@ -10,14 +10,11 @@
 namespace HandBrakeWPF.Services.Scan.Model
 {
     using System;
-    using System.Xml.Serialization;
 
     using HandBrake.App.Core.Utilities;
-    using HandBrake.Interop.Utilities;
 
     using HandBrakeWPF.Properties;
     using HandBrakeWPF.Services.Encode.Model.Models;
-    using HandBrakeWPF.Utilities;
 
     /// <summary>
     /// An object that represents a subtitle associated with a Title, in a DVD
@@ -67,9 +64,9 @@ namespace HandBrakeWPF.Services.Scan.Model
             }
         }
 
-        public bool CanBurnIn { get; private set; }
+        public bool CanBurnIn { get; set; }
 
-        public bool CanForce { get; private set; }
+        public bool CanForce { get; set; }
 
         public SubtitleType SubtitleType { get; set; }
 
