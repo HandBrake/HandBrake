@@ -630,8 +630,6 @@ namespace HandBrakeWPF.Services.Queue
                 {
                     this.queue.Insert(foundIndex, new QueueTask(QueueTaskType.Breakpoint));
                 }
-
-                this.IsProcessing = false;
             }
         }
 
@@ -725,10 +723,7 @@ namespace HandBrakeWPF.Services.Queue
                 
                 activeJob.Start();
 
-                if (!this.QueueContainsStop())
-                {
-                    this.IsProcessing = true;
-                }
+                this.IsProcessing = true;
 
                 this.InvokeQueueChanged(EventArgs.Empty);
                 this.InvokeJobProcessingStarted(new QueueProgressEventArgs(job));

@@ -6263,6 +6263,15 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to There are currently jobs running. Would you like to complete the current jobs before stopping the queue?.
+        /// </summary>
+        public static string QueueViewModel_StopButContinueJob {
+            get {
+                return ResourceManager.GetString("QueueViewModel_StopButContinueJob", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Reset.
         /// </summary>
         public static string Reset {
