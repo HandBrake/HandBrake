@@ -12,11 +12,13 @@
 
 static int is_vcn_available = -1;
 static int is_vcn_hevc_available = -1;
+static int is_vcn_av1_available = -1;
 
 #if HB_PROJECT_FEATURE_VCE
 #include "AMF/core/Factory.h"
 #include "AMF/components/VideoEncoderVCE.h"
 #include "AMF/components/VideoEncoderHEVC.h"
+#include "AMF/components/VideoEncoderAV1.h"
 
 AMF_RESULT check_component_available(const wchar_t *componentID)
 {
@@ -164,6 +166,22 @@ int hb_vce_h265_available()
     return is_vcn_hevc_available;
 }
 
+int hb_vce_av1_available()
+{
+    if (is_hardware_disabled())
+    {
+        return 0;
+    }
+
+    if (is_vcn_av1_available != -1)
+    {
+        return is_vcn_av1_available;
+    }
+
+    is_vcn_av1_available = (check_component_available(AMFVideoEncoder_AV1) == AMF_OK) ? 1 : 0;
+    return is_vcn_av1_available;
+}
+
 #else // !HB_PROJECT_FEATURE_VCE
 
 int hb_vce_h264_available()
@@ -190,5 +208,18 @@ int hb_vce_h265_available()
     
     return -1; 
 }
+
+int hb_vce_av1_available()
+{
+    if (is_vcn_av1_available != -1)
+    {
+        return is_vcn_av1_available;
+    }
+
+    is_vcn_av1_available = -2;
+
+    return -1;
+}
+
 
 #endif // HB_PROJECT_FEATURE_VCE
