@@ -438,7 +438,24 @@ static int avformatInit( hb_mux_object_t * m )
                 }
             }
         } break;
+		case HB_VCODEC_FFMPEG_VCE_AV1:
+        {
+            track->st->codecpar->codec_id  = AV_CODEC_ID_AV1;
 
+            if (job->config.extradata.length > 0)
+            {
+                priv_size = job->config.extradata.length;
+                priv_data = av_malloc(priv_size + AV_INPUT_BUFFER_PADDING_SIZE);
+                if (priv_data == NULL)
+                {
+                    hb_error("AV1 extradata: malloc failure");
+                    goto error;
+                }
+                memcpy(priv_data,
+                       job->config.extradata.bytes,
+                       job->config.extradata.length);
+            }
+        } break;
         case HB_VCODEC_THEORA:
         {
             track->st->codecpar->codec_id = AV_CODEC_ID_THEORA;
