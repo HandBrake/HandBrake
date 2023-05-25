@@ -167,7 +167,7 @@ ifeq (1,$(FEATURE.qsv))
 endif
 
 ifeq (1,$(FEATURE.vce))
-  FFMPEG.CONFIGURE.extra += --enable-amf --enable-encoder=h264_amf --enable-encoder=hevc_amf
+  FFMPEG.CONFIGURE.extra += --enable-amf --enable-encoder=h264_amf --enable-encoder=hevc_amf  --enable-encoder=av1_amf
 endif
 
 ifeq (1,$(FEATURE.nvenc))
