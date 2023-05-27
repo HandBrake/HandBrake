@@ -16,7 +16,8 @@ static NSDateFormatter *_releaseDateFormatter = nil;
 
 + (void)initialize
 {
-    if (self == [HBJob class]) {
+    if (self == [HBJob class])
+    {
         _dateFormatter = [[NSDateFormatter alloc] init];
         [_dateFormatter setDateStyle:NSDateFormatterShortStyle];
         [_dateFormatter setTimeStyle:NSDateFormatterNoStyle];
@@ -32,24 +33,194 @@ static NSDateFormatter *_releaseDateFormatter = nil;
 
 - (NSString *)automaticName
 {
-    HBTitle *title = self.title;
+    NSUserDefaults *ud = NSUserDefaults.standardUserDefaults;
+    NSString *sourceName = self.title.name;
+    NSDate *creationDate = self.title.metadata.releaseDate.length ?
+                            [_releaseDateFormatter dateFromString:self.title.metadata.releaseDate] :
+                            nil;
 
-    NSDate *releaseDate = title.metadata.releaseDate.length ? [_releaseDateFormatter dateFromString:title.metadata.releaseDate] : nil;
-    if (releaseDate == nil)
+    if (creationDate == nil)
     {
-        NSDictionary *fileAttribs = [[NSFileManager defaultManager] attributesOfItemAtPath:self.fileURL.path error:nil];
-        releaseDate = [fileAttribs objectForKey:NSFileCreationDate];
+        NSDictionary *attrs = [NSFileManager.defaultManager attributesOfItemAtPath:self.fileURL.path error:nil];
+        creationDate = attrs[NSFileCreationDate];
     }
 
-    // Generate a new file name
-    NSString *fileName = [self automaticNameForSource:title.name
-                                                       title:title.index
-                                                    chapters:NSMakeRange(self.range.chapterStart + 1, self.range.chapterStop + 1)
-                                                     quality:self.video.qualityType ? self.video.quality : 0
-                                                     bitrate:!self.video.qualityType ? self.video.avgBitrate : 0
-                                                  videoCodec:self.video.encoder
-                                                creationDate:releaseDate];
-    return fileName;
+    NSMutableString *name = [[NSMutableString alloc] init];
+
+    // The format array contains the tokens as NSString
+    NSArray<NSString *> *format = [ud objectForKey:HBAutoNamingFormat];
+
+    for (NSString *formatKey in format)
+    {
+        if ([formatKey isEqualToString:@"{Source}"])
+        {
+            if ([ud boolForKey:HBAutoNamingRemoveUnderscore])
+            {
+                sourceName = [sourceName stringByReplacingOccurrencesOfString:@"_" withString:@" "];
+            }
+            if ([ud boolForKey:HBAutoNamingRemovePunctuation])
+            {
+                sourceName = [sourceName stringByReplacingOccurrencesOfString:@"-" withString:@""];
+                sourceName = [sourceName stringByReplacingOccurrencesOfString:@"." withString:@""];
+                sourceName = [sourceName stringByReplacingOccurrencesOfString:@"," withString:@""];
+                sourceName = [sourceName stringByReplacingOccurrencesOfString:@";" withString:@""];
+            }
+            if ([ud boolForKey:HBAutoNamingTitleCase])
+            {
+                sourceName = [sourceName capitalizedString];
+            }
+            [name appendString:sourceName];
+        }
+        else if ([formatKey isEqualToString:@"{Title}"])
+        {
+            [name appendFormat:@"%lu", (unsigned long)self.title.index];
+        }
+        else if ([formatKey isEqualToString:@"{Chapters}"])
+        {
+            NSRange chaptersRange = NSMakeRange(self.range.chapterStart + 1, self.range.chapterStop + 1);
+            if (chaptersRange.location == chaptersRange.length)
+            {
+                [name appendFormat:@"%lu", (unsigned long)chaptersRange.location];
+            }
+            else
+            {
+                [name appendFormat:@"%lu-%lu", (unsigned long)chaptersRange.location, (unsigned long)chaptersRange.length];
+            }
+        }
+        else if ([formatKey isEqualToString:@"{Preset}"])
+        {
+            [name appendString:self.presetName];
+        }
+        else if ([formatKey isEqualToString:@"{Width}"])
+        {
+            [name appendFormat:@"%d", self.picture.storageWidth];
+        }
+        else if ([formatKey isEqualToString:@"{Height}"])
+        {
+            [name appendFormat:@"%d", self.picture.storageHeight];
+        }
+        else if ([formatKey isEqualToString:@"{Codec}"])
+        {
+            int vcodec = self.video.encoder;
+            NSString *codecName = @"Unknown";
+
+            if (vcodec & HB_VCODEC_AV1_MASK)
+            {
+                codecName = @"AV1";
+            }
+            else if (vcodec & HB_VCODEC_H264_MASK)
+            {
+                codecName = @"H.264";
+            }
+            else if (vcodec & HB_VCODEC_H265_MASK)
+            {
+                codecName = @"H.265";
+            }
+            else if (vcodec == HB_VCODEC_THEORA)
+            {
+                codecName = @"Theora";
+            }
+            else if (vcodec == HB_VCODEC_FFMPEG_MPEG2)
+            {
+                codecName = @"MPEG-2";
+            }
+            else if (vcodec == HB_VCODEC_FFMPEG_MPEG4)
+            {
+                codecName = @"MPEG-4";
+            }
+            else if (vcodec == HB_VCODEC_FFMPEG_VP8)
+            {
+                codecName = @"VP8";
+            }
+            else if (vcodec == HB_VCODEC_FFMPEG_VP9 || vcodec == HB_VCODEC_FFMPEG_VP9_10BIT)
+            {
+                codecName = @"VP9";
+            }
+            [name appendString:codecName];
+        }
+        else if ([formatKey isEqualToString:@"{Encoder}"])
+        {
+            [name appendString:@(hb_video_encoder_get_short_name(self.video.encoder))];
+        }
+        else if ([formatKey isEqualToString:@"{Bit-Depth}"])
+        {
+            [name appendFormat:@"%dbit", hb_video_encoder_get_depth(self.video.encoder)];
+        }
+        else if ([formatKey isEqualToString:@"{Quality/Bitrate}"])
+        {
+            if (self.video.qualityType == HBVideoQualityTypeAvgBitrate)
+            {
+                [name appendString:[NSString stringWithFormat:@"%d", self.video.avgBitrate]];
+            }
+            else
+            {
+                [name appendString:[NSString stringWithFormat:@"%0.2f", self.video.quality]];
+            }
+        }
+        else if ([formatKey isEqualToString:@"{Quality-Type}"])
+        {
+            if (self.video.qualityType == HBVideoQualityTypeAvgBitrate)
+            {
+                [name appendString:@"kbps"];
+            }
+            else
+            {
+                // Append the right quality suffix for the selected codec (rf/qp)
+                [name appendString:[@(hb_video_quality_get_name(self.video.encoder)) lowercaseString]];
+            }
+        }
+        else if ([formatKey isEqualToString:@"{Date}"])
+        {
+            NSDate *date = [NSDate date];
+            NSString *dateString = [[_dateFormatter stringFromDate:date] stringByReplacingOccurrencesOfString:@"/" withString:@"-"];
+            [name appendString:dateString];
+        }
+        else if ([formatKey isEqualToString:@"{Time}"])
+        {
+            NSDate *date = [NSDate date];
+            [name appendString:[_timeFormatter stringFromDate:date]];
+        }
+        else if ([formatKey isEqualToString:@"{Creation-Date}"])
+        {
+            if (creationDate)
+            {
+                NSString *dateString = [[_dateFormatter stringFromDate:creationDate] stringByReplacingOccurrencesOfString:@"/" withString:@"-"];
+                [name appendString:dateString];
+            }
+        }
+        else if ([formatKey isEqualToString:@"{Creation-Time}"])
+        {
+            if (creationDate)
+            {
+                [name appendString:[_timeFormatter stringFromDate:creationDate]];
+            }
+        }
+        else if ([formatKey isEqualToString:@"{Modification-Date}"])
+        {
+            NSDictionary *attrs = [NSFileManager.defaultManager attributesOfItemAtPath:self.fileURL.path error:nil];
+            NSDate *modificationDate = attrs[NSFileModificationDate];
+            if (modificationDate)
+            {
+                NSString *dateString = [[_dateFormatter stringFromDate:modificationDate] stringByReplacingOccurrencesOfString:@"/" withString:@"-"];
+                [name appendString:dateString];
+            }
+        }
+        else if ([formatKey isEqualToString:@"{Modification-Time}"])
+        {
+            NSDictionary *attrs = [NSFileManager.defaultManager attributesOfItemAtPath:self.fileURL.path error:nil];
+            NSDate *modificationDate = attrs[NSFileModificationDate];
+            if (modificationDate)
+            {
+                [name appendString:[_timeFormatter stringFromDate:modificationDate]];
+            }
+        }
+        else
+        {
+            [name appendString:formatKey];
+        }
+    }
+
+    return [name copy];
 }
 
 - (NSString *)automaticExt
@@ -92,100 +263,6 @@ static NSDateFormatter *_releaseDateFormatter = nil;
     }
 
     return [fileName stringByAppendingPathExtension:self.automaticExt];
-}
-
-- (NSString *)automaticNameForSource:(NSString *)sourceName
-                               title:(NSUInteger)title
-                            chapters:(NSRange)chaptersRange
-                             quality:(double)quality
-                             bitrate:(int)bitrate
-                          videoCodec:(uint32_t)codec
-                        creationDate:(NSDate *)creationDate
-{
-    NSUserDefaults *ud = NSUserDefaults.standardUserDefaults;
-    NSMutableString *name = [[NSMutableString alloc] init];
-
-    // The format array contains the tokens as NSString
-    NSArray<NSString *> *format = [ud objectForKey:HBAutoNamingFormat];
-
-    for (NSString *formatKey in format)
-    {
-        if ([formatKey isEqualToString:@"{Source}"])
-        {
-            if ([ud boolForKey:HBAutoNamingRemoveUnderscore])
-            {
-                sourceName = [sourceName stringByReplacingOccurrencesOfString:@"_" withString:@" "];
-            }
-            if ([ud boolForKey:HBAutoNamingRemovePunctuation])
-            {
-                sourceName = [sourceName stringByReplacingOccurrencesOfString:@"-" withString:@""];
-                sourceName = [sourceName stringByReplacingOccurrencesOfString:@"." withString:@""];
-                sourceName = [sourceName stringByReplacingOccurrencesOfString:@"," withString:@""];
-                sourceName = [sourceName stringByReplacingOccurrencesOfString:@";" withString:@""];
-            }
-            if ([ud boolForKey:HBAutoNamingTitleCase])
-            {
-                sourceName = [sourceName capitalizedString];
-            }
-            [name appendString:sourceName];
-        }
-        else if ([formatKey isEqualToString:@"{Title}"])
-        {
-            [name appendFormat:@"%lu", (unsigned long)title];
-        }
-        else if ([formatKey isEqualToString:@"{Date}"])
-        {
-            NSDate *date = [NSDate date];
-            NSString *dateString = [[_dateFormatter stringFromDate:date] stringByReplacingOccurrencesOfString:@"/" withString:@"-"];
-            [name appendString:dateString];
-        }
-        else if ([formatKey isEqualToString:@"{Time}"])
-        {
-            NSDate *date = [NSDate date];
-            [name appendString:[_timeFormatter stringFromDate:date]];
-        }
-        else if ([formatKey isEqualToString:@"{Creation-Date}"])
-        {
-            NSString *dateString = [[_dateFormatter stringFromDate:creationDate] stringByReplacingOccurrencesOfString:@"/" withString:@"-"];
-            [name appendString:dateString];
-
-        }
-        else if ([formatKey isEqualToString:@"{Creation-Time}"])
-        {
-            [name appendString:[_timeFormatter stringFromDate:creationDate]];
-        }
-        else if ([formatKey isEqualToString:@"{Chapters}"])
-        {
-            if (chaptersRange.location == chaptersRange.length)
-            {
-                [name appendFormat:@"%lu", (unsigned long)chaptersRange.location];
-            }
-            else
-            {
-                [name appendFormat:@"%lu-%lu", (unsigned long)chaptersRange.location, (unsigned long)chaptersRange.length];
-            }
-        }
-        else if ([formatKey isEqualToString:@"{Quality/Bitrate}"])
-        {
-            if (bitrate)
-            {
-                [name appendString:@"abr"];
-                [name appendString:[NSString stringWithFormat:@"%d", bitrate]];
-            }
-            else
-            {
-                // Append the right quality suffix for the selected codec (rf/qp)
-                [name appendString:[@(hb_video_quality_get_name(codec)) lowercaseString]];
-                [name appendString:[NSString stringWithFormat:@"%0.2f", quality]];
-            }
-        }
-        else
-        {
-            [name appendString:formatKey];
-        }
-    }
-
-    return [name copy];
 }
 
 @end

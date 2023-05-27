@@ -160,7 +160,11 @@ NSString * const HBKeepPresetEdits               = @"HBKeepPresetEdits";
     [self.formatTokenField setTokenizingCharacterSet:[NSCharacterSet characterSetWithCharactersInString:@"%%"]];
     [self.formatTokenField setCompletionDelay:0.2];
 
-    _buildInFormatTokens = @[@"{Source}", @"{Title}", @"{Date}", @"{Time}", @"{Creation-Date}", @"{Creation-Time}", @"{Chapters}", @"{Quality/Bitrate}"];
+    _buildInFormatTokens = @[@"{Source}", @"{Title}", @"{Chapters}", @"{Preset}",
+                             @"{Width}", @"{Height}", @"{Codec}",
+                             @"{Encoder}", @"{Bit-Depth}", @"{Quality/Bitrate}", @"{Quality-Type}",
+                             @"{Date}", @"{Time}", @"{Creation-Date}", @"{Creation-Time}",
+                             @"{Modification-Date}", @"{Modification-Time}"];
     [self.builtInTokenField setTokenizingCharacterSet:[NSCharacterSet characterSetWithCharactersInString:@"%%"]];
     [self.builtInTokenField setStringValue:[self.buildInFormatTokens componentsJoinedByString:@"%%"]];
 
@@ -275,6 +279,42 @@ NSString * const HBKeepPresetEdits               = @"HBKeepPresetEdits";
     {
         return NSLocalizedString(@"Title", "Preferences -> Output Name Token");
     }
+    else if ([tokenString isEqualToString:@"{Chapters}"])
+    {
+        return NSLocalizedString(@"Chapters", "Preferences -> Output Name Token");
+    }
+    else if ([tokenString isEqualToString:@"{Preset}"])
+    {
+        return NSLocalizedString(@"Preset", "Preferences -> Output Name Token");
+    }
+    else if ([tokenString isEqualToString:@"{Width}"])
+    {
+        return NSLocalizedString(@"Width", "Preferences -> Output Name Token");
+    }
+    else if ([tokenString isEqualToString:@"{Height}"])
+    {
+        return NSLocalizedString(@"Height", "Preferences -> Output Name Token");
+    }
+    else if ([tokenString isEqualToString:@"{Codec}"])
+    {
+        return NSLocalizedString(@"Codec", "Preferences -> Output Name Token");
+    }
+    else if ([tokenString isEqualToString:@"{Encoder}"])
+    {
+        return NSLocalizedString(@"Encoder", "Preferences -> Output Name Token");
+    }
+    else if ([tokenString isEqualToString:@"{Bit-Depth}"])
+    {
+        return NSLocalizedString(@"Bit Depth", "Preferences -> Output Name Token");
+    }
+    else if ([tokenString isEqualToString:@"{Quality/Bitrate}"])
+    {
+        return NSLocalizedString(@"Quality/Bitrate", "Preferences -> Output Name Token");
+    }
+    else if ([tokenString isEqualToString:@"{Quality-Type}"])
+    {
+        return NSLocalizedString(@"Quality Type", "Preferences -> Output Name Token");
+    }
     else if ([tokenString isEqualToString:@"{Date}"])
     {
         return NSLocalizedString(@"Date", "Preferences -> Output Name Token");
@@ -291,13 +331,13 @@ NSString * const HBKeepPresetEdits               = @"HBKeepPresetEdits";
     {
         return NSLocalizedString(@"Creation-Time", "Preferences -> Output Name Token");
     }
-    else if ([tokenString isEqualToString:@"{Chapters}"])
+    else if ([tokenString isEqualToString:@"{Modification-Date}"])
     {
-        return NSLocalizedString(@"Chapters", "Preferences -> Output Name Token");
+        return NSLocalizedString(@"Modification-Date", "Preferences -> Output Name Token");
     }
-    else if ([tokenString isEqualToString:@"{Quality/Bitrate}"])
+    else if ([tokenString isEqualToString:@"{Modification-Time}"])
     {
-        return NSLocalizedString(@"Quality/Bitrate", "Preferences -> Output Name Token");
+        return NSLocalizedString(@"Modification-Time", "Preferences -> Output Name Token");
     }
 
     return tokenString;

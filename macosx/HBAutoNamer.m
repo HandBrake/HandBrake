@@ -80,7 +80,6 @@ static void *HBAutoNamerContext = &HBAutoNamerContext;
     [ud removeObserver:self forKeyPath:@"values.HBAutoNamingRemoveUnderscore" context:HBAutoNamerPrefsContext];
     [ud removeObserver:self forKeyPath:@"values.HBAutoNamingRemovePunctuation" context:HBAutoNamerPrefsContext];
     [ud removeObserver:self forKeyPath:@"values.HBAutoNamingTitleCase" context:HBAutoNamerPrefsContext];
-
 }
 
 #pragma mark - File extension
@@ -131,7 +130,26 @@ static void *HBAutoNamerContext = &HBAutoNamerContext;
             [self.job addObserver:self forKeyPath:@"range.chapterStart" options:0 context:HBAutoNamerContext];
             [self.job addObserver:self forKeyPath:@"range.chapterStop" options:0 context:HBAutoNamerContext];
         }
-        else if ([formatKey isEqualToString:@"{Quality/Bitrate}"])
+        else if ([formatKey isEqualToString:@"{Preset}"])
+        {
+            [self.job addObserver:self forKeyPath:@"presetName" options:0 context:HBAutoNamerContext];
+        }
+        else if ([formatKey isEqualToString:@"{Width}"])
+        {
+            [self.job addObserver:self forKeyPath:@"picture.storageWidth" options:0 context:HBAutoNamerContext];
+        }
+        else if ([formatKey isEqualToString:@"{Height}"])
+        {
+            [self.job addObserver:self forKeyPath:@"picture.storageHeight" options:0 context:HBAutoNamerContext];
+        }
+        else if ([formatKey isEqualToString:@"{Codec}"] ||
+                 [formatKey isEqualToString:@"{Encoder}"] ||
+                 [formatKey isEqualToString:@"{Bit-Depth}"])
+        {
+            [self.job addObserver:self forKeyPath:@"video.encoder" options:0 context:HBAutoNamerContext];
+        }
+        else if ([formatKey isEqualToString:@"{Quality/Bitrate}"] ||
+                 [formatKey isEqualToString:@"{Quality-Type}"])
         {
             [self.job addObserver:self forKeyPath:@"video.qualityType" options:0 context:HBAutoNamerContext];
             [self.job addObserver:self forKeyPath:@"video.avgBitrate" options:0 context:HBAutoNamerContext];
@@ -149,7 +167,26 @@ static void *HBAutoNamerContext = &HBAutoNamerContext;
             [self.job removeObserver:self forKeyPath:@"range.chapterStart" context:HBAutoNamerContext];
             [self.job removeObserver:self forKeyPath:@"range.chapterStop" context:HBAutoNamerContext];
         }
-        else if ([formatKey isEqualToString:@"{Quality/Bitrate}"])
+        else if ([formatKey isEqualToString:@"{Preset}"])
+        {
+            [self.job removeObserver:self forKeyPath:@"presetName" context:HBAutoNamerContext];
+        }
+        else if ([formatKey isEqualToString:@"{Width}"])
+        {
+            [self.job removeObserver:self forKeyPath:@"picture.storageWidth" context:HBAutoNamerContext];
+        }
+        else if ([formatKey isEqualToString:@"{Height}"])
+        {
+            [self.job removeObserver:self forKeyPath:@"picture.storageHeight" context:HBAutoNamerContext];
+        }
+        else if ([formatKey isEqualToString:@"{Codec}"] ||
+                 [formatKey isEqualToString:@"{Encoder}"] ||
+                 [formatKey isEqualToString:@"{Bit-Depth}"])
+        {
+            [self.job removeObserver:self forKeyPath:@"video.encoder" context:HBAutoNamerContext];
+        }
+        else if ([formatKey isEqualToString:@"{Quality/Bitrate}"] ||
+                 [formatKey isEqualToString:@"{Quality-Type}"])
         {
             [self.job removeObserver:self forKeyPath:@"video.qualityType" context:HBAutoNamerContext];
             [self.job removeObserver:self forKeyPath:@"video.avgBitrate" context:HBAutoNamerContext];
