@@ -10,6 +10,7 @@
 
 static NSDateFormatter *_timeFormatter = nil;
 static NSDateFormatter *_dateFormatter = nil;
+static NSDateFormatter *_dateISOFormatter = nil;
 static NSDateFormatter *_releaseDateFormatter = nil;
 
 @implementation HBJob (HBAdditions)
@@ -21,6 +22,9 @@ static NSDateFormatter *_releaseDateFormatter = nil;
         _dateFormatter = [[NSDateFormatter alloc] init];
         [_dateFormatter setDateStyle:NSDateFormatterShortStyle];
         [_dateFormatter setTimeStyle:NSDateFormatterNoStyle];
+
+        _dateISOFormatter = [[NSDateFormatter alloc] init];
+        [_dateISOFormatter setDateFormat:@"yyyy-MM-dd"];
 
         _timeFormatter = [[NSDateFormatter alloc] init];
         [_timeFormatter setDateStyle:NSDateFormatterNoStyle];
@@ -34,6 +38,9 @@ static NSDateFormatter *_releaseDateFormatter = nil;
 - (NSString *)automaticName
 {
     NSUserDefaults *ud = NSUserDefaults.standardUserDefaults;
+    NSMutableString *name = [[NSMutableString alloc] init];
+
+    NSDateFormatter *formatter = [ud boolForKey:HBAutoNamingISODateFormat] ? _dateISOFormatter : _dateFormatter;
     NSString *sourceName = self.title.name;
     NSDate *creationDate = self.title.metadata.releaseDate.length ?
                             [_releaseDateFormatter dateFromString:self.title.metadata.releaseDate] :
@@ -45,12 +52,7 @@ static NSDateFormatter *_releaseDateFormatter = nil;
         creationDate = attrs[NSFileCreationDate];
     }
 
-    NSMutableString *name = [[NSMutableString alloc] init];
-
-    // The format array contains the tokens as NSString
-    NSArray<NSString *> *format = [ud objectForKey:HBAutoNamingFormat];
-
-    for (NSString *formatKey in format)
+    for (NSString *formatKey in [ud objectForKey:HBAutoNamingFormat])
     {
         if ([formatKey isEqualToString:@"{Source}"])
         {
@@ -172,7 +174,7 @@ static NSDateFormatter *_releaseDateFormatter = nil;
         else if ([formatKey isEqualToString:@"{Date}"])
         {
             NSDate *date = [NSDate date];
-            NSString *dateString = [[_dateFormatter stringFromDate:date] stringByReplacingOccurrencesOfString:@"/" withString:@"-"];
+            NSString *dateString = [[formatter stringFromDate:date] stringByReplacingOccurrencesOfString:@"/" withString:@"-"];
             [name appendString:dateString];
         }
         else if ([formatKey isEqualToString:@"{Time}"])
@@ -184,7 +186,7 @@ static NSDateFormatter *_releaseDateFormatter = nil;
         {
             if (creationDate)
             {
-                NSString *dateString = [[_dateFormatter stringFromDate:creationDate] stringByReplacingOccurrencesOfString:@"/" withString:@"-"];
+                NSString *dateString = [[formatter stringFromDate:creationDate] stringByReplacingOccurrencesOfString:@"/" withString:@"-"];
                 [name appendString:dateString];
             }
         }
@@ -201,7 +203,7 @@ static NSDateFormatter *_releaseDateFormatter = nil;
             NSDate *modificationDate = attrs[NSFileModificationDate];
             if (modificationDate)
             {
-                NSString *dateString = [[_dateFormatter stringFromDate:modificationDate] stringByReplacingOccurrencesOfString:@"/" withString:@"-"];
+                NSString *dateString = [[formatter stringFromDate:modificationDate] stringByReplacingOccurrencesOfString:@"/" withString:@"-"];
                 [name appendString:dateString];
             }
         }

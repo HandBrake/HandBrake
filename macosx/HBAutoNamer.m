@@ -71,6 +71,7 @@ static void *HBAutoNamerContext = &HBAutoNamerContext;
     [ud addObserver:self forKeyPath:@"values.HBAutoNamingRemoveUnderscore" options:0 context:HBAutoNamerPrefsContext];
     [ud addObserver:self forKeyPath:@"values.HBAutoNamingRemovePunctuation" options:0 context:HBAutoNamerPrefsContext];
     [ud addObserver:self forKeyPath:@"values.HBAutoNamingTitleCase" options:0 context:HBAutoNamerPrefsContext];
+    [ud addObserver:self forKeyPath:@"values.HBAutoNamingISODateFormat" options:0 context:HBAutoNamerPrefsContext];
 }
 
 - (void)removePrefsObservers
@@ -80,6 +81,7 @@ static void *HBAutoNamerContext = &HBAutoNamerContext;
     [ud removeObserver:self forKeyPath:@"values.HBAutoNamingRemoveUnderscore" context:HBAutoNamerPrefsContext];
     [ud removeObserver:self forKeyPath:@"values.HBAutoNamingRemovePunctuation" context:HBAutoNamerPrefsContext];
     [ud removeObserver:self forKeyPath:@"values.HBAutoNamingTitleCase" context:HBAutoNamerPrefsContext];
+    [ud removeObserver:self forKeyPath:@"values.HBAutoNamingISODateFormat" context:HBAutoNamerPrefsContext];
 }
 
 #pragma mark - File extension

@@ -27,6 +27,7 @@ NSString * const HBAutoNamingFormat              = @"HBAutoNamingFormat";
 NSString * const HBAutoNamingRemoveUnderscore    = @"HBAutoNamingRemoveUnderscore";
 NSString * const HBAutoNamingRemovePunctuation   = @"HBAutoNamingRemovePunctuation";
 NSString * const HBAutoNamingTitleCase           = @"HBAutoNamingTitleCase";
+NSString * const HBAutoNamingISODateFormat       = @"HBAutoNamingISODateFormat";
 
 NSString * const HBCqSliderFractional            = @"HBx264CqSliderFractional";
 NSString * const HBUseDvdNav                     = @"UseDvdNav";
@@ -92,6 +93,7 @@ NSString * const HBKeepPresetEdits               = @"HBKeepPresetEdits";
         HBLastSourceDirectoryURL:           [NSKeyedArchiver archivedDataWithRootObject:moviesURL],
         HBDefaultAutoNaming:                @NO,
         HBAutoNamingFormat:                 @[@"{Source}", @" ", @"{Title}"],
+        HBAutoNamingISODateFormat:          @NO,
         HBAlertWhenDone:                    @(HBDoneActionNotification),
         HBResetWhenDoneOnLaunch:            @NO,
         HBAlertWhenDoneSound:               @YES,
