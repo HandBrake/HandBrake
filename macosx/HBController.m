@@ -796,16 +796,11 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
 {
     if (![self.destinationFolderURL isEqualTo:destinationURL])
     {
-        NSNumber *writable = @NO;
-        [destinationURL getResourceValue:&writable forKey:NSURLIsWritableKey error:NULL];
-        if (writable.boolValue)
-        {
 #ifdef __SANDBOX_ENABLED__
             [self showOpenPanelForDestination:destinationURL];
 #else
             self.destinationFolderURL = destinationURL;
 #endif
-        }
     }
 }
 
@@ -832,7 +827,7 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
             if (job)
             {
                 self.job = job;
-                if ([NSUserDefaults.standardUserDefaults boolForKey:HBUseSourceFolderDestination])
+                if (featuredTitle.isStream && [NSUserDefaults.standardUserDefaults boolForKey:HBUseSourceFolderDestination])
                 {
                     [self askForPermissionAndSetDestinationURL:job.title.url.URLByDeletingLastPathComponent];
                 }
