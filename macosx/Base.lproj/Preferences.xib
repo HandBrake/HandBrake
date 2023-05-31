@@ -35,14 +35,14 @@
         </window>
         <userDefaultsController representsSharedInstance="YES" id="61" userLabel="Shared Defaults"/>
         <customView id="233" userLabel="General">
-            <rect key="frame" x="0.0" y="0.0" width="580" height="422"/>
+            <rect key="frame" x="0.0" y="0.0" width="580" height="442"/>
             <autoresizingMask key="autoresizingMask"/>
             <subviews>
                 <stackView distribution="fill" orientation="vertical" alignment="leading" spacing="18" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="1000" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="TQb-nF-3BD">
-                    <rect key="frame" x="50" y="20" width="481" height="382"/>
+                    <rect key="frame" x="50" y="20" width="481" height="402"/>
                     <subviews>
                         <stackView distribution="fill" orientation="horizontal" alignment="firstBaseline" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="750" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="F3c-q6-MdR">
-                            <rect key="frame" x="0.0" y="348" width="304" height="34"/>
+                            <rect key="frame" x="0.0" y="368" width="304" height="34"/>
                             <subviews>
                                 <textField verticalHuggingPriority="749" horizontalCompressionResistancePriority="1000" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="200" translatesAutoresizingMaskIntoConstraints="NO" id="275">
                                     <rect key="frame" x="-2" y="0.0" width="72" height="34"/>
@@ -96,10 +96,10 @@
                             </customSpacing>
                         </stackView>
                         <box verticalHuggingPriority="750" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="Ogp-hO-ybK">
-                            <rect key="frame" x="0.0" y="327" width="481" height="5"/>
+                            <rect key="frame" x="0.0" y="347" width="481" height="5"/>
                         </box>
                         <stackView distribution="fill" orientation="horizontal" alignment="firstBaseline" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="750" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Aee-4F-nXp">
-                            <rect key="frame" x="0.0" y="235" width="265" height="76"/>
+                            <rect key="frame" x="0.0" y="255" width="265" height="76"/>
                             <subviews>
                                 <textField horizontalHuggingPriority="249" verticalHuggingPriority="749" horizontalCompressionResistancePriority="1000" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="200" translatesAutoresizingMaskIntoConstraints="NO" id="242">
                                     <rect key="frame" x="-2" y="0.0" width="72" height="76"/>
@@ -232,13 +232,13 @@
                             </customSpacing>
                         </stackView>
                         <box verticalHuggingPriority="750" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="nji-Au-Qm6">
-                            <rect key="frame" x="0.0" y="214" width="481" height="5"/>
+                            <rect key="frame" x="0.0" y="234" width="481" height="5"/>
                         </box>
                         <stackView distribution="fill" orientation="horizontal" alignment="firstBaseline" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="750" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="cgC-1f-KdT">
-                            <rect key="frame" x="0.0" y="0.0" width="481" height="198"/>
+                            <rect key="frame" x="0.0" y="0.0" width="481" height="218"/>
                             <subviews>
                                 <textField horizontalHuggingPriority="249" verticalHuggingPriority="749" horizontalCompressionResistancePriority="1000" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="300" translatesAutoresizingMaskIntoConstraints="NO" id="276">
-                                    <rect key="frame" x="-2" y="0.0" width="72" height="198"/>
+                                    <rect key="frame" x="-2" y="0.0" width="72" height="218"/>
                                     <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="right" title="Output Files:" id="308">
                                         <font key="font" metaFont="menu" size="11"/>
                                         <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -246,10 +246,10 @@
                                     </textFieldCell>
                                 </textField>
                                 <stackView distribution="fill" orientation="vertical" alignment="leading" spacing="6" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="750" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="5rX-nV-cnr">
-                                    <rect key="frame" x="76" y="0.0" width="405" height="198"/>
+                                    <rect key="frame" x="76" y="0.0" width="405" height="218"/>
                                     <subviews>
                                         <stackView distribution="fill" orientation="horizontal" alignment="firstBaseline" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="1000" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="qlP-Qk-4OU">
-                                            <rect key="frame" x="0.0" y="184" width="181" height="14"/>
+                                            <rect key="frame" x="0.0" y="204" width="181" height="14"/>
                                             <subviews>
                                                 <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="300" translatesAutoresizingMaskIntoConstraints="NO" id="486">
                                                     <rect key="frame" x="-2" y="0.0" width="126" height="14"/>
@@ -287,6 +287,16 @@
                                                 <real value="3.4028234663852886e+38"/>
                                             </customSpacing>
                                         </stackView>
+                                        <button translatesAutoresizingMaskIntoConstraints="NO" id="Qrf-by-Sdu">
+                                            <rect key="frame" x="-1" y="183" width="187" height="16"/>
+                                            <buttonCell key="cell" type="check" title="Set destination to source folder" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" inset="2" id="wXE-Fz-Dru">
+                                                <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                                <font key="font" metaFont="menu" size="11"/>
+                                            </buttonCell>
+                                            <connections>
+                                                <binding destination="61" name="value" keyPath="values.HBSourceFolderDestination" id="SR2-hf-q5M"/>
+                                            </connections>
+                                        </button>
                                         <button translatesAutoresizingMaskIntoConstraints="NO" id="239">
                                             <rect key="frame" x="-1" y="163" width="187" height="16"/>
                                             <buttonCell key="cell" type="check" title="Automatically name output files" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" inset="2" id="302">
@@ -427,8 +437,10 @@
                                         <integer value="1000"/>
                                         <integer value="1000"/>
                                         <integer value="1000"/>
+                                        <integer value="1000"/>
                                     </visibilityPriorities>
                                     <customSpacing>
+                                        <real value="3.4028234663852886e+38"/>
                                         <real value="3.4028234663852886e+38"/>
                                         <real value="3.4028234663852886e+38"/>
                                         <real value="3.4028234663852886e+38"/>

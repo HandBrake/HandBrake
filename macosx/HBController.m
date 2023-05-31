@@ -774,6 +774,41 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
     }
 }
 
+- (void)showOpenPanelForDestination:(NSURL *)destinationURL
+{
+    NSOpenPanel *panel = [NSOpenPanel openPanel];
+    panel.canChooseFiles = NO;
+    panel.canChooseDirectories = YES;
+    panel.directoryURL = destinationURL;
+    panel.message = NSLocalizedString(@"HandBrake does not have permission to write to this folder. To allow HandBrake to write to this folder, click \"Allow\"", @"Main Window -> Same as source destination open panel");
+    panel.prompt = NSLocalizedString(@"Allow", @"Main Window -> Same as source destination open panel");
+
+    [panel beginSheetModalForWindow:self.window completionHandler:^(NSInteger result)
+     {
+         if (result == NSModalResponseOK)
+         {
+             self.destinationFolderURL = panel.URL;
+         }
+     }];
+}
+
+- (void)askForPermissionAndSetDestinationURL:(NSURL *)destinationURL
+{
+    if (![self.destinationFolderURL isEqualTo:destinationURL])
+    {
+        NSNumber *writable = @NO;
+        [destinationURL getResourceValue:&writable forKey:NSURLIsWritableKey error:NULL];
+        if (writable.boolValue)
+        {
+#ifdef __SANDBOX_ENABLED__
+            [self showOpenPanelForDestination:destinationURL];
+#else
+            self.destinationFolderURL = destinationURL;
+#endif
+        }
+    }
+}
+
 - (void)openURL:(NSURL *)fileURL titleIndex:(NSUInteger)index
 {
     [self showWindow:self];
@@ -797,6 +832,10 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
             if (job)
             {
                 self.job = job;
+                if ([NSUserDefaults.standardUserDefaults boolForKey:HBUseSourceFolderDestination])
+                {
+                    [self askForPermissionAndSetDestinationURL:job.title.url.URLByDeletingLastPathComponent];
+                }
             }
             else
             {

@@ -22,6 +22,8 @@ NSString * const HBAlertWhenDoneSound            = @"HBAlertWhenDoneSound";
 NSString * const HBSendToAppEnabled              = @"HBSendToAppEnabled";
 NSString * const HBSendToApp                     = @"HBSendToApp";
 
+NSString * const HBUseSourceFolderDestination    = @"HBUseSourceFolderDestination";
+
 NSString * const HBDefaultAutoNaming             = @"DefaultAutoNaming";
 NSString * const HBAutoNamingFormat              = @"HBAutoNamingFormat";
 NSString * const HBAutoNamingRemoveUnderscore    = @"HBAutoNamingRemoveUnderscore";
@@ -91,6 +93,7 @@ NSString * const HBKeepPresetEdits               = @"HBKeepPresetEdits";
         HBUseDvdNav:                        @YES,
         HBLastDestinationDirectoryURL:      [NSKeyedArchiver archivedDataWithRootObject:moviesURL],
         HBLastSourceDirectoryURL:           [NSKeyedArchiver archivedDataWithRootObject:moviesURL],
+        HBUseSourceFolderDestination:       @NO,
         HBDefaultAutoNaming:                @NO,
         HBAutoNamingFormat:                 @[@"{Source}", @" ", @"{Title}"],
         HBAutoNamingISODateFormat:          @NO,

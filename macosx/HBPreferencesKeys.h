@@ -32,6 +32,8 @@ extern NSString * const HBAlertWhenDoneSound;
 extern NSString * const HBSendToAppEnabled;
 extern NSString * const HBSendToApp;
 
+extern NSString * const HBUseSourceFolderDestination;
+
 extern NSString * const HBDefaultAutoNaming;
 extern NSString * const HBAutoNamingFormat;
 extern NSString * const HBAutoNamingRemoveUnderscore;
