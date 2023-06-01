@@ -870,23 +870,7 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
         {
             if (titles.count)
             {
-                // If the scan was cached, reselect
-                // the original title
-                for (HBTitle *title in titles)
-                {
-                    if (title.index == job.titleIdx)
-                    {
-                        job.title = title;
-                        break;
-                    }
-                }
-
-                // Else just one title or a title specific rescan
-                // select the first title
-                if (!job.title)
-                {
-                    job.title = titles.firstObject;
-                }
+                job.title = titles.firstObject;
 
                 self.job = job;
                 job.undo = self.window.undoManager;
