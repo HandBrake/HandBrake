@@ -58,10 +58,20 @@ static void *HandBrakeXPCServiceContext = &HandBrakeXPCServiceContext;
     _core = [[HBCore alloc] initWithLogLevel:level queue:_queue];
     _core.name = name;
 
-    // Completion handler
+    void (^progressHandler)(HBState state, HBProgress progress, NSString *info) = ^(HBState state, HBProgress progress, NSString *info)
+    {
+        [self.connection.remoteObjectProxy updateProgress:progress.percent
+                                                    hours:progress.hours
+                                                  minutes:progress.minutes
+                                                  seconds:progress.seconds
+                                                    state:state
+                                                     info:info];
+    };
+    _progressHandler = progressHandler;
+
     void (^completionHandler)(HBCoreResult result) = ^(HBCoreResult result)
     {
-        self->_progressHandler = nil;
+        [self stopAccessingSecurityScopedResources];
         self.reply(result);
         self.reply = nil;
     };
@@ -102,6 +112,14 @@ static void *HandBrakeXPCServiceContext = &HandBrakeXPCServiceContext;
     });
 }
 
+- (void)stopAccessingSecurityScopedResources
+{
+    for (NSURL *url in self.urls)
+    {
+        [url stopAccessingSecurityScopedResource];
+    }
+}
+
 - (void)setAutomaticallyPreventSleep:(BOOL)automaticallyPreventSleep
 {
     dispatch_sync(_queue, ^{
@@ -138,11 +156,6 @@ static void *HandBrakeXPCServiceContext = &HandBrakeXPCServiceContext;
 - (void)scanURL:(NSURL *)url titleIndex:(NSUInteger)index previews:(NSUInteger)previewsNum minDuration:(NSUInteger)seconds keepPreviews:(BOOL)keepPreviews withReply:(void (^)(HBCoreResult))reply
 {
     dispatch_sync(_queue, ^{
-        void (^progressHandler)(HBState state, HBProgress progress, NSString *info) = ^(HBState state, HBProgress progress, NSString *info)
-        {
-            [self.connection.remoteObjectProxy updateProgress:progress.percent hours:progress.hours minutes:progress.minutes seconds:progress.seconds state:state info:info];
-        };
-        self->_progressHandler = progressHandler;
         self.reply = reply;
 
         [self.core scanURL:url titleIndex:index previews:previewsNum minDuration:seconds keepPreviews:keepPreviews
@@ -161,15 +174,11 @@ static void *HandBrakeXPCServiceContext = &HandBrakeXPCServiceContext;
  - (void)encodeJob:(HBJob *)job withReply:(void (^)(HBCoreResult))reply
 {
     dispatch_sync(_queue, ^{
-        void (^progressHandler)(HBState state, HBProgress progress, NSString *info) = ^(HBState state, HBProgress progress, NSString *info)
-        {
-            [self.connection.remoteObjectProxy updateProgress:progress.percent hours:progress.hours minutes:progress.minutes seconds:progress.seconds state:state info:info];
-        };
-        self->_progressHandler = progressHandler;
         self.reply = reply;
 
         // Reset the title in the job.
         job.title = self.core.titles.firstObject;
+
         [self.core encodeJob:job
              progressHandler:self.progressHandler
            completionHandler:self.completionHandler];

@@ -121,7 +121,8 @@
     [self forwardError:@"XPC: Service did crash\n"];
 }
 
-- (void)updateState:(HBState)state {
+- (void)updateState:(HBState)state
+{
     dispatch_sync(dispatch_get_main_queue(), ^{
         self.state = state;
     });
@@ -210,10 +211,16 @@
         }
     }
 
-    NSData *bookmark = [job.destinationFolderURL bookmarkDataWithOptions:0 includingResourceValuesForKeys:nil relativeToURL:nil error:NULL];
-    if (bookmark)
+    NSData *destinationBookmark = [job.destinationFolderURL bookmarkDataWithOptions:0 includingResourceValuesForKeys:nil relativeToURL:nil error:NULL];
+    if (destinationBookmark)
     {
-        [bookmarks addObject:bookmark];
+        [bookmarks addObject:destinationBookmark];
+    }
+
+    NSData *sourceBookmark = [job.fileURL bookmarkDataWithOptions:0 includingResourceValuesForKeys:nil relativeToURL:nil error:NULL];
+    if (sourceBookmark)
+    {
+        [bookmarks addObject:sourceBookmark];
     }
 
     [_proxy provideResourceAccessWithBookmarks:bookmarks];
@@ -245,13 +252,16 @@
     [_proxy cancelEncode];
 }
 
-- (void)updateProgress:(double)currentProgress hours:(int)hours minutes:(int)minutes seconds:(int)seconds state:(HBState)state info:(NSString *)info {
-
+- (void)updateProgress:(double)currentProgress hours:(int)hours minutes:(int)minutes seconds:(int)seconds state:(HBState)state info:(NSString *)info
+{
     __weak HBRemoteCore *weakSelf = self;
 
     dispatch_sync(dispatch_get_main_queue(), ^{
-        HBProgress progress = {currentProgress , hours, minutes, seconds};
-        weakSelf.progressHandler(state, progress, info);
+        if (weakSelf.progressHandler)
+        {
+            HBProgress progress = {currentProgress , hours, minutes, seconds};
+            weakSelf.progressHandler(state, progress, info);
+        }
     });
 }
 
