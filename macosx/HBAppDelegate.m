@@ -248,20 +248,19 @@
 
     if (previewDirectory)
     {
-        NSArray *contents = [NSFileManager.defaultManager contentsOfDirectoryAtURL:previewDirectory
-                                                        includingPropertiesForKeys:nil
-                                                                           options:NSDirectoryEnumerationSkipsSubdirectoryDescendants |
-                             NSDirectoryEnumerationSkipsPackageDescendants
-                                                                             error:NULL];
-
         NSFileManager *manager = [[NSFileManager alloc] init];
+        NSArray<NSURL *> *contents = [manager contentsOfDirectoryAtURL:previewDirectory
+                                            includingPropertiesForKeys:nil
+                                                               options:NSDirectoryEnumerationSkipsSubdirectoryDescendants | NSDirectoryEnumerationSkipsPackageDescendants
+                                                                 error:NULL];
+
         for (NSURL *url in contents)
         {
             NSError *error = nil;
             BOOL result = [manager removeItemAtURL:url error:&error];
             if (result == NO && error)
             {
-                [HBUtilities writeToActivityLog: "Could not remove existing preview at : %s", url.lastPathComponent.UTF8String];
+                [HBUtilities writeToActivityLog:"Could not remove existing preview at: %s", url.lastPathComponent.UTF8String];
             }
         }
     }

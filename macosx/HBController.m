@@ -1067,8 +1067,6 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
                                               forKey:HBLastDestinationDirectoryBookmark];
     [NSUserDefaults.standardUserDefaults setURL:destinationFolderURL
                                          forKey:HBLastDestinationDirectoryURL];
-
-
 }
 
 - (IBAction)browseDestination:(id)sender
