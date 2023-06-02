@@ -47,7 +47,7 @@ index 978d995..4bffdac 100644
 +    }
 +    version = avio_rb32(pb); // version + flags
 +    if (version != 0)
-+        return AVERROR_INVALIDDATA;
++        av_log(c->fc, AV_LOG_WARNING, "udta %s unknown version number: %u\n", str, version);
 +    if (MKTAG( 'y','r','r','c') == atom.type) {
 +        int year;
 +        year = avio_rb16(pb);
@@ -61,7 +61,7 @@ index 978d995..4bffdac 100644
 +        ff_mov_lang_to_iso639(langcode, language);
 +        tmp = ff_convert_lang_to(language, AV_LANG_ISO639_2_BIBL);
 +        if (!tmp)
-+            return AVERROR_INVALIDDATA;
++           av_log(c->fc, AV_LOG_WARNING, "udta %s unknown language code: %u\n", str, langcode);
 +        str_size = atom.size - 6;
 +        if (str_size <= 0 || str_size >= INT_MAX/2)
 +            return AVERROR_INVALIDDATA;
