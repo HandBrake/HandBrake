@@ -924,9 +924,15 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
         context->profile = FF_PROFILE_UNKNOWN;
         if (job->encoder_profile != NULL && *job->encoder_profile)
         {
-            if (!strcasecmp(job->encoder_profile, "main"))
+            if (!strcasecmp(job->encoder_profile, "main")) {
                  context->profile = FF_PROFILE_HEVC_MAIN;
+            }
+            
+            if (!strcasecmp(job->encoder_profile, "main10")) {
+                 context->profile = FF_PROFILE_HEVC_MAIN_10;
+            }
         }
+        
         context->level = FF_LEVEL_UNKNOWN;
         if (job->encoder_level != NULL && *job->encoder_level)
         {
