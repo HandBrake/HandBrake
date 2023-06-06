@@ -1501,7 +1501,7 @@ static void ShowHelp(void)
 "                           matching each language will be added to your\n"
 "                           output. Provide the language's ISO 639-2 code\n"
 "                           (e.g. fre, eng, spa, dut, et cetera)\n"
-"                           Use code 'und' (Unknown) to match all languages.\n"
+"                           Use code 'any' to match all languages.\n"
 "       --all-audio         Select all audio tracks matching languages in\n"
 "                           the specified language list (--audio-lang-list).\n"
 "                           Any language if list is not specified.\n"
