@@ -1484,7 +1484,7 @@ namespace HandBrakeWPF.ViewModels
                 string[] fileNames = e.Data.GetData(DataFormats.FileDrop, true) as string[];
                 if (fileNames != null && fileNames.Any() && (File.Exists(fileNames[0]) || Directory.Exists(fileNames[0])))
                 {
-                    string videoContent = fileNames.FirstOrDefault(f => Path.GetExtension(f)?.ToLower() != ".srt" && Path.GetExtension(f)?.ToLower() != ".ssa");
+                    string videoContent = fileNames.FirstOrDefault(f => Path.GetExtension(f)?.ToLower() != ".srt" && Path.GetExtension(f)?.ToLower() != ".ssa" && Path.GetExtension(f)?.ToLower() != ".ass");
                     if (!string.IsNullOrEmpty(videoContent))
                     {
                         this.StartScan(videoContent, 0);
@@ -1502,7 +1502,7 @@ namespace HandBrakeWPF.ViewModels
                     }
 
                     // StartScan is not synchronous, so for now we don't support adding both srt and video file at the same time. 
-                    string[] subtitleFiles = fileNames.Where(f => Path.GetExtension(f)?.ToLower() == ".srt" || Path.GetExtension(f)?.ToLower() == ".ssa").ToArray();
+                    string[] subtitleFiles = fileNames.Where(f => Path.GetExtension(f)?.ToLower() == ".srt" || Path.GetExtension(f)?.ToLower() == ".ssa" || Path.GetExtension(f)?.ToLower() == ".ass").ToArray();
                     if (subtitleFiles.Any())
                     {
                         this.SwitchTab(5);

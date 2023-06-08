@@ -265,7 +265,10 @@ namespace HandBrakeWPF.ViewModels
 
             dialog.ShowDialog();
 
-            this.AddInputSubtitles(dialog.FileNames);
+            if (dialog.FileNames != null)
+            {
+                this.AddInputSubtitles(dialog.FileNames);
+            }
         }
 
         public void Import(string[] subtitleFiles)
