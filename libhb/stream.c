@@ -4055,6 +4055,7 @@ static int probe_dts_profile( hb_stream_t *stream, hb_pes_stream_t *pes )
         case FF_PROFILE_DTS:
         case FF_PROFILE_DTS_ES:
         case FF_PROFILE_DTS_96_24:
+        case FF_PROFILE_DTS_EXPRESS:
             pes->codec = HB_ACODEC_DCA;
             pes->stream_type = 0x82;
             pes->stream_kind = A;
@@ -4062,6 +4063,8 @@ static int probe_dts_profile( hb_stream_t *stream, hb_pes_stream_t *pes )
 
         case FF_PROFILE_DTS_HD_HRA:
         case FF_PROFILE_DTS_HD_MA:
+        case FF_PROFILE_DTS_HD_MA_X:
+        case FF_PROFILE_DTS_HD_MA_X_IMAX:
             pes->stream_type = 0;
             pes->stream_kind = A;
             break;
@@ -5411,11 +5414,14 @@ static void add_ffmpeg_audio(hb_title_t *title, hb_stream_t *stream, int id)
                 case FF_PROFILE_DTS:
                 case FF_PROFILE_DTS_ES:
                 case FF_PROFILE_DTS_96_24:
+                case FF_PROFILE_DTS_EXPRESS:
                     audio->config.in.codec = HB_ACODEC_DCA;
                     break;
 
                 case FF_PROFILE_DTS_HD_MA:
                 case FF_PROFILE_DTS_HD_HRA:
+                case FF_PROFILE_DTS_HD_MA_X:
+                case FF_PROFILE_DTS_HD_MA_X_IMAX:
                     audio->config.in.codec = HB_ACODEC_DCA_HD;
                     break;
 
