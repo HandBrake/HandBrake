@@ -1,0 +1,39 @@
+From 71302b3472cdad7cfa80036d25422c3eef7f4151 Mon Sep 17 00:00:00 2001
+From: Haihao Xiang <haihao.xiang@intel.com>
+Date: Mon, 12 Jun 2023 16:14:45 +0800
+Subject: [PATCH 5/9] lavfi/qsvvpp: check the parameters before initializing
+ vpp session
+
+According to the description about MFXVideoVPP_Query [1], we may call
+MFXVideoVPP_Query to check the validity of the parameters for vpp
+session, use the corrected values to initialize the session.
+
+[1] https://spec.oneapi.io/versions/latest/elements/oneVPL/source/API_ref/VPL_func_vid_vpp.html#mfxvideovpp-query
+
+Signed-off-by: Haihao Xiang <haihao.xiang@intel.com>
+---
+ libavfilter/qsvvpp.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
+
+diff --git a/libavfilter/qsvvpp.c b/libavfilter/qsvvpp.c
+index 61402c8e0a..8683a4f217 100644
+--- a/libavfilter/qsvvpp.c
++++ b/libavfilter/qsvvpp.c
+@@ -823,6 +823,14 @@ int ff_qsvvpp_init(AVFilterContext *avctx, QSVVPPParam *param)
+     ff_qsvvpp_print_iopattern(avctx, s->vpp_param.IOPattern & 0x0F, "VPP");
+     /* Print output memory mode */
+     ff_qsvvpp_print_iopattern(avctx, s->vpp_param.IOPattern & 0xF0, "VPP");
++
++    ret = MFXVideoVPP_Query(s->session, &s->vpp_param, &s->vpp_param);
++    if (ret < 0) {
++        ret = ff_qsvvpp_print_error(avctx, ret, "Error querying VPP params");
++        goto failed;
++    } else if (ret > 0)
++        ff_qsvvpp_print_warning(avctx, ret, "Warning When querying VPP params");
++
+     ret = MFXVideoVPP_Init(s->session, &s->vpp_param);
+     if (ret < 0) {
+         ret = ff_qsvvpp_print_error(avctx, ret, "Failed to create a qsvvpp");
+-- 
+2.40.1
+
