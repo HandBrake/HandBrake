@@ -1,0 +1,61 @@
+From 37dfee2e3a91eb698d87a30e256fce68b0e6c88c Mon Sep 17 00:00:00 2001
+From: Haihao Xiang <haihao.xiang@intel.com>
+Date: Mon, 12 Jun 2023 16:14:44 +0800
+Subject: [PATCH 4/9] lavfi/qsvvpp: copy metadata fields from src to dst
+
+Signed-off-by: Haihao Xiang <haihao.xiang@intel.com>
+---
+ libavfilter/qsvvpp.c | 16 ++++++++++++++--
+ 1 file changed, 14 insertions(+), 2 deletions(-)
+
+diff --git a/libavfilter/qsvvpp.c b/libavfilter/qsvvpp.c
+index 779afce66d..61402c8e0a 100644
+--- a/libavfilter/qsvvpp.c
++++ b/libavfilter/qsvvpp.c
+@@ -474,7 +474,7 @@ static QSVFrame *submit_frame(QSVVPPContext *s, AVFilterLink *inlink, AVFrame *p
+ }
+ 
+ /* get the output surface */
+-static QSVFrame *query_frame(QSVVPPContext *s, AVFilterLink *outlink)
++static QSVFrame *query_frame(QSVVPPContext *s, AVFilterLink *outlink, const AVFrame *in)
+ {
+     AVFilterContext *ctx = outlink->src;
+     QSVFrame        *out_frame;
+@@ -493,6 +493,12 @@ static QSVFrame *query_frame(QSVVPPContext *s, AVFilterLink *outlink)
+         if (!out_frame->frame)
+             return NULL;
+ 
++        ret = av_frame_copy_props(out_frame->frame, in);
++        if (ret < 0) {
++            av_log(ctx, AV_LOG_ERROR, "Failed to copy metadata fields from src to dst.\n");
++            return NULL;
++        }
++
+         ret = av_hwframe_get_buffer(outlink->hw_frames_ctx, out_frame->frame, 0);
+         if (ret < 0) {
+             av_log(ctx, AV_LOG_ERROR, "Can't allocate a surface.\n");
+@@ -509,6 +515,12 @@ static QSVFrame *query_frame(QSVVPPContext *s, AVFilterLink *outlink)
+         if (!out_frame->frame)
+             return NULL;
+ 
++        ret = av_frame_copy_props(out_frame->frame, in);
++        if (ret < 0) {
++            av_log(ctx, AV_LOG_ERROR, "Failed to copy metadata fields from src to dst.\n");
++            return NULL;
++        }
++
+         ret = map_frame_to_surface(out_frame->frame,
+                                    &out_frame->surface);
+         if (ret < 0)
+@@ -884,7 +896,7 @@ int ff_qsvvpp_filter_frame(QSVVPPContext *s, AVFilterLink *inlink, AVFrame *picr
+     }
+ 
+     do {
+-        out_frame = query_frame(s, outlink);
++        out_frame = query_frame(s, outlink, in_frame->frame);
+         if (!out_frame) {
+             av_log(ctx, AV_LOG_ERROR, "Failed to query an output frame.\n");
+             return AVERROR(ENOMEM);
+-- 
+2.40.1
+
