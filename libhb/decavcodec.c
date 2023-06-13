@@ -1150,8 +1150,7 @@ static hb_buffer_t *copy_frame( hb_work_private_t *pv )
 
 #if HB_PROJECT_FEATURE_QSV
     // no need to copy the frame data when decoding with QSV to opaque memory
-    if (pv->qsv.decode &&
-        pv->qsv.config.io_pattern == MFX_IOPATTERN_OUT_VIDEO_MEMORY)
+    if (hb_qsv_full_path_is_enabled(pv->job) && hb_qsv_get_memory_type(pv->job) == MFX_IOPATTERN_OUT_VIDEO_MEMORY)
     {
         out = hb_qsv_copy_avframe_to_video_buffer(pv->job, pv->frame, (AVRational){1,1}, 0);
     }
@@ -1371,8 +1370,7 @@ int reinit_video_filters(hb_work_private_t * pv)
     memset((void*)&filter_init, 0, sizeof(filter_init));
 
 #if HB_PROJECT_FEATURE_QSV
-    if (pv->qsv.decode &&
-        pv->qsv.config.io_pattern == MFX_IOPATTERN_OUT_VIDEO_MEMORY)
+    if (hb_qsv_full_path_is_enabled(pv->job))
     {
         // Can't use software filters when decoding with QSV opaque memory
         return 0;
@@ -1455,7 +1453,7 @@ int reinit_video_filters(hb_work_private_t * pv)
     {
         settings = hb_dict_init();
 #if HB_PROJECT_FEATURE_QSV && (defined( _WIN32 ) || defined( __MINGW32__ ))
-        if (hb_qsv_hw_filters_are_enabled(pv->job))
+        if (hb_qsv_hw_filters_via_video_memory_are_enabled(pv->job) || hb_qsv_hw_filters_via_system_memory_are_enabled(pv->job))
         {
             hb_dict_set(settings, "w", hb_value_int(orig_width));
             hb_dict_set(settings, "h", hb_value_int(orig_height));
@@ -1757,7 +1755,7 @@ static int decavcodecvInit( hb_work_object_t * w, hb_job_t * job )
     {
         pv->qsv.codec_name = hb_qsv_decode_get_codec_name(w->codec_param);
         pv->qsv.config.io_pattern = MFX_IOPATTERN_OUT_SYSTEM_MEMORY;
-        if(hb_qsv_full_path_is_enabled(job))
+        if(hb_qsv_get_memory_type(job) == MFX_IOPATTERN_OUT_VIDEO_MEMORY)
         {
             hb_qsv_info_t *info = hb_qsv_encoder_info_get(hb_qsv_get_adapter_index(), job->vcodec);
             if (info != NULL)
@@ -1875,7 +1873,7 @@ static int decavcodecvInit( hb_work_object_t * w, hb_job_t * job )
             if (pv->context->codec_id == AV_CODEC_ID_HEVC)
                 av_dict_set( &av_opts, "load_plugin", "hevc_hw", 0 );
 #if defined(_WIN32) || defined(__MINGW32__)
-            if (!hb_qsv_full_path_is_enabled(job))
+            if (hb_qsv_get_memory_type(job) == MFX_IOPATTERN_OUT_SYSTEM_MEMORY)
             {
                 hb_qsv_device_init(job);
                 pv->context->hw_device_ctx = av_buffer_ref(job->qsv.ctx->hb_hw_device_ctx);

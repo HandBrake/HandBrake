@@ -240,8 +240,7 @@ static hb_buffer_t* filterFrame( hb_filter_private_t * pv, hb_buffer_t ** buf_in
 #if HB_PROJECT_FEATURE_QSV && (defined( _WIN32 ) || defined( __MINGW32__ ))
     mfxFrameSurface1 *surface = NULL;
     HBQSVFramesContext *frames_ctx = NULL;
-
-    if (hb_qsv_hw_filters_are_enabled(pv->input.job) && buf_in != NULL)
+    if (hb_qsv_hw_filters_via_video_memory_are_enabled(pv->input.job) && buf_in != NULL)
     {
         hb_buffer_t *in = *buf_in;
         AVFrame *frame = (AVFrame *)in->storage;
@@ -263,7 +262,7 @@ static hb_buffer_t* filterFrame( hb_filter_private_t * pv, hb_buffer_t ** buf_in
         buf = hb_avfilter_get_buf(pv->graph);
     }
 #if HB_PROJECT_FEATURE_QSV && (defined( _WIN32 ) || defined( __MINGW32__ ))
-    if (hb_qsv_hw_filters_are_enabled(pv->input.job) && surface)
+    if (hb_qsv_hw_filters_via_video_memory_are_enabled(pv->input.job) && surface)
     {
         hb_qsv_release_surface_from_pool_by_surface_pointer(frames_ctx, surface);
     }

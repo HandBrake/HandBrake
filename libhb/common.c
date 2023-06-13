@@ -6383,7 +6383,7 @@ static int pix_hw_fmt_is_supported(hb_job_t *job, int pix_fmt)
     if (pix_fmt == AV_PIX_FMT_QSV)
     {
 #if HB_PROJECT_FEATURE_QSV
-        if (hb_qsv_full_path_is_enabled(job))
+        if (hb_qsv_full_path_is_enabled(job) && hb_qsv_get_memory_type(job) == MFX_IOPATTERN_OUT_VIDEO_MEMORY)
         {
             return 1;
         }
