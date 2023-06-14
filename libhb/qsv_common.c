@@ -2220,6 +2220,12 @@ int hb_qsv_full_path_is_enabled(hb_job_t *job)
         return 0;
     }
 
+    // there isn't any rotate hw filter yet, fallback to sw filters
+    if (job->title->rotation)
+    {
+        return 0;
+    }
+
     qsv_full_path_is_enabled = (hb_qsv_decode_is_enabled(job) &&
         info && hb_qsv_implementation_is_hardware(info->implementation) &&
         job->qsv.ctx && !job->qsv.ctx->num_sw_filters);
