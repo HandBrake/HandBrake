@@ -1293,18 +1293,20 @@ int encqsvInit(hb_work_object_t *w, hb_job_t *job)
                       job->par.num, job->par.den, UINT16_MAX);
 
     // some encoding parameters are used by filters to configure their output
+    int align_width = 0, align_height = 0;
+
     switch (pv->qsv_info->codec_id)
     {
         case MFX_CODEC_HEVC:
         case MFX_CODEC_AV1:
-            job->qsv.enc_info.align_width  = HB_QSV_ALIGN32(job->width);
-            job->qsv.enc_info.align_height = HB_QSV_ALIGN32(job->height);
+            align_width  = HB_QSV_ALIGN32(job->width);
+            align_height = HB_QSV_ALIGN32(job->height);
             break;
 
         case MFX_CODEC_AVC:
         default:
-            job->qsv.enc_info.align_width  = HB_QSV_ALIGN16(job->width);
-            job->qsv.enc_info.align_height = HB_QSV_ALIGN16(job->height);
+            align_width  = HB_QSV_ALIGN16(job->width);
+            align_height = HB_QSV_ALIGN16(job->height);
             break;
     }
     if (pv->param.videoParam->mfx.FrameInfo.PicStruct != MFX_PICSTRUCT_PROGRESSIVE)
@@ -1313,15 +1315,13 @@ int encqsvInit(hb_work_object_t *w, hb_job_t *job)
         switch (pv->qsv_info->codec_id)
         {
             case MFX_CODEC_AVC:
-                job->qsv.enc_info.align_height = HB_QSV_ALIGN32(job->qsv.enc_info.align_height);
+                align_height = HB_QSV_ALIGN32(align_height);
                 break;
 
             default:
                 break;
         }
     }
-    job->qsv.enc_info.pic_struct   = pv->param.videoParam->mfx.FrameInfo.PicStruct;
-    job->qsv.enc_info.is_init_done = 1;
 
     // set codec, profile/level and FrameInfo
     pv->param.videoParam->mfx.CodecId                 = pv->qsv_info->codec_id;
@@ -1337,9 +1337,8 @@ int encqsvInit(hb_work_object_t *w, hb_job_t *job)
     pv->param.videoParam->mfx.FrameInfo.CropY         = 0;
     pv->param.videoParam->mfx.FrameInfo.CropW         = job->width;
     pv->param.videoParam->mfx.FrameInfo.CropH         = job->height;
-    pv->param.videoParam->mfx.FrameInfo.PicStruct     = job->qsv.enc_info.pic_struct;
-    pv->param.videoParam->mfx.FrameInfo.Width         = job->qsv.enc_info.align_width;
-    pv->param.videoParam->mfx.FrameInfo.Height        = job->qsv.enc_info.align_height;
+    pv->param.videoParam->mfx.FrameInfo.Width         = align_width;
+    pv->param.videoParam->mfx.FrameInfo.Height        = align_height;
 
     // parse user-specified codec profile and level
     if (hb_qsv_profile_parse(&pv->param, pv->qsv_info, job->encoder_profile, job->vcodec))

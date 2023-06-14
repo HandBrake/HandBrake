@@ -4220,7 +4220,6 @@ static void job_setup(hb_job_t * job, hb_title_t * title)
     {
         job->qsv.ctx = hb_qsv_context_init();
     }
-    job->qsv.enc_info.is_init_done = 0;
     job->qsv.decode                = !!(title->video_decode_support &
                                         HB_DECODE_SUPPORT_QSV);
 #endif

@@ -814,16 +814,6 @@ struct hb_job_s
 #if HB_PROJECT_FEATURE_QSV
         hb_qsv_context *ctx;
 #endif
-        // shared encoding parameters
-        // initialized by the QSV encoder, then used upstream (e.g. by filters)
-        // to configure their output so that it matches what the encoder expects
-        struct
-        {
-            int pic_struct;
-            int align_width;
-            int align_height;
-            int is_init_done;
-        } enc_info;
     } qsv;
 
     int hw_decode;

@@ -2180,7 +2180,6 @@ static int ParseOptions( int argc, char ** argv )
     #define ENCODER_LEVEL_LIST   291
     #define NORMALIZE_MIX        293
     #define AUDIO_DITHER         294
-    #define QSV_BASELINE         295
     #define QSV_ASYNC_DEPTH      296
     #define QSV_ADAPTER          297
     #define QSV_IMPLEMENTATION   298
@@ -2229,7 +2228,6 @@ static int ParseOptions( int argc, char ** argv )
             { "no-dvdnav",   no_argument,       NULL,    DVDNAV },
 
 #if HB_PROJECT_FEATURE_QSV
-            { "qsv-baseline",         no_argument,       NULL,        QSV_BASELINE,       },
             { "qsv-async-depth",      required_argument, NULL,        QSV_ASYNC_DEPTH,    },
             { "qsv-adapter",          required_argument, NULL,        QSV_ADAPTER         },
             { "qsv-implementation",   required_argument, NULL,        QSV_IMPLEMENTATION, },
@@ -3169,9 +3167,6 @@ static int ParseOptions( int argc, char ** argv )
                 } 
                 break;
 #if HB_PROJECT_FEATURE_QSV
-            case QSV_BASELINE:
-                hb_qsv_force_workarounds();
-                break;
             case QSV_ASYNC_DEPTH:
                 qsv_async_depth = atoi(optarg);
                 break;
