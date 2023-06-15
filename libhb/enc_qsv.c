@@ -1189,6 +1189,8 @@ int encqsvInit(hb_work_object_t *w, hb_job_t *job)
     pv->param.videoParam->AsyncDepth = job->qsv.async_depth;
 
     // set and enable colorimetry (video signal information)
+    pv->param.videoSignalInfo.VideoFullRange = (pv->job->color_range == AVCOL_RANGE_JPEG);
+
     pv->param.videoSignalInfo.ColourPrimaries          = hb_output_color_prim(job);
     pv->param.videoSignalInfo.TransferCharacteristics  = hb_output_color_transfer(job);
     pv->param.videoSignalInfo.MatrixCoefficients       = hb_output_color_matrix(job);
