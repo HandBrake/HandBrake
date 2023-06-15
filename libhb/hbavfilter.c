@@ -142,9 +142,9 @@ hb_avfilter_graph_init(hb_value_t * settings, hb_filter_init_t * init)
 
         AVBufferRef *hb_hw_frames_ctx = NULL;
 
-        if(hb_qsv_hw_filters_via_video_memory_are_enabled(graph->job))
+        if (hb_qsv_hw_filters_via_video_memory_are_enabled(graph->job))
         {
-            result = hb_create_ffmpeg_pool(graph->job, init->geometry.width, init->geometry.height, init->pix_fmt, 32, 0, &hb_hw_frames_ctx);
+            result = hb_qsv_create_ffmpeg_pool(graph->job, init->geometry.width, init->geometry.height, init->pix_fmt, 32, 0, &hb_hw_frames_ctx);
             if (result < 0)
             {
                 hb_error("hb_create_ffmpeg_pool failed");
@@ -408,7 +408,24 @@ void hb_avfilter_combine( hb_list_t * list)
                 ii++;
             }
 
-            hb_value_array_concat(avfilter->settings, settings);
+#if HB_PROJECT_FEATURE_QSV
+            // Concat qsv settings as one vpp_qsv filter to optimize pipeline
+            hb_dict_t * avfilter_settings_dict = hb_value_array_get(avfilter->settings, 0);
+            hb_dict_t * cur_settings_dict = hb_value_array_get(settings, 0);
+            if (cur_settings_dict && avfilter_settings_dict && hb_dict_get(avfilter_settings_dict, "vpp_qsv"))
+            {
+                hb_dict_t *avfilter_settings_dict_qsv = hb_dict_get(avfilter_settings_dict, "vpp_qsv");
+                hb_dict_t *cur_settings_dict_qsv = hb_dict_get(cur_settings_dict, "vpp_qsv");
+                if (avfilter_settings_dict_qsv && cur_settings_dict_qsv)
+                {
+                    hb_dict_merge(avfilter_settings_dict_qsv, cur_settings_dict_qsv);
+                }
+            }
+            else
+#endif
+            {
+                hb_value_array_concat(avfilter->settings, settings);
+            }
         }
     }
 }
