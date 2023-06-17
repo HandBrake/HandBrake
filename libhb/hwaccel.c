@@ -268,7 +268,7 @@ static int is_codec_supported(int codec_id)
     }
 }
 
-static int are_filters_supported(hb_list_t *filters)
+static int are_filters_supported(hb_list_t *filters, int hw_decode)
 {
     int ret = 1;
 
@@ -277,6 +277,16 @@ static int are_filters_supported(hb_list_t *filters)
         hb_filter_object_t *filter = hb_list_item(filters, i);
         switch (filter->id)
         {
+            case HB_FILTER_CROP_SCALE:
+            case HB_FILTER_CROP_SCALE_VT:
+            case HB_FILTER_ROTATE:
+            case HB_FILTER_ROTATE_VT:
+            {
+                if (hw_decode & HB_DECODE_SUPPORT_VIDEOTOOLBOX)
+                {
+                    break;
+                }
+            }
             case HB_FILTER_VFR:
             {
                 // Mode 0 doesn't require access to the frame data
@@ -286,10 +296,6 @@ static int are_filters_supported(hb_list_t *filters)
                     break;
                 }
             }
-            // TODO: enable after fixing hw crop
-            //case HB_FILTER_CROP_SCALE:
-            //case HB_FILTER_AVFILTER:
-            //    break;
             default:
                 hb_deep_log(2, "hwaccel: %s isn't yet supported for hw video frames", filter->name);
                 ret = 0;
@@ -310,7 +316,7 @@ int hb_hwaccel_is_enabled(hb_job_t *job)
 int hb_hwaccel_is_full_hardware_pipeline_enabled(hb_job_t *job)
 {
     return hb_hwaccel_is_enabled(job) &&
-            are_filters_supported(job->list_filter) &&
+            are_filters_supported(job->list_filter, job->hw_decode) &&
             is_codec_supported(job->vcodec);
 }
 
