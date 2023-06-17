@@ -4644,6 +4644,16 @@ hb_filter_object_t * hb_filter_get( int filter_id )
             filter = &hb_filter_mt_frame;
             break;
 
+#if defined(__APPLE__)
+        case HB_FILTER_CROP_SCALE_VT:
+            filter = &hb_filter_crop_scale_vt;
+            break;
+
+        case HB_FILTER_ROTATE_VT:
+            filter = &hb_filter_rotate_vt;
+            break;
+#endif
+
         default:
             filter = NULL;
             break;

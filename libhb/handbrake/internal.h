@@ -493,6 +493,11 @@ extern hb_filter_object_t hb_filter_mt_frame;
 extern hb_filter_object_t hb_filter_colorspace;
 extern hb_filter_object_t hb_filter_format;
 
+#if defined(__APPLE__)
+extern hb_filter_object_t hb_filter_crop_scale_vt;
+extern hb_filter_object_t hb_filter_rotate_vt;
+#endif
+
 extern hb_work_object_t * hb_objects;
 
 #define HB_WORK_IDLE     0

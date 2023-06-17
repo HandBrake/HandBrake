@@ -294,3 +294,115 @@ const char* const* hb_vt_level_get_names(int encoder)
     }
     return NULL;
 }
+
+unsigned int hb_vt_get_cv_pixel_format(int pix_fmt, int color_range)
+{
+    if (pix_fmt == AV_PIX_FMT_NV12)
+    {
+        return color_range == AVCOL_RANGE_JPEG ?
+                                kCVPixelFormatType_420YpCbCr8BiPlanarFullRange :
+                                kCVPixelFormatType_420YpCbCr8BiPlanarVideoRange;
+    }
+    else if (pix_fmt == AV_PIX_FMT_YUV420P)
+    {
+        return color_range == AVCOL_RANGE_JPEG ?
+                                kCVPixelFormatType_420YpCbCr8PlanarFullRange :
+                                kCVPixelFormatType_420YpCbCr8Planar;
+    }
+    else if (pix_fmt == AV_PIX_FMT_BGRA)
+    {
+        return kCVPixelFormatType_32BGRA;
+    }
+    else if (pix_fmt == AV_PIX_FMT_P010LE)
+    {
+        return color_range == AVCOL_RANGE_JPEG ?
+                                kCVPixelFormatType_420YpCbCr10BiPlanarFullRange :
+                                kCVPixelFormatType_420YpCbCr10BiPlanarVideoRange;
+    }
+    else if (pix_fmt == AV_PIX_FMT_NV16)
+    {
+        return color_range == AVCOL_RANGE_JPEG ?
+                                kCVPixelFormatType_422YpCbCr8BiPlanarFullRange :
+                                kCVPixelFormatType_422YpCbCr8BiPlanarVideoRange;
+    }
+    else if (pix_fmt == AV_PIX_FMT_P210)
+    {
+        return color_range == AVCOL_RANGE_JPEG ?
+                                kCVPixelFormatType_422YpCbCr10BiPlanarFullRange :
+                                kCVPixelFormatType_422YpCbCr10BiPlanarVideoRange;
+    }
+    else if (pix_fmt == AV_PIX_FMT_NV24)
+    {
+        return color_range == AVCOL_RANGE_JPEG ?
+                                kCVPixelFormatType_444YpCbCr8BiPlanarFullRange :
+                                kCVPixelFormatType_444YpCbCr8BiPlanarVideoRange;
+    }
+    else if (pix_fmt == AV_PIX_FMT_P410)
+    {
+        return color_range == AVCOL_RANGE_JPEG ?
+                                kCVPixelFormatType_444YpCbCr10BiPlanarFullRange :
+                                kCVPixelFormatType_444YpCbCr10BiPlanarVideoRange;
+    }
+    else if (pix_fmt == AV_PIX_FMT_P416)
+    {
+        return kCVPixelFormatType_444YpCbCr16BiPlanarVideoRange;
+    }
+    else
+    {
+        return 0;
+    }
+}
+
+void setup_hw_filters(hb_job_t *job)
+{
+    if (job->hw_pix_fmt == AV_PIX_FMT_VIDEOTOOLBOX)
+    {
+        hb_list_t *list = job->list_filter;
+
+        hb_filter_object_t *filter = hb_filter_find(list, HB_FILTER_CROP_SCALE);
+        if (filter != NULL)
+        {
+            hb_dict_t *settings = filter->settings;
+            if (settings != NULL)
+            {
+                int width, height, top, bottom, left, right;
+                width = hb_dict_get_int(settings, "width");
+                height = hb_dict_get_int(settings, "height");
+                top = hb_dict_get_int(settings, "crop-top");
+                bottom = hb_dict_get_int(settings, "crop-bottom");
+                left = hb_dict_get_int(settings, "crop-left");
+                right = hb_dict_get_int(settings, "crop-right");
+
+                hb_list_rem(list, filter);
+                hb_filter_close(&filter);
+
+                filter = hb_filter_init(HB_FILTER_CROP_SCALE_VT);
+                char *settings = hb_strdup_printf("width=%d:height=%d:crop-top=%d:crop-bottom=%d:crop-left=%d:crop-right=%d",
+                                                  width, height, top, bottom, left, right);
+                hb_add_filter(job, filter, settings);
+                free(settings);
+            }
+        }
+
+        filter = hb_filter_find(list, HB_FILTER_ROTATE);
+        if (filter != NULL)
+        {
+            hb_dict_t *settings = filter->settings;
+            if (settings != NULL)
+            {
+                int angle, hflip;
+                angle = hb_dict_get_int(settings, "angle");
+                hflip = hb_dict_get_int(settings, "hflip");
+
+                hb_list_rem(list, filter);
+                hb_filter_close(&filter);
+
+                filter = hb_filter_init(HB_FILTER_ROTATE_VT);
+                char *settings = hb_strdup_printf("angle=%d:hflip=%d",
+                                                  angle, hflip);
+                hb_add_filter(job, filter, settings);
+                free(settings);
+            }
+        }
+    }
+}

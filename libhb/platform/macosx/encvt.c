@@ -15,6 +15,7 @@
 #include "handbrake/handbrake.h"
 #include "handbrake/hdr10plus.h"
 #include "handbrake/hbffmpeg.h"
+#include "vt_common.h"
 
 int  encvt_init(hb_work_object_t *, hb_job_t *);
 int  encvt_work(hb_work_object_t *, hb_buffer_t **, hb_buffer_t **);
@@ -451,71 +452,13 @@ static CFDataRef hb_vt_ambient_viewing_enviroment_xlat(hb_ambient_viewing_enviro
     return data;
 }
 
-static OSType hb_vt_get_cv_pixel_format(hb_job_t* job)
-{
-    if (job->output_pix_fmt == AV_PIX_FMT_NV12)
-    {
-        return job->color_range == AVCOL_RANGE_JPEG ?
-                                        kCVPixelFormatType_420YpCbCr8BiPlanarFullRange :
-                                        kCVPixelFormatType_420YpCbCr8BiPlanarVideoRange;
-    }
-    else if (job->output_pix_fmt == AV_PIX_FMT_YUV420P)
-    {
-        return job->color_range == AVCOL_RANGE_JPEG ?
-                                        kCVPixelFormatType_420YpCbCr8PlanarFullRange :
-                                        kCVPixelFormatType_420YpCbCr8Planar;
-    }
-    else if (job->output_pix_fmt == AV_PIX_FMT_BGRA)
-    {
-        return kCVPixelFormatType_32BGRA;
-    }
-    else if (job->output_pix_fmt == AV_PIX_FMT_P010LE)
-    {
-        return job->color_range == AVCOL_RANGE_JPEG ?
-                                        kCVPixelFormatType_420YpCbCr10BiPlanarFullRange :
-                                        kCVPixelFormatType_420YpCbCr10BiPlanarVideoRange;
-    }
-    else if (job->output_pix_fmt == AV_PIX_FMT_NV16)
-    {
-        return job->color_range == AVCOL_RANGE_JPEG ?
-                                        kCVPixelFormatType_422YpCbCr8BiPlanarFullRange :
-                                        kCVPixelFormatType_422YpCbCr8BiPlanarVideoRange;
-    }
-    else if (job->output_pix_fmt == AV_PIX_FMT_P210)
-    {
-        return job->color_range == AVCOL_RANGE_JPEG ?
-                                        kCVPixelFormatType_422YpCbCr10BiPlanarFullRange :
-                                        kCVPixelFormatType_422YpCbCr10BiPlanarVideoRange;
-    }
-    else if (job->output_pix_fmt == AV_PIX_FMT_NV24)
-    {
-        return job->color_range == AVCOL_RANGE_JPEG ?
-                                        kCVPixelFormatType_444YpCbCr8BiPlanarFullRange :
-                                        kCVPixelFormatType_444YpCbCr8BiPlanarVideoRange;
-    }
-    else if (job->output_pix_fmt == AV_PIX_FMT_P410)
-    {
-        return job->color_range == AVCOL_RANGE_JPEG ?
-                                        kCVPixelFormatType_444YpCbCr10BiPlanarFullRange :
-                                        kCVPixelFormatType_444YpCbCr10BiPlanarVideoRange;
-    }
-    else if (job->output_pix_fmt == AV_PIX_FMT_P416)
-    {
-        return kCVPixelFormatType_444YpCbCr16BiPlanarVideoRange;
-    }
-    else
-    {
-        return 0;
-    }
-}
-
 static int hb_vt_settings_xlat(hb_work_private_t *pv, hb_job_t *job)
 {
     /* Set global default values. */
     hb_vt_param_default(&pv->settings);
 
     pv->settings.codec       = job->vcodec == HB_VCODEC_VT_H264 ? kCMVideoCodecType_H264 : kCMVideoCodecType_HEVC;
-    pv->settings.pixelFormat = hb_vt_get_cv_pixel_format(job);
+    pv->settings.pixelFormat = hb_vt_get_cv_pixel_format(job->output_pix_fmt, job->color_range);
     pv->settings.timescale = 90000;
 
     // set the preset
@@ -797,8 +740,20 @@ static OSStatus wrap_buf(hb_work_private_t *pv, hb_buffer_t *buf, CVPixelBufferR
 
     if (pv->job->hw_pix_fmt == AV_PIX_FMT_VIDEOTOOLBOX)
     {
-        *pix_buf = (CVPixelBufferRef)((AVFrame *)buf->storage)->data[3];
-        CVPixelBufferRetain(*pix_buf);
+        if (buf->storage_type == AVFRAME)
+        {
+            *pix_buf = (CVPixelBufferRef)((AVFrame *)buf->storage)->data[3];
+            CVPixelBufferRetain(*pix_buf);
+        }
+        else if (buf->storage_type == COREMEDIA)
+        {
+            *pix_buf = (CVPixelBufferRef)buf->storage;
+            CVPixelBufferRetain(*pix_buf);
+        }
+        else
+        {
+            return 1;
+        }
     }
     else
     {

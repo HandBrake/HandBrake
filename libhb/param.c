@@ -1243,7 +1243,9 @@ hb_generate_filter_settings(int filter_id, const char *preset, const char *tune,
     {
         case HB_FILTER_PAD:
         case HB_FILTER_ROTATE:
+        case HB_FILTER_ROTATE_VT:
         case HB_FILTER_CROP_SCALE:
+        case HB_FILTER_CROP_SCALE_VT:
         case HB_FILTER_VFR:
         case HB_FILTER_RENDER_SUB:
         case HB_FILTER_GRAYSCALE:
