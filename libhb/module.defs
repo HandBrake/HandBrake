@@ -187,7 +187,7 @@ else
 endif
 
 LIBHB.GCC.args.extra.dylib++ += -Wl,--out-implib,$(LIBHB.lib)
-LIBHB.GCC.l += bcrypt ws2_32 uuid ole32 gdi32 userenv
+LIBHB.GCC.l += bcrypt ws2_32 uuid ole32 gdi32 userenv ntdll
 ifeq (1,$(FEATURE.mf))
     LIBHB.GCC.l += mfplat strmiids
 endif
