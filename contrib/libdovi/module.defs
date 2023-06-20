@@ -24,7 +24,7 @@ endif
 
 LIBDOVI.manifest = --manifest-path="$(LIBDOVI.EXTRACT.dir/)dolby_vision/Cargo.toml"
 LIBDOVI.prefix   = --prefix "$(LIBDOVI.CONFIGURE.prefix)"
-LIBDOVI.extra    = --offline --release --library-type staticlib $(LIBDOVI.prefix) $(LIBDOVI.target)
+LIBDOVI.extra    = --release --library-type staticlib $(LIBDOVI.prefix) $(LIBDOVI.target)
 
 LIBDOVI.BUILD.make       = $(CARGO.exe) cbuild
 LIBDOVI.BUILD.extra      = $(LIBDOVI.extra)
