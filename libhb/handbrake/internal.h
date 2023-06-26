@@ -285,7 +285,7 @@ hb_thread_t * hb_scan_init( hb_handle_t *, volatile int * die,
                             const char * path, int title_index,
                             hb_title_set_t * title_set, int preview_count,
                             int store_previews, uint64_t min_duration,
-                            int crop_auto_switch_threshold, int crop_median_threshold );
+                            int crop_auto_switch_threshold, int crop_median_threshold, hb_list_t * exclude_extensions );
 hb_thread_t * hb_work_init( hb_list_t * jobs,
                             volatile int * die, hb_error_code * error, hb_job_t ** job );
 void ReadLoop( void * _w );
@@ -326,7 +326,7 @@ extern const hb_muxer_t hb_demux[];
  **********************************************************************/
 typedef struct hb_batch_s hb_batch_t;
 
-hb_batch_t  * hb_batch_init( hb_handle_t *h, char * path );
+hb_batch_t  * hb_batch_init( hb_handle_t *h, char * path, hb_list_t * exclude_extensions );
 void          hb_batch_close( hb_batch_t ** _d );
 int           hb_batch_title_count( hb_batch_t * d );
 hb_title_t  * hb_batch_title_scan( hb_batch_t * d, int t );
