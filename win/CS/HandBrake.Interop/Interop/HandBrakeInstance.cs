@@ -12,8 +12,6 @@ namespace HandBrake.Interop.Interop
     using System;
     using System.Collections.Generic;
     using System.Diagnostics;
-    using System.Linq;
-    using System.Runtime.ExceptionServices;
     using System.Runtime.InteropServices;
     using System.Text.Json;
     using System.Timers;
@@ -22,9 +20,7 @@ namespace HandBrake.Interop.Interop
     using HandBrake.Interop.Interop.Helpers;
     using HandBrake.Interop.Interop.Interfaces;
     using HandBrake.Interop.Interop.Interfaces.EventArgs;
-    using HandBrake.Interop.Interop.Interfaces.Model;
     using HandBrake.Interop.Interop.Interfaces.Model.Encoders;
-    using HandBrake.Interop.Interop.Interfaces.Model.Picture;
     using HandBrake.Interop.Interop.Interfaces.Model.Preview;
     using HandBrake.Interop.Interop.Json.Encode;
     using HandBrake.Interop.Interop.Json.Scan;
@@ -139,12 +135,26 @@ namespace HandBrake.Interop.Interop
         /// <param name="titleIndex">
         /// The title index to scan (1-based, 0 for all titles).
         /// </param>
-        public void StartScan(string path, int previewCount, TimeSpan minDuration, int titleIndex)
+        /// <param name="excludedExtensions">
+        /// A list of file extensions to exclude.
+        /// These should be the extension name only. No .
+        /// Case Insensitive.
+        /// </param>
+        public void StartScan(string path, int previewCount, TimeSpan minDuration, int titleIndex, List<string> excludedExtensions)
         {
             this.PreviewCount = previewCount;
 
+            // File Exclusions
+            IntPtr excludedExtensionsPtr = HBFunctions.hb_list_init();
+            foreach (string extension in excludedExtensions)
+            {
+                IntPtr strPtr = InteropUtilities.ToUtf8PtrFromString(extension);
+                HBFunctions.hb_list_add(excludedExtensionsPtr, strPtr);
+            }
+
+            // Start the Scan
             IntPtr pathPtr = InteropUtilities.ToUtf8PtrFromString(path);
-            HBFunctions.hb_scan(this.Handle, pathPtr, titleIndex, previewCount, 1, (ulong)(minDuration.TotalSeconds * 90000));
+            HBFunctions.hb_scan3(this.Handle, pathPtr, titleIndex, previewCount, 1, (ulong)(minDuration.TotalSeconds * 90000), 0, 0, excludedExtensionsPtr);
             Marshal.FreeHGlobal(pathPtr);
 
             this.scanPollTimer = new Timer();

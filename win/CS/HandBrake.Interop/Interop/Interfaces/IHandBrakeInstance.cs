@@ -10,6 +10,7 @@
 namespace HandBrake.Interop.Interop.Interfaces
 {
     using System;
+    using System.Collections.Generic;
 
     using HandBrake.Interop.Interop.Interfaces.EventArgs;
     using HandBrake.Interop.Interop.Interfaces.Model.Preview;
@@ -93,7 +94,12 @@ namespace HandBrake.Interop.Interop.Interfaces
         /// <param name="titleIndex">
         /// The title Index.
         /// </param>
-        void StartScan(string path, int previewCount, TimeSpan minDuration, int titleIndex);
+        /// <param name="excludedExtensions">
+        /// A list of file extensions to exclude.
+        /// These should be the extension name only. No .
+        /// Case Insensitive.
+        /// </param>
+        void StartScan(string path, int previewCount, TimeSpan minDuration, int titleIndex, List<string> excludedExtensions);
 
         /// <summary>
         /// Stop any running scans

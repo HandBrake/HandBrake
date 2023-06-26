@@ -6,6 +6,7 @@
              xmlns:converters="clr-namespace:HandBrakeWPF.Converters"
              xmlns:Properties="clr-namespace:HandBrakeWPF.Properties"
              xmlns:options="clr-namespace:HandBrakeWPF.Converters.Options"
+             xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
 
@@ -68,6 +69,54 @@
                     <TextBlock Text="{x:Static Properties:Resources.Options_PriorityLevel}" Width="250" VerticalAlignment="Center" />
                     <ComboBox Name="processPriorityLevel" ItemsSource="{Binding PriorityLevelOptions, Converter={StaticResource ProcessPriorityConverter}}" SelectedItem="{Binding SelectedPriority, Converter={StaticResource ProcessPriorityConverter}}" Width="120" />
                 </StackPanel>
+            </StackPanel>
+        </StackPanel>
+
+        <StackPanel Orientation="Vertical" Margin="0,10,0,10">
+
+            <TextBlock Text="{x:Static Properties:Resources.Options_ExcludeExtensions}" Style="{StaticResource subHeader}" Margin="0,0,0,10"/>
+            <TextBlock Text="{x:Static Properties:Resources.Options_ExcludeExtensionsInfo}" Margin="0,0,0,10" Style="{StaticResource subText}" />
+
+            <StackPanel Orientation="Vertical" Margin="20,0,0,0">
+                <ListBox ItemsSource="{Binding ExcludedFileExtensions}" Width="150" HorizontalAlignment="Left" Height="100" >
+
+                    <ListBox.ItemContainerStyle>
+                        <Style TargetType="{x:Type ListBoxItem}" BasedOn="{StaticResource {x:Type ListBoxItem}}">
+                            <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                            <Setter Property="Margin" Value="0,0,0,1" />
+                        </Style>
+                    </ListBox.ItemContainerStyle>
+
+                    <ListBox.ItemTemplate>
+                        <DataTemplate x:Name="ExtensionTemplate">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+
+                                <TextBlock Text="{Binding}" />
+
+
+                                <Image Width="16" Height="16"  Source="../Images/close64.png" Grid.Column="1">
+                                    <b:Interaction.Triggers>
+                                        <b:EventTrigger EventName="MouseDown">
+                                            <b:InvokeCommandAction Command="{Binding DataContext.RemoveExtensionCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListBox}}}" CommandParameter="{Binding}" />
+                                        </b:EventTrigger>
+                                    </b:Interaction.Triggers>
+                                </Image>
+                            </Grid>
+
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+
+                <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
+                    <TextBox Text="{Binding NewExtension}" Width="150" />
+                    <Button Content="{x:Static Properties:Resources.Options_AddExt}" Command="{Binding RelayCommand}" CommandParameter="AddExcludedExtension" Margin="10,0,0,0" />
+                </StackPanel>
+
+
             </StackPanel>
         </StackPanel>
 
