@@ -897,9 +897,9 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
-        public List<string> SelectedExtensions { get; set; }
-
         public string NewExtension { get; set; }
+
+        public SimpleRelayCommand<string> RemoveExtensionCommand { get; set; }
 
         /* Video */
         public bool EnableQuickSyncEncoding
@@ -1078,7 +1078,6 @@ namespace HandBrakeWPF.ViewModels
                 this.NotifyOfPropertyChange(() => this.DownloadProgressPercentage);
             }
         }
-
 
         public bool RemoteServiceEnabled
         {
@@ -1305,9 +1304,6 @@ namespace HandBrakeWPF.ViewModels
                 this.NotifyOfPropertyChange(() => this.NewExtension);
             }
         }
-
-    
-        public SimpleRelayCommand<string> RemoveExtensionCommand { get; set; }
 
         public void RemoveExcludedExtension(string extension)
         {
