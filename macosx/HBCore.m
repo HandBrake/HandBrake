@@ -291,10 +291,10 @@ HB_OBJC_DIRECT_MEMBERS
 
     [self preventAutoSleep];
 
-    hb_scan2(_hb_handle, url.fileSystemRepresentation,
+    hb_scan(_hb_handle, url.fileSystemRepresentation,
               (int)index, (int)previewsNum,
               keepPreviews, min_title_duration_ticks,
-              0, 0);
+              0, 0, NULL);
 
     // Start the timer to handle libhb state changes
     [self startUpdateTimerWithInterval:0.2];

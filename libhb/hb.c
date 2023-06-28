@@ -359,19 +359,6 @@ void hb_remove_previews( hb_handle_t * h )
     closedir( dir );
 }
 
-// We can remove this after we update all the UI's
-void hb_scan( hb_handle_t * h, const char * path, int title_index,
-              int preview_count, int store_previews, uint64_t min_duration )
-{
-    hb_scan3(h, path, title_index, preview_count, store_previews, min_duration, 0, 0, NULL);
-}
-
-void hb_scan2( hb_handle_t * h, const char * path, int title_index,
-              int preview_count, int store_previews, uint64_t min_duration,
-              int crop_threshold_frames, int crop_threshold_pixels)
-{
-    hb_scan3(h, path, title_index, preview_count, store_previews, min_duration, 0, 0, NULL);
-}
 
 /**
  * Initializes a scan of the by calling hb_scan_init
@@ -385,7 +372,7 @@ void hb_scan2( hb_handle_t * h, const char * path, int title_index,
  * @param crop_threshold_pixels The variance in pixels detected that are allowed for.
  * @param exclude_extensions A list of extensions to exclude for this scan.
  */
-void hb_scan3( hb_handle_t * h, const char * path, int title_index,
+void hb_scan( hb_handle_t * h, const char * path, int title_index,
               int preview_count, int store_previews, uint64_t min_duration,
               int crop_threshold_frames, int crop_threshold_pixels, hb_list_t * exclude_extensions)
 {

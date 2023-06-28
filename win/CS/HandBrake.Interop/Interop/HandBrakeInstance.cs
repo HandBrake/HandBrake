@@ -154,7 +154,7 @@ namespace HandBrake.Interop.Interop
 
             // Start the Scan
             IntPtr pathPtr = InteropUtilities.ToUtf8PtrFromString(path);
-            HBFunctions.hb_scan3(this.Handle, pathPtr, titleIndex, previewCount, 1, (ulong)(minDuration.TotalSeconds * 90000), 0, 0, excludedExtensionsPtr);
+            HBFunctions.hb_scan(this.Handle, pathPtr, titleIndex, previewCount, 1, (ulong)(minDuration.TotalSeconds * 90000), 0, 0, excludedExtensionsPtr);
             Marshal.FreeHGlobal(pathPtr);
 
             this.scanPollTimer = new Timer();

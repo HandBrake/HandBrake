@@ -48,14 +48,6 @@ void          hb_dvd_set_dvdnav( int enable );
    a VOB file. If title_index is 0, scan all titles. */
 void          hb_scan( hb_handle_t *, const char * path,
                        int title_index, int preview_count,
-                       int store_previews, uint64_t min_duration );
-void          hb_scan2( hb_handle_t *, const char * path,
-                       int title_index, int preview_count,
-                       int store_previews, uint64_t min_duration,
-                       int crop_auto_switch_threshold, int crop_median_threshold );
-                       
-void          hb_scan3( hb_handle_t *, const char * path,
-                       int title_index, int preview_count,
                        int store_previews, uint64_t min_duration,
                        int crop_auto_switch_threshold, int crop_median_threshold, hb_list_t * exclude_extensions);
 
