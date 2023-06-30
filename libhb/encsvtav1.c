@@ -183,7 +183,7 @@ int encsvtInit(hb_work_object_t *w, hb_job_t *job)
         }
     }
 
-    if (job->encoder_tune != NULL && !strstr("psnr", job->encoder_tune))
+    if (job->encoder_tune != NULL && strstr("psnr", job->encoder_tune) != NULL)
     {
         param->tune = 1;
     }
@@ -192,7 +192,7 @@ int encsvtInit(hb_work_object_t *w, hb_job_t *job)
         param->tune = 0;
     }
 
-    if (job->encoder_tune != NULL && !strstr("fastdecode", job->encoder_tune))
+    if (job->encoder_tune != NULL && strstr("fastdecode", job->encoder_tune) != NULL)
     {
         param->fast_decode = 1;
     }
