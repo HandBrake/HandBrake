@@ -327,6 +327,11 @@ hb_work_object_t* hb_video_encoder(hb_handle_t *h, int vcodec)
             w = hb_get_work(h, WORK_ENCSVTAV1);
             break;
 
+        case HB_VCODEC_AOM_AV1:
+        case HB_VCODEC_AOM_AV1_10BIT:
+            w = hb_get_work(h, WORK_ENCAOM);
+            break;
+
         default:
             hb_error("Unknown video codec (0x%x)", vcodec );
     }
@@ -546,6 +551,8 @@ void hb_display_job_info(hb_job_t *job)
                 case HB_VCODEC_X265_16BIT:
                 case HB_VCODEC_SVT_AV1:
                 case HB_VCODEC_SVT_AV1_10BIT:
+                case HB_VCODEC_AOM_AV1:
+                case HB_VCODEC_AOM_AV1_10BIT:
                     hb_log("     + tune:    %s", job->encoder_tune);
                 default:
                     break;
@@ -586,6 +593,8 @@ void hb_display_job_info(hb_job_t *job)
                 case HB_VCODEC_FFMPEG_MF_H265:
                 case HB_VCODEC_SVT_AV1:
                 case HB_VCODEC_SVT_AV1_10BIT:
+                case HB_VCODEC_AOM_AV1:
+                case HB_VCODEC_AOM_AV1_10BIT:
                     hb_log("     + profile: %s", job->encoder_profile);
                 default:
                     break;
@@ -617,6 +626,8 @@ void hb_display_job_info(hb_job_t *job)
                 case HB_VCODEC_VT_H265_10BIT:
                 case HB_VCODEC_SVT_AV1:
                 case HB_VCODEC_SVT_AV1_10BIT:
+                case HB_VCODEC_AOM_AV1:
+                case HB_VCODEC_AOM_AV1_10BIT:
                 // MF h.264/h.265 currently only supports auto level
                 // case HB_VCODEC_FFMPEG_MF_H264:
                 // case HB_VCODEC_FFMPEG_MF_H265:
@@ -1483,7 +1494,8 @@ static void sanitize_dynamic_hdr_metadata_passthru(hb_job_t *job)
 
     if (job->vcodec != HB_VCODEC_X265_10BIT &&
         job->vcodec != HB_VCODEC_VT_H265_10BIT &&
-        job->vcodec != HB_VCODEC_SVT_AV1_10BIT)
+        job->vcodec != HB_VCODEC_SVT_AV1_10BIT &&
+        job->vcodec != HB_VCODEC_AOM_AV1_10BIT)
     {
         job->passthru_dynamic_hdr_metadata &= ~HDR_10_PLUS;
     }

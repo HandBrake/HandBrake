@@ -186,7 +186,7 @@ AM_CONDITIONAL([GHB_GTK_3_22], [test "$HAVE_GTK_3_22" -eq 1])
 
 AM_CONDITIONAL([MINGW], [test "x$mingw_flag" = "xyes"])
 
-HB_LIBS="$HB_LIBS -lhandbrake -lavformat -lavfilter -lavcodec -lavutil -ldav1d -lswresample -lpostproc -ldvdnav -ldvdread -lmp3lame -lvorbis -lvorbisenc -logg -lswscale -ltheoraenc -ltheoradec -lvpx -lz -lbz2 -lbluray -lass -lfontconfig -lfreetype -lxml2 -ljansson -lopus -lspeex -lturbojpeg -llzma -lzimg -lSvtAv1Enc"
+HB_LIBS="$HB_LIBS -lhandbrake -lavformat -lavfilter -lavcodec -lavutil -ldav1d -lswresample -lpostproc -ldvdnav -ldvdread -lmp3lame -lvorbis -lvorbisenc -logg -lswscale -ltheoraenc -ltheoradec -lvpx -lz -lbz2 -lbluray -lass -lfontconfig -lfreetype -lxml2 -ljansson -lopus -lspeex -lturbojpeg -llzma -lzimg -lSvtAv1Enc -laom"
 HB_CPPFLAGS="$HB_CPPFLAGS $HBINC"
 
 PKG_CHECK_MODULES([x264], [x264], sys_x264=yes, sys_x264=no)

@@ -50,6 +50,7 @@ endif
 
 MODULES += contrib/libdav1d
 MODULES += contrib/svt-av1
+MODULES += contrib/libaom
 MODULES += contrib/zimg
 MODULES += contrib/ffmpeg
 MODULES += contrib/libdvdread
