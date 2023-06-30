@@ -145,11 +145,15 @@ namespace HandBrake.Interop.Interop
             this.PreviewCount = previewCount;
 
             // File Exclusions
-            IntPtr excludedExtensionsPtr = HBFunctions.hb_list_init();
-            foreach (string extension in excludedExtensions)
+            IntPtr excludedExtensionsPtr = IntPtr.Zero;
+            if (excludedExtensions != null && excludedExtensions.Count > 0)
             {
-                IntPtr strPtr = InteropUtilities.ToUtf8PtrFromString(extension);
-                HBFunctions.hb_list_add(excludedExtensionsPtr, strPtr);
+                excludedExtensionsPtr = HBFunctions.hb_list_init();
+                foreach (string extension in excludedExtensions)
+                {
+                    IntPtr strPtr = InteropUtilities.ToUtf8PtrFromString(extension);
+                    HBFunctions.hb_list_add(excludedExtensionsPtr, strPtr);
+                }
             }
 
             // Start the Scan
@@ -165,7 +169,7 @@ namespace HandBrake.Interop.Interop
             {
                 try
                 {
-                    this.PollScanProgress();
+                    this.PollScanProgress(excludedExtensionsPtr);
                 }
                 catch (Exception exc)
                 {
@@ -379,7 +383,7 @@ namespace HandBrake.Interop.Interop
         /// <summary>
         /// Checks the status of the ongoing scan.
         /// </summary>
-        private void PollScanProgress()
+        private void PollScanProgress(IntPtr exclusionList)
         {
             IntPtr json = HBFunctions.hb_get_state_json(this.Handle);
             string statusJson = Marshal.PtrToStringAnsi(json);
@@ -417,6 +421,24 @@ namespace HandBrake.Interop.Interop
                 if (this.ScanCompleted != null)
                 {
                     this.ScanCompleted(this, new System.EventArgs());
+                }
+
+                // Memory Management for the exclusion list.
+                try
+                {
+                    if (exclusionList != IntPtr.Zero)
+                    {
+                        for (int i = 0; i < HBFunctions.hb_list_count(exclusionList); i++)
+                        {
+                            IntPtr item = HBFunctions.hb_list_item(exclusionList, i);
+                            HBFunctions.hb_list_rem(exclusionList, HBFunctions.hb_list_item(exclusionList, i));
+                            InteropUtilities.FreeMemory(new List<IntPtr> { item });
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine(ex);
                 }
             }
         }
