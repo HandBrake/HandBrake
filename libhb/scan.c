@@ -221,7 +221,7 @@ hb_thread_t * hb_scan_init( hb_handle_t * handle, volatile int * die,
     
     data->crop_threshold_frames = crop_threshold_frames;
     data->crop_threshold_pixels = crop_threshold_pixels;
-    data->exclude_extensions = exclude_extensions;
+    data->exclude_extensions    = hb_string_list_copy(exclude_extensions);
     
     // Initialize scan state
     hb_state_t state;
@@ -472,6 +472,15 @@ finish:
         hb_batch_close( &data->batch );
     }
     free( data->path );
+    
+    // clean up excluded extensions list
+    char *extension;
+    while ((extension = hb_list_item(data->exclude_extensions, 0)))
+    {
+        hb_list_rem(data->exclude_extensions, extension);
+        free(extension);
+    }
+
     free( data );
     _data = NULL;
     hb_buffer_pool_free();

@@ -3841,6 +3841,30 @@ void hb_list_close( hb_list_t ** _l )
     *_l = NULL;
 }
 
+/**********************************************************************
+ * hb_string_list_copy
+ **********************************************************************
+ * Make a copy of a string list.
+ *********************************************************************/
+hb_list_t *hb_string_list_copy(const hb_list_t *src)
+{
+    hb_list_t *list = hb_list_init();
+    char *string = NULL;
+
+    if (src)
+    {
+        for (int i = 0; i < hb_list_count(src); i++)
+        {
+            if ((string = hb_list_item(src, i)))
+            {
+                hb_list_add(list, strdup(string));
+            }
+        }
+    }
+    return list;
+}
+
+
 int global_verbosity_level; //Necessary for hb_deep_log
 /**********************************************************************
  * hb_valog
