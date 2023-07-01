@@ -1217,7 +1217,7 @@ struct hb_title_s
 #define HB_DECODE_SUPPORT_VIDEOTOOLBOX   0x08
 
 #define HB_DECODE_SUPPORT_HWACCEL        (HB_DECODE_SUPPORT_NVDEC | HB_DECODE_SUPPORT_VIDEOTOOLBOX)
-
+#define HB_DECODE_SUPPORT_FORCE_HW       0x80000000
 
     hb_metadata_t * metadata;
 
