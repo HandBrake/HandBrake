@@ -322,5 +322,19 @@ int hb_hwaccel_is_full_hardware_pipeline_enabled(hb_job_t *job)
 
 int hb_hwaccel_decode_is_enabled(hb_job_t *job)
 {
-    return hb_hwaccel_is_full_hardware_pipeline_enabled(job);
+    if (job != NULL)
+    {
+        if (job->hw_decode & HB_DECODE_SUPPORT_FORCE_HW)
+        {
+            return hb_hwaccel_is_enabled(job);
+        }
+        else
+        {
+            return hb_hwaccel_is_full_hardware_pipeline_enabled(job);
+        }
+    }
+    else
+    {
+        return 0;
+    }
 }
