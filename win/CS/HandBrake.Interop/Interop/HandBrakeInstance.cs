@@ -145,19 +145,19 @@ namespace HandBrake.Interop.Interop
             this.PreviewCount = previewCount;
 
             // File Exclusions
-            IntPtr excludedExtensionsPtr = IntPtr.Zero;
+            NativeList excludedExtensionsNative = null;
             if (excludedExtensions != null && excludedExtensions.Count > 0)
             {
-                excludedExtensionsPtr = HBFunctions.hb_list_init();
+                excludedExtensionsNative = NativeList.CreateList();
                 foreach (string extension in excludedExtensions)
                 {
-                    IntPtr strPtr = InteropUtilities.ToUtf8PtrFromString(extension);
-                    HBFunctions.hb_list_add(excludedExtensionsPtr, strPtr);
+                    excludedExtensionsNative.Add(InteropUtilities.ToUtf8PtrFromString(extension));
                 }
             }
 
             // Start the Scan
             IntPtr pathPtr = InteropUtilities.ToUtf8PtrFromString(path);
+            IntPtr excludedExtensionsPtr = excludedExtensionsNative?.Ptr ?? IntPtr.Zero;
             HBFunctions.hb_scan(this.Handle, pathPtr, titleIndex, previewCount, 1, (ulong)(minDuration.TotalSeconds * 90000), 0, 0, excludedExtensionsPtr);
             Marshal.FreeHGlobal(pathPtr);
 
@@ -169,7 +169,7 @@ namespace HandBrake.Interop.Interop
             {
                 try
                 {
-                    this.PollScanProgress(excludedExtensionsPtr);
+                    this.PollScanProgress(excludedExtensionsNative);
                 }
                 catch (Exception exc)
                 {
@@ -383,7 +383,7 @@ namespace HandBrake.Interop.Interop
         /// <summary>
         /// Checks the status of the ongoing scan.
         /// </summary>
-        private void PollScanProgress(IntPtr exclusionList)
+        private void PollScanProgress(NativeList exclusionList)
         {
             IntPtr json = HBFunctions.hb_get_state_json(this.Handle);
             string statusJson = Marshal.PtrToStringAnsi(json);
@@ -426,14 +426,16 @@ namespace HandBrake.Interop.Interop
                 // Memory Management for the exclusion list.
                 try
                 {
-                    if (exclusionList != IntPtr.Zero)
+                    if (exclusionList != null)
                     {
-                        for (int i = 0; i < HBFunctions.hb_list_count(exclusionList); i++)
+                        for (int i = 0; i < exclusionList.Count; i++)
                         {
-                            IntPtr item = HBFunctions.hb_list_item(exclusionList, i);
-                            HBFunctions.hb_list_rem(exclusionList, HBFunctions.hb_list_item(exclusionList, i));
+                            IntPtr item = exclusionList[i];
+                            exclusionList.Remove(item);
                             InteropUtilities.FreeMemory(new List<IntPtr> { item });
                         }
+
+                        exclusionList.Dispose();
                     }
                 }
                 catch (Exception ex)
