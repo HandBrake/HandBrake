@@ -22,12 +22,18 @@ static int compare_str(const void *a, const void *b)
     return strncmp(*(const char**)a, *(const char**)b, PATH_MAX);
 }
 
+static int ends_with (char* base, char* str) {
+    int blen = strlen(base);
+    int slen = strlen(str);
+    return (blen >= slen) && (0 == strcasecmp(base + blen - slen, str));
+}
+
 /***********************************************************************
  * hb_batch_init
  ***********************************************************************
  *
  **********************************************************************/
-hb_batch_t * hb_batch_init( hb_handle_t *h, char * path )
+hb_batch_t * hb_batch_init( hb_handle_t *h, char * path, hb_list_t * exclude_extensions )
 {
     hb_batch_t    * d;
     hb_stat_t       sb;
@@ -60,13 +66,41 @@ hb_batch_t * hb_batch_init( hb_handle_t *h, char * path )
     }
 
     files = malloc(count * sizeof(char*));
-
+    
+    // Excluded Extensions
+    int extension_count = hb_list_count(exclude_extensions);
+    hb_log("Excluding %i file extension(s) from scan. ", extension_count);
+    
+    for (int i = 0; i < extension_count; i++ )
+    {
+        char * file_extension = hb_list_item( exclude_extensions, i );
+        hb_log(" - Excluding Extension: %s", file_extension);
+    }
+    
     // Find all regular files
     ii = 0;
     hb_rewinddir(dir);
     while ( (entry = hb_readdir( dir ) ) )
     {
         filename = hb_strdup_printf( "%s" DIR_SEP_STR "%s", path, entry->d_name );
+        
+        int excluded = 0;
+        for (int i = 0; i < extension_count; i++ )
+        {
+            char * file_extension = hb_list_item( exclude_extensions, i );
+            if (ends_with(filename, file_extension))
+            {
+                hb_deep_log(2, " -- Excluding File: %s", filename);
+                excluded = 1;
+            }
+        }
+        
+        if (excluded)
+        {
+            free( filename );
+            continue;
+        }
+                
         if ( hb_stat( filename, &sb ) )
         {
             free( filename );

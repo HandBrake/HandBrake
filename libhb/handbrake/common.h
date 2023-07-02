@@ -138,6 +138,8 @@ void        hb_list_rem( hb_list_t *, void * );
 void      * hb_list_item( const hb_list_t *, int );
 void        hb_list_close( hb_list_t ** );
 
+hb_list_t * hb_string_list_copy(const hb_list_t *src);
+
 void hb_reduce( int *x, int *y, int num, int den );
 void hb_limit_rational( int *x, int *y, int64_t num, int64_t den, int limit );
 void hb_reduce64( int64_t *x, int64_t *y, int64_t num, int64_t den );

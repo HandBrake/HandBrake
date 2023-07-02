@@ -3091,6 +3091,15 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add Extension.
+        /// </summary>
+        public static string Options_AddExt {
+            get {
+                return ResourceManager.GetString("Options_AddExt", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Advanced.
         /// </summary>
         public static string Options_Advanced {
@@ -3276,6 +3285,33 @@ namespace HandBrakeWPF.Properties {
         public static string Options_Encoding {
             get {
                 return ResourceManager.GetString("Options_Encoding", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Exclude File Extensions.
+        /// </summary>
+        public static string Options_ExcludeExtensions {
+            get {
+                return ResourceManager.GetString("Options_ExcludeExtensions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The following file extensions will be ignored when scanning a folder. The list is case insensitive. &quot;.&quot; is not required..
+        /// </summary>
+        public static string Options_ExcludeExtensionsInfo {
+            get {
+                return ResourceManager.GetString("Options_ExcludeExtensionsInfo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This file extension already exists in the list..
+        /// </summary>
+        public static string Options_ExtensionExists {
+            get {
+                return ResourceManager.GetString("Options_ExtensionExists", resourceCulture);
             }
         }
         

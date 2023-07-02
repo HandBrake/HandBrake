@@ -594,8 +594,8 @@ int main( int argc, char ** argv )
 
         hb_system_sleep_prevent(h);
 
-        hb_scan2(h, input, titleindex, preview_count, store_previews,
-                min_title_duration * 90000LL, crop_threshold_frames, crop_threshold_pixels);
+        hb_scan(h, input, titleindex, preview_count, store_previews,
+                min_title_duration * 90000LL, crop_threshold_frames, crop_threshold_pixels, NULL);
 
         EventLoop(h, preset_dict);
         hb_value_free(&preset_dict);

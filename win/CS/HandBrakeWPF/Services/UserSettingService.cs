@@ -356,8 +356,9 @@ namespace HandBrakeWPF.Services
             defaults.Add(UserSettingConstants.IsUpdateAvailableBuild, 0);
             defaults.Add(UserSettingConstants.ExtendedQueueDisplay, true);
             defaults.Add(UserSettingConstants.HardwareDetectTimeoutSeconds, 12);
+            defaults.Add(UserSettingConstants.ExcludedExtensions, new List<string> { "png", "jpg", "srt", "ass", "ssa", "txt" });
 
-            
+
             return defaults;
         }
 

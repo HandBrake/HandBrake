@@ -226,8 +226,10 @@ namespace HandBrakeWPF.Services.Scan
 
                 HandBrakeUtils.SetDvdNav(!this.userSettingService.GetUserSetting<bool>(UserSettingConstants.DisableLibDvdNav));
 
+                List<string> excludedExtensions = this.userSettingService.GetUserSetting<List<string>>(UserSettingConstants.ExcludedExtensions);
+
                 this.ServiceLogMessage("Starting Scan ...");
-                this.instance.StartScan(sourcePath.ToString(), previewCount, minDuration, title != 0 ? title : 0);
+                this.instance.StartScan(sourcePath.ToString(), previewCount, minDuration, title != 0 ? title : 0, excludedExtensions);
 
                 this.ScanStarted?.Invoke(this, System.EventArgs.Empty);
             }

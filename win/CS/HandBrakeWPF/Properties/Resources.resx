@@ -2780,4 +2780,16 @@ To allow multiple simultaneous encodes, turn on "Process Isolation" in Tools Men
   <data name="QueueViewModel_StopButContinueJob" xml:space="preserve">
     <value>There are currently jobs running. Would you like to complete the current jobs before stopping the queue?</value>
   </data>
+  <data name="Options_AddExt" xml:space="preserve">
+    <value>Add Extension</value>
+  </data>
+  <data name="Options_ExcludeExtensions" xml:space="preserve">
+    <value>Exclude File Extensions</value>
+  </data>
+  <data name="Options_ExcludeExtensionsInfo" xml:space="preserve">
+    <value>The following file extensions will be ignored when scanning a folder. The list is case insensitive. "." is not required.</value>
+  </data>
+  <data name="Options_ExtensionExists" xml:space="preserve">
+    <value>This file extension already exists in the list.</value>
+  </data>
 </root>

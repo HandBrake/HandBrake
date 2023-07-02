@@ -12,8 +12,6 @@ namespace HandBrake.Interop.Interop
     using System;
     using System.Collections.Generic;
     using System.Diagnostics;
-    using System.Linq;
-    using System.Runtime.ExceptionServices;
     using System.Runtime.InteropServices;
     using System.Text.Json;
     using System.Timers;
@@ -22,9 +20,7 @@ namespace HandBrake.Interop.Interop
     using HandBrake.Interop.Interop.Helpers;
     using HandBrake.Interop.Interop.Interfaces;
     using HandBrake.Interop.Interop.Interfaces.EventArgs;
-    using HandBrake.Interop.Interop.Interfaces.Model;
     using HandBrake.Interop.Interop.Interfaces.Model.Encoders;
-    using HandBrake.Interop.Interop.Interfaces.Model.Picture;
     using HandBrake.Interop.Interop.Interfaces.Model.Preview;
     using HandBrake.Interop.Interop.Json.Encode;
     using HandBrake.Interop.Interop.Json.Scan;
@@ -139,12 +135,30 @@ namespace HandBrake.Interop.Interop
         /// <param name="titleIndex">
         /// The title index to scan (1-based, 0 for all titles).
         /// </param>
-        public void StartScan(string path, int previewCount, TimeSpan minDuration, int titleIndex)
+        /// <param name="excludedExtensions">
+        /// A list of file extensions to exclude.
+        /// These should be the extension name only. No .
+        /// Case Insensitive.
+        /// </param>
+        public void StartScan(string path, int previewCount, TimeSpan minDuration, int titleIndex, List<string> excludedExtensions)
         {
             this.PreviewCount = previewCount;
 
+            // File Exclusions
+            NativeList excludedExtensionsNative = null;
+            if (excludedExtensions != null && excludedExtensions.Count > 0)
+            {
+                excludedExtensionsNative = NativeList.CreateList();
+                foreach (string extension in excludedExtensions)
+                {
+                    excludedExtensionsNative.Add(InteropUtilities.ToUtf8PtrFromString(extension));
+                }
+            }
+
+            // Start the Scan
             IntPtr pathPtr = InteropUtilities.ToUtf8PtrFromString(path);
-            HBFunctions.hb_scan(this.Handle, pathPtr, titleIndex, previewCount, 1, (ulong)(minDuration.TotalSeconds * 90000));
+            IntPtr excludedExtensionsPtr = excludedExtensionsNative?.Ptr ?? IntPtr.Zero;
+            HBFunctions.hb_scan(this.Handle, pathPtr, titleIndex, previewCount, 1, (ulong)(minDuration.TotalSeconds * 90000), 0, 0, excludedExtensionsPtr);
             Marshal.FreeHGlobal(pathPtr);
 
             this.scanPollTimer = new Timer();
@@ -155,7 +169,7 @@ namespace HandBrake.Interop.Interop
             {
                 try
                 {
-                    this.PollScanProgress();
+                    this.PollScanProgress(excludedExtensionsNative);
                 }
                 catch (Exception exc)
                 {
@@ -369,7 +383,7 @@ namespace HandBrake.Interop.Interop
         /// <summary>
         /// Checks the status of the ongoing scan.
         /// </summary>
-        private void PollScanProgress()
+        private void PollScanProgress(NativeList exclusionList)
         {
             IntPtr json = HBFunctions.hb_get_state_json(this.Handle);
             string statusJson = Marshal.PtrToStringAnsi(json);
@@ -407,6 +421,26 @@ namespace HandBrake.Interop.Interop
                 if (this.ScanCompleted != null)
                 {
                     this.ScanCompleted(this, new System.EventArgs());
+                }
+
+                // Memory Management for the exclusion list.
+                try
+                {
+                    if (exclusionList != null)
+                    {
+                        for (int i = 0; i < exclusionList.Count; i++)
+                        {
+                            IntPtr item = exclusionList[i];
+                            exclusionList.Remove(item);
+                            InteropUtilities.FreeMemory(new List<IntPtr> { item });
+                        }
+
+                        exclusionList.Dispose();
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine(ex);
                 }
             }
         }
