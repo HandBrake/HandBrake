@@ -179,7 +179,10 @@ namespace HandBrakeWPF.Services.Scan
                 EncodeTaskFactory factory = new EncodeTaskFactory(this.userSettingService);
                 JsonEncodeObject jobDict = factory.Create(job);
                 RawPreviewData bitmapData = this.instance.GetPreview(jobDict, preview);
-                bitmapImage = BitmapUtilities.ConvertToBitmapImage(BitmapUtilities.ConvertByteArrayToBitmap(bitmapData));
+                if (bitmapData != null)
+                {
+                    bitmapImage = BitmapUtilities.ConvertToBitmapImage(BitmapUtilities.ConvertByteArrayToBitmap(bitmapData));
+                }
             }
             catch (AccessViolationException e)
             {
