@@ -97,7 +97,7 @@ namespace HandBrakeWPF.Instance
         /// <returns>
         /// The <see cref="IHandBrakeInstance"/>.
         /// </returns>
-        public static IHandBrakeInstance GetScanInstance(int verbosity)
+        public static IScanInstance GetScanInstance(int verbosity)
         {
             if (!HandBrakeUtils.IsInitialised())
             {

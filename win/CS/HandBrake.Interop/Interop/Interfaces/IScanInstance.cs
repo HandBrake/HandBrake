@@ -10,6 +10,7 @@
 namespace HandBrake.Interop.Interop.Interfaces
 {
     using System;
+    using System.Collections.Generic;
 
     using HandBrake.Interop.Interop.Interfaces.EventArgs;
     using HandBrake.Interop.Interop.Interfaces.Model.Preview;
@@ -19,7 +20,7 @@ namespace HandBrake.Interop.Interop.Interfaces
     /// <summary>
     /// The Interface for HandBrakeInstance
     /// </summary>
-    public interface IScanInstance
+    public interface IScanInstance : IHandBrakeInstance, IDisposable
     {
         /// <summary>
         /// Fires when a scan has completed.
@@ -31,8 +32,6 @@ namespace HandBrake.Interop.Interop.Interfaces
         /// </summary>
         event EventHandler<ScanProgressEventArgs> ScanProgress;
 
-        bool IsRemoteInstance { get; }
-
         /// <summary>
         /// Gets the index of the default title.
         /// </summary>
@@ -42,22 +41,6 @@ namespace HandBrake.Interop.Interop.Interfaces
         /// Gets the list of titles on this instance.
         /// </summary>
         JsonScanObject Titles { get; }
-
-        /// <summary>
-        /// Initializes this instance.
-        /// </summary>
-        /// <param name="verbosity">
-        /// The code for the logging verbosity to use.
-        /// </param>
-        /// <param name="noHardware">
-        /// Turn off Hardware Acceleration 
-        /// </param>
-        void Initialize(int verbosity, bool noHardware);
-
-        /// <summary>
-        /// Frees any resources associated with this object.
-        /// </summary>
-        void Dispose();
 
         /// <summary>
         /// Gets an image for the given job and preview
@@ -91,7 +74,12 @@ namespace HandBrake.Interop.Interop.Interfaces
         /// <param name="titleIndex">
         /// The title Index.
         /// </param>
-        void StartScan(string path, int previewCount, TimeSpan minDuration, int titleIndex);
+        /// <param name="excludedExtensions">
+        /// A list of file extensions to exclude.
+        /// These should be the extension name only. No .
+        /// Case Insensitive.
+        /// </param>
+        void StartScan(string path, int previewCount, TimeSpan minDuration, int titleIndex, List<string> excludedExtensions);
 
         /// <summary>
         /// Stop any running scans

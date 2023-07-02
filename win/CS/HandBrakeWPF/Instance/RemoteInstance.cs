@@ -259,14 +259,15 @@ namespace HandBrakeWPF.Instance
             if (this.IsServerRunning())
             {
                 InitCommand initCommand = new InitCommand
-                                      {
-                                          EnableDiskLogging = false,
-                                          AllowDisconnectedWorker = false,
-                                          EnableLibDvdNav = !this.userSettingService.GetUserSetting<bool>(UserSettingConstants.DisableLibDvdNav),
-                                          EnableHardwareAcceleration = true,
-                                          LogDirectory = DirectoryUtilities.GetLogDirectory(),
-                                          LogVerbosity = this.userSettingService.GetUserSetting<int>(UserSettingConstants.Verbosity),
-                                          ExcludeExtnesionList = this.userSettingService.GetUserSetting<List<string>>(null) // TODO
+                {
+                    EnableDiskLogging = false,
+                    AllowDisconnectedWorker = false,
+                    EnableLibDvdNav = !this.userSettingService.GetUserSetting<bool>(UserSettingConstants.DisableLibDvdNav),
+                    EnableHardwareAcceleration = true,
+                    LogDirectory = DirectoryUtilities.GetLogDirectory(),
+                    LogVerbosity = this.userSettingService.GetUserSetting<int>(UserSettingConstants.Verbosity),
+                    Mode = 1,
+                    ExcludeExtnesionList = this.userSettingService.GetUserSetting<List<string>>(UserSettingConstants.ExcludedExtensions)
                 };
 
                 initCommand.LogFile = Path.Combine(initCommand.LogDirectory, string.Format("activity_log.worker.{0}.txt", GeneralUtilities.ProcessId));

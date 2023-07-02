@@ -43,7 +43,7 @@ namespace HandBrakeWPF.Services.Scan
 
         private TitleFactory titleFactory = new TitleFactory();
         private string currentSourceScanPath;
-        private IHandBrakeInstance instance;
+        private IScanInstance instance;
         private Action<bool, Source> postScanOperation;
         private bool isCancelled = false;
 

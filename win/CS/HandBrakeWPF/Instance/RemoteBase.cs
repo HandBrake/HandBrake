@@ -14,6 +14,7 @@ namespace HandBrakeWPF.Instance
     using System.Text;
     using System.Threading.Tasks;
 
+    using HandBrakeWPF.Instance.Model;
     using HandBrakeWPF.Model.Options;
     using HandBrakeWPF.Services.Interfaces;
     using HandBrakeWPF.Services.Logging.Interfaces;
@@ -36,6 +37,31 @@ namespace HandBrakeWPF.Instance
         }
 
         public bool IsRemoteInstance => true;
+
+        public string Version
+        {
+            get
+            {
+                Task<ServerResponse> response = this.MakeHttpGetRequest("Version");
+                response.Wait();
+
+                if (!response.Result.WasSuccessful)
+                {
+                    return null;
+                }
+
+                return response.Result?.JsonResponse;
+            }
+        }
+
+        public int Build
+        {
+            get
+            {
+                throw new NotImplementedException("This method is not implemented yet");
+                return 0;
+            }
+        }
 
         public void Initialize(int verbosityLvl, bool noHardwareMode)
         {

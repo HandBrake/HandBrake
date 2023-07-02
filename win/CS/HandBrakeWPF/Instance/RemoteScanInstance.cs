@@ -11,6 +11,7 @@
 namespace HandBrakeWPF.Instance
 {
     using System;
+    using System.Collections.Generic;
     using System.Diagnostics;
     using System.IO;
     using System.Text.Json;
@@ -79,7 +80,7 @@ namespace HandBrakeWPF.Instance
             return null;
         }
 
-        public void StartScan(string path, int previewCount, TimeSpan minDuration, int titleIndex)
+        public void StartScan(string path, int previewCount, TimeSpan minDuration, int titleIndex, List<string> fileExclusionList)
         {
             if (this.IsServerRunning())
             {
@@ -101,20 +102,37 @@ namespace HandBrakeWPF.Instance
             }
         }
 
+        public JsonState GetProgress()
+        {
+            Task<ServerResponse> response = this.MakeHttpGetRequest("PollEncodeProgress");
+            response.Wait();
+
+            if (!response.Result.WasSuccessful)
+            {
+                return null;
+            }
+
+            string statusJson = response.Result?.JsonResponse;
+
+            JsonState state = JsonSerializer.Deserialize<JsonState>(statusJson, JsonSettings.Options);
+            return state;
+        }
+
         private void RunScanInitProcess(string path, int previewCount, TimeSpan minDuration, int titleIndex)
         {
             if (this.IsServerRunning())
             {
                 InitCommand initCommand = new InitCommand
-                                          {
-                                              EnableDiskLogging = false,
-                                              AllowDisconnectedWorker = false,
-                                              EnableLibDvdNav = !this.userSettingService.GetUserSetting<bool>(UserSettingConstants.DisableLibDvdNav),
-                                              EnableHardwareAcceleration = true,
-                                              LogDirectory = DirectoryUtilities.GetLogDirectory(),
-                                              LogVerbosity = this.userSettingService.GetUserSetting<int>(UserSettingConstants.Verbosity),
-                                              Mode = 2
-                                          };
+                {
+                    EnableDiskLogging = false,
+                    AllowDisconnectedWorker = false,
+                    EnableLibDvdNav = !this.userSettingService.GetUserSetting<bool>(UserSettingConstants.DisableLibDvdNav),
+                    EnableHardwareAcceleration = true,
+                    LogDirectory = DirectoryUtilities.GetLogDirectory(),
+                    LogVerbosity = this.userSettingService.GetUserSetting<int>(UserSettingConstants.Verbosity),
+                    Mode = 2,
+                    ExcludeExtnesionList = this.userSettingService.GetUserSetting<List<string>>(UserSettingConstants.ExcludedExtensions)
+                };
 
                 initCommand.LogFile = Path.Combine(initCommand.LogDirectory, string.Format("activity_log.worker.{0}.txt", GeneralUtilities.ProcessId));
 
