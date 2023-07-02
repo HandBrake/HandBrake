@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="EncodeCommand.cs" company="HandBrake Project (http://handbrake.fr)">
+// <copyright file="ScanCommand.cs" company="HandBrake Project (http://handbrake.fr)">
 //   This file is part of the HandBrake source code - It may be used under the terms of the GNU General Public License.
 // </copyright>
 // <summary>
@@ -7,15 +7,23 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrakeWPF.Model.Worker
+namespace HandBrake.Worker.Routing.Commands
 {
-    using HandBrake.Interop.Interop.Json.Encode;
-    using HandBrake.Worker.Routing.Commands;
+    using System;
+    using System.Collections.Generic;
 
-    public class EncodeCommand
-    { 
+    public class ScanCommand
+    {
         public InitCommand InitialiseCommand { get; set; }
 
-        public JsonEncodeObject EncodeJob { get; set; }
+        public string Path { get; set; }
+
+        public int PreviewCount { get; set; }
+
+        public TimeSpan MinDuration { get; set; }
+
+        public int TitleIndex { get; set; }
+
+        public List<string> FileExclusionList { get; set; }
     }
 }

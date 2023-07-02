@@ -17,14 +17,14 @@ namespace HandBrake.Interop.Interop.Interfaces.Model.Preview
             this.Height = height;
         }
 
-        public byte[] RawBitmapData { get; }
+        public byte[] RawBitmapData { get; set; }
 
-        public int StrideWidth { get; }
+        public int StrideWidth { get; set; }
 
-        public int StrideHeight { get; }
+        public int StrideHeight { get; set; }
 
-        public int Width { get; }
+        public int Width { get; set; }
 
-        public int Height { get; }
+        public int Height { get; set; }
     }
 }

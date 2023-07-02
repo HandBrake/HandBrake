@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="EncodeCommand.cs" company="HandBrake Project (http://handbrake.fr)">
+// <copyright file="PreviewCommand.cs" company="HandBrake Project (http://handbrake.fr)">
 //   This file is part of the HandBrake source code - It may be used under the terms of the GNU General Public License.
 // </copyright>
 // <summary>
@@ -7,15 +7,14 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrakeWPF.Model.Worker
+namespace HandBrake.Worker.Routing.Commands
 {
     using HandBrake.Interop.Interop.Json.Encode;
-    using HandBrake.Worker.Routing.Commands;
 
-    public class EncodeCommand
-    { 
-        public InitCommand InitialiseCommand { get; set; }
+    public class PreviewCommand
+    {
+        public JsonEncodeObject EncodeSettings { get; set; }
 
-        public JsonEncodeObject EncodeJob { get; set; }
+        public int PreviewNumber { get; set; }
     }
 }

@@ -27,13 +27,16 @@ namespace HandBrake.Interop.Interop
     using HandBrake.Interop.Interop.Json.State;
     using HandBrake.Interop.Utilities;
 
-    public class HandBrakeInstance : IHandBrakeInstance, IDisposable
+    public class HandBrakeInstance : IHandBrakeInstance, IScanInstance, IDisposable
     {
         private const double ScanPollIntervalMs = 250;
         private const double EncodePollIntervalMs = 250;
         private Timer scanPollTimer;
         private Timer encodePollTimer;
         private bool disposed;
+
+        private JsonState lastProgressJson;
+        private readonly object progressJsonLockObj = new object();
 
         /// <summary>
         /// Finalizes an instance of the HandBrakeInstance class.
@@ -231,18 +234,6 @@ namespace HandBrake.Interop.Interop
         }
 
         /// <summary>
-        /// Determines if DRC can be applied to the given track with the given encoder.
-        /// </summary>
-        /// <param name="trackNumber">The track Number.</param>
-        /// <param name="encoder">The encoder to use for DRC.</param>
-        /// <param name="title">The title.</param>
-        /// <returns>True if DRC can be applied to the track with the given encoder.</returns>
-        public bool CanApplyDrc(int trackNumber, HBAudioEncoder encoder, int title)
-        {
-            return HBFunctions.hb_audio_can_apply_drc2(this.Handle, title, trackNumber, encoder.Id) > 0;
-        }
-
-        /// <summary>
         /// Starts an encode with the given job.
         /// </summary>
         /// <param name="encodeObject">
@@ -319,18 +310,17 @@ namespace HandBrake.Interop.Interop
         }
 
         /// <summary>
-        /// Checks the status of the ongoing encode.
+        /// Checks the status of this instance
         /// </summary>
         /// <returns>
         /// The <see cref="JsonState"/>.
         /// </returns>
-        public JsonState GetEncodeProgress()
+        public JsonState GetProgress()
         {
-            IntPtr json = HBFunctions.hb_get_state_json(this.Handle);
-            string statusJson = Marshal.PtrToStringAnsi(json);
-
-            JsonState state = JsonSerializer.Deserialize<JsonState>(statusJson, JsonSettings.Options);
-            return state;
+            lock (this.lastProgressJson)
+            {
+                return this.lastProgressJson ?? null;
+            }
         }
 
         /// <summary>
@@ -385,12 +375,18 @@ namespace HandBrake.Interop.Interop
         /// </summary>
         private void PollScanProgress(NativeList exclusionList)
         {
-            IntPtr json = HBFunctions.hb_get_state_json(this.Handle);
-            string statusJson = Marshal.PtrToStringAnsi(json);
             JsonState state = null;
-            if (!string.IsNullOrEmpty(statusJson))
+            lock (this.progressJsonLockObj)
             {
-                state = JsonSerializer.Deserialize<JsonState>(statusJson, JsonSettings.Options);
+                IntPtr json = HBFunctions.hb_get_state_json(this.Handle);
+                string statusJson = Marshal.PtrToStringAnsi(json);
+
+                if (!string.IsNullOrEmpty(statusJson))
+                {
+                    state = JsonSerializer.Deserialize<JsonState>(statusJson, JsonSettings.Options);
+                }
+
+                this.lastProgressJson = state;
             }
 
             TaskState taskState = state != null ? TaskState.FromRepositoryValue(state.State) : null;
@@ -410,7 +406,7 @@ namespace HandBrake.Interop.Interop
                 this.TitlesJson = InteropUtilities.ToStringFromUtf8Ptr(jsonMsg);
 
                 if (!string.IsNullOrEmpty(this.TitlesJson))
-                { 
+                {
                     this.Titles = JsonSerializer.Deserialize<JsonScanObject>(this.TitlesJson, JsonSettings.Options);
                     if (this.Titles != null)
                     {
@@ -450,10 +446,19 @@ namespace HandBrake.Interop.Interop
         /// </summary>
         private void PollEncodeProgress()
         {
-            IntPtr json = HBFunctions.hb_get_state_json(this.Handle);
-            string statusJson = Marshal.PtrToStringAnsi(json);
+            JsonState state = null;
+            lock (this.progressJsonLockObj)
+            {
+                IntPtr json = HBFunctions.hb_get_state_json(this.Handle);
+                string statusJson = Marshal.PtrToStringAnsi(json);
 
-            JsonState state = JsonSerializer.Deserialize<JsonState>(statusJson, JsonSettings.Options);
+                if (!string.IsNullOrEmpty(statusJson))
+                {
+                    state = JsonSerializer.Deserialize<JsonState>(statusJson, JsonSettings.Options);
+                }
+
+                this.lastProgressJson = state;
+            }
 
             TaskState taskState = state != null ? TaskState.FromRepositoryValue(state.State) : null;
 
@@ -465,7 +470,7 @@ namespace HandBrake.Interop.Interop
                     var progressEventArgs = new EncodeProgressEventArgs(0, 0, 0, TimeSpan.MinValue, 0, 0, 0, taskState.Code);
                     if (taskState == TaskState.Muxing || state.Working == null)
                     {
-                        progressEventArgs = new EncodeProgressEventArgs(1, 0, 0, TimeSpan.MinValue, 0, 0, 0, taskState.Code);
+                        progressEventArgs = new EncodeProgressEventArgs(100, 0, 0, TimeSpan.MinValue, 0, 0, 0, taskState.Code);
                     }
                     else
                     {

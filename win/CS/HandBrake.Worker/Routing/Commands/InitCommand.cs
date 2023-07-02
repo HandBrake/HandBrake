@@ -9,6 +9,8 @@
 
 namespace HandBrake.Worker.Routing.Commands
 {
+    using System.Collections.Generic;
+
     public class InitCommand
     {
         public int LogVerbosity { get; set; }
@@ -24,5 +26,14 @@ namespace HandBrake.Worker.Routing.Commands
         public bool EnableLibDvdNav { get; set; }
 
         public bool AllowDisconnectedWorker { get; set; }
+
+        public List<string> ExcludeExtnesionList { get; set; }
+
+        /// <summary>
+        /// 1: Encode
+        /// 2: Scan
+        /// 3: Background
+        /// </summary>
+        public int Mode { get; set; }
     }
 }

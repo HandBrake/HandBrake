@@ -69,9 +69,9 @@ namespace HandBrake.Interop.Interop.Interfaces
         void StopEncode();
 
         /// <summary>
-        /// Get the current Encode State.
+        /// Get the current Progress State.
         /// </summary>
         /// <returns>A JsonState object</returns>
-        JsonState GetEncodeProgress();
+        JsonState GetProgress();
     }
 }

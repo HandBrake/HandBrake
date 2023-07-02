@@ -28,6 +28,8 @@ namespace HandBrake.Worker
         private static ApiRouter router;
         private static ManualResetEvent manualResetEvent = new ManualResetEvent(false);
 
+        private static int parentProcessId = -1;
+
         public static void Main(string[] args)
         {
             AppDomain.CurrentDomain.ProcessExit += CurrentDomain_ProcessExit;
@@ -63,6 +65,12 @@ namespace HandBrake.Worker
                         token = argument.TrimStart("--token=".ToCharArray());
                         TokenService.RegisterToken(token);
                     }
+
+                    if (argument.StartsWith("--pid"))
+                    {
+                        token = argument.TrimStart("--pid=".ToCharArray());
+                        int.TryParse(token, out parentProcessId);
+                    }
                 }
             }
 
@@ -74,6 +82,12 @@ namespace HandBrake.Worker
             }
 
             ConsoleOutput.WriteLine("Worker: Starting HandBrake Engine ...", ConsoleColor.White, true);
+            if (parentProcessId != -1)
+            {
+                ConsoleOutput.WriteLine(string.Format("Worker: Parent Process Id {0}", parentProcessId), ConsoleColor.White, true);
+                // TODO Support Process Termination if the Parent process dies.
+            }
+
             router = new ApiRouter();
             router.TerminationEvent += Router_TerminationEvent;
 
@@ -114,13 +128,21 @@ namespace HandBrake.Worker
             apiHandlers.Add("GetLogMessagesFromIndex", router.GetLogMessagesFromIndex);
             apiHandlers.Add("ResetLogging", router.ResetLogging);
 
-            // HandBrake APIs
+            // Encode APIs
             apiHandlers.Add("StartEncode", router.StartEncode);
             apiHandlers.Add("PauseEncode", router.PauseEncode);
             apiHandlers.Add("ResumeEncode", router.ResumeEncode);
             apiHandlers.Add("StopEncode", router.StopEncode);
             apiHandlers.Add("PollEncodeProgress", router.PollEncodeProgress);
-            
+
+            // Scan APIs
+            apiHandlers.Add("StartScan", router.StartScan);
+            apiHandlers.Add("StopScan", router.StopScan);
+            apiHandlers.Add("PollScanProgress", router.PollScanProgress);
+            apiHandlers.Add("GetTitles", router.GetScanTitles);
+            apiHandlers.Add("GetMainTitle", router.GetMainScanTitle);
+            apiHandlers.Add("GetPreview", router.GetPreview);
+
             return apiHandlers;
         }
 
