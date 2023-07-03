@@ -22,12 +22,6 @@ static int compare_str(const void *a, const void *b)
     return strncmp(*(const char**)a, *(const char**)b, PATH_MAX);
 }
 
-static int ends_with (char* base, char* str) {
-    int blen = strlen(base);
-    int slen = strlen(str);
-    return (blen >= slen) && (0 == strcasecmp(base + blen - slen, str));
-}
-
 /***********************************************************************
  * hb_batch_init
  ***********************************************************************

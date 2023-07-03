@@ -201,6 +201,36 @@ static int get_color_range(int color_range)
     }
 }
 
+static int is_known_filetype (char * filename) 
+{
+    if (ends_with(filename, "mp4"))
+    {
+        return 1;
+    }
+    
+    if (ends_with(filename, "mkv"))
+    {
+        return 1;
+    }
+    
+    if (ends_with(filename, "avi"))
+    {
+        return 1;
+    }
+    
+    if (ends_with(filename, "webm"))
+    {
+        return 1;
+    }
+    
+    if (ends_with(filename, "wmv"))
+    {
+        return 1;
+    }
+    
+    return 0;
+}
+
 hb_thread_t * hb_scan_init( hb_handle_t * handle, volatile int * die,
                             const char * path, int title_index,
                             hb_title_set_t * title_set, int preview_count,
@@ -251,7 +281,7 @@ static void ScanFunc( void * _data )
     data->stream = NULL;
 
     /* Try to open the path as a DVD. If it fails, try as a file */
-    if( ( data->bd = hb_bd_init( data->h, data->path ) ) )
+    if( !is_known_filetype(data->path) && ( data->bd = hb_bd_init( data->h, data->path ) ) )
     {
         hb_log( "scan: BD has %d title(s)",
                 hb_bd_title_count( data->bd ) );
@@ -276,7 +306,7 @@ static void ScanFunc( void * _data )
                                           data->title_set->list_title );
         }
     }
-    else if( ( data->dvd = hb_dvd_init( data->h, data->path ) ) )
+    else if( !is_known_filetype(data->path) && ( data->dvd = hb_dvd_init( data->h, data->path ) ) )
     {
         hb_log( "scan: DVD has %d title(s)",
                 hb_dvd_title_count( data->dvd ) );
