@@ -1,9 +1,9 @@
 $(eval $(call import.MODULE.defs,LIBJPEGTURBO,libjpeg-turbo))
 $(eval $(call import.CONTRIB.defs,LIBJPEGTURBO))
 
-LIBJPEGTURBO.FETCH.url     = https://github.com/HandBrake/HandBrake-contribs/releases/download/contribs/libjpeg-turbo-2.1.4.tar.gz
-LIBJPEGTURBO.FETCH.url    += https://github.com/libjpeg-turbo/libjpeg-turbo/archive/refs/tags/2.1.4.tar.gz
-LIBJPEGTURBO.FETCH.sha256  = a78b05c0d8427a90eb5b4eb08af25309770c8379592bb0b8a863373128e6143f
+LIBJPEGTURBO.FETCH.url     = https://github.com/HandBrake/HandBrake-contribs/releases/download/contribs/libjpeg-turbo-3.0.0.tar.gz
+LIBJPEGTURBO.FETCH.url    += https://github.com/libjpeg-turbo/libjpeg-turbo/archive/refs/tags/3.0.0.tar.gz
+LIBJPEGTURBO.FETCH.sha256  = 171dae5d73560bc94006a7c0c3281bd9bfde6a34f7e41e66f930a1a9162bd7df
 
 LIBJPEGTURBO.build_dir             = build
 LIBJPEGTURBO.CONFIGURE.exe         = cmake
