@@ -265,7 +265,7 @@ hb_thread_t * hb_scan_init( hb_handle_t * handle, volatile int * die,
     p.progress = 0.0;
 #undef p
     hb_set_state(handle, &state);
-
+    
     return hb_thread_init( "scan", ScanFunc, data, HB_NORMAL_PRIORITY );
 }
 
@@ -279,12 +279,12 @@ static void ScanFunc( void * _data )
     data->bd = NULL;
     data->dvd = NULL;
     data->stream = NULL;
-    
+        
     char * single_path = NULL;
     if (hb_list_count(data->paths) == 1) {
         single_path = hb_list_item(data->paths, 0);
     }
-    
+        
     /* Try to open the path as a DVD. If it fails, try as a file */
     if( single_path != NULL && !is_known_filetype(single_path) && ( data->bd = hb_bd_init( data->h, single_path ) ) )
     {
@@ -365,6 +365,7 @@ static void ScanFunc( void * _data )
     }
     else if (hb_list_count(data->paths) > 1) // We have many file paths to process.
     {
+           hb_log (" Multi File Scan");
         // TODO -> do we want to support excluded extensions here?
         // If dragging a batch of files, maybe not, but if the UI's implement a recursive folder maybe?
         for( i = 0; i < hb_list_count( data->paths ); i++ )
@@ -547,7 +548,7 @@ finish:
         hb_list_rem(data->paths, output_filepath);
         free(output_filepath);
     }
-    hb_list_close( data->paths );
+    hb_list_close( &data->paths );
     
     // clean up excluded extensions list
     char *extension;
@@ -821,7 +822,7 @@ static int DecodePreviews( hb_scan_t * data, hb_title_t * title, int flush )
     }
     else if (data->stream)
     {
-        stream = hb_stream_open(data->h, data->paths, title, 0);
+        stream = hb_stream_open(data->h, title->path, title, 0);
     }
 
     if (title->video_codec == WORK_NONE)
