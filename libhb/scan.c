@@ -15,7 +15,7 @@ typedef struct
     hb_handle_t  * h;
     volatile int * die;
 
-    char         * path;
+    hb_list_t    * paths;
     int            title_index;
     hb_title_set_t * title_set;
 
@@ -232,7 +232,7 @@ static int is_known_filetype (char * filename)
 }
 
 hb_thread_t * hb_scan_init( hb_handle_t * handle, volatile int * die,
-                            const char * path, int title_index,
+                            hb_list_t *  paths, int title_index,
                             hb_title_set_t * title_set, int preview_count,
                             int store_previews, uint64_t min_duration,
                             int crop_threshold_frames, int crop_threshold_pixels, hb_list_t * exclude_extensions)
@@ -241,7 +241,7 @@ hb_thread_t * hb_scan_init( hb_handle_t * handle, volatile int * die,
 
     data->h            = handle;
     data->die          = die;
-    data->path         = strdup( path );
+    data->paths        = hb_string_list_copy(paths);
     data->title_index  = title_index;
     data->title_set    = title_set;
 
@@ -279,9 +279,14 @@ static void ScanFunc( void * _data )
     data->bd = NULL;
     data->dvd = NULL;
     data->stream = NULL;
-
+    
+    char * single_path = NULL;
+    if (hb_list_count(data->paths) == 1) {
+        single_path = hb_list_item(data->paths, 0);
+    }
+    
     /* Try to open the path as a DVD. If it fails, try as a file */
-    if( !is_known_filetype(data->path) && ( data->bd = hb_bd_init( data->h, data->path ) ) )
+    if( single_path != NULL && !is_known_filetype(single_path) && ( data->bd = hb_bd_init( data->h, single_path ) ) )
     {
         hb_log( "scan: BD has %d title(s)",
                 hb_bd_title_count( data->bd ) );
@@ -306,7 +311,7 @@ static void ScanFunc( void * _data )
                                           data->title_set->list_title );
         }
     }
-    else if( !is_known_filetype(data->path) && ( data->dvd = hb_dvd_init( data->h, data->path ) ) )
+    else if( single_path != NULL && !is_known_filetype(single_path) && ( data->dvd = hb_dvd_init( data->h, single_path ) ) )
     {
         hb_log( "scan: DVD has %d title(s)",
                 hb_dvd_title_count( data->dvd ) );
@@ -331,7 +336,7 @@ static void ScanFunc( void * _data )
                                            data->title_set->list_title );
         }
     }
-    else if ( ( data->batch = hb_batch_init( data->h, data->path, data->exclude_extensions ) ) )
+    else if (single_path != NULL && ( data->batch = hb_batch_init( data->h, single_path, data->exclude_extensions ) ) )
     {
         if( data->title_index )
         {
@@ -358,7 +363,39 @@ static void ScanFunc( void * _data )
             }
         }
     }
-    else
+    else if (hb_list_count(data->paths) > 1) // We have many file paths to process.
+    {
+        // TODO -> do we want to support excluded extensions here?
+        // If dragging a batch of files, maybe not, but if the UI's implement a recursive folder maybe?
+        for( i = 0; i < hb_list_count( data->paths ); i++ )
+        {
+            single_path = hb_list_item( data->paths, i);
+            
+            
+            if (data->title_index == 0)
+            {
+                data->title_index = 1;
+            }
+            
+            hb_title_t * title = hb_title_init( single_path, data->title_index );
+            data->stream = hb_stream_open(data->h, single_path, title, 1);
+            if (data->stream != NULL)
+            {
+                title = hb_stream_title_scan( data->stream, title );
+                if ( title )
+                {
+                    hb_list_add( data->title_set->list_title, title );
+                }
+            }
+            else
+            {
+                hb_title_close( &title );
+                hb_log( "scan: unrecognized file type" );
+                goto finish;
+            }
+        }
+    }
+    else // Single File.
     {
         // Title index 0 is not a valid title number and means scan all titles.
         // So set title index to 1 in this scenario.
@@ -368,8 +405,8 @@ static void ScanFunc( void * _data )
         // mode.
         if (data->title_index == 0)
             data->title_index = 1;
-        hb_title_t * title = hb_title_init( data->path, data->title_index );
-        data->stream = hb_stream_open(data->h, data->path, title, 1);
+        hb_title_t * title = hb_title_init( single_path, data->title_index );
+        data->stream = hb_stream_open(data->h, single_path, title, 1);
         if (data->stream != NULL)
         {
             title = hb_stream_title_scan( data->stream, title );
@@ -473,9 +510,10 @@ static void ScanFunc( void * _data )
         title      = hb_list_item( data->title_set->list_title, i );
         title->flags |= HBTF_SCAN_COMPLETE;
     }
-    if (hb_list_count(data->title_set->list_title) > 0)
+    
+    if (single_path != NULL && hb_list_count(data->title_set->list_title) > 0)
     {
-        data->title_set->path = strdup(data->path);
+        data->title_set->path = strdup(single_path);
     }
     else
     {
@@ -501,7 +539,15 @@ finish:
     {
         hb_batch_close( &data->batch );
     }
-    free( data->path );
+    
+    // Clear down any file paths.
+    char *output_filepath;
+    while ((output_filepath = hb_list_item(data->paths, 0)))
+    {
+        hb_list_rem(data->paths, output_filepath);
+        free(output_filepath);
+    }
+    hb_list_close( data->paths );
     
     // clean up excluded extensions list
     char *extension;
@@ -775,7 +821,7 @@ static int DecodePreviews( hb_scan_t * data, hb_title_t * title, int flush )
     }
     else if (data->stream)
     {
-        stream = hb_stream_open(data->h, data->path, title, 0);
+        stream = hb_stream_open(data->h, data->paths, title, 0);
     }
 
     if (title->video_codec == WORK_NONE)

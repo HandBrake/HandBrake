@@ -282,7 +282,7 @@ static inline int hb_image_height(int pix_fmt, int height, int plane)
  * Threads: scan.c, work.c, reader.c, muxcommon.c
  **********************************************************************/
 hb_thread_t * hb_scan_init( hb_handle_t *, volatile int * die,
-                            const char * path, int title_index,
+                            hb_list_t * paths, int title_index,
                             hb_title_set_t * title_set, int preview_count,
                             int store_previews, uint64_t min_duration,
                             int crop_auto_switch_threshold, int crop_median_threshold, hb_list_t * exclude_extensions );
