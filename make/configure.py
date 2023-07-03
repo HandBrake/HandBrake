@@ -1401,8 +1401,8 @@ def createCLI( cross = None ):
     h = IfHost( 'enable assembly code in non-contrib modules', 'NOMATCH*-*-darwin*', 'NOMATCH*-*-linux*', none=argparse.SUPPRESS ).value
     grp.add_argument( '--enable-asm', default=False, action='store_true', help=h )
 
-    # GTK GUI is disabled by default on macOS and Windows, enabled otherwise
-    require_gtk = not (host_tuple.match('*-*-mingw*', '*-*-cygwin*', '*-*-darwin*'))
+    # GTK GUI is enabled by default on Linux and BSD
+    require_gtk = (host_tuple.match('*-*-linux*', '*-*-*bsd*'))
     h = 'enable GTK GUI' if not require_gtk else argparse.SUPPRESS
     grp.add_argument( '--enable-gtk', dest="enable_gtk", default=require_gtk, action='store_true', help=h)
     h = 'disable GTK GUI' if require_gtk else argparse.SUPPRESS
@@ -2211,7 +2211,7 @@ int main()
     stdout.write( 'Harden:             %s\n' % options.enable_harden )
     stdout.write( 'Sandbox:            %s' % options.enable_sandbox )
     stdout.write( ' (%s)\n' % note_unsupported ) if not host_tuple.system == 'darwin' else stdout.write( '\n' )
-    stdout.write( 'Enable GTK GUI:     %s\n' % options.enable_gtk ) if options.enable_gtk or not host_tuple.match('*-*-mingw*', '*-*-cygwin*', '*-*-darwin*') else stdout.write('')
+    stdout.write( 'Enable GTK GUI:     %s\n' % options.enable_gtk ) if options.enable_gtk or host_tuple.match('*-*-linux*', '*-*-*bsd*') else stdout.write('')
     stdout.write( 'Enable FDK-AAC:     %s\n' % options.enable_fdk_aac )
     stdout.write( 'Enable FFmpeg AAC:  %s' % options.enable_ffmpeg_aac )
     stdout.write( '  (%s)\n' % note_required ) if host_tuple.system != 'darwin' else stdout.write( '\n' )
