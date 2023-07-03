@@ -36,7 +36,7 @@ namespace HandBrakeWPF.Services.Scan.Model
         }
 
         #region Properties
-
+        
         /// <summary>
         /// Gets or sets a Collection of chapters in this Title
         /// </summary>

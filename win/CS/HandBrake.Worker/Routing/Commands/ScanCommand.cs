@@ -16,7 +16,7 @@ namespace HandBrake.Worker.Routing.Commands
     {
         public InitCommand InitialiseCommand { get; set; }
 
-        public string Path { get; set; }
+        public List<string> Paths { get; set; }
 
         public int PreviewCount { get; set; }
 

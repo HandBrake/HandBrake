@@ -125,7 +125,7 @@ namespace HandBrake.Interop.Interop
         /// <summary>
         /// Starts a scan of the given path.
         /// </summary>
-        /// <param name="path">
+        /// <param name="paths">
         /// The path of the video to scan.
         /// </param>
         /// <param name="previewCount">
@@ -142,7 +142,7 @@ namespace HandBrake.Interop.Interop
         /// These should be the extension name only. No .
         /// Case Insensitive.
         /// </param>
-        public void StartScan(string path, int previewCount, TimeSpan minDuration, int titleIndex, List<string> excludedExtensions)
+        public void StartScan(List<string> paths, int previewCount, TimeSpan minDuration, int titleIndex, List<string> excludedExtensions)
         {
             this.PreviewCount = previewCount;
 
@@ -157,11 +157,16 @@ namespace HandBrake.Interop.Interop
                 }
             }
 
+            // Handle Scan Paths
+            NativeList scanPathsList = NativeList.CreateList();
+            foreach (string path in paths)
+            {
+                scanPathsList.Add(InteropUtilities.ToUtf8PtrFromString(path));
+            }
+
             // Start the Scan
-            IntPtr pathPtr = InteropUtilities.ToUtf8PtrFromString(path);
             IntPtr excludedExtensionsPtr = excludedExtensionsNative?.Ptr ?? IntPtr.Zero;
-            HBFunctions.hb_scan(this.Handle, pathPtr, titleIndex, previewCount, 1, (ulong)(minDuration.TotalSeconds * 90000), 0, 0, excludedExtensionsPtr);
-            Marshal.FreeHGlobal(pathPtr);
+            HBFunctions.hb_scan_list(this.Handle, scanPathsList.Ptr, titleIndex, previewCount, 1, (ulong)(minDuration.TotalSeconds * 90000), 0, 0, excludedExtensionsPtr);
 
             this.scanPollTimer = new Timer();
             this.scanPollTimer.Interval = ScanPollIntervalMs;

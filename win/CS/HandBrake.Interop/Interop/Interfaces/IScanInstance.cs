@@ -62,8 +62,8 @@ namespace HandBrake.Interop.Interop.Interfaces
         /// <summary>
         /// Starts a scan of the given path.
         /// </summary>
-        /// <param name="path">
-        /// The path of the video to scan.
+        /// <param name="paths">
+        /// A list of file paths to scan.
         /// </param>
         /// <param name="previewCount">
         /// The number of previews to make on each title.
@@ -79,7 +79,7 @@ namespace HandBrake.Interop.Interop.Interfaces
         /// These should be the extension name only. No .
         /// Case Insensitive.
         /// </param>
-        void StartScan(string path, int previewCount, TimeSpan minDuration, int titleIndex, List<string> excludedExtensions);
+        void StartScan(List<string> paths, int previewCount, TimeSpan minDuration, int titleIndex, List<string> excludedExtensions);
 
         /// <summary>
         /// Stop any running scans

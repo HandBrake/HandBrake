@@ -1239,7 +1239,7 @@ namespace HandBrakeWPF.ViewModels
 
             if (dialogResult.HasValue && dialogResult.Value)
             {
-                this.StartScan(dialog.SelectedPath, this.TitleSpecificScan);
+                this.StartScan(new List<string> { dialog.SelectedPath }, this.TitleSpecificScan);
             }
         }
 
@@ -1274,7 +1274,7 @@ namespace HandBrakeWPF.ViewModels
             {
                 this.SetMru(Constants.FileScanMru, Path.GetDirectoryName(dialog.FileName));
 
-                this.StartScan(dialog.FileName, this.TitleSpecificScan);
+                this.StartScan(new List<string> { dialog.FileName }, this.TitleSpecificScan);
             }
         }
 
@@ -1330,7 +1330,7 @@ namespace HandBrakeWPF.ViewModels
             EncodeTask task = queueTask.Task;
 
             this.queueEditTask = queueTask;
-            this.scanService.Scan(task.Source, task.Title, QueueEditAction);
+            this.scanService.Scan(new List<string> { task.Source }, task.Title, QueueEditAction);
         }
 
         public void PauseEncode()
@@ -1484,8 +1484,8 @@ namespace HandBrakeWPF.ViewModels
                 string[] fileNames = e.Data.GetData(DataFormats.FileDrop, true) as string[];
                 if (fileNames != null && fileNames.Any() && (File.Exists(fileNames[0]) || Directory.Exists(fileNames[0])))
                 {
-                    string videoContent = fileNames.FirstOrDefault(f => Path.GetExtension(f)?.ToLower() != ".srt" && Path.GetExtension(f)?.ToLower() != ".ssa" && Path.GetExtension(f)?.ToLower() != ".ass");
-                    if (!string.IsNullOrEmpty(videoContent))
+                    List<string> videoContent = fileNames.Where(f => Path.GetExtension(f)?.ToLower() != ".srt" && Path.GetExtension(f)?.ToLower() != ".ssa" && Path.GetExtension(f)?.ToLower() != ".ass").ToList();
+                    if (videoContent.Count > 0)
                     {
                         this.StartScan(videoContent, 0);
                         return;
@@ -1880,12 +1880,12 @@ namespace HandBrakeWPF.ViewModels
             this.NotifyOfPropertyChange(() => this.IsPresetDescriptionVisible);
         }
 
-        public void StartScan(string filename, int title)
+        public void StartScan(List<string> filePaths, int title)
         {
-            if (!string.IsNullOrEmpty(filename))
+            if (filePaths != null && filePaths.Count > 0)
             {
                 ShowSourceSelection = false;
-                this.scanService.Scan(filename, title, null);
+                this.scanService.Scan(filePaths, title, null);
             }
         }
 
@@ -1898,7 +1898,9 @@ namespace HandBrakeWPF.ViewModels
                     string path = ((DriveInformation)item).RootDirectory;
                     string videoDir = Path.Combine(path, "VIDEO_TS");
 
-                    this.StartScan(Directory.Exists(videoDir) ? videoDir : path, this.TitleSpecificScan);
+                    List<string> scanPath = new List<string> { Directory.Exists(videoDir) ? videoDir : path };
+
+                    this.StartScan(scanPath, this.TitleSpecificScan);
                 }
                 else if (item.GetType() == typeof(SourceMenuItem))
                 {
@@ -1908,7 +1910,9 @@ namespace HandBrakeWPF.ViewModels
                         string path = driveInfo.RootDirectory;
                         string videoDir = Path.Combine(driveInfo.RootDirectory, "VIDEO_TS");
 
-                        this.StartScan(Directory.Exists(videoDir) ? videoDir : path, this.TitleSpecificScan);
+                        List<string> scanPath = new List<string> { Directory.Exists(videoDir) ? videoDir : path };
+
+                        this.StartScan(scanPath, this.TitleSpecificScan);
                     }
 
                     this.ShowSourceSelection = false;
