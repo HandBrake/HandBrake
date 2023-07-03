@@ -814,7 +814,12 @@ static int DecodePreviews( hb_scan_t * data, hb_title_t * title, int flush )
     {
         stream = hb_stream_open(data->h, title->path, title, 0);
     }
-
+    else 
+    {
+        // We have a batch of files.
+        stream = hb_stream_open(data->h, title->path, title, 0);
+    }
+    
     if (title->video_codec == WORK_NONE)
     {
         hb_error("No video decoder set!");
