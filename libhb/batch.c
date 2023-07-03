@@ -177,6 +177,30 @@ hb_title_t * hb_batch_title_scan( hb_batch_t * d, int t )
     return title;
 }
 
+hb_title_t * hb_batch_title_scan_single( hb_handle_t * h, char * filename, int t )
+{
+    hb_title_t   * title;
+    hb_stream_t  * stream;
+    
+    if ( t < 0 )
+        return NULL;
+
+    hb_log( "batch: scanning %s", filename );
+    title = hb_title_init( filename, t );
+    
+    stream = hb_stream_open(h, filename, title, 1);
+    if ( stream == NULL )
+    {
+        hb_title_close( &title );
+        return NULL;
+    }
+    
+    title = hb_stream_title_scan( stream, title );
+    hb_stream_close( &stream );
+
+    return title;
+}
+
 /***********************************************************************
  * hb_batch_close
  ***********************************************************************

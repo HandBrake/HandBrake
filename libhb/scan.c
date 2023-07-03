@@ -365,28 +365,18 @@ static void ScanFunc( void * _data )
     }
     else if (hb_list_count(data->paths) > 1) // We have many file paths to process.
     {
-           hb_log (" Multi File Scan");
+        hb_log ("Multi File Scan");
         // TODO -> do we want to support excluded extensions here?
         // If dragging a batch of files, maybe not, but if the UI's implement a recursive folder maybe?
         for( i = 0; i < hb_list_count( data->paths ); i++ )
         {
             single_path = hb_list_item( data->paths, i);
-            
-            
-            if (data->title_index == 0)
+           
+            UpdateState1(data, i + 1);
+            title = hb_batch_title_scan_single(data->h, single_path, (int)i + 1);
+            if ( title != NULL )
             {
-                data->title_index = 1;
-            }
-            
-            hb_title_t * title = hb_title_init( single_path, data->title_index );
-            data->stream = hb_stream_open(data->h, single_path, title, 1);
-            if (data->stream != NULL)
-            {
-                title = hb_stream_title_scan( data->stream, title );
-                if ( title )
-                {
-                    hb_list_add( data->title_set->list_title, title );
-                }
+                hb_list_add( data->title_set->list_title, title );
             }
             else
             {

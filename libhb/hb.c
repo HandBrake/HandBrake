@@ -365,7 +365,7 @@ void hb_scan( hb_handle_t * h, const char * path, int title_index,
 {
     // TODO Compatibility later for the other UI's.  Remove when they are updated.
     hb_list_t * file_paths = hb_list_init();
-    hb_list_add(file_paths, path);
+    hb_list_add(file_paths, (char*) path);
     hb_scan_list(h, file_paths, title_index, preview_count, store_previews, min_duration, crop_threshold_frames, crop_threshold_pixels, exclude_extensions);
 }
 
