@@ -158,9 +158,12 @@ static void *HandBrakeXPCServiceContext = &HandBrakeXPCServiceContext;
     dispatch_sync(_queue, ^{
         self.reply = reply;
 
-        [self.core scanURL:url titleIndex:index previews:previewsNum minDuration:seconds keepPreviews:keepPreviews
-           progressHandler:self.progressHandler
-         completionHandler:self.completionHandler];
+        [self.core scanURLs:@[url] titleIndex:index
+                   previews:previewsNum
+                minDuration:seconds
+               keepPreviews:keepPreviews
+            progressHandler:self.progressHandler
+          completionHandler:self.completionHandler];
     });
 }
 
