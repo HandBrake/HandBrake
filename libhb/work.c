@@ -1422,10 +1422,12 @@ static void sanitize_filter_list_pre(hb_job_t *job, hb_geometry_t src_geo)
 
 static void sanitize_filter_list_post(hb_job_t *job)
 {
+#ifdef __APPLE__
     if (job->hw_pix_fmt == AV_PIX_FMT_VIDEOTOOLBOX)
     {
-        setup_hw_filters(job);
+        hb_vt_setup_hw_filters(job);
     }
+#endif
 
     if (job->hw_pix_fmt == AV_PIX_FMT_NONE &&
         hb_video_encoder_pix_fmt_is_supported(job->vcodec, job->input_pix_fmt, job->encoder_profile) == 0)

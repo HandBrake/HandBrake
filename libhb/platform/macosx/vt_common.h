@@ -20,4 +20,6 @@ const char * const * hb_vt_profile_get_names(int encoder);
 const char * const * hb_vt_level_get_names(int encoder);
 
 unsigned int hb_vt_get_cv_pixel_format(int pix_fmt, int color_range);
-void setup_hw_filters(hb_job_t *job);
+
+int hb_vt_are_filters_supported(hb_list_t *filters);
+void hb_vt_setup_hw_filters(hb_job_t *job);
