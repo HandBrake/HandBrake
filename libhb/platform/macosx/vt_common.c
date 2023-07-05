@@ -353,7 +353,51 @@ unsigned int hb_vt_get_cv_pixel_format(int pix_fmt, int color_range)
     }
 }
 
-void setup_hw_filters(hb_job_t *job)
+int hb_vt_are_filters_supported(hb_list_t *filters)
+{
+    int ret = 1;
+
+    for (int i = 0; i < hb_list_count(filters); i++)
+    {
+        int supported = 1;
+        hb_filter_object_t *filter = hb_list_item(filters, i);
+
+        switch (filter->id)
+        {
+            case HB_FILTER_CROP_SCALE:
+            case HB_FILTER_CROP_SCALE_VT:
+                break;
+            case HB_FILTER_ROTATE:
+            case HB_FILTER_ROTATE_VT:
+            {
+#ifdef MAC_OS_VERSION_13_0
+                if (__builtin_available(macOS 13, *)) {}
+                else { supported = 0; }
+                break;
+#else
+                supported = 0;
+                break;
+#endif
+            }
+            case HB_FILTER_VFR:
+                // Mode 0 doesn't require access to the frame data
+                supported = hb_dict_get_int(filter->settings, "mode") == 0;
+                break;
+            default:
+                supported = 0;
+        }
+
+        if (supported == 0)
+        {
+            hb_deep_log(2, "hwaccel: %s isn't yet supported for hw video frames", filter->name);
+            ret = 0;
+        }
+    }
+
+    return ret;
+}
+
+void hb_vt_setup_hw_filters(hb_job_t *job)
 {
     if (job->hw_pix_fmt == AV_PIX_FMT_VIDEOTOOLBOX)
     {

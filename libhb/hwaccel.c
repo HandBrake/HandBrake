@@ -10,6 +10,10 @@
 #include "handbrake/hbffmpeg.h"
 #include "handbrake/handbrake.h"
 
+#ifdef __APPLE__
+#include "platform/macosx/vt_common.h"
+#endif
+
 enum AVHWDeviceType hb_hwaccel_available(int codec_id, const char *hwdevice_name)
 {
     if (is_hardware_disabled())
@@ -268,39 +272,48 @@ static int is_codec_supported(int codec_id)
     }
 }
 
-static int are_filters_supported(hb_list_t *filters, int hw_decode)
+int hb_nvenc_are_filters_supported(hb_list_t *filters)
 {
     int ret = 1;
 
     for (int i = 0; i < hb_list_count(filters); i++)
     {
+        int supported = 1;
         hb_filter_object_t *filter = hb_list_item(filters, i);
+
         switch (filter->id)
         {
-            case HB_FILTER_CROP_SCALE:
-            case HB_FILTER_CROP_SCALE_VT:
-            case HB_FILTER_ROTATE:
-            case HB_FILTER_ROTATE_VT:
-            {
-                if (hw_decode & HB_DECODE_SUPPORT_VIDEOTOOLBOX)
-                {
-                    break;
-                }
-            }
             case HB_FILTER_VFR:
-            {
                 // Mode 0 doesn't require access to the frame data
-                int mode = hb_dict_get_int(filter->settings, "mode");
-                if (mode == 0)
-                {
-                    break;
-                }
-            }
-            default:
-                hb_deep_log(2, "hwaccel: %s isn't yet supported for hw video frames", filter->name);
-                ret = 0;
+                supported = hb_dict_get_int(filter->settings, "mode") == 0;
                 break;
+            default:
+                supported = 0;
         }
+
+        if (supported == 0)
+        {
+            hb_deep_log(2, "hwaccel: %s isn't yet supported for hw video frames", filter->name);
+            ret = 0;
+        }
+    }
+
+    return ret;
+}
+
+static int are_filters_supported(hb_list_t *filters, int hw_decode)
+{
+    int ret = 0;
+
+#ifdef __APPLE__
+    if (hw_decode & HB_DECODE_SUPPORT_VIDEOTOOLBOX)
+    {
+        ret = hb_vt_are_filters_supported(filters);
+    }
+#endif
+    if (hw_decode & HB_DECODE_SUPPORT_NVDEC)
+    {
+        ret = hb_nvenc_are_filters_supported(filters);
     }
 
     return ret;
