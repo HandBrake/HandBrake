@@ -1421,6 +1421,12 @@ void hb_video_quality_get_limits(uint32_t codec, float *low, float *high,
             *low         = -12.;
             *high        = 51.;
             break;
+        case HB_VCODEC_FFMPEG_VCE_AV1:
+            *direction   = 1;
+            *granularity = 1;
+            *low         = 0.;
+            *high        = 255.;
+            break;
         case HB_VCODEC_X265_12BIT:
             *direction   = 1;
             *granularity = 0.1;
