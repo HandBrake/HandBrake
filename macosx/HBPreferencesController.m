@@ -246,11 +246,12 @@ NSString * const HBKeepPresetEdits               = @"HBKeepPresetEdits";
 	}
     [panel setDirectoryURL:sendToAppDirectory];
 
-    [panel beginSheetModalForWindow:[self window] completionHandler:^(NSInteger result) {
+    [panel beginSheetModalForWindow:[self window] completionHandler:^(NSInteger result)
+     {
         if (result == NSModalResponseOK)
         {
-            NSURL *sendToAppURL = [panel URL];
-            NSURL *sendToAppDirectoryURL = [sendToAppURL URLByDeletingLastPathComponent];
+            NSURL *sendToAppURL = panel.URL;
+            NSURL *sendToAppDirectoryURL = sendToAppURL.URLByDeletingLastPathComponent;
             [ud setURL:sendToAppDirectoryURL forKey:@"HBLastSendToAppDirectory"];
 
             // We set the name of the app to send to in the display field
@@ -258,6 +259,8 @@ NSString * const HBKeepPresetEdits               = @"HBKeepPresetEdits";
             [self->fSendEncodeToAppField setStringValue:sendToAppName];
 
             [ud setObject:self->fSendEncodeToAppField.stringValue forKey:HBSendToApp];
+
+            [sendToAppURL stopAccessingSecurityScopedResource];
         }
     }];
 }
