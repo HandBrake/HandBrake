@@ -402,7 +402,7 @@ namespace HandBrake.Interop.Interop
                     this.ScanProgress(this, new ScanProgressEventArgs(state.Scanning.Progress, state.Scanning.Preview, state.Scanning.PreviewCount, state.Scanning.Title, state.Scanning.TitleCount));
                 }
             }
-            else if (taskState != null && taskState == TaskState.ScanDone)
+            else if (taskState != null && (taskState == TaskState.ScanDone || taskState == TaskState.Idle))
             {
                 this.scanPollTimer.Stop();
 
