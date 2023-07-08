@@ -365,18 +365,19 @@ static void ScanFunc( void * _data )
     }
     else if (hb_list_count(data->paths) > 1) // We have many file paths to process.
     {
-        hb_log ("Multi File Scan");
-
         // If dragging a batch of files, maybe not, but if the UI's implement a recursive folder maybe?
         for( i = 0; i < hb_list_count( data->paths ); i++ )
         {
             single_path = hb_list_item( data->paths, i);
            
-            UpdateState1(data, i + 1);
-            title = hb_batch_title_scan_single(data->h, single_path, (int)i + 1);
-            if ( title != NULL )
-            {
-                hb_list_add( data->title_set->list_title, title );
+            if (hb_is_valid_batch_path(single_path))
+            {           
+                UpdateState1(data, i + 1);
+                title = hb_batch_title_scan_single(data->h, single_path, (int)i + 1);
+                if ( title != NULL )
+                {
+                    hb_list_add( data->title_set->list_title, title );
+                }
             }
         }
     }

@@ -181,27 +181,15 @@ hb_title_t * hb_batch_title_scan_single( hb_handle_t * h, char * filename, int t
 {
     hb_title_t   * title;
     hb_stream_t  * stream;
-    hb_stat_t      sb;
+  
     
     if ( t < 0 ) 
     {
         return NULL;
     }
     
-    if ( hb_stat( filename, &sb ) )
+    if (!hb_is_valid_batch_path(filename))
     {
-       free( filename );
-       return NULL;
-    }
-    
-    if ( S_ISDIR( sb.st_mode ) ) 
-    {
-        return NULL;
-    }
-        
-    if ( !S_ISREG( sb.st_mode ) )
-    {
-        free( filename );
         return NULL;
     }
 
@@ -225,6 +213,30 @@ hb_title_t * hb_batch_title_scan_single( hb_handle_t * h, char * filename, int t
     hb_stream_close( &stream );
 
     return title;
+}
+
+int hb_is_valid_batch_path(char * filename)
+{
+    hb_stat_t      sb;
+      
+    if ( hb_stat( filename, &sb ) )
+    {
+       free( filename );
+       return NULL;
+    }
+    
+    if ( S_ISDIR( sb.st_mode ) ) 
+    {
+        return NULL;
+    }
+        
+    if ( !S_ISREG( sb.st_mode ) )
+    {
+        free( filename );
+        return NULL;
+    }
+    
+    return 1;
 }
 
 /***********************************************************************

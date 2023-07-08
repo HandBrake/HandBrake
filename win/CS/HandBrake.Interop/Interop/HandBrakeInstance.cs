@@ -402,7 +402,7 @@ namespace HandBrake.Interop.Interop
                     this.ScanProgress(this, new ScanProgressEventArgs(state.Scanning.Progress, state.Scanning.Preview, state.Scanning.PreviewCount, state.Scanning.Title, state.Scanning.TitleCount));
                 }
             }
-            else if (taskState != null && (taskState == TaskState.ScanDone || taskState == TaskState.Idle))
+            else if (taskState != null && (taskState == TaskState.ScanDone))
             {
                 this.scanPollTimer.Stop();
 
@@ -420,7 +420,7 @@ namespace HandBrake.Interop.Interop
 
                 if (this.ScanCompleted != null)
                 {
-                    this.ScanCompleted(this, new System.EventArgs());
+                    this.ScanCompleted(this, EventArgs.Empty);
                 }
 
                 // Memory Management for the exclusion list.
@@ -441,6 +441,16 @@ namespace HandBrake.Interop.Interop
                 catch (Exception ex)
                 {
                     Debug.WriteLine(ex);
+                }
+            }
+            else if (taskState != null && (taskState == TaskState.Idle))
+            {
+                this.scanPollTimer.Stop();
+                this.Titles = null;
+
+                if (this.ScanCompleted != null)
+                {
+                    this.ScanCompleted(this, EventArgs.Empty);
                 }
             }
         }

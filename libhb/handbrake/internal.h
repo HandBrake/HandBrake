@@ -331,6 +331,7 @@ void          hb_batch_close( hb_batch_t ** _d );
 int           hb_batch_title_count( hb_batch_t * d );
 hb_title_t  * hb_batch_title_scan( hb_batch_t * d, int t );
 hb_title_t  * hb_batch_title_scan_single( hb_handle_t * h, char * filename, int t );
+int           hb_is_valid_batch_path(char * filename);
 
 /***********************************************************************
  * dvd.c
