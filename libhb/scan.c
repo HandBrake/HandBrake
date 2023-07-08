@@ -379,11 +379,6 @@ static void ScanFunc( void * _data )
                 hb_list_add( data->title_set->list_title, title );
             }
         }
-        
-        if ( hb_list_count(data->title_set->list_title) == 0)
-        {
-            goto finish;
-        }
     }
     else // Single File.
     {
@@ -501,9 +496,13 @@ static void ScanFunc( void * _data )
         title->flags |= HBTF_SCAN_COMPLETE;
     }
     
-    if (single_path != NULL && hb_list_count(data->title_set->list_title) > 0)
+    if (hb_list_count(data->title_set->list_title) > 0)
     {
-        data->title_set->path = strdup(single_path);
+        if ( single_path != NULL ) {
+            data->title_set->path = strdup(single_path);
+        } else {
+            data->title_set->path = NULL; // we have many paths.
+        }
     }
     else
     {
