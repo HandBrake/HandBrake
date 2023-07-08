@@ -1702,7 +1702,7 @@ VLC and MPC-HC are supported. Other players may also work but are not validated.
     <value>About HandBrake</value>
   </data>
   <data name="SourceSelection_DropFileHere" xml:space="preserve">
-    <value>Or drop a file or folder here ...</value>
+    <value>Or drop a file, set of files or folder here ...</value>
   </data>
   <data name="SourceSelection_Help" xml:space="preserve">
     <value>Help</value>

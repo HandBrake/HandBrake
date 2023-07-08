@@ -6525,7 +6525,7 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Or drop a file or folder here ....
+        ///   Looks up a localized string similar to Or drop a file, set of files or folder here ....
         /// </summary>
         public static string SourceSelection_DropFileHere {
             get {
