@@ -76,11 +76,11 @@ int hb_hwaccel_hw_ctx_init(hb_job_t *job)
 
     const AVCodec *codec = avcodec_find_decoder(job->title->video_codec_param);
 
-    if (job->hw_decode == HB_DECODE_SUPPORT_VIDEOTOOLBOX)
+    if (job->hw_decode & HB_DECODE_SUPPORT_VIDEOTOOLBOX)
     {
         hw_type = av_hwdevice_find_type_by_name("videotoolbox");
     }
-    else if (job->hw_decode == HB_DECODE_SUPPORT_NVDEC)
+    else if (job->hw_decode & HB_DECODE_SUPPORT_NVDEC)
     {
         hw_type = av_hwdevice_find_type_by_name("cuda");
     }
