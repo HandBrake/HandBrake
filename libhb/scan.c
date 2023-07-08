@@ -366,7 +366,7 @@ static void ScanFunc( void * _data )
     else if (hb_list_count(data->paths) > 1) // We have many file paths to process.
     {
         hb_log ("Multi File Scan");
-        // TODO -> do we want to support excluded extensions here?
+
         // If dragging a batch of files, maybe not, but if the UI's implement a recursive folder maybe?
         for( i = 0; i < hb_list_count( data->paths ); i++ )
         {
@@ -378,12 +378,11 @@ static void ScanFunc( void * _data )
             {
                 hb_list_add( data->title_set->list_title, title );
             }
-            else
-            {
-                hb_title_close( &title );
-                hb_log( "scan: unrecognized file type" );
-                goto finish;
-            }
+        }
+        
+        if ( hb_list_count(data->title_set->list_title) == 0)
+        {
+            goto finish;
         }
     }
     else // Single File.

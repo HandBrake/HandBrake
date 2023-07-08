@@ -161,7 +161,7 @@ hb_title_t * hb_batch_title_scan( hb_batch_t * d, int t )
     filename = hb_list_item( d->list_file, t - 1 );
     if ( filename == NULL )
         return NULL;
-
+        
     hb_log( "batch: scanning %s", filename );
     title = hb_title_init( filename, t );
     stream = hb_stream_open(d->h, filename, title, 1);
@@ -181,20 +181,46 @@ hb_title_t * hb_batch_title_scan_single( hb_handle_t * h, char * filename, int t
 {
     hb_title_t   * title;
     hb_stream_t  * stream;
+    hb_stat_t      sb;
     
-    if ( t < 0 )
+    if ( t < 0 ) 
+    {
         return NULL;
+    }
+    
+    if ( hb_stat( filename, &sb ) )
+    {
+       free( filename );
+       return NULL;
+    }
+    
+    if ( S_ISDIR( sb.st_mode ) ) 
+    {
+        return NULL;
+    }
+        
+    if ( !S_ISREG( sb.st_mode ) )
+    {
+        free( filename );
+        return NULL;
+    }
 
     hb_log( "batch: scanning %s", filename );
     title = hb_title_init( filename, t );
     
+    if ( title == NULL )
+    {
+        return NULL;
+    }
+
     stream = hb_stream_open(h, filename, title, 1);
+    
     if ( stream == NULL )
     {
         hb_title_close( &title );
         return NULL;
     }
-    
+        
     title = hb_stream_title_scan( stream, title );
     hb_stream_close( &stream );
 
