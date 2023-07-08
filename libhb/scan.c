@@ -203,7 +203,7 @@ static int get_color_range(int color_range)
 
 static int is_known_filetype (char * filename) 
 {
-    if (ends_with(filename, "mp4"))
+    if (ends_with(filename, "mp4") || ends_with(filename, "m4v") || ends_with(filename, "mov") || ends_with(filename, "flv"))
     {
         return 1;
     }
