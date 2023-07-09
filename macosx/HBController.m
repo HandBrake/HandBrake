@@ -688,11 +688,11 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
     // Clear the undo manager, we can't undo this action
     [self.window.undoManager removeAllActions];
 
-    NSArray<NSURL *> *mediaURLs = fileURLs;
+    NSMutableArray<NSURL *> *mediaURLs = [[NSMutableArray alloc] init];
 
-    if (fileURLs.count == 1)
+    for (NSURL *fileURL in fileURLs)
     {
-        mediaURLs = @[[HBUtilities mediaURLFromURL:fileURLs.firstObject]];
+        [mediaURLs addObject:[HBUtilities mediaURLFromURL:fileURL]];
     }
 
     // Check if we can scan the source and if there is any warning.
@@ -744,8 +744,6 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
                  {
                      [self.titlePopUp addItemWithTitle:title.description];
                  }
-                 self.window.representedURL = mediaURLs.firstObject;
-                 self.window.title = mediaURLs.firstObject.lastPathComponent;
              }
              else
              {
@@ -1004,6 +1002,9 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
         {
             self.sourceLabel.stringValue = [NSString stringWithFormat:@"%@, %@", title.name, title.shortFormatDescription];
         }
+
+        self.window.representedURL = job.fileURL;
+        self.window.title = job.fileURL.lastPathComponent;
     }
     else
     {
