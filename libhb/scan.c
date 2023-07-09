@@ -201,34 +201,20 @@ static int get_color_range(int color_range)
     }
 }
 
+static const char * const known_file_types[] =
+{
+    "mp4", "m4v", "mov", "flv", "mkv", "avi", "webm", "wmv",  NULL
+};
+
 static int is_known_filetype(const char *filename)
 {
-    if (hb_str_ends_with(filename, "mp4") || hb_str_ends_with(filename, "m4v") ||
-        hb_str_ends_with(filename, "mov") || hb_str_ends_with(filename, "flv"))
+    for (int i = 0; known_file_types[i] != NULL; i++)
     {
-        return 1;
+        if (hb_str_ends_with(filename, known_file_types[i]))
+        {
+            return 1;
+        }
     }
-
-    if (hb_str_ends_with(filename, "mkv"))
-    {
-        return 1;
-    }
-
-    if (hb_str_ends_with(filename, "avi"))
-    {
-        return 1;
-    }
-
-    if (hb_str_ends_with(filename, "webm"))
-    {
-        return 1;
-    }
-
-    if (hb_str_ends_with(filename, "wmv"))
-    {
-        return 1;
-    }
-
     return 0;
 }
 
