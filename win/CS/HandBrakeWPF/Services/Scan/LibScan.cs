@@ -12,7 +12,6 @@ namespace HandBrakeWPF.Services.Scan
     using System;
     using System.Collections.Generic;
     using System.Diagnostics;
-    using System.Linq;
     using System.Windows.Media.Imaging;
 
     using HandBrake.Interop.Interop;
@@ -43,7 +42,6 @@ namespace HandBrakeWPF.Services.Scan
         private readonly ILogInstanceManager logInstanceManager;
 
         private TitleFactory titleFactory = new TitleFactory();
-        private List<string> currentSourceScanPath;
         private IScanInstance instance;
         private Action<bool, Source> postScanOperation;
         private bool isCancelled = false;
@@ -220,8 +218,6 @@ namespace HandBrakeWPF.Services.Scan
         {
             try
             {
-                this.currentSourceScanPath = sourcePaths;
-
                 this.IsScanning = true;
 
                 TimeSpan minDuration = TimeSpan.FromSeconds(this.userSettingService.GetUserSetting<int>(UserSettingConstants.MinScanDuration));
@@ -262,8 +258,7 @@ namespace HandBrakeWPF.Services.Scan
                 Source sourceData = null;
                 if (this.instance?.Titles != null)
                 {
-                    // TODO -> Support handling multiple directories. 
-                    sourceData = new Source(this.currentSourceScanPath.FirstOrDefault(), this.ConvertTitles(this.instance.Titles), null);
+                    sourceData = new Source(this.ConvertTitles(this.instance.Titles));
                 }
 
                 this.IsScanning = false;

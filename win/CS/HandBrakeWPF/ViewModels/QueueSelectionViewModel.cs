@@ -129,11 +129,11 @@ namespace HandBrakeWPF.ViewModels
         {
             if (this.nameDesc)
             {
-                TitleList = new BindingList<SelectionTitle>(TitleList.OrderByDescending(o => o.Title.SourceName).ToList());
+                TitleList = new BindingList<SelectionTitle>(TitleList.OrderByDescending(o => o.Title.SourcePath).ToList());
             }
             else
             {
-                TitleList = new BindingList<SelectionTitle>(TitleList.OrderBy(o => o.Title.SourceName).ToList());
+                TitleList = new BindingList<SelectionTitle>(TitleList.OrderBy(o => o.Title.SourcePath).ToList());
             }
             
             this.NotifyOfPropertyChange(() => TitleList);
@@ -211,7 +211,7 @@ namespace HandBrakeWPF.ViewModels
 
                 foreach (Title item in titles)
                 {
-                    string srcName = item.DisplaySourceName ?? scannedSource.SourceName;
+                    string srcName = item.DisplaySourceName ?? item.SourcePath;
                     SelectionTitle title = new SelectionTitle(item, srcName) { IsSelected = true };
                     TitleList.Add(title);
                 }
