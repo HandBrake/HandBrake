@@ -151,12 +151,12 @@ typedef void (^HBCoreCompletionHandler)(HBCoreResult result);
 /**
  *  Determines whether the scan operation can scan a particular URL or whether an additional decryption lib is needed.
  *
- *  @param url   the URL of the input file.
+ *  @param urls   the URLs of the input files.
  *  @param error an error containing additional info.
  *
  *  @return YES is the file at URL is scannable.
  */
-- (BOOL)canScan:(NSArray<NSURL *> *)url error:(NSError * __autoreleasing *)error;
+- (BOOL)canScan:(NSArray<NSURL *> *)urls error:(NSError * __autoreleasing *)error;
 
 /**
  *  Initiates an asynchronous scan operation and returns immediately.

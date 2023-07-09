@@ -370,7 +370,7 @@ struct hb_dovi_conf_s
     unsigned dv_bl_signal_compatibility_id;
 };
 
-int ends_with (char* base, char* str);
+int hb_str_ends_with(const char *base, const char *str);
 
 /*******************************************************************************
  * Lists of rates, mixdowns, encoders etc.

@@ -363,10 +363,13 @@ void hb_scan( hb_handle_t * h, const char * path, int title_index,
               int preview_count, int store_previews, uint64_t min_duration,
               int crop_threshold_frames, int crop_threshold_pixels, hb_list_t * exclude_extensions)
 {
-    // TODO Compatibility later for the other UI's.  Remove when they are updated.
-    hb_list_t * file_paths = hb_list_init();
-    hb_list_add(file_paths, (char*) path);
+    // TODO: Compatibility later for the other UI's.  Remove when they are updated.
+    hb_list_t *file_paths = hb_list_init();
+    hb_list_add(file_paths, (char *)path);
+
     hb_scan_list(h, file_paths, title_index, preview_count, store_previews, min_duration, crop_threshold_frames, crop_threshold_pixels, exclude_extensions);
+
+    hb_list_close(&file_paths);
 }
 
 /**
@@ -387,10 +390,11 @@ void hb_scan_list( hb_handle_t * h, hb_list_t * paths, int title_index,
 {
     hb_title_t * title;
 
-    char * single_path = NULL;
+    char *single_path = NULL;
     int path_count = hb_list_count(paths);
 
-    if (path_count == 1) {
+    if (path_count == 1)
+    {
         single_path = hb_list_item(paths, 0);
     }
     
@@ -459,8 +463,9 @@ void hb_scan_list( hb_handle_t * h, hb_list_t * paths, int title_index,
     }
 #endif
 
-    char * path_info = single_path;
-    if ( path_count > 1) {
+    char *path_info = single_path;
+    if (path_count > 1)
+    {
         path_info = "(multiple)";
     }
 

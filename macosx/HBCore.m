@@ -184,7 +184,7 @@ HB_OBJC_DIRECT_MEMBERS
 
 - (BOOL)canScan:(NSArray<NSURL *> *)urls error:(NSError * __autoreleasing *)error
 {
-    NSAssert(url, @"[HBCore canScan:] called with nil url.");
+    NSAssert(urls, @"[HBCore canScan:] called with nil urls.");
 
     for (NSURL *url in urls)
     {
@@ -264,7 +264,7 @@ HB_OBJC_DIRECT_MEMBERS
 - (void)scanURLs:(NSArray<NSURL *> *)urls titleIndex:(NSUInteger)index previews:(NSUInteger)previewsNum minDuration:(NSUInteger)seconds keepPreviews:(BOOL)keepPreviews progressHandler:(HBCoreProgressHandler)progressHandler completionHandler:(HBCoreCompletionHandler)completionHandler
 {
     NSAssert(self.state == HBStateIdle, @"[HBCore scanURL:] called while another scan or encode already in progress");
-    NSAssert(url, @"[HBCore scanURL:] called with nil url.");
+    NSAssert(urls, @"[HBCore scanURL:] called with nil url.");
 
 #ifdef __SANDBOX_ENABLED__
     __block NSMutableArray<HBSecurityAccessToken *> *tokens = [[NSMutableArray alloc] init];

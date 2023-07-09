@@ -201,33 +201,34 @@ static int get_color_range(int color_range)
     }
 }
 
-static int is_known_filetype (char * filename) 
+static int is_known_filetype(const char *filename)
 {
-    if (ends_with(filename, "mp4") || ends_with(filename, "m4v") || ends_with(filename, "mov") || ends_with(filename, "flv"))
+    if (hb_str_ends_with(filename, "mp4") || hb_str_ends_with(filename, "m4v") ||
+        hb_str_ends_with(filename, "mov") || hb_str_ends_with(filename, "flv"))
     {
         return 1;
     }
-    
-    if (ends_with(filename, "mkv"))
+
+    if (hb_str_ends_with(filename, "mkv"))
     {
         return 1;
     }
-    
-    if (ends_with(filename, "avi"))
+
+    if (hb_str_ends_with(filename, "avi"))
     {
         return 1;
     }
-    
-    if (ends_with(filename, "webm"))
+
+    if (hb_str_ends_with(filename, "webm"))
     {
         return 1;
     }
-    
-    if (ends_with(filename, "wmv"))
+
+    if (hb_str_ends_with(filename, "wmv"))
     {
         return 1;
     }
-    
+
     return 0;
 }
 
@@ -265,7 +266,7 @@ hb_thread_t * hb_scan_init( hb_handle_t * handle, volatile int * die,
     p.progress = 0.0;
 #undef p
     hb_set_state(handle, &state);
-    
+
     return hb_thread_init( "scan", ScanFunc, data, HB_NORMAL_PRIORITY );
 }
 
@@ -280,8 +281,9 @@ static void ScanFunc( void * _data )
     data->dvd = NULL;
     data->stream = NULL;
         
-    char * single_path = NULL;
-    if (hb_list_count(data->paths) == 1) {
+    char *single_path = NULL;
+    if (hb_list_count(data->paths) == 1)
+    {
         single_path = hb_list_item(data->paths, 0);
     }
         
@@ -366,17 +368,17 @@ static void ScanFunc( void * _data )
     else if (hb_list_count(data->paths) > 1) // We have many file paths to process.
     {
         // If dragging a batch of files, maybe not, but if the UI's implement a recursive folder maybe?
-        for( i = 0; i < hb_list_count( data->paths ); i++ )
+        for (i = 0; i < hb_list_count( data->paths ); i++)
         {
-            single_path = hb_list_item( data->paths, i);
-           
+            single_path = hb_list_item(data->paths, i);
+
             if (hb_is_valid_batch_path(single_path))
             {           
                 UpdateState1(data, i + 1);
                 title = hb_batch_title_scan_single(data->h, single_path, (int)i + 1);
-                if ( title != NULL )
+                if (title != NULL)
                 {
-                    hb_list_add( data->title_set->list_title, title );
+                    hb_list_add(data->title_set->list_title, title);
                 }
             }
         }
@@ -496,12 +498,14 @@ static void ScanFunc( void * _data )
         title      = hb_list_item( data->title_set->list_title, i );
         title->flags |= HBTF_SCAN_COMPLETE;
     }
-    
+
     if (hb_list_count(data->title_set->list_title) > 0)
     {
-        if ( single_path != NULL ) {
+        if (single_path != NULL)
+        {
             data->title_set->path = strdup(single_path);
-        } else {
+        } else
+        {
             data->title_set->path = NULL; // we have many paths.
         }
     }
@@ -529,7 +533,7 @@ finish:
     {
         hb_batch_close( &data->batch );
     }
-    
+
     // Clear down any file paths.
     char *output_filepath;
     while ((output_filepath = hb_list_item(data->paths, 0)))
@@ -538,7 +542,7 @@ finish:
         free(output_filepath);
     }
     hb_list_close( &data->paths );
-    
+
     // clean up excluded extensions list
     char *extension;
     while ((extension = hb_list_item(data->exclude_extensions, 0)))
@@ -809,16 +813,12 @@ static int DecodePreviews( hb_scan_t * data, hb_title_t * title, int flush )
     {
         stream = hb_stream_open(data->h, title->path, title, 0);
     }
-    else if (data->stream)
-    {
-        stream = hb_stream_open(data->h, title->path, title, 0);
-    }
     else 
     {
         // We have a batch of files.
         stream = hb_stream_open(data->h, title->path, title, 0);
     }
-    
+
     if (title->video_codec == WORK_NONE)
     {
         hb_error("No video decoder set!");
