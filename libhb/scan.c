@@ -373,7 +373,7 @@ static void ScanFunc( void * _data )
             single_path = hb_list_item(data->paths, i);
 
             if (hb_is_valid_batch_path(single_path))
-            {           
+            {
                 UpdateState1(data, i + 1);
                 title = hb_batch_title_scan_single(data->h, single_path, (int)i + 1);
                 if (title != NULL)
@@ -541,7 +541,7 @@ finish:
         hb_list_rem(data->paths, output_filepath);
         free(output_filepath);
     }
-    hb_list_close( &data->paths );
+    hb_list_close(&data->paths);
 
     // clean up excluded extensions list
     char *extension;
@@ -550,6 +550,7 @@ finish:
         hb_list_rem(data->exclude_extensions, extension);
         free(extension);
     }
+    hb_list_close(&data->exclude_extensions);
 
     free( data );
     _data = NULL;
