@@ -372,9 +372,10 @@ static void ScanFunc( void * _data )
         {
             single_path = hb_list_item(data->paths, i);
 
+            UpdateState1(data, i + 1);
+
             if (hb_is_valid_batch_path(single_path))
             {
-                UpdateState1(data, i + 1);
                 title = hb_batch_title_scan_single(data->h, single_path, (int)i + 1);
                 if (title != NULL)
                 {
@@ -1854,6 +1855,8 @@ static int  AllAudioOK( hb_title_t * title )
 static void UpdateState1(hb_scan_t *scan, int title)
 {
     hb_state_t state;
+    
+    int is_multi_file = hb_list_count(scan->paths) > 0;
 
     hb_get_state2(scan->h, &state);
 #define p state.param.scanning
@@ -1863,7 +1866,8 @@ static void UpdateState1(hb_scan_t *scan, int title)
     p.title_count = scan->dvd ? hb_dvd_title_count( scan->dvd ) :
                     scan->bd ? hb_bd_title_count( scan->bd ) :
                     scan->batch ? hb_batch_title_count( scan->batch ) :
-                               hb_list_count(scan->title_set->list_title);
+                    is_multi_file ? hb_list_count(scan->paths) :
+                    hb_list_count(scan->title_set->list_title);
     p.preview_cur = 0;
     p.preview_count = 1;
     p.progress = 0.5 * ((float)p.title_cur + ((float)p.preview_cur / p.preview_count)) / p.title_count;
