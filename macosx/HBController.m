@@ -859,14 +859,6 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
     }];
 }
 
-- (void)openURL:(NSURL *)fileURL
-{
-    if (self.core.state != HBStateScanning)
-    {
-        [self openURLs:@[fileURL] titleIndex:0];
-    }
-}
-
 - (void)openURLs:(NSArray<NSURL *> *)fileURL
 {
     if (self.core.state != HBStateScanning)
