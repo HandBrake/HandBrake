@@ -55,7 +55,7 @@ Windows users, please make sure to install [Microsoft .NET Desktop Runtime versi
   - You can now drag/drop multiple files from Windows Explorer to scan.
   - Added support for recursive folder scanning. (Can be enabled in preferences -> Advanced)
 - Improved Preview window with video playback support. (Supports most, but not all codecs/containers. Requires Microsoft Codec Packs from the Microsoft Store for modern codecs)
-- Improved Autoname Preferences UI and added new options: {width} {height} {quality_type} {encoder_bit_depth} {modification-time} {modification-date}
+- Improved Autoname Preferences UI and added new options: {width} {height} {quality_type} {encoder_bit_depth} {modification-time} {modification-date} {encoder} {encoder_bit_depth} {preset}
 - Improved UI on the queue window. 
   - The left progress panel now can optionally show additional status information. 
 - Improved Preset Panel. 
