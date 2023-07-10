@@ -1549,7 +1549,7 @@ VLC and MPC-HC are supported. Other players may also work but are not validated.
     <value>A previous queue archive is available. </value>
   </data>
   <data name="SourceSelection_SingleVideoFile" xml:space="preserve">
-    <value>Open a single video file.</value>
+    <value>Open video file(s).</value>
   </data>
   <data name="SourceSelection_SourceSelection" xml:space="preserve">
     <value>Source Selection</value>

@@ -6615,7 +6615,7 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Open a single video file..
+        ///   Looks up a localized string similar to Open video file(s)..
         /// </summary>
         public static string SourceSelection_SingleVideoFile {
             get {
