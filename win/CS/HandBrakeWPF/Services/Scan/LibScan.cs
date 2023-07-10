@@ -42,7 +42,6 @@ namespace HandBrakeWPF.Services.Scan
         private readonly ILogInstanceManager logInstanceManager;
 
         private TitleFactory titleFactory = new TitleFactory();
-        private string currentSourceScanPath;
         private IScanInstance instance;
         private Action<bool, Source> postScanOperation;
         private bool isCancelled = false;
@@ -67,8 +66,8 @@ namespace HandBrakeWPF.Services.Scan
         /// Scan a Source Path.
         /// Title 0: scan all
         /// </summary>
-        /// <param name="sourcePath">
-        /// Path to the file to scan
+        /// <param name="sourcePaths">
+        /// Paths to the file to scan
         /// </param>
         /// <param name="title">
         /// int title number. 0 for scan all
@@ -76,7 +75,7 @@ namespace HandBrakeWPF.Services.Scan
         /// <param name="postAction">
         /// The post Action.
         /// </param>
-        public void Scan(string sourcePath, int title, Action<bool, Source> postAction)
+        public void Scan(List<string> sourcePaths, int title, Action<bool, Source> postAction)
         {
             if (this.IsScanning)
             {
@@ -110,7 +109,7 @@ namespace HandBrakeWPF.Services.Scan
             this.instance.ScanCompleted += this.InstanceScanCompleted;
 
             // Start the scan on a back
-            this.ScanSource(sourcePath, title, this.userSettingService.GetUserSetting<int>(UserSettingConstants.PreviewScanCount));
+            this.ScanSource(sourcePaths, title, this.userSettingService.GetUserSetting<int>(UserSettingConstants.PreviewScanCount));
         }
 
         /// <summary>
@@ -206,7 +205,7 @@ namespace HandBrakeWPF.Services.Scan
         /// <summary>
         /// Start a scan for a given source path and title
         /// </summary>
-        /// <param name="sourcePath">
+        /// <param name="sourcePaths">
         /// Path to the source file
         /// </param>
         /// <param name="title">
@@ -215,14 +214,10 @@ namespace HandBrakeWPF.Services.Scan
         /// <param name="previewCount">
         /// The preview Count.
         /// </param>
-        private void ScanSource(object sourcePath, int title, int previewCount)
+        private void ScanSource(List<string> sourcePaths, int title, int previewCount)
         {
             try
             {
-                string source = sourcePath.ToString().EndsWith("\\") ? string.Format("\"{0}\\\\\"", sourcePath.ToString().TrimEnd('\\'))
-                              : "\"" + sourcePath + "\"";
-                this.currentSourceScanPath = source;
-
                 this.IsScanning = true;
 
                 TimeSpan minDuration = TimeSpan.FromSeconds(this.userSettingService.GetUserSetting<int>(UserSettingConstants.MinScanDuration));
@@ -232,7 +227,7 @@ namespace HandBrakeWPF.Services.Scan
                 List<string> excludedExtensions = this.userSettingService.GetUserSetting<List<string>>(UserSettingConstants.ExcludedExtensions);
 
                 this.ServiceLogMessage("Starting Scan ...");
-                this.instance.StartScan(sourcePath.ToString(), previewCount, minDuration, title != 0 ? title : 0, excludedExtensions);
+                this.instance.StartScan(sourcePaths, previewCount, minDuration, title != 0 ? title : 0, excludedExtensions);
 
                 this.ScanStarted?.Invoke(this, System.EventArgs.Empty);
             }
@@ -259,18 +254,11 @@ namespace HandBrakeWPF.Services.Scan
                 bool cancelled = this.isCancelled;
                 this.isCancelled = false;
 
-                // TODO -> Might be a better place to fix this.
-                string path = this.currentSourceScanPath;
-                if (this.currentSourceScanPath.Contains("\""))
-                {
-                    path = this.currentSourceScanPath.Trim('\"');
-                }
-
                 // Process into internal structures.
                 Source sourceData = null;
                 if (this.instance?.Titles != null)
                 {
-                    sourceData = new Source(path, this.ConvertTitles(this.instance.Titles), null);
+                    sourceData = new Source(this.ConvertTitles(this.instance.Titles));
                 }
 
                 this.IsScanning = false;

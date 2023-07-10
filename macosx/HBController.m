@@ -46,7 +46,7 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
 @property (nonatomic, readonly, strong) HBCore *core;
 @property (nonatomic, readonly, strong) HBAppDelegate *delegate;
 
-@property (nonatomic, strong) HBSecurityAccessToken *fileToken;
+@property (nonatomic, strong) NSArray<HBSecurityAccessToken *> *fileTokens;
 @property (nonatomic, strong) NSURL *destinationFolderURL;
 @property (nonatomic, strong) HBSecurityAccessToken *destinationFolderToken;
 
@@ -320,12 +320,10 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
 - (BOOL)performDragOperation:(id <NSDraggingInfo>)sender
 {
     NSArray<NSURL *> *fileURLs = [self fileURLsFromPasteboard:[sender draggingPasteboard]];
-
     if (fileURLs.count)
     {
-        [self openURL:fileURLs.firstObject];
+        [self openURLs:fileURLs];
     }
-
     [self.window.contentView setShowFocusRing:NO];
     return YES;
 }
@@ -677,7 +675,7 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
 /**
  * Here we actually tell hb_scan to perform the source scan, using the path to source and title number
  */
-- (void)scanURL:(NSURL *)fileURL titleIndex:(NSUInteger)index completionHandler:(void(^)(NSArray<HBTitle *> *titles))completionHandler
+- (void)scanURLs:(NSArray<NSURL *> *)fileURLs titleIndex:(NSUInteger)index completionHandler:(void(^)(NSArray<HBTitle *> *titles))completionHandler
 {
     // Save the current settings
     [self updateCurrentPreset];
@@ -690,12 +688,16 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
     // Clear the undo manager, we can't undo this action
     [self.window.undoManager removeAllActions];
 
-    NSURL *mediaURL = [HBUtilities mediaURLFromURL:fileURL];
+    NSMutableArray<NSURL *> *mediaURLs = [[NSMutableArray alloc] init];
 
-    NSError *outError = NULL;
+    for (NSURL *fileURL in fileURLs)
+    {
+        [mediaURLs addObject:[HBUtilities mediaURLFromURL:fileURL]];
+    }
 
     // Check if we can scan the source and if there is any warning.
-    BOOL canScan = [self.core canScan:mediaURL error:&outError];
+    NSError *outError = NULL;
+    BOOL canScan = [self.core canScan:mediaURLs error:&outError];
 
     // Notify the user that we don't support removal of copy protection.
     if (canScan && outError.code == 101 && !self.suppressCopyProtectionWarning)
@@ -719,10 +721,10 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
         NSUInteger hb_num_previews = [NSUserDefaults.standardUserDefaults integerForKey:HBPreviewsNumber];
         NSUInteger min_title_duration_seconds = [NSUserDefaults.standardUserDefaults integerForKey:HBMinTitleScanSeconds];
 
-        [self.core scanURL:mediaURL
-                titleIndex:index
-                  previews:hb_num_previews minDuration:min_title_duration_seconds keepPreviews:YES
-           progressHandler:^(HBState state, HBProgress progress, NSString *info)
+        [self.core scanURLs:mediaURLs
+                 titleIndex:index
+                   previews:hb_num_previews minDuration:min_title_duration_seconds keepPreviews:YES
+            progressHandler:^(HBState state, HBProgress progress, NSString *info)
          {
              self.sourceLabel.stringValue = info;
              self.scanIndicator.hidden = NO;
@@ -742,8 +744,6 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
                  {
                      [self.titlePopUp addItemWithTitle:title.description];
                  }
-                 self.window.representedURL = mediaURL;
-                 self.window.title = mediaURL.lastPathComponent;
              }
              else
              {
@@ -752,20 +752,20 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
              }
 
              // Set the last searched source directory in the prefs here
-             if ([NSWorkspace.sharedWorkspace isFilePackageAtPath:mediaURL.URLByDeletingLastPathComponent.path])
+             if ([NSWorkspace.sharedWorkspace isFilePackageAtPath:mediaURLs.firstObject.URLByDeletingLastPathComponent.path])
              {
-                 [NSUserDefaults.standardUserDefaults setURL:mediaURL.URLByDeletingLastPathComponent.URLByDeletingLastPathComponent forKey:HBLastSourceDirectoryURL];
+                 [NSUserDefaults.standardUserDefaults setURL:mediaURLs.firstObject.URLByDeletingLastPathComponent.URLByDeletingLastPathComponent forKey:HBLastSourceDirectoryURL];
              }
              else
              {
-                 [NSUserDefaults.standardUserDefaults setURL:mediaURL.URLByDeletingLastPathComponent forKey:HBLastSourceDirectoryURL];
+                 [NSUserDefaults.standardUserDefaults setURL:mediaURLs.firstObject.URLByDeletingLastPathComponent forKey:HBLastSourceDirectoryURL];
              }
 
              completionHandler(self.core.titles);
 
-             // Clear the undo manager, the completion handle
+             // Clear the undo manager, the completion handler
              // set the job in the main window
-             // and don't want to make it undoable
+             // and we don't want to make it undoable
              [self.window.undoManager removeAllActions];
              [self.window.toolbar validateVisibleItems];
              [self _touchBar_validateUserInterfaceItems];
@@ -808,17 +808,26 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
     }
 }
 
-- (void)openURL:(NSURL *)fileURL titleIndex:(NSUInteger)index
+- (void)openURLs:(NSArray<NSURL *> *)fileURLs titleIndex:(NSUInteger)index
 {
     [self showWindow:self];
 
-    self.fileToken = [HBSecurityAccessToken tokenWithAlreadyAccessedObject:fileURL];
+    NSMutableArray<HBSecurityAccessToken *> *tokens = [[NSMutableArray alloc] init];
+    for (NSURL *fileURL in fileURLs)
+    {
+        [tokens addObject:[HBSecurityAccessToken tokenWithAlreadyAccessedObject:fileURL]];
+    }
 
-    [self scanURL:fileURL titleIndex:index completionHandler:^(NSArray<HBTitle *> *titles)
+    self.fileTokens = tokens;
+
+    [self scanURLs:fileURLs titleIndex:index completionHandler:^(NSArray<HBTitle *> *titles)
     {
         if (titles.count)
         {
-            [NSDocumentController.sharedDocumentController noteNewRecentDocumentURL:fileURL];
+            for (NSURL *fileURL in fileURLs)
+            {
+                [NSDocumentController.sharedDocumentController noteNewRecentDocumentURL:fileURL];
+            }
 
             HBTitle *featuredTitle = titles.firstObject;
             for (HBTitle *title in titles)
@@ -848,11 +857,11 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
     }];
 }
 
-- (void)openURL:(NSURL *)fileURL
+- (void)openURLs:(NSArray<NSURL *> *)fileURL
 {
     if (self.core.state != HBStateScanning)
     {
-        [self openURL:fileURL titleIndex:0];
+        [self openURLs:fileURL titleIndex:0];
     }
 }
 
@@ -864,9 +873,9 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
     if (self.core.state != HBStateScanning)
     {
         [job refreshSecurityScopedResources];
-        self.fileToken = [HBSecurityAccessToken tokenWithObject:job.fileURL];
+        self.fileTokens = @[[HBSecurityAccessToken tokenWithObject:job.fileURL]];
 
-        [self scanURL:job.fileURL titleIndex:job.titleIdx completionHandler:^(NSArray<HBTitle *> *titles)
+        [self scanURLs:@[job.fileURL] titleIndex:job.titleIdx completionHandler:^(NSArray<HBTitle *> *titles)
         {
             if (titles.count)
             {
@@ -993,6 +1002,9 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
         {
             self.sourceLabel.stringValue = [NSString stringWithFormat:@"%@, %@", title.name, title.shortFormatDescription];
         }
+
+        self.window.representedURL = job.fileURL;
+        self.window.title = job.fileURL.lastPathComponent;
     }
     else
     {
@@ -1018,7 +1030,7 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
     }
 
     NSOpenPanel *panel = [NSOpenPanel openPanel];
-    [panel setAllowsMultipleSelection:NO];
+    [panel setAllowsMultipleSelection:YES];
     [panel setCanChooseFiles:YES];
     [panel setCanChooseDirectories:YES];
 
@@ -1042,7 +1054,7 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
         if (result == NSModalResponseOK)
          {
              NSInteger titleIdx = self.scanSpecificTitle ? self.scanSpecificTitleIdx : 0;
-             [self openURL:panel.URL titleIndex:titleIdx];
+             [self openURLs:panel.URLs titleIndex:titleIdx];
          }
      }];
 }

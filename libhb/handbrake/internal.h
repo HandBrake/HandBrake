@@ -282,7 +282,7 @@ static inline int hb_image_height(int pix_fmt, int height, int plane)
  * Threads: scan.c, work.c, reader.c, muxcommon.c
  **********************************************************************/
 hb_thread_t * hb_scan_init( hb_handle_t *, volatile int * die,
-                            const char * path, int title_index,
+                            hb_list_t * paths, int title_index,
                             hb_title_set_t * title_set, int preview_count,
                             int store_previews, uint64_t min_duration,
                             int crop_auto_switch_threshold, int crop_median_threshold, hb_list_t * exclude_extensions );
@@ -330,6 +330,8 @@ hb_batch_t  * hb_batch_init( hb_handle_t *h, char * path, hb_list_t * exclude_ex
 void          hb_batch_close( hb_batch_t ** _d );
 int           hb_batch_title_count( hb_batch_t * d );
 hb_title_t  * hb_batch_title_scan( hb_batch_t * d, int t );
+hb_title_t  * hb_batch_title_scan_single( hb_handle_t * h, char * filename, int t );
+int           hb_is_valid_batch_path( const char * filename );
 
 /***********************************************************************
  * dvd.c

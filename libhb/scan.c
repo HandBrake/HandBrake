@@ -15,7 +15,7 @@ typedef struct
     hb_handle_t  * h;
     volatile int * die;
 
-    char         * path;
+    hb_list_t    * paths;
     int            title_index;
     hb_title_set_t * title_set;
 
@@ -201,8 +201,25 @@ static int get_color_range(int color_range)
     }
 }
 
+static const char * const known_file_types[] =
+{
+    "mp4", "m4v", "mov", "flv", "mkv", "avi", "webm", "wmv",  NULL
+};
+
+static int is_known_filetype(const char *filename)
+{
+    for (int i = 0; known_file_types[i] != NULL; i++)
+    {
+        if (hb_str_ends_with(filename, known_file_types[i]))
+        {
+            return 1;
+        }
+    }
+    return 0;
+}
+
 hb_thread_t * hb_scan_init( hb_handle_t * handle, volatile int * die,
-                            const char * path, int title_index,
+                            hb_list_t *  paths, int title_index,
                             hb_title_set_t * title_set, int preview_count,
                             int store_previews, uint64_t min_duration,
                             int crop_threshold_frames, int crop_threshold_pixels, hb_list_t * exclude_extensions)
@@ -211,7 +228,7 @@ hb_thread_t * hb_scan_init( hb_handle_t * handle, volatile int * die,
 
     data->h            = handle;
     data->die          = die;
-    data->path         = strdup( path );
+    data->paths        = hb_string_list_copy(paths);
     data->title_index  = title_index;
     data->title_set    = title_set;
 
@@ -249,9 +266,15 @@ static void ScanFunc( void * _data )
     data->bd = NULL;
     data->dvd = NULL;
     data->stream = NULL;
-
+        
+    char *single_path = NULL;
+    if (hb_list_count(data->paths) == 1)
+    {
+        single_path = hb_list_item(data->paths, 0);
+    }
+        
     /* Try to open the path as a DVD. If it fails, try as a file */
-    if( ( data->bd = hb_bd_init( data->h, data->path ) ) )
+    if( single_path != NULL && !is_known_filetype(single_path) && ( data->bd = hb_bd_init( data->h, single_path ) ) )
     {
         hb_log( "scan: BD has %d title(s)",
                 hb_bd_title_count( data->bd ) );
@@ -276,7 +299,7 @@ static void ScanFunc( void * _data )
                                           data->title_set->list_title );
         }
     }
-    else if( ( data->dvd = hb_dvd_init( data->h, data->path ) ) )
+    else if( single_path != NULL && !is_known_filetype(single_path) && ( data->dvd = hb_dvd_init( data->h, single_path ) ) )
     {
         hb_log( "scan: DVD has %d title(s)",
                 hb_dvd_title_count( data->dvd ) );
@@ -301,7 +324,7 @@ static void ScanFunc( void * _data )
                                            data->title_set->list_title );
         }
     }
-    else if ( ( data->batch = hb_batch_init( data->h, data->path, data->exclude_extensions ) ) )
+    else if (single_path != NULL && ( data->batch = hb_batch_init( data->h, single_path, data->exclude_extensions ) ) )
     {
         if( data->title_index )
         {
@@ -328,7 +351,26 @@ static void ScanFunc( void * _data )
             }
         }
     }
-    else
+    else if (hb_list_count(data->paths) > 1) // We have many file paths to process.
+    {
+        // If dragging a batch of files, maybe not, but if the UI's implement a recursive folder maybe?
+        for (i = 0; i < hb_list_count( data->paths ); i++)
+        {
+            single_path = hb_list_item(data->paths, i);
+
+            UpdateState1(data, i + 1);
+
+            if (hb_is_valid_batch_path(single_path))
+            {
+                title = hb_batch_title_scan_single(data->h, single_path, (int)i + 1);
+                if (title != NULL)
+                {
+                    hb_list_add(data->title_set->list_title, title);
+                }
+            }
+        }
+    }
+    else // Single File.
     {
         // Title index 0 is not a valid title number and means scan all titles.
         // So set title index to 1 in this scenario.
@@ -338,8 +380,8 @@ static void ScanFunc( void * _data )
         // mode.
         if (data->title_index == 0)
             data->title_index = 1;
-        hb_title_t * title = hb_title_init( data->path, data->title_index );
-        data->stream = hb_stream_open(data->h, data->path, title, 1);
+        hb_title_t * title = hb_title_init( single_path, data->title_index );
+        data->stream = hb_stream_open(data->h, single_path, title, 1);
         if (data->stream != NULL)
         {
             title = hb_stream_title_scan( data->stream, title );
@@ -443,9 +485,16 @@ static void ScanFunc( void * _data )
         title      = hb_list_item( data->title_set->list_title, i );
         title->flags |= HBTF_SCAN_COMPLETE;
     }
+
     if (hb_list_count(data->title_set->list_title) > 0)
     {
-        data->title_set->path = strdup(data->path);
+        if (single_path != NULL)
+        {
+            data->title_set->path = strdup(single_path);
+        } else
+        {
+            data->title_set->path = NULL; // we have many paths.
+        }
     }
     else
     {
@@ -471,8 +520,16 @@ finish:
     {
         hb_batch_close( &data->batch );
     }
-    free( data->path );
-    
+
+    // Clear down any file paths.
+    char *output_filepath;
+    while ((output_filepath = hb_list_item(data->paths, 0)))
+    {
+        hb_list_rem(data->paths, output_filepath);
+        free(output_filepath);
+    }
+    hb_list_close(&data->paths);
+
     // clean up excluded extensions list
     char *extension;
     while ((extension = hb_list_item(data->exclude_extensions, 0)))
@@ -480,6 +537,7 @@ finish:
         hb_list_rem(data->exclude_extensions, extension);
         free(extension);
     }
+    hb_list_close(&data->exclude_extensions);
 
     free( data );
     _data = NULL;
@@ -743,9 +801,10 @@ static int DecodePreviews( hb_scan_t * data, hb_title_t * title, int flush )
     {
         stream = hb_stream_open(data->h, title->path, title, 0);
     }
-    else if (data->stream)
+    else 
     {
-        stream = hb_stream_open(data->h, data->path, title, 0);
+        // We have a batch of files.
+        stream = hb_stream_open(data->h, title->path, title, 0);
     }
 
     if (title->video_codec == WORK_NONE)
@@ -1782,6 +1841,8 @@ static int  AllAudioOK( hb_title_t * title )
 static void UpdateState1(hb_scan_t *scan, int title)
 {
     hb_state_t state;
+    
+    int is_multi_file = hb_list_count(scan->paths) > 0;
 
     hb_get_state2(scan->h, &state);
 #define p state.param.scanning
@@ -1791,7 +1852,8 @@ static void UpdateState1(hb_scan_t *scan, int title)
     p.title_count = scan->dvd ? hb_dvd_title_count( scan->dvd ) :
                     scan->bd ? hb_bd_title_count( scan->bd ) :
                     scan->batch ? hb_batch_title_count( scan->batch ) :
-                               hb_list_count(scan->title_set->list_title);
+                    is_multi_file ? hb_list_count(scan->paths) :
+                    hb_list_count(scan->title_set->list_title);
     p.preview_cur = 0;
     p.preview_count = 1;
     p.progress = 0.5 * ((float)p.title_cur + ((float)p.preview_cur / p.preview_count)) / p.title_count;

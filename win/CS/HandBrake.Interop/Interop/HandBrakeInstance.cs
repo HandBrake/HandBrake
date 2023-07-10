@@ -125,7 +125,7 @@ namespace HandBrake.Interop.Interop
         /// <summary>
         /// Starts a scan of the given path.
         /// </summary>
-        /// <param name="path">
+        /// <param name="paths">
         /// The path of the video to scan.
         /// </param>
         /// <param name="previewCount">
@@ -142,7 +142,7 @@ namespace HandBrake.Interop.Interop
         /// These should be the extension name only. No .
         /// Case Insensitive.
         /// </param>
-        public void StartScan(string path, int previewCount, TimeSpan minDuration, int titleIndex, List<string> excludedExtensions)
+        public void StartScan(List<string> paths, int previewCount, TimeSpan minDuration, int titleIndex, List<string> excludedExtensions)
         {
             this.PreviewCount = previewCount;
 
@@ -157,11 +157,16 @@ namespace HandBrake.Interop.Interop
                 }
             }
 
+            // Handle Scan Paths
+            NativeList scanPathsList = NativeList.CreateList();
+            foreach (string path in paths)
+            {
+                scanPathsList.Add(InteropUtilities.ToUtf8PtrFromString(path));
+            }
+
             // Start the Scan
-            IntPtr pathPtr = InteropUtilities.ToUtf8PtrFromString(path);
             IntPtr excludedExtensionsPtr = excludedExtensionsNative?.Ptr ?? IntPtr.Zero;
-            HBFunctions.hb_scan(this.Handle, pathPtr, titleIndex, previewCount, 1, (ulong)(minDuration.TotalSeconds * 90000), 0, 0, excludedExtensionsPtr);
-            Marshal.FreeHGlobal(pathPtr);
+            HBFunctions.hb_scan_list(this.Handle, scanPathsList.Ptr, titleIndex, previewCount, 1, (ulong)(minDuration.TotalSeconds * 90000), 0, 0, excludedExtensionsPtr);
 
             this.scanPollTimer = new Timer();
             this.scanPollTimer.Interval = ScanPollIntervalMs;
@@ -397,7 +402,7 @@ namespace HandBrake.Interop.Interop
                     this.ScanProgress(this, new ScanProgressEventArgs(state.Scanning.Progress, state.Scanning.Preview, state.Scanning.PreviewCount, state.Scanning.Title, state.Scanning.TitleCount));
                 }
             }
-            else if (taskState != null && taskState == TaskState.ScanDone)
+            else if (taskState != null && (taskState == TaskState.ScanDone))
             {
                 this.scanPollTimer.Stop();
 
@@ -415,7 +420,7 @@ namespace HandBrake.Interop.Interop
 
                 if (this.ScanCompleted != null)
                 {
-                    this.ScanCompleted(this, new System.EventArgs());
+                    this.ScanCompleted(this, EventArgs.Empty);
                 }
 
                 // Memory Management for the exclusion list.
@@ -436,6 +441,16 @@ namespace HandBrake.Interop.Interop
                 catch (Exception ex)
                 {
                     Debug.WriteLine(ex);
+                }
+            }
+            else if (taskState != null && (taskState == TaskState.Idle))
+            {
+                this.scanPollTimer.Stop();
+                this.Titles = null;
+
+                if (this.ScanCompleted != null)
+                {
+                    this.ScanCompleted(this, EventArgs.Empty);
                 }
             }
         }

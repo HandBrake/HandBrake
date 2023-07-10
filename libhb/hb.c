@@ -359,6 +359,18 @@ void hb_remove_previews( hb_handle_t * h )
     closedir( dir );
 }
 
+void hb_scan( hb_handle_t * h, const char * path, int title_index,
+              int preview_count, int store_previews, uint64_t min_duration,
+              int crop_threshold_frames, int crop_threshold_pixels, hb_list_t * exclude_extensions)
+{
+    // TODO: Compatibility later for the other UI's.  Remove when they are updated.
+    hb_list_t *file_paths = hb_list_init();
+    hb_list_add(file_paths, (char *)path);
+
+    hb_scan_list(h, file_paths, title_index, preview_count, store_previews, min_duration, crop_threshold_frames, crop_threshold_pixels, exclude_extensions);
+
+    hb_list_close(&file_paths);
+}
 
 /**
  * Initializes a scan of the by calling hb_scan_init
@@ -372,16 +384,24 @@ void hb_remove_previews( hb_handle_t * h )
  * @param crop_threshold_pixels The variance in pixels detected that are allowed for.
  * @param exclude_extensions A list of extensions to exclude for this scan.
  */
-void hb_scan( hb_handle_t * h, const char * path, int title_index,
+void hb_scan_list( hb_handle_t * h, hb_list_t * paths, int title_index,
               int preview_count, int store_previews, uint64_t min_duration,
               int crop_threshold_frames, int crop_threshold_pixels, hb_list_t * exclude_extensions)
 {
     hb_title_t * title;
 
-    // Check if scanning is necessary.
-    if (h->title_set.path != NULL && !strcmp(h->title_set.path, path))
+    char *single_path = NULL;
+    int path_count = hb_list_count(paths);
+
+    if (path_count == 1)
     {
-        // Current title_set path matches requested path.
+        single_path = hb_list_item(paths, 0);
+    }
+    
+    // Check if scanning is necessary. Only works on Single Path.
+    if (single_path != NULL && h->title_set.path != NULL && !strcmp(h->title_set.path, single_path))
+    {
+        // Current title_set path matches requested single_path.
         // Check if the requested title has already been scanned.
         int ii;
         for (ii = 0; ii < hb_list_count(h->title_set.list_title); ii++)
@@ -443,8 +463,14 @@ void hb_scan( hb_handle_t * h, const char * path, int title_index,
     }
 #endif
 
-    hb_log( "hb_scan: path=%s, title_index=%d", path, title_index );
-    h->scan_thread = hb_scan_init( h, &h->scan_die, path, title_index,
+    char *path_info = single_path;
+    if (path_count > 1)
+    {
+        path_info = "(multiple)";
+    }
+
+    hb_log( "hb_scan: path=%s, title_index=%d", path_info, title_index );
+    h->scan_thread = hb_scan_init( h, &h->scan_die, paths, title_index,
                                    &h->title_set, preview_count,
                                    store_previews, min_duration,
                                    crop_threshold_frames, crop_threshold_pixels, exclude_extensions);

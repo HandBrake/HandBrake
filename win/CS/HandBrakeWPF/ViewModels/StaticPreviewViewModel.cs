@@ -155,6 +155,8 @@ namespace HandBrakeWPF.ViewModels
 
         public Source ScannedSource { get; set; }
 
+        public Title SelectedTitle { get; set; }
+
         public bool IsMediaPlayerVisible
         {
             get => this.isMediaPlayerVisible && !this.isEncoding;
@@ -334,9 +336,10 @@ namespace HandBrakeWPF.ViewModels
             }
         }
         
-        public void UpdatePreviewFrame(EncodeTask task, Source scannedSource)
+        public void UpdatePreviewFrame(Title selectedTitle, EncodeTask task, Source scannedSource)
         {
             this.Task = task;
+            this.SelectedTitle = selectedTitle;
 
             // The Built-in Player does not support WebM or Mpeg2
             if (this.Task != null && 
@@ -350,7 +353,7 @@ namespace HandBrakeWPF.ViewModels
             this.Title = Resources.StaticPreviewViewModel_Title;
             this.ScannedSource = scannedSource;
         }
-
+        
         public void NextPreview()
         {
             int maxPreview = this.userSettingService.GetUserSetting<int>(UserSettingConstants.PreviewScanCount);
@@ -533,7 +536,7 @@ namespace HandBrakeWPF.ViewModels
                 return;
             }
 
-            QueueTask task = new QueueTask(encodeTask, this.ScannedSource.ScanPath, null, false, null);
+            QueueTask task = new QueueTask(encodeTask, this.SelectedTitle.SourcePath, null, false, null);
             ThreadPool.QueueUserWorkItem(this.CreatePreview, task);
         }
 

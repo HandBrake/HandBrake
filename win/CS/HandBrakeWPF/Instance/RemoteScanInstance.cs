@@ -80,12 +80,12 @@ namespace HandBrakeWPF.Instance
             return null;
         }
 
-        public void StartScan(string path, int previewCount, TimeSpan minDuration, int titleIndex, List<string> fileExclusionList)
+        public void StartScan(List<string> paths, int previewCount, TimeSpan minDuration, int titleIndex, List<string> fileExclusionList)
         {
             if (this.IsServerRunning())
             {
                 scanCompleteFired = false;
-                Thread thread1 = new Thread(() => RunScanInitProcess(path, previewCount, minDuration, titleIndex));
+                Thread thread1 = new Thread(() => RunScanInitProcess(paths, previewCount, minDuration, titleIndex));
                 thread1.Start();
             }
             else
@@ -118,7 +118,7 @@ namespace HandBrakeWPF.Instance
             return state;
         }
 
-        private void RunScanInitProcess(string path, int previewCount, TimeSpan minDuration, int titleIndex)
+        private void RunScanInitProcess(List<string> paths, int previewCount, TimeSpan minDuration, int titleIndex)
         {
             if (this.IsServerRunning())
             {
@@ -136,7 +136,7 @@ namespace HandBrakeWPF.Instance
 
                 initCommand.LogFile = Path.Combine(initCommand.LogDirectory, string.Format("activity_log.worker.{0}.txt", GeneralUtilities.ProcessId));
 
-                string job = JsonSerializer.Serialize(new ScanCommand { InitialiseCommand = initCommand, Path = path, MinDuration = minDuration, PreviewCount = previewCount, TitleIndex = titleIndex}, JsonSettings.Options);
+                string job = JsonSerializer.Serialize(new ScanCommand { InitialiseCommand = initCommand, Paths = paths, MinDuration = minDuration, PreviewCount = previewCount, TitleIndex = titleIndex}, JsonSettings.Options);
 
                 var task = Task.Run(async () => await this.MakeHttpJsonPostRequest("StartScan", job));
                 task.Wait();

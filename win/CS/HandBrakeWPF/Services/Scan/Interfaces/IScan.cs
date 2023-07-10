@@ -10,6 +10,7 @@
 namespace HandBrakeWPF.Services.Scan.Interfaces
 {
     using System;
+    using System.Collections.Generic;
     using System.Windows.Media.Imaging;
 
     using HandBrakeWPF.Services.Encode.Model;
@@ -76,7 +77,7 @@ namespace HandBrakeWPF.Services.Scan.Interfaces
         /// <param name="postAction">
         /// The post Action.
         /// </param>
-        void Scan(string sourcePath, int title, Action<bool, Source> postAction);
+        void Scan(List<string> sourcePath, int title, Action<bool, Source> postAction);
 
         /// <summary>
         /// Cancel the current scan.

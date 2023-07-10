@@ -520,6 +520,13 @@ static int hb_container_is_enabled(int format)
     }
 }
 
+int hb_str_ends_with(const char *base, const char *str)
+{
+    int blen = strlen(base);
+    int slen = strlen(str);
+    return (blen >= slen) && (0 == strcasecmp(base + blen - slen, str));
+}
+
 void hb_common_global_init(int disable_hardware)
 {
     static int common_init_done = 0;

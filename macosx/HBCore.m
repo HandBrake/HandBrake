@@ -182,88 +182,97 @@ HB_OBJC_DIRECT_MEMBERS
 
 #pragma mark - Scan
 
-- (BOOL)canScan:(NSURL *)url error:(NSError * __autoreleasing *)error
+- (BOOL)canScan:(NSArray<NSURL *> *)urls error:(NSError * __autoreleasing *)error
 {
-    NSAssert(url, @"[HBCore canScan:] called with nil url.");
+    NSAssert(urls, @"[HBCore canScan:] called with nil urls.");
 
-#ifdef __SANDBOX_ENABLED__
-    __unused HBSecurityAccessToken *token = [HBSecurityAccessToken tokenWithObject:url];
-#endif
-
-    if (![[NSFileManager defaultManager] fileExistsAtPath:url.path]) {
-        if (error) {
-            *error = [NSError errorWithDomain:@"HBErrorDomain"
-                                         code:100
-                                     userInfo:@{ NSLocalizedDescriptionKey: @"Unable to find the file at the specified URL" }];
-        }
-
-        return NO;
-    }
-
-    HBDVDDetector *detector = [HBDVDDetector detectorForPath:url.path];
-
-    if (detector.isVideoDVD || detector.isVideoBluRay)
+    for (NSURL *url in urls)
     {
-        [HBUtilities writeToActivityLog:"%s trying to open a physical disc at: %s", self.name.UTF8String, url.path.UTF8String];
-        void *lib = NULL;
+#ifdef __SANDBOX_ENABLED__
+        __unused HBSecurityAccessToken *token = [HBSecurityAccessToken tokenWithObject:url];
+#endif
 
-        if (detector.isVideoDVD)
+        if (![NSFileManager.defaultManager fileExistsAtPath:url.path])
         {
-            lib = dlopen("libdvdcss.2.dylib", RTLD_LAZY);
-            if (!lib)
+            if (error)
             {
-                lib = dlopen("/usr/local/lib/libdvdcss.2.dylib", RTLD_LAZY);
-            }
-        }
-        else if (detector.isVideoBluRay)
-        {
-            lib = dlopen("libaacs.dylib", RTLD_LAZY);
-            if (!lib)
-            {
-                lib = dlopen("/usr/local/lib/libaacs.dylib", RTLD_LAZY);
-            }
-        }
-
-        if (lib)
-        {
-            dlclose(lib);
-            [HBUtilities writeToActivityLog:"%s library found for decrypting physical disc", self.name.UTF8String];
-        }
-        else
-        {
-            const char *dlError = dlerror();
-
-            if (dlError)
-            {
-                [HBUtilities writeToActivityLog:"dlopen error: %s", dlError];
-            }
-
-            // Notify the user that we don't support removal of copy protection.
-            [HBUtilities writeToActivityLog:"%s, library not found for decrypting physical disc", self.name.UTF8String];
-
-            if (error) {
                 *error = [NSError errorWithDomain:@"HBErrorDomain"
-                                             code:101
-                                         userInfo:@{ NSLocalizedDescriptionKey: @"library not found for decrypting physical disc" }];
+                                             code:100
+                                         userInfo:@{ NSLocalizedDescriptionKey: @"Unable to find the file at the specified URL" }];
+            }
+            
+            return NO;
+        }
+        
+        HBDVDDetector *detector = [HBDVDDetector detectorForPath:url.path];
+        
+        if (detector.isVideoDVD || detector.isVideoBluRay)
+        {
+            [HBUtilities writeToActivityLog:"%s trying to open a physical disc at: %s", self.name.UTF8String, url.path.UTF8String];
+            void *lib = NULL;
+            
+            if (detector.isVideoDVD)
+            {
+                lib = dlopen("libdvdcss.2.dylib", RTLD_LAZY);
+                if (!lib)
+                {
+                    lib = dlopen("/usr/local/lib/libdvdcss.2.dylib", RTLD_LAZY);
+                }
+            }
+            else if (detector.isVideoBluRay)
+            {
+                lib = dlopen("libaacs.dylib", RTLD_LAZY);
+                if (!lib)
+                {
+                    lib = dlopen("/usr/local/lib/libaacs.dylib", RTLD_LAZY);
+                }
+            }
+            
+            if (lib)
+            {
+                dlclose(lib);
+                [HBUtilities writeToActivityLog:"%s library found for decrypting physical disc", self.name.UTF8String];
+            }
+            else
+            {
+                const char *dlError = dlerror();
+                
+                if (dlError)
+                {
+                    [HBUtilities writeToActivityLog:"dlopen error: %s", dlError];
+                }
+                
+                // Notify the user that we don't support removal of copy protection.
+                [HBUtilities writeToActivityLog:"%s, library not found for decrypting physical disc", self.name.UTF8String];
+                
+                if (error) {
+                    *error = [NSError errorWithDomain:@"HBErrorDomain"
+                                                 code:101
+                                             userInfo:@{ NSLocalizedDescriptionKey: @"library not found for decrypting physical disc" }];
+                }
             }
         }
-    }
 
 #ifdef __SANDBOX_ENABLED__
-    token = nil;
+        token = nil;
 #endif
+    }
 
     return YES;
 }
 
-- (void)scanURL:(NSURL *)url titleIndex:(NSUInteger)index previews:(NSUInteger)previewsNum minDuration:(NSUInteger)seconds keepPreviews:(BOOL)keepPreviews progressHandler:(HBCoreProgressHandler)progressHandler completionHandler:(HBCoreCompletionHandler)completionHandler
+- (void)scanURLs:(NSArray<NSURL *> *)urls titleIndex:(NSUInteger)index previews:(NSUInteger)previewsNum minDuration:(NSUInteger)seconds keepPreviews:(BOOL)keepPreviews progressHandler:(HBCoreProgressHandler)progressHandler completionHandler:(HBCoreCompletionHandler)completionHandler
 {
     NSAssert(self.state == HBStateIdle, @"[HBCore scanURL:] called while another scan or encode already in progress");
-    NSAssert(url, @"[HBCore scanURL:] called with nil url.");
+    NSAssert(urls, @"[HBCore scanURL:] called with nil url.");
 
 #ifdef __SANDBOX_ENABLED__
-    __block HBSecurityAccessToken *token = [HBSecurityAccessToken tokenWithObject:url];
-    self.cleanupHandler = ^{ token = nil; };
+    __block NSMutableArray<HBSecurityAccessToken *> *tokens = [[NSMutableArray alloc] init];
+    for (NSURL *url in urls)
+    {
+        [tokens addObject:[HBSecurityAccessToken tokenWithObject:url]];
+    }
+    self.cleanupHandler = ^{ tokens = nil; };
 #endif
 
     // Reset the titles array
@@ -291,10 +300,18 @@ HB_OBJC_DIRECT_MEMBERS
 
     [self preventAutoSleep];
 
-    hb_scan(_hb_handle, url.fileSystemRepresentation,
+    hb_list_t *files_list = hb_list_init();
+    for (NSURL *url in urls)
+    {
+        hb_list_add(files_list, (char *)url.fileSystemRepresentation);
+    }
+
+    hb_scan_list(_hb_handle, files_list,
               (int)index, (int)previewsNum,
               keepPreviews, min_title_duration_ticks,
               0, 0, NULL);
+
+    hb_list_close(&files_list);
 
     // Start the timer to handle libhb state changes
     [self startUpdateTimerWithInterval:0.2];

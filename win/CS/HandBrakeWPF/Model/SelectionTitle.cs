@@ -53,7 +53,7 @@ namespace HandBrakeWPF.Model
         {
             get
             {
-                return !string.IsNullOrEmpty(Title.SourceName) ? Title.SourceName : sourceName;
+                return !string.IsNullOrEmpty(Title.SourcePath) ? Title.SourcePath : sourceName;
             }
         }
 
@@ -107,14 +107,14 @@ namespace HandBrakeWPF.Model
 
         private decimal? CalcFilesize()
         {
-            if (this.Title != null && !string.IsNullOrEmpty(this.Title.SourceName) && File.Exists(this.Title.SourceName))
+            if (this.Title != null && !string.IsNullOrEmpty(this.Title.SourcePath) && File.Exists(this.Title.SourcePath))
             {
-                if (Path.GetExtension(this.Title.SourceName)?.Contains("iso", StringComparison.InvariantCultureIgnoreCase) ?? false)
+                if (Path.GetExtension(this.Title.SourcePath)?.Contains("iso", StringComparison.InvariantCultureIgnoreCase) ?? false)
                 {
                     return null;
                 }
 
-                FileInfo info = new FileInfo(this.Title.SourceName);
+                FileInfo info = new FileInfo(this.Title.SourcePath);
                 return Math.Round((decimal)info.Length / 1024 / 1024, 1);
             }
 

@@ -22,12 +22,6 @@ static int compare_str(const void *a, const void *b)
     return strncmp(*(const char**)a, *(const char**)b, PATH_MAX);
 }
 
-static int ends_with (char* base, char* str) {
-    int blen = strlen(base);
-    int slen = strlen(str);
-    return (blen >= slen) && (0 == strcasecmp(base + blen - slen, str));
-}
-
 /***********************************************************************
  * hb_batch_init
  ***********************************************************************
@@ -87,8 +81,8 @@ hb_batch_t * hb_batch_init( hb_handle_t *h, char * path, hb_list_t * exclude_ext
         int excluded = 0;
         for (int i = 0; i < extension_count; i++ )
         {
-            char * file_extension = hb_list_item( exclude_extensions, i );
-            if (ends_with(filename, file_extension))
+            const char *file_extension = hb_list_item(exclude_extensions, i);
+            if (hb_str_ends_with(filename, file_extension))
             {
                 hb_deep_log(2, " -- Excluding File: %s", filename);
                 excluded = 1;
@@ -97,19 +91,19 @@ hb_batch_t * hb_batch_init( hb_handle_t *h, char * path, hb_list_t * exclude_ext
         
         if (excluded)
         {
-            free( filename );
+            free(filename);
             continue;
         }
                 
-        if ( hb_stat( filename, &sb ) )
+        if (hb_stat(filename, &sb))
         {
-            free( filename );
+            free(filename);
             continue;
         }
 
-        if ( !S_ISREG( sb.st_mode ) )
+        if (!S_ISREG(sb.st_mode))
         {
-            free( filename );
+            free(filename);
             continue;
         }
 
@@ -181,6 +175,65 @@ hb_title_t * hb_batch_title_scan( hb_batch_t * d, int t )
     hb_stream_close( &stream );
 
     return title;
+}
+
+hb_title_t * hb_batch_title_scan_single(hb_handle_t *h, char *filename, int title_index)
+{
+    hb_title_t   *title;
+    hb_stream_t  *stream;
+
+    if (title_index < 0)
+    {
+        return NULL;
+    }
+
+    if (!hb_is_valid_batch_path(filename))
+    {
+        return NULL;
+    }
+
+    hb_log("batch: scanning %s", filename);
+    title = hb_title_init(filename, title_index);
+    
+    if (title == NULL)
+    {
+        return NULL;
+    }
+
+    stream = hb_stream_open(h, filename, title, 1);
+
+    if (stream == NULL)
+    {
+        hb_title_close(&title);
+        return NULL;
+    }
+
+    title = hb_stream_title_scan(stream, title);
+    hb_stream_close(&stream);
+
+    return title;
+}
+
+int hb_is_valid_batch_path(const char *filename)
+{
+    hb_stat_t sb;
+
+    if (hb_stat(filename, &sb))
+    {
+        return 0;
+    }
+
+    if (S_ISDIR(sb.st_mode))
+    {
+        return 0;
+    }
+
+    if (!S_ISREG(sb.st_mode))
+    {
+        return 0;
+    }
+
+    return 1;
 }
 
 /***********************************************************************
