@@ -288,14 +288,13 @@ FFMpeg 和 Theora 的比例更加线性。
 这些编码器没有无损模式。</value>
   </data>
   <data name="Video_TurboAnalysisPass" xml:space="preserve">
-    <value>During the analysis pass of a multi pass encode, use settings that speed things along.</value>
+    <value>在多次编码的分析阶段中，使用能够加速处理的设置。</value>
   </data>
   <data name="Video_MultiPass" xml:space="preserve">
-    <value>Perform Multi Pass Encoding.
+    <value>进行多次编码。
 
-The 'Bitrate' option is prerequisite. During the analysis passes, statistics about
-the video are collected. Then in the final pass, those statistics are used
-to make bitrate allocation decisions.</value>
+“比特率”选项是前提条件。在分析阶段，收集有关视频的统计信息。
+然后在最后一次传递中，使用这些统计数据来进行比特率分配决策。</value>
   </data>
   <data name="Video_VariableFramerate" xml:space="preserve">
     <value>允许可变帧率输出。
@@ -511,23 +510,49 @@ HB_EXIT_CODE
 建议在对输出文件进行操作之前对其进行验证。</value>
   </data>
   <data name="Options_AdditionalFormatOptions" xml:space="preserve">
-    <value>输出文件的格式。除了常见受支持的文件系统字符外，你可以使用占位符，占位符会在修改标题时、扫描源时、更新特定设置时被替换。
+    <value>输出文件的格式。除了任何支持的文件系统字符外，你可以使用任何一个占位符，当你改变标题或扫描源或更新某些设置时，这些占位符将被替换。
 
-{source} - 源文件的文件名。
-{title} - 整数值。代表光盘标题编号。
-{chapters} - 所选的章节。
-{creation-date} - 源文件创建的日期（假如可用）。
-{creation-time} - 源文件创建的时间（假如可用）。
-{modification-date} - 源文件修改的日期（假如可用）。
-{modification-time} - 源文件修改的时间（假如可用）。
-{date} - 加入队列的日期。
-{time} - 加入队列的时间。
-{quality_bitrate} - RF/CQ值。或者比特率。
-{quality_type} - 根据视频标签所选择的质量模式打印“kbps”或者“Q”。
+
+
+
+{source} - 源文件的名称。
+
+{title} - 整数值。这是代表光盘标题的编号。
+
+{chapters} - 所选章节的范围。
+
+{creation-date} - 源文件的创建日期（如果有的话）。
+
+{creation-time} - 源文件创建的时间（如果有的话）。
+
+{modification-date} - 源文件最后被修改的日期（如果有的话）。
+
+{modification-time} - 源文件最后被修改的时间（如果有的话）。
+
+{date} - 今天的日期。在添加到队列时设置。
+
+{time} - 今天的之间。在添加到队列时设置。
+
+{quality_bitrate} - RF/CQ数值，或比特率
+
+{quality_type} - 根据视频标签上选择的质量模式，输出 "kbps "或 "Q"。
+
 {preset} - 所选预设的名称。
-{encode_bit_depth} - 整数值，如8、10、12。
-{width} - 输出存储宽度。
-{height} - 输出存储高度。</value>
+
+{encode_bit_depth} - 整数值，即8、10或12
+
+{width} - 输出存储的宽度
+
+{height} - 输出存储的高度
+
+{codec} - 显示视频格式。
+
+{encoder} - 显示所使用的编码器的简短格式键。
+
+
+
+
+任何非法的路径字符将被自动删除。</value>
   </data>
   <data name="OptionsView_RightToleftMode" xml:space="preserve">
     <value>对于从右到左的语言，你可以启用以下模式之一。“仅文字”会以右到左的方式渲染文字。“整个用户界面”将会以从右到左的方式渲染所有界面。
@@ -546,5 +571,8 @@ HB_EXIT_CODE
 {source_path} - 和源文件相同文件夹（假如可用）
 {source_folder_name} – 和源文件相同的文件夹名称，不包含完整路径。
 {source} - 源文件名称。</value>
+  </data>
+  <data name="OptionsView_LaunchsHelp" xml:space="preserve">
+    <value>启动位于https://handbrake.fr/docs的文档网站</value>
   </data>
 </root>

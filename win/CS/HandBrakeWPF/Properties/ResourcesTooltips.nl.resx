@@ -295,14 +295,14 @@ De schaal van FFMpeg en Theora is meer lineair.
 Deze encoders hebben geen verliesvrije modus.</value>
   </data>
   <data name="Video_TurboAnalysisPass" xml:space="preserve">
-    <value>During the analysis pass of a multi pass encode, use settings that speed things along.</value>
+    <value>Gebruik tijdens de analyse van een meervoudige fasecodering instellingen die zaken versnellen.</value>
   </data>
   <data name="Video_MultiPass" xml:space="preserve">
-    <value>Perform Multi Pass Encoding.
+    <value>Meervoudige fasecodering uitvoeren.
 
-The 'Bitrate' option is prerequisite. During the analysis passes, statistics about
-the video are collected. Then in the final pass, those statistics are used
-to make bitrate allocation decisions.</value>
+De optie 'Bitrate' is vereist. Tijdens de analysefase worden statistieken over 
+de video verzameld. In de laatste fase worden deze gebruikt 
+om beslissingen over bitrate-toewijzing te nemen.</value>
   </data>
   <data name="Video_VariableFramerate" xml:space="preserve">
     <value>Maakt uitvoer met variabele framesnelheid mogelijk.
@@ -535,6 +535,8 @@ Het is raadzaam om het uitvoerbestand te valideren alvorens er acties op uit te 
 {encode_bit_depth} - Numerieke waarde, bijv. 8, 10 of 12 
 {width} - De breedte van de opgeslagen uitvoer
 {hoogte} - De hoogte van de opgeslagen uitvoer
+{codec} - Geef het videoformaat weer.
+{encoder} - Geef de korte opmaaksleutel van de gebruikte encoder weer.
 
 Alle illegale tekens in het pad worden automatisch verwijderd.</value>
   </data>
@@ -556,5 +558,8 @@ op te bouwen
 {source_path} - In dezelfde map als het bronpad (indien mogelijk) 
 {source_folder_name} - De naam van de directory waarin het bronbestand zich bevindt, zonder het volledige pad.
 {source} - De naam van het bronbestand. </value>
+  </data>
+  <data name="OptionsView_LaunchsHelp" xml:space="preserve">
+    <value>Opent de documetatiewebsite op https://handbrake.fr/docs</value>
   </data>
 </root>

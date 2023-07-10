@@ -808,7 +808,7 @@ Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  021
     <value>チャプター名</value>
   </data>
   <data name="ChaptersView_ChapterNumber" xml:space="preserve">
-    <value>チャプター番号</value>
+    <value>チャプター</value>
   </data>
   <data name="ChaptersView_CreateChapterMarkers" xml:space="preserve">
     <value>チャプターマーカーを作成</value>
@@ -2745,5 +2745,50 @@ AV1やHEVCといった特定のコーデックは、再生するためにマイ�
     <value>プレビューのエンコードができませんでした。他のファイルをエンコード中でビジー状態です。
 
 同時エンコードを許可するには、ツールメニュー -&gt; 設定 -&gt; 詳細 -&gt; プロセス分離 -&gt; 「キューされたジョブをそれぞれ別のワーカープロセスで実行する」をオンにしプロセス分離を行ってください。</value>
+  </data>
+  <data name="AudioView_Quality" xml:space="preserve">
+    <value>品質</value>
+  </data>
+  <data name="AudioView_Source" xml:space="preserve">
+    <value>ソース</value>
+  </data>
+  <data name="AboutView_Documentation" xml:space="preserve">
+    <value>ドキュメント:</value>
+  </data>
+  <data name="AboutView_GithubTracker" xml:space="preserve">
+    <value>GitHub Issue Tracker:</value>
+  </data>
+  <data name="AboutView_Website" xml:space="preserve">
+    <value>ウェブサイト:</value>
+  </data>
+  <data name="MainView_PresetClone" xml:space="preserve">
+    <value>プリセットを複製</value>
+  </data>
+  <data name="PresetPane_MoveDown" xml:space="preserve">
+    <value>下に移動</value>
+  </data>
+  <data name="PresetPane_MoveToBottom" xml:space="preserve">
+    <value>一番下に移動</value>
+  </data>
+  <data name="PresetPane_MoveToTop" xml:space="preserve">
+    <value>一番上に移動</value>
+  </data>
+  <data name="PresetPane_MoveUp" xml:space="preserve">
+    <value>上に移動</value>
+  </data>
+  <data name="QueueViewModel_StopButContinueJob" xml:space="preserve">
+    <value>実行中のジョブがあります。現在のジョブを完了させてからキューを停止しますか？</value>
+  </data>
+  <data name="Options_AddExt" xml:space="preserve">
+    <value>拡張子を追加</value>
+  </data>
+  <data name="Options_ExcludeExtensions" xml:space="preserve">
+    <value>ファイルの拡張子を除外</value>
+  </data>
+  <data name="Options_ExcludeExtensionsInfo" xml:space="preserve">
+    <value>次のファイルの拡張子はフォルダースキャンの際に無視されます。大文字小文字は区別しません。"."は不要です。</value>
+  </data>
+  <data name="Options_ExtensionExists" xml:space="preserve">
+    <value>このファイル拡張子はすでにリストにあります。</value>
   </data>
 </root>

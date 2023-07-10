@@ -204,7 +204,7 @@ Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.</value>
     <value>HandBrake encodiert bereits.</value>
   </data>
   <data name="Main_DuplicateDestinationOnQueue" xml:space="preserve">
-    <value>In der Warteschlange gibt es Aufträge mit demselben Zielpfad. Bitte wählen Sie einen anderen Pfad für diesen Auftrag.
+    <value>In der Warteschlange gibt es Aufgaben mit demselben Zielpfad. Bitte wählen Sie einen anderen Pfad für diese Aufgabe.
 
 Sie können die Optionen für die automatische Dateibenennung unter "Menü Extras -&gt; Einstellungen -&gt; Ausgabedateien" konfigurieren.</value>
   </data>
@@ -812,7 +812,7 @@ Hinweis: Das Verhalten beim Überschreiben von Dateien kann in den Einstellungen
     <value>Kapitelname</value>
   </data>
   <data name="ChaptersView_ChapterNumber" xml:space="preserve">
-    <value>Kapitelnummer</value>
+    <value>Kapitel</value>
   </data>
   <data name="ChaptersView_CreateChapterMarkers" xml:space="preserve">
     <value>Kapitelmarker erstellen</value>
@@ -1560,7 +1560,7 @@ Es werden VLC und MPC-HC unterstützt. Andere Media-Player können auch funktion
     <value>Dauer:</value>
   </data>
   <data name="StaticPreviewView_LivePreview" xml:space="preserve">
-    <value>Encodiervorschau</value>
+    <value>Encodier-Vorschau</value>
   </data>
   <data name="StaticPreviewView_SelectPreviewImage" xml:space="preserve">
     <value>Ein Vorschaubild wählen</value>
@@ -1921,7 +1921,7 @@ Sie können den Text oben per Drag &amp; Drop ziehen oder eingeben.</value>
     <value>Die Wahl des Encoders wird im Video-Tab verfügbar gemacht.</value>
   </data>
   <data name="Queue_RecoverQueueQuestionPlural" xml:space="preserve">
-    <value>HandBrake hat einige nicht fertiggestellte Warteschlangedateien gefunden. Diese werden von mehreren Instanzen von HandBrake sein. Sollen alle nicht fertig gestellten Aufträge wiederhergestellt werden?</value>
+    <value>HandBrake hat einige nicht fertiggestellte Warteschlangedateien gefunden. Diese werden von mehreren Instanzen von HandBrake sein. Sollen alle nicht fertig gestellten Aufgaben wiederhergestellt werden?</value>
   </data>
   <data name="Queue_RecoverQueueQuestionSingular" xml:space="preserve">
     <value>HandBrake hat nicht fertig gestellte Objekte seit dem letzten Start in der Warteschlange gefunden. Sollen diese wiederhergestellt werden?</value>
@@ -2328,7 +2328,7 @@ Bitte eine andere Voreinstellung auswählen.</value>
     <value>Level ab der Warnungen wegen geringem Speicherplatz erscheinen:</value>
   </data>
   <data name="OptionsView_SimultaneousHardwareLimitNotice" xml:space="preserve">
-    <value>Hinweis: Dies ist die Obergrenze für gleichzeitige Aufträge. Es können Hardwarebeschränkungen wirksam werden, die die tatsächliche Anzahl der gleichzeitigen Aufträge während der Codierung verringern. Die Einstellung wird erst beim nächsten Warteschlangenstapel oder Neustart der Anwendung wirksam.</value>
+    <value>Hinweis: Dies ist die Obergrenze für gleichzeitige Aufgaben. Es können Hardwarebeschränkungen wirksam werden, die die tatsächliche Anzahl der gleichzeitigen Aufgaben während der Codierung verringern. Die Einstellung wird erst beim nächsten Warteschlangenstapel oder Neustart der Anwendung wirksam.</value>
   </data>
   <data name="Preset_NotAvailable" xml:space="preserve">
     <value>(Nicht verfügbar)</value>
@@ -2579,7 +2579,7 @@ Es werden nur Warteschlangen-Dateien der aktuellen Version unterstützt.</value>
     <value>Windows Mitteilung</value>
   </data>
   <data name="Main_QueueMultiJobStatus" xml:space="preserve">
-    <value>{0} Aufgaben abgeschlossen. {1}Arbeite an {2} Aufgaben mit {3} Pausen zu bearbeiten.</value>
+    <value>{0} Aufgaben abgeschlossen. {1} Arbeite an {2} Aufgaben, {3} weitere anstehend.</value>
   </data>
   <data name="MainView_AutonameRegenerate" xml:space="preserve">
     <value>Wiederherstellen (Autoname)</value>
@@ -2748,5 +2748,50 @@ Encodiere {1} Aufgaben</value>
     <value>Eine Vorschau kann nicht kodiert werden. Die Anwendung ist gerade mit der Encodierung einer anderen Datei beschäftigt.
 
 Um mehrere gleichzeitige Encodierungen zu ermöglichen, aktivieren Sie die "Prozessisolierung" im Menü Extras -&gt; Voreinstellungen -&gt; Erweitert -&gt; Prozessisolation -&gt; "Jeden Auftrag in der Warteschlange in einem separaten Worker-Prozess ausführen".</value>
+  </data>
+  <data name="AudioView_Quality" xml:space="preserve">
+    <value>Qualität</value>
+  </data>
+  <data name="AudioView_Source" xml:space="preserve">
+    <value>Quelle</value>
+  </data>
+  <data name="AboutView_Documentation" xml:space="preserve">
+    <value>Dokumentation:</value>
+  </data>
+  <data name="AboutView_GithubTracker" xml:space="preserve">
+    <value>Probleme melden (GitHub):</value>
+  </data>
+  <data name="AboutView_Website" xml:space="preserve">
+    <value>Webseite:</value>
+  </data>
+  <data name="MainView_PresetClone" xml:space="preserve">
+    <value>Voreinstellung schließen</value>
+  </data>
+  <data name="PresetPane_MoveDown" xml:space="preserve">
+    <value>Nach unten</value>
+  </data>
+  <data name="PresetPane_MoveToBottom" xml:space="preserve">
+    <value>Ganz nach unten</value>
+  </data>
+  <data name="PresetPane_MoveToTop" xml:space="preserve">
+    <value>Ganz nach oben</value>
+  </data>
+  <data name="PresetPane_MoveUp" xml:space="preserve">
+    <value>Nach oben</value>
+  </data>
+  <data name="QueueViewModel_StopButContinueJob" xml:space="preserve">
+    <value>Es laufen derzeit Aufgaben. Möchten Sie die laufenden Aufgaben abschließen, bevor Sie die Warteschlange stoppen?</value>
+  </data>
+  <data name="Options_AddExt" xml:space="preserve">
+    <value>Dateiendung hinzufügen</value>
+  </data>
+  <data name="Options_ExcludeExtensions" xml:space="preserve">
+    <value>Dateiendung ausschließen</value>
+  </data>
+  <data name="Options_ExcludeExtensionsInfo" xml:space="preserve">
+    <value>Die folgenden Dateiendungen werden beim Überprüfen eines Ordners ignoriert. Bei der Liste wird die Groß- und Kleinschreibung nicht berücksichtigt. "." ist nicht erforderlich.</value>
+  </data>
+  <data name="Options_ExtensionExists" xml:space="preserve">
+    <value>Diese Dateiendung existiert schon in der Liste.</value>
   </data>
 </root>
