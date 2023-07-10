@@ -1239,7 +1239,14 @@ namespace HandBrakeWPF.ViewModels
 
             if (dialogResult.HasValue && dialogResult.Value)
             {
-                this.StartScan(new List<string> { dialog.SelectedPath }, this.TitleSpecificScan);
+                if (this.userSettingService.GetUserSetting<bool>(UserSettingConstants.RecursiveFolderScan))
+                {
+                    this.StartScan(FileHelper.FileList(dialog.SelectedPath, true, this.userSettingService.GetUserSetting<List<string>>(UserSettingConstants.ExcludedExtensions)), this.TitleSpecificScan);
+                }
+                else
+                {
+                    this.StartScan(new List<string> { dialog.SelectedPath }, this.TitleSpecificScan);
+                }
             }
         }
 

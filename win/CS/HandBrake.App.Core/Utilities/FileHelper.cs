@@ -10,13 +10,45 @@
 namespace HandBrake.App.Core.Utilities
 {
     using System;
+    using System.Collections.Generic;
+    using System.Diagnostics;
     using System.IO;
+    using System.Linq;
 
     /// <summary>
     /// Helper methods for dealing with files.
     /// </summary>
     public class FileHelper
     {
+        public static List<string> FileList(string path, bool recursive, List<string> excludedExtensions)
+        {
+            List<string> foundFiles = new List<string>();
+
+            try
+            {
+                foreach (string f in Directory.GetFiles(path))
+                {
+                    string extension = Path.GetExtension(f).Replace(".", string.Empty);
+                    if (!excludedExtensions.Contains(extension, StringComparer.OrdinalIgnoreCase))
+                    {
+                        foundFiles.Add(f);
+                    }
+                }
+
+                foreach (string d in Directory.GetDirectories(path))
+                {
+                    foundFiles.AddRange(FileList(d, recursive, excludedExtensions));
+                }
+            }
+            catch (Exception e)
+            {
+                // Silently ignore. Build up what we can.
+                Debug.WriteLine(e);
+            }
+
+            return foundFiles;
+        }
+
         /// <summary>
         /// The file path has invalid chars.
         /// </summary>

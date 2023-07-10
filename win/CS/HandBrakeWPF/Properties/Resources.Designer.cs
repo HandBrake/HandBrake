@@ -3289,7 +3289,7 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Exclude File Extensions.
+        ///   Looks up a localized string similar to Exclude File Extensions:.
         /// </summary>
         public static string Options_ExcludeExtensions {
             get {
@@ -3312,6 +3312,15 @@ namespace HandBrakeWPF.Properties {
         public static string Options_ExtensionExists {
             get {
                 return ResourceManager.GetString("Options_ExtensionExists", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to File Handling (Scanning).
+        /// </summary>
+        public static string Options_FileHandling {
+            get {
+                return ResourceManager.GetString("Options_FileHandling", resourceCulture);
             }
         }
         
@@ -3555,6 +3564,15 @@ namespace HandBrakeWPF.Properties {
         public static string Options_QueueCompleted {
             get {
                 return ResourceManager.GetString("Options_QueueCompleted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Recursively scan directories when using the folder scan mode..
+        /// </summary>
+        public static string Options_RecursiveFolderScan {
+            get {
+                return ResourceManager.GetString("Options_RecursiveFolderScan", resourceCulture);
             }
         }
         

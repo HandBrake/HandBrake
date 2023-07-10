@@ -119,6 +119,7 @@ namespace HandBrakeWPF.ViewModels
         private bool enableNvDecSupport;
         private bool useIsoDateFormat;
         private BindingList<string> excludedFileExtensions;
+        private bool recursiveFolderScan;
 
         public OptionsViewModel(
             IUserSettingService userSettingService,
@@ -901,6 +902,17 @@ namespace HandBrakeWPF.ViewModels
 
         public SimpleRelayCommand<string> RemoveExtensionCommand { get; set; }
 
+        public bool RecursiveFolderScan
+        {
+            get => this.recursiveFolderScan;
+            set
+            {
+                if (value == this.recursiveFolderScan) return;
+                this.recursiveFolderScan = value;
+                this.NotifyOfPropertyChange(() => this.RecursiveFolderScan);
+            }
+        }
+
         /* Video */
         public bool EnableQuickSyncEncoding
         {
@@ -1502,6 +1514,7 @@ namespace HandBrakeWPF.ViewModels
             this.LowBatteryLevel = userSettingService.GetUserSetting<int>(UserSettingConstants.LowBatteryLevel);
 
             this.ExcludedFileExtensions = new BindingList<string>(userSettingService.GetUserSetting<List<string>>(UserSettingConstants.ExcludedExtensions));
+            this.RecursiveFolderScan = userSettingService.GetUserSetting<bool>(UserSettingConstants.RecursiveFolderScan);
 
             // #############################
             // Safe Mode
@@ -1638,6 +1651,7 @@ namespace HandBrakeWPF.ViewModels
             this.userSettingService.SetUserSetting(UserSettingConstants.PreviewScanCount, this.SelectedPreviewCount);
             this.userSettingService.SetUserSetting(UserSettingConstants.X264Step, double.Parse(this.SelectedGranularity, CultureInfo.InvariantCulture));
             this.userSettingService.SetUserSetting(UserSettingConstants.ExcludedExtensions, new List<string>(this.ExcludedFileExtensions));
+            this.userSettingService.SetUserSetting(UserSettingConstants.RecursiveFolderScan, this.RecursiveFolderScan);
 
             int value;
             if (int.TryParse(this.MinLength.ToString(CultureInfo.InvariantCulture), out value))

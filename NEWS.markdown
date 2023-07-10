@@ -53,6 +53,7 @@ Windows users, please make sure to install [Microsoft .NET Desktop Runtime versi
   - You can now exclude file extensions when scanning in batch mode. By default it will exclude common image, subtitle and text files from scans.
   - You can now multi-select files in the scan file picker.
   - You can now drag/drop multiple files from Windows Explorer to scan.
+  - Added support for recursive folder scanning. (Can be enabled in preferences -> Advanced)
 - Improved Preview window with video playback support. (Supports most, but not all codecs/containers. Requires Microsoft Codec Packs from the Microsoft Store for modern codecs)
 - Improved Autoname Preferences UI and added new options: {width} {height} {quality_type} {encoder_bit_depth} {modification-time} {modification-date}
 - Improved UI on the queue window. 
