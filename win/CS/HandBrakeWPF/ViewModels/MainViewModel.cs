@@ -1245,7 +1245,7 @@ namespace HandBrakeWPF.ViewModels
 
         public void FileScan()
         {
-            OpenFileDialog dialog = new OpenFileDialog { Filter = "All files (*.*)|*.*" };
+            OpenFileDialog dialog = new OpenFileDialog { Filter = "All files (*.*)|*.*", Multiselect = true };
 
             string mruDir = this.GetMru(Constants.FileScanMru);
             if (!string.IsNullOrEmpty(mruDir) && Directory.Exists(mruDir))
@@ -1272,9 +1272,12 @@ namespace HandBrakeWPF.ViewModels
             
             if (dialogResult.HasValue && dialogResult.Value)
             {
-                this.SetMru(Constants.FileScanMru, Path.GetDirectoryName(dialog.FileName));
+                if (!string.IsNullOrEmpty(dialog.FileName))
+                {
+                    this.SetMru(Constants.FileScanMru, Path.GetDirectoryName(dialog.FileName));
+                }
 
-                this.StartScan(new List<string> { dialog.FileName }, this.TitleSpecificScan);
+                this.StartScan(dialog.FileNames.ToList(), this.TitleSpecificScan);
             }
         }
 
