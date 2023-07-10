@@ -529,6 +529,8 @@ Es wird empfohlen, die Ausgabedatei vor der Durchführung von Aktionen zu validi
 {encode_bit_depth} - Ganzzahliger Wert, z. B. 8, 10 oder 12
 {width} - Die Breite des Ausgabespeichers
 {height} - Höhe des Ausgabespeichers
+{codec} - Zeigt das Videoformat an.
+{encoder} - Zeigt die Kurzform des Encoders an.
 
 Alle unzulässigen Pfadzeichen werden automatisch entfernt.</value>
   </data>
@@ -549,5 +551,8 @@ Die Bitrate variiert von Quelle zu Quelle.</value>
 {source_path} - In demselben Ordner wie der Quellpfad (wenn möglich)
 {source_folder_name} - Der Name des Verzeichnisses, in dem sich die Quelldatei befindet, ohne den vollständigen Pfad 
 {source} - Der Name der Quelldatei.</value>
+  </data>
+  <data name="OptionsView_LaunchsHelp" xml:space="preserve">
+    <value>Öffnet die Webseite mit der Dokumentation unter https://handbrake.fr/docs</value>
   </data>
 </root>

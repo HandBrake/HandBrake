@@ -122,36 +122,36 @@
 в результате низкокачественного сжатия видео.</value>
   </data>
   <data name="FilterView_DecombDeinterlace" xml:space="preserve">
-    <value>Выберите опции удаления "гребенки" или деинтерлейсинга.
+    <value>Выберите параметры фильтра decomb или deinterlace.
 
-Фильтр удаления "гребенки" выборочно устраняет чересстрочность кадров, который выглядят чересстрочными.
-Это сохранить качество тех кадров, в которых нет чересстрочности.
+Фильтр decomb выборочно деинтерлейсирует кадры, которые кажутся чересстрочными.
+При этом сохраняется качество кадров, которые не являются чересстрочными.
 
-Классический фильтр деинтерлейсинга применяется ко всем кадрам.
-Кадры без чересстрочности немного потеряют в качестве.</value>
+Классический фильтр деинтерлейса применяется ко всем кадрам.
+Качество кадров, которые не являются чересстрочными, будет ухудшено.</value>
   </data>
   <data name="FilterView_Denoise" xml:space="preserve">
-    <value>Шумодав снижает или убирает шумы и зерно изображения. Это может улучшить эффективность сжатия и поможет создать видео более высокого качества при меньшем размере файла.
-Чересчур сильное удаление шумов может снизить качество изображения путем снижения детализации.
+    <value>Шумоподавление уменьшает или удаляет шум и зернистость. Это позволяет повысить эффективность сжатия и создать видео более высокого качества при меньшем размере файла. 
+Слишком сильные настройки шумоподавления могут ухудшить качество изображения, удаляя детали.
 
-NLMeans - высококачественный фильтр удаления шумов, но обладающий низкой скоростью работы. Используйте в тех случаях, когда качество важнее скорости.
+NLMeans - это высококачественный фильтр шумоподавления, но с меньшими затратами на скорость. Используется там, где качество важнее скорости.
 
-HQDN3D - адаптивный низкочастотный фильтр, он быстрее, чем NLMeans, но менее эффективный для сохранения мелких деталей.</value>
+HQDN3D - адаптивный фильтр низких частот, более быстрый, чем NLMeans, но менее эффективный для сохранения мелких деталей.</value>
   </data>
   <data name="FilterView_Detelecine" xml:space="preserve">
-    <value>Удаление ТВ-"гребенки" убирает артефакты, полученные в результате работы телекинопроектора, процесса конвертирования частоты кадров кинофильма в телевизионную частоту кадров.</value>
+    <value>Удаление телегребёнки убирает артефакты, полученные в результате работы телекинопроектора, процесса конвертирования частоты кадров кинофильма в телевизионную частоту кадров.</value>
   </data>
   <data name="FilterView_Grayscale" xml:space="preserve">
-    <value>Grayscale removes the color component of the video. Often referred to as Black &amp; White video.</value>
+    <value>Градация серого удаляет цветовую составляющую видео. Часто называется чёрно-белым видео.</value>
   </data>
   <data name="MainView_Destination" xml:space="preserve">
-    <value>Путь назначения, включая директорию и имя файла. Это то место, где ваше новое видео будет создано и как оно будет названо.</value>
+    <value>Путь назначения, включая каталог и имя файла. Это место, где будет создано ваше новое видео, и как оно будет названо.</value>
   </data>
   <data name="MainView_IpodAtom" xml:space="preserve">
     <value>Добавить специальный MP4-маркер для возможности воспроизведения на винтажных iPod 5-ого поколения примерно 2006 года выпуска. Другие настройки могут повлиять на совместимость.</value>
   </data>
   <data name="MainView_Mux" xml:space="preserve">
-    <value>Формат контейнера. Видео, звуковые и другие дорожки собираются в единый файл данного формата. Влияет на совместимость.</value>
+    <value>Формат контейнера. Видео-, аудио- и другие дорожки собираются в единый файл данного формата. Влияет на совместимость.</value>
   </data>
   <data name="MainView_Optimise" xml:space="preserve">
     <value>Оптимизировать MP4 для прогрессивной загрузки. После кодирования данные реорганизуются и перезаписываются, чтобы позволить прямое воспроизведение по сети без необходимости загрузки всего файла.</value>
@@ -164,15 +164,15 @@ HQDN3D - адаптивный низкочастотный фильтр, он б
 Источники в виде Blu-ray и DVD часто имеют несколько заголовков, самый продолжительный из которых обычно является основной частью.</value>
   </data>
   <data name="PictureSettingsView_Anamorphic" xml:space="preserve">
-    <value>Anamorphic allows arbitrary storage dimensions while preserving the original aspect during playback.
+    <value>Анаморфирование позволяет сохранять произвольные размеры при сохранении исходного формата при воспроизведении.
 
-None disables anamorphic. Video storage dimensions and display dimensions will be identical. Only useful for compatibility with certain legacy devices.
+«None» отключает анаморфирование. Размеры видео для хранения и отображения будут идентичными. Полезно только для совместимости с некоторыми устаревшими устройствами.
 
-Automatic maximizes storage resolution while preserving the original display aspect ratio. Recommended.
+«Automatic» максимизирует разрешение при хранении с сохранением исходного соотношения сторон дисплея. Рекомендуется.
 
-Loose is similar to Auto, but attempts to preserve the storage aspect ratio. This can result in a slight storage resolution loss compared to Auto.
+«Loose» аналогичен «Auto», но пытается сохранить соотношение сторон хранилища. Это может привести к небольшому снижению разрешения хранения по сравнению с «Auto».
 
-Custom allows manually setting all parameters. Useful for correcting an incorrect source display aspect and for professionals needing advanced control in post-production.</value>
+«Custom» позволяет вручную настроить все параметры. Полезно для исправления неправильного соотношения сторон экрана источника и для профессионалов, которым требуется расширенный контроль в процессе постпродакшна.</value>
   </data>
   <data name="PictureSettingsView_AutoCrop" xml:space="preserve">
     <value>Автоматически обрезает черные линии вокруг видео.</value>
@@ -235,10 +235,9 @@ Custom allows manually setting all parameters. Useful for correcting an incorrec
     <value>Доступные видеокодировщики.</value>
   </data>
   <data name="Video_EncoderTune" xml:space="preserve">
-    <value>Настроить параметры для оптимизации для общих сценариев.
+    <value>Настроить параметры оптимизации для общих сценариев.
 
-Это может улучшить эффективность для некоторых характеристик источника или
-характеристик выходного файла. Изменения будут применены после пресета, но
+Это может улучшить эффективность некоторых характеристик источника или характеристик выходного файла. Изменения будут применены после шаблона, но
 перед всеми остальными параметрами.</value>
   </data>
   <data name="Video_ExtraOpts" xml:space="preserve">
@@ -293,14 +292,10 @@ Custom allows manually setting all parameters. Useful for correcting an incorrec
 Эти кодировщики не имеют режима сжатия без потерь.</value>
   </data>
   <data name="Video_TurboAnalysisPass" xml:space="preserve">
-    <value>During the analysis pass of a multi pass encode, use settings that speed things along.</value>
+    <value>Во время анализа при многопроходном кодировании используйте параметры, ускоряющие процесс.</value>
   </data>
   <data name="Video_MultiPass" xml:space="preserve">
-    <value>Perform Multi Pass Encoding.
-
-The 'Bitrate' option is prerequisite. During the analysis passes, statistics about
-the video are collected. Then in the final pass, those statistics are used
-to make bitrate allocation decisions.</value>
+    <value>Опция «Битрейт» является обязательным условием. Во время выполнения анализа собираются статистические данные о видео, а затем в последнем проходе эта статистика используется для принятия решений о распределении битрейта.</value>
   </data>
   <data name="Video_VariableFramerate" xml:space="preserve">
     <value>Включает переменную частоту кадров выходного файла.
@@ -318,23 +313,23 @@ to make bitrate allocation decisions.</value>
     <value>Ракурс видео для кодирования. Применимо только для многоракурсных DVD и Blu-ray.</value>
   </data>
   <data name="MainView_AddPreset" xml:space="preserve">
-    <value>Добавить новый пресет.</value>
+    <value>Добавить новый шаблон.</value>
   </data>
   <data name="MainView_PresetAdditionalOptions" xml:space="preserve">
-    <value>Дополнительные Опции Пресета.</value>
+    <value>Дополнительные опции шаблона.</value>
   </data>
   <data name="MainView_Presets" xml:space="preserve">
-    <value>Пресеты - это группы настроек кодирования, объединенные по указанному сценарию. Выберите тот, который больше всего подходит под ваши нужды.
+    <value>Шаблоны – это группы настроек кодирования, объединённые по указанному сценарию. Выберите тот, который больше всего подходит под ваши нужды.
 
-Переопределяет все настройки кодирования. Настройки могут быть далее поправлены после выбора пресета.</value>
+Переопределяет все настройки кодирования. Настройки можно подправить после выбора шаблона.</value>
   </data>
   <data name="MainView_RemovePreset" xml:space="preserve">
-    <value>Удалить выбранный пресет.</value>
+    <value>Удалить выбранный шаблон.</value>
   </data>
   <data name="SourceSelection_TitleSpecific" xml:space="preserve">
-    <value>Some Sources may contain more than one video clip, or a collection of Titles. Blu-ray and DVD Sources often have multiple Titles.
+    <value>Некоторые источники могут содержать более одного видеоклипа или набор титров. Источники Blu-ray и DVD часто содержат несколько титров.
 
-If you know the specific title you wish to encode you can enter it here and HandBrake will scan only that title rather than every title in the source file. Otherwise, leave the field blank.</value>
+Если вы знаете конкретные титры, которые хотите закодировать, вы можете ввести их здесь, и HandBrake будет сканировать только их вместо всех остальных титров в исходном файле. В противном случае оставьте поле пустым.</value>
   </data>
   <data name="FilterView_CustomDenoiseParams" xml:space="preserve">
     <value>Пользовательские параметры Шумодава.
@@ -348,49 +343,49 @@ NLMeans по умолчанию: y-strength=6:y-origin-tune=1:y-patch-size=7:y-r
 HQDN3D по умолчанию: y-spatial=3:cb-spatial=2:cr-spatial=2:y-temporal=2:cb-temporal=3:cr-temporal=3</value>
   </data>
   <data name="FilterView_DenoisePreset" xml:space="preserve">
-    <value>Пресет фильтра Шумодава. Устанавливает силу фильтра.</value>
+    <value>Шаблон фильтра шумоподавления. Устанавливает силу фильтра.</value>
   </data>
   <data name="FilterView_DenoiseTune" xml:space="preserve">
-    <value>Настройка Шумодава. Точнее настраивает пресет Шумодава для оптимизации под различные сценарии.
+    <value>Настройка шумоподавления. Точнее настраивает шаблон шумоподавления для оптимизации под различные сценарии.
 
-- None использует стандартные настройки пресета.
+- None (Ничего) использует стандартные настройки шаблона.
 
 - Film (Кино) улучшает параметры для подавляющего большинства кино-контента.
 
 - Grain (Зерно) работает только над цветовыми каналами. Полезно для сохранения вида фильмов со свечением зерна при уменьшении или устранении цветового шума.
 
-- Animation (Анимация) полезна для рисованной анимации, такой как аниме и мультфильмы.
+- Animation (Анимация) полезен для рисованной анимации, такой как аниме и мультфильмы.
 
-- Tape (Пленка) полезна для пленочных аналоговых источников низкого разрешения, например, VHS, где настройка Film (Кино) не производит желаемого результата.
+- Tape (Плёнка) полезен для плёночных аналоговых источников низкого разрешения, например, VHS, где настройка Film (Кино) не производит желаемого результата.
 
-- Sprite(Спрайт) из Lapsharp полезна для 1-/4-/8-/16-битных 2D-игр. Эта настройка использует ядро Лапласа для 4 соседних для улучшения вертикальных и горизонтальных краев в большей степени, чем диагональных.</value>
+- Sprite (Спрайт) полезен для 1-/4-/8-/16-битных 2D-игр. Эта настройка не предназначена для видео с большим разрешением.</value>
   </data>
   <data name="FilterView_Deinterlace" xml:space="preserve">
-    <value>Deinterlace removes comb artifacts from the picture.
+    <value>Деинтерлейсинг удаляет из изображения артефакты гребёнки.
 
-Bwdif and Yadif are two popular and fast deinterlacers.
+Bwdif и Yadif - два популярных и быстрых деинтерлейсера.
 
-Decomb switches between multiple interpolation algorithms for speed and quality.</value>
+Decomb переключается между несколькими алгоритмами интерполяции для повышения скорости и качества.</value>
   </data>
   <data name="FilterView_DeinterlaceCustom" xml:space="preserve">
-    <value>Custom Deinterlace parameters.
- 
- Bwdif and Yadif syntax: mode=m:parity=p
- 
- Bwdif and Yadif default: mode=3
- 
- Decomb syntax: mode=m:magnitude-thresh=m:variance-thresh=v:laplacian-thresh=l:dilation-thresh=d:erosion-thresh=e:noise-thresh=n:search-distance=s:postproc=p:parity=p
- 
- Decomb default: mode=7</value>
+    <value>Пользовательские параметры деинтерлейсинга.
+
+Синтаксис Bwdif и Yadif: mode=m:parity=p
+
+Bwdif и Yadif по умолчанию: mode=3
+
+Синтаксис Decomb: mode=m:magnitude-thresh=m:variance-thresh=v:laplacian-thresh=l:dilation-thresh=d:erosion-thresh=e:noise-thresh=n:search-distance=s:postproc=p:parity=p
+
+Decomb по умолчанию: mode=7</value>
   </data>
   <data name="FilterView_DeinterlacePreset" xml:space="preserve">
-    <value>Пресет фильтра деинтерлейсинга.
+    <value>Шаблон фильтра деинтерлейсинга.
 
-По умолчанию означает хороший баланс между скоростью и качеством.
+По умолчанию даёт хороший баланс между скоростью и качеством.
 
 Skip Spatial Check позволяет Yadif пропускать коррекцию некоторых избегаемых артефактов для небольшого увеличения скорости.
 
- EEDI2 использует более медленный, но более высококачественный алгоритм для удаления "гребенки". Полезно для наиболее трудных исходных файлов.
+ EEDI2 использует более медленный, но более высококачественный алгоритм для удаления "гребёнки". Полезно для наиболее трудных исходных файлов.
 
 Bob пытается лучше сохранить движение в обмен на некоторые потери конечного разрешения.</value>
   </data>
@@ -435,10 +430,10 @@ Unsharp - нерезкий маскировочный фильтр общего 
 Lapsharp увеличивает резкость с помощью сверточных ядер, аппроксимирующих краевой фильтр Лапласа, что иногда позволяет достичь более высоко качества, чем в случае нерезкой маски Unsharp.</value>
   </data>
   <data name="FilterView_SharpenPreset" xml:space="preserve">
-    <value>Пресет Увеличения резкости. Устанавливает силу фильтра.</value>
+    <value>Шаблон увеличения резкости. Устанавливает силу фильтра.</value>
   </data>
   <data name="FilterView_SharpenTune" xml:space="preserve">
-    <value>Настройки Увеличения резкости. Детальнее настраивает Пресет Увеличения резкости для оптимизации настроек под различные сценарии.
+    <value>Настройки Увеличения резкости. Детальнее настраивает шаблон увеличения резкости для оптимизации настроек под различные сценарии.
 
 None использует стандартные настройки пресета.
 
@@ -456,7 +451,7 @@ Unsharp может быть настроен для Ultrafine (Очень тон
     <value>Расположить исходные временные метки всех аудио- и видео-потоков с помощью включения пустых кадров или пропуска кадров. Может улучшить синхронизацию аудио и видео для сломанных проигрывателей, которые игнорируют списки редактирования MP4.</value>
   </data>
   <data name="MainView_PresetOptionsContextMenu" xml:space="preserve">
-    <value>Опции для управления пресетами.</value>
+    <value>Опции для управления шаблонами.</value>
   </data>
   <data name="MainView_EndPoint" xml:space="preserve">
     <value>Конечная точка для этого диапазона.</value>
@@ -478,79 +473,84 @@ Unsharp может быть настроен для Ultrafine (Очень тон
     <value>Это поле может принимать RGB-значения, такие как "0xFF0000" или названия цветов, такие как "red". Полный список именованных цветов доступен в документации по фильтру полей.</value>
   </data>
   <data name="SubtitlesView_BurnIn" xml:space="preserve">
-    <value>Burn in subtitles to the video stream.
+    <value>Запись субтитров в видеопоток.
 
-Note, this will be automatically selected if the source subtitle track format is not supported in the output file type.
+Примечание, этот параметр будет выбран автоматически, если формат дорожки субтитров источника не поддерживается в типе выходного файла.
 
-For example, PGS subtitles are not supported in MP4</value>
+Например, субтитры PGS не поддерживаются в MP4</value>
   </data>
   <data name="OptionsView_PresetDisplayModes" xml:space="preserve">
-    <value>Flat - Presets are displayed as a flat list.
-Partially Flat - The last 8 user presets are displayed as a flat list followed by all presets being shown in category listing.
-Categories - All presets are shown under a sub menu per category.</value>
+    <value>Плоский - Шаблоны отображаются в виде плоского списка.
+Частично плоский - Последние 8 шаблонов пользователя отображаются в виде плоского списка, после чего все шаблоны отображаются в списке категорий.
+Категории - Все шаблоны отображаются в подменю для каждой категории.</value>
   </data>
   <data name="AudioView_AudioDefaults" xml:space="preserve">
-    <value>Setup behaviours that dictate how this tab automatically adds audio tracks when selecting a new source or title.</value>
+    <value>Настройка поведения, определяющего, как эта вкладка автоматически добавит звуковые дорожки при выборе нового источника или названия.</value>
   </data>
   <data name="BehavioursReload" xml:space="preserve">
-    <value>Refresh the list below based on the behaviours configured. </value>
+    <value>Обновить список на основе новых настроек поведения.</value>
   </data>
   <data name="SubtitleView_SubtitleDefaults" xml:space="preserve">
-    <value>Setup behaviours that dictate how this tab automatically adds subtitle tracks when selecting a new source or title.</value>
+    <value>Настройка поведения, определяющего, как эта вкладка автоматически добавит дорожки субтитров при выборе нового источника или названия.</value>
   </data>
   <data name="OptionsView_SendFileToArguments" xml:space="preserve">
-    <value>The following environment variables are always set:
+    <value>Следующие переменные всегда установлены:
 HB_SOURCE
 HB_DESTINATION
 HB_EXIT_CODE
 
-Possible Exit Codes are as follows:
-0 : Successful
-2 : Input Arguments Error
-3 : Failed to Initialise 
-4 : Unknown Error
-5 : Error reading source file.
+Возможные выходные коды следующие:
+0 : Успешно
+2 : Ошибка входных аргументов
+3 : Не удалось инициализировать 
+4 : Неизвестная ошибка
+5 : Ошибка чтения исходного файла.
 
-Please note, errors codes are best effort and may not always be accurate.
-It is recommended the output file is validated before performing actions on it.</value>
+Пожалуйста, обратите внимание, что коды ошибок являются попыткой определить проблему и не всегда могут быть точными.
+Рекомендуется проверять выходной файл перед выполнением действий с ним.</value>
   </data>
   <data name="Options_AdditionalFormatOptions" xml:space="preserve">
-    <value>The format of the output file. In addition to any supported file system character, you can use the any of the placeholders that will be replaced when you change title or scan a source or update certain settings.
+    <value>Формат выходного файла. В дополнение к любому поддерживаемому символу файловой системы вы можете использовать любой из заполнителей, которые будут заменены при изменении названия, сканировании источника или обновлении определённых настроек.
 
-{source} - Name of the source file.
-{title} - Integer value. This is representative of a disc title number.
-{chapters} - The range of chapters selected.
-{creation-date} - The date that the source file was created on (if available).
-{creation-time} - The time that the source file was created on (if available).
-{modification-date} - The date that the source file was last modified on (if available).
-{modification-time} - The time that the source file was last modified on (if available).
-{date} - Today. Set at time of adding to the queue.
-{time} - Today. Set at time of adding to the queue.
-{quality_bitrate} - The RF/CQ number, or bitrate
-{quality_type} - Prints "kbps" or "Q" depending on the quality mode selected on the video tab.
-{preset} - Name of the preset selected.
-{encode_bit_depth} - Integer value. i.e. 8, 10 or 12
-{width} - The output storage width
-{height} - The output storage height
+{source} - Имя исходного файла.
+{title} - Целочисленное значение. Представляет собой номер названия диска.
+{chapters} - Диапазон выбранных глав.
+{creation-date} - Дата создания исходного файла (если доступна).
+{creation-time} - Время создания исходного файла (если доступно).
+{modification-date} - Дата последнего изменения исходного файла (если доступно).
+{modification-time} - Время последнего изменения исходного файла (если доступно).
+{date} - Сегодня. Устанавливается во время добавления в очередь.
+{time} - Сегодня. Устанавливается во время добавления в очередь.
+{quality_bitrate} - Номер RF/CQ или битрейт.
+{quality_type} - Выводит "kbps" или "Q" в зависимости от режима качества, выбранного на вкладке видео.
+{preset} - Название выбранного шаблона.
+{encode_bit_depth} - Целочисленное значение, т.е. 8, 10 или 12.
+{width} - Ширина выходного хранилища
+{высота} - Высота выходного хранилища
+{codec} - Отображение формата видео.
+{encoder} - Отображение короткого ключа формата используемого кодировщика.
 
-Any illegal path characters will be removed automatically.</value>
+Все недопустимые символы пути будут удалены автоматически.</value>
   </data>
   <data name="OptionsView_RightToleftMode" xml:space="preserve">
-    <value>For languages that are right to left, you can enable one of two modes.   "Text Only" will only render the text in right to left style.  "Entire User Interface" will render all controls in right to left.
+    <value>Для языков с чтением справа налево можно включить один из двух режимов. "Только текст" будет отображать только текст справа налево. "Весь пользовательский интерфейс" будет отображать все элементы управления справа налево.
 
-Please note, there may be inperfections in the UI layout when using these modes. Depending on the language, it may be worth trying both modes to find the best fit.</value>
+Обратите внимание, что при использовании этих режимов возможны неточности в компоновке пользовательского интерфейса. В зависимости от языка, возможно, стоит попробовать оба режима, чтобы найти наиболее подходящий.</value>
   </data>
   <data name="AudioView_Quality" xml:space="preserve">
-    <value>Target a specific quality level for audio.
-1 is lowest quality and 5 is highest quality.
+    <value>Устанавливает определённый уровень качества для аудио.
+1 - самое низкое качество, 5 - самое высокое качество.
 
-Bitrate will vary source to source.</value>
+Битрейт зависит от источника.</value>
   </data>
   <data name="OptionsView_DestinationReplacementOptions" xml:space="preserve">
-    <value>The following can be used singularly, or together to build up a destination path
+    <value>Следующие параметры можно использовать по отдельности или вместе для создания пути назначения
 
-{source_path} - In the same folder as the source path (if possible)
-{source_folder_name} – The name of the directory that the source file is in, without the full path.
-{source} - The name of the source file.</value>
+{source_path} - В той же папке, что и исходный путь (если возможно).
+{source_folder_name} - Имя каталога, в котором находится исходный файл, без полного пути.
+{source} - Имя исходного файла.</value>
+  </data>
+  <data name="OptionsView_LaunchsHelp" xml:space="preserve">
+    <value>Открывает веб-сайт документации по адресу https://handbrake.fr/docs</value>
   </data>
 </root>

@@ -529,6 +529,8 @@ HB_EXIT_CODE
 {encode_bit_depth} -  8, 10, 12などで表されるビット深度です。
 {width} - 出力される格納幅です。
 {height} - 出力される格納高さです。
+{codec} - 映像の形式です。
+{encoder} - 使用されるエンコーダの形式を短くしたものです。
 
 パスに使えない無効な文字は自動で除去されます。</value>
   </data>
@@ -549,5 +551,8 @@ HB_EXIT_CODE
 {source_path} - (可能であれば)ソースパスと同じフォルダです。
 {source_folder_name} – フルパスでない、ソースファイルが入っているディレクトリの名前です。
 {source} - ソースファイルの名前です。</value>
+  </data>
+  <data name="OptionsView_LaunchsHelp" xml:space="preserve">
+    <value>https://handbrake.fr/docs にあるドキュメントのウェブサイトを開く</value>
   </data>
 </root>
