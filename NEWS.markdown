@@ -32,12 +32,14 @@ Windows users, please make sure to install [Microsoft .NET Desktop Runtime versi
   - AMF 1.4.29 (AMD VCN encoding)
   - FFmpeg 6.0 (decoding and filters)
   - libass 0.17.1 (subtitles)
-  - libdav1d 1.1.0 (AV1 decoding)
+  - libdav1d 1.2.1 (AV1 decoding)
   - libopus 1.4 (Opus audio encoding)
   - libvpx 1.13.0 (VP8/VP9 video encoding)
-  - libxml 2.10.4 (general)
-  - SVT-AV1 1.5 (AV1 encoding)
+  - libxml 2.11.4 (general)
+  - SVT-AV1 1.6 (AV1 encoding)
   - x265 r12776 (H.265/HEVC video encoding)
+  - zimg 3.0.4 (color conversion)
+  - libjpeg-turbo 3.0.0 (preview image compression)  
 
 - New libraries
   - libdovi (Dolby Vision metadata)
@@ -47,6 +49,10 @@ Windows users, please make sure to install [Microsoft .NET Desktop Runtime versi
 ### Linux
 
 ### Windows
+- Improved File Input Handling
+  - You can now exclude file extensions when scanning in batch mode. By default it will exclude common image, subtitle and text files from scans.
+  - You can now multi-select files in the scan file picker.
+  - You can now drag/drop multiple files from Windows Explorer to scan.
 - Improved Preview window with video playback support. (Supports most, but not all codecs/containers. Requires Microsoft Codec Packs from the Microsoft Store for modern codecs)
 - Improved Autoname Preferences UI and added new options: {width} {height} {quality_type} {encoder_bit_depth} {modification-time} {modification-date}
 - Improved UI on the queue window. 
@@ -54,7 +60,9 @@ Windows users, please make sure to install [Microsoft .NET Desktop Runtime versi
 - Improved Preset Panel. 
   - Queue Manager button replaced by a drop menu of discrete options for quicker access to functionality. 
   - Optional display of preset description at the bottom of the preset pane.
+  - Added the ability to clone presets.
 - Improved Add Selection window. Sorting feature is now more discoverable. 
+- Updated Translations 
 - Miscellaneous bug fixes and improvements
 
 
