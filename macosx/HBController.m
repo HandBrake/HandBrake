@@ -750,16 +750,6 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
                  self.sourceLabel.stringValue = NSLocalizedString(@"No Valid Source Found", @"Main Window -> Info text");
              }
 
-             // Set the last searched source directory in the prefs here
-             if ([NSWorkspace.sharedWorkspace isFilePackageAtPath:fileURLs.firstObject.URLByDeletingLastPathComponent.path])
-             {
-                 [NSUserDefaults.standardUserDefaults setURL:fileURLs.firstObject.URLByDeletingLastPathComponent.URLByDeletingLastPathComponent forKey:HBLastSourceDirectoryURL];
-             }
-             else
-             {
-                 [NSUserDefaults.standardUserDefaults setURL:fileURLs.firstObject.URLByDeletingLastPathComponent forKey:HBLastSourceDirectoryURL];
-             }
-
              completionHandler(self.core.titles);
 
              // Clear the undo manager, the completion handler
@@ -818,10 +808,12 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
     }
     self.fileTokens = tokens;
 
-    fileURLs = [HBUtilities expandURLs:fileURLs recursive:recursive];
+    NSArray<NSURL *> *expandedFileURLs = [HBUtilities expandURLs:fileURLs recursive:recursive];
 
-    [self scanURLs:fileURLs titleIndex:index completionHandler:^(NSArray<HBTitle *> *titles)
+    [self scanURLs:expandedFileURLs titleIndex:index completionHandler:^(NSArray<HBTitle *> *titles)
     {
+        NSURL *commonURL = [HBUtilities commonURL:expandedFileURLs];
+
         if (titles.count)
         {
             for (NSURL *fileURL in fileURLs)
@@ -844,7 +836,7 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
                 self.job = job;
                 if (featuredTitle.isStream && [NSUserDefaults.standardUserDefaults boolForKey:HBUseSourceFolderDestination])
                 {
-                    [self askForPermissionAndSetDestinationURL:job.fileURL.URLByDeletingLastPathComponent];
+                    [self askForPermissionAndSetDestinationURL:commonURL];
                 }
             }
             else
@@ -854,6 +846,9 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
                 self.sourceLabel.stringValue = NSLocalizedString(@"No Valid Preset", @"Main Window -> Info text");
             }
         }
+
+        // Set the last searched source directory in the prefs here
+        [NSUserDefaults.standardUserDefaults setURL:commonURL forKey:HBLastSourceDirectoryURL];
     }];
 }
 
@@ -911,7 +906,19 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
     HBJob *job = [[HBJob alloc] initWithTitle:title preset:self.currentPreset];
     if (job)
     {
-        job.destinationFolderURL = self.destinationFolderURL;
+        NSURL *destination = self.destinationFolderURL;
+
+        // If destination mode is set to same as source, try to set the source folder url
+        if (title.isStream && [NSUserDefaults.standardUserDefaults boolForKey:HBUseSourceFolderDestination])
+        {
+            NSURL *titleParentURL = title.url.URLByDeletingLastPathComponent;
+            if ([titleParentURL.path hasPrefix:self.destinationFolderURL.path])
+            {
+                destination = titleParentURL;
+            }
+        }
+
+        job.destinationFolderURL = destination;
 
         // If the source is not a stream, and autonaming is disabled,
         // keep the existing file name.

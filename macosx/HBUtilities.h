@@ -63,6 +63,7 @@ NS_ASSUME_NONNULL_BEGIN
 + (nullable NSData *)bookmarkFromURL:(NSURL *)url;
 + (nullable NSData *)bookmarkFromURL:(NSURL *)url options:(NSURLBookmarkCreationOptions)options;
 
++ (NSURL *)commonURL:(NSArray<NSURL *> *)urls;
 + (NSArray<NSURL *> *)expandURLs:(NSArray<NSURL *> *)urls recursive:(BOOL)recursive;
 
 + (NSString *)isoCodeForNativeLang:(NSString *)language;

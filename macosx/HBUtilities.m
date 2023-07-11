@@ -142,6 +142,18 @@ static BOOL hb_resolveBookmarks = YES;
     return [HBUtilities bookmarkFromURL:url options:NSURLBookmarkCreationWithSecurityScope];
 }
 
++ (NSURL *)commonURL:(NSArray<NSURL *> *)urls
+{
+    NSArray<NSURL *> *sortedURLs = [urls sortedArrayUsingComparator:^NSComparisonResult(id  _Nonnull obj1, id  _Nonnull obj2)
+     {
+        NSUInteger len1 = [[[obj1 path] stringByDeletingLastPathComponent] length];
+        NSUInteger len2 = [[[obj2 path] stringByDeletingLastPathComponent] length];
+        return (len1 <= len2) ? (len1 < len2)? NSOrderedAscending : NSOrderedSame : NSOrderedDescending;
+    }];
+
+    return sortedURLs.firstObject.URLByDeletingLastPathComponent;
+}
+
 + (NSURL *)eyetvMediaURL:(NSURL *)url
 {
     // We're looking at an EyeTV package - try to open its enclosed .mpg or .ts media file
