@@ -10,6 +10,7 @@
 NSString * const HBShowOpenPanelAtLaunch              = @"HBShowOpenPanelAtLaunch";
 NSString * const HBShowSummaryPreview                 = @"HBShowSummaryPreview";
 
+NSString * const HBRecursiveScan                      = @"HBRecursiveScan";
 NSString * const HBLastDestinationDirectoryURL        = @"HBLastDestinationDirectoryURL";
 NSString * const HBLastDestinationDirectoryBookmark   = @"HBLastDestinationDirectoryBookmark";
 NSString * const HBLastSourceDirectoryURL             = @"HBLastSourceDirectoryURL";
@@ -91,6 +92,7 @@ NSString * const HBKeepPresetEdits               = @"HBKeepPresetEdits";
         HBShowSummaryPreview:               @YES,
         HBDefaultMpegExtension:             @".mp4",
         HBUseDvdNav:                        @YES,
+        HBRecursiveScan:                    @NO,
         HBLastDestinationDirectoryURL:      [NSKeyedArchiver archivedDataWithRootObject:moviesURL],
         HBLastSourceDirectoryURL:           [NSKeyedArchiver archivedDataWithRootObject:moviesURL],
         HBUseSourceFolderDestination:       @NO,

@@ -19,7 +19,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)launchAction;
 
-- (void)openURLs:(NSArray<NSURL *> *)fileURLs;
+- (void)openURLs:(NSArray<NSURL *> *)fileURL recursive:(BOOL)recursive;
 - (void)openJob:(HBJob *)job completionHandler:(void (^)(BOOL result))handler;
 
 - (IBAction)browseSources:(id)sender;

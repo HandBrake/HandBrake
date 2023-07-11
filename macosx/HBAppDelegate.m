@@ -185,7 +185,8 @@
 
 - (void)application:(NSApplication *)sender openURLs:(nonnull NSArray<NSURL *> *)urls
 {
-    [self.mainController openURLs:urls];
+    BOOL recursive = [NSUserDefaults.standardUserDefaults boolForKey:HBRecursiveScan];
+    [self.mainController openURLs:urls recursive:recursive];
 }
 
 - (BOOL)validateMenuItem:(NSMenuItem *)menuItem
@@ -220,15 +221,16 @@
 
     if (directoryUrl)
     {
-        NSArray *contents = [[NSFileManager defaultManager] contentsOfDirectoryAtURL:directoryUrl
-                                                          includingPropertiesForKeys:nil
-                                                                             options:NSDirectoryEnumerationSkipsSubdirectoryDescendants |
-                                                                                     NSDirectoryEnumerationSkipsHiddenFiles |
-                                                                                     NSDirectoryEnumerationSkipsPackageDescendants
-                                                                               error:NULL];
+        NSFileManager *manager = [[NSFileManager alloc] init];
+
+        NSArray<NSURL *> *contents = [manager contentsOfDirectoryAtURL:directoryUrl
+                                            includingPropertiesForKeys:nil
+                                                               options:NSDirectoryEnumerationSkipsSubdirectoryDescendants |
+                                                                        NSDirectoryEnumerationSkipsHiddenFiles |
+                                                                        NSDirectoryEnumerationSkipsPackageDescendants
+                                                                 error:NULL];
 
         NSDate *limit = [NSDate dateWithTimeIntervalSinceNow: -(60 * 60 * 24 * 30)];
-        NSFileManager *manager = [[NSFileManager alloc] init];
 
         for (NSURL *fileURL in contents)
         {
