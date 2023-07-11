@@ -52,6 +52,7 @@ MODULES += contrib/libdav1d
 MODULES += contrib/svt-av1
 MODULES += contrib/zimg
 MODULES += contrib/ffmpeg
+MODULES += contrib/libudfread
 MODULES += contrib/libdvdread
 MODULES += contrib/libdvdnav
 MODULES += contrib/libbluray
