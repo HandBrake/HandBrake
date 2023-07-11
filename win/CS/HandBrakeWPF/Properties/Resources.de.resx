@@ -2794,4 +2794,10 @@ Um mehrere gleichzeitige Encodierungen zu ermöglichen, aktivieren Sie die "Proz
   <data name="Options_ExtensionExists" xml:space="preserve">
     <value>Diese Dateiendung existiert schon in der Liste.</value>
   </data>
+  <data name="Options_FileHandling" xml:space="preserve">
+    <value>Dateiverwaltung (Durchsuchen)</value>
+  </data>
+  <data name="Options_RecursiveFolderScan" xml:space="preserve">
+    <value>Beim Hinzufügen von Ordnern rekursive Suche aktivieren.</value>
+  </data>
 </root>
