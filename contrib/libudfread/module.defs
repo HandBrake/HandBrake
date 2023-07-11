@@ -1,0 +1,6 @@
+$(eval $(call import.MODULE.defs,LIBUDFREAD,libudfread))
+$(eval $(call import.CONTRIB.defs,LIBUDFREAD))
+
+LIBUDFREAD.FETCH.url     = https://download.videolan.org/pub/videolan/libudfread/libudfread-1.1.2.tar.bz2
+LIBUDFREAD.FETCH.url    += https://download.videolan.org/pub/videolan/libudfread/libudfread-1.1.2.tar.bz2
+LIBUDFREAD.FETCH.sha256  = d5946f19b27288ce0911eb11fe583c136767421220ece3bafc96245efd208915
