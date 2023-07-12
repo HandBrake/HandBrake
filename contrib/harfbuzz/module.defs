@@ -3,9 +3,9 @@ __deps__ := FREETYPE
 $(eval $(call import.MODULE.defs,HARFBUZZ,harfbuzz,$(__deps__)))
 $(eval $(call import.CONTRIB.defs,HARFBUZZ))
 
-+HARFBUZZ.FETCH.url     = https://github.com/harfbuzz/harfbuzz/releases/download/7.3.0/harfbuzz-7.3.0.tar.xz
-+HARFBUZZ.FETCH.url    += https://github.com/harfbuzz/harfbuzz/releases/download/7.3.0/harfbuzz-7.3.0.tar.xz
-+HARFBUZZ.FETCH.sha256  = 20770789749ac9ba846df33983dbda22db836c70d9f5d050cb9aa5347094a8fb
+HARFBUZZ.FETCH.url     = https://github.com/harfbuzz/harfbuzz/releases/download/8.0.1/harfbuzz-8.0.1.tar.xz
+HARFBUZZ.FETCH.url    += https://github.com/harfbuzz/harfbuzz/releases/download/8.0.1/harfbuzz-8.0.1.tar.xz
+HARFBUZZ.FETCH.sha256  = c1ce780acd385569f25b9a29603d1d5bc71e6940e55bfdd4f7266fad50e42620
 
 HARFBUZZ.build_dir             = build
 HARFBUZZ.CONFIGURE.exe         = cmake
