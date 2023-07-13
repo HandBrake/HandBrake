@@ -5,11 +5,24 @@
  It may be used under the terms of the GNU General Public License. */
 
 #import "HBUtilities.h"
+#import "HBDirectUtilities.h"
+
 #import <Cocoa/Cocoa.h>
 
 #include "handbrake/lang.h"
 
 static BOOL hb_resolveBookmarks = YES;
+
+HB_OBJC_DIRECT_MEMBERS
+@interface HBURLPair : NSObject
+@property (nonatomic) NSURL *URL;
+@property (nonatomic) NSUInteger length;
+@property (nonatomic) NSURL *volumeURL;
+@end
+
+HB_OBJC_DIRECT_MEMBERS
+@implementation HBURLPair
+@end
 
 @implementation HBUtilities
 
@@ -142,16 +155,54 @@ static BOOL hb_resolveBookmarks = YES;
     return [HBUtilities bookmarkFromURL:url options:NSURLBookmarkCreationWithSecurityScope];
 }
 
-+ (NSURL *)commonURL:(NSArray<NSURL *> *)urls
++ (NSArray<NSURL *> *)baseURLs:(NSArray<NSURL *> *)fileURLs
 {
-    NSArray<NSURL *> *sortedURLs = [urls sortedArrayUsingComparator:^NSComparisonResult(id  _Nonnull obj1, id  _Nonnull obj2)
-     {
-        NSUInteger len1 = [[[obj1 path] stringByDeletingLastPathComponent] length];
-        NSUInteger len2 = [[[obj2 path] stringByDeletingLastPathComponent] length];
-        return (len1 <= len2) ? (len1 < len2)? NSOrderedAscending : NSOrderedSame : NSOrderedDescending;
-    }];
+    NSMutableArray<HBURLPair *> *pairs = [[NSMutableArray alloc] init];
+    NSMutableSet<NSURL *> *volumeURLs = [[NSMutableSet alloc] init];
 
-    return sortedURLs.firstObject.URLByDeletingLastPathComponent;
+    for (NSURL *fileURL in fileURLs)
+    {
+        NSURL *volumeURL = nil;
+        [fileURL getResourceValue:&volumeURL forKey:NSURLVolumeURLKey error:nil];
+
+        if (volumeURL)
+        {
+            HBURLPair *pair = [[HBURLPair alloc] init];
+            pair.URL = fileURL.URLByDeletingLastPathComponent;
+            pair.length = fileURL.path.stringByDeletingLastPathComponent.length;
+            pair.volumeURL = volumeURL;
+
+            [pairs addObject:pair];
+            [volumeURLs addObject:volumeURL];
+        }
+    }
+
+    NSMutableArray<NSURL *> *baseURLs = [[NSMutableArray alloc] init];
+
+    for (NSURL *volumeURL in volumeURLs)
+    {
+        HBURLPair *currentPair = nil;
+        for (HBURLPair *pair in pairs)
+        {
+            if ([pair.volumeURL isEqualTo:volumeURL])
+            {
+                if (currentPair == nil)
+                {
+                    currentPair = pair;
+                }
+                else if (pair.length < currentPair.length)
+                {
+                    currentPair = pair;
+                }
+            }
+        }
+        if (currentPair)
+        {
+            [baseURLs addObject:currentPair.URL];
+        }
+    }
+
+    return baseURLs;
 }
 
 + (NSURL *)eyetvMediaURL:(NSURL *)url
@@ -173,7 +224,7 @@ static BOOL hb_resolveBookmarks = YES;
     }
 }
 
-+ (NSArray<NSURL *> *)expandURLs:(NSArray<NSURL *> *)urls recursive:(BOOL)recursive
++ (NSArray<NSURL *> *)expandURLs:(NSArray<NSURL *> *)fileURLs recursive:(BOOL)recursive
 {
     NSFileManager *manager = NSFileManager.defaultManager;
     NSMutableArray<NSURL *> *mutableFileURLs = [NSMutableArray array];
@@ -183,9 +234,9 @@ static BOOL hb_resolveBookmarks = YES;
                                             NSDirectoryEnumerationSkipsSubdirectoryDescendants;
 
     // Check first if it's a DVD-Video or Bluray
-    if (urls.count == 1)
+    if (fileURLs.count == 1)
     {
-        NSURL *directoryURL = urls.firstObject;
+        NSURL *directoryURL = fileURLs.firstObject;
 
         NSNumber *isDirectory = nil;
         [directoryURL getResourceValue:&isDirectory forKey:NSURLIsDirectoryKey error:nil];
@@ -195,7 +246,7 @@ static BOOL hb_resolveBookmarks = YES;
             if ([directoryURL.pathExtension isEqualToString:@"dvdmedia"] ||
                 [directoryURL.lastPathComponent isEqualToString:@"VIDEO_TS"])
             {
-                return urls;
+                return fileURLs;
             }
 
             NSArray<NSURL *> *content = [manager contentsOfDirectoryAtURL:directoryURL
@@ -208,7 +259,7 @@ static BOOL hb_resolveBookmarks = YES;
                 if ([url.lastPathComponent isEqualToString:@"VIDEO_TS"] ||
                     [url.lastPathComponent isEqualToString:@"BDMV"])
                 {
-                    return urls;
+                    return fileURLs;
                 }
             }
         }
@@ -220,7 +271,7 @@ static BOOL hb_resolveBookmarks = YES;
     }
 
     // If not, recursively enumerate all the files and directories
-    for (NSURL *url in urls)
+    for (NSURL *url in fileURLs)
     {
         NSNumber *isDirectory = nil;
         [url getResourceValue:&isDirectory forKey:NSURLIsDirectoryKey error:nil];

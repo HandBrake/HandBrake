@@ -785,14 +785,19 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
      }];
 }
 
-- (void)askForPermissionAndSetDestinationURL:(NSURL *)destinationURL
+- (void)askForPermissionAndSetDestinationURLs:(NSArray<NSURL *> *)destinationURLs
 {
-    if (![self.destinationFolderURL isEqualTo:destinationURL])
+    if (destinationURLs.count == 0)
+    {
+        return;
+    }
+
+    if (![self.destinationFolderURL isEqualTo:destinationURLs.firstObject])
     {
 #ifdef __SANDBOX_ENABLED__
-            [self showOpenPanelForDestination:destinationURL];
+            [self showOpenPanelForDestination:destinationURLs.firstObject];
 #else
-            self.destinationFolderURL = destinationURL;
+            self.destinationFolderURL = destinationURLs.firstObject;
 #endif
     }
 }
@@ -812,7 +817,7 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
 
     [self scanURLs:expandedFileURLs titleIndex:index completionHandler:^(NSArray<HBTitle *> *titles)
     {
-        NSURL *commonURL = [HBUtilities commonURL:expandedFileURLs];
+        NSArray<NSURL *> *baseURLs = [HBUtilities baseURLs:expandedFileURLs];
 
         if (titles.count)
         {
@@ -836,7 +841,7 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
                 self.job = job;
                 if (featuredTitle.isStream && [NSUserDefaults.standardUserDefaults boolForKey:HBUseSourceFolderDestination])
                 {
-                    [self askForPermissionAndSetDestinationURL:commonURL];
+                    [self askForPermissionAndSetDestinationURLs:baseURLs];
                 }
             }
             else
@@ -848,15 +853,15 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
         }
 
         // Set the last searched source directory in the prefs here
-        [NSUserDefaults.standardUserDefaults setURL:commonURL forKey:HBLastSourceDirectoryURL];
+        [NSUserDefaults.standardUserDefaults setURL:baseURLs.firstObject forKey:HBLastSourceDirectoryURL];
     }];
 }
 
-- (void)openURLs:(NSArray<NSURL *> *)fileURL recursive:(BOOL)recursive
+- (void)openURLs:(NSArray<NSURL *> *)fileURLs recursive:(BOOL)recursive
 {
     if (self.core.state != HBStateScanning)
     {
-        [self openURLs:fileURL recursive:recursive titleIndex:0];
+        [self openURLs:fileURLs recursive:recursive titleIndex:0];
     }
 }
 
