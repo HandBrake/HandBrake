@@ -1402,18 +1402,20 @@ def createCLI( cross = None ):
     grp.add_argument( '--enable-asm', default=False, action='store_true', help=h )
 
     # GTK GUI is enabled by default on Linux and BSD
-    require_gtk = (host_tuple.match('*-*-linux*', '*-*-*bsd*'))
-    h = 'enable GTK GUI' if not require_gtk else argparse.SUPPRESS
-    grp.add_argument( '--enable-gtk', dest="enable_gtk", default=require_gtk, action='store_true', help=h)
-    h = 'disable GTK GUI' if require_gtk else argparse.SUPPRESS
+    gtk_default = host_tuple.match( '*-*-linux*', '*-*-*bsd*' )
+    h = 'enable GTK GUI' if gtk_supported else argparse.SUPPRESS
+    grp.add_argument( '--enable-gtk', dest="enable_gtk", default=gtk_default, action='store_true', help=h)
+    h = 'disable GTK GUI' if gtk_supported else argparse.SUPPRESS
     grp.add_argument( '--disable-gtk', dest="enable_gtk", action='store_false', help=h)
 
+    # Option deprecated
     grp.add_argument( '--disable-gtk-update-checks', default=False, action='store_true', help=argparse.SUPPRESS )
 
     # Option hidden as GUI is not currently buildable with GTK4
     grp.add_argument( '--enable-gtk4', default=False, action='store_true', help=argparse.SUPPRESS )
 
-    grp.add_argument( '--disable-gst', default=False, action='store_true', help='disable GStreamer (GTK live preview)' )
+    h='disable GStreamer (GTK live preview)' if gtk_supported else argparse.SUPPRESS
+    grp.add_argument( '--disable-gst', default=False, action='store_true', help=h )
 
     h = IfHost( 'x265 video encoder', '*-*-*', none=argparse.SUPPRESS ).value
     grp.add_argument( '--enable-x265', dest="enable_x265", default=True, action='store_true', help=(( 'enable %s' %h ) if h != argparse.SUPPRESS else h) )
@@ -1431,23 +1433,23 @@ def createCLI( cross = None ):
     grp.add_argument( '--enable-ffmpeg-aac', dest="enable_ffmpeg_aac", default=not host_tuple.match( '*-*-darwin*' ), action='store_true', help=(( 'enable %s' %h ) if h != argparse.SUPPRESS else h) )
     grp.add_argument( '--disable-ffmpeg-aac', dest="enable_ffmpeg_aac", action='store_false', help=(( 'disable %s' %h ) if h != argparse.SUPPRESS else h) )
 
-    h = IfHost( 'MediaFoundation video encoder', 'aarch64-w64-mingw32*', none=argparse.SUPPRESS).value
+    h = 'MediaFoundation video encoder' if mf_supported else argparse.SUPPRESS
     grp.add_argument( '--enable-mf', dest="enable_mf", default=False, action='store_true', help=(( 'enable %s' %h ) if h != argparse.SUPPRESS else h) )
     grp.add_argument( '--disable-mf', dest="enable_mf", action='store_false', help=(( 'disable %s' %h ) if h != argparse.SUPPRESS else h) )
 
-    h = IfHost( 'Nvidia NVENC video encoder', '*-*-linux*', 'x86_64-w64-mingw32*', none=argparse.SUPPRESS).value
-    grp.add_argument( '--enable-nvenc', dest="enable_nvenc", default=IfHost( True, '*-*-linux*', 'x86_64-w64-mingw32*', none=False).value, action='store_true', help=(( 'enable %s' %h ) if h != argparse.SUPPRESS else h) )
+    h = 'Nvidia NVENC video encoder' if nvenc_supported else argparse.SUPPRESS
+    grp.add_argument( '--enable-nvenc', dest="enable_nvenc", default=True, action='store_true', help=(( 'enable %s' %h ) if h != argparse.SUPPRESS else h) )
     grp.add_argument( '--disable-nvenc', dest="enable_nvenc", action='store_false', help=(( 'disable %s' %h ) if h != argparse.SUPPRESS else h) )
     
-    h = IfHost( 'Nvidia NVDEC video decoder', '*-*-linux*', 'x86_64-w64-mingw32*', none=argparse.SUPPRESS).value
+    h = 'Nvidia NVDEC video decoder' if nvenc_supported else argparse.SUPPRESS
     grp.add_argument( '--enable-nvdec', dest="enable_nvdec", default=False, action='store_true', help=(( 'enable %s' %h ) if h != argparse.SUPPRESS else h) )
     grp.add_argument( '--disable-nvdec', dest="enable_nvdec", action='store_false', help=(( 'disable %s' %h ) if h != argparse.SUPPRESS else h) )
     
-    h = IfHost( 'Intel QSV video encoder/decoder', '*-*-linux*', '*-*-freebsd*', 'x86_64-w64-mingw32*', none=argparse.SUPPRESS).value
+    h = 'Intel QSV video encoder/decoder' if qsv_supported else argparse.SUPPRESS
     grp.add_argument( '--enable-qsv', dest="enable_qsv", default=IfHost(True, "x86_64-w64-mingw32*", none=False).value, action='store_true', help=(( 'enable %s' %h ) if h != argparse.SUPPRESS else h) )
     grp.add_argument( '--disable-qsv', dest="enable_qsv", action='store_false', help=(( 'disable %s' %h ) if h != argparse.SUPPRESS else h) )
 
-    h = IfHost( 'AMD VCE video encoder', '*-*-linux*', 'x86_64-w64-mingw32*', none=argparse.SUPPRESS).value
+    h = 'AMD VCE video encoder' if vce_supported else argparse.SUPPRESS
     grp.add_argument( '--enable-vce', dest="enable_vce", default=IfHost(True, 'x86_64-w64-mingw32*', none=False).value, action='store_true', help=(( 'enable %s' %h ) if h != argparse.SUPPRESS else h) )
     grp.add_argument( '--disable-vce', dest="enable_vce", action='store_false', help=(( 'disable %s' %h ) if h != argparse.SUPPRESS else h) )
 
@@ -1687,7 +1689,7 @@ try:
         libtool    = ToolProbe( 'LIBTOOL.exe',    'libtool',    'libtool', abort=True )
         lipo       = ToolProbe( 'LIPO.exe',       'lipo',       'lipo', abort=False )
         pkgconfig  = ToolProbe( 'PKGCONFIG.exe',  'pkgconfig',  'pkg-config', abort=True, minversion=[0,27,0] )
-        meson      = ToolProbe( 'MESON.exe',      'meson',      'meson', abort=True, minversion=[0,47,0] )
+        meson      = ToolProbe( 'MESON.exe',      'meson',      'meson', abort=True, minversion=[0,49,0] )
         nasm       = ToolProbe( 'NASM.exe',       'asm',        'nasm', abort=True, minversion=[2,13,0] )
         ninja      = ToolProbe( 'NINJA.exe',      'ninja',      'ninja-build', 'ninja', abort=True )
         cargo      = ToolProbe( 'CARGO.exe',      'cargo',        'cargo', abort=False )
@@ -1735,6 +1737,13 @@ try:
     host_tuple = HostTupleAction(cross,arch_gcc,xcode_opts)
     arch       = ArchAction(); arch.run()
 
+    # set whether features can be enabled
+    gtk_supported   = host_tuple.match( '*-*-linux*', '*-*-mingw*', '*-*-*bsd*' )
+    qsv_supported   = host_tuple.match( '*-*-linux*', 'x86_64-w64-mingw32*', '*-*-freebsd*' )
+    nvenc_supported = host_tuple.match( '*-*-linux*', 'x86_64-w64-mingw32*' )
+    vce_supported   = host_tuple.match( '*-*-linux*', 'x86_64-w64-mingw32*' )
+    mf_supported    = host_tuple.match( 'aarch64-w64-mingw32*' )
+
     # create CLI and parse
     cli = createCLI( cross )
     options, args = cli.parse_known_args()
@@ -1772,16 +1781,12 @@ try:
                                         none=False).value
                                  and options.enable_x265)
     # Only allow these features on supported platforms
-    options.enable_mf         = IfHost(options.enable_mf, 'aarch64-w64-mingw32*',
-                                       none=False).value
-    options.enable_nvenc      = IfHost(options.enable_nvenc, '*-*-linux*',
-                                       'x86_64-w64-mingw32', none=False).value
-    options.enable_nvdec      = IfHost(options.enable_nvdec, '*-*-linux*',
-                                       'x86_64-w64-mingw32', none=False).value
-    options.enable_qsv        = IfHost(options.enable_qsv, '*-*-linux*', '*-*-freebsd*',
-                                       'x86_64-w64-mingw32*', none=False).value
-    options.enable_vce        = IfHost(options.enable_vce, '*-*-linux*',
-                                       'x86_64-w64-mingw32*', none=False).value
+    options.enable_mf         = options.enable_mf if mf_supported else False
+    options.enable_nvenc      = options.enable_nvenc if nvenc_supported else False
+    options.enable_nvdec      = options.enable_nvdec if nvenc_supported else False
+    options.enable_qsv        = options.enable_qsv if qsv_supported else False
+    options.enable_vce        = options.enable_vce if vce_supported else False
+    options.enable_gtk        = options.enable_gtk if gtk_supported else False
 
     #####################################
     ## Additional library and tool checks
@@ -2210,22 +2215,23 @@ int main()
     stdout.write( ' (cross-compile)\n' ) if options.cross or build_tuple.machine != host_tuple.machine else stdout.write( '\n' )
     stdout.write( 'Harden:             %s\n' % options.enable_harden )
     stdout.write( 'Sandbox:            %s' % options.enable_sandbox )
-    stdout.write( ' (%s)\n' % note_unsupported ) if not host_tuple.system == 'darwin' else stdout.write( '\n' )
-    stdout.write( 'Enable GTK GUI:     %s\n' % options.enable_gtk ) if options.enable_gtk or host_tuple.match('*-*-linux*', '*-*-*bsd*') else stdout.write('')
+    stdout.write( ' (%s)\n' % note_unsupported ) if host_tuple.system != 'darwin' else stdout.write( '\n' )
     stdout.write( 'Enable FDK-AAC:     %s\n' % options.enable_fdk_aac )
     stdout.write( 'Enable FFmpeg AAC:  %s' % options.enable_ffmpeg_aac )
     stdout.write( '  (%s)\n' % note_required ) if host_tuple.system != 'darwin' else stdout.write( '\n' )
     stdout.write( 'Enable MediaFound.: %s' % options.enable_mf )
-    stdout.write( ' (%s)\n' % note_unsupported ) if not host_tuple.match( 'aarch64-w64-mingw32*' ) else stdout.write( '\n' )
+    stdout.write( ' (%s)\n' % note_unsupported ) if not mf_supported else stdout.write( '\n' )
     stdout.write( 'Enable NVENC:       %s' % options.enable_nvenc )
-    stdout.write( ' (%s)\n' % note_unsupported ) if not (host_tuple.system == 'linux' or host_tuple.match( 'x86_64-w64-mingw32*' )) else stdout.write( '\n' )
+    stdout.write( ' (%s)\n' % note_unsupported ) if not nvenc_supported else stdout.write( '\n' )
     stdout.write( 'Enable NVDEC:       %s' % options.enable_nvdec )
-    stdout.write( ' (%s)\n' % note_unsupported ) if not (host_tuple.system == 'linux' or host_tuple.match( 'x86_64-w64-mingw32*' )) else stdout.write( '\n' )
+    stdout.write( ' (%s)\n' % note_unsupported ) if not nvenc_supported else stdout.write( '\n' )
     stdout.write( 'Enable QSV:         %s' % options.enable_qsv )
-    stdout.write( ' (%s)\n' % note_unsupported ) if not (host_tuple.system == 'linux' or host_tuple.match( 'x86_64-w64-mingw32*' ) or host_tuple.system == 'freebsd') else stdout.write( '\n' )
+    stdout.write( ' (%s)\n' % note_unsupported ) if not qsv_supported else stdout.write( '\n' )
     stdout.write( 'Enable VCE:         %s' % options.enable_vce )
-    stdout.write( ' (%s)\n' % note_unsupported ) if not (host_tuple.system == 'linux' or host_tuple.match( 'x86_64-w64-mingw32*' )) else stdout.write( '\n' )
+    stdout.write( ' (%s)\n' % note_unsupported ) if not vce_supported else stdout.write( '\n' )
     stdout.write( 'Enable libdovi:     %s\n' % options.enable_libdovi )
+    stdout.write( 'Enable GTK GUI:     %s' % options.enable_gtk )
+    stdout.write( ' (%s)\n' % note_unsupported ) if not gtk_supported else stdout.write( '\n' )
 
     if len(targets) > 0:
         print( print_blue('Note:'), 'passthrough arguments:', *targets)
