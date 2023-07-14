@@ -3073,6 +3073,10 @@ static int ParseOptions( int argc, char ** argv )
                 break;
             case PREVIEWS:
                 sscanf( optarg, "%i:%i", &preview_count, &store_previews );
+                if (preview_count < 1)
+                {
+                    preview_count = 1;
+                }
                 break;
             case START_AT_PREVIEW:
                 start_at_preview = atoi( optarg );
