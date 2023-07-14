@@ -208,8 +208,30 @@ namespace HandBrakeWPF.Instance
 
             string statusJson = response.JsonResponse;
 
-            JsonState state = JsonSerializer.Deserialize<JsonState>(statusJson, JsonSettings.Options);
+            if (string.IsNullOrEmpty(statusJson))
+            {
+                return;
+            }
 
+            try
+            {
+                JsonState state = JsonSerializer.Deserialize<JsonState>(statusJson, JsonSettings.Options);
+                if (state != null)
+                {
+                    ProcessStateChange(state);
+                }
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e); // Silently ignore.
+            }
+
+            // Next Run.
+            this.encodePollTimer?.Start();
+        }
+
+        private void ProcessStateChange(JsonState state)
+        {
             TaskState taskState = state != null ? TaskState.FromRepositoryValue(state.State) : null;
 
             if (taskState != null && (taskState == TaskState.Working || taskState == TaskState.Searching))
@@ -249,9 +271,6 @@ namespace HandBrakeWPF.Instance
                 this.EncodeCompleted?.Invoke(sender: this, e: new EncodeCompletedEventArgs(state.WorkDone.Error));
                 this.portService.FreePort(this.port);
             }
-
-            // Next Run.
-            this.encodePollTimer?.Start();
         }
 
         private void RunEncodeInitProcess(JsonEncodeObject jobToStart)
