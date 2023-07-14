@@ -2306,12 +2306,17 @@ static void compute_frame_duration( hb_work_private_t *pv )
         // for raw demuxers.
         else if (ic->iformat->raw_codec_id == AV_CODEC_ID_NONE)
         {
+            AVRational *tb = NULL;
+            // Try r_frame_rate, which is usually set for cfr streams
+            if (st->r_frame_rate.num && st->r_frame_rate.den)
+            {
+                duration = (double)st->r_frame_rate.den / (double)st->r_frame_rate.num;
+            }
             // XXX We don't have a frame count or duration so try to use the
             // far less reliable time base info in the stream.
             // Because the time bases are so screwed up, we only take values
             // in the range 8fps - 64fps.
-            AVRational *tb = NULL;
-            if ( st->avg_frame_rate.den * 64LL > st->avg_frame_rate.num &&
+            else if ( st->avg_frame_rate.den * 64LL > st->avg_frame_rate.num &&
                  st->avg_frame_rate.num > st->avg_frame_rate.den * 8LL )
             {
                 tb = &(st->avg_frame_rate);
