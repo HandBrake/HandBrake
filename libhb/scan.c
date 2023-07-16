@@ -1469,7 +1469,7 @@ skip_preview:
                    !(title->video_decode_support & HB_DECODE_SUPPORT_HWACCEL) ? "" : " hwaccel");
         }
 
-        if( interlaced_preview_count >= ( npreviews / 2 ) )
+        if (interlaced_preview_count && interlaced_preview_count >= (npreviews / 2))
         {
             hb_log("Title is likely interlaced or telecined (%i out of %i previews). You should do something about that.",
                    interlaced_preview_count, npreviews);

@@ -405,11 +405,15 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
             char quality[7];
             snprintf(quality, 7, "%.2f", job->vquality);
             av_dict_set( &av_opts, "crf", quality, 0 );
-            //This value was chosen to make the bitrate high enough
-            //for libvpx to "turn off" the maximum bitrate feature
-            //that is normally applied to constant quality.
-            context->bit_rate = (int64_t)job->width * job->height *
-                                         fps.num / fps.den;
+
+            if (w->codec_param == AV_CODEC_ID_VP8)
+            {
+                //This value was chosen to make the bitrate high enough
+                //for libvpx to "turn off" the maximum bitrate feature
+                //that is normally applied to constant quality.
+                context->bit_rate = (int64_t)job->width * job->height *
+                                    fps.num / fps.den;
+            }
             hb_log( "encavcodec: encoding at CQ %.2f", job->vquality );
         }
         //Set constant quality for nvenc
