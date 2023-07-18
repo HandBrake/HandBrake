@@ -1,0 +1,45 @@
+From 4770c4fa370c6ad81ee8469090fcc4f37f560d04 Mon Sep 17 00:00:00 2001
+From: Evgeny Pavlov <lucenticus@gmail.com>
+Date: Wed, 12 Jul 2023 04:03:25 -0700
+Subject: [PATCH] libavcodec/amfenc: Fix issue with missing headers in AV1
+ encoder
+
+This commit fixes issue with missing SPS/PPS headers in video
+encoded by AMF AV1 encoder.
+Missing headers leads to broken seek in MPV video player.
+Default value for property AV1_HEADER_INSERTION_MODE shouldn't be setup
+to NONE (no headers insertion). We need to skip definition of this property,
+because default value depends on USAGE property.
+
+Signed-off-by: Evgeny Pavlov <lucenticus@gmail.com>
+---
+ libavcodec/amfenc_av1.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
+
+diff --git a/libavcodec/amfenc_av1.c b/libavcodec/amfenc_av1.c
+index 30c0a9fad2..0a58a0808a 100644
+--- a/libavcodec/amfenc_av1.c
++++ b/libavcodec/amfenc_av1.c
+@@ -77,7 +77,7 @@ static const AVOption options[] = {
+     { "qvbr_quality_level",     "Sets the QVBR quality level",              OFFSET(qvbr_quality_level),             AV_OPT_TYPE_INT,   {.i64 = -1 }, -1, 51, VE },
+ 
+ 
+-    { "header_insertion_mode",  "Set header insertion mode",                OFFSET(header_insertion_mode),          AV_OPT_TYPE_INT,{.i64 = AMF_VIDEO_ENCODER_AV1_HEADER_INSERTION_MODE_NONE }, AMF_VIDEO_ENCODER_AV1_HEADER_INSERTION_MODE_NONE, AMF_VIDEO_ENCODER_AV1_HEADER_INSERTION_MODE_KEY_FRAME_ALIGNED, VE, "hdrmode" },
++    { "header_insertion_mode",  "Set header insertion mode",                OFFSET(header_insertion_mode),          AV_OPT_TYPE_INT,{.i64 = -1 }, -1, AMF_VIDEO_ENCODER_AV1_HEADER_INSERTION_MODE_KEY_FRAME_ALIGNED, VE, "hdrmode" },
+     { "none",                   "", 0, AV_OPT_TYPE_CONST, {.i64 = AMF_VIDEO_ENCODER_AV1_HEADER_INSERTION_MODE_NONE              }, 0, 0, VE, "hdrmode" },
+     { "gop",                    "", 0, AV_OPT_TYPE_CONST, {.i64 = AMF_VIDEO_ENCODER_AV1_HEADER_INSERTION_MODE_GOP_ALIGNED       }, 0, 0, VE, "hdrmode" },
+     { "frame",                  "", 0, AV_OPT_TYPE_CONST, {.i64 = AMF_VIDEO_ENCODER_AV1_HEADER_INSERTION_MODE_KEY_FRAME_ALIGNED }, 0, 0, VE, "hdrmode" },
+@@ -220,7 +220,9 @@ FF_ENABLE_DEPRECATION_WARNINGS
+     // Picture control properties
+     AMF_ASSIGN_PROPERTY_INT64(res, ctx->encoder, AMF_VIDEO_ENCODER_AV1_GOP_SIZE, avctx->gop_size);
+ 
+-    AMF_ASSIGN_PROPERTY_INT64(res, ctx->encoder, AMF_VIDEO_ENCODER_AV1_HEADER_INSERTION_MODE, ctx->header_insertion_mode);
++    // Setup header insertion mode only if this option was defined explicitly
++    if (ctx->header_insertion_mode != -1)
++        AMF_ASSIGN_PROPERTY_INT64(res, ctx->encoder, AMF_VIDEO_ENCODER_AV1_HEADER_INSERTION_MODE, ctx->header_insertion_mode);
+ 
+     // Rate control
+     // autodetect rate control method
+-- 
+2.41.0
+

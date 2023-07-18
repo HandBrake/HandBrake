@@ -14,6 +14,7 @@
 #include "handbrake/hwaccel.h"
 #include "handbrake/h264_common.h"
 #include "handbrake/h265_common.h"
+#include "handbrake/av1_common.h"
 #include "handbrake/nal_units.h"
 #include "handbrake/nvenc_common.h"
 
@@ -320,8 +321,8 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
     context->framerate     = fps;
     context->gop_size  = ((double)job->orig_vrate.num / job->orig_vrate.den +
                                   0.5) * 10;
-    if ((job->vcodec == HB_VCODEC_FFMPEG_VCE_H264) 
-        || (job->vcodec == HB_VCODEC_FFMPEG_VCE_H265) 
+    if ((job->vcodec == HB_VCODEC_FFMPEG_VCE_H264)
+        || (job->vcodec == HB_VCODEC_FFMPEG_VCE_H265)
         || (job->vcodec == HB_VCODEC_FFMPEG_VCE_H265_10BIT)
         || (job->vcodec == HB_VCODEC_FFMPEG_VCE_AV1))
     {
@@ -369,8 +370,8 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
             hb_log( "encavcodec: encoding at rc=vbr, Bitrate %d", job->vbitrate );
         }
 
-        if ((job->vcodec == HB_VCODEC_FFMPEG_VCE_H264) 
-            || (job->vcodec == HB_VCODEC_FFMPEG_VCE_H265) 
+        if ((job->vcodec == HB_VCODEC_FFMPEG_VCE_H264)
+            || (job->vcodec == HB_VCODEC_FFMPEG_VCE_H265)
             || (job->vcodec == HB_VCODEC_FFMPEG_VCE_H265_10BIT)
             || (job->vcodec == HB_VCODEC_FFMPEG_VCE_AV1))
         {
@@ -960,12 +961,12 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
             if (!strcasecmp(job->encoder_profile, "main")) {
                  context->profile = FF_PROFILE_HEVC_MAIN;
             }
-            
+
             if (!strcasecmp(job->encoder_profile, "main10")) {
                  context->profile = FF_PROFILE_HEVC_MAIN_10;
             }
         }
-        
+
         context->level = FF_LEVEL_UNKNOWN;
         if (job->encoder_level != NULL && *job->encoder_level)
         {
