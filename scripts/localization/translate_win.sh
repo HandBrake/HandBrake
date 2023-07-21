@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+#
 # Usage: Set environment variables, then run ./translate_windows.sh
 # Using your own HandBrake Fork, example:
 #     export HB_GIT_REPO=https://github.com/<your-username>/HandBrake.git

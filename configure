@@ -1,5 +1,4 @@
 #!/bin/sh
-#
 
 inpath()
 {
@@ -13,23 +12,13 @@ inpath()
     return 1
 }
 
-if ( inpath bash ); then
-    pp=""
-    for p in python3 python3.8 python3.7 python3.6 python3.5 python3.4 python3.3 python3.2 python3.1 python2 python2.7 python
-    do
-        if ( inpath $p ); then
-            pp="$p"
-            break
-        fi
-    done
-    if [ "$pp" != "" ]; then
-        exec $pp `dirname $0`/make/configure.py "$@"
+for p in python3 python3.11 python3.10 python3.9 python3.8 python3.7 python3.6 python
+do
+    if ( inpath $p ); then
+        exec $p `dirname $0`/make/configure.py "$@"
         exit 0
-    else
-        echo "ERROR: no suitable version of python found."
     fi
-else
-    echo "ERROR: bash shell not found."
-fi
+done
 
+echo "ERROR: no suitable version of python found."
 exit 1

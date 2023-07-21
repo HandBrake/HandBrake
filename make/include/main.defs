@@ -102,6 +102,10 @@ ifneq (,$(filter $(HOST.system),solaris))
     MODULES += contrib/libiconv
 endif
 
+ifneq (,$(filter $(HOST.system),netbsd))
+    # needed to avoid conflict with jpeg-9e
+    MODULES += contrib/libjpeg-turbo
+endif
 
 ## these must come after contrib since some contrib modules are optional
 MODULES += libhb
@@ -116,37 +120,7 @@ else
     MODULES += test
 endif
 
-ifeq (1-mingw,$(FEATURE.gtk.mingw)-$(HOST.system))
-    MODULES += gtk
-endif
-
-ifeq (1-linux,$(FEATURE.gtk)-$(HOST.system))
-    ## build gtk when gtk+linux
-    MODULES += gtk
-endif
-
-ifeq (1-freebsd,$(FEATURE.gtk)-$(HOST.system))
-    ## build gtk when gtk+freebsd
-    MODULES += gtk
-endif
-
-ifeq (1-kfreebsd,$(FEATURE.gtk)-$(HOST.system))
-    ## build gtk when gtk+kfreebsd
-    MODULES += gtk
-endif
-
-ifeq (1-gnu,$(FEATURE.gtk)-$(HOST.system))
-    ## build gtk when gtk+gnu
-    MODULES += gtk
-endif
-
-ifeq (1-netbsd,$(FEATURE.gtk)-$(BUILD.system))
-    ## build gtk when gtk+netbsd
-    MODULES += gtk
-endif
-
-ifeq (1-openbsd,$(FEATURE.gtk)-$(BUILD.system))
-    ## build gtk when gtk+openbsd
+ifeq (1,$(FEATURE.gtk))
     MODULES += gtk
 endif
 

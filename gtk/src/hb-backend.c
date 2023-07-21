@@ -2147,8 +2147,21 @@ srt_codeset_opts_set(signal_user_data_t *ud, const gchar *name,
                            -1);
     }
 }
-
-extern G_MODULE_EXPORT void combo_search_key_press_cb(void);
+#if GTK_CHECK_VERSION(4, 4, 0)
+extern G_MODULE_EXPORT gboolean
+combo_search_key_press_cb(
+    GtkEventControllerKey * keycon,
+    guint                   keyval,
+    guint                   keycode,
+    GdkModifierType         state,
+    signal_user_data_t    * ud);
+#else
+extern G_MODULE_EXPORT gboolean
+combo_search_key_press_cb(
+    GtkWidget *widget,
+    GdkEvent *event,
+    signal_user_data_t *ud);
+#endif
 
 static void
 language_opts_set(signal_user_data_t *ud, const gchar *name,
@@ -2186,7 +2199,7 @@ language_opts_set(signal_user_data_t *ud, const gchar *name,
 #if !GTK_CHECK_VERSION(4, 4, 0)
     // This is handled by GtkEventControllerKey in gtk4
     // Initialized in ghb_combo_init()
-    g_signal_connect(combo, "key-press-event", combo_search_key_press_cb, ud);
+    g_signal_connect(combo, "key-press-event", G_CALLBACK(combo_search_key_press_cb), ud);
 #endif
 }
 

@@ -1,6 +1,5 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
-from __future__ import print_function
 import types
 import os
 import sys
@@ -8,11 +7,7 @@ import json
 import getopt
 import posixpath
 from collections import OrderedDict
-try:
-    from urllib.parse import urlsplit, unquote
-except ImportError:  # Python 2
-    from urlparse import urlsplit
-    from urllib import unquote
+from urllib.parse import urlsplit, unquote
 
 
 def url2filename(url):

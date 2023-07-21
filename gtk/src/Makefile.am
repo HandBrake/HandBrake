@@ -178,8 +178,9 @@ widget_reverse.deps: makedeps.py
 widget.deps: makedeps.py
 	$(HB_PYTHON) $(srcdir)/makedeps.py
 
+## copy file if msgfmt fails as workaround for outdated version on NetBSD
 fr.handbrake.ghb.metainfo.xml: fr.handbrake.ghb.metainfo.xml.in
-	$(AM_V_GEN) $(MSGFMT) --xml --template $< -d $(top_srcdir)/po -o $@
+	$(AM_V_GEN) $(MSGFMT) --xml --template $< -d $(top_srcdir)/po -o $@ || cp $< $@
 
 fr.handbrake.ghb.metainfo.xml.in: fr.handbrake.ghb.metainfo.xml.in.in
 	sed -e 's^RELEASE_TAG^<release version="$(HB.version)" date="$(word 1,$(HB.repo.date))" />^' $< > $@

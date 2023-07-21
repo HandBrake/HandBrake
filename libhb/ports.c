@@ -13,17 +13,11 @@
 #define _WIN32_WINNT 0x600
 #endif
 
-#ifdef USE_PTHREAD
 #ifdef SYS_LINUX
 #define _GNU_SOURCE
 #include <sched.h>
 #endif
 #include <pthread.h>
-#endif
-
-#ifdef SYS_BEOS
-#include <kernel/OS.h>
-#endif
 
 #if defined(SYS_DARWIN) || defined(SYS_FREEBSD) || defined(SYS_NETBSD) || defined(SYS_OPENBSD)
 #include <sys/types.h>
@@ -182,13 +176,10 @@ void hb_snooze( int delay )
     {
         return;
     }
-#if defined( SYS_BEOS )
-    snooze( 1000 * delay );
-#elif defined( SYS_DARWIN ) || defined( SYS_LINUX ) || defined( SYS_FREEBSD) || \
-      defined(SYS_NETBSD) || defined(SYS_OPENBSD) || defined( SYS_SunOS )
-    usleep( 1000 * delay );
-#elif defined( SYS_CYGWIN ) || defined( SYS_MINGW )
+#if defined( SYS_CYGWIN ) || defined( SYS_MINGW )
     Sleep( delay );
+#else
+    usleep( 1000 * delay );
 #endif
 }
 
@@ -438,11 +429,6 @@ static int init_cpu_count()
     sched_getaffinity( 0, sizeof(p_aff), &p_aff );
     for( cpu_count = 0, bit = 0; bit < sizeof(p_aff); bit++ )
          cpu_count += (((uint8_t *)&p_aff)[bit / 8] >> (bit % 8)) & 1;
-
-#elif defined(SYS_BEOS)
-    system_info info;
-    get_system_info( &info );
-    cpu_count = info.cpu_count;
 
 #elif defined(SYS_DARWIN) || defined(SYS_FREEBSD) || defined(SYS_NETBSD) || defined(SYS_OPENBSD)
     size_t length = sizeof( cpu_count );
@@ -814,14 +800,7 @@ struct hb_thread_s
 
     hb_lock_t     * lock;
     int             exited;
-
-#if defined( SYS_BEOS )
-    thread_id       thread;
-#elif USE_PTHREAD
     pthread_t       thread;
-//#elif defined( SYS_CYGWIN )
-//    HANDLE          thread;
-#endif
 };
 
 /* Get a unique identifier to thread and represent as 64-bit unsigned.
@@ -830,22 +809,18 @@ struct hb_thread_s
  */
 static uint64_t hb_thread_to_integer( const hb_thread_t* t )
 {
-#if defined( USE_PTHREAD )
-    #if defined( SYS_CYGWIN )
-        return (uint64_t)t->thread;
-    #elif defined( _WIN32 ) || defined( __MINGW32__ )
-    #if defined(PTW32_VERSION)
-        return (uint64_t)(ptrdiff_t)t->thread.p;
-    #else
-        return (uint64_t)t->thread;
-    #endif
-    #elif defined( SYS_DARWIN )
-        return (unsigned long)t->thread;
-    #else
-        return (uint64_t)t->thread;
-    #endif
+#if defined( SYS_CYGWIN )
+    return (uint64_t)t->thread;
+#elif defined( _WIN32 ) || defined( __MINGW32__ )
+# if defined(PTW32_VERSION)
+    return (uint64_t)(ptrdiff_t)t->thread.p;
+# else
+    return (uint64_t)t->thread;
+# endif
+#elif defined( SYS_DARWIN )
+    return (unsigned long)t->thread;
 #else
-    return 0;
+    return (uint64_t)t->thread;
 #endif
 }
 
@@ -864,8 +839,7 @@ static void attribute_align_thread hb_thread_func( void * _t )
     hb_thread_t * t = (hb_thread_t *) _t;
 
 #if (defined( SYS_DARWIN ) && !defined(__aarch64__)) || defined( SYS_FREEBSD ) || \
-    defined ( __FreeBSD__ ) || defined(SYS_NETBSD) || defined( SYS_OPENBSD ) || \
-    defined ( __OpenBSD__ )
+    defined( SYS_NETBSD ) || defined( SYS_OPENBSD )
     /* Set the thread priority
        Do not change priority on Darwin arm systems */
     struct sched_param param;
@@ -876,10 +850,6 @@ static void attribute_align_thread hb_thread_func( void * _t )
 
 #if defined( SYS_DARWIN )
     pthread_setname_np( t->name );
-#endif
-
-#if defined( SYS_BEOS )
-    signal( SIGINT, SIG_IGN );
 #endif
 
     /* Start the actual routine */
@@ -913,23 +883,8 @@ hb_thread_t * hb_thread_init( const char * name, void (* function)(void *),
     t->lock     = hb_lock_init();
 
     /* Create and start the thread */
-#if defined( SYS_BEOS )
-    t->thread = spawn_thread( (thread_func) hb_thread_func,
-                              name, priority, t );
-    resume_thread( t->thread );
-
-#elif USE_PTHREAD
     pthread_create( &t->thread, NULL,
                     (void * (*)( void * )) hb_thread_func, t );
-
-//#elif defined( SYS_CYGWIN )
-//    t->thread = CreateThread( NULL, 0,
-//        (LPTHREAD_START_ROUTINE) hb_thread_func, t, 0, NULL );
-//
-//    /* Maybe use THREAD_PRIORITY_LOWEST instead */
-//    if( priority == HB_LOW_PRIORITY )
-//        SetThreadPriority( GetCurrentThread(), THREAD_PRIORITY_BELOW_NORMAL );
-#endif
 
     hb_deep_log( 2, "thread %"PRIx64" started (\"%s\")", hb_thread_to_integer( t ), t->name );
     return t;
@@ -945,16 +900,7 @@ void hb_thread_close( hb_thread_t ** _t )
     hb_thread_t * t = *_t;
 
     /* Join the thread */
-#if defined( SYS_BEOS )
-    long exit_value;
-    wait_for_thread( t->thread, &exit_value );
-
-#elif USE_PTHREAD
     pthread_join( t->thread, NULL );
-
-//#elif defined( SYS_CYGWIN )
-//    WaitForSingleObject( t->thread, INFINITE );
-#endif
 
     hb_deep_log( 2, "thread %"PRIx64" joined (\"%s\")", hb_thread_to_integer( t ), t->name );
 
@@ -985,13 +931,7 @@ int hb_thread_has_exited( hb_thread_t * t )
  ***********************************************************************/
 struct hb_lock_s
 {
-#if defined( SYS_BEOS )
-    sem_id          sem;
-#elif USE_PTHREAD
     pthread_mutex_t mutex;
-//#elif defined( SYS_CYGWIN )
-//    HANDLE          mutex;
-#endif
 };
 
 /************************************************************************
@@ -1006,22 +946,16 @@ hb_lock_t * hb_lock_init()
 {
     hb_lock_t * l = calloc( sizeof( hb_lock_t ), 1 );
 
-#if defined( SYS_BEOS )
-    l->sem = create_sem( 1, "sem" );
-#elif USE_PTHREAD
     pthread_mutexattr_t mta;
 
     pthread_mutexattr_init(&mta);
 
-#if defined( SYS_CYGWIN ) || defined( SYS_FREEBSD ) || defined ( __FreeBSD__ ) || \
-    defined(SYS_NETBSD) || defined( SYS_OPENBSD ) || defined ( __OpenBSD__ )
+#if defined( SYS_CYGWIN ) || defined( SYS_FREEBSD ) || defined( SYS_NETBSD ) || \
+    defined( SYS_OPENBSD )
     pthread_mutexattr_settype(&mta, PTHREAD_MUTEX_NORMAL);
 #endif
 
     pthread_mutex_init( &l->mutex, &mta );
-//#elif defined( SYS_CYGWIN )
-//    l->mutex = CreateMutex( 0, FALSE, 0 );
-#endif
 
     return l;
 }
@@ -1034,13 +968,7 @@ void hb_lock_close( hb_lock_t ** _l )
     {
         return;
     }
-#if defined( SYS_BEOS )
-    delete_sem( l->sem );
-#elif USE_PTHREAD
     pthread_mutex_destroy( &l->mutex );
-//#elif defined( SYS_CYGWIN )
-//    CloseHandle( l->mutex );
-#endif
     free( l );
 
     *_l = NULL;
@@ -1048,24 +976,12 @@ void hb_lock_close( hb_lock_t ** _l )
 
 void hb_lock( hb_lock_t * l )
 {
-#if defined( SYS_BEOS )
-    acquire_sem( l->sem );
-#elif USE_PTHREAD
     pthread_mutex_lock( &l->mutex );
-//#elif defined( SYS_CYGWIN )
-//    WaitForSingleObject( l->mutex, INFINITE );
-#endif
 }
 
 void hb_unlock( hb_lock_t * l )
 {
-#if defined( SYS_BEOS )
-    release_sem( l->sem );
-#elif USE_PTHREAD
     pthread_mutex_unlock( &l->mutex );
-//#elif defined( SYS_CYGWIN )
-//    ReleaseMutex( l->mutex );
-#endif
 }
 
 /************************************************************************
@@ -1073,13 +989,7 @@ void hb_unlock( hb_lock_t * l )
  ***********************************************************************/
 struct hb_cond_s
 {
-#if defined( SYS_BEOS )
-    int                 thread;
-#elif USE_PTHREAD
     pthread_cond_t      cond;
-//#elif defined( SYS_CYGWIN )
-//    HANDLE              event;
-#endif
 };
 
 /************************************************************************
@@ -1098,14 +1008,7 @@ hb_cond_t * hb_cond_init()
     if( c == NULL )
         return NULL;
 
-#if defined( SYS_BEOS )
-    c->thread = -1;
-#elif USE_PTHREAD
     pthread_cond_init( &c->cond, NULL );
-//#elif defined( SYS_CYGWIN )
-//    c->event = CreateEvent( NULL, FALSE, FALSE, NULL );
-#endif
-
     return c;
 }
 
@@ -1117,12 +1020,7 @@ void hb_cond_close( hb_cond_t ** _c )
     {
         return;
     }
-#if defined( SYS_BEOS )
-#elif USE_PTHREAD
     pthread_cond_destroy( &c->cond );
-//#elif defined( SYS_CYGWIN )
-//    CloseHandle( c->event );
-#endif
     free( c );
 
     *_c = NULL;
@@ -1130,18 +1028,7 @@ void hb_cond_close( hb_cond_t ** _c )
 
 void hb_cond_wait( hb_cond_t * c, hb_lock_t * lock )
 {
-#if defined( SYS_BEOS )
-    c->thread = find_thread( NULL );
-    release_sem( lock->sem );
-    suspend_thread( c->thread );
-    acquire_sem( lock->sem );
-    c->thread = -1;
-#elif USE_PTHREAD
     pthread_cond_wait( &c->cond, &lock->mutex );
-//#elif defined( SYS_CYGWIN )
-//    SignalObjectAndWait( lock->mutex, c->event, INFINITE, FALSE );
-//    WaitForSingleObject( lock->mutex, INFINITE );
-#endif
 }
 
 void hb_clock_gettime( struct timespec *tp )
@@ -1160,51 +1047,22 @@ void hb_yield(void)
 
 void hb_cond_timedwait( hb_cond_t * c, hb_lock_t * lock, int msec )
 {
-#if defined( SYS_BEOS )
-    c->thread = find_thread( NULL );
-    release_sem( lock->sem );
-    suspend_thread( c->thread );
-    acquire_sem( lock->sem );
-    c->thread = -1;
-#elif USE_PTHREAD
     struct timespec ts;
     hb_clock_gettime(&ts);
     ts.tv_nsec += (msec % 1000) * 1000000;
     ts.tv_sec += msec / 1000 + (ts.tv_nsec / 1000000000);
     ts.tv_nsec %= 1000000000;
     pthread_cond_timedwait( &c->cond, &lock->mutex, &ts );
-#endif
 }
 
 void hb_cond_signal( hb_cond_t * c )
 {
-#if defined( SYS_BEOS )
-    while( c->thread != -1 )
-    {
-        thread_info info;
-        get_thread_info( c->thread, &info );
-        if( info.state == B_THREAD_SUSPENDED )
-        {
-            resume_thread( c->thread );
-            break;
-        }
-        /* Looks like we have been called between hb_cond_wait's
-           release_sem() and suspend_thread() lines. Wait until the
-           thread is actually suspended before we resume it */
-        snooze( 5000 );
-    }
-#elif USE_PTHREAD
     pthread_cond_signal( &c->cond );
-//#elif defined( SYS_CYGWIN )
-//    PulseEvent( c->event );
-#endif
 }
 
 void hb_cond_broadcast( hb_cond_t * c )
 {
-#if USE_PTHREAD
     pthread_cond_broadcast( &c->cond );
-#endif
 }
 
 /************************************************************************
