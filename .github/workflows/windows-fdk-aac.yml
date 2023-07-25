@@ -58,7 +58,7 @@ jobs:
       run: |
         export PATH="/home/runner/work/HandBrake/HandBrake/toolchains/mingw-w64-toolchain-9.2.0-linux-x86_64/mingw-w64-x86_64/bin:${PATH}"
         export PATH=/usr/bin:$PATH
-        ./configure --cross=x86_64-w64-mingw32 --enable-qsv --enable-fdk-aac --launch-jobs=0 --launch
+        ./configure --cross=x86_64-w64-mingw32 --enable-qsv --enable-vce --enable-nvenc --enable-nvdec --enable-fdk-aac --launch-jobs=0 --launch
         cd build
         make pkg.create.zip
 
