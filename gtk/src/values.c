@@ -1,4 +1,4 @@
-/* -*- Mode: C; indent-tabs-mode: t; c-basic-offset: 4; tab-width: 4 -*- */
+/* -*- Mode: C; indent-tabs-mode: nil; c-basic-offset: 4; tab-width: 4 -*- */
 /*
  * values.c
  * Copyright (C) John Stebbins 2008-2022 <stebbins@stebbins>
@@ -20,6 +20,8 @@
  *  51 Franklin Street, Fifth Floor
  *  Boston, MA  02110-1301, USA.
  */
+
+#include "ghbcompat.h"
 
 #include <glib.h>
 #include <glib/gstdio.h>

@@ -236,23 +236,27 @@ namespace HandBrakeWPF.Services.Encode.Factories
             if (job.VideoEncodeRateType == VideoEncodeRateType.AverageBitrate)
             {
                 video.Bitrate = job.VideoBitrate;
-                video.TwoPass = job.TwoPass;
-                video.Turbo = job.TurboFirstPass;
+                video.MultiPass = job.MultiPass;
+                video.Turbo = job.TurboAnalysisPass;
             }
 
 
+            bool enableQuickSyncEncoding = userSettingService.GetUserSetting<bool>(UserSettingConstants.EnableQuickSyncEncoding);
             bool enableQuickSyncDecoding = userSettingService.GetUserSetting<bool>(UserSettingConstants.EnableQuickSyncDecoding);
             bool useQSVDecodeForNonQSVEnc = userSettingService.GetUserSetting<bool>(UserSettingConstants.UseQSVDecodeForNonQSVEnc);
             bool enableQsvLowPower = userSettingService.GetUserSetting<bool>(UserSettingConstants.EnableQuickSyncLowPower);
 
-            video.QSV.Decode = HandBrakeHardwareEncoderHelper.IsQsvAvailable && enableQuickSyncDecoding;
-
-            // The use of the QSV decoder is configurable for non QSV encoders.
-            if (video.QSV.Decode && !job.VideoEncoder.IsQuickSync)
+            if (job.VideoEncoder?.IsQuickSync ?? false)
             {
-                video.QSV.Decode = useQSVDecodeForNonQSVEnc;
+                video.QSV.Decode = HandBrakeHardwareEncoderHelper.IsQsvAvailable && enableQuickSyncDecoding;
             }
-            
+
+            // Allow use of the QSV decoder is configurable for non QSV encoders.
+            if (job.VideoEncoder != null && !job.VideoEncoder.IsHardwareEncoder && useQSVDecodeForNonQSVEnc && enableQuickSyncDecoding && enableQuickSyncEncoding)
+            {
+                video.QSV.Decode = HandBrakeHardwareEncoderHelper.IsQsvAvailable && useQSVDecodeForNonQSVEnc;
+            }
+
             video.Options = job.ExtraAdvancedArguments;
 
             if (HandBrakeHardwareEncoderHelper.IsQsvAvailable && (HandBrakeHardwareEncoderHelper.QsvHardwareGeneration > 6) && job.VideoEncoder.IsQuickSync)
@@ -267,7 +271,7 @@ namespace HandBrakeWPF.Services.Encode.Factories
                 }
             }
 
-            if (this.userSettingService.GetUserSetting<bool>(UserSettingConstants.EnableNvDecSupport))
+            if (this.userSettingService.GetUserSetting<bool>(UserSettingConstants.EnableNvDecSupport) && job.VideoEncoder.IsNVEnc)
             {
                 video.HardwareDecode = (int)NativeConstants.HB_DECODE_SUPPORT_NVDEC;
             }

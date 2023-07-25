@@ -1,10 +1,13 @@
 __deps__ := A52DEC BZIP2 LIBVPX SVT-AV1 FFMPEG FREETYPE LAME LIBASS LIBDCA \
     LIBDVDREAD LIBDVDNAV LIBICONV LIBSAMPLERATE LIBTHEORA LIBVORBIS LIBOGG \
     LIBXML2 X264 X265 ZLIB LIBBLURAY FDKAAC LIBVPL LIBGNURX JANSSON \
-    HARFBUZZ LIBOPUS LIBSPEEX LIBDAV1D LIBJPEGTURBO
+    HARFBUZZ LIBOPUS LIBSPEEX LIBDAV1D LIBJPEGTURBO LIBDOVI
 
 ifeq (,$(filter $(HOST.system),darwin cygwin mingw))
     __deps__ += FONTCONFIG
+endif
+ifeq (netbsd,$(HOST.system))
+    __deps__ += LIBJPEGTURBO
 endif
 
 $(eval $(call import.MODULE.defs,LIBHB,libhb,$(__deps__)))
@@ -42,11 +45,11 @@ LIBHB.out += $(LIBHB.a)
 
 ###############################################################################
 
-LIBHB.GCC.D += __LIBHB__ USE_PTHREAD
+LIBHB.GCC.D += __LIBHB__
 LIBHB.GCC.I += $(LIBHB.build/) $(CONTRIB.build/)include
 
 ifeq (1,$(FEATURE.qsv))
-    ifeq ($(HOST.system),freebsd))
+    ifeq ($(HOST.system),freebsd)
         LIBHB.GCC.I += $(LOCALBASE)/include/vpl
     else
         LIBHB.GCC.I += $(CONTRIB.build/)include/vpl
@@ -58,6 +61,7 @@ ifneq (,$(filter $(HOST.system),freebsd netbsd openbsd))
     LIBHB.GCC.I += $(LOCALBASE)/include/libxml2
 else ifneq (,$(filter $(HOST.system),darwin cygwin mingw))
     LIBHB.GCC.I += $(CONTRIB.build/)include/libxml2
+    LIBHB.GCC.D += LIBXML_STATIC
 else
     LIBHB.libxml2 := $(shell $(PKGCONFIG.exe) --silence-errors --cflags libxml2)
     ifeq (,$(LIBHB.libxml2))
@@ -98,6 +102,7 @@ else
 endif
 
 ifeq (1,$(FEATURE.qsv))
+    LIBHB.GCC.D += ONEVPL_EXPERIMENTAL
     LIBHB.GCC.D += HAVE_THREADS=1
 endif
 
@@ -132,11 +137,16 @@ LIBHB.dll.libs += $(CONTRIB.build/)lib/libfdk-aac.a
 endif
 
 ifeq (1,$(FEATURE.qsv))
+LIBHB.GCC.D += ONEVPL_EXPERIMENTAL
 LIBHB.dll.libs += $(CONTRIB.build/)lib/libvpl.a
 endif
 
 ifeq (1,$(FEATURE.x265))
 LIBHB.dll.libs += $(CONTRIB.build/)lib/libx265.a
+endif
+
+ifeq (1,$(FEATURE.libdovi))
+LIBHB.dll.libs += $(CONTRIB.build/)lib/libdovi.a
 endif
 
 ifneq ($(HAS.iconv),1)
@@ -180,7 +190,7 @@ else
 endif
 
 LIBHB.GCC.args.extra.dylib++ += -Wl,--out-implib,$(LIBHB.lib)
-LIBHB.GCC.l += bcrypt ws2_32 uuid ole32 gdi32
+LIBHB.GCC.l += bcrypt ws2_32 uuid ole32 gdi32 userenv ntdll
 ifeq (1,$(FEATURE.mf))
     LIBHB.GCC.l += mfplat strmiids
 endif

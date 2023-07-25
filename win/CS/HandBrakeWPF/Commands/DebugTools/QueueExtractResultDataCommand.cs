@@ -20,10 +20,9 @@ namespace HandBrakeWPF.Commands.DebugTools
     using HandBrakeWPF.Properties;
     using HandBrakeWPF.Services.Interfaces;
     using HandBrakeWPF.Services.Queue.Model;
+    using HandBrakeWPF.Utilities.FileDialogs;
     using HandBrakeWPF.ViewModels;
     using HandBrakeWPF.ViewModels.Interfaces;
-
-    using SaveFileDialog = Microsoft.Win32.SaveFileDialog;
 
     internal class QueueExtractResultDataCommand : ICommand
     {

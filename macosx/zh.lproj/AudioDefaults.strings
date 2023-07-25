@@ -167,7 +167,10 @@
 "r80-yv-59n.ibExternalAccessibilityDescription" = "采样率";
 
 /* Class = "NSPopUpButton"; ibShadowedToolTip = "Audio sample rate in kilohertz (kHz). Auto is recommended."; ObjectID = "r80-yv-59n"; */
-"r80-yv-59n.ibShadowedToolTip" = "音频采样率（千赫兹）。推荐自动（auto）。";
+"r80-yv-59n.ibShadowedToolTip" = "音频采样率，单位是千赫兹（kHz）。建议使用自动。";
+
+/* Class = "NSButton"; ibShadowedToolTip = "Enable this if your playback device supports Opus. This permits Opus passthru to be selected when automatic passthru selecion is enabled."; ObjectID = "Ry1-gA-ns4"; */
+"Ry1-gA-ns4.ibShadowedToolTip" = "如果你的播放设备支持 Opus，请启用此项。当启用自动直通时，允许选择 Opus 直通。";
 
 /* Class = "NSTextFieldCell"; title = "Auto Passthru:"; ObjectID = "s6s-EH-5CB"; */
 "s6s-EH-5CB.title" = "自动直通：";
@@ -195,6 +198,9 @@
 
 /* Class = "NSButton"; ibShadowedToolTip = "Enable this if your playback device supports MP3. This permits MP3 passthru to be selected when automatic passthru selecion is enabled."; ObjectID = "vUx-OV-W5T"; */
 "vUx-OV-W5T.ibShadowedToolTip" = "如果播放设备支持 MP3，请启用此选项。这允许在启用自动直通选择时选择 MP3 直通。";
+
+/* Class = "NSButtonCell"; title = "Opus"; ObjectID = "wAh-LS-JzG"; */
+"wAh-LS-JzG.title" = "Opus";
 
 /* Class = "NSTextFieldCell"; title = "Table View Cell"; ObjectID = "XKL-2e-Dlv"; */
 "XKL-2e-Dlv.title" = "表单视图单元格";

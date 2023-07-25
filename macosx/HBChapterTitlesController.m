@@ -296,6 +296,7 @@
             {
                 [self presentError:error];
             }
+            [panel.URL stopAccessingSecurityScopedResource];
         }
     }];
 }
@@ -350,6 +351,8 @@
                 [panel close];
                 [[NSAlert alertWithError:saveError] runModal];
             }
+
+            [panel.URL stopAccessingSecurityScopedResource];
         }
     }];
 }

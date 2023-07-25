@@ -315,7 +315,7 @@ int decavsubWork( hb_avsub_context_t * ctx,
     ctx->pkt->data = in->data;
     ctx->pkt->size = in->size;
     ctx->pkt->pts  = in_s.start;
-    if (in_s.duration > 0 || ctx->subtitle->source != PGSSUB)
+    if (in_s.duration > 0 || ctx->subtitle->source == SSASUB || ctx->subtitle->source == IMPORTSSA)
     {
         duration = in_s.duration;
     }

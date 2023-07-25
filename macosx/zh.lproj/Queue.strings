@@ -43,6 +43,12 @@
 /* Class = "NSMenuItem"; title = "Reset All Jobs"; ObjectID = "kPX-am-UX1"; */
 "kPX-am-UX1.title" = "重置所有任务";
 
+/* Class = "NSToolbarItem"; label = "Quick Look"; ObjectID = "nCq-Nc-EbB"; */
+"nCq-Nc-EbB.label" = "预览";
+
+/* Class = "NSToolbarItem"; paletteLabel = "Quick Look"; ObjectID = "nCq-Nc-EbB"; */
+"nCq-Nc-EbB.paletteLabel" = "预览";
+
 /* Class = "NSMenuItem"; title = "Shut Down Computer"; ObjectID = "QmP-SQ-XKK"; */
 "QmP-SQ-XKK.title" = "关闭电脑";
 
@@ -66,6 +72,9 @@
 
 /* Class = "NSToolbarItem"; toolTip = "Start Encoding"; ObjectID = "SX6-mq-Hck"; */
 "SX6-mq-Hck.toolTip" = "开始编码";
+
+/* Class = "NSMenuItem"; title = "Quit HandBrake"; ObjectID = "tBG-Gf-ynI"; */
+"tBG-Gf-ynI.title" = "退出 HandBrake";
 
 /* Class = "NSMenuItem"; title = "Remove All Jobs"; ObjectID = "Tvo-xt-sag"; */
 "Tvo-xt-sag.title" = "移除所有任务";

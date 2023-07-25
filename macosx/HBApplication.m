@@ -11,7 +11,7 @@
 
 @implementation HBApplication
 
-static void CrashMyApplication()
+static void CrashMyApplication(void)
 {
     *(char *)0x08 = 1;
 }

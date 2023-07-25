@@ -26,23 +26,25 @@ namespace HandBrakeWPF.Utilities
             return new List<InterfaceLanguage>
                    {
                        UseSystemLanguage,
-                       new InterfaceLanguage("pt-BR", "Brazilian Portuguese (Português do Brasil)"),
-                       new InterfaceLanguage("zh-CN", "Simplified Chinese (简体中文)"),
-                       new InterfaceLanguage("zh-TW", "Traditional Chinese (正體中文)"),
+                       new InterfaceLanguage("bg", "Bulgarian (Български)"),
                        new InterfaceLanguage("co", "Corsican (Corsu)"),
-                       DefaultEnglishLanguage,
-                       new InterfaceLanguage("fr", "French (Français)"),
                        new InterfaceLanguage("de", "German (Deutsch)"),
+                       DefaultEnglishLanguage,
+                       new InterfaceLanguage("es", "Spanish (Español)"),
+                       new InterfaceLanguage("fa-IR", "Persian (Iran) (فارسی)"),
+                       new InterfaceLanguage("fr", "French (Français)"),
                        new InterfaceLanguage("it", "Italian (Italiano)"),
                        new InterfaceLanguage("ja", "Japanese (日本語 (にほんご))"),
                        new InterfaceLanguage("ko", "Korean (한국어)"),
-                       new InterfaceLanguage("fa-IR", "Persian (Iran) (فارسی)"),
+                       new InterfaceLanguage("nl", "Dutch (Nederlands)"),
                        new InterfaceLanguage("pl", "Polish (Polski)"),
+                       new InterfaceLanguage("pt-BR", "Brazilian Portuguese (Português do Brasil)"),
                        new InterfaceLanguage("ru", "Russian (Русский)"),
-                       new InterfaceLanguage("es", "Spanish (Español)"),
                        new InterfaceLanguage("th", "Thai (ไทย)"),
                        new InterfaceLanguage("tr", "Turkish (Türkçe)"),
                        new InterfaceLanguage("uk", "Ukrainian (Українська)"),
+                       new InterfaceLanguage("zh-Hans", "Simplified Chinese (简体中文)"),
+                       new InterfaceLanguage("zh-Hant", "Traditional Chinese (正體中文)"),
                    };
         }
 

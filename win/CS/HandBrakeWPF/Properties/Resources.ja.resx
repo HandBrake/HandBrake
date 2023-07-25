@@ -59,46 +59,46 @@
             : using a System.ComponentModel.TypeConverter
             : and then encoded with base64 encoding.
     -->
-  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
-    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+  <xsd:schema xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" id="root">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace"/>
     <xsd:element name="root" msdata:IsDataSet="true">
       <xsd:complexType>
         <xsd:choice maxOccurs="unbounded">
           <xsd:element name="metadata">
             <xsd:complexType>
               <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+                <xsd:element name="value" type="xsd:string" minOccurs="0"/>
               </xsd:sequence>
-              <xsd:attribute name="name" use="required" type="xsd:string" />
-              <xsd:attribute name="type" type="xsd:string" />
-              <xsd:attribute name="mimetype" type="xsd:string" />
-              <xsd:attribute ref="xml:space" />
+              <xsd:attribute name="name" use="required" type="xsd:string"/>
+              <xsd:attribute name="type" type="xsd:string"/>
+              <xsd:attribute name="mimetype" type="xsd:string"/>
+              <xsd:attribute ref="xml:space"/>
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="assembly">
             <xsd:complexType>
-              <xsd:attribute name="alias" type="xsd:string" />
-              <xsd:attribute name="name" type="xsd:string" />
+              <xsd:attribute name="alias" type="xsd:string"/>
+              <xsd:attribute name="name" type="xsd:string"/>
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="data">
             <xsd:complexType>
               <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
-                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2"/>
               </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
-              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
-              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
-              <xsd:attribute ref="xml:space" />
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1"/>
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3"/>
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4"/>
+              <xsd:attribute ref="xml:space"/>
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="resheader">
             <xsd:complexType>
               <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
               </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" use="required" />
+              <xsd:attribute name="name" type="xsd:string" use="required"/>
             </xsd:complexType>
           </xsd:element>
         </xsd:choice>
@@ -112,10 +112,10 @@
     <value>2.0</value>
   </resheader>
   <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=5.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=5.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Video_EncoderExtraArgs" xml:space="preserve">
     <value>エンコーダーパラメーターの一覧:
@@ -325,9 +325,6 @@ Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  021
   </data>
   <data name="PictureSettings_OutputResolution" xml:space="preserve">
     <value>出力先: {0}</value>
-  </data>
-  <data name="Options_DefaultPathAdditionalParams" xml:space="preserve">
-    <value>次のオプションも利用可能です: {source_path}  {source_folder_name}  {source}</value>
   </data>
   <data name="Main_MatchingFileOverwriteWarning" xml:space="preserve">
     <value>ソースファイルと同じ場所とファイル名にエンコードすることはできません。ソースファイルと一致させないために、保存先のファイル名を変更してください。</value>
@@ -668,8 +665,8 @@ Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  021
     <value>{0} - ({1}%, パス {2} of {3})</value>
   </data>
   <data name="TaskTrayStatusTitle" xml:space="preserve">
-    <value>{1}%, パス {2}of {3}
-残り時間: {4}</value>
+    <value>{0}
+1つのジョブをエンコード中</value>
   </data>
   <data name="PauseOnLowDiskspace" xml:space="preserve">
     <value>キューを一時停止しました。警告、エンコードしているドライブの空き領域が少なくなっています。続けるためには空きを増やしてから開始を押してください。もしくは設定から最低領域レベルを調節することができます。</value>
@@ -715,8 +712,10 @@ Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  021
     <value>本当にこのまま残りを追加しますか？</value>
   </data>
   <data name="Main_QueueOverwritePrompt" xml:space="preserve">
-    <value>ファイル'{0}'はすでに存在しています！
-上書きしますか？</value>
+    <value>ファイル'{0}'はすでに存在します！
+上書きしますか？
+
+ヒント:ファイルを上書きするかは設定からも変更できます。</value>
   </data>
   <data name="Clipboard_Unavailable" xml:space="preserve">
     <value>システムのクリップボードは現在利用できません。</value>
@@ -809,7 +808,7 @@ Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  021
     <value>チャプター名</value>
   </data>
   <data name="ChaptersView_ChapterNumber" xml:space="preserve">
-    <value>チャプター番号</value>
+    <value>チャプター</value>
   </data>
   <data name="ChaptersView_CreateChapterMarkers" xml:space="preserve">
     <value>チャプターマーカーを作成</value>
@@ -1127,7 +1126,7 @@ Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  021
     <value>Intel QuickSync Encodersの使用を許可する</value>
   </data>
   <data name="OptionsView_EnableVceEncoding" xml:space="preserve">
-    <value>AMD VCE Encodersの使用を許可する</value>
+    <value>AMD VCNエンコーダの使用を許可する</value>
   </data>
   <data name="OptionsView_InvalidFileFormatChars" xml:space="preserve">
     <value>入力されたファイルフォーマットには無効な文字が含まれています。これらは除去されました。</value>
@@ -1214,7 +1213,7 @@ Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  021
     <value>ログの詳細度:</value>
   </data>
   <data name="Options_LogPath" xml:space="preserve">
-    <value>ログのパス:</value>
+    <value>パス:</value>
   </data>
   <data name="Options_LowDiskspaceSize" xml:space="preserve">
     <value>ディスクの空きが少なくなったらキューを一時停止する</value>
@@ -1472,9 +1471,6 @@ VLCとMPC-HCがサポートされています。他のプレイヤーではお�
   <data name="QueueView_Statistics" xml:space="preserve">
     <value>統計</value>
   </data>
-  <data name="QueueView_StatsNotAvailableYet" xml:space="preserve">
-    <value>統計はエンコードの完了後に利用可能です。</value>
-  </data>
   <data name="QueueView_Subtitles" xml:space="preserve">
     <value>字幕:</value>
   </data>
@@ -1560,13 +1556,13 @@ VLCとMPC-HCがサポートされています。他のプレイヤーではお�
     <value>再生時間:</value>
   </data>
   <data name="StaticPreviewView_LivePreview" xml:space="preserve">
-    <value>リアルタイムプレビュー</value>
+    <value>プレビューをエンコード</value>
   </data>
   <data name="StaticPreviewView_SelectPreviewImage" xml:space="preserve">
     <value>プレビュー画像を選択</value>
   </data>
-  <data name="StaticPreviewView_UseSystemDefault" xml:space="preserve">
-    <value>システム既定の動画プレーヤーを優先する</value>
+  <data name="StaticPreviewView_UseExternalPlayer" xml:space="preserve">
+    <value>外部プレーヤーアプリを使用</value>
   </data>
   <data name="SubtitlesView_AddCC" xml:space="preserve">
     <value>可能ならクローズドキャプションを追加する</value>
@@ -1640,8 +1636,8 @@ VLCとMPC-HCがサポートされています。他のプレイヤーではお�
   <data name="SummaryView_storage" xml:space="preserve">
     <value>ストレージ</value>
   </data>
-  <data name="VideoView_2Pass" xml:space="preserve">
-    <value>2-Passエンコード</value>
+  <data name="VideoView_MultiPass" xml:space="preserve">
+    <value>複数パスエンコード</value>
   </data>
   <data name="VideoView_AverageBitrate" xml:space="preserve">
     <value>平均ビットレート (kbps):</value>
@@ -1685,8 +1681,8 @@ VLCとMPC-HCがサポートされています。他のプレイヤーではお�
   <data name="VideoView_Quality" xml:space="preserve">
     <value>品質:</value>
   </data>
-  <data name="VideoView_TurboFirstPass" xml:space="preserve">
-    <value>1パス目を高速化</value>
+  <data name="VideoView_TurboAnalysisPass" xml:space="preserve">
+    <value>解析パスの高速化</value>
   </data>
   <data name="VideoView_VariableFramerate" xml:space="preserve">
     <value>可変フレームレート</value>
@@ -1869,10 +1865,8 @@ VLCとMPC-HCがサポートされています。他のプレイヤーではお�
     <value>ポータブルモード: portable.iniを読み込むことができませんでした。このファイルにエラーがある可能性があります。portable.ini.templateをガイドとして使用しやり直してください。</value>
   </data>
   <data name="OptionsView_FormatOptions" xml:space="preserve">
-    <value>利用できる変数: {source} {title} {chapters} {creation-date} {creation-time} {date} {time} {quality_bitrate}</value>
-  </data>
-  <data name="OptionsView_PathOptions" xml:space="preserve">
-    <value>利用できる変数: {source_path} {source_folder_name} {source}</value>
+    <value>命名オプション:
+上のテキストをドラッグアンドドロップできます。</value>
   </data>
   <data name="FileOverwriteBehaviours_Ask" xml:space="preserve">
     <value>上書きするかを聞く</value>
@@ -2310,7 +2304,7 @@ VLCとMPC-HCがサポートされています。他のプレイヤーではお�
     <value>停止</value>
   </data>
   <data name="String1" xml:space="preserve">
-    <value />
+    <value/>
   </data>
   <data name="PresetService_CategoryAlreadyExists" xml:space="preserve">
     <value>入力されたカテゴリ名は既に存在します。違う名前を選んでください。</value>
@@ -2667,5 +2661,134 @@ HandBrakeエンコードサポートは設定から最有効化できます。</
   </data>
   <data name="SourceSelection_UpdateNow" xml:space="preserve">
     <value>今すぐ更新！</value>
+  </data>
+  <data name="CropMode_Auto" xml:space="preserve">
+    <value>自動</value>
+  </data>
+  <data name="CropMode_Loose" xml:space="preserve">
+    <value>保守的</value>
+  </data>
+  <data name="CropMode_None" xml:space="preserve">
+    <value>なし</value>
+  </data>
+  <data name="CropMode_Custom" xml:space="preserve">
+    <value>カスタム</value>
+  </data>
+  <data name="OptionsView_EnableNvDecSupport" xml:space="preserve">
+    <value>ハードウェアが利用可能でNVEncエンコーダを使用するときの、映像のデコードにNvidia NVDecを使用する。</value>
+  </data>
+  <data name="Options_Hardware" xml:space="preserve">
+    <value>ハードウェアサポート</value>
+  </data>
+  <data name="StaticPreviewViewModel_MediaError" xml:space="preserve">
+    <value>システムはこのファイルを再生できませんでした。
+
+AV1やHEVCといった特定のコーデックは、再生するためにマイクロソフトからMicrosoft AV1やHEVCコーデックプラグインが必要であることに留意してください。
+もしくは、下にある"外部プレイヤーアプリを使用"にチェックを付けることもできます。</value>
+  </data>
+  <data name="StaticPreviewView_ClosePlayer" xml:space="preserve">
+    <value>プレーヤーを選択</value>
+  </data>
+  <data name="StaticPreviewView_Play" xml:space="preserve">
+    <value>再生</value>
+  </data>
+  <data name="StaticPreviewView_VideoPreview" xml:space="preserve">
+    <value>ビデオプレビュー</value>
+  </data>
+  <data name="StaticPreviewViewModel_WebmNotSupported" xml:space="preserve">
+    <value>WebMコンテナにビルトインプレビューは使用することができません。外部プレイヤーを使用してください。</value>
+  </data>
+  <data name="StaticPreview_EncodingPreview" xml:space="preserve">
+    <value>プレビューをエンコード中...</value>
+  </data>
+  <data name="StaticPreview_Previews" xml:space="preserve">
+    <value>プレビュー:</value>
+  </data>
+  <data name="StaticPreview_Volume" xml:space="preserve">
+    <value>ボリューム: 0</value>
+  </data>
+  <data name="Reset" xml:space="preserve">
+    <value>リセット</value>
+  </data>
+  <data name="OptionsView_IsoDateFormat" xml:space="preserve">
+    <value>システム形式の代わりにISO日付形式(YYYY-MM-DD)を使用する。</value>
+  </data>
+  <data name="QueueViewModel_ShortEncodeStatus" xml:space="preserve">
+    <value>パス {0} / {1}, {2:00.00}%, {3:000.0} fps, 平均 {4:000.0} fps, 残り時間: {5}</value>
+  </data>
+  <data name="QueueViewModel_ShortSubScanStatus" xml:space="preserve">
+    <value>字幕のスキャン中 {0:00.00}%, 残り時間: {1}</value>
+  </data>
+  <data name="QueueView_ExtendedQueueDisplay" xml:space="preserve">
+    <value>キュー情報を開く</value>
+  </data>
+  <data name="QueueView_MinimalQueueDisplay" xml:space="preserve">
+    <value>キュー情報を閉じる</value>
+  </data>
+  <data name="QueueStats_ShortOutputStats" xml:space="preserve">
+    <value>出力: {0}, 平均 {1} fps</value>
+  </data>
+  <data name="PresetPane_Desc" xml:space="preserve">
+    <value>プリセット説明:</value>
+  </data>
+  <data name="PresetPane_HidePresetDesc" xml:space="preserve">
+    <value>プリセット説明を隠す</value>
+  </data>
+  <data name="PresetPane_ShowPresetDesc" xml:space="preserve">
+    <value>プリセット説明を表示する</value>
+  </data>
+  <data name="TaskTrayStatusManyTitle" xml:space="preserve">
+    <value>{0}
+{1}つのジョブをエンコード中</value>
+  </data>
+  <data name="StaticPreviewViewModel_MultipleEncodes" xml:space="preserve">
+    <value>プレビューのエンコードができませんでした。他のファイルをエンコード中でビジー状態です。
+
+同時エンコードを許可するには、ツールメニュー -&gt; 設定 -&gt; 詳細 -&gt; プロセス分離 -&gt; 「キューされたジョブをそれぞれ別のワーカープロセスで実行する」をオンにしプロセス分離を行ってください。</value>
+  </data>
+  <data name="AudioView_Quality" xml:space="preserve">
+    <value>品質</value>
+  </data>
+  <data name="AudioView_Source" xml:space="preserve">
+    <value>ソース</value>
+  </data>
+  <data name="AboutView_Documentation" xml:space="preserve">
+    <value>ドキュメント:</value>
+  </data>
+  <data name="AboutView_GithubTracker" xml:space="preserve">
+    <value>GitHub Issue Tracker:</value>
+  </data>
+  <data name="AboutView_Website" xml:space="preserve">
+    <value>ウェブサイト:</value>
+  </data>
+  <data name="MainView_PresetClone" xml:space="preserve">
+    <value>プリセットを複製</value>
+  </data>
+  <data name="PresetPane_MoveDown" xml:space="preserve">
+    <value>下に移動</value>
+  </data>
+  <data name="PresetPane_MoveToBottom" xml:space="preserve">
+    <value>一番下に移動</value>
+  </data>
+  <data name="PresetPane_MoveToTop" xml:space="preserve">
+    <value>一番上に移動</value>
+  </data>
+  <data name="PresetPane_MoveUp" xml:space="preserve">
+    <value>上に移動</value>
+  </data>
+  <data name="QueueViewModel_StopButContinueJob" xml:space="preserve">
+    <value>実行中のジョブがあります。現在のジョブを完了させてからキューを停止しますか？</value>
+  </data>
+  <data name="Options_AddExt" xml:space="preserve">
+    <value>拡張子を追加</value>
+  </data>
+  <data name="Options_ExcludeExtensions" xml:space="preserve">
+    <value>ファイルの拡張子を除外</value>
+  </data>
+  <data name="Options_ExcludeExtensionsInfo" xml:space="preserve">
+    <value>次のファイルの拡張子はフォルダースキャンの際に無視されます。大文字小文字は区別しません。"."は不要です。</value>
+  </data>
+  <data name="Options_ExtensionExists" xml:space="preserve">
+    <value>このファイル拡張子はすでにリストにあります。</value>
   </data>
 </root>

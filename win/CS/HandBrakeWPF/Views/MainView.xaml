@@ -91,13 +91,13 @@
 
                     <MenuItem Header="{x:Static Properties:Resources.MainView_PresetsMenu}" ItemsSource="{Binding PresetsCategories, Converter={StaticResource presetsMenuConverter}}" />
                     <Separator />
-                    <MenuItem Header="{x:Static Properties:Resources.PresetManger_Title}" Command="{Binding RelayCommand}" CommandParameter="OpenPresetWindow" />
-                    <Separator />
+                    <!--<MenuItem Header="{x:Static Properties:Resources.PresetManger_Title}" Command="{Binding RelayCommand}" CommandParameter="OpenPresetWindow" />
+                    <Separator />-->
                     <MenuItem Header="{x:Static Properties:Resources.AddPresetView_AddPreset}" Command="{Binding RelayCommand}" CommandParameter="PresetAdd" />
                     <MenuItem Header="{x:Static Properties:Resources.MainView_UpdateSelectedPreset}" Command="{Binding RelayCommand}" CommandParameter="PresetUpdate" />
                     <MenuItem Header="{x:Static Properties:Resources.MainView_SetCurrentAsDefault}" Command="{Binding RelayCommand}" CommandParameter="PresetSetDefault" />
                     <MenuItem Header="{x:Static Properties:Resources.MainView_PresetManage}" Command="{Binding RelayCommand}" CommandParameter="PresetManage" />
-                    <MenuItem Header="{x:Static Properties:Resources.MainView_PresetRemove}" Command="{Binding RelayCommand}" CommandParameter="PresetRemove" />
+                    <MenuItem Header="{x:Static Properties:Resources.MainView_PresetRemove}" Command="{Binding RelayCommand}" CommandParameter="PresetRemoveSelected" />
                     <Separator />
                     <MenuItem Header="{x:Static Properties:Resources.MainView_ImportFromFile}" Command="{Binding RelayCommand}" CommandParameter="PresetImport" />
                     <MenuItem Header="{x:Static Properties:Resources.MainView_ExportToFile}" Command="{Binding RelayCommand}" CommandParameter="PresetExport" />
@@ -143,7 +143,8 @@
                      SnapsToDevicePixels="True"
                      ToolBar.OverflowMode="AsNeeded"
                      ToolBarTray.IsLocked="True"
-                     KeyboardNavigation.TabNavigation="Continue">
+                     KeyboardNavigation.TabNavigation="Continue"
+                     >
 
                 <ToolBar.ContextMenu>
                     <ContextMenu AutomationProperties.Name="Presets List Context Menu">
@@ -359,7 +360,7 @@
 
                     <TextBlock Text="{x:Static Properties:Resources.MainView_Source}" Grid.Column="0" Style="{StaticResource sectionHeader}" Margin="5,5,0,0" />
                     <TextBlock Text="{Binding Path=SourceLabel}" ToolTip="{Binding Path=SourceLabel}" TextTrimming="CharacterEllipsis" MaxWidth="595" Grid.Column="1" Margin="7,5,0,0" />
-                    <TextBlock Text="{Binding SourceInfo}" HorizontalAlignment="Right" VerticalAlignment="Center" Foreground="DimGray" Grid.Column="2" Margin="10,5,0,0" MaxWidth="360" />
+                    <TextBlock Text="{Binding SourceInfo}" HorizontalAlignment="Right" VerticalAlignment="Center" Foreground="DimGray" Grid.Column="2" Margin="10,5,0,0" TextTrimming="CharacterEllipsis" />
                 </Grid>
 
                 <Grid Grid.Row="1" Margin="0,5,5,0">

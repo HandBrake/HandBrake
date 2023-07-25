@@ -1,19 +1,21 @@
 $(eval $(call import.MODULE.defs,LIBVPL,libvpl))
 $(eval $(call import.CONTRIB.defs,LIBVPL))
 
-LIBVPL.FETCH.url       = https://github.com/oneapi-src/oneVPL/archive/refs/tags/v2022.1.2.tar.gz
-LIBVPL.FETCH.url      += https://github.com/HandBrake/HandBrake-contribs/releases/download/contribs/oneVPL-2022.1.2.tar.gz
-LIBVPL.FETCH.sha256    = 8ff93be017273eefa83dc6cd7f5d82facb168e38eafabafa2e9613a4e742016f
-LIBVPL.FETCH.basename  = oneVPL-2022.1.2.tar.gz
-LIBVPL.EXTRACT.tarbase = oneVPL-2022.1.2
+LIBVPL.FETCH.url       = https://github.com/oneapi-src/oneVPL/archive/refs/tags/v2023.1.0.tar.gz
+LIBVPL.FETCH.url      += https://github.com/HandBrake/HandBrake-contribs/releases/download/contribs/oneVPL-2023.1.0.tar.gz
+LIBVPL.FETCH.sha256    = 0a1991278c64849f471e4b307a7c01f465a308674f359054886c32352e887b60
+LIBVPL.FETCH.basename  = oneVPL-2023.1.0.tar.gz
+LIBVPL.EXTRACT.tarbase = oneVPL-2023.1.0
 
 LIBVPL.build_dir             = build
 LIBVPL.CONFIGURE.exe         = cmake
-LIBVPL.CONFIGURE.args.prefix = -DCMAKE_INSTALL_PREFIX="$(LIBVPL.CONFIGURE.prefix)" -DBUILD_PREVIEW=OFF -DBUILD_TOOLS=OFF -DBUILD_EXAMPLES=OFF -DBUILD_SHARED_LIBS=OFF
+LIBVPL.CONFIGURE.args.build  =
+LIBVPL.CONFIGURE.args.host   = -DCMAKE_HOST_SYSTEM="$(LIBVPL.CONFIGURE.host)"
+LIBVPL.CONFIGURE.args.prefix = -DCMAKE_INSTALL_PREFIX="$(LIBVPL.CONFIGURE.prefix)" -DCMAKE_INSTALL_LIBDIR=lib
 LIBVPL.CONFIGURE.deps        =
 LIBVPL.CONFIGURE.static      =
-LIBVPL.CONFIGURE.shared      =
-LIBVPL.CONFIGURE.extra       =
+LIBVPL.CONFIGURE.shared      = -DBUILD_SHARED_LIBS=OFF
+LIBVPL.CONFIGURE.extra       = -DBUILD_DISPATCHER_ONEVPL_EXPERIMENTAL=ON -DBUILD_PREVIEW=OFF -DBUILD_TOOLS=OFF -DBUILD_EXAMPLES=OFF
 
 ifeq ($(GCC.O),$(filter $(GCC.O),size size-aggressive))
     LIBVPL.CONFIGURE.extra += -DCMAKE_BUILD_TYPE=MinSizeRel
@@ -27,24 +29,16 @@ endif
 
 ifeq (1,$(HOST.cross))
     ifeq (mingw,$(HOST.system))
-        LIBVPL.CONFIGURE.extra += -DWIN32=ON
+        LIBVPL.CONFIGURE.extra += -DWIN32=ON -DMINGW=ON
         LIBVPL.CONFIGURE.extra += -DCMAKE_SYSTEM_NAME=Windows
         LIBVPL.CONFIGURE.extra += -DCMAKE_C_COMPILER=$(LIBVPL.GCC.gcc)
         LIBVPL.CONFIGURE.extra += -DCMAKE_C_FLAGS="-static-libgcc -static-libstdc++ -static"
         LIBVPL.CONFIGURE.extra += -DCMAKE_SHARED_LIBRARY_LINK_C_FLAGS="-static-libgcc -static-libstdc++ -static"
         LIBVPL.CONFIGURE.extra += -DCMAKE_CXX_COMPILER=$(LIBVPL.GCC.gxx)
         LIBVPL.CONFIGURE.extra += -DCMAKE_CXX_FLAGS="-static-libgcc -static-libstdc++ -static"
-        LIBVPL.CONFIGURE.extra += -DCMAKE_SHARED_LIBRARY_LINK_CXX_FLAGS="-static-libgcc -static-libstdc++ -static"
         LIBVPL.CONFIGURE.extra += -DCMAKE_RC_COMPILER=$(HOST.cross.prefix)windres
-    else ifeq ($(HOST.system),darwin)
-        LIBVPL.CONFIGURE.args.host  = -DCMAKE_HOST_SYSTEM="$(LIBVPL.CONFIGURE.host)"
-    else
-        LIBVPL.CONFIGURE.args.host = -DCMAKE_SYSTEM_NAME="$(LIBVPL.CONFIGURE.host)"
     endif
-    LIBVPL.CONFIGURE.args.build = -DCMAKE_HOST_SYSTEM="$(LIBVPL.CONFIGURE.build)"
     LIBVPL.CONFIGURE.extra     += -DCMAKE_SYSTEM_PROCESSOR=$(HOST.machine)
-else
-    LIBVPL.CONFIGURE.args.host  = -DCMAKE_HOST_SYSTEM="$(LIBVPL.CONFIGURE.host)"
 endif
 
 ## find CMakeLists.txt

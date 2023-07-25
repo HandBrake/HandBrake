@@ -12,8 +12,6 @@
 
 #define TASKSET_POSIX_COMPLIANT 1
 
-#include "handbrake/bits.h"
-
 typedef struct hb_tasket_thread_t {
     hb_thread_t      * thread;
     hb_lock_t        * lock;

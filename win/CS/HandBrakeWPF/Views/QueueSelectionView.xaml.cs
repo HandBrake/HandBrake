@@ -9,9 +9,11 @@
 
 namespace HandBrakeWPF.Views
 {
+    using System;
     using System.Windows;
     using System.Windows.Input;
 
+    using HandBrakeWPF.Helpers;
     using HandBrakeWPF.Model;
 
     /// <summary>
@@ -25,6 +27,12 @@ namespace HandBrakeWPF.Views
         public QueueSelectionView()
         {
             InitializeComponent();
+        }
+
+        protected override void OnSourceInitialized(EventArgs e)
+        {
+            base.OnSourceInitialized(e);
+            WindowHelper.SetDarkMode(this);
         }
 
         private void SelectionGrid_OnKeyDown(object sender, KeyEventArgs e)

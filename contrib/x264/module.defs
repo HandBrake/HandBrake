@@ -11,6 +11,10 @@ X264.CONFIGURE.shared =
 
 X264.CONFIGURE.extra += --disable-lavf --disable-ffms --disable-avs --disable-swscale --disable-gpac --disable-lsmash --disable-cli
 
+ifeq (on,$(GCC.lto))
+    X264.CONFIGURE.extra += --enable-lto
+endif
+
 ifeq (1,$(HOST.cross))
     X264.CONFIGURE.build  =
     ifneq ($(HOST.system),darwin)

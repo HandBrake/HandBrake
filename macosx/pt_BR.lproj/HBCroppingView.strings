@@ -7,6 +7,9 @@
 /* Class = "NSStepper"; ibExternalAccessibilityDescription = "Crop top"; ObjectID = "8e5-zI-IBg"; */
 "8e5-zI-IBg.ibExternalAccessibilityDescription" = "Corte do topo";
 
+/* Class = "NSMenuItem"; title = "Conservative"; ObjectID = "8Vn-fL-hvM"; */
+"8Vn-fL-hvM.title" = "Preservador";
+
 /* Class = "NSTextField"; ibExternalAccessibilityDescription = "Crop top"; ObjectID = "Cp5-xz-x1h"; */
 "Cp5-xz-x1h.ibExternalAccessibilityDescription" = "Corte do topo";
 

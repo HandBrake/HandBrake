@@ -28,7 +28,7 @@ namespace HandBrake.App.Core.Extensions
                 throw new IndexOutOfRangeException("First Index: " + firstIndex);
             }
 
-            if (firstIndex > list.Count - 1 || secondIndex < 0)
+            if (firstIndex >= (list.Count - 1) || secondIndex < 0)
             {
                 throw new IndexOutOfRangeException("Second Index: " + secondIndex);
             }
@@ -49,12 +49,13 @@ namespace HandBrake.App.Core.Extensions
             {
                 throw new ArgumentNullException("Item was null");
             }
-
+            
             int index = list.IndexOf(item);
 
             if (index > 0)
             {
-                list.Swap<T>(index, index - 1);
+                list.Remove(item);
+                list.Insert((index - 1), item);
             }
         }
 
@@ -72,9 +73,10 @@ namespace HandBrake.App.Core.Extensions
 
             int index = list.IndexOf(item);
 
-            if (index >= 0)
+            if (index >= 0 && index < (list.Count - 1))
             {
-                list.Swap<T>(index, index + 1);
+                list.Remove(item);
+                list.Insert((index + 1), item);
             }
         }
 

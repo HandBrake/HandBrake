@@ -152,10 +152,10 @@ void encvorbisClose(hb_work_object_t * w)
 {
     hb_work_private_t *pv = w->private_data;
 
-    vorbis_comment_clear(&pv->vc);
     vorbis_block_clear(&pv->vb);
-    vorbis_info_clear(&pv->vi);
     vorbis_dsp_clear(&pv->vd);
+    vorbis_info_clear(&pv->vi);
+    vorbis_comment_clear(&pv->vc);
 
     if (pv->list)
     {

@@ -10,11 +10,14 @@
 namespace HandBrakeWPF.Helpers
 {
     using System;
+    using System.Diagnostics;
     using System.Linq;
     using System.Windows;
+    using System.Windows.Interop;
 
-
+    using HandBrakeWPF.Model;
     using HandBrakeWPF.Services.Interfaces;
+    using HandBrakeWPF.Utilities;
     using HandBrakeWPF.ViewModels.Interfaces;
 
     public class WindowHelper
@@ -52,6 +55,25 @@ namespace HandBrakeWPF.Helpers
                 }
 
                 window.Close();
+            }
+        }
+
+        public static void SetDarkMode(Window h)
+        {
+            try
+            {
+                IUserSettingService userSettingService = IoCHelper.Get<IUserSettingService>();
+                DarkThemeMode mode = userSettingService.GetUserSetting<DarkThemeMode>(UserSettingConstants.DarkThemeMode);
+                if (mode == DarkThemeMode.Dark || (mode == DarkThemeMode.System && SystemInfo.IsAppsUsingDarkTheme()))
+                {
+                    var handle = new WindowInteropHelper(h).Handle;
+                    Win32.SetDarkTheme(handle);
+                }
+            }
+            catch (Exception ex)
+            {
+                // Silently Ignore.  It's not important. 
+                Debug.WriteLine(ex);
             }
         }
     }

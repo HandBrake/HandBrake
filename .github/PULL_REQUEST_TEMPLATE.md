@@ -11,7 +11,7 @@
 
 
 
-**Test on:**
+**Tested on:**
 
 - [ ] Windows 10+  (via MinGW)
 - [ ] macOS 10.13+

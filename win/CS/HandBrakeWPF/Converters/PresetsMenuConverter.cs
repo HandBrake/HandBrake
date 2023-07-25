@@ -18,6 +18,7 @@ namespace HandBrakeWPF.Converters
     using System.Windows.Data;
 
     using HandBrakeWPF.Commands;
+    using HandBrakeWPF.Commands.Presets;
     using HandBrakeWPF.Helpers;
     using HandBrakeWPF.Model.Options;
     using HandBrakeWPF.Properties;

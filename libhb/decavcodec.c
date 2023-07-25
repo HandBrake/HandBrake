@@ -47,6 +47,7 @@
 #include "libavfilter/buffersrc.h"
 #include "libavfilter/buffersink.h"
 #include "libavutil/hwcontext.h"
+#include "handbrake/hwaccel.h"
 #include "handbrake/lang.h"
 #include "handbrake/audio_resample.h"
 
@@ -54,10 +55,6 @@
 #include "libavutil/hwcontext_qsv.h"
 #include "handbrake/qsv_common.h"
 #include "handbrake/qsv_libav.h"
-#endif
-
-#if HB_PROJECT_FEATURE_NVENC
-#include "handbrake/nvenc_common.h"
 #endif
 
 static void compute_frame_duration( hb_work_private_t *pv );
@@ -146,6 +143,7 @@ struct hb_work_private_s
     hb_audio_t           * audio;
     hb_audio_resample_t  * resample;
     int                    drop_samples;
+    uint64_t               downmix_mask;
 
 #if HB_PROJECT_FEATURE_QSV
     // QSV-specific settings
@@ -157,10 +155,206 @@ struct hb_work_private_s
     } qsv;
 #endif
 
+    AVFrame              * hw_frame;
+    enum AVPixelFormat     hw_pix_fmt;
+
     hb_list_t            * list_subtitle;
 };
 
 static void decodeAudio( hb_work_private_t *pv, packet_info_t * packet_info );
+
+#define HB_AV_CH_SIDE_MASK (AV_CH_SIDE_LEFT|AV_CH_SIDE_RIGHT)
+#define HB_AV_CH_BACK_MASK (AV_CH_BACK_LEFT|AV_CH_BACK_RIGHT)
+#define HB_AV_CH_BOTH_MASK (HB_AV_CH_SIDE_MASK|HB_AV_CH_BACK_MASK)
+
+static int downmix_required(uint64_t target_layout_mask, uint64_t input_layout_mask)
+{
+    /*
+     * Side channels can easily be remapped to back channels and vice-versa.
+     * Provided the other channels are the same, downmixing is not required.
+     */
+    if ((input_layout_mask & HB_AV_CH_SIDE_MASK) == 0 &&
+        (input_layout_mask & HB_AV_CH_BACK_MASK) == HB_AV_CH_BACK_MASK)
+    {
+        if ((target_layout_mask & HB_AV_CH_BACK_MASK) == 0 &&
+            (target_layout_mask & HB_AV_CH_SIDE_MASK) == HB_AV_CH_SIDE_MASK)
+        {
+            // input has back channels but not side channels
+            // target has the opposite (sides but not backs)
+            return ((input_layout_mask & ~HB_AV_CH_BOTH_MASK) !=
+                    (target_layout_mask & ~HB_AV_CH_BOTH_MASK));
+        }
+    }
+    if ((input_layout_mask & HB_AV_CH_BACK_MASK) == 0 &&
+        (input_layout_mask & HB_AV_CH_SIDE_MASK) == HB_AV_CH_SIDE_MASK)
+    {
+        if ((target_layout_mask & HB_AV_CH_SIDE_MASK) == 0 &&
+            (target_layout_mask & HB_AV_CH_BACK_MASK) == HB_AV_CH_BACK_MASK)
+        {
+            // input has side channels but not back channels
+            // target has the opposite (backs but not sides)
+            return ((input_layout_mask & ~HB_AV_CH_BOTH_MASK) !=
+                    (target_layout_mask & ~HB_AV_CH_BOTH_MASK));
+        }
+    }
+    return (input_layout_mask != target_layout_mask);
+}
+
+static uint64_t ac3_downmix_mask(int hb_mixdown, int normalized, uint64_t input_layout_mask, const char **dmix_mode)
+{
+    /*
+     * ac3/eac3 bitstreams contain mix levels for center, surround and LFE channels.
+     *
+     * libavcodec's decoder can use them to build a normalized downmix matrix:
+     * libavcodec/ac3dec.c static int set_downmix_coeffs()
+     *
+     * and downmix to either mono or stereo specifically:
+     * libavcodec/ac3dsp.c static void ac3_downmix_c()
+     *
+     * We only do a decoder downmix here for a minor speed boost, as the mix levels
+     * are otherwise available to us via AV_FRAME_DATA_DOWNMIX_INFO, which we use
+     * in decodeAudio() to build the "regular" (non-normalized) downmix matrix.
+     *
+     * Note: the decoder ignores Lt/Rt-specific mix levels and is otherwise incapable of
+     * producing a Dolby Surround/PLII-compatible downmix: only use it for normal Stereo.
+     */
+    if (normalized == 1)
+    {
+        uint64_t mask = 0;
+        switch (hb_mixdown)
+        {
+            case HB_AMIXDOWN_MONO:
+            case HB_AMIXDOWN_STEREO:
+                mask = hb_ff_mixdown_xlat(hb_mixdown, NULL);
+                break;
+
+            default:
+                return 0;
+        }
+        if (mask && downmix_required(mask, input_layout_mask))
+        {
+            /*
+             * We also set the existing decoder option "dmix_mode" to 2 (AC3_DMIXMOD_LORO)
+             * which is currently ignored by the decoder but should (theoretically) ensure
+             * we always get a regular Lo/Ro downmix, if the decoder were to ever gain the
+             * ability to do a Dolby/PLII downmix in the future.
+             */
+            *dmix_mode = "2";
+            return mask;
+        }
+    }
+    return 0;
+}
+
+static uint64_t dca_downmix_mask(int hb_mixdown, int normalized, uint64_t input_layout_mask)
+{
+    /*
+     * AV_CODEC_ID_DTS
+     *
+     * For DTS-HD MA, doing a decoder downmix vs. an hb_audio_resample
+     * downmix can result in significant differences e.g. in terms of
+     * output bitrate using 24-bit FLAC. Letting the decoder decode
+     * the full bistream at least ensures decoding is lossless, at
+     * the expense of losing custom downmix coefficients that may
+     * exist in the bitstream. So, no decoder downmix for DTS.
+     *
+     * Long-term, a solution would be to have libavcodec's DTS decoder export
+     * downmix coefficients to a new type of AVFrame side data and pass that
+     * through to hb_audio_resample (similar to AV_FRAME_DATA_DOWNMIX_INFO).
+     */
+    return 0;
+}
+
+static uint64_t truehd_downmix_mask(int hb_mixdown, int normalized, uint64_t input_layout_mask)
+{
+    /*
+     * TrueHD bitstreams are made up of multiple "substreams" which are
+     * combined in order to obtain the final output. Any given substream
+     * depends on the previous substream(s), but not the next; by only
+     * decoding up to specific substream, a TrueHD decoder can extract
+     * an embedded downmix.
+     */
+    if (normalized == 0)
+    {
+        uint64_t mask = 0;
+        switch (hb_mixdown)
+        {
+            /*
+             * We cannot use an embedded Stereo downmix as we have no way
+             * of knowing whether it is Dolby Surround or PLII-compatible.
+             * Request 5.1 instead and let hb_audio_resample downmix that.
+             */
+            case HB_AMIXDOWN_DOLBY:
+            case HB_AMIXDOWN_DOLBYPLII:
+                mask = AV_CH_LAYOUT_5POINT1;
+                break;
+
+            default:
+                mask = hb_ff_mixdown_xlat(hb_mixdown, NULL);
+                break;
+        }
+        if (mask && downmix_required(mask, input_layout_mask))
+        {
+            if (mask == AV_CH_LAYOUT_STEREO)
+            {
+                /*
+                 * The majority of TrueHD tracks have a Stereo first
+                 * substream, even when the second substream is Mono.
+                 */
+                return mask;
+            }
+            if (hb_mixdown == HB_AMIXDOWN_MONO)
+            {
+                /*
+                 * It is unlikely that any substream configuration will
+                 * give us an embedded Mono downmix (except in the case
+                 * where the full input layout is Mono, but in said case
+                 * a downmix is not required) however it may be possible
+                 * to extract a Stereo downmix and let hb_audio_resample
+                 * take care of downmixing that to Mono for final output.
+                 *
+                 * Do it after downmix_required() so we don't accidentally
+                 * request a Stereo downmix when the input is already Mono.
+                 */
+                return AV_CH_LAYOUT_STEREO;
+            }
+            /*
+             * Which downmix(es) are possible depend on the layout for each specific substream
+             * combination, but we cannot query the substream-specific layout from the decoder.
+             * However, excepting the Stereo to Mono case already handled above, it should be
+             * safe to assume that each additional substream contains more channels than the
+             * previous one, thus a downmix should only be possible when the all-substreams
+             * layout is a superset of the target layout.
+             *
+             * Note: when requesting a layout with fewer channels than a given substream's
+             * layout but more channels than the previous substream, libavcodec's decoder
+             * will give us the substream with more channels, so we don't have to worry
+             * about having to accidentally upmix in hb_audio_resample down the line.
+             * For example input with embedded stereo and 5.1(side) then finally 7.1,
+             * and a downmix channel layout of, say, "3.1" (from an imaginary future
+             * HB mixdown), the decoder would give us "5.1(side)" rather than stereo.
+             */
+            if (mask == (mask & input_layout_mask))
+            {
+                return mask;
+            }
+        }
+    }
+    return 0;
+}
+
+static char* channel_layout_name_from_mask(uint64_t mask, char *buf, size_t size)
+{
+    AVChannelLayout layout = { 0 };
+    if (av_channel_layout_from_mask(&layout, mask) == 0 &&
+        av_channel_layout_describe(&layout, buf, size) > 0)
+    {
+        av_channel_layout_uninit(&layout);
+        return buf;
+    }
+    av_channel_layout_uninit(&layout);
+    return NULL;
+}
 
 /***********************************************************************
  * hb_work_decavcodec_init
@@ -227,64 +421,57 @@ static int decavcodecaInit( hb_work_object_t * w, hb_job_t * job )
             hb_error("decavcodecaInit: hb_audio_resample_init() failed");
             return 1;
         }
+
         /*
-         * Some audio decoders can downmix using embedded coefficients,
-         * or dedicated audio substreams for a specific channel layout.
+         * Audio decoder downmix.
          *
-         * But some will e.g. use normalized mix coefficients unconditionally,
-         * so we need to make sure this matches what the user actually requested.
+         * Some codecs (e.g. truehd) contain embedded downmixes for multiple layouts.
+         * Others (e.g. ac3/eac3, dca) contain embedded downmix coefficients instead.
+         *
+         * When applicable, configure corresponding decoder to peform the required downmix.
          */
-        int avcodec_downmix = 0;
+        char mixname[256];
+        char *downmix = NULL;
+        uint64_t downmix_mask = 0;
+        const char *dmix_mode = NULL;
         switch (w->codec_param)
         {
             case AV_CODEC_ID_AC3:
             case AV_CODEC_ID_EAC3:
-                avcodec_downmix = w->audio->config.out.normalize_mix_level == 0;
+                downmix_mask = ac3_downmix_mask(w->audio->config.out.mixdown,
+                                                w->audio->config.out.normalize_mix_level,
+                                                w->audio->config.in.channel_layout, &dmix_mode);
                 break;
+
             case AV_CODEC_ID_DTS:
-                avcodec_downmix = w->audio->config.out.normalize_mix_level == 0;
+                downmix_mask = dca_downmix_mask(w->audio->config.out.mixdown,
+                                                w->audio->config.out.normalize_mix_level,
+                                                w->audio->config.in.channel_layout);
                 break;
+
             case AV_CODEC_ID_TRUEHD:
-                avcodec_downmix = (w->audio->config.out.normalize_mix_level == 0     ||
-                                   w->audio->config.out.mixdown == HB_AMIXDOWN_MONO  ||
-                                   w->audio->config.out.mixdown == HB_AMIXDOWN_DOLBY ||
-                                   w->audio->config.out.mixdown == HB_AMIXDOWN_DOLBYPLII);
+                downmix_mask = truehd_downmix_mask(w->audio->config.out.mixdown,
+                                                   w->audio->config.out.normalize_mix_level,
+                                                   w->audio->config.in.channel_layout);
                 break;
+
             default:
                 break;
         }
-        if (avcodec_downmix)
+        if (downmix_mask)
         {
-            switch (w->audio->config.out.mixdown)
-            {
-                // request 5.1 before downmixing to dpl1/dpl2
-                case HB_AMIXDOWN_DOLBY:
-                case HB_AMIXDOWN_DOLBYPLII:
-                {
-                    av_dict_set(&av_opts, "downmix", "5.1(side)", 0);
-                    break;
-                }
-                // request the layout corresponding to the selected mixdown
-                default:
-                {
-                    char description[256];
-                    AVChannelLayout ch_layout = {0};
-                    av_channel_layout_from_mask(&ch_layout, hb_ff_mixdown_xlat(w->audio->config.out.mixdown, NULL));
-                    av_channel_layout_describe(&ch_layout, description, sizeof(description));
-                    av_channel_layout_uninit(&ch_layout);
-                    av_dict_set(&av_opts, "downmix", description, 0);
-                    break;
-                }
-            }
+            downmix = channel_layout_name_from_mask(downmix_mask, mixname, sizeof(mixname));
         }
-    }
-
-    // libavcodec can't decode TrueHD Mono (bug #356)
-    // work around it by requesting Stereo and downmixing
-    if (w->codec_param                     == AV_CODEC_ID_TRUEHD &&
-        w->audio->config.in.channel_layout == AV_CH_LAYOUT_MONO)
-    {
-        av_dict_set(&av_opts, "downmix", "stereo", 0);
+        if (dmix_mode)
+        {
+            av_dict_set(&av_opts, "dmix_mode", dmix_mode, 0);
+        }
+        if (downmix)
+        {
+            pv->downmix_mask = downmix_mask;
+            av_dict_set(&av_opts, "downmix", downmix, 0);
+            hb_log("decavcodec: requesting decoder downmix '%s' for track %d", downmix, w->audio->config.out.track);
+        }
     }
 
     // Dynamic Range Compression
@@ -331,14 +518,6 @@ static int decavcodecaInit( hb_work_object_t * w, hb_job_t * job )
     }
     pv->context->pkt_timebase.num = pv->audio->config.in.timebase.num;
     pv->context->pkt_timebase.den = pv->audio->config.in.timebase.den;
-
-    // libavcodec can't decode TrueHD Mono (bug #356)
-    // work around it by requesting Stereo and downmixing
-    if (w->codec_param                     == AV_CODEC_ID_TRUEHD &&
-        w->audio->config.in.channel_layout == AV_CH_LAYOUT_MONO)
-    {
-        pv->context->ch_layout = (AVChannelLayout)AV_CHANNEL_LAYOUT_STEREO;
-    }
 
     // avcodec_open populates av_opts with the things it didn't recognize.
     AVDictionaryEntry *t = NULL;
@@ -389,6 +568,7 @@ static void closePrivData( hb_work_private_t ** ppv )
                     pv->context->codec->name, pv->nframes, pv->decode_errors);
         }
         av_frame_free(&pv->frame);
+        av_frame_free(&pv->hw_frame);
         close_video_filters(pv);
         if ( pv->parser )
         {
@@ -413,9 +593,7 @@ static void closePrivData( hb_work_private_t ** ppv )
             //if (!(pv->qsv.decode && pv->job != NULL && (pv->job->vcodec & HB_VCODEC_QSV_MASK)))
             hb_qsv_uninit_dec(pv->context);
 #endif
-            {
-                hb_avcodec_free_context(&pv->context);
-            }
+            hb_avcodec_free_context(&pv->context);
         }
         if ( pv->context )
         {
@@ -598,6 +776,11 @@ static int parse_adts_extradata( hb_audio_t * audio, AVCodecContext * context,
     AVBSFContext            * ctx = NULL;
     int                       ret;
 
+    if (audio == NULL)
+    {
+        return 1;
+    }
+
     bsf = av_bsf_get_by_name("aac_adtstoasc");
     ret = av_bsf_alloc(bsf, &ctx);
     if (ret < 0)
@@ -728,7 +911,7 @@ static int decavcodecaBSInfo( hb_work_object_t *w, const hb_buffer_t *buf,
         parse_pos = 0;
         while (parse_pos < buf->size && !done)
         {
-            int parse_len, truehd_mono = 0, ret;
+            int parse_len, ret;
 
             if (parser != NULL)
             {
@@ -749,20 +932,11 @@ static int decavcodecaBSInfo( hb_work_object_t *w, const hb_buffer_t *buf,
                 continue;
             }
 
-            // libavcodec can't decode TrueHD Mono (bug #356)
-            // work around it by requesting Stereo before decoding
-            if (context->codec_id == AV_CODEC_ID_TRUEHD &&
-                context->ch_layout.u.mask == AV_CH_LAYOUT_MONO)
-            {
-                truehd_mono                     = 1;
-                AVChannelLayout ch_layout = AV_CHANNEL_LAYOUT_STEREO;
-                av_opt_set_chlayout(context, "downmix", &ch_layout, AV_OPT_SEARCH_CHILDREN);
-                context->ch_layout = ch_layout;
-            }
-
             AVPacket *avp = av_packet_alloc();
             avp->data = parse_buffer;
             avp->size = parse_buffer_size;
+            avp->pts  = buf->s.start;
+            avp->dts  = AV_NOPTS_VALUE;
 
             ret = avcodec_send_packet(context, avp);
             if (ret < 0 && ret != AVERROR_EOF)
@@ -812,34 +986,42 @@ static int decavcodecaBSInfo( hb_work_object_t *w, const hb_buffer_t *buf,
                         }
                     }
 
-                    if (truehd_mono)
+                    AVFrameSideData *side_data;
+                    if ((side_data =
+                         av_frame_get_side_data(frame,
+                                                AV_FRAME_DATA_MATRIXENCODING)) != NULL)
                     {
-                        info->channel_layout = AV_CH_LAYOUT_MONO;
-                        info->matrix_encoding = AV_MATRIX_ENCODING_NONE;
+                        info->matrix_encoding = *side_data->data;
                     }
                     else
                     {
-                        AVFrameSideData *side_data;
-                        if ((side_data =
-                             av_frame_get_side_data(frame,
-                                                    AV_FRAME_DATA_MATRIXENCODING)) != NULL)
-                        {
-                            info->matrix_encoding = *side_data->data;
-                        }
-                        else
-                        {
-                            info->matrix_encoding = AV_MATRIX_ENCODING_NONE;
-                        }
-                        if (info->matrix_encoding == AV_MATRIX_ENCODING_DOLBY ||
-                            info->matrix_encoding == AV_MATRIX_ENCODING_DPLII)
-                        {
-                            info->channel_layout = AV_CH_LAYOUT_STEREO_DOWNMIX;
-                        }
-                        else
-                        {
-                            info->channel_layout = frame->ch_layout.u.mask;
-                        }
+                        info->matrix_encoding = AV_MATRIX_ENCODING_NONE;
                     }
+                    if (info->matrix_encoding == AV_MATRIX_ENCODING_DOLBY ||
+                        info->matrix_encoding == AV_MATRIX_ENCODING_DPLII)
+                    {
+                        /*
+                         * Signal that the input uses matrix encoding via
+                         * channel layout for hb_mixdown_has_remix_support.
+                         * The latter needs this to allow the corresponding
+                         * mixdown for 2-channel matrix stereo input, said
+                         * mixdown being required to signal matrix encoding
+                         * in the *output* (when using e.g. the ac3 encoder).
+                         *
+                         * Quicker/faster than propagating side data all the
+                         * way through the pipeline, but we lose the ability
+                         * to distinguish between different matrix encodings.
+                         *
+                         * Only do this in BSInfo as overriding the layout
+                         * elsewhere could break downmixing, remapping etc.
+                         */
+                        info->channel_layout = AV_CH_LAYOUT_STEREO_DOWNMIX;
+                    }
+                    else
+                    {
+                        info->channel_layout = frame->ch_layout.u.mask;
+                    }
+
                     if (info->channel_layout == 0)
                     {
                         // Channel layout was not set.  Guess a layout based
@@ -979,14 +1161,6 @@ static hb_buffer_t *copy_frame( hb_work_private_t *pv )
         out = hb_avframe_to_video_buffer(pv->frame, (AVRational){1,1});
     }
 
-    // Make sure every frame is tagged.
-    if (out->f.color_prim == HB_COLR_PRI_UNDEF || out->f.color_transfer == HB_COLR_TRA_UNDEF || out->f.color_matrix == HB_COLR_MAT_UNDEF)
-    {
-        out->f.color_prim = pv->title->color_prim;
-        out->f.color_transfer = pv->title->color_transfer;
-        out->f.color_matrix = pv->title->color_matrix;
-    }
-
     if (pv->frame->pts != AV_NOPTS_VALUE)
     {
         reordered = reordered_hash_rem(pv, pv->frame->pts);
@@ -1115,26 +1289,42 @@ static hb_buffer_t *copy_frame( hb_work_private_t *pv )
         }
     }
 
-    // Check for HDR mastering data
-    sd = av_frame_get_side_data(pv->frame, AV_FRAME_DATA_MASTERING_DISPLAY_METADATA);
-    if (sd != NULL)
+    if (!pv->job && pv->title)
     {
-        if (!pv->job && pv->title && sd->size > 0)
+        // Check for HDR mastering data
+        sd = av_frame_get_side_data(pv->frame, AV_FRAME_DATA_MASTERING_DISPLAY_METADATA);
+        if (sd != NULL && sd->size > 0)
         {
             AVMasteringDisplayMetadata *mastering = (AVMasteringDisplayMetadata *)sd->data;
             pv->title->mastering = hb_mastering_ff_to_hb(*mastering);
         }
-    }
 
-    // Check for HDR content light level data
-    sd = av_frame_get_side_data(pv->frame, AV_FRAME_DATA_CONTENT_LIGHT_LEVEL);
-    if (sd != NULL)
-    {
-        if (!pv->job && pv->title && sd->size > 0)
+        // Check for HDR content light level data
+        sd = av_frame_get_side_data(pv->frame, AV_FRAME_DATA_CONTENT_LIGHT_LEVEL);
+        if (sd != NULL && sd->size > 0)
         {
             AVContentLightMetadata *coll = (AVContentLightMetadata *)sd->data;
             pv->title->coll.max_cll = coll->MaxCLL;
             pv->title->coll.max_fall = coll->MaxFALL;
+        }
+
+        // Check for HDR Plus dynamic metadata
+        sd = av_frame_get_side_data(pv->frame, AV_FRAME_DATA_DYNAMIC_HDR_PLUS);
+        if (sd != NULL && sd->size > 0)
+        {
+            pv->title->hdr_10_plus = 1;
+        }
+
+        // Check for Ambient Viewing Environment metadata
+        sd = av_frame_get_side_data(pv->frame, AV_FRAME_DATA_AMBIENT_VIEWING_ENVIRONMENT);
+        if (sd != NULL && sd->size > 0)
+        {
+            if (pv->title->ambient.ambient_illuminance.num == 0 &&
+                pv->title->ambient.ambient_illuminance.den == 0)
+            {
+                AVAmbientViewingEnvironment *ambient = (AVAmbientViewingEnvironment *)sd->data;
+                pv->title->ambient = hb_ambient_ff_to_hb(*ambient);
+            }
         }
     }
 
@@ -1152,6 +1342,20 @@ static const char * get_range_name(int color_range)
             return "full";
     }
     return "limited";
+}
+
+static const char * get_range_name_cuda(int color_range)
+{
+    // Different names for totally no reason
+    switch (color_range)
+    {
+        case AVCOL_RANGE_UNSPECIFIED:
+        case AVCOL_RANGE_MPEG:
+            return "mpeg";
+        case AVCOL_RANGE_JPEG:
+            return "jpeg";
+    }
+    return "mpeg";
 }
 
 int reinit_video_filters(hb_work_private_t * pv)
@@ -1176,7 +1380,7 @@ int reinit_video_filters(hb_work_private_t * pv)
 #endif
     if (!pv->job)
     {
-        // HandBrake's video pipeline uses yuv420 color.  This means all
+        // HandBrake's preview pipeline uses yuv420 color.  This means all
         // dimensions must be even.  So we must adjust the dimensions
         // of incoming video if not even.
         orig_width = pv->context->width & ~1;
@@ -1197,7 +1401,7 @@ int reinit_video_filters(hb_work_private_t * pv)
             orig_width = pv->job->title->geometry.width;
             orig_height = pv->job->title->geometry.height;
         }
-        pix_fmt = pv->job->input_pix_fmt;
+        pix_fmt = pv->job->hw_pix_fmt != AV_PIX_FMT_NONE ? pv->job->hw_pix_fmt : pv->job->input_pix_fmt;
         color_range = pv->job->color_range;
     }
 
@@ -1249,22 +1453,25 @@ int reinit_video_filters(hb_work_private_t * pv)
         {
             hb_dict_set(settings, "w", hb_value_int(orig_width));
             hb_dict_set(settings, "h", hb_value_int(orig_height));
-            hb_avfilter_append_dict(filters, "scale_qsv", settings);
+            hb_avfilter_append_dict(filters, "vpp_qsv", settings);
         }
         else
 #endif
-#if HB_PROJECT_FEATURE_NVENC
-        if (pv->frame->hw_frames_ctx)
+        if (pv->frame->hw_frames_ctx && pv->job->hw_pix_fmt == AV_PIX_FMT_CUDA)
         {
+            if (color_range != pv->frame->color_range)
+            {
+                hb_dict_set_string(settings, "range", get_range_name_cuda(color_range));
+                hb_avfilter_append_dict(filters, "colorspace_cuda", settings);
+                settings = hb_dict_init();
+            }
             hb_dict_set(settings, "w", hb_value_int(orig_width));
             hb_dict_set(settings, "h", hb_value_int(orig_height));
             hb_dict_set(settings, "interp_algo", hb_value_string("lanczos"));
-            hb_dict_set(settings, "format", hb_value_string(av_get_pix_fmt_name(pix_fmt)));
+            hb_dict_set(settings, "format", hb_value_string(av_get_pix_fmt_name(pv->job->input_pix_fmt)));
             hb_avfilter_append_dict(filters, "scale_cuda", settings);
-            filter_init.nv_hw_ctx.hw_frames_ctx = pv->frame->hw_frames_ctx;
         }
-        else
-#endif
+        else if ((pv->frame->width % 2) == 0 && (pv->frame->height % 2) == 0)
         {
             hb_dict_set(settings, "pix_fmts", hb_value_string(av_get_pix_fmt_name(pix_fmt)));
             hb_avfilter_append_dict(filters, "format", settings);
@@ -1275,6 +1482,20 @@ int reinit_video_filters(hb_work_private_t * pv)
             hb_dict_set_string(settings, "filter", "lanczos");
             hb_dict_set_string(settings, "range", get_range_name(color_range));
             hb_avfilter_append_dict(filters, "zscale", settings);
+        }
+        // Fallback to swscale, zscale requires a mod 2 width and height
+        else
+        {
+            hb_dict_set(settings, "w", hb_value_int(orig_width));
+            hb_dict_set(settings, "h", hb_value_int(orig_height));
+            hb_dict_set(settings, "flags", hb_value_string("lanczos+accurate_rnd"));
+            hb_dict_set_string(settings, "in_range", get_range_name(pv->frame->color_range));
+            hb_dict_set_string(settings, "out_range", get_range_name(color_range));
+            hb_avfilter_append_dict(filters, "scale", settings);
+
+            settings = hb_dict_init();
+            hb_dict_set(settings, "pix_fmts", hb_value_string(av_get_pix_fmt_name(pix_fmt)));
+            hb_avfilter_append_dict(filters, "format", settings);
         }
     }
     if (pv->title->rotation != HB_ROTATION_0)
@@ -1303,8 +1524,20 @@ int reinit_video_filters(hb_work_private_t * pv)
         }
     }
 
+    enum AVPixelFormat sw_pix_fmt = pv->frame->format;
+    enum AVPixelFormat hw_pix_fmt = AV_PIX_FMT_NONE;
+
+    AVHWFramesContext *frames_ctx = NULL;
+    if (pv->frame->hw_frames_ctx)
+    {
+        frames_ctx = (AVHWFramesContext *)pv->frame->hw_frames_ctx->data;
+        pix_fmt = frames_ctx->sw_format;
+        hw_pix_fmt = frames_ctx->format;
+    }
+
     filter_init.job               = pv->job;
-    filter_init.pix_fmt           = pv->frame->format;
+    filter_init.pix_fmt           = sw_pix_fmt;
+    filter_init.hw_pix_fmt        = hw_pix_fmt;
     filter_init.geometry.width    = pv->frame->width;
     filter_init.geometry.height   = pv->frame->height;
     filter_init.geometry.par.num  = pv->frame->sample_aspect_ratio.num;
@@ -1332,6 +1565,20 @@ fail:
 
 static void filter_video(hb_work_private_t *pv)
 {
+    // Make sure every frame is tagged
+    if (pv->frame->color_primaries == AVCOL_PRI_UNSPECIFIED ||
+        pv->frame->color_trc       == AVCOL_TRC_UNSPECIFIED ||
+        pv->frame->colorspace      == AVCOL_SPC_UNSPECIFIED)
+    {
+        pv->frame->color_primaries = pv->title->color_prim;
+        pv->frame->color_trc       = pv->title->color_transfer;
+        pv->frame->colorspace      = pv->title->color_matrix;
+    }
+    if (pv->frame->color_range == AVCOL_RANGE_UNSPECIFIED)
+    {
+        pv->frame->color_range = pv->title->color_range;
+    }
+
     reinit_video_filters(pv);
     if (pv->video_filters.graph != NULL)
     {
@@ -1368,6 +1615,12 @@ static int decodeFrame( hb_work_private_t * pv, packet_info_t * packet_info )
     int got_picture = 0, oldlevel = 0, ret;
     AVPacket *avp = pv->pkt;
     reordered_data_t * reordered;
+    AVFrame *recv_frame = pv->frame;
+
+    if (pv->hw_frame)
+    {
+        recv_frame = pv->hw_frame;
+    }
 
     if ( global_verbosity_level <= 1 )
     {
@@ -1427,7 +1680,7 @@ static int decodeFrame( hb_work_private_t * pv, packet_info_t * packet_info )
 
     do
     {
-        ret = avcodec_receive_frame(pv->context, pv->frame);
+        ret = avcodec_receive_frame(pv->context, recv_frame);
         if (ret < 0 && ret != AVERROR(EAGAIN) && ret != AVERROR_EOF)
         {
             ++pv->decode_errors;
@@ -1437,6 +1690,18 @@ static int decodeFrame( hb_work_private_t * pv, packet_info_t * packet_info )
             break;
         }
         got_picture = 1;
+
+        if (pv->hw_frame)
+        {
+            ret = av_hwframe_transfer_data(pv->frame, pv->hw_frame, 0);
+            av_frame_copy_props(pv->frame, pv->hw_frame);
+            av_frame_unref(pv->hw_frame);
+            if (ret < 0)
+            {
+                hb_error("decavcodec: error transferring data to system memory");
+                break;
+            }
+        }
 
         // recompute the frame/field duration, because sometimes it changes
         compute_frame_duration( pv );
@@ -1541,25 +1806,22 @@ static int decavcodecvInit( hb_work_object_t * w, hb_job_t * job )
         return 1;
     }
 
-#if HB_PROJECT_FEATURE_NVENC
-    int use_hw_dec = 0;
-    if (hb_nvdec_is_enabled(job))
-    {
-        use_hw_dec = 1;
-    }
-#endif
-
     pv->context = avcodec_alloc_context3( pv->codec );
     pv->context->workaround_bugs = FF_BUG_AUTODETECT;
     pv->context->err_recognition = AV_EF_CRCCHECK;
     pv->context->error_concealment = FF_EC_GUESS_MVS|FF_EC_DEBLOCK;
 
-#if HB_PROJECT_FEATURE_NVENC
-    if (use_hw_dec)
+    if (pv->job && job->hw_device_ctx)
     {
-        hb_nvdec_hw_ctx_init(pv->context, pv->job);
+        pv->context->get_format = hw_hwaccel_get_hw_format;
+        pv->context->opaque = job;
+        av_buffer_replace(&pv->context->hw_device_ctx, pv->job->hw_device_ctx);
+
+        if (job->hw_pix_fmt == AV_PIX_FMT_NONE && job->hw_decode & HB_DECODE_SUPPORT_FORCE_HW)
+        {
+            pv->hw_frame = av_frame_alloc();
+        }
     }
-#endif
 
     if ( pv->title->opaque_priv )
     {
@@ -1740,12 +2002,13 @@ static int setup_extradata( hb_work_private_t * pv, AVCodecContext * context )
     {
         if (avp->side_data[ii].type == AV_PKT_DATA_NEW_EXTRADATA)
         {
-            context->extradata      = avp->side_data[ii].data;
             context->extradata_size = avp->side_data[ii].size;
-            avp->side_data[ii].data = NULL;
-            avp->side_data[ii].size = 0;
+            context->extradata = av_malloc(context->extradata_size + AV_INPUT_BUFFER_PADDING_SIZE);
+
             if (context->extradata != NULL)
             {
+                memcpy(context->extradata, avp->side_data[ii].data, context->extradata_size);
+                av_packet_unref(avp);
                 return 0;
             }
         }
@@ -1772,18 +2035,6 @@ static int decodePacket( hb_work_object_t * w )
             return HB_WORK_OK;
         }
 
-#if HB_PROJECT_FEATURE_NVENC
-        AVBufferRef *hw_device_ctx = NULL;
-        if (pv->context->hw_device_ctx)
-        {
-            int ret = av_buffer_replace(&hw_device_ctx, pv->context->hw_device_ctx);
-            if (ret < 0)
-            {
-                return HB_WORK_ERROR;
-            }
-        }
-#endif
-
         hb_avcodec_free_context(&pv->context);
         pv->context = context;
 
@@ -1791,17 +2042,14 @@ static int decodePacket( hb_work_object_t * w )
         pv->context->err_recognition   = AV_EF_CRCCHECK;
         pv->context->error_concealment = FF_EC_GUESS_MVS|FF_EC_DEBLOCK;
 
-#if HB_PROJECT_FEATURE_NVENC
-        if (hw_device_ctx)
+        if (pv->job && pv->job->hw_device_ctx)
         {
-            int ret = av_buffer_replace(&pv->context->hw_device_ctx, hw_device_ctx);
-            av_buffer_unref(&hw_device_ctx);
+            int ret = av_buffer_replace(&pv->context->hw_device_ctx, pv->job->hw_device_ctx);
             if (ret < 0)
             {
                 return HB_WORK_ERROR;
             }
         }
-#endif
 
 #if HB_PROJECT_FEATURE_QSV
         if (pv->qsv.decode &&
@@ -2046,7 +2294,7 @@ static void compute_frame_duration( hb_work_private_t *pv )
         // than context->time_base.
         AVFormatContext *ic = (AVFormatContext*)pv->title->opaque_priv;
         AVStream *st = ic->streams[pv->title->video_id];
-        if ( st->nb_frames && st->duration )
+        if (st->nb_frames && st->duration > 0)
         {
             // compute the average frame duration from the total number
             // of frames & the total duration.
@@ -2058,12 +2306,17 @@ static void compute_frame_duration( hb_work_private_t *pv )
         // for raw demuxers.
         else if (ic->iformat->raw_codec_id == AV_CODEC_ID_NONE)
         {
+            AVRational *tb = NULL;
+            // Try r_frame_rate, which is usually set for cfr streams
+            if (st->r_frame_rate.num && st->r_frame_rate.den)
+            {
+                duration = (double)st->r_frame_rate.den / (double)st->r_frame_rate.num;
+            }
             // XXX We don't have a frame count or duration so try to use the
             // far less reliable time base info in the stream.
             // Because the time bases are so screwed up, we only take values
             // in the range 8fps - 64fps.
-            AVRational *tb = NULL;
-            if ( st->avg_frame_rate.den * 64LL > st->avg_frame_rate.num &&
+            else if ( st->avg_frame_rate.den * 64LL > st->avg_frame_rate.num &&
                  st->avg_frame_rate.num > st->avg_frame_rate.den * 8LL )
             {
                 tb = &(st->avg_frame_rate);
@@ -2111,6 +2364,16 @@ static void compute_frame_duration( hb_work_private_t *pv )
         duration = 1001. / 24000.;
     }
     pv->duration = duration * 90000.;
+
+    int clock_min, clock_max, clock;
+    hb_video_framerate_get_limits(&clock_min, &clock_max, &clock);
+    if (pv->duration < 1 / (clock / 90000.))
+    {
+        // Not representable, probably a broken file
+        // use the maximum possible fps
+        pv->duration = 1 / (clock / 90000.);
+    }
+
     pv->field_duration = pv->duration;
     if ( pv->context->ticks_per_frame > 1 )
     {
@@ -2175,16 +2438,22 @@ static int decavcodecvInfo( hb_work_object_t *w, hb_work_info_t *info )
 #if HB_PROJECT_FEATURE_QSV
     if (hb_qsv_available())
     {
-        if (hb_qsv_decode_codec_supported_codec(hb_qsv_get_adapter_index(), pv->context->codec_id, pv->context->pix_fmt, pv->context->width, pv->context->height))
+        if (hb_qsv_decode_is_codec_supported(hb_qsv_get_adapter_index(), pv->context->codec_id, pv->context->pix_fmt, pv->context->width, pv->context->height))
         {
             info->video_decode_support |= HB_DECODE_SUPPORT_QSV;
         }
     }
 #endif
 
-#if HB_PROJECT_FEATURE_NVENC
-    if (hb_check_nvenc_available() && hb_nvdec_available(w->title->video_codec_param)){
+#if HB_PROJECT_FEATURE_NVDEC
+    if (hb_hwaccel_available(w->title->video_codec_param, "cuda"))
+    {
         info->video_decode_support |= HB_DECODE_SUPPORT_NVDEC;
+    }
+#elif defined( __APPLE__ )
+    if (hb_hwaccel_available(w->title->video_codec_param, "videotoolbox"))
+    {
+        info->video_decode_support |= HB_DECODE_SUPPORT_VIDEOTOOLBOX;
     }
 #endif
 
@@ -2233,6 +2502,17 @@ hb_work_object_t hb_decavcodecv =
     .info = decavcodecvInfo,
     .bsinfo = decavcodecvBSInfo
 };
+
+static void log_decoder_downmix_mismatch(uint64_t downmix_mask, uint64_t decoded_mask)
+{
+    char buf[2][256];
+    char *req = channel_layout_name_from_mask(downmix_mask, buf[0], sizeof(buf[0]));
+    char *got = channel_layout_name_from_mask(decoded_mask, buf[1], sizeof(buf[1]));
+    hb_deep_log(2,
+                "decavcodec: requested channel layout '%s' via decoder downmix "
+                "but decoded audio has channel layout '%s' instead",
+                req ? req : "(null)", got ? got : "(null)");
+}
 
 static void decodeAudio(hb_work_private_t *pv, packet_info_t * packet_info)
 {
@@ -2335,6 +2615,11 @@ static void decodeAudio(hb_work_private_t *pv, packet_info_t * packet_info)
                                                  downmix_info->lfe_mix_level);
             }
             channel_layout = pv->frame->ch_layout;
+            if (pv->downmix_mask && pv->downmix_mask != channel_layout.u.mask)
+            {
+                log_decoder_downmix_mismatch(pv->downmix_mask, channel_layout.u.mask);
+                pv->downmix_mask = 0; // don't spam the log
+            }
             if (channel_layout.order != AV_CHANNEL_ORDER_NATIVE || channel_layout.u.mask == 0)
             {
                 AVChannelLayout default_ch_layout;

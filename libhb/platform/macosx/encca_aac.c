@@ -433,10 +433,9 @@ static hb_buffer_t* Encode(hb_work_object_t *w)
     hb_work_private_t *pv = w->private_data;
     UInt32 npackets = 1;
 
-    /* check if we need more data or we have already got to EOF
-       if so, we need to call the audio converter again even
-       without data to get out the remaining packets.
-     */
+    // Check if we need more data or we have already got to EOF
+    // if so, we need to call the audio converter again even
+    // without data to get out the remaining packets.
     if (pv->input_done != 1 &&
         (pv->ibytes = hb_list_bytes(pv->list)) < pv->isamples * pv->isamplesiz)
     {
@@ -485,11 +484,16 @@ static hb_buffer_t* Encode(hb_work_object_t *w)
 
 static void Flush(hb_work_object_t *w, hb_buffer_list_t * list)
 {
-    hb_buffer_t *buf = Encode(w);
-    while (buf)
+    // Nothing to flush if all we got was a EOF
+    if (w->private_data->first_pts == AV_NOPTS_VALUE)
+    {
+        return;
+    }
+
+    hb_buffer_t *buf;
+    while ((buf = Encode(w)))
     {
         hb_buffer_list_append(list, buf);
-        buf = Encode(w);
     }
 }
 
@@ -525,11 +529,9 @@ int encCoreAudioWork(hb_work_object_t *w, hb_buffer_t **buf_in,
     hb_list_add(pv->list, in);
     *buf_in = NULL;
 
-    buf = Encode(w);
-    while (buf)
+    while ((buf = Encode(w)))
     {
         hb_buffer_list_append(&list, buf);
-        buf = Encode(w);
     }
 
     *buf_out = hb_buffer_list_clear(&list);

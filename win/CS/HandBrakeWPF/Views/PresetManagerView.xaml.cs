@@ -9,11 +9,13 @@
 
 namespace HandBrakeWPF.Views
 {
+    using System;
     using System.Windows;
     using System.Windows.Controls;
     using System.Windows.Input;
     using System.Windows.Media;
 
+    using HandBrakeWPF.Helpers;
     using HandBrakeWPF.Services.Presets.Model;
     using HandBrakeWPF.ViewModels;
 
@@ -23,6 +25,12 @@ namespace HandBrakeWPF.Views
         {
             this.InitializeComponent();
             this.Closing += this.PresetManagerView_Closing;
+        }
+
+        protected override void OnSourceInitialized(EventArgs e)
+        {
+            base.OnSourceInitialized(e);
+            WindowHelper.SetDarkMode(this);
         }
 
         private void PresetManagerView_Closing(object sender, System.ComponentModel.CancelEventArgs e)

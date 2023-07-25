@@ -67,11 +67,11 @@ $(PKG.rpm.stamp): $(PKG.native.rpm.stamp)
 #
 $(PKG.gui.manifest.flathub):
 	$(MKDIR.exe) -p $(PKG.out.flatpak/)
-	$(SRC/)scripts/create_flatpak_manifest.py $(FPQSV) $(FPNVENC) -a "$(HB_URL)" -s "$(HB_SHA256)" -t $(PKG.gui.template.flatpak) $(foreach m,$(CONTRIBS),-c "$(word 1,$($m.FETCH.url))" -s "$(word 1,$($m.FETCH.sha256))") $(FPRUNTIME) $(PKG.gui.manifest.flathub)
+	$(SRC/)scripts/create_flatpak_manifest.py $(FPQSV) $(FPNVENC) -a "$(HB_URL)" -s "$(HB_SHA256)" -t $(PKG.gui.template.flatpak) $(foreach m,$(CONTRIBS),-c "$(word 1,$($m.FETCH.url))" -s "$(word 1,$($m.FETCH.sha256))" -b "$(word 1,$($m.FETCH.basename))") $(FPRUNTIME) $(PKG.gui.manifest.flathub)
 
 $(PKG.cli.manifest.flathub):
 	$(MKDIR.exe) -p $(PKG.out.flatpak/)
-	$(SRC/)scripts/create_flatpak_manifest.py $(FPQSV) $(FPNVENC) -a "$(HB_URL)" -s "$(HB_SHA256)" -t $(PKG.cli.template.flatpak) $(foreach m,$(CONTRIBS),-c "$(word 1,$($m.FETCH.url))" -s "$(word 1,$($m.FETCH.sha256))") $(FPRUNTIME) $(PKG.cli.manifest.flathub)
+	$(SRC/)scripts/create_flatpak_manifest.py $(FPQSV) $(FPNVENC) -a "$(HB_URL)" -s "$(HB_SHA256)" -t $(PKG.cli.template.flatpak) $(foreach m,$(CONTRIBS),-c "$(word 1,$($m.FETCH.url))" -s "$(word 1,$($m.FETCH.sha256))" -b "$(word 1,$($m.FETCH.basename))") $(FPRUNTIME) $(PKG.cli.manifest.flathub)
 
 $(PKG.gui.flatpak): GNUmakefile $(PKG.gui.template.flatpak) $(PKG.src.tar.bz2)
 	make contrib.fetch

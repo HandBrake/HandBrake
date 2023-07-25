@@ -12,7 +12,10 @@ namespace HandBrakeWPF.Services
     using System;
     using System.Windows;
 
+    using HandBrakeWPF.Controls;
     using HandBrakeWPF.Helpers;
+    using HandBrakeWPF.Model;
+    using HandBrakeWPF.Utilities;
     using HandBrakeWPF.Views;
 
     using Interfaces;
@@ -23,6 +26,13 @@ namespace HandBrakeWPF.Services
     /// </summary>
     public class ErrorService : IErrorService
     {
+        private readonly IUserSettingService userSettingService;
+
+        public ErrorService(IUserSettingService userSettingService)
+        {
+            this.userSettingService = userSettingService;
+        }
+
         /// <summary>
         /// Show an Exception Error Window
         /// </summary>
@@ -96,6 +106,22 @@ namespace HandBrakeWPF.Services
         /// </returns>
         public MessageBoxResult ShowMessageBox(string message, string header, MessageBoxButton buttons, MessageBoxImage image)
         {
+            DarkThemeMode mode = userSettingService.GetUserSetting<DarkThemeMode>(UserSettingConstants.DarkThemeMode);
+            if (mode == DarkThemeMode.Dark || (mode == DarkThemeMode.System && SystemInfo.IsAppsUsingDarkTheme()))
+            {
+                MessageBoxWindow window = new MessageBoxWindow();
+                window.Setup(header, message, buttons, image);
+                if (Application.Current.MainWindow != null && Application.Current.MainWindow.IsActive)
+                {
+                    window.Owner = Application.Current.MainWindow;
+                    window.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+                }
+            
+                window.ShowDialog();
+
+                return window.MessageBoxResult;
+            }
+
             return MessageBox.Show(message, header, buttons, image);
         }
     }

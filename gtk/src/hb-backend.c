@@ -35,7 +35,7 @@
 #include "subtitlehandler.h"
 #include "audiohandler.h"
 #include "videohandler.h"
-#include "queuehandler.h"
+#include "title-add.h"
 #include "preview.h"
 #include "presets.h"
 #include "values.h"
@@ -167,19 +167,6 @@ combo_opts_t log_longevity_opts =
 {
     sizeof(d_log_longevity_opts)/sizeof(options_map_t),
     d_log_longevity_opts
-};
-
-static options_map_t d_appcast_update_opts[] =
-{
-    {N_("Never"),   "never",   0},
-    {N_("Daily"),   "daily",   1},
-    {N_("Weekly"),  "weekly",  2},
-    {N_("Monthly"), "monthly", 3},
-};
-combo_opts_t appcast_update_opts =
-{
-    sizeof(d_appcast_update_opts)/sizeof(options_map_t),
-    d_appcast_update_opts
 };
 
 static options_map_t d_vqual_granularity_opts[] =
@@ -614,6 +601,12 @@ combo_name_map_t combo_name_map[] =
         generic_opt_get
     },
     {
+        "MainWhenComplete",
+        &when_complete_opts,
+        small_opts_set,
+        generic_opt_get
+    },
+    {
         "QueueWhenComplete",
         &when_complete_opts,
         small_opts_set,
@@ -634,12 +627,6 @@ combo_name_map_t combo_name_map[] =
     {
         "LogLongevity",
         &log_longevity_opts,
-        small_opts_set,
-        generic_opt_get
-    },
-    {
-        "check_updates",
-        &appcast_update_opts,
         small_opts_set,
         generic_opt_get
     },
@@ -988,7 +975,7 @@ del_tree(const gchar *name, gboolean del_top)
 }
 
 const gchar*
-ghb_version()
+ghb_version (void)
 {
     return hb_get_version(NULL);
 }
@@ -1014,8 +1001,8 @@ ghb_vquality_default(signal_user_data_t *ud)
     case HB_VCODEC_FFMPEG_MPEG2:
     case HB_VCODEC_FFMPEG_MPEG4:
         return 3;
-    case HB_VCODEC_FFMPEG_SVT_AV1_8BIT:
-    case HB_VCODEC_FFMPEG_SVT_AV1_10BIT:
+    case HB_VCODEC_SVT_AV1_8BIT:
+    case HB_VCODEC_SVT_AV1_10BIT:
         return 30;
     default:
     {
@@ -1061,7 +1048,7 @@ ghb_vquality_range(
         *digits = 1;
 }
 
-gint
+static gint
 find_opt_entry(const combo_opts_t *opts, const GhbValue *gval)
 {
     gint ii;
@@ -1101,7 +1088,7 @@ find_opt_entry(const combo_opts_t *opts, const GhbValue *gval)
     return opts->count;
 }
 
-const hb_filter_param_t*
+static const hb_filter_param_t*
 find_param_entry(const hb_filter_param_t *param, const GhbValue *gval)
 {
     gint ii;
@@ -1247,7 +1234,7 @@ hb_handle_t* ghb_live_handle(void)
 }
 
 gchar*
-ghb_get_tmp_dir()
+ghb_get_tmp_dir (void)
 {
     return hb_get_temporary_directory();
 }
@@ -1336,7 +1323,7 @@ grey_builder_combo_box_item(GtkBuilder *builder, const gchar *name, gint value, 
 void
 ghb_mix_opts_filter(GtkComboBox *combo, gint acodec)
 {
-    g_debug("ghb_mix_opts_filter()\n");
+    ghb_log_func();
 
     const hb_mixdown_t *mix;
     for (mix = hb_mixdown_get_next(NULL); mix != NULL;
@@ -1350,7 +1337,7 @@ ghb_mix_opts_filter(GtkComboBox *combo, gint acodec)
 static void
 grey_mix_opts(signal_user_data_t *ud, gint acodec, gint64 layout)
 {
-    g_debug("grey_mix_opts()\n");
+    ghb_log_func();
 
     const hb_mixdown_t *mix;
     for (mix = hb_mixdown_get_next(NULL); mix != NULL;
@@ -1463,7 +1450,7 @@ ghb_init_combo_box(GtkComboBox *combo)
     GtkListStore *store;
     GtkCellRenderer *cell;
 
-    g_debug("ghb_init_combo_box()\n");
+    ghb_log_func();
     // First modify the combobox model to allow greying out of options
     if (combo == NULL)
         return;
@@ -1498,7 +1485,7 @@ init_combo_box(GtkBuilder *builder, const gchar *name)
 {
     GtkComboBox *combo;
 
-    g_debug("init_combo_box() %s\n", name);
+    ghb_log_func_str(name);
     // First modify the combobox model to allow greying out of options
     combo = GTK_COMBO_BOX(GHB_WIDGET(builder, name));
     ghb_init_combo_box(combo);
@@ -2160,8 +2147,21 @@ srt_codeset_opts_set(signal_user_data_t *ud, const gchar *name,
                            -1);
     }
 }
-
-extern G_MODULE_EXPORT void combo_search_key_press_cb(void);
+#if GTK_CHECK_VERSION(4, 4, 0)
+extern G_MODULE_EXPORT gboolean
+combo_search_key_press_cb(
+    GtkEventControllerKey * keycon,
+    guint                   keyval,
+    guint                   keycode,
+    GdkModifierType         state,
+    signal_user_data_t    * ud);
+#else
+extern G_MODULE_EXPORT gboolean
+combo_search_key_press_cb(
+    GtkWidget *widget,
+    GdkEvent *event,
+    signal_user_data_t *ud);
+#endif
 
 static void
 language_opts_set(signal_user_data_t *ud, const gchar *name,
@@ -2196,10 +2196,10 @@ language_opts_set(signal_user_data_t *ud, const gchar *name,
                            -1);
         g_free(lang);
     }
-#if !GTK_CHECK_VERSION(3, 90, 0)
+#if !GTK_CHECK_VERSION(4, 4, 0)
     // This is handled by GtkEventControllerKey in gtk4
     // Initialized in ghb_combo_init()
-    g_signal_connect(combo, "key-press-event", combo_search_key_press_cb, ud);
+    g_signal_connect(combo, "key-press-event", G_CALLBACK(combo_search_key_press_cb), ud);
 #endif
 }
 
@@ -2454,37 +2454,31 @@ title_opts_set(signal_user_data_t *ud, const gchar *name,
     }
     if( count <= 0 )
     {
-        char *opt;
-
         // No titles.  Fill in a default.
         gtk_list_store_append(store, &iter);
-        opt = g_strdup_printf("<small>%s</small>", _("No Titles"));
         gtk_list_store_set(store, &iter,
-                           0, opt,
+                           0, _("No Titles"),
                            1, TRUE,
                            2, "none",
                            3, -1.0,
                            -1);
-        g_free(opt);
         return;
     }
     for (ii = 0; ii < count; ii++)
     {
-        char *title_opt, *title_index, *opt;
+        char *title_opt, *title_index;
 
         title = hb_list_item(list, ii);
         title_opt = ghb_create_title_label(title);
-        opt = g_strdup_printf("<small>%s</small>", title_opt);
         title_index = g_strdup_printf("%d", title->index);
 
         gtk_list_store_append(store, &iter);
         gtk_list_store_set(store, &iter,
-                           0, opt,
+                           0, title_opt,
                            1, TRUE,
                            2, title_index,
                            3, (gdouble)title->index,
                            -1);
-        g_free(opt);
         g_free(title_opt);
         g_free(title_index);
     }
@@ -2513,7 +2507,7 @@ lookup_title_index(hb_handle_t *h, int title_id)
     return -1;
 }
 
-const hb_title_t*
+static const hb_title_t*
 lookup_title(hb_handle_t *h, int title_id, int *index)
 {
     int ii = lookup_title_index(h, title_id);
@@ -2827,14 +2821,14 @@ subtitle_track_opts_set(signal_user_data_t *ud, const gchar *name,
 
 // Get title id of feature or longest title
 gint
-ghb_longest_title()
+ghb_longest_title (void)
 {
     hb_title_set_t * title_set;
     const hb_title_t * title;
     gint count = 0, ii, longest = -1;
     int64_t duration = 0;
 
-    g_debug("ghb_longest_title ()\n");
+    ghb_log_func();
     if (h_scan == NULL) return 0;
     title_set = hb_get_title_set( h_scan );
     count = hb_list_count( title_set->list_title );
@@ -2859,7 +2853,7 @@ ghb_get_source_audio_lang(const hb_title_t *title, gint track)
     hb_audio_config_t * audio;
     const gchar *lang = "und";
 
-    g_debug("ghb_lookup_1st_audio_lang ()\n");
+    ghb_log_func();
     if (title == NULL)
         return lang;
     if (hb_list_count( title->list_audio ) <= track)
@@ -3038,7 +3032,7 @@ sharpen_opts_set(signal_user_data_t *ud, const gchar *name,
                                   "sharpen", opts->filter_id);
 }
 
-combo_name_map_t*
+static combo_name_map_t*
 find_combo_map(const gchar *name)
 {
     gint ii;
@@ -3053,7 +3047,7 @@ find_combo_map(const gchar *name)
     return NULL;
 }
 
-combo_opts_t*
+static combo_opts_t*
 find_combo_opts(const gchar *name)
 {
     combo_name_map_t *entry = find_combo_map(name);
@@ -3380,7 +3374,7 @@ ghb_audio_bitrate_opts_filter(
     gdouble ivalue;
     gboolean done = FALSE;
 
-    g_debug("audio_bitrate_opts_filter ()\n");
+    ghb_log_func();
     store = GTK_LIST_STORE(gtk_combo_box_get_model (combo));
     if (gtk_tree_model_get_iter_first (GTK_TREE_MODEL(store), &iter))
     {
@@ -3509,7 +3503,7 @@ ghb_combo_init(signal_user_data_t *ud)
     // Populate all the combos
     ghb_update_ui_combo_box(ud, NULL, NULL, TRUE);
 
-#if GTK_CHECK_VERSION(3, 90, 0)
+#if GTK_CHECK_VERSION(4, 4, 0)
     GtkWidget          * combo;
     GtkEventController * econ;
 
@@ -3541,7 +3535,7 @@ ghb_log_level_set(int level)
 }
 
 void
-ghb_backend_close()
+ghb_backend_close (void)
 {
     if (h_live != NULL)
         hb_close(&h_live);
@@ -3552,7 +3546,7 @@ ghb_backend_close()
     hb_global_close();
 }
 
-void ghb_backend_scan_stop()
+void ghb_backend_scan_stop (void)
 {
     hb_scan_stop( h_scan );
 }
@@ -3560,7 +3554,7 @@ void ghb_backend_scan_stop()
 void
 ghb_backend_scan(const gchar *path, gint titleindex, gint preview_count, uint64_t min_duration)
 {
-    hb_scan( h_scan, path, titleindex, preview_count, 1, min_duration );
+    hb_scan( h_scan, path, titleindex, preview_count, 1, min_duration, 0, 0, NULL );
     hb_status.scan.state |= GHB_STATE_SCANNING;
     // initialize count and cur to something that won't cause FPE
     // when computing progress
@@ -3574,19 +3568,19 @@ ghb_backend_scan(const gchar *path, gint titleindex, gint preview_count, uint64_
 void
 ghb_backend_queue_scan(const gchar *path, gint titlenum)
 {
-    g_debug("ghb_backend_queue_scan()");
-    hb_scan( h_queue, path, titlenum, -1, 0, 0 );
+    ghb_log_func();
+    hb_scan( h_queue, path, titlenum, -1, 0, 0, 0, 0, NULL );
     hb_status.queue.state |= GHB_STATE_SCANNING;
 }
 
 gint
-ghb_get_scan_state()
+ghb_get_scan_state (void)
 {
     return hb_status.scan.state;
 }
 
 gint
-ghb_get_queue_state()
+ghb_get_queue_state (void)
 {
     return hb_status.queue.state;
 }
@@ -3730,7 +3724,7 @@ update_status(hb_state_t *state, ghb_instance_status_t *status)
 }
 
 void
-ghb_track_status()
+ghb_track_status (void)
 {
     hb_state_t state;
 
@@ -3766,7 +3760,7 @@ ghb_get_subtitle_info(const hb_title_t *title, gint track)
 }
 
 hb_list_t *
-ghb_get_title_list()
+ghb_get_title_list (void)
 {
     if (h_scan == NULL) return NULL;
     return hb_get_titles( h_scan );
@@ -3775,19 +3769,19 @@ ghb_get_title_list()
 gboolean
 ghb_audio_is_passthru(gint acodec)
 {
-    g_debug("ghb_audio_is_passthru () \n");
+    ghb_log_func();
     return (acodec & HB_ACODEC_PASS_FLAG) != 0;
 }
 
 gboolean
 ghb_audio_can_passthru(gint acodec)
 {
-    g_debug("ghb_audio_can_passthru () \n");
+    ghb_log_func();
     return (acodec & HB_ACODEC_PASS_MASK) != 0;
 }
 
 gint
-ghb_get_default_acodec()
+ghb_get_default_acodec (void)
 {
     return HB_ACODEC_FFAAC;
 }
@@ -3869,30 +3863,10 @@ ghb_picture_settings_deps(signal_user_data_t *ud)
     }
 }
 
-void
-ghb_limit_rational( gint *num, gint *den, gint limit )
-{
-    if (*num < limit && *den < limit)
-        return;
-
-    if (*num > *den)
-    {
-        gdouble factor = (double)limit / *num;
-        *num = limit;
-        *den = factor * *den;
-    }
-    else
-    {
-        gdouble factor = (double)limit / *den;
-        *den = limit;
-        *num = factor * *num;
-    }
-}
-
-void
-ghb_apply_pad(GhbValue *settings,
-              const hb_geometry_settings_t * geo,
-                    hb_geometry_t          * result)
+static void
+apply_pad (GhbValue *settings,
+           const hb_geometry_settings_t * geo,
+                 hb_geometry_t          * result)
 {
     gboolean fillwidth, fillheight;
     gint pad[4] = {0,};
@@ -4112,7 +4086,7 @@ ghb_set_scale_settings(signal_user_data_t * ud, GhbValue *settings, gint mode)
 
     uiGeo.maxWidth  = ghb_dict_get_int(settings, "PictureWidth");
     uiGeo.maxHeight = ghb_dict_get_int(settings, "PictureHeight");
-    ghb_apply_pad(settings, &uiGeo, &resultGeo);
+    apply_pad(settings, &uiGeo, &resultGeo);
 
     gint disp_width;
 
@@ -4127,6 +4101,10 @@ ghb_set_scale_settings(signal_user_data_t * ud, GhbValue *settings, gint mode)
                                     resultGeo.width, resultGeo.height);
     ghb_ui_update(ud, "final_storage_size", ghb_string_value(storage_size));
     g_free(storage_size);
+
+    if (ghb_check_name_template(ud, "{width}") ||
+        ghb_check_name_template(ud, "{height}"))
+        ghb_set_destination(ud);
 
     char * aspect;
     aspect = ghb_get_display_aspect_string(disp_width, resultGeo.height);
@@ -4477,7 +4455,7 @@ ghb_validate_video(GhbValue *settings, GtkWindow *parent)
         v_unsup = TRUE;
     }
     else if ((mux->format & HB_MUX_MASK_WEBM) &&
-             (vcodec != HB_VCODEC_FFMPEG_VP8 && vcodec != HB_VCODEC_FFMPEG_VP9 && vcodec != HB_VCODEC_FFMPEG_VP9_10BIT && vcodec != HB_VCODEC_FFMPEG_SVT_AV1 && vcodec != HB_VCODEC_FFMPEG_SVT_AV1_10BIT))
+             (vcodec != HB_VCODEC_FFMPEG_VP8 && vcodec != HB_VCODEC_FFMPEG_VP9 && vcodec != HB_VCODEC_FFMPEG_VP9_10BIT && vcodec != HB_VCODEC_SVT_AV1 && vcodec != HB_VCODEC_SVT_AV1_10BIT))
     {
         // webm only supports vp8, vp9 and av1.
         message = g_strdup_printf(
@@ -4489,7 +4467,7 @@ ghb_validate_video(GhbValue *settings, GtkWindow *parent)
 
     if (v_unsup)
     {
-        if (!ghb_message_dialog(parent, GTK_MESSAGE_WARNING,
+        if (!ghb_message_dialog(parent, GTK_MESSAGE_QUESTION,
                                 message, _("Cancel"), _("Continue")))
         {
             g_free(message);
@@ -4586,7 +4564,7 @@ ghb_validate_subtitles(GhbValue *settings, GtkWindow *parent)
                 _("SRT file does not exist or not a regular file.\n\n"
                     "You should choose a valid file.\n"
                     "If you continue, this subtitle will be ignored."));
-                if (!ghb_message_dialog(parent, GTK_MESSAGE_WARNING, message,
+                if (!ghb_message_dialog(parent, GTK_MESSAGE_QUESTION, message,
                     _("Cancel"), _("Continue")))
                 {
                     g_free(message);
@@ -4647,7 +4625,7 @@ ghb_validate_audio(GhbValue *settings, GtkWindow *parent)
                         _("The source does not support Pass-Thru.\n\n"
                         "You should choose a different audio codec.\n"
                         "If you continue, one will be chosen for you."));
-            if (!ghb_message_dialog(parent, GTK_MESSAGE_WARNING,
+            if (!ghb_message_dialog(parent, GTK_MESSAGE_QUESTION,
                                     message, _("Cancel"), _("Continue")))
             {
                 g_free(message);
@@ -4702,7 +4680,7 @@ ghb_validate_audio(GhbValue *settings, GtkWindow *parent)
                         _("%s is not supported in the %s container.\n\n"
                         "You should choose a different audio codec.\n"
                         "If you continue, one will be chosen for you."), a_unsup, mux_s);
-            if (!ghb_message_dialog(parent, GTK_MESSAGE_WARNING,
+            if (!ghb_message_dialog(parent, GTK_MESSAGE_QUESTION,
                                     message, _("Cancel"), _("Continue")))
             {
                 g_free(message);
@@ -4747,45 +4725,45 @@ ghb_remove_job(gint unique_id)
 }
 
 void
-ghb_start_queue()
+ghb_start_queue (void)
 {
     hb_start( h_queue );
 }
 
 void
-ghb_stop_queue()
+ghb_stop_queue (void)
 {
     hb_stop( h_queue );
 }
 
 void
-ghb_start_live_encode()
+ghb_start_live_encode (void)
 {
     hb_start( h_live );
 }
 
 void
-ghb_stop_live_encode()
+ghb_stop_live_encode (void)
 {
     hb_stop( h_live );
 }
 
 void
-ghb_pause_queue()
+ghb_pause_queue (void)
 {
     hb_status.queue.state |= GHB_STATE_PAUSED;
     hb_pause( h_queue );
 }
 
 void
-ghb_resume_queue()
+ghb_resume_queue (void)
 {
     hb_status.queue.state &= ~GHB_STATE_PAUSED;
     hb_resume( h_queue );
 }
 
 void
-ghb_pause_resume_queue()
+ghb_pause_resume_queue (void)
 {
     hb_state_t s;
     hb_get_state2( h_queue, &s );
@@ -4878,4 +4856,41 @@ ghb_dvd_volname(const gchar *device)
         return name;
     }
     return NULL;
+}
+
+const gchar *ghb_get_filter_name (hb_filter_object_t *filter)
+{
+    switch (filter->id)
+    {
+        case HB_FILTER_COMB_DETECT:
+            return _("Comb Detect");
+        case HB_FILTER_DETELECINE:
+            return _("Detelecine");
+        case HB_FILTER_YADIF:
+            return _("Deinterlace (Yadif)");
+        case HB_FILTER_BWDIF:
+            return _("Deinterlace (Bwdif)");
+        case HB_FILTER_DECOMB:
+            return _("Decomb");
+        case HB_FILTER_DEBLOCK:
+            return _("Deblock");
+        case HB_FILTER_NLMEANS:
+            return _("Denoise (NLMeans)");
+        case HB_FILTER_HQDN3D:
+            return _("Denoise (HQDN3D)");
+        case HB_FILTER_CHROMA_SMOOTH:
+            return _("Chroma Smooth");
+        case HB_FILTER_UNSHARP:
+            return _("Sharpen (Unsharp)");
+        case HB_FILTER_ROTATE:
+            return _("Rotate");
+        case HB_FILTER_LAPSHARP:
+            return _("Sharpen (lapsharp)");
+        case HB_FILTER_GRAYSCALE:
+            return _("Grayscale");
+        case HB_FILTER_COLORSPACE:
+            return _("Colorspace");
+        default:
+            return filter->name;
+    }
 }

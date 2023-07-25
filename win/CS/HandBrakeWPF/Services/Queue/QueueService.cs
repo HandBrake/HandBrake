@@ -114,6 +114,8 @@ namespace HandBrakeWPF.Services.Queue
             }
         }
 
+        public int ActiveJobCount => this.activeJobs.Count;
+
         public int ErrorCount
         {
             get
@@ -140,8 +142,9 @@ namespace HandBrakeWPF.Services.Queue
             lock (QueueLock)
             {
                 this.queue.Add(job);
-                this.InvokeQueueChanged(EventArgs.Empty);
             }
+
+            this.InvokeQueueChanged(EventArgs.Empty);
         }
 
         public void Add(List<QueueTask> tasks)
@@ -152,9 +155,9 @@ namespace HandBrakeWPF.Services.Queue
                 {
                     this.queue.Add(job);
                 }
-               
-                this.InvokeQueueChanged(EventArgs.Empty);
             }
+
+            this.InvokeQueueChanged(EventArgs.Empty);
         }
 
         public void BackupQueue(string exportPath)
@@ -372,9 +375,9 @@ namespace HandBrakeWPF.Services.Queue
             {
                 foreach (QueueTask task in this.Queue)
                 {
-                    if (!string.IsNullOrEmpty(task.Statistics.CompletedActivityLogPath))
+                    if (!string.IsNullOrEmpty(task.Statistics?.CompletedActivityLogPath))
                     {
-                        logPaths.Add(task.Statistics.CompletedActivityLogPath);
+                        logPaths.Add(task.Statistics?.CompletedActivityLogPath);
                     }
                 }
             }
@@ -441,8 +444,14 @@ namespace HandBrakeWPF.Services.Queue
                 }
 
                 this.queue.Remove(job);
-                this.InvokeQueueChanged(EventArgs.Empty);
+
+                if (this.activeJobs.Count == 0 && this.IsPaused)
+                {
+                    this.IsPaused = false;
+                }
             }
+
+            this.InvokeQueueChanged(EventArgs.Empty);
         }
 
         public void RestoreQueue(string importPath)
@@ -529,6 +538,8 @@ namespace HandBrakeWPF.Services.Queue
             this.allowedInstances = this.userSettingService.GetUserSetting<int>(UserSettingConstants.SimultaneousEncodes);
             this.processIsolationEnabled = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.ProcessIsolationEnabled);
 
+            this.IsProcessing = true;
+
             // Unpause all active jobs.
             foreach (ActiveJob job in this.activeJobs)
             {
@@ -537,7 +548,6 @@ namespace HandBrakeWPF.Services.Queue
             }
 
             this.ProcessNextJob();
-            this.IsProcessing = true;
         }
 
         public void Stop(bool stopExistingJobs)
@@ -576,24 +586,30 @@ namespace HandBrakeWPF.Services.Queue
 
         public List<QueueProgressStatus> GetQueueProgressStatus()
         {
-            // TODO make thread safe. 
             List<QueueProgressStatus> statuses = new List<QueueProgressStatus>();
-            foreach (ActiveJob job in this.activeJobs)
-            {
-                statuses.Add(job.Job.JobProgress);
-            }
-
+            ThreadHelper.OnUIThread(
+                () =>
+                {
+                    foreach (ActiveJob job in this.activeJobs)
+                    {
+                        statuses.Add(job.Job.JobProgress);
+                    }
+                });
             return statuses;
         }
 
         public List<string> GetActiveJobDestinationDirectories()
         {
-            // TODO need to make thread safe.
             List<string> directories = new List<string>();
-            foreach (ActiveJob job in this.activeJobs)
-            {
-                directories.Add(job.Job.Task.Destination);
-            }
+
+            ThreadHelper.OnUIThread(
+                () =>
+                {
+                    foreach (ActiveJob job in this.activeJobs)
+                    {
+                        directories.Add(job.Job.Task.Destination);
+                    }
+                });
 
             return directories;
         }
@@ -614,8 +630,6 @@ namespace HandBrakeWPF.Services.Queue
                 {
                     this.queue.Insert(foundIndex, new QueueTask(QueueTaskType.Breakpoint));
                 }
-
-                this.IsProcessing = false;
             }
         }
 
@@ -709,10 +723,7 @@ namespace HandBrakeWPF.Services.Queue
                 
                 activeJob.Start();
 
-                if (!this.QueueContainsStop())
-                {
-                    this.IsProcessing = true;
-                }
+                this.IsProcessing = true;
 
                 this.InvokeQueueChanged(EventArgs.Empty);
                 this.InvokeJobProcessingStarted(new QueueProgressEventArgs(job));
@@ -741,7 +752,8 @@ namespace HandBrakeWPF.Services.Queue
         {
             this.hardwareResourceManager.ReleaseToken(e.Job.Job.Task.VideoEncoder, e.Job.Job.TaskToken);
 
-            this.activeJobs.Remove(e.Job);
+            ThreadHelper.OnUIThread(() => this.activeJobs.Remove(e.Job));
+
             this.OnEncodeCompleted(e.EncodeEventArgs);
 
             this.InvokeQueueChanged(EventArgs.Empty);
@@ -812,13 +824,14 @@ namespace HandBrakeWPF.Services.Queue
 
                 // Remove the Breakpoint
                 ThreadHelper.OnUIThread(() => this.queue.Remove(task));
-
-                this.IsProcessing = false;
-                this.IsPaused = false;
-
-                // Setting the flag will allow or prevent the when done actions to be processed. 
-                this.InvokeQueueCompleted(new QueueCompletedEventArgs(false)); 
             }
+
+
+            this.IsProcessing = false;
+            this.IsPaused = false;
+
+            // Setting the flag will allow or prevent the when done actions to be processed. 
+            this.InvokeQueueCompleted(new QueueCompletedEventArgs(false));
         }
 
         private void RemoveBreakPoints()

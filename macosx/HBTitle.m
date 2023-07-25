@@ -346,13 +346,26 @@ fail:
 
     NSString *dynamicRange = @"SDR";
 
-    if (_hb_title->mastering.has_primaries && _hb_title->mastering.has_luminance)
+    if (_hb_title->hdr_10_plus)
+    {
+        dynamicRange = @"HDR10+";
+    }
+    else if (_hb_title->mastering.has_primaries && _hb_title->mastering.has_luminance)
     {
         dynamicRange = @"HDR10";
     }
     else if (_hb_title->color_transfer == 16 || _hb_title->color_transfer == 18)
     {
         dynamicRange = @"HDR";
+    }
+
+    if (_hb_title->dovi.dv_profile && _hb_title->hdr_10_plus)
+    {
+        dynamicRange = [NSString stringWithFormat:@"Dolby Vision %d.%d HDR10+", _hb_title->dovi.dv_profile, _hb_title->dovi.dv_bl_signal_compatibility_id];
+    }
+    else if (_hb_title->dovi.dv_profile)
+    {
+        dynamicRange = [NSString stringWithFormat:@"Dolby Vision %d.%d", _hb_title->dovi.dv_profile, _hb_title->dovi.dv_bl_signal_compatibility_id];
     }
 
     [format appendFormat:@", %@ (", dynamicRange];

@@ -169,6 +169,9 @@
 /* Class = "NSPopUpButton"; ibShadowedToolTip = "Audio sample rate in kilohertz (kHz). Auto is recommended."; ObjectID = "r80-yv-59n"; */
 "r80-yv-59n.ibShadowedToolTip" = "Taxa de amostra de áudio em kilohertz (kHz). Auto é recomendado.";
 
+/* Class = "NSButton"; ibShadowedToolTip = "Enable this if your playback device supports Opus. This permits Opus passthru to be selected when automatic passthru selecion is enabled."; ObjectID = "Ry1-gA-ns4"; */
+"Ry1-gA-ns4.ibShadowedToolTip" = "Habilite isso se o dispositivo de reprodução suportar Opus. Isso permite que o Opus passthru seja selecionado quando o passthru automático estiver ativado.";
+
 /* Class = "NSTextFieldCell"; title = "Auto Passthru:"; ObjectID = "s6s-EH-5CB"; */
 "s6s-EH-5CB.title" = "Auto Passthru:";
 
@@ -195,6 +198,9 @@
 
 /* Class = "NSButton"; ibShadowedToolTip = "Enable this if your playback device supports MP3. This permits MP3 passthru to be selected when automatic passthru selecion is enabled."; ObjectID = "vUx-OV-W5T"; */
 "vUx-OV-W5T.ibShadowedToolTip" = "Habilite isso se o dispositivo de reprodução suportar MP3. Isso permite que o MP3 passthru seja selecionado quando o passthru automático estiver ativado.";
+
+/* Class = "NSButtonCell"; title = "Opus"; ObjectID = "wAh-LS-JzG"; */
+"wAh-LS-JzG.title" = "Opus";
 
 /* Class = "NSTextFieldCell"; title = "Table View Cell"; ObjectID = "XKL-2e-Dlv"; */
 "XKL-2e-Dlv.title" = "Célula de Exibição da Tabela";

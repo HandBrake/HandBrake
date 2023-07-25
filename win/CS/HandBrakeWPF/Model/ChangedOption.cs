@@ -10,6 +10,8 @@ namespace HandBrakeWPF.Model
     {
         None,
         Quality,
-        Bitrate
+        Bitrate,
+        Encoder,
+        Dimensions
     }
 }

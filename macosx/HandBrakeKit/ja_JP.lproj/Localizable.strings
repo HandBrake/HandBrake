@@ -4,6 +4,9 @@
 /* HBStateFormatter -> work time format */
 " (%.2f fps, avg %.2f fps, ETA %@)" = " (%1$.2f fps, 平均 %2$.2f fps, 推定残り時間 %3$@)";
 
+/* HBStateFormatter -> work time format */
+" (%.2f fps, avg %.2f fps)" = " (%1$.2f fps, 平均 %2$.2f fps)";
+
 /* HBStateFormatter -> search time format
    HBStateFormatter -> work time format */
 " (ETA %@)" = " (推定残り時間 %@)";
@@ -65,6 +68,9 @@
 /* HBPicture -> short info */
 "%@Output: %dx%d, Anamorphic: %dx%d Custom" = "%1$@出力: %2$dx%3$d, アナモルフィック: %4$dx%5$d カスタム";
 
+/* HBPicture -> short non anamorphic info */
+"%dx%d" = "%1$dx%2$d";
+
 /* HBPicture -> short info */
 "%dx%d Storage, %dx%d Display" = "%1$dx%2$d 格納, %3$dx%4$d 表示";
 
@@ -82,12 +88,6 @@
 
 /* Title description */
 "1 Foreign Language Search Pass - " = "1パス吹き替え字幕スキャン -";
-
-/* Title description */
-"2 Video Passes" = "2パスビデオ";
-
-/* Title description */
-"2 Video Passes First Turbo" = "2パスビデオ 1パス目高速";
 
 /* HBAudio -> Mixdown */
 "5.1 Channels" = "5.1 Channels";
@@ -157,7 +157,8 @@
 /* HBFilters -> filter display name */
 "Decomb" = "Decomb";
 
-/* Subtitles description */
+/* HBFilters -> default display name
+   Subtitles description */
 "Default" = "既定";
 
 /* Video description */
@@ -285,8 +286,11 @@
 /* HBAudio -> Mixdown */
 "Mono (Right Only)" = "モノラル(右のみ)";
 
-/* HBStateFormatter -> pass display name */
-"Muxing…" = "結合中...";
+/* Title description */
+"Multi Passes" = "複数パス";
+
+/* Title description */
+"Multi Passes Turbo" = "複数パスターボ";
 
 /* HBFilters -> filter display name */
 "NLMeans" = "NLMeans";
@@ -346,12 +350,6 @@
 /* Video description */
 "Same as source (variable)" = "ソースと同じ (可変)";
 
-/* HBStateFormatter -> scan pass format */
-"Scanning title %d of %d, preview %d…" = "%2$d 中 %1$d つ目のタイトルをスキャン中, プレビュー %3$d …";
-
-/* HBStateFormatter -> scan pass format */
-"Scanning title %d of %d…" = "%2$d 中 %1$d つ目のタイトルをスキャン中…";
-
 /* HBStateFormatter -> search pass display name */
 "Searching for start point:  %.2f %%" = "開始地点を検索中: %.2f %%";
 
@@ -402,6 +400,10 @@
 
 /* Title description */
 "Title %d, %@, %@" = "タイトル %1$d, %2$@, %3$@";
+
+/* Audio track title description
+   Subtitles track title description */
+"Title: %@" = "タイトル: %@";
 
 /* Video description */
 "Tune: " = "チューニング: ";

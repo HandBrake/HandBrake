@@ -34,6 +34,7 @@ gtk/autom4te.cache
 gtk/compile
 gtk/config.*
 gtk/configure
+gtk/configure~
 gtk/depcomp
 gtk/install-sh
 gtk/ltmain.sh
@@ -41,4 +42,4 @@ gtk/m4
 gtk/missing
 gtk/po/Makevars.template
 gtk/po/*.gmo
-gtk/po/*.po~
+gtk/po/*~

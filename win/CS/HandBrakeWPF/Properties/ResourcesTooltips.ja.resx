@@ -60,45 +60,45 @@
             : and then encoded with base64 encoding.
     -->
   <xsd:schema xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" id="root">
-    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace"/>
     <xsd:element name="root" msdata:IsDataSet="true">
       <xsd:complexType>
         <xsd:choice maxOccurs="unbounded">
           <xsd:element name="metadata">
             <xsd:complexType>
               <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+                <xsd:element name="value" type="xsd:string" minOccurs="0"/>
               </xsd:sequence>
-              <xsd:attribute name="name" use="required" type="xsd:string" />
-              <xsd:attribute name="type" type="xsd:string" />
-              <xsd:attribute name="mimetype" type="xsd:string" />
-              <xsd:attribute ref="xml:space" />
+              <xsd:attribute name="name" use="required" type="xsd:string"/>
+              <xsd:attribute name="type" type="xsd:string"/>
+              <xsd:attribute name="mimetype" type="xsd:string"/>
+              <xsd:attribute ref="xml:space"/>
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="assembly">
             <xsd:complexType>
-              <xsd:attribute name="alias" type="xsd:string" />
-              <xsd:attribute name="name" type="xsd:string" />
+              <xsd:attribute name="alias" type="xsd:string"/>
+              <xsd:attribute name="name" type="xsd:string"/>
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="data">
             <xsd:complexType>
               <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
-                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2"/>
               </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
-              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
-              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
-              <xsd:attribute ref="xml:space" />
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1"/>
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3"/>
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4"/>
+              <xsd:attribute ref="xml:space"/>
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="resheader">
             <xsd:complexType>
               <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
               </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" use="required" />
+              <xsd:attribute name="name" type="xsd:string" use="required"/>
             </xsd:complexType>
           </xsd:element>
         </xsd:choice>
@@ -112,10 +112,10 @@
     <value>2.0</value>
   </resheader>
   <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=5.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=5.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="FilterView_Deblock" xml:space="preserve">
     <value>デブロックは低品質で圧縮されたときに生じるブロック状のノイズを低減します。</value>
@@ -288,15 +288,15 @@ x264は対数スケールで低い値が高いクオリティに対応します�
 FFMpegとTheoraのスケールはより直線的です。
 この二つにはロスレスモードはありません。</value>
   </data>
-  <data name="Video_TurboFirstPass" xml:space="preserve">
-    <value>2パスエンコードのうちの最初のパスの、速度に関わる設定です。</value>
+  <data name="Video_TurboAnalysisPass" xml:space="preserve">
+    <value>複数パスエンコードの内、解析パスで、高速化の設定が行われます。</value>
   </data>
-  <data name="Video_TwoPass" xml:space="preserve">
-    <value>2パスエンコードを行います。
+  <data name="Video_MultiPass" xml:space="preserve">
+    <value>複数パスエンコードを行います。
 
-'ビットレート'オプションがまず必要です。1パス目で映像の統計を取得します。
-それから2パス目で、目的のビットレートを実現するために
-その統計が使用されます。</value>
+これは 'ビットレート' オプションを使用することが前提です。解析パスで
+映像の統計情報を採取します。最後のパスで統計情報を利用し
+ビットレートの割り当てが行われます。</value>
   </data>
   <data name="Video_VariableFramerate" xml:space="preserve">
     <value>可変フレームレートの出力を有効にします。
@@ -512,7 +512,27 @@ HB_EXIT_CODE
 出力ファイルに何かする前にそれが正しいものであるか確認することが推奨されます。</value>
   </data>
   <data name="Options_AdditionalFormatOptions" xml:space="preserve">
-    <value>出力ファイルの形式です。ファイルシステムでサポートされるすべての文字の他に、タイトル変更やソースのスキャンや設定を更新した際に自動的に置き換わるようにプレースホルダを使うことができます。</value>
+    <value>出力ファイルの形式です。ファイルシステムでサポートされるすべての文字の他に、タイトル変更やソースのスキャンや設定を更新した際に自動的に置き換わるようにプレースホルダを使うことができます。
+
+{source} - ソースファイル名です。
+{title} - 整数の値を取ります。ディスクタイトルの数字の代わりになるものです。
+{chapters} - 選択されたチャプターの範囲です。
+{creation-date} - (利用可能である場合は)ソースファイルが作成された日付です。
+{creation-time} - (利用可能である場合は)ソースファイルが作成された時刻です。
+{modification-date} - (利用可能である場合は)ソースファイルが最後に変更された日付です。
+{modification-time} - (利用可能である場合は)ソースファイルが最後に変更された時刻です。
+{date} - 今日の日付です。キューに追加された時間が基準です。
+{time} - 今日の時刻です。キューに追加された時間が基準です。
+{quality_bitrate} - 品質やビットレートの数字です。
+{quality_type} - ビデオタブでの設定に応じ"kbps"や"Q"が出力されます。
+{preset} - 選択されたプリセットの名前です。
+{encode_bit_depth} -  8, 10, 12などで表されるビット深度です。
+{width} - 出力される格納幅です。
+{height} - 出力される格納高さです。
+{codec} - 映像の形式です。
+{encoder} - 使用されるエンコーダの形式を短くしたものです。
+
+パスに使えない無効な文字は自動で除去されます。</value>
   </data>
   <data name="OptionsView_RightToleftMode" xml:space="preserve">
     <value>右から左に読む言語用に2つのモードがあります。"テキストのみ"はテキストのみ右から始まるようになります。"全ユーザーインターフェイス"は全ての操作を右からにします。
@@ -524,5 +544,15 @@ HB_EXIT_CODE
 1が最も低品質で5が高品質です。
 
 ビットレートはソースに依存します。</value>
+  </data>
+  <data name="OptionsView_DestinationReplacementOptions" xml:space="preserve">
+    <value>次のものは出力先パスを決める際に一つまたは複数使用できます。
+
+{source_path} - (可能であれば)ソースパスと同じフォルダです。
+{source_folder_name} – フルパスでない、ソースファイルが入っているディレクトリの名前です。
+{source} - ソースファイルの名前です。</value>
+  </data>
+  <data name="OptionsView_LaunchsHelp" xml:space="preserve">
+    <value>https://handbrake.fr/docs にあるドキュメントのウェブサイトを開く</value>
   </data>
 </root>

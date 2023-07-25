@@ -25,12 +25,6 @@
 /* Class = "NSTextFieldCell"; title = "0"; ObjectID = "bvD-W7-O0N"; */
 "bvD-W7-O0N.title" = "0";
 
-/* Class = "CocoaBindingsConnection"; ibShadowedIsNilPlaceholder = "0"; ObjectID = "c27-4i-SiJ"; */
-"c27-4i-SiJ.ibShadowedIsNilPlaceholder" = "0";
-
-/* Class = "CocoaBindingsConnection"; ibShadowedNotApplicablePlaceholder = "0"; ObjectID = "c27-4i-SiJ"; */
-"c27-4i-SiJ.ibShadowedNotApplicablePlaceholder" = "0";
-
 /* Class = "NSTextFieldCell"; title = "Unparse:"; ObjectID = "CLk-dp-1b7"; */
 "CLk-dp-1b7.title" = "Непреобразованные:";
 

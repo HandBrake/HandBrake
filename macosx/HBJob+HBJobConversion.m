@@ -138,12 +138,12 @@
         job->ipod_atom = self.mp4iPodCompatible;
     }
 
-    if (self.video.twoPass && ((self.video.encoder & HB_VCODEC_X264_MASK) ||
+    if (self.video.multiPass && ((self.video.encoder & HB_VCODEC_X264_MASK) ||
                                (self.video.encoder & HB_VCODEC_X265_MASK)))
     {
-        job->fastfirstpass = self.video.turboTwoPass;
+        job->fastanalysispass = self.video.turboMultiPass;
     }
-    job->twopass = self.video.twoPass;
+    job->multipass = self.video.multiPass;
 
     if (hb_video_encoder_get_presets(self.video.encoder) != NULL)
     {

@@ -70,17 +70,8 @@
 /* Class = "NSButton"; ibShadowedToolTip = "Foreign Audio Search scans the source for short sequences of foreign or alien audio that are displayed by default."; ObjectID = "OOC-GZ-OFA"; */
 "OOC-GZ-OFA.ibShadowedToolTip" = "'Поиск иноязычного аудио' сканирует исходный файл на наличие коротких последовательностей иноязычных или инородных аудио которые по умолчанию показываются.";
 
-/* Class = "NSButtonCell"; title = "Show All"; ObjectID = "PiQ-bA-7P1"; */
-"PiQ-bA-7P1.title" = "Показать всё";
-
 /* Class = "NSButton"; ibShadowedToolTip = "Burn in the first selected Blu-ray subtitle track. All other Blu-ray subtitle tracks will be discarded. Use this option if your playback software or device does not support Blu-ray subtitles.\n\nOnly one subtitles track can be burned in."; ObjectID = "Px8-G6-NVX"; */
 "Px8-G6-NVX.ibShadowedToolTip" = "Вшивать первую выбранную дорожку субтитров Blu-ray. Все другие дорожки субтитров Blu-ray будут отброшены. Используйте эту опцию в том случае, если ваше программное обеспечение или устройство не поддерживает субтитры Blu-ray.\n\nТолько одна дорожка субтитров может быть вшита.";
-
-/* Class = "NSButton"; ibExternalAccessibilityDescription = "Show all subtitles languages"; ObjectID = "QAt-5X-NBT"; */
-"QAt-5X-NBT.ibExternalAccessibilityDescription" = "Показывать все языки субтитров";
-
-/* Class = "NSButton"; ibShadowedToolTip = "Show all subtitles languages in the Languages list."; ObjectID = "QAt-5X-NBT"; */
-"QAt-5X-NBT.ibShadowedToolTip" = "Показывать все языки субтитров в списке языков.";
 
 /* Class = "NSMenuItem"; title = "Foreign Audio Subtitles Track"; ObjectID = "QRd-XH-6TH"; */
 "QRd-XH-6TH.title" = "Дорожка субтитров иноязычного аудио";

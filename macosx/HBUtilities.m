@@ -5,11 +5,24 @@
  It may be used under the terms of the GNU General Public License. */
 
 #import "HBUtilities.h"
+#import "HBDirectUtilities.h"
+
 #import <Cocoa/Cocoa.h>
 
 #include "handbrake/lang.h"
 
 static BOOL hb_resolveBookmarks = YES;
+
+HB_OBJC_DIRECT_MEMBERS
+@interface HBURLPair : NSObject
+@property (nonatomic) NSURL *URL;
+@property (nonatomic) NSUInteger length;
+@property (nonatomic) NSURL *volumeURL;
+@end
+
+HB_OBJC_DIRECT_MEMBERS
+@implementation HBURLPair
+@end
 
 @implementation HBUtilities
 
@@ -142,66 +155,185 @@ static BOOL hb_resolveBookmarks = YES;
     return [HBUtilities bookmarkFromURL:url options:NSURLBookmarkCreationWithSecurityScope];
 }
 
-+ (NSURL *)mediaURLFromURL:(NSURL *)URL
++ (NSArray<NSURL *> *)baseURLs:(NSArray<NSURL *> *)fileURLs
 {
-    NSURL *mediaURL = URL;
+    NSMutableArray<HBURLPair *> *pairs = [[NSMutableArray alloc] init];
+    NSMutableSet<NSURL *> *volumeURLs = [[NSMutableSet alloc] init];
 
-    // We check to see if the chosen file at path is a package
-    if ([NSWorkspace.sharedWorkspace isFilePackageAtPath:URL.path])
+    for (NSURL *fileURL in fileURLs)
     {
-        [HBUtilities writeToActivityLog:"trying to open a package at: %s", URL.path.UTF8String];
-        // We check to see if this is an .eyetv package
-        if ([URL.pathExtension isEqualToString:@"eyetv"])
+        NSURL *volumeURL = nil;
+        [fileURL getResourceValue:&volumeURL forKey:NSURLVolumeURLKey error:nil];
+
+        if (volumeURL)
         {
-            [HBUtilities writeToActivityLog:"trying to open eyetv package"];
-            // We're looking at an EyeTV package - try to open its enclosed .mpg media file
-            NSString *mpgname;
-            NSUInteger n = [[URL.path stringByAppendingString: @"/"]
-                            completePathIntoString: &mpgname caseSensitive: YES
-                            matchesIntoArray: nil
-                            filterTypes: @[@"mpg", @"ts"]];
-            if (n > 0)
-            {
-                // Found an mpeg inside the eyetv package, make it our scan path
-                [HBUtilities writeToActivityLog:"found mpeg in eyetv package"];
-                mediaURL = [NSURL fileURLWithPath:mpgname];
-            }
-            else
-            {
-                // We did not find an mpeg file in our package, so we do not call performScan
-                [HBUtilities writeToActivityLog:"no valid mpeg in eyetv package"];
-            }
-        }
-        // We check to see if this is a .dvdmedia package
-        else if ([URL.pathExtension isEqualToString:@"dvdmedia"])
-        {
-            // path IS a package - but dvdmedia packages can be treaded like normal directories
-            [HBUtilities writeToActivityLog:"trying to open dvdmedia package"];
-        }
-        else
-        {
-            // The package is not an eyetv package, try to open it anyway
-            [HBUtilities writeToActivityLog:"not a known to package"];
+            HBURLPair *pair = [[HBURLPair alloc] init];
+            pair.URL = fileURL.URLByDeletingLastPathComponent;
+            pair.length = fileURL.path.stringByDeletingLastPathComponent.length;
+            pair.volumeURL = volumeURL;
+
+            [pairs addObject:pair];
+            [volumeURLs addObject:volumeURL];
         }
     }
-#ifndef __SANDBOX_ENABLED__
+
+    NSMutableArray<NSURL *> *baseURLs = [[NSMutableArray alloc] init];
+
+    for (NSURL *volumeURL in volumeURLs)
+    {
+        HBURLPair *currentPair = nil;
+        for (HBURLPair *pair in pairs)
+        {
+            if ([pair.volumeURL isEqualTo:volumeURL])
+            {
+                if (currentPair == nil)
+                {
+                    currentPair = pair;
+                }
+                else if (pair.length < currentPair.length)
+                {
+                    currentPair = pair;
+                }
+            }
+        }
+        if (currentPair)
+        {
+            [baseURLs addObject:currentPair.URL];
+        }
+    }
+
+    return baseURLs;
+}
+
++ (NSURL *)eyetvMediaURL:(NSURL *)url
+{
+    // We're looking at an EyeTV package - try to open its enclosed .mpg or .ts media file
+    NSString *mediaName;
+    NSUInteger count = [[url.path stringByAppendingString:@"/"] completePathIntoString:&mediaName
+                                                                         caseSensitive:YES
+                                                                      matchesIntoArray:nil
+                                                                           filterTypes:@[@"mpg", @"ts"]];
+    if (count > 0)
+    {
+        // Found an mpeg inside the eyetv package, make it our scan path
+        return [NSURL fileURLWithPath:mediaName];
+    }
     else
     {
-        // path is not a package, so we call perform scan directly on our file
-        if ([URL.lastPathComponent isEqualToString:@"VIDEO_TS"])
+        return nil;
+    }
+}
+
++ (NSArray<NSURL *> *)expandURLs:(NSArray<NSURL *> *)fileURLs recursive:(BOOL)recursive
+{
+    NSFileManager *manager = NSFileManager.defaultManager;
+    NSMutableArray<NSURL *> *mutableFileURLs = [NSMutableArray array];
+
+    NSDirectoryEnumerationOptions options = NSDirectoryEnumerationSkipsHiddenFiles |
+                                            NSDirectoryEnumerationSkipsPackageDescendants |
+                                            NSDirectoryEnumerationSkipsSubdirectoryDescendants;
+
+    // Check first if it's a DVD-Video or Bluray
+    if (fileURLs.count == 1)
+    {
+        NSURL *directoryURL = fileURLs.firstObject;
+
+        NSNumber *isDirectory = nil;
+        [directoryURL getResourceValue:&isDirectory forKey:NSURLIsDirectoryKey error:nil];
+
+        if (isDirectory.boolValue == YES)
         {
-            [HBUtilities writeToActivityLog:"trying to open video_ts folder (video_ts folder chosen)"];
-            // If VIDEO_TS Folder is chosen, choose its parent folder for the source display name
-            mediaURL = URL.URLByDeletingLastPathComponent;
+            if ([directoryURL.pathExtension isEqualToString:@"dvdmedia"] ||
+                [directoryURL.lastPathComponent isEqualToString:@"VIDEO_TS"])
+            {
+                return fileURLs;
+            }
+
+            NSArray<NSURL *> *content = [manager contentsOfDirectoryAtURL:directoryURL
+                                                includingPropertiesForKeys:nil
+                                                                   options:options
+                                                                     error:NULL];
+
+            for (NSURL *url in content)
+            {
+                if ([url.lastPathComponent isEqualToString:@"VIDEO_TS"] ||
+                    [url.lastPathComponent isEqualToString:@"BDMV"])
+                {
+                    return fileURLs;
+                }
+            }
+        }
+    }
+
+    if (recursive)
+    {
+        options &= ~NSDirectoryEnumerationSkipsSubdirectoryDescendants;
+    }
+
+    // If not, recursively enumerate all the files and directories
+    for (NSURL *url in fileURLs)
+    {
+        NSNumber *isDirectory = nil;
+        [url getResourceValue:&isDirectory forKey:NSURLIsDirectoryKey error:nil];
+
+        if (isDirectory.boolValue == NO)
+        {
+            [mutableFileURLs addObject:url];
+        }
+        else if ([url.pathExtension isEqualToString:@"eyetv"])
+        {
+            NSURL *eyetvMediaURL = [HBUtilities eyetvMediaURL:url];
+            if (eyetvMediaURL)
+            {
+                [mutableFileURLs addObject:url];
+            }
+        }
+        else if ([url.pathExtension isEqualToString:@"dvdmedia"] ||
+                 [url.lastPathComponent isEqualToString:@"VIDEO_TS"])
+        {
+            // Skip
         }
         else
         {
-            [HBUtilities writeToActivityLog:"trying to open a folder or file"];
+            NSDirectoryEnumerator<NSURL *> *enumerator = [manager enumeratorAtURL:url
+                                                       includingPropertiesForKeys:@[NSURLIsDirectoryKey]
+                                                                          options:options
+                                                                     errorHandler:NULL];
+
+            for (NSURL *enumeratorURL in enumerator)
+            {
+                [enumeratorURL getResourceValue:&isDirectory forKey:NSURLIsDirectoryKey error:nil];
+
+                if (isDirectory.boolValue == YES)
+                {
+                    if ([enumeratorURL.pathExtension isEqualToString:@"eyetv"])
+                    {
+                        NSURL *eyetvMediaURL = [HBUtilities eyetvMediaURL:enumeratorURL];
+                        if (eyetvMediaURL)
+                        {
+                            [mutableFileURLs addObject:enumeratorURL];
+                        }
+                        [enumerator skipDescendants];
+                    }
+                    else if ([enumeratorURL.pathExtension isEqualToString:@"dvdmedia"] ||
+                             [enumeratorURL.lastPathComponent isEqualToString:@"VIDEO_TS"])
+                    {
+                        [enumerator skipDescendants];
+                    }
+                    else
+                    {
+                        [mutableFileURLs addObject:enumeratorURL];
+                    }
+                }
+                else
+                {
+                    [mutableFileURLs addObject:enumeratorURL];
+                }
+            }
         }
     }
-#endif
 
-    return mediaURL;
+    return mutableFileURLs;
 }
 
 + (NSString *)isoCodeForNativeLang:(NSString *)language

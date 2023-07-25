@@ -10,6 +10,7 @@
 NSString * const HBShowOpenPanelAtLaunch              = @"HBShowOpenPanelAtLaunch";
 NSString * const HBShowSummaryPreview                 = @"HBShowSummaryPreview";
 
+NSString * const HBRecursiveScan                      = @"HBRecursiveScan";
 NSString * const HBLastDestinationDirectoryURL        = @"HBLastDestinationDirectoryURL";
 NSString * const HBLastDestinationDirectoryBookmark   = @"HBLastDestinationDirectoryBookmark";
 NSString * const HBLastSourceDirectoryURL             = @"HBLastSourceDirectoryURL";
@@ -22,11 +23,14 @@ NSString * const HBAlertWhenDoneSound            = @"HBAlertWhenDoneSound";
 NSString * const HBSendToAppEnabled              = @"HBSendToAppEnabled";
 NSString * const HBSendToApp                     = @"HBSendToApp";
 
+NSString * const HBUseSourceFolderDestination    = @"HBUseSourceFolderDestination";
+
 NSString * const HBDefaultAutoNaming             = @"DefaultAutoNaming";
 NSString * const HBAutoNamingFormat              = @"HBAutoNamingFormat";
 NSString * const HBAutoNamingRemoveUnderscore    = @"HBAutoNamingRemoveUnderscore";
 NSString * const HBAutoNamingRemovePunctuation   = @"HBAutoNamingRemovePunctuation";
 NSString * const HBAutoNamingTitleCase           = @"HBAutoNamingTitleCase";
+NSString * const HBAutoNamingISODateFormat       = @"HBAutoNamingISODateFormat";
 
 NSString * const HBCqSliderFractional            = @"HBx264CqSliderFractional";
 NSString * const HBUseDvdNav                     = @"UseDvdNav";
@@ -88,10 +92,13 @@ NSString * const HBKeepPresetEdits               = @"HBKeepPresetEdits";
         HBShowSummaryPreview:               @YES,
         HBDefaultMpegExtension:             @".mp4",
         HBUseDvdNav:                        @YES,
+        HBRecursiveScan:                    @NO,
         HBLastDestinationDirectoryURL:      [NSKeyedArchiver archivedDataWithRootObject:moviesURL],
         HBLastSourceDirectoryURL:           [NSKeyedArchiver archivedDataWithRootObject:moviesURL],
+        HBUseSourceFolderDestination:       @NO,
         HBDefaultAutoNaming:                @NO,
         HBAutoNamingFormat:                 @[@"{Source}", @" ", @"{Title}"],
+        HBAutoNamingISODateFormat:          @NO,
         HBAlertWhenDone:                    @(HBDoneActionNotification),
         HBResetWhenDoneOnLaunch:            @NO,
         HBAlertWhenDoneSound:               @YES,
@@ -160,7 +167,11 @@ NSString * const HBKeepPresetEdits               = @"HBKeepPresetEdits";
     [self.formatTokenField setTokenizingCharacterSet:[NSCharacterSet characterSetWithCharactersInString:@"%%"]];
     [self.formatTokenField setCompletionDelay:0.2];
 
-    _buildInFormatTokens = @[@"{Source}", @"{Title}", @"{Date}", @"{Time}", @"{Creation-Date}", @"{Creation-Time}", @"{Chapters}", @"{Quality/Bitrate}"];
+    _buildInFormatTokens = @[@"{Source}", @"{Title}", @"{Chapters}", @"{Preset}",
+                             @"{Width}", @"{Height}", @"{Codec}",
+                             @"{Encoder}", @"{Bit-Depth}", @"{Quality/Bitrate}", @"{Quality-Type}",
+                             @"{Date}", @"{Time}", @"{Creation-Date}", @"{Creation-Time}",
+                             @"{Modification-Date}", @"{Modification-Time}"];
     [self.builtInTokenField setTokenizingCharacterSet:[NSCharacterSet characterSetWithCharactersInString:@"%%"]];
     [self.builtInTokenField setStringValue:[self.buildInFormatTokens componentsJoinedByString:@"%%"]];
 
@@ -237,11 +248,12 @@ NSString * const HBKeepPresetEdits               = @"HBKeepPresetEdits";
 	}
     [panel setDirectoryURL:sendToAppDirectory];
 
-    [panel beginSheetModalForWindow:[self window] completionHandler:^(NSInteger result) {
+    [panel beginSheetModalForWindow:[self window] completionHandler:^(NSInteger result)
+     {
         if (result == NSModalResponseOK)
         {
-            NSURL *sendToAppURL = [panel URL];
-            NSURL *sendToAppDirectoryURL = [sendToAppURL URLByDeletingLastPathComponent];
+            NSURL *sendToAppURL = panel.URL;
+            NSURL *sendToAppDirectoryURL = sendToAppURL.URLByDeletingLastPathComponent;
             [ud setURL:sendToAppDirectoryURL forKey:@"HBLastSendToAppDirectory"];
 
             // We set the name of the app to send to in the display field
@@ -249,6 +261,8 @@ NSString * const HBKeepPresetEdits               = @"HBKeepPresetEdits";
             [self->fSendEncodeToAppField setStringValue:sendToAppName];
 
             [ud setObject:self->fSendEncodeToAppField.stringValue forKey:HBSendToApp];
+
+            [sendToAppURL stopAccessingSecurityScopedResource];
         }
     }];
 }
@@ -275,6 +289,42 @@ NSString * const HBKeepPresetEdits               = @"HBKeepPresetEdits";
     {
         return NSLocalizedString(@"Title", "Preferences -> Output Name Token");
     }
+    else if ([tokenString isEqualToString:@"{Chapters}"])
+    {
+        return NSLocalizedString(@"Chapters", "Preferences -> Output Name Token");
+    }
+    else if ([tokenString isEqualToString:@"{Preset}"])
+    {
+        return NSLocalizedString(@"Preset", "Preferences -> Output Name Token");
+    }
+    else if ([tokenString isEqualToString:@"{Width}"])
+    {
+        return NSLocalizedString(@"Width", "Preferences -> Output Name Token");
+    }
+    else if ([tokenString isEqualToString:@"{Height}"])
+    {
+        return NSLocalizedString(@"Height", "Preferences -> Output Name Token");
+    }
+    else if ([tokenString isEqualToString:@"{Codec}"])
+    {
+        return NSLocalizedString(@"Codec", "Preferences -> Output Name Token");
+    }
+    else if ([tokenString isEqualToString:@"{Encoder}"])
+    {
+        return NSLocalizedString(@"Encoder", "Preferences -> Output Name Token");
+    }
+    else if ([tokenString isEqualToString:@"{Bit-Depth}"])
+    {
+        return NSLocalizedString(@"Bit Depth", "Preferences -> Output Name Token");
+    }
+    else if ([tokenString isEqualToString:@"{Quality/Bitrate}"])
+    {
+        return NSLocalizedString(@"Quality/Bitrate", "Preferences -> Output Name Token");
+    }
+    else if ([tokenString isEqualToString:@"{Quality-Type}"])
+    {
+        return NSLocalizedString(@"Quality Type", "Preferences -> Output Name Token");
+    }
     else if ([tokenString isEqualToString:@"{Date}"])
     {
         return NSLocalizedString(@"Date", "Preferences -> Output Name Token");
@@ -291,13 +341,13 @@ NSString * const HBKeepPresetEdits               = @"HBKeepPresetEdits";
     {
         return NSLocalizedString(@"Creation-Time", "Preferences -> Output Name Token");
     }
-    else if ([tokenString isEqualToString:@"{Chapters}"])
+    else if ([tokenString isEqualToString:@"{Modification-Date}"])
     {
-        return NSLocalizedString(@"Chapters", "Preferences -> Output Name Token");
+        return NSLocalizedString(@"Modification-Date", "Preferences -> Output Name Token");
     }
-    else if ([tokenString isEqualToString:@"{Quality/Bitrate}"])
+    else if ([tokenString isEqualToString:@"{Modification-Time}"])
     {
-        return NSLocalizedString(@"Quality/Bitrate", "Preferences -> Output Name Token");
+        return NSLocalizedString(@"Modification-Time", "Preferences -> Output Name Token");
     }
 
     return tokenString;

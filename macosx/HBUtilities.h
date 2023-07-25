@@ -63,7 +63,19 @@ NS_ASSUME_NONNULL_BEGIN
 + (nullable NSData *)bookmarkFromURL:(NSURL *)url;
 + (nullable NSData *)bookmarkFromURL:(NSURL *)url options:(NSURLBookmarkCreationOptions)options;
 
-+ (NSURL *)mediaURLFromURL:(NSURL *)URL;
+/// Find the common base paths of an array of NSURL
+/// - Parameter fileURLs: an array of NSURL
++ (NSArray<NSURL *> *)baseURLs:(NSArray<NSURL *> *)fileURLs;
+
+/// Expand an array of NSURL into an array that contains all the top level
+/// files and content of the top level folders
+/// If the recursive option is set, recursively expand every subfolder.
+/// If the input is a single folder, check if it's a DVD-Video and Bluray
+/// and ignore the sub folders.
+/// - Parameters:
+///   - fileURLs: an array of NSURL
+///   - recursive: whether to recursively expand sub folders
++ (NSArray<NSURL *> *)expandURLs:(NSArray<NSURL *> *)fileURLs recursive:(BOOL)recursive;
 
 + (NSString *)isoCodeForNativeLang:(NSString *)language;
 + (NSString *)iso6392CodeFor:(NSString *)language;

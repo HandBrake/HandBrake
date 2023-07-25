@@ -1,8 +1,6 @@
 ###############################################################################
 ##
-## Coded for minimum version of Python 2.7 .
-##
-## Python3 is incompatible.
+## This script is coded for Python 2.7 through Python 3.x
 ##
 ## Authors: konablend
 ##

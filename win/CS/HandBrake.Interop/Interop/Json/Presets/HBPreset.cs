@@ -87,12 +87,6 @@ namespace HandBrake.Interop.Interop.Json.Presets
         public bool Mp4iPodCompatible { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether picture auto crop.
-        /// </summary>
-        [Obsolete("Use PictureCropMode instead. Use only for parsing legacy presets.")]
-        public bool PictureAutoCrop { get; set; }
-
-        /// <summary>
         /// Gets or sets a value indicating whether picture loose crop.
         /// </summary>
         public int PictureCropMode { get; set; }
@@ -393,14 +387,14 @@ namespace HandBrake.Interop.Interop.Json.Presets
         public double VideoQualitySlider { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether video two pass.
+        /// Gets or sets a value indicating whether video multi pass.
         /// </summary>
-        public bool VideoTwoPass { get; set; }
+        public bool VideoMultiPass { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether video turbo two pass.
+        /// Gets or sets a value indicating whether video turbo multi pass.
         /// </summary>
-        public bool VideoTurboTwoPass { get; set; }
+        public bool VideoTurboMultiPass { get; set; }
 
         /// <summary>
         /// Gets or sets the x 264 option.

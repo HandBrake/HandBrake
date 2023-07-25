@@ -43,6 +43,12 @@
 /* Class = "NSMenuItem"; title = "Reset All Jobs"; ObjectID = "kPX-am-UX1"; */
 "kPX-am-UX1.title" = "Ripristina tutti i lavori";
 
+/* Class = "NSToolbarItem"; label = "Quick Look"; ObjectID = "nCq-Nc-EbB"; */
+"nCq-Nc-EbB.label" = "Visualizzazione rapida";
+
+/* Class = "NSToolbarItem"; paletteLabel = "Quick Look"; ObjectID = "nCq-Nc-EbB"; */
+"nCq-Nc-EbB.paletteLabel" = "Visualizzazione rapida";
+
 /* Class = "NSMenuItem"; title = "Shut Down Computer"; ObjectID = "QmP-SQ-XKK"; */
 "QmP-SQ-XKK.title" = "Spegni il computer";
 
@@ -66,6 +72,9 @@
 
 /* Class = "NSToolbarItem"; toolTip = "Start Encoding"; ObjectID = "SX6-mq-Hck"; */
 "SX6-mq-Hck.toolTip" = "Avvia conversione";
+
+/* Class = "NSMenuItem"; title = "Quit HandBrake"; ObjectID = "tBG-Gf-ynI"; */
+"tBG-Gf-ynI.title" = "Esci da HandBrake";
 
 /* Class = "NSMenuItem"; title = "Remove All Jobs"; ObjectID = "Tvo-xt-sag"; */
 "Tvo-xt-sag.title" = "Rimuovi tutti i lavori";

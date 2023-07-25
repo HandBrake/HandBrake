@@ -38,7 +38,7 @@ TEST.GCC.l += $(foreach m,$(MODULES.NAMES),$($m.OSL.libs))
 
 TEST.install.exe = $(DESTDIR)$(PREFIX/)bin/$(notdir $(TEST.exe))
 ifeq (1,$(FEATURE.flatpak))
-    TEST.metainfo.template = $(TEST.src/)fr.handbrake.HandBrakeCLI.metainfo.xml.template
+    TEST.metainfo.template = $(TEST.src/)fr.handbrake.HandBrakeCLI.metainfo.xml.in.in
     TEST.metainfo = $(TEST.build/)fr.handbrake.HandBrakeCLI.metainfo.xml
     TEST.install.metainfo = $(DESTDIR)$(PREFIX/)share/metainfo/$(notdir $(TEST.metainfo))
 endif
@@ -93,7 +93,7 @@ ifeq (1,$(HAS.pthread))
 else
     TEST.GCC.l += pthreadGC2
 endif
-    TEST.GCC.l += bcrypt iconv ws2_32 regex uuid ole32 gdi32
+    TEST.GCC.l += bcrypt iconv ws2_32 regex uuid ole32 gdi32 userenv ntdll
     ifeq (1,$(FEATURE.mf))
         TEST.GCC.l += mfplat strmiids
     endif

@@ -49,7 +49,10 @@ namespace HandBrake.Interop.Interop.HbLib
         public static extern void hb_dvd_set_dvdnav(int enable);
 
         [DllImport("hb", EntryPoint = "hb_scan", CallingConvention = CallingConvention.Cdecl)]
-        public static extern void hb_scan(IntPtr hbHandle, IntPtr path, int title_index, int preview_count, int store_previews, ulong min_duration);
+        public static extern void hb_scan(IntPtr hbHandle, IntPtr path, int title_index, int preview_count, int store_previews, ulong min_duration, int crop_auto_switch_threshold, int crop_median_threshold, IntPtr exclude_extensions);
+
+        [DllImport("hb", EntryPoint = "hb_scan_list", CallingConvention = CallingConvention.Cdecl)]
+        public static extern void hb_scan_list(IntPtr hbHandle, IntPtr paths, int title_index, int preview_count, int store_previews, ulong min_duration, int crop_auto_switch_threshold, int crop_median_threshold, IntPtr exclude_extensions);
 
         [DllImport("hb", EntryPoint = "hb_scan_stop", CallingConvention = CallingConvention.Cdecl)]
         public static extern void hb_scan_stop(IntPtr hbHandle);
@@ -150,8 +153,8 @@ namespace HandBrake.Interop.Interop.HbLib
         [DllImport("hb", EntryPoint = "hb_video_quality_get_name", CallingConvention = CallingConvention.Cdecl)]
         public static extern IntPtr hb_video_quality_get_name(uint codec);
 
-        [DllImport("hb", EntryPoint = "hb_video_twopass_is_supported", CallingConvention = CallingConvention.Cdecl)]
-        public static extern int hb_video_twopass_is_supported(uint codec);
+        [DllImport("hb", EntryPoint = "hb_video_multipass_is_supported", CallingConvention = CallingConvention.Cdecl)]
+        public static extern int hb_video_multipass_is_supported(uint codec);
 
         [DllImport("hb", EntryPoint = "hb_video_encoder_is_supported", CallingConvention = CallingConvention.Cdecl)]
         public static extern int hb_video_encoder_is_supported(int encoder);
@@ -305,6 +308,12 @@ namespace HandBrake.Interop.Interop.HbLib
         [DllImport("hb", EntryPoint = "hb_presets_read_file_json", CallingConvention = CallingConvention.Cdecl)]
         public static extern IntPtr hb_presets_read_file_json(IntPtr filename);
 
+        [DllImport("hb", EntryPoint = "hb_presets_clean_json", CallingConvention = CallingConvention.Cdecl)]
+        public static extern IntPtr hb_presets_clean_json(IntPtr json);
+
+        [DllImport("hb", EntryPoint = "hb_presets_import_json", CallingConvention = CallingConvention.Cdecl)]
+        public static extern int hb_presets_import_json(IntPtr jsonIn, ref IntPtr jsonOutput);
+        
         [DllImport("hb", EntryPoint = "hb_presets_current_version", CallingConvention = CallingConvention.Cdecl)]
         public static extern IntPtr hb_presets_current_version(IntPtr major, IntPtr minor, IntPtr micro);
 
@@ -326,6 +335,9 @@ namespace HandBrake.Interop.Interop.HbLib
 
         [DllImport("hb", EntryPoint = "hb_qsv_get_platform", CallingConvention = CallingConvention.Cdecl)]
         public static extern int hb_qsv_get_platform(int adapter_index);
+
+        [DllImport("hb", EntryPoint = "hb_qsv_hyper_encode_available", CallingConvention = CallingConvention.Cdecl)]
+        public static extern int hb_qsv_hyper_encode_available(int adapter_index);
 
         [DllImport("hb", EntryPoint = "hb_qsv_hardware_generation", CallingConvention = CallingConvention.Cdecl)]
         public static extern int hb_qsv_hardware_generation(int cpu_platform);

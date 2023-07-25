@@ -1,0 +1,20 @@
+diff --git a/libavcodec/h2645_sei.c b/libavcodec/h2645_sei.c
+index 6e4a9a1..5d108d7 100644
+--- a/libavcodec/h2645_sei.c
++++ b/libavcodec/h2645_sei.c
+@@ -650,6 +650,8 @@ int ff_h2645_sei_to_frame(AVFrame *frame, H2645SEI *sei,
+         dst_env->ambient_illuminance = av_make_q(env->ambient_illuminance, 10000);
+         dst_env->ambient_light_x     = av_make_q(env->ambient_light_x,     50000);
+         dst_env->ambient_light_y     = av_make_q(env->ambient_light_y,     50000);
++
++        env->present = 0;
+     }
+ 
+     return 0;
+@@ -665,6 +667,4 @@ void ff_h2645_sei_reset(H2645SEI *s)
+     av_freep(&s->unregistered.buf_ref);
+     av_buffer_unref(&s->dynamic_hdr_plus.info);
+     av_buffer_unref(&s->dynamic_hdr_vivid.info);
+-
+-    s->ambient_viewing_environment.present = 0;
+ }

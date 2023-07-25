@@ -53,7 +53,8 @@ typedef struct
 #endif
 } hb_display_t;
 
-hb_display_t * hb_display_init(const char         *  driver_name,
+hb_display_t * hb_display_init(const char         * driver_name,
+                               const uint32_t       dri_render_node,
                                const char * const * interface_names);
 void           hb_display_close(hb_display_t ** _d);
 
@@ -134,15 +135,12 @@ size_t hb_getline(char **lineptr, size_t *n, FILE *fp);
 
 #ifdef __LIBHB__
 
-// Convert utf8 string to current code page.
-char * hb_utf8_to_cp(const char *src);
-
 /* Everything from now is only used internally and hidden to the UI */
 
 /************************************************************************
  * DVD utils
  ***********************************************************************/
-int hb_dvd_region(char *device, int *region_mask);
+int hb_dvd_region(const char *device, int *region_mask);
 
 #if defined( SYS_DARWIN )
 int macOS_get_user_config_directory( char path[512] );
@@ -154,10 +152,7 @@ void hb_get_user_config_filename( char name[1024], char *fmt, ... );
  ***********************************************************************/
 typedef struct hb_thread_s hb_thread_t;
 
-#if defined( SYS_BEOS )
-#  define HB_LOW_PRIORITY    5
-#  define HB_NORMAL_PRIORITY 10
-#elif defined( SYS_DARWIN )
+#if defined( SYS_DARWIN )
 #  define HB_LOW_PRIORITY    31
 #  define HB_NORMAL_PRIORITY 31
 #elif defined( SYS_CYGWIN )

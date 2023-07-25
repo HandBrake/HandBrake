@@ -33,57 +33,19 @@ namespace HandBrakeWPF.Services.Scan.Model
             this.Titles = new List<Title>();
         }
 
-        public Source(Source scannedSource) : this(scannedSource.ScanPath, scannedSource.Titles, scannedSource.SourceName)
+        public Source(Source scannedSource) : this(scannedSource.Titles)
         { 
         }
 
-        public Source(string scanPath, List<Title> titles, string sourceName)
+        public Source(List<Title> titles)
         {
-            this.ScanPath = scanPath;
             this.Titles = titles;
-            this.SourceName = sourceName;
-
-            if (string.IsNullOrEmpty(sourceName))
-            {
-                // Scan Path is a File.
-                if (File.Exists(this.ScanPath))
-                {
-                    this.SourceName = Path.GetFileNameWithoutExtension(this.ScanPath);
-                }
-
-                // Scan Path is a folder.
-                if (Directory.Exists(this.ScanPath))
-                {
-                    // Check to see if it's a Drive. If yes, use the volume label.
-                    foreach (DriveInformation item in DriveUtilities.GetDrives())
-                    {
-                        if (item.RootDirectory.Contains(this.ScanPath.Replace("\\\\", "\\")))
-                        {
-                            this.SourceName = item.VolumeLabel;
-                        }
-                    }
-
-                    // Otherwise, it may be a path of files.
-                    if (string.IsNullOrEmpty(this.SourceName))
-                    {
-                        this.SourceName = Path.GetFileName(this.ScanPath);
-                    }
-                }
-            }
         }
-
-        /// <summary>
-        /// Gets or sets ScanPath.
-        /// The Path used by the Scan Service.
-        /// </summary>
-        public string ScanPath { get; }
 
         /// <summary>
         /// Gets or sets Titles. A list of titles from the source
         /// </summary>
         [XmlIgnore]
         public List<Title> Titles { get; }
-
-        public string SourceName { get; }
     }
 }

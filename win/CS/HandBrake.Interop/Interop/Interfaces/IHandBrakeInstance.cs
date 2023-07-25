@@ -9,44 +9,13 @@
 
 namespace HandBrake.Interop.Interop.Interfaces
 {
-    using System;
-
-    using HandBrake.Interop.Interop.Interfaces.EventArgs;
-    using HandBrake.Interop.Interop.Interfaces.Model.Preview;
-    using HandBrake.Interop.Interop.Json.Encode;
-    using HandBrake.Interop.Interop.Json.Scan;
+    using HandBrake.Interop.Interop.Json.State;
 
     /// <summary>
     /// The Interface for HandBrakeInstance
     /// </summary>
-    public interface IHandBrakeInstance : IEncodeInstance
+    public interface IHandBrakeInstance
     {
-        #region Events
-
-        /// <summary>
-        /// Fires when a scan has completed.
-        /// </summary>
-        event EventHandler<System.EventArgs> ScanCompleted;
-
-        /// <summary>
-        /// Fires for progress updates when scanning.
-        /// </summary>
-        event EventHandler<ScanProgressEventArgs> ScanProgress;
-
-        #endregion
-
-        #region Properties
-
-        /// <summary>
-        /// Gets the index of the default title.
-        /// </summary>
-        int FeatureTitle { get; }
-
-        /// <summary>
-        /// Gets the list of titles on this instance.
-        /// </summary>
-        JsonScanObject Titles { get; }
-
         /// <summary>
         /// Gets the HandBrake version string.
         /// </summary>
@@ -57,49 +26,24 @@ namespace HandBrake.Interop.Interop.Interfaces
         /// </summary>
         int Build { get; }
 
-        #endregion
 
-        #region Public Methods
-
-        /// <summary>
-        /// Gets an image for the given job and preview
-        /// </summary>
-        /// <remarks>
-        /// Only incorporates sizing and aspect ratio into preview image.
-        /// </remarks>
-        /// <param name="job">
-        /// The encode job to preview.
-        /// </param>
-        /// <param name="previewNumber">
-        /// The index of the preview to get (0-based).
-        /// </param>
-        /// <returns>
-        /// An image with the requested preview.
-        /// </returns>
-        RawPreviewData GetPreview(JsonEncodeObject job, int previewNumber);
+        bool IsRemoteInstance { get; }
 
         /// <summary>
-        /// Starts a scan of the given path.
+        /// Initializes this instance.
         /// </summary>
-        /// <param name="path">
-        /// The path of the video to scan.
+        /// <param name="verbosity">
+        /// The code for the logging verbosity to use.
         /// </param>
-        /// <param name="previewCount">
-        /// The number of previews to make on each title.
+        /// <param name="noHardware">
+        /// Turn off Hardware Acceleration 
         /// </param>
-        /// <param name="minDuration">
-        /// The min Duration.
-        /// </param>
-        /// <param name="titleIndex">
-        /// The title Index.
-        /// </param>
-        void StartScan(string path, int previewCount, TimeSpan minDuration, int titleIndex);
+        void Initialize(int verbosity, bool noHardware);
 
         /// <summary>
-        /// Stop any running scans
+        /// Get the current Progress State.
         /// </summary>
-        void StopScan();
-
-        #endregion
+        /// <returns>A JsonState object</returns>
+        JsonState GetProgress();
     }
 }

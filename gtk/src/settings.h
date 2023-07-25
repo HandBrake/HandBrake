@@ -27,6 +27,7 @@
 #include "values.h"
 
 #define GHB_WIDGET(b,n) GTK_WIDGET(gtk_builder_get_object ((b), (n)))
+#define GHB_ACTION(b,n) g_action_map_lookup_action(G_ACTION_MAP(gtk_builder_get_application (b)), (n))
 //#define GHB_WIDGET(b,n)   GTK_WIDGET(debug_get_object((b), (n)))
 #define GHB_OBJECT(b,n) gtk_builder_get_object ((b), (n))
 
@@ -57,10 +58,10 @@ typedef struct preview_s preview_t;
 typedef struct
 {
     gchar *current_dvd_device;
-    gboolean              debug;
     gboolean              dont_clear_presets;
     gboolean              scale_busy;
     gint                  cancel_encode;
+    gint                  when_complete;
     GtkBuilder          * builder;
     GhbValue            * globals;
     GhbValue            * prefs;
@@ -75,10 +76,9 @@ typedef struct
     char                * extra_activity_path;
     gboolean              append_queue_activity;
     preview_t           * preview;
-    gchar               * appcast;
-    gint                  appcast_len;
     int                   stderr_src_id;
     GtkApplication      * app;
+    GtkFileChooserNative* source_dialog;
 } signal_user_data_t;
 
 enum

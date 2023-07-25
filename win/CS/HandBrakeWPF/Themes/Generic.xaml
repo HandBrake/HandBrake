@@ -9,6 +9,7 @@
     <SolidColorBrush x:Key="Ui.UltraLight2" />
     <SolidColorBrush x:Key="Ui.ListBoxSelect" />
     <SolidColorBrush x:Key="Ui.Arrow" />
+    <SolidColorBrush x:Key="Ui.Blue" Color="#00579f" />
 
     <!-- TextBlock -->
     <Style x:Key="BaseTextBlockStyle" TargetType="TextBlock">

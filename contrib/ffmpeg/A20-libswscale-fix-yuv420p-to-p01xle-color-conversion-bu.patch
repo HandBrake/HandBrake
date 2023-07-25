@@ -1,0 +1,37 @@
+From dbfa7cab8c9951ec13481a9ca7f6f219dd2aba94 Mon Sep 17 00:00:00 2001
+From: Vladyslav Sosunovych <vladyslav.sosunovych@intel.com>
+Date: Wed, 26 Apr 2023 15:53:52 +0200
+Subject: [PATCH] libswscale: fix yuv420p to p01xle color conversion bug
+
+---
+ libswscale/swscale_unscaled.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/libswscale/swscale_unscaled.c b/libswscale/swscale_unscaled.c
+index 9af2e7ecc3..9f9d505d9e 100644
+--- a/libswscale/swscale_unscaled.c
++++ b/libswscale/swscale_unscaled.c
+@@ -297,7 +297,7 @@ static int planar8ToP01xleWrapper(SwsContext *c, const uint8_t *src[],
+         const uint8_t *tsrc0 = src[0];
+         for (x = c->srcW; x > 0; x--) {
+             t = *tsrc0++;
+-            output_pixel(tdstY++, t | (t << 8));
++            output_pixel(tdstY++, (t << 8));
+         }
+         src[0] += srcStride[0];
+         dstY += dstStride[0] / 2;
+@@ -308,9 +308,9 @@ static int planar8ToP01xleWrapper(SwsContext *c, const uint8_t *src[],
+             const uint8_t *tsrc2 = src[2];
+             for (x = c->srcW / 2; x > 0; x--) {
+                 t = *tsrc1++;
+-                output_pixel(tdstUV++, t | (t << 8));
++                output_pixel(tdstUV++, (t << 8));
+                 t = *tsrc2++;
+-                output_pixel(tdstUV++, t | (t << 8));
++                output_pixel(tdstUV++, (t << 8));
+             }
+             src[1] += srcStride[1];
+             src[2] += srcStride[2];
+-- 
+2.39.0
+

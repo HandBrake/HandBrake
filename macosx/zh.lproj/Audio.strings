@@ -2,7 +2,7 @@
 "2c7-G5-4KL.ibExternalAccessibilityDescription" = "增益";
 
 /* Class = "NSTextField"; ibShadowedToolTip = "Audio gain in decibels (dB). Increases or decreases audio volume."; ObjectID = "2c7-G5-4KL"; */
-"2c7-G5-4KL.ibShadowedToolTip" = "以分贝（dB）为单位进行音频增益。 增大或减小音量。";
+"2c7-G5-4KL.ibShadowedToolTip" = "音频增益，单位是分贝（dB）。增加或减少音频音量。";
 
 /* Class = "NSTableColumn"; headerCell.title = "Gain"; ObjectID = "5xO-DR-4cR"; */
 "5xO-DR-4cR.headerCell.title" = "增益";
@@ -11,7 +11,7 @@
 "6iN-2G-JDF.ibExternalAccessibilityDescription" = "已选轨道";
 
 /* Class = "NSPopUpButton"; ibShadowedToolTip = "Audio language and type."; ObjectID = "6iN-2G-JDF"; */
-"6iN-2G-JDF.ibShadowedToolTip" = "音频语言与类型";
+"6iN-2G-JDF.ibShadowedToolTip" = "音频语言与类型。";
 
 /* Class = "NSTextFieldCell"; title = "Text Cell"; ObjectID = "6Iz-D8-zzz"; */
 "6Iz-D8-zzz.title" = "文本单元格";
@@ -26,7 +26,7 @@
 "AMA-Ul-v2f.title" = "添加所有轨道";
 
 /* Class = "NSButtonCell"; title = "Selection Behavior…"; ObjectID = "aYF-d5-Ya6"; */
-"aYF-d5-Ya6.title" = "选择行为";
+"aYF-d5-Ya6.title" = "选择行为…";
 
 /* Class = "NSSliderCell"; ibExternalAccessibilityDescription = "Gain"; ObjectID = "BBQ-FP-aQN"; */
 "BBQ-FP-aQN.ibExternalAccessibilityDescription" = "增益";
@@ -113,7 +113,7 @@
 "sq7-Ux-T6D.title" = "重新加载";
 
 /* Class = "NSMenuItem"; title = "Selection Behavior…"; ObjectID = "TK6-fY-4Sk"; */
-"TK6-fY-4Sk.title" = "选择行为";
+"TK6-fY-4Sk.title" = "选择行为…";
 
 /* Class = "NSPopUpButton"; ibExternalAccessibilityDescription = "Codec"; ObjectID = "tYY-w7-ZIq"; */
 "tYY-w7-ZIq.ibExternalAccessibilityDescription" = "编解码器";

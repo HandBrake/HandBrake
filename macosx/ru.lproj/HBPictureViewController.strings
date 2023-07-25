@@ -1,11 +1,20 @@
+/* Class = "NSTextFieldCell"; title = "Display Size:"; ObjectID = "1AB-bM-qTs"; */
+"1AB-bM-qTs.title" = "Размеры вывода:";
+
 /* Class = "NSMenuItem"; title = "Off"; ObjectID = "1O3-th-4M5"; */
 "1O3-th-4M5.title" = "Выкл.";
 
 /* Class = "NSTextField"; ibExternalAccessibilityDescription = "Crop bottom"; ObjectID = "1Z0-JT-vst"; */
 "1Z0-JT-vst.ibExternalAccessibilityDescription" = "Кадрирование снизу";
 
-/* Class = "NSTextField"; ibShadowedToolTip = "Bottom edge cropping amount in pixels."; ObjectID = "1Z0-JT-vst"; */
-"1Z0-JT-vst.ibShadowedToolTip" = "Обрезка по нижней грани в пикселях.";
+/* Class = "NSMenuItem"; title = "2160p 4K Ultra HD"; ObjectID = "1Zm-mM-8Tb"; */
+"1Zm-mM-8Tb.title" = "2160p 4K Ultra HD";
+
+/* Class = "NSMenuItem"; title = "180°"; ObjectID = "1zy-53-Bvd"; */
+"1zy-53-Bvd.title" = "180°";
+
+/* Class = "NSMenuItem"; title = "1440p 2.5K Quad HD"; ObjectID = "2ax-HE-Amt"; */
+"2ax-HE-Amt.title" = "1440p 2.5K Quad HD";
 
 /* Class = "CocoaBindingsConnection"; ibShadowedIsNilPlaceholder = "0"; ObjectID = "2fq-yE-LSA"; */
 "2fq-yE-LSA.ibShadowedIsNilPlaceholder" = "0";
@@ -13,8 +22,14 @@
 /* Class = "NSStepper"; ibExternalAccessibilityDescription = "Storage Height"; ObjectID = "2s0-5k-fjU"; */
 "2s0-5k-fjU.ibExternalAccessibilityDescription" = "Высота хранения";
 
-/* Class = "NSButton"; ibShadowedToolTip = "Keep Aspect Ratio maintains the original display aspect of the source. Disabling this may result in a stretched or squeezed picture."; ObjectID = "6G0-MW-iVa"; */
-"6G0-MW-iVa.ibShadowedToolTip" = "'Сохранять соотношение сторон' сохраняет оригинальное соотношение сторон исходного файла. Отключение этой опции может привести к растянутому или сжатому изображению.";
+/* Class = "NSStepper"; ibExternalAccessibilityDescription = "Storage Height"; ObjectID = "3HN-8C-yAS"; */
+"3HN-8C-yAS.ibExternalAccessibilityDescription" = "Высота хранения";
+
+/* Class = "NSTextFieldCell"; title = "x"; ObjectID = "5Tj-xw-QuU"; */
+"5Tj-xw-QuU.title" = "х";
+
+/* Class = "NSMenuItem"; title = "None"; ObjectID = "6Qy-ik-hiE"; */
+"6Qy-ik-hiE.title" = "Нет";
 
 /* Class = "NSStepper"; ibExternalAccessibilityDescription = "Crop bottom"; ObjectID = "6W6-RI-fBx"; */
 "6W6-RI-fBx.ibExternalAccessibilityDescription" = "Кадрирование снизу";
@@ -22,156 +37,165 @@
 /* Class = "NSTextFieldCell"; title = "Anamorphic:"; ObjectID = "8vS-Mw-bny"; */
 "8vS-Mw-bny.title" = "Анаморфирование:";
 
-/* Class = "NSTextField"; ibExternalAccessibilityDescription = "Storage Width"; ObjectID = "9hH-As-JSa"; */
-"9hH-As-JSa.ibExternalAccessibilityDescription" = "Ширина хранения";
-
-/* Class = "NSTextField"; ibShadowedToolTip = "Video storage width. This is the number of pixels wide to be encoded. Storage width may differ from display width depending on anamorphic settings."; ObjectID = "9hH-As-JSa"; */
-"9hH-As-JSa.ibShadowedToolTip" = "Ширина хранения видео. Это число пикселей в ширину для кодирования. Ширина хранения может отличаться от ширины вывода в зависимости от настроек анаморфирования.";
+/* Class = "NSMenuItem"; title = "480p NTSC SD"; ObjectID = "21C-Hg-mk4"; */
+"21C-Hg-mk4.title" = "480p NTSC SD";
 
 /* Class = "NSTextField"; ibExternalAccessibilityDescription = "Crop top"; ObjectID = "41c-48-2XJ"; */
 "41c-48-2XJ.ibExternalAccessibilityDescription" = "Кадрирование сверху";
 
-/* Class = "NSTextField"; ibShadowedToolTip = "Top edge cropping amount in pixels."; ObjectID = "41c-48-2XJ"; */
-"41c-48-2XJ.ibShadowedToolTip" = "Обрезка по верхней грани в пикселях.";
+/* Class = "NSTextField"; ibExternalAccessibilityDescription = "Display width"; ObjectID = "Ag1-Tk-hCm"; */
+"Ag1-Tk-hCm.ibExternalAccessibilityDescription" = "Ширина вывода";
 
-/* Class = "NSButtonCell"; title = "Automatic"; ObjectID = "b3y-yE-sYc"; */
-"b3y-yE-sYc.title" = "Авто";
+/* Class = "NSTextFieldCell"; title = "x"; ObjectID = "C6R-PR-3gu"; */
+"C6R-PR-3gu.title" = "х";
 
-/* Class = "NSTextFieldCell"; title = "x"; ObjectID = "cNr-IZ-H9j"; */
-"cNr-IZ-H9j.title" = "на";
+/* Class = "NSTextFieldCell"; title = "Resolution Limit:"; ObjectID = "d0T-QG-WXU"; */
+"d0T-QG-WXU.title" = "Лимит Разрешения:";
 
 /* Class = "NSStepper"; ibExternalAccessibilityDescription = "Crop right"; ObjectID = "Ddg-4D-el9"; */
 "Ddg-4D-el9.ibExternalAccessibilityDescription" = "Кадрирование справа";
 
+/* Class = "CocoaBindingsConnection"; ibShadowedIsNilPlaceholder = "0"; ObjectID = "DN4-KZ-LRc"; */
+"DN4-KZ-LRc.ibShadowedIsNilPlaceholder" = "0";
+
+/* Class = "NSTextFieldCell"; title = "1:1"; ObjectID = "dnG-b9-LQR"; */
+"dnG-b9-LQR.title" = "1:1";
+
+/* Class = "NSTextField"; ibExternalAccessibilityDescription = " "; ObjectID = "E5O-kn-GYm"; */
+"E5O-kn-GYm.ibExternalAccessibilityDescription" = "ceaa80fca5ba3e8646366fa50fbb4322_tr";
+
+/* Class = "NSButtonCell"; title = "Automatic"; ObjectID = "eOi-50-jLK"; */
+"eOi-50-jLK.title" = "Авто";
+
 /* Class = "NSMenuItem"; title = "Custom"; ObjectID = "f12-Dh-fDw"; */
 "f12-Dh-fDw.title" = "Пользовательское";
+
+/* Class = "NSMenuItem"; title = "None"; ObjectID = "fau-iA-M1E"; */
+"fau-iA-M1E.title" = "Нет";
 
 /* Class = "NSStepper"; ibExternalAccessibilityDescription = "Storage Width"; ObjectID = "FwZ-6T-zJe"; */
 "FwZ-6T-zJe.ibExternalAccessibilityDescription" = "Ширина хранения";
 
-/* Class = "NSTextFieldCell"; title = "PAR:"; ObjectID = "gVj-RG-PcL"; */
-"gVj-RG-PcL.title" = "PAR:";
-
-/* Class = "NSTextFieldCell"; title = "Cropping:"; ObjectID = "haC-cO-jDm"; */
-"haC-cO-jDm.title" = "Кадрирование:";
-
-/* Class = "NSButtonCell"; title = "Keep Aspect Ratio"; ObjectID = "hcF-CZ-p0E"; */
-"hcF-CZ-p0E.title" = "Сохранять соотношение сторон";
+/* Class = "NSMenuItem"; title = "None"; ObjectID = "gWL-mx-RIK"; */
+"gWL-mx-RIK.title" = "Нет";
 
 /* Class = "NSTextField"; ibExternalAccessibilityDescription = "Storage Height"; ObjectID = "Hkl-7Z-J2e"; */
 "Hkl-7Z-J2e.ibExternalAccessibilityDescription" = "Высота хранения";
 
-/* Class = "NSTextField"; ibShadowedToolTip = "Video storage height. This is the number of pixels tall to be encoded. Storage height may differ from display height depending on anamorphic settings."; ObjectID = "Hkl-7Z-J2e"; */
-"Hkl-7Z-J2e.ibShadowedToolTip" = "Высота хранения видео. Это число пикселей в высоту для кодирования. Высота хранения может отличаться от высоты вывода в зависимости от настроек анаморфирования.";
-
 /* Class = "NSTextFieldCell"; title = "x"; ObjectID = "hN1-S9-zl8"; */
 "hN1-S9-zl8.title" = "на";
 
-/* Class = "NSTextField"; ibExternalAccessibilityDescription = "Pixel Aspect Ration Numerator"; ObjectID = "JC3-5O-BXA"; */
-"JC3-5O-BXA.ibExternalAccessibilityDescription" = "Ширина соотношения сторон пикселя";
+/* Class = "NSStepper"; ibExternalAccessibilityDescription = "Storage Width"; ObjectID = "iuc-JG-bhU"; */
+"iuc-JG-bhU.ibExternalAccessibilityDescription" = "Ширина хранения";
 
-/* Class = "NSTextField"; ibShadowedToolTip = "Pixel Aspect Ratio defines the shape of the storage pixels, or how to scale anamorphic video to create the correct display aspect and dimensions. Non-anamorphic video (1:1 PAR) is not scaled during playback."; ObjectID = "JC3-5O-BXA"; */
-"JC3-5O-BXA.ibShadowedToolTip" = "Соотношение сторон пикселя определяет форму хранимого пикселя, или определяет то, как следует анаморфично масштабировать видео для создания правильных соотношения сторон и размеров. Неанаморфные видео (1:1 PAR) не масштабируются во время воспроизведения.";
+/* Class = "NSStepper"; ibExternalAccessibilityDescription = "Display width"; ObjectID = "jru-UG-Rf6"; */
+"jru-UG-Rf6.ibExternalAccessibilityDescription" = "Ширина вывода";
 
-/* Class = "NSTextFieldCell"; title = "Modulus:"; ObjectID = "jXn-fo-wNU"; */
-"jXn-fo-wNU.title" = "Модуль:";
-
-/* Class = "NSMenuItem"; title = "Auto"; ObjectID = "JyN-AK-Hae"; */
+/* Class = "NSMenuItem"; title = "Automatic"; ObjectID = "JyN-AK-Hae"; */
 "JyN-AK-Hae.title" = "Авто";
+
+/* Class = "NSMenuItem"; title = "Automatic"; ObjectID = "Kay-sv-ssX"; */
+"Kay-sv-ssX.title" = "Авто";
+
+/* Class = "NSTextFieldCell"; title = "Storage Size:"; ObjectID = "kOg-k4-0N2"; */
+"kOg-k4-0N2.title" = "Размеры хранения:";
 
 /* Class = "CocoaBindingsConnection"; ibShadowedIsNilPlaceholder = "0"; ObjectID = "krD-da-wuz"; */
 "krD-da-wuz.ibShadowedIsNilPlaceholder" = "0";
 
-/* Class = "NSTextFieldCell"; title = "Storage Size:"; ObjectID = "L7V-2e-qf9"; */
-"L7V-2e-qf9.title" = "Размеры хранения:";
+/* Class = "NSTextField"; ibShadowedToolTip = "Left edge border amount in pixels"; ObjectID = "l2V-GK-BgU"; */
+"l2V-GK-BgU.ibShadowedToolTip" = "Обрезка по левой грани в пикселях";
 
-/* Class = "NSMenuItem"; title = "8"; ObjectID = "Lbl-i2-YJg"; */
-"Lbl-i2-YJg.title" = "8";
+/* Class = "NSTextFieldCell"; title = "1:1"; ObjectID = "lIt-eN-Uyd"; */
+"lIt-eN-Uyd.title" = "1:1";
+
+/* Class = "NSMenuItem"; title = "Custom"; ObjectID = "LQm-LK-6tr"; */
+"LQm-LK-6tr.title" = "Пользовательское";
 
 /* Class = "NSTextField"; ibExternalAccessibilityDescription = "Crop left"; ObjectID = "LTu-ic-Ty9"; */
 "LTu-ic-Ty9.ibExternalAccessibilityDescription" = "Кадрирование слева";
 
-/* Class = "NSTextField"; ibShadowedToolTip = "Left edge cropping amount in pixels."; ObjectID = "LTu-ic-Ty9"; */
-"LTu-ic-Ty9.ibShadowedToolTip" = "Обрезка по левой грани в пикселях.";
-
-/* Class = "NSTextField"; ibExternalAccessibilityDescription = "Display Width"; ObjectID = "LWv-Y9-b0S"; */
-"LWv-Y9-b0S.ibExternalAccessibilityDescription" = "Ширина вывода";
-
-/* Class = "NSTextField"; ibShadowedToolTip = "Display width. This is the number of pixels wide your video will appear to be at its native resolution, and is the result of scaling the storage dimensions by the pixel aspect."; ObjectID = "LWv-Y9-b0S"; */
-"LWv-Y9-b0S.ibShadowedToolTip" = "Ширина вывода. Это число пикселей в ширину, которое используется для визуального приведения к родному разрешению, и оно является результатом масштабирования размеров хранения на соотношение сторон пикселя.";
-
-/* Class = "NSMenuItem"; title = "4"; ObjectID = "MgF-Gw-0fD"; */
-"MgF-Gw-0fD.title" = "4";
-
 /* Class = "NSStepper"; ibExternalAccessibilityDescription = "Crop top"; ObjectID = "Mke-9L-LvB"; */
 "Mke-9L-LvB.ibExternalAccessibilityDescription" = "Кадрирование сверху";
-
-/* Class = "NSView"; ibExternalAccessibilityDescription = "Cropping"; ObjectID = "Mri-4y-8rX"; */
-"Mri-4y-8rX.ibExternalAccessibilityDescription" = "Кадрирование";
-
-/* Class = "NSTextField"; ibExternalAccessibilityDescription = "Display Height"; ObjectID = "nQe-Vq-Og2"; */
-"nQe-Vq-Og2.ibExternalAccessibilityDescription" = "Высота вывода";
-
-/* Class = "NSTextField"; ibShadowedToolTip = "Display height. This is the number of pixels tall your video will appear to be at its native resolution, and is the result of scaling the storage dimensions by the pixel aspect."; ObjectID = "nQe-Vq-Og2"; */
-"nQe-Vq-Og2.ibShadowedToolTip" = "Высота вывода. Это число пикселей в высоту, которое используется для визуального приведения к родному разрешению, и оно является результатом масштабирования размеров хранения на соотношение сторон пикселя.";
-
-/* Class = "NSPopUpButton"; ibShadowedToolTip = "Ensure storage dimensions are multiples of this value. Higher values are only necessary for compatibility with certain legacy devices. Set to 2 unless you have a specific compatibility concern."; ObjectID = "ns0-ar-I7c"; */
-"ns0-ar-I7c.ibShadowedToolTip" = "Убедитесь, что размеры хранения являются кратными этому значению. Более высокие значения необходимы только для совместимости с некоторыми устаревшими устройствами. Следует указать 2, если только у вас нет специфичных сомнений насчет совместимости.";
 
 /* Class = "CocoaBindingsConnection"; ibShadowedIsNilPlaceholder = "0"; ObjectID = "ob5-QF-mOC"; */
 "ob5-QF-mOC.ibShadowedIsNilPlaceholder" = "0";
 
-/* Class = "NSMenuItem"; title = "2"; ObjectID = "OWb-6v-ggg"; */
-"OWb-6v-ggg.title" = "2";
+/* Class = "NSTextFieldCell"; title = "Color:"; ObjectID = "OCX-n7-THw"; */
+"OCX-n7-THw.title" = "Цвет:";
+
+/* Class = "NSMenuItem"; title = "Custom"; ObjectID = "owa-gb-koC"; */
+"owa-gb-koC.title" = "Пользовательское";
+
+/* Class = "NSMenuItem"; title = "Dark Gray"; ObjectID = "pWs-NL-FVO"; */
+"pWs-NL-FVO.title" = "Темно Серый";
+
+/* Class = "NSMenuItem"; title = "0°"; ObjectID = "qsi-r7-kNQ"; */
+"qsi-r7-kNQ.title" = "0°";
+
+/* Class = "CocoaBindingsConnection"; ibShadowedIsNilPlaceholder = "0"; ObjectID = "QSp-61-LWu"; */
+"QSp-61-LWu.ibShadowedIsNilPlaceholder" = "0";
 
 /* Class = "NSMenu"; title = "OtherViews"; ObjectID = "qSV-uB-Iup"; */
 "qSV-uB-Iup.title" = "OtherViews";
 
-/* Class = "NSStepper"; ibExternalAccessibilityDescription = "v"; ObjectID = "r9l-cH-pFW"; */
-"r9l-cH-pFW.ibExternalAccessibilityDescription" = "v";
+/* Class = "NSMenuItem"; title = "1080p HD"; ObjectID = "qzy-K8-2tY"; */
+"qzy-K8-2tY.title" = "1080p HD";
 
-/* Class = "NSTextField"; ibExternalAccessibilityDescription = "Pixel Aspect Ratio Denominator"; ObjectID = "rFi-0b-3BX"; */
-"rFi-0b-3BX.ibExternalAccessibilityDescription" = "Высота соотношения сторон пикселя";
+/* Class = "NSStepper"; ibExternalAccessibilityDescription = "Crop left"; ObjectID = "r9l-cH-pFW"; */
+"r9l-cH-pFW.ibExternalAccessibilityDescription" = "Кадрирование слева";
 
-/* Class = "NSTextField"; ibShadowedToolTip = "Pixel Aspect Ratio defines the shape of the storage pixels, or how to scale anamorphic video to create the correct display aspect and dimensions. Non-anamorphic video (1:1 PAR) is not scaled during playback."; ObjectID = "rFi-0b-3BX"; */
-"rFi-0b-3BX.ibShadowedToolTip" = "Соотношение сторон пикселя определяет форму хранимого пикселя, или определяет то, как следует анаморфично масштабировать видео для создания правильных соотношения сторон и размеров. Неанаморфные видео (1:1 PAR) не масштабируются во время воспроизведения.";
+/* Class = "CocoaBindingsConnection"; ibShadowedIsNilPlaceholder = "0"; ObjectID = "sg1-tR-fnw"; */
+"sg1-tR-fnw.ibShadowedIsNilPlaceholder" = "0";
 
-/* Class = "NSMatrix"; ibShadowedToolTip = "Cropping mode.\n\nAutomatic detects and removes black borders from the video.\n\nCustom allows for manual settings."; ObjectID = "RTr-3u-52l"; */
-"RTr-3u-52l.ibShadowedToolTip" = "Режим кадрирования.";
+/* Class = "CocoaBindingsConnection"; ibShadowedIsNilPlaceholder = "0"; ObjectID = "sut-JO-hwX"; */
+"sut-JO-hwX.ibShadowedIsNilPlaceholder" = "0";
 
-/* Class = "NSButtonCell"; title = "Radio"; ObjectID = "S7K-vF-t1n"; */
-"S7K-vF-t1n.title" = "Radio";
-
-/* Class = "NSTextFieldCell"; title = "Display Size:"; ObjectID = "SPg-s0-Oh0"; */
-"SPg-s0-Oh0.title" = "Размеры вывода:";
-
-/* Class = "NSMenuItem"; title = "Loose"; ObjectID = "Uiw-Nb-u5X"; */
-"Uiw-Nb-u5X.title" = "Свободная";
-
-/* Class = "NSMenu"; title = "OtherViews"; ObjectID = "und-OA-MLn"; */
-"und-OA-MLn.title" = "OtherViews";
+/* Class = "NSMenuItem"; title = "270°"; ObjectID = "tIU-4H-3Xm"; */
+"tIU-4H-3Xm.title" = "270°";
 
 /* Class = "NSTextField"; ibExternalAccessibilityDescription = " "; ObjectID = "uqQ-uA-3xF"; */
 "uqQ-uA-3xF.ibExternalAccessibilityDescription" = "0b36a71978ca057bf0594fec41410ec0_tr";
 
-/* Class = "NSMenuItem"; title = "16"; ObjectID = "uTT-yC-MFJ"; */
-"uTT-yC-MFJ.title" = "16";
+/* Class = "NSTextFieldCell"; title = ":"; ObjectID = "uuL-JR-73C"; */
+"uuL-JR-73C.title" = ":";
 
-/* Class = "NSTextFieldCell"; title = "x"; ObjectID = "uuL-JR-73C"; */
-"uuL-JR-73C.title" = "на";
+/* Class = "NSMenuItem"; title = "90°"; ObjectID = "V1G-sQ-eqd"; */
+"V1G-sQ-eqd.title" = "90°";
 
-/* Class = "NSPopUpButton"; ibShadowedToolTip = "Anamorphic allows arbitrary storage dimensions while preserving the original aspect during playback.\n\nOff disables anamorphic. Video storage dimensions and display dimensions will be identical. Only useful for compatibility with certain legacy devices.\n\nAuto maximizes storage resolution while preserving the original display aspect ratio. Recommended.\n\nLoose is similar to Auto, but attempts to preserve the storage aspect ratio. This can result in a slight storage resolution loss compared to Auto.\n\nCustom allows manually setting all parameters. Useful for correcting an incorrect source display aspect and for professionals needing advanced control in post-production."; ObjectID = "w1f-3S-up0"; */
-"w1f-3S-up0.ibShadowedToolTip" = "Анаморфирование позволяет хранить произвольные размеры при сохранении исходного соотношения сторон во время воспроизведения.\n\n'Выкл.' выключает анаморфирование. Размеры видео при хранении и выводе будут одинаковыми. Полезно только для совместимости с некоторыми старыми устройствами.\n\n'Авто' максимизирует разрешение хранения при сохранении исходного соотношения сторон. Рекомендованная настойка.\n\n'Свободная' схожа с 'Авто', но пытается сохранить исходное соотношение сторон при хранении. Это может привести к небольшой потере разрешения хранения по сравнению с 'Авто'.\n\n'Пользовательское' позволяет вручную настроить все параметры. Полезно для коррекции неправильного выходного соотношения сторон и для профессиональных нужд в постпроизводстве.";
+/* Class = "NSMenuItem"; title = "4320p 8K Ultra HD"; ObjectID = "Vrx-BH-ry2"; */
+"Vrx-BH-ry2.title" = "4320p 8K Ultra HD";
+
+/* Class = "NSMenuItem"; title = "Custom"; ObjectID = "vzz-ej-1nx"; */
+"vzz-ej-1nx.title" = "Пользовательское";
+
+/* Class = "NSTextFieldCell"; title = "Display Size:"; ObjectID = "WBD-tH-x3h"; */
+"WBD-tH-x3h.title" = "Размеры вывода:";
 
 /* Class = "NSTextField"; ibExternalAccessibilityDescription = "Crop right"; ObjectID = "wsq-TS-cC6"; */
 "wsq-TS-cC6.ibExternalAccessibilityDescription" = "Кадрирование справа";
 
-/* Class = "NSTextField"; ibShadowedToolTip = "Right edge cropping amount in pixels."; ObjectID = "wsq-TS-cC6"; */
-"wsq-TS-cC6.ibShadowedToolTip" = "Обрезка по правой грани в пикселях.";
+/* Class = "NSTextField"; ibShadowedToolTip = "Right edge cropping amount in pixels"; ObjectID = "wsq-TS-cC6"; */
+"wsq-TS-cC6.ibShadowedToolTip" = "Обрезка по правой грани в пикселях";
 
 /* Class = "CocoaBindingsConnection"; ibShadowedIsNilPlaceholder = "0"; ObjectID = "x0H-9t-WiF"; */
 "x0H-9t-WiF.ibShadowedIsNilPlaceholder" = "0";
 
-/* Class = "NSButtonCell"; title = "Custom:"; ObjectID = "zmf-MM-j1I"; */
-"zmf-MM-j1I.title" = "Пользовательские:";
+/* Class = "NSMenuItem"; title = "720p HD"; ObjectID = "Xao-1P-xPT"; */
+"Xao-1P-xPT.title" = "720p HD";
+
+/* Class = "NSMenuItem"; title = "Custom"; ObjectID = "Xun-U2-N6F"; */
+"Xun-U2-N6F.title" = "Пользовательское";
+
+/* Class = "NSMenuItem"; title = "576p PAL SD"; ObjectID = "yue-jq-T1X"; */
+"yue-jq-T1X.title" = "576p PAL SD";
+
+/* Class = "NSTextFieldCell"; title = "Borders"; ObjectID = "ywF-EG-IYr"; */
+"ywF-EG-IYr.title" = "Границы";
+
+/* Class = "NSTextFieldCell"; title = "Cropping:"; ObjectID = "zsq-Le-41g"; */
+"zsq-Le-41g.title" = "Кадрирование:";
+
+/* Class = "NSTextFieldCell"; title = "Storage Size:"; ObjectID = "ZZ9-XW-Uib"; */
+"ZZ9-XW-Uib.title" = "Размеры хранения:";
 

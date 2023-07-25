@@ -213,8 +213,9 @@
         </Grid>
 
         <Grid Grid.Column="1" Background="Black" Opacity="0.75" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
-            <Border BorderThickness="2" CornerRadius="4" BorderBrush="{StaticResource Ui.Light}" VerticalAlignment="Center" HorizontalAlignment="Center">
-                <TextBlock Text="{x:Static Properties:Resources.SourceSelection_DropFileHere}" TextWrapping="WrapWithOverflow" Foreground="White" Margin="100,125,100,125"  FontSize="30"  />
+            <Border BorderThickness="4" CornerRadius="4" BorderBrush="{StaticResource Ui.Light}" VerticalAlignment="Center" HorizontalAlignment="Center">
+                <TextBlock Text="{x:Static Properties:Resources.SourceSelection_DropFileHere}" TextWrapping="WrapWithOverflow" Foreground="White" 
+                           Margin="100,150,100,150"  FontSize="22"   />
             </Border>
         </Grid>
     </Grid>

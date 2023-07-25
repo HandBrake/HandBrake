@@ -8,7 +8,7 @@
 "75B-xq-Qbe.title" = "分辨率限制：";
 
 /* Class = "NSButtonCell"; title = "Selection Behavior…"; ObjectID = "a0j-nw-n23"; */
-"a0j-nw-n23.title" = "选择行为";
+"a0j-nw-n23.title" = "选择行为…";
 
 /* Class = "NSButton"; ibShadowedToolTip = "Selection Behavior determines the track(s) and settings used when the preset is selected."; ObjectID = "aez-2b-JXx"; */
 "aez-2b-JXx.ibShadowedToolTip" = "选择行为决定了选择预设时使用的音轨和设置。";
@@ -38,13 +38,13 @@
 "HKp-K9-MF4.title" = "音频：";
 
 /* Class = "NSTextFieldCell"; title = "Category:"; ObjectID = "IyE-Lz-32s"; */
-"IyE-Lz-32s.title" = "类别：";
+"IyE-Lz-32s.title" = "分类：";
 
 /* Class = "NSTextFieldCell"; title = "Preset Name:"; ObjectID = "jhj-Et-ncF"; */
 "jhj-Et-ncF.title" = "预设名称：";
 
 /* Class = "NSButtonCell"; title = "Selection Behavior…"; ObjectID = "LPX-Rc-KLa"; */
-"LPX-Rc-KLa.title" = "选择行为";
+"LPX-Rc-KLa.title" = "选择行为…";
 
 /* Class = "NSTextField"; ibExternalAccessibilityDescription = "Picture Height"; ObjectID = "Mga-dS-8BF"; */
 "Mga-dS-8BF.ibExternalAccessibilityDescription" = "画面高度";
@@ -56,7 +56,7 @@
 "Nfk-ix-xIv.title" = "x";
 
 /* Class = "NSButton"; ibShadowedToolTip = "Selection Behavior determines the track(s) and settings used when the preset is selected."; ObjectID = "nWJ-0b-fUA"; */
-"nWJ-0b-fUA.ibShadowedToolTip" = "选择行为决定了选择预置时使用的轨道和设置。";
+"nWJ-0b-fUA.ibShadowedToolTip" = "这些选择决定了默认设置时使用的轨道和设置。";
 
 /* Class = "NSTextFieldCell"; title = "Subtitles:"; ObjectID = "OYE-GG-Vo3"; */
 "OYE-GG-Vo3.title" = "字幕：";

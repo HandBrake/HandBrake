@@ -26,7 +26,6 @@ namespace HandBrakeWPF.Services.Presets.Factories
 
     using HandBrakeWPF.Model.Audio;
     using HandBrakeWPF.Model.Filters;
-    using HandBrakeWPF.Model.Picture;
     using HandBrakeWPF.Model.Subtitles;
     using HandBrakeWPF.Model.Video;
     using HandBrakeWPF.Services.Encode.Model.Models;
@@ -65,6 +64,7 @@ namespace HandBrakeWPF.Services.Presets.Factories
             /* Picture Settings */
             preset.Task.MaxWidth = importedPreset.PictureWidth.HasValue && importedPreset.PictureWidth.Value > 0 ? importedPreset.PictureWidth.Value : (int?)null;
             preset.Task.MaxHeight = importedPreset.PictureHeight.HasValue && importedPreset.PictureHeight.Value > 0 ? importedPreset.PictureHeight.Value : (int?)null;
+
             preset.Task.Cropping = new Cropping(importedPreset.PictureTopCrop, importedPreset.PictureBottomCrop, importedPreset.PictureLeftCrop, importedPreset.PictureRightCrop, importedPreset.PictureCropMode);
             preset.Task.KeepDisplayAspect = importedPreset.PictureKeepRatio;
             preset.Task.AllowUpscaling = importedPreset.PictureAllowUpscaling;
@@ -281,8 +281,8 @@ namespace HandBrakeWPF.Services.Presets.Factories
             /* Video Settings */
             preset.Task.VideoEncoder = HandBrakeEncoderHelpers.VideoEncoders.FirstOrDefault(s => s.ShortName == importedPreset.VideoEncoder);
             preset.Task.VideoBitrate = importedPreset.VideoAvgBitrate;
-            preset.Task.TwoPass = importedPreset.VideoTwoPass;
-            preset.Task.TurboFirstPass = importedPreset.VideoTurboTwoPass;
+            preset.Task.MultiPass = importedPreset.VideoMultiPass;
+            preset.Task.TurboAnalysisPass = importedPreset.VideoTurboMultiPass;
             preset.Task.ExtraAdvancedArguments = importedPreset.VideoOptionExtra;
             preset.Task.Quality = double.Parse(importedPreset.VideoQualitySlider.ToString(CultureInfo.InvariantCulture), CultureInfo.InvariantCulture);
             preset.Task.VideoEncodeRateType = (VideoEncodeRateType)importedPreset.VideoQualityType;
@@ -576,7 +576,6 @@ namespace HandBrakeWPF.Services.Presets.Factories
             preset.PictureBottomCrop = export.Task.Cropping.Bottom;
             preset.PictureLeftCrop = export.Task.Cropping.Left;
             preset.PictureRightCrop = export.Task.Cropping.Right;
-            preset.PictureAutoCrop = (CropMode)export.Task.Cropping.CropMode == CropMode.Custom; // Obsolete. For compatibility only.
 
             // Filters
             preset.PictureDeblockPreset = export.Task.DeblockPreset?.Key;
@@ -627,8 +626,8 @@ namespace HandBrakeWPF.Services.Presets.Factories
             preset.VideoTune = export.Task.VideoTunes.Aggregate(string.Empty, (current, item) => !string.IsNullOrEmpty(current) ? string.Format("{0},{1}", current, item.ShortName) : item.ShortName);
             preset.VideoAvgBitrate = export.Task.VideoBitrate ?? 0;
             preset.VideoColorMatrixCode = 0; // TODO not supported.
-            preset.VideoTurboTwoPass = export.Task.TurboFirstPass;
-            preset.VideoTwoPass = export.Task.TwoPass;
+            preset.VideoTurboMultiPass = export.Task.TurboAnalysisPass;
+            preset.VideoMultiPass = export.Task.MultiPass;
 
             // Unknown
             preset.ChildrenArray = new List<object>(); 

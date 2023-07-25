@@ -1,4 +1,4 @@
-/* -*- Mode: C; indent-tabs-mode: t; c-basic-offset: 4; tab-width: 4 -*- */
+/* -*- Mode: C; indent-tabs-mode: nil; c-basic-offset: 4; tab-width: 4 -*- */
 /*
  * audiohandler.c
  * Copyright (C) John Stebbins 2008-2022 <stebbins@stebbins>
@@ -21,8 +21,10 @@
  *  Boston, MA  02110-1301, USA.
  */
 
-#include <glib/gi18n.h>
 #include "ghbcompat.h"
+
+#include <glib/gi18n.h>
+
 #include "handbrake/handbrake.h"
 #include "settings.h"
 #include "jobdict.h"
@@ -35,10 +37,10 @@
 #include "presets.h"
 
 static void audio_add_to_settings(GhbValue *settings, GhbValue *asettings);
-static void ghb_add_audio_to_ui(signal_user_data_t *ud, const GhbValue *settings);
+static void audio_add_to_ui(signal_user_data_t *ud, const GhbValue *settings);
 static GhbValue* audio_get_selected_settings(signal_user_data_t *ud, int *index);
-static void ghb_clear_audio_list_settings(GhbValue *settings);
-static void ghb_clear_audio_list_ui(GtkBuilder *builder);
+static void clear_audio_list_settings(GhbValue *settings);
+static void clear_audio_list_ui(GtkBuilder *builder);
 
 static gboolean block_updates = FALSE;
 
@@ -387,7 +389,8 @@ void ghb_sanitize_audio_track_settings(GhbValue *settings)
     }
 }
 
-void ghb_sanitize_audio_tracks(signal_user_data_t *ud)
+static void
+sanitize_audio_tracks (signal_user_data_t *ud)
 {
     int ii;
     GhbValue *alist = ghb_get_job_audio_list(ud->settings);
@@ -639,8 +642,8 @@ void ghb_audio_title_change(signal_user_data_t *ud, gboolean title_valid)
     gtk_widget_set_sensitive(w, title_valid);
 }
 
-void
-ghb_set_pref_audio_settings(GhbValue *settings)
+static void
+set_pref_audio_settings (GhbValue *settings)
 {
     int       title_id;
     GhbValue *copy_mask;
@@ -799,8 +802,8 @@ audio_refresh_list_row_ui(
         0, info_src,
         1, "-->",
         2, info_dst,
-        3, "hb-edit",
-        4, "hb-remove",
+        3, "document-edit-symbolic",
+        4, "edit-delete-symbolic",
         5, 0.5,
         -1);
 
@@ -855,7 +858,7 @@ ghb_audio_list_refresh_selected(signal_user_data_t *ud)
     GhbValue *asettings = NULL;
     const GhbValue *audio_list;
 
-    g_debug("ghb_audio_list_refresh_selected ()");
+    ghb_log_func();
     tv = GTK_TREE_VIEW(GHB_WIDGET(ud->builder, "audio_list_view"));
     ts = gtk_tree_view_get_selection (tv);
     if (gtk_tree_selection_get_selected(ts, &tm, &ti))
@@ -895,7 +898,7 @@ audio_refresh_list_ui(signal_user_data_t *ud)
     count = ghb_array_len(audio_list);
     if (count != tm_count)
     {
-        ghb_clear_audio_list_ui(ud->builder);
+        clear_audio_list_ui(ud->builder);
         for (ii = 0; ii < count; ii++)
         {
             gtk_tree_store_append(GTK_TREE_STORE(tm), &ti, NULL);
@@ -912,12 +915,12 @@ audio_refresh_list_ui(signal_user_data_t *ud)
 void
 ghb_audio_list_refresh_all(signal_user_data_t *ud)
 {
-    ghb_sanitize_audio_tracks(ud);
+    sanitize_audio_tracks(ud);
     audio_refresh_list_ui(ud);
     ghb_update_summary_info(ud);
 }
 
-void
+static void
 audio_update_setting(
     GhbValue           *val,
     const char         *name,
@@ -1042,7 +1045,7 @@ audio_codec_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 G_MODULE_EXPORT void
 audio_track_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
-    g_debug("audio_track_changed_cb ()");
+    ghb_log_func();
     ghb_widget_to_setting(ud->settings, widget);
     GhbValue *val = ghb_widget_value(widget);
     audio_update_setting(ghb_value_xform(val, GHB_INT), "Track", ud);
@@ -1245,12 +1248,12 @@ gain_widget_changed_cb(GtkWidget *widget, gdouble gain, signal_user_data_t *ud)
     audio_update_setting(ghb_double_value_new(gain), "Gain", ud);
 }
 
-void
-ghb_clear_audio_list_settings(GhbValue *settings)
+static void
+clear_audio_list_settings (GhbValue *settings)
 {
     GhbValue *audio_list;
 
-    g_debug("clear_audio_list_settings ()");
+    ghb_log_func();
     audio_list = ghb_get_job_audio_list(settings);
     ghb_array_reset(audio_list);
 }
@@ -1261,7 +1264,7 @@ ghb_clear_audio_selection(GtkBuilder *builder)
     GtkTreeView *tv;
     GtkTreeSelection *tsel;
 
-    g_debug("clear_audio_list_ui ()");
+    ghb_log_func();
     tv = GTK_TREE_VIEW(GHB_WIDGET(builder, "audio_list_view"));
     // Clear tree selection so that updates are not triggered
     // that cause a recursive attempt to clear the tree selection (crasher)
@@ -1269,14 +1272,14 @@ ghb_clear_audio_selection(GtkBuilder *builder)
     gtk_tree_selection_unselect_all(tsel);
 }
 
-void
-ghb_clear_audio_list_ui(GtkBuilder *builder)
+static void
+clear_audio_list_ui (GtkBuilder *builder)
 {
     GtkTreeView *tv;
     GtkTreeStore *ts;
     GtkTreeSelection *tsel;
 
-    g_debug("clear_audio_list_ui ()");
+    ghb_log_func();
     tv = GTK_TREE_VIEW(GHB_WIDGET(builder, "audio_list_view"));
     ts = GTK_TREE_STORE(gtk_tree_view_get_model(tv));
     // Clear tree selection so that updates are not triggered
@@ -1287,7 +1290,7 @@ ghb_clear_audio_list_ui(GtkBuilder *builder)
 }
 
 static void
-ghb_add_audio_to_ui(signal_user_data_t *ud, const GhbValue *asettings)
+audio_add_to_ui (signal_user_data_t *ud, const GhbValue *asettings)
 {
     GtkTreeView *tv;
     GtkTreeIter ti;
@@ -1315,7 +1318,7 @@ audio_list_selection_changed_cb(GtkTreeSelection *ts, signal_user_data_t *ud)
     GhbValue *asettings = NULL;
     gint row;
 
-    g_debug("audio_list_selection_changed_cb ()");
+    ghb_log_func();
     if (gtk_tree_selection_get_selected(ts, &tm, &ti))
     {
         GtkTreeIter pti;
@@ -1378,13 +1381,14 @@ audio_add_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
     GhbValue *pref_audio = ghb_dict_get_value(ud->settings, "AudioList");
     asettings = audio_select_and_add_track(title, ud->settings, pref_audio,
                                            "und", 0, 0);
-    ghb_add_audio_to_ui(ud, asettings);
+    audio_add_to_ui(ud, asettings);
 
     if (asettings != NULL)
     {
         // Pop up the edit dialog
         GtkResponseType response;
         GtkWidget *dialog = GHB_WIDGET(ud->builder, "audio_dialog");
+        gtk_window_set_title(GTK_WINDOW(dialog), _("Add Audio Track"));
         response = gtk_dialog_run(GTK_DIALOG(dialog));
         gtk_widget_hide(dialog);
         if (response != GTK_RESPONSE_OK)
@@ -1412,8 +1416,8 @@ audio_add_all_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
     const hb_title_t *title;
 
     // Add the current audio settings to the list.
-    ghb_clear_audio_list_settings(ud->settings);
-    ghb_clear_audio_list_ui(ud->builder);
+    clear_audio_list_settings(ud->settings);
+    clear_audio_list_ui(ud->builder);
 
     title_id = ghb_dict_get_int(ud->settings, "title");
     title = ghb_lookup_title(title_id, &titleindex);
@@ -1466,6 +1470,7 @@ audio_edit(GtkTreeView *tv, GtkTreePath *tp, signal_user_data_t *ud)
         // Pop up the edit dialog
         GtkResponseType response;
         GtkWidget *dialog = GHB_WIDGET(ud->builder, "audio_dialog");
+        gtk_window_set_title(GTK_WINDOW(dialog), _("Edit Audio Track"));
         response = gtk_dialog_run(GTK_DIALOG(dialog));
         gtk_widget_hide(dialog);
         if (response != GTK_RESPONSE_OK)
@@ -1564,8 +1569,8 @@ audio_remove_clicked_cb(GtkWidget *widget, gchar *path, signal_user_data_t *ud)
 G_MODULE_EXPORT void
 audio_reset_clicked_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
-    ghb_set_pref_audio_settings(ud->settings);
-    ghb_sanitize_audio_tracks(ud);
+    set_pref_audio_settings(ud->settings);
+    sanitize_audio_tracks(ud);
     audio_update_dialog_widgets(ud, audio_get_selected_settings(ud, NULL));
     audio_refresh_list_ui(ud);
     ghb_update_summary_info(ud);
@@ -1737,7 +1742,8 @@ audio_def_quality_changed_cb(GtkWidget *w, gdouble quality, signal_user_data_t *
 G_MODULE_EXPORT void
 audio_def_quality_enable_changed_cb(GtkWidget *w, signal_user_data_t *ud);
 
-GtkWidget * ghb_create_audio_settings_row(signal_user_data_t *ud)
+static GtkWidget *
+create_audio_settings_row (signal_user_data_t *ud)
 {
     GtkBox *box, *box2, *box3;
     GtkComboBox *combo;
@@ -1949,7 +1955,7 @@ GtkWidget * ghb_create_audio_settings_row(signal_user_data_t *ud)
     button = GTK_BUTTON(gtk_button_new());
     gtk_widget_set_hexpand(GTK_WIDGET(button), TRUE);
     gtk_widget_set_halign(GTK_WIDGET(button), GTK_ALIGN_FILL);
-    ghb_button_set_icon_name(button, "hb-remove");
+    ghb_button_set_icon_name(button, "edit-delete");
     gtk_widget_set_tooltip_markup(GTK_WIDGET(button),
     _("Remove this audio encoder"));
     gtk_button_set_relief(button, GTK_RELIEF_NONE);
@@ -2012,7 +2018,7 @@ audio_def_setting_update(signal_user_data_t *ud, GtkWidget *widget)
     }
 }
 
-void
+static void
 audio_add_lang_iter(GtkTreeModel *tm, GtkTreeIter *iter, signal_user_data_t *ud)
 {
     GtkTreeView         * selected;
@@ -2083,7 +2089,7 @@ audio_add_lang_clicked_cb(GtkWidget *widget, signal_user_data_t *ud)
     }
 }
 
-void
+static void
 audio_remove_lang_iter(GtkTreeModel *tm, GtkTreeIter *iter,
                        signal_user_data_t *ud)
 {
@@ -2189,7 +2195,8 @@ static void audio_quality_update_limits(
     gtk_adjustment_configure (adj, value, low, high, gran, gran, 0);
 }
 
-void audio_def_set_limits(signal_user_data_t *ud, GtkWidget *widget, gboolean set_default)
+static void
+audio_def_set_limits (signal_user_data_t *ud, GtkWidget *widget, gboolean set_default)
 {
     GtkListBoxRow *row = audio_settings_get_row(widget);
     gint index = gtk_list_box_row_get_index(row);
@@ -2245,13 +2252,15 @@ void audio_def_set_limits(signal_user_data_t *ud, GtkWidget *widget, gboolean se
     ghb_audio_samplerate_opts_filter(GTK_COMBO_BOX(w), enc);
 }
 
-void audio_def_set_all_limits_cb(GtkWidget *widget, gpointer data)
+static void
+audio_def_set_all_limits_cb (GtkWidget *widget, gpointer data)
 {
     signal_user_data_t *ud = (signal_user_data_t*)data;
     audio_def_set_limits(ud, widget, FALSE);
 }
 
-void audio_def_set_all_limits(signal_user_data_t *ud)
+static void
+audio_def_set_all_limits(signal_user_data_t *ud)
 {
     GtkListBox *list_box;
 
@@ -2366,7 +2375,7 @@ audio_def_setting_add_cb(GtkWidget *widget, signal_user_data_t *ud)
     audio_def_settings_show(GTK_WIDGET(row), TRUE);
 
     // Add new "Add" button
-    widget = ghb_create_audio_settings_row(ud);
+    widget = create_audio_settings_row(ud);
     audio_def_settings_show(widget, FALSE);
     GtkListBox *list_box;
     list_box = GTK_LIST_BOX(GHB_WIDGET(ud->builder, "audio_list_default"));
@@ -2543,12 +2552,12 @@ void ghb_audio_defaults_to_ui(signal_user_data_t *ud)
         GhbValue *adict;
 
         adict = ghb_array_get(alist, ii);
-        widget = ghb_create_audio_settings_row(ud);
+        widget = create_audio_settings_row(ud);
         gtk_list_box_insert(list_box, widget, -1);
         audio_def_update_widgets(widget, adict);
     }
     // Add row with "Add" button
-    widget = ghb_create_audio_settings_row(ud);
+    widget = create_audio_settings_row(ud);
     audio_def_settings_show(widget, FALSE);
     gtk_list_box_insert(list_box, widget, -1);
 }

@@ -15,6 +15,8 @@
 #include "handbrake/handbrake.h"
 #include "handbrake/hb_dict.h"
 #include "handbrake/h265_common.h"
+#include "handbrake/dovi_common.h"
+#include "handbrake/hdr10plus.h"
 #include "x265.h"
 
 int  encx265Init (hb_work_object_t*, hb_job_t*);
@@ -65,6 +67,9 @@ struct hb_work_private_s
     // Multiple bit-depth
     const x265_api     * api;
     int                  bit_depth;
+
+    void               * sei_data;
+    unsigned int         sei_data_size;
 };
 
 static inline int64_t rescale(hb_rational_t q, int b)
@@ -205,6 +210,13 @@ int encx265Init(hb_work_object_t *w, hb_job_t *job)
         goto fail;
     }
 
+    const char *colorrange = job->color_range == AVCOL_RANGE_MPEG ? "limited" : "full";
+
+    if (param_parse(pv, param, "range",   colorrange))
+    {
+        goto fail;
+    }
+
     /*
      * HDR10 Static metadata
      */
@@ -260,7 +272,50 @@ int encx265Init(hb_work_object_t *w, hb_job_t *job)
         }
     }
 
-    if (job->chroma_location != AVCHROMA_LOC_UNSPECIFIED) {
+    if (job->passthru_dynamic_hdr_metadata & DOVI)
+    {
+        char dolbyVisionProfile[256];
+        snprintf(dolbyVisionProfile, sizeof(dolbyVisionProfile),
+                 "%hu%hu",
+                 (unsigned short)job->dovi.dv_profile,
+                 (unsigned short)job->dovi.dv_bl_signal_compatibility_id);
+
+        if (param_parse(pv, param, "dolby-vision-profile", dolbyVisionProfile))
+        {
+            goto fail;
+        }
+
+        // Dolby Vision requires VBV settings to enable HRD
+        // set the max value for the current level
+        int max_rate = hb_dolby_vision_levels[job->dovi.dv_level - 1].max_bitrate_main_tier;
+
+        char vbvMaxRate[256];
+        snprintf(vbvMaxRate, sizeof(vbvMaxRate),
+                 "%d", max_rate * 1024);
+        if (param_parse(pv, param, "vbv-maxrate", vbvMaxRate))
+        {
+            goto fail;
+        }
+
+        char vbvBufSize[256];
+        snprintf(vbvBufSize, sizeof(vbvBufSize),
+                 "%d", max_rate * 1024);
+        if (param_parse(pv, param, "vbv-bufsize", vbvBufSize))
+        {
+            goto fail;
+        }
+    }
+
+    if (job->ambient.ambient_illuminance.num && job->ambient.ambient_illuminance.den)
+    {
+        param->ambientIlluminance = rescale(job->ambient.ambient_illuminance, 10000);
+        param->ambientLightX = rescale(job->ambient.ambient_light_x, 50000);
+        param->ambientLightY = rescale(job->ambient.ambient_light_y, 50000);
+        param->bEmitAmbientViewingEnvironment = 1;
+    }
+
+    if (job->chroma_location != AVCHROMA_LOC_UNSPECIFIED)
+    {
         char chromaLocation[256];
         snprintf(chromaLocation, sizeof(chromaLocation),
                  "%d",
@@ -278,6 +333,7 @@ int encx265Init(hb_work_object_t *w, hb_job_t *job)
     /* iterate through x265_opts and parse the options */
     hb_dict_t *x265_opts;
     int override_mastering = 0, override_coll = 0, override_chroma_location = 0;
+    int override_vbv_maxrate = 0, override_vbv_bufsize = 0;
     x265_opts = hb_encopts_to_dict(job->encoder_options, job->vcodec);
 
     hb_dict_iter_t iter;
@@ -300,6 +356,14 @@ int encx265Init(hb_work_object_t *w, hb_job_t *job)
         if (!strcmp(key, "chromaloc"))
         {
             override_chroma_location = 1;
+        }
+        if (!strcmp(key, "vbv-maxrate"))
+        {
+            override_vbv_maxrate = 1;
+        }
+        if (!strcmp(key, "vbv-bufsize"))
+        {
+            override_vbv_bufsize = 1;
         }
 
         // here's where the strings are passed to libx265 for parsing
@@ -369,6 +433,30 @@ int encx265Init(hb_work_object_t *w, hb_job_t *job)
     }
 
     /*
+     * Update Dolby Vision level in case custom
+     * values were set in the encoder_options string.
+     */
+    if (override_vbv_maxrate || override_vbv_bufsize)
+    {
+        int max_rate = param->rc.vbvMaxBitrate;
+        for (int i = 0; hb_dolby_vision_levels[i].id != 0; i++)
+        {
+            int max_width = hb_dolby_vision_levels[i].max_width;
+            int tier_max_rate = param->bHighTier ?
+                                    hb_dolby_vision_levels[i].max_bitrate_high_tier :
+                                    hb_dolby_vision_levels[i].max_bitrate_main_tier;
+
+            tier_max_rate *= 1024;
+
+            if (max_rate <= tier_max_rate && job->width <= max_width)
+            {
+                job->dovi.dv_level = hb_dolby_vision_levels[i].id;
+                break;
+            }
+        }
+    }
+
+    /*
      * Settings which can't be overridden in the encoder_options string
      * (muxer-specific settings, resolution, ratecontrol, etc.).
      */
@@ -411,8 +499,8 @@ int encx265Init(hb_work_object_t *w, hb_job_t *job)
     {
         param->rc.rateControlMode = X265_RC_ABR;
         param->rc.bitrate         = job->vbitrate;
-        if (job->pass_id == HB_PASS_ENCODE_1ST ||
-            job->pass_id == HB_PASS_ENCODE_2ND)
+        if (job->pass_id == HB_PASS_ENCODE_ANALYSIS ||
+            job->pass_id == HB_PASS_ENCODE_FINAL)
         {
             char * stats_file;
             char   pass[2];
@@ -425,11 +513,11 @@ int encx265Init(hb_work_object_t *w, hb_job_t *job)
                 goto fail;
             }
             free(stats_file);
-            if (job->pass_id == HB_PASS_ENCODE_1ST)
+            if (job->pass_id == HB_PASS_ENCODE_ANALYSIS)
             {
                 char slowfirstpass[2];
                 snprintf(slowfirstpass, sizeof(slowfirstpass), "%d",
-                         !job->fastfirstpass);
+                         !job->fastanalysispass);
                 if (param_parse(pv, param, "slow-firstpass", slowfirstpass))
                 {
                     goto fail;
@@ -519,6 +607,7 @@ void encx265Close(hb_work_object_t *w)
     pv->api->param_free(pv->param);
     pv->api->encoder_close(pv->x265);
     free(pv->csvfn);
+    av_freep(&pv->sei_data);
     free(pv);
     w->private_data = NULL;
 }
@@ -543,25 +632,30 @@ static hb_buffer_t* nal_encode(hb_work_object_t *w,
                                x265_nal *nal, uint32_t nnal)
 {
     hb_work_private_t *pv = w->private_data;
-    hb_job_t *job         = pv->job;
     hb_buffer_t *buf      = NULL;
-    int i;
+    int payload_size      = 0;
 
     if (nnal <= 0)
     {
         return NULL;
     }
 
-    buf = hb_video_buffer_init(job->width, job->height);
+    for (int i = 0; i < nnal; i++)
+    {
+        payload_size += nal[i].sizeBytes;
+    }
+
+    buf = hb_buffer_init(payload_size);
     if (buf == NULL)
     {
         return NULL;
     }
+
     buf->s.flags = 0;
     buf->size = 0;
 
     // copy the bitstream data
-    for (i = 0; i < nnal; i++)
+    for (int i = 0; i < nnal; i++)
     {
         if (HB_HEVC_NALU_KEYFRAME(nal[i].type))
         {
@@ -627,6 +721,7 @@ static hb_buffer_t* x265_encode(hb_work_object_t *w, hb_buffer_t *in)
     x265_picture pic_in, pic_out;
     x265_nal *nal;
     uint32_t nnal;
+    int ret;
 
     pv->api->picture_init(pv->param, &pic_in);
 
@@ -639,6 +734,54 @@ static hb_buffer_t* x265_encode(hb_work_object_t *w, hb_buffer_t *in)
     pic_in.poc       = pv->frames_in++;
     pic_in.pts       = in->s.start;
     pic_in.bitDepth  = pv->bit_depth;
+
+    x265_sei *sei = &pic_in.userSEI;
+    sei->numPayloads = 0;
+
+    if (job->passthru_dynamic_hdr_metadata)
+    {
+        for (int i = 0; i < in->nb_side_data; i++)
+        {
+            const AVFrameSideData *side_data = in->side_data[i];
+            if (job->passthru_dynamic_hdr_metadata & HDR_10_PLUS &&
+                side_data->type == AV_FRAME_DATA_DYNAMIC_HDR_PLUS)
+            {
+                uint8_t *payload = NULL;
+                uint32_t playload_size = 0;
+                void *tmp;
+                x265_sei_payload *sei_payload = NULL;
+
+                hb_dynamic_hdr10_plus_to_itu_t_t35((AVDynamicHDRPlus *)side_data->data, &payload, &playload_size);
+                if (!playload_size)
+                {
+                    continue;
+                }
+
+                tmp = av_fast_realloc(pv->sei_data, &pv->sei_data_size,
+                                      (sei->numPayloads + 1) * sizeof(*sei_payload));
+
+                if (!tmp)
+                {
+                    continue;
+                }
+
+                pv->sei_data = tmp;
+                sei->payloads = pv->sei_data;
+                sei_payload = &sei->payloads[sei->numPayloads];
+                sei_payload->payload = payload;
+                sei_payload->payloadSize = playload_size;
+                sei_payload->payloadType = USER_DATA_REGISTERED_ITU_T_T35;
+                sei->numPayloads++;
+            }
+            if (job->passthru_dynamic_hdr_metadata & DOVI &&
+                side_data->type == AV_FRAME_DATA_DOVI_RPU_BUFFER)
+            {
+                x265_dolby_vision_rpu *rpu = &pic_in.rpu;
+                rpu->payload = side_data->data;
+                rpu->payloadSize = side_data->size;
+            }
+        }
+    }
 
     if (in->s.new_chap && job->chapter_markers)
     {
@@ -665,7 +808,15 @@ static hb_buffer_t* x265_encode(hb_work_object_t *w, hb_buffer_t *in)
     pv->last_stop = in->s.stop;
     save_frame_info(pv, in);
 
-    if (pv->api->encoder_encode(pv->x265, &nal, &nnal, &pic_in, &pic_out) > 0)
+    ret = pv->api->encoder_encode(pv->x265, &nal, &nnal, &pic_in, &pic_out);
+
+    for (int i = 0; i < sei->numPayloads; i++)
+    {
+        x265_sei_payload *sei_payload = &sei->payloads[i];
+        av_freep(&sei_payload->payload);
+    }
+
+    if (ret > 0)
     {
         return nal_encode(w, &pic_out, nal, nnal);
     }

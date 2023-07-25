@@ -1,22 +1,21 @@
 # SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR Free Software Foundation, Inc.
+# Copyright (C) 2023 HandBrake Team
 # This file is distributed under the same license as the ghb package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2023.
 # 
 # Translators:
-# Nomis101 <Nomis101@web.de>, 2019
-# JinHee Kim <sinnanjini@gmail.com>, 2019
-# nayoon <belloyv@gmail.com>, 2019
-# Jung Hee Lee <daemul72@gmail.com>, 2021
+# Junghee Lee <daemul72@gmail.com>, 2023
+# JinHee Kim <sinnanjini@gmail.com>, 2023
+# nayoon <belloyv@gmail.com>, 2023
 # 
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: ghb 0.1\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-06-17 08:17-0600\n"
+"Report-Msgid-Bugs-To: https://github.com/HandBrake/Handbrake/issues\n"
+"POT-Creation-Date: 2023-03-25 15:12+0100\n"
 "PO-Revision-Date: 2018-10-10 18:14+0000\n"
-"Last-Translator: Jung Hee Lee <daemul72@gmail.com>, 2021\n"
+"Last-Translator: nayoon <belloyv@gmail.com>, 2023\n"
 "Language-Team: Korean (https://www.transifex.com/HandBrakeProject/teams/92423/ko/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -24,7 +23,132 @@ msgstr ""
 "Language: ko\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
-#: src/ghb3.ui:23
+#: src/menu.ui:7
+msgid "_File"
+msgstr "파일(_F)"
+
+#: src/menu.ui:11
+msgid "_Open Source"
+msgstr ""
+
+#: src/menu.ui:16
+msgid "Open _Directory"
+msgstr ""
+
+#: src/menu.ui:21
+msgid "Set _Destination"
+msgstr "대상 설정하기(_D)"
+
+#: src/menu.ui:30
+msgid "_Preferences"
+msgstr "환경설정(_P)"
+
+#: src/menu.ui:34
+msgid "_Quit"
+msgstr "종료(_Q)"
+
+#: src/menu.ui:40 src/menu.ui:90
+msgid "_Queue"
+msgstr "대기열(_Q)"
+
+#: src/menu.ui:44
+msgid "_Add"
+msgstr "추가하기(_A)"
+
+#: src/menu.ui:49
+msgid "Add _Multiple"
+msgstr "여러 개 추가하기(_M)"
+
+#: src/menu.ui:53
+msgid "Add A_ll"
+msgstr ""
+
+#: src/menu.ui:60
+msgid "_Start Encoding"
+msgstr "인코딩 시작(_S)"
+
+#: src/menu.ui:65 src/queuehandler.c:2093
+msgid "_Pause Encoding"
+msgstr "인코딩 일시 중지(_P)"
+
+#: src/menu.ui:72
+msgid "S_ave Queue"
+msgstr "대기열 저장(_A)"
+
+#: src/menu.ui:76
+msgid "_Load Queue File"
+msgstr "대기열 파일 불러오기(_L)"
+
+#: src/menu.ui:81
+msgid "_View"
+msgstr "보기(_V)"
+
+#: src/menu.ui:85
+msgid "Presets _List"
+msgstr "프리셋 목록(_L)"
+
+#: src/menu.ui:95
+msgid "_Preview"
+msgstr "미리보기(_P)"
+
+#: src/menu.ui:100
+msgid "_Activity Window"
+msgstr "작업 창(_A)"
+
+#: src/menu.ui:106 src/ghb3.ui:392
+msgid "_Presets"
+msgstr "프리셋(_P)"
+
+#: src/menu.ui:110 src/ghb3.ui:166 src/ghb3.ui:400
+msgid "Set De_fault"
+msgstr "기본값 설정하기(_F)"
+
+#: src/menu.ui:116 src/ghb3.ui:172 src/ghb3.ui:414 src/ghb3.ui:8755
+#: src/ghb3.ui:9321 src/ghb3.ui:9731
+msgid "_Save"
+msgstr "저장(_S)"
+
+#: src/menu.ui:120 src/ghb3.ui:176 src/ghb3.ui:296 src/ghb3.ui:423
+msgid "Save _As"
+msgstr "다른 이름으로 저장(_A)"
+
+#: src/menu.ui:124 src/ghb3.ui:180 src/ghb3.ui:432 src/ghb3.ui:8598
+msgid "_Rename"
+msgstr "이름 바꾸기(_R)"
+
+#: src/menu.ui:128 src/ghb3.ui:184 src/ghb3.ui:441
+msgid "_Delete"
+msgstr "삭제하기(_D)"
+
+#: src/menu.ui:134 src/ghb3.ui:190
+msgid "_Import"
+msgstr "가져오기(_I)"
+
+#: src/menu.ui:138 src/ghb3.ui:194 src/ghb3.ui:455
+msgid "_Export"
+msgstr "내보내기(_E)"
+
+#: src/menu.ui:144 src/ghb3.ui:200
+msgid "Reset _Built-in Presets"
+msgstr "기본 제공된 프리셋 초기화(_B)"
+
+#: src/menu.ui:149
+msgid "_Help"
+msgstr "도움말(_H)"
+
+#: src/menu.ui:153
+msgid "_About"
+msgstr "정보(_A)"
+
+#: src/menu.ui:157
+msgid "_Guide"
+msgstr "설명서(_G)"
+
+#: src/menu.ui:167
+msgid "HandBrake For _Dummies"
+msgstr "초보자를 위한 HandBrake(_D)"
+
+#: src/ghb3.ui:101
 msgid ""
 "Render the subtitle over the video.\n"
 "\n"
@@ -34,11 +158,11 @@ msgstr ""
 "\n"
 "자막은 비디오의 일부가 되고, 비활성화할 수 없습니다."
 
-#: src/ghb3.ui:26
+#: src/ghb3.ui:104
 msgid "<b>Burned In</b>"
-msgstr "<b>번인</b>"
+msgstr "<b>진하게 인화</b>"
 
-#: src/ghb3.ui:32 src/ghb3.ui:9122
+#: src/ghb3.ui:110 src/ghb3.ui:9686
 msgid ""
 "Set the default output subtitle track.\n"
 "\n"
@@ -48,7 +172,7 @@ msgid ""
 "This is useful for creating a \"forced\" track\n"
 "in your output."
 msgstr ""
-"기본 출력 자막 트랙을 지정합니다.\n"
+"기본 출력 자막 트랙을 설정합니다.\n"
 "\n"
 "대부분의 재생기는 비디오를 재생할 때\n"
 "이 자막 트랙을 자동적으로 표시합니다.\n"
@@ -56,11 +180,11 @@ msgstr ""
 "이 설정은 출력에서 \"강제 표시\" 트랙으로 만들 때\n"
 "유용합니다."
 
-#: src/ghb3.ui:39
+#: src/ghb3.ui:117
 msgid "<b>Default</b>"
 msgstr "<b>기본값</b>"
 
-#: src/ghb3.ui:45 src/ghb3.ui:9084
+#: src/ghb3.ui:123 src/ghb3.ui:9648
 msgid ""
 "Use only subtitles that have been flagged\n"
 "as forced in the source subtitle track\n"
@@ -76,11 +200,11 @@ msgstr ""
 "얘기하는 장면에서 자막을 보여줄 때\n"
 "사용됩니다."
 
-#: src/ghb3.ui:51
+#: src/ghb3.ui:129
 msgid "<b>Forced Only</b>"
 msgstr "<b>강제 표시만</b>"
 
-#: src/ghb3.ui:57
+#: src/ghb3.ui:135
 msgid ""
 "Add (or subtract) an offset (in milliseconds)\n"
 "to the start of the SRT subtitle track.\n"
@@ -96,11 +220,11 @@ msgstr ""
 "비디오의 시작 시간과 일치하지 않기도 합니다.\n"
 "이 설정은 파일의 동기화를 제공합니다."
 
-#: src/ghb3.ui:63
+#: src/ghb3.ui:141
 msgid "<b>SRT Offset</b>"
 msgstr "<b>SRT 오프셋</b>"
 
-#: src/ghb3.ui:69
+#: src/ghb3.ui:147
 msgid ""
 "The source subtitle track\n"
 "\n"
@@ -126,139 +250,139 @@ msgstr ""
 "추가합니다. 이 옵션은 \"강제\" 옵션과\n"
 "함께 사용하는 것이 가장 좋습니다."
 
-#: src/ghb3.ui:80
+#: src/ghb3.ui:158
 msgid "<b>Track</b>"
 msgstr "<b>트랙</b>"
 
-#: src/ghb3.ui:87
+#: src/ghb3.ui:208
+msgid "Play File"
+msgstr "파일 재생하기"
+
+#: src/ghb3.ui:212 src/callbacks.c:1720
 msgid "Open Source Directory"
-msgstr "원본 디렉토리 열기"
+msgstr "원본 디렉터리 열기"
 
-#: src/ghb3.ui:91
+#: src/ghb3.ui:216
 msgid "Open Destination Directory"
-msgstr "대상 디렉토리 열기"
+msgstr "대상 디렉터리 열기"
 
-#: src/ghb3.ui:95
+#: src/ghb3.ui:222
 msgid "Open Encode Log Directory"
-msgstr "인코드 로그 디렉토리 열기"
+msgstr "인코드 로그 디렉터리 열기"
 
-#: src/ghb3.ui:99
+#: src/ghb3.ui:226
 msgid "Open Encode Log"
 msgstr "인코드 로그 열기"
 
-#: src/ghb3.ui:108
+#: src/ghb3.ui:235
 msgid "Reset Failed Jobs"
 msgstr "실패한 작업 재설정"
 
-#: src/ghb3.ui:112
+#: src/ghb3.ui:239
 msgid "Reset All Jobs"
 msgstr "모든 작업 재설정"
 
-#: src/ghb3.ui:116
+#: src/ghb3.ui:243
 msgid "Clear Completed Jobs"
 msgstr "완료된 작업 지우기"
 
-#: src/ghb3.ui:120
+#: src/ghb3.ui:247
 msgid "Clear All Jobs"
 msgstr "모든 작업 지우기"
 
-#: src/ghb3.ui:124
+#: src/ghb3.ui:253 src/queuehandler.c:1687
 msgid "Import Queue"
 msgstr "대기열 가져오기"
 
-#: src/ghb3.ui:128
+#: src/ghb3.ui:257 src/queuehandler.c:1516
 msgid "Export Queue"
 msgstr "대기열 내보내기"
 
-#: src/ghb3.ui:135
+#: src/ghb3.ui:264
 msgid "HandBrake Presets"
 msgstr "HandBrake 프리셋"
 
-#: src/ghb3.ui:163 src/ghb3.ui:2128
-msgid "_Presets"
-msgstr "프리셋(_P)"
+#: src/ghb3.ui:359 src/ghb3.ui:986
+msgid "Actions"
+msgstr "동작"
 
-#: src/ghb3.ui:171 src/ghb3.ui:2136
-msgid "Set De_fault"
-msgstr "기본값 지정(_F)"
-
-#: src/ghb3.ui:185 src/ghb3.ui:2150
-msgid "_Save"
-msgstr "저장(_S)"
-
-#: src/ghb3.ui:194 src/ghb3.ui:2159
-msgid "Save _As"
-msgstr "다른 이름으로 저장(_A)"
-
-#: src/ghb3.ui:203 src/ghb3.ui:2168
-msgid "_Rename"
-msgstr "이름 변경(_R)"
-
-#: src/ghb3.ui:212 src/ghb3.ui:2177
-msgid "_Delete"
-msgstr "삭제(_D)"
-
-#: src/ghb3.ui:226 src/ghb3.ui:2191
-msgid "_Import"
-msgstr "가져오기(_I)"
-
-#: src/ghb3.ui:235 src/ghb3.ui:2200
-msgid "_Export"
-msgstr "내보내기(_E)"
-
-#: src/ghb3.ui:249 src/ghb3.ui:2214
-msgid "Reset _Built-in Presets"
-msgstr "기본 제공된 프리셋 초기화(_B)"
-
-#: src/ghb3.ui:304
-msgid "<b>Presets List</b>"
-msgstr "<b>프리셋 목록</b>"
-
-#: src/ghb3.ui:318
+#: src/ghb3.ui:509
 msgid "HandBrake Queue"
 msgstr "HandBrake 대기열"
 
-#: src/ghb3.ui:352
+#: src/ghb3.ui:538
+msgid "_Play File"
+msgstr "파일 재생하기(_P)"
+
+#: src/ghb3.ui:547
+msgid "Open _Source Directory"
+msgstr "원본 디렉터리 열기(_S)"
+
+#: src/ghb3.ui:556
+msgid "Open _Destination Directory"
+msgstr "대상 디렉터리 열기(_D)"
+
+#: src/ghb3.ui:570
+msgid "Move to _Top"
+msgstr "상단으로 이동하기(_T)"
+
+#: src/ghb3.ui:579
+msgid "Move to _Bottom"
+msgstr "하단으로 이동하기(_B)"
+
+#: src/ghb3.ui:593
+msgid "_Edit"
+msgstr "편집하기(_E)"
+
+#: src/ghb3.ui:602
+msgid "_Reset"
+msgstr "재설정(_R)"
+
+#: src/ghb3.ui:616
+msgid "Re_move"
+msgstr "제거하기(_M)"
+
+#: src/ghb3.ui:646
 msgid "<span size=\"x-large\">Queue</span>"
 msgstr "<span size=\"x-large\">대기열</span>"
 
-#: src/ghb3.ui:367
+#: src/ghb3.ui:661
 msgid "0 jobs pending"
 msgstr "0개 작업 보류 중"
 
-#: src/ghb3.ui:404 src/ghb3.ui:2324 src/queuehandler.c:2378
-#: src/queuehandler.c:2391 src/queuehandler.c:2402
+#: src/ghb3.ui:698 src/ghb3.ui:2319 src/queuehandler.c:2026
+#: src/queuehandler.c:2039 src/queuehandler.c:2052
 msgid "Start Encoding"
 msgstr "인코딩 시작"
 
-#: src/ghb3.ui:406 src/ghb3.ui:2326 src/ghb3.ui:6432 src/queuehandler.c:2377
-#: src/queuehandler.c:2390
+#: src/ghb3.ui:700 src/ghb3.ui:2321 src/ghb3.ui:6987 src/queuehandler.c:2025
+#: src/queuehandler.c:2038
 msgid "Start"
 msgstr "시작"
 
-#: src/ghb3.ui:420 src/ghb3.ui:2339 src/queuehandler.c:2416
-#: src/queuehandler.c:2429 src/queuehandler.c:2440
+#: src/ghb3.ui:714 src/ghb3.ui:2334 src/queuehandler.c:2068
+#: src/queuehandler.c:2081
 msgid "Pause Encoding"
 msgstr "인코딩 정지"
 
-#: src/ghb3.ui:422 src/ghb3.ui:2341 src/queuehandler.c:2415
-#: src/queuehandler.c:2428
+#: src/ghb3.ui:716 src/ghb3.ui:2336 src/queuehandler.c:2067
+#: src/queuehandler.c:2080
 msgid "Pause"
 msgstr "정지"
 
-#: src/ghb3.ui:480
+#: src/ghb3.ui:775
 msgid "Options"
 msgstr "옵션"
 
-#: src/ghb3.ui:549
+#: src/ghb3.ui:844 src/ghb3.ui:7504
 msgid "When Done:"
 msgstr "완료된 경우:"
 
-#: src/ghb3.ui:630
+#: src/ghb3.ui:923
 msgid "Reset"
 msgstr "재설정"
 
-#: src/ghb3.ui:632
+#: src/ghb3.ui:925
 msgid ""
 "Mark selected queue entry as pending.\n"
 "Resets the queue job to pending and ready to run again."
@@ -266,95 +390,92 @@ msgstr ""
 "선택된 대기열 항목을 보류 중인 것으로 표시합니다\n"
 "대기열 작업을 보류 중으로 재설정하고 다시 실행할 준비가 됩니다."
 
-#: src/ghb3.ui:647
+#: src/ghb3.ui:940
 msgid "Edit"
 msgstr "편집"
 
-#: src/ghb3.ui:692
-msgid "Actions"
-msgstr "동작"
-
-#: src/ghb3.ui:741 src/ghb3.ui:4825
+#: src/ghb3.ui:1035 src/ghb3.ui:4487 src/ghb3.ui:4647 src/ghb3.ui:4829
+#: src/ghb3.ui:5309
 msgid "Preset:"
 msgstr "프리셋:"
 
-#: src/ghb3.ui:777
+#: src/ghb3.ui:1071
 msgid "Source:"
 msgstr "원본:"
 
-#: src/ghb3.ui:818 src/ghb3.ui:6512
+#: src/ghb3.ui:1112 src/ghb3.ui:7067
 msgid "Title:"
 msgstr "제목:"
 
-#: src/ghb3.ui:858
+#: src/ghb3.ui:1152
 msgid "Destination:"
 msgstr "대상:"
 
-#: src/ghb3.ui:899
+#: src/ghb3.ui:1193
 msgid "Dimensions:"
-msgstr "치수:"
+msgstr "해상도:"
 
-#: src/ghb3.ui:935
+#: src/ghb3.ui:1229
 msgid "Video:"
 msgstr "비디오:"
 
-#: src/ghb3.ui:971
+#: src/ghb3.ui:1265
 msgid "Audio:"
 msgstr "오디오:"
 
-#: src/ghb3.ui:1007
+#: src/ghb3.ui:1301
 msgid "Subtitles:"
 msgstr "자막:"
 
-#: src/ghb3.ui:1046 src/ghb3.ui:3185
+#: src/ghb3.ui:1340 src/ghb3.ui:3188
 msgid "Summary"
 msgstr "개요"
 
-#: src/ghb3.ui:1084
+#: src/ghb3.ui:1378
 msgid "Pass:"
 msgstr "패스:"
 
-#: src/ghb3.ui:1120
+#: src/ghb3.ui:1414
 msgid "Start Time:"
 msgstr "시작 시간:"
 
-#: src/ghb3.ui:1156
+#: src/ghb3.ui:1450
 msgid "End Time:"
 msgstr "종료 시간:"
 
-#: src/ghb3.ui:1196
+#: src/ghb3.ui:1490
 msgid "Paused Duration:"
 msgstr "일시 중지된 재생시간:"
 
-#: src/ghb3.ui:1236
+#: src/ghb3.ui:1530
 msgid "Encode Time:"
 msgstr "인코딩 시간:"
 
-#: src/ghb3.ui:1272
+#: src/ghb3.ui:1566
 msgid "File Size:"
 msgstr "파일 크기:"
 
-#: src/ghb3.ui:1308
+#: src/ghb3.ui:1602
 msgid "Status:"
 msgstr "상태:"
 
-#: src/ghb3.ui:1347
+#: src/ghb3.ui:1641
 msgid "Statistics"
 msgstr "통계"
 
-#: src/ghb3.ui:1412
+#: src/ghb3.ui:1706
 msgid "Activity Log"
 msgstr "작업 로그"
 
-#: src/ghb3.ui:1435
+#: src/ghb3.ui:1729
 msgid "HandBrake Activity Log"
 msgstr "HandBrake 작업 로그"
 
-#: src/ghb3.ui:1710
+#: src/ghb3.ui:2045
 msgid "About HandBrake"
 msgstr "HandBrake 정보"
 
-#: src/ghb3.ui:1716
+#: src/ghb3.ui:2051
 msgid ""
 "Copyright © 2008 -  John Stebbins\n"
 "Copyright © 2004 - , HandBrake Devs"
@@ -362,16 +483,12 @@ msgstr ""
 "Copyright © 2008 - John Stebbins\n"
 "Copyright © 2004 - , HandBrake Devs"
 
-#: src/ghb3.ui:1718
+#: src/ghb3.ui:2053
 msgid ""
 "HandBrake is a GPL-licensed, multiplatform, multithreaded video transcoder."
-msgstr "HandBrake는 GPL 라이센스를 따르며, 다중플랫폼, 다중쓰레드 기반의 비디오 변환기입니다."
+msgstr "HandBrake는 GPL 라이선스를 따르며, 다중플랫폼, 다중쓰레드 비디오 코드 변환 도구입니다."
 
-#: src/ghb3.ui:1720
-msgid "https://handbrake.fr"
-msgstr "https://handbrake.fr"
-
-#: src/ghb3.ui:1721
+#: src/ghb3.ui:2056
 msgid ""
 "HandBrake is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License version 2, as published by the Free Software Foundation.\n"
 "\n"
@@ -385,219 +502,133 @@ msgstr ""
 "\n"
 "GNU 일반 공중 사용허가서 사본을 Glade와 함께 받았어야 합니다. 그렇지 않다면, 자유 소프트웨어 재단으로 연락하세요, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA."
 
-#: src/ghb3.ui:1907
+#: src/ghb3.ui:2242 src/fr.handbrake.ghb.metainfo.xml.in.in:10
 msgid "HandBrake"
 msgstr "HandBrake"
 
-#: src/ghb3.ui:1930
-msgid "_File"
-msgstr "파일(_F)"
-
-#: src/ghb3.ui:1938
-msgid "Open _Source"
-msgstr "원본 열기(_S)"
-
-#: src/ghb3.ui:1947
-msgid "Open Single _Title"
-msgstr "단일 제목 열기(_T)"
-
-#: src/ghb3.ui:1956
-msgid "Set _Destination"
-msgstr "대상 지정(_D)"
-
-#: src/ghb3.ui:1971
-msgid "_Preferences"
-msgstr "기본설정(_P)"
-
-#: src/ghb3.ui:1986
-msgid "_Quit"
-msgstr "종료(_Q)"
-
-#: src/ghb3.ui:2001 src/ghb3.ui:2095
-msgid "_Queue"
-msgstr "대기열(_Q)"
-
-#: src/ghb3.ui:2009
-msgid "_Add"
-msgstr "추가(_A)"
-
-#: src/ghb3.ui:2018
-msgid "Add _Multiple"
-msgstr "다중 추가(_M)"
-
-#: src/ghb3.ui:2027 src/queuehandler.c:2401
-msgid "_Start Encoding"
-msgstr "인코딩 시작(_S)"
-
-#: src/ghb3.ui:2036 src/queuehandler.c:2439
-msgid "_Pause Encoding"
-msgstr "인코딩 일시 중지(_P)"
-
-#: src/ghb3.ui:2045
-msgid "S_ave Queue"
-msgstr "대기열 저장(_A)"
-
-#: src/ghb3.ui:2054
-msgid "_Load Queue File"
-msgstr "대기열 파일 불러오기(_L)"
-
-#: src/ghb3.ui:2069
-msgid "_View"
-msgstr "보기(_V)"
-
-#: src/ghb3.ui:2077
-msgid "HandBrake For _Dumbies"
-msgstr "초보자를 위한 HandBrake(_D)"
-
-#: src/ghb3.ui:2086
-msgid "Presets _List"
-msgstr "프리셋 목록(_L)"
-
-#: src/ghb3.ui:2104
-msgid "_Preview"
-msgstr "미리보기(_P)"
-
-#: src/ghb3.ui:2113
-msgid "_Activity Window"
-msgstr "작업 창(_A)"
-
-#: src/ghb3.ui:2229
-msgid "_Help"
-msgstr "도움말(_H)"
-
-#: src/ghb3.ui:2237
-msgid "_About"
-msgstr "정보(_A)"
-
-#: src/ghb3.ui:2246
-msgid "_Guide"
-msgstr "설명서(_G)"
-
-#: src/ghb3.ui:2284 src/callbacks.c:4123
+#: src/ghb3.ui:2279 src/callbacks.c:4351
 msgid "Choose Video Source"
 msgstr "비디오 원본 선택"
 
-#: src/ghb3.ui:2286 src/callbacks.c:4122
+#: src/ghb3.ui:2281 src/callbacks.c:1720 src/callbacks.c:4350
 msgid "Open Source"
 msgstr "원본 열기"
 
-#: src/ghb3.ui:2309
+#: src/ghb3.ui:2304
 msgid "Add to Queue"
 msgstr "대기열에 추가하기"
 
-#: src/ghb3.ui:2311
+#: src/ghb3.ui:2306
 msgid "Add To Queue"
-msgstr "대기열 추가"
+msgstr "대기열 추가하기"
 
-#: src/ghb3.ui:2366
+#: src/ghb3.ui:2361
 msgid "Show Presets Window"
 msgstr "설정 화면 표시"
 
-#: src/ghb3.ui:2368
+#: src/ghb3.ui:2363
 msgid "Presets"
 msgstr "프리셋"
 
-#: src/ghb3.ui:2381
+#: src/ghb3.ui:2376
 msgid "Show Preview Window"
 msgstr "미리표시 화면 표시"
 
-#: src/ghb3.ui:2383
+#: src/ghb3.ui:2378
 msgid "Preview"
 msgstr "미리보기"
 
-#: src/ghb3.ui:2396
+#: src/ghb3.ui:2391
 msgid "Show Queue"
 msgstr "대기열 표시"
 
-#: src/ghb3.ui:2398 src/callbacks.c:4567
+#: src/ghb3.ui:2393 src/callbacks.c:4781
 msgid "Queue"
 msgstr "대기열"
 
-#: src/ghb3.ui:2411
+#: src/ghb3.ui:2406
 msgid "Show Activity Window"
 msgstr "작업 창 표시"
 
-#: src/ghb3.ui:2413
+#: src/ghb3.ui:2408
 msgid "Activity"
 msgstr "작업"
 
-#: src/ghb3.ui:2443
+#: src/ghb3.ui:2438
 msgid "<b>Source:</b>"
 msgstr "<b>원본:</b>"
 
-#: src/ghb3.ui:2469 src/hb-backend.c:59 src/hb-backend.c:71
-#: src/hb-backend.c:84 src/hb-backend.c:249 src/hb-backend.c:334
-#: src/hb-backend.c:2421 src/hb-backend.c:2647 src/subtitlehandler.c:1365
+#: src/ghb3.ui:2464 src/hb-backend.c:60 src/hb-backend.c:72
+#: src/hb-backend.c:85 src/hb-backend.c:124 src/hb-backend.c:237
+#: src/hb-backend.c:270 src/hb-backend.c:281 src/hb-backend.c:308
+#: src/hb-backend.c:393 src/hb-backend.c:2593 src/hb-backend.c:2819
+#: src/subtitlehandler.c:1368
 msgid "None"
 msgstr "없음"
 
-#: src/ghb3.ui:2514 src/callbacks.c:4095
+#: src/ghb3.ui:2510 src/callbacks.c:4323
 msgid "Scanning..."
 msgstr "스캔 중..."
 
-#: src/ghb3.ui:2548
+#: src/ghb3.ui:2544
 msgid "<b>Title:</b>"
 msgstr "<b>제목:</b>"
 
-#: src/ghb3.ui:2576
+#: src/ghb3.ui:2572
 msgid ""
 "Set the title to encode.\n"
 "By default the longest title is chosen.\n"
 "This is often the feature title of a DVD."
 msgstr ""
-"인코딩할 제목 지정.\n"
+"인코딩할 제목 설정합니다.\n"
 "기본적으로 가장 킨 제목이 선택됩니다.\n"
 "이것은 보통 DVD의 주요 제목입니다."
 
-#: src/ghb3.ui:2598
-msgid "<small>No Titles</small>"
-msgstr "<small>제목 없음</small>"
-
-#: src/ghb3.ui:2616
+#: src/ghb3.ui:2599
 msgid "<b>Angle:</b>"
 msgstr "<b>구도:</b>"
 
-#: src/ghb3.ui:2628
+#: src/ghb3.ui:2611
 msgid "For multi-angle DVD's, select the desired angle to encode."
 msgstr "멀티 앵글 DVD의 경우, 인코딩할 앵글을 선택합니다."
 
-#: src/ghb3.ui:2644
+#: src/ghb3.ui:2627
 msgid "<b>Range:</b>"
 msgstr "<b>범위:</b>"
 
-#: src/ghb3.ui:2655
+#: src/ghb3.ui:2638
 msgid "Range of title to encode. Can be chapters, seconds, or frames."
 msgstr "인코딩할 제목의 범위입니다. 챕터, 초 또는 프레임일 수 있습니다."
 
-#: src/ghb3.ui:2668
+#: src/ghb3.ui:2651
 msgid "Set the first chapter to encode."
-msgstr "인코딩할 첫 챕터를 지정합니다."
+msgstr "인코딩할 첫 챕터를 설정합니다."
 
-#: src/ghb3.ui:2683
+#: src/ghb3.ui:2667
 msgid "-"
 msgstr "-"
 
-#: src/ghb3.ui:2695
+#: src/ghb3.ui:2679
 msgid "Set the last chapter to encode."
-msgstr "인코딩할 마지막 챕터를 지정합니다."
+msgstr "인코딩할 마지막 챕터를 설정합니다."
 
-#: src/ghb3.ui:2720
+#: src/ghb3.ui:2705
 msgid "<b>Preset:</b>"
 msgstr "<b>프리셋:</b>"
 
-#: src/ghb3.ui:2756
+#: src/ghb3.ui:2741
 msgid "Choose Preset"
 msgstr "프리셋 선택"
 
-#: src/ghb3.ui:2787
+#: src/ghb3.ui:2772
 msgid "<u><i>Modified</i></u>"
 msgstr "<u><i>수정</i></u>"
 
-#: src/ghb3.ui:2796 src/ghb3.ui:5169 src/ghb3.ui:5913
+#: src/ghb3.ui:2781 src/ghb3.ui:5651 src/ghb3.ui:6435
 msgid "Reload"
 msgstr "다시 불러오기"
 
-#: src/ghb3.ui:2799
+#: src/ghb3.ui:2784
 msgid ""
 "Reload the settings for the currently selected preset.\n"
 "Modifications will be discarded."
@@ -605,27 +636,27 @@ msgstr ""
 "현재 선택된 프리셋으로 설정을 다시 불러옵니다.\n"
 "수정사항은 폐기됩니다."
 
-#: src/ghb3.ui:2811
+#: src/ghb3.ui:2796
 msgid "Save New Preset"
 msgstr "새 프리셋 저장"
 
-#: src/ghb3.ui:2814
+#: src/ghb3.ui:2799
 msgid "Save the current settings to a new Preset."
 msgstr "현재 설정을 새 프리셋에 저장합니다."
 
-#: src/ghb3.ui:2896
+#: src/ghb3.ui:2879
 msgid "Format:"
 msgstr "형식:"
 
-#: src/ghb3.ui:2914
+#: src/ghb3.ui:2897
 msgid "Format to mux encoded tracks to."
 msgstr "다중사용으로 인코딩된 트랙에 대한 형식입니다."
 
-#: src/ghb3.ui:2926 src/queuehandler.c:290
+#: src/ghb3.ui:2909 src/queuehandler.c:286
 msgid "Web Optimized"
 msgstr "웹 최적화"
 
-#: src/ghb3.ui:2931
+#: src/ghb3.ui:2914
 msgid ""
 "Optimize the layout of the MP4 file for progressive download.\n"
 "This allows a player to initiate playback before downloading the entire file."
@@ -633,11 +664,11 @@ msgstr ""
 "증분 다운로드 동안 MP4 파일의 레이아웃을 최적화합니다.\n"
 "이 옵션은 재생기가 전체 파일을 다운로드하기 전에 재생을 시작할 수 있습니다."
 
-#: src/ghb3.ui:2947
+#: src/ghb3.ui:2930
 msgid "Align A/V Start"
 msgstr "A/V 시작 정렬"
 
-#: src/ghb3.ui:2952
+#: src/ghb3.ui:2935
 msgid ""
 "Aligns the initial timestamps of all audio and video streams by\n"
 "inserting blank frames or dropping frames. May improve audio/video\n"
@@ -646,236 +677,283 @@ msgstr ""
 "빈 프레임을 삽입하거나 프레임을 삭제하여 모든 오디오 및 비디오 스트림의 초기 타임 스탬프를 정렬합니다. \n"
 "MP4 편집 목록을 준수하지 않는 손상된 플레이어의 오디오/비디오 동기화를 향상시킬 수 있습니다."
 
-#: src/ghb3.ui:2969
+#: src/ghb3.ui:2952
 msgid "iPod 5G Support"
 msgstr "iPod 5G 지원"
 
-#: src/ghb3.ui:2974
+#: src/ghb3.ui:2957
 msgid "Add iPod Atom needed by some older iPods."
 msgstr "일부 구형 iPod에 필요한 iPod Atom을 추가합니다."
 
-#: src/ghb3.ui:2996
+#: src/ghb3.ui:2972
+msgid "Passthru Common Metadata"
+msgstr "패스스루 공통 메타데이터"
+
+#: src/ghb3.ui:2977
+msgid "Copy metadata from source to output."
+msgstr "원본에서 출력으로 메타데이터를 복사합니다."
+
+#: src/ghb3.ui:2999
 msgid "Duration:"
 msgstr "재생시간:"
 
-#: src/ghb3.ui:3014
+#: src/ghb3.ui:3017
 msgid "hh:mm:ss"
 msgstr "hh:mm:ss"
 
-#: src/ghb3.ui:3029
+#: src/ghb3.ui:3032
 msgid "Tracks:"
 msgstr "트랙:"
 
-#: src/ghb3.ui:3069
+#: src/ghb3.ui:3072
 msgid "Filters:"
 msgstr "필터:"
 
-#: src/ghb3.ui:3109
+#: src/ghb3.ui:3112
 msgid "Size:"
 msgstr "크기:"
 
-#: src/ghb3.ui:3134 src/ghb3.ui:3355
+#: src/ghb3.ui:3137 src/ghb3.ui:3236 src/ghb3.ui:3274 src/ghb3.ui:3312
+#: src/ghb3.ui:4148 src/ghb3.ui:4286
 msgid "--"
 msgstr "--"
 
-#: src/ghb3.ui:3227
-msgid "Auto Crop"
-msgstr "자동 자르기"
+#: src/ghb3.ui:3224 src/ghb3.ui:4136
+msgid "Storage Size:"
+msgstr "저장소 크기:"
 
-#: src/ghb3.ui:3232
-msgid "Automatically crop black borders around edges of the video."
-msgstr "비디오 외곽의 검은 배경을 자동으로 잘라냅니다."
+#: src/ghb3.ui:3262 src/ghb3.ui:4180
+msgid "Display Size:"
+msgstr "디스플레이 크기:"
 
-#: src/ghb3.ui:3246
-msgid "Loose Crop"
-msgstr "루스 자르기"
+#: src/ghb3.ui:3300 src/ghb3.ui:4274
+msgid "Aspect Ratio:"
+msgstr "가로 세로 비율:"
 
-#: src/ghb3.ui:3250
-msgid ""
-"When picture settings require that the image\n"
-"dimensions be rounded to some multiple number\n"
-"of pixels, this setting will crop a few extra pixels\n"
-"instead of doing exact cropping and then scaling to\n"
-"the required multiple."
-msgstr ""
-"영상 설정에 따라 이미지 치수를 일부 \n"
-"여러 개의 픽셀로 반올림해야 하는 경우, \n"
-"이 설정은 정확하게 잘라낸 다음 필요한 \n"
-"여러 픽셀로 확장하는 대신 몇 개의 \n"
-"추가 픽셀을 자릅니다."
+#: src/ghb3.ui:3337
+msgid "<b>Source Dimensions</b>"
+msgstr "<b>원본 해상도</b>"
 
-#: src/ghb3.ui:3272
+#: src/ghb3.ui:3384
+msgid "Flipping:"
+msgstr "뒤집기:"
+
+#: src/ghb3.ui:3395
+msgid "Horizontal ⇌"
+msgstr "수평 위치  "
+
+#: src/ghb3.ui:3400
+msgid "Flip video horizontally."
+msgstr "비디오를 수평으로 뒤집습니다."
+
+#: src/ghb3.ui:3417
+msgid "Rotation:"
+msgstr "회전:"
+
+#: src/ghb3.ui:3433
+msgid "Rotate the video clockwise in 90 degree increments."
+msgstr "비디오를 시계 방향으로 90도 회전합니다."
+
+#: src/ghb3.ui:3448
+msgid "Cropping:"
+msgstr "자르기:"
+
+#: src/ghb3.ui:3464
+msgid "How to apply crop settings."
+msgstr "자르기 설정을 적용하는 방법입니다."
+
+#: src/ghb3.ui:3480
 msgid "Left Crop"
 msgstr "좌측 자르기"
 
-#: src/ghb3.ui:3289
+#: src/ghb3.ui:3497
 msgid "Top Crop"
 msgstr "상단 자르기"
 
-#: src/ghb3.ui:3306
+#: src/ghb3.ui:3514
 msgid "Bottom Crop"
 msgstr "하단 자르기"
 
-#: src/ghb3.ui:3323
+#: src/ghb3.ui:3531
 msgid "Right Crop"
 msgstr "우측 자르기"
 
-#: src/ghb3.ui:3340
-msgid "Crop Dimensions:"
-msgstr "자르기 치수:"
+#: src/ghb3.ui:3567
+msgid "<b>Orientation &amp; Cropping</b>"
+msgstr "<b>오리엔테이션 &amp; 크로핑</b>"
 
-#: src/ghb3.ui:3376
-msgid "<b>Cropping</b>"
-msgstr "<b>자르기</b>"
+#: src/ghb3.ui:3606
+msgid "Resolution Limit:"
+msgstr "해상도 제한:"
 
-#: src/ghb3.ui:3411
-msgid "Optimal for source"
-msgstr "원본에 최적화"
+#: src/ghb3.ui:3621
+msgid "Resolution limits for common video formats."
+msgstr "일반적인 비디오 형식에 대한 해상도 제한입니다."
 
-#: src/ghb3.ui:3415
+#: src/ghb3.ui:3637
+msgid "Maximum Size:"
+msgstr "최대 크기:"
+
+#: src/ghb3.ui:3652
+msgid "This is the maximum width that the video will be stored at."
+msgstr "비디오가 저장되는 최대 너비입니다."
+
+#: src/ghb3.ui:3669 src/ghb3.ui:3838 src/ghb3.ui:4212
+msgid "x"
+msgstr "x"
+
+#: src/ghb3.ui:3684
+msgid "This is the maximum height that the video will be stored at."
+msgstr "비디오가 저장되는 최대 높이입니다."
+
+#: src/ghb3.ui:3700
+msgid "Anamorphic:"
+msgstr "아나모픽:"
+
+#: src/ghb3.ui:3715
 msgid ""
-"If enabled, select the 'optimal' storage resolution.\n"
-"This will be the resolution that most closely matches the source resolution after cropping."
+"<b>Anamorphic Modes:</b><small><tt>\n"
+"    Automatic - Use a pixel aspect ratio that maximizes\n"
+"        storage resolution while preserving the original\n"
+"        display aspect ratio.\n"
+"    None      - Force pixel aspect ratio to 1:1.\n"
+"    Custom    - Enter a custom pixel aspect ratio.</tt></small>"
 msgstr ""
-"활성화된 경우 '최적' 저장 해상도를 선택합니다.\n"
-"자르기 후 소스 해상도와 가장 밀접하게 일치하는 해상도입니다."
+"<b>아나모픽 모드:</b><small><tt>\n"
+"    자동 - 원래 디스플레이 종횡비를 유지하면서 저장\n"
+"        해상도를 최대화하는 픽셀 종횡비를 사용합니다.\n"
+"    없음 - 픽셀 종횡비를 1:1로 강제 적용합니다.\n"
+"    사용자 지정 - 사용자 지정 픽셀 종횡비를 입력합니다.</tt></small>"
 
-#: src/ghb3.ui:3433 src/ghb3.ui:3648
-msgid "Width:"
-msgstr "너비:"
+#: src/ghb3.ui:3736
+msgid "Pixel Aspect:"
+msgstr "가로세로 픽셀:"
 
-#: src/ghb3.ui:3448
+#: src/ghb3.ui:3751
+msgid ""
+"Pixel aspect defines the shape of the pixels.\n"
+"\n"
+"A 1:1 ratio defines a square pixel.  Other values define rectangular shapes.\n"
+"Players will scale the image in order to achieve the specified aspect."
+msgstr ""
+"픽셀 종횡비는 픽셀의 모양을 결정합니다.\n"
+"\n"
+"1:1 비율은 정사각 픽셀로 결정됩니다. 다른 값은 사각형 모양을 결정합니다.\n"
+"재생기는 지정된 비율에 따라서 이미지의 크기를 조절합니다."
+
+#: src/ghb3.ui:3771
+msgid ":"
+msgstr ":"
+
+#: src/ghb3.ui:3786
+msgid ""
+"Pixel aspect defines the shape of the pixels.\n"
+"A 1:1 ratio defines a square pixel.  Other values define rectangular shapes.\n"
+"Players will scale the image in order to achieve the specified aspect."
+msgstr ""
+"픽셀 종횡비는 픽셀의 모양을 결정합니다.\n"
+"1:1 비율은 정사각 픽셀로 결정됩니다. 다른 값은 사각형 모양을 결정합니다.\n"
+"재생기는 지정된 비율에 따라서 이미지의 크기를 조절합니다."
+
+#: src/ghb3.ui:3805
+msgid "Scaled Size:"
+msgstr "크기 조정된 크기:"
+
+#: src/ghb3.ui:3820
 msgid ""
 "This is the width that the video will be stored at.\n"
 "The actual display dimensions will differ if the pixel aspect ratio is not 1:1."
 msgstr ""
 "이 값은 비디오가 저장되는 너비입니다.\n"
-"픽셀 종횡비가 1:1이 아닌 경우 실제 표시 치수가 달라집니다."
+"픽셀 종횡비가 1:1이 아닌 경우 실제 표시 해상도가 달라집니다."
 
-#: src/ghb3.ui:3466 src/ghb3.ui:3680
-msgid "Height:"
-msgstr "높이:"
-
-#: src/ghb3.ui:3481
+#: src/ghb3.ui:3853
 msgid ""
 "This is the height that the video will be stored at.\n"
 "The actual display dimensions will differ if the pixel aspect ratio is not 1:1."
 msgstr ""
 "이 값은 비디오가 저장되는 높이입니다..\n"
-"픽셀 종횡비가 1:1이 아닌 경우 실제 표시 치수가 달라집니다."
+"픽셀 종횡비가 1:1이 아닌 경우 실제 표시 해상도가 달라집니다."
 
-#: src/ghb3.ui:3511
-msgid "Anamorphic:"
-msgstr "아나모픽:"
+#: src/ghb3.ui:3867
+msgid "Optimal Size"
+msgstr "최적의 크기"
 
-#: src/ghb3.ui:3526
-msgid ""
-"<b>Anamorphic Modes:</b>\n"
-"<small><tt>\n"
-"None      - Force pixel aspect ratio to 1:1.\n"
-"Loose     - Use a pixel aspect ratio that is as\n"
-"        close as possible to the source video pixel\n"
-"        aspect ratio while preserving the original\n"
-"        display aspect ratio\n"
-"Automatic - Use a pixel aspect ratio that maximizes\n"
-"        storage resolution while preserving the original\n"
-"        display aspect ratio</tt></small>"
-msgstr ""
-"<b>아나모픽 모드:</b>\n"
-"<small><tt>\n"
-"없음      - 픽셀 종횡비를 1:1로 강제합니다.\n"
-"루스      - 원본 화면 종횡비를 유지하면서 \n"
-"        원본 비디오 픽셀 종횡비에 가능한 한 가까운 \n"
-"        픽셀 종횡비 사용\n"
-"자동      - 원래 화면 종횡비를 유지하면서 \n"
-"        저장 해상도를 최대화하는 픽셀 종횡비 사용</tt></small>"
+#: src/ghb3.ui:3872
+msgid "Use highest resolution permitted by above settings."
+msgstr "위의 설정에서 허용하는 최고 해상도를 사용합니다."
 
-#: src/ghb3.ui:3550
-msgid "Alignment:"
-msgstr "정렬:"
-
-#: src/ghb3.ui:3565
-msgid ""
-"Align storage dimensions to multiples of this value.\n"
-"\n"
-"This setting is only necessary for compatibility with some devices.\n"
-"You should use 2 unless you experience compatibility issues."
-msgstr ""
-"이 값의 배수에 저장 치수를 맞춥니다.\n"
-"\n"
-"이 설정은 일부 장치와의 호환성에만 필요합니다.\n"
-"호환성 문제가 발생하지 않는 한 2를 사용해야 합니다."
-
-#: src/ghb3.ui:3590
-msgid "<b>Storage Geometry</b>"
-msgstr "<b>저장 형상</b>"
-
-#: src/ghb3.ui:3625
-msgid "Keep Aspect"
-msgstr "화면 유지"
-
-#: src/ghb3.ui:3630
-msgid ""
-"If enabled, the original display aspect of the source will be maintained."
-msgstr "활성화하면, 원본의 원래 디스플레이 화면이 유지됩니다."
-
-#: src/ghb3.ui:3663
-msgid ""
-"This is the display width. It is the result of scaling the storage "
-"dimensions by the pixel aspect."
-msgstr "이것은 화면 너비입니다. 가로세로 픽셀에 따라 저장 치수를 조정한 결과입니다."
-
-#: src/ghb3.ui:3724
-msgid "Pixel Aspect:"
-msgstr "가로세로 픽셀:"
-
-#: src/ghb3.ui:3739
-msgid ""
-"Pixel aspect defines the shape of the pixels.\n"
-"\n"
-"A 1:1 ratio defines a square pixel.  Other values define rectangular shapes.\n"
-"Players will scale the image in order to achieve the specified aspect."
-msgstr ""
-"픽셀 종횡비는 픽셀의 모양을 결정합니다.\n"
-"\n"
-"1:1 비율은 정사각 픽셀로 결정됩니다. 다른 값은 사각형 모양을 결정합니다.\n"
-"재생기는 지정된 비율에 따라서 이미지의 크기를 조절합니다."
-
-#: src/ghb3.ui:3759
-msgid ":"
-msgstr ":"
-
-#: src/ghb3.ui:3774
-msgid ""
-"Pixel aspect defines the shape of the pixels.\n"
-"A 1:1 ratio defines a square pixel.  Other values define rectangular shapes.\n"
-"Players will scale the image in order to achieve the specified aspect."
-msgstr ""
-"픽셀 종횡비는 픽셀의 모양을 결정합니다.\n"
-"1:1 비율은 정사각 픽셀로 결정됩니다. 다른 값은 사각형 모양을 결정합니다.\n"
-"재생기는 지정된 비율에 따라서 이미지의 크기를 조절합니다."
-
-#: src/ghb3.ui:3794
-msgid "Display Aspect:"
-msgstr "디스플레이 화면:"
-
-#: src/ghb3.ui:3809
-msgid "--:--"
-msgstr "--:--"
-
-#: src/ghb3.ui:3830
-msgid "<b>Display Geometry</b>"
-msgstr "<b>디스플레이 형상</b>"
-
-#: src/ghb3.ui:3848
-msgid "Dimensions"
-msgstr "치수"
-
-#: src/ghb3.ui:3876
-msgid "Detelecine:"
-msgstr "텔레시네 해제:"
+#: src/ghb3.ui:3887
+msgid "Allow Upscaling"
+msgstr "업스케일링 허용하기"
 
 #: src/ghb3.ui:3892
+msgid ""
+"If not enabled, scaled dimensions will be limited to source dimensions."
+msgstr "활성화하지 않으면, 크기 조정된 해상도가 원본 해상도로 제한됩니다."
+
+#: src/ghb3.ui:3917
+msgid "<b>Resolution &amp; Scaling</b>"
+msgstr "<b>해상도 &amp; 크기 조정</b>"
+
+#: src/ghb3.ui:3957
+msgid "Fill:"
+msgstr "채우기:"
+
+#: src/ghb3.ui:3974
+msgid "Add a border around the video."
+msgstr "비디오 주위에 테두리를 추가합니다."
+
+#: src/ghb3.ui:3991
+msgid "Left Pad"
+msgstr "좌측 패드"
+
+#: src/ghb3.ui:4008
+msgid "Top Pad"
+msgstr "상단 패드"
+
+#: src/ghb3.ui:4025
+msgid "Bottom Pad"
+msgstr "하단 패드"
+
+#: src/ghb3.ui:4042
+msgid "Right Pad"
+msgstr "우측 패드"
+
+#: src/ghb3.ui:4058
+msgid "Color:"
+msgstr "색상:"
+
+#: src/ghb3.ui:4075
+msgid "Color of border added around video."
+msgstr "비디오 주위에 테두리 색이 추가되었습니다."
+
+#: src/ghb3.ui:4097
+msgid "<b>Borders</b>"
+msgstr "<b>테두리</b>"
+
+#: src/ghb3.ui:4195 src/ghb3.ui:4227 src/ghb3.ui:4245
+msgid "Changing the display size will stretch the video."
+msgstr "디스플레이 크기를 변경하면 비디오가 늘어납니다."
+
+#: src/ghb3.ui:4240 src/hb-backend.c:123 src/hb-backend.c:239
+#: src/hb-backend.c:311
+msgid "Automatic"
+msgstr "자동"
+
+#: src/ghb3.ui:4311
+msgid "<b>Final Dimensions</b>"
+msgstr "<b>최종 해상도</b>"
+
+#: src/ghb3.ui:4324
+msgid "Dimensions"
+msgstr "해상도"
+
+#: src/ghb3.ui:4342
+msgid "Detelecine:"
+msgstr "텔레시네 제거:"
+
+#: src/ghb3.ui:4358
 msgid ""
 "This filter removes 'combing' artifacts that are the result of telecining.\n"
 "\n"
@@ -885,21 +963,21 @@ msgstr ""
 "\n"
 "텔레시닝은 24fps인 필름 프레임률을 30fps인 NTSC 비디오 프레임률로 조정하는 과정입니다."
 
-#: src/ghb3.ui:3907
+#: src/ghb3.ui:4373 src/ghb3.ui:4919
 msgid ""
 "Custom detelecine filter string format\n"
 "\n"
 "JunkLeft:JunkRight:JunkTop:JunkBottom:StrictBreaks:MetricPlane:Parity"
 msgstr ""
-"사용자 지정 텔레시네 해제 필터 문자열 형식\n"
+"사용자 지정 텔레시네 제거 필터 문자열 형식\n"
 "\n"
 "JunkLeft:JunkRight:JunkTop:JunkBottom:StrictBreaks:MetricPlane:Parity"
 
-#: src/ghb3.ui:3935
+#: src/ghb3.ui:4392
 msgid "Interlace Detection:"
 msgstr "인터레이스 감지:"
 
-#: src/ghb3.ui:3951
+#: src/ghb3.ui:4408
 msgid ""
 "This filter detects interlaced frames.\n"
 "\n"
@@ -908,9 +986,9 @@ msgid ""
 msgstr ""
 "해당 필터는 인터페이스된 프레임을 감지합니다.\n"
 "\n"
-"인터레이스 해제 필터가 활성화된 경우, 이 필터가 인터레이스되었다 판단한 프레임만을 인터레이스 해제합니다."
+"인터레이스 제거 필터가 활성화된 경우, 이 필터가 인터레이스되었다 판단한 프레임만을 인터레이스 제거합니다."
 
-#: src/ghb3.ui:3967
+#: src/ghb3.ui:4424
 msgid ""
 "Custom interlace detection filter string format\n"
 "\n"
@@ -922,43 +1000,36 @@ msgstr ""
 "모드:공간 메트릭:모션 스레시:마스크 필터 모드:\n"
 "블록 스레시: 블록 폭: 블록 높이"
 
-#: src/ghb3.ui:3996
+#: src/ghb3.ui:4444
 msgid "Deinterlace:"
-msgstr "인터레이스 해제:"
+msgstr "인터레이스 제거:"
 
-#: src/ghb3.ui:4012
+#: src/ghb3.ui:4460
 msgid ""
 "Choose decomb or deinterlace filter.\n"
 "\n"
 "The decomb filter supports a variety of interpolation algorithms.\n"
 "The deinterlace filter is a classic YADIF deinterlacer.\n"
 msgstr ""
-"Decomb나 인터레이스 해제 필터를 선택합니다.\n"
+"Decomb나 인터레이스 제거 필터를 선택합니다.\n"
 "\n"
 "Decomb 필터는 다양한 보간법 알고리즘을 지원합니다.\n"
-"인터레이스 해제 필터는 고전적인 YADIF 인터레이스 해제도구입니다.\n"
+"인터레이스 제거 필터는 고전적인 YADIF 인터레이스 제거도구입니다.\n"
 
-#: src/ghb3.ui:4031
-msgid "Deinterlace Preset:"
-msgstr "인터레이스 해제 설정:"
-
-#: src/ghb3.ui:4047
+#: src/ghb3.ui:4497
 msgid ""
 "Choose decomb or deinterlace filter options.\n"
 "\n"
-"The decomb filter supports a variety of interpolation algorithms.\n"
-"The deinterlace filter is a classic YADIF deinterlacer.\n"
+"    The decomb filter supports a variety of interpolation algorithms.\n"
+"    The deinterlace filter is a classic YADIF deinterlacer.\n"
+"    "
 msgstr ""
-"Decomb나 인터레이스 해제 필터를 선택합니다.\n"
-"\n"
-"Decomb 필터는 다양한 보간법 알고리즘을 지원합니다.\n"
-"인터레이스 해제 필터는 고전적인 YADIF 인터레이스 해제도구입니다.\n"
 
-#: src/ghb3.ui:4090
+#: src/ghb3.ui:4527
 msgid "Deblock Filter:"
 msgstr "블록 제거 필터:"
 
-#: src/ghb3.ui:4106 src/ghb3.ui:4138
+#: src/ghb3.ui:4543
 msgid ""
 "The deblocking filter removes a common type of compression artifact.\n"
 "If your source exhibits 'blockiness', this filter may help clean it up."
@@ -966,25 +1037,29 @@ msgstr ""
 "블록 제거 필터는 일반적인 유형의 압축 아티팩트를 제거합니다.\n"
 "원본 영상에 블럭이 많다면, 이 필터가 도움이 됩니다."
 
-#: src/ghb3.ui:4122
-msgid "Deblock Tune:"
-msgstr "블록 제거 조정:"
+#: src/ghb3.ui:4567 src/ghb3.ui:4670 src/ghb3.ui:4750 src/ghb3.ui:4851
+#: src/ghb3.ui:5349
+msgid "Tune:"
+msgstr "조정:"
 
-#: src/ghb3.ui:4152
+#: src/ghb3.ui:4577
+msgid ""
+"The deblocking filter removes a common type of compression artifact.\n"
+"    If your source exhibits 'blockiness', this filter may help clean it up."
+msgstr ""
+
+#: src/ghb3.ui:4585 src/ghb3.ui:4768
 msgid ""
 "Custom deblock filter string format\n"
 "\n"
-"strength=weak|strong:thresh=0-100:blocksize=4-512"
+"    strength=weak|strong:thresh=0-100:blocksize=4-512"
 msgstr ""
-"사용자 지정 블록 제거 필터 문자열 형식\n"
-"\n"
-"strength=weak|strong:thresh=0-100:blocksize=4-512"
 
-#: src/ghb3.ui:4180
+#: src/ghb3.ui:4606
 msgid "Denoise Filter:"
 msgstr "노이즈 제거 필터:"
 
-#: src/ghb3.ui:4196 src/ghb3.ui:4229 src/ghb3.ui:4262
+#: src/ghb3.ui:4622
 msgid ""
 "Denoise filtering reduces or removes the appearance of noise and grain.\n"
 "Film grain and other types of high frequency noise are difficult to compress.\n"
@@ -994,29 +1069,43 @@ msgstr ""
 "필름 그레인과 다른 종류의 고주파 노이즈는 압축을 어렵게 만듭니다.\n"
 "그런 원본에 이 필터를 사용하면 파일을 더 작게 만들 수 있습니다."
 
-#: src/ghb3.ui:4213
-msgid "Denoise Preset:"
-msgstr "노이즈 제거 프리셋:"
+#: src/ghb3.ui:4657 src/ghb3.ui:4680
+msgid ""
+"Denoise filtering reduces or removes the appearance of noise and grain.\n"
+"    Film grain and other types of high frequency noise are difficult to compress.\n"
+"    Using this filter on such sources can result in smaller file sizes."
+msgstr ""
 
-#: src/ghb3.ui:4246
-msgid "Denoise Tune:"
-msgstr "노이즈 제거 조정:"
-
-#: src/ghb3.ui:4277 src/ghb3.ui:4399
+#: src/ghb3.ui:4689 src/ghb3.ui:4869
 msgid ""
 "Custom denoise filter string format\n"
 "\n"
-"SpatialLuma:SpatialChroma:TemporalLuma:TemporalChroma"
+"    SpatialLuma:SpatialChroma:TemporalLuma:TemporalChroma"
 msgstr ""
-"사용자 지정 노이즈 제거 필터 문자열 형식\n"
-"\n"
-"SpatialLuma:SpatialChroma:TemporalLuma:TemporalChroma"
 
-#: src/ghb3.ui:4305
+#: src/ghb3.ui:4710
+msgid "Chroma Smooth Filter:"
+msgstr "크로마 스무스 필터:"
+
+#: src/ghb3.ui:4726
+msgid ""
+"The chroma smooth filter removes common color artifacts.\n"
+"Lower resolution analog source content may benefit from this filter."
+msgstr ""
+"크로마 스무스 필터는 일반적인 색상 아티팩트를 제거합니다.\n"
+"낮은 해상도의 아날로그 소스 콘텐츠가 이 필터의 이점을 얻을 수 있습니다."
+
+#: src/ghb3.ui:4760
+msgid ""
+"The chroma smooth filter removes common color artifacts.\n"
+"    Lower resolution analog source content may benefit from this filter."
+msgstr ""
+
+#: src/ghb3.ui:4789
 msgid "Sharpen Filter:"
 msgstr "선명도 필터:"
 
-#: src/ghb3.ui:4321 src/ghb3.ui:4353 src/ghb3.ui:4385
+#: src/ghb3.ui:4805
 msgid ""
 "Sharpen filtering enhances edges and other\n"
 "high frequency components in the video."
@@ -1024,47 +1113,45 @@ msgstr ""
 "선명도(Sharpen) 필터링은 비디오의 가장자리\n"
 "및 높은 빈도의 구성요소를 향상시킵니다."
 
-#: src/ghb3.ui:4337
-msgid "Sharpen Preset:"
-msgstr "선명도 프리셋:"
+#: src/ghb3.ui:4839 src/ghb3.ui:4861
+msgid ""
+"Sharpen filtering enhances edges and other\n"
+"    high frequency components in the video."
+msgstr ""
 
-#: src/ghb3.ui:4369
-msgid "Sharpen Tune:"
-msgstr "선명도 조정:"
+#: src/ghb3.ui:4890
+msgid "Colorspace:"
+msgstr "색상공간:"
 
-#: src/ghb3.ui:4427
-msgid "Rotate Filter:"
-msgstr "회전 필터:"
+#: src/ghb3.ui:4906
+msgid "Translate the colorspace of the source."
+msgstr "원본의 색상공간을 변환합니다."
 
-#: src/ghb3.ui:4443
-msgid "Rotate the video clockwise in 90 degree increments."
-msgstr "비디오를 시계 방향으로 90도 회전합니다."
-
-#: src/ghb3.ui:4457
+#: src/ghb3.ui:4935 src/hb-backend.c:4896
 msgid "Grayscale"
 msgstr "그레이스케일"
 
-#: src/ghb3.ui:4462
+#: src/ghb3.ui:4940
 msgid "If enabled, filter colour components out of video."
 msgstr "활성화된 경우, 컬러 구성 요소를 비디오에서 필터링합니다."
 
-#: src/ghb3.ui:4473
+#: src/ghb3.ui:4957
 msgid "Filters"
 msgstr "필터"
 
-#: src/ghb3.ui:4504
+#: src/ghb3.ui:4988
 msgid "Video Encoder:"
 msgstr "비디오 인코더:"
 
-#: src/ghb3.ui:4518
+#: src/ghb3.ui:5002
 msgid "Available video encoders."
 msgstr "사용 가능한 비디오 인코더."
 
-#: src/ghb3.ui:4534
+#: src/ghb3.ui:5018
 msgid "Framerate:"
 msgstr "프레임레이트:"
 
-#: src/ghb3.ui:4549
+#: src/ghb3.ui:5033
 msgid ""
 "Output framerate.\n"
 "\n"
@@ -1076,19 +1163,19 @@ msgstr ""
 "'원본과 동일'이 권장됩니다. 원본 비디오가 가변\n"
 "프레임레이트라면, '원본과 동일'은 그 설정을 보존합니다."
 
-#: src/ghb3.ui:4564
+#: src/ghb3.ui:5048
 msgid "Constant Framerate"
 msgstr "고정 프레임레이트"
 
-#: src/ghb3.ui:4569
+#: src/ghb3.ui:5053
 msgid "Enables constant framerate output."
 msgstr "고정 프레임레이트 출력을 활성화합니다."
 
-#: src/ghb3.ui:4583
+#: src/ghb3.ui:5067
 msgid "Peak Framerate (VFR)"
 msgstr "피크 프레임레이트 (VFR)"
 
-#: src/ghb3.ui:4588
+#: src/ghb3.ui:5072
 msgid ""
 "Enables variable framerate output with a peak\n"
 "rate determined by the framerate setting.\n"
@@ -1100,11 +1187,11 @@ msgstr ""
 "\n"
 "가변 프레임레이트는 일부 재생기와 호환되지 않을 수 있습니다."
 
-#: src/ghb3.ui:4606
+#: src/ghb3.ui:5090
 msgid "Variable Framerate"
 msgstr "가변 프레임레이트"
 
-#: src/ghb3.ui:4611
+#: src/ghb3.ui:5095
 msgid ""
 "Enables variable framerate output.\n"
 "\n"
@@ -1114,7 +1201,7 @@ msgstr ""
 "\n"
 "VFR은 일부 재생기와 호환되지 않습니다."
 
-#: src/ghb3.ui:4647 src/ghb3.ui:4679
+#: src/ghb3.ui:5131 src/ghb3.ui:5163
 msgid ""
 "Set the desired quality factor.\n"
 "The encoder targets a certain quality.\n"
@@ -1129,7 +1216,7 @@ msgid ""
 "FFMpeg's and Theora's scale is more linear.\n"
 "These encoders do not have a lossless mode."
 msgstr ""
-"원하는 화질 지정.\n"
+"원하는 화질 계수를 설정합니다.\n"
 "인코더는 지정된 화질을 목표로 동작합니다.\n"
 "각 비디오 인코더에 사용되는 스케일은 다릅니다.\n"
 "\n"
@@ -1141,15 +1228,15 @@ msgstr ""
 "FFMpeg과 Theora의 스케일은 좀더 선형적입니다.\n"
 "이런 인코더들은 무손실 모드를 지원하지 않습니다."
 
-#: src/ghb3.ui:4674
+#: src/ghb3.ui:5158
 msgid "Constant Quality:"
 msgstr "고정 화질:"
 
-#: src/ghb3.ui:4705
+#: src/ghb3.ui:5189
 msgid "Bitrate (kbps):    "
 msgstr "비트레이트 (kbps): "
 
-#: src/ghb3.ui:4710 src/ghb3.ui:4732
+#: src/ghb3.ui:5194 src/ghb3.ui:5216
 msgid ""
 "Set the average bitrate.\n"
 "\n"
@@ -1157,41 +1244,36 @@ msgid ""
 "But the average over a long duration will be the value set here.  If you need\n"
 "to limit instantaneous bitrate, look into x264's vbv-bufsize and vbv-maxrate settings."
 msgstr ""
-"평균 비트레이트를 지정합니다.\n"
+"평균 비트레이트를 설정합니다.\n"
 "\n"
 "특정 시간에서 순간 비트레이트는 높거나 낮을 수도 있습니다.\n"
 "그러나 긴 시간 동안의 평균치는 이 값에 수렴합니다. 순간 비트레이트를\n"
 "제한하려면 x264의 vbv-bufsize와 vbv-maxrate 설정을 살펴보세요."
 
-#: src/ghb3.ui:4749
-msgid "2-Pass Encoding"
-msgstr "2 패스 인코딩"
+#: src/ghb3.ui:5233
+msgid "Multi-Pass Encoding"
+msgstr ""
 
-#: src/ghb3.ui:4754
+#: src/ghb3.ui:5238
 msgid ""
-"Perform 2 Pass Encoding.\n"
+"Perform Multi Pass Encoding.\n"
 "\n"
-"The 'Bitrate' option is prerequisite. During the 1st pass, statistics about\n"
-"the video are collected.  Then in the second pass, those statistics are used\n"
+"The 'Bitrate' option is prerequisite. During the analysis passes, statistics about\n"
+"the video are collected.  Then in the final pass, those statistics are used\n"
 "to make bitrate allocation decisions."
 msgstr ""
-"2 패스 인코딩을 수행합니다.\n"
-"\n"
-"'비트레이트' 옵션은 필수 사항입니다. 1번째 패스를 하는 동안 비디오에 대한 \n"
-"통계가 수집됩니다. 그런 다음 두 번째 패스에서 이러한 통계를 사용하여 \n"
-"비트레이트 할당을 결정합니다."
 
-#: src/ghb3.ui:4772
-msgid "Turbo First Pass"
-msgstr "첫 번째 패스 가속"
+#: src/ghb3.ui:5256
+msgid "Turbo Analysis Pass"
+msgstr ""
 
-#: src/ghb3.ui:4777
+#: src/ghb3.ui:5261
 msgid ""
-"During the 1st pass of a 2 pass encode, use settings that speed things "
-"along."
-msgstr "2패스 인코딩의 1번째 패스를 하는 동안, 속도를 높이는 설정을 사용합니다."
+"During the analysis pass of a multi pass encode, use settings that speed "
+"things along."
+msgstr ""
 
-#: src/ghb3.ui:4839
+#: src/ghb3.ui:5323
 msgid ""
 "Adjusts encoder settings to trade off compression efficiency against encoding speed.\n"
 "\n"
@@ -1207,11 +1289,7 @@ msgstr ""
 "일반적으로 이 옵션은 느리므로 견딜 수 있는 가장 느린 값으로 설정해야 합니다.\n"
 "설정을 사용하면 화질이 향상되거나 파일 크기가 작아집니다."
 
-#: src/ghb3.ui:4865
-msgid "Tune:"
-msgstr "조정:"
-
-#: src/ghb3.ui:4882
+#: src/ghb3.ui:5366
 msgid ""
 "Tune settings to optimize for common scenarios.\n"
 "\n"
@@ -1225,11 +1303,11 @@ msgstr ""
 "특성을 설정할 수 있습니다.  변경사항은 프리셋 후 다른 모든 \n"
 "파라미터보다 먼저 적용됩니다."
 
-#: src/ghb3.ui:4898
+#: src/ghb3.ui:5382
 msgid "Fast Decode"
 msgstr "고속 디코딩"
 
-#: src/ghb3.ui:4903
+#: src/ghb3.ui:5387
 msgid ""
 "Reduce decoder CPU usage.\n"
 "\n"
@@ -1237,13 +1315,13 @@ msgid ""
 msgstr ""
 "디코더 CPU 사용량을 줄입니다.\n"
 "\n"
-"장치가 출력을 재생하는 데 어려움을 겪는 경우(프레임 누락), 이 옵션을 지정합니다."
+"장치가 출력을 재생하는 데 어려움을 겪는 경우(프레임 누락), 이 옵션을 설정합니다."
 
-#: src/ghb3.ui:4921
+#: src/ghb3.ui:5405
 msgid "Zero Latency"
 msgstr "대기 시간 없음"
 
-#: src/ghb3.ui:4925
+#: src/ghb3.ui:5409
 msgid ""
 "Minimize latency between input to encoder and output of decoder.\n"
 "\n"
@@ -1259,39 +1337,39 @@ msgstr ""
 "HandBrake는 라이브 스트리밍 방송 목적으로는 적합하지 않기 때문에,\n"
 "이러한 설정은 여기서 별로 가치가 없습니다."
 
-#: src/ghb3.ui:4949
+#: src/ghb3.ui:5433
 msgid "Profile:"
 msgstr "프로필:"
 
-#: src/ghb3.ui:4966
+#: src/ghb3.ui:5450
 msgid ""
 "Sets and ensures compliance with the specified profile.\n"
 "\n"
 "Overrides all other settings."
 msgstr ""
-"지정된 프로필과의 호환성 지정 및 보장.\n"
+"지정된 프로필을 설정하고 준수 여부를 확인합니다.\n"
 "\n"
 "다른 모든 설정을 덮어씁니다."
 
-#: src/ghb3.ui:4984
+#: src/ghb3.ui:5468
 msgid "Level:"
 msgstr "레벨:"
 
-#: src/ghb3.ui:5001
+#: src/ghb3.ui:5485
 msgid ""
 "Sets and ensures compliance with the specified level.\n"
 "\n"
 "Overrides all other settings."
 msgstr ""
-"지정된 레벨을 설정하고 준수합니다.\n"
+"지정된 레벨을 설정하고 준수 여부를 확인합니다\n"
 "\n"
 "다른 모든 설정을 재정의합니다."
 
-#: src/ghb3.ui:5026
+#: src/ghb3.ui:5510
 msgid "More Settings:"
 msgstr "상세 설정:"
 
-#: src/ghb3.ui:5044
+#: src/ghb3.ui:5528
 msgid ""
 "Additional encoder settings.\n"
 "\n"
@@ -1301,45 +1379,45 @@ msgstr ""
 "\n"
 "콜론으로 분리된 인코더 옵션 목록."
 
-#: src/ghb3.ui:5078 src/main.c:1155
+#: src/ghb3.ui:5562 src/callbacks.c:5756
 msgid "Video"
 msgstr "비디오"
 
 #. Add Button
-#: src/ghb3.ui:5144 src/ghb3.ui:5337 src/ghb3.ui:5874 src/ghb3.ui:6094
-#: src/audiohandler.c:1744
+#: src/ghb3.ui:5626 src/ghb3.ui:5819 src/ghb3.ui:6396 src/ghb3.ui:6616
+#: src/ghb3.ui:7561 src/audiohandler.c:1758
 msgid "Add"
-msgstr "추가"
+msgstr "추가하기"
 
-#: src/ghb3.ui:5146
+#: src/ghb3.ui:5628
 msgid "Add new audio settings to the list"
-msgstr "새로운 오디오 설정을 목록에 추가"
+msgstr "새로운 오디오 설정을 목록에 추가하기"
 
-#: src/ghb3.ui:5156 src/ghb3.ui:5886
+#: src/ghb3.ui:5638 src/ghb3.ui:6408
 msgid "Add All"
-msgstr "모두 추가"
+msgstr "모두 추가하기"
 
-#: src/ghb3.ui:5158
+#: src/ghb3.ui:5640
 msgid "Add all audio tracks to the list"
-msgstr "모든 오디오 트랙을 목록에 추가"
+msgstr "모든 오디오 트랙을 목록에 추가하기"
 
-#: src/ghb3.ui:5171
+#: src/ghb3.ui:5653
 msgid "Reload all audio settings from defaults"
 msgstr "기본 설정에서 모든 오디오 설정 다시 불러오기"
 
-#: src/ghb3.ui:5215 src/ghb3.ui:5959
+#: src/ghb3.ui:5697 src/ghb3.ui:6481
 msgid "Track List"
 msgstr "트랙 목록"
 
-#: src/ghb3.ui:5246 src/ghb3.ui:5994
+#: src/ghb3.ui:5728 src/ghb3.ui:6516
 msgid "Selection Behavior:"
 msgstr "선택 동작:"
 
-#: src/ghb3.ui:5261
+#: src/ghb3.ui:5743
 msgid "Choose which audio tracks of the source media are used."
 msgstr "사용할 원본 미디어의 오디오 트랙을 선택합니다."
 
-#: src/ghb3.ui:5322
+#: src/ghb3.ui:5804
 msgid ""
 "Create a list of languages you would like to select audio for.\n"
 "Tracks matching these languages will be selected using the chosen Selection Behavior."
@@ -1347,23 +1425,23 @@ msgstr ""
 "오디오를 선택할 언어 목록을 만듭니다.\n"
 "선택한 선택 동작을 사용하여 이러한 언어와 일치하는 트랙을 선택합니다."
 
-#: src/ghb3.ui:5353 src/ghb3.ui:6110
+#: src/ghb3.ui:5835 src/ghb3.ui:6632
 msgid "Remove"
 msgstr "제거"
 
-#: src/ghb3.ui:5371 src/ghb3.ui:6128
+#: src/ghb3.ui:5853 src/ghb3.ui:6650
 msgid "Available Languages"
 msgstr "사용 가능한 언어"
 
-#: src/ghb3.ui:5384 src/ghb3.ui:6141
+#: src/ghb3.ui:5866 src/ghb3.ui:6663
 msgid "Selected Languages"
 msgstr "선택된 언어"
 
-#: src/ghb3.ui:5400
+#: src/ghb3.ui:5882
 msgid "Use only first encoder for secondary audio"
 msgstr "부 오디오에 대해서 첫 인코더만 사용"
 
-#: src/ghb3.ui:5405
+#: src/ghb3.ui:5887
 msgid ""
 "Only the primary audio track will be encoded with the full encoder list.\n"
 "All other secondary audio output tracks will be encoded with first encoder only."
@@ -1371,15 +1449,27 @@ msgstr ""
 "기본 오디오 트랙만 전체 인코더 목록으로 인코딩됩니다.\n"
 "다른 모든 보조 오디오 출력 트랙은 첫 번째 인코더로만 인코딩됩니다."
 
-#: src/ghb3.ui:5441
+#: src/ghb3.ui:5923
 msgid "Auto Passthru:"
 msgstr "자동 패스트루:"
 
-#: src/ghb3.ui:5452
+#: src/ghb3.ui:5934
+msgid "MP2"
+msgstr "MP2"
+
+#: src/ghb3.ui:5939
+msgid ""
+"Enable this if your playback device supports MP2.\n"
+"This permits MP2 passthru to be selected when automatic passthru selection is enabled."
+msgstr ""
+"재생 장치가 MP2를 지원하는 경우 이 기능을 활성화합니다.\n"
+"이렇게 하면 자동 패스스루 선택이 활성화된 경우 MP2 패스스루를 선택할 수 있습니다."
+
+#: src/ghb3.ui:5955
 msgid "MP3"
 msgstr "MP3"
 
-#: src/ghb3.ui:5457
+#: src/ghb3.ui:5960
 msgid ""
 "Enable this if your playback device supports MP3.\n"
 "This permits MP3 passthru to be selected when automatic passthru selection is enabled."
@@ -1387,23 +1477,11 @@ msgstr ""
 "재생 장치가 MP3를 지원하는 경우 이 옵션을 활성화합니다.\n"
 "이 옵션은 자동 패스트루 선택이 사용 가능할 때 MP3 경유 선택이 허용됩니다."
 
-#: src/ghb3.ui:5473
-msgid "AAC"
-msgstr "AAC"
-
-#: src/ghb3.ui:5478
-msgid ""
-"Enable this if your playback device supports AAC.\n"
-"This permits AAC passthru to be selected when automatic passthru selection is enabled."
-msgstr ""
-"재생 장치가 AAC를 지원하는 경우 이 기능을 활성화합니다.\n"
-"이 옵션은 자동 패스트루 선택이 사용 가능할 때, AAC 패스트루 선택이 허용됩니다."
-
-#: src/ghb3.ui:5494
+#: src/ghb3.ui:5976
 msgid "AC-3"
 msgstr "AC-3"
 
-#: src/ghb3.ui:5499
+#: src/ghb3.ui:5981
 msgid ""
 "Enable this if your playback device supports AC-3.\n"
 "This permits AC-3 passthru to be selected when automatic passthru selection is enabled."
@@ -1411,35 +1489,11 @@ msgstr ""
 "재생 장치가 AC-3을 지원하는 경우 이 옵션을 활성화합니다.\n"
 "이 옵션은 자동 패스트루 선택이 사용 가능할 때, AC-3 패스트루 선택이 허용됩니다."
 
-#: src/ghb3.ui:5515
-msgid "DTS"
-msgstr "DTS"
-
-#: src/ghb3.ui:5520
-msgid ""
-"Enable this if your playback device supports DTS.\n"
-"This permits DTS passthru to be selected when automatic passthru selection is enabled."
-msgstr ""
-"재생 장치에서 DTS를 지원하는 경우 이 옵션을 활성화합니다.\n"
-"이 옵션은 자동 패스트루 선택이 사용 가능한 경우, DTS 패스트루 선택이 허용됩니다."
-
-#: src/ghb3.ui:5536
-msgid "DTS-HD"
-msgstr "DTS-HD"
-
-#: src/ghb3.ui:5541
-msgid ""
-"Enable this if your playback device supports DTS-HD.\n"
-"This permits DTS-HD passthru to be selected when automatic passthru selection is enabled."
-msgstr ""
-"재생 장치가 DTS-HD를 지원하는 경우 이 옵션을 활성화합니다.\n"
-"이 옵션은 자동 패스트루 선택이 사용 가능한 경우, DTS-HD 패스트루 선택이 허용됩니다."
-
-#: src/ghb3.ui:5557
+#: src/ghb3.ui:5997
 msgid "EAC-3"
 msgstr "EAC-3"
 
-#: src/ghb3.ui:5562
+#: src/ghb3.ui:6002
 msgid ""
 "Enable this if your playback device supports EAC-3.\n"
 "This permits EAC-3 passthru to be selected when automatic passthru selection is enabled."
@@ -1447,11 +1501,35 @@ msgstr ""
 "재생 장치가 EAC-3을 지원하는 경우 이 옵션을 활성화합니다.\n"
 "이 옵션은 자동 패스트루 선택이 사용 가능할 때, EAC-3 패스트루 선택이 허용됩니다."
 
-#: src/ghb3.ui:5578
+#: src/ghb3.ui:6018
+msgid "DTS"
+msgstr "DTS"
+
+#: src/ghb3.ui:6023
+msgid ""
+"Enable this if your playback device supports DTS.\n"
+"This permits DTS passthru to be selected when automatic passthru selection is enabled."
+msgstr ""
+"재생 장치에서 DTS를 지원하는 경우 이 옵션을 활성화합니다.\n"
+"이 옵션은 자동 패스트루 선택이 사용 가능한 경우, DTS 패스트루 선택이 허용됩니다."
+
+#: src/ghb3.ui:6039
+msgid "DTS-HD"
+msgstr "DTS-HD"
+
+#: src/ghb3.ui:6044
+msgid ""
+"Enable this if your playback device supports DTS-HD.\n"
+"This permits DTS-HD passthru to be selected when automatic passthru selection is enabled."
+msgstr ""
+"재생 장치가 DTS-HD를 지원하는 경우 이 옵션을 활성화합니다.\n"
+"이 옵션은 자동 패스트루 선택이 사용 가능한 경우, DTS-HD 패스트루 선택이 허용됩니다."
+
+#: src/ghb3.ui:6060
 msgid "TrueHD"
 msgstr "TrueHD"
 
-#: src/ghb3.ui:5583
+#: src/ghb3.ui:6065
 msgid ""
 "Enable this if your playback device supports TrueHD.\n"
 "This permits TrueHD passthru to be selected when automatic passthru selection is enabled."
@@ -1459,11 +1537,11 @@ msgstr ""
 "재생 장치가 TrueHD를 지원하는 경우 이 옵션을 활성화합니다.\n"
 "이 옵션은 자동 패스트루 선택이 사용 가능한 경우, TrueHD 패스트루 선택이 허용됩니다."
 
-#: src/ghb3.ui:5599
+#: src/ghb3.ui:6081
 msgid "FLAC"
 msgstr "FLAC"
 
-#: src/ghb3.ui:5604
+#: src/ghb3.ui:6086
 msgid ""
 "Enable this if your playback device supports FLAC.\n"
 "This permits FLAC passthru to be selected when automatic passthru selection is enabled."
@@ -1471,70 +1549,95 @@ msgstr ""
 "재생 장치가 FLAC를 지원하는 경우 이 옵션을 활성화합니다.\n"
 "이 옵션은 자동 패스트루 선택이 사용 가능한 경우, FLAC 패스트루 선택이 허용됩니다."
 
-#: src/ghb3.ui:5637
+#: src/ghb3.ui:6102
+msgid "AAC"
+msgstr "AAC"
+
+#: src/ghb3.ui:6107
+msgid ""
+"Enable this if your playback device supports AAC.\n"
+"This permits AAC passthru to be selected when automatic passthru selection is enabled."
+msgstr ""
+"재생 장치가 AAC를 지원하는 경우 이 기능을 활성화합니다.\n"
+"이 옵션은 자동 패스트루 선택이 사용 가능할 때, AAC 패스트루 선택이 허용됩니다."
+
+#: src/ghb3.ui:6123
+msgid "Opus"
+msgstr "Opus"
+
+#: src/ghb3.ui:6128
+msgid ""
+"Enable this if your playback device supports Opus.\n"
+"This permits Opus passthru to be selected when automatic passthru selection is enabled."
+msgstr ""
+"재생 장치가 Opus를 지원하는 경우 이 기능을 활성화합니다.\n"
+"이렇게 하면 자동 패스스루 선택이 활성화된 경우 Opus 패스스루를 선택할 수 있습니다."
+
+#: src/ghb3.ui:6161
 msgid "Passthru Fallback:"
 msgstr "패스트루 대체:"
 
-#: src/ghb3.ui:5649
+#: src/ghb3.ui:6173
 msgid ""
 "Set the audio codec to encode with when a suitable track can not be found "
 "for audio passthru."
-msgstr "오디오 패스트루에 적합한 트랙이 없는 경우 인코딩할 오디오 코덱을 지정합니다."
+msgstr "오디오 패스트루에 적합한 트랙이 없는 경우 인코딩할 오디오 코덱을 설정합니다."
 
-#: src/ghb3.ui:5678
+#: src/ghb3.ui:6202
 msgid "<b>Audio Encoder Settings:</b>"
 msgstr "<b>오디오 인코딩 설정:</b>"
 
-#: src/ghb3.ui:5679
+#: src/ghb3.ui:6203
 msgid "Each selected source track will be encoded with all selected encoders"
 msgstr "선택된 각각의 원본 트랙은 선택된 모든 인코더로 인코딩됩니다"
 
-#: src/ghb3.ui:5704 src/ghb3.ui:9279
+#: src/ghb3.ui:6228 src/ghb3.ui:9848
 msgid "Encoder"
 msgstr "인코더"
 
-#: src/ghb3.ui:5715 src/ghb3.ui:9292
+#: src/ghb3.ui:6239 src/ghb3.ui:9861
 msgid "Bitrate/Quality"
 msgstr "비프레이트/화질"
 
-#: src/ghb3.ui:5726
+#: src/ghb3.ui:6250
 msgid "Mixdown"
 msgstr "믹스다운"
 
-#: src/ghb3.ui:5737
+#: src/ghb3.ui:6261
 msgid "Samplerate"
 msgstr "샘플레이트"
 
-#: src/ghb3.ui:5748 src/ghb3.ui:9336
+#: src/ghb3.ui:6272 src/ghb3.ui:9905 src/queuehandler.c:610
 msgid "Gain"
 msgstr "게인"
 
-#: src/ghb3.ui:5759 src/ghb3.ui:9355
+#: src/ghb3.ui:6283 src/ghb3.ui:9924
 msgid "DRC"
 msgstr "DRC"
 
-#: src/ghb3.ui:5796 src/ghb3.ui:6354
+#: src/ghb3.ui:6320 src/ghb3.ui:6876
 msgid "Track Selection"
 msgstr "트랙 선택"
 
-#: src/ghb3.ui:5808
+#: src/ghb3.ui:6332
 msgid "Audio"
 msgstr "오디오"
 
-#: src/ghb3.ui:5876
+#: src/ghb3.ui:6398
 msgid "Add new subtitle settings to the list"
-msgstr "새로운 자막 설정을 목록에 추가"
+msgstr "새로운 자막 설정을 목록에 추가하기"
 
-#: src/ghb3.ui:5888
+#: src/ghb3.ui:6410
 msgid "Add all subtitle tracks to the list"
-msgstr "모든 자막 트랙을 목록에 추가"
+msgstr "모든 자막 트랙을 목록에 추가하기"
 
-#: src/ghb3.ui:5898 src/queuehandler.c:607 src/queuehandler.c:1038
-#: src/subtitlehandler.c:413
+#: src/ghb3.ui:6420 src/callbacks.c:2356 src/queuehandler.c:647
+#: src/queuehandler.c:1083 src/subtitlehandler.c:414
+#: src/subtitlehandler.c:1245
 msgid "Foreign Audio Scan"
 msgstr "외부 오디오 스캔"
 
-#: src/ghb3.ui:5900
+#: src/ghb3.ui:6422
 msgid ""
 "Add an extra pass to the encode which searches\n"
 "for subtitle candidates that provide subtitles for\n"
@@ -1543,15 +1646,15 @@ msgstr ""
 "외국어로 된 오디오 세그먼트에 대해 자막을 제공하는\n"
 "자막 후보를 검색하는 인코딩에 추가 패스를 추가합니다."
 
-#: src/ghb3.ui:5915
+#: src/ghb3.ui:6437
 msgid "Reload all subtitle settings from defaults"
 msgstr "기본 설정에서 모든 자막 설정 다시 불러오기"
 
-#: src/ghb3.ui:6009
+#: src/ghb3.ui:6531
 msgid "Choose which subtitle tracks of the source media are used."
 msgstr "사용할 원본 미디어의 자막 트랙을 선택합니다."
 
-#: src/ghb3.ui:6074
+#: src/ghb3.ui:6596
 msgid ""
 "Create a list of languages you would like to select subtitles for.\n"
 "Tracks matching these languages will be selected using the chosen Selection Behavior.\n"
@@ -1565,15 +1668,15 @@ msgstr ""
 "이 목록의 첫 번째 언어는 \"기본\" 언어이며, 외부 오디오가 있을 때 자막 \n"
 "선택 설정을 결정하는 데 사용됩니다."
 
-#: src/ghb3.ui:6155
+#: src/ghb3.ui:6677
 msgid "Preferred Language: None"
 msgstr "기본 언어: 없음"
 
-#: src/ghb3.ui:6182
+#: src/ghb3.ui:6704
 msgid "Add Foreign Audio Scan Pass"
-msgstr "외부 오디오 스캔 패스 추가"
+msgstr "외부 오디오 스캔 패스 추가하기"
 
-#: src/ghb3.ui:6187
+#: src/ghb3.ui:6709
 msgid ""
 "Add \"Foreign Audio Scan\" when the default audio track is your preferred language.\n"
 "This search pass finds short sequences of foreign audio and provides subtitles for them.\n"
@@ -1585,11 +1688,11 @@ msgstr ""
 "\n"
 "이 옵션을 사용하려면 선택한 언어 목록에서 언어를 설정해야 합니다."
 
-#: src/ghb3.ui:6202
+#: src/ghb3.ui:6724
 msgid "Add subtitle track if default audio is foreign"
-msgstr "기본 오디오가 외국어인 경우 자막 트랙 추가"
+msgstr "기본 오디오가 외국어인 경우 자막 트랙 추가하기"
 
-#: src/ghb3.ui:6207
+#: src/ghb3.ui:6729
 msgid ""
 "When the default audio track is not your preferred language, add a subtitle track.\n"
 "\n"
@@ -1599,41 +1702,41 @@ msgstr ""
 "\n"
 "이 옵션을 사용하려면 선택한 언어 목록에서 언어를 설정해야 합니다."
 
-#: src/ghb3.ui:6221
+#: src/ghb3.ui:6743
 msgid "Add Closed Captions when available"
-msgstr "사용 가능한 경우 자막(Closed Captions) 추가"
+msgstr "사용 가능한 경우 자막(Closed Captions) 추가하기"
 
-#: src/ghb3.ui:6226
+#: src/ghb3.ui:6748
 msgid ""
 "Closed captions are text subtitles that can be added to any container as a "
 "soft subtitle track"
 msgstr "자막(Closed Captions)은 매끄러운 자막 트랙으로 모든 컨테이너에 추가할 수 있는 텍스트 자막입니다"
 
-#: src/ghb3.ui:6247
+#: src/ghb3.ui:6769
 msgid "Burn-In Behavior*:"
 msgstr "복제 시 행동*:"
 
-#: src/ghb3.ui:6259
+#: src/ghb3.ui:6781
 msgid ""
 "Set the behavior of subtitle \"Burn-In\".\n"
 "\n"
 "Burned-In subtitles are part of the video and can not be disabled during playback.\n"
 "Only one subtitle track can be burned! Since conflicts can occur, the first chosen wins."
 msgstr ""
-"자막 \"번인\"의 동작을 지정합니다.\n"
+"자막 \"번인\"의 동작을 설정합니다.\n"
 "\n"
 "번인 자막은 동영상의 일부이며 재생 중에 비활성화할 수 없습니다.\n"
 "자막 트랙은 하나만 추가할 수 있습니다! 충돌이 발생할 수 있기 때문에 먼저 선택한 자막이 우선합니다."
 
-#: src/ghb3.ui:6286
+#: src/ghb3.ui:6808
 msgid "Burn-In for deficient players*:"
 msgstr "결함이 있는 플레이어를 위한 복제*:"
 
-#: src/ghb3.ui:6295
+#: src/ghb3.ui:6817
 msgid "DVD Subtitles"
 msgstr "DVD 자막"
 
-#: src/ghb3.ui:6300
+#: src/ghb3.ui:6822
 msgid ""
 "Burn the first selected DVD subtitle track. All other DVD subtitle tracks will be discarded.\n"
 "Use this option if your player software or device does not support DVD subtitles.\n"
@@ -1645,11 +1748,11 @@ msgstr ""
 "\n"
 "자막 트랙은 하나만 추가할 수 있습니다! 충돌이 발생할 수 있기 때문에 먼저 선택한 자막이 우선합니다."
 
-#: src/ghb3.ui:6314
+#: src/ghb3.ui:6836
 msgid "Blu-ray Subtitles"
 msgstr "Blu-ray 자막"
 
-#: src/ghb3.ui:6319
+#: src/ghb3.ui:6841
 msgid ""
 "Burn the first selected Blu-ray subtitle track. All other Blu-ray subtitle tracks will be discarded.\n"
 "Use this option if your player software or device does not support Blu-ray subtitles.\n"
@@ -1661,183 +1764,196 @@ msgstr ""
 "\n"
 "자막 트랙은 하나만 추가할 수 있습니다! 충돌이 발생할 수 있기 때문에 먼저 선택한 자막이 우선합니다."
 
-#: src/ghb3.ui:6341
+#: src/ghb3.ui:6863
 msgid ""
 "<small>* Only one of the above subtitle burn options will be applied, "
 "starting with the top.</small>"
 msgstr "<small>*위에서부터 시작하여 위의 자막 레코딩 옵션 중 하나만 적용됩니다.</small>"
 
-#: src/ghb3.ui:6342
+#: src/ghb3.ui:6864
 msgid ""
 "Only one subtitle track can be burned! Since conflicts can occur, the first "
 "chosen wins."
 msgstr "자막 트랙은 하나만 추가할 수 있습니다! 충돌이 발생할 수 있기 때문에 먼저 선택한 자막이 우선합니다."
 
-#: src/ghb3.ui:6366
+#: src/ghb3.ui:6888
 msgid "Subtitles"
 msgstr "자막"
 
-#: src/ghb3.ui:6381 src/queuehandler.c:280
+#: src/ghb3.ui:6906 src/callbacks.c:2413 src/queuehandler.c:276
 msgid "Chapter Markers"
 msgstr "챕터 마커"
 
-#: src/ghb3.ui:6386
+#: src/ghb3.ui:6911
 msgid "Add chapter markers to output file."
 msgstr "출력 파일에 챕터 마커를 추가합니다."
 
-#: src/ghb3.ui:6420
+#: src/ghb3.ui:6922
+msgid "Import Chapters"
+msgstr ""
+
+#: src/ghb3.ui:6926
+msgid "Import chapter list from an XML file"
+msgstr ""
+
+#: src/ghb3.ui:6937
+msgid "Export Chapters"
+msgstr ""
+
+#: src/ghb3.ui:6941
+msgid "Export chapter list as an XML file"
+msgstr ""
+
+#: src/ghb3.ui:6975
 msgid "Index"
 msgstr "색인"
 
-#: src/ghb3.ui:6444
+#: src/ghb3.ui:6999
 msgid "Duration"
 msgstr "재생시간"
 
-#: src/ghb3.ui:6455
+#: src/ghb3.ui:7010
 msgid "Title"
 msgstr "제목"
 
-#: src/ghb3.ui:6492
+#: src/ghb3.ui:7047
 msgid "Chapters"
 msgstr "챕터"
 
-#: src/ghb3.ui:6547
+#: src/ghb3.ui:7102
 msgid "Actors:"
 msgstr "배우:"
 
-#: src/ghb3.ui:6582
+#: src/ghb3.ui:7137
 msgid "Director:"
 msgstr "감독:"
 
-#: src/ghb3.ui:6617
+#: src/ghb3.ui:7172
 msgid "Release Date:"
 msgstr "배포일:"
 
-#: src/ghb3.ui:6652
+#: src/ghb3.ui:7207
 msgid "Comment:"
 msgstr "주석:"
 
-#: src/ghb3.ui:6687
+#: src/ghb3.ui:7242
 msgid "Genre:"
 msgstr "장르:"
 
-#: src/ghb3.ui:6722
+#: src/ghb3.ui:7277
 msgid "Description:"
 msgstr "설명:"
 
-#: src/ghb3.ui:6757
+#: src/ghb3.ui:7312
 msgid "Plot:"
 msgstr "줄거리:"
 
-#: src/ghb3.ui:6795
+#: src/ghb3.ui:7350
 msgid "Tags"
 msgstr "태그"
 
-#: src/ghb3.ui:6824
+#: src/ghb3.ui:7380
 msgid "<b>Save As:</b>"
 msgstr "<b>다른 이름으로 저장:</b>"
 
-#: src/ghb3.ui:6838
+#: src/ghb3.ui:7394
 msgid "Destination filename for your encode."
 msgstr "인코딩의 대상 파일 이름입니다."
 
-#: src/ghb3.ui:6858
+#: src/ghb3.ui:7414
 msgid "<b>To:</b>"
 msgstr "<b>위치:</b>"
 
-#: src/ghb3.ui:6871
+#: src/ghb3.ui:7427
 msgid "Destination directory for your encode."
 msgstr "인코딩의 대상 디렉터리입니다."
 
-#: src/ghb3.ui:6874 src/queuehandler.c:2225
+#: src/ghb3.ui:7430
 msgid "Destination Directory"
-msgstr "대상 디렉토리"
+msgstr "대상 디렉터리"
 
-#: src/ghb3.ui:6967 src/ghb3.ui:7875 src/ghb3.ui:8027 src/ghb3.ui:8753
-#: src/ghb3.ui:9158 src/callbacks.c:5463 src/callbacks.c:5473
-#: src/callbacks.c:5481 src/hb-backend.c:4181 src/hb-backend.c:4214
-#: src/hb-backend.c:4253 src/hb-backend.c:4284 src/hb-backend.c:4312
-#: src/hb-backend.c:4358 src/hb-backend.c:4415 src/hb-backend.c:4435
-#: src/hb-backend.c:4455 src/hb-backend.c:4516 src/hb-backend.c:4571
-#: src/queuehandler.c:1835 src/queuehandler.c:1852 src/queuehandler.c:1866
-#: src/queuehandler.c:1881
+#: src/ghb3.ui:7545
+msgid "Add Multiple Titles"
+msgstr "여러 제목 추가하기"
+
+#: src/ghb3.ui:7553 src/ghb3.ui:8590 src/ghb3.ui:8747 src/ghb3.ui:9313
+#: src/ghb3.ui:9723 src/callbacks.c:5610 src/callbacks.c:5618
+#: src/callbacks.c:5627 src/hb-backend.c:4300 src/hb-backend.c:4333
+#: src/hb-backend.c:4372 src/hb-backend.c:4403 src/hb-backend.c:4431
+#: src/hb-backend.c:4477 src/hb-backend.c:4534 src/hb-backend.c:4554
+#: src/hb-backend.c:4574 src/hb-backend.c:4635 src/hb-backend.c:4690
+#: src/presets.c:2466
 msgid "Cancel"
 msgstr "취소"
 
-#: src/ghb3.ui:6976 src/ghb3.ui:7120 src/ghb3.ui:7884 src/ghb3.ui:8036
-#: src/ghb3.ui:8762 src/ghb3.ui:9167
-msgid "OK"
-msgstr "확인"
-
-#: src/ghb3.ui:7005
+#: src/ghb3.ui:7594
 msgid "Select All"
-msgstr "전체 선택"
+msgstr "모두 선택하기"
 
-#: src/ghb3.ui:7009
+#: src/ghb3.ui:7598
 msgid "Mark all titles for adding to the queue"
-msgstr "모든 제목을 대기열에 추가하기로 표시"
+msgstr "대기열에 추가할 모든 제목 표시하기"
 
-#: src/ghb3.ui:7022
+#: src/ghb3.ui:7611
 msgid "Clear All"
 msgstr "모두 지우기"
 
-#: src/ghb3.ui:7026
+#: src/ghb3.ui:7615
 msgid "Unmark all titles"
 msgstr "모든 제목에서 마커 제거"
 
-#: src/ghb3.ui:7087
+#: src/ghb3.ui:7676
 msgid "Destination files OK.  No duplicates detected."
 msgstr "대상 파일 확인. 검색된 중복 항목이 없습니다."
 
-#: src/ghb3.ui:7109
+#: src/ghb3.ui:7698 src/ghb3.ui:7710
 msgid "Preferences"
-msgstr "설정"
+msgstr "환경설정"
 
-#: src/ghb3.ui:7215
+#: src/ghb3.ui:7801
 msgid "Automatically check for updates"
 msgstr "자동으로 업데이트 확인"
 
-#: src/ghb3.ui:7252
-msgid "When all encodes are complete"
-msgstr "모든 인코딩이 완료됐을 때"
+#: src/ghb3.ui:7838
+msgid "Default action when all encodes are complete"
+msgstr "모든 인코딩이 완료되면 기본 작업이 수행됩니다"
 
-#: src/ghb3.ui:7274
+#: src/ghb3.ui:7860
 msgid "Use automatic naming (uses modified source name)"
 msgstr "자동 이름 지정 사용 (수정된 원본 이름 사용)"
 
-#: src/ghb3.ui:7275
+#: src/ghb3.ui:7861
 msgid "Create destination filename from source filename or volume label"
 msgstr "원본 파일 이름 또는 볼륨 레이블에서 대상 파일 이름 만들기"
 
-#: src/ghb3.ui:7299
+#: src/ghb3.ui:7885
 msgid "Auto-Name Template"
 msgstr "이름 자동 템플릿"
 
-#: src/ghb3.ui:7310
+#: src/ghb3.ui:7896
 msgid ""
 "Available Options: {source-path} {source} {title} {preset} {chapters} {date}"
-" {time} {creation-date} {creation-time} {quality} {bitrate}"
+" {time} {creation-date} {creation-time} {modification-date} {modification-"
+"time} {codec} {bit-depth} {quality} {bitrate} {width} {height}"
 msgstr ""
-"사용 가능한 옵션: {source-path} {source} {title} {preset} {chapters} {date} {time} "
-"{creation-date} {creation-time} {quality} {bitrate}"
 
-#: src/ghb3.ui:7330
+#: src/ghb3.ui:7916
 msgid "Use iPod/iTunes friendly (.m4v) file extension for MP4"
 msgstr "MP4에 대해 iPod/iTunes 친화적인 확장자 (.m4v) 사용"
 
-#: src/ghb3.ui:7373
+#: src/ghb3.ui:7959
 msgid "Number of previews"
 msgstr "미리보기 수"
 
-#: src/ghb3.ui:7411
+#: src/ghb3.ui:7997
 msgid "Filter short DVD and Blu-ray titles (seconds)"
 msgstr "짧은 DVD 및 블루레이 제목 필터링(초)"
 
-#: src/ghb3.ui:7425
+#: src/ghb3.ui:8011
 msgid "Clear completed queue items after an encode completes"
 msgstr "완료된 대기열 항목 지우기 및 인코딩 완료"
 
-#: src/ghb3.ui:7429
+#: src/ghb3.ui:8015
 msgid ""
 "By default, completed jobs remain in the queue and are marked as complete.\n"
 "Check this if you want the queue to clean itself up by deleting completed jobs."
@@ -1845,63 +1961,126 @@ msgstr ""
 "기본적으로 완료된 작업은 대기열에 남아있고 완료된 것으로 표시됩니다.\n"
 "완료된 작업을 대기열에서 지우려면 이 것을 선택하세요."
 
-#: src/ghb3.ui:7446
+#: src/ghb3.ui:8028
+msgid "Power Saving"
+msgstr ""
+
+#: src/ghb3.ui:8046
+msgid "Pause encoding when in Power Saver mode"
+msgstr ""
+
+#: src/ghb3.ui:8052
+msgid ""
+"If checked, encoding will be paused when the device\n"
+"enters Power Saver mode. Encoding will resume when\n"
+"Power Saver mode is disabled."
+msgstr ""
+
+#: src/ghb3.ui:8063
+msgid "Pause encoding when on battery power"
+msgstr ""
+
+#: src/ghb3.ui:8069
+msgid ""
+"If checked, encoding will be paused when charger is\n"
+"unplugged. Encoding will resume when reconnected to\n"
+"a mains power source."
+msgstr ""
+
+#: src/ghb3.ui:8080
+msgid "Pause encoding when battery is low"
+msgstr ""
+
+#: src/ghb3.ui:8086
+msgid ""
+"If checked, encoding will be paused when the battery\n"
+"level is low. Encoding will resume when the\n"
+"battery is charged."
+msgstr ""
+
+#: src/ghb3.ui:8097
 msgid "General"
 msgstr "일반"
 
-#: src/ghb3.ui:7489
+#: src/ghb3.ui:8122
+msgid "Set a custom directory for Handbrake temporary files"
+msgstr "Handbrake 임시 파일에 대한 사용자 지정 디렉터리를 설정합니다"
+
+#: src/ghb3.ui:8126 src/ghb3.ui:8146
+msgid ""
+"Temporary files that HandBrake creates will be placed under this directory.\n"
+"\n"
+"Changing this setting will require restarting HandBrake.\n"
+"\n"
+"This setting overrides the TEMP environment variable that is normally used to define this directory.\n"
+"\n"
+"Flatpak users may need to set this for certain workflows to work properly. The default size of the TEMP directory in a flatpak sandbox is 1/2 physical memory size and may be too small for things like the 2-pass stats file."
+msgstr ""
+"HandBrake가 생성하는 임시 파일은 이 디렉터리 아래에 배치됩니다.\n"
+"\n"
+"이 설정을 변경하려면 HandBrake를 다시 시작해야 합니다.\n"
+"\n"
+"이 설정은 일반적으로 이 디렉터리를 정의하는 데 사용되는 TEMP 환경 변수를 재정의합니다.\n"
+"\n"
+"Flatpak 사용자는 특정 작업 흐름이 제대로 작동하도록 설정해야 할 수 있습니다. flatpak 샌드박스에서 TEMP 디렉터리의 기본 크기는 물리적 메모리 크기의 1/2이며 2패스 통계 파일과 같은 항목에 비해 너무 작을 수 있습니다."
+
+#: src/ghb3.ui:8156
+msgid "Temp Directory"
+msgstr "임시 디렉터리"
+
+#: src/ghb3.ui:8196
 msgid "Constant Quality fractional granularity"
 msgstr "고정 화질 부분 세분화"
 
-#: src/ghb3.ui:7506
+#: src/ghb3.ui:8213
 msgid "Use dvdnav (instead of libdvdread)"
 msgstr "(libdvdread 대신) dvdnav 사용"
 
-#: src/ghb3.ui:7529
+#: src/ghb3.ui:8236
 msgid "Monitor destination disk free space"
 msgstr "저장 경로 사용 가능한 디스크 공간 검사"
 
-#: src/ghb3.ui:7533 src/ghb3.ui:7555 src/ghb3.ui:7736
+#: src/ghb3.ui:8240 src/ghb3.ui:8262
 msgid "Pause encoding if free disk space drops below limit"
 msgstr "한도 이하로 사용가능한 디스크 공간이 없을 시, 인코딩 중지"
 
-#: src/ghb3.ui:7570
+#: src/ghb3.ui:8277
 msgid "MB Limit"
 msgstr "MB 한계"
 
-#: src/ghb3.ui:7598
+#: src/ghb3.ui:8305
 msgid "Put individual encode logs in same location as movie"
 msgstr "개별 인코딩 로그를 동영상과 동일한 위치에 배치"
 
-#: src/ghb3.ui:7634
+#: src/ghb3.ui:8341
 msgid "Activity Log Verbosity Level"
 msgstr "작업 로그 상세 레벨"
 
-#: src/ghb3.ui:7669
+#: src/ghb3.ui:8376
 msgid "Activity Log Longevity"
 msgstr "작업 로그 수명"
 
-#: src/ghb3.ui:7690
+#: src/ghb3.ui:8397
 msgid "Scale down High Definition previews"
 msgstr "고화질 미리 보기 비율에 따라 줄이기"
 
-#: src/ghb3.ui:7707
+#: src/ghb3.ui:8414
 msgid "Automatically Scan DVD when loaded"
 msgstr "DVD가 삽입되면 자동으로 스캔"
 
-#: src/ghb3.ui:7711
+#: src/ghb3.ui:8418
 msgid "Scans the DVD whenever a new disc is loaded"
 msgstr "새로운 디스크가 삽입되면 DVD 스캔"
 
-#: src/ghb3.ui:7750
+#: src/ghb3.ui:8456
 msgid "Activity Window Font Size"
 msgstr "작업 창 글꼴 크기"
 
-#: src/ghb3.ui:7767
+#: src/ghb3.ui:8473
 msgid "Use the same settings for all titles in a batch"
 msgstr "묶인 모든 파일들에 대해 동일한 설정 적용"
 
-#: src/ghb3.ui:7771
+#: src/ghb3.ui:8477
 msgid ""
 "When checked, every title will use the same settings when adding a\n"
 "batch of titles to the queue.\n"
@@ -1911,189 +2090,159 @@ msgstr ""
 "이 옵션을 선택하면 대기열에 일련의 제목을 추가할 때 모든 제목이 동일한 설정을 사용합니다.\n"
 "각 제목의 설정을 독립적으로 변경하려면 선택을 해제합니다."
 
-#: src/ghb3.ui:7799
+#: src/ghb3.ui:8494
+msgid "Show preview image in Summary tab"
+msgstr "요약 탭에 미리보기 이미지 표시하기"
+
+#: src/ghb3.ui:8500
+msgid ""
+"Uncheck this if you want to hide the video preview image on the Summary tab "
+"for privacy reasons."
+msgstr "개인 정보 보호를 위해 요약 탭에서 비디오 미리 보기 이미지를 숨기려면 이 옵션을 선택 취소합니다."
+
+#: src/ghb3.ui:8523
 msgid "Allow Tweaks"
 msgstr "설정 변경 허용"
 
-#: src/ghb3.ui:7815
+#: src/ghb3.ui:8539
 msgid "Allow HandBrake For Dummies"
 msgstr "초보자를 위한 HandBrake를 허용"
 
-#: src/ghb3.ui:7843
+#: src/ghb3.ui:8561
 msgid "Advanced"
 msgstr "고급"
 
-#: src/ghb3.ui:7921
+#: src/ghb3.ui:8578
+msgid "Rename Preset"
+msgstr "프리셋 이름 바꾸기"
+
+#: src/ghb3.ui:8640
 msgid "<span size=\"x-large\">Rename Preset</span>"
 msgstr "<span size=\"x-large\">프리셋 이름 변경 </span>"
 
-#: src/ghb3.ui:7941
+#: src/ghb3.ui:8660
 msgid "Name:"
 msgstr "이름:"
 
-#: src/ghb3.ui:7998 src/ghb3.ui:8345
+#: src/ghb3.ui:8717 src/ghb3.ui:8990
 msgid "<b>Description</b>"
 msgstr "<b>설명</b>"
 
-#: src/ghb3.ui:8079
+#: src/ghb3.ui:8735
+msgid "Save Preset"
+msgstr "프리셋 저장하기"
+
+#: src/ghb3.ui:8803
 msgid "Category:"
 msgstr "범주:"
 
-#: src/ghb3.ui:8094
+#: src/ghb3.ui:8818
 msgid "Set the category that this preset will be shown under."
-msgstr "해당 프리셋을 표시할 범주를 지정합니다."
+msgstr "해당 프리셋을 표시할 범주를 설정합니다."
 
-#: src/ghb3.ui:8110
+#: src/ghb3.ui:8834
 msgid "Category Name:"
 msgstr "범주 이름:"
 
-#: src/ghb3.ui:8143
+#: src/ghb3.ui:8867
 msgid "Preset Name:"
 msgstr "프리셋 이름:"
 
-#: src/ghb3.ui:8177
+#: src/ghb3.ui:8901
 msgid "Default Preset"
 msgstr "기본 프리셋"
 
-#: src/ghb3.ui:8182
+#: src/ghb3.ui:8906
 msgid "Make this the default Preset when HandBrake starts"
-msgstr "HandBrake 실행 시, 이를 기본 프리셋으로 지정합니다"
+msgstr "HandBrake 실행 시, 이를 기본 프리셋으로 설정합니다"
 
-#: src/ghb3.ui:8208
+#: src/ghb3.ui:8932
 msgid "<b>Dimensions</b>"
-msgstr "<b>치수</b>"
+msgstr "<b>해상도</b>"
 
-#: src/ghb3.ui:8234
-msgid "Maximum Width:"
-msgstr "최대 폭:"
-
-#: src/ghb3.ui:8239
-msgid "Enable maximum width limit."
-msgstr "최대 폭 제한을 활성화합니다."
-
-#: src/ghb3.ui:8257
-msgid ""
-"This is the maximum width that the video will be stored at.\n"
-"\n"
-"Whenever a new source is loaded, this value will be applied if the source width is greater.\n"
-"Setting this to 0 means there is no maximum width."
-msgstr ""
-"이 값은 저장될 비디오의 최대 폭입니다.\n"
-"\n"
-"새로운 원본이 적재됐을 때, 원본의 폭이 이 값보다 크면 이 값이 적용됩니다.\n"
-"0은 최대 폭을 지정하지 않는다는 의미입니다."
-
-#: src/ghb3.ui:8274
-msgid "Maximum Height:"
-msgstr "최대 높이:"
-
-#: src/ghb3.ui:8279
-msgid "Enable maximum height limit."
-msgstr "최대 높이 제한 활성화."
-
-#: src/ghb3.ui:8297
-msgid ""
-"This is the maximum height that the video will be stored at.\n"
-"\n"
-"Whenever a new source is loaded, this value will be applied if the source height is greater.\n"
-"Setting this to 0 means there is no maximum height."
-msgstr ""
-"이 값은 저장될 비디오의 최대 높이입니다.\n"
-"\n"
-"새로운 원본이 적재됐을 때, 원본의 높이가 이 값보다 크면 이 값이 적용됩니다.\n"
-"0은 최대 높이를 지정하지 않는다는 의미입니다."
-
-#: src/ghb3.ui:8368
+#: src/ghb3.ui:9013
 msgid "HandBrake Preview"
 msgstr "HandBrake 미리보기"
 
-#: src/ghb3.ui:8427
+#: src/ghb3.ui:9094
 msgid "Select preview frames."
 msgstr "미리보기 프레임을 선택합니다."
 
-#: src/ghb3.ui:8449
+#: src/ghb3.ui:9116
 msgid ""
 "Encode and play a short sequence of video starting from the current preview "
 "position."
 msgstr "현재 미리보기 위치에서 시작하는 짧은 비디오 시퀀스를 인코딩하고 재생합니다."
 
-#: src/ghb3.ui:8520
+#: src/ghb3.ui:9172
+msgid "Click to toggle full screen mode"
+msgstr "전체 화면 모드를 전환하려면 클릭"
+
+#: src/ghb3.ui:9208
 msgid "<b>Duration:</b>"
 msgstr "<b>재생시간:</b>"
 
-#: src/ghb3.ui:8532
+#: src/ghb3.ui:9220
 msgid "Set the duration of the live preview in seconds."
 msgstr "실시간 미리보기의 재생시간을 초단위로 설정."
 
-#: src/ghb3.ui:8548
+#: src/ghb3.ui:9236
 msgid "Show Crop"
 msgstr "자르기 표시"
 
-#: src/ghb3.ui:8552
+#: src/ghb3.ui:9240
 msgid "Show Cropped area of the preview"
 msgstr "미리표시에서 잘라낸 영역 표시"
 
-#: src/ghb3.ui:8563
+#: src/ghb3.ui:9251
 msgid "Source Resolution"
 msgstr "원본 해상도"
 
-#: src/ghb3.ui:8567
+#: src/ghb3.ui:9255
 msgid "Reset preview window to the source video's resolution"
 msgstr "미리보기 창을 원본 비디오 해상도로 재설정"
 
-#: src/ghb3.ui:8599
-msgid "_Cancel"
-msgstr "취소(_C)"
+#: src/ghb3.ui:9300 src/subtitlehandler.c:1743
+msgid "Edit Subtitles"
+msgstr "자막 편집하기"
 
-#: src/ghb3.ui:8611
-msgid "_Open"
-msgstr "열기(_O)"
-
-#: src/ghb3.ui:8645
-msgid "Title Number:"
-msgstr "제목 번호:"
-
-#: src/ghb3.ui:8681
-msgid "Detected DVD devices:"
-msgstr "감지된 DVD 장치:"
-
-#: src/ghb3.ui:8791
+#: src/ghb3.ui:9355
 msgid "Import SRT"
 msgstr "SRT 가져오기"
 
-#: src/ghb3.ui:8796
+#: src/ghb3.ui:9360
 msgid "Enable settings to import an SRT subtitle file"
 msgstr "SRT 자막 파일 가져오기 활성화"
 
-#: src/ghb3.ui:8807
+#: src/ghb3.ui:9371
 msgid "Import SSA"
 msgstr "SSA 가져오기"
 
-#: src/ghb3.ui:8812
+#: src/ghb3.ui:9376
 msgid "Enable settings to import an SSA subtitle file"
 msgstr "SSA 자막 파일을 가져오기 위한 설정 활성화"
 
-#: src/ghb3.ui:8824
+#: src/ghb3.ui:9388
 msgid "Embedded Subtitle List"
 msgstr "내장된 자막 목록"
 
-#: src/ghb3.ui:8829
+#: src/ghb3.ui:9393
 msgid "Enable settings to select embedded subtitles"
 msgstr "내장 자막 선택 설정 활성화"
 
-#: src/ghb3.ui:8856 src/ghb3.ui:9199
+#: src/ghb3.ui:9420 src/ghb3.ui:9768
 msgid "Source Track"
 msgstr "원본 트랙"
 
-#: src/ghb3.ui:8871
+#: src/ghb3.ui:9435
 msgid "List of subtitle tracks available from your source."
 msgstr "원본에서 사용할 수 있는 자막 트랙 목록입니다."
 
-#: src/ghb3.ui:8885 src/ghb3.ui:9229
+#: src/ghb3.ui:9449 src/ghb3.ui:9798
 msgid "Track Name:"
 msgstr "트랙 이름:"
 
-#: src/ghb3.ui:8901
+#: src/ghb3.ui:9465
 msgid ""
 "Set the subtitle track name.\n"
 "\n"
@@ -2103,23 +2252,23 @@ msgstr ""
 "\n"
 "재생기들은 이것을 자막 선택 목록에서 사용할 수 있습니다."
 
-#: src/ghb3.ui:8934
+#: src/ghb3.ui:9498
 msgid "Language"
 msgstr "언어"
 
-#: src/ghb3.ui:8948
+#: src/ghb3.ui:9512
 msgid "Character Code"
 msgstr "문자 인코딩"
 
-#: src/ghb3.ui:8962
+#: src/ghb3.ui:9526
 msgid "File:"
 msgstr "파일:"
 
-#: src/ghb3.ui:8977
+#: src/ghb3.ui:9541
 msgid "Offset (ms)"
 msgstr "오프셋 (ms)"
 
-#: src/ghb3.ui:8992
+#: src/ghb3.ui:9556
 msgid ""
 "Set the language of this subtitle.\n"
 "This value will be used by players in subtitle menus."
@@ -2127,7 +2276,7 @@ msgstr ""
 "이 자막의 언어 설정.\n"
 "이 값은 자막 메뉴에서 재생기가 사용합니다."
 
-#: src/ghb3.ui:9010
+#: src/ghb3.ui:9574
 msgid ""
 "Set the character code used by the SRT file you are importing.\n"
 "\n"
@@ -2141,27 +2290,27 @@ msgstr ""
 "이 문자 집합을 UTF-8로 변환합니다.\n"
 "이 변환을 수행하기 위해서 원본 문자 인코딩 방식이 필요합니다."
 
-#: src/ghb3.ui:9034
+#: src/ghb3.ui:9598
 msgid "Select the SRT file to import."
 msgstr "가져올 SRT 파일을 선택합니다."
 
-#: src/ghb3.ui:9037
+#: src/ghb3.ui:9601
 msgid "Import File"
 msgstr "파일 가져오기"
 
-#: src/ghb3.ui:9055
+#: src/ghb3.ui:9619
 msgid "Adjust the offset in milliseconds between video and SRT timestamps"
 msgstr "비디오와 SRT 타임스탬프 사이에 밀리초 단위로 오프셋을 조정합니다"
 
-#: src/ghb3.ui:9079
+#: src/ghb3.ui:9643 src/subtitlehandler.c:119
 msgid "Forced Subtitles Only"
 msgstr "강제 표시 자막만"
 
-#: src/ghb3.ui:9100
+#: src/ghb3.ui:9664
 msgid "Burn into video"
 msgstr "비디오로 굽기"
 
-#: src/ghb3.ui:9105
+#: src/ghb3.ui:9669
 msgid ""
 "Render the subtitle over the video.\n"
 "The subtitle will be part of the video and can not be disabled."
@@ -2169,15 +2318,19 @@ msgstr ""
 "비디오에 자막을 입힙니다.\n"
 "자막은 비디오의 일부가 되고, 비활성화할 수 없습니다."
 
-#: src/ghb3.ui:9117
+#: src/ghb3.ui:9681
 msgid "Set Default Track"
-msgstr "기본 트랙 지정"
+msgstr "기본 트랙 설정하기"
 
-#: src/ghb3.ui:9215
+#: src/ghb3.ui:9710 src/audiohandler.c:1473
+msgid "Edit Audio Track"
+msgstr "오디오 트랙 편집하기"
+
+#: src/ghb3.ui:9784
 msgid "List of audio tracks available from your source."
 msgstr "원본에서 사용할 수 있는 오디오 트랙 목록입니다."
 
-#: src/ghb3.ui:9245
+#: src/ghb3.ui:9814
 msgid ""
 "Set the audio track name.\n"
 "\n"
@@ -2187,15 +2340,15 @@ msgstr ""
 "\n"
 "재생기에서 오디오 선택 목록에 이 이름을 사용합니다."
 
-#: src/ghb3.ui:9308
+#: src/ghb3.ui:9877
 msgid "Mix"
 msgstr "믹스"
 
-#: src/ghb3.ui:9321
+#: src/ghb3.ui:9890
 msgid "Sample Rate"
 msgstr "샘플레이트"
 
-#: src/ghb3.ui:9351 src/ghb3.ui:9590 src/audiohandler.c:1917
+#: src/ghb3.ui:9920 src/ghb3.ui:10159 src/audiohandler.c:1931
 msgid ""
 "<b>Dynamic Range Compression:</b> Adjust the dynamic range of the output audio track.\n"
 "\n"
@@ -2206,122 +2359,172 @@ msgstr ""
 "넓은 다이나믹 레인지를 가진 원본 오디오 (매우 크고 부드러운 시퀀스)에 대해서\n"
 "다이나믹 레인지 압축은 큰 소리를 부드럽게 만들고 부드러운 소리를 크게 만들어서 레인지를 '압축'합니다."
 
-#: src/ghb3.ui:9372 src/audiohandler.c:1768
+#: src/ghb3.ui:9941 src/audiohandler.c:1782
 msgid "Set the audio codec to encode this track with."
-msgstr "이 트랙을 인코딩할 오디오 코덱을 지정합니다."
+msgstr "이 트랙을 인코딩할 오디오 코덱을 설정합니다."
 
-#: src/ghb3.ui:9394 src/audiohandler.c:1782
+#: src/ghb3.ui:9963 src/audiohandler.c:1796
 msgid "Bitrate"
 msgstr "비트레이트"
 
-#: src/ghb3.ui:9399
+#: src/ghb3.ui:9968
 msgid "Enable bitrate setting"
 msgstr "비트레이트 설정 활성화"
 
-#: src/ghb3.ui:9409 src/audiohandler.c:1787
+#: src/ghb3.ui:9978 src/audiohandler.c:1801
 msgid "Quality"
 msgstr "화질"
 
-#: src/ghb3.ui:9414
+#: src/ghb3.ui:9983
 msgid "Enable quality setting"
 msgstr "화질 설정 활성화"
 
-#: src/ghb3.ui:9435 src/audiohandler.c:1801
+#: src/ghb3.ui:10004 src/audiohandler.c:1815
 msgid "Set the bitrate to encode this track with."
-msgstr "이 트랙을 인코딩할 비트레이트를 지정합니다."
+msgstr "이 트랙을 인코딩할 비트레이트를 설정합니다."
 
-#: src/ghb3.ui:9455
+#: src/ghb3.ui:10024
 msgid ""
 "<b>Quality:</b> For output codec's that support it, adjust the quality of "
 "the output."
 msgstr "<b>화질:</b> 출력 코덱이 지원하는 경우, 출력물의 화질을 조정."
 
-#: src/ghb3.ui:9477
+#: src/ghb3.ui:10046
 msgid "00.0"
 msgstr "00.0"
 
-#: src/ghb3.ui:9504 src/audiohandler.c:1853
+#: src/ghb3.ui:10073 src/audiohandler.c:1867
 msgid "Set the mixdown of the output audio track."
-msgstr "오디오 트랙 출력의 믹스다운을 지정합니다."
+msgstr "오디오 트랙 출력의 믹스다운을 설정합니다."
 
-#: src/ghb3.ui:9520 src/audiohandler.c:1866
+#: src/ghb3.ui:10089 src/audiohandler.c:1880
 msgid "Set the sample rate of the output audio track."
-msgstr "출력 오디오 트랙의 샘플레이트를 지정합니다."
+msgstr "출력 오디오 트랙의 샘플레이트를 설정합니다."
 
-#: src/ghb3.ui:9543 src/audiohandler.c:1887
+#: src/ghb3.ui:10112 src/audiohandler.c:1901
 msgid ""
 "<b>Audio Gain:</b> Adjust the amplification or attenuation of the output "
 "audio track."
 msgstr "<b>오디오 게인:</b> 출력된 오디오 트랙의 증폭 또는 감쇄를 조정합니다."
 
 #. Audio Gain Label
-#: src/ghb3.ui:9561 src/audiohandler.c:1897
+#: src/ghb3.ui:10130 src/audiohandler.c:1911
 msgid "0dB"
 msgstr "0dB"
 
 #. Audio DRC Label
-#: src/ghb3.ui:9608 src/audiohandler.c:416 src/audiohandler.c:754
-#: src/audiohandler.c:1157 src/audiohandler.c:1931 src/callbacks.c:5232
-#: src/hb-backend.c:122 src/hb-backend.c:200 src/hb-backend.c:212
-#: src/hb-backend.c:224 src/hb-backend.c:236 src/hb-backend.c:262
-#: src/hb-backend.c:274 src/hb-backend.c:286 src/hb-backend.c:347
+#: src/ghb3.ui:10177 src/audiohandler.c:427 src/audiohandler.c:765
+#: src/audiohandler.c:1168 src/audiohandler.c:1945 src/callbacks.c:5383
+#: src/hb-backend.c:200 src/hb-backend.c:213 src/hb-backend.c:225
+#: src/hb-backend.c:250 src/hb-backend.c:321 src/hb-backend.c:333
+#: src/hb-backend.c:345 src/hb-backend.c:406
 msgid "Off"
 msgstr "끄기"
 
-#: src/ghb3.ui:9644
+#: src/ghb3.ui:10202
+msgid "HandBrake Updater"
+msgstr "HandBrake 업데이트 도구"
+
+#: src/ghb3.ui:10214
 msgid "Skip This Version"
 msgstr "이 버전 무시"
 
-#: src/ghb3.ui:9652
+#: src/ghb3.ui:10222
 msgid "Remind Me Later"
 msgstr "나중에 알려주기"
 
-#: src/ghb3.ui:9721
+#: src/ghb3.ui:10291
 msgid "<b>A new version of HandBrake is available!</b>"
 msgstr "<b>HandBrake의 새로운 버전을 사용할 수 있습니다!</b>"
 
-#: src/ghb3.ui:9737
+#: src/ghb3.ui:10307
 msgid "HandBrake xxx is now available (you have yyy)."
 msgstr "HandBrake xxx 버전이 있습니다. (현재 버전은 yyy 입니다)"
 
-#: src/ghb3.ui:9765
+#: src/ghb3.ui:10335
 msgid "<b>Release Notes</b>"
 msgstr "<b>배포 기록</b>"
 
-#: src/audiohandler.c:428 src/audiohandler.c:750 src/audiohandler.c:1225
+#: src/fr.handbrake.ghb.metainfo.xml.in.in:11
+msgid "Video Transcoder"
+msgstr "비디오 트랜스코더"
+
+#: src/fr.handbrake.ghb.metainfo.xml.in.in:14
+msgid ""
+"HandBrake is a tool for converting video from nearly any format to a "
+"selection of modern, widely supported codecs."
+msgstr "HandBrake는 현대적이며 널리 지원되는 코덱을 사용하여 대부분의 형식으로 비디오를 변환하는 도구(tool)입니다."
+
+#: src/fr.handbrake.ghb.metainfo.xml.in.in:15
+msgid "Reasons you'll love Handbrake:"
+msgstr "HandBrake를 좋아하게 될 이유:"
+
+#: src/fr.handbrake.ghb.metainfo.xml.in.in:17
+msgid "Convert video from nearly any format"
+msgstr "대부분의 형식으로 비디오 변환"
+
+#: src/fr.handbrake.ghb.metainfo.xml.in.in:18
+msgid "Free and Open Source"
+msgstr "자유 및 오픈 소스"
+
+#: src/fr.handbrake.ghb.metainfo.xml.in.in:19
+msgid "Multi-Platform (Windows, Mac and Linux)"
+msgstr "멀티-플랫폼 (Windows, Mac and Linux)"
+
+#: src/fr.handbrake.ghb.metainfo.xml.in.in:65
+msgid "Main window and settings summary"
+msgstr "메인화면 및 설정 요약"
+
+#: src/fr.handbrake.ghb.metainfo.xml.in.in:69
+msgid "Video resolution and cropping settings"
+msgstr "비디오 해상도와 자르기 설정"
+
+#: src/fr.handbrake.ghb.metainfo.xml.in.in:73
+msgid "Video encoder settings"
+msgstr "비디오 인코더 설정"
+
+#: src/fr.handbrake.ghb.metainfo.xml.in.in:77
+msgid "Audio track selection and settings"
+msgstr "오디오 트랙 선택 및 설정"
+
+#: src/fr.handbrake.ghb.metainfo.xml.in.in:81
+msgid "Chapter title editing"
+msgstr "챕터 제목 변경"
+
+#: src/audiohandler.c:439 src/audiohandler.c:761 src/audiohandler.c:1236
 #, c-format
 msgid "%ddB"
 msgstr "%ddB"
 
-#: src/audiohandler.c:726
+#: src/audiohandler.c:737
 msgid "Quality: "
 msgstr "화질: "
 
-#: src/audiohandler.c:733
+#: src/audiohandler.c:744
 #, c-format
 msgid "Bitrate: %dkbps\n"
 msgstr "비트레이트: %dkbps\n"
 
-#: src/audiohandler.c:745
+#: src/audiohandler.c:756
 #, c-format
 msgid "%.4gkHz"
 msgstr "%.4gkHz"
 
-#: src/audiohandler.c:760
+#: src/audiohandler.c:771
 #, c-format
 msgid "<small>%d - %s (%.4gkHz)</small>"
 msgstr "<small>%d - %s (%.4gkHz)</small>"
 
-#: src/audiohandler.c:765
+#: src/audiohandler.c:776
 #, c-format
 msgid "Bitrate: %.4gkbps"
 msgstr "비트레이트: %.4gkbps"
 
-#: src/audiohandler.c:771
+#: src/audiohandler.c:782
 msgid "<small>Passthrough</small>"
 msgstr "<small>패스트루</small>"
 
-#: src/audiohandler.c:780
+#: src/audiohandler.c:791
 #, c-format
 msgid ""
 "%sGain: %s\n"
@@ -2332,7 +2535,7 @@ msgstr ""
 "DRC: %s\n"
 "트랙 이름: %s"
 
-#: src/audiohandler.c:785
+#: src/audiohandler.c:796
 #, c-format
 msgid ""
 "%sGain: %s\n"
@@ -2341,7 +2544,11 @@ msgstr ""
 "%s얻기: %s\n"
 "DRC: %s"
 
-#: src/audiohandler.c:1746
+#: src/audiohandler.c:1391
+msgid "Add Audio Track"
+msgstr "오디오 트랙 추가하기"
+
+#: src/audiohandler.c:1760
 msgid ""
 "Add an audio encoder.\n"
 "Each selected source track will be encoded with all selected encoders."
@@ -2349,7 +2556,7 @@ msgstr ""
 "오디오 인코더를 추가합니다.\n"
 "선택된 각 원본 트랙은 선택된 모든 인코더로 인코딩됩니다."
 
-#: src/audiohandler.c:1826
+#: src/audiohandler.c:1840
 msgid ""
 "<b>Audio Quality:</b>\n"
 "For encoders that support it, adjust the quality of the output."
@@ -2357,39 +2564,143 @@ msgstr ""
 "<b>오디오 화질:</b>\n"
 "지원되는 인코더라면 출력 화질을 조정합니다."
 
-#: src/audiohandler.c:1946
+#: src/audiohandler.c:1960
 msgid "Remove this audio encoder"
 msgstr "오디오 인코더 제거"
 
-#: src/callbacks.c:793 src/callbacks.c:2144
+#: src/callbacks.c:556 src/callbacks.c:2026
 msgid "Closing HandBrake will terminate encoding.\n"
 msgstr "HandBrake를 종료하면 인코딩이 중지됩니다.\n"
 
-#: src/callbacks.c:1378
+#: src/callbacks.c:1188 src/callbacks.c:1199 src/callbacks.c:1674
 msgid "Not Selected"
 msgstr "선택되지 않음"
 
+#: src/callbacks.c:1197
+msgid "Detected DVD devices:"
+msgstr "감지된 DVD 장치:"
+
 #. This needs to be in scanning and working since scanning
 #. happens fast enough that it can be missed
-#: src/callbacks.c:1711 src/callbacks.c:4182
+#: src/callbacks.c:1526 src/callbacks.c:4405
 msgid "Scanning ..."
 msgstr "스캔 중 ..."
 
-#: src/callbacks.c:1747 src/callbacks.c:1748
+#: src/callbacks.c:1562 src/callbacks.c:1563
 msgid "Stop Scan"
 msgstr "스캔 중지"
 
-#: src/callbacks.c:2735 src/hb-backend.c:2085 src/hb-backend.c:2205
-#: src/hb-backend.c:2217
+#: src/callbacks.c:1735
+msgid "Single Title"
+msgstr ""
+
+#: src/callbacks.c:2127 src/callbacks.c:2271
+msgid "FPS"
+msgstr "FPS"
+
+#: src/callbacks.c:2131
+#, c-format
+msgid "Dolby Vision %d.%d"
+msgstr ""
+
+#: src/callbacks.c:2135 src/callbacks.c:2138
+msgid "HDR10+"
+msgstr ""
+
+#: src/callbacks.c:2140
+msgid "HDR10"
+msgstr ""
+
+#: src/callbacks.c:2142
+msgid "HDR"
+msgstr ""
+
+#: src/callbacks.c:2144
+msgid "SDR"
+msgstr ""
+
+#. TRANSLATORS: This is the bit depth of the video
+#: src/callbacks.c:2152
+#, c-format
+msgid "%d-bit"
+msgstr ""
+
+#: src/callbacks.c:2174
+msgid "Audio Track"
+msgid_plural "Audio Tracks"
+msgstr[0] "오디오 트랙"
+
+#: src/callbacks.c:2177
+msgid "Subtitle Track"
+msgid_plural "Subtitle Tracks"
+msgstr[0] "자막 트랙"
+
+#: src/callbacks.c:2275
+msgid "CFR"
+msgstr "CFR"
+
+#: src/callbacks.c:2279
+msgid "PFR"
+msgstr "PFR"
+
+#: src/callbacks.c:2283
+msgid "VFR"
+msgstr "VFR"
+
+#: src/callbacks.c:2325
+#, c-format
+msgid "+ %d more audio track"
+msgid_plural "+ %d more audio tracks"
+msgstr[0] "+%d개 이상의 오디오 트랙"
+
+#: src/callbacks.c:2359 src/callbacks.c:2391 src/queuehandler.c:650
+#: src/queuehandler.c:687
+msgid ", Forced Only"
+msgstr ", 강제 표시만"
+
+#: src/callbacks.c:2363 src/callbacks.c:2395 src/queuehandler.c:654
+#: src/queuehandler.c:691
+msgid ", Burned"
+msgstr ", 추가됨"
+
+#: src/callbacks.c:2367 src/callbacks.c:2399 src/queuehandler.c:658
+#: src/queuehandler.c:695
+msgid ", Default"
+msgstr ", 기본값"
+
+#: src/callbacks.c:2405
+#, c-format
+msgid "+ %d more subtitle track"
+msgid_plural "+ %d more subtitle tracks"
+msgstr[0] "+%d개 이상의 자막 트랙"
+
+#: src/callbacks.c:2560
+msgid "storage"
+msgstr "저장소"
+
+#: src/callbacks.c:2561
+msgid "display"
+msgstr "디스플레이"
+
+#: src/callbacks.c:2562
+msgid "Pixel Aspect Ratio"
+msgstr "픽셀 가로 세로 비율"
+
+#: src/callbacks.c:2563
+msgid "Display Aspect Ratio"
+msgstr "디스플레이 가로 세로 비율"
+
+#: src/callbacks.c:2700 src/hb-backend.c:2263 src/hb-backend.c:2383
+#: src/hb-backend.c:2395
 msgid "No Title Found"
 msgstr "제목 없음"
 
-#: src/callbacks.c:2736
+#: src/callbacks.c:2701
 msgid "New Video"
 msgstr "새 비디오"
 
-#: src/callbacks.c:3522 src/callbacks.c:3544 src/callbacks.c:3563
-#: src/callbacks.c:3595
+#: src/callbacks.c:3710 src/callbacks.c:3723 src/callbacks.c:3745
+#: src/callbacks.c:3783
 #, c-format
 msgid ""
 "%s\n"
@@ -2400,195 +2711,194 @@ msgstr ""
 "\n"
 "%s (%d 초) ..."
 
-#: src/callbacks.c:3666 src/callbacks.c:3708
+#: src/callbacks.c:3880 src/callbacks.c:3931
 #, c-format
 msgid "%sYour movie will be lost if you don't continue encoding."
 msgstr "인코딩을 계속하지 않으면 %s동영상이 손실됩니다."
 
-#: src/callbacks.c:3669 src/callbacks.c:3711 src/queuehandler.c:1777
+#: src/callbacks.c:3883 src/callbacks.c:3934 src/queuehandler.c:1824
 msgid "Cancel Current and Stop"
 msgstr "현재 작업 취소 및 전체 중지"
 
-#: src/callbacks.c:3670
+#: src/callbacks.c:3884
 msgid "Cancel Current, Start Next"
 msgstr "현재 작업 취소 및 다음 작업 시작"
 
-#: src/callbacks.c:3671
+#: src/callbacks.c:3885
 msgid "Finish Current, then Stop"
 msgstr "현재 작업 마친 후 전체 중지"
 
-#: src/callbacks.c:3672 src/callbacks.c:3712
+#: src/callbacks.c:3886 src/callbacks.c:3935
 msgid "Continue Encoding"
 msgstr "인코딩 계속하기"
 
-#: src/callbacks.c:3890
+#: src/callbacks.c:4118
 #, c-format
 msgid "%d encode pending"
 msgstr "%d개 인코딩 보류 중"
 
-#: src/callbacks.c:3894
+#: src/callbacks.c:4122
 #, c-format
 msgid "%d encodes pending"
 msgstr "%d개 인코딩 보류 중"
 
-#: src/callbacks.c:3951 src/callbacks.c:4019
+#: src/callbacks.c:4179 src/callbacks.c:4247
 #, c-format
 msgid "job %d of %d, "
 msgstr "작업 %d / %d, "
 
-#: src/callbacks.c:3961
+#: src/callbacks.c:4189
 #, c-format
 msgid "pass %d (subtitle scan) of %d, "
 msgstr "패스 %d / %d (자막 스캔), "
 
-#: src/callbacks.c:3966
+#: src/callbacks.c:4194
 #, c-format
 msgid "pass %d of %d, "
 msgstr "패스 %d / %d, "
 
-#: src/callbacks.c:3979
+#: src/callbacks.c:4207
 #, c-format
 msgid "Encoding: %s%s%.2f %% (%.2f fps, avg %.2f fps, ETA %02dh%02dm%02ds)"
 msgstr "인코딩: %s%s%.2f %% (%.2f fps, 평균 %.2f fps, ETA %02dh%02dm%02ds)"
 
-#: src/callbacks.c:3989 src/callbacks.c:4029
+#: src/callbacks.c:4217 src/callbacks.c:4257
 #, c-format
 msgid "Encoding: %s%s%.2f %% (ETA %02dh%02dm%02ds)"
 msgstr "인코딩: %s%s%.2f %% (ETA %02dh%02dm%02ds)"
 
-#: src/callbacks.c:3999 src/callbacks.c:4038
+#: src/callbacks.c:4227 src/callbacks.c:4266
 #, c-format
 msgid "Encoding: %s%s%.2f %%"
 msgstr "인코딩: %s%s%.2f %%"
 
-#: src/callbacks.c:4025
+#: src/callbacks.c:4253
 msgid "Searching for start time, "
 msgstr "시작 시간 검색 중, "
 
-#: src/callbacks.c:4100
+#: src/callbacks.c:4328
 #, c-format
 msgid "Scanning title %d of %d..."
 msgstr "제목 %d / %d 스캔 중..."
 
-#: src/callbacks.c:4104
+#: src/callbacks.c:4332
 #, c-format
 msgid "Scanning title %d of %d preview %d..."
 msgstr "제목 %d / %d 스캔 중, 미리보기 %d..."
 
-#: src/callbacks.c:4193
+#: src/callbacks.c:4416
 msgid "Paused"
 msgstr "정지됨"
 
-#: src/callbacks.c:4224
+#: src/callbacks.c:4447
 msgid "Encode Done!"
 msgstr "인코딩 완료!"
 
-#: src/callbacks.c:4228
+#: src/callbacks.c:4451
 msgid "Encode Canceled."
 msgstr "인코딩 취소됨."
 
-#: src/callbacks.c:4233
+#: src/callbacks.c:4456
 msgid "Encode Failed."
 msgstr "인코딩 실패함."
 
-#: src/callbacks.c:4275
+#: src/callbacks.c:4498
 msgid "Muxing: This may take a while..."
 msgstr "다중화: 시간이 좀 걸릴 수 있습니다..."
 
-#: src/callbacks.c:4877
-msgid "Scan this DVD source"
-msgstr "이 DVD 원본 스캔"
-
-#: src/callbacks.c:5265
+#: src/callbacks.c:5416
 #, c-format
 msgid "HandBrake %s/%s is now available (you have %s/%d)."
 msgstr "HandBrake %s/%s 버전이 사용 가능합니다. (설치 버전 %s/%d)"
 
-#: src/callbacks.c:5446
+#: src/callbacks.c:5595
 msgid "Encode Complete"
 msgstr "인코딩 완료됨"
 
-#: src/callbacks.c:5448
+#: src/callbacks.c:5597
 msgid "Put down that cocktail, Your HandBrake queue is done!"
 msgstr "칵테일을 내려놓으세요, HandBrake 대기열에 있는 작업이 완료됐습니다!"
 
-#: src/callbacks.c:5461 src/callbacks.c:5471 src/callbacks.c:5479
+#: src/callbacks.c:5608 src/callbacks.c:5616 src/callbacks.c:5625
 msgid "Your encode is complete."
 msgstr "인코딩이 완료됐습니다."
 
-#: src/callbacks.c:5462
-msgid "Shutting down the computer"
-msgstr "컴퓨터 종료 중"
-
-#: src/callbacks.c:5472
-msgid "Putting computer to sleep"
-msgstr "컴퓨터 절전모드로 전환 중"
-
-#: src/callbacks.c:5480
+#: src/callbacks.c:5609
 msgid "Quitting Handbrake"
 msgstr "Handbrake 종료 중"
 
-#: src/hb-backend.c:60 src/hb-backend.c:85
+#: src/callbacks.c:5617
+msgid "Putting computer to sleep"
+msgstr "컴퓨터 절전모드로 전환 중"
+
+#: src/callbacks.c:5626
+msgid "Shutting down the computer"
+msgstr "컴퓨터 종료 중"
+
+#. Add filters
+#: src/callbacks.c:5755 src/chapters.c:603 src/chapters.c:633
+#: src/presets.c:2044 src/queuehandler.c:1694
+msgid "All Files"
+msgstr ""
+
+#: src/chapters.c:604 src/chapters.c:634
+msgid "Chapters (*.xml)"
+msgstr ""
+
+#: src/hb-backend.c:61 src/hb-backend.c:86
 msgid "First Track Matching Selected Languages"
 msgstr "선택된 언어에 부합하는 첫 트랙"
 
-#: src/hb-backend.c:61 src/hb-backend.c:86
+#: src/hb-backend.c:62 src/hb-backend.c:87
 msgid "All Tracks Matching Selected Languages"
 msgstr "선택된 언어에 부합하는 모든 트랙"
 
-#: src/hb-backend.c:72
+#: src/hb-backend.c:73
 msgid "Foreign Audio Subtitle Track"
 msgstr "외부 오디오 자막 트랙"
 
-#: src/hb-backend.c:73
+#: src/hb-backend.c:74
 msgid "First Selected Track"
 msgstr "처음 선택된 트랙"
 
-#: src/hb-backend.c:74
+#: src/hb-backend.c:75
 msgid "Foreign Audio, then First Selected Track"
 msgstr "외부 오디오 그리고 처음 선택된 트랙"
 
-#: src/hb-backend.c:96
+#: src/hb-backend.c:97 src/queuehandler.c:223
 msgid "Chapters:"
 msgstr "챕터:"
 
-#: src/hb-backend.c:97
+#: src/hb-backend.c:98
 msgid "Seconds:"
 msgstr "초:"
 
-#: src/hb-backend.c:98
+#: src/hb-backend.c:99 src/queuehandler.c:244
 msgid "Frames:"
 msgstr "프레임:"
 
-#: src/hb-backend.c:108
+#: src/hb-backend.c:109
 msgid "Do Nothing"
 msgstr "아무 것도 안함"
 
-#: src/hb-backend.c:109
+#: src/hb-backend.c:110
 msgid "Show Notification"
 msgstr "알림 표시"
 
-#: src/hb-backend.c:110
+#: src/hb-backend.c:111
 msgid "Quit Handbrake"
 msgstr "Handbrake 종료"
 
-#: src/hb-backend.c:111
+#: src/hb-backend.c:112
 msgid "Put Computer To Sleep"
 msgstr "컴퓨터 절전 모드로 전환"
 
-#: src/hb-backend.c:112
+#: src/hb-backend.c:113
 msgid "Shutdown Computer"
 msgstr "컴퓨터 종료"
 
-#: src/hb-backend.c:123 src/hb-backend.c:252
-msgid "Automatic"
-msgstr "자동"
-
-#: src/hb-backend.c:124
-msgid "Loose"
-msgstr "루스"
-
-#: src/hb-backend.c:125 src/hb-backend.c:337
+#: src/hb-backend.c:125 src/hb-backend.c:240 src/hb-backend.c:271
+#: src/hb-backend.c:285 src/hb-backend.c:396
 msgid "Custom"
 msgstr "사용자 지정"
 
@@ -2624,7 +2934,7 @@ msgstr "매주"
 msgid "Monthly"
 msgstr "매달"
 
-#: src/hb-backend.c:201
+#: src/hb-backend.c:201 src/hb-backend.c:4880
 msgid "Decomb"
 msgstr "Decomb"
 
@@ -2632,205 +2942,269 @@ msgstr "Decomb"
 msgid "Yadif"
 msgstr "Yadif"
 
-#: src/hb-backend.c:213
+#: src/hb-backend.c:203
+msgid "Bwdif"
+msgstr "Bwdif"
+
+#: src/hb-backend.c:214
 msgid "NLMeans"
 msgstr "NLMeans"
 
-#: src/hb-backend.c:214
+#: src/hb-backend.c:215
 msgid "HQDN3D"
 msgstr "HQDN3D"
 
-#: src/hb-backend.c:225
+#: src/hb-backend.c:226
 msgid "Unsharp"
 msgstr "Unsharp"
 
-#: src/hb-backend.c:226
+#: src/hb-backend.c:227
 msgid "Lapsharp"
 msgstr "Lapsharp"
 
-#: src/hb-backend.c:237
-msgid "90 Degrees"
-msgstr "90º"
-
 #: src/hb-backend.c:238
-msgid "180 Degrees"
-msgstr "180º"
+msgid "Conservative"
+msgstr "보수적"
 
-#: src/hb-backend.c:239
-msgid "270 Degrees"
-msgstr "270º"
+#: src/hb-backend.c:251
+msgid "90°"
+msgstr "90°"
 
-#: src/hb-backend.c:250
+#: src/hb-backend.c:252
+msgid "180°"
+msgstr "180°"
+
+#: src/hb-backend.c:253
+msgid "270°"
+msgstr "270°"
+
+#: src/hb-backend.c:263
+msgid "4320p 8K Ultra HD"
+msgstr "4320p 8K Ultra HD"
+
+#: src/hb-backend.c:264
+msgid "2160p 4K Ultra HD"
+msgstr "2160p 4K Ultra HD"
+
+#: src/hb-backend.c:265
+msgid "1440p 2.5K Quad HD"
+msgstr "1440p 2.5K Quad HD"
+
+#: src/hb-backend.c:266
+msgid "1080p Full HD"
+msgstr "1080p Full HD"
+
+#: src/hb-backend.c:267
+msgid "720p HD"
+msgstr "720p HD"
+
+#: src/hb-backend.c:268
+msgid "576p PAL"
+msgstr "576p PAL"
+
+#: src/hb-backend.c:269
+msgid "480p NTSC"
+msgstr "480p NTSC"
+
+#: src/hb-backend.c:282
+msgid "Height (Letterbox)"
+msgstr "높이 (Letterbox)"
+
+#: src/hb-backend.c:283
+msgid "Width (Pillarbox)"
+msgstr "너비 (Pillarbox)"
+
+#: src/hb-backend.c:284
+msgid "Width &amp; Height"
+msgstr "너비 &amp; 높이"
+
+#: src/hb-backend.c:295
+msgid "Black"
+msgstr "검은색"
+
+#: src/hb-backend.c:296
+msgid "Dark Gray"
+msgstr "어두운 회색"
+
+#: src/hb-backend.c:297
+msgid "Gray"
+msgstr "회색"
+
+#: src/hb-backend.c:298
+msgid "White"
+msgstr "흰색"
+
+#: src/hb-backend.c:309
 msgid "Spatial"
 msgstr "공간"
 
-#: src/hb-backend.c:251
+#: src/hb-backend.c:310
 msgid "Temporal"
 msgstr "임시"
 
-#: src/hb-backend.c:263
+#: src/hb-backend.c:322
 msgid "Fast"
 msgstr "빠름"
 
-#: src/hb-backend.c:264
+#: src/hb-backend.c:323
 msgid "Optimal"
 msgstr "최적"
 
-#: src/hb-backend.c:275
+#: src/hb-backend.c:334
 msgid "Strict"
 msgstr "최소한"
 
-#: src/hb-backend.c:276
+#: src/hb-backend.c:335
 msgid "Normal"
 msgstr "보통"
 
-#: src/hb-backend.c:287
+#: src/hb-backend.c:346
 msgid "Simple"
 msgstr "단순"
 
-#: src/hb-backend.c:288
+#: src/hb-backend.c:347
 msgid "Smart"
 msgstr "스마트"
 
-#: src/hb-backend.c:298
+#: src/hb-backend.c:357
 msgid "Diamond"
 msgstr "마름모꼴"
 
-#: src/hb-backend.c:299
+#: src/hb-backend.c:358
 msgid "Hexagon"
 msgstr "육각형"
 
-#: src/hb-backend.c:300
+#: src/hb-backend.c:359
 msgid "Uneven Multi-Hexagon"
 msgstr "균일하지 않은 다중 육각형"
 
-#: src/hb-backend.c:301
+#: src/hb-backend.c:360
 msgid "Exhaustive"
 msgstr "Exhaustive"
 
-#: src/hb-backend.c:302
+#: src/hb-backend.c:361
 msgid "Hadamard Exhaustive"
 msgstr "아다마르 Exhaustive"
 
-#: src/hb-backend.c:312
+#: src/hb-backend.c:371
 msgid "0: SAD, no subpel"
 msgstr "0: SAD, 부화소 없음"
 
-#: src/hb-backend.c:313
+#: src/hb-backend.c:372
 msgid "1: SAD, qpel"
 msgstr "1: SAD, qpel"
 
-#: src/hb-backend.c:314
+#: src/hb-backend.c:373
 msgid "2: SATD, qpel"
 msgstr "2: SATD, qpel"
 
-#: src/hb-backend.c:315
+#: src/hb-backend.c:374
 msgid "3: SATD: multi-qpel"
 msgstr "3: SATD: multi-qpel"
 
-#: src/hb-backend.c:316
+#: src/hb-backend.c:375
 msgid "4: SATD, qpel on all"
 msgstr "4: SATD, 1/4 화소 적용"
 
-#: src/hb-backend.c:317
+#: src/hb-backend.c:376
 msgid "5: SATD, multi-qpel on all"
 msgstr "5: SATD, 복수의 1/4 화소 적용"
 
-#: src/hb-backend.c:318
+#: src/hb-backend.c:377
 msgid "6: RD in I/P-frames"
 msgstr "6: I/P-프레임의 RD"
 
-#: src/hb-backend.c:319
+#: src/hb-backend.c:378
 msgid "7: RD in all frames"
 msgstr "7: 모든 프레임의 RD"
 
-#: src/hb-backend.c:320
+#: src/hb-backend.c:379
 msgid "8: RD refine in I/P-frames"
 msgstr "8: I/P-프레임의 RD 수정"
 
-#: src/hb-backend.c:321
+#: src/hb-backend.c:380
 msgid "9: RD refine in all frames"
 msgstr "9: 모든 프레임의 RD 수정"
 
-#: src/hb-backend.c:322
+#: src/hb-backend.c:381
 msgid "10: QPRD in all frames"
 msgstr "10: 모든 프레임의 QPRD"
 
-#: src/hb-backend.c:323
+#: src/hb-backend.c:382
 msgid "11: No early terminations in analysis"
 msgstr "11: 분석 중 조기 종료하지 않음"
 
-#: src/hb-backend.c:333
+#: src/hb-backend.c:392
 msgid "Most"
 msgstr "대부분"
 
-#: src/hb-backend.c:335
+#: src/hb-backend.c:394
 msgid "Some"
 msgstr "일부"
 
-#: src/hb-backend.c:336 src/main.c:1151 src/queuehandler.c:1607
+#: src/hb-backend.c:395
 msgid "All"
 msgstr "모두"
 
-#: src/hb-backend.c:348
+#: src/hb-backend.c:407
 msgid "Encode only"
 msgstr "인코딩만"
 
-#: src/hb-backend.c:349
+#: src/hb-backend.c:408
 msgid "Always"
 msgstr "항상"
 
-#: src/hb-backend.c:1346 src/hb-backend.c:1406 src/hb-backend.c:1485
+#: src/hb-backend.c:1524 src/hb-backend.c:1584 src/hb-backend.c:1663
 msgid "Same as source"
 msgstr "원본과 동일"
 
-#: src/hb-backend.c:1499
+#: src/hb-backend.c:1677
 msgid "(NTSC Film)"
 msgstr "(NTSC 필름)"
 
-#: src/hb-backend.c:1503
+#: src/hb-backend.c:1681
 msgid "(PAL Film/Video)"
 msgstr "(PAL 필름/비디오)"
 
-#: src/hb-backend.c:1507
+#: src/hb-backend.c:1685
 msgid "(NTSC Video)"
 msgstr "(NTSC 비디오)"
 
-#: src/hb-backend.c:2074
+#: src/hb-backend.c:2252
 #, c-format
 msgid "%s - (%05d.MPLS)"
 msgstr "%s - (%05d.MPLS)"
 
-#: src/hb-backend.c:2224
+#: src/hb-backend.c:2402
 #, c-format
 msgid "%3d - %02dh%02dm%02ds - %s"
 msgstr "%3d - %02d시간 %02d분 %02d초 - %s"
 
-#: src/hb-backend.c:2243
+#: src/hb-backend.c:2421
 #, c-format
 msgid "%3d - %02dh%02dm%02ds - (%05d.MPLS)"
 msgstr "%3d - %02d시간 %02d분 %02d초 - (%05d.MPLS)"
 
-#: src/hb-backend.c:2249
+#: src/hb-backend.c:2427
 #, c-format
 msgid "%3d - (%05d.MPLS)"
 msgstr "%3d - (%05d.MPSL)"
 
-#: src/hb-backend.c:2255
+#: src/hb-backend.c:2433
 #, c-format
 msgid "%3d - %02dh%02dm%02ds"
 msgstr "%3d - %02d시간 %02d분 %02d초"
 
-#: src/hb-backend.c:2289
+#: src/hb-backend.c:2466
 msgid "No Titles"
 msgstr "제목 없음"
 
 #. No audio. set some default
-#: src/hb-backend.c:2574
+#: src/hb-backend.c:2746
 msgid "No Audio"
 msgstr "오디오 없음"
 
-#: src/hb-backend.c:4170
+#: src/hb-backend.c:4289
 #, c-format
 msgid ""
 "Invalid Detelecine Settings:\n"
@@ -2838,23 +3212,23 @@ msgid ""
 "Preset:\t%s\n"
 "Custom:\t%s\n"
 msgstr ""
-"잘못된 텔레시네 해제 설정:\n"
+"잘못된 텔레시네 제거 설정:\n"
 "\n"
 "프리셋:\t%s\n"
 "사용자 지정:\t%s\n"
 
-#: src/hb-backend.c:4177
+#: src/hb-backend.c:4296
 #, c-format
 msgid ""
 "Invalid Detelecine Settings:\n"
 "\n"
 "Preset:\t%s\n"
 msgstr ""
-"잘못된 텔레시네 해제 설정:\n"
+"잘못된 텔레시네 제거 설정:\n"
 "\n"
 "프리셋:\t%s\n"
 
-#: src/hb-backend.c:4203
+#: src/hb-backend.c:4322
 #, c-format
 msgid ""
 "Invalid Comb Detect Settings:\n"
@@ -2862,23 +3236,23 @@ msgid ""
 "Preset:\t%s\n"
 "Custom:\t%s\n"
 msgstr ""
-"잘못된 Comb Detect 설정:\n"
+"잘못된 Comb 감지 설정:\n"
 "\n"
 "프리셋:\t%s\n"
 "사용자 지정:\t%s\n"
 
-#: src/hb-backend.c:4210
+#: src/hb-backend.c:4329
 #, c-format
 msgid ""
 "Invalid Comb Detect Settings:\n"
 "\n"
 "Preset:\t%s\n"
 msgstr ""
-"잘못된 Comb Detect 설정:\n"
+"잘못된 Comb 감지 설정:\n"
 "\n"
 "프리셋:\t%s\n"
 
-#: src/hb-backend.c:4239
+#: src/hb-backend.c:4358
 #, c-format
 msgid ""
 "Invalid Deinterlace Settings:\n"
@@ -2887,13 +3261,13 @@ msgid ""
 "Preset:\t%s\n"
 "Custom:\t%s\n"
 msgstr ""
-"잘못된 인터레이스 해제 설정:\n"
+"잘못된 인터레이스 제거 설정:\n"
 "\n"
 "필터:\t%s\n"
 "프리셋:\t%s\n"
 "사용자 지정\t%s\n"
 
-#: src/hb-backend.c:4248
+#: src/hb-backend.c:4367
 #, c-format
 msgid ""
 "Invalid Deinterlace Settings:\n"
@@ -2901,12 +3275,12 @@ msgid ""
 "Filter:\t%s\n"
 "Preset:\t%s\n"
 msgstr ""
-"잘못된 인터레이스 해제 설정:\n"
+"잘못된 인터레이스 제거 설정:\n"
 "\n"
 "필터:\t%s\n"
 "프리셋:\t%s\n"
 
-#: src/hb-backend.c:4277
+#: src/hb-backend.c:4396
 #, c-format
 msgid ""
 "Invalid Denoise Settings:\n"
@@ -2923,7 +3297,7 @@ msgstr ""
 "조정:\t%s\n"
 "사용자 지정:\t%s\n"
 
-#: src/hb-backend.c:4305
+#: src/hb-backend.c:4424
 #, c-format
 msgid ""
 "Invalid Sharpen Settings:\n"
@@ -2940,7 +3314,7 @@ msgstr ""
 "조정:\t%s\n"
 "사용자 지정:\t%s\n"
 
-#: src/hb-backend.c:4339
+#: src/hb-backend.c:4458
 msgid ""
 "Theora is not supported in the MP4 container.\n"
 "\n"
@@ -2952,29 +3326,29 @@ msgstr ""
 "다른 비디오 코덱이나 컨테이너를 선택하세요.\n"
 "계속하면, FFMPEG이 선택됩니다."
 
-#: src/hb-backend.c:4349
+#: src/hb-backend.c:4468
 msgid ""
-"Only VP8 or VP9 is supported in the WebM container.\n"
+"Only VP8, VP9 and AV1 is supported in the WebM container.\n"
 "\n"
 "You should choose a different video codec or container.\n"
 "If you continue, one will be chosen for you."
 msgstr ""
-"WebM 컨테이너에서는 VP8 또는 VP9만 지원됩니다.\n"
+"VP8, VP9 및 AV1만 WebM 컨테이너에서 지원됩니다.\n"
 "\n"
-"다른 비디오 코덱 또는 컨테이너를 선택해야 합니다.\n"
-"계속 진행하면, 임의의 코덱이 선택됩니다."
+"다른 동영상 코덱이나 컨테이너를 선택해야 합니다.\n"
+"계속 진행한다면, 하나가 자동으로 선택됩니다."
 
-#: src/hb-backend.c:4358 src/hb-backend.c:4415 src/hb-backend.c:4435
-#: src/hb-backend.c:4455 src/hb-backend.c:4516 src/hb-backend.c:4571
+#: src/hb-backend.c:4477 src/hb-backend.c:4534 src/hb-backend.c:4554
+#: src/hb-backend.c:4574 src/hb-backend.c:4635 src/hb-backend.c:4690
 msgid "Continue"
 msgstr "계속하기"
 
 #. No valid title, stop right there
-#: src/hb-backend.c:4384 src/hb-backend.c:4480
+#: src/hb-backend.c:4503 src/hb-backend.c:4599
 msgid "No title found.\n"
 msgstr "제목이 없습니다.\n"
 
-#: src/hb-backend.c:4411
+#: src/hb-backend.c:4530
 msgid ""
 "Only one subtitle may be burned into the video.\n"
 "\n"
@@ -2986,7 +3360,7 @@ msgstr ""
 "자막 선택을 변경해야 합니다.\n"
 "계속하면 일부 자막이 손실됩니다."
 
-#: src/hb-backend.c:4431
+#: src/hb-backend.c:4550
 msgid ""
 "WebM in HandBrake only supports burned subtitles.\n"
 "\n"
@@ -2998,7 +3372,7 @@ msgstr ""
 "자막 선택을 변경해야합니다.\n"
 "계속하면 일부 자막이 손실됩니다."
 
-#: src/hb-backend.c:4451
+#: src/hb-backend.c:4570
 msgid ""
 "SRT file does not exist or not a regular file.\n"
 "\n"
@@ -3010,7 +3384,7 @@ msgstr ""
 "사용 가능한 파일을 선택해야 합니다.\n"
 "계속하시면, 해당 자막이 무시됩니다."
 
-#: src/hb-backend.c:4512
+#: src/hb-backend.c:4631
 msgid ""
 "The source does not support Pass-Thru.\n"
 "\n"
@@ -3022,7 +3396,7 @@ msgstr ""
 "다른 오디오 코덱을 선택해야 합니다.\n"
 "계속 진행하면, 임의의 코덱이 선택됩니다."
 
-#: src/hb-backend.c:4567
+#: src/hb-backend.c:4686
 #, c-format
 msgid ""
 "%s is not supported in the %s container.\n"
@@ -3035,7 +3409,55 @@ msgstr ""
 "다른 오디오 코덱을 선택해야 합니다.\n"
 "계속 진행하면, 임의의 코덱이 선택됩니다."
 
-#: src/main.c:97
+#: src/hb-backend.c:4872
+msgid "Comb Detect"
+msgstr "Comb 감지"
+
+#: src/hb-backend.c:4874
+msgid "Detelecine"
+msgstr "텔레시네 제거"
+
+#: src/hb-backend.c:4876
+msgid "Deinterlace (Yadif)"
+msgstr "인터레이스 제거 (Yadif)"
+
+#: src/hb-backend.c:4878
+msgid "Deinterlace (Bwdif)"
+msgstr "인터레이스 제거 (Bwdif)"
+
+#: src/hb-backend.c:4882
+msgid "Deblock"
+msgstr "블록 제거"
+
+#: src/hb-backend.c:4884
+msgid "Denoise (NLMeans)"
+msgstr "노이즈 제거 (NLMeans)"
+
+#: src/hb-backend.c:4886
+msgid "Denoise (HQDN3D)"
+msgstr "노이즈 제거 (HQDN3D)"
+
+#: src/hb-backend.c:4888
+msgid "Chroma Smooth"
+msgstr "크로마 스무스"
+
+#: src/hb-backend.c:4890
+msgid "Sharpen (Unsharp)"
+msgstr "선명도 (흐릿함)"
+
+#: src/hb-backend.c:4892
+msgid "Rotate"
+msgstr "회전하기"
+
+#: src/hb-backend.c:4894
+msgid "Sharpen (lapsharp)"
+msgstr "선명도 (lapsharp)"
+
+#: src/hb-backend.c:4898
+msgid "Colorspace"
+msgstr "색상공간"
+
+#: src/main.c:99
 #, c-format
 msgid ""
 "<b><big>Unable to create %s.</big></b>\n"
@@ -3048,43 +3470,47 @@ msgstr ""
 "내부 오류입니다. UI 설명을 구문분석 할 수 없습니다.\n"
 "%s"
 
-#: src/main.c:235 src/main.c:300
+#: src/main.c:234 src/main.c:299
 msgid "Track Information"
 msgstr "트랙 정보"
 
-#: src/main.c:362
+#: src/main.c:248 src/main.c:253 src/main.c:313 src/main.c:317
+msgid " "
+msgstr " "
+
+#: src/main.c:360
 msgid "Preset Name"
 msgstr "프리셋 이름"
 
-#: src/main.c:580
+#: src/main.c:575
 msgid "The device or file to encode"
 msgstr "인코딩할 장치 또는 파일"
 
-#: src/main.c:581
+#: src/main.c:576
 msgid "The preset values to use for encoding"
 msgstr "인코딩에 사용할 프리셋 값"
 
-#: src/main.c:582
+#: src/main.c:577
 msgid "Spam a lot"
 msgstr "많은 스팸"
 
-#: src/main.c:583
+#: src/main.c:578
 msgid "The path to override user config dir"
 msgstr "사용자 설정 디렉토리를 덮어 쓸 경로"
 
-#: src/main.c:585
+#: src/main.c:580
 msgid "Open a console for debug output"
 msgstr "디버그 출력을 위한 콘솔 열기"
 
-#: src/presets.c:1232
+#: src/presets.c:1212
 msgid "ghb_presets_menu_init: Failed to find presets folder."
 msgstr "ghb_presets_menu_init: 프리셋 폴더를 찾지 못하였습니다."
 
-#: src/presets.c:1388
+#: src/presets.c:1368
 msgid "Failed to find parent folder when adding child."
 msgstr "파일 추가 도중 상위 폴더를 찾지 못하였습니다."
 
-#: src/presets.c:1848
+#: src/presets.c:1852
 msgid ""
 "Presets found are newer than what is supported by this version of HandBrake!\n"
 "\n"
@@ -3094,31 +3520,27 @@ msgstr ""
 "\n"
 "계속하시겠습니까?"
 
-#: src/presets.c:1851
+#: src/presets.c:1855
 msgid "Get me out of here!"
 msgstr "여기서 꺼내줘요!"
 
-#: src/presets.c:1851
+#: src/presets.c:1855
 msgid "Load backup presets"
 msgstr "백업 프리셋 불러오기"
 
-#: src/presets.c:1997
-msgid "All (*)"
-msgstr "모두 (*)"
-
-#: src/presets.c:2002
+#: src/presets.c:2045
 msgid "Presets (*.json)"
 msgstr "프리셋 (*.json)"
 
-#: src/presets.c:2008
+#: src/presets.c:2047
 msgid "Legacy Presets (*.plist)"
 msgstr "기존 프리셋 (*.plist)"
 
-#: src/presets.c:2104
+#: src/presets.c:2156
 msgid "Export Preset"
 msgstr "프리셋 내보내기"
 
-#: src/presets.c:2445
+#: src/presets.c:2460
 #, c-format
 msgid ""
 "Confirm deletion of %s:\n"
@@ -3129,15 +3551,19 @@ msgstr ""
 "\n"
 "%s"
 
-#: src/presets.c:2446
+#: src/presets.c:2461
 msgid "folder"
 msgstr "폴더"
 
-#: src/presets.c:2446
+#: src/presets.c:2461
 msgid "preset"
 msgstr "프리셋"
 
-#: src/preview.c:487
+#: src/presets.c:2467
+msgid "Delete"
+msgstr "삭제하기"
+
+#: src/preview.c:532
 #, c-format
 msgid ""
 "Missing GStreamer plugin\n"
@@ -3150,20 +3576,28 @@ msgstr ""
 "\n"
 "%s"
 
-#: src/queuehandler.c:196
+#: src/preview.c:536
+msgid "OK"
+msgstr "확인"
+
+#: src/queuehandler.c:189
 #, c-format
 msgid "%s (Modified)"
 msgstr "%s (수정됨)"
 
-#: src/queuehandler.c:285
+#: src/queuehandler.c:237
+msgid "Time:"
+msgstr "시간:"
+
+#: src/queuehandler.c:281
 msgid "Align A/V"
 msgstr "A/V 정렬"
 
-#: src/queuehandler.c:295
+#: src/queuehandler.c:291
 msgid "iPod 5G"
 msgstr "iPod 5G"
 
-#: src/queuehandler.c:327
+#: src/queuehandler.c:323
 #, c-format
 msgid ""
 "%d:%d:%d:%d Crop\n"
@@ -3176,42 +3610,42 @@ msgstr ""
 "%d:%d 픽셀 종횡비\n"
 "%s 화면 종횡비"
 
-#: src/queuehandler.c:358
+#: src/queuehandler.c:354
 #, c-format
 msgid "%s, Bitrate %dkbps"
 msgstr "%s, 비트레이트 %dkbps"
 
-#: src/queuehandler.c:363
+#: src/queuehandler.c:359
 #, c-format
-msgid "%s, Bitrate %dkbps (2 Pass)"
-msgstr "%s, 비트레이트 %dkbps (2 Pass)"
+msgid "%s, Bitrate %dkbps (Multi Pass)"
+msgstr ""
 
-#: src/queuehandler.c:370
+#: src/queuehandler.c:366
 #, c-format
 msgid "%s, Constant Quality %.4g(%s)"
 msgstr "%s, 고정 화질 %.4g(%s)"
 
-#: src/queuehandler.c:403
+#: src/queuehandler.c:399
 #, c-format
 msgid "%sPreset %s"
 msgstr "%s프리셋%s"
 
-#: src/queuehandler.c:408
+#: src/queuehandler.c:404
 #, c-format
 msgid "%sTune %s"
 msgstr "%s조정 %s"
 
-#: src/queuehandler.c:413
+#: src/queuehandler.c:409
 #, c-format
 msgid "%sProfile %s"
 msgstr "%s프로필 %s"
 
-#: src/queuehandler.c:418
+#: src/queuehandler.c:414
 #, c-format
 msgid "%sLevel %s"
 msgstr "%s레벨%s"
 
-#: src/queuehandler.c:435
+#: src/queuehandler.c:431
 #, c-format
 msgid ""
 "\n"
@@ -3220,7 +3654,7 @@ msgstr ""
 "\n"
 "고정 프레임레이트 %s fps"
 
-#: src/queuehandler.c:439
+#: src/queuehandler.c:435
 #, c-format
 msgid ""
 "\n"
@@ -3229,7 +3663,7 @@ msgstr ""
 "\n"
 "피크 프레임레이트 %s fps (더 낮을 수 있음)"
 
-#: src/queuehandler.c:444
+#: src/queuehandler.c:440
 #, c-format
 msgid ""
 "\n"
@@ -3238,88 +3672,76 @@ msgstr ""
 "\n"
 "가변 프레임레이트 %s fps"
 
-#: src/queuehandler.c:610 src/queuehandler.c:641
-msgid ", Forced Only"
-msgstr ", 강제 표시만"
-
-#: src/queuehandler.c:614 src/queuehandler.c:645
-msgid ", Burned"
-msgstr ", 추가됨"
-
-#: src/queuehandler.c:618 src/queuehandler.c:649
-msgid ", Default"
-msgstr ", 기본값"
-
-#: src/queuehandler.c:705 src/queuehandler.c:1204
-msgid "Completed"
-msgstr "완료됨"
-
-#: src/queuehandler.c:709 src/queuehandler.c:1208
-msgid "Canceled"
-msgstr "취소됨"
-
-#: src/queuehandler.c:713 src/queuehandler.c:1212
-msgid "Failed"
-msgstr "실패함"
-
-#: src/queuehandler.c:718
+#: src/queuehandler.c:739 src/queuehandler.c:764
 msgid "Pending"
 msgstr "보류 중"
 
-#: src/queuehandler.c:754 src/queuehandler.c:782 src/queuehandler.c:1252
-#: src/queuehandler.c:1280
+#: src/queuehandler.c:751 src/queuehandler.c:1248
+msgid "Completed"
+msgstr "완료됨"
+
+#: src/queuehandler.c:755 src/queuehandler.c:1252
+msgid "Canceled"
+msgstr "취소됨"
+
+#: src/queuehandler.c:759 src/queuehandler.c:1256
+msgid "Failed"
+msgstr "실패함"
+
+#: src/queuehandler.c:800 src/queuehandler.c:828 src/queuehandler.c:1296
+#: src/queuehandler.c:1324
 #, c-format
 msgid "%d Day %02d:%02d:%02d"
 msgstr "%d일 %02d:%02d:%02d"
 
-#: src/queuehandler.c:757 src/queuehandler.c:785 src/queuehandler.c:1255
-#: src/queuehandler.c:1283
+#: src/queuehandler.c:803 src/queuehandler.c:831 src/queuehandler.c:1299
+#: src/queuehandler.c:1327
 #, c-format
 msgid "%d Days %02d:%02d:%02d"
 msgstr "%d일 %02d:%02d:%02d"
 
-#: src/queuehandler.c:798 src/queuehandler.c:1296
+#: src/queuehandler.c:844 src/queuehandler.c:1340
 msgid "B"
 msgstr "B"
 
-#: src/queuehandler.c:802 src/queuehandler.c:1300
+#: src/queuehandler.c:848 src/queuehandler.c:1344
 msgid "KB"
 msgstr "KB"
 
-#: src/queuehandler.c:807 src/queuehandler.c:1305
+#: src/queuehandler.c:853 src/queuehandler.c:1349
 msgid "MB"
 msgstr "MB"
 
-#: src/queuehandler.c:812 src/queuehandler.c:1310
+#: src/queuehandler.c:858 src/queuehandler.c:1354
 msgid "GB"
 msgstr "GB"
 
-#: src/queuehandler.c:823 src/queuehandler.c:1321
+#: src/queuehandler.c:869 src/queuehandler.c:1365
 msgid "Not Available"
 msgstr "사용할 수 없음"
 
-#: src/queuehandler.c:1156
+#: src/queuehandler.c:1200
 msgid "Foreign Audio Search"
 msgstr "외부 오디오 검색"
 
-#: src/queuehandler.c:1160
+#: src/queuehandler.c:1204
 msgid "Encode"
 msgstr "인코딩"
 
-#: src/queuehandler.c:1164
-msgid "Encode First Pass (Analysis)"
-msgstr "첫 번째 패스 인코딩 (분석)"
+#: src/queuehandler.c:1208
+msgid "Encode Analysis Pass"
+msgstr ""
 
-#: src/queuehandler.c:1168
-msgid "Encode Second Pass (Final)"
-msgstr "두 번째 패스 인코딩 (최종)"
+#: src/queuehandler.c:1212
+msgid "Encode Final Pass"
+msgstr ""
 
 #. Should never happen
-#: src/queuehandler.c:1173
+#: src/queuehandler.c:1217
 msgid "Error"
 msgstr "에러"
 
-#: src/queuehandler.c:1177
+#: src/queuehandler.c:1221
 #, c-format
 msgid ""
 "pass %d of %d\n"
@@ -3328,24 +3750,24 @@ msgstr ""
 "패스 %d / %d\n"
 "%s"
 
-#: src/queuehandler.c:1189
+#: src/queuehandler.c:1233
 msgid "Scanning Title"
 msgstr "제목 스캔 중"
 
-#: src/queuehandler.c:1193
+#: src/queuehandler.c:1237
 msgid "Encoding Paused"
 msgstr "인코딩 일시 중지됨"
 
-#: src/queuehandler.c:1197
+#: src/queuehandler.c:1241
 msgid "Encoding In Progress"
 msgstr "인코딩 진행 중"
 
 #. Should never happen
-#: src/queuehandler.c:1217
+#: src/queuehandler.c:1261
 msgid "Unknown"
 msgstr "알 수 없음"
 
-#: src/queuehandler.c:1770
+#: src/queuehandler.c:1817
 #, c-format
 msgid ""
 "%sThe destination filesystem is almost full: %<PRId64> MB free.\n"
@@ -3356,110 +3778,39 @@ msgstr ""
 "대상: %s\n"
 "계속 진행하면 인코딩이 불완전할 수 있습니다.\n"
 
-#: src/queuehandler.c:1775
+#: src/queuehandler.c:1822
 msgid "Resume, I've fixed the problem"
 msgstr "다시 시작, 해당 문제를 해결했습니다"
 
-#: src/queuehandler.c:1776
+#: src/queuehandler.c:1823
 msgid "Resume, Don't tell me again"
 msgstr "다시 시작하기, 다시 묻지 않습니다"
 
-#: src/queuehandler.c:1830
-#, c-format
-msgid ""
-"Destination: %s\n"
-"\n"
-"Another queued job has specified the same destination.\n"
-"Do you want to overwrite?"
-msgstr ""
-"대상: %s\n"
-"\n"
-"대기열의 다른 작업이 동일한 대상을 지정하고 있습니다.\n"
-"덮어쓰시겠습니까?"
-
-#: src/queuehandler.c:1835 src/queuehandler.c:1881
-msgid "Overwrite"
-msgstr "덮어쓰기"
-
-#: src/queuehandler.c:1848
-#, c-format
-msgid ""
-"Destination: %s\n"
-"\n"
-"This is not a valid directory."
-msgstr ""
-"대상: %s\n"
-"\n"
-"유효한 디렉토리가 아닙니다."
-
-#: src/queuehandler.c:1862
-#, c-format
-msgid ""
-"Destination: %s\n"
-"\n"
-"Can not read or write the directory."
-msgstr ""
-"대상: %s\n"
-"\n"
-"읽거나 쓸 수 없는 디렉토리입니다."
-
-#: src/queuehandler.c:1876
-#, c-format
-msgid ""
-"Destination: %s\n"
-"\n"
-"File already exists.\n"
-"Do you want to overwrite?"
-msgstr ""
-"대상: %s\n"
-"\n"
-"파일이 이미 존재합니다.\n"
-"덮어쓰시겠습니까?"
-
-#: src/queuehandler.c:2189
-msgid "Select this title for adding to the queue.\n"
-msgstr "이 제목을 대기열에 추가하기 위해 선택.\n"
-
-#. Title label
-#: src/queuehandler.c:2197
-msgid "No Title"
-msgstr "제목 없음"
-
-#: src/queuehandler.c:2207
-msgid ""
-"There is another title with the same destination file name.\n"
-"This title will not be added to the queue unless you change\n"
-"the output file name.\n"
-msgstr ""
-"같은 대상 파일 이름을 가진 다른 제목이 있습니다.\n"
-"출력 파일을 변경하기 전에는 이 제목이 대기열에\n"
-"추가되지 않습니다.\n"
-
-#: src/queuehandler.c:2371 src/queuehandler.c:2384
+#: src/queuehandler.c:2019 src/queuehandler.c:2032
 msgid "Stop"
 msgstr "중지"
 
-#: src/queuehandler.c:2372 src/queuehandler.c:2385 src/queuehandler.c:2397
+#: src/queuehandler.c:2020 src/queuehandler.c:2033
 msgid "Stop Encoding"
 msgstr "인코딩 중지"
 
-#: src/queuehandler.c:2396
+#: src/queuehandler.c:2045
 msgid "S_top Encoding"
 msgstr "인코딩 중지(_T)"
 
-#: src/queuehandler.c:2409 src/queuehandler.c:2422
+#: src/queuehandler.c:2061 src/queuehandler.c:2074
 msgid "Resume"
 msgstr "다시 시작"
 
-#: src/queuehandler.c:2410 src/queuehandler.c:2423 src/queuehandler.c:2435
+#: src/queuehandler.c:2062 src/queuehandler.c:2075
 msgid "Resume Encoding"
 msgstr "인코딩 다시 시작"
 
-#: src/queuehandler.c:2434
+#: src/queuehandler.c:2086
 msgid "_Resume Encoding"
 msgstr "인코딩 다시 시작(_R)"
 
-#: src/queuehandler.c:3065
+#: src/queuehandler.c:2678
 msgid ""
 "You are currently encoding.  What would you like to do?\n"
 "\n"
@@ -3467,21 +3818,42 @@ msgstr ""
 "인코딩 중입니다. 무엇을 하시겠습니까?\n"
 "\n"
 
-#: src/subtitlehandler.c:1379
+#: src/subtitlehandler.c:110
+#, c-format
+msgid "Offset: %dms"
+msgstr "오프셋: %dms"
+
+#: src/subtitlehandler.c:115
+msgid "Burned Into Video"
+msgstr "비디오로 굽기"
+
+#: src/subtitlehandler.c:116
+msgid "Passthrough"
+msgstr "패스스루"
+
+#: src/subtitlehandler.c:123
+msgid "Default"
+msgstr "기본값"
+
+#: src/subtitlehandler.c:1191
+msgid "Add Subtitles"
+msgstr "자막 추가하기"
+
+#: src/subtitlehandler.c:1382
 #, c-format
 msgid "Preferred Language: %s"
 msgstr "기본 언어: %s"
 
-#: src/subtitlehandler.c:1393
+#: src/subtitlehandler.c:1396
 #, c-format
 msgid "Add %s subtitle track if default audio is not %s"
-msgstr "%s 자막 트랙을 기본 오디오 트랙이 %s 아닌 경우 추가"
+msgstr "%s 자막 트랙을 기본 오디오 트랙이 %s 아닌 경우 추가하기"
 
-#: src/subtitlehandler.c:1398
+#: src/subtitlehandler.c:1401
 msgid "Add subtitle track if default audio is not your preferred language"
-msgstr "기본 오디오가 기본 언어가 아닌 경우 자막 트랙 추가"
+msgstr "기본 오디오가 기본 언어가 아닌 경우 자막 트랙 추가하기"
 
-#: src/videohandler.c:202
+#: src/videohandler.c:208
 #, c-format
 msgid ""
 "%s\n"
@@ -3494,7 +3866,7 @@ msgstr ""
 "확장 옵션:\n"
 "\"%s\""
 
-#: src/videohandler.c:205
+#: src/videohandler.c:211
 #, c-format
 msgid ""
 "%s\n"
@@ -3507,7 +3879,7 @@ msgstr ""
 "확장 옵션:\n"
 "\"\""
 
-#: src/videohandler.c:349
+#: src/videohandler.c:356
 #, c-format
 msgid "%s: %.4g (Warning: lossless)"
 msgstr "%s: %.4g (주의: 무손실)"

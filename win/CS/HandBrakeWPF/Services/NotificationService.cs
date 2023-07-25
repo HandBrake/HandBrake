@@ -103,40 +103,59 @@ namespace HandBrakeWPF.Services
                     return;
                 }
 
-                this.notifier = ToastNotificationManagerCompat.CreateToastNotifier();
-
-                isInitialised = true;
-
-                ToastNotificationManagerCompat.OnActivated += toastArgs =>
+                try
                 {
-                    // Obtain the arguments from the notification
-                    ToastArguments args = ToastArguments.Parse(toastArgs.Argument);
+                    this.notifier = ToastNotificationManagerCompat.CreateToastNotifier();
 
-                    // Remove any notifications that are clicked
-                    System.Collections.Generic.KeyValuePair<string, string> tag = args.FirstOrDefault();
-                    if (!string.IsNullOrEmpty(tag.Value))
+                    isInitialised = true;
+
+                    ToastNotificationManagerCompat.OnActivated += toastArgs =>
                     {
-                        try
+                        // Obtain the arguments from the notification
+                        ToastArguments args = ToastArguments.Parse(toastArgs.Argument);
+
+                        // Remove any notifications that are clicked
+                        System.Collections.Generic.KeyValuePair<string, string> tag = args.FirstOrDefault();
+                        if (!string.IsNullOrEmpty(tag.Value))
                         {
-                            ToastNotificationManagerCompat.History.Remove(tag.Value);
+                            try
+                            {
+                                ToastNotificationManagerCompat.History.Remove(tag.Value);
+                            }
+                            catch (Exception exc)
+                            {
+                                Debug.WriteLine(exc);
+                            }
                         }
-                        catch (Exception exc)
+
+                        // Need to dispatch to UI thread if performing UI operations
+                        Application.Current.Dispatcher.Invoke(delegate
                         {
-                            Debug.WriteLine(exc);
-                        }
+                            Window w = Application.Current.MainWindow;
+                            if (w != null)
+                            {
+                                w.WindowState = WindowState.Normal;
+                                w.BringIntoView();
+                            }
+                        });
+                    };
+                }
+                catch (Exception exc)
+                {
+                    try
+                    {
+                        this.userSettingService.SetUserSetting(UserSettingConstants.NotifyOnEncodeDone, false);
+                        this.userSettingService.SetUserSetting(UserSettingConstants.NotifyOnQueueDone, false);
+
+                        this.Uninstall();
+                    }
+                    catch (Exception exc2)
+                    {
+                        Debug.WriteLine(exc2);
                     }
 
-                    // Need to dispatch to UI thread if performing UI operations
-                    Application.Current.Dispatcher.Invoke(delegate
-                    {
-                        Window w = Application.Current.MainWindow;
-                        if (w != null)
-                        {
-                            w.WindowState = WindowState.Normal;
-                            w.BringIntoView();
-                        }
-                    });
-                };
+                    Debug.WriteLine(exc);
+                }
             }
         }
     }

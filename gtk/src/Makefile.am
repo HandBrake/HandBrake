@@ -4,37 +4,38 @@ icons =	\
 	hb-icon.svg fr.handbrake.ghb.svg
 
 icons_dep =	\
-	icons/24x24/apps/hb-remove.png \
-	icons/32x32/apps/hb-source.png \
-	icons/32x32/apps/hb-picture.png \
-	icons/32x32/apps/hb-add-queue.png \
-	icons/32x32/apps/hb-showqueue.png \
-	icons/32x32/apps/hb-activity.png \
+	icons/24x24/apps/hb-advanced-symbolic.symbolic.png \
+	icons/32x32/apps/hb-source-symbolic.symbolic.png \
+	icons/32x32/apps/hb-picture-symbolic.symbolic.png \
+	icons/32x32/apps/hb-add-queue-symbolic.symbolic.png \
+	icons/32x32/apps/hb-showqueue-symbolic.symbolic.png \
+	icons/32x32/apps/hb-activity-symbolic.symbolic.png \
+	icons/32x32/apps/hb-presets-symbolic.symbolic.png \
 	icons/32x32/apps/hb-start.png \
 	icons/32x32/apps/hb-stop.png \
 	icons/32x32/apps/hb-pause.png \
-	icons/48x48/apps/hb-remove.png \
-	icons/64x64/apps/hb-source.png \
-	icons/64x64/apps/hb-picture.png \
-	icons/64x64/apps/hb-add-queue.png \
-	icons/64x64/apps/hb-showqueue.png \
-	icons/64x64/apps/hb-activity.png \
+	icons/48x48/apps/hb-advanced-symbolic.symbolic.png \
+	icons/64x64/apps/hb-source-symbolic.symbolic.png \
+	icons/64x64/apps/hb-picture-symbolic.symbolic.png \
+	icons/64x64/apps/hb-add-queue-symbolic.symbolic.png \
+	icons/64x64/apps/hb-showqueue-symbolic.symbolic.png \
+	icons/64x64/apps/hb-activity-symbolic.symbolic.png \
+	icons/64x64/apps/hb-presets-symbolic.symbolic.png \
 	icons/64x64/apps/hb-start.png \
 	icons/64x64/apps/hb-stop.png \
 	icons/64x64/apps/hb-pause.png \
-	icons/scalable/apps/hb-source.svg \
-	icons/scalable/apps/hb-picture.svg \
-	icons/scalable/apps/hb-add-queue.svg \
-	icons/scalable/apps/hb-showqueue.svg \
-	icons/scalable/apps/hb-activity.svg \
+	icons/scalable/apps/hb-advanced-symbolic.svg \
+	icons/scalable/apps/hb-source-symbolic.svg \
+	icons/scalable/apps/hb-picture-symbolic.svg \
+	icons/scalable/apps/hb-add-queue-symbolic.svg \
+	icons/scalable/apps/hb-showqueue-symbolic.svg \
+	icons/scalable/apps/hb-activity-symbolic.svg \
+	icons/scalable/apps/hb-presets-symbolic.svg \
 	icons/scalable/apps/hb-start.svg \
 	icons/scalable/apps/hb-stop.svg \
 	icons/scalable/apps/hb-pause.svg \
-	icons/scalable/apps/hb-remove.svg \
 	icons/scalable/apps/hb-complete.svg \
-	icons/scalable/apps/hb-edit.svg \
 	icons/scalable/apps/hb-icon.svg \
-	icons/scalable/apps/hb-advanced.svg \
 	icons/scalable/apps/fr.handbrake.ghb.svg
 
 hb_menu = fr.handbrake.ghb.desktop
@@ -72,6 +73,8 @@ ghb_SOURCES = \
 	callbacks.h \
 	chapters.c \
 	chapters.h \
+	title-add.c \
+	title-add.h \
 	queuehandler.c \
 	queuehandler.h \
 	videohandler.c \
@@ -102,8 +105,6 @@ ghb_SOURCES = \
 	icons.h \
 	values.c \
 	values.h \
-	appcast.c \
-	appcast.h \
 	plist.c \
 	plist.h \
 	hb-backend.c \
@@ -113,7 +114,11 @@ ghb_SOURCES = \
 	ghb-dvd.c \
 	ghb-dvd.h \
 	marshalers.c \
-	marshalers.h
+	marshalers.h \
+	color-scheme.c \
+	color-scheme.h \
+	power-manager.c \
+	power-manager.h
 
 if MINGW
 ghb_LDFLAGS = \
@@ -145,23 +150,21 @@ data_res.c : data_res.gresource.xml internal_defaults.json widget.deps widget_re
 data_res.h : data_res.gresource.xml internal_defaults.json widget.deps widget_reverse.deps
 	glib-compile-resources --generate --target=$@ --c-name ghb_data --manual-register $<
 
-if GHB_GTK_4_00
-UI=400
+if GHB_GTK_4_4
+UI=404
 UI_FILE=ghb4.ui
 else
-if GHB_GTK_3_16
-UI=316
-UI_FILE=ghb3.ui
-else
-UI=300
+if GHB_GTK_3_22
+UI=322
 UI_FILE=ghb3.ui
 endif
 endif
 
-ui_res.c : ui_res.gresource.xml ui_res.h $(srcdir)/$(UI_FILE)
+ui_res.c : ui_res.gresource.xml ui_res.h $(srcdir)/$(UI_FILE) $(srcdir)/menu.ui
 	glib-compile-resources --generate --target=$@ --c-name ghb_ui --manual-register $<
 
-ui_res.h : ui_res.gresource.xml $(srcdir)/$(UI_FILE)
+ui_res.h : ui_res.gresource.xml $(srcdir)/$(UI_FILE) $(srcdir)/menu.ui
+	cp $(srcdir)/menu.ui menu.ui
 	cp $(srcdir)/$(UI_FILE) ghb.ui
 	glib-compile-resources --generate --target=$@ --c-name ghb_ui --manual-register $<
 
@@ -175,10 +178,11 @@ widget_reverse.deps: makedeps.py
 widget.deps: makedeps.py
 	$(HB_PYTHON) $(srcdir)/makedeps.py
 
+## copy file if msgfmt fails as workaround for outdated version on NetBSD
 fr.handbrake.ghb.metainfo.xml: fr.handbrake.ghb.metainfo.xml.in
-	$(AM_V_GEN) $(MSGFMT) --xml --template $< -d $(top_srcdir)/po -o $@
+	$(AM_V_GEN) $(MSGFMT) --xml --template $< -d $(top_srcdir)/po -o $@ || cp $< $@
 
-fr.handbrake.ghb.metainfo.xml.in: fr.handbrake.ghb.metainfo.template.xml
+fr.handbrake.ghb.metainfo.xml.in: fr.handbrake.ghb.metainfo.xml.in.in
 	sed -e 's^RELEASE_TAG^<release version="$(HB.version)" date="$(word 1,$(HB.repo.date))" />^' $< > $@
 
 $(srcdir)/marshalers.h: marshalers.list
@@ -216,3 +220,4 @@ install-data-local:
 	fi
 	mkdir -p $(DESTDIR)/$(datadir)/applications/; \
 	$(INSTALL_DATA) $(srcdir)/$(hb_menu) $(DESTDIR)/$(datadir)/applications/$(hb_menu)
+

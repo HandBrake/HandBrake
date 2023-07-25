@@ -9,6 +9,9 @@
 
 namespace HandBrakeWPF.Views
 {
+    using System;
+
+    using HandBrakeWPF.Helpers;
     using System.Windows;
 
     /// <summary>
@@ -22,6 +25,12 @@ namespace HandBrakeWPF.Views
         public CountdownAlertView()
         {
             this.InitializeComponent();
+        }
+
+        protected override void OnSourceInitialized(EventArgs e)
+        {
+            base.OnSourceInitialized(e);
+            WindowHelper.SetDarkMode(this);
         }
     }
 }

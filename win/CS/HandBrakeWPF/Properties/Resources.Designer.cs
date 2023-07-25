@@ -89,6 +89,24 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Documentation:.
+        /// </summary>
+        public static string AboutView_Documentation {
+            get {
+                return ResourceManager.GetString("AboutView_Documentation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to GitHub Issue Tracker:.
+        /// </summary>
+        public static string AboutView_GithubTracker {
+            get {
+                return ResourceManager.GetString("AboutView_GithubTracker", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to License: .
         /// </summary>
         public static string AboutView_License {
@@ -103,6 +121,15 @@ namespace HandBrakeWPF.Properties {
         public static string AboutView_Version {
             get {
                 return ResourceManager.GetString("AboutView_Version", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Website: .
+        /// </summary>
+        public static string AboutView_Website {
+            get {
+                return ResourceManager.GetString("AboutView_Website", resourceCulture);
             }
         }
         
@@ -419,6 +446,15 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Quality.
+        /// </summary>
+        public static string AudioView_Quality {
+            get {
+                return ResourceManager.GetString("AudioView_Quality", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Reload.
         /// </summary>
         public static string AudioView_ReloadDefaults {
@@ -442,6 +478,15 @@ namespace HandBrakeWPF.Properties {
         public static string AudioView_Show {
             get {
                 return ResourceManager.GetString("AudioView_Show", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Source.
+        /// </summary>
+        public static string AudioView_Source {
+            get {
+                return ResourceManager.GetString("AudioView_Source", resourceCulture);
             }
         }
         
@@ -545,7 +590,7 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Chapter Number.
+        ///   Looks up a localized string similar to Chapter.
         /// </summary>
         public static string ChaptersView_ChapterNumber {
             get {
@@ -1704,7 +1749,9 @@ namespace HandBrakeWPF.Properties {
         
         /// <summary>
         ///   Looks up a localized string similar to The file &apos;{0}&apos; already exists!
-        ///Would you like to overwrite it?.
+        ///Would you like to overwrite it?
+        ///
+        ///Hint: File overwrite behaviour can be controlled in preferences. .
         /// </summary>
         public static string Main_QueueOverwritePrompt {
             get {
@@ -2299,6 +2346,15 @@ namespace HandBrakeWPF.Properties {
         public static string MainView_PreferencesMenu {
             get {
                 return ResourceManager.GetString("MainView_PreferencesMenu", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Clone Preset.
+        /// </summary>
+        public static string MainView_PresetClone {
+            get {
+                return ResourceManager.GetString("MainView_PresetClone", resourceCulture);
             }
         }
         
@@ -3035,6 +3091,15 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add Extension.
+        /// </summary>
+        public static string Options_AddExt {
+            get {
+                return ResourceManager.GetString("Options_AddExt", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Advanced.
         /// </summary>
         public static string Options_Advanced {
@@ -3179,15 +3244,6 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Available additional Options: {source_path} or {source_folder_name} or {source}.
-        /// </summary>
-        public static string Options_DefaultPathAdditionalParams {
-            get {
-                return ResourceManager.GetString("Options_DefaultPathAdditionalParams", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Download Update.
         /// </summary>
         public static string Options_DownloadUpdates {
@@ -3229,6 +3285,42 @@ namespace HandBrakeWPF.Properties {
         public static string Options_Encoding {
             get {
                 return ResourceManager.GetString("Options_Encoding", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Exclude File Extensions:.
+        /// </summary>
+        public static string Options_ExcludeExtensions {
+            get {
+                return ResourceManager.GetString("Options_ExcludeExtensions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The following file extensions will be ignored when scanning a folder. The list is case insensitive. &quot;.&quot; is not required..
+        /// </summary>
+        public static string Options_ExcludeExtensionsInfo {
+            get {
+                return ResourceManager.GetString("Options_ExcludeExtensionsInfo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This file extension already exists in the list..
+        /// </summary>
+        public static string Options_ExtensionExists {
+            get {
+                return ResourceManager.GetString("Options_ExtensionExists", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to File Handling (Scanning).
+        /// </summary>
+        public static string Options_FileHandling {
+            get {
+                return ResourceManager.GetString("Options_FileHandling", resourceCulture);
             }
         }
         
@@ -3278,7 +3370,7 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Log Path:.
+        ///   Looks up a localized string similar to Path:.
         /// </summary>
         public static string Options_LogPath {
             get {
@@ -3472,6 +3564,15 @@ namespace HandBrakeWPF.Properties {
         public static string Options_QueueCompleted {
             get {
                 return ResourceManager.GetString("Options_QueueCompleted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Recursively scan directories when using the folder scan mode..
+        /// </summary>
+        public static string Options_RecursiveFolderScan {
+            get {
+                return ResourceManager.GetString("Options_RecursiveFolderScan", resourceCulture);
             }
         }
         
@@ -3855,7 +3956,8 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Replacement Placeholders: {source} {title} {chapters} {creation-date} {creation-time} {date} {time} {quality_bitrate}.
+        ///   Looks up a localized string similar to Replacement Options:
+        ///You can drag/drop or enter the text above..
         /// </summary>
         public static string OptionsView_FormatOptions {
             get {
@@ -3889,6 +3991,15 @@ namespace HandBrakeWPF.Properties {
         public static string OptionsView_InvalidFileFormatChars {
             get {
                 return ResourceManager.GetString("OptionsView_InvalidFileFormatChars", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use ISO Date Formats (YYYY-MM-DD) instead of system format..
+        /// </summary>
+        public static string OptionsView_IsoDateFormat {
+            get {
+                return ResourceManager.GetString("OptionsView_IsoDateFormat", resourceCulture);
             }
         }
         
@@ -3952,15 +4063,6 @@ namespace HandBrakeWPF.Properties {
         public static string OptionsView_NotSupported {
             get {
                 return ResourceManager.GetString("OptionsView_NotSupported", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Replacement Placeholders: {source_path} {source_folder_name} {source}.
-        /// </summary>
-        public static string OptionsView_PathOptions {
-            get {
-                return ResourceManager.GetString("OptionsView_PathOptions", resourceCulture);
             }
         }
         
@@ -5024,6 +5126,69 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Preset Description:.
+        /// </summary>
+        public static string PresetPane_Desc {
+            get {
+                return ResourceManager.GetString("PresetPane_Desc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Hide Preset Description.
+        /// </summary>
+        public static string PresetPane_HidePresetDesc {
+            get {
+                return ResourceManager.GetString("PresetPane_HidePresetDesc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Move Down.
+        /// </summary>
+        public static string PresetPane_MoveDown {
+            get {
+                return ResourceManager.GetString("PresetPane_MoveDown", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Move to Bottom.
+        /// </summary>
+        public static string PresetPane_MoveToBottom {
+            get {
+                return ResourceManager.GetString("PresetPane_MoveToBottom", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Move to Top.
+        /// </summary>
+        public static string PresetPane_MoveToTop {
+            get {
+                return ResourceManager.GetString("PresetPane_MoveToTop", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Move Up.
+        /// </summary>
+        public static string PresetPane_MoveUp {
+            get {
+                return ResourceManager.GetString("PresetPane_MoveUp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Show Preset Description.
+        /// </summary>
+        public static string PresetPane_ShowPresetDesc {
+            get {
+                return ResourceManager.GetString("PresetPane_ShowPresetDesc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Custom.
         /// </summary>
         public static string PresetPictureSettingsMode_Custom {
@@ -5367,6 +5532,15 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Output: {0}, avg {1} fps.
+        /// </summary>
+        public static string QueueStats_ShortOutputStats {
+            get {
+                return ResourceManager.GetString("QueueStats_ShortOutputStats", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Actions.
         /// </summary>
         public static string QueueView_Actions {
@@ -5520,6 +5694,15 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Extend Queue Info.
+        /// </summary>
+        public static string QueueView_ExtendedQueueDisplay {
+            get {
+                return ResourceManager.GetString("QueueView_ExtendedQueueDisplay", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Output Filesize: .
         /// </summary>
         public static string QueueView_FileSize {
@@ -5651,6 +5834,15 @@ namespace HandBrakeWPF.Properties {
         public static string QueueView_LogNotAvailableYet {
             get {
                 return ResourceManager.GetString("QueueView_LogNotAvailableYet", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Minimise Queue Info.
+        /// </summary>
+        public static string QueueView_MinimalQueueDisplay {
+            get {
+                return ResourceManager.GetString("QueueView_MinimalQueueDisplay", resourceCulture);
             }
         }
         
@@ -5831,15 +6023,6 @@ namespace HandBrakeWPF.Properties {
         public static string QueueView_Statistics {
             get {
                 return ResourceManager.GetString("QueueView_Statistics", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Statistics will be available after an encode completes..
-        /// </summary>
-        public static string QueueView_StatsNotAvailableYet {
-            get {
-                return ResourceManager.GetString("QueueView_StatsNotAvailableYet", resourceCulture);
             }
         }
         
@@ -6116,6 +6299,42 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Pass {0} of {1}, {2:00.00}%, {3:000.0} fps, avg {4:000.0} fps, ETA: {5}.
+        /// </summary>
+        public static string QueueViewModel_ShortEncodeStatus {
+            get {
+                return ResourceManager.GetString("QueueViewModel_ShortEncodeStatus", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Scanning for Subtitles {0:00.00}%, ETA: {1}.
+        /// </summary>
+        public static string QueueViewModel_ShortSubScanStatus {
+            get {
+                return ResourceManager.GetString("QueueViewModel_ShortSubScanStatus", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to There are currently jobs running. Would you like to complete the current jobs before stopping the queue?.
+        /// </summary>
+        public static string QueueViewModel_StopButContinueJob {
+            get {
+                return ResourceManager.GetString("QueueViewModel_StopButContinueJob", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Reset.
+        /// </summary>
+        public static string Reset {
+            get {
+                return ResourceManager.GetString("Reset", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Off.
         /// </summary>
         public static string RightToLeft_Off {
@@ -6324,7 +6543,7 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Or drop a file or folder here ....
+        ///   Looks up a localized string similar to Or drop a file, set of files or folder here ....
         /// </summary>
         public static string SourceSelection_DropFileHere {
             get {
@@ -6414,7 +6633,7 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Open a single video file..
+        ///   Looks up a localized string similar to Open video file(s)..
         /// </summary>
         public static string SourceSelection_SingleVideoFile {
             get {
@@ -6490,6 +6709,24 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Encoding Preview ....
+        /// </summary>
+        public static string StaticPreview_EncodingPreview {
+            get {
+                return ResourceManager.GetString("StaticPreview_EncodingPreview", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Previews:.
+        /// </summary>
+        public static string StaticPreview_Previews {
+            get {
+                return ResourceManager.GetString("StaticPreview_Previews", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Unable to delete previous preview file. You may still have a preview open in your media player. Please close this..
         /// </summary>
         public static string StaticPreview_UnableToDeletePreview {
@@ -6499,11 +6736,29 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Volume: 0.
+        /// </summary>
+        public static string StaticPreview_Volume {
+            get {
+                return ResourceManager.GetString("StaticPreview_Volume", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Cancel.
         /// </summary>
         public static string StaticPreviewView_CancelPreview {
             get {
                 return ResourceManager.GetString("StaticPreviewView_CancelPreview", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Close Player.
+        /// </summary>
+        public static string StaticPreviewView_ClosePlayer {
+            get {
+                return ResourceManager.GetString("StaticPreviewView_ClosePlayer", resourceCulture);
             }
         }
         
@@ -6526,11 +6781,20 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Live Preview.
+        ///   Looks up a localized string similar to Encode Preview.
         /// </summary>
         public static string StaticPreviewView_LivePreview {
             get {
                 return ResourceManager.GetString("StaticPreviewView_LivePreview", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Play.
+        /// </summary>
+        public static string StaticPreviewView_Play {
+            get {
+                return ResourceManager.GetString("StaticPreviewView_Play", resourceCulture);
             }
         }
         
@@ -6562,11 +6826,20 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Prefer system default video player.
+        ///   Looks up a localized string similar to Use External Player App.
         /// </summary>
-        public static string StaticPreviewView_UseSystemDefault {
+        public static string StaticPreviewView_UseExternalPlayer {
             get {
-                return ResourceManager.GetString("StaticPreviewView_UseSystemDefault", resourceCulture);
+                return ResourceManager.GetString("StaticPreviewView_UseExternalPlayer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Video Preview.
+        /// </summary>
+        public static string StaticPreviewView_VideoPreview {
+            get {
+                return ResourceManager.GetString("StaticPreviewView_VideoPreview", resourceCulture);
             }
         }
         
@@ -6576,6 +6849,29 @@ namespace HandBrakeWPF.Properties {
         public static string StaticPreviewViewModel_AlreadyEncoding {
             get {
                 return ResourceManager.GetString("StaticPreviewViewModel_AlreadyEncoding", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The system was unable to play this file. 
+        ///
+        ///Please note certain codecs such as AV1 or HEVC require the Microsoft AV1 or HEVC codec plugins from the Microsoft Store to play.
+        ///Alternatively, check the &quot;Use External Player&quot; checkbox below..
+        /// </summary>
+        public static string StaticPreviewViewModel_MediaError {
+            get {
+                return ResourceManager.GetString("StaticPreviewViewModel_MediaError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unable to encode a preview. The application is currently busy encoding another file.
+        ///
+        ///To allow multiple simultaneous encodes, turn on &quot;Process Isolation&quot; in Tools Menu -&gt; Preferences -&gt; Advanced -&gt; Process Isolation -&gt; &quot;Run each queued job in a separate worker process&quot;..
+        /// </summary>
+        public static string StaticPreviewViewModel_MultipleEncodes {
+            get {
+                return ResourceManager.GetString("StaticPreviewViewModel_MultipleEncodes", resourceCulture);
             }
         }
         
@@ -6603,6 +6899,15 @@ namespace HandBrakeWPF.Properties {
         public static string StaticPreviewViewModel_UnableToPlayFile {
             get {
                 return ResourceManager.GetString("StaticPreviewViewModel_UnableToPlayFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The Built-in preview is not available for the WebM container. An External player must be used..
+        /// </summary>
+        public static string StaticPreviewViewModel_WebmNotSupported {
+            get {
+                return ResourceManager.GetString("StaticPreviewViewModel_WebmNotSupported", resourceCulture);
             }
         }
         
@@ -7138,8 +7443,18 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {1}%, Pass {2} of {3}
-        ///Remaining Time: {4}.
+        ///   Looks up a localized string similar to {0}
+        ///Encoding {1} jobs.
+        /// </summary>
+        public static string TaskTrayStatusManyTitle {
+            get {
+                return ResourceManager.GetString("TaskTrayStatusManyTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0}
+        ///Encoding 1 Job.
         /// </summary>
         public static string TaskTrayStatusTitle {
             get {
@@ -7318,15 +7633,6 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 2-Pass Encoding.
-        /// </summary>
-        public static string VideoView_2Pass {
-            get {
-                return ResourceManager.GetString("VideoView_2Pass", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Avg Bitrate (kbps):.
         /// </summary>
         public static string VideoView_AverageBitrate {
@@ -7426,6 +7732,15 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Multi-Pass Encoding.
+        /// </summary>
+        public static string VideoView_MultiPass {
+            get {
+                return ResourceManager.GetString("VideoView_MultiPass", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Encoder Options: .
         /// </summary>
         public static string VideoView_OptimiseVideo {
@@ -7453,11 +7768,11 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Turbo first pass.
+        ///   Looks up a localized string similar to Turbo analysis pass.
         /// </summary>
-        public static string VideoView_TurboFirstPass {
+        public static string VideoView_TurboAnalysisPass {
             get {
-                return ResourceManager.GetString("VideoView_TurboFirstPass", resourceCulture);
+                return ResourceManager.GetString("VideoView_TurboAnalysisPass", resourceCulture);
             }
         }
         

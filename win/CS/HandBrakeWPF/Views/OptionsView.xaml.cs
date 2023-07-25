@@ -10,32 +10,15 @@
 namespace HandBrakeWPF.Views
 {
     using System.Windows.Controls;
-    using System.Windows.Input;
-    using System.Windows.Navigation;
-
-    using HandBrakeWPF.ViewModels;
 
     /// <summary>
     /// Interaction logic for OptionsView.xaml
     /// </summary>
     public partial class OptionsView : UserControl
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="OptionsView"/> class.
-        /// </summary>
         public OptionsView()
         {
             InitializeComponent();
-        }
-
-        private void VersionTextBox_OnMouseDoubleClick(object sender, MouseButtonEventArgs e)
-        {
-            this.versionTextBox.SelectAll();
-        }
-
-        private void ResetHandBrake_OnRequestNavigate(object sender, RequestNavigateEventArgs e)
-        {
-            ((OptionsViewModel)this.DataContext).ResetHandBrake();
         }
     }
 }

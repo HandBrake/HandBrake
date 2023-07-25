@@ -10,6 +10,7 @@
 namespace HandBrake.Interop.Interop.Json.Scan
 {
     using System.Collections.Generic;
+    using System.Text.Json.Serialization;
 
     using HandBrake.Interop.Interop.Json.Shared;
 
@@ -113,5 +114,12 @@ namespace HandBrake.Interop.Interop.Json.Scan
         /// Gets or sets the video codec.
         /// </summary>
         public string VideoCodec { get; set; }
-    }
+
+        public DVConfigRecord DolbyVisionConfigurationRecord { get; set; }
+
+        [JsonPropertyName("HDR10+")]
+        public int? HDR10plus { get; set; }
+
+        public MasteringDisplayColorVolume MasteringDisplayColorVolume { get; set; }
+    } 
 }

@@ -9,6 +9,10 @@
 
 namespace HandBrakeWPF.Model
 {
+    using System;
+    using System.IO;
+
+    using HandBrakeWPF.Helpers;
     using HandBrakeWPF.Services.Scan.Model;
     using HandBrakeWPF.ViewModels;
 
@@ -49,7 +53,7 @@ namespace HandBrakeWPF.Model
         {
             get
             {
-                return !string.IsNullOrEmpty(Title.SourceName) ? Title.SourceName : sourceName;
+                return !string.IsNullOrEmpty(Title.SourcePath) ? Title.SourcePath : sourceName;
             }
         }
 
@@ -83,5 +87,38 @@ namespace HandBrakeWPF.Model
         /// Gets or sets the title.
         /// </summary>
         public Title Title { get; set; }
+
+        public string SourceInfo => string.Format("{0}{1}", FilesizeStr, SourceInfoHelper.GenerateSourceInfo(this.Title));
+
+        public decimal? FilesizeMB => CalcFilesize();
+
+        public string FilesizeStr
+        {
+            get
+            {
+                if (FilesizeMB.HasValue)
+                {
+                    return string.Format("{0} MB, ", FilesizeMB);
+                }
+
+                return null;
+            }
+        }
+
+        private decimal? CalcFilesize()
+        {
+            if (this.Title != null && !string.IsNullOrEmpty(this.Title.SourcePath) && File.Exists(this.Title.SourcePath))
+            {
+                if (Path.GetExtension(this.Title.SourcePath)?.Contains("iso", StringComparison.InvariantCultureIgnoreCase) ?? false)
+                {
+                    return null;
+                }
+
+                FileInfo info = new FileInfo(this.Title.SourcePath);
+                return Math.Round((decimal)info.Length / 1024 / 1024, 1);
+            }
+
+            return null;
+        }
     }
 }

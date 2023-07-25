@@ -8,7 +8,7 @@
 "4tC-UE-40G.title" = "Cellula di testu";
 
 /* Class = "NSMenuItem"; title = "Reset Official Presets"; ObjectID = "cm5-Kl-dB3"; */
-"cm5-Kl-dB3.title" = "Reinizià e prerigature officiale";
+"cm5-Kl-dB3.title" = "Reinizià e prerigature ufficiale";
 
 /* Class = "NSMenuItem"; title = "Make Default"; ObjectID = "D2t-YG-Frn"; */
 "D2t-YG-Frn.title" = "Sceglie cum’è predefinizione";
@@ -32,7 +32,7 @@
 "uad-bt-uKD.ibExternalAccessibilityDescription" = "Prerigature";
 
 /* Class = "NSScrollView"; ibShadowedToolTip = "Presets are groups of encode settings tailored for specific scenarios. Select the one closest matching your intent.\n\nOverrides all encode settings. Settings may be further adjusted after selecting a preset."; ObjectID = "uad-bt-uKD"; */
-"uad-bt-uKD.ibShadowedToolTip" = "E prerigature sò gruppi di preferenze di cudificazione custruiti per scenarii specifichi. Selezziunate quella chì currisponde u più à u vostru bisognu.\n\nRimpiazzeghja tutte e preferenze di cudificazione. E preferenze ponu esse addattate dopu a selezzione di a prerigatura.";
+"uad-bt-uKD.ibShadowedToolTip" = "E prerigature sò gruppi di preferenze di cudificazione custruiti per scenarii specifichi. Selezziunate quella chì currisponde u più à u vostru bisognu.\n\nRimpiazzeghja tutte e preferenze di cudificazione. E preferenze ponu esse adattate dopu a selezzione di a prerigatura.";
 
 /* Class = "NSMenuItem"; title = "Export…"; ObjectID = "xEQ-Un-J0n"; */
 "xEQ-Un-J0n.title" = "Espurtà…";

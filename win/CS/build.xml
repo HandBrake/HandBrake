@@ -71,24 +71,25 @@
 
   <!-- ******* Create Installers ******* -->
 
-  <ItemGroup>
+  <!--<ItemGroup>
     <InstallerToBuild Include="HandBrake.Installer\*wixproj" Exclude="$(MSBuildProjectFile)" >
       <AdditionalProperties>HBPROFILE=$(Platform)</AdditionalProperties>
     </InstallerToBuild>
-  </ItemGroup>
+  </ItemGroup>-->
 
   <Target Name="BuildInstaller">
     <Exec Command="makensis $(MSBuildProjectDirectory)\HandBrakeWPF\bin\publish\MakeNightly64.nsi" Condition="'$(Profile)'=='Nightly'" />
     <Exec Command="makensis $(MSBuildProjectDirectory)\HandBrakeWPF\bin\publish\Installer64.nsi" Condition="'$(Profile)'=='Release'" />
 
     <!-- Wix Installer -->
+    <!-- Note: Disabled for now. Future of the WIX installer to be determined.
     <MSBuild Projects ="@(InstallerToBuild)" ContinueOnError ="false" Properties="Configuration=$(Configuration)" >
       <Output ItemName="OutputFiles" TaskParameter="TargetOutputs"/>
     </MSBuild>
 
     <Exec Command="copy $(MSBuildProjectDirectory)\HandBrake.Installer\bin\$(Configuration)\HandBrake.msi $(MSBuildProjectDirectory)\HandBrakeWPF\bin\publish\HandBrake-$(Profile)-ARM64-Win_GUI.msi /Y" Condition="'$(Platform)'=='arm64'" />
     <Exec Command="copy $(MSBuildProjectDirectory)\HandBrake.Installer\bin\$(Configuration)\HandBrake.msi $(MSBuildProjectDirectory)\HandBrakeWPF\bin\publish\HandBrake-$(Profile)-x86_64-Win_GUI.msi /Y" Condition="'$(Platform)'=='x64'" />
-
+    -->
     <!-- Tidy up -->
     <Exec Command="del $(MSBuildProjectDirectory)\HandBrakeWPF\bin\publish\*.nsi" />
     <Exec Command="del $(MSBuildProjectDirectory)\HandBrakeWPF\bin\publish\*.bmp" />
