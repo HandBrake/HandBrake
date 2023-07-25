@@ -1,0 +1,112 @@
+﻿<UserControl x:Class="HandBrakeWPF.Views.Options.OptionsGeneral"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:Properties="clr-namespace:HandBrakeWPF.Properties"
+             xmlns:options="clr-namespace:HandBrakeWPF.Converters.Options"
+             xmlns:converters="clr-namespace:HandBrakeWPF.Converters"
+             mc:Ignorable="d" >
+
+    <UserControl.Resources>
+        <Style TargetType="TextBlock" BasedOn="{StaticResource {x:Type TextBlock}}">
+            <Setter Property="Margin" Value="0,0,5,0" />
+        </Style>
+
+        <Style TargetType="TextBox" BasedOn="{StaticResource {x:Type TextBox}}">
+            <Setter Property="Padding" Value="5,2" />
+            <Setter Property="MinHeight" Value="22" />
+            <Setter Property="VerticalContentAlignment" Value="Center" />
+            <Setter Property="ToolTipService.ShowDuration" Value="20000" />
+        </Style>
+
+        <Style TargetType="CheckBox" BasedOn="{StaticResource {x:Type CheckBox}}">
+            <Setter Property="Margin" Value="0,2,0,2" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+        </Style>
+
+        <options:UpdateCheckConverter x:Key="UpdateCheckConverter" />
+        <options:ThemeSettingConverter x:Key="ThemeSettingConverter" />
+        <options:PresetDisplayModeConverter x:Key="PresetDisplayModeConverter" />
+        <options:RightToLeftConverter x:Key="RightToLeftConverter" />
+        <converters:BooleanToVisibilityConverter x:Key="boolToVisConverter" />
+
+    </UserControl.Resources>
+
+    <StackPanel Name="General" Orientation="Vertical" Margin="10,5,0,0">
+
+        <TextBlock Text="{x:Static Properties:Resources.Options_General}" Style="{StaticResource pageHeader}"  />
+
+        <StackPanel Orientation="Vertical" Margin="0,10,0,0" Visibility="{Binding CheckForUpdatesAllowed, Converter={StaticResource boolToVisConverter}}">
+
+            <TextBlock Text="{x:Static Properties:Resources.Options_OnStartup}" Style="{StaticResource subHeader}" Margin="0,0,0,10"/>
+
+            <StackPanel Orientation="Vertical" Margin="20,0,0,0">
+                <CheckBox Content="{x:Static Properties:Resources.Options_CheckForUpdates}" IsChecked="{Binding CheckForUpdates}" />
+                <ComboBox Name="checkForUpdateFrequency" ItemsSource="{Binding CheckForUpdatesFrequencies, Converter={StaticResource UpdateCheckConverter}}" SelectedItem="{Binding CheckForUpdatesFrequency, Converter={StaticResource UpdateCheckConverter}}" Margin="25,0,0,5" HorizontalAlignment="Left" Width="120"></ComboBox>
+            </StackPanel>
+        </StackPanel>
+
+        <StackPanel Orientation="Vertical" Margin="0,10,0,10">
+
+            <TextBlock Text="{x:Static Properties:Resources.Options_UserInterface}" Style="{StaticResource subHeader}" Margin="0,0,0,10"/>
+
+            <StackPanel Orientation="Horizontal"  Margin="20,0,0,5">
+                <TextBlock Text="{x:Static Properties:Resources.OptionsView_Language}"  Margin="0,0,0,0" VerticalAlignment="Center"/>
+                <ComboBox DisplayMemberPath="Name" ItemsSource="{Binding InterfaceLanguages}" SelectedItem="{Binding SelectedLanguage}" Margin="5,0,0,0" HorizontalAlignment="Left" Width="245" />
+            </StackPanel>
+
+            <StackPanel Orientation="Horizontal"  Margin="20,0,0,5">
+                <TextBlock Text="{x:Static Properties:Resources.OptionsView_RightToleftMode}"  Margin="0,0,0,0" VerticalAlignment="Center"/>
+                <ComboBox ItemsSource="{Binding RightToLeftModes, Converter={StaticResource RightToLeftConverter}}" SelectedItem="{Binding SelectedRightToLeftMode, Converter={StaticResource RightToLeftConverter}}" 
+                                      Margin="5,0,0,0" HorizontalAlignment="Left" MinWidth="158" />
+            </StackPanel>
+
+            <StackPanel Orientation="Horizontal"  Margin="20,15,0,5">
+                <TextBlock Text="{x:Static Properties:Resources.OptionsView_DarkThemeMode}"  Margin="0,0,0,0" VerticalAlignment="Center"/>
+                <ComboBox ItemsSource="{Binding DarkThemeModes, Converter={StaticResource ThemeSettingConverter}}" SelectedItem="{Binding DarkThemeMode, Converter={StaticResource ThemeSettingConverter}}" 
+                                      Margin="5,0,0,0" HorizontalAlignment="Left" Width="150" />
+                <TextBlock Text="{x:Static Properties:Resources.OptionsView_RequiresRestart}" Margin="5,0,0,0" />
+            </StackPanel>
+
+            <StackPanel Orientation="Vertical" Margin="20,5,0,0">
+                <CheckBox Content="{x:Static Properties:Resources.Options_MinimiseTray}" IsChecked="{Binding MinimiseToTray}" />
+                <CheckBox Content="{x:Static Properties:Resources.Options_ClearCompleted}" IsChecked="{Binding ClearQueueOnEncodeCompleted}" />
+                <CheckBox Content="{x:Static Properties:Resources.OptionsView_ShowStatusInTitleBar}" IsChecked="{Binding ShowStatusInTitleBar}" />
+                <CheckBox Content="{x:Static Properties:Resources.OptionsView_ShowPreviewOnSummaryTab}" IsChecked="{Binding ShowPreviewOnSummaryTab}" />
+            </StackPanel>
+
+            <StackPanel Orientation="Horizontal"  Margin="20,10,0,5">
+                <TextBlock Text="{x:Static Properties:Resources.OptionsView_PresetDisplayMode}"  Margin="0,0,0,0" VerticalAlignment="Center"/>
+                <ComboBox ItemsSource="{Binding PresetDisplayModes, Converter={StaticResource PresetDisplayModeConverter}}" SelectedItem="{Binding SelectedPresetDisplayMode, Converter={StaticResource PresetDisplayModeConverter}}" 
+                                      Margin="5,0,0,0" HorizontalAlignment="Left" Width="150" ToolTip="{x:Static Properties:ResourcesTooltips.OptionsView_PresetDisplayModes}" />
+
+            </StackPanel>
+
+            <TextBlock Text="{x:Static Properties:Resources.Options_ApplicationToolbar}" Style="{StaticResource subHeader}" Margin="0,10,0,10"/>
+            <StackPanel Orientation="Vertical" Margin="20,0,0,0">
+                <CheckBox Content="{x:Static Properties:Resources.Options_ShowToolbarAddAll}" IsChecked="{Binding ShowAddAllToQueue}" />
+                <CheckBox Content="{x:Static Properties:Resources.Options_ShowToolbarAddSelection}" IsChecked="{Binding ShowAddSelectionToQueue}" />
+            </StackPanel>
+
+
+        </StackPanel>
+
+        <StackPanel Orientation="Vertical" Margin="0,0,0,10">
+
+            <TextBlock Text="{x:Static Properties:Resources.Options_PathToMediaPlayer}" Style="{StaticResource subHeader}" Margin="0,0,0,10"/>
+
+            <StackPanel Orientation="Vertical" Margin="20,0,0,0">
+
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock VerticalAlignment="Center" Text="{x:Static Properties:Resources.Options_Path}" />
+                    <TextBox Name="vlcPath" Text="{Binding VLCPath}"  Width="250" />
+                    <Button Content="{x:Static Properties:Resources.Browse}" Command="{Binding RelayCommand}" CommandParameter="BrowseVlcPath" Margin="5,0,0,0" />
+                </StackPanel>
+                <TextBlock Margin="35,0,0,0" Text="{x:Static Properties:Resources.Options_VideoPreviewPath}" />
+
+            </StackPanel>
+        </StackPanel>
+
+    </StackPanel>
+</UserControl>

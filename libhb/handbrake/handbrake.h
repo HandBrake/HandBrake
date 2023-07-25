@@ -48,11 +48,12 @@ void          hb_dvd_set_dvdnav( int enable );
    a VOB file. If title_index is 0, scan all titles. */
 void          hb_scan( hb_handle_t *, const char * path,
                        int title_index, int preview_count,
-                       int store_previews, uint64_t min_duration );
-void          hb_scan2( hb_handle_t *, const char * path,
-                       int title_index, int preview_count,
                        int store_previews, uint64_t min_duration,
-                       int crop_auto_switch_threshold, int crop_median_threshold );
+                       int crop_auto_switch_threshold, int crop_median_threshold, hb_list_t * exclude_extensions);
+                       
+void          hb_scan_list( hb_handle_t * h, hb_list_t * paths, int title_index,
+                      int preview_count, int store_previews, uint64_t min_duration,
+                      int crop_threshold_frames, int crop_threshold_pixels, hb_list_t * exclude_extensions);
 
 void          hb_scan_stop( hb_handle_t * );
 void          hb_force_rescan( hb_handle_t * );
@@ -126,9 +127,8 @@ typedef struct hb_interjob_s
 
     hb_subtitle_t *select_subtitle; /* foreign language scan subtitle */
 
-#ifdef __APPLE__
-     void *vt_context;
- #endif
+    void *context;
+    int   context_size;
 } hb_interjob_t;
 
 hb_interjob_t * hb_interjob_get( hb_handle_t * );

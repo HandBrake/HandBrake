@@ -547,19 +547,19 @@ int encx264Init( hb_work_object_t * w, hb_job_t * job )
         param.rc.i_rc_method = X264_RC_ABR;
         param.rc.i_bitrate = job->vbitrate;
         hb_log( "encx264: encoding at average bitrate %d", param.rc.i_bitrate );
-        if( job->pass_id == HB_PASS_ENCODE_1ST ||
-            job->pass_id == HB_PASS_ENCODE_2ND )
+        if( job->pass_id == HB_PASS_ENCODE_ANALYSIS ||
+            job->pass_id == HB_PASS_ENCODE_FINAL )
         {
             pv->filename = hb_get_temporary_filename("x264.log");
         }
         switch( job->pass_id )
         {
-            case HB_PASS_ENCODE_1ST:
+            case HB_PASS_ENCODE_ANALYSIS:
                 param.rc.b_stat_read  = 0;
                 param.rc.b_stat_write = 1;
                 param.rc.psz_stat_out = pv->filename;
                 break;
-            case HB_PASS_ENCODE_2ND:
+            case HB_PASS_ENCODE_FINAL:
                 param.rc.b_stat_read  = 1;
                 param.rc.b_stat_write = 0;
                 param.rc.psz_stat_in  = pv->filename;
@@ -604,8 +604,8 @@ int encx264Init( hb_work_object_t * w, hb_job_t * job )
         }
     }
 
-    /* Turbo first pass */
-    if( job->pass_id == HB_PASS_ENCODE_1ST && job->fastfirstpass == 1 )
+    /* Turbo analysis pass */
+    if (job->pass_id == HB_PASS_ENCODE_ANALYSIS && job->fastanalysispass == 1)
     {
         pv->api->param_apply_fastfirstpass( &param );
     }
@@ -693,9 +693,14 @@ static hb_buffer_t *nal_encode( hb_work_object_t *w, x264_picture_t *pic_out,
     hb_buffer_t *buf = NULL;
     hb_work_private_t *pv = w->private_data;
     hb_job_t *job = pv->job;
+    int payload_size = 0;
 
-    /* Should be way too large */
-    buf = hb_video_buffer_init( job->width, job->height );
+    for (int i = 0; i < i_nal; i++)
+    {
+        payload_size += nal[i].i_payload;
+    }
+
+    buf = hb_buffer_init(payload_size);
     buf->size = 0;
     buf->s.frametype = 0;
 
@@ -750,16 +755,16 @@ static hb_buffer_t *nal_encode( hb_work_object_t *w, x264_picture_t *pic_out,
              be other stuff like SPS and/or PPS). If there are multiple
              frames we only get the duration of the first which will
              eventually screw up the muxer & decoder. */
-    int i;
     buf->s.flags &= ~HB_FLAG_FRAMETYPE_REF;
-    for( i = 0; i < i_nal; i++ )
+    for (int i = 0; i < i_nal; i++)
     {
         int size = nal[i].i_payload;
-        memcpy(buf->data + buf->size, nal[i].p_payload, size);
-        if( size < 1 )
+        if (size < 1)
         {
             continue;
         }
+
+        memcpy(buf->data + buf->size, nal[i].p_payload, size);
 
         /* H.264 in .mp4 or .mkv */
         switch( nal[i].i_type )
@@ -1159,7 +1164,7 @@ int apply_h264_level(const x264_api_t *api, x264_param_t *param,
             {
                 hb_encx264_profile = HB_ENCX264_PROFILE_HIGH422;
             }
-            if (api->bit_depth == 10)
+            else if (api->bit_depth == 10)
             {
                 hb_encx264_profile = HB_ENCX264_PROFILE_HIGH10;
             }

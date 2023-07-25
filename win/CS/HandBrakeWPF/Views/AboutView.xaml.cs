@@ -46,6 +46,11 @@ namespace HandBrakeWPF.Views
             Process.Start("explorer.exe", "https://github.com/HandBrake/HandBrake/issues");
         }
 
+        private void DocWebsite_OnRequestNavigate(object sender, RequestNavigateEventArgs e)
+        {
+            Process.Start("explorer.exe", "https://handbrake.fr/docs");
+        }
+
         private void AboutTextBox_OnMouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             this.versionTextBox.SelectAll();

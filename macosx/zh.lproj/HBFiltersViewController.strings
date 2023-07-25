@@ -148,8 +148,8 @@
 /* Class = "NSMenu"; title = "OtherViews"; ObjectID = "r9i-tL-qtD"; */
 "r9i-tL-qtD.title" = "其他视图";
 
-/* Class = "NSTextField"; ibShadowedToolTip = "Custom Deinterlace parameters.\n\nYadif syntax: mode=m:parity=p\n\nYadif default: mode=3\n\nDecomb syntax: mode=m:magnitude-thresh=m:variance-thresh=v:laplacian-thresh=l:dilation-thresh=d:erosion-thresh=e:noise-thresh=n:search-distance=s:postproc=p:parity=p\n\nDecomb default: mode=7"; ObjectID = "r64-vI-ymx"; */
-"r64-vI-ymx.ibShadowedToolTip" = "自定义反交错参数。\n\nYadif 语法：mode=m:parity=p\n\nYadif 默认值：mode=3\n\nDecomb 语法：mode=m:magnitude-thresh=m:variance-thresh=v:laplacian-thresh=l:dilation-thresh=d:erosion-thresh=e:noise-thresh=n:search-distance=s:postproc=p:parity=p\n\nDecomb 默认值：mode=7";
+/* Class = "NSTextField"; ibShadowedToolTip = "Custom Deinterlace parameters.\n\nBwdif and Yadif syntax: mode=m:parity=p\n\nBwdif and Yadif default: mode=3\n\nDecomb syntax: mode=m:magnitude-thresh=m:variance-thresh=v:laplacian-thresh=l:dilation-thresh=d:erosion-thresh=e:noise-thresh=n:search-distance=s:postproc=p:parity=p\n\nDecomb default: mode=7"; ObjectID = "r64-vI-ymx"; */
+"r64-vI-ymx.ibShadowedToolTip" = "自定义去隔行扫描参数。\n\nBwdif和Yadif的语法：mode=m:parity=p\n\nBwdif和Yadif默认：mode=3\n\nDecomb 语法：mode=m:magnitude-thresh=m:variance-thresh=v:laplacian-thresh=l:dilation-thresh=d:erosion-thresh=e:noise-thresh=n:search-distance=s:postproc=p:parity=p\n\nDecomb 默认： mode=7";
 
 /* Class = "NSMenu"; title = "OtherViews"; ObjectID = "rfp-ah-CVB"; */
 "rfp-ah-CVB.title" = "其他视图";
@@ -181,8 +181,8 @@
 /* Class = "NSTextFieldCell"; title = "Detelecine:"; ObjectID = "vTS-MJ-8nt"; */
 "vTS-MJ-8nt.title" = "反胶卷过带：";
 
-/* Class = "NSPopUpButton"; ibShadowedToolTip = "Deinterlace removes comb artifacts from the picture.\n\nYadif is a popular and fast deinterlacer.\n\nDecomb switches between multiple interpolation algorithms for speed and quality."; ObjectID = "xct-UB-bKm"; */
-"xct-UB-bKm.ibShadowedToolTip" = "反交错可以去除画面中的梳状伪影。\n\nYadif 是一个流行的和快速的反交错器。\n\nDecomb 在多种插值算法之间切换，以保证速度和质量。";
+/* Class = "NSPopUpButton"; ibShadowedToolTip = "Deinterlace removes comb artifacts from the picture.\n\nBwdif and Yadif are two popular and fast deinterlacers.\n\nDecomb switches between multiple interpolation algorithms for speed and quality."; ObjectID = "xct-UB-bKm"; */
+"xct-UB-bKm.ibShadowedToolTip" = "去交错可以去除图像中的梳状假象。\n\nBwdif和Yadif是两种流行的快速去交错器。\n\nDecomb 在多种插值算法之间切换，以保证速度和质量。";
 
 /* Class = "NSTextFieldCell"; title = "Interlace Detection:"; ObjectID = "xHD-vC-ePQ"; */
 "xHD-vC-ePQ.title" = "隔行扫描：";

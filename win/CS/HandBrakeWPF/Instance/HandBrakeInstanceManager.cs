@@ -42,7 +42,10 @@ namespace HandBrakeWPF.Instance
                 HandBrakeUtils.EnsureGlobalInit(noHardware);
             });
             thread.Start();
-            if (!thread.Join(8000))
+
+            int timeoutMs = 1000 * userSettingService.GetUserSetting<int>(UserSettingConstants.HardwareDetectTimeoutSeconds);
+
+            if (!thread.Join(timeoutMs))
             {
                 // Something is likely handing in a graphics driver.  Force disable this feature so we don't probe the hardware next time around.
                 userSettingService.SetUserSetting(UserSettingConstants.ForceDisableHardwareSupport, true);
@@ -94,7 +97,7 @@ namespace HandBrakeWPF.Instance
         /// <returns>
         /// The <see cref="IHandBrakeInstance"/>.
         /// </returns>
-        public static IHandBrakeInstance GetScanInstance(int verbosity)
+        public static IScanInstance GetScanInstance(int verbosity)
         {
             if (!HandBrakeUtils.IsInitialised())
             {

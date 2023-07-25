@@ -17,7 +17,7 @@
 "(Actual size)" = "（实际大小）";
 
 /* Main Window -> preset modified */
-"(Modified)" = "(已修改)";
+"(Modified)" = "（已修改）";
 
 /* Job statistics */
 "%@ fps" = "%@ fps";
@@ -230,6 +230,9 @@
 /* Queue undo action name */
 "Move Jobs in Queue" = "在队列中移动多个任务";
 
+/* Add preset window -> My Presets */
+"My Presets" = "我的预设";
+
 /* Queue status */
 "No encode pending" = "没有待处理的编码";
 
@@ -323,7 +326,7 @@
 "Queue" = "队列";
 
 /* Queue window title */
-"Queue (%@)" = "队列 (%@)";
+"Queue (%@)" = "队列（%@）";
 
 /* Quit Alert -> first button */
 "Quit" = "退出";

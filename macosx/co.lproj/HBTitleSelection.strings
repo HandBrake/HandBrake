@@ -38,7 +38,7 @@
 "PXF-7D-BKR.title" = "Ùn selezziunà &nunda";
 
 /* Class = "CocoaBindingsConnection"; ibShadowedDisplayPattern = "%{value1}@"; ObjectID = "xTt-zi-wf0"; */
-"xTt-zi-wf0.ibShadowedDisplayPattern" = "%{valore1}@";
+"xTt-zi-wf0.ibShadowedDisplayPattern" = "%{value1}@";
 
 /* Class = "NSTextFieldCell"; title = "Text Cell"; ObjectID = "zwi-rc-q6x"; */
 "zwi-rc-q6x.title" = "Cellula di testu";

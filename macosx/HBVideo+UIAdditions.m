@@ -98,25 +98,25 @@
     return NO;
 }
 
-+ (NSSet<NSString *> *)keyPathsForValuesAffectingTurboTwoPassSupported
++ (NSSet<NSString *> *)keyPathsForValuesAffectingTurboMultiPassSupported
 {
     return [NSSet setWithObjects:@"encoder", nil];
 }
 
-- (BOOL)turboTwoPassSupported
+- (BOOL)turboMultiPassSupported
 {
     return ((self.encoder & HB_VCODEC_X264_MASK) ||
             (self.encoder & HB_VCODEC_X265_MASK));
 }
 
-+ (NSSet<NSString *> *)keyPathsForValuesAffectingTwoPassSupported
++ (NSSet<NSString *> *)keyPathsForValuesAffectingMultiPassSupported
 {
     return [NSSet setWithObjects:@"encoder", nil];
 }
 
-- (BOOL)twoPassSupported
+- (BOOL)multiPassSupported
 {
-    return hb_video_twopass_is_supported(self.encoder);
+    return hb_video_multipass_is_supported(self.encoder);
 }
 
 + (NSSet<NSString *> *)keyPathsForValuesAffectingConstantQualityLabel

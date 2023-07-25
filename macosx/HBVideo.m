@@ -69,27 +69,23 @@ NSString * const HBVideoChangedNotification = @"HBVideoChangedNotification";
  */
 - (void)updateQualityBounds
 {
-    // Get the current slider maxValue to check for a change in slider scale
-    // later so that we can choose a new similar value on the new slider scale
-    double previousMaxValue             = self.qualityMaxValue;
-    double previousPercentOfSliderScale = (self.quality / (self.qualityMaxValue - self.qualityMinValue + 1));
-
     int direction;
     float minValue, maxValue, granularity;
-    hb_video_quality_get_limits(self.encoder,
-                                &minValue, &maxValue, &granularity, &direction);
+    hb_video_quality_get_limits(self.encoder, &minValue, &maxValue, &granularity, &direction);
 
     self.qualityMinValue = minValue;
     self.qualityMaxValue = maxValue;
 
-    // check to see if we have changed slider scales
-    if (previousMaxValue != maxValue)
+    // Ensure the quality value is not out of the new bounds
+    if (!(self.undo.isUndoing || self.undo.isRedoing))
     {
-        // if so, convert the old setting to the new scale as close as possible
-        // based on percentages
-        if (!(self.undo.isUndoing || self.undo.isRedoing))
+        if (self.quality > maxValue)
         {
-            self.quality = floor((maxValue - minValue + 1.) * (previousPercentOfSliderScale));
+            self.quality = maxValue;
+        }
+        else if (self.quality < minValue)
+        {
+            self.quality = minValue;
         }
     }
 }
@@ -165,23 +161,23 @@ NSString * const HBVideoChangedNotification = @"HBVideoChangedNotification";
     [self postChangedNotification];
 }
 
-- (void)setTwoPass:(BOOL)twoPass
+- (void)setMultiPass:(BOOL)multiPass
 {
-    if (twoPass != _twoPass)
+    if (multiPass != _multiPass)
     {
-        [[self.undo prepareWithInvocationTarget:self] setTwoPass:_twoPass];
+        [[self.undo prepareWithInvocationTarget:self] setMultiPass:_multiPass];
     }
-    _twoPass = twoPass;
+    _multiPass = multiPass;
     [self postChangedNotification];
 }
 
-- (void)setTurboTwoPass:(BOOL)turboTwoPass
+- (void)setTurboMultiPass:(BOOL)turboMultiPass
 {
-    if (turboTwoPass != _turboTwoPass)
+    if (turboMultiPass != _turboMultiPass)
     {
-        [[self.undo prepareWithInvocationTarget:self] setTurboTwoPass:_turboTwoPass];
+        [[self.undo prepareWithInvocationTarget:self] setTurboMultiPass:_turboMultiPass];
     }
-    _turboTwoPass = turboTwoPass;
+    _turboMultiPass = turboMultiPass;
     [self postChangedNotification];
 }
 
@@ -291,9 +287,9 @@ NSString * const HBVideoChangedNotification = @"HBVideoChangedNotification";
         self.qualityType = 0;
     }
 
-    if (!hb_video_twopass_is_supported(self.encoder))
+    if (!hb_video_multipass_is_supported(self.encoder))
     {
-        self.twoPass = NO;
+        self.multiPass = NO;
     }
 }
 
@@ -467,8 +463,8 @@ NSString * const HBVideoChangedNotification = @"HBVideoChangedNotification";
         copy->_frameRate = _frameRate;
         copy->_frameRateMode = _frameRateMode;
 
-        copy->_twoPass = _twoPass;
-        copy->_turboTwoPass = _turboTwoPass;
+        copy->_multiPass = _multiPass;
+        copy->_turboMultiPass = _turboMultiPass;
 
         copy->_preset = [_preset copy];
         copy->_tune = [_tune copy];
@@ -506,8 +502,8 @@ NSString * const HBVideoChangedNotification = @"HBVideoChangedNotification";
     encodeInt(_frameRate);
     encodeInteger(_frameRateMode);
 
-    encodeBool(_twoPass);
-    encodeBool(_turboTwoPass);
+    encodeBool(_multiPass);
+    encodeBool(_turboMultiPass);
 
     encodeObject(_preset);
     encodeObject(_tune);
@@ -534,8 +530,8 @@ NSString * const HBVideoChangedNotification = @"HBVideoChangedNotification";
 
     decodeInt(_frameRate); if (_frameRate < 0) { goto fail; }
     decodeInteger(_frameRateMode); if (_frameRateMode < HBVideoFrameRateModeVFR_PFR || _frameRateMode > HBVideoFrameRateModeCFR) { goto fail; }
-    decodeBool(_twoPass);
-    decodeBool(_turboTwoPass);
+    decodeBool(_multiPass);
+    decodeBool(_turboMultiPass);
 
     decodeObjectOrFail(_preset, NSString);
     decodeObjectOrFail(_tune, NSString);
@@ -693,10 +689,10 @@ fail:
     self.frameRate = intValue;
 
     // 2 Pass Encoding.
-    self.twoPass = [preset[@"VideoTwoPass"] boolValue];
+    self.multiPass = [preset[@"VideoMultiPass"] boolValue];
 
     // Turbo 1st pass for 2 Pass Encoding.
-    self.turboTwoPass = [preset[@"VideoTurboTwoPass"] boolValue];
+    self.turboMultiPass = [preset[@"VideoTurboMultiPass"] boolValue];
 
     self.notificationsEnabled = YES;
 }
@@ -752,8 +748,8 @@ fail:
         }
     }
 
-    preset[@"VideoTwoPass"] = @(self.twoPass);
-    preset[@"VideoTurboTwoPass"] = @(self.turboTwoPass);
+    preset[@"VideoMultiPass"] = @(self.multiPass);
+    preset[@"VideoTurboMultiPass"] = @(self.turboMultiPass);
 }
 
 @end

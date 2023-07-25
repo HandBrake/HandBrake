@@ -10,6 +10,7 @@
 namespace HandBrakeWPF.Model.Worker
 {
     using HandBrake.Interop.Interop.Json.Encode;
+    using HandBrake.Worker.Routing.Commands;
 
     public class EncodeCommand
     { 

@@ -11,6 +11,7 @@
 #include <time.h>
 #include <ctype.h>
 #include <sys/time.h>
+#include <locale.h>
 
 #include "handbrake/handbrake.h"
 #include "handbrake/hbffmpeg.h"
@@ -21,6 +22,7 @@
 #include "handbrake/h265_common.h"
 #include "handbrake/av1_common.h"
 #include "handbrake/encx264.h"
+#include "handbrake/hwaccel.h"
 #if HB_PROJECT_FEATURE_QSV
 #include "handbrake/qsv_common.h"
 #endif
@@ -74,6 +76,7 @@ enum
     HB_GID_VCODEC_VP9,
     HB_GID_VCODEC_AV1_SVT,
     HB_GID_VCODEC_AV1_QSV,
+    HB_GID_VCODEC_AV1_NVENC,
     HB_GID_ACODEC_AAC,
     HB_GID_ACODEC_AAC_HE,
     HB_GID_ACODEC_AAC_PASS,
@@ -265,10 +268,12 @@ hb_encoder_internal_t hb_video_encoders[]  =
     { { "MPEG-2 (FFmpeg)",             "ffmpeg2",          NULL,                             HB_VCODEC_FFMPEG_MPEG2,      HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 1, 0, HB_GID_VCODEC_MPEG2,  },
     { { "VP3 (Theora)",                "libtheora",        NULL,                             HB_VCODEC_THEORA,                            HB_MUX_MASK_MKV, }, NULL, 1, 0, HB_GID_VCODEC_THEORA, },
     // actual encoders
-    { { "AV1 (SVT)",                   "svt_av1",          "AV1 (SVT)",                      HB_VCODEC_FFMPEG_SVT_AV1,    HB_MUX_MASK_MP4|HB_MUX_MASK_WEBM|HB_MUX_MASK_MKV, }, NULL, 0, 1, HB_GID_VCODEC_AV1_SVT,    },
-    { { "AV1 10-bit (SVT)",            "svt_av1_10bit",    "AV1 10-bit (SVT)",               HB_VCODEC_FFMPEG_SVT_AV1_10BIT, HB_MUX_MASK_MP4|HB_MUX_MASK_WEBM|HB_MUX_MASK_MKV, }, NULL, 0, 1, HB_GID_VCODEC_AV1_SVT,    },
+    { { "AV1 (SVT)",                   "svt_av1",          "AV1 (SVT)",                      HB_VCODEC_SVT_AV1,           HB_MUX_MASK_MP4|HB_MUX_MASK_WEBM|HB_MUX_MASK_MKV, }, NULL, 0, 1, HB_GID_VCODEC_AV1_SVT,    },
+    { { "AV1 10-bit (SVT)",            "svt_av1_10bit",    "AV1 10-bit (SVT)",               HB_VCODEC_SVT_AV1_10BIT,     HB_MUX_MASK_MP4|HB_MUX_MASK_WEBM|HB_MUX_MASK_MKV, }, NULL, 0, 1, HB_GID_VCODEC_AV1_SVT,    },
     { { "AV1 (Intel QSV)",             "qsv_av1",          "AV1 (Intel Media SDK)",          HB_VCODEC_QSV_AV1,           HB_MUX_MASK_MP4|HB_MUX_MASK_WEBM|HB_MUX_MASK_MKV, }, NULL, 0, 1, HB_GID_VCODEC_AV1_QSV,    },
     { { "AV1 10-bit (Intel QSV)",      "qsv_av1_10bit",    "AV1 10-bit (Intel Media SDK)",   HB_VCODEC_QSV_AV1_10BIT,     HB_MUX_MASK_MP4|HB_MUX_MASK_WEBM|HB_MUX_MASK_MKV, }, NULL, 0, 1, HB_GID_VCODEC_AV1_QSV,    },
+    { { "AV1 (NVEnc)",                 "nvenc_av1",        "AV1 (NVEnc)",                    HB_VCODEC_FFMPEG_NVENC_AV1,                   HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 0, 1, HB_GID_VCODEC_AV1_NVENC,  },
+    { { "AV1 10-bit (NVEnc)",          "nvenc_av1_10bit",  "AV1 10-bit (NVEnc)",             HB_VCODEC_FFMPEG_NVENC_AV1_10BIT,             HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 0, 1, HB_GID_VCODEC_AV1_NVENC,  },
     { { "H.264 (x264)",                "x264",             "H.264 (libx264)",                HB_VCODEC_X264_8BIT,                          HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 0, 1, HB_GID_VCODEC_H264_X264,  },
     { { "H.264 10-bit (x264)",         "x264_10bit",       "H.264 10-bit (libx264)",         HB_VCODEC_X264_10BIT,                         HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 0, 1, HB_GID_VCODEC_H264_X264,  },
     { { "H.264 (Intel QSV)",           "qsv_h264",         "H.264 (Intel Media SDK)",        HB_VCODEC_QSV_H264,                           HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 0, 1, HB_GID_VCODEC_H264_QSV,   },
@@ -293,7 +298,7 @@ hb_encoder_internal_t hb_video_encoders[]  =
     { { "MPEG-2",                      "mpeg2",            "MPEG-2 (libavcodec)",            HB_VCODEC_FFMPEG_MPEG2,                       HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 0, 1, HB_GID_VCODEC_MPEG2,      },
     { { "VP8",                         "VP8",              "VP8 (libvpx)",                   HB_VCODEC_FFMPEG_VP8,                        HB_MUX_MASK_WEBM|HB_MUX_MASK_MKV, }, NULL, 0, 1, HB_GID_VCODEC_VP8,        },
     { { "VP9",                         "VP9",              "VP9 (libvpx)",                   HB_VCODEC_FFMPEG_VP9,                        HB_MUX_MASK_WEBM|HB_MUX_MASK_MKV, }, NULL, 0, 1, HB_GID_VCODEC_VP9,        },
-    { { "VP9 10-bit",                  "VP9_10bit",        "VP9 10-bit (libvpx)",            HB_VCODEC_FFMPEG_VP9_10BIT,                  HB_MUX_MASK_WEBM|HB_MUX_MASK_MKV, }, NULL, 0, 1, HB_GID_VCODEC_VP9,  },
+    { { "VP9 10-bit",                  "VP9_10bit",        "VP9 10-bit (libvpx)",            HB_VCODEC_FFMPEG_VP9_10BIT,                  HB_MUX_MASK_WEBM|HB_MUX_MASK_MKV, }, NULL, 0, 1, HB_GID_VCODEC_VP9,        },
     { { "Theora",                      "theora",           "Theora (libtheora)",             HB_VCODEC_THEORA,                                             HB_MUX_MASK_MKV, }, NULL, 0, 1, HB_GID_VCODEC_THEORA,     },
 };
 int hb_video_encoders_count = sizeof(hb_video_encoders) / sizeof(hb_video_encoders[0]);
@@ -325,6 +330,9 @@ static int hb_video_encoder_is_enabled(int encoder, int disable_hardware)
             case HB_VCODEC_FFMPEG_NVENC_H265:
             case HB_VCODEC_FFMPEG_NVENC_H265_10BIT:
                 return hb_nvenc_h265_available();
+            case HB_VCODEC_FFMPEG_NVENC_AV1:
+            case HB_VCODEC_FFMPEG_NVENC_AV1_10BIT:
+                return hb_nvenc_av1_available();
 #endif
 
 #ifdef __APPLE__
@@ -355,8 +363,8 @@ static int hb_video_encoder_is_enabled(int encoder, int disable_hardware)
         case HB_VCODEC_FFMPEG_VP8:
         case HB_VCODEC_FFMPEG_VP9:
         case HB_VCODEC_FFMPEG_VP9_10BIT:
-        case HB_VCODEC_FFMPEG_SVT_AV1:
-        case HB_VCODEC_FFMPEG_SVT_AV1_10BIT:
+        case HB_VCODEC_SVT_AV1:
+        case HB_VCODEC_SVT_AV1_10BIT:
             return 1;
 
 #if HB_PROJECT_FEATURE_X265
@@ -510,6 +518,13 @@ static int hb_container_is_enabled(int format)
         default:
             return 0;
     }
+}
+
+int hb_str_ends_with(const char *base, const char *str)
+{
+    int blen = strlen(base);
+    int slen = strlen(str);
+    return (blen >= slen) && (0 == strcasecmp(base + blen - slen, str));
 }
 
 void hb_common_global_init(int disable_hardware)
@@ -1395,6 +1410,7 @@ void hb_video_quality_get_limits(uint32_t codec, float *low, float *high,
         case HB_VCODEC_X265_8BIT:
         case HB_VCODEC_FFMPEG_NVENC_H264:
         case HB_VCODEC_FFMPEG_NVENC_H265:
+        case HB_VCODEC_FFMPEG_NVENC_AV1:
             *direction   = 1;
             *granularity = 0.1;
             *low         = 0.;
@@ -1403,6 +1419,7 @@ void hb_video_quality_get_limits(uint32_t codec, float *low, float *high,
         case HB_VCODEC_X264_10BIT:
         case HB_VCODEC_X265_10BIT:
         case HB_VCODEC_FFMPEG_NVENC_H265_10BIT:
+        case HB_VCODEC_FFMPEG_NVENC_AV1_10BIT:
             *direction   = 1;
             *granularity = 0.1;
             *low         = -12.;
@@ -1431,8 +1448,8 @@ void hb_video_quality_get_limits(uint32_t codec, float *low, float *high,
         case HB_VCODEC_FFMPEG_VP8:
         case HB_VCODEC_FFMPEG_VP9:
         case HB_VCODEC_FFMPEG_VP9_10BIT:
-        case HB_VCODEC_FFMPEG_SVT_AV1:
-        case HB_VCODEC_FFMPEG_SVT_AV1_10BIT:
+        case HB_VCODEC_SVT_AV1:
+        case HB_VCODEC_SVT_AV1_10BIT:
             *direction   = 1;
             *granularity = 1.;
             *low         = 0.;
@@ -1484,8 +1501,8 @@ const char* hb_video_quality_get_name(uint32_t codec)
         case HB_VCODEC_X265_10BIT:
         case HB_VCODEC_X265_12BIT:
         case HB_VCODEC_X265_16BIT:
-        case HB_VCODEC_FFMPEG_SVT_AV1:
-        case HB_VCODEC_FFMPEG_SVT_AV1_10BIT:
+        case HB_VCODEC_SVT_AV1:
+        case HB_VCODEC_SVT_AV1_10BIT:
             return "RF";
 
         case HB_VCODEC_FFMPEG_VP8:
@@ -1494,6 +1511,8 @@ const char* hb_video_quality_get_name(uint32_t codec)
         case HB_VCODEC_FFMPEG_NVENC_H264:
         case HB_VCODEC_FFMPEG_NVENC_H265:
         case HB_VCODEC_FFMPEG_NVENC_H265_10BIT:
+        case HB_VCODEC_FFMPEG_NVENC_AV1:
+        case HB_VCODEC_FFMPEG_NVENC_AV1_10BIT:
         case HB_VCODEC_FFMPEG_VCE_H264:
         case HB_VCODEC_FFMPEG_VCE_H265:
         case HB_VCODEC_FFMPEG_VCE_H265_10BIT:
@@ -1527,7 +1546,7 @@ int hb_video_quality_is_supported(uint32_t codec)
     }
 }
 
-int hb_video_twopass_is_supported(uint32_t codec)
+int hb_video_multipass_is_supported(uint32_t codec)
 {
     switch (codec)
     {
@@ -1535,7 +1554,7 @@ int hb_video_twopass_is_supported(uint32_t codec)
         case HB_VCODEC_VT_H264:
         case HB_VCODEC_VT_H265:
         case HB_VCODEC_VT_H265_10BIT:
-            return hb_vt_is_two_pass_available(codec);
+            return hb_vt_is_multipass_available(codec);
 #endif
 
         case HB_VCODEC_FFMPEG_MF_H264:
@@ -1546,9 +1565,13 @@ int hb_video_twopass_is_supported(uint32_t codec)
         case HB_VCODEC_FFMPEG_NVENC_H264:
         case HB_VCODEC_FFMPEG_NVENC_H265:
         case HB_VCODEC_FFMPEG_NVENC_H265_10BIT:
+        case HB_VCODEC_FFMPEG_NVENC_AV1:
+        case HB_VCODEC_FFMPEG_NVENC_AV1_10BIT:
         case HB_VCODEC_QSV_H264:
         case HB_VCODEC_QSV_H265:
         case HB_VCODEC_QSV_H265_10BIT:
+        case HB_VCODEC_QSV_AV1:
+        case HB_VCODEC_QSV_AV1_10BIT:
             return 0;
 
         default:
@@ -1567,6 +1590,19 @@ int hb_video_encoder_is_supported(int encoder)
         }
     }
     return 0;
+}
+
+int hb_video_encoder_get_count_of_analysis_passes(int encoder)
+{
+    switch (encoder)
+    {
+        case HB_VCODEC_SVT_AV1:
+        case HB_VCODEC_SVT_AV1_10BIT:
+            return 2;
+
+        default:
+            return 1;
+    }
 }
 
 int hb_video_encoder_pix_fmt_is_supported(int encoder, int pix_fmt, const char *profile)
@@ -1596,7 +1632,10 @@ int hb_video_encoder_get_depth(int encoder)
 #endif
         case HB_VCODEC_X264_10BIT:
         case HB_VCODEC_X265_10BIT:
+        case HB_VCODEC_SVT_AV1_10BIT:
+        case HB_VCODEC_FFMPEG_VP9_10BIT:
         case HB_VCODEC_FFMPEG_NVENC_H265_10BIT:
+        case HB_VCODEC_FFMPEG_NVENC_AV1_10BIT:
         case HB_VCODEC_FFMPEG_VCE_H265_10BIT:
             return 10;
         case HB_VCODEC_X265_12BIT:
@@ -1641,6 +1680,11 @@ const char* const* hb_video_encoder_get_presets(int encoder)
         case HB_VCODEC_VT_H265_10BIT:
             return hb_vt_preset_get_names(encoder);
 #endif
+
+        case HB_VCODEC_SVT_AV1:
+        case HB_VCODEC_SVT_AV1_10BIT:
+            return av1_svt_preset_names;
+
         default:
             return NULL;
     }
@@ -1666,6 +1710,11 @@ const char* const* hb_video_encoder_get_tunes(int encoder)
         case HB_VCODEC_X265_16BIT:
             return x265_tune_names;
 #endif
+
+        case HB_VCODEC_SVT_AV1:
+        case HB_VCODEC_SVT_AV1_10BIT:
+            return av1_svt_tune_names;
+
         default:
             return NULL;
     }
@@ -1715,9 +1764,12 @@ const char* const* hb_video_encoder_get_profiles(int encoder)
         case HB_VCODEC_FFMPEG_NVENC_H265_10BIT:
         case HB_VCODEC_FFMPEG_MF_H264:
         case HB_VCODEC_FFMPEG_MF_H265:
-        case HB_VCODEC_FFMPEG_SVT_AV1:
-        case HB_VCODEC_FFMPEG_SVT_AV1_10BIT:
             return hb_av_profile_get_names(encoder);
+
+        case HB_VCODEC_SVT_AV1:
+        case HB_VCODEC_SVT_AV1_10BIT:
+            return av1_svt_profile_names;
+
         default:
             return NULL;
     }
@@ -1763,8 +1815,8 @@ const char* const* hb_video_encoder_get_levels(int encoder)
             return hb_vt_level_get_names(encoder);
 #endif
 
-        case HB_VCODEC_FFMPEG_SVT_AV1:
-        case HB_VCODEC_FFMPEG_SVT_AV1_10BIT:
+        case HB_VCODEC_SVT_AV1:
+        case HB_VCODEC_SVT_AV1_10BIT:
             return hb_av1_level_names;
 
         default:
@@ -1785,6 +1837,11 @@ static const enum AVPixelFormat standard_422_pix_fmts[] =
 static const enum AVPixelFormat standard_444_pix_fmts[] =
 {
     AV_PIX_FMT_YUV444P, AV_PIX_FMT_NONE
+};
+
+static const enum AVPixelFormat standard_10bit_only_pix_fmts[] =
+{
+    AV_PIX_FMT_YUV420P10, AV_PIX_FMT_NONE
 };
 
 static const enum AVPixelFormat standard_10bit_pix_fmts[] =
@@ -1918,6 +1975,9 @@ const int* hb_video_encoder_get_pix_fmts(int encoder, const char *profile)
         case HB_VCODEC_VT_H265_10BIT:
             return hb_vt_get_pix_fmts(encoder);
 #endif
+
+        case HB_VCODEC_SVT_AV1_10BIT:
+            return standard_10bit_only_pix_fmts;
 
         default:
             return standard_pix_fmts;
@@ -2274,17 +2334,29 @@ int hb_mixdown_has_remix_support(int mixdown, uint64_t layout)
             return ((layout & AV_CH_LAYOUT_2_1) == AV_CH_LAYOUT_2_1 ||
                     (layout & AV_CH_LAYOUT_2_2) == AV_CH_LAYOUT_2_2 ||
                     (layout & AV_CH_LAYOUT_QUAD) == AV_CH_LAYOUT_QUAD ||
-                    (layout == AV_CH_LAYOUT_STEREO_DOWNMIX &&
-                     mixdown == HB_AMIXDOWN_DOLBY));
+                    (layout == AV_CH_LAYOUT_STEREO_DOWNMIX && // decavcodecaBSInfo tells us the input signals matrix encoding
+                     mixdown == HB_AMIXDOWN_DOLBY)); // allows signaling matrix encoding in output w/encoders that support it
 
         // more than 1 channel
         case HB_AMIXDOWN_STEREO:
             return (hb_layout_get_discrete_channel_count(layout) > 1);
 
-        // regular stereo (not Dolby)
+        /*
+         * The following mixdowns have a very specific purpose!!!
+         *
+         * Given 2-channel input, they allow discarding either of the right or
+         * left channel to produce mono output instead of downmixing (the latter
+         * may clip or lower volume depending on whether the downmix coefficients
+         * are normalized or not). They are meant to be used for sources which
+         * are known to actually be Mono (identical content in the L/R channels
+         * or one of L/R is actually empty). They hardly make any sense when the
+         * input has more than two channels (be they discrete or matrix-encoded).
+         *
+         * Thus specifically only allow them for non-matrix Stereo input (layout == STEREO).
+         */
         case HB_AMIXDOWN_LEFT:
         case HB_AMIXDOWN_RIGHT:
-            return (layout & AV_CH_LAYOUT_STEREO);
+            return (layout == AV_CH_LAYOUT_STEREO);
 
         // mono remix always supported
         // HB_AMIXDOWN_NONE always supported (for Passthru)
@@ -3776,6 +3848,30 @@ void hb_list_close( hb_list_t ** _l )
     *_l = NULL;
 }
 
+/**********************************************************************
+ * hb_string_list_copy
+ **********************************************************************
+ * Make a copy of a string list.
+ *********************************************************************/
+hb_list_t *hb_string_list_copy(const hb_list_t *src)
+{
+    hb_list_t *list = hb_list_init();
+    char *string = NULL;
+
+    if (src)
+    {
+        for (int i = 0; i < hb_list_count(src); i++)
+        {
+            if ((string = hb_list_item(src, i)))
+            {
+                hb_list_add(list, strdup(string));
+            }
+        }
+    }
+    return list;
+}
+
+
 int global_verbosity_level; //Necessary for hb_deep_log
 /**********************************************************************
  * hb_valog
@@ -4118,7 +4214,7 @@ static void job_setup(hb_job_t * job, hb_title_t * title)
     job->vcodec     = HB_VCODEC_FFMPEG_MPEG4;
     job->vquality   = HB_INVALID_VIDEO_QUALITY;
     job->vbitrate   = 1000;
-    job->twopass    = 0;
+    job->multipass  = 0;
     job->pass_id    = HB_PASS_ENCODE;
     job->vrate      = title->vrate;
 
@@ -4132,8 +4228,13 @@ static void job_setup(hb_job_t * job, hb_title_t * title)
     job->color_prim_override     = HB_COLR_PRI_UNDEF;
     job->color_transfer_override = HB_COLR_TRA_UNDEF;
     job->color_matrix_override   = HB_COLR_MAT_UNDEF;
+
     job->mastering      = title->mastering;
     job->coll           = title->coll;
+    job->ambient        = title->ambient;
+    job->dovi           = title->dovi;
+    job->passthru_dynamic_hdr_metadata |= title->dovi.dv_profile ? DOVI : NONE;
+    job->passthru_dynamic_hdr_metadata |= title->hdr_10_plus ? HDR_10_PLUS : NONE;
 
     job->mux = HB_MUX_MP4;
 
@@ -4150,11 +4251,9 @@ static void job_setup(hb_job_t * job, hb_title_t * title)
     {
         job->qsv.ctx = hb_qsv_context_init();
     }
-    job->qsv.enc_info.is_init_done = 0;
     job->qsv.decode                = !!(title->video_decode_support &
                                         HB_DECODE_SUPPORT_QSV);
 #endif
-
 }
 
 int hb_output_color_prim(hb_job_t * job)
@@ -4512,6 +4611,10 @@ hb_filter_object_t * hb_filter_get( int filter_id )
             filter = &hb_filter_render_sub;
             break;
 
+        case HB_FILTER_RPU:
+            filter = &hb_filter_rpu;
+            break;
+
         case HB_FILTER_CROP_SCALE:
             filter = &hb_filter_crop_scale;
             break;
@@ -4544,25 +4647,19 @@ hb_filter_object_t * hb_filter_get( int filter_id )
             filter = &hb_filter_format;
             break;
 
-#if HB_PROJECT_FEATURE_QSV
-#if !HB_QSV_ONEVPL
-        case HB_FILTER_QSV:
-            filter = &hb_filter_qsv;
-            break;
-
-        case HB_FILTER_QSV_PRE:
-            filter = &hb_filter_qsv_pre;
-            break;
-
-        case HB_FILTER_QSV_POST:
-            filter = &hb_filter_qsv_post;
-            break;
-#endif
-#endif
-
         case HB_FILTER_MT_FRAME:
             filter = &hb_filter_mt_frame;
             break;
+
+#if defined(__APPLE__)
+        case HB_FILTER_CROP_SCALE_VT:
+            filter = &hb_filter_crop_scale_vt;
+            break;
+
+        case HB_FILTER_ROTATE_VT:
+            filter = &hb_filter_rotate_vt;
+            break;
+#endif
 
         default:
             filter = NULL;
@@ -5259,6 +5356,18 @@ int hb_subtitle_add_ssa_header(hb_subtitle_t *subtitle, const char *font,
     float shadow_size = fs / 36.0;
     float outline_size = fs / 30.0;
 
+    char *shadow_size_string = hb_strdup_printf("%.2f", shadow_size);
+    hb_str_from_locale(shadow_size_string);
+
+    char *outline_size_string = hb_strdup_printf("%.2f", outline_size);
+    hb_str_from_locale(outline_size_string);
+
+    if (shadow_size_string == NULL || outline_size_string == NULL)
+    {
+        hb_error("hb_subtitle_add_ssa_header: malloc failed");
+        return 0;
+    }
+
     // SRT subtitles are represented internally as SSA
     // Create an SSA header
     const char * ssa_header =
@@ -5273,9 +5382,13 @@ int hb_subtitle_add_ssa_header(hb_subtitle_t *subtitle, const char *font,
         "\r\n"
         "[V4+ Styles]\r\n"
         "Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding\r\n"
-        "Style: Default,%s,%d,&H00FFFFFF,&H00FFFFFF,&H000F0F0F,&H000F0F0F,0,0,0,0,100,100,0,0.00,1,%.2f,%.2f,2,20,20,20,0\r\n";
+        "Style: Default,%s,%d,&H00FFFFFF,&H00FFFFFF,&H000F0F0F,&H000F0F0F,0,0,0,0,100,100,0,0.00,1,%s,%s,2,20,20,20,0\r\n";
 
-    subtitle->extradata = (uint8_t*)hb_strdup_printf(ssa_header, w, h, font, fs, outline_size, shadow_size);
+    subtitle->extradata = (uint8_t *)hb_strdup_printf(ssa_header, w, h, font, fs, outline_size_string, shadow_size_string);
+
+    free(shadow_size_string);
+    free(outline_size_string);
+
     if (subtitle->extradata == NULL)
     {
         hb_error("hb_subtitle_add_ssa_header: malloc failed");
@@ -5600,6 +5713,46 @@ void hb_metadata_rem_coverart( hb_metadata_t *metadata, int idx )
     }
 }
 
+// Copied from jansson strconv.c
+
+void hb_str_to_locale(char *str)
+{
+    const char *point;
+    char *pos;
+
+    point = localeconv()->decimal_point;
+    if (*point == '.')
+    {
+        // No conversion needed
+        return;
+    }
+
+    pos = strchr(str, '.');
+    if (pos)
+    {
+        *pos = *point;
+    }
+}
+
+void hb_str_from_locale(char *str)
+{
+    const char *point;
+    char *pos;
+
+    point = localeconv()->decimal_point;
+    if (*point == '.')
+    {
+        // No conversion needed
+        return;
+    }
+
+    pos = strchr(str, *point);
+    if (pos)
+    {
+        *pos = '.';
+    }
+}
+
 char * hb_strdup_vaprintf( const char * fmt, va_list args )
 {
     int       len;
@@ -5891,7 +6044,6 @@ void hb_hexdump( hb_debug_level_t level, const char * label, const uint8_t * dat
     {
         if( ( ii & 0x0f ) == 0x0f )
         {
-            p += snprintf( p, sizeof(line), "%02x", data[ii] );
             hb_deep_log( level, "    %-50s%20s", line, ascii );
             memset(&ascii[1], '.', 16);
             p = line;
@@ -6147,37 +6299,22 @@ static int pix_fmt_is_supported(hb_job_t *job, int pix_fmt)
         return 0;
     }
 
-    if (job->title->video_decode_support & HB_DECODE_SUPPORT_QSV)
+    // Allow biplanar formats only if hardware decoder is enabled
+    const int planes_count = av_pix_fmt_count_planes(pix_fmt);
+
+    if (planes_count == 2)
     {
-        // Allow formats supported by QSV pipeline via system memory
-        // at that stage only, video memory formats will be reassigned later if allowed
-        if (pix_fmt != AV_PIX_FMT_YUV420P10 &&
-            pix_fmt != AV_PIX_FMT_YUV420P)
-        {
-            return 0;
-        }
-    }
-#if HB_PROJECT_FEATURE_NVENC
-    else if (hb_nvdec_is_enabled(job))
-    {
-        if (pix_fmt != AV_PIX_FMT_YUV420P10LE &&
-            pix_fmt != AV_PIX_FMT_NV12)
-        {
-            return 0;
-        }
-    }
+        if (hb_hwaccel_decode_is_enabled(job) == 0
+#if HB_PROJECT_FEATURE_QSV
+            && hb_qsv_decode_is_enabled(job) == 0
 #endif
-    else
-    {
-        // Allow biplanar formats only if
-        // hardware decoding is enabled.
-        if (pix_fmt == AV_PIX_FMT_P010 ||
-            pix_fmt == AV_PIX_FMT_NV12)
+            )
         {
             return 0;
         }
     }
 
+    // These filters support only planar pixel formats
     for (int i = 0; i < hb_list_count(job->list_filter); i++)
     {
         hb_filter_object_t *filter = hb_list_item(job->list_filter, i);
@@ -6185,7 +6322,6 @@ static int pix_fmt_is_supported(hb_job_t *job, int pix_fmt)
         switch (filter->id)
         {
             case HB_FILTER_DETELECINE:
-            case HB_FILTER_COMB_DETECT:
             case HB_FILTER_DECOMB:
             case HB_FILTER_YADIF:
             case HB_FILTER_BWDIF:
@@ -6196,8 +6332,7 @@ static int pix_fmt_is_supported(hb_job_t *job, int pix_fmt)
             case HB_FILTER_UNSHARP:
             case HB_FILTER_GRAYSCALE:
             case HB_FILTER_RENDER_SUB:
-               if (pix_fmt == AV_PIX_FMT_P010 ||
-                   pix_fmt == AV_PIX_FMT_NV12)
+               if (planes_count == 2)
                {
                    return 0;
                }
@@ -6209,10 +6344,16 @@ static int pix_fmt_is_supported(hb_job_t *job, int pix_fmt)
 
 static const enum AVPixelFormat pipeline_pix_fmts[] =
 {
-    AV_PIX_FMT_YUV444P12, AV_PIX_FMT_YUV444P10, AV_PIX_FMT_YUV444P,
-    AV_PIX_FMT_YUV422P12, AV_PIX_FMT_YUV422P10, AV_PIX_FMT_YUV422P,
-    AV_PIX_FMT_YUV420P12, AV_PIX_FMT_P010, AV_PIX_FMT_YUV420P10,
-    AV_PIX_FMT_NV12, AV_PIX_FMT_YUV420P, AV_PIX_FMT_NONE
+    AV_PIX_FMT_YUV444P12,
+    AV_PIX_FMT_P410, AV_PIX_FMT_YUV444P10,
+    AV_PIX_FMT_NV24, AV_PIX_FMT_YUV444P,
+    AV_PIX_FMT_YUV422P12,
+    AV_PIX_FMT_P210, AV_PIX_FMT_YUV422P10,
+    AV_PIX_FMT_NV16, AV_PIX_FMT_YUV422P,
+    AV_PIX_FMT_YUV420P12,
+    AV_PIX_FMT_P010, AV_PIX_FMT_YUV420P10,
+    AV_PIX_FMT_NV12, AV_PIX_FMT_YUV420P,
+    AV_PIX_FMT_NONE
 };
 
 int hb_get_best_pix_fmt(hb_job_t * job)
@@ -6229,4 +6370,53 @@ int hb_get_best_pix_fmt(hb_job_t * job)
     }
 
     return AV_PIX_FMT_YUV420P;
+}
+
+static int pix_hw_fmt_is_supported(hb_job_t *job, int pix_fmt)
+{
+    if (pix_fmt == AV_PIX_FMT_QSV)
+    {
+#if HB_PROJECT_FEATURE_QSV
+        if (hb_qsv_full_path_is_enabled(job))
+        {
+            return 1;
+        }
+#endif
+    }
+    else if (hb_hwaccel_is_full_hardware_pipeline_enabled(job))
+    {
+        if (pix_fmt == AV_PIX_FMT_CUDA &&
+            job->hw_decode & HB_DECODE_SUPPORT_NVDEC)
+        {
+            return 1;
+        }
+        if (pix_fmt == AV_PIX_FMT_VIDEOTOOLBOX &&
+            job->hw_decode & HB_DECODE_SUPPORT_VIDEOTOOLBOX)
+        {
+            return 1;
+        }
+    }
+
+    return 0;
+}
+
+static const enum AVPixelFormat hw_pipeline_pix_fmts[] =
+{
+    AV_PIX_FMT_QSV, AV_PIX_FMT_CUDA, AV_PIX_FMT_VIDEOTOOLBOX, AV_PIX_FMT_NONE
+};
+
+int hb_get_best_hw_pix_fmt(hb_job_t *job)
+{
+    const int *pix_fmts = hw_pipeline_pix_fmts;
+
+    while (*pix_fmts != AV_PIX_FMT_NONE)
+    {
+        if (pix_hw_fmt_is_supported(job, *pix_fmts))
+        {
+            return *pix_fmts;
+        }
+        pix_fmts++;
+    }
+
+    return AV_PIX_FMT_NONE;
 }

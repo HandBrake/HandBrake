@@ -18,20 +18,11 @@ int            hb_qsv_available();
 
 // Public API
 int  hb_qsv_impl_set_preferred(const char *name);
-void hb_qsv_force_workarounds(); // for developers only
 
 #ifdef __LIBHB__
 // Private API
 
 #include "vpl/mfxvideo.h"
-
-#define HB_QSV_VERSION_ATLEAST(MAJOR, MINOR)   \
-    (MFX_VERSION_MAJOR > (MAJOR) ||         \
-     MFX_VERSION_MAJOR == (MAJOR) && MFX_VERSION_MINOR >= (MINOR))
-#define HB_QSV_ONEVPL HB_QSV_VERSION_ATLEAST(2, 0)
-#if !HB_QSV_ONEVPL
-    #include "mfx/mfxplugin.h"
-#endif
 #include "handbrake/hb_dict.h"
 #include "handbrake/qsv_libav.h"
 
@@ -84,49 +75,40 @@ typedef struct hb_qsv_info_s
 #define HB_QSV_CAP_OPTION2_MBBRC     (1LL << 31)
 #define HB_QSV_CAP_OPTION2_EXTBRC    (1LL << 32)
 #define HB_QSV_CAP_OPTION2_TRELLIS   (1LL << 33)
-#define HB_QSV_CAP_OPTION2_BREFTYPE  (1LL << 34)
-#define HB_QSV_CAP_OPTION2_IB_ADAPT  (1LL << 35)
-#define HB_QSV_CAP_OPTION2_LA_DOWNS  (1LL << 36)
-#define HB_QSV_CAP_OPTION2_NMPSLICE  (1LL << 37)
-#define HB_QSV_CAP_VPP_SCALING       (1LL << 38)
-#define HB_QSV_CAP_VPP_INTERPOLATION (1LL << 39)
+#define HB_QSV_CAP_OPTION2_REPEATPPS (1LL << 34)
+#define HB_QSV_CAP_OPTION2_BREFTYPE  (1LL << 35)
+#define HB_QSV_CAP_OPTION2_IB_ADAPT  (1LL << 36)
+#define HB_QSV_CAP_OPTION2_LA_DOWNS  (1LL << 37)
+#define HB_QSV_CAP_OPTION2_NMPSLICE  (1LL << 38)
+#define HB_QSV_CAP_VPP_SCALING       (1LL << 39)
+#define HB_QSV_CAP_VPP_INTERPOLATION (1LL << 40)
     // mfxExtAV1BitstreamParam
-#define HB_QSV_CAP_AV1_BITSTREAM     (1LL << 40)
+#define HB_QSV_CAP_AV1_BITSTREAM     (1LL << 41)
     // mfxExtHyperModeParam
-#define HB_QSV_CAP_HYPERENCODE       (1LL << 41)
+#define HB_QSV_CAP_HYPERENCODE       (1LL << 42)
 
     // TODO: add maximum encode resolution, etc.
 } hb_qsv_info_t;
 
 /* Intel Quick Sync Video utilities */
-int            hb_qsv_create_mfx_session(mfxIMPL implementation, int adapter_index, mfxVersion *pver, mfxSession *psession, mfxLoader *ploader);
-hb_display_t * hb_qsv_display_init(void);
+int            hb_qsv_create_mfx_session(mfxIMPL implementation, int adapter_index, mfxVersion *pver, mfxSession *psession);
+hb_display_t * hb_qsv_display_init(const uint32_t dri_render_node);
 int            hb_qsv_video_encoder_is_enabled(int adapter_index, int encoder);
-int            hb_qsv_audio_encoder_is_enabled(int encoder);
 int            hb_qsv_info_init();
+void           hb_qsv_info_close();
 void           hb_qsv_info_print();
 hb_list_t*     hb_qsv_adapters_list();
+int            hb_qsv_hyper_encode_available(int adapter_index);
 hb_qsv_info_t* hb_qsv_encoder_info_get(int adapter_index, int encoder);
 int            hb_qsv_hardware_generation(int cpu_platform);
 int            hb_qsv_get_platform(int adapter_index);
 int            hb_qsv_get_adapter_index();
+int            hb_qsv_get_adapter_render_node(int adapter_index);
 int            hb_qsv_implementation_is_hardware(mfxIMPL implementation);
-
-#if !HB_QSV_ONEVPL
-/* Automatically load and unload any required MFX plug-ins */
-hb_list_t* hb_qsv_load_plugins  (int adapter_index, hb_qsv_info_t *info, mfxSession session, mfxVersion version);
-void       hb_qsv_unload_plugins(hb_list_t     **_l,  mfxSession session, mfxVersion version);
-#endif
 
 /* Intel Quick Sync Video DECODE utilities */
 const char* hb_qsv_decode_get_codec_name(enum AVCodecID codec_id);
 int hb_qsv_decode_is_enabled(hb_job_t *job);
-
-/*
- * mfxCoreInterface::CopyFrame had a bug preventing us from using it, but
- * it was fixed in newer drivers - we can use this to determine usability
- */
-int hb_qsv_copyframe_is_slow(int encoder);
 
 /* Media SDK parameters handling */
 enum
@@ -282,16 +264,14 @@ int hb_qsv_replace_surface_mid(HBQSVFramesContext* hb_qsv_frames_ctx, const QSVM
 int hb_qsv_release_surface_from_pool_by_surface_pointer(HBQSVFramesContext* hb_enc_qsv_frames_ctx, const mfxFrameSurface1 *surface);
 int hb_qsv_get_buffer(AVCodecContext *s, AVFrame *frame, int flags);
 enum AVPixelFormat hb_qsv_get_format(AVCodecContext *s, const enum AVPixelFormat *pix_fmts);
-int hb_qsv_preset_is_zero_copy_enabled(const hb_dict_t *job_dict);
 void hb_qsv_uninit_dec(AVCodecContext *s);
 void hb_qsv_uninit_enc(hb_job_t *job);
-int hb_qsv_parse_adapter_index(hb_job_t *job);
 int hb_qsv_setup_job(hb_job_t *job);
 int hb_qsv_decode_h264_is_supported(int adapter_index);
 int hb_qsv_decode_h265_is_supported(int adapter_index);
 int hb_qsv_decode_h265_10_bit_is_supported(int adapter_index);
 int hb_qsv_decode_av1_is_supported(int adapter_index);
-int hb_qsv_decode_codec_supported_codec(int adapter_index, int video_codec_param, int pix_fmt, int width, int height);
+int hb_qsv_decode_is_codec_supported(int adapter_index, int video_codec_param, int pix_fmt, int width, int height);
 int hb_qsv_device_init(hb_job_t *job);
 
 #endif // __LIBHB__

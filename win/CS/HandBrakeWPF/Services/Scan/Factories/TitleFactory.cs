@@ -10,7 +10,10 @@
 namespace HandBrakeWPF.Services.Scan.Factories
 {
     using System;
+    using System.IO;
 
+    using HandBrake.App.Core.Model;
+    using HandBrake.App.Core.Utilities;
     using HandBrake.Interop.Interop;
     using HandBrake.Interop.Interop.Interfaces.Model.Picture;
     using HandBrake.Interop.Interop.Json.Scan;
@@ -24,6 +27,23 @@ namespace HandBrakeWPF.Services.Scan.Factories
     {
         public Title CreateTitle(SourceTitle title, int mainFeature)
         {
+            string driveLabel = null;
+            if ("VIDEO_TS".Equals(title.Name, StringComparison.CurrentCultureIgnoreCase))
+            {
+                foreach (DriveInformation info in DriveUtilities.GetDrives())
+                {
+                    if (title.Path.StartsWith(info.RootDirectory, StringComparison.CurrentCultureIgnoreCase))
+                    {
+                        driveLabel = info.VolumeLabel;
+                        break;
+                    }
+                }
+            }
+            else if (title.Type == 0 || title.Type == 1)
+            {
+                driveLabel = Path.GetFileNameWithoutExtension(title.Path) ?? title.Path;
+            }
+
             Title converted = new Title
             {
                 TitleNumber = title.Index,
@@ -46,13 +66,51 @@ namespace HandBrakeWPF.Services.Scan.Factories
                     Right = title.LooseCrop[3]
                 },
                 Fps = ((double)title.FrameRate.Num) / title.FrameRate.Den,
-                SourceName = title.Path,
+                SourcePath = title.Path,
+                DriveLabel = driveLabel,
                 MainTitle = mainFeature == title.Index,
                 Playlist = title.Type == 1 ? string.Format(" {0:d5}.MPLS", title.Playlist).Trim() : null,
                 FramerateNumerator = title.FrameRate.Num,
                 FramerateDenominator = title.FrameRate.Den,
-                Type = title.Type
+                Type = title.Type,
+                ColorInformation = new ColorInfo
+                {
+                    HDR10plus = title.HDR10plus == 1,
+                    BitDepth = title.Color?.BitDepth,
+                    ChromaSubsampling = title.Color?.ChromaSubsampling,
+                }
             };
+
+            if (title.Color != null)
+            {
+                converted.ColorInformation.ColourInfoStr = string.Format(
+                    "{0}-{1}-{2}",
+                    title.Color.Primary,
+                    title.Color.Transfer,
+                    title.Color.Matrix);
+            }
+
+            if (title.MasteringDisplayColorVolume != null && title.MasteringDisplayColorVolume.HasPrimaries
+                                                          && title.MasteringDisplayColorVolume.HasLuminance)
+            {
+                converted.ColorInformation.HDR10 = true;
+            }
+
+            if (title.Color != null && (title.Color.Transfer == 16 || title.Color.Transfer == 18))
+            {
+                converted.ColorInformation.HDR = true;
+            }
+
+            if (title.DolbyVisionConfigurationRecord != null && title.DolbyVisionConfigurationRecord.DVProfile != null && converted.ColorInformation.HDR10plus)
+            {
+                converted.ColorInformation.DBV = true;
+                converted.ColorInformation.DBVProfileStr = string.Format("Dolby Vision {0}.{1} HDR10+", title.DolbyVisionConfigurationRecord.DVProfile, title.DolbyVisionConfigurationRecord.BLSignalCompatibilityId);
+            }
+            else if (title.DolbyVisionConfigurationRecord != null && title.DolbyVisionConfigurationRecord.DVProfile != null)
+            {
+                converted.ColorInformation.DBV = true;
+                converted.ColorInformation.DBVProfileStr = string.Format("Dolby Vision {0}.{1}", title.DolbyVisionConfigurationRecord.DVProfile, title.DolbyVisionConfigurationRecord.BLSignalCompatibilityId);
+            }
 
             int currentTrack = 1;
             foreach (SourceChapter chapter in title.ChapterList)

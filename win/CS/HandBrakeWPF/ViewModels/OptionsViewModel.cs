@@ -10,16 +10,20 @@
 namespace HandBrakeWPF.ViewModels
 {
     using System;
+    using System.Collections.Generic;
     using System.ComponentModel;
     using System.Diagnostics;
     using System.Globalization;
     using System.IO;
     using System.Linq;
     using System.Windows;
+    using System.Windows.Documents;
     using System.Windows.Media;
 
     using HandBrake.App.Core.Utilities;
     using HandBrake.Interop.Interop;
+
+    using HandBrakeWPF.Commands;
     using HandBrakeWPF.Helpers;
     using HandBrakeWPF.Model;
     using HandBrakeWPF.Model.Options;
@@ -29,14 +33,10 @@ namespace HandBrakeWPF.ViewModels
     using HandBrakeWPF.Services.Interfaces;
     using HandBrakeWPF.Services.Presets.Interfaces;
     using HandBrakeWPF.Utilities;
+    using HandBrakeWPF.Utilities.FileDialogs;
     using HandBrakeWPF.ViewModels.Interfaces;
 
-    using Microsoft.Win32;
-
-    using Ookii.Dialogs.Wpf;
-
     using ILog = HandBrakeWPF.Services.Logging.Interfaces.ILog;
-
     public class OptionsViewModel : ViewModelBase, IOptionsViewModel
     {
         private readonly IUserSettingService userSettingService;
@@ -116,16 +116,18 @@ namespace HandBrakeWPF.ViewModels
         private bool enableQuickSyncLowPower;
         private int simultaneousEncodes;
         private bool enableQuickSyncHyperEncode;
-
         private bool enableNvDecSupport;
+        private bool useIsoDateFormat;
+        private BindingList<string> excludedFileExtensions;
+        private bool recursiveFolderScan;
 
         public OptionsViewModel(
             IUserSettingService userSettingService,
-            IUpdateService updateService, 
-            IAboutViewModel aboutViewModel, 
-            IErrorService errorService, 
-            IPresetService presetService, 
-            INotificationService notificationService, 
+            IUpdateService updateService,
+            IAboutViewModel aboutViewModel,
+            IErrorService errorService,
+            IPresetService presetService,
+            INotificationService notificationService,
             ILog logService)
         {
             this.Title = "Options";
@@ -140,6 +142,7 @@ namespace HandBrakeWPF.ViewModels
 
             this.SelectedTab = OptionsTab.General;
             this.UpdateMessage = Resources.OptionsViewModel_CheckForUpdatesMsg;
+            this.RemoveExtensionCommand = new SimpleRelayCommand<string>(this.RemoveExcludedExtension);
         }
 
         public OptionsTab SelectedTab
@@ -562,6 +565,57 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
+        public BindingList<PlaceHolderBucket> OutputFilenamePlaceholders
+        {
+            get
+            {
+                return new BindingList<PlaceHolderBucket>
+                {
+                    new PlaceHolderBucket { Name = Constants.Source },
+                    new PlaceHolderBucket { Name = Constants.Title },
+                    new PlaceHolderBucket { Name = Constants.Chapters},
+                    new PlaceHolderBucket { Name = Constants.CreationDate },
+                    new PlaceHolderBucket { Name = Constants.CreationTime },
+                    new PlaceHolderBucket { Name = Constants.ModificationDate },
+                    new PlaceHolderBucket { Name = Constants.ModificationTime },
+                    new PlaceHolderBucket { Name = Constants.Date },
+                    new PlaceHolderBucket { Name = Constants.Time },
+                    new PlaceHolderBucket { Name = Constants.QualityBitrate },
+                    new PlaceHolderBucket { Name = Constants.QualityType },
+                    new PlaceHolderBucket { Name = Constants.Preset },
+                    new PlaceHolderBucket { Name = Constants.EncoderBitDepth },
+                    new PlaceHolderBucket { Name = Constants.StorageWidth },
+                    new PlaceHolderBucket { Name = Constants.StorageHeight },
+                    new PlaceHolderBucket { Name = Constants.Codec },
+                    new PlaceHolderBucket { Name = Constants.Encoder },
+                };
+            }
+        }
+
+        public BindingList<PlaceHolderBucket> PathFilenamePlaceholders
+        {
+            get
+            {
+                return new BindingList<PlaceHolderBucket>
+                       {
+                           new PlaceHolderBucket { Name = Constants.SourcePath },
+                           new PlaceHolderBucket { Name = Constants.SourceFolderName },
+                           new PlaceHolderBucket { Name = Constants.Source }
+                       };
+            }
+        }
+
+        public bool UseIsoDateFormat
+        {
+            get => this.useIsoDateFormat;
+            set
+            {
+                if (value == this.useIsoDateFormat) return;
+                this.useIsoDateFormat = value;
+                this.OnPropertyChanged();
+            }
+        }
+
         /* Preview */
 
         public string VLCPath
@@ -833,7 +887,33 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
-        /* Video */ 
+        public BindingList<string> ExcludedFileExtensions
+        {
+            get => this.excludedFileExtensions;
+            set
+            {
+                if (Equals(value, this.excludedFileExtensions)) return;
+                this.excludedFileExtensions = value;
+                this.OnPropertyChanged();
+            }
+        }
+
+        public string NewExtension { get; set; }
+
+        public SimpleRelayCommand<string> RemoveExtensionCommand { get; set; }
+
+        public bool RecursiveFolderScan
+        {
+            get => this.recursiveFolderScan;
+            set
+            {
+                if (value == this.recursiveFolderScan) return;
+                this.recursiveFolderScan = value;
+                this.NotifyOfPropertyChange(() => this.RecursiveFolderScan);
+            }
+        }
+
+        /* Video */
         public bool EnableQuickSyncEncoding
         {
             get => this.enableQuickSyncEncoding && this.IsQuickSyncAvailable;
@@ -846,6 +926,7 @@ namespace HandBrakeWPF.ViewModels
 
                 this.enableQuickSyncEncoding = value;
                 this.NotifyOfPropertyChange(() => this.EnableQuickSyncEncoding);
+                this.NotifyOfPropertyChange(() => this.CanSetQsvDecForOtherEncodes);
             }
         }
 
@@ -893,6 +974,7 @@ namespace HandBrakeWPF.ViewModels
                 this.enableQuickSyncDecoding = value;
                 this.NotifyOfPropertyChange(() => this.EnableQuickSyncDecoding);
                 this.NotifyOfPropertyChange(() => this.IsUseQsvDecAvailable);
+                this.NotifyOfPropertyChange(() => this.CanSetQsvDecForOtherEncodes);
             }
         }
 
@@ -930,7 +1012,7 @@ namespace HandBrakeWPF.ViewModels
 
         public bool IsQuickSyncAvailable { get; } = HandBrakeHardwareEncoderHelper.IsQsvAvailable;
 
-        public bool IsMultiIntelGPU { get; } = HandBrakeEncoderHelpers.GetQsvAdaptorList().Count > 1;
+        public bool IsQuickSyncHyperEncodeAvailable { get; } = HandBrakeHardwareEncoderHelper.IsQsvHyperEncodeAvailable;
 
         public bool IsVceAvailable { get; } = HandBrakeHardwareEncoderHelper.IsVceH264Available;
 
@@ -951,6 +1033,8 @@ namespace HandBrakeWPF.ViewModels
                 this.NotifyOfPropertyChange(() => this.UseQSVDecodeForNonQSVEnc);
             }
         }
+
+        public bool CanSetQsvDecForOtherEncodes => this.EnableQuickSyncDecoding && this.IsQuickSyncAvailable && this.EnableQuickSyncEncoding;
 
         public BindingList<VideoScaler> ScalingOptions { get; } = new BindingList<VideoScaler>(EnumHelper<VideoScaler>.GetEnumList().ToList());
 
@@ -1007,7 +1091,6 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
-        /* Experimental */
         public bool RemoteServiceEnabled
         {
             get => this.remoteServiceEnabled;
@@ -1100,7 +1183,7 @@ namespace HandBrakeWPF.ViewModels
 
         public void BrowseAutoNamePath()
         {
-            VistaFolderBrowserDialog dialog = new VistaFolderBrowserDialog { Description = Resources.OptionsView_SelectFolder, UseDescriptionForTitle = true, SelectedPath = this.AutoNameDefaultPath };
+            FolderBrowserDialog dialog = new FolderBrowserDialog { Description = Resources.OptionsView_SelectFolder, UseDescriptionForTitle = true, SelectedPath = this.AutoNameDefaultPath };
             bool? dialogResult = dialog.ShowDialog();
             if (dialogResult.HasValue && dialogResult.Value)
             {
@@ -1120,7 +1203,7 @@ namespace HandBrakeWPF.ViewModels
 
         public void BrowseLogPath()
         {
-            VistaFolderBrowserDialog dialog = new VistaFolderBrowserDialog { Description = Resources.OptionsView_SelectFolder, UseDescriptionForTitle = true, SelectedPath = this.LogDirectory };
+            FolderBrowserDialog dialog = new FolderBrowserDialog { Description = Resources.OptionsView_SelectFolder, UseDescriptionForTitle = true, SelectedPath = this.LogDirectory };
             bool? dialogResult = dialog.ShowDialog();
             if (dialogResult.HasValue && dialogResult.Value)
             {
@@ -1139,7 +1222,7 @@ namespace HandBrakeWPF.ViewModels
         public void ClearLogHistory()
         {
             MessageBoxResult result = this.errorService.ShowMessageBox(Resources.OptionsView_ClearLogDirConfirm, Resources.OptionsView_ClearLogs,
-                                                  MessageBoxButton.YesNoCancel, MessageBoxImage.Question);
+                                                  MessageBoxButton.YesNo, MessageBoxImage.Question);
             if (result == MessageBoxResult.Yes)
             {
                 GeneralUtilities.ClearLogFiles(0);
@@ -1209,6 +1292,40 @@ namespace HandBrakeWPF.ViewModels
 
             this.IsAutomaticSafeMode = false;
             this.NotifyOfPropertyChange(() => this.IsAutomaticSafeMode);
+        }
+
+        public void ResetAutoNameFormat()
+        {
+            this.AutonameFormat = "{source}-{title}";
+        }
+
+        public void AddExcludedExtension()
+        {
+            if (!string.IsNullOrEmpty(NewExtension))
+            {
+                NewExtension = NewExtension.Replace(".", string.Empty);
+
+                if (this.ExcludedFileExtensions.Contains(NewExtension, StringComparer.OrdinalIgnoreCase))
+                {
+                    this.errorService.ShowMessageBox(Resources.Options_ExtensionExists, Resources.Error, MessageBoxButton.OK, MessageBoxImage.Error);
+                    return;
+                }
+
+                this.ExcludedFileExtensions.Add(this.NewExtension);
+                this.NewExtension = null;
+                this.NotifyOfPropertyChange(() => this.NewExtension);
+            }
+        }
+
+        public void RemoveExcludedExtension(string extension)
+        {
+            if (!string.IsNullOrEmpty(extension))
+            {
+                if (this.ExcludedFileExtensions.Contains(extension, StringComparer.OrdinalIgnoreCase))
+                {
+                    this.ExcludedFileExtensions.Remove(extension);
+                }
+            }
         }
 
         #endregion
@@ -1299,6 +1416,8 @@ namespace HandBrakeWPF.ViewModels
             this.PrePostFilenameText = this.userSettingService.GetUserSetting<string>(UserSettingConstants.AutonameFilePrePostString);
 
             this.AlwaysUseDefaultPath = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.AlwaysUseDefaultPath);
+
+            this.UseIsoDateFormat = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.UseIsoDateFormat);
 
             // #############################
             // Picture Tab
@@ -1393,6 +1512,9 @@ namespace HandBrakeWPF.ViewModels
 
             this.PauseOnLowBattery = userSettingService.GetUserSetting<bool>(UserSettingConstants.PauseEncodingOnLowBattery);
             this.LowBatteryLevel = userSettingService.GetUserSetting<int>(UserSettingConstants.LowBatteryLevel);
+
+            this.ExcludedFileExtensions = new BindingList<string>(userSettingService.GetUserSetting<List<string>>(UserSettingConstants.ExcludedExtensions));
+            this.RecursiveFolderScan = userSettingService.GetUserSetting<bool>(UserSettingConstants.RecursiveFolderScan);
 
             // #############################
             // Safe Mode
@@ -1496,6 +1618,7 @@ namespace HandBrakeWPF.ViewModels
             this.userSettingService.SetUserSetting(UserSettingConstants.AutonameFileCollisionBehaviour, this.SelectedCollisionBehaviour);
             this.userSettingService.SetUserSetting(UserSettingConstants.AutonameFilePrePostString, this.PrePostFilenameText);
             this.userSettingService.SetUserSetting(UserSettingConstants.AlwaysUseDefaultPath, this.AlwaysUseDefaultPath);
+            this.userSettingService.SetUserSetting(UserSettingConstants.UseIsoDateFormat, this.UseIsoDateFormat);
 
             /* Previews */
             this.userSettingService.SetUserSetting(UserSettingConstants.MediaPlayerPath, this.VLCPath);
@@ -1527,6 +1650,8 @@ namespace HandBrakeWPF.ViewModels
             this.userSettingService.SetUserSetting(UserSettingConstants.ClearCompletedFromQueue, this.ClearQueueOnEncodeCompleted);
             this.userSettingService.SetUserSetting(UserSettingConstants.PreviewScanCount, this.SelectedPreviewCount);
             this.userSettingService.SetUserSetting(UserSettingConstants.X264Step, double.Parse(this.SelectedGranularity, CultureInfo.InvariantCulture));
+            this.userSettingService.SetUserSetting(UserSettingConstants.ExcludedExtensions, new List<string>(this.ExcludedFileExtensions));
+            this.userSettingService.SetUserSetting(UserSettingConstants.RecursiveFolderScan, this.RecursiveFolderScan);
 
             int value;
             if (int.TryParse(this.MinLength.ToString(CultureInfo.InvariantCulture), out value))
@@ -1539,10 +1664,14 @@ namespace HandBrakeWPF.ViewModels
             this.userSettingService.SetUserSetting(UserSettingConstants.PauseEncodingOnLowBattery, this.PauseOnLowBattery);
             this.userSettingService.SetUserSetting(UserSettingConstants.LowBatteryLevel, this.LowBatteryLevel);
 
-            /* Experimental */
             this.userSettingService.SetUserSetting(UserSettingConstants.ProcessIsolationEnabled, this.RemoteServiceEnabled);
             this.userSettingService.SetUserSetting(UserSettingConstants.ProcessIsolationPort, this.RemoteServicePort);
             this.userSettingService.SetUserSetting(UserSettingConstants.SimultaneousEncodes, this.SimultaneousEncodes);
+        }
+
+        public void LaunchHelp()
+        {
+            Process.Start("explorer.exe", "https://handbrake.fr/docs/en/latest/technical/preferences.html");
         }
 
         private void UpdateCheckComplete(UpdateCheckInformation info)

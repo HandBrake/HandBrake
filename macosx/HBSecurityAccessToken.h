@@ -23,8 +23,11 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface HBSecurityAccessToken : NSObject
 
-+ (instancetype)tokenWithObject:(id<HBSecurityScope>)object;
 - (instancetype)initWithObject:(id<HBSecurityScope>)object;
+- (instancetype)initWithAlreadyAccessedObject:(id<HBSecurityScope>)object;
+
++ (instancetype)tokenWithObject:(id<HBSecurityScope>)object;
++ (instancetype)tokenWithAlreadyAccessedObject:(id<HBSecurityScope>)object;
 
 @end
 

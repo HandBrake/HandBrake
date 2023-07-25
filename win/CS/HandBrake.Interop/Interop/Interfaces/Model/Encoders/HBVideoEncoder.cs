@@ -60,6 +60,21 @@ namespace HandBrake.Interop.Interop.Interfaces.Model.Encoders
         /// </summary>
         public string ShortName { get; private set; }
 
+        public string Codec
+        {
+            get
+            {
+                string[] codec = this.DisplayName.Split(' ');
+
+                if (codec.Length >= 1)
+                {
+                    return codec[0];
+                }
+
+                return string.Empty;
+            }
+        }
+
         /// <summary>
         /// Gets the list of presets this encoder supports. (null if the encoder doesn't support presets)
         /// </summary>
@@ -104,6 +119,24 @@ namespace HandBrake.Interop.Interop.Interfaces.Model.Encoders
             }
         }
 
+        public int BitDepth
+        {
+            get
+            {
+                if (this.DisplayName.Contains("10"))
+                {
+                    return 10;
+                }
+
+                if (this.DisplayName.Contains("12"))
+                {
+                    return 12;
+                }
+
+                return 8;
+            }
+        }
+
         public bool SupportsMP4 => (this.CompatibleContainers & NativeConstants.HB_MUX_MASK_MP4) == NativeConstants.HB_MUX_MASK_MP4
                                    || (this.CompatibleContainers & NativeConstants.HB_MUX_AV_MP4) == NativeConstants.HB_MUX_AV_MP4;
 
@@ -113,7 +146,7 @@ namespace HandBrake.Interop.Interop.Interfaces.Model.Encoders
         public bool SupportsWebM => (this.CompatibleContainers & NativeConstants.HB_MUX_MASK_WEBM) == NativeConstants.HB_MUX_MASK_WEBM
                                     || (this.CompatibleContainers & NativeConstants.HB_MUX_AV_WEBM) == NativeConstants.HB_MUX_AV_WEBM;
 
-        public bool SupportsTwoPass => HandBrakeEncoderHelpers.VideoEncoderSupportsTwoPass(this.ShortName);
+        public bool SupportsMultiPass => HandBrakeEncoderHelpers.VideoEncoderSupportsMultiPass(this.ShortName);
 
         // TODO check if there is a nicer way of doing this.
         public bool IsSVTAV1 => this.ShortName.Contains("svt_av1");
@@ -126,6 +159,8 @@ namespace HandBrake.Interop.Interop.Interfaces.Model.Encoders
         public bool IsNVEnc => this.ShortName.Contains("nvenc");
         public bool IsVCN => this.ShortName.Contains("vce") || this.ShortName.Contains("vcn");
         public bool IsMediaFoundation => this.ShortName.Contains("mf");
+        public bool IsMpeg2 => this.ShortName.Contains("mpeg2");
         public bool IsVP9 => this.ShortName.Contains("VP9", StringComparison.InvariantCultureIgnoreCase);
+        public bool IsHardwareEncoder => this.IsNVEnc || this.IsMediaFoundation || this.IsVCN || this.IsQuickSync;
     }
 }

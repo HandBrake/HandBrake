@@ -11,7 +11,6 @@ namespace HandBrakeWPF.ViewModels.Interfaces
 {
     using HandBrakeWPF.Model.Audio;
     using HandBrakeWPF.Model.Subtitles;
-    using HandBrakeWPF.Services.Scan.Model;
 
     using EncodeTask = Services.Encode.Model.EncodeTask;
 
@@ -40,6 +39,9 @@ namespace HandBrakeWPF.ViewModels.Interfaces
         /// <param name="subtitleBehaviours">
         /// The subtitle Behaviours.
         /// </param>
-        void Setup(EncodeTask task, Title title, AudioBehaviours audioBehaviours, SubtitleBehaviours subtitleBehaviours);
+        /// <param name="presetName">
+        /// Optional initial preset name.
+        /// </param>
+        void Setup(EncodeTask task, AudioBehaviours audioBehaviours, SubtitleBehaviours subtitleBehaviours, string presetName);
     }
 }

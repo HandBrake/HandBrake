@@ -2,8 +2,8 @@ __deps__ := X265_8
 $(eval $(call import.MODULE.defs,X265_12,x265_12,$(__deps__),x265))
 $(eval $(call import.CONTRIB.defs,X265_12))
 
-X265_12.FETCH.url     = https://github.com/HandBrake/HandBrake-contribs/releases/download/contribs/x265-snapshot-20220709-12716.tar.gz
-X265_12.FETCH.sha256  = 19ef8b21301f13d795601184884859e9f4a2f87fcda83757bd7dcd588056e926
+X265_12.FETCH.url     = https://github.com/HandBrake/HandBrake-contribs/releases/download/contribs/x265-snapshot-20230403-12776.tar.gz
+X265_12.FETCH.sha256  = 23898695c5520e9e971d12e88125d5ad03ad67f462fc8ecaa016b48adad7cb20
 
 # Silence "warning: overriding recipe for target" messages
 X265_12.FETCH.target =
@@ -36,6 +36,14 @@ else
     else
         X265_12.CONFIGURE.extra += -DCMAKE_BUILD_TYPE=Release
     endif
+endif
+
+ifeq (on,$(GCC.lto))
+    X265_12.CONFIGURE.extra += -DCMAKE_INTERPROCEDURAL_OPTIMIZATION=TRUE
+else ifeq (thin,$(GCC.lto))
+    X265_12.CONFIGURE.extra += -DCMAKE_INTERPROCEDURAL_OPTIMIZATION=TRUE -DCMAKE_LTO_THIN=TRUE
+else ifeq (off,$(GCC.lto))
+    X265_12.CONFIGURE.extra += -DCMAKE_INTERPROCEDURAL_OPTIMIZATION=FALSE
 endif
 
 ifeq (1,$(HOST.cross))

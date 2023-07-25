@@ -1,0 +1,53 @@
+diff --git a/configure b/configure
+index e242e73c..c95fd9dd 100755
+--- a/configure
++++ b/configure
+@@ -925,39 +925,6 @@ if [ $shared = yes ] ; then
+     pic="yes"
+ fi
+ 
+-if cc_check '' '' '' '__attribute__((force_align_arg_pointer))' ; then
+-    if [ $compiler = GNU -a \( $ARCH = X86 -o $ARCH = X86_64 \) ] ; then
+-        if cc_check '' -mpreferred-stack-boundary=6 ; then
+-            CFLAGS="$CFLAGS -mpreferred-stack-boundary=6"
+-            stack_alignment=64
+-        elif cc_check '' -mstack-alignment=64 ; then
+-            CFLAGS="$CFLAGS -mstack-alignment=64"
+-            stack_alignment=64
+-        elif [ $stack_alignment -lt 16 ] ; then
+-            if cc_check '' -mpreferred-stack-boundary=4 ; then
+-                CFLAGS="$CFLAGS -mpreferred-stack-boundary=4"
+-                stack_alignment=16
+-            elif cc_check '' -mstack-alignment=16 ; then
+-                CFLAGS="$CFLAGS -mstack-alignment=16"
+-                stack_alignment=16
+-            fi
+-        fi
+-    elif [ $compiler = ICC -a $ARCH = X86 ]; then
+-        # icc on linux has various degrees of mod16 stack support
+-        if [ $SYS = LINUX ]; then
+-            # >= 12 defaults to a mod16 stack
+-            if cpp_check "" "" "__INTEL_COMPILER >= 1200" ; then
+-                stack_alignment=16
+-            # 11 <= x < 12 is capable of keeping a mod16 stack, but defaults to not doing so.
+-            elif cpp_check "" "" "__INTEL_COMPILER >= 1100" ; then
+-                CFLAGS="$CFLAGS -falign-stack=assume-16-byte"
+-                stack_alignment=16
+-            fi
+-            # < 11 is completely incapable of keeping a mod16 stack
+-        fi
+-    fi
+-fi
+-
+ if [ $asm = auto -a \( $ARCH = X86 -o $ARCH = X86_64 \) ] ; then
+     if ! as_check "vmovdqa32 [eax]{k1}{z}, zmm0" ; then
+         VER="$( ($AS --version || echo no assembler) 2>/dev/null | head -n 1 )"
+@@ -1030,8 +997,6 @@ fi
+ define ARCH_$ARCH
+ define SYS_$SYS
+ 
+-define STACK_ALIGNMENT $stack_alignment
+-ASFLAGS="$ASFLAGS -DSTACK_ALIGNMENT=$stack_alignment"
+ 
+ # skip endianness check for Intel Compiler and MSVS, as all supported platforms are little. each have flags that will cause the check to fail as well
+ CPU_ENDIAN="little-endian"

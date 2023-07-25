@@ -44,12 +44,12 @@ int enctheoraInit( hb_work_object_t * w, hb_job_t * job )
 
     pv->job = job;
 
-    if( job->pass_id == HB_PASS_ENCODE_1ST ||
-        job->pass_id == HB_PASS_ENCODE_2ND )
+    if( job->pass_id == HB_PASS_ENCODE_ANALYSIS ||
+        job->pass_id == HB_PASS_ENCODE_FINAL )
     {
         char * filename;
         filename = hb_get_temporary_filename("theora.log");
-        if ( job->pass_id == HB_PASS_ENCODE_1ST )
+        if ( job->pass_id == HB_PASS_ENCODE_ANALYSIS )
         {
             pv->file = hb_fopen(filename, "wb");
         }
@@ -117,8 +117,8 @@ int enctheoraInit( hb_work_object_t * w, hb_job_t * job )
     {
         hb_log("theora: Could not set soft ratecontrol");
     }
-    if( job->pass_id == HB_PASS_ENCODE_1ST ||
-        job->pass_id == HB_PASS_ENCODE_2ND )
+    if( job->pass_id == HB_PASS_ENCODE_ANALYSIS ||
+        job->pass_id == HB_PASS_ENCODE_FINAL )
     {
         arg = keyframe_frequency * 7 >> 1;
         ret = th_encode_ctl(pv->ctx, TH_ENCCTL_SET_RATE_BUFFER, &arg, sizeof(arg));
@@ -128,7 +128,7 @@ int enctheoraInit( hb_work_object_t * w, hb_job_t * job )
         }
     }
 
-    if( job->pass_id == HB_PASS_ENCODE_1ST )
+    if( job->pass_id == HB_PASS_ENCODE_ANALYSIS )
     {
         unsigned char *buffer;
         int bytes;
@@ -146,7 +146,7 @@ int enctheoraInit( hb_work_object_t * w, hb_job_t * job )
         }
         fflush( pv->file );
     }
-    if( job->pass_id == HB_PASS_ENCODE_2ND )
+    if( job->pass_id == HB_PASS_ENCODE_FINAL )
     {
         /* Enable the second pass here.
          * We make this call just to set the encoder into 2-pass mode, because
@@ -231,7 +231,7 @@ int enctheoraWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
         *buf_out = in;
         *buf_in = NULL;
         th_encode_packetout( pv->ctx, 1, &op );
-        if( job->pass_id == HB_PASS_ENCODE_1ST )
+        if( job->pass_id == HB_PASS_ENCODE_ANALYSIS )
         {
             unsigned char *buffer;
             int bytes;
@@ -254,7 +254,7 @@ int enctheoraWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
         return HB_WORK_DONE;
     }
 
-    if( job->pass_id == HB_PASS_ENCODE_2ND )
+    if( job->pass_id == HB_PASS_ENCODE_FINAL )
     {
         for(;;)
         {
@@ -333,7 +333,7 @@ int enctheoraWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
 
     th_encode_ycbcr_in( pv->ctx, ycbcr );
 
-    if( job->pass_id == HB_PASS_ENCODE_1ST )
+    if( job->pass_id == HB_PASS_ENCODE_ANALYSIS )
     {
         unsigned char *buffer;
         int bytes;

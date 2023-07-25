@@ -141,11 +141,6 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // sleep is defined in milliseconds
 #define hb_qsv_sleep(x) av_usleep((x)*1000)
 
-#define HB_QSV_VERSION_ATLEAST(MAJOR, MINOR)   \
-    (MFX_VERSION_MAJOR > (MAJOR) ||         \
-     MFX_VERSION_MAJOR == (MAJOR) && MFX_VERSION_MINOR >= (MINOR))
-#define HB_QSV_ONEVPL HB_QSV_VERSION_ATLEAST(2, 0)
-
 #define HB_QSV_ZERO_MEMORY(VAR)                    {memset(&VAR, 0, sizeof(VAR));}
 #define HB_QSV_ALIGN32(X)                      (((mfxU32)((X)+31)) & (~ (mfxU32)31))
 #define HB_QSV_ALIGN16(value)                  (((value + 15) >> 4) << 4)
@@ -283,9 +278,7 @@ typedef struct hb_qsv_space {
 
     mfxFrameAllocResponse response;
     mfxFrameAllocRequest request[2];    // [0] - in, [1] - out, if needed
-#if !HB_QSV_ONEVPL
-    mfxExtOpaqueSurfaceAlloc ext_opaque_alloc;
-#endif
+
     mfxExtBuffer **p_ext_params;
     uint16_t p_ext_param_num;
 
@@ -342,17 +335,18 @@ typedef struct hb_qsv_context {
     int la_is_enabled;
     int qsv_hw_filters_are_enabled;
     int full_path_is_enabled;
-    char *vpp_scale_mode;
-    char *vpp_interpolation_method;
-    char *qsv_device;
+    const char *vpp_scale_mode;
+    const char *vpp_interpolation_method;
     int dx_index;
     AVBufferRef *hb_hw_device_ctx;
+    AVBufferRef *hb_ffmpeg_qsv_hw_frames_ctx;
     HBQSVFramesContext *hb_dec_qsv_frames_ctx;
     HBQSVFramesContext *hb_vpp_qsv_frames_ctx;
 
     mfxHDL device_manager_handle;
     mfxHandleType device_manager_handle_type;
     void *device_context;
+    hb_display_t *display;
 } hb_qsv_context;
 
 typedef enum {
@@ -379,9 +373,6 @@ typedef struct hb_qsv_alloc_buffer {
 typedef struct hb_qsv_allocators_space {
     hb_qsv_space *space;
     mfxFrameAllocator frame_alloc;
-#if !HB_QSV_ONEVPL
-    mfxBufferAllocator buffer_alloc;
-#endif
 } hb_qsv_allocators_space;
 
 typedef struct hb_qsv_config {
@@ -509,7 +500,6 @@ int hb_qsv_get_free_surface(hb_qsv_space *, hb_qsv_context *, mfxFrameInfo *,
                      hb_qsv_split);
 int hb_qsv_get_free_encode_task(hb_qsv_list *);
 
-int av_is_qsv_available(mfxIMPL, mfxVersion *);
 int hb_qsv_wait_on_sync(hb_qsv_context *, hb_qsv_stage *);
 
 void hb_qsv_add_context_usage(hb_qsv_context *, int);
@@ -520,13 +510,13 @@ void hb_qsv_pipe_list_clean(hb_qsv_list **);
 void hb_qsv_add_stagee(hb_qsv_list **, hb_qsv_stage *, int);
 hb_qsv_stage *hb_qsv_get_last_stage(hb_qsv_list *);
 hb_qsv_list *hb_qsv_pipe_by_stage(hb_qsv_list *, hb_qsv_stage *);
-void hb_qsv_flush_stages(hb_qsv_list *, hb_qsv_list **);
+void hb_qsv_flush_stages(hb_qsv_list *, hb_qsv_list **, int);
 
 void hb_qsv_dts_ordered_insert(hb_qsv_context *, int, int, int64_t, int);
 void hb_qsv_dts_pop(hb_qsv_context *);
 
 hb_qsv_stage *hb_qsv_stage_init(void);
-void hb_qsv_stage_clean(hb_qsv_stage **);
+void hb_qsv_stage_clean(hb_qsv_stage **, int);
 int hb_qsv_context_clean(hb_qsv_context *, int);
 
 int ff_qsv_is_sync_in_pipe(mfxSyncPoint *, hb_qsv_context *);

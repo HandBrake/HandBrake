@@ -1,4 +1,4 @@
-/* -*- Mode: C; indent-tabs-mode: t; c-basic-offset: 4; tab-width: 4 -*- */
+/* -*- Mode: C; indent-tabs-mode: nil; c-basic-offset: 4; tab-width: 4 -*- */
 /*
  * resources.c
  * Copyright (C) John Stebbins 2008-2022 <stebbins@stebbins>
@@ -21,11 +21,13 @@
  *  Boston, MA  02110-1301, USA.
  */
 
+#include "ghbcompat.h"
+
 #include <glib.h>
 #include <glib-object.h>
 #include <glib/gstdio.h>
 #include <string.h>
-#include "ghbcompat.h"
+
 #include "settings.h"
 #include "resources.h"
 #include "values.h"
@@ -34,7 +36,7 @@
 static GhbValue *resources;
 
 void
-ghb_resource_init()
+ghb_resource_init (void)
 {
     GhbValue *val;
     gsize data_size;
@@ -77,7 +79,7 @@ ghb_resource_get(const gchar *name)
 }
 
 void
-ghb_resource_free()
+ghb_resource_free (void)
 {
     ghb_value_free(&resources);
 }

@@ -13,7 +13,7 @@
 #define CHROMA_SMOOTH_STRENGTH_DEFAULT 0.25
 #define CHROMA_SMOOTH_SIZE_DEFAULT 7
 #define CHROMA_SMOOTH_SIZE_MIN 3
-#define CHROMA_SMOOTH_SIZE_MAX 63
+#define CHROMA_SMOOTH_SIZE_MAX 15
 
 typedef struct
 {
@@ -132,7 +132,7 @@ static void name##_##nbits(const uint8_t *frame_src,                            
             src2 = src;                                                                                     \
         }                                                                                                   \
                                                                                                             \
-        memset(SR, 0, sizeof(SR[0]) * (2 * steps - 1));                                                     \
+        memset(SR, 0, sizeof(SR[0]) * (2 * steps));                                                         \
                                                                                                             \
         for (x = -steps; x < width + steps; x++)                                                            \
         {                                                                                                   \
@@ -389,7 +389,7 @@ static int chroma_smooth_work_thread(hb_filter_object_t *filter,
                       ctx, tctx);
     }
 
-    out->s = in->s;
+    hb_buffer_copy_props(out, in);
     *buf_out = out;
 
     return HB_FILTER_OK;

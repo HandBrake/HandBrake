@@ -24,9 +24,25 @@
     return self;
 }
 
+- (instancetype)initWithAlreadyAccessedObject:(id<HBSecurityScope>)object
+{
+    self = [super init];
+    if (self)
+    {
+        _object = object;
+        _accessed = YES;
+    }
+    return self;
+}
+
 + (instancetype)tokenWithObject:(id<HBSecurityScope>)object
 {
     return [[self alloc] initWithObject:object];
+}
+
++ (instancetype)tokenWithAlreadyAccessedObject:(id<HBSecurityScope>)object
+{
+    return [[self alloc] initWithAlreadyAccessedObject:object];
 }
 
 - (void)dealloc

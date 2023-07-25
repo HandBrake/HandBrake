@@ -12,8 +12,9 @@
 
 @interface HBSubtitlesController ()
 
-@property (nonatomic, readwrite, strong) HBSubtitlesDefaultsController *defaultsController;
 @property (nonatomic, weak) IBOutlet NSTableView *table;
+@property (nonatomic, strong) NSArray<HBSecurityAccessToken *> *fileTokens;
+@property (nonatomic, strong) HBSubtitlesDefaultsController *defaultsController;
 
 @end
 
@@ -23,6 +24,12 @@
 {
     self = [super initWithNibName:@"Subtitles" bundle:nil];
     return self;
+}
+
+- (void)setSubtitles:(HBSubtitles *)subtitles
+{
+    _subtitles = subtitles;
+    self.fileTokens = nil;
 }
 
 #pragma mark - Actions
@@ -113,11 +120,15 @@
     {
         if (result == NSModalResponseOK)
         {
+            NSMutableArray<HBSecurityAccessToken *> *tokens = [[NSMutableArray alloc] init];
+            [tokens addObjectsFromArray:self.fileTokens];
             for (NSURL *importFileURL in panel.URLs)
             {
+                [tokens addObject:[HBSecurityAccessToken tokenWithAlreadyAccessedObject:importFileURL]];
                 [NSUserDefaults.standardUserDefaults setURL:importFileURL.URLByDeletingLastPathComponent forKey:@"LastExternalSubImportDirectoryURL"];
                 [self.subtitles addExternalTrackFromURL:importFileURL];
             }
+            self.fileTokens = tokens;
         }
     }];
 }

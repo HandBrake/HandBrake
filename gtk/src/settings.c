@@ -1,4 +1,4 @@
-/* -*- Mode: C; indent-tabs-mode: t; c-basic-offset: 4; tab-width: 4 -*- */
+/* -*- Mode: C; indent-tabs-mode: nil; c-basic-offset: 4; tab-width: 4 -*- */
 /*
  * settings.c
  * Copyright (C) John Stebbins 2008-2022 <stebbins@stebbins>
@@ -21,12 +21,13 @@
  *  Boston, MA  02110-1301, USA.
  */
 
+#include "ghbcompat.h"
+
 #include <fcntl.h>
 #include <unistd.h>
 #include <glib.h>
 #include <glib/gstdio.h>
 #include <string.h>
-#include "ghbcompat.h"
 #include "settings.h"
 #include "hb-backend.h"
 #include "values.h"
@@ -37,7 +38,7 @@ void ghb_pref_audio_init(signal_user_data_t *ud);
 GObject*
 debug_get_object(GtkBuilder* b, const gchar *n)
 {
-    g_message("name %s\n", n);
+    g_debug("name %s\n", n);
     return gtk_builder_get_object(b, n);
 }
 
@@ -67,8 +68,9 @@ ghb_get_setting_key(GtkWidget *widget)
 {
     const gchar *name;
 
-    g_debug("get_setting_key ()\n");
+    ghb_log_func();
     if (widget == NULL) return NULL;
+    g_return_val_if_fail(GTK_IS_WIDGET(widget), NULL);
     name = gtk_buildable_get_name(GTK_BUILDABLE(widget));
 
     if (name == NULL || !strncmp(name, "Gtk", 3))
@@ -78,7 +80,7 @@ ghb_get_setting_key(GtkWidget *widget)
     if (name == NULL)
     {
         // Bad widget pointer?  Should never happen.
-        g_debug("Bad widget\n");
+        g_debug("Bad widget");
         return NULL;
     }
     return name;
@@ -93,7 +95,7 @@ ghb_widget_value(GtkWidget *widget)
 
     if (widget == NULL)
     {
-        g_debug("NULL widget\n");
+        g_debug("NULL widget");
         return NULL;
     }
 
@@ -107,7 +109,7 @@ ghb_widget_value(GtkWidget *widget)
     else if (type == GTK_TYPE_RADIO_BUTTON)
     {
         gboolean bval;
-#if !GTK_CHECK_VERSION(3, 90, 0)
+#if !GTK_CHECK_VERSION(4, 4, 0)
         bval = gtk_toggle_button_get_inconsistent(GTK_TOGGLE_BUTTON(widget));
         if (bval)
         {
@@ -304,7 +306,7 @@ ghb_widget_to_setting(GhbValue *settings, GtkWidget *widget)
     GhbValue *value;
 
     if (widget == NULL) return;
-    g_debug("ghb_widget_to_setting");
+    ghb_log_func();
     // Find corresponding setting
     key = ghb_get_setting_key(widget);
     if (key == NULL) return;
@@ -315,7 +317,7 @@ ghb_widget_to_setting(GhbValue *settings, GtkWidget *widget)
     }
     else
     {
-        g_debug("No value found for %s\n", key);
+        g_debug("No value found for %s", key);
     }
 }
 
@@ -507,7 +509,7 @@ ghb_ui_update_from_settings(signal_user_data_t *ud, const gchar *name, const Ghb
     GObject *object;
     GhbValue * value;
 
-    g_debug("ghb_ui_update_from_settings() %s", name);
+    ghb_log_func_str(name);
     if (name == NULL)
         return 0;
     value = ghb_dict_get_value(settings, name);
@@ -516,7 +518,7 @@ ghb_ui_update_from_settings(signal_user_data_t *ud, const gchar *name, const Ghb
     object = GHB_OBJECT(ud->builder, name);
     if (object == NULL)
     {
-        g_debug("Failed to find widget for key: %s\n", name);
+        g_debug("Failed to find widget for key: %s", name);
         return -1;
     }
     ghb_update_widget((GtkWidget*)object, value);
@@ -531,13 +533,13 @@ ghb_ui_update(signal_user_data_t *ud, const gchar *name, const GhbValue *value)
 {
     GObject *object;
 
-    g_debug("ghb_ui_update() %s", name);
+    ghb_log_func_str(name);
     if (name == NULL || value == NULL)
         return 0;
     object = GHB_OBJECT(ud->builder, name);
     if (object == NULL)
     {
-        g_debug("Failed to find widget for key: %s\n", name);
+        g_debug("Failed to find widget for key: %s", name);
         return -1;
     }
     ghb_update_widget((GtkWidget*)object, value);
@@ -556,13 +558,13 @@ ghb_ui_settings_update(
 {
     GObject *object;
 
-    g_debug("ghb_ui_update() %s", name);
+    ghb_log_func_str(name);
     if (name == NULL || value == NULL)
         return 0;
     object = GHB_OBJECT(ud->builder, name);
     if (object == NULL)
     {
-        g_debug("Failed to find widget for key: %s\n", name);
+        g_debug("Failed to find widget for key: %s", name);
         return -1;
     }
     ghb_update_widget((GtkWidget*)object, value);
@@ -571,4 +573,3 @@ ghb_ui_settings_update(
     ghb_widget_to_setting(settings, (GtkWidget*)object);
     return 0;
 }
-

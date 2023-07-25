@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="18122" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="21507" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="18122"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="21507"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -35,7 +35,7 @@
                     </connections>
                 </textField>
                 <textField toolTip="Average Bitrate varies quality to ensure the data rate remains relatively consistent throughout the video." verticalHuggingPriority="750" textCompletion="NO" translatesAutoresizingMaskIntoConstraints="NO" id="A3o-Zx-OfM">
-                    <rect key="frame" x="501" y="298" width="78" height="19"/>
+                    <rect key="frame" x="520" y="298" width="78" height="19"/>
                     <constraints>
                         <constraint firstAttribute="width" constant="78" id="EZ2-qD-5pb"/>
                     </constraints>
@@ -75,7 +75,7 @@
                     </connections>
                 </textField>
                 <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="50" translatesAutoresizingMaskIntoConstraints="NO" id="Pai-3Q-Gs3">
-                    <rect key="frame" x="524" y="345" width="11" height="14"/>
+                    <rect key="frame" x="543" y="345" width="11" height="14"/>
                     <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="left" title="0" id="bvD-W7-O0N">
                         <numberFormatter key="formatter" formatterBehavior="default10_4" numberStyle="decimal" minimumIntegerDigits="1" maximumIntegerDigits="2000000000" maximumFractionDigits="3" id="wYW-16-bWA"/>
                         <font key="font" metaFont="controlContent" size="11"/>
@@ -89,7 +89,7 @@
                     </connections>
                 </textField>
                 <popUpButton toolTip="Framerate (Frames Per Second). Number of pictures displayed during each second of video." verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="9tc-EO-QMd">
-                    <rect key="frame" x="113" y="315" width="151" height="22"/>
+                    <rect key="frame" x="113" y="316" width="151" height="22"/>
                     <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="clipping" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" id="0VS-Ah-Q3S">
                         <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="controlContent" size="11"/>
@@ -116,9 +116,9 @@
                     </connections>
                 </popUpButton>
                 <button translatesAutoresizingMaskIntoConstraints="NO" id="bnV-aE-FVh">
-                    <rect key="frame" x="360" y="274" width="110" height="16"/>
-                    <string key="toolTip">2-pass encoding analyzes the entire source video before encoding. The information gathered enables the encoder to make more informed decisions about quality and data rate in Average Bitrate mode.</string>
-                    <buttonCell key="cell" type="check" title="2-pass encoding" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" inset="2" id="nPA-nO-Eik">
+                    <rect key="frame" x="360" y="274" width="129" height="16"/>
+                    <string key="toolTip">Multi-pass encoding analyzes the entire source video before encoding. The information gathered enables the encoder to make more informed decisions about quality and data rate in Average Bitrate mode.</string>
+                    <buttonCell key="cell" type="check" title="Multi-pass encoding" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" inset="2" id="nPA-nO-Eik">
                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                         <font key="font" metaFont="controlContent" size="11"/>
                     </buttonCell>
@@ -132,13 +132,8 @@
                                 <string key="NSValueTransformerName">NSIsNotNil</string>
                             </dictionary>
                         </binding>
-                        <binding destination="-2" name="enabled" keyPath="self.video.qualityType" id="7aV-7j-MzB">
-                            <dictionary key="options">
-                                <string key="NSValueTransformerName">NSNegateBoolean</string>
-                            </dictionary>
-                        </binding>
-                        <binding destination="-2" name="value" keyPath="self.video.twoPass" id="mOJ-b3-YKx"/>
-                        <binding destination="-2" name="enabled3" keyPath="self.video.twoPassSupported" previousBinding="c4g-dz-q05" id="rwS-GN-5Dd">
+                        <binding destination="-2" name="value" keyPath="self.video.multiPass" id="oMA-Mr-zX3"/>
+                        <binding destination="-2" name="enabled3" keyPath="self.video.multiPassSupported" previousBinding="c4g-dz-q05" id="e4I-LB-isN">
                             <dictionary key="options">
                                 <integer key="NSMultipleValuesPlaceholder" value="-1"/>
                                 <integer key="NSNoSelectionPlaceholder" value="-1"/>
@@ -146,11 +141,16 @@
                                 <integer key="NSNullPlaceholder" value="-1"/>
                             </dictionary>
                         </binding>
+                        <binding destination="-2" name="enabled" keyPath="self.video.qualityType" id="7aV-7j-MzB">
+                            <dictionary key="options">
+                                <string key="NSValueTransformerName">NSNegateBoolean</string>
+                            </dictionary>
+                        </binding>
                     </connections>
                 </button>
-                <button toolTip="Turbo first pass speeds up the first pass of a 2-pass encode for a slight penalty to analysis." translatesAutoresizingMaskIntoConstraints="NO" id="olm-zg-k9Y">
-                    <rect key="frame" x="500" y="274" width="103" height="16"/>
-                    <buttonCell key="cell" type="check" title="Turbo first pass" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" inset="2" id="vSc-VB-NEv">
+                <button toolTip="Turbo first pass speeds up the analysis pass of a multi-pass encode for a slight penalty to analysis." translatesAutoresizingMaskIntoConstraints="NO" id="olm-zg-k9Y">
+                    <rect key="frame" x="519" y="274" width="125" height="16"/>
+                    <buttonCell key="cell" type="check" title="Turbo analysis pass" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" inset="2" id="vSc-VB-NEv">
                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                         <font key="font" metaFont="controlContent" size="11"/>
                     </buttonCell>
@@ -164,13 +164,18 @@
                                 <string key="NSValueTransformerName">NSIsNotNil</string>
                             </dictionary>
                         </binding>
+                        <binding destination="-2" name="hidden" keyPath="self.video.multiPass" previousBinding="Fbv-qd-JTg" id="rIt-i4-ObE">
+                            <dictionary key="options">
+                                <string key="NSValueTransformerName">NSNegateBoolean</string>
+                            </dictionary>
+                        </binding>
                         <binding destination="-2" name="enabled" keyPath="self.video.qualityType" id="iZE-er-OQN">
                             <dictionary key="options">
                                 <string key="NSValueTransformerName">NSNegateBoolean</string>
                             </dictionary>
                         </binding>
-                        <binding destination="-2" name="value" keyPath="self.video.turboTwoPass" id="4A4-hg-qhy"/>
-                        <binding destination="-2" name="hidden2" keyPath="self.video.turboTwoPassSupported" previousBinding="jpH-IH-e0p" id="BFH-ET-uPq">
+                        <binding destination="-2" name="value" keyPath="self.video.turboMultiPass" id="4Ms-BT-qNe"/>
+                        <binding destination="-2" name="hidden2" keyPath="self.video.turboMultiPassSupported" previousBinding="rIt-i4-ObE" id="dcp-wp-0qC">
                             <dictionary key="options">
                                 <integer key="NSMultipleValuesPlaceholder" value="-1"/>
                                 <integer key="NSNoSelectionPlaceholder" value="-1"/>
@@ -179,15 +184,10 @@
                                 <string key="NSValueTransformerName">NSNegateBoolean</string>
                             </dictionary>
                         </binding>
-                        <binding destination="-2" name="hidden" keyPath="self.video.twoPass" previousBinding="Fbv-qd-JTg" id="jpH-IH-e0p">
-                            <dictionary key="options">
-                                <string key="NSValueTransformerName">NSNegateBoolean</string>
-                            </dictionary>
-                        </binding>
                     </connections>
                 </button>
                 <popUpButton toolTip="Video encoder. Determines video type and settings used during encoding." verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="xwK-Yu-a1e">
-                    <rect key="frame" x="113" y="339" width="151" height="22"/>
+                    <rect key="frame" x="113" y="340" width="151" height="22"/>
                     <constraints>
                         <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="143" id="8aS-6C-FvY"/>
                     </constraints>
@@ -272,7 +272,7 @@ x264 is lossless at RF 0.</string>
                     </connections>
                 </slider>
                 <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="60" translatesAutoresizingMaskIntoConstraints="NO" id="1au-ZO-l1i">
-                    <rect key="frame" x="499" y="345" width="21" height="14"/>
+                    <rect key="frame" x="518" y="345" width="21" height="14"/>
                     <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="left" title="RF:" id="rRB-9F-pHn">
                         <font key="font" metaFont="controlContent" size="11"/>
                         <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -285,7 +285,7 @@ x264 is lossless at RF 0.</string>
                     </connections>
                 </textField>
                 <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Vae-sv-7Up">
-                    <rect key="frame" x="344" y="344.5" width="111" height="15"/>
+                    <rect key="frame" x="344" y="344.5" width="130" height="15"/>
                     <buttonCell key="cell" type="radio" title="Constant Quality" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" inset="2" id="ZjL-cY-O5f">
                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                         <font key="font" metaFont="controlContent" size="11"/>
@@ -308,7 +308,7 @@ x264 is lossless at RF 0.</string>
                     </connections>
                 </button>
                 <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="brN-9J-qa1">
-                    <rect key="frame" x="344" y="299.5" width="144" height="15"/>
+                    <rect key="frame" x="344" y="299.5" width="163" height="15"/>
                     <buttonCell key="cell" type="radio" title="Average Bitrate (kbps):" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" inset="2" id="VQe-CK-YDR">
                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                         <font key="font" metaFont="controlContent" size="11"/>
@@ -327,7 +327,7 @@ x264 is lossless at RF 0.</string>
                     </connections>
                 </button>
                 <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Fc1-EX-DWd">
-                    <rect key="frame" x="116" y="298.5" width="120" height="15"/>
+                    <rect key="frame" x="116" y="299.5" width="120" height="15"/>
                     <buttonCell key="cell" type="radio" title="Variable Framerate" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" inset="2" id="zZo-75-1WG">
                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                         <font key="font" metaFont="controlContent" size="11"/>
@@ -346,7 +346,7 @@ x264 is lossless at RF 0.</string>
                     </connections>
                 </button>
                 <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Y3k-tv-pIb">
-                    <rect key="frame" x="116" y="276.5" width="126" height="15"/>
+                    <rect key="frame" x="116" y="277.5" width="126" height="15"/>
                     <buttonCell key="cell" type="radio" title="Constant Framerate" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" inset="2" id="6Dd-IP-Pwt">
                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                         <font key="font" metaFont="controlContent" size="11"/>
@@ -379,7 +379,7 @@ x264 is lossless at RF 0.</string>
                                     </connections>
                                 </textField>
                                 <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="200" translatesAutoresizingMaskIntoConstraints="NO" id="O1a-XY-efg">
-                                    <rect key="frame" x="58" y="135" width="42" height="14"/>
+                                    <rect key="frame" x="58" y="134" width="42" height="14"/>
                                     <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="right" title="Tune:" id="fzT-im-zKN">
                                         <font key="font" metaFont="controlContent" size="11"/>
                                         <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -390,7 +390,7 @@ x264 is lossless at RF 0.</string>
                                     </connections>
                                 </textField>
                                 <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="200" translatesAutoresizingMaskIntoConstraints="NO" id="LUQ-6T-KDP">
-                                    <rect key="frame" x="58" y="111" width="42" height="14"/>
+                                    <rect key="frame" x="58" y="110" width="42" height="14"/>
                                     <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="right" title="Profile:" id="Hho-GY-qOR">
                                         <font key="font" metaFont="controlContent" size="11"/>
                                         <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -401,7 +401,7 @@ x264 is lossless at RF 0.</string>
                                     </connections>
                                 </textField>
                                 <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="200" translatesAutoresizingMaskIntoConstraints="NO" id="Axj-zl-Cyb">
-                                    <rect key="frame" x="58" y="87" width="42" height="14"/>
+                                    <rect key="frame" x="58" y="86" width="42" height="14"/>
                                     <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="right" title="Level:" id="sTM-lk-DBC">
                                         <font key="font" metaFont="controlContent" size="11"/>
                                         <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -472,7 +472,7 @@ x264 is lossless at RF 0.</string>
                                     </connections>
                                 </popUpButton>
                                 <button translatesAutoresizingMaskIntoConstraints="NO" id="stU-Fo-Avu">
-                                    <rect key="frame" x="250" y="134" width="87" height="16"/>
+                                    <rect key="frame" x="250" y="133" width="87" height="16"/>
                                     <string key="toolTip">Fast Decode uses settings that reduce CPU usage during playback of the encoded video. Useful for devices that struggle to play video without stuttering.</string>
                                     <buttonCell key="cell" type="check" title="Fast Decode" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" inset="2" id="EcY-w1-bc8">
                                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -489,7 +489,7 @@ x264 is lossless at RF 0.</string>
                                     </connections>
                                 </button>
                                 <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="300" translatesAutoresizingMaskIntoConstraints="NO" id="t4D-CZ-8G3">
-                                    <rect key="frame" x="248" y="111" width="104" height="14"/>
+                                    <rect key="frame" x="248" y="110" width="104" height="14"/>
                                     <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="right" title="Additional Options:" id="ja7-Zr-y1P">
                                         <font key="font" metaFont="controlContent" size="11"/>
                                         <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -500,7 +500,7 @@ x264 is lossless at RF 0.</string>
                                     </connections>
                                 </textField>
                                 <textField horizontalHuggingPriority="240" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" textCompletion="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rbo-w6-ENd">
-                                    <rect key="frame" x="358" y="83" width="542" height="42"/>
+                                    <rect key="frame" x="358" y="82" width="542" height="42"/>
                                     <string key="toolTip">Additional video encoder options. For advanced use only.
 
 Syntax: option-1=foo:opt2=bar,baz</string>

@@ -15,7 +15,7 @@ typedef struct
     hb_handle_t  * h;
     volatile int * die;
 
-    char         * path;
+    hb_list_t    * paths;
     int            title_index;
     hb_title_set_t * title_set;
 
@@ -31,6 +31,9 @@ typedef struct
     
     int            crop_threshold_frames;
     int            crop_threshold_pixels;
+    
+    hb_list_t    * exclude_extensions;
+    
 } hb_scan_t;
 
 #define PREVIEW_READ_THRESH (200)
@@ -46,6 +49,7 @@ static void UpdateState3(hb_scan_t *scan, int preview);
 static int get_color_prim(int color_primaries, hb_geometry_t geometry, hb_rational_t rate);
 static int get_color_transfer(int color_trc);
 static int get_color_matrix(int colorspace, hb_geometry_t geometry);
+static int get_color_range(int color_range);
 
 static const char *aspect_to_string(hb_rational_t *dar)
 {
@@ -184,18 +188,47 @@ static int get_color_matrix(int colorspace, hb_geometry_t geometry)
     }
 }
 
+static int get_color_range(int color_range)
+{
+    switch (color_range)
+    {
+        case AVCOL_RANGE_MPEG:
+            return AVCOL_RANGE_MPEG;
+        case AVCOL_RANGE_JPEG:
+            return AVCOL_RANGE_JPEG;
+        default:
+            return AVCOL_RANGE_MPEG;
+    }
+}
+
+static const char * const known_file_types[] =
+{
+    "mp4", "m4v", "mov", "flv", "mkv", "avi", "webm", "wmv",  NULL
+};
+
+static int is_known_filetype(const char *filename)
+{
+    for (int i = 0; known_file_types[i] != NULL; i++)
+    {
+        if (hb_str_ends_with(filename, known_file_types[i]))
+        {
+            return 1;
+        }
+    }
+    return 0;
+}
 
 hb_thread_t * hb_scan_init( hb_handle_t * handle, volatile int * die,
-                            const char * path, int title_index,
+                            hb_list_t *  paths, int title_index,
                             hb_title_set_t * title_set, int preview_count,
                             int store_previews, uint64_t min_duration,
-                            int crop_threshold_frames, int crop_threshold_pixels)
+                            int crop_threshold_frames, int crop_threshold_pixels, hb_list_t * exclude_extensions)
 {
     hb_scan_t * data = calloc( sizeof( hb_scan_t ), 1 );
 
     data->h            = handle;
     data->die          = die;
-    data->path         = strdup( path );
+    data->paths        = hb_string_list_copy(paths);
     data->title_index  = title_index;
     data->title_set    = title_set;
 
@@ -205,6 +238,7 @@ hb_thread_t * hb_scan_init( hb_handle_t * handle, volatile int * die,
     
     data->crop_threshold_frames = crop_threshold_frames;
     data->crop_threshold_pixels = crop_threshold_pixels;
+    data->exclude_extensions    = hb_string_list_copy(exclude_extensions);
     
     // Initialize scan state
     hb_state_t state;
@@ -232,9 +266,15 @@ static void ScanFunc( void * _data )
     data->bd = NULL;
     data->dvd = NULL;
     data->stream = NULL;
-
+        
+    char *single_path = NULL;
+    if (hb_list_count(data->paths) == 1)
+    {
+        single_path = hb_list_item(data->paths, 0);
+    }
+        
     /* Try to open the path as a DVD. If it fails, try as a file */
-    if( ( data->bd = hb_bd_init( data->h, data->path ) ) )
+    if( single_path != NULL && !is_known_filetype(single_path) && ( data->bd = hb_bd_init( data->h, single_path ) ) )
     {
         hb_log( "scan: BD has %d title(s)",
                 hb_bd_title_count( data->bd ) );
@@ -259,7 +299,7 @@ static void ScanFunc( void * _data )
                                           data->title_set->list_title );
         }
     }
-    else if( ( data->dvd = hb_dvd_init( data->h, data->path ) ) )
+    else if( single_path != NULL && !is_known_filetype(single_path) && ( data->dvd = hb_dvd_init( data->h, single_path ) ) )
     {
         hb_log( "scan: DVD has %d title(s)",
                 hb_dvd_title_count( data->dvd ) );
@@ -284,7 +324,7 @@ static void ScanFunc( void * _data )
                                            data->title_set->list_title );
         }
     }
-    else if ( ( data->batch = hb_batch_init( data->h, data->path ) ) )
+    else if (single_path != NULL && ( data->batch = hb_batch_init( data->h, single_path, data->exclude_extensions ) ) )
     {
         if( data->title_index )
         {
@@ -311,7 +351,26 @@ static void ScanFunc( void * _data )
             }
         }
     }
-    else
+    else if (hb_list_count(data->paths) > 1) // We have many file paths to process.
+    {
+        // If dragging a batch of files, maybe not, but if the UI's implement a recursive folder maybe?
+        for (i = 0; i < hb_list_count( data->paths ); i++)
+        {
+            single_path = hb_list_item(data->paths, i);
+
+            UpdateState1(data, i + 1);
+
+            if (hb_is_valid_batch_path(single_path))
+            {
+                title = hb_batch_title_scan_single(data->h, single_path, (int)i + 1);
+                if (title != NULL)
+                {
+                    hb_list_add(data->title_set->list_title, title);
+                }
+            }
+        }
+    }
+    else // Single File.
     {
         // Title index 0 is not a valid title number and means scan all titles.
         // So set title index to 1 in this scenario.
@@ -321,8 +380,8 @@ static void ScanFunc( void * _data )
         // mode.
         if (data->title_index == 0)
             data->title_index = 1;
-        hb_title_t * title = hb_title_init( data->path, data->title_index );
-        data->stream = hb_stream_open(data->h, data->path, title, 1);
+        hb_title_t * title = hb_title_init( single_path, data->title_index );
+        data->stream = hb_stream_open(data->h, single_path, title, 1);
         if (data->stream != NULL)
         {
             title = hb_stream_title_scan( data->stream, title );
@@ -426,9 +485,16 @@ static void ScanFunc( void * _data )
         title      = hb_list_item( data->title_set->list_title, i );
         title->flags |= HBTF_SCAN_COMPLETE;
     }
+
     if (hb_list_count(data->title_set->list_title) > 0)
     {
-        data->title_set->path = strdup(data->path);
+        if (single_path != NULL)
+        {
+            data->title_set->path = strdup(single_path);
+        } else
+        {
+            data->title_set->path = NULL; // we have many paths.
+        }
     }
     else
     {
@@ -454,7 +520,25 @@ finish:
     {
         hb_batch_close( &data->batch );
     }
-    free( data->path );
+
+    // Clear down any file paths.
+    char *output_filepath;
+    while ((output_filepath = hb_list_item(data->paths, 0)))
+    {
+        hb_list_rem(data->paths, output_filepath);
+        free(output_filepath);
+    }
+    hb_list_close(&data->paths);
+
+    // clean up excluded extensions list
+    char *extension;
+    while ((extension = hb_list_item(data->exclude_extensions, 0)))
+    {
+        hb_list_rem(data->exclude_extensions, extension);
+        free(extension);
+    }
+    hb_list_close(&data->exclude_extensions);
+
     free( data );
     _data = NULL;
     hb_buffer_pool_free();
@@ -717,9 +801,10 @@ static int DecodePreviews( hb_scan_t * data, hb_title_t * title, int flush )
     {
         stream = hb_stream_open(data->h, title->path, title, 0);
     }
-    else if (data->stream)
+    else 
     {
-        stream = hb_stream_open(data->h, data->path, title, 0);
+        // We have a batch of files.
+        stream = hb_stream_open(data->h, title->path, title, 0);
     }
 
     if (title->video_codec == WORK_NONE)
@@ -1154,11 +1239,32 @@ skip_preview:
                 title->geometry.par.num != vid_info.geometry.par.num &&
                 title->geometry.par.den != vid_info.geometry.par.den)
             {
-                hb_log("WARNING: Video PAR %d:%d != container PAR %d:%d",
-                    vid_info.geometry.par.num, vid_info.geometry.par.den,
-                    title->geometry.par.num, title->geometry.par.den);
+                hb_log("WARNING: bitstream PAR %d:%d != container PAR %d:%d",
+                       vid_info.geometry.par.num, vid_info.geometry.par.den,
+                       title->geometry.par.num, title->geometry.par.den);
             }
-            title->geometry.par = vid_info.geometry.par;
+            /*
+             * Don't override container-level non-square
+             * pixels with bitstream-level square pixels.
+             *
+             * Allows fixing absent bitstream PAR at the container level.
+             *
+             * Still prefer bitstream-level PAR when set, as e.g. mkvmerge will sadly round
+             * it when muxing from elementary streams, making the bitstream PAR more precise:
+             * 720x480 [SAR 32:27 DAR 16:9], SAR 853:720 DAR 853:480, 24 fps, 24 tbr, 1k tbn (default)
+             */
+            if (vid_info.geometry.par.num != 1 ||
+                vid_info.geometry.par.den != 1 ||
+                !title->geometry.par.num ||
+                !title->geometry.par.den)
+            {
+                hb_log("using bitstream PAR %d:%d", vid_info.geometry.par.num, vid_info.geometry.par.den);
+                title->geometry.par = vid_info.geometry.par;
+            }
+            else
+            {
+                hb_log("using container PAR %d:%d", title->geometry.par.num, title->geometry.par.den);
+            }
         }
         else if (!title->geometry.par.num || !title->geometry.par.den)
         {
@@ -1178,14 +1284,16 @@ skip_preview:
             title->color_transfer = get_color_transfer(title->color_transfer);
             title->color_matrix   = get_color_matrix(title->color_matrix, vid_info.geometry);
         }
-        else
+        // Let's try to guess a color profile only if the source is not Dolby Vision 5
+        // which requires the values to be unset
+        else if (title->dovi.dv_profile != 5)
         {
             title->color_prim     = get_color_prim(vid_info.color_prim, vid_info.geometry, vid_info.rate);
             title->color_transfer = get_color_transfer(vid_info.color_transfer);
             title->color_matrix   = get_color_matrix(vid_info.color_matrix, vid_info.geometry);
         }
 
-        title->color_range = vid_info.color_range;
+        title->color_range = get_color_range(vid_info.color_range);
         title->chroma_location = vid_info.chroma_location;
 
         title->video_decode_support = vid_info.video_decode_support;
@@ -1327,15 +1435,41 @@ skip_preview:
                    title->coll.max_fall);
         }
 
+        if (title->ambient.ambient_illuminance.num)
+        {
+            hb_log("scan: ambient viewing environment: ambient_illuminance=%f, ambient_light_x=%f, ambient_light_x=%f",
+                   hb_q2d(title->ambient.ambient_illuminance),
+                   hb_q2d(title->ambient.ambient_light_x),
+                   hb_q2d(title->ambient.ambient_light_y));
+        }
+
+        if (title->dovi.dv_profile > 0)
+        {
+            hb_log("scan: dolby vision configuration record: version: %d.%d, profile: %d, level: %d, rpu flag: %d, el flag: %d, bl flag: %d, compatibility id: %d",
+                   title->dovi.dv_version_major,
+                   title->dovi.dv_version_minor,
+                   title->dovi.dv_profile,
+                   title->dovi.dv_level,
+                   title->dovi.rpu_present_flag,
+                   title->dovi.el_present_flag,
+                   title->dovi.bl_present_flag,
+                   title->dovi.dv_bl_signal_compatibility_id);
+        }
+
+        if (title->hdr_10_plus)
+        {
+            hb_log("scan: hdr10+ dynamic metadata found");
+        }
+
         if (title->video_decode_support != HB_DECODE_SUPPORT_SW)
         {
             hb_log("scan: supported video decoders:%s%s%s",
-                   !(title->video_decode_support & HB_DECODE_SUPPORT_SW)    ? "" : " avcodec",
-                   !(title->video_decode_support & HB_DECODE_SUPPORT_QSV)   ? "" : " qsv",
-                   !(title->video_decode_support & HB_DECODE_SUPPORT_NVDEC) ? "" : " nvdec");
+                   !(title->video_decode_support & HB_DECODE_SUPPORT_SW)      ? "" : " avcodec",
+                   !(title->video_decode_support & HB_DECODE_SUPPORT_QSV)     ? "" : " qsv",
+                   !(title->video_decode_support & HB_DECODE_SUPPORT_HWACCEL) ? "" : " hwaccel");
         }
 
-        if( interlaced_preview_count >= ( npreviews / 2 ) )
+        if (interlaced_preview_count && interlaced_preview_count >= (npreviews / 2))
         {
             hb_log("Title is likely interlaced or telecined (%i out of %i previews). You should do something about that.",
                    interlaced_preview_count, npreviews);
@@ -1707,6 +1841,8 @@ static int  AllAudioOK( hb_title_t * title )
 static void UpdateState1(hb_scan_t *scan, int title)
 {
     hb_state_t state;
+    
+    int is_multi_file = hb_list_count(scan->paths) > 0;
 
     hb_get_state2(scan->h, &state);
 #define p state.param.scanning
@@ -1716,7 +1852,8 @@ static void UpdateState1(hb_scan_t *scan, int title)
     p.title_count = scan->dvd ? hb_dvd_title_count( scan->dvd ) :
                     scan->bd ? hb_bd_title_count( scan->bd ) :
                     scan->batch ? hb_batch_title_count( scan->batch ) :
-                               hb_list_count(scan->title_set->list_title);
+                    is_multi_file ? hb_list_count(scan->paths) :
+                    hb_list_count(scan->title_set->list_title);
     p.preview_cur = 0;
     p.preview_count = 1;
     p.progress = 0.5 * ((float)p.title_cur + ((float)p.preview_cur / p.preview_count)) / p.title_count;

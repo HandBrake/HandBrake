@@ -43,6 +43,12 @@
 /* Class = "NSMenuItem"; title = "Reset All Jobs"; ObjectID = "kPX-am-UX1"; */
 "kPX-am-UX1.title" = "Сбросить все задания";
 
+/* Class = "NSToolbarItem"; label = "Quick Look"; ObjectID = "nCq-Nc-EbB"; */
+"nCq-Nc-EbB.label" = "Быстрый Просмотр";
+
+/* Class = "NSToolbarItem"; paletteLabel = "Quick Look"; ObjectID = "nCq-Nc-EbB"; */
+"nCq-Nc-EbB.paletteLabel" = "Быстрый Просмотр";
+
 /* Class = "NSMenuItem"; title = "Shut Down Computer"; ObjectID = "QmP-SQ-XKK"; */
 "QmP-SQ-XKK.title" = "Выключать компьютер";
 
@@ -66,6 +72,9 @@
 
 /* Class = "NSToolbarItem"; toolTip = "Start Encoding"; ObjectID = "SX6-mq-Hck"; */
 "SX6-mq-Hck.toolTip" = "Начать кодирование";
+
+/* Class = "NSMenuItem"; title = "Quit HandBrake"; ObjectID = "tBG-Gf-ynI"; */
+"tBG-Gf-ynI.title" = "Выйти из HandBrake";
 
 /* Class = "NSMenuItem"; title = "Remove All Jobs"; ObjectID = "Tvo-xt-sag"; */
 "Tvo-xt-sag.title" = "Удалить все задания";

@@ -227,17 +227,26 @@ taskset_fini( taskset_t *ts )
             hb_unlock( thread->lock );
         }
         /*
-         * Clean up taskset memory.
+         * Clean up thread memory.
          */
         for( i = 0; i < ts->thread_count; i++ )
         {
             taskset_thread_t *thread = taskset_thread( ts, i );
             hb_thread_close( &thread->thread );
-            hb_lock_close( &thread->lock );
-            hb_cond_close( &thread->begin_cond );
-            hb_cond_close( &thread->complete_cond );
         }
     }
+
+    /*
+     * Clean up taskset memory.
+     */
+    for( i = 0; i < ts->thread_count; i++ )
+    {
+        taskset_thread_t *thread = taskset_thread( ts, i );
+        hb_lock_close( &thread->lock );
+        hb_cond_close( &thread->begin_cond );
+        hb_cond_close( &thread->complete_cond );
+    }
+
     free( ts->task_threads );
 
     if( ts->task_threads_args != NULL )

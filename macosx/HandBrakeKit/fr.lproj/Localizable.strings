@@ -4,6 +4,9 @@
 /* HBStateFormatter -> work time format */
 " (%.2f fps, avg %.2f fps, ETA %@)" = " (%1$.2f fps, env. %2$.2f fps, ETA %3$@)";
 
+/* HBStateFormatter -> work time format */
+" (%.2f fps, avg %.2f fps)" = " (%1$.2f fps, env. %2$.2f fps)";
+
 /* HBStateFormatter -> search time format
    HBStateFormatter -> work time format */
 " (ETA %@)" = " (ETA %@)";
@@ -65,6 +68,9 @@
 /* HBPicture -> short info */
 "%@Output: %dx%d, Anamorphic: %dx%d Custom" = "%1$@Sortie : %2$dx%3$d, Anamorphique : %4$dx%5$d Personnalisé";
 
+/* HBPicture -> short non anamorphic info */
+"%dx%d" = "%1$dx%2$d";
+
 /* HBPicture -> short info */
 "%dx%d Storage, %dx%d Display" = "%1$dx%2$d Stockage, %3$dx%4$d Affichage";
 
@@ -82,12 +88,6 @@
 
 /* Title description */
 "1 Foreign Language Search Pass - " = "1 passe de recherche de langues étrangères - ";
-
-/* Title description */
-"2 Video Passes" = "Vidéo 2 passes";
-
-/* Title description */
-"2 Video Passes First Turbo" = "Vidéo en 2 passes, première passe en turbo";
 
 /* HBAudio -> Mixdown */
 "5.1 Channels" = "Canaux 5.1";
@@ -112,6 +112,9 @@
 
 /* Subtitles description */
 "Burned In" = "Incrustés";
+
+/* HBFilters -> filter display name */
+"Bwdif" = "Bwdif";
 
 /* Title -> chapter name
    Title description */
@@ -154,7 +157,8 @@
 /* HBFilters -> filter display name */
 "Decomb" = "Suppression du peigne";
 
-/* Subtitles description */
+/* HBFilters -> default display name
+   Subtitles description */
 "Default" = "Défaut";
 
 /* Video description */
@@ -222,6 +226,9 @@
 /* HBFilters -> filter display name */
 "HQDN3D" = "HQDN3D";
 
+/* HBFilters -> invalid Bwdif custom string description */
+"Invalid Bwdif custom settings." = "Paramètres personnalisés Bwdif non valides.";
+
 /* HBFilters -> invalid chroma smooth custom string description */
 "Invalid chroma smooth custom settings." = "Réglage personnalisé de lissage de la saturation non valide.";
 
@@ -278,9 +285,6 @@
 
 /* HBAudio -> Mixdown */
 "Mono (Right Only)" = "Mono (à droite seulement)";
-
-/* HBStateFormatter -> pass display name */
-"Muxing…" = "Multiplexage…";
 
 /* HBFilters -> filter display name */
 "NLMeans" = "NLMeans";
@@ -340,12 +344,6 @@
 /* Video description */
 "Same as source (variable)" = "Comme la source (variable)";
 
-/* HBStateFormatter -> scan pass format */
-"Scanning title %d of %d, preview %d…" = "Lecture des titres %1$d sur %2$d, aperçu %3$d…";
-
-/* HBStateFormatter -> scan pass format */
-"Scanning title %d of %d…" = "Scan du titre %1$d sur %2$d …";
-
 /* HBStateFormatter -> search pass display name */
 "Searching for start point:  %.2f %%" = "Recherche du point de départ : %.2f %%";
 
@@ -396,6 +394,10 @@
 
 /* Title description */
 "Title %d, %@, %@" = "Titre %1$d, %2$@, %3$@";
+
+/* Audio track title description
+   Subtitles track title description */
+"Title: %@" = "Titre : %@";
 
 /* Video description */
 "Tune: " = "Régler : ";

@@ -298,10 +298,11 @@ namespace HandBrakeWPF.Services
             defaults.Add(UserSettingConstants.AutoNameTitleCase, true);
             defaults.Add(UserSettingConstants.AutoNameRemoveUnderscore, true);
             defaults.Add(UserSettingConstants.AutonameFileCollisionBehaviour, 0);
+            defaults.Add(UserSettingConstants.UseIsoDateFormat, false);
             defaults.Add(UserSettingConstants.AlwaysUseDefaultPath, true);
             defaults.Add(UserSettingConstants.RemovePunctuation, false);
             defaults.Add(UserSettingConstants.FileOverwriteBehaviour, 0);
-            defaults.Add(UserSettingConstants.UseM4v, 1);
+            defaults.Add(UserSettingConstants.UseM4v, 0);
 
             // When Done
             defaults.Add(UserSettingConstants.SendFile, false);
@@ -337,9 +338,12 @@ namespace HandBrakeWPF.Services
             defaults.Add(UserSettingConstants.SaveLogWithVideo, false);
             defaults.Add(UserSettingConstants.ClearOldLogs, true);
 
+            defaults.Add(UserSettingConstants.ExcludedExtensions, new List<string> { "png", "jpg", "srt", "ass", "ssa", "txt" });
+            defaults.Add(UserSettingConstants.RecursiveFolderScan, false);
+            
             // Preview
             defaults.Add(UserSettingConstants.LastPreviewDuration, 30);
-            defaults.Add(UserSettingConstants.DefaultPlayer, false);
+            defaults.Add(UserSettingConstants.UseExternalPlayer, false);
 
             // Experimental
             defaults.Add(UserSettingConstants.ProcessIsolationEnabled, true);
@@ -353,7 +357,10 @@ namespace HandBrakeWPF.Services
             defaults.Add(UserSettingConstants.RunCounter, 0);
             defaults.Add(UserSettingConstants.ForceSoftwareRendering, false);
             defaults.Add(UserSettingConstants.IsUpdateAvailableBuild, 0);
-            
+            defaults.Add(UserSettingConstants.ExtendedQueueDisplay, true);
+            defaults.Add(UserSettingConstants.HardwareDetectTimeoutSeconds, 12);
+
+
             return defaults;
         }
 

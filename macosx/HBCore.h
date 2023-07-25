@@ -151,17 +151,17 @@ typedef void (^HBCoreCompletionHandler)(HBCoreResult result);
 /**
  *  Determines whether the scan operation can scan a particular URL or whether an additional decryption lib is needed.
  *
- *  @param url   the URL of the input file.
+ *  @param urls   the URLs of the input files.
  *  @param error an error containing additional info.
  *
  *  @return YES is the file at URL is scannable.
  */
-- (BOOL)canScan:(NSURL *)url error:(NSError * __autoreleasing *)error;
+- (BOOL)canScan:(NSArray<NSURL *> *)urls error:(NSError * __autoreleasing *)error;
 
 /**
  *  Initiates an asynchronous scan operation and returns immediately.
  *
- *  @param url                 the URL of the input file.
+ *  @param urls            the URLs of the input files.
  *  @param index            the index of the desired title. Use 0 to scan every title.
  *  @param previewsNum         the number of previews image to generate.
  *  @param seconds             the minimum duration of the wanted titles in seconds.
@@ -169,7 +169,7 @@ typedef void (^HBCoreCompletionHandler)(HBCoreResult result);
  *  @param progressHandler     a block called periodically with the progress information.
  *  @param completionHandler   a block called with the scan result.
  */
-- (void)scanURL:(NSURL *)url titleIndex:(NSUInteger)index previews:(NSUInteger)previewsNum minDuration:(NSUInteger)seconds keepPreviews:(BOOL)keepPreviews progressHandler:(HBCoreProgressHandler)progressHandler completionHandler:(HBCoreCompletionHandler)completionHandler;
+- (void)scanURLs:(NSArray<NSURL *> *)urls titleIndex:(NSUInteger)index previews:(NSUInteger)previewsNum minDuration:(NSUInteger)seconds keepPreviews:(BOOL)keepPreviews progressHandler:(HBCoreProgressHandler)progressHandler completionHandler:(HBCoreCompletionHandler)completionHandler;
 
 /**
  *  Cancels the scan execution.

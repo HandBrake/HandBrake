@@ -608,9 +608,7 @@ static void FUNC(yadif_decomb_filter_work)(void *thread_args_v)
         // Copy unfiltered lines
         start = !parity ? (segment_start + 1) & ~1 : segment_start | 1;
         dst2 = &((pixel *)dst->plane[pp].data)[start * stride];
-        prev = &((const pixel *)pv->ref[0]->plane[pp].data)[start * stride];
         cur  = &((const pixel *)pv->ref[1]->plane[pp].data)[start * stride];
-        next = &((const pixel *)pv->ref[2]->plane[pp].data)[start * stride];
 
         for (int yy = start; yy < segment_stop; yy += 2 )
         {

@@ -47,14 +47,7 @@ namespace HandBrakeWPF.Services.Queue
 
         private void UserSettingService_SettingChanged(object sender, HandBrakeWPF.EventArgs.SettingChangedEventArgs e)
         {
-            if (e.Key == UserSettingConstants.SimultaneousEncodes)
-            {
-                this.maxAllowedInstances = this.userSettingService.GetUserSetting<int>(UserSettingConstants.SimultaneousEncodes);
-                if (this.maxAllowedInstances > Utilities.SystemInfo.MaximumSimultaneousInstancesSupported)
-                {
-                    this.maxAllowedInstances = Utilities.SystemInfo.MaximumSimultaneousInstancesSupported;
-                }
-            }
+            this.Init();
         }
 
         public int TotalActiveInstances
@@ -97,8 +90,8 @@ namespace HandBrakeWPF.Services.Queue
                 return;
             } 
 
-            // NVEnc Support - (Most cards support 3 but not all)
-            this.totalNvidiaInstances = 3;
+            // NVEnc Support - (Most cards now support 5 with up-to-date drivers)
+            this.totalNvidiaInstances = 5;
 
             // VCN Support
             this.totalVceInstances = 3;
@@ -245,7 +238,7 @@ namespace HandBrakeWPF.Services.Queue
             if (this.userSettingService.GetUserSetting<bool>(UserSettingConstants.EnableQuickSyncHyperEncode))
             {
                 task.ExtraAdvancedArguments = string.IsNullOrEmpty(task.ExtraAdvancedArguments)
-                                                  ? "hyperencode=adaptive" : string.Format("{0}:hyperencode=adaptive", task.ExtraAdvancedArguments);
+                                                  ? "hyperencode=adaptive" : string.Format("hyperencode=adaptive:{0}", task.ExtraAdvancedArguments);
                 return;
             }
 
@@ -282,14 +275,14 @@ namespace HandBrakeWPF.Services.Queue
                 // GPU List 1
                 task.ExtraAdvancedArguments = string.IsNullOrEmpty(task.ExtraAdvancedArguments)
                                                   ? string.Format("gpu={0}", this.qsvGpus[1])
-                                                  : string.Format("{0}:gpu={1}", task.ExtraAdvancedArguments, this.qsvGpus[1]);
+                                                  : string.Format("gpu={1}:{0}", task.ExtraAdvancedArguments, this.qsvGpus[1]);
             }
             else
             {
                 // GPU List 0
                 task.ExtraAdvancedArguments = string.IsNullOrEmpty(task.ExtraAdvancedArguments)
                     ? string.Format("gpu={0}", this.qsvGpus[0])
-                    : string.Format("{0}:gpu={1}", task.ExtraAdvancedArguments, this.qsvGpus[0]);
+                    : string.Format("gpu={1}:{0}", task.ExtraAdvancedArguments, this.qsvGpus[0]);
             }
         }
     }

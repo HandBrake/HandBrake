@@ -27,7 +27,7 @@ static int compare_str(const void *a, const void *b)
  ***********************************************************************
  *
  **********************************************************************/
-hb_batch_t * hb_batch_init( hb_handle_t *h, char * path )
+hb_batch_t * hb_batch_init( hb_handle_t *h, char * path, hb_list_t * exclude_extensions )
 {
     hb_batch_t    * d;
     hb_stat_t       sb;
@@ -49,7 +49,7 @@ hb_batch_t * hb_batch_init( hb_handle_t *h, char * path )
 
     // Count the total number of entries
     count = 0;
-    while ( (entry = hb_readdir( dir ) ) )
+    while (hb_readdir(dir))
     {
         count++;
     }
@@ -60,22 +60,50 @@ hb_batch_t * hb_batch_init( hb_handle_t *h, char * path )
     }
 
     files = malloc(count * sizeof(char*));
-
+    
+    // Excluded Extensions
+    int extension_count = hb_list_count(exclude_extensions);
+    hb_log("Excluding %i file extension(s) from scan. ", extension_count);
+    
+    for (int i = 0; i < extension_count; i++ )
+    {
+        char * file_extension = hb_list_item( exclude_extensions, i );
+        hb_log(" - Excluding Extension: %s", file_extension);
+    }
+    
     // Find all regular files
     ii = 0;
     hb_rewinddir(dir);
     while ( (entry = hb_readdir( dir ) ) )
     {
         filename = hb_strdup_printf( "%s" DIR_SEP_STR "%s", path, entry->d_name );
-        if ( hb_stat( filename, &sb ) )
+        
+        int excluded = 0;
+        for (int i = 0; i < extension_count; i++ )
         {
-            free( filename );
+            const char *file_extension = hb_list_item(exclude_extensions, i);
+            if (hb_str_ends_with(filename, file_extension))
+            {
+                hb_deep_log(2, " -- Excluding File: %s", filename);
+                excluded = 1;
+            }
+        }
+        
+        if (excluded)
+        {
+            free(filename);
+            continue;
+        }
+                
+        if (hb_stat(filename, &sb))
+        {
+            free(filename);
             continue;
         }
 
-        if ( !S_ISREG( sb.st_mode ) )
+        if (!S_ISREG(sb.st_mode))
         {
-            free( filename );
+            free(filename);
             continue;
         }
 
@@ -147,6 +175,65 @@ hb_title_t * hb_batch_title_scan( hb_batch_t * d, int t )
     hb_stream_close( &stream );
 
     return title;
+}
+
+hb_title_t * hb_batch_title_scan_single(hb_handle_t *h, char *filename, int title_index)
+{
+    hb_title_t   *title;
+    hb_stream_t  *stream;
+
+    if (title_index < 0)
+    {
+        return NULL;
+    }
+
+    if (!hb_is_valid_batch_path(filename))
+    {
+        return NULL;
+    }
+
+    hb_log("batch: scanning %s", filename);
+    title = hb_title_init(filename, title_index);
+    
+    if (title == NULL)
+    {
+        return NULL;
+    }
+
+    stream = hb_stream_open(h, filename, title, 1);
+
+    if (stream == NULL)
+    {
+        hb_title_close(&title);
+        return NULL;
+    }
+
+    title = hb_stream_title_scan(stream, title);
+    hb_stream_close(&stream);
+
+    return title;
+}
+
+int hb_is_valid_batch_path(const char *filename)
+{
+    hb_stat_t sb;
+
+    if (hb_stat(filename, &sb))
+    {
+        return 0;
+    }
+
+    if (S_ISDIR(sb.st_mode))
+    {
+        return 0;
+    }
+
+    if (!S_ISREG(sb.st_mode))
+    {
+        return 0;
+    }
+
+    return 1;
 }
 
 /***********************************************************************

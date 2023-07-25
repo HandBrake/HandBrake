@@ -184,6 +184,7 @@ static int avformatInit( hb_mux_object_t * m )
             meta_mux = META_MUX_MP4;
 
             av_dict_set(&av_opts, "brand", "mp42", 0);
+            av_dict_set(&av_opts, "strict", "experimental", 0);
             if (job->mp4_optimize)
                 av_dict_set(&av_opts, "movflags", "faststart+disable_chpl+write_colr", 0);
             else
@@ -226,15 +227,17 @@ static int avformatInit( hb_mux_object_t * m )
 
     ret = avio_open2(&m->oc->pb, job->file, AVIO_FLAG_WRITE,
                      &m->oc->interrupt_callback, NULL);
-    if( ret < 0 )
+    if (ret < 0)
     {
-      if( ret == -2 ) 
-      {
-        hb_error( "avio_open2 failed, errno -2: Could not write to indicated output file. Please check destination path and file permissions" );
-      }
-      else
-        hb_error( "avio_open2 failed, errno %d", ret);
-      goto error;
+        if (ret == -2)
+        {
+            hb_error("avio_open2 failed, errno -2: Could not write to indicated output file. Please check destination path and file permissions");
+        }
+        else
+        {
+            hb_error("avio_open2 failed, errno %d", ret);
+        }
+        goto error;
     }
 
     /* Video track */
@@ -380,8 +383,10 @@ static int avformatInit( hb_mux_object_t * m )
             priv_size                  = 0;
             break;
 
-        case HB_VCODEC_FFMPEG_SVT_AV1:
-        case HB_VCODEC_FFMPEG_SVT_AV1_10BIT:
+        case HB_VCODEC_SVT_AV1:
+        case HB_VCODEC_SVT_AV1_10BIT:
+        case HB_VCODEC_FFMPEG_NVENC_AV1:
+        case HB_VCODEC_FFMPEG_NVENC_AV1_10BIT:
             track->st->codecpar->codec_id = AV_CODEC_ID_AV1;
 
             if (job->config.extradata.length > 0)
@@ -576,6 +581,41 @@ static int avformatInit( hb_mux_object_t * m )
                                     coll_data,
                                     sizeof(AVContentLightMetadata));
         }
+    }
+
+    if (job->ambient.ambient_illuminance.num && job->ambient.ambient_illuminance.den)
+    {
+        AVAmbientViewingEnvironment ambient = hb_ambient_hb_to_ff(job->ambient);
+
+        uint8_t *ambient_data = av_malloc(sizeof(AVAmbientViewingEnvironment));
+        memcpy(ambient_data, &ambient, sizeof(AVAmbientViewingEnvironment));
+
+        av_stream_add_side_data(track->st,
+                                AV_PKT_DATA_AMBIENT_VIEWING_ENVIRONMENT,
+                                ambient_data,
+                                sizeof(AVAmbientViewingEnvironment));
+    }
+
+    if (job->passthru_dynamic_hdr_metadata & DOVI)
+    {
+        if (job->dovi.dv_profile == 5 && job->mux == HB_MUX_AV_MP4)
+        {
+            if (track->st->codecpar->codec_id == AV_CODEC_ID_HEVC)
+            {
+                track->st->codecpar->codec_tag = MKTAG('d','v','h','1');
+            }
+        }
+        AVDOVIDecoderConfigurationRecord dovi = hb_dovi_hb_to_ff(job->dovi);
+
+        uint8_t *dovi_data = av_malloc(sizeof(AVDOVIDecoderConfigurationRecord));
+        memcpy(dovi_data, &dovi, sizeof(AVDOVIDecoderConfigurationRecord));
+
+        av_stream_add_side_data(track->st,
+                                AV_PKT_DATA_DOVI_CONF,
+                                dovi_data,
+                                sizeof(AVDOVIDecoderConfigurationRecord));
+
+        m->oc->strict_std_compliance = FF_COMPLIANCE_UNOFFICIAL;
     }
 
     hb_rational_t vrate = job->vrate;
@@ -1215,7 +1255,6 @@ static int avformatInit( hb_mux_object_t * m )
     ret = avformat_write_header(m->oc, &av_opts);
     if( ret < 0 )
     {
-        av_dict_free( &av_opts );
         hb_error( "muxavformat: avformat_write_header failed!");
         goto error;
     }
@@ -1230,6 +1269,7 @@ static int avformatInit( hb_mux_object_t * m )
     return 0;
 
 error:
+    av_dict_free(&av_opts);
     free(job->mux_data);
     job->mux_data = NULL;
     avformat_free_context(m->oc);
@@ -1395,12 +1435,10 @@ static int avformatMux(hb_mux_object_t *m, hb_mux_data_t *track, hb_buffer_t *bu
         {
             m->pkt->flags |= AV_PKT_FLAG_KEY;
         }
-#ifdef AV_PKT_FLAG_DISPOSABLE
         if (!(buf->s.flags & HB_FLAG_FRAMETYPE_REF))
         {
             m->pkt->flags |= AV_PKT_FLAG_DISPOSABLE;
         }
-#endif
     }
     else if (buf->s.frametype & HB_FRAME_MASK_KEY)
     {

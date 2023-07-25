@@ -53,7 +53,7 @@ namespace HandBrakeWPF.ViewModels
             this.SelectedAvailableToMove = new BindingList<string>();
             this.SelectedLanguagesToMove = new BindingList<string>();
             this.AvailableLanguages = new BindingList<string>();
-            this.AudioEncoders = new List<HBAudioEncoder>(HandBrakeEncoderHelpers.AudioEncoders) { HBAudioEncoder.None }; // TODO check
+            this.AudioEncoders = new List<HBAudioEncoder>(HandBrakeEncoderHelpers.AudioEncoders) { HBAudioEncoder.None }; 
 
             this.SampleRates = new ObservableCollection<string> { "Auto" };
             foreach (var item in HandBrakeEncoderHelpers.AudioSampleRates)

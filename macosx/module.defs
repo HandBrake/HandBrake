@@ -38,12 +38,25 @@ MACOSX.map.O.size            = s
 MACOSX.map.O.size-aggressive = z
 MACOSX.map.O.speed           = 3
 
+## mapping from symbolic cpu target value to cflags
+MACOSX.map.cpu.none   = $(GCC.args.cpu.none)
+MACOSX.map.cpu.native = $(GCC.args.cpu.native)
+
+## mapping from symbolic lto value to llvm lto value
+MACOSX.map.lto.none   =
+MACOSX.map.lto.on     = YES
+MACOSX.map.lto.thin   = YES_THIN
+MACOSX.map.lto.off    = NO
+
 ## xcconfig: must be one of macosx/xcconfig/*.xcconfig
 MACOSX.xcconfig = $(foreach x,$(XCODE.xcconfig),-xcconfig $(MACOSX.src/)xcconfig/$(x))
 MACOSX.sdk      = $(foreach sdk,$(GCC.sysroot),-sdk $(sdk))
 
 ## extra CFLAGS: macro definitions
-MACOSX.extra_cflags = OTHER_CFLAGS='$(MACOSX.GCC.D)'
+MACOSX.extra_cflags = $(MACOSX.GCC.D) $(MACOSX.map.cpu.$(MACOSX.GCC.cpu))
+
+## link time optimization
+MACOSX.lto = $(MACOSX.map.lto.$(MACOSX.GCC.lto))
 
 ## launch a build through xcode; which in turn will do a nested make against
 ## this build system with normal build rules enabled.
@@ -71,7 +84,8 @@ MACOSX.XCODE = $(strip \
         EXTERNAL_O='$(MACOSX.map.O.$(MACOSX.GCC.O))' \
         EXTERNAL_VARS='$(-*-command-variables-*-)' \
         \
-        $(MACOSX.extra_cflags) \
+        OTHER_CFLAGS='$(strip $(MACOSX.extra_cflags))' \
+        LLVM_LTO='$(MACOSX.lto)' \
         \
         $(2) )
 

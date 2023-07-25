@@ -154,20 +154,11 @@
 /* Class = "NSTextFieldCell"; title = "0"; ObjectID = "OVr-Jm-VrK"; */
 "OVr-Jm-VrK.title" = "0";
 
-/* Class = "NSButtonCell"; title = "Show All"; ObjectID = "PiQ-bA-7P1"; */
-"PiQ-bA-7P1.title" = "Показать все";
-
 /* Class = "NSTableColumn"; headerCell.title = "Codec"; ObjectID = "pR9-d4-SNf"; */
 "pR9-d4-SNf.headerCell.title" = "Кодек";
 
 /* Class = "NSMenu"; title = "OtherViews"; ObjectID = "PtB-Wp-B9X"; */
 "PtB-Wp-B9X.title" = "OtherViews";
-
-/* Class = "NSButton"; ibExternalAccessibilityDescription = "Show all audio languages"; ObjectID = "QAt-5X-NBT"; */
-"QAt-5X-NBT.ibExternalAccessibilityDescription" = "Показывать все языки аудио";
-
-/* Class = "NSButton"; ibShadowedToolTip = "Show all audio languages in the Languages list."; ObjectID = "QAt-5X-NBT"; */
-"QAt-5X-NBT.ibShadowedToolTip" = "Показывать все языки аудио в списке языков.";
 
 /* Class = "NSPopUpButton"; ibExternalAccessibilityDescription = "Samplerate"; ObjectID = "r80-yv-59n"; */
 "r80-yv-59n.ibExternalAccessibilityDescription" = "Частота дискретизации";

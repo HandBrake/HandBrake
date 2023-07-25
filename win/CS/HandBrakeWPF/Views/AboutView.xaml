@@ -31,6 +31,7 @@
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
                     <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
 
@@ -43,22 +44,29 @@
                 </StackPanel>
 
                 <StackPanel Orientation="Horizontal" Grid.Row="1"  Margin="5,5,0,0">
-                    <TextBlock Text="Website: " />
+                    <TextBlock Text="{x:Static Properties:Resources.AboutView_Website}" />
                     <TextBlock>           
                         <Hyperlink x:Name="handbrakeWebsite" NavigateUri="/" RequestNavigate="HandbrakeWebsite_OnRequestNavigate"  >https://handbrake.fr</Hyperlink>
                     </TextBlock>
                 </StackPanel>
 
                 <StackPanel Orientation="Horizontal" Grid.Row="2"  Margin="5,5,0,0">
-                    <TextBlock Text="GitHub Issue Tracker: " />
+                    <TextBlock Text="{x:Static Properties:Resources.AboutView_GithubTracker}" />
                     <TextBlock>           
                         <Hyperlink x:Name="githubWebsite" NavigateUri="/" RequestNavigate="GithubWebsite_OnRequestNavigate"  >https://github.com/HandBrake/HandBrake/issues</Hyperlink>
                     </TextBlock>
                 </StackPanel>
 
-                <TextBlock Grid.Row="3" Margin="5,10,0,5" Text="{x:Static Properties:Resources.AboutView_License}" />
+                <StackPanel Orientation="Horizontal" Grid.Row="3"  Margin="5,5,0,0">
+                    <TextBlock Text="{x:Static Properties:Resources.AboutView_Documentation}" />
+                    <TextBlock>           
+                        <Hyperlink x:Name="docWebsite" NavigateUri="/" RequestNavigate="DocWebsite_OnRequestNavigate"  >https://handbrake.fr/docs</Hyperlink>
+                    </TextBlock>
+                </StackPanel>
 
-                <TextBox Text="{Binding License, Mode=OneWay}" Grid.Row="4" Margin="10,0,10,10" HorizontalAlignment="Stretch"
+                <TextBlock Grid.Row="4" Margin="5,10,0,5" Text="{x:Static Properties:Resources.AboutView_License}" />
+
+                <TextBox Text="{Binding License, Mode=OneWay}" Grid.Row="5" Margin="10,0,10,10" HorizontalAlignment="Stretch"
                          VerticalAlignment="Stretch" IsReadOnly="True" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto" />
 
          

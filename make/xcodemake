@@ -106,6 +106,9 @@ fi
 if [ -n "$reconfigure" ]; then
     echo "reconfiguring ($reconfigure)"
 
+    ## export rustc
+    export PATH="$HOME/.cargo/bin:$PATH"
+
     ## respect PATH priority
     OIFS="${IFS}"
     IFS=':'

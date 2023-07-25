@@ -9,6 +9,9 @@
 
 namespace HandBrakeWPF.Views
 {
+    using System;
+
+    using HandBrakeWPF.Helpers;
     using System.Windows;
     
     public partial class AudioDefaultsView : Window
@@ -16,6 +19,12 @@ namespace HandBrakeWPF.Views
         public AudioDefaultsView()
         {
             this.InitializeComponent();
+        }
+
+        protected override void OnSourceInitialized(EventArgs e)
+        {
+            base.OnSourceInitialized(e);
+            WindowHelper.SetDarkMode(this);
         }
     }
 }

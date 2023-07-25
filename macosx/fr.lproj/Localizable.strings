@@ -230,6 +230,9 @@
 /* Queue undo action name */
 "Move Jobs in Queue" = "Déplacer les tâches dans la file d'attente";
 
+/* Add preset window -> My Presets */
+"My Presets" = "Mes préréglages";
+
 /* Queue status */
 "No encode pending" = "Aucun encodage en cours";
 

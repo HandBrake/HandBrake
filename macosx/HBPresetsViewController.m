@@ -196,6 +196,7 @@ static void *HBPresetsViewControllerContext = &HBPresetsViewControllerContext;
                     [self presentError:error];
                 }
             }
+            [panel.URL stopAccessingSecurityScopedResource];
         }
     }];
 }
@@ -300,6 +301,11 @@ static void *HBPresetsViewControllerContext = &HBPresetsViewControllerContext;
          if (result == NSModalResponseOK)
          {
              [self doImportPreset:panel.URLs atIndexPath:nil];
+         }
+
+         for (NSURL *url in panel.URLs)
+         {
+             [url stopAccessingSecurityScopedResource];
          }
      }];
 }
@@ -560,7 +566,13 @@ static void *HBPresetsViewControllerContext = &HBPresetsViewControllerContext;
 - (void)handleExternalDrops:(NSPasteboard *)pboard withIndexPath:(NSIndexPath *)indexPath
 {
     NSArray<NSURL *> *URLs = [pboard readObjectsForClasses:@[[NSURL class]] options:nil];
+
     [self doImportPreset:URLs atIndexPath:indexPath];
+
+    for (NSURL *url in URLs)
+    {
+        [url stopAccessingSecurityScopedResource];
+    }
 }
 
 - (BOOL)outlineView:(NSOutlineView *)ov acceptDrop:(id <NSDraggingInfo>)info item:(id)targetItem childIndex:(NSInteger)index

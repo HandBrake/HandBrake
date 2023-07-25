@@ -1,4 +1,4 @@
-__deps__ := BZIP2 ZLIB FDKAAC LIBDAV1D SVT-AV1 LIBVPX LAME LIBOPUS LIBSPEEX XZ ZIMG
+__deps__ := BZIP2 ZLIB FDKAAC LIBDAV1D LIBVPX LAME LIBOPUS LIBSPEEX XZ ZIMG
 ifeq (1,$(FEATURE.qsv))
 __deps__ += LIBVPL
 endif
@@ -12,9 +12,9 @@ endif
 $(eval $(call import.MODULE.defs,FFMPEG,ffmpeg,$(__deps__)))
 $(eval $(call import.CONTRIB.defs,FFMPEG))
 
-FFMPEG.FETCH.url    = https://github.com/HandBrake/HandBrake-contribs/releases/download/contribs/ffmpeg-5.1.2.tar.bz2
-FFMPEG.FETCH.url   += https://ffmpeg.org/releases/ffmpeg-5.1.2.tar.bz2
-FFMPEG.FETCH.sha256 = 39a0bcc8d98549f16c570624678246a6ac736c066cebdb409f9502e915b22f2b
+FFMPEG.FETCH.url    = https://github.com/HandBrake/HandBrake-contribs/releases/download/contribs/ffmpeg-6.0.tar.bz2
+FFMPEG.FETCH.url   += https://ffmpeg.org/releases/ffmpeg-6.0.tar.bz2
+FFMPEG.FETCH.sha256 = 47d062731c9f66a78380e35a19aac77cebceccd1c7cc309b9c82343ffc430c3d
 
 FFMPEG.CONFIGURE.deps  =
 FFMPEG.CONFIGURE.host  =
@@ -55,8 +55,6 @@ FFMPEG.CONFIGURE.extra = \
     --disable-decoder=libvpx_* \
     --enable-encoder=libvpx_vp8 \
     --enable-encoder=libvpx_vp9 \
-    --enable-libsvtav1 \
-    --enable-encoder=libsvtav1 \
     --disable-decoder=*_crystalhd \
     --enable-demuxer=av1 \
     --enable-demuxer=obu \
@@ -69,6 +67,10 @@ FFMPEG.CONFIGURE.extra = \
 ifeq (size-aggressive,$(GCC.O))
 FFMPEG.CONFIGURE.extra += \
     --enable-small
+endif
+
+ifeq (on,$(GCC.lto))
+    FFMPEG.CONFIGURE.extra += --enable-lto
 endif
 
 ifneq (,$(filter $(FEATURE.qsv)-$(HOST.system),1-linux 1-freebsd))
@@ -94,7 +96,7 @@ FFMPEG.CONFIGURE.extra += \
     --enable-muxer=ipod
 
 ifeq (darwin,$(HOST.system))
-    FFMPEG.CONFIGURE.extra += --disable-audiotoolbox --disable-coreimage
+    FFMPEG.CONFIGURE.extra += --disable-audiotoolbox --disable-coreimage --enable-hwaccel=h264_videotoolbox --enable-hwaccel=hevc_videotoolbox --enable-hwaccel=prores_videotoolbox
 
     ifeq (x86_64,$(HOST.arch))
         FFMPEG.CONFIGURE.extra += --arch=x86_64
@@ -115,6 +117,7 @@ else ifeq (1-mingw,$(HOST.cross)-$(HOST.system))
         --target-os=mingw32 \
         --arch=$(HOST.machine) \
         --cross-prefix=$(HOST.cross.prefix) \
+        --disable-vulkan \
         --pkg-config=$(PKGCONFIG.exe) \
         --pkg-config-flags="--static"
     FFMPEG.GCC.args.extra += -fno-common
@@ -153,7 +156,8 @@ ifeq (1,$(FEATURE.nvenc))
 FFMPEG.CONFIGURE.extra += \
      --enable-ffnvcodec \
      --enable-encoder=h264_nvenc \
-     --enable-encoder=hevc_nvenc
+     --enable-encoder=hevc_nvenc \
+     --enable-encoder=av1_nvenc
 endif
 
 ifeq (1,$(FEATURE.nvdec))

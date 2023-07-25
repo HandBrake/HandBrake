@@ -32,6 +32,12 @@ namespace HandBrakeWPF.Views
             this.Closed += this.LogView_Closed;
         }
 
+        protected override void OnSourceInitialized(EventArgs e)
+        {
+            base.OnSourceInitialized(e);
+            WindowHelper.SetDarkMode(this);
+        }
+
         private void LogView_Closed(object sender, EventArgs e)
         {
             ((LogViewModel)this.DataContext).LogMessageReceived -= this.Vm_LogMessageReceived;

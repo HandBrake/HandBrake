@@ -33,33 +33,9 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #if HB_PROJECT_FEATURE_QSV
 
-#include "libswscale/swscale.h"
 #include "handbrake/qsv_libav.h"
-#if !HB_QSV_ONEVPL
-#include "mfx/mfxplugin.h"
-#endif
 
-typedef struct{
-
-    struct{
-        // for "planes" , Y and VU
-        uint8_t     *data[2];
-        int         strides[2];
-    }               qsv_data;
-
-    struct{
-        // for each plane, Y U V
-        uint8_t     *data[3];
-        int         strides[3];
-    }               data;
-    int             width;
-    int             height;
-} qsv_memory_copy_t;
-
-#if !HB_QSV_ONEVPL
-int qsv_nv12_to_yuv420(struct SwsContext* sws_context,hb_buffer_t* dst, mfxFrameSurface1* src,mfxCoreInterface *core);
-#endif
-int qsv_convert_yuv_to_nv12(struct SwsContext *sws_context, mfxFrameSurface1 *dst, hb_buffer_t *src);
 int qsv_copy_buffer_to_surface(mfxFrameSurface1 *dst, hb_buffer_t *src);
+
 #endif // HB_PROJECT_FEATURE_QSV
 #endif // HANDBRAKE_QSV_MEMORY_H

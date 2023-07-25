@@ -57,7 +57,7 @@ __goals__:
 
 ###############################################################################
 
-MACOSX.JOBS := $(shell ps T | $(GREP.exe) "^\s*$(shell echo $$PPID).*$(MAKE)" | $(GREP.exe) -o "\(\-j\|\-\-jobs\)[= ]*[^\s]*" | $(GREP.exe) -o "[0-9][0-9]*")
+MACOSX.JOBS := $(shell ps T | $(GREP.exe) "^[[:space:]]*$(shell echo $$PPID).*$(MAKE)" | $(GREP.exe) -o "\(-j\|--jobs\)[=[:space:]]*[^[:space:]]*" | $(GREP.exe) -o "[0-9][0-9]*")
 ifeq "${MACOSX.JOBS}" ""
 	# fall back to number of jobs specified in makefile created by configure
 	MACOSX.JOBS := $(BUILD.jobs)

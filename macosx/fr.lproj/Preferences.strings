@@ -160,6 +160,9 @@
 /* Class = "NSMenuItem"; title = "Notification"; ObjectID = "499"; */
 "499.title" = "Notification";
 
+/* Class = "NSMenuItem"; title = "Quit HandBrake"; ObjectID = "500"; */
+"500.title" = "Quitter HandBrake";
+
 /* Class = "NSMenuItem"; title = "35"; ObjectID = "514"; */
 "514.title" = "35";
 

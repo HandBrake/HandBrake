@@ -24,7 +24,7 @@ namespace HandBrakeWPF.ViewModels.Interfaces
 
         BitmapSource PreviewImage { get; }
 
-        void UpdatePreviewFrame(EncodeTask task, Source scannedSource);
+        void UpdatePreviewFrame(Title title, EncodeTask task, Source scannedSource);
 
         void PreviousPreview();
 

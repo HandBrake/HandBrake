@@ -185,7 +185,8 @@
 
 - (void)application:(NSApplication *)sender openURLs:(nonnull NSArray<NSURL *> *)urls
 {
-    [self.mainController openURL:urls.firstObject];
+    BOOL recursive = [NSUserDefaults.standardUserDefaults boolForKey:HBRecursiveScan];
+    [self.mainController openURLs:urls recursive:recursive];
 }
 
 - (BOOL)validateMenuItem:(NSMenuItem *)menuItem
@@ -220,15 +221,16 @@
 
     if (directoryUrl)
     {
-        NSArray *contents = [[NSFileManager defaultManager] contentsOfDirectoryAtURL:directoryUrl
-                                                          includingPropertiesForKeys:nil
-                                                                             options:NSDirectoryEnumerationSkipsSubdirectoryDescendants |
-                                                                                     NSDirectoryEnumerationSkipsHiddenFiles |
-                                                                                     NSDirectoryEnumerationSkipsPackageDescendants
-                                                                               error:NULL];
+        NSFileManager *manager = [[NSFileManager alloc] init];
+
+        NSArray<NSURL *> *contents = [manager contentsOfDirectoryAtURL:directoryUrl
+                                            includingPropertiesForKeys:nil
+                                                               options:NSDirectoryEnumerationSkipsSubdirectoryDescendants |
+                                                                        NSDirectoryEnumerationSkipsHiddenFiles |
+                                                                        NSDirectoryEnumerationSkipsPackageDescendants
+                                                                 error:NULL];
 
         NSDate *limit = [NSDate dateWithTimeIntervalSinceNow: -(60 * 60 * 24 * 30)];
-        NSFileManager *manager = [[NSFileManager alloc] init];
 
         for (NSURL *fileURL in contents)
         {
@@ -248,20 +250,19 @@
 
     if (previewDirectory)
     {
-        NSArray *contents = [NSFileManager.defaultManager contentsOfDirectoryAtURL:previewDirectory
-                                                        includingPropertiesForKeys:nil
-                                                                           options:NSDirectoryEnumerationSkipsSubdirectoryDescendants |
-                             NSDirectoryEnumerationSkipsPackageDescendants
-                                                                             error:NULL];
-
         NSFileManager *manager = [[NSFileManager alloc] init];
+        NSArray<NSURL *> *contents = [manager contentsOfDirectoryAtURL:previewDirectory
+                                            includingPropertiesForKeys:nil
+                                                               options:NSDirectoryEnumerationSkipsSubdirectoryDescendants | NSDirectoryEnumerationSkipsPackageDescendants
+                                                                 error:NULL];
+
         for (NSURL *url in contents)
         {
             NSError *error = nil;
             BOOL result = [manager removeItemAtURL:url error:&error];
             if (result == NO && error)
             {
-                [HBUtilities writeToActivityLog: "Could not remove existing preview at : %s", url.lastPathComponent.UTF8String];
+                [HBUtilities writeToActivityLog:"Could not remove existing preview at: %s", url.lastPathComponent.UTF8String];
             }
         }
     }

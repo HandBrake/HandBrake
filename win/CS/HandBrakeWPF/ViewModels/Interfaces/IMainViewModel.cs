@@ -9,6 +9,7 @@
 
 namespace HandBrakeWPF.ViewModels.Interfaces
 {
+    using System.Collections.Generic;
     using System.Windows;
 
     using HandBrakeWPF.Model;
@@ -99,12 +100,12 @@ namespace HandBrakeWPF.ViewModels.Interfaces
         /// The start scan.
         /// </summary>
         /// <param name="filename">
-        /// The filename.
+        /// A list of files to scan
         /// </param>
         /// <param name="title">
         /// The title.
         /// </param>
-        void StartScan(string filename, int title);
+        void StartScan(List<string> filename, int title);
 
         /// <summary>
         /// Edit a Queue Task

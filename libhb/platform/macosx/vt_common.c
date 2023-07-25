@@ -170,7 +170,7 @@ int hb_vt_is_constant_quality_available(int encoder)
     return 0;
 }
 
-int hb_vt_is_two_pass_available(int encoder)
+int hb_vt_is_multipass_available(int encoder)
 {
     switch (encoder)
     {
@@ -233,7 +233,7 @@ static const char * const vt_h265_level_names[] =
 
 static const enum AVPixelFormat vt_h26x_pix_fmts[] =
 {
-    /*AV_PIX_FMT_NV12, */AV_PIX_FMT_YUV420P, AV_PIX_FMT_NONE
+    AV_PIX_FMT_VIDEOTOOLBOX, AV_PIX_FMT_YUV420P, AV_PIX_FMT_NV12, AV_PIX_FMT_NONE
 };
 
 static const enum AVPixelFormat vt_h265_10bit_pix_fmts[] =
@@ -293,4 +293,160 @@ const char* const* hb_vt_level_get_names(int encoder)
             return vt_h265_level_names;
     }
     return NULL;
+}
+
+unsigned int hb_vt_get_cv_pixel_format(int pix_fmt, int color_range)
+{
+    if (pix_fmt == AV_PIX_FMT_NV12)
+    {
+        return color_range == AVCOL_RANGE_JPEG ?
+                                kCVPixelFormatType_420YpCbCr8BiPlanarFullRange :
+                                kCVPixelFormatType_420YpCbCr8BiPlanarVideoRange;
+    }
+    else if (pix_fmt == AV_PIX_FMT_YUV420P)
+    {
+        return color_range == AVCOL_RANGE_JPEG ?
+                                kCVPixelFormatType_420YpCbCr8PlanarFullRange :
+                                kCVPixelFormatType_420YpCbCr8Planar;
+    }
+    else if (pix_fmt == AV_PIX_FMT_BGRA)
+    {
+        return kCVPixelFormatType_32BGRA;
+    }
+    else if (pix_fmt == AV_PIX_FMT_P010LE)
+    {
+        return color_range == AVCOL_RANGE_JPEG ?
+                                kCVPixelFormatType_420YpCbCr10BiPlanarFullRange :
+                                kCVPixelFormatType_420YpCbCr10BiPlanarVideoRange;
+    }
+    else if (pix_fmt == AV_PIX_FMT_NV16)
+    {
+        return color_range == AVCOL_RANGE_JPEG ?
+                                kCVPixelFormatType_422YpCbCr8BiPlanarFullRange :
+                                kCVPixelFormatType_422YpCbCr8BiPlanarVideoRange;
+    }
+    else if (pix_fmt == AV_PIX_FMT_P210)
+    {
+        return color_range == AVCOL_RANGE_JPEG ?
+                                kCVPixelFormatType_422YpCbCr10BiPlanarFullRange :
+                                kCVPixelFormatType_422YpCbCr10BiPlanarVideoRange;
+    }
+    else if (pix_fmt == AV_PIX_FMT_NV24)
+    {
+        return color_range == AVCOL_RANGE_JPEG ?
+                                kCVPixelFormatType_444YpCbCr8BiPlanarFullRange :
+                                kCVPixelFormatType_444YpCbCr8BiPlanarVideoRange;
+    }
+    else if (pix_fmt == AV_PIX_FMT_P410)
+    {
+        return color_range == AVCOL_RANGE_JPEG ?
+                                kCVPixelFormatType_444YpCbCr10BiPlanarFullRange :
+                                kCVPixelFormatType_444YpCbCr10BiPlanarVideoRange;
+    }
+    else if (pix_fmt == AV_PIX_FMT_P416)
+    {
+        return kCVPixelFormatType_444YpCbCr16BiPlanarVideoRange;
+    }
+    else
+    {
+        return 0;
+    }
+}
+
+int hb_vt_are_filters_supported(hb_list_t *filters)
+{
+    int ret = 1;
+
+    for (int i = 0; i < hb_list_count(filters); i++)
+    {
+        int supported = 1;
+        hb_filter_object_t *filter = hb_list_item(filters, i);
+
+        switch (filter->id)
+        {
+            case HB_FILTER_CROP_SCALE:
+            case HB_FILTER_CROP_SCALE_VT:
+                break;
+            case HB_FILTER_ROTATE:
+            case HB_FILTER_ROTATE_VT:
+            {
+#ifdef MAC_OS_VERSION_13_0
+                if (__builtin_available(macOS 13, *)) {}
+                else { supported = 0; }
+                break;
+#else
+                supported = 0;
+                break;
+#endif
+            }
+            case HB_FILTER_VFR:
+                // Mode 0 doesn't require access to the frame data
+                supported = hb_dict_get_int(filter->settings, "mode") == 0;
+                break;
+            default:
+                supported = 0;
+        }
+
+        if (supported == 0)
+        {
+            hb_deep_log(2, "hwaccel: %s isn't yet supported for hw video frames", filter->name);
+            ret = 0;
+        }
+    }
+
+    return ret;
+}
+
+void hb_vt_setup_hw_filters(hb_job_t *job)
+{
+    if (job->hw_pix_fmt == AV_PIX_FMT_VIDEOTOOLBOX)
+    {
+        hb_list_t *list = job->list_filter;
+
+        hb_filter_object_t *filter = hb_filter_find(list, HB_FILTER_CROP_SCALE);
+        if (filter != NULL)
+        {
+            hb_dict_t *settings = filter->settings;
+            if (settings != NULL)
+            {
+                int width, height, top, bottom, left, right;
+                width = hb_dict_get_int(settings, "width");
+                height = hb_dict_get_int(settings, "height");
+                top = hb_dict_get_int(settings, "crop-top");
+                bottom = hb_dict_get_int(settings, "crop-bottom");
+                left = hb_dict_get_int(settings, "crop-left");
+                right = hb_dict_get_int(settings, "crop-right");
+
+                hb_list_rem(list, filter);
+                hb_filter_close(&filter);
+
+                filter = hb_filter_init(HB_FILTER_CROP_SCALE_VT);
+                char *settings = hb_strdup_printf("width=%d:height=%d:crop-top=%d:crop-bottom=%d:crop-left=%d:crop-right=%d",
+                                                  width, height, top, bottom, left, right);
+                hb_add_filter(job, filter, settings);
+                free(settings);
+            }
+        }
+
+        filter = hb_filter_find(list, HB_FILTER_ROTATE);
+        if (filter != NULL)
+        {
+            hb_dict_t *settings = filter->settings;
+            if (settings != NULL)
+            {
+                int angle, hflip;
+                angle = hb_dict_get_int(settings, "angle");
+                hflip = hb_dict_get_int(settings, "hflip");
+
+                hb_list_rem(list, filter);
+                hb_filter_close(&filter);
+
+                filter = hb_filter_init(HB_FILTER_ROTATE_VT);
+                char *settings = hb_strdup_printf("angle=%d:hflip=%d",
+                                                  angle, hflip);
+                hb_add_filter(job, filter, settings);
+                free(settings);
+            }
+        }
+    }
 }

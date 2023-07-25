@@ -618,7 +618,7 @@ static void FUNC(nlmeans_plane)(NLMeansFunctions *functions,
     const int bw     = w + 2 * border;
 
     // Allocate temporary pixel sums
-    struct PixelSum *tmp_data = calloc((dst_w + n) * (dst_h + n), sizeof(struct PixelSum));
+    struct PixelSum *tmp_data = calloc(dst_w * dst_h, sizeof(struct PixelSum));
 
     // Allocate integral image
     const int integral_stride    = ((dst_w + n + 15) / 16 * 16) + 2 * 16;
@@ -670,12 +670,12 @@ static void FUNC(nlmeans_plane)(NLMeansFunctions *functions,
                                           n);
 
                 // Average displacement
-                for (int y = 0; y <= dst_h; y++)
+                for (int y = 0; y < dst_h; y++)
                 {
                     const uint32_t *integral_ptr1 = integral + (y  -1)*integral_stride - 1;
                     const uint32_t *integral_ptr2 = integral + (y+n-1)*integral_stride - 1;
 
-                    for (int x = 0; x <= dst_w; x++)
+                    for (int x = 0; x < dst_w; x++)
                     {
 
                         // Difference between patches

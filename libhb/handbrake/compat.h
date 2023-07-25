@@ -15,12 +15,10 @@
  * Some MinGW-w64 distributions #define strtok_r in pthread.h,
  * however their so-called "implementation" isn't thread-safe.
  */
-#ifdef USE_PTHREAD
 #include <pthread.h>
 #ifdef strtok_r
 #undef strtok_r
 #endif // strtok_r
-#endif // USE_PTHREAD
 
 char *strtok_r(char *s, const char *delim, char **save_ptr);
 #endif // HB_NEED_STRTOK_R

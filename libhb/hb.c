@@ -117,6 +117,11 @@ int hb_picture_fill(uint8_t *data[], int stride[], hb_buffer_t *buf)
 {
     int ret, ii;
 
+    if (buf->f.max_plane < 0)
+    {
+        return -1;
+    }
+
     for (ii = 0; ii <= buf->f.max_plane; ii++)
         stride[ii] = buf->plane[ii].stride;
     for (; ii < 4; ii++)
@@ -354,11 +359,17 @@ void hb_remove_previews( hb_handle_t * h )
     closedir( dir );
 }
 
-// We can remove this after we update all the UI's
 void hb_scan( hb_handle_t * h, const char * path, int title_index,
-              int preview_count, int store_previews, uint64_t min_duration )
+              int preview_count, int store_previews, uint64_t min_duration,
+              int crop_threshold_frames, int crop_threshold_pixels, hb_list_t * exclude_extensions)
 {
-    hb_scan2(h, path, title_index, preview_count, store_previews, min_duration, 0, 0);
+    // TODO: Compatibility later for the other UI's.  Remove when they are updated.
+    hb_list_t *file_paths = hb_list_init();
+    hb_list_add(file_paths, (char *)path);
+
+    hb_scan_list(h, file_paths, title_index, preview_count, store_previews, min_duration, crop_threshold_frames, crop_threshold_pixels, exclude_extensions);
+
+    hb_list_close(&file_paths);
 }
 
 /**
@@ -371,17 +382,26 @@ void hb_scan( hb_handle_t * h, const char * path, int title_index,
  * @param min_duration Ignore titles below a given threshold
  * @param crop_threshold_frames The number of frames to trigger smart crop
  * @param crop_threshold_pixels The variance in pixels detected that are allowed for.
+ * @param exclude_extensions A list of extensions to exclude for this scan.
  */
-void hb_scan2( hb_handle_t * h, const char * path, int title_index,
+void hb_scan_list( hb_handle_t * h, hb_list_t * paths, int title_index,
               int preview_count, int store_previews, uint64_t min_duration,
-              int crop_threshold_frames, int crop_threshold_pixels)
+              int crop_threshold_frames, int crop_threshold_pixels, hb_list_t * exclude_extensions)
 {
     hb_title_t * title;
 
-    // Check if scanning is necessary.
-    if (h->title_set.path != NULL && !strcmp(h->title_set.path, path))
+    char *single_path = NULL;
+    int path_count = hb_list_count(paths);
+
+    if (path_count == 1)
     {
-        // Current title_set path matches requested path.
+        single_path = hb_list_item(paths, 0);
+    }
+    
+    // Check if scanning is necessary. Only works on Single Path.
+    if (single_path != NULL && h->title_set.path != NULL && !strcmp(h->title_set.path, single_path))
+    {
+        // Current title_set path matches requested single_path.
         // Check if the requested title has already been scanned.
         int ii;
         for (ii = 0; ii < hb_list_count(h->title_set.list_title); ii++)
@@ -443,11 +463,17 @@ void hb_scan2( hb_handle_t * h, const char * path, int title_index,
     }
 #endif
 
-    hb_log( "hb_scan: path=%s, title_index=%d", path, title_index );
-    h->scan_thread = hb_scan_init( h, &h->scan_die, path, title_index,
+    char *path_info = single_path;
+    if (path_count > 1)
+    {
+        path_info = "(multiple)";
+    }
+
+    hb_log( "hb_scan: path=%s, title_index=%d", path_info, title_index );
+    h->scan_thread = hb_scan_init( h, &h->scan_die, paths, title_index,
                                    &h->title_set, preview_count,
                                    store_previews, min_duration,
-                                   crop_threshold_frames, crop_threshold_pixels);
+                                   crop_threshold_frames, crop_threshold_pixels, exclude_extensions);
 }
 
 void hb_force_rescan( hb_handle_t * h )
@@ -929,7 +955,6 @@ hb_image_t * hb_get_preview3(hb_handle_t * h, int picture,
 
             case HB_FILTER_VFR:
             case HB_FILTER_RENDER_SUB:
-            case HB_FILTER_QSV:
             case HB_FILTER_NLMEANS:
             case HB_FILTER_CHROMA_SMOOTH:
             case HB_FILTER_LAPSHARP:
@@ -1131,7 +1156,7 @@ fail:
  */
 int hb_detect_comb( hb_buffer_t * buf, int color_equal, int color_diff, int threshold, int prog_equal, int prog_diff, int prog_threshold )
 {
-    int j, k, n, off, cc_1, cc_2, cc[3];
+    int j, k, n, off, cc_1, cc_2, cc[3] = {0};
 	// int flag[3] ; // debugging flag
     uint16_t s1, s2, s3, s4;
     cc_1 = 0; cc_2 = 0;
@@ -1189,7 +1214,7 @@ int hb_detect_comb( hb_buffer_t * buf, int color_equal, int color_diff, int thre
     }
 
 
-    /* HandBrake is all yuv420, so weight the average percentage of all 3 planes accordingly.*/
+    /* HandBrake previews are all yuv420, so weight the average percentage of all 3 planes accordingly. */
     int average_cc = ( 2 * cc[0] + ( cc[1] / 2 ) + ( cc[2] / 2 ) ) / 3;
 
     /* Now see if that average percentage of combed pixels surpasses the threshold percentage given by the user.*/
@@ -1976,7 +2001,7 @@ void hb_job_setup_passes(hb_handle_t * h, hb_job_t * job, hb_list_t * list_pass)
 {
     if (job->vquality > HB_INVALID_VIDEO_QUALITY)
     {
-        job->twopass = 0;
+        job->multipass = 0;
     }
     if (job->indepth_scan)
     {
@@ -1985,12 +2010,16 @@ void hb_job_setup_passes(hb_handle_t * h, hb_job_t * job, hb_list_t * list_pass)
         hb_add_internal(h, job, list_pass);
         job->indepth_scan = 0;
     }
-    if (job->twopass)
+    if (job->multipass)
     {
-        hb_deep_log(2, "Adding two-pass encode");
-        job->pass_id = HB_PASS_ENCODE_1ST;
-        hb_add_internal(h, job, list_pass);
-        job->pass_id = HB_PASS_ENCODE_2ND;
+        hb_deep_log(2, "Adding multi-pass encode");
+        int analysis_pass_count = hb_video_encoder_get_count_of_analysis_passes(job->vcodec);
+        for (int i = 0; i < analysis_pass_count; i++)
+        {
+            job->pass_id = HB_PASS_ENCODE_ANALYSIS;
+            hb_add_internal(h, job, list_pass);
+        }
+        job->pass_id = HB_PASS_ENCODE_FINAL;
         hb_add_internal(h, job, list_pass);
     }
     else
@@ -2190,10 +2219,6 @@ int hb_global_init()
         return -1;
     }
 
-#if HB_PROJECT_FEATURE_QSV
-    hb_param_configure_qsv();
-#endif
-
     /* libavcodec */
     hb_avcodec_init();
 
@@ -2223,9 +2248,11 @@ int hb_global_init()
 #if HB_PROJECT_FEATURE_X265
     hb_register(&hb_encx265);
 #endif
+    hb_register(&hb_encsvtav1);
 #if HB_PROJECT_FEATURE_QSV
     if (!disable_hardware)
     {
+        hb_qsv_available();
         hb_register(&hb_encqsv);
     }
 #endif
@@ -2449,6 +2476,7 @@ hb_interjob_t * hb_interjob_get( hb_handle_t * h )
     return h->interjob;
 }
 
-int is_hardware_disabled(void){
+int is_hardware_disabled(void)
+{
     return disable_hardware;
 }

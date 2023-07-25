@@ -2,13 +2,13 @@
 "1.title" = "Sbagliu Internu";
 
 /* Class = "NSTextFieldCell"; title = "An internal error has occurred. You can choose to continue in an unstable state, or crash."; ObjectID = "10"; */
-"10.title" = "Un sbagliu internu hè accadutu. Pudete sceglie di cuntinuà in un statu instabile, osinnò di lampà l’appiecazione.";
+"10.title" = "Un sbagliu internu hè accadutu. Pudete sceglie di cuntinuà in un statu instabile, osinnò di sciappà l’appiecazione.";
 
 /* Class = "NSTextFieldCell"; title = "Reason contents go here."; ObjectID = "12"; */
 "12.title" = "U cuntenutu và quì.";
 
 /* Class = "NSButtonCell"; title = "Crash"; ObjectID = "14"; */
-"14.title" = "Lampà";
+"14.title" = "Sciappà";
 
 /* Class = "NSButtonCell"; title = "Continue"; ObjectID = "16"; */
 "16.title" = "Cuntinuà";

@@ -1,7 +1,6 @@
 /* hbffmpeg.c
 
    Copyright (c) 2003-2022 HandBrake Team
-   Copyright 2022 NVIDIA Corporation
    This file is part of the HandBrake source code
    Homepage: <http://handbrake.fr/>.
    It may be used under the terms of the GNU General Public License v2.
@@ -31,17 +30,55 @@ static int get_frame_type(int type)
     }
 }
 
+static void free_side_data(AVFrameSideData **ptr_sd)
+{
+    AVFrameSideData *sd = *ptr_sd;
+
+    av_buffer_unref(&sd->buf);
+    av_dict_free(&sd->metadata);
+    av_freep(ptr_sd);
+}
+
+static void wipe_avframe_side_data(AVFrame *frame)
+{
+    for (int i = 0; i < frame->nb_side_data; i++)
+    {
+        free_side_data(&frame->side_data[i]);
+    }
+    frame->nb_side_data = 0;
+
+    av_freep(&frame->side_data);
+}
+
 void hb_video_buffer_to_avframe(AVFrame *frame, hb_buffer_t * buf)
 {
-    frame->data[0]     = buf->plane[0].data;
-    frame->data[1]     = buf->plane[1].data;
-    frame->data[2]     = buf->plane[2].data;
-    frame->linesize[0] = buf->plane[0].stride;
-    frame->linesize[1] = buf->plane[1].stride;
-    frame->linesize[2] = buf->plane[2].stride;
+    if (buf->storage_type == AVFRAME)
+    {
+        av_frame_ref(frame, buf->storage);
+    }
+    else
+    {
+        frame->data[0]     = buf->plane[0].data;
+        frame->data[1]     = buf->plane[1].data;
+        frame->data[2]     = buf->plane[2].data;
+        frame->linesize[0] = buf->plane[0].stride;
+        frame->linesize[1] = buf->plane[1].stride;
+        frame->linesize[2] = buf->plane[2].stride;
+        for (int i = 0; i < buf->nb_side_data; i++)
+        {
+            const AVFrameSideData *sd_src = buf->side_data[i];
+            AVBufferRef *ref = av_buffer_ref(sd_src->buf);
+            AVFrameSideData *sd_dst = av_frame_new_side_data_from_buf(frame, sd_src->type, ref);
+            if (!sd_dst)
+            {
+                av_buffer_unref(&ref);
+                wipe_avframe_side_data(frame);
+            }
+        }
+    }
 
     frame->pts              = buf->s.start;
-    frame->reordered_opaque = buf->s.duration;
+    frame->duration         = buf->s.duration;
     frame->width            = buf->f.width;
     frame->height           = buf->f.height;
     frame->format           = buf->f.fmt;
@@ -65,7 +102,7 @@ void hb_avframe_set_video_buffer_flags(hb_buffer_t * buf, AVFrame *frame,
     }
 
     buf->s.start = av_rescale_q(frame->pts, time_base, (AVRational){1, 90000});
-    buf->s.duration = frame->reordered_opaque;
+    buf->s.duration = frame->duration;
 
     if (frame->top_field_first)
     {
@@ -98,58 +135,109 @@ void hb_avframe_set_video_buffer_flags(hb_buffer_t * buf, AVFrame *frame,
 
 hb_buffer_t * hb_avframe_to_video_buffer(AVFrame *frame, AVRational time_base)
 {
-    hb_buffer_t * buf;
+    hb_buffer_t *buf;
 
-    buf = hb_frame_buffer_init(frame->format, frame->width, frame->height);
-    if (buf == NULL)
-    {
-        return NULL;
-    }
-
-    hb_avframe_set_video_buffer_flags(buf, frame, time_base);
-
-    int pp;
-    for (pp = 0; pp <= buf->f.max_plane; pp++)
-    {
-        int yy;
-        int stride    = buf->plane[pp].stride;
-        int height    = buf->plane[pp].height;
-        int linesize  = frame->linesize[pp];
-        int size = linesize < stride ? ABS(linesize) : stride;
-        uint8_t * dst = buf->plane[pp].data;
-        uint8_t * src = frame->data[pp];
-
-#if HB_PROJECT_FEATURE_NVENC
-        if (frame->hw_frames_ctx)
-            continue;
-#endif
-
-        for (yy = 0; yy < height; yy++)
-        {
-            memcpy(dst, src, size);
-            dst += stride;
-            src += linesize;
-        }
-    }
-
-#if HB_PROJECT_FEATURE_NVENC
     if (frame->hw_frames_ctx)
     {
-        int ret = av_hwframe_get_buffer(frame->hw_frames_ctx, buf->hw_ctx.frame, 0);
-        if (ret)
+        // Zero-copy path
+        buf = hb_buffer_wrapper_init();
+
+        if (buf == NULL)
+        {
+            return NULL;
+        }
+
+        AVFrame *frame_copy = av_frame_alloc();
+        if (frame_copy == NULL)
         {
             hb_buffer_close(&buf);
             return NULL;
         }
 
-        ret = av_hwframe_transfer_data(buf->hw_ctx.frame, frame, 0);
-        if (ret)
+        int ret;
+        ret = av_frame_ref(frame_copy, frame);
+
+        if (ret < 0)
         {
             hb_buffer_close(&buf);
+            av_frame_free(&frame_copy);
             return NULL;
         }
+
+        buf->storage_type = AVFRAME;
+        buf->storage = frame_copy;
+
+        buf->s.type = FRAME_BUF;
+        buf->f.width = frame_copy->width;
+        buf->f.height = frame_copy->height;
+        hb_avframe_set_video_buffer_flags(buf, frame_copy, time_base);
+
+        buf->side_data = (void **)frame_copy->side_data;
+        buf->nb_side_data = frame_copy->nb_side_data;
+
+        const AVPixFmtDescriptor *desc = av_pix_fmt_desc_get(frame_copy->format);
+        for (int ii = 0; ii < desc->nb_components; ii++)
+        {
+            int pp = desc->comp[ii].plane;
+            if (pp > buf->f.max_plane)
+            {
+                buf->f.max_plane = pp;
+            }
+        }
+
+        for (int pp = 0; pp <= buf->f.max_plane; pp++)
+        {
+            buf->plane[pp].data          = frame_copy->data[pp];
+            buf->plane[pp].stride        = frame_copy->linesize[pp];
+            buf->plane[pp].height_stride = 0;
+            buf->plane[pp].width         = hb_image_width(buf->f.fmt, buf->f.width, pp);
+            buf->plane[pp].height        = hb_image_height(buf->f.fmt, buf->f.height, pp);
+            buf->plane[pp].size          = buf->plane[pp].stride * buf->plane[pp].height;
+
+            buf->size += buf->plane[pp].size;
+        }
+
+        return buf;
     }
-#endif
+    else
+    {
+        // Memcpy to a standard hb_buffer_t
+        buf = hb_frame_buffer_init(frame->format, frame->width, frame->height);
+        if (buf == NULL)
+        {
+            return NULL;
+        }
+
+        hb_avframe_set_video_buffer_flags(buf, frame, time_base);
+        int pp;
+        for (pp = 0; pp <= buf->f.max_plane; pp++)
+        {
+            int yy;
+            int stride    = buf->plane[pp].stride;
+            int height    = buf->plane[pp].height;
+            int linesize  = frame->linesize[pp];
+            int size = linesize < stride ? ABS(linesize) : stride;
+            uint8_t * dst = buf->plane[pp].data;
+            uint8_t * src = frame->data[pp];
+            for (yy = 0; yy < height; yy++)
+            {
+                memcpy(dst, src, size);
+                dst += stride;
+                src += linesize;
+            }
+        }
+        for (int i = 0; i < frame->nb_side_data; i++)
+        {
+            const AVFrameSideData *sd_src = frame->side_data[i];
+            AVBufferRef *ref = av_buffer_ref(sd_src->buf);
+            AVFrameSideData *sd_dst = hb_buffer_new_side_data_from_buf(buf, sd_src->type, ref);
+            if (!sd_dst)
+            {
+                av_buffer_unref(&ref);
+                hb_buffer_wipe_side_data(buf);
+            }
+        }
+    }
 
     return buf;
 }
@@ -497,6 +585,60 @@ AVMasteringDisplayMetadata hb_mastering_hb_to_ff(hb_mastering_display_metadata_t
     ff_mastering.has_luminance = mastering.has_luminance;
 
     return ff_mastering;
+}
+
+hb_ambient_viewing_environment_metadata_t hb_ambient_ff_to_hb(AVAmbientViewingEnvironment ambient)
+{
+    hb_ambient_viewing_environment_metadata_t hb_ambient;
+
+    hb_ambient.ambient_illuminance = hb_rational_ff_to_hb(ambient.ambient_illuminance);
+    hb_ambient.ambient_light_x = hb_rational_ff_to_hb(ambient.ambient_light_x);
+    hb_ambient.ambient_light_y = hb_rational_ff_to_hb(ambient.ambient_light_y);
+
+    return hb_ambient;
+}
+
+AVAmbientViewingEnvironment hb_ambient_hb_to_ff(hb_ambient_viewing_environment_metadata_t ambient)
+{
+    AVAmbientViewingEnvironment ff_ambient;
+
+    ff_ambient.ambient_illuminance = hb_rational_hb_to_ff(ambient.ambient_illuminance);
+    ff_ambient.ambient_light_x = hb_rational_hb_to_ff(ambient.ambient_light_x);
+    ff_ambient.ambient_light_y = hb_rational_hb_to_ff(ambient.ambient_light_y);
+
+    return ff_ambient;
+}
+
+AVDOVIDecoderConfigurationRecord hb_dovi_hb_to_ff(hb_dovi_conf_t dovi)
+{
+    AVDOVIDecoderConfigurationRecord ff_dovi;
+
+    ff_dovi.dv_version_major = dovi.dv_version_major;
+    ff_dovi.dv_version_minor = dovi.dv_version_minor;
+    ff_dovi.dv_profile = dovi.dv_profile;
+    ff_dovi.dv_level = dovi.dv_level;
+    ff_dovi.rpu_present_flag = dovi.rpu_present_flag;
+    ff_dovi.el_present_flag = dovi.el_present_flag;
+    ff_dovi.bl_present_flag = dovi.bl_present_flag;
+    ff_dovi.dv_bl_signal_compatibility_id = dovi.dv_bl_signal_compatibility_id;
+
+    return ff_dovi;
+}
+
+hb_dovi_conf_t hb_dovi_ff_to_hb(AVDOVIDecoderConfigurationRecord dovi)
+{
+    hb_dovi_conf_t hb_dovi;
+
+    hb_dovi.dv_version_major = dovi.dv_version_major;
+    hb_dovi.dv_version_minor = dovi.dv_version_minor;
+    hb_dovi.dv_profile = dovi.dv_profile;
+    hb_dovi.dv_level = dovi.dv_level;
+    hb_dovi.rpu_present_flag = dovi.rpu_present_flag;
+    hb_dovi.el_present_flag = dovi.el_present_flag;
+    hb_dovi.bl_present_flag = dovi.bl_present_flag;
+    hb_dovi.dv_bl_signal_compatibility_id = dovi.dv_bl_signal_compatibility_id;
+
+    return hb_dovi;
 }
 
 uint64_t hb_ff_mixdown_xlat(int hb_mixdown, int *downmix_mode)

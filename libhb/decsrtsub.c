@@ -56,7 +56,7 @@ struct hb_work_private_s
     unsigned long last_entry_number;
     unsigned long current_state;
     srt_entry_t current_entry;
-    iconv_t *iconv_context;
+    iconv_t iconv_context;
     hb_subtitle_t *subtitle;
     uint64_t start_time;              // In HB time
     uint64_t stop_time;               // In HB time

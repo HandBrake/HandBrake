@@ -1,4 +1,4 @@
-/* -*- Mode: C; indent-tabs-mode: t; c-basic-offset: 4; tab-width: 4 -*- */
+/* -*- Mode: C; indent-tabs-mode: nil; c-basic-offset: 4; tab-width: 4 -*- */
 /*
  * audiohandler.h
  * Copyright (C) John Stebbins 2008-2022 <stebbins@stebbins>
@@ -43,5 +43,9 @@ gboolean ghb_find_lang_row(GtkTreeModel *model, GtkTreeIter *iter, int idx);
 void ghb_audio_title_change(signal_user_data_t *ud, gboolean title_valid);
 void ghb_clear_audio_selection(GtkBuilder *builder);
 gboolean ghb_audio_quality_enabled(const GhbValue *asettings);
+
+void audio_list_selection_changed_cb(GtkTreeSelection *ts, signal_user_data_t *ud);
+void audio_edit_clicked_cb(GtkWidget *widget, gchar *path, signal_user_data_t *ud);
+void audio_remove_clicked_cb(GtkWidget *widget, gchar *path, signal_user_data_t *ud);
 
 #endif // _AUDIOHANDLER_H_

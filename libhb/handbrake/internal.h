@@ -12,6 +12,7 @@
 
 #include "libavutil/imgutils.h"
 #include "libavutil/pixdesc.h"
+#include "libavutil/frame.h"
 #include "handbrake/project.h"
 
 /***********************************************************************
@@ -156,22 +157,20 @@ struct hb_buffer_s
     {
         void               * qsv_atom;
         AVFrame            * frame;
-        void               * filter_details;
         hb_qsv_context     * ctx;
         HBQSVFramesContext * qsv_frames_ctx;
     } qsv_details;
 #endif
 
-#if HB_PROJECT_FEATURE_NVENC
-    struct hw_ctx
-    {
-        void *frame;
-    } hw_ctx;
-#endif
+    void  *storage;
+    enum  { STANDARD, AVFRAME, COREMEDIA } storage_type;
 
     // libav may attach AV_PKT_DATA_PALETTE side data to some AVPackets
     // Store this data here when read and pass to decoder.
     hb_buffer_t * palette;
+
+    void **side_data;
+    int    nb_side_data;
 
     // Packets in a list:
     //   the next packet in the list
@@ -181,6 +180,7 @@ struct hb_buffer_s
 void hb_buffer_pool_init( void );
 void hb_buffer_pool_free( void );
 
+hb_buffer_t * hb_buffer_wrapper_init();
 hb_buffer_t * hb_buffer_init( int size );
 hb_buffer_t * hb_buffer_eof_init( void );
 hb_buffer_t * hb_frame_buffer_init( int pix_fmt, int w, int h);
@@ -199,6 +199,15 @@ hb_image_t  * hb_buffer_to_image(hb_buffer_t *buf);
 int           hb_picture_fill(uint8_t *data[], int stride[], hb_buffer_t *b);
 int           hb_picture_crop(uint8_t *data[], int stride[], hb_buffer_t *b,
                               int top, int left);
+
+AVFrameSideData *hb_buffer_new_side_data_from_buf(hb_buffer_t *buf,
+                                                  enum AVFrameSideDataType type,
+                                                  AVBufferRef *side_data_buf);
+void hb_frame_remove_side_data(hb_buffer_t *buf, enum AVFrameSideDataType type);
+void             hb_buffer_wipe_side_data(hb_buffer_t *buf);
+void             hb_buffer_copy_side_data(hb_buffer_t *dst, const hb_buffer_t *src);
+
+void             hb_buffer_copy_props(hb_buffer_t *dst, const hb_buffer_t *src);
 
 hb_fifo_t   * hb_fifo_init( int capacity, int thresh );
 void          hb_fifo_register_full_cond( hb_fifo_t * f, hb_cond_t * c );
@@ -269,21 +278,14 @@ static inline int hb_image_height(int pix_fmt, int height, int plane)
     return height;
 }
 
-// this routine gets a buffer for an uncompressed YUV420 video frame
-// with dimensions width x height.
-static inline hb_buffer_t * hb_video_buffer_init( int width, int height )
-{
-    return hb_frame_buffer_init( AV_PIX_FMT_YUV420P, width, height );
-}
-
 /***********************************************************************
  * Threads: scan.c, work.c, reader.c, muxcommon.c
  **********************************************************************/
 hb_thread_t * hb_scan_init( hb_handle_t *, volatile int * die,
-                            const char * path, int title_index,
+                            hb_list_t * paths, int title_index,
                             hb_title_set_t * title_set, int preview_count,
                             int store_previews, uint64_t min_duration,
-                            int crop_auto_switch_threshold, int crop_median_threshold );
+                            int crop_auto_switch_threshold, int crop_median_threshold, hb_list_t * exclude_extensions );
 hb_thread_t * hb_work_init( hb_list_t * jobs,
                             volatile int * die, hb_error_code * error, hb_job_t ** job );
 void ReadLoop( void * _w );
@@ -324,10 +326,12 @@ extern const hb_muxer_t hb_demux[];
  **********************************************************************/
 typedef struct hb_batch_s hb_batch_t;
 
-hb_batch_t  * hb_batch_init( hb_handle_t *h, char * path );
+hb_batch_t  * hb_batch_init( hb_handle_t *h, char * path, hb_list_t * exclude_extensions );
 void          hb_batch_close( hb_batch_t ** _d );
 int           hb_batch_title_count( hb_batch_t * d );
 hb_title_t  * hb_batch_title_scan( hb_batch_t * d, int t );
+hb_title_t  * hb_batch_title_scan_single( hb_handle_t * h, char * filename, int t );
+int           hb_is_valid_batch_path( const char * filename );
 
 /***********************************************************************
  * dvd.c
@@ -453,6 +457,7 @@ enum
     WORK_ENCVT,
     WORK_ENCX264,
     WORK_ENCX265,
+    WORK_ENCSVTAV1,
     WORK_ENCTHEORA,
     WORK_DECAVCODEC,
     WORK_DECAVCODECV,
@@ -478,6 +483,7 @@ extern hb_filter_object_t hb_filter_denoise;
 extern hb_filter_object_t hb_filter_nlmeans;
 extern hb_filter_object_t hb_filter_chroma_smooth;
 extern hb_filter_object_t hb_filter_render_sub;
+extern hb_filter_object_t hb_filter_rpu;
 extern hb_filter_object_t hb_filter_crop_scale;
 extern hb_filter_object_t hb_filter_rotate;
 extern hb_filter_object_t hb_filter_grayscale;
@@ -489,10 +495,9 @@ extern hb_filter_object_t hb_filter_mt_frame;
 extern hb_filter_object_t hb_filter_colorspace;
 extern hb_filter_object_t hb_filter_format;
 
-#if HB_PROJECT_FEATURE_QSV
-extern hb_filter_object_t hb_filter_qsv;
-extern hb_filter_object_t hb_filter_qsv_pre;
-extern hb_filter_object_t hb_filter_qsv_post;
+#if defined(__APPLE__)
+extern hb_filter_object_t hb_filter_crop_scale_vt;
+extern hb_filter_object_t hb_filter_rotate_vt;
 #endif
 
 extern hb_work_object_t * hb_objects;
@@ -546,6 +551,10 @@ void                 hb_chapter_dequeue(hb_chapter_queue_t *q, hb_buffer_t *b);
 /* Font names used for rendering subtitles */
 #if defined(SYS_MINGW)
 #define HB_FONT_MONO "Lucida Console"
+#define HB_FONT_SANS "sans-serif"
+#elif defined(__APPLE__)
+// use a different monospace font until https://github.com/libass/libass/issues/518 is resolved
+#define HB_FONT_MONO "Andale Mono"
 #define HB_FONT_SANS "sans-serif"
 #else
 #define HB_FONT_MONO "monospace"

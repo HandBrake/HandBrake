@@ -68,6 +68,11 @@ namespace HandBrakeWPF.Services.Presets.Interfaces
         Preset GetDefaultPreset();
 
         /// <summary>
+        /// Generate a new preset name that is not used, based on the current name
+        /// </summary>
+        string GenerateUniqueName(string currentName);
+
+        /// <summary>
         /// Add a new preset to the system
         /// </summary>
         /// <param name="preset">
@@ -217,5 +222,10 @@ namespace HandBrakeWPF.Services.Presets.Interfaces
         /// The category Name.
         /// </param>
         void ChangePresetCategory(string presetName, string categoryName);
+
+        void MoveToTopOfGroup(Preset preset);
+        void MoveToBottomOfGroup(Preset preset);
+        void MoveUp(Preset preset);
+        void MoveDown(Preset preset);
     }
 }

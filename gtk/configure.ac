@@ -8,12 +8,11 @@ AM_MAINTAINER_MODE
 
 AC_USE_SYSTEM_EXTENSIONS
 AC_PROG_CC(gcc clang)
-AC_ISC_POSIX
+AC_SEARCH_LIBS([strerror],[cposix])
 AC_PROG_CXX(g++ clang++)
-AM_PROG_CC_STDC
-AC_HEADER_STDC
 
-AM_CONFIG_HEADER([config.h])
+AC_CONFIG_MACRO_DIR([m4])
+AC_CONFIG_HEADERS([config.h])
 AC_CONFIG_FILES([
 po/Makefile.in
 Makefile
@@ -35,7 +34,7 @@ AC_SUBST(CC_FOR_BUILD)
 
 # introduce the optional configure parameter for the path of libXXX.a
 AC_ARG_WITH(hb,
-	AC_HELP_STRING(
+	AS_HELP_STRING(
 		[--with-hb=prefix],
 		[try this for the hb-library prefix install directory]
 	),
@@ -94,13 +93,13 @@ AC_ARG_ENABLE(mf,
 	AS_HELP_STRING([--enable-mf], [enable MediaFoundation encoder]),
 	use_mf=yes, use_mf=no)
 
+AC_ARG_ENABLE(libdovi,
+    AS_HELP_STRING([--enable-libdovi], [enable libdovi]),
+    use_libdovi=yes, use_libdovi=no)
+
 AC_ARG_ENABLE(gst,
 	AS_HELP_STRING([--disable-gst], [disable gstreamer (live preview)]),
 	gst_disable=yes, gst_disable=no)
-
-AC_ARG_ENABLE(update-checks,
-	AS_HELP_STRING([--disable-update-checks], [disable update checks]),
-	update_checks=no, update_checks=yes)
 
 AC_ARG_ENABLE(gtk4,
 	AS_HELP_STRING([--enable-gtk4], [enable building with gtk4]),
@@ -119,7 +118,7 @@ GETTEXT_PACKAGE=ghb
 AC_SUBST(GETTEXT_PACKAGE)
 AC_DEFINE_UNQUOTED(GETTEXT_PACKAGE,"$GETTEXT_PACKAGE", [GETTEXT package name])
 
-AM_PROG_LIBTOOL
+LT_INIT
 
 AC_SYS_LARGEFILE
 
@@ -140,16 +139,16 @@ esac
 
 PKG_PROG_PKG_CONFIG
 
-HAVE_GTK_400=0
-HAVE_GTK_316=0
+HAVE_GTK_4_4=0
+HAVE_GTK_3_22=0
 if test "x$use_gtk4" = "xyes" ; then
-	PKG_CHECK_MODULES([gtk], [gtk4 >= 3.92], [HAVE_GTK_400=1], [HAVE_GTK_400=0])
+	PKG_CHECK_MODULES([gtk], [gtk4 >= 4.4], [HAVE_GTK_4_4=1], [HAVE_GTK_4_4=0])
 else
-	PKG_CHECK_MODULES([gtk], [gtk+-3.0 >= 3.16], [HAVE_GTK_316=1], [HAVE_GTK_316=0])
+	PKG_CHECK_MODULES([gtk], [gtk+-3.0 >= 3.22], [HAVE_GTK_3_22=1], [HAVE_GTK_3_22=0])
 fi
 
-if test "$HAVE_GTK_316" -eq 0 -a "$HAVE_GTK_400" -eq 0 ; then
-	AC_MSG_ERROR("GTK 3.16 or above is required)
+if test "$HAVE_GTK_3_22" -eq 0 -a "$HAVE_GTK_4_4" -eq 0 ; then
+	AC_MSG_ERROR("GTK 3.22 or above is required)
 fi
 HB_LIBS="$HB_LIBS $gtk_LIBS"
 HB_CPPFLAGS="$HB_CPPFLAGS $gtk_CFLAGS"
@@ -159,14 +158,11 @@ HB_LIBS="$HB_LIBS $GHB_LIBS"
 HB_CPPFLAGS="$HB_CPPFLAGS $GHB_CFLAGS"
 
 
-pkg_gudev="gudev-1.0"
-PKG_CHECK_MODULES([gudev], [$pkg_gudev], have_gudev=yes, have_gudev=no)
-if test "x$have_gudev" = "xyes" ; then
-	HB_LIBS="$HB_LIBS $gudev_LIBS"
-	HB_CPPFLAGS="$HB_CPPFLAGS $gudev_CFLAGS"
-
-	CXXFLAGS="$CXXFLAGS -D_HAVE_GUDEV"
-	CFLAGS="$CFLAGS -D_HAVE_GUDEV"
+pkg_libxml2="libxml-2.0"
+PKG_CHECK_MODULES([libxml2], [$pkg_libxml2], have_libxml2=yes, have_libxml2=no)
+if test "x$have_libxml2" = "xyes" ; then
+	HB_LIBS="$HB_LIBS $libxml2_LIBS"
+	HB_CPPFLAGS="$HB_CPPFLAGS $libxml2_CFLAGS"
 fi
 
 GST1_MODULES="gstreamer-1.0 gstreamer-video-1.0 gstreamer-audio-1.0 gstreamer-pbutils-1.0"
@@ -185,21 +181,8 @@ if test "x$gst_disable" = "xno" ; then
 	CFLAGS="$CFLAGS -D_ENABLE_GST"
 fi
 
-if test "x$update_checks" = "xyes" ; then
-	PKG_CHECK_MODULES([webkitgtk], webkitgtk-3.0, use_webkitgtk=yes, use_webkitgtk=no)
-	if test "x$use_webkitgtk" = "xyes" ; then
-		HB_LIBS="$HB_LIBS $webkitgtk_LIBS"
-		HB_CPPFLAGS="$HB_CPPFLAGS $webkitgtk_CFLAGS"
-	else
-		update_checks="no"
-		CFLAGS="$CFLAGS -D_NO_UPDATE_CHECK"
-	fi
-else
-	CFLAGS="$CFLAGS -D_NO_UPDATE_CHECK"
-fi
-
-AM_CONDITIONAL([GHB_GTK_4_00], [test "$HAVE_GTK_400" -eq 1])
-AM_CONDITIONAL([GHB_GTK_3_16], [test "$HAVE_GTK_316" -eq 1])
+AM_CONDITIONAL([GHB_GTK_4_4], [test "$HAVE_GTK_4_4" -eq 1])
+AM_CONDITIONAL([GHB_GTK_3_22], [test "$HAVE_GTK_3_22" -eq 1])
 
 AM_CONDITIONAL([MINGW], [test "x$mingw_flag" = "xyes"])
 
@@ -225,6 +208,10 @@ fi
 
 if test "x$use_qsv" = "xyes" ; then
 	HB_LIBS="$HB_LIBS -lvpl"
+fi
+
+if test "x$use_libdovi" = "xyes" ; then
+    HB_LIBS="$HB_LIBS -ldovi"
 fi
 
 case $host in
@@ -273,7 +260,7 @@ AM_CONDITIONAL([GHB_FLATPAK], [test "$use_flatpak" = "yes"])
 if test "x$PYTHON" != "x" ; then
 	HB_PYTHON="$PYTHON"
 else
-	HB_PYTHON="python2"
+	HB_PYTHON="python3"
 fi
 
 AC_SUBST(HB_PYTHON)

@@ -38,7 +38,7 @@
 "1539.ibShadowedToolTip" = "Nome documento sorgente.";
 
 /* Class = "NSPopUpButton"; ibShadowedToolTip = "Title, or video clip, to encode. The longest title is selected by default.\n\nBlu-ray and DVD sources often have multiple titles, the longest of which is typically the main feature."; ObjectID = "1541"; */
-"1541.ibShadowedToolTip" = "Titolo, o clip video, da convertire. Il titolo più lungo è selezionato di default\n\nSorgenti Blu-ray e DVD hanno di solito titolo multipli, il più lungo dei quali è tipicamente il contenuto principale.";
+"1541.ibShadowedToolTip" = "Titolo, o clip video, da convertire. Il titolo più lungo è selezionato di default\n\nLe sorgenti Blu-ray e DVD hanno di solito titoli multipli, il più lungo dei quali è tipicamente il contenuto principale.";
 
 /* Class = "NSMenu"; title = "OtherViews"; ObjectID = "1542"; */
 "1542.title" = "OtherViews";

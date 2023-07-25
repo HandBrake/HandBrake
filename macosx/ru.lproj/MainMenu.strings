@@ -1,8 +1,8 @@
 /* Class = "NSMenu"; title = "Services"; ObjectID = "0te-ai-fgD"; */
 "0te-ai-fgD.title" = "Сервисы:";
 
-/* Class = "NSMenuItem"; title = "Rename Preset…"; ObjectID = "1GQ-n3-jfY"; */
-"1GQ-n3-jfY.title" = "Переименовать пресет...";
+/* Class = "NSMenuItem"; title = "Rename…"; ObjectID = "1GQ-n3-jfY"; */
+"1GQ-n3-jfY.title" = "Переименовать...";
 
 /* Class = "NSMenuItem"; title = "Filters"; ObjectID = "6rE-SM-AGi"; */
 "6rE-SM-AGi.title" = "Фильтры";
@@ -169,8 +169,8 @@
 /* Class = "NSMenuItem"; title = "HandBrake"; ObjectID = "2368"; */
 "2368.title" = "HandBrake";
 
-/* Class = "NSMenuItem"; title = "Select Default Preset"; ObjectID = "2421"; */
-"2421.title" = "Выбрать пресет по умолчанию";
+/* Class = "NSMenuItem"; title = "Select Default"; ObjectID = "2421"; */
+"2421.title" = "Выбрать По Умолчанию";
 
 /* Class = "NSMenuItem"; title = "Add To Queue"; ObjectID = "2443"; */
 "2443.title" = "Добавить в очередь";
@@ -208,8 +208,8 @@
 /* Class = "NSMenuItem"; title = "Audio"; ObjectID = "brQ-mu-8JM"; */
 "brQ-mu-8JM.title" = "Аудио";
 
-/* Class = "NSMenuItem"; title = "Delete Preset"; ObjectID = "CN3-Rh-gVf"; */
-"CN3-Rh-gVf.title" = "Удалить пресет";
+/* Class = "NSMenuItem"; title = "Delete"; ObjectID = "CN3-Rh-gVf"; */
+"CN3-Rh-gVf.title" = "Удалить";
 
 /* Class = "NSMenuItem"; title = "Subtitles"; ObjectID = "Csx-2S-iUe"; */
 "Csx-2S-iUe.title" = "Субтитры";
@@ -217,8 +217,8 @@
 /* Class = "NSMenuItem"; title = "Open Recent"; ObjectID = "fNa-z2-K1i"; */
 "fNa-z2-K1i.title" = "Открыть недавние";
 
-/* Class = "NSMenuItem"; title = "Make Default Preset"; ObjectID = "frQ-v5-pRa"; */
-"frQ-v5-pRa.title" = "Выбрать как пресет по умолчанию";
+/* Class = "NSMenuItem"; title = "Make Default"; ObjectID = "frQ-v5-pRa"; */
+"frQ-v5-pRa.title" = "Выбрать по умолчанию";
 
 /* Class = "NSMenuItem"; title = "View"; ObjectID = "Hzp-jb-hme"; */
 "Hzp-jb-hme.title" = "Вид";
@@ -231,6 +231,9 @@
 
 /* Class = "NSMenuItem"; title = "Customize Toolbar…"; ObjectID = "KKV-n0-Fmr"; */
 "KKV-n0-Fmr.title" = "Настроить панель инструментов...";
+
+/* Class = "NSMenuItem"; title = "Save"; ObjectID = "lab-Ly-3p3"; */
+"lab-Ly-3p3.title" = "Сохранить";
 
 /* Class = "NSMenuItem"; title = "Chapters"; ObjectID = "lCU-PH-gal"; */
 "lCU-PH-gal.title" = "Главы";
@@ -253,8 +256,8 @@
 /* Class = "NSMenuItem"; title = "Clear Menu"; ObjectID = "wPw-Uj-Gxi"; */
 "wPw-Uj-Gxi.title" = "Очистить меню";
 
-/* Class = "NSMenuItem"; title = "New Category"; ObjectID = "wvb-60-cWL"; */
-"wvb-60-cWL.title" = "Новая категория";
+/* Class = "NSMenuItem"; title = "New Category…"; ObjectID = "wvb-60-cWL"; */
+"wvb-60-cWL.title" = "Новая категория...";
 
 /* Class = "NSMenuItem"; title = "Services"; ObjectID = "XcG-Aw-Gdb"; */
 "XcG-Aw-Gdb.title" = "Сервисы:";

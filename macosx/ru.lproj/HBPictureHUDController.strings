@@ -13,12 +13,6 @@
 /* Class = "NSTextFieldCell"; title = "sec"; ObjectID = "ksF-Ma-hB1"; */
 "ksF-Ma-hB1.title" = "сек";
 
-/* Class = "NSButton"; ibShadowedToolTip = "Show picture settings."; ObjectID = "mV7-hU-tMt"; */
-"mV7-hU-tMt.ibShadowedToolTip" = "Показать настройки изображения.";
-
-/* Class = "NSButtonCell"; title = "Settings"; ObjectID = "NWd-Lq-c1A"; */
-"NWd-Lq-c1A.title" = "Настройки";
-
 /* Class = "NSButtonCell"; title = "Scale To Screen"; ObjectID = "STc-Po-p1X"; */
 "STc-Po-p1X.title" = "Масштабировать к размеру экрана";
 

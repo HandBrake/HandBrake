@@ -171,6 +171,14 @@ static int colorspace_init(hb_filter_object_t * filter, hb_filter_init_t * init)
     }
     pv->input = *init;
 
+    if (init->color_prim     == HB_COLR_PRI_UNDEF ||
+        init->color_transfer == HB_COLR_TRA_UNDEF ||
+        init->color_matrix   == HB_COLR_MAT_UNDEF)
+    {
+        hb_error("colorspace: input color space undefined");
+        return -1;
+    }
+
     hb_dict_t        * settings = filter->settings;
 
     char * range = NULL;

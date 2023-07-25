@@ -14,9 +14,6 @@
 /* HBJob -> video short description framerate */
 " FPS PFR" = " FPS PFR";
 
-/* Dimensions description */
-" Keep Aspect Ratio" = "Сохранять соотношение сторон";
-
 /* Title short description -> audio format */
 ", %d audio tracks" = ", %d аудио-дорожек";
 
@@ -44,9 +41,6 @@
 /* Format description */
 ", iPod 5G Support" = ", Поддержка iPod 5G";
 
-/* HBPicture -> summary */
-", Modulus: %d" = ", Модуль: %d";
-
 /* Format description */
 ", Web Optimized" = ", Оптимизирован для Веб";
 
@@ -63,13 +57,7 @@
 "%@Output: %dx%d" = "%1$@Выходной: %2$dx%3$d";
 
 /* HBPicture -> short info */
-"%@Output: %dx%d, Anamorphic: %dx%d Auto" = "%1$@Выходное: %2$dx%3$d, Анаморфирование: %4$dx%5$d Авто";
-
-/* HBPicture -> short info */
 "%@Output: %dx%d, Anamorphic: %dx%d Custom" = "%1$@Выходное: %2$dx%3$d, Анаморфирование: %4$dx%5$d Пользовательское";
-
-/* HBPicture -> short info */
-"%@Output: %dx%d, Anamorphic: %dx%d Loose" = "%1$@Выходное: %2$dx%3$d, Анаморфирование: %4$dx%5$d Свободное";
 
 /* HBPicture -> short info */
 "%dx%d Storage, %dx%d Display" = "%1$dx%2$d Хранение, %3$dx%4$d Показ";
@@ -111,7 +99,7 @@
 "Audio:" = "Аудио";
 
 /* HBPicture -> summary */
-"Auto" = "Авто";
+"Automatic" = "Авто";
 
 /* Video description */
 "Bitrate: %d kbps" = "Битрейт: %d кбит/с";
@@ -149,14 +137,8 @@
    HBJob -> filters short description */
 "Deblock" = "Деблокинг";
 
-/* HBJob -> invalid deblock custom settings error recovery suggestion */
-"Deblock syntax: strength=s:thresh=t:blocksize=b" = "Синтаксис деблокинга: strength=s:thresh=t:blocksize=b";
-
 /* HBFilters -> filter display name */
 "Decomb" = "Удаление гребенки";
-
-/* HBJob -> invalid Decomb custom settings error recovery suggestion */
-"Decomb syntax: mode=m:magnitude-thresh=m:variance-thresh=v:laplacian-thresh=l:dilation-thresh=d:erosion-thresh=e:noise-thresh=n:search-distance=s:postproc=p:parity=p\n\nDecomb default: mode=7" = "Синтаксис удаления гребенки: mode=m:magnitude-thresh=m:variance-thresh=v:laplacian-thresh=l:dilation-thresh=d:erosion-thresh=e:noise-thresh=n:search-distance=s:postproc=p:parity=p\n\nУдаления гребенки по умолчанию: mode=7";
 
 /* Subtitles description */
 "Default" = "По умолчанию";
@@ -223,9 +205,6 @@
 /* HBFilters -> filter display name */
 "HQDN3D" = "HQDN3D";
 
-/* HBJob -> invalid name error recovery suggestion */
-"HQDN3D syntax: y-spatial=y:cb-spatial=c:cr-spatial=c:y-temporal=y:cb-temporal=c:cr-temporal=c\n\nDefault settings: y-spatial=3:cb-spatial=2:cr-spatial=2:y-temporal=2:cb-temporal=3:cr-temporal=3" = "HQDN3D синтаксис: y-spatial=y:cb-spatial=c:cr-spatial=c:y-temporal=y:cb-temporal=c:cr-temporal=c\n\nНастройки по умолчанию: y-spatial=3:cb-spatial=2:cr-spatial=2:y-temporal=2:cb-temporal=3:cr-temporal=3";
-
 /* HBFilters -> invalid comb detect custom string description */
 "Invalid custom comb detect settings." = "Недействительные пользовательские параметры обнаружения \"гребенки\".";
 
@@ -250,6 +229,9 @@
 /* HBJob -> invalid name error description */
 "Invalid name" = "Недействительное название";
 
+/* HBJob -> invalid preset */
+"Invalid preset" = "Невалидный пресет";
+
 /* HBFilters -> invalid unsharp custom string description */
 "Invalid unsharp custom settings." = "Недействительные пользовательские настройки unsharp.";
 
@@ -259,17 +241,11 @@
 /* HBFilters -> filter display name */
 "Lapsharp" = "Lapsharp";
 
-/* HBJob -> invalid lapsharp custom settings error recovery suggestion */
-"Lapsharp syntax: y-strength=y:y-kernel=y:cb-strength=c:cb-kernel=c:cr-strength=c:cr-kernel=c\n\nLapsharp default: y-strength=0.2:y-kernel=isolap:cb-strength=0.2:cb-kernel=isolap" = "Синтаксис Lapsharp: y-strength=y:y-kernel=y:cb-strength=c:cb-kernel=c:cr-strength=c:cr-kernel=c\n\nLapsharp по умолчанию: y-strength=0.2:y-kernel=isolap:cb-strength=0.2:cb-kernel=isolap";
-
 /* Video description */
 "Level: %@" = "Уровень: %@";
 
 /* Audio description */
 "Mixdown: %@, Samplerate: %@, Bitrate: %d kbps" = "Микширование: %1$@, Частота дискретизации: %2$@, Битрейт: %3$d кбит/с";
-
-/* HBJob -> Format display name */
-"MKV File" = "MKV-файл";
 
 /* HBAudio -> Mixdown */
 "Mono" = "Моно";
@@ -280,17 +256,11 @@
 /* HBAudio -> Mixdown */
 "Mono (Right Only)" = "Моно (только правый)";
 
-/* HBJob -> Format display name */
-"MP4 File" = "MP4-файл";
-
 /* HBStateFormatter -> pass display name */
 "Muxing…" = "Миксирую...";
 
 /* HBFilters -> filter display name */
 "NLMeans" = "NLMeans";
-
-/* HBJob -> invalid name error recovery suggestion */
-"NLMeans syntax: y-strength=y:y-origin-tune=y:y-patch-size=y:y-range=y:y-frame-count=y:y-prefilter=y:cb-strength=c:cb-origin-tune=c:cb-patch-size=c:cb-range=c:cb-frame-count=c:cb-prefilter=c:cr-strength=c:cr-origin-tune=c:cr-patch-size=c:cr-range=c:cr-frame-count=c:cr-prefilter=c:threads=t\n\nDefault settings: y-strength=6:y-origin-tune=1:y-patch-size=7:y-range=3:y-frame-count=2:y-prefilter=0:cb-strength=6:cb-origin-tune=1:cb-patch-size=7:cb-range=3:cb-frame-count=2:cb-prefilter=0" = "Ситаксис NLMeans: y-strength=y:y-origin-tune=y:y-patch-size=y:y-range=y:y-frame-count=y:y-prefilter=y:cb-strength=c:cb-origin-tune=c:cb-patch-size=c:cb-range=c:cb-frame-count=c:cb-prefilter=c:cr-strength=c:cr-origin-tune=c:cr-patch-size=c:cr-range=c:cr-frame-count=c:cr-prefilter=c:threads=t\n\nНастройки по умолчанию: y-strength=6:y-origin-tune=1:y-patch-size=7:y-range=3:y-frame-count=2:y-prefilter=0:cb-strength=6:cb-origin-tune=1:cb-patch-size=7:cb-range=3:cb-frame-count=2:cb-prefilter=0";
 
 /* HBVideo -> tune */
 "none" = "нет";
@@ -338,9 +308,6 @@
 /* Range description */
 "Range:" = "Промежуток:";
 
-/* HBJob -> filters short description */
-"Rotation" = "Поворот";
-
 /* HBVideo -> frame rates display name */
 "Same as source" = "Такой же, как в исходном файле";
 
@@ -380,11 +347,8 @@
 /* Subtitles description */
 "Subtitles:" = "Субтитры:";
 
-/* HBJob -> invalid comb detect custom settings error recovery suggestion */
-"Syntax: mode=m:spatial-metric=s:motion-thresh=m:spatial-thresh=s:filter-mode=f:block-thresh=b:block-width=b:block-height=b:disable=d\n\nDefault: mode=3:spatial-metric=2:motion-thresh=1:spatial-thresh=1:filter-mode=2:block-thresh=40:block-width=16:block-height=16" = "Синтаксис: mode=m:spatial-metric=s:motion-thresh=m:spatial-thresh=s:filter-mode=f:block-thresh=b:block-width=b:block-height=b:disable=d\n\nПо умолчанию: mode=3:spatial-metric=2:motion-thresh=1:spatial-thresh=1:filter-mode=2:block-thresh=40:block-width=16:block-height=16";
-
-/* HBJob -> invalid detelecine custom settings error recovery suggestion */
-"Syntax: skip-left=s:skip-right=s:skip-top=s:skip-bottom=s:strict-breaks=s:plane=p:parity=p:disable=d\n\nDefault: skip-left=1:skip-right=1:skip-top=4:skip-bottom=4:plane=0" = "Синтаксис: skip-left=s:skip-right=s:skip-top=s:skip-bottom=s:strict-breaks=s:plane=p:parity=p:disable=d\n\nПо умолчанию: skip-left=1:skip-right=1:skip-top=4:skip-bottom=4:plane=0";
+/* HBFilters -> invalid filter custom settings error recovery suggestion */
+"Syntax: " = "Синтаксис:";
 
 /* HBJob -> invalid name error recovery suggestion */
 "The file name can't be empty." = "Название файла не может быть пустым.";
@@ -394,6 +358,9 @@
 
 /* Preset -> import error description */
 "The preset \"%@\" could not be imported." = "Пресет \"%@\" не может быть импортирован.";
+
+/* Job preset -> invalid preset recovery suggestion */
+"The preset is not a valid, try to select a different one." = "Пресет невалидный, попробуйте выбрать другой.";
 
 /* Preset -> import error reason */
 "The selected preset is invalid." = "Выбранный пресет является недействительным.";
@@ -417,9 +384,6 @@
 /* HBFilters -> filter display name */
 "Unsharp" = "Unsharp";
 
-/* HBJob -> invalid unsharp custom settings error recovery suggestion */
-"Unsharp syntax: y-strength=y:y-size=y:cb-strength=c:cb-size=c:cr-strength=c:cr-size=c\n\nUnsharp default: y-strength=0.25:y-size=7:cb-strength=0.25:cb-size=7" = "Синтаксис Unsharp: y-strength=y:y-size=y:cb-strength=c:cb-size=c:cr-strength=c:cr-size=c\n\nUnsharp по умолчанию: y-strength=0.25:y-size=7:cb-strength=0.25:cb-size=7";
-
 /* HBJob -> video short description framerate */
 "VFR" = "VFR";
 
@@ -429,12 +393,6 @@
 /* Video description */
 "Video:" = "Видео:";
 
-/* HBJob -> Format display name */
-"WebM File" = "WebM-файл";
-
 /* HBFilters -> filter display name */
 "Yadif" = "Yadif";
-
-/* HBJob -> invalid Yadif custom settings error recovery suggestion */
-"Yadif syntax: mode=m:parity=p\n\nYadif default: mode=3" = "Yadif синтаксис: mode=m:parity=p\n\nYadif по умолчанию: mode=3";
 

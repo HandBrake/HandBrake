@@ -12,8 +12,6 @@ namespace HandBrake.Interop.Interop
     using System;
     using System.Collections.Generic;
     using System.Diagnostics;
-    using System.Linq;
-    using System.Runtime.ExceptionServices;
     using System.Runtime.InteropServices;
     using System.Text.Json;
     using System.Timers;
@@ -22,22 +20,22 @@ namespace HandBrake.Interop.Interop
     using HandBrake.Interop.Interop.Helpers;
     using HandBrake.Interop.Interop.Interfaces;
     using HandBrake.Interop.Interop.Interfaces.EventArgs;
-    using HandBrake.Interop.Interop.Interfaces.Model;
-    using HandBrake.Interop.Interop.Interfaces.Model.Encoders;
-    using HandBrake.Interop.Interop.Interfaces.Model.Picture;
     using HandBrake.Interop.Interop.Interfaces.Model.Preview;
     using HandBrake.Interop.Interop.Json.Encode;
     using HandBrake.Interop.Interop.Json.Scan;
     using HandBrake.Interop.Interop.Json.State;
     using HandBrake.Interop.Utilities;
 
-    public class HandBrakeInstance : IHandBrakeInstance, IDisposable
+    public class HandBrakeInstance : IEncodeInstance, IScanInstance
     {
         private const double ScanPollIntervalMs = 250;
         private const double EncodePollIntervalMs = 250;
         private Timer scanPollTimer;
         private Timer encodePollTimer;
         private bool disposed;
+
+        private JsonState lastProgressJson;
+        private readonly object progressJsonLockObj = new object();
 
         /// <summary>
         /// Finalizes an instance of the HandBrakeInstance class.
@@ -127,7 +125,7 @@ namespace HandBrake.Interop.Interop
         /// <summary>
         /// Starts a scan of the given path.
         /// </summary>
-        /// <param name="path">
+        /// <param name="paths">
         /// The path of the video to scan.
         /// </param>
         /// <param name="previewCount">
@@ -139,13 +137,36 @@ namespace HandBrake.Interop.Interop
         /// <param name="titleIndex">
         /// The title index to scan (1-based, 0 for all titles).
         /// </param>
-        public void StartScan(string path, int previewCount, TimeSpan minDuration, int titleIndex)
+        /// <param name="excludedExtensions">
+        /// A list of file extensions to exclude.
+        /// These should be the extension name only. No .
+        /// Case Insensitive.
+        /// </param>
+        public void StartScan(List<string> paths, int previewCount, TimeSpan minDuration, int titleIndex, List<string> excludedExtensions)
         {
             this.PreviewCount = previewCount;
 
-            IntPtr pathPtr = InteropUtilities.ToUtf8PtrFromString(path);
-            HBFunctions.hb_scan(this.Handle, pathPtr, titleIndex, previewCount, 1, (ulong)(minDuration.TotalSeconds * 90000));
-            Marshal.FreeHGlobal(pathPtr);
+            // File Exclusions
+            NativeList excludedExtensionsNative = null;
+            if (excludedExtensions != null && excludedExtensions.Count > 0)
+            {
+                excludedExtensionsNative = NativeList.CreateList();
+                foreach (string extension in excludedExtensions)
+                {
+                    excludedExtensionsNative.Add(InteropUtilities.ToUtf8PtrFromString(extension));
+                }
+            }
+
+            // Handle Scan Paths
+            NativeList scanPathsList = NativeList.CreateList();
+            foreach (string path in paths)
+            {
+                scanPathsList.Add(InteropUtilities.ToUtf8PtrFromString(path));
+            }
+
+            // Start the Scan
+            IntPtr excludedExtensionsPtr = excludedExtensionsNative?.Ptr ?? IntPtr.Zero;
+            HBFunctions.hb_scan_list(this.Handle, scanPathsList.Ptr, titleIndex, previewCount, 1, (ulong)(minDuration.TotalSeconds * 90000), 0, 0, excludedExtensionsPtr);
 
             this.scanPollTimer = new Timer();
             this.scanPollTimer.Interval = ScanPollIntervalMs;
@@ -155,7 +176,7 @@ namespace HandBrake.Interop.Interop
             {
                 try
                 {
-                    this.PollScanProgress();
+                    this.PollScanProgress(excludedExtensionsNative);
                 }
                 catch (Exception exc)
                 {
@@ -214,18 +235,6 @@ namespace HandBrake.Interop.Interop
             Marshal.FreeHGlobal(nativeJobPtrPtr);
 
             return preview;
-        }
-
-        /// <summary>
-        /// Determines if DRC can be applied to the given track with the given encoder.
-        /// </summary>
-        /// <param name="trackNumber">The track Number.</param>
-        /// <param name="encoder">The encoder to use for DRC.</param>
-        /// <param name="title">The title.</param>
-        /// <returns>True if DRC can be applied to the track with the given encoder.</returns>
-        public bool CanApplyDrc(int trackNumber, HBAudioEncoder encoder, int title)
-        {
-            return HBFunctions.hb_audio_can_apply_drc2(this.Handle, title, trackNumber, encoder.Id) > 0;
         }
 
         /// <summary>
@@ -305,18 +314,17 @@ namespace HandBrake.Interop.Interop
         }
 
         /// <summary>
-        /// Checks the status of the ongoing encode.
+        /// Checks the status of this instance
         /// </summary>
         /// <returns>
         /// The <see cref="JsonState"/>.
         /// </returns>
-        public JsonState GetEncodeProgress()
+        public JsonState GetProgress()
         {
-            IntPtr json = HBFunctions.hb_get_state_json(this.Handle);
-            string statusJson = Marshal.PtrToStringAnsi(json);
-
-            JsonState state = JsonSerializer.Deserialize<JsonState>(statusJson, JsonSettings.Options);
-            return state;
+            lock (this.lastProgressJson)
+            {
+                return this.lastProgressJson ?? null;
+            }
         }
 
         /// <summary>
@@ -369,14 +377,20 @@ namespace HandBrake.Interop.Interop
         /// <summary>
         /// Checks the status of the ongoing scan.
         /// </summary>
-        private void PollScanProgress()
+        private void PollScanProgress(NativeList exclusionList)
         {
-            IntPtr json = HBFunctions.hb_get_state_json(this.Handle);
-            string statusJson = Marshal.PtrToStringAnsi(json);
             JsonState state = null;
-            if (!string.IsNullOrEmpty(statusJson))
+            lock (this.progressJsonLockObj)
             {
-                state = JsonSerializer.Deserialize<JsonState>(statusJson, JsonSettings.Options);
+                IntPtr json = HBFunctions.hb_get_state_json(this.Handle);
+                string statusJson = Marshal.PtrToStringAnsi(json);
+
+                if (!string.IsNullOrEmpty(statusJson))
+                {
+                    state = JsonSerializer.Deserialize<JsonState>(statusJson, JsonSettings.Options);
+                }
+
+                this.lastProgressJson = state;
             }
 
             TaskState taskState = state != null ? TaskState.FromRepositoryValue(state.State) : null;
@@ -388,7 +402,7 @@ namespace HandBrake.Interop.Interop
                     this.ScanProgress(this, new ScanProgressEventArgs(state.Scanning.Progress, state.Scanning.Preview, state.Scanning.PreviewCount, state.Scanning.Title, state.Scanning.TitleCount));
                 }
             }
-            else if (taskState != null && taskState == TaskState.ScanDone)
+            else if (taskState != null && (taskState == TaskState.ScanDone))
             {
                 this.scanPollTimer.Stop();
 
@@ -396,7 +410,7 @@ namespace HandBrake.Interop.Interop
                 this.TitlesJson = InteropUtilities.ToStringFromUtf8Ptr(jsonMsg);
 
                 if (!string.IsNullOrEmpty(this.TitlesJson))
-                { 
+                {
                     this.Titles = JsonSerializer.Deserialize<JsonScanObject>(this.TitlesJson, JsonSettings.Options);
                     if (this.Titles != null)
                     {
@@ -406,7 +420,37 @@ namespace HandBrake.Interop.Interop
 
                 if (this.ScanCompleted != null)
                 {
-                    this.ScanCompleted(this, new System.EventArgs());
+                    this.ScanCompleted(this, EventArgs.Empty);
+                }
+
+                // Memory Management for the exclusion list.
+                try
+                {
+                    if (exclusionList != null)
+                    {
+                        for (int i = 0; i < exclusionList.Count; i++)
+                        {
+                            IntPtr item = exclusionList[i];
+                            exclusionList.Remove(item);
+                            InteropUtilities.FreeMemory(new List<IntPtr> { item });
+                        }
+
+                        exclusionList.Dispose();
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine(ex);
+                }
+            }
+            else if (taskState != null && (taskState == TaskState.Idle))
+            {
+                this.scanPollTimer.Stop();
+                this.Titles = null;
+
+                if (this.ScanCompleted != null)
+                {
+                    this.ScanCompleted(this, EventArgs.Empty);
                 }
             }
         }
@@ -416,10 +460,19 @@ namespace HandBrake.Interop.Interop
         /// </summary>
         private void PollEncodeProgress()
         {
-            IntPtr json = HBFunctions.hb_get_state_json(this.Handle);
-            string statusJson = Marshal.PtrToStringAnsi(json);
+            JsonState state = null;
+            lock (this.progressJsonLockObj)
+            {
+                IntPtr json = HBFunctions.hb_get_state_json(this.Handle);
+                string statusJson = Marshal.PtrToStringAnsi(json);
 
-            JsonState state = JsonSerializer.Deserialize<JsonState>(statusJson, JsonSettings.Options);
+                if (!string.IsNullOrEmpty(statusJson))
+                {
+                    state = JsonSerializer.Deserialize<JsonState>(statusJson, JsonSettings.Options);
+                }
+
+                this.lastProgressJson = state;
+            }
 
             TaskState taskState = state != null ? TaskState.FromRepositoryValue(state.State) : null;
 

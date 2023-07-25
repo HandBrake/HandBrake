@@ -26,10 +26,6 @@ static const char * const hb_h265_profile_names_10bit[]     = {
     "auto", "main10", "main10-intra", NULL, };
 static const char * const hb_x265_profile_names_10bit[]     = {
     "auto", "main10", "main10-intra", "main422-10", "main422-10-intra", "main444-10", "main444-10-intra", NULL, };
-#if HB_PROJECT_FEATURE_QSV
-static const char * const hb_h265_qsv_profile_names_10bit[] = {
-    "auto", "main10", NULL, };
-#endif
 static const char * const hb_h265_profile_names_12bit[]     = {
     "auto", "main12", "main12-intra", NULL, };
 static const char * const hb_x265_profile_names_12bit[]     = {

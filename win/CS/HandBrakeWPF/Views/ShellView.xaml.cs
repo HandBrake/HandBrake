@@ -32,9 +32,15 @@ namespace HandBrakeWPF.Views
     /// <summary>
     /// Interaction logic for ShellView.xaml
     /// </summary>
-    public partial class ShellView
+    public partial class ShellView : Window
     {
         private INotifyIconService notifyIconService;
+
+        protected override void OnSourceInitialized(EventArgs e)
+        {
+            base.OnSourceInitialized(e);
+            WindowHelper.SetDarkMode(this);
+        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ShellView"/> class.

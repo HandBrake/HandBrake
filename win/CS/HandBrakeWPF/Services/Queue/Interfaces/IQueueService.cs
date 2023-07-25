@@ -53,6 +53,8 @@ namespace HandBrakeWPF.Services.Queue.Interfaces
         /// </summary>
         int Count { get; }
 
+        int ActiveJobCount { get; }
+
         /// <summary>
         /// Gets the number of errors detected in the queue.
         /// </summary>

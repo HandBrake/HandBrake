@@ -7,6 +7,9 @@
 /* Class = "NSMenuItem"; title = "Off"; ObjectID = "1O3-th-4M5"; */
 "1O3-th-4M5.title" = "Aus";
 
+/* Class = "NSMenuItem"; title = "Conservative"; ObjectID = "1Pn-6x-bhx"; */
+"1Pn-6x-bhx.title" = "Konservativ";
+
 /* Class = "NSTextField"; ibExternalAccessibilityDescription = "Crop bottom"; ObjectID = "1Z0-JT-vst"; */
 "1Z0-JT-vst.ibExternalAccessibilityDescription" = "Unten beschneiden";
 
@@ -54,9 +57,6 @@
 
 /* Class = "NSStepper"; ibExternalAccessibilityDescription = "Crop bottom"; ObjectID = "6W6-RI-fBx"; */
 "6W6-RI-fBx.ibExternalAccessibilityDescription" = "Unten beschneiden";
-
-/* Class = "NSMenuItem"; title = "Automatic"; ObjectID = "7rG-Qv-khx"; */
-"7rG-Qv-khx.title" = "Automatisch";
 
 /* Class = "NSTextFieldCell"; title = "Anamorphic:"; ObjectID = "8vS-Mw-bny"; */
 "8vS-Mw-bny.title" = "Anamorph:";
@@ -201,6 +201,9 @@
 
 /* Class = "NSMenuItem"; title = "Gray"; ObjectID = "K6n-ea-Zty"; */
 "K6n-ea-Zty.title" = "Grau";
+
+/* Class = "NSMenuItem"; title = "Automatic"; ObjectID = "Kay-sv-ssX"; */
+"Kay-sv-ssX.title" = "Automatisch";
 
 /* Class = "NSTextFieldCell"; title = "Storage Size:"; ObjectID = "kOg-k4-0N2"; */
 "kOg-k4-0N2.title" = "Bildgröße:";

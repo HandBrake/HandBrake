@@ -6,11 +6,14 @@
 
 namespace HandBrakeWPF.Views
 {
+    using System;
+    using System.ComponentModel;
     using System.Windows;
     using System.Windows.Controls;
     using System.Windows.Input;
     using System.Windows.Media;
 
+    using HandBrakeWPF.Helpers;
     using HandBrakeWPF.Services.Queue.Model;
     using HandBrakeWPF.ViewModels;
 
@@ -22,6 +25,12 @@ namespace HandBrakeWPF.Views
         {
             this.InitializeComponent();
             this.SizeChanged += this.QueueView_SizeChanged;
+        }
+
+        protected override void OnSourceInitialized(EventArgs e)
+        {
+            base.OnSourceInitialized(e);
+            WindowHelper.SetDarkMode(this);
         }
 
         private void QueueView_SizeChanged(object sender, SizeChangedEventArgs e)
@@ -174,6 +183,23 @@ namespace HandBrakeWPF.Views
         private void DeleteItem_OnClick(object sender, ExecutedRoutedEventArgs e)
         {
             ((QueueViewModel)this.DataContext).RemoveSelectedJobs();
+        }
+
+        private void OptionsMenu_OnSubmenuOpened(object sender, RoutedEventArgs e)
+        {
+            if (((QueueViewModel)this.DataContext).ExtendedQueueDisplay)
+            {
+                this.extendedQueueDisplay.Header = Properties.Resources.QueueView_MinimalQueueDisplay;
+            }
+            else
+            {
+                this.extendedQueueDisplay.Header = Properties.Resources.QueueView_ExtendedQueueDisplay;
+            }
+        }
+        
+        private void QueueView_OnClosing(object sender, CancelEventArgs e)
+        {
+            ((QueueViewModel)this.DataContext).BackupQueue();
         }
     }
 }

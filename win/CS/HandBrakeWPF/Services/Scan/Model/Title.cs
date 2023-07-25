@@ -32,10 +32,11 @@ namespace HandBrakeWPF.Services.Scan.Model
             this.Chapters = new List<Chapter>();
             this.Subtitles = new List<Subtitle>();
             this.Metadata = new Metadata();
+            this.ColorInformation = new ColorInfo();
         }
 
         #region Properties
-
+        
         /// <summary>
         /// Gets or sets a Collection of chapters in this Title
         /// </summary>
@@ -124,20 +125,34 @@ namespace HandBrakeWPF.Services.Scan.Model
         /// <summary>
         /// Gets or sets the Source Name
         /// </summary>
-        public string SourceName { get; set; }
+        public string SourcePath { get; set; }
 
         public string DisplaySourceName
         {
             get
             {
-                if (!string.IsNullOrEmpty(this.SourceName))
+                switch (this.Type)
                 {
-                    return Path.GetFileNameWithoutExtension(this.SourceName);
+                    case 0: // HB_DVD_TYPE
+                    case 1: // HB_BD_TYPE
+                 
+                        return DriveLabel;
+                    case 2: // HB_STREAM_TYPE
+                    case 3: // HB_FF_STREAM_TYPE
+                        if (!string.IsNullOrEmpty(this.SourcePath))
+                        {
+                            return Path.GetFileNameWithoutExtension(this.SourcePath);
+                        }
+                        break;
+                    default:
+                        return null;
                 }
 
                 return null;
             }
         }
+
+        public string DriveLabel { get; set; }
 
         public string SourceDisplayName
         {
@@ -151,7 +166,7 @@ namespace HandBrakeWPF.Services.Scan.Model
                         return string.Empty;
                     case 2: // HB_STREAM_TYPE
                     case 3: // HB_FF_STREAM_TYPE
-                        return Path.GetFileNameWithoutExtension(this.SourceName);
+                        return Path.GetFileNameWithoutExtension(this.SourcePath);
                 }
             }
         }
@@ -184,6 +199,8 @@ namespace HandBrakeWPF.Services.Scan.Model
                     this.Duration.Seconds);
             }
         }
+
+        public ColorInfo ColorInformation { get; set; }
 
         #endregion
 

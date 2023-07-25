@@ -15,9 +15,6 @@ namespace HandBrakeWPF.Model.Options
 
     public enum Mp4Behaviour
     {
-        [DisplayName(typeof(Resources), "Mp4Behaviour_Auto")]
-        Auto = 0,
-
         [DisplayName(typeof(Resources), "Mp4Behaviour_UseMp4")]
         MP4,
 

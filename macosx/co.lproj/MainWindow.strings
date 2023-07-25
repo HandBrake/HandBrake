@@ -14,13 +14,13 @@
 "6E4-AG-PEh.title" = "0";
 
 /* Class = "NSToolbarItem"; label = "Open Source"; ObjectID = "8r8-nZ-dYs"; */
-"8r8-nZ-dYs.label" = "Apre una fonte";
+"8r8-nZ-dYs.label" = "Apre a fonte";
 
 /* Class = "NSToolbarItem"; paletteLabel = "Open Source"; ObjectID = "8r8-nZ-dYs"; */
-"8r8-nZ-dYs.paletteLabel" = "Apre una fonte";
+"8r8-nZ-dYs.paletteLabel" = "Apre a fonte";
 
 /* Class = "NSToolbarItem"; toolTip = "Open Source"; ObjectID = "8r8-nZ-dYs"; */
-"8r8-nZ-dYs.toolTip" = "Apre una fonte";
+"8r8-nZ-dYs.toolTip" = "Apre a fonte";
 
 /* Class = "NSWindow"; title = "HandBrake"; ObjectID = "21"; */
 "21.title" = "HandBrake";

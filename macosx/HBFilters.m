@@ -39,7 +39,7 @@ NSString * const HBFiltersChangedNotification = @"HBFiltersChangedNotification";
         _denoisePreset = @"medium";
         _denoiseTune = @"none";
         _chromaSmooth = @"off";
-        _chromaSmoothTune = @"off";
+        _chromaSmoothTune = @"none";
         _chromaSmoothCustomString = @"";
         _sharpen = @"off";
         _sharpenCustomString = @"";
@@ -841,7 +841,7 @@ NSString * const HBFiltersChangedNotification = @"HBFiltersChangedNotification";
 {
     if (![deblockCustomString isEqualToString:_deblockCustomString])
     {
-        [[self.undo prepareWithInvocationTarget:self] setDeblock:_deblockCustomString];
+        [[self.undo prepareWithInvocationTarget:self] setDeblockCustomString:_deblockCustomString];
     }
     if (deblockCustomString)
     {
