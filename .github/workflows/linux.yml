@@ -56,11 +56,9 @@ jobs:
         PWD=$(pwd)
         export PATH=$PWD/cmake-3.16.3-Linux-x86_64/bin:$PATH
         ./configure --enable-qsv --enable-vce --enable-nvenc --enable-nvdec --enable-fdk-aac --launch-jobs=0 --launch
-        cd build
-        make -j 3
 
     - name: Upload HandBrakeCLI
       uses: actions/upload-artifact@v3
       with:
         name: HandBrakeCLI
-        path: ./build/
+        path: ./build/HandBrakeCLI
