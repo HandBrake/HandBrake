@@ -2297,7 +2297,7 @@ namespace HandBrakeWPF.ViewModels
             ThreadHelper.OnUIThread(
               () =>
               {
-                  if (!this.queueProcessor.IsEncoding)
+                  if (!this.queueProcessor.IsEncoding && !this.queueProcessor.IsProcessing)
                   {
                       this.ProgramStatusLabel = string.Format(Resources.Main_XEncodesPending, this.queueProcessor.Count);
                   }

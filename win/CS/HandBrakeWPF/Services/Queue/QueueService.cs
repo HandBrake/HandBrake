@@ -14,6 +14,7 @@ namespace HandBrakeWPF.Services.Queue
     using System.Collections.ObjectModel;
     using System.IO;
     using System.Linq;
+    using System.Runtime.CompilerServices;
     using System.Text.Json;
     using System.Timers;
     using System.Windows;
@@ -535,6 +536,8 @@ namespace HandBrakeWPF.Services.Queue
 
             this.IsPaused = false;
 
+            ClearCancelledAndErrorJobs();
+
             this.allowedInstances = this.userSettingService.GetUserSetting<int>(UserSettingConstants.SimultaneousEncodes);
             this.processIsolationEnabled = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.ProcessIsolationEnabled);
 
@@ -846,6 +849,22 @@ namespace HandBrakeWPF.Services.Queue
         private bool QueueContainsStop()
         {
             return this.queue.Any(t => t.TaskType == QueueTaskType.Breakpoint);
+        }
+
+        private void ClearCancelledAndErrorJobs()
+        {
+            // Called when queue starts to clear previous work off the queue that was left in an error state.
+            // This will remove confusion over the "Queue completed with errors" message at the end of the queue batch if the user doesn't clean it up themselves
+            lock (QueueLock)
+            {
+                foreach (QueueTask t in this.queue.ToList())
+                {
+                    if (t.Status == QueueItemStatus.Cancelled || t.Status == QueueItemStatus.Error)
+                    {
+                        this.queue.Remove(t);
+                    }
+                }
+            }
         }
     }
 }
