@@ -797,7 +797,6 @@ title_add_multiple_action_cb (GSimpleAction *action, GVariant *param,
         max_title_len = 60;
     for (ii = 0; ii < count; ii++)
     {
-        GtkWidget *row;
         GtkLabel *label;
 
         row = GTK_WIDGET(gtk_list_box_get_row_at_index(list, ii));

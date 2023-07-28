@@ -27,8 +27,10 @@
 #define MyGdkRectangle const GdkRectangle
 
 /* Some boring function declarations: GObject type system stuff */
-static void     custom_cell_renderer_button_init       (CustomCellRendererButton      *cellprogress);
-static void     custom_cell_renderer_button_class_init (CustomCellRendererButtonClass *klass);
+static void     custom_cell_renderer_button_init       (CustomCellRendererButton      *cellprogress,
+                                                        gpointer                       class_data);
+static void     custom_cell_renderer_button_class_init (CustomCellRendererButtonClass *klass,
+                                                        gpointer                       class_data);
 static void     custom_cell_renderer_button_get_property  (GObject                    *object,
                                                              guint                       param_id,
                                                              GValue                     *value,
@@ -104,7 +106,8 @@ custom_cell_renderer_button_get_type (void)
  *
  ***************************************************************************/
 static void
-custom_cell_renderer_button_init (CustomCellRendererButton *cellbutton)
+custom_cell_renderer_button_init (CustomCellRendererButton *cellbutton,
+                                  gpointer class_data)
 {
     g_object_set(cellbutton, "mode", GTK_CELL_RENDERER_MODE_ACTIVATABLE, NULL);
     g_object_set(cellbutton, "xpad", 2, NULL);
@@ -123,7 +126,8 @@ custom_cell_renderer_button_init (CustomCellRendererButton *cellbutton)
  *
  ***************************************************************************/
 static void
-custom_cell_renderer_button_class_init (CustomCellRendererButtonClass *klass)
+custom_cell_renderer_button_class_init (CustomCellRendererButtonClass *klass,
+                                        gpointer class_data)
 {
     GtkCellRendererClass *cell_class   = GTK_CELL_RENDERER_CLASS(klass);
     GObjectClass         *object_class = G_OBJECT_CLASS(klass);

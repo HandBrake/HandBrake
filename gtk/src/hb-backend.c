@@ -1335,7 +1335,7 @@ ghb_mix_opts_filter(GtkComboBox *combo, gint acodec)
 }
 
 static void
-grey_mix_opts(signal_user_data_t *ud, gint acodec, gint64 layout)
+grey_mix_opts(signal_user_data_t *ud, gint acodec, uint64_t layout)
 {
     ghb_log_func();
 
@@ -1425,7 +1425,7 @@ ghb_grey_combo_options(signal_user_data_t *ud)
 
     acodec = ghb_settings_audio_encoder_codec(ud->settings, "AudioEncoder");
 
-    gint64 layout = aconfig != NULL ? aconfig->in.channel_layout : ~0;
+    uint64_t layout = aconfig != NULL ? aconfig->in.channel_layout : UINT64_MAX;
     guint32 in_codec = aconfig != NULL ? aconfig->in.codec : 0;
     fallback = ghb_select_fallback(ud->settings, acodec);
     gint copy_mask = ghb_get_copy_mask(ud->settings);
@@ -2040,7 +2040,7 @@ container_opts_set(signal_user_data_t *ud, const gchar *name,
 }
 
 static void
-preset_category_opts_set(signal_user_data_t *ud, const gchar *name,
+preset_category_opts_set(signal_user_data_t *ud, const char *opt_name,
                          void *opts, const void* data)
 {
     (void)opts; // Silence "unused variable" warning
@@ -2055,7 +2055,7 @@ preset_category_opts_set(signal_user_data_t *ud, const gchar *name,
     presets = hb_presets_get();
     count   = hb_value_array_len(presets);
 
-    combo = GTK_COMBO_BOX(GHB_WIDGET(ud->builder, name));
+    combo = GTK_COMBO_BOX(GHB_WIDGET(ud->builder, opt_name));
     store = GTK_LIST_STORE(gtk_combo_box_get_model (combo));
     gtk_list_store_clear(store);
 
@@ -2131,7 +2131,7 @@ srt_codeset_opts_set(signal_user_data_t *ud, const gchar *name,
     (void)data; // Silence "unused variable" warning
     GtkTreeIter iter;
     GtkListStore *store;
-    gint ii;
+    guint ii;
 
     GtkComboBox *combo = GTK_COMBO_BOX(GHB_WIDGET(ud->builder, name));
     store = GTK_LIST_STORE(gtk_combo_box_get_model (combo));
@@ -2751,11 +2751,10 @@ audio_track_opts_set(signal_user_data_t *ud, const gchar *name,
     }
     for (ii = 0; ii < count; ii++)
     {
-        char idx[4];
+        char *idx = g_strdup_printf("%d", ii);
         audio = hb_list_audio_config_item(title->list_audio, ii);
         opt = g_strdup_printf("<small>%d - %s</small>",
                               ii + 1, audio->lang.description);
-        snprintf(idx, 4, "%d", ii);
 
         gtk_list_store_append(store, &iter);
         gtk_list_store_set(store, &iter,
@@ -2765,6 +2764,7 @@ audio_track_opts_set(signal_user_data_t *ud, const gchar *name,
                            3, (gdouble)ii,
                            -1);
         g_free(opt);
+        g_free(idx);
     }
     gtk_combo_box_set_active (combo, 0);
 }
@@ -2791,11 +2791,9 @@ subtitle_track_opts_set(signal_user_data_t *ud, const gchar *name,
     for (ii = 0; ii < count; ii++)
     {
         gchar *opt;
-        char idx[4];
-
+        char *idx = g_strdup_printf("%d", ii);
         subtitle = hb_list_item(title->list_subtitle, ii);
         opt = g_strdup_printf("%d - %s", ii+1, subtitle->lang);
-        snprintf(idx, 4, "%d", ii);
 
         gtk_list_store_append(store, &iter);
         gtk_list_store_set(store, &iter,
@@ -2805,6 +2803,7 @@ subtitle_track_opts_set(signal_user_data_t *ud, const gchar *name,
                     3, (gdouble)ii,
                     -1);
         g_free(opt);
+        g_free(idx);
     }
     if (count <= 0)
     {
@@ -2826,7 +2825,7 @@ ghb_longest_title (void)
     hb_title_set_t * title_set;
     const hb_title_t * title;
     gint count = 0, ii, longest = -1;
-    int64_t duration = 0;
+    uint64_t duration = 0;
 
     ghb_log_func();
     if (h_scan == NULL) return 0;
@@ -3043,17 +3042,6 @@ find_combo_map(const gchar *name)
         {
             return &combo_name_map[ii];
         }
-    }
-    return NULL;
-}
-
-static combo_opts_t*
-find_combo_opts(const gchar *name)
-{
-    combo_name_map_t *entry = find_combo_map(name);
-    if (entry != NULL)
-    {
-        return entry->opts;
     }
     return NULL;
 }
@@ -3552,7 +3540,7 @@ void ghb_backend_scan_stop (void)
 }
 
 void
-ghb_backend_scan(const gchar *path, gint titleindex, gint preview_count, uint64_t min_duration)
+ghb_backend_scan(const char *path, int titleindex, int preview_count, uint64_t min_duration)
 {
     hb_scan( h_scan, path, titleindex, preview_count, 1, min_duration, 0, 0, NULL, 0 );
     hb_status.scan.state |= GHB_STATE_SCANNING;

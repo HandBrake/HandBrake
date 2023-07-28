@@ -215,7 +215,7 @@ audio_deps(signal_user_data_t *ud, GhbValue *asettings, GtkWidget *widget)
     if (widget != NULL)
         ghb_check_dependency(ud, widget, NULL);
 
-    int track = -1, title_id, mix = 0, acodec = 0, sr = 0;
+    int title_id, mix = 0, acodec = 0, sr = 0;
     hb_audio_config_t *aconfig = NULL;
     const hb_title_t *title;
     gboolean qe;
@@ -225,7 +225,7 @@ audio_deps(signal_user_data_t *ud, GhbValue *asettings, GtkWidget *widget)
 
     if (asettings != NULL)
     {
-        track = ghb_dict_get_int(asettings, "Track");
+        int track = ghb_dict_get_int(asettings, "Track");
         acodec = ghb_settings_audio_encoder_codec(asettings, "Encoder");
         aconfig = ghb_get_audio_info(title, track);
         mix = ghb_settings_mixdown_mix(asettings, "Mixdown");
