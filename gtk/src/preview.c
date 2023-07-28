@@ -212,7 +212,7 @@ ghb_preview_init(signal_user_data_t *ud)
     if (ud->preview->play == NULL || ud->preview->vsink == NULL)
     {
         g_warning("Couldn't initialize gstreamer. Disabling live preview.");
-        GtkWidget *widget = GHB_WIDGET(ud->builder, "live_preview_box");
+        widget = GHB_WIDGET(ud->builder, "live_preview_box");
         gtk_widget_hide (widget);
         widget = GHB_WIDGET(ud->builder, "live_preview_duration_box");
         gtk_widget_hide (widget);

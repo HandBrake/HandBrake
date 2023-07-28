@@ -556,30 +556,6 @@ set_pref_subtitle(signal_user_data_t *ud)
     subtitle_refresh_list_ui(ud);
 }
 
-static gint
-selected_subtitle_row (signal_user_data_t *ud)
-{
-    GtkTreeView *tv;
-    GtkTreePath *tp;
-    GtkTreeSelection *ts;
-    GtkTreeModel *tm;
-    GtkTreeIter iter;
-    gint *indices;
-    gint row = -1;
-
-    tv = GTK_TREE_VIEW(GHB_WIDGET(ud->builder, "subtitle_list_view"));
-    ts = gtk_tree_view_get_selection(tv);
-    if (gtk_tree_selection_get_selected(ts, &tm, &iter))
-    {
-        // Get the row number
-        tp = gtk_tree_model_get_path(tm, &iter);
-        indices = gtk_tree_path_get_indices(tp);
-        row = indices[0];
-        gtk_tree_path_free(tp);
-    }
-    return row;
-}
-
 static GhbValue*
 subtitle_get_selected_settings(signal_user_data_t *ud, int *index)
 {
@@ -1560,10 +1536,10 @@ subtitle_remove_lang_iter(GtkTreeModel *tm, GtkTreeIter *iter,
     {
         if (ghb_array_len(slang_list) > 0)
         {
-            const iso639_lang_t *lang;
+            const iso639_lang_t *lang_id;
             GhbValue *entry = ghb_array_get(slang_list, 0);
-            lang = ghb_iso639_lookup_by_int(ghb_lookup_lang(entry));
-            subtitle_update_pref_lang(ud, lang);
+            lang_id = ghb_iso639_lookup_by_int(ghb_lookup_lang(entry));
+            subtitle_update_pref_lang(ud, lang_id);
         }
         else
         {

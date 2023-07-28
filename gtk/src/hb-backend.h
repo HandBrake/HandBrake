@@ -123,7 +123,7 @@ gint ghb_get_scan_state(void);
 gint ghb_get_queue_state(void);
 void ghb_get_status(ghb_status_t *status);
 void ghb_track_status(void);
-void ghb_backend_scan(const gchar *path, gint titleindex, gint preview_count, guint64 min_duration);
+void ghb_backend_scan(const char *path, int titleindex, int preview_count, uint64_t min_duration);
 void ghb_backend_scan_stop(void);
 void ghb_backend_queue_scan(const gchar *path, gint titleindex);
 hb_list_t * ghb_get_title_list(void);

@@ -813,7 +813,7 @@ parse_datestring(const char *src, struct tm *tm)
 
     datemap maps[1] = { ymdThmsZ };
 
-    for (int i = 0; i < sizeof(maps); i++)
+    for (guint i = 0; i < sizeof(maps); i++)
     {
         if (hb_validate_param_string(maps[i].pattern, src))
         {
@@ -3264,7 +3264,7 @@ ptop_read_value_cb (GtkWidget *widget, gdouble *val, signal_user_data_t *ud)
         return FALSE;
     if (result == 1)
     {
-        result = sscanf(text, "%lf", val);
+        sscanf(text, "%lf", val);
         return TRUE;
     }
     *val = hh * 3600 + mm * 60 + ss;
@@ -4688,6 +4688,9 @@ ghb_browse_uri(signal_user_data_t *ud, const gchar *uri)
     argv[2] = NULL;
     result = g_spawn_async(NULL, argv, NULL, G_SPAWN_SEARCH_PATH, NULL,
                 NULL, NULL, NULL);
+
+    if (!result)
+        g_warning("No application to open URI was found");
 #endif
 }
 
@@ -5066,7 +5069,7 @@ ghb_is_cd(GDrive *gd)
 {
     GIcon *gicon;
     gboolean ret = FALSE;
-    char **names, **iter;
+    char **names;
 
     if (!g_drive_is_media_removable (gd))
         return ret;
@@ -5081,7 +5084,7 @@ ghb_is_cd(GDrive *gd)
     }
 
     g_object_get (gicon, "names", &names, NULL);
-    ret = g_strv_contains (names, "drive-optical");
+    ret = g_strv_contains ((const char * const *) names, "drive-optical");
     g_strfreev (names);
     g_object_unref (gicon);
 

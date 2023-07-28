@@ -16,12 +16,12 @@
 #endif
 
 static AppColorScheme app_scheme = APP_FORCES_LIGHT;
-static GDBusProxy *portal;
+static GDBusProxy *desktop_portal;
 static GtkSettings *settings;
 static gboolean init_done = FALSE;
 
 static void
-_set_gtk_theme (gboolean dark)
+set_gtk_theme (gboolean dark)
 {
     g_object_set(settings, "gtk-application-prefer-dark-theme", dark, NULL);
 }
@@ -67,7 +67,7 @@ color_scheme_toggle (void)
 }
 
 static void
-_setting_changed (GDBusProxy *proxy, char *sender_name, char *signal_name,
+setting_changed (GDBusProxy *proxy, char *sender_name, char *signal_name,
                   GVariant *parameters, gpointer user_data)
 {
     const char *namespace_;
@@ -87,12 +87,12 @@ _setting_changed (GDBusProxy *proxy, char *sender_name, char *signal_name,
         g_variant_get(var, "u", &portal_value);
         set_dark = (portal_value == DESKTOP_PREFERS_DARK) ? TRUE : FALSE;
         if (!(app_scheme & APP_FORCE))
-            _set_gtk_theme(set_dark);
+            set_gtk_theme(set_dark);
     }
 }
 
 static GDBusProxy *
-_portal_init (void)
+portal_init (void)
 {
     GDBusProxy *portal;
     GError *error = NULL;
@@ -110,7 +110,7 @@ _portal_init (void)
 }
 
 static void
-_set_theme (void)
+set_theme (void)
 {
     DesktopColorScheme desktop_scheme;
     gboolean set_dark;
@@ -121,11 +121,11 @@ _set_theme (void)
     else
         set_dark = (desktop_scheme == DESKTOP_PREFERS_DARK);
 
-    _set_gtk_theme(set_dark);
+    set_gtk_theme(set_dark);
 }
 
 static void
-_color_scheme_init_cb (GObject *object, GAsyncResult *res, gpointer user_data)
+init_color_scheme_cb (GObject *object, GAsyncResult *res, gpointer user_data)
 {
     GDBusProxy *portal;
     GError *error = NULL;
@@ -135,7 +135,7 @@ _color_scheme_init_cb (GObject *object, GAsyncResult *res, gpointer user_data)
     if (portal)
     {
         g_signal_connect(portal, SETTING_CHANGED_SIGNAL,
-                         G_CALLBACK(_setting_changed), NULL);
+                         G_CALLBACK(setting_changed), NULL);
     }
     else
     {
@@ -145,7 +145,7 @@ _color_scheme_init_cb (GObject *object, GAsyncResult *res, gpointer user_data)
 }
 
 static void
-_color_scheme_init_async (void)
+init_color_scheme_async (void)
 {
     static size_t init = 0;
 
@@ -158,15 +158,15 @@ _color_scheme_init_async (void)
                                   "/org/freedesktop/portal/desktop",
                                   "org.freedesktop.portal.Settings",
                                   NULL,
-                                  (GAsyncReadyCallback)_color_scheme_init_cb,
+                                  (GAsyncReadyCallback)init_color_scheme_cb,
                                   NULL);
         g_once_init_leave(&init, 1);
     }
-    _set_theme();
+    set_theme();
 }
 
 static gboolean
-_color_scheme_init (void)
+init_color_scheme (void)
 {
     static GMutex init_mutex;
 
@@ -175,11 +175,11 @@ _color_scheme_init (void)
         if (!init_done)
         {
             settings = gtk_settings_get_default();
-            portal = _portal_init();
-            if (portal)
+            desktop_portal = portal_init();
+            if (desktop_portal)
             {
-                g_signal_connect(portal, SETTING_CHANGED_SIGNAL,
-                                 G_CALLBACK(_setting_changed), NULL);
+                g_signal_connect(desktop_portal, SETTING_CHANGED_SIGNAL,
+                                 G_CALLBACK(setting_changed), NULL);
             }
         }
     }
@@ -202,16 +202,17 @@ color_scheme_get_desktop_scheme (void)
     g_autoptr (GError) error = NULL;
     DesktopColorScheme scheme;
 
-    if (!init_done && !_color_scheme_init())
+    if (!init_done && !init_color_scheme())
         return DESKTOP_NO_PREFERENCE;
 
-    if (!portal)
+    if (!desktop_portal)
         return DESKTOP_NO_PREFERENCE;
 
     GVariant *call = g_variant_new("(ss)", "org.freedesktop.appearance",
                                    "color-scheme");
-    result = g_dbus_proxy_call_sync(portal, "Read", call, G_DBUS_CALL_FLAGS_NONE,
-                                    DBUS_TIMEOUT, NULL, &error);
+    result = g_dbus_proxy_call_sync(desktop_portal, "Read", call,
+                                    G_DBUS_CALL_FLAGS_NONE, DBUS_TIMEOUT,
+                                    NULL, &error);
     if (!result)
     {
         g_debug("%s", error->message);
@@ -239,7 +240,7 @@ color_scheme_set (AppColorScheme scheme)
     gboolean set_dark;
     DesktopColorScheme desktop_scheme;
 
-    if (!init_done && !_color_scheme_init())
+    if (!init_done && !init_color_scheme())
         return FALSE;
 
     app_scheme = scheme;
@@ -250,7 +251,7 @@ color_scheme_set (AppColorScheme scheme)
     else
         set_dark = (desktop_scheme == DESKTOP_PREFERS_DARK);
 
-    _set_gtk_theme(set_dark);
+    set_gtk_theme(set_dark);
     return TRUE;
 }
 
@@ -264,7 +265,7 @@ color_scheme_set_async (AppColorScheme scheme)
 {
     app_scheme = scheme;
     if (init_done)
-        _set_theme();
+        set_theme();
     else
-        _color_scheme_init_async();
+        init_color_scheme_async();
 }

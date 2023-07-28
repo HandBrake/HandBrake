@@ -545,12 +545,6 @@ IoRedirect(signal_user_data_t *ud)
         g_io_add_watch(channel, G_IO_IN, ghb_log_cb, (gpointer)ud );
 }
 
-typedef struct
-{
-    gchar *filename;
-    gchar *iconname;
-} icon_map_t;
-
 static gchar *dvd_device = NULL;
 static gchar *arg_preset = NULL;
 static gboolean ghb_debug = FALSE;
@@ -1323,9 +1317,9 @@ main(int argc, char *argv[])
         // Enable console logging
         if(AttachConsole(ATTACH_PARENT_PROCESS) || AllocConsole()){
             close(STDOUT_FILENO);
-            freopen("CONOUT$", "w", stdout);
+            (void) freopen("CONOUT$", "w", stdout);
             close(STDERR_FILENO);
-            freopen("CONOUT$", "w", stderr);
+            (void) freopen("CONOUT$", "w", stderr);
         }
     }
     else

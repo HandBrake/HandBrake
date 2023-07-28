@@ -11,11 +11,6 @@ static const char *battery_widgets[] = {
     "PauseEncodingOnLowBattery",
     NULL,
 };
-static const char *power_save_widgets[] = {
-    "pause_encoding_label",
-    "PauseEncodingOnPowerSave",
-    NULL,
-};
 
 static GDBusProxy *upower_proxy;
 static GDBusProxy *battery_proxy;
@@ -26,9 +21,14 @@ static GhbPowerState power_state;
  * level first drops from normal to low, so the user can resume encoding
  * without it being paused again. So this variable tracks the previous
  * battery level, and if it was low already, we don't do anything. */
-static guint prev_battery_level;
+static int prev_battery_level;
 
 #if GLIB_CHECK_VERSION(2, 70, 0)
+static const char *power_save_widgets[] = {
+    "pause_encoding_label",
+    "PauseEncodingOnPowerSave",
+    NULL,
+};
 static GPowerProfileMonitor *power_monitor;
 #endif
 
@@ -185,12 +185,12 @@ device_get_battery_proxy (const char *path)
     return NULL;
 }
 
-static void
+static gpointer
 devices_thread (signal_user_data_t *ud)
 {
     GDBusProxy *proxy;
 
-    for (int i = 0; i < g_strv_length(upower_devices); i++)
+    for (guint i = 0; i < g_strv_length(upower_devices); i++)
     {
         proxy = device_get_battery_proxy(upower_devices[i]);
         if (proxy != NULL)
@@ -205,6 +205,7 @@ devices_thread (signal_user_data_t *ud)
     }
     g_strfreev(upower_devices);
     g_thread_exit(0);
+    return NULL;
 }
 
 static void
