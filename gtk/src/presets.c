@@ -1123,6 +1123,45 @@ get_selected_path(signal_user_data_t *ud)
     return NULL;
 }
 
+G_MODULE_EXPORT void
+show_presets_action_cb(GSimpleAction *action, GVariant *value,
+                       signal_user_data_t *ud)
+{
+    GtkWidget *presets_window;
+    GtkWidget *hb_window;
+    int w, h;
+
+    hb_window = GHB_WIDGET(ud->builder, "hb_window");
+    if (!gtk_widget_is_visible(hb_window))
+    {
+        return;
+    }
+
+    w = ghb_dict_get_int(ud->prefs, "presets_window_width");
+    h = ghb_dict_get_int(ud->prefs, "presets_window_height");
+
+    presets_window = GHB_WIDGET(ud->builder, "presets_window");
+    if (w > 200 && h > 200)
+    {
+        gtk_window_resize(GTK_WINDOW(presets_window), w, h);
+    }
+
+#if !GTK_CHECK_VERSION(4, 4, 0)
+    // Note: Only works on GTK3 and with X11
+    int x, y;
+
+    gtk_window_get_position(GTK_WINDOW(hb_window), &x, &y);
+    x -= w + 10;
+    if (x < 0)
+    {
+        gtk_window_move(GTK_WINDOW(hb_window), w + 10, y);
+        x = 0;
+    }
+    gtk_window_move(GTK_WINDOW(presets_window), x, y);
+#endif
+    gtk_window_present(GTK_WINDOW(presets_window));
+}
+
 G_MODULE_EXPORT gboolean
 presets_window_delete_cb(
     GtkWidget *xwidget,
@@ -1131,12 +1170,8 @@ presets_window_delete_cb(
 #endif
     signal_user_data_t *ud)
 {
-    GSimpleAction * action;
-    GVariant      * state = g_variant_new_boolean(FALSE);
-
-    action = G_SIMPLE_ACTION(g_action_map_lookup_action(
-                             G_ACTION_MAP(ud->app), "show-presets"));
-    g_action_change_state(G_ACTION(action), state);
+    GtkWidget *presets_window = GHB_WIDGET(ud->builder, "presets_window");
+    gtk_widget_set_visible(presets_window, FALSE);
     return TRUE;
 }
 

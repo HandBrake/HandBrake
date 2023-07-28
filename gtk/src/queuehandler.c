@@ -2142,8 +2142,8 @@ find_pid:
     }
     else
     {
-        GtkWidget *widget = GHB_WIDGET(ud->builder, "show_queue");
-        gtk_toggle_tool_button_set_active(GTK_TOGGLE_TOOL_BUTTON(widget), TRUE);
+        GtkWidget *widget = GHB_WIDGET(ud->builder, "queue_window");
+        gtk_window_present(GTK_WINDOW(widget));
         ud->queue = queue;
         for (ii = 0; ii < count; ii++)
         {
@@ -2238,12 +2238,8 @@ G_MODULE_EXPORT void
 show_queue_action_cb (GSimpleAction *action, GVariant *value,
                       signal_user_data_t *ud)
 {
-    GtkWidget * queue_window;
-    gboolean    state = g_variant_get_boolean(value);
-
-    g_simple_action_set_state(action, value);
-    queue_window = GHB_WIDGET(ud->builder, "queue_window");
-    gtk_widget_set_visible(queue_window, state);
+    GtkWidget *queue_window = GHB_WIDGET(ud->builder, "queue_window");
+    gtk_window_present(GTK_WINDOW(queue_window));
 }
 
 G_MODULE_EXPORT gboolean
@@ -2255,8 +2251,6 @@ queue_window_delete_cb(
     signal_user_data_t *ud)
 {
     gtk_widget_set_visible(xwidget, FALSE);
-    GtkWidget *widget = GHB_WIDGET (ud->builder, "show_queue");
-    gtk_toggle_tool_button_set_active(GTK_TOGGLE_TOOL_BUTTON(widget), FALSE);
     return TRUE;
 }
 
@@ -2299,8 +2293,8 @@ queue_edit_action_cb (GSimpleAction *action, GVariant *param,
         source = ghb_dict_get_string(ghb_queue_edit_settings, "source");
         ghb_do_scan(ud, source, 0, FALSE);
 
-        GtkWidget *widget = GHB_WIDGET(ud->builder, "show_queue");
-        gtk_toggle_tool_button_set_active(GTK_TOGGLE_TOOL_BUTTON(widget), FALSE);
+        GtkWidget *widget = GHB_WIDGET(ud->builder, "hb_window");
+        gtk_window_present(GTK_WINDOW(widget));
     }
 }
 

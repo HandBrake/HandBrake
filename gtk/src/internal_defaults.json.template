@@ -1,7 +1,6 @@
 {
     "Globals": {
         "SkipDiskFreeCheck": false,
-        "show_preview": false,
         "scan_source": "",
         "volume": "New Video"
     },
