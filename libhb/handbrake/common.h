@@ -1369,6 +1369,7 @@ struct hb_work_object_s
     int                 status;
     int                 frame_count;
     int                 codec_param;
+    void              * hw_device_ctx;
     hb_title_t        * title;
 
     hb_work_object_t  * next;

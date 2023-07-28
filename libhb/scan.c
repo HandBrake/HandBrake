@@ -9,6 +9,7 @@
 
 #include "handbrake/handbrake.h"
 #include "handbrake/hbffmpeg.h"
+#include "handbrake/hwaccel.h"
 
 typedef struct
 {
@@ -33,6 +34,8 @@ typedef struct
     int            crop_threshold_pixels;
     
     hb_list_t    * exclude_extensions;
+
+    int            hw_decode;
     
 } hb_scan_t;
 
@@ -222,7 +225,8 @@ hb_thread_t * hb_scan_init( hb_handle_t * handle, volatile int * die,
                             hb_list_t *  paths, int title_index,
                             hb_title_set_t * title_set, int preview_count,
                             int store_previews, uint64_t min_duration,
-                            int crop_threshold_frames, int crop_threshold_pixels, hb_list_t * exclude_extensions)
+                            int crop_threshold_frames, int crop_threshold_pixels,
+                            hb_list_t * exclude_extensions, int hw_decode)
 {
     hb_scan_t * data = calloc( sizeof( hb_scan_t ), 1 );
 
@@ -239,6 +243,7 @@ hb_thread_t * hb_scan_init( hb_handle_t * handle, volatile int * die,
     data->crop_threshold_frames = crop_threshold_frames;
     data->crop_threshold_pixels = crop_threshold_pixels;
     data->exclude_extensions    = hb_string_list_copy(exclude_extensions);
+    data->hw_decode             = hw_decode;
     
     // Initialize scan state
     hb_state_t state;
@@ -815,8 +820,29 @@ static int DecodePreviews( hb_scan_t * data, hb_title_t * title, int flush )
         hb_stream_close(&stream);
         return 0;
     }
+
+    int hw_decode = 0;
+
+    if (data->hw_decode == HB_DECODE_SUPPORT_NVDEC &&
+        hb_hwaccel_available(title->video_codec_param, "cuda"))
+    {
+        hw_decode = HB_DECODE_SUPPORT_NVDEC;
+    }
+    else if (data->hw_decode == HB_DECODE_SUPPORT_VIDEOTOOLBOX &&
+             hb_hwaccel_available(title->video_codec_param, "videotoolbox"))
+    {
+        hw_decode = HB_DECODE_SUPPORT_VIDEOTOOLBOX;
+    }
+
+    void *hw_device_ctx = NULL;
+    if (hw_decode)
+    {
+        hb_hwaccel_hw_ctx_init(title->video_codec_param, hw_decode, &hw_device_ctx);
+    }
+
     hb_work_object_t *vid_decoder = hb_get_work(data->h, title->video_codec);
     vid_decoder->codec_param = title->video_codec_param;
+    vid_decoder->hw_device_ctx = hw_device_ctx;
     vid_decoder->title = title;
 
     if (vid_decoder->init(vid_decoder, NULL))
@@ -1159,6 +1185,8 @@ skip_preview:
 
     vid_decoder->close( vid_decoder );
     free( vid_decoder );
+
+    hb_hwaccel_hw_ctx_close(&hw_device_ctx);
 
     if (stream != NULL)
     {

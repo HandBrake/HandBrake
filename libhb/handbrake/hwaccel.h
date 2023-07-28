@@ -14,8 +14,8 @@
 
 enum AVPixelFormat hw_hwaccel_get_hw_format(AVCodecContext *ctx, const enum AVPixelFormat *pix_fmts);
 
-int hb_hwaccel_hw_ctx_init(hb_job_t *job);
-void hb_hwaccel_hw_ctx_close(hb_job_t *job);
+int hb_hwaccel_hw_ctx_init(int codec_id, int hw_decode, void **hw_device_ctx);
+void hb_hwaccel_hw_ctx_close(void **hw_device_ctx);
 
 int hb_hwaccel_hwframes_ctx_init(struct AVCodecContext *ctx, hb_job_t *job);
 AVBufferRef *hb_hwaccel_init_hw_frames_ctx(AVBufferRef *hw_device_ctx,
@@ -29,7 +29,6 @@ hb_buffer_t * hb_hwaccel_copy_video_buffer_to_hw_video_buffer(hb_job_t *job, hb_
 const char * hb_hwaccel_get_codec_name(enum AVCodecID codec_id);
 
 int hb_hwaccel_available(int codec_id, const char *device_name);
-int hb_hwaccel_is_enabled(hb_job_t *job);
 int hb_hwaccel_decode_is_enabled(hb_job_t *job);
 int hb_hwaccel_is_full_hardware_pipeline_enabled(hb_job_t *job);
 

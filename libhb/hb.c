@@ -361,13 +361,14 @@ void hb_remove_previews( hb_handle_t * h )
 
 void hb_scan( hb_handle_t * h, const char * path, int title_index,
               int preview_count, int store_previews, uint64_t min_duration,
-              int crop_threshold_frames, int crop_threshold_pixels, hb_list_t * exclude_extensions)
+              int crop_threshold_frames, int crop_threshold_pixels,
+              hb_list_t * exclude_extensions, int hw_decode)
 {
     // TODO: Compatibility later for the other UI's.  Remove when they are updated.
     hb_list_t *file_paths = hb_list_init();
     hb_list_add(file_paths, (char *)path);
 
-    hb_scan_list(h, file_paths, title_index, preview_count, store_previews, min_duration, crop_threshold_frames, crop_threshold_pixels, exclude_extensions);
+    hb_scan_list(h, file_paths, title_index, preview_count, store_previews, min_duration, crop_threshold_frames, crop_threshold_pixels, exclude_extensions, hw_decode);
 
     hb_list_close(&file_paths);
 }
@@ -383,10 +384,12 @@ void hb_scan( hb_handle_t * h, const char * path, int title_index,
  * @param crop_threshold_frames The number of frames to trigger smart crop
  * @param crop_threshold_pixels The variance in pixels detected that are allowed for.
  * @param exclude_extensions A list of extensions to exclude for this scan.
+ * @param hw_decode  The preferred hardware decoder to use..
  */
 void hb_scan_list( hb_handle_t * h, hb_list_t * paths, int title_index,
               int preview_count, int store_previews, uint64_t min_duration,
-              int crop_threshold_frames, int crop_threshold_pixels, hb_list_t * exclude_extensions)
+              int crop_threshold_frames, int crop_threshold_pixels,
+              hb_list_t * exclude_extensions, int hw_decode)
 {
     hb_title_t * title;
 
@@ -473,7 +476,8 @@ void hb_scan_list( hb_handle_t * h, hb_list_t * paths, int title_index,
     h->scan_thread = hb_scan_init( h, &h->scan_die, paths, title_index,
                                    &h->title_set, preview_count,
                                    store_previews, min_duration,
-                                   crop_threshold_frames, crop_threshold_pixels, exclude_extensions);
+                                   crop_threshold_frames, crop_threshold_pixels,
+                                   exclude_extensions, hw_decode);
 }
 
 void hb_force_rescan( hb_handle_t * h )
