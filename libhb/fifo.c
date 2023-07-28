@@ -939,15 +939,15 @@ void hb_buffer_close( hb_buffer_t ** _b )
 #if HB_PROJECT_FEATURE_QSV
         // Reclaim QSV resources before dropping the buffer.
         // when decoding without QSV, the QSV atom will be NULL.
-        if(b->qsv_details.frame && b->qsv_details.ctx != NULL)
+        if (b->storage != NULL && b->qsv_details.ctx != NULL)
         {
-            mfxFrameSurface1 *surface = (mfxFrameSurface1*)b->qsv_details.frame->data[3];
-            if(surface)
+            AVFrame *frame = (AVFrame *)b->storage;
+            mfxFrameSurface1 *surface = (mfxFrameSurface1 *)frame->data[3];
+            if (surface)
             {
                 hb_qsv_release_surface_from_pool_by_surface_pointer(b->qsv_details.qsv_frames_ctx, surface);
-                b->qsv_details.frame->data[3] = 0;
+                frame->data[3] = 0;
             }
-            av_frame_unref(b->qsv_details.frame);
         }
         if (b->qsv_details.qsv_atom != NULL && b->qsv_details.ctx != NULL)
         {

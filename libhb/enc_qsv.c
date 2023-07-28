@@ -2285,9 +2285,10 @@ int encqsvWork(hb_work_object_t *w, hb_buffer_t **buf_in, hb_buffer_t **buf_out)
     else
     {
         QSVMid *mid = NULL;
-        if (in->qsv_details.frame && in->qsv_details.frame->data[3])
+        AVFrame *frame = (AVFrame *)in->storage;
+        if (frame && frame->data[3])
         {
-            surface = ((mfxFrameSurface1*)in->qsv_details.frame->data[3]);
+            surface = ((mfxFrameSurface1*)frame->data[3]);
             frames_ctx = in->qsv_details.qsv_frames_ctx;
             hb_qsv_get_mid_by_surface_from_pool(frames_ctx, surface, &mid);
             hb_qsv_replace_surface_mid(frames_ctx, mid, surface);
@@ -2399,9 +2400,11 @@ int encqsvWork(hb_work_object_t *w, hb_buffer_t **buf_in, hb_buffer_t **buf_out)
         goto fail;
     }
 
-    if (in->qsv_details.frame)
+    if (in->storage)
     {
-        in->qsv_details.frame->data[3] = 0;
+        // FIXME: This looks weird
+        AVFrame *frame = (AVFrame *)in->storage;
+        frame->data[3] = 0;
     }
 
     *buf_out = hb_buffer_list_clear(&pv->encoded_frames);
