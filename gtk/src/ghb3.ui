@@ -2348,7 +2348,7 @@ libx264 authors:
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkToggleToolButton" id="show_presets">
+                  <object class="GtkToolButton" id="show_presets">
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
@@ -2363,7 +2363,7 @@ libx264 authors:
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkToggleToolButton" id="show_preview">
+                  <object class="GtkToolButton" id="show_preview">
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
@@ -2378,7 +2378,7 @@ libx264 authors:
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkToggleToolButton" id="show_queue">
+                  <object class="GtkToolButton" id="show_queue">
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
@@ -2393,7 +2393,7 @@ libx264 authors:
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkToggleToolButton" id="show_activity">
+                  <object class="GtkToolButton" id="show_activity">
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>

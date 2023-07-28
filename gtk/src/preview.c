@@ -1155,8 +1155,9 @@ preview_button_size_allocate_cb(
     set_mini_preview_image(ud, ud->preview->pix);
 }
 
-void
-ghb_preview_set_visible(signal_user_data_t *ud, gboolean visible)
+G_MODULE_EXPORT void
+show_preview_action_cb(GSimpleAction *action, GVariant *value,
+                       signal_user_data_t *ud)
 {
     GtkWidget *widget;
 #if 0
@@ -1168,30 +1169,17 @@ ghb_preview_set_visible(signal_user_data_t *ud, gboolean visible)
     visible &= title != NULL;
 #endif
     widget = GHB_WIDGET(ud->builder, "preview_window");
-    if (visible)
-    {
+
 #if !GTK_CHECK_VERSION(4, 4, 0)
-        // TODO: can this be done in GTK4?
-        gint x, y;
-        x = ghb_dict_get_int(ud->prefs, "preview_x");
-        y = ghb_dict_get_int(ud->prefs, "preview_y");
+    // Note: Only works on GTK3 and with X11
+    gint x, y;
+    x = ghb_dict_get_int(ud->prefs, "preview_x");
+    y = ghb_dict_get_int(ud->prefs, "preview_y");
 
-        if (x >= 0 && y >= 0)
-            gtk_window_move(GTK_WINDOW(widget), x, y);
+    if (x >= 0 && y >= 0)
+        gtk_window_move(GTK_WINDOW(widget), x, y);
 #endif
-        gtk_window_deiconify(GTK_WINDOW(widget));
-    }
-    gtk_widget_set_visible(widget, visible);
-}
-
-G_MODULE_EXPORT void
-show_preview_action_cb(GSimpleAction *action, GVariant *value,
-                       signal_user_data_t *ud)
-{
-    gboolean state = g_variant_get_boolean(value);
-
-    g_simple_action_set_state(action, value);
-    ghb_preview_set_visible(ud, state);
+    gtk_window_present(GTK_WINDOW(widget));
 }
 
 G_MODULE_EXPORT void
@@ -1239,7 +1227,7 @@ preview_window_delete_cb(
     signal_user_data_t *ud)
 {
     live_preview_stop(ud);
-    g_action_activate(GHB_ACTION(ud->builder, "show-preview"), NULL);
+    gtk_widget_set_visible(widget, FALSE);
     return TRUE;
 }
 
@@ -1465,7 +1453,6 @@ preview_state_cb(
             GDK_WINDOW_STATE_ICONIFIED)
         {
             live_preview_stop(ud);
-			g_action_activate(GHB_ACTION(ud->builder, "show-preview"), NULL);
         }
         ud->preview->is_fullscreen = wse->new_window_state & GDK_WINDOW_STATE_FULLSCREEN;
     }

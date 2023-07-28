@@ -4619,12 +4619,8 @@ G_MODULE_EXPORT void
 show_activity_action_cb(GSimpleAction *action, GVariant *value,
                         signal_user_data_t *ud)
 {
-    GtkWidget * activity_window;
-    gboolean    state = g_variant_get_boolean(value);
-
-    g_simple_action_set_state(action, value);
-    activity_window = GHB_WIDGET(ud->builder, "activity_window");
-    gtk_widget_set_visible(activity_window, state);
+    GtkWidget *activity_window = GHB_WIDGET(ud->builder, "activity_window");
+    gtk_window_present(GTK_WINDOW(activity_window));
 }
 
 G_MODULE_EXPORT gboolean
@@ -4636,8 +4632,6 @@ activity_window_delete_cb(
     signal_user_data_t *ud)
 {
     gtk_widget_set_visible(xwidget, FALSE);
-    GtkWidget *widget = GHB_WIDGET (ud->builder, "show_activity");
-    gtk_toggle_tool_button_set_active(GTK_TOGGLE_TOOL_BUTTON(widget), FALSE);
     return TRUE;
 }
 
@@ -4744,57 +4738,6 @@ update_queue_labels(signal_user_data_t *ud)
     }
     gtk_tool_button_set_label(button, str);
     g_free(str);
-}
-
-static void
-presets_window_set_visible(signal_user_data_t *ud, gboolean visible)
-{
-    GtkWidget     * presets_window;
-    GtkWidget     * hb_window;
-
-    hb_window = GHB_WIDGET(ud->builder, "hb_window");
-    if (!gtk_widget_is_visible(hb_window))
-    {
-        return;
-    }
-
-    int w, h;
-    w = ghb_dict_get_int(ud->prefs, "presets_window_width");
-    h = ghb_dict_get_int(ud->prefs, "presets_window_height");
-
-    presets_window = GHB_WIDGET(ud->builder, "presets_window");
-    if (w > 200 && h > 200)
-    {
-        gtk_window_resize(GTK_WINDOW(presets_window), w, h);
-    }
-    gtk_widget_set_visible(presets_window, visible);
-
-#if !GTK_CHECK_VERSION(4, 4, 0)
-    // TODO: Is this possible in GTK4?
-    int             x, y;
-
-    if (visible)
-    {
-        gtk_window_get_position(GTK_WINDOW(hb_window), &x, &y);
-        x -= w + 10;
-        if (x < 0)
-        {
-            gtk_window_move(GTK_WINDOW(hb_window), w + 10, y);
-            x = 0;
-        }
-        gtk_window_move(GTK_WINDOW(presets_window), x, y);
-    }
-#endif
-}
-
-G_MODULE_EXPORT void
-show_presets_action_cb(GSimpleAction *action, GVariant *value,
-                       signal_user_data_t *ud)
-{
-    gboolean state = g_variant_get_boolean(value);
-
-    g_simple_action_set_state(action, value);
-    presets_window_set_visible(ud, state);
 }
 
 void
