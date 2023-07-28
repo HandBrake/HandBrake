@@ -594,8 +594,8 @@ hb_dict_t* hb_job_to_dict( const hb_job_t * job )
     // Destination {Mux, InlineParameterSets, AlignAVStart,
     //              ChapterMarkers, ChapterList}
     "s:{s:o, s:o, s:o, s:o, s:[]},"
-    // Source {Path, Title, Angle}
-    "s:{s:o, s:o, s:o,},"
+    // Source {Path, Title, Angle, HWDecode}
+    "s:{s:o, s:o, s:o, s:o},"
     // PAR {Num, Den}
     "s:{s:o, s:o},"
     // Video {Encoder, HardwareDecode, QSV {Decode, AsyncDepth, AdapterIndex}}
@@ -620,6 +620,7 @@ hb_dict_t* hb_job_to_dict( const hb_job_t * job )
             "Path",             hb_value_string(job->title->path),
             "Title",            hb_value_int(job->title->index),
             "Angle",            hb_value_int(job->angle),
+            "HWDecode",         hb_value_int(job->hw_decode),
         "PAR",
             "Num",              hb_value_int(job->par.num),
             "Den",              hb_value_int(job->par.den),
@@ -1013,13 +1014,14 @@ void hb_json_job_scan( hb_handle_t * h, const char * json_job )
 
     dict = hb_value_json(json_job);
 
-    int title_index;
+    int title_index, hw_decode;
     const char *path = NULL;
 
-    result = json_unpack_ex(dict, &error, 0, "{s:{s:s, s:i}}",
+    result = json_unpack_ex(dict, &error, 0, "{s:{s:s, s:i, s?i}}",
                             "Source",
                                 "Path",     unpack_s(&path),
-                                "Title",    unpack_i(&title_index)
+                                "Title",    unpack_i(&title_index),
+                                "HWDecode", unpack_i(&hw_decode)
                            );
     if (result < 0)
     {
@@ -1030,7 +1032,7 @@ void hb_json_job_scan( hb_handle_t * h, const char * json_job )
 
     // If the job wants to use Hardware decode, it must also be
     // enabled during scan.  So enable it here.                      
-    hb_scan(h, path, title_index, -1, 0, 0, 0, 0, NULL);
+    hb_scan(h, path, title_index, -1, 0, 0, 0, 0, NULL, hw_decode);
 
     // Wait for scan to complete
     hb_state_t state;

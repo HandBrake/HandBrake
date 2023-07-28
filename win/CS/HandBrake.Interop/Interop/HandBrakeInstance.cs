@@ -166,7 +166,7 @@ namespace HandBrake.Interop.Interop
 
             // Start the Scan
             IntPtr excludedExtensionsPtr = excludedExtensionsNative?.Ptr ?? IntPtr.Zero;
-            HBFunctions.hb_scan_list(this.Handle, scanPathsList.Ptr, titleIndex, previewCount, 1, (ulong)(minDuration.TotalSeconds * 90000), 0, 0, excludedExtensionsPtr);
+            HBFunctions.hb_scan_list(this.Handle, scanPathsList.Ptr, titleIndex, previewCount, 1, (ulong)(minDuration.TotalSeconds * 90000), 0, 0, excludedExtensionsPtr, 0);
 
             this.scanPollTimer = new Timer();
             this.scanPollTimer.Interval = ScanPollIntervalMs;

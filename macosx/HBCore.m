@@ -309,7 +309,7 @@ HB_OBJC_DIRECT_MEMBERS
     hb_scan_list(_hb_handle, files_list,
               (int)index, (int)previewsNum,
               keepPreviews, min_title_duration_ticks,
-              0, 0, NULL);
+              0, 0, NULL, 0);
 
     hb_list_close(&files_list);
 

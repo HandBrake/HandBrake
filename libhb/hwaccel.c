@@ -51,7 +51,7 @@ enum AVPixelFormat hw_hwaccel_get_hw_format(AVCodecContext *ctx, const enum AVPi
 
     for (p = pix_fmts; *p != -1; p++)
     {
-        if (job->hw_pix_fmt != AV_PIX_FMT_NONE)
+        if (job && job->hw_pix_fmt != AV_PIX_FMT_NONE)
         {
             if (*p == job->hw_pix_fmt)
             {
@@ -68,19 +68,19 @@ enum AVPixelFormat hw_hwaccel_get_hw_format(AVCodecContext *ctx, const enum AVPi
     return AV_PIX_FMT_NONE;
 }
 
-int hb_hwaccel_hw_ctx_init(hb_job_t *job)
+int hb_hwaccel_hw_ctx_init(int codec_id, int hw_decode, void **hw_device_ctx)
 {
     enum AVHWDeviceType hw_type = AV_HWDEVICE_TYPE_NONE;
     enum AVPixelFormat pix_fmt = AV_PIX_FMT_NONE;
     int err = 0;
 
-    const AVCodec *codec = avcodec_find_decoder(job->title->video_codec_param);
+    const AVCodec *codec = avcodec_find_decoder(codec_id);
 
-    if (job->hw_decode & HB_DECODE_SUPPORT_VIDEOTOOLBOX)
+    if (hw_decode & HB_DECODE_SUPPORT_VIDEOTOOLBOX)
     {
         hw_type = av_hwdevice_find_type_by_name("videotoolbox");
     }
-    else if (job->hw_decode & HB_DECODE_SUPPORT_NVDEC)
+    else if (hw_decode & HB_DECODE_SUPPORT_NVDEC)
     {
         hw_type = av_hwdevice_find_type_by_name("cuda");
     }
@@ -105,26 +105,25 @@ int hb_hwaccel_hw_ctx_init(hb_job_t *job)
 
     if (pix_fmt != AV_PIX_FMT_NONE)
     {
-        AVBufferRef *hw_device_ctx;
-        if ((err = av_hwdevice_ctx_create(&hw_device_ctx, hw_type, NULL, NULL, 0)) < 0)
+        AVBufferRef *ctx;
+        if ((err = av_hwdevice_ctx_create(&ctx, hw_type, NULL, NULL, 0)) < 0)
         {
             hb_error("hwaccel: failed to create hwdevice");
         }
         else
         {
-            job->hw_device_ctx = hw_device_ctx;
+            *hw_device_ctx = ctx;
         }
     }
 
     return err;
 }
 
-void hb_hwaccel_hw_ctx_close(hb_job_t *job)
+void hb_hwaccel_hw_ctx_close(void **hw_device_ctx)
 {
-    if (job->hw_device_ctx)
+    if (hw_device_ctx && *hw_device_ctx)
     {
-        AVBufferRef *hw_device_ctx = (AVBufferRef *)job->hw_device_ctx;
-        av_buffer_unref(&hw_device_ctx);
+        av_buffer_unref((AVBufferRef **)hw_device_ctx);
     }
 }
 
