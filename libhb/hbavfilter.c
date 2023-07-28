@@ -307,21 +307,23 @@ int hb_avfilter_get_frame(hb_avfilter_graph_t * graph, AVFrame * frame)
     return av_buffersink_get_frame(graph->output, frame);
 }
 
-int hb_avfilter_add_buf(hb_avfilter_graph_t * graph, hb_buffer_t * in)
+int hb_avfilter_add_buf(hb_avfilter_graph_t * graph, hb_buffer_t ** buf_in)
 {
     int ret;
-    if (in != NULL)
+    if (buf_in != NULL && *buf_in != NULL)
     {
 #if HB_PROJECT_FEATURE_QSV
         if (hb_qsv_hw_filters_are_enabled(graph->job))
         {
-            hb_video_buffer_to_avframe(in->qsv_details.frame, in);
+            hb_buffer_t      *in = *buf_in;
+
+            hb_video_buffer_to_avframe(in->qsv_details.frame, buf_in);
             ret = hb_avfilter_add_frame(graph, in->qsv_details.frame);
         }
         else
 #endif
         {
-            hb_video_buffer_to_avframe(graph->frame, in);
+            hb_video_buffer_to_avframe(graph->frame, buf_in);
             ret = av_buffersrc_add_frame(graph->input, graph->frame);
             av_frame_unref(graph->frame);
         }
@@ -351,7 +353,7 @@ hb_buffer_t * hb_avfilter_get_buf(hb_avfilter_graph_t * graph)
         else
 #endif
         {
-            buf = hb_avframe_to_video_buffer(graph->frame, graph->out_time_base);
+            buf = hb_avframe_to_video_buffer(graph->frame, graph->out_time_base, 1);
         }
         av_frame_unref(graph->frame);
         return buf;

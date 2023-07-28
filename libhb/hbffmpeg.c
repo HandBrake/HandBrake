@@ -50,20 +50,37 @@ static void wipe_avframe_side_data(AVFrame *frame)
     av_freep(&frame->side_data);
 }
 
-void hb_video_buffer_to_avframe(AVFrame *frame, hb_buffer_t * buf)
+static void hb_buffer_close_callback(void *opaque, uint8_t *data)
 {
+    hb_buffer_t *buf = opaque;
+    hb_buffer_close(&buf);
+}
+
+void hb_video_buffer_to_avframe(AVFrame *frame, hb_buffer_t **buf_in)
+{
+    hb_buffer_t *buf = *buf_in;
+
     if (buf->storage_type == AVFRAME)
     {
         av_frame_ref(frame, buf->storage);
     }
     else
     {
-        frame->data[0]     = buf->plane[0].data;
-        frame->data[1]     = buf->plane[1].data;
-        frame->data[2]     = buf->plane[2].data;
-        frame->linesize[0] = buf->plane[0].stride;
-        frame->linesize[1] = buf->plane[1].stride;
-        frame->linesize[2] = buf->plane[2].stride;
+        // Create a refcounted AVBufferRef to avoid additional copies
+        AVBufferRef *buf_ref = av_buffer_create(buf->data,
+                                                buf->size,
+                                                hb_buffer_close_callback,
+                                                buf,
+                                                0);
+
+        frame->buf[0] = buf_ref;
+
+        for (int pp = 0; pp <= buf->f.max_plane; pp++)
+        {
+            frame->data[pp] = buf->plane[pp].data;
+            frame->linesize[pp] = buf->plane[pp].stride;
+        }
+
         for (int i = 0; i < buf->nb_side_data; i++)
         {
             const AVFrameSideData *sd_src = buf->side_data[i];
@@ -91,6 +108,13 @@ void hb_video_buffer_to_avframe(AVFrame *frame, hb_buffer_t * buf)
     frame->colorspace      = hb_colr_mat_hb_to_ff(buf->f.color_matrix);
     frame->color_range     = buf->f.color_range;
     frame->chroma_location = buf->f.chroma_location;
+
+    if (buf->storage_type == AVFRAME)
+    {
+        hb_buffer_close(&buf);
+    }
+
+    *buf_in = NULL;
 }
 
 void hb_avframe_set_video_buffer_flags(hb_buffer_t * buf, AVFrame *frame,
@@ -133,11 +157,11 @@ void hb_avframe_set_video_buffer_flags(hb_buffer_t * buf, AVFrame *frame,
     buf->f.chroma_location = frame->chroma_location;
 }
 
-hb_buffer_t * hb_avframe_to_video_buffer(AVFrame *frame, AVRational time_base)
+hb_buffer_t * hb_avframe_to_video_buffer(AVFrame *frame, AVRational time_base, int zero_copy)
 {
     hb_buffer_t *buf;
 
-    if (frame->hw_frames_ctx)
+    if (zero_copy || frame->hw_frames_ctx)
     {
         // Zero-copy path
         buf = hb_buffer_wrapper_init();
@@ -188,10 +212,10 @@ hb_buffer_t * hb_avframe_to_video_buffer(AVFrame *frame, AVRational time_base)
         for (int pp = 0; pp <= buf->f.max_plane; pp++)
         {
             buf->plane[pp].data          = frame_copy->data[pp];
-            buf->plane[pp].stride        = frame_copy->linesize[pp];
-            buf->plane[pp].height_stride = 0;
             buf->plane[pp].width         = hb_image_width(buf->f.fmt, buf->f.width, pp);
             buf->plane[pp].height        = hb_image_height(buf->f.fmt, buf->f.height, pp);
+            buf->plane[pp].stride        = frame_copy->linesize[pp];
+            buf->plane[pp].height_stride = buf->plane[pp].height;
             buf->plane[pp].size          = buf->plane[pp].stride * buf->plane[pp].height;
 
             buf->size += buf->plane[pp].size;
