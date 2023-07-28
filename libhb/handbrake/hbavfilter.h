@@ -30,7 +30,7 @@ int     hb_avfilter_add_frame(hb_avfilter_graph_t * graph, AVFrame * frame);
 
 int     hb_avfilter_get_frame(hb_avfilter_graph_t * graph, AVFrame * frame);
 
-int     hb_avfilter_add_buf(hb_avfilter_graph_t * graph, hb_buffer_t * in);
+int     hb_avfilter_add_buf(hb_avfilter_graph_t * graph, hb_buffer_t ** in);
 
 hb_buffer_t *
 hb_avfilter_get_buf(hb_avfilter_graph_t * graph);
