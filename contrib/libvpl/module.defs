@@ -1,11 +1,11 @@
 $(eval $(call import.MODULE.defs,LIBVPL,libvpl))
 $(eval $(call import.CONTRIB.defs,LIBVPL))
 
-LIBVPL.FETCH.url       = https://github.com/oneapi-src/oneVPL/archive/refs/tags/v2023.3.0.tar.gz
-LIBVPL.FETCH.url      += https://github.com/oneapi-src/oneVPL/archive/refs/tags/v2023.3.0.tar.gz
-LIBVPL.FETCH.sha256    = 6378539dfd15c08aad4b7756c0dd694430c789a0aa2ebaf4352de18e59ab54e9
-LIBVPL.FETCH.basename  = oneVPL-2023.3.0.tar.gz
-LIBVPL.EXTRACT.tarbase = oneVPL-2023.3.0
+LIBVPL.FETCH.url       = https://github.com/oneapi-src/oneVPL/archive/refs/tags/v2023.3.1.tar.gz
+LIBVPL.FETCH.url      += https://github.com/oneapi-src/oneVPL/archive/refs/tags/v2023.3.1.tar.gz
+LIBVPL.FETCH.sha256    = 4411543519486a2450f6f5af06a077596e7888a551768594e9dfa2a46b23b6f5
+LIBVPL.FETCH.basename  = oneVPL-2023.3.1.tar.gz
+LIBVPL.EXTRACT.tarbase = oneVPL-2023.3.1
 
 LIBVPL.build_dir             = build
 LIBVPL.CONFIGURE.exe         = cmake
