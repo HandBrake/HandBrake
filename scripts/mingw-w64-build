@@ -124,7 +124,7 @@ function mingw-w64-build {  # mingw-w64-build [args] $TARGET_PARAM $TARGET_DIR
     MPFR_VER="4.2.0"
     MPC_VER="1.3.1"
     ISL_VER="0.26"
-    GCC_VER="10.2.0"
+    GCC_VER="12.3.0"
     VERSIONS=("${CONFIG_VER}" "${BINUTILS_VER}" "${MINGW_W64_VER}" "${GMP_VER}" "${MPFR_VER}" "${MPC_VER}" "${ISL_VER}" "${GCC_VER}")
 
     # filenames
@@ -161,13 +161,13 @@ function mingw-w64-build {  # mingw-w64-build [args] $TARGET_PARAM $TARGET_DIR
     MPFR_SHA256="f1cc1c6bb14d18f0c61cc416e083f5e697b6e0e3cf9630b9b33e8e483fc960f0"
     MPC_SHA256="ab642492f5cf882b74aa0cb730cd410a81edcdbec895183ce930e706c1c759b8"
     ISL_SHA256="5eac8664e9d67be6bd0bee5085d6840b8baf738c06814df47eaf4166d9776436"
-    GCC_SHA256="27e879dccc639cd7b0cc08ed575c1669492579529b53c9ff27b0b96265fa867d"
+    GCC_SHA256="11275aa7bb34cd8ab101d01b341015499f8d9466342a2574ece93f954d92273b"
     CHECKSUMS=("${CONFIG_SHA256}" "${BINUTILS_SHA256}" "${MINGW_W64_SHA256}" "${GMP_SHA256}" "${MPFR_SHA256}" "${MPC_SHA256}" "${ISL_SHA256}" "${GCC_SHA256}")
 
     # internal vars
     local NAME VERSION SELF SELF_NAME HELP
     NAME="mingw-w64-build"
-    VERSION="9.2.0"
+    VERSION="9.4.0"
     SELF="${BASH_SOURCE[0]}"
     SELF_NAME=$(basename "${SELF}")
     HELP="\
@@ -337,13 +337,13 @@ default install-dir: ${HOME}/toolchains/mingw-w64-${MINGW_W64_VER}-gcc-${GCC_VER
     if [[ "${DISABLE_GDB}" == false ]] || [[ "${LIST}" == true ]]; then
         GDB_NAME="gdb"
         NAMES+=("${GDB_NAME}")
-        GDB_VER="10.1"
+        GDB_VER="10.2"
         VERSIONS+=("${GDB_VER}")
         GDB_PKG="gdb-${GDB_VER}.tar.gz"
         PKGS+=("${GDB_PKG}")
         GDB_URLS=("https://ftp.gnu.org/gnu/gdb/gdb-${GDB_VER}.tar.gz" "${ARCHIVE_URL}/${GDB_PKG}")
         URLS_VARNAMES+=('GDB_URLS')
-        GDB_SHA256="f12f388b99e1408c01308c3f753313fafa45517740c81ab7ed0d511b13e2cf55"
+        GDB_SHA256="b33ad58d687487a821ec8d878daab0f716be60d0936f2e3ac5cf08419ce70350"
         CHECKSUMS+=("${GDB_SHA256}")
     fi
 
