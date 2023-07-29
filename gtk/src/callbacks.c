@@ -676,6 +676,10 @@ get_dvd_volume_name(gpointer gd)
     gchar *drive;
 
     drive = get_dvd_device_name(gd);
+
+    if (drive == NULL)
+        return NULL;
+
     g_mutex_lock(volname_mutex);
     label = g_strdup(g_hash_table_lookup(volname_hash, drive));
     g_mutex_unlock(volname_mutex);
@@ -4992,12 +4996,15 @@ ghb_file_menu_add_dvd(signal_user_data_t *ud)
             gchar *action = g_strdup_printf("app.dvd-open('%s')", get_dvd_device_name(link->data));
             gchar *name = get_dvd_volume_name(link->data);
 
-            GMenuItem *item = g_menu_item_new_from_model(dvd_template, 0);
-            g_menu_item_set_label(item, name);
-            g_menu_item_set_detailed_action(item, action);
-            g_menu_append_item(dvd_menu, item);
+            if (name != NULL)
+            {
+                GMenuItem *item = g_menu_item_new_from_model(dvd_template, 0);
+                g_menu_item_set_label(item, name);
+                g_menu_item_set_detailed_action(item, action);
+                g_menu_append_item(dvd_menu, item);
+                g_free(name);
+            }
 
-            g_free(name);
             g_free(action);
             free_drive(link->data);
             link = link->next;
