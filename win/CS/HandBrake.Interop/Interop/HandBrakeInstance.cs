@@ -20,6 +20,7 @@ namespace HandBrake.Interop.Interop
     using HandBrake.Interop.Interop.Helpers;
     using HandBrake.Interop.Interop.Interfaces;
     using HandBrake.Interop.Interop.Interfaces.EventArgs;
+    using HandBrake.Interop.Interop.Interfaces.Model.Encoders;
     using HandBrake.Interop.Interop.Interfaces.Model.Preview;
     using HandBrake.Interop.Interop.Json.Encode;
     using HandBrake.Interop.Interop.Json.Scan;
@@ -235,6 +236,18 @@ namespace HandBrake.Interop.Interop
             Marshal.FreeHGlobal(nativeJobPtrPtr);
 
             return preview;
+        }
+
+        /// <summary>
+        /// Determines if DRC can be applied to the given track with the given encoder.
+        /// </summary>
+        /// <param name="trackNumber">The track Number.</param>
+        /// <param name="encoder">The encoder to use for DRC.</param>
+        /// <param name="title">The title.</param>
+        /// <returns>True if DRC can be applied to the track with the given encoder.</returns>
+        public bool CanApplyDrc(int trackNumber, HBAudioEncoder encoder, int title)
+        {
+            return HBFunctions.hb_audio_can_apply_drc2(this.Handle, title, trackNumber, encoder.Id) > 0;
         }
 
         /// <summary>
