@@ -54,6 +54,11 @@ namespace HandBrake.Interop.Interop.Json.Scan
         /// </summary>
         public int Codec { get; set; }
 
+        /// <summary>
+        /// Parameters for the codec.
+        /// </summary>
+        public int CodecParam { get; set; }
+
         public string CodecName { get; set; }
 
         public long LFECount { get; set; }
