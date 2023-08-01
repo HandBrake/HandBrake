@@ -4120,9 +4120,9 @@ hb_title_t * hb_title_init( char * path, int index )
     t->angle_count        = 1;
     t->geometry.par.num   = 0;
     t->geometry.par.den   = 1;
-    t->color_prim         = -1;
-    t->color_transfer     = -1;
-    t->color_matrix       = -1;
+    t->color_prim         = HB_COLR_PRI_UNSET;
+    t->color_transfer     = HB_COLR_TRA_UNSET;
+    t->color_matrix       = HB_COLR_MAT_UNSET;
 
     return t;
 }
@@ -4225,9 +4225,9 @@ static void job_setup(hb_job_t * job, hb_title_t * title)
     job->color_matrix    = title->color_matrix;
     job->color_range     = title->color_range;
     job->chroma_location = title->chroma_location;
-    job->color_prim_override     = HB_COLR_PRI_UNDEF;
-    job->color_transfer_override = HB_COLR_TRA_UNDEF;
-    job->color_matrix_override   = HB_COLR_MAT_UNDEF;
+    job->color_prim_override     = HB_COLR_PRI_UNSET;
+    job->color_transfer_override = HB_COLR_TRA_UNSET;
+    job->color_matrix_override   = HB_COLR_MAT_UNSET;
 
     job->mastering      = title->mastering;
     job->coll           = title->coll;
@@ -4258,7 +4258,7 @@ static void job_setup(hb_job_t * job, hb_title_t * title)
 
 int hb_output_color_prim(hb_job_t * job)
 {
-    if (job->color_prim_override != HB_COLR_PRI_UNDEF)
+    if (job->color_prim_override != HB_COLR_PRI_UNSET)
         return job->color_prim_override;
     else
         return job->color_prim;
@@ -4266,7 +4266,7 @@ int hb_output_color_prim(hb_job_t * job)
 
 int hb_output_color_transfer(hb_job_t * job)
 {
-    if (job->color_transfer_override != HB_COLR_TRA_UNDEF)
+    if (job->color_transfer_override != HB_COLR_TRA_UNSET)
         return job->color_transfer_override;
     else
         return job->color_transfer;
@@ -4274,7 +4274,7 @@ int hb_output_color_transfer(hb_job_t * job)
 
 int hb_output_color_matrix(hb_job_t * job)
 {
-    if (job->color_matrix_override != HB_COLR_MAT_UNDEF)
+    if (job->color_matrix_override != HB_COLR_MAT_UNSET)
         return job->color_matrix_override;
     else
         return job->color_matrix;

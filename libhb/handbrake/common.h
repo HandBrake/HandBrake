@@ -683,6 +683,7 @@ struct hb_job_s
 // see https://developer.apple.com/library/content/technotes/tn2162/_index.html
 //     https://developer.apple.com/library/content/documentation/QuickTime/QTFF/QTFFChap3/qtff3.html#//apple_ref/doc/uid/TP40000939-CH205-125526
 //     libav pixfmt.h
+#define HB_COLR_PRI_UNSET       -1
 #define HB_COLR_PRI_BT709        1
 #define HB_COLR_PRI_UNDEF        2
 #define HB_COLR_PRI_BT470M       4
@@ -697,6 +698,7 @@ struct hb_job_s
 #define HB_COLR_PRI_JEDEC_P22    22
 // 0, 3-4, 7-8, 10-65535: reserved/not implemented
 #define HB_COLR_TRA_BT709        1 // also use for bt470m, bt470bg, smpte170m, bt2020_10 and bt2020_12
+#define HB_COLR_TRA_UNSET       -1
 #define HB_COLR_TRA_UNDEF        2
 #define HB_COLR_TRA_GAMMA22      4
 #define HB_COLR_TRA_GAMMA28      5
@@ -714,6 +716,7 @@ struct hb_job_s
 #define HB_COLR_TRA_SMPTE428     17
 #define HB_COLR_TRA_ARIB_STD_B67 18 //known as "Hybrid log-gamma"
 // 0, 3-6, 8-15, 17-65535: reserved/not implemented
+#define HB_COLR_MAT_UNSET       -1
 #define HB_COLR_MAT_RGB          0
 #define HB_COLR_MAT_BT709        1
 #define HB_COLR_MAT_UNDEF        2

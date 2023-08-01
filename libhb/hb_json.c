@@ -726,17 +726,17 @@ hb_dict_t* hb_job_to_dict( const hb_job_t * job )
                 hb_value_int(job->color_matrix));
     hb_dict_set(video_dict, "ChromaLocation",
                 hb_value_int(job->chroma_location));
-    if (job->color_prim_override != HB_COLR_PRI_UNDEF)
+    if (job->color_prim_override != HB_COLR_PRI_UNSET)
     {
         hb_dict_set(video_dict, "ColorPrimariesOverride",
                     hb_value_int(job->color_prim_override));
     }
-    if (job->color_transfer_override != HB_COLR_TRA_UNDEF)
+    if (job->color_transfer_override != HB_COLR_TRA_UNSET)
     {
         hb_dict_set(video_dict, "ColorTransferOverride",
                     hb_value_int(job->color_transfer_override));
     }
-    if (job->color_matrix_override != HB_COLR_MAT_UNDEF)
+    if (job->color_matrix_override != HB_COLR_MAT_UNSET)
     {
         hb_dict_set(video_dict, "ColorMatrixOverride",
                     hb_value_int(job->color_matrix_override));
