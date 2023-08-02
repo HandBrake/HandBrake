@@ -5,6 +5,8 @@ RUN yum install -y fribidi-devel git jansson-devel libogg-devel libsamplerate-de
 RUN yum install -y epel-release
 RUN yum install -y libass-devel yasm
 RUN yum localinstall -y `curl -L -s 'https://archives.fedoraproject.org/pub/archive/epel/6/x86_64/Packages/o/' | grep -Eo 'opus-[^">]+\.x86_64\.rpm' | sort -u | awk '{ print "https://archives.fedoraproject.org/pub/archive/epel/6/x86_64/Packages/o/"$0 }'`
+RUN git clone https://github.com/autotools-mirror/autoconf && cd autoconf && git checkout v2.72c && autoreconf -vi && ./configure --prefix=/usr && make -s -j`nproc` && make install
+
 RUN git clone https://github.com/netwide-assembler/nasm && cd nasm && git checkout nasm-2.16.02rc1 && ./autogen.sh && ./configure --prefix=/usr && make -s -j`nproc` && make install
 RUN yum localinstall -y --nogpgcheck https://download1.rpmfusion.org/free/el/rpmfusion-free-release-7.noarch.rpm
 RUN yum install -y lame-devel x264-devel
