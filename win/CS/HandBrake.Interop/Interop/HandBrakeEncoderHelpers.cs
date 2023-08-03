@@ -468,24 +468,21 @@ namespace HandBrake.Interop.Interop
         /// <summary>
         /// Determines if DRC can be applied to the given track with the given encoder.
         /// </summary>
-        /// <param name="handle">
-        /// The handle.
+        /// <param name="codecId">
+        /// The source audio codec.
         /// </param>
-        /// <param name="trackNumber">
-        /// The track Number.
+        /// <param name="codecParam">
+        /// The source audio codec parameters.
         /// </param>
         /// <param name="encoder">
-        /// The encoder to use for DRC.
-        /// </param>
-        /// <param name="title">
-        /// The title.
+        /// The encoder that will be used.
         /// </param>
         /// <returns>
         /// True if DRC can be applied to the track with the given encoder.
         /// </returns>
-        public static bool CanApplyDrc(IntPtr handle, int trackNumber, HBAudioEncoder encoder, int title)
+        public static bool CanApplyDrc(int codecId, int codecParam, HBAudioEncoder encoder)
         {
-            return HBFunctions.hb_audio_can_apply_drc2(handle, title, trackNumber, encoder.Id) > 0; 
+            return HBFunctions.hb_audio_can_apply_drc((uint)codecId, (uint)codecParam, encoder.Id) > 0;
         }
 
         /// <summary>

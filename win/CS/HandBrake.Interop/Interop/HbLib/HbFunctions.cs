@@ -171,8 +171,8 @@ namespace HandBrake.Interop.Interop.HbLib
         [DllImport("hb", EntryPoint = "hb_audio_compression_get_default", CallingConvention = CallingConvention.Cdecl)]
         public static extern float hb_audio_compression_get_default(uint codec);
 
-        [DllImport("hb", EntryPoint = "hb_audio_can_apply_drc2", CallingConvention = CallingConvention.Cdecl)]
-        public static extern int hb_audio_can_apply_drc2(IntPtr handle, int title_index, int audio_index, int encoder);
+        [DllImport("hb", EntryPoint = "hb_audio_can_apply_drc", CallingConvention = CallingConvention.Cdecl)]
+        public static extern int hb_audio_can_apply_drc(uint codec, uint codec_param, int encoder);
 
         [DllImport("hb", EntryPoint = "hb_autopassthru_get_encoder", CallingConvention = CallingConvention.Cdecl)]
         public static extern int hb_autopassthru_get_encoder(int in_codec, int copy_mask, int fallback, int muxer);

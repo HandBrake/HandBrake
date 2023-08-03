@@ -1274,11 +1274,11 @@ skip_preview:
         title->pix_fmt = vid_info.pix_fmt;
 
         if ((title->color_prim     != HB_COLR_PRI_UNDEF &&
-             title->color_prim     != -1) ||
+             title->color_prim     != HB_COLR_PRI_UNSET) ||
             (title->color_transfer != HB_COLR_TRA_UNDEF &&
-             title->color_transfer != -1) ||
+             title->color_transfer != HB_COLR_TRA_UNSET) ||
             (title->color_matrix   != HB_COLR_MAT_UNDEF &&
-             title->color_matrix != -1))
+             title->color_matrix != HB_COLR_MAT_UNSET))
         {
             title->color_prim     = get_color_prim(title->color_prim, vid_info.geometry, vid_info.rate);
             title->color_transfer = get_color_transfer(title->color_transfer);
