@@ -77,6 +77,9 @@
 /* Preferences Advanced Toolbar Item */
 "Advanced" = "高度";
 
+/* Main Window -> Same as source destination open panel */
+"Allow" = "許可";
+
 /* HBLanguage -> Any language */
 "Any" = "全て";
 
@@ -97,6 +100,9 @@
 
 /* Job statistics */
 "Average speed:" = "平均速度:";
+
+/* Preferences -> Output Name Token */
+"Bit Depth" = "ビット深度";
 
 /* Copy Protection Alert -> second button
    Delete preset alert -> second button
@@ -121,6 +127,9 @@
 
 /* Main Window -> Destination open panel */
 "Choose" = "選択";
+
+/* Preferences -> Output Name Token */
+"Codec" = "コーデック";
 
 /* Queue Alert -> cancel rip first button */
 "Continue Encoding" = "エンコードを続ける";
@@ -175,6 +184,9 @@
 /* HBQueueItemView -> Encode state accessibility label */
 "Encode working" = "エンコード処理中";
 
+/* Preferences -> Output Name Token */
+"Encoder" = "エンコーダー";
+
 /* No comment provided by engineer. */
 "Encoding %lu Jobs" = "%lu つのジョブをエンコード中";
 
@@ -205,6 +217,12 @@
 /* Preview -> live preview alert informative text */
 "HandBrake can't playback this combination of video/audio/container format. Do you want to open it in an external player?" = "HandBrakeはこのビデオ/音声/コンテナ形式の組み合わせでは再生できません。外部プレーヤーを開きますか？";
 
+/* Main Window -> Same as source destination open panel */
+"HandBrake does not have permission to write to this folder. To allow HandBrake to write to this folder, click \"Allow\"" = "HandBrakeにはこのフォルダーに書き込む権限がありません。このフォルダーに書き込むには、\"許可\"をクリックしてください";
+
+/* Preferences -> Output Name Token */
+"Height" = "高さ";
+
 /* Quit Alert -> informative text */
 "If you quit HandBrake your current encode will be reloaded into your queue at next launch. Do you want to quit anyway?" = "HandBrakeを終了すると現在のエンコードは次回起動時にキューに再読み込みされます。本当に終了しますか＞";
 
@@ -223,6 +241,12 @@
 
 /* Touch bar */
 "Live Preview" = "ライブプレビュー";
+
+/* Preferences -> Output Name Token */
+"Modification-Date" = "更新日";
+
+/* Preferences -> Output Name Token */
+"Modification-Time" = "更新時刻";
 
 /* Queue undo action name */
 "Move Job in Queue" = "ジョブをキューに移動";
@@ -300,6 +324,9 @@
    Queue Done Alert -> sleep second button */
 "Preferences…" = "設定…";
 
+/* Preferences -> Output Name Token */
+"Preset" = "プリセット";
+
 /* Preview -> progress formatter title */
 "preview" = "プレビュー";
 
@@ -318,6 +345,9 @@
 /* Queue done alert message
    Queue notification alert message */
 "Put down that cocktail…" = "カクテルを置いて…";
+
+/* Preferences -> Output Name Token */
+"Quality Type" = "品質タイプ";
 
 /* Preferences -> Output Name Token */
 "Quality/Bitrate" = "品質/ビットレート";
@@ -484,6 +514,9 @@
 
 /* Invalid destination alert -> message */
 "Warning!" = "警告！";
+
+/* Preferences -> Output Name Token */
+"Width" = "幅";
 
 /* No comment provided by engineer. */
 "Working" = "処理中";

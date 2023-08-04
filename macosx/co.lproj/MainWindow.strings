@@ -211,6 +211,9 @@
 /* Class = "NSToolbarItem"; toolTip = "Show Queue Window"; ObjectID = "HCx-ku-nF7"; */
 "HCx-ku-nF7.toolTip" = "Affissà a finestra di a fila d’attesa";
 
+/* Class = "NSButtonCell"; title = "Recursively scan folders"; ObjectID = "Hwu-gp-tRZ"; */
+"Hwu-gp-tRZ.title" = "Analisa di i cartulari d’una manera recursiva";
+
 /* Class = "CocoaBindingsConnection"; ibShadowedIsNilPlaceholder = " "; ObjectID = "Iat-pL-ttI"; */
 "Iat-pL-ttI.ibShadowedIsNilPlaceholder" = "";
 
