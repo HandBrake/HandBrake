@@ -329,7 +329,7 @@ VFR ist nicht kompatibel mit manchen Abspielgeräten.</value>
   <data name="SourceSelection_TitleSpecific" xml:space="preserve">
     <value>Einige Quellen können mehr als einen Videoclip oder eine Sammlung von Titeln enthalten. Blu-ray- und DVD-Quellen haben oft mehrere Titel.
 
-Wenn Sie den spezifischen Titel kennen, den Sie encodieren möchten, können Sie ihn hier eingeben und HandBrake wird nur diesen Titel und nicht alle Titel in der Quelldatei scannen. Andernfalls lassen Sie das Feld leer.</value>
+Wenn Sie den spezifischen Titel kennen, den Sie encodieren möchten, können Sie ihn hier eingeben und HandBrake wird nur diesen Titel und nicht alle Titel in der Quelldatei einlesen. Andernfalls lassen Sie das Feld leer.</value>
   </data>
   <data name="FilterView_CustomDenoiseParams" xml:space="preserve">
     <value>Eigene Entrauschparameter.
@@ -512,7 +512,7 @@ Bitte beachten Sie, dass die Fehlercodes nach bestem Wissen und Gewissen ermitte
 Es wird empfohlen, die Ausgabedatei vor der Durchführung von Aktionen zu validieren.</value>
   </data>
   <data name="Options_AdditionalFormatOptions" xml:space="preserve">
-    <value>Das Format der Ausgabedatei. Zusätzlich zu jedem unterstützten Dateisystemzeichen können Sie einen der Platzhalter verwenden, die ersetzt werden, wenn Sie den Titel ändern, eine Quelle scannen oder bestimmte Einstellungen aktualisieren.
+    <value>Das Format der Ausgabedatei. Zusätzlich zu jedem unterstützten Dateisystemzeichen können Sie einen der Platzhalter verwenden, die ersetzt werden, wenn Sie den Titel ändern, eine Quelle einlesen oder bestimmte Einstellungen aktualisieren.
 
 {source} - Name der Quelldatei.
 {title} - Ganzzahliger Wert. Dieser Wert steht für eine Disc-Titelnummer.

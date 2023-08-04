@@ -293,14 +293,14 @@ A scala di FFMpeg è Theora hè più lineare.
 Sti cudificatori ùn anu micca di modu senza perdita.</value>
   </data>
   <data name="Video_TurboAnalysisPass" xml:space="preserve">
-    <value>During the analysis pass of a multi pass encode, use settings that speed things along.</value>
+    <value>Durante u passu d’analisa d’una cudificazione à parechji passi, impiegate preferenze chì acceleranu u trattamentu.</value>
   </data>
   <data name="Video_MultiPass" xml:space="preserve">
-    <value>Perform Multi Pass Encoding.
+    <value>Effettuà una cudificazione à parechji passi.
 
-The 'Bitrate' option is prerequisite. During the analysis passes, statistics about
-the video are collected. Then in the final pass, those statistics are used
-to make bitrate allocation decisions.</value>
+L’ozzione « Flussu binariu » hè prerichiesta. Durante u passu d’analisa,
+e statistiche sò cullettate nant’à a video. Eppò, à u passu finale, quelle
+statistiche sò impiegate per fà a scelta di l’allucamentu di u flussu binariu.</value>
   </data>
   <data name="Video_VariableFramerate" xml:space="preserve">
     <value>Attiveghja una frequenza di fiure variabile in esciuta.
@@ -513,28 +513,30 @@ I codici di sbagliu ponu esse :
 5 : Sbagliu di lettura di u schedariu di fonte.
 
 Sappiate chì i codici di sbagliu sò indicativi è puderianu esse incurretti.
-Hè ricumandatu di cunvalidà u schedariu d’esciuta primu d’eseguisce qualchì azzione nant’à stu schedariu.</value>
+Hè ricumandatu di cunvalidà u schedariu d’esciuta primu d’effettuà qualchì azzione nant’à stu schedariu.</value>
   </data>
   <data name="Options_AdditionalFormatOptions" xml:space="preserve">
-    <value>The format of the output file. In addition to any supported file system character, you can use the any of the placeholders that will be replaced when you change title or scan a source or update certain settings.
+    <value>U furmatu di u schedariu d’esciuta. In più di i caratteri accettati da u sistema di schedariu, pudete impiegà i campi di sustituzione chì seranu rimpiazzati quandu vo cambiate di titulu, analizate una fonte, o mudificate certe definizioni.
 
-{source} - Name of the source file.
-{title} - Integer value. This is representative of a disc title number.
-{chapters} - The range of chapters selected.
-{creation-date} - The date that the source file was created on (if available).
-{creation-time} - The time that the source file was created on (if available).
-{modification-date} - The date that the source file was last modified on (if available).
-{modification-time} - The time that the source file was last modified on (if available).
-{date} - Today. Set at time of adding to the queue.
-{time} - Today. Set at time of adding to the queue.
-{quality_bitrate} - The RF/CQ number, or bitrate
-{quality_type} - Prints "kbps" or "Q" depending on the quality mode selected on the video tab.
-{preset} - Name of the preset selected.
-{encode_bit_depth} - Integer value. i.e. 8, 10 or 12
-{width} - The output storage width
-{height} - The output storage height
+{source} - U nome di u schedariu di fonte.
+{title} - Valore interu. Què riprisente un numeru di titulu di discu.
+{chapters} - A seria di i capituli selezziunati.
+{creation-date} - A data di creazione di u schedariu di fonte (s’ella hè dispunibule).
+{creation-time} - L’ora di creazione di u schedariu di fonte (s’ella hè dispunibule).
+{modification-date} - A data di l’ultima mudificazione di u schedariu di fonte (s’ella hè dispunibule).
+{modification-time} - L’ora di l’ultima mudificazione di u schedariu di fonte (s’ella hè dispunibule).
+{date} - Oghje. Definitu à u mumentu d’aghjuntu à a fila d’attesa.
+{time} - Oghje. Definitu à u mumentu d’aghjuntu à a fila d’attesa.
+{quality_bitrate} - U numeru RF/CQ, o u flussu binariu.
+{quality_type} - Stampa « kbps » or « Q » secondu à u modu di qualità selezziunatu nant’à l’unghjetta di a video.
+{preset} - U nome di a prerigatura selezziunata.
+{encode_bit_depth} - Valore interu. Per indettu : 8, 10 o 12.
+{width} - A larghezza d’allucamentu d’esciuta.
+{height} - L’altezza d’allucamentu d’esciuta.
+{codec} - Affisseghja u furmatu video.
+{encoder} - Affisseghja a chjave corta di u furmatu di u cudificatore impiegatu.
 
-Any illegal path characters will be removed automatically.</value>
+Tutti i caratteri inaccettevule di chjassu seranu cacciati autumaticamente.</value>
   </data>
   <data name="OptionsView_RightToleftMode" xml:space="preserve">
     <value>Per e lingue chì si leghjenu da diritta à manca, si pò attivà unu trà dui modi. « Solu u testu » per scrive solu u testu da diritta à manca. « Interfaccia cumpleta di l’utilizatore » per impiegà tutti i cuntrolli grafichi da diritta à manca.
@@ -548,10 +550,13 @@ Sappiate chì a dispusizione di l’interaccia pò esse imperfetta quand’ella 
 U flussu binariu cambierà d’una fonte à l’altra.</value>
   </data>
   <data name="OptionsView_DestinationReplacementOptions" xml:space="preserve">
-    <value>The following can be used singularly, or together to build up a destination path
+    <value>Sti parametri ponu esse impiegati unu à unu, o inseme per custruisce un chjassu di destinazione
 
-{source_path} - In the same folder as the source path (if possible)
-{source_folder_name} – The name of the directory that the source file is in, without the full path.
-{source} - The name of the source file.</value>
+{source_path} - In u listessu cartulare chè u chjassu di fonte (s’ella hè pussibule)
+{source_folder_name} - U nome di u cartulare induve si trova u schedariu di fonte, senza u chjassu sanu.
+{source} - U nome di u schedariu di fonte.</value>
+  </data>
+  <data name="OptionsView_LaunchsHelp" xml:space="preserve">
+    <value>Lancia u situ web di documentazione à l’indirizzu https://handbrake.fr/docs</value>
   </data>
 </root>
