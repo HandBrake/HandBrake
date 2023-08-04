@@ -292,6 +292,9 @@
 /* Title description */
 "Multi Passes Turbo" = "複数パスターボ";
 
+/* HBStateFormatter -> pass display name */
+"Muxing…" = "結合中...";
+
 /* HBFilters -> filter display name */
 "NLMeans" = "NLMeans";
 
@@ -349,6 +352,12 @@
 
 /* Video description */
 "Same as source (variable)" = "ソースと同じ (可変)";
+
+/* HBStateFormatter -> scan pass format */
+"Scanning title %d of %d, preview %d…" = "%2$d 中 %1$d つ目のタイトルをスキャン中, プレビュー %3$d …";
+
+/* HBStateFormatter -> scan pass format */
+"Scanning title %d of %d…" = "%2$d 中 %1$d つ目のタイトルをスキャン中…";
 
 /* HBStateFormatter -> search pass display name */
 "Searching for start point:  %.2f %%" = "開始地点を検索中: %.2f %%";

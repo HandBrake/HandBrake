@@ -25,8 +25,8 @@
 /* Class = "NSTextFieldCell"; title = "At Launch:"; ObjectID = "307"; */
 "307.title" = "启动时：";
 
-/* Class = "NSTextFieldCell"; title = "Output Files:"; ObjectID = "308"; */
-"308.title" = "输出文件：";
+/* Class = "NSTextFieldCell"; title = "File Name: "; ObjectID = "308"; */
+"308.title" = "文件名：";
 
 /* Class = "NSButtonCell"; title = "Store Activity Logs in same location as video"; ObjectID = "348"; */
 "348.title" = "储存活动日志到视频相同位置。";
@@ -229,8 +229,14 @@
 /* Class = "NSButtonCell"; title = "Remove old logs from main Activity Logs folder after 30 days"; ObjectID = "lgn-RF-k0d"; */
 "lgn-RF-k0d.title" = "30 天后从主“活动日志”文件夹中删除旧日志";
 
+/* Class = "NSTextFieldCell"; title = "Destination:"; ObjectID = "lo9-Hk-I6l"; */
+"lo9-Hk-I6l.title" = "目标：";
+
 /* Class = "NSPopUpButton"; ibShadowedToolTip = "Higher values may help to fully utilize the CPU if a single encode can't scale to all available CPU cores."; ObjectID = "MLd-Te-AbW"; */
 "MLd-Te-AbW.ibShadowedToolTip" = "如果单个编码不能扩展到所有可用的 CPU 内核，更高的值可能有助于充分利用 CPU。";
+
+/* Class = "NSButtonCell"; title = "Use ISO Date Format (YYYY-MM-DD)"; ObjectID = "NO8-bA-kkw"; */
+"NO8-bA-kkw.title" = "使用 ISO 日期格式（YYYY-MM-DD）";
 
 /* Class = "NSMenuItem"; title = "4"; ObjectID = "nTJ-DB-eOd"; */
 "nTJ-DB-eOd.title" = "4";
@@ -255,6 +261,9 @@
 
 /* Class = "NSButtonCell"; title = "Remove common punctuation"; ObjectID = "wo5-iR-2mb"; */
 "wo5-iR-2mb.title" = "删除常见的标点符号";
+
+/* Class = "NSButtonCell"; title = "Use same folder as source when possible"; ObjectID = "wXE-Fz-Dru"; */
+"wXE-Fz-Dru.title" = "尽可能使用与源文件相同的文件夹";
 
 /* Class = "NSButtonCell"; title = "Pause queue if disk space is lower than:"; ObjectID = "yG9-mz-tqQ"; */
 "yG9-mz-tqQ.title" = "如果磁盘空间少于以下，则暂停队列：";

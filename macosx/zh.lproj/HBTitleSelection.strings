@@ -26,10 +26,10 @@
 "jHg-nh-9NJ.title" = "取消";
 
 /* Class = "NSButtonCell"; title = "Check"; ObjectID = "JqJ-5C-Yhw"; */
-"JqJ-5C-Yhw.title" = "检查";
+"JqJ-5C-Yhw.title" = "校验";
 
 /* Class = "NSButtonCell"; title = "Check"; ObjectID = "k84-a6-eZ7"; */
-"k84-a6-eZ7.title" = "检查";
+"k84-a6-eZ7.title" = "校验";
 
 /* Class = "NSButtonCell"; title = "Add"; ObjectID = "mOe-XL-tl1"; */
 "mOe-XL-tl1.title" = "添加";

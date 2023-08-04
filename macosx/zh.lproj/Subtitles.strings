@@ -101,7 +101,7 @@
 "N3S-st-yGv.headerCell.title" = "音轨";
 
 /* Class = "NSButtonCell"; title = "Check"; ObjectID = "ooy-Sh-Edm"; */
-"ooy-Sh-Edm.title" = "检查";
+"ooy-Sh-Edm.title" = "校验";
 
 /* Class = "NSButtonCell"; title = "Selection Behavior…"; ObjectID = "oxg-bs-1si"; */
 "oxg-bs-1si.title" = "选择行为…";

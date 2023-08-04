@@ -25,8 +25,8 @@
 /* Class = "NSTextFieldCell"; title = "At Launch:"; ObjectID = "307"; */
 "307.title" = "All'avvio:";
 
-/* Class = "NSTextFieldCell"; title = "Output Files:"; ObjectID = "308"; */
-"308.title" = "Nome documenti:";
+/* Class = "NSTextFieldCell"; title = "File Name: "; ObjectID = "308"; */
+"308.title" = "Nome file:";
 
 /* Class = "NSButtonCell"; title = "Store Activity Logs in same location as video"; ObjectID = "348"; */
 "348.title" = "Registra i resoconti delle attività nella stessa posizione del video";
@@ -229,8 +229,14 @@
 /* Class = "NSButtonCell"; title = "Remove old logs from main Activity Logs folder after 30 days"; ObjectID = "lgn-RF-k0d"; */
 "lgn-RF-k0d.title" = "Rimuovi i vecchi resoconti dalla cartella dei Resoconti di attività dopo 30 giorni";
 
+/* Class = "NSTextFieldCell"; title = "Destination:"; ObjectID = "lo9-Hk-I6l"; */
+"lo9-Hk-I6l.title" = "Destinazione:";
+
 /* Class = "NSPopUpButton"; ibShadowedToolTip = "Higher values may help to fully utilize the CPU if a single encode can't scale to all available CPU cores."; ObjectID = "MLd-Te-AbW"; */
 "MLd-Te-AbW.ibShadowedToolTip" = "Valori più alti possono aiutare a utilizzare completamente la CPU se una singola codifica non può riesce ad utilizzare tutti i core CPU disponibili.";
+
+/* Class = "NSButtonCell"; title = "Use ISO Date Format (YYYY-MM-DD)"; ObjectID = "NO8-bA-kkw"; */
+"NO8-bA-kkw.title" = "Usa il formato data ISO (YYYY-MM-DD)";
 
 /* Class = "NSMenuItem"; title = "4"; ObjectID = "nTJ-DB-eOd"; */
 "nTJ-DB-eOd.title" = "4";
@@ -255,6 +261,9 @@
 
 /* Class = "NSButtonCell"; title = "Remove common punctuation"; ObjectID = "wo5-iR-2mb"; */
 "wo5-iR-2mb.title" = "Rimuovi la punteggiatura comune";
+
+/* Class = "NSButtonCell"; title = "Use same folder as source when possible"; ObjectID = "wXE-Fz-Dru"; */
+"wXE-Fz-Dru.title" = "Usa la stessa cartella della sorgente quando possibile";
 
 /* Class = "NSButtonCell"; title = "Pause queue if disk space is lower than:"; ObjectID = "yG9-mz-tqQ"; */
 "yG9-mz-tqQ.title" = "Metti in pausa la coda se lo spazio sul disco è minore di:";
