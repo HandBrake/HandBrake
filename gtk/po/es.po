@@ -14,7 +14,7 @@ msgstr ""
 "POT-Creation-Date: 2023-03-25 15:12+0100\n"
 "PO-Revision-Date: 2018-10-10 18:14+0000\n"
 "Last-Translator: Casper, 2023\n"
-"Language-Team: Spanish (https://www.transifex.com/HandBrakeProject/teams/92423/es/)\n"
+"Language-Team: Spanish (https://app.transifex.com/HandBrakeProject/teams/92423/es/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -1277,7 +1277,7 @@ msgstr ""
 
 #: src/ghb3.ui:5233
 msgid "Multi-Pass Encoding"
-msgstr ""
+msgstr "Codificación en varias pasadas"
 
 #: src/ghb3.ui:5238
 msgid ""
@@ -1287,16 +1287,23 @@ msgid ""
 "the video are collected.  Then in the final pass, those statistics are used\n"
 "to make bitrate allocation decisions."
 msgstr ""
+"Realice la codificación de varias pasadas.\n"
+"\n"
+"La opción 'Tasa de bits' es un requisito previo. Durante los pases de análisis, las estadísticas sobre\n"
+"el video se recopilan. Luego, en el pase final, se usan esas estadísticas\n"
+"para tomar decisiones de asignación de tasa de bits."
 
 #: src/ghb3.ui:5256
 msgid "Turbo Analysis Pass"
-msgstr ""
+msgstr "Pasada de análisis turbo"
 
 #: src/ghb3.ui:5261
 msgid ""
 "During the analysis pass of a multi pass encode, use settings that speed "
 "things along."
 msgstr ""
+"Durante el pase de análisis de una codificación en varias pasadas, use "
+"configuraciones que aceleren las cosas."
 
 #: src/ghb3.ui:5323
 msgid ""
@@ -3704,7 +3711,7 @@ msgstr "%s, Tasa de Bits %dkbps"
 #: src/queuehandler.c:359
 #, c-format
 msgid "%s, Bitrate %dkbps (Multi Pass)"
-msgstr ""
+msgstr "%s, Tasa de bits %dkbps (Varias pasadas)"
 
 #: src/queuehandler.c:366
 #, c-format
@@ -3816,11 +3823,11 @@ msgstr "Codificar"
 
 #: src/queuehandler.c:1208
 msgid "Encode Analysis Pass"
-msgstr ""
+msgstr "Pase de análisis de codificación"
 
 #: src/queuehandler.c:1212
 msgid "Encode Final Pass"
-msgstr ""
+msgstr "Codificar pase final"
 
 #. Should never happen
 #: src/queuehandler.c:1217
