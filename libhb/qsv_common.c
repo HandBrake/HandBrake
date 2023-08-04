@@ -3776,7 +3776,7 @@ int hb_qsv_release_surface_from_pool_by_surface_pointer(HBQSVFramesContext* hb_e
     for(int i = 0; i < hb_enc_qsv_frames_ctx->nb_mids; i++)
     {
         mfxFrameSurface1 *pool_surface = &frames_hwctx->surfaces[i];
-        if(surface == pool_surface)
+        if(surface == pool_surface && hb_enc_qsv_frames_ctx->pool[i] > 0)
         {
             ff_qsv_atomic_dec(&hb_enc_qsv_frames_ctx->pool[i]);
             return 0;

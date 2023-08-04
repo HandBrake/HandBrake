@@ -6306,7 +6306,7 @@ static int pix_fmt_is_supported(hb_job_t *job, int pix_fmt)
     {
         if (hb_hwaccel_decode_is_enabled(job) == 0
 #if HB_PROJECT_FEATURE_QSV
-            && hb_qsv_decode_is_enabled(job) == 0
+            && hb_qsv_full_path_is_enabled(job) == 0
 #endif
             )
         {
