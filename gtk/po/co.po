@@ -4,7 +4,7 @@
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2023.
 # 
 # Translators:
-# Patriccollu di Santa Maria è Sichè <Patrick.Santa-Maria@laposte.net>, 2022
+# Patriccollu di Santa Maria è Sichè <Patrick.Santa-Maria@laposte.net>, 2023
 # 
 #, fuzzy
 msgid ""
@@ -13,8 +13,8 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://github.com/HandBrake/Handbrake/issues\n"
 "POT-Creation-Date: 2023-03-25 15:12+0100\n"
 "PO-Revision-Date: 2018-10-10 18:14+0000\n"
-"Last-Translator: Patriccollu di Santa Maria è Sichè <Patrick.Santa-Maria@laposte.net>, 2022\n"
-"Language-Team: Corsican (https://www.transifex.com/HandBrakeProject/teams/92423/co/)\n"
+"Last-Translator: Patriccollu di Santa Maria è Sichè <Patrick.Santa-Maria@laposte.net>, 2023\n"
+"Language-Team: Corsican (https://app.transifex.com/HandBrakeProject/teams/92423/co/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -27,11 +27,11 @@ msgstr "_Schedariu"
 
 #: src/menu.ui:11
 msgid "_Open Source"
-msgstr ""
+msgstr "_Apre a fonte"
 
 #: src/menu.ui:16
 msgid "Open _Directory"
-msgstr ""
+msgstr "Apre u _cartulare"
 
 #: src/menu.ui:21
 msgid "Set _Destination"
@@ -59,7 +59,7 @@ msgstr "Aghjunghje _parechje"
 
 #: src/menu.ui:53
 msgid "Add A_ll"
-msgstr ""
+msgstr "_Tuttu aghjunghje"
 
 #: src/menu.ui:60
 msgid "_Start Encoding"
@@ -1031,6 +1031,11 @@ msgid ""
 "    The deinterlace filter is a classic YADIF deinterlacer.\n"
 "    "
 msgstr ""
+"Sciglite u filtru di dipettinera o disintricciamentu.\n"
+"\n"
+"    U filtru di dipettinera accetta cudificazioni numerose d’interpolazione.\n"
+"    U filtru di disintricciament hè un disintricciatore YADIF classicu.\n"
+"    "
 
 #: src/ghb3.ui:4527
 msgid "Deblock Filter:"
@@ -1054,6 +1059,8 @@ msgid ""
 "The deblocking filter removes a common type of compression artifact.\n"
 "    If your source exhibits 'blockiness', this filter may help clean it up."
 msgstr ""
+"U filtru di sblucchime caccia un tipu classicu d’effetti parassiti di cumpressione.\n"
+"    S’è a vostra fonte fà vede certi effetti parassiti di bloccu, stu filtru pò aiutà à nettalli."
 
 #: src/ghb3.ui:4585 src/ghb3.ui:4768
 msgid ""
@@ -1061,6 +1068,9 @@ msgid ""
 "\n"
 "    strength=weak|strong:thresh=0-100:blocksize=4-512"
 msgstr ""
+"Furmatu persunalizatu di catena di filtru di sblucchime\n"
+"\n"
+"    strength=weak|strong:thresh=0-100:blocksize=4-512"
 
 #: src/ghb3.ui:4606
 msgid "Denoise Filter:"
@@ -1082,6 +1092,9 @@ msgid ""
 "    Film grain and other types of high frequency noise are difficult to compress.\n"
 "    Using this filter on such sources can result in smaller file sizes."
 msgstr ""
+"U filtru di riduzzione di trostu riduce o caccia l’aspettu di rumore è di granellu d’un filmu.\n"
+"    U granellu d’un filmu è l’altri tipi di trostu d’alta frequenza sò difficiule à cumprime.\n"
+"    L’impiegu di stu filtru nant’à quelle fonti permette di riduce a dimensione di i schedarii."
 
 #: src/ghb3.ui:4689 src/ghb3.ui:4869
 msgid ""
@@ -1089,6 +1102,9 @@ msgid ""
 "\n"
 "    SpatialLuma:SpatialChroma:TemporalLuma:TemporalChroma"
 msgstr ""
+"Furmatu persunalizatu di catena di filtru di riduzzione di trostu\n"
+"\n"
+"    SpatialLuma:SpatialChroma:TemporalLuma:TemporalChroma"
 
 #: src/ghb3.ui:4710
 msgid "Chroma Smooth Filter:"
@@ -1107,6 +1123,8 @@ msgid ""
 "The chroma smooth filter removes common color artifacts.\n"
 "    Lower resolution analog source content may benefit from this filter."
 msgstr ""
+"U filtru d’allisciata cromatica caccia l’effetti parassiti cumuni di culore.\n"
+"    E fonti analogichi di risuluzione debule ponu prufittà di stu filtru."
 
 #: src/ghb3.ui:4789
 msgid "Sharpen Filter:"
@@ -1125,6 +1143,8 @@ msgid ""
 "Sharpen filtering enhances edges and other\n"
 "    high frequency components in the video."
 msgstr ""
+"U filtru d’arrutata amendeghja i bordi è\n"
+"    l’altri cumpunenti d’alta frequenza in u filmu."
 
 #: src/ghb3.ui:4890
 msgid "Colorspace:"
@@ -1259,7 +1279,7 @@ msgstr ""
 
 #: src/ghb3.ui:5233
 msgid "Multi-Pass Encoding"
-msgstr ""
+msgstr "Cudificazione à parechji passi"
 
 #: src/ghb3.ui:5238
 msgid ""
@@ -1269,16 +1289,23 @@ msgid ""
 "the video are collected.  Then in the final pass, those statistics are used\n"
 "to make bitrate allocation decisions."
 msgstr ""
+"Effettuà una cudificazione à parechji passi.\n"
+"\n"
+"L’ozzione « Flussu binariu » hè prerichiesta. Durante u passu d’analisa,\n"
+"e statistiche sò cullettate nant’à a video. Eppò, à u passu finale, quelle\n"
+"statistiche sò impiegate per fà a scelta di l’allucamentu di u flussu binariu."
 
 #: src/ghb3.ui:5256
 msgid "Turbo Analysis Pass"
-msgstr ""
+msgstr "Passu d’analisa in modu Turbo"
 
 #: src/ghb3.ui:5261
 msgid ""
 "During the analysis pass of a multi pass encode, use settings that speed "
 "things along."
 msgstr ""
+"Durante u passu d’analisa d’una cudificazione à parechji passi, impiegate "
+"preferenze chì acceleranu u trattamentu."
 
 #: src/ghb3.ui:5323
 msgid ""
@@ -1811,19 +1838,19 @@ msgstr "Aghjunghje marcatori di capitulu à u schedariu d’esciuta."
 
 #: src/ghb3.ui:6922
 msgid "Import Chapters"
-msgstr ""
+msgstr "Impurtà i capituli"
 
 #: src/ghb3.ui:6926
 msgid "Import chapter list from an XML file"
-msgstr ""
+msgstr "Impurtà a lista di i capituli da un schedariu XML."
 
 #: src/ghb3.ui:6937
 msgid "Export Chapters"
-msgstr ""
+msgstr "Espurtà i capituli"
 
 #: src/ghb3.ui:6941
 msgid "Export chapter list as an XML file"
-msgstr ""
+msgstr "Espurtà a lista di i capituli in un schedariu XML."
 
 #: src/ghb3.ui:6975
 msgid "Index"
@@ -1960,6 +1987,9 @@ msgid ""
 " {time} {creation-date} {creation-time} {modification-date} {modification-"
 "time} {codec} {bit-depth} {quality} {bitrate} {width} {height}"
 msgstr ""
+"Ozzioni dispunibule : {source-path} {source} {title} {preset} {chapters} "
+"{date} {time} {creation-date} {creation-time} {modification-date} "
+"{modification-time} {codec} {bit-depth} {quality} {bitrate} {width} {height}"
 
 #: src/ghb3.ui:7916
 msgid "Use iPod/iTunes friendly (.m4v) file extension for MP4"
@@ -1990,11 +2020,13 @@ msgstr ""
 
 #: src/ghb3.ui:8028
 msgid "Power Saving"
-msgstr ""
+msgstr "Ecunumia d’energia"
 
 #: src/ghb3.ui:8046
 msgid "Pause encoding when in Power Saver mode"
 msgstr ""
+"Interrompe a cudificazione quandu l’apparechju si trova in modu d’ecunumia "
+"d’energia"
 
 #: src/ghb3.ui:8052
 msgid ""
@@ -2002,10 +2034,14 @@ msgid ""
 "enters Power Saver mode. Encoding will resume when\n"
 "Power Saver mode is disabled."
 msgstr ""
+"S’è st’ozzione hè attiva, a cudificazione hè interrotta\n"
+"quandu l’apparechju entre in modu d’ecunumia d’energia.\n"
+"A cudificazione ripiglia quandu stu modu hè disattivatu."
 
 #: src/ghb3.ui:8063
 msgid "Pause encoding when on battery power"
 msgstr ""
+"Interrompe a cudificazione quandu l’apparechju impiegheghja a so batteria"
 
 #: src/ghb3.ui:8069
 msgid ""
@@ -2013,10 +2049,13 @@ msgid ""
 "unplugged. Encoding will resume when reconnected to\n"
 "a mains power source."
 msgstr ""
+"S’è st’ozzione hè attiva, a cudificazione hè interrotta\n"
+"quandu l’apparechju impiegheghja a so batteria. A\n"
+"cudificazione ripiglia quand’ellu hè rimessu in carica."
 
 #: src/ghb3.ui:8080
 msgid "Pause encoding when battery is low"
-msgstr ""
+msgstr "Interrompe a cudificazione quandu u livellu di batteria hè debule"
 
 #: src/ghb3.ui:8086
 msgid ""
@@ -2024,6 +2063,9 @@ msgid ""
 "level is low. Encoding will resume when the\n"
 "battery is charged."
 msgstr ""
+"S’è st’ozzione hè attiva, a cudificazione hè interrotta\n"
+"quandu u livellu di batteria hè debule. A cudificazione\n"
+"ripiglia quandu a batteria hè caricata."
 
 #: src/ghb3.ui:8097
 msgid "General"
@@ -2330,7 +2372,7 @@ msgstr ""
 "\n"
 "SRT ghjunghje cù tutte e pussibilità di codici di caratteru.\n"
 "Traducemu u codice di caratteru in UTF-8.\n"
-"Avemu bisognu di u codice di caratteru di a fonte per fà sta traduzzione."
+"Avemu bisognu di u codice di caratteru di a fonte per effettuà sta traduzzione."
 
 #: src/ghb3.ui:9598
 msgid "Select the SRT file to import."
@@ -2495,49 +2537,51 @@ msgstr "<b>Annutazioni di versione</b>"
 
 #: src/fr.handbrake.ghb.metainfo.xml.in.in:11
 msgid "Video Transcoder"
-msgstr ""
+msgstr "Trascudificatore di video"
 
 #: src/fr.handbrake.ghb.metainfo.xml.in.in:14
 msgid ""
 "HandBrake is a tool for converting video from nearly any format to a "
 "selection of modern, widely supported codecs."
 msgstr ""
+"HandBrake hè un attrezzu per cunvertisce una video da guasi tutti i furmati "
+"ver di una selezzione di cudechi muderni estesamente accettati."
 
 #: src/fr.handbrake.ghb.metainfo.xml.in.in:15
 msgid "Reasons you'll love Handbrake:"
-msgstr ""
+msgstr "E ragioni per impiegà HandBrake cù felicità :"
 
 #: src/fr.handbrake.ghb.metainfo.xml.in.in:17
 msgid "Convert video from nearly any format"
-msgstr ""
+msgstr "Cunvertisce e video da guasi tutti i furmati"
 
 #: src/fr.handbrake.ghb.metainfo.xml.in.in:18
 msgid "Free and Open Source"
-msgstr ""
+msgstr "Di rigalu è di fonte aperta"
 
 #: src/fr.handbrake.ghb.metainfo.xml.in.in:19
 msgid "Multi-Platform (Windows, Mac and Linux)"
-msgstr ""
+msgstr "Multipiattaforma (Windows, Mac è Linux)"
 
 #: src/fr.handbrake.ghb.metainfo.xml.in.in:65
 msgid "Main window and settings summary"
-msgstr ""
+msgstr "Finestra principale è riassuntu di e preferenze"
 
 #: src/fr.handbrake.ghb.metainfo.xml.in.in:69
 msgid "Video resolution and cropping settings"
-msgstr ""
+msgstr "Risuluzione di a video è preferenze d’inquadratura"
 
 #: src/fr.handbrake.ghb.metainfo.xml.in.in:73
 msgid "Video encoder settings"
-msgstr ""
+msgstr "Preferenze di u cudificatore video"
 
 #: src/fr.handbrake.ghb.metainfo.xml.in.in:77
 msgid "Audio track selection and settings"
-msgstr ""
+msgstr "Selezzione di e traccie audio è preferenze"
 
 #: src/fr.handbrake.ghb.metainfo.xml.in.in:81
 msgid "Chapter title editing"
-msgstr ""
+msgstr "Mudificazione di i tituli di capitulu"
 
 #: src/audiohandler.c:439 src/audiohandler.c:761 src/audiohandler.c:1236
 #, c-format
@@ -2551,7 +2595,7 @@ msgstr "Qualità : "
 #: src/audiohandler.c:744
 #, c-format
 msgid "Bitrate: %dkbps\n"
-msgstr "Flussu binariu : %dkbps\n"
+msgstr "Flussu binariu : %d kbps\n"
 
 #: src/audiohandler.c:756
 #, c-format
@@ -2566,7 +2610,7 @@ msgstr "<small>%d - %s (%.4g kHz)</small>"
 #: src/audiohandler.c:776
 #, c-format
 msgid "Bitrate: %.4gkbps"
-msgstr "Flussu binariu : %.4gkbps"
+msgstr "Flussu binariu : %.4g kbps"
 
 #: src/audiohandler.c:782
 msgid "<small>Passthrough</small>"
@@ -2640,7 +2684,7 @@ msgstr "Piantà l’esplurazione"
 
 #: src/callbacks.c:1735
 msgid "Single Title"
-msgstr ""
+msgstr "Titulu unicu"
 
 #: src/callbacks.c:2127 src/callbacks.c:2271
 msgid "FPS"
@@ -2649,29 +2693,29 @@ msgstr "FPS"
 #: src/callbacks.c:2131
 #, c-format
 msgid "Dolby Vision %d.%d"
-msgstr ""
+msgstr "Dolby Vision %d.%d"
 
 #: src/callbacks.c:2135 src/callbacks.c:2138
 msgid "HDR10+"
-msgstr ""
+msgstr "HDR10+"
 
 #: src/callbacks.c:2140
 msgid "HDR10"
-msgstr ""
+msgstr "HDR10"
 
 #: src/callbacks.c:2142
 msgid "HDR"
-msgstr ""
+msgstr "HDR"
 
 #: src/callbacks.c:2144
 msgid "SDR"
-msgstr ""
+msgstr "SDR"
 
 #. TRANSLATORS: This is the bit depth of the video
 #: src/callbacks.c:2152
 #, c-format
 msgid "%d-bit"
-msgstr ""
+msgstr "%d-bit"
 
 #: src/callbacks.c:2174
 msgid "Audio Track"
@@ -2893,11 +2937,11 @@ msgstr "Piantata di l’urdinatore"
 #: src/callbacks.c:5755 src/chapters.c:603 src/chapters.c:633
 #: src/presets.c:2044 src/queuehandler.c:1694
 msgid "All Files"
-msgstr ""
+msgstr "Tutti i schedarii"
 
 #: src/chapters.c:604 src/chapters.c:634
 msgid "Chapters (*.xml)"
-msgstr ""
+msgstr "Capituli (*.xml)"
 
 #: src/hb-backend.c:61 src/hb-backend.c:86
 msgid "First Track Matching Selected Languages"
@@ -3670,12 +3714,12 @@ msgstr ""
 #: src/queuehandler.c:354
 #, c-format
 msgid "%s, Bitrate %dkbps"
-msgstr "%s, Flussu binariu %dkbps"
+msgstr "%s, Flussu binariu %d kbps"
 
 #: src/queuehandler.c:359
 #, c-format
 msgid "%s, Bitrate %dkbps (Multi Pass)"
-msgstr ""
+msgstr "%s, Flussu binariu %d kbps (Parechji passi)"
 
 #: src/queuehandler.c:366
 #, c-format
@@ -3787,11 +3831,11 @@ msgstr "Cudificà"
 
 #: src/queuehandler.c:1208
 msgid "Encode Analysis Pass"
-msgstr ""
+msgstr "Cudificà u passu d’analisa"
 
 #: src/queuehandler.c:1212
 msgid "Encode Final Pass"
-msgstr ""
+msgstr "Cudificà u passu finale"
 
 #. Should never happen
 #: src/queuehandler.c:1217
