@@ -810,7 +810,7 @@ Suggerimento: le opzioni della sovrascrittura possono essere modificate nelle Pr
     <value>Nome del capitolo</value>
   </data>
   <data name="ChaptersView_ChapterNumber" xml:space="preserve">
-    <value>Numero del capitolo</value>
+    <value>Capitolo</value>
   </data>
   <data name="ChaptersView_CreateChapterMarkers" xml:space="preserve">
     <value>Crea marcatori capitoli</value>
@@ -1215,7 +1215,7 @@ Suggerimento: le opzioni della sovrascrittura possono essere modificate nelle Pr
     <value>Livello verbosità del registro:</value>
   </data>
   <data name="Options_LogPath" xml:space="preserve">
-    <value>Path:</value>
+    <value>Percorso:</value>
   </data>
   <data name="Options_LowDiskspaceSize" xml:space="preserve">
     <value>Metti in pausa la coda se non c'è spazio su disco</value>
@@ -1549,7 +1549,7 @@ Sono supportati VLC e MPC-HC. Altri riproduttori multimediali potrebbero funzion
     <value>È disponibile il salvataggio di una coda precedente.</value>
   </data>
   <data name="SourceSelection_SingleVideoFile" xml:space="preserve">
-    <value>Apri un singolo file video.</value>
+    <value>Apri file video.</value>
   </data>
   <data name="SourceSelection_SourceSelection" xml:space="preserve">
     <value>Seleziona sorgente</value>
@@ -1639,7 +1639,7 @@ Sono supportati VLC e MPC-HC. Altri riproduttori multimediali potrebbero funzion
     <value>spazio</value>
   </data>
   <data name="VideoView_MultiPass" xml:space="preserve">
-    <value>Multi-Pass Encoding</value>
+    <value>Codifica In Più Passaggi</value>
   </data>
   <data name="VideoView_AverageBitrate" xml:space="preserve">
     <value>Bitrate Medio (kbps):</value>
@@ -1684,7 +1684,7 @@ Sono supportati VLC e MPC-HC. Altri riproduttori multimediali potrebbero funzion
     <value>Qualità:</value>
   </data>
   <data name="VideoView_TurboAnalysisPass" xml:space="preserve">
-    <value>Turbo analysis pass</value>
+    <value>Passaggio di analisi turbo</value>
   </data>
   <data name="VideoView_VariableFramerate" xml:space="preserve">
     <value>Frequenza Fotogrammi Variabile</value>
@@ -1702,7 +1702,7 @@ Sono supportati VLC e MPC-HC. Altri riproduttori multimediali potrebbero funzion
     <value>Informazioni su HandBrake</value>
   </data>
   <data name="SourceSelection_DropFileHere" xml:space="preserve">
-    <value>Oppure trascina un file o una cartella qui ...</value>
+    <value>Oppure trascina un file, insieme di file o una cartella qui ...</value>
   </data>
   <data name="SourceSelection_Help" xml:space="preserve">
     <value>Aiuto</value>
@@ -2746,5 +2746,56 @@ Codificando {1} processi</value>
     <value>Impossibile codificare un'anteprima. L'applicazione è già occupata nella codifica di un altro file.
 
 Per permettere più codifiche simultanee, attivare "Isolamento del Processo" nel menu Strumenti -&gt; Preferenze -&gt; Avanzate -&gt; Isolamento del Processo -&gt; "Avvia ogni elemento in coda in un processo di lavoro separato".</value>
+  </data>
+  <data name="AudioView_Quality" xml:space="preserve">
+    <value>Qualità</value>
+  </data>
+  <data name="AudioView_Source" xml:space="preserve">
+    <value>Sorgente</value>
+  </data>
+  <data name="AboutView_Documentation" xml:space="preserve">
+    <value>Documentazione:</value>
+  </data>
+  <data name="AboutView_GithubTracker" xml:space="preserve">
+    <value>Segnalazioni di Problemi su GitHub:</value>
+  </data>
+  <data name="AboutView_Website" xml:space="preserve">
+    <value>Sito Web:</value>
+  </data>
+  <data name="MainView_PresetClone" xml:space="preserve">
+    <value>Clona Preimpostazione</value>
+  </data>
+  <data name="PresetPane_MoveDown" xml:space="preserve">
+    <value>Sposta in Basso</value>
+  </data>
+  <data name="PresetPane_MoveToBottom" xml:space="preserve">
+    <value>Sposta in Fondo</value>
+  </data>
+  <data name="PresetPane_MoveToTop" xml:space="preserve">
+    <value>Sposta in Cima</value>
+  </data>
+  <data name="PresetPane_MoveUp" xml:space="preserve">
+    <value>Sposta in Alto</value>
+  </data>
+  <data name="QueueViewModel_StopButContinueJob" xml:space="preserve">
+    <value>Attualmente ci sono dei processi in corso. Completare tali processi prima di fermare la coda?</value>
+  </data>
+  <data name="Options_AddExt" xml:space="preserve">
+    <value>Aggiungi Estensione</value>
+  </data>
+  <data name="Options_ExcludeExtensions" xml:space="preserve">
+    <value>Escludi Estensioni File:</value>
+  </data>
+  <data name="Options_ExcludeExtensionsInfo" xml:space="preserve">
+    <value>Le seguenti estensioni file saranno ignorate durante la scansione di una cartella. La lista non distingue tra maiuscole e minuscole. Il punto dell'estensione non è necessario,</value>
+  </data>
+  <data name="Options_ExtensionExists" xml:space="preserve">
+    <value>Questa estensione file è già presente nella lista.</value>
+  </data>
+  <data name="Options_FileHandling" xml:space="preserve">
+    <value>Gestione File (Scansione)</value>
+  </data>
+  <data name="Options_RecursiveFolderScan" xml:space="preserve">
+    <value>Scansiona ricorsivamente le cartelle durante la scansione delle cartelle.</value>
   </data>
 </root>
