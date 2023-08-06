@@ -292,6 +292,9 @@
 /* Title description */
 "Multi Passes Turbo" = "Parechji passi in modu Turbo";
 
+/* HBStateFormatter -> pass display name */
+"Muxing…" = "Mischiu multiple…";
+
 /* HBFilters -> filter display name */
 "NLMeans" = "NLMeans";
 
@@ -349,6 +352,12 @@
 
 /* Video description */
 "Same as source (variable)" = "Listessa chì a fonte (variabile)";
+
+/* HBStateFormatter -> scan pass format */
+"Scanning title %d of %d, preview %d…" = "Esplurazione di u titulu %1$d nant’à %2$d fighjulata %3$d…";
+
+/* HBStateFormatter -> scan pass format */
+"Scanning title %d of %d…" = "Esplurazione di u titulu %1$d nant’à %2$d…";
 
 /* HBStateFormatter -> search pass display name */
 "Searching for start point:  %.2f %%" = "Ricerca di u puntu di principiu : %.2f %%";

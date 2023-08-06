@@ -598,70 +598,118 @@ void hb_buffer_copy_props(hb_buffer_t *dst, const hb_buffer_t *src)
     hb_buffer_copy_side_data(dst, src);
 }
 
-hb_buffer_t * hb_buffer_dup( const hb_buffer_t * src )
+static int copy_hwframe_to_video_buffer(const AVFrame *frame, hb_buffer_t *buf)
 {
+    int ret;
+    AVFrame *hw_frame = av_frame_alloc();
 
-    hb_buffer_t * buf;
-
-    if ( src == NULL )
-        return NULL;
-
-    buf = hb_buffer_init( src->size );
-    if ( buf )
+    ret = av_frame_copy_props(hw_frame, frame);
+    if (ret < 0)
     {
-        buf->f = src->f;
-        hb_buffer_copy_props(buf, src);
+        hb_log("fifo: av_frame_copy_props");
+    }
+    ret = av_hwframe_get_buffer(frame->hw_frames_ctx, hw_frame, 0);
+    if (ret < 0)
+    {
+        hb_log("fifo: av_hwframe_get_buffer failed");
+    }
+    ret = av_hwframe_transfer_data(hw_frame, frame, 0);
+    if (ret < 0)
+    {
+        hb_log("fifo: av_hwframe_transfer_data failed");
+    }
 
-        if (buf->s.type == FRAME_BUF)
+    buf->storage = hw_frame;
+    buf->storage_type = AVFRAME;
+
+    return ret;
+}
+
+static void copy_avframe_to_video_buffer(const AVFrame *frame, hb_buffer_t *buf)
+{
+    for (int pp = 0; pp <= buf->f.max_plane; pp++)
+    {
+        if (buf->plane[pp].stride == frame->linesize[pp])
         {
-            hb_buffer_init_planes(buf);
-        }
-
-        if (src->storage_type == AVFRAME)
-        {
-            AVBufferRef *hw_frames_ctx = ((AVFrame *)src->storage)->hw_frames_ctx;
-            if (hw_frames_ctx)
-            {
-                AVFrame *hw_frame = av_frame_alloc();
-
-                int ret;
-
-                ret = av_frame_copy_props(hw_frame, (AVFrame *)src->storage);
-                if (ret < 0)
-                {
-                    hb_log("fifo: av_frame_copy_props");
-                }
-                ret = av_hwframe_get_buffer(hw_frames_ctx, hw_frame, 0);
-                if (ret < 0)
-                {
-                    hb_log("fifo: av_hwframe_get_buffer failed");
-                }
-                ret = av_hwframe_transfer_data(hw_frame, (AVFrame *)src->storage, 0);
-                if (ret < 0)
-                {
-                    hb_log("fifo: av_hwframe_transfer_data failed");
-                }
-
-                buf->storage = hw_frame;
-                buf->storage_type = AVFRAME;
-            }
-            else
-            {
-                for (int pp = 0; pp <= src->f.max_plane; pp++)
-                {
-                    memcpy(buf->plane[pp].data, src->plane[pp].data, src->plane[pp].size);
-                }
-            }
+            memcpy(buf->plane[pp].data, frame->data[pp], frame->linesize[pp] * buf->plane[pp].height);
         }
         else
         {
-            memcpy( buf->data, src->data, src->size );
+            const int width     = buf->plane[pp].width;
+            const int height    = buf->plane[pp].height;
+            const int stride    = buf->plane[pp].stride;
+            const int linesize  = frame->linesize[pp];
+            uint8_t *dst = buf->plane[pp].data;
+            uint8_t *src = frame->data[pp];
+            for (int yy = 0; yy < height; yy++)
+            {
+                memcpy(dst, src, width);
+                dst += stride;
+                src += linesize;
+            }
         }
+    }
+}
 
+hb_buffer_t * hb_buffer_dup(const hb_buffer_t *src)
+{
+    hb_buffer_t *buf = NULL;
+
+    if (src == NULL)
+    {
+        return NULL;
+    }
+
+    if (src->storage_type == STANDARD)
+    {
+        buf = hb_buffer_init(src->size);
+        if (buf)
+        {
+            buf->f = src->f;
+            hb_buffer_copy_props(buf, src);
+
+            if (buf->s.type == FRAME_BUF)
+            {
+                hb_buffer_init_planes(buf);
+            }
+
+            memcpy(buf->data, src->data, src->size);
+        }
+    }
+    else if (src->storage_type == AVFRAME)
+    {
+        const AVFrame *frame = (AVFrame *)src->storage;
+
+        // If it's an hardware frame, make a copy
+        // into another hardware AVFrame.
+        if (frame->hw_frames_ctx)
+        {
+            buf = hb_buffer_wrapper_init();
+            if (buf)
+            {
+                buf->f = src->f;
+                hb_buffer_copy_props(buf, src);
+                copy_hwframe_to_video_buffer(frame, buf);
+            }
+        }
+        // If not, copy the content to a standard hb_buffer
+        else
+        {
+            buf = hb_frame_buffer_init(src->f.fmt, src->f.width, src->f.height);
+            if (buf)
+            {
+                buf->f = src->f;
+                hb_buffer_copy_props(buf, src);
+                copy_avframe_to_video_buffer(frame, buf);
+            }
+        }
     }
 
 #if HB_PROJECT_FEATURE_QSV
-    memcpy(&buf->qsv_details, &src->qsv_details, sizeof(src->qsv_details));
+    if (buf)
+    {
+        memcpy(&buf->qsv_details, &src->qsv_details, sizeof(src->qsv_details));
+    }
 #endif
 
     return buf;
@@ -891,15 +939,15 @@ void hb_buffer_close( hb_buffer_t ** _b )
 #if HB_PROJECT_FEATURE_QSV
         // Reclaim QSV resources before dropping the buffer.
         // when decoding without QSV, the QSV atom will be NULL.
-        if(b->qsv_details.frame && b->qsv_details.ctx != NULL)
+        if (b->storage != NULL && b->qsv_details.ctx != NULL)
         {
-            mfxFrameSurface1 *surface = (mfxFrameSurface1*)b->qsv_details.frame->data[3];
-            if(surface)
+            AVFrame *frame = (AVFrame *)b->storage;
+            mfxFrameSurface1 *surface = (mfxFrameSurface1 *)frame->data[3];
+            if (surface)
             {
                 hb_qsv_release_surface_from_pool_by_surface_pointer(b->qsv_details.qsv_frames_ctx, surface);
-                b->qsv_details.frame->data[3] = 0;
+                frame->data[3] = 0;
             }
-            av_frame_unref(b->qsv_details.frame);
         }
         if (b->qsv_details.qsv_atom != NULL && b->qsv_details.ctx != NULL)
         {

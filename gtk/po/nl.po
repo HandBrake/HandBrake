@@ -15,7 +15,7 @@ msgstr ""
 "POT-Creation-Date: 2023-03-25 15:12+0100\n"
 "PO-Revision-Date: 2018-10-10 18:14+0000\n"
 "Last-Translator: Stephan Paternotte <stephan@paternottes.net>, 2023\n"
-"Language-Team: Dutch (https://www.transifex.com/HandBrakeProject/teams/92423/nl/)\n"
+"Language-Team: Dutch (https://app.transifex.com/HandBrakeProject/teams/92423/nl/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -1290,7 +1290,7 @@ msgstr ""
 
 #: src/ghb3.ui:5233
 msgid "Multi-Pass Encoding"
-msgstr ""
+msgstr "Meervoudige fasecodering"
 
 #: src/ghb3.ui:5238
 msgid ""
@@ -1300,16 +1300,23 @@ msgid ""
 "the video are collected.  Then in the final pass, those statistics are used\n"
 "to make bitrate allocation decisions."
 msgstr ""
+"Meervoudige fasecodering uitvoeren.\n"
+"\n"
+"De optie 'Bitrate'-optie is vereist. Tijdens de analysefase worden statistieken over \n"
+"de video verzameld. In de laatste fase worden deze gebruikt \n"
+"om beslissingen over bitrate-toewijzing te nemen."
 
 #: src/ghb3.ui:5256
 msgid "Turbo Analysis Pass"
-msgstr ""
+msgstr "Turbo analysefase"
 
 #: src/ghb3.ui:5261
 msgid ""
 "During the analysis pass of a multi pass encode, use settings that speed "
 "things along."
 msgstr ""
+"Gebruik tijdens de analysepas van een meervoudige fasecodering instellingen "
+"die zaken versnellen."
 
 #: src/ghb3.ui:5323
 msgid ""
@@ -3708,7 +3715,7 @@ msgstr "%s, Bitsnelheid %dkbps"
 #: src/queuehandler.c:359
 #, c-format
 msgid "%s, Bitrate %dkbps (Multi Pass)"
-msgstr ""
+msgstr "%s, Bitrate %dkbps (Meervoudige fasen)"
 
 #: src/queuehandler.c:366
 #, c-format
@@ -3820,11 +3827,11 @@ msgstr "Encoderen"
 
 #: src/queuehandler.c:1208
 msgid "Encode Analysis Pass"
-msgstr ""
+msgstr "Coderingsanalysefase"
 
 #: src/queuehandler.c:1212
 msgid "Encode Final Pass"
-msgstr ""
+msgstr "Codering laatste fase"
 
 #. Should never happen
 #: src/queuehandler.c:1217

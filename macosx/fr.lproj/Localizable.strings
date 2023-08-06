@@ -77,6 +77,9 @@
 /* Preferences Advanced Toolbar Item */
 "Advanced" = "Avancé";
 
+/* Main Window -> Same as source destination open panel */
+"Allow" = "Autoriser";
+
 /* HBLanguage -> Any language */
 "Any" = "Tout";
 
@@ -97,6 +100,9 @@
 
 /* Job statistics */
 "Average speed:" = "Vitesse moyenne :";
+
+/* Preferences -> Output Name Token */
+"Bit Depth" = "Profondeur en bit";
 
 /* Copy Protection Alert -> second button
    Delete preset alert -> second button
@@ -121,6 +127,9 @@
 
 /* Main Window -> Destination open panel */
 "Choose" = "Choisir";
+
+/* Preferences -> Output Name Token */
+"Codec" = "Codec";
 
 /* Queue Alert -> cancel rip first button */
 "Continue Encoding" = "Continuer l'encodage";
@@ -175,6 +184,9 @@
 /* HBQueueItemView -> Encode state accessibility label */
 "Encode working" = "Encodage en cours";
 
+/* Preferences -> Output Name Token */
+"Encoder" = "Encodeur";
+
 /* No comment provided by engineer. */
 "Encoding %lu Jobs" = "Encodage de %lu tâches";
 
@@ -205,6 +217,12 @@
 /* Preview -> live preview alert informative text */
 "HandBrake can't playback this combination of video/audio/container format. Do you want to open it in an external player?" = "HandBrake ne peut pas lire cette combinaison de format video/audio/conteneur. Voulez-vous l'ouvrir dans un lecteur externe ?";
 
+/* Main Window -> Same as source destination open panel */
+"HandBrake does not have permission to write to this folder. To allow HandBrake to write to this folder, click \"Allow\"" = "HandBrake n'a pas la permission d'écrire dans ce dossier. Pour autoriser HandBrake à y écrire, cliquer sur « Autoriser »";
+
+/* Preferences -> Output Name Token */
+"Height" = "Hauteur";
+
 /* Quit Alert -> informative text */
 "If you quit HandBrake your current encode will be reloaded into your queue at next launch. Do you want to quit anyway?" = "Si vous quittez HandBrake, votre encodage actuel sera remis en file d'attente au prochain démarrage. Voulez-vous quand même quitter ?";
 
@@ -223,6 +241,12 @@
 
 /* Touch bar */
 "Live Preview" = "Aperçu instantané";
+
+/* Preferences -> Output Name Token */
+"Modification-Date" = "Date de modification";
+
+/* Preferences -> Output Name Token */
+"Modification-Time" = "Heure de modification";
 
 /* Queue undo action name */
 "Move Job in Queue" = "Déplacer la tâche dans la file d'attente";
@@ -300,6 +324,9 @@
    Queue Done Alert -> sleep second button */
 "Preferences…" = "Préférences…";
 
+/* Preferences -> Output Name Token */
+"Preset" = "Préréglage";
+
 /* Preview -> progress formatter title */
 "preview" = "aperçu";
 
@@ -318,6 +345,9 @@
 /* Queue done alert message
    Queue notification alert message */
 "Put down that cocktail…" = "Reposez ce cocktail…";
+
+/* Preferences -> Output Name Token */
+"Quality Type" = "Type de qualité";
 
 /* Preferences -> Output Name Token */
 "Quality/Bitrate" = "Qualité/Débit";
@@ -484,6 +514,9 @@
 
 /* Invalid destination alert -> message */
 "Warning!" = "Attention !";
+
+/* Preferences -> Output Name Token */
+"Width" = "Largeur";
 
 /* No comment provided by engineer. */
 "Working" = "Travail en cours";

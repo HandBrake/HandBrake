@@ -5234,9 +5234,9 @@ static int ffmpeg_open( hb_stream_t *stream, hb_title_t *title, int scan )
     }
     av_dict_free( &av_opts );
 
-    if (title->color_prim     == -1 &&
-        title->color_transfer == -1 &&
-        title->color_matrix   == -1)
+    if (title->color_prim     == HB_COLR_PRI_UNSET &&
+        title->color_transfer == HB_COLR_TRA_UNSET &&
+        title->color_matrix   == HB_COLR_MAT_UNSET)
     {
         // Read the video track color info
         // before it's overwritten with the stream info

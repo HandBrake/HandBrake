@@ -5,7 +5,7 @@
 "2vD-zN-YMe.ibShadowedToolTip" = "Neue Voreinstellung speichern …";
 
 /* Class = "NSTextField"; ibShadowedToolTip = "Title to scan."; ObjectID = "3w9-Iu-3u2"; */
-"3w9-Iu-3u2.ibShadowedToolTip" = "Titel zum überprüfen.";
+"3w9-Iu-3u2.ibShadowedToolTip" = "Titel zum Einlesen.";
 
 /* Class = "NSButton"; ibShadowedToolTip = "Add To Queue"; ObjectID = "3xl-Xh-n9j"; */
 "3xl-Xh-n9j.ibShadowedToolTip" = "Zur Warteschlange hinzufügen";
@@ -194,13 +194,13 @@
 "dK4-jt-v4K.toolTip" = "Vorschau zeigen";
 
 /* Class = "NSButton"; ibShadowedToolTip = "Scan only the specified title instead of all titles."; ObjectID = "DN4-48-aOI"; */
-"DN4-48-aOI.ibShadowedToolTip" = "Nur den ausgewählten, statt alle Titel überprüfen.";
+"DN4-48-aOI.ibShadowedToolTip" = "Nur den ausgewählten, statt alle Titel einlesen.";
 
 /* Class = "NSTabViewItem"; label = "Dimensions"; ObjectID = "eij-Sn-QmJ"; */
 "eij-Sn-QmJ.label" = "Bildgröße";
 
 /* Class = "NSButtonCell"; title = "Scan only title:"; ObjectID = "eQA-t2-FcV"; */
-"eQA-t2-FcV.title" = "Überprüfe nur Titel:";
+"eQA-t2-FcV.title" = "Lese nur Titel ein:";
 
 /* Class = "NSToolbarItem"; label = "Queue"; ObjectID = "HCx-ku-nF7"; */
 "HCx-ku-nF7.label" = "Warteschlange";
@@ -210,6 +210,9 @@
 
 /* Class = "NSToolbarItem"; toolTip = "Show Queue Window"; ObjectID = "HCx-ku-nF7"; */
 "HCx-ku-nF7.toolTip" = "Warteschlange zeigen";
+
+/* Class = "NSButtonCell"; title = "Recursively scan folders"; ObjectID = "Hwu-gp-tRZ"; */
+"Hwu-gp-tRZ.title" = "Ordner rekursiv auslesen";
 
 /* Class = "CocoaBindingsConnection"; ibShadowedIsNilPlaceholder = " "; ObjectID = "Iat-pL-ttI"; */
 "Iat-pL-ttI.ibShadowedIsNilPlaceholder" = "";

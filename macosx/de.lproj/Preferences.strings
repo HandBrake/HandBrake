@@ -25,8 +25,8 @@
 /* Class = "NSTextFieldCell"; title = "At Launch:"; ObjectID = "307"; */
 "307.title" = "Beim Start:";
 
-/* Class = "NSTextFieldCell"; title = "Output Files:"; ObjectID = "308"; */
-"308.title" = "Ausgabedatei:";
+/* Class = "NSTextFieldCell"; title = "File Name: "; ObjectID = "308"; */
+"308.title" = "Dateiname:";
 
 /* Class = "NSButtonCell"; title = "Store Activity Logs in same location as video"; ObjectID = "348"; */
 "348.title" = "Aktivitätsprotokoll am selben Ort wie das Video ablegen";
@@ -35,7 +35,7 @@
 "351.title" = "Protokoll:";
 
 /* Class = "NSPopUpButton"; ibShadowedToolTip = "Number of picture previews to scan. Higher values may increase automatic cropping accuracy at the expense of title scan time."; ObjectID = "352"; */
-"352.ibShadowedToolTip" = "Anzahl der zu überprüfenden Vorschaubilder. Höhere Werte verbessern die Genauigkeit der automatischen Bildbeschneidung auf Kosten einer längeren Scanzeit.";
+"352.ibShadowedToolTip" = "Anzahl der einzulesenden Vorschaubilder. Höhere Werte verbessern die Genauigkeit der automatischen Bildbeschneidung auf Kosten einer längeren Einleszeit.";
 
 /* Class = "NSMenu"; title = "OtherViews"; ObjectID = "354"; */
 "354.title" = "OtherViews";
@@ -50,10 +50,10 @@
 "357.title" = "20";
 
 /* Class = "NSTextField"; ibShadowedToolTip = "Number of picture previews to scan. Higher values may increase automatic cropping accuracy at the expense of title scan time."; ObjectID = "359"; */
-"359.ibShadowedToolTip" = "Anzahl der Bilder für die Vorschau. Höhere Werte verbessern die Genauigkeit der automatischen Bildbeschneidung auf Kosten einer längeren Scanzeit.";
+"359.ibShadowedToolTip" = "Anzahl der Bilder für die Vorschau. Höhere Werte verbessern die Genauigkeit der automatischen Bildbeschneidung auf Kosten einer längeren Einleszeit.";
 
 /* Class = "NSTextFieldCell"; title = "Number of picture previews to scan:"; ObjectID = "360"; */
-"360.title" = "Anzahl der Bilder für die Vorschau:";
+"360.title" = "Anzahl der einzulesenden Bilder für die Vorschau:";
 
 /* Class = "NSMenuItem"; title = "25"; ObjectID = "361"; */
 "361.title" = "25";
@@ -188,7 +188,7 @@
 "BPU-E2-N8l.title" = "Nach erfolgter Encodierung Einträge abgeschlossener Aufgaben immer entfernen";
 
 /* Class = "NSTextFieldCell"; title = "Scan:"; ObjectID = "c0L-TU-WML"; */
-"c0L-TU-WML.title" = "Überprüfen:";
+"c0L-TU-WML.title" = "Einlesen:";
 
 /* Class = "NSTextFieldCell"; title = "Encoder:"; ObjectID = "cqp-xU-GOe"; */
 "cqp-xU-GOe.title" = "Encoder:";
@@ -229,8 +229,14 @@
 /* Class = "NSButtonCell"; title = "Remove old logs from main Activity Logs folder after 30 days"; ObjectID = "lgn-RF-k0d"; */
 "lgn-RF-k0d.title" = "Alte Aktivitätsprotokolle nach 30 Tagen löschen";
 
+/* Class = "NSTextFieldCell"; title = "Destination:"; ObjectID = "lo9-Hk-I6l"; */
+"lo9-Hk-I6l.title" = "Ausgabe:";
+
 /* Class = "NSPopUpButton"; ibShadowedToolTip = "Higher values may help to fully utilize the CPU if a single encode can't scale to all available CPU cores."; ObjectID = "MLd-Te-AbW"; */
 "MLd-Te-AbW.ibShadowedToolTip" = "Höhere Werte können helfen, die CPU voll auszunutzen, wenn eine einzelne Codierung nicht alle verfügbaren CPU-Kerne ausreizt.";
+
+/* Class = "NSButtonCell"; title = "Use ISO Date Format (YYYY-MM-DD)"; ObjectID = "NO8-bA-kkw"; */
+"NO8-bA-kkw.title" = "Verwende ISO-Datumsformat (YYYY-MM-DD)";
 
 /* Class = "NSMenuItem"; title = "4"; ObjectID = "nTJ-DB-eOd"; */
 "nTJ-DB-eOd.title" = "4";
@@ -255,6 +261,9 @@
 
 /* Class = "NSButtonCell"; title = "Remove common punctuation"; ObjectID = "wo5-iR-2mb"; */
 "wo5-iR-2mb.title" = "Punktationen entfernen";
+
+/* Class = "NSButtonCell"; title = "Use same folder as source when possible"; ObjectID = "wXE-Fz-Dru"; */
+"wXE-Fz-Dru.title" = "Wenn möglich, selben Ordner wie Quelle benutzen";
 
 /* Class = "NSButtonCell"; title = "Pause queue if disk space is lower than:"; ObjectID = "yG9-mz-tqQ"; */
 "yG9-mz-tqQ.title" = "Warteschlange anhalten, wenn verfügbarer Speicherplatz kleiner als:";

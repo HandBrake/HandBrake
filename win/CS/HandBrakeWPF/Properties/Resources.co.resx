@@ -663,7 +663,7 @@ U vostru schedariu di prerigatura hà da esse archiviatu è un novu hà da esse 
   </data>
   <data name="TaskTrayStatusTitle" xml:space="preserve">
     <value>{0}
-Encoding 1 Job</value>
+Cudificazione d’1 travagliu</value>
   </data>
   <data name="PauseOnLowDiskspace" xml:space="preserve">
     <value>Fila d’attesa interrotta.  Avertimentu : ùn ci hè abbastanza spaziu di discu nant’à u lettore per fà a cudificazione. Ci vole à liberà qualchì spaziu è appughjate nant’à Principià per cuntinuà. Pudete ancu adattà u livellu minimu di spaziu in e preferenze.</value>
@@ -709,10 +709,10 @@ Vulete cuntinuà ? </value>
     <value>Vulete cuntinuà pruvendu d’aghjunghje u restu ?</value>
   </data>
   <data name="Main_QueueOverwritePrompt" xml:space="preserve">
-    <value>The file '{0}' already exists!
-Would you like to overwrite it?
+    <value>U schedariu « {0} » esiste dighjà !
+Vulete rimpiazzallu ?
 
-Hint: File overwrite behaviour can be controlled in preferences. </value>
+Indiziu : Ciò ch’ella ci vole à fà in casu di rimpiazzamentu di schedariu pò esse definitu in e preferenze.</value>
   </data>
   <data name="Clipboard_Unavailable" xml:space="preserve">
     <value>U preme’papei di u sistema  ùn hè micca dispunibule attualmente.</value>
@@ -805,7 +805,7 @@ Hint: File overwrite behaviour can be controlled in preferences. </value>
     <value>Nome di capitulu</value>
   </data>
   <data name="ChaptersView_ChapterNumber" xml:space="preserve">
-    <value>Numeru di capitulu</value>
+    <value>Capitulu</value>
   </data>
   <data name="ChaptersView_CreateChapterMarkers" xml:space="preserve">
     <value>Creà marcatori di capitulu</value>
@@ -1210,7 +1210,7 @@ Hint: File overwrite behaviour can be controlled in preferences. </value>
     <value>Livellu di verbusità di u ghjurnale :</value>
   </data>
   <data name="Options_LogPath" xml:space="preserve">
-    <value>Path:</value>
+    <value>Chjassu d’accessu :</value>
   </data>
   <data name="Options_LowDiskspaceSize" xml:space="preserve">
     <value>Interrompe a fila d’attesa s’ella ùn basta u spaziu discu</value>
@@ -1544,7 +1544,7 @@ VLC è MPC-HC sò accettati. D’altri lettori ponu dinù funziunà ma ùn sò m
     <value>Un archiviu precedente di fila d’attesa hè dispunibule. </value>
   </data>
   <data name="SourceSelection_SingleVideoFile" xml:space="preserve">
-    <value>Apre un solu schedariu video.</value>
+    <value>Apre schedariu(i) di video.</value>
   </data>
   <data name="SourceSelection_SourceSelection" xml:space="preserve">
     <value>Selezzione di a fonte</value>
@@ -1553,13 +1553,13 @@ VLC è MPC-HC sò accettati. D’altri lettori ponu dinù funziunà ma ùn sò m
     <value>Durata :</value>
   </data>
   <data name="StaticPreviewView_LivePreview" xml:space="preserve">
-    <value>Encode Preview</value>
+    <value>Fighjulata di cudificazione</value>
   </data>
   <data name="StaticPreviewView_SelectPreviewImage" xml:space="preserve">
     <value>Selezziunà una fighjulata di fiura</value>
   </data>
   <data name="StaticPreviewView_UseExternalPlayer" xml:space="preserve">
-    <value>Use External Player App</value>
+    <value>Impiegà un’appiecazione esterna di lettore</value>
   </data>
   <data name="SubtitlesView_AddCC" xml:space="preserve">
     <value>Aghjunghje e legende chjose (CC) s’elle sò dispunibule</value>
@@ -1634,7 +1634,7 @@ VLC è MPC-HC sò accettati. D’altri lettori ponu dinù funziunà ma ùn sò m
     <value>allucamentu</value>
   </data>
   <data name="VideoView_MultiPass" xml:space="preserve">
-    <value>Multi-Pass Encoding</value>
+    <value>Cudificazione à parechji passi</value>
   </data>
   <data name="VideoView_AverageBitrate" xml:space="preserve">
     <value>Flussu medianu (kbps) :</value>
@@ -1679,7 +1679,7 @@ VLC è MPC-HC sò accettati. D’altri lettori ponu dinù funziunà ma ùn sò m
     <value>Qualità :</value>
   </data>
   <data name="VideoView_TurboAnalysisPass" xml:space="preserve">
-    <value>Turbo analysis pass</value>
+    <value>Passu d’analisa in modu Turbo</value>
   </data>
   <data name="VideoView_VariableFramerate" xml:space="preserve">
     <value>Frequenza di fiure variabile (VFR)</value>
@@ -1697,7 +1697,7 @@ VLC è MPC-HC sò accettati. D’altri lettori ponu dinù funziunà ma ùn sò m
     <value>Apprupositu d’HandBrake</value>
   </data>
   <data name="SourceSelection_DropFileHere" xml:space="preserve">
-    <value>Osinnò depone un schedariu o un cartulare quì…</value>
+    <value>Osinnò depone quì, un schedariu, un inseme di schedarii o un cartulare…</value>
   </data>
   <data name="SourceSelection_Help" xml:space="preserve">
     <value>Aiutu</value>
@@ -1862,8 +1862,8 @@ Tempu rimanente : {5}, Trascorsu : {6} {7}</value>
     <value>Modu purtabile : Impussibule di leghje portable.ini. Forse ci hè qualchì sbagliu in stu schedariu. Ci vole à pruvà torna impieghendu portable.ini.template cum’è esempiu.</value>
   </data>
   <data name="OptionsView_FormatOptions" xml:space="preserve">
-    <value>Replacement Options:
-You can drag/drop or enter the text above.</value>
+    <value>Ozzioni di rimpiazzamentu :
+Pudete sguillà è depone o stampittà u testu insù.</value>
   </data>
   <data name="FileOverwriteBehaviours_Ask" xml:space="preserve">
     <value>Dumandà per rimpiazzà u schedariu</value>
@@ -2677,69 +2677,120 @@ Forse, ghjè una limitazione nant’à u cuntenidore di schedariu chì vo avete 
     <value>Adopru di u materiale</value>
   </data>
   <data name="StaticPreviewViewModel_MediaError" xml:space="preserve">
-    <value>The system was unable to play this file. 
+    <value>U sistema ùn pò micca leghje stu schedariu.
 
-Please note certain codecs such as AV1 or HEVC require the Microsoft AV1 or HEVC codec plugins from the Microsoft Store to play.
-Alternatively, check the "Use External Player" checkbox below.</value>
+Sappiate chì certi cudechi, cum’è AV1 o HEVC, richiedenu i moduli d’estensione di codecu Microsoft AV1 o HEVC, dispunibule nant’à Microsoft Store, per funziunà.
+Osinnò, attivate l’ozzione « Impiegà un lettore esternu » quì sottu.</value>
   </data>
   <data name="StaticPreviewView_ClosePlayer" xml:space="preserve">
-    <value>Close Player</value>
+    <value>Chjode u lettore</value>
   </data>
   <data name="StaticPreviewView_Play" xml:space="preserve">
     <value>Leghje</value>
   </data>
   <data name="StaticPreviewView_VideoPreview" xml:space="preserve">
-    <value>Video Preview</value>
+    <value>Fighjulata di a video</value>
   </data>
   <data name="StaticPreviewViewModel_WebmNotSupported" xml:space="preserve">
-    <value>The Built-in preview is not available for the WebM container. An External player must be used.</value>
+    <value>A fighjulata integrata ùn hè micca dispunibule per u cuntenidore WebM. Ci vole à impiegà un lettore esternu.</value>
   </data>
   <data name="StaticPreview_EncodingPreview" xml:space="preserve">
-    <value>Encoding Preview ...</value>
+    <value>Cudificazione di a fighjulata…</value>
   </data>
   <data name="StaticPreview_Previews" xml:space="preserve">
-    <value>Previews:</value>
+    <value>Fighjulate :</value>
   </data>
   <data name="StaticPreview_Volume" xml:space="preserve">
-    <value>Volume: 0</value>
+    <value>Vulume : 0</value>
   </data>
   <data name="Reset" xml:space="preserve">
     <value>Reinizià</value>
   </data>
   <data name="OptionsView_IsoDateFormat" xml:space="preserve">
-    <value>Use ISO Date Formats (YYYY-MM-DD) instead of system format.</value>
+    <value>Impiegà i furmati di data ISO (AAAA-MM-GG) invece d’un furmatu di u sistema.</value>
   </data>
   <data name="QueueViewModel_ShortEncodeStatus" xml:space="preserve">
-    <value>Pass {0} of {1}, {2:00.00}%, {3:000.0} fps, avg {4:000.0} fps, ETA: {5}</value>
+    <value>Passu {0} nant’à {1}, {2:00.00}%, {3:000.0} fps, mez. {4:000.0} fps, ETA: {5}</value>
   </data>
   <data name="QueueViewModel_ShortSubScanStatus" xml:space="preserve">
-    <value>Scanning for Subtitles {0:00.00}%, ETA: {1}</value>
+    <value>Ricerca di sottutituli {0:00.00} %, ETA: {1}</value>
   </data>
   <data name="QueueView_ExtendedQueueDisplay" xml:space="preserve">
-    <value>Extend Queue Info</value>
+    <value>Allungà l’infurmazione di a fila d’attesa</value>
   </data>
   <data name="QueueView_MinimalQueueDisplay" xml:space="preserve">
-    <value>Minimise Queue Info</value>
+    <value>Riduce l’infurmazione di a fila d’attesa</value>
   </data>
   <data name="QueueStats_ShortOutputStats" xml:space="preserve">
-    <value>Output: {0}, avg {1} fps</value>
+    <value>Esciuta : {0}, mez. {1} fps</value>
   </data>
   <data name="PresetPane_Desc" xml:space="preserve">
-    <value>Preset Description:</value>
+    <value>Discrizzione di a prerigatura :</value>
   </data>
   <data name="PresetPane_HidePresetDesc" xml:space="preserve">
-    <value>Hide Preset Description</value>
+    <value>Piattà a discrizzione di a prerigatura</value>
   </data>
   <data name="PresetPane_ShowPresetDesc" xml:space="preserve">
-    <value>Show Preset Description</value>
+    <value>Affissà a discrizzione di a prerigatura</value>
   </data>
   <data name="TaskTrayStatusManyTitle" xml:space="preserve">
     <value>{0}
-Encoding {1} jobs</value>
+Cudificazione di {1} travaglii</value>
   </data>
   <data name="StaticPreviewViewModel_MultipleEncodes" xml:space="preserve">
-    <value>Unable to encode a preview. The application is currently busy encoding another file.
+    <value>Impussibule di cudificà una fighjulata. L’appiecazione hè attualmente affaccendata à cudificà un altru schedariu.
 
-To allow multiple simultaneous encodes, turn on "Process Isolation" in Tools Menu -&gt; Preferences -&gt; Advanced -&gt; Process Isolation -&gt; "Run each queued job in a separate worker process".</value>
+Per permette parechje cudificazioni simultanee, attivate st’ozzione in u listinu Attrezzi -&gt; Preferenze -&gt; Espertu -&gt; Isulamentu di i trattamenti -&gt; « Eseguisce ogni travagliu di a fila d’attesa in un trattamentu di travagliu distintu ».</value>
+  </data>
+  <data name="AudioView_Quality" xml:space="preserve">
+    <value>Qualità</value>
+  </data>
+  <data name="AudioView_Source" xml:space="preserve">
+    <value>Fonte</value>
+  </data>
+  <data name="AboutView_Documentation" xml:space="preserve">
+    <value>Documentazione :</value>
+  </data>
+  <data name="AboutView_GithubTracker" xml:space="preserve">
+    <value>Seguitatu GitHub di penseru :</value>
+  </data>
+  <data name="AboutView_Website" xml:space="preserve">
+    <value>Situ web :</value>
+  </data>
+  <data name="MainView_PresetClone" xml:space="preserve">
+    <value>Duppione di prerigatura</value>
+  </data>
+  <data name="PresetPane_MoveDown" xml:space="preserve">
+    <value>Dispiazzà inghjò</value>
+  </data>
+  <data name="PresetPane_MoveToBottom" xml:space="preserve">
+    <value>Dispiazzà à a fine</value>
+  </data>
+  <data name="PresetPane_MoveToTop" xml:space="preserve">
+    <value>Dispiazzà à u principiu</value>
+  </data>
+  <data name="PresetPane_MoveUp" xml:space="preserve">
+    <value>Dispiazzà insù</value>
+  </data>
+  <data name="QueueViewModel_StopButContinueJob" xml:space="preserve">
+    <value>Ci hè travagli in corsu d’esecuzione. Vulete compie i travagli in corsu nanzu di piantà a fila d’attesa ?</value>
+  </data>
+  <data name="Options_AddExt" xml:space="preserve">
+    <value>Aghjunghje un’estensione</value>
+  </data>
+  <data name="Options_ExcludeExtensions" xml:space="preserve">
+    <value>Esclude l’estensioni di schedariu :</value>
+  </data>
+  <data name="Options_ExcludeExtensionsInfo" xml:space="preserve">
+    <value>Quelle estensioni di schedariu seranu ignurate durante un’analisa di cartulare. A lista ùn sfarenzieghja micca maiuscule è minuscule. « . » ùn hè micca richiestu.</value>
+  </data>
+  <data name="Options_ExtensionExists" xml:space="preserve">
+    <value>L’estensione di schedariu esiste dighjà in a lista.</value>
+  </data>
+  <data name="Options_FileHandling" xml:space="preserve">
+    <value>Trattamentu di schedariu (Analisa)</value>
+  </data>
+  <data name="Options_RecursiveFolderScan" xml:space="preserve">
+    <value>Analisa di i cartulari d’una manera recursiva quand’ella s’impiega u modu d’analisa di cartulare.</value>
   </data>
 </root>

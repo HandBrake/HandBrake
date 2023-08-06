@@ -1294,14 +1294,14 @@ static void get_packets( hb_work_object_t * w, hb_buffer_list_t * list )
     }
 }
 
-static void Encode( hb_work_object_t *w, hb_buffer_t *in,
+static void Encode( hb_work_object_t *w, hb_buffer_t **buf_in,
                     hb_buffer_list_t *list )
 {
     hb_work_private_t * pv = w->private_data;
+    hb_buffer_t       * in = *buf_in;
     AVFrame             frame = {{0}};
+    int                 key_frame = 0;
     int                 ret;
-
-    hb_video_buffer_to_avframe(&frame, in);
 
     if (in->s.new_chap > 0 && pv->job->chapter_markers)
     {
@@ -1310,14 +1310,9 @@ static void Encode( hb_work_object_t *w, hb_buffer_t *in,
            currently buffered in the encoder remember the timestamp so
            when this frame finally pops out of the encoder we'll mark
            its buffer as the start of a chapter. */
-        frame.pict_type = AV_PICTURE_TYPE_I;
-        frame.key_frame = 1;
+        key_frame = 1;
         hb_chapter_enqueue(pv->chapter_queue, in);
     }
-
-    // For constant quality, setting the quality in AVCodecContext
-    // doesn't do the trick.  It must be set in the AVFrame.
-    frame.quality = pv->context->global_quality;
 
     // Bizarro ffmpeg requires timestamp time_base to be == framerate
     // for the encoders we care about.  It writes AVCodecContext.time_base
@@ -1336,7 +1331,20 @@ static void Encode( hb_work_object_t *w, hb_buffer_t *in,
     save_frame_info(pv, in);
     compute_dts_offset(pv, in);
 
+    // Convert the hb_buffer_t to avframe
+    // This will consume the hb_buffer_t and make it NULL
+    hb_video_buffer_to_avframe(&frame, buf_in);
     frame.pts = pv->frameno_in++;
+
+    // For constant quality, setting the quality in AVCodecContext
+    // doesn't do the trick.  It must be set in the AVFrame.
+    frame.quality = pv->context->global_quality;
+
+    if (key_frame)
+    {
+        frame.pict_type = AV_PICTURE_TYPE_I;
+        frame.key_frame = 1;
+    }
 
     // Encode
     ret = avcodec_send_frame(pv->context, &frame);
@@ -1402,7 +1410,7 @@ int encavcodecWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
         return HB_WORK_DONE;
     }
 
-    Encode(w, in, &list);
+    Encode(w, buf_in, &list);
     *buf_out = hb_buffer_list_clear(&list);
 
     return HB_WORK_OK;

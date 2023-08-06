@@ -1408,6 +1408,9 @@ void hb_video_quality_get_limits(uint32_t codec, float *low, float *high,
          */
         case HB_VCODEC_X264_8BIT:
         case HB_VCODEC_X265_8BIT:
+        case HB_VCODEC_FFMPEG_VCE_H264:
+        case HB_VCODEC_FFMPEG_VCE_H265:
+        case HB_VCODEC_FFMPEG_VCE_H265_10BIT:
         case HB_VCODEC_FFMPEG_NVENC_H264:
         case HB_VCODEC_FFMPEG_NVENC_H265:
         case HB_VCODEC_FFMPEG_NVENC_AV1:
@@ -4120,9 +4123,9 @@ hb_title_t * hb_title_init( char * path, int index )
     t->angle_count        = 1;
     t->geometry.par.num   = 0;
     t->geometry.par.den   = 1;
-    t->color_prim         = -1;
-    t->color_transfer     = -1;
-    t->color_matrix       = -1;
+    t->color_prim         = HB_COLR_PRI_UNSET;
+    t->color_transfer     = HB_COLR_TRA_UNSET;
+    t->color_matrix       = HB_COLR_MAT_UNSET;
 
     return t;
 }
@@ -4225,9 +4228,9 @@ static void job_setup(hb_job_t * job, hb_title_t * title)
     job->color_matrix    = title->color_matrix;
     job->color_range     = title->color_range;
     job->chroma_location = title->chroma_location;
-    job->color_prim_override     = HB_COLR_PRI_UNDEF;
-    job->color_transfer_override = HB_COLR_TRA_UNDEF;
-    job->color_matrix_override   = HB_COLR_MAT_UNDEF;
+    job->color_prim_override     = HB_COLR_PRI_UNSET;
+    job->color_transfer_override = HB_COLR_TRA_UNSET;
+    job->color_matrix_override   = HB_COLR_MAT_UNSET;
 
     job->mastering      = title->mastering;
     job->coll           = title->coll;
@@ -4258,7 +4261,7 @@ static void job_setup(hb_job_t * job, hb_title_t * title)
 
 int hb_output_color_prim(hb_job_t * job)
 {
-    if (job->color_prim_override != HB_COLR_PRI_UNDEF)
+    if (job->color_prim_override != HB_COLR_PRI_UNSET)
         return job->color_prim_override;
     else
         return job->color_prim;
@@ -4266,7 +4269,7 @@ int hb_output_color_prim(hb_job_t * job)
 
 int hb_output_color_transfer(hb_job_t * job)
 {
-    if (job->color_transfer_override != HB_COLR_TRA_UNDEF)
+    if (job->color_transfer_override != HB_COLR_TRA_UNSET)
         return job->color_transfer_override;
     else
         return job->color_transfer;
@@ -4274,7 +4277,7 @@ int hb_output_color_transfer(hb_job_t * job)
 
 int hb_output_color_matrix(hb_job_t * job)
 {
-    if (job->color_matrix_override != HB_COLR_MAT_UNDEF)
+    if (job->color_matrix_override != HB_COLR_MAT_UNSET)
         return job->color_matrix_override;
     else
         return job->color_matrix;
@@ -6306,7 +6309,7 @@ static int pix_fmt_is_supported(hb_job_t *job, int pix_fmt)
     {
         if (hb_hwaccel_decode_is_enabled(job) == 0
 #if HB_PROJECT_FEATURE_QSV
-            && hb_qsv_decode_is_enabled(job) == 0
+            && hb_qsv_full_path_is_enabled(job) == 0
 #endif
             )
         {
