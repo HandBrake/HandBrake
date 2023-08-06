@@ -194,14 +194,14 @@ static int hb_hwaccel_hwframe_init(hb_job_t *job, AVFrame **frame)
     return av_hwframe_get_buffer(hw_frames_ctx, *frame, 0);
 }
 
-hb_buffer_t * hb_hwaccel_copy_video_buffer_to_hw_video_buffer(hb_job_t *job, hb_buffer_t *buf)
+hb_buffer_t * hb_hwaccel_copy_video_buffer_to_hw_video_buffer(hb_job_t *job, hb_buffer_t **buf_in)
 {
     AVFrame frame = {{0}};
     AVFrame *hw_frame = NULL;
 
     int ret;
 
-    hb_video_buffer_to_avframe(&frame, buf);
+    hb_video_buffer_to_avframe(&frame, buf_in);
 
     ret = hb_hwaccel_hwframe_init(job, &hw_frame);
     if (ret < 0)
@@ -221,9 +221,7 @@ hb_buffer_t * hb_hwaccel_copy_video_buffer_to_hw_video_buffer(hb_job_t *job, hb_
         goto fail;
     }
 
-    hb_buffer_close(&buf);
-
-    hb_buffer_t *out = hb_avframe_to_video_buffer(hw_frame, (AVRational){1,1});
+    hb_buffer_t *out = hb_avframe_to_video_buffer(hw_frame, (AVRational){1,1}, 1);
 
     av_frame_unref(&frame);
     av_frame_unref(hw_frame);

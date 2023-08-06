@@ -25,8 +25,8 @@
 /* Class = "NSTextFieldCell"; title = "At Launch:"; ObjectID = "307"; */
 "307.title" = "À u lanciu :";
 
-/* Class = "NSTextFieldCell"; title = "Output Files:"; ObjectID = "308"; */
-"308.title" = "Schedarii d’esciuta :";
+/* Class = "NSTextFieldCell"; title = "File Name: "; ObjectID = "308"; */
+"308.title" = "Nome di u schedariu :";
 
 /* Class = "NSButtonCell"; title = "Store Activity Logs in same location as video"; ObjectID = "348"; */
 "348.title" = "Arregistrà i ghjurnali d¹attività in u listessu locu chì a video";
@@ -229,8 +229,14 @@
 /* Class = "NSButtonCell"; title = "Remove old logs from main Activity Logs folder after 30 days"; ObjectID = "lgn-RF-k0d"; */
 "lgn-RF-k0d.title" = "Caccià da u cartulare di i ghjurnali d’attività quelli più vechji di 30 ghjorni";
 
+/* Class = "NSTextFieldCell"; title = "Destination:"; ObjectID = "lo9-Hk-I6l"; */
+"lo9-Hk-I6l.title" = "Destinazione :";
+
 /* Class = "NSPopUpButton"; ibShadowedToolTip = "Higher values may help to fully utilize the CPU if a single encode can't scale to all available CPU cores."; ObjectID = "MLd-Te-AbW"; */
 "MLd-Te-AbW.ibShadowedToolTip" = "Valori più alti ponu aiutà à aduprà cumpletamente a CPU s’è una sola cudificazione ùn pò riesce à impiegà tutti i cori CPU dispunibule.";
+
+/* Class = "NSButtonCell"; title = "Use ISO Date Format (YYYY-MM-DD)"; ObjectID = "NO8-bA-kkw"; */
+"NO8-bA-kkw.title" = "Impiegà u furmatu di data ISO (AAAA-MM-GG)";
 
 /* Class = "NSMenuItem"; title = "4"; ObjectID = "nTJ-DB-eOd"; */
 "nTJ-DB-eOd.title" = "4";
@@ -255,6 +261,9 @@
 
 /* Class = "NSButtonCell"; title = "Remove common punctuation"; ObjectID = "wo5-iR-2mb"; */
 "wo5-iR-2mb.title" = "Caccià a puntuazione cumuna";
+
+/* Class = "NSButtonCell"; title = "Use same folder as source when possible"; ObjectID = "wXE-Fz-Dru"; */
+"wXE-Fz-Dru.title" = "Impiegà u listessu cartulare chè a fonte quand’ella hè pussibule";
 
 /* Class = "NSButtonCell"; title = "Pause queue if disk space is lower than:"; ObjectID = "yG9-mz-tqQ"; */
 "yG9-mz-tqQ.title" = "Interrompe a fila d’attesa s’è u spaziu di discu hè inferiore à :";

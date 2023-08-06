@@ -253,25 +253,25 @@ Von der vorherigen Datei user_presets.xml wurde ein Backup angelegt.</value>
     <value>Warteschlange beendet</value>
   </data>
   <data name="Main_ScanCancelled" xml:space="preserve">
-    <value>Überprüfen abgebrochen.</value>
+    <value>Einlesen abgebrochen.</value>
   </data>
   <data name="Main_ScanCompleted" xml:space="preserve">
-    <value>Überprüfen abgeschlossen</value>
+    <value>Einlesen abgeschlossen</value>
   </data>
   <data name="Main_ScanFailed_NoReason" xml:space="preserve">
-    <value>Überprüfen fehlgeschlagen:</value>
+    <value>Einlesen fehlgeschlagen:</value>
   </data>
   <data name="Main_ScanFailed_CheckLog" xml:space="preserve">
-    <value>Überprüfen fehlgeschlagen … Details im Aktivitätsprotokoll.</value>
+    <value>Einlesen fehlgeschlagen … Details im Aktivitätsprotokoll.</value>
   </data>
   <data name="Main_ScanningPleaseWait" xml:space="preserve">
-    <value>Quelle überprüfen, bitte warten …</value>
+    <value>Quelle einlesen, bitte warten …</value>
   </data>
   <data name="Main_ScanningTitleXOfY" xml:space="preserve">
-    <value>Titel {0} von {1} überprüfen ({2} %)</value>
+    <value>Titel {0} von {1} einlesen ({2} %)</value>
   </data>
   <data name="Main_ScanSource" xml:space="preserve">
-    <value>Bevor eine Encodierung gestartet werden kann, muss eine Quelle überprüft und eine Aufgabe festgelegt werden. Bitte „Quelle“ in der Symbolleiste auswählen, um fortzufahren.</value>
+    <value>Bevor eine Encodierung gestartet werden kann, muss eine Quelle eingelesen und eine Aufgabe festgelegt werden. Bitte „Quelle“ in der Symbolleiste auswählen, um fortzufahren.</value>
   </data>
   <data name="Main_SelectPreset" xml:space="preserve">
     <value>Bitte sicherstellen, dass eine eigene Voreinstellung ausgewählt ist. Installierte Voreinstellungen können nicht exportiert werden.</value>
@@ -403,7 +403,7 @@ Das Aktivitätsprotokoll kann weitere Informationen enthalten.</value>
     <value>Eine Voreinstellung mit diesem Namen existiert bereits. Soll sie überschrieben werden?</value>
   </data>
   <data name="AddPresetViewModel_YouMustFirstScanSource" xml:space="preserve">
-    <value>Eine Quelle muss zuerst überprüft werden, bevor „Quellenmaximum“ ausgewählt werden kann.</value>
+    <value>Eine Quelle muss zuerst eingelesen werden, bevor „Quellenmaximum“ ausgewählt werden kann.</value>
   </data>
   <data name="AddPresetViewModel_CustomWidthHeightFieldsRequired" xml:space="preserve">
     <value>Das Feld der benutzerdefinierten Breite und Höhe muss für die Option „Eigene“ ausgefüllt werden.</value>
@@ -531,7 +531,7 @@ Soll HandBrake wirklich beendet werden?</value>
     <value>Das Entfernen einer früheren Vorschaudatei ist fehlgeschlagen. Es ist womöglich noch eine Vorschau im Media-Player geöffnet. Diese bitte schließen.</value>
   </data>
   <data name="StaticPreviewViewModel_ScanFirst" xml:space="preserve">
-    <value>Bevor eine Vorschau erstellt werden kann, muss die Quelle überprüft und eine Encodierung festgelegt werden.</value>
+    <value>Bevor eine Vorschau erstellt werden kann, muss die Quelle eingelesen und eine Encodierung festgelegt werden.</value>
   </data>
   <data name="StaticPreviewViewModel_UnableToPlayFile" xml:space="preserve">
     <value>Vorschaudatei konnte nicht gefunden werden. Entweder wurde die Datei gelöscht oder die Encodierung ist fehlgeschlagen. Bitte das Aktivitätsprotokoll für Details prüfen.</value>
@@ -619,7 +619,7 @@ Sollen die Kapitelnamen wirklich importiert werden?</value>
     <value>Die Dauer der Kapitel zwischen Quelle und Eingangsdatei stimmen nicht überein.</value>
   </data>
   <data name="ScanService_ScanStopFailed" xml:space="preserve">
-    <value>Beim Stoppen der Überprüfung ist ein Fehler aufgetreten. Bitte HandBrake neu starten.</value>
+    <value>Beim Stoppen der Einlesung ist ein Fehler aufgetreten. Bitte HandBrake neu starten.</value>
   </data>
   <data name="Presets_PresetForceReset" xml:space="preserve">
     <value>HandBrake kann die Voreinstellungsdatei nicht auf eine neue Version aktualisieren.
@@ -660,7 +660,7 @@ Die Voreinstellungsdatei wird archiviert und eine neue erstellt. Die eigenen Vor
     <value>Bitte überprüfen, dass das Ausgabeverzeichnis gültig ist.</value>
   </data>
   <data name="MainViewModel_EncodeStatusChanged_SubScan_StatusLabel" xml:space="preserve">
-    <value>Durchgang {0} von {1} wird verarbeitet, (Untertitelprüfung) {2:00.00} %, verbleibende Prüfungszeit: {3}, vergangen: {4}</value>
+    <value>Durchgang {0} von {1} wird verarbeitet, (Untertitelscan) {2:00.00} %, verbleibende Einleszeit: {3}, vergangen: {4}</value>
   </data>
   <data name="NoAdditionalInformation" xml:space="preserve">
     <value>Keine zusätzlichen Informationen</value>
@@ -1247,7 +1247,7 @@ Hinweis: Das Verhalten beim Überschreiben von Dateien kann in den Einstellungen
     <value>Das System daran hindern während der Encodierung in den Ruhezustand zu fahren</value>
   </data>
   <data name="Options_PreviewScanCount" xml:space="preserve">
-    <value>Anzahl der Bilder für die Vorschau:</value>
+    <value>Anzahl der einzulesenden Bilder für die Vorschau:</value>
   </data>
   <data name="Options_PriorityLevel" xml:space="preserve">
     <value>Arbeitspriorität:</value>
@@ -1518,13 +1518,13 @@ Es werden VLC und MPC-HC unterstützt. Andere Media-Player können auch funktion
     <value>Neu laden</value>
   </data>
   <data name="SourceSelection_ChooseDisc" xml:space="preserve">
-    <value>Disk zum Überprüfen wählen</value>
+    <value>Disk zum Einlesen wählen</value>
   </data>
   <data name="SourceSelection_ChooseFile" xml:space="preserve">
-    <value>Datei zum Überprüfen wählen</value>
+    <value>Datei zum Einlesen wählen</value>
   </data>
   <data name="SourceSelection_ChooseFolder" xml:space="preserve">
-    <value>Ordner zum Überprüfen wählen</value>
+    <value>Ordner zum Einlesen wählen</value>
   </data>
   <data name="SourceSelection_ChooseSpecificTitle" xml:space="preserve">
     <value>Optional einen bestimmten Titel wählen:</value>
@@ -1551,7 +1551,7 @@ Es werden VLC und MPC-HC unterstützt. Andere Media-Player können auch funktion
     <value>Eine frühere archivierte Warteschlange ist verfügbar.</value>
   </data>
   <data name="SourceSelection_SingleVideoFile" xml:space="preserve">
-    <value>Eine einzelne Videodatei öffnen.</value>
+    <value>Video-Datei(en) öffnen.</value>
   </data>
   <data name="SourceSelection_SourceSelection" xml:space="preserve">
     <value>Quellenauswahl</value>
@@ -1572,7 +1572,7 @@ Es werden VLC und MPC-HC unterstützt. Andere Media-Player können auch funktion
     <value>Wenn verfügbar, CC-Untertitel hinzufügen</value>
   </data>
   <data name="SubtitlesView_AddForeignAudioSearch" xml:space="preserve">
-    <value>Fremdsprachensuche hinzufügen</value>
+    <value>Fremdsprachentonsuche hinzufügen</value>
   </data>
   <data name="SubtitlesView_BurnInBehaviour" xml:space="preserve">
     <value>Einbrennverhalten:</value>
@@ -1704,7 +1704,7 @@ Es werden VLC und MPC-HC unterstützt. Andere Media-Player können auch funktion
     <value>Über HandBrake</value>
   </data>
   <data name="SourceSelection_DropFileHere" xml:space="preserve">
-    <value>Oder hier eine Datei / einen Ordner ablegen …</value>
+    <value>Oder hier eine Datei, Dateien oder einen Ordner ablegen …</value>
   </data>
   <data name="SourceSelection_Help" xml:space="preserve">
     <value>Hilfe</value>
@@ -2439,7 +2439,7 @@ Bitte eine andere Voreinstellung auswählen.</value>
     <value>Im Dateibrowser-Dialog wurde ein Fehler festgestellt. 
 
 - Bitte beachten Sie, dass lange Dateipfade nicht vollständig unterstützt werden. Bitte halten Sie Dateipfade kürzer als 255 Zeichen. 
-- Das zuletzt verwendete Verzeichnis für dieses Fenster, wurde zurückgesetzt, um Fehler zu vermeiden, wenn Sie das nächste Mal versuchen, eine Datei zu prüfen.</value>
+- Das zuletzt verwendete Verzeichnis für dieses Fenster, wurde zurückgesetzt, um Fehler zu vermeiden, wenn Sie das nächste Mal versuchen, eine Datei einzulesen.</value>
   </data>
   <data name="PictureSettingsView_MaxHeight" xml:space="preserve">
     <value>Maximale Höhe:</value>
@@ -2579,7 +2579,7 @@ Es werden nur Warteschlangen-Dateien der aktuellen Version unterstützt.</value>
     <value>Windows Mitteilung</value>
   </data>
   <data name="Main_QueueMultiJobStatus" xml:space="preserve">
-    <value>{0} Aufgaben abgeschlossen. {1} Arbeite an {2} Aufgaben, {3} weitere anstehend.</value>
+    <value>{0} Aufgaben abgeschlossen. {1} Arbeite an {2} Aufgaben,{3} weitere anstehend.</value>
   </data>
   <data name="MainView_AutonameRegenerate" xml:space="preserve">
     <value>Wiederherstellen (Autoname)</value>
@@ -2646,7 +2646,7 @@ Die Unterstützung der Hardware-Kodierung kann in den Einstellungen wieder aktiv
     <value>Export beendet!</value>
   </data>
   <data name="Debug_QueueSweep_NotSetup" xml:space="preserve">
-    <value>Es muss zuerst eine Quelle gescannt und ein Zielverzeichnis gewählt werden</value>
+    <value>Es muss zuerst eine Quelle eingelesen und ein Zielverzeichnis gewählt werden</value>
   </data>
   <data name="OptionsView_FileCollisionNotice" xml:space="preserve">
     <value>Nur wenn die Datei bereits auf dem Speichermedium vorhanden ist.</value>
@@ -2786,12 +2786,18 @@ Um mehrere gleichzeitige Encodierungen zu ermöglichen, aktivieren Sie die "Proz
     <value>Dateiendung hinzufügen</value>
   </data>
   <data name="Options_ExcludeExtensions" xml:space="preserve">
-    <value>Dateiendung ausschließen</value>
+    <value>Dateiendung ausschließen:</value>
   </data>
   <data name="Options_ExcludeExtensionsInfo" xml:space="preserve">
-    <value>Die folgenden Dateiendungen werden beim Überprüfen eines Ordners ignoriert. Bei der Liste wird die Groß- und Kleinschreibung nicht berücksichtigt. "." ist nicht erforderlich.</value>
+    <value>Die folgenden Dateiendungen werden beim Einlesen eines Ordners ignoriert. Bei der Liste wird die Groß- und Kleinschreibung nicht berücksichtigt. "." ist nicht erforderlich.</value>
   </data>
   <data name="Options_ExtensionExists" xml:space="preserve">
     <value>Diese Dateiendung existiert schon in der Liste.</value>
+  </data>
+  <data name="Options_FileHandling" xml:space="preserve">
+    <value>Dateiverwaltung (Einlesen)</value>
+  </data>
+  <data name="Options_RecursiveFolderScan" xml:space="preserve">
+    <value>Beim Hinzufügen von Ordnern rekursives Einlesen aktivieren.</value>
   </data>
 </root>

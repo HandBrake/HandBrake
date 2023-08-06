@@ -232,33 +232,31 @@ void hb_avfilter_alias_close( hb_filter_object_t * filter )
     filter->private_data = NULL;
 }
 
-static hb_buffer_t* filterFrame( hb_filter_private_t * pv, hb_buffer_t * in )
+static hb_buffer_t* filterFrame( hb_filter_private_t * pv, hb_buffer_t ** buf_in )
 {
     hb_buffer_list_t   list;
     hb_buffer_t      * buf = NULL, * next = NULL;
-    int av_frame_is_not_null = 1; // TODO: find the reason for empty input av_frame for ffmpeg filters
+
 #if HB_PROJECT_FEATURE_QSV && (defined( _WIN32 ) || defined( __MINGW32__ ))
     mfxFrameSurface1 *surface = NULL;
     HBQSVFramesContext *frames_ctx = NULL;
-    if (hb_qsv_hw_filters_are_enabled(pv->input.job))
+
+    if (hb_qsv_hw_filters_are_enabled(pv->input.job) && buf_in != NULL)
     {
-        if (in && in->qsv_details.frame)
+        hb_buffer_t *in = *buf_in;
+        AVFrame *frame = (AVFrame *)in->storage;
+        if (frame)
         {
             // We need to keep surface pointer because hb_avfilter_add_buf set it to 0 after in ffmpeg call
-            surface = (mfxFrameSurface1 *)in->qsv_details.frame->data[3];
+            surface = (mfxFrameSurface1 *)frame->data[3];
             frames_ctx = in->qsv_details.qsv_frames_ctx;
-        }
-        else
-        {
-            av_frame_is_not_null = 0;
         }
     }
 #endif
-    if (av_frame_is_not_null)
-    {
-        hb_avfilter_add_buf(pv->graph, in);
-        buf = hb_avfilter_get_buf(pv->graph);
-    }
+
+    hb_avfilter_add_buf(pv->graph, buf_in);
+    buf = hb_avfilter_get_buf(pv->graph);
+
     while (buf != NULL)
     {
         hb_buffer_list_append(&pv->list, buf);
@@ -305,7 +303,7 @@ static int avfilter_work( hb_filter_object_t * filter,
         return HB_FILTER_DONE;
     }
 
-    *buf_out = filterFrame(pv, in);
+    *buf_out = filterFrame(pv, buf_in);
 
     return HB_FILTER_OK;
 }

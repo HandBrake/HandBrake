@@ -156,7 +156,6 @@ struct hb_buffer_s
     struct qsv
     {
         void               * qsv_atom;
-        AVFrame            * frame;
         hb_qsv_context     * ctx;
         HBQSVFramesContext * qsv_frames_ctx;
     } qsv_details;
@@ -232,9 +231,8 @@ static inline int hb_image_stride( int pix_fmt, int width, int plane )
     int linesize = av_image_get_linesize( pix_fmt, width, plane );
 
     // Make buffer SIMD friendly.
-    // Decomb requires stride aligned to 32 bytes
-    // TODO: eliminate extra buffer copies in decomb
-    linesize = MULTIPLE_MOD_UP( linesize, 32 );
+    // Zscale requires stride aligned to 64 bytes
+    linesize = MULTIPLE_MOD_UP(linesize, 64);
     return linesize;
 }
 

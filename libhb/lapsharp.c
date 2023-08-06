@@ -126,7 +126,8 @@ static void name##_##nbits(const uint8_t *frame_src,                            
                                  uint8_t *frame_dst,                                             \
                            const int width,                                                      \
                            const int height,                                                     \
-                           int stride,                                                           \
+                           int stride_src,                                                       \
+                           int stride_dst,                                                       \
                            lapsharp_plane_context_t *ctx)                                        \
 {                                                                                                \
     const kernel_t *kernel = &kernels[ctx->kernel];                                              \
@@ -134,12 +135,13 @@ static void name##_##nbits(const uint8_t *frame_src,                            
     const uint##nbits##_t *src = (const uint##nbits##_t *)frame_src;                             \
     uint##nbits##_t       *dst = (uint##nbits##_t *)frame_dst;                                   \
                                                                                                  \
-    stride /= ctx->bps;                                                                          \
+    stride_src /= ctx->bps;                                                                      \
+    stride_dst /= ctx->bps;                                                                      \
                                                                                                  \
     /* Sharpen using selected kernel */                                                          \
     const int offset_min    = -((kernel->size - 1) / 2);                                         \
     const int offset_max    =   (kernel->size + 1) / 2;                                          \
-    const int stride_border =   (stride - width) / 2;                                            \
+    const int stride_border =   (stride_src - width) / 2;                                        \
     const int max_value     = ctx->max_value;                                                    \
                                                                                                  \
     int##pixelbits##_t pixel;                                                                    \
@@ -153,7 +155,7 @@ static void name##_##nbits(const uint8_t *frame_src,                            
                 (x < stride_border + offset_max) ||                                              \
                 (x > width + stride_border - offset_max))                                        \
             {                                                                                    \
-                *(dst + stride*y + x) = *(src + stride*y + x);                                   \
+                *(dst + stride_dst*y + x) = *(src + stride_src*y + x);                           \
                 continue;                                                                        \
             }                                                                                    \
                                                                                                  \
@@ -163,14 +165,14 @@ static void name##_##nbits(const uint8_t *frame_src,                            
                 for (int j = offset_min; j < offset_max; j++)                                    \
                 {                                                                                \
                     pixel += kernel->mem[((j - offset_min) * kernel->size) +                     \
-                             k - offset_min] * *(src + stride*(y + j) + (x + k));                \
+                             k - offset_min] * *(src + stride_src*(y + j) + (x + k));            \
                 }                                                                                \
             }                                                                                    \
-            pixel = (int##pixelbits##_t)(((pixel * kernel->coef) - *(src + stride*y + x)) *      \
-                        ctx->strength) + *(src + stride*y + x);                                  \
+            pixel = (int##pixelbits##_t)(((pixel * kernel->coef) - *(src + stride_src*y + x)) *  \
+                        ctx->strength) + *(src + stride_src*y + x);                              \
             pixel = pixel < 0 ? 0 : pixel;                                                       \
             pixel = pixel > max_value ? max_value : pixel;                                       \
-            *(dst + stride*y + x) = (uint##nbits##_t)(pixel);                                    \
+            *(dst + stride_dst*y + x) = (uint##nbits##_t)(pixel);                                \
         }                                                                                        \
     }                                                                                            \
 }                                                                                                \
@@ -339,6 +341,7 @@ static int hb_lapsharp_work(hb_filter_object_t *filter,
                     in->plane[c].width,
                     in->plane[c].height,
                     in->plane[c].stride,
+                    out->plane[c].stride,
                     ctx);
     }
 

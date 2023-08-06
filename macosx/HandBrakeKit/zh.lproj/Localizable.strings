@@ -292,6 +292,9 @@
 /* Title description */
 "Multi Passes Turbo" = "Multi Passes Turbo";
 
+/* HBStateFormatter -> pass display name */
+"Muxing…" = "Muxing…";
+
 /* HBFilters -> filter display name */
 "NLMeans" = "NLMeans";
 
@@ -349,6 +352,12 @@
 
 /* Video description */
 "Same as source (variable)" = "与源视频相同（可变）";
+
+/* HBStateFormatter -> scan pass format */
+"Scanning title %d of %d, preview %d…" = "正在扫描标题 %1$d/%2$d，预览 %3$d…";
+
+/* HBStateFormatter -> scan pass format */
+"Scanning title %d of %d…" = "正在扫描标题 %1$d/%2$d…";
 
 /* HBStateFormatter -> search pass display name */
 "Searching for start point:  %.2f %%" = "搜索起始点：%.2f %%";

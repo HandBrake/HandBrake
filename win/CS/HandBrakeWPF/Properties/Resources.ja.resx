@@ -1547,7 +1547,7 @@ VLCとMPC-HCがサポートされています。他のプレイヤーではお�
     <value>以前のキューのアーカイブが利用可能です。</value>
   </data>
   <data name="SourceSelection_SingleVideoFile" xml:space="preserve">
-    <value>ビデオファイルを開きます。</value>
+    <value>ビデオファイルを開く。</value>
   </data>
   <data name="SourceSelection_SourceSelection" xml:space="preserve">
     <value>ソース選択</value>
@@ -1700,7 +1700,7 @@ VLCとMPC-HCがサポートされています。他のプレイヤーではお�
     <value>HandBrakeについて</value>
   </data>
   <data name="SourceSelection_DropFileHere" xml:space="preserve">
-    <value>もしくはファイルかフォルダをここにドラッグ ...</value>
+    <value>もしくはファイルかフォルダをここにドラッグする...</value>
   </data>
   <data name="SourceSelection_Help" xml:space="preserve">
     <value>ヘルプ</value>
@@ -2783,12 +2783,18 @@ AV1やHEVCといった特定のコーデックは、再生するためにマイ�
     <value>拡張子を追加</value>
   </data>
   <data name="Options_ExcludeExtensions" xml:space="preserve">
-    <value>ファイルの拡張子を除外</value>
+    <value>ファイルの拡張子を除外:</value>
   </data>
   <data name="Options_ExcludeExtensionsInfo" xml:space="preserve">
     <value>次のファイルの拡張子はフォルダースキャンの際に無視されます。大文字小文字は区別しません。"."は不要です。</value>
   </data>
   <data name="Options_ExtensionExists" xml:space="preserve">
     <value>このファイル拡張子はすでにリストにあります。</value>
+  </data>
+  <data name="Options_FileHandling" xml:space="preserve">
+    <value>ファイル操作(スキャン中)</value>
+  </data>
+  <data name="Options_RecursiveFolderScan" xml:space="preserve">
+    <value>フォルダースキャンを使用している時に子ディレクトリもスキャンする。</value>
   </data>
 </root>

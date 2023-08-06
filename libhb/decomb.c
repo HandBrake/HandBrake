@@ -573,6 +573,15 @@ static int hb_decomb_work(hb_filter_object_t *filter,
     hb_filter_private_t *pv = filter->private_data;
     hb_buffer_t *in = *buf_in;
 
+    // TODO: eliminate extra buffer copies in decomb
+    if (in->plane[0].height_stride - in->plane[0].height < 3)
+    {
+        // Decomb requires some additional rows
+        // to work on.
+        in = hb_buffer_dup(in);
+        hb_buffer_close(buf_in);
+    }
+
     // Input buffer is always consumed.
     *buf_in = NULL;
     if (in->s.flags & HB_BUF_FLAG_EOF)

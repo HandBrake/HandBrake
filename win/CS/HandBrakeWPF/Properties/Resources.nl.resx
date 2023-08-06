@@ -811,7 +811,7 @@ Tip: de optie Bestanden overschrijven kan worden ingesteld bij voorkeuren.</valu
     <value>Hoofdstuknaam</value>
   </data>
   <data name="ChaptersView_ChapterNumber" xml:space="preserve">
-    <value>Hoofdstuknummer</value>
+    <value>Hoofdstuk</value>
   </data>
   <data name="ChaptersView_CreateChapterMarkers" xml:space="preserve">
     <value>Hoofdstukmarkeringen aanmaken</value>
@@ -835,10 +835,10 @@ Tip: de optie Bestanden overschrijven kan worden ingesteld bij voorkeuren.</valu
     <value>Hoofdstuknamen opnieuw instellen</value>
   </data>
   <data name="CountdownAlterView_CancelAction" xml:space="preserve">
-    <value>Actie bij afbreken</value>
+    <value>Annuleer actie</value>
   </data>
   <data name="CountdownAlterView_Proceed" xml:space="preserve">
-    <value>Doorgaan</value>
+    <value>Voer actie uit</value>
   </data>
   <data name="CountdownAlterView_WhenDoneAction" xml:space="preserve">
     <value>Actie wanneer klaar</value>
@@ -1216,7 +1216,7 @@ Tip: de optie Bestanden overschrijven kan worden ingesteld bij voorkeuren.</valu
     <value>Logboek-detailniveau:</value>
   </data>
   <data name="Options_LogPath" xml:space="preserve">
-    <value>Path:</value>
+    <value>Pad:</value>
   </data>
   <data name="Options_LowDiskspaceSize" xml:space="preserve">
     <value>Wachtrij pauzeren bij gebrek aan schijfruimte</value>
@@ -1550,7 +1550,7 @@ VLC en MPC-HC worden ondersteund. Andere mediaspelers werken mogelijk ook, maar 
     <value>Een eerder wachtrijarchief is beschikbaar.</value>
   </data>
   <data name="SourceSelection_SingleVideoFile" xml:space="preserve">
-    <value>Open een enkel videobestand.</value>
+    <value>Open videobestand(en).</value>
   </data>
   <data name="SourceSelection_SourceSelection" xml:space="preserve">
     <value>Bronselectie</value>
@@ -1640,7 +1640,7 @@ VLC en MPC-HC worden ondersteund. Andere mediaspelers werken mogelijk ook, maar 
     <value>opslag</value>
   </data>
   <data name="VideoView_MultiPass" xml:space="preserve">
-    <value>Multi-Pass Encoding</value>
+    <value>Meervoudige fasecodering</value>
   </data>
   <data name="VideoView_AverageBitrate" xml:space="preserve">
     <value>Gem. bitsnelheid (kbps):</value>
@@ -1685,7 +1685,7 @@ VLC en MPC-HC worden ondersteund. Andere mediaspelers werken mogelijk ook, maar 
     <value>Kwaliteit:</value>
   </data>
   <data name="VideoView_TurboAnalysisPass" xml:space="preserve">
-    <value>Turbo analysis pass</value>
+    <value>Turbo analysefase</value>
   </data>
   <data name="VideoView_VariableFramerate" xml:space="preserve">
     <value>Variabele framesnelheid</value>
@@ -1703,7 +1703,7 @@ VLC en MPC-HC worden ondersteund. Andere mediaspelers werken mogelijk ook, maar 
     <value>Over HandBrake</value>
   </data>
   <data name="SourceSelection_DropFileHere" xml:space="preserve">
-    <value>Of sleep een bestand of map hierheen...</value>
+    <value>Of sleep een bestand, een verzameling bestanden of een map hierheen...</value>
   </data>
   <data name="SourceSelection_Help" xml:space="preserve">
     <value>Help</value>
@@ -2746,5 +2746,56 @@ U kunt hieronder ook "Externe mediaspeler gebruiken" selecteren.</value>
     <value>Kan een voorbeeld niet coderen. De applicatie is momenteel bezig met het coderen van een ander bestand.
 
 Om meerdere gelijktijdige coderingen toe te staan dien je "Procesisolatie" in te schakelen in het menu Voorkeuren -&gt; Geavanceerd -&gt; Procesisolatie -&gt; "Voer elke wachtrijtaak uit in een apart werkproces".</value>
+  </data>
+  <data name="AudioView_Quality" xml:space="preserve">
+    <value>Kwaliteit</value>
+  </data>
+  <data name="AudioView_Source" xml:space="preserve">
+    <value>Bron</value>
+  </data>
+  <data name="AboutView_Documentation" xml:space="preserve">
+    <value>Documentatie:</value>
+  </data>
+  <data name="AboutView_GithubTracker" xml:space="preserve">
+    <value>GitHub Issue Tracker:</value>
+  </data>
+  <data name="AboutView_Website" xml:space="preserve">
+    <value>Website: </value>
+  </data>
+  <data name="MainView_PresetClone" xml:space="preserve">
+    <value>Voorinstelling kopiëren</value>
+  </data>
+  <data name="PresetPane_MoveDown" xml:space="preserve">
+    <value>Omlaag verplaatsen</value>
+  </data>
+  <data name="PresetPane_MoveToBottom" xml:space="preserve">
+    <value>Onderaan plaatsen</value>
+  </data>
+  <data name="PresetPane_MoveToTop" xml:space="preserve">
+    <value>Bovenaan plaatsen</value>
+  </data>
+  <data name="PresetPane_MoveUp" xml:space="preserve">
+    <value>Omhoog verplaatsen</value>
+  </data>
+  <data name="QueueViewModel_StopButContinueJob" xml:space="preserve">
+    <value>Er zijn momenteel taken actief. Wilt u de huidige taken laten voltooien voordat de wachtrij wordt onderbroken?</value>
+  </data>
+  <data name="Options_AddExt" xml:space="preserve">
+    <value>Extensie toevoegen</value>
+  </data>
+  <data name="Options_ExcludeExtensions" xml:space="preserve">
+    <value>Bestandsextensies uitsluiten:</value>
+  </data>
+  <data name="Options_ExcludeExtensionsInfo" xml:space="preserve">
+    <value>De volgende bestandsextensies worden genegeerd bij het scannen van een map. De lijst is niet hoofdlettergevoelig. "." is niet vereist.</value>
+  </data>
+  <data name="Options_ExtensionExists" xml:space="preserve">
+    <value>Deze bestandsextensie staat al in de lijst.</value>
+  </data>
+  <data name="Options_FileHandling" xml:space="preserve">
+    <value>Bestandsafhandeling (scannen)</value>
+  </data>
+  <data name="Options_RecursiveFolderScan" xml:space="preserve">
+    <value>Mappen recursief scannen bij gebruik van de mappenscanmodus.</value>
   </data>
 </root>

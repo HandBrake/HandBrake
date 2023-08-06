@@ -3776,7 +3776,7 @@ int hb_qsv_release_surface_from_pool_by_surface_pointer(HBQSVFramesContext* hb_e
     for(int i = 0; i < hb_enc_qsv_frames_ctx->nb_mids; i++)
     {
         mfxFrameSurface1 *pool_surface = &frames_hwctx->surfaces[i];
-        if(surface == pool_surface)
+        if(surface == pool_surface && hb_enc_qsv_frames_ctx->pool[i] > 0)
         {
             ff_qsv_atomic_dec(&hb_enc_qsv_frames_ctx->pool[i]);
             return 0;
@@ -4004,8 +4004,44 @@ static int hb_qsv_copy_surface(hb_qsv_context *ctx, void* output_surface, int ou
     return 0;
 }
 
-int hb_qsv_attach_surface_to_video_buffer(hb_job_t *job, hb_buffer_t* buf, int is_vpp)
+hb_buffer_t * hb_qsv_copy_video_buffer_to_hw_video_buffer(hb_job_t *job, hb_buffer_t *in, const int is_vpp)
 {
+    hb_buffer_t *out = hb_buffer_wrapper_init();
+
+    if (out == NULL)
+    {
+        goto fail;
+    }
+
+    // Alloc new frame
+    AVFrame *frame = av_frame_alloc();
+
+    if (frame == NULL)
+    {
+        hb_error("hb_qsv_copy_video_buffer_to_hw_video_buffer: av_frame_alloc() failed");
+        goto fail;
+    }
+
+    frame->pts              = in->s.start;
+    frame->duration         = in->s.duration;
+    frame->width            = in->f.width;
+    frame->height           = in->f.height;
+    frame->format           = in->f.fmt;
+    frame->interlaced_frame = !!in->s.combed;
+    frame->top_field_first  = !!(in->s.flags & PIC_FLAG_TOP_FIELD_FIRST);
+
+    frame->format          = in->f.fmt;
+    frame->color_primaries = hb_colr_pri_hb_to_ff(in->f.color_prim);
+    frame->color_trc       = hb_colr_tra_hb_to_ff(in->f.color_transfer);
+    frame->colorspace      = hb_colr_mat_hb_to_ff(in->f.color_matrix);
+    frame->color_range     = in->f.color_range;
+    frame->chroma_location = in->f.chroma_location;
+
+    out->storage_type = AVFRAME;
+    out->storage = frame;
+    out->f = in->f;
+    hb_buffer_copy_props(out, in);
+
     QSVMid *mid = NULL;
     mfxFrameSurface1 *surface = NULL;
     HBQSVFramesContext *hb_qsv_frames_ctx = NULL;
@@ -4034,74 +4070,89 @@ int hb_qsv_attach_surface_to_video_buffer(hb_job_t *job, hb_buffer_t* buf, int i
         }
         else
         {
-            hb_error("hb_qsv_attach_surface_to_video_buffer: unsupported texture_format=%d", job->input_pix_fmt);
-            return -1;
+            hb_error("hb_qsv_copy_video_buffer_to_hw_video_buffer: unsupported texture_format=%d", job->input_pix_fmt);
+            goto fail;
         }
         hb_qsv_get_free_surface_from_pool_with_range(hb_qsv_frames_ctx, 0, HB_QSV_POOL_SURFACE_SIZE, &mid, &surface);
         output_surface = mid->handle_pair->first;
         ID3D11Texture2D_GetDesc(output_surface, &desc);
-        ID3D11Texture2D* blank_surface = hb_qsv_create_dx11_texture_with_bytes(job->qsv.ctx->device_manager_handle, buf->data, buf->plane[0].stride, desc.Width, desc.Height, texture_format);
+        ID3D11Texture2D* blank_surface = hb_qsv_create_dx11_texture_with_bytes(job->qsv.ctx->device_manager_handle,
+            in->data, in->plane[0].stride, desc.Width, desc.Height, texture_format);
         if (!blank_surface)
         {
-            hb_error("hb_qsv_attach_surface_to_video_buffer: hb_qsv_create_dx11_texture_with_bytes() failed");
-            return -1;
+            hb_error("hb_qsv_copy_video_buffer_to_hw_video_buffer: hb_qsv_create_dx11_texture_with_bytes() failed");
+            goto fail;
         }
         mfxHDLPair* output_pair = (mfxHDLPair*)surface->Data.MemId;
         int output_index = (int)(intptr_t)output_pair->second == MFX_INFINITE ? 0 : (int)(intptr_t)output_pair->second;
         int ret = hb_qsv_copy_surface(job->qsv.ctx, output_surface, output_index, blank_surface, 0);
         if (ret < 0)
         {
-            hb_error("hb_qsv_attach_surface_to_video_buffer: hb_qsv_copy_surface() failed");
-            return -1;
+            hb_error("hb_qsv_copy_video_buffer_to_hw_video_buffer: hb_qsv_copy_surface() failed");
+            goto fail;
         }
         ID3D11Texture2D_Release(blank_surface);
     }
 
-    // alloc new frame
-    buf->qsv_details.frame = av_frame_alloc();
-    if (!buf->qsv_details.frame) {
-        hb_error("hb_qsv_attach_surface_to_video_buffer: av_frame_alloc() failed");
-        return -1;
-    }
+    frame->data[3] = (uint8_t *)surface;
 
-    buf->qsv_details.frame->data[3] = (uint8_t*)surface;
-    buf->qsv_details.qsv_frames_ctx = hb_qsv_frames_ctx;
-    buf->qsv_details.qsv_atom       = 0;
-    buf->qsv_details.ctx            = job->qsv.ctx;
-    return 0;
+    out->qsv_details.qsv_frames_ctx = hb_qsv_frames_ctx;
+    out->qsv_details.qsv_atom       = NULL;
+    out->qsv_details.ctx            = job->qsv.ctx;
+
+    return out;
+
+fail:
+    hb_buffer_close(&out);
+    av_frame_free(&frame);
+    return NULL;
 }
 
-int hb_qsv_copy_video_buffer_to_video_buffer(hb_job_t *job, hb_buffer_t* in, hb_buffer_t* out, int is_vpp)
+hb_buffer_t * hb_qsv_buffer_dup(hb_job_t *job, hb_buffer_t *in, const int is_vpp)
 {
-    // alloc new frame
-    out->qsv_details.frame = av_frame_alloc();
-    if (!out->qsv_details.frame)
+    if (in->storage == NULL || in->storage_type != AVFRAME)
     {
-        hb_error("hb_qsv_copy_video_buffer_to_video_buffer: av_frame_alloc() failed");
-        return -1;
+        hb_error("hb_qsv_buffer_dup: in->storage is NULL");
+        goto fail;
     }
 
-    if (!in->qsv_details.frame)
+    hb_buffer_t *out = hb_buffer_wrapper_init();
+
+    if (out == NULL)
     {
-        hb_error("hb_qsv_copy_video_buffer_to_video_buffer: in->qsv_details.frame is NULL");
-        return -1;
+        goto fail;
     }
 
-    mfxFrameSurface1* input_surface = (mfxFrameSurface1*)in->qsv_details.frame->data[3];
-    mfxHDLPair* input_pair = (mfxHDLPair*)input_surface->Data.MemId;
+    // Alloc new frame
+    AVFrame *frame_copy = av_frame_alloc();
 
-    out->qsv_details.frame->format         = in->qsv_details.frame->format;
-    out->qsv_details.frame->width          = in->qsv_details.frame->width;
-    out->qsv_details.frame->height         = in->qsv_details.frame->height;
-    out->qsv_details.frame->ch_layout      = in->qsv_details.frame->ch_layout;
-    out->qsv_details.frame->nb_samples     = in->qsv_details.frame->nb_samples;
+    if (frame_copy == NULL)
+    {
+        hb_error("hb_qsv_buffer_dup: av_frame_alloc() failed");
+        goto fail;
+    }
 
-    int ret = av_frame_copy_props(out->qsv_details.frame, in->qsv_details.frame);
+    AVFrame *frame = (AVFrame *)in->storage;
+    frame_copy->format     = frame->format;
+    frame_copy->width      = frame->width;
+    frame_copy->height     = frame->height;
+    frame_copy->ch_layout  = frame->ch_layout;
+    frame_copy->nb_samples = frame->nb_samples;
+
+    mfxFrameSurface1 *input_surface = (mfxFrameSurface1 *)frame->data[3];
+    mfxHDLPair *input_pair = (mfxHDLPair*)input_surface->Data.MemId;
+
+    int ret = av_frame_copy_props(frame_copy, frame);
     if (ret < 0)
     {
-        hb_error("hb_qsv_copy_video_buffer_to_video_buffer: av_frame_copy_props error %d", ret);
-        return -1;
+        hb_error("hb_qsv_buffer_dup: av_frame_copy_props error %d", ret);
+        goto fail;
     }
+
+    out->storage_type = AVFRAME;
+    out->storage = frame_copy;
+    out->f = in->f;
+    hb_buffer_copy_props(out, in);
 
     QSVMid *mid = NULL;
     mfxFrameSurface1 *surface = NULL;
@@ -4125,49 +4176,73 @@ int hb_qsv_copy_video_buffer_to_video_buffer(hb_job_t *job, hb_buffer_t* in, hb_
         int ret = hb_qsv_copy_surface(job->qsv.ctx, mid->handle_pair->first, output_index, input_pair->first, input_index);
         if (ret < 0)
         {
-            hb_error("hb_qsv_copy_video_buffer_to_video_buffer: hb_qsv_copy_surface() failed");
-            return -1;
+            hb_error("hb_qsv_buffer_dup: hb_qsv_copy_surface() failed");
+            goto fail;
         }
     }
     else
     {
-        hb_error("hb_qsv_copy_video_buffer_to_video_buffer: device_manager_handle_type unsupported=%d", job->qsv.ctx->device_manager_handle_type);
+        hb_error("hb_qsv_buffer_dup: device_manager_handle_type unsupported=%d", job->qsv.ctx->device_manager_handle_type);
+        goto fail;
     }
 
-    out->qsv_details.frame->data[3] = (uint8_t*)surface;
+    frame_copy->data[3] = (uint8_t *)surface;
+
     out->qsv_details.qsv_frames_ctx = hb_qsv_frames_ctx;
-    out->qsv_details.qsv_atom       = 0;
+    out->qsv_details.qsv_atom       = NULL;
     out->qsv_details.ctx            = job->qsv.ctx;
-    return 0;
+
+    return out;
+
+fail:
+    hb_buffer_close(&out);
+    av_frame_free(&frame_copy);
+    return NULL;
 }
 
-hb_buffer_t* hb_qsv_copy_avframe_to_video_buffer(hb_job_t *job, AVFrame *frame, const int is_vpp)
+hb_buffer_t * hb_qsv_copy_avframe_to_video_buffer(hb_job_t *job, AVFrame *frame, AVRational time_base, const int is_vpp)
 {
-    hb_buffer_t *out;
-    out = hb_frame_buffer_init(frame->format, frame->width, frame->height);
-    hb_avframe_set_video_buffer_flags(out, frame, (AVRational){1,1});
+    hb_buffer_t *out = hb_buffer_wrapper_init();
 
-    // alloc new frame
-    out->qsv_details.frame = av_frame_alloc();
-    if (!out->qsv_details.frame) {
-        return out;
+    if (out == NULL)
+    {
+        return NULL;
     }
 
-    out->qsv_details.frame->format         = frame->format;
-    out->qsv_details.frame->width          = frame->width;
-    out->qsv_details.frame->height         = frame->height;
-    out->qsv_details.frame->ch_layout      = frame->ch_layout;
-    out->qsv_details.frame->nb_samples     = frame->nb_samples;
+    // Alloc new frame
+    AVFrame *frame_copy = av_frame_alloc();
+    if (frame_copy == NULL)
+    {
+        goto fail;
+    }
 
-    int ret = av_frame_copy_props(out->qsv_details.frame, frame);
+    frame_copy->format         = frame->format;
+    frame_copy->width          = frame->width;
+    frame_copy->height         = frame->height;
+    frame_copy->ch_layout      = frame->ch_layout;
+    frame_copy->nb_samples     = frame->nb_samples;
+
+    int ret = av_frame_copy_props(frame_copy, frame);
     if (ret < 0)
     {
         hb_error("hb_qsv_copy_avframe_to_video_buffer: av_frame_copy_props error %d", ret);
+        goto fail;
     }
-    
+
+    out->storage_type = AVFRAME;
+    out->storage = frame_copy;
+
+    out->s.type = FRAME_BUF;
+    out->f.width  = frame_copy->width;
+    out->f.height = frame_copy->height;
+    hb_avframe_set_video_buffer_flags(out, frame, time_base);
+
+    out->side_data = (void **)frame_copy->side_data;
+    out->nb_side_data = frame_copy->nb_side_data;
+
     QSVMid *mid = NULL;
-    mfxFrameSurface1* output_surface = NULL;
-    HBQSVFramesContext* hb_qsv_frames_ctx = NULL;
+    mfxFrameSurface1 *output_surface = NULL;
+    HBQSVFramesContext *hb_qsv_frames_ctx = NULL;
 
     if (is_vpp)
     {
@@ -4180,10 +4255,13 @@ hb_buffer_t* hb_qsv_copy_avframe_to_video_buffer(hb_job_t *job, AVFrame *frame, 
 
     if (!is_vpp && hb_qsv_hw_filters_are_enabled(job))
     {
-        ret = hb_qsv_get_free_surface_from_pool(hb_qsv_frames_ctx, out->qsv_details.frame, &mid);
+        ret = hb_qsv_get_free_surface_from_pool(hb_qsv_frames_ctx, frame_copy, &mid);
         if (ret < 0)
-            return out;
-        output_surface = (mfxFrameSurface1*)out->qsv_details.frame->data[3];
+        {
+            hb_error("hb_qsv_copy_avframe_to_video_buffer: hb_qsv_get_free_surface_from_pool error %d", ret);
+            goto fail;
+        }
+        output_surface = (mfxFrameSurface1 *)frame_copy->data[3];
     }
     else
     {
@@ -4192,15 +4270,18 @@ hb_buffer_t* hb_qsv_copy_avframe_to_video_buffer(hb_job_t *job, AVFrame *frame, 
 
     if (job->qsv.ctx->device_manager_handle_type == MFX_HANDLE_D3D11_DEVICE)
     {
-        mfxFrameSurface1* input_surface = (mfxFrameSurface1*)frame->data[3];
-        mfxHDLPair* input_pair = (mfxHDLPair*)input_surface->Data.MemId;
+        mfxFrameSurface1 *input_surface = (mfxFrameSurface1 *)frame->data[3];
+        mfxHDLPair *input_pair = (mfxHDLPair *)input_surface->Data.MemId;
+
         // Need to pass 0 instead of MFX_INFINITE to DirectX as index of surface
         int input_index = (int)(intptr_t)input_pair->second == MFX_INFINITE ? 0 : (int)(intptr_t)input_pair->second;
         int output_index = (int)(intptr_t)mid->handle_pair->second == MFX_INFINITE ? 0 : (int)(intptr_t)mid->handle_pair->second;
-        // copy all surface fields
+
+        // Copy all surface fields
         *output_surface = *input_surface;
         output_surface->Info.CropW = frame->width;
         output_surface->Info.CropH = frame->height;
+
         if (hb_qsv_hw_filters_are_enabled(job))
         {
             // Make sure that we pass handle_pair to scale_qsv
@@ -4211,24 +4292,34 @@ hb_buffer_t* hb_qsv_copy_avframe_to_video_buffer(hb_job_t *job, AVFrame *frame, 
             // Make sure that we pass QSVMid to QSV encoder
             output_surface->Data.MemId = mid;
         }
-        // copy input surface to surface from the pool
+
+        // Copy input surface to surface from the pool
         ret = hb_qsv_copy_surface(job->qsv.ctx, mid->handle_pair->first, output_index, input_pair->first, input_index);
+
         if (ret < 0)
         {
             hb_error("hb_qsv_copy_avframe_to_video_buffer: hb_qsv_copy_surface() failed");
-            return NULL;
+            goto fail;
         }
     }
     else
     {
         hb_error("hb_qsv_copy_avframe_to_video_buffer: incorrect mfx impl");
-        return out;
+        goto fail;
     }
-    out->qsv_details.frame->data[3] = (uint8_t*)output_surface;
+
+    frame_copy->data[3] = (uint8_t *)output_surface;
+
     out->qsv_details.qsv_frames_ctx = hb_qsv_frames_ctx;
-    out->qsv_details.qsv_atom       = 0;
+    out->qsv_details.qsv_atom       = NULL;
     out->qsv_details.ctx            = job->qsv.ctx;
+
     return out;
+
+fail:
+    hb_buffer_close(&out);
+    av_frame_free(&frame_copy);
+    return NULL;
 }
 
 static int qsv_get_buffer(AVCodecContext *s, AVFrame *frame, int flags)
@@ -4601,17 +4692,17 @@ int hb_qsv_hw_frames_init(AVCodecContext *s)
     return -1;
 }
 
-int hb_qsv_attach_surface_to_video_buffer(hb_job_t *job, hb_buffer_t* buf, int is_vpp)
+hb_buffer_t * hb_qsv_copy_video_buffer_to_hw_video_buffer(hb_job_t *job, hb_buffer_t *in, const int is_vpp)
 {
-    return -1;
+    return NULL;
 }
 
-int hb_qsv_copy_video_buffer_to_video_buffer(hb_job_t *job, hb_buffer_t* in, hb_buffer_t* out, int is_vpp)
+hb_buffer_t * hb_qsv_buffer_dup(hb_job_t *job, hb_buffer_t *in, const int is_vpp)
 {
-    return -1;
+    return NULL;
 }
 
-hb_buffer_t* hb_qsv_copy_avframe_to_video_buffer(hb_job_t *job, AVFrame *frame, const int is_vpp)
+hb_buffer_t * hb_qsv_copy_avframe_to_video_buffer(hb_job_t *job, AVFrame *frame, AVRational time_base, const int is_vpp)
 {
     return NULL;
 }
