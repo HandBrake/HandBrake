@@ -18,6 +18,7 @@ namespace HandBrakeWPF.Model.Subtitles
     {
         private SubtitleBehaviourModes selectedBehaviour;
         private BindingList<string> selectedLanguages;
+        private bool addDefault;
         private bool addForeignAudioScanTrack;
         private bool addClosedCaptions;
         private SubtitleBurnInBehaviourModes selectedBurnInBehaviour;
@@ -34,6 +35,7 @@ namespace HandBrakeWPF.Model.Subtitles
             this.SelectedBehaviour = behaviours.selectedBehaviour;
             this.SelectedBurnInBehaviour = behaviours.selectedBurnInBehaviour;
             this.SelectedLanguages = new BindingList<string>(behaviours.SelectedLanguages.ToList());
+            this.AddDefault = behaviours.AddDefault;
             this.AddClosedCaptions = behaviours.AddClosedCaptions;
             this.AddForeignAudioScanTrack = behaviours.AddForeignAudioScanTrack;
         }
@@ -86,6 +88,23 @@ namespace HandBrakeWPF.Model.Subtitles
                 }
                 this.selectedLanguages = value;
                 this.NotifyOfPropertyChange(() => this.SelectedLanguages);
+            }
+        }
+
+        public bool AddDefault
+        {
+            get
+            {
+                return this.addDefault;
+            }
+            set
+            {
+                if (value.Equals(this.addDefault))
+                {
+                    return;
+                }
+                this.addDefault = value;
+                this.NotifyOfPropertyChange(() => this.AddDefault);
             }
         }
 

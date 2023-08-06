@@ -52,6 +52,7 @@
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
 
             <Grid.ColumnDefinitions>
@@ -109,15 +110,17 @@
 
             <!-- Options -->
             <TextBlock Grid.Row="3" Grid.Column="0" Text="Options: " Margin="0,20,0,0" />
-            <CheckBox Content="{x:Static Properties:Resources.SubtitlesView_AddCC}" Grid.Row="3" Grid.Column="1"  Margin="0,20,0,0" 
+            <CheckBox Content="{x:Static Properties:Resources.SubtitlesView_AddDefault}" Grid.Row="3" Grid.Column="1"  Margin="0,20,0,0" 
+                          HorizontalAlignment="Left" IsChecked="{Binding SubtitleBehaviours.AddDefault}"/>
+            <CheckBox Content="{x:Static Properties:Resources.SubtitlesView_AddCC}" Grid.Row="4" Grid.Column="1"  Margin="0,5,0,0" 
                           HorizontalAlignment="Left" IsChecked="{Binding SubtitleBehaviours.AddClosedCaptions}"/>
-            <CheckBox Content="{x:Static Properties:Resources.SubtitlesView_AddForeignAudioSearch}"  Grid.Column="1" Grid.Row="4" Margin="0,5,0,0" 
+            <CheckBox Content="{x:Static Properties:Resources.SubtitlesView_AddForeignAudioSearch}"  Grid.Column="1" Grid.Row="5" Margin="0,5,0,0" 
                           HorizontalAlignment="Left" IsChecked="{Binding SubtitleBehaviours.AddForeignAudioScanTrack}"/>
 
 
             <!-- Burn In Behaviour -->
-            <TextBlock Text="{x:Static Properties:Resources.SubtitlesView_BurnInBehaviour}"  Grid.Column="0" Grid.Row="5" Margin="0,15,5,0" HorizontalAlignment="Left" VerticalAlignment="Center" />
-            <ComboBox Name="burninBehaviour"  Grid.Column="2" Grid.Row="5" HorizontalAlignment="Left"
+            <TextBlock Text="{x:Static Properties:Resources.SubtitlesView_BurnInBehaviour}"  Grid.Column="0" Grid.Row="6" Margin="0,15,5,0" HorizontalAlignment="Left" VerticalAlignment="Center" />
+            <ComboBox Name="burninBehaviour"  Grid.Column="2" Grid.Row="6" HorizontalAlignment="Left"
                           ItemsSource="{Binding SubtitleBurnInBehaviourModeList, Converter={StaticResource subtitleBurnInBehaviourConverter}}" 
                           SelectedItem="{Binding SubtitleBehaviours.SelectedBurnInBehaviour, Converter={StaticResource subtitleBurnInBehaviourConverter}}" Width="210" Margin="0,15,5,0">
                 <ComboBox.ToolTip>

@@ -277,6 +277,11 @@ namespace HandBrake.Interop.Interop.Json.Presets
         public int Type { get; set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether subtitle add default.
+        /// </summary>
+        public bool SubtitleAddDefault { get; set; }
+
+        /// <summary>
         /// Gets or sets a value indicating whether subtitle add cc.
         /// </summary>
         public bool SubtitleAddCC { get; set; }

@@ -216,6 +216,7 @@ namespace HandBrakeWPF.ViewModels
             // Step 1, Set the behaviour mode
             this.SubtitleBehaviours.SelectedBehaviour = SubtitleBehaviourModes.None;
             this.SubtitleBehaviours.SelectedBurnInBehaviour = SubtitleBurnInBehaviourModes.None;
+            this.SubtitleBehaviours.AddDefault = false;
             this.SubtitleBehaviours.AddClosedCaptions = false;
             this.SubtitleBehaviours.AddForeignAudioScanTrack = false;
             this.SubtitleBehaviours.SelectedLanguages.Clear();
@@ -236,6 +237,7 @@ namespace HandBrakeWPF.ViewModels
             {
                 this.SubtitleBehaviours.SelectedBehaviour = behaviours.SelectedBehaviour;
                 this.SubtitleBehaviours.SelectedBurnInBehaviour = behaviours.SelectedBurnInBehaviour;
+                this.SubtitleBehaviours.AddDefault = behaviours.AddDefault;
                 this.SubtitleBehaviours.AddClosedCaptions = behaviours.AddClosedCaptions;
                 this.SubtitleBehaviours.AddForeignAudioScanTrack = behaviours.AddForeignAudioScanTrack;
 

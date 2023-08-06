@@ -178,6 +178,18 @@ namespace HandBrakeWPF.ViewModels
         }
 
         /// <summary>
+        /// Add all closed captions not already on the list.
+        /// </summary>
+        public void AddDefault()
+        {
+            var firstTrack = this.Task.SubtitleTracks.FirstOrDefault();
+            if (firstTrack != null)
+            {
+                firstTrack.Default = true;
+            }
+        }
+
+        /// <summary>
         /// Add all the remaining subtitle tracks.
         /// </summary>
         public void AddAllRemaining()
@@ -443,6 +455,12 @@ namespace HandBrakeWPF.ViewModels
             if (this.SubtitleBehaviours.AddClosedCaptions)
             {
                 this.AddAllClosedCaptions();
+            }
+
+            // Add first subtitle as default
+            if (this.SubtitleBehaviours.AddDefault)
+            {
+                this.AddDefault();
             }
         }
 

@@ -401,6 +401,7 @@ namespace HandBrakeWPF.Services.Presets.Factories
             preset.SubtitleTrackBehaviours.SelectedBehaviour = EnumHelper<SubtitleBehaviourModes>.GetValue(importedPreset.SubtitleTrackSelectionBehavior);
             preset.SubtitleTrackBehaviours.SelectedBurnInBehaviour = EnumHelper<SubtitleBurnInBehaviourModes>.GetValue(importedPreset.SubtitleBurnBehavior);
 
+            preset.SubtitleTrackBehaviours.AddDefault = importedPreset.SubtitleAddDefault;
             preset.SubtitleTrackBehaviours.AddClosedCaptions = importedPreset.SubtitleAddCC;
             preset.SubtitleTrackBehaviours.AddForeignAudioScanTrack = importedPreset.SubtitleAddForeignAudioSearch;
             if (importedPreset.SubtitleLanguageList != null)
@@ -527,6 +528,7 @@ namespace HandBrakeWPF.Services.Presets.Factories
             }
 
             // Subtitles
+            preset.SubtitleAddDefault = export.SubtitleTrackBehaviours.AddDefault;
             preset.SubtitleAddCC = export.SubtitleTrackBehaviours.AddClosedCaptions;
             preset.SubtitleAddForeignAudioSearch = export.SubtitleTrackBehaviours.AddForeignAudioScanTrack;
             preset.SubtitleBurnBDSub = false; // TODO not supported yet.

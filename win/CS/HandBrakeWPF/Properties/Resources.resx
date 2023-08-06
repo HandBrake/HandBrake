@@ -2798,4 +2798,7 @@ To allow multiple simultaneous encodes, turn on "Process Isolation" in Tools Men
   <data name="Options_RecursiveFolderScan" xml:space="preserve">
     <value>Recursively scan directories when using the folder scan mode.</value>
   </data>
+  <data name="SubtitlesView_AddDefault" xml:space="preserve">
+    <value>Add first subtitle as default</value>
+  </data>
 </root>

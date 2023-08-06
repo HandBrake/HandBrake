@@ -7045,6 +7045,15 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add first subtitle as default.
+        /// </summary>
+        public static string SubtitlesView_AddDefault {
+            get {
+                return ResourceManager.GetString("SubtitlesView_AddDefault", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Add &apos;Foreign Audio Scan&apos;.
         /// </summary>
         public static string SubtitlesView_AddForeignAudioSearch {
