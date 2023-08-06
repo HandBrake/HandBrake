@@ -1,16 +1,17 @@
 $(eval $(call import.MODULE.defs,AMF,amf))
 $(eval $(call import.CONTRIB.defs,AMF))
 
-AMF.FETCH.url      = https://github.com/HandBrake/HandBrake-contribs/releases/download/contribs/AMF-1.4.29.tar.gz
-# Commented out official source for now. The official tar includes ffmpeg binaries which seriously bloats the file. Our version is cut down.
-# AMF.FETCH.url     += https://github.com/GPUOpen-LibrariesAndSDKs/AMF/archive/refs/tags/v1.4.29.tar.gz
-AMF.FETCH.sha256   = 5608db714889db185fc85cac89f011e5c444bf14eb9b9c32ca91b6f39286c660
-AMF.FETCH.basename = AMF-1.4.29.tar.gz
+AMF.FETCH.url     += https://github.com/GPUOpen-LibrariesAndSDKs/AMF/archive/refs/tags/v1.4.30.tar.gz
+AMF.FETCH.sha256   = 4a9d43c730a76df6636932cee007917409d5b3607b61cecdf6dfab410f7b5f1d
+AMF.FETCH.basename = AMF-1.4.30.tar.gz
 
 AMF.CONFIGURE = $(TOUCH.exe) $@
 AMF.BUILD     = $(TOUCH.exe) $@
 
 define AMF.INSTALL
+	# The official tar includes ffmpeg binaries which not needed for building HandBrake.
+	# Remove Thirdparty/ffmpeg folder from extracted tar.
+	$(RM.exe) -rf $(AMF.EXTRACT.dir/)Thirdparty/ffmpeg
     $(MKDIR.exe) -p $(CONTRIB.build/)include/AMF
     $(CP.exe) -R $(AMF.EXTRACT.dir/)amf/public/include/* $(CONTRIB.build/)include/AMF/
     $(TOUCH.exe) $@
