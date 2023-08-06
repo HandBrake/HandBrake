@@ -844,23 +844,45 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
             context->gop_size = (int)(FFMIN(av_q2d(fps) * 2, 120));
 
             char quality[7];
+            char qualityP[7];
             char qualityB[7];
-            double adjustedQualityB = job->vquality + 2;
+            double qualityOffsetP = 8;
+            double qualityOffsetB;
+            double adjustedQualityP;
+            double adjustedQualityB;
 
+            if (job->vquality <= 32)
+            {
+                qualityOffsetP = job->vquality / qualityOffsetP * 2;
+            }
+            qualityOffsetB = qualityOffsetP * 2;
+
+            adjustedQualityP = job->vquality + qualityOffsetP;
+            adjustedQualityB = job->vquality + qualityOffsetB;
+            if (adjustedQualityP > 255)
+            {
+                adjustedQualityP = 255;
+            }
             if (adjustedQualityB > 255)
             {
                 adjustedQualityB = 255;
             }
 
             snprintf(quality, 7, "%.2f", job->vquality);
+            snprintf(qualityP, 7, "%.2f", adjustedQualityP);
             snprintf(qualityB, 7, "%.2f", adjustedQualityB);
 
             av_dict_set( &av_opts, "rc", "cqp", 0 );
 
             av_dict_set( &av_opts, "qp_i", quality, 0 );
-            av_dict_set( &av_opts, "qp_p", quality, 0 );
+            av_dict_set( &av_opts, "qp_p", qualityP, 0 );
             av_dict_set( &av_opts, "qp_b", qualityB, 0 );
+
             hb_log( "encavcodec: encoding at CQ %.2f", job->vquality );
+            hb_log( "encavcodec: QP (I)   %.2f", job->vquality );
+            hb_log( "encavcodec: QP (P)   %.2f", adjustedQualityP );
+            hb_log( "encavcodec: QP (B)   %.2f", adjustedQualityB );
+            hb_log( "encavcodec: GOP Size %d", context->gop_size );
         }
         else if (job->vcodec == HB_VCODEC_FFMPEG_MF_H264 ||
                  job->vcodec == HB_VCODEC_FFMPEG_MF_H265)
