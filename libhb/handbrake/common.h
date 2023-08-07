@@ -1483,6 +1483,7 @@ enum
     HB_FILTER_INVALID = 0,
     HB_FILTER_FIRST = 1,
 
+    HB_FILTER_PRE_VT,
     // First, filters that may change the framerate (drop or dup frames)
     HB_FILTER_DETELECINE,
     HB_FILTER_COMB_DETECT,

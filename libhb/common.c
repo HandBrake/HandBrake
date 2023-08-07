@@ -4655,6 +4655,10 @@ hb_filter_object_t * hb_filter_get( int filter_id )
             break;
 
 #if defined(__APPLE__)
+        case HB_FILTER_PRE_VT:
+            filter = &hb_filter_prefilter_vt;
+            break;
+
         case HB_FILTER_CROP_SCALE_VT:
             filter = &hb_filter_crop_scale_vt;
             break;

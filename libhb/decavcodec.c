@@ -1426,6 +1426,12 @@ int reinit_video_filters(hb_work_private_t * pv)
         return 0;
     }
 
+    if (pv->job && pv->job->hw_pix_fmt == AV_PIX_FMT_VIDEOTOOLBOX)
+    {
+        // Filtering is done in a separate filter
+        return 0;
+    }
+
     pv->video_filters.width       = pv->frame->width;
     pv->video_filters.height      = pv->frame->height;
     pv->video_filters.color_range = pv->frame->color_range;
