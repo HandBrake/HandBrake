@@ -1580,7 +1580,9 @@ int encqsvInit(hb_work_object_t *w, hb_job_t *job)
         {
             pv->param.videoParam->mfx.IdrInterval = 0;
         }
-        pv->param.videoParam->AsyncDepth = 60;
+        // sanitize some of the encoding parameters
+        pv->param.videoParam->mfx.GopPicSize = (int)(FFMIN(pv->param.gop.gop_pic_size, 60));
+        pv->param.videoParam->AsyncDepth = (int)(FFMAX(pv->param.videoParam->AsyncDepth, 30));
     }
     // sanitize some settings that affect memory consumption
     if (!pv->is_sys_mem)
