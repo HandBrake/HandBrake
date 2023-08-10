@@ -44,6 +44,8 @@ extern NSString * const HBAutoNamingISODateFormat;
 
 extern NSString * const HBCqSliderFractional;
 extern NSString * const HBUseDvdNav;
+extern NSString * const HBUseHardwareDecoder;
+extern NSString * const HBAlwaysUseHardwareDecoder;
 extern NSString * const HBMinTitleScanSeconds;
 extern NSString * const HBPreviewsNumber;
 

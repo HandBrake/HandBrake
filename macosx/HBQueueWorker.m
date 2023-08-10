@@ -198,6 +198,7 @@ NSString * const HBQueueWorkerItemNotificationItemKey = @"HBQueueWorkerItemNotif
               previews:10
            minDuration:0
           keepPreviews:NO
+       hardwareDecoder:[NSUserDefaults.standardUserDefaults boolForKey:HBUseHardwareDecoder]
        progressHandler:progressHandler
      completionHandler:completionHandler];
 }
@@ -208,6 +209,20 @@ NSString * const HBQueueWorkerItemNotificationItemKey = @"HBQueueWorkerItemNotif
 - (void)realEncodeItem:(HBQueueJobItem *)item
 {
     HBJob *job = item.job;
+
+    if ([NSUserDefaults.standardUserDefaults boolForKey:HBUseHardwareDecoder])
+    {
+        job.hwDecodeUsage = HBJobHardwareDecoderUsageFullPathOnly;
+
+        if ([NSUserDefaults.standardUserDefaults boolForKey:HBAlwaysUseHardwareDecoder])
+        {
+            job.hwDecodeUsage = HBJobHardwareDecoderUsageAlways;
+        }
+    }
+    else
+    {
+        job.hwDecodeUsage = HBJobHardwareDecoderUsageNone;
+    }
 
     // Progress handler
     void (^progressHandler)(HBState state, HBProgress progress, NSString *info) = ^(HBState state, HBProgress progress, NSString *info)

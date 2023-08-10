@@ -722,7 +722,9 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
 
         [self.core scanURLs:fileURLs
                  titleIndex:index
-                   previews:hb_num_previews minDuration:min_title_duration_seconds keepPreviews:YES
+                   previews:hb_num_previews minDuration:min_title_duration_seconds
+               keepPreviews:YES
+            hardwareDecoder:[NSUserDefaults.standardUserDefaults boolForKey:HBUseHardwareDecoder]
             progressHandler:^(HBState state, HBProgress progress, NSString *info)
          {
              self.sourceLabel.stringValue = info;

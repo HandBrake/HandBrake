@@ -34,6 +34,8 @@ NSString * const HBAutoNamingISODateFormat       = @"HBAutoNamingISODateFormat";
 
 NSString * const HBCqSliderFractional            = @"HBx264CqSliderFractional";
 NSString * const HBUseDvdNav                     = @"UseDvdNav";
+NSString * const HBUseHardwareDecoder            = @"HBUseHardwareDecoder";
+NSString * const HBAlwaysUseHardwareDecoder      = @"HBAlwaysUseHardwareDecoder";
 NSString * const HBMinTitleScanSeconds           = @"MinTitleScanSeconds";
 NSString * const HBPreviewsNumber                = @"PreviewsNumber";
 
@@ -92,6 +94,8 @@ NSString * const HBKeepPresetEdits               = @"HBKeepPresetEdits";
         HBShowSummaryPreview:               @YES,
         HBDefaultMpegExtension:             @".mp4",
         HBUseDvdNav:                        @YES,
+        HBUseHardwareDecoder:               @NO,
+        HBAlwaysUseHardwareDecoder:         @NO,
         HBRecursiveScan:                    @NO,
         HBLastDestinationDirectoryURL:      [NSKeyedArchiver archivedDataWithRootObject:moviesURL],
         HBLastSourceDirectoryURL:           [NSKeyedArchiver archivedDataWithRootObject:moviesURL],
