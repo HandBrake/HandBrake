@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="21701" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="22152" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="21701"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="22152"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -44,7 +44,7 @@
                         <stackView distribution="fill" orientation="horizontal" alignment="firstBaseline" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="750" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="F3c-q6-MdR">
                             <rect key="frame" x="0.0" y="399" width="313" height="34"/>
                             <subviews>
-                                <textField horizontalHuggingPriority="249" verticalHuggingPriority="749" horizontalCompressionResistancePriority="1000" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="200" translatesAutoresizingMaskIntoConstraints="NO" id="275">
+                                <textField focusRingType="none" horizontalHuggingPriority="249" verticalHuggingPriority="749" horizontalCompressionResistancePriority="1000" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="200" translatesAutoresizingMaskIntoConstraints="NO" id="275">
                                     <rect key="frame" x="-2" y="0.0" width="81" height="34"/>
                                     <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="right" title="At Launch:" id="307">
                                         <font key="font" metaFont="menu" size="11"/>
@@ -101,7 +101,7 @@
                         <stackView distribution="fill" orientation="horizontal" alignment="firstBaseline" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="750" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Aee-4F-nXp">
                             <rect key="frame" x="0.0" y="286" width="274" height="76"/>
                             <subviews>
-                                <textField horizontalHuggingPriority="248" verticalHuggingPriority="749" horizontalCompressionResistancePriority="1000" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="200" translatesAutoresizingMaskIntoConstraints="NO" id="242">
+                                <textField focusRingType="none" horizontalHuggingPriority="248" verticalHuggingPriority="749" horizontalCompressionResistancePriority="1000" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="200" translatesAutoresizingMaskIntoConstraints="NO" id="242">
                                     <rect key="frame" x="-2" y="0.0" width="81" height="76"/>
                                     <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="right" title="When Done:" id="304">
                                         <font key="font" metaFont="menu" size="11"/>
@@ -167,7 +167,7 @@
                                                         <binding destination="61" name="value" keyPath="values.HBSendToAppEnabled" id="Kff-6m-jt9"/>
                                                     </connections>
                                                 </button>
-                                                <textField horizontalHuggingPriority="249" verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="300" translatesAutoresizingMaskIntoConstraints="NO" id="448">
+                                                <textField focusRingType="none" horizontalHuggingPriority="249" verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="300" translatesAutoresizingMaskIntoConstraints="NO" id="448">
                                                     <rect key="frame" x="89" y="0.0" width="32" height="14"/>
                                                     <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="None" id="449">
                                                         <font key="font" metaFont="menu" size="11"/>
@@ -237,7 +237,7 @@
                         <stackView distribution="fill" orientation="horizontal" alignment="firstBaseline" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="750" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="4pr-s0-FuJ">
                             <rect key="frame" x="0.0" y="235" width="490" height="14"/>
                             <subviews>
-                                <textField horizontalHuggingPriority="249" verticalHuggingPriority="749" horizontalCompressionResistancePriority="1000" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="200" translatesAutoresizingMaskIntoConstraints="NO" id="PPY-fd-mVq">
+                                <textField focusRingType="none" horizontalHuggingPriority="249" verticalHuggingPriority="749" horizontalCompressionResistancePriority="1000" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="200" translatesAutoresizingMaskIntoConstraints="NO" id="PPY-fd-mVq">
                                     <rect key="frame" x="-2" y="0.0" width="81" height="14"/>
                                     <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="right" title="Destination:" id="lo9-Hk-I6l">
                                         <font key="font" metaFont="menu" size="11"/>
@@ -282,7 +282,7 @@
                         <stackView distribution="fill" orientation="horizontal" alignment="firstBaseline" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="750" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="cgC-1f-KdT">
                             <rect key="frame" x="0.0" y="0.0" width="490" height="198"/>
                             <subviews>
-                                <textField horizontalHuggingPriority="249" verticalHuggingPriority="749" horizontalCompressionResistancePriority="1000" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="300" translatesAutoresizingMaskIntoConstraints="NO" id="276">
+                                <textField focusRingType="none" horizontalHuggingPriority="249" verticalHuggingPriority="749" horizontalCompressionResistancePriority="1000" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="300" translatesAutoresizingMaskIntoConstraints="NO" id="276">
                                     <rect key="frame" x="-2" y="0.0" width="81" height="198"/>
                                     <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="right" title="File Name: " id="308">
                                         <font key="font" metaFont="menu" size="11"/>
@@ -296,7 +296,7 @@
                                         <stackView distribution="fill" orientation="horizontal" alignment="firstBaseline" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="1000" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="qlP-Qk-4OU">
                                             <rect key="frame" x="0.0" y="184" width="181" height="14"/>
                                             <subviews>
-                                                <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="300" translatesAutoresizingMaskIntoConstraints="NO" id="486">
+                                                <textField focusRingType="none" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="300" translatesAutoresizingMaskIntoConstraints="NO" id="486">
                                                     <rect key="frame" x="-2" y="0.0" width="126" height="14"/>
                                                     <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="right" title="Default MP4 Extension:" id="487">
                                                         <font key="font" metaFont="menu" size="11"/>
@@ -345,7 +345,7 @@
                                         <stackView distribution="fill" orientation="horizontal" alignment="firstBaseline" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="1000" horizontalHuggingPriority="750" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="eM6-W0-cC4">
                                             <rect key="frame" x="16" y="120" width="389" height="38"/>
                                             <subviews>
-                                                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="150" translatesAutoresizingMaskIntoConstraints="NO" id="fF9-Q1-vYr">
+                                                <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="150" translatesAutoresizingMaskIntoConstraints="NO" id="fF9-Q1-vYr">
                                                     <rect key="frame" x="-2" y="0.0" width="45" height="38"/>
                                                     <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="Format:" id="3dN-MN-DcP">
                                                         <font key="font" metaFont="menu" size="11"/>
@@ -356,7 +356,7 @@
                                                         <binding destination="61" name="enabled" keyPath="values.DefaultAutoNaming" id="RQc-sb-xRW"/>
                                                     </connections>
                                                 </textField>
-                                                <tokenField horizontalHuggingPriority="1000" horizontalCompressionResistancePriority="250" verticalCompressionResistancePriority="1000" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="6aa-GX-TuM">
+                                                <tokenField focusRingType="none" horizontalHuggingPriority="1000" horizontalCompressionResistancePriority="250" verticalCompressionResistancePriority="1000" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="6aa-GX-TuM">
                                                     <rect key="frame" x="49" y="0.0" width="340" height="38"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="340" id="PN0-BF-dcA"/>
@@ -389,7 +389,7 @@
                                                 <real value="3.4028234663852886e+38"/>
                                             </customSpacing>
                                         </stackView>
-                                        <tokenField toolTip="Drag labels to the Format field to compose a naming format." horizontalHuggingPriority="1000" verticalHuggingPriority="249" horizontalCompressionResistancePriority="250" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Tk3-Ig-fFI">
+                                        <tokenField toolTip="Drag labels to the Format field to compose a naming format." focusRingType="none" horizontalHuggingPriority="1000" verticalHuggingPriority="249" horizontalCompressionResistancePriority="250" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Tk3-Ig-fFI">
                                             <rect key="frame" x="63" y="100" width="304" height="14"/>
                                             <constraints>
                                                 <constraint firstAttribute="width" constant="300" id="GPI-Do-VPV"/>
@@ -404,7 +404,7 @@
                                                 <outlet property="delegate" destination="-2" id="P3H-mA-QsB"/>
                                             </connections>
                                         </tokenField>
-                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="751" verticalCompressionResistancePriority="1000" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="LKY-ui-YVw">
+                                        <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="751" verticalCompressionResistancePriority="1000" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="LKY-ui-YVw">
                                             <rect key="frame" x="63" y="80" width="274" height="14"/>
                                             <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" title="Drag labels to Format to compose a naming format." id="dQ6-Dh-9sD">
                                                 <font key="font" metaFont="menu" size="11"/>
@@ -535,19 +535,19 @@
                 <constraint firstAttribute="bottom" secondItem="TQb-nF-3BD" secondAttribute="bottom" constant="20" symbolic="YES" id="czc-wV-7ee"/>
                 <constraint firstItem="TQb-nF-3BD" firstAttribute="top" secondItem="233" secondAttribute="top" constant="20" symbolic="YES" id="u4A-xM-w8P"/>
             </constraints>
-            <point key="canvasLocation" x="48" y="-129.5"/>
+            <point key="canvasLocation" x="-44" y="-137"/>
         </customView>
         <customView id="236" userLabel="Advanced">
-            <rect key="frame" x="0.0" y="0.0" width="580" height="424"/>
+            <rect key="frame" x="0.0" y="0.0" width="580" height="489"/>
             <autoresizingMask key="autoresizingMask"/>
             <subviews>
                 <stackView distribution="fill" orientation="vertical" alignment="leading" spacing="16" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="1000" verticalHuggingPriority="1000" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="OVb-Af-BVd">
-                    <rect key="frame" x="79" y="20" width="422" height="387"/>
+                    <rect key="frame" x="45" y="20" width="490" height="452"/>
                     <subviews>
                         <stackView distribution="fill" orientation="horizontal" alignment="firstBaseline" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="750" verticalHuggingPriority="1000" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="vWO-gM-Ipq">
-                            <rect key="frame" x="0.0" y="326" width="410" height="61"/>
+                            <rect key="frame" x="0.0" y="391" width="410" height="61"/>
                             <subviews>
-                                <textField horizontalHuggingPriority="248" verticalHuggingPriority="1000" horizontalCompressionResistancePriority="1000" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="300" translatesAutoresizingMaskIntoConstraints="NO" id="IV7-SY-HLR">
+                                <textField focusRingType="none" horizontalHuggingPriority="248" verticalHuggingPriority="1000" horizontalCompressionResistancePriority="1000" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="300" translatesAutoresizingMaskIntoConstraints="NO" id="IV7-SY-HLR">
                                     <rect key="frame" x="-2" y="44" width="75" height="14"/>
                                     <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="right" title="Scan:" id="c0L-TU-WML">
                                         <font key="font" metaFont="menu" size="11"/>
@@ -561,7 +561,7 @@
                                         <stackView distribution="fill" orientation="horizontal" alignment="firstBaseline" spacing="6" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="250" verticalHuggingPriority="1000" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="WJs-Wy-S1o">
                                             <rect key="frame" x="0.0" y="42" width="331" height="19"/>
                                             <subviews>
-                                                <textField toolTip="Minimum DVD and Blu-ray title duration in seconds. Shorter titles will be skipped." verticalHuggingPriority="1000" horizontalCompressionResistancePriority="250" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="400" translatesAutoresizingMaskIntoConstraints="NO" id="463">
+                                                <textField toolTip="Minimum DVD and Blu-ray title duration in seconds. Shorter titles will be skipped." focusRingType="none" verticalHuggingPriority="1000" horizontalCompressionResistancePriority="250" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="400" translatesAutoresizingMaskIntoConstraints="NO" id="463">
                                                     <rect key="frame" x="-2" y="2" width="228" height="14"/>
                                                     <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="right" title="Ignore DVD and Blu-ray titles shorter than:" id="464">
                                                         <font key="font" metaFont="menu" size="11"/>
@@ -569,7 +569,7 @@
                                                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                                     </textFieldCell>
                                                 </textField>
-                                                <textField toolTip="Minimum title duration in seconds. Shorter titles will be skipped." verticalHuggingPriority="1000" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="480">
+                                                <textField toolTip="Minimum title duration in seconds. Shorter titles will be skipped." focusRingType="none" verticalHuggingPriority="1000" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="480">
                                                     <rect key="frame" x="230" y="0.0" width="50" height="19"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="50" id="DCn-qW-TPY"/>
@@ -584,7 +584,7 @@
                                                         <binding destination="61" name="value" keyPath="values.MinTitleScanSeconds" id="483"/>
                                                     </connections>
                                                 </textField>
-                                                <textField verticalHuggingPriority="1000" horizontalCompressionResistancePriority="250" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="200" translatesAutoresizingMaskIntoConstraints="NO" id="UXr-op-aKN">
+                                                <textField focusRingType="none" verticalHuggingPriority="1000" horizontalCompressionResistancePriority="250" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="200" translatesAutoresizingMaskIntoConstraints="NO" id="UXr-op-aKN">
                                                     <rect key="frame" x="284" y="2" width="49" height="14"/>
                                                     <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="left" title="seconds" id="klQ-DW-Kc6">
                                                         <font key="font" metaFont="menu" size="11"/>
@@ -607,7 +607,7 @@
                                         <stackView distribution="fill" orientation="horizontal" alignment="firstBaseline" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" verticalHuggingPriority="1000" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="O8F-xH-gTY">
                                             <rect key="frame" x="0.0" y="20" width="238" height="16"/>
                                             <subviews>
-                                                <textField toolTip="Number of picture previews to scan. Higher values may increase automatic cropping accuracy at the expense of title scan time." verticalHuggingPriority="1000" horizontalCompressionResistancePriority="250" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="400" translatesAutoresizingMaskIntoConstraints="NO" id="359">
+                                                <textField toolTip="Number of picture previews to scan. Higher values may increase automatic cropping accuracy at the expense of title scan time." focusRingType="none" verticalHuggingPriority="1000" horizontalCompressionResistancePriority="250" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="400" translatesAutoresizingMaskIntoConstraints="NO" id="359">
                                                     <rect key="frame" x="-2" y="1" width="195" height="14"/>
                                                     <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="right" title="Number of picture previews to scan:" id="360">
                                                         <font key="font" metaFont="menu" size="11"/>
@@ -699,72 +699,55 @@
                                 <real value="3.4028234663852886e+38"/>
                             </customSpacing>
                         </stackView>
-                        <box verticalHuggingPriority="1000" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="ETV-cg-RgU">
-                            <rect key="frame" x="0.0" y="307" width="422" height="5"/>
+                        <box verticalHuggingPriority="1000" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="hr4-Pm-Vz2">
+                            <rect key="frame" x="0.0" y="372" width="490" height="5"/>
                         </box>
-                        <stackView distribution="fill" orientation="horizontal" alignment="centerY" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="750" verticalHuggingPriority="1000" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="tQh-6O-iM2">
-                            <rect key="frame" x="0.0" y="277" width="422" height="16"/>
+                        <stackView distribution="fill" orientation="horizontal" alignment="firstBaseline" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="750" verticalHuggingPriority="1000" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="eyN-bD-QR9">
+                            <rect key="frame" x="0.0" y="324" width="366" height="34"/>
                             <subviews>
-                                <textField verticalHuggingPriority="1000" horizontalCompressionResistancePriority="1000" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="300" translatesAutoresizingMaskIntoConstraints="NO" id="jPa-4p-Y29">
-                                    <rect key="frame" x="-2" y="1" width="75" height="14"/>
-                                    <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="right" title="Encoder:" id="cqp-xU-GOe">
+                                <textField focusRingType="none" verticalHuggingPriority="1000" horizontalCompressionResistancePriority="251" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="300" translatesAutoresizingMaskIntoConstraints="NO" id="v13-p6-eJ2">
+                                    <rect key="frame" x="-2" y="20" width="75" height="14"/>
+                                    <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="right" title="Decoder:" id="j6w-xf-tC0">
                                         <font key="font" metaFont="menu" size="11"/>
                                         <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                     </textFieldCell>
                                 </textField>
-                                <stackView distribution="fill" orientation="vertical" alignment="leading" spacing="0.0" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="1000" verticalHuggingPriority="1000" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Jxx-8p-Riz">
-                                    <rect key="frame" x="79" y="0.0" width="343" height="16"/>
+                                <stackView distribution="fill" orientation="vertical" alignment="leading" spacing="6" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="1000" verticalHuggingPriority="1000" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="etI-4Z-e5w">
+                                    <rect key="frame" x="79" y="0.0" width="287" height="34"/>
                                     <subviews>
-                                        <stackView distribution="fill" orientation="horizontal" alignment="firstBaseline" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" horizontalHuggingPriority="249" verticalHuggingPriority="1000" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="hdb-ng-C9T">
-                                            <rect key="frame" x="0.0" y="0.0" width="260" height="16"/>
-                                            <subviews>
-                                                <textField toolTip="Determines the granularity of the x264 Constant Quality control. Smaller values allow for finer quality increments." verticalHuggingPriority="1000" horizontalCompressionResistancePriority="250" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="400" translatesAutoresizingMaskIntoConstraints="NO" id="395">
-                                                    <rect key="frame" x="-2" y="1" width="208" height="14"/>
-                                                    <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="right" title="Constant Quality fractional granularity:" id="396">
-                                                        <font key="font" metaFont="menu" size="11"/>
-                                                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                                                    </textFieldCell>
-                                                </textField>
-                                                <popUpButton toolTip="Determines the granularity of the x264 Constant Quality control. Smaller values allow for finer quality increments." horizontalHuggingPriority="750" verticalHuggingPriority="1000" translatesAutoresizingMaskIntoConstraints="NO" id="387">
-                                                    <rect key="frame" x="208" y="-4" width="56" height="22"/>
-                                                    <popUpButtonCell key="cell" type="push" title="0.25" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" tag="4" imageScaling="proportionallyDown" inset="2" selectedItem="391" id="388">
-                                                        <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
-                                                        <font key="font" metaFont="menu" size="11"/>
-                                                        <menu key="menu" title="OtherViews" id="389">
-                                                            <items>
-                                                                <menuItem title="1.0" tag="1" id="394"/>
-                                                                <menuItem title="0.50" tag="2" id="393"/>
-                                                                <menuItem title="0.25" state="on" tag="4" id="391">
-                                                                    <modifierMask key="keyEquivalentModifierMask"/>
-                                                                </menuItem>
-                                                                <menuItem title="0.20" tag="5" id="390">
-                                                                    <modifierMask key="keyEquivalentModifierMask"/>
-                                                                </menuItem>
-                                                            </items>
-                                                        </menu>
-                                                    </popUpButtonCell>
-                                                    <connections>
-                                                        <accessibilityConnection property="title" destination="395" id="NVF-jL-QpH"/>
-                                                        <binding destination="61" name="selectedTag" keyPath="values.HBx264CqSliderFractional" id="XKV-6r-lP5"/>
-                                                    </connections>
-                                                </popUpButton>
-                                            </subviews>
-                                            <visibilityPriorities>
-                                                <integer value="1000"/>
-                                                <integer value="1000"/>
-                                            </visibilityPriorities>
-                                            <customSpacing>
-                                                <real value="3.4028234663852886e+38"/>
-                                                <real value="3.4028234663852886e+38"/>
-                                            </customSpacing>
-                                        </stackView>
+                                        <button verticalHuggingPriority="1000" translatesAutoresizingMaskIntoConstraints="NO" id="Doh-Ja-Gh7">
+                                            <rect key="frame" x="-1" y="19" width="254" height="16"/>
+                                            <string key="toolTip">Hardware decoder will reduce CPU usage and lower battery usage when combined with an hardware encoder. Depending on the CPU speed, they could either improve or decrese encoding speed.</string>
+                                            <buttonCell key="cell" type="check" title="Enable the VideoToolbox hardware decoders" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" inset="2" id="BHK-QU-DwS">
+                                                <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                                <font key="font" metaFont="menu" size="11"/>
+                                            </buttonCell>
+                                            <connections>
+                                                <binding destination="61" name="value" keyPath="values.HBUseHardwareDecoder" id="dxI-cp-QOL"/>
+                                            </connections>
+                                        </button>
+                                        <button verticalHuggingPriority="1000" translatesAutoresizingMaskIntoConstraints="NO" id="6Tx-U9-QG9">
+                                            <rect key="frame" x="15" y="-1" width="272" height="16"/>
+                                            <buttonCell key="cell" type="check" title="Also use in combination with software encoders" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" inset="2" id="d9B-Vd-jMM">
+                                                <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                                <font key="font" metaFont="menu" size="11"/>
+                                            </buttonCell>
+                                            <connections>
+                                                <binding destination="61" name="value" keyPath="values.HBAlwaysUseHardwareDecoder" id="tie-OI-x9E"/>
+                                                <binding destination="61" name="enabled" keyPath="values.HBUseHardwareDecoder" id="PZ6-3c-zRc"/>
+                                            </connections>
+                                        </button>
                                     </subviews>
+                                    <constraints>
+                                        <constraint firstItem="6Tx-U9-QG9" firstAttribute="leading" secondItem="Doh-Ja-Gh7" secondAttribute="leading" constant="16" id="o50-wu-cG2"/>
+                                    </constraints>
                                     <visibilityPriorities>
+                                        <integer value="1000"/>
                                         <integer value="1000"/>
                                     </visibilityPriorities>
                                     <customSpacing>
+                                        <real value="3.4028234663852886e+38"/>
                                         <real value="3.4028234663852886e+38"/>
                                     </customSpacing>
                                 </stackView>
@@ -778,13 +761,84 @@
                                 <real value="3.4028234663852886e+38"/>
                             </customSpacing>
                         </stackView>
+                        <box verticalHuggingPriority="1000" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="ETV-cg-RgU">
+                            <rect key="frame" x="0.0" y="305" width="490" height="5"/>
+                        </box>
+                        <stackView distribution="fill" orientation="horizontal" alignment="centerY" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="750" verticalHuggingPriority="1000" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="tQh-6O-iM2">
+                            <rect key="frame" x="0.0" y="277" width="339" height="14"/>
+                            <subviews>
+                                <textField focusRingType="none" verticalHuggingPriority="1000" horizontalCompressionResistancePriority="1000" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="300" translatesAutoresizingMaskIntoConstraints="NO" id="jPa-4p-Y29">
+                                    <rect key="frame" x="-2" y="0.0" width="75" height="14"/>
+                                    <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="right" title="Encoder:" id="cqp-xU-GOe">
+                                        <font key="font" metaFont="menu" size="11"/>
+                                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                    </textFieldCell>
+                                </textField>
+                                <stackView distribution="fill" orientation="horizontal" alignment="firstBaseline" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="1000" verticalHuggingPriority="1000" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Jxx-8p-Riz">
+                                    <rect key="frame" x="79" y="0.0" width="260" height="14"/>
+                                    <subviews>
+                                        <textField toolTip="Determines the granularity of the x264 Constant Quality control. Smaller values allow for finer quality increments." focusRingType="none" verticalHuggingPriority="1000" horizontalCompressionResistancePriority="250" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="400" translatesAutoresizingMaskIntoConstraints="NO" id="395">
+                                            <rect key="frame" x="-2" y="0.0" width="208" height="14"/>
+                                            <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="right" title="Constant Quality fractional granularity:" id="396">
+                                                <font key="font" metaFont="menu" size="11"/>
+                                                <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                            </textFieldCell>
+                                        </textField>
+                                        <popUpButton toolTip="Determines the granularity of the x264 Constant Quality control. Smaller values allow for finer quality increments." horizontalHuggingPriority="750" verticalHuggingPriority="1000" translatesAutoresizingMaskIntoConstraints="NO" id="387">
+                                            <rect key="frame" x="208" y="-4" width="56" height="20"/>
+                                            <popUpButtonCell key="cell" type="push" title="0.25" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" tag="4" imageScaling="proportionallyDown" inset="2" selectedItem="391" id="388">
+                                                <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                                                <font key="font" metaFont="menu" size="11"/>
+                                                <menu key="menu" title="OtherViews" id="389">
+                                                    <items>
+                                                        <menuItem title="1.0" tag="1" id="394"/>
+                                                        <menuItem title="0.50" tag="2" id="393"/>
+                                                        <menuItem title="0.25" state="on" tag="4" id="391">
+                                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                                        </menuItem>
+                                                        <menuItem title="0.20" tag="5" id="390">
+                                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                                        </menuItem>
+                                                    </items>
+                                                </menu>
+                                            </popUpButtonCell>
+                                            <connections>
+                                                <accessibilityConnection property="title" destination="395" id="NVF-jL-QpH"/>
+                                                <binding destination="61" name="selectedTag" keyPath="values.HBx264CqSliderFractional" id="XKV-6r-lP5"/>
+                                            </connections>
+                                        </popUpButton>
+                                    </subviews>
+                                    <visibilityPriorities>
+                                        <integer value="1000"/>
+                                        <integer value="1000"/>
+                                    </visibilityPriorities>
+                                    <customSpacing>
+                                        <real value="3.4028234663852886e+38"/>
+                                        <real value="3.4028234663852886e+38"/>
+                                    </customSpacing>
+                                </stackView>
+                            </subviews>
+                            <constraints>
+                                <constraint firstItem="395" firstAttribute="firstBaseline" secondItem="jPa-4p-Y29" secondAttribute="firstBaseline" id="vdw-mi-3oC"/>
+                            </constraints>
+                            <visibilityPriorities>
+                                <integer value="1000"/>
+                                <integer value="1000"/>
+                            </visibilityPriorities>
+                            <customSpacing>
+                                <real value="3.4028234663852886e+38"/>
+                                <real value="3.4028234663852886e+38"/>
+                            </customSpacing>
+                        </stackView>
                         <box verticalHuggingPriority="1000" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="VIv-34-shj">
-                            <rect key="frame" x="0.0" y="258" width="422" height="5"/>
+                            <rect key="frame" x="0.0" y="258" width="490" height="5"/>
                         </box>
                         <stackView distribution="fill" orientation="horizontal" alignment="centerY" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="750" verticalHuggingPriority="1000" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="FOD-gy-lzc">
                             <rect key="frame" x="0.0" y="230" width="331" height="14"/>
                             <subviews>
-                                <textField verticalHuggingPriority="1000" horizontalCompressionResistancePriority="1000" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="300" translatesAutoresizingMaskIntoConstraints="NO" id="ufI-Bw-KRl">
+                                <textField focusRingType="none" verticalHuggingPriority="1000" horizontalCompressionResistancePriority="1000" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="300" translatesAutoresizingMaskIntoConstraints="NO" id="ufI-Bw-KRl">
                                     <rect key="frame" x="-2" y="0.0" width="75" height="14"/>
                                     <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="right" title="Preset:" id="wiP-Ia-DfB">
                                         <font key="font" metaFont="menu" size="11"/>
@@ -813,12 +867,12 @@
                             </customSpacing>
                         </stackView>
                         <box verticalHuggingPriority="1000" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="0OI-K4-nd9">
-                            <rect key="frame" x="0.0" y="211" width="422" height="5"/>
+                            <rect key="frame" x="0.0" y="211" width="490" height="5"/>
                         </box>
                         <stackView distribution="fill" orientation="horizontal" alignment="firstBaseline" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="750" verticalHuggingPriority="1000" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="SV2-pU-Zy5">
                             <rect key="frame" x="0.0" y="136" width="399" height="61"/>
                             <subviews>
-                                <textField verticalHuggingPriority="1000" horizontalCompressionResistancePriority="251" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="300" translatesAutoresizingMaskIntoConstraints="NO" id="sRQ-Oe-1xH">
+                                <textField focusRingType="none" verticalHuggingPriority="1000" horizontalCompressionResistancePriority="251" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="300" translatesAutoresizingMaskIntoConstraints="NO" id="sRQ-Oe-1xH">
                                     <rect key="frame" x="-2" y="44" width="75" height="14"/>
                                     <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="right" title="Queue:" id="FKi-zh-5gc">
                                         <font key="font" metaFont="menu" size="11"/>
@@ -842,7 +896,7 @@
                                                         <binding destination="61" name="value" keyPath="values.HBQueuePauseIfLowSpace" id="GWr-Dv-XBh"/>
                                                     </connections>
                                                 </button>
-                                                <textField toolTip="Minimum free space on destination disk." horizontalHuggingPriority="1000" verticalHuggingPriority="1000" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="PaR-zw-opS">
+                                                <textField toolTip="Minimum free space on destination disk." focusRingType="none" horizontalHuggingPriority="1000" verticalHuggingPriority="1000" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="PaR-zw-opS">
                                                     <rect key="frame" x="236" y="0.0" width="50" height="19"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="50" id="QfS-RV-sxI"/>
@@ -857,7 +911,7 @@
                                                         <binding destination="61" name="value" keyPath="values.HBQueueMinFreeSpace" id="xrN-DJ-ihe"/>
                                                     </connections>
                                                 </textField>
-                                                <textField verticalHuggingPriority="1000" horizontalCompressionResistancePriority="250" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="200" translatesAutoresizingMaskIntoConstraints="NO" id="Koh-5H-cdo">
+                                                <textField focusRingType="none" verticalHuggingPriority="1000" horizontalCompressionResistancePriority="250" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="200" translatesAutoresizingMaskIntoConstraints="NO" id="Koh-5H-cdo">
                                                     <rect key="frame" x="290" y="2" width="20" height="14"/>
                                                     <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="left" title="GB" id="FZE-ZR-g93">
                                                         <font key="font" metaFont="menu" size="11"/>
@@ -890,7 +944,7 @@
                                         <stackView distribution="fill" orientation="horizontal" alignment="centerY" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" verticalHuggingPriority="1000" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ExZ-Gs-Uis">
                                             <rect key="frame" x="0.0" y="0.0" width="220" height="16"/>
                                             <subviews>
-                                                <textField verticalHuggingPriority="1000" horizontalCompressionResistancePriority="250" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="400" translatesAutoresizingMaskIntoConstraints="NO" id="qkp-nA-8ES">
+                                                <textField focusRingType="none" verticalHuggingPriority="1000" horizontalCompressionResistancePriority="250" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="400" translatesAutoresizingMaskIntoConstraints="NO" id="qkp-nA-8ES">
                                                     <rect key="frame" x="-2" y="1" width="184" height="14"/>
                                                     <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="left" title="Number of simultaneous encodes:" id="iGS-b5-ip7">
                                                         <font key="font" metaFont="menu" size="11"/>
@@ -952,12 +1006,12 @@
                             </customSpacing>
                         </stackView>
                         <box verticalHuggingPriority="1000" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="I0X-1x-9qe">
-                            <rect key="frame" x="0.0" y="117" width="422" height="5"/>
+                            <rect key="frame" x="0.0" y="117" width="490" height="5"/>
                         </box>
                         <stackView distribution="fill" orientation="horizontal" alignment="firstBaseline" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="750" verticalHuggingPriority="1000" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Ywq-ob-I2a">
                             <rect key="frame" x="0.0" y="47" width="418" height="56"/>
                             <subviews>
-                                <textField verticalHuggingPriority="1000" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="400" translatesAutoresizingMaskIntoConstraints="NO" id="350">
+                                <textField focusRingType="none" verticalHuggingPriority="1000" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="400" translatesAutoresizingMaskIntoConstraints="NO" id="350">
                                     <rect key="frame" x="-2" y="41" width="75" height="14"/>
                                     <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="right" title="Activity Logs:" id="351">
                                         <font key="font" metaFont="menu" size="11"/>
@@ -971,7 +1025,7 @@
                                         <stackView distribution="fill" orientation="horizontal" alignment="firstBaseline" spacing="6" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" verticalHuggingPriority="1000" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Id7-c4-iCn">
                                             <rect key="frame" x="0.0" y="40" width="168" height="16"/>
                                             <subviews>
-                                                <textField toolTip="Verbosity Level. Extended verbosity records more technical information to the Activity Log. Minimal verbosity records less." verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="200" translatesAutoresizingMaskIntoConstraints="NO" id="371">
+                                                <textField toolTip="Verbosity Level. Extended verbosity records more technical information to the Activity Log. Minimal verbosity records less." focusRingType="none" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="200" translatesAutoresizingMaskIntoConstraints="NO" id="371">
                                                     <rect key="frame" x="-2" y="1" width="88" height="14"/>
                                                     <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="right" title="Verbosity Level:" id="372">
                                                         <font key="font" metaFont="menu" size="11"/>
@@ -1050,12 +1104,12 @@
                             </customSpacing>
                         </stackView>
                         <box verticalHuggingPriority="1000" horizontalCompressionResistancePriority="1000" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="756-9v-KSX">
-                            <rect key="frame" x="0.0" y="28" width="422" height="5"/>
+                            <rect key="frame" x="0.0" y="28" width="490" height="5"/>
                         </box>
                         <stackView distribution="fill" orientation="horizontal" alignment="firstBaseline" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="750" verticalHuggingPriority="1000" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="7c9-5I-bdX">
                             <rect key="frame" x="0.0" y="0.0" width="213" height="14"/>
                             <subviews>
-                                <textField verticalHuggingPriority="1000" horizontalCompressionResistancePriority="251" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="300" translatesAutoresizingMaskIntoConstraints="NO" id="6NP-6w-Wa6">
+                                <textField focusRingType="none" verticalHuggingPriority="1000" horizontalCompressionResistancePriority="251" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="300" translatesAutoresizingMaskIntoConstraints="NO" id="6NP-6w-Wa6">
                                     <rect key="frame" x="-2" y="0.0" width="75" height="14"/>
                                     <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="right" title="Summary:" id="GQJ-go-PoN">
                                         <font key="font" metaFont="menu" size="11"/>
@@ -1085,22 +1139,28 @@
                         </stackView>
                     </subviews>
                     <constraints>
+                        <constraint firstItem="756-9v-KSX" firstAttribute="leading" secondItem="OVb-Af-BVd" secondAttribute="leading" id="2d7-LB-G90"/>
                         <constraint firstItem="IV7-SY-HLR" firstAttribute="width" secondItem="350" secondAttribute="width" id="4Bz-gv-uid"/>
-                        <constraint firstItem="I0X-1x-9qe" firstAttribute="leading" secondItem="OVb-Af-BVd" secondAttribute="leading" id="4Uo-Zn-IQY"/>
-                        <constraint firstAttribute="trailing" secondItem="I0X-1x-9qe" secondAttribute="trailing" id="98y-iP-aJm"/>
+                        <constraint firstItem="I0X-1x-9qe" firstAttribute="leading" secondItem="OVb-Af-BVd" secondAttribute="leading" id="73U-eZ-vXY"/>
+                        <constraint firstItem="hr4-Pm-Vz2" firstAttribute="leading" secondItem="OVb-Af-BVd" secondAttribute="leading" id="FoE-0M-4Ul"/>
                         <constraint firstItem="ufI-Bw-KRl" firstAttribute="width" secondItem="jPa-4p-Y29" secondAttribute="width" id="Isc-qn-kaM"/>
-                        <constraint firstItem="tQh-6O-iM2" firstAttribute="trailing" secondItem="I0X-1x-9qe" secondAttribute="trailing" id="NsF-aU-gLY"/>
-                        <constraint firstAttribute="trailing" secondItem="ETV-cg-RgU" secondAttribute="trailing" id="SDr-k0-JBP"/>
-                        <constraint firstAttribute="trailing" secondItem="VIv-34-shj" secondAttribute="trailing" id="cyy-bN-Avo"/>
-                        <constraint firstItem="ETV-cg-RgU" firstAttribute="leading" secondItem="OVb-Af-BVd" secondAttribute="leading" id="kCm-uu-XAz"/>
+                        <constraint firstAttribute="trailing" secondItem="0OI-K4-nd9" secondAttribute="trailing" id="PaO-Ro-qUs"/>
+                        <constraint firstItem="ETV-cg-RgU" firstAttribute="leading" secondItem="OVb-Af-BVd" secondAttribute="leading" id="Uyv-N4-egN"/>
+                        <constraint firstItem="IV7-SY-HLR" firstAttribute="width" secondItem="v13-p6-eJ2" secondAttribute="width" id="eIJ-b1-6Km"/>
+                        <constraint firstAttribute="trailing" secondItem="VIv-34-shj" secondAttribute="trailing" id="h5R-hV-tff"/>
+                        <constraint firstItem="VIv-34-shj" firstAttribute="leading" secondItem="OVb-Af-BVd" secondAttribute="leading" id="huZ-Yb-kNo"/>
+                        <constraint firstItem="0OI-K4-nd9" firstAttribute="leading" secondItem="OVb-Af-BVd" secondAttribute="leading" id="jOd-a4-tKC"/>
+                        <constraint firstAttribute="trailing" secondItem="hr4-Pm-Vz2" secondAttribute="trailing" id="kyL-nH-L6M"/>
+                        <constraint firstAttribute="trailing" secondItem="I0X-1x-9qe" secondAttribute="trailing" id="mEn-n3-Qrp"/>
                         <constraint firstItem="350" firstAttribute="width" secondItem="sRQ-Oe-1xH" secondAttribute="width" id="mhs-ln-Axe"/>
-                        <constraint firstAttribute="trailing" secondItem="756-9v-KSX" secondAttribute="trailing" id="mnl-VH-8Jc"/>
-                        <constraint firstItem="756-9v-KSX" firstAttribute="leading" secondItem="OVb-Af-BVd" secondAttribute="leading" id="nE5-gC-Etm"/>
-                        <constraint firstItem="VIv-34-shj" firstAttribute="leading" secondItem="OVb-Af-BVd" secondAttribute="leading" id="oCQ-Ko-ZX7"/>
                         <constraint firstItem="jPa-4p-Y29" firstAttribute="width" secondItem="IV7-SY-HLR" secondAttribute="width" id="wfJ-1q-hrR"/>
+                        <constraint firstAttribute="trailing" secondItem="ETV-cg-RgU" secondAttribute="trailing" id="ysh-2j-xxI"/>
                         <constraint firstItem="sRQ-Oe-1xH" firstAttribute="width" secondItem="6NP-6w-Wa6" secondAttribute="width" id="zDM-j8-4YX"/>
+                        <constraint firstAttribute="trailing" secondItem="756-9v-KSX" secondAttribute="trailing" id="zNT-GR-J6L"/>
                     </constraints>
                     <visibilityPriorities>
+                        <integer value="1000"/>
+                        <integer value="1000"/>
                         <integer value="1000"/>
                         <integer value="1000"/>
                         <integer value="1000"/>
@@ -1125,6 +1185,8 @@
                         <real value="3.4028234663852886e+38"/>
                         <real value="3.4028234663852886e+38"/>
                         <real value="3.4028234663852886e+38"/>
+                        <real value="3.4028234663852886e+38"/>
+                        <real value="3.4028234663852886e+38"/>
                     </customSpacing>
                 </stackView>
             </subviews>
@@ -1135,7 +1197,7 @@
                 <constraint firstAttribute="bottom" secondItem="OVb-Af-BVd" secondAttribute="bottom" constant="20" symbolic="YES" id="rfw-rz-rC5"/>
                 <constraint firstItem="OVb-Af-BVd" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="236" secondAttribute="leading" id="ws0-YM-nwc"/>
             </constraints>
-            <point key="canvasLocation" x="64" y="-632"/>
+            <point key="canvasLocation" x="-44" y="-671.5"/>
         </customView>
         <customObject id="410" userLabel="Updater" customClass="SPUStandardUpdaterController"/>
     </objects>

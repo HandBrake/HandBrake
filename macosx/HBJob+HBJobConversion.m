@@ -50,6 +50,15 @@
 
     hb_job_set_file(job, self.destinationURL.fileSystemRepresentation);
 
+    if (self.hwDecodeUsage == HBJobHardwareDecoderUsageFullPathOnly)
+    {
+        job->hw_decode = HB_DECODE_SUPPORT_VIDEOTOOLBOX;
+    }
+    else if (self.hwDecodeUsage == HBJobHardwareDecoderUsageAlways)
+    {
+        job->hw_decode = HB_DECODE_SUPPORT_VIDEOTOOLBOX | HB_DECODE_SUPPORT_FORCE_HW;
+    }
+
     // Title Angle for dvdnav
     job->angle = self.angle;
 

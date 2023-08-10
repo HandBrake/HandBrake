@@ -413,6 +413,7 @@ NSString *HBChaptersChangedNotification  = @"HBChaptersChangedNotification";
         copy->_chapterTitles = [[NSArray alloc] initWithArray:_chapterTitles copyItems:YES];
 
         copy->_metadataPassthru = _metadataPassthru;
+        copy->_hwDecodeUsage = _hwDecodeUsage;
     }
 
     return copy;
@@ -477,6 +478,7 @@ NSString *HBChaptersChangedNotification  = @"HBChaptersChangedNotification";
     encodeObject(_chapterTitles);
 
     encodeBool(_metadataPassthru);
+    encodeInteger(_hwDecodeUsage);
 }
 
 - (instancetype)initWithCoder:(NSCoder *)decoder
@@ -521,6 +523,7 @@ NSString *HBChaptersChangedNotification  = @"HBChaptersChangedNotification";
         decodeCollectionOfObjectsOrFail(_chapterTitles, NSArray, HBChapter);
 
         decodeBool(_metadataPassthru);
+        decodeInteger(_hwDecodeUsage); if (_hwDecodeUsage != HBJobHardwareDecoderUsageNone && _hwDecodeUsage != HBJobHardwareDecoderUsageAlways && _hwDecodeUsage != HBJobHardwareDecoderUsageFullPathOnly) { goto fail; }
 
         return self;
     }
