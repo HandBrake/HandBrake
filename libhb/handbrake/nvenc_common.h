@@ -20,4 +20,6 @@ int            hb_check_nvdec_available();
 
 const char * hb_map_nvenc_preset_name (const char *preset);
 
+int hb_nvenc_are_filters_supported(hb_list_t *filters);
+
 #endif // HANDBRAKE_NVENC_COMMON_H
