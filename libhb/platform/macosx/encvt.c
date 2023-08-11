@@ -752,7 +752,7 @@ static OSStatus wrap_buf(hb_work_private_t *pv, hb_buffer_t *buf, CVPixelBufferR
         }
         else
         {
-            return 1;
+            err = 1;
         }
     }
     else
@@ -783,8 +783,11 @@ static OSStatus wrap_buf(hb_work_private_t *pv, hb_buffer_t *buf, CVPixelBufferR
                                                  pix_buf);
     }
 
-    hb_vt_add_color_tag(*pix_buf, pv->job);
-    hb_vt_add_dynamic_hdr_metadata(*pix_buf, pv->job, buf);
+    if (*pix_buf)
+    {
+        hb_vt_add_color_tag(*pix_buf, pv->job);
+        hb_vt_add_dynamic_hdr_metadata(*pix_buf, pv->job, buf);
+    }
 
     return err;
 }
