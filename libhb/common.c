@@ -6338,7 +6338,6 @@ static int pix_fmt_is_supported(hb_job_t *job, int pix_fmt)
             case HB_FILTER_LAPSHARP:
             case HB_FILTER_UNSHARP:
             case HB_FILTER_GRAYSCALE:
-            case HB_FILTER_RENDER_SUB:
                if (planes_count == 2)
                {
                    return 0;

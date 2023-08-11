@@ -9,6 +9,7 @@
 
 #include "handbrake/handbrake.h"
 #include "handbrake/hbffmpeg.h"
+#include "libavutil/bswap.h"
 #include <ass/ass.h>
 
 #define ABS(a) ((a) > 0 ? (a) : (-(a)))
@@ -38,6 +39,9 @@ struct hb_filter_private_s
     // SRT
     int                 line;
     hb_buffer_t       * current_sub;
+
+    void (*blend)(hb_buffer_t *dst, const hb_buffer_t *src,
+                  const int left, const int top, const int shift);
 
     hb_filter_init_t    input;
     hb_filter_init_t    output;
@@ -109,7 +113,7 @@ hb_filter_object_t hb_filter_render_sub =
 };
 
 // blends src YUVA4**P buffer into dst
-static void blend(hb_buffer_t *dst, const hb_buffer_t *src, const int left, const int top)
+static void blend8on8(hb_buffer_t *dst, const hb_buffer_t *src, const int left, const int top, const int shift)
 {
     int xx, yy;
     int ww, hh;
@@ -282,19 +286,185 @@ static void blend8on1x(hb_buffer_t *dst, const hb_buffer_t *src, const int left,
     }
 }
 
+static void blend8onbi8(hb_buffer_t *dst, const hb_buffer_t *src, const int left, const int top, const int shift)
+{
+    int xx, yy;
+    int ww, hh;
+    int x0, y0;
+    uint8_t *y_in, *y_out;
+    uint8_t *u_in, *u_out;
+    uint8_t *v_in, *v_out;
+    uint8_t *a_in, alpha;
+
+    x0 = y0 = 0;
+    if (left < 0)
+    {
+        x0 = -left;
+    }
+    if (top < 0)
+    {
+        y0 = -top;
+    }
+
+    ww = src->f.width;
+    if (src->f.width - x0 > dst->f.width - left)
+    {
+        ww = dst->f.width - left + x0;
+    }
+    hh = src->f.height;
+    if (src->f.height - y0 > dst->f.height - top)
+    {
+        hh = dst->f.height - top + y0;
+    }
+    // Blend luma
+    for (yy = y0; yy < hh; yy++)
+    {
+        y_in   = src->plane[0].data + yy * src->plane[0].stride;
+        y_out   = dst->plane[0].data + ( yy + top ) * dst->plane[0].stride;
+        a_in = src->plane[3].data + yy * src->plane[3].stride;
+        for (xx = x0; xx < ww; xx++)
+        {
+            alpha = a_in[xx];
+            /*
+             * Merge the luminance and alpha with the picture
+             */
+            y_out[left + xx] =
+                ( (uint16_t)y_out[left + xx] * ( 255 - alpha ) +
+                     (uint16_t)y_in[xx] * alpha ) / 255;
+        }
+    }
+
+    // Blend U & V
+    // Assumes source and dest are the same PIX_FMT
+    int hshift = 0;
+    int wshift = 0;
+    if (dst->plane[1].height < dst->plane[0].height)
+        hshift = 1;
+    if (dst->plane[1].width < dst->plane[0].width)
+        wshift = 1;
+
+    for (yy = y0 >> hshift; yy < hh >> hshift; yy++)
+    {
+        u_in = src->plane[1].data + yy * src->plane[1].stride;
+        u_out = dst->plane[1].data + (yy + (top >> hshift)) * dst->plane[1].stride;
+        v_in = src->plane[2].data + yy * src->plane[2].stride;
+        v_out = dst->plane[1].data + (yy + (top >> hshift)) * dst->plane[1].stride;
+        a_in = src->plane[3].data + (yy << hshift) * src->plane[3].stride;
+
+        for (xx = x0 >> wshift; xx < ww >> wshift; xx++)
+        {
+            alpha = a_in[xx << wshift];
+
+            // Blend U and alpha
+            u_out[((left >> wshift) + xx) * 2] =
+                ( (uint16_t)u_out[((left >> wshift) + xx) * 2] * (255 - alpha) +
+                  (uint16_t)u_in[xx] * alpha) / 255;
+
+            // Blend V and alpha
+            v_out[((left >> wshift) + xx) * 2 +1] =
+                ( (uint16_t)v_out[((left >> wshift) + xx) * 2 + 1] * (255 - alpha) +
+                  (uint16_t)v_in[xx] * alpha) / 255;
+        }
+    }
+}
+
+
+static void blend8onbi1x(hb_buffer_t *dst, const hb_buffer_t *src, const int left, const int top, const int shift)
+{
+    int xx, yy;
+    int ww, hh;
+    int x0, y0;
+    int max;
+
+    uint8_t *y_in;
+    uint8_t *u_in;
+    uint8_t *v_in;
+    uint8_t *a_in;
+
+    uint16_t *y_out;
+    uint16_t *u_out;
+    uint16_t *v_out;
+    uint16_t alpha;
+
+    x0 = y0 = 0;
+    if (left < 0)
+    {
+        x0 = -left;
+    }
+    if (top < 0)
+    {
+        y0 = -top;
+    }
+
+    ww = src->f.width;
+    if (src->f.width - x0 > dst->f.width - left)
+    {
+        ww = dst->f.width - left + x0;
+    }
+    hh = src->f.height;
+    if (src->f.height - y0 > dst->f.height - top)
+    {
+        hh = dst->f.height - top + y0;
+    }
+
+    max = (256 << shift) -1;
+
+    // Blend luma
+    for (yy = y0; yy < hh; yy++)
+    {
+        y_in   = src->plane[0].data + yy * src->plane[0].stride;
+        y_out   = (uint16_t*)(dst->plane[0].data + ( yy + top ) * dst->plane[0].stride);
+        a_in = src->plane[3].data + yy * src->plane[3].stride;
+        for( xx = x0; xx < ww; xx++ )
+        {
+            alpha = a_in[xx] << shift;
+            /*
+             * Merge the luminance and alpha with the picture
+             */
+            y_out[left + xx] =
+                ( (uint32_t)y_out[left + xx] * ( max - alpha ) +
+                     ((uint32_t)av_bswap16(y_in[xx])) * alpha ) / max;
+        }
+    }
+
+    // Blend U & V
+    int hshift = 0;
+    int wshift = 0;
+    if (dst->plane[1].height < dst->plane[0].height)
+        hshift = 1;
+    if (dst->plane[1].width < dst->plane[0].width)
+        wshift = 1;
+
+    for (yy = y0 >> hshift; yy < hh >> hshift; yy++)
+    {
+        u_in = src->plane[1].data + yy * src->plane[1].stride;
+        u_out = (uint16_t *)(dst->plane[1].data + ( yy + ( top >> hshift ) ) * dst->plane[1].stride);
+        v_in = src->plane[2].data + yy * src->plane[2].stride;
+        v_out = (uint16_t *)(dst->plane[1].data + ( yy + ( top >> hshift ) ) * dst->plane[1].stride);
+        a_in = src->plane[3].data + ( yy << hshift ) * src->plane[3].stride;
+
+        for (xx = x0 >> wshift; xx < ww >> wshift; xx++)
+        {
+            alpha = a_in[xx << wshift] << shift;
+
+            // Blend averge U and alpha
+            u_out[((left >> wshift) + xx) * 2] =
+                ( (uint32_t)u_out[((left >> wshift) + xx) * 2] * ( max - alpha ) +
+                  ((uint32_t)av_bswap16(u_in[xx])) * alpha ) / max;
+
+            // Blend V and alpha
+            v_out[((left >> wshift) + xx) * 2 + 1] =
+                ( (uint32_t)v_out[((left >> wshift) + xx) * 2 + 1] * ( max - alpha ) +
+                  ((uint32_t)av_bswap16(v_in[xx])) * alpha ) / max;
+        }
+    }
+}
+
 // Assumes that the input destination buffer has the same dimensions
 // as the original title dimensions
 static void ApplySub(const hb_filter_private_t *pv, hb_buffer_t *buf, const hb_buffer_t *sub)
 {
-    switch (pv->output.pix_fmt)
-    {
-        case AV_PIX_FMT_YUV420P:
-            blend(buf, sub, sub->f.x, sub->f.y);
-            break;
-        default:
-            blend8on1x(buf, sub, sub->f.x, sub->f.y, pv->depth - 8);
-            break;
-    }
+    pv->blend(buf, sub, sub->f.x, sub->f.y, pv->depth - 8);
 }
 
 static hb_buffer_t * ScaleSubtitle(hb_filter_private_t *pv,
@@ -1065,18 +1235,28 @@ static int hb_rendersub_init( hb_filter_object_t * filter,
 
     switch (init->pix_fmt)
     {
+        case AV_PIX_FMT_NV12:
+        case AV_PIX_FMT_P010:
+        case AV_PIX_FMT_P012:
+        case AV_PIX_FMT_P016:
         case AV_PIX_FMT_YUV420P:
         case AV_PIX_FMT_YUV420P10:
         case AV_PIX_FMT_YUV420P12:
         case AV_PIX_FMT_YUV420P16:
             pv->pix_fmt_alpha = AV_PIX_FMT_YUVA420P;
             break;
+        case AV_PIX_FMT_NV16:
+        case AV_PIX_FMT_P210:
+        case AV_PIX_FMT_P216:
         case AV_PIX_FMT_YUV422P:
         case AV_PIX_FMT_YUV422P10:
         case AV_PIX_FMT_YUV422P12:
         case AV_PIX_FMT_YUV422P16:
             pv->pix_fmt_alpha = AV_PIX_FMT_YUVA422P;
             break;
+        case AV_PIX_FMT_NV24:
+        case AV_PIX_FMT_P410:
+        case AV_PIX_FMT_P416:
         case AV_PIX_FMT_YUV444P:
         case AV_PIX_FMT_YUV444P10:
         case AV_PIX_FMT_YUV444P12:
@@ -1084,6 +1264,33 @@ static int hb_rendersub_init( hb_filter_object_t * filter,
         default:
             pv->pix_fmt_alpha = AV_PIX_FMT_YUVA444P;
             break;
+    }
+
+    const int planes_count = av_pix_fmt_count_planes(init->pix_fmt);
+
+    switch (pv->depth)
+    {
+        case 8:
+            switch (planes_count)
+            {
+                case 2:
+                    pv->blend = blend8onbi8;
+                    break;
+                default:
+                    pv->blend = blend8on8;
+                    break;
+            }
+            break;
+        default:
+            switch (planes_count)
+            {
+                case 2:
+                    pv->blend = blend8onbi1x;
+                    break;
+                default:
+                    pv->blend = blend8on1x;
+                    break;
+            }
     }
 
     // Find the subtitle we need
