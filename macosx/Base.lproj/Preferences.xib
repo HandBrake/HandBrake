@@ -718,7 +718,7 @@
                                     <subviews>
                                         <button verticalHuggingPriority="1000" translatesAutoresizingMaskIntoConstraints="NO" id="Doh-Ja-Gh7">
                                             <rect key="frame" x="-1" y="19" width="254" height="16"/>
-                                            <string key="toolTip">Hardware decoder will reduce CPU usage and lower battery usage when combined with an hardware encoder. Depending on the CPU speed, they could either improve or decrese encoding speed.</string>
+                                            <string key="toolTip">Hardware decoders will reduce CPU usage and lower battery usage when combined with an hardware encoder. Depending on the CPU speed, they could either improve or decrease encoding speed.</string>
                                             <buttonCell key="cell" type="check" title="Enable the VideoToolbox hardware decoders" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" inset="2" id="BHK-QU-DwS">
                                                 <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                 <font key="font" metaFont="menu" size="11"/>
