@@ -283,7 +283,8 @@ hb_thread_t * hb_scan_init( hb_handle_t *, volatile int * die,
                             hb_list_t * paths, int title_index,
                             hb_title_set_t * title_set, int preview_count,
                             int store_previews, uint64_t min_duration,
-                            int crop_auto_switch_threshold, int crop_median_threshold, hb_list_t * exclude_extensions );
+                            int crop_auto_switch_threshold, int crop_median_threshold,
+                            hb_list_t * exclude_extensions, int hw_decode);
 hb_thread_t * hb_work_init( hb_list_t * jobs,
                             volatile int * die, hb_error_code * error, hb_job_t ** job );
 void ReadLoop( void * _w );
@@ -292,7 +293,7 @@ hb_work_object_t * hb_muxer_init( hb_job_t * );
 hb_work_object_t * hb_get_work( hb_handle_t *, int );
 hb_work_object_t * hb_audio_decoder( hb_handle_t *, int );
 hb_work_object_t * hb_audio_encoder( hb_handle_t *, int );
-hb_work_object_t * hb_video_decoder( hb_handle_t *, int, int );
+hb_work_object_t * hb_video_decoder( hb_handle_t *, int, int, void *);
 hb_work_object_t * hb_video_encoder( hb_handle_t *, int );
 
 /***********************************************************************
@@ -494,6 +495,7 @@ extern hb_filter_object_t hb_filter_colorspace;
 extern hb_filter_object_t hb_filter_format;
 
 #if defined(__APPLE__)
+extern hb_filter_object_t hb_filter_prefilter_vt;
 extern hb_filter_object_t hb_filter_crop_scale_vt;
 extern hb_filter_object_t hb_filter_rotate_vt;
 #endif

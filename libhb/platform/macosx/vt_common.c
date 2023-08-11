@@ -366,6 +366,7 @@ int hb_vt_are_filters_supported(hb_list_t *filters)
         {
             case HB_FILTER_CROP_SCALE:
             case HB_FILTER_CROP_SCALE_VT:
+            case HB_FILTER_PRE_VT:
                 break;
             case HB_FILTER_ROTATE:
             case HB_FILTER_ROTATE_VT:
@@ -402,8 +403,12 @@ void hb_vt_setup_hw_filters(hb_job_t *job)
     if (job->hw_pix_fmt == AV_PIX_FMT_VIDEOTOOLBOX)
     {
         hb_list_t *list = job->list_filter;
+        hb_filter_object_t *filter;
 
-        hb_filter_object_t *filter = hb_filter_find(list, HB_FILTER_CROP_SCALE);
+        filter = hb_filter_init(HB_FILTER_PRE_VT);
+        hb_add_filter(job, filter, NULL);
+
+        filter = hb_filter_find(list, HB_FILTER_CROP_SCALE);
         if (filter != NULL)
         {
             hb_dict_t *settings = filter->settings;

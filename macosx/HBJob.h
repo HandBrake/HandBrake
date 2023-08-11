@@ -24,6 +24,12 @@ NS_ASSUME_NONNULL_BEGIN
 extern NSString *HBContainerChangedNotification;
 extern NSString *HBChaptersChangedNotification;
 
+typedef NS_ENUM(NSUInteger, HBJobHardwareDecoderUsage) {
+    HBJobHardwareDecoderUsageNone,
+    HBJobHardwareDecoderUsageAlways,
+    HBJobHardwareDecoderUsageFullPathOnly
+};
+
 /**
  * HBJob
  */
@@ -72,6 +78,7 @@ extern NSString *HBChaptersChangedNotification;
 @property (nonatomic, readonly) NSArray<HBChapter *> *chapterTitles;
 
 @property (nonatomic, readwrite) BOOL metadataPassthru;
+@property (nonatomic, readwrite) HBJobHardwareDecoderUsage hwDecodeUsage;
 
 @property (nonatomic, readwrite, weak, nullable) NSUndoManager *undo;
 

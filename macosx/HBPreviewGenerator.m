@@ -260,6 +260,20 @@
     // this should suffice for a fairly accurate short preview and cuts our preview generation time in half.
     job.video.multiPass = NO;
 
+    if ([NSUserDefaults.standardUserDefaults boolForKey:HBUseHardwareDecoder])
+    {
+        job.hwDecodeUsage = HBJobHardwareDecoderUsageFullPathOnly;
+
+        if ([NSUserDefaults.standardUserDefaults boolForKey:HBAlwaysUseHardwareDecoder])
+        {
+            job.hwDecodeUsage = HBJobHardwareDecoderUsageAlways;
+        }
+    }
+    else
+    {
+        job.hwDecodeUsage = HBJobHardwareDecoderUsageNone;
+    }
+
     // Init the libhb core
     NSInteger level = [NSUserDefaults.standardUserDefaults integerForKey:HBLoggingLevel];
     self.core = [[HBCore alloc] initWithLogLevel:level name:@"PreviewCore"];

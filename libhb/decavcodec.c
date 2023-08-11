@@ -1426,6 +1426,12 @@ int reinit_video_filters(hb_work_private_t * pv)
         return 0;
     }
 
+    if (pv->job && pv->job->hw_pix_fmt == AV_PIX_FMT_VIDEOTOOLBOX)
+    {
+        // Filtering is done in a separate filter
+        return 0;
+    }
+
     pv->video_filters.width       = pv->frame->width;
     pv->video_filters.height      = pv->frame->height;
     pv->video_filters.color_range = pv->frame->color_range;
@@ -1693,13 +1699,26 @@ static int decodeFrame( hb_work_private_t * pv, packet_info_t * packet_info )
 
         if (pv->hw_frame)
         {
-            ret = av_hwframe_transfer_data(pv->frame, pv->hw_frame, 0);
-            av_frame_copy_props(pv->frame, pv->hw_frame);
-            av_frame_unref(pv->hw_frame);
-            if (ret < 0)
+            if (pv->hw_frame->hw_frames_ctx)
             {
-                hb_error("decavcodec: error transferring data to system memory");
-                break;
+                ret = av_hwframe_transfer_data(pv->frame, pv->hw_frame, 0);
+                av_frame_copy_props(pv->frame, pv->hw_frame);
+                av_frame_unref(pv->hw_frame);
+                if (ret < 0)
+                {
+                    hb_error("decavcodec: error transferring data to system memory");
+                    break;
+                }
+            }
+            else
+            {
+                // HWAccel falled back to the software decoder
+                av_frame_ref(pv->frame, pv->hw_frame);
+                av_frame_unref(pv->hw_frame);
+                if (ret < 0)
+                {
+                    hb_error("decavcodec: error hwaccel copying frame");
+                }
             }
         }
 
@@ -1811,13 +1830,14 @@ static int decavcodecvInit( hb_work_object_t * w, hb_job_t * job )
     pv->context->err_recognition = AV_EF_CRCCHECK;
     pv->context->error_concealment = FF_EC_GUESS_MVS|FF_EC_DEBLOCK;
 
-    if (pv->job && job->hw_device_ctx)
+    if (w->hw_device_ctx)
     {
         pv->context->get_format = hw_hwaccel_get_hw_format;
         pv->context->opaque = job;
-        av_buffer_replace(&pv->context->hw_device_ctx, pv->job->hw_device_ctx);
+        av_buffer_replace(&pv->context->hw_device_ctx, w->hw_device_ctx);
 
-        if (job->hw_pix_fmt == AV_PIX_FMT_NONE && job->hw_decode & HB_DECODE_SUPPORT_FORCE_HW)
+        if (job == NULL ||
+            (job->hw_pix_fmt == AV_PIX_FMT_NONE && job->hw_decode & HB_DECODE_SUPPORT_FORCE_HW))
         {
             pv->hw_frame = av_frame_alloc();
         }
@@ -2042,9 +2062,9 @@ static int decodePacket( hb_work_object_t * w )
         pv->context->err_recognition   = AV_EF_CRCCHECK;
         pv->context->error_concealment = FF_EC_GUESS_MVS|FF_EC_DEBLOCK;
 
-        if (pv->job && pv->job->hw_device_ctx)
+        if (w->hw_device_ctx)
         {
-            int ret = av_buffer_replace(&pv->context->hw_device_ctx, pv->job->hw_device_ctx);
+            int ret = av_buffer_replace(&pv->context->hw_device_ctx, w->hw_device_ctx);
             if (ret < 0)
             {
                 return HB_WORK_ERROR;
@@ -2426,7 +2446,7 @@ static int decavcodecvInfo( hb_work_object_t *w, hb_work_info_t *info )
     info->level = pv->context->level;
     info->name = pv->context->codec->name;
 
-    info->pix_fmt        = pv->context->pix_fmt;
+    info->pix_fmt        = pv->context->sw_pix_fmt;
     info->color_prim     = pv->context->color_primaries;
     info->color_transfer = pv->context->color_trc;
     info->color_matrix   = pv->context->colorspace;
@@ -2445,17 +2465,14 @@ static int decavcodecvInfo( hb_work_object_t *w, hb_work_info_t *info )
     }
 #endif
 
-#if HB_PROJECT_FEATURE_NVDEC
-    if (hb_hwaccel_available(w->title->video_codec_param, "cuda"))
+    if (pv->context->pix_fmt == AV_PIX_FMT_CUDA)
     {
         info->video_decode_support |= HB_DECODE_SUPPORT_NVDEC;
     }
-#elif defined( __APPLE__ )
-    if (hb_hwaccel_available(w->title->video_codec_param, "videotoolbox"))
+    else if (pv->context->pix_fmt == AV_PIX_FMT_VIDEOTOOLBOX)
     {
         info->video_decode_support |= HB_DECODE_SUPPORT_VIDEOTOOLBOX;
     }
-#endif
 
     return 1;
 }

@@ -697,8 +697,8 @@ struct hb_job_s
 #define HB_COLR_PRI_SMPTE432     12
 #define HB_COLR_PRI_JEDEC_P22    22
 // 0, 3-4, 7-8, 10-65535: reserved/not implemented
-#define HB_COLR_TRA_BT709        1 // also use for bt470m, bt470bg, smpte170m, bt2020_10 and bt2020_12
 #define HB_COLR_TRA_UNSET       -1
+#define HB_COLR_TRA_BT709        1 // also use for bt470m, bt470bg, smpte170m, bt2020_10 and bt2020_12
 #define HB_COLR_TRA_UNDEF        2
 #define HB_COLR_TRA_GAMMA22      4
 #define HB_COLR_TRA_GAMMA28      5
@@ -1369,6 +1369,7 @@ struct hb_work_object_s
     int                 status;
     int                 frame_count;
     int                 codec_param;
+    void              * hw_device_ctx;
     hb_title_t        * title;
 
     hb_work_object_t  * next;
@@ -1482,6 +1483,7 @@ enum
     HB_FILTER_INVALID = 0,
     HB_FILTER_FIRST = 1,
 
+    HB_FILTER_PRE_VT,
     // First, filters that may change the framerate (drop or dup frames)
     HB_FILTER_DETELECINE,
     HB_FILTER_COMB_DETECT,

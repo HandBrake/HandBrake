@@ -222,7 +222,7 @@ hb_work_object_t* hb_audio_decoder(hb_handle_t *h, int codec)
     return w;
 }
 
-hb_work_object_t* hb_video_decoder(hb_handle_t *h, int vcodec, int param)
+hb_work_object_t* hb_video_decoder(hb_handle_t *h, int vcodec, int param, void *hw_device_ctx)
 {
     hb_work_object_t * w;
 
@@ -233,6 +233,7 @@ hb_work_object_t* hb_video_decoder(hb_handle_t *h, int vcodec, int param)
         return NULL;
     }
     w->codec_param = param;
+    w->hw_device_ctx = hw_device_ctx;
 
     return w;
 }
@@ -1627,6 +1628,16 @@ static void do_job(hb_job_t *job)
         hb_log( "Starting Task: Encoding Pass" );
     }
 
+    // Allow the usage of the hardware decoder
+    // only if it was marked as supported in the scan
+    // TODO: remove the ifdef after WinUI is updated
+#ifdef __APPLE__
+    if ((title->video_decode_support & job->hw_decode) == 0)
+    {
+        job->hw_decode = 0;
+    }
+#endif
+
     // This must be performed before initializing filters because
     // it can add the subtitle render filter.
     result = sanitize_subtitles(job);
@@ -1651,7 +1662,9 @@ static void do_job(hb_job_t *job)
         // Init hwaccel context if needed
         if (hb_hwaccel_decode_is_enabled(job))
         {
-            hb_hwaccel_hw_ctx_init(job);
+            hb_hwaccel_hw_ctx_init(job->title->video_codec_param,
+                                   job->hw_decode,
+                                   &job->hw_device_ctx);
         }
 
         sanitize_dynamic_hdr_metadata_passthru(job);
@@ -1850,7 +1863,7 @@ static void do_job(hb_job_t *job)
     }
 
     // Video decoder
-    w = hb_video_decoder(job->h, title->video_codec, title->video_codec_param);
+    w = hb_video_decoder(job->h, title->video_codec, title->video_codec_param, job->hw_device_ctx);
     if (w == NULL)
     {
         *job->done_error = HB_ERROR_WRONG_INPUT;
@@ -2096,7 +2109,7 @@ cleanup:
     }
 
     hb_buffer_pool_free();
-    hb_hwaccel_hw_ctx_close(job);
+    hb_hwaccel_hw_ctx_close(&job->hw_device_ctx);
 
 #if HB_PROJECT_FEATURE_QSV
     if (!job->indepth_scan &&

@@ -1,0 +1,17 @@
+diff --git a/configure.ac b/configure.ac
+index 14a267f..963b74b 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -202,9 +202,9 @@ else
+ 		CFLAGS="-O3 -Wall -Wextra -ffast-math -D__NO_MATH_INLINES -fsigned-char $sparc_cpu"
+ 		PROFILE="-pg -g -O3 -D__NO_MATH_INLINES -fsigned-char $sparc_cpu" ;;
+ 	*-*-darwin*)
+-		DEBUG="-DDARWIN -fno-common -force_cpusubtype_ALL -Wall -g -O0 -fsigned-char"
+-		CFLAGS="-DDARWIN -fno-common -force_cpusubtype_ALL -Wall -g -O3 -ffast-math -fsigned-char"
+-		PROFILE="-DDARWIN -fno-common -force_cpusubtype_ALL -Wall -g -pg -O3 -ffast-math -fsigned-char";;
++		DEBUG="-DDARWIN -fno-common -Wall -g -O0 -fsigned-char"
++		CFLAGS="-DDARWIN -fno-common -Wall -g -O3 -ffast-math -fsigned-char"
++		PROFILE="-DDARWIN -fno-common -Wall -g -pg -O3 -ffast-math -fsigned-char";;
+ 	*-*-os2*)
+ 		# Use -W instead of -Wextra because gcc on OS/2 is an old version.
+ 		DEBUG="-g -Wall -W -D_REENTRANT -D__NO_MATH_INLINES -fsigned-char"

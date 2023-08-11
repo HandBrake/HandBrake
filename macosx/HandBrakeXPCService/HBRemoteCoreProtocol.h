@@ -24,7 +24,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)preventSleep;
 - (void)allowSleep;
 
-- (void)scanURL:(NSURL *)url titleIndex:(NSUInteger)index previews:(NSUInteger)previewsNum minDuration:(NSUInteger)seconds keepPreviews:(BOOL)keepPreviews withReply:(void (^)(HBCoreResult))reply;
+- (void)scanURL:(NSURL *)url titleIndex:(NSUInteger)index previews:(NSUInteger)previewsNum minDuration:(NSUInteger)seconds keepPreviews:(BOOL)keepPreviews hardwareDecoder:(BOOL)hardwareDecoder withReply:(void (^)(HBCoreResult))reply;
 - (void)cancelScan;
 
 - (void)encodeJob:(HBJob *)job withReply:(void (^)(HBCoreResult))reply;
