@@ -1,7 +1,7 @@
 FROM centos:7
 RUN yum install -y centos-release-scl && yum install -y devtoolset-7
 RUN yum groupinstall -y "Development Tools" "Additional Development"
-RUN yum install -y fribidi-devel git jansson-devel libogg-devel libsamplerate-devel libtheora-devel libvorbis-devel opus-devel speex-devel xz-devel
+RUN yum install -y git sudo fribidi-devel jansson-devel libogg-devel libsamplerate-devel libtheora-devel libvorbis-devel opus-devel speex-devel xz-devel
 RUN yum install -y epel-release
 RUN yum install -y libass-devel yasm
 RUN yum localinstall -y --nogpgcheck https://download1.rpmfusion.org/free/el/rpmfusion-free-release-7.noarch.rpm
