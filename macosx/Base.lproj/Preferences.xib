@@ -724,6 +724,7 @@
                                                 <font key="font" metaFont="menu" size="11"/>
                                             </buttonCell>
                                             <connections>
+                                                <binding destination="-2" name="enabled" keyPath="hardwareDecodersCheckboxesEnabled" id="fsJ-Br-piU"/>
                                                 <binding destination="61" name="value" keyPath="values.HBUseHardwareDecoder" id="dxI-cp-QOL"/>
                                             </connections>
                                         </button>
@@ -734,6 +735,14 @@
                                                 <font key="font" metaFont="menu" size="11"/>
                                             </buttonCell>
                                             <connections>
+                                                <binding destination="-2" name="enabled2" keyPath="hardwareDecodersCheckboxesEnabled" previousBinding="PZ6-3c-zRc" id="zg4-uM-xG6">
+                                                    <dictionary key="options">
+                                                        <integer key="NSMultipleValuesPlaceholder" value="-1"/>
+                                                        <integer key="NSNoSelectionPlaceholder" value="-1"/>
+                                                        <integer key="NSNotApplicablePlaceholder" value="-1"/>
+                                                        <integer key="NSNullPlaceholder" value="-1"/>
+                                                    </dictionary>
+                                                </binding>
                                                 <binding destination="61" name="value" keyPath="values.HBAlwaysUseHardwareDecoder" id="tie-OI-x9E"/>
                                                 <binding destination="61" name="enabled" keyPath="values.HBUseHardwareDecoder" id="PZ6-3c-zRc"/>
                                             </connections>
