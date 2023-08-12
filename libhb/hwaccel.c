@@ -196,41 +196,52 @@ static int hb_hwaccel_hwframe_init(hb_job_t *job, AVFrame **frame)
 
 hb_buffer_t * hb_hwaccel_copy_video_buffer_to_hw_video_buffer(hb_job_t *job, hb_buffer_t **buf_in)
 {
-    AVFrame frame = {{0}};
-    AVFrame *hw_frame = NULL;
-
-    int ret;
-
-    hb_video_buffer_to_avframe(&frame, buf_in);
-
-    ret = hb_hwaccel_hwframe_init(job, &hw_frame);
-    if (ret < 0)
+#ifdef __APPLE__
+    if (job->hw_pix_fmt == AV_PIX_FMT_VIDEOTOOLBOX)
     {
-        goto fail;
+        return hb_vt_copy_video_buffer_to_hw_video_buffer(job, buf_in);
+    }
+    else
+#endif
+    {
+        AVFrame frame = {{0}};
+        AVFrame *hw_frame = NULL;
+
+        int ret;
+
+        hb_video_buffer_to_avframe(&frame, buf_in);
+
+        ret = hb_hwaccel_hwframe_init(job, &hw_frame);
+        if (ret < 0)
+        {
+            goto fail;
+        }
+
+        av_frame_copy_props(hw_frame, &frame);
+        if (ret < 0)
+        {
+            goto fail;
+        }
+
+        av_hwframe_transfer_data(hw_frame, &frame, 0);
+        if (ret < 0)
+        {
+            goto fail;
+        }
+
+        hb_buffer_t *out = hb_avframe_to_video_buffer(hw_frame, (AVRational){1,1}, 1);
+
+        av_frame_unref(&frame);
+        av_frame_unref(hw_frame);
+
+        return out;
+
+    fail:
+        av_frame_unref(&frame);
+        av_frame_unref(hw_frame);
+        return NULL;
     }
 
-    av_frame_copy_props(hw_frame, &frame);
-    if (ret < 0)
-    {
-        goto fail;
-    }
-
-    av_hwframe_transfer_data(hw_frame, &frame, 0);
-    if (ret < 0)
-    {
-        goto fail;
-    }
-
-    hb_buffer_t *out = hb_avframe_to_video_buffer(hw_frame, (AVRational){1,1}, 1);
-
-    av_frame_unref(&frame);
-    av_frame_unref(hw_frame);
-
-    return out;
-
-fail:
-    av_frame_unref(&frame);
-    av_frame_unref(hw_frame);
     return NULL;
 }
 

@@ -353,6 +353,123 @@ unsigned int hb_vt_get_cv_pixel_format(int pix_fmt, int color_range)
     }
 }
 
+static void releaseCallback (void * CV_NULLABLE releaseRefCon,
+                             const void * CV_NULLABLE dataPtr,
+                             size_t dataSize, size_t numberOfPlanes,
+                             const void * CV_NULLABLE planeAddresses[CV_NULLABLE ])
+{
+    hb_buffer_t *buf = releaseRefCon;
+    hb_buffer_close(&buf);
+}
+
+hb_buffer_t * hb_vt_copy_video_buffer_to_hw_video_buffer(const hb_job_t *job, hb_buffer_t **in)
+{
+    hb_buffer_t *buf = *in;
+
+    OSType pixelFormat = hb_vt_get_cv_pixel_format(buf->f.fmt, buf->f.color_range);
+    int numberOfPlanes = pixelFormat == kCVPixelFormatType_420YpCbCr8Planar ||
+        pixelFormat == kCVPixelFormatType_420YpCbCr8PlanarFullRange ? 3 : 2;
+
+    void *planeBaseAddress[3] = {buf->plane[0].data, buf->plane[1].data, buf->plane[2].data};
+    size_t planeWidth[3] = {buf->plane[0].width, buf->plane[1].width, buf->plane[2].width};
+    size_t planeHeight[3] = {buf->plane[0].height, buf->plane[1].height, buf->plane[2].height};
+    size_t planeBytesPerRow[3] = {buf->plane[0].stride, buf->plane[1].stride, buf->plane[2].stride};
+
+    CVPixelBufferRef pix_buf = NULL;
+    OSStatus err = CVPixelBufferCreateWithPlanarBytes(
+                                             kCFAllocatorDefault,
+                                             buf->f.width,
+                                             buf->f.height,
+                                             pixelFormat,
+                                             buf->data,
+                                             0,
+                                             numberOfPlanes,
+                                             planeBaseAddress,
+                                             planeWidth,
+                                             planeHeight,
+                                             planeBytesPerRow,
+                                             releaseCallback,
+                                             buf,
+                                             NULL,
+                                             &pix_buf);
+
+    if (err)
+    {
+        hb_buffer_close(&buf);
+        return NULL;
+    }
+
+    hb_buffer_t *out  = hb_buffer_wrapper_init();
+    out->storage_type = COREMEDIA;
+    out->storage      = pix_buf;
+    out->f            = buf->f;
+    hb_buffer_copy_props(out, buf);
+
+    return out;
+}
+
+hb_buffer_t * hb_vt_buffer_dup(const hb_buffer_t *src)
+{
+    CVPixelBufferRef src_pix_buf = (CVPixelBufferRef)src->storage;
+
+    if (src_pix_buf == NULL)
+    {
+        return NULL;
+    }
+
+    CVPixelBufferLockBaseAddress(src_pix_buf, kCVPixelBufferLock_ReadOnly);
+
+    size_t width = CVPixelBufferGetWidth(src_pix_buf);
+    size_t height = CVPixelBufferGetHeight(src_pix_buf);
+    OSType pix_ftm = CVPixelBufferGetPixelFormatType(src_pix_buf);
+    size_t planes_count = CVPixelBufferGetPlaneCount(src_pix_buf);
+
+    CFDictionaryRef attrs = NULL;
+    if (__builtin_available(macOS 12, *))
+    {
+        attrs = CVPixelBufferCopyCreationAttributes(src_pix_buf);
+    }
+
+    // Copy the pixel buffer
+    CVPixelBufferRef out_pix_buf = NULL;
+    CVReturn status = CVPixelBufferCreate(kCFAllocatorDefault,
+                                          width, height,
+                                          pix_ftm,
+                                          attrs, &out_pix_buf);
+    if (attrs)
+    {
+        CFRelease(attrs);
+    }
+
+    if (status != kCVReturnSuccess)
+    {
+        CVPixelBufferUnlockBaseAddress(src_pix_buf, kCVPixelBufferLock_ReadOnly);
+        return NULL;
+    }
+
+    CVPixelBufferLockBaseAddress(out_pix_buf, 0);
+
+    for (int i = 0; i < planes_count; i++)
+    {
+        void *outPlaneBaseAddress  = CVPixelBufferGetBaseAddressOfPlane(out_pix_buf, i);
+        void *planeBaseAddress  = CVPixelBufferGetBaseAddressOfPlane(src_pix_buf, i);
+        size_t planeHeight      = CVPixelBufferGetHeightOfPlane(src_pix_buf, i);
+        size_t planeBytesPerRow = CVPixelBufferGetBytesPerRowOfPlane(src_pix_buf, i);
+        memcpy(outPlaneBaseAddress, planeBaseAddress, planeHeight * planeBytesPerRow);
+    }
+
+    CVPixelBufferUnlockBaseAddress(src_pix_buf, kCVPixelBufferLock_ReadOnly);
+    CVPixelBufferUnlockBaseAddress(out_pix_buf, 0);
+
+    hb_buffer_t *out  = hb_buffer_wrapper_init();
+    out->storage_type = COREMEDIA;
+    out->storage      = out_pix_buf;
+    out->f            = src->f;
+    hb_buffer_copy_props(out, src);
+
+    return out;
+}
+
 int hb_vt_are_filters_supported(hb_list_t *filters)
 {
     int ret = 1;
