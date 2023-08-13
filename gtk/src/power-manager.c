@@ -5,6 +5,12 @@
 #include "queuehandler.h"
 #include "callbacks.h"
 
+#define UPOWER_PATH "org.freedesktop.UPower"
+#define UPOWER_OBJECT "/org/freedesktop/UPower"
+#define DEVICE_OBJECT "/org/freedesktop/UPower/devices/DisplayDevice"
+#define UPOWER_INTERFACE "org.freedesktop.UPower"
+#define DEVICE_INTERFACE "org.freedesktop.UPower.Device"
+
 static const char *battery_widgets[] = {
     "pause_encoding_label",
     "PauseEncodingOnBatteryPower",
@@ -14,7 +20,6 @@ static const char *battery_widgets[] = {
 
 static GDBusProxy *upower_proxy;
 static GDBusProxy *battery_proxy;
-static char **upower_devices;
 static GhbPowerState power_state;
 
 /* We want to ensure that the encode is only paused when the battery
@@ -36,67 +41,20 @@ static void
 show_power_widgets (const char *widgets[], signal_user_data_t *ud)
 {
     GtkWidget *widget;
-    int i = 0;
 
     if (ud->builder == NULL)
         return;
 
-    while (widgets[i] != NULL)
+    for (int i = 0; widgets[i] != NULL; i++)
     {
         widget = GHB_WIDGET(ud->builder, widgets[i]);
         gtk_widget_set_visible(widget, TRUE);
-        i++;
     }
 }
 
 static void
-upower_status_cb (GDBusProxy *proxy, GVariant *changed_properties,
+battery_level_cb (GDBusProxy *proxy, GVariant *changed_properties,
                   GStrv invalidated_properties, signal_user_data_t *ud)
-{
-    int on_battery = -1;
-    const char *prop_name;
-    int queue_state;
-    GVariant *var;
-    GVariantIter iter;
-
-    if (!ghb_dict_get_bool(ud->prefs, "PauseEncodingOnBatteryPower"))
-        return;
-
-    g_variant_iter_init(&iter, changed_properties);
-    while (g_variant_iter_next(&iter, "{&sv}", &prop_name, &var))
-    {
-        if (g_strcmp0("OnBattery", prop_name) == 0)
-            on_battery = !!g_variant_get_boolean(var);
-
-        g_variant_unref(var);
-    }
-
-    if (on_battery == -1)
-        return;
-
-    queue_state = ghb_get_queue_state();
-
-    if (on_battery && (queue_state & GHB_STATE_WORKING)
-                   && !(queue_state & GHB_STATE_PAUSED))
-    {
-        power_state = GHB_POWER_PAUSED_ON_BATTERY;
-        ghb_log("Charger disconnected: pausing encode");
-        ghb_pause_queue();
-    }
-    else if (!on_battery && (power_state == GHB_POWER_PAUSED_ON_BATTERY))
-    {
-        if (queue_state & GHB_STATE_PAUSED)
-        {
-            ghb_resume_queue();
-            ghb_log("Charger connected: resuming encode");
-        }
-        power_state = GHB_POWER_OK;
-    }
-}
-
-static void
-battery_status_cb (GDBusProxy *proxy, GVariant *changed_properties,
-                   GStrv invalidated_properties, signal_user_data_t *ud)
 {
     int battery_level = -1;
     const char *prop_name;
@@ -146,87 +104,78 @@ battery_status_cb (GDBusProxy *proxy, GVariant *changed_properties,
     prev_battery_level = battery_level;
 }
 
-static GDBusProxy *
-device_get_battery_proxy (const char *path)
+static void
+battery_proxy_new_cb (GObject *source, GAsyncResult *result,
+                      signal_user_data_t *ud)
 {
     GDBusProxy *proxy;
-    GVariant *var;
-    uint32_t type;
-    gboolean power_supply, is_present;
+    GVariant *is_present;
     GError *error = NULL;
 
-    proxy = g_dbus_proxy_new_for_bus_sync(G_BUS_TYPE_SYSTEM,
-                                          G_DBUS_PROXY_FLAGS_NONE,
-                                          NULL, "org.freedesktop.UPower",
-                                          path, "org.freedesktop.UPower.Device",
-                                          NULL, &error);
+    proxy = g_dbus_proxy_new_for_bus_finish(result, &error);
     if (proxy != NULL)
     {
-        var = g_dbus_proxy_get_cached_property(proxy, "Type");
-        type = g_variant_get_uint32(var);
-        g_variant_unref(var);
-        var = g_dbus_proxy_get_cached_property(proxy, "PowerSupply");
-        power_supply = g_variant_get_boolean(var);
-        g_variant_unref(var);
-        var = g_dbus_proxy_get_cached_property(proxy, "IsPresent");
-        is_present = g_variant_get_boolean(var);
-        g_variant_unref(var);
-
-        if (type == 2 && power_supply && is_present)
-            return proxy;
+        is_present = g_dbus_proxy_get_cached_property(proxy, "IsPresent");
+        if (g_variant_get_boolean(is_present))
+        {
+            g_signal_connect(proxy, "g-properties-changed",
+                         G_CALLBACK(battery_level_cb), ud);
+            show_power_widgets(battery_widgets, ud);
+            battery_proxy = proxy;
+        }
         else
-            g_object_unref(proxy);
+        {
+            g_debug("No battery present. Disconnecting UPower proxy.");
+            g_clear_object(&proxy);
+            g_clear_object(&upower_proxy);
+        }
+        g_variant_unref(is_present);
     }
     else
     {
-        g_debug("Could not get proxy for device: %s", error->message);
+        g_debug("Could not get DisplayDevice proxy: %s", error->message);
         g_error_free(error);
+        g_clear_object(&upower_proxy);
     }
-    return NULL;
-}
-
-static gpointer
-devices_thread (signal_user_data_t *ud)
-{
-    GDBusProxy *proxy;
-
-    for (guint i = 0; i < g_strv_length(upower_devices); i++)
-    {
-        proxy = device_get_battery_proxy(upower_devices[i]);
-        if (proxy != NULL)
-        {
-            g_debug("Battery: %s", g_dbus_proxy_get_object_path(proxy));
-            battery_proxy = proxy;
-            g_signal_connect(battery_proxy, "g-properties-changed",
-                             G_CALLBACK(battery_status_cb), ud);
-            show_power_widgets(battery_widgets, ud);
-            break;
-        }
-    }
-    g_strfreev(upower_devices);
-    g_thread_exit(0);
-    return NULL;
 }
 
 static void
-upower_devices_cb (GDBusProxy *proxy, GAsyncResult *result,
-                   signal_user_data_t *ud)
+battery_proxy_new_async (signal_user_data_t *ud)
 {
-    GVariant *var, *array;
-    GError *error = NULL;
+    g_dbus_proxy_new_for_bus(G_BUS_TYPE_SYSTEM, G_DBUS_PROXY_FLAGS_NONE, NULL,
+                             UPOWER_PATH, DEVICE_OBJECT, DEVICE_INTERFACE, NULL,
+                             (GAsyncReadyCallback) battery_proxy_new_cb, ud);
+}
 
-    var = g_dbus_proxy_call_finish(proxy, result, &error);
-    if (error)
+static void
+upower_status_cb (GDBusProxy *proxy, GVariant *changed_properties,
+                  GStrv invalidated_properties, signal_user_data_t *ud)
+{
+    gboolean on_battery;
+    int queue_state;
+
+    if (!ghb_dict_get_bool(ud->prefs, "PauseEncodingOnBatteryPower") ||
+        !g_variant_lookup(changed_properties, "OnBattery", "b", &on_battery))
+        return;
+
+    queue_state = ghb_get_queue_state();
+
+    if (on_battery && (queue_state & GHB_STATE_WORKING)
+                   && !(queue_state & GHB_STATE_PAUSED))
     {
-        g_debug("Could not get device list: %s", error->message);
-        g_error_free(error);
+        power_state = GHB_POWER_PAUSED_ON_BATTERY;
+        ghb_log("Charger disconnected: pausing encode");
+        ghb_pause_queue();
     }
-
-    array = g_variant_get_child_value(var, 0);
-    upower_devices = g_variant_dup_objv(array, NULL);
-    g_thread_new("devices_thread", (GThreadFunc)devices_thread, ud);
-    g_variant_unref(array);
-    g_variant_unref(var);
+    else if (!on_battery && (power_state == GHB_POWER_PAUSED_ON_BATTERY))
+    {
+        if (queue_state & GHB_STATE_PAUSED)
+        {
+            ghb_resume_queue();
+            ghb_log("Charger connected: resuming encode");
+        }
+        power_state = GHB_POWER_OK;
+    }
 }
 
 static void
@@ -241,14 +190,12 @@ upower_proxy_new_cb (GObject *source, GAsyncResult *result,
     {
         g_signal_connect(proxy, "g-properties-changed",
                          G_CALLBACK(upower_status_cb), ud);
-        g_dbus_proxy_call(proxy, "EnumerateDevices", NULL,
-                          G_DBUS_CALL_FLAGS_NONE, 10000, NULL,
-                          (GAsyncReadyCallback) upower_devices_cb, ud);
         upower_proxy = proxy;
+        battery_proxy_new_async(ud);
     }
     else
     {
-        g_debug("Could not create DBus proxy: %s", error->message);
+        g_debug("Could not create UPower proxy: %s", error->message);
         g_error_free(error);
     }
 }
@@ -256,11 +203,8 @@ upower_proxy_new_cb (GObject *source, GAsyncResult *result,
 static void
 upower_proxy_new_async (signal_user_data_t *ud)
 {
-    g_dbus_proxy_new_for_bus(G_BUS_TYPE_SYSTEM,
-                             G_DBUS_PROXY_FLAGS_NONE, NULL,
-                             "org.freedesktop.UPower",
-                             "/org/freedesktop/UPower",
-                             "org.freedesktop.UPower", NULL,
+    g_dbus_proxy_new_for_bus(G_BUS_TYPE_SYSTEM, G_DBUS_PROXY_FLAGS_NONE, NULL,
+                             UPOWER_PATH, UPOWER_OBJECT, UPOWER_INTERFACE, NULL,
                              (GAsyncReadyCallback) upower_proxy_new_cb, ud);
 }
 
@@ -344,22 +288,25 @@ ghb_power_manager_dispose (signal_user_data_t *ud)
 {
     if (upower_proxy != NULL)
     {
+        g_debug("Disconnecting UPower proxy");
         g_signal_handlers_disconnect_by_func(upower_proxy,
                                              upower_status_cb, ud);
-        g_object_unref(upower_proxy);
+        g_clear_object(&upower_proxy);
     }
     if (battery_proxy != NULL)
     {
+        g_debug("Disconnecting battery level proxy");
         g_signal_handlers_disconnect_by_func(battery_proxy,
-                                             battery_status_cb, ud);
-        g_object_unref(battery_proxy);
+                                             battery_level_cb, ud);
+        g_clear_object(&battery_proxy);
     }
 #if GLIB_CHECK_VERSION(2, 70, 0)
     if (power_monitor != NULL)
     {
+        g_debug("Disconnecting power monitor\n");
         g_signal_handlers_disconnect_by_func(power_monitor,
                                              power_save_cb, ud);
-        g_object_unref(power_monitor);
+        g_clear_object(&power_monitor);
     }
 #endif
 }
