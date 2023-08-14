@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="21701" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="22152" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="21701"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="22152"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -121,14 +121,14 @@
                     </textField>
                     <popUpButton toolTip="Source range selection. By default, all chapters are selected and the entire source is encoded." horizontalHuggingPriority="1000" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="5513">
                         <rect key="frame" x="517" y="537" width="86" height="22"/>
-                        <constraints>
-                            <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="78" id="Zs8-pX-H7V"/>
-                        </constraints>
                         <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="clipping" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" id="5514">
                             <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                             <font key="font" metaFont="message" size="11"/>
                             <menu key="menu" title="OtherViews" id="5515"/>
                         </popUpButtonCell>
+                        <constraints>
+                            <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="78" id="Zs8-pX-H7V"/>
+                        </constraints>
                         <accessibility description="Range Selection"/>
                         <connections>
                             <accessibilityConnection property="title" destination="4NG-AB-JWs" id="D9J-Ih-cYu"/>
@@ -365,9 +365,6 @@
                     </textField>
                     <popUpButton toolTip="First chapter to encode." verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="1545" userLabel="Chapter Start">
                         <rect key="frame" x="603" y="537" width="66" height="22"/>
-                        <constraints>
-                            <constraint firstAttribute="width" constant="58" id="LYd-Am-GKJ"/>
-                        </constraints>
                         <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="clipping" state="on" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="1547" id="4910">
                             <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                             <font key="font" metaFont="message" size="11"/>
@@ -377,6 +374,9 @@
                                 </items>
                             </menu>
                         </popUpButtonCell>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="58" id="LYd-Am-GKJ"/>
+                        </constraints>
                         <accessibility description="Start Chapter"/>
                         <connections>
                             <binding destination="-2" name="selectedIndex" keyPath="self.job.range.chapterStart" previousBinding="iug-tk-BPC" id="6Lh-6x-j09"/>
@@ -390,9 +390,6 @@
                     </popUpButton>
                     <popUpButton toolTip="Last chapter to encode." verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="1548" userLabel="Chapter End">
                         <rect key="frame" x="679" y="537" width="66" height="22"/>
-                        <constraints>
-                            <constraint firstAttribute="width" constant="58" id="zhJ-ur-lHA"/>
-                        </constraints>
                         <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="clipping" state="on" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="1550" id="4911">
                             <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                             <font key="font" metaFont="message" size="11"/>
@@ -402,6 +399,9 @@
                                 </items>
                             </menu>
                         </popUpButtonCell>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="58" id="zhJ-ur-lHA"/>
+                        </constraints>
                         <accessibility description="End Chapter"/>
                         <connections>
                             <binding destination="-2" name="selectedIndex" keyPath="self.job.range.chapterStop" previousBinding="wDD-Bt-zMX" id="eHK-zg-A5x"/>
@@ -415,9 +415,6 @@
                     </popUpButton>
                     <popUpButton toolTip="Video angle to encode. Only applicable to multi-angle DVD and Blu-ray." horizontalHuggingPriority="1000" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="5181">
                         <rect key="frame" x="417" y="537" width="46" height="22"/>
-                        <constraints>
-                            <constraint firstAttribute="width" constant="38" id="xGF-g4-jWh"/>
-                        </constraints>
                         <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="clipping" state="on" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="5184" id="5182">
                             <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                             <font key="font" metaFont="message" size="11"/>
@@ -427,6 +424,9 @@
                                 </items>
                             </menu>
                         </popUpButtonCell>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="38" id="xGF-g4-jWh"/>
+                        </constraints>
                         <connections>
                             <accessibilityConnection property="title" destination="5180" id="1bt-ea-b2b"/>
                             <binding destination="-2" name="enabled" keyPath="self.job" id="pA6-GK-w84">
@@ -460,9 +460,6 @@ IA
                         <string key="toolTip">Title, or video clip, to encode. The longest title is selected by default.
 
 Blu-ray and DVD sources often have multiple titles, the longest of which is typically the main feature.</string>
-                        <constraints>
-                            <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="220" id="Kfe-4R-KRB"/>
-                        </constraints>
                         <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="clipping" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" id="4908">
                             <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                             <font key="font" metaFont="message" size="11"/>
@@ -471,6 +468,9 @@ Blu-ray and DVD sources often have multiple titles, the longest of which is typi
                                 <accessibilityConnection property="title" destination="1540" id="8YI-Kk-J0w"/>
                             </connections>
                         </popUpButtonCell>
+                        <constraints>
+                            <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="220" id="Kfe-4R-KRB"/>
+                        </constraints>
                         <connections>
                             <accessibilityConnection property="title" destination="1540" id="zCa-Oa-e1z"/>
                             <action selector="titlePopUpChanged:" target="-2" id="kSs-y7-Mfi"/>
@@ -562,9 +562,6 @@ Blu-ray and DVD sources often have multiple titles, the longest of which is typi
                     </box>
                     <popUpButton verticalHuggingPriority="750" verticalCompressionResistancePriority="1000" translatesAutoresizingMaskIntoConstraints="NO" id="bWH-Lp-mKY">
                         <rect key="frame" x="65" y="508" width="212" height="22"/>
-                        <constraints>
-                            <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="204" id="k4L-Sa-g4b"/>
-                        </constraints>
                         <popUpButtonCell key="cell" type="push" title="Selected Preset" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" pullsDown="YES" id="4hk-61-M1H">
                             <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                             <font key="font" metaFont="message" size="11"/>
@@ -578,6 +575,9 @@ Blu-ray and DVD sources often have multiple titles, the longest of which is typi
                                 </items>
                             </menu>
                         </popUpButtonCell>
+                        <constraints>
+                            <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="204" id="k4L-Sa-g4b"/>
+                        </constraints>
                         <accessibility description="Preset selection"/>
                         <connections>
                             <binding destination="-2" name="enabled" keyPath="self.job" id="1XP-x4-0GV">
@@ -900,7 +900,7 @@ Blu-ray and DVD sources often have multiple titles, the longest of which is typi
                                 </binding>
                             </connections>
                         </textField>
-                        <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="5hE-Ri-tcZ">
+                        <button toolTip="Recursively scan and open the content of every sub-folder." verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="5hE-Ri-tcZ">
                             <rect key="frame" x="18" y="15" width="173" height="18"/>
                             <buttonCell key="cell" type="check" title="Recursively scan folders" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="Hwu-gp-tRZ">
                                 <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
