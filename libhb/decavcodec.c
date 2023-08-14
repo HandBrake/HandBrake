@@ -2471,17 +2471,7 @@ static int decavcodecvInfo( hb_work_object_t *w, hb_work_info_t *info )
     }
     else if (pv->context->pix_fmt == AV_PIX_FMT_VIDEOTOOLBOX)
     {
-#if defined(ARCH_X86)
-        // TODO: Find a better place
-        if (pv->context->codec->id == AV_CODEC_ID_H264 && hb_get_bit_depth(pv->context->sw_pix_fmt) == 10)
-        {
-            hb_deep_log(2, "decavcodec: VideoToolbox can't decode 10-bit H.264 properly, disabling.");
-        }
-        else
-#endif
-        {
-            info->video_decode_support |= HB_DECODE_SUPPORT_VIDEOTOOLBOX;
-        }
+        info->video_decode_support |= HB_DECODE_SUPPORT_VIDEOTOOLBOX;
     }
 
     return 1;
