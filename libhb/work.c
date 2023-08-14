@@ -1387,10 +1387,21 @@ static void sanitize_filter_list_pre(hb_job_t *job, hb_geometry_t src_geo)
         }
     }
 
-    hb_filter_object_t *filter = hb_filter_find(list, HB_FILTER_CROP_SCALE);
+    int angle = 0;
+    hb_filter_object_t *filter = hb_filter_find(list, HB_FILTER_ROTATE);
     if (filter != NULL)
     {
-        hb_dict_t* settings = filter->settings;
+        hb_dict_t *settings = filter->settings;
+        if (settings != NULL)
+        {
+            angle = hb_dict_get_int(settings, "angle");
+        }
+    }
+
+    filter = hb_filter_find(list, HB_FILTER_CROP_SCALE);
+    if (filter != NULL)
+    {
+        hb_dict_t *settings = filter->settings;
         if (settings != NULL)
         {
             int width, height, top, bottom, left, right;
@@ -1401,8 +1412,15 @@ static void sanitize_filter_list_pre(hb_job_t *job, hb_geometry_t src_geo)
             left = hb_dict_get_int(settings, "crop-left");
             right = hb_dict_get_int(settings, "crop-right");
 
-            if ( (src_geo.width == width) && (src_geo.height == height) &&
-                (top == 0) && (bottom == 0 ) && (left == 0) && (right == 0) )
+            if (angle == 90 || angle == 270)
+            {
+                int temp = width;
+                width = height;
+                height = temp;
+            }
+
+            if (src_geo.width == width && src_geo.height == height &&
+                top == 0 && bottom == 0 && left == 0 && right == 0)
             {
                 hb_list_rem(list, filter);
                 hb_filter_close(&filter);
