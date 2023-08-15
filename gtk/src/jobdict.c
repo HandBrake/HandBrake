@@ -60,16 +60,16 @@ GhbValue* ghb_get_job_chapter_list(GhbValue *settings)
     return chapters;
 }
 
-GhbValue* ghb_get_job_mp4_settings(GhbValue *settings)
+GhbValue* ghb_get_job_container_settings(GhbValue *settings)
 {
     GhbValue *dest = ghb_get_job_dest_settings(settings);
-    GhbValue *mp4  = ghb_dict_get(dest, "Mp4Options");
-    if (mp4 == NULL)
+    GhbValue *options = ghb_dict_get(dest, "Options");
+    if (options == NULL)
     {
-        mp4 = ghb_dict_new();
-        ghb_dict_set(dest, "Mp4Options", mp4);
+        options = ghb_dict_new();
+        ghb_dict_set(dest, "Options", options);
     }
-    return mp4;
+    return options;
 }
 
 GhbValue* ghb_get_job_source_settings(GhbValue *settings)

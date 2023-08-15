@@ -267,7 +267,7 @@ static void queue_update_summary (GhbValue * queueDict, signal_user_data_t *ud)
     if (container->format & HB_MUX_MASK_MP4)
     {
         ipod = ghb_dict_get_bool(uiDict, "Mp4iPodCompatible");
-        http = ghb_dict_get_bool(uiDict, "Mp4HttpOptimize");
+        http = ghb_dict_get_bool(uiDict, "Optimize");
     }
 
     sep = "\n";

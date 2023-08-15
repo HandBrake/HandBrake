@@ -62,7 +62,7 @@ typedef NS_ENUM(NSUInteger, HBJobHardwareDecoderUsage) {
 @property (nonatomic, readwrite) int angle;
 
 // Container options
-@property (nonatomic, readwrite) BOOL mp4HttpOptimize;
+@property (nonatomic, readwrite) BOOL optimize;
 @property (nonatomic, readwrite) BOOL mp4iPodCompatible;
 @property (nonatomic, readwrite) BOOL alignAVStart;
 

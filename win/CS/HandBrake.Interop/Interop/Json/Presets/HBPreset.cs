@@ -77,9 +77,9 @@ namespace HandBrake.Interop.Interop.Json.Presets
         public bool FolderOpen { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether mp 4 http optimize.
+        /// Gets or sets a value indicating whether optimize.
         /// </summary>
-        public bool Mp4HttpOptimize { get; set; }
+        public bool Optimize { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether mp 4 i pod compatible.

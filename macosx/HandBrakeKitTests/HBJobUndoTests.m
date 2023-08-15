@@ -105,7 +105,7 @@
     XCTAssertEqualObjects(self.job.presetName, self.modifiedJob.presetName);
     XCTAssertEqual(self.job.container, self.modifiedJob.container);
 
-    XCTAssertEqual(self.job.mp4HttpOptimize, self.modifiedJob.mp4HttpOptimize);
+    XCTAssertEqual(self.job.optimize, self.modifiedJob.optimize);
     XCTAssertEqual(self.job.mp4iPodCompatible, self.modifiedJob.mp4iPodCompatible);
 
     XCTAssertEqual(self.job.angle, self.modifiedJob.angle);

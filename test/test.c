@@ -192,7 +192,7 @@ static char *   preset_export_file   = NULL;
 static char *   preset_name          = NULL;
 static char *   queue_import_name    = NULL;
 static int      cfr           = -1;
-static int      mp4_optimize  = -1;
+static int      optimize      = -1;
 static int      ipod_atom     = -1;
 static int      color_matrix_code = -1;
 static int      preview_count = 10;
@@ -1387,8 +1387,8 @@ static void ShowHelp(void)
 "                           default: auto-detected from destination file name)\n"
 "   -m, --markers           Add chapter markers\n"
 "       --no-markers        Disable preset chapter markers\n"
-"   -O, --optimize          Optimize MP4 files for HTTP streaming (fast start,\n"
-"                           s.s. rewrite file to place MOOV atom at beginning)\n"
+"   -O, --optimize          Optimize files for HTTP streaming (fast start,\n"
+"                           s.s. rewrite file to place MOOV atom or cues at beginning)\n"
 "       --no-optimize       Disable preset 'optimize'\n"
 "   -I, --ipod-atom         Add iPod 5G compatibility atom to MP4 container\n"
 "       --no-ipod-atom      Disable iPod 5G atom\n"
@@ -2247,7 +2247,7 @@ static int ParseOptions( int argc, char ** argv )
             { "input",       required_argument, NULL,    'i' },
             { "output",      required_argument, NULL,    'o' },
             { "optimize",    no_argument,       NULL,        'O' },
-            { "no-optimize", no_argument,       &mp4_optimize, 0 },
+            { "no-optimize", no_argument,       &optimize, 0 },
             { "ipod-atom",   no_argument,       NULL,        'I' },
             { "no-ipod-atom",no_argument,       &ipod_atom,    0 },
 
@@ -2527,7 +2527,7 @@ static int ParseOptions( int argc, char ** argv )
                 output = strdup( optarg );
                 break;
             case 'O':
-                mp4_optimize = 1;
+                optimize = 1;
                 break;
             case 'I':
                 ipod_atom = 1;
@@ -3715,9 +3715,9 @@ static hb_dict_t * PreparePreset(const char *preset_name)
     {
         hb_dict_set(preset, "FileFormat", hb_value_string(format));
     }
-    if (mp4_optimize != -1)
+    if (optimize != -1)
     {
-        hb_dict_set(preset, "Mp4HttpOptimize", hb_value_bool(mp4_optimize));
+        hb_dict_set(preset, "Optimize", hb_value_bool(optimize));
     }
     if (ipod_atom != -1)
     {

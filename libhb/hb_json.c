@@ -656,13 +656,13 @@ hb_dict_t* hb_job_to_dict( const hb_job_t * job )
     {
         hb_dict_set(dest_dict, "File", hb_value_string(job->file));
     }
-    if (job->mux & HB_MUX_MASK_MP4)
+    if (job->mux)
     {
-        hb_dict_t *mp4_dict;
-        mp4_dict = json_pack_ex(&error, 0, "{s:o, s:o}",
-            "Mp4Optimize",      hb_value_bool(job->mp4_optimize),
+        hb_dict_t *options_dict;
+        options_dict = json_pack_ex(&error, 0, "{s:o, s:o}",
+            "Optimize",         hb_value_bool(job->optimize),
             "IpodAtom",         hb_value_bool(job->ipod_atom));
-        hb_dict_set(dest_dict, "Mp4Options", mp4_dict);
+        hb_dict_set(dest_dict, "Options", options_dict);
     }
     hb_dict_t *source_dict = hb_dict_get(dict, "Source");
     hb_dict_t *range_dict;
@@ -1122,7 +1122,7 @@ hb_job_t* hb_dict_to_job( hb_handle_t * h, hb_dict_t *dict )
     "s:i,"
     // Destination {File, Mux, InlineParameterSets, AlignAVStart,
     //              ChapterMarkers, ChapterList,
-    //              Mp4Options {Mp4Optimize, IpodAtom}}
+    //              Options {Optimize, IpodAtom}}
     "s:{s?s, s:o, s?b, s?b, s:b, s?o s?{s?b, s?b}},"
     // Source {Angle, Range {Type, Start, End, SeekPoints}}
     "s:{s?i, s?{s:s, s?I, s?I, s?I}},"
@@ -1165,8 +1165,8 @@ hb_job_t* hb_dict_to_job( hb_handle_t * h, hb_dict_t *dict )
             "AlignAVStart",         unpack_b(&job->align_av_start),
             "ChapterMarkers",       unpack_b(&job->chapter_markers),
             "ChapterList",          unpack_o(&chapter_list),
-            "Mp4Options",
-                "Mp4Optimize",      unpack_b(&job->mp4_optimize),
+            "Options",
+                "Optimize",         unpack_b(&job->optimize),
                 "IpodAtom",         unpack_b(&job->ipod_atom),
         "Source",
             "Angle",                unpack_i(&job->angle),

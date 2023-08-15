@@ -37,9 +37,9 @@ namespace HandBrake.Interop.Interop.Json.Encode
         public string File { get; set; }
 
         /// <summary>
-        /// Gets or sets the mp 4 options.
+        /// Gets or sets the options.
         /// </summary>
-        public Mp4Options Mp4Options { get; set; }
+        public Options Options { get; set; }
 
         /// <summary>
         /// Gets or sets the mux.

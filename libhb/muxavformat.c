@@ -185,7 +185,7 @@ static int avformatInit( hb_mux_object_t * m )
 
             av_dict_set(&av_opts, "brand", "mp42", 0);
             av_dict_set(&av_opts, "strict", "experimental", 0);
-            if (job->mp4_optimize)
+            if (job->optimize)
                 av_dict_set(&av_opts, "movflags", "faststart+disable_chpl+write_colr", 0);
             else
                 av_dict_set(&av_opts, "movflags", "+disable_chpl+write_colr", 0);
@@ -199,6 +199,10 @@ static int avformatInit( hb_mux_object_t * m )
             muxer_name = "matroska";
             meta_mux = META_MUX_MKV;
             av_dict_set(&av_opts, "default_mode", "passthrough", 0);
+            if (job->optimize)
+            {
+                av_dict_set(&av_opts, "cues_to_front", "1", 0);
+            }
             break;
 
         case HB_MUX_AV_WEBM:
@@ -209,6 +213,10 @@ static int avformatInit( hb_mux_object_t * m )
             muxer_name = "webm";
             meta_mux = META_MUX_WEBM;
             av_dict_set(&av_opts, "default_mode", "passthrough", 0);
+            if (job->optimize)
+            {
+                av_dict_set(&av_opts, "cues_to_front", "1", 0);
+            }
             break;
 
         default:

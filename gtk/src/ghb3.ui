@@ -2899,7 +2899,7 @@ Modifications will be discarded.</property>
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkCheckButton" id="Mp4HttpOptimize">
+                          <object class="GtkCheckButton" id="Optimize">
                             <property name="label" translatable="yes">Web Optimized</property>
                             <property name="visible">True</property>
                             <property name="can-focus">True</property>

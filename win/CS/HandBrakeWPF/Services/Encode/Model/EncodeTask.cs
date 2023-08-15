@@ -148,7 +148,7 @@ namespace HandBrakeWPF.Services.Encode.Model
             /* Container */
             this.IPod5GSupport = task.IPod5GSupport;
             this.OutputFormat = task.OutputFormat;
-            this.OptimizeMP4 = task.OptimizeMP4;
+            this.Optimize = task.Optimize;
             this.AlignAVStart = task.AlignAVStart;
 
             /* Other */
@@ -177,7 +177,7 @@ namespace HandBrakeWPF.Services.Encode.Model
 
         public OutputFormat OutputFormat { get; set; }
 
-        public bool OptimizeMP4 { get; set; }
+        public bool Optimize { get; set; }
 
         public bool IPod5GSupport { get; set; }
 

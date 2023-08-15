@@ -61,7 +61,7 @@
             <StackPanel Orientation="Vertical"  Grid.Row="1" Grid.Column="1">
                 <CheckBox Name="WebOptimized" VerticalAlignment="Center" HorizontalAlignment="Left" 
                           Content="{x:Static Properties:Resources.MainView_WebOptimized}"
-                          IsChecked="{Binding Path=OptimizeMP4}"
+                          IsChecked="{Binding Path=Optimize}"
                           ToolTip="{x:Static Properties:ResourcesTooltips.MainView_Optimise}"
                           Visibility="{Binding IsMkvOrWebm, Converter={StaticResource boolToVisConverter}, ConverterParameter=true}" />
                 <CheckBox Name="AlignAVStart" VerticalAlignment="Center" HorizontalAlignment="Left" 
