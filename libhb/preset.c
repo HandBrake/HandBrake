@@ -1955,16 +1955,16 @@ int hb_preset_apply_mux(const hb_dict_t *preset, hb_dict_t *job_dict)
     hb_dict_set(dest_dict, "InlineParameterSets",
                 hb_value_xform(hb_dict_get(preset, "InlineParameterSets"),
                                HB_VALUE_TYPE_BOOL));
-    if (mux & HB_MUX_MASK_MP4)
+    if (mux)
     {
-        hb_dict_t *mp4_dict = hb_dict_init();
-        hb_dict_set(mp4_dict, "Mp4Optimize",
-                    hb_value_xform(hb_dict_get(preset, "Mp4HttpOptimize"),
+        hb_dict_t *options_dict = hb_dict_init();
+        hb_dict_set(options_dict, "Optimize",
+                    hb_value_xform(hb_dict_get(preset, "Optimize"),
                                    HB_VALUE_TYPE_BOOL));
-        hb_dict_set(mp4_dict, "IpodAtom",
+        hb_dict_set(options_dict, "IpodAtom",
                     hb_value_xform(hb_dict_get(preset, "Mp4iPodCompatible"),
                                    HB_VALUE_TYPE_BOOL));
-        hb_dict_set(dest_dict, "Mp4Options", mp4_dict);
+        hb_dict_set(dest_dict, "Options", options_dict);
     }
 
     return 0;
@@ -2795,6 +2795,12 @@ static void und_to_any(hb_value_array_t * list)
     }
 }
 
+static void import_container_settings_51_0_0(hb_value_t *preset)
+{
+    int optimize = hb_dict_get_bool(preset, "Mp4HttpOptimize");
+    hb_dict_set_bool(preset, "Optimize", optimize);
+}
+
 static void import_video_pass_settings_50_0_0(hb_value_t *preset)
 {
     int two_pass = hb_dict_get_bool(preset, "VideoTwoPass");
@@ -3499,6 +3505,11 @@ static void import_video_0_0_0(hb_value_t *preset)
     }
 }
 
+static void import_51_0_0(hb_value_t *preset)
+{
+    import_container_settings_51_0_0(preset);
+}
+
 static void import_50_0_0(hb_value_t *preset)
 {
     import_video_pass_settings_50_0_0(preset);
@@ -3665,6 +3676,11 @@ static int preset_import(hb_value_t *preset, int major, int minor, int micro)
         else if (cmpVersion(major, minor, micro, 50, 0, 0) <= 0)
         {
             import_50_0_0(preset);
+            result = 1;
+        }
+        else if (cmpVersion(major, minor, micro, 51, 0, 0) <= 0)
+        {
+            import_51_0_0(preset);
             result = 1;
         }
 

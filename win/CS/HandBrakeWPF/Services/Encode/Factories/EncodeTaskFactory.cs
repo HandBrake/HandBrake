@@ -111,10 +111,10 @@ namespace HandBrakeWPF.Services.Encode.Factories
             Destination destination = new Destination
             {
                 File = job.Destination,
-                Mp4Options = new Mp4Options
+                Options = new Options
                 {
                     IpodAtom = job.VideoEncoder.IsH264 ? job.IPod5GSupport : false,
-                    Mp4Optimize = job.OptimizeMP4
+                    Optimize = job.Optimize
                 },
                 ChapterMarkers = job.IncludeChapterMarkers,
                 AlignAVStart = job.AlignAVStart,

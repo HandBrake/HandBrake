@@ -264,22 +264,22 @@ namespace HandBrakeWPF.ViewModels
         }
 
         /// <summary>
-        /// Optimise MP4 Checkbox
+        /// Optimise Checkbox
         /// </summary>
-        public bool OptimizeMP4
+        public bool Optimize
         {
             get
             {
-                return this.Task?.OptimizeMP4 ?? false;
+                return this.Task?.Optimize ?? false;
             }
             set
             {
-                if (value == this.Task.OptimizeMP4)
+                if (value == this.Task.Optimize)
                 {
                     return;
                 }
-                this.Task.OptimizeMP4 = value;
-                this.NotifyOfPropertyChange(() => this.OptimizeMP4);
+                this.Task.Optimize = value;
+                this.NotifyOfPropertyChange(() => this.Optimize);
                 this.OnTabStatusChanged(null);
             }
         }
@@ -363,7 +363,7 @@ namespace HandBrakeWPF.ViewModels
             this.NotifyOfPropertyChange(() => this.IsMkvOrWebm);
             this.NotifyOfPropertyChange(() => this.IsIpodAtomVisible);
 
-            this.NotifyOfPropertyChange(() => this.OptimizeMP4);
+            this.NotifyOfPropertyChange(() => this.Optimize);
             this.NotifyOfPropertyChange(() => this.IPod5GSupport);
             this.NotifyOfPropertyChange(() => this.AlignAVStart);
             this.NotifyOfPropertyChange(() => this.MetadataPassthru);
@@ -376,7 +376,7 @@ namespace HandBrakeWPF.ViewModels
                 return false;
             }
 
-            if (preset.Task.OptimizeMP4 != this.OptimizeMP4)
+            if (preset.Task.Optimize != this.Optimize)
             {
                 return false;
             }
@@ -478,7 +478,7 @@ namespace HandBrakeWPF.ViewModels
         {
             // Main Window Settings
             this.SelectedOutputFormat = selectedPreset.Task.OutputFormat;
-            this.OptimizeMP4 = selectedPreset.Task.OptimizeMP4;
+            this.Optimize = selectedPreset.Task.Optimize;
             this.IPod5GSupport = selectedPreset.Task.IPod5GSupport;
             this.AlignAVStart = selectedPreset.Task.AlignAVStart;
             this.MetadataPassthru = selectedPreset.Task?.MetaData.PassthruMetadataEnabled ?? false;
@@ -503,7 +503,6 @@ namespace HandBrakeWPF.ViewModels
             // Now disable controls that are not required. The Following are for MP4 only!
             if (newExtension == ".mkv" || newExtension == ".webm")
             {
-                this.OptimizeMP4 = false;
                 this.IPod5GSupport = false;
                 this.AlignAVStart = false;
             }

@@ -40,7 +40,7 @@
         "FolderOpen": false,
         "InlineParameterSets": false,
         "MetadataPassthrough": true,
-        "Mp4HttpOptimize": false,
+        "Optimize": false,
         "Mp4iPodCompatible": false,
         "PictureAllowUpscaling": false,
         "PictureUseMaximumSize": true,

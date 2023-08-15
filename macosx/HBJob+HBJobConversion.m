@@ -101,7 +101,7 @@
     job->mux = self.container;
     job->vcodec = self.video.encoder;
 
-    job->mp4_optimize = self.mp4HttpOptimize;
+    job->optimize = self.optimize;
 
     if (self.container & HB_MUX_MASK_MP4)
     {

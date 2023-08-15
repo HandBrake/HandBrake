@@ -56,7 +56,7 @@ namespace HandBrakeWPF.Services.Presets.Factories
             // Step 1, Create the EncodeTask Object that can be loaded into the UI.
 
             /* Output Settings */
-            preset.Task.OptimizeMP4 = importedPreset.Mp4HttpOptimize;
+            preset.Task.Optimize = importedPreset.Optimize;
             preset.Task.IPod5GSupport = importedPreset.Mp4iPodCompatible;
             preset.Task.OutputFormat = GetFileFormat(importedPreset.FileFormat.Replace("file", string.Empty).Trim());
             preset.Task.AlignAVStart = importedPreset.AlignAVStart;
@@ -541,7 +541,7 @@ namespace HandBrakeWPF.Services.Presets.Factories
 
             // Output Settings
             preset.FileFormat = EnumHelper<OutputFormat>.GetShortName(export.Task.OutputFormat);
-            preset.Mp4HttpOptimize = export.Task.OptimizeMP4;
+            preset.Optimize = export.Task.Optimize;
             preset.Mp4iPodCompatible = export.Task.IPod5GSupport;
             preset.AlignAVStart = export.Task.AlignAVStart;
             preset.MetadataPassthrough = export.Task.MetaData?.PassthruMetadataEnabled ?? false;

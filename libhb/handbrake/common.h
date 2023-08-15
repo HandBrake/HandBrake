@@ -793,7 +793,7 @@ struct hb_job_s
                                         // faithful reproduction of the source
                                         // stream and may have blank frames
                                         // added or initial frames dropped.
-    int             mp4_optimize;
+    int             optimize;
     int             ipod_atom;
 
     int                     indepth_scan;

@@ -34,7 +34,7 @@ GhbValue* ghb_get_job_dest_settings(GhbValue *settings);
 GhbValue* ghb_get_job_video_settings(GhbValue *settings);
 GhbValue* ghb_get_job_metadata_settings(GhbValue *settings);
 GhbValue* ghb_get_job_chapter_list(GhbValue *settings);
-GhbValue* ghb_get_job_mp4_settings(GhbValue *settings);
+GhbValue* ghb_get_job_container_settings(GhbValue *settings);
 GhbValue* ghb_get_job_audio_settings(GhbValue *settings);
 GhbValue* ghb_get_job_audio_list(GhbValue *settings);
 GhbValue* ghb_get_job_subtitle_settings(GhbValue *settings);

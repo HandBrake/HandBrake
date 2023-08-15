@@ -2516,12 +2516,12 @@ Modifications will be discarded.</property>
                               </object>
                             </child>
                             <child>
-                              <object class="GtkCheckButton" id="Mp4HttpOptimize">
+                              <object class="GtkCheckButton" id="Optimize">
                                 <property name="label" translatable="yes">Web Optimized</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
-                                <property name="tooltip_text" translatable="yes">Optimize the layout of the MP4 file for progressive download.
+                                <property name="tooltip_text" translatable="yes">Optimize the layout of the file for progressive download.
 This allows a player to initiate playback before downloading the entire file.</property>
                                 <property name="halign">start</property>
                                 <property name="draw_indicator">True</property>

@@ -433,12 +433,16 @@ void hb_display_job_info(hb_job_t *job)
     switch (job->mux)
     {
         case HB_MUX_AV_MP4:
-            if (job->mp4_optimize)
+            if (job->optimize)
                 hb_log("     + optimized for HTTP streaming (fast start)");
             if (job->ipod_atom)
                 hb_log("     + compatibility atom for iPod 5G");
             break;
-
+        case HB_MUX_AV_MKV:
+        case HB_MUX_AV_WEBM:
+            if (job->optimize)
+                hb_log("     + optimized for HTTP streaming (cues to the front)");
+            break;
         default:
             break;
     }

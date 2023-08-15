@@ -1268,7 +1268,6 @@ void ghb_show_container_options(signal_user_data_t *ud)
 {
     GtkWidget *w1, *w2, *w3;
     w1 = GHB_WIDGET(ud->builder, "AlignAVStart");
-    w2 = GHB_WIDGET(ud->builder, "Mp4HttpOptimize");
     w3 = GHB_WIDGET(ud->builder, "Mp4iPodCompatible");
 
     const char *mux_id;
@@ -1280,7 +1279,6 @@ void ghb_show_container_options(signal_user_data_t *ud)
     gint enc = ghb_settings_video_encoder_codec(ud->settings, "VideoEncoder");
 
     gtk_widget_set_visible(w1, (mux->format & HB_MUX_MASK_MP4));
-    gtk_widget_set_visible(w2, (mux->format & HB_MUX_MASK_MP4));
     gtk_widget_set_visible(w3, (mux->format & HB_MUX_MASK_MP4) &&
                                (enc == HB_VCODEC_X264_8BIT));
 }

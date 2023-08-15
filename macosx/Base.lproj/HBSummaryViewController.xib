@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="18122" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="22152" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="18122"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="22152"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -33,7 +33,7 @@
                                         <stackView distribution="fill" orientation="horizontal" alignment="centerY" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Vuy-Er-bln">
                                             <rect key="frame" x="0.0" y="80" width="218" height="16"/>
                                             <subviews>
-                                                <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="bpr-UY-4al" userLabel="Format">
+                                                <textField focusRingType="none" verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="bpr-UY-4al" userLabel="Format">
                                                     <rect key="frame" x="-2" y="1" width="45" height="14"/>
                                                     <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Format:" id="RXJ-DZ-4mh">
                                                         <font key="font" metaFont="smallSystem"/>
@@ -46,9 +46,6 @@
                                                 </textField>
                                                 <popUpButton toolTip="Container format. Video, audio, and other tracks are combined into a single file of this type. Affects compatibility." verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="txV-1R-WoD">
                                                     <rect key="frame" x="45" y="-4" width="177" height="22"/>
-                                                    <constraints>
-                                                        <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="140" id="em9-IL-zmS"/>
-                                                    </constraints>
                                                     <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="clipping" state="on" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="4NR-1i-weK" id="tqd-2J-YTU">
                                                         <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                                                         <font key="font" metaFont="smallSystem"/>
@@ -58,6 +55,9 @@
                                                             </items>
                                                         </menu>
                                                     </popUpButtonCell>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="140" id="em9-IL-zmS"/>
+                                                    </constraints>
                                                     <connections>
                                                         <accessibilityConnection property="title" destination="bpr-UY-4al" id="2Lk-cn-fRD"/>
                                                         <binding destination="-2" name="enabled" keyPath="self.job" id="vIZ-WQ-JdM">
@@ -103,7 +103,7 @@
                                                 </button>
                                                 <button translatesAutoresizingMaskIntoConstraints="NO" id="lUi-Oc-208">
                                                     <rect key="frame" x="-1" y="39" width="102" height="16"/>
-                                                    <string key="toolTip">Optimize MP4 for progressive download. After encoding, data is reorganized and rewritten to allow immediate playback over a network, without needing to download the entire file.</string>
+                                                    <string key="toolTip">Optimize for progressive download. After encoding, data is reorganized and rewritten to allow immediate playback over a network, without needing to download the entire file.</string>
                                                     <buttonCell key="cell" type="check" title="Web Optimized" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" inset="2" id="wcc-5d-Dgj">
                                                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                         <font key="font" metaFont="smallSystem"/>
@@ -114,12 +114,7 @@
                                                                 <string key="NSValueTransformerName">NSIsNotNil</string>
                                                             </dictionary>
                                                         </binding>
-                                                        <binding destination="-2" name="value" keyPath="self.job.mp4HttpOptimize" id="LYj-Km-ze0"/>
-                                                        <binding destination="-2" name="hidden" keyPath="self.job.mp4OptionsEnabled" previousBinding="IF3-Zz-8Fc" id="PQl-de-g6C">
-                                                            <dictionary key="options">
-                                                                <string key="NSValueTransformerName">NSNegateBoolean</string>
-                                                            </dictionary>
-                                                        </binding>
+                                                        <binding destination="-2" name="value" keyPath="self.job.optimize" id="E5v-QJ-Bhj"/>
                                                     </connections>
                                                 </button>
                                                 <button translatesAutoresizingMaskIntoConstraints="NO" id="fPv-Vw-I89">
@@ -194,7 +189,7 @@
                                 <stackView distribution="fill" orientation="horizontal" alignment="top" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="u22-zk-2gT">
                                     <rect key="frame" x="0.0" y="54" width="259" height="14"/>
                                     <subviews>
-                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="GCn-2c-Fql" userLabel="Tracks">
+                                        <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="GCn-2c-Fql" userLabel="Tracks">
                                             <rect key="frame" x="-2" y="0.0" width="45" height="14"/>
                                             <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="Tracks:" id="3mF-Bb-Gon">
                                                 <font key="font" metaFont="smallSystem"/>
@@ -205,7 +200,7 @@
                                                 <binding destination="-2" name="textColor" keyPath="self.labelColor" id="oGS-ya-5m8"/>
                                             </connections>
                                         </textField>
-                                        <textField horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="yRE-5c-FhX">
+                                        <textField focusRingType="none" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="yRE-5c-FhX">
                                             <rect key="frame" x="47" y="0.0" width="214" height="14"/>
                                             <constraints>
                                                 <constraint firstAttribute="width" constant="210" id="gqV-xA-TUl"/>
@@ -233,7 +228,7 @@
                                 <stackView distribution="fill" orientation="horizontal" alignment="top" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="PVH-BQ-dOC">
                                     <rect key="frame" x="0.0" y="27" width="259" height="14"/>
                                     <subviews>
-                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="0kh-Uy-Yo3" userLabel="Filters">
+                                        <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="0kh-Uy-Yo3" userLabel="Filters">
                                             <rect key="frame" x="-2" y="0.0" width="45" height="14"/>
                                             <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="Filters:" id="OCw-f6-uA0">
                                                 <font key="font" metaFont="smallSystem"/>
@@ -244,7 +239,7 @@
                                                 <binding destination="-2" name="textColor" keyPath="self.labelColor" id="Y59-Gp-EZi"/>
                                             </connections>
                                         </textField>
-                                        <textField horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="BHq-Mt-3eA">
+                                        <textField focusRingType="none" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="BHq-Mt-3eA">
                                             <rect key="frame" x="47" y="0.0" width="214" height="14"/>
                                             <textFieldCell key="cell" controlSize="mini" selectable="YES" sendsActionOnEndEditing="YES" title="None" id="RIB-ME-Yhh">
                                                 <font key="font" metaFont="smallSystem"/>
@@ -269,7 +264,7 @@
                                 <stackView distribution="fill" orientation="horizontal" alignment="top" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="8JZ-RV-cxj">
                                     <rect key="frame" x="0.0" y="0.0" width="259" height="14"/>
                                     <subviews>
-                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Jgq-K8-z3W" userLabel="Size">
+                                        <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Jgq-K8-z3W" userLabel="Size">
                                             <rect key="frame" x="-2" y="0.0" width="45" height="14"/>
                                             <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="Size:" id="B4a-co-0ly">
                                                 <font key="font" metaFont="smallSystem"/>
@@ -280,7 +275,7 @@
                                                 <binding destination="-2" name="textColor" keyPath="self.labelColor" id="EMw-0U-JBu"/>
                                             </connections>
                                         </textField>
-                                        <textField horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="Jaw-pH-rhf">
+                                        <textField focusRingType="none" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="Jaw-pH-rhf">
                                             <rect key="frame" x="47" y="0.0" width="214" height="14"/>
                                             <textFieldCell key="cell" controlSize="mini" selectable="YES" sendsActionOnEndEditing="YES" title="None" id="xmy-Jl-mR4">
                                                 <font key="font" metaFont="smallSystem"/>
@@ -346,28 +341,5 @@
             </constraints>
             <point key="canvasLocation" x="-88.5" y="-145"/>
         </customView>
-        <button id="JNB-kV-52S">
-            <rect key="frame" x="0.0" y="0.0" width="102" height="16"/>
-            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-            <string key="toolTip">Optimize MP4 for progressive download. After encoding, data is reorganized and rewritten to allow immediate playback over a network, without needing to download the entire file.</string>
-            <buttonCell key="cell" type="check" title="Web Optimized" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" inset="2" id="ma8-UR-dx2">
-                <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                <font key="font" metaFont="smallSystem"/>
-            </buttonCell>
-            <connections>
-                <binding destination="-2" name="enabled" keyPath="self.job" id="GM1-ep-4mM">
-                    <dictionary key="options">
-                        <string key="NSValueTransformerName">NSIsNotNil</string>
-                    </dictionary>
-                </binding>
-                <binding destination="-2" name="value" keyPath="self.job.mp4HttpOptimize" id="oQw-Gl-n8O"/>
-                <binding destination="-2" name="hidden" keyPath="self.job.mp4OptionsEnabled" previousBinding="GM1-ep-4mM" id="JOB-2s-UOH">
-                    <dictionary key="options">
-                        <string key="NSValueTransformerName">NSNegateBoolean</string>
-                    </dictionary>
-                </binding>
-            </connections>
-            <point key="canvasLocation" x="-211" y="-402"/>
-        </button>
     </objects>
 </document>
