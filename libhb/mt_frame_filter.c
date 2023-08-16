@@ -58,15 +58,28 @@ static int mt_frame_init(hb_filter_object_t * filter,
                          hb_filter_init_t   * init)
 {
     filter->private_data = calloc(sizeof(struct hb_filter_private_s), 1);
+    if (filter->private_data == NULL)
+    {
+        hb_error("mt_frame: calloc failed");
+        return -1;
+    }
     hb_filter_private_t *pv = filter->private_data;
 
     pv->sub_filter = filter->sub_filter;
     pv->sub_filter->init(pv->sub_filter, init);
 
     pv->thread_count = hb_get_cpu_count();
-    pv->buf = calloc(pv->thread_count, sizeof(hb_buffer_t*));
+    pv->buf = calloc(pv->thread_count, sizeof(hb_buffer_t *));
+    if (pv->buf == NULL)
+    {
+        goto fail;
+    }
 
-    pv->thread_data = malloc(pv->thread_count * sizeof(mt_frame_thread_arg_t*));
+    pv->thread_data = malloc(pv->thread_count * sizeof(mt_frame_thread_arg_t *));
+    if (pv->thread_data == NULL)
+    {
+        goto fail;
+    }
     if (taskset_init(&pv->taskset, "mt_frame_filter", pv->thread_count,
                      sizeof(mt_frame_thread_arg_t), mt_frame_filter_work) == 0)
     {

@@ -51,6 +51,11 @@ struct hb_work_private_s
 int encvorbisInit(hb_work_object_t *w, hb_job_t *job)
 {
     hb_work_private_t *pv = calloc(1, sizeof(hb_work_private_t));
+    if (pv == NULL)
+    {
+        hb_error("encvorbis: calloc failed");
+        return -1;
+    }
     hb_audio_t *audio = w->audio;
     w->private_data = pv;
     pv->job = job;
@@ -79,8 +84,6 @@ int encvorbisInit(hb_work_object_t *w, hb_job_t *job)
                                         audio->config.out.bitrate * 1000, -1))
         {
             hb_error("encvorbis: vorbis_encode_setup_managed() failed");
-            *job->done_error = HB_ERROR_INIT;
-            *job->die = 1;
             return -1;
         }
     }
@@ -92,8 +95,6 @@ int encvorbisInit(hb_work_object_t *w, hb_job_t *job)
                                     audio->config.out.quality / 10))
         {
             hb_error("encvorbis: vorbis_encode_setup_vbr() failed");
-            *job->done_error = HB_ERROR_INIT;
-            *job->die = 1;
             return -1;
         }
     }
@@ -102,8 +103,6 @@ int encvorbisInit(hb_work_object_t *w, hb_job_t *job)
         vorbis_encode_setup_init(&pv->vi))
     {
         hb_error("encvorbis: vorbis_encode_ctl(ratemanage2_set) OR vorbis_encode_setup_init() failed");
-        *job->done_error = HB_ERROR_INIT;
-        *job->die = 1;
         return -1;
     }
 
@@ -131,6 +130,11 @@ int encvorbisInit(hb_work_object_t *w, hb_job_t *job)
     pv->input_samples = pv->out_discrete_channels * OGGVORBIS_FRAME_SIZE;
     audio->config.out.samples_per_frame = OGGVORBIS_FRAME_SIZE;
     pv->buf = malloc(pv->input_samples * sizeof(float));
+    if (pv->buf == NULL)
+    {
+        hb_error("encvorbis: malloc failed");
+        return -1;
+    }
 
     pv->list = hb_list_init();
 

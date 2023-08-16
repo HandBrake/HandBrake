@@ -214,6 +214,11 @@ static int hb_denoise_init( hb_filter_object_t * filter,
                             hb_filter_init_t * init )
 {
     filter->private_data = calloc( sizeof(struct hb_filter_private_s), 1 );
+    if (filter->private_data == NULL)
+    {
+        hb_error("denoise: calloc failed");
+        return -1;
+    }
     hb_filter_private_t * pv = filter->private_data;
 
     const AVPixFmtDescriptor *desc = av_pix_fmt_desc_get(init->pix_fmt);

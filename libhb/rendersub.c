@@ -1222,6 +1222,11 @@ static int hb_rendersub_init( hb_filter_object_t * filter,
                               hb_filter_init_t * init )
 {
     filter->private_data = calloc( 1, sizeof(struct hb_filter_private_s) );
+    if (filter->private_data == NULL)
+    {
+        hb_error("rendersub: calloc failed");
+        return -1;
+    }
     hb_filter_private_t * pv = filter->private_data;
     hb_subtitle_t *subtitle;
     int ii;

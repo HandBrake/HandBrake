@@ -130,7 +130,13 @@ static hb_buffer_t *tx3g_decode_to_ssa(hb_work_private_t *pv, hb_buffer_t *in)
 
             numStyleRecords = READ_U16();
             if (numStyleRecords > 0)
+            {
                 styleRecords = calloc(numStyleRecords, sizeof(StyleRecord));
+                if (styleRecords == NULL)
+                {
+                    goto fail;
+                }
+            }
 
             int i;
             for (i = 0; i < numStyleRecords; i++)

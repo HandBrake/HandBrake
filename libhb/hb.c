@@ -1750,6 +1750,11 @@ void hb_add_filter2( hb_value_array_t * list, hb_dict_t * filter_dict )
 void hb_add_filter_dict( hb_job_t * job, hb_filter_object_t * filter,
                          const hb_dict_t * settings_in )
 {
+    if (filter == NULL)
+    {
+        hb_log("hb_add_filter_dict: filter is null");
+        return;
+    }
     hb_dict_t * settings;
 
     // Always set filter->settings to a valid hb_dict_t
@@ -1799,6 +1804,11 @@ void hb_add_filter_dict( hb_job_t * job, hb_filter_object_t * filter,
 void hb_add_filter( hb_job_t * job, hb_filter_object_t * filter,
                     const char * settings_in )
 {
+    if (filter == NULL)
+    {
+        hb_log("hb_add_filter: filter is null");
+        return;
+    }
     hb_dict_t * settings = hb_parse_filter_settings(settings_in);
     if (settings_in != NULL && settings == NULL)
     {
