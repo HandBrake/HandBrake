@@ -1731,40 +1731,40 @@ static void LookForAudio(hb_scan_t *scan, hb_title_t * title, hb_buffer_t * b)
     if (codec_name != NULL && profile_name != NULL)
     {
         snprintf(audio->config.lang.description, sizeof(audio->config.lang.description),
-                "%s (%s %s)", audio->config.lang.simple, codec_name, profile_name);
+                "%s (%s %s", audio->config.lang.simple, codec_name, profile_name);
     }
     else if (codec_name != NULL)
     {
         snprintf(audio->config.lang.description, sizeof(audio->config.lang.description),
-                "%s (%s)", audio->config.lang.simple, codec_name);
+                "%s (%s", audio->config.lang.simple, codec_name);
     }
     else if (profile_name != NULL)
     {
         snprintf(audio->config.lang.description, sizeof(audio->config.lang.description),
-                "%s (%s)", audio->config.lang.simple, profile_name);
+                "%s (%s", audio->config.lang.simple, profile_name);
     }
 
     if (audio->config.lang.attributes & HB_AUDIO_ATTR_VISUALLY_IMPAIRED)
     {
-        strncat(audio->config.lang.description, " (Visually Impaired)",
+        strncat(audio->config.lang.description, ", Visually Impaired",
                 sizeof(audio->config.lang.description) -
                 strlen(audio->config.lang.description) - 1);
     }
     if (audio->config.lang.attributes & HB_AUDIO_ATTR_COMMENTARY)
     {
-        strncat(audio->config.lang.description, " (Director's Commentary 1)",
+        strncat(audio->config.lang.description, ", Director's Commentary 1",
                 sizeof(audio->config.lang.description) -
                 strlen(audio->config.lang.description) - 1);
     }
     if (audio->config.lang.attributes & HB_AUDIO_ATTR_ALT_COMMENTARY)
     {
-        strncat(audio->config.lang.description, " (Director's Commentary 2)",
+        strncat(audio->config.lang.description, ", Director's Commentary 2",
                 sizeof(audio->config.lang.description) -
                 strlen(audio->config.lang.description) - 1);
     }
     if (audio->config.lang.attributes & HB_AUDIO_ATTR_SECONDARY)
     {
-        strncat(audio->config.lang.description, " (Secondary)",
+        strncat(audio->config.lang.description, ", Secondary",
                 sizeof(audio->config.lang.description) -
                 strlen(audio->config.lang.description) - 1);
     }
@@ -1777,7 +1777,7 @@ static void LookForAudio(hb_scan_t *scan, hb_title_t * title, hb_buffer_t * b)
         char *desc   = audio->config.lang.description +
                         strlen(audio->config.lang.description);
         size_t size = sizeof(audio->config.lang.description) - strlen(audio->config.lang.description);
-        snprintf(desc, size, " (%d.%d ch)", channels - lfes, lfes);
+        snprintf(desc, size, ", %d.%d ch", channels - lfes, lfes);
 
         // describe the matrix encoding mode, if any
         switch (audio->config.in.matrix_encoding)
@@ -1788,25 +1788,25 @@ static void LookForAudio(hb_scan_t *scan, hb_title_t * title, hb_buffer_t * b)
                     audio->config.in.codec_param == AV_CODEC_ID_EAC3 ||
                     audio->config.in.codec_param == AV_CODEC_ID_TRUEHD)
                 {
-                    strcat(audio->config.lang.description, " (Dolby Surround)");
+                    strcat(audio->config.lang.description, ", Dolby Surround");
                     break;
                 }
-                strcat(audio->config.lang.description, " (Lt/Rt)");
+                strcat(audio->config.lang.description, ", Lt/Rt)");
                 break;
             case AV_MATRIX_ENCODING_DPLII:
-                strcat(audio->config.lang.description, " (Dolby Pro Logic II)");
+                strcat(audio->config.lang.description, ", Dolby Pro Logic II");
                 break;
             case AV_MATRIX_ENCODING_DPLIIX:
-                strcat(audio->config.lang.description, " (Dolby Pro Logic IIx)");
+                strcat(audio->config.lang.description, ", Dolby Pro Logic IIx");
                 break;
             case AV_MATRIX_ENCODING_DPLIIZ:
-                strcat(audio->config.lang.description, " (Dolby Pro Logic IIz)");
+                strcat(audio->config.lang.description, ", Dolby Pro Logic IIz");
                 break;
             case AV_MATRIX_ENCODING_DOLBYEX:
-                strcat(audio->config.lang.description, " (Dolby Digital EX)");
+                strcat(audio->config.lang.description, ", Dolby Digital EX");
                 break;
             case AV_MATRIX_ENCODING_DOLBYHEADPHONE:
-                strcat(audio->config.lang.description, " (Dolby Headphone)");
+                strcat(audio->config.lang.description, ", Dolby Headphone");
                 break;
             default:
                 break;
@@ -1818,10 +1818,11 @@ static void LookForAudio(hb_scan_t *scan, hb_title_t * title, hb_buffer_t * b)
     if (audio->config.in.bitrate > 1)
     {
         char in_bitrate_str[19];
-        snprintf(in_bitrate_str, 18, " (%d kbps)", audio->config.in.bitrate / 1000);
+        snprintf(in_bitrate_str, 18, ", %d kbps", audio->config.in.bitrate / 1000);
         strncat(audio->config.lang.description, in_bitrate_str,
                 sizeof(audio->config.lang.description) - strlen(audio->config.lang.description) - 1);
     }
+    strcat(audio->config.lang.description, ")");
 
     hb_log( "scan: audio 0x%x: %s, rate=%dHz, bitrate=%d %s", audio->id,
             info.name, audio->config.in.samplerate, audio->config.in.bitrate,

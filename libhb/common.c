@@ -5468,7 +5468,7 @@ int hb_import_subtitle_add( const hb_job_t * job,
         hb_log("hb_srt_add: unknown language code (%s)", lang_code);
         lang = lang_for_code2("und");
     }
-    snprintf(subtitle->lang, sizeof(subtitle->lang), "%s [%s]",
+    snprintf(subtitle->lang, sizeof(subtitle->lang), "%s (%s)",
              strlen(lang->native_name) ? lang->native_name : lang->eng_name,
              hb_subsource_name(subtitle->source));
     strcpy(subtitle->iso639_2, lang->iso639_2);
