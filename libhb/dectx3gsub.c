@@ -79,6 +79,7 @@ static int write_ssa_markup(char *dst, StyleRecord *style)
 
 static hb_buffer_t *tx3g_decode_to_ssa(hb_work_private_t *pv, hb_buffer_t *in)
 {
+    hb_buffer_t *out = NULL;
     uint8_t *pos = in->data;
     uint8_t *end = in->data + in->size;
 
@@ -160,7 +161,7 @@ static hb_buffer_t *tx3g_decode_to_ssa(hb_work_private_t *pv, hb_buffer_t *in)
      * Copy text to output buffer, and add HTML markup for the style records
      */
     int maxOutputSize = textLength + SSA_PREAMBLE_LEN + (numStyleRecords * MAX_MARKUP_LEN);
-    hb_buffer_t *out = hb_buffer_init( maxOutputSize );
+    out = hb_buffer_init( maxOutputSize );
     if ( out == NULL )
         goto fail;
     uint8_t *dst = out->data;
