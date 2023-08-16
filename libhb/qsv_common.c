@@ -4758,7 +4758,7 @@ int hb_qsv_sanitize_filter_list(hb_job_t *job)
         job->qsv.ctx->qsv_hw_filters_via_system_memory_are_enabled = (num_hw_filters > 0) && hb_qsv_full_path_is_enabled(job) && hb_qsv_get_memory_type(job) == MFX_IOPATTERN_OUT_SYSTEM_MEMORY ? 1 : 0;
         job->qsv.ctx->qsv_hw_filters_via_video_memory_are_enabled  = (num_hw_filters > 0) && hb_qsv_full_path_is_enabled(job) && hb_qsv_get_memory_type(job) == MFX_IOPATTERN_OUT_VIDEO_MEMORY  ? 1 : 0;
 
-        if (job->qsv.ctx->qsv_hw_filters_via_video_memory_are_enabled || job->qsv.ctx->qsv_hw_filters_via_system_memory_are_enabled)
+        if (!job->qsv.ctx->hb_vpp_qsv_frames_ctx && (job->qsv.ctx->qsv_hw_filters_via_video_memory_are_enabled || job->qsv.ctx->qsv_hw_filters_via_system_memory_are_enabled))
         {
             job->qsv.ctx->hb_vpp_qsv_frames_ctx = av_mallocz(sizeof(HBQSVFramesContext));
             if (!job->qsv.ctx->hb_vpp_qsv_frames_ctx)

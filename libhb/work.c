@@ -1428,6 +1428,13 @@ static void sanitize_filter_list_pre(hb_job_t *job, hb_geometry_t src_geo)
             }
         }
     }
+
+#if HB_PROJECT_FEATURE_QSV && (defined( _WIN32 ) || defined( __MINGW32__ ))
+    if (hb_qsv_is_enabled(job))
+    {
+        hb_qsv_sanitize_filter_list(job);
+    }
+#endif
 }
 
 static void sanitize_filter_list_post(hb_job_t *job)
@@ -1470,8 +1477,6 @@ static void sanitize_filter_list_post(hb_job_t *job)
     }
 
 #if HB_PROJECT_FEATURE_QSV && (defined( _WIN32 ) || defined( __MINGW32__ ))
-    // sanitize_qsv looks for subtitle render filter, so must happen after
-    // sanitize_subtitle
     if (hb_qsv_is_enabled(job))
     {
         hb_qsv_sanitize_filter_list(job);
