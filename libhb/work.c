@@ -1475,13 +1475,6 @@ static void sanitize_filter_list_post(hb_job_t *job)
         hb_add_filter(job, filter, settings);
         free(settings);
     }
-
-#if HB_PROJECT_FEATURE_QSV && (defined( _WIN32 ) || defined( __MINGW32__ ))
-    if (hb_qsv_is_enabled(job))
-    {
-        hb_qsv_sanitize_filter_list(job);
-    }
-#endif
 }
 
 static int dolby_vision_level(int width, int height, hb_rational_t vrate)

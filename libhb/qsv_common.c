@@ -2235,12 +2235,12 @@ int hb_qsv_decode_is_enabled(hb_job_t *job)
 
 int hb_qsv_hw_filters_via_video_memory_are_enabled(hb_job_t *job)
 {
-    return job && job->qsv.ctx && job->qsv.ctx->qsv_hw_filters_via_video_memory_are_enabled;
+    return hb_qsv_full_path_is_enabled(job) && (hb_qsv_get_memory_type(job) == MFX_IOPATTERN_OUT_VIDEO_MEMORY) && (job->qsv.ctx->num_hw_filters > 0);
 }
 
 int hb_qsv_hw_filters_via_system_memory_are_enabled(hb_job_t *job)
 {
-    return job && job->qsv.ctx && job->qsv.ctx->qsv_hw_filters_via_system_memory_are_enabled;
+    return hb_qsv_full_path_is_enabled(job) && (hb_qsv_get_memory_type(job) == MFX_IOPATTERN_OUT_SYSTEM_MEMORY) && (job->qsv.ctx->num_hw_filters > 0);
 }
 
 int hb_qsv_is_enabled(hb_job_t *job)
@@ -3812,7 +3812,7 @@ int hb_qsv_replace_surface_mid(HBQSVFramesContext* hb_enc_qsv_frames_ctx, const 
 
 int hb_qsv_release_surface_from_pool_by_surface_pointer(HBQSVFramesContext* hb_enc_qsv_frames_ctx, const mfxFrameSurface1 *surface)
 {
-    if (!hb_enc_qsv_frames_ctx || !surface)
+    if (!(hb_enc_qsv_frames_ctx && hb_enc_qsv_frames_ctx->hw_frames_ctx) || !surface)
         return -1;
 
     AVHWFramesContext *frames_ctx = (AVHWFramesContext*)hb_enc_qsv_frames_ctx->hw_frames_ctx->data;
@@ -4673,7 +4673,7 @@ enum AVPixelFormat hb_qsv_get_format(AVCodecContext *s, const enum AVPixelFormat
 
 int hb_qsv_create_ffmpeg_vpp_pool(hb_filter_init_t *init, int width, int height)
 {
-    if (init->job->qsv.ctx && init->job->qsv.ctx->hb_vpp_qsv_frames_ctx->hw_frames_ctx)
+    if (init->job->qsv.ctx && init->job->qsv.ctx->hb_vpp_qsv_frames_ctx && init->job->qsv.ctx->hb_vpp_qsv_frames_ctx->hw_frames_ctx)
     {
         if (init->job->qsv.ctx->hb_vpp_qsv_frames_ctx->mids_buf)
             av_buffer_unref(&init->job->qsv.ctx->hb_vpp_qsv_frames_ctx->mids_buf);
@@ -4755,10 +4755,9 @@ int hb_qsv_sanitize_filter_list(hb_job_t *job)
         }
 
         job->qsv.ctx->num_sw_filters = num_sw_filters;
-        job->qsv.ctx->qsv_hw_filters_via_system_memory_are_enabled = (num_hw_filters > 0) && hb_qsv_full_path_is_enabled(job) && hb_qsv_get_memory_type(job) == MFX_IOPATTERN_OUT_SYSTEM_MEMORY ? 1 : 0;
-        job->qsv.ctx->qsv_hw_filters_via_video_memory_are_enabled  = (num_hw_filters > 0) && hb_qsv_full_path_is_enabled(job) && hb_qsv_get_memory_type(job) == MFX_IOPATTERN_OUT_VIDEO_MEMORY  ? 1 : 0;
+        job->qsv.ctx->num_hw_filters = num_hw_filters;
 
-        if (!job->qsv.ctx->hb_vpp_qsv_frames_ctx && (job->qsv.ctx->qsv_hw_filters_via_video_memory_are_enabled || job->qsv.ctx->qsv_hw_filters_via_system_memory_are_enabled))
+        if (!job->qsv.ctx->hb_vpp_qsv_frames_ctx)
         {
             job->qsv.ctx->hb_vpp_qsv_frames_ctx = av_mallocz(sizeof(HBQSVFramesContext));
             if (!job->qsv.ctx->hb_vpp_qsv_frames_ctx)
