@@ -98,7 +98,7 @@ static int crop_scale_init(hb_filter_object_t * filter, hb_filter_init_t * init)
     hb_dict_t * avsettings = hb_dict_init();
 
 #if HB_PROJECT_FEATURE_QSV && (defined( _WIN32 ) || defined( __MINGW32__ ))
-    if (hb_qsv_hw_filters_via_system_memory_are_enabled(init->job) || hb_qsv_hw_filters_via_video_memory_are_enabled(init->job))
+    if (hb_qsv_hw_filters_via_video_memory_are_enabled(init->job) || hb_qsv_hw_filters_via_system_memory_are_enabled(init->job))
     {
         if (hb_qsv_hw_filters_via_video_memory_are_enabled(init->job))
         {
