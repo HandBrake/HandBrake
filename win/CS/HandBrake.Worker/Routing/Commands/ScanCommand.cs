@@ -25,5 +25,7 @@ namespace HandBrake.Worker.Routing.Commands
         public int TitleIndex { get; set; }
 
         public List<string> FileExclusionList { get; set; }
+
+        public int HwDecode { get; set; }
     }
 }

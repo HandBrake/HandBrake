@@ -79,7 +79,10 @@ namespace HandBrake.Interop.Interop.Interfaces
         /// These should be the extension name only. No .
         /// Case Insensitive.
         /// </param>
-        void StartScan(List<string> paths, int previewCount, TimeSpan minDuration, int titleIndex, List<string> excludedExtensions);
+        /// <param name="hwDecode">
+        /// From NativeConstants, allow for Hardware decode probing during scans.
+        /// </param>
+        void StartScan(List<string> paths, int previewCount, TimeSpan minDuration, int titleIndex, List<string> excludedExtensions, int hwDecode);
 
         /// <summary>
         /// Stop any running scans

@@ -80,12 +80,12 @@ namespace HandBrakeWPF.Instance
             return null;
         }
 
-        public void StartScan(List<string> paths, int previewCount, TimeSpan minDuration, int titleIndex, List<string> fileExclusionList)
+        public void StartScan(List<string> paths, int previewCount, TimeSpan minDuration, int titleIndex, List<string> fileExclusionList, int hwDecode)
         {
             if (this.IsServerRunning())
             {
                 scanCompleteFired = false;
-                Thread thread1 = new Thread(() => RunScanInitProcess(paths, previewCount, minDuration, titleIndex));
+                Thread thread1 = new Thread(() => RunScanInitProcess(paths, previewCount, minDuration, titleIndex, hwDecode));
                 thread1.Start();
             }
             else
@@ -118,7 +118,7 @@ namespace HandBrakeWPF.Instance
             return state;
         }
 
-        private void RunScanInitProcess(List<string> paths, int previewCount, TimeSpan minDuration, int titleIndex)
+        private void RunScanInitProcess(List<string> paths, int previewCount, TimeSpan minDuration, int titleIndex, int hwDecode)
         {
             if (this.IsServerRunning())
             {
@@ -131,7 +131,8 @@ namespace HandBrakeWPF.Instance
                     LogDirectory = DirectoryUtilities.GetLogDirectory(),
                     LogVerbosity = this.userSettingService.GetUserSetting<int>(UserSettingConstants.Verbosity),
                     Mode = 2,
-                    ExcludeExtnesionList = this.userSettingService.GetUserSetting<List<string>>(UserSettingConstants.ExcludedExtensions)
+                    ExcludeExtnesionList = this.userSettingService.GetUserSetting<List<string>>(UserSettingConstants.ExcludedExtensions),
+                    HwDecode = hwDecode
                 };
 
                 initCommand.LogFile = Path.Combine(initCommand.LogDirectory, string.Format("activity_log.worker.{0}.txt", GeneralUtilities.ProcessId));

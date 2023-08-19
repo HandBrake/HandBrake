@@ -35,5 +35,7 @@ namespace HandBrake.Worker.Routing.Commands
         /// 3: Background
         /// </summary>
         public int Mode { get; set; }
+
+        public int HwDecode { get; set; }
     }
 }

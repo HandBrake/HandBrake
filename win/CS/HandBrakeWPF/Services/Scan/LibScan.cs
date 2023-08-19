@@ -15,6 +15,7 @@ namespace HandBrakeWPF.Services.Scan
     using System.Windows.Media.Imaging;
 
     using HandBrake.Interop.Interop;
+    using HandBrake.Interop.Interop.HbLib;
     using HandBrake.Interop.Interop.Interfaces;
     using HandBrake.Interop.Interop.Interfaces.Model.Preview;
     using HandBrake.Interop.Interop.Json.Encode;
@@ -226,8 +227,16 @@ namespace HandBrakeWPF.Services.Scan
 
                 List<string> excludedExtensions = this.userSettingService.GetUserSetting<List<string>>(UserSettingConstants.ExcludedExtensions);
 
+                bool nvdec = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.EnableNvDecSupport);
+                int hwDecode = 0;
+                if (nvdec)
+                {
+                    hwDecode = (int)NativeConstants.HB_DECODE_SUPPORT_NVDEC;
+                }
+
+
                 this.ServiceLogMessage("Starting Scan ...");
-                this.instance.StartScan(sourcePaths, previewCount, minDuration, title != 0 ? title : 0, excludedExtensions);
+                this.instance.StartScan(sourcePaths, previewCount, minDuration, title != 0 ? title : 0, excludedExtensions, hwDecode);
 
                 this.ScanStarted?.Invoke(this, System.EventArgs.Empty);
             }
