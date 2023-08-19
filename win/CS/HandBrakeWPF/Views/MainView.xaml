@@ -527,7 +527,7 @@
                     </Grid.ColumnDefinitions>
                     <Label Margin="0,0,0,0" Content="{x:Static Properties:Resources.MainView_File}" FontWeight="Bold" />
                     <TextBox Name="Destination"
-                             Grid.Column="1"
+                             Grid.Column="1" behaviours:TextBoxBehavior.TripleClickSelectAll="True" 
                              Margin="5,0,0,0" ToolTip="{x:Static Properties:ResourcesTooltips.MainView_Destination}"
                              Text="{Binding Destination,
                                             UpdateSourceTrigger=PropertyChanged}">
