@@ -4782,6 +4782,16 @@ int hb_qsv_hw_frames_init(AVCodecContext *s)
     return -1;
 }
 
+int hb_qsv_device_init(hb_job_t *job)
+{
+    return -1;
+}
+
+int hb_qsv_create_ffmpeg_pool(hb_job_t *job, int coded_width, int coded_height, enum AVPixelFormat sw_pix_fmt, int pool_size, int extra_hw_frames, AVBufferRef **out_hw_frames_ctx)
+{
+    return -1;
+}
+
 hb_buffer_t * hb_qsv_copy_video_buffer_to_hw_video_buffer(hb_job_t *job, hb_buffer_t *in, const int is_vpp)
 {
     return NULL;
