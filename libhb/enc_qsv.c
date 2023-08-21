@@ -206,8 +206,9 @@ static int log_encoder_params(const hb_work_private_t *pv, const mfxVideoParam *
     }
 
     // log code path and main output settings
-    hb_log("encqsvInit: using%s%s%s path",
-           pv->is_sys_mem ? " encode-only" : " full QSV",
+    hb_log("encqsvInit: using%s%s%s%s path",
+           hb_qsv_full_path_is_enabled(pv->job) ? " full QSV" : " encode-only",
+           hb_qsv_get_memory_type(pv->job) == MFX_IOPATTERN_OUT_VIDEO_MEMORY ? " via video memory" : " via system memory",
            videoParam->mfx.LowPower == MFX_CODINGOPTION_ON ? " (LowPower)" : "",
            extHyperModeOption != NULL ? hyper_encode_name(extHyperModeOption->Mode) : "");
     hb_log("encqsvInit: %s %s profile @ level %s",
@@ -1017,7 +1018,7 @@ int qsv_enc_init(hb_work_private_t *pv)
                 .Free   = hb_qsv_frame_free,
             };
 
-            if (hb_qsv_hw_filters_are_enabled(pv->job))
+            if (hb_qsv_hw_filters_via_video_memory_are_enabled(pv->job) || hb_qsv_hw_filters_via_system_memory_are_enabled(pv->job))
             {
                 frame_allocator.pthis = pv->job->qsv.ctx->hb_vpp_qsv_frames_ctx;
             }
@@ -1161,7 +1162,7 @@ int encqsvInit(hb_work_object_t *w, hb_job_t *job)
     hb_work_private_t *pv = calloc(1, sizeof(hb_work_private_t));
     w->private_data       = pv;
 
-    pv->is_sys_mem         = hb_qsv_full_path_is_enabled(job) ? 0 : 1;
+    pv->is_sys_mem         = (hb_qsv_get_memory_type(job) == MFX_IOPATTERN_OUT_SYSTEM_MEMORY);
     pv->job                = job;
     pv->qsv_info           = hb_qsv_encoder_info_get(hb_qsv_get_adapter_index(), job->vcodec);
     pv->delayed_processing = hb_list_init();
@@ -1188,6 +1189,8 @@ int encqsvInit(hb_work_object_t *w, hb_job_t *job)
     pv->param.videoParam->AsyncDepth = job->qsv.async_depth;
 
     // set and enable colorimetry (video signal information)
+    pv->param.videoSignalInfo.VideoFullRange = (pv->job->color_range == AVCOL_RANGE_JPEG);
+
     pv->param.videoSignalInfo.ColourPrimaries          = hb_output_color_prim(job);
     pv->param.videoSignalInfo.TransferCharacteristics  = hb_output_color_transfer(job);
     pv->param.videoSignalInfo.MatrixCoefficients       = hb_output_color_matrix(job);
@@ -1577,7 +1580,9 @@ int encqsvInit(hb_work_object_t *w, hb_job_t *job)
         {
             pv->param.videoParam->mfx.IdrInterval = 0;
         }
-        pv->param.videoParam->AsyncDepth = 60;
+        // sanitize some of the encoding parameters
+        pv->param.videoParam->mfx.GopPicSize = (int)(FFMIN(pv->param.gop.gop_pic_size, 60));
+        pv->param.videoParam->AsyncDepth = (int)(FFMAX(pv->param.videoParam->AsyncDepth, 30));
     }
     // sanitize some settings that affect memory consumption
     if (!pv->is_sys_mem)

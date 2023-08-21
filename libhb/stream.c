@@ -2032,7 +2032,7 @@ static void pes_add_subtitle_to_title(
     }
 
     lang = lang_for_code( pes->lang_code );
-    snprintf(subtitle->lang, sizeof( subtitle->lang ), "%s [%s]",
+    snprintf(subtitle->lang, sizeof( subtitle->lang ), "%s (%s)",
              strlen(lang->native_name) ? lang->native_name : lang->eng_name,
              hb_subsource_name(subtitle->source));
     snprintf(subtitle->iso639_2, sizeof( subtitle->iso639_2 ), "%s",
@@ -5680,7 +5680,7 @@ static void add_ffmpeg_subtitle( hb_title_t *title, hb_stream_t *stream, int id 
             return;
     }
 
-    snprintf(subtitle->lang, sizeof( subtitle->lang ), "%s [%s]",
+    snprintf(subtitle->lang, sizeof( subtitle->lang ), "%s (%s)",
              strlen(lang->native_name) ? lang->native_name : lang->eng_name,
              hb_subsource_name(subtitle->source));
     strncpy(subtitle->iso639_2, lang->iso639_2, 3);

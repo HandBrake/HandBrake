@@ -67,5 +67,8 @@ namespace HandBrake.Interop.Interop.HbLib
         public const uint HB_DECODE_SUPPORT_SW = 0x01;
         public const uint HB_DECODE_SUPPORT_QSV = 0x02;
         public const uint HB_DECODE_SUPPORT_NVDEC = 0x04;
+        public const uint HB_DECODE_SUPPORT_VIDEOTOOLBOX = 0x08;
+
+        public const uint HB_DECODE_SUPPORT_HWACCEL = (HB_DECODE_SUPPORT_NVDEC | HB_DECODE_SUPPORT_VIDEOTOOLBOX);
     }
 }

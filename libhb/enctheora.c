@@ -40,6 +40,11 @@ int enctheoraInit( hb_work_object_t * w, hb_job_t * job )
 {
     int keyframe_frequency, log_keyframe, ret;
     hb_work_private_t * pv = calloc( 1, sizeof( hb_work_private_t ) );
+    if (pv == NULL)
+    {
+        hb_error("theora: calloc failed");
+        return 1;
+    }
     w->private_data = pv;
 
     pv->job = job;

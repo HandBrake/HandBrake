@@ -357,7 +357,8 @@ format_vquality_cb(GtkScale *scale, gdouble val, signal_user_data_t *ud)
                                        vqname, val);
                 break;
             }
-        } // Falls through to default
+            G_GNUC_FALLTHROUGH; // Falls through to default
+        }
         case HB_VCODEC_X264_10BIT:
         default:
         {

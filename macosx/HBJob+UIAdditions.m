@@ -821,6 +821,7 @@ static HBMixdownTransformer    *mixdownTransformer;
     {
         if (audioTrack.isEnabled)
         {
+            [info appendFormat: @"%lu: ", (unsigned long)audioTrack.sourceTrackIdx - 1];
             const char *encoder = hb_audio_encoder_get_name(audioTrack.encoder);
             if (encoder)
             {
@@ -840,7 +841,8 @@ static HBMixdownTransformer    *mixdownTransformer;
             [info appendString:@"\n"];
         }
 
-        if (index == 1) {
+        if (index == 1)
+        {
             break;
         }
         index += 1;

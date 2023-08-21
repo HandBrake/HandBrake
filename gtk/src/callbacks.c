@@ -676,6 +676,10 @@ get_dvd_volume_name(gpointer gd)
     gchar *drive;
 
     drive = get_dvd_device_name(gd);
+
+    if (drive == NULL)
+        return NULL;
+
     g_mutex_lock(volname_mutex);
     label = g_strdup(g_hash_table_lookup(volname_hash, drive));
     g_mutex_unlock(volname_mutex);
@@ -813,7 +817,7 @@ parse_datestring(const char *src, struct tm *tm)
 
     datemap maps[1] = { ymdThmsZ };
 
-    for (int i = 0; i < sizeof(maps); i++)
+    for (guint i = 0; i < sizeof(maps); i++)
     {
         if (hb_validate_param_string(maps[i].pattern, src))
         {
@@ -3264,7 +3268,7 @@ ptop_read_value_cb (GtkWidget *widget, gdouble *val, signal_user_data_t *ud)
         return FALSE;
     if (result == 1)
     {
-        result = sscanf(text, "%lf", val);
+        sscanf(text, "%lf", val);
         return TRUE;
     }
     *val = hh * 3600 + mm * 60 + ss;
@@ -4619,12 +4623,8 @@ G_MODULE_EXPORT void
 show_activity_action_cb(GSimpleAction *action, GVariant *value,
                         signal_user_data_t *ud)
 {
-    GtkWidget * activity_window;
-    gboolean    state = g_variant_get_boolean(value);
-
-    g_simple_action_set_state(action, value);
-    activity_window = GHB_WIDGET(ud->builder, "activity_window");
-    gtk_widget_set_visible(activity_window, state);
+    GtkWidget *activity_window = GHB_WIDGET(ud->builder, "activity_window");
+    gtk_window_present(GTK_WINDOW(activity_window));
 }
 
 G_MODULE_EXPORT gboolean
@@ -4636,8 +4636,6 @@ activity_window_delete_cb(
     signal_user_data_t *ud)
 {
     gtk_widget_set_visible(xwidget, FALSE);
-    GtkWidget *widget = GHB_WIDGET (ud->builder, "show_activity");
-    gtk_toggle_tool_button_set_active(GTK_TOGGLE_TOOL_BUTTON(widget), FALSE);
     return TRUE;
 }
 
@@ -4694,6 +4692,9 @@ ghb_browse_uri(signal_user_data_t *ud, const gchar *uri)
     argv[2] = NULL;
     result = g_spawn_async(NULL, argv, NULL, G_SPAWN_SEARCH_PATH, NULL,
                 NULL, NULL, NULL);
+
+    if (!result)
+        g_warning("No application to open URI was found");
 #endif
 }
 
@@ -4744,57 +4745,6 @@ update_queue_labels(signal_user_data_t *ud)
     }
     gtk_tool_button_set_label(button, str);
     g_free(str);
-}
-
-static void
-presets_window_set_visible(signal_user_data_t *ud, gboolean visible)
-{
-    GtkWidget     * presets_window;
-    GtkWidget     * hb_window;
-
-    hb_window = GHB_WIDGET(ud->builder, "hb_window");
-    if (!gtk_widget_is_visible(hb_window))
-    {
-        return;
-    }
-
-    int w, h;
-    w = ghb_dict_get_int(ud->prefs, "presets_window_width");
-    h = ghb_dict_get_int(ud->prefs, "presets_window_height");
-
-    presets_window = GHB_WIDGET(ud->builder, "presets_window");
-    if (w > 200 && h > 200)
-    {
-        gtk_window_resize(GTK_WINDOW(presets_window), w, h);
-    }
-    gtk_widget_set_visible(presets_window, visible);
-
-#if !GTK_CHECK_VERSION(4, 4, 0)
-    // TODO: Is this possible in GTK4?
-    int             x, y;
-
-    if (visible)
-    {
-        gtk_window_get_position(GTK_WINDOW(hb_window), &x, &y);
-        x -= w + 10;
-        if (x < 0)
-        {
-            gtk_window_move(GTK_WINDOW(hb_window), w + 10, y);
-            x = 0;
-        }
-        gtk_window_move(GTK_WINDOW(presets_window), x, y);
-    }
-#endif
-}
-
-G_MODULE_EXPORT void
-show_presets_action_cb(GSimpleAction *action, GVariant *value,
-                       signal_user_data_t *ud)
-{
-    gboolean state = g_variant_get_boolean(value);
-
-    g_simple_action_set_state(action, value);
-    presets_window_set_visible(ud, state);
 }
 
 void
@@ -5046,12 +4996,15 @@ ghb_file_menu_add_dvd(signal_user_data_t *ud)
             gchar *action = g_strdup_printf("app.dvd-open('%s')", get_dvd_device_name(link->data));
             gchar *name = get_dvd_volume_name(link->data);
 
-            GMenuItem *item = g_menu_item_new_from_model(dvd_template, 0);
-            g_menu_item_set_label(item, name);
-            g_menu_item_set_detailed_action(item, action);
-            g_menu_append_item(dvd_menu, item);
+            if (name != NULL)
+            {
+                GMenuItem *item = g_menu_item_new_from_model(dvd_template, 0);
+                g_menu_item_set_label(item, name);
+                g_menu_item_set_detailed_action(item, action);
+                g_menu_append_item(dvd_menu, item);
+                g_free(name);
+            }
 
-            g_free(name);
             g_free(action);
             free_drive(link->data);
             link = link->next;
@@ -5123,7 +5076,7 @@ ghb_is_cd(GDrive *gd)
 {
     GIcon *gicon;
     gboolean ret = FALSE;
-    char **names, **iter;
+    char **names;
 
     if (!g_drive_is_media_removable (gd))
         return ret;
@@ -5138,7 +5091,7 @@ ghb_is_cd(GDrive *gd)
     }
 
     g_object_get (gicon, "names", &names, NULL);
-    ret = g_strv_contains (names, "drive-optical");
+    ret = g_strv_contains ((const char * const *) names, "drive-optical");
     g_strfreev (names);
     g_object_unref (gicon);
 

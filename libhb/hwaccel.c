@@ -9,6 +9,7 @@
 
 #include "handbrake/hbffmpeg.h"
 #include "handbrake/handbrake.h"
+#include "handbrake/nvenc_common.h"
 
 #ifdef __APPLE__
 #include "platform/macosx/vt_common.h"
@@ -195,41 +196,52 @@ static int hb_hwaccel_hwframe_init(hb_job_t *job, AVFrame **frame)
 
 hb_buffer_t * hb_hwaccel_copy_video_buffer_to_hw_video_buffer(hb_job_t *job, hb_buffer_t **buf_in)
 {
-    AVFrame frame = {{0}};
-    AVFrame *hw_frame = NULL;
-
-    int ret;
-
-    hb_video_buffer_to_avframe(&frame, buf_in);
-
-    ret = hb_hwaccel_hwframe_init(job, &hw_frame);
-    if (ret < 0)
+#ifdef __APPLE__
+    if (job->hw_pix_fmt == AV_PIX_FMT_VIDEOTOOLBOX)
     {
-        goto fail;
+        return hb_vt_copy_video_buffer_to_hw_video_buffer(job, buf_in);
+    }
+    else
+#endif
+    {
+        AVFrame frame = {{0}};
+        AVFrame *hw_frame = NULL;
+
+        int ret;
+
+        hb_video_buffer_to_avframe(&frame, buf_in);
+
+        ret = hb_hwaccel_hwframe_init(job, &hw_frame);
+        if (ret < 0)
+        {
+            goto fail;
+        }
+
+        av_frame_copy_props(hw_frame, &frame);
+        if (ret < 0)
+        {
+            goto fail;
+        }
+
+        av_hwframe_transfer_data(hw_frame, &frame, 0);
+        if (ret < 0)
+        {
+            goto fail;
+        }
+
+        hb_buffer_t *out = hb_avframe_to_video_buffer(hw_frame, (AVRational){1,1}, 1);
+
+        av_frame_unref(&frame);
+        av_frame_unref(hw_frame);
+
+        return out;
+
+    fail:
+        av_frame_unref(&frame);
+        av_frame_unref(hw_frame);
+        return NULL;
     }
 
-    av_frame_copy_props(hw_frame, &frame);
-    if (ret < 0)
-    {
-        goto fail;
-    }
-
-    av_hwframe_transfer_data(hw_frame, &frame, 0);
-    if (ret < 0)
-    {
-        goto fail;
-    }
-
-    hb_buffer_t *out = hb_avframe_to_video_buffer(hw_frame, (AVRational){1,1}, 1);
-
-    av_frame_unref(&frame);
-    av_frame_unref(hw_frame);
-
-    return out;
-
-fail:
-    av_frame_unref(&frame);
-    av_frame_unref(hw_frame);
     return NULL;
 }
 
@@ -239,21 +251,20 @@ const char * hb_hwaccel_get_codec_name(enum AVCodecID codec_id)
     {
         case AV_CODEC_ID_H264:
             return "h264_hwaccel";
-
         case AV_CODEC_ID_HEVC:
             return "hevc_hwaccel";
-
         case AV_CODEC_ID_AV1:
             return "av1_hwaccel";
-
+        case AV_CODEC_ID_PRORES:
+            return "prores_hwaccel";
         default:
             return "hwaccel";
     }
 }
 
-static int is_codec_supported(int codec_id)
+static int is_encoder_supported(int encoder_id)
 {
-    switch (codec_id)
+    switch (encoder_id)
     {
         case HB_VCODEC_FFMPEG_NVENC_H264:
         case HB_VCODEC_FFMPEG_NVENC_H265:
@@ -267,35 +278,6 @@ static int is_codec_supported(int codec_id)
         default:
             return 0;
     }
-}
-
-int hb_nvenc_are_filters_supported(hb_list_t *filters)
-{
-    int ret = 1;
-
-    for (int i = 0; i < hb_list_count(filters); i++)
-    {
-        int supported = 1;
-        hb_filter_object_t *filter = hb_list_item(filters, i);
-
-        switch (filter->id)
-        {
-            case HB_FILTER_VFR:
-                // Mode 0 doesn't require access to the frame data
-                supported = hb_dict_get_int(filter->settings, "mode") == 0;
-                break;
-            default:
-                supported = 0;
-        }
-
-        if (supported == 0)
-        {
-            hb_deep_log(2, "hwaccel: %s isn't yet supported for hw video frames", filter->name);
-            ret = 0;
-        }
-    }
-
-    return ret;
 }
 
 static int are_filters_supported(hb_list_t *filters, int hw_decode)
@@ -327,7 +309,7 @@ int hb_hwaccel_is_full_hardware_pipeline_enabled(hb_job_t *job)
 {
     return hb_hwaccel_is_enabled(job) &&
             are_filters_supported(job->list_filter, job->hw_decode) &&
-            is_codec_supported(job->vcodec);
+            is_encoder_supported(job->vcodec);
 }
 
 int hb_hwaccel_decode_is_enabled(hb_job_t *job)

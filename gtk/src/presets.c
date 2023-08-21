@@ -856,7 +856,7 @@ ghb_write_pid_file (void)
     fd = open(path, O_RDWR|O_CREAT, S_IRUSR|S_IWUSR);
     if (fd >= 0)
     {
-        lockf(fd, F_TLOCK, 0);
+        (void) !!lockf(fd, F_TLOCK, 0);
     }
 
     g_free(config);
@@ -1123,6 +1123,45 @@ get_selected_path(signal_user_data_t *ud)
     return NULL;
 }
 
+G_MODULE_EXPORT void
+show_presets_action_cb(GSimpleAction *action, GVariant *value,
+                       signal_user_data_t *ud)
+{
+    GtkWidget *presets_window;
+    GtkWidget *hb_window;
+    int w, h;
+
+    hb_window = GHB_WIDGET(ud->builder, "hb_window");
+    if (!gtk_widget_is_visible(hb_window))
+    {
+        return;
+    }
+
+    w = ghb_dict_get_int(ud->prefs, "presets_window_width");
+    h = ghb_dict_get_int(ud->prefs, "presets_window_height");
+
+    presets_window = GHB_WIDGET(ud->builder, "presets_window");
+    if (w > 200 && h > 200)
+    {
+        gtk_window_resize(GTK_WINDOW(presets_window), w, h);
+    }
+
+#if !GTK_CHECK_VERSION(4, 4, 0)
+    // Note: Only works on GTK3 and with X11
+    int x, y;
+
+    gtk_window_get_position(GTK_WINDOW(hb_window), &x, &y);
+    x -= w + 10;
+    if (x < 0)
+    {
+        gtk_window_move(GTK_WINDOW(hb_window), w + 10, y);
+        x = 0;
+    }
+    gtk_window_move(GTK_WINDOW(presets_window), x, y);
+#endif
+    gtk_window_present(GTK_WINDOW(presets_window));
+}
+
 G_MODULE_EXPORT gboolean
 presets_window_delete_cb(
     GtkWidget *xwidget,
@@ -1131,12 +1170,8 @@ presets_window_delete_cb(
 #endif
     signal_user_data_t *ud)
 {
-    GSimpleAction * action;
-    GVariant      * state = g_variant_new_boolean(FALSE);
-
-    action = G_SIMPLE_ACTION(g_action_map_lookup_action(
-                             G_ACTION_MAP(ud->app), "show-presets"));
-    g_action_change_state(G_ACTION(action), state);
+    GtkWidget *presets_window = GHB_WIDGET(ud->builder, "presets_window");
+    gtk_widget_set_visible(presets_window, FALSE);
     return TRUE;
 }
 
@@ -1424,10 +1459,10 @@ ghb_presets_list_init(signal_user_data_t *ud, const hb_preset_index_t *path)
             ghb_presets_list_init(ud, next_path);
             if (ghb_dict_get_bool(dict, "FolderOpen"))
             {
-                GtkTreePath *path;
-                path = gtk_tree_model_get_path(GTK_TREE_MODEL(store), &iter);
-                gtk_tree_view_expand_to_path(treeview, path);
-                gtk_tree_path_free(path);
+                GtkTreePath *tpath;
+                tpath = gtk_tree_model_get_path(GTK_TREE_MODEL(store), &iter);
+                gtk_tree_view_expand_to_path(treeview, tpath);
+                gtk_tree_path_free(tpath);
             }
         }
     }
@@ -1892,7 +1927,6 @@ settings_save(signal_user_data_t *ud, const char * category,
               const char *name, const char * desc, gboolean set_def)
 {
     GhbValue          * preset, * new_preset;
-    gboolean            def = FALSE;
     hb_preset_index_t * folder_path, * path;
     char              * fullname;
 
@@ -1930,7 +1964,7 @@ settings_save(signal_user_data_t *ud, const char * category,
     if (preset != NULL)
     {
         // Replacing an existing preset
-        def = ghb_dict_get_bool(preset, "Default");
+        gboolean def = ghb_dict_get_bool(preset, "Default");
 
         // If we are replacing the default preset, re-mark it as default
         ghb_dict_set_bool(new_preset, "Default", def);
@@ -2419,7 +2453,7 @@ preset_remove_action_cb(GSimpleAction *action, GVariant *param,
                         signal_user_data_t *ud)
 {
     hb_preset_index_t * path;
-    GhbValue          * preset;
+    GhbValue          * preset = NULL;
 
     path = get_selected_path(ud);
     if (path != NULL)
@@ -2672,7 +2706,6 @@ presets_drag_motion_cb(
             return TRUE;
         }
 
-        dst_ptype = ghb_dict_get_int(dst_preset, "Type");
         dst_folder = ghb_dict_get_bool(dst_preset, "Folder");
         drop_pos = GTK_TREE_VIEW_DROP_AFTER;
     }
@@ -2740,8 +2773,7 @@ presets_drag_data_received_cb(
 
     dst_model    = gtk_tree_view_get_model(tv);
     dst_treepath = g_object_get_data(G_OBJECT(tv), "dst-tree-path");
-    drop_pos     = (GtkTreeViewDropPosition)g_object_get_data(G_OBJECT(tv),
-                                                              "dst-drop-pos");
+    g_object_get(G_OBJECT(tv), "dst-drop-pos", &drop_pos, NULL);
     g_object_set_data(G_OBJECT(tv), "dst-tree-path", NULL);
     if (dst_treepath == NULL)
     {
@@ -3081,5 +3113,3 @@ preset_widget_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
     ghb_widget_to_setting(ud->settings, widget);
     ghb_check_dependency(ud, widget, NULL);
 }
-
-

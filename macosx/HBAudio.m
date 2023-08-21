@@ -65,7 +65,14 @@ NSString *HBAudioEncoderChangedNotification = @"HBAudioEncoderChangedNotificatio
 
     for (HBTitleAudioTrack *track in self.sourceTracks)
     {
-        [sourceNames addObject:track.displayName];
+        if (track.title.length)
+        {
+            [sourceNames addObject:[NSString stringWithFormat:@"%@ - %@", track.displayName, track.title]];
+        }
+        else
+        {
+            [sourceNames addObject:track.displayName];
+        }
     }
 
     return sourceNames;

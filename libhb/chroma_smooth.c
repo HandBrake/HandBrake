@@ -325,6 +325,11 @@ static int chroma_smooth_init_thread(hb_filter_object_t *filter, int threads)
 
     chroma_smooth_thread_close(pv);
     pv->thread_ctx = calloc(threads, sizeof(chroma_smooth_thread_context3_t));
+    if (pv->thread_ctx == NULL)
+    {
+        hb_error("Chroma Smooth calloc failed");
+        return -1;
+    }
     pv->threads = threads;
     for (int c = 0; c < 3; c++)
     {
@@ -345,7 +350,6 @@ static int chroma_smooth_init_thread(hb_filter_object_t *filter, int threads)
                     if (tctx->SC[z] == NULL)
                     {
                         hb_error("Chroma Smooth calloc failed");
-                        chroma_smooth_close(filter);
                         return -1;
                     }
                 }

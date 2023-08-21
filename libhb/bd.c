@@ -111,7 +111,7 @@ static void add_subtitle(int track, hb_list_t *list_subtitle, BLURAY_STREAM_INFO
             return;
     }
     lang = lang_for_code2( (char*)bdsub->lang );
-    snprintf(subtitle->lang, sizeof( subtitle->lang ), "%s [%s]",
+    snprintf(subtitle->lang, sizeof( subtitle->lang ), "%s (%s)",
              strlen(lang->native_name) ? lang->native_name : lang->eng_name,
              hb_subsource_name(subtitle->source));
     snprintf(subtitle->iso639_2, sizeof( subtitle->iso639_2 ), "%s",

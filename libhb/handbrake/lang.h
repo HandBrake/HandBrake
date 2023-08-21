@@ -27,7 +27,7 @@ extern "C" {
 const iso639_lang_t * lang_lookup( const char * str );
 
 /* find language table index, match any of names in lang struct */
-const int lang_lookup_index( const char * str );
+int lang_lookup_index( const char * str );
 
 /* return language for an index into the language table */
 const iso639_lang_t * lang_for_index( int index );

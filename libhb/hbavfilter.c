@@ -112,44 +112,54 @@ hb_avfilter_graph_init(hb_value_t * settings, hb_filter_init_t * init)
 
     // Build filter input
 #if HB_PROJECT_FEATURE_QSV
-    if (hb_qsv_hw_filters_are_enabled(graph->job))
+    if (hb_qsv_hw_filters_via_video_memory_are_enabled(graph->job) || hb_qsv_hw_filters_via_system_memory_are_enabled(graph->job))
     {
+        enum AVPixelFormat pix_fmt = init->pix_fmt;
+        if(hb_qsv_hw_filters_via_video_memory_are_enabled(graph->job))
+        {
+            pix_fmt = AV_PIX_FMT_QSV;
+        }
+
         par = av_buffersrc_parameters_alloc();
+        par->format = pix_fmt;
+        // TODO: qsv_vpp changes time_base, adapt settings to hb pipeline
+        par->frame_rate.num = init->time_base.den;
+        par->frame_rate.den = init->time_base.num;
+        par->width = init->geometry.width;
+        par->height = init->geometry.height;
+        par->sample_aspect_ratio.num = init->geometry.par.num;
+        par->sample_aspect_ratio.den = init->geometry.par.den;
+        par->time_base.num = init->time_base.num;
+        par->time_base.den = init->time_base.den;
+
         filter_args = hb_strdup_printf(
                 "video_size=%dx%d:pix_fmt=%d:sar=%d/%d:"
                 "time_base=%d/%d:frame_rate=%d/%d",
-                init->geometry.width, init->geometry.height, AV_PIX_FMT_QSV,
+                init->geometry.width, init->geometry.height, pix_fmt,
                 init->geometry.par.num, init->geometry.par.den,
                 init->time_base.num, init->time_base.den,
                 init->vrate.num, init->vrate.den);
 
         AVBufferRef *hb_hw_frames_ctx = NULL;
 
-        result = hb_create_ffmpeg_pool(graph->job, init->geometry.width, init->geometry.height, init->pix_fmt, 32, 0, &hb_hw_frames_ctx);
-        if (result < 0)
+        if (hb_qsv_hw_filters_via_video_memory_are_enabled(graph->job))
         {
-            hb_error("hb_create_ffmpeg_pool failed");
-            goto fail;
+            result = hb_qsv_create_ffmpeg_pool(graph->job, init->geometry.width, init->geometry.height, init->pix_fmt, 32, 0, &hb_hw_frames_ctx);
+            if (result < 0)
+            {
+                hb_error("hb_create_ffmpeg_pool failed");
+                goto fail;
+            }
+        }
+        else
+        {
+            hb_qsv_device_init(graph->job);
+            for (int i = 0; i < graph->avgraph->nb_filters; i++)
+            {
+                graph->avgraph->filters[i]->hw_device_ctx = av_buffer_ref(graph->job->qsv.ctx->hb_hw_device_ctx);
+            }
         }
         par->hw_frames_ctx = hb_hw_frames_ctx;
-        // TODO: need to pass correct alignment for the scale_qsv output frame
-        int out_alignment = 0;
-        switch (graph->job->vcodec)
-        {
-            case HB_VCODEC_QSV_H264:
-                out_alignment = 16;
-                break;
-            case HB_VCODEC_QSV_AV1_10BIT:
-            case HB_VCODEC_QSV_AV1:
-            case HB_VCODEC_QSV_H265_10BIT:
-            case HB_VCODEC_QSV_H265:
-                out_alignment = 32;
-                break;
-            default:
-                out_alignment = 0;
-                break;
-        }
-        graph->avgraph->opaque = (void*)(intptr_t)out_alignment;
     }
     else
 #endif
@@ -334,7 +344,7 @@ hb_buffer_t * hb_avfilter_get_buf(hb_avfilter_graph_t * graph)
     {
         hb_buffer_t * buf;
 #if HB_PROJECT_FEATURE_QSV
-        if (hb_qsv_hw_filters_are_enabled(graph->job))
+        if (hb_qsv_hw_filters_via_video_memory_are_enabled(graph->job))
         {
             buf = hb_qsv_copy_avframe_to_video_buffer(graph->job, graph->frame, graph->out_time_base, 1);
         }
@@ -398,7 +408,24 @@ void hb_avfilter_combine( hb_list_t * list)
                 ii++;
             }
 
-            hb_value_array_concat(avfilter->settings, settings);
+#if HB_PROJECT_FEATURE_QSV
+            // Concat qsv settings as one vpp_qsv filter to optimize pipeline
+            hb_dict_t * avfilter_settings_dict = hb_value_array_get(avfilter->settings, 0);
+            hb_dict_t * cur_settings_dict = hb_value_array_get(settings, 0);
+            if (cur_settings_dict && avfilter_settings_dict && hb_dict_get(avfilter_settings_dict, "vpp_qsv"))
+            {
+                hb_dict_t *avfilter_settings_dict_qsv = hb_dict_get(avfilter_settings_dict, "vpp_qsv");
+                hb_dict_t *cur_settings_dict_qsv = hb_dict_get(cur_settings_dict, "vpp_qsv");
+                if (avfilter_settings_dict_qsv && cur_settings_dict_qsv)
+                {
+                    hb_dict_merge(avfilter_settings_dict_qsv, cur_settings_dict_qsv);
+                }
+            }
+            else
+#endif
+            {
+                hb_value_array_concat(avfilter->settings, settings);
+            }
         }
     }
 }

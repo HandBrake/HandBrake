@@ -162,6 +162,11 @@ static void lpcmInfo( hb_work_object_t *w, hb_buffer_t *in )
 static int declpcmInit( hb_work_object_t * w, hb_job_t * job )
 {
     hb_work_private_t * pv = calloc( 1, sizeof( hb_work_private_t ) );
+    if (pv == NULL)
+    {
+        hb_error("declpcmInit: hb_audio_resample_init() failed");
+        return 1;
+    }
     w->private_data = pv;
     pv->job = job;
 

@@ -9,7 +9,9 @@
 
 #include "handbrake/handbrake.h"
 #include "handbrake/hbffmpeg.h"
+#include <CoreVideo/CoreVideo.h>
 #include "vt_common.h"
+
 
 struct hb_filter_private_s
 {
@@ -114,17 +116,17 @@ static void prefilter_vt_close(hb_filter_object_t *filter)
 
 void set_properties(hb_filter_private_t *pv, hb_buffer_t *in)
 {
-    AVFrame *frame = (AVFrame *)in->storage;
-    if (pv->input.job->title->rotation == HB_ROTATION_90 ||
-        pv->input.job->title->rotation == HB_ROTATION_270)
+    if (in->storage_type == AVFRAME &&
+        (pv->input.job->title->rotation == HB_ROTATION_90 ||
+         pv->input.job->title->rotation == HB_ROTATION_270))
     {
-        pv->input.geometry.width   = frame->height;
-        pv->input.geometry.height  = frame->width;
+        pv->input.geometry.width  = in->f.height;
+        pv->input.geometry.height = in->f.width;
     }
     else
     {
-        pv->input.geometry.width   = frame->width;
-        pv->input.geometry.height  = frame->height;
+        pv->input.geometry.width  = in->f.width;
+        pv->input.geometry.height = in->f.height;
     }
 }
 

@@ -206,7 +206,7 @@ static const iso639_lang_t languages[] =
 
 static const int lang_count = sizeof(languages) / sizeof(languages[0]);
 
-const int lang_lookup_index( const char * str )
+int lang_lookup_index( const char * str )
 {
     int             ii = 0;
     const iso639_lang_t * lang;

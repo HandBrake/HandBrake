@@ -75,9 +75,25 @@ NSString * const HBKeepPresetEdits               = @"HBKeepPresetEdits";
 @property (nonatomic, readonly, strong) NSArray *buildInFormatTokens;
 @property (nonatomic, strong) NSArray *matches;
 
+@property (nonatomic) BOOL hardwareDecodersCheckboxesEnabled;
+
+@property (class, nonatomic, getter=areHardwareDecoderSupported) BOOL hardwareDecoderSupported;
+
 @end
 
 @implementation HBPreferencesController
+
+static BOOL _hardwareDecoderSupported = NO;
+
++ (BOOL)areHardwareDecoderSupported
+{
+    return _hardwareDecoderSupported;
+}
+
++ (void)setHardwareDecoderSupported:(BOOL)hardwareDecoderSupported
+{
+    _hardwareDecoderSupported = hardwareDecoderSupported;
+}
 
 /**
  * +[HBPreferencesController registerUserDefaults]
@@ -87,9 +103,20 @@ NSString * const HBKeepPresetEdits               = @"HBKeepPresetEdits";
  */
 + (void)registerUserDefaults
 {
+    NSUserDefaults *defaults = NSUserDefaults.standardUserDefaults;
+
     NSURL *moviesURL = HBUtilities.defaultDestinationFolderURL;
 
-    [NSUserDefaults.standardUserDefaults registerDefaults:@{
+    if (@available(macOS 13, *))
+    {
+        HBPreferencesController.hardwareDecoderSupported = YES;
+    }
+    else
+    {
+        HBPreferencesController.hardwareDecoderSupported = NO;
+    }
+
+    [defaults registerDefaults:@{
         HBShowOpenPanelAtLaunch:            @YES,
         HBShowSummaryPreview:               @YES,
         HBDefaultMpegExtension:             @".mp4",
@@ -119,10 +146,16 @@ NSString * const HBKeepPresetEdits               = @"HBKeepPresetEdits";
         HBKeepPresetEdits:                  @YES
     }];
 
+    if (HBPreferencesController.areHardwareDecoderSupported == NO &&
+        [defaults boolForKey:HBUseHardwareDecoder] == YES)
+    {
+        [defaults setBool:NO forKey:HBUseHardwareDecoder];
+    }
+
     // Overwrite the update check interval because previous versions
     // could be set to a daily check.
     NSUInteger week = 60 * 60 * 24 * 7;
-    [NSUserDefaults.standardUserDefaults setObject:@(week) forKey:@"SUScheduledCheckInterval"];
+    [defaults setObject:@(week) forKey:@"SUScheduledCheckInterval"];
 }
 
 /**
@@ -166,6 +199,8 @@ NSString * const HBKeepPresetEdits               = @"HBKeepPresetEdits";
     toolbar.displayMode = NSToolbarDisplayModeIconAndLabel;
     toolbar.sizeMode = NSToolbarSizeModeRegular;
     self.window.toolbar = toolbar;
+
+    self.hardwareDecodersCheckboxesEnabled = HBPreferencesController.areHardwareDecoderSupported;
 
     // Format token field initialization
     [self.formatTokenField setTokenizingCharacterSet:[NSCharacterSet characterSetWithCharactersInString:@"%%"]];

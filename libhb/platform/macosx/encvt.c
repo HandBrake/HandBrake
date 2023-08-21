@@ -752,7 +752,7 @@ static OSStatus wrap_buf(hb_work_private_t *pv, hb_buffer_t *buf, CVPixelBufferR
         }
         else
         {
-            return 1;
+            err = 1;
         }
     }
     else
@@ -783,8 +783,11 @@ static OSStatus wrap_buf(hb_work_private_t *pv, hb_buffer_t *buf, CVPixelBufferR
                                                  pix_buf);
     }
 
-    hb_vt_add_color_tag(*pix_buf, pv->job);
-    hb_vt_add_dynamic_hdr_metadata(*pix_buf, pv->job, buf);
+    if (*pix_buf)
+    {
+        hb_vt_add_color_tag(*pix_buf, pv->job);
+        hb_vt_add_dynamic_hdr_metadata(*pix_buf, pv->job, buf);
+    }
 
     return err;
 }
@@ -1596,6 +1599,24 @@ void encvt_close(hb_work_object_t * w)
     }
 
     hb_chapter_queue_close(&pv->chapter_queue);
+
+    // A cancelled encode doesn't send an EOF,
+    // do some additional cleanups here
+    if (*pv->job->die)
+    {
+        if (pv->session)
+        {
+            VTCompressionSessionCompleteFrames(pv->session, kCMTimeIndefinite);
+        }
+        if (pv->queue)
+        {
+            CMSampleBufferRef sampleBuffer;
+            while ((sampleBuffer = (CMSampleBufferRef)CMSimpleQueueDequeue(pv->queue)))
+            {
+                CFRelease(sampleBuffer);
+            }
+        }
+    }
 
     if (pv->remainingPasses == 0 || *pv->job->die)
     {

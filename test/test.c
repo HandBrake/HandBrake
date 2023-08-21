@@ -1487,7 +1487,11 @@ static void ShowHelp(void)
 "                           If none of these flags are given, the default\n"
 "                           is --pfr when -r is given and --vfr otherwise\n"
 "   --enable-hw-decoding <string>                                        \n"
+#if defined( __APPLE_CC__ )
+"                           Use 'videotoolbox' to enable VideoToolbox    \n"
+#else
 "                           Use 'nvdec' to enable NVDec                  \n"
+#endif
 "   --disable-hw-decoding   Disable hardware decoding of the video track,\n"
 "                           forcing software decoding instead\n"
 
@@ -3192,7 +3196,16 @@ static int ParseOptions( int argc, char ** argv )
                     }
                     else if (!strcmp(optarg, "videotoolbox"))
                     {
-                        hw_decode = HB_DECODE_SUPPORT_VIDEOTOOLBOX;
+#if defined( __APPLE_CC__ )
+                        if (__builtin_available(macOS 13, *))
+                        {
+                            hw_decode = HB_DECODE_SUPPORT_VIDEOTOOLBOX;
+                        }
+                        else
+                        {
+                            fprintf( stderr, "videotoolbox hardware decoders require macOS 13 and later");
+                        }
+#endif
                     }
                     else
                     {

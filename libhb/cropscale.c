@@ -98,13 +98,16 @@ static int crop_scale_init(hb_filter_object_t * filter, hb_filter_init_t * init)
     hb_dict_t * avsettings = hb_dict_init();
 
 #if HB_PROJECT_FEATURE_QSV && (defined( _WIN32 ) || defined( __MINGW32__ ))
-    if (hb_qsv_hw_filters_are_enabled(init->job))
+    if (hb_qsv_hw_filters_via_video_memory_are_enabled(init->job) || hb_qsv_hw_filters_via_system_memory_are_enabled(init->job))
     {
-        int result = hb_create_ffmpeg_pool(init->job, width, height, init->pix_fmt, HB_QSV_POOL_SURFACE_SIZE, 0, &init->job->qsv.ctx->hb_vpp_qsv_frames_ctx->hw_frames_ctx);
-        if (result < 0)
+        if (hb_qsv_hw_filters_via_video_memory_are_enabled(init->job))
         {
-            hb_error("hb_create_ffmpeg_pool vpp allocation failed");
-            return result;
+            int result = hb_qsv_create_ffmpeg_vpp_pool(init, width, height);
+            if (result < 0)
+            {
+                hb_error("hb_create_ffmpeg_pool vpp allocation failed");
+                return result;
+            }
         }
 
         if (top > 0 || bottom > 0 || left > 0 || right > 0)
@@ -119,7 +122,7 @@ static int crop_scale_init(hb_filter_object_t * filter, hb_filter_init_t * init)
         hb_dict_set_int(avsettings, "h", height);
         if (init->job->qsv.ctx->vpp_scale_mode)
         {
-            hb_dict_set_string(avsettings, "mode", init->job->qsv.ctx->vpp_scale_mode);
+            hb_dict_set_string(avsettings, "scale_mode", init->job->qsv.ctx->vpp_scale_mode);
         }
         if (init->job->qsv.ctx->vpp_interpolation_method)
         {
@@ -128,25 +131,6 @@ static int crop_scale_init(hb_filter_object_t * filter, hb_filter_init_t * init)
         hb_log("qsv: scaling filter mode %s", init->job->qsv.ctx->vpp_scale_mode ? init->job->qsv.ctx->vpp_scale_mode : "default");
         hb_log("qsv: scaling filter interpolation method %s", init->job->qsv.ctx->vpp_interpolation_method ? init->job->qsv.ctx->vpp_interpolation_method : "default");
         hb_dict_set(avfilter, "vpp_qsv", avsettings);
-
-        AVHWFramesContext *frames_ctx;
-        AVQSVFramesContext *frames_hwctx;
-        AVBufferRef *hw_frames_ctx;
-
-        hw_frames_ctx = init->job->qsv.ctx->hb_vpp_qsv_frames_ctx->hw_frames_ctx;
-        frames_ctx   = (AVHWFramesContext*)hw_frames_ctx->data;
-        frames_hwctx = frames_ctx->hwctx;
-        mfxHDLPair* handle_pair = (mfxHDLPair*)frames_hwctx->surfaces[0].Data.MemId;
-        init->job->qsv.ctx->hb_vpp_qsv_frames_ctx->input_texture = ((size_t)handle_pair->second != MFX_INFINITE) ? handle_pair->first : NULL;
-
-        /* allocate the memory ids for the external frames */
-        av_buffer_unref(&init->job->qsv.ctx->hb_vpp_qsv_frames_ctx->mids_buf);
-        init->job->qsv.ctx->hb_vpp_qsv_frames_ctx->mids_buf = hb_qsv_create_mids(init->job->qsv.ctx->hb_vpp_qsv_frames_ctx->hw_frames_ctx);
-        if (!init->job->qsv.ctx->hb_vpp_qsv_frames_ctx->mids_buf)
-            return AVERROR(ENOMEM);
-        init->job->qsv.ctx->hb_vpp_qsv_frames_ctx->mids    = (QSVMid*)init->job->qsv.ctx->hb_vpp_qsv_frames_ctx->mids_buf->data;
-        init->job->qsv.ctx->hb_vpp_qsv_frames_ctx->nb_mids = frames_hwctx->nb_surfaces;
-        memset(init->job->qsv.ctx->hb_vpp_qsv_frames_ctx->pool, 0, init->job->qsv.ctx->hb_vpp_qsv_frames_ctx->nb_mids * sizeof(init->job->qsv.ctx->hb_vpp_qsv_frames_ctx->pool[0]));
     }
     else
 #endif
@@ -182,7 +166,7 @@ static int crop_scale_init(hb_filter_object_t * filter, hb_filter_init_t * init)
     avsettings = hb_dict_init();
 
 #if HB_PROJECT_FEATURE_QSV && (defined( _WIN32 ) || defined( __MINGW32__ ))
-    if (!hb_qsv_hw_filters_are_enabled(init->job))
+    if (!(hb_qsv_hw_filters_via_video_memory_are_enabled(init->job) || hb_qsv_hw_filters_via_system_memory_are_enabled(init->job)))
 #endif
     {
         char * out_pix_fmt = NULL;

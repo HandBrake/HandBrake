@@ -18,6 +18,7 @@
 
 #ifdef __APPLE__
 #include <CoreMedia/CoreMedia.h>
+#include "platform/macosx/vt_common.h"
 #endif
 
 #ifndef SYS_DARWIN
@@ -704,6 +705,12 @@ hb_buffer_t * hb_buffer_dup(const hb_buffer_t *src)
             }
         }
     }
+#ifdef __APPLE__
+    else if (src->storage_type == COREMEDIA)
+    {
+        buf = hb_vt_buffer_dup(src);
+    }
+#endif
 
 #if HB_PROJECT_FEATURE_QSV
     if (buf)

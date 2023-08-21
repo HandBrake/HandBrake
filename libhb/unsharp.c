@@ -313,6 +313,11 @@ static int unsharp_init_thread(hb_filter_object_t *filter, int threads)
 
     unsharp_thread_close(pv);
     pv->thread_ctx = calloc(threads, sizeof(unsharp_thread_context3_t));
+    if (pv->thread_ctx == NULL)
+    {
+        hb_error("Unsharp calloc failed");
+        return -1;
+    }
     pv->threads = threads;
     for (int c = 0; c < 3; c++)
     {
@@ -330,7 +335,6 @@ static int unsharp_init_thread(hb_filter_object_t *filter, int threads)
                 if (tctx->SC[z] == NULL)
                 {
                     hb_error("Unsharp calloc failed");
-                    unsharp_close(filter);
                     return -1;
                 }
             }

@@ -332,8 +332,12 @@ typedef struct hb_qsv_context {
     void *qsv_config;
 
     int num_sw_filters;
+    int num_hw_filters;
     int la_is_enabled;
-    int qsv_hw_filters_are_enabled;
+    int qsv_hw_filters_via_video_memory_are_enabled;
+    int qsv_hw_filters_via_system_memory_are_enabled;
+    int memory_type;
+    int out_range;
     int full_path_is_enabled;
     const char *vpp_scale_mode;
     const char *vpp_interpolation_method;

@@ -545,12 +545,6 @@ IoRedirect(signal_user_data_t *ud)
         g_io_add_watch(channel, G_IO_IN, ghb_log_cb, (gpointer)ud );
 }
 
-typedef struct
-{
-    gchar *filename;
-    gchar *iconname;
-} icon_map_t;
-
 static gchar *dvd_device = NULL;
 static gchar *arg_preset = NULL;
 static gboolean ghb_debug = FALSE;
@@ -870,14 +864,10 @@ static void map_actions(GApplication * app, signal_user_data_t * ud)
         { "dvd-open",              dvd_source_activate_cb, "s"     },
         { "hbfd",                  NULL,
           NULL, "false",           hbfd_action_cb                  },
-        { "show-presets",          NULL,
-          NULL, "false",           show_presets_action_cb          },
-        { "show-queue",            NULL,
-          NULL, "false",           show_queue_action_cb            },
-        { "show-preview",          NULL,
-          NULL, "false",           show_preview_action_cb          },
-        { "show-activity",         NULL,
-          NULL, "false",           show_activity_action_cb         },
+        { "show-presets",          show_presets_action_cb          },
+        { "show-queue",            show_queue_action_cb            },
+        { "show-preview",          show_preview_action_cb          },
+        { "show-activity",         show_activity_action_cb         },
         { "preset-save",           preset_save_action_cb           },
         { "preset-save-as",        preset_save_as_action_cb        },
         { "preset-rename",         preset_rename_action_cb         },
@@ -1327,9 +1317,9 @@ main(int argc, char *argv[])
         // Enable console logging
         if(AttachConsole(ATTACH_PARENT_PROCESS) || AllocConsole()){
             close(STDOUT_FILENO);
-            freopen("CONOUT$", "w", stdout);
+            (void) freopen("CONOUT$", "w", stdout);
             close(STDERR_FILENO);
-            freopen("CONOUT$", "w", stderr);
+            (void) freopen("CONOUT$", "w", stderr);
         }
     }
     else

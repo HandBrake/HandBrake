@@ -265,10 +265,8 @@ conjunction with the "Forced" option.</property>
     <property name="visible">False</property>
     <property name="can-focus">False</property>
     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-    <property name="type-hint">utility</property>
     <property name="skip-taskbar-hint">True</property>
     <property name="skip-pager-hint">True</property>
-    <property name="transient-for">hb_window</property>
     <property name="default-width">300</property>
     <property name="default-height">600</property>
     <signal name="delete-event" handler="presets_window_delete_cb" swapped="no"/>
@@ -511,10 +509,8 @@ conjunction with the "Forced" option.</property>
     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
     <property name="resizable">True</property>
     <property name="window-position">center</property>
-    <property name="type-hint">utility</property>
     <property name="skip-taskbar-hint">True</property>
     <property name="skip-pager-hint">True</property>
-    <property name="transient-for">hb_window</property>
     <property name="default-width">1024</property>
     <signal name="delete-event" handler="queue_window_delete_cb" swapped="no"/>
     <child>
@@ -1731,10 +1727,8 @@ Resets the queue job to pending and ready to run again.</property>
     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
     <property name="default-width">800</property>
     <property name="default-height">600</property>
-    <property name="type-hint">utility</property>
     <property name="skip-taskbar-hint">True</property>
     <property name="skip-pager-hint">True</property>
-    <property name="transient-for">hb_window</property>
     <signal name="delete-event" handler="activity_window_delete_cb" swapped="no"/>
     <child>
       <object class="GtkBox" id="vbox37">
@@ -2354,7 +2348,7 @@ libx264 authors:
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkToggleToolButton" id="show_presets">
+                  <object class="GtkToolButton" id="show_presets">
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
@@ -2369,7 +2363,7 @@ libx264 authors:
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkToggleToolButton" id="show_preview">
+                  <object class="GtkToolButton" id="show_preview">
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
@@ -2384,7 +2378,7 @@ libx264 authors:
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkToggleToolButton" id="show_queue">
+                  <object class="GtkToolButton" id="show_queue">
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
@@ -2399,7 +2393,7 @@ libx264 authors:
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkToggleToolButton" id="show_activity">
+                  <object class="GtkToolButton" id="show_activity">
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
@@ -8979,7 +8973,6 @@ Uncheck this if you want to allow changing each title's settings independently.<
     <property name="events">GDK_POINTER_MOTION_MASK | GDK_STRUCTURE_MASK</property>
     <property name="resizable">True</property>
     <property name="window-position">center</property>
-    <property name="type-hint">normal</property>
     <property name="icon-name">hb-icon</property>
     <property name="default-width">854</property>
     <property name="default-height">480</property>

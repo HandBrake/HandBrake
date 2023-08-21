@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="21223" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="22152" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="21223"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="22152"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -26,32 +26,32 @@
             <subviews>
                 <button toolTip="Encode and play a preview video using current settings." horizontalHuggingPriority="249" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="16b-R9-bBU">
                     <rect key="frame" x="14" y="10" width="73" height="16"/>
-                    <constraints>
-                        <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="50" id="ir9-qd-gak"/>
-                    </constraints>
                     <buttonCell key="cell" type="push" title="Live Preview" bezelStyle="rounded" alignment="center" controlSize="mini" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="vkh-GY-5qx">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="miniSystem"/>
                     </buttonCell>
+                    <constraints>
+                        <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="50" id="ir9-qd-gak"/>
+                    </constraints>
                     <connections>
                         <action selector="createMoviePreview:" target="-2" id="rhf-gy-aMT"/>
                     </connections>
                 </button>
                 <button toolTip="Show cropping settings" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="mV7-hU-tMt">
                     <rect key="frame" x="408" y="10" width="54" height="16"/>
-                    <constraints>
-                        <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="50" id="xea-W9-xGB"/>
-                    </constraints>
                     <buttonCell key="cell" type="push" title="Crop" bezelStyle="rounded" alignment="center" controlSize="mini" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="NWd-Lq-c1A">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="miniSystem"/>
                     </buttonCell>
+                    <constraints>
+                        <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="50" id="xea-W9-xGB"/>
+                    </constraints>
                     <connections>
                         <action selector="showCroppingSettings:" target="-2" id="aDd-cp-S1k"/>
                     </connections>
                 </button>
                 <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="5T3-Vx-mC1">
-                    <rect key="frame" x="100" y="15" width="48" height="11"/>
+                    <rect key="frame" x="100" y="14" width="48" height="11"/>
                     <constraints>
                         <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="30" id="wtS-2b-Ijm"/>
                     </constraints>
@@ -62,7 +62,7 @@
                     </textFieldCell>
                 </textField>
                 <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Vrm-He-CjP">
-                    <rect key="frame" x="202" y="15" width="21" height="11"/>
+                    <rect key="frame" x="202" y="14" width="21" height="11"/>
                     <constraints>
                         <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="17" id="88j-t5-f6t"/>
                     </constraints>
@@ -73,10 +73,7 @@
                     </textFieldCell>
                 </textField>
                 <popUpButton toolTip="Duration to encode in seconds." verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="ASA-X8-16P">
-                    <rect key="frame" x="148" y="11" width="55" height="16"/>
-                    <constraints>
-                        <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="50" id="JLd-YP-qt1"/>
-                    </constraints>
+                    <rect key="frame" x="148" y="10" width="55" height="16"/>
                     <popUpButtonCell key="cell" type="push" title="240" bezelStyle="rounded" alignment="left" controlSize="mini" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" inset="2" selectedItem="XYh-Ls-slf" id="yDS-gf-Y4N">
                         <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="miniSystem"/>
@@ -86,6 +83,9 @@
                             </items>
                         </menu>
                     </popUpButtonCell>
+                    <constraints>
+                        <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="50" id="JLd-YP-qt1"/>
+                    </constraints>
                     <connections>
                         <accessibilityConnection property="title" destination="5T3-Vx-mC1" id="G7o-Sr-rhm"/>
                         <action selector="previewDurationPopUpChanged:" target="-2" id="JSm-Eo-Ijw"/>
@@ -122,13 +122,13 @@
                 </textField>
                 <button toolTip="Scale preview to fill the display." verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="12K-c3-Z7A">
                     <rect key="frame" x="315" y="10" width="89" height="16"/>
-                    <constraints>
-                        <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="50" id="N0p-GD-cNh"/>
-                    </constraints>
                     <buttonCell key="cell" type="push" title="Scale To Screen" bezelStyle="rounded" alignment="center" controlSize="mini" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="STc-Po-p1X">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="miniSystem"/>
                     </buttonCell>
+                    <constraints>
+                        <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="50" id="N0p-GD-cNh"/>
+                    </constraints>
                     <connections>
                         <action selector="toggleScaleToScreen:" target="-2" id="bbI-nW-6zM"/>
                     </connections>
@@ -136,7 +136,6 @@
             </subviews>
             <constraints>
                 <constraint firstAttribute="trailing" secondItem="7UR-Zz-7iX" secondAttribute="trailing" constant="16" id="0Wf-Fb-RTk"/>
-                <constraint firstItem="5T3-Vx-mC1" firstAttribute="firstBaseline" secondItem="16b-R9-bBU" secondAttribute="firstBaseline" id="1zX-eR-aGy"/>
                 <constraint firstAttribute="bottom" secondItem="mV7-hU-tMt" secondAttribute="bottom" constant="12" id="3Aa-It-qOg"/>
                 <constraint firstItem="7UR-Zz-7iX" firstAttribute="top" secondItem="agq-EJ-miM" secondAttribute="top" constant="12" id="IeE-C6-C22"/>
                 <constraint firstItem="mV7-hU-tMt" firstAttribute="leading" secondItem="12K-c3-Z7A" secondAttribute="trailing" constant="8" symbolic="YES" id="Kuw-QY-Ctl"/>
@@ -148,13 +147,13 @@
                 <constraint firstAttribute="trailing" secondItem="mV7-hU-tMt" secondAttribute="trailing" constant="16" id="QHQ-ca-Wiq"/>
                 <constraint firstItem="5T3-Vx-mC1" firstAttribute="firstBaseline" secondItem="ASA-X8-16P" secondAttribute="firstBaseline" id="VW0-yQ-ZHQ"/>
                 <constraint firstItem="MkW-KN-I1h" firstAttribute="top" secondItem="7UR-Zz-7iX" secondAttribute="bottom" constant="2" id="Vdz-nb-5GM"/>
-                <constraint firstItem="ASA-X8-16P" firstAttribute="firstBaseline" secondItem="Vrm-He-CjP" secondAttribute="firstBaseline" id="de5-l2-64W"/>
                 <constraint firstItem="Vrm-He-CjP" firstAttribute="leading" secondItem="ASA-X8-16P" secondAttribute="trailing" constant="4" id="efc-p5-b0P"/>
+                <constraint firstItem="Vrm-He-CjP" firstAttribute="firstBaseline" secondItem="ASA-X8-16P" secondAttribute="firstBaseline" id="gyw-eU-Y4Q"/>
                 <constraint firstAttribute="bottom" secondItem="16b-R9-bBU" secondAttribute="bottom" constant="12" id="hKH-Co-ezT"/>
                 <constraint firstItem="12K-c3-Z7A" firstAttribute="firstBaseline" secondItem="mV7-hU-tMt" secondAttribute="firstBaseline" id="keF-Yc-6WX"/>
                 <constraint firstAttribute="trailing" secondItem="wUk-SQ-GhS" secondAttribute="trailing" constant="16" id="n9K-Or-fZr"/>
                 <constraint firstAttribute="trailing" secondItem="MkW-KN-I1h" secondAttribute="trailing" constant="16" id="nQP-nz-a64"/>
-                <constraint firstItem="Vrm-He-CjP" firstAttribute="firstBaseline" secondItem="12K-c3-Z7A" secondAttribute="firstBaseline" id="pXi-kt-bgj"/>
+                <constraint firstItem="16b-R9-bBU" firstAttribute="centerY" secondItem="ASA-X8-16P" secondAttribute="centerY" id="nVM-uZ-0Pl"/>
                 <constraint firstItem="ASA-X8-16P" firstAttribute="leading" secondItem="5T3-Vx-mC1" secondAttribute="trailing" constant="4" id="sa0-fe-7P6"/>
                 <constraint firstItem="wUk-SQ-GhS" firstAttribute="top" secondItem="MkW-KN-I1h" secondAttribute="bottom" constant="1" id="vrZ-g3-L7M"/>
                 <constraint firstItem="MkW-KN-I1h" firstAttribute="leading" secondItem="agq-EJ-miM" secondAttribute="leading" constant="16" id="wet-qf-RQ4"/>

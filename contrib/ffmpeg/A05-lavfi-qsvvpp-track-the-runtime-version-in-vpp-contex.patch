@@ -1,0 +1,47 @@
+From a8d1e6bcf2070de3cbc75a173872e894cb140e47 Mon Sep 17 00:00:00 2001
+From: Haihao Xiang <haihao.xiang@intel.com>
+Date: Mon, 12 Jun 2023 16:14:43 +0800
+Subject: [PATCH 3/9] lavfi/qsvvpp: track the runtime version in vpp context
+
+We may check whether a feature is supported via the runtime version in
+future.
+
+Signed-off-by: Haihao Xiang <haihao.xiang@intel.com>
+---
+ libavfilter/qsvvpp.c | 6 ++++++
+ libavfilter/qsvvpp.h | 2 ++
+ 2 files changed, 8 insertions(+)
+
+diff --git a/libavfilter/qsvvpp.c b/libavfilter/qsvvpp.c
+index b233b81243..779afce66d 100644
+--- a/libavfilter/qsvvpp.c
++++ b/libavfilter/qsvvpp.c
+@@ -655,6 +655,12 @@ static int init_vpp_session(AVFilterContext *avctx, QSVVPPContext *s)
+     if (ret)
+         return ret;
+ 
++    ret = MFXQueryVersion(s->session, &s->ver);
++    if (ret != MFX_ERR_NONE) {
++        av_log(avctx, AV_LOG_ERROR, "Error querying the runtime version\n");
++        return AVERROR_UNKNOWN;
++    }
++
+     if (handle) {
+         ret = MFXVideoCORE_SetHandle(s->session, handle_type, handle);
+         if (ret != MFX_ERR_NONE)
+diff --git a/libavfilter/qsvvpp.h b/libavfilter/qsvvpp.h
+index 3b32193744..8851185ff3 100644
+--- a/libavfilter/qsvvpp.h
++++ b/libavfilter/qsvvpp.h
+@@ -83,6 +83,8 @@ typedef struct QSVVPPContext {
+     int eof;
+     /** order with frame_out, sync */
+     AVFifo *async_fifo;
++
++    mfxVersion ver;
+ } QSVVPPContext;
+ 
+ typedef struct QSVVPPCrop {
+-- 
+2.40.1
+

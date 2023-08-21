@@ -119,7 +119,7 @@ namespace HandBrake.Worker.Routing
 
                 this.Initialise(command.InitialiseCommand);
 
-                this.handbrakeInstance.StartScan(command.Paths, command.PreviewCount, command.MinDuration, command.TitleIndex, command.InitialiseCommand.ExcludeExtnesionList);
+                this.handbrakeInstance.StartScan(command.Paths, command.PreviewCount, command.MinDuration, command.TitleIndex, command.InitialiseCommand.ExcludeExtnesionList, command.HwDecode);
 
                 return JsonSerializer.Serialize(new CommandResult() { WasSuccessful = true }, JsonSettings.Options);
             }

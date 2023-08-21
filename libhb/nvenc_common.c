@@ -224,3 +224,32 @@ const char * hb_map_nvenc_preset_name (const char * preset)
 
     return "p4"; // Default to Medium
 }
+
+int hb_nvenc_are_filters_supported(hb_list_t *filters)
+{
+    int ret = 1;
+
+    for (int i = 0; i < hb_list_count(filters); i++)
+    {
+        int supported = 1;
+        hb_filter_object_t *filter = hb_list_item(filters, i);
+
+        switch (filter->id)
+        {
+            case HB_FILTER_VFR:
+                // Mode 0 doesn't require access to the frame data
+                supported = hb_dict_get_int(filter->settings, "mode") == 0;
+                break;
+            default:
+                supported = 0;
+        }
+
+        if (supported == 0)
+        {
+            hb_deep_log(2, "hwaccel: %s isn't yet supported for hw video frames", filter->name);
+            ret = 0;
+        }
+    }
+
+    return ret;
+}

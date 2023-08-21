@@ -209,6 +209,11 @@ taskset_thread_f( void *thread_args_v )
 void
 taskset_fini( taskset_t *ts )
 {
+    if (ts == NULL)
+    {
+        return;
+    }
+
     int i;
     if ( ts->task_thread_started ) {
         /*

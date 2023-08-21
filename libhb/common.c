@@ -5468,7 +5468,7 @@ int hb_import_subtitle_add( const hb_job_t * job,
         hb_log("hb_srt_add: unknown language code (%s)", lang_code);
         lang = lang_for_code2("und");
     }
-    snprintf(subtitle->lang, sizeof(subtitle->lang), "%s [%s]",
+    snprintf(subtitle->lang, sizeof(subtitle->lang), "%s (%s)",
              strlen(lang->native_name) ? lang->native_name : lang->eng_name,
              hb_subsource_name(subtitle->source));
     strcpy(subtitle->iso639_2, lang->iso639_2);
@@ -6338,7 +6338,6 @@ static int pix_fmt_is_supported(hb_job_t *job, int pix_fmt)
             case HB_FILTER_LAPSHARP:
             case HB_FILTER_UNSHARP:
             case HB_FILTER_GRAYSCALE:
-            case HB_FILTER_RENDER_SUB:
                if (planes_count == 2)
                {
                    return 0;
@@ -6384,7 +6383,7 @@ static int pix_hw_fmt_is_supported(hb_job_t *job, int pix_fmt)
     if (pix_fmt == AV_PIX_FMT_QSV)
     {
 #if HB_PROJECT_FEATURE_QSV
-        if (hb_qsv_full_path_is_enabled(job))
+        if (hb_qsv_full_path_is_enabled(job) && hb_qsv_get_memory_type(job) == MFX_IOPATTERN_OUT_VIDEO_MEMORY)
         {
             return 1;
         }
