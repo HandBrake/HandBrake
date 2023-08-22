@@ -4,8 +4,7 @@ set -e
 
 export PYTHONHTTPSVERIFY=0
 
-git clone -b 1.6.1 https://github.com/HandBrake/HandBrake
+git clone --single-branch --depth=1 https://github.com/HandBrake/HandBrake
 cd HandBrake
-./configure --disable-gtk --enable-fdk-aac --force
-cd build/
-make -s -j`nproc`
+./configure --launch-jobs=$(nproc) --launch --disable-gtk --enable-fdk-aac
+cd build/ && find
