@@ -264,6 +264,7 @@ static int rotate_vt_work(hb_filter_object_t *filter,
     out->storage           = dest_buf;
     out->f.width           = pv->output.geometry.width;
     out->f.height          = pv->output.geometry.height;
+    out->f.fmt             = pv->output.pix_fmt;
     out->f.color_prim      = pv->output.color_prim;
     out->f.color_transfer  = pv->output.color_transfer;
     out->f.color_matrix    = pv->output.color_matrix;

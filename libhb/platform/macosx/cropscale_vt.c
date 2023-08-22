@@ -76,8 +76,8 @@ static int crop_scale_vt_init(hb_filter_object_t *filter,
 
     crop_width       = init->geometry.width - left - right;
     crop_height      = init->geometry.height - top - bottom;
-    crop_offset_left = left / 2;
-    crop_offset_top  = top / 2;
+    crop_offset_left = left / 2 - right / 2;
+    crop_offset_top  = top / 2 - bottom / 2;
 
     // Set up the source clean aperture dictionary
     // VTPixelTransferSessionRef will use it to crop the source buffer
@@ -309,6 +309,7 @@ static int crop_scale_vt_work(hb_filter_object_t *filter,
     out->storage           = dest_buf;
     out->f.width           = pv->output.geometry.width;
     out->f.height          = pv->output.geometry.height;
+    out->f.fmt             = pv->output.pix_fmt;
     out->f.color_prim      = pv->output.color_prim;
     out->f.color_transfer  = pv->output.color_transfer;
     out->f.color_matrix    = pv->output.color_matrix;
