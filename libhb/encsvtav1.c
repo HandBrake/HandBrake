@@ -183,7 +183,11 @@ int encsvtInit(hb_work_object_t *w, hb_job_t *job)
         }
     }
 
-    if (job->encoder_tune != NULL && strstr("psnr", job->encoder_tune) != NULL)
+    if (job->encoder_tune != NULL && strstr("ssim", job->encoder_tune) != NULL)
+    {
+        param->tune = 2;
+    }
+    else if (job->encoder_tune != NULL && strstr("psnr", job->encoder_tune) != NULL)
     {
         param->tune = 1;
     }
