@@ -92,6 +92,8 @@ void hb_video_buffer_to_avframe(AVFrame *frame, hb_buffer_t **buf_in)
                 wipe_avframe_side_data(frame);
             }
         }
+
+        frame->extended_data = frame->data;
     }
 
     frame->pts              = buf->s.start;
