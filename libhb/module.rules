@@ -3,16 +3,22 @@ $(eval $(call import.MODULE.rules,LIBHB))
 libhb.build: $(LIBHB.a)
 
 $(LIBHB.a): | $(dir $(LIBHB.a))
-$(LIBHB.a): $(LIBHB.c.o) $(LIBHB.m.o)
+$(LIBHB.a): $(LIBHB.metal.o) $(LIBHB.c.o) $(LIBHB.m.o)
 	$(AR.exe) rsu $@ $^
 
 $(LIBHB.c.o): $(LIBHB.d)
 $(LIBHB.c.o): | $(dir $(LIBHB.c.o))
 $(LIBHB.c.o): $(BUILD/)%.o: $(SRC/)%.c
 	$(call LIBHB.GCC.C_O,$@,$<)
+$(LIBHB.m.o): $(LIBHB.d)
 $(LIBHB.m.o): | $(dir $(LIBHB.m.o))
 $(LIBHB.m.o): $(BUILD/)%.o: $(SRC/)%.m
 	$(call LIBHB.GCC.C_O,$@,$<)
+
+$(LIBHB.metal.o): $(LIBHB.d)
+$(LIBHB.metal.o): | $(dir $(LIBHB.metal.o))
+$(LIBHB.metal.o): $(BUILD/)%.o: $(SRC/)%.metal
+	$(call LIBHB.METAL.C_O,$(patsubst %.o,%,$@),$<)
 
 $(LIBHB.m4.out): $(BUILD/)project/handbrake.m4
 $(LIBHB.m4.out): | $(dir $(LIBHB.m4.out))

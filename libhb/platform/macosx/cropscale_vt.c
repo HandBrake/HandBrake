@@ -7,10 +7,9 @@
    For full terms see the file COPYING file or visit http://www.gnu.org/licenses/gpl-2.0.html
  */
 
-#include "handbrake/handbrake.h"
-#include "vt_common.h"
-
 #include <VideoToolbox/VideoToolbox.h>
+#include "handbrake/handbrake.h"
+#include "cv_utils.h"
 
 struct hb_filter_private_s
 {
@@ -36,7 +35,6 @@ static const char crop_scale_vt_template[] =
     "crop-top=^"HB_INT_REG"$:crop-bottom=^"HB_INT_REG"$:"
     "crop-left=^"HB_INT_REG"$:crop-right=^"HB_INT_REG"$";
 
-
 hb_filter_object_t hb_filter_crop_scale_vt =
 {
     .id                = HB_FILTER_CROP_SCALE_VT,
@@ -55,11 +53,10 @@ static int crop_scale_vt_init(hb_filter_object_t *filter,
     filter->private_data = calloc(sizeof(struct hb_filter_private_s), 1);
     if (filter->private_data == NULL)
     {
-        hb_error("crop scale videotoolbox: calloc failed");
+        hb_error("cropscale_vt: calloc failed");
         return -1;
     }
     hb_filter_private_t *pv = filter->private_data;
-
     pv->input = *init;
 
     hb_dict_t         *settings = filter->settings;
@@ -67,6 +64,9 @@ static int crop_scale_vt_init(hb_filter_object_t *filter,
     int                top = 0, bottom = 0, left = 0, right = 0;
     int                crop_width, crop_height;
     int                crop_offset_left, crop_offset_top;
+
+    hb_dict_extract_int(&width, settings, "width");
+    hb_dict_extract_int(&height, settings, "height");
 
     // Convert crop settings to 'crop'
     hb_dict_extract_int(&top, settings, "crop-top");
@@ -82,7 +82,6 @@ static int crop_scale_vt_init(hb_filter_object_t *filter,
     // Set up the source clean aperture dictionary
     // VTPixelTransferSessionRef will use it to crop the source buffer
     // before resizing it to fit the destination buffer
-
     CFNumberRef crop_width_num       = CFNumberCreate(kCFAllocatorDefault, kCFNumberIntType, &crop_width);
     CFNumberRef crop_height_num      = CFNumberCreate(kCFAllocatorDefault, kCFNumberIntType, &crop_height);
     CFNumberRef crop_offset_left_num = CFNumberCreate(kCFAllocatorDefault, kCFNumberIntType, &crop_offset_left);
@@ -90,17 +89,12 @@ static int crop_scale_vt_init(hb_filter_object_t *filter,
 
     const void *clean_aperture_keys[4] =
     {
-        kCVImageBufferCleanApertureWidthKey,
-        kCVImageBufferCleanApertureHeightKey,
-        kCVImageBufferCleanApertureHorizontalOffsetKey,
-        kCVImageBufferCleanApertureVerticalOffsetKey
+        kCVImageBufferCleanApertureWidthKey, kCVImageBufferCleanApertureHeightKey,
+        kCVImageBufferCleanApertureHorizontalOffsetKey, kCVImageBufferCleanApertureVerticalOffsetKey
     };
     const void *source_clean_aperture_values[4] =
     {
-        crop_width_num,
-        crop_height_num,
-        crop_offset_left_num,
-        crop_offset_top_num
+        crop_width_num, crop_height_num, crop_offset_left_num, crop_offset_top_num
     };
 
     pv->source_clean_aperture = CFDictionaryCreate(kCFAllocatorDefault,
@@ -134,12 +128,8 @@ static int crop_scale_vt_init(hb_filter_object_t *filter,
         hb_log("cropscale_vt: kVTPixelTransferPropertyKey_ScalingMode failed");
     }
 
-    // Set yo the destination clean aperture dictionary
-    hb_dict_extract_int(&width, settings, "width");
-    hb_dict_extract_int(&height, settings, "height");
-
+    // Set the destination clean aperture dictionary
     int zero = 0;
-
     CFNumberRef width_num       = CFNumberCreate(kCFAllocatorDefault, kCFNumberIntType, &width);
     CFNumberRef height_num      = CFNumberCreate(kCFAllocatorDefault, kCFNumberIntType, &height);
     CFNumberRef offset_left_num = CFNumberCreate(kCFAllocatorDefault, kCFNumberIntType, &zero);
@@ -147,10 +137,7 @@ static int crop_scale_vt_init(hb_filter_object_t *filter,
 
     const void *destination_clean_aperture_values[4] =
     {
-        width_num,
-        height_num,
-        offset_left_num,
-        offset_top_num
+        width_num, height_num, offset_left_num, offset_top_num
     };
 
     CFDictionaryRef destination_clean_aperture = CFDictionaryCreate(kCFAllocatorDefault,
@@ -160,6 +147,8 @@ static int crop_scale_vt_init(hb_filter_object_t *filter,
                                                                     &kCFTypeDictionaryKeyCallBacks,
                                                                     &kCFTypeDictionaryValueCallBacks);
 
+    CFRelease(width_num);
+    CFRelease(height_num);
     CFRelease(offset_left_num);
     CFRelease(offset_top_num);
 
@@ -175,45 +164,11 @@ static int crop_scale_vt_init(hb_filter_object_t *filter,
         return err;
     }
 
-    // CVPixelBuffer pool
-    // Set the Metal compatibility key
-    // to keep the buffer on the GPU memory
-    OSType cv_pix_fmt = hb_vt_get_cv_pixel_format(init->pix_fmt, init->color_range);
-    CFNumberRef pix_fmt_num = CFNumberCreate(kCFAllocatorDefault, kCFNumberSInt32Type, &cv_pix_fmt);
-
-    const void *attrs_keys[4] =
-    {
-        kCVPixelBufferWidthKey,
-        kCVPixelBufferHeightKey,
-        kCVPixelBufferPixelFormatTypeKey,
-        kCVPixelBufferMetalCompatibilityKey
-
-    };
-    const void *attrs_values[4] =
-    {
-        width_num,
-        height_num,
-        pix_fmt_num,
-        kCFBooleanTrue
-    };
-
-    CFDictionaryRef attrs = CFDictionaryCreate(kCFAllocatorDefault,
-                                               attrs_keys,
-                                               attrs_values,
-                                               4,
-                                               &kCFTypeDictionaryKeyCallBacks,
-                                               &kCFTypeDictionaryValueCallBacks);
-
-    CFRelease(width_num);
-    CFRelease(height_num);
-    CFRelease(pix_fmt_num);
-
-    err = CVPixelBufferPoolCreate(kCFAllocatorDefault, NULL, attrs, &pv->pool);
-    CFRelease(attrs);
-    if (err != noErr)
+    pv->pool = hb_cv_create_pixel_buffer_pool(width, height, init->pix_fmt, init->color_range);
+    if (pv->pool == NULL)
     {
         hb_log("cropscale_vt: CVPixelBufferPoolCreate failed");
-        return err;
+        return -1;
     }
 
     init->crop[0] = top;
@@ -240,26 +195,22 @@ static void crop_scale_vt_close(hb_filter_object_t *filter)
         return;
     }
 
-    VTPixelTransferSessionInvalidate(pv->session);
-    CFRelease(pv->session);
-    CFRelease(pv->source_clean_aperture);
-    CVPixelBufferPoolRelease(pv->pool);
+    if (pv->session)
+    {
+        VTPixelTransferSessionInvalidate(pv->session);
+        CFRelease(pv->session);
+    }
+    if (pv->source_clean_aperture)
+    {
+        CFRelease(pv->source_clean_aperture);
+    }
+    if (pv->pool)
+    {
+        CVPixelBufferPoolRelease(pv->pool);
+    }
 
     free(pv);
     filter->private_data = NULL;
-}
-
-static CVPixelBufferRef extract_buf(hb_buffer_t *in)
-{
-    if (in->storage_type == AVFRAME)
-    {
-        return (CVPixelBufferRef)((AVFrame *)in->storage)->data[3];
-    }
-    else if (in->storage_type == COREMEDIA)
-    {
-        return (CVPixelBufferRef)in->storage;
-    }
-    return nil;
 }
 
 static int crop_scale_vt_work(hb_filter_object_t *filter,
@@ -279,7 +230,10 @@ static int crop_scale_vt_work(hb_filter_object_t *filter,
     // Setup buffers
     OSStatus err = noErr;
 
-    CVPixelBufferRef source_buf = extract_buf(in);
+    CVPixelBufferRef source_buf = hb_cv_get_pixel_buffer(in);
+    hb_cv_add_color_tag(source_buf,
+                        pv->input.color_prim, pv->input.color_transfer,
+                        pv->input.color_matrix, pv->input.chroma_location);
     if (source_buf == NULL)
     {
         hb_log("cropscale_vt: extract_buf failed");

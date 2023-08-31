@@ -12,6 +12,7 @@ endif
 
 $(eval $(call import.MODULE.defs,LIBHB,libhb,$(__deps__)))
 $(eval $(call import.GCC,LIBHB))
+$(eval $(call import.METAL,LIBHB))
 
 ###############################################################################
 
@@ -24,6 +25,7 @@ LIBHB.m4.out = $(patsubst $(LIBHB.src/)%.m4,$(LIBHB.build/)%,$(LIBHB.m4.in))
 LIBHB.c   = $(wildcard $(LIBHB.src/)*.c)
 LIBHB.c.o = $(patsubst $(SRC/)%.c,$(BUILD/)%.o,$(LIBHB.c))
 LIBHB.m.o = $(patsubst $(SRC/)%.m,$(BUILD/)%.o,$(LIBHB.m))
+LIBHB.metal.o = $(patsubst $(SRC/)%.metal,$(BUILD/)%.o,$(LIBHB.metal))
 LIBHB.d   = $(LIBHB.m4.out) $(LIBHB.h.out) \
     $(foreach n,$(LIBHB.prerequisites),$($n.INSTALL.target) )
 
@@ -40,6 +42,7 @@ LIBHB.a = $(LIBHB.build/)$(call TARGET.archive,handbrake)
 LIBHB.out += $(LIBHB.m4.out)
 LIBHB.out += $(LIBHB.c.o)
 LIBHB.out += $(LIBHB.m.o)
+LIBHB.out += $(LIBHB.metal.o)
 LIBHB.out += $(LIBHB.h.out)
 LIBHB.out += $(LIBHB.a)
 
@@ -81,6 +84,7 @@ else ifeq ($(HOST.system),darwin)
     LIBHB.GCC.D += SYS_DARWIN
     LIBHB.c += $(wildcard $(LIBHB.src/)platform/macosx/*.c)
     LIBHB.m += $(wildcard $(LIBHB.src/)platform/macosx/*.m)
+    LIBHB.metal += $(wildcard $(LIBHB.src/)platform/macosx/shaders/*.metal)
 else ifeq ($(HOST.system),linux)
     LIBHB.GCC.D += SYS_LINUX _LARGEFILE_SOURCE _FILE_OFFSET_BITS=64
 else ifeq ($(HOST.system),freebsd)
