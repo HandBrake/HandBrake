@@ -15,7 +15,7 @@
 #include "handbrake/handbrake.h"
 #include "handbrake/hdr10plus.h"
 #include "handbrake/hbffmpeg.h"
-#include "vt_common.h"
+#include "cv_utils.h"
 
 int  encvt_init(hb_work_object_t *, hb_job_t *);
 int  encvt_work(hb_work_object_t *, hb_buffer_t **, hb_buffer_t **);
@@ -216,135 +216,6 @@ static void compute_dts_offset(hb_work_private_t *pv, hb_buffer_t *buf)
     }
 }
 
-static CFStringRef hb_vt_colr_pri_xlat(int color_prim)
-{
-    switch (color_prim)
-    {
-        case HB_COLR_PRI_BT2020:
-            return kCMFormatDescriptionColorPrimaries_ITU_R_2020;
-        case HB_COLR_PRI_BT709:
-            return kCMFormatDescriptionColorPrimaries_ITU_R_709_2;
-        case HB_COLR_PRI_EBUTECH:
-            return kCMFormatDescriptionColorPrimaries_EBU_3213;
-        case HB_COLR_PRI_SMPTEC:
-            return kCMFormatDescriptionColorPrimaries_SMPTE_C;
-        default:
-            return NULL;
-    }
-}
-
-static CFStringRef hb_vt_colr_tra_xlat(int color_transfer)
-{
-    switch (color_transfer)
-    {
-        case HB_COLR_TRA_BT709:
-            return kCMFormatDescriptionTransferFunction_ITU_R_709_2;
-        case HB_COLR_TRA_SMPTE240M:
-            return kCMFormatDescriptionTransferFunction_SMPTE_240M_1995;
-        case HB_COLR_TRA_SMPTEST2084:
-            return kCVImageBufferTransferFunction_SMPTE_ST_2084_PQ;
-        case HB_COLR_TRA_LINEAR:
-            if (__builtin_available(macOS 10.14, *)) { return kCVImageBufferTransferFunction_Linear; }
-        case HB_COLR_TRA_IEC61966_2_1:
-            return kCVImageBufferTransferFunction_sRGB;
-        case HB_COLR_TRA_ARIB_STD_B67:
-            return kCVImageBufferTransferFunction_ITU_R_2100_HLG;
-        case HB_COLR_TRA_GAMMA22:
-            return kCVImageBufferTransferFunction_UseGamma;
-        case HB_COLR_TRA_GAMMA28:
-            return kCVImageBufferTransferFunction_UseGamma;
-        case HB_COLR_TRA_BT2020_10:
-        case HB_COLR_TRA_BT2020_12:
-            return kCVImageBufferTransferFunction_ITU_R_2020;
-        default:
-            return NULL;
-    }
-}
-
-static CFNumberRef hb_vt_colr_gamma_xlat(int color_transfer)
-{
-    Float32 gamma = 0;
-    switch (color_transfer)
-    {
-        case HB_COLR_TRA_GAMMA22:
-            gamma = 2.2;
-        case HB_COLR_TRA_GAMMA28:
-            gamma = 2.8;
-    }
-
-    return gamma > 0 ? CFNumberCreate(NULL, kCFNumberFloat32Type, &gamma) : NULL;
-}
-
-static CFStringRef hb_vt_colr_mat_xlat(int color_matrix)
-{
-    switch (color_matrix)
-    {
-        case HB_COLR_MAT_BT2020_NCL:
-            return kCMFormatDescriptionYCbCrMatrix_ITU_R_2020;
-        case HB_COLR_MAT_BT709:
-            return kCMFormatDescriptionYCbCrMatrix_ITU_R_709_2;
-        case HB_COLR_MAT_SMPTE170M:
-            return kCMFormatDescriptionYCbCrMatrix_ITU_R_601_4;
-        case HB_COLR_MAT_SMPTE240M:
-            return kCMFormatDescriptionYCbCrMatrix_SMPTE_240M_1995;
-        default:
-            return NULL;
-    }
-}
-
-static CFStringRef hb_vt_chroma_loc_xlat(int chroma_location)
-{
-    switch (chroma_location)
-    {
-        case AVCHROMA_LOC_LEFT:
-            return kCVImageBufferChromaLocation_Left;
-        case AVCHROMA_LOC_CENTER:
-            return kCVImageBufferChromaLocation_Center;
-        case AVCHROMA_LOC_TOPLEFT:
-            return kCVImageBufferChromaLocation_TopLeft;
-        case AVCHROMA_LOC_TOP:
-            return kCVImageBufferChromaLocation_Top;
-        case AVCHROMA_LOC_BOTTOMLEFT:
-            return kCVImageBufferChromaLocation_BottomLeft;
-        case AVCHROMA_LOC_BOTTOM:
-            return kCVImageBufferChromaLocation_Bottom;
-        default:
-            return NULL;
-    }
-}
-
-static void hb_vt_add_color_tag(CVPixelBufferRef pxbuffer, hb_job_t *job)
-{
-    CFStringRef prim       = hb_vt_colr_pri_xlat(job->color_prim);
-    CFStringRef transfer   = hb_vt_colr_tra_xlat(job->color_transfer);
-    CFNumberRef gamma      = hb_vt_colr_gamma_xlat(job->color_transfer);
-    CFStringRef matrix     = hb_vt_colr_mat_xlat(job->color_matrix);
-    CFStringRef chroma_loc = hb_vt_chroma_loc_xlat(job->chroma_location);
-
-    if (prim)
-    {
-        CVBufferSetAttachment(pxbuffer, kCVImageBufferColorPrimariesKey, prim, kCVAttachmentMode_ShouldPropagate);
-    }
-    if (transfer)
-    {
-        CVBufferSetAttachment(pxbuffer, kCVImageBufferTransferFunctionKey, transfer, kCVAttachmentMode_ShouldPropagate);
-    }
-    if (gamma)
-    {
-        CVBufferSetAttachment(pxbuffer, kCVImageBufferGammaLevelKey, gamma, kCVAttachmentMode_ShouldPropagate);
-        CFRelease(gamma);
-    }
-    if (matrix)
-    {
-        CVBufferSetAttachment(pxbuffer, kCVImageBufferYCbCrMatrixKey, matrix, kCVAttachmentMode_ShouldPropagate);
-    }
-    if (chroma_loc)
-    {
-        CVBufferSetAttachment(pxbuffer, kCVImageBufferChromaLocationTopFieldKey, chroma_loc, kCVAttachmentMode_ShouldPropagate);
-        CVBufferSetAttachment(pxbuffer, kCVImageBufferChromaLocationBottomFieldKey, chroma_loc, kCVAttachmentMode_ShouldPropagate);
-    }
-}
-
 static void hb_vt_add_dynamic_hdr_metadata(CVPixelBufferRef pxbuffer, hb_job_t *job, hb_buffer_t *buf)
 {
     for (int i = 0; i < buf->nb_side_data; i++)
@@ -458,7 +329,7 @@ static int hb_vt_settings_xlat(hb_work_private_t *pv, hb_job_t *job)
     hb_vt_param_default(&pv->settings);
 
     pv->settings.codec       = job->vcodec == HB_VCODEC_VT_H264 ? kCMVideoCodecType_H264 : kCMVideoCodecType_HEVC;
-    pv->settings.pixelFormat = hb_vt_get_cv_pixel_format(job->output_pix_fmt, job->color_range);
+    pv->settings.pixelFormat = hb_cv_get_pixel_format(job->output_pix_fmt, job->color_range);
     pv->settings.timescale = 90000;
 
     // set the preset
@@ -785,7 +656,8 @@ static OSStatus wrap_buf(hb_work_private_t *pv, hb_buffer_t *buf, CVPixelBufferR
 
     if (*pix_buf)
     {
-        hb_vt_add_color_tag(*pix_buf, pv->job);
+        hb_cv_add_color_tag(*pix_buf, pv->job->color_prim, pv->job->color_transfer,
+                            pv->job->color_matrix, pv->job->chroma_location);
         hb_vt_add_dynamic_hdr_metadata(*pix_buf, pv->job, buf);
     }
 
@@ -1033,19 +905,19 @@ static OSStatus init_vtsession(hb_work_object_t *w, hb_job_t *job, hb_work_priva
 
     err = VTSessionSetProperty(pv->session,
                                kVTCompressionPropertyKey_ColorPrimaries,
-                               hb_vt_colr_pri_xlat(pv->settings.color.prim));
+                               hb_cv_colr_pri_xlat(pv->settings.color.prim));
     if (err != noErr)
     {
         hb_log("VTSessionSetProperty: kVTCompressionPropertyKey_ColorPrimaries failed");
     }
     err = VTSessionSetProperty(pv->session,
                                kVTCompressionPropertyKey_TransferFunction,
-                               hb_vt_colr_tra_xlat(pv->settings.color.transfer));
+                               hb_cv_colr_tra_xlat(pv->settings.color.transfer));
     if (err != noErr)
     {
         hb_log("VTSessionSetProperty: kVTCompressionPropertyKey_TransferFunction failed");
     }
-    CFNumberRef gamma = hb_vt_colr_gamma_xlat(pv->settings.color.transfer);
+    CFNumberRef gamma = hb_cv_colr_gamma_xlat(pv->settings.color.transfer);
     err = VTSessionSetProperty(pv->session,
                                CFSTR("GammaLevel"),
                                gamma);
@@ -1060,21 +932,21 @@ static OSStatus init_vtsession(hb_work_object_t *w, hb_job_t *job, hb_work_priva
     }
     err = VTSessionSetProperty(pv->session,
                                kVTCompressionPropertyKey_YCbCrMatrix,
-                               hb_vt_colr_mat_xlat(pv->settings.color.matrix));
+                               hb_cv_colr_mat_xlat(pv->settings.color.matrix));
     if (err != noErr)
     {
         hb_log("VTSessionSetProperty: kVTCompressionPropertyKey_YCbCrMatrix failed");
     }
     err = VTSessionSetProperty(pv->session,
                                CFSTR("ChromaLocationTopField"),
-                               hb_vt_chroma_loc_xlat(pv->settings.color.chromaLocation));
+                               hb_cv_chroma_loc_xlat(pv->settings.color.chromaLocation));
     if (err != noErr)
     {
         hb_log("VTSessionSetProperty: ChromaLocationTopField failed");
     }
     err = VTSessionSetProperty(pv->session,
                                    CFSTR("ChromaLocationBottomField"),
-                                   hb_vt_chroma_loc_xlat(pv->settings.color.chromaLocation));
+                                   hb_cv_chroma_loc_xlat(pv->settings.color.chromaLocation));
     if (err != noErr)
     {
         hb_log("VTSessionSetProperty: ChromaLocationBottomField failed");

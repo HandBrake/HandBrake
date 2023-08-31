@@ -496,8 +496,15 @@ extern hb_filter_object_t hb_filter_format;
 
 #if defined(__APPLE__)
 extern hb_filter_object_t hb_filter_prefilter_vt;
+extern hb_filter_object_t hb_filter_yadif_vt;
+extern hb_filter_object_t hb_filter_bwdif_vt;
 extern hb_filter_object_t hb_filter_crop_scale_vt;
+extern hb_filter_object_t hb_filter_chroma_smooth_vt;
 extern hb_filter_object_t hb_filter_rotate_vt;
+extern hb_filter_object_t hb_filter_grayscale_vt;
+extern hb_filter_object_t hb_filter_pad_vt;
+extern hb_filter_object_t hb_filter_lapsharp_vt;
+extern hb_filter_object_t hb_filter_unsharp_vt;
 #endif
 
 extern hb_work_object_t * hb_objects;

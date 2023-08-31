@@ -76,6 +76,7 @@
 		A91119A21C7DD58B001C463C /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 273F203B14ADBC210021BE6D /* Cocoa.framework */; };
 		A91119A31C7DD591001C463C /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 273F202214ADB8650021BE6D /* IOKit.framework */; };
 		A91119A41C7DD614001C463C /* HBSubtitlesDefaults.h in Headers */ = {isa = PBXBuildFile; fileRef = A9F4728B1976BAA70009EC65 /* HBSubtitlesDefaults.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		A913DDFC2AAB828D004D2C5E /* Metal.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A99B989F27957FCE00DCD062 /* Metal.framework */; };
 		A91485FE1F61296100374C12 /* HBFiltersViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A91485FD1F61296100374C12 /* HBFiltersViewController.m */; };
 		A914BCB31BC441C700157917 /* HBPreviewView.m in Sources */ = {isa = PBXBuildFile; fileRef = A914BCB21BC441C700157917 /* HBPreviewView.m */; };
 		A9150DAE243F7BE200694870 /* HBQueueDockTileController.m in Sources */ = {isa = PBXBuildFile; fileRef = A9150DAD243F7BE200694870 /* HBQueueDockTileController.m */; };
@@ -1131,6 +1132,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A913DDFC2AAB828D004D2C5E /* Metal.framework in Frameworks */,
 				A9998605278868220019E76F /* QuickLookUI.framework in Frameworks */,
 				273F203C14ADBC210021BE6D /* Cocoa.framework in Frameworks */,
 				A96E461B278D99840016DCBB /* Sparkle in Frameworks */,

@@ -1490,7 +1490,9 @@ enum
     HB_FILTER_COMB_DETECT,
     HB_FILTER_DECOMB,
     HB_FILTER_YADIF,
+    HB_FILTER_YADIF_VT,
     HB_FILTER_BWDIF,
+    HB_FILTER_BWDIF_VT,
     HB_FILTER_VFR,
     // Filters that must operate on the original source image are next
     HB_FILTER_DEBLOCK,
@@ -1498,15 +1500,20 @@ enum
     HB_FILTER_HQDN3D = HB_FILTER_DENOISE,
     HB_FILTER_NLMEANS,
     HB_FILTER_CHROMA_SMOOTH,
+    HB_FILTER_CHROMA_SMOOTH_VT,
     HB_FILTER_ROTATE,
     HB_FILTER_ROTATE_VT,
     HB_FILTER_RENDER_SUB,
     HB_FILTER_CROP_SCALE,
     HB_FILTER_CROP_SCALE_VT,
     HB_FILTER_LAPSHARP,
+    HB_FILTER_LAPSHARP_VT,
     HB_FILTER_UNSHARP,
+    HB_FILTER_UNSHARP_VT,
     HB_FILTER_GRAYSCALE,
+    HB_FILTER_GRAYSCALE_VT,
     HB_FILTER_PAD,
+    HB_FILTER_PAD_VT,
     HB_FILTER_COLORSPACE,
     HB_FILTER_FORMAT,
     HB_FILTER_RPU,
@@ -1557,6 +1564,7 @@ char ** hb_str_vsplit( const char * str, char delem );
 int hb_yuv2rgb(int yuv);
 int hb_rgb2yuv(int rgb);
 int hb_rgb2yuv_bt709(int rgb);
+int hb_rgb2yuv_bt2020(int rgb);
 
 const char * hb_subsource_name( int source );
 

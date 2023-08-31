@@ -7,10 +7,9 @@
    For full terms see the file COPYING file or visit http://www.gnu.org/licenses/gpl-2.0.html
  */
 
-#include "handbrake/handbrake.h"
-#include "vt_common.h"
-
 #include <VideoToolbox/VideoToolbox.h>
+#include "handbrake/handbrake.h"
+#include "cv_utils.h"
 
 struct hb_filter_private_s
 {
@@ -32,7 +31,6 @@ static void rotate_vt_close(hb_filter_object_t *filter);
 
 static const char rotate_vt_template[] =
     "angle=^(0|90|180|270)$:hflip=^"HB_BOOL_REG"$:disable=^"HB_BOOL_REG"$";
-
 
 hb_filter_object_t hb_filter_rotate_vt =
 {
@@ -56,7 +54,6 @@ static int rotate_vt_init(hb_filter_object_t *filter,
         return -1;
     }
     hb_filter_private_t *pv = filter->private_data;
-
     pv->input = *init;
 
     hb_dict_t    *settings = filter->settings;
@@ -129,49 +126,11 @@ static int rotate_vt_init(hb_filter_object_t *filter,
         }
     }
 
-    // CVPixelBuffer pool
-    // Set the Metal compatibility key
-    // to keep the buffer on the GPU memory
-    OSStatus err = noErr;
-    OSType cv_pix_fmt = hb_vt_get_cv_pixel_format(init->pix_fmt, init->color_range);
-
-    CFNumberRef width_num   = CFNumberCreate(kCFAllocatorDefault, kCFNumberIntType, &width);
-    CFNumberRef height_num  = CFNumberCreate(kCFAllocatorDefault, kCFNumberIntType, &height);
-    CFNumberRef pix_fmt_num = CFNumberCreate(kCFAllocatorDefault, kCFNumberSInt32Type, &cv_pix_fmt);
-
-    const void *attrs_keys[4] =
-    {
-        kCVPixelBufferWidthKey,
-        kCVPixelBufferHeightKey,
-        kCVPixelBufferPixelFormatTypeKey,
-        kCVPixelBufferMetalCompatibilityKey
-
-    };
-    const void *attrs_values[4] =
-    {
-        width_num,
-        height_num,
-        pix_fmt_num,
-        kCFBooleanTrue
-    };
-
-    CFDictionaryRef attrs = CFDictionaryCreate(kCFAllocatorDefault,
-                                               attrs_keys,
-                                               attrs_values,
-                                               4,
-                                               &kCFTypeDictionaryKeyCallBacks,
-                                               &kCFTypeDictionaryValueCallBacks);
-
-    CFRelease(width_num);
-    CFRelease(height_num);
-    CFRelease(pix_fmt_num);
-
-    err = CVPixelBufferPoolCreate(kCFAllocatorDefault, NULL, attrs, &pv->pool);
-    CFRelease(attrs);
-    if (err != noErr)
+    pv->pool = hb_cv_create_pixel_buffer_pool(width, height, init->pix_fmt, init->color_range);
+    if (pv->pool == NULL)
     {
         hb_log("rotate_vt: CVPixelBufferPoolCreate failed");
-        return err;
+        return -1;
     }
 
     init->geometry.width  = width;
@@ -193,27 +152,20 @@ static void rotate_vt_close(hb_filter_object_t *filter)
 
     if (__builtin_available (macOS 13, *))
     {
-        VTPixelRotationSessionInvalidate(pv->session);
-        CFRelease(pv->session);
+        if (pv->session)
+        {
+            VTPixelRotationSessionInvalidate(pv->session);
+            CFRelease(pv->session);
+        }
     }
 
-    CVPixelBufferPoolRelease(pv->pool);
+    if (pv->pool)
+    {
+        CVPixelBufferPoolRelease(pv->pool);
+    }
 
     free(pv);
     filter->private_data = NULL;
-}
-
-static CVPixelBufferRef extract_buf(hb_buffer_t *in)
-{
-    if (in->storage_type == AVFRAME)
-    {
-        return (CVPixelBufferRef)((AVFrame *)in->storage)->data[3];
-    }
-    else if (in->storage_type == COREMEDIA)
-    {
-        return (CVPixelBufferRef)in->storage;
-    }
-    return nil;
 }
 
 static int rotate_vt_work(hb_filter_object_t *filter,
@@ -233,7 +185,7 @@ static int rotate_vt_work(hb_filter_object_t *filter,
     // Setup buffers
     OSStatus err = noErr;
 
-    CVPixelBufferRef source_buf = extract_buf(in);
+    CVPixelBufferRef source_buf = hb_cv_get_pixel_buffer(in);
     if (source_buf == NULL)
     {
         hb_log("rotate_vt: extract_buf failed");
