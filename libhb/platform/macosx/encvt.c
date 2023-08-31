@@ -1088,7 +1088,7 @@ static OSStatus init_vtsession(hb_work_object_t *w, hb_job_t *job, hb_work_priva
         }
     }
 
-    if (CFDictionaryContainsKey(supportedProps, kVTCompressionPropertyKey_MasteringDisplayColorVolume) &&
+    if (CFDictionaryContainsKey(supportedProps, kVTCompressionPropertyKey_ContentLightLevelInfo) &&
         pv->settings.color.contentLightLevel != NULL)
     {
         err = VTSessionSetProperty(pv->session,
