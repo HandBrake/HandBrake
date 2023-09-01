@@ -38,6 +38,11 @@ namespace HandBrakeWPF.Services.Scan.Factories
                         break;
                     }
                 }
+
+                if (string.IsNullOrEmpty(driveLabel))
+                {
+                    driveLabel = Path.GetFileNameWithoutExtension(title.Path) ?? title.Path;
+                }
             }
             else if (title.Type == 0 || title.Type == 1)
             {
