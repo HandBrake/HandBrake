@@ -9,14 +9,17 @@
 
 namespace HandBrakeWPF.ViewModels
 {
+    using System;
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
     using System.ComponentModel;
     using System.Diagnostics;
     using System.Linq;
+    using System.Runtime.CompilerServices;
 
     using HandBrake.App.Core.Utilities;
     using HandBrake.Interop.Interop;
+    using HandBrake.Interop.Interop.Interfaces.Model;
     using HandBrake.Interop.Interop.Interfaces.Model.Encoders;
     using HandBrake.Interop.Utilities;
 
@@ -40,7 +43,7 @@ namespace HandBrakeWPF.ViewModels
     {
         private readonly IWindowManager windowManager;
 
-        private BindingList<string> availableLanguages;
+        private BindingList<Language> availableLanguages;
         private AudioBehaviours audioBehaviours;
 
         /// <summary>
@@ -50,9 +53,9 @@ namespace HandBrakeWPF.ViewModels
         {
             this.windowManager = windowManager;
             this.AudioBehaviours = new AudioBehaviours();
-            this.SelectedAvailableToMove = new BindingList<string>();
-            this.SelectedLanguagesToMove = new BindingList<string>();
-            this.AvailableLanguages = new BindingList<string>();
+            this.SelectedAvailableToMove = new BindingList<Language>();
+            this.SelectedLanguagesToMove = new BindingList<Language>();
+            this.AvailableLanguages = new BindingList<Language>();
             this.AudioEncoders = new List<HBAudioEncoder>(HandBrakeEncoderHelpers.AudioEncoders) { HBAudioEncoder.None }; 
 
             this.SampleRates = new ObservableCollection<string> { "Auto" };
@@ -122,12 +125,12 @@ namespace HandBrakeWPF.ViewModels
         /// <summary>
         /// Gets SelectedLanguages.
         /// </summary>
-        public BindingList<string> SelectedAvailableToMove { get; private set; }
+        public BindingList<Language> SelectedAvailableToMove { get; private set; }
 
         /// <summary>
         /// Gets SelectedLanguages.
         /// </summary>
-        public BindingList<string> SelectedLanguagesToMove { get; private set; }
+        public BindingList<Language> SelectedLanguagesToMove { get; private set; }
 
         public BindingList<AudioFallbackWrapper> PassthruEncoders { get; private set; }
 
@@ -189,7 +192,7 @@ namespace HandBrakeWPF.ViewModels
         /// <summary>
         /// Gets AvailableLanguages.
         /// </summary>
-        public BindingList<string> AvailableLanguages
+        public BindingList<Language> AvailableLanguages
         {
             get
             {
@@ -255,14 +258,14 @@ namespace HandBrakeWPF.ViewModels
         {
             if (this.SelectedAvailableToMove.Count > 0)
             {
-                List<string> copiedList = this.SelectedAvailableToMove.ToList();
-                foreach (string item in copiedList)
+                List<Language> copiedList = this.SelectedAvailableToMove.ToList();
+
+                foreach (Language item in copiedList)
                 {
-                    this.AvailableLanguages.Remove(item);
                     this.AudioBehaviours.SelectedLanguages.Add(item);
                 }
 
-                this.AvailableLanguages = new BindingList<string>(this.AvailableLanguages.OrderBy(o => o).ToList());
+                this.UpdateAvailableLanguages();
             }
         }
 
@@ -273,15 +276,14 @@ namespace HandBrakeWPF.ViewModels
         {
             if (this.SelectedLanguagesToMove.Count > 0)
             {
-                List<string> copiedList = this.SelectedLanguagesToMove.ToList();
-                foreach (string item in copiedList)
+                List<Language> copiedList = this.SelectedLanguagesToMove.ToList();
+                foreach (Language item in copiedList)
                 {
                     this.AudioBehaviours.SelectedLanguages.Remove(item);
-                    this.AvailableLanguages.Add(item);
                 }
             }
 
-            this.AvailableLanguages = new BindingList<string>(this.AvailableLanguages.OrderBy(o => o).ToList());
+            this.UpdateAvailableLanguages();
         }
 
         /// <summary>
@@ -289,13 +291,8 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         public void LanguageClearAll()
         {
-            foreach (string item in this.AudioBehaviours.SelectedLanguages)
-            {
-                this.AvailableLanguages.Add(item);
-            }
-            this.AvailableLanguages = new BindingList<string>(this.AvailableLanguages.OrderBy(o => o).ToList());
-
             this.AudioBehaviours.SelectedLanguages.Clear();
+            this.UpdateAvailableLanguages();
         }
 
         #endregion
@@ -308,11 +305,8 @@ namespace HandBrakeWPF.ViewModels
             this.IsApplied = false;
             this.AudioBehaviours = new AudioBehaviours();
 
-            IDictionary<string, string> langList = LanguageUtilities.MapLanguages();
-            langList = (from entry in langList orderby entry.Key ascending select entry).ToDictionary(pair => pair.Key, pair => pair.Value);
-
             this.AvailableLanguages.Clear();
-            foreach (string item in langList.Keys)
+            foreach (Language item in HandBrakeLanguagesHelper.AllLanguagesWithAny)
             {
                 this.AvailableLanguages.Add(item);
             }
@@ -342,11 +336,12 @@ namespace HandBrakeWPF.ViewModels
 
                 this.NotifyOfPropertyChange(() => this.BehaviourTracks);
 
-                foreach (string selectedItem in behaviours.SelectedLanguages)
+                foreach (Language selectedItem in behaviours.SelectedLanguages)
                 {
-                    this.AvailableLanguages.Remove(selectedItem);
                     this.AudioBehaviours.SelectedLanguages.Add(selectedItem);
                 }
+
+                this.UpdateAvailableLanguages();
             }
 
             this.CorrectAudioEncoders(this.OutputFormat);
@@ -422,6 +417,23 @@ namespace HandBrakeWPF.ViewModels
                     track.Encoder = HandBrakeEncoderHelpers.GetAudioEncoder(HBAudioEncoder.Vorbis);
                 }
             }
+        }
+        
+        private void UpdateAvailableLanguages()
+        {
+            List<Language> copiedList = this.AudioBehaviours.SelectedLanguages.ToList();
+
+            BindingList<Language> newAvailable = new BindingList<Language>();
+
+            foreach (Language lang in HandBrakeLanguagesHelper.AllLanguagesWithAny)
+            {
+                if (!copiedList.Contains(lang))
+                {
+                    newAvailable.Add(lang);
+                }
+            }
+
+            this.AvailableLanguages = newAvailable;
         }
     }
 }

@@ -12,12 +12,14 @@ namespace HandBrakeWPF.Model.Subtitles
     using System.ComponentModel;
     using System.Linq;
 
+    using HandBrake.Interop.Interop.Interfaces.Model;
+
     using HandBrakeWPF.ViewModels;
 
     public class SubtitleBehaviours : PropertyChangedBase
     {
         private SubtitleBehaviourModes selectedBehaviour;
-        private BindingList<string> selectedLanguages;
+        private BindingList<Language> selectedLanguages;
         private bool addForeignAudioScanTrack;
         private bool addClosedCaptions;
         private SubtitleBurnInBehaviourModes selectedBurnInBehaviour;
@@ -26,14 +28,14 @@ namespace HandBrakeWPF.Model.Subtitles
         {
             this.SelectedBehaviour = SubtitleBehaviourModes.None;
             this.SelectedBurnInBehaviour = SubtitleBurnInBehaviourModes.None;
-            this.SelectedLanguages = new BindingList<string>();
+            this.SelectedLanguages = new BindingList<Language>();
         }
 
         public SubtitleBehaviours(SubtitleBehaviours behaviours)
         {
             this.SelectedBehaviour = behaviours.selectedBehaviour;
             this.SelectedBurnInBehaviour = behaviours.selectedBurnInBehaviour;
-            this.SelectedLanguages = new BindingList<string>(behaviours.SelectedLanguages.ToList());
+            this.SelectedLanguages = new BindingList<Language>(behaviours.SelectedLanguages.ToList());
             this.AddClosedCaptions = behaviours.AddClosedCaptions;
             this.AddForeignAudioScanTrack = behaviours.AddForeignAudioScanTrack;
         }
@@ -72,7 +74,7 @@ namespace HandBrakeWPF.Model.Subtitles
             }
         }
 
-        public BindingList<string> SelectedLanguages
+        public BindingList<Language> SelectedLanguages
         {
             get
             {
