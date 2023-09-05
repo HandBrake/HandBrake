@@ -1060,7 +1060,7 @@ static int hb_detelecine_work( hb_filter_object_t * filter,
         {
             const int stride_src = in->plane[pp].stride;
             const int stride_dst = ctx->stride[pp];
-            const int height = in->f.height;
+            const int height = in->plane[pp].height;
             const int size = stride_src < stride_dst ? ABS(stride_src) : stride_dst;
             uint8_t *dst = buf->planes[pp];
             uint8_t *src = in->plane[pp].data;
