@@ -9,7 +9,6 @@
 
 namespace HandBrakeWPF.ViewModels
 {
-    using System;
     using System.Collections.Generic;
     using System.ComponentModel;
     using System.Diagnostics;
@@ -20,6 +19,8 @@ namespace HandBrakeWPF.ViewModels
     using HandBrake.Interop.Interop.Interfaces.Model;
     using HandBrake.Interop.Utilities;
 
+    using HandBrakeWPF.Commands;
+    using HandBrakeWPF.Model.Audio;
     using HandBrakeWPF.Model.Subtitles;
     using HandBrakeWPF.Properties;
     using HandBrakeWPF.Services.Interfaces;
@@ -52,6 +53,8 @@ namespace HandBrakeWPF.ViewModels
             this.SetupPreset((Preset)null);
 
             this.Title = Resources.SubtitlesViewModel_SubDefaults;
+
+            this.RemoveTrackCommand = new SimpleRelayCommand<SubtitleBehaviourTrack>(this.RemoveTrack, null);
         }
 
         public SubtitleBehaviourRule SubtitleBehaviourRules { get; }
@@ -67,6 +70,16 @@ namespace HandBrakeWPF.ViewModels
         /// Gets Languages.
         /// </summary>
         public IEnumerable<Language> Languages { get; private set; }
+
+        public BindingList<SubtitleBehaviourModes> TrackSelectionModes => new BindingList<SubtitleBehaviourModes>(EnumHelper<SubtitleBehaviourModes>.GetEnumList().ToList());
+
+        public BindingList<IsDefaultModes> IsDefaultModes => new BindingList<IsDefaultModes>(EnumHelper<IsDefaultModes>.GetEnumList().ToList());
+
+        public BindingList<SubtitleBurnInBehaviourModes> BurnPassthruModes => new BindingList<SubtitleBurnInBehaviourModes>(EnumHelper<SubtitleBurnInBehaviourModes>.GetEnumList().ToList());
+
+        public BindingList<ForcedModes> ForcedModes => new BindingList<ForcedModes>(EnumHelper<ForcedModes>.GetEnumList().ToList());
+
+        public SimpleRelayCommand<SubtitleBehaviourTrack> RemoveTrackCommand { get; }
 
         /// <summary>
         /// Gets the subtitle behaviour modes.
@@ -134,6 +147,27 @@ namespace HandBrakeWPF.ViewModels
             {
                 this.SetupPreset(preset.SubtitleTrackBehaviours);
             }
+        }
+
+        public void AddRule()
+        {
+            this.SubtitleBehaviourRules.Tracks.Add(new SubtitleBehaviourTrack());
+        }
+
+        /// <summary>
+        /// Remove the Selected Track
+        /// </summary>
+        /// <param name="track">
+        /// The track.
+        /// </param>
+        public void RemoveTrack(SubtitleBehaviourTrack track)
+        {
+            this.SubtitleBehaviourRules.Tracks.Remove(track);
+        }
+
+        public void Clear()
+        {
+            this.SubtitleBehaviourRules.Tracks.Clear();
         }
 
         /// <summary>
