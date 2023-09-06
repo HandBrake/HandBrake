@@ -1842,7 +1842,7 @@ int hb_preset_apply_video(const hb_dict_t *preset, hb_dict_t *job_dict)
     }
 
     vqtype = hb_value_get_int(hb_dict_get(preset, "VideoQualityType"));
-    if (vqtype == 2)        // Constant quality
+    if (vqtype == 2 && hb_video_quality_is_supported(vcodec))   // Constant quality
     {
         hb_dict_set(video_dict, "Quality",
                     hb_value_xform(hb_dict_get(preset, "VideoQualitySlider"),
@@ -1854,18 +1854,21 @@ int hb_preset_apply_video(const hb_dict_t *preset, hb_dict_t *job_dict)
         hb_dict_set(video_dict, "Bitrate",
                     hb_value_xform(hb_dict_get(preset, "VideoAvgBitrate"),
                                    HB_VALUE_TYPE_INT));
-        hb_dict_set(video_dict, "MultiPass",
-                    hb_value_xform(hb_dict_get(preset, "VideoMultiPass"),
-                                   HB_VALUE_TYPE_BOOL));
-        hb_dict_set(video_dict, "Turbo",
-                    hb_value_xform(hb_dict_get(preset, "VideoTurboMultiPass"),
-                                   HB_VALUE_TYPE_BOOL));
+        if (hb_video_multipass_is_supported(vcodec))
+        {
+            hb_dict_set(video_dict, "MultiPass",
+                        hb_value_xform(hb_dict_get(preset, "VideoMultiPass"),
+                                       HB_VALUE_TYPE_BOOL));
+            hb_dict_set(video_dict, "Turbo",
+                        hb_value_xform(hb_dict_get(preset, "VideoTurboMultiPass"),
+                                       HB_VALUE_TYPE_BOOL));
+        }
         hb_dict_remove(video_dict, "Quality");
     }
     else
     {
         value = hb_dict_get(preset, "VideoQualitySlider");
-        if (value != NULL && hb_value_get_double(value) >= 0)
+        if (value != NULL && hb_value_get_double(value) >= 0 && hb_video_quality_is_supported(vcodec))
         {
             hb_dict_set(video_dict, "Quality",
                         hb_value_xform(value, HB_VALUE_TYPE_DOUBLE));
@@ -1876,12 +1879,15 @@ int hb_preset_apply_video(const hb_dict_t *preset, hb_dict_t *job_dict)
             hb_dict_set(video_dict, "Bitrate",
                         hb_value_xform(hb_dict_get(preset, "VideoAvgBitrate"),
                                        HB_VALUE_TYPE_INT));
-            hb_dict_set(video_dict, "MultiPass",
-                        hb_value_xform(hb_dict_get(preset, "VideoMultiPass"),
-                                       HB_VALUE_TYPE_BOOL));
-            hb_dict_set(video_dict, "Turbo",
-                        hb_value_xform(hb_dict_get(preset, "VideoTurboMultiPass"),
-                                       HB_VALUE_TYPE_BOOL));
+            if (hb_video_multipass_is_supported(vcodec))
+            {
+                hb_dict_set(video_dict, "MultiPass",
+                            hb_value_xform(hb_dict_get(preset, "VideoMultiPass"),
+                                           HB_VALUE_TYPE_BOOL));
+                hb_dict_set(video_dict, "Turbo",
+                            hb_value_xform(hb_dict_get(preset, "VideoTurboMultiPass"),
+                                           HB_VALUE_TYPE_BOOL));
+            }
             hb_dict_remove(video_dict, "Quality");
         }
     }
