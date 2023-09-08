@@ -2302,8 +2302,13 @@ static void compute_frame_duration( hb_work_private_t *pv )
     int64_t max_fps = 64LL;
 
     // context->time_base may be in fields, so set the max *fields* per second
-    if ( pv->context->ticks_per_frame > 1 )
-        max_fps *= pv->context->ticks_per_frame;
+    const AVCodecDescriptor *desc = avcodec_descriptor_get(pv->context->codec_id);
+    int ticks_per_frame = desc && (desc->props & AV_CODEC_PROP_FIELDS) ? 2 : 1;
+
+    if (ticks_per_frame > 1)
+    {
+        max_fps *= ticks_per_frame;
+    }
 
     if ( pv->title->opaque_priv )
     {
@@ -2353,11 +2358,11 @@ static void compute_frame_duration( hb_work_private_t *pv )
         {
             duration =  (double)pv->context->time_base.num /
                         (double)pv->context->time_base.den;
-            if ( pv->context->ticks_per_frame > 1 )
+            if ( ticks_per_frame > 1 )
             {
                 // for ffmpeg 0.5 & later, the H.264 & MPEG-2 time base is
                 // field rate rather than frame rate so convert back to frames.
-                duration *= pv->context->ticks_per_frame;
+                duration *= ticks_per_frame;
             }
         }
     }
@@ -2368,11 +2373,11 @@ static void compute_frame_duration( hb_work_private_t *pv )
         {
             duration =  (double)pv->context->time_base.num /
                             (double)pv->context->time_base.den;
-            if ( pv->context->ticks_per_frame > 1 )
+            if ( ticks_per_frame > 1 )
             {
                 // for ffmpeg 0.5 & later, the H.264 & MPEG-2 time base is
                 // field rate rather than frame rate so convert back to frames.
-                duration *= pv->context->ticks_per_frame;
+                duration *= ticks_per_frame;
             }
         }
     }
@@ -2393,9 +2398,9 @@ static void compute_frame_duration( hb_work_private_t *pv )
     }
 
     pv->field_duration = pv->duration;
-    if ( pv->context->ticks_per_frame > 1 )
+    if ( ticks_per_frame > 1 )
     {
-        pv->field_duration /= pv->context->ticks_per_frame;
+        pv->field_duration /= ticks_per_frame;
     }
 }
 

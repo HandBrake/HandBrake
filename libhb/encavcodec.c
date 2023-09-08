@@ -1343,7 +1343,7 @@ static void Encode( hb_work_object_t *w, hb_buffer_t **buf_in,
     if (key_frame)
     {
         frame.pict_type = AV_PICTURE_TYPE_I;
-        frame.key_frame = 1;
+        frame.flags |= AV_FRAME_FLAG_KEY;
     }
 
     // Encode

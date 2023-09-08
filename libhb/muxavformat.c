@@ -7,6 +7,7 @@
    For full terms see the file COPYING file or visit http://www.gnu.org/licenses/gpl-2.0.html
  */
 
+#include <time.h>
 #include <ogg/ogg.h>
 #include "libavcodec/bsf.h"
 #include "libavformat/avformat.h"

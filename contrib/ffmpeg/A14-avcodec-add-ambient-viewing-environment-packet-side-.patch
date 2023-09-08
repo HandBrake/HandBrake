@@ -1,0 +1,72 @@
+From ef33c5bd72846c5c93662a3e6a75c4f3273f0a35 Mon Sep 17 00:00:00 2001
+From: Damiano Galassi <damiog@gmail.com>
+Date: Tue, 11 Jul 2023 07:38:26 +0200
+Subject: [PATCH 1/2] avcodec: add ambient viewing environment packet side
+ data.
+
+---
+ fftools/ffprobe.c     | 3 +++
+ libavcodec/avpacket.c | 1 +
+ libavcodec/decode.c   | 1 +
+ libavcodec/packet.h   | 7 +++++++
+ 4 files changed, 12 insertions(+)
+
+diff --git a/fftools/ffprobe.c b/fftools/ffprobe.c
+index 4fcfe1164b..5663a12dc4 100644
+--- a/fftools/ffprobe.c
++++ b/fftools/ffprobe.c
+@@ -2349,6 +2349,9 @@ static void print_pkt_side_data(WriterContext *w,
+             AVContentLightMetadata *metadata = (AVContentLightMetadata *)sd->data;
+             print_int("max_content", metadata->MaxCLL);
+             print_int("max_average", metadata->MaxFALL);
++        } else if (sd->type == AV_PKT_DATA_AMBIENT_VIEWING_ENVIRONMENT) {
++            print_ambient_viewing_environment(
++                w, (const AVAmbientViewingEnvironment *)sd->data);
+         } else if (sd->type == AV_PKT_DATA_DYNAMIC_HDR10_PLUS) {
+             AVDynamicHDRPlus *metadata = (AVDynamicHDRPlus *)sd->data;
+             print_dynamic_hdr10_plus(w, metadata);
+diff --git a/libavcodec/avpacket.c b/libavcodec/avpacket.c
+index 5fef65e97a..db9c0c95e8 100644
+--- a/libavcodec/avpacket.c
++++ b/libavcodec/avpacket.c
+@@ -300,6 +300,7 @@ const char *av_packet_side_data_name(enum AVPacketSideDataType type)
+     case AV_PKT_DATA_DOVI_CONF:                  return "DOVI configuration record";
+     case AV_PKT_DATA_S12M_TIMECODE:              return "SMPTE ST 12-1:2014 timecode";
+     case AV_PKT_DATA_DYNAMIC_HDR10_PLUS:         return "HDR10+ Dynamic Metadata (SMPTE 2094-40)";
++    case AV_PKT_DATA_AMBIENT_VIEWING_ENVIRONMENT:return "Ambient viewing environment";
+     }
+     return NULL;
+ }
+diff --git a/libavcodec/decode.c b/libavcodec/decode.c
+index 7eada8e9ab..e58b462272 100644
+--- a/libavcodec/decode.c
++++ b/libavcodec/decode.c
+@@ -1428,6 +1428,7 @@ int ff_decode_frame_props_from_pkt(const AVCodecContext *avctx,
+         { AV_PKT_DATA_S12M_TIMECODE,              AV_FRAME_DATA_S12M_TIMECODE },
+         { AV_PKT_DATA_DYNAMIC_HDR10_PLUS,         AV_FRAME_DATA_DYNAMIC_HDR_PLUS },
+         { AV_PKT_DATA_SKIP_SAMPLES,               AV_FRAME_DATA_SKIP_SAMPLES },
++        { AV_PKT_DATA_AMBIENT_VIEWING_ENVIRONMENT,AV_FRAME_DATA_AMBIENT_VIEWING_ENVIRONMENT },
+     };
+ 
+     frame->pts          = pkt->pts;
+diff --git a/libavcodec/packet.h b/libavcodec/packet.h
+index f28e7e7011..199baad763 100644
+--- a/libavcodec/packet.h
++++ b/libavcodec/packet.h
+@@ -299,6 +299,13 @@ enum AVPacketSideDataType {
+      */
+     AV_PKT_DATA_DYNAMIC_HDR10_PLUS,
+ 
++    /**
++     * Ambient viewing environment metadata, as defined by H.274.. This metadata
++     * should be associated with a video stream and contains data in the form
++     * of the AVAmbientViewingEnvironment struct.
++     */
++    AV_PKT_DATA_AMBIENT_VIEWING_ENVIRONMENT,
++
+     /**
+      * The number of side data types.
+      * This is not part of the public API/ABI in the sense that it may
+-- 
+2.39.3 (Apple Git-145)
+
