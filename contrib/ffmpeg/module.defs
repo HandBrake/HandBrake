@@ -12,9 +12,9 @@ endif
 $(eval $(call import.MODULE.defs,FFMPEG,ffmpeg,$(__deps__)))
 $(eval $(call import.CONTRIB.defs,FFMPEG))
 
-FFMPEG.FETCH.url    = https://github.com/HandBrake/HandBrake-contribs/releases/download/contribs/ffmpeg-6.0.tar.bz2
-FFMPEG.FETCH.url   += https://ffmpeg.org/releases/ffmpeg-6.0.tar.bz2
-FFMPEG.FETCH.sha256 = 47d062731c9f66a78380e35a19aac77cebceccd1c7cc309b9c82343ffc430c3d
+FFMPEG.FETCH.url    = https://github.com/HandBrake/HandBrake-contribs/releases/download/contribs/ffmpeg-snapshot-20230909.tar.gz
+#FFMPEG.FETCH.url   += https://ffmpeg.org/releases/ffmpeg-snapshot.tar.bz2
+FFMPEG.FETCH.sha256 = 47fd6838af1b840ffb1e6a151c45b8085b592b5acf1ff4749b8a16a29c834c4f
 
 FFMPEG.CONFIGURE.deps  =
 FFMPEG.CONFIGURE.host  =
@@ -34,7 +34,7 @@ FFMPEG.CONFIGURE.extra = \
     --disable-avdevice \
     --disable-muxers \
     --disable-network \
-    --enable-libzimg \
+    --disable-filters \
     --disable-hwaccels \
     --disable-vdpau \
     --disable-encoders \
@@ -61,6 +61,23 @@ FFMPEG.CONFIGURE.extra = \
     --enable-decoder=av1 \
     --enable-libdav1d \
     --enable-decoder=libdav1d \
+    --enable-libzimg \
+    --enable-filter=format \
+    --enable-filter=crop \
+    --enable-filter=scale \
+    --enable-filter=zscale \
+    --enable-filter=pad \
+    --enable-filter=transpose \
+    --enable-filter=hflip \
+    --enable-filter=vflip \
+    --enable-filter=yadif \
+    --enable-filter=bwdif \
+    --enable-filter=deblock \
+    --enable-filter=tonemap \
+    --enable-filter=monochrome \
+    --enable-filter=hwdownload \
+    --enable-filter=hwmap \
+    --enable-filter=hwupload \
     --cc="$(FFMPEG.GCC.gcc)" \
     --extra-ldflags="$(call fn.ARGS,FFMPEG.GCC,*archs *sysroot *minver ?extra) -L$(call fn.ABSOLUTE,$(CONTRIB.build/)lib) $(FFMPEG.GCC.args.extra-ldflags)"
 
@@ -146,6 +163,7 @@ endif
 
 ifeq (1,$(FEATURE.qsv))
   FFMPEG.CONFIGURE.extra += --enable-libvpl
+  FFMPEG.CONFIGURE.extra += --enable-filter=vpp_qsv
 endif
 
 ifeq (1,$(FEATURE.vce))
@@ -165,7 +183,9 @@ FFMPEG.CONFIGURE.extra += \
      --enable-hwaccels \
      --enable-nvdec \
      --enable-cuda-llvm \
-     --enable-cuda
+     --enable-cuda \
+     --enable-filter=colorspace_cuda \
+     --enable-filter=scale_cuda
 endif
 
 ifeq (1,$(FEATURE.mf))

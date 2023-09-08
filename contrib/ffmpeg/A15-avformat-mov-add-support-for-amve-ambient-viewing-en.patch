@@ -1,61 +1,18 @@
-diff --git a/fftools/ffprobe.c b/fftools/ffprobe.c
-index af927cb..71fb9b4 100644
---- a/fftools/ffprobe.c
-+++ b/fftools/ffprobe.c
-@@ -2352,6 +2352,9 @@ static void print_pkt_side_data(WriterContext *w,
-             AVContentLightMetadata *metadata = (AVContentLightMetadata *)sd->data;
-             print_int("max_content", metadata->MaxCLL);
-             print_int("max_average", metadata->MaxFALL);
-+        } else if (sd->type == AV_PKT_DATA_AMBIENT_VIEWING_ENVIRONMENT) {
-+            print_ambient_viewing_environment(
-+                w, (const AVAmbientViewingEnvironment *)sd->data);
-         } else if (sd->type == AV_PKT_DATA_DOVI_CONF) {
-             AVDOVIDecoderConfigurationRecord *dovi = (AVDOVIDecoderConfigurationRecord *)sd->data;
-             print_int("dv_version_major", dovi->dv_version_major);
-diff --git a/libavcodec/avpacket.c b/libavcodec/avpacket.c
-index 5fef65e..f4f2914 100644
---- a/libavcodec/avpacket.c
-+++ b/libavcodec/avpacket.c
-@@ -300,6 +300,7 @@ const char *av_packet_side_data_name(enum AVPacketSideDataType type)
-     case AV_PKT_DATA_DOVI_CONF:                  return "DOVI configuration record";
-     case AV_PKT_DATA_S12M_TIMECODE:              return "SMPTE ST 12-1:2014 timecode";
-     case AV_PKT_DATA_DYNAMIC_HDR10_PLUS:         return "HDR10+ Dynamic Metadata (SMPTE 2094-40)";
-+    case AV_PKT_DATA_AMBIENT_VIEWING_ENVIRONMENT:return "Ambient viewing environment";
-     }
-     return NULL;
- }
-diff --git a/libavcodec/decode.c b/libavcodec/decode.c
-index be2be81..4a70c9f 100644
---- a/libavcodec/decode.c
-+++ b/libavcodec/decode.c
-@@ -1309,6 +1309,7 @@ int ff_decode_frame_props_from_pkt(const AVCodecContext *avctx,
-         { AV_PKT_DATA_ICC_PROFILE,                AV_FRAME_DATA_ICC_PROFILE },
-         { AV_PKT_DATA_S12M_TIMECODE,              AV_FRAME_DATA_S12M_TIMECODE },
-         { AV_PKT_DATA_DYNAMIC_HDR10_PLUS,         AV_FRAME_DATA_DYNAMIC_HDR_PLUS },
-+        { AV_PKT_DATA_AMBIENT_VIEWING_ENVIRONMENT,AV_FRAME_DATA_AMBIENT_VIEWING_ENVIRONMENT },
-     };
- 
-     frame->pts          = pkt->pts;
-diff --git a/libavcodec/packet.h b/libavcodec/packet.h
-index f28e7e7..199baad 100644
---- a/libavcodec/packet.h
-+++ b/libavcodec/packet.h
-@@ -299,6 +299,13 @@ enum AVPacketSideDataType {
-      */
-     AV_PKT_DATA_DYNAMIC_HDR10_PLUS,
- 
-+    /**
-+     * Ambient viewing environment metadata, as defined by H.274.. This metadata
-+     * should be associated with a video stream and contains data in the form
-+     * of the AVAmbientViewingEnvironment struct.
-+     */
-+    AV_PKT_DATA_AMBIENT_VIEWING_ENVIRONMENT,
-+
-     /**
-      * The number of side data types.
-      * This is not part of the public API/ABI in the sense that it may
+From 39152a8730363c6eca43b5e0f006165d7c138a64 Mon Sep 17 00:00:00 2001
+From: Damiano Galassi <damiog@gmail.com>
+Date: Tue, 11 Jul 2023 07:39:06 +0200
+Subject: [PATCH 2/2] avformat/mov: add support for 'amve' ambient viewing
+ environment box. As defined in ISOBMFF (ISO/IEC 14496-12) document.
+
+---
+ libavformat/dump.c   | 15 +++++++++++++++
+ libavformat/isom.h   |  3 +++
+ libavformat/mov.c    | 36 ++++++++++++++++++++++++++++++++++++
+ libavformat/movenc.c | 22 ++++++++++++++++++++++
+ 4 files changed, 76 insertions(+)
+
 diff --git a/libavformat/dump.c b/libavformat/dump.c
-index d31e4c2..eca6e73 100644
+index d31e4c2ec6..88dc9dd89c 100644
 --- a/libavformat/dump.c
 +++ b/libavformat/dump.c
 @@ -27,6 +27,7 @@
@@ -74,7 +31,7 @@ index d31e4c2..eca6e73 100644
 +{
 +    const AVAmbientViewingEnvironment *ambient =
 +        (const AVAmbientViewingEnvironment *)sd->data;
-+    av_log(ctx, AV_LOG_INFO, "Ambvient Viewing Environment, "
++    av_log(ctx, AV_LOG_INFO, "Ambient Viewing Environment, "
 +           "ambient_illuminance=%f, ambient_light_x=%f, ambient_light_y=%f",
 +           av_q2d(ambient->ambient_illuminance),
 +           av_q2d(ambient->ambient_light_x),
@@ -95,7 +52,7 @@ index d31e4c2..eca6e73 100644
              av_log(ctx, AV_LOG_INFO, "unknown side data type %d "
                     "(%"SIZE_SPECIFIER" bytes)", sd->type, sd->size);
 diff --git a/libavformat/isom.h b/libavformat/isom.h
-index 5107b4e..ab678d9 100644
+index 4b1cd42f0f..e24dfb3dd0 100644
 --- a/libavformat/isom.h
 +++ b/libavformat/isom.h
 @@ -29,6 +29,7 @@
@@ -106,19 +63,20 @@ index 5107b4e..ab678d9 100644
  #include "libavutil/spherical.h"
  #include "libavutil/stereo3d.h"
  
-@@ -249,6 +250,7 @@ typedef struct MOVStreamContext {
+@@ -249,6 +250,8 @@ typedef struct MOVStreamContext {
      AVMasteringDisplayMetadata *mastering;
      AVContentLightMetadata *coll;
      size_t coll_size;
 +    AVAmbientViewingEnvironment *ambient;
++    size_t ambient_size;
  
      uint32_t format;
  
 diff --git a/libavformat/mov.c b/libavformat/mov.c
-index 8af564e..87671b3 100644
+index be9975f297..ac193ff021 100644
 --- a/libavformat/mov.c
 +++ b/libavformat/mov.c
-@@ -5874,6 +5874,38 @@ static int mov_read_clli(MOVContext *c, AVIOContext *pb, MOVAtom atom)
+@@ -6017,6 +6017,31 @@ static int mov_read_clli(MOVContext *c, AVIOContext *pb, MOVAtom atom)
      return 0;
  }
  
@@ -127,45 +85,38 @@ index 8af564e..87671b3 100644
 +    MOVStreamContext *sc;
 +    const int illuminance_den = 10000;
 +    const int ambient_den = 50000;
-+
 +    if (c->fc->nb_streams < 1)
 +        return AVERROR_INVALIDDATA;
-+
 +    sc = c->fc->streams[c->fc->nb_streams - 1]->priv_data;
-+
 +    if (atom.size < 6) {
 +        av_log(c->fc, AV_LOG_ERROR, "Empty Ambient Viewing Environment Info box\n");
 +        return AVERROR_INVALIDDATA;
 +    }
-+
 +    if (sc->ambient){
 +        av_log(c->fc, AV_LOG_WARNING, "Ignoring duplicate AMVE\n");
 +        return 0;
 +    }
-+
-+    sc->ambient = av_ambient_viewing_environment_alloc(NULL);
++    sc->ambient = av_ambient_viewing_environment_alloc(&sc->ambient_size);
 +    if (!sc->ambient)
 +        return AVERROR(ENOMEM);
-+
 +    sc->ambient->ambient_illuminance  = av_make_q(avio_rb32(pb), illuminance_den);
 +    sc->ambient->ambient_light_x = av_make_q(avio_rb16(pb), ambient_den);
 +    sc->ambient->ambient_light_y = av_make_q(avio_rb16(pb), ambient_den);
-+
 +    return 0;
 +}
 +
  static int mov_read_st3d(MOVContext *c, AVIOContext *pb, MOVAtom atom)
  {
      AVStream *st;
-@@ -7796,6 +7828,7 @@ static const MOVParseTableEntry mov_default_parse_table[] = {
- { MKTAG('i','l','o','c'), mov_read_iloc },
+@@ -7928,6 +7953,7 @@ static const MOVParseTableEntry mov_default_parse_table[] = {
  { MKTAG('p','c','m','C'), mov_read_pcmc }, /* PCM configuration box */
  { MKTAG('p','i','t','m'), mov_read_pitm },
+ { MKTAG('e','v','c','C'), mov_read_glbl },
 +{ MKTAG('a','m','v','e'), mov_read_amve }, /* ambient viewing environment box */
  { 0, NULL }
  };
  
-@@ -8264,6 +8297,7 @@ static int mov_read_close(AVFormatContext *s)
+@@ -8398,6 +8424,7 @@ static int mov_read_close(AVFormatContext *s)
          av_freep(&sc->spherical);
          av_freep(&sc->mastering);
          av_freep(&sc->coll);
@@ -173,14 +124,14 @@ index 8af564e..87671b3 100644
      }
  
      av_freep(&mov->dv_demux);
-@@ -8629,6 +8663,15 @@ static int mov_read_header(AVFormatContext *s)
+@@ -8763,6 +8790,15 @@ static int mov_read_header(AVFormatContext *s)
  
                  sc->coll = NULL;
              }
 +            if (sc->ambient) {
 +                err = av_stream_add_side_data(st, AV_PKT_DATA_AMBIENT_VIEWING_ENVIRONMENT,
-+                                                (uint8_t *)sc->ambient,
-+                                                 sizeof(*sc->ambient));
++                                              (uint8_t *)sc->ambient,
++                                              sc->ambient_size);
 +                if (err < 0)
 +                    return err;
 +
@@ -190,10 +141,10 @@ index 8af564e..87671b3 100644
          }
      }
 diff --git a/libavformat/movenc.c b/libavformat/movenc.c
-index c4fcb5f..a22cc11 100644
+index 7ef6cef46a..507d57d811 100644
 --- a/libavformat/movenc.c
 +++ b/libavformat/movenc.c
-@@ -2124,6 +2124,27 @@ static int mov_write_mdcv_tag(AVIOContext *pb, MOVTrack *track)
+@@ -2225,6 +2225,27 @@ static int mov_write_mdcv_tag(AVIOContext *pb, MOVTrack *track)
      return 32;
  }
  
@@ -221,7 +172,7 @@ index c4fcb5f..a22cc11 100644
  static void find_compressor(char * compressor_name, int len, MOVTrack *track)
  {
      AVDictionaryEntry *encoder;
-@@ -2331,6 +2352,7 @@ static int mov_write_video_tag(AVFormatContext *s, AVIOContext *pb, MOVMuxContex
+@@ -2435,6 +2456,7 @@ static int mov_write_video_tag(AVFormatContext *s, AVIOContext *pb, MOVMuxContex
      if (track->mode == MODE_MOV || track->mode == MODE_MP4) {
          mov_write_clli_tag(pb, track);
          mov_write_mdcv_tag(pb, track);
@@ -229,3 +180,6 @@ index c4fcb5f..a22cc11 100644
      }
  
      if (track->mode == MODE_MP4 && mov->fc->strict_std_compliance <= FF_COMPLIANCE_UNOFFICIAL) {
+-- 
+2.39.3 (Apple Git-145)
+
