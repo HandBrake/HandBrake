@@ -13,6 +13,9 @@ Windows users, please make sure to install [Microsoft .NET Desktop Runtime versi
 #### General
 
 - Miscellaneous bug fixes and improvements
+- Slightly improved conversion speed by removing unneeded frame copies
+- Expanded the Optimize option to move MKV and WebM the cues to front
+- Added VideoToolbox presets
 
 #### Video
 
@@ -25,12 +28,38 @@ Windows users, please make sure to install [Microsoft .NET Desktop Runtime versi
   - HDR10+ is supported on both x265 10bit and SVT-AV1 encoders
 - Support for SVT-AV1 multi-pass ABR mode
 - Added NVENC AV1 encoder
+- Preserve the ambient viewing enviroment metadata
+- Removed an artificial bitrate limit on VP9 CQ mode
+- Fixed an issue when scaling video content that is not mod2.
+- Fixed an issue with QSV that could result in the output video being a green screen (#4842)
+- Fixed a green video issue with QuickSync (#4876)
+- Fixed a pixel format conversion issue that could result is slightly different colors when using a 10-bit hardware encoder (#5011)
+- Various fixes and library updates for QuickSync to improve support on Linux (#4958)
+- Switch to using swscale instead of zscale when the resolution isn't mod2. Should fix scan failures in this condition
+- Fixed PAR when reading from a AV1 anamorphic video track
+- Changed NVEnc option to not default to using multipass. This is now a user configurable advanced option
+
+#### Command line interface
+
+- Fixed an issue with cropping when using presets / crop arguments (#5055)
+
+#### Audio
+
+- Fixed ac3/eac3 dowmix, volume was too low
+- Fixed availability of left / right mono mixdowns.
+
+#### Subtitles
+
+- Fixed a locale issue that could result in the wrong decimal separator in SSA headers
+- Fixed an issue that caused issues with 0 length subtitles when using SSA.
 
 #### Third-party libraries
 
 - Updated libraries
   - AMF 1.4.29 (AMD VCN encoding)
-  - FFmpeg 6.0 (decoding and filters)
+  - FFmpeg 6.x (decoding and filters)
+    - Faster HEVC decoding on arm64
+    - 30% faster bwdif filter on arm64
   - libass 0.17.1 (subtitles)
   - libdav1d 1.2.1 (AV1 decoding)
   - libopus 1.4 (Opus audio encoding)
@@ -46,9 +75,28 @@ Windows users, please make sure to install [Microsoft .NET Desktop Runtime versi
   
 ### Mac
 
+- Added support for VideoToolbox HEVC, H.265, and ProRes hardware decoders on macOS 13 and later
+  - They can be enabled in the Advanced preferences tab: either for the full path or always
+  - Depending on your computer capabilities, they could decrease CPU usage and speed up the conversion
+- Added GPU accelerated Crop & Scale and Rotate filters
+- Improved File Input Handling
+  - You can now multi-select files in the open panel
+  - You can now drag/drop multiple files to scan
+  - Added support for recursive folder scanning (can be enabled in the open panel options)
+- Improved Autoname Preferences UI and added new options: {width} {height} {quality_type} {encoder_bit_depth} {modification-time} {modification-date} {codec} {encoder} {encoder_bit_depth} {preset}
+- Added a "Same as source" destination option that will automatically set the destination to the source one
+- Improved handling of security scoped bookmarks
+- Fixed Chroma Smooth tune options
+- Fixed an issue with the Deblock Filter custom string field
+- Fixed the file size display on the queue statistics window when file size info is not available
+- Miscellaneous bug fixes and improvements
+
 ### Linux
 
+- Miscellaneous bug fixes and improvements
+
 ### Windows
+
 - Improved File Input Handling
   - You can now exclude file extensions when scanning in batch mode. By default it will exclude common image, subtitle and text files from scans.
   - You can now multi-select files in the scan file picker.
@@ -63,49 +111,7 @@ Windows users, please make sure to install [Microsoft .NET Desktop Runtime versi
   - Optional display of preset description at the bottom of the preset pane.
   - Added the ability to clone presets.
 - Improved Add Selection window. Sorting feature is now more discoverable. 
-- Updated Translations 
-- Miscellaneous bug fixes and improvements
-
-
-## HandBrake 1.6.2
-
-### All platforms
-
-#### Video
-
-- Fixed an issue when scaling video content that is not mod2.
-- Fixed an issue with QSV that could result in the output video being a green screen (#4842)
-- Fixed a green video issue with QuickSync (#4876)
-- Fixed a pixel format conversion issue that could result is slightly different colors when using a 10-bit hardware encoder (#5011)
-- Various fixes and library updates for QuickSync to improve support on Linux (#4958)
-- Switch to using swscale instead of zscale when the resolution isn't mod2. Should fix scan failures in this condition
-- Fixed PAR when reading from a AV1 anamorphic video track
-- Changed NVEnc option to not default to using multipass. This is now a user configurable advanced option. 
-
-#### Command line interface
-
-- Fixed an issue with cropping when using presets / crop arguments (#5055)
-
-#### Audio
-
-- Fixed ac3/eac3 dowmix, volume was too low.
-- Fixed availability of left / right mono mixdowns. 
-- Backported an ffmpeg fix for OPUS LBRR
-
-#### Subtitles
-
-- Fixed a locale issue that could result in the wrong decimal separator in SSA headers.
-- Fixed an issue that caused issues with 0 length subtitles when using SSA. 
-
-### Mac
-
-- Fixed Chroma Smooth tune options.
-- Fixed an issue with the Deblock Filter custom string field. 
-- Fixed the file size display on the queue statistics window when file size info is not available 
-- Miscellaneous other fixes.
-
-### Windows
-
+- Updated Translations
 - Fixed an issue with automatic file naming when using drive-based sources (#4859)
 - Fixed Title Specific Scan for drive sources. (#4921)
 - Fixed an issue that could cause a preset to show as "modified" when it was not. (#4909, #4908)
@@ -113,8 +119,8 @@ Windows users, please make sure to install [Microsoft .NET Desktop Runtime versi
 - Fixed an issue on the audio tab where audio tracks could be duplicated when using non fallback encoder. (#5012)
 - Fixed an issue where some hardware presets are incorrectly shown as disabled when swapping graphics cards.
 - Fixed an issue where windows notifications could cause the app to crash on startup where issues exist on the system. (#5097)
-- Some reliability improvements in the Process Isolation Feature. 
-- Miscellaneous other fixes. (#5090, #5091)
+- Some reliability improvements in the Process Isolation Feature.
+- Miscellaneous bug fixes and improvements
 
 
 ## HandBrake 1.6.1
