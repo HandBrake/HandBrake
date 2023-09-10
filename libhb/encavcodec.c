@@ -846,14 +846,15 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
             char quality[7];
             char qualityP[7];
             char qualityB[7];
+            double qualityOffsetThreshold = 32;
             double qualityOffsetP = 8;
             double qualityOffsetB;
             double adjustedQualityP;
             double adjustedQualityB;
 
-            if (job->vquality <= 32)
+            if (job->vquality <= qualityOffsetThreshold)
             {
-                qualityOffsetP = job->vquality / qualityOffsetP * 2;
+                qualityOffsetP = job->vquality / qualityOffsetThreshold * qualityOffsetP;
             }
             qualityOffsetB = qualityOffsetP * 2;
 
