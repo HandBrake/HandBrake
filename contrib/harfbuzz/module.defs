@@ -3,9 +3,9 @@ __deps__ := FREETYPE
 $(eval $(call import.MODULE.defs,HARFBUZZ,harfbuzz,$(__deps__)))
 $(eval $(call import.CONTRIB.defs,HARFBUZZ))
 
-HARFBUZZ.FETCH.url     = https://github.com/HandBrake/HandBrake-contribs/releases/download/contribs/harfbuzz-4.4.1.tar.xz
-HARFBUZZ.FETCH.url    += https://github.com/harfbuzz/harfbuzz/releases/download/4.4.1/harfbuzz-4.4.1.tar.xz
-HARFBUZZ.FETCH.sha256  = c5bc33ac099b2e52f01d27cde21cee4281b9d5bfec7684135e268512478bc9ee
+HARFBUZZ.FETCH.url     = https://github.com/HandBrake/HandBrake-contribs/releases/download/contribs/harfbuzz-8.2.0.tar.xz
+HARFBUZZ.FETCH.url    += https://github.com/harfbuzz/harfbuzz/releases/download/8.2.0/harfbuzz-8.2.0.tar.xz
+HARFBUZZ.FETCH.sha256  = 8cb7117a62f42d5ad25d4a697e1bbfc65933b3eed2ee7f247203c79c9f1b514c
 
 HARFBUZZ.build_dir             = build
 HARFBUZZ.CONFIGURE.exe         = cmake
@@ -25,10 +25,10 @@ ifeq (1,$(HOST.cross))
         HARFBUZZ.CONFIGURE.extra += -DWIN32=ON -DMINGW=ON
         HARFBUZZ.CONFIGURE.extra += -DCMAKE_SYSTEM_NAME=Windows
         HARFBUZZ.CONFIGURE.extra += -DCMAKE_C_COMPILER=$(HARFBUZZ.GCC.gcc)
-        HARFBUZZ.CONFIGURE.extra += -DCMAKE_C_FLAGS="-static-libgcc -static-libstdc++ -static"
-        HARFBUZZ.CONFIGURE.extra += -DCMAKE_SHARED_LIBRARY_LINK_C_FLAGS="-static-libgcc -static-libstdc++ -static"
+        HARFBUZZ.CONFIGURE.extra += -DCMAKE_C_FLAGS="-Wa,-mbig-obj -static-libgcc -static-libstdc++ -static"
+        HARFBUZZ.CONFIGURE.extra += -DCMAKE_SHARED_LIBRARY_LINK_C_FLAGS="-Wa,-mbig-obj -static-libgcc -static-libstdc++ -static"
         HARFBUZZ.CONFIGURE.extra += -DCMAKE_CXX_COMPILER=$(HARFBUZZ.GCC.gxx)
-        HARFBUZZ.CONFIGURE.extra += -DCMAKE_CXX_FLAGS="-static-libgcc -static-libstdc++ -static"
+        HARFBUZZ.CONFIGURE.extra += -DCMAKE_CXX_FLAGS="-Wa,-mbig-obj -static-libgcc -static-libstdc++ -static"
         HARFBUZZ.CONFIGURE.extra += -DCMAKE_RC_COMPILER=$(HOST.cross.prefix)windres
         HARFBUZZ.CONFIGURE.extra += -DHB_HAVE_DIRECTWRITE=OFF \
                                     -DHB_HAVE_GLIB=OFF \

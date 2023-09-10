@@ -1,9 +1,9 @@
 diff -Naur harfbuzz-1.2.6.orig/src/hb.h harfbuzz-1.2.6/src/hb.h
 --- harfbuzz-1.2.6.orig/src/hb.h	2016-01-06 04:00:36.000000000 -0800
 +++ harfbuzz-1.2.6/src/hb.h	2016-06-15 05:30:43.212202580 -0700
-@@ -32,6 +32,9 @@
- #define HB_EXTERN extern
- #endif
+@@ -28,6 +28,9 @@
+ #define HB_H
+ #define HB_H_IN
  
 +#ifdef __x86_64__
 +#include <emmintrin.h>
