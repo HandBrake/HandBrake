@@ -1,23 +1,24 @@
---- zlib-1.2.11/configure.orig	2016-12-31 13:06:40.000000000 -0500
-+++ zlib-1.2.11/configure	2017-07-22 11:25:12.000000000 -0400
-@@ -30,12 +30,6 @@
-     SRCDIR="$SRCDIR/"
+--- zlib-1.3/configure	2023-08-18 10:45:36.000000000 +0200
++++ zlib-1.3-patched/configure	2023-08-19 23:06:46.875730600 +0200
+@@ -31,14 +31,6 @@
  fi
  
--# set command prefix for cross-compilation
+ # set command prefix for cross-compilation
 -if [ -n "${CHOST}" ]; then
--    uname="`echo "${CHOST}" | sed -e 's/^[^-]*-\([^-]*\)$/\1/' -e 's/^[^-]*-[^-]*-\([^-]*\)$/\1/' -e 's/^[^-]*-[^-]*-\([^-]*\)-.*$/\1/'`"
+-    uname=${CHOST}
+-    mname=${CHOST}
 -    CROSS_PREFIX="${CHOST}-"
+-else
+-    mname=`(uname -a || echo unknown) 2>/dev/null`
 -fi
 -
  # destination name for static library
  STATICLIB=libz.a
  
-@@ -45,28 +39,6 @@
- VER2=`sed -n -e '/VERSION "/s/.*"\([0-9]*\\.[0-9]*\)\\..*/\1/p' < ${SRCDIR}zlib.h`
+@@ -47,27 +39,6 @@
  VER1=`sed -n -e '/VERSION "/s/.*"\([0-9]*\)\\..*/\1/p' < ${SRCDIR}zlib.h`
  
--# establish commands for library building
+ # establish commands for library building
 -if "${CROSS_PREFIX}ar" --version >/dev/null 2>/dev/null || test $? -lt 126; then
 -    AR=${AR-"${CROSS_PREFIX}ar"}
 -    test -n "${CROSS_PREFIX}" && echo Using ${AR} | tee -a configure.log
@@ -42,61 +43,61 @@
  # set defaults before processing command line options
  LDCONFIG=${LDCONFIG-"ldconfig"}
  LDSHAREDLIBC="${LDSHAREDLIBC--lc}"
-@@ -206,49 +178,7 @@
+@@ -225,56 +196,7 @@
    if test -z "$uname"; then
      uname=`(uname -s || echo unknown) 2>/dev/null`
    fi
 -  case "$uname" in
--  Linux* | linux* | GNU | GNU/* | solaris*)
+-  Linux* | linux* | *-linux* | GNU | GNU/* | solaris*)
+-        case "$mname" in
+-        *sparc*)
+-            LDFLAGS="${LDFLAGS} -Wl,--no-warn-rwx-segments" ;;
+-        esac
 -        LDSHARED=${LDSHARED-"$cc -shared -Wl,-soname,libz.so.1,--version-script,${SRCDIR}zlib.map"} ;;
 -  *BSD | *bsd* | DragonFly)
 -        LDSHARED=${LDSHARED-"$cc -shared -Wl,-soname,libz.so.1,--version-script,${SRCDIR}zlib.map"}
 -        LDCONFIG="ldconfig -m" ;;
--  CYGWIN* | Cygwin* | cygwin* | OS/2*)
+-  CYGWIN* | Cygwin* | cygwin* | *-cygwin* | OS/2*)
 -        EXE='.exe' ;;
--  MINGW* | mingw*)
--# temporary bypass
+-  MINGW* | mingw* | *-mingw*)
 -        rm -f $test.[co] $test $test$shared_ext
--        echo "Please use win32/Makefile.gcc instead." | tee -a configure.log
--        leave 1
+-        echo "If this doesn't work for you, try win32/Makefile.gcc." | tee -a configure.log
 -        LDSHARED=${LDSHARED-"$cc -shared"}
 -        LDSHAREDLIBC=""
 -        EXE='.exe' ;;
--  QNX*)  # This is for QNX6. I suppose that the QNX rule below is for QNX2,QNX4
--         # (alain.bonnefoy@icbt.com)
--                 LDSHARED=${LDSHARED-"$cc -shared -Wl,-hlibz.so.1"} ;;
+-  QNX*) # This is for QNX6. I suppose that the QNX rule below is for QNX2,QNX4
+-        # (alain.bonnefoy@icbt.com)
+-        LDSHARED=${LDSHARED-"$cc -shared -Wl,-hlibz.so.1"} ;;
 -  HP-UX*)
--         LDSHARED=${LDSHARED-"$cc -shared $SFLAGS"}
--         case `(uname -m || echo unknown) 2>/dev/null` in
--         ia64)
--                 shared_ext='.so'
--                 SHAREDLIB='libz.so' ;;
--         *)
--                 shared_ext='.sl'
--                 SHAREDLIB='libz.sl' ;;
--         esac ;;
--  Darwin* | darwin*)
--             shared_ext='.dylib'
--             SHAREDLIB=libz$shared_ext
--             SHAREDLIBV=libz.$VER$shared_ext
--             SHAREDLIBM=libz.$VER1$shared_ext
--             LDSHARED=${LDSHARED-"$cc -dynamiclib -install_name $libdir/$SHAREDLIBM -compatibility_version $VER1 -current_version $VER3"}
--             if libtool -V 2>&1 | grep Apple > /dev/null; then
--                 AR="libtool"
--             else
--                 AR="/usr/bin/libtool"
--             fi
--             ARFLAGS="-o" ;;
--  *)             LDSHARED=${LDSHARED-"$cc -shared"} ;;
+-        LDSHARED=${LDSHARED-"$cc -shared $SFLAGS"}
+-        case `(uname -m || echo unknown) 2>/dev/null` in
+-        ia64)
+-            shared_ext='.so'
+-            SHAREDLIB='libz.so' ;;
+-        *)
+-            shared_ext='.sl'
+-            SHAREDLIB='libz.sl' ;;
+-        esac ;;
+-  AIX*)
+-        LDFLAGS="${LDFLAGS} -Wl,-brtl" ;;
+-  Darwin* | darwin* | *-darwin*)
+-        shared_ext='.dylib'
+-        SHAREDLIB=libz$shared_ext
+-        SHAREDLIBV=libz.$VER$shared_ext
+-        SHAREDLIBM=libz.$VER1$shared_ext
+-        LDSHARED=${LDSHARED-"$cc -dynamiclib -install_name $libdir/$SHAREDLIBM -compatibility_version $VER1 -current_version $VER"}
+-        if "${CROSS_PREFIX}libtool" -V 2>&1 | grep Apple > /dev/null; then
+-            AR="${CROSS_PREFIX}libtool"
+-        elif libtool -V 2>&1 | grep Apple > /dev/null; then
+-            AR="libtool"
+-        else
+-            AR="/usr/bin/libtool"
+-        fi
+-        ARFLAGS="-o" ;;
+-  *)
+-        LDSHARED=${LDSHARED-"$cc -shared"} ;;
 -  esac
-+  LDSHARED=${LDSHARED-"$cc"}
++LDSHARED=${LDSHARED-"$cc"}
  else
    # find system name and corresponding cc options
    CC=${CC-cc}
-@@ -918,4 +848,4 @@
- " > zlib.pc
- 
- # done
--leave 0
-+leave 0
-\ No newline at end of file
