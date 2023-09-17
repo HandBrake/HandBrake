@@ -34,7 +34,7 @@
 #include <sys/utsname.h>
 #endif
 
-#include <config.h>
+#include "config.h"
 
 #include "ghbcompat.h"
 

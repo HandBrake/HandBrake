@@ -1,0 +1,54 @@
+option('extra-libdirs',
+       type: 'array',
+       value: [],
+       description: 'Extra directories to search for libraries')
+
+option('fdk-aac',
+       type: 'feature',
+       value: 'disabled',
+       description: 'Enable FDK AAC encoder')
+
+option('flatpak',
+       type: 'boolean',
+       value: false,
+       description: 'Enable Flatpak packaging')
+
+option('gstreamer',
+       type: 'feature',
+       value: 'disabled',
+       description: 'Disable gstreamer (live preview)')
+
+option('gtk4',
+       type: 'boolean',
+       value: false,
+       description: 'Enable building with GTK4')
+
+option('hb-dir',
+       type: 'string',
+       value: '',
+       description: 'Prefix of libhb install directory')
+
+option('libdovi',
+       type: 'feature',
+       value: 'disabled',
+       description: 'Enable libdovi for Dolby Vision support')
+
+option('mf',
+       type: 'feature',
+       value: 'disabled',
+       description: 'Enable MediaFoundation encoder')
+
+option('numa',
+       type: 'feature',
+       value: 'disabled',
+       description: 'Enable x265 NUMA support')
+
+option('qsv',
+       type: 'feature',
+       value: 'disabled',
+       description: 'Enable QSV encoder')
+
+option('x265',
+       type: 'feature',
+       value: 'disabled',
+       description: 'Enable x265 encoder')

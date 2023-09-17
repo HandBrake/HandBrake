@@ -1,0 +1,22 @@
+[binaries]
+c = 'aarch64-w64-mingw32-gcc'
+cpp = 'aarch64-w64-mingw32-g++'
+rust = ['rustc', '--target', 'aarch64-pc-windows-msvc', '-C', 'linker=aarch64-w64-mingw32-gcc']
+ar = 'aarch64-w64-mingw32-ar'
+pkgconfig = 'aarch64-w64-mingw32-pkg-config'
+ranlib = 'aarch64-w64-mingw32-ranlib'
+strip = 'aarch64-w64-mingw32-strip'
+windres = 'aarch64-w64-mingw32-windres'
+dlltool = 'aarch64-w64-mingw32-dlltool'
+
+[builtin_options]
+c_link_args = ['-static-libgcc']
+
+[properties]
+needs_exe_wrapper = true
+
+[host_machine]
+system = 'windows'
+cpu_family = 'aarch64'
+cpu = 'aarch64'
+endian = 'little'

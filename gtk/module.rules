@@ -7,43 +7,35 @@ uninstall: gtk.uninstall
 clean: gtk.clean
 xclean: gtk.xclean
 
-gtk.configure: $(GTK.CONFIGURE.stamp)
+gtk.configure: | $(GTK.CONFIGURE.stamp)
 
-$(GTK.CONFIGURE.stamp): | $(dir $(GTK.CONFIGURE.stamp))
-$(GTK.CONFIGURE.stamp): $(GTK.src/)Makefile.am
-$(GTK.CONFIGURE.stamp): $(BUILD/)GNUmakefile
-$(GTK.CONFIGURE.stamp): $(GTK.src/)configure.ac $(GTK.src/)src/Makefile.am
-	set -e; cd $(GTK.src/); NOCONFIGURE=1 autoreconf -fiv
-	set -e; cd $(GTK.build/); $(call fn.ABSOLUTE,$(GTK.src/))configure \
-		$(GTK.CONFIGURE.extra) \
-		PKG_CONFIG_PATH=$(BUILD/)contrib/lib/pkgconfig:$(PKG_CONFIG_PATH) \
-		CC="$(GCC.gcc)" \
-		CXX="$(GCC.gxx)" \
-		CFLAGS="$(call fn.ARGS,GTK.GCC,.g .O *D *W ?extra)" \
-		LDFLAGS="$(call fn.ARGS,GTK.GCC,?strip .g .O ?extra.exe)" \
-		PYTHON="$(PYTHON.exe)" \
-		--prefix=$(PREFIX) \
-		--with-hb=$(call fn.ABSOLUTE,$(BUILD/))
-	$(TOUCH.exe) $@
+$(GTK.CONFIGURE.stamp): $(BUILD/)GNUmakefile $(LIBHB.a)
+	if ! [ -e "$(GTK.CONFIGURE.stamp)" ]; then \
+		CC="$(GCC.gcc)" CXX="$(GCC.gxx)" $(MESON.exe) setup \
+			$(call fn.ABSOLUTE,$(GTK.build/)) $(call fn.ABSOLUTE,$(GTK.src/)) $(GTK.CONFIGURE.extra); \
+	else \
+		$(MESON.exe) configure \
+			$(call fn.ABSOLUTE,$(GTK.build/)) $(GTK.CONFIGURE.extra); \
+	fi
 
-gtk.build: | $(GTK.build/)
-gtk.build: $(GTK.CONFIGURE.stamp) $(LIBHB.a)
-	+$(MAKE) -C $(GTK.build/)
+gtk.reconfigure:
+	$(MESON.exe) setup --reconfigure \
+		$(call fn.ABSOLUTE,$(GTK.build/)) $(call fn.ABSOLUTE,$(GTK.src/)) $(GTK.CONFIGURE.extra)
+
+gtk.build: $(GTK.CONFIGURE.stamp) | $(GTK.setup)
+	+$(NINJA.exe) -C $(GTK.build/)
 
 gtk.install-strip:
-	$(MAKE) -C $(GTK.build/) prefix=$(PREFIX) install-strip
+	$(MESON.exe) install -C $(GTK.build/) --strip
 
 gtk.install:
-	$(MAKE) -C $(GTK.build/) prefix=$(PREFIX) install
+	$(MESON.exe) install -C $(GTK.build/)
 
 gtk.uninstall:
-	$(MAKE) -C $(GTK.build/) uninstall
+	$(NINJA.exe) uninstall -C $(GTK.build/)
 
 gtk.clean:
-	$(MAKE) -C $(GTK.build/) clean
+	$(NINJA.exe) clean -C $(GTK.build/)
 
 gtk.xclean:
-	$(MAKE) -C $(GTK.build/) distclean
-	$(RM.exe) -f $(GTK.out)
 	$(RM.exe) -fr $(GTK.build/)
-
