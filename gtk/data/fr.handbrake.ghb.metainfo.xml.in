@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Copyright 2018-2022 John Stebbins <your@email.com> -->
+<!-- Copyright 2018-2023 John Stebbins <your@email.com> -->
 <component type="desktop-application">
   <id>fr.handbrake.ghb</id>
   <translation>ghb</translation>
   <update_contact>jstebbins.hb_AT_gmail.com</update_contact>
   <launchable type="desktop-id">fr.handbrake.ghb.desktop</launchable>
   <metadata_license>CC0-1.0</metadata_license>
-  <project_license>GPL-2.0+</project_license>
+  <project_license>GPL-2.0</project_license>
   <name>HandBrake</name>
   <summary>Video Transcoder</summary>
 
@@ -86,39 +86,43 @@
     <binary>ghb</binary>
   </provides>
 
+  <recommends>
+    <control>keyboard</control>
+    <control>pointing</control>
+  </recommends>
+
+  <supports>
+    <control>touch</control>
+  </supports>
+
+  <requires>
+    <display_length compare="ge">medium</display_length>
+  </requires>
+
   <releases>
-    RELEASE_TAG
+    <release version="1.6.1" date="2023-01-15">
+      <description>
+        <p>Updated missing translations and fixed an issue with QSV hardware detection.</p>
+      </description>
+    </release>
+    <release version="1.6.0" date="2022-12-28">
+      <description>
+        <p>Adds support for the AV1 codec, new encoder profiles and filters, and various user interface improvements.</p>
+      </description>
+    </release>
+    <release version="1.5.1" date="2022-01-10">
+      <description>
+        <p>Fixed an issue with the source tarball that broke Flathub builds.</p>
+      </description>
+    </release>
+    <release version="1.5.0" date="2022-01-09">
+      <description>
+        <p>Updated video engine to preserve chroma sample location information, and updated Intel Quick Sync to use the Intel oneAPI Video Processing Library.</p>
+      </description>
+    </release>
   </releases>
-  
-  <content_rating type="oars-1.1">
-    <content_attribute id="violence-cartoon">none</content_attribute>
-    <content_attribute id="violence-fantasy">none</content_attribute>
-    <content_attribute id="violence-realistic">none</content_attribute>
-    <content_attribute id="violence-bloodshed">none</content_attribute>
-    <content_attribute id="violence-sexual">none</content_attribute>
-    <content_attribute id="violence-desecration">none</content_attribute>
-    <content_attribute id="violence-slavery">none</content_attribute>
-    <content_attribute id="violence-worship">none</content_attribute>
-    <content_attribute id="drugs-alcohol">none</content_attribute>
-    <content_attribute id="drugs-narcotics">none</content_attribute>
-    <content_attribute id="drugs-tobacco">none</content_attribute>
-    <content_attribute id="sex-nudity">none</content_attribute>
-    <content_attribute id="sex-themes">none</content_attribute>
-    <content_attribute id="sex-homosexuality">none</content_attribute>
-    <content_attribute id="sex-prostitution">none</content_attribute>
-    <content_attribute id="sex-adultery">none</content_attribute>
-    <content_attribute id="sex-appearance">none</content_attribute>
-    <content_attribute id="language-profanity">none</content_attribute>
-    <content_attribute id="language-humor">none</content_attribute>
-    <content_attribute id="language-discrimination">none</content_attribute>
-    <content_attribute id="social-chat">none</content_attribute>
-    <content_attribute id="social-info">none</content_attribute>
-    <content_attribute id="social-audio">none</content_attribute>
-    <content_attribute id="social-location">none</content_attribute>
-    <content_attribute id="social-contacts">none</content_attribute>
-    <content_attribute id="money-purchasing">none</content_attribute>
-    <content_attribute id="money-gambling">none</content_attribute>
-  </content_rating>
-  
+
+  <content_rating type="oars-1.1"/>
+
 </component>
 

@@ -3,6 +3,7 @@
 import collections
 import sys
 import json
+import os
 
 DepEntry = collections.namedtuple('DepEntry', 'widget dep enable die hide')
 dep_map = (
@@ -62,6 +63,8 @@ dep_map = (
     )
 
 def main():
+
+    os.chdir('data')
 
     try:
         depsfile = open("widget.deps", "w")

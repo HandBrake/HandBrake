@@ -22,6 +22,7 @@
  */
 
 #include "ghbcompat.h"
+#include "config.h"
 
 #include <unistd.h>
 #include <glib.h>

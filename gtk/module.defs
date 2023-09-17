@@ -4,11 +4,14 @@ $(eval $(call import.GCC,GTK))
 GTK.src/   = $(SRC/)gtk/
 GTK.build/ = $(BUILD/)gtk/
 
-GTK.CONFIGURE.stamp = $(GTK.build/).stamp.configure
+GTK.CONFIGURE.stamp = $(GTK.build/)build.ninja
 
-ifeq ($(HOST.system),netbsd)
-    LDFLAGS += -Wl,-R$(X11BASE)/lib
-endif
+GTK.CONFIGURE.exe   = $(MESON.exe)
+GTK.CONFIGURE.extra = -Dc_args="$(call fn.ARGS,GTK.GCC,*D ?extra)" \
+                      -Dc_link_args="$(call fn.ARGS,GTK.GCC,?extra.exe)" \
+                      --pkg-config-path=$(call fn.ABSOLUTE,$(BUILD/))contrib/lib/pkgconfig:$(PKG_CONFIG_PATH) \
+                      --prefix=$(PREFIX) -Dhb-dir=$(call fn.ABSOLUTE,$(BUILD/))
+GTK.CONFIGURE.env   =
 
 ###############################################################################
 
@@ -18,46 +21,90 @@ BUILD.out += $(GTK.out)
 
 ###############################################################################
 
-ifeq (1-mingw,$(HOST.cross)-$(HOST.system))
-GTK.CONFIGURE.extra += --host=$(HOST.spec)
-ifeq ($(HAS.dlfcn),1)
-	GTK.CONFIGURE.extra += --enable-dl
-endif
-ifeq ($(HAS.pthread),1)
-	GTK.CONFIGURE.extra += --enable-pthread
-endif
+ifneq (none,$(GTK.GCC.g))
+    GTK.CONFIGURE.extra += -Ddebug=true
+else
+    GTK.CONFIGURE.extra += -Ddebug=false
 endif
 
-ifeq (0,$(FEATURE.gst))
-	GTK.CONFIGURE.extra += --disable-gst
+ifeq (speed,$(GTK.GCC.O))
+    ifeq (none,$GTK.GCC.g)
+        GTK.CONFIGURE.extra += -Doptimization=3
+    else
+        GTK.CONFIGURE.extra += -Doptimization=2
+    endif
+else
+    ifneq (,$(filter $(GTK.GCC.O),size size-aggressive))
+        GTK.CONFIGURE.extra += -Doptimization=s
+    else
+        GTK.CONFIGURE.extra += -Doptimization=0
+    endif
+endif
+
+ifeq (on,$(GCC.lto))
+    GTK.CONFIGURE.extra += -Db_lto=true
+else
+    GTK.CONFIGURE.extra += -Db_lto=false
+endif
+
+ifeq (1,$(FEATURE.gst))
+    GTK.CONFIGURE.extra += -Dgstreamer=enabled
+else
+    GTK.CONFIGURE.extra += -Dgstreamer=disabled
 endif
 
 ifeq (1,$(FEATURE.fdk_aac))
-	GTK.CONFIGURE.extra += --enable-fdk-aac
+    GTK.CONFIGURE.extra += -Dfdk-aac=enabled
+else
+    GTK.CONFIGURE.extra += -Dfdk-aac=disabled
 endif
 
 ifeq (1,$(FEATURE.x265))
-	GTK.CONFIGURE.extra += --enable-x265
-ifeq (1,$(FEATURE.numa))
-	GTK.CONFIGURE.extra += --enable-numa
+    GTK.CONFIGURE.extra += -Dx265=enabled
+else
+    GTK.CONFIGURE.extra += -Dx265=disabled
 endif
+
+ifeq (1,$(FEATURE.numa))
+    GTK.CONFIGURE.extra += -Dnuma=enabled
+else
+    GTK.CONFIGURE.extra += -Dnuma=disabled
 endif
 
 ifeq (1,$(FEATURE.qsv))
-	GTK.CONFIGURE.extra += --enable-qsv
+    GTK.CONFIGURE.extra += -Dqsv=enabled
+else
+    GTK.CONFIGURE.extra += -Dqsv=disabled
 endif
 
 ifeq (1,$(FEATURE.libdovi))
-    GTK.CONFIGURE.extra += --enable-libdovi
+    GTK.CONFIGURE.extra += -Dlibdovi=enabled
+else
+    GTK.CONFIGURE.extra += -Dlibdovi=disabled
 endif
 
-
 ifeq (1,$(FEATURE.flatpak))
-	GTK.CONFIGURE.extra += --enable-flatpak
+    GTK.CONFIGURE.extra += -Dflatpak=true
+else
+    GTK.CONFIGURE.extra += -Dflatpak=false
 endif
 
 ifeq (1,$(FEATURE.gtk4))
-	GTK.CONFIGURE.extra += --enable-gtk4
+    GTK.CONFIGURE.extra += -Dgtk4=true
+else
+    GTK.CONFIGURE.extra += -Dgtk4=false
+endif
+
+ifneq (,$(filter $(HOST.system),freebsd netbsd openbsd))
+    GTK.CONFIGURE.extra += -Dextra-libdirs=$(LOCALBASE)/lib
+endif
+
+ifeq (mingw,$(HOST.system))
+    GTK.CONFIGURE.extra += -Dprefer_static=true
+endif
+
+ifeq (1,$(HOST.cross))
+    GTK.CONFIGURE.extra += --cross-file=$(SRC/)make/cross/$(HOST.spec).meson
 endif
 
 export HB.version HB.repo.date
