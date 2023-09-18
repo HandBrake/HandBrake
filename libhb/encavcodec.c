@@ -127,12 +127,12 @@ static const enum AVPixelFormat h26x_mf_pix_fmts[] =
 
 static const enum AVPixelFormat nvenc_pix_formats_10bit[] =
 {
-    AV_PIX_FMT_CUDA, AV_PIX_FMT_P010, AV_PIX_FMT_NONE
+    AV_PIX_FMT_P010, AV_PIX_FMT_NONE
 };
 
 static const enum AVPixelFormat nvenc_pix_formats[] =
 {
-    AV_PIX_FMT_CUDA, AV_PIX_FMT_YUV420P, AV_PIX_FMT_NV12, AV_PIX_FMT_NONE
+    AV_PIX_FMT_YUV420P, AV_PIX_FMT_NV12, AV_PIX_FMT_NONE
 };
 
 static const enum AVPixelFormat vce_pix_formats_10bit[] =
