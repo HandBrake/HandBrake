@@ -2,152 +2,172 @@
 # Copyright (C) 2023 HandBrake Team
 # This file is distributed under the same license as the ghb package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2023.
-# 
+#
 # Translators:
 # Sigmund Walrerson <riseofthenorse@live.be>, 2023
 # Stephan Paternotte <stephan@paternottes.net>, 2023
-# 
+#
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: ghb 0.1\n"
-"Report-Msgid-Bugs-To: https://github.com/HandBrake/Handbrake/issues\n"
-"POT-Creation-Date: 2023-03-25 15:12+0100\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-09-20 09:46+0100\n"
 "PO-Revision-Date: 2018-10-10 18:14+0000\n"
 "Last-Translator: Stephan Paternotte <stephan@paternottes.net>, 2023\n"
-"Language-Team: Dutch (https://app.transifex.com/HandBrakeProject/teams/92423/nl/)\n"
+"Language-Team: Dutch (https://app.transifex.com/HandBrakeProject/teams/92423/"
+"nl/)\n"
+"Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: nl\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: src/menu.ui:7
+#: data/fr.handbrake.ghb.desktop.in:3 src/ui-gtk3/ghb.ui:2236
+msgid "HandBrake"
+msgstr "HandBrake"
+
+#: data/fr.handbrake.ghb.desktop.in:4
+#, fuzzy
+msgid "Media Transcoder"
+msgstr "Video-transcoder"
+
+#: data/fr.handbrake.ghb.desktop.in:5
+msgid "Transcodes DVD, Blu-ray, and other media"
+msgstr ""
+
+#: data/fr.handbrake.ghb.desktop.in:11
+msgid "Format Converter;Video Encoder;"
+msgstr ""
+
+#: src/ui-gtk3/menu.ui:7
 msgid "_File"
 msgstr "_Bestand"
 
-#: src/menu.ui:11
+#: src/ui-gtk3/menu.ui:11
 msgid "_Open Source"
 msgstr "_Bron openen"
 
-#: src/menu.ui:16
+#: src/ui-gtk3/menu.ui:16
 msgid "Open _Directory"
 msgstr "_Map openen"
 
-#: src/menu.ui:21
+#: src/ui-gtk3/menu.ui:21
 msgid "Set _Destination"
 msgstr "Doel instellen"
 
-#: src/menu.ui:30
+#: src/ui-gtk3/menu.ui:30
 msgid "_Preferences"
 msgstr "Instellingen"
 
-#: src/menu.ui:34
+#: src/ui-gtk3/menu.ui:34
 msgid "_Quit"
 msgstr "Stoppen"
 
-#: src/menu.ui:40 src/menu.ui:90
+#: src/ui-gtk3/menu.ui:40 src/ui-gtk3/menu.ui:90
 msgid "_Queue"
 msgstr "Wachtlijst"
 
-#: src/menu.ui:44
+#: src/ui-gtk3/menu.ui:44
 msgid "_Add"
 msgstr "Toevoegen"
 
-#: src/menu.ui:49
+#: src/ui-gtk3/menu.ui:49
 msgid "Add _Multiple"
 msgstr "_Meerdere toevoegen"
 
-#: src/menu.ui:53
+#: src/ui-gtk3/menu.ui:53
 msgid "Add A_ll"
 msgstr "A_lles toevoegen"
 
-#: src/menu.ui:60
+#: src/ui-gtk3/menu.ui:60
 msgid "_Start Encoding"
 msgstr "Codering _starten"
 
-#: src/menu.ui:65 src/queuehandler.c:2093
+#: src/ui-gtk3/menu.ui:65 src/queuehandler.c:2093
 msgid "_Pause Encoding"
 msgstr "Codering _pauzeren"
 
-#: src/menu.ui:72
+#: src/ui-gtk3/menu.ui:72
 msgid "S_ave Queue"
 msgstr "W_achtlijst opslaan"
 
-#: src/menu.ui:76
+#: src/ui-gtk3/menu.ui:76
 msgid "_Load Queue File"
 msgstr "Wachtlijstbestand _laden"
 
-#: src/menu.ui:81
+#: src/ui-gtk3/menu.ui:81
 msgid "_View"
 msgstr "Weerga_ve"
 
-#: src/menu.ui:85
+#: src/ui-gtk3/menu.ui:85
 msgid "Presets _List"
 msgstr "_Lijst met voorinstellingen"
 
-#: src/menu.ui:95
+#: src/ui-gtk3/menu.ui:95
 msgid "_Preview"
 msgstr "_Voorvertoning"
 
-#: src/menu.ui:100
+#: src/ui-gtk3/menu.ui:100
 msgid "_Activity Window"
 msgstr "_Activiteitsvenster"
 
-#: src/menu.ui:106 src/ghb3.ui:392
+#: src/ui-gtk3/menu.ui:106 src/ui-gtk3/ghb.ui:390
 msgid "_Presets"
 msgstr "_Voorinstellingen"
 
-#: src/menu.ui:110 src/ghb3.ui:166 src/ghb3.ui:400
+#: src/ui-gtk3/menu.ui:110 src/ui-gtk3/ghb.ui:166 src/ui-gtk3/ghb.ui:398
 msgid "Set De_fault"
 msgstr "Stel als _Standaard in"
 
-#: src/menu.ui:116 src/ghb3.ui:172 src/ghb3.ui:414 src/ghb3.ui:8755
-#: src/ghb3.ui:9321 src/ghb3.ui:9731
+#: src/ui-gtk3/menu.ui:116 src/ui-gtk3/ghb.ui:172 src/ui-gtk3/ghb.ui:412
+#: src/ui-gtk3/ghb.ui:8713 src/ui-gtk3/ghb.ui:9278 src/ui-gtk3/ghb.ui:9688
 msgid "_Save"
 msgstr "_Opslaan"
 
-#: src/menu.ui:120 src/ghb3.ui:176 src/ghb3.ui:296 src/ghb3.ui:423
+#: src/ui-gtk3/menu.ui:120 src/ui-gtk3/ghb.ui:176 src/ui-gtk3/ghb.ui:294
+#: src/ui-gtk3/ghb.ui:421
 msgid "Save _As"
 msgstr "Opslaan _als"
 
-#: src/menu.ui:124 src/ghb3.ui:180 src/ghb3.ui:432 src/ghb3.ui:8598
+#: src/ui-gtk3/menu.ui:124 src/ui-gtk3/ghb.ui:180 src/ui-gtk3/ghb.ui:430
+#: src/ui-gtk3/ghb.ui:8556
 msgid "_Rename"
 msgstr "_Naam wijzigen"
 
-#: src/menu.ui:128 src/ghb3.ui:184 src/ghb3.ui:441
+#: src/ui-gtk3/menu.ui:128 src/ui-gtk3/ghb.ui:184 src/ui-gtk3/ghb.ui:439
 msgid "_Delete"
 msgstr "_Verwijderen"
 
-#: src/menu.ui:134 src/ghb3.ui:190
+#: src/ui-gtk3/menu.ui:134 src/ui-gtk3/ghb.ui:190
 msgid "_Import"
 msgstr "_Importeren"
 
-#: src/menu.ui:138 src/ghb3.ui:194 src/ghb3.ui:455
+#: src/ui-gtk3/menu.ui:138 src/ui-gtk3/ghb.ui:194 src/ui-gtk3/ghb.ui:453
 msgid "_Export"
 msgstr "_Exporteren"
 
-#: src/menu.ui:144 src/ghb3.ui:200
+#: src/ui-gtk3/menu.ui:144 src/ui-gtk3/ghb.ui:200
 msgid "Reset _Built-in Presets"
 msgstr "Ingebouwde voorinstellingen _herstellen"
 
-#: src/menu.ui:149
+#: src/ui-gtk3/menu.ui:149
 msgid "_Help"
 msgstr "_Help"
 
-#: src/menu.ui:153
+#: src/ui-gtk3/menu.ui:153
 msgid "_About"
 msgstr "Over"
 
-#: src/menu.ui:157
+#: src/ui-gtk3/menu.ui:157
 msgid "_Guide"
 msgstr "_Gids"
 
-#: src/menu.ui:167
+#: src/ui-gtk3/menu.ui:167
 msgid "HandBrake For _Dummies"
 msgstr "HandBrake For _Dummies"
 
-#: src/ghb3.ui:101
+#: src/ui-gtk3/ghb.ui:101
 msgid ""
 "Render the subtitle over the video.\n"
 "\n"
@@ -157,11 +177,11 @@ msgstr ""
 "\n"
 "De ondertiteling wordt deel van de video en kan niet worden uitgeschakeld."
 
-#: src/ghb3.ui:104
+#: src/ui-gtk3/ghb.ui:104
 msgid "<b>Burned In</b>"
 msgstr "<b>ingebrand</b>"
 
-#: src/ghb3.ui:110 src/ghb3.ui:9686
+#: src/ui-gtk3/ghb.ui:110 src/ui-gtk3/ghb.ui:9643
 msgid ""
 "Set the default output subtitle track.\n"
 "\n"
@@ -179,11 +199,11 @@ msgstr ""
 "Dit is nuttig om een \"geforceerde\" spoor\n"
 "in uw uitvoer aan te maken."
 
-#: src/ghb3.ui:117
+#: src/ui-gtk3/ghb.ui:117
 msgid "<b>Default</b>"
 msgstr "<b>Standaard</b>"
 
-#: src/ghb3.ui:123 src/ghb3.ui:9648
+#: src/ui-gtk3/ghb.ui:123 src/ui-gtk3/ghb.ui:9605
 msgid ""
 "Use only subtitles that have been flagged\n"
 "as forced in the source subtitle track\n"
@@ -199,11 +219,11 @@ msgstr ""
 "om ondertitels te tonen tijdens scènes waarin een\n"
 "vreemde taal gesproken wordt."
 
-#: src/ghb3.ui:129
+#: src/ui-gtk3/ghb.ui:129
 msgid "<b>Forced Only</b>"
 msgstr "<b>Enkel geforceerd</b>"
 
-#: src/ghb3.ui:135
+#: src/ui-gtk3/ghb.ui:135
 msgid ""
 "Add (or subtract) an offset (in milliseconds)\n"
 "to the start of the SRT subtitle track.\n"
@@ -219,11 +239,11 @@ msgstr ""
 "niet goed overeen met het begin van de video.\n"
 "Deze instelling laat u toe om de bestanden te synchroniseren."
 
-#: src/ghb3.ui:141
+#: src/ui-gtk3/ghb.ui:141
 msgid "<b>SRT Offset</b>"
 msgstr "<b>SRT-verschuiving</b>"
 
-#: src/ghb3.ui:147
+#: src/ui-gtk3/ghb.ui:147
 msgid ""
 "The source subtitle track\n"
 "\n"
@@ -250,232 +270,233 @@ msgstr ""
 "wordt best gebruikt in combinatie met de\n"
 "\"geforceerd\" optie."
 
-#: src/ghb3.ui:158
+#: src/ui-gtk3/ghb.ui:158
 msgid "<b>Track</b>"
 msgstr "<b>Spoor</b>"
 
-#: src/ghb3.ui:208
+#: src/ui-gtk3/ghb.ui:208
 msgid "Play File"
 msgstr "Bestand afspelen"
 
-#: src/ghb3.ui:212 src/callbacks.c:1720
+#: src/ui-gtk3/ghb.ui:212 src/callbacks.c:1708
 msgid "Open Source Directory"
 msgstr "Open bronmap"
 
-#: src/ghb3.ui:216
+#: src/ui-gtk3/ghb.ui:216
 msgid "Open Destination Directory"
 msgstr "Open doelmap"
 
-#: src/ghb3.ui:222
+#: src/ui-gtk3/ghb.ui:222
 msgid "Open Encode Log Directory"
 msgstr "Open map coderingslog"
 
-#: src/ghb3.ui:226
+#: src/ui-gtk3/ghb.ui:226
 msgid "Open Encode Log"
 msgstr "Open encoderingslog"
 
-#: src/ghb3.ui:235
+#: src/ui-gtk3/ghb.ui:235
 msgid "Reset Failed Jobs"
 msgstr "Mislukte taken opnieuw instellen"
 
-#: src/ghb3.ui:239
+#: src/ui-gtk3/ghb.ui:239
 msgid "Reset All Jobs"
 msgstr "Alle taken opnieuw instellen"
 
-#: src/ghb3.ui:243
+#: src/ui-gtk3/ghb.ui:243
 msgid "Clear Completed Jobs"
 msgstr "Voltooide taken opruimen"
 
-#: src/ghb3.ui:247
+#: src/ui-gtk3/ghb.ui:247
 msgid "Clear All Jobs"
 msgstr "Alle taken opruimen"
 
-#: src/ghb3.ui:253 src/queuehandler.c:1687
+#: src/ui-gtk3/ghb.ui:253 src/queuehandler.c:1687
 msgid "Import Queue"
 msgstr "Wachtrij importeren"
 
-#: src/ghb3.ui:257 src/queuehandler.c:1516
+#: src/ui-gtk3/ghb.ui:257 src/queuehandler.c:1516
 msgid "Export Queue"
 msgstr "Wachtrij exporteren"
 
-#: src/ghb3.ui:264
+#: src/ui-gtk3/ghb.ui:264
 msgid "HandBrake Presets"
 msgstr "Handbrake-voorinstellingen"
 
-#: src/ghb3.ui:359 src/ghb3.ui:986
+#: src/ui-gtk3/ghb.ui:357 src/ui-gtk3/ghb.ui:982
 msgid "Actions"
 msgstr "Acties"
 
-#: src/ghb3.ui:509
+#: src/ui-gtk3/ghb.ui:507
 msgid "HandBrake Queue"
 msgstr "HandBrake wachtrij"
 
-#: src/ghb3.ui:538
+#: src/ui-gtk3/ghb.ui:534
 msgid "_Play File"
 msgstr "Bestand _afspelen"
 
-#: src/ghb3.ui:547
+#: src/ui-gtk3/ghb.ui:543
 msgid "Open _Source Directory"
 msgstr "Open _bronmap"
 
-#: src/ghb3.ui:556
+#: src/ui-gtk3/ghb.ui:552
 msgid "Open _Destination Directory"
 msgstr "Open _doelmap"
 
-#: src/ghb3.ui:570
+#: src/ui-gtk3/ghb.ui:566
 msgid "Move to _Top"
 msgstr "_Bovenaan plaatsen"
 
-#: src/ghb3.ui:579
+#: src/ui-gtk3/ghb.ui:575
 msgid "Move to _Bottom"
 msgstr "_Onderaan plaatsen"
 
-#: src/ghb3.ui:593
+#: src/ui-gtk3/ghb.ui:589
 msgid "_Edit"
 msgstr "_Bewerken"
 
-#: src/ghb3.ui:602
+#: src/ui-gtk3/ghb.ui:598
 msgid "_Reset"
 msgstr "_Opnieuw instellen"
 
-#: src/ghb3.ui:616
+#: src/ui-gtk3/ghb.ui:612
 msgid "Re_move"
 msgstr "Ver_wijderen"
 
-#: src/ghb3.ui:646
+#: src/ui-gtk3/ghb.ui:642
 msgid "<span size=\"x-large\">Queue</span>"
 msgstr "<span size=\"x-large\">Wachtrij</span>"
 
-#: src/ghb3.ui:661
+#: src/ui-gtk3/ghb.ui:657
 msgid "0 jobs pending"
 msgstr "0 taken in wachtrij"
 
-#: src/ghb3.ui:698 src/ghb3.ui:2319 src/queuehandler.c:2026
+#: src/ui-gtk3/ghb.ui:694 src/ui-gtk3/ghb.ui:2313 src/queuehandler.c:2026
 #: src/queuehandler.c:2039 src/queuehandler.c:2052
 msgid "Start Encoding"
 msgstr "Codering starten"
 
-#: src/ghb3.ui:700 src/ghb3.ui:2321 src/ghb3.ui:6987 src/queuehandler.c:2025
-#: src/queuehandler.c:2038
+#: src/ui-gtk3/ghb.ui:696 src/ui-gtk3/ghb.ui:2315 src/ui-gtk3/ghb.ui:6981
+#: src/queuehandler.c:2025 src/queuehandler.c:2038
 msgid "Start"
 msgstr "Starten"
 
-#: src/ghb3.ui:714 src/ghb3.ui:2334 src/queuehandler.c:2068
+#: src/ui-gtk3/ghb.ui:710 src/ui-gtk3/ghb.ui:2328 src/queuehandler.c:2068
 #: src/queuehandler.c:2081
 msgid "Pause Encoding"
 msgstr "Codering pauzeren"
 
-#: src/ghb3.ui:716 src/ghb3.ui:2336 src/queuehandler.c:2067
+#: src/ui-gtk3/ghb.ui:712 src/ui-gtk3/ghb.ui:2330 src/queuehandler.c:2067
 #: src/queuehandler.c:2080
 msgid "Pause"
 msgstr "Pauzeren"
 
-#: src/ghb3.ui:775
+#: src/ui-gtk3/ghb.ui:771
 msgid "Options"
 msgstr "Opties"
 
-#: src/ghb3.ui:844 src/ghb3.ui:7504
+#: src/ui-gtk3/ghb.ui:840 src/ui-gtk3/ghb.ui:7498
 msgid "When Done:"
 msgstr "Wanneer voltooid:"
 
-#: src/ghb3.ui:923
+#: src/ui-gtk3/ghb.ui:919
 msgid "Reset"
 msgstr "Opnieuw instellen"
 
-#: src/ghb3.ui:925
+#: src/ui-gtk3/ghb.ui:921
 msgid ""
 "Mark selected queue entry as pending.\n"
 "Resets the queue job to pending and ready to run again."
 msgstr ""
 "Markeer het geselecteerde item in de wachtrij als wachtend.\n"
-"Dit herstelt de huidige wachtrij-taak naar wachtend en klaar om opnieuw uit te voeren."
+"Dit herstelt de huidige wachtrij-taak naar wachtend en klaar om opnieuw uit "
+"te voeren."
 
-#: src/ghb3.ui:940
+#: src/ui-gtk3/ghb.ui:936
 msgid "Edit"
 msgstr "Bewerken"
 
-#: src/ghb3.ui:1035 src/ghb3.ui:4487 src/ghb3.ui:4647 src/ghb3.ui:4829
-#: src/ghb3.ui:5309
+#: src/ui-gtk3/ghb.ui:1031 src/ui-gtk3/ghb.ui:4481 src/ui-gtk3/ghb.ui:4641
+#: src/ui-gtk3/ghb.ui:4823 src/ui-gtk3/ghb.ui:5303
 msgid "Preset:"
 msgstr "Voorinstelling:"
 
-#: src/ghb3.ui:1071
+#: src/ui-gtk3/ghb.ui:1067
 msgid "Source:"
 msgstr "Bron:"
 
-#: src/ghb3.ui:1112 src/ghb3.ui:7067
+#: src/ui-gtk3/ghb.ui:1108 src/ui-gtk3/ghb.ui:7061
 msgid "Title:"
 msgstr "Titel:"
 
-#: src/ghb3.ui:1152
+#: src/ui-gtk3/ghb.ui:1148
 msgid "Destination:"
 msgstr "Doel:"
 
-#: src/ghb3.ui:1193
+#: src/ui-gtk3/ghb.ui:1189
 msgid "Dimensions:"
 msgstr "Afmetingen:"
 
-#: src/ghb3.ui:1229
+#: src/ui-gtk3/ghb.ui:1225
 msgid "Video:"
 msgstr "Video:"
 
-#: src/ghb3.ui:1265
+#: src/ui-gtk3/ghb.ui:1261
 msgid "Audio:"
 msgstr "Audio:"
 
-#: src/ghb3.ui:1301
+#: src/ui-gtk3/ghb.ui:1297
 msgid "Subtitles:"
 msgstr "Ondertitels:"
 
-#: src/ghb3.ui:1340 src/ghb3.ui:3188
+#: src/ui-gtk3/ghb.ui:1336 src/ui-gtk3/ghb.ui:3182
 msgid "Summary"
 msgstr "Samenvatting"
 
-#: src/ghb3.ui:1378
+#: src/ui-gtk3/ghb.ui:1374
 msgid "Pass:"
 msgstr "Fase:"
 
-#: src/ghb3.ui:1414
+#: src/ui-gtk3/ghb.ui:1410
 msgid "Start Time:"
 msgstr "Starttijd:"
 
-#: src/ghb3.ui:1450
+#: src/ui-gtk3/ghb.ui:1446
 msgid "End Time:"
 msgstr "Eindtijd:"
 
-#: src/ghb3.ui:1490
+#: src/ui-gtk3/ghb.ui:1486
 msgid "Paused Duration:"
 msgstr "Gepauzeerde duurtijd:"
 
-#: src/ghb3.ui:1530
+#: src/ui-gtk3/ghb.ui:1526
 msgid "Encode Time:"
 msgstr "Encoderingstijd:"
 
-#: src/ghb3.ui:1566
+#: src/ui-gtk3/ghb.ui:1562
 msgid "File Size:"
 msgstr "Bestandsgrootte:"
 
-#: src/ghb3.ui:1602
+#: src/ui-gtk3/ghb.ui:1598
 msgid "Status:"
 msgstr "Status:"
 
-#: src/ghb3.ui:1641
+#: src/ui-gtk3/ghb.ui:1637
 msgid "Statistics"
 msgstr "Statistieken"
 
-#: src/ghb3.ui:1706
+#: src/ui-gtk3/ghb.ui:1702
 msgid "Activity Log"
 msgstr "Activiteitslog"
 
-#: src/ghb3.ui:1729
+#: src/ui-gtk3/ghb.ui:1725
 msgid "HandBrake Activity Log"
 msgstr "Handbrake-activiteitslog"
 
-#: src/ghb3.ui:2045
+#: src/ui-gtk3/ghb.ui:2039
 msgid "About HandBrake"
 msgstr "Over HandBrake"
 
-#: src/ghb3.ui:2051
+#: src/ui-gtk3/ghb.ui:2045
 msgid ""
 "Copyright © 2008 -  John Stebbins\n"
 "Copyright © 2004 - , HandBrake Devs"
@@ -483,100 +504,111 @@ msgstr ""
 "Copyright © 2008 -  John Stebbins\n"
 "Copyright © 2004 - , HandBrake Devs"
 
-#: src/ghb3.ui:2053
+#: src/ui-gtk3/ghb.ui:2047
 msgid ""
 "HandBrake is a GPL-licensed, multiplatform, multithreaded video transcoder."
 msgstr ""
 "HandBrake is een GPL-gelicentiëerde, multi-platform, multi-threaded "
 "videotranscoder."
 
-#: src/ghb3.ui:2056
+#: src/ui-gtk3/ghb.ui:2050
 msgid ""
-"HandBrake is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License version 2, as published by the Free Software Foundation.\n"
+"HandBrake is free software; you can redistribute it and/or modify it under "
+"the terms of the GNU General Public License version 2, as published by the "
+"Free Software Foundation.\n"
 "\n"
-"HandBrake is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.\n"
+"HandBrake is distributed in the hope that it will be useful, but WITHOUT ANY "
+"WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS "
+"FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more "
+"details.\n"
 "\n"
-"You should have received a copy of the GNU General Public License along with Glade; if not, write to the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA."
+"You should have received a copy of the GNU General Public License along with "
+"Glade; if not, write to the Free Software Foundation, Inc., 51 Franklin "
+"Street, Fifth Floor, Boston, MA 02110-1301, USA."
 msgstr ""
-"HandBrake is gratis software; U kunt het verspreiden en/of aanpassen onder de termen van de GNU General Public License zoals gepubliceerd door de Free Software Foundation\n"
+"HandBrake is gratis software; U kunt het verspreiden en/of aanpassen onder "
+"de termen van de GNU General Public License zoals gepubliceerd door de Free "
+"Software Foundation\n"
 "\n"
-"HandBrake wordt uitgegeven in de hoop dat het nuttig zal zijn, maar ZONDER ENIGE GARANTIE; zelfs zonder de impliciete garantie van VERKOOPBAARHEID of GESCHIKTHEID VOOR EEN BEPAALD DOEL. Zie de GNU General Public License voor meer details.\n"
+"HandBrake wordt uitgegeven in de hoop dat het nuttig zal zijn, maar ZONDER "
+"ENIGE GARANTIE; zelfs zonder de impliciete garantie van VERKOOPBAARHEID of "
+"GESCHIKTHEID VOOR EEN BEPAALD DOEL. Zie de GNU General Public License voor "
+"meer details.\n"
 "\n"
-"U zou een kopie van de GNU General Public License samen met Glade moeten ontvangen hebben; is dit niet het geval, schrijf dan naar de Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA."
+"U zou een kopie van de GNU General Public License samen met Glade moeten "
+"ontvangen hebben; is dit niet het geval, schrijf dan naar de Free Software "
+"Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, "
+"USA."
 
-#: src/ghb3.ui:2242 src/fr.handbrake.ghb.metainfo.xml.in.in:10
-msgid "HandBrake"
-msgstr "HandBrake"
-
-#: src/ghb3.ui:2279 src/callbacks.c:4351
+#: src/ui-gtk3/ghb.ui:2273 src/callbacks.c:4339
 msgid "Choose Video Source"
 msgstr "Kies videobron"
 
-#: src/ghb3.ui:2281 src/callbacks.c:1720 src/callbacks.c:4350
+#: src/ui-gtk3/ghb.ui:2275 src/callbacks.c:1708 src/callbacks.c:4338
 msgid "Open Source"
 msgstr "Open bron"
 
-#: src/ghb3.ui:2304
+#: src/ui-gtk3/ghb.ui:2298
 msgid "Add to Queue"
 msgstr "Aan wachtlijst toevoegen"
 
-#: src/ghb3.ui:2306
+#: src/ui-gtk3/ghb.ui:2300
 msgid "Add To Queue"
 msgstr "Aan wachtlijst toevoegen"
 
-#: src/ghb3.ui:2361
+#: src/ui-gtk3/ghb.ui:2355
 msgid "Show Presets Window"
 msgstr "Toon voorinstellingenvenster"
 
-#: src/ghb3.ui:2363
+#: src/ui-gtk3/ghb.ui:2357
 msgid "Presets"
 msgstr "Voorinstellingen"
 
-#: src/ghb3.ui:2376
+#: src/ui-gtk3/ghb.ui:2370
 msgid "Show Preview Window"
 msgstr "Toon voorvertoningsvenster"
 
-#: src/ghb3.ui:2378
+#: src/ui-gtk3/ghb.ui:2372
 msgid "Preview"
 msgstr "Voorvertoning"
 
-#: src/ghb3.ui:2391
+#: src/ui-gtk3/ghb.ui:2385
 msgid "Show Queue"
 msgstr "Toon wachtlijst"
 
-#: src/ghb3.ui:2393 src/callbacks.c:4781
+#: src/ui-gtk3/ghb.ui:2387 src/callbacks.c:4735
 msgid "Queue"
 msgstr "Wachtlijst"
 
-#: src/ghb3.ui:2406
+#: src/ui-gtk3/ghb.ui:2400
 msgid "Show Activity Window"
 msgstr "Toon activiteitsvenster"
 
-#: src/ghb3.ui:2408
+#: src/ui-gtk3/ghb.ui:2402
 msgid "Activity"
 msgstr "Activiteit"
 
-#: src/ghb3.ui:2438
+#: src/ui-gtk3/ghb.ui:2432
 msgid "<b>Source:</b>"
 msgstr "<b>Bron:</b>"
 
-#: src/ghb3.ui:2464 src/hb-backend.c:60 src/hb-backend.c:72
-#: src/hb-backend.c:85 src/hb-backend.c:124 src/hb-backend.c:237
-#: src/hb-backend.c:270 src/hb-backend.c:281 src/hb-backend.c:308
-#: src/hb-backend.c:393 src/hb-backend.c:2593 src/hb-backend.c:2819
-#: src/subtitlehandler.c:1368
+#: src/ui-gtk3/ghb.ui:2458 src/hb-backend.c:60 src/hb-backend.c:72
+#: src/hb-backend.c:85 src/hb-backend.c:124 src/hb-backend.c:224
+#: src/hb-backend.c:257 src/hb-backend.c:268 src/hb-backend.c:295
+#: src/hb-backend.c:380 src/hb-backend.c:2587 src/hb-backend.c:2812
+#: src/subtitlehandler.c:1344
 msgid "None"
 msgstr "Geen"
 
-#: src/ghb3.ui:2510 src/callbacks.c:4323
+#: src/ui-gtk3/ghb.ui:2504 src/callbacks.c:4311
 msgid "Scanning..."
 msgstr "Scannen..."
 
-#: src/ghb3.ui:2544
+#: src/ui-gtk3/ghb.ui:2538
 msgid "<b>Title:</b>"
 msgstr "<b>Titel:</b>"
 
-#: src/ghb3.ui:2572
+#: src/ui-gtk3/ghb.ui:2566
 msgid ""
 "Set the title to encode.\n"
 "By default the longest title is chosen.\n"
@@ -586,53 +618,53 @@ msgstr ""
 "Standaard wordt de langste titel gekozen.\n"
 "Dit is vaak de getoonde titel van een DVD."
 
-#: src/ghb3.ui:2599
+#: src/ui-gtk3/ghb.ui:2593
 msgid "<b>Angle:</b>"
 msgstr "<b>Kijkhoek:</b>"
 
-#: src/ghb3.ui:2611
+#: src/ui-gtk3/ghb.ui:2605
 msgid "For multi-angle DVD's, select the desired angle to encode."
 msgstr "Voor multi-angle DVD's, kies de gewenste kijkhoek om te encoderen."
 
-#: src/ghb3.ui:2627
+#: src/ui-gtk3/ghb.ui:2621
 msgid "<b>Range:</b>"
 msgstr "<b>Bereik:</b>"
 
-#: src/ghb3.ui:2638
+#: src/ui-gtk3/ghb.ui:2632
 msgid "Range of title to encode. Can be chapters, seconds, or frames."
 msgstr ""
 "Bereik van de te encoderen titel. Kunnen hoofdstukken, seconden of frames "
 "zijn."
 
-#: src/ghb3.ui:2651
+#: src/ui-gtk3/ghb.ui:2645
 msgid "Set the first chapter to encode."
 msgstr "Stel het eerste te encoderen hoofdstuk in."
 
-#: src/ghb3.ui:2667
+#: src/ui-gtk3/ghb.ui:2661
 msgid "-"
 msgstr "-"
 
-#: src/ghb3.ui:2679
+#: src/ui-gtk3/ghb.ui:2673
 msgid "Set the last chapter to encode."
 msgstr "Stel het laatste te encoderen hoofdstuk in."
 
-#: src/ghb3.ui:2705
+#: src/ui-gtk3/ghb.ui:2699
 msgid "<b>Preset:</b>"
 msgstr "<b>Voorinstelling:</b>"
 
-#: src/ghb3.ui:2741
+#: src/ui-gtk3/ghb.ui:2735
 msgid "Choose Preset"
 msgstr "Kies voorinstelling"
 
-#: src/ghb3.ui:2772
+#: src/ui-gtk3/ghb.ui:2766
 msgid "<u><i>Modified</i></u>"
 msgstr "<u><i>Gewijzigd</i></u>"
 
-#: src/ghb3.ui:2781 src/ghb3.ui:5651 src/ghb3.ui:6435
+#: src/ui-gtk3/ghb.ui:2775 src/ui-gtk3/ghb.ui:5645 src/ui-gtk3/ghb.ui:6429
 msgid "Reload"
 msgstr "Herladen"
 
-#: src/ghb3.ui:2784
+#: src/ui-gtk3/ghb.ui:2778
 msgid ""
 "Reload the settings for the currently selected preset.\n"
 "Modifications will be discarded."
@@ -640,39 +672,40 @@ msgstr ""
 "Herlaad de instellingen voor de huidige voorinstelling.\n"
 "Wijzigingen worden verworpen."
 
-#: src/ghb3.ui:2796
+#: src/ui-gtk3/ghb.ui:2790
 msgid "Save New Preset"
 msgstr "Nieuwe voorinstelling opslaan"
 
-#: src/ghb3.ui:2799
+#: src/ui-gtk3/ghb.ui:2793
 msgid "Save the current settings to a new Preset."
 msgstr "De huidige instellingen opslaan als nieuwe voorinstelling."
 
-#: src/ghb3.ui:2879
+#: src/ui-gtk3/ghb.ui:2873
 msgid "Format:"
 msgstr "Formaat:"
 
-#: src/ghb3.ui:2897
+#: src/ui-gtk3/ghb.ui:2891
 msgid "Format to mux encoded tracks to."
 msgstr "Formaat waarin geëncodeerde tracks gemuxt worden."
 
-#: src/ghb3.ui:2909 src/queuehandler.c:286
+#: src/ui-gtk3/ghb.ui:2903 src/queuehandler.c:286
 msgid "Web Optimized"
 msgstr "Web-geöptimaliseerd"
 
-#: src/ghb3.ui:2914
+#: src/ui-gtk3/ghb.ui:2908
 msgid ""
 "Optimize the layout of the MP4 file for progressive download.\n"
 "This allows a player to initiate playback before downloading the entire file."
 msgstr ""
 "Optimaliseer de opmaak van het MP4-bestand voor progressieve download.\n"
-"Dit laat een speler toe om het afspelen te starten voor het hele bestand is gedownload."
+"Dit laat een speler toe om het afspelen te starten voor het hele bestand is "
+"gedownload."
 
-#: src/ghb3.ui:2930
+#: src/ui-gtk3/ghb.ui:2924
 msgid "Align A/V Start"
 msgstr "A/V-start uitlijnen"
 
-#: src/ghb3.ui:2935
+#: src/ui-gtk3/ghb.ui:2929
 msgid ""
 "Aligns the initial timestamps of all audio and video streams by\n"
 "inserting blank frames or dropping frames. May improve audio/video\n"
@@ -683,140 +716,140 @@ msgstr ""
 "van audio/video verbeteren voor kapotte spelers zonder ondersteuning\n"
 "voor MP4-lijsten."
 
-#: src/ghb3.ui:2952
+#: src/ui-gtk3/ghb.ui:2946
 msgid "iPod 5G Support"
 msgstr "Ondersteuning voor iPod 5G"
 
-#: src/ghb3.ui:2957
+#: src/ui-gtk3/ghb.ui:2951
 msgid "Add iPod Atom needed by some older iPods."
 msgstr "Voeg iPod Atom toe, nodig voor sommige oudere iPods."
 
-#: src/ghb3.ui:2972
+#: src/ui-gtk3/ghb.ui:2966
 msgid "Passthru Common Metadata"
 msgstr "Veelgebruikte metadata doorgeven"
 
-#: src/ghb3.ui:2977
+#: src/ui-gtk3/ghb.ui:2971
 msgid "Copy metadata from source to output."
 msgstr "Kopieer metadata van de bron naar de uitvoer."
 
-#: src/ghb3.ui:2999
+#: src/ui-gtk3/ghb.ui:2993
 msgid "Duration:"
 msgstr "Afspeelduur:"
 
-#: src/ghb3.ui:3017
+#: src/ui-gtk3/ghb.ui:3011
 msgid "hh:mm:ss"
 msgstr "uu:mm:ss"
 
-#: src/ghb3.ui:3032
+#: src/ui-gtk3/ghb.ui:3026
 msgid "Tracks:"
 msgstr "Sporen:"
 
-#: src/ghb3.ui:3072
+#: src/ui-gtk3/ghb.ui:3066
 msgid "Filters:"
 msgstr "Filters:"
 
-#: src/ghb3.ui:3112
+#: src/ui-gtk3/ghb.ui:3106
 msgid "Size:"
 msgstr "Afmetingen:"
 
-#: src/ghb3.ui:3137 src/ghb3.ui:3236 src/ghb3.ui:3274 src/ghb3.ui:3312
-#: src/ghb3.ui:4148 src/ghb3.ui:4286
+#: src/ui-gtk3/ghb.ui:3131 src/ui-gtk3/ghb.ui:3230 src/ui-gtk3/ghb.ui:3268
+#: src/ui-gtk3/ghb.ui:3306 src/ui-gtk3/ghb.ui:4142 src/ui-gtk3/ghb.ui:4280
 msgid "--"
 msgstr "--"
 
-#: src/ghb3.ui:3224 src/ghb3.ui:4136
+#: src/ui-gtk3/ghb.ui:3218 src/ui-gtk3/ghb.ui:4130
 msgid "Storage Size:"
 msgstr "Opslagafmetingen:"
 
-#: src/ghb3.ui:3262 src/ghb3.ui:4180
+#: src/ui-gtk3/ghb.ui:3256 src/ui-gtk3/ghb.ui:4174
 msgid "Display Size:"
 msgstr "Weergaveafmetingen:"
 
-#: src/ghb3.ui:3300 src/ghb3.ui:4274
+#: src/ui-gtk3/ghb.ui:3294 src/ui-gtk3/ghb.ui:4268
 msgid "Aspect Ratio:"
 msgstr "Beeldverhouding:"
 
-#: src/ghb3.ui:3337
+#: src/ui-gtk3/ghb.ui:3331
 msgid "<b>Source Dimensions</b>"
 msgstr "<b>Afmetingen van de bron</b>"
 
-#: src/ghb3.ui:3384
+#: src/ui-gtk3/ghb.ui:3378
 msgid "Flipping:"
 msgstr "Spiegelen:"
 
-#: src/ghb3.ui:3395
+#: src/ui-gtk3/ghb.ui:3389
 msgid "Horizontal ⇌"
 msgstr "Horizontaal  "
 
-#: src/ghb3.ui:3400
+#: src/ui-gtk3/ghb.ui:3394
 msgid "Flip video horizontally."
 msgstr "Video horizontaal spiegelen."
 
-#: src/ghb3.ui:3417
+#: src/ui-gtk3/ghb.ui:3411
 msgid "Rotation:"
 msgstr "Rotatie:"
 
-#: src/ghb3.ui:3433
+#: src/ui-gtk3/ghb.ui:3427
 msgid "Rotate the video clockwise in 90 degree increments."
 msgstr "Roteer de video in stappen van 90 graden met de klok mee."
 
-#: src/ghb3.ui:3448
+#: src/ui-gtk3/ghb.ui:3442
 msgid "Cropping:"
 msgstr "Bijsnijden:"
 
-#: src/ghb3.ui:3464
+#: src/ui-gtk3/ghb.ui:3458
 msgid "How to apply crop settings."
 msgstr "Toepassing van instellingen voor bijsnijden."
 
-#: src/ghb3.ui:3480
+#: src/ui-gtk3/ghb.ui:3474
 msgid "Left Crop"
 msgstr "Links bijsnijden"
 
-#: src/ghb3.ui:3497
+#: src/ui-gtk3/ghb.ui:3491
 msgid "Top Crop"
 msgstr "Boven bijsnijden"
 
-#: src/ghb3.ui:3514
+#: src/ui-gtk3/ghb.ui:3508
 msgid "Bottom Crop"
 msgstr "Onder bijsnijden"
 
-#: src/ghb3.ui:3531
+#: src/ui-gtk3/ghb.ui:3525
 msgid "Right Crop"
 msgstr "Rechts bijsnijden"
 
-#: src/ghb3.ui:3567
+#: src/ui-gtk3/ghb.ui:3561
 msgid "<b>Orientation &amp; Cropping</b>"
 msgstr "<b>Oriëntatie &amp; bijsnijden</b>"
 
-#: src/ghb3.ui:3606
+#: src/ui-gtk3/ghb.ui:3600
 msgid "Resolution Limit:"
 msgstr "Resolutie-limiet:"
 
-#: src/ghb3.ui:3621
+#: src/ui-gtk3/ghb.ui:3615
 msgid "Resolution limits for common video formats."
 msgstr "Limieten voor resoluties van algemene videoformaten."
 
-#: src/ghb3.ui:3637
+#: src/ui-gtk3/ghb.ui:3631
 msgid "Maximum Size:"
 msgstr "Maximum-afmetingen:"
 
-#: src/ghb3.ui:3652
+#: src/ui-gtk3/ghb.ui:3646
 msgid "This is the maximum width that the video will be stored at."
 msgstr "Dit is de maximale breedte waarop de video wordt opgeslagen."
 
-#: src/ghb3.ui:3669 src/ghb3.ui:3838 src/ghb3.ui:4212
+#: src/ui-gtk3/ghb.ui:3663 src/ui-gtk3/ghb.ui:3832 src/ui-gtk3/ghb.ui:4206
 msgid "x"
 msgstr "x"
 
-#: src/ghb3.ui:3684
+#: src/ui-gtk3/ghb.ui:3678
 msgid "This is the maximum height that the video will be stored at."
 msgstr "Dit is de maximale hoogte waarop de video wordt opgeslagen."
 
-#: src/ghb3.ui:3700
+#: src/ui-gtk3/ghb.ui:3694
 msgid "Anamorphic:"
 msgstr "Anamorf:"
 
-#: src/ghb3.ui:3715
+#: src/ui-gtk3/ghb.ui:3709
 msgid ""
 "<b>Anamorphic Modes:</b><small><tt>\n"
 "    Automatic - Use a pixel aspect ratio that maximizes\n"
@@ -832,15 +865,16 @@ msgstr ""
 "Geen - Forceer de pixelverhouding tot 1: 1.\n"
 "Aangepast - Voer een aangepaste pixelverhouding in.</tt></small>"
 
-#: src/ghb3.ui:3736
+#: src/ui-gtk3/ghb.ui:3730
 msgid "Pixel Aspect:"
 msgstr "Pixel-aspectverhouding:"
 
-#: src/ghb3.ui:3751
+#: src/ui-gtk3/ghb.ui:3745
 msgid ""
 "Pixel aspect defines the shape of the pixels.\n"
 "\n"
-"A 1:1 ratio defines a square pixel.  Other values define rectangular shapes.\n"
+"A 1:1 ratio defines a square pixel.  Other values define rectangular "
+"shapes.\n"
 "Players will scale the image in order to achieve the specified aspect."
 msgstr ""
 "Pixel-aspectverhouding definiëert de vorm van de pixels.\n"
@@ -850,14 +884,15 @@ msgstr ""
 "Spelers zullen het beeld schalen om de gespecifiëerde\n"
 "aspectverhouding te behalen."
 
-#: src/ghb3.ui:3771
+#: src/ui-gtk3/ghb.ui:3765
 msgid ":"
 msgstr ":"
 
-#: src/ghb3.ui:3786
+#: src/ui-gtk3/ghb.ui:3780
 msgid ""
 "Pixel aspect defines the shape of the pixels.\n"
-"A 1:1 ratio defines a square pixel.  Other values define rectangular shapes.\n"
+"A 1:1 ratio defines a square pixel.  Other values define rectangular "
+"shapes.\n"
 "Players will scale the image in order to achieve the specified aspect."
 msgstr ""
 "Pixel-aspectverhouding definiëert de vorm van de pixels.\n"
@@ -867,119 +902,123 @@ msgstr ""
 "Spelers zullen het beeld schalen om de gespecifiëerde\n"
 "aspectverhouding te behalen."
 
-#: src/ghb3.ui:3805
+#: src/ui-gtk3/ghb.ui:3799
 msgid "Scaled Size:"
 msgstr "Verschaalde afmetingen:"
 
-#: src/ghb3.ui:3820
+#: src/ui-gtk3/ghb.ui:3814
 msgid ""
 "This is the width that the video will be stored at.\n"
-"The actual display dimensions will differ if the pixel aspect ratio is not 1:1."
+"The actual display dimensions will differ if the pixel aspect ratio is not "
+"1:1."
 msgstr ""
 "Dis de breedte waarmee de video wordt opgeslaan.\n"
 "De werkelijke weergave-afmetingen verschillen als de\n"
 "pixel-aspectverhouding niet 1:1 is."
 
-#: src/ghb3.ui:3853
+#: src/ui-gtk3/ghb.ui:3847
 msgid ""
 "This is the height that the video will be stored at.\n"
-"The actual display dimensions will differ if the pixel aspect ratio is not 1:1."
+"The actual display dimensions will differ if the pixel aspect ratio is not "
+"1:1."
 msgstr ""
 "Dit is de hoogte waarmee de video wordt opgeslaan.\n"
 "De werkelijke weergave-afmetingen verschillen als de\n"
 "pixel-aspectverhouding niet 1:1 is."
 
-#: src/ghb3.ui:3867
+#: src/ui-gtk3/ghb.ui:3861
 msgid "Optimal Size"
 msgstr "Optimale afmetingen:"
 
-#: src/ghb3.ui:3872
+#: src/ui-gtk3/ghb.ui:3866
 msgid "Use highest resolution permitted by above settings."
 msgstr ""
 "Gebruik de hoogste resolutie die is toegestaan door bovenstaande "
 "instellingen."
 
-#: src/ghb3.ui:3887
+#: src/ui-gtk3/ghb.ui:3881
 msgid "Allow Upscaling"
 msgstr "Upscaling toestaan"
 
-#: src/ghb3.ui:3892
-msgid ""
-"If not enabled, scaled dimensions will be limited to source dimensions."
+#: src/ui-gtk3/ghb.ui:3886
+msgid "If not enabled, scaled dimensions will be limited to source dimensions."
 msgstr ""
 "Indien niet ingeschakeld, zijn schaalafmetingen beperkt tot bronafmetingen."
 
-#: src/ghb3.ui:3917
+#: src/ui-gtk3/ghb.ui:3911
 msgid "<b>Resolution &amp; Scaling</b>"
 msgstr "<b>Resolutie &amp; schaling</b>"
 
-#: src/ghb3.ui:3957
+#: src/ui-gtk3/ghb.ui:3951
 msgid "Fill:"
 msgstr "Vulling:"
 
-#: src/ghb3.ui:3974
+#: src/ui-gtk3/ghb.ui:3968
 msgid "Add a border around the video."
 msgstr "Voeg een rand om de video."
 
-#: src/ghb3.ui:3991
+#: src/ui-gtk3/ghb.ui:3985
 msgid "Left Pad"
 msgstr "Opvulling links"
 
-#: src/ghb3.ui:4008
+#: src/ui-gtk3/ghb.ui:4002
 msgid "Top Pad"
 msgstr "Opvulling boven"
 
-#: src/ghb3.ui:4025
+#: src/ui-gtk3/ghb.ui:4019
 msgid "Bottom Pad"
 msgstr "Opvulling onder"
 
-#: src/ghb3.ui:4042
+#: src/ui-gtk3/ghb.ui:4036
 msgid "Right Pad"
 msgstr "Opvulling rechts"
 
-#: src/ghb3.ui:4058
+#: src/ui-gtk3/ghb.ui:4052
 msgid "Color:"
 msgstr "Kleur:"
 
-#: src/ghb3.ui:4075
+#: src/ui-gtk3/ghb.ui:4069
 msgid "Color of border added around video."
 msgstr "Kleur van de rand om de video."
 
-#: src/ghb3.ui:4097
+#: src/ui-gtk3/ghb.ui:4091
 msgid "<b>Borders</b>"
 msgstr "<b>Randen</b>"
 
-#: src/ghb3.ui:4195 src/ghb3.ui:4227 src/ghb3.ui:4245
+#: src/ui-gtk3/ghb.ui:4189 src/ui-gtk3/ghb.ui:4221 src/ui-gtk3/ghb.ui:4239
 msgid "Changing the display size will stretch the video."
 msgstr "Door de weergavegrootte te wijzigen, wordt de video uitgerekt."
 
-#: src/ghb3.ui:4240 src/hb-backend.c:123 src/hb-backend.c:239
-#: src/hb-backend.c:311
+#: src/ui-gtk3/ghb.ui:4234 src/hb-backend.c:123 src/hb-backend.c:226
+#: src/hb-backend.c:298
 msgid "Automatic"
 msgstr "Automatisch"
 
-#: src/ghb3.ui:4311
+#: src/ui-gtk3/ghb.ui:4305
 msgid "<b>Final Dimensions</b>"
 msgstr "<b>Uiteindelijke afmetingen</b>"
 
-#: src/ghb3.ui:4324
+#: src/ui-gtk3/ghb.ui:4318
 msgid "Dimensions"
 msgstr "Afmetingen"
 
-#: src/ghb3.ui:4342
+#: src/ui-gtk3/ghb.ui:4336
 msgid "Detelecine:"
 msgstr "Detelecine:"
 
-#: src/ghb3.ui:4358
+#: src/ui-gtk3/ghb.ui:4352
 msgid ""
 "This filter removes 'combing' artifacts that are the result of telecining.\n"
 "\n"
-"Telecining is a process that adjusts film framerates that are 24fps to NTSC video frame rates which are 30fps."
+"Telecining is a process that adjusts film framerates that are 24fps to NTSC "
+"video frame rates which are 30fps."
 msgstr ""
-"Deze filter verwijdert 'combing' artefacten die het resultaat zijn van telecine.\n"
-"Telecine is het process dat framesnelheid van film van 24 fps omzet naar de NTSC video framesnelheid van 30 fps."
+"Deze filter verwijdert 'combing' artefacten die het resultaat zijn van "
+"telecine.\n"
+"Telecine is het process dat framesnelheid van film van 24 fps omzet naar de "
+"NTSC video framesnelheid van 30 fps."
 
-#: src/ghb3.ui:4373 src/ghb3.ui:4919
+#: src/ui-gtk3/ghb.ui:4367 src/ui-gtk3/ghb.ui:4913
 msgid ""
 "Custom detelecine filter string format\n"
 "\n"
@@ -989,11 +1028,11 @@ msgstr ""
 "\n"
 "JunkLeft:JunkRight:JunkTop:JunkBottom:StrictBreaks:MetricPlane:Parity"
 
-#: src/ghb3.ui:4392
+#: src/ui-gtk3/ghb.ui:4386
 msgid "Interlace Detection:"
 msgstr "Interlace-detectie:"
 
-#: src/ghb3.ui:4408
+#: src/ui-gtk3/ghb.ui:4402
 msgid ""
 "This filter detects interlaced frames.\n"
 "\n"
@@ -1005,7 +1044,7 @@ msgstr ""
 "Als een deinterlace-filter is ingeschakeld, zullen enkel de\n"
 "door deze filter gevonden frames deinterlaced worden."
 
-#: src/ghb3.ui:4424
+#: src/ui-gtk3/ghb.ui:4418
 msgid ""
 "Custom interlace detection filter string format\n"
 "\n"
@@ -1017,11 +1056,11 @@ msgstr ""
 "Mode:Spatiale Metriek:Spatiale Drempel:Maskerfilter Mode:\n"
 "Blokdrempel:Blokbreedte:Blokhoogte"
 
-#: src/ghb3.ui:4444
+#: src/ui-gtk3/ghb.ui:4438
 msgid "Deinterlace:"
 msgstr "Deinterlace:"
 
-#: src/ghb3.ui:4460
+#: src/ui-gtk3/ghb.ui:4454
 msgid ""
 "Choose decomb or deinterlace filter.\n"
 "\n"
@@ -1033,7 +1072,7 @@ msgstr ""
 "De decomb filter ondersteunt verschillende interpolatie-algoritmen.\n"
 "De deinterlace filter is een klassieke YADIF deinterlacer.\n"
 
-#: src/ghb3.ui:4497
+#: src/ui-gtk3/ghb.ui:4491
 msgid ""
 "Choose decomb or deinterlace filter options.\n"
 "\n"
@@ -1046,11 +1085,11 @@ msgstr ""
 "Het decomb-filter ondersteunt verschillende interpolatiealgoritmen.\n"
 "Het deinterlace-filter is een klassieke YADIF-deinterlacer."
 
-#: src/ghb3.ui:4527
+#: src/ui-gtk3/ghb.ui:4521
 msgid "Deblock Filter:"
 msgstr "Ontblokkingsfilter:"
 
-#: src/ghb3.ui:4543
+#: src/ui-gtk3/ghb.ui:4537
 msgid ""
 "The deblocking filter removes a common type of compression artifact.\n"
 "If your source exhibits 'blockiness', this filter may help clean it up."
@@ -1058,20 +1097,21 @@ msgstr ""
 "De ontblokkingfilter verwijdert een veelvoorkomend artefact van compressie.\n"
 "Als de bron 'blokkig' is, kan deze filter het helpen opschonen."
 
-#: src/ghb3.ui:4567 src/ghb3.ui:4670 src/ghb3.ui:4750 src/ghb3.ui:4851
-#: src/ghb3.ui:5349
+#: src/ui-gtk3/ghb.ui:4561 src/ui-gtk3/ghb.ui:4664 src/ui-gtk3/ghb.ui:4744
+#: src/ui-gtk3/ghb.ui:4845 src/ui-gtk3/ghb.ui:5343
 msgid "Tune:"
 msgstr "Regelen:"
 
-#: src/ghb3.ui:4577
+#: src/ui-gtk3/ghb.ui:4571
 msgid ""
 "The deblocking filter removes a common type of compression artifact.\n"
 "    If your source exhibits 'blockiness', this filter may help clean it up."
 msgstr ""
-"Het deblocking-filter verwijdert een veelvoorkomend artefact van compressie.\n"
+"Het deblocking-filter verwijdert een veelvoorkomend artefact van "
+"compressie.\n"
 "   Als de bron 'blokkig' is, kan deze filter het helpen opschonen."
 
-#: src/ghb3.ui:4585 src/ghb3.ui:4768
+#: src/ui-gtk3/ghb.ui:4579 src/ui-gtk3/ghb.ui:4762
 msgid ""
 "Custom deblock filter string format\n"
 "\n"
@@ -1081,31 +1121,36 @@ msgstr ""
 "\n"
 "   strength=weak|strong:thresh=0-100:blocksize=4-512"
 
-#: src/ghb3.ui:4606
+#: src/ui-gtk3/ghb.ui:4600
 msgid "Denoise Filter:"
 msgstr "Ontruisfilter"
 
-#: src/ghb3.ui:4622
+#: src/ui-gtk3/ghb.ui:4616
 msgid ""
 "Denoise filtering reduces or removes the appearance of noise and grain.\n"
-"Film grain and other types of high frequency noise are difficult to compress.\n"
+"Film grain and other types of high frequency noise are difficult to "
+"compress.\n"
 "Using this filter on such sources can result in smaller file sizes."
 msgstr ""
 "De ontruisfilter vermindert of verwijdert zichtbare ruis of filmkorrel.\n"
-"Filmkorrel en andere soorten hoogfrequente ruis zijn moeilijk te comprimeren.\n"
-"Deze filter op dergelijke bronnen te gebruiken kan resulteren in kleinere bestanden."
+"Filmkorrel en andere soorten hoogfrequente ruis zijn moeilijk te "
+"comprimeren.\n"
+"Deze filter op dergelijke bronnen te gebruiken kan resulteren in kleinere "
+"bestanden."
 
-#: src/ghb3.ui:4657 src/ghb3.ui:4680
+#: src/ui-gtk3/ghb.ui:4651 src/ui-gtk3/ghb.ui:4674
 msgid ""
 "Denoise filtering reduces or removes the appearance of noise and grain.\n"
-"    Film grain and other types of high frequency noise are difficult to compress.\n"
+"    Film grain and other types of high frequency noise are difficult to "
+"compress.\n"
 "    Using this filter on such sources can result in smaller file sizes."
 msgstr ""
 "Het denoise-filter vermindert of verwijdert zichtbare ruis of filmkorrel.\n"
-"    Filmkorrel en andere soorten hoogfrequente ruis zijn moeilijk te comprimeren.\n"
+"    Filmkorrel en andere soorten hoogfrequente ruis zijn moeilijk te "
+"comprimeren.\n"
 "   Toepassing van dit filter kan resulteren in kleinere bestanden."
 
-#: src/ghb3.ui:4689 src/ghb3.ui:4869
+#: src/ui-gtk3/ghb.ui:4683 src/ui-gtk3/ghb.ui:4863
 msgid ""
 "Custom denoise filter string format\n"
 "\n"
@@ -1115,11 +1160,11 @@ msgstr ""
 "\n"
 "SpatialLuma:SpatialChroma:TemporalLuma:TemporalChroma"
 
-#: src/ghb3.ui:4710
+#: src/ui-gtk3/ghb.ui:4704
 msgid "Chroma Smooth Filter:"
 msgstr "Chroma Smooth filter:"
 
-#: src/ghb3.ui:4726
+#: src/ui-gtk3/ghb.ui:4720
 msgid ""
 "The chroma smooth filter removes common color artifacts.\n"
 "Lower resolution analog source content may benefit from this filter."
@@ -1127,7 +1172,7 @@ msgstr ""
 "Het chroma smooth filter verwijdert veelvoorkomende kleurartefacten.\n"
 "Analoge broninhoud met een lagere resolutie kan van dit filter profiteren."
 
-#: src/ghb3.ui:4760
+#: src/ui-gtk3/ghb.ui:4754
 msgid ""
 "The chroma smooth filter removes common color artifacts.\n"
 "    Lower resolution analog source content may benefit from this filter."
@@ -1135,11 +1180,11 @@ msgstr ""
 "Het chroma smooth filter verwijdert veelvoorkomende kleurartefacten.\n"
 "   Analoge broninhoud met een lagere resolutie kan van dit filter profiteren."
 
-#: src/ghb3.ui:4789
+#: src/ui-gtk3/ghb.ui:4783
 msgid "Sharpen Filter:"
 msgstr "Scherptefilter:"
 
-#: src/ghb3.ui:4805
+#: src/ui-gtk3/ghb.ui:4799
 msgid ""
 "Sharpen filtering enhances edges and other\n"
 "high frequency components in the video."
@@ -1147,7 +1192,7 @@ msgstr ""
 "De scherptefilter versterkt randen en andere\n"
 "hoogfrequente componenten in de video."
 
-#: src/ghb3.ui:4839 src/ghb3.ui:4861
+#: src/ui-gtk3/ghb.ui:4833 src/ui-gtk3/ghb.ui:4855
 msgid ""
 "Sharpen filtering enhances edges and other\n"
 "    high frequency components in the video."
@@ -1155,39 +1200,39 @@ msgstr ""
 "Het Sharpen-filter versterkt randen en andere\n"
 "hoogfrequente componenten in de video."
 
-#: src/ghb3.ui:4890
+#: src/ui-gtk3/ghb.ui:4884
 msgid "Colorspace:"
 msgstr "Kleurruimte:"
 
-#: src/ghb3.ui:4906
+#: src/ui-gtk3/ghb.ui:4900
 msgid "Translate the colorspace of the source."
 msgstr "Vertaal de kleurenruimte van de bron."
 
-#: src/ghb3.ui:4935 src/hb-backend.c:4896
+#: src/ui-gtk3/ghb.ui:4929 src/hb-backend.c:4878
 msgid "Grayscale"
 msgstr "Grijswaarden"
 
-#: src/ghb3.ui:4940
+#: src/ui-gtk3/ghb.ui:4934
 msgid "If enabled, filter colour components out of video."
 msgstr "Indien ingeschakeld, filter kleurcomponenten uit de video."
 
-#: src/ghb3.ui:4957
+#: src/ui-gtk3/ghb.ui:4951
 msgid "Filters"
 msgstr "Filters"
 
-#: src/ghb3.ui:4988
+#: src/ui-gtk3/ghb.ui:4982
 msgid "Video Encoder:"
 msgstr "Video-encoder:"
 
-#: src/ghb3.ui:5002
+#: src/ui-gtk3/ghb.ui:4996
 msgid "Available video encoders."
 msgstr "Beschikbare video-encoders"
 
-#: src/ghb3.ui:5018
+#: src/ui-gtk3/ghb.ui:5012
 msgid "Framerate:"
 msgstr "Framesnelheid:"
 
-#: src/ghb3.ui:5033
+#: src/ui-gtk3/ghb.ui:5027
 msgid ""
 "Output framerate.\n"
 "\n"
@@ -1199,19 +1244,19 @@ msgstr ""
 "'Zelfde als bron' is aangeraden. Als de bronvideo een variabele\n"
 "framesnelheid heeft, zal 'Zelfde als bron' deze behouden."
 
-#: src/ghb3.ui:5048
+#: src/ui-gtk3/ghb.ui:5042
 msgid "Constant Framerate"
 msgstr "Constante framesnelheid"
 
-#: src/ghb3.ui:5053
+#: src/ui-gtk3/ghb.ui:5047
 msgid "Enables constant framerate output."
 msgstr "Stelt een constante framesnelheid in voor de uitvoer."
 
-#: src/ghb3.ui:5067
+#: src/ui-gtk3/ghb.ui:5061
 msgid "Peak Framerate (VFR)"
 msgstr "Piek-framesnelheid (VFR)"
 
-#: src/ghb3.ui:5072
+#: src/ui-gtk3/ghb.ui:5066
 msgid ""
 "Enables variable framerate output with a peak\n"
 "rate determined by the framerate setting.\n"
@@ -1223,11 +1268,11 @@ msgstr ""
 "\n"
 "VFR is niet compatibel met sommige spelers."
 
-#: src/ghb3.ui:5090
+#: src/ui-gtk3/ghb.ui:5084
 msgid "Variable Framerate"
 msgstr "Variabele framesnelheid"
 
-#: src/ghb3.ui:5095
+#: src/ui-gtk3/ghb.ui:5089
 msgid ""
 "Enables variable framerate output.\n"
 "\n"
@@ -1237,7 +1282,7 @@ msgstr ""
 "\n"
 "VFR is niet compatibel met sommige spelers."
 
-#: src/ghb3.ui:5131 src/ghb3.ui:5163
+#: src/ui-gtk3/ghb.ui:5125 src/ui-gtk3/ghb.ui:5157
 msgid ""
 "Set the desired quality factor.\n"
 "The encoder targets a certain quality.\n"
@@ -1265,21 +1310,23 @@ msgstr ""
 "FFMpeg en Theora hebben een meer lineaire schaal.\n"
 "Deze encoders hebben geen verliesloze modus."
 
-#: src/ghb3.ui:5158
+#: src/ui-gtk3/ghb.ui:5152
 msgid "Constant Quality:"
 msgstr "Constante kwaliteit:"
 
-#: src/ghb3.ui:5189
+#: src/ui-gtk3/ghb.ui:5183
 msgid "Bitrate (kbps):    "
 msgstr "Bitsnelheid (kbps):"
 
-#: src/ghb3.ui:5194 src/ghb3.ui:5216
+#: src/ui-gtk3/ghb.ui:5188 src/ui-gtk3/ghb.ui:5210
 msgid ""
 "Set the average bitrate.\n"
 "\n"
 "The instantaneous bitrate can be much higher or lower at any point in time.\n"
-"But the average over a long duration will be the value set here.  If you need\n"
-"to limit instantaneous bitrate, look into x264's vbv-bufsize and vbv-maxrate settings."
+"But the average over a long duration will be the value set here.  If you "
+"need\n"
+"to limit instantaneous bitrate, look into x264's vbv-bufsize and vbv-maxrate "
+"settings."
 msgstr ""
 "Stel de gemiddelde bitsnelheid in.\n"
 "\n"
@@ -1288,29 +1335,31 @@ msgstr ""
 "waarde zijn. Als de momentane bitsnelheid beperkt moet worden, moeten\n"
 "de vbv-bufsize- and vbv-maxrate-instellingen van x264 bekeken worden."
 
-#: src/ghb3.ui:5233
+#: src/ui-gtk3/ghb.ui:5227
 msgid "Multi-Pass Encoding"
 msgstr "Meervoudige fasecodering"
 
-#: src/ghb3.ui:5238
+#: src/ui-gtk3/ghb.ui:5232
 msgid ""
 "Perform Multi Pass Encoding.\n"
 "\n"
-"The 'Bitrate' option is prerequisite. During the analysis passes, statistics about\n"
+"The 'Bitrate' option is prerequisite. During the analysis passes, statistics "
+"about\n"
 "the video are collected.  Then in the final pass, those statistics are used\n"
 "to make bitrate allocation decisions."
 msgstr ""
 "Meervoudige fasecodering uitvoeren.\n"
 "\n"
-"De optie 'Bitrate'-optie is vereist. Tijdens de analysefase worden statistieken over \n"
+"De optie 'Bitrate'-optie is vereist. Tijdens de analysefase worden "
+"statistieken over \n"
 "de video verzameld. In de laatste fase worden deze gebruikt \n"
 "om beslissingen over bitrate-toewijzing te nemen."
 
-#: src/ghb3.ui:5256
+#: src/ui-gtk3/ghb.ui:5250
 msgid "Turbo Analysis Pass"
 msgstr "Turbo analysefase"
 
-#: src/ghb3.ui:5261
+#: src/ui-gtk3/ghb.ui:5255
 msgid ""
 "During the analysis pass of a multi pass encode, use settings that speed "
 "things along."
@@ -1318,13 +1367,15 @@ msgstr ""
 "Gebruik tijdens de analysepas van een meervoudige fasecodering instellingen "
 "die zaken versnellen."
 
-#: src/ghb3.ui:5323
+#: src/ui-gtk3/ghb.ui:5317
 msgid ""
-"Adjusts encoder settings to trade off compression efficiency against encoding speed.\n"
+"Adjusts encoder settings to trade off compression efficiency against "
+"encoding speed.\n"
 "\n"
 "This establishes your default encoder settings.\n"
 "Tunes, profiles, levels and extra options string will be applied to this.\n"
-"You should generally set this option to the slowest you can bear since slower\n"
+"You should generally set this option to the slowest you can bear since "
+"slower\n"
 "settings will result in better quality or smaller files."
 msgstr ""
 "Past de encoder-instellingen aan om compressie-efficiëntie tegen\n"
@@ -1336,7 +1387,7 @@ msgstr ""
 "als draaglijk moeten ingesteld worden, aangezien tragere instellingen\n"
 "een betere kwaliteit of kleinere bestanden oplevert."
 
-#: src/ghb3.ui:5366
+#: src/ui-gtk3/ghb.ui:5360
 msgid ""
 "Tune settings to optimize for common scenarios.\n"
 "\n"
@@ -1350,11 +1401,11 @@ msgstr ""
 "of karakteristieken in de uitvoer instellen. Veranderingen worden\n"
 "toegepast na de voorinstelling maar vóór alle andere parameters."
 
-#: src/ghb3.ui:5382
+#: src/ui-gtk3/ghb.ui:5376
 msgid "Fast Decode"
 msgstr "Snel decoderen"
 
-#: src/ghb3.ui:5387
+#: src/ui-gtk3/ghb.ui:5381
 msgid ""
 "Reduce decoder CPU usage.\n"
 "\n"
@@ -1365,11 +1416,11 @@ msgstr ""
 "Stel dit in als uw apparaat moeite heeft om de uitvoer af te spelen\n"
 "(verloren frames)."
 
-#: src/ghb3.ui:5405
+#: src/ui-gtk3/ghb.ui:5399
 msgid "Zero Latency"
 msgstr "Geen vertraging"
 
-#: src/ghb3.ui:5409
+#: src/ui-gtk3/ghb.ui:5403
 msgid ""
 "Minimize latency between input to encoder and output of decoder.\n"
 "\n"
@@ -1378,17 +1429,18 @@ msgid ""
 "Since HandBrake is not suitable for live stream broadcast purposes,\n"
 "this setting is of little value here."
 msgstr ""
-"Minimaliseert vertraging tussen input naar de encoder en output van de decoder.\n"
+"Minimaliseert vertraging tussen input naar de encoder en output van de "
+"decoder.\n"
 "\n"
 "Dit is nuttig voor de uitzending van live-beelden.\n"
 "Aangezien HandBrake niet geschikt is voor uitzending van live-beelden,\n"
 "heeft deze instelling weinig nut."
 
-#: src/ghb3.ui:5433
+#: src/ui-gtk3/ghb.ui:5427
 msgid "Profile:"
 msgstr "Profiel:"
 
-#: src/ghb3.ui:5450
+#: src/ui-gtk3/ghb.ui:5444
 msgid ""
 "Sets and ensures compliance with the specified profile.\n"
 "\n"
@@ -1398,11 +1450,11 @@ msgstr ""
 "\n"
 "Heeft voorrang op alle andere instellingen."
 
-#: src/ghb3.ui:5468
+#: src/ui-gtk3/ghb.ui:5462
 msgid "Level:"
 msgstr "Niveau:"
 
-#: src/ghb3.ui:5485
+#: src/ui-gtk3/ghb.ui:5479
 msgid ""
 "Sets and ensures compliance with the specified level.\n"
 "\n"
@@ -1412,11 +1464,11 @@ msgstr ""
 "\n"
 "Heeft voorrang op alle andere instellingen."
 
-#: src/ghb3.ui:5510
+#: src/ui-gtk3/ghb.ui:5504
 msgid "More Settings:"
 msgstr "Meer instellingen:"
 
-#: src/ghb3.ui:5528
+#: src/ui-gtk3/ghb.ui:5522
 msgid ""
 "Additional encoder settings.\n"
 "\n"
@@ -1426,205 +1478,227 @@ msgstr ""
 "\n"
 "Lijst van encoder-opties, gescheiden door dubbel punt."
 
-#: src/ghb3.ui:5562 src/callbacks.c:5756
+#: src/ui-gtk3/ghb.ui:5556 src/callbacks.c:5447
 msgid "Video"
 msgstr "Video"
 
 #. Add Button
-#: src/ghb3.ui:5626 src/ghb3.ui:5819 src/ghb3.ui:6396 src/ghb3.ui:6616
-#: src/ghb3.ui:7561 src/audiohandler.c:1758
+#: src/ui-gtk3/ghb.ui:5620 src/ui-gtk3/ghb.ui:5813 src/ui-gtk3/ghb.ui:6390
+#: src/ui-gtk3/ghb.ui:6610 src/ui-gtk3/ghb.ui:7555 src/audiohandler.c:1758
 msgid "Add"
 msgstr "Toevoegen"
 
-#: src/ghb3.ui:5628
+#: src/ui-gtk3/ghb.ui:5622
 msgid "Add new audio settings to the list"
 msgstr "Voeg nieuwe audio-instellingen toe aan de lijst"
 
-#: src/ghb3.ui:5638 src/ghb3.ui:6408
+#: src/ui-gtk3/ghb.ui:5632 src/ui-gtk3/ghb.ui:6402
 msgid "Add All"
 msgstr "Allen toevoegen"
 
-#: src/ghb3.ui:5640
+#: src/ui-gtk3/ghb.ui:5634
 msgid "Add all audio tracks to the list"
 msgstr "Voeg alle audio-tracks toe aan de lijst"
 
-#: src/ghb3.ui:5653
+#: src/ui-gtk3/ghb.ui:5647
 msgid "Reload all audio settings from defaults"
 msgstr "Stel alle audio-instellingen in op hun standaard."
 
-#: src/ghb3.ui:5697 src/ghb3.ui:6481
+#: src/ui-gtk3/ghb.ui:5691 src/ui-gtk3/ghb.ui:6475
 msgid "Track List"
 msgstr "Track-lijst"
 
-#: src/ghb3.ui:5728 src/ghb3.ui:6516
+#: src/ui-gtk3/ghb.ui:5722 src/ui-gtk3/ghb.ui:6510
 msgid "Selection Behavior:"
 msgstr "Selectiegedrag:"
 
-#: src/ghb3.ui:5743
+#: src/ui-gtk3/ghb.ui:5737
 msgid "Choose which audio tracks of the source media are used."
 msgstr "Kies welke audio-tracks van de bron-media gebruikt worden."
 
-#: src/ghb3.ui:5804
+#: src/ui-gtk3/ghb.ui:5798
 msgid ""
 "Create a list of languages you would like to select audio for.\n"
-"Tracks matching these languages will be selected using the chosen Selection Behavior."
+"Tracks matching these languages will be selected using the chosen Selection "
+"Behavior."
 msgstr ""
 "Maak een lijst van talen waarvoor audio geselecteerd wordt.\n"
-"Tracks die overeenkomen met deze talen worden geselecteerd door het gekozen selectiegedrag."
+"Tracks die overeenkomen met deze talen worden geselecteerd door het gekozen "
+"selectiegedrag."
 
-#: src/ghb3.ui:5835 src/ghb3.ui:6632
+#: src/ui-gtk3/ghb.ui:5829 src/ui-gtk3/ghb.ui:6626
 msgid "Remove"
 msgstr "Verwijderen"
 
-#: src/ghb3.ui:5853 src/ghb3.ui:6650
+#: src/ui-gtk3/ghb.ui:5847 src/ui-gtk3/ghb.ui:6644
 msgid "Available Languages"
 msgstr "Beschikbare talen"
 
-#: src/ghb3.ui:5866 src/ghb3.ui:6663
+#: src/ui-gtk3/ghb.ui:5860 src/ui-gtk3/ghb.ui:6657
 msgid "Selected Languages"
 msgstr "Geselecteerde talen"
 
-#: src/ghb3.ui:5882
+#: src/ui-gtk3/ghb.ui:5876
 msgid "Use only first encoder for secondary audio"
 msgstr "Gebruik enkel de eerste encoder voor secundaire audio"
 
-#: src/ghb3.ui:5887
+#: src/ui-gtk3/ghb.ui:5881
 msgid ""
 "Only the primary audio track will be encoded with the full encoder list.\n"
-"All other secondary audio output tracks will be encoded with first encoder only."
+"All other secondary audio output tracks will be encoded with first encoder "
+"only."
 msgstr ""
-"Enkel de primaire audio-track wordt geëncodeerd met de volledige encoder-lijst.\n"
-"Alle andere, secundaire audio-tracks voor uitvoer worden enkel met de eerste encoder geëncodeerd."
+"Enkel de primaire audio-track wordt geëncodeerd met de volledige encoder-"
+"lijst.\n"
+"Alle andere, secundaire audio-tracks voor uitvoer worden enkel met de eerste "
+"encoder geëncodeerd."
 
-#: src/ghb3.ui:5923
+#: src/ui-gtk3/ghb.ui:5917
 msgid "Auto Passthru:"
 msgstr "Auto Passthru:"
 
-#: src/ghb3.ui:5934
+#: src/ui-gtk3/ghb.ui:5928
 msgid "MP2"
 msgstr "MP2"
 
-#: src/ghb3.ui:5939
+#: src/ui-gtk3/ghb.ui:5933
 msgid ""
 "Enable this if your playback device supports MP2.\n"
-"This permits MP2 passthru to be selected when automatic passthru selection is enabled."
+"This permits MP2 passthru to be selected when automatic passthru selection "
+"is enabled."
 msgstr ""
 "Schakel dit in als uw afspeelapparaat MP2 ondersteunt.\n"
-"Hierdoor kan MP2-doorgave worden geselecteerd wanneer automatische doorgave-selectie is ingeschakeld."
+"Hierdoor kan MP2-doorgave worden geselecteerd wanneer automatische doorgave-"
+"selectie is ingeschakeld."
 
-#: src/ghb3.ui:5955
+#: src/ui-gtk3/ghb.ui:5949
 msgid "MP3"
 msgstr "MP3"
 
-#: src/ghb3.ui:5960
+#: src/ui-gtk3/ghb.ui:5954
 msgid ""
 "Enable this if your playback device supports MP3.\n"
-"This permits MP3 passthru to be selected when automatic passthru selection is enabled."
+"This permits MP3 passthru to be selected when automatic passthru selection "
+"is enabled."
 msgstr ""
 "Schakel dit in als uw afspeelapparaat MP3 ondersteunt.\n"
 "Dit laat toe om MP3 passthru te selecteren als Auto Passthru is ingeschakeld."
 
-#: src/ghb3.ui:5976
+#: src/ui-gtk3/ghb.ui:5970
 msgid "AC-3"
 msgstr "AC-3"
 
-#: src/ghb3.ui:5981
+#: src/ui-gtk3/ghb.ui:5975
 msgid ""
 "Enable this if your playback device supports AC-3.\n"
-"This permits AC-3 passthru to be selected when automatic passthru selection is enabled."
+"This permits AC-3 passthru to be selected when automatic passthru selection "
+"is enabled."
 msgstr ""
 "Schakel dit in als uw afspeelapparaat AC-3 ondersteunt.\n"
-"Dit laat toe om AC-3 passthru te selecteren als Auto Passthru is ingeschakeld."
+"Dit laat toe om AC-3 passthru te selecteren als Auto Passthru is "
+"ingeschakeld."
 
-#: src/ghb3.ui:5997
+#: src/ui-gtk3/ghb.ui:5991
 msgid "EAC-3"
 msgstr "EAC-3"
 
-#: src/ghb3.ui:6002
+#: src/ui-gtk3/ghb.ui:5996
 msgid ""
 "Enable this if your playback device supports EAC-3.\n"
-"This permits EAC-3 passthru to be selected when automatic passthru selection is enabled."
+"This permits EAC-3 passthru to be selected when automatic passthru selection "
+"is enabled."
 msgstr ""
 "Schakel dit in als uw afspeelapparaat EAC-3 ondersteunt.\n"
-"Dit laat toe om EAC-3 passthru te selecteren als Auto Passthru is ingeschakeld."
+"Dit laat toe om EAC-3 passthru te selecteren als Auto Passthru is "
+"ingeschakeld."
 
-#: src/ghb3.ui:6018
+#: src/ui-gtk3/ghb.ui:6012
 msgid "DTS"
 msgstr "DTS"
 
-#: src/ghb3.ui:6023
+#: src/ui-gtk3/ghb.ui:6017
 msgid ""
 "Enable this if your playback device supports DTS.\n"
-"This permits DTS passthru to be selected when automatic passthru selection is enabled."
+"This permits DTS passthru to be selected when automatic passthru selection "
+"is enabled."
 msgstr ""
 "Schakel dit in als uw afspeelapparaat DTS ondersteunt.\n"
 "Dit laat toe om DTS passthru te selecteren als Auto Passthru is ingeschakeld."
 
-#: src/ghb3.ui:6039
+#: src/ui-gtk3/ghb.ui:6033
 msgid "DTS-HD"
 msgstr "DTS-HD"
 
-#: src/ghb3.ui:6044
+#: src/ui-gtk3/ghb.ui:6038
 msgid ""
 "Enable this if your playback device supports DTS-HD.\n"
-"This permits DTS-HD passthru to be selected when automatic passthru selection is enabled."
+"This permits DTS-HD passthru to be selected when automatic passthru "
+"selection is enabled."
 msgstr ""
 "Schakel dit in als uw afspeelapparaat DTS-HD ondersteunt.\n"
-"Dit laat toe om DTS-HD passthru te selecteren als Auto Passthru is ingeschakeld."
+"Dit laat toe om DTS-HD passthru te selecteren als Auto Passthru is "
+"ingeschakeld."
 
-#: src/ghb3.ui:6060
+#: src/ui-gtk3/ghb.ui:6054
 msgid "TrueHD"
 msgstr "TrueHD"
 
-#: src/ghb3.ui:6065
+#: src/ui-gtk3/ghb.ui:6059
 msgid ""
 "Enable this if your playback device supports TrueHD.\n"
-"This permits TrueHD passthru to be selected when automatic passthru selection is enabled."
+"This permits TrueHD passthru to be selected when automatic passthru "
+"selection is enabled."
 msgstr ""
 "Schakel dit in als uw afspeelapparaat TrueHD ondersteunt.\n"
-"Dit laat toe om TrueHD passthru te selecteren als Auto Passthru is ingeschakeld."
+"Dit laat toe om TrueHD passthru te selecteren als Auto Passthru is "
+"ingeschakeld."
 
-#: src/ghb3.ui:6081
+#: src/ui-gtk3/ghb.ui:6075
 msgid "FLAC"
 msgstr "FLAC"
 
-#: src/ghb3.ui:6086
+#: src/ui-gtk3/ghb.ui:6080
 msgid ""
 "Enable this if your playback device supports FLAC.\n"
-"This permits FLAC passthru to be selected when automatic passthru selection is enabled."
+"This permits FLAC passthru to be selected when automatic passthru selection "
+"is enabled."
 msgstr ""
 "Schakel dit in als uw afspeelapparaat FLAC ondersteunt.\n"
-"Dit laat toe om FLAC passthru te selecteren als Auto Passthru is ingeschakeld."
+"Dit laat toe om FLAC passthru te selecteren als Auto Passthru is "
+"ingeschakeld."
 
-#: src/ghb3.ui:6102
+#: src/ui-gtk3/ghb.ui:6096
 msgid "AAC"
 msgstr "AAC"
 
-#: src/ghb3.ui:6107
+#: src/ui-gtk3/ghb.ui:6101
 msgid ""
 "Enable this if your playback device supports AAC.\n"
-"This permits AAC passthru to be selected when automatic passthru selection is enabled."
+"This permits AAC passthru to be selected when automatic passthru selection "
+"is enabled."
 msgstr ""
 "Schakel dit in als uw afspeelapparaat AAC ondersteunt.\n"
 "Dit laat toe om AAC passthru te selecteren als Auto Passthru is ingeschakeld."
 
-#: src/ghb3.ui:6123
+#: src/ui-gtk3/ghb.ui:6117
 msgid "Opus"
 msgstr "Opus"
 
-#: src/ghb3.ui:6128
+#: src/ui-gtk3/ghb.ui:6122
 msgid ""
 "Enable this if your playback device supports Opus.\n"
-"This permits Opus passthru to be selected when automatic passthru selection is enabled."
+"This permits Opus passthru to be selected when automatic passthru selection "
+"is enabled."
 msgstr ""
 "Schakel dit in als uw afspeelapparaat Opus ondersteunt.\n"
-"Hierdoor kan Opus-doorgave worden geselecteerd wanneer automatische doorgave-selectie is ingeschakeld."
+"Hierdoor kan Opus-doorgave worden geselecteerd wanneer automatische doorgave-"
+"selectie is ingeschakeld."
 
-#: src/ghb3.ui:6161
+#: src/ui-gtk3/ghb.ui:6155
 msgid "Passthru Fallback:"
 msgstr "Passthru terugval-track:"
 
-#: src/ghb3.ui:6173
+#: src/ui-gtk3/ghb.ui:6167
 msgid ""
 "Set the audio codec to encode with when a suitable track can not be found "
 "for audio passthru."
@@ -1632,63 +1706,62 @@ msgstr ""
 "Stel de audio-codec om te encoderen in wanneer geen geschikte track voor "
 "audio-passthru kan gevonden worden."
 
-#: src/ghb3.ui:6202
+#: src/ui-gtk3/ghb.ui:6196
 msgid "<b>Audio Encoder Settings:</b>"
 msgstr "<b>Audio-encoder-instellingen:</b>"
 
-#: src/ghb3.ui:6203
+#: src/ui-gtk3/ghb.ui:6197
 msgid "Each selected source track will be encoded with all selected encoders"
 msgstr ""
 "Elke geselcteerde bron-track zal worden geëncodeerd met alle geselecteerde "
 "encoders."
 
-#: src/ghb3.ui:6228 src/ghb3.ui:9848
+#: src/ui-gtk3/ghb.ui:6222 src/ui-gtk3/ghb.ui:9805
 msgid "Encoder"
 msgstr "Encoder"
 
-#: src/ghb3.ui:6239 src/ghb3.ui:9861
+#: src/ui-gtk3/ghb.ui:6233 src/ui-gtk3/ghb.ui:9818
 msgid "Bitrate/Quality"
 msgstr "Bitsnelheid/Kwaliteit"
 
-#: src/ghb3.ui:6250
+#: src/ui-gtk3/ghb.ui:6244
 msgid "Mixdown"
 msgstr "Mixdown"
 
-#: src/ghb3.ui:6261
+#: src/ui-gtk3/ghb.ui:6255
 msgid "Samplerate"
 msgstr "Sample-snelheid"
 
-#: src/ghb3.ui:6272 src/ghb3.ui:9905 src/queuehandler.c:610
+#: src/ui-gtk3/ghb.ui:6266 src/ui-gtk3/ghb.ui:9862 src/queuehandler.c:610
 msgid "Gain"
 msgstr "Versterking"
 
-#: src/ghb3.ui:6283 src/ghb3.ui:9924
+#: src/ui-gtk3/ghb.ui:6277 src/ui-gtk3/ghb.ui:9881
 msgid "DRC"
 msgstr "DRC"
 
-#: src/ghb3.ui:6320 src/ghb3.ui:6876
+#: src/ui-gtk3/ghb.ui:6314 src/ui-gtk3/ghb.ui:6870
 msgid "Track Selection"
 msgstr "Track-selectie"
 
-#: src/ghb3.ui:6332
+#: src/ui-gtk3/ghb.ui:6326
 msgid "Audio"
 msgstr "Audio"
 
-#: src/ghb3.ui:6398
+#: src/ui-gtk3/ghb.ui:6392
 msgid "Add new subtitle settings to the list"
 msgstr "Voeg nieuwe ondertitel-instellingen toe aan de lijst"
 
-#: src/ghb3.ui:6410
+#: src/ui-gtk3/ghb.ui:6404
 msgid "Add all subtitle tracks to the list"
 msgstr "Voeg alle ondertitel-tracks toe aan de lijst"
 
-#: src/ghb3.ui:6420 src/callbacks.c:2356 src/queuehandler.c:647
-#: src/queuehandler.c:1083 src/subtitlehandler.c:414
-#: src/subtitlehandler.c:1245
+#: src/ui-gtk3/ghb.ui:6414 src/callbacks.c:2344 src/queuehandler.c:647
+#: src/queuehandler.c:1083 src/subtitlehandler.c:414 src/subtitlehandler.c:1221
 msgid "Foreign Audio Scan"
 msgstr "Vreemde taal audio-scan"
 
-#: src/ghb3.ui:6422
+#: src/ui-gtk3/ghb.ui:6416
 msgid ""
 "Add an extra pass to the encode which searches\n"
 "for subtitle candidates that provide subtitles for\n"
@@ -1698,40 +1771,45 @@ msgstr ""
 "zoeken naar kandidaat-ondertitels die tekst voorzien\n"
 "voor audiosegmenten in een vreemde taal."
 
-#: src/ghb3.ui:6437
+#: src/ui-gtk3/ghb.ui:6431
 msgid "Reload all subtitle settings from defaults"
 msgstr "Stel alle ondertitel-instellingen in op hun standaard."
 
-#: src/ghb3.ui:6531
+#: src/ui-gtk3/ghb.ui:6525
 msgid "Choose which subtitle tracks of the source media are used."
 msgstr "Kies welke ondertitel-tracks van de bronmedia gebruikt worden."
 
-#: src/ghb3.ui:6596
+#: src/ui-gtk3/ghb.ui:6590
 msgid ""
 "Create a list of languages you would like to select subtitles for.\n"
-"Tracks matching these languages will be selected using the chosen Selection Behavior.\n"
+"Tracks matching these languages will be selected using the chosen Selection "
+"Behavior.\n"
 "\n"
-"The first language in this list is your \"preferred\" language and will be used\n"
+"The first language in this list is your \"preferred\" language and will be "
+"used\n"
 "for determining subtitle selection settings when there is foreign audio."
 msgstr ""
 "Maak en lijst van talen waarvoor ondertitels moeten geselecteerd worden.\n"
-"Tracks die overeenkomen met deze talen worden geselecteerd door het gekozen selectiegedrag.\n"
+"Tracks die overeenkomen met deze talen worden geselecteerd door het gekozen "
+"selectiegedrag.\n"
 "\n"
 "De eerste taal in deze lijst is de \"voorkeur\"-taal en wordt gebruikt om\n"
 "de selectie van ondertitels te bepalen als er vreemde talen gesproken worden."
 
-#: src/ghb3.ui:6677
+#: src/ui-gtk3/ghb.ui:6671
 msgid "Preferred Language: None"
 msgstr "Voorkeurstaal: Geen"
 
-#: src/ghb3.ui:6704
+#: src/ui-gtk3/ghb.ui:6698
 msgid "Add Foreign Audio Scan Pass"
 msgstr "Voeg fase voor vreemde talen toe"
 
-#: src/ghb3.ui:6709
+#: src/ui-gtk3/ghb.ui:6703
 msgid ""
-"Add \"Foreign Audio Scan\" when the default audio track is your preferred language.\n"
-"This search pass finds short sequences of foreign audio and provides subtitles for them.\n"
+"Add \"Foreign Audio Scan\" when the default audio track is your preferred "
+"language.\n"
+"This search pass finds short sequences of foreign audio and provides "
+"subtitles for them.\n"
 "\n"
 "This option requires a language to be set in the Selected Languages list."
 msgstr ""
@@ -1741,26 +1819,28 @@ msgstr ""
 "\n"
 "Voor deze optie moet er een taal in de lijst met geselcteerde talen zijn."
 
-#: src/ghb3.ui:6724
+#: src/ui-gtk3/ghb.ui:6718
 msgid "Add subtitle track if default audio is foreign"
 msgstr ""
 "Voeg ondertitel-track toe als de standaard-audio in een vreemde taal is."
 
-#: src/ghb3.ui:6729
+#: src/ui-gtk3/ghb.ui:6723
 msgid ""
-"When the default audio track is not your preferred language, add a subtitle track.\n"
+"When the default audio track is not your preferred language, add a subtitle "
+"track.\n"
 "\n"
 "This option requires a language to be set in the Selected Languages list."
 msgstr ""
-"Wanneer de standaard-audio-track niet in de voorkeurstaal is, voeg een ondertitel-track toe.\n"
+"Wanneer de standaard-audio-track niet in de voorkeurstaal is, voeg een "
+"ondertitel-track toe.\n"
 "\n"
 "Deze optie vereist dat er een taal in de lijst met geselcteerde talen is"
 
-#: src/ghb3.ui:6743
+#: src/ui-gtk3/ghb.ui:6737
 msgid "Add Closed Captions when available"
 msgstr "Voeg bijgesloten ondertitels toe indien voorhanden."
 
-#: src/ghb3.ui:6748
+#: src/ui-gtk3/ghb.ui:6742
 msgid ""
 "Closed captions are text subtitles that can be added to any container as a "
 "soft subtitle track"
@@ -1768,62 +1848,76 @@ msgstr ""
 "Bijgesloten ondertitels zijn ondertitels die aan elke container kunnen "
 "toegevoegd worden als een \"soft\" ondertitel-track"
 
-#: src/ghb3.ui:6769
+#: src/ui-gtk3/ghb.ui:6763
 msgid "Burn-In Behavior*:"
 msgstr "Burn-In-gedrag*:"
 
-#: src/ghb3.ui:6781
+#: src/ui-gtk3/ghb.ui:6775
 msgid ""
 "Set the behavior of subtitle \"Burn-In\".\n"
 "\n"
-"Burned-In subtitles are part of the video and can not be disabled during playback.\n"
-"Only one subtitle track can be burned! Since conflicts can occur, the first chosen wins."
+"Burned-In subtitles are part of the video and can not be disabled during "
+"playback.\n"
+"Only one subtitle track can be burned! Since conflicts can occur, the first "
+"chosen wins."
 msgstr ""
 "Stel het gedrag van ondertitel-\"Burn-In\" in.\n"
 "\n"
-"Ondertitels met \"Burn-In\" zijn een deel van de video en kunnen niet uitgeschakeld\n"
-"worden tijdens het afspelen. Slechts één ondertitel-track kan gebruikt worden!\n"
+"Ondertitels met \"Burn-In\" zijn een deel van de video en kunnen niet "
+"uitgeschakeld\n"
+"worden tijdens het afspelen. Slechts één ondertitel-track kan gebruikt "
+"worden!\n"
 "Aangezien conflicten kunnen optreden, wint de eerstgekozen ondertitel."
 
-#: src/ghb3.ui:6808
+#: src/ui-gtk3/ghb.ui:6802
 msgid "Burn-In for deficient players*:"
 msgstr "Burn-In voor gebrekkige spelers*:"
 
-#: src/ghb3.ui:6817
+#: src/ui-gtk3/ghb.ui:6811
 msgid "DVD Subtitles"
 msgstr "DVD-ondertitels"
 
-#: src/ghb3.ui:6822
+#: src/ui-gtk3/ghb.ui:6816
 msgid ""
-"Burn the first selected DVD subtitle track. All other DVD subtitle tracks will be discarded.\n"
-"Use this option if your player software or device does not support DVD subtitles.\n"
+"Burn the first selected DVD subtitle track. All other DVD subtitle tracks "
+"will be discarded.\n"
+"Use this option if your player software or device does not support DVD "
+"subtitles.\n"
 "\n"
-"Only one subtitle track can be burned! Since conflicts can occur, the first chosen wins."
+"Only one subtitle track can be burned! Since conflicts can occur, the first "
+"chosen wins."
 msgstr ""
-"Brand de eerste geselecteerde DVD-ondertitel-track. Alle andere DVD-ondertitel-tracks worden verworpen.\n"
-"Gebruik deze optie als de speler of het afspeelapparaat geen DVD-ondertitels ondersteunt.\n"
+"Brand de eerste geselecteerde DVD-ondertitel-track. Alle andere DVD-"
+"ondertitel-tracks worden verworpen.\n"
+"Gebruik deze optie als de speler of het afspeelapparaat geen DVD-ondertitels "
+"ondersteunt.\n"
 "\n"
 "Slechts één ondertitel-track kan gebruikt worden!\n"
 "Aangezien conflicten kunnen optreden, wint de eerstgekozen ondertitel."
 
-#: src/ghb3.ui:6836
+#: src/ui-gtk3/ghb.ui:6830
 msgid "Blu-ray Subtitles"
 msgstr "Blu-ray-ondertitels"
 
-#: src/ghb3.ui:6841
+#: src/ui-gtk3/ghb.ui:6835
 msgid ""
-"Burn the first selected Blu-ray subtitle track. All other Blu-ray subtitle tracks will be discarded.\n"
-"Use this option if your player software or device does not support Blu-ray subtitles.\n"
+"Burn the first selected Blu-ray subtitle track. All other Blu-ray subtitle "
+"tracks will be discarded.\n"
+"Use this option if your player software or device does not support Blu-ray "
+"subtitles.\n"
 "\n"
-"Only one subtitle track can be burned! Since conflicts can occur, the first chosen wins."
+"Only one subtitle track can be burned! Since conflicts can occur, the first "
+"chosen wins."
 msgstr ""
-"Brand de eerste geselecteerde Blu-ray-ondertitel-track. Alle andere Blu-ray-ondertitel-tracks worden verworpen.\n"
-"Gebruik deze optie als de speler of het afspeelapparaat geen Blu-ray-ondertitels ondersteunt.\n"
+"Brand de eerste geselecteerde Blu-ray-ondertitel-track. Alle andere Blu-ray-"
+"ondertitel-tracks worden verworpen.\n"
+"Gebruik deze optie als de speler of het afspeelapparaat geen Blu-ray-"
+"ondertitels ondersteunt.\n"
 "\n"
 "Slechts één ondertitel-track kan gebruikt worden!\n"
 "Aangezien conflicten kunnen optreden, wint de eerstgekozen ondertitel."
 
-#: src/ghb3.ui:6863
+#: src/ui-gtk3/ghb.ui:6857
 msgid ""
 "<small>* Only one of the above subtitle burn options will be applied, "
 "starting with the top.</small>"
@@ -1831,7 +1925,7 @@ msgstr ""
 "<small>* Slechts één van bovenstaande ondertitel-opties wordt toegepast, "
 "beginnend met de bovenste.</small>"
 
-#: src/ghb3.ui:6864
+#: src/ui-gtk3/ghb.ui:6858
 msgid ""
 "Only one subtitle track can be burned! Since conflicts can occur, the first "
 "chosen wins."
@@ -1839,203 +1933,203 @@ msgstr ""
 "Slechts één ondertitel-track kan ingebrand worden!\n"
 "Aangezien conflicten kunnen optreden, wint de eerstgekozen ondertitel."
 
-#: src/ghb3.ui:6888
+#: src/ui-gtk3/ghb.ui:6882
 msgid "Subtitles"
 msgstr "Ondertitels"
 
-#: src/ghb3.ui:6906 src/callbacks.c:2413 src/queuehandler.c:276
+#: src/ui-gtk3/ghb.ui:6900 src/callbacks.c:2401 src/queuehandler.c:276
 msgid "Chapter Markers"
 msgstr "Hoofdstukmarkeringen"
 
-#: src/ghb3.ui:6911
+#: src/ui-gtk3/ghb.ui:6905
 msgid "Add chapter markers to output file."
 msgstr "Voeg hoofdstukmarkeringen toe aan het uitvoerbestand."
 
-#: src/ghb3.ui:6922
+#: src/ui-gtk3/ghb.ui:6916
 msgid "Import Chapters"
 msgstr "Hoofdstukken importeren"
 
-#: src/ghb3.ui:6926
+#: src/ui-gtk3/ghb.ui:6920
 msgid "Import chapter list from an XML file"
 msgstr "Lijst met hoofdstukken importeren van een XML-bestand"
 
-#: src/ghb3.ui:6937
+#: src/ui-gtk3/ghb.ui:6931
 msgid "Export Chapters"
 msgstr "Hoofdstukken exporteren"
 
-#: src/ghb3.ui:6941
+#: src/ui-gtk3/ghb.ui:6935
 msgid "Export chapter list as an XML file"
 msgstr "Lijst met hoofdstukken bewerken als XML-bestand"
 
-#: src/ghb3.ui:6975
+#: src/ui-gtk3/ghb.ui:6969
 msgid "Index"
 msgstr "Index"
 
-#: src/ghb3.ui:6999
+#: src/ui-gtk3/ghb.ui:6993
 msgid "Duration"
 msgstr "Speelduur"
 
-#: src/ghb3.ui:7010
+#: src/ui-gtk3/ghb.ui:7004
 msgid "Title"
 msgstr "Titel"
 
-#: src/ghb3.ui:7047
+#: src/ui-gtk3/ghb.ui:7041
 msgid "Chapters"
 msgstr "Hoodstukken"
 
-#: src/ghb3.ui:7102
+#: src/ui-gtk3/ghb.ui:7096
 msgid "Actors:"
 msgstr "Acteurs:"
 
-#: src/ghb3.ui:7137
+#: src/ui-gtk3/ghb.ui:7131
 msgid "Director:"
 msgstr "Regisseur:"
 
-#: src/ghb3.ui:7172
+#: src/ui-gtk3/ghb.ui:7166
 msgid "Release Date:"
 msgstr "Publicatiedatum:"
 
-#: src/ghb3.ui:7207
+#: src/ui-gtk3/ghb.ui:7201
 msgid "Comment:"
 msgstr "Commentaar:"
 
-#: src/ghb3.ui:7242
+#: src/ui-gtk3/ghb.ui:7236
 msgid "Genre:"
 msgstr "Genre:"
 
-#: src/ghb3.ui:7277
+#: src/ui-gtk3/ghb.ui:7271
 msgid "Description:"
 msgstr "Beschrijving:"
 
-#: src/ghb3.ui:7312
+#: src/ui-gtk3/ghb.ui:7306
 msgid "Plot:"
 msgstr "Plot:"
 
-#: src/ghb3.ui:7350
+#: src/ui-gtk3/ghb.ui:7344
 msgid "Tags"
 msgstr "Tags"
 
-#: src/ghb3.ui:7380
+#: src/ui-gtk3/ghb.ui:7374
 msgid "<b>Save As:</b>"
 msgstr "<b>Opslaan als:</b>"
 
-#: src/ghb3.ui:7394
+#: src/ui-gtk3/ghb.ui:7388
 msgid "Destination filename for your encode."
 msgstr "Doelbestandsnaam voor de encodering."
 
-#: src/ghb3.ui:7414
+#: src/ui-gtk3/ghb.ui:7408
 msgid "<b>To:</b>"
 msgstr "<b>Naar:</b>"
 
-#: src/ghb3.ui:7427
+#: src/ui-gtk3/ghb.ui:7421
 msgid "Destination directory for your encode."
 msgstr "Doelmap voor de encodering."
 
-#: src/ghb3.ui:7430
+#: src/ui-gtk3/ghb.ui:7424 src/title-add.c:514
 msgid "Destination Directory"
 msgstr "Doelmap"
 
-#: src/ghb3.ui:7545
+#: src/ui-gtk3/ghb.ui:7539
 msgid "Add Multiple Titles"
 msgstr "Meerdere titels toevoegen"
 
-#: src/ghb3.ui:7553 src/ghb3.ui:8590 src/ghb3.ui:8747 src/ghb3.ui:9313
-#: src/ghb3.ui:9723 src/callbacks.c:5610 src/callbacks.c:5618
-#: src/callbacks.c:5627 src/hb-backend.c:4300 src/hb-backend.c:4333
-#: src/hb-backend.c:4372 src/hb-backend.c:4403 src/hb-backend.c:4431
-#: src/hb-backend.c:4477 src/hb-backend.c:4534 src/hb-backend.c:4554
-#: src/hb-backend.c:4574 src/hb-backend.c:4635 src/hb-backend.c:4690
-#: src/presets.c:2466
+#: src/ui-gtk3/ghb.ui:7547 src/ui-gtk3/ghb.ui:8548 src/ui-gtk3/ghb.ui:8705
+#: src/ui-gtk3/ghb.ui:9270 src/ui-gtk3/ghb.ui:9680 src/callbacks.c:5301
+#: src/callbacks.c:5309 src/callbacks.c:5318 src/hb-backend.c:4282
+#: src/hb-backend.c:4315 src/hb-backend.c:4354 src/hb-backend.c:4385
+#: src/hb-backend.c:4413 src/hb-backend.c:4459 src/hb-backend.c:4516
+#: src/hb-backend.c:4536 src/hb-backend.c:4556 src/hb-backend.c:4617
+#: src/hb-backend.c:4672 src/presets.c:2500 src/title-add.c:114
+#: src/title-add.c:132 src/title-add.c:147 src/title-add.c:163
 msgid "Cancel"
 msgstr "Annuleer"
 
-#: src/ghb3.ui:7594
+#: src/ui-gtk3/ghb.ui:7588
 msgid "Select All"
 msgstr "Alles selecteren"
 
-#: src/ghb3.ui:7598
+#: src/ui-gtk3/ghb.ui:7592
 msgid "Mark all titles for adding to the queue"
 msgstr "Markeer alle titels om aan de wachtrij toe te voegen"
 
-#: src/ghb3.ui:7611
+#: src/ui-gtk3/ghb.ui:7605
 msgid "Clear All"
 msgstr "Alles opruimen"
 
-#: src/ghb3.ui:7615
+#: src/ui-gtk3/ghb.ui:7609
 msgid "Unmark all titles"
 msgstr "Onmarkeer alle titels"
 
-#: src/ghb3.ui:7676
+#: src/ui-gtk3/ghb.ui:7670
 msgid "Destination files OK.  No duplicates detected."
 msgstr "Doelbestanden OK. Geen duplicaten gedetecteerd."
 
-#: src/ghb3.ui:7698 src/ghb3.ui:7710
+#: src/ui-gtk3/ghb.ui:7692 src/ui-gtk3/ghb.ui:7704
 msgid "Preferences"
 msgstr "Voorkeuren"
 
-#: src/ghb3.ui:7801
-msgid "Automatically check for updates"
-msgstr "Automatisch controleren op updates"
-
-#: src/ghb3.ui:7838
+#: src/ui-gtk3/ghb.ui:7796
 msgid "Default action when all encodes are complete"
 msgstr "Standaardactie wanneer alle coderingen zijn voltooid"
 
-#: src/ghb3.ui:7860
+#: src/ui-gtk3/ghb.ui:7818
 msgid "Use automatic naming (uses modified source name)"
 msgstr "Gebruik automatische naamgeving (gebruikt gewijzigde bronnaam)"
 
-#: src/ghb3.ui:7861
+#: src/ui-gtk3/ghb.ui:7819
 msgid "Create destination filename from source filename or volume label"
 msgstr "Maak doel-bestandsnaam uit bron-bestandsnaam of volume-label"
 
-#: src/ghb3.ui:7885
+#: src/ui-gtk3/ghb.ui:7843
 msgid "Auto-Name Template"
 msgstr "Auto-naam-sjabloon"
 
-#: src/ghb3.ui:7896
+#: src/ui-gtk3/ghb.ui:7854
 msgid ""
-"Available Options: {source-path} {source} {title} {preset} {chapters} {date}"
-" {time} {creation-date} {creation-time} {modification-date} {modification-"
+"Available Options: {source-path} {source} {title} {preset} {chapters} {date} "
+"{time} {creation-date} {creation-time} {modification-date} {modification-"
 "time} {codec} {bit-depth} {quality} {bitrate} {width} {height}"
 msgstr ""
 "Beschikbare opties: {source-path} {source} {title} {preset} {chapters} "
 "{date} {time} {creation-date} {creation-time} {modification-date} "
 "{modification-time} {codec} {bit-depth} {quality} {bitrate} {width} {height}"
 
-#: src/ghb3.ui:7916
+#: src/ui-gtk3/ghb.ui:7874
 msgid "Use iPod/iTunes friendly (.m4v) file extension for MP4"
 msgstr "Gebruik iPod/iTunes-vriendelijke (.m4v) bestandsextensie voor MP4"
 
-#: src/ghb3.ui:7959
+#: src/ui-gtk3/ghb.ui:7917
 msgid "Number of previews"
 msgstr "Aantal previews"
 
-#: src/ghb3.ui:7997
+#: src/ui-gtk3/ghb.ui:7955
 msgid "Filter short DVD and Blu-ray titles (seconds)"
 msgstr "Filter korte DVD- en Blu-ray-titels (seconden)"
 
-#: src/ghb3.ui:8011
+#: src/ui-gtk3/ghb.ui:7969
 msgid "Clear completed queue items after an encode completes"
 msgstr "Voltooide wachtrij-items opruimen nadat een encodering is voltooid"
 
-#: src/ghb3.ui:8015
+#: src/ui-gtk3/ghb.ui:7973
 msgid ""
 "By default, completed jobs remain in the queue and are marked as complete.\n"
-"Check this if you want the queue to clean itself up by deleting completed jobs."
+"Check this if you want the queue to clean itself up by deleting completed "
+"jobs."
 msgstr ""
-"Standaard blijven voltooide taken in de wachtrij en gemarkeerd als voltooid.\n"
-"Vink dit aan als de wachtrij zichzelf moet opschonen door voltooide taken te verwijderen."
+"Standaard blijven voltooide taken in de wachtrij en gemarkeerd als "
+"voltooid.\n"
+"Vink dit aan als de wachtrij zichzelf moet opschonen door voltooide taken te "
+"verwijderen."
 
-#: src/ghb3.ui:8028
+#: src/ui-gtk3/ghb.ui:7986
 msgid "Power Saving"
 msgstr "Energiebesparing"
 
-#: src/ghb3.ui:8046
+#: src/ui-gtk3/ghb.ui:8004
 msgid "Pause encoding when in Power Saver mode"
 msgstr "Pauzeer de codering in energiebesparingsstand"
 
-#: src/ghb3.ui:8052
+#: src/ui-gtk3/ghb.ui:8010
 msgid ""
 "If checked, encoding will be paused when the device\n"
 "enters Power Saver mode. Encoding will resume when\n"
@@ -2046,11 +2140,11 @@ msgstr ""
 "De codering wordt hervat wanneer de energie-\n"
 "besparingsstand wordt uitgeschakeld."
 
-#: src/ghb3.ui:8063
+#: src/ui-gtk3/ghb.ui:8021
 msgid "Pause encoding when on battery power"
 msgstr "Pauzeer de codering bij werking op batterijstroom"
 
-#: src/ghb3.ui:8069
+#: src/ui-gtk3/ghb.ui:8027
 msgid ""
 "If checked, encoding will be paused when charger is\n"
 "unplugged. Encoding will resume when reconnected to\n"
@@ -2060,11 +2154,11 @@ msgstr ""
 "wanneer de oplader is losgekoppeld. De codering wordt \n"
 "hervat wanneer oplader weer wordt aangesloten."
 
-#: src/ghb3.ui:8080
+#: src/ui-gtk3/ghb.ui:8038
 msgid "Pause encoding when battery is low"
 msgstr "Pauzeer de codering bij lage batterijspanning"
 
-#: src/ghb3.ui:8086
+#: src/ui-gtk3/ghb.ui:8044
 msgid ""
 "If checked, encoding will be paused when the battery\n"
 "level is low. Encoding will resume when the\n"
@@ -2074,94 +2168,102 @@ msgstr ""
 "wanneer de batterijspanning laag is. De codering wordt \n"
 "hervat wanneer batterij wordt opgeladen."
 
-#: src/ghb3.ui:8097
+#: src/ui-gtk3/ghb.ui:8055
 msgid "General"
 msgstr "Algemeen"
 
-#: src/ghb3.ui:8122
+#: src/ui-gtk3/ghb.ui:8080
 msgid "Set a custom directory for Handbrake temporary files"
 msgstr "Stel een aangepaste map in voor tijdelijke bestanden van Handbrake"
 
-#: src/ghb3.ui:8126 src/ghb3.ui:8146
+#: src/ui-gtk3/ghb.ui:8084 src/ui-gtk3/ghb.ui:8104
 msgid ""
 "Temporary files that HandBrake creates will be placed under this directory.\n"
 "\n"
 "Changing this setting will require restarting HandBrake.\n"
 "\n"
-"This setting overrides the TEMP environment variable that is normally used to define this directory.\n"
+"This setting overrides the TEMP environment variable that is normally used "
+"to define this directory.\n"
 "\n"
-"Flatpak users may need to set this for certain workflows to work properly. The default size of the TEMP directory in a flatpak sandbox is 1/2 physical memory size and may be too small for things like the 2-pass stats file."
+"Flatpak users may need to set this for certain workflows to work properly. "
+"The default size of the TEMP directory in a flatpak sandbox is 1/2 physical "
+"memory size and may be too small for things like the 2-pass stats file."
 msgstr ""
 "Tijdelijke bestanden die HandBrake maakt, worden onder deze map geplaatst.\n"
 "\n"
 "Om deze instelling te wijzigen, moet HandBrake opnieuw worden opgestart.\n"
 "\n"
-"Deze instelling overschrijft de TEMP-omgevingsvariabele die normaal wordt gebruikt om deze directory te definiëren.\n"
+"Deze instelling overschrijft de TEMP-omgevingsvariabele die normaal wordt "
+"gebruikt om deze directory te definiëren.\n"
 "\n"
-"Flatpak-gebruikers moeten dit mogelijk instellen om bepaalde workflows goed te laten werken. De standaardgrootte van de TEMP-directory in een flatpak-sandbox is 1/2 fysieke geheugengrootte en is mogelijk te klein voor zaken als het 2-fase stats-bestand."
+"Flatpak-gebruikers moeten dit mogelijk instellen om bepaalde workflows goed "
+"te laten werken. De standaardgrootte van de TEMP-directory in een flatpak-"
+"sandbox is 1/2 fysieke geheugengrootte en is mogelijk te klein voor zaken "
+"als het 2-fase stats-bestand."
 
-#: src/ghb3.ui:8156
+#: src/ui-gtk3/ghb.ui:8114
 msgid "Temp Directory"
 msgstr "Tijdelijke map"
 
-#: src/ghb3.ui:8196
+#: src/ui-gtk3/ghb.ui:8154
 msgid "Constant Quality fractional granularity"
 msgstr "Constante-kwaliteit fractionele granulariteit"
 
-#: src/ghb3.ui:8213
+#: src/ui-gtk3/ghb.ui:8171
 msgid "Use dvdnav (instead of libdvdread)"
 msgstr "Gebruik dvdnav (in plaats van libdvdread)"
 
-#: src/ghb3.ui:8236
+#: src/ui-gtk3/ghb.ui:8194
 msgid "Monitor destination disk free space"
 msgstr "Monitor vrije ruimte van doelschijf"
 
-#: src/ghb3.ui:8240 src/ghb3.ui:8262
+#: src/ui-gtk3/ghb.ui:8198 src/ui-gtk3/ghb.ui:8220
 msgid "Pause encoding if free disk space drops below limit"
 msgstr "Pauzeer encodering als vrije schijfruimte onder limiet valt"
 
-#: src/ghb3.ui:8277
+#: src/ui-gtk3/ghb.ui:8235
 msgid "MB Limit"
 msgstr "MB limiet"
 
-#: src/ghb3.ui:8305
+#: src/ui-gtk3/ghb.ui:8263
 msgid "Put individual encode logs in same location as movie"
 msgstr "Plaats inidividuele encode-logs in dezelfde locatie als de film"
 
-#: src/ghb3.ui:8341
+#: src/ui-gtk3/ghb.ui:8299
 msgid "Activity Log Verbosity Level"
 msgstr "Uitvoerigheidsniveau activiteitslog"
 
-#: src/ghb3.ui:8376
+#: src/ui-gtk3/ghb.ui:8334
 msgid "Activity Log Longevity"
 msgstr "Levensduur activiteitslog"
 
-#: src/ghb3.ui:8397
+#: src/ui-gtk3/ghb.ui:8355
 msgid "Scale down High Definition previews"
 msgstr "High Definition previews herschalen"
 
-#: src/ghb3.ui:8414
+#: src/ui-gtk3/ghb.ui:8372
 msgid "Automatically Scan DVD when loaded"
 msgstr "Automatisch DVD scannen bij inladen"
 
-#: src/ghb3.ui:8418
+#: src/ui-gtk3/ghb.ui:8376
 msgid "Scans the DVD whenever a new disc is loaded"
 msgstr "Scant de DVD wanneer een nieuwe schijf wordt ingeladen"
 
-#: src/ghb3.ui:8456
+#: src/ui-gtk3/ghb.ui:8414
 msgid "Activity Window Font Size"
 msgstr "Lettergrootte activiteitsvenster"
 
-#: src/ghb3.ui:8473
+#: src/ui-gtk3/ghb.ui:8431
 msgid "Use the same settings for all titles in a batch"
 msgstr "Gebruik dezelfde instellingen voor alle titels in een groep"
 
-#: src/ghb3.ui:8477
+#: src/ui-gtk3/ghb.ui:8435
 msgid ""
 "When checked, every title will use the same settings when adding a\n"
 "batch of titles to the queue.\n"
 "\n"
-"Uncheck this if you want to allow changing each title's settings independently."
+"Uncheck this if you want to allow changing each title's settings "
+"independently."
 msgstr ""
 "Indien aangevinkt, gebruikt elke titel dezelfde instellingen wanneer\n"
 "een groep titels aan de wachtrij wordt toegevoegd.\n"
@@ -2169,163 +2271,161 @@ msgstr ""
 "Vink dit uit om toe te laten om de instellingen van elke titel\n"
 "onafhankelijk te wijzigen."
 
-#: src/ghb3.ui:8494
+#: src/ui-gtk3/ghb.ui:8452
 msgid "Show preview image in Summary tab"
 msgstr "Voorvertoning weergeven in tab Samenvatting"
 
-#: src/ghb3.ui:8500
+#: src/ui-gtk3/ghb.ui:8458
 msgid ""
 "Uncheck this if you want to hide the video preview image on the Summary tab "
 "for privacy reasons."
 msgstr ""
-"Schakel dit uit als u voorvertoning van de video op het tabblad Samenvatting"
-" wilt verbergen."
+"Schakel dit uit als u voorvertoning van de video op het tabblad Samenvatting "
+"wilt verbergen."
 
-#: src/ghb3.ui:8523
+#: src/ui-gtk3/ghb.ui:8481
 msgid "Allow Tweaks"
 msgstr "Tweaks toelaten"
 
-#: src/ghb3.ui:8539
+#: src/ui-gtk3/ghb.ui:8497
 msgid "Allow HandBrake For Dummies"
 msgstr "HandBrake voor Dummies toelaten"
 
-#: src/ghb3.ui:8561
+#: src/ui-gtk3/ghb.ui:8519
 msgid "Advanced"
 msgstr "Geavanceerd"
 
-#: src/ghb3.ui:8578
+#: src/ui-gtk3/ghb.ui:8536
 msgid "Rename Preset"
 msgstr "Voorinstelling hernoemen"
 
-#: src/ghb3.ui:8640
+#: src/ui-gtk3/ghb.ui:8598
 msgid "<span size=\"x-large\">Rename Preset</span>"
 msgstr "<span size=\"x-large\">Hernoem voorinstelling</span>"
 
-#: src/ghb3.ui:8660
+#: src/ui-gtk3/ghb.ui:8618
 msgid "Name:"
 msgstr "Naam:"
 
-#: src/ghb3.ui:8717 src/ghb3.ui:8990
+#: src/ui-gtk3/ghb.ui:8675 src/ui-gtk3/ghb.ui:8948
 msgid "<b>Description</b>"
 msgstr "<b>Beschrijving</b>"
 
-#: src/ghb3.ui:8735
+#: src/ui-gtk3/ghb.ui:8693
 msgid "Save Preset"
 msgstr "Voorinstelling opslaan"
 
-#: src/ghb3.ui:8803
+#: src/ui-gtk3/ghb.ui:8761
 msgid "Category:"
 msgstr "Categorie:"
 
-#: src/ghb3.ui:8818
+#: src/ui-gtk3/ghb.ui:8776
 msgid "Set the category that this preset will be shown under."
-msgstr ""
-"Stel de categorie waaronder deze voorinstelling zal getoond worden in."
+msgstr "Stel de categorie waaronder deze voorinstelling zal getoond worden in."
 
-#: src/ghb3.ui:8834
+#: src/ui-gtk3/ghb.ui:8792
 msgid "Category Name:"
 msgstr "Categorienaam:"
 
-#: src/ghb3.ui:8867
+#: src/ui-gtk3/ghb.ui:8825
 msgid "Preset Name:"
 msgstr "Naam voorinstelling:"
 
-#: src/ghb3.ui:8901
+#: src/ui-gtk3/ghb.ui:8859
 msgid "Default Preset"
 msgstr "Standaard-voorinstelling"
 
-#: src/ghb3.ui:8906
+#: src/ui-gtk3/ghb.ui:8864
 msgid "Make this the default Preset when HandBrake starts"
 msgstr "Maak dit de standaard-voorinstelling wanneer HandBrake opstart"
 
-#: src/ghb3.ui:8932
+#: src/ui-gtk3/ghb.ui:8890
 msgid "<b>Dimensions</b>"
 msgstr "<b>Afmetingen</b>"
 
-#: src/ghb3.ui:9013
+#: src/ui-gtk3/ghb.ui:8971
 msgid "HandBrake Preview"
 msgstr "Handbrake-preview"
 
-#: src/ghb3.ui:9094
+#: src/ui-gtk3/ghb.ui:9051
 msgid "Select preview frames."
 msgstr "Selecteer previewframes"
 
-#: src/ghb3.ui:9116
+#: src/ui-gtk3/ghb.ui:9073
 msgid ""
 "Encode and play a short sequence of video starting from the current preview "
 "position."
-msgstr ""
-"Encodeer en speel een kort stuk video vanaf de huidige preview-positie"
+msgstr "Encodeer en speel een kort stuk video vanaf de huidige preview-positie"
 
-#: src/ghb3.ui:9172
+#: src/ui-gtk3/ghb.ui:9129
 msgid "Click to toggle full screen mode"
 msgstr "Klik om volledig schermweergave te wisselen"
 
-#: src/ghb3.ui:9208
+#: src/ui-gtk3/ghb.ui:9165
 msgid "<b>Duration:</b>"
 msgstr "<b>Afspeelduur:</b>"
 
-#: src/ghb3.ui:9220
+#: src/ui-gtk3/ghb.ui:9177
 msgid "Set the duration of the live preview in seconds."
 msgstr "Stel de afspeelduur van de live preview in seconden in."
 
-#: src/ghb3.ui:9236
+#: src/ui-gtk3/ghb.ui:9193
 msgid "Show Crop"
 msgstr "Toon knip"
 
-#: src/ghb3.ui:9240
+#: src/ui-gtk3/ghb.ui:9197
 msgid "Show Cropped area of the preview"
 msgstr "Toon de geknipte oppervlakte van de preview"
 
-#: src/ghb3.ui:9251
+#: src/ui-gtk3/ghb.ui:9208
 msgid "Source Resolution"
 msgstr "Bronresolutie"
 
-#: src/ghb3.ui:9255
+#: src/ui-gtk3/ghb.ui:9212
 msgid "Reset preview window to the source video's resolution"
 msgstr "Herstel het preview-scherm naar de resolutie van de bronvideo"
 
-#: src/ghb3.ui:9300 src/subtitlehandler.c:1743
+#: src/ui-gtk3/ghb.ui:9257 src/subtitlehandler.c:1719
 msgid "Edit Subtitles"
 msgstr "Ondertiteling bewerken"
 
-#: src/ghb3.ui:9355
+#: src/ui-gtk3/ghb.ui:9312
 msgid "Import SRT"
 msgstr "Importeer SRT"
 
-#: src/ghb3.ui:9360
+#: src/ui-gtk3/ghb.ui:9317
 msgid "Enable settings to import an SRT subtitle file"
 msgstr "Schakel instellingen in om een SRT-ondertitelbestand in te laden"
 
-#: src/ghb3.ui:9371
+#: src/ui-gtk3/ghb.ui:9328
 msgid "Import SSA"
 msgstr "Importeer SSA"
 
-#: src/ghb3.ui:9376
+#: src/ui-gtk3/ghb.ui:9333
 msgid "Enable settings to import an SSA subtitle file"
 msgstr "Schakel instellingen in om een SSA-ondertitelbestand in te laden"
 
-#: src/ghb3.ui:9388
+#: src/ui-gtk3/ghb.ui:9345
 msgid "Embedded Subtitle List"
 msgstr "Lijst van ingebouwde ondertitels"
 
-#: src/ghb3.ui:9393
+#: src/ui-gtk3/ghb.ui:9350
 msgid "Enable settings to select embedded subtitles"
 msgstr "Schakel instellingen in om ingebouwde ondertitels te selecteren"
 
-#: src/ghb3.ui:9420 src/ghb3.ui:9768
+#: src/ui-gtk3/ghb.ui:9377 src/ui-gtk3/ghb.ui:9725
 msgid "Source Track"
 msgstr "Bron-track"
 
-#: src/ghb3.ui:9435
+#: src/ui-gtk3/ghb.ui:9392
 msgid "List of subtitle tracks available from your source."
 msgstr "Lijst van beschikbare ondertiteltracks uit de bron."
 
-#: src/ghb3.ui:9449 src/ghb3.ui:9798
+#: src/ui-gtk3/ghb.ui:9406 src/ui-gtk3/ghb.ui:9755
 msgid "Track Name:"
 msgstr "Tracknaam:"
 
-#: src/ghb3.ui:9465
+#: src/ui-gtk3/ghb.ui:9422
 msgid ""
 "Set the subtitle track name.\n"
 "\n"
@@ -2335,23 +2435,23 @@ msgstr ""
 "\n"
 "Spelers kunnen deze gebruiken in de audioselectielijst."
 
-#: src/ghb3.ui:9498
+#: src/ui-gtk3/ghb.ui:9455
 msgid "Language"
 msgstr "Taal"
 
-#: src/ghb3.ui:9512
+#: src/ui-gtk3/ghb.ui:9469
 msgid "Character Code"
 msgstr "Karakter-codering"
 
-#: src/ghb3.ui:9526
+#: src/ui-gtk3/ghb.ui:9483
 msgid "File:"
 msgstr "Bestand:"
 
-#: src/ghb3.ui:9541
+#: src/ui-gtk3/ghb.ui:9498
 msgid "Offset (ms)"
 msgstr "Verschuiving (ms)"
 
-#: src/ghb3.ui:9556
+#: src/ui-gtk3/ghb.ui:9513
 msgid ""
 "Set the language of this subtitle.\n"
 "This value will be used by players in subtitle menus."
@@ -2359,7 +2459,7 @@ msgstr ""
 "Stel de taal van deze ondertitel in.\n"
 "Deze waarde wordt door spelers gebruikt in ondertitelmenus."
 
-#: src/ghb3.ui:9574
+#: src/ui-gtk3/ghb.ui:9531
 msgid ""
 "Set the character code used by the SRT file you are importing.\n"
 "\n"
@@ -2367,35 +2467,36 @@ msgid ""
 "We translate the character set to UTF-8.\n"
 "The source's character code is needed in order to perform this translation."
 msgstr ""
-"Stel de karakter-set in die gebruikt wordt door het te importeren SRT-bestand.\n"
+"Stel de karakter-set in die gebruikt wordt door het te importeren SRT-"
+"bestand.\n"
 "\n"
 "Er bestaan SRT's met verschillende karakter-sets.\n"
 "De karakter-set wordt vertaald naar UTF-8.\n"
 "De karakter-set van de bron is vereist om deze vertaling te kunnen uitvoeren."
 
-#: src/ghb3.ui:9598
+#: src/ui-gtk3/ghb.ui:9555
 msgid "Select the SRT file to import."
 msgstr "Selecteer het te importeren SRT-bestand."
 
-#: src/ghb3.ui:9601
+#: src/ui-gtk3/ghb.ui:9558
 msgid "Import File"
 msgstr "Importeer Bestand"
 
-#: src/ghb3.ui:9619
+#: src/ui-gtk3/ghb.ui:9576
 msgid "Adjust the offset in milliseconds between video and SRT timestamps"
 msgstr ""
 "Stel de verschuiving in milliseconden tussen de video en de SRT-tijdstippen "
 "in."
 
-#: src/ghb3.ui:9643 src/subtitlehandler.c:119
+#: src/ui-gtk3/ghb.ui:9600 src/subtitlehandler.c:119
 msgid "Forced Subtitles Only"
 msgstr "Enkel geforceerde ondertitels"
 
-#: src/ghb3.ui:9664
+#: src/ui-gtk3/ghb.ui:9621
 msgid "Burn into video"
 msgstr "Inbranden in video"
 
-#: src/ghb3.ui:9669
+#: src/ui-gtk3/ghb.ui:9626
 msgid ""
 "Render the subtitle over the video.\n"
 "The subtitle will be part of the video and can not be disabled."
@@ -2403,19 +2504,19 @@ msgstr ""
 "Render de ondertitel over de video.\n"
 "De ondertitel wordt deel van de video en kan niet worden uitgeschakeld."
 
-#: src/ghb3.ui:9681
+#: src/ui-gtk3/ghb.ui:9638
 msgid "Set Default Track"
 msgstr "Stel standaard-track in"
 
-#: src/ghb3.ui:9710 src/audiohandler.c:1473
+#: src/ui-gtk3/ghb.ui:9667 src/audiohandler.c:1473
 msgid "Edit Audio Track"
 msgstr "Audiospoor bewerken"
 
-#: src/ghb3.ui:9784
+#: src/ui-gtk3/ghb.ui:9741
 msgid "List of audio tracks available from your source."
 msgstr "Lijst van beschikbare audiotracks uit de bron."
 
-#: src/ghb3.ui:9814
+#: src/ui-gtk3/ghb.ui:9771
 msgid ""
 "Set the audio track name.\n"
 "\n"
@@ -2425,51 +2526,57 @@ msgstr ""
 "\n"
 "Spelers kunnen deze gebruiken in de audioselectielijst."
 
-#: src/ghb3.ui:9877
+#: src/ui-gtk3/ghb.ui:9834
 msgid "Mix"
 msgstr "Mix"
 
-#: src/ghb3.ui:9890
+#: src/ui-gtk3/ghb.ui:9847
 msgid "Sample Rate"
 msgstr "Sample-snelheid"
 
-#: src/ghb3.ui:9920 src/ghb3.ui:10159 src/audiohandler.c:1931
+#: src/ui-gtk3/ghb.ui:9877 src/ui-gtk3/ghb.ui:10116 src/audiohandler.c:1931
 msgid ""
-"<b>Dynamic Range Compression:</b> Adjust the dynamic range of the output audio track.\n"
+"<b>Dynamic Range Compression:</b> Adjust the dynamic range of the output "
+"audio track.\n"
 "\n"
-"For source audio that has a wide dynamic range (very loud and very soft sequences),\n"
-"DRC allows you to 'compress' the range by making loud sounds softer and soft sounds louder."
+"For source audio that has a wide dynamic range (very loud and very soft "
+"sequences),\n"
+"DRC allows you to 'compress' the range by making loud sounds softer and soft "
+"sounds louder."
 msgstr ""
-"<b>Dynamisch-bereikcompressie :</b> Wijzig het dynamisch bereik van de audio-uitvoertrack.\n"
+"<b>Dynamisch-bereikcompressie :</b> Wijzig het dynamisch bereik van de audio-"
+"uitvoertrack.\n"
 "\n"
-"Voor bronaudio met een breed dynamisch bereik (heel luide en heel stille sequenties),\n"
-"laat DBC toe om het bereik te 'comprimeren' door luide geluiden stiller en stille geluiden luider te maken."
+"Voor bronaudio met een breed dynamisch bereik (heel luide en heel stille "
+"sequenties),\n"
+"laat DBC toe om het bereik te 'comprimeren' door luide geluiden stiller en "
+"stille geluiden luider te maken."
 
-#: src/ghb3.ui:9941 src/audiohandler.c:1782
+#: src/ui-gtk3/ghb.ui:9898 src/audiohandler.c:1782
 msgid "Set the audio codec to encode this track with."
 msgstr "Stel de audio-codec om deze track te encoderen in."
 
-#: src/ghb3.ui:9963 src/audiohandler.c:1796
+#: src/ui-gtk3/ghb.ui:9920 src/audiohandler.c:1796
 msgid "Bitrate"
 msgstr "Bitsnelheid"
 
-#: src/ghb3.ui:9968
+#: src/ui-gtk3/ghb.ui:9925
 msgid "Enable bitrate setting"
 msgstr "Bitsnelheid-instelling inschakelen"
 
-#: src/ghb3.ui:9978 src/audiohandler.c:1801
+#: src/ui-gtk3/ghb.ui:9935 src/audiohandler.c:1801
 msgid "Quality"
 msgstr "Kwaliteit"
 
-#: src/ghb3.ui:9983
+#: src/ui-gtk3/ghb.ui:9940
 msgid "Enable quality setting"
 msgstr "Kwaliteit-instelling inschakelen"
 
-#: src/ghb3.ui:10004 src/audiohandler.c:1815
+#: src/ui-gtk3/ghb.ui:9961 src/audiohandler.c:1815
 msgid "Set the bitrate to encode this track with."
 msgstr "Stel de bitsnelheid in om deze track mee te encoderen."
 
-#: src/ghb3.ui:10024
+#: src/ui-gtk3/ghb.ui:9981
 msgid ""
 "<b>Quality:</b> For output codec's that support it, adjust the quality of "
 "the output."
@@ -2477,19 +2584,19 @@ msgstr ""
 "<b>Kwaliteit:</b> Voor codecs die het ondersteunen, pas de kwaliteit van de "
 "uitvoer aan."
 
-#: src/ghb3.ui:10046
+#: src/ui-gtk3/ghb.ui:10003
 msgid "00.0"
 msgstr "00.0"
 
-#: src/ghb3.ui:10073 src/audiohandler.c:1867
+#: src/ui-gtk3/ghb.ui:10030 src/audiohandler.c:1867
 msgid "Set the mixdown of the output audio track."
 msgstr "Stel de mixdown van de uitvoertrack in."
 
-#: src/ghb3.ui:10089 src/audiohandler.c:1880
+#: src/ui-gtk3/ghb.ui:10046 src/audiohandler.c:1880
 msgid "Set the sample rate of the output audio track."
 msgstr "Stel de sample-snelheid van de uitvoertrack in."
 
-#: src/ghb3.ui:10112 src/audiohandler.c:1901
+#: src/ui-gtk3/ghb.ui:10069 src/audiohandler.c:1901
 msgid ""
 "<b>Audio Gain:</b> Adjust the amplification or attenuation of the output "
 "audio track."
@@ -2498,90 +2605,19 @@ msgstr ""
 "audiokanaal aan."
 
 #. Audio Gain Label
-#: src/ghb3.ui:10130 src/audiohandler.c:1911
+#: src/ui-gtk3/ghb.ui:10087 src/audiohandler.c:1911
 msgid "0dB"
 msgstr "0dB"
 
 #. Audio DRC Label
-#: src/ghb3.ui:10177 src/audiohandler.c:427 src/audiohandler.c:765
-#: src/audiohandler.c:1168 src/audiohandler.c:1945 src/callbacks.c:5383
-#: src/hb-backend.c:200 src/hb-backend.c:213 src/hb-backend.c:225
-#: src/hb-backend.c:250 src/hb-backend.c:321 src/hb-backend.c:333
-#: src/hb-backend.c:345 src/hb-backend.c:406
+#: src/ui-gtk3/ghb.ui:10134 src/audiohandler.c:427 src/audiohandler.c:765
+#: src/audiohandler.c:1168 src/audiohandler.c:1945 src/callbacks.c:5269
+#: src/hb-backend.c:187 src/hb-backend.c:200 src/hb-backend.c:212
+#: src/hb-backend.c:237 src/hb-backend.c:308 src/hb-backend.c:320
+#: src/hb-backend.c:332 src/hb-backend.c:393
+#, c-format
 msgid "Off"
 msgstr "Uit"
-
-#: src/ghb3.ui:10202
-msgid "HandBrake Updater"
-msgstr "HandBrake Updater"
-
-#: src/ghb3.ui:10214
-msgid "Skip This Version"
-msgstr "Deze versie overslaan"
-
-#: src/ghb3.ui:10222
-msgid "Remind Me Later"
-msgstr "Herinner mij later"
-
-#: src/ghb3.ui:10291
-msgid "<b>A new version of HandBrake is available!</b>"
-msgstr "<b>Een nieuwere versie van HandBrake is beschikbaar!</b>"
-
-#: src/ghb3.ui:10307
-msgid "HandBrake xxx is now available (you have yyy)."
-msgstr "HandBrake xxx is nu beschikbaar (huidge versie is yyy)."
-
-#: src/ghb3.ui:10335
-msgid "<b>Release Notes</b>"
-msgstr "<b>Release-opmerkingen</b>"
-
-#: src/fr.handbrake.ghb.metainfo.xml.in.in:11
-msgid "Video Transcoder"
-msgstr "Video-transcoder"
-
-#: src/fr.handbrake.ghb.metainfo.xml.in.in:14
-msgid ""
-"HandBrake is a tool for converting video from nearly any format to a "
-"selection of modern, widely supported codecs."
-msgstr ""
-"HandBrake is een hulpmiddel om video vanuit nagenoeg elk formaat om te "
-"zetten in een selectie van moderne en breed ondersteunde codecs."
-
-#: src/fr.handbrake.ghb.metainfo.xml.in.in:15
-msgid "Reasons you'll love Handbrake:"
-msgstr "Redenen om van HandBrake te houden:"
-
-#: src/fr.handbrake.ghb.metainfo.xml.in.in:17
-msgid "Convert video from nearly any format"
-msgstr "Zet video vanuit nagenoeg elk formaat om"
-
-#: src/fr.handbrake.ghb.metainfo.xml.in.in:18
-msgid "Free and Open Source"
-msgstr "Gratis en open source"
-
-#: src/fr.handbrake.ghb.metainfo.xml.in.in:19
-msgid "Multi-Platform (Windows, Mac and Linux)"
-msgstr "Multi-Platform (Windows, Mac en Linux)"
-
-#: src/fr.handbrake.ghb.metainfo.xml.in.in:65
-msgid "Main window and settings summary"
-msgstr "Hoofdscherm en samenvatting van instellingen"
-
-#: src/fr.handbrake.ghb.metainfo.xml.in.in:69
-msgid "Video resolution and cropping settings"
-msgstr "Videoresolutie en bijsnijd-instellingen"
-
-#: src/fr.handbrake.ghb.metainfo.xml.in.in:73
-msgid "Video encoder settings"
-msgstr "Video-encoder-instellingen"
-
-#: src/fr.handbrake.ghb.metainfo.xml.in.in:77
-msgid "Audio track selection and settings"
-msgstr "Audiotrack-selectie en -instellingen"
-
-#: src/fr.handbrake.ghb.metainfo.xml.in.in:81
-msgid "Chapter title editing"
-msgstr "Hoofdstuktitels aanpassen"
 
 #: src/audiohandler.c:439 src/audiohandler.c:761 src/audiohandler.c:1236
 #, c-format
@@ -2613,6 +2649,7 @@ msgid "Bitrate: %.4gkbps"
 msgstr "Bitsnelheid: %.4gkbps"
 
 #: src/audiohandler.c:782
+#, c-format
 msgid "<small>Passthrough</small>"
 msgstr "<small>Passthrough</small>"
 
@@ -2646,7 +2683,8 @@ msgid ""
 "Each selected source track will be encoded with all selected encoders."
 msgstr ""
 "Voeg een audio-encoder toe.\n"
-"Elke geselcteerde bron-track zal worden geëncodeerd met alle geselecteerde encoders."
+"Elke geselcteerde bron-track zal worden geëncodeerd met alle geselecteerde "
+"encoders."
 
 #: src/audiohandler.c:1840
 msgid ""
@@ -2660,143 +2698,146 @@ msgstr ""
 msgid "Remove this audio encoder"
 msgstr "Verwijder deze audio-encoder"
 
-#: src/callbacks.c:556 src/callbacks.c:2026
+#: src/callbacks.c:542 src/callbacks.c:2014
 msgid "Closing HandBrake will terminate encoding.\n"
 msgstr "Handbrake sluiten zal het encoderen beëindigen.\n"
 
-#: src/callbacks.c:1188 src/callbacks.c:1199 src/callbacks.c:1674
+#: src/callbacks.c:1178 src/callbacks.c:1189 src/callbacks.c:1662
 msgid "Not Selected"
 msgstr "Niet geselecteerd"
 
-#: src/callbacks.c:1197
+#: src/callbacks.c:1187
 msgid "Detected DVD devices:"
 msgstr "Gedetecteerde DVD-apparaten:"
 
 #. This needs to be in scanning and working since scanning
 #. happens fast enough that it can be missed
-#: src/callbacks.c:1526 src/callbacks.c:4405
+#: src/callbacks.c:1514 src/callbacks.c:4393
 msgid "Scanning ..."
 msgstr "Scannen ..."
 
-#: src/callbacks.c:1562 src/callbacks.c:1563
+#: src/callbacks.c:1550 src/callbacks.c:1551
 msgid "Stop Scan"
 msgstr "Stop Scan"
 
-#: src/callbacks.c:1735
+#: src/callbacks.c:1723
 msgid "Single Title"
 msgstr "Enkele titel"
 
-#: src/callbacks.c:2127 src/callbacks.c:2271
+#: src/callbacks.c:2115 src/callbacks.c:2259
 msgid "FPS"
 msgstr "FPS"
 
-#: src/callbacks.c:2131
+#: src/callbacks.c:2119
 #, c-format
 msgid "Dolby Vision %d.%d"
 msgstr "Dolby Vision %d.%d"
 
-#: src/callbacks.c:2135 src/callbacks.c:2138
+#: src/callbacks.c:2123 src/callbacks.c:2126
 msgid "HDR10+"
 msgstr "HDR10+"
 
-#: src/callbacks.c:2140
+#: src/callbacks.c:2128
 msgid "HDR10"
 msgstr "HDR10"
 
-#: src/callbacks.c:2142
+#: src/callbacks.c:2130
 msgid "HDR"
 msgstr "HDR"
 
-#: src/callbacks.c:2144
+#: src/callbacks.c:2132
 msgid "SDR"
 msgstr "SDR"
 
 #. TRANSLATORS: This is the bit depth of the video
-#: src/callbacks.c:2152
+#: src/callbacks.c:2140
 #, c-format
 msgid "%d-bit"
 msgstr "%d-bit"
 
-#: src/callbacks.c:2174
+#: src/callbacks.c:2162
 msgid "Audio Track"
 msgid_plural "Audio Tracks"
 msgstr[0] "Audiospoor"
 msgstr[1] "Audiosporen"
 
-#: src/callbacks.c:2177
+#: src/callbacks.c:2165
 msgid "Subtitle Track"
 msgid_plural "Subtitle Tracks"
 msgstr[0] "Ondertitelingsspoor"
 msgstr[1] "Ondertitelingssporen"
 
-#: src/callbacks.c:2275
+#: src/callbacks.c:2263
 msgid "CFR"
 msgstr "CFR"
 
-#: src/callbacks.c:2279
+#: src/callbacks.c:2267
 msgid "PFR"
 msgstr "PFR"
 
-#: src/callbacks.c:2283
+#: src/callbacks.c:2271
 msgid "VFR"
 msgstr "VFR"
 
-#: src/callbacks.c:2325
+#: src/callbacks.c:2313
 #, c-format
 msgid "+ %d more audio track"
 msgid_plural "+ %d more audio tracks"
 msgstr[0] "+ %d extra audiospoor"
 msgstr[1] "+ %d extra audiosporen"
 
-#: src/callbacks.c:2359 src/callbacks.c:2391 src/queuehandler.c:650
+#: src/callbacks.c:2347 src/callbacks.c:2379 src/queuehandler.c:650
 #: src/queuehandler.c:687
+#, c-format
 msgid ", Forced Only"
 msgstr ", enkel geforceerd"
 
-#: src/callbacks.c:2363 src/callbacks.c:2395 src/queuehandler.c:654
+#: src/callbacks.c:2351 src/callbacks.c:2383 src/queuehandler.c:654
 #: src/queuehandler.c:691
+#, c-format
 msgid ", Burned"
 msgstr ", ingebrand"
 
-#: src/callbacks.c:2367 src/callbacks.c:2399 src/queuehandler.c:658
+#: src/callbacks.c:2355 src/callbacks.c:2387 src/queuehandler.c:658
 #: src/queuehandler.c:695
+#, c-format
 msgid ", Default"
 msgstr ", standaard"
 
-#: src/callbacks.c:2405
+#: src/callbacks.c:2393
 #, c-format
 msgid "+ %d more subtitle track"
 msgid_plural "+ %d more subtitle tracks"
 msgstr[0] "+ %d extra ondertitelingsspoor"
 msgstr[1] "+ %d extra ondertitelingssporen"
 
-#: src/callbacks.c:2560
+#: src/callbacks.c:2548
 msgid "storage"
 msgstr "opslag"
 
-#: src/callbacks.c:2561
+#: src/callbacks.c:2549
 msgid "display"
 msgstr "weergave"
 
-#: src/callbacks.c:2562
+#: src/callbacks.c:2550
 msgid "Pixel Aspect Ratio"
 msgstr "Pixelverhouding"
 
-#: src/callbacks.c:2563
+#: src/callbacks.c:2551
 msgid "Display Aspect Ratio"
 msgstr "Beeldverhouding"
 
-#: src/callbacks.c:2700 src/hb-backend.c:2263 src/hb-backend.c:2383
-#: src/hb-backend.c:2395
+#: src/callbacks.c:2688 src/hb-backend.c:2257 src/hb-backend.c:2377
+#: src/hb-backend.c:2389
 msgid "No Title Found"
 msgstr "Geen titel gevonden"
 
-#: src/callbacks.c:2701
+#: src/callbacks.c:2689
 msgid "New Video"
 msgstr "Nieuwe video"
 
-#: src/callbacks.c:3710 src/callbacks.c:3723 src/callbacks.c:3745
-#: src/callbacks.c:3783
+#: src/callbacks.c:3698 src/callbacks.c:3711 src/callbacks.c:3733
+#: src/callbacks.c:3771
 #, c-format
 msgid ""
 "%s\n"
@@ -2807,133 +2848,129 @@ msgstr ""
 "\n"
 "%s in %d seconden ..."
 
-#: src/callbacks.c:3880 src/callbacks.c:3931
+#: src/callbacks.c:3868 src/callbacks.c:3919
 #, c-format
 msgid "%sYour movie will be lost if you don't continue encoding."
 msgstr "%sDe film zal verloren gaan als de encodering niet wordt hervat."
 
-#: src/callbacks.c:3883 src/callbacks.c:3934 src/queuehandler.c:1824
+#: src/callbacks.c:3871 src/callbacks.c:3922 src/queuehandler.c:1824
 msgid "Cancel Current and Stop"
 msgstr "Huidige annuleren en stoppen"
 
-#: src/callbacks.c:3884
+#: src/callbacks.c:3872
 msgid "Cancel Current, Start Next"
 msgstr "Huidige annuleren, start volgende"
 
-#: src/callbacks.c:3885
+#: src/callbacks.c:3873
 msgid "Finish Current, then Stop"
 msgstr "Huidige afwerken, dan stoppen"
 
-#: src/callbacks.c:3886 src/callbacks.c:3935
+#: src/callbacks.c:3874 src/callbacks.c:3923
 msgid "Continue Encoding"
 msgstr "Hervat encodering"
 
-#: src/callbacks.c:4118
+#: src/callbacks.c:4106
 #, c-format
 msgid "%d encode pending"
 msgstr "%d encodering in wachtrij"
 
-#: src/callbacks.c:4122
+#: src/callbacks.c:4110
 #, c-format
 msgid "%d encodes pending"
 msgstr "%d encoderingen in wachtrij"
 
-#: src/callbacks.c:4179 src/callbacks.c:4247
+#: src/callbacks.c:4167 src/callbacks.c:4235
 #, c-format
 msgid "job %d of %d, "
 msgstr "taak %d van %d, "
 
-#: src/callbacks.c:4189
+#: src/callbacks.c:4177
 #, c-format
 msgid "pass %d (subtitle scan) of %d, "
 msgstr "fase %d (ondertitel-scan) van %d, "
 
-#: src/callbacks.c:4194
+#: src/callbacks.c:4182
 #, c-format
 msgid "pass %d of %d, "
 msgstr "fase %d van %d, "
 
-#: src/callbacks.c:4207
+#: src/callbacks.c:4195
 #, c-format
 msgid "Encoding: %s%s%.2f %% (%.2f fps, avg %.2f fps, ETA %02dh%02dm%02ds)"
 msgstr "Encoderen: %s%s%.2f %% (%.2f fps, gem. %.2f fps, ETA %02du%02dm%02ds)"
 
-#: src/callbacks.c:4217 src/callbacks.c:4257
+#: src/callbacks.c:4205 src/callbacks.c:4245
 #, c-format
 msgid "Encoding: %s%s%.2f %% (ETA %02dh%02dm%02ds)"
 msgstr "Encoderen: %s%s%.2f %% (ETA %02du%02dm%02ds)"
 
-#: src/callbacks.c:4227 src/callbacks.c:4266
+#: src/callbacks.c:4215 src/callbacks.c:4254
 #, c-format
 msgid "Encoding: %s%s%.2f %%"
 msgstr "Encoderen: %s%s%.2f %%"
 
-#: src/callbacks.c:4253
+#: src/callbacks.c:4241
+#, c-format
 msgid "Searching for start time, "
 msgstr "Zoeken naar starttijd,"
 
-#: src/callbacks.c:4328
+#: src/callbacks.c:4316
 #, c-format
 msgid "Scanning title %d of %d..."
 msgstr "Titel %d van %d scannen..."
 
-#: src/callbacks.c:4332
+#: src/callbacks.c:4320
 #, c-format
 msgid "Scanning title %d of %d preview %d..."
 msgstr "Titel %d van %d scannen, preview %d..."
 
-#: src/callbacks.c:4416
+#: src/callbacks.c:4404
 msgid "Paused"
 msgstr "Gepauzeerd"
 
-#: src/callbacks.c:4447
+#: src/callbacks.c:4435
 msgid "Encode Done!"
 msgstr "Encoderen klaar!"
 
-#: src/callbacks.c:4451
+#: src/callbacks.c:4439
 msgid "Encode Canceled."
 msgstr "Encoderen geannuleerd."
 
-#: src/callbacks.c:4456
+#: src/callbacks.c:4444
 msgid "Encode Failed."
 msgstr "Encoderen mislukt."
 
-#: src/callbacks.c:4498
+#: src/callbacks.c:4486
 msgid "Muxing: This may take a while..."
 msgstr "Muxen: Dit kan even duren..."
 
-#: src/callbacks.c:5416
-#, c-format
-msgid "HandBrake %s/%s is now available (you have %s/%d)."
-msgstr "HandBrake %s/%s is nu beschikbaar (je hebt %s/%d)."
-
-#: src/callbacks.c:5595
+#: src/callbacks.c:5286
 msgid "Encode Complete"
 msgstr "Encoderen voltooid"
 
-#: src/callbacks.c:5597
+#: src/callbacks.c:5288
 msgid "Put down that cocktail, Your HandBrake queue is done!"
 msgstr "Zet die cocktail neer. Je HandBrake-wachtrij is klaar!"
 
-#: src/callbacks.c:5608 src/callbacks.c:5616 src/callbacks.c:5625
+#: src/callbacks.c:5299 src/callbacks.c:5307 src/callbacks.c:5316
 msgid "Your encode is complete."
 msgstr "Het encoderen is voltooid."
 
-#: src/callbacks.c:5609
+#: src/callbacks.c:5300
 msgid "Quitting Handbrake"
 msgstr "Handbrake wordt afgesloten"
 
-#: src/callbacks.c:5617
+#: src/callbacks.c:5308
 msgid "Putting computer to sleep"
 msgstr "De computer wordt in slaapstand gezet"
 
-#: src/callbacks.c:5626
+#: src/callbacks.c:5317
 msgid "Shutting down the computer"
 msgstr "De computer wordt afgesloten"
 
 #. Add filters
-#: src/callbacks.c:5755 src/chapters.c:603 src/chapters.c:633
-#: src/presets.c:2044 src/queuehandler.c:1694
+#: src/callbacks.c:5446 src/chapters.c:603 src/chapters.c:633
+#: src/presets.c:2078 src/queuehandler.c:1694
 msgid "All Files"
 msgstr "Alle bestanden"
 
@@ -2993,8 +3030,8 @@ msgstr "De computer in slaapstand zetten"
 msgid "Shutdown Computer"
 msgstr "De computer afsluiten"
 
-#: src/hb-backend.c:125 src/hb-backend.c:240 src/hb-backend.c:271
-#: src/hb-backend.c:285 src/hb-backend.c:396
+#: src/hb-backend.c:125 src/hb-backend.c:227 src/hb-backend.c:258
+#: src/hb-backend.c:272 src/hb-backend.c:383
 msgid "Custom"
 msgstr "Aangepast"
 
@@ -3014,293 +3051,277 @@ msgstr "Jaar"
 msgid "Immortal"
 msgstr "Onsterfelijk"
 
-#: src/hb-backend.c:174
-msgid "Never"
-msgstr "Nooit"
-
-#: src/hb-backend.c:175
-msgid "Daily"
-msgstr "Dagelijks"
-
-#: src/hb-backend.c:176
-msgid "Weekly"
-msgstr "Wekelijks"
-
-#: src/hb-backend.c:177
-msgid "Monthly"
-msgstr "Maandelijks"
-
-#: src/hb-backend.c:201 src/hb-backend.c:4880
+#: src/hb-backend.c:188 src/hb-backend.c:4862
 msgid "Decomb"
 msgstr "Decomb"
 
-#: src/hb-backend.c:202
+#: src/hb-backend.c:189
 msgid "Yadif"
 msgstr "Yadif"
 
-#: src/hb-backend.c:203
+#: src/hb-backend.c:190
 msgid "Bwdif"
 msgstr "Bwdif"
 
-#: src/hb-backend.c:214
+#: src/hb-backend.c:201
 msgid "NLMeans"
 msgstr "NLMeans"
 
-#: src/hb-backend.c:215
+#: src/hb-backend.c:202
 msgid "HQDN3D"
 msgstr "HQDN3D"
 
-#: src/hb-backend.c:226
+#: src/hb-backend.c:213
 msgid "Unsharp"
 msgstr "Unsharp"
 
-#: src/hb-backend.c:227
+#: src/hb-backend.c:214
 msgid "Lapsharp"
 msgstr "Lapsharp"
 
-#: src/hb-backend.c:238
+#: src/hb-backend.c:225
 msgid "Conservative"
 msgstr "Conservatief"
 
-#: src/hb-backend.c:251
+#: src/hb-backend.c:238
 msgid "90°"
 msgstr "90°"
 
-#: src/hb-backend.c:252
+#: src/hb-backend.c:239
 msgid "180°"
 msgstr "180°"
 
-#: src/hb-backend.c:253
+#: src/hb-backend.c:240
 msgid "270°"
 msgstr "270°"
 
-#: src/hb-backend.c:263
+#: src/hb-backend.c:250
 msgid "4320p 8K Ultra HD"
 msgstr "4320p 8K Ultra HD"
 
-#: src/hb-backend.c:264
+#: src/hb-backend.c:251
 msgid "2160p 4K Ultra HD"
 msgstr "2160p 4K Ultra HD"
 
-#: src/hb-backend.c:265
+#: src/hb-backend.c:252
 msgid "1440p 2.5K Quad HD"
 msgstr "1440p 2.5K Quad HD"
 
-#: src/hb-backend.c:266
+#: src/hb-backend.c:253
 msgid "1080p Full HD"
 msgstr "1080p Full HD"
 
-#: src/hb-backend.c:267
+#: src/hb-backend.c:254
 msgid "720p HD"
 msgstr "720p HD"
 
-#: src/hb-backend.c:268
+#: src/hb-backend.c:255
 msgid "576p PAL"
 msgstr "576p PAL"
 
-#: src/hb-backend.c:269
+#: src/hb-backend.c:256
 msgid "480p NTSC"
 msgstr "480p NTSC"
 
-#: src/hb-backend.c:282
+#: src/hb-backend.c:269
 msgid "Height (Letterbox)"
 msgstr "Hoogte (randen boven/onder)"
 
-#: src/hb-backend.c:283
+#: src/hb-backend.c:270
 msgid "Width (Pillarbox)"
 msgstr "Breedte (randen links/rechts)"
 
-#: src/hb-backend.c:284
+#: src/hb-backend.c:271
 msgid "Width &amp; Height"
 msgstr "Breedte &amp; hoogte"
 
-#: src/hb-backend.c:295
+#: src/hb-backend.c:282
 msgid "Black"
 msgstr "Zwart"
 
-#: src/hb-backend.c:296
+#: src/hb-backend.c:283
 msgid "Dark Gray"
 msgstr "Donkergrijs"
 
-#: src/hb-backend.c:297
+#: src/hb-backend.c:284
 msgid "Gray"
 msgstr "Grijs"
 
-#: src/hb-backend.c:298
+#: src/hb-backend.c:285
 msgid "White"
 msgstr "Wit"
 
-#: src/hb-backend.c:309
+#: src/hb-backend.c:296
 msgid "Spatial"
 msgstr "Spatiaal"
 
-#: src/hb-backend.c:310
+#: src/hb-backend.c:297
 msgid "Temporal"
 msgstr "Temporaal"
 
-#: src/hb-backend.c:322
+#: src/hb-backend.c:309
 msgid "Fast"
 msgstr "Snel"
 
-#: src/hb-backend.c:323
+#: src/hb-backend.c:310
 msgid "Optimal"
 msgstr "Optimaal"
 
-#: src/hb-backend.c:334
+#: src/hb-backend.c:321
 msgid "Strict"
 msgstr "Strict"
 
-#: src/hb-backend.c:335
+#: src/hb-backend.c:322
 msgid "Normal"
 msgstr "Normaal"
 
-#: src/hb-backend.c:346
+#: src/hb-backend.c:333
 msgid "Simple"
 msgstr "Eenvoudig"
 
-#: src/hb-backend.c:347
+#: src/hb-backend.c:334
 msgid "Smart"
 msgstr "Slim"
 
-#: src/hb-backend.c:357
+#: src/hb-backend.c:344
 msgid "Diamond"
 msgstr "Ruit"
 
-#: src/hb-backend.c:358
+#: src/hb-backend.c:345
 msgid "Hexagon"
 msgstr "Zeshoek"
 
-#: src/hb-backend.c:359
+#: src/hb-backend.c:346
 msgid "Uneven Multi-Hexagon"
 msgstr "Onregelmatige multi-zeshoek"
 
-#: src/hb-backend.c:360
+#: src/hb-backend.c:347
 msgid "Exhaustive"
 msgstr "Uitgebreid"
 
-#: src/hb-backend.c:361
+#: src/hb-backend.c:348
 msgid "Hadamard Exhaustive"
 msgstr "Hadamard uitgebreid"
 
-#: src/hb-backend.c:371
+#: src/hb-backend.c:358
 msgid "0: SAD, no subpel"
 msgstr "0: SAD, geen subpel"
 
-#: src/hb-backend.c:372
+#: src/hb-backend.c:359
 msgid "1: SAD, qpel"
 msgstr "1: SAD, qpel"
 
-#: src/hb-backend.c:373
+#: src/hb-backend.c:360
 msgid "2: SATD, qpel"
 msgstr "2: SATD, qpel"
 
-#: src/hb-backend.c:374
+#: src/hb-backend.c:361
 msgid "3: SATD: multi-qpel"
 msgstr "3: SATD: multi-qpel"
 
-#: src/hb-backend.c:375
+#: src/hb-backend.c:362
 msgid "4: SATD, qpel on all"
 msgstr "4: SATD, qpel op alle"
 
-#: src/hb-backend.c:376
+#: src/hb-backend.c:363
 msgid "5: SATD, multi-qpel on all"
 msgstr "5: SATD, multi-qpel op alle"
 
-#: src/hb-backend.c:377
+#: src/hb-backend.c:364
 msgid "6: RD in I/P-frames"
 msgstr "6: RD in I/P-frames"
 
-#: src/hb-backend.c:378
+#: src/hb-backend.c:365
 msgid "7: RD in all frames"
 msgstr "7: RD in all frames"
 
-#: src/hb-backend.c:379
+#: src/hb-backend.c:366
 msgid "8: RD refine in I/P-frames"
 msgstr "8: RD verfijnd in I/P-frames"
 
-#: src/hb-backend.c:380
+#: src/hb-backend.c:367
 msgid "9: RD refine in all frames"
 msgstr "9: RD verfijnd in all frames"
 
-#: src/hb-backend.c:381
+#: src/hb-backend.c:368
 msgid "10: QPRD in all frames"
 msgstr "10: QPRD in alle frames"
 
-#: src/hb-backend.c:382
+#: src/hb-backend.c:369
 msgid "11: No early terminations in analysis"
 msgstr "11: Geen vroege stopzetting in de analyse"
 
-#: src/hb-backend.c:392
+#: src/hb-backend.c:379
 msgid "Most"
 msgstr "Meeste"
 
-#: src/hb-backend.c:394
+#: src/hb-backend.c:381
 msgid "Some"
 msgstr "Sommige"
 
-#: src/hb-backend.c:395
+#: src/hb-backend.c:382
 msgid "All"
 msgstr "Alle"
 
-#: src/hb-backend.c:407
+#: src/hb-backend.c:394
 msgid "Encode only"
 msgstr "Enkel encoderen"
 
-#: src/hb-backend.c:408
+#: src/hb-backend.c:395
 msgid "Always"
 msgstr "Altijd"
 
-#: src/hb-backend.c:1524 src/hb-backend.c:1584 src/hb-backend.c:1663
+#: src/hb-backend.c:1505 src/hb-backend.c:1565 src/hb-backend.c:1644
 msgid "Same as source"
 msgstr "Zelfde als bron"
 
-#: src/hb-backend.c:1677
+#: src/hb-backend.c:1658
 msgid "(NTSC Film)"
 msgstr "(NTSC Film)"
 
-#: src/hb-backend.c:1681
+#: src/hb-backend.c:1662
 msgid "(PAL Film/Video)"
 msgstr "(PAL Film/Video)"
 
-#: src/hb-backend.c:1685
+#: src/hb-backend.c:1666
 msgid "(NTSC Video)"
 msgstr "(NTSC Video)"
 
-#: src/hb-backend.c:2252
+#: src/hb-backend.c:2246
 #, c-format
 msgid "%s - (%05d.MPLS)"
 msgstr "%s - (%05d.MPLS)"
 
-#: src/hb-backend.c:2402
+#: src/hb-backend.c:2396
 #, c-format
 msgid "%3d - %02dh%02dm%02ds - %s"
 msgstr "%3d - %02du%02dm%02ds - %s"
 
-#: src/hb-backend.c:2421
+#: src/hb-backend.c:2415
 #, c-format
 msgid "%3d - %02dh%02dm%02ds - (%05d.MPLS)"
 msgstr "%3d - %02du%02dm%02ds - (%05d.MPLS)"
 
-#: src/hb-backend.c:2427
+#: src/hb-backend.c:2421
 #, c-format
 msgid "%3d - (%05d.MPLS)"
 msgstr "%3d - (%05d.MPLS)"
 
-#: src/hb-backend.c:2433
+#: src/hb-backend.c:2427
 #, c-format
 msgid "%3d - %02dh%02dm%02ds"
 msgstr "%3d - %02du%02dm%02ds"
 
-#: src/hb-backend.c:2466
+#: src/hb-backend.c:2460
 msgid "No Titles"
 msgstr "Geen titels"
 
 #. No audio. set some default
-#: src/hb-backend.c:2746
+#: src/hb-backend.c:2740
 msgid "No Audio"
 msgstr "Geen audio"
 
-#: src/hb-backend.c:4289
+#: src/hb-backend.c:4271
 #, c-format
 msgid ""
 "Invalid Detelecine Settings:\n"
@@ -3313,7 +3334,7 @@ msgstr ""
 "Voorinstelling:\t%s\n"
 "Aangepast:\t%s\n"
 
-#: src/hb-backend.c:4296
+#: src/hb-backend.c:4278
 #, c-format
 msgid ""
 "Invalid Detelecine Settings:\n"
@@ -3324,7 +3345,7 @@ msgstr ""
 "\n"
 "Voorinstelling:\t%s\n"
 
-#: src/hb-backend.c:4322
+#: src/hb-backend.c:4304
 #, c-format
 msgid ""
 "Invalid Comb Detect Settings:\n"
@@ -3337,7 +3358,7 @@ msgstr ""
 "Voorinstelling:\t%s\n"
 "Aangepast:\t%s\n"
 
-#: src/hb-backend.c:4329
+#: src/hb-backend.c:4311
 #, c-format
 msgid ""
 "Invalid Comb Detect Settings:\n"
@@ -3348,7 +3369,7 @@ msgstr ""
 "\n"
 "Voorinstelling:\t%s\n"
 
-#: src/hb-backend.c:4358
+#: src/hb-backend.c:4340
 #, c-format
 msgid ""
 "Invalid Deinterlace Settings:\n"
@@ -3363,7 +3384,7 @@ msgstr ""
 "Voorinstelling:\t%s\n"
 "Aangepast:\t%s\n"
 
-#: src/hb-backend.c:4367
+#: src/hb-backend.c:4349
 #, c-format
 msgid ""
 "Invalid Deinterlace Settings:\n"
@@ -3376,7 +3397,7 @@ msgstr ""
 "Filter:\t%s\n"
 "Voorinstelling:\t%s\n"
 
-#: src/hb-backend.c:4396
+#: src/hb-backend.c:4378
 #, c-format
 msgid ""
 "Invalid Denoise Settings:\n"
@@ -3393,7 +3414,7 @@ msgstr ""
 "Regeling:\t%s\n"
 "Aangepast:\t%s\n"
 
-#: src/hb-backend.c:4424
+#: src/hb-backend.c:4406
 #, c-format
 msgid ""
 "Invalid Sharpen Settings:\n"
@@ -3410,7 +3431,8 @@ msgstr ""
 "Regeling:\t%s\n"
 "Aangepast:\t%s\n"
 
-#: src/hb-backend.c:4458
+#: src/hb-backend.c:4440
+#, c-format
 msgid ""
 "Theora is not supported in the MP4 container.\n"
 "\n"
@@ -3422,7 +3444,8 @@ msgstr ""
 "Kies een andere video-codec of container.\n"
 "Als u doorgaat zal FFMPEG gekozen worden."
 
-#: src/hb-backend.c:4468
+#: src/hb-backend.c:4450
+#, c-format
 msgid ""
 "Only VP8, VP9 and AV1 is supported in the WebM container.\n"
 "\n"
@@ -3434,17 +3457,18 @@ msgstr ""
 "Kies een andere videocodec of container.\n"
 "Als je doorgaat, wordt er een voor je gekozen."
 
-#: src/hb-backend.c:4477 src/hb-backend.c:4534 src/hb-backend.c:4554
-#: src/hb-backend.c:4574 src/hb-backend.c:4635 src/hb-backend.c:4690
+#: src/hb-backend.c:4459 src/hb-backend.c:4516 src/hb-backend.c:4536
+#: src/hb-backend.c:4556 src/hb-backend.c:4617 src/hb-backend.c:4672
 msgid "Continue"
 msgstr "Doorgaan"
 
 #. No valid title, stop right there
-#: src/hb-backend.c:4503 src/hb-backend.c:4599
+#: src/hb-backend.c:4485 src/hb-backend.c:4581
 msgid "No title found.\n"
 msgstr "Geen titel gevonden.\n"
 
-#: src/hb-backend.c:4530
+#: src/hb-backend.c:4512
+#, c-format
 msgid ""
 "Only one subtitle may be burned into the video.\n"
 "\n"
@@ -3456,7 +3480,8 @@ msgstr ""
 "Pas de ondertitel-selecties aan.\n"
 "Als u doorgaat zullen sommige ondertitels verloren gaan."
 
-#: src/hb-backend.c:4550
+#: src/hb-backend.c:4532
+#, c-format
 msgid ""
 "WebM in HandBrake only supports burned subtitles.\n"
 "\n"
@@ -3468,7 +3493,8 @@ msgstr ""
 "Pas de ondertitel-selecties aan.\n"
 "Als u doorgaat zullen sommige ondertitels verloren gaan."
 
-#: src/hb-backend.c:4570
+#: src/hb-backend.c:4552
+#, c-format
 msgid ""
 "SRT file does not exist or not a regular file.\n"
 "\n"
@@ -3480,7 +3506,8 @@ msgstr ""
 "Kies een geldig bestand.\n"
 "Als u doorgaat zal deze ondertitel genegeerd worden."
 
-#: src/hb-backend.c:4631
+#: src/hb-backend.c:4613
+#, c-format
 msgid ""
 "The source does not support Pass-Thru.\n"
 "\n"
@@ -3492,7 +3519,7 @@ msgstr ""
 "Kies een andere audio-codec.\n"
 "Als u doorgaat zal er automatisch één gekozen worden."
 
-#: src/hb-backend.c:4686
+#: src/hb-backend.c:4668
 #, c-format
 msgid ""
 "%s is not supported in the %s container.\n"
@@ -3505,55 +3532,55 @@ msgstr ""
 "Kies een andere audio-codec.\n"
 "Als u doorgaat zal er automatisch één gekozen worden."
 
-#: src/hb-backend.c:4872
+#: src/hb-backend.c:4854
 msgid "Comb Detect"
 msgstr "Comb Detect"
 
-#: src/hb-backend.c:4874
+#: src/hb-backend.c:4856
 msgid "Detelecine"
 msgstr "Detelecine"
 
-#: src/hb-backend.c:4876
+#: src/hb-backend.c:4858
 msgid "Deinterlace (Yadif)"
 msgstr "Deinterlace (Yadif)"
 
-#: src/hb-backend.c:4878
+#: src/hb-backend.c:4860
 msgid "Deinterlace (Bwdif)"
 msgstr "Deinterlace (Bwdif)"
 
-#: src/hb-backend.c:4882
+#: src/hb-backend.c:4864
 msgid "Deblock"
 msgstr "Deblock"
 
-#: src/hb-backend.c:4884
+#: src/hb-backend.c:4866
 msgid "Denoise (NLMeans)"
 msgstr "Denoise (NLMeans)"
 
-#: src/hb-backend.c:4886
+#: src/hb-backend.c:4868
 msgid "Denoise (HQDN3D)"
 msgstr "Denoise (HQDN3D)"
 
-#: src/hb-backend.c:4888
+#: src/hb-backend.c:4870
 msgid "Chroma Smooth"
 msgstr "Chroma Smooth"
 
-#: src/hb-backend.c:4890
+#: src/hb-backend.c:4872
 msgid "Sharpen (Unsharp)"
 msgstr "Sharpen (Unsharp)"
 
-#: src/hb-backend.c:4892
+#: src/hb-backend.c:4874
 msgid "Rotate"
 msgstr "Roteren"
 
-#: src/hb-backend.c:4894
+#: src/hb-backend.c:4876
 msgid "Sharpen (lapsharp)"
 msgstr "Sharpen (lapsharp)"
 
-#: src/hb-backend.c:4898
+#: src/hb-backend.c:4880
 msgid "Colorspace"
 msgstr "Kleurruimte"
 
-#: src/main.c:99
+#: src/main.c:102
 #, c-format
 msgid ""
 "<b><big>Unable to create %s.</big></b>\n"
@@ -3566,78 +3593,81 @@ msgstr ""
 "Interne fout. Kan UI-beschrijving niet lezen.\n"
 "%s"
 
-#: src/main.c:234 src/main.c:299
+#: src/main.c:233 src/main.c:294
 msgid "Track Information"
 msgstr "Trackinformatie"
 
-#: src/main.c:248 src/main.c:253 src/main.c:313 src/main.c:317
+#: src/main.c:247 src/main.c:252 src/main.c:308 src/main.c:312
 msgid " "
 msgstr " "
 
-#: src/main.c:360
+#: src/main.c:349
 msgid "Preset Name"
 msgstr "Naam voorinstelling"
 
-#: src/main.c:575
+#: src/main.c:558
 msgid "The device or file to encode"
 msgstr "Het apparaat of bestand om te encoderen"
 
-#: src/main.c:576
+#: src/main.c:559
 msgid "The preset values to use for encoding"
 msgstr "De voorinstelling om te gebruiken voor encoderen"
 
-#: src/main.c:577
+#: src/main.c:560
 msgid "Spam a lot"
 msgstr "Spam veel"
 
-#: src/main.c:578
+#: src/main.c:561
 msgid "The path to override user config dir"
 msgstr "Het pad om de gebruikersconfiguratiemap te overschrijven"
 
-#: src/main.c:580
+#: src/main.c:563
 msgid "Open a console for debug output"
 msgstr "Open een console voor debug-uitvoer"
 
-#: src/presets.c:1212
+#: src/presets.c:1247
 msgid "ghb_presets_menu_init: Failed to find presets folder."
 msgstr "ghb_presets_menu_init: Vinden van voorinstelling-map mislukt."
 
-#: src/presets.c:1368
+#: src/presets.c:1403
 msgid "Failed to find parent folder when adding child."
 msgstr ""
 "Vinden van de bovenliggende map mislukt bij het toevoegen van een item."
 
-#: src/presets.c:1852
+#: src/presets.c:1887
+#, c-format
 msgid ""
-"Presets found are newer than what is supported by this version of HandBrake!\n"
+"Presets found are newer than what is supported by this version of "
+"HandBrake!\n"
 "\n"
 "Would you like to continue?"
 msgstr ""
-"Gevonden voorinstellingen zijn nieuwer dan wat door deze versie van HandBrake ondersteund wordt!\n"
+"Gevonden voorinstellingen zijn nieuwer dan wat door deze versie van "
+"HandBrake ondersteund wordt!\n"
 "\n"
 "Wilt u doorgaan?"
 
-#: src/presets.c:1855
+#: src/presets.c:1890
 msgid "Get me out of here!"
 msgstr "Haal me hier weg."
 
-#: src/presets.c:1855
+#: src/presets.c:1890
 msgid "Load backup presets"
 msgstr "Backup-voorinstellingen inladen"
 
-#: src/presets.c:2045
+#: src/presets.c:2079
 msgid "Presets (*.json)"
 msgstr "Voorinstellingen (*.json)"
 
-#: src/presets.c:2047
+#: src/presets.c:2081
 msgid "Legacy Presets (*.plist)"
 msgstr "Oude voorinstellingen (*.plist)"
 
-#: src/presets.c:2156
+#: src/presets.c:2190
 msgid "Export Preset"
 msgstr "Voorinstelling exporteren"
 
-#: src/presets.c:2460
+#: src/presets.c:2494
 #, c-format
 msgid ""
 "Confirm deletion of %s:\n"
@@ -3648,19 +3678,19 @@ msgstr ""
 "\n"
 "%s"
 
-#: src/presets.c:2461
+#: src/presets.c:2495
 msgid "folder"
 msgstr "map"
 
-#: src/presets.c:2461
+#: src/presets.c:2495
 msgid "preset"
 msgstr "voorinstelling"
 
-#: src/presets.c:2467
+#: src/presets.c:2501
 msgid "Delete"
 msgstr "Verwijderen"
 
-#: src/preview.c:532
+#: src/preview.c:533
 #, c-format
 msgid ""
 "Missing GStreamer plugin\n"
@@ -3673,7 +3703,7 @@ msgstr ""
 "\n"
 "%s"
 
-#: src/preview.c:536
+#: src/preview.c:537 src/title-add.c:874
 msgid "OK"
 msgstr "OK"
 
@@ -3907,7 +3937,7 @@ msgstr "Codering hervatten"
 msgid "_Resume Encoding"
 msgstr "Codering _hervatten"
 
-#: src/queuehandler.c:2678
+#: src/queuehandler.c:2672
 msgid ""
 "You are currently encoding.  What would you like to do?\n"
 "\n"
@@ -3932,24 +3962,101 @@ msgstr "Passthrough"
 msgid "Default"
 msgstr "Standaard"
 
-#: src/subtitlehandler.c:1191
+#: src/subtitlehandler.c:1167
 msgid "Add Subtitles"
 msgstr "Ondertiteling toevoegen"
 
-#: src/subtitlehandler.c:1382
+#: src/subtitlehandler.c:1358
 #, c-format
 msgid "Preferred Language: %s"
 msgstr "Voorkeurstaal: %s"
 
-#: src/subtitlehandler.c:1396
+#: src/subtitlehandler.c:1372
 #, c-format
 msgid "Add %s subtitle track if default audio is not %s"
 msgstr "Voeg %s ondertitel-track toe als de standaard-audio niet %s is"
 
-#: src/subtitlehandler.c:1401
+#: src/subtitlehandler.c:1377
+#, c-format
 msgid "Add subtitle track if default audio is not your preferred language"
 msgstr ""
 "Voeg ondertitel-track toe als de standaard-audio niet de voorkeurstaal is"
+
+#: src/title-add.c:108
+#, c-format
+msgid ""
+"Destination: %s\n"
+"\n"
+"Another queued job has specified the same destination.\n"
+"Do you want to overwrite?"
+msgstr ""
+
+#: src/title-add.c:113 src/title-add.c:162
+msgid "Overwrite File?"
+msgstr ""
+
+#: src/title-add.c:114 src/title-add.c:163
+msgid "Overwrite"
+msgstr ""
+
+#: src/title-add.c:127
+#, c-format
+msgid ""
+"Destination: %s\n"
+"\n"
+"This is not a valid directory."
+msgstr ""
+
+#: src/title-add.c:131 src/title-add.c:146
+#, fuzzy
+msgid "Invalid Destination"
+msgstr "Doel:"
+
+#: src/title-add.c:142
+#, c-format
+msgid ""
+"Destination: %s\n"
+"\n"
+"Can not read or write the directory."
+msgstr ""
+
+#: src/title-add.c:157
+#, c-format
+msgid ""
+"Destination: %s\n"
+"\n"
+"File already exists.\n"
+"Do you want to overwrite?"
+msgstr ""
+
+#: src/title-add.c:478
+#, fuzzy
+msgid "Select this title for adding to the queue.\n"
+msgstr "Markeer alle titels om aan de wachtrij toe te voegen"
+
+#. Title label
+#: src/title-add.c:486
+#, fuzzy
+msgid "No Title"
+msgstr "Geen titels"
+
+#: src/title-add.c:496
+msgid ""
+"There is another title with the same destination file name.\n"
+"This title will not be added to the queue unless you change\n"
+"the output file name.\n"
+msgstr ""
+
+#: src/title-add.c:871
+#, fuzzy
+msgid "Cannot Add Titles"
+msgstr "Geen titels"
+
+#: src/title-add.c:872
+msgid ""
+"The filenames are not unique. Please choose\n"
+"a unique destination filename for each title."
+msgstr ""
 
 #: src/videohandler.c:208
 #, c-format
@@ -3981,3 +4088,74 @@ msgstr ""
 #, c-format
 msgid "%s: %.4g (Warning: lossless)"
 msgstr "%s: %.4g (Waarschuwing: verliesloos)"
+
+#~ msgid "Automatically check for updates"
+#~ msgstr "Automatisch controleren op updates"
+
+#~ msgid "HandBrake Updater"
+#~ msgstr "HandBrake Updater"
+
+#~ msgid "Skip This Version"
+#~ msgstr "Deze versie overslaan"
+
+#~ msgid "Remind Me Later"
+#~ msgstr "Herinner mij later"
+
+#~ msgid "<b>A new version of HandBrake is available!</b>"
+#~ msgstr "<b>Een nieuwere versie van HandBrake is beschikbaar!</b>"
+
+#~ msgid "HandBrake xxx is now available (you have yyy)."
+#~ msgstr "HandBrake xxx is nu beschikbaar (huidge versie is yyy)."
+
+#~ msgid "<b>Release Notes</b>"
+#~ msgstr "<b>Release-opmerkingen</b>"
+
+#~ msgid ""
+#~ "HandBrake is a tool for converting video from nearly any format to a "
+#~ "selection of modern, widely supported codecs."
+#~ msgstr ""
+#~ "HandBrake is een hulpmiddel om video vanuit nagenoeg elk formaat om te "
+#~ "zetten in een selectie van moderne en breed ondersteunde codecs."
+
+#~ msgid "Reasons you'll love Handbrake:"
+#~ msgstr "Redenen om van HandBrake te houden:"
+
+#~ msgid "Convert video from nearly any format"
+#~ msgstr "Zet video vanuit nagenoeg elk formaat om"
+
+#~ msgid "Free and Open Source"
+#~ msgstr "Gratis en open source"
+
+#~ msgid "Multi-Platform (Windows, Mac and Linux)"
+#~ msgstr "Multi-Platform (Windows, Mac en Linux)"
+
+#~ msgid "Main window and settings summary"
+#~ msgstr "Hoofdscherm en samenvatting van instellingen"
+
+#~ msgid "Video resolution and cropping settings"
+#~ msgstr "Videoresolutie en bijsnijd-instellingen"
+
+#~ msgid "Video encoder settings"
+#~ msgstr "Video-encoder-instellingen"
+
+#~ msgid "Audio track selection and settings"
+#~ msgstr "Audiotrack-selectie en -instellingen"
+
+#~ msgid "Chapter title editing"
+#~ msgstr "Hoofdstuktitels aanpassen"
+
+#, c-format
+#~ msgid "HandBrake %s/%s is now available (you have %s/%d)."
+#~ msgstr "HandBrake %s/%s is nu beschikbaar (je hebt %s/%d)."
+
+#~ msgid "Never"
+#~ msgstr "Nooit"
+
+#~ msgid "Daily"
+#~ msgstr "Dagelijks"
+
+#~ msgid "Weekly"
+#~ msgstr "Wekelijks"
+
+#~ msgid "Monthly"
+#~ msgstr "Maandelijks"
