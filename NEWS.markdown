@@ -55,6 +55,10 @@ Windows users, please make sure to install [Microsoft .NET Desktop Runtime versi
 - Fixed a locale issue that could result in the wrong decimal separator in SSA headers
 - Fixed an issue that caused issues with 0 length subtitles when using SSA.
 
+#### Build System
+
+- Use Meson build system for the Linux GUI
+
 #### Third-party libraries
 
 - Updated libraries
@@ -102,6 +106,15 @@ Windows users, please make sure to install [Microsoft .NET Desktop Runtime versi
 
 ### Linux
 
+- Added support for native file choosers via xdg-desktop-portal
+- Added drag and drop support for video scanning
+- Added XML chapter import and export
+- Option to pause encoding when switching to battery power or when power save mode is activated
+- Added Queue > Add All menu option
+- Added bit-depth and HDR information to video summary
+- Added Auto naming options: {codec} {bit-depth} {width} {height} {modification-date} {modification-time}
+- Queue, Activity and Presets windows no longer stay on top of the main window
+- Removed obsolete update checker
 - Miscellaneous bug fixes and improvements
 
 ### Windows
@@ -2844,3 +2857,4 @@ The Universal preset is designed to play on all modern iPods (anything newer tha
 ## HandBrake 0.1-alpha
 
 - First version.
+
