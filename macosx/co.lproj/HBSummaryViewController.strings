@@ -22,17 +22,11 @@
 /* Class = "NSTextField"; ibExternalAccessibilityDescription = "Size summary"; ObjectID = "Jaw-pH-rhf"; */
 "Jaw-pH-rhf.ibExternalAccessibilityDescription" = "Riassuntu di dimensione";
 
-/* Class = "NSButton"; ibShadowedToolTip = "Optimize MP4 for progressive download. After encoding, data is reorganized and rewritten to allow immediate playback over a network, without needing to download the entire file."; ObjectID = "JNB-kV-52S"; */
-"JNB-kV-52S.ibShadowedToolTip" = "Perfezziunà u MP4 per u scaricamentu prugressivu. Dopu a cudificazione, i dati sò riorganizati è riscritti per permette una lettura istantanea nant’à una reta, senza avè à scaricà u schedariu sanu.";
-
-/* Class = "NSButton"; ibShadowedToolTip = "Optimize MP4 for progressive download. After encoding, data is reorganized and rewritten to allow immediate playback over a network, without needing to download the entire file."; ObjectID = "lUi-Oc-208"; */
-"lUi-Oc-208.ibShadowedToolTip" = "Perfezziunà u MP4 per u scaricamentu prugressivu. Dopu a cudificazione, i dati sò riorganizati è riscritti per permette una lettura istantanea nant’à una reta, senza avè à scaricà u schedariu sanu.";
+/* Class = "NSButton"; ibShadowedToolTip = "Optimize for progressive download. After encoding, data is reorganized and rewritten to allow immediate playback over a network, without needing to download the entire file."; ObjectID = "lUi-Oc-208"; */
+"lUi-Oc-208.ibShadowedToolTip" = "Amendà per un scaricamentu prugressivu. Dopu a cudificazione, i dati sò riorganizati è riscritti per permette una lettura istantanea nant’à una reta, senza avè à scaricà u schedariu sanu.";
 
 /* Class = "NSView"; ibExternalAccessibilityDescription = "Preview"; ObjectID = "m5a-0z-QQ4"; */
 "m5a-0z-QQ4.ibExternalAccessibilityDescription" = "Fighjulata";
-
-/* Class = "NSButtonCell"; title = "Web Optimized"; ObjectID = "ma8-UR-dx2"; */
-"ma8-UR-dx2.title" = "Megliuratu per u Web";
 
 /* Class = "NSTextFieldCell"; title = "Filters:"; ObjectID = "OCw-f6-uA0"; */
 "OCw-f6-uA0.title" = "Filtri :";
