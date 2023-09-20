@@ -10,6 +10,9 @@
 /* Class = "NSButton"; ibShadowedToolTip = "Add To Queue"; ObjectID = "3xl-Xh-n9j"; */
 "3xl-Xh-n9j.ibShadowedToolTip" = "Aghjunghje à a fila d’attesa";
 
+/* Class = "NSButton"; ibShadowedToolTip = "Recursively scan and open the content of every sub-folder."; ObjectID = "5hE-Ri-tcZ"; */
+"5hE-Ri-tcZ.ibShadowedToolTip" = "Analizà di manera ripetitiva è apre u cuntenutu d’ogni sottucartulare.";
+
 /* Class = "NSTextFieldCell"; title = "0"; ObjectID = "6E4-AG-PEh"; */
 "6E4-AG-PEh.title" = "0";
 

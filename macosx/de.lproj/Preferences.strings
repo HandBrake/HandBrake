@@ -184,6 +184,9 @@
 /* Class = "NSButtonCell"; title = "Show preview images"; ObjectID = "Aao-Tf-JeJ"; */
 "Aao-Tf-JeJ.title" = "Vorschaubild anzeigen";
 
+/* Class = "NSButtonCell"; title = "Enable the VideoToolbox hardware decoders"; ObjectID = "BHK-QU-DwS"; */
+"BHK-QU-DwS.title" = "VideoToolbox-Hardwaredecoder aktivieren";
+
 /* Class = "NSButtonCell"; title = "Always clear completed items after an encode completes"; ObjectID = "BPU-E2-N8l"; */
 "BPU-E2-N8l.title" = "Nach erfolgter Encodierung Einträge abgeschlossener Aufgaben immer entfernen";
 
@@ -192,6 +195,12 @@
 
 /* Class = "NSTextFieldCell"; title = "Encoder:"; ObjectID = "cqp-xU-GOe"; */
 "cqp-xU-GOe.title" = "Encoder:";
+
+/* Class = "NSButtonCell"; title = "Also use in combination with software encoders"; ObjectID = "d9B-Vd-jMM"; */
+"d9B-Vd-jMM.title" = "Auch in Kombination mit Software-Encodern verwenden";
+
+/* Class = "NSButton"; ibShadowedToolTip = "Hardware decoders will reduce CPU usage and lower battery usage when combined with an hardware encoder. Depending on the CPU speed, they could either improve or decrease encoding speed."; ObjectID = "Doh-Ja-Gh7"; */
+"Doh-Ja-Gh7.ibShadowedToolTip" = "Hardware-Decoder reduzieren die CPU-Auslastung und den Batterieverbrauch, wenn sie mit einem Hardware-Encoder kombiniert werden. Je nach CPU-Geschwindigkeit können sie die Kodierungsgeschwindigkeit verbessern oder verringern.";
 
 /* Class = "NSTextFieldCell"; title = "Drag labels to Format to compose a naming format."; ObjectID = "dQ6-Dh-9sD"; */
 "dQ6-Dh-9sD.title" = "Labels in das Formatfenster ziehen, um das Benennungsschema festzulegen.";
@@ -213,6 +222,9 @@
 
 /* Class = "NSTextFieldCell"; title = "Number of simultaneous encodes:"; ObjectID = "iGS-b5-ip7"; */
 "iGS-b5-ip7.title" = "Anzahl simultaner Encodierungen:";
+
+/* Class = "NSTextFieldCell"; title = "Decoder:"; ObjectID = "j6w-xf-tC0"; */
+"j6w-xf-tC0.title" = "Decoder:";
 
 /* Class = "NSMenuItem"; title = "2"; ObjectID = "JcO-br-AXz"; */
 "JcO-br-AXz.title" = "2";
