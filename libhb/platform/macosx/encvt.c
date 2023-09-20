@@ -811,7 +811,7 @@ void hb_vt_compression_output_callback(
     {
         hb_log("VTCompressionSession: hb_vt_compression_output_callback called error");
     }
-    else
+    else if (sampleBuffer)
     {
         CFRetain(sampleBuffer);
         CMSimpleQueueRef queue = outputCallbackRefCon;
@@ -820,6 +820,10 @@ void hb_vt_compression_output_callback(
         {
             hb_log("VTCompressionSession: hb_vt_compression_output_callback queue full");
         }
+    }
+    else
+    {
+        hb_log("VTCompressionSession: hb_vt_compression_output_callback sample buffer is NULL");
     }
 }
 
@@ -1895,6 +1899,10 @@ int encvt_work(hb_work_object_t *w, hb_buffer_t **buf_in, hb_buffer_t **buf_out)
             {
                 hb_log("VTCompressionSessionEndPass error");
             }
+            if (furtherPassesRequestedOut == false)
+            {
+                hb_log("VTCompressionSessionEndPass: no additional pass requested");
+            }
 
             // Save the sessions and the related context
             // for the next pass.
@@ -1909,9 +1917,7 @@ int encvt_work(hb_work_object_t *w, hb_buffer_t **buf_in, hb_buffer_t **buf_out)
         }
         else if (job->pass_id == HB_PASS_ENCODE_FINAL)
         {
-            VTCompressionSessionEndPass(pv->session,
-                                        NULL,
-                                        0);
+            VTCompressionSessionEndPass(pv->session, NULL, 0);
         }
 
         return HB_WORK_DONE;
