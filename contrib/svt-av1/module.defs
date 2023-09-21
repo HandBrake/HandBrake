@@ -1,4 +1,4 @@
-__deps__ := 
+__deps__ := SSE2NEON
 
 $(eval $(call import.MODULE.defs,SVT-AV1,svt-av1,$(__deps__)))
 $(eval $(call import.CONTRIB.defs,SVT-AV1))
