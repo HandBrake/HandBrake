@@ -464,7 +464,7 @@ static int hb_vt_settings_xlat(hb_work_private_t *pv, hb_job_t *job)
     // set the preset
     if (job->encoder_preset != NULL && *job->encoder_preset != '\0')
     {
-        if (!strcasecmp(job->encoder_profile, "speed"))
+        if (!strcasecmp(job->encoder_preset, "speed"))
         {
             pv->settings.prioritizeEncodingSpeedOverQuality = kCFBooleanTrue;
         }
