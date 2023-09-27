@@ -23,6 +23,7 @@ namespace HandBrake.Interop.Interop.HbLib
         public const uint HB_ACODEC_FFFLAC = 0x00100000;
         public const uint HB_ACODEC_FFEAC3 = 0x01000000;
         public const uint HB_ACODEC_FFTRUEHD = 0x02000000;
+        public const uint HB_ACODEC_FFTRUEHD16 = 0x00000100;
         public const uint HB_ACODEC_OPUS = 0x04000000;
         public const uint HB_ACODEC_MP2 = 0x08000000;
         public const uint HB_ACODEC_PASS_FLAG = 0x40000000;
