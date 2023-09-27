@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="14269.12" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="22154" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14269.12"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="22154"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -23,7 +23,7 @@
                     <rect key="frame" x="0.0" y="0.0" width="640" height="480"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                 </customView>
-                <customView translatesAutoresizingMaskIntoConstraints="NO" id="Fn2-om-hEi" customClass="HBHUDView">
+                <customView clipsToBounds="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Fn2-om-hEi" customClass="HBHUDView">
                     <rect key="frame" x="284" y="40" width="72" height="26"/>
                     <subviews>
                         <button toolTip="Next Preview Image" translatesAutoresizingMaskIntoConstraints="NO" id="5po-M6-Hqa">
@@ -39,14 +39,14 @@
                         </button>
                         <button toolTip="Previous Preview Image" translatesAutoresizingMaskIntoConstraints="NO" id="1o6-MG-Jbu">
                             <rect key="frame" x="4" y="4" width="30" height="20"/>
-                            <constraints>
-                                <constraint firstAttribute="height" constant="20" id="efr-28-vaL"/>
-                                <constraint firstAttribute="width" constant="30" id="tBw-VV-Jdp"/>
-                            </constraints>
                             <buttonCell key="cell" type="square" title="‹" bezelStyle="shadowlessSquare" imagePosition="overlaps" alignment="center" imageScaling="proportionallyDown" id="EWx-of-C7c">
                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                 <font key="font" metaFont="system" size="18"/>
                             </buttonCell>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="20" id="efr-28-vaL"/>
+                                <constraint firstAttribute="width" constant="30" id="tBw-VV-Jdp"/>
+                            </constraints>
                             <accessibility description="Previous Preview Image"/>
                             <connections>
                                 <action selector="previous:" target="-2" id="UxL-j8-GeJ"/>
