@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="22152" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="22154" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="22152"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="22154"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -20,7 +20,7 @@
         </customObject>
         <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
         <customObject id="-3" userLabel="Application" customClass="NSObject"/>
-        <customView id="agq-EJ-miM" userLabel="Picture Controls" customClass="HBHUDView">
+        <customView clipsToBounds="YES" id="agq-EJ-miM" userLabel="Picture Controls" customClass="HBHUDView">
             <rect key="frame" x="0.0" y="0.0" width="476" height="96"/>
             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <subviews>
@@ -50,7 +50,7 @@
                         <action selector="showCroppingSettings:" target="-2" id="aDd-cp-S1k"/>
                     </connections>
                 </button>
-                <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="5T3-Vx-mC1">
+                <textField focusRingType="none" verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="5T3-Vx-mC1">
                     <rect key="frame" x="100" y="14" width="48" height="11"/>
                     <constraints>
                         <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="30" id="wtS-2b-Ijm"/>
@@ -61,7 +61,7 @@
                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
                 </textField>
-                <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Vrm-He-CjP">
+                <textField focusRingType="none" verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Vrm-He-CjP">
                     <rect key="frame" x="202" y="14" width="21" height="11"/>
                     <constraints>
                         <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="17" id="88j-t5-f6t"/>
@@ -101,7 +101,7 @@
                         <action selector="pictureSliderChanged:" target="-2" id="576-54-fMW"/>
                     </connections>
                 </slider>
-                <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="426" translatesAutoresizingMaskIntoConstraints="NO" id="MkW-KN-I1h">
+                <textField focusRingType="none" verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="426" translatesAutoresizingMaskIntoConstraints="NO" id="MkW-KN-I1h">
                     <rect key="frame" x="14" y="50" width="448" height="20"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="20" id="Wqt-oa-eQj"/>
@@ -112,7 +112,7 @@
                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
                 </textField>
-                <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="600" translatesAutoresizingMaskIntoConstraints="NO" id="7UR-Zz-7iX">
+                <textField focusRingType="none" verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="600" translatesAutoresizingMaskIntoConstraints="NO" id="7UR-Zz-7iX">
                     <rect key="frame" x="14" y="72" width="448" height="12"/>
                     <textFieldCell key="cell" controlSize="mini" sendsActionOnEndEditing="YES" alignment="left" id="CeL-Pu-NS6">
                         <font key="font" metaFont="miniSystemBold"/>

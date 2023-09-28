@@ -10,6 +10,9 @@
 /* Class = "NSButton"; ibShadowedToolTip = "Add To Queue"; ObjectID = "3xl-Xh-n9j"; */
 "3xl-Xh-n9j.ibShadowedToolTip" = "Aggiungi in coda";
 
+/* Class = "NSButton"; ibShadowedToolTip = "Recursively scan and open the content of every sub-folder."; ObjectID = "5hE-Ri-tcZ"; */
+"5hE-Ri-tcZ.ibShadowedToolTip" = "Scansiona e apri ricorsivamente il contenuto di ogni sottocartella";
+
 /* Class = "NSTextFieldCell"; title = "0"; ObjectID = "6E4-AG-PEh"; */
 "6E4-AG-PEh.title" = "0";
 
@@ -210,6 +213,9 @@
 
 /* Class = "NSToolbarItem"; toolTip = "Show Queue Window"; ObjectID = "HCx-ku-nF7"; */
 "HCx-ku-nF7.toolTip" = "Mostra finestra della coda";
+
+/* Class = "NSButtonCell"; title = "Recursively scan folders"; ObjectID = "Hwu-gp-tRZ"; */
+"Hwu-gp-tRZ.title" = "Scansiona ricorsivamente le cartella";
 
 /* Class = "CocoaBindingsConnection"; ibShadowedIsNilPlaceholder = " "; ObjectID = "Iat-pL-ttI"; */
 "Iat-pL-ttI.ibShadowedIsNilPlaceholder" = "";

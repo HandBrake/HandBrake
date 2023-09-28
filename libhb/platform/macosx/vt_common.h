@@ -19,7 +19,6 @@ const char * const * hb_vt_preset_get_names(int encoder);
 const char * const * hb_vt_profile_get_names(int encoder);
 const char * const * hb_vt_level_get_names(int encoder);
 
-unsigned int hb_vt_get_cv_pixel_format(int pix_fmt, int color_range);
 hb_buffer_t * hb_vt_copy_video_buffer_to_hw_video_buffer(const hb_job_t *job, hb_buffer_t **buf);
 hb_buffer_t * hb_vt_buffer_dup(const hb_buffer_t *src);
 

@@ -4707,12 +4707,40 @@ hb_filter_object_t * hb_filter_get( int filter_id )
             filter = &hb_filter_prefilter_vt;
             break;
 
+        case HB_FILTER_YADIF_VT:
+            filter = &hb_filter_yadif_vt;
+            break;
+
+        case HB_FILTER_BWDIF_VT:
+            filter = &hb_filter_bwdif_vt;
+            break;
+
+        case HB_FILTER_CHROMA_SMOOTH_VT:
+            filter = &hb_filter_chroma_smooth_vt;
+            break;
+
         case HB_FILTER_CROP_SCALE_VT:
             filter = &hb_filter_crop_scale_vt;
             break;
 
+        case HB_FILTER_PAD_VT:
+            filter = &hb_filter_pad_vt;
+            break;
+
         case HB_FILTER_ROTATE_VT:
             filter = &hb_filter_rotate_vt;
+            break;
+
+        case HB_FILTER_GRAYSCALE_VT:
+            filter = &hb_filter_grayscale_vt;
+            break;
+
+        case HB_FILTER_LAPSHARP_VT:
+            filter = &hb_filter_lapsharp_vt;
+            break;
+
+        case HB_FILTER_UNSHARP_VT:
+            filter = &hb_filter_unsharp_vt;
             break;
 #endif
 
@@ -6053,6 +6081,30 @@ int hb_rgb2yuv_bt709(int rgb)
     return (y << 16) | (Cr << 8) | Cb;
 }
 
+int hb_rgb2yuv_bt2020(int rgb)
+{
+    double r, g, b;
+    int y, Cr, Cb;
+
+    r = (rgb >> 16) & 0xff;
+    g = (rgb >>  8) & 0xff;
+    b = (rgb      ) & 0xff;
+
+    y  =  16. + ( 0.2307 * r) + (0.5956 * g) + (0.0521 * b);
+    Cb = 128. + (-0.1227 * r) - (0.3166 * g) + (0.4392 * b);
+    Cr = 128. + ( 0.4392 * r) - (0.4039 * g) - (0.0353 * b);
+
+    y = (y < 0) ? 0 : y;
+    Cb = (Cb < 0) ? 0 : Cb;
+    Cr = (Cr < 0) ? 0 : Cr;
+
+    y = (y > 255) ? 255 : y;
+    Cb = (Cb > 255) ? 255 : Cb;
+    Cr = (Cr > 255) ? 255 : Cr;
+
+    return (y << 16) | (Cr << 8) | Cb;
+}
+
 const char * hb_subsource_name( int source )
 {
     switch (source)
@@ -6386,7 +6438,8 @@ static int pix_fmt_is_supported(hb_job_t *job, int pix_fmt)
             case HB_FILTER_LAPSHARP:
             case HB_FILTER_UNSHARP:
             case HB_FILTER_GRAYSCALE:
-               if (planes_count == 2)
+               if (planes_count == 2 &&
+                   job->hw_pix_fmt != AV_PIX_FMT_VIDEOTOOLBOX)
                {
                    return 0;
                }

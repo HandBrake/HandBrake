@@ -76,8 +76,8 @@
     }
 
 	NSPoint centerPoint;
-	centerPoint.x = (dirtyRect.size.width / 2) - (stringSize.width / 2);
-	centerPoint.y = dirtyRect.size.height / 2 - (stringSize.height / 2) - 2;
+	centerPoint.x = (self.bounds.size.width / 2) - (stringSize.width / 2);
+	centerPoint.y = self.bounds.size.height / 2 - (stringSize.height / 2) - 2;
 
 	[budgetString drawAtPoint:centerPoint withAttributes:attributes];
 }

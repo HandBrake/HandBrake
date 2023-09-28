@@ -14,7 +14,7 @@ Windows users, please make sure to install [Microsoft .NET Desktop Runtime versi
 
 - Miscellaneous bug fixes and improvements
 - Slightly improved conversion speed by removing unneeded frame copies
-- Expanded the Optimize option to move MKV and WebM the cues to front
+- Expanded the Optimize option to move MKV and WebM cues to front
 - Added VideoToolbox presets
 
 #### Video
@@ -27,13 +27,16 @@ Windows users, please make sure to install [Microsoft .NET Desktop Runtime versi
     - 8.4
   - HDR10+ is supported on both x265 10bit and SVT-AV1 encoders
 - Support for SVT-AV1 multi-pass ABR mode
+- 4x speedup when using SVT-AV1 on Apple Silicon and arm64 CPUs
 - Added NVENC AV1 encoder
+- Added VCN AV1 encoder
 - Preserve the ambient viewing enviroment metadata
 - Removed an artificial bitrate limit on VP9 CQ mode
 - Fixed an issue when scaling video content that is not mod2.
 - Fixed an issue with QSV that could result in the output video being a green screen (#4842)
 - Fixed a green video issue with QuickSync (#4876)
 - Fixed a pixel format conversion issue that could result is slightly different colors when using a 10-bit hardware encoder (#5011)
+- Fixed an issue that prevented the VideoToolbox "speed" preset from being used
 - Various fixes and library updates for QuickSync to improve support on Linux (#4958)
 - Switch to using swscale instead of zscale when the resolution isn't mod2. Should fix scan failures in this condition
 - Fixed PAR when reading from a AV1 anamorphic video track

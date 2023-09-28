@@ -320,10 +320,6 @@ HB_OBJC_DIRECT_MEMBERS
                     {
                         [enumerator skipDescendants];
                     }
-                    else
-                    {
-                        [mutableFileURLs addObject:enumeratorURL];
-                    }
                 }
                 else
                 {
@@ -332,6 +328,10 @@ HB_OBJC_DIRECT_MEMBERS
             }
         }
     }
+
+    [mutableFileURLs sortUsingComparator:^NSComparisonResult(id  _Nonnull obj1, id  _Nonnull obj2) {
+        return [[obj1 path] localizedCaseInsensitiveCompare:[obj2 path]];
+    }];
 
     return mutableFileURLs;
 }

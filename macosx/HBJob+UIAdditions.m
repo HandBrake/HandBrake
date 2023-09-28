@@ -248,7 +248,7 @@ static HBMixdownTransformer    *mixdownTransformer;
         [options appendString:HBKitLocalizedString(@", Chapter Markers", @"Format description")];
     }
 
-    if (self.optimize)
+    if ((self.container & HB_MUX_MASK_MP4) && self.optimize)
     {
         [options appendString:HBKitLocalizedString(@", Web Optimized", @"Format description")];
     }

@@ -184,6 +184,9 @@
 /* Class = "NSButtonCell"; title = "Show preview images"; ObjectID = "Aao-Tf-JeJ"; */
 "Aao-Tf-JeJ.title" = "Affissà e fiure di fighjulata";
 
+/* Class = "NSButtonCell"; title = "Enable the VideoToolbox hardware decoders"; ObjectID = "BHK-QU-DwS"; */
+"BHK-QU-DwS.title" = "Attivà i discudificatori materiale VideoToolbox";
+
 /* Class = "NSButtonCell"; title = "Always clear completed items after an encode completes"; ObjectID = "BPU-E2-N8l"; */
 "BPU-E2-N8l.title" = "Sempre squassà l’elementi compii dopu à a fine di a cudificazione";
 
@@ -192,6 +195,12 @@
 
 /* Class = "NSTextFieldCell"; title = "Encoder:"; ObjectID = "cqp-xU-GOe"; */
 "cqp-xU-GOe.title" = "Cudificatore :";
+
+/* Class = "NSButtonCell"; title = "Also use in combination with software encoders"; ObjectID = "d9B-Vd-jMM"; */
+"d9B-Vd-jMM.title" = "Si pò dinù impiegalli cù cudificatori logichi";
+
+/* Class = "NSButton"; ibShadowedToolTip = "Hardware decoders will reduce CPU usage and lower battery usage when combined with an hardware encoder. Depending on the CPU speed, they could either improve or decrease encoding speed."; ObjectID = "Doh-Ja-Gh7"; */
+"Doh-Ja-Gh7.ibShadowedToolTip" = "I discudificatori materiale riducenu l’usu di a CPU è l’impiegu di a batteria quand’elli sò cumbinati cù un cudificatore materiale. Secondu à a vitezza di a CPU, i dui ponu megliurà o diminuisce a vitezza di a cudificazione.";
 
 /* Class = "NSTextFieldCell"; title = "Drag labels to Format to compose a naming format."; ObjectID = "dQ6-Dh-9sD"; */
 "dQ6-Dh-9sD.title" = "Fate trascinà l’etichette in Furmatu per cumpone un furmatu di dinuminazione.";
@@ -213,6 +222,9 @@
 
 /* Class = "NSTextFieldCell"; title = "Number of simultaneous encodes:"; ObjectID = "iGS-b5-ip7"; */
 "iGS-b5-ip7.title" = "Numeru di cudificazioni simultanei :";
+
+/* Class = "NSTextFieldCell"; title = "Decoder:"; ObjectID = "j6w-xf-tC0"; */
+"j6w-xf-tC0.title" = "Discudificatore :";
 
 /* Class = "NSMenuItem"; title = "2"; ObjectID = "JcO-br-AXz"; */
 "JcO-br-AXz.title" = "2";
