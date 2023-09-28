@@ -145,7 +145,7 @@ hb_avfilter_graph_init(hb_value_t * settings, hb_filter_init_t * init)
 
         if (pix_fmt == AV_PIX_FMT_QSV)
         {
-            result = hb_qsv_create_ffmpeg_pool(graph->job, init->geometry.width, init->geometry.height, init->pix_fmt, 32, 0, &hb_hw_frames_ctx);
+            result = hb_qsv_create_ffmpeg_pool(graph->job, init->geometry.width, init->geometry.height, init->pix_fmt, HB_QSV_POOL_SURFACE_SIZE, 0, &hb_hw_frames_ctx);
             if (result < 0)
             {
                 hb_error("hb_create_ffmpeg_pool failed");
