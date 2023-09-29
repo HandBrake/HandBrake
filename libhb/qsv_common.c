@@ -1381,7 +1381,7 @@ static int query_capabilities(mfxSession session, int index, mfxVersion version,
                 info->capabilities |= HB_QSV_CAP_VPP_SCALING;
             }
         }
-        if (HB_CHECK_MFX_VERSION(version, 1, 25) && info->codec_id == MFX_CODEC_HEVC)
+        if (HB_CHECK_MFX_VERSION(version, 1, 25) && (info->codec_id == MFX_CODEC_HEVC || info->codec_id == MFX_CODEC_AV1))
         {
             init_video_param(&videoParam);
             videoParam.mfx.CodecId = info->codec_id;
