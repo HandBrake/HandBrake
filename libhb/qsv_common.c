@@ -144,10 +144,13 @@ static const char * const hb_qsv_av1_profiles_names[] =
 };
 static hb_triplet_t hb_qsv_vpp_scale_modes[] =
 {
-    { "auto",              "0",         MFX_SCALING_MODE_DEFAULT,  },
-    { "lowpower",          "1",         MFX_SCALING_MODE_LOWPOWER, },
-    { "hq",                "2",         MFX_SCALING_MODE_QUALITY,  },
-    { NULL,                                                        },
+    { "auto",              "auto",              MFX_SCALING_MODE_DEFAULT,  },
+    { "lowpower",          "low_power",         MFX_SCALING_MODE_LOWPOWER, },
+    { "hq",                "hq",                MFX_SCALING_MODE_QUALITY,  },
+    { "compute",           "compute",           3                          },
+    { "vd",                "vd",                4                          },
+    { "ve",                "ve",                5                          },
+    { NULL,                                                                },
 };
 
 static hb_triplet_t hb_qsv_memory_types[] =
