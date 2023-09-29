@@ -112,12 +112,13 @@ hb_avfilter_graph_init(hb_value_t * settings, hb_filter_init_t * init)
 
     // Build filter input
 #if HB_PROJECT_FEATURE_QSV
-    if (hb_qsv_hw_filters_via_video_memory_are_enabled(graph->job) || hb_qsv_hw_filters_via_system_memory_are_enabled(graph->job))
+    // Need to handle preview as special case
+    if (hb_qsv_full_path_is_enabled(graph->job) && init->pix_fmt != AV_PIX_FMT_YUV420P)
     {
-        enum AVPixelFormat pix_fmt = init->pix_fmt;
-        if(hb_qsv_hw_filters_via_video_memory_are_enabled(graph->job))
+        enum AVPixelFormat pix_fmt = init->hw_pix_fmt;
+        if(pix_fmt == AV_PIX_FMT_NONE)
         {
-            pix_fmt = AV_PIX_FMT_QSV;
+            pix_fmt = init->pix_fmt;
         }
 
         par = av_buffersrc_parameters_alloc();
@@ -142,7 +143,7 @@ hb_avfilter_graph_init(hb_value_t * settings, hb_filter_init_t * init)
 
         AVBufferRef *hb_hw_frames_ctx = NULL;
 
-        if (hb_qsv_hw_filters_via_video_memory_are_enabled(graph->job))
+        if (pix_fmt == AV_PIX_FMT_QSV)
         {
             result = hb_qsv_create_ffmpeg_pool(graph->job, init->geometry.width, init->geometry.height, init->pix_fmt, 32, 0, &hb_hw_frames_ctx);
             if (result < 0)

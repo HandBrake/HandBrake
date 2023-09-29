@@ -10,6 +10,12 @@
 #include "handbrake/common.h"
 #include "handbrake/avfilter_priv.h"
 
+#if HB_PROJECT_FEATURE_QSV && (defined( _WIN32 ) || defined( __MINGW32__ ))
+#include "handbrake/qsv_common.h"
+#include "libavutil/hwcontext_qsv.h"
+#include "libavutil/hwcontext.h"
+#endif
+
 static int rotate_init(hb_filter_object_t * filter, hb_filter_init_t * init);
 
 const char rotate_template[] =
@@ -48,6 +54,102 @@ hb_filter_object_t hb_filter_rotate =
  * Mode 4: Rotate 90' (aka 90:0)
  * Mode 7: Flip horiz & vert plus Rotate 90' (aka 270:0)
  */
+
+#if HB_PROJECT_FEATURE_QSV && (defined( _WIN32 ) || defined( __MINGW32__ ))
+static int qsv_rotate_init(hb_filter_private_t * pv, hb_filter_init_t * init, int angle, int flip)
+{
+    hb_rational_t par    = init->geometry.par;
+    int           width  = init->geometry.width;
+    int           height = init->geometry.height;
+    const char *  trans  = NULL;
+    int           hflip = 0, vflip = 0;
+
+    switch (angle)
+    {
+        case 0:
+            hflip = flip;
+            break;
+        case 90:
+            trans   = "clock";
+            width   = init->geometry.height;
+            height  = init->geometry.width;
+            par.num = init->geometry.par.den;
+            par.den = init->geometry.par.num;
+            break;
+        case 180:
+            trans = "reversal";
+            break;
+        case 270:
+            trans  = "cclock";
+            width   = init->geometry.height;
+            height  = init->geometry.width;
+            par.num = init->geometry.par.den;
+            par.den = init->geometry.par.num;
+            break;
+        default:
+            break;
+    }
+
+    if (hb_qsv_hw_filters_via_video_memory_are_enabled(init->job))
+    {
+        int result = hb_qsv_create_ffmpeg_vpp_pool(init, width, height);
+        if (result < 0)
+        {
+            hb_error("hb_create_ffmpeg_pool vpp allocation failed");
+            return result;
+        }
+    }
+
+    if (trans != NULL)
+    {
+        hb_dict_t * avfilter = hb_dict_init();
+        hb_dict_t * avsettings = hb_dict_init();
+
+        if(hflip)
+            hb_dict_set(avsettings, "transpose", hb_value_string(strcat(trans, "_hflip")));
+        else
+            hb_dict_set(avsettings, "transpose", hb_value_string(trans));
+        hb_dict_set(avfilter, "vpp_qsv", avsettings);
+        
+        pv->avfilters = avfilter;
+    }
+    else if (hflip || vflip)
+    {
+        hb_value_array_t * avfilters = hb_value_array_init();
+        hb_dict_t        * avfilter;
+        hb_dict_t * avsettings = hb_dict_init();
+        if (vflip)
+        {
+            avfilter = hb_dict_init();
+
+            hb_dict_set(avsettings, "transpose", "vflip");
+            hb_dict_set(avfilter, "vpp_qsv", avsettings);
+            pv->avfilters = avfilter;
+        }
+        if (hflip)
+        {
+            avfilter = hb_dict_init();
+
+            hb_dict_set(avsettings, "transpose", "hflip");
+            hb_dict_set(avfilter, "vpp_qsv", avsettings);
+            pv->avfilters = avfilter;
+        }
+        pv->avfilters = avfilters;
+    }
+    else
+    {
+        pv->avfilters = hb_value_null();
+    }
+
+    init->geometry.width  = width;
+    init->geometry.height = height;
+    init->geometry.par    = par;
+    pv->output = *init;
+
+    return 0;
+}
+#endif
+
 static int rotate_init(hb_filter_object_t * filter, hb_filter_init_t * init)
 {
     hb_filter_private_t * pv = NULL;
@@ -83,6 +185,15 @@ static int rotate_init(hb_filter_object_t * filter, hb_filter_init_t * init)
         clock  = "clock";
         cclock = "cclock";
     }
+
+#if HB_PROJECT_FEATURE_QSV && (defined( _WIN32 ) || defined( __MINGW32__ ))
+    if (hb_qsv_hw_filters_via_video_memory_are_enabled(init->job) || hb_qsv_hw_filters_via_system_memory_are_enabled(init->job))
+    {
+        qsv_rotate_init(pv, init, angle, flip);
+        return 0;
+    }
+#endif
+
     switch (angle)
     {
         case 0:

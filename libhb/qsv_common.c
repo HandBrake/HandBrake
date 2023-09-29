@@ -2273,12 +2273,6 @@ int hb_qsv_full_path_is_enabled(hb_job_t *job)
 #if defined(_WIN32) || defined(__MINGW32__)
     hb_qsv_info_t *info = hb_qsv_encoder_info_get(hb_qsv_get_adapter_index(), job->vcodec);
 
-    // there isn't any rotate hw filter yet, fallback to sw filters
-    if (job->title->rotation)
-    {
-        return 0;
-    }
-
     qsv_full_path_is_enabled = (hb_qsv_decode_is_enabled(job) &&
         info && hb_qsv_implementation_is_hardware(info->implementation) &&
         job->qsv.ctx && !job->qsv.ctx->num_sw_filters);
@@ -4767,6 +4761,9 @@ int hb_qsv_sanitize_filter_list(hb_job_t *job)
                         break;
                     // cropping and scaling always done via VPP filter
                     case HB_FILTER_CROP_SCALE:
+                        num_hw_filters++;
+                        break;
+                    case HB_FILTER_ROTATE:
                         num_hw_filters++;
                         break;
                     case HB_FILTER_VFR:
