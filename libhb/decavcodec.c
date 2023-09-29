@@ -1564,7 +1564,7 @@ int reinit_video_filters(hb_work_private_t * pv)
     if (pv->frame->hw_frames_ctx)
     {
         frames_ctx = (AVHWFramesContext *)pv->frame->hw_frames_ctx->data;
-        pix_fmt = frames_ctx->sw_format;
+        sw_pix_fmt = frames_ctx->sw_format;
         hw_pix_fmt = frames_ctx->format;
     }
 
