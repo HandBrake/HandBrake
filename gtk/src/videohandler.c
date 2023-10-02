@@ -34,6 +34,10 @@
 #include "hb-backend.h"
 #include "videohandler.h"
 
+#if !GLIB_CHECK_VERSION(2, 60, 0)
+#define G_GNUC_FALLTHROUGH
+#endif
+
 int ghb_get_video_encoder(GhbValue *settings)
 {
     const char *encoder;
