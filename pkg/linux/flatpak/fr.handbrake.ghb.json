@@ -47,6 +47,14 @@
                         "tag-pattern": "^v([\\d.]+)$"
                     }
                 }
+            ],
+            "cleanup": [
+                "/include",
+                "/lib/pkgconfig",
+                "/lib/*.a",
+                "/lib/*.la",
+                "/lib/*.so",
+                "/share/man"
             ]
         },
         {
@@ -70,6 +78,15 @@
                 }
             ],
             "modules": [
+            ],
+            "cleanup": [
+                "/etc",
+                "/include",
+                "/lib/cmake",
+                "/lib/pkgconfig",
+                "/lib/*.a",
+                "/lib/*.la",
+                "/lib/*.so"
             ]
         }
     ]
