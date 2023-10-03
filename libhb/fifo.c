@@ -384,10 +384,7 @@ hb_buffer_t * hb_buffer_init_internal( int size )
             memset( b, 0, sizeof(hb_buffer_t) );
             b->alloc          = buffer_pool->buffer_size;
             b->size           = size;
-            if (size)
-            {
-                b->data           = data;
-            }
+            b->data           = size ? data : NULL;
             b->storage        = NULL;
             b->s.start        = AV_NOPTS_VALUE;
             b->s.stop         = AV_NOPTS_VALUE;
@@ -798,6 +795,7 @@ hb_buffer_t * hb_frame_buffer_init( int pix_fmt, int width, int height )
     buf->f.width = width;
     buf->f.height = height;
     buf->f.fmt = pix_fmt;
+    buf->f.hw_fmt = AV_PIX_FMT_NONE;
 
     hb_buffer_init_planes(buf);
 

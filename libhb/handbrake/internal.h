@@ -122,6 +122,7 @@ struct hb_image_format_s
     int           width;
     int           height;
     int           fmt;
+    int           hw_fmt;
     int           color_prim;
     int           color_transfer;
     int           color_matrix;

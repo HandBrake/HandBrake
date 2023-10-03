@@ -100,7 +100,7 @@ void hb_video_buffer_to_avframe(AVFrame *frame, hb_buffer_t **buf_in)
     frame->duration         = buf->s.duration;
     frame->width            = buf->f.width;
     frame->height           = buf->f.height;
-    frame->format           = buf->f.fmt;
+    frame->format           = buf->f.hw_fmt != AV_PIX_FMT_NONE ? buf->f.hw_fmt : buf->f.fmt;
 
     if (buf->s.combed)
     {
@@ -167,7 +167,20 @@ void hb_avframe_set_video_buffer_flags(hb_buffer_t * buf, AVFrame *frame,
         buf->s.flags |= PIC_FLAG_REPEAT_FRAME;
     }
     buf->s.frametype       = get_frame_type(frame->pict_type);
-    buf->f.fmt             = frame->format;
+
+    // AVFrame format contains the hw format when using an hw decoder,
+    // so extract the actual pixel format from the hw frames context
+    if (frame->hw_frames_ctx)
+    {
+        AVHWFramesContext *frames_ctx = (AVHWFramesContext *)frame->hw_frames_ctx->data;
+        buf->f.fmt    = frames_ctx->sw_format;
+        buf->f.hw_fmt = frames_ctx->format;
+    }
+    else
+    {
+        buf->f.fmt    = frame->format;
+        buf->f.hw_fmt = AV_PIX_FMT_NONE;
+    }
     buf->f.color_prim      = hb_colr_pri_ff_to_hb(frame->color_primaries);
     buf->f.color_transfer  = hb_colr_tra_ff_to_hb(frame->color_trc);
     buf->f.color_matrix    = hb_colr_mat_ff_to_hb(frame->colorspace);
