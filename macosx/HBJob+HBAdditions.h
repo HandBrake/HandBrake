@@ -18,6 +18,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, readonly) NSString *automaticExt;
 @property (nonatomic, readonly) NSString *defaultName;
 
+- (void)setDestinationFolderURL:(NSURL *)destinationFolderURL sameAsSource:(BOOL)useSourceFolderDestination;
+
 @end
 
 NS_ASSUME_NONNULL_END

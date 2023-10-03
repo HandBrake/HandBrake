@@ -267,4 +267,19 @@ static NSDateFormatter *_releaseDateFormatter = nil;
     return [fileName stringByAppendingPathExtension:self.automaticExt];
 }
 
+- (void)setDestinationFolderURL:(NSURL *)destinationFolderURL sameAsSource:(BOOL)useSourceFolderDestination
+{
+    // If destination mode is set to same as source, try to set the source folder url
+    if (self.title.isStream && useSourceFolderDestination)
+    {
+        NSURL *titleParentURL = self.title.url.URLByDeletingLastPathComponent;
+        if ([titleParentURL.path hasPrefix:destinationFolderURL.path])
+        {
+            destinationFolderURL = titleParentURL;
+        }
+    }
+
+    self.destinationFolderURL = destinationFolderURL;
+}
+
 @end
