@@ -12,7 +12,7 @@ $(PKG.appcast): $(PKG.in/)appcast.xml.m4
 
 $(PKG.cli.dmg): | $(dir $(PKG.cli.dmg))
 $(PKG.cli.dmg): | $(STAGE.out.cli/)
-	hdiutil create -srcfolder $(STAGE.out.cli/) -fs HFS+ -format UDRO -mode 755 \
+	hdiutil create -srcfolder $(STAGE.out.cli/) -fs APFS -format ULFO -mode 755 \
 	    -volname $(basename $(notdir $@)) \
 	    -ov $(PKG.cli.tmp.dmg)
 	hdiutil convert -format UDBZ -o $@ $(PKG.cli.tmp.dmg)
@@ -21,7 +21,7 @@ $(PKG.cli.dmg): | $(STAGE.out.cli/)
 $(PKG.gui.dmg): | $(dir $(PKG.gui.dmg))
 $(PKG.gui.dmg): | $(STAGE.out.gui/)
 ifeq (1-darwin,$(FEATURE.xcode)-$(HOST.system))
-	hdiutil create -srcfolder $(STAGE.out.gui/) -fs HFS+ -format UDRO -mode 755 \
+	hdiutil create -srcfolder $(STAGE.out.gui/) -fs APFS -format ULFO -mode 755 \
 	    -volname $(basename $(notdir $@)) \
 	    -ov $(PKG.gui.tmp.dmg)
 	hdiutil convert -format UDBZ -o $@ $(PKG.gui.tmp.dmg)
