@@ -450,6 +450,27 @@ int hb_vt_are_filters_supported(hb_list_t *filters)
     return ret;
 }
 
+static void fix_prores_pix_fmt(hb_job_t *job)
+{
+    // TODO: Find a better way
+    // VideoToolbox ProRes decoder uses an higher bitdepth
+    // than FFmpeg software decoder. We get only the pixel format
+    // from the software decoder in decavcodec.c, so set
+    // a better one here
+    if (job->title->video_codec_param == AV_CODEC_ID_PRORES)
+    {
+        switch (job->title->video_codec_profile)
+        {
+            case AV_PROFILE_PRORES_XQ:
+            case AV_PROFILE_PRORES_4444:
+                job->input_pix_fmt = AV_PIX_FMT_P416;
+                break;
+            default:
+                break;
+        }
+    }
+}
+
 static void replace_filter(hb_job_t *job, int prev_filter_id, int new_filter_id)
 {
     hb_list_t *list = job->list_filter;
@@ -472,6 +493,8 @@ void hb_vt_setup_hw_filters(hb_job_t *job)
 {
     if (job->hw_pix_fmt == AV_PIX_FMT_VIDEOTOOLBOX)
     {
+        fix_prores_pix_fmt(job);
+
         hb_filter_object_t *filter = hb_filter_init(HB_FILTER_PRE_VT);
         hb_add_filter(job, filter, NULL);
 
