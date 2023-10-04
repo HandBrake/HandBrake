@@ -249,7 +249,7 @@ static int update(hb_filter_private_t *pv)
             if (pv->output.pix_fmt != pv->input.pix_fmt)
             {
                 hb_dict_set_int(filter->settings, "format", pv->output.pix_fmt);
-                hb_log("prefilter_vt: converting video pixel format from %d", pv->input.pix_fmt);
+                hb_log("prefilter_vt: converting video pixel format from %s", av_get_pix_fmt_name(pv->input.pix_fmt));
             }
 
             hb_list_add(list_filter, filter);
