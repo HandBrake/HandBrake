@@ -2449,7 +2449,7 @@ static int decavcodecvInfo( hb_work_object_t *w, hb_work_info_t *info )
     info->level = pv->context->level;
     info->name = pv->context->codec->name;
 
-    info->pix_fmt        = pv->context->sw_pix_fmt;
+    info->pix_fmt        = pv->context->sw_pix_fmt != AV_PIX_FMT_NONE ? pv->context->sw_pix_fmt : pv->context->pix_fmt;
     info->color_prim     = pv->context->color_primaries;
     info->color_transfer = pv->context->color_trc;
     info->color_matrix   = pv->context->colorspace;
