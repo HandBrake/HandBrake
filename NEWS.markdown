@@ -14,7 +14,6 @@ Windows users, please make sure to install [Microsoft .NET Desktop Runtime versi
 
 - Miscellaneous bug fixes and improvements
 - Slightly improved conversion speed by removing unneeded frame copies
-- Expanded the Optimize option to move MKV and WebM cues to front
 - Added VideoToolbox presets
 
 #### Video
@@ -59,29 +58,36 @@ Windows users, please make sure to install [Microsoft .NET Desktop Runtime versi
 #### Third-party libraries
 
 - Updated libraries
-  - AMF 1.4.29 (AMD VCN encoding)
+  - AMF 1.4.30 (AMD VCN encoding)
   - FFmpeg 6.x (decoding and filters)
     - Faster HEVC decoding on arm64
     - 30% faster bwdif filter on arm64
+  - FreeType 2.13.2 (subtitles)
+  - Fribidi 1.0.13 (subtitles)
+  - HarfBuzz 8.2.0 (subtitles)
   - libass 0.17.1 (subtitles)
   - libdav1d 1.2.1 (AV1 decoding)
+  - liblzma (xz) 5.4.4 (LZMA video decoding, e.g. TIFF)
   - libopus 1.4 (Opus audio encoding)
-  - libvpx 1.13.0 (VP8/VP9 video encoding)
+  - libjpeg-turbo 3.0.0 (preview image compression)
+  - libvpx 1.13.1 (VP8/VP9 video encoding)
   - libxml 2.11.4 (general)
-  - SVT-AV1 1.6 (AV1 encoding)
+  - oneVPL 2023.3.1 (Intel QSV encoding/decoding)
+  - SVT-AV1 1.7 (AV1 encoding)
+  - x264 164 r3107 (H.264/AVC video encoding)
   - x265 r12776 (H.265/HEVC video encoding)
-  - zimg 3.0.4 (color conversion)
-  - libjpeg-turbo 3.0.0 (preview image compression)  
+  - zimg 3.0.5 (color conversion)
+  - zlib 1.3 (general)
 
 - New libraries
   - libdovi (Dolby Vision metadata)
   
 ### Mac
 
-- Added support for VideoToolbox HEVC, H.265, and ProRes hardware decoders on macOS 13 and later
+- Added support for VideoToolbox HEVC, H.264, and ProRes hardware decoders on macOS 13 and later
   - They can be enabled in the Advanced preferences tab: either for the full path or always
   - Depending on your computer capabilities, they could decrease CPU usage and speed up the conversion
-- Added GPU accelerated Crop & Scale and Rotate filters
+- Added GPU accelerated Crop & Scale, Rotate, Pad, Yadif, Bwdif, Chroma Smooth, Unsharp, Lasharp, Grayscale filters
 - Improved File Input Handling
   - You can now multi-select files in the open panel
   - You can now drag/drop multiple files to scan
