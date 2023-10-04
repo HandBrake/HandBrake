@@ -74,8 +74,8 @@ class FlatpakManifest:
         if nvenc:
             self.hbconfig.append("--enable-nvenc");
             self.hbconfig.append("--enable-nvdec");
-            self.manifest["sdk-extensions"] = ['org.freedesktop.Sdk.Extension.llvm14'];
-            self.hbmodule["build-options"]  = {'append-path':'/usr/lib/sdk/llvm14/bin','prepend-ld-library-path':'/usr/lib/sdk/llvm14/lib'};
+            self.manifest["sdk-extensions"] = ['org.freedesktop.Sdk.Extension.llvm16'];
+            self.hbmodule["build-options"]  = {'append-path':'/usr/lib/sdk/llvm16/bin','prepend-ld-library-path':'/usr/lib/sdk/llvm16/lib'};
 
         handbrake_found = False
         for key, value in source_list.items():
