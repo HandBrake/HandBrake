@@ -4,6 +4,7 @@ $(eval $(call import.GCC,BIN2C))
 BIN2C.src/ = $(SRC/)contrib/bin2c/
 BIN2C.build/ = $(BUILD/)contrib/bin2c/
 BIN2C.GCC.archs = $(BUILD.machine)
+BIN2C.GCC.args.extra =
 
 BIN2C.c   = $(wildcard $(BIN2C.src/)*.c)
 BIN2C.c.o = $(patsubst $(SRC/)%.c,$(BUILD/)%.o,$(BIN2C.c))
