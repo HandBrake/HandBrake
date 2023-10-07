@@ -1,8 +1,10 @@
 $(eval $(call import.MODULE.defs,NVENC,nvenc))
 $(eval $(call import.CONTRIB.defs,NVENC))
 
-NVENC.FETCH.url      = https://github.com/HandBrake/HandBrake-contribs/releases/download/contribs/nv-codec-headers-12.0.16.tar.gz
-NVENC.FETCH.sha256   = 936c368afe33e27cb40deb1f3bad569ea94faf7920e7b15fc9a2f19853baf157
+NVENC.FETCH.url      = https://github.com/HandBrake/HandBrake-contribs/releases/download/contribs/nv-codec-headers-12.1.14.0.tar.gz
+NVENC.FETCH.url     += https://github.com/FFmpeg/nv-codec-headers/releases/download/n12.1.14.0/nv-codec-headers-12.1.14.0.tar.gz
+
+NVENC.FETCH.sha256   = 62b30ab37e4e9be0d0c5b37b8fee4b094e38e570984d56e1135a6b6c2c164c9f
 
 NVENC.CONFIGURE = $(TOUCH.exe) $@
 NVENC.BUILD.extra = PREFIX="$(NVENC.CONFIGURE.prefix)"
