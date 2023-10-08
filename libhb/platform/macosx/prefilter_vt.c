@@ -9,9 +9,6 @@
 
 #include "handbrake/handbrake.h"
 #include "handbrake/hbffmpeg.h"
-#include <CoreVideo/CoreVideo.h>
-#include "vt_common.h"
-
 
 struct hb_filter_private_s
 {
@@ -27,6 +24,7 @@ struct hb_filter_private_s
         int width;
         int height;
         int rotation;
+        int pix_fmt;
     } resample;
 
     int resample_needed;
@@ -43,7 +41,6 @@ static int prefilter_vt_work(hb_filter_object_t *filter,
 static void prefilter_vt_close(hb_filter_object_t *filter);
 
 static const char prefilter_vt_template[] = "";
-
 
 hb_filter_object_t hb_filter_prefilter_vt =
 {
@@ -114,11 +111,10 @@ static void prefilter_vt_close(hb_filter_object_t *filter)
     filter->private_data = NULL;
 }
 
-void set_properties(hb_filter_private_t *pv, hb_buffer_t *in)
+static void set_properties(hb_filter_private_t *pv, hb_buffer_t *in)
 {
-    if (in->storage_type == AVFRAME &&
-        (pv->input.job->title->rotation == HB_ROTATION_90 ||
-         pv->input.job->title->rotation == HB_ROTATION_270))
+    if (pv->input.job->title->rotation == HB_ROTATION_90 ||
+        pv->input.job->title->rotation == HB_ROTATION_270)
     {
         pv->input.geometry.width  = in->f.height;
         pv->input.geometry.height = in->f.width;
@@ -127,6 +123,26 @@ void set_properties(hb_filter_private_t *pv, hb_buffer_t *in)
     {
         pv->input.geometry.width  = in->f.width;
         pv->input.geometry.height = in->f.height;
+    }
+
+    if (in->storage_type == AVFRAME)
+    {
+        AVFrame *frame = (AVFrame *)in->storage;
+        // AVFrame format contains the hw format when using an hw decoder,
+        // so extract the actual pixel format from the hw frames context
+        if (frame->hw_frames_ctx)
+        {
+            AVHWFramesContext *frames_ctx = (AVHWFramesContext *)frame->hw_frames_ctx->data;
+            pv->input.pix_fmt    = frames_ctx->sw_format;
+        }
+        else
+        {
+            pv->input.pix_fmt    = frame->format;
+        }
+    }
+    else
+    {
+        pv->input.pix_fmt = in->f.fmt;
     }
 }
 
@@ -176,14 +192,16 @@ static int update(hb_filter_private_t *pv)
     hb_job_t *job = pv->input.job;
 
     pv->resample_needed =
-        (pv->output.geometry.width != pv->input.geometry.width ||
+        (pv->output.geometry.width  != pv->input.geometry.width  ||
          pv->output.geometry.height != pv->input.geometry.height ||
+         pv->output.pix_fmt   != pv->input.pix_fmt ||
          job->title->rotation != HB_ROTATION_0);
 
     resample_changed =
         (pv->resample_needed &&
-         (pv->resample.width != pv->input.geometry.width ||
-          pv->resample.height != pv->input.geometry.height ||
+         (pv->resample.width    != pv->input.geometry.width  ||
+          pv->resample.height   != pv->input.geometry.height ||
+          pv->resample.pix_fmt  != pv->input.pix_fmt ||
           pv->resample.rotation != job->title->rotation));
 
     if (resample_changed || (pv->resample_needed &&
@@ -228,19 +246,30 @@ static int update(hb_filter_private_t *pv)
             }
         }
 
-        // Crop Scale
-        if (pv->output.geometry.width != pv->input.geometry.width ||
-            pv->output.geometry.height != pv->input.geometry.height)
+        // Crop Scale & Format
+        if (pv->output.geometry.width  != pv->input.geometry.width  ||
+            pv->output.geometry.height != pv->input.geometry.height ||
+            pv->output.pix_fmt         != pv->input.pix_fmt)
         {
             filter = hb_filter_init(HB_FILTER_CROP_SCALE_VT);
             filter->settings = hb_dict_init();
 
-            hb_dict_set_int(filter->settings, "width", pv->output.geometry.width);
+            hb_dict_set_int(filter->settings, "width",  pv->output.geometry.width);
             hb_dict_set_int(filter->settings, "height", pv->output.geometry.height);
 
-            hb_log("prefilter_vt: auto-scaling video from %d x %d",
-                   pv->input.geometry.width,
-                   pv->input.geometry.height);
+            if (pv->output.geometry.width  != pv->input.geometry.width  ||
+                pv->output.geometry.height != pv->input.geometry.height)
+            {
+                hb_log("prefilter_vt: auto-scaling video from %d x %d",
+                       pv->input.geometry.width,
+                       pv->input.geometry.height);
+            }
+
+            if (pv->output.pix_fmt != pv->input.pix_fmt)
+            {
+                hb_dict_set_int(filter->settings, "format", pv->output.pix_fmt);
+                hb_log("prefilter_vt: converting video pixel format from %s", av_get_pix_fmt_name(pv->input.pix_fmt));
+            }
 
             hb_list_add(list_filter, filter);
             if (filter->init != NULL && filter->init(filter, &init))
@@ -286,6 +315,7 @@ static int update(hb_filter_private_t *pv)
         pv->resample.width        = pv->input.geometry.width;
         pv->resample.height       = pv->input.geometry.height;
         pv->resample.rotation     = pv->output.job->title->rotation;
+        pv->resample.pix_fmt      = pv->input.pix_fmt;
     }
 
     return 0;

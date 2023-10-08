@@ -1204,6 +1204,7 @@ skip_preview:
         {
             title->video_codec_name = strdup( vid_info.name );
         }
+        title->video_codec_profile = vid_info.profile;
         title->geometry.width = vid_info.geometry.width;
         title->geometry.height = vid_info.geometry.height;
         if (vid_info.rate.num && vid_info.rate.den)

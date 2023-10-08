@@ -29,7 +29,7 @@ OSType hb_cv_get_pixel_format(enum AVPixelFormat pix_fmt, enum AVColorRange colo
     {
         return kCVPixelFormatType_32BGRA;
     }
-    else if (pix_fmt == AV_PIX_FMT_P010LE)
+    else if (pix_fmt == AV_PIX_FMT_P010)
     {
         return color_range == AVCOL_RANGE_JPEG ?
                                 kCVPixelFormatType_420YpCbCr10BiPlanarFullRange :
@@ -47,6 +47,11 @@ OSType hb_cv_get_pixel_format(enum AVPixelFormat pix_fmt, enum AVColorRange colo
                                 kCVPixelFormatType_422YpCbCr10BiPlanarFullRange :
                                 kCVPixelFormatType_422YpCbCr10BiPlanarVideoRange;
     }
+    else if (pix_fmt == AV_PIX_FMT_P212 ||
+             pix_fmt == AV_PIX_FMT_P216)
+    {
+        return color_range == kCVPixelFormatType_422YpCbCr16BiPlanarVideoRange;
+    }
     else if (pix_fmt == AV_PIX_FMT_NV24)
     {
         return color_range == AVCOL_RANGE_JPEG ?
@@ -59,7 +64,8 @@ OSType hb_cv_get_pixel_format(enum AVPixelFormat pix_fmt, enum AVColorRange colo
                                 kCVPixelFormatType_444YpCbCr10BiPlanarFullRange :
                                 kCVPixelFormatType_444YpCbCr10BiPlanarVideoRange;
     }
-    else if (pix_fmt == AV_PIX_FMT_P416)
+    else if (pix_fmt == AV_PIX_FMT_P412 ||
+             pix_fmt == AV_PIX_FMT_P416)
     {
         return kCVPixelFormatType_444YpCbCr16BiPlanarVideoRange;
     }

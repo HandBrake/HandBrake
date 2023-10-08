@@ -1376,6 +1376,11 @@ int reinit_video_filters(hb_work_private_t * pv)
         return 0;
     }
 #endif
+    if (pv->job && pv->job->hw_pix_fmt == AV_PIX_FMT_VIDEOTOOLBOX)
+    {
+        // Filtering is done in a separate filter
+        return 0;
+    }
     if (!pv->job)
     {
         // HandBrake's preview pipeline uses yuv420 color.  This means all
@@ -1421,12 +1426,6 @@ int reinit_video_filters(hb_work_private_t * pv)
         pv->video_filters.pix_fmt     == pv->frame->format)
     {
         // Current filter settings are good
-        return 0;
-    }
-
-    if (pv->job && pv->job->hw_pix_fmt == AV_PIX_FMT_VIDEOTOOLBOX)
-    {
-        // Filtering is done in a separate filter
         return 0;
     }
 
@@ -1742,6 +1741,7 @@ static int decavcodecvInit( hb_work_object_t * w, hb_job_t * job )
     w->private_data = pv;
     pv->job         = job;
     pv->next_pts    = (int64_t)AV_NOPTS_VALUE;
+    pv->hw_pix_fmt  = AV_PIX_FMT_NONE;
     if ( job )
         pv->title = job->title;
     else

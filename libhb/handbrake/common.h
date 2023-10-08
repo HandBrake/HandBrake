@@ -1210,6 +1210,7 @@ struct hb_title_s
     uint32_t        video_stream_type;      /* stream type from source stream */
     int             video_codec_param;      /* codec specific config */
     char          * video_codec_name;
+    int             video_codec_profile;
     int             video_bitrate;
     hb_rational_t   video_timebase;
     char          * container_name;
