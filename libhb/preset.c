@@ -2116,9 +2116,10 @@ int hb_preset_apply_dimensions(hb_handle_t *h, int title_index,
     geo.geometry.par.den = hb_dict_get_int(preset, "PicturePARHeight");
 
     int display_width = hb_dict_get_int(preset, "PictureDARWidth");
-    if (display_width <= 0)
+    if (display_width <= 0 && geo.geometry.par.den)
     {
-        display_width = ((double)geo.geometry.par.num / geo.geometry.par.den) * geo.geometry.width + 0.5;
+        int cropped_width = geo.geometry.width - geo.crop[2] - geo.crop[3];
+        display_width = ((double)geo.geometry.par.num / geo.geometry.par.den) * cropped_width + 0.5;
     }
     geo.displayWidth     = display_width;
     geo.displayHeight    = geo.geometry.height;
