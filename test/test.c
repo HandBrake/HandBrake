@@ -536,7 +536,11 @@ int main( int argc, char ** argv )
     if (queue_import_name != NULL)
     {
         hb_system_sleep_prevent(h);
-        RunQueue(h, queue_import_name);
+        if (RunQueue(h, queue_import_name))
+        {
+            done_error = HB_ERROR_WRONG_INPUT;
+            goto cleanup;
+        }
     }
     else
     {
