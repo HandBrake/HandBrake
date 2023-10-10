@@ -2798,6 +2798,7 @@ Um mehrere gleichzeitige Encodierungen zu ermöglichen, aktivieren Sie die "Proz
     <value>Dateiverwaltung (Einlesen)</value>
   </data>
   <data name="Options_RecursiveFolderScan" xml:space="preserve">
-    <value>Beim Hinzufügen von Ordnern rekursives Einlesen aktivieren.</value>
+    <value>Beim Hinzufügen von Ordnern rekursives Einlesen aktivieren.
+(Nur aktiv bei "Quellenauswahl" -&gt; "Ordner (Stapelverarbeitung)"</value>
   </data>
 </root>

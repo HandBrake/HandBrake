@@ -2787,7 +2787,7 @@ Per permettere più codifiche simultanee, attivare "Isolamento del Processo" nel
     <value>Escludi Estensioni File:</value>
   </data>
   <data name="Options_ExcludeExtensionsInfo" xml:space="preserve">
-    <value>Le seguenti estensioni file saranno ignorate durante la scansione di una cartella. La lista non distingue tra maiuscole e minuscole. Il punto dell'estensione non è necessario,</value>
+    <value>Le seguenti estensioni file saranno ignorate durante la scansione di una cartella. La lista non distingue tra maiuscole e minuscole. Il punto dell'estensione non è necessario.</value>
   </data>
   <data name="Options_ExtensionExists" xml:space="preserve">
     <value>Questa estensione file è già presente nella lista.</value>

@@ -527,6 +527,8 @@ HB_EXIT_CODE
 {encode_bit_depth} - Integer value. i.e. 8, 10 or 12
 {width} - The output storage width
 {height} - The output storage height
+{codec} - Display the video format.
+{encoder} - Display the short format key of the encoder used.
 
 Any illegal path characters will be removed automatically.</value>
   </data>
@@ -547,5 +549,8 @@ Any illegal path characters will be removed automatically.</value>
 {source_path} - 원본 경로와 동일한 폴더(가능한 경우)
 {source_folder_name} – 전체 경로 없이 원본 파일이 있는 디렉터리의 이름입니다.
 {source} - 원본 파일의 이름입니다.</value>
+  </data>
+  <data name="OptionsView_LaunchsHelp" xml:space="preserve">
+    <value>Launches the documentation website located at https://handbrake.fr/docs</value>
   </data>
 </root>

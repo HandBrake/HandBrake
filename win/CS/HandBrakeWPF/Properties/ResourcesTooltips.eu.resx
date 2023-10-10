@@ -1,0 +1,559 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" id="root">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace"/>
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0"/>
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string"/>
+              <xsd:attribute name="type" type="xsd:string"/>
+              <xsd:attribute name="mimetype" type="xsd:string"/>
+              <xsd:attribute ref="xml:space"/>
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string"/>
+              <xsd:attribute name="name" type="xsd:string"/>
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2"/>
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1"/>
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3"/>
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4"/>
+              <xsd:attribute ref="xml:space"/>
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required"/>
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="FilterView_Deblock" xml:space="preserve">
+    <value>Desbloketzeak kalitate baxuko bideo konpresioak eragindako bloke-artefaktuak murrizten ditu.</value>
+  </data>
+  <data name="FilterView_DecombDeinterlace" xml:space="preserve">
+    <value>Aukeratu Decomb edo Desentrelazatze iragazkien ezarpenak.
+
+Decomb iragazkiak gurutzatuta daudela diruditen fotogramak modu selektiboan kentzen ditu.
+Horrek kalitatea gordeko du gurutzatuta ez dauden fotogrametan.
+
+Desentrelazatze iragazki klasikoa fotograma guztietan aplikatzen da.
+Gurutzatuta ez dauden fotogramek kalitatearen nolabaiteko degradazioa jasango dute.</value>
+  </data>
+  <data name="FilterView_Denoise" xml:space="preserve">
+    <value>Denoise-k zarata eta garaua murriztu edo kentzen ditu. Honek konpresio eraginkortasuna hobetu eta kalitate handiagoko bideoa sor dezake fitxategi tamaina txikiagoetan.
+Denoise ezarpen gogorregiek irudiaren kalitatea kaltetu dezakete xehetasunak galduz.
+
+NLMeans kalitate handiko Denoise iragazkia da, baina nahiko motela. Erabili kalitatea abiadura baino garrantzitsuagoa den kasuetan.
+
+HQDN3D pasabide baxuko iragazki moldagarria da, NLMeans baino azkarragoa, baina ez da hain eraginkorra xehetasun finak zaintzeko.</value>
+  </data>
+  <data name="FilterView_Detelecine" xml:space="preserve">
+    <value>Detelecine-k telezinearen emaitza diren artefaktuak ezabatzen ditu, zineko fotograma abiadura telebistako fotograma abiadurara bihurtzeko prozesuaren emaitza direnak.</value>
+  </data>
+  <data name="FilterView_Grayscale" xml:space="preserve">
+    <value>Grisen eskalak bideoaren kolorea kentzen du. Askotan zuri-beltzezko bideoa ere deitzen zaio.</value>
+  </data>
+  <data name="MainView_Destination" xml:space="preserve">
+    <value>Helmugako bidea, direktorioa eta fitxategiaren izena barne. Hemen sortuko da zure bideo berria, zuk jarritako izenarekin.</value>
+  </data>
+  <data name="MainView_IpodAtom" xml:space="preserve">
+    <value>Gehitu MP4 markatzaile berezi bat 2006. urte inguruko iPod 5. belaunaldiko gailuetan erreproduzitzeko aukera emateko. Beste ezarpen batzuek bateragarritasunari eragin diezaiokete.</value>
+  </data>
+  <data name="MainView_Mux" xml:space="preserve">
+    <value>Edukiontziaren formatua. Bideoa, audioa eta bestelako pistak mota honetako fitxategi bakar batean konbinatzen dira. Bateragarritasunari eragiten dio.</value>
+  </data>
+  <data name="MainView_Optimise" xml:space="preserve">
+    <value>Optimizatu MP4 deskarga progresiborako. Kodetu ondoren, datuak berrantolatu eta berridazten dira sarean berehala erreproduzitzeko, fitxategi osoa deskargatu beharrik gabe.</value>
+  </data>
+  <data name="MainView_Range" xml:space="preserve">
+    <value>Iturburuaren tartearen hautaketa. Lehenespenez, kapitulu guztiak hautatzen dira eta iturburu osoa kodetzen da.</value>
+  </data>
+  <data name="MainView_Title" xml:space="preserve">
+    <value>Kodetzeko fitxategia edo izenburua.
+Blu-ray eta DVDek askotan izenburu ugari izaten dituzte, eta luzeena da normalean nagusia</value>
+  </data>
+  <data name="PictureSettingsView_Anamorphic" xml:space="preserve">
+    <value>Anamorfikoak hautazko biltegiratze dimentsioak ahalbidetzen ditu, erreprodukzioan jatorrizko aspektua gordetzen duen bitartean.
+
+'Bat ere ez' aukerak anamorfikoa desgaitzen du. Bideoak biltegiratzeko neurriak eta pantailaren neurriak berdinak izango dira. Oinarrizko gailu batzuekin bateragarri izateko bakarrik erabilgarria.
+
+Automatikoak biltegiratze bereizmena maximizatzen du jatorrizko pantailaren aspektu-erlazioa mantenduz. Gomendagarria.
+
+'Lasaia' autoamatikoaren antzekoa da, baina biltegiratze-erlazioa mantentzen saiatzen da. Honek biltegiratze bereizmen galera txiki bat eragin dezake automatikoarekin alderatuta.
+
+Pertsonalizatuak parametro guztiak eskuz ezartzeko aukera ematen du. Baliagarria iturriaren bistaratze alderdi oker bat zuzentzeko eta postprodukzioan kontrol aurreratua behar duten profesionalentzat.</value>
+  </data>
+  <data name="PictureSettingsView_AutoCrop" xml:space="preserve">
+    <value>Moztu automatikoki bideoaren inguruko ertz beltzak.</value>
+  </data>
+  <data name="PictureSettingsView_CropBottom" xml:space="preserve">
+    <value>Moztu bideoa behetik.</value>
+  </data>
+  <data name="PictureSettingsView_CropLeft" xml:space="preserve">
+    <value>Moztu bideoa ezkerretik.</value>
+  </data>
+  <data name="PictureSettingsView_CropRight" xml:space="preserve">
+    <value>Moztu bideoa eskuinetik.</value>
+  </data>
+  <data name="PictureSettingsView_CropTop" xml:space="preserve">
+    <value>Moztu bideoa goitik.</value>
+  </data>
+  <data name="PictureSettingsView_Height" xml:space="preserve">
+    <value>Hau izango bideoaren altuera gordetzean.
+Bistaratze tamaina desberdina izango da pixelen aspektu-erlazioa 1:1 ez bada.</value>
+  </data>
+  <data name="PictureSettingsView_ManualCrop" xml:space="preserve">
+    <value>Moztu bideoa eskuz.</value>
+  </data>
+  <data name="PictureSettingsView_Modulus" xml:space="preserve">
+    <value>Lerrokatu biltegiratze-dimentsioak balio honen multiploekin.
+
+Ezarpen hau gailu batzuekin bateragarri izateko soilik da beharrezkoa.
+2 erabili beharko zenuke bateragarritasun arazorik izan ez baduzu.</value>
+  </data>
+  <data name="PictureSettingsView_PAR" xml:space="preserve">
+    <value>Pixelen itxurak pixelen forma definitzen du.
+1:1 erlazioak pixel karratu bat definitzen du. Beste balio batzuek forma angeluzuzenak definitzen dituzte.
+Erreproduzitzaileek irudia eskalatuko dute zehaztutako aspektua lortzeko.</value>
+  </data>
+  <data name="PictureSettingsView_Width" xml:space="preserve">
+    <value>Hau izango bideoaren zabalera gordetzean.
+Bistaratze tamaina desberdina izango da pixelen aspektu-erlazioa 1:1 ez bada.</value>
+  </data>
+  <data name="QueueView_DeleteJob" xml:space="preserve">
+    <value>Ezabatu lana ilaratik.</value>
+  </data>
+  <data name="QueueView_ResetJobStatus" xml:space="preserve">
+    <value>Berrezarri lanaren egoera 'Zain' gisa.</value>
+  </data>
+  <data name="QueueView_SendJobBack" xml:space="preserve">
+    <value>Bidali lana berriro leiho nagusira editatzeko.</value>
+  </data>
+  <data name="Video_AvgBitrate" xml:space="preserve">
+    <value>Ezarri batez besteko bit-tasa.
+
+Berehalako bit-tasa askoz handiagoa edo txikiagoa izan daiteke une batzuetan.
+Baina batez besteko orokorra hemen ezarritako balioa izango da. Berehalako bit-tasa
+mugatu behar baduzu, begiratu x264-ren vbv-bufsize eta vbv-maxrate ezarpenak.</value>
+  </data>
+  <data name="Video_ConstantFramerate" xml:space="preserve">
+    <value>Irteerako fotograma-tasa konstantea gaitzen du.</value>
+  </data>
+  <data name="Video_Encoders" xml:space="preserve">
+    <value>Eskuragarri dauden bideo-kodetzaileak.</value>
+  </data>
+  <data name="Video_EncoderTune" xml:space="preserve">
+    <value>Doitu ezarpenak ohiko eszenatokietarako optimizatzeko.
+
+Horrek eraginkortasuna hobetu dezake iturriaren edo
+multzo baten irteerako fitxategiaren ezaugarrietan. Aldaketak aurrezarpenaren ondoren
+baina beste parametro guztien aurretik aplikatuko dira.</value>
+  </data>
+  <data name="Video_ExtraOpts" xml:space="preserve">
+    <value>Kodetzearen ezarpen gehigarriak.
+
+Bi puntuz bereizitako kodetzearen aukeren zerrenda.</value>
+  </data>
+  <data name="Video_FastDecode" xml:space="preserve">
+    <value>Murriztu kodetzailearen CPUaren erabilera.
+
+Ezarri hau zure gailuak irteera erreproduzitzeko zailtasunak baditu (fotograma akastunak).</value>
+  </data>
+  <data name="Video_Framerate" xml:space="preserve">
+    <value>Irteerako fotograma-tasa.
+
+"Iturburuaren berdina" gomendatzen da. Zure iturburuko bideoak fotograma-tasa aldakorra badu, 'Iturburuaren berdina'-k mantendu egingo du.</value>
+  </data>
+  <data name="Video_Level" xml:space="preserve">
+    <value>Zehaztutako maila betetzen dela bermatzen du.
+
+Beste ezarpen guztiak gainidazten ditu.</value>
+  </data>
+  <data name="Video_PeakFramerate" xml:space="preserve">
+    <value>Fotograma-tasa aldakorreko irteera gaitzen du, fotograma-tasaren ezarpenak zehazten duen gehienezko kopuruarekin.</value>
+  </data>
+  <data name="Video_Presets" xml:space="preserve">
+    <value>Kodetzailearen ezarpenak doitzen ditu konpresio-eraginkortasuna kodetze-abiadurarekin orekatzeko.
+
+Honek kodetzearen ezarpen lehenetsiak ezartzen ditu.
+Tonuak, profilak, mailak eta aukera-kate aurreratuak aplikatuko zaizkio.
+Oro har, aukera hau motelenean ezarri beharko zenuke
+kalitate hobeko edo tamaina txikiagoko fitxategiak sortzeko.</value>
+  </data>
+  <data name="Video_Profile" xml:space="preserve">
+    <value>Zehaztutako profila betetzen dela ezartzen eta ziurtatzen du.
+
+Beste ezarpen guztiak gainidazten ditu.</value>
+  </data>
+  <data name="Video_Quality" xml:space="preserve">
+    <value>Ezarri nahi duzun kalitate balioa.
+Kodetzaileak kalitate jakin bat du helburu.
+Bideo-kodetzaile bakoitzak erabiltzen duen eskala desberdina da.
+
+x264-ren eskala logaritmikoa da eta balio baxuagoak kalitate handiagoari dagozkio.
+Beraz, balioaren murrizketa txikiek igoera gero eta handiagoak izango dituzte
+irteerako fitxategiaren tamainan. 0 balioak galerarik gabekoa esan nahi du
+eta emaitza jatorrizko fitxategia baino handiagoa izango da, iturria ere galerarik gabekoa izan ezean.
+Gomandatutako balioak hauek dira: 18tik 20ra definizio estandarreko fitxategietarako eta 20tik 23ra definizio altuko fitxategietarako.
+
+FFMpeg eta Theora eskalak linealagoak dira.
+Kodetzaile hauek ez dute galerarik gabeko modurik.</value>
+  </data>
+  <data name="Video_TurboAnalysisPass" xml:space="preserve">
+    <value>Itzuli anitzeko kodetze baten analisian, gauzak azkartzen dituen ezarpenak erabiltzen ditu.</value>
+  </data>
+  <data name="Video_MultiPass" xml:space="preserve">
+    <value>Egin itzuli anitzeko kodeketa.
+
+'Bitrate' aukera ezinbestekoa da. Analisi itzulian, bideoari buruzko estatistikak
+biltzen dira. Ondoren, azken itzulian, estatistika horiek erabiltzen dira
+bitratea esleitzeko erabakiak hartzeko.</value>
+  </data>
+  <data name="Video_VariableFramerate" xml:space="preserve">
+    <value>Fotograma-tasa aldakorreko irteera gaitzen du.
+
+Hau ez da erreproduktore batzuekin bateragarria.</value>
+  </data>
+  <data name="MainView_WhenDone" xml:space="preserve">
+    <value>HandBrake-ek uneko kodetzea edo ilara amaitzen duenean ekintza hau egingo du.</value>
+  </data>
+  <data name="MainView_Browse" xml:space="preserve">
+    <value>Arakatu helmuga eta izen berri bat hautatzeko fitxategiarentzat.</value>
+  </data>
+  <data name="MainView_Angle" xml:space="preserve">
+    <value>Kodetzeko bideoaren angelua. Angelu ugariko DVD eta Blu-ray-etarako soilik aplikagarria.</value>
+  </data>
+  <data name="MainView_AddPreset" xml:space="preserve">
+    <value>Gehitu aurrezarpen berri bat.</value>
+  </data>
+  <data name="MainView_PresetAdditionalOptions" xml:space="preserve">
+    <value>Aurrezarpen gehigarrien aukerak.</value>
+  </data>
+  <data name="MainView_Presets" xml:space="preserve">
+    <value>Aurrezarpenak egoera zehatzetarako egokitutako kodetze-ezarpenen multzoak dira. Hautatu zure beharrekin bat datorrena.
+
+Kodetzearen ezarpen guztiak gainidazten ditu. Ezarpenak gehiago doitu daitezke aurrezarpen bat hautatu ondoren ere.</value>
+  </data>
+  <data name="MainView_RemovePreset" xml:space="preserve">
+    <value>Ezabatu hautatutako aurrezarpena.</value>
+  </data>
+  <data name="SourceSelection_TitleSpecific" xml:space="preserve">
+    <value>Iturburu batzuek bideo fitxategi bat baino gehiago edo izenburu bilduma bat izan dezakete. Blu-ray eta DVDek askotan izenburu ugari dituzte.
+
+Kodetu nahi duzun izenburu espezifikoa ezagutzen baduzu, hemen sar dezakezu eta HandBrake-ek izenburu hori bakarrik eskaneatuko du. Bestela, utzi eremua hutsik.</value>
+  </data>
+  <data name="FilterView_CustomDenoiseParams" xml:space="preserve">
+    <value>Denoise parametroak pertsonalizatu.
+ 
+NLMeans syntax: y-strength=y:y-origin-tune=y:y-patch-size=y:y-range=y:y-frame-count=y:y-prefilter=y:cb-strength=c:cb-origin-tune=c:cb-patch-size=c:cb-range=c:cb-frame-count=c:cb-prefilter=c:cr-strength=c:cr-origin-tune=c:cr-patch-size=c:cr-range=c:cr-frame-count=c:cr-prefilter=c:threads=t
+
+NLMeans default: y-strength=6:y-origin-tune=1:y-patch-size=7:y-range=3:y-frame-count=2:y-prefilter=0:cb-strength=6:cb-origin-tune=1:cb-patch-size=7:cb-range=3:cb-frame-count=2:cb-prefilter=0
+
+HQDN3D syntax: y-spatial=y:cb-spatial=c:cr-spatial=c:y-temporal=y:cb-temporal=c:cr-temporal=c
+
+HQDN3D default: y-spatial=3:cb-spatial=2:cr-spatial=2:y-temporal=2:cb-temporal=3:cr-temporal=3</value>
+  </data>
+  <data name="FilterView_DenoisePreset" xml:space="preserve">
+    <value>Denoise iragazkiaren aurrezarpena. Iragazkiaren gogortasuna ezartzen du.</value>
+  </data>
+  <data name="FilterView_DenoiseTune" xml:space="preserve">
+    <value>Denoise tonua. Denoise aurrezarpena gehiago doitzen du egoera zehatzetarako ezarpenak optimizatzeko.
+
+- 'Bat ere ez' aukerak lehenetsitako ezarpenak erabiltzen ditu.
+
+- 'Filma' ezarpenak irudi errealeko eduki gehienak hobetzen ditu.
+
+- 'Garaua'-k kolore kanalak soilik prozesatzen ditu. Baliagarria film itxura gordetzeko, kolore-zarata murrizten edo kentzen duen bitartean.
+
+- 'Mugimendu handia'-k mugimendu handiko eszenetan koloreen zikintzea murrizten du, kolore-kanalen denborazko prozesamendua saihestuz. Kirol eta akzio bideotarako erabilgarria.
+
+- 'Animazioa' erabilgarria da animaziorako, hala nola anime eta marrazki bizidunetarako.
+
+- 'Zinta' erabilgarria da xehetasun gutxiko zinta analogikoetarako, hala nola VHSak, non 'Filma'-k ez duen emaitza desiragarririk ematen.
+
+- 'Sprite' erabilgarria da 1-/4-/8-/16 biteko 2 dimentsioko jokoetarako. Sprite ez dago bereizmen handiko bideoetarako diseinatuta.</value>
+  </data>
+  <data name="FilterView_Deinterlace" xml:space="preserve">
+    <value>Desentrelazatuak artefaktuak ezabatzen ditu iruditik.
+
+Bwdif eta Yadif bi aukera ezagun eta azkar dira.
+
+Decomb-ek interpolazio algoritmo ugari baliatzen ditu abiadura eta kalitatea lortzeko.</value>
+  </data>
+  <data name="FilterView_DeinterlaceCustom" xml:space="preserve">
+    <value>Desentrelazatzearen parametro pertsonalizatuak.
+ 
+ Bwdif and Yadif syntax: mode=m:parity=p
+ 
+ Bwdif and Yadif default: mode=3
+ 
+ Decomb syntax: mode=m:magnitude-thresh=m:variance-thresh=v:laplacian-thresh=l:dilation-thresh=d:erosion-thresh=e:noise-thresh=n:search-distance=s:postproc=p:parity=p
+ 
+ Decomb default: mode=7</value>
+  </data>
+  <data name="FilterView_DeinterlacePreset" xml:space="preserve">
+    <value>Desentrelazatze iragazkiaren aurrezarpena.
+
+Lehenetsia ondo orekatuta dago abiadura eta kalitatearen artean.
+
+'Saltatu egiaztapen espaziala'-k Yadifek saihes daitezkeen zenbait artefaktu zuzentzea ahalbidetzen du abiadura apur bat areagotzeko.
+
+EEDI2-k Decomb-erako interpolazio algoritmo motelagoa eta kalitate handiagokoa erabiltzen du. Iturri zailenetarako erabilgarria.
+
+Bob mugimendua hobeto zaintzen saiatzen da hautematen den erresoluzioa pixka bat gutxituz.</value>
+  </data>
+  <data name="FilterView_Flip" xml:space="preserve">
+    <value>Irudia ardatz horizontalean iraultzen du (ispilu efektua).</value>
+  </data>
+  <data name="FilterView_InterlaceDetection" xml:space="preserve">
+    <value>Entrelazatuaren detekzioak, gaituta dagoenean, Desentrelazatu iragazkiak tartekaturiko bideo fotogramak soilik prozesatzeko aukera ematen du.</value>
+  </data>
+  <data name="FilterView_InterlaceDetectionCustom" xml:space="preserve">
+    <value>Entrelazatua hautemateko parametroak pertsonalizatu.
+ 
+ Syntax: mode=m:spatial-metric=s:motion-thresh=m:spatial-thresh=s:filter-mode=f:block-thresh=b:block-width=b:block-height=b:disable=d
+ 
+ Default: mode=3:spatial-metric=2:motion-thresh=1:spatial-thresh=1:filter-mode=2:block-thresh=40:block-width=16:block-height=16</value>
+  </data>
+  <data name="FilterView_Rotate" xml:space="preserve">
+    <value>Biratu irudia 90 gradu erlojuaren orratzen norantzan.</value>
+  </data>
+  <data name="MainView_Duration" xml:space="preserve">
+    <value>Hautatutako iturburuaren iraupena Ordu:Minutu:Segundutan</value>
+  </data>
+  <data name="PictureSettingsView_KeepAR" xml:space="preserve">
+    <value>'Mantendu itxura-erlazioa' aukerak iturburuaren jatorrizko bistaratze-aspektua mantentzen du. Hau desgaituz gero, irudia luzatu edo estutu daiteke.</value>
+  </data>
+  <data name="FilterView_CustomSharpenParams" xml:space="preserve">
+    <value>Pertsonalizatu zorrozte parametroak.
+
+Unsharp syntax: y-strength=y:y-size=y:cb-strength=c:cb-size=c:cr-strength=c:cr-size=c
+
+Unsharp default: y-strength=0.25:y-size=7:cb-strength=0.25:cb-size=7
+
+Lapsharp syntax: y-strength=y:y-kernel=y:cb-strength=c:cb-kernel=c:cr-strength=c:cr-kernel=c
+
+Lapsharp default: y-strength=0.2:y-kernel=isolap:cb-strength=0.2:cb-kernel=isolap</value>
+  </data>
+  <data name="FilterView_Sharpen" xml:space="preserve">
+    <value>Zorrozteak xehetasunen itxura hobetzen du, batez ere ertzena. Zorrotze ezarpen gogorregiek irudiaren kalitatea kaltetu dezakete artefaktuak sortuz eta zarata areagotuz, eta horrek konpresio eraginkortasuna murriztu dezake. 
+
+'Zorroztu gabe' helburu orokorreko maskara iragazkia da. Lausotuz zorrozten du, irudi lausoaren eta jatorrizkoaren arteko aldea kalkulatuz.
+
+Lapsharp-ek Laplaziar ertz-iragazkiak  konboluzio nukleoak erabiliz zorrozten ditu, eta batzuetan kalitate handiagoko emaitzak sortzen ditu 'Zorroztu gabe'-k baino.</value>
+  </data>
+  <data name="FilterView_SharpenPreset" xml:space="preserve">
+    <value>'Zorroztu' iragazkiaren aurrezarpena. Iragazkiaren indarra ezartzen du.</value>
+  </data>
+  <data name="FilterView_SharpenTune" xml:space="preserve">
+    <value>Zorroztearen tonua. Zorroztu aurrezarpena doitzen du eszenatoki zehatzetarako ezarpenak optimizatzeko.
+
+'Bar ere ez' aukerak lehenetsitako ezarpenak erabiltzen ditu.
+
+Unsharp aukera zorroztasun ultrafina, fina, ertaina, lodia edo oso lodia lortzeko doitu daiteke. Aukeratu bat irteerako irudiaren bereizmenaren eta xehetasunen arabera hobetzeko.
+
+Lapsharp-en 'Filma' tonuak irudi errealeko eduki gehienekin erabiltzeko ezarpenak hobetzen ditu. Kernel laplaziar isotropiko bat erabiltzen du ertz guztiak antzera zorrozteko, eta luminantzia (distira) informazioa krominantzia (kolore) informazioa baino gehiago zorrozten da.
+
+Lapsharp-en 'Garaua' tonua 'Filma'-ren antzekoa da, baina kernel gausiarraren laplaziar isotropiko bat erabiltzen du zarata eta garauaren eragina murrizteko. Garaua kontserbatzeko erabilgarria, 'Filma' tonuaren alternatiba orokor gisa.
+
+Lapsharp-en 'Animazioa' tonua animaziorako erabilgarria da, hala nola, anime eta marrazki bizidunetarako. 'Filma'-ren berdina da, baina gogortasuna murrizten da artefaktuak sortzea saihesteko.
+
+Lapsharp-en 'Sprite' tonua erabilgarria da 1-/4-/8-/16 biteko 2 dimentsioko jokoetarako. Sprite-k 4 nukleoko laplaziar nukleoa erabiltzen du, ertz bertikalak eta horizontalak ertz diagonalak baino gehiago hobetzen dituena.</value>
+  </data>
+  <data name="MainView_AlignAVStart" xml:space="preserve">
+    <value>Audio eta bideo pista guztien hasierako denborak lerrokatzen ditu fotograma hutsak sartuz edo fotogramak kenduz. MP4 edizio zerrendak errespetatzen ez dituzten erreproduzitzaile hautsien audio/bideo sinkronizazioa hobetu dezake.</value>
+  </data>
+  <data name="MainView_PresetOptionsContextMenu" xml:space="preserve">
+    <value>Aurrezarpenak kontrolatzeko aukerak.</value>
+  </data>
+  <data name="MainView_EndPoint" xml:space="preserve">
+    <value>Sorta honen amaierako puntua.</value>
+  </data>
+  <data name="MainView_StartPoint" xml:space="preserve">
+    <value>Sorta honen hasiera puntua.</value>
+  </data>
+  <data name="OptionsView_AlwaysUseDefaultPath" xml:space="preserve">
+    <value>Gaituta dagoenean, izendatze sistema automatikoak bide lehenetsia erabiliko du beti.
+Desgaituta dagoenean, leiho nagusiko helmuga-koadroan dagoen bidea erabiliko du beteta baldin badago, bestela bide lehenetsia erabiliko du.</value>
+  </data>
+  <data name="FiltersView_ColourSpace" xml:space="preserve">
+    <value>Kolore-espazio iragazkia.</value>
+  </data>
+  <data name="FiltersView_ChromaSmooth" xml:space="preserve">
+    <value>Chroma leuna iragazkia</value>
+  </data>
+  <data name="PictureSettingsView_PaddingCustomColourTooltip" xml:space="preserve">
+    <value>Eremu honek RGB balioak onar ditzake, hala nola: "0xFF0000" edo kolore-izenak, esaterako, "gorria". Kolore izendunen zerrenda osoa lortzeko, ikusi iragazkien dokumentazioa.</value>
+  </data>
+  <data name="SubtitlesView_BurnIn" xml:space="preserve">
+    <value>Erre azpitituluak bideoan.
+
+Kontuan izan, hau automatikoki hautatuko da iturburuko azpitituluen pistaren formatua irteerako fitxategi motan onartzen ez bada.
+
+Adibidez, PGS azpitituluak ez dira onartzen MP4 formatuan</value>
+  </data>
+  <data name="OptionsView_PresetDisplayModes" xml:space="preserve">
+    <value>Laua - Aurrezarpenak zerrenda lau gisa bistaratzen dira.
+Partzialki laua - Azken 8 erabiltzaile-aurrezarpenak zerrenda lau gisa bistaratzen dira eta jarraian aurrezarpen guztiak kategoria-zerrendan erakusten dira.
+Kategoriak - Aurrezarpen guztiak kategoria bakoitzeko azpimenu batean erakusten dira.</value>
+  </data>
+  <data name="AudioView_AudioDefaults" xml:space="preserve">
+    <value>Konfiguratu leiho honek audio pistak automatikoki nola gehituko dituen fitxategi berri bat hautatzen denean.</value>
+  </data>
+  <data name="BehavioursReload" xml:space="preserve">
+    <value>Freskatu beheko zerrenda konfiguratutako portaeretan oinarrituta.</value>
+  </data>
+  <data name="SubtitleView_SubtitleDefaults" xml:space="preserve">
+    <value>Konfiguratu leiho honek azpititulu pistak automatikoki nola gehituko dituen fitxategi berri bat hautatzen denean.</value>
+  </data>
+  <data name="OptionsView_SendFileToArguments" xml:space="preserve">
+    <value>Aldagai hauek beti ezartzen dira:
+HB_SOURCE
+HB_DESTINATION
+HB_EXIT_CODE
+
+Irteera-kode posibleak hauek dira:
+0 : Arrakastatsua
+2: Sarrerako argudioen akatsa
+3: Ezin izan da hasi
+4: Akats ezezaguna
+5: Akatsa iturburu-fitxategia irakurtzean.
+
+Kontuan izan akats kodeak ahaleginik onena direla baina agian ez direla beti zehatzak izango.
+Irteerako fitxategia balioztatzea gomendatzen da bertan ekintzak egin aurretik.</value>
+  </data>
+  <data name="Options_AdditionalFormatOptions" xml:space="preserve">
+    <value>Irteerako fitxategiaren formatua. Onartutako fitxategi-sistemako karaktereez gain, izenburua aldatzen duzunean, iturburu bat eskaneatzen duzunean edo ezarpen jakin batzuk eguneratzen dituzunean, ordezkatuko diren leku-marketako edozein erabil dezakezu..
+
+{iturburua} - Iturburu-fitxategiaren izena.
+{izenburua} - Balio osoa. Diskoaren izenburu-zenbakiaren adierazgarria da.
+{kapituluak} - Hautatutako kapitulu sorta.
+{sortze-data} - Sortu-fitxategia sortu zen data (eskuragarri badago).
+{sortze-ordua} - Sorburu-fitxategia sortu zeneko ordua (eskuragarri badago).
+{aldatze-data} - Sorburu-fitxategia azken aldiz aldatu zen data (eskuragarri badago).
+{aldatze-ordua} - Sorburu-fitxategia azken aldiz aldatu zeneko ordua (eskuragarri badago).
+{data} - Gaur. Ezarri ilarara gehitzeko unean.
+{ordua} - Gaur. Ezarri ilarara gehitzeko unean.
+{kalitatea_bitratea} - RF/CQ zenbakia edo bit-tasa
+{kalitatea_mota} - "kbps" edo "Q" inprimatzen du bideo fitxan hautatutako kalitate-moduaren arabera.
+{aurrezarpena} - Hautatutako aurrezarpenaren izena.
+{kodetze_bit_sakonera} - Osoko balioa. Adibidez, 8, 10 edo 12
+{zabalera} - Irteerako biltegiratze-zabalera
+{altuera} - Irteerako biltegiratzeko altuera
+{kodeka} - Bideo formatua bistaratu.
+{kodetzailea} - Erabilitako kodetzailearen formatu laburreko tekla bistaratu.
+
+Onartzen ez diren bide-karaktere guztiak automatikoki kenduko dira.</value>
+  </data>
+  <data name="OptionsView_RightToleftMode" xml:space="preserve">
+    <value>Eskuinetik ezkerrera doazen hizkuntzetarako, bi moduetako bat gaitu dezakezu. "Testua soilik" aukerak testua soilik agertuko du eskuinetik ezkerrera. "Erabiltzaile-interfaze osoa" aukerak kontrol guztiak agertuko ditu eskuinetik ezkerrera.
+
+Kontuan izan, modu hauek erabiltzean UI diseinuan akatsak egon daitezkeela. Hizkuntzaren arabera, egokia izan daiteke bi moduak probatzea aukera onena aurkitzeko.</value>
+  </data>
+  <data name="AudioView_Quality" xml:space="preserve">
+    <value>Aukeratu audioaren kalitate maila zehatz bat.
+1 kalitate baxuena da eta 5 kalitate gorena.
+
+Bit-tasa iturburu batetik bestera aldatu egiten da.</value>
+  </data>
+  <data name="OptionsView_DestinationReplacementOptions" xml:space="preserve">
+    <value>Honako hauek bakarka edo batera erabil daitezke helmugako bide bat eraikitzeko
+
+{source_path} - Iturburu-bidearen karpeta berean (ahal bada)
+{source_folder_name} - Iturburu-fitxategia dagoen direktorioaren izena, bide osoa gabe.
+{source} - Iturburu-fitxategiaren izena.</value>
+  </data>
+  <data name="OptionsView_LaunchsHelp" xml:space="preserve">
+    <value>https://handbrake.fr/docs helbidean dagoen dokumentazioaren webgunea abiarazten du</value>
+  </data>
+</root>
