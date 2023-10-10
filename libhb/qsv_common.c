@@ -2269,7 +2269,11 @@ int hb_qsv_get_memory_type(hb_job_t *job)
 int hb_qsv_full_path_is_enabled(hb_job_t *job)
 {
     int qsv_full_path_is_enabled = 0;
-    if(!job || !job->qsv.ctx)
+    if (!job || !job->qsv.ctx)
+    {
+        return 0;
+    }
+    if (hb_get_bit_depth(job->title->pix_fmt) == -1)
     {
         return 0;
     }
