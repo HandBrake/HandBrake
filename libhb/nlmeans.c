@@ -442,6 +442,7 @@ static void nlmeans_close(hb_filter_object_t *filter)
                 free(pv->frame[f].plane[c].mem);
                 pv->frame[f].plane[c].mem = NULL;
             }
+            hb_buffer_close(&pv->frame[f].buf);
         }
     }
 

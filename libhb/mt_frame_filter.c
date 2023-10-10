@@ -129,6 +129,15 @@ static void mt_frame_close(hb_filter_object_t *filter)
 
     pv->sub_filter->close(pv->sub_filter);
     taskset_fini(&pv->taskset);
+
+    for (int f = 0; f < pv->frame_count; f++)
+    {
+        if (pv->buf[f] != NULL)
+        {
+            hb_buffer_close(&pv->buf[f]);
+        }
+    }
+
     free(pv->thread_data);
     free(pv->buf);
     free(pv);

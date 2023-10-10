@@ -960,6 +960,8 @@ static void comb_detect_close(hb_filter_object_t *filter)
         }
     }
 
+    hb_buffer_list_close(&pv->out_list);
+
     /* Cleanup reference buffers. */
     for (int ii = 0; ii < 3; ii++)
     {

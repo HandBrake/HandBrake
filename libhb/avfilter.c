@@ -227,6 +227,7 @@ void hb_avfilter_alias_close( hb_filter_object_t * filter )
         return;
     }
 
+    hb_buffer_list_close(&pv->list);
     hb_value_free(&pv->avfilters);
     free(pv);
     filter->private_data = NULL;

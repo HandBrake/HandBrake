@@ -441,6 +441,8 @@ static void hb_decomb_close(hb_filter_object_t *filter)
         taskset_fini(&pv->eedi2_taskset);
     }
 
+    hb_buffer_list_close(&pv->out_list);
+
     // Cleanup reference buffers
     for (int ii = 0; ii < 3; ii++)
     {
