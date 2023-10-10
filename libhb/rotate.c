@@ -106,10 +106,15 @@ static int qsv_rotate_init(hb_filter_private_t * pv, hb_filter_init_t * init, in
         hb_dict_t * avsettings = hb_dict_init();
 
         if(hflip)
-            hb_dict_set(avsettings, "transpose", hb_value_string(strcat(trans, "_hflip")));
+        {
+            char *s = hb_strdup_printf("%s_hflip", trans);
+            hb_dict_set(avsettings, "transpose", hb_value_string(s));
+            free(s);
+        }
         else
+        {
             hb_dict_set(avsettings, "transpose", hb_value_string(trans));
-
+        }
         hb_dict_set_int(avsettings, "async_depth", init->job->qsv.async_depth);
         hb_dict_set(avfilter, "vpp_qsv", avsettings);
         pv->avfilters = avfilter;
@@ -123,7 +128,7 @@ static int qsv_rotate_init(hb_filter_private_t * pv, hb_filter_init_t * init, in
         {
             avfilter = hb_dict_init();
 
-            hb_dict_set(avsettings, "transpose", "vflip");
+            hb_dict_set(avsettings, "transpose", hb_value_string("vflip"));
             hb_dict_set_int(avsettings, "async_depth", init->job->qsv.async_depth);
             hb_dict_set(avfilter, "vpp_qsv", avsettings);
             pv->avfilters = avfilter;
@@ -132,7 +137,7 @@ static int qsv_rotate_init(hb_filter_private_t * pv, hb_filter_init_t * init, in
         {
             avfilter = hb_dict_init();
 
-            hb_dict_set(avsettings, "transpose", "hflip");
+            hb_dict_set(avsettings, "transpose", hb_value_string("hflip"));
             hb_dict_set_int(avsettings, "async_depth", init->job->qsv.async_depth);
             hb_dict_set(avfilter, "vpp_qsv", avsettings);
             pv->avfilters = avfilter;
