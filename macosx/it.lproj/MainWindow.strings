@@ -215,7 +215,7 @@
 "HCx-ku-nF7.toolTip" = "Mostra finestra della coda";
 
 /* Class = "NSButtonCell"; title = "Recursively scan folders"; ObjectID = "Hwu-gp-tRZ"; */
-"Hwu-gp-tRZ.title" = "Scansiona ricorsivamente le cartella";
+"Hwu-gp-tRZ.title" = "Scansiona ricorsivamente le cartelle";
 
 /* Class = "CocoaBindingsConnection"; ibShadowedIsNilPlaceholder = " "; ObjectID = "Iat-pL-ttI"; */
 "Iat-pL-ttI.ibShadowedIsNilPlaceholder" = "";

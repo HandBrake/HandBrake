@@ -1,0 +1,48 @@
+/* Class = "NSTextField"; ibExternalAccessibilityDescription = "Crop bottom"; ObjectID = "6Gj-ZU-E1E"; */
+"6Gj-ZU-E1E.ibExternalAccessibilityDescription" = "아래쪽 잘라내기";
+
+/* Class = "NSTextField"; ibShadowedToolTip = "Bottom edge cropping amount in pixels."; ObjectID = "6Gj-ZU-E1E"; */
+"6Gj-ZU-E1E.ibShadowedToolTip" = "지정한 픽셀만큼 아래쪽 모서리를 잘라냅니다";
+
+/* Class = "NSStepper"; ibExternalAccessibilityDescription = "Crop top"; ObjectID = "8e5-zI-IBg"; */
+"8e5-zI-IBg.ibExternalAccessibilityDescription" = "윗쪽 잘라내기";
+
+/* Class = "NSTextField"; ibExternalAccessibilityDescription = "Crop top"; ObjectID = "Cp5-xz-x1h"; */
+"Cp5-xz-x1h.ibExternalAccessibilityDescription" = "윗쪽 잘라내기";
+
+/* Class = "NSTextField"; ibShadowedToolTip = "Top edge cropping amount in pixels."; ObjectID = "Cp5-xz-x1h"; */
+"Cp5-xz-x1h.ibShadowedToolTip" = "지정한 픽셀만큼 윗쪽 모서리를 잘라냅니다.";
+
+/* Class = "NSPopUpButton"; ibShadowedToolTip = "Rotate the picture clockwise in 90 degree increments."; ObjectID = "cWv-q0-EN9"; */
+"cWv-q0-EN9.ibShadowedToolTip" = "영상을 시계 방향으로 90도 돌리기";
+
+/* Class = "NSMenuItem"; title = "Custom"; ObjectID = "dD5-og-dxx"; */
+"dD5-og-dxx.title" = "사용자 지정";
+
+/* Class = "NSTextField"; ibExternalAccessibilityDescription = "Crop right"; ObjectID = "php-p6-Nz6"; */
+"php-p6-Nz6.ibExternalAccessibilityDescription" = "오른쪽 자르기";
+
+/* Class = "NSTextField"; ibShadowedToolTip = "Right edge cropping amount in pixels."; ObjectID = "php-p6-Nz6"; */
+"php-p6-Nz6.ibShadowedToolTip" = "지정한 픽셀만큼 오른쪽 모서리를 잘라냅니다.";
+
+/* Class = "NSMenuItem"; title = "None"; ObjectID = "Pqk-fS-pyy"; */
+"Pqk-fS-pyy.title" = "없음";
+
+/* Class = "NSMenuItem"; title = "Automatic"; ObjectID = "sUG-Cw-nQU"; */
+"sUG-Cw-nQU.title" = "자동";
+
+/* Class = "NSStepper"; ibExternalAccessibilityDescription = "Crop bottom"; ObjectID = "sWf-fq-lvl"; */
+"sWf-fq-lvl.ibExternalAccessibilityDescription" = "아래쪽 자르기";
+
+/* Class = "NSTextField"; ibExternalAccessibilityDescription = "Crop left"; ObjectID = "Td7-sa-0TV"; */
+"Td7-sa-0TV.ibExternalAccessibilityDescription" = "왼쪽 자르기";
+
+/* Class = "NSTextField"; ibShadowedToolTip = "Left edge cropping amount in pixels."; ObjectID = "Td7-sa-0TV"; */
+"Td7-sa-0TV.ibShadowedToolTip" = "지정한 픽셀만큼 왼쪽 모서리를 잘라냅니다.";
+
+/* Class = "NSStepper"; ibExternalAccessibilityDescription = "Crop right"; ObjectID = "y7P-yk-q46"; */
+"y7P-yk-q46.ibExternalAccessibilityDescription" = "오른쪽 자르기";
+
+/* Class = "NSStepper"; ibExternalAccessibilityDescription = "Crop left"; ObjectID = "Yua-R6-mWU"; */
+"Yua-R6-mWU.ibExternalAccessibilityDescription" = "왼쪽 자르기";
+

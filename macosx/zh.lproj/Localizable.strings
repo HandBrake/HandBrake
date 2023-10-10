@@ -1,438 +1,554 @@
-/* Video description */
-" - fastdecode" = " - 快速解码";
+/* Job statistics */
+" (%@ %% of the source file)" = "（源文件的 %@ %%）";
 
-/* HBStateFormatter -> work time format */
-" (%.2f fps, avg %.2f fps, ETA %@)" = "（%1$.2f fps，平均 %2$.2f fps，预计完成时间 %3$@）";
+/* Preview -> size info label */
+" Scaled To Screen" = "缩放到屏幕";
 
-/* HBStateFormatter -> work time format */
-" (%.2f fps, avg %.2f fps)" = "（%1$.2f fps，平均 %2$.2f fps)";
+/* No comment provided by engineer. */
+"- --:--" = "- --:--";
 
-/* HBStateFormatter -> search time format
-   HBStateFormatter -> work time format */
-" (ETA %@)" = "（预计完成时间 %@）";
+/* No comment provided by engineer. */
+"--:--" = "--:--";
 
-/* HBJob -> video short description framerate */
-" FPS CFR" = " FPS CFR";
+/* Preview -> size info label */
+"(%.0f%% actual size)" = "（%.0f%% 实际大小）";
 
-/* HBJob -> video short description framerate */
-" FPS PFR" = " FPS PFR";
+/* Preview -> size info label */
+"(Actual size)" = "（实际大小）";
 
-/* Title short description -> audio format */
-", %d audio tracks" = "， %d 条音轨";
+/* Main Window -> preset modified */
+"(Modified)" = "（已修改）";
 
-/* Title short description -> subtitles format */
-", %d subtitles tracks" = "，%d 条字幕轨道";
+/* Job statistics */
+"%@ fps" = "%@ fps";
 
-/* Title short description -> audio format */
-", 1 audio track" = "，1 条音轨";
+/* Queue status */
+"%lu encode pending" = "%lu 个编码待处理";
 
-/* Title short description -> subtitles format */
-", 1 subtitles track" = "，1 条字幕轨道";
+/* Queue status */
+"%lu encodes pending" = "%lu 个编码待处理";
 
-/* Format description */
-", Align A/V Start" = "，对齐音视频开头";
+/* No comment provided by engineer. */
+"%lu jobs selected" = "已选择 %lu 个任务";
 
-/* HBPicture -> summary */
-", Border: %d/%d/%d/%d" = "，边框：%1$d/%2$d/%3$d/%4$d";
+/* Add preset window -> picture setting */
+"480p NTSC SD" = "480p NTSC SD";
 
-/* HBJob -> subtitles short description */
-", Burned" = "，已烧入";
+/* Add preset window -> picture setting */
+"576p PAL SD" = "576p PAL SD";
 
-/* Format description */
-", Chapter Markers" = "，章节标记";
+/* Add preset window -> picture setting */
+"720p HD" = "720p 高清";
 
-/* HBPicture -> summary */
-", Crop: %@ %d/%d/%d/%d" = "，裁剪：%1$@ %2$d/%3$d/%4$d/%5$d";
+/* Add preset window -> picture setting */
+"1080p HD" = "1080p 高清";
 
-/* Format description */
-", iPod 5G Support" = "，iPod 5G 支持";
+/* Add preset window -> picture setting */
+"1440p 2.5K Quad HD" = "1440p 2.5K Quad HD";
 
-/* Format description */
-", Web Optimized" = "，Web 优化";
+/* Add preset window -> picture setting */
+"2160p 4K Ultra HD" = "2160p 4K 超高清";
 
-/* HBStateFormatter -> work pass type format */
-"(subtitle scan)" = "（字幕扫描）";
+/* Add preset window -> picture setting */
+"4320p 8K Ultra HD" = "4320p 8K 超高清";
 
-/* Title short description -> video format */
-"%.6g FPS" = "%.6g FPS";
+/* Destination same as source alert -> message
+   File already exists alert -> message */
+"A file already exists at the selected destination." = "所选目标上已存在文件。";
 
-/* Audio description */
-"%@ ▸ Encoder: %@" = "%1$@ ▸ 编码器：%2$@";
+/* Picture HUD -> scale button */
+"Actual Scale" = "实际比例";
 
-/* HBPicture -> short info */
-"%@Output: %dx%d" = "%1$@输出：%2$dx%3$d";
+/* Queue undo action name */
+"Add Job To Queue" = "将任务添加到队列";
 
-/* HBPicture -> short info */
-"%@Output: %dx%d, Anamorphic: %dx%d Automatic" = "%1$@输出：%2$dx%3$d，变形：%4$dx%5$d 自动";
+/* Queue undo action name */
+"Add Jobs To Queue" = "将多个任务添加到队列";
 
-/* HBPicture -> short info */
-"%@Output: %dx%d, Anamorphic: %dx%d Custom" = "%1$@输出：%2$dx%3$d，变形：%4$dx%5$d 自定义";
+/* Touch bar */
+"Add Preset" = "添加预设";
 
-/* HBPicture -> short non anamorphic info */
-"%dx%d" = "%1$dx%2$d";
+/* Touch bar */
+"Add Titles To Queue" = "添加标题到队列";
 
-/* HBPicture -> short info */
-"%dx%d Storage, %dx%d Display" = "%1$dx%2$d 存储，%3$dx%4$d 显示";
+/* Touch bar */
+"Add To Queue" = "添加到队列";
 
-/* HBJob -> audio short description */
-"+ %lu additional audio tracks" = "+ %lu 个额外的音轨";
+/* Preferences Advanced Toolbar Item */
+"Advanced" = "高级";
 
-/* HBJob -> subtitles short description */
-"+ %lu additional subtitles tracks" = "+ %lu 个额外的字幕轨道";
+/* Main Window -> Same as source destination open panel */
+"Allow" = "允许";
 
-/* HBJob -> audio short description */
-"+ 1 additional audio track" = "+ 1 个额外的音轨";
+/* HBLanguage -> Any language */
+"Any" = "任何";
 
-/* HBJob -> subtitles short description */
-"+ 1 additional subtitles track" = "+ 1 个额外的字幕轨道";
+/* Delete preset alert -> message */
+"Are you sure you want to permanently delete the selected preset?" = "您确定要永久删除选定的预设吗？";
 
-/* Title description */
-"1 Foreign Language Search Pass - " = "1 外语搜索 Pass - ";
+/* Delete preset alert -> message */
+"Are you sure you want to permanently delete the selected presets?" = "您确定要永久删除选定的预设吗？";
 
-/* HBAudio -> Mixdown */
-"5.1 Channels" = "5.1 声道";
+/* Quit Alert -> message */
+"Are you sure you want to quit HandBrake?" = "您确定要退出 HandBrake 吗？";
 
-/* HBAudio -> Mixdown */
-"6.1 Channels" = "6.1 声道";
+/* Copy Protection Alert -> first button */
+"Attempt Scan Anyway" = "仍然尝试扫描";
 
-/* HBAudio -> Mixdown */
-"7.1 (5F/2R/LFE)" = "7.1（5F/2R/LFE）";
+/* Player HUD -> audio menu */
+"Audio" = "音频";
 
-/* HBAudio -> Mixdown */
-"7.1 Channels" = "7.1 声道";
+/* Job statistics */
+"Average speed:" = "平均速度：";
 
-/* Audio description */
-"Audio:" = "音频：";
+/* Preferences -> Output Name Token */
+"Bit Depth" = "位深度";
 
-/* HBPicture -> summary */
-"Automatic" = "自动";
+/* Copy Protection Alert -> second button
+   Delete preset alert -> second button
+   File already exists alert -> first button
+   File already exists in queue alert -> first button
+   Preview -> live preview alert alternate button
+   Touch bar */
+"Cancel" = "取消";
 
-/* Video description */
-"Bitrate: %d kbps" = "比特率：%dkbps";
+/* Touch bar */
+"Cancel Encoding" = "取消编码";
 
-/* Subtitles description */
-"Burned In" = "烧入";
+/* Toolbar Open/Cancel Item
+   Touch bar */
+"Cancel Scan" = "取消扫描";
 
-/* HBFilters -> filter display name */
-"Bwdif" = "Bwdif";
+/* Toolbar Open/Cancel Item */
+"Cancel Scanning Source" = "取消扫描源";
 
-/* Title -> chapter name
-   Title description */
-"Chapter %d" = "章节 %d";
-
-/* HBJob -> chapters short description */
-"Chapter Markers" = "章节标记";
-
-/* HBRange -> display name */
+/* Preferences -> Output Name Token */
 "Chapters" = "章节";
 
-/* Title description */
-"Chapters %d through %d" = "章节 %1$d 到 %2$d";
+/* Main Window -> Destination open panel */
+"Choose" = "选择";
 
-/* Filters description
-   HBJob -> filters short description */
-"Chroma Smooth" = "色度平滑";
+/* Preferences -> Output Name Token */
+"Codec" = "编解码器";
 
-/* Filters description
-   HBJob -> filters short description */
-"Colorspace" = "色彩空间";
+/* Queue Alert -> cancel rip first button */
+"Continue Encoding" = "继续编码";
 
-/* HBJob -> filters short description */
-"Comb Detect" = "梳状检测";
+/* Copy Protection Alert -> message */
+"Copy-Protected sources are not supported." = "不支持复制受保护的源。";
 
-/* Video description */
-"Constant Quality: %.2f %s" = "恒定质量：%1$.2f %2$s";
+/* Preferences -> Output Name Token */
+"Creation-Date" = "创建日期";
 
-/* HBJob -> video short description framerate */
-"CRF" = "CRF";
+/* Preferences -> Output Name Token */
+"Creation-Time" = "创建时间";
 
-/* HBFilters -> custom display name
-   HBPicture -> summary */
+/* Touch bar */
+"Current Time" = "当前时间";
+
+/* Add preset window -> picture setting */
 "Custom" = "自定义";
 
-/* Filters description
-   HBJob -> filters short description */
-"Deblock" = "去块效应";
+/* Preferences -> Output Name Token */
+"Date" = "日期";
 
-/* HBFilters -> filter display name */
-"Decomb" = "去梳状纹理";
+/* Delete preset alert -> first button */
+"Delete Preset" = "删除预设";
 
-/* HBFilters -> default display name
-   Subtitles description */
-"Default" = "默认";
+/* Delete preset alert -> first button */
+"Delete Presets" = "删除预设";
 
-/* Video description */
-"default settings" = "默认设置";
+/* File already exists alert -> informative text
+   File already exists in queue alert -> informative text */
+"Do you want to overwrite %@?" = "您是否确认覆盖 %@？";
 
-/* HBFilters -> invalid filter custom settings error recovery suggestion */
-"Default: " = "默认：";
+/* Quit Alert -> second button */
+"Don't Quit" = "不要退出";
 
-/* Filters description */
-"Denoise" = "降噪";
+/* Touch bar */
+"Done" = "完成";
 
-/* Destination description */
-"Destination:" = "目标：";
+/* HBQueueItemView -> Encode state accessibility label */
+"Encode canceled" = "编码取消";
 
-/* Dimensions description
-   HBJob -> filters short description */
-"Detelecine" = "反胶卷过带";
+/* HBQueueItemView -> Encode state accessibility label */
+"Encode complete" = "编码完成";
 
-/* Dimensions description */
-"Dimensions:" = "尺寸：";
+/* HBQueueItemView -> Encode state accessibility label
+   Queue done notification failed message */
+"Encode failed" = "编码失败";
 
-/* HBAudio -> Mixdown */
-"Dolby Pro Logic II" = "Dolby Pro Logic II";
+/* HBQueueItemView -> Encode state accessibility label */
+"Encode ready" = "已准备编码";
 
-/* HBAudio -> Mixdown */
-"Dolby Surround" = "Dolby Surround";
+/* HBQueueItemView -> Encode state accessibility label */
+"Encode working" = "编码工作中";
 
-/* Audio description */
-"DRC: %.2f" = "DRC：%.2f";
+/* Preferences -> Output Name Token */
+"Encoder" = "编码器";
 
-/* Video description */
-"Encoder: %@, " = "编码器：%@，";
+/* No comment provided by engineer. */
+"Encoding %lu Jobs" = "编码 %lu 个任务";
 
-/* HBStateFormatter -> work pass display name */
-"Encoding %@ " = "正在编码 %@ ";
+/* No comment provided by engineer. */
+"Encoding Job: %@" = "编码任务：%@";
 
-/* Filters description */
-"Filters:" = "滤镜：";
+/* Job statistics */
+"Ended at:" = "结束于：";
 
-/* Subtitles description */
-"Forced Only" = "仅强制";
+/* Export presets save panel title */
+"Export preset" = "导出预设";
 
-/* HBSubtitles -> search pass name */
-"Foreign Audio Search" = "外语音频搜索";
+/* Export presets save panel title */
+"Export presets" = "导出预设";
 
-/* Format description */
-"Format:" = "格式:";
+/* File already exists alert -> message */
+"File already exists." = "文件已存在。";
 
-/* Video description */
-"Framerate: " = "帧率：";
+/* Preferences General Toolbar Item */
+"General" = "通用";
 
-/* HBRange -> display name */
-"Frames" = "帧";
+/* Main Window -> title */
+"HandBrake" = "HandBrake";
 
-/* Title description */
-"Frames %d through %d" = "帧 %1$d 到 %2$d";
+/* Preview -> live preview alert message */
+"HandBrake can't open the preview." = "HandBrake 无法打开这个预览。";
 
-/* Audio description */
-"Gain: %.2f" = "增益：%.2f";
+/* Preview -> live preview alert informative text */
+"HandBrake can't playback this combination of video/audio/container format. Do you want to open it in an external player?" = "HandBrake 无法播放这种视频/音频/容器格式的组合。您想在外部播放器中打开它吗？";
 
-/* Filters description
-   HBJob -> filters short description */
-"Grayscale" = "灰度";
+/* Main Window -> Same as source destination open panel */
+"HandBrake does not have permission to write to this folder. To allow HandBrake to write to this folder, click \"Allow\"" = "HandBrake 没有写入此文件夹的权限。要允许 HandBrake 写入此文件夹，请单击“允许”";
 
-/* HBFilters -> filter display name */
-"HQDN3D" = "HQDN3D";
+/* Preferences -> Output Name Token */
+"Height" = "高度";
 
-/* HBFilters -> invalid Bwdif custom string description */
-"Invalid Bwdif custom settings." = "Bwdif 自定义设置无效";
+/* Quit Alert -> informative text */
+"If you quit HandBrake your current encode will be reloaded into your queue at next launch. Do you want to quit anyway?" = "如果您退出 HandBrake，您当前的编码将在下一次启动时重新加载到你的队列中。真的想要退出吗?";
 
-/* HBFilters -> invalid chroma smooth custom string description */
-"Invalid chroma smooth custom settings." = "无效的色度平滑自定义设置。";
+/* Import preset open panel title */
+"Import presets" = "导入预设";
 
-/* HBFilters -> invalid chroma smooth custom string description */
-"Invalid colorspace custom settings." = "无效的色彩空间自定义设置。";
+/* Chapters import -> invalid CSV line count description */
+"Incorrect line count" = "行数不正确";
 
-/* HBFilters -> invalid comb detect custom string description */
-"Invalid custom comb detect settings." = "无效的自定义疏状检测设置。";
+/* Chapters import -> invalid CSV description */
+"Invalid chapters CSV file" = "无效的章节 CSV 文件";
 
-/* HBFilters -> invalid detelecine custom string description */
-"Invalid custom detelecine settings." = "无效的自定义反胶卷过带设置。";
+/* Queue Edit Alert -> stop and edit first button
+   Queue Stop Alert -> stop and remove first button */
+"Keep Encoding" = "继续编码";
 
-/* HBFilters -> invalid denoise custom string description */
-"Invalid custom HQDN3D settings" = "无效的自定义 HQDN3D 设置";
+/* Touch bar */
+"Live Preview" = "实时预览";
 
-/* HBFilters -> invalid denoise custom string description */
-"Invalid custom NLMeans settings" = "无效的自定义 NLMeans 设置";
+/* Preferences -> Output Name Token */
+"Modification-Date" = "修改日期";
 
-/* HBFilters -> invalid deblock custom string description */
-"Invalid deblock custom settings." = "无效的去块效应自定义设置。";
+/* Preferences -> Output Name Token */
+"Modification-Time" = "修改时间";
 
-/* HBFilters -> invalid Decomb custom string description */
-"Invalid Decomb custom settings." = "无效的 Decomb 自定义设置。";
+/* Queue undo action name */
+"Move Job in Queue" = "在队列中移动任务";
 
-/* HBFilters -> invalid lapsharp custom string description */
-"Invalid lapsharp custom settings." = "无效的 Lapsharp 自定义设置。";
+/* Queue undo action name */
+"Move Jobs in Queue" = "在队列中移动多个任务";
 
-/* HBJob -> invalid name error description */
-"Invalid name" = "无效的名称";
+/* Add preset window -> My Presets */
+"My Presets" = "我的预设";
 
-/* HBJob -> invalid preset */
-"Invalid preset" = "无效的预设";
+/* Queue status */
+"No encode pending" = "没有待处理的编码";
 
-/* HBFilters -> invalid unsharp custom string description */
-"Invalid unsharp custom settings." = "无效的 Unsharp 自定义设置。";
+/* Preview -> accessibility label */
+"No image" = "没有图像";
 
-/* HBFilters -> invalid Yadif custom string description */
-"Invalid Yadif custom settings." = "无效的 Yadif 自定义设置。";
+/* No comment provided by engineer. */
+"No job selected" = "没有选中的任务";
 
-/* HBFilters -> filter display name */
-"Lapsharp" = "Lapsharp";
+/* Main Window -> Info text */
+"No Valid Preset" = "没有有效的预设";
 
-/* Video description */
-"Level: %@" = "级别：%@";
+/* Main Window -> Info text */
+"No Valid Source Found" = "没有找到有效源";
 
-/* Audio description */
-"Mixdown: %@, Samplerate: %@, Bitrate: %d kbps" = "混音：%1$@，采样率：%2$@，比特率：%3$d kbps";
-
-/* HBAudio -> Mixdown */
-"Mono" = "单声道";
-
-/* HBAudio -> Mixdown */
-"Mono (Left Only)" = "单声道（仅左声道）";
-
-/* HBAudio -> Mixdown */
-"Mono (Right Only)" = "单声道（仅右声道）";
-
-/* Title description */
-"Multi Passes" = "Multi Passes";
-
-/* Title description */
-"Multi Passes Turbo" = "Multi Passes Turbo";
-
-/* HBStateFormatter -> pass display name */
-"Muxing…" = "Muxing…";
-
-/* HBFilters -> filter display name */
-"NLMeans" = "NLMeans";
-
-/* HBVideo -> tune */
-"none" = "无";
-
-/* HBAudio -> Mixdown
-   HBAudio -> none track name
-   HBJob -> filters short description
-   HBSubtitles -> none track name */
+/* Add preset window -> picture setting */
 "None" = "无";
 
-/* HBFilters -> filter display name
-   HBFilters -> off display name */
-"Off" = "关";
+/* Queue Done Alert -> shut down first button
+   Queue Done Alert -> sleep first button */
+"OK" = "确定";
 
-/* Video description */
-"Options: %@" = "选项：%@";
+/* File already exists alert -> informative text */
+"One or more file already exists. Do you want to overwrite?" = "一个或多个文件已存在。你是否确定覆盖？";
 
-/* HBStateFormatter -> work pass number format */
-"Pass %d %@ of %d, %.2f %%" = "步骤 %1$d %2$@ of %3$d，%4$.2f %%";
+/* Preview -> live preview alert default button */
+"Open in external player" = "在外部播放器中打开";
 
-/* HBStateFormatter -> work pass number format */
-"Pass %d of %d, %.2f %%" = "步骤 %1$d of %2$d，%3$.2f %%";
+/* Toolbar Open/Cancel Item
+   Touch bar */
+"Open Source" = "打开源";
 
-/* HBStateFormatter -> work first pass number format */
-"Pass 1" = "步骤 1";
+/* File already exists alert -> second button
+   File already exists in queue alert -> second button */
+"Overwrite" = "覆盖";
 
-/* HBStateFormatter -> pass display name */
-"Paused" = "已暂停";
+/* Toolbar Pause Item */
+"Pause" = "暂停";
 
-/* Video description */
-"Peak %@ (constant frame rate)" = "峰值 %@（恒定帧率）";
+/* Queue -> pause/resume menu
+   Toolbar Pause Item
+   Touch bar */
+"Pause Encoding" = "暂停编码";
 
-/* Video description */
-"Peak %@ (may be lower)" = "峰值 %@（可能更低）";
+/* Touch bar */
+"Pause/Resume Encoding" = "暂停/继续编码";
 
-/* Preset description */
-"Preset:" = "预设：";
+/* Job statistics */
+"Paused time:" = "暂停时间：";
 
-/* Video description */
-"Preset: %@" = "预设：%@";
+/* Video -> Framerate */
+"Peak Framerate (VFR)" = "峰值帧率（VFR）";
 
-/* Video description */
-"Profile: %@" = "配置文件：%@";
+/* Touch bar */
+"Play/Pause" = "播放/暂停";
 
-/* Range description */
-"Range:" = "范围：";
+/* Add preset window -> name alert informative text
+   Rename preset window -> name alert informative text */
+"Please enter a name." = "请输入一个名称。";
 
-/* HBVideo -> frame rates display name */
-"Same as source" = "与源视频相同";
+/* Copy Protection Alert -> informative text */
+"Please note that HandBrake does not support the removal of copy-protection from DVD Discs. You can if you wish use any other 3rd party software for this function. This warning will be shown only once each time HandBrake is run." = "请注意，HandBrake 不支持去除 DVD 光盘的防拷贝保护。如果您愿意，您可以使用任何其他第三方软件来实现这一功能。这个警告在每次运行 HandBrake 时只显示一次。";
 
-/* Video description */
-"Same as source (constant)" = "与源视频相同（恒定）";
+/* Queue Done Alert -> shut down second button
+   Queue Done Alert -> sleep second button */
+"Preferences…" = "偏好设置…";
 
-/* Video description */
-"Same as source (variable)" = "与源视频相同（可变）";
+/* Preferences -> Output Name Token */
+"Preset" = "预设";
 
-/* HBStateFormatter -> scan pass format */
-"Scanning title %d of %d, preview %d…" = "正在扫描标题 %1$d/%2$d，预览 %3$d…";
+/* Preview -> progress formatter title */
+"preview" = "预览";
 
-/* HBStateFormatter -> scan pass format */
-"Scanning title %d of %d…" = "正在扫描标题 %1$d/%2$d…";
+/* Preview -> window title */
+"Preview" = "预览";
 
-/* HBStateFormatter -> search pass display name */
-"Searching for start point:  %.2f %%" = "搜索起始点：%.2f %%";
+/* Preview -> window title format */
+"Preview - %@ %@" = "预览 - %1$@ %2$@";
 
-/* HBRange -> display name */
-"Seconds" = "秒";
+/* Preview -> accessibility label */
+"Preview Image, Size: %zu x %zu, Scale: %.0f%%" = "预览图，大小：%1$zu x %2$zu，缩放：%3$.0f%%";
 
-/* Title description */
-"Seconds %d through %d" = "秒 %1$d 到 %2$d";
+/* Touch bar */
+"Previews" = "预览";
 
-/* Filters description */
-"Sharpen" = "锐化";
+/* Queue done alert message
+   Queue notification alert message */
+"Put down that cocktail…" = "放下那杯鸡尾酒…";
 
-/* Source description */
-"Source:" = "源：";
+/* Preferences -> Output Name Token */
+"Quality Type" = "质量类型";
 
-/* HBPicture -> short info */
-"Source: %dx%d, " = "源：%1$dx%2$d，";
+/* Preferences -> Output Name Token */
+"Quality/Bitrate" = "质量/码率";
 
-/* HBAudio -> Mixdown */
-"Stereo" = "立体声";
+/* Queue window title */
+"Queue" = "队列";
 
-/* Subtitles description */
-"Subtitles:" = "字幕：";
+/* Queue window title */
+"Queue (%@)" = "队列（%@）";
 
-/* HBFilters -> invalid filter custom settings error recovery suggestion */
-"Syntax: " = "语法：";
+/* Quit Alert -> first button */
+"Quit" = "退出";
 
-/* HBJob -> invalid name error recovery suggestion */
-"The file name can't be empty." = "文件名不能为空。";
+/* Touch bar */
+"Remaining Time" = "剩余时间";
 
-/* HBJob -> invalid name error recovery suggestion */
-"The file name can't contain the / character." = "文件名不能包含 / 字符。";
+/* HBQueueItemView -> Remove button accessibility label */
+"Remove job" = "移除任务";
 
-/* Preset -> import error description */
-"The preset \"%@\" could not be imported." = "无法导入预设 “%@”。";
+/* Queue undo action name */
+"Remove Job From Queue" = "从队列移除任务";
 
-/* Job preset -> invalid preset recovery suggestion */
-"The preset is not a valid, try to select a different one." = "该预设不是有效的，尝试选择一个不同的预设。";
+/* Queue undo action name */
+"Remove Jobs From Queue" = "从队列移除多个任务";
 
-/* Preset -> import error reason */
-"The selected preset is invalid." = "所选预设是无效的。";
+/* HBQueueItemView -> Encode state accessibility label */
+"Rescanning for editing" = "重新扫描以进行编辑";
 
-/* Preset -> import error reason */
-"The selected preset was created with a newer version of HandBrake." = "所选的预设是用较新版本的 HandBrake 创建的。";
+/* Toolbar Pause Item */
+"Resume" = "继续";
 
-/* Title description */
-"Title %d, %@" = "标题 %1$d，%2$@";
+/* Queue -> pause/resume men
+   Toolbar Pause Item */
+"Resume Encoding" = "继续编码";
 
-/* Title description */
-"Title %d, %@, %@" = "标题 %1$d，%2$@，%3$@";
+/* HBQueueItemView -> Reveal button accessibility label */
+"Reveal destination in Finder" = "在访达中显示目标";
 
-/* Audio track title description
-   Subtitles track title description */
-"Title: %@" = "标题: %@";
+/* Job statistics */
+"Run time:" = "运行时间：";
 
-/* Video description */
-"Tune: " = "调优：";
+/* Export presets panel prompt */
+"Save" = "保存";
 
-/* HBJob -> video short description encoder name
-   Video description */
+/* Picture HUD -> scale button
+   Touch bar */
+"Scale To Screen" = "缩放到屏幕";
+
+/* Queue Alert -> cancel rip informative text */
+"Select Continue Encoding to dismiss this dialog without making changes." = "选择“继续编码”，可以在不做任何修改的情况下关闭这个对话框。";
+
+/* Preferences -> send to app destination open panel */
+"Select the desired external application" = "选择所需的外部应用程序";
+
+/* Titles selection sheet -> informative text */
+"Select the titles to add to the queue using the %@ preset:" = "使用 %@ 预设将选择的标题添加到队列：";
+
+/* Notification -> Show in Finder */
+"Show" = "显示";
+
+/* Touch bar */
+"Show Activity Window" = "显示活动窗口";
+
+/* Touch bar */
+"Show Preview Window" = "显示预览窗口";
+
+/* Job statistics */
+"Size:" = "大小：";
+
+/* Queue Alert -> cancel rip second button */
+"Skip Current Job" = "跳过当前任务";
+
+/* Touch bar */
+"Slider" = "滑块";
+
+/* Preferences -> Output Name Token */
+"Source" = "来源";
+
+/* Toolbar Start/Stop Item */
+"Start" = "开始";
+
+/* Menu Start/Stop Item
+   Queue -> start/stop menu
+   Toolbar Start/Stop Item */
+"Start Encoding" = "开始编码";
+
+/* Toolbar Start/Stop Item */
+"Start Queue" = "开始队列";
+
+/* Touch bar */
+"Start/Stop Encoding" = "开始/停止编码";
+
+/* Job statistics */
+"Started at:" = "开始于：";
+
+/* Queue -> Stop action
+   Toolbar Start/Stop Item */
+"Stop" = "停止";
+
+/* Queue -> Stop action */
+"Stop action." = "停止动作。";
+
+/* Queue Alert -> cancel rip third button */
+"Stop After Current Job" = "当前任务后停止";
+
+/* Queue Alert -> cancel rip fourth button */
+"Stop All" = "全部停止";
+
+/* Queue -> start/stop menu
+   Toolbar Start/Stop Item */
+"Stop Encoding" = "停止编码";
+
+/* Queue Stop Alert -> stop and remove second button */
+"Stop Encoding and Delete" = "停止编码并删除";
+
+/* Queue Edit Alert -> stop and edit second button */
+"Stop Encoding and Edit" = "停止编码并编辑";
+
+/* Queue Edit Alert -> stop and edit message */
+"Stop This Encode and Edit It?" = "停止编码并编辑？";
+
+/* Queue Stop Alert -> stop and remove message */
+"Stop This Encode and Remove It?" = "停止编码并删除？";
+
+/* Player HUD -> subtitles menu */
+"Subtitles" = "字幕";
+
+/* Queue Done Alert -> shut down message */
+"The computer will shut down after encoding is done." = "编码完成之后将会关闭计算机。";
+
+/* Queue Done Alert -> sleep message */
+"The computer will sleep after encoding is done." = "编码完成之后将计算机休眠。";
+
+/* Chapters import -> invalid CSV recovery suggestion */
+"The CSV file is not a valid chapters CSV file." = "这个 CSV 文件不是包含有效章节信息的 CSV 文件。";
+
+/* Destination same as source alert -> informative text */
+"The destination is the same as the source, you can not overwrite your source file!" = "目标与源文件相同，您不能覆盖您的源文件！";
+
+/* Chapters import -> invalid CSV line count recovery suggestion */
+"The line count in the chapters CSV file does not match the number of chapters in the movie." = "章节 CSV 文件中的行数与视频中的章节数不一致。";
+
+/* Add preset window -> name alert message
+   Rename preset window -> name alert message */
+"The preset name cannot be empty." = "预设名称不能为空。";
+
+/* File already exists in queue alert -> message */
+"There is already a queue item for this destination." = "这个目标已经有一个队列项目。";
+
+/* Invalid destination alert -> informative text */
+"This is not a valid destination directory!" = "这不是有效的目标目录！";
+
+/* Preferences -> Output Name Token */
+"Time" = "时间";
+
+/* Preferences -> Output Name Token */
+"Title" = "标题";
+
+/* HBLanguage -> Unknown language */
 "Unknown" = "未知";
 
-/* HBFilters -> filter display name */
-"Unsharp" = "Unsharp";
+/* Video -> Framerate */
+"Variable Framerate" = "可变帧率";
 
-/* HBJob -> video short description framerate */
-"VFR" = "VFR";
+/* Invalid destination alert -> message */
+"Warning!" = "警告！";
 
-/* Video description */
-"Video Options:" = "视频选项：";
+/* Preferences -> Output Name Token */
+"Width" = "宽度";
 
-/* Video description */
-"Video:" = "视频：";
+/* No comment provided by engineer. */
+"Working" = "工作中";
 
-/* HBFilters -> filter display name */
-"Yadif" = "Yadif";
+/* Queue Alert -> cancel rip message */
+"You are currently encoding. What would you like to do?" = "您目前正在进行编码。您想做什么？";
+
+/* Delete preset alert -> informative text */
+"You can't undo this action." = "您不能撤销这个操作。";
+
+/* Queue Done Alert -> shut down informative text */
+"You have selected to shut down the computer after encoding. To turn off shut down, go to the HandBrake preferences." = "您已选择在编码后关闭计算机。要停止关机，请到 HandBrake 选项中取消。";
+
+/* Queue Done Alert -> sleep informative text */
+"You have selected to sleep the computer after encoding. To turn off sleeping, go to the HandBrake preferences." = "您已选择在编码后让计算机休眠。要停止休眠，请到 HandBrake 选项中取消。";
+
+/* Queue -> disk almost full alert informative text */
+"You need to make more space available on your destination disk." = "您需要在目标磁盘上腾出更多空间。";
+
+/* Queue -> disk almost full alert message */
+"Your destination disk is almost full." = "您的目标磁盘几乎已满。";
+
+/* Queue done notification message */
+"Your encode %@ couldn't be completed." = "您的编码 %@ 无法完成。";
+
+/* Queue done notification message */
+"Your encode %@ is done!" = "您的编码 %@ 已完成！";
+
+/* Queue done alert informative text */
+"Your HandBrake queue is done!" = "您的 HandBrake 队列已完成！";
+
+/* Queue Edit Alert -> stop and edit informative text
+   Queue Stop Alert -> stop and remove informative text */
+"Your movie will be lost if you don't continue encoding." = "如果不继续编码您的视频将会丢失。";
 

@@ -1,0 +1,15 @@
+/* Class = "NSWindow"; title = "Rename Preset"; ObjectID = "C4G-OG-ksc"; */
+"C4G-OG-ksc.title" = "사전설정 이름변경";
+
+/* Class = "NSButtonCell"; title = "Cancel"; ObjectID = "N2f-jz-YyX"; */
+"N2f-jz-YyX.title" = "취소";
+
+/* Class = "NSTextFieldCell"; title = "Untitled"; ObjectID = "NQn-fS-Rbd"; */
+"NQn-fS-Rbd.title" = "제목없음";
+
+/* Class = "NSTextFieldCell"; title = "New preset name:"; ObjectID = "Pe0-gr-Yv4"; */
+"Pe0-gr-Yv4.title" = "새 사전설정 이름:";
+
+/* Class = "NSButtonCell"; title = "Rename"; ObjectID = "Z9M-dc-5Ml"; */
+"Z9M-dc-5Ml.title" = "이름바꾸기";
+

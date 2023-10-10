@@ -1,0 +1,9 @@
+/* Class = "NSButtonCell"; title = "Cancel"; ObjectID = "Ha0-iE-RLa"; */
+"Ha0-iE-RLa.title" = "Отмяна";
+
+/* Class = "NSButton"; ibShadowedToolTip = "Cancel Live Preview Encode"; ObjectID = "SEa-H6-T26"; */
+"SEa-H6-T26.ibShadowedToolTip" = "Отмени кодиране с визуализация в реално време";
+
+/* Class = "NSTextFieldCell"; title = "Preparing Preview"; ObjectID = "tM8-gj-kBo"; */
+"tM8-gj-kBo.title" = "Подготвяне на визуализация";
+

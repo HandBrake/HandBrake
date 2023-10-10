@@ -1,0 +1,66 @@
+/* Class = "NSButtonCell"; title = "Cancel"; ObjectID = "5Xb-gz-QEa"; */
+"5Xb-gz-QEa.title" = "취소";
+
+/* Class = "NSTextField"; ibShadowedToolTip = "Enter a description for the new preset. The description will be shown when hovering the cursor over the preset in the presets list."; ObjectID = "8kl-Sh-Gh7"; */
+"8kl-Sh-Gh7.ibShadowedToolTip" = "새 사전설정을 위해 설명을 입력하십시오. 이 설명은 사전설정 목록에서 커서를 가져갈 때 표시됩니다.";
+
+/* Class = "NSTextFieldCell"; title = "Resolution Limit:"; ObjectID = "75B-xq-Qbe"; */
+"75B-xq-Qbe.title" = "해상도 제한:";
+
+/* Class = "NSButtonCell"; title = "Selection Behavior…"; ObjectID = "a0j-nw-n23"; */
+"a0j-nw-n23.title" = "동작 선택...";
+
+/* Class = "NSTextField"; ibShadowedToolTip = "Enter a name for the new preset. This name will be displayed in the presets list."; ObjectID = "aKg-n4-OUS"; */
+"aKg-n4-OUS.ibShadowedToolTip" = "새 사전설정을 위해 이름을 입력하십시오. 이 이름은 사전설정 목록에 표시됩니다.";
+
+/* Class = "NSWindow"; title = "New Preset"; ObjectID = "dbZ-Wo-9nG"; */
+"dbZ-Wo-9nG.title" = "새 사전설정";
+
+/* Class = "NSButtonCell"; title = "Add"; ObjectID = "Deg-rS-mRc"; */
+"Deg-rS-mRc.title" = "추가";
+
+/* Class = "NSTextField"; ibExternalAccessibilityDescription = "Picture Width"; ObjectID = "gOg-oO-8ar"; */
+"gOg-oO-8ar.ibExternalAccessibilityDescription" = "사진 너비";
+
+/* Class = "NSTextField"; ibShadowedToolTip = "Maximum video storage width in pixels allowed by the preset. Set to 0 for unlimited width."; ObjectID = "gOg-oO-8ar"; */
+"gOg-oO-8ar.ibShadowedToolTip" = "사전 설정에서 허용하는 비디오의 최대 가로값. 0으로 설정시 무제한.";
+
+/* Class = "NSTextFieldCell"; title = "Description:"; ObjectID = "hc8-1h-Jye"; */
+"hc8-1h-Jye.title" = "설명:";
+
+/* Class = "NSTextFieldCell"; title = "Audio:"; ObjectID = "HKp-K9-MF4"; */
+"HKp-K9-MF4.title" = "오디오:";
+
+/* Class = "NSTextFieldCell"; title = "Category:"; ObjectID = "IyE-Lz-32s"; */
+"IyE-Lz-32s.title" = "카테고리:";
+
+/* Class = "NSTextFieldCell"; title = "Preset Name:"; ObjectID = "jhj-Et-ncF"; */
+"jhj-Et-ncF.title" = "사전설정 이름:";
+
+/* Class = "NSButtonCell"; title = "Selection Behavior…"; ObjectID = "LPX-Rc-KLa"; */
+"LPX-Rc-KLa.title" = "동작 선택...";
+
+/* Class = "NSTextField"; ibExternalAccessibilityDescription = "Picture Height"; ObjectID = "Mga-dS-8BF"; */
+"Mga-dS-8BF.ibExternalAccessibilityDescription" = "사진 높이";
+
+/* Class = "NSTextField"; ibShadowedToolTip = "Maximum video storage height in pixels allowed by the preset. Set to 0 for unlimited height."; ObjectID = "Mga-dS-8BF"; */
+"Mga-dS-8BF.ibShadowedToolTip" = "사전 설정에서 허용하는 비디오의 최대 세로값. 0으로 설정시 무제한";
+
+/* Class = "NSTextFieldCell"; title = "x"; ObjectID = "Nfk-ix-xIv"; */
+"Nfk-ix-xIv.title" = "x";
+
+/* Class = "NSTextFieldCell"; title = "Subtitles:"; ObjectID = "OYE-GG-Vo3"; */
+"OYE-GG-Vo3.title" = "자막:";
+
+/* Class = "NSMenu"; title = "OtherViews"; ObjectID = "qsA-gt-zdK"; */
+"qsA-gt-zdK.title" = "다른 견해들";
+
+/* Class = "NSMenuItem"; title = "New Category…"; ObjectID = "Sf8-HP-mhE"; */
+"Sf8-HP-mhE.title" = "새로운 카테고리...";
+
+/* Class = "NSMenu"; title = "OtherViews"; ObjectID = "tQ1-PN-kvh"; */
+"tQ1-PN-kvh.title" = "다른 견해들";
+
+/* Class = "NSPopUpButton"; ibShadowedToolTip = "Resolution Limit allows you to set a maximum width and/or height."; ObjectID = "z6B-ig-ouq"; */
+"z6B-ig-ouq.ibShadowedToolTip" = "해상도 제한으로 가로 세로의 최대값을 설정할 수 있습니다.";
+

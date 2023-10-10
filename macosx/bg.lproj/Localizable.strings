@@ -1,0 +1,506 @@
+/* Job statistics */
+" (%@ %% of the source file)" = " (%@ %% от източника)";
+
+/* Preview -> size info label */
+" Scaled To Screen" = "Мащабиран до екран";
+
+/* No comment provided by engineer. */
+"- --:--" = "- --:--";
+
+/* No comment provided by engineer. */
+"--:--" = "--:--";
+
+/* Preview -> size info label */
+"(%.0f%% actual size)" = "(%.0f%% реален размер)";
+
+/* Preview -> size info label */
+"(Actual size)" = "(Реален размер)";
+
+/* Main Window -> preset modified */
+"(Modified)" = "(Модифициран)";
+
+/* Job statistics */
+"%@ fps" = "%@ fps";
+
+/* Queue status */
+"%lu encode pending" = "%lu чакащо кодиране";
+
+/* Queue status */
+"%lu encodes pending" = "%lu чакащи кодирания";
+
+/* No comment provided by engineer. */
+"%lu jobs selected" = "%lu избрани задачи";
+
+/* Add preset window -> picture setting */
+"480p NTSC SD" = "480p NTSC SD";
+
+/* Add preset window -> picture setting */
+"576p PAL SD" = "576p PAL SD";
+
+/* Add preset window -> picture setting */
+"720p HD" = "720p HD";
+
+/* Add preset window -> picture setting */
+"1080p HD" = "1080p HD";
+
+/* Add preset window -> picture setting */
+"1440p 2.5K Quad HD" = "1440p 2.5K Quad HD";
+
+/* Add preset window -> picture setting */
+"2160p 4K Ultra HD" = "2160p 4K Ultra HD";
+
+/* Add preset window -> picture setting */
+"4320p 8K Ultra HD" = "4320p 8K Ultra HD";
+
+/* Destination same as source alert -> message
+   File already exists alert -> message */
+"A file already exists at the selected destination." = "Вече съществува файл в избраната изходна директория.";
+
+/* Picture HUD -> scale button */
+"Actual Scale" = "Истински мащаб";
+
+/* Queue undo action name */
+"Add Job To Queue" = "Добави задача на опашката";
+
+/* Queue undo action name */
+"Add Jobs To Queue" = "Добави задачи на опашката";
+
+/* Touch bar */
+"Add Preset" = "Добави шаблон";
+
+/* Touch bar */
+"Add Titles To Queue" = "Добави заглавия на опашката";
+
+/* Touch bar */
+"Add To Queue" = "Добави на опашката";
+
+/* Preferences Advanced Toolbar Item */
+"Advanced" = "Разширени";
+
+/* HBLanguage -> Any language */
+"Any" = "Всякакви";
+
+/* Delete preset alert -> message */
+"Are you sure you want to permanently delete the selected preset?" = "Сигурен ли сте, че искате да изтриете избрания шаблон завинаги?";
+
+/* Delete preset alert -> message */
+"Are you sure you want to permanently delete the selected presets?" = "Сигурен ли сте, че искате да изтриете избраните шаблони завинаги?";
+
+/* Quit Alert -> message */
+"Are you sure you want to quit HandBrake?" = "Сигурен ли сте, че искате да излезете от HandBrake?";
+
+/* Copy Protection Alert -> first button */
+"Attempt Scan Anyway" = "Все пак опитай сканиране";
+
+/* Player HUD -> audio menu */
+"Audio" = "Аудио";
+
+/* Job statistics */
+"Average speed:" = "Средна скорост:";
+
+/* Copy Protection Alert -> second button
+   Delete preset alert -> second button
+   File already exists alert -> first button
+   File already exists in queue alert -> first button
+   Preview -> live preview alert alternate button
+   Touch bar */
+"Cancel" = "Отмяна";
+
+/* Touch bar */
+"Cancel Encoding" = "Отмени кодиране";
+
+/* Toolbar Open/Cancel Item
+   Touch bar */
+"Cancel Scan" = "Отмени сканиране";
+
+/* Toolbar Open/Cancel Item */
+"Cancel Scanning Source" = "Отмени сканиране на източник";
+
+/* Preferences -> Output Name Token */
+"Chapters" = "Глави";
+
+/* Main Window -> Destination open panel */
+"Choose" = "Избери";
+
+/* Preferences -> Output Name Token */
+"Codec" = "Кодек";
+
+/* Queue Alert -> cancel rip first button */
+"Continue Encoding" = "Продължи кодиране";
+
+/* Preferences -> Output Name Token */
+"Creation-Date" = "Дата на създаване";
+
+/* Preferences -> Output Name Token */
+"Creation-Time" = "Час на създаване";
+
+/* Touch bar */
+"Current Time" = "Настоящо време";
+
+/* Add preset window -> picture setting */
+"Custom" = "Персонализиране";
+
+/* Preferences -> Output Name Token */
+"Date" = "Дата";
+
+/* Delete preset alert -> first button */
+"Delete Preset" = "Изтрий шаблон";
+
+/* Delete preset alert -> first button */
+"Delete Presets" = "Изтрий шаблони";
+
+/* File already exists alert -> informative text
+   File already exists in queue alert -> informative text */
+"Do you want to overwrite %@?" = "Искате ли да презапишете %@?";
+
+/* Quit Alert -> second button */
+"Don't Quit" = "Не излизай";
+
+/* Touch bar */
+"Done" = "Завършено";
+
+/* HBQueueItemView -> Encode state accessibility label */
+"Encode canceled" = "Кодирането е отменено";
+
+/* HBQueueItemView -> Encode state accessibility label */
+"Encode complete" = "Кодирането е завършено";
+
+/* HBQueueItemView -> Encode state accessibility label
+   Queue done notification failed message */
+"Encode failed" = "Кодирането се провали";
+
+/* HBQueueItemView -> Encode state accessibility label */
+"Encode ready" = "Кодирането е готово";
+
+/* HBQueueItemView -> Encode state accessibility label */
+"Encode working" = "Кодирането работи";
+
+/* No comment provided by engineer. */
+"Encoding %lu Jobs" = "Кодиране на %lu задачи";
+
+/* No comment provided by engineer. */
+"Encoding Job: %@" = "Кодиране на задача: %@";
+
+/* Job statistics */
+"Ended at:" = "Приключило в:";
+
+/* Export presets save panel title */
+"Export preset" = "Експортиране на шаблон";
+
+/* Export presets save panel title */
+"Export presets" = "Експортиране на шаблони";
+
+/* File already exists alert -> message */
+"File already exists." = "Файлът вече съществува.";
+
+/* Preferences General Toolbar Item */
+"General" = "Основни";
+
+/* Main Window -> title */
+"HandBrake" = "HandBrake";
+
+/* Preview -> live preview alert message */
+"HandBrake can't open the preview." = "HandBrake не може да отвори визуализацията.";
+
+/* Preview -> live preview alert informative text */
+"HandBrake can't playback this combination of video/audio/container format. Do you want to open it in an external player?" = "HandBrake не може да възпроизведе тази комбинация от видео/аудио/контейнер. Искате ли да го отворите във външен плеър?";
+
+/* Quit Alert -> informative text */
+"If you quit HandBrake your current encode will be reloaded into your queue at next launch. Do you want to quit anyway?" = "Ако изключите HandBrake, текущото кодиране ще бъде добавено в опашката при следващото стартиране. Искате ли да излезете все пак?";
+
+/* Import preset open panel title */
+"Import presets" = "Импортиране на шаблони";
+
+/* Chapters import -> invalid CSV line count description */
+"Incorrect line count" = "Неправилен брой редове";
+
+/* Queue Edit Alert -> stop and edit first button
+   Queue Stop Alert -> stop and remove first button */
+"Keep Encoding" = "Продължавай да кодираш";
+
+/* Touch bar */
+"Live Preview" = "Визуализация в реално време";
+
+/* Queue undo action name */
+"Move Job in Queue" = "Премести задача на опашката";
+
+/* Queue undo action name */
+"Move Jobs in Queue" = "Премести задачи на опашката";
+
+/* Add preset window -> My Presets */
+"My Presets" = "Моите шаблони";
+
+/* Queue status */
+"No encode pending" = "Няма чакащи кодирания";
+
+/* Preview -> accessibility label */
+"No image" = "Няма изображение";
+
+/* No comment provided by engineer. */
+"No job selected" = "Няма избрани задачи";
+
+/* Main Window -> Info text */
+"No Valid Preset" = "Няма валиден шаблон";
+
+/* Main Window -> Info text */
+"No Valid Source Found" = "Не е открит валиден източник";
+
+/* Add preset window -> picture setting */
+"None" = "Няма";
+
+/* Queue Done Alert -> shut down first button
+   Queue Done Alert -> sleep first button */
+"OK" = "ОК";
+
+/* File already exists alert -> informative text */
+"One or more file already exists. Do you want to overwrite?" = "Един или повече файла вече съществуват. Желаете ли да презапишете?";
+
+/* Preview -> live preview alert default button */
+"Open in external player" = "Отвори във външен плеър";
+
+/* Toolbar Open/Cancel Item
+   Touch bar */
+"Open Source" = "Отвори източник";
+
+/* File already exists alert -> second button
+   File already exists in queue alert -> second button */
+"Overwrite" = "Презапиши";
+
+/* Toolbar Pause Item */
+"Pause" = "Пауза";
+
+/* Queue -> pause/resume menu
+   Toolbar Pause Item
+   Touch bar */
+"Pause Encoding" = "Паузирай кодиране";
+
+/* Touch bar */
+"Pause/Resume Encoding" = "Пауза/Продължи кодиране";
+
+/* Job statistics */
+"Paused time:" = "Паузирано време:";
+
+/* Video -> Framerate */
+"Peak Framerate (VFR)" = "Максимална кадрова честота (VFR)";
+
+/* Touch bar */
+"Play/Pause" = "Възпроизвеждане/Пауза";
+
+/* Add preset window -> name alert informative text
+   Rename preset window -> name alert informative text */
+"Please enter a name." = "Моля, въведете име.";
+
+/* Copy Protection Alert -> informative text */
+"Please note that HandBrake does not support the removal of copy-protection from DVD Discs. You can if you wish use any other 3rd party software for this function. This warning will be shown only once each time HandBrake is run." = "HandBrake не поддържа премахването на защитите на копие. Ако желаете, може да използвате друг софтуер за тази задача. Това предупреждение ще се показва само веднъж при всяко изпълнение на HandBrake.";
+
+/* Queue Done Alert -> shut down second button
+   Queue Done Alert -> sleep second button */
+"Preferences…" = "Предпочитания...";
+
+/* Preview -> progress formatter title */
+"preview" = "визуализация";
+
+/* Preview -> window title */
+"Preview" = "Визуализация";
+
+/* Preview -> window title format */
+"Preview - %@ %@" = "Визуализация - %1$@ %2$@";
+
+/* Preview -> accessibility label */
+"Preview Image, Size: %zu x %zu, Scale: %.0f%%" = "Изображение за визуализация, размери: %1$zux%2$zu, мащаб: %3$.0f%%";
+
+/* Touch bar */
+"Previews" = "Визуализации";
+
+/* Queue done alert message
+   Queue notification alert message */
+"Put down that cocktail…" = "Оставете коктейла...";
+
+/* Preferences -> Output Name Token */
+"Quality/Bitrate" = "Качество/Побитова скорост";
+
+/* Queue window title */
+"Queue" = "Опашка";
+
+/* Queue window title */
+"Queue (%@)" = "Опашка (%@)";
+
+/* Quit Alert -> first button */
+"Quit" = "Изход";
+
+/* Touch bar */
+"Remaining Time" = "Оставащо време";
+
+/* HBQueueItemView -> Remove button accessibility label */
+"Remove job" = "Махни задача";
+
+/* Queue undo action name */
+"Remove Job From Queue" = "Махни задачата от опашката";
+
+/* Queue undo action name */
+"Remove Jobs From Queue" = "Махни задачите от опашката";
+
+/* HBQueueItemView -> Encode state accessibility label */
+"Rescanning for editing" = "Повторно сканиране за редакция";
+
+/* Toolbar Pause Item */
+"Resume" = "Продължи";
+
+/* Queue -> pause/resume men
+   Toolbar Pause Item */
+"Resume Encoding" = "Продължи кодиране";
+
+/* Job statistics */
+"Run time:" = "Врем за изпълнение:";
+
+/* Export presets panel prompt */
+"Save" = "Запази";
+
+/* Picture HUD -> scale button
+   Touch bar */
+"Scale To Screen" = "Мащабиране до екран";
+
+/* Preferences -> send to app destination open panel */
+"Select the desired external application" = "Изберете желаното външно приложение";
+
+/* Titles selection sheet -> informative text */
+"Select the titles to add to the queue using the %@ preset:" = "Изберете заглавия, които да добавите на опашката, като използвате шаблон %@:";
+
+/* Notification -> Show in Finder */
+"Show" = "Покажи";
+
+/* Touch bar */
+"Show Activity Window" = "Покажи прозорец на дейностите";
+
+/* Touch bar */
+"Show Preview Window" = "Покажи прозорец на визуализация";
+
+/* Job statistics */
+"Size:" = "Размер:";
+
+/* Queue Alert -> cancel rip second button */
+"Skip Current Job" = "Пропускане на настояща задача";
+
+/* Touch bar */
+"Slider" = "Плъзгач";
+
+/* Preferences -> Output Name Token */
+"Source" = "Източник";
+
+/* Toolbar Start/Stop Item */
+"Start" = "Начало";
+
+/* Menu Start/Stop Item
+   Queue -> start/stop menu
+   Toolbar Start/Stop Item */
+"Start Encoding" = "Започни кодиране";
+
+/* Toolbar Start/Stop Item */
+"Start Queue" = "Начало на опашката";
+
+/* Touch bar */
+"Start/Stop Encoding" = "Стартиране/Спиране на кодирането";
+
+/* Job statistics */
+"Started at:" = "Започнало в:";
+
+/* Queue -> Stop action
+   Toolbar Start/Stop Item */
+"Stop" = "Спиране";
+
+/* Queue -> Stop action */
+"Stop action." = "Спиране на действие.";
+
+/* Queue Alert -> cancel rip third button */
+"Stop After Current Job" = "Спиране след настоящата задача";
+
+/* Queue Alert -> cancel rip fourth button */
+"Stop All" = "Спиране на всички";
+
+/* Queue -> start/stop menu
+   Toolbar Start/Stop Item */
+"Stop Encoding" = "Спиране на кодиране";
+
+/* Queue Stop Alert -> stop and remove second button */
+"Stop Encoding and Delete" = "Спиране на кодиране и изтриване";
+
+/* Queue Edit Alert -> stop and edit second button */
+"Stop Encoding and Edit" = "Спиране на кодиране и редактиране";
+
+/* Queue Edit Alert -> stop and edit message */
+"Stop This Encode and Edit It?" = "Спрете това кодиране и го редактирайте?";
+
+/* Queue Stop Alert -> stop and remove message */
+"Stop This Encode and Remove It?" = "Спрете това кодиране и го премахнете?";
+
+/* Player HUD -> subtitles menu */
+"Subtitles" = "Субтитри";
+
+/* Queue Done Alert -> shut down message */
+"The computer will shut down after encoding is done." = "Компютърът ще се изключи, след като кодирането е готово.";
+
+/* Queue Done Alert -> sleep message */
+"The computer will sleep after encoding is done." = "Компютърът ще заспи, след като кодирането е готово.";
+
+/* Chapters import -> invalid CSV recovery suggestion */
+"The CSV file is not a valid chapters CSV file." = "CSV файлът не е валиден CSV файл.";
+
+/* Add preset window -> name alert message
+   Rename preset window -> name alert message */
+"The preset name cannot be empty." = "Името на шаблона не може да е празно.";
+
+/* File already exists in queue alert -> message */
+"There is already a queue item for this destination." = "Вече има задача в опашката за този изход.";
+
+/* Invalid destination alert -> informative text */
+"This is not a valid destination directory!" = "Това не е валидна изходна директория!";
+
+/* Preferences -> Output Name Token */
+"Time" = "Време";
+
+/* Preferences -> Output Name Token */
+"Title" = "Заглавие";
+
+/* HBLanguage -> Unknown language */
+"Unknown" = "Неизвестно";
+
+/* Video -> Framerate */
+"Variable Framerate" = "Променлива кадрова честота";
+
+/* Invalid destination alert -> message */
+"Warning!" = "Внимание!";
+
+/* No comment provided by engineer. */
+"Working" = "Работи";
+
+/* Queue Alert -> cancel rip message */
+"You are currently encoding. What would you like to do?" = "В момента кодирате. Какво желаете да направите?";
+
+/* Delete preset alert -> informative text */
+"You can't undo this action." = "Не можете да отмените това действие.";
+
+/* Queue Done Alert -> shut down informative text */
+"You have selected to shut down the computer after encoding. To turn off shut down, go to the HandBrake preferences." = "Избрали сте да изключите компютъра след кодиране. За да спрете изключването, отидете в настройките на HandBrake.";
+
+/* Queue Done Alert -> sleep informative text */
+"You have selected to sleep the computer after encoding. To turn off sleeping, go to the HandBrake preferences." = "Избрали сте да приспите компютъра след кодиране.За да спрете приспиването, отидете в настройките на HandBrake.";
+
+/* Queue -> disk almost full alert informative text */
+"You need to make more space available on your destination disk." = "Трябва да освободите повече пространство на изходния си диск.";
+
+/* Queue -> disk almost full alert message */
+"Your destination disk is almost full." = "Вашият изходен диск е почни пълен.";
+
+/* Queue done notification message */
+"Your encode %@ couldn't be completed." = "Вашето кодиране %@ не можа да завърши.";
+
+/* Queue done notification message */
+"Your encode %@ is done!" = "Вашето кодиране %@ е готово!";
+
+/* Queue done alert informative text */
+"Your HandBrake queue is done!" = "Вашата опашка в HandBrake е готова!";
+
+/* Queue Edit Alert -> stop and edit informative text
+   Queue Stop Alert -> stop and remove informative text */
+"Your movie will be lost if you don't continue encoding." = "Филмът ви ще бъде загубен, ако не продължите да кодирате.";
+

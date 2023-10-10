@@ -25,9 +25,6 @@
 /* Class = "NSTextFieldCell"; title = "At Launch:"; ObjectID = "307"; */
 "307.title" = "No lançamento:";
 
-/* Class = "NSTextFieldCell"; title = "Output Files:"; ObjectID = "308"; */
-"308.title" = "Arquivos de saída:";
-
 /* Class = "NSButtonCell"; title = "Store Activity Logs in same location as video"; ObjectID = "348"; */
 "348.title" = "Registros de atividades da loja no mesmo local que o vídeo";
 
@@ -228,6 +225,9 @@
 
 /* Class = "NSButtonCell"; title = "Remove old logs from main Activity Logs folder after 30 days"; ObjectID = "lgn-RF-k0d"; */
 "lgn-RF-k0d.title" = "Remova registros antigos da pasta principais registros de atividades após 30 dias";
+
+/* Class = "NSTextFieldCell"; title = "Destination:"; ObjectID = "lo9-Hk-I6l"; */
+"lo9-Hk-I6l.title" = "Destino:";
 
 /* Class = "NSPopUpButton"; ibShadowedToolTip = "Higher values may help to fully utilize the CPU if a single encode can't scale to all available CPU cores."; ObjectID = "MLd-Te-AbW"; */
 "MLd-Te-AbW.ibShadowedToolTip" = "Valores mais altos podem contribuir para a plena utilização da CPU caso uma única codificação não puder ser distribuída para todos os núcleos disponíveis da CPU.";

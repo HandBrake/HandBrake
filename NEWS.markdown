@@ -103,6 +103,10 @@ Windows users, please make sure to install [Microsoft .NET Desktop Runtime versi
 - Fixed an issue with the Deblock Filter custom string field
 - Fixed the file size display on the queue statistics window when file size info is not available
 - Miscellaneous bug fixes and improvements
+- Added new translations
+ - Korean
+ - Bulgarian
+- Updated existing translations
 
 ### Linux
 

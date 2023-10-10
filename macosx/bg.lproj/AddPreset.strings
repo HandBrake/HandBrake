@@ -1,0 +1,75 @@
+/* Class = "NSButtonCell"; title = "Cancel"; ObjectID = "5Xb-gz-QEa"; */
+"5Xb-gz-QEa.title" = "Отмяна";
+
+/* Class = "NSTextField"; ibShadowedToolTip = "Enter a description for the new preset. The description will be shown when hovering the cursor over the preset in the presets list."; ObjectID = "8kl-Sh-Gh7"; */
+"8kl-Sh-Gh7.ibShadowedToolTip" = "Въведете описание на новия шаблон. Описанието ще се показва, когато курсорът се постави над шаблона в списъка с шаблони.";
+
+/* Class = "NSTextFieldCell"; title = "Resolution Limit:"; ObjectID = "75B-xq-Qbe"; */
+"75B-xq-Qbe.title" = "Лимит на разделителна способност";
+
+/* Class = "NSButtonCell"; title = "Selection Behavior…"; ObjectID = "a0j-nw-n23"; */
+"a0j-nw-n23.title" = "Поведение на селекция...";
+
+/* Class = "NSButton"; ibShadowedToolTip = "Selection Behavior determines the track(s) and settings used when the preset is selected."; ObjectID = "aez-2b-JXx"; */
+"aez-2b-JXx.ibShadowedToolTip" = "Поведението на селекцията определя пътечките и настройките, които се използват при избор на шаблона.";
+
+/* Class = "NSTextField"; ibShadowedToolTip = "Enter a name for the new preset. This name will be displayed in the presets list."; ObjectID = "aKg-n4-OUS"; */
+"aKg-n4-OUS.ibShadowedToolTip" = "Въведете име за новия шаблон. Това име ще се показва в списъка с шаблони.";
+
+/* Class = "NSPopUpButton"; ibShadowedToolTip = "Picture Size controls how video dimensions are applied when selecting the preset.\n\nNone uses the currently set dimensions.\n\nCustom allows you to set a maximum width and/or height.\n\nSource maximum uses the full dimensions of each source."; ObjectID = "bma-pS-phM"; */
+"bma-pS-phM.ibShadowedToolTip" = "Размерът на картината контролира как да бъдат приложени размерите на видеото при избор на шаблон.\n\n\"Няма\" използва настоящите зададени настройки.\n\n\"Персонализиране\" Ви позволява да зададете максимална ширина и/или височина.\n\n\"Максимум на източника\" използва пълните размери на всеки източник.";
+
+/* Class = "NSWindow"; title = "New Preset"; ObjectID = "dbZ-Wo-9nG"; */
+"dbZ-Wo-9nG.title" = "Нов шаблон";
+
+/* Class = "NSButtonCell"; title = "Add"; ObjectID = "Deg-rS-mRc"; */
+"Deg-rS-mRc.title" = "Добавяне";
+
+/* Class = "NSTextField"; ibExternalAccessibilityDescription = "Picture Width"; ObjectID = "gOg-oO-8ar"; */
+"gOg-oO-8ar.ibExternalAccessibilityDescription" = "Ширина на картина";
+
+/* Class = "NSTextField"; ibShadowedToolTip = "Maximum video storage width in pixels allowed by the preset. Set to 0 for unlimited width."; ObjectID = "gOg-oO-8ar"; */
+"gOg-oO-8ar.ibShadowedToolTip" = "Максимална позволена от шаблона ширина в пиксели на видеото в хранилището. Задайте на 0 за неограничена ширина.";
+
+/* Class = "NSTextFieldCell"; title = "Description:"; ObjectID = "hc8-1h-Jye"; */
+"hc8-1h-Jye.title" = "Описание:";
+
+/* Class = "NSTextFieldCell"; title = "Audio:"; ObjectID = "HKp-K9-MF4"; */
+"HKp-K9-MF4.title" = "Аудио:";
+
+/* Class = "NSTextFieldCell"; title = "Category:"; ObjectID = "IyE-Lz-32s"; */
+"IyE-Lz-32s.title" = "Категория:";
+
+/* Class = "NSTextFieldCell"; title = "Preset Name:"; ObjectID = "jhj-Et-ncF"; */
+"jhj-Et-ncF.title" = "Име на шаблон:";
+
+/* Class = "NSButtonCell"; title = "Selection Behavior…"; ObjectID = "LPX-Rc-KLa"; */
+"LPX-Rc-KLa.title" = "Поведение на селекция...";
+
+/* Class = "NSTextField"; ibExternalAccessibilityDescription = "Picture Height"; ObjectID = "Mga-dS-8BF"; */
+"Mga-dS-8BF.ibExternalAccessibilityDescription" = "Височина на картина";
+
+/* Class = "NSTextField"; ibShadowedToolTip = "Maximum video storage height in pixels allowed by the preset. Set to 0 for unlimited height."; ObjectID = "Mga-dS-8BF"; */
+"Mga-dS-8BF.ibShadowedToolTip" = "Максимална позволена от шаблона височина в пиксели на видеото в хранилището. Задайте на 0 за неограничена височина.";
+
+/* Class = "NSTextFieldCell"; title = "x"; ObjectID = "Nfk-ix-xIv"; */
+"Nfk-ix-xIv.title" = "x";
+
+/* Class = "NSButton"; ibShadowedToolTip = "Selection Behavior determines the track(s) and settings used when the preset is selected."; ObjectID = "nWJ-0b-fUA"; */
+"nWJ-0b-fUA.ibShadowedToolTip" = "\"Поведение на селекция\" определя пътечките и настройките, които се използват при избор на шаблона.";
+
+/* Class = "NSTextFieldCell"; title = "Subtitles:"; ObjectID = "OYE-GG-Vo3"; */
+"OYE-GG-Vo3.title" = "Субтитри:";
+
+/* Class = "NSMenu"; title = "OtherViews"; ObjectID = "qsA-gt-zdK"; */
+"qsA-gt-zdK.title" = "ДругиИзгледи";
+
+/* Class = "NSMenuItem"; title = "New Category…"; ObjectID = "Sf8-HP-mhE"; */
+"Sf8-HP-mhE.title" = "Нова категория...";
+
+/* Class = "NSMenu"; title = "OtherViews"; ObjectID = "tQ1-PN-kvh"; */
+"tQ1-PN-kvh.title" = "ДругиИзгледи";
+
+/* Class = "NSPopUpButton"; ibShadowedToolTip = "Resolution Limit allows you to set a maximum width and/or height."; ObjectID = "z6B-ig-ouq"; */
+"z6B-ig-ouq.ibShadowedToolTip" = "\"Лимит на разделителна способност\" позволява задаването на максимална ширина и/или височина.";
+

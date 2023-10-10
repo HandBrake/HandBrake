@@ -286,6 +286,9 @@
 /* HBAudio -> Mixdown */
 "Mono (Right Only)" = "Mono (somente à direita)";
 
+/* HBStateFormatter -> pass display name */
+"Muxing…" = "Muxing...";
+
 /* HBFilters -> filter display name */
 "NLMeans" = "NLMeans";
 
@@ -343,6 +346,12 @@
 
 /* Video description */
 "Same as source (variable)" = "O mesmo que a fonte (variável)";
+
+/* HBStateFormatter -> scan pass format */
+"Scanning title %d of %d, preview %d…" = "Título de digitalização %1$d de %2$d, pré-visualização %3$d...";
+
+/* HBStateFormatter -> scan pass format */
+"Scanning title %d of %d…" = "Título de digitalização %1$d de %2$d...";
 
 /* HBStateFormatter -> search pass display name */
 "Searching for start point:  %.2f %%" = "Em busca de ponto de partida: %.2f %%";

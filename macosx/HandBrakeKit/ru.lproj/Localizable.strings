@@ -77,12 +77,6 @@
 /* Title description */
 "1 Foreign Language Search Pass - " = "1 Проход поиска иностранных языков - ";
 
-/* Title description */
-"2 Video Passes" = "2 Прохода видео";
-
-/* Title description */
-"2 Video Passes First Turbo" = "2 Прохода видео, ускоренный первый";
-
 /* HBAudio -> Mixdown */
 "5.1 Channels" = "5.1 Каналов";
 
@@ -140,7 +134,8 @@
 /* HBFilters -> filter display name */
 "Decomb" = "Удаление гребенки";
 
-/* Subtitles description */
+/* HBFilters -> default display name
+   Subtitles description */
 "Default" = "По умолчанию";
 
 /* Video description */

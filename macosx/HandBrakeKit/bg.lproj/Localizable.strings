@@ -1,0 +1,432 @@
+/* Video description */
+" - fastdecode" = " - fastdecode";
+
+/* HBStateFormatter -> work time format */
+" (%.2f fps, avg %.2f fps, ETA %@)" = " (%1$.2f fps, avg %2$.2f fps, ETA %3$@)";
+
+/* HBStateFormatter -> work time format */
+" (%.2f fps, avg %.2f fps)" = " (%1$.2f fps, avg %2$.2f fps)";
+
+/* HBStateFormatter -> search time format
+   HBStateFormatter -> work time format */
+" (ETA %@)" = " (ETA %@)";
+
+/* HBJob -> video short description framerate */
+" FPS CFR" = "FPS CFR";
+
+/* HBJob -> video short description framerate */
+" FPS PFR" = "FPS PFR";
+
+/* Title short description -> audio format */
+", %d audio tracks" = ", %d аудио пътечки";
+
+/* Title short description -> subtitles format */
+", %d subtitles tracks" = ", %d пътечки за субтитри";
+
+/* Title short description -> audio format */
+", 1 audio track" = ", 1 аудио пътечка";
+
+/* Title short description -> subtitles format */
+", 1 subtitles track" = ", 1 пътечка за субтитри";
+
+/* Format description */
+", Align A/V Start" = ", Подравняване на Аудио/Видео началото";
+
+/* HBPicture -> summary */
+", Border: %d/%d/%d/%d" = ", Рамка: %1$d/%2$d/%3$d/%4$d";
+
+/* HBJob -> subtitles short description */
+", Burned" = ", Вграден";
+
+/* Format description */
+", Chapter Markers" = ", Маркери на глави";
+
+/* HBPicture -> summary */
+", Crop: %@ %d/%d/%d/%d" = ", Изрязване: %1$@ %2$d/%3$d/%4$d/%5$d";
+
+/* Format description */
+", iPod 5G Support" = ", Поддръжка на iPod 5G";
+
+/* Format description */
+", Web Optimized" = ", Оптимизирано за уеб";
+
+/* HBStateFormatter -> work pass type format */
+"(subtitle scan)" = "(сканиране на субтитри)";
+
+/* Title short description -> video format */
+"%.6g FPS" = "%.6g FPS";
+
+/* Audio description */
+"%@ ▸ Encoder: %@" = "%1$@ ▸ Енкодер: %2$@";
+
+/* HBPicture -> short info */
+"%@Output: %dx%d" = "%1$@Изход: %2$dx%3$d";
+
+/* HBPicture -> short info */
+"%@Output: %dx%d, Anamorphic: %dx%d Automatic" = "%1$@Изход: %2$dx%3$d, Анаморфотен: %4$dx%5$d Автоматичен";
+
+/* HBPicture -> short info */
+"%@Output: %dx%d, Anamorphic: %dx%d Custom" = "%1$@Изход: %2$dx%3$d, Анаморфотен: %4$dx%5$d Персонализиран";
+
+/* HBPicture -> short non anamorphic info */
+"%dx%d" = "%1$dx%2$d";
+
+/* HBPicture -> short info */
+"%dx%d Storage, %dx%d Display" = "%1$dx%2$d Хранилище, %3$dx%4$d Екран";
+
+/* HBJob -> audio short description */
+"+ %lu additional audio tracks" = "+ %lu допълнителни аудио пътечки";
+
+/* HBJob -> subtitles short description */
+"+ %lu additional subtitles tracks" = "+ %lu допълнителни пътечки за субтитри";
+
+/* HBJob -> audio short description */
+"+ 1 additional audio track" = "+ 1 допълнителна аудио пътечка";
+
+/* HBJob -> subtitles short description */
+"+ 1 additional subtitles track" = "+ 1 допълнителна пътечка за субтитри";
+
+/* Title description */
+"1 Foreign Language Search Pass - " = "1 цикъл за сканиране за чуждо аудио -";
+
+/* HBAudio -> Mixdown */
+"5.1 Channels" = "5.1 Канала";
+
+/* HBAudio -> Mixdown */
+"6.1 Channels" = "6.1 Канала";
+
+/* HBAudio -> Mixdown */
+"7.1 (5F/2R/LFE)" = "7.1 (5F/2R/LFE)";
+
+/* HBAudio -> Mixdown */
+"7.1 Channels" = "7.1 Канала";
+
+/* Audio description */
+"Audio:" = "Аудио:";
+
+/* HBPicture -> summary */
+"Automatic" = "Автоматично";
+
+/* Video description */
+"Bitrate: %d kbps" = "Побитова скорост: %d kbps";
+
+/* Subtitles description */
+"Burned In" = "Вграден";
+
+/* HBFilters -> filter display name */
+"Bwdif" = "Bwdif";
+
+/* Title -> chapter name
+   Title description */
+"Chapter %d" = "Глава %d";
+
+/* HBJob -> chapters short description */
+"Chapter Markers" = "Маркери на глави";
+
+/* HBRange -> display name */
+"Chapters" = "Глави";
+
+/* Title description */
+"Chapters %d through %d" = "Глави от %1$d до %2$d";
+
+/* Filters description
+   HBJob -> filters short description */
+"Chroma Smooth" = "Изглаждане на наситеността";
+
+/* Filters description
+   HBJob -> filters short description */
+"Colorspace" = "Цветово пространство";
+
+/* HBJob -> filters short description */
+"Comb Detect" = "Засичане на гребеновиден ефект";
+
+/* Video description */
+"Constant Quality: %.2f %s" = "Постоянно качество: %1$.2f %2$s";
+
+/* HBJob -> video short description framerate */
+"CRF" = "CRF";
+
+/* HBFilters -> custom display name
+   HBPicture -> summary */
+"Custom" = "Персонализиране";
+
+/* Filters description
+   HBJob -> filters short description */
+"Deblock" = "Поправяне на макроблокове";
+
+/* HBFilters -> filter display name */
+"Decomb" = "Премахване на гребеновиден ефект";
+
+/* HBFilters -> default display name
+   Subtitles description */
+"Default" = "По подразбиране";
+
+/* Video description */
+"default settings" = "настройки по подразбиране";
+
+/* HBFilters -> invalid filter custom settings error recovery suggestion */
+"Default: " = "По подразбиране:";
+
+/* Filters description */
+"Denoise" = "Премахване на шум";
+
+/* Destination description */
+"Destination:" = "Изход:";
+
+/* Dimensions description
+   HBJob -> filters short description */
+"Detelecine" = "Обратно кадриране";
+
+/* Dimensions description */
+"Dimensions:" = "Размери:";
+
+/* HBAudio -> Mixdown */
+"Dolby Pro Logic II" = "Dolby Pro Logic II";
+
+/* HBAudio -> Mixdown */
+"Dolby Surround" = "Dolby Surround";
+
+/* Audio description */
+"DRC: %.2f" = "КДО: %.2f";
+
+/* Video description */
+"Encoder: %@, " = "Енкодер: %@,";
+
+/* HBStateFormatter -> work pass display name */
+"Encoding %@ " = "Кодиране %@";
+
+/* Filters description */
+"Filters:" = "Филтри:";
+
+/* Subtitles description */
+"Forced Only" = "Само принудително";
+
+/* HBSubtitles -> search pass name */
+"Foreign Audio Search" = "Търсене на чуждо аудио";
+
+/* Format description */
+"Format:" = "Формат:";
+
+/* Video description */
+"Framerate: " = "Кадрова честота:";
+
+/* HBRange -> display name */
+"Frames" = "Кадри";
+
+/* Title description */
+"Frames %d through %d" = "Кадри от %1$d до %2$d";
+
+/* Audio description */
+"Gain: %.2f" = "Усилване: %.2f";
+
+/* Filters description
+   HBJob -> filters short description */
+"Grayscale" = "Сива скала";
+
+/* HBFilters -> filter display name */
+"HQDN3D" = "HQDN3D";
+
+/* HBFilters -> invalid Bwdif custom string description */
+"Invalid Bwdif custom settings." = "Невалидни персонализирани настройки за Bwdif.";
+
+/* HBFilters -> invalid chroma smooth custom string description */
+"Invalid chroma smooth custom settings." = "Невалидни персонализирани настройки за изглаждане на наситеността.";
+
+/* HBFilters -> invalid chroma smooth custom string description */
+"Invalid colorspace custom settings." = "Невалидни персонализирани настройки за цветово пространство.";
+
+/* HBFilters -> invalid comb detect custom string description */
+"Invalid custom comb detect settings." = "Невалидни персонализирани настройки за засичане на гребеновиден ефект.";
+
+/* HBFilters -> invalid detelecine custom string description */
+"Invalid custom detelecine settings." = "Невалидни персонализирани настройки за обратно кадриране.";
+
+/* HBFilters -> invalid denoise custom string description */
+"Invalid custom HQDN3D settings" = "Невалидни персонализирани настройки за HQDN3D.";
+
+/* HBFilters -> invalid denoise custom string description */
+"Invalid custom NLMeans settings" = "Невалидни персонализирани настройки за NLMeans.";
+
+/* HBFilters -> invalid deblock custom string description */
+"Invalid deblock custom settings." = "Невалидни персонализирани настройки за поправяне на макроблокове.";
+
+/* HBFilters -> invalid Decomb custom string description */
+"Invalid Decomb custom settings." = "Невалидни персонализирани настройки за премахване на гребеновиден ефект.";
+
+/* HBFilters -> invalid lapsharp custom string description */
+"Invalid lapsharp custom settings." = "Невалидни персонализирани настройки за lapshark.";
+
+/* HBJob -> invalid name error description */
+"Invalid name" = "Невалидно име";
+
+/* HBJob -> invalid preset */
+"Invalid preset" = "Невалиден шаблон";
+
+/* HBFilters -> invalid unsharp custom string description */
+"Invalid unsharp custom settings." = "Невалидни unsharp персонализирани настройки.";
+
+/* HBFilters -> invalid Yadif custom string description */
+"Invalid Yadif custom settings." = "Невалидни персонализирани настройки за Yadiff.";
+
+/* HBFilters -> filter display name */
+"Lapsharp" = "Lapsharp";
+
+/* Video description */
+"Level: %@" = "Ниво: %@";
+
+/* Audio description */
+"Mixdown: %@, Samplerate: %@, Bitrate: %d kbps" = "Смесване: %1$@, Честота на дискретизация: %2$@, Побитова скорост: %3$d kbps";
+
+/* HBAudio -> Mixdown */
+"Mono" = "Моно";
+
+/* HBAudio -> Mixdown */
+"Mono (Left Only)" = "Моно (Само ляв)";
+
+/* HBAudio -> Mixdown */
+"Mono (Right Only)" = "Моно (Само десен)";
+
+/* HBStateFormatter -> pass display name */
+"Muxing…" = "Мултиплексиране...";
+
+/* HBFilters -> filter display name */
+"NLMeans" = "NLMeans";
+
+/* HBVideo -> tune */
+"none" = "няма";
+
+/* HBAudio -> Mixdown
+   HBAudio -> none track name
+   HBJob -> filters short description
+   HBSubtitles -> none track name */
+"None" = "Няма";
+
+/* HBFilters -> filter display name
+   HBFilters -> off display name */
+"Off" = "Изключено";
+
+/* Video description */
+"Options: %@" = "Опции: %@";
+
+/* HBStateFormatter -> work pass number format */
+"Pass %d %@ of %d, %.2f %%" = "Цикъл %1$d %2$@ от %3$d, %4$.2f %%";
+
+/* HBStateFormatter -> work pass number format */
+"Pass %d of %d, %.2f %%" = "Цикъл %1$d от %2$d, %3$.2f %%";
+
+/* HBStateFormatter -> work first pass number format */
+"Pass 1" = "Цикъл 1";
+
+/* HBStateFormatter -> pass display name */
+"Paused" = "На пауза";
+
+/* Video description */
+"Peak %@ (constant frame rate)" = "Максимална %@ (постоянна кадрова честота)";
+
+/* Video description */
+"Peak %@ (may be lower)" = "Максимална %@ (може да е по-ниско)";
+
+/* Preset description */
+"Preset:" = "Шаблон:";
+
+/* Video description */
+"Preset: %@" = "Шаблон: %@";
+
+/* Video description */
+"Profile: %@" = "Профил: %@";
+
+/* Range description */
+"Range:" = "Интервал:";
+
+/* HBVideo -> frame rates display name */
+"Same as source" = "Същият като при източника";
+
+/* Video description */
+"Same as source (constant)" = "Същият като при източника (постоянен)";
+
+/* Video description */
+"Same as source (variable)" = "Същият като при източника (променлив)";
+
+/* HBStateFormatter -> scan pass format */
+"Scanning title %d of %d, preview %d…" = "Сканиране на заглавие %1$d от %2$d, визуализация %3$d…";
+
+/* HBStateFormatter -> scan pass format */
+"Scanning title %d of %d…" = "Сканиране на заглавие %1$d от %2$d…";
+
+/* HBStateFormatter -> search pass display name */
+"Searching for start point:  %.2f %%" = "Търсене за начална позиция: %.2f %%";
+
+/* HBRange -> display name */
+"Seconds" = "Секунди";
+
+/* Title description */
+"Seconds %d through %d" = "Секунди от %1$d до %2$d";
+
+/* Filters description */
+"Sharpen" = "Изостряне";
+
+/* Source description */
+"Source:" = "Източник:";
+
+/* HBPicture -> short info */
+"Source: %dx%d, " = "Източник: %1$dx%2$d, ";
+
+/* HBAudio -> Mixdown */
+"Stereo" = "Стерео";
+
+/* Subtitles description */
+"Subtitles:" = "Субтитри:";
+
+/* HBFilters -> invalid filter custom settings error recovery suggestion */
+"Syntax: " = "Синтаксис:";
+
+/* HBJob -> invalid name error recovery suggestion */
+"The file name can't be empty." = "Името на файла не може да е празно.";
+
+/* HBJob -> invalid name error recovery suggestion */
+"The file name can't contain the / character." = "Името на файла не може да съдържа символа \"/\".";
+
+/* Preset -> import error description */
+"The preset \"%@\" could not be imported." = "Шаблонът \"%@\" не можа да бъде импортиран.";
+
+/* Job preset -> invalid preset recovery suggestion */
+"The preset is not a valid, try to select a different one." = "Шаблонът е невалиден, моля, изберете друг.";
+
+/* Preset -> import error reason */
+"The selected preset is invalid." = "Избраният шаблон е невалиден.";
+
+/* Preset -> import error reason */
+"The selected preset was created with a newer version of HandBrake." = "Избраният шаблон е бил създаден с по-нова версия на HandBrake.";
+
+/* Title description */
+"Title %d, %@" = "Заглавие %1$d, %2$@";
+
+/* Title description */
+"Title %d, %@, %@" = "Заглавие %1$d, %2$@, %3$@";
+
+/* Audio track title description
+   Subtitles track title description */
+"Title: %@" = "Заглавие: %@";
+
+/* Video description */
+"Tune: " = "Настройка:";
+
+/* HBJob -> video short description encoder name
+   Video description */
+"Unknown" = "Неизвестно";
+
+/* HBFilters -> filter display name */
+"Unsharp" = "Unsharp";
+
+/* HBJob -> video short description framerate */
+"VFR" = "VFR";
+
+/* Video description */
+"Video Options:" = "Опции за видео:";
+
+/* Video description */
+"Video:" = "Видео:";
+
+/* HBFilters -> filter display name */
+"Yadif" = "Yadif";
+

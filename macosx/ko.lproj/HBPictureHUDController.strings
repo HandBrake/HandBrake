@@ -1,0 +1,36 @@
+/* Class = "NSButton"; ibShadowedToolTip = "Scale preview to fill the display."; ObjectID = "12K-c3-Z7A"; */
+"12K-c3-Z7A.ibShadowedToolTip" = "화면이 꽉 차보이게 미리보기의 크기를 조정합니다.";
+
+/* Class = "NSButton"; ibShadowedToolTip = "Encode and play a preview video using current settings."; ObjectID = "16b-R9-bBU"; */
+"16b-R9-bBU.ibShadowedToolTip" = "현재 설정을 사용하여 미리 보기 영상을 인코딩하고 재생";
+
+/* Class = "NSMenu"; title = "OtherViews"; ObjectID = "KrC-nR-rYk"; */
+"KrC-nR-rYk.title" = "다른 견해들";
+
+/* Class = "NSTextFieldCell"; title = "sec"; ObjectID = "ksF-Ma-hB1"; */
+"ksF-Ma-hB1.title" = "초";
+
+/* Class = "NSButton"; ibShadowedToolTip = "Show cropping settings"; ObjectID = "mV7-hU-tMt"; */
+"mV7-hU-tMt.ibShadowedToolTip" = "잘라내기 설정 보이기";
+
+/* Class = "NSButtonCell"; title = "Crop"; ObjectID = "NWd-Lq-c1A"; */
+"NWd-Lq-c1A.title" = "잘라내기";
+
+/* Class = "NSButtonCell"; title = "Scale To Screen"; ObjectID = "STc-Po-p1X"; */
+"STc-Po-p1X.title" = "화면에 맞추기";
+
+/* Class = "NSTextFieldCell"; title = "Duration:"; ObjectID = "USR-Qf-N5v"; */
+"USR-Qf-N5v.title" = "지속 기간:";
+
+/* Class = "NSButtonCell"; title = "Live Preview"; ObjectID = "vkh-GY-5qx"; */
+"vkh-GY-5qx.title" = "실시간 미리보기";
+
+/* Class = "NSSlider"; ibExternalAccessibilityDescription = "preview image"; ObjectID = "wUk-SQ-GhS"; */
+"wUk-SQ-GhS.ibExternalAccessibilityDescription" = "미리보기 이미지";
+
+/* Class = "NSSlider"; ibShadowedToolTip = "Starting point for the preview encode."; ObjectID = "wUk-SQ-GhS"; */
+"wUk-SQ-GhS.ibShadowedToolTip" = "미리보기 인코딩 시작 지점";
+
+/* Class = "NSMenuItem"; title = "240"; ObjectID = "XYh-Ls-slf"; */
+"XYh-Ls-slf.title" = "240";
+

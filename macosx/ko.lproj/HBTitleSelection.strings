@@ -1,0 +1,45 @@
+/* Class = "NSTableColumn"; headerCell.title = "Title"; ObjectID = "4XY-C0-SwE"; */
+"4XY-C0-SwE.headerCell.title" = "제목";
+
+/* Class = "NSTextFieldCell"; title = "Select the titles to add to the queue:"; ObjectID = "5tD-fg-g4t"; */
+"5tD-fg-g4t.title" = "대기열에 추가할 영상 선택";
+
+/* Class = "NSTableColumn"; headerCell.title = "Duration"; ObjectID = "a6r-ky-REh"; */
+"a6r-ky-REh.headerCell.title" = "지속 시간";
+
+/* Class = "NSTextFieldCell"; title = "Table View Cell"; ObjectID = "dsG-Ho-vsT"; */
+"dsG-Ho-vsT.title" = "테이블 보기 셀";
+
+/* Class = "NSWindow"; title = "Window"; ObjectID = "F0z-JX-Cv5"; */
+"F0z-JX-Cv5.title" = "창";
+
+/* Class = "NSTextFieldCell"; title = "Text Cell"; ObjectID = "Fcv-FE-8Fv"; */
+"Fcv-FE-8Fv.title" = "텍스트 셀";
+
+/* Class = "NSTableColumn"; headerCell.title = "Name"; ObjectID = "FQY-Ye-g0f"; */
+"FQY-Ye-g0f.headerCell.title" = "이름";
+
+/* Class = "NSTextFieldCell"; title = "0"; ObjectID = "hQc-RA-phB"; */
+"hQc-RA-phB.title" = "0";
+
+/* Class = "NSButtonCell"; title = "Cancel"; ObjectID = "jHg-nh-9NJ"; */
+"jHg-nh-9NJ.title" = "취소";
+
+/* Class = "NSButtonCell"; title = "Check"; ObjectID = "JqJ-5C-Yhw"; */
+"JqJ-5C-Yhw.title" = "검사";
+
+/* Class = "NSButtonCell"; title = "Check"; ObjectID = "k84-a6-eZ7"; */
+"k84-a6-eZ7.title" = "검사";
+
+/* Class = "NSButtonCell"; title = "Add"; ObjectID = "mOe-XL-tl1"; */
+"mOe-XL-tl1.title" = "추가";
+
+/* Class = "NSMenuItem"; title = "Deselect All"; ObjectID = "PXF-7D-BKR"; */
+"PXF-7D-BKR.title" = "선택 해제";
+
+/* Class = "CocoaBindingsConnection"; ibShadowedDisplayPattern = "%{value1}@"; ObjectID = "xTt-zi-wf0"; */
+"xTt-zi-wf0.ibShadowedDisplayPattern" = "%{value1}@";
+
+/* Class = "NSTextFieldCell"; title = "Text Cell"; ObjectID = "zwi-rc-q6x"; */
+"zwi-rc-q6x.title" = "텍스트 셀";
+

@@ -1,0 +1,168 @@
+/* Class = "NSTableColumn"; headerCell.title = "Mixdown"; ObjectID = "0kT-0J-3k2"; */
+"0kT-0J-3k2.headerCell.title" = "Mixdown";
+
+/* Class = "NSTextFieldCell"; title = "Text Cell"; ObjectID = "1XC-VS-X3g"; */
+"1XC-VS-X3g.title" = "텍스트 셀";
+
+/* Class = "NSTextFieldCell"; title = "Text Cell"; ObjectID = "3o5-Gn-Vao"; */
+"3o5-Gn-Vao.title" = "텍스트 셀";
+
+/* Class = "NSPopUpButton"; ibExternalAccessibilityDescription = "Codec"; ObjectID = "6lx-af-rBL"; */
+"6lx-af-rBL.ibExternalAccessibilityDescription" = "코덱";
+
+/* Class = "NSPopUpButton"; ibShadowedToolTip = "Audio encoder."; ObjectID = "6lx-af-rBL"; */
+"6lx-af-rBL.ibShadowedToolTip" = "오디오 인코더.";
+
+/* Class = "NSTextFieldCell"; title = "Audio encoder settings for each selected track:"; ObjectID = "007-WM-RmC"; */
+"007-WM-RmC.title" = "각 선택된 트랙에 대한 오디오 인코더 설정:";
+
+/* Class = "NSTextFieldCell"; title = "Text Cell"; ObjectID = "7sl-o7-pUh"; */
+"7sl-o7-pUh.title" = "텍스트 셀";
+
+/* Class = "NSButtonCell"; title = "DTS"; ObjectID = "8mC-Wx-myL"; */
+"8mC-Wx-myL.title" = "DTS";
+
+/* Class = "NSButtonCell"; title = "Use only first encoder for secondary audio"; ObjectID = "66v-2g-DHn"; */
+"66v-2g-DHn.title" = "부가적인 오디오를 위해 첫 인코더만 사용";
+
+/* Class = "NSScrollView"; ibExternalAccessibilityDescription = "Audio Track Languages"; ObjectID = "aTC-39-h6S"; */
+"aTC-39-h6S.ibExternalAccessibilityDescription" = "오디오 트랙 언어";
+
+/* Class = "NSTextField"; ibExternalAccessibilityDescription = "DRC"; ObjectID = "BaY-Lo-8xn"; */
+"BaY-Lo-8xn.ibExternalAccessibilityDescription" = "DRC";
+
+/* Class = "NSTextField"; ibShadowedToolTip = "Dynamic Range Compression. Reduces the volume difference between loud and quiet sounds. Only applies to AC-3 source tracks when encoding to another format.\n\n0: Do not apply DRC.\n1: Apply DRC according to the compression hints embedded in the source track.\n\nValues greater than 1 further increase the volume of quiet sounds. Values greater than 2.5 are typically unnecessary and may introduce audible distortion."; ObjectID = "BaY-Lo-8xn"; */
+"BaY-Lo-8xn.ibShadowedToolTip" = "다이내믹 레인지 압축. 큰 소리와 작은 소리 사이의 볼륨 차이를 줄입니다. 다른 포맷으로 인코딩할 때 AC-3 가 소스트랙일 때만 적용됩니다.\n\n0: 적용하지 않음.\n1: 소스 트랙에 내장된 압축힌트에 따라 DRC 적용.\n\n1보다 큰 값은 작은 소리의 볼륨을 높입니다. 2.5보다 큰 값은 대부분 불필요하며 소리 왜곡을 일으킬 수 있습니다.";
+
+/* Class = "NSButtonCell"; title = "AAC"; ObjectID = "cUX-iP-UAs"; */
+"cUX-iP-UAs.title" = "AAC";
+
+/* Class = "NSSlider"; ibExternalAccessibilityDescription = "Gain"; ObjectID = "DbI-6O-BzA"; */
+"DbI-6O-BzA.ibExternalAccessibilityDescription" = "볼륨 설정";
+
+/* Class = "NSSlider"; ibShadowedToolTip = "Audio gain in decibels (dB). Increases or decreases audio volume."; ObjectID = "DbI-6O-BzA"; */
+"DbI-6O-BzA.ibShadowedToolTip" = "데시벨(dB) 단위 오디오 볼륨 설정. 오디오 볼륨을 높이거나 내리십시오.";
+
+/* Class = "NSSlider"; ibExternalAccessibilityDescription = "DRC"; ObjectID = "DGi-Dl-5nh"; */
+"DGi-Dl-5nh.ibExternalAccessibilityDescription" = "DRC";
+
+/* Class = "NSSlider"; ibShadowedToolTip = "Dynamic Range Compression. Reduces the volume difference between loud and quiet sounds. Only applies to AC-3 source tracks when encoding to another format.\n\n0: Do not apply DRC.\n1: Apply DRC according to the compression hints embedded in the source track.\n\nValues greater than 1 further increase the volume of quiet sounds. Values greater than 2.5 are typically unnecessary and may introduce audible distortion."; ObjectID = "DGi-Dl-5nh"; */
+"DGi-Dl-5nh.ibShadowedToolTip" = "다이내믹 레인지 압축. 큰 소리와 작은 소리 사이의 볼륨 차이를 줄입니다. 다른 포맷으로 인코딩할 때 AC-3 가 소스트랙일 때만 적용됩니다.\n\n0: 적용하지 않음.\n1: 소스 트랙에 내장된 압축힌트에 따라 DRC 적용.\n\n1보다 큰 값은 작은 소리의 볼륨을 높입니다. 2.5보다 큰 값은 대부분 불필요하며 소리 왜곡을 일으킬 수 있습니다.";
+
+/* Class = "NSTextFieldCell"; title = "Text Cell"; ObjectID = "dpw-He-8eZ"; */
+"dpw-He-8eZ.title" = "텍스트 셀";
+
+/* Class = "CocoaBindingsConnection"; ibShadowedIsNilPlaceholder = "Auto"; ObjectID = "DxT-bF-prJ"; */
+"DxT-bF-prJ.ibShadowedIsNilPlaceholder" = "자동";
+
+/* Class = "NSTextFieldCell"; title = "Text Cell"; ObjectID = "fH9-oV-QdJ"; */
+"fH9-oV-QdJ.title" = "텍스트 셀";
+
+/* Class = "NSTextFieldCell"; title = "Track Selection Behavior:"; ObjectID = "GbM-vm-RC2"; */
+"GbM-vm-RC2.title" = "트랙 선택 동작:";
+
+/* Class = "NSMenuItem"; title = "All Matching Selected Languages"; ObjectID = "GZP-q7-SYy"; */
+"GZP-q7-SYy.title" = "선택한 언어와 모두 일치";
+
+/* Class = "NSPopUpButton"; ibExternalAccessibilityDescription = "Bitrate"; ObjectID = "hHP-dw-nba"; */
+"hHP-dw-nba.ibExternalAccessibilityDescription" = "비트레이트";
+
+/* Class = "NSPopUpButton"; ibShadowedToolTip = "Audio bit rate in kilobits per second (kbps). Smaller values reduce audio quality. Larger values use more data and may be less compatible."; ObjectID = "hHP-dw-nba"; */
+"hHP-dw-nba.ibShadowedToolTip" = "오디오 비트레이트를 초당 킬로비트(kbps)로 설정합니다. 작은 값을 사용할 수록 음질이 떨어집니다. 큰 값을 사용하면 더 많은 데이터가 필요하고 호환성이 감소할 수 있습니다.";
+
+/* Class = "NSPopUpButton"; ibExternalAccessibilityDescription = "Mixdown"; ObjectID = "igm-hS-rrD"; */
+"igm-hS-rrD.ibExternalAccessibilityDescription" = "Mixdown";
+
+/* Class = "NSButtonCell"; title = "Cancel"; ObjectID = "Jn4-1L-J1g"; */
+"Jn4-1L-J1g.title" = "취소";
+
+/* Class = "NSButtonCell"; title = "OK"; ObjectID = "kDe-1L-VkD"; */
+"kDe-1L-VkD.title" = "확인";
+
+/* Class = "NSWindow"; title = "Audio Selection Behaviour"; ObjectID = "kwM-lz-5lG"; */
+"kwM-lz-5lG.title" = "오디오 선택 동작";
+
+/* Class = "NSMenu"; title = "OtherViews"; ObjectID = "Kwy-lU-VuU"; */
+"Kwy-lU-VuU.title" = "다른 견해들";
+
+/* Class = "NSButtonCell"; title = "DTS-HD"; ObjectID = "LX6-kc-5vq"; */
+"LX6-kc-5vq.title" = "DTS-HD";
+
+/* Class = "NSTableColumn"; headerCell.title = "Samplerate"; ObjectID = "LxC-Qx-psh"; */
+"LxC-Qx-psh.headerCell.title" = "샘플레이트";
+
+/* Class = "NSTextFieldCell"; title = "Languages:"; ObjectID = "mAT-Jp-SG1"; */
+"mAT-Jp-SG1.title" = "언어:";
+
+/* Class = "NSTextFieldCell"; title = "0"; ObjectID = "MiI-OV-waZ"; */
+"MiI-OV-waZ.title" = "0";
+
+/* Class = "NSMenuItem"; title = "None"; ObjectID = "mvw-Hg-JFM"; */
+"mvw-Hg-JFM.title" = "없음";
+
+/* Class = "NSTableColumn"; headerCell.title = "Gain"; ObjectID = "N7h-CJ-quV"; */
+"N7h-CJ-quV.headerCell.title" = "볼륨 설정";
+
+/* Class = "NSButtonCell"; title = "FLAC"; ObjectID = "naS-No-CdV"; */
+"naS-No-CdV.title" = "FLAC";
+
+/* Class = "NSSegmentedCell"; otA-K4-TxM.ibShadowedToolTips[0] = "Add Audio Track"; ObjectID = "otA-K4-TxM"; */
+"otA-K4-TxM.ibShadowedToolTips[0]" = "오디오 트랙 추가";
+
+/* Class = "NSSegmentedCell"; otA-K4-TxM.ibShadowedToolTips[1] = "Remove Selected Audio Track"; ObjectID = "otA-K4-TxM"; */
+"otA-K4-TxM.ibShadowedToolTips[1]" = "선택한 오디오 트랙 제거";
+
+/* Class = "NSTextFieldCell"; title = "0"; ObjectID = "OVr-Jm-VrK"; */
+"OVr-Jm-VrK.title" = "0";
+
+/* Class = "NSTableColumn"; headerCell.title = "Codec"; ObjectID = "pR9-d4-SNf"; */
+"pR9-d4-SNf.headerCell.title" = "코덱";
+
+/* Class = "NSMenu"; title = "OtherViews"; ObjectID = "PtB-Wp-B9X"; */
+"PtB-Wp-B9X.title" = "다른 견해들";
+
+/* Class = "NSPopUpButton"; ibExternalAccessibilityDescription = "Samplerate"; ObjectID = "r80-yv-59n"; */
+"r80-yv-59n.ibExternalAccessibilityDescription" = "샘플레이트";
+
+/* Class = "NSPopUpButton"; ibShadowedToolTip = "Audio sample rate in kilohertz (kHz). Auto is recommended."; ObjectID = "r80-yv-59n"; */
+"r80-yv-59n.ibShadowedToolTip" = "오디오 샘플링 레이트를 킬로헤르츠(kHz)단위로 설정합니다. Auto를 추천합니다.";
+
+/* Class = "NSTextFieldCell"; title = "Auto Passthru:"; ObjectID = "s6s-EH-5CB"; */
+"s6s-EH-5CB.title" = "자동 패스트루:";
+
+/* Class = "NSButtonCell"; title = "MP3"; ObjectID = "sdZ-Rx-JoG"; */
+"sdZ-Rx-JoG.title" = "MP3";
+
+/* Class = "NSButtonCell"; title = "E-AC3"; ObjectID = "u9h-dn-wcK"; */
+"u9h-dn-wcK.title" = "E-AC3";
+
+/* Class = "NSTextFieldCell"; title = "Text Cell"; ObjectID = "uFK-z7-8Yj"; */
+"uFK-z7-8Yj.title" = "텍스트 셀";
+
+/* Class = "NSMenuItem"; title = "Item"; ObjectID = "UJy-A2-Bb1"; */
+"UJy-A2-Bb1.title" = "항목";
+
+/* Class = "NSTableColumn"; headerCell.title = "Bitrate"; ObjectID = "vhn-7C-4aZ"; */
+"vhn-7C-4aZ.headerCell.title" = "비트레이트";
+
+/* Class = "NSButtonCell"; title = "AC3"; ObjectID = "VnE-3R-bUf"; */
+"VnE-3R-bUf.title" = "AC3";
+
+/* Class = "NSTextFieldCell"; title = "Table View Cell"; ObjectID = "XKL-2e-Dlv"; */
+"XKL-2e-Dlv.title" = "테이블 보기 셀";
+
+/* Class = "NSTextField"; ibExternalAccessibilityDescription = "Gain"; ObjectID = "xnA-03-Bul"; */
+"xnA-03-Bul.ibExternalAccessibilityDescription" = "볼륨 설정";
+
+/* Class = "NSTextField"; ibShadowedToolTip = "Audio gain in decibels (dB). Increases or decreases audio volume."; ObjectID = "xnA-03-Bul"; */
+"xnA-03-Bul.ibShadowedToolTip" = "데시벨(dB) 단위 오디오 볼륨 설정. 오디오 볼륨을 높이거나 내리십시오.";
+
+/* Class = "NSButtonCell"; title = "MP2"; ObjectID = "Z8O-AS-UdA"; */
+"Z8O-AS-UdA.title" = "MP2";
+
+/* Class = "NSButtonCell"; title = "TrueHD"; ObjectID = "z9d-P3-6UP"; */
+"z9d-P3-6UP.title" = "TrueHD";
+
+/* Class = "NSTableColumn"; headerCell.title = "DRC"; ObjectID = "zX9-T9-wKy"; */
+"zX9-T9-wKy.headerCell.title" = "DRC";
+

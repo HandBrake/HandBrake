@@ -184,6 +184,9 @@
 /* Class = "NSButtonCell"; title = "Show preview images"; ObjectID = "Aao-Tf-JeJ"; */
 "Aao-Tf-JeJ.title" = "Afficher les images d'aperçu";
 
+/* Class = "NSButtonCell"; title = "Enable the VideoToolbox hardware decoders"; ObjectID = "BHK-QU-DwS"; */
+"BHK-QU-DwS.title" = "Activer les décodeurs matériels VideoToolbox";
+
 /* Class = "NSButtonCell"; title = "Always clear completed items after an encode completes"; ObjectID = "BPU-E2-N8l"; */
 "BPU-E2-N8l.title" = "Toujours effacer les éléments terminés après la fin de l'encodage";
 
@@ -192,6 +195,9 @@
 
 /* Class = "NSTextFieldCell"; title = "Encoder:"; ObjectID = "cqp-xU-GOe"; */
 "cqp-xU-GOe.title" = "Encodeur :";
+
+/* Class = "NSButtonCell"; title = "Also use in combination with software encoders"; ObjectID = "d9B-Vd-jMM"; */
+"d9B-Vd-jMM.title" = "Utiliser également en combinaison avec des encodeurs logiciels";
 
 /* Class = "NSTextFieldCell"; title = "Drag labels to Format to compose a naming format."; ObjectID = "dQ6-Dh-9sD"; */
 "dQ6-Dh-9sD.title" = "Glisser les labels vers Format pour composer un format de nommage.";
@@ -213,6 +219,9 @@
 
 /* Class = "NSTextFieldCell"; title = "Number of simultaneous encodes:"; ObjectID = "iGS-b5-ip7"; */
 "iGS-b5-ip7.title" = "Nombre d'encodages simultanés :";
+
+/* Class = "NSTextFieldCell"; title = "Decoder:"; ObjectID = "j6w-xf-tC0"; */
+"j6w-xf-tC0.title" = "Décodeur :";
 
 /* Class = "NSMenuItem"; title = "2"; ObjectID = "JcO-br-AXz"; */
 "JcO-br-AXz.title" = "2";
