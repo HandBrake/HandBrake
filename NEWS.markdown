@@ -116,6 +116,7 @@ Windows users, please make sure to install [Microsoft .NET Desktop Runtime versi
 - Queue, Activity and Presets windows no longer stay on top of the main window
 - Removed obsolete update checker
 - Miscellaneous bug fixes and improvements
+- Update existing translations
 
 ### Windows
 

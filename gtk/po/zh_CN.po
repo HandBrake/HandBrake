@@ -1,26 +1,25 @@
 # SOME DESCRIPTIVE TITLE.
-# Copyright (C) 2023 HandBrake Team
+# Copyright (C) YEAR HandBrake Team
 # This file is distributed under the same license as the ghb package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, 2023.
-#
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# 
 # Translators:
-# pluwen <pluwen@gmail.com>, 2021
+# pluwen <pluwen@gmail.com>, 2023
 # 玉堂白鹤 <yjwork@qq.com>, 2023
-#
+# 
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: ghb 0.1\n"
+"Project-Id-Version: ghb 1.6.0-git-a6a111e86\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-09-20 09:46+0100\n"
 "PO-Revision-Date: 2018-10-10 18:14+0000\n"
 "Last-Translator: 玉堂白鹤 <yjwork@qq.com>, 2023\n"
-"Language-Team: Chinese (https://www.transifex.com/HandBrakeProject/"
-"teams/92423/zh/)\n"
-"Language: zh\n"
+"Language-Team: Chinese (https://app.transifex.com/HandBrakeProject/teams/92423/zh/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: zh\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
 #: data/fr.handbrake.ghb.desktop.in:3 src/ui-gtk3/ghb.ui:2236
@@ -28,9 +27,8 @@ msgid "HandBrake"
 msgstr "HandBrake"
 
 #: data/fr.handbrake.ghb.desktop.in:4
-#, fuzzy
 msgid "Media Transcoder"
-msgstr "视频转码器"
+msgstr ""
 
 #: data/fr.handbrake.ghb.desktop.in:5
 msgid "Transcodes DVD, Blu-ray, and other media"
@@ -505,27 +503,16 @@ msgstr "HandBrake 是一个遵循 GPL 许可，多平台，多线程的视频编
 
 #: src/ui-gtk3/ghb.ui:2050
 msgid ""
-"HandBrake is free software; you can redistribute it and/or modify it under "
-"the terms of the GNU General Public License version 2, as published by the "
-"Free Software Foundation.\n"
+"HandBrake is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License version 2, as published by the Free Software Foundation.\n"
 "\n"
-"HandBrake is distributed in the hope that it will be useful, but WITHOUT ANY "
-"WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS "
-"FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more "
-"details.\n"
+"HandBrake is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.\n"
 "\n"
-"You should have received a copy of the GNU General Public License along with "
-"Glade; if not, write to the Free Software Foundation, Inc., 51 Franklin "
-"Street, Fifth Floor, Boston, MA 02110-1301, USA."
+"You should have received a copy of the GNU General Public License along with Glade; if not, write to the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA."
 msgstr ""
-"HandBrake 是一款自由软件；您可以在 自由软件基金会发布的 GNU 通用公共许可证"
-"（第2版）下再分发或者修改。\n"
-"HandBrake 希望能够帮到您，但无任何形式的担保责任，其包括但不限于，就适售性以"
-"及特定目的的适用性为默示性担保。详情参见 GNU 通用公共许可证全文。\n"
+"HandBrake 是一款自由软件；您可以在 自由软件基金会发布的 GNU 通用公共许可证（第2版）下再分发或者修改。\n"
+"HandBrake 希望能够帮到您，但无任何形式的担保责任，其包括但不限于，就适售性以及特定目的的适用性为默示性担保。详情参见 GNU 通用公共许可证全文。\n"
 "\n"
-"您应当随程序收到了 GNU 通用公共许可证的一份拷贝；如果没有，您可以写信到 Free "
-"Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA "
-"02110-1301, USA. 索取。"
+"您应当随程序收到了 GNU 通用公共许可证的一份拷贝；如果没有，您可以写信到 Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA. 索取。"
 
 #: src/ui-gtk3/ghb.ui:2273 src/callbacks.c:4339
 msgid "Choose Video Source"
@@ -708,11 +695,11 @@ msgstr "添加老旧 iPod 所需的 iPod Atom。"
 
 #: src/ui-gtk3/ghb.ui:2966
 msgid "Passthru Common Metadata"
-msgstr ""
+msgstr "直通通用元数据"
 
 #: src/ui-gtk3/ghb.ui:2971
 msgid "Copy metadata from source to output."
-msgstr ""
+msgstr "将元数据从源复制到输出。"
 
 #: src/ui-gtk3/ghb.ui:2993
 msgid "Duration:"
@@ -777,7 +764,7 @@ msgstr "以 90 度为增量顺时针旋转视频。"
 
 #: src/ui-gtk3/ghb.ui:3442
 msgid "Cropping:"
-msgstr ""
+msgstr "裁剪："
 
 #: src/ui-gtk3/ghb.ui:3458
 msgid "How to apply crop settings."
@@ -849,8 +836,7 @@ msgstr "像素宽高比："
 msgid ""
 "Pixel aspect defines the shape of the pixels.\n"
 "\n"
-"A 1:1 ratio defines a square pixel.  Other values define rectangular "
-"shapes.\n"
+"A 1:1 ratio defines a square pixel.  Other values define rectangular shapes.\n"
 "Players will scale the image in order to achieve the specified aspect."
 msgstr ""
 "像素宽高比定义了像素的形状。\n"
@@ -865,8 +851,7 @@ msgstr ":"
 #: src/ui-gtk3/ghb.ui:3780
 msgid ""
 "Pixel aspect defines the shape of the pixels.\n"
-"A 1:1 ratio defines a square pixel.  Other values define rectangular "
-"shapes.\n"
+"A 1:1 ratio defines a square pixel.  Other values define rectangular shapes.\n"
 "Players will scale the image in order to achieve the specified aspect."
 msgstr ""
 "像素宽高比定义了像素的形状。\n"
@@ -880,8 +865,7 @@ msgstr ""
 #: src/ui-gtk3/ghb.ui:3814
 msgid ""
 "This is the width that the video will be stored at.\n"
-"The actual display dimensions will differ if the pixel aspect ratio is not "
-"1:1."
+"The actual display dimensions will differ if the pixel aspect ratio is not 1:1."
 msgstr ""
 "这是视频存储的宽度。\n"
 "如果像素宽高比不是 1:1 的话，实际的画面显示尺寸会有所不同。"
@@ -889,8 +873,7 @@ msgstr ""
 #: src/ui-gtk3/ghb.ui:3847
 msgid ""
 "This is the height that the video will be stored at.\n"
-"The actual display dimensions will differ if the pixel aspect ratio is not "
-"1:1."
+"The actual display dimensions will differ if the pixel aspect ratio is not 1:1."
 msgstr ""
 "这是视频存储的高度。\n"
 "如果像素宽高比不是 1:1 的话，实际的画面显示尺寸会有所不同。"
@@ -908,7 +891,8 @@ msgid "Allow Upscaling"
 msgstr ""
 
 #: src/ui-gtk3/ghb.ui:3886
-msgid "If not enabled, scaled dimensions will be limited to source dimensions."
+msgid ""
+"If not enabled, scaled dimensions will be limited to source dimensions."
 msgstr ""
 
 #: src/ui-gtk3/ghb.ui:3911
@@ -917,7 +901,7 @@ msgstr ""
 
 #: src/ui-gtk3/ghb.ui:3951
 msgid "Fill:"
-msgstr ""
+msgstr "填充："
 
 #: src/ui-gtk3/ghb.ui:3968
 msgid "Add a border around the video."
@@ -941,7 +925,7 @@ msgstr ""
 
 #: src/ui-gtk3/ghb.ui:4052
 msgid "Color:"
-msgstr ""
+msgstr "色彩："
 
 #: src/ui-gtk3/ghb.ui:4069
 msgid "Color of border added around video."
@@ -976,8 +960,7 @@ msgstr "反胶卷过带滤镜："
 msgid ""
 "This filter removes 'combing' artifacts that are the result of telecining.\n"
 "\n"
-"Telecining is a process that adjusts film framerates that are 24fps to NTSC "
-"video frame rates which are 30fps."
+"Telecining is a process that adjusts film framerates that are 24fps to NTSC video frame rates which are 30fps."
 msgstr ""
 "这个滤镜移除胶卷过带 (telecining) 导致的“梳状”条纹。\n"
 "\n"
@@ -1082,8 +1065,7 @@ msgstr "降噪滤镜："
 #: src/ui-gtk3/ghb.ui:4616
 msgid ""
 "Denoise filtering reduces or removes the appearance of noise and grain.\n"
-"Film grain and other types of high frequency noise are difficult to "
-"compress.\n"
+"Film grain and other types of high frequency noise are difficult to compress.\n"
 "Using this filter on such sources can result in smaller file sizes."
 msgstr ""
 "降噪滤镜可以减少或移除噪音和颗粒噪点。\n"
@@ -1093,8 +1075,7 @@ msgstr ""
 #: src/ui-gtk3/ghb.ui:4651 src/ui-gtk3/ghb.ui:4674
 msgid ""
 "Denoise filtering reduces or removes the appearance of noise and grain.\n"
-"    Film grain and other types of high frequency noise are difficult to "
-"compress.\n"
+"    Film grain and other types of high frequency noise are difficult to compress.\n"
 "    Using this filter on such sources can result in smaller file sizes."
 msgstr ""
 
@@ -1139,7 +1120,7 @@ msgstr ""
 
 #: src/ui-gtk3/ghb.ui:4884
 msgid "Colorspace:"
-msgstr ""
+msgstr "色彩空间："
 
 #: src/ui-gtk3/ghb.ui:4900
 msgid "Translate the colorspace of the source."
@@ -1257,16 +1238,13 @@ msgid ""
 "Set the average bitrate.\n"
 "\n"
 "The instantaneous bitrate can be much higher or lower at any point in time.\n"
-"But the average over a long duration will be the value set here.  If you "
-"need\n"
-"to limit instantaneous bitrate, look into x264's vbv-bufsize and vbv-maxrate "
-"settings."
+"But the average over a long duration will be the value set here.  If you need\n"
+"to limit instantaneous bitrate, look into x264's vbv-bufsize and vbv-maxrate settings."
 msgstr ""
 "设置平均码率。\n"
 "\n"
 "任意时间点的瞬时码率可能更高或者更低，但是总体的平均值为此处设置的值。\n"
-"如果您需要限定瞬时码率的值，您可以参考 x264 的 vbv-bufsize 和 vbv-maxrate 设"
-"置。"
+"如果您需要限定瞬时码率的值，您可以参考 x264 的 vbv-bufsize 和 vbv-maxrate 设置。"
 
 #: src/ui-gtk3/ghb.ui:5227
 msgid "Multi-Pass Encoding"
@@ -1276,8 +1254,7 @@ msgstr ""
 msgid ""
 "Perform Multi Pass Encoding.\n"
 "\n"
-"The 'Bitrate' option is prerequisite. During the analysis passes, statistics "
-"about\n"
+"The 'Bitrate' option is prerequisite. During the analysis passes, statistics about\n"
 "the video are collected.  Then in the final pass, those statistics are used\n"
 "to make bitrate allocation decisions."
 msgstr ""
@@ -1294,13 +1271,11 @@ msgstr ""
 
 #: src/ui-gtk3/ghb.ui:5317
 msgid ""
-"Adjusts encoder settings to trade off compression efficiency against "
-"encoding speed.\n"
+"Adjusts encoder settings to trade off compression efficiency against encoding speed.\n"
 "\n"
 "This establishes your default encoder settings.\n"
 "Tunes, profiles, levels and extra options string will be applied to this.\n"
-"You should generally set this option to the slowest you can bear since "
-"slower\n"
+"You should generally set this option to the slowest you can bear since slower\n"
 "settings will result in better quality or smaller files."
 msgstr ""
 "调整编码器设置以在压缩效率与编码速度之间折衷。\n"
@@ -1440,8 +1415,7 @@ msgstr "选择使用源媒体的哪一个音轨。"
 #: src/ui-gtk3/ghb.ui:5798
 msgid ""
 "Create a list of languages you would like to select audio for.\n"
-"Tracks matching these languages will be selected using the chosen Selection "
-"Behavior."
+"Tracks matching these languages will be selected using the chosen Selection Behavior."
 msgstr ""
 "创建您想要选择的音频的语言列表。\n"
 "将使用所选的选择行为选择与这些语言匹配的音轨。"
@@ -1465,8 +1439,7 @@ msgstr "仅使用第一编码器，用于辅助音频"
 #: src/ui-gtk3/ghb.ui:5881
 msgid ""
 "Only the primary audio track will be encoded with the full encoder list.\n"
-"All other secondary audio output tracks will be encoded with first encoder "
-"only."
+"All other secondary audio output tracks will be encoded with first encoder only."
 msgstr ""
 "只有首选音轨会使用整个列表的编码器进行编码。\n"
 "其他次选音轨只会使用第一个编码器进行编码。"
@@ -1482,8 +1455,7 @@ msgstr "MP2"
 #: src/ui-gtk3/ghb.ui:5933
 msgid ""
 "Enable this if your playback device supports MP2.\n"
-"This permits MP2 passthru to be selected when automatic passthru selection "
-"is enabled."
+"This permits MP2 passthru to be selected when automatic passthru selection is enabled."
 msgstr ""
 
 #: src/ui-gtk3/ghb.ui:5949
@@ -1493,8 +1465,7 @@ msgstr "MP3"
 #: src/ui-gtk3/ghb.ui:5954
 msgid ""
 "Enable this if your playback device supports MP3.\n"
-"This permits MP3 passthru to be selected when automatic passthru selection "
-"is enabled."
+"This permits MP3 passthru to be selected when automatic passthru selection is enabled."
 msgstr ""
 "如果您的回放设备支持 MP3 则勾选此项。\n"
 "已勾选自动直通时则允许使用 MP3 直通。"
@@ -1506,8 +1477,7 @@ msgstr "AC-3"
 #: src/ui-gtk3/ghb.ui:5975
 msgid ""
 "Enable this if your playback device supports AC-3.\n"
-"This permits AC-3 passthru to be selected when automatic passthru selection "
-"is enabled."
+"This permits AC-3 passthru to be selected when automatic passthru selection is enabled."
 msgstr ""
 "如果您的回放设备支持 AC-3 则勾选此项。\n"
 "已勾选自动直通时则允许使用 AC-3 直通。"
@@ -1519,8 +1489,7 @@ msgstr "EAC-3"
 #: src/ui-gtk3/ghb.ui:5996
 msgid ""
 "Enable this if your playback device supports EAC-3.\n"
-"This permits EAC-3 passthru to be selected when automatic passthru selection "
-"is enabled."
+"This permits EAC-3 passthru to be selected when automatic passthru selection is enabled."
 msgstr ""
 "如果您的回放设备支持 EAC-3 则勾选此项。\n"
 "已勾选自动直通时则允许使用 EAC-3 直通。"
@@ -1532,8 +1501,7 @@ msgstr "DTS"
 #: src/ui-gtk3/ghb.ui:6017
 msgid ""
 "Enable this if your playback device supports DTS.\n"
-"This permits DTS passthru to be selected when automatic passthru selection "
-"is enabled."
+"This permits DTS passthru to be selected when automatic passthru selection is enabled."
 msgstr ""
 "如果您的回放设备支持 DTS 则勾选此项。\n"
 "已勾选自动直通时则允许使用 DTS 直通。"
@@ -1545,8 +1513,7 @@ msgstr "DTS-HD"
 #: src/ui-gtk3/ghb.ui:6038
 msgid ""
 "Enable this if your playback device supports DTS-HD.\n"
-"This permits DTS-HD passthru to be selected when automatic passthru "
-"selection is enabled."
+"This permits DTS-HD passthru to be selected when automatic passthru selection is enabled."
 msgstr ""
 "如果您的回放设备支持 DTS-HD 则勾选此项。\n"
 "已勾选自动直通时则允许使用 DTS-HD 直通。"
@@ -1558,8 +1525,7 @@ msgstr "TrueHD"
 #: src/ui-gtk3/ghb.ui:6059
 msgid ""
 "Enable this if your playback device supports TrueHD.\n"
-"This permits TrueHD passthru to be selected when automatic passthru "
-"selection is enabled."
+"This permits TrueHD passthru to be selected when automatic passthru selection is enabled."
 msgstr ""
 "如果您的回放设备支持 TrueHD 则勾选此项。\n"
 "已勾选自动直通时则允许使用 TrueHD 直通。"
@@ -1571,8 +1537,7 @@ msgstr "FLAC"
 #: src/ui-gtk3/ghb.ui:6080
 msgid ""
 "Enable this if your playback device supports FLAC.\n"
-"This permits FLAC passthru to be selected when automatic passthru selection "
-"is enabled."
+"This permits FLAC passthru to be selected when automatic passthru selection is enabled."
 msgstr ""
 "如果您的回放设备支持 FLAC 则勾选此项。\n"
 "已勾选自动直通时则允许使用 FLAC 直通。"
@@ -1584,8 +1549,7 @@ msgstr "AAC"
 #: src/ui-gtk3/ghb.ui:6101
 msgid ""
 "Enable this if your playback device supports AAC.\n"
-"This permits AAC passthru to be selected when automatic passthru selection "
-"is enabled."
+"This permits AAC passthru to be selected when automatic passthru selection is enabled."
 msgstr ""
 "如果您的回放设备支持 AAC 则勾选此项。\n"
 "已勾选自动直通时则允许使用 AAC 直通。"
@@ -1597,8 +1561,7 @@ msgstr "Opus"
 #: src/ui-gtk3/ghb.ui:6122
 msgid ""
 "Enable this if your playback device supports Opus.\n"
-"This permits Opus passthru to be selected when automatic passthru selection "
-"is enabled."
+"This permits Opus passthru to be selected when automatic passthru selection is enabled."
 msgstr ""
 
 #: src/ui-gtk3/ghb.ui:6155
@@ -1660,7 +1623,8 @@ msgid "Add all subtitle tracks to the list"
 msgstr "将所有字幕轨道到列表"
 
 #: src/ui-gtk3/ghb.ui:6414 src/callbacks.c:2344 src/queuehandler.c:647
-#: src/queuehandler.c:1083 src/subtitlehandler.c:414 src/subtitlehandler.c:1221
+#: src/queuehandler.c:1083 src/subtitlehandler.c:414
+#: src/subtitlehandler.c:1221
 msgid "Foreign Audio Scan"
 msgstr "外语音频扫描"
 
@@ -1682,11 +1646,9 @@ msgstr "选择使用源媒体的哪一个字幕轨。"
 #: src/ui-gtk3/ghb.ui:6590
 msgid ""
 "Create a list of languages you would like to select subtitles for.\n"
-"Tracks matching these languages will be selected using the chosen Selection "
-"Behavior.\n"
+"Tracks matching these languages will be selected using the chosen Selection Behavior.\n"
 "\n"
-"The first language in this list is your \"preferred\" language and will be "
-"used\n"
+"The first language in this list is your \"preferred\" language and will be used\n"
 "for determining subtitle selection settings when there is foreign audio."
 msgstr ""
 "创建您想要选择的字幕的语言列表。\n"
@@ -1705,10 +1667,8 @@ msgstr "添加外语音频扫描通道 "
 
 #: src/ui-gtk3/ghb.ui:6703
 msgid ""
-"Add \"Foreign Audio Scan\" when the default audio track is your preferred "
-"language.\n"
-"This search pass finds short sequences of foreign audio and provides "
-"subtitles for them.\n"
+"Add \"Foreign Audio Scan\" when the default audio track is your preferred language.\n"
+"This search pass finds short sequences of foreign audio and provides subtitles for them.\n"
 "\n"
 "This option requires a language to be set in the Selected Languages list."
 msgstr ""
@@ -1723,8 +1683,7 @@ msgstr "如果默认音轨为外语则添加字幕轨"
 
 #: src/ui-gtk3/ghb.ui:6723
 msgid ""
-"When the default audio track is not your preferred language, add a subtitle "
-"track.\n"
+"When the default audio track is not your preferred language, add a subtitle track.\n"
 "\n"
 "This option requires a language to be set in the Selected Languages list."
 msgstr ""
@@ -1750,10 +1709,8 @@ msgstr "烧录偏好*："
 msgid ""
 "Set the behavior of subtitle \"Burn-In\".\n"
 "\n"
-"Burned-In subtitles are part of the video and can not be disabled during "
-"playback.\n"
-"Only one subtitle track can be burned! Since conflicts can occur, the first "
-"chosen wins."
+"Burned-In subtitles are part of the video and can not be disabled during playback.\n"
+"Only one subtitle track can be burned! Since conflicts can occur, the first chosen wins."
 msgstr ""
 "设置字幕模式为“内嵌”。\n"
 "\n"
@@ -1770,13 +1727,10 @@ msgstr "DVD 字幕"
 
 #: src/ui-gtk3/ghb.ui:6816
 msgid ""
-"Burn the first selected DVD subtitle track. All other DVD subtitle tracks "
-"will be discarded.\n"
-"Use this option if your player software or device does not support DVD "
-"subtitles.\n"
+"Burn the first selected DVD subtitle track. All other DVD subtitle tracks will be discarded.\n"
+"Use this option if your player software or device does not support DVD subtitles.\n"
 "\n"
-"Only one subtitle track can be burned! Since conflicts can occur, the first "
-"chosen wins."
+"Only one subtitle track can be burned! Since conflicts can occur, the first chosen wins."
 msgstr ""
 "内嵌所选 DVD 字幕轨道的第一个字幕。其他 DVD 字幕轨道将会被丢弃。\n"
 "如果您的软件或者设备不支持 DVD 字幕则使用这个选项。\n"
@@ -1789,13 +1743,10 @@ msgstr "蓝光字幕"
 
 #: src/ui-gtk3/ghb.ui:6835
 msgid ""
-"Burn the first selected Blu-ray subtitle track. All other Blu-ray subtitle "
-"tracks will be discarded.\n"
-"Use this option if your player software or device does not support Blu-ray "
-"subtitles.\n"
+"Burn the first selected Blu-ray subtitle track. All other Blu-ray subtitle tracks will be discarded.\n"
+"Use this option if your player software or device does not support Blu-ray subtitles.\n"
 "\n"
-"Only one subtitle track can be burned! Since conflicts can occur, the first "
-"chosen wins."
+"Only one subtitle track can be burned! Since conflicts can occur, the first chosen wins."
 msgstr ""
 "内嵌第一个选中的蓝光字幕轨道。所有其他蓝光字幕轨道将会被丢弃。\n"
 "如果您的播放器或者设备不支持蓝光字幕，则使用该选项。\n"
@@ -1967,8 +1918,8 @@ msgstr "自动命名模板"
 
 #: src/ui-gtk3/ghb.ui:7854
 msgid ""
-"Available Options: {source-path} {source} {title} {preset} {chapters} {date} "
-"{time} {creation-date} {creation-time} {modification-date} {modification-"
+"Available Options: {source-path} {source} {title} {preset} {chapters} {date}"
+" {time} {creation-date} {creation-time} {modification-date} {modification-"
 "time} {codec} {bit-depth} {quality} {bitrate} {width} {height}"
 msgstr ""
 
@@ -1991,8 +1942,7 @@ msgstr "编码完成后清除已完成的队列项目"
 #: src/ui-gtk3/ghb.ui:7973
 msgid ""
 "By default, completed jobs remain in the queue and are marked as complete.\n"
-"Check this if you want the queue to clean itself up by deleting completed "
-"jobs."
+"Check this if you want the queue to clean itself up by deleting completed jobs."
 msgstr ""
 "默认情况下，已完成编码任务仍然保留在队列中并标记为已完成。\n"
 "如果您想要编码任务完成时自动清除，则勾选此项。"
@@ -2048,12 +1998,9 @@ msgid ""
 "\n"
 "Changing this setting will require restarting HandBrake.\n"
 "\n"
-"This setting overrides the TEMP environment variable that is normally used "
-"to define this directory.\n"
+"This setting overrides the TEMP environment variable that is normally used to define this directory.\n"
 "\n"
-"Flatpak users may need to set this for certain workflows to work properly. "
-"The default size of the TEMP directory in a flatpak sandbox is 1/2 physical "
-"memory size and may be too small for things like the 2-pass stats file."
+"Flatpak users may need to set this for certain workflows to work properly. The default size of the TEMP directory in a flatpak sandbox is 1/2 physical memory size and may be too small for things like the 2-pass stats file."
 msgstr ""
 
 #: src/ui-gtk3/ghb.ui:8114
@@ -2117,8 +2064,7 @@ msgid ""
 "When checked, every title will use the same settings when adding a\n"
 "batch of titles to the queue.\n"
 "\n"
-"Uncheck this if you want to allow changing each title's settings "
-"independently."
+"Uncheck this if you want to allow changing each title's settings independently."
 msgstr ""
 "选中后，在向队列中添加一批标题时，每个标题都将使用相同的设置。\n"
 "\n"
@@ -2148,7 +2094,7 @@ msgstr "高级"
 
 #: src/ui-gtk3/ghb.ui:8536
 msgid "Rename Preset"
-msgstr ""
+msgstr "重命名预设"
 
 #: src/ui-gtk3/ghb.ui:8598
 msgid "<span size=\"x-large\">Rename Preset</span>"
@@ -2164,7 +2110,7 @@ msgstr "<b>描述</b>"
 
 #: src/ui-gtk3/ghb.ui:8693
 msgid "Save Preset"
-msgstr ""
+msgstr "保存预设"
 
 #: src/ui-gtk3/ghb.ui:8761
 msgid "Category:"
@@ -2384,18 +2330,14 @@ msgstr "采样率"
 
 #: src/ui-gtk3/ghb.ui:9877 src/ui-gtk3/ghb.ui:10116 src/audiohandler.c:1931
 msgid ""
-"<b>Dynamic Range Compression:</b> Adjust the dynamic range of the output "
-"audio track.\n"
+"<b>Dynamic Range Compression:</b> Adjust the dynamic range of the output audio track.\n"
 "\n"
-"For source audio that has a wide dynamic range (very loud and very soft "
-"sequences),\n"
-"DRC allows you to 'compress' the range by making loud sounds softer and soft "
-"sounds louder."
+"For source audio that has a wide dynamic range (very loud and very soft sequences),\n"
+"DRC allows you to 'compress' the range by making loud sounds softer and soft sounds louder."
 msgstr ""
 "<b>动态范围压缩：</b>调整输出音轨的动态范围。\n"
 "\n"
-"对于源音轨有较大音量范围的（非常响亮和非常柔和的序列），动态范围压缩 (DRC) 允"
-"许您压缩其范围使得大音量降低而小音量有所增加。"
+"对于源音轨有较大音量范围的（非常响亮和非常柔和的序列），动态范围压缩 (DRC) 允许您压缩其范围使得大音量降低而小音量有所增加。"
 
 #: src/ui-gtk3/ghb.ui:9898 src/audiohandler.c:1782
 msgid "Set the audio codec to encode this track with."
@@ -2516,7 +2458,7 @@ msgstr ""
 
 #: src/audiohandler.c:1391
 msgid "Add Audio Track"
-msgstr ""
+msgstr "添加音轨"
 
 #: src/audiohandler.c:1760
 msgid ""
@@ -2566,28 +2508,28 @@ msgstr ""
 
 #: src/callbacks.c:2115 src/callbacks.c:2259
 msgid "FPS"
-msgstr ""
+msgstr "FPS"
 
 #: src/callbacks.c:2119
 #, c-format
 msgid "Dolby Vision %d.%d"
-msgstr ""
+msgstr "杜比视界 %d.%d"
 
 #: src/callbacks.c:2123 src/callbacks.c:2126
 msgid "HDR10+"
-msgstr ""
+msgstr "HDR10+"
 
 #: src/callbacks.c:2128
 msgid "HDR10"
-msgstr ""
+msgstr "HDR10"
 
 #: src/callbacks.c:2130
 msgid "HDR"
-msgstr ""
+msgstr "HDR"
 
 #: src/callbacks.c:2132
 msgid "SDR"
-msgstr ""
+msgstr "SDR"
 
 #. TRANSLATORS: This is the bit depth of the video
 #: src/callbacks.c:2140
@@ -2598,12 +2540,12 @@ msgstr ""
 #: src/callbacks.c:2162
 msgid "Audio Track"
 msgid_plural "Audio Tracks"
-msgstr[0] ""
+msgstr[0] "音轨"
 
 #: src/callbacks.c:2165
 msgid "Subtitle Track"
 msgid_plural "Subtitle Tracks"
-msgstr[0] ""
+msgstr[0] "字幕轨"
 
 #: src/callbacks.c:2263
 msgid "CFR"
@@ -2649,19 +2591,19 @@ msgstr[0] ""
 
 #: src/callbacks.c:2548
 msgid "storage"
-msgstr ""
+msgstr "存储"
 
 #: src/callbacks.c:2549
 msgid "display"
-msgstr ""
+msgstr "显示"
 
 #: src/callbacks.c:2550
 msgid "Pixel Aspect Ratio"
-msgstr ""
+msgstr "像素宽高比"
 
 #: src/callbacks.c:2551
 msgid "Display Aspect Ratio"
-msgstr ""
+msgstr "显示宽高比"
 
 #: src/callbacks.c:2688 src/hb-backend.c:2257 src/hb-backend.c:2377
 #: src/hb-backend.c:2389
@@ -2733,8 +2675,7 @@ msgstr "正在处理%dof%d "
 #: src/callbacks.c:4195
 #, c-format
 msgid "Encoding: %s%s%.2f %% (%.2f fps, avg %.2f fps, ETA %02dh%02dm%02ds)"
-msgstr ""
-"正在编码：%s%s%.2f %% (%.2f fps，平均 %.2f fps，还需%02d小时%02d分%02d秒)"
+msgstr "正在编码：%s%s%.2f %% (%.2f fps，平均 %.2f fps，还需%02d小时%02d分%02d秒)"
 
 #: src/callbacks.c:4205 src/callbacks.c:4245
 #, c-format
@@ -2809,7 +2750,7 @@ msgstr "关闭此计算机"
 #: src/callbacks.c:5446 src/chapters.c:603 src/chapters.c:633
 #: src/presets.c:2078 src/queuehandler.c:1694
 msgid "All Files"
-msgstr ""
+msgstr "全部文件"
 
 #: src/chapters.c:604 src/chapters.c:634
 msgid "Chapters (*.xml)"
@@ -3403,7 +3344,7 @@ msgstr ""
 
 #: src/hb-backend.c:4874
 msgid "Rotate"
-msgstr ""
+msgstr "旋转"
 
 #: src/hb-backend.c:4876
 msgid "Sharpen (lapsharp)"
@@ -3411,7 +3352,7 @@ msgstr ""
 
 #: src/hb-backend.c:4880
 msgid "Colorspace"
-msgstr ""
+msgstr "色彩空间"
 
 #: src/main.c:102
 #, c-format
@@ -3469,8 +3410,7 @@ msgstr "添加子项时无法找到父文件夹。"
 #: src/presets.c:1887
 #, c-format
 msgid ""
-"Presets found are newer than what is supported by this version of "
-"HandBrake!\n"
+"Presets found are newer than what is supported by this version of HandBrake!\n"
 "\n"
 "Would you like to continue?"
 msgstr ""
@@ -3545,7 +3485,7 @@ msgstr "%s (已修改)"
 
 #: src/queuehandler.c:237
 msgid "Time:"
-msgstr ""
+msgstr "时间："
 
 #: src/queuehandler.c:281
 msgid "Align A/V"
@@ -3791,7 +3731,7 @@ msgstr ""
 
 #: src/subtitlehandler.c:123
 msgid "Default"
-msgstr ""
+msgstr "默认"
 
 #: src/subtitlehandler.c:1167
 msgid "Add Subtitles"
@@ -3820,6 +3760,9 @@ msgid ""
 "Another queued job has specified the same destination.\n"
 "Do you want to overwrite?"
 msgstr ""
+"目标路径中：%s\n"
+"已经有另一个任务指定了相同路径\n"
+"是否要覆盖？"
 
 #: src/title-add.c:113 src/title-add.c:162
 msgid "Overwrite File?"
@@ -3827,7 +3770,7 @@ msgstr ""
 
 #: src/title-add.c:114 src/title-add.c:163
 msgid "Overwrite"
-msgstr ""
+msgstr "覆盖"
 
 #: src/title-add.c:127
 #, c-format
@@ -3836,11 +3779,13 @@ msgid ""
 "\n"
 "This is not a valid directory."
 msgstr ""
+"目标路径：%s\n"
+"\n"
+"这不是有效的目录。"
 
 #: src/title-add.c:131 src/title-add.c:146
-#, fuzzy
 msgid "Invalid Destination"
-msgstr "目标"
+msgstr ""
 
 #: src/title-add.c:142
 #, c-format
@@ -3849,6 +3794,9 @@ msgid ""
 "\n"
 "Can not read or write the directory."
 msgstr ""
+"目标路径：%s\n"
+"\n"
+"没有读取或者写入权限。"
 
 #: src/title-add.c:157
 #, c-format
@@ -3858,15 +3806,15 @@ msgid ""
 "File already exists.\n"
 "Do you want to overwrite?"
 msgstr ""
+"目标路径中已经存在：%s\n"
+"是否要覆盖？"
 
 #: src/title-add.c:478
-#, fuzzy
 msgid "Select this title for adding to the queue.\n"
-msgstr "将所有标题标记并加入队列"
+msgstr "添加选中的标题到渲染队列\n"
 
 #. Title label
 #: src/title-add.c:486
-#, fuzzy
 msgid "No Title"
 msgstr "无标题"
 
@@ -3876,11 +3824,13 @@ msgid ""
 "This title will not be added to the queue unless you change\n"
 "the output file name.\n"
 msgstr ""
+"发现另一个标题与目标文件名相同。\n"
+"该标题不会被添加到队列中，除非您\n"
+"修改输出文件名。\n"
 
 #: src/title-add.c:871
-#, fuzzy
 msgid "Cannot Add Titles"
-msgstr "无标题"
+msgstr ""
 
 #: src/title-add.c:872
 msgid ""
@@ -3918,70 +3868,3 @@ msgstr ""
 #, c-format
 msgid "%s: %.4g (Warning: lossless)"
 msgstr "%s: %.4g (警告：无损)"
-
-#~ msgid "Automatically check for updates"
-#~ msgstr "自动检查更新"
-
-#~ msgid "Skip This Version"
-#~ msgstr "跳过此版本"
-
-#~ msgid "Remind Me Later"
-#~ msgstr "稍后提醒我"
-
-#~ msgid "<b>A new version of HandBrake is available!</b>"
-#~ msgstr "<b>有新版本的 HandBrake 可用!</b>"
-
-#~ msgid "HandBrake xxx is now available (you have yyy)."
-#~ msgstr "HandBrake xxx 现在可用 (您拥有 yyy)。"
-
-#~ msgid "<b>Release Notes</b>"
-#~ msgstr "<b>发行说明</b>"
-
-#~ msgid ""
-#~ "HandBrake is a tool for converting video from nearly any format to a "
-#~ "selection of modern, widely supported codecs."
-#~ msgstr ""
-#~ "HandBrake 是一种几乎可以将任何格式转换为现代广泛支持的编码视频的工具。"
-
-#~ msgid "Reasons you'll love Handbrake:"
-#~ msgstr "您喜欢 Handbrake 的原因："
-
-#~ msgid "Convert video from nearly any format"
-#~ msgstr "几乎转换任何格式视频"
-
-#~ msgid "Free and Open Source"
-#~ msgstr "自由和开源"
-
-#~ msgid "Multi-Platform (Windows, Mac and Linux)"
-#~ msgstr "多平台（Windows，Mac 和 Linux）"
-
-#~ msgid "Main window and settings summary"
-#~ msgstr "主窗口和设置摘要"
-
-#~ msgid "Video resolution and cropping settings"
-#~ msgstr "视频分辨率和裁剪设置"
-
-#~ msgid "Video encoder settings"
-#~ msgstr "视频编码器设置"
-
-#~ msgid "Audio track selection and settings"
-#~ msgstr "音轨选择和设置"
-
-#~ msgid "Chapter title editing"
-#~ msgstr "章节标题编辑"
-
-#, c-format
-#~ msgid "HandBrake %s/%s is now available (you have %s/%d)."
-#~ msgstr "HandBrake %s/%s 现在可用 (您拥有 %s/%d)。"
-
-#~ msgid "Never"
-#~ msgstr "从不"
-
-#~ msgid "Daily"
-#~ msgstr "每天"
-
-#~ msgid "Weekly"
-#~ msgstr "每周"
-
-#~ msgid "Monthly"
-#~ msgstr "每月"

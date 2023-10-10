@@ -1,25 +1,24 @@
 # SOME DESCRIPTIVE TITLE.
-# Copyright (C) 2023 HandBrake Team
+# Copyright (C) YEAR HandBrake Team
 # This file is distributed under the same license as the ghb package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, 2023.
-#
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# 
 # Translators:
-# හෙළබස සමූහය, 2022
-#
+# HelaBasa Group <transifex-helabasa-group@yalu.lk>, 2022
+# 
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: ghb 0.1\n"
+"Project-Id-Version: ghb 1.6.0-git-a6a111e86\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-09-20 09:46+0100\n"
 "PO-Revision-Date: 2018-10-10 18:14+0000\n"
-"Last-Translator: හෙළබස සමූහය, 2022\n"
-"Language-Team: Sinhala (https://www.transifex.com/HandBrakeProject/"
-"teams/92423/si/)\n"
-"Language: si\n"
+"Last-Translator: HelaBasa Group <transifex-helabasa-group@yalu.lk>, 2022\n"
+"Language-Team: Sinhala (https://app.transifex.com/HandBrakeProject/teams/92423/si/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: si\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: data/fr.handbrake.ghb.desktop.in:3 src/ui-gtk3/ghb.ui:2236
@@ -470,18 +469,11 @@ msgstr ""
 
 #: src/ui-gtk3/ghb.ui:2050
 msgid ""
-"HandBrake is free software; you can redistribute it and/or modify it under "
-"the terms of the GNU General Public License version 2, as published by the "
-"Free Software Foundation.\n"
+"HandBrake is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License version 2, as published by the Free Software Foundation.\n"
 "\n"
-"HandBrake is distributed in the hope that it will be useful, but WITHOUT ANY "
-"WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS "
-"FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more "
-"details.\n"
+"HandBrake is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.\n"
 "\n"
-"You should have received a copy of the GNU General Public License along with "
-"Glade; if not, write to the Free Software Foundation, Inc., 51 Franklin "
-"Street, Fifth Floor, Boston, MA 02110-1301, USA."
+"You should have received a copy of the GNU General Public License along with Glade; if not, write to the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA."
 msgstr ""
 
 #: src/ui-gtk3/ghb.ui:2273 src/callbacks.c:4339
@@ -797,8 +789,7 @@ msgstr ""
 msgid ""
 "Pixel aspect defines the shape of the pixels.\n"
 "\n"
-"A 1:1 ratio defines a square pixel.  Other values define rectangular "
-"shapes.\n"
+"A 1:1 ratio defines a square pixel.  Other values define rectangular shapes.\n"
 "Players will scale the image in order to achieve the specified aspect."
 msgstr ""
 
@@ -809,8 +800,7 @@ msgstr ""
 #: src/ui-gtk3/ghb.ui:3780
 msgid ""
 "Pixel aspect defines the shape of the pixels.\n"
-"A 1:1 ratio defines a square pixel.  Other values define rectangular "
-"shapes.\n"
+"A 1:1 ratio defines a square pixel.  Other values define rectangular shapes.\n"
 "Players will scale the image in order to achieve the specified aspect."
 msgstr ""
 
@@ -821,15 +811,13 @@ msgstr ""
 #: src/ui-gtk3/ghb.ui:3814
 msgid ""
 "This is the width that the video will be stored at.\n"
-"The actual display dimensions will differ if the pixel aspect ratio is not "
-"1:1."
+"The actual display dimensions will differ if the pixel aspect ratio is not 1:1."
 msgstr ""
 
 #: src/ui-gtk3/ghb.ui:3847
 msgid ""
 "This is the height that the video will be stored at.\n"
-"The actual display dimensions will differ if the pixel aspect ratio is not "
-"1:1."
+"The actual display dimensions will differ if the pixel aspect ratio is not 1:1."
 msgstr ""
 
 #: src/ui-gtk3/ghb.ui:3861
@@ -845,7 +833,8 @@ msgid "Allow Upscaling"
 msgstr ""
 
 #: src/ui-gtk3/ghb.ui:3886
-msgid "If not enabled, scaled dimensions will be limited to source dimensions."
+msgid ""
+"If not enabled, scaled dimensions will be limited to source dimensions."
 msgstr ""
 
 #: src/ui-gtk3/ghb.ui:3911
@@ -913,8 +902,7 @@ msgstr ""
 msgid ""
 "This filter removes 'combing' artifacts that are the result of telecining.\n"
 "\n"
-"Telecining is a process that adjusts film framerates that are 24fps to NTSC "
-"video frame rates which are 30fps."
+"Telecining is a process that adjusts film framerates that are 24fps to NTSC video frame rates which are 30fps."
 msgstr ""
 
 #: src/ui-gtk3/ghb.ui:4367 src/ui-gtk3/ghb.ui:4913
@@ -1000,16 +988,14 @@ msgstr ""
 #: src/ui-gtk3/ghb.ui:4616
 msgid ""
 "Denoise filtering reduces or removes the appearance of noise and grain.\n"
-"Film grain and other types of high frequency noise are difficult to "
-"compress.\n"
+"Film grain and other types of high frequency noise are difficult to compress.\n"
 "Using this filter on such sources can result in smaller file sizes."
 msgstr ""
 
 #: src/ui-gtk3/ghb.ui:4651 src/ui-gtk3/ghb.ui:4674
 msgid ""
 "Denoise filtering reduces or removes the appearance of noise and grain.\n"
-"    Film grain and other types of high frequency noise are difficult to "
-"compress.\n"
+"    Film grain and other types of high frequency noise are difficult to compress.\n"
 "    Using this filter on such sources can result in smaller file sizes."
 msgstr ""
 
@@ -1152,10 +1138,8 @@ msgid ""
 "Set the average bitrate.\n"
 "\n"
 "The instantaneous bitrate can be much higher or lower at any point in time.\n"
-"But the average over a long duration will be the value set here.  If you "
-"need\n"
-"to limit instantaneous bitrate, look into x264's vbv-bufsize and vbv-maxrate "
-"settings."
+"But the average over a long duration will be the value set here.  If you need\n"
+"to limit instantaneous bitrate, look into x264's vbv-bufsize and vbv-maxrate settings."
 msgstr ""
 
 #: src/ui-gtk3/ghb.ui:5227
@@ -1166,8 +1150,7 @@ msgstr ""
 msgid ""
 "Perform Multi Pass Encoding.\n"
 "\n"
-"The 'Bitrate' option is prerequisite. During the analysis passes, statistics "
-"about\n"
+"The 'Bitrate' option is prerequisite. During the analysis passes, statistics about\n"
 "the video are collected.  Then in the final pass, those statistics are used\n"
 "to make bitrate allocation decisions."
 msgstr ""
@@ -1184,13 +1167,11 @@ msgstr ""
 
 #: src/ui-gtk3/ghb.ui:5317
 msgid ""
-"Adjusts encoder settings to trade off compression efficiency against "
-"encoding speed.\n"
+"Adjusts encoder settings to trade off compression efficiency against encoding speed.\n"
 "\n"
 "This establishes your default encoder settings.\n"
 "Tunes, profiles, levels and extra options string will be applied to this.\n"
-"You should generally set this option to the slowest you can bear since "
-"slower\n"
+"You should generally set this option to the slowest you can bear since slower\n"
 "settings will result in better quality or smaller files."
 msgstr ""
 
@@ -1302,8 +1283,7 @@ msgstr ""
 #: src/ui-gtk3/ghb.ui:5798
 msgid ""
 "Create a list of languages you would like to select audio for.\n"
-"Tracks matching these languages will be selected using the chosen Selection "
-"Behavior."
+"Tracks matching these languages will be selected using the chosen Selection Behavior."
 msgstr ""
 
 #: src/ui-gtk3/ghb.ui:5829 src/ui-gtk3/ghb.ui:6626
@@ -1325,8 +1305,7 @@ msgstr ""
 #: src/ui-gtk3/ghb.ui:5881
 msgid ""
 "Only the primary audio track will be encoded with the full encoder list.\n"
-"All other secondary audio output tracks will be encoded with first encoder "
-"only."
+"All other secondary audio output tracks will be encoded with first encoder only."
 msgstr ""
 
 #: src/ui-gtk3/ghb.ui:5917
@@ -1340,8 +1319,7 @@ msgstr ""
 #: src/ui-gtk3/ghb.ui:5933
 msgid ""
 "Enable this if your playback device supports MP2.\n"
-"This permits MP2 passthru to be selected when automatic passthru selection "
-"is enabled."
+"This permits MP2 passthru to be selected when automatic passthru selection is enabled."
 msgstr ""
 
 #: src/ui-gtk3/ghb.ui:5949
@@ -1351,8 +1329,7 @@ msgstr ""
 #: src/ui-gtk3/ghb.ui:5954
 msgid ""
 "Enable this if your playback device supports MP3.\n"
-"This permits MP3 passthru to be selected when automatic passthru selection "
-"is enabled."
+"This permits MP3 passthru to be selected when automatic passthru selection is enabled."
 msgstr ""
 
 #: src/ui-gtk3/ghb.ui:5970
@@ -1362,8 +1339,7 @@ msgstr ""
 #: src/ui-gtk3/ghb.ui:5975
 msgid ""
 "Enable this if your playback device supports AC-3.\n"
-"This permits AC-3 passthru to be selected when automatic passthru selection "
-"is enabled."
+"This permits AC-3 passthru to be selected when automatic passthru selection is enabled."
 msgstr ""
 
 #: src/ui-gtk3/ghb.ui:5991
@@ -1373,8 +1349,7 @@ msgstr ""
 #: src/ui-gtk3/ghb.ui:5996
 msgid ""
 "Enable this if your playback device supports EAC-3.\n"
-"This permits EAC-3 passthru to be selected when automatic passthru selection "
-"is enabled."
+"This permits EAC-3 passthru to be selected when automatic passthru selection is enabled."
 msgstr ""
 
 #: src/ui-gtk3/ghb.ui:6012
@@ -1384,8 +1359,7 @@ msgstr ""
 #: src/ui-gtk3/ghb.ui:6017
 msgid ""
 "Enable this if your playback device supports DTS.\n"
-"This permits DTS passthru to be selected when automatic passthru selection "
-"is enabled."
+"This permits DTS passthru to be selected when automatic passthru selection is enabled."
 msgstr ""
 
 #: src/ui-gtk3/ghb.ui:6033
@@ -1395,8 +1369,7 @@ msgstr ""
 #: src/ui-gtk3/ghb.ui:6038
 msgid ""
 "Enable this if your playback device supports DTS-HD.\n"
-"This permits DTS-HD passthru to be selected when automatic passthru "
-"selection is enabled."
+"This permits DTS-HD passthru to be selected when automatic passthru selection is enabled."
 msgstr ""
 
 #: src/ui-gtk3/ghb.ui:6054
@@ -1406,8 +1379,7 @@ msgstr ""
 #: src/ui-gtk3/ghb.ui:6059
 msgid ""
 "Enable this if your playback device supports TrueHD.\n"
-"This permits TrueHD passthru to be selected when automatic passthru "
-"selection is enabled."
+"This permits TrueHD passthru to be selected when automatic passthru selection is enabled."
 msgstr ""
 
 #: src/ui-gtk3/ghb.ui:6075
@@ -1417,8 +1389,7 @@ msgstr ""
 #: src/ui-gtk3/ghb.ui:6080
 msgid ""
 "Enable this if your playback device supports FLAC.\n"
-"This permits FLAC passthru to be selected when automatic passthru selection "
-"is enabled."
+"This permits FLAC passthru to be selected when automatic passthru selection is enabled."
 msgstr ""
 
 #: src/ui-gtk3/ghb.ui:6096
@@ -1428,8 +1399,7 @@ msgstr ""
 #: src/ui-gtk3/ghb.ui:6101
 msgid ""
 "Enable this if your playback device supports AAC.\n"
-"This permits AAC passthru to be selected when automatic passthru selection "
-"is enabled."
+"This permits AAC passthru to be selected when automatic passthru selection is enabled."
 msgstr ""
 
 #: src/ui-gtk3/ghb.ui:6117
@@ -1439,8 +1409,7 @@ msgstr ""
 #: src/ui-gtk3/ghb.ui:6122
 msgid ""
 "Enable this if your playback device supports Opus.\n"
-"This permits Opus passthru to be selected when automatic passthru selection "
-"is enabled."
+"This permits Opus passthru to be selected when automatic passthru selection is enabled."
 msgstr ""
 
 #: src/ui-gtk3/ghb.ui:6155
@@ -1502,7 +1471,8 @@ msgid "Add all subtitle tracks to the list"
 msgstr ""
 
 #: src/ui-gtk3/ghb.ui:6414 src/callbacks.c:2344 src/queuehandler.c:647
-#: src/queuehandler.c:1083 src/subtitlehandler.c:414 src/subtitlehandler.c:1221
+#: src/queuehandler.c:1083 src/subtitlehandler.c:414
+#: src/subtitlehandler.c:1221
 msgid "Foreign Audio Scan"
 msgstr ""
 
@@ -1524,11 +1494,9 @@ msgstr ""
 #: src/ui-gtk3/ghb.ui:6590
 msgid ""
 "Create a list of languages you would like to select subtitles for.\n"
-"Tracks matching these languages will be selected using the chosen Selection "
-"Behavior.\n"
+"Tracks matching these languages will be selected using the chosen Selection Behavior.\n"
 "\n"
-"The first language in this list is your \"preferred\" language and will be "
-"used\n"
+"The first language in this list is your \"preferred\" language and will be used\n"
 "for determining subtitle selection settings when there is foreign audio."
 msgstr ""
 
@@ -1542,10 +1510,8 @@ msgstr ""
 
 #: src/ui-gtk3/ghb.ui:6703
 msgid ""
-"Add \"Foreign Audio Scan\" when the default audio track is your preferred "
-"language.\n"
-"This search pass finds short sequences of foreign audio and provides "
-"subtitles for them.\n"
+"Add \"Foreign Audio Scan\" when the default audio track is your preferred language.\n"
+"This search pass finds short sequences of foreign audio and provides subtitles for them.\n"
 "\n"
 "This option requires a language to be set in the Selected Languages list."
 msgstr ""
@@ -1556,8 +1522,7 @@ msgstr ""
 
 #: src/ui-gtk3/ghb.ui:6723
 msgid ""
-"When the default audio track is not your preferred language, add a subtitle "
-"track.\n"
+"When the default audio track is not your preferred language, add a subtitle track.\n"
 "\n"
 "This option requires a language to be set in the Selected Languages list."
 msgstr ""
@@ -1580,10 +1545,8 @@ msgstr ""
 msgid ""
 "Set the behavior of subtitle \"Burn-In\".\n"
 "\n"
-"Burned-In subtitles are part of the video and can not be disabled during "
-"playback.\n"
-"Only one subtitle track can be burned! Since conflicts can occur, the first "
-"chosen wins."
+"Burned-In subtitles are part of the video and can not be disabled during playback.\n"
+"Only one subtitle track can be burned! Since conflicts can occur, the first chosen wins."
 msgstr ""
 
 #: src/ui-gtk3/ghb.ui:6802
@@ -1596,13 +1559,10 @@ msgstr ""
 
 #: src/ui-gtk3/ghb.ui:6816
 msgid ""
-"Burn the first selected DVD subtitle track. All other DVD subtitle tracks "
-"will be discarded.\n"
-"Use this option if your player software or device does not support DVD "
-"subtitles.\n"
+"Burn the first selected DVD subtitle track. All other DVD subtitle tracks will be discarded.\n"
+"Use this option if your player software or device does not support DVD subtitles.\n"
 "\n"
-"Only one subtitle track can be burned! Since conflicts can occur, the first "
-"chosen wins."
+"Only one subtitle track can be burned! Since conflicts can occur, the first chosen wins."
 msgstr ""
 
 #: src/ui-gtk3/ghb.ui:6830
@@ -1611,13 +1571,10 @@ msgstr ""
 
 #: src/ui-gtk3/ghb.ui:6835
 msgid ""
-"Burn the first selected Blu-ray subtitle track. All other Blu-ray subtitle "
-"tracks will be discarded.\n"
-"Use this option if your player software or device does not support Blu-ray "
-"subtitles.\n"
+"Burn the first selected Blu-ray subtitle track. All other Blu-ray subtitle tracks will be discarded.\n"
+"Use this option if your player software or device does not support Blu-ray subtitles.\n"
 "\n"
-"Only one subtitle track can be burned! Since conflicts can occur, the first "
-"chosen wins."
+"Only one subtitle track can be burned! Since conflicts can occur, the first chosen wins."
 msgstr ""
 
 #: src/ui-gtk3/ghb.ui:6857
@@ -1785,8 +1742,8 @@ msgstr ""
 
 #: src/ui-gtk3/ghb.ui:7854
 msgid ""
-"Available Options: {source-path} {source} {title} {preset} {chapters} {date} "
-"{time} {creation-date} {creation-time} {modification-date} {modification-"
+"Available Options: {source-path} {source} {title} {preset} {chapters} {date}"
+" {time} {creation-date} {creation-time} {modification-date} {modification-"
 "time} {codec} {bit-depth} {quality} {bitrate} {width} {height}"
 msgstr ""
 
@@ -1809,8 +1766,7 @@ msgstr ""
 #: src/ui-gtk3/ghb.ui:7973
 msgid ""
 "By default, completed jobs remain in the queue and are marked as complete.\n"
-"Check this if you want the queue to clean itself up by deleting completed "
-"jobs."
+"Check this if you want the queue to clean itself up by deleting completed jobs."
 msgstr ""
 
 #: src/ui-gtk3/ghb.ui:7986
@@ -1864,12 +1820,9 @@ msgid ""
 "\n"
 "Changing this setting will require restarting HandBrake.\n"
 "\n"
-"This setting overrides the TEMP environment variable that is normally used "
-"to define this directory.\n"
+"This setting overrides the TEMP environment variable that is normally used to define this directory.\n"
 "\n"
-"Flatpak users may need to set this for certain workflows to work properly. "
-"The default size of the TEMP directory in a flatpak sandbox is 1/2 physical "
-"memory size and may be too small for things like the 2-pass stats file."
+"Flatpak users may need to set this for certain workflows to work properly. The default size of the TEMP directory in a flatpak sandbox is 1/2 physical memory size and may be too small for things like the 2-pass stats file."
 msgstr ""
 
 #: src/ui-gtk3/ghb.ui:8114
@@ -1933,8 +1886,7 @@ msgid ""
 "When checked, every title will use the same settings when adding a\n"
 "batch of titles to the queue.\n"
 "\n"
-"Uncheck this if you want to allow changing each title's settings "
-"independently."
+"Uncheck this if you want to allow changing each title's settings independently."
 msgstr ""
 
 #: src/ui-gtk3/ghb.ui:8452
@@ -2182,13 +2134,10 @@ msgstr ""
 
 #: src/ui-gtk3/ghb.ui:9877 src/ui-gtk3/ghb.ui:10116 src/audiohandler.c:1931
 msgid ""
-"<b>Dynamic Range Compression:</b> Adjust the dynamic range of the output "
-"audio track.\n"
+"<b>Dynamic Range Compression:</b> Adjust the dynamic range of the output audio track.\n"
 "\n"
-"For source audio that has a wide dynamic range (very loud and very soft "
-"sequences),\n"
-"DRC allows you to 'compress' the range by making loud sounds softer and soft "
-"sounds louder."
+"For source audio that has a wide dynamic range (very loud and very soft sequences),\n"
+"DRC allows you to 'compress' the range by making loud sounds softer and soft sounds louder."
 msgstr ""
 
 #: src/ui-gtk3/ghb.ui:9898 src/audiohandler.c:1782
@@ -3191,8 +3140,7 @@ msgstr ""
 #: src/presets.c:1887
 #, c-format
 msgid ""
-"Presets found are newer than what is supported by this version of "
-"HandBrake!\n"
+"Presets found are newer than what is supported by this version of HandBrake!\n"
 "\n"
 "Would you like to continue?"
 msgstr ""
