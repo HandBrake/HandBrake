@@ -2643,8 +2643,8 @@
 				A9D2DDE524B3B1C2009C92DA /* pt_BR */,
                 A91CAB55270726B300006BEA /* co */,
 				A91CAB54270726B000006BEA /* zh */,
-                D0A186012AD5BDE60056C7BD /* ko */,
-                D0E25A752AD5BE3600D1B3F5 /* bg */,
+                D0A185FF2AD5BDE60056C7BD /* ko */,
+                D0E25A732AD5BE3600D1B3F5 /* bg */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";
