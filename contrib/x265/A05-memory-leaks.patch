@@ -1,0 +1,299 @@
+From 2e2b36a033becc5c7eef64a81be3245fc0f9a42b Mon Sep 17 00:00:00 2001
+From: Damiano galassi <damiog@gmail.com>
+Date: Wed, 11 Oct 2023 14:26:03 +0200
+Subject: [PATCH] Fix a good number of memory leaks.
+
+---
+ source/common/frame.cpp        |  5 +++
+ source/common/param.cpp        | 65 ++++++++++++++++++++--------------
+ source/encoder/api.cpp         |  3 +-
+ source/encoder/encoder.cpp     | 27 +++++++-------
+ source/encoder/framefilter.cpp |  8 ++---
+ source/encoder/slicetype.cpp   |  6 ++++
+ 6 files changed, 67 insertions(+), 47 deletions(-)
+
+diff --git a/source/common/frame.cpp b/source/common/frame.cpp
+index ae3773e83..74580cc54 100644
+--- a/source/common/frame.cpp
++++ b/source/common/frame.cpp
+@@ -302,6 +302,11 @@ void Frame::destroy()
+         delete[] m_userSEI.payloads;
+     }
+ 
++    if (m_rpu.payloadSize)
++    {
++        delete[] m_rpu.payload;
++    }
++
+     if (m_ctuInfo)
+     {
+         uint32_t widthInCU = (m_param->sourceWidth + m_param->maxCUSize - 1) >> m_param->maxLog2CUSize;
+diff --git a/source/common/param.cpp b/source/common/param.cpp
+index 1a4df4cdc..e189b390b 100755
+--- a/source/common/param.cpp
++++ b/source/common/param.cpp
+@@ -102,6 +102,19 @@ x265_param *x265_param_alloc()
+ 
+ void x265_param_free(x265_param* p)
+ {
++    /* release string arguments that were strdup'd */
++    free((char*)p->rc.lambdaFileName);
++    free((char*)p->rc.statFileName);
++    free((char*)p->rc.sharedMemName);
++    free((char*)p->analysisReuseFileName);
++    free((char*)p->scalingLists);
++    free((char*)p->csvfn);
++    free((char*)p->numaPools);
++    free((char*)p->masteringDisplayColorVolume);
++    free((char*)p->toneMapFile);
++    free((char*)p->analysisSave);
++    free((char*)p->analysisLoad);
++    free((char*)p->videoSignalTypePreset);
+     x265_zone_free(p);
+ #ifdef SVT_HEVC
+      x265_free(p->svtHevcParam);
+@@ -2554,12 +2567,24 @@ bool parseMaskingStrength(x265_param* p, const char* value)
+     return bError;
+ }
+ 
++void copy_str(const char **dst, const char *src)
++{
++    if (*dst)
++    {
++        free((void *)*dst);
++        *dst = NULL;
++    }
++    if (src)
++    {
++        *dst = strdup(src);
++    }
++}
++
+ void x265_copy_params(x265_param* dst, x265_param* src)
+ {
+     dst->cpuid = src->cpuid;
+     dst->frameNumThreads = src->frameNumThreads;
+-    if (src->numaPools) dst->numaPools = strdup(src->numaPools);
+-    else dst->numaPools = NULL;
++    copy_str(&dst->numaPools, src->numaPools);
+ 
+     dst->bEnableWavefront = src->bEnableWavefront;
+     dst->bDistributeModeAnalysis = src->bDistributeModeAnalysis;
+@@ -2569,8 +2594,7 @@ void x265_copy_params(x265_param* dst, x265_param* src)
+     dst->bEnableSsim = src->bEnableSsim;
+     dst->logLevel = src->logLevel;
+     dst->csvLogLevel = src->csvLogLevel;
+-    if (src->csvfn) dst->csvfn = strdup(src->csvfn);
+-    else dst->csvfn = NULL;
++    copy_str(&dst->csvfn, src->csvfn);
+     dst->internalBitDepth = src->internalBitDepth;
+     dst->sourceBitDepth = src->sourceBitDepth;
+     dst->internalCsp = src->internalCsp;
+@@ -2619,8 +2643,7 @@ void x265_copy_params(x265_param* dst, x265_param* src)
+     dst->bEnableTransformSkip = src->bEnableTransformSkip;
+     dst->noiseReductionInter = src->noiseReductionInter;
+     dst->noiseReductionIntra = src->noiseReductionIntra;
+-    if (src->scalingLists) dst->scalingLists = strdup(src->scalingLists);
+-    else dst->scalingLists = NULL;
++    copy_str(&dst->scalingLists, src->scalingLists);
+     dst->bEnableStrongIntraSmoothing = src->bEnableStrongIntraSmoothing;
+     dst->bEnableConstrainedIntra = src->bEnableConstrainedIntra;
+     dst->maxNumMergeCand = src->maxNumMergeCand;
+@@ -2662,8 +2685,7 @@ void x265_copy_params(x265_param* dst, x265_param* src)
+     dst->psyRdoq = src->psyRdoq;
+     dst->bEnableRdRefine = src->bEnableRdRefine;
+     dst->analysisReuseMode = src->analysisReuseMode;
+-    if (src->analysisReuseFileName) dst->analysisReuseFileName=strdup(src->analysisReuseFileName);
+-    else dst->analysisReuseFileName = NULL;
++    copy_str(&dst->analysisReuseFileName, src->analysisReuseFileName);
+     dst->bLossless = src->bLossless;
+     dst->cbQpOffset = src->cbQpOffset;
+     dst->crQpOffset = src->crQpOffset;
+@@ -2692,10 +2714,8 @@ void x265_copy_params(x265_param* dst, x265_param* src)
+     dst->rc.bStatWrite = src->rc.bStatWrite;
+     dst->rc.bStatRead = src->rc.bStatRead;
+     dst->rc.dataShareMode = src->rc.dataShareMode;
+-    if (src->rc.statFileName) dst->rc.statFileName=strdup(src->rc.statFileName);
+-    else dst->rc.statFileName = NULL;
+-    if (src->rc.sharedMemName) dst->rc.sharedMemName = strdup(src->rc.sharedMemName);
+-    else dst->rc.sharedMemName = NULL;
++    copy_str(&dst->rc.statFileName, src->rc.statFileName);
++    copy_str(&dst->rc.sharedMemName, src->rc.sharedMemName);
+     dst->rc.qblur = src->rc.qblur;
+     dst->rc.complexityBlur = src->rc.complexityBlur;
+     dst->rc.bEnableSlowFirstPass = src->rc.bEnableSlowFirstPass;
+@@ -2729,8 +2749,7 @@ void x265_copy_params(x265_param* dst, x265_param* src)
+     else
+         dst->rc.zones = NULL;
+ 
+-    if (src->rc.lambdaFileName) dst->rc.lambdaFileName = strdup(src->rc.lambdaFileName);
+-    else dst->rc.lambdaFileName = NULL;
++    copy_str(&dst->rc.lambdaFileName, src->rc.lambdaFileName);
+     dst->rc.bStrictCbr = src->rc.bStrictCbr;
+     dst->rc.qgSize = src->rc.qgSize;
+     dst->rc.bEnableGrain = src->rc.bEnableGrain;
+@@ -2761,8 +2780,7 @@ void x265_copy_params(x265_param* dst, x265_param* src)
+     dst->vui.defDispWinRightOffset = src->vui.defDispWinRightOffset;
+     dst->vui.defDispWinTopOffset = src->vui.defDispWinTopOffset;
+ 
+-    if (src->masteringDisplayColorVolume) dst->masteringDisplayColorVolume=strdup( src->masteringDisplayColorVolume);
+-    else dst->masteringDisplayColorVolume = NULL;
++    copy_str(&dst->masteringDisplayColorVolume, src->masteringDisplayColorVolume);
+     dst->maxLuma = src->maxLuma;
+     dst->minLuma = src->minLuma;
+     dst->bEmitCLL = src->bEmitCLL;
+@@ -2791,8 +2809,7 @@ void x265_copy_params(x265_param* dst, x265_param* src)
+     dst->analysisSaveReuseLevel = src->analysisSaveReuseLevel;
+     dst->analysisLoadReuseLevel = src->analysisLoadReuseLevel;
+     dst->bLimitSAO = src->bLimitSAO;
+-    if (src->toneMapFile) dst->toneMapFile = strdup(src->toneMapFile);
+-    else dst->toneMapFile = NULL;
++    copy_str(&dst->toneMapFile, src->toneMapFile);
+     dst->bDhdr10opt = src->bDhdr10opt;
+     dst->bCTUInfo = src->bCTUInfo;
+     dst->bUseRcStats = src->bUseRcStats;
+@@ -2814,10 +2831,8 @@ void x265_copy_params(x265_param* dst, x265_param* src)
+     dst->vbvEndFrameAdjust = src->vbvEndFrameAdjust;
+     dst->bAnalysisType = src->bAnalysisType;
+     dst->bCopyPicToFrame = src->bCopyPicToFrame;
+-    if (src->analysisSave) dst->analysisSave=strdup(src->analysisSave);
+-    else dst->analysisSave = NULL;
+-    if (src->analysisLoad) dst->analysisLoad=strdup(src->analysisLoad);
+-    else dst->analysisLoad = NULL;
++    copy_str(&dst->analysisSave, src->analysisSave);
++    copy_str(&dst->analysisLoad, src->analysisLoad);
+     dst->gopLookahead = src->gopLookahead;
+     dst->radl = src->radl;
+     dst->selectiveSAO = src->selectiveSAO;
+@@ -2827,8 +2842,7 @@ void x265_copy_params(x265_param* dst, x265_param* src)
+     dst->bSingleSeiNal = src->bSingleSeiNal;
+     dst->chunkStart = src->chunkStart;
+     dst->chunkEnd = src->chunkEnd;
+-    if (src->naluFile) dst->naluFile=strdup(src->naluFile);
+-    else dst->naluFile = NULL;
++    copy_str(&dst->naluFile, src->naluFile);
+     dst->scaleFactor = src->scaleFactor;
+     dst->ctuDistortionRefine = src->ctuDistortionRefine;
+     dst->bEnableHRDConcatFlag = src->bEnableHRDConcatFlag;
+@@ -2854,8 +2868,7 @@ void x265_copy_params(x265_param* dst, x265_param* src)
+     dst->confWinBottomOffset = src->confWinBottomOffset;
+     dst->bliveVBV2pass = src->bliveVBV2pass;
+ 
+-    if (src->videoSignalTypePreset) dst->videoSignalTypePreset = strdup(src->videoSignalTypePreset);
+-    else dst->videoSignalTypePreset = NULL;
++    copy_str(&dst->videoSignalTypePreset, src->videoSignalTypePreset);
+ #ifdef SVT_HEVC
+     memcpy(dst->svtHevcParam, src->svtHevcParam, sizeof(EB_H265_ENC_CONFIGURATION));
+ #endif
+diff --git a/source/encoder/api.cpp b/source/encoder/api.cpp
+index 15b898a3c..6ad4ea590 100644
+--- a/source/encoder/api.cpp
++++ b/source/encoder/api.cpp
+@@ -205,11 +205,12 @@ x265_encoder *x265_encoder_open(x265_param *p)
+         }
+     }
+ 
+-    memcpy(zoneParam, param, sizeof(x265_param));
++    x265_copy_params(zoneParam, param);
+     for (int i = 0; i < param->rc.zonefileCount; i++)
+     {
+         encoder->configureZone(zoneParam, param->rc.zones[i].zoneParam);
+     }
++    PARAM_NS::x265_param_free(zoneParam);
+ 
+     /* Try to open CSV file handle */
+     if (encoder->m_param->csvfn)
+diff --git a/source/encoder/encoder.cpp b/source/encoder/encoder.cpp
+index 8ec01bebe..6e497c5aa 100644
+--- a/source/encoder/encoder.cpp
++++ b/source/encoder/encoder.cpp
+@@ -973,18 +973,6 @@ void Encoder::destroy()
+         if (m_param->csvfpt)
+             fclose(m_param->csvfpt);
+         /* release string arguments that were strdup'd */
+-        free((char*)m_param->rc.lambdaFileName);
+-        free((char*)m_param->rc.statFileName);
+-        free((char*)m_param->rc.sharedMemName);
+-        free((char*)m_param->analysisReuseFileName);
+-        free((char*)m_param->scalingLists);
+-        free((char*)m_param->csvfn);
+-        free((char*)m_param->numaPools);
+-        free((char*)m_param->masteringDisplayColorVolume);
+-        free((char*)m_param->toneMapFile);
+-        free((char*)m_param->analysisSave);
+-        free((char*)m_param->analysisLoad);
+-        free((char*)m_param->videoSignalTypePreset);
+         PARAM_NS::x265_param_free(m_param);
+     }
+ }
+@@ -1673,11 +1661,20 @@ int Encoder::encode(const x265_picture* pic_in, x265_picture* pic_out)
+ 
+         copyUserSEIMessages(inFrame, inputPic);
+ 
+-        /*Copy Dolby Vision RPU from inputPic to frame*/
++        /* Copy Dolby Vision RPU from inputPic to frame. */
++        if (inFrame->m_rpu.payload && inFrame->m_rpu.payloadSize  < inputPic->rpu.payloadSize)
++        {
++            delete[] inFrame->m_rpu.payload;
++            inFrame->m_rpu.payload = NULL;
++        }
++
+         if (inputPic->rpu.payloadSize)
+         {
++            if (inFrame->m_rpu.payload == NULL)
++            {
++                inFrame->m_rpu.payload = new uint8_t[inputPic->rpu.payloadSize];
++            }
+             inFrame->m_rpu.payloadSize = inputPic->rpu.payloadSize;
+-            inFrame->m_rpu.payload = new uint8_t[inputPic->rpu.payloadSize];
+             memcpy(inFrame->m_rpu.payload, inputPic->rpu.payload, inputPic->rpu.payloadSize);
+         }
+ 
+@@ -3513,7 +3510,7 @@ void Encoder::configureZone(x265_param *p, x265_param *zone)
+         }
+         p->radl = zone->radl;
+     }
+-    memcpy(zone, p, sizeof(x265_param));
++    x265_copy_params(zone, p);
+ }
+ 
+ void Encoder::configureDolbyVisionParams(x265_param* p)
+diff --git a/source/encoder/framefilter.cpp b/source/encoder/framefilter.cpp
+index 8a09f5b51..cf83930b7 100644
+--- a/source/encoder/framefilter.cpp
++++ b/source/encoder/framefilter.cpp
+@@ -162,11 +162,9 @@ void FrameFilter::destroy()
+ 
+     if (m_parallelFilter)
+     {
+-        if (m_useSao)
+-        {
+-            for(int row = 0; row < m_numRows; row++)
+-                m_parallelFilter[row].m_sao.destroy((row == 0 ? 1 : 0));
+-        }
++
++        for(int row = 0; row < m_numRows; row++)
++            m_parallelFilter[row].m_sao.destroy((row == 0 ? 1 : 0));
+ 
+         delete[] m_parallelFilter;
+         m_parallelFilter = NULL;
+diff --git a/source/encoder/slicetype.cpp b/source/encoder/slicetype.cpp
+index caf4cbf29..77e6cb96e 100644
+--- a/source/encoder/slicetype.cpp
++++ b/source/encoder/slicetype.cpp
+@@ -1165,6 +1165,12 @@ void Lookahead::destroy()
+         delete curFrame;
+     }
+ 
++    X265_FREE(m_accHistDiffRunningAvgCb[0]);
++    X265_FREE(m_accHistDiffRunningAvgCb);
++    X265_FREE(m_accHistDiffRunningAvgCr[0]);
++    X265_FREE(m_accHistDiffRunningAvgCr);
++    X265_FREE(m_accHistDiffRunningAvg[0]);
++    X265_FREE(m_accHistDiffRunningAvg);
+     X265_FREE(m_scratch);
+     delete [] m_tld;
+     if (m_param->lookaheadThreads > 0)
+-- 
+2.39.3 (Apple Git-145)
+
