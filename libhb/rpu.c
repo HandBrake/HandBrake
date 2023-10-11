@@ -187,8 +187,15 @@ static int rpu_work(hb_filter_object_t *filter,
     hb_filter_private_t *pv = filter->private_data;
     hb_buffer_t *in = *buf_in;
 
+    if (in->s.flags & HB_BUF_FLAG_EOF)
+    {
+        *buf_out = in;
+        *buf_in = NULL;
+        return HB_FILTER_DONE;
+    }
+
     // libavcodec hevc decoder seems to be missing some rpu
-    // a specific sample file, work around the issue
+    // in a specific sample file, work around the issue
     // by using the last seen rpu
     apply_rpu_if_needed(pv, in);
 
@@ -198,6 +205,12 @@ static int rpu_work(hb_filter_object_t *filter,
         if (side_data->type == AV_FRAME_DATA_DOVI_RPU_BUFFER)
         {
             DoviRpuOpaque *rpu_in = dovi_parse_unspec62_nalu(side_data->data, side_data->size);
+
+            if (rpu_in == NULL)
+            {
+                hb_log("rpu: dovi_parse_unspec62_nalu failed");
+                break;
+            }
 
             if (pv->mode & 2)
             {
@@ -293,6 +306,8 @@ static int rpu_work(hb_filter_object_t *filter,
                     hb_log("dovi_write_unspec62_nalu failed");
                 }
             }
+
+            dovi_rpu_free(rpu_in);
 
             break;
         }

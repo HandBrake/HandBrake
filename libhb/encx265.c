@@ -606,6 +606,11 @@ void encx265Close(hb_work_object_t *w)
 
     pv->api->param_free(pv->param);
     pv->api->encoder_close(pv->x265);
+    // x265 has got some global variables that prevents
+    // multiple encode with different settings in the same process
+    // Clean-up it here to avoid unneccessary memory pressure,
+    // they will be recreated in the next encode
+    pv->api->cleanup();
     free(pv->csvfn);
     av_freep(&pv->sei_data);
     free(pv);

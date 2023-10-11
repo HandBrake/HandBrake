@@ -375,6 +375,10 @@ void encsvtClose(hb_work_object_t *w)
     }
     if (pv->in_buf)
     {
+        if (pv->in_buf->metadata)
+        {
+            svt_metadata_array_free(&pv->in_buf->metadata);
+        }
         av_free(pv->in_buf->p_buffer);
         av_freep(&pv->in_buf);
     }
