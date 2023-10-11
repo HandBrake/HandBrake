@@ -1125,7 +1125,7 @@ static OSStatus init_vtsession(hb_work_object_t *w, hb_job_t *job, hb_work_priva
     // Multi-pass
     if (job->pass_id == HB_PASS_ENCODE_ANALYSIS && cookieOnly == 0)
     {
-        const char *filename = hb_get_temporary_filename("videotoolbox.log");
+        char *filename = hb_get_temporary_filename("videotoolbox.log");
 
         CFStringRef path = CFStringCreateWithCString(kCFAllocatorDefault, filename, kCFStringEncodingUTF8);
         CFURLRef url = CFURLCreateWithFileSystemPath(NULL, path, kCFURLPOSIXPathStyle, FALSE);
@@ -1152,8 +1152,9 @@ static OSStatus init_vtsession(hb_work_object_t *w, hb_job_t *job, hb_work_priva
             }
         }
 
-        CFRelease(path);
         CFRelease(url);
+        CFRelease(path);
+        free(filename);
     }
 
     err = VTCompressionSessionPrepareToEncodeFrames(pv->session);
@@ -1353,9 +1354,10 @@ static OSStatus reuse_vtsession(hb_work_object_t *w, hb_job_t * job, hb_work_pri
         set_h265_cookie(w, context->format);
     }
 
-    pv->queue = context->queue;
     pv->session = context->session;
     pv->passStorage = context->passStorage;
+    pv->queue = context->queue;
+    pv->format = context->format;
 
     if (err != noErr)
     {
@@ -1401,8 +1403,8 @@ static OSStatus reuse_vtsession(hb_work_object_t *w, hb_job_t * job, hb_work_pri
         CFRelease(allowFrameReordering);
     }
 
-    interjob->context = NULL;
     free(context);
+    interjob->context = NULL;
 
     return err;
 }

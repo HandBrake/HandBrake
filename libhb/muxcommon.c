@@ -563,12 +563,9 @@ static void muxClose( hb_work_object_t * muxer )
         {
             hb_buffer_close( &b );
         }
-        if( track->mux_data )
-        {
-            free( track->mux_data );
-            free( track->mf.fifo );
-        }
-        free( track );
+        free(track->mux_data);
+        free(track->mf.fifo);
+        free(track);
     }
     free(mux->track);
     hb_unlock( mux->mutex );
