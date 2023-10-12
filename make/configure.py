@@ -2259,12 +2259,14 @@ int main()
             stdout.write( 'You may now examine the output.\n' )
         else:
             stdout.write( 'You may now cd into %s and examine the output.\n' % (cfg.build_dir) )
+        sys.exit( launcher.returncode )
     else:
         stdout.write( print_bold( 'Build is configured!\n' ) )
         if nocd:
             stdout.write( 'You may now run make (%s).\n' % (Tools.gmake.pathname) )
         else:
             stdout.write( 'You may now cd into %s and run make (%s).\n' % (cfg.build_dir,Tools.gmake.pathname) )
+        sys.exit( 0 )
 
 except AbortError as x:
     stderr.write( '\n%s\n\n' % print_red( 'ERROR: %s' % x ) )
@@ -2273,8 +2275,3 @@ except AbortError as x:
     except:
         pass
     sys.exit( 1 )
-
-if options.launch:
-    sys.exit( launcher.returncode )
-else:
-    sys.exit( 0 )
