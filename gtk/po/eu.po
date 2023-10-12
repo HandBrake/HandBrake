@@ -1,25 +1,24 @@
 # SOME DESCRIPTIVE TITLE.
-# Copyright (C) 2023 HandBrake Team
+# Copyright (C) YEAR HandBrake Team
 # This file is distributed under the same license as the ghb package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, 2023.
-#
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# 
 # Translators:
 # arrakala EuskalEncodings, 2023
-#
+# 
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: ghb 0.1\n"
+"Project-Id-Version: ghb 1.6.0-git-a6a111e86\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-09-20 09:46+0100\n"
 "PO-Revision-Date: 2018-10-10 18:14+0000\n"
 "Last-Translator: arrakala EuskalEncodings, 2023\n"
-"Language-Team: Basque (https://www.transifex.com/HandBrakeProject/"
-"teams/92423/eu/)\n"
-"Language: eu\n"
+"Language-Team: Basque (https://app.transifex.com/HandBrakeProject/teams/92423/eu/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: eu\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: data/fr.handbrake.ghb.desktop.in:3 src/ui-gtk3/ghb.ui:2236
@@ -44,11 +43,11 @@ msgstr "_Fitxategia"
 
 #: src/ui-gtk3/menu.ui:11
 msgid "_Open Source"
-msgstr ""
+msgstr "_Ireki Iturburua"
 
 #: src/ui-gtk3/menu.ui:16
 msgid "Open _Directory"
-msgstr ""
+msgstr "Ireki_direktorioa"
 
 #: src/ui-gtk3/menu.ui:21
 msgid "Set _Destination"
@@ -76,7 +75,7 @@ msgstr "Gehitu batzuk"
 
 #: src/ui-gtk3/menu.ui:53
 msgid "Add A_ll"
-msgstr ""
+msgstr "Gehitu A_ll"
 
 #: src/ui-gtk3/menu.ui:60
 msgid "_Start Encoding"
@@ -507,31 +506,17 @@ msgstr ""
 
 #: src/ui-gtk3/ghb.ui:2050
 msgid ""
-"HandBrake is free software; you can redistribute it and/or modify it under "
-"the terms of the GNU General Public License version 2, as published by the "
-"Free Software Foundation.\n"
+"HandBrake is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License version 2, as published by the Free Software Foundation.\n"
 "\n"
-"HandBrake is distributed in the hope that it will be useful, but WITHOUT ANY "
-"WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS "
-"FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more "
-"details.\n"
+"HandBrake is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.\n"
 "\n"
-"You should have received a copy of the GNU General Public License along with "
-"Glade; if not, write to the Free Software Foundation, Inc., 51 Franklin "
-"Street, Fifth Floor, Boston, MA 02110-1301, USA."
+"You should have received a copy of the GNU General Public License along with Glade; if not, write to the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA."
 msgstr ""
-"HandBrake software librekoa da; birbana dezakezu eta/edo aldatu GNU "
-"Lizentzia Publiko Orokorraren baldintzen arabera Free Software Foundation-ek "
-"argitaratutakoaren arabera, lizentziaren 2. bertsioan.\n"
+"HandBrake software librekoa da; birbana dezakezu eta/edo aldatu GNU Lizentzia Publiko Orokorraren baldintzen arabera Free Software Foundation-ek argitaratutakoaren arabera, lizentziaren 2. bertsioan.\n"
 "\n"
-"Programa hau erabilgarria izango den itxaropenarekin banatzen da, baina "
-"INOLAKO BERMErik GABE; eta MERKATARITZARAKO edo HELBURU BATEKO "
-"EGOKITASUNAREN berme inpliziturik gabe. Ikusi GNU Lizentzia Publiko Orokorra "
-"xehetasun gehiagorako.\n"
+"Programa hau erabilgarria izango den itxaropenarekin banatzen da, baina INOLAKO BERMErik GABE; eta MERKATARITZARAKO edo HELBURU BATEKO EGOKITASUNAREN berme inpliziturik gabe. Ikusi GNU Lizentzia Publiko Orokorra xehetasun gehiagorako.\n"
 "\n"
-"GNU Lizentzia Publiko Orokorraren kopia bat jaso beharko zenuke programa "
-"honekin batera; hala ez bada, idatzi hona: Free Software Foundation, Inc., "
-"51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA."
+"GNU Lizentzia Publiko Orokorraren kopia bat jaso beharko zenuke programa honekin batera; hala ez bada, idatzi hona: Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA."
 
 #: src/ui-gtk3/ghb.ui:2273 src/callbacks.c:4339
 msgid "Choose Video Source"
@@ -691,8 +676,7 @@ msgid ""
 "This allows a player to initiate playback before downloading the entire file."
 msgstr ""
 "Optimizatu MP4 fitxategiaren diseinua deskarga progresiboetarako.\n"
-"Horrela erreproduzigailuak erreprodukzioa has dezake fitxategi osoa "
-"deskargatu aurretik."
+"Horrela erreproduzigailuak erreprodukzioa has dezake fitxategi osoa deskargatu aurretik."
 
 #: src/ui-gtk3/ghb.ui:2924
 msgid "Align A/V Start"
@@ -705,10 +689,8 @@ msgid ""
 "sync for broken players that do not honor MP4 edit lists."
 msgstr ""
 "Audio eta bideo transmisio guztien hasierako kronogramak lerrokatzen ditu\n"
-"marko zuriak edo prezipitazio-markoak txertatuta. Audio/bideoa "
-"sinkronizazioa\n"
-"hobetu dezake MP4 editatzeko zerrendak errespetatzen ez dituzten "
-"erreproduzitzaileentzat."
+"marko zuriak edo prezipitazio-markoak txertatuta. Audio/bideoa sinkronizazioa\n"
+"hobetu dezake MP4 editatzeko zerrendak errespetatzen ez dituzten erreproduzitzaileentzat."
 
 #: src/ui-gtk3/ghb.ui:2946
 msgid "iPod 5G Support"
@@ -857,8 +839,7 @@ msgstr ""
 "biltegiratze bereizmena jatorrizko\n"
 "bistaratzeko aspektu erlazioa gordez.\n"
 "Bat ere ez - Behartu pixelen aspektu erlazioa 1:1era.\n"
-"Pertsonalizatua - Aukeratu pixelen aspektu erlazio pertsonalizatua.</tt></"
-"small>"
+"Pertsonalizatua - Aukeratu pixelen aspektu erlazio pertsonalizatua.</tt></small>"
 
 #: src/ui-gtk3/ghb.ui:3730
 msgid "Pixel Aspect:"
@@ -868,14 +849,12 @@ msgstr "Pixel proportzioa"
 msgid ""
 "Pixel aspect defines the shape of the pixels.\n"
 "\n"
-"A 1:1 ratio defines a square pixel.  Other values define rectangular "
-"shapes.\n"
+"A 1:1 ratio defines a square pixel.  Other values define rectangular shapes.\n"
 "Players will scale the image in order to achieve the specified aspect."
 msgstr ""
 "Pixelen itxurak pixelen forma definitzen du.\n"
 "\n"
-"1:1 erlazioak pixel karratu bat definitzen du. Beste balio batzuek forma "
-"angeluzuzenak definitzen dituzte.\n"
+"1:1 erlazioak pixel karratu bat definitzen du. Beste balio batzuek forma angeluzuzenak definitzen dituzte.\n"
 "Erreproduzitzaileek irudia eskalatuko dute zehaztutako itxura lortzeko."
 
 #: src/ui-gtk3/ghb.ui:3765
@@ -885,13 +864,11 @@ msgstr ":"
 #: src/ui-gtk3/ghb.ui:3780
 msgid ""
 "Pixel aspect defines the shape of the pixels.\n"
-"A 1:1 ratio defines a square pixel.  Other values define rectangular "
-"shapes.\n"
+"A 1:1 ratio defines a square pixel.  Other values define rectangular shapes.\n"
 "Players will scale the image in order to achieve the specified aspect."
 msgstr ""
 "Pixelen itxurak pixelen forma definitzen du.\n"
-"1:1 erlazioak pixel karratu bat definitzen du. Beste balio batzuek forma "
-"angeluzuzenak definitzen dituzte.\n"
+"1:1 erlazioak pixel karratu bat definitzen du. Beste balio batzuek forma angeluzuzenak definitzen dituzte.\n"
 "Erreproduzitzaileek irudia eskalatuko dute zehaztutako itxura lortzeko."
 
 #: src/ui-gtk3/ghb.ui:3799
@@ -901,22 +878,18 @@ msgstr "Tamaina eskalatua:"
 #: src/ui-gtk3/ghb.ui:3814
 msgid ""
 "This is the width that the video will be stored at.\n"
-"The actual display dimensions will differ if the pixel aspect ratio is not "
-"1:1."
+"The actual display dimensions will differ if the pixel aspect ratio is not 1:1."
 msgstr ""
 "Bideoa zabalera honekin biltegiratuko da.\n"
-"Bistaratzeko uneko luze-zabalera ez dira berdinak izango baldin eta pixelen "
-"itxuraren proportzioa 1:1 ez bada."
+"Bistaratzeko uneko luze-zabalera ez dira berdinak izango baldin eta pixelen itxuraren proportzioa 1:1 ez bada."
 
 #: src/ui-gtk3/ghb.ui:3847
 msgid ""
 "This is the height that the video will be stored at.\n"
-"The actual display dimensions will differ if the pixel aspect ratio is not "
-"1:1."
+"The actual display dimensions will differ if the pixel aspect ratio is not 1:1."
 msgstr ""
 "Bideoa altuera honekin biltegiratuko da.\n"
-"Bistaratzeko uneko luze-zabalera ez dira berdinak izango baldin eta pixelen "
-"itxuraren proportzioa 1:1 ez bada."
+"Bistaratzeko uneko luze-zabalera ez dira berdinak izango baldin eta pixelen itxuraren proportzioa 1:1 ez bada."
 
 #: src/ui-gtk3/ghb.ui:3861
 msgid "Optimal Size"
@@ -931,7 +904,8 @@ msgid "Allow Upscaling"
 msgstr "Baimendu handitzea"
 
 #: src/ui-gtk3/ghb.ui:3886
-msgid "If not enabled, scaled dimensions will be limited to source dimensions."
+msgid ""
+"If not enabled, scaled dimensions will be limited to source dimensions."
 msgstr ""
 "Gaitzen ez bada, eskalatutako dimentsioak iturburuaren dimentsioetara "
 "mugatuko dira."
@@ -1001,14 +975,11 @@ msgstr "Detelecine:"
 msgid ""
 "This filter removes 'combing' artifacts that are the result of telecining.\n"
 "\n"
-"Telecining is a process that adjusts film framerates that are 24fps to NTSC "
-"video frame rates which are 30fps."
+"Telecining is a process that adjusts film framerates that are 24fps to NTSC video frame rates which are 30fps."
 msgstr ""
-"Iragazki honek Telezinearen ondorioz sortzen diren artefaktuak kentzen "
-"ditu.\n"
+"Iragazki honek Telezinearen ondorioz sortzen diren artefaktuak kentzen ditu.\n"
 "\n"
-"Telezinea 24 fps dauden filmen fotograma-abiadurak 30 fps-ra doitzeko "
-"prozesua da."
+"Telezinea 24 fps dauden filmen fotograma-abiadurak 30 fps-ra doitzeko prozesua da."
 
 #: src/ui-gtk3/ghb.ui:4367 src/ui-gtk3/ghb.ui:4913
 msgid ""
@@ -1072,6 +1043,10 @@ msgid ""
 "    The deinterlace filter is a classic YADIF deinterlacer.\n"
 "    "
 msgstr ""
+"Aukeratu decomb edo desentralazatze iragazkien aukerak.\n"
+"\n"
+"Dcomb iragazkiak interpolazio-algoritmo ugari onartzen ditu.\n"
+"Desentralazatze iragazkia YADIF desentralazatze klasikoa da."
 
 #: src/ui-gtk3/ghb.ui:4521
 msgid "Deblock Filter:"
@@ -1082,8 +1057,7 @@ msgid ""
 "The deblocking filter removes a common type of compression artifact.\n"
 "If your source exhibits 'blockiness', this filter may help clean it up."
 msgstr ""
-"Desbloketze iragazkiak konpresioak sortutako bloke artefaktu arruntak "
-"kentzen ditu.\n"
+"Desbloketze iragazkiak konpresioak sortutako bloke artefaktu arruntak kentzen ditu.\n"
 "Zure iturburuak baldin baditu, iragazki honek garbitzen lagun dezake."
 
 #: src/ui-gtk3/ghb.ui:4561 src/ui-gtk3/ghb.ui:4664 src/ui-gtk3/ghb.ui:4744
@@ -1096,6 +1070,8 @@ msgid ""
 "The deblocking filter removes a common type of compression artifact.\n"
 "    If your source exhibits 'blockiness', this filter may help clean it up."
 msgstr ""
+"Deblock iragazkiak konpresio-artefaktu arruntak kentzen ditu.\n"
+"Zure iturburuak artefaktu hauek erakusten baditu, iragazki honek garbitzen lagun dezake."
 
 #: src/ui-gtk3/ghb.ui:4579 src/ui-gtk3/ghb.ui:4762
 msgid ""
@@ -1103,6 +1079,9 @@ msgid ""
 "\n"
 "    strength=weak|strong:thresh=0-100:blocksize=4-512"
 msgstr ""
+"Deblock iragazkiaren kate-formatu pertsonalizatua\n"
+"\n"
+"    strength=weak|strong:thresh=0-100:blocksize=4-512"
 
 #: src/ui-gtk3/ghb.ui:4600
 msgid "Denoise Filter:"
@@ -1111,23 +1090,22 @@ msgstr "Denoise iragazkia:"
 #: src/ui-gtk3/ghb.ui:4616
 msgid ""
 "Denoise filtering reduces or removes the appearance of noise and grain.\n"
-"Film grain and other types of high frequency noise are difficult to "
-"compress.\n"
+"Film grain and other types of high frequency noise are difficult to compress.\n"
 "Using this filter on such sources can result in smaller file sizes."
 msgstr ""
 "Denoise iragazkiak irudiaren zarata eta garaua murriztu edo kentzen du.\n"
-"Filmetako garaua eta frekuentzia handiko beste zarata mota batzuk zailak "
-"dira konprimitzen.\n"
-"Iturburu horietan iragazki hau erabiltzeak fitxategi-tamaina txikiagoak ekar "
-"ditzake."
+"Filmetako garaua eta frekuentzia handiko beste zarata mota batzuk zailak dira konprimitzen.\n"
+"Iturburu horietan iragazki hau erabiltzeak fitxategi-tamaina txikiagoak ekar ditzake."
 
 #: src/ui-gtk3/ghb.ui:4651 src/ui-gtk3/ghb.ui:4674
 msgid ""
 "Denoise filtering reduces or removes the appearance of noise and grain.\n"
-"    Film grain and other types of high frequency noise are difficult to "
-"compress.\n"
+"    Film grain and other types of high frequency noise are difficult to compress.\n"
 "    Using this filter on such sources can result in smaller file sizes."
 msgstr ""
+"Denoise iragazkiak zarata eta pikorra murrizten edo kentzen du.\n"
+"Filmaren pikorra eta frekuentzia handiko beste zarata mota batzuk zailak dira konprimitzen.\n"
+"Iturburu horietan iragazki hau erabiltzeak fitxategi-tamaina txikiagoak ekar ditzake."
 
 #: src/ui-gtk3/ghb.ui:4683 src/ui-gtk3/ghb.ui:4863
 msgid ""
@@ -1135,6 +1113,9 @@ msgid ""
 "\n"
 "    SpatialLuma:SpatialChroma:TemporalLuma:TemporalChroma"
 msgstr ""
+"Denoise iragazkiaren kate-formatu pertsonalizatua\n"
+"\n"
+"    SpatialLuma:SpatialChroma:TemporalLuma:TemporalChroma"
 
 #: src/ui-gtk3/ghb.ui:4704
 msgid "Chroma Smooth Filter:"
@@ -1146,14 +1127,15 @@ msgid ""
 "Lower resolution analog source content may benefit from this filter."
 msgstr ""
 "Kroma leuntze iragazkiak kolore-artefaktu arruntak desagerrarazten ditu.\n"
-"Bereizmen baxuko iturri analogikoko edukientzat iragazki hau onuragarria "
-"izan daiteke."
+"Bereizmen baxuko iturri analogikoko edukientzat iragazki hau onuragarria izan daiteke."
 
 #: src/ui-gtk3/ghb.ui:4754
 msgid ""
 "The chroma smooth filter removes common color artifacts.\n"
 "    Lower resolution analog source content may benefit from this filter."
 msgstr ""
+"Kroma-iragazki leunak kolore-artefaktu arruntak kentzen ditu.\n"
+"Bereizmen baxuko iturri analogikoko edukientzat onuragarria izan daiteke."
 
 #: src/ui-gtk3/ghb.ui:4783
 msgid "Sharpen Filter:"
@@ -1172,6 +1154,8 @@ msgid ""
 "Sharpen filtering enhances edges and other\n"
 "    high frequency components in the video."
 msgstr ""
+"Zorrozte iragazkiak bidoaren ertzak eta \n"
+"frekuentzia handiko beste konponente batzuk hobetzen ditu."
 
 #: src/ui-gtk3/ghb.ui:4884
 msgid "Colorspace:"
@@ -1215,8 +1199,7 @@ msgstr ""
 "Irteerako fotograma-tasa.\n"
 "\n"
 "\"Iturburuaren berdina\" gomendatzen da. Zure iturburuko bideoak\n"
-"fotograma-tasa aldakorra badu, 'Iturburuaren berdina' aukerak errespetatuko "
-"du."
+"fotograma-tasa aldakorra badu, 'Iturburuaren berdina' aukerak errespetatuko du."
 
 #: src/ui-gtk3/ghb.ui:5042
 msgid "Constant Framerate"
@@ -1275,12 +1258,9 @@ msgstr ""
 "Kodetzaileek kalitate jakin bat dute helburu.\n"
 "Bideo-kodetzaile bakoitzak erabiltzen duen eskala desberdina da.\n"
 "\n"
-"x264-ren eskala logaritmikoa da eta balio baxuagoak kalitate handiagoari "
-"dagozkio.\n"
-"Beraz, balioaren murrizketa txikiek igoera gero eta handiagoak izango "
-"dituzte\n"
-"fitxategiaren tamainan. 0 balioak galerarik gabekoa esan nahi du eta "
-"jatorrizko fitxategia baino handiagoa den fitxategia sortuko du,\n"
+"x264-ren eskala logaritmikoa da eta balio baxuagoak kalitate handiagoari dagozkio.\n"
+"Beraz, balioaren murrizketa txikiek igoera gero eta handiagoak izango dituzte\n"
+"fitxategiaren tamainan. 0 balioak galerarik gabekoa esan nahi du eta jatorrizko fitxategia baino handiagoa den fitxategia sortuko du,\n"
 "iturria ere galerarik gabekoa izan ezean.\n"
 "\n"
 "FFMpeg eta Theora-ren eskalak linealagoak dira.\n"
@@ -1299,56 +1279,55 @@ msgid ""
 "Set the average bitrate.\n"
 "\n"
 "The instantaneous bitrate can be much higher or lower at any point in time.\n"
-"But the average over a long duration will be the value set here.  If you "
-"need\n"
-"to limit instantaneous bitrate, look into x264's vbv-bufsize and vbv-maxrate "
-"settings."
+"But the average over a long duration will be the value set here.  If you need\n"
+"to limit instantaneous bitrate, look into x264's vbv-bufsize and vbv-maxrate settings."
 msgstr ""
 "Ezarri batez besteko bit-tasa.\n"
 "\n"
 "Momentuko bit-tasa handiagoa edo txikiagoa izan daiteke edozein unetan.\n"
-"Baina iraupen luzeko batez bestekoa hemen ezarritako balioa izango da. Behar "
-"baduzu\n"
-"momentuko bit-tasa mugatzeko, begiratu x264-ren vbv-bufsize eta vbv-maxrate "
-"ezarpenak."
+"Baina iraupen luzeko batez bestekoa hemen ezarritako balioa izango da. Behar baduzu\n"
+"momentuko bit-tasa mugatzeko, begiratu x264-ren vbv-bufsize eta vbv-maxrate ezarpenak."
 
 #: src/ui-gtk3/ghb.ui:5227
 msgid "Multi-Pass Encoding"
-msgstr ""
+msgstr "Itzuli anitzeko kodeketa"
 
 #: src/ui-gtk3/ghb.ui:5232
 msgid ""
 "Perform Multi Pass Encoding.\n"
 "\n"
-"The 'Bitrate' option is prerequisite. During the analysis passes, statistics "
-"about\n"
+"The 'Bitrate' option is prerequisite. During the analysis passes, statistics about\n"
 "the video are collected.  Then in the final pass, those statistics are used\n"
 "to make bitrate allocation decisions."
 msgstr ""
+"Egin itzuli anitzeko kodeketa.\n"
+"\n"
+"'Bitrate' aukera ezinbestekoa da. Analisi itzulian, bideoari buruzko estatistikak\n"
+"biltzen dira. Ondoren, azken itzulian, estatistika horiek erabiltzen dira\n"
+"bitratea esleitzeko erabakiak hartzeko."
 
 #: src/ui-gtk3/ghb.ui:5250
 msgid "Turbo Analysis Pass"
-msgstr ""
+msgstr "Analisi azkarreko itzulia"
 
 #: src/ui-gtk3/ghb.ui:5255
 msgid ""
 "During the analysis pass of a multi pass encode, use settings that speed "
 "things along."
 msgstr ""
+"Itzuli anitzeko kodeketa baten analisi itzulian, gauzak azkartzen dituen "
+"ezarpenak erabili."
 
 #: src/ui-gtk3/ghb.ui:5317
 msgid ""
-"Adjusts encoder settings to trade off compression efficiency against "
-"encoding speed.\n"
+"Adjusts encoder settings to trade off compression efficiency against encoding speed.\n"
 "\n"
 "This establishes your default encoder settings.\n"
 "Tunes, profiles, levels and extra options string will be applied to this.\n"
-"You should generally set this option to the slowest you can bear since "
-"slower\n"
+"You should generally set this option to the slowest you can bear since slower\n"
 "settings will result in better quality or smaller files."
 msgstr ""
-"Kodetzailearen ezarpenak doitzen ditu eraginkortasuna eta abiadura "
-"orekatzeko.\n"
+"Kodetzailearen ezarpenak doitzen ditu eraginkortasuna eta abiadura orekatzeko.\n"
 "\n"
 "Honek zure kodetzailearen ezarpen lehenetsiak ezartzen ditu.\n"
 "Tonuak, profilak, mailak eta aukera gehigarriak aplikatuko zaizkio.\n"
@@ -1366,8 +1345,7 @@ msgstr ""
 "Doitu ezarpenak ohiko egoeretarako optimizatzeko.\n"
 "\n"
 "Honek eraginkortasuna hobetu dezake iturriaren irteerako \n"
-"ezaugarri jakin baterako. Aldaketak aurrezarpenaren ondoren aplikatuko "
-"dira,\n"
+"ezaugarri jakin baterako. Aldaketak aurrezarpenaren ondoren aplikatuko dira,\n"
 "baina beste parametro guztien aurretik."
 
 #: src/ui-gtk3/ghb.ui:5376
@@ -1382,8 +1360,7 @@ msgid ""
 msgstr ""
 "Murriztu kodetzailearen CPUaren erabilera. \n"
 "\n"
-"Ezarri hau zure gailuak irteera erreproduzitzeko zailtasunak baditu "
-"(fotograma eroriak adibidez)."
+"Ezarri hau zure gailuak irteera erreproduzitzeko zailtasunak baditu (fotograma eroriak adibidez)."
 
 #: src/ui-gtk3/ghb.ui:5399
 msgid "Zero Latency"
@@ -1488,8 +1465,7 @@ msgstr "Aukeratu iturburuko zein audio pista erabili diren."
 #: src/ui-gtk3/ghb.ui:5798
 msgid ""
 "Create a list of languages you would like to select audio for.\n"
-"Tracks matching these languages will be selected using the chosen Selection "
-"Behavior."
+"Tracks matching these languages will be selected using the chosen Selection Behavior."
 msgstr ""
 "Sortu zerrenda bat audiorako aukeratu nahi dituzun hizkuntzekin.\n"
 "Hizkuntza hauekin bat datozen pistak automatikoki hautatu ahal izango dira."
@@ -1513,12 +1489,10 @@ msgstr "Erabili soilik lehenengo kodetzailea audio sekundariorako."
 #: src/ui-gtk3/ghb.ui:5881
 msgid ""
 "Only the primary audio track will be encoded with the full encoder list.\n"
-"All other secondary audio output tracks will be encoded with first encoder "
-"only."
+"All other secondary audio output tracks will be encoded with first encoder only."
 msgstr ""
 "Audio-pista nagusia bakarrik kodetuko da kodetzaileen zerrenda osoarekin.\n"
-"Bigarren mailako gainerako audio pista guztiak lehen kodetzailearekin "
-"bakarrik kodetuko dira."
+"Bigarren mailako gainerako audio pista guztiak lehen kodetzailearekin bakarrik kodetuko dira."
 
 #: src/ui-gtk3/ghb.ui:5917
 msgid "Auto Passthru:"
@@ -1531,8 +1505,7 @@ msgstr "MP2"
 #: src/ui-gtk3/ghb.ui:5933
 msgid ""
 "Enable this if your playback device supports MP2.\n"
-"This permits MP2 passthru to be selected when automatic passthru selection "
-"is enabled."
+"This permits MP2 passthru to be selected when automatic passthru selection is enabled."
 msgstr ""
 "Gaitu hau zure erreprodukzio-gailuak MP2 onartzen badu.\n"
 "Honen bidez, MP2 aukera daiteke aukeraketa automatikoa gaituta dagoenean."
@@ -1544,8 +1517,7 @@ msgstr "MP3"
 #: src/ui-gtk3/ghb.ui:5954
 msgid ""
 "Enable this if your playback device supports MP3.\n"
-"This permits MP3 passthru to be selected when automatic passthru selection "
-"is enabled."
+"This permits MP3 passthru to be selected when automatic passthru selection is enabled."
 msgstr ""
 "Gaitu hau zure erreprodukzio-gailuak MP3 onartzen badu.\n"
 "Honen bidez, MP3 aukera daiteke aukeraketa automatikoa gaituta dagoenean."
@@ -1557,8 +1529,7 @@ msgstr "AC-3"
 #: src/ui-gtk3/ghb.ui:5975
 msgid ""
 "Enable this if your playback device supports AC-3.\n"
-"This permits AC-3 passthru to be selected when automatic passthru selection "
-"is enabled."
+"This permits AC-3 passthru to be selected when automatic passthru selection is enabled."
 msgstr ""
 "Gaitu hau zure erreprodukzio-gailuak AC-3 onartzen badu.\n"
 "Honen bidez, AC-3 aukera daiteke aukeraketa automatikoa gaituta dagoenean."
@@ -1570,8 +1541,7 @@ msgstr "EAC-3"
 #: src/ui-gtk3/ghb.ui:5996
 msgid ""
 "Enable this if your playback device supports EAC-3.\n"
-"This permits EAC-3 passthru to be selected when automatic passthru selection "
-"is enabled."
+"This permits EAC-3 passthru to be selected when automatic passthru selection is enabled."
 msgstr ""
 "Gaitu hau zure erreprodukzio-gailuak EAC-3 onartzen badu.\n"
 "Honen bidez, EAC-3 aukera daiteke aukeraketa automatikoa gaituta dagoenean."
@@ -1583,8 +1553,7 @@ msgstr "DTS"
 #: src/ui-gtk3/ghb.ui:6017
 msgid ""
 "Enable this if your playback device supports DTS.\n"
-"This permits DTS passthru to be selected when automatic passthru selection "
-"is enabled."
+"This permits DTS passthru to be selected when automatic passthru selection is enabled."
 msgstr ""
 "Gaitu hau zure erreprodukzio-gailuak DTS onartzen badu.\n"
 "Honen bidez, DTS aukera daiteke aukeraketa automatikoa gaituta dagoenean."
@@ -1596,8 +1565,7 @@ msgstr "DTS-HD"
 #: src/ui-gtk3/ghb.ui:6038
 msgid ""
 "Enable this if your playback device supports DTS-HD.\n"
-"This permits DTS-HD passthru to be selected when automatic passthru "
-"selection is enabled."
+"This permits DTS-HD passthru to be selected when automatic passthru selection is enabled."
 msgstr ""
 "Gaitu hau zure erreprodukzio-gailuak DTS-HD onartzen badu.\n"
 "Honen bidez, DTS-HD aukera daiteke aukeraketa automatikoa gaituta dagoenean."
@@ -1609,8 +1577,7 @@ msgstr "TrueHD"
 #: src/ui-gtk3/ghb.ui:6059
 msgid ""
 "Enable this if your playback device supports TrueHD.\n"
-"This permits TrueHD passthru to be selected when automatic passthru "
-"selection is enabled."
+"This permits TrueHD passthru to be selected when automatic passthru selection is enabled."
 msgstr ""
 "Gaitu hau zure erreprodukzio-gailuak TrueHD onartzen badu.\n"
 "Honen bidez, TrueHD aukera daiteke aukeraketa automatikoa gaituta dagoenean."
@@ -1622,8 +1589,7 @@ msgstr "FLAC"
 #: src/ui-gtk3/ghb.ui:6080
 msgid ""
 "Enable this if your playback device supports FLAC.\n"
-"This permits FLAC passthru to be selected when automatic passthru selection "
-"is enabled."
+"This permits FLAC passthru to be selected when automatic passthru selection is enabled."
 msgstr ""
 "Gaitu hau zure erreprodukzio-gailuak FLAC onartzen badu.\n"
 "Honen bidez, FLAC aukera daiteke aukeraketa automatikoa gaituta dagoenean."
@@ -1635,8 +1601,7 @@ msgstr "AAC"
 #: src/ui-gtk3/ghb.ui:6101
 msgid ""
 "Enable this if your playback device supports AAC.\n"
-"This permits AAC passthru to be selected when automatic passthru selection "
-"is enabled."
+"This permits AAC passthru to be selected when automatic passthru selection is enabled."
 msgstr ""
 "Gaitu hau zure erreprodukzio-gailuak AAC onartzen badu.\n"
 "Honen bidez, AAC aukera daiteke aukeraketa automatikoa gaituta dagoenean."
@@ -1648,8 +1613,7 @@ msgstr "Opus"
 #: src/ui-gtk3/ghb.ui:6122
 msgid ""
 "Enable this if your playback device supports Opus.\n"
-"This permits Opus passthru to be selected when automatic passthru selection "
-"is enabled."
+"This permits Opus passthru to be selected when automatic passthru selection is enabled."
 msgstr ""
 "Gaitu hau zure erreprodukzio-gailuak Opus onartzen badu.\n"
 "Honen bidez, Opus aukera daiteke aukeraketa automatikoa gaituta dagoenean."
@@ -1663,8 +1627,8 @@ msgid ""
 "Set the audio codec to encode with when a suitable track can not be found "
 "for audio passthru."
 msgstr ""
-"Ezarri audioa kodek honekin kodetzeko, audioaren pasabiderako pista egokirik "
-"aurkitu ezin denean."
+"Ezarri audioa kodek honekin kodetzeko, audioaren pasabiderako pista egokirik"
+" aurkitu ezin denean."
 
 #: src/ui-gtk3/ghb.ui:6196
 msgid "<b>Audio Encoder Settings:</b>"
@@ -1717,7 +1681,8 @@ msgid "Add all subtitle tracks to the list"
 msgstr "Gehitu azpitituluen pista guztiak zerrendara"
 
 #: src/ui-gtk3/ghb.ui:6414 src/callbacks.c:2344 src/queuehandler.c:647
-#: src/queuehandler.c:1083 src/subtitlehandler.c:414 src/subtitlehandler.c:1221
+#: src/queuehandler.c:1083 src/subtitlehandler.c:414
+#: src/subtitlehandler.c:1221
 msgid "Foreign Audio Scan"
 msgstr "Kanpoko audioaren eskaneatzea"
 
@@ -1742,18 +1707,15 @@ msgstr "Aukeratu iturburuaren azpititulu pistetatik zein erabiltzen diren."
 #: src/ui-gtk3/ghb.ui:6590
 msgid ""
 "Create a list of languages you would like to select subtitles for.\n"
-"Tracks matching these languages will be selected using the chosen Selection "
-"Behavior.\n"
+"Tracks matching these languages will be selected using the chosen Selection Behavior.\n"
 "\n"
-"The first language in this list is your \"preferred\" language and will be "
-"used\n"
+"The first language in this list is your \"preferred\" language and will be used\n"
 "for determining subtitle selection settings when there is foreign audio."
 msgstr ""
 "Sortu azpitituluak hautatu nahi dituzun hizkuntzen zerrenda.\n"
 "Hizkuntza hauekin bat datozen pistak automatikoki hautatu ahal izango dira.\n"
 "\n"
-"Zerrenda honetako lehen hizkuntza zure hizkuntza \"gogokoena\" izango da "
-"eta\n"
+"Zerrenda honetako lehen hizkuntza zure hizkuntza \"gogokoena\" izango da eta\n"
 "kanpoko audioa dagoenean azpitituluak zehazteko aukeratuko da."
 
 #: src/ui-gtk3/ghb.ui:6671
@@ -1766,20 +1728,15 @@ msgstr "Gehitu kanpoko audioa eskaneatzea"
 
 #: src/ui-gtk3/ghb.ui:6703
 msgid ""
-"Add \"Foreign Audio Scan\" when the default audio track is your preferred "
-"language.\n"
-"This search pass finds short sequences of foreign audio and provides "
-"subtitles for them.\n"
+"Add \"Foreign Audio Scan\" when the default audio track is your preferred language.\n"
+"This search pass finds short sequences of foreign audio and provides subtitles for them.\n"
 "\n"
 "This option requires a language to be set in the Selected Languages list."
 msgstr ""
-"Gehitu \"Kanpoko audioa eskaneatu\" audio pista lehenetsia zure hizkuntza "
-"gogokoena denean.\n"
-"Bilaketa honek atzerriko audioaren sekuentzia laburrak aurkitzen ditu eta "
-"horien azpitituluak eskaintzen ditu.\n"
+"Gehitu \"Kanpoko audioa eskaneatu\" audio pista lehenetsia zure hizkuntza gogokoena denean.\n"
+"Bilaketa honek atzerriko audioaren sekuentzia laburrak aurkitzen ditu eta horien azpitituluak eskaintzen ditu.\n"
 "\n"
-"Aukera honek 'Hautatutako hizkuntzak' zerrendan hizkuntza bat ezarrita "
-"egotea behar du."
+"Aukera honek 'Hautatutako hizkuntzak' zerrendan hizkuntza bat ezarrita egotea behar du."
 
 #: src/ui-gtk3/ghb.ui:6718
 msgid "Add subtitle track if default audio is foreign"
@@ -1787,16 +1744,13 @@ msgstr "Gehitu azpitituluen pista audio lehenetsia kanpokoa denean"
 
 #: src/ui-gtk3/ghb.ui:6723
 msgid ""
-"When the default audio track is not your preferred language, add a subtitle "
-"track.\n"
+"When the default audio track is not your preferred language, add a subtitle track.\n"
 "\n"
 "This option requires a language to be set in the Selected Languages list."
 msgstr ""
-"Audio pista lehenetsia zure hizkuntza gogokoena ez denean, gehitu azpititulu "
-"pista bat.\n"
+"Audio pista lehenetsia zure hizkuntza gogokoena ez denean, gehitu azpititulu pista bat.\n"
 "\n"
-"Aukera honek 'Hautatutako hizkuntzak' zerrendan hizkuntza bat ezarria "
-"edukitzea eskatzen du."
+"Aukera honek 'Hautatutako hizkuntzak' zerrendan hizkuntza bat ezarria edukitzea eskatzen du."
 
 #: src/ui-gtk3/ghb.ui:6737
 msgid "Add Closed Captions when available"
@@ -1818,17 +1772,13 @@ msgstr "Erretzearen portaera*:"
 msgid ""
 "Set the behavior of subtitle \"Burn-In\".\n"
 "\n"
-"Burned-In subtitles are part of the video and can not be disabled during "
-"playback.\n"
-"Only one subtitle track can be burned! Since conflicts can occur, the first "
-"chosen wins."
+"Burned-In subtitles are part of the video and can not be disabled during playback.\n"
+"Only one subtitle track can be burned! Since conflicts can occur, the first chosen wins."
 msgstr ""
 "Ezarri azpitituluak \"erretzearen\" portaera.\n"
 "\n"
-"Erretako azpitituluak bideoaren parte dira eta ezin dira desgaitu "
-"erreprodukzioan.\n"
-"Azpitituluen pista bakarra erre daiteke! Gatazkak gerta daitezkeenez, lehen "
-"aukerak irabazten du."
+"Erretako azpitituluak bideoaren parte dira eta ezin dira desgaitu erreprodukzioan.\n"
+"Azpitituluen pista bakarra erre daiteke! Gatazkak gerta daitezkeenez, lehen aukerak irabazten du."
 
 #: src/ui-gtk3/ghb.ui:6802
 msgid "Burn-In for deficient players*:"
@@ -1840,21 +1790,15 @@ msgstr "DVD azpitituluak"
 
 #: src/ui-gtk3/ghb.ui:6816
 msgid ""
-"Burn the first selected DVD subtitle track. All other DVD subtitle tracks "
-"will be discarded.\n"
-"Use this option if your player software or device does not support DVD "
-"subtitles.\n"
+"Burn the first selected DVD subtitle track. All other DVD subtitle tracks will be discarded.\n"
+"Use this option if your player software or device does not support DVD subtitles.\n"
 "\n"
-"Only one subtitle track can be burned! Since conflicts can occur, the first "
-"chosen wins."
+"Only one subtitle track can be burned! Since conflicts can occur, the first chosen wins."
 msgstr ""
-"Erre hautatutako lehen DVDko azpititulu pista. Beste azpititulu pista "
-"guztiak baztertu egingo dira.\n"
-"Erabili aukera hau zure erreproduzitzailearen softwareak edo gailuak DVD "
-"azpitituluak onartzen ez baditu.\n"
+"Erre hautatutako lehen DVDko azpititulu pista. Beste azpititulu pista guztiak baztertu egingo dira.\n"
+"Erabili aukera hau zure erreproduzitzailearen softwareak edo gailuak DVD azpitituluak onartzen ez baditu.\n"
 "\n"
-"Azpitituluen pista bakarra erre daiteke! Gatazkak gerta daitezkeenez, "
-"lehendabizi aukeratutakoak irabazten du."
+"Azpitituluen pista bakarra erre daiteke! Gatazkak gerta daitezkeenez, lehendabizi aukeratutakoak irabazten du."
 
 #: src/ui-gtk3/ghb.ui:6830
 msgid "Blu-ray Subtitles"
@@ -1862,21 +1806,15 @@ msgstr "Blu-ray azpitituluak"
 
 #: src/ui-gtk3/ghb.ui:6835
 msgid ""
-"Burn the first selected Blu-ray subtitle track. All other Blu-ray subtitle "
-"tracks will be discarded.\n"
-"Use this option if your player software or device does not support Blu-ray "
-"subtitles.\n"
+"Burn the first selected Blu-ray subtitle track. All other Blu-ray subtitle tracks will be discarded.\n"
+"Use this option if your player software or device does not support Blu-ray subtitles.\n"
 "\n"
-"Only one subtitle track can be burned! Since conflicts can occur, the first "
-"chosen wins."
+"Only one subtitle track can be burned! Since conflicts can occur, the first chosen wins."
 msgstr ""
-"Erre hautatutako lehen Blu-ray-eko azpititulu pista. Beste azpititulu pista "
-"guztiak baztertu egingo dira.\n"
-"Erabili aukera hau zure erreproduzitzailearen softwareak edo gailuak Blu-ray "
-"azpitituluak onartzen ez baditu.\n"
+"Erre hautatutako lehen Blu-ray-eko azpititulu pista. Beste azpititulu pista guztiak baztertu egingo dira.\n"
+"Erabili aukera hau zure erreproduzitzailearen softwareak edo gailuak Blu-ray azpitituluak onartzen ez baditu.\n"
 "\n"
-"Azpitituluen pista bakarra erre daiteke! Gatazkak gerta daitezkeenez, "
-"lehendabizi aukeratutakoak irabazten du."
+"Azpitituluen pista bakarra erre daiteke! Gatazkak gerta daitezkeenez, lehendabizi aukeratutakoak irabazten du."
 
 #: src/ui-gtk3/ghb.ui:6857
 msgid ""
@@ -1908,19 +1846,19 @@ msgstr "Gehitu kapitulu markatzaileak irteera-fitxategia."
 
 #: src/ui-gtk3/ghb.ui:6916
 msgid "Import Chapters"
-msgstr ""
+msgstr "Inportatu kapituluak"
 
 #: src/ui-gtk3/ghb.ui:6920
 msgid "Import chapter list from an XML file"
-msgstr ""
+msgstr "Inportatu kapituluen zerrenda XML fitxategi batetik"
 
 #: src/ui-gtk3/ghb.ui:6931
 msgid "Export Chapters"
-msgstr ""
+msgstr "Esportatu kapituluak"
 
 #: src/ui-gtk3/ghb.ui:6935
 msgid "Export chapter list as an XML file"
-msgstr ""
+msgstr "Esportatu kapituluen zerrenda XML fitxategi gisa"
 
 #: src/ui-gtk3/ghb.ui:6969
 msgid "Index"
@@ -2050,10 +1988,14 @@ msgstr "Auto-izendatzeko txantiloia"
 
 #: src/ui-gtk3/ghb.ui:7854
 msgid ""
-"Available Options: {source-path} {source} {title} {preset} {chapters} {date} "
-"{time} {creation-date} {creation-time} {modification-date} {modification-"
+"Available Options: {source-path} {source} {title} {preset} {chapters} {date}"
+" {time} {creation-date} {creation-time} {modification-date} {modification-"
 "time} {codec} {bit-depth} {quality} {bitrate} {width} {height}"
 msgstr ""
+"Aukera eskuragarriak: {iturburu-bidea} {iturburua} {titulua} {aurrezarpena} "
+"{kapituluak} {data} {ordua} {sorkuntza-data} {sorkuntza-ordua} {aldaketa-"
+"data} {aldaketa-ordua} {kodeka} {bit-sakonera} {kalitatea} {bitratea} "
+"{zabalera} {altuera}"
 
 #: src/ui-gtk3/ghb.ui:7874
 msgid "Use iPod/iTunes friendly (.m4v) file extension for MP4"
@@ -2074,20 +2016,18 @@ msgstr "Garbitu osatutako ilarako elementuak kodetze bat amaitu ondoren"
 #: src/ui-gtk3/ghb.ui:7973
 msgid ""
 "By default, completed jobs remain in the queue and are marked as complete.\n"
-"Check this if you want the queue to clean itself up by deleting completed "
-"jobs."
+"Check this if you want the queue to clean itself up by deleting completed jobs."
 msgstr ""
-"Lehenespenez, amaitutako lanak ilaran geratzen dira eta amaitutzat markatzen "
-"dira.\n"
+"Lehenespenez, amaitutako lanak ilaran geratzen dira eta amaitutzat markatzen dira.\n"
 "Aukeratu hau ilara bera garbitzea nahi baduzu, amaitutako lanak ezabatuz."
 
 #: src/ui-gtk3/ghb.ui:7986
 msgid "Power Saving"
-msgstr ""
+msgstr "Energia aurreztea"
 
 #: src/ui-gtk3/ghb.ui:8004
 msgid "Pause encoding when in Power Saver mode"
-msgstr ""
+msgstr "Pausatu kodeketa 'Energia aurrezteko moduan' dagoenean"
 
 #: src/ui-gtk3/ghb.ui:8010
 msgid ""
@@ -2095,10 +2035,13 @@ msgid ""
 "enters Power Saver mode. Encoding will resume when\n"
 "Power Saver mode is disabled."
 msgstr ""
+"Hautatzen bada, kodeketa pausatuko da \n"
+"'Energia aurrezteko moduan' dagoenean. Kodeketa \n"
+"berrekingo da 'Energia aurrezteko modua' desgaitzean."
 
 #: src/ui-gtk3/ghb.ui:8021
 msgid "Pause encoding when on battery power"
-msgstr ""
+msgstr "Pausatu kodeketak bateria erabiltzen denean"
 
 #: src/ui-gtk3/ghb.ui:8027
 msgid ""
@@ -2106,10 +2049,13 @@ msgid ""
 "unplugged. Encoding will resume when reconnected to\n"
 "a mains power source."
 msgstr ""
+"Hautatzen bada, kodeketa eten egingo da \n"
+"kargagailua deskonektatuta dagoenean. Kodetzea \n"
+"berrekingo da kargagailua konektatzen denean."
 
 #: src/ui-gtk3/ghb.ui:8038
 msgid "Pause encoding when battery is low"
-msgstr ""
+msgstr "Pausatu kodeketa bateria gutxi dagoenean"
 
 #: src/ui-gtk3/ghb.ui:8044
 msgid ""
@@ -2117,6 +2063,9 @@ msgid ""
 "level is low. Encoding will resume when the\n"
 "battery is charged."
 msgstr ""
+"Hautatuta badago, kodeketa pausatu egingo da \n"
+"bateria-maila baxua denean. Kodetzea berriro\n"
+"hasiko da bateria kargatzean."
 
 #: src/ui-gtk3/ghb.ui:8055
 msgid "General"
@@ -2134,25 +2083,17 @@ msgid ""
 "\n"
 "Changing this setting will require restarting HandBrake.\n"
 "\n"
-"This setting overrides the TEMP environment variable that is normally used "
-"to define this directory.\n"
+"This setting overrides the TEMP environment variable that is normally used to define this directory.\n"
 "\n"
-"Flatpak users may need to set this for certain workflows to work properly. "
-"The default size of the TEMP directory in a flatpak sandbox is 1/2 physical "
-"memory size and may be too small for things like the 2-pass stats file."
+"Flatpak users may need to set this for certain workflows to work properly. The default size of the TEMP directory in a flatpak sandbox is 1/2 physical memory size and may be too small for things like the 2-pass stats file."
 msgstr ""
-"HandBrake-ek sortzen dituen aldi baterako fitxategiak direktorio honetan "
-"jarriko dira.\n"
+"HandBrake-ek sortzen dituen aldi baterako fitxategiak direktorio honetan jarriko dira.\n"
 "\n"
 "Ezarpen hau aldatzeko, HandBrake berrabiarazi beharko da.\n"
 "\n"
-"Ezarpen honek direktorio hau definitzeko normalean erabiltzen den TEMP "
-"aldagaia gainidazten du.\n"
+"Ezarpen honek direktorio hau definitzeko normalean erabiltzen den TEMP aldagaia gainidazten du.\n"
 "\n"
-"Baliteke Flatpak-eko erabiltzaileek hau ezarri behar izatea zenbait lan-"
-"fluxuk behar bezala funtziona dezaten. Flatpak sandbox batean TEMP "
-"direktorioaren tamaina lehenetsia memoria fisikoaren tamainaren 1/2 da eta "
-"baliteke txikiegia izatea '2-pass stats' bezalako fitxategietarako."
+"Baliteke Flatpak-eko erabiltzaileek hau ezarri behar izatea zenbait lan-fluxuk behar bezala funtziona dezaten. Flatpak sandbox batean TEMP direktorioaren tamaina lehenetsia memoria fisikoaren tamainaren 1/2 da eta baliteke txikiegia izatea '2-pass stats' bezalako fitxategietarako."
 
 #: src/ui-gtk3/ghb.ui:8114
 msgid "Temp Directory"
@@ -2215,14 +2156,12 @@ msgid ""
 "When checked, every title will use the same settings when adding a\n"
 "batch of titles to the queue.\n"
 "\n"
-"Uncheck this if you want to allow changing each title's settings "
-"independently."
+"Uncheck this if you want to allow changing each title's settings independently."
 msgstr ""
 "Hautatuta, titulu bakoitzak ezarpen berdina erabiliko du\n"
 "titulu-sorta ilaran gehitzerakoan.\n"
 "\n"
-"Desmarkatu hau titulu bakoitzaren ezarpenak modu independentean aldatzea "
-"baimendu nahi baduzu."
+"Desmarkatu hau titulu bakoitzaren ezarpenak modu independentean aldatzea baimendu nahi baduzu."
 
 #: src/ui-gtk3/ghb.ui:8452
 msgid "Show preview image in Summary tab"
@@ -2233,8 +2172,8 @@ msgid ""
 "Uncheck this if you want to hide the video preview image on the Summary tab "
 "for privacy reasons."
 msgstr ""
-"Desmarkatu hau bideoaren aurrebista irudia 'Laburpena' leihoan ezkutatu nahi "
-"baduzu pribatutasun arrazoiengatik."
+"Desmarkatu hau bideoaren aurrebista irudia 'Laburpena' leihoan ezkutatu nahi"
+" baduzu pribatutasun arrazoiengatik."
 
 #: src/ui-gtk3/ghb.ui:8481
 msgid "Allow Tweaks"
@@ -2422,8 +2361,7 @@ msgid ""
 "We translate the character set to UTF-8.\n"
 "The source's character code is needed in order to perform this translation."
 msgstr ""
-"Ezarri inportatzen ari zaren SRT fitxategiak erabiltzen duen karaktere-"
-"kodea.\n"
+"Ezarri inportatzen ari zaren SRT fitxategiak erabiltzen duen karaktere-kodea.\n"
 "\n"
 "SRTak karaktere multzo askotan etor daitezke.\n"
 "Karaktere multzoa UTF-8ra itzultzen dugu.\n"
@@ -2491,21 +2429,15 @@ msgstr "Lagin-tasa"
 
 #: src/ui-gtk3/ghb.ui:9877 src/ui-gtk3/ghb.ui:10116 src/audiohandler.c:1931
 msgid ""
-"<b>Dynamic Range Compression:</b> Adjust the dynamic range of the output "
-"audio track.\n"
+"<b>Dynamic Range Compression:</b> Adjust the dynamic range of the output audio track.\n"
 "\n"
-"For source audio that has a wide dynamic range (very loud and very soft "
-"sequences),\n"
-"DRC allows you to 'compress' the range by making loud sounds softer and soft "
-"sounds louder."
+"For source audio that has a wide dynamic range (very loud and very soft sequences),\n"
+"DRC allows you to 'compress' the range by making loud sounds softer and soft sounds louder."
 msgstr ""
-"<b>Tarte Dinamikoko Konpresioa:</b> Doitu irteerako audio-pistaren tarte "
-"dinamikoa.\n"
+"<b>Tarte Dinamikoko Konpresioa:</b> Doitu irteerako audio-pistaren tarte dinamikoa.\n"
 "\n"
-"Tarte dinamiko zabala duen audiorako (sekuentzia oso ozenak eta oso "
-"leunak),\n"
-"TDK-k tartea 'konprimitzeko' aukera ematen dizu, soinu ozenak leunagoak eta "
-"soinu leunak ozenagoak eginez."
+"Tarte dinamiko zabala duen audiorako (sekuentzia oso ozenak eta oso leunak),\n"
+"TDK-k tartea 'konprimitzeko' aukera ematen dizu, soinu ozenak leunagoak eta soinu leunak ozenagoak eginez."
 
 #: src/ui-gtk3/ghb.ui:9898 src/audiohandler.c:1782
 msgid "Set the audio codec to encode this track with."
@@ -2676,7 +2608,7 @@ msgstr "Gelditu eskaneatzea"
 
 #: src/callbacks.c:1723
 msgid "Single Title"
-msgstr ""
+msgstr "Izenburu bakarra"
 
 #: src/callbacks.c:2115 src/callbacks.c:2259
 msgid "FPS"
@@ -2685,29 +2617,29 @@ msgstr "FPS"
 #: src/callbacks.c:2119
 #, c-format
 msgid "Dolby Vision %d.%d"
-msgstr ""
+msgstr "Dolby Vision %d.%d"
 
 #: src/callbacks.c:2123 src/callbacks.c:2126
 msgid "HDR10+"
-msgstr ""
+msgstr "HDR10+"
 
 #: src/callbacks.c:2128
 msgid "HDR10"
-msgstr ""
+msgstr "HDR10"
 
 #: src/callbacks.c:2130
 msgid "HDR"
-msgstr ""
+msgstr "HDR"
 
 #: src/callbacks.c:2132
 msgid "SDR"
-msgstr ""
+msgstr "SDR"
 
 #. TRANSLATORS: This is the bit depth of the video
 #: src/callbacks.c:2140
 #, c-format
 msgid "%d-bit"
-msgstr ""
+msgstr "%d-bit"
 
 #: src/callbacks.c:2162
 msgid "Audio Track"
@@ -2926,11 +2858,11 @@ msgstr "Ordenagailua itzaltzen"
 #: src/callbacks.c:5446 src/chapters.c:603 src/chapters.c:633
 #: src/presets.c:2078 src/queuehandler.c:1694
 msgid "All Files"
-msgstr ""
+msgstr "Fitxategi guztiak"
 
 #: src/chapters.c:604 src/chapters.c:634
 msgid "Chapters (*.xml)"
-msgstr ""
+msgstr "Kapituluak (*.xml)"
 
 #: src/hb-backend.c:61 src/hb-backend.c:86
 msgid "First Track Matching Selected Languages"
@@ -3590,13 +3522,11 @@ msgstr "Ezin izan da karpeta nagusia aurkitu azpikarpeta gehitzean."
 #: src/presets.c:1887
 #, c-format
 msgid ""
-"Presets found are newer than what is supported by this version of "
-"HandBrake!\n"
+"Presets found are newer than what is supported by this version of HandBrake!\n"
 "\n"
 "Would you like to continue?"
 msgstr ""
-"Aurkitutako aurrezarpenak HandBrake-ren bertsio honek onartzen duena baino "
-"berriagoak dira!\n"
+"Aurkitutako aurrezarpenak HandBrake-ren bertsio honek onartzen duena baino berriagoak dira!\n"
 "\n"
 "Jarraitu nahi duzu?"
 
@@ -3698,7 +3628,7 @@ msgstr "%s, Bit-tasa %dkbps"
 #: src/queuehandler.c:359
 #, c-format
 msgid "%s, Bitrate %dkbps (Multi Pass)"
-msgstr ""
+msgstr "%s, Bitratea %dkbps (Itzuli anitz)"
 
 #: src/queuehandler.c:366
 #, c-format
@@ -3810,11 +3740,11 @@ msgstr "Kodetu"
 
 #: src/queuehandler.c:1208
 msgid "Encode Analysis Pass"
-msgstr ""
+msgstr "Kodetu analisi itzulia"
 
 #: src/queuehandler.c:1212
 msgid "Encode Final Pass"
-msgstr ""
+msgstr "Kodetu azken itzulia"
 
 #. Should never happen
 #: src/queuehandler.c:1217
@@ -3943,6 +3873,10 @@ msgid ""
 "Another queued job has specified the same destination.\n"
 "Do you want to overwrite?"
 msgstr ""
+"Helmuga: %s\n"
+"\n"
+"Ilaran dagoen beste lan batek helmuga bera zehaztu du.\n"
+"Gainidatzi nahi duzu?"
 
 #: src/title-add.c:113 src/title-add.c:162
 msgid "Overwrite File?"
@@ -3950,7 +3884,7 @@ msgstr ""
 
 #: src/title-add.c:114 src/title-add.c:163
 msgid "Overwrite"
-msgstr ""
+msgstr "Gainidatzi"
 
 #: src/title-add.c:127
 #, c-format
@@ -3959,11 +3893,13 @@ msgid ""
 "\n"
 "This is not a valid directory."
 msgstr ""
+"Helmuga: %s\n"
+"\n"
+"Hau ez da baliozko direktorio bat."
 
 #: src/title-add.c:131 src/title-add.c:146
-#, fuzzy
 msgid "Invalid Destination"
-msgstr "Helmuga:"
+msgstr ""
 
 #: src/title-add.c:142
 #, c-format
@@ -3972,6 +3908,9 @@ msgid ""
 "\n"
 "Can not read or write the directory."
 msgstr ""
+"Helmuga: %s\n"
+"\n"
+"Ezin da direktorioa irakurri edo idatzi."
 
 #: src/title-add.c:157
 #, c-format
@@ -3981,15 +3920,17 @@ msgid ""
 "File already exists.\n"
 "Do you want to overwrite?"
 msgstr ""
+"Helmuga: %s\n"
+"\n"
+"Fitxategia jada existitzen da.\n"
+"Gainidatzi nahi duzu?"
 
 #: src/title-add.c:478
-#, fuzzy
 msgid "Select this title for adding to the queue.\n"
-msgstr "Markatu ilarara gehituko diren titulu guztiak"
+msgstr "Hautatu titulu hau ilaran gehitzeko.\n"
 
 #. Title label
 #: src/title-add.c:486
-#, fuzzy
 msgid "No Title"
 msgstr "Titulurik ez"
 
@@ -3999,11 +3940,13 @@ msgid ""
 "This title will not be added to the queue unless you change\n"
 "the output file name.\n"
 msgstr ""
+"Helmuga fitxategi izen bera duen beste titulu bat dago.\n"
+"Izenburu hau ez da ilaran gehituko\n"
+"irteerako fitxategiaren izena aldatzen ez bada.\n"
 
 #: src/title-add.c:871
-#, fuzzy
 msgid "Cannot Add Titles"
-msgstr "Titulurik ez"
+msgstr ""
 
 #: src/title-add.c:872
 msgid ""
@@ -4041,40 +3984,3 @@ msgstr ""
 #, c-format
 msgid "%s: %.4g (Warning: lossless)"
 msgstr "%s: %.4g (Kontuz: galera gabea)"
-
-#~ msgid "Automatically check for updates"
-#~ msgstr "Bilatu eguneraketak automatikoki"
-
-#~ msgid "HandBrake Updater"
-#~ msgstr "HandBrake eguneratzailea"
-
-#~ msgid "Skip This Version"
-#~ msgstr "Saltatu bertsio hau"
-
-#~ msgid "Remind Me Later"
-#~ msgstr "Gogorarazi geroago"
-
-#~ msgid "<b>A new version of HandBrake is available!</b>"
-#~ msgstr "<b>HandBrake-ren bertsio berri bat dago eskuragarri!</b>"
-
-#~ msgid "HandBrake xxx is now available (you have yyy)."
-#~ msgstr "HandBrake xxx eskuragarri dago orain (yyy duzu)."
-
-#~ msgid "<b>Release Notes</b>"
-#~ msgstr "<b>Argitalpen oharrak</b>"
-
-#, c-format
-#~ msgid "HandBrake %s/%s is now available (you have %s/%d)."
-#~ msgstr "HandBrake %s/%s eskuragarri dago (zuk %s/%d duzu)."
-
-#~ msgid "Never"
-#~ msgstr "Inoiz ez"
-
-#~ msgid "Daily"
-#~ msgstr "Egunero"
-
-#~ msgid "Weekly"
-#~ msgstr "Astero"
-
-#~ msgid "Monthly"
-#~ msgstr "Hilabetero"

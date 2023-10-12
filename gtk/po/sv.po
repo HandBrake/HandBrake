@@ -1,25 +1,24 @@
 # SOME DESCRIPTIVE TITLE.
-# Copyright (C) 2023 HandBrake Team
+# Copyright (C) YEAR HandBrake Team
 # This file is distributed under the same license as the ghb package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, 2023.
-#
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# 
 # Translators:
 # Åke Engelbrektson, 2023
-#
+# 
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: ghb 0.1\n"
+"Project-Id-Version: ghb 1.6.0-git-a6a111e86\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-09-20 09:46+0100\n"
 "PO-Revision-Date: 2018-10-10 18:14+0000\n"
 "Last-Translator: Åke Engelbrektson, 2023\n"
-"Language-Team: Swedish (Sweden) (https://app.transifex.com/HandBrakeProject/"
-"teams/92423/sv_SE/)\n"
-"Language: sv_SE\n"
+"Language-Team: Swedish (Sweden) (https://app.transifex.com/HandBrakeProject/teams/92423/sv_SE/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: sv_SE\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: data/fr.handbrake.ghb.desktop.in:3 src/ui-gtk3/ghb.ui:2236
@@ -27,17 +26,16 @@ msgid "HandBrake"
 msgstr "HandBrake"
 
 #: data/fr.handbrake.ghb.desktop.in:4
-#, fuzzy
 msgid "Media Transcoder"
-msgstr "Video-omkodare"
+msgstr "Mediaomkodare"
 
 #: data/fr.handbrake.ghb.desktop.in:5
 msgid "Transcodes DVD, Blu-ray, and other media"
-msgstr ""
+msgstr "Omkodar DVD, Blu-ray och andra media"
 
 #: data/fr.handbrake.ghb.desktop.in:11
 msgid "Format Converter;Video Encoder;"
-msgstr ""
+msgstr "Formatkonverterare;Video-kodare;"
 
 #: src/ui-gtk3/menu.ui:7
 msgid "_File"
@@ -505,35 +503,22 @@ msgstr ""
 msgid ""
 "HandBrake is a GPL-licensed, multiplatform, multithreaded video transcoder."
 msgstr ""
-"HandBrake är en GPL-licensierad, multiplattform, flertrådad video-transkoder."
+"HandBrake är en GPL-licensierad, multiplattform, flertrådad video-"
+"transkoder."
 
 #: src/ui-gtk3/ghb.ui:2050
 msgid ""
-"HandBrake is free software; you can redistribute it and/or modify it under "
-"the terms of the GNU General Public License version 2, as published by the "
-"Free Software Foundation.\n"
+"HandBrake is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License version 2, as published by the Free Software Foundation.\n"
 "\n"
-"HandBrake is distributed in the hope that it will be useful, but WITHOUT ANY "
-"WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS "
-"FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more "
-"details.\n"
+"HandBrake is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.\n"
 "\n"
-"You should have received a copy of the GNU General Public License along with "
-"Glade; if not, write to the Free Software Foundation, Inc., 51 Franklin "
-"Street, Fifth Floor, Boston, MA 02110-1301, USA."
+"You should have received a copy of the GNU General Public License along with Glade; if not, write to the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA."
 msgstr ""
-"HandBrake är fri mjukvara! Du kan återdistribuera det och/eller modifiera "
-"det, under villkoren för GNU General Public License version 2, som den "
-"publiceras av Free Software Foundation.\n"
+"HandBrake är fri mjukvara! Du kan återdistribuera det och/eller modifiera det, under villkoren för GNU General Public License version 2, som den publiceras av Free Software Foundation.\n"
 "\n"
-"HandBrake distribueras i hopp om att det skall vara användbart, men UTAN "
-"NÅGRA GARANTIER. Utan ens underförstådd garanti om SÄLJBARHET eller "
-"LÄMPLIGHET FÖR ETT VISST ÄNDAMÅL. Se GNU General Public License för mer "
-"detaljerad info.\n"
+"HandBrake distribueras i hopp om att det skall vara användbart, men UTAN NÅGRA GARANTIER. Utan ens underförstådd garanti om SÄLJBARHET eller LÄMPLIGHET FÖR ETT VISST ÄNDAMÅL. Se GNU General Public License för mer detaljerad info.\n"
 "\n"
-"Du bör ha fått en kopia av GNU General Public License, tillsammans med "
-"Glade. Om inte, skriv till Free Software Foundation, Inc., 51 Franklin "
-"Street, Fifth Floor, Boston, MA 02110-1301, USA."
+"Du bör ha fått en kopia av GNU General Public License, tillsammans med Glade. Om inte, skriv till Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA."
 
 #: src/ui-gtk3/ghb.ui:2273 src/callbacks.c:4339
 msgid "Choose Video Source"
@@ -865,14 +850,12 @@ msgstr "Pixelproportion:"
 msgid ""
 "Pixel aspect defines the shape of the pixels.\n"
 "\n"
-"A 1:1 ratio defines a square pixel.  Other values define rectangular "
-"shapes.\n"
+"A 1:1 ratio defines a square pixel.  Other values define rectangular shapes.\n"
 "Players will scale the image in order to achieve the specified aspect."
 msgstr ""
 "Pixelproportioner definierar formen på bildpunkterna.\n"
 "\n"
-"Förhållandet 1:1 definierar en kvadratisk bildpunkt. Andra värden definierar "
-"rektangulära former.\n"
+"Förhållandet 1:1 definierar en kvadratisk bildpunkt. Andra värden definierar rektangulära former.\n"
 "Mediaspelare skalar bilden för att uppnå specificerade proportioner."
 
 #: src/ui-gtk3/ghb.ui:3765
@@ -882,13 +865,11 @@ msgstr ":"
 #: src/ui-gtk3/ghb.ui:3780
 msgid ""
 "Pixel aspect defines the shape of the pixels.\n"
-"A 1:1 ratio defines a square pixel.  Other values define rectangular "
-"shapes.\n"
+"A 1:1 ratio defines a square pixel.  Other values define rectangular shapes.\n"
 "Players will scale the image in order to achieve the specified aspect."
 msgstr ""
 "Pixelproportioner definierar formen på bildpunkterna.\n"
-"Förhållandet 1:1 definierar en kvadratisk bildpunkt. Andra värden definierar "
-"rektangulära former.\n"
+"Förhållandet 1:1 definierar en kvadratisk bildpunkt. Andra värden definierar rektangulära former.\n"
 "Mediaspelare skalar bilden för att uppnå specificerade proportioner."
 
 #: src/ui-gtk3/ghb.ui:3799
@@ -898,22 +879,18 @@ msgstr "Skalad storlek:"
 #: src/ui-gtk3/ghb.ui:3814
 msgid ""
 "This is the width that the video will be stored at.\n"
-"The actual display dimensions will differ if the pixel aspect ratio is not "
-"1:1."
+"The actual display dimensions will differ if the pixel aspect ratio is not 1:1."
 msgstr ""
 "Detta är den bredd som videon kommer att sparas i.\n"
-"Den verkliga skärmstorleken kommer att differentieras om pixelproportionerna "
-"inte är 1:1."
+"Den verkliga skärmstorleken kommer att differentieras om pixelproportionerna inte är 1:1."
 
 #: src/ui-gtk3/ghb.ui:3847
 msgid ""
 "This is the height that the video will be stored at.\n"
-"The actual display dimensions will differ if the pixel aspect ratio is not "
-"1:1."
+"The actual display dimensions will differ if the pixel aspect ratio is not 1:1."
 msgstr ""
 "Detta är den höjd som videon kommer att sparas i.\n"
-"Den verkliga skärmstorleken kommer att differentieras om pixelproportionerna "
-"inte är 1:1."
+"Den verkliga skärmstorleken kommer att differentieras om pixelproportionerna inte är 1:1."
 
 #: src/ui-gtk3/ghb.ui:3861
 msgid "Optimal Size"
@@ -929,9 +906,11 @@ msgid "Allow Upscaling"
 msgstr "Tillåt uppskalning"
 
 #: src/ui-gtk3/ghb.ui:3886
-msgid "If not enabled, scaled dimensions will be limited to source dimensions."
+msgid ""
+"If not enabled, scaled dimensions will be limited to source dimensions."
 msgstr ""
-"Om inte aktiverad, begränsas de skalade dimensionerna till källdimensionerna."
+"Om inte aktiverad, begränsas de skalade dimensionerna till "
+"källdimensionerna."
 
 #: src/ui-gtk3/ghb.ui:3911
 msgid "<b>Resolution &amp; Scaling</b>"
@@ -998,14 +977,11 @@ msgstr "Detelecine:"
 msgid ""
 "This filter removes 'combing' artifacts that are the result of telecining.\n"
 "\n"
-"Telecining is a process that adjusts film framerates that are 24fps to NTSC "
-"video frame rates which are 30fps."
+"Telecining is a process that adjusts film framerates that are 24fps to NTSC video frame rates which are 30fps."
 msgstr ""
-"Detta filter tar bort \"kamning\", artefakter som är resultatet av "
-"telecining.\n"
+"Detta filter tar bort \"kamning\", artefakter som är resultatet av telecining.\n"
 "\n"
-"Telecining är en process som justerar filmbildfrekvens på 24fps till NTSC "
-"videobildfrekvens på 30fps."
+"Telecining är en process som justerar filmbildfrekvens på 24fps till NTSC videobildfrekvens på 30fps."
 
 #: src/ui-gtk3/ghb.ui:4367 src/ui-gtk3/ghb.ui:4913
 msgid ""
@@ -1084,8 +1060,7 @@ msgid ""
 "If your source exhibits 'blockiness', this filter may help clean it up."
 msgstr ""
 "Blockborttagningsfiltret tar bort en vanlig typ av komprimeringsartefakt.\n"
-"Tillämpas på avkodad, komprimerad video för att förbättra visuell kvalitet "
-"genom att jämna ut vassa kanter."
+"Tillämpas på avkodad, komprimerad video för att förbättra visuell kvalitet genom att jämna ut vassa kanter."
 
 #: src/ui-gtk3/ghb.ui:4561 src/ui-gtk3/ghb.ui:4664 src/ui-gtk3/ghb.ui:4744
 #: src/ui-gtk3/ghb.ui:4845 src/ui-gtk3/ghb.ui:5343
@@ -1098,8 +1073,7 @@ msgid ""
 "    If your source exhibits 'blockiness', this filter may help clean it up."
 msgstr ""
 "Blockborttagningsfiltret tar bort en vanlig typ av komprimeringsartefakt.\n"
-"Tillämpas på avkodad, komprimerad video för att förbättra visuell kvalitet "
-"genom att jämna ut vassa kanter."
+"Tillämpas på avkodad, komprimerad video för att förbättra visuell kvalitet genom att jämna ut vassa kanter."
 
 #: src/ui-gtk3/ghb.ui:4579 src/ui-gtk3/ghb.ui:4762
 msgid ""
@@ -1118,28 +1092,22 @@ msgstr "Brusreduceringsfilter:"
 #: src/ui-gtk3/ghb.ui:4616
 msgid ""
 "Denoise filtering reduces or removes the appearance of noise and grain.\n"
-"Film grain and other types of high frequency noise are difficult to "
-"compress.\n"
+"Film grain and other types of high frequency noise are difficult to compress.\n"
 "Using this filter on such sources can result in smaller file sizes."
 msgstr ""
-"Brusreduceringsfilter reducerar eller tar bort förekomst av brus och "
-"kornighet.\n"
+"Brusreduceringsfilter reducerar eller tar bort förekomst av brus och kornighet.\n"
 "Grynighet och andra typer av högfrekvent brus är svårt att komprimera.\n"
-"Användning av detta filter på sådana källor, kan resultera i mindre "
-"filstorlek."
+"Användning av detta filter på sådana källor, kan resultera i mindre filstorlek."
 
 #: src/ui-gtk3/ghb.ui:4651 src/ui-gtk3/ghb.ui:4674
 msgid ""
 "Denoise filtering reduces or removes the appearance of noise and grain.\n"
-"    Film grain and other types of high frequency noise are difficult to "
-"compress.\n"
+"    Film grain and other types of high frequency noise are difficult to compress.\n"
 "    Using this filter on such sources can result in smaller file sizes."
 msgstr ""
-"Brusreduceringsfilter reducerar eller tar bort förekomst av brus och "
-"kornighet.\n"
+"Brusreduceringsfilter reducerar eller tar bort förekomst av brus och kornighet.\n"
 "Grynighet och andra typer av högfrekvent brus är svårt att komprimera.\n"
-"Användning av detta filter på sådana källor, kan resultera i mindre "
-"filstorlek."
+"Användning av detta filter på sådana källor, kan resultera i mindre filstorlek."
 
 #: src/ui-gtk3/ghb.ui:4683 src/ui-gtk3/ghb.ui:4863
 msgid ""
@@ -1294,10 +1262,8 @@ msgstr ""
 "\n"
 "Skalan för x264 är logaritmisk och lägre värden motsvarar högre kvalitet.\n"
 "Små minskningar i värdet, resulterar alltså i progressivt högre ökningar i\n"
-"resulterande filstorlek. 0-värde innebär förlustfri kodning och resulterar "
-"i\n"
-"en filstorlek som är större än den ursprungliga källan, om inte källan "
-"också\n"
+"resulterande filstorlek. 0-värde innebär förlustfri kodning och resulterar i\n"
+"en filstorlek som är större än den ursprungliga källan, om inte källan också\n"
 "är förlustfri.\n"
 "\n"
 "FFMpeg- och Theora-skalan är mer linjär.\n"
@@ -1316,19 +1282,14 @@ msgid ""
 "Set the average bitrate.\n"
 "\n"
 "The instantaneous bitrate can be much higher or lower at any point in time.\n"
-"But the average over a long duration will be the value set here.  If you "
-"need\n"
-"to limit instantaneous bitrate, look into x264's vbv-bufsize and vbv-maxrate "
-"settings."
+"But the average over a long duration will be the value set here.  If you need\n"
+"to limit instantaneous bitrate, look into x264's vbv-bufsize and vbv-maxrate settings."
 msgstr ""
 "Ange genomsnittlig bithastighet.\n"
 "\n"
-"Den momentana bithastigheten kan vara mycket högre eller lägre vid någon "
-"tidpunkt,\n"
-"men genomsnittet under en lång tid blir det värde som anges här. Om du "
-"behöver för\n"
-"begränsa den momentana bithastigheten, kan du titta på x264-inställningarna "
-"för\n"
+"Den momentana bithastigheten kan vara mycket högre eller lägre vid någon tidpunkt,\n"
+"men genomsnittet under en lång tid blir det värde som anges här. Om du behöver för\n"
+"begränsa den momentana bithastigheten, kan du titta på x264-inställningarna för\n"
 "vbv-bufsize och vbv-maxrate."
 
 #: src/ui-gtk3/ghb.ui:5227
@@ -1339,17 +1300,14 @@ msgstr "Multipasskodning"
 msgid ""
 "Perform Multi Pass Encoding.\n"
 "\n"
-"The 'Bitrate' option is prerequisite. During the analysis passes, statistics "
-"about\n"
+"The 'Bitrate' option is prerequisite. During the analysis passes, statistics about\n"
 "the video are collected.  Then in the final pass, those statistics are used\n"
 "to make bitrate allocation decisions."
 msgstr ""
 "Utför multipasskodning.\n"
 "\n"
-"Alternativet \"Bithastighet\" är en förutsättning. Under analyspassen, "
-"samlas statistik\n"
-"om videon in. I slutpasset används sedan den statistiken för att fatta "
-"beslut om\n"
+"Alternativet \"Bithastighet\" är en förutsättning. Under analyspassen, samlas statistik\n"
+"om videon in. I slutpasset används sedan den statistiken för att fatta beslut om\n"
 "bithastighetsallokering."
 
 #: src/ui-gtk3/ghb.ui:5250
@@ -1361,27 +1319,23 @@ msgid ""
 "During the analysis pass of a multi pass encode, use settings that speed "
 "things along."
 msgstr ""
-"Under analyspasset i en multipasskodning används inställningar som påskyndar "
-"saker."
+"Under analyspasset i en multipasskodning används inställningar som påskyndar"
+" saker."
 
 #: src/ui-gtk3/ghb.ui:5317
 msgid ""
-"Adjusts encoder settings to trade off compression efficiency against "
-"encoding speed.\n"
+"Adjusts encoder settings to trade off compression efficiency against encoding speed.\n"
 "\n"
 "This establishes your default encoder settings.\n"
 "Tunes, profiles, levels and extra options string will be applied to this.\n"
-"You should generally set this option to the slowest you can bear since "
-"slower\n"
+"You should generally set this option to the slowest you can bear since slower\n"
 "settings will result in better quality or smaller files."
 msgstr ""
-"Justera kodningsinställningar för att väga av komprimeringseffektivitet mot "
-"kodningshastighet.\n"
+"Justera kodningsinställningar för att väga av komprimeringseffektivitet mot kodningshastighet.\n"
 "\n"
 "Detta fastställer dina standardinställningar för kodare.\n"
 "Justeringar, profiler, nivåer och avancerade alternativ tillämpas här.\n"
-"Generellt bör du sätta detta alternativ så långsamt som du står ut med, "
-"eftersom\n"
+"Generellt bör du sätta detta alternativ så långsamt som du står ut med, eftersom\n"
 "långsammare inställningar resulterar i bättre kvalitet eller mindre filer."
 
 #: src/ui-gtk3/ghb.ui:5360
@@ -1515,12 +1469,10 @@ msgstr "Välj vilket källljudspår som skall användas."
 #: src/ui-gtk3/ghb.ui:5798
 msgid ""
 "Create a list of languages you would like to select audio for.\n"
-"Tracks matching these languages will be selected using the chosen Selection "
-"Behavior."
+"Tracks matching these languages will be selected using the chosen Selection Behavior."
 msgstr ""
 "Skapa en lista över de språk som du vill kunna välja ljudspår för.\n"
-"Spår som matchar dessa språk kommer att väljas med hjälp av det valda "
-"urvalsbeteendet."
+"Spår som matchar dessa språk kommer att väljas med hjälp av det valda urvalsbeteendet."
 
 #: src/ui-gtk3/ghb.ui:5829 src/ui-gtk3/ghb.ui:6626
 msgid "Remove"
@@ -1541,8 +1493,7 @@ msgstr "Använd endast första kodaren för sekundärt ljud"
 #: src/ui-gtk3/ghb.ui:5881
 msgid ""
 "Only the primary audio track will be encoded with the full encoder list.\n"
-"All other secondary audio output tracks will be encoded with first encoder "
-"only."
+"All other secondary audio output tracks will be encoded with first encoder only."
 msgstr ""
 "Endast det primära ljudspåret kommer att kodas med hela kodarlistan.\n"
 "Alla andra sekundära ljudspår kommer endast att kodas med första kodaren."
@@ -1558,12 +1509,10 @@ msgstr "MP2"
 #: src/ui-gtk3/ghb.ui:5933
 msgid ""
 "Enable this if your playback device supports MP2.\n"
-"This permits MP2 passthru to be selected when automatic passthru selection "
-"is enabled."
+"This permits MP2 passthru to be selected when automatic passthru selection is enabled."
 msgstr ""
 "Aktivera detta om din uppspelningsenhet stödjer MP2.\n"
-"Detta tillåter att MP2-genomströmning väljs när automatisk genomströmning är "
-"aktiverat."
+"Detta tillåter att MP2-genomströmning väljs när automatisk genomströmning är aktiverat."
 
 #: src/ui-gtk3/ghb.ui:5949
 msgid "MP3"
@@ -1572,12 +1521,10 @@ msgstr "MP3"
 #: src/ui-gtk3/ghb.ui:5954
 msgid ""
 "Enable this if your playback device supports MP3.\n"
-"This permits MP3 passthru to be selected when automatic passthru selection "
-"is enabled."
+"This permits MP3 passthru to be selected when automatic passthru selection is enabled."
 msgstr ""
 "Aktivera detta om din uppspelningsenhet stödjer MP3.\n"
-"Detta tillåter att MP3-genomströmning väljs när automatisk genomströmning är "
-"aktiverat."
+"Detta tillåter att MP3-genomströmning väljs när automatisk genomströmning är aktiverat."
 
 #: src/ui-gtk3/ghb.ui:5970
 msgid "AC-3"
@@ -1586,12 +1533,10 @@ msgstr "AC-3"
 #: src/ui-gtk3/ghb.ui:5975
 msgid ""
 "Enable this if your playback device supports AC-3.\n"
-"This permits AC-3 passthru to be selected when automatic passthru selection "
-"is enabled."
+"This permits AC-3 passthru to be selected when automatic passthru selection is enabled."
 msgstr ""
 "Aktivera detta om din uppspelningsenhet stödjer AC-3.\n"
-"Detta tillåter att AC-3-genomströmning väljs när automatisk genomströmning "
-"är aktiverat."
+"Detta tillåter att AC-3-genomströmning väljs när automatisk genomströmning är aktiverat."
 
 #: src/ui-gtk3/ghb.ui:5991
 msgid "EAC-3"
@@ -1600,12 +1545,10 @@ msgstr "EAC-3"
 #: src/ui-gtk3/ghb.ui:5996
 msgid ""
 "Enable this if your playback device supports EAC-3.\n"
-"This permits EAC-3 passthru to be selected when automatic passthru selection "
-"is enabled."
+"This permits EAC-3 passthru to be selected when automatic passthru selection is enabled."
 msgstr ""
 "Aktivera detta om din uppspelningsenhet stödjer EAC-3.\n"
-"Detta tillåter att EAC-3-genomströmning väljs när automatisk genomströmning "
-"är aktiverat."
+"Detta tillåter att EAC-3-genomströmning väljs när automatisk genomströmning är aktiverat."
 
 #: src/ui-gtk3/ghb.ui:6012
 msgid "DTS"
@@ -1614,12 +1557,10 @@ msgstr "DTS"
 #: src/ui-gtk3/ghb.ui:6017
 msgid ""
 "Enable this if your playback device supports DTS.\n"
-"This permits DTS passthru to be selected when automatic passthru selection "
-"is enabled."
+"This permits DTS passthru to be selected when automatic passthru selection is enabled."
 msgstr ""
 "Aktivera detta om din uppspelningsenhet stödjer DTS.\n"
-"Detta tillåter att DTS-genomströmning väljs när automatisk genomströmning är "
-"aktiverat."
+"Detta tillåter att DTS-genomströmning väljs när automatisk genomströmning är aktiverat."
 
 #: src/ui-gtk3/ghb.ui:6033
 msgid "DTS-HD"
@@ -1628,12 +1569,10 @@ msgstr "DTS-HD"
 #: src/ui-gtk3/ghb.ui:6038
 msgid ""
 "Enable this if your playback device supports DTS-HD.\n"
-"This permits DTS-HD passthru to be selected when automatic passthru "
-"selection is enabled."
+"This permits DTS-HD passthru to be selected when automatic passthru selection is enabled."
 msgstr ""
 "Aktivera detta om din uppspelningsenhet stödjer DTS-HD.\n"
-"Detta tillåter att DTS-HD-genomströmning väljs när automatisk genomströmning "
-"är aktiverat."
+"Detta tillåter att DTS-HD-genomströmning väljs när automatisk genomströmning är aktiverat."
 
 #: src/ui-gtk3/ghb.ui:6054
 msgid "TrueHD"
@@ -1642,12 +1581,10 @@ msgstr "TrueHD"
 #: src/ui-gtk3/ghb.ui:6059
 msgid ""
 "Enable this if your playback device supports TrueHD.\n"
-"This permits TrueHD passthru to be selected when automatic passthru "
-"selection is enabled."
+"This permits TrueHD passthru to be selected when automatic passthru selection is enabled."
 msgstr ""
 "Aktivera detta om din uppspelningsenhet stödjer ThrueHD.\n"
-"Detta tillåter att ThrueHD-genomströmning väljs när automatisk "
-"genomströmning är aktiverat."
+"Detta tillåter att ThrueHD-genomströmning väljs när automatisk genomströmning är aktiverat."
 
 #: src/ui-gtk3/ghb.ui:6075
 msgid "FLAC"
@@ -1656,12 +1593,10 @@ msgstr "FLAC"
 #: src/ui-gtk3/ghb.ui:6080
 msgid ""
 "Enable this if your playback device supports FLAC.\n"
-"This permits FLAC passthru to be selected when automatic passthru selection "
-"is enabled."
+"This permits FLAC passthru to be selected when automatic passthru selection is enabled."
 msgstr ""
 "Aktivera detta om din uppspelningsenhet stödjer FLAC.\n"
-"Detta tillåter att FLAC-genomströmning väljs när automatisk genomströmning "
-"är aktiverat."
+"Detta tillåter att FLAC-genomströmning väljs när automatisk genomströmning är aktiverat."
 
 #: src/ui-gtk3/ghb.ui:6096
 msgid "AAC"
@@ -1670,12 +1605,10 @@ msgstr "AAC"
 #: src/ui-gtk3/ghb.ui:6101
 msgid ""
 "Enable this if your playback device supports AAC.\n"
-"This permits AAC passthru to be selected when automatic passthru selection "
-"is enabled."
+"This permits AAC passthru to be selected when automatic passthru selection is enabled."
 msgstr ""
 "Aktivera detta om din uppspelningsenhet stödjer AAC.\n"
-"Detta tillåter att AAC-genomströmning väljs när automatisk genomströmning är "
-"aktiverat."
+"Detta tillåter att AAC-genomströmning väljs när automatisk genomströmning är aktiverat."
 
 #: src/ui-gtk3/ghb.ui:6117
 msgid "Opus"
@@ -1684,12 +1617,10 @@ msgstr "Opus"
 #: src/ui-gtk3/ghb.ui:6122
 msgid ""
 "Enable this if your playback device supports Opus.\n"
-"This permits Opus passthru to be selected when automatic passthru selection "
-"is enabled."
+"This permits Opus passthru to be selected when automatic passthru selection is enabled."
 msgstr ""
 "Aktivera detta om din uppspelningsenhet stödjer Opus.\n"
-"Detta tillåter att Opus-genomströmning väljs när automatisk genomströmning "
-"är aktiverat."
+"Detta tillåter att Opus-genomströmning väljs när automatisk genomströmning är aktiverat."
 
 #: src/ui-gtk3/ghb.ui:6155
 msgid "Passthru Fallback:"
@@ -1700,8 +1631,8 @@ msgid ""
 "Set the audio codec to encode with when a suitable track can not be found "
 "for audio passthru."
 msgstr ""
-"Ange ljudkodek att koda om med, när ett passande spår för ljudgenomströmning "
-"inte kan hittas."
+"Ange ljudkodek att koda om med, när ett passande spår för ljudgenomströmning"
+" inte kan hittas."
 
 #: src/ui-gtk3/ghb.ui:6196
 msgid "<b>Audio Encoder Settings:</b>"
@@ -1752,7 +1683,8 @@ msgid "Add all subtitle tracks to the list"
 msgstr "Lägg till alla undertextspår i listan"
 
 #: src/ui-gtk3/ghb.ui:6414 src/callbacks.c:2344 src/queuehandler.c:647
-#: src/queuehandler.c:1083 src/subtitlehandler.c:414 src/subtitlehandler.c:1221
+#: src/queuehandler.c:1083 src/subtitlehandler.c:414
+#: src/subtitlehandler.c:1221
 msgid "Foreign Audio Scan"
 msgstr "Främmande ljudsökning"
 
@@ -1777,19 +1709,15 @@ msgstr "Välj vilket undertextspår som skall användas."
 #: src/ui-gtk3/ghb.ui:6590
 msgid ""
 "Create a list of languages you would like to select subtitles for.\n"
-"Tracks matching these languages will be selected using the chosen Selection "
-"Behavior.\n"
+"Tracks matching these languages will be selected using the chosen Selection Behavior.\n"
 "\n"
-"The first language in this list is your \"preferred\" language and will be "
-"used\n"
+"The first language in this list is your \"preferred\" language and will be used\n"
 "for determining subtitle selection settings when there is foreign audio."
 msgstr ""
 "Skapa en lista över de språk som du vill kunna välja ljudspår för.\n"
-"Spår som matchar dessa språk kommer att väljas med hjälp av det valda "
-"urvalsbeteendet.\n"
+"Spår som matchar dessa språk kommer att väljas med hjälp av det valda urvalsbeteendet.\n"
 "\n"
-"Första språket i listan är ditt \"föredragna\" språk och kommer att "
-"användas\n"
+"Första språket i listan är ditt \"föredragna\" språk och kommer att användas\n"
 "för att avgöra undertextvalet vid förekomst av främmande språk."
 
 #: src/ui-gtk3/ghb.ui:6671
@@ -1802,20 +1730,15 @@ msgstr "Lägg till främmande ljudsökningspass"
 
 #: src/ui-gtk3/ghb.ui:6703
 msgid ""
-"Add \"Foreign Audio Scan\" when the default audio track is your preferred "
-"language.\n"
-"This search pass finds short sequences of foreign audio and provides "
-"subtitles for them.\n"
+"Add \"Foreign Audio Scan\" when the default audio track is your preferred language.\n"
+"This search pass finds short sequences of foreign audio and provides subtitles for them.\n"
 "\n"
 "This option requires a language to be set in the Selected Languages list."
 msgstr ""
-"Lägg till \"Främmande ljudsökning\" när standardljudspåret är ditt "
-"föredragna språk.\n"
-"Detta sökpass hittar korta sekvenser på främmande språk och tillhandahåller "
-"undertexter för dem.\n"
+"Lägg till \"Främmande ljudsökning\" när standardljudspåret är ditt föredragna språk.\n"
+"Detta sökpass hittar korta sekvenser på främmande språk och tillhandahåller undertexter för dem.\n"
 "\n"
-"Detta alternativ kräver att ett språk har valts från listan med "
-"\"Tillgängliga språk\"."
+"Detta alternativ kräver att ett språk har valts från listan med \"Tillgängliga språk\"."
 
 #: src/ui-gtk3/ghb.ui:6718
 msgid "Add subtitle track if default audio is foreign"
@@ -1823,16 +1746,13 @@ msgstr "Lägg till undertextspår om standardspråket är främmande"
 
 #: src/ui-gtk3/ghb.ui:6723
 msgid ""
-"When the default audio track is not your preferred language, add a subtitle "
-"track.\n"
+"When the default audio track is not your preferred language, add a subtitle track.\n"
 "\n"
 "This option requires a language to be set in the Selected Languages list."
 msgstr ""
-"Lägg till ett undertextspår, när standardljudspåret inte är ditt föredragna "
-"språk.\n"
+"Lägg till ett undertextspår, när standardljudspåret inte är ditt föredragna språk.\n"
 "\n"
-"Detta alternativ kräver att ett språk har valts från listan med "
-"\"Tillgängliga språk\"."
+"Detta alternativ kräver att ett språk har valts från listan med \"Tillgängliga språk\"."
 
 #: src/ui-gtk3/ghb.ui:6737
 msgid "Add Closed Captions when available"
@@ -1854,17 +1774,13 @@ msgstr "Inbränningsbeteende*:"
 msgid ""
 "Set the behavior of subtitle \"Burn-In\".\n"
 "\n"
-"Burned-In subtitles are part of the video and can not be disabled during "
-"playback.\n"
-"Only one subtitle track can be burned! Since conflicts can occur, the first "
-"chosen wins."
+"Burned-In subtitles are part of the video and can not be disabled during playback.\n"
+"Only one subtitle track can be burned! Since conflicts can occur, the first chosen wins."
 msgstr ""
 "Ange inbränningsbeteende för undertext.\n"
 "\n"
-"Inbrända undertexter är en del av videon och kan inte inaktiveras vid "
-"uppspelning.\n"
-"Endast en undertext kan brännas! Eftersom konflikter kan uppstå, vinner det "
-"först valda."
+"Inbrända undertexter är en del av videon och kan inte inaktiveras vid uppspelning.\n"
+"Endast en undertext kan brännas! Eftersom konflikter kan uppstå, vinner det först valda."
 
 #: src/ui-gtk3/ghb.ui:6802
 msgid "Burn-In for deficient players*:"
@@ -1876,21 +1792,15 @@ msgstr "DVD-undertexter"
 
 #: src/ui-gtk3/ghb.ui:6816
 msgid ""
-"Burn the first selected DVD subtitle track. All other DVD subtitle tracks "
-"will be discarded.\n"
-"Use this option if your player software or device does not support DVD "
-"subtitles.\n"
+"Burn the first selected DVD subtitle track. All other DVD subtitle tracks will be discarded.\n"
+"Use this option if your player software or device does not support DVD subtitles.\n"
 "\n"
-"Only one subtitle track can be burned! Since conflicts can occur, the first "
-"chosen wins."
+"Only one subtitle track can be burned! Since conflicts can occur, the first chosen wins."
 msgstr ""
-"Bränn den först valda DVD-undertexten. Alla andra DVD-undertexter kommer att "
-"tas bort.\n"
-"Använd detta alternativ om ditt spelarprogram eller enhet inte stödjer DVD-"
-"undertexter.\n"
+"Bränn den först valda DVD-undertexten. Alla andra DVD-undertexter kommer att tas bort.\n"
+"Använd detta alternativ om ditt spelarprogram eller enhet inte stödjer DVD-undertexter.\n"
 "\n"
-"Endast ett undertextspår kan brännas! Eftersom konflikter kan uppstå, vinner "
-"det först valda."
+"Endast ett undertextspår kan brännas! Eftersom konflikter kan uppstå, vinner det först valda."
 
 #: src/ui-gtk3/ghb.ui:6830
 msgid "Blu-ray Subtitles"
@@ -1898,37 +1808,31 @@ msgstr "Blu-ray-undertexter"
 
 #: src/ui-gtk3/ghb.ui:6835
 msgid ""
-"Burn the first selected Blu-ray subtitle track. All other Blu-ray subtitle "
-"tracks will be discarded.\n"
-"Use this option if your player software or device does not support Blu-ray "
-"subtitles.\n"
+"Burn the first selected Blu-ray subtitle track. All other Blu-ray subtitle tracks will be discarded.\n"
+"Use this option if your player software or device does not support Blu-ray subtitles.\n"
 "\n"
-"Only one subtitle track can be burned! Since conflicts can occur, the first "
-"chosen wins."
+"Only one subtitle track can be burned! Since conflicts can occur, the first chosen wins."
 msgstr ""
-"Bränn den först valda Blu-ray-undertexten. Alla andra Blu-ray-undertexter "
-"kommer att tas bort.\n"
-"Använd detta alternativ om ditt spelarprogram eller enhet inte stödjer Blu-"
-"ray-undertexter.\n"
+"Bränn den först valda Blu-ray-undertexten. Alla andra Blu-ray-undertexter kommer att tas bort.\n"
+"Använd detta alternativ om ditt spelarprogram eller enhet inte stödjer Blu-ray-undertexter.\n"
 "\n"
-"Endast ett undertextspår kan brännas! Eftersom konflikter kan uppstå, vinner "
-"det först valda."
+"Endast ett undertextspår kan brännas! Eftersom konflikter kan uppstå, vinner det först valda."
 
 #: src/ui-gtk3/ghb.ui:6857
 msgid ""
 "<small>* Only one of the above subtitle burn options will be applied, "
 "starting with the top.</small>"
 msgstr ""
-"<small>* Endast ett av ovanstående undertextalternativ kommer att tillämpas, "
-"med början överst.</small>"
+"<small>* Endast ett av ovanstående undertextalternativ kommer att tillämpas,"
+" med början överst.</small>"
 
 #: src/ui-gtk3/ghb.ui:6858
 msgid ""
 "Only one subtitle track can be burned! Since conflicts can occur, the first "
 "chosen wins."
 msgstr ""
-"Endast ett undertextspår kan brännas in, eftersom konflikter kan uppstå! Det "
-"först valda vinner."
+"Endast ett undertextspår kan brännas in, eftersom konflikter kan uppstå! Det"
+" först valda vinner."
 
 #: src/ui-gtk3/ghb.ui:6882
 msgid "Subtitles"
@@ -2083,13 +1987,14 @@ msgstr "Mall för autonamn"
 
 #: src/ui-gtk3/ghb.ui:7854
 msgid ""
-"Available Options: {source-path} {source} {title} {preset} {chapters} {date} "
-"{time} {creation-date} {creation-time} {modification-date} {modification-"
+"Available Options: {source-path} {source} {title} {preset} {chapters} {date}"
+" {time} {creation-date} {creation-time} {modification-date} {modification-"
 "time} {codec} {bit-depth} {quality} {bitrate} {width} {height}"
 msgstr ""
 "Tillgängliga alternativ: {source-path} {source} {title} {preset} {chapters} "
 "{date} {time} {creation-date} {creation-time} {modification-date} "
-"{modification-time} {codec} {bit-depth}  {quality} {bitrate} {width} {height}"
+"{modification-time} {codec} {bit-depth}  {quality} {bitrate} {width} "
+"{height}"
 
 #: src/ui-gtk3/ghb.ui:7874
 msgid "Use iPod/iTunes friendly (.m4v) file extension for MP4"
@@ -2110,12 +2015,10 @@ msgstr "Ta bort slutförda köobjekt när en kodning har slutförts"
 #: src/ui-gtk3/ghb.ui:7973
 msgid ""
 "By default, completed jobs remain in the queue and are marked as complete.\n"
-"Check this if you want the queue to clean itself up by deleting completed "
-"jobs."
+"Check this if you want the queue to clean itself up by deleting completed jobs."
 msgstr ""
 "Som standard, behålls slutförda jobb i kön och markeras som slutförda.\n"
-"Markera det här, om du vill att kön skall rensa sig själv och ta bort "
-"slutförda jobb."
+"Markera det här, om du vill att kön skall rensa sig själv och ta bort slutförda jobb."
 
 #: src/ui-gtk3/ghb.ui:7986
 msgid "Power Saving"
@@ -2177,24 +2080,17 @@ msgid ""
 "\n"
 "Changing this setting will require restarting HandBrake.\n"
 "\n"
-"This setting overrides the TEMP environment variable that is normally used "
-"to define this directory.\n"
+"This setting overrides the TEMP environment variable that is normally used to define this directory.\n"
 "\n"
-"Flatpak users may need to set this for certain workflows to work properly. "
-"The default size of the TEMP directory in a flatpak sandbox is 1/2 physical "
-"memory size and may be too small for things like the 2-pass stats file."
+"Flatpak users may need to set this for certain workflows to work properly. The default size of the TEMP directory in a flatpak sandbox is 1/2 physical memory size and may be too small for things like the 2-pass stats file."
 msgstr ""
 "Temporära filer som HandBrake skapar placeras i denna katalog.\n"
 "\n"
 "Om denna inställning ändras måste du starta om HandBrake.\n"
 "\n"
-"Den här inställningen åsidosätter miljövariabeln TEMP som normalt används "
-"för att definiera den här katalogen.\n"
+"Den här inställningen åsidosätter miljövariabeln TEMP som normalt används för att definiera den här katalogen.\n"
 "\n"
-"Flatpak-användare kan behöva ställa in detta för att vissa arbetsflöden ska "
-"fungera korrekt. Standardstorleken på TEMP-katalogen i en flatpak-sandlåda "
-"är 1/2 fysisk minnesstorlek och kan vara för liten för saker som 2-pass-"
-"statistikfilen."
+"Flatpak-användare kan behöva ställa in detta för att vissa arbetsflöden ska fungera korrekt. Standardstorleken på TEMP-katalogen i en flatpak-sandlåda är 1/2 fysisk minnesstorlek och kan vara för liten för saker som 2-pass-statistikfilen."
 
 #: src/ui-gtk3/ghb.ui:8114
 msgid "Temp Directory"
@@ -2257,8 +2153,7 @@ msgid ""
 "When checked, every title will use the same settings when adding a\n"
 "batch of titles to the queue.\n"
 "\n"
-"Uncheck this if you want to allow changing each title's settings "
-"independently."
+"Uncheck this if you want to allow changing each title's settings independently."
 msgstr ""
 "Vid aktivering, används samma inställningar på samtliga titlar,\n"
 "när en omgång titlar läggs till i kön.\n"
@@ -2530,21 +2425,15 @@ msgstr "Samplingsfrekvens"
 
 #: src/ui-gtk3/ghb.ui:9877 src/ui-gtk3/ghb.ui:10116 src/audiohandler.c:1931
 msgid ""
-"<b>Dynamic Range Compression:</b> Adjust the dynamic range of the output "
-"audio track.\n"
+"<b>Dynamic Range Compression:</b> Adjust the dynamic range of the output audio track.\n"
 "\n"
-"For source audio that has a wide dynamic range (very loud and very soft "
-"sequences),\n"
-"DRC allows you to 'compress' the range by making loud sounds softer and soft "
-"sounds louder."
+"For source audio that has a wide dynamic range (very loud and very soft sequences),\n"
+"DRC allows you to 'compress' the range by making loud sounds softer and soft sounds louder."
 msgstr ""
-"<b>Komprimering av dynamiskt intervall:</b> Justera dynamiskt intervall för "
-"utdataljudspår.\n"
+"<b>Komprimering av dynamiskt intervall:</b> Justera dynamiskt intervall för utdataljudspår.\n"
 "\n"
-"För källjud som har ett brett dynamiskt intervall (mycket högt och mycket "
-"låga sekvenser),\n"
-"Låter DRC dig \"komprimera\" intervallet genom att göra höga ljud lägre och "
-"låga ljud högre."
+"För källjud som har ett brett dynamiskt intervall (mycket högt och mycket låga sekvenser),\n"
+"Låter DRC dig \"komprimera\" intervallet genom att göra höga ljud lägre och låga ljud högre."
 
 #: src/ui-gtk3/ghb.ui:9898 src/audiohandler.c:1782
 msgid "Set the audio codec to encode this track with."
@@ -3628,8 +3517,7 @@ msgstr "Kunde inte hitta överordnad mapp när undermapp lades till."
 #: src/presets.c:1887
 #, c-format
 msgid ""
-"Presets found are newer than what is supported by this version of "
-"HandBrake!\n"
+"Presets found are newer than what is supported by this version of HandBrake!\n"
 "\n"
 "Would you like to continue?"
 msgstr ""
@@ -3980,14 +3868,18 @@ msgid ""
 "Another queued job has specified the same destination.\n"
 "Do you want to overwrite?"
 msgstr ""
+"Målplats: %s\n"
+"\n"
+"Ett annat köat jobb har specificerat samma målplats.\n"
+"Vill du skriva över?"
 
 #: src/title-add.c:113 src/title-add.c:162
 msgid "Overwrite File?"
-msgstr ""
+msgstr "Vill du skriva över filen?"
 
 #: src/title-add.c:114 src/title-add.c:163
 msgid "Overwrite"
-msgstr ""
+msgstr "Skriv över"
 
 #: src/title-add.c:127
 #, c-format
@@ -3996,11 +3888,13 @@ msgid ""
 "\n"
 "This is not a valid directory."
 msgstr ""
+"Målplats: %s\n"
+"\n"
+"Detta är ingen giltig målmapp."
 
 #: src/title-add.c:131 src/title-add.c:146
-#, fuzzy
 msgid "Invalid Destination"
-msgstr "Målmapp:"
+msgstr "Ogiltig destination"
 
 #: src/title-add.c:142
 #, c-format
@@ -4009,6 +3903,9 @@ msgid ""
 "\n"
 "Can not read or write the directory."
 msgstr ""
+"Målplats: %s\n"
+"\n"
+"Kan inte läsa eller skriva målmappen."
 
 #: src/title-add.c:157
 #, c-format
@@ -4018,17 +3915,19 @@ msgid ""
 "File already exists.\n"
 "Do you want to overwrite?"
 msgstr ""
+"Målplats: %s\n"
+"\n"
+"Filen finns redan.\n"
+"Vill du skriva över den?"
 
 #: src/title-add.c:478
-#, fuzzy
 msgid "Select this title for adding to the queue.\n"
-msgstr "Markera titlar för att lägga till i kön"
+msgstr "Välj den här titeln för att läggas till i kön.\n"
 
 #. Title label
 #: src/title-add.c:486
-#, fuzzy
 msgid "No Title"
-msgstr "Inga titlar"
+msgstr "Ingen titel"
 
 #: src/title-add.c:496
 msgid ""
@@ -4036,17 +3935,21 @@ msgid ""
 "This title will not be added to the queue unless you change\n"
 "the output file name.\n"
 msgstr ""
+"Det finns en annan titel med samma målfilsnamn.\n"
+"Denna titel kommer inte att läggas till i kön, om du\n"
+"inte först ändrar utdatafilens namn.\n"
 
 #: src/title-add.c:871
-#, fuzzy
 msgid "Cannot Add Titles"
-msgstr "Inga titlar"
+msgstr "Kan inte lägga till titlar"
 
 #: src/title-add.c:872
 msgid ""
 "The filenames are not unique. Please choose\n"
 "a unique destination filename for each title."
 msgstr ""
+"Filnamnen är inte unika. Välj ett unikt\n"
+"målfilnamn för varje titel."
 
 #: src/videohandler.c:208
 #, c-format
@@ -4078,74 +3981,3 @@ msgstr ""
 #, c-format
 msgid "%s: %.4g (Warning: lossless)"
 msgstr "%s: %.4g (Varning: förlustfri)"
-
-#~ msgid "Automatically check for updates"
-#~ msgstr "Sök automatiskt efter uppdateringar"
-
-#~ msgid "HandBrake Updater"
-#~ msgstr "HandBrake uppdaterare"
-
-#~ msgid "Skip This Version"
-#~ msgstr "Hoppa över den här versionen"
-
-#~ msgid "Remind Me Later"
-#~ msgstr "Påminn mig senare"
-
-#~ msgid "<b>A new version of HandBrake is available!</b>"
-#~ msgstr "<b>En ny version av HandBrake finns tillgänglig!</b>"
-
-#~ msgid "HandBrake xxx is now available (you have yyy)."
-#~ msgstr "HandBrake xxx finns nu tillgänglig (du har yyy)."
-
-#~ msgid "<b>Release Notes</b>"
-#~ msgstr "<b>Versionsnotiser</b>"
-
-#~ msgid ""
-#~ "HandBrake is a tool for converting video from nearly any format to a "
-#~ "selection of modern, widely supported codecs."
-#~ msgstr ""
-#~ "HandBrake är ett verktyg för att konvertera film från nästan vilket "
-#~ "format som helst, till ett urval av moderna, allmänt stödda kodekar."
-
-#~ msgid "Reasons you'll love Handbrake:"
-#~ msgstr "Anledningar till att du kommer att älska HandBrake:"
-
-#~ msgid "Convert video from nearly any format"
-#~ msgstr "Konvertera video från nästan vilket format som helst"
-
-#~ msgid "Free and Open Source"
-#~ msgstr "Fri och öppen källkod"
-
-#~ msgid "Multi-Platform (Windows, Mac and Linux)"
-#~ msgstr "Multiplattform (Linux, Mac och Windows)"
-
-#~ msgid "Main window and settings summary"
-#~ msgstr "Huvudfönster och inställningssammandrag"
-
-#~ msgid "Video resolution and cropping settings"
-#~ msgstr "Videoupplösning och beskärningsinställningar"
-
-#~ msgid "Video encoder settings"
-#~ msgstr "Inställningar för videokodare"
-
-#~ msgid "Audio track selection and settings"
-#~ msgstr "Ljudspårsval och inställningar"
-
-#~ msgid "Chapter title editing"
-#~ msgstr "Redigera avsnittstitel"
-
-#, c-format
-#~ msgid "HandBrake %s/%s is now available (you have %s/%d)."
-#~ msgstr "HandBrake %s/%s finns nu tillgänglig (du har %s/%d)."
-
-#~ msgid "Never"
-#~ msgstr "Aldrig"
-
-#~ msgid "Daily"
-#~ msgstr "Varje dag"
-
-#~ msgid "Weekly"
-#~ msgstr "Varje vecka"
-
-#~ msgid "Monthly"
-#~ msgstr "Varje månad"

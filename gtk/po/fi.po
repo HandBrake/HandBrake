@@ -1,27 +1,26 @@
 # SOME DESCRIPTIVE TITLE.
-# Copyright (C) 2023 HandBrake Team
+# Copyright (C) YEAR HandBrake Team
 # This file is distributed under the same license as the ghb package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, 2023.
-#
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# 
 # Translators:
 # Jaakko Saarikko <jaakko.saarikko@protonmail.com>, 2022
-# Tommi Nieminen <translator@legisign.org>, 2022
 # heidi.wenger, 2022
-#
+# Tommi Nieminen <translator@legisign.org>, 2023
+# 
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: ghb 0.1\n"
+"Project-Id-Version: ghb 1.6.0-git-a6a111e86\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-09-20 09:46+0100\n"
 "PO-Revision-Date: 2018-10-10 18:14+0000\n"
-"Last-Translator: heidi.wenger, 2022\n"
-"Language-Team: Finnish (https://www.transifex.com/HandBrakeProject/"
-"teams/92423/fi/)\n"
-"Language: fi\n"
+"Last-Translator: Tommi Nieminen <translator@legisign.org>, 2023\n"
+"Language-Team: Finnish (https://app.transifex.com/HandBrakeProject/teams/92423/fi/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: fi\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: data/fr.handbrake.ghb.desktop.in:3 src/ui-gtk3/ghb.ui:2236
@@ -46,11 +45,11 @@ msgstr "_Tiedosto"
 
 #: src/ui-gtk3/menu.ui:11
 msgid "_Open Source"
-msgstr ""
+msgstr "Avaa _lähde"
 
 #: src/ui-gtk3/menu.ui:16
 msgid "Open _Directory"
-msgstr ""
+msgstr "Avaa _kansio"
 
 #: src/ui-gtk3/menu.ui:21
 msgid "Set _Destination"
@@ -78,7 +77,7 @@ msgstr "Lisää _useampia"
 
 #: src/ui-gtk3/menu.ui:53
 msgid "Add A_ll"
-msgstr ""
+msgstr "Lisää k_aikki"
 
 #: src/ui-gtk3/menu.ui:60
 msgid "_Start Encoding"
@@ -165,7 +164,7 @@ msgstr "_Opas"
 
 #: src/ui-gtk3/menu.ui:167
 msgid "HandBrake For _Dummies"
-msgstr ""
+msgstr "Hand_Brake hölmöille"
 
 #: src/ui-gtk3/ghb.ui:101
 msgid ""
@@ -212,16 +211,16 @@ msgid ""
 "subtitles during scenes where someone is speaking\n"
 "a foreign language."
 msgstr ""
-"Käytä ainoastaan tekstityksiä, jotka on merkitty\n"
-"pakotetuiksi lähdetekstitysraidalla.\n"
+"Käytä ainoastaan lähdetekstitysraidalla\n"
+"pakotetuiksi merkittyjä tekstityksiä.\n"
 "\n"
 "”Pakotettuja” tekstityksiä käytetään yleensä\n"
-"teksteinä kohtauksissa, jossa joku puhuu vierasta\n"
+"teksteinä kohtauksissa, joissa joku puhuu vierasta\n"
 "kieltä."
 
 #: src/ui-gtk3/ghb.ui:129
 msgid "<b>Forced Only</b>"
-msgstr "<b>Vain pakotettu</b>"
+msgstr "<b>Vain pakotetut</b>"
 
 #: src/ui-gtk3/ghb.ui:135
 msgid ""
@@ -274,7 +273,7 @@ msgstr "<b>Raita</b>"
 
 #: src/ui-gtk3/ghb.ui:208
 msgid "Play File"
-msgstr ""
+msgstr "Toista tiedosto"
 
 #: src/ui-gtk3/ghb.ui:212 src/callbacks.c:1708
 msgid "Open Source Directory"
@@ -330,35 +329,35 @@ msgstr "HandBraken jono"
 
 #: src/ui-gtk3/ghb.ui:534
 msgid "_Play File"
-msgstr ""
+msgstr "T_oista tiedosto"
 
 #: src/ui-gtk3/ghb.ui:543
 msgid "Open _Source Directory"
-msgstr ""
+msgstr "Avaa _lähdekansio"
 
 #: src/ui-gtk3/ghb.ui:552
 msgid "Open _Destination Directory"
-msgstr ""
+msgstr "Avaa _kohdekansio"
 
 #: src/ui-gtk3/ghb.ui:566
 msgid "Move to _Top"
-msgstr ""
+msgstr "Siirrä _ylimmäs"
 
 #: src/ui-gtk3/ghb.ui:575
 msgid "Move to _Bottom"
-msgstr ""
+msgstr "Siirrä _alimmas"
 
 #: src/ui-gtk3/ghb.ui:589
 msgid "_Edit"
-msgstr ""
+msgstr "_Muokkaa"
 
 #: src/ui-gtk3/ghb.ui:598
 msgid "_Reset"
-msgstr ""
+msgstr "_Palauta"
 
 #: src/ui-gtk3/ghb.ui:612
 msgid "Re_move"
-msgstr ""
+msgstr "P_oista"
 
 #: src/ui-gtk3/ghb.ui:642
 msgid "<span size=\"x-large\">Queue</span>"
@@ -510,29 +509,17 @@ msgstr ""
 
 #: src/ui-gtk3/ghb.ui:2050
 msgid ""
-"HandBrake is free software; you can redistribute it and/or modify it under "
-"the terms of the GNU General Public License version 2, as published by the "
-"Free Software Foundation.\n"
+"HandBrake is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License version 2, as published by the Free Software Foundation.\n"
 "\n"
-"HandBrake is distributed in the hope that it will be useful, but WITHOUT ANY "
-"WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS "
-"FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more "
-"details.\n"
+"HandBrake is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.\n"
 "\n"
-"You should have received a copy of the GNU General Public License along with "
-"Glade; if not, write to the Free Software Foundation, Inc., 51 Franklin "
-"Street, Fifth Floor, Boston, MA 02110-1301, USA."
+"You should have received a copy of the GNU General Public License along with Glade; if not, write to the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA."
 msgstr ""
-"HandBrake on vapaata ohjelmistoa: sitä voi jakaa tai muuttaa Free Software "
-"Foundationin julkaiseman GNU General Public Licensen version 2 mukaisesti.\n"
+"HandBrake on vapaata ohjelmistoa: sitä voi jakaa tai muuttaa Free Software Foundationin julkaiseman GNU General Public Licensen version 2 mukaisesti.\n"
 "\n"
-"HandBrakea jaetaan toivoen, että siitä on hyötyä, mutta ILMAN MITÄÄN "
-"TAKUUTA, edes implikoitua takuuta MARKKINOITAVUUDESTA tai SOPIVUUDESTA "
-"TIETTYYN KÄYTTÖÖN. Lisätietoa löytyy GNU General Public Licensesta.\n"
+"HandBrakea jaetaan toivoen, että siitä on hyötyä, mutta ILMAN MITÄÄN TAKUUTA, edes implikoitua takuuta MARKKINOITAVUUDESTA tai SOPIVUUDESTA TIETTYYN KÄYTTÖÖN. Lisätietoa löytyy GNU General Public Licensesta.\n"
 "\n"
-"Ohjelman mukana pitäisi tulla GNU General Public Licensen kopio. Ellei näin "
-"ole, pyydä sitä kirjeitse Free Software Foundation Inc:ltä, 51 Franklin "
-"Street, Fifth Floor, Boston, MA 02110-1301, USA."
+"Ohjelman mukana pitäisi tulla GNU General Public Licensen kopio. Ellei näin ole, pyydä sitä kirjeitse Free Software Foundation Inc:ltä, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA."
 
 #: src/ui-gtk3/ghb.ui:2273 src/callbacks.c:4339
 msgid "Choose Video Source"
@@ -690,8 +677,7 @@ msgid ""
 "This allows a player to initiate playback before downloading the entire file."
 msgstr ""
 "Tehosta MP4-tiedoston rakenne sen edistynyttä lataamista varten.\n"
-"Tämä mahdollistaa toistimen aloittaa varsinainen toisto ennen kuin koko "
-"tiedosto on ladattu."
+"Tämä mahdollistaa toistimen aloittaa varsinainen toisto ennen kuin koko tiedosto on ladattu."
 
 #: src/ui-gtk3/ghb.ui:2924
 msgid "Align A/V Start"
@@ -717,11 +703,11 @@ msgstr "Lisää joidenkin vanhempien iPodien vaatima iPod Atom."
 
 #: src/ui-gtk3/ghb.ui:2966
 msgid "Passthru Common Metadata"
-msgstr ""
+msgstr "Vie yleiset metatiedot läpi"
 
 #: src/ui-gtk3/ghb.ui:2971
 msgid "Copy metadata from source to output."
-msgstr ""
+msgstr "Kopioi metatiedot lähteestä tulokseen."
 
 #: src/ui-gtk3/ghb.ui:2993
 msgid "Duration:"
@@ -750,47 +736,47 @@ msgstr "--"
 
 #: src/ui-gtk3/ghb.ui:3218 src/ui-gtk3/ghb.ui:4130
 msgid "Storage Size:"
-msgstr ""
+msgstr "Talletuskoko:"
 
 #: src/ui-gtk3/ghb.ui:3256 src/ui-gtk3/ghb.ui:4174
 msgid "Display Size:"
-msgstr ""
+msgstr "Näyttökoko:"
 
 #: src/ui-gtk3/ghb.ui:3294 src/ui-gtk3/ghb.ui:4268
 msgid "Aspect Ratio:"
-msgstr ""
+msgstr "Kuvasuhde:"
 
 #: src/ui-gtk3/ghb.ui:3331
 msgid "<b>Source Dimensions</b>"
-msgstr ""
+msgstr "<b>Lähteen mitat</b>"
 
 #: src/ui-gtk3/ghb.ui:3378
 msgid "Flipping:"
-msgstr ""
+msgstr "Kierto:"
 
 #: src/ui-gtk3/ghb.ui:3389
 msgid "Horizontal ⇌"
-msgstr ""
+msgstr "Vaakasuuntainen  "
 
 #: src/ui-gtk3/ghb.ui:3394
 msgid "Flip video horizontally."
-msgstr ""
+msgstr "Kierrä videota vaakasuunnassa."
 
 #: src/ui-gtk3/ghb.ui:3411
 msgid "Rotation:"
-msgstr ""
+msgstr "Kääntö:"
 
 #: src/ui-gtk3/ghb.ui:3427
 msgid "Rotate the video clockwise in 90 degree increments."
-msgstr "Kierrä videota myötäpäivään 90 asteen askelin."
+msgstr "Käännä videota myötäpäivään 90° askelin."
 
 #: src/ui-gtk3/ghb.ui:3442
 msgid "Cropping:"
-msgstr ""
+msgstr "Rajaus:"
 
 #: src/ui-gtk3/ghb.ui:3458
 msgid "How to apply crop settings."
-msgstr ""
+msgstr "Miten käyttää rajausasetuksia."
 
 #: src/ui-gtk3/ghb.ui:3474
 msgid "Left Crop"
@@ -810,31 +796,31 @@ msgstr "Rajaus oikealta"
 
 #: src/ui-gtk3/ghb.ui:3561
 msgid "<b>Orientation &amp; Cropping</b>"
-msgstr ""
+msgstr "<b>Suunta ja rajaus</b>"
 
 #: src/ui-gtk3/ghb.ui:3600
 msgid "Resolution Limit:"
-msgstr ""
+msgstr "Tarkkuusrajoitus:"
 
 #: src/ui-gtk3/ghb.ui:3615
 msgid "Resolution limits for common video formats."
-msgstr ""
+msgstr "Yleisten videomuotojen tarkkuusrajoitukset."
 
 #: src/ui-gtk3/ghb.ui:3631
 msgid "Maximum Size:"
-msgstr ""
+msgstr "Enimmäiskoko:"
 
 #: src/ui-gtk3/ghb.ui:3646
 msgid "This is the maximum width that the video will be stored at."
-msgstr ""
+msgstr "Tämä on talletettavan videon enimmäisleveys."
 
 #: src/ui-gtk3/ghb.ui:3663 src/ui-gtk3/ghb.ui:3832 src/ui-gtk3/ghb.ui:4206
 msgid "x"
-msgstr ""
+msgstr "×"
 
 #: src/ui-gtk3/ghb.ui:3678
 msgid "This is the maximum height that the video will be stored at."
-msgstr ""
+msgstr "Tämä on talletettavan videon enimmäiskorkeus."
 
 #: src/ui-gtk3/ghb.ui:3694
 msgid "Anamorphic:"
@@ -849,6 +835,11 @@ msgid ""
 "    None      - Force pixel aspect ratio to 1:1.\n"
 "    Custom    - Enter a custom pixel aspect ratio.</tt></small>"
 msgstr ""
+"<b>Anamorfiset tilat:</b><small><tt>\n"
+"Automaattinen – käytä kuvapistesuhdetta, joka käyttää\n"
+"    parhaiten kuva-alan säästäen kuitenkin kuvasuhteen.\n"
+"Ei mitään – pakota kuvapistesuhteeksi 1 : 1.\n"
+"Mukautettu – anna oma kuvapistesuhde.</tt></small>"
 
 #: src/ui-gtk3/ghb.ui:3730
 msgid "Pixel Aspect:"
@@ -858,8 +849,7 @@ msgstr "Kuvapistesuhde:"
 msgid ""
 "Pixel aspect defines the shape of the pixels.\n"
 "\n"
-"A 1:1 ratio defines a square pixel.  Other values define rectangular "
-"shapes.\n"
+"A 1:1 ratio defines a square pixel.  Other values define rectangular shapes.\n"
 "Players will scale the image in order to achieve the specified aspect."
 msgstr ""
 "Kuvapistesuhde määrittää kuvapisteiden muodon.\n"
@@ -874,25 +864,22 @@ msgstr ":"
 #: src/ui-gtk3/ghb.ui:3780
 msgid ""
 "Pixel aspect defines the shape of the pixels.\n"
-"A 1:1 ratio defines a square pixel.  Other values define rectangular "
-"shapes.\n"
+"A 1:1 ratio defines a square pixel.  Other values define rectangular shapes.\n"
 "Players will scale the image in order to achieve the specified aspect."
 msgstr ""
 "Pikselivaste määrittää pikseleiden muodon.\n"
 "\n"
-"1:1 kuvasuhde määrittää neliöpikselimallin. Muut arvot suosivat "
-"suorakulmaista laajaa kuvaa.\n"
+"1:1 kuvasuhde määrittää neliöpikselimallin. Muut arvot suosivat suorakulmaista laajaa kuvaa.\n"
 "Toistimet mitoittavat kuvan pyydetyn kuva-asetuksen saavuttamiseksi. "
 
 #: src/ui-gtk3/ghb.ui:3799
 msgid "Scaled Size:"
-msgstr ""
+msgstr "Skaalattu koko:"
 
 #: src/ui-gtk3/ghb.ui:3814
 msgid ""
 "This is the width that the video will be stored at.\n"
-"The actual display dimensions will differ if the pixel aspect ratio is not "
-"1:1."
+"The actual display dimensions will differ if the pixel aspect ratio is not 1:1."
 msgstr ""
 "Tämä on kuvaleveys, jolla video tallennetaan.\n"
 "Todelliset näyttömitat eroavat, ellei kuvapistesuhde ole 1:1."
@@ -900,71 +887,72 @@ msgstr ""
 #: src/ui-gtk3/ghb.ui:3847
 msgid ""
 "This is the height that the video will be stored at.\n"
-"The actual display dimensions will differ if the pixel aspect ratio is not "
-"1:1."
+"The actual display dimensions will differ if the pixel aspect ratio is not 1:1."
 msgstr ""
 "Tämä on kuvakorkeus, jolla video tallennetaan.\n"
 "Todellinen näyttömitta eroaa, ellei kuvapistesuhde ole 1:1."
 
 #: src/ui-gtk3/ghb.ui:3861
 msgid "Optimal Size"
-msgstr ""
+msgstr "Optimaalinen koko"
 
 #: src/ui-gtk3/ghb.ui:3866
 msgid "Use highest resolution permitted by above settings."
-msgstr ""
+msgstr "Käytä suurinta yllä olevien asetusten sallimaa tarkkuutta."
 
 #: src/ui-gtk3/ghb.ui:3881
 msgid "Allow Upscaling"
-msgstr ""
+msgstr "Salli skaalaus ylöspäin"
 
 #: src/ui-gtk3/ghb.ui:3886
-msgid "If not enabled, scaled dimensions will be limited to source dimensions."
+msgid ""
+"If not enabled, scaled dimensions will be limited to source dimensions."
 msgstr ""
+"Ellei tätä ole valittu, lähteen mitat rajoittavat skaalattuja mittoja."
 
 #: src/ui-gtk3/ghb.ui:3911
 msgid "<b>Resolution &amp; Scaling</b>"
-msgstr ""
+msgstr "<b>Tarkkuus ja skaalaus</b>"
 
 #: src/ui-gtk3/ghb.ui:3951
 msgid "Fill:"
-msgstr ""
+msgstr "Täyttö:"
 
 #: src/ui-gtk3/ghb.ui:3968
 msgid "Add a border around the video."
-msgstr ""
+msgstr "Lisää videon ympärille reunus."
 
 #: src/ui-gtk3/ghb.ui:3985
 msgid "Left Pad"
-msgstr ""
+msgstr "Vasen täyte"
 
 #: src/ui-gtk3/ghb.ui:4002
 msgid "Top Pad"
-msgstr ""
+msgstr "Ylätäyte"
 
 #: src/ui-gtk3/ghb.ui:4019
 msgid "Bottom Pad"
-msgstr ""
+msgstr "Alatäyte"
 
 #: src/ui-gtk3/ghb.ui:4036
 msgid "Right Pad"
-msgstr ""
+msgstr "Oikea täyte"
 
 #: src/ui-gtk3/ghb.ui:4052
 msgid "Color:"
-msgstr ""
+msgstr "Väri:"
 
 #: src/ui-gtk3/ghb.ui:4069
 msgid "Color of border added around video."
-msgstr ""
+msgstr "Videon ympärille lisätyn reunuksen väri."
 
 #: src/ui-gtk3/ghb.ui:4091
 msgid "<b>Borders</b>"
-msgstr ""
+msgstr "<b>Reunukset</b>"
 
 #: src/ui-gtk3/ghb.ui:4189 src/ui-gtk3/ghb.ui:4221 src/ui-gtk3/ghb.ui:4239
 msgid "Changing the display size will stretch the video."
-msgstr ""
+msgstr "Näytön koon muuttaminen venyttää videota."
 
 #: src/ui-gtk3/ghb.ui:4234 src/hb-backend.c:123 src/hb-backend.c:226
 #: src/hb-backend.c:298
@@ -973,7 +961,7 @@ msgstr "Automaattinen"
 
 #: src/ui-gtk3/ghb.ui:4305
 msgid "<b>Final Dimensions</b>"
-msgstr ""
+msgstr "<b>Lopulliset mitat</b>"
 
 #: src/ui-gtk3/ghb.ui:4318
 msgid "Dimensions"
@@ -987,14 +975,11 @@ msgstr "Vastatelekiini:"
 msgid ""
 "This filter removes 'combing' artifacts that are the result of telecining.\n"
 "\n"
-"Telecining is a process that adjusts film framerates that are 24fps to NTSC "
-"video frame rates which are 30fps."
+"Telecining is a process that adjusts film framerates that are 24fps to NTSC video frame rates which are 30fps."
 msgstr ""
-"Tämä suodatin poistaa kuvasta muunnoksesta aiheutuneen ”kampamaisen” "
-"kuvavirheen.\n"
+"Tämä suodatin poistaa kuvasta muunnoksesta aiheutuneen ”kampamaisen” kuvavirheen.\n"
 "\n"
-"Muuntamisessa filmin 24 FPS kuvanopeus sovitetaan NTSC-videon 30 FPS "
-"kuvanopeuteen."
+"Muuntamisessa filmin 24 FPS kuvanopeus sovitetaan NTSC-videon 30 FPS kuvanopeuteen."
 
 #: src/ui-gtk3/ghb.ui:4367 src/ui-gtk3/ghb.ui:4913
 msgid ""
@@ -1004,8 +989,7 @@ msgid ""
 msgstr ""
 "Itsemääritetty suodatusmuoto vastatelekiinille\n"
 "\n"
-"RoskaVasemmalla:RoskaOikealla:RoskaYläosassa:Roskala-osassa:TiukatHajoitteet:"
-"MetrinenAla:Vastaavuus"
+"RoskaVasemmalla:RoskaOikealla:RoskaYläosassa:Roskala-osassa:TiukatHajoitteet:MetrinenAla:Vastaavuus"
 
 #: src/ui-gtk3/ghb.ui:4386
 msgid "Interlace Detection:"
@@ -1032,8 +1016,7 @@ msgid ""
 msgstr ""
 "Itsemääritetty suodatusketju lomitukselle \n"
 "\n"
-"Moodi:Spatiaalinen Metrisyys:Liike Puinti:Spatiaalinen Puinti:Naamio "
-"Suodatin Moodi:\n"
+"Moodi:Spatiaalinen Metrisyys:Liike Puinti:Spatiaalinen Puinti:Naamio Suodatin Moodi:\n"
 "Sulku Puinti: Laatikon Leveys: Laatikon Korkeus"
 
 #: src/ui-gtk3/ghb.ui:4438
@@ -1060,6 +1043,10 @@ msgid ""
 "    The deinterlace filter is a classic YADIF deinterlacer.\n"
 "    "
 msgstr ""
+"Valitse kamman- tai lomituksenpoistosuodattimen asetukset.\n"
+"\n"
+"    Kammanpoistosuodatin tukee eri interpolointialgoritmeja.\n"
+"    Lomituksenpoistosuodatin on perinteinen Yadif-lomituksenpoistaja."
 
 #: src/ui-gtk3/ghb.ui:4521
 msgid "Deblock Filter:"
@@ -1070,10 +1057,8 @@ msgid ""
 "The deblocking filter removes a common type of compression artifact.\n"
 "If your source exhibits 'blockiness', this filter may help clean it up."
 msgstr ""
-"Laatikointisuodatin poistaa tavanomaisia sivutuotteita joita kuvan "
-"pakkaaminen tuo mukanaan.\n"
-"Mikäli lähdevideossa on 'laatikkomaisuuksia', tämä suodatin voi auttaa "
-"niiden putsaamisessa."
+"Laatikointisuodatin poistaa tavanomaisia sivutuotteita joita kuvan pakkaaminen tuo mukanaan.\n"
+"Mikäli lähdevideossa on 'laatikkomaisuuksia', tämä suodatin voi auttaa niiden putsaamisessa."
 
 #: src/ui-gtk3/ghb.ui:4561 src/ui-gtk3/ghb.ui:4664 src/ui-gtk3/ghb.ui:4744
 #: src/ui-gtk3/ghb.ui:4845 src/ui-gtk3/ghb.ui:5343
@@ -1085,6 +1070,8 @@ msgid ""
 "The deblocking filter removes a common type of compression artifact.\n"
 "    If your source exhibits 'blockiness', this filter may help clean it up."
 msgstr ""
+"Mosaiikinpoistosuodatin poistaa yleisen pakkaushäiriön. Jos lähde\n"
+"aiheuttaa ”mosaiikkimaisuutta”, tämä suodatin voi vähentää sitä."
 
 #: src/ui-gtk3/ghb.ui:4579 src/ui-gtk3/ghb.ui:4762
 msgid ""
@@ -1092,6 +1079,9 @@ msgid ""
 "\n"
 "    strength=weak|strong:thresh=0-100:blocksize=4-512"
 msgstr ""
+"Mukautettu mosaiikinpoistosuodatinjonon muoto\n"
+"\n"
+"    strength=weak|strong:thresh=0-100:blocksize=4-512"
 
 #: src/ui-gtk3/ghb.ui:4600
 msgid "Denoise Filter:"
@@ -1100,23 +1090,22 @@ msgstr "Kohinanpoistosuodatin:"
 #: src/ui-gtk3/ghb.ui:4616
 msgid ""
 "Denoise filtering reduces or removes the appearance of noise and grain.\n"
-"Film grain and other types of high frequency noise are difficult to "
-"compress.\n"
+"Film grain and other types of high frequency noise are difficult to compress.\n"
 "Using this filter on such sources can result in smaller file sizes."
 msgstr ""
 "Kohinasuodin vähentää tai poistaa kuvasta kohinaa ja rakeisuutta.\n"
-"Filmin rakeisuus tai muut sen tapaiset korkean taajuuden harmit ovat "
-"vaikeita pakata.\n"
-"Tätä suodatinta käyttämällä kyseisissä tilantessa voit saavuttaa pienemmän "
-"tiedostokoon."
+"Filmin rakeisuus tai muut sen tapaiset korkean taajuuden harmit ovat vaikeita pakata.\n"
+"Tätä suodatinta käyttämällä kyseisissä tilantessa voit saavuttaa pienemmän tiedostokoon."
 
 #: src/ui-gtk3/ghb.ui:4651 src/ui-gtk3/ghb.ui:4674
 msgid ""
 "Denoise filtering reduces or removes the appearance of noise and grain.\n"
-"    Film grain and other types of high frequency noise are difficult to "
-"compress.\n"
+"    Film grain and other types of high frequency noise are difficult to compress.\n"
 "    Using this filter on such sources can result in smaller file sizes."
 msgstr ""
+"Kohinanpoistosuodatin vähentää tai poistaa kohinaa ja rakeisuutta.\n"
+"    Filmin rakeisuutta ja muuta suurtaajuuskohinaa on vaikea pakata.\n"
+"    Tällä suodattimella näiden lähteiden tulostiedostokoko pienenee."
 
 #: src/ui-gtk3/ghb.ui:4683 src/ui-gtk3/ghb.ui:4863
 msgid ""
@@ -1124,22 +1113,29 @@ msgid ""
 "\n"
 "    SpatialLuma:SpatialChroma:TemporalLuma:TemporalChroma"
 msgstr ""
+"Mukautettu kohinanpoistosuodatinjonon muoto\n"
+"\n"
+"    SpatialLuma:SpatialChroma:TemporalLuma:TemporalChroma"
 
 #: src/ui-gtk3/ghb.ui:4704
 msgid "Chroma Smooth Filter:"
-msgstr ""
+msgstr "Chroma-pehmennyssuodatin:"
 
 #: src/ui-gtk3/ghb.ui:4720
 msgid ""
 "The chroma smooth filter removes common color artifacts.\n"
 "Lower resolution analog source content may benefit from this filter."
 msgstr ""
+"Chroma-pehmennyssuodatin poistaa yleisiä värivirheitä.\n"
+"Heikkotarkkuuksinen analoginen lähdesisältö voi hyötyä tästä suodattimesta."
 
 #: src/ui-gtk3/ghb.ui:4754
 msgid ""
 "The chroma smooth filter removes common color artifacts.\n"
 "    Lower resolution analog source content may benefit from this filter."
 msgstr ""
+"Chroma-pehmennyssuodatin poistaa yleisiä värivirheitä.\n"
+"    Heikkotarkkuuksinen analoginen lähdesisältö voi hyötyä tästä suodattimesta."
 
 #: src/ui-gtk3/ghb.ui:4783
 msgid "Sharpen Filter:"
@@ -1158,14 +1154,16 @@ msgid ""
 "Sharpen filtering enhances edges and other\n"
 "    high frequency components in the video."
 msgstr ""
+"Terävöityssuodatin korostaa reunoja ja videon\n"
+"muita suuritaajuuksisia osia."
 
 #: src/ui-gtk3/ghb.ui:4884
 msgid "Colorspace:"
-msgstr ""
+msgstr "Väriavaruus:"
 
 #: src/ui-gtk3/ghb.ui:4900
 msgid "Translate the colorspace of the source."
-msgstr ""
+msgstr "Muunna lähteen väriavaruus."
 
 #: src/ui-gtk3/ghb.ui:4929 src/hb-backend.c:4878
 msgid "Grayscale"
@@ -1282,63 +1280,59 @@ msgid ""
 "Set the average bitrate.\n"
 "\n"
 "The instantaneous bitrate can be much higher or lower at any point in time.\n"
-"But the average over a long duration will be the value set here.  If you "
-"need\n"
-"to limit instantaneous bitrate, look into x264's vbv-bufsize and vbv-maxrate "
-"settings."
+"But the average over a long duration will be the value set here.  If you need\n"
+"to limit instantaneous bitrate, look into x264's vbv-bufsize and vbv-maxrate settings."
 msgstr ""
 "Asettaa keskimääräisen bittinopeuden.\n"
 "\n"
-"Välitön tietynhetkinen bittinopeus voi olla paljon tätä pienempi tai "
-"suurempi,\n"
-"mutta nopeuden pitkän ajan keskiarvo on tässä annettu arvo. Jos "
-"välitöntäkin\n"
-"bittinopeutta pitää rajoittaa, ks. x264:n asetuksia vbv-bufsize ja vbv-"
-"maxrate."
+"Välitön tietynhetkinen bittinopeus voi olla paljon tätä pienempi tai suurempi,\n"
+"mutta nopeuden pitkän ajan keskiarvo on tässä annettu arvo. Jos välitöntäkin\n"
+"bittinopeutta pitää rajoittaa, ks. x264:n asetuksia vbv-bufsize ja vbv-maxrate."
 
 #: src/ui-gtk3/ghb.ui:5227
 msgid "Multi-Pass Encoding"
-msgstr ""
+msgstr "Monivaiheinen koodaus"
 
 #: src/ui-gtk3/ghb.ui:5232
 msgid ""
 "Perform Multi Pass Encoding.\n"
 "\n"
-"The 'Bitrate' option is prerequisite. During the analysis passes, statistics "
-"about\n"
+"The 'Bitrate' option is prerequisite. During the analysis passes, statistics about\n"
 "the video are collected.  Then in the final pass, those statistics are used\n"
 "to make bitrate allocation decisions."
 msgstr ""
+"Suorita koodaus useammassa vaiheessa.\n"
+"\n"
+"Ennakkoedellytys on ”bittinopeus”-valinta. Analyysivaiheissa kerätään tietoa\n"
+"videosta. Viimeisessä vaiheessa tilastoja käytetään tehtäessä päätöksiä\n"
+"bittinopeuden osoittamisesta."
 
 #: src/ui-gtk3/ghb.ui:5250
 msgid "Turbo Analysis Pass"
-msgstr ""
+msgstr "Turboanalyysivaihe"
 
 #: src/ui-gtk3/ghb.ui:5255
 msgid ""
 "During the analysis pass of a multi pass encode, use settings that speed "
 "things along."
 msgstr ""
+"Käytä monivaiheisen koodauksen analyysivaiheessa toimintaa nopeuttavia "
+"asetuksia."
 
 #: src/ui-gtk3/ghb.ui:5317
 msgid ""
-"Adjusts encoder settings to trade off compression efficiency against "
-"encoding speed.\n"
+"Adjusts encoder settings to trade off compression efficiency against encoding speed.\n"
 "\n"
 "This establishes your default encoder settings.\n"
 "Tunes, profiles, levels and extra options string will be applied to this.\n"
-"You should generally set this option to the slowest you can bear since "
-"slower\n"
+"You should generally set this option to the slowest you can bear since slower\n"
 "settings will result in better quality or smaller files."
 msgstr ""
-"Säätää koodausasetukset korostamaan koodausnopeutta pakkaustehon "
-"kustannuksella.\n"
+"Säätää koodausasetukset korostamaan koodausnopeutta pakkaustehon kustannuksella.\n"
 "\n"
 "Tämä tulkitaan koodauksen oletusasetukseksi.\n"
-"Hienosäätöä, profiileja, tasoja ja lisävalintajonoja sovelletaan tähän "
-"pohjaan.\n"
-"Asetus kannattaa yleensä asentaa hitaimmaksi, mitä sietää, koska hitaat "
-"asetukset\n"
+"Hienosäätöä, profiileja, tasoja ja lisävalintajonoja sovelletaan tähän pohjaan.\n"
+"Asetus kannattaa yleensä asentaa hitaimmaksi, mitä sietää, koska hitaat asetukset\n"
 "tuottavat yleensä parempilaatuisen videon ja pienemmän tiedoston."
 
 #: src/ui-gtk3/ghb.ui:5360
@@ -1472,8 +1466,7 @@ msgstr "Valitse, mitä lähdetietovälineen ääniraitoja käytetään."
 #: src/ui-gtk3/ghb.ui:5798
 msgid ""
 "Create a list of languages you would like to select audio for.\n"
-"Tracks matching these languages will be selected using the chosen Selection "
-"Behavior."
+"Tracks matching these languages will be selected using the chosen Selection Behavior."
 msgstr ""
 "Luo luettelo kielistä, joiden äänen haluat valita.\n"
 "Kieliä vastaavat raidat valitaan halutun valintatoiminnan mukaisesti."
@@ -1497,26 +1490,26 @@ msgstr "Käytä toissijaiseen ääneen vain ensimmäistä koodausta"
 #: src/ui-gtk3/ghb.ui:5881
 msgid ""
 "Only the primary audio track will be encoded with the full encoder list.\n"
-"All other secondary audio output tracks will be encoded with first encoder "
-"only."
+"All other secondary audio output tracks will be encoded with first encoder only."
 msgstr ""
-"Vain ensisijainen ääniraita koodataan koko koodausluettelolla.\n"
-"Toissijaiset äänitulosraidat koodataan vain ensimmäisellä koodauksista."
+"Koko koodausluetteloa käytetään vain ensisijaiseen ääniraitaan.\n"
+"Toissijaiset äänitulosraidat koodataan koodauksista ensimmäisellä."
 
 #: src/ui-gtk3/ghb.ui:5917
 msgid "Auto Passthru:"
-msgstr "AUtomaattinen läpivienti:"
+msgstr "Automaattinen läpivienti:"
 
 #: src/ui-gtk3/ghb.ui:5928
 msgid "MP2"
-msgstr ""
+msgstr "MP2"
 
 #: src/ui-gtk3/ghb.ui:5933
 msgid ""
 "Enable this if your playback device supports MP2.\n"
-"This permits MP2 passthru to be selected when automatic passthru selection "
-"is enabled."
+"This permits MP2 passthru to be selected when automatic passthru selection is enabled."
 msgstr ""
+"Valitse tämä, jos toistolaite tukee MP2:ta.\n"
+"Tämä mahdollistaa MP2-läpiviennin valinnan automaattista läpivientiä käytettäessä."
 
 #: src/ui-gtk3/ghb.ui:5949
 msgid "MP3"
@@ -1525,12 +1518,10 @@ msgstr "MP3"
 #: src/ui-gtk3/ghb.ui:5954
 msgid ""
 "Enable this if your playback device supports MP3.\n"
-"This permits MP3 passthru to be selected when automatic passthru selection "
-"is enabled."
+"This permits MP3 passthru to be selected when automatic passthru selection is enabled."
 msgstr ""
 "Valitse tämä, jos toistolaite tukee MP3:a.\n"
-"Tällöin valitaan MP3-läpivienti, kun automaattinen läpiviennin valinta on "
-"käytössä."
+"Tämä mahdollistaa MP3-läpiviennin valinnan automaattista läpivientiä käytettäessä."
 
 #: src/ui-gtk3/ghb.ui:5970
 msgid "AC-3"
@@ -1539,12 +1530,10 @@ msgstr "AC-3"
 #: src/ui-gtk3/ghb.ui:5975
 msgid ""
 "Enable this if your playback device supports AC-3.\n"
-"This permits AC-3 passthru to be selected when automatic passthru selection "
-"is enabled."
+"This permits AC-3 passthru to be selected when automatic passthru selection is enabled."
 msgstr ""
-"Ota tämä käyttöön, jos toistolaite tukee AC-3:a.\n"
-"Tämä sallii valita AC-3-läpiviennin, kun automaattinen läpivienti on "
-"käytössä."
+"Valitse tämä, jos toistolaite tukee AC-3:a.\n"
+"Tämä mahdollistaa AC-3-läpiviennin valinnan automaattista läpivientiä käytettäessä."
 
 #: src/ui-gtk3/ghb.ui:5991
 msgid "EAC-3"
@@ -1553,12 +1542,10 @@ msgstr "EAC-3"
 #: src/ui-gtk3/ghb.ui:5996
 msgid ""
 "Enable this if your playback device supports EAC-3.\n"
-"This permits EAC-3 passthru to be selected when automatic passthru selection "
-"is enabled."
+"This permits EAC-3 passthru to be selected when automatic passthru selection is enabled."
 msgstr ""
-"Ota tämä käyttöön, jos toistolaite tukee EAC-3:a.\n"
-"Tämä sallii valita EAC-3-läpiviennin, kun automaattinen läpivienti on "
-"käytössä."
+"Valitse tämä, jos toistolaite tukee EAC-3:a.\n"
+"Tämä mahdollistaa EAC-3-läpiviennin valinnan automaattista läpivientiä käytettäessä."
 
 #: src/ui-gtk3/ghb.ui:6012
 msgid "DTS"
@@ -1567,11 +1554,10 @@ msgstr "DTS"
 #: src/ui-gtk3/ghb.ui:6017
 msgid ""
 "Enable this if your playback device supports DTS.\n"
-"This permits DTS passthru to be selected when automatic passthru selection "
-"is enabled."
+"This permits DTS passthru to be selected when automatic passthru selection is enabled."
 msgstr ""
-"Ota tämä käyttöön, jos toistolaite tukee DTS:ää.\n"
-"Tämä sallii valita DTS-läpiviennin, kun automaattinen läpivienti on käytössä."
+"Valitse tämä, jos toistolaite tukee DTS:ää.\n"
+"Tämä mahdollistaa DTS-läpiviennin valinnan automaattista läpivientiä käytettäessä."
 
 #: src/ui-gtk3/ghb.ui:6033
 msgid "DTS-HD"
@@ -1580,12 +1566,10 @@ msgstr "DTS-HD"
 #: src/ui-gtk3/ghb.ui:6038
 msgid ""
 "Enable this if your playback device supports DTS-HD.\n"
-"This permits DTS-HD passthru to be selected when automatic passthru "
-"selection is enabled."
+"This permits DTS-HD passthru to be selected when automatic passthru selection is enabled."
 msgstr ""
-"Ota tämä käyttöön, jos toistolaite tukee DTS-HD:tä.\n"
-"Tämä sallii valita DTS-HD-läpiviennin, kun automaattinen läpivienti on "
-"käytössä."
+"Valitse tämä, jos toistolaite tukee DTS-HD:tä.\n"
+"Tämä mahdollistaa DTS-HD-läpiviennin valinnan automaattista läpivientiä käytettäessä."
 
 #: src/ui-gtk3/ghb.ui:6054
 msgid "TrueHD"
@@ -1594,12 +1578,10 @@ msgstr "TrueHD"
 #: src/ui-gtk3/ghb.ui:6059
 msgid ""
 "Enable this if your playback device supports TrueHD.\n"
-"This permits TrueHD passthru to be selected when automatic passthru "
-"selection is enabled."
+"This permits TrueHD passthru to be selected when automatic passthru selection is enabled."
 msgstr ""
-"Ota tämä käyttöön, jos toistolaite tukee TrueHD:tä.\n"
-"Tämä sallii valita TrueHD-läpiviennin, kun automaattinen läpivienti on "
-"käytössä."
+"Valitse tämä, jos toistolaite tukee TrueHD:tä.\n"
+"Tämä mahdollistaa TrueHD-läpiviennin valinnan automaattista läpivientiä käytettäessä."
 
 #: src/ui-gtk3/ghb.ui:6075
 msgid "FLAC"
@@ -1608,12 +1590,10 @@ msgstr "FLAC"
 #: src/ui-gtk3/ghb.ui:6080
 msgid ""
 "Enable this if your playback device supports FLAC.\n"
-"This permits FLAC passthru to be selected when automatic passthru selection "
-"is enabled."
+"This permits FLAC passthru to be selected when automatic passthru selection is enabled."
 msgstr ""
-"Ota tämä käyttöön, jos toistolaite tukee FLACia.\n"
-"Tämä sallii valita FLAC-läpiviennin, kun automaattinen läpivienti on "
-"käytössä."
+"Valitse tämä, jos toistolaite tukee FLACia.\n"
+"Tämä mahdollistaa FLAC-läpiviennin valinnan automaattista läpivientiä käytettäessä."
 
 #: src/ui-gtk3/ghb.ui:6096
 msgid "AAC"
@@ -1622,23 +1602,22 @@ msgstr "AAC"
 #: src/ui-gtk3/ghb.ui:6101
 msgid ""
 "Enable this if your playback device supports AAC.\n"
-"This permits AAC passthru to be selected when automatic passthru selection "
-"is enabled."
+"This permits AAC passthru to be selected when automatic passthru selection is enabled."
 msgstr ""
 "Valitse tämä, jos toistolaite tukee AAC:tä.\n"
-"Tällöin valitaan AAC-läpivienti, kun automaattinen läpiviennin valinta on "
-"käytössä."
+"Tämä mahdollistaa AAC-läpiviennin valinnan automaattista läpivientiä käytettäessä."
 
 #: src/ui-gtk3/ghb.ui:6117
 msgid "Opus"
-msgstr ""
+msgstr "Opus"
 
 #: src/ui-gtk3/ghb.ui:6122
 msgid ""
 "Enable this if your playback device supports Opus.\n"
-"This permits Opus passthru to be selected when automatic passthru selection "
-"is enabled."
+"This permits Opus passthru to be selected when automatic passthru selection is enabled."
 msgstr ""
+"Valitse tämä, jos toistolaite tukee Opusta.\n"
+"Tämä mahdollistaa Opus-läpiviennin valinnan automaattista läpivientiä käytettäessä."
 
 #: src/ui-gtk3/ghb.ui:6155
 msgid "Passthru Fallback:"
@@ -1701,7 +1680,8 @@ msgid "Add all subtitle tracks to the list"
 msgstr "Lisää luetteloon kaikki tekstitysraidat"
 
 #: src/ui-gtk3/ghb.ui:6414 src/callbacks.c:2344 src/queuehandler.c:647
-#: src/queuehandler.c:1083 src/subtitlehandler.c:414 src/subtitlehandler.c:1221
+#: src/queuehandler.c:1083 src/subtitlehandler.c:414
+#: src/subtitlehandler.c:1221
 msgid "Foreign Audio Scan"
 msgstr "Vieraskielisen äänen tunnistus"
 
@@ -1726,11 +1706,9 @@ msgstr "Valitse, mitä lähteen tekstitysraidoista käytetään."
 #: src/ui-gtk3/ghb.ui:6590
 msgid ""
 "Create a list of languages you would like to select subtitles for.\n"
-"Tracks matching these languages will be selected using the chosen Selection "
-"Behavior.\n"
+"Tracks matching these languages will be selected using the chosen Selection Behavior.\n"
 "\n"
-"The first language in this list is your \"preferred\" language and will be "
-"used\n"
+"The first language in this list is your \"preferred\" language and will be used\n"
 "for determining subtitle selection settings when there is foreign audio."
 msgstr ""
 "Luo luettelo kielistä, joille haluat valita tekstitykset.\n"
@@ -1749,17 +1727,13 @@ msgstr "Lisää vieraskielisenä äänen tunnistusvaihe"
 
 #: src/ui-gtk3/ghb.ui:6703
 msgid ""
-"Add \"Foreign Audio Scan\" when the default audio track is your preferred "
-"language.\n"
-"This search pass finds short sequences of foreign audio and provides "
-"subtitles for them.\n"
+"Add \"Foreign Audio Scan\" when the default audio track is your preferred language.\n"
+"This search pass finds short sequences of foreign audio and provides subtitles for them.\n"
 "\n"
 "This option requires a language to be set in the Selected Languages list."
 msgstr ""
-"Lisää ”vieraskielisen äänen tunnistus”, kun oletusääniraita on jo suositulla "
-"kielellä.\n"
-"Tässä haussa etsitään lyhyitä vieraskielisen äänen jaksoja ja tarjotaan "
-"niille tekstitystä.\n"
+"Lisää ”vieraskielisen äänen tunnistus”, kun oletusääniraita on jo suositulla kielellä.\n"
+"Tässä haussa etsitään lyhyitä vieraskielisen äänen jaksoja ja tarjotaan niille tekstitystä.\n"
 "\n"
 "Valinta vaatii, että valittujen kielten luettelossa on asetettu kieli."
 
@@ -1769,8 +1743,7 @@ msgstr "Lisää tekstitysraita, kun oletusäänen kieli on vieras"
 
 #: src/ui-gtk3/ghb.ui:6723
 msgid ""
-"When the default audio track is not your preferred language, add a subtitle "
-"track.\n"
+"When the default audio track is not your preferred language, add a subtitle track.\n"
 "\n"
 "This option requires a language to be set in the Selected Languages list."
 msgstr ""
@@ -1798,17 +1771,13 @@ msgstr "Toiminta kuvaan poltettaessa*:"
 msgid ""
 "Set the behavior of subtitle \"Burn-In\".\n"
 "\n"
-"Burned-In subtitles are part of the video and can not be disabled during "
-"playback.\n"
-"Only one subtitle track can be burned! Since conflicts can occur, the first "
-"chosen wins."
+"Burned-In subtitles are part of the video and can not be disabled during playback.\n"
+"Only one subtitle track can be burned! Since conflicts can occur, the first chosen wins."
 msgstr ""
 "Aseta, milloin tekstitykset poltetaan kuvaan.\n"
 "\n"
-"Kuvaan poltetut tekstitykset ovat osa videota eikä niitä voi toistettaessa "
-"poistaa käytöstä.\n"
-"Vain yksi tekstitysraita voidaan polttaa kuvaan! Ristiriitatilanteissa "
-"ensimmäinen valittu voittaa."
+"Kuvaan poltetut tekstitykset ovat osa videota eikä niitä voi toistettaessa poistaa käytöstä.\n"
+"Vain yksi tekstitysraita voidaan polttaa kuvaan! Ristiriitatilanteissa ensimmäinen valittu voittaa."
 
 #: src/ui-gtk3/ghb.ui:6802
 msgid "Burn-In for deficient players*:"
@@ -1820,19 +1789,15 @@ msgstr "DVD-tekstitykset"
 
 #: src/ui-gtk3/ghb.ui:6816
 msgid ""
-"Burn the first selected DVD subtitle track. All other DVD subtitle tracks "
-"will be discarded.\n"
-"Use this option if your player software or device does not support DVD "
-"subtitles.\n"
+"Burn the first selected DVD subtitle track. All other DVD subtitle tracks will be discarded.\n"
+"Use this option if your player software or device does not support DVD subtitles.\n"
 "\n"
-"Only one subtitle track can be burned! Since conflicts can occur, the first "
-"chosen wins."
+"Only one subtitle track can be burned! Since conflicts can occur, the first chosen wins."
 msgstr ""
 "Polta ensimmäinen valittu DVD-tekstitysraita, kaikki muut hylätään.\n"
 "Käytä tätä asetusta, jos soitto-ohjelma tai -laite ei tue DVD-tekstityksiä.\n"
 "\n"
-"Vain yhden tekstitysraidan voi polttaa! Ristiriitatapauksissa ensimmäinen "
-"valittu voittaa."
+"Vain yhden tekstitysraidan voi polttaa! Ristiriitatapauksissa ensimmäinen valittu voittaa."
 
 #: src/ui-gtk3/ghb.ui:6830
 msgid "Blu-ray Subtitles"
@@ -1840,20 +1805,16 @@ msgstr "Bluray-tekstitykset"
 
 #: src/ui-gtk3/ghb.ui:6835
 msgid ""
-"Burn the first selected Blu-ray subtitle track. All other Blu-ray subtitle "
-"tracks will be discarded.\n"
-"Use this option if your player software or device does not support Blu-ray "
-"subtitles.\n"
+"Burn the first selected Blu-ray subtitle track. All other Blu-ray subtitle tracks will be discarded.\n"
+"Use this option if your player software or device does not support Blu-ray subtitles.\n"
 "\n"
-"Only one subtitle track can be burned! Since conflicts can occur, the first "
-"chosen wins."
+"Only one subtitle track can be burned! Since conflicts can occur, the first chosen wins."
 msgstr ""
 "Polta ensimmäinen valittu bluray-tekstitysraita, kaikki muut hylätään.\n"
 "\n"
 "Käytä tätä, jos soitto-ohjelma tai -laite ei tue blu-ray-tekstityksiä.\n"
 "\n"
-"Vain yhden tekstitysraidan voi polttaa! Ristiriitatapauksissa ensimmäinen "
-"valittu voittaa."
+"Vain yhden tekstitysraidan voi polttaa! Ristiriitatapauksissa ensimmäinen valittu voittaa."
 
 #: src/ui-gtk3/ghb.ui:6857
 msgid ""
@@ -1885,19 +1846,19 @@ msgstr "Lisää tulostiedostoon lukumerkit."
 
 #: src/ui-gtk3/ghb.ui:6916
 msgid "Import Chapters"
-msgstr ""
+msgstr "Tuo luvut"
 
 #: src/ui-gtk3/ghb.ui:6920
 msgid "Import chapter list from an XML file"
-msgstr ""
+msgstr "Tuo XML-tiedostosta lukujen luettelo"
 
 #: src/ui-gtk3/ghb.ui:6931
 msgid "Export Chapters"
-msgstr ""
+msgstr "Vie luvut"
 
 #: src/ui-gtk3/ghb.ui:6935
 msgid "Export chapter list as an XML file"
-msgstr ""
+msgstr "Vie lukujen luettelo XML-tiedostoon"
 
 #: src/ui-gtk3/ghb.ui:6969
 msgid "Index"
@@ -1969,7 +1930,7 @@ msgstr "Kohdekansio"
 
 #: src/ui-gtk3/ghb.ui:7539
 msgid "Add Multiple Titles"
-msgstr ""
+msgstr "Lisää useita nimekkeitä"
 
 #: src/ui-gtk3/ghb.ui:7547 src/ui-gtk3/ghb.ui:8548 src/ui-gtk3/ghb.ui:8705
 #: src/ui-gtk3/ghb.ui:9270 src/ui-gtk3/ghb.ui:9680 src/callbacks.c:5301
@@ -2008,7 +1969,7 @@ msgstr "Valinnat"
 
 #: src/ui-gtk3/ghb.ui:7796
 msgid "Default action when all encodes are complete"
-msgstr ""
+msgstr "Oletustoiminta, kun kaikki koodaukset ovat valmistuneet"
 
 #: src/ui-gtk3/ghb.ui:7818
 msgid "Use automatic naming (uses modified source name)"
@@ -2024,10 +1985,14 @@ msgstr "Automaattisen nimen malli"
 
 #: src/ui-gtk3/ghb.ui:7854
 msgid ""
-"Available Options: {source-path} {source} {title} {preset} {chapters} {date} "
-"{time} {creation-date} {creation-time} {modification-date} {modification-"
+"Available Options: {source-path} {source} {title} {preset} {chapters} {date}"
+" {time} {creation-date} {creation-time} {modification-date} {modification-"
 "time} {codec} {bit-depth} {quality} {bitrate} {width} {height}"
 msgstr ""
+"Saatavilla olevat valinnat: {lähdesijainti} {lähde} {nimeke} {esiasetus} "
+"{luvut} {päiväys} {aika} {luontipäivä} {luontiaika} {muutospäivä} "
+"{muutosaika} {koodekki} {bittisyvyys} {laatu} {bittinopeus} {leveys} "
+"{korkeus}"
 
 #: src/ui-gtk3/ghb.ui:7874
 msgid "Use iPod/iTunes friendly (.m4v) file extension for MP4"
@@ -2048,20 +2013,18 @@ msgstr "Poista valmistuneet työt jonosta koodauksen valmistuttua"
 #: src/ui-gtk3/ghb.ui:7973
 msgid ""
 "By default, completed jobs remain in the queue and are marked as complete.\n"
-"Check this if you want the queue to clean itself up by deleting completed "
-"jobs."
+"Check this if you want the queue to clean itself up by deleting completed jobs."
 msgstr ""
-"Valmistuneet työt säilytetään oletusarvoisesti jonossa ja merkitään "
-"valmiiksi.\n"
+"Valmistuneet työt säilytetään oletusarvoisesti jonossa ja merkitään valmiiksi.\n"
 "Valitse tämä, jos haluat poistaa jonosta valmistuneet työt automaattisesti."
 
 #: src/ui-gtk3/ghb.ui:7986
 msgid "Power Saving"
-msgstr ""
+msgstr "Virransäästö"
 
 #: src/ui-gtk3/ghb.ui:8004
 msgid "Pause encoding when in Power Saver mode"
-msgstr ""
+msgstr "Keskeytä koodaus virransäästötilassa"
 
 #: src/ui-gtk3/ghb.ui:8010
 msgid ""
@@ -2069,10 +2032,13 @@ msgid ""
 "enters Power Saver mode. Encoding will resume when\n"
 "Power Saver mode is disabled."
 msgstr ""
+"Jos valittu, koodaus keskeytetään laitteen siirtyessä\n"
+"virransäästötilaan. Koodaus jatkuu virransäästötilasta\n"
+"poistuttaessa."
 
 #: src/ui-gtk3/ghb.ui:8021
 msgid "Pause encoding when on battery power"
-msgstr ""
+msgstr "Keskeytä koodaus akkukäytössä"
 
 #: src/ui-gtk3/ghb.ui:8027
 msgid ""
@@ -2080,10 +2046,13 @@ msgid ""
 "unplugged. Encoding will resume when reconnected to\n"
 "a mains power source."
 msgstr ""
+"Jos valittu, koodaus keskeytetään, kun ei olla\n"
+"verkkovirrassa. Koodaus jatkuu, kun verkkovirta\n"
+"kytketään."
 
 #: src/ui-gtk3/ghb.ui:8038
 msgid "Pause encoding when battery is low"
-msgstr ""
+msgstr "Keskeytä koodaus akun ollessa vähissä"
 
 #: src/ui-gtk3/ghb.ui:8044
 msgid ""
@@ -2091,14 +2060,16 @@ msgid ""
 "level is low. Encoding will resume when the\n"
 "battery is charged."
 msgstr ""
+"Jos valittu, koodaus keskeytetään akun ollessa vähissä.\n"
+"Koodaus jatkuu, kun akku vaihdetaan."
 
 #: src/ui-gtk3/ghb.ui:8055
 msgid "General"
-msgstr "Yleistä"
+msgstr "Perusasetukset"
 
 #: src/ui-gtk3/ghb.ui:8080
 msgid "Set a custom directory for Handbrake temporary files"
-msgstr ""
+msgstr "Käytä HandBraken väliaikaistiedostoille omaa kansiota"
 
 #: src/ui-gtk3/ghb.ui:8084 src/ui-gtk3/ghb.ui:8104
 msgid ""
@@ -2106,21 +2077,25 @@ msgid ""
 "\n"
 "Changing this setting will require restarting HandBrake.\n"
 "\n"
-"This setting overrides the TEMP environment variable that is normally used "
-"to define this directory.\n"
+"This setting overrides the TEMP environment variable that is normally used to define this directory.\n"
 "\n"
-"Flatpak users may need to set this for certain workflows to work properly. "
-"The default size of the TEMP directory in a flatpak sandbox is 1/2 physical "
-"memory size and may be too small for things like the 2-pass stats file."
+"Flatpak users may need to set this for certain workflows to work properly. The default size of the TEMP directory in a flatpak sandbox is 1/2 physical memory size and may be too small for things like the 2-pass stats file."
 msgstr ""
+"HandBraken luomat väliaikaistiedostot sijoitetaan tämän kansion alle.\n"
+"\n"
+"Asetus tulee voimaan, kun HandBrake on käynnistetty uudelleen.\n"
+"\n"
+"Asetus sivuuttaa yleisesti tämän kansion määritykseen käytetyn TEMP-ympäristömuuttujan arvon.\n"
+"\n"
+"Flatpak-käyttäjien on yleensä asetettava tämä, jotta työnkulku toimisi. Flatpak-hiekkalaatikon TEMP-kansion oletuskoko on 1/2 fyysisen muistin koosta, mikä voi olla liian vähän esimerkiksi kakkosvaiheen tilastotiedostoille."
 
 #: src/ui-gtk3/ghb.ui:8114
 msgid "Temp Directory"
-msgstr ""
+msgstr "Väliaikaiskansio:"
 
 #: src/ui-gtk3/ghb.ui:8154
 msgid "Constant Quality fractional granularity"
-msgstr ""
+msgstr "Vakiolaadun murto-osatarkkuus"
 
 #: src/ui-gtk3/ghb.ui:8171
 msgid "Use dvdnav (instead of libdvdread)"
@@ -2175,8 +2150,7 @@ msgid ""
 "When checked, every title will use the same settings when adding a\n"
 "batch of titles to the queue.\n"
 "\n"
-"Uncheck this if you want to allow changing each title's settings "
-"independently."
+"Uncheck this if you want to allow changing each title's settings independently."
 msgstr ""
 "Jos valittu, kukin nimeke käyttää samoja asetuksia, kun jonoon lisätän\n"
 "useita nimekkeitä.\n"
@@ -2185,13 +2159,15 @@ msgstr ""
 
 #: src/ui-gtk3/ghb.ui:8452
 msgid "Show preview image in Summary tab"
-msgstr ""
+msgstr "Näytä yhteenvetolehdellä esikatselukuva"
 
 #: src/ui-gtk3/ghb.ui:8458
 msgid ""
 "Uncheck this if you want to hide the video preview image on the Summary tab "
 "for privacy reasons."
 msgstr ""
+"Poista tämä valinta, jos yksityisyyssyistä haluat piilottaa "
+"videoesikatselukuvan yhteenvetovälilehdeltä. "
 
 #: src/ui-gtk3/ghb.ui:8481
 msgid "Allow Tweaks"
@@ -2207,7 +2183,7 @@ msgstr "Lisäasetukset"
 
 #: src/ui-gtk3/ghb.ui:8536
 msgid "Rename Preset"
-msgstr ""
+msgstr "Muuta esiasetuksen nimeä"
 
 #: src/ui-gtk3/ghb.ui:8598
 msgid "<span size=\"x-large\">Rename Preset</span>"
@@ -2223,7 +2199,7 @@ msgstr "<b>Kuvaus</b>"
 
 #: src/ui-gtk3/ghb.ui:8693
 msgid "Save Preset"
-msgstr ""
+msgstr "Tallenna esiasetus"
 
 #: src/ui-gtk3/ghb.ui:8761
 msgid "Category:"
@@ -2270,7 +2246,7 @@ msgstr ""
 
 #: src/ui-gtk3/ghb.ui:9129
 msgid "Click to toggle full screen mode"
-msgstr ""
+msgstr "Vaihda koko näytön tilaa napsauttamalla"
 
 #: src/ui-gtk3/ghb.ui:9165
 msgid "<b>Duration:</b>"
@@ -2298,7 +2274,7 @@ msgstr "Palauta esikatseluikkuna lähdevideon tarkkuuteen"
 
 #: src/ui-gtk3/ghb.ui:9257 src/subtitlehandler.c:1719
 msgid "Edit Subtitles"
-msgstr ""
+msgstr "Muokkaa tekstityksiä"
 
 #: src/ui-gtk3/ghb.ui:9312
 msgid "Import SRT"
@@ -2418,7 +2394,7 @@ msgstr "Aseta oletusraita"
 
 #: src/ui-gtk3/ghb.ui:9667 src/audiohandler.c:1473
 msgid "Edit Audio Track"
-msgstr ""
+msgstr "Muokkaa ääniraitaa"
 
 #: src/ui-gtk3/ghb.ui:9741
 msgid "List of audio tracks available from your source."
@@ -2444,20 +2420,15 @@ msgstr "Näytteenottotaajuus"
 
 #: src/ui-gtk3/ghb.ui:9877 src/ui-gtk3/ghb.ui:10116 src/audiohandler.c:1931
 msgid ""
-"<b>Dynamic Range Compression:</b> Adjust the dynamic range of the output "
-"audio track.\n"
+"<b>Dynamic Range Compression:</b> Adjust the dynamic range of the output audio track.\n"
 "\n"
-"For source audio that has a wide dynamic range (very loud and very soft "
-"sequences),\n"
-"DRC allows you to 'compress' the range by making loud sounds softer and soft "
-"sounds louder."
+"For source audio that has a wide dynamic range (very loud and very soft sequences),\n"
+"DRC allows you to 'compress' the range by making loud sounds softer and soft sounds louder."
 msgstr ""
 "<b>Dynaamisen alueen pakkaus:</b> Säädä tulosääniraidan dynaamista aluetta.\n"
 "\n"
-"Äänilähteille, joilla on laaja dynamiikka (sekä kovaäänisiä että hiljaisia "
-"jaksoja),\n"
-"DRC ”pakkaa” alueen niin, että kovaääniset jaksot heikkenevät ja hiljaiset "
-"kovenevat."
+"Äänilähteille, joilla on laaja dynamiikka (sekä kovaäänisiä että hiljaisia jaksoja),\n"
+"DRC ”pakkaa” alueen niin, että kovaääniset jaksot heikkenevät ja hiljaiset kovenevat."
 
 #: src/ui-gtk3/ghb.ui:9898 src/audiohandler.c:1782
 msgid "Set the audio codec to encode this track with."
@@ -2487,7 +2458,8 @@ msgstr "Aseta bittinopeus, johon tämä raita koodataan."
 msgid ""
 "<b>Quality:</b> For output codec's that support it, adjust the quality of "
 "the output."
-msgstr "<b>Laatu:</b> Asettaa tuloksen laadun sitä tukeville tuloskoodekeille."
+msgstr ""
+"<b>Laatu:</b> Asettaa tuloksen laadun sitä tukeville tuloskoodekeille."
 
 #: src/ui-gtk3/ghb.ui:10003
 msgid "00.0"
@@ -2580,7 +2552,7 @@ msgstr ""
 
 #: src/audiohandler.c:1391
 msgid "Add Audio Track"
-msgstr ""
+msgstr "Lisää ääniraita"
 
 #: src/audiohandler.c:1760
 msgid ""
@@ -2626,69 +2598,69 @@ msgstr "Pysäytä haku"
 
 #: src/callbacks.c:1723
 msgid "Single Title"
-msgstr ""
+msgstr "Yksittäinen nimeke"
 
 #: src/callbacks.c:2115 src/callbacks.c:2259
 msgid "FPS"
-msgstr ""
+msgstr "FPS"
 
 #: src/callbacks.c:2119
 #, c-format
 msgid "Dolby Vision %d.%d"
-msgstr ""
+msgstr "Dolby Vision %d.%d"
 
 #: src/callbacks.c:2123 src/callbacks.c:2126
 msgid "HDR10+"
-msgstr ""
+msgstr "HDR10+"
 
 #: src/callbacks.c:2128
 msgid "HDR10"
-msgstr ""
+msgstr "HDR10"
 
 #: src/callbacks.c:2130
 msgid "HDR"
-msgstr ""
+msgstr "HDR"
 
 #: src/callbacks.c:2132
 msgid "SDR"
-msgstr ""
+msgstr "SDR"
 
 #. TRANSLATORS: This is the bit depth of the video
 #: src/callbacks.c:2140
 #, c-format
 msgid "%d-bit"
-msgstr ""
+msgstr "%d-bittinen"
 
 #: src/callbacks.c:2162
 msgid "Audio Track"
 msgid_plural "Audio Tracks"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "ääniraita"
+msgstr[1] "ääniraitaa"
 
 #: src/callbacks.c:2165
 msgid "Subtitle Track"
 msgid_plural "Subtitle Tracks"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "tekstitysraita"
+msgstr[1] "tekstitysraitaa"
 
 #: src/callbacks.c:2263
 msgid "CFR"
-msgstr ""
+msgstr "CFR"
 
 #: src/callbacks.c:2267
 msgid "PFR"
-msgstr ""
+msgstr "PFR"
 
 #: src/callbacks.c:2271
 msgid "VFR"
-msgstr ""
+msgstr "VFR"
 
 #: src/callbacks.c:2313
 #, c-format
 msgid "+ %d more audio track"
 msgid_plural "+ %d more audio tracks"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "+%dääniraita lisää"
+msgstr[1] "+%dääniraitaa lisää"
 
 #: src/callbacks.c:2347 src/callbacks.c:2379 src/queuehandler.c:650
 #: src/queuehandler.c:687
@@ -2712,24 +2684,24 @@ msgstr ", oletus"
 #, c-format
 msgid "+ %d more subtitle track"
 msgid_plural "+ %d more subtitle tracks"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "+ %d tekstitysraita lisää"
+msgstr[1] "+ %dtekstitysraitaa lisää"
 
 #: src/callbacks.c:2548
 msgid "storage"
-msgstr ""
+msgstr "talletustila"
 
 #: src/callbacks.c:2549
 msgid "display"
-msgstr ""
+msgstr "näyttö"
 
 #: src/callbacks.c:2550
 msgid "Pixel Aspect Ratio"
-msgstr ""
+msgstr "Kuvapistesuhde"
 
 #: src/callbacks.c:2551
 msgid "Display Aspect Ratio"
-msgstr ""
+msgstr "Näyttökuvasuhde"
 
 #: src/callbacks.c:2688 src/hb-backend.c:2257 src/hb-backend.c:2377
 #: src/hb-backend.c:2389
@@ -2848,7 +2820,7 @@ msgstr "Koodaus epäonnistui."
 
 #: src/callbacks.c:4486
 msgid "Muxing: This may take a while..."
-msgstr ""
+msgstr "Multipleksataan: tämä voi kestää hetken…"
 
 #: src/callbacks.c:5286
 msgid "Encode Complete"
@@ -2878,11 +2850,11 @@ msgstr "Sammutetaan tietokonetta"
 #: src/callbacks.c:5446 src/chapters.c:603 src/chapters.c:633
 #: src/presets.c:2078 src/queuehandler.c:1694
 msgid "All Files"
-msgstr ""
+msgstr "Kaikki tiedostot"
 
 #: src/chapters.c:604 src/chapters.c:634
 msgid "Chapters (*.xml)"
-msgstr ""
+msgstr "Luvut (*.xml)"
 
 #: src/hb-backend.c:61 src/hb-backend.c:86
 msgid "First Track Matching Selected Languages"
@@ -2967,7 +2939,7 @@ msgstr "Yadif"
 
 #: src/hb-backend.c:190
 msgid "Bwdif"
-msgstr ""
+msgstr "Bwdif"
 
 #: src/hb-backend.c:201
 msgid "NLMeans"
@@ -2983,79 +2955,79 @@ msgstr "Epäterävöitys"
 
 #: src/hb-backend.c:214
 msgid "Lapsharp"
-msgstr ""
+msgstr "Lapsharp"
 
 #: src/hb-backend.c:225
 msgid "Conservative"
-msgstr ""
+msgstr "Varovainen"
 
 #: src/hb-backend.c:238
 msgid "90°"
-msgstr ""
+msgstr "90°"
 
 #: src/hb-backend.c:239
 msgid "180°"
-msgstr ""
+msgstr "180°"
 
 #: src/hb-backend.c:240
 msgid "270°"
-msgstr ""
+msgstr "270°"
 
 #: src/hb-backend.c:250
 msgid "4320p 8K Ultra HD"
-msgstr ""
+msgstr "4320p 8K Ultra HD"
 
 #: src/hb-backend.c:251
 msgid "2160p 4K Ultra HD"
-msgstr ""
+msgstr "2160p 4K Ultra HD"
 
 #: src/hb-backend.c:252
 msgid "1440p 2.5K Quad HD"
-msgstr ""
+msgstr "1440p 2,5K Quad HD"
 
 #: src/hb-backend.c:253
 msgid "1080p Full HD"
-msgstr ""
+msgstr "1080p Full HD"
 
 #: src/hb-backend.c:254
 msgid "720p HD"
-msgstr ""
+msgstr "720p HD"
 
 #: src/hb-backend.c:255
 msgid "576p PAL"
-msgstr ""
+msgstr "576p PAL"
 
 #: src/hb-backend.c:256
 msgid "480p NTSC"
-msgstr ""
+msgstr "480p NTSC"
 
 #: src/hb-backend.c:269
 msgid "Height (Letterbox)"
-msgstr ""
+msgstr "Korkeus (Letterbox)"
 
 #: src/hb-backend.c:270
 msgid "Width (Pillarbox)"
-msgstr ""
+msgstr "Leveys (Pillarbox)"
 
 #: src/hb-backend.c:271
 msgid "Width &amp; Height"
-msgstr ""
+msgstr "Leveys ja korkeus"
 
 #: src/hb-backend.c:282
 msgid "Black"
-msgstr ""
+msgstr "Musta"
 
 #: src/hb-backend.c:283
 msgid "Dark Gray"
-msgstr ""
+msgstr "Tummanharmaa"
 
 #: src/hb-backend.c:284
 msgid "Gray"
-msgstr ""
+msgstr "Harmaa"
 
 #: src/hb-backend.c:285
 msgid "White"
-msgstr ""
+msgstr "Valkoinen"
 
 #: src/hb-backend.c:296
 msgid "Spatial"
@@ -3107,7 +3079,7 @@ msgstr "Perusteellinen"
 
 #: src/hb-backend.c:348
 msgid "Hadamard Exhaustive"
-msgstr ""
+msgstr "Kattava Hadamard"
 
 #: src/hb-backend.c:358
 msgid "0: SAD, no subpel"
@@ -3143,11 +3115,11 @@ msgstr "7: RD kaikissa kuvissa"
 
 #: src/hb-backend.c:366
 msgid "8: RD refine in I/P-frames"
-msgstr ""
+msgstr "8: RD-parannus I/P-kuvissa"
 
 #: src/hb-backend.c:367
 msgid "9: RD refine in all frames"
-msgstr ""
+msgstr "9: RD-parannus kaikissa kuvissa"
 
 #: src/hb-backend.c:368
 msgid "10: QPRD in all frames"
@@ -3351,6 +3323,10 @@ msgid ""
 "You should choose a different video codec or container.\n"
 "If you continue, one will be chosen for you."
 msgstr ""
+"WebM-säilö tukee vain VP8:aa, VP9:ää ja AV1:tä.\n"
+"\n"
+"Joko videokoodekki tai säilö on vaihdettava.\n"
+"Jos jatkat, arvo valitaan puolestasi."
 
 #: src/hb-backend.c:4459 src/hb-backend.c:4516 src/hb-backend.c:4536
 #: src/hb-backend.c:4556 src/hb-backend.c:4617 src/hb-backend.c:4672
@@ -3429,7 +3405,7 @@ msgstr ""
 
 #: src/hb-backend.c:4854
 msgid "Comb Detect"
-msgstr ""
+msgstr "Kampamaisuuden tunnistus"
 
 #: src/hb-backend.c:4856
 msgid "Detelecine"
@@ -3437,43 +3413,43 @@ msgstr ""
 
 #: src/hb-backend.c:4858
 msgid "Deinterlace (Yadif)"
-msgstr ""
+msgstr "Lomituksenpoisto (Yadif)"
 
 #: src/hb-backend.c:4860
 msgid "Deinterlace (Bwdif)"
-msgstr ""
+msgstr "Lomituksenpoisto (Bwdif)"
 
 #: src/hb-backend.c:4864
 msgid "Deblock"
-msgstr ""
+msgstr "Mosaiikinpoisto"
 
 #: src/hb-backend.c:4866
 msgid "Denoise (NLMeans)"
-msgstr ""
+msgstr "Kohinanpoisto (NLMeans)"
 
 #: src/hb-backend.c:4868
 msgid "Denoise (HQDN3D)"
-msgstr ""
+msgstr "Kohinanpoisto (HQDN3D)"
 
 #: src/hb-backend.c:4870
 msgid "Chroma Smooth"
-msgstr ""
+msgstr "Chroma-pehmennys"
 
 #: src/hb-backend.c:4872
 msgid "Sharpen (Unsharp)"
-msgstr ""
+msgstr "Terävöitys (unsharp)"
 
 #: src/hb-backend.c:4874
 msgid "Rotate"
-msgstr ""
+msgstr "Kierto"
 
 #: src/hb-backend.c:4876
 msgid "Sharpen (lapsharp)"
-msgstr ""
+msgstr "Terävöitys (lapsharp)"
 
 #: src/hb-backend.c:4880
 msgid "Colorspace"
-msgstr ""
+msgstr "Väriavaruus"
 
 #: src/main.c:102
 #, c-format
@@ -3531,13 +3507,11 @@ msgstr "Yläkansiota ei löytynyt alakansiota lisättäessä."
 #: src/presets.c:1887
 #, c-format
 msgid ""
-"Presets found are newer than what is supported by this version of "
-"HandBrake!\n"
+"Presets found are newer than what is supported by this version of HandBrake!\n"
 "\n"
 "Would you like to continue?"
 msgstr ""
-"Löytyi esiasetuksia, jotka ovat uudempia kuin mitä tämä HandBraken versio "
-"tukee!\n"
+"Löytyi esiasetuksia, jotka ovat uudempia kuin mitä tämä HandBraken versio tukee!\n"
 "\n"
 "Haluatko jatkaa?"
 
@@ -3582,7 +3556,7 @@ msgstr "esiasetus"
 
 #: src/presets.c:2501
 msgid "Delete"
-msgstr ""
+msgstr "Poista"
 
 #: src/preview.c:533
 #, c-format
@@ -3608,7 +3582,7 @@ msgstr "%s (muutettu)"
 
 #: src/queuehandler.c:237
 msgid "Time:"
-msgstr ""
+msgstr "Aika:"
 
 #: src/queuehandler.c:281
 msgid "Align A/V"
@@ -3639,7 +3613,7 @@ msgstr "%s, bittinopeus %d kbps"
 #: src/queuehandler.c:359
 #, c-format
 msgid "%s, Bitrate %dkbps (Multi Pass)"
-msgstr ""
+msgstr "%s, bittinopeus %d kbps (monivaiheinen)"
 
 #: src/queuehandler.c:366
 #, c-format
@@ -3719,7 +3693,7 @@ msgstr "%d päivä %02d:%02d:%02d"
 #: src/queuehandler.c:1327
 #, c-format
 msgid "%d Days %02d:%02d:%02d"
-msgstr "%d päivää %2d:%02d:%02d"
+msgstr "%dpäivää %02d:%02d:%02d"
 
 #: src/queuehandler.c:844 src/queuehandler.c:1340
 msgid "B"
@@ -3751,11 +3725,11 @@ msgstr "Koodaa"
 
 #: src/queuehandler.c:1208
 msgid "Encode Analysis Pass"
-msgstr ""
+msgstr "Koodauksen analyysivaihe"
 
 #: src/queuehandler.c:1212
 msgid "Encode Final Pass"
-msgstr ""
+msgstr "Koodauksen viimeinen vaihe"
 
 #. Should never happen
 #: src/queuehandler.c:1217
@@ -3842,23 +3816,23 @@ msgstr ""
 #: src/subtitlehandler.c:110
 #, c-format
 msgid "Offset: %dms"
-msgstr ""
+msgstr "Siirtymä: %d ms"
 
 #: src/subtitlehandler.c:115
 msgid "Burned Into Video"
-msgstr ""
+msgstr "Poltettu kuvaan"
 
 #: src/subtitlehandler.c:116
 msgid "Passthrough"
-msgstr ""
+msgstr "Läpivienti"
 
 #: src/subtitlehandler.c:123
 msgid "Default"
-msgstr ""
+msgstr "Oletus"
 
 #: src/subtitlehandler.c:1167
 msgid "Add Subtitles"
-msgstr ""
+msgstr "Lisää tekstityksiä"
 
 #: src/subtitlehandler.c:1358
 #, c-format
@@ -3883,6 +3857,10 @@ msgid ""
 "Another queued job has specified the same destination.\n"
 "Do you want to overwrite?"
 msgstr ""
+"Kohde: %s\n"
+"\n"
+"Jonon toiselle työlle on asetettu sama kohde.\n"
+"Haluatko jatkaa?"
 
 #: src/title-add.c:113 src/title-add.c:162
 msgid "Overwrite File?"
@@ -3890,7 +3868,7 @@ msgstr ""
 
 #: src/title-add.c:114 src/title-add.c:163
 msgid "Overwrite"
-msgstr ""
+msgstr "Korvaa"
 
 #: src/title-add.c:127
 #, c-format
@@ -3899,11 +3877,13 @@ msgid ""
 "\n"
 "This is not a valid directory."
 msgstr ""
+"Kohde: %s\n"
+"\n"
+"Kansio ei ole kelvollinen."
 
 #: src/title-add.c:131 src/title-add.c:146
-#, fuzzy
 msgid "Invalid Destination"
-msgstr "Kohde:"
+msgstr ""
 
 #: src/title-add.c:142
 #, c-format
@@ -3912,6 +3892,9 @@ msgid ""
 "\n"
 "Can not read or write the directory."
 msgstr ""
+"Kohde: %s\n"
+"\n"
+"Kansiota ei voi lukea eikä sinne kirjoittaa."
 
 #: src/title-add.c:157
 #, c-format
@@ -3921,17 +3904,19 @@ msgid ""
 "File already exists.\n"
 "Do you want to overwrite?"
 msgstr ""
+"Kohde: %s\n"
+"\n"
+"Tiedosto on jo olemassa.\n"
+"Haluatko korvata sen?"
 
 #: src/title-add.c:478
-#, fuzzy
 msgid "Select this title for adding to the queue.\n"
-msgstr "Merkitse kaikki nimekkeet lisättäviksi jonoon"
+msgstr "Valitse tämä nimeke lisättäväksi jonoon.\n"
 
 #. Title label
 #: src/title-add.c:486
-#, fuzzy
 msgid "No Title"
-msgstr "Ei nimekkeitä"
+msgstr "Ei nimekettä"
 
 #: src/title-add.c:496
 msgid ""
@@ -3939,11 +3924,13 @@ msgid ""
 "This title will not be added to the queue unless you change\n"
 "the output file name.\n"
 msgstr ""
+"Toisella nimekkeellä on sama kohdetiedostonimi.\n"
+"Nykyistä nimekettä ei lisätä jonoon, ellei tulostiedoston\n"
+"nimeä muuteta.\n"
 
 #: src/title-add.c:871
-#, fuzzy
 msgid "Cannot Add Titles"
-msgstr "Ei nimekkeitä"
+msgstr ""
 
 #: src/title-add.c:872
 msgid ""
@@ -3981,37 +3968,3 @@ msgstr ""
 #, c-format
 msgid "%s: %.4g (Warning: lossless)"
 msgstr "%s: %.4g (varoitus: häviötön)"
-
-#~ msgid "Automatically check for updates"
-#~ msgstr "Tarkista päivitykset automaattisesti"
-
-#~ msgid "Skip This Version"
-#~ msgstr "Ohita tämä versio"
-
-#~ msgid "Remind Me Later"
-#~ msgstr "Muistuta myöhemmin"
-
-#~ msgid "<b>A new version of HandBrake is available!</b>"
-#~ msgstr "<b>HandBraken uusi versio on saatavilla!</b>"
-
-#~ msgid "HandBrake xxx is now available (you have yyy)."
-#~ msgstr "HandBrake xxx on nyt saatavilla (sinulla on yyy)."
-
-#~ msgid "<b>Release Notes</b>"
-#~ msgstr "<b>Julkaisutiedot</b>"
-
-#, c-format
-#~ msgid "HandBrake %s/%s is now available (you have %s/%d)."
-#~ msgstr "HandBrake %s/%s on nyt saatavilla (sinulla on %s/%d)."
-
-#~ msgid "Never"
-#~ msgstr "Ei koskaan"
-
-#~ msgid "Daily"
-#~ msgstr "Päivittäin"
-
-#~ msgid "Weekly"
-#~ msgstr "Viikoittain"
-
-#~ msgid "Monthly"
-#~ msgstr "Kuukausittain"
