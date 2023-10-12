@@ -509,39 +509,51 @@ AVFrameSideData *hb_buffer_new_side_data_from_buf(hb_buffer_t *buf,
                                                   enum AVFrameSideDataType type,
                                                   AVBufferRef *side_data_buf)
 {
-    AVFrameSideData *ret, **tmp;
-
-    if (!buf)
+    AVFrameSideData *ret;
+    if (buf->storage_type == AVFRAME)
     {
-        return NULL;
+        AVFrame *frame = (AVFrame *)buf->storage;
+        ret = av_frame_new_side_data_from_buf(frame, type, side_data_buf);
+        buf->side_data = (void **)frame->side_data;
+        buf->nb_side_data = frame->nb_side_data;
+        return ret;
     }
-
-    if (buf->nb_side_data > INT_MAX / sizeof(*buf->side_data) - 1)
+    else
     {
-        return NULL;
+        AVFrameSideData **tmp;
+
+        if (!buf)
+        {
+            return NULL;
+        }
+
+        if (buf->nb_side_data > INT_MAX / sizeof(*buf->side_data) - 1)
+        {
+            return NULL;
+        }
+
+        tmp = av_realloc(buf->side_data, (buf->nb_side_data + 1) * sizeof(*buf->side_data));
+        if (!tmp)
+        {
+            return NULL;
+        }
+        buf->side_data = (void **)tmp;
+
+        ret = av_mallocz(sizeof(*ret));
+        if (!ret)
+        {
+            return NULL;
+        }
+
+        ret->buf = side_data_buf;
+        ret->data = ret->buf->data;
+        ret->size = side_data_buf->size;
+        ret->type = type;
+
+        buf->side_data[buf->nb_side_data++] = ret;
+
+        return ret;
     }
-
-    tmp = av_realloc(buf->side_data, (buf->nb_side_data + 1) * sizeof(*buf->side_data));
-    if (!tmp)
-    {
-        return NULL;
-    }
-    buf->side_data = (void **)tmp;
-
-    ret = av_mallocz(sizeof(*ret));
-    if (!ret)
-    {
-        return NULL;
-    }
-
-    ret->buf = side_data_buf;
-    ret->data = ret->buf->data;
-    ret->size = side_data_buf->size;
-    ret->type = type;
-
-    buf->side_data[buf->nb_side_data++] = ret;
-
-    return ret;
 }
 
 static void free_side_data(AVFrameSideData **ptr_sd)
@@ -553,16 +565,25 @@ static void free_side_data(AVFrameSideData **ptr_sd)
     av_freep(ptr_sd);
 }
 
-void hb_frame_remove_side_data(hb_buffer_t *buf, enum AVFrameSideDataType type)
+void hb_buffer_remove_side_data(hb_buffer_t *buf, enum AVFrameSideDataType type)
 {
-    for (int i = buf->nb_side_data - 1; i >= 0; i--)
+    if (buf->storage_type == AVFRAME)
     {
-        AVFrameSideData *sd = buf->side_data[i];
-        if (sd->type == type)
+        AVFrame *frame = (AVFrame *)buf->storage;
+        av_frame_remove_side_data(frame, type);
+        buf->nb_side_data = frame->nb_side_data;
+    }
+    else
+    {
+        for (int i = buf->nb_side_data - 1; i >= 0; i--)
         {
-            free_side_data((AVFrameSideData **)&buf->side_data[i]);
-            buf->side_data[i] = buf->side_data[buf->nb_side_data - 1];
-            buf->nb_side_data--;
+            AVFrameSideData *sd = buf->side_data[i];
+            if (sd->type == type)
+            {
+                free_side_data((AVFrameSideData **)&buf->side_data[i]);
+                buf->side_data[i] = buf->side_data[buf->nb_side_data - 1];
+                buf->nb_side_data--;
+            }
         }
     }
 }

@@ -288,7 +288,7 @@ static int rpu_work(hb_filter_object_t *filter,
 
                 if (rpu_data)
                 {
-                    hb_frame_remove_side_data(in, side_data->type);
+                    hb_buffer_remove_side_data(in, side_data->type);
 
                     AVBufferRef *ref = av_buffer_alloc(rpu_data->len - 2);
                     memcpy(ref->data, rpu_data->data + 2, rpu_data->len - 2);
