@@ -1501,16 +1501,15 @@ class Launcher:
         ## launch/pipe
         try:
             pipe = subprocess.Popen(cmd, shell=True, bufsize=1, stdout=subprocess.PIPE, stderr=subprocess.STDOUT )
-            self.returncode = pipe.returncode
         except Exception as x:
             raise AbortError( 'launch failure: %s', x )
-            self.returncode = 1
 
         for line in pipe.stdout:
             if not isinstance(line, str):
                 line = line.decode()
             self.echof( '%s', line )
         pipe.wait()
+        self.returncode = pipe.returncode
 
         ## record end
         timeEnd = time.time()
