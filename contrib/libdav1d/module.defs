@@ -7,7 +7,7 @@ LIBDAV1D.FETCH.sha256  = bde8db3d0583a4f3733bb5a4ac525556ffd03ab7dcd8a6e7c091bee
 
 LIBDAV1D.build_dir     = build/
 
-LIBDAV1D.CONFIGURE.exe    = $(MESON.exe)
+LIBDAV1D.CONFIGURE.exe    = $(MESON.exe) setup
 LIBDAV1D.CONFIGURE.deps   =
 LIBDAV1D.CONFIGURE.shared =
 LIBDAV1D.CONFIGURE.host   =
