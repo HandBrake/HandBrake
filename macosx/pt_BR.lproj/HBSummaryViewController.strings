@@ -22,17 +22,8 @@
 /* Class = "NSTextField"; ibExternalAccessibilityDescription = "Size summary"; ObjectID = "Jaw-pH-rhf"; */
 "Jaw-pH-rhf.ibExternalAccessibilityDescription" = "Tamanho do sumário";
 
-/* Class = "NSButton"; ibShadowedToolTip = "Optimize MP4 for progressive download. After encoding, data is reorganized and rewritten to allow immediate playback over a network, without needing to download the entire file."; ObjectID = "JNB-kV-52S"; */
-"JNB-kV-52S.ibShadowedToolTip" = "Otimize MP4 para download progressivo. Após a codificação, os dados são reorganizados e reescritos para permitir a reprodução imediata em uma rede, sem precisar baixar todo o arquivo.";
-
-/* Class = "NSButton"; ibShadowedToolTip = "Optimize MP4 for progressive download. After encoding, data is reorganized and rewritten to allow immediate playback over a network, without needing to download the entire file."; ObjectID = "lUi-Oc-208"; */
-"lUi-Oc-208.ibShadowedToolTip" = "Otimize MP4 para download progressivo. Após a codificação, os dados são reorganizados e reescritos para permitir a reprodução imediata em uma rede, sem precisar baixar todo o arquivo.";
-
 /* Class = "NSView"; ibExternalAccessibilityDescription = "Preview"; ObjectID = "m5a-0z-QQ4"; */
 "m5a-0z-QQ4.ibExternalAccessibilityDescription" = "Pré-visualização";
-
-/* Class = "NSButtonCell"; title = "Web Optimized"; ObjectID = "ma8-UR-dx2"; */
-"ma8-UR-dx2.title" = "Otimizado para Web";
 
 /* Class = "NSTextFieldCell"; title = "Filters:"; ObjectID = "OCw-f6-uA0"; */
 "OCw-f6-uA0.title" = "Filtros:";

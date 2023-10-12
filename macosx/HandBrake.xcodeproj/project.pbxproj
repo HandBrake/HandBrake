@@ -1001,6 +1001,42 @@
 		D092462A280B72BA00B79A40 /* ja_JP */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja_JP; path = "ja_JP.lproj/HandBrakeXPCService2-InfoPlist.strings"; sourceTree = "<group>"; };
 		D092462B280B72BA00B79A40 /* ja_JP */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja_JP; path = "ja_JP.lproj/HandBrakeXPCService3-InfoPlist.strings"; sourceTree = "<group>"; };
 		D092462C280B72BA00B79A40 /* ja_JP */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja_JP; path = "ja_JP.lproj/HandBrakeXPCService4-InfoPlist.strings"; sourceTree = "<group>"; };
+		D0A185E22AD5BDE60056C7BD /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ko; path = ko.lproj/AddPreset.strings; sourceTree = "<group>"; };
+		D0A185E32AD5BDE60056C7BD /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ko; path = ko.lproj/Audio.strings; sourceTree = "<group>"; };
+		D0A185E42AD5BDE60056C7BD /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ko; path = ko.lproj/AudioDefaults.strings; sourceTree = "<group>"; };
+		D0A185E52AD5BDE60056C7BD /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ko; path = ko.lproj/ChaptersTitles.strings; sourceTree = "<group>"; };
+		D0A185E62AD5BDE60056C7BD /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ko; path = ko.lproj/ExceptionAlert.strings; sourceTree = "<group>"; };
+		D0A185E72AD5BDE60056C7BD /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ko; path = ko.lproj/HBAddCategoryController.strings; sourceTree = "<group>"; };
+		D0A185E82AD5BDE60056C7BD /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ko; path = ko.lproj/HBCroppingView.strings; sourceTree = "<group>"; };
+		D0A185E92AD5BDE60056C7BD /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ko; path = ko.lproj/HBEncodingProgressHUDController.strings; sourceTree = "<group>"; };
+		D0A185EA2AD5BDE60056C7BD /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ko; path = ko.lproj/HBFiltersViewController.strings; sourceTree = "<group>"; };
+		D0A185EB2AD5BDE60056C7BD /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ko; path = ko.lproj/HBPictureHUDController.strings; sourceTree = "<group>"; };
+		D0A185EC2AD5BDE60056C7BD /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ko; path = ko.lproj/HBPictureViewController.strings; sourceTree = "<group>"; };
+		D0A185ED2AD5BDE60056C7BD /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ko; path = ko.lproj/HBPlayerHUDController.strings; sourceTree = "<group>"; };
+		D0A185EE2AD5BDE60056C7BD /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ko; path = ko.lproj/HBPreviewViewController.strings; sourceTree = "<group>"; };
+		D0A185EF2AD5BDE60056C7BD /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ko; path = ko.lproj/HBQueueInfoViewController.strings; sourceTree = "<group>"; };
+		D0A185F02AD5BDE60056C7BD /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ko; path = ko.lproj/HBQueueTableViewController.strings; sourceTree = "<group>"; };
+		D0A185F12AD5BDE60056C7BD /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ko; path = ko.lproj/HBRenamePresetController.strings; sourceTree = "<group>"; };
+		D0A185F22AD5BDE60056C7BD /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ko; path = ko.lproj/HBSummaryViewController.strings; sourceTree = "<group>"; };
+		D0A185F32AD5BDE60056C7BD /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ko; path = ko.lproj/HBTitleSelection.strings; sourceTree = "<group>"; };
+		D0A185F42AD5BDE60056C7BD /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ko; path = ko.lproj/HBTrackTitleViewController.strings; sourceTree = "<group>"; };
+		D0A185F52AD5BDE60056C7BD /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ko; path = ko.lproj/MainMenu.strings; sourceTree = "<group>"; };
+		D0A185F62AD5BDE60056C7BD /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ko; path = ko.lproj/MainWindow.strings; sourceTree = "<group>"; };
+		D0A185F72AD5BDE60056C7BD /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ko; path = ko.lproj/OutputPanel.strings; sourceTree = "<group>"; };
+		D0A185F82AD5BDE60056C7BD /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ko; path = ko.lproj/PicturePreview.strings; sourceTree = "<group>"; };
+		D0A185F92AD5BDE60056C7BD /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ko; path = ko.lproj/Preferences.strings; sourceTree = "<group>"; };
+		D0A185FA2AD5BDE60056C7BD /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ko; path = ko.lproj/Presets.strings; sourceTree = "<group>"; };
+		D0A185FB2AD5BDE60056C7BD /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ko; path = ko.lproj/Queue.strings; sourceTree = "<group>"; };
+		D0A185FC2AD5BDE60056C7BD /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ko; path = ko.lproj/Subtitles.strings; sourceTree = "<group>"; };
+		D0A185FD2AD5BDE60056C7BD /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ko; path = ko.lproj/SubtitlesDefaults.strings; sourceTree = "<group>"; };
+		D0A185FE2AD5BDE60056C7BD /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ko; path = ko.lproj/Video.strings; sourceTree = "<group>"; };
+		D0A185FF2AD5BDE60056C7BD /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ko; path = ko.lproj/Localizable.strings; sourceTree = "<group>"; };
+		D0A186002AD5BDE60056C7BD /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ko; path = ko.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+        D0A186012AD5BDE60056C7BD /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ko; path = ko.lproj/Localizable.strings; sourceTree = "<group>"; };
+		D0A186022AD5BDE60056C7BD /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ko; path = "ko.lproj/HandBrakeXPCService1-InfoPlist.strings"; sourceTree = "<group>"; };
+		D0A186032AD5BDE60056C7BD /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ko; path = "ko.lproj/HandBrakeXPCService2-InfoPlist.strings"; sourceTree = "<group>"; };
+		D0A186042AD5BDE60056C7BD /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ko; path = "ko.lproj/HandBrakeXPCService3-InfoPlist.strings"; sourceTree = "<group>"; };
+		D0A186052AD5BDE60056C7BD /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ko; path = "ko.lproj/HandBrakeXPCService4-InfoPlist.strings"; sourceTree = "<group>"; };
 		D0A8A0322706E3710008018A /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		D0A8A0332706E3710008018A /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = "ru.lproj/HandBrakeXPCService1-InfoPlist.strings"; sourceTree = "<group>"; };
 		D0A8A0342706E3710008018A /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = "ru.lproj/HandBrakeXPCService2-InfoPlist.strings"; sourceTree = "<group>"; };
@@ -1073,6 +1109,42 @@
 		D0DA2AD024B384AD003ACA30 /* pt_BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = pt_BR; path = pt_BR.lproj/HBPictureViewController.strings; sourceTree = "<group>"; };
 		D0DA2AD124B384AD003ACA30 /* pt_BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = pt_BR; path = pt_BR.lproj/Video.strings; sourceTree = "<group>"; };
 		D0DC8F672331573500C12A24 /* libdav1d.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libdav1d.a; path = external/contrib/lib/libdav1d.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		D0E25A562AD5BE3600D1B3F5 /* bg */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = bg; path = bg.lproj/AddPreset.strings; sourceTree = "<group>"; };
+		D0E25A572AD5BE3600D1B3F5 /* bg */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = bg; path = bg.lproj/Audio.strings; sourceTree = "<group>"; };
+		D0E25A582AD5BE3600D1B3F5 /* bg */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = bg; path = bg.lproj/AudioDefaults.strings; sourceTree = "<group>"; };
+		D0E25A592AD5BE3600D1B3F5 /* bg */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = bg; path = bg.lproj/ChaptersTitles.strings; sourceTree = "<group>"; };
+		D0E25A5A2AD5BE3600D1B3F5 /* bg */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = bg; path = bg.lproj/ExceptionAlert.strings; sourceTree = "<group>"; };
+		D0E25A5B2AD5BE3600D1B3F5 /* bg */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = bg; path = bg.lproj/HBAddCategoryController.strings; sourceTree = "<group>"; };
+		D0E25A5C2AD5BE3600D1B3F5 /* bg */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = bg; path = bg.lproj/HBCroppingView.strings; sourceTree = "<group>"; };
+		D0E25A5D2AD5BE3600D1B3F5 /* bg */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = bg; path = bg.lproj/HBEncodingProgressHUDController.strings; sourceTree = "<group>"; };
+		D0E25A5E2AD5BE3600D1B3F5 /* bg */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = bg; path = bg.lproj/HBFiltersViewController.strings; sourceTree = "<group>"; };
+		D0E25A5F2AD5BE3600D1B3F5 /* bg */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = bg; path = bg.lproj/HBPictureHUDController.strings; sourceTree = "<group>"; };
+		D0E25A602AD5BE3600D1B3F5 /* bg */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = bg; path = bg.lproj/HBPictureViewController.strings; sourceTree = "<group>"; };
+		D0E25A612AD5BE3600D1B3F5 /* bg */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = bg; path = bg.lproj/HBPlayerHUDController.strings; sourceTree = "<group>"; };
+		D0E25A622AD5BE3600D1B3F5 /* bg */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = bg; path = bg.lproj/HBPreviewViewController.strings; sourceTree = "<group>"; };
+		D0E25A632AD5BE3600D1B3F5 /* bg */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = bg; path = bg.lproj/HBQueueInfoViewController.strings; sourceTree = "<group>"; };
+		D0E25A642AD5BE3600D1B3F5 /* bg */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = bg; path = bg.lproj/HBQueueTableViewController.strings; sourceTree = "<group>"; };
+		D0E25A652AD5BE3600D1B3F5 /* bg */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = bg; path = bg.lproj/HBRenamePresetController.strings; sourceTree = "<group>"; };
+		D0E25A662AD5BE3600D1B3F5 /* bg */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = bg; path = bg.lproj/HBSummaryViewController.strings; sourceTree = "<group>"; };
+		D0E25A672AD5BE3600D1B3F5 /* bg */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = bg; path = bg.lproj/HBTitleSelection.strings; sourceTree = "<group>"; };
+		D0E25A682AD5BE3600D1B3F5 /* bg */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = bg; path = bg.lproj/HBTrackTitleViewController.strings; sourceTree = "<group>"; };
+		D0E25A692AD5BE3600D1B3F5 /* bg */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = bg; path = bg.lproj/MainMenu.strings; sourceTree = "<group>"; };
+		D0E25A6A2AD5BE3600D1B3F5 /* bg */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = bg; path = bg.lproj/MainWindow.strings; sourceTree = "<group>"; };
+		D0E25A6B2AD5BE3600D1B3F5 /* bg */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = bg; path = bg.lproj/OutputPanel.strings; sourceTree = "<group>"; };
+		D0E25A6C2AD5BE3600D1B3F5 /* bg */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = bg; path = bg.lproj/PicturePreview.strings; sourceTree = "<group>"; };
+		D0E25A6D2AD5BE3600D1B3F5 /* bg */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = bg; path = bg.lproj/Preferences.strings; sourceTree = "<group>"; };
+		D0E25A6E2AD5BE3600D1B3F5 /* bg */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = bg; path = bg.lproj/Presets.strings; sourceTree = "<group>"; };
+		D0E25A6F2AD5BE3600D1B3F5 /* bg */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = bg; path = bg.lproj/Queue.strings; sourceTree = "<group>"; };
+		D0E25A702AD5BE3600D1B3F5 /* bg */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = bg; path = bg.lproj/Subtitles.strings; sourceTree = "<group>"; };
+		D0E25A712AD5BE3600D1B3F5 /* bg */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = bg; path = bg.lproj/SubtitlesDefaults.strings; sourceTree = "<group>"; };
+		D0E25A722AD5BE3600D1B3F5 /* bg */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = bg; path = bg.lproj/Video.strings; sourceTree = "<group>"; };
+		D0E25A732AD5BE3600D1B3F5 /* bg */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = bg; path = bg.lproj/Localizable.strings; sourceTree = "<group>"; };
+		D0E25A742AD5BE3600D1B3F5 /* bg */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = bg; path = bg.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+        D0E25A752AD5BE3600D1B3F5 /* bg */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = bg; path = bg.lproj/Localizable.strings; sourceTree = "<group>"; };
+		D0E25A762AD5BE3600D1B3F5 /* bg */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = bg; path = "bg.lproj/HandBrakeXPCService1-InfoPlist.strings"; sourceTree = "<group>"; };
+		D0E25A772AD5BE3600D1B3F5 /* bg */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = bg; path = "bg.lproj/HandBrakeXPCService2-InfoPlist.strings"; sourceTree = "<group>"; };
+		D0E25A782AD5BE3600D1B3F5 /* bg */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = bg; path = "bg.lproj/HandBrakeXPCService3-InfoPlist.strings"; sourceTree = "<group>"; };
+		D0E25A792AD5BE3600D1B3F5 /* bg */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = bg; path = "bg.lproj/HandBrakeXPCService4-InfoPlist.strings"; sourceTree = "<group>"; };
 		D86C9DD41C6D372500F06F1B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -2129,6 +2201,8 @@
 				co,
 				zh,
 				ja_JP,
+				ko,
+				bg,
 			);
 			mainGroup = 273F1FDE14AD9DA40021BE6D;
 			packageReferences = (
@@ -2526,6 +2600,8 @@
 				D0B806B326E7F2760013D332 /* co */,
 				D0530EAA2706DF6A00CB946A /* zh */,
 				D0924616280B72B900B79A40 /* ja_JP */,
+				D0A185F12AD5BDE60056C7BD /* ko */,
+				D0E25A652AD5BE3600D1B3F5 /* bg */,
 			);
 			name = HBRenamePresetController.xib;
 			sourceTree = "<group>";
@@ -2550,6 +2626,8 @@
 				D0B806B426E7F2760013D332 /* co */,
 				D0530EAB2706DF6A00CB946A /* zh */,
 				D0924617280B72BA00B79A40 /* ja_JP */,
+				D0A185F22AD5BDE60056C7BD /* ko */,
+				D0E25A662AD5BE3600D1B3F5 /* bg */,
 			);
 			name = HBSummaryViewController.xib;
 			sourceTree = "<group>";
@@ -2563,8 +2641,10 @@
 				A919992D23003D730037F526 /* de */,
 				A9D3E315234A11E600F39385 /* ru */,
 				A9D2DDE524B3B1C2009C92DA /* pt_BR */,
+                A91CAB55270726B300006BEA /* co */,
 				A91CAB54270726B000006BEA /* zh */,
-				A91CAB55270726B300006BEA /* co */,
+                D0A185FF2AD5BDE60056C7BD /* ko */,
+                D0E25A732AD5BE3600D1B3F5 /* bg */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";
@@ -2581,6 +2661,8 @@
 				D0B806A926E7F2760013D332 /* co */,
 				D0530EA02706DF6A00CB946A /* zh */,
 				D092460C280B72B900B79A40 /* ja_JP */,
+				D0A185E72AD5BDE60056C7BD /* ko */,
+				D0E25A5B2AD5BE3600D1B3F5 /* bg */,
 			);
 			name = HBAddCategoryController.xib;
 			sourceTree = "<group>";
@@ -2597,6 +2679,8 @@
 				D0B806A426E7F2760013D332 /* co */,
 				D0530E9B2706DF6A00CB946A /* zh */,
 				D0924607280B72B900B79A40 /* ja_JP */,
+				D0A185E22AD5BDE60056C7BD /* ko */,
+				D0E25A562AD5BE3600D1B3F5 /* bg */,
 			);
 			name = AddPreset.xib;
 			sourceTree = "<group>";
@@ -2612,6 +2696,8 @@
 				D0B806C626E7F2760013D332 /* co */,
 				D0530EBD2706DF6A00CB946A /* zh */,
 				D0924629280B72BA00B79A40 /* ja_JP */,
+				D0A186022AD5BDE60056C7BD /* ko */,
+				D0E25A762AD5BE3600D1B3F5 /* bg */,
 			);
 			name = "HandBrakeXPCService1-InfoPlist.strings";
 			sourceTree = "<group>";
@@ -2627,6 +2713,8 @@
 				D0B806C726E7F2760013D332 /* co */,
 				D0530EBE2706DF6A00CB946A /* zh */,
 				D092462A280B72BA00B79A40 /* ja_JP */,
+				D0A186032AD5BDE60056C7BD /* ko */,
+				D0E25A772AD5BE3600D1B3F5 /* bg */,
 			);
 			name = "HandBrakeXPCService2-InfoPlist.strings";
 			sourceTree = "<group>";
@@ -2642,6 +2730,8 @@
 				D0B806C826E7F2760013D332 /* co */,
 				D0530EBF2706DF6A00CB946A /* zh */,
 				D092462B280B72BA00B79A40 /* ja_JP */,
+				D0A186042AD5BDE60056C7BD /* ko */,
+				D0E25A782AD5BE3600D1B3F5 /* bg */,
 			);
 			name = "HandBrakeXPCService3-InfoPlist.strings";
 			sourceTree = "<group>";
@@ -2657,6 +2747,8 @@
 				D0B806C926E7F2760013D332 /* co */,
 				D0530EC02706DF6A00CB946A /* zh */,
 				D092462C280B72BA00B79A40 /* ja_JP */,
+				D0A186052AD5BDE60056C7BD /* ko */,
+				D0E25A792AD5BE3600D1B3F5 /* bg */,
 			);
 			name = "HandBrakeXPCService4-InfoPlist.strings";
 			sourceTree = "<group>";
@@ -2673,6 +2765,8 @@
 				D0B806B826E7F2760013D332 /* co */,
 				D0530EAF2706DF6A00CB946A /* zh */,
 				D092461B280B72BA00B79A40 /* ja_JP */,
+				D0A185F62AD5BDE60056C7BD /* ko */,
+				D0E25A6A2AD5BE3600D1B3F5 /* bg */,
 			);
 			name = MainWindow.xib;
 			sourceTree = "<group>";
@@ -2689,6 +2783,8 @@
 				D0B806B226E7F2760013D332 /* co */,
 				D0530EA92706DF6A00CB946A /* zh */,
 				D0924615280B72B900B79A40 /* ja_JP */,
+				D0A185F02AD5BDE60056C7BD /* ko */,
+				D0E25A642AD5BE3600D1B3F5 /* bg */,
 			);
 			name = HBQueueTableViewController.xib;
 			sourceTree = "<group>";
@@ -2705,6 +2801,8 @@
 				D0B806B126E7F2760013D332 /* co */,
 				D0530EA82706DF6A00CB946A /* zh */,
 				D0924614280B72B900B79A40 /* ja_JP */,
+				D0A185EF2AD5BDE60056C7BD /* ko */,
+				D0E25A632AD5BE3600D1B3F5 /* bg */,
 			);
 			name = HBQueueInfoViewController.xib;
 			sourceTree = "<group>";
@@ -2720,6 +2818,8 @@
 				A91CAB412707267000006BEA /* co */,
 				A91CAB532707267200006BEA /* zh */,
 				A94D0454280D488600E24AA6 /* ja_JP */,
+				D0A185FF2AD5BDE60056C7BD /* ko */,
+				D0E25A732AD5BE3600D1B3F5 /* bg */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";
@@ -2736,6 +2836,8 @@
 				D0B806AD26E7F2760013D332 /* co */,
 				D0530EA42706DF6A00CB946A /* zh */,
 				D0924610280B72B900B79A40 /* ja_JP */,
+				D0A185EB2AD5BDE60056C7BD /* ko */,
+				D0E25A5F2AD5BE3600D1B3F5 /* bg */,
 			);
 			name = HBPictureHUDController.xib;
 			sourceTree = "<group>";
@@ -2752,6 +2854,8 @@
 				D0B806AB26E7F2760013D332 /* co */,
 				D0530EA22706DF6A00CB946A /* zh */,
 				D092460E280B72B900B79A40 /* ja_JP */,
+				D0A185E92AD5BDE60056C7BD /* ko */,
+				D0E25A5D2AD5BE3600D1B3F5 /* bg */,
 			);
 			name = HBEncodingProgressHUDController.xib;
 			sourceTree = "<group>";
@@ -2768,6 +2872,8 @@
 				D0B806AF26E7F2760013D332 /* co */,
 				D0530EA62706DF6A00CB946A /* zh */,
 				D0924612280B72B900B79A40 /* ja_JP */,
+				D0A185ED2AD5BDE60056C7BD /* ko */,
+				D0E25A612AD5BE3600D1B3F5 /* bg */,
 			);
 			name = HBPlayerHUDController.xib;
 			sourceTree = "<group>";
@@ -2784,6 +2890,8 @@
 				D0B806B726E7F2760013D332 /* co */,
 				D0530EAE2706DF6A00CB946A /* zh */,
 				D092461A280B72BA00B79A40 /* ja_JP */,
+				D0A185F52AD5BDE60056C7BD /* ko */,
+				D0E25A692AD5BE3600D1B3F5 /* bg */,
 			);
 			name = MainMenu.xib;
 			sourceTree = "<group>";
@@ -2800,6 +2908,8 @@
 				D0B806BC26E7F2760013D332 /* co */,
 				D0530EB32706DF6A00CB946A /* zh */,
 				D092461F280B72BA00B79A40 /* ja_JP */,
+				D0A185FA2AD5BDE60056C7BD /* ko */,
+				D0E25A6E2AD5BE3600D1B3F5 /* bg */,
 			);
 			name = Presets.xib;
 			sourceTree = "<group>";
@@ -2816,6 +2926,8 @@
 				D0B806B526E7F2760013D332 /* co */,
 				D0530EAC2706DF6A00CB946A /* zh */,
 				D0924618280B72BA00B79A40 /* ja_JP */,
+				D0A185F32AD5BDE60056C7BD /* ko */,
+				D0E25A672AD5BE3600D1B3F5 /* bg */,
 			);
 			name = HBTitleSelection.xib;
 			sourceTree = "<group>";
@@ -2832,6 +2944,8 @@
 				D0B806AE26E7F2760013D332 /* co */,
 				D0530EA52706DF6A00CB946A /* zh */,
 				D0924611280B72B900B79A40 /* ja_JP */,
+				D0A185EC2AD5BDE60056C7BD /* ko */,
+				D0E25A602AD5BE3600D1B3F5 /* bg */,
 			);
 			name = HBPictureViewController.xib;
 			sourceTree = "<group>";
@@ -2848,6 +2962,8 @@
 				D0B806AC26E7F2760013D332 /* co */,
 				D0530EA32706DF6A00CB946A /* zh */,
 				D092460F280B72B900B79A40 /* ja_JP */,
+				D0A185EA2AD5BDE60056C7BD /* ko */,
+				D0E25A5E2AD5BE3600D1B3F5 /* bg */,
 			);
 			name = HBFiltersViewController.xib;
 			sourceTree = "<group>";
@@ -2864,6 +2980,8 @@
 				D0B806C026E7F2760013D332 /* co */,
 				D0530EB72706DF6A00CB946A /* zh */,
 				D0924623280B72BA00B79A40 /* ja_JP */,
+				D0A185FE2AD5BDE60056C7BD /* ko */,
+				D0E25A722AD5BE3600D1B3F5 /* bg */,
 			);
 			name = Video.xib;
 			sourceTree = "<group>";
@@ -2880,6 +2998,8 @@
 				D0B806A526E7F2760013D332 /* co */,
 				D0530E9C2706DF6A00CB946A /* zh */,
 				D0924608280B72B900B79A40 /* ja_JP */,
+				D0A185E32AD5BDE60056C7BD /* ko */,
+				D0E25A572AD5BE3600D1B3F5 /* bg */,
 			);
 			name = Audio.xib;
 			sourceTree = "<group>";
@@ -2896,6 +3016,8 @@
 				D0B806A626E7F2760013D332 /* co */,
 				D0530E9D2706DF6A00CB946A /* zh */,
 				D0924609280B72B900B79A40 /* ja_JP */,
+				D0A185E42AD5BDE60056C7BD /* ko */,
+				D0E25A582AD5BE3600D1B3F5 /* bg */,
 			);
 			name = AudioDefaults.xib;
 			sourceTree = "<group>";
@@ -2912,6 +3034,8 @@
 				D0B806BE26E7F2760013D332 /* co */,
 				D0530EB52706DF6A00CB946A /* zh */,
 				D0924621280B72BA00B79A40 /* ja_JP */,
+				D0A185FC2AD5BDE60056C7BD /* ko */,
+				D0E25A702AD5BE3600D1B3F5 /* bg */,
 			);
 			name = Subtitles.xib;
 			sourceTree = "<group>";
@@ -2928,6 +3052,8 @@
 				D0B806BF26E7F2760013D332 /* co */,
 				D0530EB62706DF6A00CB946A /* zh */,
 				D0924622280B72BA00B79A40 /* ja_JP */,
+				D0A185FD2AD5BDE60056C7BD /* ko */,
+				D0E25A712AD5BE3600D1B3F5 /* bg */,
 			);
 			name = SubtitlesDefaults.xib;
 			sourceTree = "<group>";
@@ -2944,6 +3070,8 @@
 				D0B806A726E7F2760013D332 /* co */,
 				D0530E9E2706DF6A00CB946A /* zh */,
 				D092460A280B72B900B79A40 /* ja_JP */,
+				D0A185E52AD5BDE60056C7BD /* ko */,
+				D0E25A592AD5BE3600D1B3F5 /* bg */,
 			);
 			name = ChaptersTitles.xib;
 			sourceTree = "<group>";
@@ -2960,6 +3088,8 @@
 				D0B806BD26E7F2760013D332 /* co */,
 				D0530EB42706DF6A00CB946A /* zh */,
 				D0924620280B72BA00B79A40 /* ja_JP */,
+				D0A185FB2AD5BDE60056C7BD /* ko */,
+				D0E25A6F2AD5BE3600D1B3F5 /* bg */,
 			);
 			name = Queue.xib;
 			sourceTree = "<group>";
@@ -2976,6 +3106,8 @@
 				D0B806AA26E7F2760013D332 /* co */,
 				D0530EA12706DF6A00CB946A /* zh */,
 				D092460D280B72B900B79A40 /* ja_JP */,
+				D0A185E82AD5BDE60056C7BD /* ko */,
+				D0E25A5C2AD5BE3600D1B3F5 /* bg */,
 			);
 			name = HBCroppingView.xib;
 			sourceTree = "<group>";
@@ -2992,6 +3124,8 @@
 				D0B806BA26E7F2760013D332 /* co */,
 				D0530EB12706DF6A00CB946A /* zh */,
 				D092461D280B72BA00B79A40 /* ja_JP */,
+				D0A185F82AD5BDE60056C7BD /* ko */,
+				D0E25A6C2AD5BE3600D1B3F5 /* bg */,
 			);
 			name = PicturePreview.xib;
 			sourceTree = "<group>";
@@ -3008,6 +3142,8 @@
 				D0B806B926E7F2760013D332 /* co */,
 				D0530EB02706DF6A00CB946A /* zh */,
 				D092461C280B72BA00B79A40 /* ja_JP */,
+				D0A185F72AD5BDE60056C7BD /* ko */,
+				D0E25A6B2AD5BE3600D1B3F5 /* bg */,
 			);
 			name = OutputPanel.xib;
 			sourceTree = "<group>";
@@ -3024,6 +3160,8 @@
 				D0B806BB26E7F2760013D332 /* co */,
 				D0530EB22706DF6A00CB946A /* zh */,
 				D092461E280B72BA00B79A40 /* ja_JP */,
+				D0A185F92AD5BDE60056C7BD /* ko */,
+				D0E25A6D2AD5BE3600D1B3F5 /* bg */,
 			);
 			name = Preferences.xib;
 			sourceTree = "<group>";
@@ -3040,6 +3178,8 @@
 				D0B806B026E7F2760013D332 /* co */,
 				D0530EA72706DF6A00CB946A /* zh */,
 				D0924613280B72B900B79A40 /* ja_JP */,
+				D0A185EE2AD5BDE60056C7BD /* ko */,
+				D0E25A622AD5BE3600D1B3F5 /* bg */,
 			);
 			name = HBPreviewViewController.xib;
 			sourceTree = "<group>";
@@ -3056,6 +3196,8 @@
 				D0B806B626E7F2760013D332 /* co */,
 				D0530EAD2706DF6A00CB946A /* zh */,
 				D0924619280B72BA00B79A40 /* ja_JP */,
+				D0A185F42AD5BDE60056C7BD /* ko */,
+				D0E25A682AD5BE3600D1B3F5 /* bg */,
 			);
 			name = HBTrackTitleViewController.xib;
 			sourceTree = "<group>";
@@ -3072,6 +3214,8 @@
 				D0B806C426E7F2760013D332 /* co */,
 				D0530EBB2706DF6A00CB946A /* zh */,
 				D0924627280B72BA00B79A40 /* ja_JP */,
+				D0A186002AD5BDE60056C7BD /* ko */,
+				D0E25A742AD5BE3600D1B3F5 /* bg */,
 			);
 			name = InfoPlist.strings;
 			sourceTree = "<group>";
@@ -3087,6 +3231,8 @@
 				D0B806C526E7F2760013D332 /* co */,
 				D0530EBC2706DF6A00CB946A /* zh */,
 				D0924628280B72BA00B79A40 /* ja_JP */,
+				D0A186012AD5BDE60056C7BD /* ko */,
+				D0E25A752AD5BE3600D1B3F5 /* bg */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";
@@ -3103,6 +3249,8 @@
 				D0B806A826E7F2760013D332 /* co */,
 				D0530E9F2706DF6A00CB946A /* zh */,
 				D092460B280B72B900B79A40 /* ja_JP */,
+				D0A185E62AD5BDE60056C7BD /* ko */,
+				D0E25A5A2AD5BE3600D1B3F5 /* bg */,
 			);
 			name = ExceptionAlert.xib;
 			sourceTree = "<group>";

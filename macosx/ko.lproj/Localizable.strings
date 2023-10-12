@@ -1,0 +1,460 @@
+/* Job statistics */
+" (%@ %% of the source file)" = " (원본 파일의 %@ %%)";
+
+/* Preview -> size info label */
+" Scaled To Screen" = "화면에 맞추기";
+
+/* No comment provided by engineer. */
+"- --:--" = "- --:--";
+
+/* No comment provided by engineer. */
+"--:--" = "--:--";
+
+/* Preview -> size info label */
+"(%.0f%% actual size)" = "(%.0f%% 실제 크기)";
+
+/* Preview -> size info label */
+"(Actual size)" = "(실제 크기)";
+
+/* Main Window -> preset modified */
+"(Modified)" = "(수정됨)";
+
+/* Job statistics */
+"%@ fps" = "%@ fps";
+
+/* Queue status */
+"%lu encode pending" = "%lu 인코딩 대기중";
+
+/* Queue status */
+"%lu encodes pending" = "%lu 인코딩 대기중";
+
+/* No comment provided by engineer. */
+"%lu jobs selected" = "%lu 작업 선택";
+
+/* Add preset window -> picture setting */
+"480p NTSC SD" = "480p NTSC SD";
+
+/* Add preset window -> picture setting */
+"576p PAL SD" = "576p PAL SD";
+
+/* Add preset window -> picture setting */
+"720p HD" = "720p HD";
+
+/* Add preset window -> picture setting */
+"1080p HD" = "1080p HD";
+
+/* Add preset window -> picture setting */
+"1440p 2.5K Quad HD" = "1440p 2.5K Quad HD";
+
+/* Add preset window -> picture setting */
+"2160p 4K Ultra HD" = "2160p 4K Ultra HD";
+
+/* Add preset window -> picture setting */
+"4320p 8K Ultra HD" = "4320p 8K Ultra HD";
+
+/* Destination same as source alert -> message
+   File already exists alert -> message */
+"A file already exists at the selected destination." = "파일이 이미 대상 위치에 있습니다.";
+
+/* Queue undo action name */
+"Add Job To Queue" = "대기열에 작업 추가";
+
+/* Queue undo action name */
+"Add Jobs To Queue" = "대기열에 작업 추가";
+
+/* Touch bar */
+"Add Preset" = "사전설정 추가";
+
+/* Touch bar */
+"Add Titles To Queue" = "대기열에 제목 추가...";
+
+/* Touch bar */
+"Add To Queue" = "대기열에 추가";
+
+/* Preferences Advanced Toolbar Item */
+"Advanced" = "고급";
+
+/* Delete preset alert -> message */
+"Are you sure you want to permanently delete the selected preset?" = "선택한 사전설정을 완전히 삭제하시겠습니까?";
+
+/* Delete preset alert -> message */
+"Are you sure you want to permanently delete the selected presets?" = "선택한 사전설정을 완전히 삭제하시겠습니까?";
+
+/* Player HUD -> audio menu */
+"Audio" = "오디오";
+
+/* Job statistics */
+"Average speed:" = "평균 속도:";
+
+/* Copy Protection Alert -> second button
+   Delete preset alert -> second button
+   File already exists alert -> first button
+   File already exists in queue alert -> first button
+   Preview -> live preview alert alternate button
+   Touch bar */
+"Cancel" = "취소";
+
+/* Touch bar */
+"Cancel Encoding" = "인코딩 취소";
+
+/* Toolbar Open/Cancel Item
+   Touch bar */
+"Cancel Scan" = "스캔 취소";
+
+/* Toolbar Open/Cancel Item */
+"Cancel Scanning Source" = "소스 스캔 취소";
+
+/* Preferences -> Output Name Token */
+"Chapters" = "챕터";
+
+/* Main Window -> Destination open panel */
+"Choose" = "선택";
+
+/* Preferences -> Output Name Token */
+"Codec" = "코덱";
+
+/* Queue Alert -> cancel rip first button */
+"Continue Encoding" = "인코딩 계속";
+
+/* Copy Protection Alert -> message */
+"Copy-Protected sources are not supported." = "복사 방지 영상은 지원하지 않습니다.";
+
+/* Preferences -> Output Name Token */
+"Creation-Date" = "생성한 날짜";
+
+/* Preferences -> Output Name Token */
+"Creation-Time" = "생성한 시간";
+
+/* Touch bar */
+"Current Time" = "현재 시간";
+
+/* Add preset window -> picture setting */
+"Custom" = "사용자 지정";
+
+/* Preferences -> Output Name Token */
+"Date" = "날짜";
+
+/* Delete preset alert -> first button */
+"Delete Preset" = "사전설정 삭제";
+
+/* Delete preset alert -> first button */
+"Delete Presets" = "사전설정 삭제";
+
+/* File already exists alert -> informative text
+   File already exists in queue alert -> informative text */
+"Do you want to overwrite %@?" = "%@을/를 덮어쓰시겠습니까?";
+
+/* Touch bar */
+"Done" = "완료";
+
+/* HBQueueItemView -> Encode state accessibility label */
+"Encode canceled" = "인코딩 취소";
+
+/* HBQueueItemView -> Encode state accessibility label */
+"Encode complete" = "인코딩 완료";
+
+/* HBQueueItemView -> Encode state accessibility label
+   Queue done notification failed message */
+"Encode failed" = "인코딩 실패";
+
+/* HBQueueItemView -> Encode state accessibility label */
+"Encode ready" = "인코딩 준비완료";
+
+/* HBQueueItemView -> Encode state accessibility label */
+"Encode working" = "인코딩 작업중";
+
+/* No comment provided by engineer. */
+"Encoding %lu Jobs" = "%lu 작업 인코딩중";
+
+/* No comment provided by engineer. */
+"Encoding Job: %@" = "인코딩 작업: %@";
+
+/* Job statistics */
+"Ended at:" = "완료:";
+
+/* Export presets save panel title */
+"Export preset" = "사전설정 내보내기";
+
+/* Export presets save panel title */
+"Export presets" = "사전설정 내보내기";
+
+/* File already exists alert -> message */
+"File already exists." = "이미 파일이 있습니다.";
+
+/* Preferences General Toolbar Item */
+"General" = "일반";
+
+/* Main Window -> title */
+"HandBrake" = "HandBrake";
+
+/* Preview -> live preview alert message */
+"HandBrake can't open the preview." = "HandBrake 가 미리보기를 열 수 없습니다.";
+
+/* Preview -> live preview alert informative text */
+"HandBrake can't playback this combination of video/audio/container format. Do you want to open it in an external player?" = "HandBrake 에서 이 비디오/오디오/파일 포맷 조합을 재생할 수 없습니다. 외부 플레이어에서 여시겠습니까?";
+
+/* Quit Alert -> informative text */
+"If you quit HandBrake your current encode will be reloaded into your queue at next launch. Do you want to quit anyway?" = "HandBrake 를 종료하면 다음 시작시에 진행 중인 인코딩을 대기열에 다시 읽어들입니다. 종료를 계속하시겠습니까?";
+
+/* Import preset open panel title */
+"Import presets" = "사전설정 가져오기";
+
+/* Chapters import -> invalid CSV line count description */
+"Incorrect line count" = "잘못된 줄 수";
+
+/* Chapters import -> invalid CSV description */
+"Invalid chapters CSV file" = "잘못된 챕터 CSV파일";
+
+/* Queue Edit Alert -> stop and edit first button
+   Queue Stop Alert -> stop and remove first button */
+"Keep Encoding" = "인코딩 유지";
+
+/* Touch bar */
+"Live Preview" = "실시간 미리보기";
+
+/* Add preset window -> My Presets */
+"My Presets" = "내 사전설정";
+
+/* Queue status */
+"No encode pending" = "대기중인 인코딩 없음";
+
+/* Preview -> accessibility label */
+"No image" = "이미지 없음";
+
+/* No comment provided by engineer. */
+"No job selected" = "선택된 작업없음";
+
+/* Main Window -> Info text */
+"No Valid Source Found" = "적절한 원본을 찾을 수 없음";
+
+/* Add preset window -> picture setting */
+"None" = "없음";
+
+/* Queue Done Alert -> shut down first button
+   Queue Done Alert -> sleep first button */
+"OK" = "확인";
+
+/* Preview -> live preview alert default button */
+"Open in external player" = "외부 플레이어에서 열기";
+
+/* Toolbar Open/Cancel Item
+   Touch bar */
+"Open Source" = "원본 열기";
+
+/* File already exists alert -> second button
+   File already exists in queue alert -> second button */
+"Overwrite" = "덮어쓰기";
+
+/* Toolbar Pause Item */
+"Pause" = "일시중지";
+
+/* Queue -> pause/resume menu
+   Toolbar Pause Item
+   Touch bar */
+"Pause Encoding" = "인코딩 일시중지";
+
+/* Touch bar */
+"Pause/Resume Encoding" = "인코딩 일시중지/이어하기";
+
+/* Job statistics */
+"Paused time:" = "일시중지 시간:";
+
+/* Video -> Framerate */
+"Peak Framerate (VFR)" = "프레임레이트 순간 최고값 (VFR)";
+
+/* Touch bar */
+"Play/Pause" = "재생/일시중지";
+
+/* Add preset window -> name alert informative text
+   Rename preset window -> name alert informative text */
+"Please enter a name." = "이름을 넣어주세요.";
+
+/* Queue Done Alert -> shut down second button
+   Queue Done Alert -> sleep second button */
+"Preferences…" = "환경설정...";
+
+/* Preview -> progress formatter title */
+"preview" = "미리보기";
+
+/* Preview -> window title */
+"Preview" = "미리보기";
+
+/* Preview -> window title format */
+"Preview - %@ %@" = "미리보기 - %1$@ %2$@";
+
+/* Touch bar */
+"Previews" = "미리보기";
+
+/* Preferences -> Output Name Token */
+"Quality/Bitrate" = "품질/비트레이트";
+
+/* Queue window title */
+"Queue" = "대기열";
+
+/* Queue window title */
+"Queue (%@)" = "대기열 (%@)";
+
+/* Quit Alert -> first button */
+"Quit" = "중단";
+
+/* Touch bar */
+"Remaining Time" = "남은 시간";
+
+/* HBQueueItemView -> Remove button accessibility label */
+"Remove job" = "작업 제거";
+
+/* Queue undo action name */
+"Remove Job From Queue" = "대기열에서 작업 제거";
+
+/* Queue undo action name */
+"Remove Jobs From Queue" = "대기열에서 여러 작업 제거";
+
+/* Toolbar Pause Item */
+"Resume" = "이어하기";
+
+/* Queue -> pause/resume men
+   Toolbar Pause Item */
+"Resume Encoding" = "인코딩 이어하기";
+
+/* Job statistics */
+"Run time:" = "동작 시간:";
+
+/* Export presets panel prompt */
+"Save" = "저장";
+
+/* Picture HUD -> scale button
+   Touch bar */
+"Scale To Screen" = "화면에 맞추기";
+
+/* Titles selection sheet -> informative text */
+"Select the titles to add to the queue using the %@ preset:" = "%@ 사전설정을 사용하는 대기열에 추가할 영상 선택:";
+
+/* Notification -> Show in Finder */
+"Show" = "표시";
+
+/* Touch bar */
+"Show Activity Window" = "작업 창 표시";
+
+/* Touch bar */
+"Show Preview Window" = "미리보기 창 표시";
+
+/* Job statistics */
+"Size:" = "크기:";
+
+/* Queue Alert -> cancel rip second button */
+"Skip Current Job" = "현재 작업 넘어가기";
+
+/* Touch bar */
+"Slider" = "슬라이더";
+
+/* Preferences -> Output Name Token */
+"Source" = "원본";
+
+/* Toolbar Start/Stop Item */
+"Start" = "시작";
+
+/* Menu Start/Stop Item
+   Queue -> start/stop menu
+   Toolbar Start/Stop Item */
+"Start Encoding" = "인코딩 시작";
+
+/* Toolbar Start/Stop Item */
+"Start Queue" = "대기열 시작";
+
+/* Touch bar */
+"Start/Stop Encoding" = "인코딩 시작/중지";
+
+/* Job statistics */
+"Started at:" = "시작 시간:";
+
+/* Queue -> Stop action
+   Toolbar Start/Stop Item */
+"Stop" = "중지";
+
+/* Queue -> Stop action */
+"Stop action." = "동작 중단";
+
+/* Queue Alert -> cancel rip third button */
+"Stop After Current Job" = "현재 작업 후 중지";
+
+/* Queue Alert -> cancel rip fourth button */
+"Stop All" = "모두 중지";
+
+/* Queue -> start/stop menu
+   Toolbar Start/Stop Item */
+"Stop Encoding" = "인코딩 중지";
+
+/* Queue Stop Alert -> stop and remove second button */
+"Stop Encoding and Delete" = "인코딩 중지 후 삭제";
+
+/* Queue Edit Alert -> stop and edit second button */
+"Stop Encoding and Edit" = "인코딩 중지 후 편집";
+
+/* Queue Edit Alert -> stop and edit message */
+"Stop This Encode and Edit It?" = "인코딩을 중지하고 편집하시겠습니까?";
+
+/* Queue Stop Alert -> stop and remove message */
+"Stop This Encode and Remove It?" = "인코딩을 중지하고 삭제하시겠습니까?";
+
+/* Player HUD -> subtitles menu */
+"Subtitles" = "자막";
+
+/* Queue Done Alert -> shut down message */
+"The computer will shut down after encoding is done." = "인코딩이 완료되면 컴퓨터가 종료됩니다.";
+
+/* Queue Done Alert -> sleep message */
+"The computer will sleep after encoding is done." = "인코딩이 완료되면 잠자기 상태가 됩니다.";
+
+/* Chapters import -> invalid CSV recovery suggestion */
+"The CSV file is not a valid chapters CSV file." = "올바른 챕터 CSV 파일이 아닙니다.";
+
+/* Add preset window -> name alert message
+   Rename preset window -> name alert message */
+"The preset name cannot be empty." = "사전설정 이름은 비워 둘 수 없습니다.";
+
+/* Invalid destination alert -> informative text */
+"This is not a valid destination directory!" = "올바른 대상 디렉터리가 아닙니다!";
+
+/* Preferences -> Output Name Token */
+"Time" = "시간";
+
+/* Preferences -> Output Name Token */
+"Title" = "제목";
+
+/* Video -> Framerate */
+"Variable Framerate" = "가변 프레임레이트";
+
+/* Invalid destination alert -> message */
+"Warning!" = "경고!";
+
+/* No comment provided by engineer. */
+"Working" = "작업중";
+
+/* Delete preset alert -> informative text */
+"You can't undo this action." = "이 작업은 되돌릴 수 없습니다.";
+
+/* Queue Done Alert -> shut down informative text */
+"You have selected to shut down the computer after encoding. To turn off shut down, go to the HandBrake preferences." = "인코딩 완료후 컴퓨터 끄기를 선택하였습니다. 컴퓨터 끄기를 취소하려면 HandBrake 환경설정으로 이동하세요.";
+
+/* Queue Done Alert -> sleep informative text */
+"You have selected to sleep the computer after encoding. To turn off sleeping, go to the HandBrake preferences." = "인코딩 완료후 잠자기를 선택하셨습니다. 잠자기를 취소하려면 HandBrake 환경설정으로 이동하세요.";
+
+/* Queue -> disk almost full alert informative text */
+"You need to make more space available on your destination disk." = "대상 디스크에 더 많은 공간이 필요합니다.";
+
+/* Queue -> disk almost full alert message */
+"Your destination disk is almost full." = "대상 디스크가 거의 찼습니다.";
+
+/* Queue done notification message */
+"Your encode %@ couldn't be completed." = "%@ 인코딩을 완료할 수 없었습니다.";
+
+/* Queue done notification message */
+"Your encode %@ is done!" = "%@ 인코딩이 완료되었습니다!";
+
+/* Queue done alert informative text */
+"Your HandBrake queue is done!" = "HandBrake 대기열이 완료되었습니다!";
+
+/* Queue Edit Alert -> stop and edit informative text
+   Queue Stop Alert -> stop and remove informative text */
+"Your movie will be lost if you don't continue encoding." = "인코딩을 계속하지 않으면 영상이 손실됩니다.";
+

@@ -1,0 +1,216 @@
+/* Class = "NSButton"; ibShadowedToolTip = "Enable this if your playback device supports FLAC. This permits FLAC passthru to be selected when automatic passthru selecion is enabled."; ObjectID = "0HY-xB-cvO"; */
+"0HY-xB-cvO.ibShadowedToolTip" = "Изберете това, ако устройството поддържа FLAC. Това позволява подаване на FLAC да бъде избрано, когато автоматичното подаване е включено.";
+
+/* Class = "NSTableColumn"; headerCell.title = "Mixdown"; ObjectID = "0kT-0J-3k2"; */
+"0kT-0J-3k2.headerCell.title" = "Смесване";
+
+/* Class = "NSTextFieldCell"; title = "Text Cell"; ObjectID = "1XC-VS-X3g"; */
+"1XC-VS-X3g.title" = "Текстова клетка";
+
+/* Class = "NSTextFieldCell"; title = "Text Cell"; ObjectID = "3o5-Gn-Vao"; */
+"3o5-Gn-Vao.title" = "Текстова клетка";
+
+/* Class = "NSPopUpButton"; ibExternalAccessibilityDescription = "Codec"; ObjectID = "6lx-af-rBL"; */
+"6lx-af-rBL.ibExternalAccessibilityDescription" = "Кодек";
+
+/* Class = "NSPopUpButton"; ibShadowedToolTip = "Audio encoder."; ObjectID = "6lx-af-rBL"; */
+"6lx-af-rBL.ibShadowedToolTip" = "Аудио енкодер:";
+
+/* Class = "NSTextFieldCell"; title = "Audio encoder settings for each selected track:"; ObjectID = "007-WM-RmC"; */
+"007-WM-RmC.title" = "Настройки за аудио енкодера за всяка избрана пътечка";
+
+/* Class = "NSTextFieldCell"; title = "Text Cell"; ObjectID = "7sl-o7-pUh"; */
+"7sl-o7-pUh.title" = "Текстова клетка";
+
+/* Class = "NSButtonCell"; title = "DTS"; ObjectID = "8mC-Wx-myL"; */
+"8mC-Wx-myL.title" = "DTS";
+
+/* Class = "NSButtonCell"; title = "Use only first encoder for secondary audio"; ObjectID = "66v-2g-DHn"; */
+"66v-2g-DHn.title" = "Използвай само първия енкодер за второстепенно аудио";
+
+/* Class = "NSTextFieldCell"; title = "Passthru Fallback:"; ObjectID = "AQe-Sg-Qgh"; */
+"AQe-Sg-Qgh.title" = "Резерва при подаване:";
+
+/* Class = "NSScrollView"; ibExternalAccessibilityDescription = "Audio Track Languages"; ObjectID = "aTC-39-h6S"; */
+"aTC-39-h6S.ibExternalAccessibilityDescription" = "Езици за аудио пътечка";
+
+/* Class = "NSScrollView"; ibShadowedToolTip = "Select the languages to use with the Track Selection Behavior setting."; ObjectID = "aTC-39-h6S"; */
+"aTC-39-h6S.ibShadowedToolTip" = "Избери езиците, които ще се използват с настройката \"Поведение на избрани пътечки\".";
+
+/* Class = "NSTextField"; ibExternalAccessibilityDescription = "DRC"; ObjectID = "BaY-Lo-8xn"; */
+"BaY-Lo-8xn.ibExternalAccessibilityDescription" = "КДО";
+
+/* Class = "NSTextField"; ibShadowedToolTip = "Dynamic Range Compression. Reduces the volume difference between loud and quiet sounds. Only applies to AC-3 source tracks when encoding to another format.\n\n0: Do not apply DRC.\n1: Apply DRC according to the compression hints embedded in the source track.\n\nValues greater than 1 further increase the volume of quiet sounds. Values greater than 2.5 are typically unnecessary and may introduce audible distortion."; ObjectID = "BaY-Lo-8xn"; */
+"BaY-Lo-8xn.ibShadowedToolTip" = "Компресия на динамичен обхват. Намалява разликата в звука между шумни и тихи звуци. Прилага се само при пътечки източници AC-3, когато се кодират в друг формат.\n\n0: Не се прилага КДО.\n1: КДО се прилага според подсказки за компресия, налични в пътечката източник.\n\nСтойности над 1 още повече увеличават звука на тихите звуци. Стойности над 2.5 обикновено не са нужни и може да причинят доловимо изкривяване на звука.";
+
+/* Class = "NSButton"; ibShadowedToolTip = "Enable this if your playback device supports E-AC3. This permits E-AC3 passthru to be selected when automatic passthru selecion is enabled."; ObjectID = "BK7-c4-kkk"; */
+"BK7-c4-kkk.ibShadowedToolTip" = "Изберете това, ако устройството поддържа E-AC3. Това позволява подаване на E-AC3 да бъде избрано, когато автоматичното подаване е включено.";
+
+/* Class = "NSButtonCell"; title = "AAC"; ObjectID = "cUX-iP-UAs"; */
+"cUX-iP-UAs.title" = "AAC";
+
+/* Class = "NSSlider"; ibExternalAccessibilityDescription = "Gain"; ObjectID = "DbI-6O-BzA"; */
+"DbI-6O-BzA.ibExternalAccessibilityDescription" = "Усилване";
+
+/* Class = "NSSlider"; ibShadowedToolTip = "Audio gain in decibels (dB). Increases or decreases audio volume."; ObjectID = "DbI-6O-BzA"; */
+"DbI-6O-BzA.ibShadowedToolTip" = "Усилване на аудиото в децибели (dB). Увеличава или намаля звука на аудиото.";
+
+/* Class = "NSSlider"; ibExternalAccessibilityDescription = "DRC"; ObjectID = "DGi-Dl-5nh"; */
+"DGi-Dl-5nh.ibExternalAccessibilityDescription" = "КДО";
+
+/* Class = "NSSlider"; ibShadowedToolTip = "Dynamic Range Compression. Reduces the volume difference between loud and quiet sounds. Only applies to AC-3 source tracks when encoding to another format.\n\n0: Do not apply DRC.\n1: Apply DRC according to the compression hints embedded in the source track.\n\nValues greater than 1 further increase the volume of quiet sounds. Values greater than 2.5 are typically unnecessary and may introduce audible distortion."; ObjectID = "DGi-Dl-5nh"; */
+"DGi-Dl-5nh.ibShadowedToolTip" = "Компресия на динамичен обхват. Намалява разликата в звука между шумни и тихи звуци. Прилага се само при пътечки източници AC-3, когато се кодират в друг формат.\n\n0: Не се прилага КДО.\n1: КДО се прилага според подсказки за компресия, налични в пътечката източник.\n\nСтойности над 1 още повече увеличават звука на тихите звуци. Стойности над 2.5 обикновено не са нужни и може да причинят доловимо изкривяване на звука.";
+
+/* Class = "NSTextFieldCell"; title = "Text Cell"; ObjectID = "dpw-He-8eZ"; */
+"dpw-He-8eZ.title" = "Текстова клетка";
+
+/* Class = "CocoaBindingsConnection"; ibShadowedIsNilPlaceholder = "Auto"; ObjectID = "DxT-bF-prJ"; */
+"DxT-bF-prJ.ibShadowedIsNilPlaceholder" = "Автоматично";
+
+/* Class = "NSButton"; ibShadowedToolTip = "Enable this if your playback device supports DTS. This permits DTS passthru to be selected when automatic passthru selecion is enabled."; ObjectID = "E93-Md-aWa"; */
+"E93-Md-aWa.ibShadowedToolTip" = "Изберете това, ако устройството поддържа DTS. Това позволява подаване на DTS да бъде избрано, когато автоматичното подаване е включено.";
+
+/* Class = "NSButton"; ibShadowedToolTip = "Enable this if your playback device supports AC3. This permits AC3 passthru to be selected when automatic passthru selecion is enabled."; ObjectID = "fgl-Ev-ELt"; */
+"fgl-Ev-ELt.ibShadowedToolTip" = "Изберете това, ако устройството поддържа AC3. Това позволява подаване на AC3 да бъде избрано, когато автоматичното подаване е включено.";
+
+/* Class = "NSTextFieldCell"; title = "Text Cell"; ObjectID = "fH9-oV-QdJ"; */
+"fH9-oV-QdJ.title" = "Текстова клетка";
+
+/* Class = "NSButton"; ibShadowedToolTip = "Enable this if your playback device supports AAC. This permits AAC passthru to be selected when automatic passthru selecion is enabled."; ObjectID = "fzd-MO-xaB"; */
+"fzd-MO-xaB.ibShadowedToolTip" = "Изберете това, ако устройството поддържа AAC. Това позволява подаване на AAC да бъде избрано, когато автоматичното подаване е включено.";
+
+/* Class = "NSTextFieldCell"; title = "Track Selection Behavior:"; ObjectID = "GbM-vm-RC2"; */
+"GbM-vm-RC2.title" = "Поведение на избрани пътечки";
+
+/* Class = "NSButton"; ibShadowedToolTip = "Enable this if your playback device supports MP2. This permits MP2 passthru to be selected when automatic passthru selecion is enabled."; ObjectID = "GHJ-25-kZl"; */
+"GHJ-25-kZl.ibShadowedToolTip" = "Изберете това, ако устройството поддържа MP2. Това позволява подаване на MP2 да бъде избрано, когато автоматичното подаване е включено.";
+
+/* Class = "NSMenuItem"; title = "All Matching Selected Languages"; ObjectID = "GZP-q7-SYy"; */
+"GZP-q7-SYy.title" = "Всички отговарящи избрани езици";
+
+/* Class = "NSPopUpButton"; ibExternalAccessibilityDescription = "Bitrate"; ObjectID = "hHP-dw-nba"; */
+"hHP-dw-nba.ibExternalAccessibilityDescription" = "Побитова скорост";
+
+/* Class = "NSPopUpButton"; ibShadowedToolTip = "Audio bit rate in kilobits per second (kbps). Smaller values reduce audio quality. Larger values use more data and may be less compatible."; ObjectID = "hHP-dw-nba"; */
+"hHP-dw-nba.ibShadowedToolTip" = "Побитова скорост на аудио в килобита в секунда (kbps). По-ниските стойности намаляват качеството на аудиото. По-високите стойности използват повече данни и може да са по-малко съвместими.";
+
+/* Class = "NSPopUpButton"; ibExternalAccessibilityDescription = "Mixdown"; ObjectID = "igm-hS-rrD"; */
+"igm-hS-rrD.ibExternalAccessibilityDescription" = "Смесване";
+
+/* Class = "NSButton"; ibShadowedToolTip = "Enable this if your playback device supports DTS-HD. This permits DTS-HD passthru to be selected when automatic passthru selecion is enabled."; ObjectID = "IxI-o9-jMs"; */
+"IxI-o9-jMs.ibShadowedToolTip" = "Изберете това, ако устройството поддържа DTS-HD. Това позволява подаване на DTS-HD да бъде избрано, когато автоматичното подаване е включено.";
+
+/* Class = "NSMenuItem"; title = "First Matching Selected Languages"; ObjectID = "jDd-Ji-7Sm"; */
+"jDd-Ji-7Sm.title" = "Първи отговарящи избрани езици";
+
+/* Class = "NSButtonCell"; title = "Cancel"; ObjectID = "Jn4-1L-J1g"; */
+"Jn4-1L-J1g.title" = "Отмяна";
+
+/* Class = "NSButtonCell"; title = "OK"; ObjectID = "kDe-1L-VkD"; */
+"kDe-1L-VkD.title" = "ОК";
+
+/* Class = "NSWindow"; title = "Audio Selection Behaviour"; ObjectID = "kwM-lz-5lG"; */
+"kwM-lz-5lG.title" = "Поведение на избрано аудио";
+
+/* Class = "NSMenu"; title = "OtherViews"; ObjectID = "Kwy-lU-VuU"; */
+"Kwy-lU-VuU.title" = "ДругиИзгледи";
+
+/* Class = "NSPopUpButton"; ibShadowedToolTip = "Audio encoder to use when a track suitable for passthru is unavailable."; ObjectID = "LdN-Cx-ZJY"; */
+"LdN-Cx-ZJY.ibShadowedToolTip" = "Аудио енкодер, който да се използва, когато не е налична подходяща пътечка за подаване.";
+
+/* Class = "NSButtonCell"; title = "DTS-HD"; ObjectID = "LX6-kc-5vq"; */
+"LX6-kc-5vq.title" = "DTS-HD";
+
+/* Class = "NSTableColumn"; headerCell.title = "Samplerate"; ObjectID = "LxC-Qx-psh"; */
+"LxC-Qx-psh.headerCell.title" = "Честота на дискретизация";
+
+/* Class = "NSTextFieldCell"; title = "Languages:"; ObjectID = "mAT-Jp-SG1"; */
+"mAT-Jp-SG1.title" = "Езици:";
+
+/* Class = "NSTextFieldCell"; title = "0"; ObjectID = "MiI-OV-waZ"; */
+"MiI-OV-waZ.title" = "0";
+
+/* Class = "NSMenuItem"; title = "None"; ObjectID = "mvw-Hg-JFM"; */
+"mvw-Hg-JFM.title" = "Няма";
+
+/* Class = "NSTableColumn"; headerCell.title = "Gain"; ObjectID = "N7h-CJ-quV"; */
+"N7h-CJ-quV.headerCell.title" = "Усилване";
+
+/* Class = "NSButtonCell"; title = "FLAC"; ObjectID = "naS-No-CdV"; */
+"naS-No-CdV.title" = "FLAC";
+
+/* Class = "NSButton"; ibShadowedToolTip = "Enable this if your playback device supports TrueHD. This permits TrueHD passthru to be selected when automatic passthru selecion is enabled."; ObjectID = "os0-Jl-OXF"; */
+"os0-Jl-OXF.ibShadowedToolTip" = "Изберете това, ако устройството поддържа TrueHD. Това позволява подаване на TrueHD да бъде избрано, когато автоматичното подаване е включено.";
+
+/* Class = "NSSegmentedCell"; otA-K4-TxM.ibShadowedToolTips[0] = "Add Audio Track"; ObjectID = "otA-K4-TxM"; */
+"otA-K4-TxM.ibShadowedToolTips[0]" = "Добави аудио пътечка";
+
+/* Class = "NSSegmentedCell"; otA-K4-TxM.ibShadowedToolTips[1] = "Remove Selected Audio Track"; ObjectID = "otA-K4-TxM"; */
+"otA-K4-TxM.ibShadowedToolTips[1]" = "Премахни избраната аудио пътечка";
+
+/* Class = "NSTextFieldCell"; title = "0"; ObjectID = "OVr-Jm-VrK"; */
+"OVr-Jm-VrK.title" = "0";
+
+/* Class = "NSTableColumn"; headerCell.title = "Codec"; ObjectID = "pR9-d4-SNf"; */
+"pR9-d4-SNf.headerCell.title" = "Кодек";
+
+/* Class = "NSMenu"; title = "OtherViews"; ObjectID = "PtB-Wp-B9X"; */
+"PtB-Wp-B9X.title" = "ДругиИзгледи";
+
+/* Class = "NSPopUpButton"; ibExternalAccessibilityDescription = "Samplerate"; ObjectID = "r80-yv-59n"; */
+"r80-yv-59n.ibExternalAccessibilityDescription" = "Честота на дискретизация";
+
+/* Class = "NSPopUpButton"; ibShadowedToolTip = "Audio sample rate in kilohertz (kHz). Auto is recommended."; ObjectID = "r80-yv-59n"; */
+"r80-yv-59n.ibShadowedToolTip" = "Честота на дискретизация на аудиото в килохерци (kHz). Автоматично е препоръчително.";
+
+/* Class = "NSButton"; ibShadowedToolTip = "Enable this if your playback device supports Opus. This permits Opus passthru to be selected when automatic passthru selecion is enabled."; ObjectID = "Ry1-gA-ns4"; */
+"Ry1-gA-ns4.ibShadowedToolTip" = "Изберете това, ако устройството поддържа Opus. Това позволява подаване на Opus да бъде избрано, когато автоматичното подаване е включено.";
+
+/* Class = "NSTextFieldCell"; title = "Auto Passthru:"; ObjectID = "s6s-EH-5CB"; */
+"s6s-EH-5CB.title" = "Автоматично подаване";
+
+/* Class = "NSButtonCell"; title = "MP3"; ObjectID = "sdZ-Rx-JoG"; */
+"sdZ-Rx-JoG.title" = "MP3";
+
+/* Class = "NSButtonCell"; title = "E-AC3"; ObjectID = "u9h-dn-wcK"; */
+"u9h-dn-wcK.title" = "E-AC3";
+
+/* Class = "NSButton"; ibShadowedToolTip = "Only the primary audio track will be encoded with the full encoder list. All additional audio tracks will be encoded with first encoder only."; ObjectID = "uF5-6E-EIe"; */
+"uF5-6E-EIe.ibShadowedToolTip" = "Само основната аудио пътечка ще бъде кодирана с пълния списък с енкодери. Всички допълнителни аудио пътечки ще бъдат кодирани само с първия енкодер.";
+
+/* Class = "NSTextFieldCell"; title = "Text Cell"; ObjectID = "uFK-z7-8Yj"; */
+"uFK-z7-8Yj.title" = "Текстова клетка";
+
+/* Class = "NSMenuItem"; title = "Item"; ObjectID = "UJy-A2-Bb1"; */
+"UJy-A2-Bb1.title" = "Елемент";
+
+/* Class = "NSTableColumn"; headerCell.title = "Bitrate"; ObjectID = "vhn-7C-4aZ"; */
+"vhn-7C-4aZ.headerCell.title" = "Побитова скорост";
+
+/* Class = "NSButtonCell"; title = "AC3"; ObjectID = "VnE-3R-bUf"; */
+"VnE-3R-bUf.title" = "AC3";
+
+/* Class = "NSButton"; ibShadowedToolTip = "Enable this if your playback device supports MP3. This permits MP3 passthru to be selected when automatic passthru selecion is enabled."; ObjectID = "vUx-OV-W5T"; */
+"vUx-OV-W5T.ibShadowedToolTip" = "Изберете това, ако устройството поддържа MP3. Това позволява подаване на MP3 да бъде избрано, когато автоматичното подаване е включено.";
+
+/* Class = "NSButtonCell"; title = "Opus"; ObjectID = "wAh-LS-JzG"; */
+"wAh-LS-JzG.title" = "Opus";
+
+/* Class = "NSTextFieldCell"; title = "Table View Cell"; ObjectID = "XKL-2e-Dlv"; */
+"XKL-2e-Dlv.title" = "Клетка от табличен изглед";
+
+/* Class = "NSTextField"; ibExternalAccessibilityDescription = "Gain"; ObjectID = "xnA-03-Bul"; */
+"xnA-03-Bul.ibExternalAccessibilityDescription" = "Усилване";
+
+/* Class = "NSTextField"; ibShadowedToolTip = "Audio gain in decibels (dB). Increases or decreases audio volume."; ObjectID = "xnA-03-Bul"; */
+"xnA-03-Bul.ibShadowedToolTip" = "Усилване на аудиото в децибели (dB). Увеличава или намаля звука на аудиото.";
+
+/* Class = "NSButtonCell"; title = "MP2"; ObjectID = "Z8O-AS-UdA"; */
+"Z8O-AS-UdA.title" = "MP2";
+
+/* Class = "NSButtonCell"; title = "TrueHD"; ObjectID = "z9d-P3-6UP"; */
+"z9d-P3-6UP.title" = "TrueHD";
+
+/* Class = "NSTableColumn"; headerCell.title = "DRC"; ObjectID = "zX9-T9-wKy"; */
+"zX9-T9-wKy.headerCell.title" = "КДО";
+

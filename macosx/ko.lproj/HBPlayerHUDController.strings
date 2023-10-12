@@ -1,0 +1,60 @@
+/* Class = "NSTextFieldCell"; title = "00:00:00"; ObjectID = "6A0-9h-5UY"; */
+"6A0-9h-5UY.title" = "00:00:00";
+
+/* Class = "NSMenuItem"; title = "Tracks"; ObjectID = "6BQ-wU-p2C"; */
+"6BQ-wU-p2C.title" = "트랙";
+
+/* Class = "NSButton"; ibExternalAccessibilityDescription = "End Live Preview"; ObjectID = "84p-08-fGK"; */
+"84p-08-fGK.ibExternalAccessibilityDescription" = "실시간 미리보기 종료";
+
+/* Class = "NSButton"; ibExternalAccessibilityDescription = "Go To End"; ObjectID = "CQ0-pk-SFk"; */
+"CQ0-pk-SFk.ibExternalAccessibilityDescription" = "끝으로 이동";
+
+/* Class = "NSButton"; ibShadowedToolTip = "Go To End"; ObjectID = "CQ0-pk-SFk"; */
+"CQ0-pk-SFk.ibShadowedToolTip" = "끝으로 이동";
+
+/* Class = "NSTextFieldCell"; title = "00:00:00"; ObjectID = "dGi-LK-P1E"; */
+"dGi-LK-P1E.title" = "00:00:00";
+
+/* Class = "NSButton"; ibExternalAccessibilityDescription = "Mute Volume"; ObjectID = "euL-Tg-dmT"; */
+"euL-Tg-dmT.ibExternalAccessibilityDescription" = "음소거";
+
+/* Class = "NSButton"; ibShadowedToolTip = "Mute Volume"; ObjectID = "euL-Tg-dmT"; */
+"euL-Tg-dmT.ibShadowedToolTip" = "음소거";
+
+/* Class = "NSSlider"; ibExternalAccessibilityDescription = "Volume Control"; ObjectID = "gzA-no-jdv"; */
+"gzA-no-jdv.ibExternalAccessibilityDescription" = "볼륨 조절";
+
+/* Class = "NSSlider"; ibShadowedToolTip = "Drag to change volume."; ObjectID = "gzA-no-jdv"; */
+"gzA-no-jdv.ibShadowedToolTip" = "드래그해서 볼륨 조절.";
+
+/* Class = "NSButton"; ibExternalAccessibilityDescription = "Full Volume"; ObjectID = "Kiv-cL-wYI"; */
+"Kiv-cL-wYI.ibExternalAccessibilityDescription" = "최대 볼륨";
+
+/* Class = "NSButton"; ibShadowedToolTip = "Full Volume"; ObjectID = "Kiv-cL-wYI"; */
+"Kiv-cL-wYI.ibShadowedToolTip" = "최대 볼륨";
+
+/* Class = "NSButton"; ibExternalAccessibilityDescription = "Play/Pause"; ObjectID = "mLA-ei-4sK"; */
+"mLA-ei-4sK.ibExternalAccessibilityDescription" = "재생/일시중지";
+
+/* Class = "NSButton"; ibShadowedToolTip = "Toggle Play/Pause"; ObjectID = "mLA-ei-4sK"; */
+"mLA-ei-4sK.ibShadowedToolTip" = "재생/일시중지 전환";
+
+/* Class = "NSTextField"; ibExternalAccessibilityDescription = "Time Remaining"; ObjectID = "PVD-pq-1ZG"; */
+"PVD-pq-1ZG.ibExternalAccessibilityDescription" = "남은 시간";
+
+/* Class = "NSTextField"; ibShadowedToolTip = "Time remaining."; ObjectID = "PVD-pq-1ZG"; */
+"PVD-pq-1ZG.ibShadowedToolTip" = "남은 시간.";
+
+/* Class = "NSPopUpButton"; ibExternalAccessibilityDescription = "Tracks Selection"; ObjectID = "Vj1-Za-AUV"; */
+"Vj1-Za-AUV.ibExternalAccessibilityDescription" = "트랙 선택";
+
+/* Class = "NSPopUpButton"; ibShadowedToolTip = "Enable or disable tracks."; ObjectID = "Vj1-Za-AUV"; */
+"Vj1-Za-AUV.ibShadowedToolTip" = "트랙 활성화/비활성화.";
+
+/* Class = "NSButton"; ibExternalAccessibilityDescription = "Go To Beginning"; ObjectID = "WuP-9l-8AN"; */
+"WuP-9l-8AN.ibExternalAccessibilityDescription" = "처음으로 이동";
+
+/* Class = "NSButton"; ibShadowedToolTip = "Go To Beginning"; ObjectID = "WuP-9l-8AN"; */
+"WuP-9l-8AN.ibShadowedToolTip" = "처음으로 이동";
+

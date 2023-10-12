@@ -1,0 +1,261 @@
+/* Class = "NSMenu"; title = "Services"; ObjectID = "0te-ai-fgD"; */
+"0te-ai-fgD.title" = "Услуги";
+
+/* Class = "NSMenuItem"; title = "Rename…"; ObjectID = "1GQ-n3-jfY"; */
+"1GQ-n3-jfY.title" = "Преименуване...";
+
+/* Class = "NSMenuItem"; title = "Filters"; ObjectID = "6rE-SM-AGi"; */
+"6rE-SM-AGi.title" = "Филтри";
+
+/* Class = "NSMenuItem"; title = "Summary"; ObjectID = "9ie-b7-RaS"; */
+"9ie-b7-RaS.title" = "Обобщение";
+
+/* Class = "NSMenu"; title = "MainMenu"; ObjectID = "29"; */
+"29.title" = "ГлавноМеню";
+
+/* Class = "NSMenuItem"; title = "HandBrake"; ObjectID = "56"; */
+"56.title" = "HandBrake";
+
+/* Class = "NSMenu"; title = "HandBrake"; ObjectID = "57"; */
+"57.title" = "HandBrake";
+
+/* Class = "NSMenuItem"; title = "About HandBrake"; ObjectID = "58"; */
+"58.title" = "Относно HandBrake";
+
+/* Class = "NSMenuItem"; title = "Quit HandBrake"; ObjectID = "136"; */
+"136.title" = "Изход от HandBrake";
+
+/* Class = "NSMenuItem"; title = "Hide HandBrake"; ObjectID = "971"; */
+"971.title" = "Скриване на HandBrake";
+
+/* Class = "NSMenuItem"; title = "Hide Others"; ObjectID = "973"; */
+"973.title" = "Скриване на останалите";
+
+/* Class = "NSMenuItem"; title = "Window"; ObjectID = "1189"; */
+"1189.title" = "Прозорец";
+
+/* Class = "NSMenuItem"; title = "Minimize"; ObjectID = "1191"; */
+"1191.title" = "Минимизиране";
+
+/* Class = "NSMenu"; title = "Window"; ObjectID = "1192"; */
+"1192.title" = "Прозорец";
+
+/* Class = "NSMenuItem"; title = "Open Source…"; ObjectID = "1198"; */
+"1198.title" = "Отваряне на източник...";
+
+/* Class = "NSMenuItem"; title = "File"; ObjectID = "1200"; */
+"1200.title" = "Файл";
+
+/* Class = "NSMenu"; title = "File"; ObjectID = "1209"; */
+"1209.title" = "Файл";
+
+/* Class = "NSMenu"; title = "Help"; ObjectID = "1429"; */
+"1429.title" = "Помощ";
+
+/* Class = "NSMenuItem"; title = "Help"; ObjectID = "1431"; */
+"1431.title" = "Помощ";
+
+/* Class = "NSMenuItem"; title = "HandBrake Website"; ObjectID = "1432"; */
+"1432.title" = "Уебсайт на HandBrake";
+
+/* Class = "NSMenuItem"; title = "Online Community Forums"; ObjectID = "1433"; */
+"1433.title" = "Онлайн форум на общността";
+
+/* Class = "NSMenuItem"; title = "Preferences…"; ObjectID = "1445"; */
+"1445.title" = "Предпочитания...";
+
+/* Class = "NSMenuItem"; title = "Edit"; ObjectID = "1795"; */
+"1795.title" = "Редактиране";
+
+/* Class = "NSMenu"; title = "Edit"; ObjectID = "1796"; */
+"1796.title" = "Редактиране";
+
+/* Class = "NSMenuItem"; title = "Delete"; ObjectID = "1797"; */
+"1797.title" = "Изтриване";
+
+/* Class = "NSMenuItem"; title = "Select All"; ObjectID = "1798"; */
+"1798.title" = "Избор на всички";
+
+/* Class = "NSMenuItem"; title = "Undo"; ObjectID = "1799"; */
+"1799.title" = "Отмяна";
+
+/* Class = "NSMenuItem"; title = "Find"; ObjectID = "1802"; */
+"1802.title" = "Открий";
+
+/* Class = "NSMenu"; title = "Find"; ObjectID = "1803"; */
+"1803.title" = "Открий";
+
+/* Class = "NSMenuItem"; title = "Jump to Selection"; ObjectID = "1804"; */
+"1804.title" = "Прескочи на селекция";
+
+/* Class = "NSMenuItem"; title = "Find…"; ObjectID = "1805"; */
+"1805.title" = "Открий...";
+
+/* Class = "NSMenuItem"; title = "Find Next"; ObjectID = "1806"; */
+"1806.title" = "Открий следващ";
+
+/* Class = "NSMenuItem"; title = "Find Previous"; ObjectID = "1807"; */
+"1807.title" = "Открий предишен";
+
+/* Class = "NSMenuItem"; title = "Use Selection for Find"; ObjectID = "1808"; */
+"1808.title" = "Използвай селекция да намериш";
+
+/* Class = "NSMenuItem"; title = "Spelling"; ObjectID = "1810"; */
+"1810.title" = "Правопис";
+
+/* Class = "NSMenu"; title = "Spelling"; ObjectID = "1811"; */
+"1811.title" = "Правопис";
+
+/* Class = "NSMenuItem"; title = "Spelling…"; ObjectID = "1812"; */
+"1812.title" = "Правопис...";
+
+/* Class = "NSMenuItem"; title = "Check Spelling"; ObjectID = "1813"; */
+"1813.title" = "Проверка на правопис";
+
+/* Class = "NSMenuItem"; title = "Check Spelling as You Type"; ObjectID = "1814"; */
+"1814.title" = "Проверка на правопис по време на въвеждане";
+
+/* Class = "NSMenuItem"; title = "Cut"; ObjectID = "1815"; */
+"1815.title" = "Изрязване";
+
+/* Class = "NSMenuItem"; title = "Copy"; ObjectID = "1816"; */
+"1816.title" = "Копиране";
+
+/* Class = "NSMenuItem"; title = "Speech"; ObjectID = "1817"; */
+"1817.title" = "Говорене";
+
+/* Class = "NSMenu"; title = "Speech"; ObjectID = "1818"; */
+"1818.title" = "Говорене";
+
+/* Class = "NSMenuItem"; title = "Stop Speaking"; ObjectID = "1819"; */
+"1819.title" = "Спри говорене";
+
+/* Class = "NSMenuItem"; title = "Start Speaking"; ObjectID = "1820"; */
+"1820.title" = "Започни говорене";
+
+/* Class = "NSMenuItem"; title = "Paste"; ObjectID = "1821"; */
+"1821.title" = "Поставяне";
+
+/* Class = "NSMenuItem"; title = "Presets View"; ObjectID = "1884"; */
+"1884.title" = "Изглед на шаблоните";
+
+/* Class = "NSMenuItem"; title = "Presets"; ObjectID = "1948"; */
+"1948.title" = "Шаблони";
+
+/* Class = "NSMenu"; title = "Presets"; ObjectID = "1949"; */
+"1949.title" = "Шаблони";
+
+/* Class = "NSMenuItem"; title = "Reset Official Presets"; ObjectID = "1950"; */
+"1950.title" = "Възстанови официалните шаблони";
+
+/* Class = "NSMenuItem"; title = "New Preset…"; ObjectID = "1955"; */
+"1955.title" = "Нов шаблон...";
+
+/* Class = "NSMenuItem"; title = "Online Documentation"; ObjectID = "1985"; */
+"1985.title" = "Онлайн документация";
+
+/* Class = "NSMenuItem"; title = "Activity Window"; ObjectID = "2295"; */
+"2295.title" = "Прозорец на дейностите";
+
+/* Class = "NSMenuItem"; title = "HandBrake"; ObjectID = "2368"; */
+"2368.title" = "HandBrake";
+
+/* Class = "NSMenuItem"; title = "Select Default"; ObjectID = "2421"; */
+"2421.title" = "Избери по подразбиране";
+
+/* Class = "NSMenuItem"; title = "Add To Queue"; ObjectID = "2443"; */
+"2443.title" = "Добави на опашката";
+
+/* Class = "NSMenuItem"; title = "Start Encoding"; ObjectID = "2444"; */
+"2444.title" = "Започни кодиране";
+
+/* Class = "NSMenuItem"; title = "Queue"; ObjectID = "2445"; */
+"2445.title" = "Опашка";
+
+/* Class = "NSMenuItem"; title = "Pause Encoding"; ObjectID = "2494"; */
+"2494.title" = "Паузирай кодиране";
+
+/* Class = "NSMenuItem"; title = "Close Window"; ObjectID = "2508"; */
+"2508.title" = "Затвори прозорец";
+
+/* Class = "NSMenuItem"; title = "Check for Updates…"; ObjectID = "4964"; */
+"4964.title" = "Проверка за актуализации...";
+
+/* Class = "NSMenuItem"; title = "Preview Window"; ObjectID = "5157"; */
+"5157.title" = "Прозорец за визуализация";
+
+/* Class = "NSMenuItem"; title = "Export…"; ObjectID = "5188"; */
+"5188.title" = "Експортиране...";
+
+/* Class = "NSMenuItem"; title = "Import…"; ObjectID = "5192"; */
+"5192.title" = "Импортиране...";
+
+/* Class = "NSMenuItem"; title = "Show All"; ObjectID = "5280"; */
+"5280.title" = "Покажи всичко";
+
+/* Class = "NSMenuItem"; title = "Add Titles To Queue…"; ObjectID = "5897"; */
+"5897.title" = "Добави заглавия на опашката...";
+
+/* Class = "NSMenuItem"; title = "Audio"; ObjectID = "brQ-mu-8JM"; */
+"brQ-mu-8JM.title" = "Аудио";
+
+/* Class = "NSMenuItem"; title = "Delete"; ObjectID = "CN3-Rh-gVf"; */
+"CN3-Rh-gVf.title" = "Изтриване";
+
+/* Class = "NSMenuItem"; title = "Subtitles"; ObjectID = "Csx-2S-iUe"; */
+"Csx-2S-iUe.title" = "Субтитри";
+
+/* Class = "NSMenuItem"; title = "Open Recent"; ObjectID = "fNa-z2-K1i"; */
+"fNa-z2-K1i.title" = "Отвори скорошни";
+
+/* Class = "NSMenuItem"; title = "Make Default"; ObjectID = "frQ-v5-pRa"; */
+"frQ-v5-pRa.title" = "Направи по подразбиране";
+
+/* Class = "NSMenuItem"; title = "View"; ObjectID = "Hzp-jb-hme"; */
+"Hzp-jb-hme.title" = "Преглед";
+
+/* Class = "NSMenuItem"; title = "Show Toolbar"; ObjectID = "IsV-5A-bqx"; */
+"IsV-5A-bqx.title" = "Покажи лентата с инструменти";
+
+/* Class = "NSMenuItem"; title = "Video"; ObjectID = "Jef-U4-eQT"; */
+"Jef-U4-eQT.title" = "Видео";
+
+/* Class = "NSMenuItem"; title = "Customize Toolbar…"; ObjectID = "KKV-n0-Fmr"; */
+"KKV-n0-Fmr.title" = "Персонализирай лентата с инструменти...";
+
+/* Class = "NSMenuItem"; title = "Save"; ObjectID = "lab-Ly-3p3"; */
+"lab-Ly-3p3.title" = "Запазване";
+
+/* Class = "NSMenuItem"; title = "Chapters"; ObjectID = "lCU-PH-gal"; */
+"lCU-PH-gal.title" = "Глави";
+
+/* Class = "NSMenuItem"; title = "Enter Full Screen"; ObjectID = "mGX-7Z-siB"; */
+"mGX-7Z-siB.title" = "Влизане в пълен екран";
+
+/* Class = "NSMenu"; title = "View"; ObjectID = "ndG-Ig-Yol"; */
+"ndG-Ig-Yol.title" = "Преглед";
+
+/* Class = "NSMenuItem"; title = "Add All Titles To Queue"; ObjectID = "oYh-V7-kbx"; */
+"oYh-V7-kbx.title" = "Добави всички заглавия на опашката";
+
+/* Class = "NSMenuItem"; title = "Dimension"; ObjectID = "shS-hb-XSI"; */
+"shS-hb-XSI.title" = "Размер";
+
+/* Class = "NSMenu"; title = "Open Recent"; ObjectID = "ukX-HN-SXk"; */
+"ukX-HN-SXk.title" = "Отвори скорошни";
+
+/* Class = "NSMenuItem"; title = "Switch to Next Title"; ObjectID = "viv-aA-SoB"; */
+"viv-aA-SoB.title" = "Премини към следващото заглавие";
+
+/* Class = "NSMenuItem"; title = "Clear Menu"; ObjectID = "wPw-Uj-Gxi"; */
+"wPw-Uj-Gxi.title" = "Изчисти меню";
+
+/* Class = "NSMenuItem"; title = "New Category…"; ObjectID = "wvb-60-cWL"; */
+"wvb-60-cWL.title" = "Нова категория...";
+
+/* Class = "NSMenuItem"; title = "Services"; ObjectID = "XcG-Aw-Gdb"; */
+"XcG-Aw-Gdb.title" = "Услуги";
+
+/* Class = "NSMenuItem"; title = "Switch to Previous Title"; ObjectID = "zgj-Iv-4xJ"; */
+"zgj-Iv-4xJ.title" = "Премини към предишното заглавие";
+

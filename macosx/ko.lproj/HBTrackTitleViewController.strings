@@ -1,0 +1,12 @@
+/* Class = "NSTextFieldCell"; title = "Name:"; ObjectID = "eBw-qE-Hyb"; */
+"eBw-qE-Hyb.title" = "이름:";
+
+/* Class = "NSTextField"; ibExternalAccessibilityDescription = "Track name"; ObjectID = "FpM-Jx-vLD"; */
+"FpM-Jx-vLD.ibExternalAccessibilityDescription" = "트랙 이름";
+
+/* Class = "NSTextField"; ibShadowedToolTip = "Players may use this in the audio/subtitles selection list."; ObjectID = "FpM-Jx-vLD"; */
+"FpM-Jx-vLD.ibShadowedToolTip" = "플레이어가 오디오/자막 선택 목록에서 이 트랙을 사용할 수 있습니다.";
+
+/* Class = "NSButtonCell"; title = "Done"; ObjectID = "Vzr-yd-VKe"; */
+"Vzr-yd-VKe.title" = "완료";
+

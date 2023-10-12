@@ -122,6 +122,9 @@
 /* Main Window -> Destination open panel */
 "Choose" = "Escolher";
 
+/* Preferences -> Output Name Token */
+"Codec" = "Codec";
+
 /* Queue Alert -> cancel rip first button */
 "Continue Encoding" = "Continuar Codificação";
 

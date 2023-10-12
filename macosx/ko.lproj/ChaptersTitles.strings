@@ -1,0 +1,57 @@
+/* Class = "NSTableColumn"; headerCell.title = "Index"; ObjectID = "0iF-eL-NOC"; */
+"0iF-eL-NOC.headerCell.title" = "인덱스";
+
+/* Class = "NSButton"; ibShadowedToolTip = "Export the list of chapter names to a CSV file."; ObjectID = "3SP-6e-RPS"; */
+"3SP-6e-RPS.ibShadowedToolTip" = "챕터 이름을 CSV 파일로 내보내기";
+
+/* Class = "NSButton"; ibShadowedToolTip = "Add a chapter markers track to the video."; ObjectID = "7Xf-c0-jsr"; */
+"7Xf-c0-jsr.ibShadowedToolTip" = "비디오에 챕터 표시를 추가합니다.";
+
+/* Class = "NSTextFieldCell"; title = "Text Cell"; ObjectID = "All-Bz-NLv"; */
+"All-Bz-NLv.title" = "텍스트 셀";
+
+/* Class = "NSTextFieldCell"; title = "Text Cell"; ObjectID = "FyM-2X-9xs"; */
+"FyM-2X-9xs.title" = "텍스트 셀";
+
+/* Class = "NSTextFieldCell"; title = "1"; ObjectID = "G9p-Cg-wyC"; */
+"G9p-Cg-wyC.title" = "1";
+
+/* Class = "NSButtonCell"; title = "Export Chapters…"; ObjectID = "h0O-zg-OF9"; */
+"h0O-zg-OF9.title" = "챕터 내보내기...";
+
+/* Class = "NSTableView"; ibExternalAccessibilityDescription = "Chapter titles"; ObjectID = "InF-gR-Lia"; */
+"InF-gR-Lia.ibExternalAccessibilityDescription" = "챕터 제목";
+
+/* Class = "NSButtonCell"; title = "Create chapter markers"; ObjectID = "lJL-wX-DVP"; */
+"lJL-wX-DVP.title" = "챕터 마커 생성";
+
+/* Class = "NSTableColumn"; headerCell.title = "Start"; ObjectID = "NlF-th-Cg9"; */
+"NlF-th-Cg9.headerCell.title" = "시작";
+
+/* Class = "NSTextFieldCell"; title = "Text Cell"; ObjectID = "ozt-ED-g1M"; */
+"ozt-ED-g1M.title" = "텍스트 셀";
+
+/* Class = "NSTextFieldCell"; title = "Text Cell"; ObjectID = "pAo-XM-bvP"; */
+"pAo-XM-bvP.title" = "텍스트 셀";
+
+/* Class = "NSButtonCell"; title = "Import Chapters…"; ObjectID = "PM3-Ue-0kW"; */
+"PM3-Ue-0kW.title" = "챕터 가져오기...";
+
+/* Class = "NSTableColumn"; headerCell.title = "Duration"; ObjectID = "QVB-Cw-DJD"; */
+"QVB-Cw-DJD.headerCell.title" = "지속 시간";
+
+/* Class = "NSButton"; ibShadowedToolTip = "Import a list of chapter names from a CSV file."; ObjectID = "Ron-3B-rYg"; */
+"Ron-3B-rYg.ibShadowedToolTip" = "CSV 파일에서 챕터의 이름을 읽어들입니다.";
+
+/* Class = "NSTextFieldCell"; title = "Title"; ObjectID = "UjY-nz-uSt"; */
+"UjY-nz-uSt.title" = "제목";
+
+/* Class = "NSTextFieldCell"; title = "Duration"; ObjectID = "Vmq-zJ-NEA"; */
+"Vmq-zJ-NEA.title" = "지속 시간";
+
+/* Class = "NSTableColumn"; headerCell.title = "Title"; ObjectID = "Z6H-lJ-ipr"; */
+"Z6H-lJ-ipr.headerCell.title" = "제목";
+
+/* Class = "NSTextFieldCell"; title = "Timestamp"; ObjectID = "zaN-qY-tke"; */
+"zaN-qY-tke.title" = "타임 스탬프";
+

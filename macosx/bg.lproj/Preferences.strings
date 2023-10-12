@@ -1,0 +1,246 @@
+/* Class = "NSTextFieldCell"; title = "Format:"; ObjectID = "3dN-MN-DcP"; */
+"3dN-MN-DcP.title" = "Формат:";
+
+/* Class = "NSWindow"; title = "Preferences"; ObjectID = "5"; */
+"5.title" = "Предпочитания";
+
+/* Class = "NSMenu"; title = "OtherViews"; ObjectID = "290"; */
+"290.title" = "ДругиИзгледи";
+
+/* Class = "NSMenuItem"; title = "Auto"; ObjectID = "292"; */
+"292.title" = "Автоматично";
+
+/* Class = "NSButtonCell"; title = "Automatically name output files"; ObjectID = "302"; */
+"302.title" = "Автоматично именувай изходните файлове";
+
+/* Class = "NSTextFieldCell"; title = "When Done:"; ObjectID = "304"; */
+"304.title" = "При завършване:";
+
+/* Class = "NSButtonCell"; title = "Automatically check for updates weekly"; ObjectID = "305"; */
+"305.title" = "Автоматична ежеседмична проверка за актуализации";
+
+/* Class = "NSButtonCell"; title = "Send file to:"; ObjectID = "306"; */
+"306.title" = "Изпрати файла в:";
+
+/* Class = "NSTextFieldCell"; title = "At Launch:"; ObjectID = "307"; */
+"307.title" = "При стартиране:";
+
+/* Class = "NSButtonCell"; title = "Store Activity Logs in same location as video"; ObjectID = "348"; */
+"348.title" = "Запазване на дневника на активностите на същото място като видеото";
+
+/* Class = "NSTextFieldCell"; title = "Activity Logs:"; ObjectID = "351"; */
+"351.title" = "Дневници на дейностите:";
+
+/* Class = "NSMenu"; title = "OtherViews"; ObjectID = "354"; */
+"354.title" = "ДругиИзгледи";
+
+/* Class = "NSMenuItem"; title = "10"; ObjectID = "355"; */
+"355.title" = "10";
+
+/* Class = "NSMenuItem"; title = "15"; ObjectID = "356"; */
+"356.title" = "15";
+
+/* Class = "NSMenuItem"; title = "20"; ObjectID = "357"; */
+"357.title" = "20";
+
+/* Class = "NSMenuItem"; title = "25"; ObjectID = "361"; */
+"361.title" = "25";
+
+/* Class = "NSMenuItem"; title = "30"; ObjectID = "362"; */
+"362.title" = "30";
+
+/* Class = "NSPopUpButton"; ibShadowedToolTip = "Verbosity Level. Extended verbosity records more technical information to the Activity Log. Minimal verbosity records less."; ObjectID = "363"; */
+"363.ibShadowedToolTip" = "Ниво на подробност. Разширена подробност записва повече техническа информация в дневника на дейностите. Минимална подробност записва по-малко.";
+
+/* Class = "NSMenu"; title = "OtherViews"; ObjectID = "365"; */
+"365.title" = "ДругиИзгледи";
+
+/* Class = "NSMenuItem"; title = "Extended"; ObjectID = "368"; */
+"368.title" = "Разширена";
+
+/* Class = "NSMenuItem"; title = "Standard"; ObjectID = "369"; */
+"369.title" = "Стандартна";
+
+/* Class = "NSMenuItem"; title = "Minimised"; ObjectID = "370"; */
+"370.title" = "Минимизирана";
+
+/* Class = "NSTextField"; ibShadowedToolTip = "Verbosity Level. Extended verbosity records more technical information to the Activity Log. Minimal verbosity records less."; ObjectID = "371"; */
+"371.ibShadowedToolTip" = "Ниво на подробност. Разширена подробност записва повече техническа информация в дневника на дейностите. Минимална подробност записва по-малко.";
+
+/* Class = "NSTextFieldCell"; title = "Verbosity Level:"; ObjectID = "372"; */
+"372.title" = "Ниво на подробност:";
+
+/* Class = "NSPopUpButton"; ibShadowedToolTip = "Determines the granularity of the x264 Constant Quality control. Smaller values allow for finer quality increments."; ObjectID = "387"; */
+"387.ibShadowedToolTip" = "Определя грануларността на x264 постоянното качество. По-малки стойности позволяват по-фин контрол над качеството.";
+
+/* Class = "NSMenu"; title = "OtherViews"; ObjectID = "389"; */
+"389.title" = "ДругиИзгледи";
+
+/* Class = "NSMenuItem"; title = "0.20"; ObjectID = "390"; */
+"390.title" = "0.20";
+
+/* Class = "NSMenuItem"; title = "0.25"; ObjectID = "391"; */
+"391.title" = "0.25";
+
+/* Class = "NSMenuItem"; title = "0.50"; ObjectID = "393"; */
+"393.title" = "0.50";
+
+/* Class = "NSMenuItem"; title = "1.0"; ObjectID = "394"; */
+"394.title" = "1.0";
+
+/* Class = "NSTextField"; ibShadowedToolTip = "Determines the granularity of the x264 Constant Quality control. Smaller values allow for finer quality increments."; ObjectID = "395"; */
+"395.ibShadowedToolTip" = "Определя грануларността на x264 постоянното качество. По-малки стойности позволяват по-фин контрол над качеството.";
+
+/* Class = "NSTextFieldCell"; title = "Constant Quality fractional granularity:"; ObjectID = "396"; */
+"396.title" = "Постоянно качество дробна грануларност:";
+
+/* Class = "NSButton"; ibShadowedToolTip = "Use libdvdnav to read DVDs. Only disable this for problematic DVDs where libdvdread works better (rare)."; ObjectID = "398"; */
+"398.ibShadowedToolTip" = "Използване на libdvdnav за четене на DVD. Изключи това само при проблемни DVD дискове, където libdvdread работи по-добре (рядко).";
+
+/* Class = "NSButtonCell"; title = "Use libdvdnav (instead of libdvdread)"; ObjectID = "399"; */
+"399.title" = "Използвай libdvdnav (вместо libdvdread)";
+
+/* Class = "NSTextFieldCell"; title = "None"; ObjectID = "449"; */
+"449.title" = "Няма";
+
+/* Class = "NSButtonCell"; title = "Browse…"; ObjectID = "451"; */
+"451.title" = "Прелистване...";
+
+/* Class = "NSButtonCell"; title = "Play System Alert Sound"; ObjectID = "458"; */
+"458.title" = "Изпълни системния звук за предупреждение";
+
+/* Class = "NSTextField"; ibShadowedToolTip = "Minimum DVD and Blu-ray title duration in seconds. Shorter titles will be skipped."; ObjectID = "463"; */
+"463.ibShadowedToolTip" = "Минимална продължителност на DVD и Blu-ray заглавия в секунди. По-кратки заглавия ще бъдат пропускани.";
+
+/* Class = "NSTextFieldCell"; title = "Ignore DVD and Blu-ray titles shorter than:"; ObjectID = "464"; */
+"464.title" = "Игнорирай DVD и Blu-ray заглавия по-кратки от:";
+
+/* Class = "NSTextField"; ibShadowedToolTip = "Minimum title duration in seconds. Shorter titles will be skipped."; ObjectID = "480"; */
+"480.ibShadowedToolTip" = "Минимална продължителност на заглавия в секунди. По-кратки заглавия ще бъдат пропускани.";
+
+/* Class = "NSMenuItem"; title = ".m4v"; ObjectID = "484"; */
+"484.title" = ".m4v";
+
+/* Class = "NSMenuItem"; title = ".mp4"; ObjectID = "485"; */
+"485.title" = ".mp4";
+
+/* Class = "NSTextFieldCell"; title = "Default MP4 Extension:"; ObjectID = "487"; */
+"487.title" = "MP4 разширение по подразбиране:";
+
+/* Class = "NSMenu"; title = "OtherViews"; ObjectID = "493"; */
+"493.title" = "ДругиИзгледи";
+
+/* Class = "NSMenuItem"; title = "Do Nothing"; ObjectID = "494"; */
+"494.title" = "Не прави нищо";
+
+/* Class = "NSMenuItem"; title = "Alert"; ObjectID = "495"; */
+"495.title" = "Предупреждение";
+
+/* Class = "NSMenuItem"; title = "Alert And Notification"; ObjectID = "496"; */
+"496.title" = "Предупреждение и известие";
+
+/* Class = "NSMenuItem"; title = "Put Computer To Sleep"; ObjectID = "497"; */
+"497.title" = "Заспиване на компютъра";
+
+/* Class = "NSMenuItem"; title = "Shut Down Computer"; ObjectID = "498"; */
+"498.title" = "Изключване на компютъра";
+
+/* Class = "NSMenuItem"; title = "Notification"; ObjectID = "499"; */
+"499.title" = "Известие";
+
+/* Class = "NSMenuItem"; title = "Quit HandBrake"; ObjectID = "500"; */
+"500.title" = "Изход от HandBrake";
+
+/* Class = "NSMenuItem"; title = "35"; ObjectID = "514"; */
+"514.title" = "35";
+
+/* Class = "NSMenuItem"; title = "40"; ObjectID = "515"; */
+"515.title" = "40";
+
+/* Class = "NSMenuItem"; title = "45"; ObjectID = "516"; */
+"516.title" = "45";
+
+/* Class = "NSMenuItem"; title = "50"; ObjectID = "517"; */
+"517.title" = "50";
+
+/* Class = "NSMenuItem"; title = "55"; ObjectID = "518"; */
+"518.title" = "55";
+
+/* Class = "NSMenuItem"; title = "60"; ObjectID = "519"; */
+"519.title" = "60";
+
+/* Class = "NSButtonCell"; title = "Always clear completed items after an encode completes"; ObjectID = "BPU-E2-N8l"; */
+"BPU-E2-N8l.title" = "Винаги изчиствай завършените задачи след завършване на кодиране";
+
+/* Class = "NSTextFieldCell"; title = "Scan:"; ObjectID = "c0L-TU-WML"; */
+"c0L-TU-WML.title" = "Сканиране:";
+
+/* Class = "NSTextFieldCell"; title = "Encoder:"; ObjectID = "cqp-xU-GOe"; */
+"cqp-xU-GOe.title" = "Енкодер:";
+
+/* Class = "CocoaBindingsConnection"; ibShadowedIsNilPlaceholder = "None"; ObjectID = "f36-PN-c5F"; */
+"f36-PN-c5F.ibShadowedIsNilPlaceholder" = "Няма";
+
+/* Class = "NSTextFieldCell"; title = "Queue:"; ObjectID = "FKi-zh-5gc"; */
+"FKi-zh-5gc.title" = "Опашка:";
+
+/* Class = "NSTextFieldCell"; title = "GB"; ObjectID = "FZE-ZR-g93"; */
+"FZE-ZR-g93.title" = "GB";
+
+/* Class = "NSButtonCell"; title = "Change case to Title Case"; ObjectID = "ggR-Zs-P8G"; */
+"ggR-Zs-P8G.title" = "Промени първите букви на главни";
+
+/* Class = "NSTextFieldCell"; title = "Summary:"; ObjectID = "GQJ-go-PoN"; */
+"GQJ-go-PoN.title" = "Обобщение:";
+
+/* Class = "NSTextFieldCell"; title = "Number of simultaneous encodes:"; ObjectID = "iGS-b5-ip7"; */
+"iGS-b5-ip7.title" = "Брой едновременни кодирания:";
+
+/* Class = "NSMenuItem"; title = "2"; ObjectID = "JcO-br-AXz"; */
+"JcO-br-AXz.title" = "2";
+
+/* Class = "NSTextFieldCell"; title = "seconds"; ObjectID = "klQ-DW-Kc6"; */
+"klQ-DW-Kc6.title" = "секунди";
+
+/* Class = "NSMenuItem"; title = "1"; ObjectID = "l8v-ns-6UR"; */
+"l8v-ns-6UR.title" = "1";
+
+/* Class = "NSButtonCell"; title = "Remove old logs from main Activity Logs folder after 30 days"; ObjectID = "lgn-RF-k0d"; */
+"lgn-RF-k0d.title" = "Премахни старите дневници от главната папка за дневници на дейностите след 30 дни";
+
+/* Class = "NSTextFieldCell"; title = "Destination:"; ObjectID = "lo9-Hk-I6l"; */
+"lo9-Hk-I6l.title" = "Изход:";
+
+/* Class = "NSPopUpButton"; ibShadowedToolTip = "Higher values may help to fully utilize the CPU if a single encode can't scale to all available CPU cores."; ObjectID = "MLd-Te-AbW"; */
+"MLd-Te-AbW.ibShadowedToolTip" = "По-високи стойности може да помогнат за пълното използване на процесора, ако едно кодиране не се възползва от всички достъпни ядра на процесора.";
+
+/* Class = "NSMenuItem"; title = "4"; ObjectID = "nTJ-DB-eOd"; */
+"nTJ-DB-eOd.title" = "4";
+
+/* Class = "NSTextField"; ibShadowedToolTip = "Minimum free space on destination disk."; ObjectID = "PaR-zw-opS"; */
+"PaR-zw-opS.ibShadowedToolTip" = "Минимално свободно пространство на изходен диск.";
+
+/* Class = "NSButtonCell"; title = "Replace underscores with spaces"; ObjectID = "pUi-lK-cHw"; */
+"pUi-lK-cHw.title" = "Замени долните черти с интервали";
+
+/* Class = "NSMenu"; title = "OtherViews"; ObjectID = "TpU-3v-fhx"; */
+"TpU-3v-fhx.title" = "ДругиИзгледи";
+
+/* Class = "NSButtonCell"; title = "Reset to \"Do nothing\" on launch"; ObjectID = "Uxv-oN-c1r"; */
+"Uxv-oN-c1r.title" = "Върни на \"Не прави нищо\" при стартиране";
+
+/* Class = "NSTextFieldCell"; title = "Preset:"; ObjectID = "wiP-Ia-DfB"; */
+"wiP-Ia-DfB.title" = "Шаблон:";
+
+/* Class = "NSButtonCell"; title = "Remove common punctuation"; ObjectID = "wo5-iR-2mb"; */
+"wo5-iR-2mb.title" = "Премахни често срещана пунктуация";
+
+/* Class = "NSButtonCell"; title = "Pause queue if disk space is lower than:"; ObjectID = "yG9-mz-tqQ"; */
+"yG9-mz-tqQ.title" = "Паузирай опашката, ако дисковото пространство е под:";
+
+/* Class = "NSMenuItem"; title = "3"; ObjectID = "ZGL-FR-zSW"; */
+"ZGL-FR-zSW.title" = "3";
+
+/* Class = "NSButtonCell"; title = "Show Open Source panel"; ObjectID = "Zqz-Kn-xOS"; */
+"Zqz-Kn-xOS.title" = "Покажи панел за отваряне на източник";
+

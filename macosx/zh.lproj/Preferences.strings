@@ -184,6 +184,9 @@
 /* Class = "NSButtonCell"; title = "Show preview images"; ObjectID = "Aao-Tf-JeJ"; */
 "Aao-Tf-JeJ.title" = "显示预览图";
 
+/* Class = "NSButtonCell"; title = "Enable the VideoToolbox hardware decoders"; ObjectID = "BHK-QU-DwS"; */
+"BHK-QU-DwS.title" = "启用 VideoToolbox 硬件解码器";
+
 /* Class = "NSButtonCell"; title = "Always clear completed items after an encode completes"; ObjectID = "BPU-E2-N8l"; */
 "BPU-E2-N8l.title" = "始终在编码完成后清除已完成的项目";
 
@@ -192,6 +195,12 @@
 
 /* Class = "NSTextFieldCell"; title = "Encoder:"; ObjectID = "cqp-xU-GOe"; */
 "cqp-xU-GOe.title" = "编码：";
+
+/* Class = "NSButtonCell"; title = "Also use in combination with software encoders"; ObjectID = "d9B-Vd-jMM"; */
+"d9B-Vd-jMM.title" = "也可与软件编码器结合使用";
+
+/* Class = "NSButton"; ibShadowedToolTip = "Hardware decoders will reduce CPU usage and lower battery usage when combined with an hardware encoder. Depending on the CPU speed, they could either improve or decrease encoding speed."; ObjectID = "Doh-Ja-Gh7"; */
+"Doh-Ja-Gh7.ibShadowedToolTip" = "硬件解码器与硬件编码器结合使用时，可减少 CPU 占用率，降低电池使用率。根据 CPU 的速度，它们可以提高或降低编码速度。";
 
 /* Class = "NSTextFieldCell"; title = "Drag labels to Format to compose a naming format."; ObjectID = "dQ6-Dh-9sD"; */
 "dQ6-Dh-9sD.title" = "将标签拖到格式栏以组成命名格式。";
@@ -213,6 +222,9 @@
 
 /* Class = "NSTextFieldCell"; title = "Number of simultaneous encodes:"; ObjectID = "iGS-b5-ip7"; */
 "iGS-b5-ip7.title" = "同时编码的数量：";
+
+/* Class = "NSTextFieldCell"; title = "Decoder:"; ObjectID = "j6w-xf-tC0"; */
+"j6w-xf-tC0.title" = "解码器：";
 
 /* Class = "NSMenuItem"; title = "2"; ObjectID = "JcO-br-AXz"; */
 "JcO-br-AXz.title" = "2";

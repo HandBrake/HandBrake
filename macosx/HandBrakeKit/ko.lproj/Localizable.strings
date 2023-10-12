@@ -1,0 +1,327 @@
+/* HBStateFormatter -> work time format */
+" (%.2f fps, avg %.2f fps, ETA %@)" = " (%1$.2f fps, 평균 %2$.2f fps, 예상시간 %3$@)";
+
+/* HBStateFormatter -> search time format
+   HBStateFormatter -> work time format */
+" (ETA %@)" = " (예상시간 %@)";
+
+/* Title short description -> audio format */
+", %d audio tracks" = ", %d 오디오 트랙";
+
+/* Title short description -> subtitles format */
+", %d subtitles tracks" = ", %d 자막 트랙";
+
+/* Title short description -> audio format */
+", 1 audio track" = ", 1 오디오 트랙";
+
+/* Title short description -> subtitles format */
+", 1 subtitles track" = ", 1 자막 트랙";
+
+/* Format description */
+", Align A/V Start" = ", A/V 시작 맞춤";
+
+/* HBPicture -> summary */
+", Border: %d/%d/%d/%d" = ", 경계: %1$d/%2$d/%3$d/%4$d";
+
+/* Format description */
+", Chapter Markers" = ", 챕터 표시";
+
+/* HBPicture -> summary */
+", Crop: %@ %d/%d/%d/%d" = ", 자르기: %1$@ %2$d/%3$d/%4$d/%5$d";
+
+/* Format description */
+", iPod 5G Support" = ", iPod 5G 지원";
+
+/* Format description */
+", Web Optimized" = ", 웹 최적화";
+
+/* HBStateFormatter -> work pass type format */
+"(subtitle scan)" = "(자막 스캔)";
+
+/* Title short description -> video format */
+"%.6g FPS" = "%.6g FPS";
+
+/* Audio description */
+"%@ ▸ Encoder: %@" = "%1$@ ▸ 인코더: %2$@";
+
+/* HBPicture -> short info */
+"%@Output: %dx%d" = "%1$@출력: %2$dx%3$d";
+
+/* HBJob -> audio short description */
+"+ %lu additional audio tracks" = "+ %lu 추가 오디오 트랙";
+
+/* HBJob -> subtitles short description */
+"+ %lu additional subtitles tracks" = "+ %lu 추가 자막 트랙";
+
+/* HBJob -> audio short description */
+"+ 1 additional audio track" = "+ 1 추가 오디오 트랙";
+
+/* HBJob -> subtitles short description */
+"+ 1 additional subtitles track" = "+ 1 추가 자막 트랙";
+
+/* HBAudio -> Mixdown */
+"5.1 Channels" = "5.1 채널";
+
+/* HBAudio -> Mixdown */
+"6.1 Channels" = "6.1 채널";
+
+/* HBAudio -> Mixdown */
+"7.1 (5F/2R/LFE)" = "7.1 (5F/2R/LFE)";
+
+/* HBAudio -> Mixdown */
+"7.1 Channels" = "7.1 채널";
+
+/* Audio description */
+"Audio:" = "오디오:";
+
+/* HBPicture -> summary */
+"Automatic" = "자동";
+
+/* Video description */
+"Bitrate: %d kbps" = "비트레이트: %d kbps";
+
+/* Subtitles description */
+"Burned In" = "영상에 입히기";
+
+/* Title -> chapter name
+   Title description */
+"Chapter %d" = "챕터 %d";
+
+/* HBJob -> chapters short description */
+"Chapter Markers" = "챕터 표시";
+
+/* HBRange -> display name */
+"Chapters" = "챕터";
+
+/* Title description */
+"Chapters %d through %d" = "챕터 %1$d 부터 %2$d";
+
+/* Filters description
+   HBJob -> filters short description */
+"Colorspace" = "색공간";
+
+/* HBJob -> filters short description */
+"Comb Detect" = "빗살 모양 감지";
+
+/* Video description */
+"Constant Quality: %.2f %s" = "품질고정: %1$.2f %2$s";
+
+/* HBFilters -> custom display name
+   HBPicture -> summary */
+"Custom" = "사용자 지정";
+
+/* Filters description
+   HBJob -> filters short description */
+"Deblock" = "블록제거";
+
+/* HBFilters -> default display name
+   Subtitles description */
+"Default" = "기본값";
+
+/* Video description */
+"default settings" = "기본 설정";
+
+/* HBFilters -> invalid filter custom settings error recovery suggestion */
+"Default: " = "기본값:";
+
+/* Filters description */
+"Denoise" = "잡음제거";
+
+/* Destination description */
+"Destination:" = "대상:";
+
+/* Dimensions description
+   HBJob -> filters short description */
+"Detelecine" = "텔레시네 제거";
+
+/* Dimensions description */
+"Dimensions:" = "차원:";
+
+/* HBAudio -> Mixdown */
+"Dolby Pro Logic II" = "Dolby Pro Logic II";
+
+/* HBAudio -> Mixdown */
+"Dolby Surround" = "Dolby Surround";
+
+/* Audio description */
+"DRC: %.2f" = "다이내믹레인지 압축: %.2f";
+
+/* Video description */
+"Encoder: %@, " = "인코더: %@, ";
+
+/* HBStateFormatter -> work pass display name */
+"Encoding %@ " = "%@ 인코딩 중";
+
+/* Filters description */
+"Filters:" = "필터:";
+
+/* HBSubtitles -> search pass name */
+"Foreign Audio Search" = "외부 오디오 검색";
+
+/* Format description */
+"Format:" = "형식:";
+
+/* Video description */
+"Framerate: " = "프레임레이트: ";
+
+/* HBRange -> display name */
+"Frames" = "프레임";
+
+/* Title description */
+"Frames %d through %d" = "프레임 %1$d 부터 %2$d";
+
+/* Audio description */
+"Gain: %.2f" = "볼륨: %.2f";
+
+/* Filters description
+   HBJob -> filters short description */
+"Grayscale" = "회색조";
+
+/* HBFilters -> filter display name */
+"HQDN3D" = "HQDN3D";
+
+/* HBFilters -> invalid chroma smooth custom string description */
+"Invalid colorspace custom settings." = "부적절한 색공간 사용자 정의 설정";
+
+/* HBFilters -> invalid comb detect custom string description */
+"Invalid custom comb detect settings." = "부적절한 빗살 모양 감지 사용자 정의 설정";
+
+/* HBFilters -> invalid detelecine custom string description */
+"Invalid custom detelecine settings." = "사용자 지정 텔레시네 제거 설정이 잘못되었습니다.";
+
+/* HBFilters -> invalid denoise custom string description */
+"Invalid custom HQDN3D settings" = "부적절한 HQDN3D 사용자 정의 설정";
+
+/* HBFilters -> invalid deblock custom string description */
+"Invalid deblock custom settings." = "부적절한 블록제거 사용자 정의 설정";
+
+/* HBFilters -> invalid Decomb custom string description */
+"Invalid Decomb custom settings." = "부적절한 Decomb 사용자 정의 설정";
+
+/* HBJob -> invalid name error description */
+"Invalid name" = "잘못된 이름";
+
+/* HBJob -> invalid preset */
+"Invalid preset" = "잘못된 사전 설정";
+
+/* HBFilters -> invalid Yadif custom string description */
+"Invalid Yadif custom settings." = "부적절한 Yadif 사용자 정의 설정";
+
+/* Video description */
+"Level: %@" = "레벨: %@";
+
+/* Audio description */
+"Mixdown: %@, Samplerate: %@, Bitrate: %d kbps" = "Mixdown: %1$@, 샘플링 속도: %2$@, 비트레이트: %3$d kbps";
+
+/* HBAudio -> Mixdown */
+"Mono" = "모노";
+
+/* HBAudio -> Mixdown */
+"Mono (Left Only)" = "모노 (왼쪽만)";
+
+/* HBAudio -> Mixdown */
+"Mono (Right Only)" = "모노 (오른쪽만)";
+
+/* HBStateFormatter -> pass display name */
+"Muxing…" = "섞기...";
+
+/* HBVideo -> tune */
+"none" = "없음";
+
+/* HBAudio -> Mixdown
+   HBAudio -> none track name
+   HBJob -> filters short description
+   HBSubtitles -> none track name */
+"None" = "없음";
+
+/* HBFilters -> filter display name
+   HBFilters -> off display name */
+"Off" = "끔";
+
+/* Video description */
+"Options: %@" = "옵션: %@";
+
+/* HBStateFormatter -> pass display name */
+"Paused" = "일시 중지";
+
+/* Video description */
+"Peak %@ (constant frame rate)" = "순간최대값 %@ (고정 프레임레이트)";
+
+/* Video description */
+"Peak %@ (may be lower)" = "순간최대값 %@ (더 낮을 수 있음)";
+
+/* Preset description */
+"Preset:" = "사전설정:";
+
+/* Video description */
+"Preset: %@" = "사전설정: %@";
+
+/* Video description */
+"Profile: %@" = "프로파일: %@";
+
+/* Range description */
+"Range:" = "범위:";
+
+/* HBVideo -> frame rates display name */
+"Same as source" = "원본과 동일";
+
+/* Video description */
+"Same as source (constant)" = "원본과 동일 (고정)";
+
+/* Video description */
+"Same as source (variable)" = "원본과 동일 (가변)";
+
+/* HBRange -> display name */
+"Seconds" = "초";
+
+/* Filters description */
+"Sharpen" = "선명도";
+
+/* Source description */
+"Source:" = "원본:";
+
+/* HBPicture -> short info */
+"Source: %dx%d, " = "원본: %1$dx%2$d, ";
+
+/* HBAudio -> Mixdown */
+"Stereo" = "스테레오";
+
+/* Subtitles description */
+"Subtitles:" = "자막:";
+
+/* HBFilters -> invalid filter custom settings error recovery suggestion */
+"Syntax: " = "구문:";
+
+/* HBJob -> invalid name error recovery suggestion */
+"The file name can't be empty." = "파일 이름은 비워둘 수 없습니다.";
+
+/* HBJob -> invalid name error recovery suggestion */
+"The file name can't contain the / character." = "파일 이름에는 / 가 들어갈 수 없습니다.";
+
+/* Preset -> import error description */
+"The preset \"%@\" could not be imported." = "\"%@\" 사전설정은 가져올 수 없습니다.";
+
+/* Job preset -> invalid preset recovery suggestion */
+"The preset is not a valid, try to select a different one." = "사전 설정이 잘못되었습니다. 다른 설정을 선택하세요.";
+
+/* Preset -> import error reason */
+"The selected preset is invalid." = "선택된 사전설정이 유효하지 않습니다.";
+
+/* Preset -> import error reason */
+"The selected preset was created with a newer version of HandBrake." = "선택한 사전설정은 최신 버전의 HandBrake로 만들어졌습니다.";
+
+/* Title description */
+"Title %d, %@" = "영상 %1$d, %2$@";
+
+/* Title description */
+"Title %d, %@, %@" = "영상 %1$d, %2$@, %3$@";
+
+/* Video description */
+"Video Options:" = "비디오 옵션:";
+
+/* Video description */
+"Video:" = "비디오:";
+
+/* HBFilters -> filter display name */
+"Yadif" = "Yadif";
+

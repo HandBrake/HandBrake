@@ -1,0 +1,228 @@
+/* Class = "NSTextFieldCell"; title = "Format:"; ObjectID = "3dN-MN-DcP"; */
+"3dN-MN-DcP.title" = "형식:";
+
+/* Class = "NSWindow"; title = "Preferences"; ObjectID = "5"; */
+"5.title" = "환경설정";
+
+/* Class = "NSMenu"; title = "OtherViews"; ObjectID = "290"; */
+"290.title" = "다른 견해들";
+
+/* Class = "NSMenuItem"; title = "Auto"; ObjectID = "292"; */
+"292.title" = "자동";
+
+/* Class = "NSButtonCell"; title = "Automatically name output files"; ObjectID = "302"; */
+"302.title" = "자동으로 출력파일 이름 설정";
+
+/* Class = "NSTextFieldCell"; title = "When Done:"; ObjectID = "304"; */
+"304.title" = "완료시:";
+
+/* Class = "NSButtonCell"; title = "Automatically check for updates weekly"; ObjectID = "305"; */
+"305.title" = "일주일마다 자동으로 업데이트 검사";
+
+/* Class = "NSButtonCell"; title = "Send file to:"; ObjectID = "306"; */
+"306.title" = "파일 보내기:";
+
+/* Class = "NSTextFieldCell"; title = "At Launch:"; ObjectID = "307"; */
+"307.title" = "시작할 때:";
+
+/* Class = "NSButtonCell"; title = "Store Activity Logs in same location as video"; ObjectID = "348"; */
+"348.title" = "비디오와 동일한 위치에 작업 로그 저장";
+
+/* Class = "NSTextFieldCell"; title = "Activity Logs:"; ObjectID = "351"; */
+"351.title" = "작업 로그:";
+
+/* Class = "NSMenu"; title = "OtherViews"; ObjectID = "354"; */
+"354.title" = "다른 견해들";
+
+/* Class = "NSMenuItem"; title = "10"; ObjectID = "355"; */
+"355.title" = "10";
+
+/* Class = "NSMenuItem"; title = "15"; ObjectID = "356"; */
+"356.title" = "15";
+
+/* Class = "NSMenuItem"; title = "20"; ObjectID = "357"; */
+"357.title" = "20";
+
+/* Class = "NSMenuItem"; title = "25"; ObjectID = "361"; */
+"361.title" = "25";
+
+/* Class = "NSMenuItem"; title = "30"; ObjectID = "362"; */
+"362.title" = "30";
+
+/* Class = "NSPopUpButton"; ibShadowedToolTip = "Verbosity Level. Extended verbosity records more technical information to the Activity Log. Minimal verbosity records less."; ObjectID = "363"; */
+"363.ibShadowedToolTip" = "로그 상세 레벨. 레벨이 확장될 수도록 더 많은 기술 정보가 활동 로그에 기록됩니다. 레벨이 낮아질수록 정보가 적어집니다.";
+
+/* Class = "NSMenu"; title = "OtherViews"; ObjectID = "365"; */
+"365.title" = "다른 견해들";
+
+/* Class = "NSMenuItem"; title = "Extended"; ObjectID = "368"; */
+"368.title" = "확장";
+
+/* Class = "NSMenuItem"; title = "Standard"; ObjectID = "369"; */
+"369.title" = "표준";
+
+/* Class = "NSMenuItem"; title = "Minimised"; ObjectID = "370"; */
+"370.title" = "최소화";
+
+/* Class = "NSTextField"; ibShadowedToolTip = "Verbosity Level. Extended verbosity records more technical information to the Activity Log. Minimal verbosity records less."; ObjectID = "371"; */
+"371.ibShadowedToolTip" = "로그 상세 레벨. 레벨이 확장될 수도록 더 많은 기술 정보가 활동 로그에 기록됩니다. 레벨이 낮아질수록 정보가 적어집니다.";
+
+/* Class = "NSTextFieldCell"; title = "Verbosity Level:"; ObjectID = "372"; */
+"372.title" = "로그 상세 레벨:";
+
+/* Class = "NSMenu"; title = "OtherViews"; ObjectID = "389"; */
+"389.title" = "다른 견해들";
+
+/* Class = "NSMenuItem"; title = "0.20"; ObjectID = "390"; */
+"390.title" = "0.20";
+
+/* Class = "NSMenuItem"; title = "0.25"; ObjectID = "391"; */
+"391.title" = "0.25";
+
+/* Class = "NSMenuItem"; title = "0.50"; ObjectID = "393"; */
+"393.title" = "0.50";
+
+/* Class = "NSMenuItem"; title = "1.0"; ObjectID = "394"; */
+"394.title" = "1.0";
+
+/* Class = "NSButtonCell"; title = "Use libdvdnav (instead of libdvdread)"; ObjectID = "399"; */
+"399.title" = "libdvdnav 사용하기 (libdvdread 대신)";
+
+/* Class = "NSTextFieldCell"; title = "None"; ObjectID = "449"; */
+"449.title" = "없음";
+
+/* Class = "NSButtonCell"; title = "Browse…"; ObjectID = "451"; */
+"451.title" = "탐색...";
+
+/* Class = "NSButtonCell"; title = "Play System Alert Sound"; ObjectID = "458"; */
+"458.title" = "시스템 경고음 재생";
+
+/* Class = "NSTextFieldCell"; title = "Ignore DVD and Blu-ray titles shorter than:"; ObjectID = "464"; */
+"464.title" = "짧은 DVD와 Blu-ray 영상 무시:";
+
+/* Class = "NSTextField"; ibShadowedToolTip = "Minimum title duration in seconds. Shorter titles will be skipped."; ObjectID = "480"; */
+"480.ibShadowedToolTip" = "최소 영상 길이 - 초. 짧은 영상은 넘어갑니다.";
+
+/* Class = "NSMenuItem"; title = ".m4v"; ObjectID = "484"; */
+"484.title" = ".m4v";
+
+/* Class = "NSMenuItem"; title = ".mp4"; ObjectID = "485"; */
+"485.title" = ".mp4";
+
+/* Class = "NSTextFieldCell"; title = "Default MP4 Extension:"; ObjectID = "487"; */
+"487.title" = "기본 MP4 확장자:";
+
+/* Class = "NSMenu"; title = "OtherViews"; ObjectID = "493"; */
+"493.title" = "다른 견해들";
+
+/* Class = "NSMenuItem"; title = "Do Nothing"; ObjectID = "494"; */
+"494.title" = "아무것도 안 함";
+
+/* Class = "NSMenuItem"; title = "Alert"; ObjectID = "495"; */
+"495.title" = "경고";
+
+/* Class = "NSMenuItem"; title = "Alert And Notification"; ObjectID = "496"; */
+"496.title" = "경고하고 알림";
+
+/* Class = "NSMenuItem"; title = "Put Computer To Sleep"; ObjectID = "497"; */
+"497.title" = "컴퓨터를 잠자기 상태로 변경";
+
+/* Class = "NSMenuItem"; title = "Shut Down Computer"; ObjectID = "498"; */
+"498.title" = "컴퓨터 끄기";
+
+/* Class = "NSMenuItem"; title = "Notification"; ObjectID = "499"; */
+"499.title" = "알림";
+
+/* Class = "NSMenuItem"; title = "Quit HandBrake"; ObjectID = "500"; */
+"500.title" = "HandBrake 종료";
+
+/* Class = "NSMenuItem"; title = "35"; ObjectID = "514"; */
+"514.title" = "35";
+
+/* Class = "NSMenuItem"; title = "40"; ObjectID = "515"; */
+"515.title" = "40";
+
+/* Class = "NSMenuItem"; title = "45"; ObjectID = "516"; */
+"516.title" = "45";
+
+/* Class = "NSMenuItem"; title = "50"; ObjectID = "517"; */
+"517.title" = "50";
+
+/* Class = "NSMenuItem"; title = "55"; ObjectID = "518"; */
+"518.title" = "55";
+
+/* Class = "NSMenuItem"; title = "60"; ObjectID = "519"; */
+"519.title" = "60";
+
+/* Class = "NSButtonCell"; title = "Show preview images"; ObjectID = "Aao-Tf-JeJ"; */
+"Aao-Tf-JeJ.title" = "미리보기 이미지 표시";
+
+/* Class = "NSButtonCell"; title = "Always clear completed items after an encode completes"; ObjectID = "BPU-E2-N8l"; */
+"BPU-E2-N8l.title" = "인코딩이 완료되면 완료된 아이템 항상 제거";
+
+/* Class = "NSTextFieldCell"; title = "Scan:"; ObjectID = "c0L-TU-WML"; */
+"c0L-TU-WML.title" = "스캔:";
+
+/* Class = "NSTextFieldCell"; title = "Encoder:"; ObjectID = "cqp-xU-GOe"; */
+"cqp-xU-GOe.title" = "인코더:";
+
+/* Class = "CocoaBindingsConnection"; ibShadowedIsNilPlaceholder = "None"; ObjectID = "f36-PN-c5F"; */
+"f36-PN-c5F.ibShadowedIsNilPlaceholder" = "없음";
+
+/* Class = "NSTextFieldCell"; title = "Queue:"; ObjectID = "FKi-zh-5gc"; */
+"FKi-zh-5gc.title" = "대기열:";
+
+/* Class = "NSTextFieldCell"; title = "GB"; ObjectID = "FZE-ZR-g93"; */
+"FZE-ZR-g93.title" = "GB";
+
+/* Class = "NSTextFieldCell"; title = "Summary:"; ObjectID = "GQJ-go-PoN"; */
+"GQJ-go-PoN.title" = "요약";
+
+/* Class = "NSTextFieldCell"; title = "Number of simultaneous encodes:"; ObjectID = "iGS-b5-ip7"; */
+"iGS-b5-ip7.title" = "동시 인코딩 수:";
+
+/* Class = "NSMenuItem"; title = "2"; ObjectID = "JcO-br-AXz"; */
+"JcO-br-AXz.title" = "2";
+
+/* Class = "NSTextFieldCell"; title = "seconds"; ObjectID = "klQ-DW-Kc6"; */
+"klQ-DW-Kc6.title" = "초";
+
+/* Class = "NSButtonCell"; title = "Keep preset edits when selecting a new title"; ObjectID = "L3N-te-KLg"; */
+"L3N-te-KLg.title" = "새 영상 선택시 사전 설정 편집 유지";
+
+/* Class = "NSMenuItem"; title = "1"; ObjectID = "l8v-ns-6UR"; */
+"l8v-ns-6UR.title" = "1";
+
+/* Class = "NSButtonCell"; title = "Remove old logs from main Activity Logs folder after 30 days"; ObjectID = "lgn-RF-k0d"; */
+"lgn-RF-k0d.title" = "30일 후 기본 작업 로그 폴더에서 이전 로그 제거";
+
+/* Class = "NSTextFieldCell"; title = "Destination:"; ObjectID = "lo9-Hk-I6l"; */
+"lo9-Hk-I6l.title" = "대상:";
+
+/* Class = "NSMenuItem"; title = "4"; ObjectID = "nTJ-DB-eOd"; */
+"nTJ-DB-eOd.title" = "4";
+
+/* Class = "NSTextField"; ibShadowedToolTip = "Minimum free space on destination disk."; ObjectID = "PaR-zw-opS"; */
+"PaR-zw-opS.ibShadowedToolTip" = "대상 디스크의 최소 여유 공간.";
+
+/* Class = "NSButtonCell"; title = "Replace underscores with spaces"; ObjectID = "pUi-lK-cHw"; */
+"pUi-lK-cHw.title" = "밑줄을 공백으로 변경";
+
+/* Class = "NSMenu"; title = "OtherViews"; ObjectID = "TpU-3v-fhx"; */
+"TpU-3v-fhx.title" = "다른 견해들";
+
+/* Class = "NSTextFieldCell"; title = "Preset:"; ObjectID = "wiP-Ia-DfB"; */
+"wiP-Ia-DfB.title" = "사전설정:";
+
+/* Class = "NSButtonCell"; title = "Remove common punctuation"; ObjectID = "wo5-iR-2mb"; */
+"wo5-iR-2mb.title" = "마침표 제거";
+
+/* Class = "NSButtonCell"; title = "Pause queue if disk space is lower than:"; ObjectID = "yG9-mz-tqQ"; */
+"yG9-mz-tqQ.title" = "작업을 일시중지할 디스크 남은 공간:";
+
+/* Class = "NSMenuItem"; title = "3"; ObjectID = "ZGL-FR-zSW"; */
+"ZGL-FR-zSW.title" = "3";
+
+/* Class = "NSButtonCell"; title = "Show Open Source panel"; ObjectID = "Zqz-Kn-xOS"; */
+"Zqz-Kn-xOS.title" = "원본 패널 열기 표시";
+

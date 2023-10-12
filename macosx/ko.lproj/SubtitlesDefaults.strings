@@ -1,0 +1,51 @@
+/* Class = "NSButtonCell"; title = "Add Closed Captions when available"; ObjectID = "66v-2g-DHn"; */
+"66v-2g-DHn.title" = "사용 가능한 경우 자막 추가";
+
+/* Class = "NSButtonCell"; title = "DVD Subtitles"; ObjectID = "69Q-xB-Vyq"; */
+"69Q-xB-Vyq.title" = "DVD 자막";
+
+/* Class = "NSScrollView"; ibExternalAccessibilityDescription = "Subtitles Track Languages"; ObjectID = "aTC-39-h6S"; */
+"aTC-39-h6S.ibExternalAccessibilityDescription" = "자막 트랙 언어";
+
+/* Class = "NSButtonCell"; title = "Blu-ray Subtitles"; ObjectID = "bfV-9D-6dh"; */
+"bfV-9D-6dh.title" = "Blu-ray 자막";
+
+/* Class = "NSMenuItem"; title = "Foreign Audio, then First Selected Track"; ObjectID = "d79-2j-fhc"; */
+"d79-2j-fhc.title" = "외부 오디오, 이후 첫 선택 트랙";
+
+/* Class = "NSButtonCell"; title = "Cancel"; ObjectID = "ego-rt-a64"; */
+"ego-rt-a64.title" = "취소";
+
+/* Class = "NSMenuItem"; title = "None"; ObjectID = "ej8-4k-1vd"; */
+"ej8-4k-1vd.title" = "없음";
+
+/* Class = "NSTextFieldCell"; title = "Track Selection Behavior:"; ObjectID = "GbM-vm-RC2"; */
+"GbM-vm-RC2.title" = "트랙 선택 동작:";
+
+/* Class = "NSMenuItem"; title = "All Matching Selected Languages"; ObjectID = "GZP-q7-SYy"; */
+"GZP-q7-SYy.title" = "선택한 언어와 모두 일치";
+
+/* Class = "NSButtonCell"; title = "OK"; ObjectID = "iLI-Nb-D7t"; */
+"iLI-Nb-D7t.title" = "확인";
+
+/* Class = "NSMenu"; title = "OtherViews"; ObjectID = "Kwy-lU-VuU"; */
+"Kwy-lU-VuU.title" = "다른 견해들";
+
+/* Class = "NSTextFieldCell"; title = "Languages:"; ObjectID = "mAT-Jp-SG1"; */
+"mAT-Jp-SG1.title" = "언어:";
+
+/* Class = "NSMenuItem"; title = "None"; ObjectID = "mvw-Hg-JFM"; */
+"mvw-Hg-JFM.title" = "없음";
+
+/* Class = "NSTextFieldCell"; title = "Options:"; ObjectID = "NJl-q3-zXL"; */
+"NJl-q3-zXL.title" = "옵션:";
+
+/* Class = "NSMenuItem"; title = "Foreign Audio Subtitles Track"; ObjectID = "QRd-XH-6TH"; */
+"QRd-XH-6TH.title" = "외부 오디오 자막 트랙";
+
+/* Class = "NSTextFieldCell"; title = "Table View Cell"; ObjectID = "qVQ-fS-w1S"; */
+"qVQ-fS-w1S.title" = "테이블 보기 셀";
+
+/* Class = "NSButtonCell"; title = "Add Foreign Audio Search"; ObjectID = "vNY-OC-hTJ"; */
+"vNY-OC-hTJ.title" = "외부 오디오 검색 추가";
+

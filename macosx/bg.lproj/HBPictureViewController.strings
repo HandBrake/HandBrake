@@ -1,0 +1,366 @@
+/* Class = "NSButtonCell"; title = "Allow Upscaling"; ObjectID = "0kU-Uy-P4P"; */
+"0kU-Uy-P4P.title" = "Позволи преоразмеряване нагоре";
+
+/* Class = "NSTextFieldCell"; title = "Display Size:"; ObjectID = "1AB-bM-qTs"; */
+"1AB-bM-qTs.title" = "Размер на екран:";
+
+/* Class = "NSMenuItem"; title = "Off"; ObjectID = "1O3-th-4M5"; */
+"1O3-th-4M5.title" = "Изключено";
+
+/* Class = "NSMenuItem"; title = "Conservative"; ObjectID = "1Pn-6x-bhx"; */
+"1Pn-6x-bhx.title" = "Консервативно";
+
+/* Class = "NSTextField"; ibExternalAccessibilityDescription = "Crop bottom"; ObjectID = "1Z0-JT-vst"; */
+"1Z0-JT-vst.ibExternalAccessibilityDescription" = "Изрязване отдолу";
+
+/* Class = "NSMenuItem"; title = "2160p 4K Ultra HD"; ObjectID = "1Zm-mM-8Tb"; */
+"1Zm-mM-8Tb.title" = "2160p 4K Ultra HD";
+
+/* Class = "NSMenuItem"; title = "180°"; ObjectID = "1zy-53-Bvd"; */
+"1zy-53-Bvd.title" = "180°";
+
+/* Class = "NSMenuItem"; title = "1440p 2.5K Quad HD"; ObjectID = "2ax-HE-Amt"; */
+"2ax-HE-Amt.title" = "1440p 2.5K Quad HD";
+
+/* Class = "CocoaBindingsConnection"; ibShadowedIsNilPlaceholder = "0"; ObjectID = "2fq-yE-LSA"; */
+"2fq-yE-LSA.ibShadowedIsNilPlaceholder" = "0";
+
+/* Class = "CocoaBindingsConnection"; ibShadowedIsNilPlaceholder = "-"; ObjectID = "2jg-kg-z9e"; */
+"2jg-kg-z9e.ibShadowedIsNilPlaceholder" = "-";
+
+/* Class = "NSStepper"; ibExternalAccessibilityDescription = "Storage Height"; ObjectID = "2s0-5k-fjU"; */
+"2s0-5k-fjU.ibExternalAccessibilityDescription" = "Височина в хранилище";
+
+/* Class = "NSStepper"; ibExternalAccessibilityDescription = "Storage Height"; ObjectID = "3HN-8C-yAS"; */
+"3HN-8C-yAS.ibExternalAccessibilityDescription" = "Височина в хранилище";
+
+/* Class = "CocoaBindingsConnection"; ibShadowedIsNilPlaceholder = "-"; ObjectID = "3Ze-5A-gL3"; */
+"3Ze-5A-gL3.ibShadowedIsNilPlaceholder" = "-";
+
+/* Class = "NSTextFieldCell"; title = "x"; ObjectID = "5Tj-xw-QuU"; */
+"5Tj-xw-QuU.title" = "x";
+
+/* Class = "NSTextFieldCell"; title = "Aspect Ratio:"; ObjectID = "5Vi-N9-9kM"; */
+"5Vi-N9-9kM.title" = "Съотношение на страните:";
+
+/* Class = "NSTextField"; ibExternalAccessibilityDescription = "Pad top"; ObjectID = "6Jp-gt-DbX"; */
+"6Jp-gt-DbX.ibExternalAccessibilityDescription" = "Запълване отгоре";
+
+/* Class = "NSMenuItem"; title = "None"; ObjectID = "6Qy-ik-hiE"; */
+"6Qy-ik-hiE.title" = "Няма";
+
+/* Class = "NSStepper"; ibExternalAccessibilityDescription = "Crop bottom"; ObjectID = "6W6-RI-fBx"; */
+"6W6-RI-fBx.ibExternalAccessibilityDescription" = "Изрязване отдолу";
+
+/* Class = "NSTextFieldCell"; title = "Anamorphic:"; ObjectID = "8vS-Mw-bny"; */
+"8vS-Mw-bny.title" = "Анаморфотен:";
+
+/* Class = "NSStepper"; ibExternalAccessibilityDescription = "Pad top"; ObjectID = "09f-sT-7la"; */
+"09f-sT-7la.ibExternalAccessibilityDescription" = "Запълване отгоре";
+
+/* Class = "NSTextField"; ibExternalAccessibilityDescription = "Scaled Width"; ObjectID = "9hH-As-JSa"; */
+"9hH-As-JSa.ibExternalAccessibilityDescription" = "Мащабирана ширина";
+
+/* Class = "NSTextField"; ibShadowedToolTip = "Video scaled width. This is the number of pixels wide to be encoded. Scaled width may differ from display width depending on anamorphic settings and fill settings"; ObjectID = "9hH-As-JSa"; */
+"9hH-As-JSa.ibShadowedToolTip" = "Мащабирана ширина на видеото. Това е броят пиксели за кодиране на ширината. Мащабираната ширина може да се различава от ширината на екрана в зависимост от анаморфотните настройки и настройките за запълване.";
+
+/* Class = "NSMenuItem"; title = "480p NTSC SD"; ObjectID = "21C-Hg-mk4"; */
+"21C-Hg-mk4.title" = "480p NTSC SD";
+
+/* Class = "NSTextField"; ibExternalAccessibilityDescription = "Crop top"; ObjectID = "41c-48-2XJ"; */
+"41c-48-2XJ.ibExternalAccessibilityDescription" = "Изрязване отгоре";
+
+/* Class = "NSTextField"; ibExternalAccessibilityDescription = "Custom border color"; ObjectID = "aby-WS-tzS"; */
+"aby-WS-tzS.ibExternalAccessibilityDescription" = "Персонализиран цвят на рамка";
+
+/* Class = "NSTextField"; ibShadowedToolTip = "Custom border color"; ObjectID = "aby-WS-tzS"; */
+"aby-WS-tzS.ibShadowedToolTip" = "Персонализиран цвят на рамка";
+
+/* Class = "NSTextField"; ibExternalAccessibilityDescription = "Display width"; ObjectID = "Ag1-Tk-hCm"; */
+"Ag1-Tk-hCm.ibExternalAccessibilityDescription" = "Ширина на екрана";
+
+/* Class = "NSTextFieldCell"; title = "Resolution & Scaling"; ObjectID = "aVx-b3-2AK"; */
+"aVx-b3-2AK.title" = "Разделителна способност и мащабиране";
+
+/* Class = "NSPopUpButton"; ibShadowedToolTip = "Color of the border added around the video"; ObjectID = "BjH-qa-mJM"; */
+"BjH-qa-mJM.ibShadowedToolTip" = "Оцвети рамката около видеото";
+
+/* Class = "NSTextFieldCell"; title = "0 x 0"; ObjectID = "byr-LI-ap5"; */
+"byr-LI-ap5.title" = "0 x 0";
+
+/* Class = "NSTextFieldCell"; title = "x"; ObjectID = "C6R-PR-3gu"; */
+"C6R-PR-3gu.title" = "x";
+
+/* Class = "NSTextFieldCell"; title = "0 x 0"; ObjectID = "c9F-IW-Rln"; */
+"c9F-IW-Rln.title" = "0 x 0";
+
+/* Class = "NSTextField"; ibExternalAccessibilityDescription = "Pad right"; ObjectID = "ck0-Gu-lGg"; */
+"ck0-Gu-lGg.ibExternalAccessibilityDescription" = "Запълване отдясно";
+
+/* Class = "NSTextFieldCell"; title = "Resolution Limit:"; ObjectID = "d0T-QG-WXU"; */
+"d0T-QG-WXU.title" = "Лимит на разделителна способност";
+
+/* Class = "NSStepper"; ibExternalAccessibilityDescription = "Crop right"; ObjectID = "Ddg-4D-el9"; */
+"Ddg-4D-el9.ibExternalAccessibilityDescription" = "Изрязване вдясно";
+
+/* Class = "CocoaBindingsConnection"; ibShadowedIsNilPlaceholder = "0"; ObjectID = "DN4-KZ-LRc"; */
+"DN4-KZ-LRc.ibShadowedIsNilPlaceholder" = "0";
+
+/* Class = "NSTextFieldCell"; title = "1:1"; ObjectID = "dnG-b9-LQR"; */
+"dnG-b9-LQR.title" = "1:1";
+
+/* Class = "NSTextField"; ibExternalAccessibilityDescription = " "; ObjectID = "E5O-kn-GYm"; */
+"E5O-kn-GYm.ibExternalAccessibilityDescription" = "ceaa80fca5ba3e8646366fa50fbb4322_tr";
+
+/* Class = "NSTextField"; ibExternalAccessibilityDescription = "Display height"; ObjectID = "eEF-b3-4o9"; */
+"eEF-b3-4o9.ibExternalAccessibilityDescription" = "Височина на екран";
+
+/* Class = "NSMenuItem"; title = "Black"; ObjectID = "EM5-tR-x3U"; */
+"EM5-tR-x3U.title" = "Черен";
+
+/* Class = "NSButtonCell"; title = "Automatic"; ObjectID = "eOi-50-jLK"; */
+"eOi-50-jLK.title" = "Автоматично";
+
+/* Class = "CocoaBindingsConnection"; ibShadowedIsNilPlaceholder = "-"; ObjectID = "ePc-i4-vPZ"; */
+"ePc-i4-vPZ.ibShadowedIsNilPlaceholder" = "-";
+
+/* Class = "NSButtonCell"; title = "Horizontal"; ObjectID = "EqJ-eR-Fz7"; */
+"EqJ-eR-Fz7.title" = "Хоризонтален";
+
+/* Class = "NSTextFieldCell"; title = "Flipping:"; ObjectID = "ewx-pd-ANc"; */
+"ewx-pd-ANc.title" = "Обръщане:";
+
+/* Class = "NSMenuItem"; title = "Custom"; ObjectID = "f12-Dh-fDw"; */
+"f12-Dh-fDw.title" = "Персонализиране";
+
+/* Class = "NSMenuItem"; title = "None"; ObjectID = "fau-iA-M1E"; */
+"fau-iA-M1E.title" = "Няма";
+
+/* Class = "NSPopUpButton"; ibShadowedToolTip = "Rotate the picture clockwise in 90 degree increments"; ObjectID = "ffe-SL-kPm"; */
+"ffe-SL-kPm.ibShadowedToolTip" = "Завъртане на изображението в посока на часовниковата стрелка на 90 градусови стъпки";
+
+/* Class = "NSTextField"; ibExternalAccessibilityDescription = "Maximum height"; ObjectID = "FGm-oJ-FVW"; */
+"FGm-oJ-FVW.ibExternalAccessibilityDescription" = "Максимална височина";
+
+/* Class = "NSButton"; ibShadowedToolTip = "Use highest resolution permitted by above settings"; ObjectID = "fjj-ZH-nqb"; */
+"fjj-ZH-nqb.ibShadowedToolTip" = "Използвай най-високата разделителна способност, позволена от горните настройки";
+
+/* Class = "NSMenuItem"; title = "White"; ObjectID = "fQM-vV-sUg"; */
+"fQM-vV-sUg.title" = "Бял";
+
+/* Class = "NSButtonCell"; title = "Optimal Size"; ObjectID = "FUA-5p-imC"; */
+"FUA-5p-imC.title" = "Оптимален размер";
+
+/* Class = "NSStepper"; ibExternalAccessibilityDescription = "Storage Width"; ObjectID = "FwZ-6T-zJe"; */
+"FwZ-6T-zJe.ibExternalAccessibilityDescription" = "Ширина в хранилище";
+
+/* Class = "NSMenuItem"; title = "None"; ObjectID = "gWL-mx-RIK"; */
+"gWL-mx-RIK.title" = "Няма";
+
+/* Class = "NSTextField"; ibExternalAccessibilityDescription = "Storage Height"; ObjectID = "Hkl-7Z-J2e"; */
+"Hkl-7Z-J2e.ibExternalAccessibilityDescription" = "Височина в хранилище";
+
+/* Class = "NSTextField"; ibShadowedToolTip = "Video scaled height. This is the number of pixels tall to be encoded. Scaled height may differ from display height depending on anamorphic settings and fill settings"; ObjectID = "Hkl-7Z-J2e"; */
+"Hkl-7Z-J2e.ibShadowedToolTip" = "Мащабирана височина на видеото. Това е броят пиксели за кодиране на височината. Мащабираната височина може да се различава от височината на екрана в зависимост от анаморфотните настройки и настройките за запълване.";
+
+/* Class = "NSTextFieldCell"; title = "x"; ObjectID = "hN1-S9-zl8"; */
+"hN1-S9-zl8.title" = "x";
+
+/* Class = "CocoaBindingsConnection"; ibShadowedIsNilPlaceholder = "-"; ObjectID = "hTi-U4-PGY"; */
+"hTi-U4-PGY.ibShadowedIsNilPlaceholder" = "-";
+
+/* Class = "NSTextFieldCell"; title = "Fill:"; ObjectID = "iqM-GW-fCe"; */
+"iqM-GW-fCe.title" = "Запълване:";
+
+/* Class = "NSStepper"; ibExternalAccessibilityDescription = "Storage Width"; ObjectID = "iuc-JG-bhU"; */
+"iuc-JG-bhU.ibExternalAccessibilityDescription" = "Ширина в хранилище";
+
+/* Class = "NSStepper"; ibExternalAccessibilityDescription = "Pad left"; ObjectID = "iZc-Ks-efB"; */
+"iZc-Ks-efB.ibExternalAccessibilityDescription" = "Запълване отляво";
+
+/* Class = "NSStepper"; ibExternalAccessibilityDescription = "Display width"; ObjectID = "jru-UG-Rf6"; */
+"jru-UG-Rf6.ibExternalAccessibilityDescription" = "Ширина на екрана";
+
+/* Class = "NSMenuItem"; title = "Automatic"; ObjectID = "JyN-AK-Hae"; */
+"JyN-AK-Hae.title" = "Автоматично";
+
+/* Class = "NSMenuItem"; title = "Gray"; ObjectID = "K6n-ea-Zty"; */
+"K6n-ea-Zty.title" = "Сив";
+
+/* Class = "NSMenuItem"; title = "Automatic"; ObjectID = "Kay-sv-ssX"; */
+"Kay-sv-ssX.title" = "Автоматично";
+
+/* Class = "NSTextFieldCell"; title = "Storage Size:"; ObjectID = "kOg-k4-0N2"; */
+"kOg-k4-0N2.title" = "Размер в хранилище:";
+
+/* Class = "CocoaBindingsConnection"; ibShadowedIsNilPlaceholder = "0"; ObjectID = "krD-da-wuz"; */
+"krD-da-wuz.ibShadowedIsNilPlaceholder" = "0";
+
+/* Class = "NSTextField"; ibExternalAccessibilityDescription = "Pad left"; ObjectID = "l2V-GK-BgU"; */
+"l2V-GK-BgU.ibExternalAccessibilityDescription" = "Запълване отляво";
+
+/* Class = "NSTextFieldCell"; title = "Scaled Size:"; ObjectID = "L7V-2e-qf9"; */
+"L7V-2e-qf9.title" = "Мащабиран размер:";
+
+/* Class = "NSTextFieldCell"; title = "1:1"; ObjectID = "lIt-eN-Uyd"; */
+"lIt-eN-Uyd.title" = "1:1";
+
+/* Class = "NSMenuItem"; title = "Custom"; ObjectID = "LQm-LK-6tr"; */
+"LQm-LK-6tr.title" = "Персонализиране";
+
+/* Class = "NSTextField"; ibExternalAccessibilityDescription = "Crop left"; ObjectID = "LTu-ic-Ty9"; */
+"LTu-ic-Ty9.ibExternalAccessibilityDescription" = "Изрязване вляво";
+
+/* Class = "NSTextField"; ibExternalAccessibilityDescription = "Pixel Aspect Numerator"; ObjectID = "LWv-Y9-b0S"; */
+"LWv-Y9-b0S.ibExternalAccessibilityDescription" = "Числител на съотношението на пикселите";
+
+/* Class = "NSTextField"; ibShadowedToolTip = "Pixel aspect defines the shape of the pixels.\n\nA 1:1 ratio defines a square pixel. Other values define rectangulars shapers.\nPlayers will scale the image in order to achieve the specified aspect."; ObjectID = "LWv-Y9-b0S"; */
+"LWv-Y9-b0S.ibShadowedToolTip" = "Съотношението на пикселите дефинира формата на пикселите.\n\nСъотношение 1:1 дефинира квадратен пиксел. Други стойности дефинират правоъгълни форми.\nПлеърите ще мащабират изображението да получат желаното съотношение.";
+
+/* Class = "NSTextFieldCell"; title = "Aspect Ratio:"; ObjectID = "Lz1-Cx-d30"; */
+"Lz1-Cx-d30.title" = "Съотношение на страните:";
+
+/* Class = "NSStepper"; ibExternalAccessibilityDescription = "Crop top"; ObjectID = "Mke-9L-LvB"; */
+"Mke-9L-LvB.ibExternalAccessibilityDescription" = "Изрязване отгоре";
+
+/* Class = "NSMenuItem"; title = "Width & Height"; ObjectID = "N5d-nG-TZV"; */
+"N5d-nG-TZV.title" = "Ширина и височина";
+
+/* Class = "NSTextField"; ibExternalAccessibilityDescription = "Pixel Aspect Denominator"; ObjectID = "nQe-Vq-Og2"; */
+"nQe-Vq-Og2.ibExternalAccessibilityDescription" = "Знаменател на съотношението на пикселите";
+
+/* Class = "NSTextField"; ibShadowedToolTip = "Pixel aspect defines the shape of the pixels.\n\nA 1:1 ratio defines a square pixel. Other values define rectangulars shapers.\nPlayers will scale the image in order to achieve the specified aspect."; ObjectID = "nQe-Vq-Og2"; */
+"nQe-Vq-Og2.ibShadowedToolTip" = "Съотношението на пикселите дефинира формата на пикселите.\n\nСъотношение 1:1 дефинира квадратен пиксел. Други стойности дефинират правоъгълни форми.\nПлеърите ще мащабират изображението да получат желаното съотношение.";
+
+/* Class = "NSTextField"; ibExternalAccessibilityDescription = "Maximum width"; ObjectID = "NRy-vc-8qX"; */
+"NRy-vc-8qX.ibExternalAccessibilityDescription" = "Максимална ширина";
+
+/* Class = "CocoaBindingsConnection"; ibShadowedIsNilPlaceholder = "0"; ObjectID = "ob5-QF-mOC"; */
+"ob5-QF-mOC.ibShadowedIsNilPlaceholder" = "0";
+
+/* Class = "NSTextFieldCell"; title = "Color:"; ObjectID = "OCX-n7-THw"; */
+"OCX-n7-THw.title" = "Цвят:";
+
+/* Class = "NSMenuItem"; title = "Custom"; ObjectID = "owa-gb-koC"; */
+"owa-gb-koC.title" = "Персонализиране";
+
+/* Class = "NSMenuItem"; title = "Height (Letterbox)"; ObjectID = "p7U-Ee-kt4"; */
+"p7U-Ee-kt4.title" = "Височина (Letterbox)";
+
+/* Class = "NSMenuItem"; title = "Dark Gray"; ObjectID = "pWs-NL-FVO"; */
+"pWs-NL-FVO.title" = "Тъмносив";
+
+/* Class = "NSMenuItem"; title = "0°"; ObjectID = "qsi-r7-kNQ"; */
+"qsi-r7-kNQ.title" = "0°";
+
+/* Class = "CocoaBindingsConnection"; ibShadowedIsNilPlaceholder = "0"; ObjectID = "QSp-61-LWu"; */
+"QSp-61-LWu.ibShadowedIsNilPlaceholder" = "0";
+
+/* Class = "NSMenu"; title = "OtherViews"; ObjectID = "qSV-uB-Iup"; */
+"qSV-uB-Iup.title" = "ДругиИзгледи";
+
+/* Class = "NSMenuItem"; title = "1080p HD"; ObjectID = "qzy-K8-2tY"; */
+"qzy-K8-2tY.title" = "1080p HD";
+
+/* Class = "NSStepper"; ibExternalAccessibilityDescription = "Crop left"; ObjectID = "r9l-cH-pFW"; */
+"r9l-cH-pFW.ibExternalAccessibilityDescription" = "Изрязване вляво";
+
+/* Class = "CocoaBindingsConnection"; ibShadowedIsNilPlaceholder = "0"; ObjectID = "sg1-tR-fnw"; */
+"sg1-tR-fnw.ibShadowedIsNilPlaceholder" = "0";
+
+/* Class = "CocoaBindingsConnection"; ibShadowedIsNilPlaceholder = "-"; ObjectID = "SGn-b9-JVZ"; */
+"SGn-b9-JVZ.ibShadowedIsNilPlaceholder" = "-";
+
+/* Class = "NSTextFieldCell"; title = "Pixel Aspect:"; ObjectID = "SPg-s0-Oh0"; */
+"SPg-s0-Oh0.title" = "Съотношение на пикселите:";
+
+/* Class = "CocoaBindingsConnection"; ibShadowedIsNilPlaceholder = "0"; ObjectID = "sut-JO-hwX"; */
+"sut-JO-hwX.ibShadowedIsNilPlaceholder" = "0";
+
+/* Class = "NSButton"; ibShadowedToolTip = "Changing the displays size will stretch the video"; ObjectID = "tHu-FW-tzx"; */
+"tHu-FW-tzx.ibShadowedToolTip" = "Промяната в размера на екрана ще разтегне видеото";
+
+/* Class = "NSMenuItem"; title = "270°"; ObjectID = "tIU-4H-3Xm"; */
+"tIU-4H-3Xm.title" = "270°";
+
+/* Class = "NSTextFieldCell"; title = "Source Dimensions"; ObjectID = "Trk-C5-Npx"; */
+"Trk-C5-Npx.title" = "Размери на източник";
+
+/* Class = "NSTextFieldCell"; title = "Orientation & Cropping"; ObjectID = "u2U-SJ-szy"; */
+"u2U-SJ-szy.title" = "Ориентация и изрязване";
+
+/* Class = "NSStepper"; ibExternalAccessibilityDescription = "Pad right"; ObjectID = "uoH-Hv-lNp"; */
+"uoH-Hv-lNp.ibExternalAccessibilityDescription" = "Запълване отдясно";
+
+/* Class = "NSTextField"; ibExternalAccessibilityDescription = " "; ObjectID = "uqQ-uA-3xF"; */
+"uqQ-uA-3xF.ibExternalAccessibilityDescription" = "0b36a71978ca057bf0594fec41410ec0_tr";
+
+/* Class = "NSTextFieldCell"; title = ":"; ObjectID = "uuL-JR-73C"; */
+"uuL-JR-73C.title" = ":";
+
+/* Class = "NSTextFieldCell"; title = "Final Dimensions"; ObjectID = "Ux1-Pc-XSD"; */
+"Ux1-Pc-XSD.title" = "Финални размери";
+
+/* Class = "NSMenuItem"; title = "90°"; ObjectID = "V1G-sQ-eqd"; */
+"V1G-sQ-eqd.title" = "90°";
+
+/* Class = "NSTextFieldCell"; title = "Rotation:"; ObjectID = "vb2-DA-Pgr"; */
+"vb2-DA-Pgr.title" = "Завъртане:";
+
+/* Class = "NSPopUpButton"; ibShadowedToolTip = "How to apply crop settings"; ObjectID = "vfx-ON-9ys"; */
+"vfx-ON-9ys.ibShadowedToolTip" = "Как се прилагат настройките за изрязване";
+
+/* Class = "NSPopUpButton"; ibShadowedToolTip = "Add a border around the video"; ObjectID = "vKr-fn-Ujh"; */
+"vKr-fn-Ujh.ibShadowedToolTip" = "Добавяне на рамка около видеото";
+
+/* Class = "NSMenuItem"; title = "4320p 8K Ultra HD"; ObjectID = "Vrx-BH-ry2"; */
+"Vrx-BH-ry2.title" = "4320p 8K Ultra HD";
+
+/* Class = "NSMenuItem"; title = "Custom"; ObjectID = "vzz-ej-1nx"; */
+"vzz-ej-1nx.title" = "Персонализиране";
+
+/* Class = "NSPopUpButton"; ibShadowedToolTip = "Anamorphic allows arbitrary storage dimensions while preserving the original aspect during playback.\n\nAutomatic maximizes storage resolution while preserving the original display aspect ratio. Recommended.\n\nNone disables anamorphic. Video storage dimensions and display dimensions will be identical. Only useful for compatibility with certain legacy devices.\n\nCustom allows manually setting all parameters. Useful for correcting an incorrect source display aspect and for professionals needing advanced control in post-production."; ObjectID = "w1f-3S-up0"; */
+"w1f-3S-up0.ibShadowedToolTip" = "\"Анаморфотен\" позволява за произволни размери в хранилището, запазвайки оригиналното съотношение по време на възпроизвеждане.\n\nАвтоматично максимизира разделителна способност на хранилището, докато запазва оригиналното съотношение на страните. Препоръчително.\n\n\"Никакво\" изключва \"Анаморфотен\". Размерите на видеото в хранилището и тези на екрана ще са еднакви. Единствено е полезно за стари устройства.\n\nПерсонализиран позволява ръчно настройване на всички параметри. Полезно е за поправяне на грешно съотношение на страните на източника и за професионалисти, на които им трябва по-напреднал контрол върху постпродукцията.";
+
+/* Class = "NSMenuItem"; title = "Width (Pillarbox)"; ObjectID = "W5p-nd-4WK"; */
+"W5p-nd-4WK.title" = "Ширина (Pillarbox)";
+
+/* Class = "NSTextFieldCell"; title = "Display Size:"; ObjectID = "WBD-tH-x3h"; */
+"WBD-tH-x3h.title" = "Размер на екран:";
+
+/* Class = "NSTextField"; ibExternalAccessibilityDescription = "Pad bottom"; ObjectID = "WfM-tx-rC5"; */
+"WfM-tx-rC5.ibExternalAccessibilityDescription" = "Запълване отдолу";
+
+/* Class = "NSTextField"; ibExternalAccessibilityDescription = "Crop right"; ObjectID = "wsq-TS-cC6"; */
+"wsq-TS-cC6.ibExternalAccessibilityDescription" = "Изрязване вдясно";
+
+/* Class = "CocoaBindingsConnection"; ibShadowedIsNilPlaceholder = "0"; ObjectID = "x0H-9t-WiF"; */
+"x0H-9t-WiF.ibShadowedIsNilPlaceholder" = "0";
+
+/* Class = "NSMenuItem"; title = "720p HD"; ObjectID = "Xao-1P-xPT"; */
+"Xao-1P-xPT.title" = "720p HD";
+
+/* Class = "NSButton"; ibShadowedToolTip = "Flips (mirrors) the picture on the horizontal axis"; ObjectID = "xNB-9k-4uD"; */
+"xNB-9k-4uD.ibShadowedToolTip" = "Обръща (огледално) картината по хоризонталната ос";
+
+/* Class = "NSMenuItem"; title = "Custom"; ObjectID = "Xun-U2-N6F"; */
+"Xun-U2-N6F.title" = "Персонализиране";
+
+/* Class = "NSMenuItem"; title = "576p PAL SD"; ObjectID = "yue-jq-T1X"; */
+"yue-jq-T1X.title" = "576p PAL SD";
+
+/* Class = "NSTextFieldCell"; title = "Borders"; ObjectID = "ywF-EG-IYr"; */
+"ywF-EG-IYr.title" = "Граници";
+
+/* Class = "NSTextFieldCell"; title = "Cropping:"; ObjectID = "zsq-Le-41g"; */
+"zsq-Le-41g.title" = "Изрязване:";
+
+/* Class = "NSTextFieldCell"; title = "0 x 0"; ObjectID = "ZTy-fJ-cDa"; */
+"ZTy-fJ-cDa.title" = "0 x 0";
+
+/* Class = "NSStepper"; ibExternalAccessibilityDescription = "Pad bottom"; ObjectID = "zVm-0W-Jxg"; */
+"zVm-0W-Jxg.ibExternalAccessibilityDescription" = "Запълване отдолу";
+
+/* Class = "NSTextFieldCell"; title = "Storage Size:"; ObjectID = "ZZ9-XW-Uib"; */
+"ZZ9-XW-Uib.title" = "Размер в хранилище:";
+

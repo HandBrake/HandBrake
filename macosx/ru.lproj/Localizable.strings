@@ -16,14 +16,38 @@
 /* Main Window -> preset modified */
 "(Modified)" = "(Изменено)";
 
-/* Queue status */
-"%d encode pending" = "%d работа в ожидании";
+/* Job statistics */
+"%@ fps" = "%@ фпс";
 
 /* Queue status */
-"%d encodes pending" = "%d работ в ожидании";
+"%lu encode pending" = "%lu кодирование в ожидании";
+
+/* Queue status */
+"%lu encodes pending" = "%lu кодирований в ожидании";
 
 /* No comment provided by engineer. */
-"%llu jobs selected" = "%llu заданий выбрано";
+"%lu jobs selected" = "%lu заданий выбрано";
+
+/* Add preset window -> picture setting */
+"480p NTSC SD" = "480p NTSC SD";
+
+/* Add preset window -> picture setting */
+"576p PAL SD" = "576p PAL SD";
+
+/* Add preset window -> picture setting */
+"720p HD" = "720p HD";
+
+/* Add preset window -> picture setting */
+"1080p HD" = "1080p HD";
+
+/* Add preset window -> picture setting */
+"1440p 2.5K Quad HD" = "1440p 2.5K Quad HD";
+
+/* Add preset window -> picture setting */
+"2160p 4K Ultra HD" = "2160p 4K Ultra HD";
+
+/* Add preset window -> picture setting */
+"4320p 8K Ultra HD" = "4320p 8K Ultra HD";
 
 /* Destination same as source alert -> message
    File already exists alert -> message */
@@ -56,6 +80,9 @@
 /* Delete preset alert -> message */
 "Are you sure you want to permanently delete the selected preset?" = "Вы уверены, что хотите безвозвратно удалить выбранный пресет?";
 
+/* Delete preset alert -> message */
+"Are you sure you want to permanently delete the selected presets?" = "Вы уверены что хотите безвозвратно удалить выбранные пресеты?";
+
 /* Quit Alert -> message */
 "Are you sure you want to quit HandBrake?" = "Вы уверены, что хотите выйти из HandBrake?";
 
@@ -64,6 +91,9 @@
 
 /* Player HUD -> audio menu */
 "Audio" = "Аудио";
+
+/* Job statistics */
+"Average speed:" = "Средняя скорость:";
 
 /* Copy Protection Alert -> second button
    Delete preset alert -> second button
@@ -89,6 +119,9 @@
 /* Main Window -> Destination open panel */
 "Choose" = "Выбрать";
 
+/* Preferences -> Output Name Token */
+"Codec" = "Кодек";
+
 /* Queue Alert -> cancel rip first button */
 "Continue Encoding" = "Продолжить кодирование";
 
@@ -113,6 +146,9 @@
 /* Delete preset alert -> first button */
 "Delete Preset" = "Удалить пресет";
 
+/* Delete preset alert -> first button */
+"Delete Presets" = "Удалить Пресеты";
+
 /* File already exists alert -> informative text
    File already exists in queue alert -> informative text */
 "Do you want to overwrite %@?" = "Вы хотите перезаписать %@?";
@@ -126,21 +162,12 @@
 /* HBQueueItemView -> Encode state accessibility label */
 "Encode canceled" = "Кодирование отменено";
 
-/* Queue status */
-"Encode Canceled." = "Кодирование отменено.";
-
 /* HBQueueItemView -> Encode state accessibility label */
 "Encode complete" = "Кодирование завершено";
 
 /* HBQueueItemView -> Encode state accessibility label
    Queue done notification failed message */
 "Encode failed" = "Кодирование не удалось";
-
-/* Queue status */
-"Encode Failed." = "Кодирование не удалось.";
-
-/* Queue status */
-"Encode Finished." = "Кодирование завершено.";
 
 /* HBQueueItemView -> Encode state accessibility label */
 "Encode ready" = "Кодирование готово";
@@ -149,10 +176,16 @@
 "Encode working" = "Кодирование в процессе";
 
 /* No comment provided by engineer. */
-"Encoding %@\n%@" = "Кодирование %1$@\n%2$@";
+"Encoding %lu Jobs" = "Кодирование %lu Заданий";
+
+/* No comment provided by engineer. */
+"Encoding Job: %@" = "Кодирование: %@";
 
 /* Job statistics */
 "Ended at:" = "Закончено: ";
+
+/* Export presets save panel title */
+"Export preset" = "Экспортировать пресет";
 
 /* Export presets save panel title */
 "Export presets" = "Экспортировать пресеты";
@@ -197,11 +230,20 @@
 /* Queue undo action name */
 "Move Jobs in Queue" = "Переместить задания в очереди";
 
+/* Add preset window -> My Presets */
+"My Presets" = "Мои Пресеты";
+
+/* Queue status */
+"No encode pending" = "Нет работ в ожидании";
+
 /* Preview -> accessibility label */
 "No image" = "Нет изображения";
 
 /* No comment provided by engineer. */
 "No job selected" = "Задание не выбрано";
+
+/* Main Window -> Info text */
+"No Valid Preset" = "Нету Валидных Пресетов";
 
 /* Main Window -> Info text */
 "No Valid Source Found" = "Не найдено действительного исходного файла";
@@ -314,6 +356,9 @@
 /* Job statistics */
 "Run time:" = "Время работы:";
 
+/* Export presets panel prompt */
+"Save" = "Сохранить";
+
 /* Picture HUD -> scale button
    Touch bar */
 "Scale To Screen" = "Масштабировать к размеру экрана";
@@ -348,9 +393,6 @@
 /* Preferences -> Output Name Token */
 "Source" = "Исходный файл";
 
-/* Add preset window -> picture setting */
-"Source Maximum" = "Максимум исходного файла";
-
 /* Toolbar Start/Stop Item */
 "Start" = "Начало";
 
@@ -368,7 +410,8 @@
 /* Job statistics */
 "Started at:" = "Начало в:";
 
-/* Toolbar Start/Stop Item */
+/* Queue -> Stop action
+   Toolbar Start/Stop Item */
 "Stop" = "Остановить";
 
 /* Queue Alert -> cancel rip third button */
@@ -415,14 +458,8 @@
    Rename preset window -> name alert message */
 "The preset name cannot be empty." = "Название пресета не может быть пустым.";
 
-/* Queue -> Multiple instances alert informative text */
-"The queue will be shared between the instances." = "Очередь будет общей между экземплярами.";
-
 /* File already exists in queue alert -> message */
 "There is already a queue item for this destination." = "Уже существует задание в очереди с таким путем назначения.";
-
-/* Queue -> Multiple instances alert message */
-"There is already an instance of HandBrake running." = "Один экземпляр HandBrake уже работает.";
 
 /* Invalid destination alert -> informative text */
 "This is not a valid destination directory!" = "Данная папка не является действительным путем назначения!";

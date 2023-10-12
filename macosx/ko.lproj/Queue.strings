@@ -1,0 +1,81 @@
+/* Class = "NSMenuItem"; title = "Reset Failed Jobs"; ObjectID = "0zn-7P-JbR"; */
+"0zn-7P-JbR.title" = "실패한 작업 재설정";
+
+/* Class = "NSMenuItem"; title = "Remove Completed Jobs"; ObjectID = "9tg-YJ-DuI"; */
+"9tg-YJ-DuI.title" = "완료된 작업 제거";
+
+/* Class = "NSWindow"; title = "Queue"; ObjectID = "2576"; */
+"2576.title" = "대기열";
+
+/* Class = "NSToolbarItem"; label = "When Done"; ObjectID = "a3c-kV-98E"; */
+"a3c-kV-98E.label" = "완료시";
+
+/* Class = "NSToolbarItem"; paletteLabel = "When Done"; ObjectID = "a3c-kV-98E"; */
+"a3c-kV-98E.paletteLabel" = "완료시";
+
+/* Class = "NSToolbarItem"; toolTip = "Action to perform when encoding is complete."; ObjectID = "a3c-kV-98E"; */
+"a3c-kV-98E.toolTip" = "인코딩이 완료되었을 때 실행할 동작";
+
+/* Class = "NSMenuItem"; title = "Alert and Notification"; ObjectID = "aat-1N-Odn"; */
+"aat-1N-Odn.title" = "경고와 알림";
+
+/* Class = "NSToolbarItem"; label = "Action"; ObjectID = "DCB-WP-NRs"; */
+"DCB-WP-NRs.label" = "동작";
+
+/* Class = "NSToolbarItem"; paletteLabel = "Action"; ObjectID = "DCB-WP-NRs"; */
+"DCB-WP-NRs.paletteLabel" = "동작";
+
+/* Class = "NSToolbarItem"; label = "Details"; ObjectID = "DfN-Iw-bzy"; */
+"DfN-Iw-bzy.label" = "상세정보";
+
+/* Class = "NSToolbarItem"; paletteLabel = "Details"; ObjectID = "DfN-Iw-bzy"; */
+"DfN-Iw-bzy.paletteLabel" = "상세정보";
+
+/* Class = "NSMenuItem"; title = "Alert"; ObjectID = "fAD-ky-zo6"; */
+"fAD-ky-zo6.title" = "경고";
+
+/* Class = "NSMenuItem"; title = "Put Computer to Sleep"; ObjectID = "GUQ-xb-HVS"; */
+"GUQ-xb-HVS.title" = "컴퓨터를 잠자기 상태로 변경";
+
+/* Class = "NSMenuItem"; title = "Notification"; ObjectID = "jDL-sB-8e3"; */
+"jDL-sB-8e3.title" = "알림";
+
+/* Class = "NSMenuItem"; title = "Reset All Jobs"; ObjectID = "kPX-am-UX1"; */
+"kPX-am-UX1.title" = "모든 작업 재설정";
+
+/* Class = "NSToolbarItem"; label = "Quick Look"; ObjectID = "nCq-Nc-EbB"; */
+"nCq-Nc-EbB.label" = "Quick Look";
+
+/* Class = "NSToolbarItem"; paletteLabel = "Quick Look"; ObjectID = "nCq-Nc-EbB"; */
+"nCq-Nc-EbB.paletteLabel" = "Quick Look";
+
+/* Class = "NSMenuItem"; title = "Shut Down Computer"; ObjectID = "QmP-SQ-XKK"; */
+"QmP-SQ-XKK.title" = "컴퓨터 끄기";
+
+/* Class = "NSToolbarItem"; label = "Pause"; ObjectID = "s7o-pK-heI"; */
+"s7o-pK-heI.label" = "일시중지";
+
+/* Class = "NSToolbarItem"; paletteLabel = "Pause/Resume"; ObjectID = "s7o-pK-heI"; */
+"s7o-pK-heI.paletteLabel" = "일시중지/이어하기";
+
+/* Class = "NSToolbarItem"; toolTip = "Pause Encoding"; ObjectID = "s7o-pK-heI"; */
+"s7o-pK-heI.toolTip" = "인코딩 일시중지";
+
+/* Class = "NSMenuItem"; title = "Do Nothing"; ObjectID = "sm5-26-sAg"; */
+"sm5-26-sAg.title" = "아무것도 안 함";
+
+/* Class = "NSToolbarItem"; label = "Start"; ObjectID = "SX6-mq-Hck"; */
+"SX6-mq-Hck.label" = "시작";
+
+/* Class = "NSToolbarItem"; paletteLabel = "Start/Cancel"; ObjectID = "SX6-mq-Hck"; */
+"SX6-mq-Hck.paletteLabel" = "시작/취소";
+
+/* Class = "NSToolbarItem"; toolTip = "Start Encoding"; ObjectID = "SX6-mq-Hck"; */
+"SX6-mq-Hck.toolTip" = "인코딩 시작";
+
+/* Class = "NSMenuItem"; title = "Quit HandBrake"; ObjectID = "tBG-Gf-ynI"; */
+"tBG-Gf-ynI.title" = "HandBrake 종료";
+
+/* Class = "NSMenuItem"; title = "Remove All Jobs"; ObjectID = "Tvo-xt-sag"; */
+"Tvo-xt-sag.title" = "모든 작업 제거";
+
