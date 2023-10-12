@@ -810,7 +810,7 @@ Hint: File overwrite behaviour can be controlled in preferences. </value>
     <value>Назва глави</value>
   </data>
   <data name="ChaptersView_ChapterNumber" xml:space="preserve">
-    <value>Номер глави</value>
+    <value>Chapter</value>
   </data>
   <data name="ChaptersView_CreateChapterMarkers" xml:space="preserve">
     <value>Створити маркери глав</value>
@@ -1023,7 +1023,7 @@ Hint: File overwrite behaviour can be controlled in preferences. </value>
     <value>Розміри</value>
   </data>
   <data name="MainView_PresetManage" xml:space="preserve">
-    <value>Edit Preset</value>
+    <value>Редагувати набір</value>
   </data>
   <data name="MainView_PresetOptionsContextMenu" xml:space="preserve">
     <value>Контекстне меню опцій наборів</value>
@@ -1128,7 +1128,7 @@ Hint: File overwrite behaviour can be controlled in preferences. </value>
     <value>Дозволити використання кодувальників Intel QuickSync</value>
   </data>
   <data name="OptionsView_EnableVceEncoding" xml:space="preserve">
-    <value>Allow use of the AMD VCN Encoders</value>
+    <value>Дозволити використовувати кодувальники AMD VCN</value>
   </data>
   <data name="OptionsView_InvalidFileFormatChars" xml:space="preserve">
     <value>Введений формат файлу містив недійсні символи. Вони були видалені.</value>
@@ -1248,7 +1248,7 @@ Hint: File overwrite behaviour can be controlled in preferences. </value>
     <value>Сканувати зображень попереднього перегляду:</value>
   </data>
   <data name="Options_PriorityLevel" xml:space="preserve">
-    <value>Work Priority Level:</value>
+    <value>Рівень пріоритету роботи:</value>
   </data>
   <data name="Options_QsvDecode" xml:space="preserve">
     <value>Prefer use of Intel QuickSync for decoding video when using the QuickSync encoder and the hardware is available for use.</value>
@@ -1549,7 +1549,7 @@ Hint: File overwrite behaviour can be controlled in preferences. </value>
     <value>Доступний архів попередньої черги.</value>
   </data>
   <data name="SourceSelection_SingleVideoFile" xml:space="preserve">
-    <value>Відкрийте один відеофайл.</value>
+    <value>Open video file(s).</value>
   </data>
   <data name="SourceSelection_SourceSelection" xml:space="preserve">
     <value>Вибір джерела</value>
@@ -1702,7 +1702,7 @@ Hint: File overwrite behaviour can be controlled in preferences. </value>
     <value>Про HandBrake</value>
   </data>
   <data name="SourceSelection_DropFileHere" xml:space="preserve">
-    <value>Або перетягніть сюди файл чи папку…</value>
+    <value>Or drop a file, set of files or folder here ...</value>
   </data>
   <data name="SourceSelection_Help" xml:space="preserve">
     <value>Довідка</value>
@@ -1889,7 +1889,7 @@ You can drag/drop or enter the text above.</value>
     <value>Кодування завершено</value>
   </data>
   <data name="Options_Notifications" xml:space="preserve">
-    <value>Sound Notifications</value>
+    <value>Звукові сповіщення</value>
   </data>
   <data name="Options_QueueCompleted" xml:space="preserve">
     <value>Черга завершена</value>
@@ -2134,7 +2134,7 @@ You can drag/drop or enter the text above.</value>
     <value>Діапазон порту повинна бути від 5000 до 32767</value>
   </data>
   <data name="OptionsView_SendFileToArgPlaceholders" xml:space="preserve">
-    <value>Replacement Placeholders: {source} {destination} {exit_code}</value>
+    <value>Замінювані заповнювачі: {джерело} {призначення} {код_виходу}</value>
     <comment>Note: {source}, {destination} and {exit_code} are not translatable. </comment>
   </data>
   <data name="SourceSelection_UpdateAvailable" xml:space="preserve">
@@ -2455,9 +2455,9 @@ You can drag/drop or enter the text above.</value>
     <value>The default auto name path was not valid. {0} must not be before {1}</value>
   </data>
   <data name="FirstRun_EnableUpdateCheck" xml:space="preserve">
-    <value>Would you like to allow HandBrake to automatically check for updates?
+    <value>Ви хочете дозволити HandBrake автоматично перевіряти наявність оновлень?
 
-You can change your choice at any time by changing the options in Preferences -&gt; General -&gt; Check for Updates</value>
+Ви можете змінити свій вибір у будь-який час, змінивши параметри в Налаштування -&gt; Загальні -&gt; Шукати оновлення</value>
   </data>
   <data name="FirstRun_EnableUpdateCheckHeader" xml:space="preserve">
     <value>Шукати оновлення?</value>
@@ -2522,19 +2522,19 @@ You can change your choice at any time by changing the options in Preferences -&
     <value>Are you sure you wish to reset all built-in presets?</value>
   </data>
   <data name="OptionsView_ResetBuildInPresets" xml:space="preserve">
-    <value>Reset all built-in presets to HandBrake defaults:</value>
+    <value>Скинути всі вбудовані набори HandBrake до стандартних:</value>
   </data>
   <data name="OptionsView_ResetBuildInPresetsNotice" xml:space="preserve">
     <value>(User presets will not be reset)</value>
   </data>
   <data name="OptionsView_ResetSettingsToDefaults" xml:space="preserve">
-    <value>Reset all HandBrake settings back to defaults:</value>
+    <value>Скинути всі налаштування HandBrake до стандартних:</value>
   </data>
   <data name="Options_BuiltInPresets" xml:space="preserve">
-    <value>Built In Presets</value>
+    <value>Вбудовані набори</value>
   </data>
   <data name="Options_UserSettings" xml:space="preserve">
-    <value>User Settings</value>
+    <value>Налаштування користувача</value>
   </data>
   <data name="PresetDisplayMode_FloatingPanel" xml:space="preserve">
     <value>Floating Treeview</value>
@@ -2559,7 +2559,7 @@ Only queue files from the current version are supported.</value>
     <value>This will also disable the show windows taskbar notifications options on the 'When Done' tab. Re-enable these if you want to re-activate this feature.</value>
   </data>
   <data name="OptionsView_NotificationRemovalText" xml:space="preserve">
-    <value>Remove HandBrake from the Windows notifications control panel.</value>
+    <value>Видалити HandBrake з панелі керування сповіщеннями Windows.</value>
   </data>
   <data name="OptionsView_UninstallMessageBoxHeader" xml:space="preserve">
     <value>Uninstalled</value>
@@ -2571,10 +2571,10 @@ Only queue files from the current version are supported.</value>
     <value>Clear &amp; Uninstall</value>
   </data>
   <data name="OptionsView_WindowsNotification" xml:space="preserve">
-    <value>Send a notification to the Windows Taskbar.</value>
+    <value>Надіслати сповіщення на панель завдань Windows.</value>
   </data>
   <data name="OptionsView_WindowsNotificationsBanner" xml:space="preserve">
-    <value>Windows Notifications</value>
+    <value>Сповіщення Windows</value>
   </data>
   <data name="Main_QueueMultiJobStatus" xml:space="preserve">
     <value>{0} jobs completed. {1}Working on {2} jobs with {3} waiting to be processed.</value>
@@ -2592,16 +2592,16 @@ Only queue files from the current version are supported.</value>
     <value>Expand All</value>
   </data>
   <data name="OptionsView_RightToleftMode" xml:space="preserve">
-    <value>Right to Left display mode:</value>
+    <value>Режим показу справа наліво:</value>
   </data>
   <data name="RightToLeft_Off" xml:space="preserve">
-    <value>Off</value>
+    <value>Вимкнено</value>
   </data>
   <data name="RightToLeft_TextOnly" xml:space="preserve">
-    <value>Text Only</value>
+    <value>Тільки текст</value>
   </data>
   <data name="RightToLeft_WholeInterface" xml:space="preserve">
-    <value>Entire User Interface</value>
+    <value>Весь інтерфейс користувача</value>
   </data>
   <data name="SourceSelection_NightlyUpdate" xml:space="preserve">
     <value>The current development build you are running is getting old. You may wish to update!</value>
@@ -2647,7 +2647,7 @@ Hardware encoding support can be re-enabled in preferences. </value>
     <value>You must first scan a source and have an initial destination directory set</value>
   </data>
   <data name="OptionsView_FileCollisionNotice" xml:space="preserve">
-    <value>Only when file already exists on disk.</value>
+    <value>Тільки якщо файл вже існує на диску.</value>
   </data>
   <data name="Info" xml:space="preserve">
     <value>Info</value>
@@ -2746,5 +2746,56 @@ Encoding {1} jobs</value>
     <value>Unable to encode a preview. The application is currently busy encoding another file.
 
 To allow multiple simultaneous encodes, turn on "Process Isolation" in Tools Menu -&gt; Preferences -&gt; Advanced -&gt; Process Isolation -&gt; "Run each queued job in a separate worker process".</value>
+  </data>
+  <data name="AudioView_Quality" xml:space="preserve">
+    <value>Якість</value>
+  </data>
+  <data name="AudioView_Source" xml:space="preserve">
+    <value>Source</value>
+  </data>
+  <data name="AboutView_Documentation" xml:space="preserve">
+    <value>Documentation:</value>
+  </data>
+  <data name="AboutView_GithubTracker" xml:space="preserve">
+    <value>GitHub Issue Tracker:</value>
+  </data>
+  <data name="AboutView_Website" xml:space="preserve">
+    <value>Вебсайт:</value>
+  </data>
+  <data name="MainView_PresetClone" xml:space="preserve">
+    <value>Clone Preset</value>
+  </data>
+  <data name="PresetPane_MoveDown" xml:space="preserve">
+    <value>Move Down</value>
+  </data>
+  <data name="PresetPane_MoveToBottom" xml:space="preserve">
+    <value>Move to Bottom</value>
+  </data>
+  <data name="PresetPane_MoveToTop" xml:space="preserve">
+    <value>Move to Top</value>
+  </data>
+  <data name="PresetPane_MoveUp" xml:space="preserve">
+    <value>Move Up</value>
+  </data>
+  <data name="QueueViewModel_StopButContinueJob" xml:space="preserve">
+    <value>There are currently jobs running. Would you like to complete the current jobs before stopping the queue?</value>
+  </data>
+  <data name="Options_AddExt" xml:space="preserve">
+    <value>Add Extension</value>
+  </data>
+  <data name="Options_ExcludeExtensions" xml:space="preserve">
+    <value>Exclude File Extensions:</value>
+  </data>
+  <data name="Options_ExcludeExtensionsInfo" xml:space="preserve">
+    <value>The following file extensions will be ignored when scanning a folder. The list is case insensitive. "." is not required.</value>
+  </data>
+  <data name="Options_ExtensionExists" xml:space="preserve">
+    <value>This file extension already exists in the list.</value>
+  </data>
+  <data name="Options_FileHandling" xml:space="preserve">
+    <value>File Handling (Scanning)</value>
+  </data>
+  <data name="Options_RecursiveFolderScan" xml:space="preserve">
+    <value>Recursively scan directories when using the folder scan mode.</value>
   </data>
 </root>

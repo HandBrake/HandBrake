@@ -220,11 +220,11 @@ Piksel en boy oranı 1:1 değilse gerçek ekran boyutları farklılık gösterir
     <value>İşi düzenleme için ana pencereye geri gönderin.</value>
   </data>
   <data name="Video_AvgBitrate" xml:space="preserve">
-    <value>Ortalama bit hızını ayarlayın.
+    <value>Ortalama bit hızı ayarlaması.
 
-Anlık bit hızı, zamanın herhangi bir noktasında çok daha yüksek veya daha düşük olabilir.
-Ancak uzun bir süre boyunca ortalama burada ayarlanan değer olacaktır.  Eğer ihtiyacın varsa
-anlık bit hızını sınırlamak için x264'ün vbv-bufsize ve vbv-maxrate ayarlarına bakın.</value>
+Anlık bit hızı, herhangi bir zamanda çok daha yüksek veya daha düşük olabilir.
+Ancak uzun bir süre boyunca ortalama, burada ayarlanan değer olacaktır. 
+Gerek görürseniz anlık bit hızını sınırlamak için X264'ün VBV-Arabellek boyutu ve VBV-Max hızı ayarlarına bakın.</value>
   </data>
   <data name="Video_ConstantFramerate" xml:space="preserve">
     <value>Sabit kare hızı çıkışını etkinleştirir.</value>
@@ -235,7 +235,7 @@ anlık bit hızını sınırlamak için x264'ün vbv-bufsize ve vbv-maxrate ayar
   <data name="Video_EncoderTune" xml:space="preserve">
     <value>Genel senaryolar için optimize etmek üzere ayarları yapın.
 
-Bu, belirli kaynak karakteristikleri için verimi artırabilir veya çıkış
+Bu, belirli kaynak karakteristikleri için verimi artırabilir veya çıktı
 dosyasının ayar özelliklerini değiştirebilir. Değişiklikler ön ayardan
 sonra ancak diğer tüm parametrelerden önce uygulanacaktır.</value>
   </data>
@@ -245,17 +245,17 @@ sonra ancak diğer tüm parametrelerden önce uygulanacaktır.</value>
 Kodlayıcı seçeneklerinin iki nokta üst üste ayrılmış listesi.</value>
   </data>
   <data name="Video_FastDecode" xml:space="preserve">
-    <value>Kod çözücü CPU kullanımını azaltın.
+    <value>Kod çözücü için CPU kullanımının azaltılması.
 
-Cihazınız çıkışı oynatmakta zorlanıyorsa (bırakılan kareler) bunu ayarlayın.</value>
+Cihazınız çıktıyı oynatmakta zorlanıyorsa (kare atlamalı) bunu ayarlayın.</value>
   </data>
   <data name="Video_Framerate" xml:space="preserve">
     <value>Çıktı kare hızı.
 
-'Kaynakla aynı' önerilir. Kaynak videonuzun değişken bir kare hızı varsa, 'Kaynakla aynı' onu koruyacaktır.</value>
+'Kaynak ile aynı' önerilir. Kaynak videonuzun değişken bir kare hızı varsa, 'Kaynak ile aynı' seçimi onu koruyacaktır.</value>
   </data>
   <data name="Video_Level" xml:space="preserve">
-    <value>Ayarlar ve belirtilen düzeyde uyum sağlar.
+    <value>Belirtilen düzeyde ayarlama ve uyum sağlanması
 
 Diğer tüm ayarları geçersiz kılar.</value>
   </data>
@@ -280,26 +280,26 @@ Diğer tüm ayarları geçersiz kılar.</value>
 Kodlayıcı belirli bir kaliteyi hedefliyor.
 Her video kodlayıcı tarafından kullanılan ölçek farklıdır.
 
-x264 ölçeği logaritmiktir ve düşük değerler daha yüksek kaliteye karşılık gelir.
-Dolayısıyla değerdeki küçük düşüşler, sonuçta oluşan dosya
+x264 ölçeği logaritmiktir. Daha düşük değerler daha yüksek kaliteye karşılık gelir.
+Dolayısıyla değer düştükçe, sonuçta oluşan dosya
 boyutunda aşamalı olarak daha büyük artışlara neden olur. 0 değeri,
 kayıpsız demektir ve kaynak kayıpsız olmadığı sürece, orijinal
 kaynaktan daha büyük bir dosya boyutuna neden olur.
 Önerilen değerler: standart tanım kaynakları için 18 ila 20 ve yüksek
 tanım kaynakları için 20 ila 23'tür.
 
-FFMpeg ve Theora'nın ölçeği daha doğrusaldır.
+FFMpeg ve Theora ölçeği daha doğrusaldır.
 Bu kodlayıcılar kayıpsız bir moda sahip değildir.</value>
   </data>
   <data name="Video_TurboAnalysisPass" xml:space="preserve">
-    <value>During the analysis pass of a multi pass encode, use settings that speed things along.</value>
+    <value>Çok geçişli bir kodlamanın analiz geçişi sırasında, işleri hızlandıran ayarları kullanın.</value>
   </data>
   <data name="Video_MultiPass" xml:space="preserve">
-    <value>Perform Multi Pass Encoding.
+    <value>Çok Geçişli Kodlama Gerçekleştirin.
 
-The 'Bitrate' option is prerequisite. During the analysis passes, statistics about
-the video are collected. Then in the final pass, those statistics are used
-to make bitrate allocation decisions.</value>
+'Bit Hızı' seçeneği ön koşuldur. Analiz geçişleri sırasında video
+hakkında istatistikler toplanır. Daha sonra son geçişte, bu istatistikler
+bit hızı tahsis kararları vermek için kullanılır.</value>
   </data>
   <data name="Video_VariableFramerate" xml:space="preserve">
     <value>Değişken kare hızı çıkışını etkinleştirir.
@@ -515,25 +515,27 @@ Lütfen unutmayın, hata kodları en iyi çabadır ve her zaman doğru olmayabil
 Çıktı dosyasının üzerinde işlem yapmadan önce doğrulanması önerilir.</value>
   </data>
   <data name="Options_AdditionalFormatOptions" xml:space="preserve">
-    <value>The format of the output file. In addition to any supported file system character, you can use the any of the placeholders that will be replaced when you change title or scan a source or update certain settings.
+    <value>Çıktı dosyasının biçimi. Desteklenen herhangi bir dosya sistemi karakterine ek olarak, başlığı değiştirdiğinizde veya bir kaynağı taradığınızda veya belirli ayarları güncellediğinizde değiştirilecek olan yer tutuculardan herhangi birini kullanabilirsiniz.
 
-{source} - Name of the source file.
-{title} - Integer value. This is representative of a disc title number.
-{chapters} - The range of chapters selected.
-{creation-date} - The date that the source file was created on (if available).
-{creation-time} - The time that the source file was created on (if available).
-{modification-date} - The date that the source file was last modified on (if available).
-{modification-time} - The time that the source file was last modified on (if available).
-{date} - Today. Set at time of adding to the queue.
-{time} - Today. Set at time of adding to the queue.
-{quality_bitrate} - The RF/CQ number, or bitrate
-{quality_type} - Prints "kbps" or "Q" depending on the quality mode selected on the video tab.
-{preset} - Name of the preset selected.
-{encode_bit_depth} - Integer value. i.e. 8, 10 or 12
-{width} - The output storage width
-{height} - The output storage height
+{source} - Kaynak dosyanın adı.
+{title} - Tamsayı değeri. Bu, bir disk başlığı numarasını temsil eder.
+{chapters} - Seçilen bölüm aralığı.
+{creation-date} - Kaynak dosyanın oluşturulduğu tarih (varsa).
+{creation-time} - Kaynak dosyanın oluşturulduğu saat (varsa).
+{modification-date} - Kaynak dosyanın en son değiştirildiği tarih (varsa).
+{modification-time} - Kaynak dosyanın en son değiştirildiği saat (varsa).
+{date} - Bugün. Kuyruğa ekleme sırasında ayarlanır.
+{time} - Bugün. Kuyruğa ekleme sırasında ayarlanır.
+{quality_bitrate} - RF/CQ numarası veya bit hızı
+{quality_type} - Video sekmesinde seçilen kalite moduna bağlı olarak "kbps" veya "Q" yazdırır.
+{preset} - Seçilen ön ayarın adı.
+{encode_bit_depth} - Tamsayı değeri. örn. 8, 10 veya 12
+{width} - Çıktı depolama genişliği
+{height} - Çıktı depolama yüksekliği
+{codec} - Video biçimini görüntüler.
+{encoder} - Kullanılan kodlayıcının kısa biçim anahtarını görüntüler.
 
-Any illegal path characters will be removed automatically.</value>
+Herhangi bir geçersiz yol karakteri otomatik olarak kaldırılacaktır.</value>
   </data>
   <data name="OptionsView_RightToleftMode" xml:space="preserve">
     <value>Sağdan sola doğru olan diller için iki moddan birini etkinleştirebilirsiniz. "Yalnızca Metin", metni yalnızca sağdan sola stilde işler. "Tüm Kullanıcı Arayüzü", tüm kontrolleri sağdan sola yapacaktır.
@@ -552,5 +554,8 @@ Bit hızı kaynaktan kaynağa değişecektir.</value>
 {source_path} - Kaynak yolla aynı klasörde (mümkünse)
 {source_folder_name} – Tam yol olmadan, kaynak dosyanın bulunduğu dizinin adı.
 {source} - Kaynak dosyanın adı.</value>
+  </data>
+  <data name="OptionsView_LaunchsHelp" xml:space="preserve">
+    <value>https://handbrake.fr/docs adresinde bulunan belgeler web sitesini başlatır</value>
   </data>
 </root>

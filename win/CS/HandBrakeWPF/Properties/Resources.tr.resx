@@ -131,16 +131,16 @@ Cihazınız çıktıyı oynatırken zorlanıyorsa bunu ayarlayın. (Yani, kare a
   </data>
   <data name="Video_LosslessWarningTooltip" xml:space="preserve">
     <value>0 değeri kayıpsız anlamına gelir ve kaynak da kayıpsız olmadığı
-sürece dosya boyutunun orijinal kaynaktan daha büyük olmasına neden olur.
+sürece dosya boyutu, orijinal kaynaktan daha büyük bir dosya boyutuna neden olur.
 
 x264 ve x265'in ölçeği logaritmiktir ve daha düşük değerler daha yüksek kaliteye karşılık gelir. 
 
-0 değeri kayıpsız anlamına gelir ve kaynak da kayıpsız olmadığı sürece dosya boyutunun orijinal kaynaktan daha büyük olmasına neden olur. </value>
+Bu nedenle, değerdeki küçük artışlar, sonuçta ortaya çıkan dosya boyutunda giderek daha büyük artışlara neden olacaktır. </value>
   </data>
   <data name="AddPreset_PictureSizeMode" xml:space="preserve">
     <value>İsteğe bağlı olarak bu ön ayar ile bir resim ayarlarını saklayabilirsiniz. 3 mod vardır:
 
-Yok: Resim ayarları önceden ayarlanmış durumda değildir. Bir kaynak yüklerken kaynak özünürlük sınırları dahilinde kalacaktır. Bu aynı zamanda anamorfik, modül, kırpma vs.'yi de etkiler.
+Yok: Resim ayarları önceden ayarlanmış durumda değildir. Bir kaynak yüklerken kaynak çözünürlük sınırları dahilinde kalacaktır. Bu aynı zamanda anamorfik, modül, kırpma vs.'yi de etkiler.
 
 Özel: İsteğe bağlı olarak bir Maksimum genişlik ve Yükseklik ayarlayabilirsiniz. Bunu yaparken bir kodlama bu değerlerden daha küçük veya ona eşit olacaktır. En Boy Oranını Koru otomatik olarak açılır.
 
@@ -174,13 +174,13 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.</
     <value>Sıfırlama Tamamlandı</value>
   </data>
   <data name="Video_HigherQuality" xml:space="preserve">
-    <value>Daha Yüksek Kalite |</value>
+    <value>Kalite Daha Yüksek |</value>
   </data>
   <data name="Video_LowQuality" xml:space="preserve">
-    <value>| Daha Düşük Kalite</value>
+    <value>| Kalite Daha Düşük</value>
   </data>
   <data name="Video_PlaceboQuality" xml:space="preserve">
-    <value>Plasebo Kalitesi |</value>
+    <value>Daha Yüksek Kalite |</value>
   </data>
   <data name="Error" xml:space="preserve">
     <value>Hata</value>
@@ -207,13 +207,13 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.</
 </value>
   </data>
   <data name="Main_JobsPending_addon" xml:space="preserve">
-    <value>Bekleyen İşler {0}</value>
+    <value>Beklemedeki İşler {0}</value>
   </data>
   <data name="Main_NewDefaultPreset" xml:space="preserve">
-    <value>Yeni Varsayılan Ön Ayar Seti: {0}</value>
+    <value>Yeni Varsayılan Ön Ayar Ayarla: {0}</value>
   </data>
   <data name="Main_NewUpdate" xml:space="preserve">
-    <value>Yeni Bir Güncelleme Var.  Yüklemek İçin Araçlar &gt; Ayarlar Menüsünü Ziyaret Edin. </value>
+    <value>Yeni Bir Güncelleme Var.  Yüklemek İçin Araçlar &gt; Tercihler &gt; Güncellemeler Menüsünü Ziyaret Edin. </value>
   </data>
   <data name="Main_NoPresetSelected" xml:space="preserve">
     <value>Ön Ayar seçilmedi.</value>
@@ -248,7 +248,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.</
 Önceki user_presets.xml dosyası yedeklendi.</value>
   </data>
   <data name="Main_QueueFinished" xml:space="preserve">
-    <value>Sıra Bitti</value>
+    <value>Sıradaki İşler Bitti</value>
   </data>
   <data name="Main_ScanCancelled" xml:space="preserve">
     <value>Tarama İptal Edildi.</value>
@@ -266,7 +266,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.</
     <value>Kaynak taranıyor, lütfen bekleyin...</value>
   </data>
   <data name="Main_ScanningTitleXOfY" xml:space="preserve">
-    <value>Başlık Taranıyor {0} / {1} ({2}%)</value>
+    <value>Başlıklar Taranıyor {0} / {1} ({2}%)</value>
   </data>
   <data name="Main_ScanSource" xml:space="preserve">
     <value>İlk önce bir kaynak taramanız ve bir kodlamaya başlamadan önce işinizi kurmanız gerekir. Devam etmek için araç çubuğundaki 'Kaynak' düğmesini tıklayın.</value>
@@ -810,7 +810,7 @@ Devam etmek istiyor musunuz? </value>
     <value>Bölüm Adı</value>
   </data>
   <data name="ChaptersView_ChapterNumber" xml:space="preserve">
-    <value>Bölüm Numarası</value>
+    <value>Bölüm</value>
   </data>
   <data name="ChaptersView_CreateChapterMarkers" xml:space="preserve">
     <value>Bölüm işaretleyicileri oluşturun</value>
@@ -849,28 +849,28 @@ Devam etmek istiyor musunuz? </value>
     <value>Özel:</value>
   </data>
   <data name="FiltersView_Deblock" xml:space="preserve">
-    <value>Serbest bırakmak:</value>
+    <value>Karelenme Azaltma:</value>
   </data>
   <data name="FiltersView_Decomb" xml:space="preserve">
     <value>Ayrıştırma</value>
   </data>
   <data name="FiltersView_Deinterlace" xml:space="preserve">
-    <value>Binişiklik Giderme -Deinterlace-:</value>
+    <value>Taraklanma Giderme (Deinterlace):</value>
   </data>
   <data name="FiltersView_DeinterlacePreset" xml:space="preserve">
     <value>Ön Ayar:</value>
   </data>
   <data name="FiltersView_DeinterlacePresetAuto" xml:space="preserve">
-    <value>Binişiklik Giderme -Deinterlace- Ön Ayarı</value>
+    <value>Taraklanma Giderme (Deinterlace) Ön Ayarı</value>
   </data>
   <data name="FiltersView_Denoise" xml:space="preserve">
-    <value>Parazit Azaltma:</value>
+    <value>Gürültü Azaltma:</value>
   </data>
   <data name="FiltersView_DenoisePresetAuto" xml:space="preserve">
-    <value>Parazit Azaltma Ön Ayarı</value>
+    <value>Gürültü Azaltma Ön Ayarı</value>
   </data>
   <data name="FiltersView_DenoiseTuneAuto" xml:space="preserve">
-    <value>Parazit Azaltma Ayarı</value>
+    <value>Gürültü Azaltma Ayarı</value>
   </data>
   <data name="FiltersView_Detelecine" xml:space="preserve">
     <value>Telesine Etkisi Giderme:</value>
@@ -885,7 +885,7 @@ Devam etmek istiyor musunuz? </value>
     <value>Gri tonlama</value>
   </data>
   <data name="FiltersView_InterlaceDetection" xml:space="preserve">
-    <value>Geçmeli Algılama:</value>
+    <value>Taraklanma Algılama:</value>
   </data>
   <data name="FiltersView_Preset" xml:space="preserve">
     <value>Ön Ayar:</value>
@@ -894,7 +894,7 @@ Devam etmek istiyor musunuz? </value>
     <value>Döndürme:</value>
   </data>
   <data name="FiltersView_Sharpen" xml:space="preserve">
-    <value>Keskinleştirmek:</value>
+    <value>Keskinleştirme:</value>
   </data>
   <data name="FiltersView_SharpenPresetAuto" xml:space="preserve">
     <value>Keskinleştirme Ön Ayarı</value>
@@ -960,7 +960,7 @@ Devam etmek istiyor musunuz? </value>
     <value>Gelişmiş</value>
   </data>
   <data name="MainView_AlignAVStart" xml:space="preserve">
-    <value>Hizala A/V Başlat</value>
+    <value>Ses/Video Başlangıcını Hizala</value>
   </data>
   <data name="MainView_Angle" xml:space="preserve">
     <value>Açı:</value>
@@ -1020,7 +1020,7 @@ Devam etmek istiyor musunuz? </value>
     <value>Duraklat</value>
   </data>
   <data name="MainView_PictureTab" xml:space="preserve">
-    <value>Boyutlar</value>
+    <value>Boyutlandırma</value>
   </data>
   <data name="MainView_PresetManage" xml:space="preserve">
     <value>Ön Ayarı Düzenle</value>
@@ -1113,7 +1113,7 @@ Devam etmek istiyor musunuz? </value>
     <value>Video</value>
   </data>
   <data name="MainView_WebOptimized" xml:space="preserve">
-    <value>Web Optimize Edilmiş</value>
+    <value>Web İçin Optimize Et</value>
   </data>
   <data name="ManagePresetView_ManagePreset" xml:space="preserve">
     <value>Ön Ayarları Yönet</value>
@@ -1215,7 +1215,7 @@ Devam etmek istiyor musunuz? </value>
     <value>Günlük Ayrıntı Düzeyi:</value>
   </data>
   <data name="Options_LogPath" xml:space="preserve">
-    <value>Path:</value>
+    <value>Dizin:</value>
   </data>
   <data name="Options_LowDiskspaceSize" xml:space="preserve">
     <value>Disk alanı azsa sırayı duraklatın</value>
@@ -1303,7 +1303,7 @@ VLC ve MPC-HC desteklenmektedir. Diğer oyuncular da çalışabilir ancak onayla
     <value>x264/5 Ayarları</value>
   </data>
   <data name="Options_x264Granularity" xml:space="preserve">
-    <value>Sabit kalitede kesirli parçalanma:</value>
+    <value>Sabit kalitede fraksiyonel ayrıntı düzeyi:</value>
   </data>
   <data name="PictureSettingsView_Anamorphic" xml:space="preserve">
     <value>Anamorfik:</value>
@@ -1336,7 +1336,7 @@ VLC ve MPC-HC desteklenmektedir. Diğer oyuncular da çalışabilir ancak onayla
     <value>Son Boyutlar:</value>
   </data>
   <data name="PictureSettingsView_PAR" xml:space="preserve">
-    <value>Piksel Görüntüsü:</value>
+    <value>Piksel En-boy Oranı:</value>
   </data>
   <data name="PictureSettingsView_Right" xml:space="preserve">
     <value>Sağ</value>
@@ -1549,7 +1549,7 @@ VLC ve MPC-HC desteklenmektedir. Diğer oyuncular da çalışabilir ancak onayla
     <value>Bir önceki sıra arşivi kullanılabilir. </value>
   </data>
   <data name="SourceSelection_SingleVideoFile" xml:space="preserve">
-    <value>Tek bir video dosyasını açın</value>
+    <value>Video dosya(lar)ını aç.</value>
   </data>
   <data name="SourceSelection_SourceSelection" xml:space="preserve">
     <value>Kaynak Seçimi</value>
@@ -1582,10 +1582,10 @@ VLC ve MPC-HC desteklenmektedir. Diğer oyuncular da çalışabilir ancak onayla
     <value>Parça Seçme Davranışı:</value>
   </data>
   <data name="SubtitleView_AddAllCC" xml:space="preserve">
-    <value>Kalan Tüm Kapalı Başlıkları Ekle</value>
+    <value>Kalan Tüm Kapalı Altyazıları Ekle</value>
   </data>
   <data name="SubtitleView_SubtitleDefaultsDescription" xml:space="preserve">
-    <value>Yeni bir başlık veya kaynak video seçtiğinizde Altyazı İzlerinin otomatik olarak nasıl seçileceğini ve yapılandırılacağını yapılandırın.</value>
+    <value>Yeni bir başlık veya kaynak video seçtiğinizde Altyazı İzlerinin otomatik olarak nasıl seçileceğini ve yapılandırılacağını ayarlayın.</value>
   </data>
   <data name="SummaryView_AdditionalAudioTracks" xml:space="preserve">
     <value>Ek Ses Parçaları</value>
@@ -1633,16 +1633,16 @@ VLC ve MPC-HC desteklenmektedir. Diğer oyuncular da çalışabilir ancak onayla
     <value>Önizleme {0} / {1}</value>
   </data>
   <data name="SummaryView_Rotation" xml:space="preserve">
-    <value>Dönme</value>
+    <value>Döndürme</value>
   </data>
   <data name="SummaryView_storage" xml:space="preserve">
     <value>depolama</value>
   </data>
   <data name="VideoView_MultiPass" xml:space="preserve">
-    <value>Multi-Pass Encoding</value>
+    <value>Çok Geçişli Kodlama</value>
   </data>
   <data name="VideoView_AverageBitrate" xml:space="preserve">
-    <value>Avg bit hızı (kbps):</value>
+    <value>Ort. bit hızı (Kbps):</value>
   </data>
   <data name="VideoView_Codec" xml:space="preserve">
     <value>Video Kodlayıcı:</value>
@@ -1678,13 +1678,13 @@ VLC ve MPC-HC desteklenmektedir. Diğer oyuncular da çalışabilir ancak onayla
     <value>Kodlayıcı Seçenekleri:</value>
   </data>
   <data name="VideoView_PeakFramerate" xml:space="preserve">
-    <value>Tepe Kare Hızı</value>
+    <value>Değişken Kare Hızı</value>
   </data>
   <data name="VideoView_Quality" xml:space="preserve">
     <value>Kalite:</value>
   </data>
   <data name="VideoView_TurboAnalysisPass" xml:space="preserve">
-    <value>Turbo analysis pass</value>
+    <value>Turbo analiz geçişi</value>
   </data>
   <data name="VideoView_VariableFramerate" xml:space="preserve">
     <value>Değişken Kare Hızı</value>
@@ -1702,7 +1702,7 @@ VLC ve MPC-HC desteklenmektedir. Diğer oyuncular da çalışabilir ancak onayla
     <value>HandBrake Hakkında</value>
   </data>
   <data name="SourceSelection_DropFileHere" xml:space="preserve">
-    <value>Veya buraya bir dosya veya klasör bırakın ...</value>
+    <value>Veya buraya bir dosya, dosya kümesi veya klasör bırakın ...</value>
   </data>
   <data name="SourceSelection_Help" xml:space="preserve">
     <value>Yardım</value>
@@ -1774,7 +1774,7 @@ VLC ve MPC-HC desteklenmektedir. Diğer oyuncular da çalışabilir ancak onayla
     <value>Ön Ayar Panelini Göster</value>
   </data>
   <data name="MainView_ShowQueueMenu" xml:space="preserve">
-    <value>_Sıra Göster</value>
+    <value>_Sırayı Göster</value>
   </data>
   <data name="MainView_ToolsMenu" xml:space="preserve">
     <value>_Araçlar</value>
@@ -1807,16 +1807,16 @@ VLC ve MPC-HC desteklenmektedir. Diğer oyuncular da çalışabilir ancak onayla
     <value>Varsayılan konumu ayarlamak için 'Gözat'a tıklayın</value>
   </data>
   <data name="MainView_Hide" xml:space="preserve">
-    <value>Saklamak</value>
+    <value>Sakla</value>
   </data>
   <data name="MainView_Show" xml:space="preserve">
-    <value>Göstermek</value>
+    <value>Göster</value>
   </data>
   <data name="MainView_ShowAddAllToQueue" xml:space="preserve">
-    <value>Sıraya 'Tümünü Ekle'</value>
+    <value>'Tümünü' Kuyruğa Ekle</value>
   </data>
   <data name="MainView_ShowAddSelectionToQueue" xml:space="preserve">
-    <value>Sıraya 'Seçileni Ekle'</value>
+    <value>'Seçiliyi' Kuyruğa Ekle</value>
   </data>
   <data name="QueueView_PlayMediaFile" xml:space="preserve">
     <value>Dosyayı Oynat</value>
@@ -1825,10 +1825,10 @@ VLC ve MPC-HC desteklenmektedir. Diğer oyuncular da çalışabilir ancak onayla
     <value>Uygulama Araç Çubuğu</value>
   </data>
   <data name="Options_ShowToolbarAddAll" xml:space="preserve">
-    <value>Araç çubuğunda 'Tümünü Sıraya Ekle' seçeneğini göster</value>
+    <value>Araç çubuğunda 'Tümünü' Kuyruğa ekle seçeneğini göster</value>
   </data>
   <data name="Options_ShowToolbarAddSelection" xml:space="preserve">
-    <value>Araç çubuğunda 'Sıraya Seçileni Ekle' seçeneğini göster</value>
+    <value>Araç çubuğunda 'Seçiliyi' kuyruğa ekle seçeneğini göster</value>
   </data>
   <data name="OptionsView_HardwareDetectFailed" xml:space="preserve">
     <value>Donanım kodlama desteği şu anda devre dışı bırakıldı. HandBrake'i "--no-hardware" seçeneğiyle başlatmadıysanız, lütfen bu sistemdeki tüm grafik bağdaştırıcıları için güncel sürücüleri çalıştırdığınızdan emin olun.
@@ -1871,10 +1871,10 @@ Kalan Süre: {5},  Geçen: {6} {7}</value>
 Yukarıdaki metni sürükleyip bırakabilir veya girebilirsiniz.</value>
   </data>
   <data name="FileOverwriteBehaviours_Ask" xml:space="preserve">
-    <value>Dosyanın üzerine yazılmasını isteyin</value>
+    <value>Dosyanın üzerine yazılmadan önce sor</value>
   </data>
   <data name="FileOverwriteBehaviours_Autoname" xml:space="preserve">
-    <value>Dosyayı otomatik olarak yeniden adlandırmayı deneyin</value>
+    <value>Dosyayı otomatik olarak yeniden adlandırmayı dene</value>
   </data>
   <data name="FileOverwriteBehaviours_Overwrite" xml:space="preserve">
     <value>Dosyanın üzerine yaz</value>
@@ -1898,16 +1898,16 @@ Yukarıdaki metni sürükleyip bırakabilir veya girebilirsiniz.</value>
     <value>Bittiğinde:</value>
   </data>
   <data name="OptionsView_FileCollisionBehaviour" xml:space="preserve">
-    <value>Dosya adı çarpışma davranışı:</value>
+    <value>Dosya adı çakışma davranışı:</value>
   </data>
   <data name="CollisionBehaviour_Post" xml:space="preserve">
-    <value>Sonek</value>
+    <value>Son ek</value>
   </data>
   <data name="CollisionBehaviour_Pre" xml:space="preserve">
-    <value>Önek</value>
+    <value>Ön ek</value>
   </data>
   <data name="CollisionBehaviour_AppendNumber" xml:space="preserve">
-    <value>Numara Ekle</value>
+    <value>Numaralandır</value>
   </data>
   <data name="FiltersViewAuto_DeblockPreset" xml:space="preserve">
     <value>FiltersView_DeblockPreset</value>
@@ -1936,7 +1936,7 @@ Desteklendiğinde, herhangi bir kullanıcı ön ayarı içe aktarılmış olacak
     <value>Hemen harekete geçin. (Bu 60 saniyelik onay iletişim kutusunu devre dışı bırakır)</value>
   </data>
   <data name="Browse" xml:space="preserve">
-    <value>Araştır</value>
+    <value>Göz At</value>
   </data>
   <data name="OptionsView_MediaFileNotSet" xml:space="preserve">
     <value>Ses dosyası ayarlanmadı. Bir wav veya mp3 dosyasını oynatmayı seçmek için lütfen 'Gözat'ı tıklayın.</value>
@@ -2005,7 +2005,7 @@ Desteklendiğinde, herhangi bir kullanıcı ön ayarı içe aktarılmış olacak
     <value>Günlük Görüntüleyici</value>
   </data>
   <data name="MainView_Aspect" xml:space="preserve">
-    <value>Görünüş:</value>
+    <value>En-Boy Oranı:</value>
   </data>
   <data name="MainView_Filters" xml:space="preserve">
     <value>Filtreler:</value>
@@ -2362,7 +2362,7 @@ Lütfen farklı bir ön ayar seçin.</value>
     <value>(Yeniden Başlatma Gerektirir)</value>
   </data>
   <data name="FiltersView_ChromaSmooth" xml:space="preserve">
-    <value>Chroma Smooth:</value>
+    <value>Kroma Yumuşatma:</value>
   </data>
   <data name="FiltersView_ColourSpace" xml:space="preserve">
     <value>Renk alanı:</value>
@@ -2449,7 +2449,7 @@ Lütfen farklı bir ön ayar seçin.</value>
     <value>Görüntü Oranı: {0}</value>
   </data>
   <data name="SummaryView_MetadataPassthru" xml:space="preserve">
-    <value>Ortak Üstveriyi Doğrudan Aktar</value>
+    <value>Ortak Üstverileri Doğrudan Aktar</value>
   </data>
   <data name="OptionsViewModel_InvalidAutonamePath" xml:space="preserve">
     <value>Varsayılan otomatik isim yolu geçerli değildi. {0}  {1}'den önce gelmemeli.</value>
@@ -2743,8 +2743,59 @@ Alternatif olarak, aşağıdaki "Harici Oynatıcı Kullan" onay kutusunu işaret
 {1} kodlama görevi gerçekleştiriliyor</value>
   </data>
   <data name="StaticPreviewViewModel_MultipleEncodes" xml:space="preserve">
-    <value>Unable to encode a preview. The application is currently busy encoding another file.
+    <value>Bir önizleme kodlanamıyor. Uygulama şu anda başka bir dosyayı kodlamakla meşgul.
 
-To allow multiple simultaneous encodes, turn on "Process Isolation" in Tools Menu -&gt; Preferences -&gt; Advanced -&gt; Process Isolation -&gt; "Run each queued job in a separate worker process".</value>
+Birden fazla eşzamanlı kodlamaya izin vermek için Araçlar Menüsü -&gt; Tercihler -&gt; Gelişmiş -&gt; İşlem İzolasyonu -&gt; "Kuyruğa alınan her işi ayrı bir alt işlemde çalıştır" seçeneğinden "İşlem İzolasyonu"nu açın.</value>
+  </data>
+  <data name="AudioView_Quality" xml:space="preserve">
+    <value>Kalite</value>
+  </data>
+  <data name="AudioView_Source" xml:space="preserve">
+    <value>Kaynak</value>
+  </data>
+  <data name="AboutView_Documentation" xml:space="preserve">
+    <value>Belgeler:</value>
+  </data>
+  <data name="AboutView_GithubTracker" xml:space="preserve">
+    <value>GitHub Sorun Takibi:</value>
+  </data>
+  <data name="AboutView_Website" xml:space="preserve">
+    <value>Web sitesi:</value>
+  </data>
+  <data name="MainView_PresetClone" xml:space="preserve">
+    <value>Ön Ayarı Klonla</value>
+  </data>
+  <data name="PresetPane_MoveDown" xml:space="preserve">
+    <value>Aşağı Taşı</value>
+  </data>
+  <data name="PresetPane_MoveToBottom" xml:space="preserve">
+    <value>Aşağıya Taşı</value>
+  </data>
+  <data name="PresetPane_MoveToTop" xml:space="preserve">
+    <value>Yukarıya Taşı</value>
+  </data>
+  <data name="PresetPane_MoveUp" xml:space="preserve">
+    <value>Yukarı Taşı</value>
+  </data>
+  <data name="QueueViewModel_StopButContinueJob" xml:space="preserve">
+    <value>Şu anda devam eden işler var. Kuyruğu durdurmadan önce mevcut işleri tamamlamak ister misiniz?</value>
+  </data>
+  <data name="Options_AddExt" xml:space="preserve">
+    <value>Uzantı Ekle</value>
+  </data>
+  <data name="Options_ExcludeExtensions" xml:space="preserve">
+    <value>Dosya Uzantılarını Hariç Tut:</value>
+  </data>
+  <data name="Options_ExcludeExtensionsInfo" xml:space="preserve">
+    <value>Bir klasör taranırken aşağıdaki dosya uzantıları göz ardı edilecektir. Liste büyük/küçük harfe duyarlı değildir. "." gerekli değildir.</value>
+  </data>
+  <data name="Options_ExtensionExists" xml:space="preserve">
+    <value>Bu dosya uzantısı listede zaten var.</value>
+  </data>
+  <data name="Options_FileHandling" xml:space="preserve">
+    <value>Dosya İşleme (Tarama)</value>
+  </data>
+  <data name="Options_RecursiveFolderScan" xml:space="preserve">
+    <value>Klasör tarama modunu kullanırken dizinleri yinelemeli olarak tarayın.</value>
   </data>
 </root>

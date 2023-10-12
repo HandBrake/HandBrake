@@ -802,7 +802,7 @@ Foreign Audio Preferred, else First：如果存在外语轨道，则会将其烧
     <value>章节名称</value>
   </data>
   <data name="ChaptersView_ChapterNumber" xml:space="preserve">
-    <value>章节编号</value>
+    <value>章节</value>
   </data>
   <data name="ChaptersView_CreateChapterMarkers" xml:space="preserve">
     <value>创建章节标记</value>
@@ -1207,7 +1207,7 @@ Foreign Audio Preferred, else First：如果存在外语轨道，则会将其烧
     <value>日志详细级别：</value>
   </data>
   <data name="Options_LogPath" xml:space="preserve">
-    <value>Path:</value>
+    <value>路径：</value>
   </data>
   <data name="Options_LowDiskspaceSize" xml:space="preserve">
     <value>硬盘空间低时暂停队列</value>
@@ -1541,7 +1541,7 @@ Foreign Audio Preferred, else First：如果存在外语轨道，则会将其烧
     <value>以前的队列存档可用。</value>
   </data>
   <data name="SourceSelection_SingleVideoFile" xml:space="preserve">
-    <value>打开单个视频文件。</value>
+    <value>打开视频文件（S）。</value>
   </data>
   <data name="SourceSelection_SourceSelection" xml:space="preserve">
     <value>选择源</value>
@@ -1631,7 +1631,7 @@ Foreign Audio Preferred, else First：如果存在外语轨道，则会将其烧
     <value>存储空间</value>
   </data>
   <data name="VideoView_MultiPass" xml:space="preserve">
-    <value>Multi-Pass Encoding</value>
+    <value>多次编码</value>
   </data>
   <data name="VideoView_AverageBitrate" xml:space="preserve">
     <value>平均码率(kbps)：</value>
@@ -1694,7 +1694,7 @@ Foreign Audio Preferred, else First：如果存在外语轨道，则会将其烧
     <value>关于 HandBrake</value>
   </data>
   <data name="SourceSelection_DropFileHere" xml:space="preserve">
-    <value>或者将文件或文件夹拖放到这里...</value>
+    <value>Or drop a file, set of files or folder here ...</value>
   </data>
   <data name="SourceSelection_Help" xml:space="preserve">
     <value>帮助</value>
@@ -1772,7 +1772,7 @@ Foreign Audio Preferred, else First：如果存在外语轨道，则会将其烧
     <value>工具(_T)</value>
   </data>
   <data name="OptionsView_CheckingForUpdates" xml:space="preserve">
-    <value>检查更新 ...</value>
+    <value>检查更新…</value>
   </data>
   <data name="OptionsView_ClearLogDirConfirm" xml:space="preserve">
     <value>您确定要清除日志文件目录吗？</value>
@@ -2447,7 +2447,7 @@ Foreign Audio Preferred, else First：如果存在外语轨道，则会将其烧
     <value>默认的自动名称路径是无效的。{0} 不能在 {1} 前面</value>
   </data>
   <data name="FirstRun_EnableUpdateCheck" xml:space="preserve">
-    <value>您想让HandBrake自动检查更新吗？
+    <value>您想让 HandBrake 自动检查更新吗？
 
 您可以在 首选项 -&gt; 常规 -&gt; 检查更新 中更改设置。</value>
   </data>
@@ -2676,7 +2676,7 @@ Foreign Audio Preferred, else First：如果存在外语轨道，则会将其烧
   <data name="StaticPreviewViewModel_MediaError" xml:space="preserve">
     <value>此系统不能播放此文件。
 
-请注意特定的编解码器如AV1或者HEVA需要来自Microsoft Store的Microsoft AV1或者HEVC编解码器插件。
+请注意特定的编解码器如 AV1 或者 HEVA 需要来自 Microsoft Store 的 Microsoft AV1 或者 HEVC 编解码器插件。
 或者，勾选下面的“使用外部播放器”复选框。</value>
   </data>
   <data name="StaticPreviewView_ClosePlayer" xml:space="preserve">
@@ -2738,5 +2738,56 @@ Foreign Audio Preferred, else First：如果存在外语轨道，则会将其烧
     <value>无法编码一个预览。程序正在编码另外一个文件。
 
 要允许多个同时编码任务，在工具菜单-&gt;首选项-&gt;高级-&gt;进程隔离-&gt;“用一个独立的进程运行每个队列任务”处打开“进程隔离”。</value>
+  </data>
+  <data name="AudioView_Quality" xml:space="preserve">
+    <value>质量</value>
+  </data>
+  <data name="AudioView_Source" xml:space="preserve">
+    <value>源</value>
+  </data>
+  <data name="AboutView_Documentation" xml:space="preserve">
+    <value>文档：</value>
+  </data>
+  <data name="AboutView_GithubTracker" xml:space="preserve">
+    <value>Github Issue跟踪器：</value>
+  </data>
+  <data name="AboutView_Website" xml:space="preserve">
+    <value>网站：</value>
+  </data>
+  <data name="MainView_PresetClone" xml:space="preserve">
+    <value>复制预设</value>
+  </data>
+  <data name="PresetPane_MoveDown" xml:space="preserve">
+    <value>向下移动</value>
+  </data>
+  <data name="PresetPane_MoveToBottom" xml:space="preserve">
+    <value>移至底部</value>
+  </data>
+  <data name="PresetPane_MoveToTop" xml:space="preserve">
+    <value>移至顶部</value>
+  </data>
+  <data name="PresetPane_MoveUp" xml:space="preserve">
+    <value>向上移动</value>
+  </data>
+  <data name="QueueViewModel_StopButContinueJob" xml:space="preserve">
+    <value>当前有任务正在运行。你想要完成当前任务后再停止队列吗？</value>
+  </data>
+  <data name="Options_AddExt" xml:space="preserve">
+    <value>添加扩展</value>
+  </data>
+  <data name="Options_ExcludeExtensions" xml:space="preserve">
+    <value>不包含文件扩展名：</value>
+  </data>
+  <data name="Options_ExcludeExtensionsInfo" xml:space="preserve">
+    <value>The following file extensions will be ignored when scanning a folder. The list is case insensitive. "." is not required.</value>
+  </data>
+  <data name="Options_ExtensionExists" xml:space="preserve">
+    <value>This file extension already exists in the list.</value>
+  </data>
+  <data name="Options_FileHandling" xml:space="preserve">
+    <value>File Handling (Scanning)</value>
+  </data>
+  <data name="Options_RecursiveFolderScan" xml:space="preserve">
+    <value>Recursively scan directories when using the folder scan mode.</value>
   </data>
 </root>

@@ -118,9 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="FilterView_Deblock" xml:space="preserve">
-    <value>هموارسازی، شطرنجی شدن ویدیو که از فشرده‌سازی با کیفیت پایین ناشی شده‌است را کاهش می‌دهد.
-
-Deblock</value>
+    <value>Deblock reduces blocky artifacts caused by low quality video compression.</value>
   </data>
   <data name="FilterView_DecombDeinterlace" xml:space="preserve">
     <value>Choose decomb or deinterlace filter options.
@@ -143,7 +141,7 @@ HQDN3D is an adaptive low-pass filter, faster than NLMeans but less effective at
     <value>Detelecine removes comb artifacts that are the result of telecine, a process for converting film frame rates to television frame rates.</value>
   </data>
   <data name="FilterView_Grayscale" xml:space="preserve">
-    <value>خاکستری‌طیف رنگ ویدیو را حذف می‌کند.نتیجه اغلب به عنوان فیلم سیاه‌و‌سفید شناخته می‌شود.</value>
+    <value>Grayscale removes the color component of the video. Often referred to as Black &amp; White video.</value>
   </data>
   <data name="MainView_Destination" xml:space="preserve">
     <value>Destination path, including directory and file name. This is where your new video will be created, and what it will be named.</value>
@@ -176,26 +174,26 @@ Loose is similar to Auto, but attempts to preserve the storage aspect ratio. Thi
 Custom allows manually setting all parameters. Useful for correcting an incorrect source display aspect and for professionals needing advanced control in post-production.</value>
   </data>
   <data name="PictureSettingsView_AutoCrop" xml:space="preserve">
-    <value>حاشیه‌های سیاه در کناره‌های ویدیو را به صورت خودکار برش می‌دهد.</value>
+    <value>Automatically crop black borders around edges of the video.</value>
   </data>
   <data name="PictureSettingsView_CropBottom" xml:space="preserve">
-    <value>بریدن ویدیو از پایین</value>
+    <value>Kärbi videot alt servast.</value>
   </data>
   <data name="PictureSettingsView_CropLeft" xml:space="preserve">
-    <value>بریدن ویدیو از چپ</value>
+    <value>Kärbi videot vasakult servast.</value>
   </data>
   <data name="PictureSettingsView_CropRight" xml:space="preserve">
-    <value>بریدن ویدیو از راست</value>
+    <value>Kärbi videot paremalt servast.</value>
   </data>
   <data name="PictureSettingsView_CropTop" xml:space="preserve">
-    <value>بریدن ویدیو از بالا</value>
+    <value>Kärbi videot ülevalt servast.</value>
   </data>
   <data name="PictureSettingsView_Height" xml:space="preserve">
     <value>This is the height that the video will be stored at.
 The actual display dimensions will differ if the pixel aspect ratio is not 1:1.</value>
   </data>
   <data name="PictureSettingsView_ManualCrop" xml:space="preserve">
-    <value>بریدن دستی ویدیو</value>
+    <value>Kärbi videot käsitsi.</value>
   </data>
   <data name="PictureSettingsView_Modulus" xml:space="preserve">
     <value>Align storage dimensions to multiples of this value.
@@ -213,7 +211,7 @@ Players will scale the image in order to achieve the specified aspect.</value>
 The actual display dimensions will differ if the pixel aspect ratio is not 1:1.</value>
   </data>
   <data name="QueueView_DeleteJob" xml:space="preserve">
-    <value>حذف این کار از صف.</value>
+    <value>Kustuta töö järjekorrast.</value>
   </data>
   <data name="QueueView_ResetJobStatus" xml:space="preserve">
     <value>Reset job status to Waiting.</value>
@@ -232,7 +230,7 @@ to limit instantaneous bitrate, look into x264's vbv-bufsize and vbv-maxrate set
     <value>Enables constant framerate output.</value>
   </data>
   <data name="Video_Encoders" xml:space="preserve">
-    <value>Available video encoders.</value>
+    <value>Saadaolevad video kodeerijad.</value>
   </data>
   <data name="Video_EncoderTune" xml:space="preserve">
     <value>Tune settings to optimize for common scenarios.
@@ -247,9 +245,9 @@ preset but before all other parameters.</value>
 Colon separated list of encoder options.</value>
   </data>
   <data name="Video_FastDecode" xml:space="preserve">
-    <value>این گزینه استفاده از پردازنده را در باز‌سازی ویدیو کاهش می‌دهد.
+    <value>Reduce decoder CPU usage.
 
-اگر دستگاه شما برای پخش خروجی مشکل دارد (تصویر گیر می‌کند)، این را بزنید.</value>
+Set this if your device is struggling to play the output (dropped frames).</value>
   </data>
   <data name="Video_Framerate" xml:space="preserve">
     <value>Output framerate.
@@ -317,18 +315,18 @@ VFR is not compatible with some players.</value>
     <value>Video angle to encode. Only applicable to multi-angle DVD and Blu-ray.</value>
   </data>
   <data name="MainView_AddPreset" xml:space="preserve">
-    <value>افزودن یک پیش‌نهاده‌ی جدید.</value>
+    <value>Lisa uus eelseadistus.</value>
   </data>
   <data name="MainView_PresetAdditionalOptions" xml:space="preserve">
-    <value>Additional Preset Options.</value>
+    <value>Eelseadistuste lisavalikud.</value>
   </data>
   <data name="MainView_Presets" xml:space="preserve">
-    <value>پیش‌نشانده‌ها دسته‌ای از تنظیمات فشرده‌سازی هستند که برای استفاده‌های عمومی طراحی شده است. می‌توانید نزدیک‌ترین گزینه را که با نیاز خود را انتخاب کنید.
-
-انتخاب پیش‌نشانده ممکن است همه‌ی تنظیمات فشرده‌سازی را تغییر دهد. تنظیمات می‌توانند پس از انتخاب یک پیش‌نشانده عوض شوند.</value>
+    <value>Presets are groups of encode settings tailored for specific scenarios. Select the one closest matching your intent.
+ 
+ Overrides all encode settings. Settings may be further adjusted after selecting a preset.</value>
   </data>
   <data name="MainView_RemovePreset" xml:space="preserve">
-    <value>حذف پیش‌نشانده‌ی انتخاب شده</value>
+    <value>Eemalda valitud eelseadistus.</value>
   </data>
   <data name="SourceSelection_TitleSpecific" xml:space="preserve">
     <value>Some Sources may contain more than one video clip, or a collection of Titles. Blu-ray and DVD Sources often have multiple Titles.
@@ -396,7 +394,7 @@ EEDI2 uses a slower, higher quality interpolation algorithm for Decomb. Useful f
 Bob attempts to better preserve motion for a slight penalty to perceived resolution.</value>
   </data>
   <data name="FilterView_Flip" xml:space="preserve">
-    <value>این گزینه تصویر را در راستای افقی وارونه (آينه) می‌کند.</value>
+    <value>Flips (mirrors) the picture on the horizontal axis.</value>
   </data>
   <data name="FilterView_InterlaceDetection" xml:space="preserve">
     <value>Interlace Detection, when enabled, allows the Deinterlace filter to only process interlaced video frames.</value>
@@ -409,7 +407,7 @@ Bob attempts to better preserve motion for a slight penalty to perceived resolut
  Default: mode=3:spatial-metric=2:motion-thresh=1:spatial-thresh=1:filter-mode=2:block-thresh=40:block-width=16:block-height=16</value>
   </data>
   <data name="FilterView_Rotate" xml:space="preserve">
-    <value>تصویر را 90 درجه در جهت عقربه‌های ساعت می‌چرخاند.</value>
+    <value>Rotate the picture clockwise in 90 degree increments.</value>
   </data>
   <data name="MainView_Duration" xml:space="preserve">
     <value>Duration of the selected source range in Hours:Minutes:Seconds</value>
@@ -436,8 +434,7 @@ Unsharp is a general purpose unsharp masking filter. It sharpens by blurring, th
 Lapsharp sharpens using convolution kernels approximating Laplacian edge filters, sometimes producing higher quality results than unsharp masking.</value>
   </data>
   <data name="FilterView_SharpenPreset" xml:space="preserve">
-    <value>پیش‌نشانده‌ی پالایه‌ی واضح‌سازی. قدرت پالایه را تنظیم کنید.
-Sharpen filter preset</value>
+    <value>Sharpen filter preset. Sets the strength of the filter.</value>
   </data>
   <data name="FilterView_SharpenTune" xml:space="preserve">
     <value>Sharpen tune. Further adjusts the Sharpen preset to optimize settings for specific scenarios.
@@ -458,28 +455,26 @@ Lapsharp's Sprite tune is useful for 1-/4-/8-/16-bit 2-dimensional games. Sprite
     <value>Aligns the initial timestamps of all audio and video streams by inserting blank frames or dropping frames. May improve audio/video sync for broken players that do not honor MP4 edit lists.</value>
   </data>
   <data name="MainView_PresetOptionsContextMenu" xml:space="preserve">
-    <value>Options to control presets.</value>
+    <value>Eelseadistuste juhtimise valikud.</value>
   </data>
   <data name="MainView_EndPoint" xml:space="preserve">
-    <value>The end point for this range.</value>
+    <value>Selle vahemiku lõpp-punkt.</value>
   </data>
   <data name="MainView_StartPoint" xml:space="preserve">
-    <value>The start point for this range.</value>
+    <value>Selle vahemiku alguspunkt.</value>
   </data>
   <data name="OptionsView_AlwaysUseDefaultPath" xml:space="preserve">
     <value>When enabled the auto name system will always use the default path. 
 When disabled, it will use the path in the destination box on the main window if populated, otherwise it will use the default path.</value>
   </data>
   <data name="FiltersView_ColourSpace" xml:space="preserve">
-    <value>پالایه‌ی فضای رنگ.
-Colourspace Filter</value>
+    <value>Colourspace Filter.</value>
   </data>
   <data name="FiltersView_ChromaSmooth" xml:space="preserve">
-    <value>پالایه‌ی نرم کردن رنگ
-Chroma Smooth</value>
+    <value>Chroma Smooth Filter</value>
   </data>
   <data name="PictureSettingsView_PaddingCustomColourTooltip" xml:space="preserve">
-    <value>اینجا می‌تواند مقادیر RGB مانند: "0xFF0000" یا نام رنگ‌هایی مانند "red" را بپذیرد. برای فهرست کامل رنگ‌ها به padding filter documentation مراجعه کنید.</value>
+    <value>This field can accept RGB values such as: "0xFF0000" or colour names such as "red". For a full list of named colours, see the padding filter documentation. </value>
   </data>
   <data name="SubtitlesView_BurnIn" xml:space="preserve">
     <value>Burn in subtitles to the video stream.

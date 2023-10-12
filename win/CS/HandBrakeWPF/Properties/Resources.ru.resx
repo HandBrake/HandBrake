@@ -122,15 +122,15 @@
 {0}</value>
   </data>
   <data name="Video_x264FastDecode" xml:space="preserve">
-    <value>Снижает нагрузку декодировщика на процессор.
+    <value>Снижает нагрузку декодера на процессор.
 
 Выберите, если ваше устройство не справляется с воспроизведением выходного файла (происходят потери кадров).</value>
   </data>
   <data name="Video_LosslessWarning" xml:space="preserve">
-    <value>Предупреждение: RF 0 это сжатие без потерь!</value>
+    <value>Предупреждение: RF 0 – сжатие без потерь!</value>
   </data>
   <data name="Video_LosslessWarningTooltip" xml:space="preserve">
-    <value>Значение 0 означает сжатие без потерь и приводит к размеру
+    <value>Значение 0 устанавливает сжатие без потерь и приводит к размеру
 файла выше исходного, если исходный файл уже не был сжатым без потерь.
 
 Шкала x264 и x265 логарифмическая, и низкие значения соответствуют высокому качеству.
@@ -139,9 +139,9 @@
 размера выходного фала. </value>
   </data>
   <data name="AddPreset_PictureSizeMode" xml:space="preserve">
-    <value>При желании, вы можете сохранить настройки изображения с этим пресетом. Есть 3 режима: 
+    <value>При желании вы можете сохранить настройки изображения с этим шаблоном. Есть 3 режима: 
 
-None: настройки изображения не сохраняются в пресете. При загрузке из исходного файла они останутся как есть, в пределах исходного разрешения. Это также влияет на анаморфотность, модуль, обрезку и т. д.
+None: настройки изображения не сохраняются в шаблоне. При загрузке из исходного файла они останутся как есть, в пределах исходного разрешения. Это также влияет на анаморфность, модуль, обрезку и т. д.
 
 Custom: при желании вы можете установить максимальную ширину и высоту. При этом кодирование будет меньше или равно этим значениям. Сохранение пропорций также будет автоматически включено.
 
@@ -169,7 +169,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.<
     <value>ВНИМАНИЕ: В данный момент у вас не настроен автоматический выбор звуковых дорожек и субтитров. Вы можете настроить правила выбора дорожек по умолчанию в Опциях.</value>
   </data>
   <data name="Presets_ResetComplete" xml:space="preserve">
-    <value>Встроенные пресеты были сброшены.</value>
+    <value>Встроенные шаблоны были сброшены.</value>
   </data>
   <data name="Presets_ResetHeader" xml:space="preserve">
     <value>Сброс завершен</value>
@@ -211,16 +211,16 @@ You may wish to configure the automatic file naming options in "Tools Menu -&gt;
     <value>Pending Jobs {0}</value>
   </data>
   <data name="Main_NewDefaultPreset" xml:space="preserve">
-    <value>Новый пресет по умолчанию: {0}</value>
+    <value>Новый шаблон по умолчанию: {0}</value>
   </data>
   <data name="Main_NewUpdate" xml:space="preserve">
     <value>Доступно новое обновление. Перейдите в Инструменты &gt; Предпочтения для установки</value>
   </data>
   <data name="Main_NoPresetSelected" xml:space="preserve">
-    <value>Пресет не выбран.</value>
+    <value>Шаблон не выбран.</value>
   </data>
   <data name="Main_NoUpdateOfBuiltInPresets" xml:space="preserve">
-    <value>Вы не можете модифицировать встроенные пресеты. Пожалуйста выберите один из ваших пресетов.</value>
+    <value>Вы не можете модифицировать встроенные шаблоны. Пожалуйста, выберите один из ваших шаблонов.</value>
   </data>
   <data name="Main_PleaseSelectFolder" xml:space="preserve">
     <value>Пожалуйста выберите папку.</value>
@@ -229,24 +229,24 @@ You may wish to configure the automatic file naming options in "Tools Menu -&gt;
     <value>Подготовка к кодированию ...</value>
   </data>
   <data name="Main_PresetErrorBuiltInName" xml:space="preserve">
-    <value>Вы не можете импортировать пресет с одним и тем же именем что и у встроенного пресета.</value>
+    <value>Вы не можете импортировать шаблон с тем же именем, что и у встроенного шаблона.</value>
   </data>
   <data name="Main_PresetOverwriteWarning" xml:space="preserve">
-    <value>Пресет "{0}" уже существует. Вы хотите перезаписать его?</value>
+    <value>Шаблон "{0}" уже существует. Вы хотите перезаписать его?</value>
   </data>
   <data name="Main_Presets" xml:space="preserve">
-    <value>Пресеты</value>
+    <value>Шаблоны</value>
   </data>
   <data name="Main_PresetUpdateConfirmation" xml:space="preserve">
-    <value>Вы уверены что хотите обновить выбранный пресет?</value>
+    <value>Вы уверены, что хотите обновить выбранный шаблон?</value>
   </data>
   <data name="Main_PresetUpdated" xml:space="preserve">
-    <value>Пресет был обновлен с вашими текущими настройками.</value>
+    <value>Шаблон обновлён с учётом ваших текущих настроек.</value>
   </data>
   <data name="Main_PresetUpdateNotification" xml:space="preserve">
-    <value>HandBrake обнаружил, что ваши встроенные пресеты устарели... Эти пресеты были обновлены.
-Ваши пользовательские пресеты не были обновлены, поэтому вы можете либо их пересоздать или добавить заново.
-Предыдущий файл user_presets.xml был возвращён обратно.</value>
+    <value>HandBrake обнаружил, что встроенные шаблоны устарели... Теперь они обновлены.
+Ваши пользовательские шаблоны обновлены не были, поэтому вам, возможно, придётся создать их заново, удалив и снова добавив.
+Резервная копия файла user_presets.xml сохранена.</value>
   </data>
   <data name="Main_QueueFinished" xml:space="preserve">
     <value>Очередь завершена</value>
@@ -273,10 +273,10 @@ You may wish to configure the automatic file naming options in "Tools Menu -&gt;
     <value>Вы должны сперва отсканировать исходник и настроить задание прежде, чем начинать кодирование. Нажмите на кнопку 'Исходник' на панели инструментов для продолжения.</value>
   </data>
   <data name="Main_SelectPreset" xml:space="preserve">
-    <value>Пожалуйста, удостоверьтесь в том, что выбран один из ваших пресетов. Обратите внимание, что вы не можете экспортировать встроенные пресеты.</value>
+    <value>Пожалуйста, удостоверьтесь в том, что выбран один из ваших шаблонов. Обратите внимание, что вы не можете экспортировать встроенные шаблоны.</value>
   </data>
   <data name="Main_SelectPresetForUpdate" xml:space="preserve">
-    <value>Пожалуйста выберите пресет для обновления.</value>
+    <value>Пожалуйста, выберите шаблон для обновления.</value>
   </data>
   <data name="Main_SelectSource" xml:space="preserve">
     <value>Выберите 'Источник' для продолжения</value>
@@ -300,20 +300,20 @@ You may wish to configure the automatic file naming options in "Tools Menu -&gt;
     <value>Обновлен</value>
   </data>
   <data name="Preset_OldVersion_Header" xml:space="preserve">
-    <value>Версия пресета</value>
+    <value>Версия шаблона</value>
   </data>
   <data name="Preset_OldVersion_Message" xml:space="preserve">
-    <value>Пресет, который вы пытаетесь импортировать, относится к другой версии HandBrake.
-Невозможно импортировать все значения из этого пресета.
+    <value>Шаблон, который вы пытаетесь импортировать, относится к другой версии HandBrake.
+Импортировать все значения из этого шаблона невозможно.
 
 
-Хотите продолжить?</value>
+Всё равно продолжить?</value>
   </data>
   <data name="Preset_UnableToImport_Header" xml:space="preserve">
-    <value>Невозможно импортировать пресет!</value>
+    <value>Невозможно импортировать шаблон!</value>
   </data>
   <data name="Preset_UnableToImport_Message" xml:space="preserve">
-    <value>Невозможно импортировать пресет, т. к. он поврежден или относится к старой версии HandBrake.</value>
+    <value>Невозможно импортировать шаблон, так как он повреждён или относится к старой версии HandBrake.</value>
   </data>
   <data name="Main_SetDestination" xml:space="preserve">
     <value>Сначала вы должны указать путь назначения для выходного файла перед тем как добавлять его в очередь.</value>
@@ -340,11 +340,11 @@ You may wish to configure the automatic file naming options in "Tools Menu -&gt;
     <value>Вы по-прежнему сможете получить доступ к страницам справки, посетив веб-сайт по адресу: https://handbrake.fr</value>
   </data>
   <data name="Main_PresetImportFailed" xml:space="preserve">
-    <value>Невозможно импортировать выбранный пресет.</value>
+    <value>Невозможно импортировать выбранный шаблон.</value>
   </data>
   <data name="Main_PresetImportFailedSolution" xml:space="preserve">
-    <value>Пресет, возможно, поврежден, или был создан в более ранней версии HandBrake, которая не поддерживается.
-Пресеты из старых версий должны быть созданы заново в текущей версии.</value>
+    <value>Возможно, шаблон повреждён или был создан в неподдерживаемой версии HandBrake.
+Шаблоны из старых версий должны быть созданы заново в текущей версии.</value>
   </data>
   <data name="Video_EncoderExtraArgsTooltip" xml:space="preserve">
     <value>Дополнительные расширенные аргументы которые могут быть переданы кодировщику видео.</value>
@@ -388,19 +388,19 @@ The Activity log may have further information.</value>
     <value>Запустить очередь</value>
   </data>
   <data name="MainViewModel_CanNotDeleteDefaultPreset" xml:space="preserve">
-    <value>Вы не можете удалить пресет по умолчанию. Сперва, пожалуйста, выберите другой пресет.</value>
+    <value>Вы не можете удалить шаблон по умолчанию. Пожалуйста, выберите другой шаблон по умолчанию.</value>
   </data>
   <data name="MainViewModel_PresetRemove_AreYouSure" xml:space="preserve">
-    <value>Вы уверены что хотите удалить пресет: </value>
+    <value>Вы уверены что хотите удалить шаблон: </value>
   </data>
   <data name="MainViewModel_EncodeStatusChanged_StatusLabel" xml:space="preserve">
     <value>Encoding: Pass {0} of {1},  {2:00.00}%, FPS: {3:000.0},  Avg FPS: {4:000.0},  Time Remaining: {5},  Elapsed: {6} {7}</value>
   </data>
   <data name="AddPresetViewModel_PresetMustProvideName" xml:space="preserve">
-    <value>Пресет должен иметь имя. Пожалуйста, заполните поле 'Название пресета'.</value>
+    <value>У шаблона должно быть название. Пожалуйста, заполните поле «Название шаблона».</value>
   </data>
   <data name="AddPresetViewModel_PresetWithSameNameOverwriteWarning" xml:space="preserve">
-    <value>Пресет с этим названием уже существует. Хотите переписать?</value>
+    <value>Шаблон с таким названием уже существует. Хотите переписать?</value>
   </data>
   <data name="AddPresetViewModel_YouMustFirstScanSource" xml:space="preserve">
     <value>Вы должны сперва сканировать источник, прежде, чем использовать опцию 'Source Maximum'.</value>
@@ -409,7 +409,7 @@ The Activity log may have further information.</value>
     <value>Поля Ползовательской Ширины или Высоты должны быть заполнены для опции 'Пользовательское'.</value>
   </data>
   <data name="AddPresetViewModel_UnableToAddPreset" xml:space="preserve">
-    <value>Невозможно добавить пресет</value>
+    <value>Невозможно добавить шаблон</value>
   </data>
   <data name="UnknownError" xml:space="preserve">
     <value>Неизвестная ошибка</value>
@@ -452,7 +452,7 @@ The Activity log may have further information.</value>
 Зайдите на сайт для получения более подробной информации.</value>
   </data>
   <data name="OptionsViewModel_NoNewUpdates" xml:space="preserve">
-    <value>На данный момент нет новых обновлении.</value>
+    <value>Новых версий не обнаружено.</value>
   </data>
   <data name="OptionsViewModel_UpdateDownloaded" xml:space="preserve">
     <value>Обновление загружено</value>
@@ -555,12 +555,12 @@ The Activity log may have further information.</value>
     <value>Архивированный файл:</value>
   </data>
   <data name="PresetService_UnableToLoad" xml:space="preserve">
-    <value>Невозможно загрузить пресеты.</value>
+    <value>Невозможно загрузить шаблоны.</value>
   </data>
   <data name="PresetService_UnableToLoadPresets" xml:space="preserve">
-    <value>HandBrake не смог загрузить ваш файл с пресетами. Возможно, этот пресет был создан в старой неподдерживаемой версии HandBrake или поврежден.
+    <value>HandBrake не смог загрузить ваш файл с шаблонами. Возможно, он был создан в старой неподдерживаемой версии HandBrake или повреждён.
 
-Файл с вашими старыми пресетами был архивированы здесь: </value>
+Ваш старый файл с шаблонами сохранён в: </value>
   </data>
   <data name="Main_QueueFinishedErrors" xml:space="preserve">
     <value> with {0} errors detected. Check Queue window for details.</value>
@@ -622,8 +622,8 @@ The Activity log may have further information.</value>
     <value>При попытке остановки сканирования была обнаружена ошибка. Пожалуйста, перезапустите HandBrake.</value>
   </data>
   <data name="Presets_PresetForceReset" xml:space="preserve">
-    <value>HandBrake не может обновить файл с вашими пресетами в формат новой версии.
-Ваш файл с пресетами будет архивирован, а новый будет создан. Вам будет необходимо создать ваши пресеты заново.</value>
+    <value>HandBrake не может обновить файл с вашими шаблонами в формат новой версии.
+Будет создан новый файл с шаблонами, а ваш старый – архивирован. Вам будет необходимо создать ваши шаблоны заново.</value>
   </data>
   <data name="SettingService_SaveErrorReset" xml:space="preserve">
     <value>Некоторые измененные вами настройки вступят в силу при повторном запуске HandBrake.</value>
@@ -673,7 +673,7 @@ The Activity log may have further information.</value>
 Encoding 1 Job</value>
   </data>
   <data name="PauseOnLowDiskspace" xml:space="preserve">
-    <value>Очередь приостановлена. Внимание, на диске, на котором находится кодируемый файл, мало свободного места. Пожалуйста, освободите немного места и нажмите "Старт" для продолжения. Вы также можете выбрать минимальный уровень пространства в настройках.</value>
+    <value>Очередь приостановлена. На диске, на котором находится кодируемый файл, мало свободного места. Освободите пространство и нажмите "Старт" для продолжения. Вы также можете выбрать минимальный уровень памяти в настройках.</value>
   </data>
   <data name="Main_QueuePaused" xml:space="preserve">
     <value>Очередь приостановлена</value>
@@ -682,11 +682,11 @@ Encoding 1 Job</value>
     <value>Очередь приостановлена</value>
   </data>
   <data name="Main_LowDiskspace" xml:space="preserve">
-    <value>Your destination directory is low on diskspace. 
+    <value>В целевом каталоге недостаточно дискового пространства. 
 
-You can configure the level at which this alert appears in preferences. 
+Вы можете настроить объём памяти, при котором будет появляться это предупреждение. 
 
-Do you wish to continue? </value>
+Вы хотите продолжить?</value>
   </data>
   <data name="Queue_UnableToResetJob" xml:space="preserve">
     <value>Невозможно сбросить состояние задания, так как оно не в ошибочном или завершенном состоянии</value>
@@ -707,10 +707,10 @@ Do you wish to continue? </value>
     <value>Предпросмотр ({0}% от настоящего размера)</value>
   </data>
   <data name="OsBitnessWarning" xml:space="preserve">
-    <value>HandBrake requires a 64bit version of Windows 10 or later to run.</value>
+    <value>Для работы HandBrake требуется 64-разрядная версия Windows 10 или более поздняя.</value>
   </data>
   <data name="OsVersionWarning" xml:space="preserve">
-    <value>HandBrake requires Windows 10 or later to run. Version 0.9.9 (XP), 0.10.5 (Vista), 1.3.3 (7 and 8.x) were the last versions to support these older operating systems.</value>
+    <value>Для работы HandBrake требуется Windows 10 или более поздняя версия. Версии 0.9.9 (XP), 0.10.5 (Vista), 1.3.3 (7 и 8.x) были последними, поддерживающими эти старые операционные системы.</value>
   </data>
   <data name="Main_ContinueAddingToQueue" xml:space="preserve">
     <value>Вы желаете продолжить, пытаясь добавить остальные?</value>
@@ -737,7 +737,7 @@ Hint: File overwrite behaviour can be controlled in preferences. </value>
     <value>-- Добавить новую категорию --</value>
   </data>
   <data name="AddPresetView_AddPreset" xml:space="preserve">
-    <value>Добавить пресет</value>
+    <value>Добавить шаблон</value>
   </data>
   <data name="AddPresetView_Category" xml:space="preserve">
     <value>Категория:</value>
@@ -812,7 +812,7 @@ Hint: File overwrite behaviour can be controlled in preferences. </value>
     <value>Название главы</value>
   </data>
   <data name="ChaptersView_ChapterNumber" xml:space="preserve">
-    <value>Номер главы</value>
+    <value>Chapter</value>
   </data>
   <data name="ChaptersView_CreateChapterMarkers" xml:space="preserve">
     <value>Создать маркеры глав</value>
@@ -860,16 +860,16 @@ Hint: File overwrite behaviour can be controlled in preferences. </value>
     <value>Деинтерлейсинг:</value>
   </data>
   <data name="FiltersView_DeinterlacePreset" xml:space="preserve">
-    <value>Пресет:</value>
+    <value>Шаблон:</value>
   </data>
   <data name="FiltersView_DeinterlacePresetAuto" xml:space="preserve">
-    <value>Пресет деинтерлейсинга</value>
+    <value>Шаблон деинтерлейсинга</value>
   </data>
   <data name="FiltersView_Denoise" xml:space="preserve">
     <value>Шумодав:</value>
   </data>
   <data name="FiltersView_DenoisePresetAuto" xml:space="preserve">
-    <value>Пресет шумодава</value>
+    <value>Шаблон шумоподавления</value>
   </data>
   <data name="FiltersView_DenoiseTuneAuto" xml:space="preserve">
     <value>Настройка шумодава</value>
@@ -890,7 +890,7 @@ Hint: File overwrite behaviour can be controlled in preferences. </value>
     <value>Обнаружение интерлейсинга:</value>
   </data>
   <data name="FiltersView_Preset" xml:space="preserve">
-    <value>Пресет:</value>
+    <value>Шаблон:</value>
   </data>
   <data name="FiltersView_Rotate" xml:space="preserve">
     <value>Rotation:</value>
@@ -899,7 +899,7 @@ Hint: File overwrite behaviour can be controlled in preferences. </value>
     <value>Sharpen:</value>
   </data>
   <data name="FiltersView_SharpenPresetAuto" xml:space="preserve">
-    <value>Пресет увеличения резкости</value>
+    <value>Шаблон увеличения резкости</value>
   </data>
   <data name="FiltersView_SharpenTuneAuto" xml:space="preserve">
     <value>Настройка увеличения резкости</value>
@@ -1028,13 +1028,13 @@ Hint: File overwrite behaviour can be controlled in preferences. </value>
     <value>Edit Preset</value>
   </data>
   <data name="MainView_PresetOptionsContextMenu" xml:space="preserve">
-    <value>Контекстное меню опций пресетов</value>
+    <value>Контекстное меню опций шаблонов</value>
   </data>
   <data name="MainView_PresetRemove" xml:space="preserve">
-    <value>Удалить пресет</value>
+    <value>Удалить шаблон</value>
   </data>
   <data name="MainView_Presets" xml:space="preserve">
-    <value>Пресеты</value>
+    <value>Шаблоны</value>
   </data>
   <data name="MainView_Preview" xml:space="preserve">
     <value>Предпросмотр</value>
@@ -1052,10 +1052,10 @@ Hint: File overwrite behaviour can be controlled in preferences. </value>
     <value>Удалить</value>
   </data>
   <data name="MainView_ResetBuiltInPresets" xml:space="preserve">
-    <value>Сбросить встроенные пресеты</value>
+    <value>Сбросить встроенные шаблоны</value>
   </data>
   <data name="MainView_SaveNewPreset" xml:space="preserve">
-    <value>Сохранить новый пресет</value>
+    <value>Сохранить новый шаблон</value>
   </data>
   <data name="MainView_Searching" xml:space="preserve">
     <value>Поиск начального времени</value>
@@ -1148,7 +1148,7 @@ Hint: File overwrite behaviour can be controlled in preferences. </value>
     <value>Показывать состояние кодирования в заголовке окна приложения.</value>
   </data>
   <data name="Options_7DayLogClear" xml:space="preserve">
-    <value>Clear Log files older than 7 days</value>
+    <value>Очищать файлы журнала старше 7 дней</value>
   </data>
   <data name="Options_About" xml:space="preserve">
     <value>О HandBrake</value>
@@ -1169,7 +1169,7 @@ Hint: File overwrite behaviour can be controlled in preferences. </value>
     <value>Автоматически именовать выходные файлы</value>
   </data>
   <data name="Options_CheckForUpdates" xml:space="preserve">
-    <value>Проверить наличие обновлений</value>
+    <value>Проверить обновления</value>
   </data>
   <data name="Options_ClearCompleted" xml:space="preserve">
     <value>Всегда убирать из очереди завершенные задания после окончания кодирования</value>
@@ -1211,19 +1211,19 @@ Hint: File overwrite behaviour can be controlled in preferences. </value>
     <value>Общие</value>
   </data>
   <data name="Options_Logging" xml:space="preserve">
-    <value>Логгирование</value>
+    <value>Логирование</value>
   </data>
   <data name="Options_LogLevel" xml:space="preserve">
-    <value>Подробность логгирования:</value>
+    <value>Подробность логирования:</value>
   </data>
   <data name="Options_LogPath" xml:space="preserve">
     <value>Path:</value>
   </data>
   <data name="Options_LowDiskspaceSize" xml:space="preserve">
-    <value>Pause queue if disk space is low</value>
+    <value>Приостанавливать очередь, если на диске мало места</value>
   </data>
   <data name="Options_MinimiseTray" xml:space="preserve">
-    <value>Минимизировать в системный трей (необходим перезапуск)</value>
+    <value>Сворачивать в системный трей (необходим перезапуск)</value>
   </data>
   <data name="Options_MinTitleScanLength" xml:space="preserve">
     <value>Минимальная длительность заголовка DVD и Blu-ray. Заголовки меньшей длительности будут пропущены:</value>
@@ -1241,16 +1241,16 @@ Hint: File overwrite behaviour can be controlled in preferences. </value>
     <value>Путь: </value>
   </data>
   <data name="Options_PathToMediaPlayer" xml:space="preserve">
-    <value>Path to Media Player</value>
+    <value>Путь к медиаплееру</value>
   </data>
   <data name="Options_PreventSleep" xml:space="preserve">
-    <value>Не давать системе уснуть, если происходит кодирование</value>
+    <value>Предотвращать переход системы в спящий режим во время кодирования</value>
   </data>
   <data name="Options_PreviewScanCount" xml:space="preserve">
-    <value>Количество изображений-превью для сканирования:</value>
+    <value>Количество изображений-превью:</value>
   </data>
   <data name="Options_PriorityLevel" xml:space="preserve">
-    <value>Work Priority Level:</value>
+    <value>Приоритет процесса кодирования</value>
   </data>
   <data name="Options_QsvDecode" xml:space="preserve">
     <value>Prefer use of Intel QuickSync for decoding video when using the QuickSync encoder and the hardware is available for use.</value>
@@ -1299,7 +1299,7 @@ VLC and MPC-HC are supported. Other players may also work but are not validated.
     <value>Посмотреть папку с логами</value>
   </data>
   <data name="Options_WhenDone" xml:space="preserve">
-    <value>Когда завершено</value>
+    <value>По завершении</value>
   </data>
   <data name="Options_x264" xml:space="preserve">
     <value>Настройки x264/5</value>
@@ -1371,7 +1371,7 @@ VLC and MPC-HC are supported. Other players may also work but are not validated.
     <value>Добавить в очередь</value>
   </data>
   <data name="QueueSelection_UsingPreset" xml:space="preserve">
-    <value>Выбранные заглавия будут добавлены используя пресет "{0}".</value>
+    <value>Выбранные заглавия будут добавлены, используя шаблон "{0}".</value>
   </data>
   <data name="QueueView_Advanced" xml:space="preserve">
     <value>Video Options:</value>
@@ -1551,7 +1551,7 @@ VLC and MPC-HC are supported. Other players may also work but are not validated.
     <value>Архив предыдущей очереди доступен.</value>
   </data>
   <data name="SourceSelection_SingleVideoFile" xml:space="preserve">
-    <value>Открыть один видеофайл.</value>
+    <value>Open video file(s).</value>
   </data>
   <data name="SourceSelection_SourceSelection" xml:space="preserve">
     <value>Выбор исходника</value>
@@ -1659,7 +1659,7 @@ VLC and MPC-HC are supported. Other players may also work but are not validated.
     <value>Уровень кодирования:</value>
   </data>
   <data name="VideoView_EncoderPreset" xml:space="preserve">
-    <value>Пресет кодирования:</value>
+    <value>Шаблон кодирования:</value>
   </data>
   <data name="VideoView_EncoderProfile" xml:space="preserve">
     <value>Профиль кодирования:</value>
@@ -1704,7 +1704,7 @@ VLC and MPC-HC are supported. Other players may also work but are not validated.
     <value>О HandBrake</value>
   </data>
   <data name="SourceSelection_DropFileHere" xml:space="preserve">
-    <value>Или бросьте файл или папку сюда...</value>
+    <value>Or drop a file, set of files or folder here ...</value>
   </data>
   <data name="SourceSelection_Help" xml:space="preserve">
     <value>Помощь</value>
@@ -1737,7 +1737,7 @@ VLC and MPC-HC are supported. Other players may also work but are not validated.
     <value>_Лог активности</value>
   </data>
   <data name="MainView_CheckForUpdates" xml:space="preserve">
-    <value>_Проверить наличие обновлений</value>
+    <value>_Проверить обновления</value>
   </data>
   <data name="MainView_Exit" xml:space="preserve">
     <value>_Выход</value>
@@ -1761,19 +1761,19 @@ VLC and MPC-HC are supported. Other players may also work but are not validated.
     <value>_Предпочтения</value>
   </data>
   <data name="MainView_PresetsMenu" xml:space="preserve">
-    <value>_Пресеты</value>
+    <value>_Шаблоны</value>
   </data>
   <data name="MainView_QueueMenu" xml:space="preserve">
     <value>_Очередь</value>
   </data>
   <data name="MainView_ResetPresets" xml:space="preserve">
-    <value>_Сбросить встроенные пресеты</value>
+    <value>_Сбросить встроенные шаблоны</value>
   </data>
   <data name="MainView_SetCurrentAsDefault" xml:space="preserve">
     <value>_Установить по умолчанию</value>
   </data>
   <data name="MainView_ShowPresetPanel" xml:space="preserve">
-    <value>Показывать панель с пресетами</value>
+    <value>Показывать панель с шаблонами</value>
   </data>
   <data name="MainView_ShowQueueMenu" xml:space="preserve">
     <value>_Показать очередь</value>
@@ -1782,7 +1782,7 @@ VLC and MPC-HC are supported. Other players may also work but are not validated.
     <value>_Инструменты</value>
   </data>
   <data name="OptionsView_CheckingForUpdates" xml:space="preserve">
-    <value>Проверка обновления ...</value>
+    <value>Проверка обновлений...</value>
   </data>
   <data name="OptionsView_ClearLogDirConfirm" xml:space="preserve">
     <value>Вы уверены, что хотите очистить папку с логами?</value>
@@ -1833,9 +1833,9 @@ VLC and MPC-HC are supported. Other players may also work but are not validated.
     <value>Показать 'Добавить выбранное в очередь' на панели инструментов</value>
   </data>
   <data name="OptionsView_HardwareDetectFailed" xml:space="preserve">
-    <value>Hardware encoding support is currently disabled. If you did not start HandBrake with the "--no-hardware" option, please make sure you are running up-to-date drivers for all graphics adaptors in this system.
+    <value>В настоящее время поддержка аппаратного кодирования отключена. Если вы не запускали HandBrake с опцией "--no-hardware", пожалуйста, убедитесь, что у вас установлены актуальные драйверы для всех графических адаптеров в системе.
 
-This will not impact any of the software encoders.</value>
+Это не повлияет ни на один из программных кодировщиков.</value>
   </data>
   <data name="Main_PleaseFixSubtitleSettings" xml:space="preserve">
     <value>Пожалуйста, исправьте свои настройки субтитров перед тем, как продолжить.</value>
@@ -1866,20 +1866,20 @@ Time Remaining: {5},  Elapsed: {6} {7}</value>
     <value>Portable Mode: Unable to create Storage directory. Please check the path is correct and is writable.</value>
   </data>
   <data name="Portable_IniFileError" xml:space="preserve">
-    <value>Портативный режим: Невозможно прочитать файл portable.ini. Возможно, в этом файле ошибка. Пожалуйста, попробуйте снова с использование файла portable.ini.template в качестве руководства.</value>
+    <value>Портативный режим: Невозможно прочесть portable.ini. Возможно, в этом файле ошибка. Пожалуйста, попробуйте снова, используя файл portable.ini.template в качестве руководства.</value>
   </data>
   <data name="OptionsView_FormatOptions" xml:space="preserve">
     <value>Replacement Options:
 You can drag/drop or enter the text above.</value>
   </data>
   <data name="FileOverwriteBehaviours_Ask" xml:space="preserve">
-    <value>Спрашивать при перезаписи файла</value>
+    <value>Спрашивать</value>
   </data>
   <data name="FileOverwriteBehaviours_Autoname" xml:space="preserve">
     <value>Попробовать автоматически переименовать файл</value>
   </data>
   <data name="FileOverwriteBehaviours_Overwrite" xml:space="preserve">
-    <value>Перезаписать файл</value>
+    <value>Перезаписать</value>
   </data>
   <data name="Options_UIBehaviour" xml:space="preserve">
     <value>Поведение пользовательского интерфейса</value>
@@ -1891,13 +1891,13 @@ You can drag/drop or enter the text above.</value>
     <value>Кодирование завершено</value>
   </data>
   <data name="Options_Notifications" xml:space="preserve">
-    <value>Sound Notifications</value>
+    <value>Звуковые уведомления</value>
   </data>
   <data name="Options_QueueCompleted" xml:space="preserve">
     <value>Очередь завершена</value>
   </data>
   <data name="Options_WhenDoneColon" xml:space="preserve">
-    <value>Когда завершена:</value>
+    <value>По завершении:</value>
   </data>
   <data name="OptionsView_FileCollisionBehaviour" xml:space="preserve">
     <value>Поведение при совпадении имен файлов</value>
@@ -1909,10 +1909,10 @@ You can drag/drop or enter the text above.</value>
     <value>Префикс</value>
   </data>
   <data name="CollisionBehaviour_AppendNumber" xml:space="preserve">
-    <value>Присоединять число</value>
+    <value>Добавлять число</value>
   </data>
   <data name="FiltersViewAuto_DeblockPreset" xml:space="preserve">
-    <value>Пресет деблокинга</value>
+    <value>Шаблон деблокинга</value>
   </data>
   <data name="FiltersViewAuto_DeblockTune" xml:space="preserve">
     <value>Настройка деблокинга</value>
@@ -1930,18 +1930,18 @@ You can drag/drop or enter the text above.</value>
     <value>Возможно восстановление очереди</value>
   </data>
   <data name="PresetService_ImportingBuiltInWarning" xml:space="preserve">
-    <value>Ваш файл с пресетами содержал встроенные пресеты. Функция импортирования не поддерживает их импортирование. Пожалуйста, используйте 'Меню пресетов -&gt; Сбросить встроенные пресеты' для восстановления стандартных пресетов.
+    <value>Ваш файл с шаблонами содержал встроенные шаблоны. Их импортирование не поддерживается. Пожалуйста, используйте «Меню шаблонов -&gt; Сбросить встроенные шаблоны» для восстановления стандартных шаблонов.
 
-Любые пользовательские пресеты были импортированы, если это было возможно.</value>
+Пользовательские шаблоны были импортированы, где это возможно.</value>
   </data>
   <data name="Options_PromptBeforeAction" xml:space="preserve">
-    <value>Немедленно выполнять действие. (Это отключит 60-секундный диалог подтверждения)</value>
+    <value>Выполнить действие немедленно (60-секундное диалоговое окно подтверждения будет отключено).</value>
   </data>
   <data name="Browse" xml:space="preserve">
     <value>Выбрать</value>
   </data>
   <data name="OptionsView_MediaFileNotSet" xml:space="preserve">
-    <value>Аудио-файл не был установлен. Пожалуйста, нажмите "Выбрать" для выбора файла wav или mp3 для воспроизведения.</value>
+    <value>Аудиофайл не был установлен. Нажмите "Выбрать" для выбора файла WAV или MP3.</value>
   </data>
   <data name="OptionsView_Play" xml:space="preserve">
     <value>Воспроизвести</value>
@@ -2022,7 +2022,7 @@ You can drag/drop or enter the text above.</value>
     <value>Общие</value>
   </data>
   <data name="OptionsViewModel_CheckForUpdatesMsg" xml:space="preserve">
-    <value>Нажмите 'Проверить наличие обновлений' для проверки наличия новых версий</value>
+    <value>Нажмите 'Проверить обновления' для проверки наличия новых версий</value>
   </data>
   <data name="OptionsView_BackButton" xml:space="preserve">
     <value>&lt; Назад</value>
@@ -2109,10 +2109,10 @@ You can drag/drop or enter the text above.</value>
     <value>Всегда использовать разрешение источника</value>
   </data>
   <data name="ProcessPriority_AboveNormal" xml:space="preserve">
-    <value>Выше нормального</value>
+    <value>Выше среднего</value>
   </data>
   <data name="ProcessPriority_BelowNormal" xml:space="preserve">
-    <value>Ничего нормального</value>
+    <value>Ниже среднего</value>
   </data>
   <data name="ProcessPriority_High" xml:space="preserve">
     <value>Высокий</value>
@@ -2121,7 +2121,7 @@ You can drag/drop or enter the text above.</value>
     <value>Низкий</value>
   </data>
   <data name="ProcessPriority_Normal" xml:space="preserve">
-    <value>Нормальный</value>
+    <value>Средний</value>
   </data>
   <data name="UpdateCheck_Monthly" xml:space="preserve">
     <value>Ежемесячно</value>
@@ -2136,7 +2136,7 @@ You can drag/drop or enter the text above.</value>
     <value>Port range must be between 5000 and 32767</value>
   </data>
   <data name="OptionsView_SendFileToArgPlaceholders" xml:space="preserve">
-    <value>Replacement Placeholders: {source} {destination} {exit_code}</value>
+    <value>Переменные для замены: {source} {destination} {exit_code}</value>
     <comment>Note: {source}, {destination} and {exit_code} are not translatable. </comment>
   </data>
   <data name="SourceSelection_UpdateAvailable" xml:space="preserve">
@@ -2149,7 +2149,7 @@ You can drag/drop or enter the text above.</value>
     <value>Low battery level:</value>
   </data>
   <data name="Options_PauseOnLowBattery" xml:space="preserve">
-    <value>Pause any running jobs when the battery gets low.</value>
+    <value>Приостанавливать задания при низком уровне заряда батареи.</value>
   </data>
   <data name="SubtitleView_AddRemainingCC" xml:space="preserve">
     <value>Добавить все оставшиеся субтитры</value>
@@ -2162,10 +2162,10 @@ This will also stop any existing running jobs.</value>
     <value>Duplicates Detected</value>
   </data>
   <data name="OptionsView_EnableQuicksyncLowPower" xml:space="preserve">
-    <value>Enable Low Power QuickSync Hardware (where supported).</value>
+    <value>Включить аппаратное обеспечение QuickSync с низким энергопотреблением (если поддерживается).</value>
   </data>
   <data name="QueueView_JobInformationNotAvailable" xml:space="preserve">
-    <value>Please select a single job to view summary information.</value>
+    <value>Пожалуйста, выберите задание для просмотра краткой информации.</value>
   </data>
   <data name="OptionsView_EnableWorkerProcesses" xml:space="preserve">
     <value>Run each queued job in a separate worker process.</value>
@@ -2174,14 +2174,14 @@ This will also stop any existing running jobs.</value>
     <value>Default network port for worker:</value>
   </data>
   <data name="Presets_NotAvailableForUse" xml:space="preserve">
-    <value>The preset you have selected is not available for use on this system.
+    <value>Выбранный шаблон недоступен для использования на данной системе.
 
-This is typically an indication that your system does not support the hardware required to utilise it.
+Обычно это значит, что ваша система не поддерживает аппаратное обеспечение, необходимое для его использования.
 
-Please choose a different preset.</value>
+Пожалуйста, выберите другой шаблон.</value>
   </data>
   <data name="OptionsView_ProcessIsolation" xml:space="preserve">
-    <value>Process Isolation</value>
+    <value>Изоляция процесса</value>
   </data>
   <data name="OptionsView_ProcessIsolation_Warning1" xml:space="preserve">
     <value>Please note, using this feature will start an HTTP server bound to 127.0.0.1 on the port stated.</value>
@@ -2196,7 +2196,7 @@ Please choose a different preset.</value>
     <value>Отмена</value>
   </data>
   <data name="MainView_SelectedPresets" xml:space="preserve">
-    <value>Пресет:</value>
+    <value>Шаблон:</value>
   </data>
   <data name="SummaryView_SameAsSource" xml:space="preserve">
     <value>Same as source</value>
@@ -2280,7 +2280,7 @@ Please choose a different preset.</value>
     <value>Manage Presets</value>
   </data>
   <data name="ManagePresetView_DeleteBuiltIn" xml:space="preserve">
-    <value>Delete Built-in Presets</value>
+    <value>Удалить встроенные шаблоны</value>
   </data>
   <data name="ManagePresetView_Export" xml:space="preserve">
     <value>Export selected preset</value>
@@ -2292,13 +2292,13 @@ Please choose a different preset.</value>
     <value>Preset Information:</value>
   </data>
   <data name="ManagePresetView_RestrictedPreset" xml:space="preserve">
-    <value>Built in presets can not be modified.</value>
+    <value>Встроенные шаблоны не могут быть изменены.</value>
   </data>
   <data name="ManagePresetView_SetDefault" xml:space="preserve">
     <value>Set selected preset as default</value>
   </data>
   <data name="PresetManagerView_Delete" xml:space="preserve">
-    <value>Удалить пресет</value>
+    <value>Удалить шаблон</value>
   </data>
   <data name="OptionsView_NotSupported" xml:space="preserve">
     <value>(Not supported on this system)</value>
@@ -2325,7 +2325,7 @@ Please choose a different preset.</value>
     <value>Export all user presets</value>
   </data>
   <data name="Options_LowDiskspaceLevelText" xml:space="preserve">
-    <value>Level at which low disk space alerts show:</value>
+    <value>Предупреждать при объёме памяти менее:</value>
   </data>
   <data name="OptionsView_SimultaneousHardwareLimitNotice" xml:space="preserve">
     <value>Notice: This is the upper limit of simultaneous jobs. Hardware limitations may take effect which lowers the actual number of simultaneous jobs during encoding. Setting will only take affect on the next queue batch or app restart.</value>
@@ -2361,7 +2361,7 @@ Please choose a different preset.</value>
     <value>Theme:</value>
   </data>
   <data name="OptionsView_RequiresRestart" xml:space="preserve">
-    <value>(Requires Restart)</value>
+    <value>(необходим перезапуск)</value>
   </data>
   <data name="FiltersView_ChromaSmooth" xml:space="preserve">
     <value>Chroma Smooth:</value>
@@ -2485,7 +2485,7 @@ You can change your choice at any time by changing the options in Preferences -&
     <value>Choose how presets are displayed in menus:</value>
   </data>
   <data name="QueueView_SelectedPresets" xml:space="preserve">
-    <value>Пресет:</value>
+    <value>Шаблон:</value>
   </data>
   <data name="LogViewModel_Complete" xml:space="preserve">
     <value>[Finished]</value>
@@ -2521,22 +2521,22 @@ You can change your choice at any time by changing the options in Preferences -&
     <value>Сбросить</value>
   </data>
   <data name="OptionsViewModel_ResetHandBrakePresetsQuestion" xml:space="preserve">
-    <value>Are you sure you wish to reset all built-in presets?</value>
+    <value>Сбросить все встроенные шаблоны?</value>
   </data>
   <data name="OptionsView_ResetBuildInPresets" xml:space="preserve">
-    <value>Reset all built-in presets to HandBrake defaults:</value>
+    <value>Сбросить все встроенные шаблоны на значения по умолчанию:</value>
   </data>
   <data name="OptionsView_ResetBuildInPresetsNotice" xml:space="preserve">
-    <value>(User presets will not be reset)</value>
+    <value>(Пользовательские шаблоны не будут затронуты)</value>
   </data>
   <data name="OptionsView_ResetSettingsToDefaults" xml:space="preserve">
-    <value>Reset all HandBrake settings back to defaults:</value>
+    <value>Сбросить все настройки HandBrake до значений по умолчанию:</value>
   </data>
   <data name="Options_BuiltInPresets" xml:space="preserve">
-    <value>Built In Presets</value>
+    <value>Встроенные шаблоны</value>
   </data>
   <data name="Options_UserSettings" xml:space="preserve">
-    <value>User Settings</value>
+    <value>Пользовательские настройки</value>
   </data>
   <data name="PresetDisplayMode_FloatingPanel" xml:space="preserve">
     <value>Floating Treeview</value>
@@ -2558,7 +2558,7 @@ Only queue files from the current version are supported.</value>
     <value>Your HandBrake queue is done!</value>
   </data>
   <data name="OptionsView_NotificationRemovalSubText" xml:space="preserve">
-    <value>This will also disable the show windows taskbar notifications options on the 'When Done' tab. Re-enable these if you want to re-activate this feature.</value>
+    <value>Это также отключит опции показа уведомлений на панели задач Windows на вкладке "По окончании". Включите их заново, если хотите снова активировать эту функцию.</value>
   </data>
   <data name="OptionsView_NotificationRemovalText" xml:space="preserve">
     <value>Remove HandBrake from the Windows notifications control panel.</value>
@@ -2570,10 +2570,10 @@ Only queue files from the current version are supported.</value>
     <value>Notification settings have been removed.</value>
   </data>
   <data name="OptionsView_UninstallToast" xml:space="preserve">
-    <value>Clear &amp; Uninstall</value>
+    <value>Очистить и удалить</value>
   </data>
   <data name="OptionsView_WindowsNotification" xml:space="preserve">
-    <value>Send a notification to the Windows Taskbar.</value>
+    <value>Отправить уведомление на панель задач Windows.</value>
   </data>
   <data name="OptionsView_WindowsNotificationsBanner" xml:space="preserve">
     <value>Windows Notifications</value>
@@ -2594,7 +2594,7 @@ Only queue files from the current version are supported.</value>
     <value>Expand All</value>
   </data>
   <data name="OptionsView_RightToleftMode" xml:space="preserve">
-    <value>Right to Left display mode:</value>
+    <value>Отображение справа налево:</value>
   </data>
   <data name="RightToLeft_Off" xml:space="preserve">
     <value>Off</value>
@@ -2609,7 +2609,7 @@ Only queue files from the current version are supported.</value>
     <value>The current development build you are running is getting old. You may wish to update!</value>
   </data>
   <data name="SourceSelection_NightlyUpdateUrl" xml:space="preserve">
-    <value>Download via Github</value>
+    <value>Загрузить через Github</value>
   </data>
   <data name="MainView_NightlyBuildsUpdate" xml:space="preserve">
     <value>Download Development Builds (HTTPS)</value>
@@ -2649,15 +2649,15 @@ Hardware encoding support can be re-enabled in preferences. </value>
     <value>You must first scan a source and have an initial destination directory set</value>
   </data>
   <data name="OptionsView_FileCollisionNotice" xml:space="preserve">
-    <value>Only when file already exists on disk.</value>
+    <value>Только если файл уже существует на диске.</value>
   </data>
   <data name="Info" xml:space="preserve">
     <value>Info</value>
   </data>
   <data name="SubtitleView_NoSubtitlesAdded" xml:space="preserve">
-    <value>There were no subtitle tracks added. 
+    <value>Дорожки субтитров не были добавлены.
 
-This may be due to limitations of the file container you have selected. Please see our subtitle help documentation for more information.</value>
+Это может быть связано с ограничениями выбранного вами контейнера. Для получения дополнительной информации обратитесь к нашей справочной документации по субтитрам.</value>
   </data>
   <data name="DarkTheme_None" xml:space="preserve">
     <value>Нет</value>
@@ -2684,10 +2684,10 @@ This may be due to limitations of the file container you have selected. Please s
     <value>Hardware Support</value>
   </data>
   <data name="StaticPreviewViewModel_MediaError" xml:space="preserve">
-    <value>The system was unable to play this file. 
+    <value>Система не смогла воспроизвести этот файл. 
 
-Please note certain codecs such as AV1 or HEVC require the Microsoft AV1 or HEVC codec plugins from the Microsoft Store to play.
-Alternatively, check the "Use External Player" checkbox below.</value>
+Обратите внимание, что для воспроизведения некоторых кодеков, таких как AV1 или HEVC, требуются плагины кодеков Microsoft AV1 или HEVC из магазина Microsoft Store.
+В качестве альтернативы установите флажок "Использовать внешний проигрыватель" ниже.</value>
   </data>
   <data name="StaticPreviewView_ClosePlayer" xml:space="preserve">
     <value>Close Player</value>
@@ -2748,5 +2748,56 @@ Encoding {1} jobs</value>
     <value>Unable to encode a preview. The application is currently busy encoding another file.
 
 To allow multiple simultaneous encodes, turn on "Process Isolation" in Tools Menu -&gt; Preferences -&gt; Advanced -&gt; Process Isolation -&gt; "Run each queued job in a separate worker process".</value>
+  </data>
+  <data name="AudioView_Quality" xml:space="preserve">
+    <value>Качество</value>
+  </data>
+  <data name="AudioView_Source" xml:space="preserve">
+    <value>Source</value>
+  </data>
+  <data name="AboutView_Documentation" xml:space="preserve">
+    <value>Documentation:</value>
+  </data>
+  <data name="AboutView_GithubTracker" xml:space="preserve">
+    <value>Трекер проблем на GitHub:</value>
+  </data>
+  <data name="AboutView_Website" xml:space="preserve">
+    <value>Веб-сайт: </value>
+  </data>
+  <data name="MainView_PresetClone" xml:space="preserve">
+    <value>Clone Preset</value>
+  </data>
+  <data name="PresetPane_MoveDown" xml:space="preserve">
+    <value>Move Down</value>
+  </data>
+  <data name="PresetPane_MoveToBottom" xml:space="preserve">
+    <value>Move to Bottom</value>
+  </data>
+  <data name="PresetPane_MoveToTop" xml:space="preserve">
+    <value>Move to Top</value>
+  </data>
+  <data name="PresetPane_MoveUp" xml:space="preserve">
+    <value>Move Up</value>
+  </data>
+  <data name="QueueViewModel_StopButContinueJob" xml:space="preserve">
+    <value>There are currently jobs running. Would you like to complete the current jobs before stopping the queue?</value>
+  </data>
+  <data name="Options_AddExt" xml:space="preserve">
+    <value>Add Extension</value>
+  </data>
+  <data name="Options_ExcludeExtensions" xml:space="preserve">
+    <value>Exclude File Extensions:</value>
+  </data>
+  <data name="Options_ExcludeExtensionsInfo" xml:space="preserve">
+    <value>The following file extensions will be ignored when scanning a folder. The list is case insensitive. "." is not required.</value>
+  </data>
+  <data name="Options_ExtensionExists" xml:space="preserve">
+    <value>This file extension already exists in the list.</value>
+  </data>
+  <data name="Options_FileHandling" xml:space="preserve">
+    <value>File Handling (Scanning)</value>
+  </data>
+  <data name="Options_RecursiveFolderScan" xml:space="preserve">
+    <value>Recursively scan directories when using the folder scan mode.</value>
   </data>
 </root>

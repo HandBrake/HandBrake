@@ -292,14 +292,12 @@ L'échelle de FFMpeg et de Theora est plus linéaire.
 Ces encodeurs n'ont pas de mode sans perte.</value>
   </data>
   <data name="Video_TurboAnalysisPass" xml:space="preserve">
-    <value>During the analysis pass of a multi pass encode, use settings that speed things along.</value>
+    <value>Lors de la phase d'analyse d'un encodage multi-passes, utiliser les paramètres favorisant la vitesse du processus.</value>
   </data>
   <data name="Video_MultiPass" xml:space="preserve">
-    <value>Perform Multi Pass Encoding.
+    <value>Effectue un encodage multi-passes.
 
-The 'Bitrate' option is prerequisite. During the analysis passes, statistics about
-the video are collected. Then in the final pass, those statistics are used
-to make bitrate allocation decisions.</value>
+Requière l'option 'débit / bitrate'. Lors de la phase d'analyse, des statiques sur la vidéo sont collectées. Lors de la dernière phase, ces statistiques seront utilisées dans les choix d'allocation du débit d'encodage.</value>
   </data>
   <data name="Video_VariableFramerate" xml:space="preserve">
     <value>Active un framerate variable (VFR) en sortie.
@@ -516,25 +514,27 @@ Veuillez noter que les codes d'erreur sont indicatifs et peuvent et non représe
 Il est recommandé que le fichier de sortie soit validé avant d'effectuer des actions sur celui-ci.</value>
   </data>
   <data name="Options_AdditionalFormatOptions" xml:space="preserve">
-    <value>The format of the output file. In addition to any supported file system character, you can use the any of the placeholders that will be replaced when you change title or scan a source or update certain settings.
+    <value>Format du fichier de sortie. En plus de tout caractère de système de fichiers pris en charge, vous pouvez utiliser l'un des caractères de substitution qui seront substitués lorsque vous changerez de titre ou que vous analyserez une source ou mettrez à jour certains paramètres.
 
-{source} - Name of the source file.
-{title} - Integer value. This is representative of a disc title number.
-{chapters} - The range of chapters selected.
-{creation-date} - The date that the source file was created on (if available).
-{creation-time} - The time that the source file was created on (if available).
-{modification-date} - The date that the source file was last modified on (if available).
-{modification-time} - The time that the source file was last modified on (if available).
-{date} - Today. Set at time of adding to the queue.
-{time} - Today. Set at time of adding to the queue.
-{quality_bitrate} - The RF/CQ number, or bitrate
-{quality_type} - Prints "kbps" or "Q" depending on the quality mode selected on the video tab.
-{preset} - Name of the preset selected.
-{encode_bit_depth} - Integer value. i.e. 8, 10 or 12
-{width} - The output storage width
-{height} - The output storage height
+{source} - Nom du fichier source.
+{title} - Nombre entier. Représente le numéro de titre de disque.
+{chapters} - La plage de chapitres sélectionnés.
+{creation-date} - La date de création du fichier source (si disponible).
+{creation-time} - L'heure de création du fichier source (is disponible).
+{modification-date} - La date de dernière modification du fichier source (si disponible).
+{modification-time} - L'heure de dernière modification du fichier source (si disponible).
+{date} - Aujourd'hui (Date). Substitué lors de l'ajout à la file d'attente.
+{time} - Aujourd'hui (Heure). Substitué lors de l'ajout à la file d'attente.
+{quality_bitrate} - Numéros RF/CQ ou débit.
+{quality_type} - Vaut "kbps" or "Q"  en fonction du mode de qualité sélectionné dans l'onglet vidéo.
+{preset} - Nom du préréglage sélectionné.
+{encode_bit_depth} - Nombre entier. Ex. 8, 10 ou 12.
+{width} - Largeur du fichier de stockage.
+{height} - Hauteur du fichier de stockage.
+{codec} - Affiche le format vidéo.
+{encoder} - Affiche une courte clef de format de l'encodeur utilisé.
 
-Any illegal path characters will be removed automatically.</value>
+Tout caractère de chemin invalide sera automatiquement supprimé.</value>
   </data>
   <data name="OptionsView_RightToleftMode" xml:space="preserve">
     <value>Pour les langues transcrites de droite à gauche, vous pouvez appliquer un des deux modes.  "Texte seulement" retranscrira seulement les textes de droite à gauche.  "Toute l'interface utilisateur" retranscrira aussi tous les contrôles de gauche à droite.
@@ -548,10 +548,13 @@ Veuillez noter qu'il peut y avoir des imperfections dans l'interface utilisateur
 Le débit variera d'une source à une autre.</value>
   </data>
   <data name="OptionsView_DestinationReplacementOptions" xml:space="preserve">
-    <value>The following can be used singularly, or together to build up a destination path
+    <value>Les caractères suivants peuvent être utilisés seuls ou conjointement afin de former le chemin de destination.
 
-{source_path} - In the same folder as the source path (if possible)
-{source_folder_name} – The name of the directory that the source file is in, without the full path.
-{source} - The name of the source file.</value>
+{source_path} - Dans le même dossier que le fichier source (si possible).
+{source_folder_name} – Nom du dossier contenant le fichier source, sans le chemin complet vers ce dernier.
+{source} - Nom du fichier source.</value>
+  </data>
+  <data name="OptionsView_LaunchsHelp" xml:space="preserve">
+    <value>Ouvre le site internet de documentation à l'adresse https://handbrake.fr/docs</value>
   </data>
 </root>

@@ -118,51 +118,49 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="FilterView_Deblock" xml:space="preserve">
-    <value>هموارسازی، شطرنجی شدن ویدیو که از فشرده‌سازی با کیفیت پایین ناشی شده‌است را کاهش می‌دهد.
-
-Deblock</value>
+    <value>Deblock reduces blocky artifacts caused by low quality video compression.</value>
   </data>
   <data name="FilterView_DecombDeinterlace" xml:space="preserve">
-    <value>Choose decomb or deinterlace filter options.
+    <value>Aseta kamman- tai lomituksenpoistosuodattimen valintoja.
 
-The decomb filter selectively deinterlaces frames that appear to be interlaced.
-This will preserve quality in frames that are not interlaced.
+Kammanpoistosuodatin poistaa valikoiden lomituksen kuvista, jotka vaikuttavat
+lomitetuilta. Lomittamattomien kuvien laatu säilyy.
 
-The classic deinterlace filter is applied to all frames.
-Frames that are not interlaced will suffer some quality degradation.</value>
+Perinteinen lomituksenpoistosuodatin vaikuttaa kaikkiin kuviin.
+Lomittamattomien kuvien laatu kärsii hieman.</value>
   </data>
   <data name="FilterView_Denoise" xml:space="preserve">
-    <value>Denoise reduces or removes the appearance of noise and grain. This can improve compression efficiency and create higher quality video at smaller file sizes. 
-Overly strong Denoise settings may damage picture quality by discarding detail.
-         
-NLMeans is a high quality denoise filter with a cost to speed. Use where quality is more important than speed.
-         
-HQDN3D is an adaptive low-pass filter, faster than NLMeans but less effective at preserving fine detail.</value>
+    <value>Kohinanpoisto vähentää tai poistaa kohinan tai rakeisuuden vaikutelmaa. Se voi parantaa pakkaustehokkuutta tuottaa parempilaatuisen videon pienemmässä tiedostokoossa.
+Liian jyrkkä kohinanpoistoasetus voi vahingoittaa kuvan laatua häivyttämällä yksityiskohtia.
+
+NLMeans on hyvälaatuinen mutta hitaahko kohinanpoistosuodatin. Käytä sitä, milloin laatu on nopeutta tärkeämpää.
+
+HQDN3D on mukautuva matalapäästäsuodatin, joka on NLMeansiä nopeampi mutta huonompi säilyttämään pieniä yksityiskohtia.</value>
   </data>
   <data name="FilterView_Detelecine" xml:space="preserve">
     <value>Detelecine removes comb artifacts that are the result of telecine, a process for converting film frame rates to television frame rates.</value>
   </data>
   <data name="FilterView_Grayscale" xml:space="preserve">
-    <value>خاکستری‌طیف رنگ ویدیو را حذف می‌کند.نتیجه اغلب به عنوان فیلم سیاه‌و‌سفید شناخته می‌شود.</value>
+    <value>Harmaasävytys poistaa videon värikomponentin ja tuottaa usein mustavalkoiseksi kutsutun videon.</value>
   </data>
   <data name="MainView_Destination" xml:space="preserve">
-    <value>Destination path, including directory and file name. This is where your new video will be created, and what it will be named.</value>
+    <value>Kohdesijainti kansioineen ja tiedostonimineen. Tämä on paikka, jonne uusi video luodaan, samoin kuin mitä sille annetaan nimeksi.</value>
   </data>
   <data name="MainView_IpodAtom" xml:space="preserve">
-    <value>Add a special MP4 marker to allow playback on vintage iPod 5th Generation devices circa 2006. Other settings may affect compatibility.</value>
+    <value>Lisää erityinen MP4-merkki mahdollistaaksesi toiston vanhoissa viidennen sukupolven iPodeissa noin vuodelta 2006. Muutkin asetukset voivat vaikuttaa yhteensopivuuteen.</value>
   </data>
   <data name="MainView_Mux" xml:space="preserve">
-    <value>Container format. Video, audio, and other tracks are combined into a single file of this type. Affects compatibility.</value>
+    <value>Säilömuoto. Video-, ääni- ja muut raidat yhdistetään yksittäiseksi tämän tyyppiseksi tiedostoksi. Vaikuttaa yhteensopivuuteen.</value>
   </data>
   <data name="MainView_Optimise" xml:space="preserve">
-    <value>Optimize MP4 for progressive download. After encoding, data is reorganized and rewritten to allow immediate playback over a network, without needing to download the entire file.</value>
+    <value>Optimoi MP4 etenevään lataukseen. Koodauksen jälkeen data järjestetään ja kirjoitetaan uudelleen välitöntä verkkotoistoa varten, jossa koko tiedostoa ei tarvitse ladata.</value>
   </data>
   <data name="MainView_Range" xml:space="preserve">
-    <value>Source range selection. By default, all chapters are selected and the entire source is encoded.</value>
+    <value>Lähdealueen valinta. Oletuksena valitaan kaikki luvut, ja koko lähde koodataan.</value>
   </data>
   <data name="MainView_Title" xml:space="preserve">
-    <value>Title, or video clip, to encode.
-Blu-ray and DVD sources often have multiple titles, the longest of which is typically the main feature</value>
+    <value>Koodattava nimike tai videoleike.
+Bluray- ja DVD-lähteissä on usein useampia nimikkeitä, joista varsinainen elokuva on tyypillisesti pisin.</value>
   </data>
   <data name="PictureSettingsView_Anamorphic" xml:space="preserve">
     <value>Anamorphic allows arbitrary storage dimensions while preserving the original aspect during playback.
@@ -176,93 +174,93 @@ Loose is similar to Auto, but attempts to preserve the storage aspect ratio. Thi
 Custom allows manually setting all parameters. Useful for correcting an incorrect source display aspect and for professionals needing advanced control in post-production.</value>
   </data>
   <data name="PictureSettingsView_AutoCrop" xml:space="preserve">
-    <value>حاشیه‌های سیاه در کناره‌های ویدیو را به صورت خودکار برش می‌دهد.</value>
+    <value>Rajaa automaattisesti mustat reunat videon laidoilta.</value>
   </data>
   <data name="PictureSettingsView_CropBottom" xml:space="preserve">
-    <value>بریدن ویدیو از پایین</value>
+    <value>Rajaa video alareunasta.</value>
   </data>
   <data name="PictureSettingsView_CropLeft" xml:space="preserve">
-    <value>بریدن ویدیو از چپ</value>
+    <value>Rajaa video vasemmasta reunasta.</value>
   </data>
   <data name="PictureSettingsView_CropRight" xml:space="preserve">
-    <value>بریدن ویدیو از راست</value>
+    <value>Rajaa video oikeasta reunasta.</value>
   </data>
   <data name="PictureSettingsView_CropTop" xml:space="preserve">
-    <value>بریدن ویدیو از بالا</value>
+    <value>Rajaa video yläreunasta.</value>
   </data>
   <data name="PictureSettingsView_Height" xml:space="preserve">
-    <value>This is the height that the video will be stored at.
-The actual display dimensions will differ if the pixel aspect ratio is not 1:1.</value>
+    <value>Tämä on kuvakorkeus, johon video talletetaan.
+Todelliset näyttömitat voivat erota, ellei kuvapistesuhde ole 1 : 1.</value>
   </data>
   <data name="PictureSettingsView_ManualCrop" xml:space="preserve">
-    <value>بریدن دستی ویدیو</value>
+    <value>Rajaa videota käsin.</value>
   </data>
   <data name="PictureSettingsView_Modulus" xml:space="preserve">
-    <value>Align storage dimensions to multiples of this value.
+    <value>Tasaa talletusmitat tämän arvon monikertoihin.
 
-This setting is only necessary for compatibility with some devices.
-You should use 2 unless you experience compatibility issues.</value>
+Asetus on tarpeen vain yhteensopivuussyistä joidenkin laitteiden kanssa.
+Käytä arvoa 2, ellei vastaan tulee yhteensopivuusongelmia.</value>
   </data>
   <data name="PictureSettingsView_PAR" xml:space="preserve">
-    <value>Pixel aspect defines the shape of the pixels.
-A 1:1 ratio defines a square pixel.  Other values define rectangular shapes.
-Players will scale the image in order to achieve the specified aspect.</value>
+    <value>Kuvapistesuhde määrittää kuvapisteiden muodon.
+1 : 1 -suhde määrittää neliömäisen kuvapisteen, muut arvot nelikulmaisia.
+Toistimet skaalaavat kuvaa saavuttaakseen tietyn kuvasuhteen.</value>
   </data>
   <data name="PictureSettingsView_Width" xml:space="preserve">
-    <value>This is the width that the video will be stored at.
-The actual display dimensions will differ if the pixel aspect ratio is not 1:1.</value>
+    <value>Tämä on kuvaleveys, johon video talletetaan.
+Todelliset näyttömitat voivat erota, ellei kuvapistesuhde ole 1 : 1.</value>
   </data>
   <data name="QueueView_DeleteJob" xml:space="preserve">
-    <value>حذف این کار از صف.</value>
+    <value>Poista työ jonosta.</value>
   </data>
   <data name="QueueView_ResetJobStatus" xml:space="preserve">
-    <value>Reset job status to Waiting.</value>
+    <value>Palauta työn tila odottavaksi.</value>
   </data>
   <data name="QueueView_SendJobBack" xml:space="preserve">
-    <value>Send the job back to the main window for editing.</value>
+    <value>Lähetä työ takaisin pääikkunaan muokattavaksi.</value>
   </data>
   <data name="Video_AvgBitrate" xml:space="preserve">
-    <value>Set the average bitrate.
+    <value>Aseta keskimääräinen bittinopeus.
 
-The instantaneous bitrate can be much higher or lower at any point in time.
-But the average over a long duration will be the value set here.  If you need
-to limit instantaneous bitrate, look into x264's vbv-bufsize and vbv-maxrate settings.</value>
+Välitön bittinopeus tietyllä hetkellä voi olla pienempi tai suurempi, mutta
+pitkässä aikajaksossa keskimäärin tämän arvon mukainen. Jos välitöntä
+bittinopeutta pitää rajata, katso x264:n vbv-bufsize- ja vbv-maxrate-asetuksia.</value>
   </data>
   <data name="Video_ConstantFramerate" xml:space="preserve">
-    <value>Enables constant framerate output.</value>
+    <value>Ottaa käyttöön vakiokuvanopeustulosteen.</value>
   </data>
   <data name="Video_Encoders" xml:space="preserve">
-    <value>Available video encoders.</value>
+    <value>Käytettävissä olevat videokoodaimet.</value>
   </data>
   <data name="Video_EncoderTune" xml:space="preserve">
-    <value>Tune settings to optimize for common scenarios.
+    <value>Hienosäädä asetuksia yleisten tilanteiden optimointia varten.
 
-This can improve efficiency for particular source characteristics or set
-characteristics of the output file.  Changes will be applied after the
-preset but before all other parameters.</value>
+Tämä voi parantaa tiettyjen lähteiden suorituskykyä tai tulostiedoston
+ominaisuuksia. Muutoksia käytetään esiasetuksen jälkeen mutta ennen
+muita parametreja.</value>
   </data>
   <data name="Video_ExtraOpts" xml:space="preserve">
-    <value>Additional encoder settings.
+    <value>Koodaimen lisäasetukset.
 
-Colon separated list of encoder options.</value>
+Kaksoispistein erotettu koodainvalintojen luettelo.</value>
   </data>
   <data name="Video_FastDecode" xml:space="preserve">
-    <value>این گزینه استفاده از پردازنده را در باز‌سازی ویدیو کاهش می‌دهد.
+    <value>Vähennä koodaimen suoritinkäyttöä.
 
-اگر دستگاه شما برای پخش خروجی مشکل دارد (تصویر گیر می‌کند)، این را بزنید.</value>
+Aseta tämä, jos laitteella on vaikeuksia toistaa tulosta (kuvia jää pois).</value>
   </data>
   <data name="Video_Framerate" xml:space="preserve">
-    <value>Output framerate.
+    <value>Tuloskuvanopeus.
 
-'Same as source' is recommended. If your source video has a variable framerate, 'Same as source' will preserve it.</value>
+”Sama kuin lähteessä” on suositeltu. Jos lähdevideon kuvanopeus on vaihteleva, ”Sama kuin lähteessä” säästää sen.</value>
   </data>
   <data name="Video_Level" xml:space="preserve">
-    <value>Sets and ensures compliance with the specified level.
+    <value>Asettaa ja varmistaa yhteensopivuuden annetun tason kanssa.
 
-Overrides all other settings.</value>
+Ohittaa kaikki muut asetukset.</value>
   </data>
   <data name="Video_PeakFramerate" xml:space="preserve">
-    <value>Enables variable framerate output with a peak rate determined by the framerate setting.</value>
+    <value>Ottaa käyttöön vaihtelevan kuvanopeuden tulosteen, jonka huippunopeuden määrittää kuvanopeusasetus.</value>
   </data>
   <data name="Video_Presets" xml:space="preserve">
     <value>Adjusts encoder settings to trade off compression efficiency against encoding speed.
@@ -273,9 +271,9 @@ You should generally set this option to the slowest you can bear since slower
 settings will result in better quality or smaller files.</value>
   </data>
   <data name="Video_Profile" xml:space="preserve">
-    <value>Sets and ensures compliance with the specified profile.
+    <value>Asettaa ja varmistaa yhteensopivuuden annetun profiilin kanssa.
 
-Overrides all other settings.</value>
+Ohittaa kaikki muut asetukset.</value>
   </data>
   <data name="Video_Quality" xml:space="preserve">
     <value>Set the desired quality factor.
@@ -303,32 +301,32 @@ the video are collected. Then in the final pass, those statistics are used
 to make bitrate allocation decisions.</value>
   </data>
   <data name="Video_VariableFramerate" xml:space="preserve">
-    <value>Enables variable framerate output.
+    <value>Ottaa käyttöön vaihtelevan kuvanopeuden tulosteen (VFR).
 
-VFR is not compatible with some players.</value>
+VFR ei ole yhteensopiva kaikkien toistinten kanssa.</value>
   </data>
   <data name="MainView_WhenDone" xml:space="preserve">
-    <value>When HandBrake has finished the current queue or encode it will perform this action.</value>
+    <value>Kun HandBrake on päässyt loppuun nykyisen jonon tai koodauksen, tehdään tämä toimenpide.</value>
   </data>
   <data name="MainView_Browse" xml:space="preserve">
-    <value>Browse to select a new destination path and file name for your encode.</value>
+    <value>Selaa ja valitse koodauksen uusi kohdesijainti tai -tiedostonimi.</value>
   </data>
   <data name="MainView_Angle" xml:space="preserve">
-    <value>Video angle to encode. Only applicable to multi-angle DVD and Blu-ray.</value>
+    <value>Koodattava videokulma. Vaikuttaa vain useampikulmaisiin DVD- ja Bluray-levyihin.</value>
   </data>
   <data name="MainView_AddPreset" xml:space="preserve">
-    <value>افزودن یک پیش‌نهاده‌ی جدید.</value>
+    <value>Lisää uusi esiasetus.</value>
   </data>
   <data name="MainView_PresetAdditionalOptions" xml:space="preserve">
-    <value>Additional Preset Options.</value>
+    <value>Esiasetuksen lisävalinnat.</value>
   </data>
   <data name="MainView_Presets" xml:space="preserve">
-    <value>پیش‌نشانده‌ها دسته‌ای از تنظیمات فشرده‌سازی هستند که برای استفاده‌های عمومی طراحی شده است. می‌توانید نزدیک‌ترین گزینه را که با نیاز خود را انتخاب کنید.
-
-انتخاب پیش‌نشانده ممکن است همه‌ی تنظیمات فشرده‌سازی را تغییر دهد. تنظیمات می‌توانند پس از انتخاب یک پیش‌نشانده عوض شوند.</value>
+    <value>Presets are groups of encode settings tailored for specific scenarios. Select the one closest matching your intent.
+ 
+ Overrides all encode settings. Settings may be further adjusted after selecting a preset.</value>
   </data>
   <data name="MainView_RemovePreset" xml:space="preserve">
-    <value>حذف پیش‌نشانده‌ی انتخاب شده</value>
+    <value>Poista valittu esiasetus.</value>
   </data>
   <data name="SourceSelection_TitleSpecific" xml:space="preserve">
     <value>Some Sources may contain more than one video clip, or a collection of Titles. Blu-ray and DVD Sources often have multiple Titles.
@@ -347,7 +345,7 @@ HQDN3D syntax: y-spatial=y:cb-spatial=c:cr-spatial=c:y-temporal=y:cb-temporal=c:
 HQDN3D default: y-spatial=3:cb-spatial=2:cr-spatial=2:y-temporal=2:cb-temporal=3:cr-temporal=3</value>
   </data>
   <data name="FilterView_DenoisePreset" xml:space="preserve">
-    <value>Denoise filter preset. Sets the strength of the filter.</value>
+    <value>Kohinanpoistosuodatitimen esiasetus. Asettaa suodattimen voimakkuuden.</value>
   </data>
   <data name="FilterView_DenoiseTune" xml:space="preserve">
     <value>Denoise tune. Further adjusts the Denoise preset to optimize settings for specific scenarios.
@@ -396,10 +394,10 @@ EEDI2 uses a slower, higher quality interpolation algorithm for Decomb. Useful f
 Bob attempts to better preserve motion for a slight penalty to perceived resolution.</value>
   </data>
   <data name="FilterView_Flip" xml:space="preserve">
-    <value>این گزینه تصویر را در راستای افقی وارونه (آينه) می‌کند.</value>
+    <value>Kääntää (peilaa) kuvan vaaka-akselilla.</value>
   </data>
   <data name="FilterView_InterlaceDetection" xml:space="preserve">
-    <value>Interlace Detection, when enabled, allows the Deinterlace filter to only process interlaced video frames.</value>
+    <value>Lomituksen tunnistus, kun käytössä, mahdollistaa, että lomituksenpoistosuodatin käsittelee vain lomitetut kuvat.</value>
   </data>
   <data name="FilterView_InterlaceDetectionCustom" xml:space="preserve">
     <value>Custom Interlace Detection parameters.
@@ -409,13 +407,13 @@ Bob attempts to better preserve motion for a slight penalty to perceived resolut
  Default: mode=3:spatial-metric=2:motion-thresh=1:spatial-thresh=1:filter-mode=2:block-thresh=40:block-width=16:block-height=16</value>
   </data>
   <data name="FilterView_Rotate" xml:space="preserve">
-    <value>تصویر را 90 درجه در جهت عقربه‌های ساعت می‌چرخاند.</value>
+    <value>Kierrä kuvaa myötäpäivään 90° askelin.</value>
   </data>
   <data name="MainView_Duration" xml:space="preserve">
-    <value>Duration of the selected source range in Hours:Minutes:Seconds</value>
+    <value>Valitun lähdealueen kesto tunteina:minuutteina:sekunteina</value>
   </data>
   <data name="PictureSettingsView_KeepAR" xml:space="preserve">
-    <value>Keep Aspect Ratio maintains the original display aspect of the source. Disabling this may result in a stretched or squeezed picture.</value>
+    <value>”Säilytä kuvasuhde” säilyttää lähteen alkuperäisen kuvasuhteen. Jos tämä poistetaan käytöstä, kuva voi näyttää venyneeltä tai litistyneeltä.</value>
   </data>
   <data name="FilterView_CustomSharpenParams" xml:space="preserve">
     <value>Custom Sharpen parameters.
@@ -436,8 +434,7 @@ Unsharp is a general purpose unsharp masking filter. It sharpens by blurring, th
 Lapsharp sharpens using convolution kernels approximating Laplacian edge filters, sometimes producing higher quality results than unsharp masking.</value>
   </data>
   <data name="FilterView_SharpenPreset" xml:space="preserve">
-    <value>پیش‌نشانده‌ی پالایه‌ی واضح‌سازی. قدرت پالایه را تنظیم کنید.
-Sharpen filter preset</value>
+    <value>Terävöityssuodattimen esiasetus. Asettaa suodattimen voimakkuuden.</value>
   </data>
   <data name="FilterView_SharpenTune" xml:space="preserve">
     <value>Sharpen tune. Further adjusts the Sharpen preset to optimize settings for specific scenarios.
@@ -455,31 +452,29 @@ Lapsharp's Animation tune is useful for cel animation such as anime and cartoons
 Lapsharp's Sprite tune is useful for 1-/4-/8-/16-bit 2-dimensional games. Sprite uses a 4-neighbor Laplacian kernel that enhances vertical and horizontal edges more than diagonal edges.</value>
   </data>
   <data name="MainView_AlignAVStart" xml:space="preserve">
-    <value>Aligns the initial timestamps of all audio and video streams by inserting blank frames or dropping frames. May improve audio/video sync for broken players that do not honor MP4 edit lists.</value>
+    <value>Tasaa kaikkien ääni- ja videovirtojen alkuaikaleimat joko lisäämällä tyhjiä kuvia tai jättämällä kuvia pois. Voi parantaa äänen ja kuvan tahdistusta viallisissa toistimissa, jotka eivät kunnioita MP4-muokkauslistoja.</value>
   </data>
   <data name="MainView_PresetOptionsContextMenu" xml:space="preserve">
-    <value>Options to control presets.</value>
+    <value>Esiasetuksiin vaikuttavat valinnat.</value>
   </data>
   <data name="MainView_EndPoint" xml:space="preserve">
-    <value>The end point for this range.</value>
+    <value>Tämän alueen päätepiste.</value>
   </data>
   <data name="MainView_StartPoint" xml:space="preserve">
-    <value>The start point for this range.</value>
+    <value>Tämän alueen alkupiste.</value>
   </data>
   <data name="OptionsView_AlwaysUseDefaultPath" xml:space="preserve">
     <value>When enabled the auto name system will always use the default path. 
 When disabled, it will use the path in the destination box on the main window if populated, otherwise it will use the default path.</value>
   </data>
   <data name="FiltersView_ColourSpace" xml:space="preserve">
-    <value>پالایه‌ی فضای رنگ.
-Colourspace Filter</value>
+    <value>Väriavaruussuodatin.</value>
   </data>
   <data name="FiltersView_ChromaSmooth" xml:space="preserve">
-    <value>پالایه‌ی نرم کردن رنگ
-Chroma Smooth</value>
+    <value>Chroma Smooth Filter</value>
   </data>
   <data name="PictureSettingsView_PaddingCustomColourTooltip" xml:space="preserve">
-    <value>اینجا می‌تواند مقادیر RGB مانند: "0xFF0000" یا نام رنگ‌هایی مانند "red" را بپذیرد. برای فهرست کامل رنگ‌ها به padding filter documentation مراجعه کنید.</value>
+    <value>This field can accept RGB values such as: "0xFF0000" or colour names such as "red". For a full list of named colours, see the padding filter documentation. </value>
   </data>
   <data name="SubtitlesView_BurnIn" xml:space="preserve">
     <value>Burn in subtitles to the video stream.
@@ -497,7 +492,7 @@ Categories - All presets are shown under a sub menu per category.</value>
     <value>Setup behaviours that dictate how this tab automatically adds audio tracks when selecting a new source or title.</value>
   </data>
   <data name="BehavioursReload" xml:space="preserve">
-    <value>Refresh the list below based on the behaviours configured. </value>
+    <value>Virkistä alla oleva luettelo määritettyjen toimintojen pohjalta.</value>
   </data>
   <data name="SubtitleView_SubtitleDefaults" xml:space="preserve">
     <value>Setup behaviours that dictate how this tab automatically adds subtitle tracks when selecting a new source or title.</value>

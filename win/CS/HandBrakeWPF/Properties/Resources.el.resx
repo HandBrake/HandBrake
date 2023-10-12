@@ -1,0 +1,2823 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" id="root">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace"/>
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0"/>
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string"/>
+              <xsd:attribute name="type" type="xsd:string"/>
+              <xsd:attribute name="mimetype" type="xsd:string"/>
+              <xsd:attribute ref="xml:space"/>
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string"/>
+              <xsd:attribute name="name" type="xsd:string"/>
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2"/>
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1"/>
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3"/>
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4"/>
+              <xsd:attribute ref="xml:space"/>
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required"/>
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Video_EncoderExtraArgs" xml:space="preserve">
+    <value>Η πλήρης λίστα παραμέτρων κωδικοποιητή: 
+{0}</value>
+  </data>
+  <data name="Video_x264FastDecode" xml:space="preserve">
+    <value>Μειώνει τη χρήση της CPU του αποκωδικοποιητή.
+
+Επιλέξτε αυτό εάν η συσκευή αναπαραγωγής αντιμετωπίζει προβλήματα (π.χ. πέφτουν τα καρέ).</value>
+  </data>
+  <data name="Video_LosslessWarning" xml:space="preserve">
+    <value>Προειδοποίηση: Το RF 0 δεν έχει απώλειες!</value>
+  </data>
+  <data name="Video_LosslessWarningTooltip" xml:space="preserve">
+    <value>Η τιμή 0 σημαίνει χωρίς απώλειες και θα έχει ως αποτέλεσμα ένα μέγεθος αρχείου μεγαλύτερο από την αρχική πηγή,
+εκτός αν η πηγή ήταν επίσης χωρίς απώλειες. 
+
+Στα x264 και x265, η κλίμακα είναι λογαριθμική και μικρότερες τιμές σημαίνουν υψηλότερη ποιότητα.
+
+Επομένως, μικρές αυξήσεις στις τιμές έχουν ως αποτέλεσμα μεγάλες σταδιακές αυξήσεις στο μέγεθος του αρχείου.</value>
+  </data>
+  <data name="AddPreset_PictureSizeMode" xml:space="preserve">
+    <value>Μπορείτε να αποθηκεύσετε μια ρύθμιση εικόνας με αυτήν την προεπιλογή. Υπάρχουν 3 τρόποι λειτουργίας:
+
+Κανένα: Οι ρυθμίσεις εικόνας δεν αποθηκεύονται στην προεπιλογή. Κατά τη φόρτωση μιας πηγής, θα παραμείνουν ως έχουν εντός των ορίων της ανάλυσης πηγής. Αυτό επηρεάζει επίσης το Anamorphic, το Modulus, το ψαλίδισμα κ.λπ.
+
+Προσαρμοσμένο: Μπορείτε προαιρετικά να ορίσετε μέγιστο Πλάτος και Ύψος. Όταν το κάνετε αυτό, μια κωδικοποίηση θα είναι μικρότερη ή ίση με αυτές τις τιμές. Η "Διατήρηση αναλογίας διαστάσεων" θα ενεργοποιηθεί αυτόματα.
+
+Μέγιστη πηγή: Πάντα να κωδικοποιείτε στην ανάλυση των πηγών όπου είναι δυνατόν.</value>
+  </data>
+  <data name="About_GPL" xml:space="preserve">
+    <value>Αυτό το πρόγραμμα είναι ελεύθερο λογισμικό. μπορείτε να το αναδιανείμετε ή/και
+να το τροποποιήσετε σύμφωνα με τους όρους της Γενικής Άδειας Δημόσιας Χρήσης GNU
+όπως δημοσιεύτηκε από το Ίδρυμα Ελεύθερου Λογισμικού· οποιαδήποτε έκδοση 2
+της Άδειας Χρήσης ή (κατ' επιλογή σας) οποιαδήποτε μεταγενέστερη έκδοση.
+
+Αυτό το πρόγραμμα διανέμεται με την ελπίδα ότι θα είναι χρήσιμο,
+αλλά ΧΩΡΙΣ ΚΑΜΙΑ ΕΓΓΥΗΣΗ! Χωρίς καν την σιωπηρή εγγύηση του
+MERCHANTABILITY ή FITNESS FOR A PARTICULAR PURPOSE. Δείτε την
+Γενική Άδεια Δημόσιας Χρήσης GNU για περισσότερες λεπτομέρειες.
+
+Θα έπρεπε να έχετε λάβει αντίγραφο της Γενικής Δημόσιας Άδειας GNU
+μαζί με αυτό το πρόγραμμα. Εάν όχι, γράψτε στο Ελεύθερο Λογισμικό
+Foundation, Inc., Franklin Street 51, Fifth Floor, Boston, MA 02110-1301, USA.</value>
+  </data>
+  <data name="QueueSelection_AutoNameWarning" xml:space="preserve">
+    <value>ΠΡΟΕΙΔΟΠΟΙΗΣΗ: Δεν έχετε ενεργοποιημένη την αυτόματη ονομασία αρχείων. Παρακαλώ ενεργοποιήστε την στις επιλογές.</value>
+  </data>
+  <data name="QueueSelection_AutoTrackSelectionWarning" xml:space="preserve">
+    <value>ΠΡΟΕΙΔΟΠΟΙΗΣΗ: Δεν έχετε αυτόματη ρύθμιση επιλογής κομματιού ήχου και υπότιτλων. Μπορείτε να ρυθμίσετε την προεπιλεγμένη συμπεριφορά επιλογής κομματιού από τις επιλογές.</value>
+  </data>
+  <data name="Presets_ResetComplete" xml:space="preserve">
+    <value>Έχει γίνει επαναφορά των ενσωματωμένων προεπιλογών.</value>
+  </data>
+  <data name="Presets_ResetHeader" xml:space="preserve">
+    <value>Ολοκληρώθηκε η επαναφορά</value>
+  </data>
+  <data name="Video_HigherQuality" xml:space="preserve">
+    <value>Υψηλότερη Ποιότητα |</value>
+  </data>
+  <data name="Video_LowQuality" xml:space="preserve">
+    <value>| Κατώτερη Ποιότητα</value>
+  </data>
+  <data name="Video_PlaceboQuality" xml:space="preserve">
+    <value>Ποιότητα Placebo |</value>
+  </data>
+  <data name="Error" xml:space="preserve">
+    <value>Σφάλμα</value>
+  </data>
+  <data name="Main_TurnOnAutoFileNaming" xml:space="preserve">
+    <value>Η αυτόματη ονομασία αρχείων πρέπει να είναι ενεργοποιημένη ΚΑΙ πρέπει να οριστεί μια προεπιλεγμένη διαδρομή στις ρυθμίσεις για να μπορέσει να προστεθεί στην ουρά.</value>
+  </data>
+  <data name="Warning" xml:space="preserve">
+    <value>Προειδοποίηση</value>
+  </data>
+  <data name="AreYouSure" xml:space="preserve">
+    <value>Είστε σίγουροι;</value>
+  </data>
+  <data name="HandBrake_Title" xml:space="preserve">
+    <value>HandBrake</value>
+  </data>
+  <data name="Main_AlreadyEncoding" xml:space="preserve">
+    <value>Το HandBrake κωδικοποιεί ήδη.</value>
+  </data>
+  <data name="Main_DuplicateDestinationOnQueue" xml:space="preserve">
+    <value>Υπάρχουν εργασίες στην ουρά με την ίδια διαδρομή προορισμού. Επιλέξτε διαφορετική διαδρομή για αυτήν την εργασία.</value>
+  </data>
+  <data name="Main_JobsPending_addon" xml:space="preserve">
+    <value>Εκκρεμείς εργασίες {0}</value>
+  </data>
+  <data name="Main_NewDefaultPreset" xml:space="preserve">
+    <value>Νέα προεπιλεγμένη προεπιλογή: {0}</value>
+  </data>
+  <data name="Main_NewUpdate" xml:space="preserve">
+    <value>Μια νέα ενημέρωση είναι διαθέσιμη. Μεταβείτε στο μενού Εργαλεία &gt; Επιλογές για εγκατάσταση</value>
+  </data>
+  <data name="Main_NoPresetSelected" xml:space="preserve">
+    <value>Δεν έχει επιλεγεί προεπιλογή.</value>
+  </data>
+  <data name="Main_NoUpdateOfBuiltInPresets" xml:space="preserve">
+    <value>Δεν είναι δυνατή η αλλαγή των ενσωματωμένων προεπιλογών. Επιλέξτε τις δικές σας προεπιλογές.</value>
+  </data>
+  <data name="Main_PleaseSelectFolder" xml:space="preserve">
+    <value>Παρακαλώ επιλέξτε ένα φάκελο.</value>
+  </data>
+  <data name="Main_PreparingToEncode" xml:space="preserve">
+    <value>Προετοιμασία για κωδικοποίηση ...</value>
+  </data>
+  <data name="Main_PresetErrorBuiltInName" xml:space="preserve">
+    <value>Δεν μπορεί να εισαχθεί μια προεπιλογή με το ίδιο όνομα με μια εγκατεστημένη προεπιλογή.</value>
+  </data>
+  <data name="Main_PresetOverwriteWarning" xml:space="preserve">
+    <value>Η προεπιλογή "{0}" υπάρχει ήδη. Θέλετε να την αντικαταστήσετε;</value>
+  </data>
+  <data name="Main_Presets" xml:space="preserve">
+    <value>Προεπιλογές</value>
+  </data>
+  <data name="Main_PresetUpdateConfirmation" xml:space="preserve">
+    <value>Είστε βέβαιοι ότι θέλετε να ενημερώσετε την επιλεγμένη προεπιλογή;</value>
+  </data>
+  <data name="Main_PresetUpdated" xml:space="preserve">
+    <value>Η προεπιλογή έχει πλέον ενημερωθεί με τις τρέχουσες ρυθμίσεις σας.</value>
+  </data>
+  <data name="Main_PresetUpdateNotification" xml:space="preserve">
+    <value>Το HandBrake εντόπισε ότι οι προεπιλογές που έχετε εγκαταστήσει δεν είναι ενημερωμένες... Αυτές οι προεπιλογές θα ενημερωθούν τώρα.
+Οι προσαρμοσμένες προεπιλογές δεν έχουν ενημερωθεί, επομένως ίσως χρειαστεί να τις δημιουργήσετε ξανά διαγράφοντας και προσθέτοντάς τις ξανά.
+Δημιουργήθηκε αντίγραφο ασφαλείας του προηγούμενου αρχείου user_presets.xml.</value>
+  </data>
+  <data name="Main_QueueFinished" xml:space="preserve">
+    <value>Η ουρά ολοκληρώθηκε</value>
+  </data>
+  <data name="Main_ScanCancelled" xml:space="preserve">
+    <value>Ακυρώθηκε η σάρωση.</value>
+  </data>
+  <data name="Main_ScanCompleted" xml:space="preserve">
+    <value>Ολοκληρώθηκε η σάρωση</value>
+  </data>
+  <data name="Main_ScanFailed_NoReason" xml:space="preserve">
+    <value>Απέτυχε η σάρωση: </value>
+  </data>
+  <data name="Main_ScanFailed_CheckLog" xml:space="preserve">
+    <value>Η σάρωση απέτυχε... Ανατρέξτε στο αρχείο καταγραφής δραστηριότητας για λεπτομέρειες.</value>
+  </data>
+  <data name="Main_ScanningPleaseWait" xml:space="preserve">
+    <value>Σάρωση πηγής, παρακαλώ περιμένετε...</value>
+  </data>
+  <data name="Main_ScanningTitleXOfY" xml:space="preserve">
+    <value>Σάρωση τίτλου {0} από {1} ({2}%)</value>
+  </data>
+  <data name="Main_ScanSource" xml:space="preserve">
+    <value>Πρέπει πρώτα να σαρώσετε μια πηγή και να ρυθμίσετε την εργασία σας πριν ξεκινήσετε μια κωδικοποίηση. Κάντε κλικ στο κουμπί «Πηγή» στη γραμμή εργαλείων για να συνεχίσετε.</value>
+  </data>
+  <data name="Main_SelectPreset" xml:space="preserve">
+    <value>Βεβαιωθείτε ότι έχει επιλεγεί μία από τις δικές σας προεπιλογές. Δεν είναι δυνατή η εξαγωγή των εγκατεστημένων προεπιλογών.</value>
+  </data>
+  <data name="Main_SelectPresetForUpdate" xml:space="preserve">
+    <value>Επιλέξτε μια προεπιλογή για ενημέρωση.</value>
+  </data>
+  <data name="Main_SelectSource" xml:space="preserve">
+    <value>Επιλέξτε "Πηγή" για συνέχεια</value>
+  </data>
+  <data name="Main_XEncodesPending" xml:space="preserve">
+    <value>{0} Εκκρεμείς εργασίες</value>
+  </data>
+  <data name="Notice" xml:space="preserve">
+    <value>Σημείωση</value>
+  </data>
+  <data name="Overwrite" xml:space="preserve">
+    <value>Αντικατάσταση;</value>
+  </data>
+  <data name="Question" xml:space="preserve">
+    <value>Ερώτηση</value>
+  </data>
+  <data name="State_Ready" xml:space="preserve">
+    <value>Έτοιμο</value>
+  </data>
+  <data name="Updated" xml:space="preserve">
+    <value>Ενημερώθηκε</value>
+  </data>
+  <data name="Preset_OldVersion_Header" xml:space="preserve">
+    <value>Έκδοση Προεπιλογής</value>
+  </data>
+  <data name="Preset_OldVersion_Message" xml:space="preserve">
+    <value>Η προεπιλογή που θα εισαχεί είναι από άλλη έκδοση του HandBrake.
+ Ενδέχεται να μην είναι δυνατή η εισαγωγή όλων των τιμών από αυτήν την προεπιλογή.
+
+Θέλετε να προχωρήσετε;</value>
+  </data>
+  <data name="Preset_UnableToImport_Header" xml:space="preserve">
+    <value>Δεν είναι δυνατή η εισαγωγή προεπιλογών!</value>
+  </data>
+  <data name="Preset_UnableToImport_Message" xml:space="preserve">
+    <value>Δεν είναι δυνατή η εισαγωγή της προεπιλογής καθώς φαίνεται να είναι κατεστραμμένη ή από παλαιότερη έκδοση του HandBrake.</value>
+  </data>
+  <data name="Main_SetDestination" xml:space="preserve">
+    <value>Πρέπει πρώτα να ορίσετε τη διαδρομή προορισμού για το αρχείο εξόδου προτού το προσθέσετε στην ουρά.</value>
+  </data>
+  <data name="Main_InvalidDestination" xml:space="preserve">
+    <value>Η διαδρομή προορισμού περιέχει μη έγκυρους χαρακτήρες και δεν θα ενημερωθεί.</value>
+  </data>
+  <data name="Preview" xml:space="preserve">
+    <value>Προεπισκόπηση {0}</value>
+  </data>
+  <data name="Preview_Scaled" xml:space="preserve">
+    <value>Προεπισκόπηση (Κλιμακωμένη)</value>
+  </data>
+  <data name="PictureSettings_OutputResolution" xml:space="preserve">
+    <value>Έξοδος: {0}</value>
+  </data>
+  <data name="Main_MatchingFileOverwriteWarning" xml:space="preserve">
+    <value>Ένα αρχείο με την ίδια διαδρομή και όνομα αρχείου με το αρχείο προέλευσης δεν μπορεί να κωδικοποιηθεί. Αλλάξτε το όνομα του αρχείου εξόδου ώστε να μην ταιριάζει με το αρχείο προέλευσης.</value>
+  </data>
+  <data name="Main_UnableToLoadHelpMessage" xml:space="preserve">
+    <value>Το σύστημά σας, εμπόδισε το HandBrake να ξεκινήσει ένα πρόγραμμα περιήγησης.</value>
+  </data>
+  <data name="Main_UnableToLoadHelpSolution" xml:space="preserve">
+    <value>Μπορείτε ακόμα να έχετε πρόσβαση στις σελίδες βοήθειας επισκεπτόμενοι τον ιστότοπο απευθείας στη διεύθυνση: https://handbrake.fr</value>
+  </data>
+  <data name="Main_PresetImportFailed" xml:space="preserve">
+    <value>Δεν είναι δυνατή η εισαγωγή της επιλεγμένης προεπιλογής.</value>
+  </data>
+  <data name="Main_PresetImportFailedSolution" xml:space="preserve">
+    <value>Η προεπιλογή μπορεί να είναι κατεστραμμένη ή από μια παλαιότερη έκδοση του HandBrake που δεν υποστηρίζεται.
+Οι προεπιλογές από παλαιότερες εκδόσεις πρέπει να δημιουργηθούν εκ νέου στην τρέχουσα έκδοση.</value>
+  </data>
+  <data name="Video_EncoderExtraArgsTooltip" xml:space="preserve">
+    <value>Πρόσθετες προηγμένες παράμετροι που εφαρμόζονται από τον κωδικοποιητή βίντεο.</value>
+  </data>
+  <data name="Subtitles_BurnInBehaviourModes" xml:space="preserve">
+    <value>Κανένα - Θα εγγραφούν μόνο τα κομμάτια όπου το κοντέινερ δεν υποστηρίζει τη μορφή.
+Ξένο κομμάτι ήχου - Το ξένο κομμάτι ήχου θα εγγραφεί εάν είναι διαθέσιμο.
+Πρώτο κομμάτι - Το πρώτο κομμάτι θα εγγραφεί.
+Προτιμώμενος ήχος ξένης γλώσσας, αλλιώς Πρώτος - Εάν υπάρχει το ξένο κομμάτι ύχου, θα εγγραφεί, διαφορετικά θα επιλεγεί το πρώτο κομμάτι.</value>
+  </data>
+  <data name="Subtitles_WebmSubtitleIncompatibilityHeader" xml:space="preserve">
+    <value>Συμβατότητα υποτίτλων WebM</value>
+  </data>
+  <data name="Subtitles_WebmSubtitleIncompatibilityError" xml:space="preserve">
+    <value>Το WebM στο HandBrake υποστηρίζει μόνο εγγεγραμμένους υπότιτλους.
+
+Η επιλογή υποτίτλων πρέπει να αλλάξει.
+
+Εάν συνεχίσετε, οι υπότιτλοι που δεν έχουν εγγραφεί θα χαθούν.</value>
+  </data>
+  <data name="Main_ScanNoTitlesFound" xml:space="preserve">
+    <value>Δεν βρέθηκε έγκυρη πηγή ή τίτλοι.</value>
+  </data>
+  <data name="Main_ScanNoTitlesFoundMessage" xml:space="preserve">
+    <value>Το HandBrake δεν μπορεί να κωδικοποιήσει την επιλεγμένη πηγή, καθώς δεν βρήκε έγκυρη πηγή με τίτλους προς κωδικοποίηση.
+Αυτό μπορεί να οφείλεται σε έναν από τους παρακάτω λόγους:
+
+- Η διάρκεια κάθε τίτλου πηγής είναι κάτω από την επιλογή "Ελάχιστη διάρκεια τίτλου" στο "Προτιμήσεις &gt; Προχωρημένες'. 
+- Το αρχείο προέλευσης δεν είναι έγκυρο αρχείο βίντεο ή είναι σε μορφή που δεν υποστηρίζει το HandBrake.
+- Η πηγή μπορεί να προστατεύεται από αντιγραφή ή να περιέχει DRM. Λάβετε υπόψη ότι το HandBrake δεν υποστηρίζει την αφαίρεση των προστασιών αντιγραφής.
+
+Το αρχείο καταγραφής δραστηριότητας μπορεί να έχει περισσότερες πληροφορίες.</value>
+  </data>
+  <data name="Main_QueueLabel" xml:space="preserve">
+    <value>Ουρά {0}</value>
+  </data>
+  <data name="Main_Start" xml:space="preserve">
+    <value>Έναρξη κωδικοποίησης</value>
+  </data>
+  <data name="Main_StartQueue" xml:space="preserve">
+    <value>Έναρξη ουράς</value>
+  </data>
+  <data name="MainViewModel_CanNotDeleteDefaultPreset" xml:space="preserve">
+    <value>Δεν μπορείτε να διαγράψετε την προεπιλεγμένη προεπιλογή. Ορίστε πρώτα μια άλλη προεπιλογή ως προεπιλογή.</value>
+  </data>
+  <data name="MainViewModel_PresetRemove_AreYouSure" xml:space="preserve">
+    <value>Είστε βέβαιοι ότι θέλετε να διαγράψετε την προεπιλογή: </value>
+  </data>
+  <data name="MainViewModel_EncodeStatusChanged_StatusLabel" xml:space="preserve">
+    <value>Κωδικοποίηση: Πέρασμα {0} από {1}, {2:00.00}%, FPS: {3:000.0}, Μέσος όρος FPS: {4:000.0}, Απομένει: {5}, Πέρασε: {6} {7}</value>
+  </data>
+  <data name="AddPresetViewModel_PresetMustProvideName" xml:space="preserve">
+    <value>Μια προεπιλογή πρέπει να έχει όνομα. Συμπληρώστε το πεδίο Προκαθορισμένο Όνομα.</value>
+  </data>
+  <data name="AddPresetViewModel_PresetWithSameNameOverwriteWarning" xml:space="preserve">
+    <value>Υπάρχει ήδη μια προεπιλογή με αυτό το όνομα. Θέλετε να την αντικαταστήσετε;</value>
+  </data>
+  <data name="AddPresetViewModel_YouMustFirstScanSource" xml:space="preserve">
+    <value>Πρέπει πρώτα να σαρώσετε μια πηγή για να χρησιμοποιήσετε την Επιλογή «Μέγιστη πηγή».</value>
+  </data>
+  <data name="AddPresetViewModel_CustomWidthHeightFieldsRequired" xml:space="preserve">
+    <value>Τα πεδία Προσαρμοσμένο Πλάτος ή Ύψος πρέπει να συμπληρωθούν για την επιλογή «Προσαρμοσμένο».</value>
+  </data>
+  <data name="AddPresetViewModel_UnableToAddPreset" xml:space="preserve">
+    <value>Δεν είναι δυνατή η προσθήκη προεπιλογών</value>
+  </data>
+  <data name="UnknownError" xml:space="preserve">
+    <value>Άγνωστο Σφάλμα</value>
+  </data>
+  <data name="AudioViewModel_AudioDefaults" xml:space="preserve">
+    <value>Προεπιλογές ήχου</value>
+  </data>
+  <data name="AudioViewModel_AudioTracks" xml:space="preserve">
+    <value>Κομμάτια ήχου</value>
+  </data>
+  <data name="AudioViewModel_ConfigureDefaults" xml:space="preserve">
+    <value>Συμπεριφορά Επιλογής...</value>
+  </data>
+  <data name="AudioViewModel_SwitchBackToTracks" xml:space="preserve">
+    <value>Επιστροφή στα κομμάτια</value>
+  </data>
+  <data name="ChaptersViewModel_UnableToExportChaptersWarning" xml:space="preserve">
+    <value>Αδύνατη η αποθήκευση του αρχείου Chapter Markers! (Δείκτες Κεφαλαίων!)</value>
+  </data>
+  <data name="ChaptersViewModel_UnableToExportChaptersMsg" xml:space="preserve">
+    <value>Τα ονόματα των δεικτών κεφαλαίων ΔΕΝ θα αποθηκευτούν στην κωδικοποίησή σας.</value>
+  </data>
+  <data name="CountdownAlertViewModel_NoticeMessage" xml:space="preserve">
+    <value>Η ακόλουθη ενέργεια '{0}' θα πραγματοποιηθεί σε {1} δευτερόλεπτα.</value>
+  </data>
+  <data name="ErrorViewModel_IfTheProblemPersists" xml:space="preserve">
+    <value>Εάν το πρόβλημα παραμένει, δοκιμάστε να επανεκκινήσετε το HandBrake.</value>
+  </data>
+  <data name="ErrorViewModel_NoFurtherInformation" xml:space="preserve">
+    <value>Δεν υπάρχουν περισσότερες διαθέσιμες πληροφορίες σχετικά με αυτό το σφάλμα.</value>
+  </data>
+  <data name="ErrorViewModel_UnknownError" xml:space="preserve">
+    <value>Προέκυψε ένα άγνωστο σφάλμα.</value>
+  </data>
+  <data name="OptionsViewModel_NewUpdate" xml:space="preserve">
+    <value>Μια νέα ενημέρωση είναι διαθέσιμη! Ελέγξτε τον ιστότοπο για σημειώσεις έκδοσης.</value>
+  </data>
+  <data name="OptionsViewModel_64bitAvailable" xml:space="preserve">
+    <value>Το σύστημά σας υποστηρίζει την έκδοση 64bit του HandBrake! Αυτό προσφέρει βελτιώσεις απόδοσης και σταθερότητας σε σχέση με την έκδοση των 32bit.
+    Ελέγξτε τον ιστότοπο για σημειώσεις έκδοσης.</value>
+  </data>
+  <data name="OptionsViewModel_NoNewUpdates" xml:space="preserve">
+    <value>Δεν υπάρχουν νέες ενημερώσεις αυτήν τη στιγμή.</value>
+  </data>
+  <data name="OptionsViewModel_UpdateDownloaded" xml:space="preserve">
+    <value>Έγινε λήψη της ενημέρωσης</value>
+  </data>
+  <data name="OptionsViewModel_UpdateServiceUnavailable" xml:space="preserve">
+    <value>Η υπηρεσία ενημέρωσης δεν είναι διαθέσιμη. Μπορείτε να κάνετε λήψη της ενημέρωσης από τη διεύθυνση https://handbrake.fr</value>
+  </data>
+  <data name="OptionsViewModel_UpdateFailed" xml:space="preserve">
+    <value>Απέτυχε η ενημέρωση. Μπορείτε να κάνετε λήψη της ενημέρωσης από τη διεύθυνση https://handbrake.fr</value>
+  </data>
+  <data name="PictureSettingsViewModel_StorageDisplayLabel" xml:space="preserve">
+    <value>Μέγεθος αποθήκευσης: {0}x{1}</value>
+  </data>
+  <data name="QueueSelectionViewModel_AddToQueue" xml:space="preserve">
+    <value>Προσθήκη στην ουρά</value>
+  </data>
+  <data name="QueueViewModel_NoEncodesPending" xml:space="preserve">
+    <value>Δεν υπάρχουν εκκρεμείς κωδικοποιήσεις</value>
+  </data>
+  <data name="QueueViewModel_NoJobsPending" xml:space="preserve">
+    <value>Δεν υπάρχουν εργασίες κωδικοποίησης αυτήν τη στιγμή</value>
+  </data>
+  <data name="QueueViewModel_Queue" xml:space="preserve">
+    <value>Ουρά</value>
+  </data>
+  <data name="QueueViewModel_ClearQueueConfirmation" xml:space="preserve">
+    <value>Είστε βέβαιοι ότι θέλετε να διαγράψετε την ουρά;</value>
+  </data>
+  <data name="Confirm" xml:space="preserve">
+    <value>Επιβεβαίωση</value>
+  </data>
+  <data name="QueueViewModel_JobsPending" xml:space="preserve">
+    <value>{0} εργασίες σε εκκρεμότητα</value>
+  </data>
+  <data name="QueueViewModel_QueuePending" xml:space="preserve">
+    <value>Η ουρά σταμάτησε</value>
+  </data>
+  <data name="QueueViewModel_DelSelectedJobConfirmation" xml:space="preserve">
+    <value>Είστε βέβαιοι ότι θέλετε να διαγράψετε τις επιλεγμένες εργασίες;</value>
+  </data>
+  <data name="QueueViewModel_JobCurrentlyRunningWarning" xml:space="preserve">
+    <value>Αυτή η κωδικοποίηση βρίσκεται σε εξέλιξη. Εάν την διαγράψετε, η κωδικοποίηση θα σταματήσει. Είστε σίγουροι ότι θέλετε να συνεχίσετε;</value>
+  </data>
+  <data name="QueueViewModel_NoPendingJobs" xml:space="preserve">
+    <value>Δεν υπάρχουν εκκρεμείς εργασίας.</value>
+  </data>
+  <data name="QueueViewModel_EditConfirmation" xml:space="preserve">
+    <value>Είστε βέβαιοι ότι θέλετε να επεξεργαστείτε αυτήν την εργασία; Θα αφαιρεθεί από την ουρά και θα σταλεί στο κύριο παράθυρο.</value>
+  </data>
+  <data name="QueueViewModel_QueueReady" xml:space="preserve">
+    <value>Η ουρά είναι έτοιμη</value>
+  </data>
+  <data name="QueueViewModel_QueueNotRunning" xml:space="preserve">
+    <value>Η ουρά δεν τρέχει</value>
+  </data>
+  <data name="QueueViewModel_QueueCompleted" xml:space="preserve">
+    <value>Η ουρά ολοκληρώθηκε</value>
+  </data>
+  <data name="QueueViewModel_LastJobFinished" xml:space="preserve">
+    <value>Η τελευταία εργασία στην ουρά ολοκληρώθηκε</value>
+  </data>
+  <data name="QueueViewModel_QueueStarted" xml:space="preserve">
+    <value>Η ουρά ξεκίνησε</value>
+  </data>
+  <data name="QueueViewModel_QueueStatusDisplay" xml:space="preserve">
+    <value>Κωδικοποίηση: Πέρασμα {0} από {1}, {2:00.00}%, FPS: {3:000.0}, Μέσος όρος FPS: {4:000.0}, Υπολειπόμενος χρόνος: {5}, Παρήλθε: {6:d\:ωω\:μμ\:δδ}</value>
+  </data>
+  <data name="ShellViewModel_CanClose" xml:space="preserve">
+    <value>Αυτήν τη στιγμή εκτελείται μια κωδικοποίηση. Η έξοδος από το HandBrake θα σταματήσει αυτήν την κωδικοποίηση.
+Είστε βέβαιοι ότι θέλετε να βγείτε από το HandBrake;</value>
+  </data>
+  <data name="StaticPreviewViewModel_Title" xml:space="preserve">
+    <value>Προεπισκόπηση εικόνας</value>
+  </data>
+  <data name="StaticPreview_UnableToDeletePreview" xml:space="preserve">
+    <value>Δεν είναι δυνατή η διαγραφή του προηγούμενου αρχείου προεπισκόπησης. Μπορεί να έχετε ακόμα ανοιχτή μια προεπισκόπηση στη συσκευή αναπαραγωγής πολυμέσων. Παρακαλώ κλείστε αυτό.</value>
+  </data>
+  <data name="StaticPreviewViewModel_ScanFirst" xml:space="preserve">
+    <value>Πρέπει πρώτα να σαρώσετε μια πηγή και να ρυθμίσετε την κωδικοποίησή σας πριν δημιουργήσετε μια προεπισκόπηση.</value>
+  </data>
+  <data name="StaticPreviewViewModel_UnableToPlayFile" xml:space="preserve">
+    <value>Δεν είναι δυνατή η εύρεση του αρχείου προεπισκόπησης. Είτε το αρχείο διαγράφηκε είτε η κωδικοποίηση απέτυχε. Ελέγξτε το αρχείο καταγραφής για λεπτομέρειες.</value>
+  </data>
+  <data name="StaticPreviewViewModel_AlreadyEncoding" xml:space="preserve">
+    <value>Το Handbrake κωδικοποιεί ήδη ένα βίντεο! Μπορεί να κωδικοποιηθεί μόνο ένα αρχείο την φορά.</value>
+  </data>
+  <data name="SubtitlesViewModel_SubDefaults" xml:space="preserve">
+    <value>Προεπιλογές υποτίτλων</value>
+  </data>
+  <data name="SubtitlesViewModel_SubTracks" xml:space="preserve">
+    <value>Κομμάτια υπότιτλων</value>
+  </data>
+  <data name="SubtitlesViewModel_SwitchToTracks" xml:space="preserve">
+    <value>Επιστροφή στα κομμάτια</value>
+  </data>
+  <data name="SubtitlesViewModel_ConfigureDefaults" xml:space="preserve">
+    <value>Συμπεριφορά Επιλογής...</value>
+  </data>
+  <data name="PresetService_ArchiveFile" xml:space="preserve">
+    <value>Αρχειοθετημένο αρχείο:</value>
+  </data>
+  <data name="PresetService_UnableToLoad" xml:space="preserve">
+    <value>Δεν είναι δυνατή η φόρτωση προεπιλογών.</value>
+  </data>
+  <data name="PresetService_UnableToLoadPresets" xml:space="preserve">
+    <value>Το HandBrake δεν μπόρεσε να φορτώσει το αρχείο προεπιλογών σας. Μπορεί να ήταν από μια παλαιότερη μη υποστηριζόμενη έκδοση του HandBrake ή να ήταν κατεστραμμένο.
+
+Τα παλιά αρχεία προεπιλογών αρχειοθετήθηκαν στο:</value>
+  </data>
+  <data name="Main_QueueFinishedErrors" xml:space="preserve">
+    <value> με {0} εντοπισμένα σφάλματα ή ακυρώσεις.</value>
+  </data>
+  <data name="MainViewModel_LowDiskSpace" xml:space="preserve">
+    <value>Χαμηλός χώρος στο δίσκο</value>
+  </data>
+  <data name="MainViewModel_LowDiskSpaceWarning" xml:space="preserve">
+    <value>Προειδοποίηση, ο χώρος στο δίσκο εξαντλείται. Το HandBrake δεν θα μπορέσει να ολοκληρώσει αυτήν την κωδικοποίηση εάν εξαντληθεί ο χώρος. </value>
+  </data>
+  <data name="ChaptersViewModel_UnableToImportChaptersMalformedLineMsg" xml:space="preserve">
+    <value>Η γραμμή {0} δεν είναι έγκυρη. Δεν θα εισαχθεί τίποτα.</value>
+  </data>
+  <data name="ChaptersViewModel_UnableToImportChaptersWarning" xml:space="preserve">
+    <value>Αδυναμία εισαγωγής αρχείου κεφαλαίου</value>
+  </data>
+  <data name="ChaptersViewModel_UnableToImportChaptersLineDoesNotHaveAtLeastTwoColumns" xml:space="preserve">
+    <value>Όλες οι γραμμές στο αρχείο κεφαλαίων πρέπει να έχουν τουλάχιστον 2 στήλες δεδομένων</value>
+  </data>
+  <data name="ChaptersViewModel_UnableToImportChaptersFirstColumnMustContainOnlyIntegerNumber" xml:space="preserve">
+    <value>Η πρώτη στήλη στο αρχείο κεφαλαίων πρέπει να περιέχει μόνο μια τιμή ακέραιου αριθμού μεγαλύτερη από το μηδέν (0)</value>
+  </data>
+  <data name="ChaptersViewModel_UnsupportedFileFormatMsg" xml:space="preserve">
+    <value>Τα αρχεία κεφαλαίων του τύπου '{0}' δεν υποστηρίζονται αυτήν τη στιγμή.</value>
+  </data>
+  <data name="ChaptersViewModel_UnsupportedFileFormatWarning" xml:space="preserve">
+    <value>Μη υποστηριζόμενος τύπος αρχείου κεφαλαίου</value>
+  </data>
+  <data name="ChaptersViewModel_ValidationFailedWarning" xml:space="preserve">
+    <value>Μη έγκυρες πληροφορίες κεφαλαίου για τα μέσα προέλευσης</value>
+  </data>
+  <data name="ChaptersViewModel_ValidateImportedChapters_ChapterCountMismatch" xml:space="preserve">
+    <value>Ο αριθμός των κεφαλαίων στο μέσο πηγής
+και ο αριθμός των κεφαλαίων στο αρχείο εισόδου δεν ταιριάζουν ({0} έναντι {1}).
+
+Θέλετε να κάνετε εισαγωγή τα ονόματα των κεφαλαίων;</value>
+  </data>
+  <data name="ChaptersViewModel_ValidateImportedChapters_ChapterCountMismatchMsg" xml:space="preserve">
+    <value>Ο αριθμός των κεφαλαίων στο μέσο πηγής
+και ο αριθμός των κεφαλαίων στο αρχείο εισόδου δεν ταιριάζουν ({0} έναντι {1}).
+
+Θέλετε να κάνετε εισαγωγή τα ονόματα των κεφαλαίων;</value>
+  </data>
+  <data name="ChaptersViewModel_ValidateImportedChapters_ChapterCountMismatchWarning" xml:space="preserve">
+    <value>Ο αριθμός κεφαλαίων δεν ταιριάζει μεταξύ της πηγής και του αρχείου εισόδου</value>
+  </data>
+  <data name="ChaptersViewModel_ValidateImportedChapters_ChapterDurationMismatchMsg" xml:space="preserve">
+    <value>Η αναφερόμενη διάρκεια των κεφαλαίων στην πηγή
+και η διάρκεια των κεφαλαίων στο αρχείο εισόδου διαφέρει πολύ.
+
+Είναι πολύ πιθανό αυτό το αρχείο κεφαλαίου να δημιουργήθηκε από διαφορετικό μέσο προέλευσης.
+
+Θέλετε να κάνετε εισαγωγή τα ονόματα των κεφαλαίων;</value>
+  </data>
+  <data name="ChaptersViewModel_ValidateImportedChapters_ChapterDurationMismatchWarning" xml:space="preserve">
+    <value>Η διάρκεια του κεφαλαίου δεν ταιριάζει μεταξύ της πηγής και του αρχείου εισόδου</value>
+  </data>
+  <data name="ScanService_ScanStopFailed" xml:space="preserve">
+    <value>Παρουσιάστηκε σφάλμα κατά την προσπάθεια διακοπής της σάρωσης. Επανεκκινήστε το HandBrake.</value>
+  </data>
+  <data name="Presets_PresetForceReset" xml:space="preserve">
+    <value>Το HandBrake δεν μπορεί να αναβαθμίσει το αρχείο προεπιλογών σε νέα μορφή έκδοσης.
+Το προκαθορισμένο αρχείο θα αρχειοθετηθεί και θα δημιουργηθεί νέο. Θα χρειαστεί να δημιουργήσετε ξανά τις δικές σας προεπιλογές.</value>
+  </data>
+  <data name="SettingService_SaveErrorReset" xml:space="preserve">
+    <value>Τυχόν ρυθμίσεις που αλλάξατε μπορεί να χρειαστεί να επαναφερθούν την επόμενη φορά που θα ξεκινήσει το HandBrake.</value>
+  </data>
+  <data name="UserSettings_AnErrorOccurred" xml:space="preserve">
+    <value>Παρουσιάστηκε πρόβλημα κατά την προσπάθεια αποθήκευσης των προτιμήσεών σας.</value>
+  </data>
+  <data name="UserSettings_YourSettingsHaveBeenReset" xml:space="preserve">
+    <value>Προειδοποίηση, οι ρυθμίσεις σας επαναφέρθηκαν!</value>
+  </data>
+  <data name="UserSettings_YourSettingsAreCorrupt" xml:space="preserve">
+    <value>Το αρχείο ρυθμίσεων χρήστη ήταν κατεστραμμένο ή δεν ήταν προσβάσιμο. Οι ρυθμίσεις έχουν επαναφερθεί στις προεπιλογές.</value>
+  </data>
+  <data name="UserSettings_UnableToLoad" xml:space="preserve">
+    <value>Δεν είναι δυνατή η φόρτωση του αρχείου ρυθμίσεων χρήστη: {0}</value>
+  </data>
+  <data name="UserSettings_UnableToLoadSolution" xml:space="preserve">
+    <value>Το αρχείο ρυθμίσεων χρήστη φαίνεται ότι δεν είναι προσβάσιμο ή είναι κατεστραμμένο. Ίσως χρειαστεί να διαγράψετε το αρχείο και να αφήσετε το HandBrake να δημιουργήσει ένα νέο.</value>
+  </data>
+  <data name="Main_NoPermissionsOrMissingDirectory" xml:space="preserve">
+    <value>Ο κατάλογος εξόδου που επιλέξατε είτε δεν υπάρχει, είτε δεν έχετε δικαιώματα εγγραφής αρχείων σε αυτόν.</value>
+  </data>
+  <data name="DirectoryUtils_CreateFolder" xml:space="preserve">
+    <value>Δημιουργία φακέλου;</value>
+  </data>
+  <data name="DirectoryUtils_CreateFolderMsg" xml:space="preserve">
+    <value>Ο φάκελος στον οποίο προσπαθείτε να γράψετε δεν υπάρχει. Θα θέλατε το HandBrake να δημιουργήσει τον παρακάτω φάκελο;
+{0}</value>
+  </data>
+  <data name="MainViewModel_UnableToLaunchDestDir" xml:space="preserve">
+    <value>Αδύνατη η εκκίνηση του καταλόγου προορισμού.</value>
+  </data>
+  <data name="MainViewModel_UnableToLaunchDestDirSolution" xml:space="preserve">
+    <value>Ελέγξτε ότι έχετε έγκυρο κατάλογο προορισμού.</value>
+  </data>
+  <data name="MainViewModel_EncodeStatusChanged_SubScan_StatusLabel" xml:space="preserve">
+    <value>Επεξεργασία Περάσματος {0} από {1}, (Σάρωση υπότιτλου)  {2:00.00}%, Υπολειπόμενος χρόνος σάρωσης: {3},  Παρήλθε: {4}</value>
+  </data>
+  <data name="NoAdditionalInformation" xml:space="preserve">
+    <value>Καμία πρόσθετη πληροφορία</value>
+  </data>
+  <data name="WindowTitleStatus" xml:space="preserve">
+    <value>{0} - ({1}%, Πέρασμα {2} από {3})</value>
+  </data>
+  <data name="TaskTrayStatusTitle" xml:space="preserve">
+    <value>{0}
+Encoding 1 Job</value>
+  </data>
+  <data name="PauseOnLowDiskspace" xml:space="preserve">
+    <value>Η ουρά σταμάτησε. Προειδοποίηση, η μονάδα δίσκου στην οποία κωδικοποιείτε έχει χαμηλό χώρο στο δίσκο. Απελευθερώστε λίγο χώρο και πατήστε εκκίνηση για να συνεχίσετε. Μπορείτε επίσης να προσαρμόσετε το ελάχιστο επίπεδο χώρου στις προτιμήσεις.</value>
+  </data>
+  <data name="Main_QueuePaused" xml:space="preserve">
+    <value>Η ουρά σταμάτησε</value>
+  </data>
+  <data name="QueueViewModel_QueuePaused" xml:space="preserve">
+    <value>Η ουρά σταμάτησε</value>
+  </data>
+  <data name="Main_LowDiskspace" xml:space="preserve">
+    <value>Ο κατάλογος προορισμού έχει χαμηλό χώρο στο δίσκο.
+
+Μπορείτε να διαμορφώσετε το επίπεδο στο οποίο εμφανίζεται αυτή η ειδοποίηση στις προτιμήσεις.
+
+Θέλετε να συνεχίσετε; </value>
+  </data>
+  <data name="Queue_UnableToResetJob" xml:space="preserve">
+    <value>Δεν είναι δυνατή η επαναφορά της κατάστασης της εργασίας επειδή δεν βρίσκεται σε κατάσταση σφάλματος ή σε κατάσταση επεξεργασίας</value>
+  </data>
+  <data name="Queue_UnableToRestoreFile" xml:space="preserve">
+    <value>Αδυναμία επαναφοράς του αρχείου ουράς.</value>
+  </data>
+  <data name="Queue_UnableToRestoreFileExtended" xml:space="preserve">
+    <value>Το αρχείο μπορεί να είναι κατεστραμμένο ή από παλαιότερη μη συμβατή έκδοση του HandBrake</value>
+  </data>
+  <data name="Queue_AlreadyEncoding" xml:space="preserve">
+    <value>Το HandBrake κωδικοποιεί ήδη ένα αρχείο.</value>
+  </data>
+  <data name="Queue_AlreadyEncodingSolution" xml:space="preserve">
+    <value>Σταματήστε την τρέχουσα κωδικοποίηση. Εάν το πρόβλημα παραμένει, επανεκκινήστε το HandBrake.</value>
+  </data>
+  <data name="StaticPreviewView_Title" xml:space="preserve">
+    <value>Προεπισκόπηση ({0}% πραγματικού μεγέθους)</value>
+  </data>
+  <data name="OsBitnessWarning" xml:space="preserve">
+    <value>Το HandBrake απαιτεί έκδοση 64bit των Windows 10 ή νεότερη έκδοση για να εκτελεστεί.</value>
+  </data>
+  <data name="OsVersionWarning" xml:space="preserve">
+    <value>Το HandBrake απαιτεί Windows 10 ή νεότερη έκδοση για να εκτελεστεί. Οι εκδόσεις 0.9.9 (XP), 0.10.5 (Vista), 1.3.3 (7 και 8.x) ήταν οι τελευταίες εκδόσεις που υποστήριξαν αυτά τα παλαιότερα λειτουργικά συστήματα.</value>
+  </data>
+  <data name="Main_ContinueAddingToQueue" xml:space="preserve">
+    <value>Θέλετε να συνεχίσετε την προσπάθεια προσθήκης των υπολοίπων;</value>
+  </data>
+  <data name="Main_QueueOverwritePrompt" xml:space="preserve">
+    <value>The file '{0}' already exists!
+Would you like to overwrite it?
+
+Hint: File overwrite behaviour can be controlled in preferences. </value>
+  </data>
+  <data name="Clipboard_Unavailable" xml:space="preserve">
+    <value>Το πρόχειρο του συστήματος δεν είναι διαθέσιμο αυτήν τη στιγμή.</value>
+  </data>
+  <data name="Clipboard_Unavailable_Solution" xml:space="preserve">
+    <value>Αυτό μπορεί να οφείλεται σε μια άλλη εφαρμογή που παρακολουθεί ή κλειδώνει το πρόχειρο για δική της χρήση. Δεν θα μπορείτε να χρησιμοποιήσετε το πρόχειρο μέχρι να ξεκλειδωθεί.</value>
+  </data>
+  <data name="AboutView_License" xml:space="preserve">
+    <value>Άδεια:</value>
+  </data>
+  <data name="AboutView_Version" xml:space="preserve">
+    <value>Έκδοση: </value>
+  </data>
+  <data name="AddPresetView_AddNewCategory" xml:space="preserve">
+    <value>-- Προσθήκη νέας κατηγορίας --</value>
+  </data>
+  <data name="AddPresetView_AddPreset" xml:space="preserve">
+    <value>Προσθήκη προεπιλογής</value>
+  </data>
+  <data name="AddPresetView_Category" xml:space="preserve">
+    <value>Κατηγορία:</value>
+  </data>
+  <data name="AddPresetView_Description" xml:space="preserve">
+    <value>Περιγραφή:</value>
+  </data>
+  <data name="AddPresetView_Name" xml:space="preserve">
+    <value>Όνομα:</value>
+  </data>
+  <data name="AddPresetView_SavePictureSize" xml:space="preserve">
+    <value>Διαστάσεις:</value>
+  </data>
+  <data name="AudioDefaultView_Behaviours" xml:space="preserve">
+    <value>Επιλογή κομματιού πηγής</value>
+  </data>
+  <data name="AudioView_AllowPassThruOf" xml:space="preserve">
+    <value>Επιτρέψτε το passthru των:</value>
+  </data>
+  <data name="AudioView_AudioDefaultsDescription" xml:space="preserve">
+    <value>Διαμορφώστε τον τρόπο αυτόματης επιλογής και διαμόρφωσης των κομματιών ήχου όταν επιλέγετε νέο τίτλο ή πηγή βίντεο.</value>
+  </data>
+  <data name="AudioView_AutoPassthruBehaviour" xml:space="preserve">
+    <value>Συμπεριφορά 'Αυτόματου Passthru':</value>
+  </data>
+  <data name="AudioView_Bitrate" xml:space="preserve">
+    <value>Bitrate</value>
+  </data>
+  <data name="AudioView_Codec" xml:space="preserve">
+    <value>Κωδικοποιητής</value>
+  </data>
+  <data name="AudioView_DRC" xml:space="preserve">
+    <value>DRC</value>
+  </data>
+  <data name="AudioView_Gain" xml:space="preserve">
+    <value>Ενίσχυση</value>
+  </data>
+  <data name="AudioView_Hide" xml:space="preserve">
+    <value>Απόκρυψη</value>
+  </data>
+  <data name="AudioView_Mixdown" xml:space="preserve">
+    <value>Ανάμειξη</value>
+  </data>
+  <data name="AudioView_OtherwiseFallbackEncoder" xml:space="preserve">
+    <value>Εναλλακτικός κωδικοποιητής:</value>
+  </data>
+  <data name="AudioView_ReloadDefaults" xml:space="preserve">
+    <value>Επαναφόρτωση</value>
+  </data>
+  <data name="AudioView_Samplerate" xml:space="preserve">
+    <value>Δειγματοληψία</value>
+  </data>
+  <data name="AudioView_Show" xml:space="preserve">
+    <value>Εμφάνιση</value>
+  </data>
+  <data name="AudioView_TrackName" xml:space="preserve">
+    <value>Όνομα κομματιού</value>
+  </data>
+  <data name="AudioView_TrackSelectionBehaviour" xml:space="preserve">
+    <value>Συμπεριφορά επιλογής κομματιού:</value>
+  </data>
+  <data name="AudioView_TrackSettingDefaultBehaviour" xml:space="preserve">
+    <value>Για πρόσθετα κομμάτια:</value>
+  </data>
+  <data name="AudioView_WhenAutoPassthru" xml:space="preserve">
+    <value>Όταν έχει επιλεγεί το 'Αυτόματο Passthru' ως κωδικοποιητής ήχου.</value>
+  </data>
+  <data name="ChaptersView_ChapterMarkers" xml:space="preserve">
+    <value>Δείκτης κεφαλαίου</value>
+  </data>
+  <data name="ChaptersView_ChapterName" xml:space="preserve">
+    <value>Όνομα Κεφαλαίου</value>
+  </data>
+  <data name="ChaptersView_ChapterNumber" xml:space="preserve">
+    <value>Chapter</value>
+  </data>
+  <data name="ChaptersView_CreateChapterMarkers" xml:space="preserve">
+    <value>Δημιουργία δεικτών κεφαλαίου</value>
+  </data>
+  <data name="ChaptersView_Duration" xml:space="preserve">
+    <value>Διάρκεια</value>
+  </data>
+  <data name="ChaptersView_Export" xml:space="preserve">
+    <value>Εξαγωγή</value>
+  </data>
+  <data name="ChaptersView_Import" xml:space="preserve">
+    <value>Εισαγωγή</value>
+  </data>
+  <data name="ChapterView_ExportNames" xml:space="preserve">
+    <value>Εξαγωγή Ονομάτων</value>
+  </data>
+  <data name="ChapterView_ImportNames" xml:space="preserve">
+    <value>Εισαγωγή Ονομάτων</value>
+  </data>
+  <data name="ChapterView_ResetChapterNames" xml:space="preserve">
+    <value>Επαναφορά Ονομάτων Κεφαλαίων</value>
+  </data>
+  <data name="CountdownAlterView_CancelAction" xml:space="preserve">
+    <value>Ακύρωση Ενέργειας</value>
+  </data>
+  <data name="CountdownAlterView_Proceed" xml:space="preserve">
+    <value>Συνεχίστε</value>
+  </data>
+  <data name="CountdownAlterView_WhenDoneAction" xml:space="preserve">
+    <value>Όταν Ολοκληρωθεί η Ενέργεια</value>
+  </data>
+  <data name="ErrorView_ErrorDetails" xml:space="preserve">
+    <value>Στοιχεία σφάλματος:</value>
+  </data>
+  <data name="FiltersView_Custom" xml:space="preserve">
+    <value>Προσαρμοσμένο:</value>
+  </data>
+  <data name="FiltersView_Deblock" xml:space="preserve">
+    <value>Deblock:</value>
+  </data>
+  <data name="FiltersView_Decomb" xml:space="preserve">
+    <value>Decomb</value>
+  </data>
+  <data name="FiltersView_Deinterlace" xml:space="preserve">
+    <value>Deinterlace:</value>
+  </data>
+  <data name="FiltersView_DeinterlacePreset" xml:space="preserve">
+    <value>Προεπιλογή:</value>
+  </data>
+  <data name="FiltersView_DeinterlacePresetAuto" xml:space="preserve">
+    <value>Προεπιλογή Deinterlace</value>
+  </data>
+  <data name="FiltersView_Denoise" xml:space="preserve">
+    <value>Denoise:</value>
+  </data>
+  <data name="FiltersView_DenoisePresetAuto" xml:space="preserve">
+    <value>Προεπιλογή Denoise</value>
+  </data>
+  <data name="FiltersView_DenoiseTuneAuto" xml:space="preserve">
+    <value>Συντωνισμός Denoise</value>
+  </data>
+  <data name="FiltersView_Detelecine" xml:space="preserve">
+    <value>Detelecine:</value>
+  </data>
+  <data name="FiltersView_Filters" xml:space="preserve">
+    <value>Φίλτρα</value>
+  </data>
+  <data name="FiltersView_FlipVideo" xml:space="preserve">
+    <value>Οριζόντια</value>
+  </data>
+  <data name="FiltersView_Grayscale" xml:space="preserve">
+    <value>Κλίμακα του γκρι</value>
+  </data>
+  <data name="FiltersView_InterlaceDetection" xml:space="preserve">
+    <value>Ανίχνευση Διαπλοκής:</value>
+  </data>
+  <data name="FiltersView_Preset" xml:space="preserve">
+    <value>Προεπιλογή:</value>
+  </data>
+  <data name="FiltersView_Rotate" xml:space="preserve">
+    <value>Περιστροφή:</value>
+  </data>
+  <data name="FiltersView_Sharpen" xml:space="preserve">
+    <value>Sharpen:</value>
+  </data>
+  <data name="FiltersView_SharpenPresetAuto" xml:space="preserve">
+    <value>Προεπιλογές Sharpen</value>
+  </data>
+  <data name="FiltersView_SharpenTuneAuto" xml:space="preserve">
+    <value>Συντωνισμός Sharpen</value>
+  </data>
+  <data name="FiltersView_Tune" xml:space="preserve">
+    <value>Συντωνισμός:</value>
+  </data>
+  <data name="Generic_Add" xml:space="preserve">
+    <value>Προσθήκη</value>
+  </data>
+  <data name="Generic_Cancel" xml:space="preserve">
+    <value>Ακύρωση</value>
+  </data>
+  <data name="Generic_Clear" xml:space="preserve">
+    <value>Καθαρισμός</value>
+  </data>
+  <data name="Generic_Close" xml:space="preserve">
+    <value>Κλείσε</value>
+  </data>
+  <data name="Generic_CopyToClipboard" xml:space="preserve">
+    <value>Αντιγραφή στο Πρόχειρο</value>
+  </data>
+  <data name="Generic_MoveLeft" xml:space="preserve">
+    <value>Μετακίνηση Αριστερά</value>
+  </data>
+  <data name="Generic_MoveRight" xml:space="preserve">
+    <value>Μετακίνηση Δεξιά</value>
+  </data>
+  <data name="Generic_Save" xml:space="preserve">
+    <value>Αποθήκευση</value>
+  </data>
+  <data name="LogView_CopyClipboard" xml:space="preserve">
+    <value>Αντιγραφή στο Πρόχειρο</value>
+  </data>
+  <data name="LogView_EncodeLog" xml:space="preserve">
+    <value>Καταγραφή Κωδικοποίησης</value>
+  </data>
+  <data name="LogView_OpenLogDir" xml:space="preserve">
+    <value>Άνοιγμα Φακέλου Καταγραφής</value>
+  </data>
+  <data name="LogView_ScanLog" xml:space="preserve">
+    <value>ScanLog</value>
+  </data>
+  <data name="MainView_ActivityLog" xml:space="preserve">
+    <value>Αρχείο καταγραφής δραστηριοτήτων</value>
+  </data>
+  <data name="MainView_AddAll" xml:space="preserve">
+    <value>Προσθήκη Όλων</value>
+  </data>
+  <data name="MainView_AddCurrent" xml:space="preserve">
+    <value>Προσθήκη Τρέχοντος</value>
+  </data>
+  <data name="MainView_AddSelection" xml:space="preserve">
+    <value>Προσθήκη Επιλεγμένου</value>
+  </data>
+  <data name="MainView_AddToQueue" xml:space="preserve">
+    <value>Προσθήκη στην ουρά</value>
+  </data>
+  <data name="MainView_AdvancedTab" xml:space="preserve">
+    <value>Προχωρημένο</value>
+  </data>
+  <data name="MainView_AlignAVStart" xml:space="preserve">
+    <value>Ταιριάζει με τη γραμμή χρόνου των κομματιών βίντεο και ήχου προσθέτοντας κενά καρέ ή αφαιρώντας καρέ. Μπορεί να βελτιώσει το συγχρονισμό ήχου/βίντεο σε ορισμένες ξεκλείδωτες συσκευές αναπαραγωγής που δεν τιμούν τις λίστες επεξεργασίας MP4.</value>
+  </data>
+  <data name="MainView_Angle" xml:space="preserve">
+    <value>Γωνία βίντεο για κωδικοποίηση. Ισχύει μόνο για DVD και Blu-ray πολλαπλών γωνιών.</value>
+  </data>
+  <data name="MainView_AudioTab" xml:space="preserve">
+    <value>Ήχος</value>
+  </data>
+  <data name="MainView_AudioTrackCount" xml:space="preserve">
+    <value>Κομμάτια ήχου</value>
+  </data>
+  <data name="MainView_Browser" xml:space="preserve">
+    <value>Αναζήτηση</value>
+  </data>
+  <data name="MainView_ChaptersTab" xml:space="preserve">
+    <value>Κεφάλαια</value>
+  </data>
+  <data name="MainView_Container" xml:space="preserve">
+    <value>Container</value>
+  </data>
+  <data name="MainView_Destination" xml:space="preserve">
+    <value>Διαδρομή προορισμού, συμπεριλαμβανομένων καταλόγου και ονόματος αρχείου. Εδώ θα δημιουργηθεί το νέο βίντεο και η ονομασία του.</value>
+  </data>
+  <data name="MainView_Duration" xml:space="preserve">
+    <value>Διάρκεια του επιλεγμένου εύρους πηγής σε Ώρες:Λεπτά:Δευτερόλεπτα</value>
+  </data>
+  <data name="MainView_File" xml:space="preserve">
+    <value>Αποθήκευση Ως:</value>
+  </data>
+  <data name="MainView_FiltersTab" xml:space="preserve">
+    <value>Φίλτρα</value>
+  </data>
+  <data name="MainView_Format" xml:space="preserve">
+    <value>Μορφοποίηση:</value>
+  </data>
+  <data name="MainView_Help" xml:space="preserve">
+    <value>Βοήθεια</value>
+  </data>
+  <data name="MainView_iPod5G" xml:space="preserve">
+    <value>Υποστήριξη iPod 5G</value>
+  </data>
+  <data name="MainView_MetaDataTab" xml:space="preserve">
+    <value>Μεταδεδομένα</value>
+  </data>
+  <data name="MainView_ModifiedPreset" xml:space="preserve">
+    <value>(Τροποποιημένο)</value>
+  </data>
+  <data name="MainView_Muxing" xml:space="preserve">
+    <value>Πολυπλεξία: Αυτό μπορεί να διαρκέσει λίγο...</value>
+  </data>
+  <data name="MainView_Options" xml:space="preserve">
+    <value>Επιλογές</value>
+  </data>
+  <data name="MainView_OutputSettings" xml:space="preserve">
+    <value>Ρυθμίσεις εξόδου</value>
+  </data>
+  <data name="MainView_Pause" xml:space="preserve">
+    <value>Παύση</value>
+  </data>
+  <data name="MainView_PictureTab" xml:space="preserve">
+    <value>Διαστάσεις</value>
+  </data>
+  <data name="MainView_PresetManage" xml:space="preserve">
+    <value>Επεξεργασία Προεπιλογής</value>
+  </data>
+  <data name="MainView_PresetOptionsContextMenu" xml:space="preserve">
+    <value>Επιλογές για έλεγχο προεπιλογών.</value>
+  </data>
+  <data name="MainView_PresetRemove" xml:space="preserve">
+    <value>Διαγραφή προεπιλογής</value>
+  </data>
+  <data name="MainView_Presets" xml:space="preserve">
+    <value>Οι προεπιλογές είναι ομάδες ρυθμίσεων κωδικοποίησης προσαρμοσμένες για συγκεκριμένα σενάριο. Επιλέξτε την προεπιλογή που ταιριάζει καλύτερα στις ανάγκες σας.
+
+Αντικαθιστά όλες τις ρυθμίσεις κωδικοποίησης. Οι ρυθμίσεις μπορούν ακόμα να βελτιωθούν μετά την επιλογή μιας προεπιλογής.</value>
+  </data>
+  <data name="MainView_Preview" xml:space="preserve">
+    <value>Προεπισκόπηση</value>
+  </data>
+  <data name="MainView_ProgressStatusWithTask" xml:space="preserve">
+    <value>Κωδικοποίηση: {0}, {1:00.00}%, Χρονος που απομένει: {2}, {3}</value>
+  </data>
+  <data name="MainView_Range" xml:space="preserve">
+    <value>Επιλογή εύρους πηγής. Από προεπιλογή, επιλέγονται όλα τα κεφάλαια και κωδικοποιείται ολόκληρη η πηγή.</value>
+  </data>
+  <data name="MainView_Reload" xml:space="preserve">
+    <value>Επαναφόρτωση</value>
+  </data>
+  <data name="MainView_Remove" xml:space="preserve">
+    <value>Αφαίρεση</value>
+  </data>
+  <data name="MainView_ResetBuiltInPresets" xml:space="preserve">
+    <value>Επαναφορά ενσωματωμένων προεπιλογών</value>
+  </data>
+  <data name="MainView_SaveNewPreset" xml:space="preserve">
+    <value>Αποθήκευση νέας προεπιλογής</value>
+  </data>
+  <data name="MainView_Searching" xml:space="preserve">
+    <value>Αναζήτηση ώρας έναρξης</value>
+  </data>
+  <data name="MainView_SetDefault" xml:space="preserve">
+    <value>Ορισμός προεπιλογής</value>
+  </data>
+  <data name="MainView_ShowPreview" xml:space="preserve">
+    <value>Προεπισκόπηση</value>
+  </data>
+  <data name="MainView_ShowQueue" xml:space="preserve">
+    <value>Ουρά</value>
+  </data>
+  <data name="MainView_Source" xml:space="preserve">
+    <value>Πηγή:</value>
+  </data>
+  <data name="MainView_SourceOpen" xml:space="preserve">
+    <value>Άνοιγμα Πηγής</value>
+  </data>
+  <data name="MainView_StartEncode" xml:space="preserve">
+    <value>Έναρξη Κωδικοποίησης</value>
+  </data>
+  <data name="MainView_StartQueue" xml:space="preserve">
+    <value>Έναρξη Ουράς</value>
+  </data>
+  <data name="MainView_Stop" xml:space="preserve">
+    <value>Διακοπή</value>
+  </data>
+  <data name="MainView_StopEncode" xml:space="preserve">
+    <value>Διακοπή κωδικοποίησης</value>
+  </data>
+  <data name="MainView_StopEncodeConfirm" xml:space="preserve">
+    <value>Είστε βέβαιοι ότι θέλετε να διακόψετε αυτήν την κωδικοποίηση;</value>
+  </data>
+  <data name="MainView_SubtitleBeforeScanError" xml:space="preserve">
+    <value>Επιλέξτε μια πηγή για κωδικοποίηση πριν προσπαθήσετε να εισάγετε ένα αρχείο υπότιτλων.</value>
+  </data>
+  <data name="MainView_SubtitlesTab" xml:space="preserve">
+    <value>Υπότιτλοι</value>
+  </data>
+  <data name="MainView_SubtitleTracksCount" xml:space="preserve">
+    <value>Κωμμάτια Υπότιτλων</value>
+  </data>
+  <data name="MainView_SummaryTab" xml:space="preserve">
+    <value>Σύνοψη</value>
+  </data>
+  <data name="MainView_through" xml:space="preserve">
+    <value> - </value>
+  </data>
+  <data name="MainView_Title" xml:space="preserve">
+    <value>Τίτλος ή βίντεο κλιπ, για κωδικοποίηση.
+Τα Blu-ray και τα DVD έχουν συνήθως πολλούς τίτλους, με τον μεγαλύτερο συνήθως να είναι η κύρια ταινία.</value>
+  </data>
+  <data name="MainView_UpdateSelectedPreset" xml:space="preserve">
+    <value>Ενημέρωση Τρέχουσας Προεπιλογής</value>
+  </data>
+  <data name="MainView_VideoTab" xml:space="preserve">
+    <value>Βίντεο</value>
+  </data>
+  <data name="MainView_WebOptimized" xml:space="preserve">
+    <value>Βελτιστοποιημένη στον Ιστό</value>
+  </data>
+  <data name="ManagePresetView_ManagePreset" xml:space="preserve">
+    <value>Διαχείριση προεπιλογών</value>
+  </data>
+  <data name="MetaDataView_Title" xml:space="preserve">
+    <value>Μεταδεδομένα</value>
+  </data>
+  <data name="OptionsView_EnableNvencEncoding" xml:space="preserve">
+    <value>Να επιτρέπεται η χρήση των κωδικοποιητών Nvidia NVENC</value>
+  </data>
+  <data name="OptionsView_EnableQuicksyncEncoding" xml:space="preserve">
+    <value>Να επιτρέπεται η χρήση των κωδικοποιητών Intel QuickSync</value>
+  </data>
+  <data name="OptionsView_EnableVceEncoding" xml:space="preserve">
+    <value>Να επιτρέπεται η χρήση των κωδικοποιητών AMD VCE</value>
+  </data>
+  <data name="OptionsView_InvalidFileFormatChars" xml:space="preserve">
+    <value>Η μορφή αρχείου που καταχωρίσατε περιείχε μη έγκυρους χαρακτήρες. Αυτοί αφαιρέθηκαν. </value>
+  </data>
+  <data name="OptionsView_PlaySoundWhenDone" xml:space="preserve">
+    <value>Παίξτε έναν ήχο όταν ολοκληρώνετε κάθε κωδικοποίηση</value>
+  </data>
+  <data name="OptionsView_PlaySoundWhenQueueDone" xml:space="preserve">
+    <value>Παίξτε έναν ήχο όταν ολοκληρωθεί η ουρά</value>
+  </data>
+  <data name="OptionsView_ShowPreviewOnSummaryTab" xml:space="preserve">
+    <value>Εμφάνιση προεπισκοπήσεων στην καρτέλα Σύνοψη.</value>
+  </data>
+  <data name="OptionsView_ShowStatusInTitleBar" xml:space="preserve">
+    <value>Εμφάνιση της κατάστασης κωδικοποίησης στη γραμμή τίτλου της εφαρμογής.</value>
+  </data>
+  <data name="Options_7DayLogClear" xml:space="preserve">
+    <value>Εκκαθάριση αρχείων καταγραφής παλαιότερα των 7 ημερών</value>
+  </data>
+  <data name="Options_About" xml:space="preserve">
+    <value>Σχετικά με το HandBrake</value>
+  </data>
+  <data name="Options_Advanced" xml:space="preserve">
+    <value>Προχωρημένο</value>
+  </data>
+  <data name="Options_AdvancedOptions" xml:space="preserve">
+    <value>Προχωρημένες Επιλογές</value>
+  </data>
+  <data name="Options_Arguments" xml:space="preserve">
+    <value>Επιχειρήματα:</value>
+  </data>
+  <data name="Options_AutomaticFileNaming" xml:space="preserve">
+    <value>Αυτόματη ονομασία αρχείου</value>
+  </data>
+  <data name="Options_AutoNameOutput" xml:space="preserve">
+    <value>Αυτόματη ονομασία αρχείων εξόδου</value>
+  </data>
+  <data name="Options_CheckForUpdates" xml:space="preserve">
+    <value>Ελεγχος για ενημερώσεις</value>
+  </data>
+  <data name="Options_ClearCompleted" xml:space="preserve">
+    <value>Να καθαρίζετε πάντα τα ολοκληρωμένα στοιχεία ουράς μετά την ολοκλήρωση μιας κωδικοποίησης</value>
+  </data>
+  <data name="Options_ClearLogs" xml:space="preserve">
+    <value>Εκκαθάριση ιστορικού καταγραφής</value>
+  </data>
+  <data name="Options_CopyLogToDir" xml:space="preserve">
+    <value>Τοποθετήστε ένα αντίγραφο μεμονωμένων αρχείων καταγραφής κωδικοποίησης σε μια καθορισμένη θέση:</value>
+  </data>
+  <data name="Options_CopyLogToEncDir" xml:space="preserve">
+    <value>Τοποθετήστε ένα αντίγραφο μεμονωμένων αρχείων καταγραφής κωδικοποίησης στην ίδια θέση με το κωδικοποιημένο βίντεο</value>
+  </data>
+  <data name="Options_CurVersion" xml:space="preserve">
+    <value>Τρέχουσα έκδοση</value>
+  </data>
+  <data name="Options_Decoding" xml:space="preserve">
+    <value>Αποκωδικοποίηση</value>
+  </data>
+  <data name="Options_DefaultPath" xml:space="preserve">
+    <value>Προκαθορισμένη Διαδρομή:</value>
+  </data>
+  <data name="Options_DownloadUpdates" xml:space="preserve">
+    <value>Λήψη ενημέρωσης</value>
+  </data>
+  <data name="Options_DVD" xml:space="preserve">
+    <value>Ανάγνωση DVD</value>
+  </data>
+  <data name="Options_DvdRead" xml:space="preserve">
+    <value>Απενεργοποιήστε το LibDVDNav. (αντ' αυτού θα χρησιμοποιηθεί το libdvdread)</value>
+  </data>
+  <data name="Options_Encoding" xml:space="preserve">
+    <value>Κωδικοποίηση</value>
+  </data>
+  <data name="Options_Format" xml:space="preserve">
+    <value>Μορφή αρχείου:</value>
+  </data>
+  <data name="Options_General" xml:space="preserve">
+    <value>Γενικά</value>
+  </data>
+  <data name="Options_Logging" xml:space="preserve">
+    <value>Καταγραφή</value>
+  </data>
+  <data name="Options_LogLevel" xml:space="preserve">
+    <value>Επίπεδο καταγραφής:</value>
+  </data>
+  <data name="Options_LogPath" xml:space="preserve">
+    <value>Path:</value>
+  </data>
+  <data name="Options_LowDiskspaceSize" xml:space="preserve">
+    <value>Παύση της ουράς αν ο χώρος στο δίσκο είναι χαμηλός</value>
+  </data>
+  <data name="Options_MinimiseTray" xml:space="preserve">
+    <value>Ελαχιστοποίηση στην γραμμή εργασιών (Απαιτείται επανεκκίνηση)</value>
+  </data>
+  <data name="Options_MinTitleScanLength" xml:space="preserve">
+    <value>Ελάχιστη διάρκεια τίτλου DVD και Blu-ray σε δευτερόλεπτα. Οι συντομότεροι τίτλοι θα παραβλεφθούν:</value>
+  </data>
+  <data name="Options_MP4FileExtension" xml:space="preserve">
+    <value>Επέκταση αρχείου MP4:</value>
+  </data>
+  <data name="Options_OnStartup" xml:space="preserve">
+    <value>Κατά την εκκίνηση</value>
+  </data>
+  <data name="Options_Output" xml:space="preserve">
+    <value>Αρχεία Εξόδου</value>
+  </data>
+  <data name="Options_Path" xml:space="preserve">
+    <value>Διαδρομή: </value>
+  </data>
+  <data name="Options_PathToMediaPlayer" xml:space="preserve">
+    <value>Διαδρομή στο πρόγραμμα αναπαραγωγής πολυμέσων</value>
+  </data>
+  <data name="Options_PreventSleep" xml:space="preserve">
+    <value>Αποτρέψτε την αδράνεια του συστήματος κατά την κωδικοποίηση</value>
+  </data>
+  <data name="Options_PreviewScanCount" xml:space="preserve">
+    <value>Αριθμός προεπισκοπήσεων εικόνων για σάρωση:</value>
+  </data>
+  <data name="Options_PriorityLevel" xml:space="preserve">
+    <value>Επίπεδο προτεραιότητας:</value>
+  </data>
+  <data name="Options_QsvDecode" xml:space="preserve">
+    <value>Προτιμήστε τη χρήση του Intel QuickSync για αποκωδικοποίηση βίντεο όταν είναι διαθέσιμο. </value>
+  </data>
+  <data name="Options_QsvDecodeForNonFullPath" xml:space="preserve">
+    <value>Χρησιμοποιήστε επίσης την αποκωδικοποίηση QSV όταν δεν χρησιμοποιείτε κωδικοποιητή QuickSync. (π.χ. x265) </value>
+  </data>
+  <data name="Options_RemovePunctuation" xml:space="preserve">
+    <value>Αφαιρέστε τα κοινά σημεία στίξης</value>
+  </data>
+  <data name="Options_ReplaceUnderscores" xml:space="preserve">
+    <value>Αντικαταστήστε τις κάτω παύλες με ένα κενό</value>
+  </data>
+  <data name="Options_ResetDoNothing" xml:space="preserve">
+    <value>Επαναφορά σε 'Μην κάνεις τίποτα' όταν η εφαρμογή επανεκκινηθεί.</value>
+  </data>
+  <data name="Options_Scaler" xml:space="preserve">
+    <value>Επιλέξτε Κλιμακωτή:</value>
+  </data>
+  <data name="Options_Scaling" xml:space="preserve">
+    <value>Κλιμάκωση</value>
+  </data>
+  <data name="Options_SendFileTo" xml:space="preserve">
+    <value>Αποστολή αρχείου σε:</value>
+  </data>
+  <data name="Options_TitleCase" xml:space="preserve">
+    <value>Σωστά κεφαλαία γράμματα</value>
+  </data>
+  <data name="Options_Updates" xml:space="preserve">
+    <value>Ενημερώσεις</value>
+  </data>
+  <data name="Options_UserInterface" xml:space="preserve">
+    <value>Διεπαφή χρήστη</value>
+  </data>
+  <data name="Options_Version" xml:space="preserve">
+    <value>Έκδοση:</value>
+  </data>
+  <data name="Options_Video" xml:space="preserve">
+    <value>Βίντεο</value>
+  </data>
+  <data name="Options_VideoPreviewPath" xml:space="preserve">
+    <value>Αυτή η διαδρομή χρησιμοποιείται μόνο για τη δυνατότητα προεπισκόπησης βίντεο.
+Υποστηρίζονται το VLC και το MPC-HC. Άλλα προγράμματα αναπαραγωγής μπορεί επίσης να λειτουργούν αλλά δεν έχουν επικυρωθεί.</value>
+  </data>
+  <data name="Options_ViewLogDirectory" xml:space="preserve">
+    <value>Προβολή καταλόγου καταγραφής</value>
+  </data>
+  <data name="Options_WhenDone" xml:space="preserve">
+    <value>Όταν τελειώσει</value>
+  </data>
+  <data name="Options_x264" xml:space="preserve">
+    <value>Ρυθμίσεις x264/5</value>
+  </data>
+  <data name="Options_x264Granularity" xml:space="preserve">
+    <value>Κατανομή κοκκοποίησης με σταθερή ποιότητα:</value>
+  </data>
+  <data name="PictureSettingsView_Anamorphic" xml:space="preserve">
+    <value>Το Anamorphic επιτρέπει οποιεσδήποτε διαστάσεις εξόδου, ενώ διατηρεί την αρχική εμφάνιση κατά την αναπαραγωγή.
+
+Απενεργοποιεί το Anamorphic. Οι διαστάσεις αποθήκευσης βίντεο και οι διαστάσεις προβολής θα είναι ίδιες. Χρήσιμο μόνο για συμβατότητα με ορισμένες παλαιού τύπου συσκευές. 
+
+Αυτόματο, μεγιστοποιεί την ανάλυση αποθήκευσης ενώ διατηρεί την αρχική αναλογία διαστάσεων της οθόνης. Συνιστάται. 
+
+Το Χαραλό είναι παρόμοιο με το Αυτόματο, αλλά προσπαθεί να διατηρήσει την αναλογία διαστάσεων της εξόδου. Αυτό μπορεί να οδηγήσει σε ελαφρά απώλεια ανάλυσης σε σύγκριση με το Αυτόματο. 
+
+Προσαρμοσμένο, επιτρέπει τη μη αυτόματη ρύθμιση όλων των παραμέτρων. Χρήσιμο για τη διόρθωση της λανθασμένης εμφάνισης του υλικού πηγής και για επαγγελματίες που χρειάζονται προηγμένο έλεγχο κατά τη μετα-παραγωγή.</value>
+  </data>
+  <data name="PictureSettingsView_Automatic" xml:space="preserve">
+    <value>Αυτόματα</value>
+  </data>
+  <data name="PictureSettingsView_Bottom" xml:space="preserve">
+    <value>Κάτω μέρος</value>
+  </data>
+  <data name="PictureSettingsView_Cropping" xml:space="preserve">
+    <value>Περικοπή:</value>
+  </data>
+  <data name="PictureSettingsView_Custom" xml:space="preserve">
+    <value>Προσαρμοσμένο</value>
+  </data>
+  <data name="PictureSettingsView_DisplayWidth" xml:space="preserve">
+    <value>Μέγεθος εμφάνισης:</value>
+  </data>
+  <data name="PictureSettingsView_Height" xml:space="preserve">
+    <value>Αυτό είναι το ύψος στο οποίο θα αποθηκευτεί το βίντεο.
+Οι πραγματικές διαστάσεις της οθόνης θα διαφέρουν εάν η αναλογία πλευρών των εικονοστοιχείων δεν είναι 1:1.</value>
+  </data>
+  <data name="PictureSettingsView_KeepAR" xml:space="preserve">
+    <value>Το Keep Aspect Ratio διατηρεί την αρχική όψη εμφάνισης της πηγής. Η απενεργοποίηση αυτού μπορεί να οδηγήσει σε τεντωμένη ή συμπιεσμένη εικόνα.</value>
+  </data>
+  <data name="PictureSettingsView_Left" xml:space="preserve">
+    <value>Αριστερά</value>
+  </data>
+  <data name="PictureSettingsView_Output" xml:space="preserve">
+    <value>Τελικές Διαστάσεις:</value>
+  </data>
+  <data name="PictureSettingsView_PAR" xml:space="preserve">
+    <value>Η μορφή εικονοστοιχείων καθορίζει το σχήμα των εικονοστοιχείων.
+Η αναλογία 1:1 ορίζει ένα τετράγωνο εικονοστοιχείο. Άλλες τιμές ορίζουν ορθογώνια σχήματα.
+Οι συσκευές αναπαραγωγής θα κλιμακώσουν την εικόνα ώστε να ταιριάζει στην καθορισμένη μορφή.</value>
+  </data>
+  <data name="PictureSettingsView_Right" xml:space="preserve">
+    <value>Δεξιά</value>
+  </data>
+  <data name="PictureSettingsView_Size" xml:space="preserve">
+    <value>Μέγεθος</value>
+  </data>
+  <data name="PictureSettingsView_Top" xml:space="preserve">
+    <value>Κορυφή</value>
+  </data>
+  <data name="PictureSettingsView_Width" xml:space="preserve">
+    <value>Σε αυτό το πλάτος θα αποθηκευτεί το βίντεο.
+Οι πραγματικές διαστάσεις της οθόνης θα διαφέρουν εάν η αναλογία πλευρών των εικονοστοιχείων δεν είναι 1:1.</value>
+  </data>
+  <data name="Preset_Custom" xml:space="preserve">
+    <value>Προσαρμοσμένο</value>
+  </data>
+  <data name="Preset_Export" xml:space="preserve">
+    <value>Εξαγωγή σε αρχείο</value>
+  </data>
+  <data name="Preset_Import" xml:space="preserve">
+    <value>Εισαγωγή από αρχείο</value>
+  </data>
+  <data name="Preset_Official" xml:space="preserve">
+    <value>Επίσημο</value>
+  </data>
+  <data name="QueueSelectionView_ChooseTitles" xml:space="preserve">
+    <value>Επιλογή τίτλων:</value>
+  </data>
+  <data name="QueueSelectionView_Title" xml:space="preserve">
+    <value>Προσθήκη στην ουρά</value>
+  </data>
+  <data name="QueueSelection_UsingPreset" xml:space="preserve">
+    <value>Οι επιλεγμένοι τίτλοι θα προστεθούν χρησιμοποιώντας την προεπιλογή "{0}" .</value>
+  </data>
+  <data name="QueueView_Advanced" xml:space="preserve">
+    <value>Επιλογές Βίντεο:</value>
+  </data>
+  <data name="QueueView_Audio" xml:space="preserve">
+    <value>Ήχος:</value>
+  </data>
+  <data name="QueueView_ClearAll" xml:space="preserve">
+    <value>Καθαρισμός Όλων</value>
+  </data>
+  <data name="QueueView_ClearCompleted" xml:space="preserve">
+    <value>Καθαρισμός Ολοκληρώθηκε.</value>
+  </data>
+  <data name="QueueView_ClearQueue" xml:space="preserve">
+    <value>Εκκαθάριση ουράς</value>
+  </data>
+  <data name="QueueView_ClearSelected" xml:space="preserve">
+    <value>Εκκαθάριση επιλεγμένων</value>
+  </data>
+  <data name="QueueView_Delete" xml:space="preserve">
+    <value>Διαγραφή</value>
+  </data>
+  <data name="QueueView_Destination" xml:space="preserve">
+    <value>Προορισμός:</value>
+  </data>
+  <data name="WhenDone_DoNothing" xml:space="preserve">
+    <value>Μην κάνεις τίποτα</value>
+  </data>
+  <data name="QueueView_Duration" xml:space="preserve">
+    <value>Διάρκεια κωδικοποίησης:</value>
+  </data>
+  <data name="QueueView_Edit" xml:space="preserve">
+    <value>Επεξεργασία</value>
+  </data>
+  <data name="QueueView_EndTime" xml:space="preserve">
+    <value>Χρόνος λήξης:</value>
+  </data>
+  <data name="QueueView_Export" xml:space="preserve">
+    <value>Έξαγωγή Ουράς</value>
+  </data>
+  <data name="QueueView_FileSize" xml:space="preserve">
+    <value>Μέγεθος αρχείου εξόδου: </value>
+  </data>
+  <data name="WhenDone_Hibernate" xml:space="preserve">
+    <value>Αδρανοποίηση</value>
+  </data>
+  <data name="WhenDone_LockSystem" xml:space="preserve">
+    <value>Σύστημα Kλειδώματος</value>
+  </data>
+  <data name="QueueView_LogNotAvailableYet" xml:space="preserve">
+    <value>Το αρχείο καταγραφής θα είναι διαθέσιμο μετά την ολοκλήρωση της κωδικοποίησης.</value>
+  </data>
+  <data name="WhenDone_Logoff" xml:space="preserve">
+    <value>Αποσύνδεση</value>
+  </data>
+  <data name="QueueView_OpenDestDir" xml:space="preserve">
+    <value>Ανοίξτε τον Κατάλογο Προορισμών</value>
+  </data>
+  <data name="QueueView_OpenSourceDir" xml:space="preserve">
+    <value>Ανοίξτε τον Κατάλογο Πηγής</value>
+  </data>
+  <data name="QueueView_Options" xml:space="preserve">
+    <value>Επιλογές</value>
+  </data>
+  <data name="QueueView_Pause" xml:space="preserve">
+    <value>Παύση</value>
+  </data>
+  <data name="QueueView_PausedDuration" xml:space="preserve">
+    <value>Διάρκεια παύσης:</value>
+  </data>
+  <data name="QueueView_PictureSettings" xml:space="preserve">
+    <value>Ρυθμίσεις εικόνας:</value>
+  </data>
+  <data name="WhenDone_QuitHandBrake" xml:space="preserve">
+    <value>Κλείστε το HandBrake</value>
+  </data>
+  <data name="QueueView_ResetAllJobs" xml:space="preserve">
+    <value>Επανάληψη όλων των εργασιών</value>
+  </data>
+  <data name="QueueView_ResetFailed" xml:space="preserve">
+    <value>Η επανάληψη απέτυχε</value>
+  </data>
+  <data name="QueueView_ResetSelectedJobs" xml:space="preserve">
+    <value>Επαναφορά επιλεγμένων εργασιών</value>
+  </data>
+  <data name="QueueView_Reset" xml:space="preserve">
+    <value>Επαναφορά</value>
+  </data>
+  <data name="WhenDone_Shutdown" xml:space="preserve">
+    <value>Τερματισμός</value>
+  </data>
+  <data name="QueueView_Source" xml:space="preserve">
+    <value>Πηγή:</value>
+  </data>
+  <data name="QueueView_Start" xml:space="preserve">
+    <value>Έναρξη Ουράς</value>
+  </data>
+  <data name="QueueView_StartTime" xml:space="preserve">
+    <value>Χρόνος Έναρξης:</value>
+  </data>
+  <data name="QueueView_Statistics" xml:space="preserve">
+    <value>Στατιστικά</value>
+  </data>
+  <data name="QueueView_Subtitles" xml:space="preserve">
+    <value>Υπότιτλοι:</value>
+  </data>
+  <data name="QueueView_Summary" xml:space="preserve">
+    <value>Περίληψη</value>
+  </data>
+  <data name="WhenDone_Suspend" xml:space="preserve">
+    <value>Αναστολή </value>
+  </data>
+  <data name="QueueView_Video" xml:space="preserve">
+    <value>Βίντεο:</value>
+  </data>
+  <data name="QueueView_WhenDone" xml:space="preserve">
+    <value>Όταν ολοκληρωθεί:</value>
+  </data>
+  <data name="Shared_AddAllForSelected" xml:space="preserve">
+    <value>Προσθήκη όλων των υπόλοιπων επιλεγμένων γλωσσών</value>
+  </data>
+  <data name="Shared_AddAllRemaining" xml:space="preserve">
+    <value>Προσθήκη όλων των κομματιών που απομένουν</value>
+  </data>
+  <data name="Shared_AddNewTrack" xml:space="preserve">
+    <value>Προσθήκη νέου κομματιού</value>
+  </data>
+  <data name="Shared_AddTrack" xml:space="preserve">
+    <value>Κομμάτια</value>
+  </data>
+  <data name="Shared_AvailableLanguages" xml:space="preserve">
+    <value>Διαθέσιμες Γλώσσες:</value>
+  </data>
+  <data name="Shared_ChooseLanguages" xml:space="preserve">
+    <value>Επιλογή Γλώσσων:</value>
+  </data>
+  <data name="Shared_ChosenLanguages" xml:space="preserve">
+    <value>Επιλεγμένες Γλώσσες</value>
+  </data>
+  <data name="Shared_ConfigureDefaultBehaviours" xml:space="preserve">
+    <value>Διαμόρφωση προεπιλεγμένων συμπεριφορών</value>
+  </data>
+  <data name="Shared_ReloadDefaults" xml:space="preserve">
+    <value>Επαναφόρτωση</value>
+  </data>
+  <data name="SourceSelection_ChooseDisc" xml:space="preserve">
+    <value>Επιλέξτε Δίσκο για Σάρωση</value>
+  </data>
+  <data name="SourceSelection_ChooseFile" xml:space="preserve">
+    <value>Επιλέξτε Αρχείο για Σάρωση</value>
+  </data>
+  <data name="SourceSelection_ChooseFolder" xml:space="preserve">
+    <value>Επιλέξτε Φάκελο για Σάρωση</value>
+  </data>
+  <data name="SourceSelection_ChooseSpecificTitle" xml:space="preserve">
+    <value>Προαιρετικά επιλέξτε έναν συγκεκριμένο τίτλο:</value>
+  </data>
+  <data name="SourceSelection_ChooseVideo" xml:space="preserve">
+    <value>Στη συνέχεια, επιλέξτε το βίντεο που θέλετε να κωδικοποιήσετε: </value>
+  </data>
+  <data name="SourceSelection_File" xml:space="preserve">
+    <value>Αρχείο</value>
+  </data>
+  <data name="SourceSelection_FolderBatchScan" xml:space="preserve">
+    <value>Φάκελος (Μαζική Σάρωση)</value>
+  </data>
+  <data name="SourceSelection_OpenDVDBluray" xml:space="preserve">
+    <value>Ανοίξτε αυτό το DVD ή το Bluray</value>
+  </data>
+  <data name="SourceSelection_OpenFolderWIth" xml:space="preserve">
+    <value>Άνοιγμα φακέλου με ένα ή περισσότερα αρχεία.</value>
+  </data>
+  <data name="SourceSelection_QueueArchiveRecovery" xml:space="preserve">
+    <value>Ανάκτηση αρχείων ουράς</value>
+  </data>
+  <data name="SourceSelection_QueueArchiveRecoveryDesc" xml:space="preserve">
+    <value>Ένα προηγούμενο αρχείο ουράς είναι διαθέσιμο. </value>
+  </data>
+  <data name="SourceSelection_SingleVideoFile" xml:space="preserve">
+    <value>Open video file(s).</value>
+  </data>
+  <data name="SourceSelection_SourceSelection" xml:space="preserve">
+    <value>Επιλογή πηγής</value>
+  </data>
+  <data name="StaticPreviewView_Duration" xml:space="preserve">
+    <value>Διάρκεια:</value>
+  </data>
+  <data name="StaticPreviewView_LivePreview" xml:space="preserve">
+    <value>Encode Preview</value>
+  </data>
+  <data name="StaticPreviewView_SelectPreviewImage" xml:space="preserve">
+    <value>Επιλέξτε μια εικόνα προεπισκόπησης</value>
+  </data>
+  <data name="StaticPreviewView_UseExternalPlayer" xml:space="preserve">
+    <value>Use External Player App</value>
+  </data>
+  <data name="SubtitlesView_AddCC" xml:space="preserve">
+    <value>Προσθέστε υπότιτλους όταν είναι διαθέσιμοι</value>
+  </data>
+  <data name="SubtitlesView_AddForeignAudioSearch" xml:space="preserve">
+    <value>Προσθήκη "Σάρωση ξένου ήχου"</value>
+  </data>
+  <data name="SubtitlesView_BurnInBehaviour" xml:space="preserve">
+    <value>Συμπεριφορά καψίματος:</value>
+  </data>
+  <data name="SubtitlesView_ImportSubtitle" xml:space="preserve">
+    <value>Εισαγωγή υποτίτλων</value>
+  </data>
+  <data name="SubtitlesView_TrackSelectionBehaviour" xml:space="preserve">
+    <value>Συμπεριφορά επιλογής κομματιού:</value>
+  </data>
+  <data name="SubtitleView_AddAllCC" xml:space="preserve">
+    <value>Προσθήκη όλων των υπότιτλων που απομένουν</value>
+  </data>
+  <data name="SubtitleView_SubtitleDefaultsDescription" xml:space="preserve">
+    <value>Διαμορφώστε τον τρόπο με τον οποίο επιλέγονται και διαμορφώνονται αυτόματα τα κομμάτια υπότιτλων όταν επιλέγετε νέο τίτλο ή πηγή βίντεο.</value>
+  </data>
+  <data name="SummaryView_AdditionalAudioTracks" xml:space="preserve">
+    <value>Πρόσθετα κομμάτια ήχου</value>
+  </data>
+  <data name="SummaryView_AdditionalSubtitleTracks" xml:space="preserve">
+    <value>Πρόσθετα κομμάτια υπότιτλων</value>
+  </data>
+  <data name="SummaryView_Burned" xml:space="preserve">
+    <value>Καμένο</value>
+  </data>
+  <data name="SummaryView_Chapters" xml:space="preserve">
+    <value>Δείκτες κεφαλαίων</value>
+  </data>
+  <data name="SummaryView_Deblock" xml:space="preserve">
+    <value>Deblock</value>
+  </data>
+  <data name="SummaryView_Detelecine" xml:space="preserve">
+    <value>Detelecine</value>
+  </data>
+  <data name="SummaryView_display" xml:space="preserve">
+    <value>απεικόνιση</value>
+  </data>
+  <data name="SummaryView_Grayscale" xml:space="preserve">
+    <value>Κλίμακα του γκρι</value>
+  </data>
+  <data name="SummaryView_NoAudioTracks" xml:space="preserve">
+    <value>Δίχως κομμάτια ήχου</value>
+  </data>
+  <data name="SummaryView_NoChapters" xml:space="preserve">
+    <value>Δίχως δείκτες κεφαλαίου</value>
+  </data>
+  <data name="SummaryView_NoFilters" xml:space="preserve">
+    <value>Δίχως Φίλτρα</value>
+  </data>
+  <data name="SummaryView_NoSource" xml:space="preserve">
+    <value>Δίχως Πηγή</value>
+  </data>
+  <data name="SummaryView_NoSubtitleTracks" xml:space="preserve">
+    <value>Δίχως Κομμάτια Υπότιτλων</value>
+  </data>
+  <data name="SummaryView_NoTracks" xml:space="preserve">
+    <value>Δίχως Κομμάτια</value>
+  </data>
+  <data name="SummaryView_PreviewInfo" xml:space="preserve">
+    <value>Προεπισκόπηση {0} από {1}</value>
+  </data>
+  <data name="SummaryView_Rotation" xml:space="preserve">
+    <value>Περιστροφή</value>
+  </data>
+  <data name="SummaryView_storage" xml:space="preserve">
+    <value>αποθήκευση</value>
+  </data>
+  <data name="VideoView_MultiPass" xml:space="preserve">
+    <value>Multi-Pass Encoding</value>
+  </data>
+  <data name="VideoView_AverageBitrate" xml:space="preserve">
+    <value>Μέσος ρυθμός Bitrate (kbps):</value>
+  </data>
+  <data name="VideoView_Codec" xml:space="preserve">
+    <value>Κωδικοποιητής βίντεο:</value>
+  </data>
+  <data name="VideoView_ConstantFramerate" xml:space="preserve">
+    <value>Σταθερός ρυθμός καρέ</value>
+  </data>
+  <data name="VideoView_ConstantQuality" xml:space="preserve">
+    <value>Σταθερή Ποιότητα:</value>
+  </data>
+  <data name="VideoView_EncoderLevel" xml:space="preserve">
+    <value>Επίπεδο κωδικοποιητή:</value>
+  </data>
+  <data name="VideoView_EncoderPreset" xml:space="preserve">
+    <value>Προκαθορισμένη ρύθμιση κωδικοποιητή:</value>
+  </data>
+  <data name="VideoView_EncoderProfile" xml:space="preserve">
+    <value>Προφίλ κωδικοποιητή:</value>
+  </data>
+  <data name="VideoView_EncodeTune" xml:space="preserve">
+    <value>Συντονισμός κωδικοποιητή:</value>
+  </data>
+  <data name="VideoView_ExtraOptions" xml:space="preserve">
+    <value>Προχωρημένες Επιλογές:</value>
+  </data>
+  <data name="VideoView_FastDecode" xml:space="preserve">
+    <value>Γρήγορη αποκωδικοποίηση</value>
+  </data>
+  <data name="VideoView_Framerate" xml:space="preserve">
+    <value>Ρυθμός Καρέ (FPS):</value>
+  </data>
+  <data name="VideoView_OptimiseVideo" xml:space="preserve">
+    <value>Επιλογές κωδικοποιητή: </value>
+  </data>
+  <data name="VideoView_PeakFramerate" xml:space="preserve">
+    <value>Μέγιστος ρυθμός καρέ</value>
+  </data>
+  <data name="VideoView_Quality" xml:space="preserve">
+    <value>Ποιότητα: </value>
+  </data>
+  <data name="VideoView_TurboAnalysisPass" xml:space="preserve">
+    <value>Turbo analysis pass</value>
+  </data>
+  <data name="VideoView_VariableFramerate" xml:space="preserve">
+    <value>Μεταβλητός ρυθμός καρέ</value>
+  </data>
+  <data name="VideoView_Video" xml:space="preserve">
+    <value>Βίντεο: </value>
+  </data>
+  <data name="OptionsView_Language" xml:space="preserve">
+    <value>Γλώσσα:</value>
+  </data>
+  <data name="Language_UseSystem" xml:space="preserve">
+    <value>Χρήση Γλώσσας Συστήματος</value>
+  </data>
+  <data name="SourceSelection_AboutHandBrake" xml:space="preserve">
+    <value>Σχετικά με το HandBrake</value>
+  </data>
+  <data name="SourceSelection_DropFileHere" xml:space="preserve">
+    <value>Or drop a file, set of files or folder here ...</value>
+  </data>
+  <data name="SourceSelection_Help" xml:space="preserve">
+    <value>Βοήθεια</value>
+  </data>
+  <data name="Preferences" xml:space="preserve">
+    <value>Προτιμήσεις</value>
+  </data>
+  <data name="AudioDefaultsView_AddTrack" xml:space="preserve">
+    <value>Προσθήκη κομματιού</value>
+  </data>
+  <data name="AudioDefaultsView_AutoAddTracks" xml:space="preserve">
+    <value>Audio encoder settings for each chosen track:</value>
+  </data>
+  <data name="AudioDefaultsView_Clear" xml:space="preserve">
+    <value>Καθαρισμός</value>
+  </data>
+  <data name="SubtitlesView_BurnIn" xml:space="preserve">
+    <value>Εγγραφή υπότιτλων σε βίντεο.
+
+Σημείωση: Αυτό θα επιλεγεί αυτόματα εάν η μορφή του κομματιού υπότιτλων πηγής δεν υποστηρίζεται στον τύπο αρχείου εξόδου.
+
+Για παράδειγμα, οι υπότιτλοι PGS δεν υποστηρίζονται σε MP4.</value>
+  </data>
+  <data name="SubtitlesView_Default" xml:space="preserve">
+    <value>Προκαθορισμένο</value>
+  </data>
+  <data name="SubtitlesView_ForcedOnly" xml:space="preserve">
+    <value>Μόνο Αναγκαστικά</value>
+  </data>
+  <data name="MainView_About" xml:space="preserve">
+    <value>_Σχετικά με το...</value>
+  </data>
+  <data name="MainView_ActivityLogMenu" xml:space="preserve">
+    <value>_Μητρώο Δραστηριότητας</value>
+  </data>
+  <data name="MainView_CheckForUpdates" xml:space="preserve">
+    <value>_Έλεγχος για Ενημερώσεις</value>
+  </data>
+  <data name="MainView_Exit" xml:space="preserve">
+    <value>_Έξοδος</value>
+  </data>
+  <data name="MainView_ExportToFile" xml:space="preserve">
+    <value>_Εξαγωγή σε αρχείο</value>
+  </data>
+  <data name="MainView_FileMenu" xml:space="preserve">
+    <value>_Αρχείο</value>
+  </data>
+  <data name="MainView_HandBrakeDocs" xml:space="preserve">
+    <value>_Τεκμηρίωση HandBrake (HTTPS)</value>
+  </data>
+  <data name="MainView_HelpMenu" xml:space="preserve">
+    <value>_Βοήθεια</value>
+  </data>
+  <data name="MainView_ImportFromFile" xml:space="preserve">
+    <value>_Εισαγωγή από αρχείο</value>
+  </data>
+  <data name="MainView_PreferencesMenu" xml:space="preserve">
+    <value>_Προτιμήσεις</value>
+  </data>
+  <data name="MainView_PresetsMenu" xml:space="preserve">
+    <value>_Προεπιλογές</value>
+  </data>
+  <data name="MainView_QueueMenu" xml:space="preserve">
+    <value>_Ουρά</value>
+  </data>
+  <data name="MainView_ResetPresets" xml:space="preserve">
+    <value>_Επαναφορά εγκατεστημένων προεπιλογών</value>
+  </data>
+  <data name="MainView_SetCurrentAsDefault" xml:space="preserve">
+    <value>_Ορίστε την τρέχουσα ως προεπιλογή</value>
+  </data>
+  <data name="MainView_ShowPresetPanel" xml:space="preserve">
+    <value>_Εμφάνιση πίνακα προεπιλογής</value>
+  </data>
+  <data name="MainView_ShowQueueMenu" xml:space="preserve">
+    <value>_Εμφάνιση Ουράς</value>
+  </data>
+  <data name="MainView_ToolsMenu" xml:space="preserve">
+    <value>_Εργαλεία</value>
+  </data>
+  <data name="OptionsView_CheckingForUpdates" xml:space="preserve">
+    <value>Έλεγχος για ενημερώσεις...</value>
+  </data>
+  <data name="OptionsView_ClearLogDirConfirm" xml:space="preserve">
+    <value>Είστε βέβαιοι ότι θέλετε να διαγράψετε τον κατάλογο του αρχείου καταγραφής;</value>
+  </data>
+  <data name="OptionsView_ClearLogs" xml:space="preserve">
+    <value>Εκκαθάριση αρχείων καταγραφής</value>
+  </data>
+  <data name="OptionsView_Downloading" xml:space="preserve">
+    <value>Γίνεται λήψη…</value>
+  </data>
+  <data name="OptionsView_LogsCleared" xml:space="preserve">
+    <value>Ο κατάλογος αρχείων καταγραφής του HandBrake έχει διαγραφεί!</value>
+  </data>
+  <data name="OptionsView_Notice" xml:space="preserve">
+    <value>Σημείωση</value>
+  </data>
+  <data name="OptionsView_PreparingUpdate" xml:space="preserve">
+    <value>Προετοιμασία για ενημέρωση...</value>
+  </data>
+  <data name="OptionsView_SelectFolder" xml:space="preserve">
+    <value>Επιλέξτε έναν φάκελο.</value>
+  </data>
+  <data name="OptionsView_SetDefaultLocationOutputFIle" xml:space="preserve">
+    <value>Κάντε κλικ στην 'Αναζήτηση' για να ορίσετε την προεπιλεγμένη τοποθεσία</value>
+  </data>
+  <data name="MainView_Hide" xml:space="preserve">
+    <value>Απόκρυψη</value>
+  </data>
+  <data name="MainView_Show" xml:space="preserve">
+    <value>Εμφάνιση</value>
+  </data>
+  <data name="MainView_ShowAddAllToQueue" xml:space="preserve">
+    <value>'Προσθήκη Όλων' στην Ουρά</value>
+  </data>
+  <data name="MainView_ShowAddSelectionToQueue" xml:space="preserve">
+    <value>'Προσθήκη Επιλεγμένου' στην Ουρά</value>
+  </data>
+  <data name="QueueView_PlayMediaFile" xml:space="preserve">
+    <value>Αναπαραγωγή Αρχείου</value>
+  </data>
+  <data name="Options_ApplicationToolbar" xml:space="preserve">
+    <value>Γραμμή εργαλείων εφαρμογής</value>
+  </data>
+  <data name="Options_ShowToolbarAddAll" xml:space="preserve">
+    <value>Εμφάνιση "Προσθήκη Όλων στην ουρά" στη γραμμή εργαλείων</value>
+  </data>
+  <data name="Options_ShowToolbarAddSelection" xml:space="preserve">
+    <value>Εμφάνιση 'Προσθήκη Επιλεγμένου στην ουρά' στη γραμμή εργαλείων</value>
+  </data>
+  <data name="OptionsView_HardwareDetectFailed" xml:space="preserve">
+    <value>Η υποστήριξη υλικού κωδικοποιητή είναι προς το παρόν απενεργοποιημένη. Εάν δεν ξεκινήσατε το HandBrake με την επιλογή "--no-hardware", βεβαιωθείτε ότι χρησιμοποιείτε τρέχοντα προγράμματα οδήγησης για όλες τις κάρτες γραφικών σε αυτό το σύστημα.
+
+Αυτό δεν θα επηρεάσει κανέναν από τους κωδικοποιητές λογισμικού.</value>
+  </data>
+  <data name="Main_PleaseFixSubtitleSettings" xml:space="preserve">
+    <value>Διορθώστε τις ρυθμίσεις υποτίτλων πριν συνεχίσετε. </value>
+  </data>
+  <data name="Generic_Apply" xml:space="preserve">
+    <value>Χρήση</value>
+  </data>
+  <data name="Main_ResumeEncode" xml:space="preserve">
+    <value>Συνέχιση της κωδικοποίησης</value>
+  </data>
+  <data name="QueueView_Actions" xml:space="preserve">
+    <value>Ενέργειες</value>
+  </data>
+  <data name="QueueView_Import" xml:space="preserve">
+    <value>Εισαγωγή Ουράς</value>
+  </data>
+  <data name="QueueViewModel_EncodeStatusChanged_StatusLabel" xml:space="preserve">
+    <value>Κωδικοποίηση: Πέρασμα {0} από {1},  {2:00.00}%, FPS: {3:000.0},  Μέσος όρος FPS: {4:000.0}
+Χρόνος που απομένει: {5},  Παρήλθε: {6} {7}</value>
+  </data>
+  <data name="QueueView_DeleteSelected" xml:space="preserve">
+    <value>Διαγραφή Επιλεγμένου</value>
+  </data>
+  <data name="Portable_TmpNotWritable" xml:space="preserve">
+    <value>Φορητή λειτουργία: Δεν είναι δυνατή η δημιουργία καταλόγου TMP. Ελέγξτε ότι η διαδρομή είναι σωστή και εγγράψιμη.
+
+    {0}</value>
+  </data>
+  <data name="Portable_StorageNotWritable" xml:space="preserve">
+    <value>Φορητή λειτουργία: Δεν είναι δυνατή η δημιουργία καταλόγου αποθήκευσης. Ελέγξτε ότι η διαδρομή είναι σωστή και εγγράψιμη.
+
+    {0}</value>
+  </data>
+  <data name="Portable_IniFileError" xml:space="preserve">
+    <value>Φορητή λειτουργία: Δεν είναι δυνατή η ανάγνωση του portable.ini. Ενδέχεται να υπάρχει σφάλμα σε αυτό το αρχείο. Δοκιμάστε ξανά χρησιμοποιώντας το portable.ini.template ως οδηγό.</value>
+  </data>
+  <data name="OptionsView_FormatOptions" xml:space="preserve">
+    <value>Replacement Options:
+You can drag/drop or enter the text above.</value>
+  </data>
+  <data name="FileOverwriteBehaviours_Ask" xml:space="preserve">
+    <value>Ερώτηση για Επανεγγραφής αρχείου</value>
+  </data>
+  <data name="FileOverwriteBehaviours_Autoname" xml:space="preserve">
+    <value>Προσπαθήστε να μετονομάσετε αυτόματα το αρχείο</value>
+  </data>
+  <data name="FileOverwriteBehaviours_Overwrite" xml:space="preserve">
+    <value>Επανεγγράψτε το αρχείο</value>
+  </data>
+  <data name="Options_UIBehaviour" xml:space="preserve">
+    <value>Συμπεριφορά διεπαφής χρήστη</value>
+  </data>
+  <data name="OptionsView_FileOverwriteBehaviour" xml:space="preserve">
+    <value>Συμπεριφορά αντικατάστασης αρχείου:</value>
+  </data>
+  <data name="Options_EncodeCompleted" xml:space="preserve">
+    <value>Ολοκληρώθηκε η κωδικοποίηση</value>
+  </data>
+  <data name="Options_Notifications" xml:space="preserve">
+    <value>Ηχητικές ειδοποιήσεις</value>
+  </data>
+  <data name="Options_QueueCompleted" xml:space="preserve">
+    <value>Ολοκληρώθηκε η ουρά</value>
+  </data>
+  <data name="Options_WhenDoneColon" xml:space="preserve">
+    <value>Όταν Ολοκληρωθεί:</value>
+  </data>
+  <data name="OptionsView_FileCollisionBehaviour" xml:space="preserve">
+    <value>Συμπεριφορά σε περίπτωση διένεξης ονόματος αρχείου:</value>
+  </data>
+  <data name="CollisionBehaviour_Post" xml:space="preserve">
+    <value>Postfix</value>
+  </data>
+  <data name="CollisionBehaviour_Pre" xml:space="preserve">
+    <value>Prefix</value>
+  </data>
+  <data name="CollisionBehaviour_AppendNumber" xml:space="preserve">
+    <value>Προσάρτηση Αριθμού</value>
+  </data>
+  <data name="FiltersViewAuto_DeblockPreset" xml:space="preserve">
+    <value>FiltersView_DeblockPreset</value>
+  </data>
+  <data name="FiltersViewAuto_DeblockTune" xml:space="preserve">
+    <value>Συντονισμός Deblock</value>
+  </data>
+  <data name="OptionsView_ChoiceOfEncoderHint" xml:space="preserve">
+    <value>Η επιλογή του κωδικοποιητή θα είναι διαθέσιμη στην καρτέλα "Βίντεο".</value>
+  </data>
+  <data name="Queue_RecoverQueueQuestionPlural" xml:space="preserve">
+    <value>Το HandBrake εντόπισε πολλά ημιτελή αρχεία ουράς. Αυτά θα προέρχονται από πολλαπλές περιπτώσεις λειτουργίας HandBrake. Θα θέλατε να ανακτήσετε όλες τις ημιτελείς εργασίες;</value>
+  </data>
+  <data name="Queue_RecoverQueueQuestionSingular" xml:space="preserve">
+    <value>Το HandBrake εντόπισε ημιτελή στοιχεία στην ουρά από την τελευταία φορά που ξεκίνησε η εφαρμογή. Θα θέλατε να τα ανακτήσετε;</value>
+  </data>
+  <data name="Queue_RecoveryPossible" xml:space="preserve">
+    <value>Πιθανή ανάκτηση ουράς</value>
+  </data>
+  <data name="PresetService_ImportingBuiltInWarning" xml:space="preserve">
+    <value>Το αρχείο προεπιλογών περιείχε ενσωματωμένες προεπιλογές. Η λειτουργία εισαγωγής δεν υποστηρίζει την εισαγωγή τους. Χρησιμοποιήστε το 'Μενού Προεπιλογών -&gt; Επαναφορά ενσωματωμένων προεπιλογών' για να επαναφέρετε τις τυπικές προεπιλογές.
+
+Όπου υποστηρίζεται, θα έχουν εισαχθεί τυχόν προκαθορισμένες ρυθμίσεις χρήστη.</value>
+  </data>
+  <data name="Options_PromptBeforeAction" xml:space="preserve">
+    <value>Εκτελέστε ενέργεια αμέσως (αυτό απενεργοποιεί το παράθυρο διαλόγου επιβεβαίωσης 60 δευτερολέπτων).</value>
+  </data>
+  <data name="Browse" xml:space="preserve">
+    <value>Αναζήτηση</value>
+  </data>
+  <data name="OptionsView_MediaFileNotSet" xml:space="preserve">
+    <value>Δεν έχει οριστεί αρχείο ήχου. Κάντε κλικ στην 'Αναζήτηση' για να επιλέξετε ένα αρχείο wav ή mp3 για αναπαραγωγή.</value>
+  </data>
+  <data name="OptionsView_Play" xml:space="preserve">
+    <value>Παίξε</value>
+  </data>
+  <data name="QueueView_ExportCLI" xml:space="preserve">
+    <value>Ουρά εξαγωγής (μόνο CLI)</value>
+  </data>
+  <data name="Options_DarkTheme" xml:space="preserve">
+    <value>Χρησιμοποιήστε το Σκοτεινό Θέμα. (Απαιτείται επανεκκίνηση, μόνο Windows 10)</value>
+  </data>
+  <data name="QueueView_NotAvailable" xml:space="preserve">
+    <value>Μη διαθέσιμο</value>
+  </data>
+  <data name="Options_LowDiskspaceSizeGB" xml:space="preserve">
+    <value>GB</value>
+  </data>
+  <data name="SystemService_ACMains" xml:space="preserve">
+    <value>Εντοπίστηκε τροφοδοσία ρεύματος AC. Συνέχιση κωδικοποίησης... ({0} %)</value>
+  </data>
+  <data name="SystemService_CriticalBattery" xml:space="preserve">
+    <value>Η μπαταρία του συστήματος είναι κρίσιμη! ({0} %)</value>
+  </data>
+  <data name="SystemService_LowBatteryLog" xml:space="preserve">
+    <value>Χαμηλή μπαταρία συστήματος! ({0} %). Η κωδικοποίησή σας έχει τεθεί σε παύση.</value>
+  </data>
+  <data name="SystemService_LowDiskSpaceLog" xml:space="preserve">
+    <value>Ο υπολειπόμενος αποθηκευτικός χώρος της μονάδας δίσκου έχει πέσει κάτω από τα {0} GB στη μονάδα δίσκου προορισμού. Παύση κωδικοποίησης...</value>
+  </data>
+  <data name="AudioDefaultsView_PaneTitle" xml:space="preserve">
+    <value>Αυτόματες Επιλογές Ήχου</value>
+  </data>
+  <data name="SubtitlesDefaultsView_PaneTitle" xml:space="preserve">
+    <value>Αυτόματες Επιλογές Υπότιτλων</value>
+  </data>
+  <data name="Options_SystemOptions" xml:space="preserve">
+    <value>Σύστημα</value>
+  </data>
+  <data name="MetadataView_Actors" xml:space="preserve">
+    <value>Ηθοποιοί:</value>
+  </data>
+  <data name="MetadataView_Comments" xml:space="preserve">
+    <value>Σχόλια:</value>
+  </data>
+  <data name="MetadataView_Description" xml:space="preserve">
+    <value>Περιγραφή:</value>
+  </data>
+  <data name="MetadataView_Director" xml:space="preserve">
+    <value>Σκηνοθέτης:</value>
+  </data>
+  <data name="MetadataView_Genre" xml:space="preserve">
+    <value>Είδος:</value>
+  </data>
+  <data name="MetadataView_Plot" xml:space="preserve">
+    <value>Πλοκή:</value>
+  </data>
+  <data name="MetadataView_ReleaseDate" xml:space="preserve">
+    <value>Ημερομηνία κυκλοφορίας:</value>
+  </data>
+  <data name="MetadataView_TitleTag" xml:space="preserve">
+    <value>Τίτλος:</value>
+  </data>
+  <data name="LogViewModel_Title" xml:space="preserve">
+    <value>Προβολή καταγραφής</value>
+  </data>
+  <data name="MainView_Aspect" xml:space="preserve">
+    <value>Μορφή εικόνας::</value>
+  </data>
+  <data name="MainView_Filters" xml:space="preserve">
+    <value>Φίλτρα:</value>
+  </data>
+  <data name="MainView_Size" xml:space="preserve">
+    <value>Μέγεθος:</value>
+  </data>
+  <data name="MainView_Tracks" xml:space="preserve">
+    <value>Κομμάτια:</value>
+  </data>
+  <data name="OptionsTab_General" xml:space="preserve">
+    <value>Γενικά</value>
+  </data>
+  <data name="OptionsViewModel_CheckForUpdatesMsg" xml:space="preserve">
+    <value>Κάντε κλικ στο 'Έλεγχος για Ενημερώσεις' για να ελέγξετε για νέες εκδόσεις</value>
+  </data>
+  <data name="OptionsView_BackButton" xml:space="preserve">
+    <value>&lt; Πίσω</value>
+  </data>
+  <data name="QueueView_CurrentlyPaused" xml:space="preserve">
+    <value>Σε παύση</value>
+  </data>
+  <data name="Options_OutputFiles" xml:space="preserve">
+    <value>Έξοδος αρχείων</value>
+  </data>
+  <data name="PointToPointMode_Chapters" xml:space="preserve">
+    <value>Κεφάλαια</value>
+  </data>
+  <data name="PointToPointMode_Frames" xml:space="preserve">
+    <value>Εικόνες</value>
+  </data>
+  <data name="PointToPointMode_Preview" xml:space="preserve">
+    <value>Προεπισκόπηση</value>
+  </data>
+  <data name="PointToPointMode_Seconds" xml:space="preserve">
+    <value>Δευτερόλεπτα</value>
+  </data>
+  <data name="SubtitleBehaviourModes_AllMatching" xml:space="preserve">
+    <value>Όλες οι επιλεγμένες γλώσσες που ταιριάζουν</value>
+  </data>
+  <data name="SubtitleBehaviourModes_FirstMatching" xml:space="preserve">
+    <value>Πρώτη αντιστοιχισμένη επιλεγμένη γλώσσα</value>
+  </data>
+  <data name="SubtitleBehaviourModes_None" xml:space="preserve">
+    <value>Κανένα</value>
+  </data>
+  <data name="SubtitleBurnInBehaviourModes_FirstTrack" xml:space="preserve">
+    <value>Πρώτο κομμάτι</value>
+  </data>
+  <data name="SubtitleBurnInBehaviourModes_ForeignAudioPreferredElseFirst" xml:space="preserve">
+    <value>Προτιμάται η ξένη γλώσσα, αλλιώς η Πρώτη</value>
+  </data>
+  <data name="SubtitleBurnInBehaviourModes_ForeignAudioTrack" xml:space="preserve">
+    <value>Ξενόγλωσσο κομμάτι ήχου</value>
+  </data>
+  <data name="SubtitleBurnInBehaviourModes_None" xml:space="preserve">
+    <value>Κανένα</value>
+  </data>
+  <data name="SubtitleViewModel_ForeignAudioSearch" xml:space="preserve">
+    <value>Aναζήτηση ήχου ξένης γλώσσας</value>
+  </data>
+  <data name="Subtitle_ForeignAudioScan" xml:space="preserve">
+    <value>Aναζήτηση ήχου ξένης γλώσσας</value>
+  </data>
+  <data name="AudioBehaviourModes_AllMatching" xml:space="preserve">
+    <value>Όλες οι επιλεγμένες γλώσσες που ταιριάζουν</value>
+  </data>
+  <data name="AudioBehaviourModes_AllTracks" xml:space="preserve">
+    <value>Χρήση όλων των κομματιών ως πρότυπα</value>
+  </data>
+  <data name="AudioBehaviourModes_FirstMatch" xml:space="preserve">
+    <value>Πρώτη αντιστοιχισμένη επιλεγμένη γλώσσα</value>
+  </data>
+  <data name="AudioBehaviourModes_FirstTrack" xml:space="preserve">
+    <value>Χρησιμοποιήστε το πρώτο κομμάτι ως πρότυπο</value>
+  </data>
+  <data name="AudioBehaviourModes_None" xml:space="preserve">
+    <value>Χωρίς ήχο</value>
+  </data>
+  <data name="ChapterViewModel_Chapter" xml:space="preserve">
+    <value>Κεφάλαιο {0}</value>
+  </data>
+  <data name="Mp4Behaviour_Auto" xml:space="preserve">
+    <value>Αυτόματο</value>
+  </data>
+  <data name="Mp4Behaviour_UseM4v" xml:space="preserve">
+    <value>Πάντα να χρησιμοποιείτε M4V</value>
+  </data>
+  <data name="Mp4Behaviour_UseMp4" xml:space="preserve">
+    <value>Πάντα να χρησιμοποιείτε MP4</value>
+  </data>
+  <data name="PresetPictureSettingsMode_Custom" xml:space="preserve">
+    <value>Προσαρμοσμένο</value>
+  </data>
+  <data name="PresetPictureSettingsMode_None" xml:space="preserve">
+    <value>Κανένα</value>
+  </data>
+  <data name="PresetPictureSettingsMode_SourceMaximum" xml:space="preserve">
+    <value>Να χρησιμοποιείτε πάντα την Ανάλυση πηγής</value>
+  </data>
+  <data name="ProcessPriority_AboveNormal" xml:space="preserve">
+    <value>Πάνω από το κανονικό</value>
+  </data>
+  <data name="ProcessPriority_BelowNormal" xml:space="preserve">
+    <value>Κάτω από το κανονικό</value>
+  </data>
+  <data name="ProcessPriority_High" xml:space="preserve">
+    <value>Υψηλή</value>
+  </data>
+  <data name="ProcessPriority_Low" xml:space="preserve">
+    <value>Χαμηλή</value>
+  </data>
+  <data name="ProcessPriority_Normal" xml:space="preserve">
+    <value>Κανονική</value>
+  </data>
+  <data name="UpdateCheck_Monthly" xml:space="preserve">
+    <value>Μηνιαία</value>
+  </data>
+  <data name="UpdateCheck_Weekly" xml:space="preserve">
+    <value>Εβδομαδιαία</value>
+  </data>
+  <data name="OptionsView_AlwaysUseDefaultPath" xml:space="preserve">
+    <value>Όταν είναι ενεργοποιημένο το αυτόματο σύστημα ονομάτων θα χρησιμοποιεί πάντα την προεπιλεγμένη διαδρομή.
+Όταν είναι απενεργοποιημένο, θα χρησιμοποιεί τη διαδρομή στο πλαίσιο προορισμού στο κύριο παράθυρο, εάν συμπληρωθεί,  διαφορετικά θα χρησιμοποιηθεί η προεπιλεγμένη διαδρομή.</value>
+  </data>
+  <data name="OptionsView_RemotePortLimit" xml:space="preserve">
+    <value>Το εύρος της θύρας πρέπει να είναι μεταξύ 5000 και 32767</value>
+  </data>
+  <data name="OptionsView_SendFileToArgPlaceholders" xml:space="preserve">
+    <value>Αντικατάσταση θέσεων: {source} {destination} {exit_code}</value>
+    <comment>Note: {source}, {destination} and {exit_code} are not translatable. </comment>
+  </data>
+  <data name="SourceSelection_UpdateAvailable" xml:space="preserve">
+    <value>Μια νέα έκδοση του HandBrake είναι διαθέσιμη!</value>
+  </data>
+  <data name="About_Copyright" xml:space="preserve">
+    <value>Πνευματικά δικαιώματα(C) 2003-2022 Η ομάδα του HandBrake</value>
+  </data>
+  <data name="Options_LowBatteryLevel" xml:space="preserve">
+    <value>Χαμηλό επίπεδο μπαταρίας:</value>
+  </data>
+  <data name="Options_PauseOnLowBattery" xml:space="preserve">
+    <value>Παύση τυχόν εργασιών που τρέχουν όταν η μπαταρία πέσει.</value>
+  </data>
+  <data name="SubtitleView_AddRemainingCC" xml:space="preserve">
+    <value>Προσθήκη όλων των υπότιτλων που απομένουν</value>
+  </data>
+  <data name="QueueService_DuplicatesQuestion" xml:space="preserve">
+    <value>Εντοπίστηκαν διπλότυπες εργασίες στο αρχείο ουράς που προσπαθείτε να εισάγετε. Θέλετε να αντικαταστήσετε τις υπάρχουσες εγγραφές;
+Αυτό θα σταματήσει επίσης τυχόν υπάρχουσες εργασίες που εκτελούνται.</value>
+  </data>
+  <data name="QueueService_DuplicatesTitle" xml:space="preserve">
+    <value>Εντοπίστηκαν Διπλότυπα</value>
+  </data>
+  <data name="OptionsView_EnableQuicksyncLowPower" xml:space="preserve">
+    <value>Ενεργοποίηση υλικού QuickSync χαμηλής κατανάλωσης (όπου υποστηρίζεται).</value>
+  </data>
+  <data name="QueueView_JobInformationNotAvailable" xml:space="preserve">
+    <value>Επιλέξτε μία εργασία για να δείτε συνοπτικές πληροφορίες.</value>
+  </data>
+  <data name="OptionsView_EnableWorkerProcesses" xml:space="preserve">
+    <value>Εκτελέστε κάθε εργασία στην ουρά σε μια ξεχωριστή διαδικασία του worker.</value>
+  </data>
+  <data name="OptionsView_WorkerDefaultPort" xml:space="preserve">
+    <value>Προεπιλεγμένη θύρα δικτύου για τον worker:</value>
+  </data>
+  <data name="Presets_NotAvailableForUse" xml:space="preserve">
+    <value>Η προεπιλογή που επιλέξατε δεν είναι διαθέσιμη για χρήση σε αυτό το σύστημα.
+
+Αυτό είναι συνήθως μια ένδειξη ότι το σύστημά σας δεν υποστηρίζει το υλικό που απαιτείται για να το χρησιμοποιήσετε.
+
+Επιλέξτε διαφορετική προεπιλογή.</value>
+  </data>
+  <data name="OptionsView_ProcessIsolation" xml:space="preserve">
+    <value>Απομόνωση Διεργασιών</value>
+  </data>
+  <data name="OptionsView_ProcessIsolation_Warning1" xml:space="preserve">
+    <value>Λάβετε υπόψη ότι η χρήση αυτής της δυνατότητας θα ξεκινήσει έναν διακομιστή HTTP δεσμευμένο στο 127.0.0.1 στη θύρα που αναφέρεται.</value>
+  </data>
+  <data name="OptionsView_ProcessIsolation_Warning2" xml:space="preserve">
+    <value>Εάν η καθορισμένη θύρα χρησιμοποιείται, θα βρει την πρώτη ελεύθερη θύρα εντός +100 από την καθορισμένη θύρα.</value>
+  </data>
+  <data name="OptionsView_SimultaneousEncodes" xml:space="preserve">
+    <value>Μέγιστος αριθμός ταυτόχρονων κωδικοποιήσεων:</value>
+  </data>
+  <data name="StaticPreviewView_CancelPreview" xml:space="preserve">
+    <value>Ακύρωση</value>
+  </data>
+  <data name="MainView_SelectedPresets" xml:space="preserve">
+    <value>Προεπιλογή:</value>
+  </data>
+  <data name="SummaryView_SameAsSource" xml:space="preserve">
+    <value>Το ίδιο με την πηγή</value>
+  </data>
+  <data name="OptionsViewModel_ResetHandBrake" xml:space="preserve">
+    <value>Επαναφορά ρυθμίσεων</value>
+  </data>
+  <data name="OptionsViewModel_ResetHandBrakeQuestion" xml:space="preserve">
+    <value>Είστε βέβαιοι ότι θέλετε να επαναφέρετε το HandBrake στις προεπιλεγμένες ρυθμίσεις;</value>
+  </data>
+  <data name="PaddingMode_Custom" xml:space="preserve">
+    <value>Προσαρμοσμένο (Δεν Περιορίζεται)</value>
+  </data>
+  <data name="PaddingMode_Fill" xml:space="preserve">
+    <value>Γέμισμα (Surround)</value>
+  </data>
+  <data name="PaddingMode_Height" xml:space="preserve">
+    <value>Ύψος (Pillarbox)</value>
+  </data>
+  <data name="PaddingMode_None" xml:space="preserve">
+    <value>Κανένα</value>
+  </data>
+  <data name="PaddingMode_Width" xml:space="preserve">
+    <value>Πλάτος (Letterbox)</value>
+  </data>
+  <data name="PictureSettingsView_Padding" xml:space="preserve">
+    <value>Γέμισμα:</value>
+  </data>
+  <data name="PictureSettingsView_PaddingColour" xml:space="preserve">
+    <value>Χρώμμα:</value>
+  </data>
+  <data name="PictureSettingsView_Borders" xml:space="preserve">
+    <value>Περιθώρια:</value>
+  </data>
+  <data name="PictureSettingsView_ResAndScaling" xml:space="preserve">
+    <value>Ανάλυση και Κλιμάκωση:</value>
+  </data>
+  <data name="PictureSettingsView_RotateAndCrop" xml:space="preserve">
+    <value>Προσανατολισμός και Περικοπή:</value>
+  </data>
+  <data name="QueueView_FilterSettings" xml:space="preserve">
+    <value>Φίλτρα:</value>
+  </data>
+  <data name="SummaryView_Default" xml:space="preserve">
+    <value>Προκαθορισμένο</value>
+  </data>
+  <data name="SummaryView_Forced" xml:space="preserve">
+    <value>Εξαναγκασμένο</value>
+  </data>
+  <data name="PictureSettingsResLimitModes_1080p" xml:space="preserve">
+    <value>1080p HD</value>
+  </data>
+  <data name="PictureSettingsResLimitModes_480p" xml:space="preserve">
+    <value>480p NTSC SD</value>
+  </data>
+  <data name="PictureSettingsResLimitModes_4K" xml:space="preserve">
+    <value>2160p 4K Ultra HD</value>
+  </data>
+  <data name="PictureSettingsResLimitModes_576p" xml:space="preserve">
+    <value>576p PAL SD</value>
+  </data>
+  <data name="PictureSettingsResLimitModes_720p" xml:space="preserve">
+    <value>720p HD</value>
+  </data>
+  <data name="PictureSettingsResLimitModes_8K" xml:space="preserve">
+    <value>4320p 8K Ultra HD</value>
+  </data>
+  <data name="PictureSettingsResLimitModes_custom" xml:space="preserve">
+    <value>Προσαρμοσμένο</value>
+  </data>
+  <data name="PictureSettingsView_MaxSize" xml:space="preserve">
+    <value>Μέγιστο μέγεθος:</value>
+  </data>
+  <data name="PictureSettingsView_ResLimit" xml:space="preserve">
+    <value>Όριο Ανάλυσης:</value>
+  </data>
+  <data name="PictureSettingsResLimitModes_none" xml:space="preserve">
+    <value>Κανένα</value>
+  </data>
+  <data name="PresetManger_Title" xml:space="preserve">
+    <value>Διαχείριση προεπιλογών</value>
+  </data>
+  <data name="ManagePresetView_DeleteBuiltIn" xml:space="preserve">
+    <value>Διαγραφή ενσωματωμένων προεπιλογών</value>
+  </data>
+  <data name="ManagePresetView_Export" xml:space="preserve">
+    <value>Εξαγωγή επιλεγμένης προεπιλογής</value>
+  </data>
+  <data name="ManagePresetView_Import" xml:space="preserve">
+    <value>Εισαγωγή προεπιλογής(ών) από αρχείο</value>
+  </data>
+  <data name="ManagePresetView_PresetInfo" xml:space="preserve">
+    <value>Πληροφορίες Ποεπιλογής:</value>
+  </data>
+  <data name="ManagePresetView_RestrictedPreset" xml:space="preserve">
+    <value>Οι ενσωματωμένες προεπιλογές δεν μπορούν να τροποποιηθούν.</value>
+  </data>
+  <data name="ManagePresetView_SetDefault" xml:space="preserve">
+    <value>Ορίστε την επιλεγμένη προεπιλογή ως προεπιλογή</value>
+  </data>
+  <data name="PresetManagerView_Delete" xml:space="preserve">
+    <value>Διαγραφή προεπιλογής</value>
+  </data>
+  <data name="OptionsView_NotSupported" xml:space="preserve">
+    <value>(Δεν υποστηρίζεται από αυτό το σύστημα)</value>
+  </data>
+  <data name="QueueView_Stop" xml:space="preserve">
+    <value>Σταμάτημα</value>
+  </data>
+  <data name="String1" xml:space="preserve">
+    <value/>
+  </data>
+  <data name="PresetService_CategoryAlreadyExists" xml:space="preserve">
+    <value>Το όνομα της κατηγορίας που δώσατε υπάρχει ήδη. Επιλέξτε διαφορετικό όνομα.</value>
+  </data>
+  <data name="PresetService_CategoryNameEmpty" xml:space="preserve">
+    <value>Το όνομα της κατηγορίας ήταν κενό. Δώστε ένα όνομα.</value>
+  </data>
+  <data name="TextEntryView_EnterName" xml:space="preserve">
+    <value>Εισάγετε ένα όνομα: </value>
+  </data>
+  <data name="ManagePresetView_NoPresetSelected" xml:space="preserve">
+    <value>Δεν έχει επιλεγεί προεπιλογή.</value>
+  </data>
+  <data name="ManagePresetView_ExportUserPresets" xml:space="preserve">
+    <value>Εξαγωγή όλων των προεπιλογών χρήστη</value>
+  </data>
+  <data name="Options_LowDiskspaceLevelText" xml:space="preserve">
+    <value>Επίπεδο στο οποίο εμφανίζονται οι ειδοποιήσεις για χαμηλό χώρο στο δίσκο:</value>
+  </data>
+  <data name="OptionsView_SimultaneousHardwareLimitNotice" xml:space="preserve">
+    <value>Σημείωση: Αυτό είναι το ανώτατο όριο ταυτόχρονων εργασιών. Ενδέχεται να τεθούν σε ισχύ περιορισμοί υλικού που μειώνουν τον πραγματικό αριθμό ταυτόχρονων εργασιών κατά την κωδικοποίηση.</value>
+  </data>
+  <data name="Preset_NotAvailable" xml:space="preserve">
+    <value>(Μη διαθέσιμο)</value>
+  </data>
+  <data name="AddPresetView_IsDefault" xml:space="preserve">
+    <value>Είναι Προεπιλογή:</value>
+  </data>
+  <data name="No" xml:space="preserve">
+    <value>Όχι</value>
+  </data>
+  <data name="Yes" xml:space="preserve">
+    <value>Ναι</value>
+  </data>
+  <data name="StaticPreviewView_FineTuning" xml:space="preserve">
+    <value>Βελτιστοποιήστε τις ρυθμίσεις εικόνας</value>
+  </data>
+  <data name="StaticPreviewView_ShowPictureSettingsAdjustment" xml:space="preserve">
+    <value>Προβολή ρυθμίσεων περικοπής.</value>
+  </data>
+  <data name="DarkTheme_dark" xml:space="preserve">
+    <value>Σκοτεινό</value>
+  </data>
+  <data name="DarkTheme_light" xml:space="preserve">
+    <value>Φωτεινό</value>
+  </data>
+  <data name="DarkTheme_system" xml:space="preserve">
+    <value>Πρότυπο συστήματος</value>
+  </data>
+  <data name="OptionsView_DarkThemeMode" xml:space="preserve">
+    <value>Θέμα:</value>
+  </data>
+  <data name="OptionsView_RequiresRestart" xml:space="preserve">
+    <value>(Απαιτεί επανεκκίνηση)</value>
+  </data>
+  <data name="FiltersView_ChromaSmooth" xml:space="preserve">
+    <value>Φίλτρο Χρωματικής εξομάλυνσης</value>
+  </data>
+  <data name="FiltersView_ColourSpace" xml:space="preserve">
+    <value>Φίλτρο χρωμάτων.</value>
+  </data>
+  <data name="SummaryView_Colourspace" xml:space="preserve">
+    <value>Χρωματικός χώρος</value>
+  </data>
+  <data name="PictureSettingsView_SeePreview" xml:space="preserve">
+    <value>Ανοίξτε την Προεπισκόπηση</value>
+  </data>
+  <data name="SummaryView_SourcePreview" xml:space="preserve">
+    <value>Προεπισκόπηση Πηγής:</value>
+  </data>
+  <data name="QueueView_JobStatus" xml:space="preserve">
+    <value>Κατάσταση Εργασίας:</value>
+  </data>
+  <data name="QueueView_JobStatus_Cancelled" xml:space="preserve">
+    <value>Ακυρώθηκε</value>
+  </data>
+  <data name="QueueView_JobStatus_Complete" xml:space="preserve">
+    <value>Ολοκληρώθηκε</value>
+  </data>
+  <data name="QueueView_JobStatus_InitFailed" xml:space="preserve">
+    <value>Μη έγκυρες ρυθμίσεις. Ελέγξτε το αρχείο καταγραφής για λεπτομέρειες.</value>
+  </data>
+  <data name="QueueView_JobStatus_InvalidInput" xml:space="preserve">
+    <value>Μη έγκυρη εισαγωγή. Ελέγξτε το αρχείο καταγραφής για λεπτομέρειες.</value>
+  </data>
+  <data name="QueueView_JobStatus_NoErrorCode" xml:space="preserve">
+    <value>Άγνωστη Κατάσταση. Ελέγξτε το αρχείο καταγραφής για λεπτομέρειες.</value>
+  </data>
+  <data name="QueueView_JobStatus_ReadError" xml:space="preserve">
+    <value>Εντοπίστηκαν σφάλματα κατά την προσπάθεια ανάγνωσης της πηγής.</value>
+  </data>
+  <data name="QueueView_JobStatus_Unknown" xml:space="preserve">
+    <value>Άγνωστη αποτυχία. Ελέγξτε το αρχείο καταγραφής για λεπτομέρειες.</value>
+  </data>
+  <data name="QueueView_JobStatus_WorkerCrash" xml:space="preserve">
+    <value>Ο Worker κράσαρε. Ελέγξτε το αρχείο καταγραφής για λεπτομέρειες.</value>
+  </data>
+  <data name="Startup_HbDllMissing" xml:space="preserve">
+    <value>Λείπει το αρχείο "hb.dll". Εγκαταστήστε ξανά.</value>
+  </data>
+  <data name="OptionsView_SafeMode" xml:space="preserve">
+    <value>Προειδοποίηση: Πρόκειται για μια έκδοση "Ασφαλούς λειτουργίας" του HandBrake που δεν περιλαμβάνει υποστήριξη για κωδικοποιητές υλικού. Εάν θέλετε υποστήριξη κωδικοποιητή υλικού, πραγματοποιήστε λήψη μιας έκδοσης που δεν είναι "Ασφαλούς Λειτουργίας" από τον ιστότοπο.</value>
+  </data>
+  <data name="PadColour_Black" xml:space="preserve">
+    <value>Μαύρο</value>
+  </data>
+  <data name="PadColour_Custom" xml:space="preserve">
+    <value>Προσαρμοσμένο</value>
+  </data>
+  <data name="PadColour_White" xml:space="preserve">
+    <value>Άσπρο</value>
+  </data>
+  <data name="PictureSettingsView_PaddingCustomColour" xml:space="preserve">
+    <value>Τιμή RGB:</value>
+  </data>
+  <data name="SummaryView_Padded" xml:space="preserve">
+    <value>(γέματο)</value>
+  </data>
+  <data name="FiltersView_Flip" xml:space="preserve">
+    <value>Αναστροφή:</value>
+  </data>
+  <data name="PictureSettingsView_SourceDimensions" xml:space="preserve">
+    <value>Διαστάσεις Πηγής:</value>
+  </data>
+  <data name="PictureSettingsViewModel_SourceInfo" xml:space="preserve">
+    <value>Μέγεθος αποθήκευσης: {0}x{1}     Μέγεθος οθόνης: {2}x{3}      Αναλογία διαστάσεων: {4}</value>
+  </data>
+  <data name="MainViewModel_FilePathSelectError" xml:space="preserve">
+    <value>Εντοπίστηκε σφάλμα στο παράθυρο διαλόγου προγράμματος περιήγησης αρχείων. 
+
+- Λάβετε υπόψη ότι οι μεγάλες διαδρομές αρχείων δεν υποστηρίζονται πλήρως. Διατηρήστε τις διαδρομές αρχείων μικρότερες από 255 χαρακτήρες.
+- Ο τελευταίος κατάλογος που χρησιμοποιήθηκε για αυτό το παράθυρο, έχει επαναφερθεί για να αποφευχθούν σφάλματα την επόμενη φορά που θα προσπαθήσετε να σαρώσετε ένα αρχείο.</value>
+  </data>
+  <data name="PictureSettingsView_MaxHeight" xml:space="preserve">
+    <value>Μέγιστο Ύψος:</value>
+  </data>
+  <data name="PictureSettingsView_MaxWidth" xml:space="preserve">
+    <value>Μέγιστο Πλάτος:</value>
+  </data>
+  <data name="PictureSettingsViewModel_AspectRatioLabel" xml:space="preserve">
+    <value>Λόγος Διαστάσεων: {0}</value>
+  </data>
+  <data name="SummaryView_MetadataPassthru" xml:space="preserve">
+    <value>Passthru Κοινών Μεταδεδομένων</value>
+  </data>
+  <data name="OptionsViewModel_InvalidAutonamePath" xml:space="preserve">
+    <value>Η προεπιλεγμένη αυτόματη διαδρομή ονόματος δεν ήταν έγκυρη. Το {0} δεν πρέπει να είναι πριν από το {1}</value>
+  </data>
+  <data name="FirstRun_EnableUpdateCheck" xml:space="preserve">
+    <value>Θέλετε να επιτρέψετε στο HandBrake να ελέγχει αυτόματα για ενημερώσεις;
+
+Μπορείτε να αλλάξετε την επιλογή σας ανά πάσα στιγμή αλλάζοντας τις επιλογές στις Προτιμήσεις -&gt; Γενικά -&gt; Έλεγχος για Ενημερώσεις</value>
+  </data>
+  <data name="FirstRun_EnableUpdateCheckHeader" xml:space="preserve">
+    <value>Έλεγχος για ενημερώσεις;</value>
+  </data>
+  <data name="OptionsViewModel_UpdateNotice" xml:space="preserve">
+    <value>Πριν από την ενημέρωση:
+- Βεβαιωθείτε ότι δεν υπάρχουν κωδικοποιήσεις σε εκκρεμότητα στην ουρά. 
+- Δημιουργήστε αντίγραφα ασφαλείας ή σημειώστε τυχόν προσαρμοσμένες προεπιλογές που έχετε δημιουργήσει, καθώς ενδέχεται να μην είναι πλήρως συμβατές με νεότερες εκδόσεις.</value>
+  </data>
+  <data name="Preset_Default" xml:space="preserve">
+    <value>(Προκαθορισμένο)</value>
+  </data>
+  <data name="PresetDisplayMode_Category" xml:space="preserve">
+    <value>Κατηγορίες</value>
+  </data>
+  <data name="PresetDisplayMode_Flat" xml:space="preserve">
+    <value>Επίπεδο</value>
+  </data>
+  <data name="PresetDisplayMode_Partial" xml:space="preserve">
+    <value>Μερικώς Επίπεδο</value>
+  </data>
+  <data name="OptionsView_PresetDisplayMode" xml:space="preserve">
+    <value>Επιλέξτε τον τρόπο εμφάνισης των προεπιλογών στα μενού:</value>
+  </data>
+  <data name="QueueView_SelectedPresets" xml:space="preserve">
+    <value>Προεπιλογή:</value>
+  </data>
+  <data name="LogViewModel_Complete" xml:space="preserve">
+    <value>[Ολοκληρώθηκε]</value>
+  </data>
+  <data name="QueueViewModel_EditJob" xml:space="preserve">
+    <value>Επεξεργασία εργασίας;</value>
+  </data>
+  <data name="QueueView_Length" xml:space="preserve">
+    <value>Διάρκεια εξόδου:</value>
+  </data>
+  <data name="QueueView_MoveToBottom" xml:space="preserve">
+    <value>Μετακίνηση προς τα κάτω</value>
+  </data>
+  <data name="QueueView_MoveToTop" xml:space="preserve">
+    <value>Μετακίνηση προς τα πάνω</value>
+  </data>
+  <data name="QueueView_VideoOutputBitrate" xml:space="preserve">
+    <value>Bitrate Εξόδου:</value>
+  </data>
+  <data name="QueueView_AverageEncodeSpeed" xml:space="preserve">
+    <value>Μέση ταχύτητα κωδικοποίησης:</value>
+  </data>
+  <data name="QueueViewModel_DifferenceText" xml:space="preserve">
+    <value> του αρχείου προέλευσης</value>
+  </data>
+  <data name="QueueViewModel_NotAvailable" xml:space="preserve">
+    <value>Μη διαθέσιμο</value>
+  </data>
+  <data name="QueueView_SourceLength" xml:space="preserve">
+    <value>Διάρκεια Πηγής:</value>
+  </data>
+  <data name="Options_Reset" xml:space="preserve">
+    <value>Επαναφορά</value>
+  </data>
+  <data name="OptionsViewModel_ResetHandBrakePresetsQuestion" xml:space="preserve">
+    <value>Είστε βέβαιοι ότι θέλετε να επαναφέρετε όλες τις ενσωματωμένες προεπιλογές;</value>
+  </data>
+  <data name="OptionsView_ResetBuildInPresets" xml:space="preserve">
+    <value>Επαναφορά όλων των ενσωματωμένων προεπιλογών στις προεπιλογές του HandBrake:</value>
+  </data>
+  <data name="OptionsView_ResetBuildInPresetsNotice" xml:space="preserve">
+    <value>(Δεν θα γίνει επαναφορά των προεπιλογών του χρήστη)</value>
+  </data>
+  <data name="OptionsView_ResetSettingsToDefaults" xml:space="preserve">
+    <value>Επαναφέρετε όλες τις ρυθμίσεις του HandBrake στις προεπιλεγμένες ρυθμίσεις:</value>
+  </data>
+  <data name="Options_BuiltInPresets" xml:space="preserve">
+    <value>Ενσωματωμένες προεπιλογές</value>
+  </data>
+  <data name="Options_UserSettings" xml:space="preserve">
+    <value>Ρυθμίσεις χρήστη</value>
+  </data>
+  <data name="PresetDisplayMode_FloatingPanel" xml:space="preserve">
+    <value>Δενδροειδής Λίστα</value>
+  </data>
+  <data name="QueueViewModel_PlayFileErrorSolution" xml:space="preserve">
+    <value>Βεβαιωθείτε ότι οι κατάλληλες συσχετίσεις αρχείων έχουν ρυθμιστεί στα Windows, προκειμένου αυτό το αρχείο να ανοίγει με ένα υποστηριζόμενο πρόγραμμα αναπαραγωγής βίντεο.</value>
+  </data>
+  <data name="QueueViewModel_ImportFail" xml:space="preserve">
+    <value>Αδυναμία ανάγνωσης του αρχείου ουράς.</value>
+  </data>
+  <data name="QueueViewModel_ImportFailSolution" xml:space="preserve">
+    <value>Το αρχείο μπορεί να είναι κατεστραμμένο ή από παλαιότερη έκδοση του HandBrake. 
+Υποστηρίζονται μόνο αρχεία ουράς από την τρέχουσα έκδοση.</value>
+  </data>
+  <data name="Notifications_EncodeDone" xml:space="preserve">
+    <value>Η κωδικοποίηση στο HandBrake ολοκληρώθηκε!</value>
+  </data>
+  <data name="Notifications_QueueDone" xml:space="preserve">
+    <value>Η ουρά στο HandBrake ολοκληρώθηκε!</value>
+  </data>
+  <data name="OptionsView_NotificationRemovalSubText" xml:space="preserve">
+    <value>Αυτό θα απενεργοποιήσει επίσης τις επιλογές εμφάνισης ειδοποιήσεων στη γραμμή εργασιών των Windows στην καρτέλα "Όταν τελειώσει". Ενεργοποιήστε την ξανά εάν θέλετε πάλι αυτήν τη δυνατότητα.</value>
+  </data>
+  <data name="OptionsView_NotificationRemovalText" xml:space="preserve">
+    <value>Αφαιρέστε το HandBrake από τον πίνακα ελέγχου ειδοποιήσεων των Windows.</value>
+  </data>
+  <data name="OptionsView_UninstallMessageBoxHeader" xml:space="preserve">
+    <value>Απεγκαταστάθηκε</value>
+  </data>
+  <data name="OptionsView_UninstallMessageBoxText" xml:space="preserve">
+    <value>Οι ρυθμίσεις ειδοποιήσεων καταργήθηκαν.</value>
+  </data>
+  <data name="OptionsView_UninstallToast" xml:space="preserve">
+    <value>Διαγραφή &amp; Απεγκατάσταση</value>
+  </data>
+  <data name="OptionsView_WindowsNotification" xml:space="preserve">
+    <value>Αποστολή ειδοποίησης στη γραμμή εργασιών των Windows.</value>
+  </data>
+  <data name="OptionsView_WindowsNotificationsBanner" xml:space="preserve">
+    <value>Ειδοποιήσεις των Windows</value>
+  </data>
+  <data name="Main_QueueMultiJobStatus" xml:space="preserve">
+    <value>Ολοκληρώθηκαν {0} εργασίες. {1}Σε εργασία {2} εργασίες με {3} σε αναμονή για επεξεργασία.</value>
+  </data>
+  <data name="MainView_AutonameRegenerate" xml:space="preserve">
+    <value>Επαναδημιουργία (Αυτόματη ονομασία)</value>
+  </data>
+  <data name="MainView_OpenDirectory" xml:space="preserve">
+    <value>Ανοίξτε αυτόν τον Κατάλογο</value>
+  </data>
+  <data name="Shared_CollapseAll" xml:space="preserve">
+    <value>Σύμπτυξη όλων</value>
+  </data>
+  <data name="Shared_ExpandAll" xml:space="preserve">
+    <value>Ανάπτυξη όλων</value>
+  </data>
+  <data name="OptionsView_RightToleftMode" xml:space="preserve">
+    <value>Για γλώσσες που είναι από δεξιά προς τα αριστερά, μπορείτε να ενεργοποιήσετε μία από τις δύο λειτουργίες. Το "Μόνο Κέιμενο" θα αποδώσει το κείμενο μόνο σε στυλ από δεξιά προς τα αριστερά. Το "Ολόκληρο περιβάλλον εργασίας" θα αποδώσει όλα τα στοιχεία ελέγχου από δεξιά προς τα αριστερά.
+
+Λάβετε υπόψη ότι ενδέχεται να υπάρχουν ατέλειες στη εμφάνιση του προγράμματος κατά τη χρήση αυτών των λειτουργιών. Ανάλογα με τη γλώσσα, ίσως αξίζει να δοκιμάσετε και τις δύο λειτουργίες για να βρείτε την καλύτερη εφαρμογή.</value>
+  </data>
+  <data name="RightToLeft_Off" xml:space="preserve">
+    <value>Κλειστό</value>
+  </data>
+  <data name="RightToLeft_TextOnly" xml:space="preserve">
+    <value>Μόνο Κείμενο</value>
+  </data>
+  <data name="RightToLeft_WholeInterface" xml:space="preserve">
+    <value>Όλο το περιβάλλον εργασίας χρήστη</value>
+  </data>
+  <data name="SourceSelection_NightlyUpdate" xml:space="preserve">
+    <value>Η τρέχουσα έκδοση ανάπτυξης που εκτελείτε είναι παλιά. Ίσως θελήσετε να την ενημερώσετε!</value>
+  </data>
+  <data name="SourceSelection_NightlyUpdateUrl" xml:space="preserve">
+    <value>Λήψη μέσω Github</value>
+  </data>
+  <data name="MainView_NightlyBuildsUpdate" xml:space="preserve">
+    <value>Λήψη Eκδόσεων Aνάπτυξης (HTTPS)</value>
+  </data>
+  <data name="OptionsView_EnableQuicksyncHyperEncode" xml:space="preserve">
+    <value>Ενεργοποίηση Κωδικοποίησης QuickSync Deep Link Hyper </value>
+  </data>
+  <data name="OptionsView_HyperEncodeDescription" xml:space="preserve">
+    <value>Προτιμά τη χρήση πολλαπλών μηχανών πολυμέσων για την επιτάχυνση μιας μεμονωμένης κωδικοποίησης όπου υποστηρίζεται. Απενεργοποιήστε για να επιτρέψετε την εξισορρόπηση φορτίου πολλαπλών παράλληλων κωδικοποιήσεων σε μηχανές πολυμέσων.</value>
+  </data>
+  <data name="MainView_OpenHandBrake" xml:space="preserve">
+    <value>Ανοίξτε το HandBrake</value>
+  </data>
+  <data name="Startup_UnableToStartInfo" xml:space="preserve">
+    <value>Η υποστήριξη κωδικοποίησης υλικού έχει απενεργοποιηθεί καθώς αποτελεί συχνή αιτία προβλημάτων εκκίνησης.
+- Δοκιμάστε να επανεκκινήσετε το HandBrake.
+- Εάν το πρόβλημα παραμένει, μπορεί να είναι ένα παλιό πρόγραμμα οδήγησης κάρτας γραφικών (ενσωματωμένο ή διακριτό) που προκαλεί το πρόβλημα.
+Η υποστήριξη κωδικοποίησης υλικού μπορεί να ενεργοποιηθεί ξανά στις προτιμήσεις.</value>
+  </data>
+  <data name="Startup_UnableToStart" xml:space="preserve">
+    <value>Το HandBrake δεν μπόρεσε να ξεκινήσει.</value>
+  </data>
+  <data name="OptionsView_ResetSafeMode" xml:space="preserve">
+    <value>Επαναφορά Ασφαλής Λειτουργία</value>
+  </data>
+  <data name="OptionsView_ResetSafeModeMessage" xml:space="preserve">
+    <value>Επανεκκινήστε το HandBrake.</value>
+  </data>
+  <data name="Debug_QueueDataExport" xml:space="preserve">
+    <value>Εξαγωγή Στατιστικών Δεδομένων Ουράς (csv)</value>
+  </data>
+  <data name="Debug_QueueExportDataDone" xml:space="preserve">
+    <value>Ολοκληρώθηκε η εξαγωγή!</value>
+  </data>
+  <data name="Debug_QueueSweep_NotSetup" xml:space="preserve">
+    <value>Πρέπει πρώτα να σαρώσετε μια πηγή και να έχετε ορίσει έναν αρχικό κατάλογο προορισμού</value>
+  </data>
+  <data name="OptionsView_FileCollisionNotice" xml:space="preserve">
+    <value>Μόνο όταν το αρχείο υπάρχει ήδη στο δίσκο.</value>
+  </data>
+  <data name="Info" xml:space="preserve">
+    <value>Πληροφορίες</value>
+  </data>
+  <data name="SubtitleView_NoSubtitlesAdded" xml:space="preserve">
+    <value>Δεν προστέθηκαν κομμάτια υπότιτλων.
+
+Αυτό μπορεί να οφείλεται σε περιορισμούς του κοντέινερ αρχείων που έχετε επιλέξει. Ανατρέξτε στην τεκμηρίωση βοήθειας υπότιτλων για περισσότερες πληροφορίες.</value>
+  </data>
+  <data name="DarkTheme_None" xml:space="preserve">
+    <value>Κανένα</value>
+  </data>
+  <data name="SourceSelection_UpdateNow" xml:space="preserve">
+    <value>Ενημερώστε τώρα!</value>
+  </data>
+  <data name="CropMode_Auto" xml:space="preserve">
+    <value>Αυτόματα</value>
+  </data>
+  <data name="CropMode_Loose" xml:space="preserve">
+    <value>Συντηρητικό</value>
+  </data>
+  <data name="CropMode_None" xml:space="preserve">
+    <value>Κανένα</value>
+  </data>
+  <data name="CropMode_Custom" xml:space="preserve">
+    <value>Προσαρμοσμένο</value>
+  </data>
+  <data name="OptionsView_EnableNvDecSupport" xml:space="preserve">
+    <value>Προτιμήστε τη χρήση του Nvidia NVDec για την αποκωδικοποίηση βίντεο κατά τη χρήση του κωδικοποιητή NVEnc και το υλικό είναι διαθέσιμο για χρήση.</value>
+  </data>
+  <data name="Options_Hardware" xml:space="preserve">
+    <value>Υποστήριξη Υλικού</value>
+  </data>
+  <data name="StaticPreviewViewModel_MediaError" xml:space="preserve">
+    <value>The system was unable to play this file. 
+
+Please note certain codecs such as AV1 or HEVC require the Microsoft AV1 or HEVC codec plugins from the Microsoft Store to play.
+Alternatively, check the "Use External Player" checkbox below.</value>
+  </data>
+  <data name="StaticPreviewView_ClosePlayer" xml:space="preserve">
+    <value>Close Player</value>
+  </data>
+  <data name="StaticPreviewView_Play" xml:space="preserve">
+    <value>Παίξε</value>
+  </data>
+  <data name="StaticPreviewView_VideoPreview" xml:space="preserve">
+    <value>Video Preview</value>
+  </data>
+  <data name="StaticPreviewViewModel_WebmNotSupported" xml:space="preserve">
+    <value>The Built-in preview is not available for the WebM container. An External player must be used.</value>
+  </data>
+  <data name="StaticPreview_EncodingPreview" xml:space="preserve">
+    <value>Encoding Preview ...</value>
+  </data>
+  <data name="StaticPreview_Previews" xml:space="preserve">
+    <value>Previews:</value>
+  </data>
+  <data name="StaticPreview_Volume" xml:space="preserve">
+    <value>Volume: 0</value>
+  </data>
+  <data name="Reset" xml:space="preserve">
+    <value>Επαναφορά</value>
+  </data>
+  <data name="OptionsView_IsoDateFormat" xml:space="preserve">
+    <value>Use ISO Date Formats (YYYY-MM-DD) instead of system format.</value>
+  </data>
+  <data name="QueueViewModel_ShortEncodeStatus" xml:space="preserve">
+    <value>Pass {0} of {1}, {2:00.00}%, {3:000.0} fps, avg {4:000.0} fps, ETA: {5}</value>
+  </data>
+  <data name="QueueViewModel_ShortSubScanStatus" xml:space="preserve">
+    <value>Scanning for Subtitles {0:00.00}%, ETA: {1}</value>
+  </data>
+  <data name="QueueView_ExtendedQueueDisplay" xml:space="preserve">
+    <value>Extend Queue Info</value>
+  </data>
+  <data name="QueueView_MinimalQueueDisplay" xml:space="preserve">
+    <value>Minimise Queue Info</value>
+  </data>
+  <data name="QueueStats_ShortOutputStats" xml:space="preserve">
+    <value>Output: {0}, avg {1} fps</value>
+  </data>
+  <data name="PresetPane_Desc" xml:space="preserve">
+    <value>Preset Description:</value>
+  </data>
+  <data name="PresetPane_HidePresetDesc" xml:space="preserve">
+    <value>Hide Preset Description</value>
+  </data>
+  <data name="PresetPane_ShowPresetDesc" xml:space="preserve">
+    <value>Show Preset Description</value>
+  </data>
+  <data name="TaskTrayStatusManyTitle" xml:space="preserve">
+    <value>{0}
+Encoding {1} jobs</value>
+  </data>
+  <data name="StaticPreviewViewModel_MultipleEncodes" xml:space="preserve">
+    <value>Unable to encode a preview. The application is currently busy encoding another file.
+
+To allow multiple simultaneous encodes, turn on "Process Isolation" in Tools Menu -&gt; Preferences -&gt; Advanced -&gt; Process Isolation -&gt; "Run each queued job in a separate worker process".</value>
+  </data>
+  <data name="AudioView_Quality" xml:space="preserve">
+    <value>Quality</value>
+  </data>
+  <data name="AudioView_Source" xml:space="preserve">
+    <value>Source</value>
+  </data>
+  <data name="AboutView_Documentation" xml:space="preserve">
+    <value>Documentation:</value>
+  </data>
+  <data name="AboutView_GithubTracker" xml:space="preserve">
+    <value>GitHub Issue Tracker:</value>
+  </data>
+  <data name="AboutView_Website" xml:space="preserve">
+    <value>Website: </value>
+  </data>
+  <data name="MainView_PresetClone" xml:space="preserve">
+    <value>Clone Preset</value>
+  </data>
+  <data name="PresetPane_MoveDown" xml:space="preserve">
+    <value>Move Down</value>
+  </data>
+  <data name="PresetPane_MoveToBottom" xml:space="preserve">
+    <value>Move to Bottom</value>
+  </data>
+  <data name="PresetPane_MoveToTop" xml:space="preserve">
+    <value>Move to Top</value>
+  </data>
+  <data name="PresetPane_MoveUp" xml:space="preserve">
+    <value>Move Up</value>
+  </data>
+  <data name="QueueViewModel_StopButContinueJob" xml:space="preserve">
+    <value>There are currently jobs running. Would you like to complete the current jobs before stopping the queue?</value>
+  </data>
+  <data name="Options_AddExt" xml:space="preserve">
+    <value>Add Extension</value>
+  </data>
+  <data name="Options_ExcludeExtensions" xml:space="preserve">
+    <value>Exclude File Extensions:</value>
+  </data>
+  <data name="Options_ExcludeExtensionsInfo" xml:space="preserve">
+    <value>The following file extensions will be ignored when scanning a folder. The list is case insensitive. "." is not required.</value>
+  </data>
+  <data name="Options_ExtensionExists" xml:space="preserve">
+    <value>This file extension already exists in the list.</value>
+  </data>
+  <data name="Options_FileHandling" xml:space="preserve">
+    <value>File Handling (Scanning)</value>
+  </data>
+  <data name="Options_RecursiveFolderScan" xml:space="preserve">
+    <value>Recursively scan directories when using the folder scan mode.</value>
+  </data>
+</root>
