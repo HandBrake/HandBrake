@@ -427,32 +427,43 @@ namespace HandBrakeWPF.Services.Queue
 
         public void Remove(QueueTask job)
         {
+            bool stoppedJob = false;
             lock (QueueLock)
             {
                 ActiveJob activeJob = null;
+ 
                 foreach (ActiveJob ajob in this.activeJobs)
                 {
                     if (Equals(ajob.Job, job))
                     {
                         activeJob = ajob;
+                        activeJob.JobFinished += (a, e) =>
+                        {
+                            this.activeJobs.Remove(activeJob);
+
+                            if (this.activeJobs.Count == 0 && this.IsPaused)
+                            {
+                                this.IsPaused = false;
+                            }
+                        };
                         ajob.Stop();
+                        stoppedJob = true;
+                        break;
                     }
                 }
 
-                if (activeJob != null)
-                {
-                    this.activeJobs.Remove(activeJob);
-                }
-
                 this.queue.Remove(job);
-
-                if (this.activeJobs.Count == 0 && this.IsPaused)
-                {
-                    this.IsPaused = false;
-                }
             }
 
-            this.InvokeQueueChanged(EventArgs.Empty);
+            if (!stoppedJob)
+            {
+                this.InvokeQueueChanged(EventArgs.Empty);
+            }
+        }
+
+        private void ActiveJob_JobFinished1(object sender, ActiveJobCompletedEventArgs e)
+        {
+            throw new NotImplementedException();
         }
 
         public void RestoreQueue(string importPath)
