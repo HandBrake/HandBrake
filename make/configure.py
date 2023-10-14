@@ -1500,7 +1500,7 @@ class Launcher:
 
         ## launch/pipe
         try:
-            pipe = subprocess.Popen(cmd, shell=True, bufsize=1, stdout=subprocess.PIPE, stderr=subprocess.STDOUT )
+            pipe = subprocess.Popen( cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT )
         except Exception as x:
             raise AbortError( 'launch failure: %s', x )
 
