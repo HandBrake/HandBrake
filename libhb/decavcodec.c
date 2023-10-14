@@ -2352,35 +2352,27 @@ static void compute_frame_duration( hb_work_private_t *pv )
                 duration =  (double)tb->num / (double)tb->den;
             }
         }
-        if ( !duration &&
-             pv->context->time_base.num * max_fps > pv->context->time_base.den &&
-             pv->context->time_base.den > pv->context->time_base.num * 8LL )
-        {
-            duration =  (double)pv->context->time_base.num /
-                        (double)pv->context->time_base.den;
-            if ( ticks_per_frame > 1 )
-            {
-                // for ffmpeg 0.5 & later, the H.264 & MPEG-2 time base is
-                // field rate rather than frame rate so convert back to frames.
-                duration *= ticks_per_frame;
-            }
-        }
     }
-    else
+    else if (pv->context->framerate.num && pv->context->framerate.den)
     {
-        if ( pv->context->time_base.num * max_fps > pv->context->time_base.den &&
-             pv->context->time_base.den > pv->context->time_base.num * 8LL )
+        duration = (double)pv->context->framerate.den / (double)pv->context->framerate.num;
+    }
+
+    // time_base is not set by decoders, todo: investigate if this
+    // can be safely removed
+    if (!duration &&
+        pv->context->time_base.num * max_fps > pv->context->time_base.den &&
+        pv->context->time_base.den > pv->context->time_base.num * 8LL)
+    {
+        duration = (double)pv->context->time_base.num / (double)pv->context->time_base.den;
+        if (ticks_per_frame > 1)
         {
-            duration =  (double)pv->context->time_base.num /
-                            (double)pv->context->time_base.den;
-            if ( ticks_per_frame > 1 )
-            {
-                // for ffmpeg 0.5 & later, the H.264 & MPEG-2 time base is
-                // field rate rather than frame rate so convert back to frames.
-                duration *= ticks_per_frame;
-            }
+            // for ffmpeg 0.5 & later, the H.264 & MPEG-2 time base is
+            // field rate rather than frame rate so convert back to frames.
+            duration *= ticks_per_frame;
         }
     }
+
     if ( duration == 0 )
     {
         // No valid timing info found in the stream, so pick some value
@@ -2392,9 +2384,8 @@ static void compute_frame_duration( hb_work_private_t *pv )
     hb_video_framerate_get_limits(&clock_min, &clock_max, &clock);
     if (pv->duration < 1 / (clock / 90000.))
     {
-        // Not representable, probably a broken file
-        // use the maximum possible fps
-        pv->duration = 1 / (clock / 90000.);
+        // Not representable, probably a broken file, so pick some value
+        pv->duration = 1001. / 24000. * 90000;
     }
 
     pv->field_duration = pv->duration;
