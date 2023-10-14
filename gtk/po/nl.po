@@ -4,8 +4,8 @@
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 # 
 # Translators:
-# Stephan Paternotte <stephan@paternottes.net>, 2023
 # Sigmund Walrerson <riseofthenorse@live.be>, 2023
+# Stephan Paternotte <stephan@paternottes.net>, 2023
 # 
 #, fuzzy
 msgid ""
@@ -14,7 +14,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-09-20 09:46+0100\n"
 "PO-Revision-Date: 2018-10-10 18:14+0000\n"
-"Last-Translator: Sigmund Walrerson <riseofthenorse@live.be>, 2023\n"
+"Last-Translator: Stephan Paternotte <stephan@paternottes.net>, 2023\n"
 "Language-Team: Dutch (https://app.transifex.com/HandBrakeProject/teams/92423/nl/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -28,15 +28,15 @@ msgstr "HandBrake"
 
 #: data/fr.handbrake.ghb.desktop.in:4
 msgid "Media Transcoder"
-msgstr ""
+msgstr "Media-transcodering"
 
 #: data/fr.handbrake.ghb.desktop.in:5
 msgid "Transcodes DVD, Blu-ray, and other media"
-msgstr ""
+msgstr "Transcodeert DVD, Blu-ray en andere media"
 
 #: data/fr.handbrake.ghb.desktop.in:11
 msgid "Format Converter;Video Encoder;"
-msgstr ""
+msgstr "Formaatconverter; Video-codering;"
 
 #: src/ui-gtk3/menu.ui:7
 msgid "_File"
@@ -3898,7 +3898,7 @@ msgstr ""
 
 #: src/title-add.c:113 src/title-add.c:162
 msgid "Overwrite File?"
-msgstr ""
+msgstr "Bestand overschrijven?"
 
 #: src/title-add.c:114 src/title-add.c:163
 msgid "Overwrite"
@@ -3917,7 +3917,7 @@ msgstr ""
 
 #: src/title-add.c:131 src/title-add.c:146
 msgid "Invalid Destination"
-msgstr ""
+msgstr "Ongeldige bestemming"
 
 #: src/title-add.c:142
 #, c-format
@@ -3964,13 +3964,15 @@ msgstr ""
 
 #: src/title-add.c:871
 msgid "Cannot Add Titles"
-msgstr ""
+msgstr "Kan geen titels toevoegen"
 
 #: src/title-add.c:872
 msgid ""
 "The filenames are not unique. Please choose\n"
 "a unique destination filename for each title."
 msgstr ""
+"De bestandsnamen zijn niet uniek. Kies alstublieft\n"
+"voor elke titel een unieke doelbestandsnaam ."
 
 #: src/videohandler.c:208
 #, c-format
