@@ -122,7 +122,7 @@ class Configure( object ):
         dir = os.path.dirname( args[0] )
         if len(args) > 1 and args[1].find('w') != -1:
             self.mkdirs( dir )
-        m = re.match( '^(.*)\.tmp\..{8}$', args[0] )
+        m = re.match( r'^(.*)\.tmp\..{8}$', args[0] )
         if m:
             self.infof( 'write: %s\n', m.group(1) )
         else:
@@ -844,7 +844,7 @@ class RepoProbe( ShellProbe ):
                 line = line.decode('utf-8')
 
             ## grok fields
-            m = re.match( '([^\=]+)\=(.*)', line )
+            m = re.match( r'([^=]+)=(.*)', line )
             if not m:
                 continue
 
@@ -865,7 +865,7 @@ class RepoProbe( ShellProbe ):
                 self.date = datetime.strptime(value[0:19], "%Y-%m-%d %H:%M:%S")
 
                 # strptime can't handle UTC offset
-                m = re.match( '^([-+]?[0-9]{2})([0-9]{2})$', value[20:])
+                m = re.match(r'^([-+]?[0-9]{2})([0-9]{2})$', value[20:])
                 (hh, mn) = m.groups()
                 utc_off_hour   = int(hh)
                 utc_off_minute = int(mn)
@@ -961,7 +961,7 @@ class Project( Action ):
             raise AbortError( '%s is missing version information it needs to build properly.\nClone the official git repository at %s\nor download an official source archive from %s\n', self.name, self.url_repo, self.url_website )
 
         if repo.tag != '':
-            m = re.match( '^([0-9]+)\.([0-9]+)\.([0-9]+)-?(.+)?$', repo.tag )
+            m = re.match( r'^([0-9]+)\.([0-9]+)\.([0-9]+)-?(.+)?$', repo.tag )
             if not m:
                 raise AbortError( 'Invalid repo tag format %s\n', repo.tag )
             (vmajor, vminor, vpoint, suffix) = m.groups()
@@ -987,7 +987,7 @@ class Project( Action ):
             self.build = time.strftime('%Y%m%d', now) + '01'
             self.title = '%s %s (%s)' % (self.name,self.version,self.build)
         else:
-            m = re.match('^([a-zA-Z]+)\.([0-9]+)$', self.suffix)
+            m = re.match(r'^([a-zA-Z]+)\.([0-9]+)$', self.suffix)
             if not m:
                 # Regular release
                 self.version = '%d.%d.%d' % (self.vmajor,self.vminor,self.vpoint)
@@ -1099,8 +1099,8 @@ class VersionProbe( Action ):
         self.command = command
         self.abort = abort
         self.minversion = minversion
-        self.rexprs = [ '(?P<name>[^.]+)\s+(?P<svers>(?P<i0>\d+)(\.(?P<i1>\d+))?(\.(?P<i2>\d+))?)',
-                        '(?P<svers>(?P<i0>\d+)(\.(?P<i1>\d+))?(\.(?P<i2>\d+))?)' ]
+        self.rexprs = [ r'(?P<name>[^.]+)\s+(?P<svers>(?P<i0>\d+)(\.(?P<i1>\d+))?(\.(?P<i2>\d+))?)',
+                        r'(?P<svers>(?P<i0>\d+)(\.(?P<i1>\d+))?(\.(?P<i2>\d+))?)' ]
         if rexpr:
             self.rexprs.insert(0,rexpr)
 
@@ -1630,31 +1630,31 @@ try:
     cross    = None
     xcode_opts = { 'disabled': False, 'config': None }
     for i in range(len(sys.argv)):
-        if re.compile( '^--arch=(.+)$' ).match( sys.argv[i] ):
+        if re.match( r'^--arch=(.+)$', sys.argv[i] ):
             arch_gcc = sys.argv[i][7:]
             continue
-        elif re.compile( '^--arch$' ).match( sys.argv[i] ) and ((i + 1) < len(sys.argv)):
+        elif re.match( r'^--arch$', sys.argv[i] ) and ((i + 1) < len(sys.argv)):
             arch_gcc = sys.argv[i+1]
             arch_gcc = None if arch_gcc == '' else arch_gcc
             i = i + 1
             continue
-        elif re.compile( '^--cross=(.+)$' ).match( sys.argv[i] ):
+        elif re.match( r'^--cross=(.+)$', sys.argv[i] ):
             cross = sys.argv[i][8:]
             continue
-        elif re.compile( '^--cross$' ).match( sys.argv[i] ) and ((i + 1) < len(sys.argv)):
+        elif re.match( r'^--cross$', sys.argv[i] ) and ((i + 1) < len(sys.argv)):
             cross = sys.argv[i+1]
             cross = None if cross == '' else cross
             i = i + 1
             continue
-        elif re.compile( '^--xcode-config=(.+)$' ).match( sys.argv[i] ):
+        elif re.match( r'^--xcode-config=(.+)$', sys.argv[i] ):
             xcode_opts['config'] = sys.argv[i][15:]
             continue
-        elif re.compile( '^--xcode-config$' ).match( sys.argv[i] ) and ((i + 1) < len(sys.argv)):
+        elif re.match( r'^--xcode-config$', sys.argv[i] ) and ((i + 1) < len(sys.argv)):
             xcode_opts['config'] = sys.argv[i+1]
             xcode_opts['config'] = None if xcode_opts['config'] == '' else xcode_opts['config']
             i = i + 1
             continue
-        elif re.compile( '^--disable-xcode$' ).match( sys.argv[i] ):
+        elif re.match( r'^--disable-xcode$', sys.argv[i] ):
             xcode_opts['disabled'] = True
             continue
 
@@ -1756,7 +1756,7 @@ try:
     ## prepare list of targets and NAME=VALUE args to pass to make
     targets = []
     exports = []
-    rx_exports = re.compile( '([^=-]+)=(.*)' )
+    rx_exports = re.compile( r'([^=-]+)=(.*)' )
     for arg in args:
         m = rx_exports.match( arg )
         if m:
@@ -1997,7 +1997,7 @@ int main()
     doc.addBlank()
     conf_args = []
     for arg in sys.argv[1:]:
-        if re.match( '^--(force|launch).*$', arg ):
+        if re.match( r'^--(force|launch).*$', arg ):
             continue
         conf_args.append(arg)
     doc.add( 'CONF.args', ' '.join(conf_args).replace('$','$$') )
