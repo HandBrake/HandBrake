@@ -493,15 +493,19 @@ void hb_buffer_realloc( hb_buffer_t * b, int size )
 
 void hb_buffer_reduce( hb_buffer_t * b, int size )
 {
-
     if (b->storage_type == STANDARD && (size < b->alloc / 8 || b->data == NULL))
     {
-        hb_buffer_t * tmp = hb_buffer_init( size );
-
-        hb_buffer_swap_copy( b, tmp );
-        memcpy( b->data, tmp->data, size );
-        tmp->next = NULL;
-        hb_buffer_close( &tmp );
+        hb_buffer_t *tmp = hb_buffer_init(size);
+        if (tmp)
+        {
+            hb_buffer_swap_copy(b, tmp);
+            if (tmp->data)
+            {
+                memcpy(b->data, tmp->data, size);
+            }
+            tmp->next = NULL;
+        }
+        hb_buffer_close(&tmp);
     }
 }
 

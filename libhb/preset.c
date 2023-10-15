@@ -2020,6 +2020,7 @@ int hb_preset_apply_dimensions(hb_handle_t *h, int title_index,
 
     srcGeo.geometry = title->geometry;
     memcpy(srcGeo.crop, title->crop, sizeof(geo.crop));
+    memset(geo.crop, 0, sizeof(geo.crop));
 
     if (rotate_settings != NULL)
     {
