@@ -108,6 +108,7 @@
         "version": "0.1",
         "PreferredLanguage": "und",
         "WhenComplete": "notify",
+        "NotifyOnEncodeDone": false,
         "SrtDir": "",
         "window_width": 1,
         "window_height": 1,

@@ -8,6 +8,7 @@ src/chapters.c
 src/ghb-dvd.c
 src/hb-backend.c
 src/main.c
+src/notifications.c
 src/presets.c
 src/preview.c
 src/queuehandler.c

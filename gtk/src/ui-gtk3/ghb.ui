@@ -7764,138 +7764,206 @@ Only one subtitle track can be burned! Since conflicts can occur, the first chos
                 <property name="hexpand">True</property>
                 <child>
                   <object class="GtkBox" id="vbox42">
-                    <property name="orientation">vertical</property>
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
+                    <property name="orientation">vertical</property>
+                    <property name="spacing">5</property>
                     <child>
-                      <object class="GtkBox" id="hbox82">
-                        <property name="orientation">horizontal</property>
+                      <object class="GtkLabel">
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
-                        <property name="spacing">4</property>
-                        <property name="margin-top">6</property>
-                        <property name="margin-bottom">6</property>
-                        <property name="margin-start">12</property>
-                        <property name="margin-end">12</property>
-                        <child>
-                          <object class="GtkComboBox" id="WhenComplete">
-                            <property name="visible">True</property>
-                            <property name="valign">GTK_ALIGN_CENTER</property>
-                            <property name="can-focus">False</property>
-                            <signal name="changed" handler="when_complete_changed_cb" swapped="no"/>
-                          </object>
-                          <packing>
-                            <property name="position">0</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkLabel" id="labela1">
-                            <property name="visible">True</property>
-                            <property name="can-focus">False</property>
-                            <property name="label" translatable="yes">Default action when all encodes are complete</property>
-                            <property name="use-markup">True</property>
-                          </object>
-                          <packing>
-                            <property name="position">1</property>
-                          </packing>
-                        </child>
+                        <property name="halign">start</property>
+                        <property name="margin-start">4</property>
+                        <property name="margin-top">4</property>
+                        <property name="margin-bottom">4</property>
+                        <property name="label" translatable="yes">When Done</property>
+                        <attributes>
+                          <attribute name="weight" value="bold"/>
+                        </attributes>
                       </object>
                       <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
                         <property name="position">1</property>
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkBox" id="vbox5">
-                        <property name="orientation">vertical</property>
+                      <object class="GtkBox" id="hbox82">
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
-                        <property name="margin-top">6</property>
-                        <property name="margin-bottom">6</property>
-                        <property name="margin-start">12</property>
+                        <property name="spacing">4</property>
                         <child>
-                          <object class="GtkCheckButton" id="auto_name">
-                            <property name="label" translatable="yes">Use automatic naming (uses modified source name)</property>
-                            <property name="tooltip-text" translatable="yes">Create destination filename from source filename or volume label</property>
+                          <object class="GtkLabel" id="labela1">
                             <property name="visible">True</property>
-                            <property name="can-focus">True</property>
-                            <property name="receives-default">False</property>
-                            <property name="halign">start</property>
-                            <property name="draw-indicator">True</property>
-                            <signal name="toggled" handler="pref_changed_cb" swapped="no"/>
+                            <property name="can-focus">False</property>
+                            <property name="margin-start">4</property>
+                            <property name="label" translatable="yes">Default action when queue is completed:</property>
+                            <property name="use-markup">True</property>
                           </object>
                           <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
                             <property name="position">0</property>
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkBox" id="autoname_box">
-                            <property name="orientation">horizontal</property>
+                          <object class="GtkComboBox" id="WhenComplete">
                             <property name="visible">True</property>
                             <property name="can-focus">False</property>
-                            <property name="spacing">4</property>
-                            <property name="margin-start">18</property>
-                            <property name="margin-end">8</property>
-                            <child>
-                              <object class="GtkLabel" id="auto_name_template_label">
-                                <property name="visible">True</property>
-                                <property name="can-focus">False</property>
-                                <property name="label" translatable="yes">Auto-Name Template</property>
-                                <property name="use-markup">True</property>
-
-                                <property name="halign">end</property>
-                              </object>
-                              <packing>
-                                <property name="position">0</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkEntry" id="auto_name_template">
-                                <property name="tooltip-text" translatable="yes">Available Options: {source-path} {source} {title} {preset} {chapters} {date} {time} {creation-date} {creation-time} {modification-date} {modification-time} {codec} {bit-depth} {quality} {bitrate} {width} {height}</property>
-                                <property name="visible">True</property>
-                                <property name="can-focus">True</property>
-                                <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                <property name="activates-default">True</property>
-                                <property name="width-chars">40</property>
-                                <property name="truncate-multiline">True</property>
-                                <signal name="changed" handler="pref_changed_cb" swapped="no"/>
-                              </object>
-                              <packing>
-                                <property name="position">1</property>
-                              </packing>
-                            </child>
+                            <signal name="changed" handler="when_complete_changed_cb" swapped="no"/>
                           </object>
                           <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
                             <property name="position">1</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkCheckButton" id="UseM4v">
-                            <property name="label" translatable="yes">Use iPod/iTunes friendly (.m4v) file extension for MP4</property>
-                            <property name="visible">True</property>
-                            <property name="can-focus">True</property>
-                            <property name="receives-default">False</property>
-                            <property name="halign">start</property>
-                            <property name="draw-indicator">True</property>
-                            <signal name="toggled" handler="use_m4v_changed_cb" swapped="no"/>
-                          </object>
-                          <packing>
-                            <property name="position">2</property>
                           </packing>
                         </child>
                       </object>
                       <packing>
-                        <property name="position">2</property>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">3</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkCheckButton" id="NotifyOnEncodeDone">
+                        <property name="label" translatable="yes">Show notification when each item is completed</property>
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">False</property>
+                        <property name="halign">start</property>
+                        <property name="draw-indicator">True</property>
+                        <signal name="toggled" handler="pref_changed_cb" swapped="no"/>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">5</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkCheckButton" id="RemoveFinishedJobs">
+                        <property name="label" translatable="yes">Remove completed items from queue</property>
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">False</property>
+                        <property name="tooltip-text" translatable="yes">By default, completed jobs remain in the queue and are marked as complete.
+Check this if you want the queue to clean itself up by deleting completed jobs.</property>
+                        <property name="halign">start</property>
+                        <property name="draw-indicator">True</property>
+                        <signal name="toggled" handler="pref_changed_cb" swapped="no"/>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">6</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkLabel">
+                        <property name="visible">True</property>
+                        <property name="can-focus">False</property>
+                        <property name="halign">start</property>
+                        <property name="margin-left">4</property>
+                        <property name="margin-start">4</property>
+                        <property name="margin-top">4</property>
+                        <property name="margin-bottom">4</property>
+                        <property name="label" translatable="yes">General</property>
+                        <attributes>
+                          <attribute name="weight" value="bold"/>
+                        </attributes>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">7</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkCheckButton" id="auto_name">
+                        <property name="label" translatable="yes">Use automatic naming (uses modified source name)</property>
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">False</property>
+                        <property name="tooltip-text" translatable="yes">Create destination filename from source filename or volume label</property>
+                        <property name="halign">start</property>
+                        <property name="draw-indicator">True</property>
+                        <signal name="toggled" handler="pref_changed_cb" swapped="no"/>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">8</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkBox" id="autoname_box">
+                        <property name="visible">True</property>
+                        <property name="can-focus">False</property>
+                        <property name="margin-left">18</property>
+                        <property name="margin-right">8</property>
+                        <property name="margin-start">18</property>
+                        <property name="margin-end">8</property>
+                        <property name="spacing">4</property>
+                        <child>
+                          <object class="GtkLabel" id="auto_name_template_label">
+                            <property name="visible">True</property>
+                            <property name="can-focus">False</property>
+                            <property name="halign">end</property>
+                            <property name="label" translatable="yes">Auto-Name Template</property>
+                            <property name="use-markup">True</property>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">0</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkEntry" id="auto_name_template">
+                            <property name="visible">True</property>
+                            <property name="can-focus">True</property>
+                            <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                            <property name="tooltip-text" translatable="yes">Available Options: {source-path} {source} {title} {preset} {chapters} {date} {time} {creation-date} {creation-time} {modification-date} {modification-time} {codec} {bit-depth} {quality} {bitrate} {width} {height}</property>
+                            <property name="activates-default">True</property>
+                            <property name="width-chars">40</property>
+                            <property name="truncate-multiline">True</property>
+                            <signal name="changed" handler="pref_changed_cb" swapped="no"/>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">1</property>
+                          </packing>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">9</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkCheckButton" id="UseM4v">
+                        <property name="label" translatable="yes">Use iPod/iTunes friendly (.m4v) file extension for MP4</property>
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">False</property>
+                        <property name="halign">start</property>
+                        <property name="draw-indicator">True</property>
+                        <signal name="toggled" handler="use_m4v_changed_cb" swapped="no"/>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">10</property>
                       </packing>
                     </child>
                     <child>
                       <object class="GtkBox" id="hbox66">
-                        <property name="orientation">horizontal</property>
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
                         <property name="spacing">4</property>
-                        <property name="margin-top">6</property>
-                        <property name="margin-bottom">6</property>
-                        <property name="margin-start">12</property>
                         <child>
                           <object class="GtkSpinButton" id="preview_count">
                             <property name="visible">True</property>
@@ -7906,6 +7974,8 @@ Only one subtitle track can be burned! Since conflicts can occur, the first chos
                             <signal name="value-changed" handler="pref_changed_cb" swapped="no"/>
                           </object>
                           <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
                             <property name="position">0</property>
                           </packing>
                         </child>
@@ -7917,23 +7987,23 @@ Only one subtitle track can be burned! Since conflicts can occur, the first chos
                             <property name="use-markup">True</property>
                           </object>
                           <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
                             <property name="position">1</property>
                           </packing>
                         </child>
                       </object>
                       <packing>
-                        <property name="position">3</property>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">11</property>
                       </packing>
                     </child>
                     <child>
                       <object class="GtkBox" id="hbox60">
-                        <property name="orientation">horizontal</property>
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
                         <property name="spacing">4</property>
-                        <property name="margin-top">6</property>
-                        <property name="margin-bottom">6</property>
-                        <property name="margin-start">12</property>
                         <child>
                           <object class="GtkSpinButton" id="MinTitleDuration">
                             <property name="visible">True</property>
@@ -7944,6 +8014,8 @@ Only one subtitle track can be burned! Since conflicts can occur, the first chos
                             <signal name="value-changed" handler="pref_changed_cb" swapped="no"/>
                           </object>
                           <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
                             <property name="position">0</property>
                           </packing>
                         </child>
@@ -7955,29 +8027,16 @@ Only one subtitle track can be burned! Since conflicts can occur, the first chos
                             <property name="use-markup">True</property>
                           </object>
                           <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
                             <property name="position">1</property>
                           </packing>
                         </child>
                       </object>
                       <packing>
-                        <property name="position">4</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkCheckButton" id="RemoveFinishedJobs">
-                        <property name="label" translatable="yes">Clear completed queue items after an encode completes</property>
-                        <property name="visible">True</property>
-                        <property name="can-focus">True</property>
-                        <property name="receives-default">False</property>
-                        <property name="tooltip-text" translatable="yes">By default, completed jobs remain in the queue and are marked as complete.
-Check this if you want the queue to clean itself up by deleting completed jobs.</property>
-                        <property name="halign">start</property>
-                        <property name="margin-start">12</property>
-                        <property name="draw-indicator">True</property>
-                        <signal name="toggled" handler="pref_changed_cb" swapped="no"/>
-                      </object>
-                      <packing>
-                        <property name="position">5</property>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">12</property>
                       </packing>
                     </child>
                     <child>
@@ -7986,16 +8045,17 @@ Check this if you want the queue to clean itself up by deleting completed jobs.<
                         <property name="visible">False</property>
                         <property name="can-focus">False</property>
                         <property name="receives-default">False</property>
-                        <property name="margin-start">12</property>
-                        <property name="margin-top">3</property>
-                        <property name="margin-bottom">3</property>
+                        <property name="margin-left">4</property>
+                        <property name="margin-start">4</property>
+                        <property name="margin-top">4</property>
+                        <property name="margin-bottom">4</property>
                         <property name="halign">start</property>
                         <attributes>
                           <attribute name="weight" value="bold"/>
                         </attributes>
                       </object>
                       <packing>
-                        <property name="position">6</property>
+                        <property name="position">13</property>
                       </packing>
                     </child>
                     <child>
@@ -8005,14 +8065,13 @@ Check this if you want the queue to clean itself up by deleting completed jobs.<
                         <property name="can-focus">True</property>
                         <property name="receives-default">False</property>
                         <property name="halign">start</property>
-                        <property name="margin-start">12</property>
                         <property name="tooltip-text" translatable="yes">If checked, encoding will be paused when the device
 enters Power Saver mode. Encoding will resume when
 Power Saver mode is disabled.</property>
                         <signal name="toggled" handler="pref_changed_cb" swapped="no"/>
                       </object>
                       <packing>
-                        <property name="position">7</property>
+                        <property name="position">14</property>
                       </packing>
                     </child>
                     <child>
@@ -8022,14 +8081,13 @@ Power Saver mode is disabled.</property>
                         <property name="can-focus">True</property>
                         <property name="receives-default">False</property>
                         <property name="halign">start</property>
-                        <property name="margin-start">12</property>
                         <property name="tooltip-text" translatable="yes">If checked, encoding will be paused when charger is
 unplugged. Encoding will resume when reconnected to
 a mains power source.</property>
                         <signal name="toggled" handler="pref_changed_cb" swapped="no"/>
                       </object>
                       <packing>
-                        <property name="position">8</property>
+                        <property name="position">15</property>
                       </packing>
                     </child>
                     <child>
@@ -8039,14 +8097,13 @@ a mains power source.</property>
                         <property name="can-focus">True</property>
                         <property name="receives-default">False</property>
                         <property name="halign">start</property>
-                        <property name="margin-start">12</property>
                         <property name="tooltip-text" translatable="yes">If checked, encoding will be paused when the battery
 level is low. Encoding will resume when the
 battery is charged.</property>
                         <signal name="toggled" handler="pref_changed_cb" swapped="no"/>
                       </object>
                       <packing>
-                        <property name="position">9</property>
+                        <property name="position">16</property>
                       </packing>
                     </child>
                   </object>
@@ -8190,11 +8247,10 @@ Flatpak users may need to set this for certain workflows to work properly. The d
                             <property name="spacing">2</property>
                             <child>
                               <object class="GtkCheckButton" id="DiskFreeCheck">
-                                <property name="label" translatable="yes">Monitor destination disk free space</property>
+                                <property name="label" translatable="yes">Pause encoding if free disk space drops below:</property>
                                 <property name="visible">True</property>
                                 <property name="can-focus">True</property>
                                 <property name="receives-default">False</property>
-                                <property name="tooltip-text" translatable="yes">Pause encoding if free disk space drops below limit</property>
                                 <property name="halign">start</property>
                                 <property name="draw-indicator">True</property>
                                 <signal name="toggled" handler="pref_changed_cb" swapped="no"/>
@@ -8216,7 +8272,6 @@ Flatpak users may need to set this for certain workflows to work properly. The d
                                     <property name="visible">True</property>
                                     <property name="can-focus">True</property>
                                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                    <property name="tooltip-text" translatable="yes">Pause encoding if free disk space drops below limit</property>
                                     <property name="valign">GTK_ALIGN_CENTER</property>
                                     <property name="adjustment">DiskFreeLimitAdjustment</property>
                                     <property name="width-request">55</property>
@@ -8231,7 +8286,7 @@ Flatpak users may need to set this for certain workflows to work properly. The d
                                     <property name="visible">True</property>
                                     <property name="can-focus">False</property>
                                     <property name="halign">start</property>
-                                    <property name="label" translatable="yes">MB Limit</property>
+                                    <property name="label" translatable="yes">MB</property>
                                     <property name="hexpand">True</property>
                                   </object>
                                   <packing>
