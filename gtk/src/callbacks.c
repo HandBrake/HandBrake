@@ -61,6 +61,7 @@
 #include "handbrake/handbrake.h"
 #include "callbacks.h"
 #include "chapters.h"
+#include "notifications.h"
 #include "queuehandler.h"
 #include "audiohandler.h"
 #include "subtitlehandler.h"
@@ -85,6 +86,7 @@ static gboolean can_suspend_logind(void);
 static void suspend_logind(void);
 static void quit_dialog_show(signal_user_data_t *ud);
 static void quit_dialog_response(GtkDialog *dialog, int response, signal_user_data_t *ud);
+static void queue_done_action(signal_user_data_t *ud);
 static gboolean has_drive = FALSE;
 
 #if !defined(_WIN32)
@@ -4120,7 +4122,8 @@ ghb_start_next_job(signal_user_data_t *ud)
     }
     // Nothing pending
     uninhibit_suspend(ud);
-    ghb_notify_done(ud);
+    ghb_send_notification(GHB_NOTIFY_QUEUE_DONE, 0, ud);
+    queue_done_action(ud);
     ghb_update_pending(ud);
     gtk_widget_hide(progress);
     ghb_dict_set_bool(ud->globals, "SkipDiskFreeCheck", FALSE);
@@ -4408,6 +4411,7 @@ ghb_backend_events(signal_user_data_t *ud)
             case GHB_ERROR_NONE:
                 gtk_label_set_text(work_status, _("Encode Done!"));
                 qstatus = GHB_QUEUE_DONE;
+                ghb_send_notification (GHB_NOTIFY_ITEM_DONE, index, ud);
                 break;
             case GHB_ERROR_CANCELED:
                 gtk_label_set_text(work_status, _("Encode Canceled."));
@@ -4416,6 +4420,7 @@ ghb_backend_events(signal_user_data_t *ud)
             case GHB_ERROR_FAIL:
             default:
                 gtk_label_set_text(work_status, _("Encode Failed."));
+                ghb_send_notification (GHB_NOTIFY_ITEM_FAILED, index, ud);
                 qstatus = GHB_QUEUE_FAIL;
         }
         if (queueDict != NULL)
@@ -5243,25 +5248,9 @@ format_deblock_cb(GtkScale *scale, gdouble val, signal_user_data_t *ud)
     }
 }
 
-void
-ghb_notify_done(signal_user_data_t *ud)
+static void
+queue_done_action (signal_user_data_t *ud)
 {
-    if (ud->when_complete == 0)
-        return;
-
-    GNotification * notification;
-    GIcon         * icon;
-
-    notification = g_notification_new(_("Encode Complete"));
-    g_notification_set_body(notification,
-        _("Put down that cocktail, Your HandBrake queue is done!"));
-    icon = g_themed_icon_new("fr.handbrake.ghb");
-    g_notification_set_icon(notification, icon);
-
-    g_application_send_notification(G_APPLICATION(ud->app), "cocktail", notification);
-    g_object_unref(G_OBJECT(notification));
-    g_object_unref(G_OBJECT(icon));
-
     switch (ud->when_complete)    {
 	    case 2:
             ghb_countdown_dialog_show(_("Your encode is complete."),
@@ -5287,6 +5276,7 @@ ghb_notify_done(signal_user_data_t *ud)
         default:
             break;    }
 }
+
 
 G_MODULE_EXPORT gboolean
 window_map_cb(

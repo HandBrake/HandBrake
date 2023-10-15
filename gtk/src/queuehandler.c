@@ -40,6 +40,7 @@
 #include "queuehandler.h"
 #include "title-add.h"
 #include "power-manager.h"
+#include "notifications.h"
 
 void ghb_queue_buttons_grey (signal_user_data_t *ud);
 
@@ -1771,6 +1772,7 @@ low_disk_check_response_cb (GtkDialog *dialog, int response,
 {
     g_signal_handlers_disconnect_by_data(dialog, ud);
     gtk_widget_destroy(GTK_WIDGET(dialog));
+    ghb_withdraw_notification(GHB_NOTIFY_PAUSED_LOW_DISK_SPACE);
     switch (response)
     {
         case 1:
@@ -1835,6 +1837,8 @@ void ghb_low_disk_check (signal_user_data_t *ud)
     }
 
     ghb_pause_queue();
+    ghb_send_notification(GHB_NOTIFY_PAUSED_LOW_DISK_SPACE,
+                          free_size / (1024 * 1024), ud);
     dest      = ghb_dict_get_string(settings, "destination");
     hb_window = GTK_WINDOW(GHB_WIDGET(ud->builder, "hb_window"));
     dialog    = gtk_message_dialog_new(hb_window, GTK_DIALOG_MODAL,

@@ -97,6 +97,5 @@ void ghb_break_duration(gint64 duration, gint *hh, gint *mm, gint *ss);
 GtkFileFilter *ghb_add_file_filter(GtkFileChooser *chooser,
                                    signal_user_data_t *ud,
                                    const char *name, const char *id);
-void ghb_notify_done(signal_user_data_t *ud);
 
 #endif // _CALLBACKS_H_
