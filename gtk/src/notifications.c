@@ -91,7 +91,7 @@ notify_done (gboolean final, gboolean success, gint idx, signal_user_data_t *ud)
     gboolean notify_item, notify_queue;
 
     notify_item = ghb_dict_get_bool(ud->prefs, "NotifyOnEncodeDone");
-    notify_queue = ud->when_complete;
+    notify_queue = ghb_dict_get_bool(ud->prefs, "NotifyOnQueueDone");
 
     if (notify_queue && final)
     {

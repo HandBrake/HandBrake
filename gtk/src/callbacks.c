@@ -5252,12 +5252,12 @@ static void
 queue_done_action (signal_user_data_t *ud)
 {
     switch (ud->when_complete)    {
-	    case 2:
+        case 1:
             ghb_countdown_dialog_show(_("Your encode is complete."),
                                       _("Quitting HandBrake"),
                                       (GSourceFunc)quit_cb, 60, ud);
             break;
-        case 3:
+        case 2:
             if (can_suspend_logind())
             {
                 ghb_countdown_dialog_show(_("Your encode is complete."),
@@ -5265,7 +5265,7 @@ queue_done_action (signal_user_data_t *ud)
                                           (GSourceFunc)suspend_cb, 60, ud);
             }
             break;
-	    case 4:
+        case 3:
             if (can_shutdown_logind())
             {
                 ghb_countdown_dialog_show(_("Your encode is complete."),

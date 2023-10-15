@@ -107,8 +107,7 @@ combo_opts_t point_to_point_opts =
 static options_map_t d_when_complete_opts[] =
 {
     {N_("Do Nothing"),            "nothing",  0},
-    {N_("Show Notification"),     "notify",   1},
-    {N_("Quit Handbrake"),        "quit",     4},
+    {N_("Quit Handbrake"),        "quit",     1},
     {N_("Put Computer To Sleep"), "sleep",    2},
     {N_("Shutdown Computer"),     "shutdown", 3},
 };
