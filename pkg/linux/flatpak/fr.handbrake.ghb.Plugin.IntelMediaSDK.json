@@ -29,7 +29,8 @@
                 ],
                 "make-install-args": [
                     "-v"
-                ]
+                ],
+                "strip": true
             }
         },
         {
@@ -44,7 +45,8 @@
             "no-autogen": false,
             "config-opts": ["--with-drivers-path=/app/extensions/IntelMediaSDK/lib/dri"],
             "build-options": {
-                "prefix" : "/app/extensions/IntelMediaSDK"
+                "prefix" : "/app/extensions/IntelMediaSDK",
+                "strip": true
             }
         },
         {
@@ -59,7 +61,8 @@
             "no-autogen": false,
             "build-options": {
                 "prefix" : "/app/extensions/IntelMediaSDK",
-                "prepend-pkg-config-path": "/app/extensions/IntelMediaSDK/lib/pkgconfig"
+                "prepend-pkg-config-path": "/app/extensions/IntelMediaSDK/lib/pkgconfig",
+                "strip": true
             }
         },
         {
@@ -80,7 +83,8 @@
             ],
             "build-options": {
                 "prefix" : "/app/extensions/IntelMediaSDK",
-                "prepend-pkg-config-path": "/app/extensions/IntelMediaSDK/lib/pkgconfig"
+                "prepend-pkg-config-path": "/app/extensions/IntelMediaSDK/lib/pkgconfig",
+                "strip": true
             }
         },
         {
@@ -97,7 +101,8 @@
             ],
             "build-options": {
                 "prefix" : "/app/extensions/IntelMediaSDK",
-                "prepend-pkg-config-path": "/app/extensions/IntelMediaSDK/lib/pkgconfig"
+                "prepend-pkg-config-path": "/app/extensions/IntelMediaSDK/lib/pkgconfig",
+                "strip": true
             },
             "post-install": [
                 "install -Dp -m 644 ${FLATPAK_BUILDER_BUILDDIR}/fr.handbrake.ghb.Plugin.IntelMediaSDK.metainfo.xml --target-directory=${FLATPAK_DEST}/share/metainfo",
@@ -128,7 +133,8 @@
             ],
             "build-options": {
                 "prefix" : "/app/extensions/IntelMediaSDK",
-                "prepend-pkg-config-path": "/app/extensions/IntelMediaSDK/lib/pkgconfig"
+                "prepend-pkg-config-path": "/app/extensions/IntelMediaSDK/lib/pkgconfig",
+                "strip": true
             },
             "sources": [
                 {
