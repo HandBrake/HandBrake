@@ -1,7 +1,7 @@
 {
     "app-id": "fr.handbrake.ghb",
     "runtime": "org.gnome.Platform",
-    "runtime-version": "43",
+    "runtime-version": "45",
     "sdk": "org.gnome.Sdk",
     "command": "ghb",
     "finish-args": [
@@ -63,6 +63,8 @@
             "config-opts": [
                 "--flatpak"
             ],
+            "build-options": {
+            },
             "builddir": true,
             "post-install": ["install -d /app/extensions"],
             "sources": [
