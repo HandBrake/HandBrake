@@ -109,6 +109,7 @@
         "PreferredLanguage": "und",
         "WhenComplete": "notify",
         "NotifyOnEncodeDone": false,
+        "NotifyOnQueueDone": true,
         "SrtDir": "",
         "window_width": 1,
         "window_height": 1,

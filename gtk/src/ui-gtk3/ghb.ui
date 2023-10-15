@@ -7826,6 +7826,22 @@ Only one subtitle track can be burned! Since conflicts can occur, the first chos
                       </packing>
                     </child>
                     <child>
+                      <object class="GtkCheckButton" id="NotifyOnQueueDone">
+                        <property name="label" translatable="yes">Show notification when queue is completed</property>
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">False</property>
+                        <property name="halign">start</property>
+                        <property name="draw-indicator">True</property>
+                        <signal name="toggled" handler="pref_changed_cb" swapped="no"/>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">4</property>
+                      </packing>
+                    </child>
+                    <child>
                       <object class="GtkCheckButton" id="NotifyOnEncodeDone">
                         <property name="label" translatable="yes">Show notification when each item is completed</property>
                         <property name="visible">True</property>
