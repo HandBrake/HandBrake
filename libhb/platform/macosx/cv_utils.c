@@ -185,7 +185,7 @@ CFStringRef hb_cv_colr_tra_xlat(int color_transfer)
     }
 }
 
-CFNumberRef hb_cv_colr_gamma_xlat(int color_transfer)
+CFNumberRef hb_cv_colr_gamma_xlat(int color_transfer) CF_RETURNS_RETAINED
 {
     Float32 gamma = 0;
     switch (color_transfer)

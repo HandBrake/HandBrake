@@ -206,7 +206,7 @@ MTLPixelFormat hb_metal_pix_fmt_from_component(const AVComponentDescriptor *comp
     return format;
 }
 
-CVMetalTextureRef hb_metal_texture_from_pixbuf(CVMetalTextureCacheRef textureCache,
+CVMetalTextureRef hb_metal_create_texture_from_pixbuf(CVMetalTextureCacheRef textureCache,
                                                CVPixelBufferRef pixbuf,
                                                int plane,
                                                MTLPixelFormat format)

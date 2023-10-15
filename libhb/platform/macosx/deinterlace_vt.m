@@ -237,6 +237,7 @@ static hb_buffer_t * filter_frame(hb_filter_private_t *pv, int parity, int tff)
     CVReturn ret = kCVReturnSuccess;
     hb_buffer_t *out = NULL;
 
+    CVPixelBufferRef cv_dest = NULL;
     CVPixelBufferRef cv_prev = pv->ref[PREV] ? hb_cv_get_pixel_buffer(pv->ref[PREV]) : hb_cv_get_pixel_buffer(pv->ref[CURR]);
     CVPixelBufferRef cv_cur = hb_cv_get_pixel_buffer(pv->ref[CURR]);
     CVPixelBufferRef cv_next = pv->ref[NEXT] ? hb_cv_get_pixel_buffer(pv->ref[NEXT]) : hb_cv_get_pixel_buffer(pv->ref[CURR]);
@@ -247,7 +248,6 @@ static hb_buffer_t * filter_frame(hb_filter_private_t *pv, int parity, int tff)
         goto fail;
     }
 
-    CVPixelBufferRef cv_dest = NULL;
     ret = CVPixelBufferPoolCreatePixelBuffer(kCFAllocatorDefault, pv->mtl->pool, &cv_dest);
     if (ret != kCVReturnSuccess)
     {
@@ -270,10 +270,10 @@ static hb_buffer_t * filter_frame(hb_filter_private_t *pv, int parity, int tff)
             goto fail;
         }
 
-        CVMetalTextureRef prev = hb_metal_texture_from_pixbuf(pv->mtl->cache, cv_prev, i, format);
-        CVMetalTextureRef cur  = hb_metal_texture_from_pixbuf(pv->mtl->cache, cv_cur,  i, format);
-        CVMetalTextureRef next = hb_metal_texture_from_pixbuf(pv->mtl->cache, cv_next, i, format);
-        CVMetalTextureRef dest = hb_metal_texture_from_pixbuf(pv->mtl->cache, cv_dest, i, format);
+        CVMetalTextureRef prev = hb_metal_create_texture_from_pixbuf(pv->mtl->cache, cv_prev, i, format);
+        CVMetalTextureRef cur  = hb_metal_create_texture_from_pixbuf(pv->mtl->cache, cv_cur,  i, format);
+        CVMetalTextureRef next = hb_metal_create_texture_from_pixbuf(pv->mtl->cache, cv_next, i, format);
+        CVMetalTextureRef dest = hb_metal_create_texture_from_pixbuf(pv->mtl->cache, cv_dest, i, format);
 
         id<MTLTexture> tex_prev = CVMetalTextureGetTexture(prev);
         id<MTLTexture> tex_cur  = CVMetalTextureGetTexture(cur);

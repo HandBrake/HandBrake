@@ -24,7 +24,7 @@ CVPixelBufferPoolRef hb_cv_create_pixel_buffer_pool(int width, int height,
 
 CFStringRef hb_cv_colr_pri_xlat(int color_prim);
 CFStringRef hb_cv_colr_tra_xlat(int color_transfer);
-CFNumberRef hb_cv_colr_gamma_xlat(int color_transfer);
+CFNumberRef hb_cv_colr_gamma_xlat(int color_transfer) CF_RETURNS_RETAINED;
 CFStringRef hb_cv_colr_mat_xlat(int color_matrix);
 CFStringRef hb_cv_chroma_loc_xlat(int chroma_location);
 
