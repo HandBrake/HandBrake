@@ -311,7 +311,8 @@ inhibit_suspend (signal_user_data_t *ud)
         return;
     }
     suspend_cookie = gtk_application_inhibit(ud->app, NULL,
-                            GTK_APPLICATION_INHIBIT_SUSPEND, "Encoding");
+            GTK_APPLICATION_INHIBIT_SUSPEND | GTK_APPLICATION_INHIBIT_LOGOUT,
+            _("An encode is in progress."));
     if (suspend_cookie != 0)
     {
         suspend_inhibited = GHB_SUSPEND_INHIBITED_GTK;
