@@ -245,23 +245,6 @@ hb_buffer_t * hb_hwaccel_copy_video_buffer_to_hw_video_buffer(hb_job_t *job, hb_
     return NULL;
 }
 
-const char * hb_hwaccel_get_codec_name(enum AVCodecID codec_id)
-{
-    switch (codec_id)
-    {
-        case AV_CODEC_ID_H264:
-            return "h264_hwaccel";
-        case AV_CODEC_ID_HEVC:
-            return "hevc_hwaccel";
-        case AV_CODEC_ID_AV1:
-            return "av1_hwaccel";
-        case AV_CODEC_ID_PRORES:
-            return "prores_hwaccel";
-        default:
-            return "hwaccel";
-    }
-}
-
 static int is_encoder_supported(int encoder_id)
 {
     switch (encoder_id)
