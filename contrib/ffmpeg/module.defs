@@ -118,7 +118,7 @@ ifeq (darwin,$(HOST.system))
     ifeq (x86_64,$(HOST.arch))
         FFMPEG.CONFIGURE.extra += --arch=x86_64
     else ifeq (arm64,$(HOST.arch))
-        FFMPEG.CONFIGURE.extra += --arch=arm64
+        FFMPEG.CONFIGURE.extra += --arch=arm64 --enable-hwaccel=vp9_videotoolbox
     endif
 
     ifeq (1,$(HOST.cross))
