@@ -1,6 +1,6 @@
-From c2466e6f97a2975dbfddb140f442902442427415 Mon Sep 17 00:00:00 2001
-From: Ghost
-Date: Wed, 20 Sep 2023 09:31:25 +0200
+From ae6a19bac22da87a784dbce6016d3985719dbbb4 Mon Sep 17 00:00:00 2001
+From: Damiano galassi <damiog@gmail.com>
+Date: Mon, 16 Oct 2023 10:00:00 +0200
 Subject: [PATCH] Neon optimizations.
 
 ---
@@ -19,7 +19,7 @@ Subject: [PATCH] Neon optimizations.
  Source/Lib/Common/ASM_NEON/convolve_neon.h    |  298 +++
  Source/Lib/Common/ASM_NEON/mem_neon.h         |  546 +++++
  Source/Lib/Common/ASM_NEON/transpose_neon.h   |  755 +++++++
- .../Common/ASM_NEON/wiener_convolve_neon.c    |  544 +++++
+ .../Common/ASM_NEON/wiener_convolve_neon.c    |  525 +++++
  Source/Lib/Common/ASM_SSE2/CMakeLists.txt     |   19 +-
  .../ASM_SSE2/EbAvcStyleMcp_Intrinsic_SSE2.c   |    2 +-
  .../EbDeblockingFilter_Intrinsic_SSE2.c       |    2 +-
@@ -108,7 +108,7 @@ Subject: [PATCH] Neon optimizations.
  Source/Lib/Encoder/Codec/aom_dsp_rtcd.h       |  157 +-
  Source/Lib/Encoder/Globals/EbEncHandle.c      |    6 +-
  Source/Lib/Encoder/Globals/EbEncSettings.c    |   11 +
- 104 files changed, 9542 insertions(+), 320 deletions(-)
+ 104 files changed, 9523 insertions(+), 320 deletions(-)
  create mode 100644 Source/Lib/Common/ASM_NEON/CMakeLists.txt
  create mode 100644 Source/Lib/Common/ASM_NEON/aom_convolve_copy_neon.c
  create mode 100644 Source/Lib/Common/ASM_NEON/aom_subpixel_8t_intrin_neon.c
@@ -6589,10 +6589,10 @@ index 0000000..2650a20
 +
 diff --git a/Source/Lib/Common/ASM_NEON/wiener_convolve_neon.c b/Source/Lib/Common/ASM_NEON/wiener_convolve_neon.c
 new file mode 100644
-index 0000000..2f38021
+index 0000000..910e624
 --- /dev/null
 +++ b/Source/Lib/Common/ASM_NEON/wiener_convolve_neon.c
-@@ -0,0 +1,544 @@
+@@ -0,0 +1,525 @@
 +/*
 + * Copyright (c) 2018, Alliance for Open Media. All rights reserved
 + *
@@ -6615,16 +6615,6 @@ index 0000000..2f38021
 +#include "mem_neon.h"
 +#include "transpose_neon.h"
 +
-+// #include "config/aom_config.h"
-+// #include "config/av1_rtcd.h"
-+
-+// #include "aom_dsp/txfm_common.h"
-+// #include "aom_dsp/arm/mem_neon.h"
-+// #include "aom_dsp/arm/transpose_neon.h"
-+// #include "aom_ports/mem.h"
-+// #include "av1/common/common.h"
-+// #include "av1/common/arm/convolve_neon.h"
-+
 +/* Wiener filter 2D
 +   Apply horizontal filter and store in a temporary buffer. When applying
 +   vertical filter, overwrite the original pixel values.
@@ -6634,18 +6624,10 @@ index 0000000..2f38021
 +                                          const int16_t *const filter_x, const int16_t *const filter_y,
 +                                          const int32_t k_width, const int32_t k_height, const ConvolveParams *const conv_params)
 +{
-+// void svt_av1_wiener_convolve_add_src_neon(const uint8_t *src, ptrdiff_t src_stride,
-+//                                       uint8_t *dst, ptrdiff_t dst_stride,
-+//                                       const int16_t *filter_x, int x_step_q4,
-+//                                       const int16_t *filter_y, int y_step_q4,
-+//                                       int w, int h,
-+//                                       const ConvolveParams *conv_params) {
 +  uint16_t *d_tmp;
 +  uint8_t *d;
 +  const uint8_t *src_ptr, *s_tmp;
 +  uint16_t *dst_ptr;
-+  // (void)x_step_q4;
-+  // (void)y_step_q4;
 +  int32_t w = k_width;
 +  int32_t h = k_height;
 +  int width, height;
@@ -6657,7 +6639,6 @@ index 0000000..2f38021
 +  DECLARE_ALIGNED(16, uint16_t,
 +                  temp[(MAX_SB_SIZE + HORIZ_EXTRA_ROWS) * MAX_SB_SIZE]);
 +
-+  assert(x_step_q4 == 16 && y_step_q4 == 16);
 +  assert(!(w % 8));
 +
 +  assert(w <= MAX_SB_SIZE);
