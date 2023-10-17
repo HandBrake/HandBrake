@@ -2054,7 +2054,7 @@ ghb_queue_buttons_grey (signal_user_data_t *ud)
     else
     {
         item = g_menu_item_new_from_model(G_MENU_MODEL(menu), 0);
-        g_menu_item_set_label(item, _("Start Encoding"));
+        g_menu_item_set_label(item, _("_Start Encoding"));
         g_menu_remove(menu, 0);
         g_menu_prepend_item(menu, item);
         g_object_unref(item);
