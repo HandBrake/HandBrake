@@ -169,29 +169,29 @@ conjunction with the "Forced" option.</property>
     <section>
       <item>
         <attribute name="action">app.preset-save</attribute>
-        <attribute name="label" translatable="yes">_Save</attribute>
+        <attribute name="label" translatable="yes">_Save…</attribute>
       </item>
       <item>
         <attribute name="action">app.preset-save-as</attribute>
-        <attribute name="label" translatable="yes">Save _As</attribute>
+        <attribute name="label" translatable="yes">Save _As…</attribute>
       </item>
       <item>
         <attribute name="action">app.preset-rename</attribute>
-        <attribute name="label" translatable="yes">_Rename</attribute>
+        <attribute name="label" translatable="yes">_Rename…</attribute>
       </item>
       <item>
         <attribute name="action">app.preset-remove</attribute>
-        <attribute name="label" translatable="yes">_Delete</attribute>
+        <attribute name="label" translatable="yes">_Delete…</attribute>
       </item>
     </section>
     <section>
       <item>
         <attribute name="action">app.preset-import</attribute>
-        <attribute name="label" translatable="yes">_Import</attribute>
+        <attribute name="label" translatable="yes">_Import Preset…</attribute>
       </item>
       <item>
         <attribute name="action">app.preset-export</attribute>
-        <attribute name="label" translatable="yes">_Export</attribute>
+        <attribute name="label" translatable="yes">_Export Preset…</attribute>
       </item>
     </section>
     <section>
@@ -250,11 +250,11 @@ conjunction with the "Forced" option.</property>
     </section>
     <section>
       <item>
-        <attribute name="label" translatable="yes">Import Queue</attribute>
+        <attribute name="label" translatable="yes">Import Queue…</attribute>
         <attribute name="action">app.queue-import</attribute>
       </item>
       <item>
-        <attribute name="label" translatable="yes">Export Queue</attribute>
+        <attribute name="label" translatable="yes">Export Queue…</attribute>
         <attribute name="action">app.queue-export</attribute>
       </item>
     </section>
@@ -409,7 +409,7 @@ conjunction with the "Forced" option.</property>
                     </child>
                     <child>
                       <object class="GtkMenuItem" id="presets_window_save">
-                        <property name="label" translatable="yes">_Save</property>
+                        <property name="label" translatable="yes">_Save…</property>
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
                         <property name="use-underline">True</property>
@@ -418,7 +418,7 @@ conjunction with the "Forced" option.</property>
                     </child>
                     <child>
                       <object class="GtkMenuItem" id="presets_window_save_as">
-                        <property name="label" translatable="yes">Save _As</property>
+                        <property name="label" translatable="yes">Save _As…</property>
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
                         <property name="use-underline">True</property>
@@ -427,7 +427,7 @@ conjunction with the "Forced" option.</property>
                     </child>
                     <child>
                       <object class="GtkMenuItem" id="presets_window_rename">
-                        <property name="label" translatable="yes">_Rename</property>
+                        <property name="label" translatable="yes">_Rename…</property>
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
                         <property name="use-underline">True</property>
@@ -436,7 +436,7 @@ conjunction with the "Forced" option.</property>
                     </child>
                     <child>
                       <object class="GtkMenuItem" id="presets_window_remove">
-                        <property name="label" translatable="yes">_Delete</property>
+                        <property name="label" translatable="yes">_Delete…</property>
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
                         <property name="use-underline">True</property>
@@ -450,7 +450,7 @@ conjunction with the "Forced" option.</property>
                     </child>
                     <child>
                       <object class="GtkMenuItem" id="presets_window_export">
-                        <property name="label" translatable="yes">_Export</property>
+                        <property name="label" translatable="yes">_Export…</property>
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
                         <property name="use-underline">True</property>
@@ -2051,7 +2051,7 @@ Copyright © 2004 - , HandBrake Devs</property>
 
 HandBrake is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
-You should have received a copy of the GNU General Public License along with Glade; if not, write to the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.</property>
+You should have received a copy of the GNU General Public License along with HandBrake; if not, write to the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.</property>
     <property name="authors">ghb author:
   John Stebbins
 
