@@ -51,6 +51,7 @@ FFMPEG.CONFIGURE.extra = \
     --enable-libspeex \
     --disable-encoder=libspeex \
     --enable-decoder=libspeex \
+    --enable-encoder=truehd \
     --enable-libvpx \
     --disable-decoder=libvpx_* \
     --enable-encoder=libvpx_vp8 \
