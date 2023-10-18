@@ -85,7 +85,7 @@
     if (index != -1)
     {
         controller.track = [self.subtitles objectInTracksAtIndex:index];
-        [self presentViewController:controller asPopoverRelativeToRect:[sender bounds] ofView:sender preferredEdge:NSRectEdgeMinX behavior:NSPopoverBehaviorTransient];
+        [self presentViewController:controller asPopoverRelativeToRect:[sender bounds] ofView:sender preferredEdge:NSRectEdgeMinX behavior:NSPopoverBehaviorSemitransient];
     }
 }
 

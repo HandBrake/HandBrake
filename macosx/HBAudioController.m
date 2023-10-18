@@ -13,6 +13,7 @@
 @interface HBAudioController ()
 
 @property (nonatomic, readwrite, strong) HBAudioDefaultsController *defaultsController;
+@property (nonatomic, readwrite, strong) NSPopover *popover;
 @property (nonatomic, weak) IBOutlet NSTableView *table;
 
 @end
@@ -47,7 +48,7 @@
     if (index != -1)
     {
         controller.track = [self.audio objectInTracksAtIndex:index];
-        [self presentViewController:controller asPopoverRelativeToRect:[sender bounds] ofView:sender preferredEdge:NSRectEdgeMinX behavior:NSPopoverBehaviorTransient];
+        [self presentViewController:controller asPopoverRelativeToRect:[sender bounds] ofView:sender preferredEdge:NSRectEdgeMinX behavior:NSPopoverBehaviorSemitransient];
     }
 }
 
