@@ -68,12 +68,12 @@
       </section>
       <section>
         <item>
-          <attribute name="action">app.queue-export</attribute>
-          <attribute name="label" translatable="yes">_Export Queue…</attribute>
-        </item>
-        <item>
           <attribute name="action">app.queue-import</attribute>
           <attribute name="label" translatable="yes">_Import Queue…</attribute>
+        </item>
+        <item>
+          <attribute name="action">app.queue-export</attribute>
+          <attribute name="label" translatable="yes">_Export Queue…</attribute>
         </item>
       </section>
     </submenu>
@@ -112,12 +112,12 @@
       </section>
       <section>
         <item>
-          <attribute name="action">app.preset-save</attribute>
-          <attribute name="label" translatable="yes">_Save…</attribute>
+          <attribute name="action">app.preset-save-as</attribute>
+          <attribute name="label" translatable="yes">_New Preset…</attribute>
         </item>
         <item>
-          <attribute name="action">app.preset-save-as</attribute>
-          <attribute name="label" translatable="yes">Save _As…</attribute>
+          <attribute name="action">app.preset-save</attribute>
+          <attribute name="label" translatable="yes">_Save</attribute>
         </item>
         <item>
           <attribute name="action">app.preset-rename</attribute>
@@ -150,7 +150,7 @@
       <section>
         <item>
           <attribute name="action">app.guide</attribute>
-          <attribute name="label" translatable="yes">_HandBrake Docs</attribute>
+          <attribute name="label" translatable="yes">_Online Documentation</attribute>
           <attribute name="accel">F1</attribute>
         </item>
         <item>
