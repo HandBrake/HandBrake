@@ -168,12 +168,12 @@ conjunction with the "Forced" option.</property>
     </section>
     <section>
       <item>
-        <attribute name="action">app.preset-save</attribute>
-        <attribute name="label" translatable="yes">_Save…</attribute>
+        <attribute name="action">app.preset-save-as</attribute>
+        <attribute name="label" translatable="yes">_New Preset…</attribute>
       </item>
       <item>
-        <attribute name="action">app.preset-save-as</attribute>
-        <attribute name="label" translatable="yes">Save _As…</attribute>
+        <attribute name="action">app.preset-save</attribute>
+        <attribute name="label" translatable="yes">_Save</attribute>
       </item>
       <item>
         <attribute name="action">app.preset-rename</attribute>
@@ -205,25 +205,25 @@ conjunction with the "Forced" option.</property>
   <menu id="queue_actions_menu">
     <section>
       <item>
-        <attribute name="label" translatable="yes">Play File</attribute>
+        <attribute name="label" translatable="yes">_Play File</attribute>
         <attribute name="action">app.queue-play-file</attribute>
       </item>
       <item>
-        <attribute name="label" translatable="yes">Open Source Directory</attribute>
+        <attribute name="label" translatable="yes">Open _Source Directory</attribute>
         <attribute name="action">app.queue-open-source</attribute>
       </item>
       <item>
-        <attribute name="label" translatable="yes">Open Destination Directory</attribute>
+        <attribute name="label" translatable="yes">Open _Destination Directory</attribute>
         <attribute name="action">app.queue-open-dest</attribute>
       </item>
     </section>
     <section>
       <item>
-        <attribute name="label" translatable="yes">Open Encode Log Directory</attribute>
+        <attribute name="label" translatable="yes">Open _Encode Log Directory</attribute>
         <attribute name="action">app.queue-open-log-dir</attribute>
       </item>
       <item>
-        <attribute name="label" translatable="yes">Open Encode Log</attribute>
+        <attribute name="label" translatable="yes">Open Encode _Log</attribute>
         <attribute name="action">app.queue-open-log</attribute>
       </item>
     </section>
@@ -232,29 +232,29 @@ conjunction with the "Forced" option.</property>
   <menu id="queue_options_menu">
     <section>
       <item>
-        <attribute name="label" translatable="yes">Reset Failed Jobs</attribute>
+        <attribute name="label" translatable="yes">Reset _Failed Jobs</attribute>
         <attribute name="action">app.queue-reset-fail</attribute>
       </item>
       <item>
-        <attribute name="label" translatable="yes">Reset All Jobs</attribute>
+        <attribute name="label" translatable="yes">_Reset All Jobs</attribute>
         <attribute name="action">app.queue-reset-all</attribute>
       </item>
       <item>
-        <attribute name="label" translatable="yes">Clear Completed Jobs</attribute>
+        <attribute name="label" translatable="yes">_Clear Completed Jobs</attribute>
         <attribute name="action">app.queue-delete-complete</attribute>
       </item>
       <item>
-        <attribute name="label" translatable="yes">Clear All Jobs</attribute>
+        <attribute name="label" translatable="yes">Clear _All Jobs</attribute>
         <attribute name="action">app.queue-delete-all</attribute>
       </item>
     </section>
     <section>
       <item>
-        <attribute name="label" translatable="yes">Import Queue…</attribute>
+        <attribute name="label" translatable="yes">_Import Queue…</attribute>
         <attribute name="action">app.queue-import</attribute>
       </item>
       <item>
-        <attribute name="label" translatable="yes">Export Queue…</attribute>
+        <attribute name="label" translatable="yes">_Export Queue…</attribute>
         <attribute name="action">app.queue-export</attribute>
       </item>
     </section>
@@ -291,9 +291,8 @@ conjunction with the "Forced" option.</property>
                 <property name="can-focus">True</property>
                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                 <property name="is-important">True</property>
-                <property name="label" translatable="yes">Save _As</property>
-                <property name="use-underline">True</property>
-                <property name="icon-name">document-save-as</property>
+                <property name="label" translatable="yes">New</property>
+                <property name="icon-name">bookmark-new</property>
                 <property name="action-name">app.preset-save-as</property>
               </object>
               <packing>
@@ -409,20 +408,11 @@ conjunction with the "Forced" option.</property>
                     </child>
                     <child>
                       <object class="GtkMenuItem" id="presets_window_save">
-                        <property name="label" translatable="yes">_Save…</property>
+                        <property name="label" translatable="yes">_Save</property>
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
                         <property name="use-underline">True</property>
                         <property name="action-name">app.preset-save</property>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="GtkMenuItem" id="presets_window_save_as">
-                        <property name="label" translatable="yes">Save _As…</property>
-                        <property name="visible">True</property>
-                        <property name="can-focus">False</property>
-                        <property name="use-underline">True</property>
-                        <property name="action-name">app.preset-save-as</property>
                       </object>
                     </child>
                     <child>
@@ -8553,7 +8543,7 @@ Uncheck this if you want to allow changing each title's settings independently.<
     </child>
     <child type="action">
       <object class="GtkButton" id="preset_rename_ok">
-        <property name="label" translatable="yes">_Rename</property>
+        <property name="label" translatable="yes">_Save</property>
         <property name="use-underline">True</property>
         <property name="visible">True</property>
         <property name="can-focus">True</property>
@@ -8588,20 +8578,6 @@ Uncheck this if you want to allow changing each title's settings independently.<
             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
             <property name="vexpand">True</property>
             <child>
-              <object class="GtkLabel" id="preset_dialog_rename_label">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                <property name="halign">start</property>
-                <property name="margin-bottom">12</property>
-                <property name="use-markup">True</property>
-                <property name="label" translatable="yes">&lt;span size="x-large"&gt;Rename Preset&lt;/span&gt;</property>
-              </object>
-              <packing>
-                <property name="position">0</property>
-              </packing>
-            </child>
-            <child>
               <object class="GtkBox" id="preset_rename_hbox">
                 <property name="orientation">horizontal</property>
                 <property name="visible">True</property>
@@ -8615,7 +8591,7 @@ Uncheck this if you want to allow changing each title's settings independently.<
                     <property name="can-focus">False</property>
                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                     <property name="halign">end</property>
-                    <property name="label" translatable="yes">Name:</property>
+                    <property name="label" translatable="yes">Preset Name:</property>
                   </object>
                   <packing>
                     <property name="position">0</property>
@@ -8690,7 +8666,7 @@ Uncheck this if you want to allow changing each title's settings independently.<
     </child>
   </object>
   <object class="GtkDialog" id="preset_save_dialog">
-    <property name="title" translatable="yes">Save Preset</property>
+    <property name="title" translatable="yes">New Preset</property>
     <property name="transient-for">hb_window</property>
     <property name="can-focus">False</property>
     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
@@ -8761,7 +8737,7 @@ Uncheck this if you want to allow changing each title's settings independently.<
                     <property name="label" translatable="yes">Category:</property>
                   </object>
                   <packing>
-                    <property name="top-attach">0</property>
+                    <property name="top-attach">1</property>
                     <property name="left-attach">0</property>
                     <property name="width">1</property>
                     <property name="height">1</property>
@@ -8777,7 +8753,7 @@ Uncheck this if you want to allow changing each title's settings independently.<
                     <signal name="changed" handler="preset_category_changed_cb" swapped="no"/>
                   </object>
                   <packing>
-                    <property name="top-attach">0</property>
+                    <property name="top-attach">1</property>
                     <property name="left-attach">1</property>
                     <property name="width">1</property>
                     <property name="height">1</property>
@@ -8792,7 +8768,7 @@ Uncheck this if you want to allow changing each title's settings independently.<
                     <property name="label" translatable="yes">Category Name:</property>
                   </object>
                   <packing>
-                    <property name="top-attach">1</property>
+                    <property name="top-attach">2</property>
                     <property name="left-attach">0</property>
                     <property name="width">1</property>
                     <property name="height">1</property>
@@ -8810,7 +8786,7 @@ Uncheck this if you want to allow changing each title's settings independently.<
                     <signal name="changed" handler="preset_category_changed_cb" swapped="no"/>
                   </object>
                   <packing>
-                    <property name="top-attach">1</property>
+                    <property name="top-attach">2</property>
                     <property name="left-attach">1</property>
                     <property name="width">1</property>
                     <property name="height">1</property>
@@ -8825,7 +8801,7 @@ Uncheck this if you want to allow changing each title's settings independently.<
                     <property name="label" translatable="yes">Preset Name:</property>
                   </object>
                   <packing>
-                    <property name="top-attach">2</property>
+                    <property name="top-attach">0</property>
                     <property name="left-attach">0</property>
                     <property name="width">1</property>
                     <property name="height">1</property>
@@ -8843,7 +8819,7 @@ Uncheck this if you want to allow changing each title's settings independently.<
                     <signal name="changed" handler="preset_name_changed_cb" swapped="no"/>
                   </object>
                   <packing>
-                    <property name="top-attach">2</property>
+                    <property name="top-attach">0</property>
                     <property name="left-attach">1</property>
                     <property name="width">1</property>
                     <property name="height">1</property>
@@ -8883,7 +8859,7 @@ Uncheck this if you want to allow changing each title's settings independently.<
                 </child>
                 <child>
                   <object class="GtkLabel" id="UsingCurrentPicLabel">
-                    <property name="visible">True</property>
+                    <property name="visible">False</property>
                     <property name="can-focus">False</property>
                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                     <property name="halign">start</property>
@@ -8899,7 +8875,7 @@ Uncheck this if you want to allow changing each title's settings independently.<
                 </child>
                 <child>
                   <object class="GtkLabel" id="fillerlabel1">
-                    <property name="visible">True</property>
+                    <property name="visible">False</property>
                     <property name="can-focus">False</property>
                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                     <property name="halign">start</property>
