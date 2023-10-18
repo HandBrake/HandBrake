@@ -687,6 +687,7 @@ static int avformatInit( hb_mux_object_t * m )
             case HB_ACODEC_FFEAC3:
                 track->st->codecpar->codec_id = AV_CODEC_ID_EAC3;
                 break;
+            case HB_ACODEC_FFTRUEHD16:
             case HB_ACODEC_FFTRUEHD:
                 track->st->codecpar->codec_id = AV_CODEC_ID_TRUEHD;
                 break;

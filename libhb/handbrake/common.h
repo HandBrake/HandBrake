@@ -857,7 +857,7 @@ struct hb_job_s
 };
 
 /* Audio starts here */
-/* Audio Codecs: Update win/CS/HandBrake.Interop/HandBrakeInterop/HbLib/NativeConstants.cs when changing these consts */
+/* Audio Codecs: Update win/CS/HandBrake.Interop/Interop/HbLib/NativeConstants.cs when changing these consts */
 #define HB_ACODEC_INVALID   0x00000000
 #define HB_ACODEC_NONE      0x00000001
 #define HB_ACODEC_MASK      0x0FFFFF01
@@ -879,8 +879,9 @@ struct hb_job_s
 #define HB_ACODEC_FDK_HAAC  0x00800000
 #define HB_ACODEC_FFEAC3    0x01000000
 #define HB_ACODEC_FFTRUEHD  0x02000000
+#define HB_ACODEC_FFTRUEHD16  0x00000100
 #define HB_ACODEC_OPUS      0x04000000
-#define HB_ACODEC_FF_MASK   0x0FFF2800
+#define HB_ACODEC_FF_MASK   0xFFF2900
 #define HB_ACODEC_PASS_FLAG 0x40000000
 #define HB_ACODEC_PASS_MASK   (HB_ACODEC_AC3 | HB_ACODEC_DCA | HB_ACODEC_DCA_HD | HB_ACODEC_FFAAC | HB_ACODEC_FFEAC3 | HB_ACODEC_FFFLAC | HB_ACODEC_MP2 | HB_ACODEC_MP3 | HB_ACODEC_FFTRUEHD | HB_ACODEC_OPUS)
 #define HB_ACODEC_AUTO_PASS   (HB_ACODEC_PASS_FLAG | HB_ACODEC_PASS_MASK)
