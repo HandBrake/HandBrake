@@ -4785,17 +4785,17 @@ activity_font_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
     ghb_pref_set(ud->prefs, name);
 
     int size = ghb_dict_get_int(ud->prefs, "ActivityFontSize");
+    const char *font = ghb_dict_get_string(ud->prefs, "ActivityFontFamily");
 
     const gchar *css_template =
         "                                   \n\
-        #activity_view                      \n\
+        .ghb-monospace                      \n\
         {                                   \n\
-            font-family: monospace;         \n\
+            font-family: %s;                \n\
             font-size: %dpt;                \n\
-            font-weight: 300;               \n\
         }                                   \n\
         ";
-    char           * css      = g_strdup_printf(css_template, size);
+    char           * css      = g_strdup_printf(css_template, font, size);
     GtkCssProvider * provider = gtk_css_provider_new();
 
     ghb_css_provider_load_from_data(provider, css, -1);

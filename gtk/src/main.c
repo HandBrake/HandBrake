@@ -639,13 +639,13 @@ const gchar *MyCSS =
 "    min-height: 3px;"
 "}"
 
-"#preview_hud"
+".ghb-preview-hud"
 "{"
 "    border-radius: 16px;"
 "    border-width: 1px;"
 "}"
 
-".preview-image-frame"
+".ghb-preview-image-frame"
 "{"
 "    background-color: black;"
 "}"
@@ -666,7 +666,7 @@ const gchar *MyCSS =
 "    min-width: 50px;"
 "}"
 
-"#activity_view"
+".ghb-monospace"
 "{"
 "    font-family: monospace;"
 "    font-size: 8pt;"
@@ -1092,11 +1092,6 @@ ghb_activate_cb(GApplication * app, signal_user_data_t * ud)
     ud->extra_activity_buffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(widget));
     g_object_ref(ud->extra_activity_buffer);
     ud->queue_activity_buffer = gtk_text_buffer_new(NULL);
-
-    // Must set the names of the widgets that I want to modify
-    // style for.
-    gtk_widget_set_name(GHB_WIDGET(ud->builder, "preview_hud"), "preview_hud");
-    gtk_widget_set_name(GHB_WIDGET(ud->builder, "activity_view"), "activity_view");
 
     // Redirect stderr to the activity window
     ghb_preview_init(ud);
