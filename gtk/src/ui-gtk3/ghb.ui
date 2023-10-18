@@ -1676,6 +1676,9 @@ Resets the queue job to pending and ready to run again.</property>
                                     <property name="editable">False</property>
                                     <property name="wrap-mode">char</property>
                                     <property name="cursor-visible">False</property>
+                                    <style>
+                                      <class name="ghb-monospace"/>
+                                    </style>
                                   </object>
                                 </child>
                               </object>
@@ -1761,6 +1764,9 @@ Resets the queue job to pending and ready to run again.</property>
                 <property name="editable">False</property>
                 <property name="wrap-mode">char</property>
                 <property name="cursor-visible">False</property>
+                <style>
+                  <class name="ghb-monospace"/>
+                </style>
               </object>
             </child>
           </object>
@@ -8991,7 +8997,7 @@ Uncheck this if you want to allow changing each title's settings independently.<
               </object>
             </child>
             <style>
-              <class name="preview-image-frame"/>
+              <class name="ghb-preview-image-frame"/>
             </style>
           </object>
         </child>
@@ -9006,6 +9012,7 @@ Uncheck this if you want to allow changing each title's settings independently.<
             <signal name="enter-notify-event" handler="hud_enter_cb" swapped="no"/>
             <signal name="leave-notify-event" handler="hud_leave_cb" swapped="no"/>
             <style>
+              <class name="ghb-preview-hud"/>
               <class name="osd"/>
               <class name="app-notification"/>
             </style>

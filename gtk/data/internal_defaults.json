@@ -70,6 +70,7 @@
     },
     "Preferences": {
         "ActivityFontSize": 8,
+        "ActivityFontFamily": "monospace",
         "CustomTmpEnable": false,
         "CustomTmpDir": "",
         "DiskFreeCheck": true,
