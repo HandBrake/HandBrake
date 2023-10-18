@@ -9,6 +9,7 @@ HandBrake uses many cool libraries from the GNU/Linux world. We thank them and t
 - [libbluray](https://www.videolan.org/developers/libbluray.html)
 - [libbzip2](http://bzip.org/)
 - [libdav1d](https://code.videolan.org/videolan/dav1d)
+- [libdovi](https://github.com/quietvoid/dovi_tool)
 - [libdvdnav](https://dvdnav.mplayerhq.hu/)
 - [libdvdread](https://dvdnav.mplayerhq.hu/)
 - [libfdk-aac](https://sourceforge.net/projects/opencore-amr/)

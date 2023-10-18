@@ -70,7 +70,7 @@ Windows users, please make sure to install [Microsoft .NET Desktop Runtime versi
   - Fribidi 1.0.13 (subtitles)
   - HarfBuzz 8.2.0 (subtitles)
   - libass 0.17.1 (subtitles)
-  - libdav1d 1.2.1 (AV1 decoding)
+  - libdav1d 1.3.0 (AV1 decoding)
   - liblzma (xz) 5.4.4 (LZMA video decoding, e.g. TIFF)
   - libopus 1.4 (Opus audio encoding)
   - libjpeg-turbo 3.0.0 (preview image compression)
