@@ -9,7 +9,7 @@ concurrency:
 jobs:
   build_mingw:
     name: CLI / LibHB
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     steps:
     - uses: actions/checkout@v4
 
@@ -32,17 +32,17 @@ jobs:
 
     - name: Setup Toolchain
       run: |
-        wget https://github.com/bradleysepos/mingw-w64-build/releases/download/9.2.0/mingw-w64-toolchain-9.2.0-linux-x86_64.tar.gz
-        SHA=$(sha1sum mingw-w64-toolchain-9.2.0-linux-x86_64.tar.gz)
-        EXPECTED="560ceb85cdf2783c68226d3761f865c42101c3f6  mingw-w64-toolchain-9.2.0-linux-x86_64.tar.gz"
+        wget https://github.com/bradleysepos/mingw-w64-build/releases/download/10.0.0/mingw-w64-toolchain-10.0.0-msvcrt-linux-x86_64.tar.gz
+        SHA=$(sha1sum mingw-w64-toolchain-10.0.0-msvcrt-linux-x86_64.tar.gz)
+        EXPECTED="f7250d140a72bdfdda2d4cd01d84e9a3938132b1  mingw-w64-toolchain-10.0.0-msvcrt-linux-x86_64.tar.gz"
         if [ "$SHA" == "$EXPECTED" ];
         then
             echo "Toolchain Verified. Extracting ..."
             mkdir toolchains
-            mv mingw-w64-toolchain-9.2.0-linux-x86_64.tar.gz toolchains
+            mv mingw-w64-toolchain-10.0.0-msvcrt-linux-x86_64.tar.gz toolchains
             cd toolchains
-            tar xvf mingw-w64-toolchain-9.2.0-linux-x86_64.tar.gz
-            cd mingw-w64-toolchain-9.2.0-linux-x86_64/mingw-w64-x86_64/
+            tar xvf mingw-w64-toolchain-10.0.0-msvcrt-linux-x86_64.tar.gz
+            cd mingw-w64-toolchain-10.0.0-msvcrt-linux-x86_64/mingw-w64-x86_64/
             pwd
         else
             echo "Toolchain Verification FAILED. Exiting!"
@@ -56,7 +56,7 @@ jobs:
 
     - name: Build CLI and LibHB
       run: |
-        export PATH="/home/runner/work/HandBrake/HandBrake/toolchains/mingw-w64-toolchain-9.2.0-linux-x86_64/mingw-w64-x86_64/bin:${PATH}"
+        export PATH="/home/runner/work/HandBrake/HandBrake/toolchains/mingw-w64-toolchain-10.0.0-msvcrt-linux-x86_64/mingw-w64-x86_64/bin:${PATH}"
         export PATH=/usr/bin:$PATH
         ./configure --cross=x86_64-w64-mingw32 --enable-qsv --enable-vce --enable-nvenc --enable-nvdec --launch-jobs=0 --launch
         cd build
