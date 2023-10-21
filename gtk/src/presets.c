@@ -2470,7 +2470,6 @@ preset_category_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
     ghb_widget_to_setting(ud->settings, widget);
     preset_save_set_ok_sensitive(ud);
-    ghb_check_dependency(ud, widget, NULL);
 }
 
 G_MODULE_EXPORT void
@@ -3161,5 +3160,4 @@ G_MODULE_EXPORT void
 preset_widget_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
     ghb_widget_to_setting(ud->settings, widget);
-    ghb_check_dependency(ud, widget, NULL);
 }

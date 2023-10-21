@@ -1,12 +1,7 @@
 # SPDX-License-Identifier: GPL-2.0-or-later
 # Copyright (c) 2023 HandBrake Team
 
-widget_deps = custom_target('widget.deps',
-  output: ['widget.deps', 'widget_reverse.deps'],
-  command: find_program('makedeps.py'))
-
 data = gnome.compile_resources('data_res', 'data_res.gresource.xml',
-  dependencies: widget_deps,
   source_dir: meson.current_build_dir(),
   extra_args: '--manual-register',
   c_name: 'ghb_data')

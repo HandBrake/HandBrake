@@ -1462,6 +1462,7 @@ ghb_init_combo_box(GtkComboBox *combo)
     store = gtk_list_store_new(4, G_TYPE_STRING, G_TYPE_BOOLEAN,
                                G_TYPE_STRING, G_TYPE_DOUBLE);
     gtk_combo_box_set_model(combo, GTK_TREE_MODEL(store));
+    gtk_combo_box_set_id_column(combo, 2);
 
     if (!gtk_combo_box_get_has_entry(combo))
     {
