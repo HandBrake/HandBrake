@@ -2826,6 +2826,7 @@ Modifications will be discarded.</property>
                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                 <property name="stack">SettingsStack</property>
                 <property name="hexpand">True</property>
+                <property name="homogeneous">True</property>
                 <property name="halign">GTK_ALIGN_FILL</property>
                 <property name="valign">GTK_ALIGN_START</property>
                 <property name="margin-top">12</property>
