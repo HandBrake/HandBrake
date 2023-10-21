@@ -212,8 +212,6 @@ audio_deps(signal_user_data_t *ud, GhbValue *asettings, GtkWidget *widget)
 {
     ghb_adjust_audio_rate_combos(ud, asettings);
     ghb_grey_combo_options(ud);
-    if (widget != NULL)
-        ghb_check_dependency(ud, widget, NULL);
 
     int title_id, mix = 0, acodec = 0, sr = 0;
     hb_audio_config_t *aconfig = NULL;

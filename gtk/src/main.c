@@ -922,7 +922,7 @@ ghb_idle_ui_init(signal_user_data_t *ud)
     }
 
     // Grey out widgets that are dependent on a disabled feature
-    ghb_check_all_dependencies(ud);
+    ghb_bind_dependencies(ud);
 
     return FALSE;
 }
@@ -1097,7 +1097,6 @@ ghb_activate_cb(GApplication * app, signal_user_data_t * ud)
     ghb_preview_init(ud);
     IoRedirect(ud);
     print_system_information();
-    ghb_init_dep_map();
 
     GtkTextView   * textview;
     GtkTextBuffer * buffer;

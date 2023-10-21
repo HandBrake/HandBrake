@@ -957,16 +957,12 @@ import_offset_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
     ghb_widget_to_setting(ud->settings, widget);
     GhbValue *val = ghb_widget_value(widget);
     subtitle_update_setting(ghb_value_xform(val, GHB_INT), "Offset", ud);
-
-    ghb_check_dependency(ud, widget, NULL);
 }
 
 G_MODULE_EXPORT void
 srt_codeset_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
     ghb_widget_to_setting(ud->settings, widget);
-    ghb_check_dependency(ud, widget, NULL);
-
     GhbValue *val = ghb_dict_get(ud->settings, "SrtCodeset");
     import_setting_update(ghb_value_dup(val), "Codeset", ud);
 }
@@ -975,8 +971,6 @@ G_MODULE_EXPORT void
 import_file_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
     ghb_widget_to_setting(ud->settings, widget);
-    ghb_check_dependency(ud, widget, NULL);
-
     GhbValue *val = ghb_dict_get(ud->settings, "ImportFile");
     import_setting_update(ghb_value_dup(val), "Filename", ud);
 
@@ -1002,8 +996,6 @@ G_MODULE_EXPORT void
 import_lang_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
     ghb_widget_to_setting(ud->settings, widget);
-    ghb_check_dependency(ud, widget, NULL);
-
     GhbValue *val = ghb_dict_get(ud->settings, "ImportLanguage");
     import_setting_update(ghb_value_dup(val), "Language", ud);
 }

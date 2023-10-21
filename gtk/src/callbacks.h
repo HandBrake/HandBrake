@@ -40,7 +40,6 @@
 #define GHB_THREAD_NEW(n, f, p) \
                 g_thread_create((GThreadFunc)(f), (p), TRUE, NULL)
 #endif
-void ghb_check_all_dependencies(signal_user_data_t *ud);
 gboolean ghb_timer_cb(gpointer data);
 gboolean ghb_log_cb(GIOChannel *source, GIOCondition cond, gpointer data);
 void ghb_hbfd(signal_user_data_t *ud, gboolean hbfd);
@@ -57,12 +56,10 @@ gboolean ghb_message_dialog(
 void ghb_error_dialog(
     GtkWindow *parent, GtkMessageType type,
     const gchar *message, const gchar *cancel);
-void ghb_init_dep_map(void);
 void ghb_cancel_encode(signal_user_data_t *ud, const gchar *extra_msg);
 gboolean ghb_cancel_encode2(signal_user_data_t *ud, const gchar *extra_msg);
 void ghb_start_next_job(signal_user_data_t *ud);
-void ghb_check_dependency(
-    signal_user_data_t *ud, GtkWidget *widget, const gchar *alt_name);
+void ghb_bind_dependencies (signal_user_data_t *ud);
 void ghb_do_scan( signal_user_data_t *ud, const gchar *filename,
     gint titlenum, gboolean force);
 void ghb_log(gchar *log, ...);

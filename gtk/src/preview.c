@@ -1238,7 +1238,6 @@ preview_duration_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
     ghb_log_func();
     ghb_live_reset(ud);
     ghb_widget_to_setting (ud->prefs, widget);
-    ghb_check_dependency(ud, widget, NULL);
     const gchar *name = ghb_get_setting_key(widget);
     ghb_pref_save(ud->prefs, name);
 }
@@ -1511,7 +1510,6 @@ show_crop_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
     //
     ghb_log_func();
     ghb_widget_to_setting(ud->prefs, widget);
-    ghb_check_dependency(ud, widget, NULL);
     ghb_live_reset(ud);
     if (gtk_widget_is_sensitive(widget))
         ghb_set_scale(ud, 0);

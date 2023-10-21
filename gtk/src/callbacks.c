@@ -336,200 +336,166 @@ uninhibit_suspend (signal_user_data_t *ud)
 // you will have to look further to combo box options
 // maps in hb-backend.c
 
-GhbValue *dep_map;
-GhbValue *rev_map;
+typedef struct {
+    const char *source_widget;
+    const char *source_property;
+    const char *source_property_values;
+    const char *target_widget;
+    const char *target_property;
+    gboolean invert;
+    GBindingFlags flags;
+} GhbBinding;
 
-void
-ghb_init_dep_map (void)
+gboolean ghb_bind_property (GBinding *binding,
+                            const GValue *from_value,
+                            GValue *to_value,
+                            gpointer user_data)
 {
-    dep_map = ghb_resource_get("widget-deps");
-    rev_map = ghb_resource_get("widget-reverse-deps");
-}
+    const char *from_list, *from_str;
 
-static gboolean
-dep_check(signal_user_data_t *ud, const gchar *name, gboolean *out_hide)
-{
-    GtkWidget *widget;
-    GObject *dep_object;
-    gint ii;
-    gint count;
-    gboolean result = TRUE;
-    GhbValue *array, *data;
-    const gchar *widget_name;
+    g_return_val_if_fail(G_VALUE_HOLDS_BOOLEAN(to_value), FALSE);
 
-    ghb_log_func_str(name);
-
-    if (rev_map == NULL) return TRUE;
-    array = ghb_dict_get(rev_map, name);
-    count = ghb_array_len(array);
-    *out_hide = FALSE;
-    for (ii = 0; ii < count; ii++)
+    from_list = (const char *)user_data;
+    if (G_VALUE_HOLDS_STRING(from_value))
     {
-        data = ghb_array_get(array, ii);
-        widget_name = ghb_value_get_string(ghb_array_get(data, 0));
-        widget = GHB_WIDGET(ud->builder, widget_name);
-        dep_object = gtk_builder_get_object(ud->builder, name);
-        if (widget != NULL && !gtk_widget_is_sensitive(widget))
-        {
-            continue;
-        }
-        if (dep_object == NULL)
-        {
-            g_warning("Failed to find widget");
-        }
-        else
-        {
-            gchar *value;
-            gint jj = 0;
-            gchar **values;
-            gboolean sensitive = FALSE;
-            gboolean die, hide;
+        from_str = g_value_get_string(from_value);
+        if (!from_str)
+            return TRUE;
 
-            die = ghb_value_get_bool(ghb_array_get(data, 2));
-            hide = ghb_value_get_bool(ghb_array_get(data, 3));
-            const char *tmp = ghb_value_get_string(ghb_array_get(data, 1));
-            values = g_strsplit(tmp, "|", -1);
-
-            if (widget)
-                value = ghb_widget_string(widget);
-            else
-                value = ghb_dict_get_string_xform(ud->settings, widget_name);
-            while (values && values[jj])
-            {
-                if (values[jj][0] == '>')
-                {
-                    gdouble dbl = g_strtod (&values[jj][1], NULL);
-                    gdouble dvalue = ghb_widget_double(widget);
-                    if (dvalue > dbl)
-                    {
-                        sensitive = TRUE;
-                        break;
-                    }
-                }
-                else if (values[jj][0] == '<')
-                {
-                    gdouble dbl = g_strtod (&values[jj][1], NULL);
-                    gdouble dvalue = ghb_widget_double(widget);
-                    if (dvalue < dbl)
-                    {
-                        sensitive = TRUE;
-                        break;
-                    }
-                }
-                if (strcmp(values[jj], value) == 0)
-                {
-                    sensitive = TRUE;
-                    break;
-                }
-                jj++;
-            }
-            sensitive = die ^ sensitive;
-            if (!sensitive)
-            {
-                result = FALSE;
-                *out_hide |= hide;
-            }
-            g_strfreev (values);
-            g_free(value);
-        }
+        g_value_set_boolean(to_value, g_str_match_string(from_str,
+                                                         from_list,
+                                                         FALSE));
     }
-    return result;
-}
-
-void
-ghb_check_dependency(
-    signal_user_data_t *ud,
-    GtkWidget *widget,
-    const char *alt_name)
-{
-    GObject *dep_object;
-    const gchar *name;
-    GhbValue *array, *data;
-    gint count, ii;
-    const gchar *dep_name;
-    GType type;
-
-    if (widget != NULL)
+    else if (G_VALUE_HOLDS_BOOLEAN(from_value))
     {
-        type = G_OBJECT_TYPE(widget);
-        if (type == GTK_TYPE_COMBO_BOX)
-            if (gtk_combo_box_get_active(GTK_COMBO_BOX(widget)) < 0) return;
-        name = ghb_get_setting_key(widget);
+        g_value_copy(from_value, to_value);
+    }
+    else if (G_VALUE_HOLDS_DOUBLE(from_value))
+    {
+        long from_dbl = (long) g_value_get_double(from_value);
+        long from_max = strtol(from_list, NULL, 10);
+
+        g_value_set_boolean(to_value, from_dbl > from_max);
     }
     else
-        name = alt_name;
-
-    ghb_log_func_str(name);
-
-    if (dep_map == NULL) return;
-    array = ghb_dict_get(dep_map, name);
-    count = ghb_array_len(array);
-    for (ii = 0; ii < count; ii++)
     {
-        gboolean sensitive;
-        gboolean hide;
-
-        data = ghb_array_get(array, ii);
-        dep_name = ghb_value_get_string(data);
-        dep_object = gtk_builder_get_object(ud->builder, dep_name);
-        if (dep_object == NULL)
-        {
-            g_warning("Failed to find dependent widget %s", dep_name);
-            continue;
-        }
-        sensitive = dep_check(ud, dep_name, &hide);
-        gtk_widget_set_sensitive(GTK_WIDGET(dep_object), sensitive);
-        gtk_widget_set_can_focus(GTK_WIDGET(dep_object), sensitive);
-        if (!sensitive && hide)
-        {
-            if (gtk_widget_get_visible(GTK_WIDGET(dep_object)))
-            {
-                gtk_widget_hide(GTK_WIDGET(dep_object));
-            }
-        }
-        else
-        {
-            if (!gtk_widget_get_visible(GTK_WIDGET(dep_object)))
-            {
-                gtk_widget_show(GTK_WIDGET(dep_object));
-            }
-        }
+        g_warning("Unrecognized binding value type");
+        return FALSE;
     }
+    return TRUE;
 }
 
-void
-ghb_check_all_dependencies(signal_user_data_t *ud)
+gboolean ghb_bind_property_inverted (GBinding *binding,
+                                     const GValue *from_value,
+                                     GValue *to_value,
+                                     gpointer user_data)
 {
-    GhbDictIter iter;
-    const gchar *dep_name;
-    GhbValue *value;
-    GObject *dep_object;
+    const char *from_list, *from_str;
 
-    ghb_log_func();
-    if (rev_map == NULL) return;
-    iter = ghb_dict_iter_init(rev_map);
-    while (ghb_dict_iter_next(rev_map, &iter, &dep_name, &value))
+    g_return_val_if_fail(G_VALUE_HOLDS_BOOLEAN(to_value), FALSE);
+
+    from_list = (const char *)user_data;
+    if (G_VALUE_HOLDS_STRING(from_value))
     {
-        gboolean sensitive;
-        gboolean hide;
+        from_str = g_value_get_string(from_value);
+        if (!from_str)
+            return TRUE;
 
-        dep_object = gtk_builder_get_object (ud->builder, dep_name);
-        if (dep_object == NULL)
-        {
-            g_warning("Failed to find dependent widget %s", dep_name);
-            continue;
-        }
-        sensitive = dep_check(ud, dep_name, &hide);
-        gtk_widget_set_sensitive(GTK_WIDGET(dep_object), sensitive);
-        gtk_widget_set_can_focus(GTK_WIDGET(dep_object), sensitive);
-        if (!sensitive && hide)
-        {
-            gtk_widget_hide(GTK_WIDGET(dep_object));
-        }
-        else
-        {
-            gtk_widget_show(GTK_WIDGET(dep_object));
-        }
+        g_value_set_boolean(to_value, !g_str_match_string(from_str,
+                                                          from_list,
+                                                          FALSE));
+    }
+    else if (G_VALUE_HOLDS_BOOLEAN(from_value))
+        g_value_set_boolean(to_value, !g_value_get_boolean(from_value));
+    else if (G_VALUE_HOLDS_DOUBLE(from_value))
+    {
+        long from_dbl = (long) g_value_get_double(from_value);
+        long from_max = strtol(from_list, NULL, 10);
+
+        g_value_set_boolean(to_value, from_dbl <= from_max);
+    }
+    else
+    {
+        g_warning("Unrecognized binding value type");
+        return FALSE;
+    }
+    return TRUE;
+}
+
+static GhbBinding widget_bindings[] =
+{
+    {"angle_adj", "upper", "1", "angle", "visible"},
+    {"angle_adj", "upper", "1", "angle_label", "visible"},
+    {"title_label", "text", N_("No Title Found"), "PtoPType", "sensitive", TRUE},
+    {"title_label", "text", N_("No Title Found"), "preview_frame", "sensitive", TRUE},
+    {"title_label", "text", N_("No Title Found"), "chapters_tab", "sensitive", TRUE},
+    {"title_label", "text", N_("No Title Found"), "start_point", "sensitive", TRUE},
+    {"title_label", "text", N_("No Title Found"), "end_point", "sensitive", TRUE},
+    {"title_label", "text", N_("No Title Found"), "angle", "sensitive", TRUE},
+    {"title_label", "text", N_("No Title Found"), "angle_label", "sensitive", TRUE},
+    {"vquality_type_bitrate", "active", NULL, "VideoAvgBitrate", "sensitive"},
+    {"vquality_type_constant", "active", NULL, "VideoQualitySlider", "sensitive"},
+    {"vquality_type_constant", "active", NULL, "VideoMultiPassBox", "sensitive", TRUE},
+    {"VideoFramerate", "active-id", "auto", "VideoFrameratePFR", "visible", TRUE},
+    {"VideoFramerate", "active-id", "auto", "VideoFramerateVFR", "visible"},
+    {"VideoMultiPass", "active", NULL, "VideoTurboMultiPass", "sensitive"},
+    {"PictureCombDetectPreset", "active-id", "custom1", "PictureCombDetectCustom", "visible"},
+    {"PictureDeinterlaceFilter", "active-id", "off", "PictureDeinterlaceOptions", "visible", TRUE},
+    {"PictureDeinterlacePreset", "active-id", "custom", "PictureDeinterlaceCustom", "visible"},
+    {"PictureDeblockPreset", "active-id", "off|custom", "PictureDeblockTune", "visible", TRUE},
+    {"PictureDeblockPreset", "active-id", "off|custom", "PictureDeblockTuneLabel", "visible", TRUE},
+    {"PictureDeblockPreset", "active-id", "custom2", "PictureDeblockCustom", "visible"},
+    {"PictureDenoiseFilter", "active-id", "off", "PictureDenoiseOptions", "visible", TRUE},
+    {"PictureDenoisePreset", "active-id", "custom3", "PictureDenoiseCustom", "visible"},
+    {"PictureDenoisePreset", "active-id", "custom4", "PictureDenoiseTune", "visible", TRUE},
+    {"PictureDenoisePreset", "active-id", "custom5", "PictureDenoiseTuneLabel", "visible", TRUE},
+    {"PictureChromaSmoothPreset", "active-id", "off|custom", "PictureChromaSmoothTune", "visible", TRUE},
+    {"PictureChromaSmoothPreset", "active-id", "off|custom", "PictureChromaSmoothTuneLabel", "visible", TRUE},
+    {"PictureChromaSmoothPreset", "active-id", "custom6", "PictureChromaSmoothCustom", "visible"},
+    {"PictureSharpenFilter", "active-id", "off", "PictureSharpenOptions", "visible", TRUE},
+    {"PictureSharpenPreset", "active-id", "custom7", "PictureSharpenCustom", "visible"},
+    {"PictureSharpenPreset", "active-id", "custom8", "PictureSharpenTune", "visible", TRUE},
+    {"PictureSharpenPreset", "active-id", "custom9", "PictureSharpenTuneLabel", "visible", TRUE},
+    {"PictureDetelecine", "active-id", "custom10", "PictureDetelecineCustom", "visible"},
+    {"PictureColorspacePreset", "active-id", "custom11", "PictureColorspaceCustom", "visible"},
+    {"VideoEncoder", "active-id", "svt_av1|svt_av1_10bit|x264|x264_10bit", "x264FastDecode", "visible"},
+    {"VideoEncoder", "active-id", "svt_av1|svt_av1_10bit|x264|x264_10bit|x265|x265_10bit|x265_12bit|x265_16bit|mpeg4|mpeg2|VP8|VP9|VP9_10bit|qsv_av1|qsv_av1_10bit|qsv_h264|qsv_h265|qsv_h265_10bit", "VideoOptionExtraWindow", "visible"},
+    {"VideoEncoder", "active-id", "svt_av1|svt_av1_10bit|x264|x264_10bit|x265|x265_10bit|x265_12bit|x265_16bit|mpeg4|mpeg2|VP8|VP9|VP9_10bit|qsv_av1|qsv_av1_10bit|qsv_h264|qsv_h265|qsv_h265_10bit", "VideoOptionExtraLabel", "visible"},
+    {"auto_name", "active", NULL, "autoname_box", "sensitive"},
+    {"CustomTmpEnable", "active", NULL, "CustomTmpDir", "sensitive"},
+    {"PresetCategory", "active-id", "new", "PresetCategoryName", "visible"},
+    {"PresetCategory", "active-id", "new", "PresetCategoryEntryLabel", "visible"},
+    {"DiskFreeCheck", "active", NULL, "DiskFreeLimit", "sensitive"}
+};
+
+void ghb_bind_dependencies (signal_user_data_t *ud)
+{
+    GhbBinding *binding;
+    GObject *source, *target;
+    GBindingTransformFunc func;
+    int n_bindings = sizeof(widget_bindings) / sizeof(GhbBinding);
+
+    for (int i = 0; i < n_bindings; i++)
+    {
+
+        binding = &widget_bindings[i];
+        func = (GBindingTransformFunc) (binding->invert ?
+                                        ghb_bind_property_inverted :
+                                        ghb_bind_property);
+        source = gtk_builder_get_object(ud->builder, binding->source_widget);
+        if (!G_IS_OBJECT(source))
+            g_warning("Invalid object name: %s", binding->source_widget);
+
+        target = gtk_builder_get_object(ud->builder, binding->target_widget);
+        if (!G_IS_OBJECT(target))
+            g_warning("Invalid object name: %s", binding->target_widget);
+
+        g_object_bind_property_full(source, binding->source_property,
+                                    target, binding->target_property,
+                                    binding->flags | G_BINDING_SYNC_CREATE,
+                                    func, NULL,
+                                    (gpointer) gettext(binding->source_property_values),
+                                    NULL);
     }
 }
 
@@ -1474,7 +1440,6 @@ ghb_load_post_settings(signal_user_data_t * ud)
     ud->scale_busy = TRUE;
 
     set_widget_ranges(ud, ud->settings);
-    ghb_check_all_dependencies(ud);
     ghb_show_container_options(ud);
     check_chapter_markers(ud);
 
@@ -2045,7 +2010,6 @@ container_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
         ghb_ui_update(ud, "AlignAVStart", ghb_boolean_value(FALSE));
     }
 
-    ghb_check_dependency(ud, widget, NULL);
     ghb_show_container_options(ud);
     update_acodec(ud);
     ghb_update_destination_extension(ud);
@@ -2817,7 +2781,6 @@ ptop_widget_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
     GhbValue *range;
 
     ghb_widget_to_setting(ud->settings, widget);
-    ghb_check_dependency(ud, widget, NULL);
     ghb_live_reset(ud);
 
     // Update type in Job
@@ -2864,7 +2827,6 @@ G_MODULE_EXPORT void
 setting_widget_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
     ghb_widget_to_setting(ud->settings, widget);
-    ghb_check_dependency(ud, widget, NULL);
     ghb_update_summary_info(ud);
     ghb_clear_presets_selection(ud);
     ghb_live_reset(ud);
@@ -2953,7 +2915,6 @@ G_MODULE_EXPORT void
 nonsetting_widget_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
     ghb_widget_to_setting(ud->settings, widget);
-    ghb_check_dependency(ud, widget, NULL);
     ghb_update_summary_info(ud);
     ghb_live_reset(ud);
 }
@@ -2962,7 +2923,6 @@ G_MODULE_EXPORT void
 comb_detect_widget_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
     ghb_widget_to_setting(ud->settings, widget);
-    ghb_check_dependency(ud, widget, NULL);
     ghb_clear_presets_selection(ud);
     ghb_live_reset(ud);
 
@@ -2985,7 +2945,6 @@ G_MODULE_EXPORT void
 deint_filter_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
     ghb_widget_to_setting(ud->settings, widget);
-    ghb_check_dependency(ud, widget, NULL);
     ghb_clear_presets_selection(ud);
     ghb_live_reset(ud);
     ghb_update_ui_combo_box(ud, "PictureDeinterlacePreset", NULL, FALSE);
@@ -3006,7 +2965,6 @@ G_MODULE_EXPORT void
 denoise_filter_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
     ghb_widget_to_setting(ud->settings, widget);
-    ghb_check_dependency(ud, widget, NULL);
     ghb_clear_presets_selection(ud);
     ghb_live_reset(ud);
     ghb_update_ui_combo_box(ud, "PictureDenoisePreset", NULL, FALSE);
@@ -3019,7 +2977,6 @@ G_MODULE_EXPORT void
 sharpen_filter_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
     ghb_widget_to_setting(ud->settings, widget);
-    ghb_check_dependency(ud, widget, NULL);
     ghb_clear_presets_selection(ud);
     ghb_live_reset(ud);
     ghb_update_ui_combo_box(ud, "PictureSharpenPreset", NULL, FALSE);
@@ -3034,7 +2991,6 @@ G_MODULE_EXPORT void
 title_angle_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
     ghb_widget_to_setting(ud->settings, widget);
-    ghb_check_dependency(ud, widget, NULL);
     ghb_live_reset(ud);
 
     GhbValue *source = ghb_get_job_source_settings(ud->settings);
@@ -3127,7 +3083,6 @@ G_MODULE_EXPORT void
 chapter_markers_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
     ghb_widget_to_setting(ud->settings, widget);
-    ghb_check_dependency(ud, widget, NULL);
     ghb_clear_presets_selection(ud);
     ghb_live_reset(ud);
 
@@ -3147,7 +3102,6 @@ G_MODULE_EXPORT void
 vquality_type_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
     ghb_widget_to_setting(ud->settings, widget);
-    ghb_check_dependency(ud, widget, NULL);
     ghb_clear_presets_selection(ud);
     ghb_live_reset(ud);
     if (ghb_check_name_template(ud, "{quality}") ||
@@ -3159,7 +3113,6 @@ G_MODULE_EXPORT void
 vbitrate_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
     ghb_widget_to_setting(ud->settings, widget);
-    ghb_check_dependency(ud, widget, NULL);
     ghb_clear_presets_selection(ud);
     ghb_live_reset(ud);
     if (ghb_check_name_template(ud, "{bitrate}"))
@@ -3170,7 +3123,6 @@ G_MODULE_EXPORT void
 vquality_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
     ghb_widget_to_setting(ud->settings, widget);
-    ghb_check_dependency(ud, widget, NULL);
     ghb_clear_presets_selection(ud);
     ghb_live_reset(ud);
 
@@ -3379,7 +3331,6 @@ start_point_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 
     ptop_read_value_cb(widget, &new_val, ud);
     ptop_update_bg(PTOP_START, new_val, ud);
-    ghb_check_dependency(ud, widget, NULL);
 }
 
 G_MODULE_EXPORT void
@@ -3389,7 +3340,6 @@ end_point_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 
     ptop_read_value_cb(widget, &new_val, ud);
     ptop_update_bg(PTOP_END, new_val, ud);
-    ghb_check_dependency(ud, widget, NULL);
 }
 
 /*
@@ -3419,7 +3369,6 @@ scale_width_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
     ghb_log_func();
     ghb_widget_to_setting(ud->settings, widget);
-    ghb_check_dependency(ud, widget, NULL);
     ghb_clear_presets_selection(ud);
     if (gtk_widget_is_sensitive(widget))
         ghb_set_scale(ud, GHB_PIC_KEEP_WIDTH);
@@ -3432,7 +3381,6 @@ scale_height_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
     ghb_log_func();
     ghb_widget_to_setting(ud->settings, widget);
-    ghb_check_dependency(ud, widget, NULL);
     ghb_clear_presets_selection(ud);
     if (gtk_widget_is_sensitive(widget))
         ghb_set_scale(ud, GHB_PIC_KEEP_HEIGHT);
@@ -3446,7 +3394,6 @@ crop_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
     ghb_log_func();
     ghb_widget_to_setting(ud->settings, widget);
-    ghb_check_dependency(ud, widget, NULL);
     ghb_clear_presets_selection(ud);
     if (gtk_widget_is_sensitive(widget))
         ghb_set_scale(ud, 0);
@@ -3459,7 +3406,6 @@ pad_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
     ghb_log_func();
     ghb_widget_to_setting(ud->settings, widget);
-    ghb_check_dependency(ud, widget, NULL);
     ghb_clear_presets_selection(ud);
     ghb_live_reset(ud);
     if (gtk_widget_is_sensitive(widget))
@@ -3473,7 +3419,6 @@ display_width_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
     ghb_log_func();
     ghb_widget_to_setting(ud->settings, widget);
-    ghb_check_dependency(ud, widget, NULL);
     ghb_clear_presets_selection(ud);
     ghb_live_reset(ud);
     if (gtk_widget_is_sensitive(widget))
@@ -3487,7 +3432,6 @@ display_height_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
     ghb_log_func();
     ghb_widget_to_setting(ud->settings, widget);
-    ghb_check_dependency(ud, widget, NULL);
     ghb_clear_presets_selection(ud);
     ghb_live_reset(ud);
     if (gtk_widget_is_sensitive(widget))
@@ -3501,7 +3445,6 @@ par_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
     ghb_log_func();
     ghb_widget_to_setting(ud->settings, widget);
-    ghb_check_dependency(ud, widget, NULL);
     ghb_clear_presets_selection(ud);
     ghb_live_reset(ud);
     if (gtk_widget_is_sensitive(widget))
@@ -3515,7 +3458,6 @@ scale_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
     ghb_log_func();
     ghb_widget_to_setting(ud->settings, widget);
-    ghb_check_dependency(ud, widget, NULL);
     ghb_clear_presets_selection(ud);
     ghb_live_reset(ud);
     if (gtk_widget_is_sensitive(widget))
@@ -3533,7 +3475,6 @@ rotate_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
     prev_hflip = ghb_dict_get_int(ud->settings, "hflip");
 
     ghb_widget_to_setting(ud->settings, widget);
-    ghb_check_dependency(ud, widget, NULL);
     ghb_clear_presets_selection(ud);
     ghb_live_reset(ud);
 
@@ -3603,7 +3544,6 @@ resolution_limit_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
     ghb_log_func();
     ghb_widget_to_setting(ud->settings, widget);
-    ghb_check_dependency(ud, widget, NULL);
     ghb_clear_presets_selection(ud);
     ghb_live_reset(ud);
 
@@ -4828,7 +4768,6 @@ when_complete_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 
     ghb_widget_to_setting (ud->prefs, widget);
 
-    ghb_check_dependency(ud, widget, NULL);
     const gchar *name = ghb_get_setting_key(widget);
     ghb_pref_set(ud->prefs, name);
     ghb_prefs_store();
@@ -4850,7 +4789,6 @@ pref_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
     ghb_widget_to_setting (ud->prefs, widget);
 
-    ghb_check_dependency(ud, widget, NULL);
     const gchar *name = ghb_get_setting_key(widget);
     ghb_pref_set(ud->prefs, name);
 }
@@ -4868,7 +4806,6 @@ use_m4v_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
     ghb_log_func();
     ghb_widget_to_setting (ud->prefs, widget);
-    ghb_check_dependency(ud, widget, NULL);
     const gchar *name = ghb_get_setting_key(widget);
     ghb_pref_set(ud->prefs, name);
     ghb_update_destination_extension(ud);
@@ -4893,7 +4830,6 @@ temp_dir_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
         orig_tmp_dir = g_strdup(tmp_dir);
     }
     ghb_widget_to_setting (ud->prefs, widget);
-    ghb_check_dependency(ud, widget, NULL);
 
     tmp_dir = ghb_dict_get_string(ud->prefs, "CustomTmpDir");
     if (tmp_dir == NULL)
@@ -4913,7 +4849,6 @@ vqual_granularity_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
     ghb_log_func();
     ghb_widget_to_setting (ud->prefs, widget);
-    ghb_check_dependency(ud, widget, NULL);
 
     const gchar *name = ghb_get_setting_key(widget);
     ghb_pref_set(ud->prefs, name);
