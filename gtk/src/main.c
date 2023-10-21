@@ -1194,25 +1194,6 @@ ghb_activate_cb(GApplication * app, signal_user_data_t * ud)
     window_width = ghb_dict_get_int(ud->prefs, "window_width");
     window_height = ghb_dict_get_int(ud->prefs, "window_height");
 
-    // Grrrr!  Gtk developers !!!hard coded!!! the width of the
-    // radio buttons in GtkStackSwitcher to 100!!!
-    //
-    // Thankfully, GtkStackSwitcher is a regular container object
-    // and we can access the buttons to change their width.
-    GList *stack_switcher_children, *link;
-    GtkContainer * stack_switcher = GTK_CONTAINER(
-                            GHB_WIDGET(ud->builder, "SettingsStackSwitcher"));
-    link = stack_switcher_children = gtk_container_get_children(stack_switcher);
-    while (link != NULL)
-    {
-        GtkWidget *widget = link->data;
-        gtk_widget_set_size_request(widget, -1, -1);
-        gtk_widget_set_hexpand(widget, TRUE);
-        gtk_widget_set_halign(widget, GTK_ALIGN_FILL);
-        link = link->next;
-    }
-    g_list_free(stack_switcher_children);
-
     gtk_window_resize(GTK_WINDOW(ghb_window), window_width, window_height);
 
     ghb_set_custom_filter_tooltip(ud, "PictureDetelecineCustom",
