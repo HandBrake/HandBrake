@@ -142,12 +142,10 @@ static int encavcodecaInit(hb_work_object_t *w, hb_job_t *job)
             switch (audio->config.out.codec)
             {
                 case HB_ACODEC_FFTRUEHD24:
-                    sample_fmt          = AV_SAMPLE_FMT_S32;
-                    bits_per_raw_sample = 24;
+                    sample_fmt = AV_SAMPLE_FMT_S32P;
                     break;
                 default:
-                    sample_fmt          = AV_SAMPLE_FMT_S16;
-                    bits_per_raw_sample = 16;
+                    sample_fmt = AV_SAMPLE_FMT_S16P;
                     break;
             }
             break;
