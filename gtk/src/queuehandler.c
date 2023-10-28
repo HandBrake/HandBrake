@@ -578,6 +578,7 @@ static void queue_update_summary (GhbValue * queueDict, signal_user_data_t *ud)
         const char         * lang;
         int                  gain;
         int                  track;
+        int                  bitrate;
 
         asettings     = ghb_array_get(audioList, ii);
         track         = ghb_dict_get_int(asettings, "Track");
@@ -585,6 +586,7 @@ static void queue_update_summary (GhbValue * queueDict, signal_user_data_t *ud)
         lang          = ghb_dict_get_string(asource, "Language");
         name          = ghb_dict_get_string(asettings, "Name");
         gain          = ghb_dict_get_int(asettings, "Gain");
+        bitrate       = ghb_dict_get_int(asettings, "Bitrate");
         audio_encoder = ghb_settings_audio_encoder(asettings, "Encoder");
         if (name)
         {
@@ -602,7 +604,8 @@ static void queue_update_summary (GhbValue * queueDict, signal_user_data_t *ud)
         else
         {
             audio_mix = ghb_settings_mixdown(asettings, "Mixdown");
-            g_string_append_printf(str, "%s, %s, %s", lang,
+            g_string_append_printf(str, "%s, %d %s %s, %s", lang,
+                                   bitrate, _("kbps"),
                                    audio_encoder->name, audio_mix->name);
         }
         if (gain)
