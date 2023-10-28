@@ -88,7 +88,6 @@
 static GtkBuilder*
 create_builder_or_die(const gchar * name)
 {
-    GtkWidget *dialog;
     GtkBuilder *xml;
     GError *error = NULL;
 
@@ -98,24 +97,11 @@ create_builder_or_die(const gchar * name)
     if (!error)
         gtk_builder_add_from_resource(xml, "/fr/handbrake/ghb/ui/menu.ui", &error);
 
-    const gchar *markup =
-        N_("<b><big>Unable to create %s.</big></b>\n"
-        "\n"
-        "Internal error. Could not parse UI description.\n"
-        "%s");
-
     if (error)
     {
-        dialog = gtk_message_dialog_new_with_markup(NULL,
-            GTK_DIALOG_MODAL,
-            GTK_MESSAGE_ERROR,
-            GTK_BUTTONS_CLOSE,
-            gettext(markup),
-            name, error->message);
-        gtk_dialog_run(GTK_DIALOG(dialog));
-        gtk_widget_destroy(dialog);
-        exit(EXIT_FAILURE);
+        g_error("Unable to load ui file: %s", error->message);
     }
+
     return xml;
 }
 

@@ -7701,7 +7701,7 @@ Only one subtitle track can be burned! Since conflicts can occur, the first chos
     <property name="type-hint">dialog</property>
     <property name="skip-taskbar-hint">True</property>
     <property name="skip-pager-hint">True</property>
-    <signal name="delete-event" handler="gtk_widget_hide_on_delete" swapped="no"/>
+    <signal name="delete-event" handler="prefs_response_cb" swapped="no"/>
     <child type="titlebar">
       <object class="GtkHeaderBar">
         <property name="visible">True</property>

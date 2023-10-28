@@ -727,6 +727,18 @@ title_add_action_cb (GSimpleAction *action, GVariant *param,
     ghb_audio_list_refresh_all(ud);
 }
 
+static void
+title_add_multiple_response_cb (GtkDialog *dialog, int response,
+                                signal_user_data_t *ud)
+{
+    g_signal_handlers_disconnect_by_data(dialog, ud);
+    gtk_widget_set_visible(GTK_WIDGET(dialog), FALSE);
+    if (response == GTK_RESPONSE_OK)
+    {
+        add_multiple_titles(ud);
+    }
+}
+
 G_MODULE_EXPORT void
 title_add_multiple_action_cb (GSimpleAction *action, GVariant *param,
                               signal_user_data_t *ud)
@@ -738,6 +750,8 @@ title_add_multiple_action_cb (GSimpleAction *action, GVariant *param,
     GhbValue * preset = NULL;
 
     list = GTK_LIST_BOX(GHB_WIDGET(ud->builder, "title_add_multiple_list"));
+    // Clear title list
+    ghb_container_empty(GTK_CONTAINER(list));
 
     if (ghb_dict_get_bool(ud->prefs, "SyncTitleSettings"))
     {
@@ -824,17 +838,10 @@ title_add_multiple_action_cb (GSimpleAction *action, GVariant *param,
     title_add_check_conflicts(ud);
 
     // Pop up the title multiple selections dialog
-    GtkResponseType response;
     GtkWidget *dialog = GHB_WIDGET(ud->builder, "title_add_multiple_dialog");
-    response = gtk_dialog_run(GTK_DIALOG(dialog));
-    gtk_widget_hide(dialog);
-    if (response == GTK_RESPONSE_OK)
-    {
-        add_multiple_titles(ud);
-    }
-
-    // Clear title list
-    ghb_container_empty(GTK_CONTAINER(list));
+    g_signal_connect(dialog, "response",
+                     G_CALLBACK(title_add_multiple_response_cb), ud);
+    gtk_widget_set_visible(dialog, TRUE);
 }
 
 G_MODULE_EXPORT void

@@ -3590,9 +3590,14 @@ preferences_action_cb(GSimpleAction *action, GVariant *param,
 
     prefs_require_restart = FALSE;
     dialog = GHB_WIDGET(ud->builder, "prefs_dialog");
-    gtk_dialog_run(GTK_DIALOG(dialog));
-    gtk_widget_hide(dialog);
+    gtk_widget_set_visible(dialog, TRUE);
+}
+
+G_MODULE_EXPORT gboolean
+prefs_response_cb(GtkDialog *dialog, GdkEvent *event, signal_user_data_t *ud)
+{
     ghb_prefs_store();
+    gtk_widget_set_visible(GTK_WIDGET(dialog), FALSE);
 
     if (prefs_require_restart)
     {
@@ -3606,6 +3611,7 @@ preferences_action_cb(GSimpleAction *action, GVariant *param,
         prune_logs(ud);
         g_application_quit(G_APPLICATION(ud->app));
     }
+    return TRUE;
 }
 
 typedef struct
@@ -3680,6 +3686,23 @@ suspend_cb(countdown_t *cd)
     return TRUE;
 }
 
+static void
+countdown_dialog_response (GtkDialog *dialog, int response, guint *timeout_id)
+{
+    if (response == GTK_RESPONSE_CANCEL)
+    {
+        GMainContext *mc;
+        GSource *source;
+
+        mc = g_main_context_default();
+        source = g_main_context_find_source_by_id(mc, *timeout_id);
+        if (source != NULL)
+            g_source_destroy(source);
+        gtk_widget_destroy(GTK_WIDGET(dialog));
+    }
+    g_free(timeout_id);
+}
+
 void
 ghb_countdown_dialog(
     GtkMessageType type,
@@ -3692,14 +3715,13 @@ ghb_countdown_dialog(
 {
     GtkWindow *hb_window;
     GtkWidget *dialog;
-    GtkResponseType response;
-    guint timeout_id;
-    countdown_t cd;
+    guint *timeout_id = g_new(guint, 1);
+    countdown_t *cd = g_new(countdown_t, 1);
 
-    cd.msg = message;
-    cd.action = action;
-    cd.timeout = timeout;
-    cd.ud = ud;
+    cd->msg = message;
+    cd->action = action;
+    cd->timeout = timeout;
+    cd->ud = ud;
 
     // Toss up a warning dialog
     hb_window = GTK_WINDOW(GHB_WIDGET(ud->builder, "hb_window"));
@@ -3711,20 +3733,12 @@ ghb_countdown_dialog(
                            cancel, GTK_RESPONSE_CANCEL,
                            NULL);
 
-    cd.dlg = GTK_MESSAGE_DIALOG(dialog);
-    timeout_id = g_timeout_add(1000, action_func, &cd);
-    response = gtk_dialog_run(GTK_DIALOG(dialog));
-    if (response == GTK_RESPONSE_CANCEL)
-    {
-        GMainContext *mc;
-        GSource *source;
+    cd->dlg = GTK_MESSAGE_DIALOG(dialog);
+    *timeout_id = g_timeout_add(1000, action_func, cd);
 
-        mc = g_main_context_default();
-        source = g_main_context_find_source_by_id(mc, timeout_id);
-        if (source != NULL)
-            g_source_destroy(source);
-        gtk_widget_destroy (dialog);
-    }
+    g_signal_connect(dialog, "response",
+                     G_CALLBACK(countdown_dialog_response), timeout_id);
+    gtk_widget_show(dialog);
 }
 
 gboolean
@@ -3789,12 +3803,37 @@ ghb_error_dialog(GtkWindow *parent, GtkMessageType type, const gchar *message, c
     ghb_message_dialog(parent, type, message, cancel, NULL);
 }
 
+static void
+cancel_encode_response (GtkDialog *dialog, int response, signal_user_data_t *ud)
+{
+    g_signal_handlers_disconnect_by_data(dialog, ud);
+    gtk_widget_destroy(GTK_WIDGET(dialog));
+
+    switch (response)
+    {
+        case 1:
+            ghb_stop_queue();
+            ud->cancel_encode = GHB_CANCEL_ALL;
+            break;
+        case 2:
+            ghb_stop_queue();
+            ud->cancel_encode = GHB_CANCEL_CURRENT;
+            break;
+        case 3:
+            ud->cancel_encode = GHB_CANCEL_FINISH;
+            break;
+        case 4:
+        default:
+            ud->cancel_encode = GHB_CANCEL_NONE;
+            break;
+    }
+}
+
 void
 ghb_cancel_encode(signal_user_data_t *ud, const gchar *extra_msg)
 {
     GtkWindow *hb_window;
     GtkWidget *dialog, *cancel;
-    GtkResponseType response;
     GtkStyleContext *style;
 
     if (extra_msg == NULL) extra_msg = "";
@@ -3818,26 +3857,8 @@ ghb_cancel_encode(signal_user_data_t *ud, const gchar *extra_msg)
     style = gtk_widget_get_style_context(cancel);
     gtk_style_context_add_class(style, "destructive-action");
 
-    response = gtk_dialog_run(GTK_DIALOG(dialog));
-    gtk_widget_destroy (dialog);
-    switch ((int)response)
-    {
-        case 1:
-            ghb_stop_queue();
-            ud->cancel_encode = GHB_CANCEL_ALL;
-            break;
-        case 2:
-            ghb_stop_queue();
-            ud->cancel_encode = GHB_CANCEL_CURRENT;
-            break;
-        case 3:
-            ud->cancel_encode = GHB_CANCEL_FINISH;
-            break;
-        case 4:
-        default:
-            ud->cancel_encode = GHB_CANCEL_NONE;
-            break;
-    }
+    g_signal_connect(dialog, "response", G_CALLBACK(cancel_encode_response), ud);
+    gtk_widget_set_visible(dialog, TRUE);
 }
 
 gboolean
@@ -4317,6 +4338,7 @@ ghb_backend_events(signal_user_data_t *ud)
         index = ghb_find_queue_job(ud->queue, status.queue.unique_id,
                                    &queueDict);
         if ((status.queue.state & GHB_STATE_WORKING) &&
+            !(status.queue.state & GHB_STATE_PAUSED) &&
             (event_sequence % 50 == 0)) // check every 10 seconds
         {
             ghb_low_disk_check(ud);
@@ -4646,8 +4668,7 @@ about_action_cb(GSimpleAction *action, GVariant *param, signal_user_data_t *ud)
                                 HB_PROJECT_URL_WEBSITE);
     gtk_about_dialog_set_website_label(GTK_ABOUT_DIALOG(widget),
                                         HB_PROJECT_URL_WEBSITE);
-    gtk_dialog_run(GTK_DIALOG(widget));
-    gtk_widget_hide(widget);
+    gtk_widget_set_visible(widget, TRUE);
 }
 
 #define HB_DOCS "https://handbrake.fr/docs/"

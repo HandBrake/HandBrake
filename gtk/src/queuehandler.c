@@ -1762,13 +1762,36 @@ gint ghb_find_queue_job (GhbValue *queue, gint unique_id, GhbValue **job)
     return -1;
 }
 
+static void
+low_disk_check_response_cb (GtkDialog *dialog, int response,
+                            signal_user_data_t *ud)
+{
+    g_signal_handlers_disconnect_by_data(dialog, ud);
+    gtk_widget_destroy(GTK_WIDGET(dialog));
+    switch (response)
+    {
+        case 1:
+            ghb_resume_queue();
+            break;
+        case 2:
+            ghb_dict_set_bool(ud->globals, "SkipDiskFreeCheck", TRUE);
+            ghb_resume_queue();
+            break;
+        case 3:
+            ghb_stop_queue();
+            ud->cancel_encode = GHB_CANCEL_ALL;
+            break;
+        default:
+            ghb_resume_queue();
+            break;
+    }
+}
+
 void ghb_low_disk_check (signal_user_data_t *ud)
 {
     GtkWindow       *hb_window;
     GtkWidget       *dialog, *cancel;
-    GtkResponseType  response;
     ghb_status_t     status;
-    const char      *paused_msg = "";
     const char      *dest;
     gint64           free_size;
     gint64           free_limit;
@@ -1808,20 +1831,17 @@ void ghb_low_disk_check (signal_user_data_t *ud)
         return;
     }
 
-    if ((status.queue.state & GHB_STATE_WORKING) &&
-        !(status.queue.state & GHB_STATE_PAUSED))
-    {
-        paused_msg = "Encoding has been paused.\n\n";
-        ghb_pause_queue();
-    }
+    ghb_pause_queue();
     dest      = ghb_dict_get_string(settings, "destination");
     hb_window = GTK_WINDOW(GHB_WIDGET(ud->builder, "hb_window"));
     dialog    = gtk_message_dialog_new(hb_window, GTK_DIALOG_MODAL,
-            GTK_MESSAGE_WARNING, GTK_BUTTONS_NONE,
-            _("%sThe destination filesystem is almost full: %"PRId64" MB free.\n"
-              "Destination: %s\n"
-              "Encode may be incomplete if you proceed.\n"),
-            paused_msg, free_size / (1024 * 1024), dest);
+                    GTK_MESSAGE_WARNING, GTK_BUTTONS_NONE,
+                    _("Low Disk Space: Encoding Paused"));
+    gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dialog),
+        _("The destination filesystem is almost full: %"PRId64" MB free.\n"
+          "Destination: %s\n"
+          "Encode may be incomplete if you proceed."),
+        free_size / (1024 * 1024), dest);
     gtk_dialog_add_buttons( GTK_DIALOG(dialog),
                            _("Resume, I've fixed the problem"), 1,
                            _("Resume, Don't tell me again"), 2,
@@ -1831,26 +1851,9 @@ void ghb_low_disk_check (signal_user_data_t *ud)
     cancel = gtk_dialog_get_widget_for_response(GTK_DIALOG(dialog), 3);
     style = gtk_widget_get_style_context(cancel);
     gtk_style_context_add_class(style, "destructive-action");
-
-    response = gtk_dialog_run(GTK_DIALOG(dialog));
-    gtk_widget_destroy(dialog);
-    switch ((gint) response)
-    {
-        case 1:
-            ghb_resume_queue();
-            break;
-        case 2:
-            ghb_dict_set_bool(ud->globals, "SkipDiskFreeCheck", TRUE);
-            ghb_resume_queue();
-            break;
-        case 3:
-            ghb_stop_queue();
-            ud->cancel_encode = GHB_CANCEL_ALL;
-            break;
-        default:
-            ghb_resume_queue();
-            break;
-    }
+    g_signal_connect(dialog, "response",
+                     G_CALLBACK(low_disk_check_response_cb), ud);
+    gtk_widget_set_visible(dialog, TRUE);
 }
 
 static GtkListBoxRow*
