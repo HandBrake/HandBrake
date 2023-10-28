@@ -265,8 +265,7 @@ conjunction with the "Forced" option.</property>
     <property name="visible">False</property>
     <property name="can-focus">False</property>
     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-    <property name="skip-taskbar-hint">True</property>
-    <property name="skip-pager-hint">True</property>
+    <property name="icon-name">fr.handbrake.ghb</property>
     <property name="default-width">300</property>
     <property name="default-height">600</property>
     <signal name="delete-event" handler="presets_window_delete_cb" swapped="no"/>
@@ -498,9 +497,8 @@ conjunction with the "Forced" option.</property>
     <property name="can-focus">False</property>
     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
     <property name="resizable">True</property>
+    <property name="icon-name">fr.handbrake.ghb</property>
     <property name="window-position">center</property>
-    <property name="skip-taskbar-hint">True</property>
-    <property name="skip-pager-hint">True</property>
     <property name="default-width">1024</property>
     <signal name="delete-event" handler="queue_window_delete_cb" swapped="no"/>
     <child>
@@ -1718,10 +1716,9 @@ Resets the queue job to pending and ready to run again.</property>
     <property name="title" translatable="yes">HandBrake Activity Log</property>
     <property name="can-focus">False</property>
     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+    <property name="icon-name">fr.handbrake.ghb</property>
     <property name="default-width">800</property>
     <property name="default-height">600</property>
-    <property name="skip-taskbar-hint">True</property>
-    <property name="skip-pager-hint">True</property>
     <signal name="delete-event" handler="activity_window_delete_cb" swapped="no"/>
     <child>
       <object class="GtkBox" id="vbox37">
@@ -2033,9 +2030,7 @@ Resets the queue job to pending and ready to run again.</property>
     <property name="transient-for">hb_window</property>
     <property name="can-focus">False</property>
     <property name="title" translatable="yes">About HandBrake</property>
-    <property name="type-hint">dialog</property>
-    <property name="skip-taskbar-hint">True</property>
-    <property name="skip-pager-hint">True</property>
+    <property name="modal">True</property>
     <property name="program-name">HandBrake</property>
     <property name="version">0.9.2</property>
     <property name="copyright" translatable="yes">Copyright © 2008 -  John Stebbins
@@ -7544,7 +7539,6 @@ Only one subtitle track can be burned! Since conflicts can occur, the first chos
     <property name="title" translatable="yes">Add Multiple Titles</property>
     <property name="transient-for">hb_window</property>
     <property name="can-focus">False</property>
-    <property name="type-hint">dialog</property>
     <property name="deletable">False</property>
     <property name="use-header-bar">1</property>
     <child type="action">
@@ -8544,7 +8538,6 @@ Uncheck this if you want to allow changing each title's settings independently.<
     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
     <property name="modal">True</property>
     <property name="window-position">center-on-parent</property>
-    <property name="type-hint">dialog</property>
     <property name="deletable">False</property>
     <property name="use-header-bar">1</property>
     <signal name="delete-event" handler="gtk_widget_hide_on_delete" swapped="no"/>
@@ -8687,7 +8680,6 @@ Uncheck this if you want to allow changing each title's settings independently.<
     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
     <property name="modal">True</property>
     <property name="window-position">center-on-parent</property>
-    <property name="type-hint">dialog</property>
     <property name="deletable">False</property>
     <property name="use-header-bar">1</property>
     <signal name="delete-event" handler="gtk_widget_hide_on_delete" swapped="no"/>
@@ -9252,9 +9244,6 @@ Uncheck this if you want to allow changing each title's settings independently.<
     <property name="modal">True</property>
     <property name="resizable">False</property>
     <property name="window-position">center-on-parent</property>
-    <property name="type-hint">dialog</property>
-    <property name="skip-taskbar-hint">True</property>
-    <property name="skip-pager-hint">True</property>
     <property name="deletable">False</property>
     <property name="use-header-bar">1</property>
     <child type="action">
@@ -9662,9 +9651,6 @@ in your output.</property>
     <property name="modal">True</property>
     <property name="resizable">False</property>
     <property name="window-position">center-on-parent</property>
-    <property name="type-hint">dialog</property>
-    <property name="skip-taskbar-hint">True</property>
-    <property name="skip-pager-hint">True</property>
     <property name="deletable">False</property>
     <property name="use-header-bar">1</property>
     <child type="action">
