@@ -1869,17 +1869,51 @@ list_box_get_row(GtkWidget *widget)
     return GTK_LIST_BOX_ROW(widget);
 }
 
-static void
-ghb_queue_remove_row_internal (signal_user_data_t *ud, int index)
-{
-    GtkListBox    * lb;
-    GtkListBoxRow * row;
-    GhbValue      * queueDict, * uiDict;
+static GtkWidget *queue_remove_dialog = NULL;
+static int queue_remove_index     = -1;
+static int queue_remove_unique_id = -1;
 
-    if (index < 0 || index >= ghb_array_len(ud->queue))
+static void
+queue_remove_row_cb (GtkWidget *dialog, int response, signal_user_data_t *ud)
+{
+    if (dialog != NULL)
+    {
+        gtk_widget_destroy(dialog);
+        queue_remove_dialog = NULL;
+    }
+
+    if (response != 1 || queue_remove_index < 0)
     {
         return;
     }
+
+    if (queue_remove_unique_id >= 0)
+    {
+        ghb_stop_queue();
+        ud->cancel_encode = GHB_CANCEL_ALL;
+        ghb_remove_job(queue_remove_unique_id);
+    }
+    ghb_array_remove(ud->queue, queue_remove_index);
+
+    // Update UI
+    GtkListBox    *lb  = GTK_LIST_BOX(GHB_WIDGET(ud->builder, "queue_list"));
+    GtkListBoxRow *row = gtk_list_box_get_row_at_index(lb, queue_remove_index);
+    gtk_container_remove(GTK_CONTAINER(lb), GTK_WIDGET(row));
+
+    queue_remove_index = -1;
+}
+
+static void
+ghb_queue_remove_row_internal (signal_user_data_t *ud, int index)
+{
+    GhbValue *queueDict, *uiDict;
+
+    if (index < 0 || index >= ghb_array_len(ud->queue) || queue_remove_dialog != NULL)
+    {
+        return;
+    }
+
+    queue_remove_index = index;
 
     queueDict  = ghb_array_get(ud->queue, index);
     uiDict     = ghb_dict_get(queueDict, "uiSettings");
@@ -1887,19 +1921,13 @@ ghb_queue_remove_row_internal (signal_user_data_t *ud, int index)
     if (status == GHB_QUEUE_RUNNING)
     {
         // Ask if wants to stop encode.
-        if (!ghb_cancel_encode2(ud, NULL))
-        {
-            return;
-        }
-        int unique_id = ghb_dict_get_int(uiDict, "job_unique_id");
-        ghb_remove_job(unique_id);
+        queue_remove_unique_id = ghb_dict_get_int(uiDict, "job_unique_id");
+        ghb_stop_encode_dialog(FALSE, "", G_CALLBACK(queue_remove_row_cb), ud);
     }
-    ghb_array_remove(ud->queue, index);
-
-    // Update UI
-    lb  = GTK_LIST_BOX(GHB_WIDGET(ud->builder, "queue_list"));
-    row = gtk_list_box_get_row_at_index(lb, index);
-    gtk_container_remove(GTK_CONTAINER(lb), GTK_WIDGET(row));
+    else
+    {
+        queue_remove_row_cb(NULL, 1, ud);
+    }
 }
 
 void

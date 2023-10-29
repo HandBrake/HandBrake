@@ -83,6 +83,7 @@ static GList* dvd_device_list(void);
 static void prune_logs(signal_user_data_t *ud);
 static gboolean can_suspend_logind(void);
 static void suspend_logind(void);
+static void quit_dialog_response(GtkDialog *dialog, int response, signal_user_data_t *ud);
 static gboolean has_drive = FALSE;
 
 #if !defined(_WIN32)
@@ -499,24 +500,28 @@ void ghb_bind_dependencies (signal_user_data_t *ud)
     }
 }
 
+static void
+application_quit (signal_user_data_t *ud)
+{
+    ghb_hb_cleanup(FALSE);
+    prune_logs(ud);
+    g_application_quit(G_APPLICATION(ud->app));
+}
+
 G_MODULE_EXPORT void
 quit_action_cb(GSimpleAction *action, GVariant *param, signal_user_data_t *ud)
 {
     gint state = ghb_get_queue_state();
     if (state & (GHB_STATE_WORKING|GHB_STATE_SEARCHING))
     {
-        if (ghb_cancel_encode2(ud, _("Closing HandBrake will terminate encoding.\n")))
-        {
-            ghb_hb_cleanup(FALSE);
-            prune_logs(ud);
-            g_application_quit(G_APPLICATION(ud->app));
-            return;
-        }
+        ghb_stop_encode_dialog(FALSE, _("Closing HandBrake will terminate encoding.\n"),
+                               G_CALLBACK(quit_dialog_response), ud);
         return;
     }
-    ghb_hb_cleanup(FALSE);
-    prune_logs(ud);
-    g_application_quit(G_APPLICATION(ud->app));
+    else
+    {
+        application_quit(ud);
+    }
 }
 
 static gboolean
@@ -1955,9 +1960,7 @@ window_destroy_event_cb(
 #endif
     signal_user_data_t *ud)
 {
-    ghb_hb_cleanup(FALSE);
-    prune_logs(ud);
-    g_application_quit(G_APPLICATION(ud->app));
+    application_quit(ud);
     return FALSE;
 }
 
@@ -1972,19 +1975,13 @@ window_delete_event_cb(
     gint state = ghb_get_queue_state();
     if (state & (GHB_STATE_WORKING|GHB_STATE_SEARCHING))
     {
-        if (ghb_cancel_encode2(ud,
-            _("Closing HandBrake will terminate encoding.\n")))
-        {
-            ghb_hb_cleanup(FALSE);
-            prune_logs(ud);
-            g_application_quit(G_APPLICATION(ud->app));
-            return FALSE;
-        }
-        return TRUE;
+        ghb_stop_encode_dialog(FALSE, _("Closing HandBrake will terminate encoding.\n"),
+                               G_CALLBACK(quit_dialog_response), ud);
     }
-    ghb_hb_cleanup(FALSE);
-    prune_logs(ud);
-    g_application_quit(G_APPLICATION(ud->app));
+    else
+    {
+        application_quit(ud);
+    }
     return FALSE;
 }
 
@@ -3829,44 +3826,22 @@ cancel_encode_response (GtkDialog *dialog, int response, signal_user_data_t *ud)
     }
 }
 
-void
-ghb_cancel_encode(signal_user_data_t *ud, const gchar *extra_msg)
+static void
+quit_dialog_response (GtkDialog *dialog, int response, signal_user_data_t *ud)
 {
-    GtkWindow *hb_window;
-    GtkWidget *dialog, *cancel;
-    GtkStyleContext *style;
-
-    if (extra_msg == NULL) extra_msg = "";
-    // Toss up a warning dialog
-    hb_window = GTK_WINDOW(GHB_WIDGET(ud->builder, "hb_window"));
-    dialog = gtk_message_dialog_new(hb_window, GTK_DIALOG_MODAL,
-                GTK_MESSAGE_WARNING, GTK_BUTTONS_NONE,
-                _("%sYour movie will be lost if you don't continue encoding."),
-                extra_msg);
-    gtk_dialog_add_buttons( GTK_DIALOG(dialog),
-                           _("Cancel Current and Stop"), 1,
-                           _("Cancel Current, Start Next"), 2,
-                           _("Finish Current, then Stop"), 3,
-                           _("Continue Encoding"), 4,
-                           NULL);
-
-    cancel = gtk_dialog_get_widget_for_response(GTK_DIALOG(dialog), 1);
-    style = gtk_widget_get_style_context(cancel);
-    gtk_style_context_add_class(style, "destructive-action");
-    cancel = gtk_dialog_get_widget_for_response(GTK_DIALOG(dialog), 2);
-    style = gtk_widget_get_style_context(cancel);
-    gtk_style_context_add_class(style, "destructive-action");
-
-    g_signal_connect(dialog, "response", G_CALLBACK(cancel_encode_response), ud);
-    gtk_widget_set_visible(dialog, TRUE);
+    gtk_widget_destroy(GTK_WIDGET(dialog));
+    if (response == 1)
+    {
+        application_quit(ud);
+    }
 }
 
-gboolean
-ghb_cancel_encode2(signal_user_data_t *ud, const gchar *extra_msg)
+GtkWidget *
+ghb_stop_encode_dialog (gboolean show_all_options, const char *extra_msg,
+                        GCallback response, signal_user_data_t *ud)
 {
     GtkWindow *hb_window;
     GtkWidget *dialog, *cancel;
-    GtkResponseType response;
     GtkStyleContext *style;
 
     if (extra_msg == NULL) extra_msg = "";
@@ -3876,28 +3851,30 @@ ghb_cancel_encode2(signal_user_data_t *ud, const gchar *extra_msg)
                 GTK_MESSAGE_WARNING, GTK_BUTTONS_NONE,
                 _("%sYour movie will be lost if you don't continue encoding."),
                 extra_msg);
-    gtk_dialog_add_buttons( GTK_DIALOG(dialog),
-                           _("Cancel Current and Stop"), 1,
-                           _("Continue Encoding"), 4,
-                           NULL);
-
-    cancel = gtk_dialog_get_widget_for_response(GTK_DIALOG(dialog), 1);
+    cancel = gtk_dialog_add_button(GTK_DIALOG(dialog),
+                                   _("Cancel Current and Stop"), 1);
     style = gtk_widget_get_style_context(cancel);
     gtk_style_context_add_class(style, "destructive-action");
-
-    response = gtk_dialog_run(GTK_DIALOG(dialog));
-    gtk_widget_destroy (dialog);
-    switch ((int)response)
+    if (show_all_options)
     {
-        case 1:
-            ghb_stop_queue();
-            ud->cancel_encode = GHB_CANCEL_ALL;
-            return TRUE;
-        case 4:
-        default:
-            break;
+        cancel = gtk_dialog_add_button(GTK_DIALOG(dialog),
+                                       _("Cancel Current, Start Next"), 2);
+        style = gtk_widget_get_style_context(cancel);
+        gtk_style_context_add_class(style, "destructive-action");
+        gtk_dialog_add_button (GTK_DIALOG(dialog),
+                               _("Finish Current, then Stop"), 3);
     }
-    return FALSE;
+    gtk_dialog_add_button(GTK_DIALOG(dialog), _("Continue Encoding"), 4);
+
+    g_signal_connect(dialog, "response", response, ud);
+    gtk_widget_show(dialog);
+    return dialog;
+}
+
+void
+ghb_cancel_encode (signal_user_data_t *ud, const char *extra_msg)
+{
+    ghb_stop_encode_dialog(TRUE, extra_msg, G_CALLBACK(cancel_encode_response), ud);
 }
 
 static void
