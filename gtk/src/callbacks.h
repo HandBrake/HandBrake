@@ -57,7 +57,8 @@ void ghb_error_dialog(
     GtkWindow *parent, GtkMessageType type,
     const gchar *message, const gchar *cancel);
 void ghb_cancel_encode(signal_user_data_t *ud, const gchar *extra_msg);
-gboolean ghb_cancel_encode2(signal_user_data_t *ud, const gchar *extra_msg);
+GtkWidget *ghb_stop_encode_dialog(gboolean show_all_options,
+    const char *extra_msg, GCallback response, signal_user_data_t *ud);
 void ghb_start_next_job(signal_user_data_t *ud);
 void ghb_bind_dependencies (signal_user_data_t *ud);
 void ghb_do_scan( signal_user_data_t *ud, const gchar *filename,
