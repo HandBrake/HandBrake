@@ -56,9 +56,11 @@ gboolean ghb_message_dialog(
 void ghb_error_dialog(
     GtkWindow *parent, GtkMessageType type,
     const gchar *message, const gchar *cancel);
-void ghb_cancel_encode(signal_user_data_t *ud, const gchar *extra_msg);
-GtkWidget *ghb_stop_encode_dialog(gboolean show_all_options,
-    const char *extra_msg, GCallback response, signal_user_data_t *ud);
+GtkWidget *ghb_cancel_dialog_new(GtkWindow *parent,
+    const char *title, const char *message, const char *cancel_all_button,
+    const char *cancel_current_button, const char *finish_button,
+    const char *continue_button);
+void ghb_stop_encode_dialog_show(signal_user_data_t *ud);
 void ghb_start_next_job(signal_user_data_t *ud);
 void ghb_bind_dependencies (signal_user_data_t *ud);
 void ghb_do_scan( signal_user_data_t *ud, const gchar *filename,

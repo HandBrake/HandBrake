@@ -1869,17 +1869,15 @@ list_box_get_row(GtkWidget *widget)
     return GTK_LIST_BOX_ROW(widget);
 }
 
-static GtkWidget *queue_remove_dialog = NULL;
 static int queue_remove_index     = -1;
 static int queue_remove_unique_id = -1;
 
 static void
-queue_remove_row_cb (GtkWidget *dialog, int response, signal_user_data_t *ud)
+queue_remove_response (GtkWidget *dialog, int response, signal_user_data_t *ud)
 {
     if (dialog != NULL)
     {
         gtk_widget_destroy(dialog);
-        queue_remove_dialog = NULL;
     }
 
     if (response != 1 || queue_remove_index < 0)
@@ -1904,11 +1902,26 @@ queue_remove_row_cb (GtkWidget *dialog, int response, signal_user_data_t *ud)
 }
 
 static void
+queue_remove_dialog_show (signal_user_data_t *ud)
+{
+    GtkWidget *dialog;
+    GtkWindow *queue_window;
+
+    queue_window = GTK_WINDOW(GHB_WIDGET(ud->builder, "queue_window"));
+    dialog = ghb_cancel_dialog_new(queue_window, _("Remove Item in Progress?"),
+                _("Your movie will be lost if you don't continue encoding."),
+                _("Cancel and Remove"), NULL, NULL, _("Continue Encoding"));
+
+    g_signal_connect(dialog, "response", G_CALLBACK(queue_remove_response), ud);
+    gtk_widget_show(dialog);
+}
+
+static void
 ghb_queue_remove_row_internal (signal_user_data_t *ud, int index)
 {
     GhbValue *queueDict, *uiDict;
 
-    if (index < 0 || index >= ghb_array_len(ud->queue) || queue_remove_dialog != NULL)
+    if (index < 0 || index >= ghb_array_len(ud->queue))
     {
         return;
     }
@@ -1922,11 +1935,11 @@ ghb_queue_remove_row_internal (signal_user_data_t *ud, int index)
     {
         // Ask if wants to stop encode.
         queue_remove_unique_id = ghb_dict_get_int(uiDict, "job_unique_id");
-        ghb_stop_encode_dialog(FALSE, "", G_CALLBACK(queue_remove_row_cb), ud);
+        queue_remove_dialog_show(ud);
     }
     else
     {
-        queue_remove_row_cb(NULL, 1, ud);
+        queue_remove_response(NULL, 1, ud);
     }
 }
 
@@ -2711,8 +2724,7 @@ queue_start_action_cb (GSimpleAction *action, GVariant *param,
     if (state & (GHB_STATE_WORKING | GHB_STATE_SEARCHING |
                  GHB_STATE_SCANNING | GHB_STATE_MUXING))
     {
-        ghb_cancel_encode(ud, _("You are currently encoding.  "
-                                "What would you like to do?\n\n"));
+        ghb_stop_encode_dialog_show(ud);
         return;
     }
 
