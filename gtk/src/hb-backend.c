@@ -4251,8 +4251,6 @@ ghb_set_custom_filter_tooltip(signal_user_data_t *ud,
 gboolean
 ghb_validate_filters(GhbValue *settings, GtkWindow *parent)
 {
-    gchar *message;
-
     // Detelecine
     const char *detel_preset;
     detel_preset = ghb_dict_get_string(settings, "PictureDetelecine");
@@ -4268,20 +4266,18 @@ ghb_validate_filters(GhbValue *settings, GtkWindow *parent)
         {
             if (detel_custom != NULL)
             {
-                message = g_strdup_printf(
-                            _("Invalid Detelecine Settings:\n\n"
-                              "Preset:\t%s\n"
-                              "Custom:\t%s\n"), detel_preset, detel_custom);
+                ghb_alert_dialog_show(GTK_MESSAGE_ERROR,
+                                      _("Invalid Detelecine Settings"),
+                                      "%s %s\n%s %s",
+                                      _("Preset:"), detel_preset,
+                                      _("Custom:"), detel_custom);
             }
             else
             {
-                message = g_strdup_printf(
-                            _("Invalid Detelecine Settings:\n\n"
-                              "Preset:\t%s\n"), detel_preset);
+                ghb_alert_dialog_show(GTK_MESSAGE_ERROR,
+                                      _("Invalid Detelecine Settings"),
+                                      "%s %s", _("Preset:"), detel_preset);
             }
-            ghb_message_dialog(parent, GTK_MESSAGE_ERROR,
-                               message, _("Cancel"), NULL);
-            g_free(message);
             return FALSE;
         }
     }
@@ -4301,20 +4297,19 @@ ghb_validate_filters(GhbValue *settings, GtkWindow *parent)
         {
             if (comb_custom != NULL && comb_custom[0] != 0)
             {
-                message = g_strdup_printf(
-                            _("Invalid Comb Detect Settings:\n\n"
-                              "Preset:\t%s\n"
-                              "Custom:\t%s\n"), comb_preset, comb_custom);
+                ghb_alert_dialog_show(GTK_MESSAGE_ERROR,
+                                      _("Invalid Comb Detect Settings"),
+                                      "%s %s\n%s %s",
+                                      _("Preset:"), comb_preset,
+                                      _("Custom:"), comb_custom);
             }
             else
             {
-                message = g_strdup_printf(
-                            _("Invalid Comb Detect Settings:\n\n"
-                              "Preset:\t%s\n"), comb_preset);
+                ghb_alert_dialog_show(GTK_MESSAGE_ERROR,
+                                      _("Invalid Comb Detect Settings"),
+                                      "%s %s",
+                                      _("Preset:"), comb_preset);
             }
-            ghb_message_dialog(parent, GTK_MESSAGE_ERROR,
-                               message, _("Cancel"), NULL);
-            g_free(message);
             return FALSE;
         }
     }
@@ -4337,23 +4332,21 @@ ghb_validate_filters(GhbValue *settings, GtkWindow *parent)
         {
             if (deint_custom != NULL)
             {
-                message = g_strdup_printf(
-                            _("Invalid Deinterlace Settings:\n\n"
-                              "Filter:\t%s\n"
-                              "Preset:\t%s\n"
-                              "Custom:\t%s\n"), deint_filter, deint_preset,
-                                                deint_custom);
+                ghb_alert_dialog_show(GTK_MESSAGE_ERROR,
+                                      _("Invalid Deinterlace Settings"),
+                                      "%s %s\n%s %s\n%s %s",
+                                      _("Filter:"), deint_filter,
+                                      _("Preset:"), deint_preset,
+                                      _("Custom:"), deint_custom);
             }
             else
             {
-                message = g_strdup_printf(
-                            _("Invalid Deinterlace Settings:\n\n"
-                              "Filter:\t%s\n"
-                              "Preset:\t%s\n"), deint_filter, deint_preset);
+                ghb_alert_dialog_show(GTK_MESSAGE_ERROR,
+                                      _("Invalid Deinterlace Settings"),
+                                      "%s %s\n%s %s",
+                                      _("Filter:"), deint_filter,
+                                      _("Preset:"), deint_preset);
             }
-            ghb_message_dialog(parent, GTK_MESSAGE_ERROR,
-                               message, _("Cancel"), NULL);
-            g_free(message);
             return FALSE;
         }
     }
@@ -4375,16 +4368,13 @@ ghb_validate_filters(GhbValue *settings, GtkWindow *parent)
         if (hb_validate_filter_preset(filter_id, denoise_preset, denoise_tune,
                                       denoise_custom))
         {
-            message = g_strdup_printf(
-                        _("Invalid Denoise Settings:\n\n"
-                          "Filter:\t%s\n"
-                          "Preset:\t%s\n"
-                          "Tune:\t%s\n"
-                          "Custom:\t%s\n"), denoise_filter, denoise_preset,
-                                           denoise_tune, denoise_custom);
-            ghb_message_dialog(parent, GTK_MESSAGE_ERROR,
-                               message, _("Cancel"), NULL);
-            g_free(message);
+            ghb_alert_dialog_show(GTK_MESSAGE_ERROR,
+                                  _("Invalid Denoise Settings"),
+                                  "%s %s\n%s %s\n%s %s\n%s %s",
+                                  _("Filter:"), denoise_filter,
+                                  _("Preset:"), denoise_preset,
+                                  _("Tune:"), denoise_tune,
+                                  _("Custom:"), denoise_custom);
             return FALSE;
         }
     }
@@ -4403,16 +4393,13 @@ ghb_validate_filters(GhbValue *settings, GtkWindow *parent)
         if (hb_validate_filter_preset(filter_id, sharpen_preset, sharpen_tune,
                                       sharpen_custom))
         {
-            message = g_strdup_printf(
-                        _("Invalid Sharpen Settings:\n\n"
-                          "Filter:\t%s\n"
-                          "Preset:\t%s\n"
-                          "Tune:\t%s\n"
-                          "Custom:\t%s\n"), sharpen_filter, sharpen_preset,
-                                           sharpen_tune, sharpen_custom);
-            ghb_message_dialog(parent, GTK_MESSAGE_ERROR,
-                               message, _("Cancel"), NULL);
-            g_free(message);
+            ghb_alert_dialog_show(GTK_MESSAGE_ERROR,
+                                  _("Invalid Sharpen Settings"),
+                                  "%s %s\n%s %s\n%s %s\n%s %s",
+                                  _("Filter:"), sharpen_filter,
+                                  _("Preset:"), sharpen_preset,
+                                  _("Tune:"), sharpen_tune,
+                                  _("Custom:"), sharpen_custom);
             return FALSE;
         }
     }

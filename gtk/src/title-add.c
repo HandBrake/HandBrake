@@ -123,14 +123,8 @@ validate_settings (signal_user_data_t *ud, GhbValue *settings, gint batch)
     gchar *destdir = g_path_get_dirname(dest);
     if (!g_file_test(destdir, G_FILE_TEST_IS_DIR))
     {
-        message = g_strdup_printf(
-                    _("Destination: %s\n\n"
-                    "This is not a valid directory."),
-                    destdir);
-        ghb_title_message_dialog(hb_window, GTK_MESSAGE_ERROR,
-                                 _("Invalid Destination"),
-                                 message, _("Cancel"), NULL);
-        g_free(message);
+        ghb_alert_dialog_show(GTK_MESSAGE_ERROR, _("Invalid Destination"),
+                              _("“%s” is is not a valid directory."), destdir);
         g_free(destdir);
         return FALSE;
     }
@@ -138,14 +132,8 @@ validate_settings (signal_user_data_t *ud, GhbValue *settings, gint batch)
     // This doesn't work properly on windows
     if (g_access(destdir, R_OK|W_OK) != 0)
     {
-        message = g_strdup_printf(
-                    _("Destination: %s\n\n"
-                    "Can not read or write the directory."),
-                    destdir);
-        ghb_title_message_dialog(hb_window, GTK_MESSAGE_ERROR,
-                                 _("Invalid Destination"),
-                                 message, _("Cancel"), NULL);
-        g_free(message);
+        ghb_alert_dialog_show(GTK_MESSAGE_ERROR, _("Invalid Destination"),
+                              _("“%s” is not a writable directory."), destdir);
         g_free(destdir);
         return FALSE;
     }
