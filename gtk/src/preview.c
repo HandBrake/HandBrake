@@ -524,18 +524,12 @@ live_preview_cb(GstBus *bus, GstMessage *msg, gpointer data)
             //printf("element\n");
             if (gst_is_missing_plugin_message(msg))
             {
-                GtkWindow *hb_window;
-                hb_window = GTK_WINDOW(GHB_WIDGET(ud->builder, "hb_window"));
                 gst_element_set_state(ud->preview->play, GST_STATE_PAUSED);
-                gchar *message, *desc;
-                desc = gst_missing_plugin_message_get_description(msg);
-                message = g_strdup_printf(
-                            _("Missing GStreamer plugin\n"
-                            "Audio or Video may not play as expected\n\n%s"),
-                            desc);
-                ghb_message_dialog(hb_window, GTK_MESSAGE_WARNING,
-                                   message, _("OK"), NULL);
-                g_free(message);
+                gchar *desc = gst_missing_plugin_message_get_description(msg);
+                ghb_alert_dialog_show(GTK_MESSAGE_WARNING,_("Missing GStreamer plugin"),
+                                      "%s\n\n%s",
+                                      _("Audio or Video may not play as expected"),
+                                      desc);
                 gst_element_set_state(ud->preview->play, GST_STATE_PLAYING);
             }
             else if (msg->src == GST_OBJECT_CAST(ud->preview->vsink))

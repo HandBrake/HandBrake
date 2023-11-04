@@ -3792,11 +3792,41 @@ ghb_message_dialog(GtkWindow *parent, GtkMessageType type, const gchar *message,
     return ghb_title_message_dialog(parent, type, message, NULL, no, yes);
 }
 
-
 void
-ghb_error_dialog(GtkWindow *parent, GtkMessageType type, const gchar *message, const gchar *cancel)
+message_dialog_destroy (GtkDialog *dialog, int response, gpointer user_data)
 {
-    ghb_message_dialog(parent, type, message, cancel, NULL);
+    gtk_widget_destroy(GTK_WIDGET(dialog));
+}
+
+/**
+ * Displays a modal message dialog which will be destroyed automatically.
+ * Use for warnings which don't need a response.
+ *
+ * @type: The @GtkMessageType for the dialog
+ * @title: The title of the dialog
+ * @message: The detail text of the dialog
+ */
+void
+ghb_alert_dialog_show (GtkMessageType type, const char *title,
+                       const char *format, ...)
+{
+    GtkWindow *parent;
+    GtkWidget *dialog;
+    char *message;
+    va_list args;
+
+    parent = gtk_application_get_active_window(GTK_APPLICATION(g_application_get_default()));
+
+    dialog = gtk_message_dialog_new(parent, GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
+                                    type, GTK_BUTTONS_CLOSE, "%s", title);
+
+    va_start(args, format);
+    message = g_strdup_vprintf(format, args);
+    va_end(args);
+    gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dialog), message);
+    g_free(message);
+    g_signal_connect(dialog, "response", G_CALLBACK(message_dialog_destroy), NULL);
+    gtk_widget_show(dialog);
 }
 
 GtkWidget *

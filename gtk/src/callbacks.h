@@ -53,9 +53,8 @@ gboolean ghb_title_message_dialog(
 gboolean ghb_message_dialog(
     GtkWindow *parent, GtkMessageType type, const gchar *message,
     const gchar *no, const gchar *yes);
-void ghb_error_dialog(
-    GtkWindow *parent, GtkMessageType type,
-    const gchar *message, const gchar *cancel);
+void ghb_alert_dialog_show(GtkMessageType type, const char *title,
+                           const char *format, ...) G_GNUC_PRINTF(3, 4);
 GtkWidget *ghb_cancel_dialog_new(GtkWindow *parent,
     const char *title, const char *message, const char *cancel_all_button,
     const char *cancel_current_button, const char *finish_button,
