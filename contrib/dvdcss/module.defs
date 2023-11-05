@@ -1,0 +1,9 @@
+$(eval $(call import.MODULE.defs,DVDCSS,dvdcss))
+$(eval $(call import.CONTRIB.defs,DVDCSS))
+
+DVDCSS.FETCH.url     = https://download.videolan.org/pub/videolan/libdvdcss/1.4.3/libdvdcss-1.4.3.tar.bz2
+DVDCSS.FETCH.url    += https://download.videolan.org/pub/videolan/libdvdcss/1.4.3/libdvdcss-1.4.3.tar.bz2
+DVDCSS.FETCH.sha256  = 233cc92f5dc01c5d3a96f5b3582be7d5cee5a35a52d3a08158745d3d86070079
+
+DVDCSS.CONFIGURE.extra = --disable-doc
+

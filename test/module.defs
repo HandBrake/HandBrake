@@ -1,102 +1,210 @@
-$(eval $(call import.MODULE.defs,TEST,test,LIBHB))
-$(eval $(call import.GCC,TEST))
-
-TEST.src/   = $(SRC/)test/
-TEST.build/ = $(BUILD/)test/
-
-TEST.c   = $(wildcard $(TEST.src/)*.c)
-TEST.c.o = $(patsubst $(SRC/)%.c,$(BUILD/)%.o,$(TEST.c))
-
-TEST.exe = $(BUILD/)$(call TARGET.exe,$(HB.name)CLI)
-
-TEST.GCC.L = $(CONTRIB.build/)lib
-
-TEST.libs = $(LIBHB.a)
-
-TEST.GCC.l = \
-        ass avformat avfilter avcodec avutil swresample postproc mp3lame dvdnav \
-        dvdread fribidi swscale vpx theoraenc theoradec vorbis vorbisenc ogg \
-        x264 bluray freetype xml2 bz2 z jansson harfbuzz opus speex lzma dav1d \
-        turbojpeg zimg SvtAv1Enc
+__deps__ := A52DEC BZIP2 LIBVPX SVT-AV1 FFMPEG FREETYPE LAME LIBASS LIBDCA \
+    DVDCSS LIBDVDREAD LIBDVDNAV LIBICONV LIBSAMPLERATE LIBTHEORA LIBVORBIS LIBOGG \
+    LIBXML2 X264 X265 ZLIB LIBBLURAY FDKAAC LIBVPL LIBGNURX JANSSON \
+    HARFBUZZ LIBOPUS LIBSPEEX LIBDAV1D LIBJPEGTURBO LIBDOVI
 
 ifeq (,$(filter $(HOST.system),darwin cygwin mingw))
-    TEST.GCC.l += fontconfig
+    __deps__ += FONTCONFIG
+endif
+ifeq (netbsd,$(HOST.system))
+    __deps__ += LIBJPEGTURBO
+endif
+
+$(eval $(call import.MODULE.defs,LIBHB,libhb,$(__deps__)))
+$(eval $(call import.GCC,LIBHB))
+$(eval $(call import.METAL,LIBHB))
+
+###############################################################################
+
+LIBHB.src/   = $(SRC/)libhb/
+LIBHB.build/ = $(BUILD/)libhb/
+
+LIBHB.m4.in  = $(wildcard $(LIBHB.src/)handbrake/*.m4)
+LIBHB.m4.out = $(patsubst $(LIBHB.src/)%.m4,$(LIBHB.build/)%,$(LIBHB.m4.in))
+
+LIBHB.c   = $(wildcard $(LIBHB.src/)*.c)
+LIBHB.c.o = $(patsubst $(SRC/)%.c,$(BUILD/)%.o,$(LIBHB.c))
+LIBHB.m.o = $(patsubst $(SRC/)%.m,$(BUILD/)%.o,$(LIBHB.m))
+LIBHB.metal.o = $(patsubst $(SRC/)%.metal,$(BUILD/)%.o,$(LIBHB.metal))
+LIBHB.d   = $(LIBHB.m4.out) $(LIBHB.h.out) \
+    $(foreach n,$(LIBHB.prerequisites),$($n.INSTALL.target) )
+
+LIBHB.h.in  = $(wildcard $(LIBHB.src/)handbrake/*.h)
+LIBHB.h.in += $(wildcard $(LIBHB.src/)extras/*.h)
+LIBHB.h.out = $(patsubst $(SRC/)%,$(BUILD/)%,$(LIBHB.h.in))
+
+###############################################################################
+
+LIBHB.a = $(LIBHB.build/)$(call TARGET.archive,handbrake)
+
+###############################################################################
+
+LIBHB.out += $(LIBHB.m4.out)
+LIBHB.out += $(LIBHB.c.o)
+LIBHB.out += $(LIBHB.m.o)
+LIBHB.out += $(LIBHB.metal.o)
+LIBHB.out += $(LIBHB.h.out)
+LIBHB.out += $(LIBHB.a)
+
+###############################################################################
+
+LIBHB.GCC.D += __LIBHB__
+LIBHB.GCC.I += $(LIBHB.build/) $(CONTRIB.build/)include
+
+ifeq (1,$(FEATURE.qsv))
+    ifeq ($(HOST.system),freebsd)
+        LIBHB.GCC.I += $(LOCALBASE)/include/vpl
+    else
+        LIBHB.GCC.I += $(CONTRIB.build/)include/vpl
+    endif
+endif
+
+ifneq (,$(filter $(HOST.system),freebsd netbsd openbsd))
+    LIBHB.GCC.I += $(LOCALBASE)/include
+    LIBHB.GCC.I += $(LOCALBASE)/include/libxml2
+else ifneq (,$(filter $(HOST.system),darwin cygwin mingw))
+    LIBHB.GCC.I += $(CONTRIB.build/)include/libxml2
+    LIBHB.GCC.D += LIBXML_STATIC
+else
+    LIBHB.libxml2 := $(shell $(PKGCONFIG.exe) --silence-errors --cflags libxml2)
+    ifeq (,$(LIBHB.libxml2))
+        LIBHB.libxml2 := $(shell $(PKGCONFIG.exe) --silence-errors --cflags libxml-2.0)
+    endif
+    ifneq (,$(LIBHB.libxml2))
+        LIBHB.libxml2 := $(patsubst -I%,%,$(LIBHB.libxml2))
+        LIBHB.GCC.I += $(LIBHB.libxml2)
+    else
+        LIBHB.GCC.I += /usr/include/libxml2
+    endif
+endif
+
+ifeq ($(HOST.system),cygwin)
+    LIBHB.GCC.D += SYS_CYGWIN
+else ifeq ($(HOST.system),darwin)
+    LIBHB.GCC.D += SYS_DARWIN
+    LIBHB.c += $(wildcard $(LIBHB.src/)platform/macosx/*.c)
+    LIBHB.m += $(wildcard $(LIBHB.src/)platform/macosx/*.m)
+    LIBHB.metal += $(wildcard $(LIBHB.src/)platform/macosx/shaders/*.metal)
+else ifeq ($(HOST.system),linux)
+    LIBHB.GCC.D += SYS_LINUX _LARGEFILE_SOURCE _FILE_OFFSET_BITS=64
+else ifeq ($(HOST.system),freebsd)
+    LIBHB.GCC.D += SYS_FREEBSD _LARGEFILE_SOURCE _FILE_OFFSET_BITS=64
+else ifeq ($(HOST.system),netbsd)
+    LIBHB.GCC.D += SYS_NETBSD _LARGEFILE_SOURCE _FILE_OFFSET_BITS=64
+else ifeq ($(HOST.system),openbsd)
+    LIBHB.GCC.D += SYS_OPENBSD
+else ifeq ($(HOST.system),mingw)
+    LIBHB.GCC.D += SYS_MINGW
+ifneq ($(HAS.pthread),1)
+    LIBHB.GCC.D += PTW32_STATIC_LIB
+endif
+	LIBHB.GCC.args.extra.dylib++ += -Wl,--enable-auto-import -static
+else ifeq ($(HOST.system),solaris)
+    LIBHB.GCC.D += SYS_SunOS _LARGEFILE_SOURCE _FILE_OFFSET_BITS=64 _POSIX_C_SOURCE=200112L __EXTENSIONS__
+else
+    LIBHB.platform.D = SYS_UNKNOWN
 endif
 
 ifeq (1,$(FEATURE.qsv))
-    TEST.GCC.l += vpl
-ifneq (,$(filter $(HOST.system),linux freebsd))
-    TEST.GCC.l += va va-drm
-endif
+    LIBHB.GCC.D += ONEVPL_EXPERIMENTAL
+    LIBHB.GCC.D += HAVE_THREADS=1
 endif
 
-ifeq (1,$(FEATURE.flatpak))
-    TEST.GCC.l += glib-2.0
+ifeq (1,$(COMPAT.strtok_r))
+    LIBHB.GCC.D += HB_NEED_STRTOK_R
 endif
 
-TEST.GCC.l += $(foreach m,$(MODULES.NAMES),$($m.OSL.libs))
+ifeq (1,$(HAS.strerror_r))
+    LIBHB.GCC.D += HAS_STRERROR_R
+endif
 
-TEST.install.exe = $(DESTDIR)$(PREFIX/)bin/$(notdir $(TEST.exe))
-ifeq (1,$(FEATURE.flatpak))
-    TEST.metainfo.template = $(TEST.src/)fr.handbrake.HandBrakeCLI.metainfo.xml.in.in
-    TEST.metainfo = $(TEST.build/)fr.handbrake.HandBrakeCLI.metainfo.xml
-    TEST.install.metainfo = $(DESTDIR)$(PREFIX/)share/metainfo/$(notdir $(TEST.metainfo))
+## required for <libdvdread/*.h>
+ifneq (,$(filter $(HOST.arch),ppc ppc64))
+	LIBHB.GCC.D += WORDS_BIGENDIAN
 endif
 
 ###############################################################################
 
-TEST.out += $(TEST.c.o)
-TEST.out += $(TEST.exe)
-ifeq (1,$(FEATURE.flatpak))
-    TEST.out += $(TEST.metainfo)
+ifeq (1-mingw,$(HOST.cross)-$(HOST.system))
+
+LIBHB.dll = $(LIBHB.build/)hb.dll
+LIBHB.lib = $(LIBHB.build/)hb.lib
+
+LIBHB.dll.libs = $(foreach n, \
+        ass avformat avfilter avcodec avutil swresample postproc dvdnav dvdread dvdcss \
+        freetype mp3lame swscale vpx theora vorbis vorbisenc ogg x264 xml2 \
+        bluray jansson harfbuzz opus speex dav1d turbojpeg zimg SvtAv1Enc, \
+        $(CONTRIB.build/)lib/lib$(n).a )
+
+ifeq (1,$(FEATURE.fdk_aac))
+LIBHB.dll.libs += $(CONTRIB.build/)lib/libfdk-aac.a
 endif
 
-BUILD.out += $(TEST.out)
-BUILD.out += $(TEST.install.exe)
-ifeq (1,$(FEATURE.flatpak))
-    BUILD.out += $(TEST.install.metainfo)
+ifeq (1,$(FEATURE.qsv))
+LIBHB.GCC.D += ONEVPL_EXPERIMENTAL
+LIBHB.dll.libs += $(CONTRIB.build/)lib/libvpl.a
 endif
 
-###############################################################################
+ifeq (1,$(FEATURE.x265))
+LIBHB.dll.libs += $(CONTRIB.build/)lib/libx265.a
+endif
 
-TEST.GCC.I += $(LIBHB.GCC.I)
+ifeq (1,$(FEATURE.libdovi))
+LIBHB.dll.libs += $(CONTRIB.build/)lib/libdovi.a
+endif
 
-ifeq ($(HOST.system),darwin)
-    TEST.GCC.f += IOKit CoreServices CoreText CoreGraphics AudioToolbox VideoToolbox CoreMedia CoreVideo Foundation DiskArbitration Metal
-    TEST.GCC.l += iconv
-else ifeq ($(HOST.system),linux)
-    TEST.GCC.l += pthread dl m
-ifeq (1, $(FEATURE.numa))
-    TEST.GCC.l += numa
-endif
-else ifeq ($(HOST.system),kfreebsd)
-    TEST.GCC.l += pthread dl m
-else ifneq (,$(filter $(HOST.system),freebsd netbsd openbsd))
-    TEST.GCC.L += $(LOCALBASE)/lib
-ifneq (,$(filter $(HOST.system),openbsd))
-    TEST.GCC.L += $(X11BASE)/lib
-    TEST.GCC.l += iconv
-endif
-    TEST.GCC.l += pthread m
-else ifeq ($(HOST.system),solaris)
-    TEST.GCC.l += pthread nsl socket
-ifneq (,$(filter $(HOST.release),2.10))
-    TEST.GCC.l += iconv
-endif
-    TEST.GCC.D += _POSIX_C_SOURCE=200112L __EXTENSIONS__
-else ifeq (1-mingw,$(HOST.cross)-$(HOST.system))
-ifeq ($(HAS.dlfcn),1)
-    TEST.GCC.l += dl
-endif
-ifeq (1,$(HAS.pthread))
-    TEST.GCC.l += pthread
+ifneq ($(HAS.iconv),1)
+LIBHB.dll.libs += $(CONTRIB.build/)lib/libiconv.a
 else
-    TEST.GCC.l += pthreadGC2
+    LIBHB.GCC.l += iconv
 endif
-    TEST.GCC.l += bcrypt iconv ws2_32 regex uuid ole32 gdi32 userenv ntdll
-    ifeq (1,$(FEATURE.mf))
-        TEST.GCC.l += mfplat strmiids
-    endif
-    TEST.GCC.D += PTW32_STATIC_LIB
-    TEST.GCC.args.extra.exe++ += -static
-endif #   (1-mingw,$(HOST.cross)-$(HOST.system))
+
+ifneq ($(HAS.regex),1)
+LIBHB.dll.libs += $(CONTRIB.build/)lib/libregex.a
+else
+    LIBHB.GCC.l += regex
+endif
+
+ifeq (1,$(FRIBIDI.enabled))
+    LIBHB.dll.libs += $(CONTRIB.build/)lib/libfribidi.a
+else
+	LIBHB.GCC.l += fribidi
+endif
+
+ifeq ($(HAS.pthread),1)
+    LIBHB.GCC.l += pthread
+endif
+
+ifneq ($(HAS.bz2),1)
+LIBHB.dll.libs += $(CONTRIB.build/)lib/libbz2.a
+else
+    LIBHB.GCC.l += bz2
+endif
+
+ifneq ($(HAS.libz),1)
+LIBHB.dll.libs += $(CONTRIB.build/)lib/libz.a
+else
+    LIBHB.GCC.l += z
+endif
+
+ifneq ($(HAS.xz),1)
+LIBHB.dll.libs += $(CONTRIB.build/)lib/liblzma.a
+else
+    LIBHB.GCC.l += lzma
+endif
+
+LIBHB.GCC.args.extra.dylib++ += -Wl,--out-implib,$(LIBHB.lib)
+LIBHB.GCC.l += bcrypt ws2_32 uuid ole32 gdi32 userenv ntdll
+ifeq (1,$(FEATURE.mf))
+    LIBHB.GCC.l += mfplat strmiids
+endif
+ifeq ($(HAS.dlfcn),1)
+    LIBHB.GCC.l += dl
+endif
+LIBHB.out += $(LIBHB.dll) $(LIBHB.lib)
+
+endif
+
+###############################################################################
+
+BUILD.out += $(LIBHB.out)

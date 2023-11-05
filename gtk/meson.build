@@ -33,6 +33,7 @@ ghb_deps = [
   cc.find_library('mp3lame', dirs: hb_libdirs),
   dependency('dvdnav'),
   dependency('dvdread'),
+  dependency('dvdcss'),
   dependency('dav1d'),
   dependency('SvtAv1Enc'),
   dependency('fribidi'),

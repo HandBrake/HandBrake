@@ -1,4 +1,6 @@
-$(eval $(call import.MODULE.defs,LIBDVDREAD,libdvdread))
+__deps__ := DVDCSS
+
+$(eval $(call import.MODULE.defs,LIBDVDREAD,libdvdread,$(__deps__)))
 $(eval $(call import.CONTRIB.defs,LIBDVDREAD))
 
 LIBDVDREAD.FETCH.url     = https://github.com/HandBrake/HandBrake-contribs/releases/download/contribs/libdvdread-6.1.3.tar.bz2
@@ -6,5 +8,5 @@ LIBDVDREAD.FETCH.url    += https://download.videolan.org/pub/videolan/libdvdread
 LIBDVDREAD.FETCH.sha256  = ce35454997a208cbe50e91232f0e73fb1ac3471965813a13b8730a8f18a15369
 
 ifeq (1-mingw,$(HOST.cross)-$(HOST.system))
-    LIBDVDREAD.CONFIGURE.extra = --enable-dlfcn
+    LIBDVDREAD.CONFIGURE.extra = --enable-dlfcn --with-libdvdcss
 endif
