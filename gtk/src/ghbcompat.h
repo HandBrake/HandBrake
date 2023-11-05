@@ -52,6 +52,8 @@
 #define GHB_STOCK_CANCEL    _("_Cancel")
 #define GHB_STOCK_SAVE      _("_Save")
 
+int ghb_dialog_run (GtkDialog *dialog);
+
 static inline void ghb_widget_get_preferred_width(
     GtkWidget *widget, gint *min_width, gint * natural_width)
 {

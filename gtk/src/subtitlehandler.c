@@ -1157,7 +1157,7 @@ subtitle_add_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
         GtkResponseType response;
         GtkWidget *dialog = GHB_WIDGET(ud->builder, "subtitle_dialog");
         gtk_window_set_title(GTK_WINDOW(dialog), _("Add Subtitles"));
-        response = gtk_dialog_run(GTK_DIALOG(dialog));
+        response = ghb_dialog_run(GTK_DIALOG(dialog));
         gtk_widget_hide(dialog);
         if (response != GTK_RESPONSE_OK)
         {
@@ -1211,7 +1211,7 @@ subtitle_add_fas_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
     GtkResponseType response;
     GtkWidget *dialog = GHB_WIDGET(ud->builder, "subtitle_dialog");
     gtk_window_set_title(GTK_WINDOW(dialog), _("Foreign Audio Scan"));
-    response = gtk_dialog_run(GTK_DIALOG(dialog));
+    response = ghb_dialog_run(GTK_DIALOG(dialog));
     gtk_widget_hide(dialog);
     if (response != GTK_RESPONSE_OK)
     {
@@ -1709,7 +1709,7 @@ subtitle_edit(GtkTreeView *tv, GtkTreePath *tp, signal_user_data_t *ud)
         GtkResponseType response;
         GtkWidget *dialog = GHB_WIDGET(ud->builder, "subtitle_dialog");
         gtk_window_set_title(GTK_WINDOW(dialog), _("Edit Subtitles"));
-        response = gtk_dialog_run(GTK_DIALOG(dialog));
+        response = ghb_dialog_run(GTK_DIALOG(dialog));
         gtk_widget_hide(dialog);
         if (response != GTK_RESPONSE_OK)
         {

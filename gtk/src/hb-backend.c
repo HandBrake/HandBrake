@@ -4411,8 +4411,7 @@ gboolean
 ghb_validate_video(GhbValue *settings, GtkWindow *parent)
 {
     gint vcodec;
-    gchar *message;
-    const char *mux_id;
+    const char *message, *mux_id;
     const hb_container_t *mux;
 
     mux_id = ghb_dict_get_string(settings, "FileFormat");
@@ -4424,32 +4423,28 @@ ghb_validate_video(GhbValue *settings, GtkWindow *parent)
     if ((mux->format & HB_MUX_MASK_MP4) && (vcodec == HB_VCODEC_THEORA))
     {
         // mp4/theora combination is not supported.
-        message = g_strdup_printf(
-                    _("Theora is not supported in the MP4 container.\n\n"
+        message = _("Theora is not supported in the MP4 container.\n\n"
                     "You should choose a different video codec or container.\n"
-                    "If you continue, FFMPEG will be chosen for you."));
+                    "If you continue, FFMPEG will be chosen for you.");
         v_unsup = TRUE;
     }
     else if ((mux->format & HB_MUX_MASK_WEBM) &&
              (vcodec != HB_VCODEC_FFMPEG_VP8 && vcodec != HB_VCODEC_FFMPEG_VP9 && vcodec != HB_VCODEC_FFMPEG_VP9_10BIT && vcodec != HB_VCODEC_SVT_AV1 && vcodec != HB_VCODEC_SVT_AV1_10BIT))
     {
         // webm only supports vp8, vp9 and av1.
-        message = g_strdup_printf(
-                    _("Only VP8, VP9 and AV1 is supported in the WebM container.\n\n"
+        message = _("Only VP8, VP9 and AV1 is supported in the WebM container.\n\n"
                     "You should choose a different video codec or container.\n"
-                    "If you continue, one will be chosen for you."));
+                    "If you continue, one will be chosen for you.");
         v_unsup = TRUE;
     }
 
     if (v_unsup)
     {
-        if (!ghb_message_dialog(parent, GTK_MESSAGE_QUESTION,
-                                message, _("Cancel"), _("Continue")))
+        if (!ghb_question_dialog_run(parent, GHB_ACTION_NORMAL, _("Continue"),
+                _("Cancel"), _("Invalid Video Codec"), "%s", message))
         {
-            g_free(message);
             return FALSE;
         }
-        g_free(message);
         vcodec = hb_video_encoder_get_default(mux->format);
         ghb_dict_set_string(settings, "VideoEncoder",
                                 hb_video_encoder_get_short_name(vcodec));
@@ -4463,7 +4458,6 @@ ghb_validate_subtitles(GhbValue *settings, GtkWindow *parent)
 {
     gint title_id, titleindex;
     const hb_title_t * title;
-    gchar *message;
 
     title_id = ghb_dict_get_int(settings, "title");
     title = ghb_lookup_title(title_id, &titleindex);
@@ -4496,17 +4490,14 @@ ghb_validate_subtitles(GhbValue *settings, GtkWindow *parent)
         {
             // MP4 can only handle burned vobsubs.  make sure there isn't
             // already something burned in the list
-            message = g_strdup_printf(
-            _("Only one subtitle may be burned into the video.\n\n"
-                "You should change your subtitle selections.\n"
-                "If you continue, some subtitles will be lost."));
-            if (!ghb_message_dialog(parent, GTK_MESSAGE_WARNING,
-                                    message, _("Cancel"), _("Continue")))
+            if (!ghb_question_dialog_run(parent, GHB_ACTION_DESTRUCTIVE,
+                    _("Continue"), _("Cancel"), _("Invalid Subtitle Selection"),
+                    _("Only one subtitle may be burned into the video.\n\n"
+                      "You should change your subtitle selections.\n"
+                      "If you continue, some subtitles will be lost.")))
             {
-                g_free(message);
                 return FALSE;
             }
-            g_free(message);
             break;
         }
         else if (burned)
@@ -4516,17 +4507,14 @@ ghb_validate_subtitles(GhbValue *settings, GtkWindow *parent)
         else if (mux->format & HB_MUX_MASK_WEBM)
         {
             // WebM can only handle burned subs afaik. Their specs are ambiguous here
-            message = g_strdup_printf(
-            _("WebM in HandBrake only supports burned subtitles.\n\n"
-                "You should change your subtitle selections.\n"
-                "If you continue, some subtitles will be lost."));
-            if (!ghb_message_dialog(parent, GTK_MESSAGE_WARNING,
-                                    message, _("Cancel"), _("Continue")))
+            if (!ghb_question_dialog_run(parent, GHB_ACTION_DESTRUCTIVE,
+                    _("Continue"), _("Cancel"), _("Invalid Subtitle Selection"),
+                    _("WebM in HandBrake only supports burned subtitles.\n\n"
+                      "You should change your subtitle selections.\n"
+                      "If you continue, some subtitles will be lost.")))
             {
-                g_free(message);
                 return FALSE;
             }
-            g_free(message);
             break;
         }
         if (import != NULL)
@@ -4536,17 +4524,14 @@ ghb_validate_subtitles(GhbValue *settings, GtkWindow *parent)
             filename = ghb_dict_get_string(import, "Filename");
             if (!g_file_test(filename, G_FILE_TEST_IS_REGULAR))
             {
-                message = g_strdup_printf(
-                _("SRT file does not exist or not a regular file.\n\n"
-                    "You should choose a valid file.\n"
-                    "If you continue, this subtitle will be ignored."));
-                if (!ghb_message_dialog(parent, GTK_MESSAGE_QUESTION, message,
-                    _("Cancel"), _("Continue")))
+                if (!ghb_question_dialog_run(parent, GHB_ACTION_NORMAL,
+                    _("Continue"), _("Cancel"), _("Subtitle File Not Found"),
+                    _("SRT file does not exist or not a regular file.\n\n"
+                      "You should choose a valid file.\n"
+                      "If you continue, this subtitle will be ignored.")))
                 {
-                    g_free(message);
                     return FALSE;
                 }
-                g_free(message);
                 break;
             }
         }
@@ -4559,7 +4544,6 @@ ghb_validate_audio(GhbValue *settings, GtkWindow *parent)
 {
     gint title_id, titleindex;
     const hb_title_t * title;
-    gchar *message;
 
     title_id = ghb_dict_get_int(settings, "title");
     title = ghb_lookup_title(title_id, &titleindex);
@@ -4597,17 +4581,14 @@ ghb_validate_audio(GhbValue *settings, GtkWindow *parent)
               (aconfig->in.codec & codec)))
         {
             // Not supported.  AC3 is passthrough only, so input must be AC3
-            message = g_strdup_printf(
-                        _("The source does not support Pass-Thru.\n\n"
-                        "You should choose a different audio codec.\n"
-                        "If you continue, one will be chosen for you."));
-            if (!ghb_message_dialog(parent, GTK_MESSAGE_QUESTION,
-                                    message, _("Cancel"), _("Continue")))
+            if (!ghb_question_dialog_run(parent, GHB_ACTION_NORMAL,
+                    _("Continue"), _("Cancel"), _("Invalid Audio Selection"),
+                    _("The source does not support Pass-Thru.\n\n"
+                      "You should choose a different audio codec.\n"
+                      "If you continue, one will be chosen for you.")))
             {
-                g_free(message);
                 return FALSE;
             }
-            g_free(message);
             if ((codec & HB_ACODEC_AC3) ||
                 (aconfig->in.codec & HB_ACODEC_MASK) == HB_ACODEC_DCA)
             {
@@ -4652,17 +4633,14 @@ ghb_validate_audio(GhbValue *settings, GtkWindow *parent)
         }
         if (a_unsup)
         {
-            message = g_strdup_printf(
-                        _("%s is not supported in the %s container.\n\n"
-                        "You should choose a different audio codec.\n"
-                        "If you continue, one will be chosen for you."), a_unsup, mux_s);
-            if (!ghb_message_dialog(parent, GTK_MESSAGE_QUESTION,
-                                    message, _("Cancel"), _("Continue")))
+            if (!ghb_question_dialog_run(parent, GHB_ACTION_NORMAL,
+                    _("Continue"), _("Cancel"), _("Invalid Audio Selection"),
+                    _("%s is not supported in the %s container.\n\n"
+                      "You should choose a different audio codec.\n"
+                      "If you continue, one will be chosen for you."), a_unsup, mux_s))
             {
-                g_free(message);
                 return FALSE;
             }
-            g_free(message);
             const char *name = hb_audio_encoder_get_short_name(codec);
             ghb_dict_set_string(asettings, "Encoder", name);
         }

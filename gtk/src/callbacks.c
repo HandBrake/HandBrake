@@ -1611,7 +1611,7 @@ single_title_dialog (signal_user_data_t *ud)
     gtk_widget_show(spin);
     msg = gtk_message_dialog_get_message_area(GTK_MESSAGE_DIALOG(dialog));
     gtk_box_pack_end(GTK_BOX(msg), spin, FALSE, FALSE, 0);
-    gtk_dialog_run(GTK_DIALOG(dialog));
+    ghb_dialog_run(GTK_DIALOG(dialog));
     result = gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(spin));
     gtk_widget_destroy(dialog);
     return result;
@@ -3600,9 +3600,9 @@ prefs_response_cb(GtkDialog *dialog, GdkEvent *event, signal_user_data_t *ud)
         GtkWindow *hb_window = GTK_WINDOW(GHB_WIDGET(ud->builder, "hb_window"));
 
         // Toss up a warning dialog
-        ghb_message_dialog(hb_window, GTK_MESSAGE_WARNING,
-                           "You must restart HandBrake now",
-                           "Exit HandBrake", NULL);
+        ghb_question_dialog_run(hb_window, GHB_ACTION_NORMAL, _("_Quit"), NULL,
+                                _("Temp Directory Changed"),
+                                _("You must restart HandBrake now."));
         ghb_hb_cleanup(FALSE);
         prune_logs(ud);
         g_application_quit(G_APPLICATION(ud->app));
@@ -3622,8 +3622,6 @@ typedef struct
 static gboolean
 quit_cb(countdown_t *cd)
 {
-    gchar *str;
-
     cd->timeout--;
     if (cd->timeout == 0)
     {
@@ -3634,22 +3632,17 @@ quit_cb(countdown_t *cd)
         g_application_quit(G_APPLICATION(cd->ud->app));
         return FALSE;
     }
-    str = g_strdup_printf(_("%s\n\n%s in %d seconds ..."),
-                            cd->msg, cd->action, cd->timeout);
-    gtk_message_dialog_set_markup(cd->dlg, str);
-    g_free(str);
+    gtk_message_dialog_format_secondary_text(cd->dlg, _("%s in %d seconds…"),
+                                             cd->action, cd->timeout);
     return TRUE;
 }
 
 static gboolean
 shutdown_cb(countdown_t *cd)
 {
-    gchar *str;
-
     cd->timeout--;
-    str = g_strdup_printf(_("%s\n\n%s in %d seconds ..."),
-                            cd->msg, cd->action, cd->timeout);
-    gtk_message_dialog_set_markup(cd->dlg, str);
+    gtk_message_dialog_format_secondary_text(cd->dlg, _("%s in %d seconds…"),
+                                             cd->action, cd->timeout);
     if (cd->timeout == 0)
     {
         ghb_hb_cleanup(FALSE);
@@ -3659,26 +3652,21 @@ shutdown_cb(countdown_t *cd)
         g_application_quit(G_APPLICATION(cd->ud->app));
         return FALSE;
     }
-    g_free(str);
     return TRUE;
 }
 
 static gboolean
 suspend_cb(countdown_t *cd)
 {
-    gchar *str;
-
     cd->timeout--;
-    str = g_strdup_printf(_("%s\n\n%s in %d seconds ..."),
-                            cd->msg, cd->action, cd->timeout);
-    gtk_message_dialog_set_markup(cd->dlg, str);
+    gtk_message_dialog_format_secondary_text(cd->dlg, _("%s in %d seconds…"),
+                                             cd->action, cd->timeout);
     if (cd->timeout == 0)
     {
         gtk_widget_destroy (GTK_WIDGET(cd->dlg));
         suspend_logind();
         return FALSE;
     }
-    g_free(str);
     return TRUE;
 }
 
@@ -3700,14 +3688,9 @@ countdown_dialog_response (GtkDialog *dialog, int response, guint *timeout_id)
 }
 
 void
-ghb_countdown_dialog(
-    GtkMessageType type,
-    const gchar *message,
-    const gchar *action,
-    const gchar *cancel,
-    GSourceFunc action_func,
-    signal_user_data_t *ud,
-    gint timeout)
+ghb_countdown_dialog_show (const gchar *message, const gchar *action,
+                           GSourceFunc action_func, int timeout,
+                           signal_user_data_t *ud)
 {
     GtkWindow *hb_window;
     GtkWidget *dialog;
@@ -3722,12 +3705,9 @@ ghb_countdown_dialog(
     // Toss up a warning dialog
     hb_window = GTK_WINDOW(GHB_WIDGET(ud->builder, "hb_window"));
     dialog = gtk_message_dialog_new(hb_window, GTK_DIALOG_MODAL,
-                            type, GTK_BUTTONS_NONE,
-                            _("%s\n\n%s in %d seconds ..."),
-                            message, action, timeout);
-    gtk_dialog_add_buttons( GTK_DIALOG(dialog),
-                           cancel, GTK_RESPONSE_CANCEL,
-                           NULL);
+        GTK_MESSAGE_INFO, GTK_BUTTONS_CANCEL, "%s", message);
+    gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dialog),
+        _("%s in %d seconds…"), action, timeout);
 
     cd->dlg = GTK_MESSAGE_DIALOG(dialog);
     *timeout_id = g_timeout_add(1000, action_func, cd);
@@ -3738,58 +3718,66 @@ ghb_countdown_dialog(
 }
 
 gboolean
-ghb_title_message_dialog(GtkWindow *parent, GtkMessageType type, const gchar *title,
-                         const gchar *message, const gchar *no, const gchar *yes)
+ghb_question_dialog_run (GtkWindow *parent, GhbActionStyle accept_style,
+                         const char *accept_button, const char *cancel_button,
+                         const char *title, const char *format, ...)
 {
-    GtkWidget *dialog, *yes_button;
+    GtkWidget *dialog, *button;
     GtkResponseType response;
-    GtkStyleContext *yes_style;
+
+    if (parent == NULL)
+    {
+        GtkApplication *app = GTK_APPLICATION(g_application_get_default());
+        parent = gtk_application_get_active_window(app);
+    }
 
     // Toss up a warning dialog
-    dialog = gtk_message_dialog_new(parent, GTK_DIALOG_MODAL, type,
-                                    GTK_BUTTONS_NONE, "%s", title);
-    if (message)
-        gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dialog), "%s", message);
-
-    gtk_dialog_add_buttons(GTK_DIALOG(dialog),
-                           no, GTK_RESPONSE_NO,
-                           yes, GTK_RESPONSE_YES, NULL);
-
-    if (yes != NULL)
+    dialog = gtk_message_dialog_new(parent, GTK_DIALOG_MODAL,
+                                    GTK_MESSAGE_QUESTION, GTK_BUTTONS_NONE,
+                                    "%s", title);
+    if (format)
     {
-        yes_button = gtk_dialog_get_widget_for_response(GTK_DIALOG(dialog),
-                                                        GTK_RESPONSE_YES);
-        yes_style = gtk_widget_get_style_context(yes_button);
+        va_list args;
+        char *message;
 
-        // Use GTK_MESSAGE_QUESTION for a neutral dialog,
-        // GTK_MESSAGE_INFO for a blue 'suggested-action' confirm button, or
-        // GTK_MESSAGE_WARNING for a red 'destructive-action' confirm button.
-        switch (type)
+        va_start(args, format);
+        message = g_strdup_vprintf(format, args);
+        va_end(args);
+        gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dialog), "%s", message);
+        g_free(message);
+    }
+
+    if (cancel_button != NULL)
+    {
+        gtk_dialog_add_button(GTK_DIALOG(dialog), cancel_button,
+                              GTK_RESPONSE_CANCEL);
+    }
+
+    if (accept_button != NULL)
+    {
+        button = gtk_dialog_add_button(GTK_DIALOG(dialog), accept_button,
+                                       GTK_RESPONSE_ACCEPT);
+
+        GtkStyleContext *style = gtk_widget_get_style_context(button);
+
+        switch (accept_style)
         {
-        case GTK_MESSAGE_INFO:
-            gtk_style_context_add_class(yes_style, "suggested-action");
+        case GHB_ACTION_SUGGESTED:
+            gtk_style_context_add_class(style, "suggested-action");
             break;
-        case GTK_MESSAGE_WARNING:
-        case GTK_MESSAGE_ERROR:
-            gtk_style_context_add_class(yes_style, "destructive-action");
+        case GHB_ACTION_DESTRUCTIVE:
+            gtk_style_context_add_class(style, "destructive-action");
         default:
             break;
         }
     }
-    response = gtk_dialog_run(GTK_DIALOG(dialog));
-    gtk_widget_destroy (dialog);
-    if (response == GTK_RESPONSE_NO)
+    response = ghb_dialog_run(GTK_DIALOG(dialog));
+    gtk_widget_destroy(dialog);
+    if (response == GTK_RESPONSE_ACCEPT)
     {
-        return FALSE;
+        return TRUE;
     }
-    return TRUE;
-}
-
-gboolean
-ghb_message_dialog(GtkWindow *parent, GtkMessageType type, const gchar *message,
-                   const gchar *no, const gchar *yes)
-{
-    return ghb_title_message_dialog(parent, type, message, NULL, no, yes);
+    return FALSE;
 }
 
 void
@@ -3820,11 +3808,14 @@ ghb_alert_dialog_show (GtkMessageType type, const char *title,
     dialog = gtk_message_dialog_new(parent, GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
                                     type, GTK_BUTTONS_CLOSE, "%s", title);
 
-    va_start(args, format);
-    message = g_strdup_vprintf(format, args);
-    va_end(args);
-    gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dialog), message);
-    g_free(message);
+    if (format != NULL)
+    {
+        va_start(args, format);
+        message = g_strdup_vprintf(format, args);
+        va_end(args);
+        gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dialog), "%s", message);
+        g_free(message);
+    }
     g_signal_connect(dialog, "response", G_CALLBACK(message_dialog_destroy), NULL);
     gtk_widget_show(dialog);
 }
@@ -3839,7 +3830,7 @@ ghb_cancel_dialog_new (GtkWindow *parent, const char *title, const char *message
 
     dialog = gtk_message_dialog_new(parent, GTK_DIALOG_MODAL,
                 GTK_MESSAGE_WARNING, GTK_BUTTONS_NONE, "%s", title);
-    gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dialog), message);
+    gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dialog), "%s", message);
     gtk_window_set_transient_for(GTK_WINDOW(dialog), parent);
     gtk_window_set_modal(GTK_WINDOW(dialog), TRUE);
     cancel = gtk_dialog_add_button(GTK_DIALOG(dialog), cancel_all_button, 1);
@@ -5273,27 +5264,24 @@ ghb_notify_done(signal_user_data_t *ud)
 
     switch (ud->when_complete)    {
 	    case 2:
-            ghb_countdown_dialog(GTK_MESSAGE_INFO,
-                                _("Your encode is complete."),
-                                _("Quitting Handbrake"),
-                                _("Cancel"), (GSourceFunc)quit_cb, ud, 60);
+            ghb_countdown_dialog_show(_("Your encode is complete."),
+                                      _("Quitting HandBrake"),
+                                      (GSourceFunc)quit_cb, 60, ud);
             break;
         case 3:
             if (can_suspend_logind())
             {
-                ghb_countdown_dialog(GTK_MESSAGE_INFO,
-                    _("Your encode is complete."),
-                    _("Putting computer to sleep"),
-                    _("Cancel"), (GSourceFunc)suspend_cb, ud, 60);
+                ghb_countdown_dialog_show(_("Your encode is complete."),
+                                          _("Putting computer to sleep"),
+                                          (GSourceFunc)suspend_cb, 60, ud);
             }
             break;
 	    case 4:
             if (can_shutdown_logind())
             {
-                ghb_countdown_dialog(GTK_MESSAGE_INFO,
-                    _("Your encode is complete."),
-                    _("Shutting down the computer"),
-                    _("Cancel"), (GSourceFunc)shutdown_cb, ud, 60);
+                ghb_countdown_dialog_show(_("Your encode is complete."),
+                                          _("Shutting down the computer"),
+                                          (GSourceFunc)shutdown_cb, 60, ud);
             }
 
         default:
