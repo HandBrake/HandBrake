@@ -80,7 +80,6 @@ validate_settings (signal_user_data_t *ud, GhbValue *settings, gint batch)
 {
     // Check to see if the dest file exists or is
     // already in the queue
-    gchar *message;
     const gchar *dest;
     gint count, ii;
     gint title_id, titleindex;
@@ -104,19 +103,14 @@ validate_settings (signal_user_data_t *ud, GhbValue *settings, gint batch)
         filename = ghb_dict_get_string(uiDict, "destination");
         if (g_strcmp0(dest, filename) == 0)
         {
-            message = g_strdup_printf(
-                        _("Destination: %s\n\n"
-                        "Another queued job has specified the same destination.\n"
-                        "Do you want to overwrite?"),
-                        dest);
-            if (!ghb_title_message_dialog(hb_window, GTK_MESSAGE_QUESTION,
-                                          _("Overwrite File?"),
-                                          message, _("Cancel"), _("Overwrite")))
+            if (!ghb_question_dialog_run(hb_window, GHB_ACTION_NORMAL,
+                _("Overwrite"), _("Cancel"), _("Overwrite File?"),
+                _("Destination: %s\n\n"
+                  "Another queued job has specified the same destination.\n"
+                  "Do you want to overwrite?"), dest))
             {
-                g_free(message);
                 return FALSE;
             }
-            g_free(message);
             break;
         }
     }
@@ -141,19 +135,13 @@ validate_settings (signal_user_data_t *ud, GhbValue *settings, gint batch)
     g_free(destdir);
     if (g_file_test(dest, G_FILE_TEST_EXISTS))
     {
-        message = g_strdup_printf(
-                    _("Destination: %s\n\n"
-                    "File already exists.\n"
-                    "Do you want to overwrite?"),
-                    dest);
-        if (!ghb_title_message_dialog(hb_window, GTK_MESSAGE_WARNING,
-                                      _("Overwrite File?"),
-                                      message, _("Cancel"), _("Overwrite")))
+        if (!ghb_question_dialog_run(hb_window, GHB_ACTION_DESTRUCTIVE,
+            _("Overwrite"), _("Cancel"), _("Overwrite File?"),
+            _("The file “%s” already exists.\n"
+              "Do you want to overwrite it?"), dest))
         {
-            g_free(message);
             return FALSE;
         }
-        g_free(message);
     }
     // Validate audio settings
     if (!ghb_validate_audio(settings, hb_window))
@@ -864,11 +852,10 @@ title_add_all_action_cb (GSimpleAction *action, GVariant *param,
     {
         if (!title_destination_is_unique(ud->settings_array, ii))
         {
-            ghb_title_message_dialog(GTK_WINDOW(GHB_WIDGET(ud->builder, "hb_window")),
-                                     GTK_MESSAGE_ERROR, _("Cannot Add Titles"),
-                                     _("The filenames are not unique. Please choose\n"
-                                       "a unique destination filename for each title."),
-                                     _("OK"), NULL);
+            ghb_question_dialog_run(GTK_WINDOW(GHB_WIDGET(ud->builder, "hb_window")),
+                GHB_ACTION_NORMAL, _("OK"), NULL, _("Cannot Add Titles"),
+                _("The filenames are not unique. Please choose\n"
+                  "a unique destination filename for each title."));
             title_add_multiple_action_cb(action, param, ud);
             return;
         }

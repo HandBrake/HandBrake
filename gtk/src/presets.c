@@ -1900,16 +1900,13 @@ ghb_presets_load(signal_user_data_t *ud)
         // Look for a backup version that matches the currently running
         // version.
         GtkWindow *hb_window = GTK_WINDOW(GHB_WIDGET(ud->builder, "hb_window"));
-        gchar *message = g_strdup_printf(
+        if (!ghb_question_dialog_run(hb_window, GHB_ACTION_DESTRUCTIVE,
+            _("Load backup presets"), _("Get me out of here!"),
             _("Presets found are newer than what is supported by this version of HandBrake!\n\n"
-              "Would you like to continue?"));
-        if (!ghb_message_dialog(hb_window, GTK_MESSAGE_WARNING, message,
-            _("Get me out of here!"), _("Load backup presets")))
+              "Would you like to continue?"), NULL))
         {
-            g_free(message);
             exit(1);
         }
-        g_free(message);
 
         gchar *name;
         int major, minor, micro;
@@ -2555,25 +2552,16 @@ preset_remove_action_cb(GSimpleAction *action, GVariant *param,
         return;
     }
 
-    GtkWindow       * hb_window;
-    gboolean          is_folder;
-    GtkResponseType   response;
-    const char      * name;
-    char            * message;
+    gboolean    is_folder;
+    const char *name;
 
     name  = ghb_dict_get_string(preset, "PresetName");
     is_folder = preset_is_folder(path);
-    hb_window = GTK_WINDOW(GHB_WIDGET(ud->builder, "hb_window"));
-    message = g_strdup_printf(_("Confirm deletion of %s:\n\n%s"),
-                              is_folder ? _("folder") : _("preset"),
-                              name);
-    response = ghb_message_dialog(hb_window,
-                        GTK_MESSAGE_WARNING,
-                        message,
-                        _("Cancel"),
-                        _("Delete"));
-    g_free(message);
-    if (response)
+    if (ghb_question_dialog_run(NULL, GHB_ACTION_DESTRUCTIVE,
+            _("_Delete"), _("Cancel"),
+            is_folder ? _("Delete Folder?") : _("Delete Preset?"),
+            _("Are you sure you want to delete “%s”?\n"
+              "Deleted items cannot be recovered."), name))
     {
         int depth = path->depth;
 
