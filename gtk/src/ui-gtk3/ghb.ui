@@ -2204,7 +2204,7 @@ libx264 authors:
   Laurent Aimar
 
 </property>
-    <property name="logo-icon-name">hb-icon</property>
+    <property name="logo-icon-name">fr.handbrake.ghb</property>
     <property name="wrap-license">True</property>
     <signal name="delete-event" handler="gtk_widget_hide_on_delete" swapped="no"/>
     <child internal-child="vbox">
@@ -2236,7 +2236,7 @@ libx264 authors:
     <property name="title" translatable="yes">HandBrake</property>
     <property name="default-width">500</property>
     <property name="default-height">400</property>
-    <property name="icon-name">hb-icon</property>
+    <property name="icon-name">fr.handbrake.ghb</property>
     <signal name="map-event" handler="window_map_cb" swapped="no"/>
     <signal name="size-allocate" handler="hb_win_sz_alloc_cb" swapped="no"/>
     <signal name="delete-event" handler="window_delete_event_cb" swapped="no"/>
@@ -3153,7 +3153,7 @@ sync for broken players that do not honor MP4 edit lists.</property>
                         <property name="valign">fill</property>
                         <property name="expand">True</property>
                         <property name="pixel-size">128</property>
-                        <property name="icon-name">hb-icon</property>
+                        <property name="icon-name">fr.handbrake.ghb</property>
                       </object>
                       <packing>
                         <property name="position">1</property>
@@ -3168,7 +3168,7 @@ sync for broken players that do not honor MP4 edit lists.</property>
                         <property name="margin-end">4</property>
                         <property name="expand">True</property>
                         <property name="pixel-size">128</property>
-                        <property name="icon-name">hb-icon</property>
+                        <property name="icon-name">fr.handbrake.ghb</property>
                         <signal name="size-allocate" handler="preview_button_size_allocate_cb" swapped="no"/>
                       </object>
                       <packing>
@@ -7742,7 +7742,7 @@ Only one subtitle track can be burned! Since conflicts can occur, the first chos
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
                         <property name="pixel-size">64</property>
-                        <property name="icon-name">hb-icon</property>
+                        <property name="icon-name">fr.handbrake.ghb</property>
                       </object>
                     </child>
                   </object>
@@ -8973,7 +8973,7 @@ Uncheck this if you want to allow changing each title's settings independently.<
     <property name="events">GDK_POINTER_MOTION_MASK | GDK_STRUCTURE_MASK</property>
     <property name="resizable">True</property>
     <property name="window-position">center</property>
-    <property name="icon-name">hb-icon</property>
+    <property name="icon-name">fr.handbrake.ghb</property>
     <property name="default-width">854</property>
     <property name="default-height">480</property>
     <signal name="window-state-event" handler="preview_state_cb" swapped="no"/>
