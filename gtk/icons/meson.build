@@ -22,6 +22,9 @@ icon_files = files(
   '64x64/apps/hb-start.png',
   '64x64/apps/hb-stop.png',
   '64x64/apps/hb-pause.png',
+  '128x128/apps/fr.handbrake.ghb.png',
+  '256x256/apps/fr.handbrake.ghb.png',
+  'scalable/apps/fr.handbrake.ghb.svg',
   'scalable/apps/hb-advanced-symbolic.svg',
   'scalable/apps/hb-source-symbolic.svg',
   'scalable/apps/hb-picture-symbolic.svg',
@@ -33,8 +36,6 @@ icon_files = files(
   'scalable/apps/hb-stop.svg',
   'scalable/apps/hb-pause.svg',
   'scalable/apps/hb-complete.svg',
-  'scalable/apps/hb-icon.svg',
-  'scalable/apps/fr.handbrake.ghb.svg',
 )
 
 icons = gnome.compile_resources('icon_res', 'icon_res.gresource.xml',
@@ -43,6 +44,6 @@ icons = gnome.compile_resources('icon_res', 'icon_res.gresource.xml',
   c_name: 'ghb_icons')
 
 if host_machine.system() not in ['windows', 'haiku']
-  install_data('fr.handbrake.ghb.svg',
+  install_data('scalable/apps/fr.handbrake.ghb.svg',
     install_dir: get_option('datadir') / 'icons/hicolor/scalable/apps')
 endif
