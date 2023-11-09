@@ -21,6 +21,9 @@
     <file>64x64/apps/hb-start.png</file>
     <file>64x64/apps/hb-stop.png</file>
     <file>64x64/apps/hb-pause.png</file>
+    <file>128x128/apps/fr.handbrake.ghb.png</file>
+    <file>256x256/apps/fr.handbrake.ghb.png</file>
+    <file>scalable/apps/fr.handbrake.ghb.svg</file>
     <file>scalable/apps/hb-advanced-symbolic.svg</file>
     <file>scalable/apps/hb-source-symbolic.svg</file>
     <file>scalable/apps/hb-picture-symbolic.svg</file>
@@ -32,7 +35,5 @@
     <file>scalable/apps/hb-stop.svg</file>
     <file>scalable/apps/hb-pause.svg</file>
     <file>scalable/apps/hb-complete.svg</file>
-    <file>scalable/apps/hb-icon.svg</file>
-    <file>scalable/apps/fr.handbrake.ghb.svg</file>
   </gresource>
 </gresources>
