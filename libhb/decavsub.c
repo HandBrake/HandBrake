@@ -479,7 +479,8 @@ int decavsubWork( hb_avsub_context_t * ctx,
             hb_log("decavsub: track %d, non-monotonically increasing PTS, last %"PRId64" current %"PRId64"",
                    ctx->subtitle->out_track,
                    ctx->last_pts, pts);
-            pts = ctx->last_pts + 1 * 90000LL;
+            //PGS PTS may not be always aligned to AV PTS. To not mess up animations, add only a single tick.
+            pts = ctx->last_pts + (ctx->subtitle->source == PGSSUB ? 1 : 90000LL);
         }
         ctx->last_pts = pts;
 
