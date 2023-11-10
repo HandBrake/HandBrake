@@ -419,7 +419,15 @@ void hb_avfilter_combine( hb_list_t * list)
                 hb_dict_t *cur_settings_dict_qsv = hb_dict_get(cur_settings_dict, "vpp_qsv");
                 if (avfilter_settings_dict_qsv && cur_settings_dict_qsv)
                 {
-                    hb_dict_merge(avfilter_settings_dict_qsv, cur_settings_dict_qsv);
+                    // transpose filter should be applied first separately, then other merged filters
+                    if (hb_dict_get(avfilter_settings_dict_qsv, "transpose"))
+                    {
+                        hb_value_array_concat(avfilter->settings, settings);
+                    }
+                    else
+                    {
+                        hb_dict_merge(avfilter_settings_dict_qsv, cur_settings_dict_qsv);
+                    }
                 }
             }
             else
