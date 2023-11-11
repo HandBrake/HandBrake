@@ -31,11 +31,9 @@ Windows users, please make sure to install [Microsoft .NET Desktop Runtime versi
 - Added VCN AV1 encoder
 - Preserve the ambient viewing enviroment metadata
 - Removed an artificial bitrate limit on VP9 CQ mode
-- Fixed an issue when scaling video content that is not mod2.
 - Fixed an issue with QSV that could result in the output video being a green screen (#4842)
 - Fixed a green video issue with QuickSync (#4876)
 - Fixed a pixel format conversion issue that could result is slightly different colors when using a 10-bit hardware encoder (#5011)
-- Fixed an issue that prevented the VideoToolbox "speed" preset from being used
 - Various fixes and library updates for QuickSync to improve support on Linux (#4958)
 - Switch to using swscale instead of zscale when the resolution isn't mod2. Should fix scan failures in this condition
 - Fixed PAR when reading from a AV1 anamorphic video track
@@ -63,19 +61,19 @@ Windows users, please make sure to install [Microsoft .NET Desktop Runtime versi
 
 - Updated libraries
   - AMF 1.4.30 (AMD VCN encoding)
-  - FFmpeg 6.x (decoding and filters)
+  - FFmpeg 6.1 (decoding and filters)
     - Faster HEVC decoding on arm64
     - 30% faster bwdif filter on arm64
   - FreeType 2.13.2 (subtitles)
   - Fribidi 1.0.13 (subtitles)
-  - HarfBuzz 8.2.0 (subtitles)
+  - HarfBuzz 8.2.2 (subtitles)
   - libass 0.17.1 (subtitles)
   - libdav1d 1.3.0 (AV1 decoding)
-  - liblzma (xz) 5.4.4 (LZMA video decoding, e.g. TIFF)
+  - liblzma (xz) 5.4.5 (LZMA video decoding, e.g. TIFF)
   - libopus 1.4 (Opus audio encoding)
-  - libjpeg-turbo 3.0.0 (preview image compression)
+  - libjpeg-turbo 3.0.1 (preview image compression)
   - libvpx 1.13.1 (VP8/VP9 video encoding)
-  - libxml 2.11.4 (general)
+  - libxml 2.11.5 (general)
   - oneVPL 2023.3.1 (Intel QSV encoding/decoding)
   - SVT-AV1 1.7 (AV1 encoding)
   - x264 164 r3107 (H.264/AVC video encoding)
@@ -92,6 +90,7 @@ Windows users, please make sure to install [Microsoft .NET Desktop Runtime versi
   - They can be enabled in the Advanced preferences tab: either for the full path or always
   - Depending on your computer capabilities, they could decrease CPU usage and speed up the conversion
 - Added GPU accelerated Crop & Scale, Rotate, Pad, Yadif, Bwdif, Chroma Smooth, Unsharp, Lasharp, Grayscale filters
+- Fixed an issue that prevented the VideoToolbox "speed" preset from being used
 - Improved File Input Handling
   - You can now multi-select files in the open panel
   - You can now drag/drop multiple files to scan
