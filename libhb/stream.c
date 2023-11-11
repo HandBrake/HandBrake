@@ -5852,9 +5852,9 @@ static hb_title_t *ffmpeg_title_scan( hb_stream_t *stream, hb_title_t *title )
             }
 
             int j;
-            for (j = 0; j < st->nb_side_data; j++)
+            for (j = 0; j < codecpar->nb_coded_side_data; j++)
             {
-                AVPacketSideData sd = st->side_data[j];
+                AVPacketSideData sd = codecpar->coded_side_data[j];
                 switch (sd.type)
                 {
                     case AV_PKT_DATA_DISPLAYMATRIX:

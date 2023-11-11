@@ -562,10 +562,11 @@ static int avformatInit( hb_mux_object_t * m )
             uint8_t *mastering_data = av_malloc(sizeof(AVMasteringDisplayMetadata));
             memcpy(mastering_data, &mastering, sizeof(AVMasteringDisplayMetadata));
 
-            av_stream_add_side_data(track->st,
+            av_packet_side_data_add(&track->st->codecpar->coded_side_data,
+                                    &track->st->codecpar->nb_coded_side_data,
                                     AV_PKT_DATA_MASTERING_DISPLAY_METADATA,
                                     mastering_data,
-                                    sizeof(AVMasteringDisplayMetadata));
+                                    sizeof(AVMasteringDisplayMetadata), 0);
         }
 
         if (job->coll.max_cll && job->coll.max_fall)
@@ -577,10 +578,11 @@ static int avformatInit( hb_mux_object_t * m )
             uint8_t *coll_data = av_malloc(sizeof(AVContentLightMetadata));
             memcpy(coll_data, &coll, sizeof(AVContentLightMetadata));
 
-            av_stream_add_side_data(track->st,
+            av_packet_side_data_add(&track->st->codecpar->coded_side_data,
+                                    &track->st->codecpar->nb_coded_side_data,
                                     AV_PKT_DATA_CONTENT_LIGHT_LEVEL,
                                     coll_data,
-                                    sizeof(AVContentLightMetadata));
+                                    sizeof(AVContentLightMetadata), 0);
         }
     }
 
@@ -591,10 +593,11 @@ static int avformatInit( hb_mux_object_t * m )
         uint8_t *ambient_data = av_malloc(sizeof(AVAmbientViewingEnvironment));
         memcpy(ambient_data, &ambient, sizeof(AVAmbientViewingEnvironment));
 
-        av_stream_add_side_data(track->st,
+        av_packet_side_data_add(&track->st->codecpar->coded_side_data,
+                                &track->st->codecpar->nb_coded_side_data,
                                 AV_PKT_DATA_AMBIENT_VIEWING_ENVIRONMENT,
                                 ambient_data,
-                                sizeof(AVAmbientViewingEnvironment));
+                                sizeof(AVAmbientViewingEnvironment), 0);
     }
 
     if (job->passthru_dynamic_hdr_metadata & DOVI)
@@ -611,10 +614,11 @@ static int avformatInit( hb_mux_object_t * m )
         uint8_t *dovi_data = av_malloc(sizeof(AVDOVIDecoderConfigurationRecord));
         memcpy(dovi_data, &dovi, sizeof(AVDOVIDecoderConfigurationRecord));
 
-        av_stream_add_side_data(track->st,
+        av_packet_side_data_add(&track->st->codecpar->coded_side_data,
+                                &track->st->codecpar->nb_coded_side_data,
                                 AV_PKT_DATA_DOVI_CONF,
                                 dovi_data,
-                                sizeof(AVDOVIDecoderConfigurationRecord));
+                                sizeof(AVDOVIDecoderConfigurationRecord), 0);
 
         m->oc->strict_std_compliance = FF_COMPLIANCE_UNOFFICIAL;
     }
@@ -921,16 +925,19 @@ static int avformatInit( hb_mux_object_t * m )
                          codec == HB_ACODEC_FDK_HAAC))
                     {
                         hb_mux_data_t * fallback_track;
-                        int           * sd;
+                        AVPacketSideData *sd;
 
                         track = audio->priv.mux_data;
                         fallback_track = fallback->priv.mux_data;
-                        sd = (int*)av_stream_new_side_data(track->st,
+                        sd = av_packet_side_data_new(&track->st->codecpar->coded_side_data,
+                                                     &track->st->codecpar->nb_coded_side_data,
                                                      AV_PKT_DATA_FALLBACK_TRACK,
-                                                     sizeof(int));
+                                                     sizeof(int), 0);
+
                         if (sd != NULL)
                         {
-                            *sd = fallback_track->st->index;
+                            int *data = (int *)sd->data;
+                            *data = fallback_track->st->index;
                         }
                     }
                 }
