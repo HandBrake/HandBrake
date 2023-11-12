@@ -28,6 +28,7 @@ Windows users, please make sure to install [Microsoft .NET Desktop Runtime versi
 - Added NVIDIA NVENC AV1 encoder
 - Added support for SVT-AV1 multi-pass ABR mode
 - Added support for preserving ambient viewing enviroment metadata
+- Added QSV Rotate and Format filters
 - Improved performance on arm64 / aarch64 / Apple Silicon architectures
   - Latest FFmpeg provides faster HEVC decoding, 30% faster bwdif filter
   - New SVT-AV1 assembly optimizations provide up to 4x increase in performance
@@ -37,7 +38,6 @@ Windows users, please make sure to install [Microsoft .NET Desktop Runtime versi
   - Supported profiles and cross-compatibility IDs: 8.4, 8.1, 7.6 (base layer only, converted to 8.1), 5.0
 - Improved HDR10+ dynamic range metadata pass through
   - Supported encoders: x265 10-bit, SVT-AV1
-- Added QSV Rotate and Format filters
 - Improved QSV support on Linux (#4958)
 - Updated NVENC to not use multi-pass by default; user configurable advanced option
 - Renamed 2-pass encode option to multi-pass (#5019)
@@ -109,7 +109,7 @@ Windows users, please make sure to install [Microsoft .NET Desktop Runtime versi
 - Added support for drag and drop of multiple files at once
 - Added support for selecting multiple files at once in the Open Source dialog
 - Added support for recursive folder scanning in the Open Source dialog
-- Added support for VideoToolbox HEVC, H.264/AVC, H.265/HEVC, and ProRes hardware decoders on macOS 13 and later
+- Added support for VideoToolbox H.265/HEVC, H.264/AVC, ProRes, and VP9 hardware decoders on macOS 13 and later
   - Enable/disable in the Preferences > Advanced tab always or full path only
   - Using hardware decoders on modern devices may decrease CPU usage and thus speed up some filters and encoding
 - Added GPU accelerated Crop & Scale, Rotate, Pad, Yadif, Bwdif, Chroma Smooth, Unsharp, Lasharp, Grayscale filters
