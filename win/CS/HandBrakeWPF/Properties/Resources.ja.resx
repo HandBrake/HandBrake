@@ -2139,7 +2139,7 @@ VLCとMPC-HCがサポートされています。他のプレイヤーではお�
     <value>新しいバージョンが利用できます！</value>
   </data>
   <data name="About_Copyright" xml:space="preserve">
-    <value>Copyright (C) 2003-2022 The HandBrake Team</value>
+    <value>Copyright (C) 2003-2023 The HandBrake Team</value>
   </data>
   <data name="Options_LowBatteryLevel" xml:space="preserve">
     <value>バッテリー残量低下:</value>

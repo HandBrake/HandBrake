@@ -61,7 +61,7 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Copyright (C) 2003-2022 The HandBrake Team.
+        ///   Looks up a localized string similar to Copyright (C) 2003-2023 The HandBrake Team.
         /// </summary>
         public static string About_Copyright {
             get {

@@ -2132,7 +2132,7 @@ You can drag/drop or enter the text above.</value>
     <value>A new version is available!</value>
   </data>
   <data name="About_Copyright" xml:space="preserve">
-    <value>版權所有 ©️ 2003-2022 HandBrake 團隊</value>
+    <value>版權所有 ©️ 2003-2023 HandBrake 團隊</value>
   </data>
   <data name="Options_LowBatteryLevel" xml:space="preserve">
     <value>低電量：</value>

@@ -1,6 +1,6 @@
 /*
  * ghb-dvd.c
- * Copyright (C) John Stebbins 2008-2022 <stebbins@stebbins>
+ * Copyright (C) John Stebbins 2008-2023 <stebbins@stebbins>
  *
  * ghb-dvd.c is free software.
  *

@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 # Copyright (C) 2012-2017 VLC authors and VideoLAN
 # Copyright (C) 2012-2014 Felix Paul Kühne <fkuehne at videolan dot org>
-# Copyright (C) 2018-2022 Damiano Galassi <damiog@gmail.com>
-# Copyright (C) 2018-2022 Bradley Sepos <bradley@bradleysepos.com>
+# Copyright (C) 2018-2023 Damiano Galassi <damiog@gmail.com>
+# Copyright (C) 2018-2023 Bradley Sepos <bradley@bradleysepos.com>
 #
 # Based on VLC's codesign.sh
 #
