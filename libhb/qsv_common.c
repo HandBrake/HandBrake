@@ -4441,7 +4441,7 @@ static int hb_qsv_ffmpeg_set_options(hb_job_t *job, AVDictionary** dict)
     int err;
     AVDictionary* out_dict = *dict;
 
-    if (job->qsv.ctx && job->qsv.ctx->dx_index > 0)
+    if (job->qsv.ctx && job->qsv.ctx->dx_index >= 0)
     {
         char device[32];
         snprintf(device, 32, "%u", job->qsv.ctx->dx_index);
