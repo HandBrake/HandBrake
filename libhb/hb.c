@@ -2267,7 +2267,6 @@ int hb_global_init()
 #if HB_PROJECT_FEATURE_QSV
     if (!disable_hardware)
     {
-        hb_qsv_available();
         hb_register(&hb_encqsv);
     }
 #endif

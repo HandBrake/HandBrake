@@ -18,6 +18,7 @@
 
 static int is_nvenc_available = -1;
 static int is_nvenc_av1_available = -1;
+static int is_nvenc_h264_available = -1;
 static int is_nvenc_hevc_available = -1;
 
 static double cuda_version = -1;
@@ -138,7 +139,27 @@ int hb_check_nvenc_available()
 
 int hb_nvenc_h264_available()
 {
-    return hb_check_nvenc_available();
+    if (is_nvenc_h264_available != -1)
+    {
+        return is_nvenc_h264_available;
+    }
+
+    if (!hb_check_nvenc_available())
+    {
+        is_nvenc_h264_available = 0;
+        return is_nvenc_h264_available;
+    }
+
+    if (hb_nvenc_get_cuda_version() > 0)
+    {
+        is_nvenc_h264_available = 1;
+    } 
+    else 
+    {
+        is_nvenc_h264_available = 0;
+    }
+
+    return is_nvenc_h264_available;
 }
 
 int hb_nvenc_h265_available()
