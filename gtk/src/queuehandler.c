@@ -2045,6 +2045,7 @@ ghb_queue_buttons_grey (signal_user_data_t *ud)
         g_menu_item_set_label(item, _("S_top Encoding"));
         g_menu_remove(menu, 0);
         g_menu_prepend_item(menu, item);
+        g_object_unref(item);
     }
     else
     {
@@ -2052,6 +2053,7 @@ ghb_queue_buttons_grey (signal_user_data_t *ud)
         g_menu_item_set_label(item, _("Start Encoding"));
         g_menu_remove(menu, 0);
         g_menu_prepend_item(menu, item);
+        g_object_unref(item);
     }
 
     widget = GHB_WIDGET (ud->builder, "queue_pause");
@@ -2086,6 +2088,7 @@ ghb_queue_buttons_grey (signal_user_data_t *ud)
         g_menu_item_set_label(item, _("_Resume Encoding"));
         g_menu_remove(menu, 1);
         g_menu_append_item(menu, item);
+        g_object_unref(item);
     }
     else
     {
@@ -2093,6 +2096,7 @@ ghb_queue_buttons_grey (signal_user_data_t *ud)
         g_menu_item_set_label(item, _("_Pause Encoding"));
         g_menu_remove(menu, 1);
         g_menu_append_item(menu, item);
+        g_object_unref(item);
     }
 }
 

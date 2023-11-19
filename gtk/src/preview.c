@@ -1519,3 +1519,15 @@ show_crop_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
     ghb_rescale_preview_image(ud);
 #endif
 }
+
+void
+ghb_preview_dispose (signal_user_data_t *ud)
+{
+    if (!ud || !ud->preview)
+        return;
+    if (ud->preview->pix)
+        g_object_unref(ud->preview->pix);
+    if (ud->preview->scaled_pix)
+        g_object_unref(ud->preview->scaled_pix);
+    g_free(ud->preview);
+}

@@ -767,6 +767,7 @@ title_add_multiple_action_cb (GSimpleAction *action, GVariant *param,
         {
             ghb_preset_to_settings(settings, preset);
             ghb_set_title_settings(ud, settings);
+            ghb_value_free(&preset);
         }
         title_id = ghb_dict_get_int(settings, "title");
         title = ghb_lookup_title(title_id, &titleindex);
@@ -859,6 +860,7 @@ title_add_all_action_cb (GSimpleAction *action, GVariant *param,
         {
             ghb_preset_to_settings(settings, preset);
             ghb_set_title_settings(ud, settings);
+            ghb_value_free(&preset);
         }
         ghb_dict_set_bool(settings, "title_selected", TRUE);
     }
