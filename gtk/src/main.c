@@ -543,6 +543,8 @@ IoRedirect(signal_user_data_t *ud)
     g_io_channel_set_encoding(channel, NULL, NULL);
     ud->stderr_src_id =
         g_io_add_watch(channel, G_IO_IN, ghb_log_cb, (gpointer)ud );
+
+    g_io_channel_unref(channel);
 }
 
 static gchar *dvd_device = NULL;
@@ -989,7 +991,9 @@ static void
 print_system_information (void)
 {
 #if GLIB_CHECK_VERSION(2, 64, 0)
-    fprintf(stderr, "OS: %s\n", g_get_os_info(G_OS_INFO_KEY_PRETTY_NAME));
+    char *os_info = g_get_os_info(G_OS_INFO_KEY_PRETTY_NAME);
+    fprintf(stderr, "OS: %s\n", os_info);
+    g_free(os_info);
 #endif
 #ifndef _WIN32
     char *exe_path;
@@ -1008,12 +1012,16 @@ print_system_information (void)
     result = readlink( "/proc/self/exe", exe_path, PATH_MAX);
     if (result > 0)
     {
-        fprintf(stderr, "Install Dir: %s\n", g_path_get_dirname(exe_path));
+        char *exe_dirname = g_path_get_dirname(exe_path);
+        fprintf(stderr, "Install Dir: %s\n", exe_dirname);
+        g_free(exe_dirname);
     }
     free(exe_path);
 #endif
-    fprintf(stderr, "Config Dir:  %s\n", ghb_get_user_config_dir(NULL));
+    char *config_dirname = ghb_get_user_config_dir(NULL);
+    fprintf(stderr, "Config Dir:  %s\n", config_dirname);
     fprintf(stderr, "_______________________________\n\n");
+    g_free(config_dirname);
 }
 
 extern G_MODULE_EXPORT void
@@ -1376,6 +1384,7 @@ main(int argc, char *argv[])
     g_object_unref(ud->queue_activity_buffer);
     g_object_unref(ud->activity_buffer);
     g_free(ud->extra_activity_path);
+    ghb_preview_dispose(ud);
 
     g_free(ud->current_dvd_device);
     g_free(ud);

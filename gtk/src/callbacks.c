@@ -5002,6 +5002,7 @@ ghb_file_menu_add_dvd(signal_user_data_t *ud)
                 g_menu_item_set_label(item, name);
                 g_menu_item_set_detailed_action(item, action);
                 g_menu_append_item(dvd_menu, item);
+                g_object_unref(item);
                 g_free(name);
             }
 
