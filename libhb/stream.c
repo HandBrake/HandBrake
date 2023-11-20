@@ -5306,7 +5306,8 @@ static int ffmpeg_open( hb_stream_t *stream, hb_title_t *title, int scan )
     return 1;
 
   fail:
-    if ( info_ic ) avformat_close_input( &info_ic );
+    avformat_close_input(&info_ic);
+    av_packet_free(&stream->ffmpeg_pkt);
     return 0;
 }
 
