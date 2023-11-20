@@ -1,6 +1,6 @@
 /* comb_detect_template.c
 
-   Copyright (c) 2003-2022 HandBrake Team
+   Copyright (c) 2003-2023 HandBrake Team
    This file is part of the HandBrake source code
    Homepage: <http://handbrake.fr/>.
    It may be used under the terms of the GNU General Public License v2.
@@ -145,7 +145,9 @@ static void FUNC(detect_gamma_combed_segment)(hb_filter_private_t *pv,
     const float athresh6 = pv->gamma_spatial_threshold6;
 
     // One pass for Y
-    const int stride  = pv->ref[0]->plane[0].stride / pv->bps;
+    const int stride_prev  = pv->ref[0]->plane[0].stride / pv->bps;
+    const int stride_cur   = pv->ref[1]->plane[0].stride / pv->bps;
+    const int stride_next  = pv->ref[2]->plane[0].stride / pv->bps;
     const int width   = pv->ref[0]->plane[0].width;
     const int height  = pv->ref[0]->plane[0].height;
     const int mask_stride = pv->mask->plane[0].stride;
@@ -163,18 +165,24 @@ static void FUNC(detect_gamma_combed_segment)(hb_filter_private_t *pv,
     }
 
     // These are just to make the buffer locations easier to read.
-    const int up_2    = -2 * stride;
-    const int up_1    = -1 * stride;
-    const int down_1  =      stride;
-    const int down_2  =  2 * stride;
+    const int up_1_prev    = -1 * stride_prev;
+    const int down_1_prev  =      stride_prev;
+
+    const int up_2    = -2 * stride_cur;
+    const int up_1    = -1 * stride_cur;
+    const int down_1  =      stride_cur;
+    const int down_2  =  2 * stride_cur;
+
+    const int up_1_next    = -1 * stride_next;
+    const int down_1_next =       stride_next;
 
     for (int y = segment_start; y < segment_stop; y++)
     {
         // We need to examine a column of 5 pixels
         // in the prev, cur, and next frames.
-        const pixel *prev = &((const pixel *)pv->ref[0]->plane[0].data)[y * stride];
-        const pixel *cur  = &((const pixel *)pv->ref[1]->plane[0].data)[y * stride];
-        const pixel *next = &((const pixel *)pv->ref[2]->plane[0].data)[y * stride];
+        const pixel *prev = &((const pixel *)pv->ref[0]->plane[0].data)[y * stride_prev];
+        const pixel *cur  = &((const pixel *)pv->ref[1]->plane[0].data)[y * stride_cur];
+        const pixel *next = &((const pixel *)pv->ref[2]->plane[0].data)[y * stride_next];
         uint8_t *mask = &pv->mask->plane[0].data[y * mask_stride];
 
         memset(mask, 0, mask_stride);
@@ -193,15 +201,15 @@ static void FUNC(detect_gamma_combed_segment)(hb_filter_private_t *pv,
                 if (mthresh > 0)
                 {
                     // Make sure there's sufficient motion between frame t-1 to frame t+1.
-                    if (fabs(pv->gamma_lut[prev[0]]     - pv->gamma_lut[cur[0]]      ) > mthresh &&
-                        fabs(pv->gamma_lut[cur[up_1]]   - pv->gamma_lut[next[up_1]]  ) > mthresh &&
-                        fabs(pv->gamma_lut[cur[down_1]] - pv->gamma_lut[next[down_1]]) > mthresh)
+                    if (fabs(pv->gamma_lut[prev[0]]     - pv->gamma_lut[cur[0]]           ) > mthresh &&
+                        fabs(pv->gamma_lut[cur[up_1]]   - pv->gamma_lut[next[up_1_next]]  ) > mthresh &&
+                        fabs(pv->gamma_lut[cur[down_1]] - pv->gamma_lut[next[down_1_next]]) > mthresh)
                     {
                         motion++;
                     }
-                    if (fabs(pv->gamma_lut[next[0]]      - pv->gamma_lut[cur[0]]     ) > mthresh &&
-                        fabs(pv->gamma_lut[prev[up_1]]   - pv->gamma_lut[cur[up_1]]  ) > mthresh &&
-                        fabs(pv->gamma_lut[prev[down_1]] - pv->gamma_lut[cur[down_1]]) > mthresh)
+                    if (fabs(pv->gamma_lut[next[0]]           - pv->gamma_lut[cur[0]]     ) > mthresh &&
+                        fabs(pv->gamma_lut[prev[up_1_prev]]   - pv->gamma_lut[cur[up_1]]  ) > mthresh &&
+                        fabs(pv->gamma_lut[prev[down_1_prev]] - pv->gamma_lut[cur[down_1]]) > mthresh)
                     {
                         motion++;
                     }
@@ -255,7 +263,9 @@ static void FUNC(detect_combed_segment)(hb_filter_private_t *pv,
     const int athresh6        = pv->spatial_threshold6;
 
     // One pass for Y
-    const int stride  = pv->ref[0]->plane[0].stride / pv->bps;
+    const int stride_prev  = pv->ref[0]->plane[0].stride / pv->bps;
+    const int stride_cur   = pv->ref[1]->plane[0].stride / pv->bps;
+    const int stride_next  = pv->ref[2]->plane[0].stride / pv->bps;
     const int width   = pv->ref[0]->plane[0].width;
     const int height  = pv->ref[0]->plane[0].height;
     const int mask_stride = pv->mask->plane[0].stride;
@@ -273,18 +283,24 @@ static void FUNC(detect_combed_segment)(hb_filter_private_t *pv,
     }
 
     // These are just to make the buffer locations easier to read.
-    const int up_2    = -2 * stride;
-    const int up_1    = -1 * stride;
-    const int down_1  =      stride;
-    const int down_2  =  2 * stride;
+    const int up_1_prev    = -1 * stride_prev;
+    const int down_1_prev  =      stride_prev;
+
+    const int up_2    = -2 * stride_cur;
+    const int up_1    = -1 * stride_cur;
+    const int down_1  =      stride_cur;
+    const int down_2  =  2 * stride_cur;
+
+    const int up_1_next    = -1 * stride_next;
+    const int down_1_next =       stride_next;
 
     for (int y = segment_start; y < segment_stop; y++)
     {
         // We need to examine a column of 5 pixels
         // in the prev, cur, and next frames.
-        const pixel *prev = &((const pixel *)pv->ref[0]->plane[0].data)[y * stride];
-        const pixel *cur  = &((const pixel *)pv->ref[1]->plane[0].data)[y * stride];
-        const pixel *next = &((const pixel *)pv->ref[2]->plane[0].data)[y * stride];
+        const pixel *prev = &((const pixel *)pv->ref[0]->plane[0].data)[y * stride_prev];
+        const pixel *cur  = &((const pixel *)pv->ref[1]->plane[0].data)[y * stride_cur];
+        const pixel *next = &((const pixel *)pv->ref[2]->plane[0].data)[y * stride_next];
         uint8_t *mask = &pv->mask->plane[0].data[y * mask_stride];
 
         memset(mask, 0, mask_stride);
@@ -303,15 +319,15 @@ static void FUNC(detect_combed_segment)(hb_filter_private_t *pv,
                 if (mthresh > 0)
                 {
                     // Make sure there's sufficient motion between frame t-1 to frame t+1.
-                    if (abs(prev[0]     - cur[0]      ) > mthresh &&
-                        abs(cur[up_1]   - next[up_1]  ) > mthresh &&
-                        abs(cur[down_1] - next[down_1]) > mthresh)
+                    if (abs(prev[0]     - cur[0]           ) > mthresh &&
+                        abs(cur[up_1]   - next[up_1_next]  ) > mthresh &&
+                        abs(cur[down_1] - next[down_1_next]) > mthresh)
                     {
                         motion++;
                     }
-                    if (abs(next[0]      - cur[0]     ) > mthresh &&
-                        abs(prev[up_1]   - cur[up_1]  ) > mthresh &&
-                        abs(prev[down_1] - cur[down_1]) > mthresh)
+                    if (abs(next[0]           - cur[0]     ) > mthresh &&
+                        abs(prev[up_1_prev]   - cur[up_1]  ) > mthresh &&
+                        abs(prev[down_1_prev] - cur[down_1]) > mthresh)
                     {
                         motion++;
                     }

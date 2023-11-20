@@ -1,7 +1,7 @@
 /* -*- Mode: C; indent-tabs-mode: nil; c-basic-offset: 4; tab-width: 4 -*- */
 /*
  * resources.c
- * Copyright (C) John Stebbins 2008-2022 <stebbins@stebbins>
+ * Copyright (C) John Stebbins 2008-2023 <stebbins@stebbins>
  *
  * resources.c is free software.
  *

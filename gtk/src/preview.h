@@ -1,6 +1,6 @@
 /*
  * preview.h
- * Copyright (C) John Stebbins 2008-2022 <stebbins@stebbins>
+ * Copyright (C) John Stebbins 2008-2023 <stebbins@stebbins>
  *
  * preview.h is free software.
  *

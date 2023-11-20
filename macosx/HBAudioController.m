@@ -13,7 +13,6 @@
 @interface HBAudioController ()
 
 @property (nonatomic, readwrite, strong) HBAudioDefaultsController *defaultsController;
-@property (nonatomic, readwrite, strong) NSPopover *popover;
 @property (nonatomic, weak) IBOutlet NSTableView *table;
 
 @end

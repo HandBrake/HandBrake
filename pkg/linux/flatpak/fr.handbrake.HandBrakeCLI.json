@@ -1,7 +1,7 @@
 {
     "app-id": "fr.handbrake.HandBrakeCLI",
     "runtime": "org.freedesktop.Platform",
-    "runtime-version": "21.08",
+    "runtime-version": "23.08",
     "sdk": "org.freedesktop.Sdk",
     "command": "HandBrakeCLI",
     "finish-args": [
@@ -25,6 +25,8 @@
             "config-opts": ["--flatpak", "--disable-gtk"],
             "builddir": true,
             "post-install": ["rm -rf /app/share"],
+            "build-options":{
+            },
             "sources": [
                 {
                     "type": "archive",

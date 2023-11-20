@@ -3,7 +3,7 @@
     "branch": "1",
     "runtime": "fr.handbrake.ghb",
     "runtime-version": "development",
-    "sdk": "org.gnome.Sdk//43",
+    "sdk": "org.gnome.Sdk//45",
     "build-extension": true,
     "separate-locales": false,
     "appstream-compose": false,
@@ -13,8 +13,8 @@
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://github.com/intel/gmmlib/archive/refs/tags/intel-gmmlib-22.3.3.tar.gz",
-                    "sha256": "86651bd2803c9f0afd82471bec784e65d2b418dee315a053d22215eb2a679be7"
+                    "url": "https://github.com/intel/gmmlib/archive/refs/tags/intel-gmmlib-22.3.12.tar.gz",
+                    "sha256": "14ec859936aea696a65e6b9488e95a0ac26b15126ef65b20956ef219004dd9a6"
                 }
             ],
             "buildsystem": "cmake-ninja",
@@ -29,7 +29,8 @@
                 ],
                 "make-install-args": [
                     "-v"
-                ]
+                ],
+                "strip": true
             }
         },
         {
@@ -37,14 +38,15 @@
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://github.com/intel/libva/archive/refs/tags/2.17.0.tar.gz",
-                    "sha256": "8940541980ef998a36cd8f6ad905e81838ea4ddf56dc479ed2bebd12711e6001"
+                    "url": "https://github.com/intel/libva/archive/refs/tags/2.19.0.tar.gz",
+                    "sha256": "8cb5e2a9287a76b12c0b6cb96f4f27a0321bbe693df43cd950e5d4542db7f227"
                 }
             ],
             "no-autogen": false,
             "config-opts": ["--with-drivers-path=/app/extensions/IntelMediaSDK/lib/dri"],
             "build-options": {
-                "prefix" : "/app/extensions/IntelMediaSDK"
+                "prefix" : "/app/extensions/IntelMediaSDK",
+                "strip": true
             }
         },
         {
@@ -52,14 +54,15 @@
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://github.com/intel/libva-utils/archive/refs/tags/2.17.1.tar.gz",
-                    "sha256": "6ea5993c3eba230a979fa9d35b4cad8df06d4474a773dc0918033bf50353f966"
+                    "url": "https://github.com/intel/libva-utils/archive/refs/tags/2.19.0.tar.gz",
+                    "sha256": "4135992ab534d0cfd71a93c28e1a22f79c0003cf8d157ffd4621e5e482191b4f"
                 }
             ],
             "no-autogen": false,
             "build-options": {
                 "prefix" : "/app/extensions/IntelMediaSDK",
-                "prepend-pkg-config-path": "/app/extensions/IntelMediaSDK/lib/pkgconfig"
+                "prepend-pkg-config-path": "/app/extensions/IntelMediaSDK/lib/pkgconfig",
+                "strip": true
             }
         },
         {
@@ -67,8 +70,8 @@
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://github.com/intel/media-driver/archive/refs/tags/intel-media-23.1.0.tar.gz",
-                    "sha256": "edae1bdc07b694bd6e42099feddcf875e3b5d7254894f4b3fb292128577baf82"
+                    "url": "https://github.com/intel/media-driver/archive/refs/tags/intel-media-23.2.4.tar.gz",
+                    "sha256": "dfcf2facc4f8bf3df6b147222786032be195874adacc2f4071fc6c91a0abdf0a"
                 }
             ],
             "buildsystem": "cmake-ninja",
@@ -80,7 +83,8 @@
             ],
             "build-options": {
                 "prefix" : "/app/extensions/IntelMediaSDK",
-                "prepend-pkg-config-path": "/app/extensions/IntelMediaSDK/lib/pkgconfig"
+                "prepend-pkg-config-path": "/app/extensions/IntelMediaSDK/lib/pkgconfig",
+                "strip": true
             }
         },
         {
@@ -97,7 +101,8 @@
             ],
             "build-options": {
                 "prefix" : "/app/extensions/IntelMediaSDK",
-                "prepend-pkg-config-path": "/app/extensions/IntelMediaSDK/lib/pkgconfig"
+                "prepend-pkg-config-path": "/app/extensions/IntelMediaSDK/lib/pkgconfig",
+                "strip": true
             },
             "post-install": [
                 "install -Dp -m 644 ${FLATPAK_BUILDER_BUILDDIR}/fr.handbrake.ghb.Plugin.IntelMediaSDK.metainfo.xml --target-directory=${FLATPAK_DEST}/share/metainfo",
@@ -108,6 +113,10 @@
                     "type": "archive",
                     "url": "https://github.com/Intel-Media-SDK/MediaSDK/archive/refs/tags/intel-mediasdk-22.6.5.tar.gz",
                     "sha256": "3a671cc692da5111c041088f5e32528b4346e122e8a134fad71310c572705106"
+                },
+                {
+                    "type": "patch",
+                    "path": "intel-mediasdk-gcc13.patch"
                 },
                 {
                     "type": "file",
@@ -124,13 +133,14 @@
             ],
             "build-options": {
                 "prefix" : "/app/extensions/IntelMediaSDK",
-                "prepend-pkg-config-path": "/app/extensions/IntelMediaSDK/lib/pkgconfig"
+                "prepend-pkg-config-path": "/app/extensions/IntelMediaSDK/lib/pkgconfig",
+                "strip": true
             },
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://github.com/oneapi-src/oneVPL-intel-gpu/archive/refs/tags/intel-onevpl-23.1.0.tar.gz",
-                    "sha256": "4a4437f2ec09f80431807f6031751b586c6353f3c11f1b2d92c10a9a6906acd8"
+                    "url": "https://github.com/oneapi-src/oneVPL-intel-gpu/archive/refs/tags/intel-onevpl-23.2.4.tar.gz",
+                    "sha256": "77a768645c323dfd3e395e6e7e1aff886a7d3af75fb9f38ee9e7014d11e6356f"
                 },
                 {
                     "type": "file",

@@ -1,6 +1,6 @@
 /*
  * values.h
- * Copyright (C) John Stebbins 2008-2022 <stebbins@stebbins>
+ * Copyright (C) John Stebbins 2008-2023 <stebbins@stebbins>
  *
  * values.h is free software.
  *

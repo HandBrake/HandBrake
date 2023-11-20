@@ -1,6 +1,6 @@
 /* vfr.c
 
-   Copyright (c) 2003-2022 HandBrake Team
+   Copyright (c) 2003-2023 HandBrake Team
    This file is part of the HandBrake source code
    Homepage: <http://handbrake.fr/>.
    It may be used under the terms of the GNU General Public License v2.
@@ -89,7 +89,7 @@ static void build_gamma_lut( hb_filter_private_t * pv )
 // Compute the sum of squared errors for a 16x16 block
 // Gamma adjusts pixel values so that less visible differences
 // count less.
-static inline unsigned sse_block16( unsigned *gamma_lut, uint8_t *a, uint8_t *b, int stride )
+static inline unsigned sse_block16( unsigned *gamma_lut, uint8_t *a, uint8_t *b, int stride_a, int stride_b )
 {
     int x, y;
     unsigned sum = 0;
@@ -102,8 +102,8 @@ static inline unsigned sse_block16( unsigned *gamma_lut, uint8_t *a, uint8_t *b,
             diff =  gamma_lut[a[x]] - gamma_lut[b[x]];
             sum += diff * diff;
         }
-        a += stride;
-        b += stride;
+        a += stride_a;
+        b += stride_b;
     }
     return sum;
 }
@@ -114,7 +114,8 @@ static float motion_metric( unsigned * gamma_lut, hb_buffer_t * a, hb_buffer_t *
 {
     int bw = a->f.width / 16;
     int bh = a->f.height / 16;
-    int stride = a->plane[0].stride;
+    int stride_a = a->plane[0].stride;
+    int stride_b = b->plane[0].stride;
     uint8_t * pa = a->plane[0].data;
     uint8_t * pb = b->plane[0].data;
     int x, y;
@@ -124,9 +125,9 @@ static float motion_metric( unsigned * gamma_lut, hb_buffer_t * a, hb_buffer_t *
     {
         for( x = 0; x < bw; x++ )
         {
-            sum +=  sse_block16( gamma_lut, pa + y * 16 * stride + x * 16,
-                                            pb + y * 16 * stride + x * 16,
-                                            stride );
+            sum +=  sse_block16( gamma_lut, pa + y * 16 * stride_a + x * 16,
+                                            pb + y * 16 * stride_b + x * 16,
+                                            stride_a, stride_b );
         }
     }
     return (float)sum / ( a->f.width * a->f.height );;

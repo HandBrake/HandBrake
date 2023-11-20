@@ -2141,7 +2141,7 @@ Waar ondersteund, worden alle gebruikersvoorinstellingen geïmporteerd.</value>
     <value>Er is een nieuwe versie beschikbaar!</value>
   </data>
   <data name="About_Copyright" xml:space="preserve">
-    <value>Copyright (C) 2003-2022 The HandBrake Team</value>
+    <value>Copyright (C) 2003-2023 The HandBrake Team</value>
   </data>
   <data name="Options_LowBatteryLevel" xml:space="preserve">
     <value>Laag accuniveau:</value>

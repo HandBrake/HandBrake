@@ -2162,7 +2162,7 @@ You can drag/drop or enter the text above.</value>
     <value>Μια νέα έκδοση του HandBrake είναι διαθέσιμη!</value>
   </data>
   <data name="About_Copyright" xml:space="preserve">
-    <value>Πνευματικά δικαιώματα(C) 2003-2022 Η ομάδα του HandBrake</value>
+    <value>Πνευματικά δικαιώματα(C) 2003-2023 Η ομάδα του HandBrake</value>
   </data>
   <data name="Options_LowBatteryLevel" xml:space="preserve">
     <value>Χαμηλό επίπεδο μπαταρίας:</value>

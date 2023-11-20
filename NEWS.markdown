@@ -8,152 +8,157 @@ Before updating HandBrake, please make sure there are no pending encodes in the 
 Windows users, please make sure to install [Microsoft .NET Desktop Runtime version 6.0.x](https://dotnet.microsoft.com/en-us/download/dotnet/6.0). Read carefully: you need the **DESKTOP** runtime. You must install .NET 6 even if you have installed .NET 7.
 
 
-## HandBrake 1.7
+## HandBrake 1.7.0
 
 #### General
 
+- Added Apple VideoToolbox hardware presets
+- Updated Creator presets
+  - Disabled interlacing detection and removal; assume creators are working with progressive sources by default
+- Updated Social presets
+  - Target higher quality and frame rate over shorter durations, without interlacing detection and removal
+  - Better suited for modern social sharing of short live action clips and screen/game captures
+- Removed Email presets in favor of revised Social presets
+  - Please stop sending videos via email or use the new Social presets
 - Miscellaneous bug fixes and improvements
-- Slightly improved conversion speed by removing unneeded frame copies
-- Added VideoToolbox presets
 
 #### Video
 
-- Improved HDR Passthru. Preserve HDR10+ and Dolby Vision dynamic metadata
-  - Dolby Vision is supported only when using the x265 10-bit encoder, only the following Dolby Vision profiles and cross compatibility IDs are supported:
-    - 5.0
-    - 7.6 (base layer only, converted to 8.1)
-    - 8.1
-    - 8.4
-  - HDR10+ is supported on both x265 10bit and SVT-AV1 encoders
-- Support for SVT-AV1 multi-pass ABR mode
-- 4x speedup when using SVT-AV1 on Apple Silicon and arm64 CPUs
-- Added NVENC AV1 encoder
-- Added VCN AV1 encoder
-- Preserve the ambient viewing enviroment metadata
+- Added AMD VCN AV1 encoder
+- Added NVIDIA NVENC AV1 encoder
+- Added support for SVT-AV1 multi-pass ABR mode
+- Added support for preserving ambient viewing enviroment metadata
+- Added QSV Rotate and Format filters
+- Improved performance on arm64 / aarch64 / Apple Silicon architectures
+  - Latest FFmpeg provides faster HEVC decoding, 30% faster bwdif filter
+  - New SVT-AV1 assembly optimizations provide up to 4x increase in performance
+- Improved video conversion speed by removing unneeded frame copies for better memory efficiency
+- Improved Dolby Vision dynamic range metadata pass through
+  - Supported encoders: x265 10-bit
+  - Supported profiles and cross-compatibility IDs: 8.4, 8.1, 7.6 (base layer only, converted to 8.1), 5.0
+- Improved HDR10+ dynamic range metadata pass through
+  - Supported encoders: x265 10-bit, SVT-AV1
+- Improved QSV support on Linux (#4958)
+- Updated NVENC to not use multi-pass by default; user configurable advanced option
+- Renamed 2-pass encode option to multi-pass (#5019)
+- Fixed Intel QSV encoder outputting green video in some cases (#4842, #4876)
+- Fixed pixel format conversion slightly altering colors when using a 10-bit hardware encoder (#5011)
+- Fixed scan failures by using swscale instead of zscale when source resolution is not mod 2
+- Fixed incorrect PAR when reading from an anamorphic AV1 video track
 - Removed an artificial bitrate limit on VP9 CQ mode
-- Fixed an issue when scaling video content that is not mod2.
-- Fixed an issue with QSV that could result in the output video being a green screen (#4842)
-- Fixed a green video issue with QuickSync (#4876)
-- Fixed a pixel format conversion issue that could result is slightly different colors when using a 10-bit hardware encoder (#5011)
-- Fixed an issue that prevented the VideoToolbox "speed" preset from being used
-- Various fixes and library updates for QuickSync to improve support on Linux (#4958)
-- Switch to using swscale instead of zscale when the resolution isn't mod2. Should fix scan failures in this condition
-- Fixed PAR when reading from a AV1 anamorphic video track
-- Changed NVEnc option to not default to using multipass. This is now a user configurable advanced option
 
 #### Command line interface
 
-- Fixed an issue with cropping when using presets / crop arguments (#5055)
+- Renamed `--two-pass` to `--multi-pass` and `--no-two-pass` to `--no-multi-pass`, removed `-2` (#5019)
+- Fixed automatic cropping enabled despite using preset with cropping disabled (#5055)
 
 #### Audio
 
-- Fixed ac3/eac3 dowmix, volume was too low
-- Fixed availability of left / right mono mixdowns.
+- Fixed low volume level when downmixing ac3 and eac3
+- Fixed left-only and right-only mono mixdowns (#3533, #5054)
 
 #### Subtitles
 
-- Fixed a locale issue that could result in the wrong decimal separator in SSA headers
-- Fixed an issue that caused issues with 0 length subtitles when using SSA.
+- Fixed locale settings potentially causing incorrect decimal separator in SSA headers
+- Fixed a potential issue affecting zero-duration subtitles
 
-#### Build System
+#### Build system
 
-- Use Meson build system for the Linux GUI
+- Added Meson build system for the Linux GUI
 
 #### Third-party libraries
 
+- New libraries
+  - libdovi 3.2.0 (Dolby Vision dynamic range metadata)
 - Updated libraries
-  - AMF 1.4.30 (AMD VCN encoding)
-  - FFmpeg 6.x (decoding and filters)
-    - Faster HEVC decoding on arm64
-    - 30% faster bwdif filter on arm64
+  - AMF 1.4.30 (AMD VCN video encoding)
+  - FFmpeg 6.1 (decoding and filters)
   - FreeType 2.13.2 (subtitles)
   - Fribidi 1.0.13 (subtitles)
-  - HarfBuzz 8.2.0 (subtitles)
+  - HarfBuzz 8.2.2 (subtitles)
   - libass 0.17.1 (subtitles)
-  - libdav1d 1.3.0 (AV1 decoding)
-  - liblzma (xz) 5.4.4 (LZMA video decoding, e.g. TIFF)
+  - libdav1d 1.3.0 (AV1 video decoding)
+  - liblzma (xz) 5.4.5 (LZMA video decoding, e.g. TIFF)
   - libopus 1.4 (Opus audio encoding)
-  - libjpeg-turbo 3.0.0 (preview image compression)
+  - libjpeg-turbo 3.0.1 (preview image compression)
   - libvpx 1.13.1 (VP8/VP9 video encoding)
-  - libxml 2.11.4 (general)
-  - oneVPL 2023.3.1 (Intel QSV encoding/decoding)
-  - SVT-AV1 1.7 (AV1 encoding)
+  - libxml 2.11.5 (general)
+  - oneVPL 2023.3.1 (Intel QSV video encoding/decoding)
+  - SVT-AV1 1.7 (AV1 video encoding)
   - x264 164 r3107 (H.264/AVC video encoding)
   - x265 r12776 (H.265/HEVC video encoding)
   - zimg 3.0.5 (color conversion)
   - zlib 1.3 (general)
 
-- New libraries
-  - libdovi (Dolby Vision metadata)
-  
+### Linux
+
+- Added drag and drop support for video scanning
+- Added support for native file choosers via xdg-desktop-portal
+- Added Queue > Add All menu option
+- Added XML chapter import and export
+- Added bit depth and HDR information to video summary
+- Added option to pause encoding when switching to battery power or when power save mode is activated
+- Added automatic file naming options: {codec} {bit-depth} {width} {height} {modification-date} {modification-time}
+- Updated Queue, Activity, and Presets windows to no longer float on top of the main window
+- Updated existing translations
+- Removed obsolete update checker
+- Miscellaneous bug fixes and improvements
+
 ### Mac
 
-- Added support for VideoToolbox HEVC, H.264, and ProRes hardware decoders on macOS 13 and later
-  - They can be enabled in the Advanced preferences tab: either for the full path or always
-  - Depending on your computer capabilities, they could decrease CPU usage and speed up the conversion
+- Added support for drag and drop of multiple files at once
+- Added support for selecting multiple files at once in the Open Source dialog
+- Added support for recursive folder scanning in the Open Source dialog
+- Added support for VideoToolbox H.265/HEVC, H.264/AVC, ProRes, and VP9 hardware decoders on macOS 13 and later
+  - Enable/disable in the Preferences > Advanced tab always or full path only
+  - Using hardware decoders on modern devices may decrease CPU usage and thus speed up some filters and encoding
 - Added GPU accelerated Crop & Scale, Rotate, Pad, Yadif, Bwdif, Chroma Smooth, Unsharp, Lasharp, Grayscale filters
-- Improved File Input Handling
-  - You can now multi-select files in the open panel
-  - You can now drag/drop multiple files to scan
-  - Added support for recursive folder scanning (can be enabled in the open panel options)
-- Improved Autoname Preferences UI and added new options: {width} {height} {quality_type} {encoder_bit_depth} {modification-time} {modification-date} {codec} {encoder} {encoder_bit_depth} {preset}
-- Added a "Same as source" destination option that will automatically set the destination to the source one
+- Added "Same as source" destination option that automatically sets the destination path to the source path
+- Improved SVT-AV1 encoding performance by up to 4x on Apple Silicon Macs
+- Improved automatic file naming Preferences UI and added new options: {width} {height} {quality_type} {encoder_bit_depth} {modification-time} {modification-date} {codec} {encoder} {encoder_bit_depth} {preset}
 - Improved handling of security scoped bookmarks
 - Fixed Chroma Smooth tune options
-- Fixed an issue with the Deblock Filter custom string field
+- Fixed Deblock Filter custom string field
+- Fixed an issue that prevented the VideoToolbox "speed" preset from being used
 - Fixed the file size display on the queue statistics window when file size info is not available
 - Miscellaneous bug fixes and improvements
 - Added new translations
- - Korean
- - Bulgarian
+  - Korean (한국어)
+  - Bulgarian (Български)
 - Updated existing translations
-
-### Linux
-
-- Added support for native file choosers via xdg-desktop-portal
-- Added drag and drop support for video scanning
-- Added XML chapter import and export
-- Option to pause encoding when switching to battery power or when power save mode is activated
-- Added Queue > Add All menu option
-- Added bit-depth and HDR information to video summary
-- Added Auto naming options: {codec} {bit-depth} {width} {height} {modification-date} {modification-time}
-- Queue, Activity and Presets windows no longer stay on top of the main window
-- Removed obsolete update checker
-- Miscellaneous bug fixes and improvements
-- Update existing translations
 
 ### Windows
 
-- Improved File Input Handling
-  - You can now exclude file extensions when scanning in batch mode. By default it will exclude common image, subtitle and text files from scans.
-  - You can now multi-select files in the scan file picker.
-  - You can now drag/drop multiple files from Windows Explorer to scan.
-  - Added support for recursive folder scanning. (Can be enabled in preferences -> Advanced)
-- Improved Preview window with video playback support. (Supports most, but not all codecs/containers. Requires Microsoft Codec Packs from the Microsoft Store for modern codecs)
-- Improved Autoname Preferences UI and added new options: {width} {height} {quality_type} {encoder_bit_depth} {modification-time} {modification-date} {encoder} {encoder_bit_depth} {preset}
-- Improved UI on the queue window. 
-  - The left progress panel now can optionally show additional status information. 
-- Improved Preset Panel. 
-  - Queue Manager button replaced by a drop menu of discrete options for quicker access to functionality. 
-  - Optional display of preset description at the bottom of the preset pane.
-  - Added the ability to clone presets.
-- Improved Add Selection window. Sorting feature is now more discoverable. 
-- Updated Translations
-- Fixed an issue with automatic file naming when using drive-based sources (#4859)
-- Fixed Title Specific Scan for drive sources. (#4921)
-- Fixed an issue that could cause a preset to show as "modified" when it was not. (#4909, #4908)
-- Fixed an issue where changes to queue order could be lost. (#4922)
-- Fixed an issue on the audio tab where audio tracks could be duplicated when using non fallback encoder. (#5012)
-- Fixed an issue where some hardware presets are incorrectly shown as disabled when swapping graphics cards.
-- Fixed an issue where windows notifications could cause the app to crash on startup where issues exist on the system. (#5097)
-- Some reliability improvements in the Process Isolation Feature.
+- Added support for drag and drop of multiple files at once
+- Added support for selecting multiple files at once in the Open Source dialog
+- Added support for recursive folder scanning in the Open Source dialog
+  - Enable/disable in Preferences > Advanced
+- Added support for excluding file extensions when opening files in batch mode
+  - Default exclusions are common image, subtitles, and text file extensions; edit list in Preferences > Advanced
+- Improved Preview window native video playback to support most containers and codecs
+  - Modern codec support requires Microsoft Codec Packs from the Microsoft Store
+- Improved automatic file naming Preferences UI and added new options: {width} {height} {quality_type} {encoder_bit_depth} {modification-time} {modification-date} {encoder} {encoder_bit_depth} {preset}
+- Improved Queue window UI to optionally show additional status information on the left progress panel
+- Improved Presets panel
+  - Manage Presets button replaced with a menu of discrete options for quicker access to functionality
+  - Added an option to display the description for the selected preset
+  - Added the ability to clone a preset (create a new preset based on an existing one)
+- Improved Add Selection window to make sorting feature more discoverable
+- Improved Process Isolation reliability
+- Fixed automatic file naming when using physical drive sources (#4859)
+- Fixed Title Specific Scan for physical drive sources (#4921)
+- Fixed an potential issue that could cause an unmodified preset to display as "modified" (#4909, #4908)
+- Fixed an potential issue where changes to queue order were not retained (#4922)
+- Fixed an Audio tab issue where using a non-fallback encoder could lead to duplicated tracks (#5012)
+- Fixed an issue where swapping graphics cards might cause hardware presets to be incorrectly shown as disabled
+- Fixed a potential crash on startup related to Windows Notifications Service failures (#5097)
 - Miscellaneous bug fixes and improvements
 - Added new translations
- - Czech (česky) (partially)
- - Greek (Ελληνικά) (partially)
- - Estonian (Eesti) (partially)
+ - Czech (česky) (partially complete)
+ - Greek (Ελληνικά) (partially complete)
+ - Estonian (Eesti) (partially complete)
  - Basque (Euskara)
- - Finnish (Suomi) (partially)
+ - Finnish (Suomi) (partially complete)
 - Updated existing translations
 
 

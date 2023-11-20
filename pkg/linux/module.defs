@@ -64,11 +64,15 @@ RPMROOT.out/ = $(RPMROOT.out)/
 ###############################################################################
 
 ifeq (1,$(FEATURE.qsv))
-    FPQSV = -q
+    FPFLAGS += -q
 endif
 
 ifeq (1,$(FEATURE.nvenc))
-    FPNVENC = -e
+    FPFLAGS += -e
+endif
+
+ifeq (1,$(FEATURE.libdovi))
+    FPFLAGS += -d
 endif
 
 ifneq ($(FP_RUNTIME),)
@@ -108,6 +112,7 @@ PKG.mediasdk.manifest.flathub = $(PKG.out.flatpak/)$(PKG.mediasdk.name.flatpak).
 PKG.mediasdk.metainfo.flatpak = $(PKG.flatpak/)$(PKG.mediasdk.name.flatpak).metainfo.xml
 PKG.mediasdk.template.flatpak = $(PKG.flatpak/)$(PKG.mediasdk.name.flatpak).json
 PKG.mediasdk.manifest.flatpak = $(STAGE.out.flatpak/)$(PKG.mediasdk.name.flatpak).json
+PKG.mediasdk.patch.flatpak = $(PKG.flatpak/)intel-mediasdk-gcc13.patch
 PKG.mediasdk.build.flatpak = $(STAGE.out.flatpak/)$(PKG.mediasdk.name.flatpak)-$(HB.version)-$(HOST.machine).build
 PKG.mediasdk.flatpak = $(PKG.out.flatpak/)$(PKG.mediasdk.name.flatpak)-$(HB.version)-$(HOST.machine).flatpak
 

@@ -27,15 +27,15 @@ msgstr "HandBrake"
 
 #: data/fr.handbrake.ghb.desktop.in:4
 msgid "Media Transcoder"
-msgstr ""
+msgstr "Transcodificador de medios"
 
 #: data/fr.handbrake.ghb.desktop.in:5
 msgid "Transcodes DVD, Blu-ray, and other media"
-msgstr ""
+msgstr "Transcodifica DVD, Blu-ray y otros medios"
 
 #: data/fr.handbrake.ghb.desktop.in:11
 msgid "Format Converter;Video Encoder;"
-msgstr ""
+msgstr "Convertidor de formato; codificador de vídeo;"
 
 #: src/ui-gtk3/menu.ui:7
 msgid "_File"
@@ -3895,7 +3895,7 @@ msgstr ""
 
 #: src/title-add.c:113 src/title-add.c:162
 msgid "Overwrite File?"
-msgstr ""
+msgstr "¿Sobrescribir archivo?"
 
 #: src/title-add.c:114 src/title-add.c:163
 msgid "Overwrite"
@@ -3914,7 +3914,7 @@ msgstr ""
 
 #: src/title-add.c:131 src/title-add.c:146
 msgid "Invalid Destination"
-msgstr ""
+msgstr "Destino no válido"
 
 #: src/title-add.c:142
 #, c-format
@@ -3961,13 +3961,15 @@ msgstr ""
 
 #: src/title-add.c:871
 msgid "Cannot Add Titles"
-msgstr ""
+msgstr "No se pueden añadir títulos"
 
 #: src/title-add.c:872
 msgid ""
 "The filenames are not unique. Please choose\n"
 "a unique destination filename for each title."
 msgstr ""
+"Los nombres de archivos no son únicos. Por favor elige\n"
+"un nombre de archivo de destino único para cada título."
 
 #: src/videohandler.c:208
 #, c-format

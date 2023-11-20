@@ -1,6 +1,6 @@
 /* stream.c
 
-   Copyright (c) 2003-2022 HandBrake Team
+   Copyright (c) 2003-2023 HandBrake Team
    This file is part of the HandBrake source code
    Homepage: <http://handbrake.fr/>.
    It may be used under the terms of the GNU General Public License v2.
@@ -5306,7 +5306,8 @@ static int ffmpeg_open( hb_stream_t *stream, hb_title_t *title, int scan )
     return 1;
 
   fail:
-    if ( info_ic ) avformat_close_input( &info_ic );
+    avformat_close_input(&info_ic);
+    av_packet_free(&stream->ffmpeg_pkt);
     return 0;
 }
 
@@ -5852,9 +5853,9 @@ static hb_title_t *ffmpeg_title_scan( hb_stream_t *stream, hb_title_t *title )
             }
 
             int j;
-            for (j = 0; j < st->nb_side_data; j++)
+            for (j = 0; j < codecpar->nb_coded_side_data; j++)
             {
-                AVPacketSideData sd = st->side_data[j];
+                AVPacketSideData sd = codecpar->coded_side_data[j];
                 switch (sd.type)
                 {
                     case AV_PKT_DATA_DISPLAYMATRIX:

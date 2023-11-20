@@ -1,6 +1,6 @@
 /* fifo.c
 
-   Copyright (c) 2003-2022 HandBrake Team
+   Copyright (c) 2003-2023 HandBrake Team
    Copyright 2022 NVIDIA Corporation
    This file is part of the HandBrake source code
    Homepage: <http://handbrake.fr/>.
@@ -661,15 +661,15 @@ static void copy_avframe_to_video_buffer(const AVFrame *frame, hb_buffer_t *buf)
         }
         else
         {
-            const int width     = buf->plane[pp].width;
-            const int height    = buf->plane[pp].height;
             const int stride    = buf->plane[pp].stride;
+            const int height    = buf->plane[pp].height;
             const int linesize  = frame->linesize[pp];
+            const int size = linesize < stride ? ABS(linesize) : stride;
             uint8_t *dst = buf->plane[pp].data;
             uint8_t *src = frame->data[pp];
             for (int yy = 0; yy < height; yy++)
             {
-                memcpy(dst, src, width);
+                memcpy(dst, src, size);
                 dst += stride;
                 src += linesize;
             }

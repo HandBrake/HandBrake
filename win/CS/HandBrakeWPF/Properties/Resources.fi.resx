@@ -2141,7 +2141,7 @@ Sikäli kuin mahdollista, on tuotu käyttäjän esiasetukset.</value>
     <value>Saatavilla on uusi versio!</value>
   </data>
   <data name="About_Copyright" xml:space="preserve">
-    <value>Tekijänoikeudet © 2003–2022 HandBrake-työryhmä</value>
+    <value>Tekijänoikeudet © 2003–2023 HandBrake-työryhmä</value>
   </data>
   <data name="Options_LowBatteryLevel" xml:space="preserve">
     <value>Akkutehon ollessa vähissä:</value>

@@ -41,7 +41,7 @@ class FlatpakPluginManifest:
             self.manifest["runtime-version"] = runtime
 
 class FlatpakManifest:
-    def __init__(self, source_list, runtime, qsv, nvenc, template=None):
+    def __init__(self, source_list, runtime, qsv, nvenc, dovi, template=None):
         if template is not None and os.path.exists(template):
             with open(template, 'r') as fp:
                 self.manifest = json.load(fp, object_pairs_hook=OrderedDict)
@@ -65,6 +65,11 @@ class FlatpakManifest:
             self.hbmodule["sources"]     = self.sources
             self.hbconfig                = [None]
 
+        self.extensions  = []
+        self.build_path  = []
+        self.build_args  = []
+        self.ld_path     = []
+
         if runtime is not None:
             self.manifest["runtime-version"] = runtime
 
@@ -74,8 +79,27 @@ class FlatpakManifest:
         if nvenc:
             self.hbconfig.append("--enable-nvenc");
             self.hbconfig.append("--enable-nvdec");
-            self.manifest["sdk-extensions"] = ['org.freedesktop.Sdk.Extension.llvm14'];
-            self.hbmodule["build-options"]  = {'append-path':'/usr/lib/sdk/llvm14/bin','prepend-ld-library-path':'/usr/lib/sdk/llvm14/lib'};
+            self.extensions += ['org.freedesktop.Sdk.Extension.llvm16'];
+            self.build_path += ['/usr/lib/sdk/llvm16/bin'];
+            self.ld_path    += ['/usr/lib/sdk/llvm16/lib'];
+
+        if dovi:
+            self.hbconfig.append("--enable-libdovi");
+            self.extensions += ['org.freedesktop.Sdk.Extension.rust-stable'];
+            self.build_path += ['/usr/lib/sdk/rust-stable/bin'];
+            self.build_args += ['--share=network'];
+
+        if len(self.extensions) > 0:
+            self.manifest["sdk-extensions"] = self.extensions
+
+        if len(self.build_path) > 0:
+            self.hbmodule["build-options"].update({'append-path': ':'.join(self.build_path)})
+
+        if len(self.build_args) > 0:
+            self.hbmodule["build-options"].update({'build-args': self.build_args})
+
+        if self.ld_path:
+            self.hbmodule["build-options"].update({'prepend-ld-library-path': ':'.join(self.ld_path)})
 
         handbrake_found = False
         for key, value in source_list.items():
@@ -118,14 +142,15 @@ def usage():
     print("     -r --runtime    - Flatpak SDK runtime version")
     print("     -q --qsv        - Build with Intel QSV support")
     print("     -e --nvenc      - Build with Nvidia HW Encoder support")
+    print("     -d --dovi       - Build with libdovi support")
     print("     -p --plugin     - Manifest if for a HandBrake flatpak plugin")
     print("     -h --help       - Show this message")
 
 if __name__ == "__main__":
     try:
-        opts, args = getopt.getopt(sys.argv[1:], "a:c:s:b:t:r:qeph",
+        opts, args = getopt.getopt(sys.argv[1:], "a:c:s:b:t:r:qedph",
             ["archive=", "contrib=", "sha256=", "basename=",
-             "template=", "runtime=", "qsv", "nvenc", "plugin", "help"])
+             "template=", "runtime=", "qsv", "nvenc", "dovi", "plugin", "help"])
     except getopt.GetoptError:
         print("Error: Invalid option")
         usage()
@@ -139,6 +164,7 @@ if __name__ == "__main__":
     current_source = None
     runtime = None
     plugin = 0
+    dovi = 0
     qsv = 0
     nvenc = 1
     print("ARGS ",args)
@@ -176,10 +202,11 @@ if __name__ == "__main__":
             runtime = arg
         elif opt in ("-q", "--qsv"):
             qsv = 1;
-
         elif opt in ("-e", "--nvenc"):
             print("NVENC ON")
             nvenc = 1;
+        elif opt in ("-d", "--dovi"):
+            dovi = 1;
         elif opt in ("-p", "--plugin"):
             plugin = 1;
 
@@ -191,7 +218,7 @@ if __name__ == "__main__":
     if plugin:
         manifest = FlatpakPluginManifest(runtime, template)
     else:
-        manifest = FlatpakManifest(source_list, runtime, qsv, nvenc, template)
+        manifest = FlatpakManifest(source_list, runtime, qsv, nvenc, dovi, template)
 
     if dst is not None:
         with open(dst, 'w') as fp:

@@ -24,5 +24,5 @@ We accept bug reports (including security reports) for the following versions:
 
 | Version            | Supported          |
 | ------------------ | ------------------ |
-| 1.6                | :white_check_mark: |
+| 1.7.x              | :white_check_mark: |
 | Earlier Releases   | :x:                |
