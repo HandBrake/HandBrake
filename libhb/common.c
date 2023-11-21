@@ -538,7 +538,9 @@ static void hb_common_global_hw_init()
     hb_vce_h264_available();
 
     // first initialization and QSV adapters list collection should happen after other hw vendors initializations to prevent device order issues
+#if HB_PROJECT_FEATURE_QSV
     hb_qsv_available();
+#endif
 }
 
 void hb_common_global_init(int disable_hardware)
