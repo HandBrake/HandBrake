@@ -8,6 +8,19 @@ Before updating HandBrake, please make sure there are no pending encodes in the 
 Windows users, please make sure to install [Microsoft .NET Desktop Runtime version 6.0.x](https://dotnet.microsoft.com/en-us/download/dotnet/6.0). Read carefully: you need the **DESKTOP** runtime. You must install .NET 6 even if you have installed .NET 7.
 
 
+## HandBrake 1.7.1
+
+#### Video
+
+- Fixed Decomb filter producing corrupted frames with 10-bit depth or higher source (#5518)
+- Fixed a potential crash when using the Comb Detect filter on an RGB source
+- Fixed Intel QSV devices enumeration where devices from other vendors are present (#5317, #5177)
+
+#### Mac
+
+- Fixed an issue opening EyeTV sources (#5514)
+
+
 ## HandBrake 1.7.0
 
 #### General
