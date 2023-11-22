@@ -785,7 +785,7 @@ title_add_multiple_action_cb (GSimpleAction *action, GVariant *param,
 
             gtk_label_set_markup(label, title_label);
             ghb_editable_set_text(entry, dest_file);
-            gtk_file_chooser_set_filename(chooser, dest_dir);
+            ghb_file_chooser_set_initial_file(chooser, dest_dir);
 
             g_free(title_label);
         }

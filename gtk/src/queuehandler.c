@@ -1520,6 +1520,8 @@ static void save_queue_file (signal_user_data_t *ud)
                       GHB_STOCK_CANCEL);
     gtk_file_chooser_set_current_name(GTK_FILE_CHOOSER(chooser), "queue.json");
     gtk_file_chooser_set_do_overwrite_confirmation(GTK_FILE_CHOOSER(chooser), TRUE);
+    ghb_file_chooser_set_initial_file(GTK_FILE_CHOOSER(chooser),
+                                      ghb_dict_get_string(ud->prefs, "ExportDirectory"));
 
     gtk_native_dialog_set_modal(GTK_NATIVE_DIALOG(chooser), TRUE);
     g_signal_connect(G_OBJECT(chooser), "response", G_CALLBACK(save_queue_file_cb), ud);
@@ -1693,6 +1695,8 @@ static void open_queue_file (signal_user_data_t *ud)
     // Add filters
     ghb_add_file_filter(GTK_FILE_CHOOSER(chooser), ud, _("All Files"), "FilterAll");
     ghb_add_file_filter(GTK_FILE_CHOOSER(chooser), ud, g_content_type_get_description("application/json"), "FilterJSON");
+    ghb_file_chooser_set_initial_file(GTK_FILE_CHOOSER(chooser),
+                                      ghb_dict_get_string(ud->prefs, "ExportDirectory"));
 
     gtk_native_dialog_set_modal(GTK_NATIVE_DIALOG(chooser), TRUE);
     g_signal_connect(G_OBJECT(chooser), "response", G_CALLBACK(open_queue_file_cb), ud);
