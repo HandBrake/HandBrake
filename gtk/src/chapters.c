@@ -608,7 +608,7 @@ chapters_export_action_cb (GSimpleAction *action, GVariant *param,
 
     exportDir = ghb_dict_get_string(ud->prefs, "ExportDirectory");
     if (exportDir && exportDir[0] != '\0')
-        gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(dialog), exportDir);
+        ghb_file_chooser_set_initial_file(GTK_FILE_CHOOSER(dialog), exportDir);
 
     gtk_native_dialog_set_modal(GTK_NATIVE_DIALOG(dialog), TRUE);
     gtk_native_dialog_set_transient_for(GTK_NATIVE_DIALOG(dialog), GTK_WINDOW(hb_window));
@@ -633,6 +633,8 @@ chapters_import_action_cb (GSimpleAction *action, GVariant *param,
     ghb_add_file_filter(GTK_FILE_CHOOSER(dialog), ud, _("All Files"), "FilterAll");
     filter = ghb_add_file_filter(GTK_FILE_CHOOSER(dialog), ud, _("Chapters (*.xml)"), "FilterXML");
     gtk_file_chooser_set_filter(GTK_FILE_CHOOSER(dialog), filter);
+    ghb_file_chooser_set_initial_file(GTK_FILE_CHOOSER(dialog),
+                                      ghb_dict_get_string(ud->prefs, "ExportDirectory"));
 
     gtk_native_dialog_set_modal(GTK_NATIVE_DIALOG(dialog), TRUE);
     gtk_native_dialog_set_transient_for(GTK_NATIVE_DIALOG(dialog), GTK_WINDOW(hb_window));

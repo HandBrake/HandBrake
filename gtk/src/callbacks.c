@@ -1727,7 +1727,7 @@ do_source_dialog(gboolean dir, signal_user_data_t *ud)
     gtk_native_dialog_set_modal(GTK_NATIVE_DIALOG(chooser), TRUE);
     gtk_native_dialog_set_transient_for(GTK_NATIVE_DIALOG(chooser), hb_window);
     g_signal_connect(chooser, "response", G_CALLBACK(source_dialog_response_cb), ud);
-    gtk_file_chooser_select_filename(GTK_FILE_CHOOSER(chooser), sourcename);
+    ghb_file_chooser_set_initial_file(GTK_FILE_CHOOSER(chooser), sourcename);
     gtk_native_dialog_show(GTK_NATIVE_DIALOG(chooser));
 }
 
@@ -1952,7 +1952,7 @@ destination_response_cb(GtkFileChooserNative *chooser,
         entry = (GtkEntry*)GHB_WIDGET(ud->builder, "dest_file");
         ghb_editable_set_text(entry, basename);
         dest_chooser = GTK_FILE_CHOOSER(GHB_WIDGET(ud->builder, "dest_dir"));
-        gtk_file_chooser_set_filename(dest_chooser, dirname);
+        ghb_file_chooser_set_initial_file(dest_chooser, dirname);
         g_object_unref(file);
         g_free (dirname);
         g_free (basename);
@@ -1968,7 +1968,6 @@ destination_action_cb(GSimpleAction *action, GVariant *param,
     GtkFileChooserNative *chooser;
     GtkWindow *hb_window;
     const gchar *destname;
-    gchar *basename;
 
     hb_window = GTK_WINDOW(GHB_WIDGET(ud->builder, "hb_window"));
     destname = ghb_dict_get_string(ud->settings, "destination");
@@ -1977,11 +1976,7 @@ destination_action_cb(GSimpleAction *action, GVariant *param,
                                           GTK_FILE_CHOOSER_ACTION_SAVE,
                                           GHB_STOCK_SAVE,
                                           GHB_STOCK_CANCEL);
-    gtk_file_chooser_set_filename(GTK_FILE_CHOOSER(chooser), destname);
-    basename = g_path_get_basename(destname);
-    gtk_file_chooser_set_current_name(GTK_FILE_CHOOSER(chooser), basename);
-    g_free(basename);
-
+    ghb_file_chooser_set_initial_file(GTK_FILE_CHOOSER(chooser), destname);
     gtk_native_dialog_set_modal(GTK_NATIVE_DIALOG(chooser), TRUE);
     g_signal_connect(chooser, "response", G_CALLBACK(destination_response_cb), ud);
     gtk_native_dialog_show(GTK_NATIVE_DIALOG(chooser));
