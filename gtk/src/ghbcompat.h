@@ -390,4 +390,44 @@ static inline GtkGesture *ghb_gesture_click_new (GtkWidget *widget)
     return gesture;
 }
 
+static inline void
+ghb_file_chooser_set_initial_file (GtkFileChooser *chooser, const char *file)
+{
+    if (!file || !file[0])
+    {
+        return;
+    }
+    else if (g_file_test(file, G_FILE_TEST_IS_DIR))
+    {
+#if GTK_CHECK_VERSION(4, 4, 0)
+        GFile *gfile = g_file_new_for_path(file);
+        gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(chooser), gfile, NULL);
+        g_object_unref(gfile);
+#else
+        gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(chooser), file);
+#endif
+    }
+    else
+    {
+        char *dir = g_path_get_dirname(file);
+        if (g_file_test(dir, G_FILE_TEST_IS_DIR))
+        {
+#if GTK_CHECK_VERSION(4, 4, 0)
+            GFile *gfile = g_file_new_for_path(dir);
+            gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(chooser), gfile, NULL);
+            g_object_unref(gfile);
+#else
+            gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(chooser), dir);
+#endif
+        }
+        g_free(dir);
+        if (gtk_file_chooser_get_action(chooser) == GTK_FILE_CHOOSER_ACTION_SAVE)
+        {
+            char *base = g_path_get_basename(file);
+            gtk_file_chooser_set_current_name(GTK_FILE_CHOOSER(chooser), base);
+            g_free(base);
+        }
+    }
+}
+
 #endif // _GHB_COMPAT_H_
