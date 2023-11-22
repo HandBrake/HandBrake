@@ -2085,7 +2085,7 @@ preset_import_action_cb(GSimpleAction *action, GVariant *param,
     {
         exportDir = ".";
     }
-    gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(chooser), exportDir);
+    ghb_file_chooser_set_initial_file(GTK_FILE_CHOOSER(chooser), exportDir);
 
     gtk_native_dialog_set_modal(GTK_NATIVE_DIALOG(chooser), TRUE);
     gtk_native_dialog_set_transient_for(GTK_NATIVE_DIALOG(chooser), GTK_WINDOW(hb_window));
@@ -2203,7 +2203,7 @@ preset_export_action_cb(GSimpleAction *action, GVariant *param,
     g_strstrip(preset_name);
     g_strdelimit(preset_name, GHB_UNSAFE_FILENAME_CHARS, '_');
     filename = g_strdup_printf("%s.json", preset_name);
-    gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(chooser), exportDir);
+    ghb_file_chooser_set_initial_file(GTK_FILE_CHOOSER(chooser), exportDir);
     gtk_file_chooser_set_current_name(GTK_FILE_CHOOSER(chooser), filename);
     gtk_file_chooser_set_do_overwrite_confirmation(GTK_FILE_CHOOSER(chooser), TRUE);
     g_free(filename);

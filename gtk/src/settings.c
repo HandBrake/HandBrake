@@ -456,44 +456,9 @@ ghb_update_widget(GtkWidget *widget, const GhbValue *value)
     }
     else if (type == GTK_TYPE_FILE_CHOOSER_BUTTON)
     {
-        GtkFileChooserAction act;
-        act = gtk_file_chooser_get_action(GTK_FILE_CHOOSER(widget));
-
-        if (str[0] == 0)
+        if (str[0] != 0)
         {
-            // Do nothing
-            ;
-        }
-        else if (act == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER ||
-                 act == GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER)
-        {
-            gtk_file_chooser_set_filename (GTK_FILE_CHOOSER(widget), str);
-        }
-        else if (act == GTK_FILE_CHOOSER_ACTION_SAVE)
-        {
-            gtk_file_chooser_set_filename (GTK_FILE_CHOOSER(widget), str);
-        }
-        else
-        {
-            if (g_file_test(str, G_FILE_TEST_IS_DIR))
-            {
-                gtk_file_chooser_set_current_folder(
-                    GTK_FILE_CHOOSER(widget), str);
-            }
-            else if (g_file_test(str, G_FILE_TEST_EXISTS))
-            {
-                gtk_file_chooser_set_filename (GTK_FILE_CHOOSER(widget), str);
-            }
-            else
-            {
-                gchar * dirname;
-
-                dirname = g_path_get_dirname(str);
-                gtk_file_chooser_set_current_folder(
-                    GTK_FILE_CHOOSER(widget), dirname);
-                gtk_file_chooser_unselect_all(GTK_FILE_CHOOSER(widget));
-                g_free(dirname);
-            }
+            ghb_file_chooser_set_initial_file(GTK_FILE_CHOOSER(widget), str);
         }
     }
     else
