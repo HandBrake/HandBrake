@@ -57,10 +57,11 @@ hb_metal_context_t * hb_metal_context_init(const char *metallib_data,
         goto fail;
     }
 
-    ctx->function = [ctx->library newFunctionWithName:@(function_name)];
-    if (!ctx->function)
+    ctx->params_buffer = [ctx->device newBufferWithLength:params_buffer_len
+                                                  options:MTLResourceStorageModeShared];
+    if (!ctx->params_buffer)
     {
-        hb_error("metal: failed to create Metal function");
+        hb_error("metal: failed to create Metal buffer for parameters");
         goto fail;
     }
 
@@ -71,18 +72,9 @@ hb_metal_context_t * hb_metal_context_init(const char *metallib_data,
         goto fail;
     }
 
-    ctx->pipeline = [ctx->device newComputePipelineStateWithFunction:ctx->function error:&err];
-    if (!ctx->pipeline)
+    if (hb_metal_add_pipeline(ctx, function_name, 0))
     {
-        hb_error("metal: failed to create Metal compute pipeline: %s", err.description.UTF8String);
-        goto fail;
-    }
-
-    ctx->params_buffer = [ctx->device newBufferWithLength:params_buffer_len
-                                                  options:MTLResourceStorageModeShared];
-    if (!ctx->params_buffer)
-    {
-        hb_error("metal: failed to create Metal buffer for parameters");
+        hb_error("metal: failed to add Metal function");
         goto fail;
     }
 
@@ -110,14 +102,40 @@ fail:
     return NULL;
 }
 
+int hb_metal_add_pipeline(hb_metal_context_t *ctx, const char *function_name, size_t index)
+{
+    if (ctx->pipelines_count < index + 1) {
+        ctx->pipelines_count = index + 1;
+        ctx->pipelines = av_realloc(ctx->pipelines, (ctx->pipelines_count) * sizeof(id<MTLComputePipelineState>));
+        ctx->functions = av_realloc(ctx->functions, (ctx->pipelines_count) * sizeof(id<MTLFunction>));
+    }
+    NSError *err = nil;
+    ctx->functions[index] = [ctx->library newFunctionWithName:@(function_name)];
+    if (!ctx->functions[index])
+    {
+        hb_error("metal: failed to create Metal function");
+        return -1;
+    }
+    ctx->pipelines[index] = [ctx->device newComputePipelineStateWithFunction:ctx->functions[index] error:&err];
+    if (!ctx->pipelines[index])
+    {
+        hb_error("metal: failed to create Metal compute pipeline: %s", err.description.UTF8String);
+        return -1;
+    }
+    return 0;
+}
+
 void hb_metal_context_close(hb_metal_context_t **_ctx)
 {
     hb_metal_context_t *ctx = *_ctx;
     if (ctx)
     {
+        for (int i = 0; i < ctx->pipelines_count; i++)
+        {
+            [ctx->functions[i] release];
+            [ctx->pipelines[i] release];
+        }
         [ctx->params_buffer release];
-        [ctx->function release];
-        [ctx->pipeline release];
         [ctx->queue release];
         [ctx->library release];
         [ctx->device release];
