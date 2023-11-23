@@ -1489,6 +1489,7 @@ enum
     // First, filters that may change the framerate (drop or dup frames)
     HB_FILTER_DETELECINE,
     HB_FILTER_COMB_DETECT,
+    HB_FILTER_COMB_DETECT_VT,
     HB_FILTER_DECOMB,
     HB_FILTER_YADIF,
     HB_FILTER_YADIF_VT,

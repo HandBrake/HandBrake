@@ -403,6 +403,8 @@ int hb_vt_are_filters_supported(hb_list_t *filters)
         switch (filter->id)
         {
             case HB_FILTER_PRE_VT:
+            case HB_FILTER_COMB_DETECT:
+            case HB_FILTER_COMB_DETECT_VT:
             case HB_FILTER_YADIF:
             case HB_FILTER_YADIF_VT:
             case HB_FILTER_BWDIF:
@@ -498,6 +500,7 @@ void hb_vt_setup_hw_filters(hb_job_t *job)
         hb_filter_object_t *filter = hb_filter_init(HB_FILTER_PRE_VT);
         hb_add_filter(job, filter, NULL);
 
+        replace_filter(job, HB_FILTER_COMB_DETECT, HB_FILTER_COMB_DETECT_VT);
         replace_filter(job, HB_FILTER_YADIF, HB_FILTER_YADIF_VT);
         replace_filter(job, HB_FILTER_BWDIF, HB_FILTER_BWDIF_VT);
         replace_filter(job, HB_FILTER_CROP_SCALE, HB_FILTER_CROP_SCALE_VT);

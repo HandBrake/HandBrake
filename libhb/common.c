@@ -4693,6 +4693,10 @@ hb_filter_object_t * hb_filter_get( int filter_id )
             filter = &hb_filter_prefilter_vt;
             break;
 
+        case HB_FILTER_COMB_DETECT_VT:
+            filter = &hb_filter_comb_detect_vt;
+            break;
+
         case HB_FILTER_YADIF_VT:
             filter = &hb_filter_yadif_vt;
             break;
