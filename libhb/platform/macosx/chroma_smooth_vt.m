@@ -283,12 +283,12 @@ static void call_kernel(hb_filter_private_t *pv,
 
     if (pv->global)
     {
-        hb_metal_compute_encoder_dispatch(pv->mtl->device, pv->mtl->pipeline, encoder, dst.width, dst.height);
+        hb_metal_compute_encoder_dispatch(pv->mtl->device, pv->mtl->pipelines[0], encoder, dst.width, dst.height);
     }
     else
     {
-        hb_metal_compute_encoder_dispatch_fixed_threadgroup_size(pv->mtl->device, pv->mtl->pipeline, encoder,
-                                                                 dst.width, dst.height, 16, 16);
+        hb_metal_compute_encoder_dispatch_fixed_threadgroup_size(pv->mtl->device, pv->mtl->pipelines[0],
+                                                                 encoder, dst.width, dst.height, 16, 16);
     }
     [encoder endEncoding];
 
