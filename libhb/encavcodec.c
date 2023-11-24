@@ -703,6 +703,13 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
                 ++i;
             }
         }
+
+        // Disable unhandled SEI
+        // These might be present in the source video
+        // and passed through in side_data, but we
+        // don't want to automatically preserve them
+        av_dict_set(&av_opts, "a53_cc", "0", 0);
+        av_dict_set(&av_opts, "s12m_tc", "0", 0);
     }
 
     // Make VCE h.265 encoder emit an IDR for every GOP
