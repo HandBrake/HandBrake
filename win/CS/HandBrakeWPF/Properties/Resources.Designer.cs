@@ -374,6 +374,24 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Audio Track Quality.
+        /// </summary>
+        public static string AudioView_AudioQuality {
+            get {
+                return ResourceManager.GetString("AudioView_AudioQuality", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Audio Track Name.
+        /// </summary>
+        public static string AudioView_AudioTrackName {
+            get {
+                return ResourceManager.GetString("AudioView_AudioTrackName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to &apos;Auto Passthru&apos; Behaviour:.
         /// </summary>
         public static string AudioView_AutoPassthruBehaviour {
@@ -392,11 +410,29 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Audio Track Bitrate.
+        /// </summary>
+        public static string AudioView_BitrateSelection {
+            get {
+                return ResourceManager.GetString("AudioView_BitrateSelection", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Codec.
         /// </summary>
         public static string AudioView_Codec {
             get {
                 return ResourceManager.GetString("AudioView_Codec", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Delete this audio track.
+        /// </summary>
+        public static string AudioView_DeleteTrack {
+            get {
+                return ResourceManager.GetString("AudioView_DeleteTrack", resourceCulture);
             }
         }
         
@@ -451,6 +487,15 @@ namespace HandBrakeWPF.Properties {
         public static string AudioView_Quality {
             get {
                 return ResourceManager.GetString("AudioView_Quality", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Audio Encoder Quality Mode.
+        /// </summary>
+        public static string AudioView_QualityMode {
+            get {
+                return ResourceManager.GetString("AudioView_QualityMode", resourceCulture);
             }
         }
         
