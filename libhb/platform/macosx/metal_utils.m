@@ -57,12 +57,15 @@ hb_metal_context_t * hb_metal_context_init(const char *metallib_data,
         goto fail;
     }
 
-    ctx->params_buffer = [ctx->device newBufferWithLength:params_buffer_len
-                                                  options:MTLResourceStorageModeShared];
-    if (!ctx->params_buffer)
+    if (params_buffer_len)
     {
-        hb_error("metal: failed to create Metal buffer for parameters");
-        goto fail;
+        ctx->params_buffer = [ctx->device newBufferWithLength:params_buffer_len
+                                                      options:MTLResourceStorageModeShared];
+        if (!ctx->params_buffer)
+        {
+            hb_error("metal: failed to create Metal buffer for parameters");
+            goto fail;
+        }
     }
 
     ctx->queue = ctx->device.newCommandQueue;
@@ -72,10 +75,13 @@ hb_metal_context_t * hb_metal_context_init(const char *metallib_data,
         goto fail;
     }
 
-    if (hb_metal_add_pipeline(ctx, function_name, 0))
+    if (function_name != NULL)
     {
-        hb_error("metal: failed to add Metal function");
-        goto fail;
+        if (hb_metal_add_pipeline(ctx, function_name, 0))
+        {
+            hb_error("metal: failed to add Metal function");
+            goto fail;
+        }
     }
 
     CVReturn ret = CVMetalTextureCacheCreate(NULL, NULL, ctx->device, NULL, &ctx->cache);
