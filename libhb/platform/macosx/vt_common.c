@@ -402,49 +402,22 @@ int hb_vt_are_filters_supported(hb_list_t *filters)
 
         switch (filter->id)
         {
-            case HB_FILTER_PRE_VT:
-            case HB_FILTER_COMB_DETECT:
-            case HB_FILTER_COMB_DETECT_VT:
-            case HB_FILTER_YADIF:
-            case HB_FILTER_YADIF_VT:
-            case HB_FILTER_BWDIF:
-            case HB_FILTER_BWDIF_VT:
-            case HB_FILTER_CHROMA_SMOOTH:
-            case HB_FILTER_CHROMA_SMOOTH_VT:
-            case HB_FILTER_CROP_SCALE:
-            case HB_FILTER_CROP_SCALE_VT:
-            case HB_FILTER_GRAYSCALE:
-            case HB_FILTER_GRAYSCALE_VT:
-            case HB_FILTER_LAPSHARP:
-            case HB_FILTER_LAPSHARP_VT:
-            case HB_FILTER_UNSHARP:
-            case HB_FILTER_UNSHARP_VT:
-            case HB_FILTER_PAD:
-            case HB_FILTER_PAD_VT:
-                break;
-            case HB_FILTER_ROTATE:
-            case HB_FILTER_ROTATE_VT:
-            {
-#ifdef MAC_OS_VERSION_13_0
-                if (__builtin_available(macOS 13, *)) {}
-                else { supported = 0; }
-                break;
-#else
+            case HB_FILTER_DECOMB:
+            case HB_FILTER_DEBLOCK:
+            case HB_FILTER_DENOISE:
+            case HB_FILTER_NLMEANS:
+            case HB_FILTER_RENDER_SUB:
+            case HB_FILTER_COLORSPACE:
+            case HB_FILTER_FORMAT:
                 supported = 0;
-                break;
-#endif
-            }
-            case HB_FILTER_VFR:
-                // Mode 0 doesn't require access to the frame data
-                supported = hb_dict_get_int(filter->settings, "mode") == 0;
                 break;
             default:
-                supported = 0;
+                break;
         }
 
         if (supported == 0)
         {
-            hb_deep_log(2, "hwaccel: %s isn't yet supported for hw video frames", filter->name);
+            hb_deep_log(2, "videotoolbox: %s isn't yet supported for hw video frames", filter->name);
             ret = 0;
         }
     }

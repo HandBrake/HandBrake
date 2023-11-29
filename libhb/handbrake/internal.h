@@ -510,6 +510,10 @@ extern hb_filter_object_t hb_filter_unsharp_vt;
 
 extern hb_motion_metric_object_t hb_motion_metric;
 
+#if defined(__APPLE__)
+extern hb_motion_metric_object_t hb_motion_metric_vt;
+#endif
+
 extern hb_work_object_t * hb_objects;
 
 #define HB_WORK_IDLE     0

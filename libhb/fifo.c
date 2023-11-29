@@ -710,12 +710,21 @@ hb_buffer_t * hb_buffer_dup(const hb_buffer_t *src)
         // into another hardware AVFrame.
         if (frame->hw_frames_ctx)
         {
-            buf = hb_buffer_wrapper_init();
-            if (buf)
+#ifdef __APPLE__
+            if (frame->format == AV_PIX_FMT_VIDEOTOOLBOX)
             {
-                buf->f = src->f;
-                hb_buffer_copy_props(buf, src);
-                copy_hwframe_to_video_buffer(frame, buf);
+                buf = hb_vt_buffer_dup(src);
+            }
+            else
+#endif
+            {
+                buf = hb_buffer_wrapper_init();
+                if (buf)
+                {
+                    buf->f = src->f;
+                    hb_buffer_copy_props(buf, src);
+                    copy_hwframe_to_video_buffer(frame, buf);
+                }
             }
         }
         // If not, copy the content to a standard hb_buffer

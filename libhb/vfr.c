@@ -72,8 +72,54 @@ hb_filter_object_t hb_filter_vfr =
     .settings_template = hb_vfr_template,
 };
 
+static hb_motion_metric_object_t * hb_motion_metric_init(hb_filter_init_t *init)
+{
+    hb_motion_metric_object_t *metric;
+    switch (init->hw_pix_fmt)
+    {
+#if defined(__APPLE__)
+        case AV_PIX_FMT_VIDEOTOOLBOX:
+            metric = &hb_motion_metric_vt;
+            break;
+#endif
+        default:
+            metric = &hb_motion_metric;
+            break;
+    }
 
-#define DUP_THRESH_SSE 5.0
+    hb_motion_metric_object_t *metric_copy = malloc(sizeof(hb_motion_metric_object_t));
+    if (metric_copy == NULL)
+    {
+        hb_error("vfr: motion metric malloc failed");
+        return NULL;
+    }
+
+    memcpy(metric_copy, metric, sizeof(hb_motion_metric_object_t));
+
+    if (metric_copy->init(metric_copy, init))
+    {
+        free(metric_copy);
+        hb_error("vfr: motion metric init failed");
+        return NULL;
+    }
+
+    return metric_copy;
+}
+
+void hb_motion_metric_close(hb_motion_metric_object_t **_m)
+{
+    hb_motion_metric_object_t *m = *_m;
+
+    if (m == NULL)
+    {
+        return;
+    }
+
+    m->close(m);
+
+    free(m);
+    *_m = NULL;
+}
 
 static void delete_metric(double * metrics, int pos, int size)
 {
@@ -323,14 +369,19 @@ static int hb_vfr_init(hb_filter_object_t *filter, hb_filter_init_t *init)
     filter->private_data    = calloc(1, sizeof(struct hb_filter_private_s));
     hb_filter_private_t *pv = filter->private_data;
 
-    pv->metric = calloc(1, sizeof(struct hb_motion_metric_object_s));
-    memcpy(pv->metric, &hb_motion_metric, sizeof(hb_motion_metric_object_t));
-    pv->metric->init(pv->metric, init);
-
     pv->cfr              = init->cfr;
     pv->input_vrate = pv->vrate = init->vrate;
     hb_dict_extract_int(&pv->cfr, filter->settings, "mode");
     hb_dict_extract_rational(&pv->vrate, filter->settings, "rate");
+
+    if (pv->cfr)
+    {
+        pv->metric = hb_motion_metric_init(init);
+        if (pv->metric == NULL)
+        {
+            return -1;
+        }
+    }
 
     // frame-drop analysis always looks at at least 2 buffers
     pv->frame_analysis_depth = 2;
@@ -519,11 +570,7 @@ static void hb_vfr_close( hb_filter_object_t * filter )
     free(pv->frame_metric);
     hb_list_close(&pv->frame_rate_list);
 
-    if (pv->metric)
-    {
-        pv->metric->close(pv->metric);
-        free(pv->metric);
-    }
+    hb_motion_metric_close(&pv->metric);
 
     /* Cleanup render work structure */
     free( pv );
