@@ -508,6 +508,8 @@ extern hb_filter_object_t hb_filter_lapsharp_vt;
 extern hb_filter_object_t hb_filter_unsharp_vt;
 #endif
 
+extern hb_motion_metric_object_t hb_motion_metric;
+
 extern hb_work_object_t * hb_objects;
 
 #define HB_WORK_IDLE     0
