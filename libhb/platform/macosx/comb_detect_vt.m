@@ -248,7 +248,7 @@ static int comb_detect_vt_init(hb_filter_object_t *filter,
             ((pv->block_width == 16 && pv->block_height == 16) || (pv->block_width == 32 && pv->block_height == 32)))
         {
             // Use simd_sum() to speed up the final reduction pass
-            check_combing_name = pv->mode & MODE_FILTER ? "check_filtered_combing_mask_quad" : "check_combing_mask_quad";
+            check_combing_name = pv->mode & MODE_FILTER ? "check_filtered_combing_mask_simd" : "check_combing_mask_simd";
         }
         else if ([pv->mtl->device supportsFamily:MTLGPUFamilyCommon3] &&
                  (pv->block_width * pv->block_height) % 4)
