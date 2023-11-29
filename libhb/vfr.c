@@ -568,6 +568,13 @@ static void hb_vfr_close( hb_filter_object_t * filter )
         hb_fifo_close( &pv->delay_queue );
     }
     free(pv->frame_metric);
+
+    hb_buffer_t *b;
+    while ((b = hb_list_item(pv->frame_rate_list, 0)))
+    {
+        hb_list_rem(pv->frame_rate_list, b);
+        hb_buffer_close(&b);
+    }
     hb_list_close(&pv->frame_rate_list);
 
     hb_motion_metric_close(&pv->metric);
