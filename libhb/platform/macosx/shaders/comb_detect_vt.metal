@@ -307,8 +307,9 @@ kernel void check_filtered_combing_mask_simd(
     device  atomic_int *combed [[buffer(0)]],
     constant params& p         [[buffer(1)]],
     ushort2 pos [[thread_position_in_grid]],
+    ushort2 lid [[thread_position_in_threadgroup]],
     ushort  sid [[simdgroup_index_in_threadgroup]],
-    ushort  w   [[simdgroups_per_threadgroup]])
+    ushort  w   [[dispatch_simdgroups_per_threadgroup]])
 {
     threadgroup ushort partial_score[32];
 
@@ -317,7 +318,7 @@ kernel void check_filtered_combing_mask_simd(
 
     threadgroup_barrier(mem_flags::mem_threadgroup);
 
-    if (sid == 0) {
+    if (lid.x == 0 && lid.y == 0) {
         ushort block_score = 0;
         for (uchar i = 0; i < w; i++) {
             block_score += partial_score[i];
@@ -331,8 +332,9 @@ kernel void check_filtered_combing_mask_quad(
     device  atomic_int *combed [[buffer(0)]],
     constant params& p         [[buffer(1)]],
     ushort2 pos [[thread_position_in_grid]],
+    ushort2 lid [[thread_position_in_threadgroup]],
     ushort  qid [[quadgroup_index_in_threadgroup]],
-    ushort  w   [[quadgroups_per_threadgroup]])
+    ushort  w   [[dispatch_quadgroups_per_threadgroup]])
 {
     threadgroup ushort partial_score[256];
 
@@ -341,7 +343,7 @@ kernel void check_filtered_combing_mask_quad(
 
     threadgroup_barrier(mem_flags::mem_threadgroup);
 
-    if (qid == 0) {
+    if (lid.x == 0 && lid.y == 0) {
         ushort block_score = 0;
         for (uchar i = 0; i < w; i++) {
             block_score += partial_score[i];
@@ -377,8 +379,9 @@ kernel void check_combing_mask_simd(
     device  atomic_int *combed [[buffer(0)]],
     constant params& p         [[buffer(1)]],
     ushort2 pos [[thread_position_in_grid]],
+    ushort2 lid [[thread_position_in_threadgroup]],
     ushort  sid [[simdgroup_index_in_threadgroup]],
-    ushort  w   [[simdgroups_per_threadgroup]])
+    ushort  w   [[dispatch_simdgroups_per_threadgroup]])
 {
     threadgroup ushort partial_score[32];
     const short2 left  = short2(pos.x -1, pos.y);
@@ -389,7 +392,7 @@ kernel void check_combing_mask_simd(
 
     threadgroup_barrier(mem_flags::mem_threadgroup);
 
-    if (sid == 0) {
+    if (lid.x == 0 && lid.y == 0) {
         ushort block_score = 0;
         for (uchar i = 0; i < w; i++) {
             block_score += partial_score[i];
@@ -403,8 +406,9 @@ kernel void check_combing_mask_quad(
     device  atomic_int *combed [[buffer(0)]],
     constant params& p         [[buffer(1)]],
     ushort2 pos [[thread_position_in_grid]],
+    ushort2 lid [[thread_position_in_threadgroup]],
     ushort  qid [[quadgroup_index_in_threadgroup]],
-    ushort  w   [[quadgroups_per_threadgroup]])
+    ushort  w   [[dispatch_quadgroups_per_threadgroup]])
 {
     threadgroup ushort partial_score[256];
     const short2 left  = short2(pos.x -1, pos.y);
@@ -415,7 +419,7 @@ kernel void check_combing_mask_quad(
 
     threadgroup_barrier(mem_flags::mem_threadgroup);
 
-    if (qid == 0) {
+    if (lid.x == 0 && lid.y == 0) {
         ushort block_score = 0;
         for (uchar i = 0; i < w; i++) {
             block_score += partial_score[i];
