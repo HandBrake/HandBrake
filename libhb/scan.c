@@ -375,7 +375,7 @@ static void ScanFunc( void * _data )
             }
         }
     }
-    else // Single File.
+    else if (single_path != NULL) // Single File.
     {
         // Title index 0 is not a valid title number and means scan all titles.
         // So set title index to 1 in this scenario.
