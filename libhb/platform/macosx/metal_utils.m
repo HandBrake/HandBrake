@@ -28,6 +28,14 @@ hb_metal_context_t * hb_metal_context_init(const char *metallib_data,
 
     NSArray<id<MTLDevice>> *devices = MTLCopyAllDevices();
     ctx->device = [devices.lastObject retain];
+    for (id<MTLDevice> device in devices)
+    {
+        if (device.isLowPower)
+        {
+            [ctx->device release];
+            ctx->device = [device retain];
+        }
+    }
     [devices release];
     if (!ctx->device)
     {
@@ -141,6 +149,9 @@ void hb_metal_context_close(hb_metal_context_t **_ctx)
             [ctx->functions[i] release];
             [ctx->pipelines[i] release];
         }
+        av_free(ctx->functions);
+        av_free(ctx->pipelines);
+
         [ctx->params_buffer release];
         [ctx->queue release];
         [ctx->library release];
