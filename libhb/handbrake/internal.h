@@ -253,8 +253,6 @@ static inline int hb_image_height_stride(int pix_fmt, int height, int plane)
 {
     const AVPixFmtDescriptor *desc = av_pix_fmt_desc_get(pix_fmt);
 
-    // Decomb requires 6 extra lines and stride aligned to 32 bytes
-    height = MULTIPLE_MOD_UP(height + 6, 32);
     if (desc != NULL && (plane == 1 || plane == 2))
     {
         height = height >> desc->log2_chroma_h;
