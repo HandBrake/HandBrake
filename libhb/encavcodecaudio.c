@@ -137,17 +137,7 @@ static int encavcodecaInit(hb_work_object_t *w, hb_job_t *job)
             break;
 
         case HB_ACODEC_FFTRUEHD:
-        case HB_ACODEC_FFTRUEHD24:
             codec_id = AV_CODEC_ID_TRUEHD;
-            switch (audio->config.out.codec)
-            {
-                case HB_ACODEC_FFTRUEHD24:
-                    sample_fmt = AV_SAMPLE_FMT_S32P;
-                    break;
-                default:
-                    sample_fmt = AV_SAMPLE_FMT_S16P;
-                    break;
-            }
             break;
 
         case HB_ACODEC_LAME:

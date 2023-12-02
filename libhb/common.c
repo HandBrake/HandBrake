@@ -429,8 +429,7 @@ hb_encoder_internal_t hb_audio_encoders[]  =
     { { "AC3 Passthru",       "copy:ac3",   "AC3 Passthru",                HB_ACODEC_AC3_PASS,    HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 0, 1, HB_GID_ACODEC_AC3_PASS,   },
     { { "E-AC3",              "eac3",       "E-AC3 (libavcodec)",          HB_ACODEC_FFEAC3,      HB_MUX_MASK_MP4|HB_MUX_AV_MKV,   }, NULL, 0, 1, HB_GID_ACODEC_EAC3,       },
     { { "E-AC3 Passthru",     "copy:eac3",  "E-AC3 Passthru",              HB_ACODEC_EAC3_PASS,   HB_MUX_MASK_MP4|HB_MUX_AV_MKV,   }, NULL, 0, 1, HB_GID_ACODEC_EAC3_PASS,  },
-    { { "TrueHD (Low)",       "truehd16",   "TrueHD",                      HB_ACODEC_FFTRUEHD,    HB_MUX_MASK_MP4|HB_MUX_AV_MKV,   }, NULL, 0, 1, HB_GID_ACODEC_TRUEHD,     },
-    { { "TrueHD (High)",      "truehd24",   "TrueHD",                      HB_ACODEC_FFTRUEHD24,  HB_MUX_MASK_MP4|HB_MUX_AV_MKV,   }, NULL, 0, 1, HB_GID_ACODEC_TRUEHD,     },
+    { { "TrueHD",             "truehd",     "TrueHD",                      HB_ACODEC_FFTRUEHD,    HB_MUX_MASK_MP4|HB_MUX_AV_MKV,   }, NULL, 0, 1, HB_GID_ACODEC_TRUEHD,     },
     { { "TrueHD Passthru",    "copy:truehd","TrueHD Passthru",             HB_ACODEC_TRUEHD_PASS, HB_MUX_MASK_MP4|HB_MUX_AV_MKV,   }, NULL, 0, 1, HB_GID_ACODEC_TRUEHD_PASS,},
     { { "DTS Passthru",       "copy:dts",   "DTS Passthru",                HB_ACODEC_DCA_PASS,    HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 0, 1, HB_GID_ACODEC_DTS_PASS,   },
     { { "DTS-HD Passthru",    "copy:dtshd", "DTS-HD Passthru",             HB_ACODEC_DCA_HD_PASS, HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 0, 1, HB_GID_ACODEC_DTSHD_PASS, },
@@ -484,7 +483,6 @@ static int hb_audio_encoder_is_enabled(int encoder)
             return avcodec_find_encoder(AV_CODEC_ID_OPUS) != NULL;
 
         case HB_ACODEC_FFTRUEHD:
-        case HB_ACODEC_FFTRUEHD24:
             return avcodec_find_encoder(AV_CODEC_ID_TRUEHD) != NULL;
 
         // the following encoders are always enabled
@@ -913,7 +911,6 @@ int hb_audio_samplerate_is_supported(int samplerate, uint32_t codec)
                     return 0;
             }
         case HB_ACODEC_FFTRUEHD:
-        case HB_ACODEC_FFTRUEHD24:
             switch (samplerate)
             {
                 // TrueHD only supports samplerates 44.1kHz, 48kHz, 88.2kHz,
@@ -1102,7 +1099,6 @@ int hb_audio_bitrate_get_default(uint32_t codec, int samplerate, int mixdown)
         case HB_ACODEC_FFFLAC:
         case HB_ACODEC_FFFLAC24:
         case HB_ACODEC_FFTRUEHD:
-        case HB_ACODEC_FFTRUEHD24:
             goto fail;
 
         // 96, 224, 640 Kbps
@@ -1291,7 +1287,6 @@ void hb_audio_bitrate_get_limits(uint32_t codec, int samplerate, int mixdown,
         case HB_ACODEC_FFFLAC:
         case HB_ACODEC_FFFLAC24:
         case HB_ACODEC_FFTRUEHD:
-        case HB_ACODEC_FFTRUEHD24:
             *low = *high = -1;
             return;
 
@@ -2503,7 +2498,6 @@ int hb_mixdown_get_default(uint32_t codec, uint64_t layout)
         case HB_ACODEC_AC3:
         case HB_ACODEC_FFEAC3:
         case HB_ACODEC_FFTRUEHD:
-        case HB_ACODEC_FFTRUEHD24:
             mixdown = HB_AMIXDOWN_5POINT1;
             break;
 
