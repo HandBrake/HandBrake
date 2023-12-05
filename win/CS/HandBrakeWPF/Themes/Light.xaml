@@ -7,6 +7,7 @@
     <SolidColorBrush x:Key="Ui.Light" Color="WhiteSmoke" />
     <SolidColorBrush x:Key="Ui.ContrastLight" Color="#C0C0C0" />
     <SolidColorBrush x:Key="Ui.UltraLight2" Color="AliceBlue" />
+    <SolidColorBrush x:Key="Ui.Ultralight" Color="AliceBlue" />
     <SolidColorBrush x:Key="Ui.Arrow" Color="#252525" />
     <SolidColorBrush x:Key="Ui.ListBoxSelect" Color="#D8D8D8" />
 
