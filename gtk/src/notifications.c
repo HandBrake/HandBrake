@@ -50,14 +50,14 @@ queue_complete_message (int n_succeeded, int n_failed)
 
     if (n_failed > 0)
     {
-        msg = g_strdup_printf((const char *)ngettext("%d encode completed, %d failed",
-                                                     "%d encodes completed, %d failed",
+        msg = g_strdup_printf((const char *)ngettext("%d item complete, %d failed",
+                                                     "%d items complete, %d failed",
                                                      n_succeeded), n_succeeded, n_failed);
     }
     else
     {
-       msg = g_strdup_printf((const char *)ngettext("%d item has finished encoding.",
-                                                    "%d items have finished encoding.",
+       msg = g_strdup_printf((const char *)ngettext("%d item has finished encoding",
+                                                    "%d items have finished encoding",
                                                     n_succeeded), n_succeeded);
     }
     return msg;
@@ -86,7 +86,7 @@ notify_done (gboolean final, gboolean success, gint idx, signal_user_data_t *ud)
     }
 
     GhbValue *queueDict, *jobDict, *destDict;
-    const char *title;
+    g_autofree char *title = NULL;
     g_autofree char *body = NULL;
     gboolean notify_item, notify_queue;
 
@@ -95,7 +95,15 @@ notify_done (gboolean final, gboolean success, gint idx, signal_user_data_t *ud)
 
     if (notify_queue && final)
     {
-        title = _("Queue Complete");
+        const char *msg = ghb_dict_get_string(ud->prefs, "CustomNotificationMessage");
+        if (msg && msg[0])
+        {
+            title = g_strdup(msg);
+        }
+        else
+        {
+            title = g_strdup(_("Put down that cocktail…"));
+        }
         body = queue_complete_message(n_succeeded, n_failed);
     }
     else if (notify_item && !final)
@@ -104,7 +112,7 @@ notify_done (gboolean final, gboolean success, gint idx, signal_user_data_t *ud)
         jobDict = ghb_dict_get(queueDict, "Job");
         destDict = ghb_dict_get(jobDict, "Destination");
         body = item_complete_name(ghb_dict_get_string(destDict, "File"));
-        title = success ? _("Encode Complete") : _("Encode Failed");
+        title = g_strdup(success ? _("Encode Complete") : _("Encode Failed"));
     }
     else
     {

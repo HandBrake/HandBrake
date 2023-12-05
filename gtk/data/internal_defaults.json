@@ -110,6 +110,7 @@
         "WhenComplete": "notify",
         "NotifyOnEncodeDone": false,
         "NotifyOnQueueDone": true,
+        "CustomNotificationMessage": "",
         "SrtDir": "",
         "window_width": 1,
         "window_height": 1,

@@ -8152,6 +8152,7 @@ battery is charged.</property>
                                 <property name="label" translatable="yes">Set a custom directory for Handbrake temporary files</property>
                                 <property name="visible">True</property>
                                 <property name="can-focus">True</property>
+                                <property name="has-focus">True</property>
                                 <property name="receives-default">False</property>
                                 <property name="tooltip-text" translatable="yes">Temporary files that HandBrake creates will be placed under this directory.
 
@@ -8530,6 +8531,34 @@ Uncheck this if you want to allow changing each title's settings independently.<
                           </object>
                           <packing>
                             <property name="top-attach">9</property>
+                            <property name="left-attach">0</property>
+                            <property name="width">1</property>
+                            <property name="height">1</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkBox">
+                            <property name="visible">True</property>
+                            <property name="orientation">horizontal</property>
+                            <property name="spacing">8</property>
+                            <property name="tooltip-text" translatable="yes">The message to display on the notification that all items have been completed. Delete it to restore the default setting.</property>
+                            <child>
+                              <object class="GtkLabel">
+                                <property name="visible">True</property>
+                                <property name="label" translatable="yes">Queue complete notification text:</property>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkEntry" id="CustomNotificationMessage">
+                                <property name="visible">True</property>
+                                <property name="hexpand">True</property>
+                                <property name="placeholder-text" translatable="yes">Put down that cocktail…</property>
+                                <signal name="changed" handler="pref_changed_cb" swapped="no"/>
+                              </object>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="top-attach">10</property>
                             <property name="left-attach">0</property>
                             <property name="width">1</property>
                             <property name="height">1</property>
