@@ -2719,7 +2719,7 @@ Foreign Audio Preferred, else First：如果存在外语轨道，则会将其烧
     <value>折叠队列信息</value>
   </data>
   <data name="QueueStats_ShortOutputStats" xml:space="preserve">
-    <value>输出：{0}，平局帧率{1}</value>
+    <value>输出：{0}，平均帧率{1}</value>
   </data>
   <data name="PresetPane_Desc" xml:space="preserve">
     <value>预设描述：</value>
