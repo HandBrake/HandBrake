@@ -9,6 +9,19 @@ Windows users, please make sure to install [Microsoft .NET Desktop Runtime versi
 
 ## HandBrake 1.7.2
 
+#### Video
+
+- Fixed an issue in VP9, MPEG-4, MPEG-2, NVENC, and AMD VCN encoders that could cause the creation of an excessive number of keyframes (#5530)
+- Disabled automatic a53 cc SEI pass through in NVENC.
+
+### Linux
+
+- Addresses an issue where the file chooser opens in the home directory instead of the folder that was previously selected, when running as a Flatpak
+
+### Mac
+
+- Fixed a crash that happened when opening an folder that contains no file.
+
 #### Windows
 
 - Fixed an issue where Nvidia NVDec option was ignored (#5569)
