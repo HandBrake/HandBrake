@@ -80,7 +80,6 @@ validate_settings (signal_user_data_t *ud, GhbValue *settings, gint batch)
 {
     // Check to see if the dest file exists or is
     // already in the queue
-    gchar *message;
     const gchar *dest;
     gint count, ii;
     gint title_id, titleindex;
@@ -104,33 +103,22 @@ validate_settings (signal_user_data_t *ud, GhbValue *settings, gint batch)
         filename = ghb_dict_get_string(uiDict, "destination");
         if (g_strcmp0(dest, filename) == 0)
         {
-            message = g_strdup_printf(
-                        _("Destination: %s\n\n"
-                        "Another queued job has specified the same destination.\n"
-                        "Do you want to overwrite?"),
-                        dest);
-            if (!ghb_title_message_dialog(hb_window, GTK_MESSAGE_QUESTION,
-                                          _("Overwrite File?"),
-                                          message, _("Cancel"), _("Overwrite")))
+            if (!ghb_question_dialog_run(hb_window, GHB_ACTION_NORMAL,
+                _("Overwrite"), _("Cancel"), _("Overwrite File?"),
+                _("Destination: %s\n\n"
+                  "Another queued job has specified the same destination.\n"
+                  "Do you want to overwrite?"), dest))
             {
-                g_free(message);
                 return FALSE;
             }
-            g_free(message);
             break;
         }
     }
     gchar *destdir = g_path_get_dirname(dest);
     if (!g_file_test(destdir, G_FILE_TEST_IS_DIR))
     {
-        message = g_strdup_printf(
-                    _("Destination: %s\n\n"
-                    "This is not a valid directory."),
-                    destdir);
-        ghb_title_message_dialog(hb_window, GTK_MESSAGE_ERROR,
-                                 _("Invalid Destination"),
-                                 message, _("Cancel"), NULL);
-        g_free(message);
+        ghb_alert_dialog_show(GTK_MESSAGE_ERROR, _("Invalid Destination"),
+                              _("“%s” is is not a valid directory."), destdir);
         g_free(destdir);
         return FALSE;
     }
@@ -138,14 +126,8 @@ validate_settings (signal_user_data_t *ud, GhbValue *settings, gint batch)
     // This doesn't work properly on windows
     if (g_access(destdir, R_OK|W_OK) != 0)
     {
-        message = g_strdup_printf(
-                    _("Destination: %s\n\n"
-                    "Can not read or write the directory."),
-                    destdir);
-        ghb_title_message_dialog(hb_window, GTK_MESSAGE_ERROR,
-                                 _("Invalid Destination"),
-                                 message, _("Cancel"), NULL);
-        g_free(message);
+        ghb_alert_dialog_show(GTK_MESSAGE_ERROR, _("Invalid Destination"),
+                              _("“%s” is not a writable directory."), destdir);
         g_free(destdir);
         return FALSE;
     }
@@ -153,19 +135,13 @@ validate_settings (signal_user_data_t *ud, GhbValue *settings, gint batch)
     g_free(destdir);
     if (g_file_test(dest, G_FILE_TEST_EXISTS))
     {
-        message = g_strdup_printf(
-                    _("Destination: %s\n\n"
-                    "File already exists.\n"
-                    "Do you want to overwrite?"),
-                    dest);
-        if (!ghb_title_message_dialog(hb_window, GTK_MESSAGE_WARNING,
-                                      _("Overwrite File?"),
-                                      message, _("Cancel"), _("Overwrite")))
+        if (!ghb_question_dialog_run(hb_window, GHB_ACTION_DESTRUCTIVE,
+            _("Overwrite"), _("Cancel"), _("Overwrite File?"),
+            _("The file “%s” already exists.\n"
+              "Do you want to overwrite it?"), dest))
         {
-            g_free(message);
             return FALSE;
         }
-        g_free(message);
     }
     // Validate audio settings
     if (!ghb_validate_audio(settings, hb_window))
@@ -727,6 +703,18 @@ title_add_action_cb (GSimpleAction *action, GVariant *param,
     ghb_audio_list_refresh_all(ud);
 }
 
+static void
+title_add_multiple_response_cb (GtkDialog *dialog, int response,
+                                signal_user_data_t *ud)
+{
+    g_signal_handlers_disconnect_by_data(dialog, ud);
+    gtk_widget_set_visible(GTK_WIDGET(dialog), FALSE);
+    if (response == GTK_RESPONSE_OK)
+    {
+        add_multiple_titles(ud);
+    }
+}
+
 G_MODULE_EXPORT void
 title_add_multiple_action_cb (GSimpleAction *action, GVariant *param,
                               signal_user_data_t *ud)
@@ -738,6 +726,8 @@ title_add_multiple_action_cb (GSimpleAction *action, GVariant *param,
     GhbValue * preset = NULL;
 
     list = GTK_LIST_BOX(GHB_WIDGET(ud->builder, "title_add_multiple_list"));
+    // Clear title list
+    ghb_container_empty(GTK_CONTAINER(list));
 
     if (ghb_dict_get_bool(ud->prefs, "SyncTitleSettings"))
     {
@@ -767,6 +757,7 @@ title_add_multiple_action_cb (GSimpleAction *action, GVariant *param,
         {
             ghb_preset_to_settings(settings, preset);
             ghb_set_title_settings(ud, settings);
+            ghb_value_free(&preset);
         }
         title_id = ghb_dict_get_int(settings, "title");
         title = ghb_lookup_title(title_id, &titleindex);
@@ -784,7 +775,7 @@ title_add_multiple_action_cb (GSimpleAction *action, GVariant *param,
 
             gtk_label_set_markup(label, title_label);
             ghb_editable_set_text(entry, dest_file);
-            gtk_file_chooser_set_filename(chooser, dest_dir);
+            ghb_file_chooser_set_initial_file(chooser, dest_dir);
 
             g_free(title_label);
         }
@@ -823,17 +814,10 @@ title_add_multiple_action_cb (GSimpleAction *action, GVariant *param,
     title_add_check_conflicts(ud);
 
     // Pop up the title multiple selections dialog
-    GtkResponseType response;
     GtkWidget *dialog = GHB_WIDGET(ud->builder, "title_add_multiple_dialog");
-    response = gtk_dialog_run(GTK_DIALOG(dialog));
-    gtk_widget_hide(dialog);
-    if (response == GTK_RESPONSE_OK)
-    {
-        add_multiple_titles(ud);
-    }
-
-    // Clear title list
-    ghb_container_empty(GTK_CONTAINER(list));
+    g_signal_connect(dialog, "response",
+                     G_CALLBACK(title_add_multiple_response_cb), ud);
+    gtk_widget_set_visible(dialog, TRUE);
 }
 
 G_MODULE_EXPORT void
@@ -859,6 +843,7 @@ title_add_all_action_cb (GSimpleAction *action, GVariant *param,
         {
             ghb_preset_to_settings(settings, preset);
             ghb_set_title_settings(ud, settings);
+            ghb_value_free(&preset);
         }
         ghb_dict_set_bool(settings, "title_selected", TRUE);
     }
@@ -867,11 +852,10 @@ title_add_all_action_cb (GSimpleAction *action, GVariant *param,
     {
         if (!title_destination_is_unique(ud->settings_array, ii))
         {
-            ghb_title_message_dialog(GTK_WINDOW(GHB_WIDGET(ud->builder, "hb_window")),
-                                     GTK_MESSAGE_ERROR, _("Cannot Add Titles"),
-                                     _("The filenames are not unique. Please choose\n"
-                                       "a unique destination filename for each title."),
-                                     _("OK"), NULL);
+            ghb_question_dialog_run(GTK_WINDOW(GHB_WIDGET(ud->builder, "hb_window")),
+                GHB_ACTION_NORMAL, _("OK"), NULL, _("Cannot Add Titles"),
+                _("The filenames are not unique. Please choose\n"
+                  "a unique destination filename for each title."));
             title_add_multiple_action_cb(action, param, ud);
             return;
         }

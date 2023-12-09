@@ -198,6 +198,20 @@ preset_is_folder(hb_preset_index_t *path)
     return folder;
 }
 
+static gboolean
+preset_is_default (hb_preset_index_t *path)
+{
+    GhbValue *dict;
+    gboolean def = FALSE;
+
+    dict = hb_preset_get(path);
+    if (dict)
+    {
+        def = ghb_dict_get_bool(dict, "Default");
+    }
+    return def;
+}
+
 void
 ghb_preset_to_settings(GhbValue *settings, GhbValue *preset)
 {
@@ -605,6 +619,9 @@ select_preset2(signal_user_data_t *ud, hb_preset_index_t *path)
     action = G_SIMPLE_ACTION(g_action_map_lookup_action(
                              G_ACTION_MAP(ud->app), "preset-save"));
     g_simple_action_set_enabled(action, type == HB_PRESET_TYPE_CUSTOM);
+    action = G_SIMPLE_ACTION(g_action_map_lookup_action(
+                             G_ACTION_MAP(ud->app), "preset-default"));
+    g_simple_action_set_enabled(action, !preset_is_default(path));
 }
 
 void
@@ -1883,16 +1900,13 @@ ghb_presets_load(signal_user_data_t *ud)
         // Look for a backup version that matches the currently running
         // version.
         GtkWindow *hb_window = GTK_WINDOW(GHB_WIDGET(ud->builder, "hb_window"));
-        gchar *message = g_strdup_printf(
+        if (!ghb_question_dialog_run(hb_window, GHB_ACTION_DESTRUCTIVE,
+            _("Load backup presets"), _("Get me out of here!"),
             _("Presets found are newer than what is supported by this version of HandBrake!\n\n"
-              "Would you like to continue?"));
-        if (!ghb_message_dialog(hb_window, GTK_MESSAGE_WARNING, message,
-            _("Get me out of here!"), _("Load backup presets")))
+              "Would you like to continue?"), NULL))
         {
-            g_free(message);
             exit(1);
         }
-        g_free(message);
 
         gchar *name;
         int major, minor, micro;
@@ -1956,7 +1970,8 @@ settings_save(signal_user_data_t *ud, const char * category,
     new_preset = ghb_settings_to_preset(ud->settings);
     ghb_dict_set_int(new_preset, "Type", HB_PRESET_TYPE_CUSTOM);
     ghb_dict_set_string(new_preset, "PresetName", name);
-    ghb_dict_set_string(new_preset, "PresetDescription", desc);
+    if (desc != NULL)
+        ghb_dict_set_string(new_preset, "PresetDescription", desc);
 
     fullname = g_strdup_printf("/%s/%s", category, name);
     path = hb_preset_search_index(fullname, 0, HB_PRESET_TYPE_CUSTOM);
@@ -2085,7 +2100,7 @@ preset_import_action_cb(GSimpleAction *action, GVariant *param,
     {
         exportDir = ".";
     }
-    gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(chooser), exportDir);
+    ghb_file_chooser_set_initial_file(GTK_FILE_CHOOSER(chooser), exportDir);
 
     gtk_native_dialog_set_modal(GTK_NATIVE_DIALOG(chooser), TRUE);
     gtk_native_dialog_set_transient_for(GTK_NATIVE_DIALOG(chooser), GTK_WINDOW(hb_window));
@@ -2203,7 +2218,7 @@ preset_export_action_cb(GSimpleAction *action, GVariant *param,
     g_strstrip(preset_name);
     g_strdelimit(preset_name, GHB_UNSAFE_FILENAME_CHARS, '_');
     filename = g_strdup_printf("%s.json", preset_name);
-    gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(chooser), exportDir);
+    ghb_file_chooser_set_initial_file(GTK_FILE_CHOOSER(chooser), exportDir);
     gtk_file_chooser_set_current_name(GTK_FILE_CHOOSER(chooser), filename);
     gtk_file_chooser_set_do_overwrite_confirmation(GTK_FILE_CHOOSER(chooser), TRUE);
     g_free(filename);
@@ -2215,41 +2230,27 @@ preset_export_action_cb(GSimpleAction *action, GVariant *param,
     gtk_native_dialog_show(GTK_NATIVE_DIALOG(chooser));
 }
 
-G_MODULE_EXPORT void
-preset_rename_action_cb(GSimpleAction *action, GVariant *param,
-                        signal_user_data_t *ud)
+static void
+preset_rename_response_cb (GtkDialog *dialog, int response,
+                           signal_user_data_t *ud)
 {
     const gchar       * name;
     const gchar       * fullname;
     int                 type;
     hb_preset_index_t * path;
-    GtkWidget         * dialog;
     GtkEntry          * entry;
     GtkTextView       * tv;
     GhbValue          * dict;
-    GtkResponseType     response;
 
-    name      = ghb_dict_get_string(ud->settings, "PresetName");
-    type      = ghb_dict_get_int(ud->settings, "Type");
-    fullname  = ghb_dict_get_string(ud->settings, "PresetFullName");
+    g_signal_handlers_disconnect_by_data(dialog, ud);
+    gtk_widget_set_visible(GTK_WIDGET(dialog), FALSE);
 
-    if (type != HB_PRESET_TYPE_CUSTOM)
-    {
-        // Only allow renaming custom presets
-        return;
-    }
-    path = hb_preset_search_index(fullname, 0, type);
-
-    ghb_ui_update(ud, "PresetReDescription",
-                  ghb_dict_get_value(ud->settings, "PresetDescription"));
-    tv = GTK_TEXT_VIEW(GHB_WIDGET(ud->builder, "PresetReDescription"));
-
-    dialog   = GHB_WIDGET(ud->builder, "preset_rename_dialog");
     entry    = GTK_ENTRY(GHB_WIDGET(ud->builder, "PresetReName"));
-    ghb_editable_set_text(entry, name);
+    tv       = GTK_TEXT_VIEW(GHB_WIDGET(ud->builder, "PresetReDescription"));
+    fullname = ghb_dict_get_string(ud->settings, "PresetFullName");
+    type     = ghb_dict_get_int(ud->settings, "Type");
+    path     = hb_preset_search_index(fullname, 0, type);
 
-    response = gtk_dialog_run(GTK_DIALOG(dialog));
-    gtk_widget_hide(dialog);
     if (response == GTK_RESPONSE_OK)
     {
         GtkTextBuffer * buffer;
@@ -2280,7 +2281,83 @@ preset_rename_action_cb(GSimpleAction *action, GVariant *param,
     }
 }
 
-static void preset_save_action(signal_user_data_t *ud, gboolean as)
+G_MODULE_EXPORT void
+preset_rename_action_cb(GSimpleAction *action, GVariant *param,
+                        signal_user_data_t *ud)
+{
+    const gchar       * name;
+    int                 type;
+    GtkWidget         * dialog;
+    GtkEntry          * entry;
+
+    name      = ghb_dict_get_string(ud->settings, "PresetName");
+    type      = ghb_dict_get_int(ud->settings, "Type");
+
+    if (type != HB_PRESET_TYPE_CUSTOM)
+    {
+        // Only allow renaming custom presets
+        return;
+    }
+
+    ghb_ui_update(ud, "PresetReDescription",
+                  ghb_dict_get_value(ud->settings, "PresetDescription"));
+
+    dialog   = GHB_WIDGET(ud->builder, "preset_rename_dialog");
+    entry    = GTK_ENTRY(GHB_WIDGET(ud->builder, "PresetReName"));
+    ghb_editable_set_text(entry, name);
+
+    g_signal_connect(dialog, "response",
+                     G_CALLBACK(preset_rename_response_cb), ud);
+    gtk_widget_set_visible(dialog, TRUE);
+}
+
+static void
+preset_save_as_response_cb (GtkDialog *dialog, int response,
+                            signal_user_data_t *ud)
+{
+    const char *name, *category;
+    GtkEntry *entry;
+    GtkTextView *tv;
+
+    g_signal_handlers_disconnect_by_data(dialog, ud);
+    gtk_widget_set_visible(GTK_WIDGET(dialog), FALSE);
+
+    entry = GTK_ENTRY(GHB_WIDGET(ud->builder, "PresetName"));
+    tv = GTK_TEXT_VIEW(GHB_WIDGET(ud->builder, "PresetDescription"));
+
+    if (response == GTK_RESPONSE_OK)
+    {
+        GtkTextBuffer * buffer;
+        GtkTextIter     start, end;
+        char          * desc;
+        gboolean        def;
+
+        // save the preset
+        name = ghb_editable_get_text(entry);
+        category = ghb_dict_get_string(ud->settings, "PresetCategory");
+        if (!g_strcmp0(category, "new"))
+        {
+            entry = GTK_ENTRY(GHB_WIDGET(ud->builder,
+                                            "PresetCategoryName"));
+            category = ghb_editable_get_text(entry);
+        }
+        if (category == NULL || category[0] == 0)
+        {
+            ghb_log("Invalid empty category.");
+            return;
+        }
+        buffer = gtk_text_view_get_buffer(tv);
+        gtk_text_buffer_get_bounds(buffer, &start, &end);
+        desc = gtk_text_buffer_get_text(buffer, &start, &end, FALSE);
+        def = ghb_dict_get_bool(ud->settings, "PresetSetDefault");
+        settings_save(ud, category, name, desc, def);
+        free(desc);
+    }
+}
+
+G_MODULE_EXPORT void
+preset_save_as_action_cb (GSimpleAction *action, GVariant *param,
+                          signal_user_data_t *ud)
 {
     const char        * category = NULL;
     const gchar       * name;
@@ -2288,11 +2365,8 @@ static void preset_save_action(signal_user_data_t *ud, gboolean as)
     int                 type;
     hb_preset_index_t * path;
     GtkWidget         * dialog;
-    GtkWidget         * widget;
     GtkEntry          * entry;
-    GtkTextView       * tv;
     GhbValue          * dict;
-    GtkResponseType     response;
 
     name      = ghb_dict_get_string(ud->settings, "PresetName");
     type      = ghb_dict_get_int(ud->settings, "Type");
@@ -2341,62 +2415,59 @@ static void preset_save_action(signal_user_data_t *ud, gboolean as)
         category = "new";
     }
     ghb_ui_update(ud, "PresetCategory", ghb_string_value(category));
-    tv = GTK_TEXT_VIEW(GHB_WIDGET(ud->builder, "PresetDescription"));
 
     dialog   = GHB_WIDGET(ud->builder, "preset_save_dialog");
     entry    = GTK_ENTRY(GHB_WIDGET(ud->builder, "PresetName"));
     ghb_editable_set_text(entry, name);
 
-    widget = GHB_WIDGET(ud->builder, "PresetName");
-    gtk_widget_set_sensitive(widget, as);
-    widget = GHB_WIDGET(ud->builder, "PresetCategory");
-    gtk_widget_set_sensitive(widget, as);
-    widget = GHB_WIDGET(ud->builder, "PresetSetDefault");
-    gtk_widget_set_visible(widget, as);
-
-    response = gtk_dialog_run(GTK_DIALOG(dialog));
-    gtk_widget_hide(dialog);
-    if (response == GTK_RESPONSE_OK)
-    {
-        GtkTextBuffer * buffer;
-        GtkTextIter     start, end;
-        char          * desc;
-        gboolean        def;
-
-        // save the preset
-        name = ghb_editable_get_text(entry);
-        category = ghb_dict_get_string(ud->settings, "PresetCategory");
-        if (!strcmp(category, "new"))
-        {
-            entry = GTK_ENTRY(GHB_WIDGET(ud->builder, "PresetCategoryName"));
-            category = ghb_editable_get_text(entry);
-        }
-        if (category == NULL || category[0] == 0)
-        {
-            ghb_log("Invalid empty category.");
-            return;
-        }
-        buffer = gtk_text_view_get_buffer(tv);
-        gtk_text_buffer_get_bounds(buffer, &start, &end);
-        desc = gtk_text_buffer_get_text(buffer, &start, &end, FALSE);
-        def = ghb_dict_get_bool(ud->settings, "PresetSetDefault");
-        settings_save(ud, category, name, desc, def);
-        free(desc);
-    }
+    g_signal_connect(dialog, "response",
+                     G_CALLBACK(preset_save_as_response_cb), ud);
+    gtk_widget_set_visible(dialog, TRUE);
 }
 
 G_MODULE_EXPORT void
 preset_save_action_cb(GSimpleAction *action, GVariant *param,
                       signal_user_data_t *ud)
 {
-    preset_save_action(ud, FALSE);
-}
+    const char        * category = NULL;
+    const gchar       * name;
+    const gchar       * fullname;
+    int                 type;
+    hb_preset_index_t * path;
+    GhbValue          * dict;
+    gboolean            def;
 
-G_MODULE_EXPORT void
-preset_save_as_action_cb(GSimpleAction *action, GVariant *param,
-                         signal_user_data_t *ud)
-{
-    preset_save_action(ud, TRUE);
+    name      = ghb_dict_get_string(ud->settings, "PresetName");
+    type      = ghb_dict_get_int(ud->settings, "Type");
+    fullname  = ghb_dict_get_string(ud->settings, "PresetFullName");
+
+    if (type != HB_PRESET_TYPE_CUSTOM)
+    {
+        // Only allow saving custom presets
+        return;
+    }
+    path = hb_preset_search_index(fullname, 0, type);
+
+    // Find an appropriate default category
+    if (path != NULL)
+    {
+        path->depth = 1;
+        dict        = hb_preset_get(path);
+        if (ghb_dict_get_bool(dict, "Folder"))
+        {
+            category = ghb_dict_get_string(dict, "PresetName");
+        }
+        free(path);
+    }
+    if (category == NULL)
+    {
+        // Only save existing presets
+        return;
+    }
+    ghb_ui_update(ud, "PresetCategory", ghb_string_value(category));
+
+    def = ghb_dict_get_bool(ud->settings, "PresetSetDefault");
+    settings_save(ud, category, name, NULL, def);
 }
 
 static void
@@ -2426,7 +2497,6 @@ preset_category_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
     ghb_widget_to_setting(ud->settings, widget);
     preset_save_set_ok_sensitive(ud);
-    ghb_check_dependency(ud, widget, NULL);
 }
 
 G_MODULE_EXPORT void
@@ -2482,25 +2552,16 @@ preset_remove_action_cb(GSimpleAction *action, GVariant *param,
         return;
     }
 
-    GtkWindow       * hb_window;
-    gboolean          is_folder;
-    GtkResponseType   response;
-    const char      * name;
-    char            * message;
+    gboolean    is_folder;
+    const char *name;
 
     name  = ghb_dict_get_string(preset, "PresetName");
     is_folder = preset_is_folder(path);
-    hb_window = GTK_WINDOW(GHB_WIDGET(ud->builder, "hb_window"));
-    message = g_strdup_printf(_("Confirm deletion of %s:\n\n%s"),
-                              is_folder ? _("folder") : _("preset"),
-                              name);
-    response = ghb_message_dialog(hb_window,
-                        GTK_MESSAGE_WARNING,
-                        message,
-                        _("Cancel"),
-                        _("Delete"));
-    g_free(message);
-    if (response)
+    if (ghb_question_dialog_run(NULL, GHB_ACTION_DESTRUCTIVE,
+            _("_Delete"), _("Cancel"),
+            is_folder ? _("Delete Folder?") : _("Delete Preset?"),
+            _("Are you sure you want to delete “%s”?\n"
+              "Deleted items cannot be recovered."), name))
     {
         int depth = path->depth;
 
@@ -3023,6 +3084,9 @@ presets_list_selection_changed_cb(GtkTreeSelection *selection, signal_user_data_
         action = G_SIMPLE_ACTION(g_action_map_lookup_action(
                                  G_ACTION_MAP(ud->app), "preset-save"));
         g_simple_action_set_enabled(action, type == HB_PRESET_TYPE_CUSTOM);
+        action = G_SIMPLE_ACTION(g_action_map_lookup_action(
+                                 G_ACTION_MAP(ud->app), "preset-default"));
+        g_simple_action_set_enabled(action, !preset_is_default(path));
         free(path);
     }
 }
@@ -3068,6 +3132,9 @@ preset_default_action_cb(GSimpleAction *action, GVariant *param,
             ghb_dict_set_bool(dict, "Default", 1);
             presets_list_show_default(ud);
             store_presets();
+            GSimpleAction *action = G_SIMPLE_ACTION(g_action_map_lookup_action(
+                                     G_ACTION_MAP(ud->app), "preset-default"));
+            g_simple_action_set_enabled(action, FALSE);
         }
         g_free(path);
     }
@@ -3111,5 +3178,4 @@ G_MODULE_EXPORT void
 preset_widget_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
     ghb_widget_to_setting(ud->settings, widget);
-    ghb_check_dependency(ud, widget, NULL);
 }

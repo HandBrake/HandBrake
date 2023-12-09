@@ -2,7 +2,5 @@
 <gresources>
   <gresource prefix="/fr/handbrake/ghb/data">
     <file>internal_defaults.json</file>
-    <file>widget.deps</file>
-    <file>widget_reverse.deps</file>
   </gresource>
 </gresources>

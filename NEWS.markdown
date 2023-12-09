@@ -7,6 +7,39 @@ Before updating HandBrake, please make sure there are no pending encodes in the 
 
 Windows users, please make sure to install [Microsoft .NET Desktop Runtime version 6.0.x](https://dotnet.microsoft.com/en-us/download/dotnet/6.0). Read carefully: you need the **DESKTOP** runtime. You must install .NET 6 even if you have installed .NET 7.
 
+## HandBrake 1.7.2
+
+#### Video
+
+- Fixed an issue in VP9, MPEG-4, MPEG-2, NVENC, and AMD VCN encoders that could cause the creation of an excessive number of keyframes (#5530)
+- Disabled automatic a53 cc SEI pass through in NVENC.
+
+### Linux
+
+- Addresses an issue where the file chooser opens in the home directory instead of the folder that was previously selected, when running as a Flatpak
+
+### Mac
+
+- Fixed a crash that happened when opening an folder that contains no file.
+
+#### Windows
+
+- Fixed an issue where Nvidia NVDec option was ignored (#5569)
+- Fixed an issue with theme loading that could cause a crash on start (#5567)
+
+
+## HandBrake 1.7.1
+
+#### Video
+
+- Fixed Decomb filter producing corrupted frames with 10-bit depth or higher source (#5518)
+- Fixed a potential crash when using the Comb Detect filter on an RGB source
+- Fixed Intel QSV devices enumeration where devices from other vendors are present (#5317, #5177)
+
+#### Mac
+
+- Fixed an issue opening EyeTV sources (#5514)
+
 
 ## HandBrake 1.7.0
 

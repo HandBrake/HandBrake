@@ -275,7 +275,7 @@ hb_encoder_internal_t hb_video_encoders[]  =
     { { "AV1 10-bit (Intel QSV)",      "qsv_av1_10bit",    "AV1 10-bit (Intel Media SDK)",   HB_VCODEC_QSV_AV1_10BIT,     HB_MUX_MASK_MP4|HB_MUX_MASK_WEBM|HB_MUX_MASK_MKV, }, NULL, 0, 1, HB_GID_VCODEC_AV1_QSV,    },
     { { "AV1 (NVEnc)",                 "nvenc_av1",        "AV1 (NVEnc)",                    HB_VCODEC_FFMPEG_NVENC_AV1,                   HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 0, 1, HB_GID_VCODEC_AV1_NVENC,  },
     { { "AV1 10-bit (NVEnc)",          "nvenc_av1_10bit",  "AV1 10-bit (NVEnc)",             HB_VCODEC_FFMPEG_NVENC_AV1_10BIT,             HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 0, 1, HB_GID_VCODEC_AV1_NVENC,  },
-    { { "AV1 (AMD VCE)",               "vce_av1",          "AV1 (AMD VCE)",                  HB_VCODEC_FFMPEG_VCE_AV1,    				   HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 0, 1, HB_GID_VCODEC_AV1_VCE,   },
+    { { "AV1 (AMD VCE)",               "vce_av1",          "AV1 (AMD VCE)",                  HB_VCODEC_FFMPEG_VCE_AV1,    				   HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 0, 1, HB_GID_VCODEC_AV1_VCE,    },
     { { "H.264 (x264)",                "x264",             "H.264 (libx264)",                HB_VCODEC_X264_8BIT,                          HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 0, 1, HB_GID_VCODEC_H264_X264,  },
     { { "H.264 10-bit (x264)",         "x264_10bit",       "H.264 10-bit (libx264)",         HB_VCODEC_X264_10BIT,                         HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 0, 1, HB_GID_VCODEC_H264_X264,  },
     { { "H.264 (Intel QSV)",           "qsv_h264",         "H.264 (Intel Media SDK)",        HB_VCODEC_QSV_H264,                           HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 0, 1, HB_GID_VCODEC_H264_QSV,   },
@@ -531,11 +531,30 @@ int hb_str_ends_with(const char *base, const char *str)
     return (blen >= slen) && (0 == strcasecmp(base + blen - slen, str));
 }
 
+static void hb_common_global_hw_init()
+{
+#if HB_PROJECT_FEATURE_NVENC
+    hb_nvenc_h264_available();
+#endif
+#if HB_PROJECT_FEATURE_VCE
+    hb_vce_h264_available();
+#endif
+    // first initialization and QSV adapters list collection should happen after other hw vendors initializations to prevent device order issues
+#if HB_PROJECT_FEATURE_QSV
+    hb_qsv_available();
+#endif
+}
+
 void hb_common_global_init(int disable_hardware)
 {
     static int common_init_done = 0;
     if (common_init_done)
         return;
+
+    if (!disable_hardware)
+    {
+        hb_common_global_hw_init();
+    }
 
     int i, j;
 
@@ -4672,6 +4691,10 @@ hb_filter_object_t * hb_filter_get( int filter_id )
 #if defined(__APPLE__)
         case HB_FILTER_PRE_VT:
             filter = &hb_filter_prefilter_vt;
+            break;
+
+        case HB_FILTER_COMB_DETECT_VT:
+            filter = &hb_filter_comb_detect_vt;
             break;
 
         case HB_FILTER_YADIF_VT:

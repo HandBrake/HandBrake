@@ -703,6 +703,13 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
                 ++i;
             }
         }
+
+        // Disable unhandled SEI
+        // These might be present in the source video
+        // and passed through in side_data, but we
+        // don't want to automatically preserve them
+        av_dict_set(&av_opts, "a53_cc", "0", 0);
+        av_dict_set(&av_opts, "s12m_tc", "0", 0);
     }
 
     // Make VCE h.265 encoder emit an IDR for every GOP
@@ -1061,6 +1068,7 @@ static void Encode( hb_work_object_t *w, hb_buffer_t **buf_in,
     // This will consume the hb_buffer_t and make it NULL
     hb_video_buffer_to_avframe(&frame, buf_in);
     frame.pts = pv->frameno_in++;
+    frame.duration = 0;
 
     // For constant quality, setting the quality in AVCodecContext
     // doesn't do the trick.  It must be set in the AVFrame.
@@ -1069,7 +1077,12 @@ static void Encode( hb_work_object_t *w, hb_buffer_t **buf_in,
     if (key_frame)
     {
         frame.pict_type = AV_PICTURE_TYPE_I;
-        frame.flags |= AV_FRAME_FLAG_KEY;
+        frame.flags = AV_FRAME_FLAG_KEY;
+    }
+    else
+    {
+        frame.pict_type = AV_PICTURE_TYPE_NONE;
+        frame.flags = 0;
     }
 
     // Encode

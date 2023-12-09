@@ -661,15 +661,15 @@ static void copy_avframe_to_video_buffer(const AVFrame *frame, hb_buffer_t *buf)
         }
         else
         {
-            const int width     = buf->plane[pp].width;
-            const int height    = buf->plane[pp].height;
             const int stride    = buf->plane[pp].stride;
+            const int height    = buf->plane[pp].height;
             const int linesize  = frame->linesize[pp];
+            const int size = linesize < stride ? ABS(linesize) : stride;
             uint8_t *dst = buf->plane[pp].data;
             uint8_t *src = frame->data[pp];
             for (int yy = 0; yy < height; yy++)
             {
-                memcpy(dst, src, width);
+                memcpy(dst, src, size);
                 dst += stride;
                 src += linesize;
             }
@@ -710,12 +710,21 @@ hb_buffer_t * hb_buffer_dup(const hb_buffer_t *src)
         // into another hardware AVFrame.
         if (frame->hw_frames_ctx)
         {
-            buf = hb_buffer_wrapper_init();
-            if (buf)
+#ifdef __APPLE__
+            if (frame->format == AV_PIX_FMT_VIDEOTOOLBOX)
             {
-                buf->f = src->f;
-                hb_buffer_copy_props(buf, src);
-                copy_hwframe_to_video_buffer(frame, buf);
+                buf = hb_vt_buffer_dup(src);
+            }
+            else
+#endif
+            {
+                buf = hb_buffer_wrapper_init();
+                if (buf)
+                {
+                    buf->f = src->f;
+                    hb_buffer_copy_props(buf, src);
+                    copy_hwframe_to_video_buffer(frame, buf);
+                }
             }
         }
         // If not, copy the content to a standard hb_buffer

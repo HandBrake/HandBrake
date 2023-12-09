@@ -70,6 +70,7 @@
     },
     "Preferences": {
         "ActivityFontSize": 8,
+        "ActivityFontFamily": "monospace",
         "CustomTmpEnable": false,
         "CustomTmpDir": "",
         "DiskFreeCheck": true,
@@ -107,6 +108,9 @@
         "version": "0.1",
         "PreferredLanguage": "und",
         "WhenComplete": "notify",
+        "NotifyOnEncodeDone": false,
+        "NotifyOnQueueDone": true,
+        "CustomNotificationMessage": "",
         "SrtDir": "",
         "window_width": 1,
         "window_height": 1,

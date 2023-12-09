@@ -524,18 +524,12 @@ live_preview_cb(GstBus *bus, GstMessage *msg, gpointer data)
             //printf("element\n");
             if (gst_is_missing_plugin_message(msg))
             {
-                GtkWindow *hb_window;
-                hb_window = GTK_WINDOW(GHB_WIDGET(ud->builder, "hb_window"));
                 gst_element_set_state(ud->preview->play, GST_STATE_PAUSED);
-                gchar *message, *desc;
-                desc = gst_missing_plugin_message_get_description(msg);
-                message = g_strdup_printf(
-                            _("Missing GStreamer plugin\n"
-                            "Audio or Video may not play as expected\n\n%s"),
-                            desc);
-                ghb_message_dialog(hb_window, GTK_MESSAGE_WARNING,
-                                   message, _("OK"), NULL);
-                g_free(message);
+                gchar *desc = gst_missing_plugin_message_get_description(msg);
+                ghb_alert_dialog_show(GTK_MESSAGE_WARNING,_("Missing GStreamer plugin"),
+                                      "%s\n\n%s",
+                                      _("Audio or Video may not play as expected"),
+                                      desc);
                 gst_element_set_state(ud->preview->play, GST_STATE_PLAYING);
             }
             else if (msg->src == GST_OBJECT_CAST(ud->preview->vsink))
@@ -1238,7 +1232,6 @@ preview_duration_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
     ghb_log_func();
     ghb_live_reset(ud);
     ghb_widget_to_setting (ud->prefs, widget);
-    ghb_check_dependency(ud, widget, NULL);
     const gchar *name = ghb_get_setting_key(widget);
     ghb_pref_save(ud->prefs, name);
 }
@@ -1511,11 +1504,22 @@ show_crop_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
     //
     ghb_log_func();
     ghb_widget_to_setting(ud->prefs, widget);
-    ghb_check_dependency(ud, widget, NULL);
     ghb_live_reset(ud);
     if (gtk_widget_is_sensitive(widget))
         ghb_set_scale(ud, 0);
     ghb_pref_save(ud->prefs, "preview_show_crop");
     ghb_rescale_preview_image(ud);
 #endif
+}
+
+void
+ghb_preview_dispose (signal_user_data_t *ud)
+{
+    if (!ud || !ud->preview)
+        return;
+    if (ud->preview->pix)
+        g_object_unref(ud->preview->pix);
+    if (ud->preview->scaled_pix)
+        g_object_unref(ud->preview->scaled_pix);
+    g_free(ud->preview);
 }

@@ -88,7 +88,6 @@
 static GtkBuilder*
 create_builder_or_die(const gchar * name)
 {
-    GtkWidget *dialog;
     GtkBuilder *xml;
     GError *error = NULL;
 
@@ -98,24 +97,11 @@ create_builder_or_die(const gchar * name)
     if (!error)
         gtk_builder_add_from_resource(xml, "/fr/handbrake/ghb/ui/menu.ui", &error);
 
-    const gchar *markup =
-        N_("<b><big>Unable to create %s.</big></b>\n"
-        "\n"
-        "Internal error. Could not parse UI description.\n"
-        "%s");
-
     if (error)
     {
-        dialog = gtk_message_dialog_new_with_markup(NULL,
-            GTK_DIALOG_MODAL,
-            GTK_MESSAGE_ERROR,
-            GTK_BUTTONS_CLOSE,
-            gettext(markup),
-            name, error->message);
-        gtk_dialog_run(GTK_DIALOG(dialog));
-        gtk_widget_destroy(dialog);
-        exit(EXIT_FAILURE);
+        g_error("Unable to load ui file: %s", error->message);
     }
+
     return xml;
 }
 
@@ -543,6 +529,8 @@ IoRedirect(signal_user_data_t *ud)
     g_io_channel_set_encoding(channel, NULL, NULL);
     ud->stderr_src_id =
         g_io_add_watch(channel, G_IO_IN, ghb_log_cb, (gpointer)ud );
+
+    g_io_channel_unref(channel);
 }
 
 static gchar *dvd_device = NULL;
@@ -637,13 +625,13 @@ const gchar *MyCSS =
 "    min-height: 3px;"
 "}"
 
-"#preview_hud"
+".ghb-preview-hud"
 "{"
 "    border-radius: 16px;"
 "    border-width: 1px;"
 "}"
 
-".preview-image-frame"
+".ghb-preview-image-frame"
 "{"
 "    background-color: black;"
 "}"
@@ -664,7 +652,7 @@ const gchar *MyCSS =
 "    min-width: 50px;"
 "}"
 
-"#activity_view"
+".ghb-monospace"
 "{"
 "    font-family: monospace;"
 "    font-size: 8pt;"
@@ -920,7 +908,7 @@ ghb_idle_ui_init(signal_user_data_t *ud)
     }
 
     // Grey out widgets that are dependent on a disabled feature
-    ghb_check_all_dependencies(ud);
+    ghb_bind_dependencies(ud);
 
     return FALSE;
 }
@@ -989,7 +977,9 @@ static void
 print_system_information (void)
 {
 #if GLIB_CHECK_VERSION(2, 64, 0)
-    fprintf(stderr, "OS: %s\n", g_get_os_info(G_OS_INFO_KEY_PRETTY_NAME));
+    char *os_info = g_get_os_info(G_OS_INFO_KEY_PRETTY_NAME);
+    fprintf(stderr, "OS: %s\n", os_info);
+    g_free(os_info);
 #endif
 #ifndef _WIN32
     char *exe_path;
@@ -1008,12 +998,16 @@ print_system_information (void)
     result = readlink( "/proc/self/exe", exe_path, PATH_MAX);
     if (result > 0)
     {
-        fprintf(stderr, "Install Dir: %s\n", g_path_get_dirname(exe_path));
+        char *exe_dirname = g_path_get_dirname(exe_path);
+        fprintf(stderr, "Install Dir: %s\n", exe_dirname);
+        g_free(exe_dirname);
     }
     free(exe_path);
 #endif
-    fprintf(stderr, "Config Dir:  %s\n", ghb_get_user_config_dir(NULL));
+    char *config_dirname = ghb_get_user_config_dir(NULL);
+    fprintf(stderr, "Config Dir:  %s\n", config_dirname);
     fprintf(stderr, "_______________________________\n\n");
+    g_free(config_dirname);
 }
 
 extern G_MODULE_EXPORT void
@@ -1085,16 +1079,10 @@ ghb_activate_cb(GApplication * app, signal_user_data_t * ud)
     g_object_ref(ud->extra_activity_buffer);
     ud->queue_activity_buffer = gtk_text_buffer_new(NULL);
 
-    // Must set the names of the widgets that I want to modify
-    // style for.
-    gtk_widget_set_name(GHB_WIDGET(ud->builder, "preview_hud"), "preview_hud");
-    gtk_widget_set_name(GHB_WIDGET(ud->builder, "activity_view"), "activity_view");
-
     // Redirect stderr to the activity window
     ghb_preview_init(ud);
     IoRedirect(ud);
     print_system_information();
-    ghb_init_dep_map();
 
     GtkTextView   * textview;
     GtkTextBuffer * buffer;
@@ -1190,25 +1178,6 @@ ghb_activate_cb(GApplication * app, signal_user_data_t * ud)
     gint window_width, window_height;
     window_width = ghb_dict_get_int(ud->prefs, "window_width");
     window_height = ghb_dict_get_int(ud->prefs, "window_height");
-
-    // Grrrr!  Gtk developers !!!hard coded!!! the width of the
-    // radio buttons in GtkStackSwitcher to 100!!!
-    //
-    // Thankfully, GtkStackSwitcher is a regular container object
-    // and we can access the buttons to change their width.
-    GList *stack_switcher_children, *link;
-    GtkContainer * stack_switcher = GTK_CONTAINER(
-                            GHB_WIDGET(ud->builder, "SettingsStackSwitcher"));
-    link = stack_switcher_children = gtk_container_get_children(stack_switcher);
-    while (link != NULL)
-    {
-        GtkWidget *widget = link->data;
-        gtk_widget_set_size_request(widget, -1, -1);
-        gtk_widget_set_hexpand(widget, TRUE);
-        gtk_widget_set_halign(widget, GTK_ALIGN_FILL);
-        link = link->next;
-    }
-    g_list_free(stack_switcher_children);
 
     gtk_window_resize(GTK_WINDOW(ghb_window), window_width, window_height);
 
@@ -1376,6 +1345,7 @@ main(int argc, char *argv[])
     g_object_unref(ud->queue_activity_buffer);
     g_object_unref(ud->activity_buffer);
     g_free(ud->extra_activity_path);
+    ghb_preview_dispose(ud);
 
     g_free(ud->current_dvd_device);
     g_free(ud);

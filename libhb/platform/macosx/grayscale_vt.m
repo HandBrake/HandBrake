@@ -154,7 +154,7 @@ static void call_kernel(hb_filter_private_t *pv,
     }
     [encoder setBuffer:pv->mtl->params_buffer offset:0 atIndex:0];
 
-    hb_metal_compute_encoder_dispatch(pv->mtl->device, pv->mtl->pipeline, encoder, dst.width, dst.height);
+    hb_metal_compute_encoder_dispatch(pv->mtl->device, pv->mtl->pipelines[0], encoder, dst.width, dst.height);
 
     [encoder endEncoding];
 

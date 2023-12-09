@@ -82,7 +82,6 @@ vcodec_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
     int inverted, digits;
 
     ghb_widget_to_setting(ud->settings, widget);
-    ghb_check_dependency(ud, widget, NULL);
     ghb_show_container_options(ud);
     ghb_update_summary_info(ud);
     ghb_clear_presets_selection(ud);
@@ -248,7 +247,6 @@ video_preset_slider_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
     GhbValue *gval = ghb_dict_get_value(ud->settings, "VideoPresetSlider");
     ghb_ui_settings_update(ud, ud->settings, "VideoPresetSlider", gval);
 
-    ghb_check_dependency(ud, widget, NULL);
     ghb_clear_presets_selection(ud);
     update_adv_settings_tooltip(ud);
 }
@@ -259,7 +257,6 @@ video_setting_changed(GtkWidget *widget, signal_user_data_t *ud)
     ghb_widget_to_setting(ud->settings, widget);
     update_adv_settings_tooltip(ud);
 
-    ghb_check_dependency(ud, widget, NULL);
     ghb_clear_presets_selection(ud);
 }
 
@@ -405,7 +402,6 @@ framerate_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
     {
         ghb_ui_update(ud, "VideoFramerateVFR", ghb_boolean_value(TRUE));
     }
-    ghb_check_dependency(ud, widget, NULL);
     ghb_clear_presets_selection(ud);
     ghb_live_reset(ud);
 }
@@ -415,7 +411,6 @@ framerate_mode_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
     ghb_widget_to_setting(ud->settings, widget);
     ghb_update_summary_info(ud);
-    ghb_check_dependency(ud, widget, NULL);
     ghb_clear_presets_selection(ud);
     ghb_live_reset(ud);
 }

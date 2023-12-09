@@ -212,8 +212,6 @@ audio_deps(signal_user_data_t *ud, GhbValue *asettings, GtkWidget *widget)
 {
     ghb_adjust_audio_rate_combos(ud, asettings);
     ghb_grey_combo_options(ud);
-    if (widget != NULL)
-        ghb_check_dependency(ud, widget, NULL);
 
     int title_id, mix = 0, acodec = 0, sr = 0;
     hb_audio_config_t *aconfig = NULL;
@@ -1389,7 +1387,7 @@ audio_add_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
         GtkResponseType response;
         GtkWidget *dialog = GHB_WIDGET(ud->builder, "audio_dialog");
         gtk_window_set_title(GTK_WINDOW(dialog), _("Add Audio Track"));
-        response = gtk_dialog_run(GTK_DIALOG(dialog));
+        response = ghb_dialog_run(GTK_DIALOG(dialog));
         gtk_widget_hide(dialog);
         if (response != GTK_RESPONSE_OK)
         {
@@ -1471,7 +1469,7 @@ audio_edit(GtkTreeView *tv, GtkTreePath *tp, signal_user_data_t *ud)
         GtkResponseType response;
         GtkWidget *dialog = GHB_WIDGET(ud->builder, "audio_dialog");
         gtk_window_set_title(GTK_WINDOW(dialog), _("Edit Audio Track"));
-        response = gtk_dialog_run(GTK_DIALOG(dialog));
+        response = ghb_dialog_run(GTK_DIALOG(dialog));
         gtk_widget_hide(dialog);
         if (response != GTK_RESPONSE_OK)
         {

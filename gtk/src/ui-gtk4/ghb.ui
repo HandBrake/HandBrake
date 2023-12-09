@@ -1623,7 +1623,7 @@ libx264 authors:
   Laurent Aimar
 
 </property>
-    <property name="logo_icon_name">hb-icon</property>
+    <property name="logo_icon_name">fr.handbrake.ghb</property>
     <property name="wrap_license">True</property>
     <signal name="close-request" handler="ghb_widget_hide_on_close" swapped="no"/>
   </object>
@@ -1633,7 +1633,7 @@ libx264 authors:
     <property name="title" translatable="yes">HandBrake</property>
     <property name="default_width">500</property>
     <property name="default_height">400</property>
-    <property name="icon_name">hb-icon</property>
+    <property name="icon_name">fr.handbrake.ghb</property>
     <signal name="map" handler="window_map_cb" swapped="no"/>
     <signal name="size-allocate" handler="hb_win_sz_alloc_cb" swapped="no"/>
     <signal name="close-request" handler="window_delete_event_cb" swapped="no"/>
@@ -2712,7 +2712,7 @@ sync for broken players that do not honor MP4 edit lists.</property>
                             <property name="valign">fill</property>
                             <property name="expand">True</property>
                             <property name="pixel_size">128</property>
-                            <property name="icon_name">hb-icon</property>
+                            <property name="icon_name">fr.handbrake.ghb</property>
                           </object>
                         </child>
                         <child>
@@ -6067,7 +6067,7 @@ Only one subtitle track can be burned! Since conflicts can occur, the first chos
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="pixel_size">64</property>
-                    <property name="icon_name">hb-icon</property>
+                    <property name="icon_name">fr.handbrake.ghb</property>
                   </object>
                 </child>
               </object>
@@ -7005,7 +7005,7 @@ Setting this to 0 means there is no maximum height.</property>
     <property name="resizable">True</property>
     <property name="window_position">center</property>
     <property name="type_hint">normal</property>
-    <property name="icon-name">hb-icon</property>
+    <property name="icon-name">fr.handbrake.ghb</property>
     <signal name="close-request" handler="preview_window_delete_cb" swapped="no"/>
     <child>
       <object class="GtkOverlay" id="preview_overlay">
@@ -8059,7 +8059,7 @@ DRC allows you to 'compress' the range by making loud sounds softer and soft sou
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="pixel_size">64</property>
-                    <property name="icon_name">hb-icon</property>
+                    <property name="icon_name">fr.handbrake.ghb</property>
                   </object>
                 </child>
               </object>

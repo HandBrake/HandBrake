@@ -61,6 +61,7 @@
 #include "handbrake/handbrake.h"
 #include "callbacks.h"
 #include "chapters.h"
+#include "notifications.h"
 #include "queuehandler.h"
 #include "audiohandler.h"
 #include "subtitlehandler.h"
@@ -83,6 +84,9 @@ static GList* dvd_device_list(void);
 static void prune_logs(signal_user_data_t *ud);
 static gboolean can_suspend_logind(void);
 static void suspend_logind(void);
+static void quit_dialog_show(signal_user_data_t *ud);
+static void quit_dialog_response(GtkDialog *dialog, int response, signal_user_data_t *ud);
+static void queue_done_action(signal_user_data_t *ud);
 static gboolean has_drive = FALSE;
 
 #if !defined(_WIN32)
@@ -307,7 +311,8 @@ inhibit_suspend (signal_user_data_t *ud)
         return;
     }
     suspend_cookie = gtk_application_inhibit(ud->app, NULL,
-                            GTK_APPLICATION_INHIBIT_SUSPEND, "Encoding");
+            GTK_APPLICATION_INHIBIT_SUSPEND | GTK_APPLICATION_INHIBIT_LOGOUT,
+            _("An encode is in progress."));
     if (suspend_cookie != 0)
     {
         suspend_inhibited = GHB_SUSPEND_INHIBITED_GTK;
@@ -336,201 +341,175 @@ uninhibit_suspend (signal_user_data_t *ud)
 // you will have to look further to combo box options
 // maps in hb-backend.c
 
-GhbValue *dep_map;
-GhbValue *rev_map;
+typedef struct {
+    const char *source_widget;
+    const char *source_property;
+    const char *source_property_values;
+    const char *target_widget;
+    const char *target_property;
+    gboolean invert;
+    GBindingFlags flags;
+} GhbBinding;
 
-void
-ghb_init_dep_map (void)
+gboolean ghb_bind_property (GBinding *binding,
+                            const GValue *from_value,
+                            GValue *to_value,
+                            gpointer user_data)
 {
-    dep_map = ghb_resource_get("widget-deps");
-    rev_map = ghb_resource_get("widget-reverse-deps");
-}
+    const char *from_list, *from_str;
 
-static gboolean
-dep_check(signal_user_data_t *ud, const gchar *name, gboolean *out_hide)
-{
-    GtkWidget *widget;
-    GObject *dep_object;
-    gint ii;
-    gint count;
-    gboolean result = TRUE;
-    GhbValue *array, *data;
-    const gchar *widget_name;
+    g_return_val_if_fail(G_VALUE_HOLDS_BOOLEAN(to_value), FALSE);
 
-    ghb_log_func_str(name);
-
-    if (rev_map == NULL) return TRUE;
-    array = ghb_dict_get(rev_map, name);
-    count = ghb_array_len(array);
-    *out_hide = FALSE;
-    for (ii = 0; ii < count; ii++)
+    from_list = (const char *)user_data;
+    if (G_VALUE_HOLDS_STRING(from_value))
     {
-        data = ghb_array_get(array, ii);
-        widget_name = ghb_value_get_string(ghb_array_get(data, 0));
-        widget = GHB_WIDGET(ud->builder, widget_name);
-        dep_object = gtk_builder_get_object(ud->builder, name);
-        if (widget != NULL && !gtk_widget_is_sensitive(widget))
-        {
-            continue;
-        }
-        if (dep_object == NULL)
-        {
-            g_warning("Failed to find widget");
-        }
-        else
-        {
-            gchar *value;
-            gint jj = 0;
-            gchar **values;
-            gboolean sensitive = FALSE;
-            gboolean die, hide;
+        from_str = g_value_get_string(from_value);
+        if (!from_str)
+            return TRUE;
 
-            die = ghb_value_get_bool(ghb_array_get(data, 2));
-            hide = ghb_value_get_bool(ghb_array_get(data, 3));
-            const char *tmp = ghb_value_get_string(ghb_array_get(data, 1));
-            values = g_strsplit(tmp, "|", -1);
-
-            if (widget)
-                value = ghb_widget_string(widget);
-            else
-                value = ghb_dict_get_string_xform(ud->settings, widget_name);
-            while (values && values[jj])
-            {
-                if (values[jj][0] == '>')
-                {
-                    gdouble dbl = g_strtod (&values[jj][1], NULL);
-                    gdouble dvalue = ghb_widget_double(widget);
-                    if (dvalue > dbl)
-                    {
-                        sensitive = TRUE;
-                        break;
-                    }
-                }
-                else if (values[jj][0] == '<')
-                {
-                    gdouble dbl = g_strtod (&values[jj][1], NULL);
-                    gdouble dvalue = ghb_widget_double(widget);
-                    if (dvalue < dbl)
-                    {
-                        sensitive = TRUE;
-                        break;
-                    }
-                }
-                if (strcmp(values[jj], value) == 0)
-                {
-                    sensitive = TRUE;
-                    break;
-                }
-                jj++;
-            }
-            sensitive = die ^ sensitive;
-            if (!sensitive)
-            {
-                result = FALSE;
-                *out_hide |= hide;
-            }
-            g_strfreev (values);
-            g_free(value);
-        }
+        g_value_set_boolean(to_value, g_str_match_string(from_str,
+                                                         from_list,
+                                                         FALSE));
     }
-    return result;
-}
-
-void
-ghb_check_dependency(
-    signal_user_data_t *ud,
-    GtkWidget *widget,
-    const char *alt_name)
-{
-    GObject *dep_object;
-    const gchar *name;
-    GhbValue *array, *data;
-    gint count, ii;
-    const gchar *dep_name;
-    GType type;
-
-    if (widget != NULL)
+    else if (G_VALUE_HOLDS_BOOLEAN(from_value))
     {
-        type = G_OBJECT_TYPE(widget);
-        if (type == GTK_TYPE_COMBO_BOX)
-            if (gtk_combo_box_get_active(GTK_COMBO_BOX(widget)) < 0) return;
-        name = ghb_get_setting_key(widget);
+        g_value_copy(from_value, to_value);
+    }
+    else if (G_VALUE_HOLDS_DOUBLE(from_value))
+    {
+        long from_dbl = (long) g_value_get_double(from_value);
+        long from_max = strtol(from_list, NULL, 10);
+
+        g_value_set_boolean(to_value, from_dbl > from_max);
     }
     else
-        name = alt_name;
-
-    ghb_log_func_str(name);
-
-    if (dep_map == NULL) return;
-    array = ghb_dict_get(dep_map, name);
-    count = ghb_array_len(array);
-    for (ii = 0; ii < count; ii++)
     {
-        gboolean sensitive;
-        gboolean hide;
+        g_warning("Unrecognized binding value type");
+        return FALSE;
+    }
+    return TRUE;
+}
 
-        data = ghb_array_get(array, ii);
-        dep_name = ghb_value_get_string(data);
-        dep_object = gtk_builder_get_object(ud->builder, dep_name);
-        if (dep_object == NULL)
-        {
-            g_warning("Failed to find dependent widget %s", dep_name);
-            continue;
-        }
-        sensitive = dep_check(ud, dep_name, &hide);
-        gtk_widget_set_sensitive(GTK_WIDGET(dep_object), sensitive);
-        gtk_widget_set_can_focus(GTK_WIDGET(dep_object), sensitive);
-        if (!sensitive && hide)
-        {
-            if (gtk_widget_get_visible(GTK_WIDGET(dep_object)))
-            {
-                gtk_widget_hide(GTK_WIDGET(dep_object));
-            }
-        }
-        else
-        {
-            if (!gtk_widget_get_visible(GTK_WIDGET(dep_object)))
-            {
-                gtk_widget_show(GTK_WIDGET(dep_object));
-            }
-        }
+gboolean ghb_bind_property_inverted (GBinding *binding,
+                                     const GValue *from_value,
+                                     GValue *to_value,
+                                     gpointer user_data)
+{
+    const char *from_list, *from_str;
+
+    g_return_val_if_fail(G_VALUE_HOLDS_BOOLEAN(to_value), FALSE);
+
+    from_list = (const char *)user_data;
+    if (G_VALUE_HOLDS_STRING(from_value))
+    {
+        from_str = g_value_get_string(from_value);
+        if (!from_str)
+            return TRUE;
+
+        g_value_set_boolean(to_value, !g_str_match_string(from_str,
+                                                          from_list,
+                                                          FALSE));
+    }
+    else if (G_VALUE_HOLDS_BOOLEAN(from_value))
+        g_value_set_boolean(to_value, !g_value_get_boolean(from_value));
+    else if (G_VALUE_HOLDS_DOUBLE(from_value))
+    {
+        long from_dbl = (long) g_value_get_double(from_value);
+        long from_max = strtol(from_list, NULL, 10);
+
+        g_value_set_boolean(to_value, from_dbl <= from_max);
+    }
+    else
+    {
+        g_warning("Unrecognized binding value type");
+        return FALSE;
+    }
+    return TRUE;
+}
+
+static GhbBinding widget_bindings[] =
+{
+    {"angle_adj", "upper", "1", "angle", "visible"},
+    {"angle_adj", "upper", "1", "angle_label", "visible"},
+    {"title_label", "text", N_("No Title Found"), "PtoPType", "sensitive", TRUE},
+    {"title_label", "text", N_("No Title Found"), "preview_frame", "sensitive", TRUE},
+    {"title_label", "text", N_("No Title Found"), "chapters_tab", "sensitive", TRUE},
+    {"title_label", "text", N_("No Title Found"), "start_point", "sensitive", TRUE},
+    {"title_label", "text", N_("No Title Found"), "end_point", "sensitive", TRUE},
+    {"title_label", "text", N_("No Title Found"), "angle", "sensitive", TRUE},
+    {"title_label", "text", N_("No Title Found"), "angle_label", "sensitive", TRUE},
+    {"vquality_type_bitrate", "active", NULL, "VideoAvgBitrate", "sensitive"},
+    {"vquality_type_constant", "active", NULL, "VideoQualitySlider", "sensitive"},
+    {"vquality_type_constant", "active", NULL, "VideoMultiPassBox", "sensitive", TRUE},
+    {"VideoFramerate", "active-id", "auto", "VideoFrameratePFR", "visible", TRUE},
+    {"VideoFramerate", "active-id", "auto", "VideoFramerateVFR", "visible"},
+    {"VideoMultiPass", "active", NULL, "VideoTurboMultiPass", "sensitive"},
+    {"PictureCombDetectPreset", "active-id", "custom1", "PictureCombDetectCustom", "visible"},
+    {"PictureDeinterlaceFilter", "active-id", "off", "PictureDeinterlaceOptions", "visible", TRUE},
+    {"PictureDeinterlacePreset", "active-id", "custom", "PictureDeinterlaceCustom", "visible"},
+    {"PictureDeblockPreset", "active-id", "off|custom", "PictureDeblockTune", "visible", TRUE},
+    {"PictureDeblockPreset", "active-id", "off|custom", "PictureDeblockTuneLabel", "visible", TRUE},
+    {"PictureDeblockPreset", "active-id", "custom2", "PictureDeblockCustom", "visible"},
+    {"PictureDenoiseFilter", "active-id", "off", "PictureDenoiseOptions", "visible", TRUE},
+    {"PictureDenoisePreset", "active-id", "custom3", "PictureDenoiseCustom", "visible"},
+    {"PictureDenoisePreset", "active-id", "custom4", "PictureDenoiseTune", "visible", TRUE},
+    {"PictureDenoisePreset", "active-id", "custom5", "PictureDenoiseTuneLabel", "visible", TRUE},
+    {"PictureChromaSmoothPreset", "active-id", "off|custom", "PictureChromaSmoothTune", "visible", TRUE},
+    {"PictureChromaSmoothPreset", "active-id", "off|custom", "PictureChromaSmoothTuneLabel", "visible", TRUE},
+    {"PictureChromaSmoothPreset", "active-id", "custom6", "PictureChromaSmoothCustom", "visible"},
+    {"PictureSharpenFilter", "active-id", "off", "PictureSharpenOptions", "visible", TRUE},
+    {"PictureSharpenPreset", "active-id", "custom7", "PictureSharpenCustom", "visible"},
+    {"PictureSharpenPreset", "active-id", "custom8", "PictureSharpenTune", "visible", TRUE},
+    {"PictureSharpenPreset", "active-id", "custom9", "PictureSharpenTuneLabel", "visible", TRUE},
+    {"PictureDetelecine", "active-id", "custom10", "PictureDetelecineCustom", "visible"},
+    {"PictureColorspacePreset", "active-id", "custom11", "PictureColorspaceCustom", "visible"},
+    {"VideoEncoder", "active-id", "svt_av1|svt_av1_10bit|x264|x264_10bit", "x264FastDecode", "visible"},
+    {"VideoEncoder", "active-id", "svt_av1|svt_av1_10bit|x264|x264_10bit|x265|x265_10bit|x265_12bit|x265_16bit|mpeg4|mpeg2|VP8|VP9|VP9_10bit|qsv_av1|qsv_av1_10bit|qsv_h264|qsv_h265|qsv_h265_10bit", "VideoOptionExtraWindow", "visible"},
+    {"VideoEncoder", "active-id", "svt_av1|svt_av1_10bit|x264|x264_10bit|x265|x265_10bit|x265_12bit|x265_16bit|mpeg4|mpeg2|VP8|VP9|VP9_10bit|qsv_av1|qsv_av1_10bit|qsv_h264|qsv_h265|qsv_h265_10bit", "VideoOptionExtraLabel", "visible"},
+    {"auto_name", "active", NULL, "autoname_box", "sensitive"},
+    {"CustomTmpEnable", "active", NULL, "CustomTmpDir", "sensitive"},
+    {"PresetCategory", "active-id", "new", "PresetCategoryName", "visible"},
+    {"PresetCategory", "active-id", "new", "PresetCategoryEntryLabel", "visible"},
+    {"DiskFreeCheck", "active", NULL, "DiskFreeLimit", "sensitive"}
+};
+
+void ghb_bind_dependencies (signal_user_data_t *ud)
+{
+    GhbBinding *binding;
+    GObject *source, *target;
+    GBindingTransformFunc func;
+    int n_bindings = sizeof(widget_bindings) / sizeof(GhbBinding);
+
+    for (int i = 0; i < n_bindings; i++)
+    {
+
+        binding = &widget_bindings[i];
+        func = (GBindingTransformFunc) (binding->invert ?
+                                        ghb_bind_property_inverted :
+                                        ghb_bind_property);
+        source = gtk_builder_get_object(ud->builder, binding->source_widget);
+        if (!G_IS_OBJECT(source))
+            g_warning("Invalid object name: %s", binding->source_widget);
+
+        target = gtk_builder_get_object(ud->builder, binding->target_widget);
+        if (!G_IS_OBJECT(target))
+            g_warning("Invalid object name: %s", binding->target_widget);
+
+        g_object_bind_property_full(source, binding->source_property,
+                                    target, binding->target_property,
+                                    binding->flags | G_BINDING_SYNC_CREATE,
+                                    func, NULL,
+                                    (gpointer) gettext(binding->source_property_values),
+                                    NULL);
     }
 }
 
-void
-ghb_check_all_dependencies(signal_user_data_t *ud)
+static void
+application_quit (signal_user_data_t *ud)
 {
-    GhbDictIter iter;
-    const gchar *dep_name;
-    GhbValue *value;
-    GObject *dep_object;
-
-    ghb_log_func();
-    if (rev_map == NULL) return;
-    iter = ghb_dict_iter_init(rev_map);
-    while (ghb_dict_iter_next(rev_map, &iter, &dep_name, &value))
-    {
-        gboolean sensitive;
-        gboolean hide;
-
-        dep_object = gtk_builder_get_object (ud->builder, dep_name);
-        if (dep_object == NULL)
-        {
-            g_warning("Failed to find dependent widget %s", dep_name);
-            continue;
-        }
-        sensitive = dep_check(ud, dep_name, &hide);
-        gtk_widget_set_sensitive(GTK_WIDGET(dep_object), sensitive);
-        gtk_widget_set_can_focus(GTK_WIDGET(dep_object), sensitive);
-        if (!sensitive && hide)
-        {
-            gtk_widget_hide(GTK_WIDGET(dep_object));
-        }
-        else
-        {
-            gtk_widget_show(GTK_WIDGET(dep_object));
-        }
-    }
+    ghb_hb_cleanup(FALSE);
+    prune_logs(ud);
+    g_application_quit(G_APPLICATION(ud->app));
 }
 
 G_MODULE_EXPORT void
@@ -539,18 +518,13 @@ quit_action_cb(GSimpleAction *action, GVariant *param, signal_user_data_t *ud)
     gint state = ghb_get_queue_state();
     if (state & (GHB_STATE_WORKING|GHB_STATE_SEARCHING))
     {
-        if (ghb_cancel_encode2(ud, _("Closing HandBrake will terminate encoding.\n")))
-        {
-            ghb_hb_cleanup(FALSE);
-            prune_logs(ud);
-            g_application_quit(G_APPLICATION(ud->app));
-            return;
-        }
+        quit_dialog_show(ud);
         return;
     }
-    ghb_hb_cleanup(FALSE);
-    prune_logs(ud);
-    g_application_quit(G_APPLICATION(ud->app));
+    else
+    {
+        application_quit(ud);
+    }
 }
 
 static gboolean
@@ -1474,7 +1448,6 @@ ghb_load_post_settings(signal_user_data_t * ud)
     ud->scale_busy = TRUE;
 
     set_widget_ranges(ud, ud->settings);
-    ghb_check_all_dependencies(ud);
     ghb_show_container_options(ud);
     check_chapter_markers(ud);
 
@@ -1641,7 +1614,7 @@ single_title_dialog (signal_user_data_t *ud)
     gtk_widget_show(spin);
     msg = gtk_message_dialog_get_message_area(GTK_MESSAGE_DIALOG(dialog));
     gtk_box_pack_end(GTK_BOX(msg), spin, FALSE, FALSE, 0);
-    gtk_dialog_run(GTK_DIALOG(dialog));
+    ghb_dialog_run(GTK_DIALOG(dialog));
     result = gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(spin));
     gtk_widget_destroy(dialog);
     return result;
@@ -1727,7 +1700,7 @@ do_source_dialog(gboolean dir, signal_user_data_t *ud)
     gtk_native_dialog_set_modal(GTK_NATIVE_DIALOG(chooser), TRUE);
     gtk_native_dialog_set_transient_for(GTK_NATIVE_DIALOG(chooser), hb_window);
     g_signal_connect(chooser, "response", G_CALLBACK(source_dialog_response_cb), ud);
-    gtk_file_chooser_select_filename(GTK_FILE_CHOOSER(chooser), sourcename);
+    ghb_file_chooser_set_initial_file(GTK_FILE_CHOOSER(chooser), sourcename);
     gtk_native_dialog_show(GTK_NATIVE_DIALOG(chooser));
 }
 
@@ -1952,7 +1925,7 @@ destination_response_cb(GtkFileChooserNative *chooser,
         entry = (GtkEntry*)GHB_WIDGET(ud->builder, "dest_file");
         ghb_editable_set_text(entry, basename);
         dest_chooser = GTK_FILE_CHOOSER(GHB_WIDGET(ud->builder, "dest_dir"));
-        gtk_file_chooser_set_filename(dest_chooser, dirname);
+        ghb_file_chooser_set_initial_file(dest_chooser, dirname);
         g_object_unref(file);
         g_free (dirname);
         g_free (basename);
@@ -1968,7 +1941,6 @@ destination_action_cb(GSimpleAction *action, GVariant *param,
     GtkFileChooserNative *chooser;
     GtkWindow *hb_window;
     const gchar *destname;
-    gchar *basename;
 
     hb_window = GTK_WINDOW(GHB_WIDGET(ud->builder, "hb_window"));
     destname = ghb_dict_get_string(ud->settings, "destination");
@@ -1977,11 +1949,7 @@ destination_action_cb(GSimpleAction *action, GVariant *param,
                                           GTK_FILE_CHOOSER_ACTION_SAVE,
                                           GHB_STOCK_SAVE,
                                           GHB_STOCK_CANCEL);
-    gtk_file_chooser_set_filename(GTK_FILE_CHOOSER(chooser), destname);
-    basename = g_path_get_basename(destname);
-    gtk_file_chooser_set_current_name(GTK_FILE_CHOOSER(chooser), basename);
-    g_free(basename);
-
+    ghb_file_chooser_set_initial_file(GTK_FILE_CHOOSER(chooser), destname);
     gtk_native_dialog_set_modal(GTK_NATIVE_DIALOG(chooser), TRUE);
     g_signal_connect(chooser, "response", G_CALLBACK(destination_response_cb), ud);
     gtk_native_dialog_show(GTK_NATIVE_DIALOG(chooser));
@@ -1995,9 +1963,7 @@ window_destroy_event_cb(
 #endif
     signal_user_data_t *ud)
 {
-    ghb_hb_cleanup(FALSE);
-    prune_logs(ud);
-    g_application_quit(G_APPLICATION(ud->app));
+    application_quit(ud);
     return FALSE;
 }
 
@@ -2012,19 +1978,12 @@ window_delete_event_cb(
     gint state = ghb_get_queue_state();
     if (state & (GHB_STATE_WORKING|GHB_STATE_SEARCHING))
     {
-        if (ghb_cancel_encode2(ud,
-            _("Closing HandBrake will terminate encoding.\n")))
-        {
-            ghb_hb_cleanup(FALSE);
-            prune_logs(ud);
-            g_application_quit(G_APPLICATION(ud->app));
-            return FALSE;
-        }
-        return TRUE;
+        quit_dialog_show(ud);
     }
-    ghb_hb_cleanup(FALSE);
-    prune_logs(ud);
-    g_application_quit(G_APPLICATION(ud->app));
+    else
+    {
+        application_quit(ud);
+    }
     return FALSE;
 }
 
@@ -2050,7 +2009,6 @@ container_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
         ghb_ui_update(ud, "AlignAVStart", ghb_boolean_value(FALSE));
     }
 
-    ghb_check_dependency(ud, widget, NULL);
     ghb_show_container_options(ud);
     update_acodec(ud);
     ghb_update_destination_extension(ud);
@@ -2822,7 +2780,6 @@ ptop_widget_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
     GhbValue *range;
 
     ghb_widget_to_setting(ud->settings, widget);
-    ghb_check_dependency(ud, widget, NULL);
     ghb_live_reset(ud);
 
     // Update type in Job
@@ -2869,7 +2826,6 @@ G_MODULE_EXPORT void
 setting_widget_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
     ghb_widget_to_setting(ud->settings, widget);
-    ghb_check_dependency(ud, widget, NULL);
     ghb_update_summary_info(ud);
     ghb_clear_presets_selection(ud);
     ghb_live_reset(ud);
@@ -2958,7 +2914,6 @@ G_MODULE_EXPORT void
 nonsetting_widget_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
     ghb_widget_to_setting(ud->settings, widget);
-    ghb_check_dependency(ud, widget, NULL);
     ghb_update_summary_info(ud);
     ghb_live_reset(ud);
 }
@@ -2967,7 +2922,6 @@ G_MODULE_EXPORT void
 comb_detect_widget_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
     ghb_widget_to_setting(ud->settings, widget);
-    ghb_check_dependency(ud, widget, NULL);
     ghb_clear_presets_selection(ud);
     ghb_live_reset(ud);
 
@@ -2990,7 +2944,6 @@ G_MODULE_EXPORT void
 deint_filter_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
     ghb_widget_to_setting(ud->settings, widget);
-    ghb_check_dependency(ud, widget, NULL);
     ghb_clear_presets_selection(ud);
     ghb_live_reset(ud);
     ghb_update_ui_combo_box(ud, "PictureDeinterlacePreset", NULL, FALSE);
@@ -3011,7 +2964,6 @@ G_MODULE_EXPORT void
 denoise_filter_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
     ghb_widget_to_setting(ud->settings, widget);
-    ghb_check_dependency(ud, widget, NULL);
     ghb_clear_presets_selection(ud);
     ghb_live_reset(ud);
     ghb_update_ui_combo_box(ud, "PictureDenoisePreset", NULL, FALSE);
@@ -3024,7 +2976,6 @@ G_MODULE_EXPORT void
 sharpen_filter_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
     ghb_widget_to_setting(ud->settings, widget);
-    ghb_check_dependency(ud, widget, NULL);
     ghb_clear_presets_selection(ud);
     ghb_live_reset(ud);
     ghb_update_ui_combo_box(ud, "PictureSharpenPreset", NULL, FALSE);
@@ -3039,7 +2990,6 @@ G_MODULE_EXPORT void
 title_angle_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
     ghb_widget_to_setting(ud->settings, widget);
-    ghb_check_dependency(ud, widget, NULL);
     ghb_live_reset(ud);
 
     GhbValue *source = ghb_get_job_source_settings(ud->settings);
@@ -3132,7 +3082,6 @@ G_MODULE_EXPORT void
 chapter_markers_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
     ghb_widget_to_setting(ud->settings, widget);
-    ghb_check_dependency(ud, widget, NULL);
     ghb_clear_presets_selection(ud);
     ghb_live_reset(ud);
 
@@ -3152,7 +3101,6 @@ G_MODULE_EXPORT void
 vquality_type_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
     ghb_widget_to_setting(ud->settings, widget);
-    ghb_check_dependency(ud, widget, NULL);
     ghb_clear_presets_selection(ud);
     ghb_live_reset(ud);
     if (ghb_check_name_template(ud, "{quality}") ||
@@ -3164,7 +3112,6 @@ G_MODULE_EXPORT void
 vbitrate_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
     ghb_widget_to_setting(ud->settings, widget);
-    ghb_check_dependency(ud, widget, NULL);
     ghb_clear_presets_selection(ud);
     ghb_live_reset(ud);
     if (ghb_check_name_template(ud, "{bitrate}"))
@@ -3175,7 +3122,6 @@ G_MODULE_EXPORT void
 vquality_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
     ghb_widget_to_setting(ud->settings, widget);
-    ghb_check_dependency(ud, widget, NULL);
     ghb_clear_presets_selection(ud);
     ghb_live_reset(ud);
 
@@ -3384,7 +3330,6 @@ start_point_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 
     ptop_read_value_cb(widget, &new_val, ud);
     ptop_update_bg(PTOP_START, new_val, ud);
-    ghb_check_dependency(ud, widget, NULL);
 }
 
 G_MODULE_EXPORT void
@@ -3394,7 +3339,6 @@ end_point_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 
     ptop_read_value_cb(widget, &new_val, ud);
     ptop_update_bg(PTOP_END, new_val, ud);
-    ghb_check_dependency(ud, widget, NULL);
 }
 
 /*
@@ -3424,7 +3368,6 @@ scale_width_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
     ghb_log_func();
     ghb_widget_to_setting(ud->settings, widget);
-    ghb_check_dependency(ud, widget, NULL);
     ghb_clear_presets_selection(ud);
     if (gtk_widget_is_sensitive(widget))
         ghb_set_scale(ud, GHB_PIC_KEEP_WIDTH);
@@ -3437,7 +3380,6 @@ scale_height_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
     ghb_log_func();
     ghb_widget_to_setting(ud->settings, widget);
-    ghb_check_dependency(ud, widget, NULL);
     ghb_clear_presets_selection(ud);
     if (gtk_widget_is_sensitive(widget))
         ghb_set_scale(ud, GHB_PIC_KEEP_HEIGHT);
@@ -3451,7 +3393,6 @@ crop_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
     ghb_log_func();
     ghb_widget_to_setting(ud->settings, widget);
-    ghb_check_dependency(ud, widget, NULL);
     ghb_clear_presets_selection(ud);
     if (gtk_widget_is_sensitive(widget))
         ghb_set_scale(ud, 0);
@@ -3464,7 +3405,6 @@ pad_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
     ghb_log_func();
     ghb_widget_to_setting(ud->settings, widget);
-    ghb_check_dependency(ud, widget, NULL);
     ghb_clear_presets_selection(ud);
     ghb_live_reset(ud);
     if (gtk_widget_is_sensitive(widget))
@@ -3478,7 +3418,6 @@ display_width_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
     ghb_log_func();
     ghb_widget_to_setting(ud->settings, widget);
-    ghb_check_dependency(ud, widget, NULL);
     ghb_clear_presets_selection(ud);
     ghb_live_reset(ud);
     if (gtk_widget_is_sensitive(widget))
@@ -3492,7 +3431,6 @@ display_height_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
     ghb_log_func();
     ghb_widget_to_setting(ud->settings, widget);
-    ghb_check_dependency(ud, widget, NULL);
     ghb_clear_presets_selection(ud);
     ghb_live_reset(ud);
     if (gtk_widget_is_sensitive(widget))
@@ -3506,7 +3444,6 @@ par_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
     ghb_log_func();
     ghb_widget_to_setting(ud->settings, widget);
-    ghb_check_dependency(ud, widget, NULL);
     ghb_clear_presets_selection(ud);
     ghb_live_reset(ud);
     if (gtk_widget_is_sensitive(widget))
@@ -3520,7 +3457,6 @@ scale_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
     ghb_log_func();
     ghb_widget_to_setting(ud->settings, widget);
-    ghb_check_dependency(ud, widget, NULL);
     ghb_clear_presets_selection(ud);
     ghb_live_reset(ud);
     if (gtk_widget_is_sensitive(widget))
@@ -3538,7 +3474,6 @@ rotate_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
     prev_hflip = ghb_dict_get_int(ud->settings, "hflip");
 
     ghb_widget_to_setting(ud->settings, widget);
-    ghb_check_dependency(ud, widget, NULL);
     ghb_clear_presets_selection(ud);
     ghb_live_reset(ud);
 
@@ -3608,7 +3543,6 @@ resolution_limit_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
     ghb_log_func();
     ghb_widget_to_setting(ud->settings, widget);
-    ghb_check_dependency(ud, widget, NULL);
     ghb_clear_presets_selection(ud);
     ghb_live_reset(ud);
 
@@ -3655,22 +3589,28 @@ preferences_action_cb(GSimpleAction *action, GVariant *param,
 
     prefs_require_restart = FALSE;
     dialog = GHB_WIDGET(ud->builder, "prefs_dialog");
-    gtk_dialog_run(GTK_DIALOG(dialog));
-    gtk_widget_hide(dialog);
+    gtk_widget_set_visible(dialog, TRUE);
+}
+
+G_MODULE_EXPORT gboolean
+prefs_response_cb(GtkDialog *dialog, GdkEvent *event, signal_user_data_t *ud)
+{
     ghb_prefs_store();
+    gtk_widget_set_visible(GTK_WIDGET(dialog), FALSE);
 
     if (prefs_require_restart)
     {
         GtkWindow *hb_window = GTK_WINDOW(GHB_WIDGET(ud->builder, "hb_window"));
 
         // Toss up a warning dialog
-        ghb_message_dialog(hb_window, GTK_MESSAGE_WARNING,
-                           "You must restart HandBrake now",
-                           "Exit HandBrake", NULL);
+        ghb_question_dialog_run(hb_window, GHB_ACTION_NORMAL, _("_Quit"), NULL,
+                                _("Temp Directory Changed"),
+                                _("You must restart HandBrake now."));
         ghb_hb_cleanup(FALSE);
         prune_logs(ud);
         g_application_quit(G_APPLICATION(ud->app));
     }
+    return TRUE;
 }
 
 typedef struct
@@ -3685,8 +3625,6 @@ typedef struct
 static gboolean
 quit_cb(countdown_t *cd)
 {
-    gchar *str;
-
     cd->timeout--;
     if (cd->timeout == 0)
     {
@@ -3697,22 +3635,17 @@ quit_cb(countdown_t *cd)
         g_application_quit(G_APPLICATION(cd->ud->app));
         return FALSE;
     }
-    str = g_strdup_printf(_("%s\n\n%s in %d seconds ..."),
-                            cd->msg, cd->action, cd->timeout);
-    gtk_message_dialog_set_markup(cd->dlg, str);
-    g_free(str);
+    gtk_message_dialog_format_secondary_text(cd->dlg, _("%s in %d seconds…"),
+                                             cd->action, cd->timeout);
     return TRUE;
 }
 
 static gboolean
 shutdown_cb(countdown_t *cd)
 {
-    gchar *str;
-
     cd->timeout--;
-    str = g_strdup_printf(_("%s\n\n%s in %d seconds ..."),
-                            cd->msg, cd->action, cd->timeout);
-    gtk_message_dialog_set_markup(cd->dlg, str);
+    gtk_message_dialog_format_secondary_text(cd->dlg, _("%s in %d seconds…"),
+                                             cd->action, cd->timeout);
     if (cd->timeout == 0)
     {
         ghb_hb_cleanup(FALSE);
@@ -3722,170 +3655,215 @@ shutdown_cb(countdown_t *cd)
         g_application_quit(G_APPLICATION(cd->ud->app));
         return FALSE;
     }
-    g_free(str);
     return TRUE;
 }
 
 static gboolean
 suspend_cb(countdown_t *cd)
 {
-    gchar *str;
-
     cd->timeout--;
-    str = g_strdup_printf(_("%s\n\n%s in %d seconds ..."),
-                            cd->msg, cd->action, cd->timeout);
-    gtk_message_dialog_set_markup(cd->dlg, str);
+    gtk_message_dialog_format_secondary_text(cd->dlg, _("%s in %d seconds…"),
+                                             cd->action, cd->timeout);
     if (cd->timeout == 0)
     {
         gtk_widget_destroy (GTK_WIDGET(cd->dlg));
         suspend_logind();
         return FALSE;
     }
-    g_free(str);
     return TRUE;
 }
 
-void
-ghb_countdown_dialog(
-    GtkMessageType type,
-    const gchar *message,
-    const gchar *action,
-    const gchar *cancel,
-    GSourceFunc action_func,
-    signal_user_data_t *ud,
-    gint timeout)
+static void
+countdown_dialog_response (GtkDialog *dialog, int response, guint *timeout_id)
 {
-    GtkWindow *hb_window;
-    GtkWidget *dialog;
-    GtkResponseType response;
-    guint timeout_id;
-    countdown_t cd;
-
-    cd.msg = message;
-    cd.action = action;
-    cd.timeout = timeout;
-    cd.ud = ud;
-
-    // Toss up a warning dialog
-    hb_window = GTK_WINDOW(GHB_WIDGET(ud->builder, "hb_window"));
-    dialog = gtk_message_dialog_new(hb_window, GTK_DIALOG_MODAL,
-                            type, GTK_BUTTONS_NONE,
-                            _("%s\n\n%s in %d seconds ..."),
-                            message, action, timeout);
-    gtk_dialog_add_buttons( GTK_DIALOG(dialog),
-                           cancel, GTK_RESPONSE_CANCEL,
-                           NULL);
-
-    cd.dlg = GTK_MESSAGE_DIALOG(dialog);
-    timeout_id = g_timeout_add(1000, action_func, &cd);
-    response = gtk_dialog_run(GTK_DIALOG(dialog));
     if (response == GTK_RESPONSE_CANCEL)
     {
         GMainContext *mc;
         GSource *source;
 
         mc = g_main_context_default();
-        source = g_main_context_find_source_by_id(mc, timeout_id);
+        source = g_main_context_find_source_by_id(mc, *timeout_id);
         if (source != NULL)
             g_source_destroy(source);
-        gtk_widget_destroy (dialog);
+        gtk_widget_destroy(GTK_WIDGET(dialog));
     }
+    g_free(timeout_id);
+}
+
+void
+ghb_countdown_dialog_show (const gchar *message, const gchar *action,
+                           GSourceFunc action_func, int timeout,
+                           signal_user_data_t *ud)
+{
+    GtkWindow *hb_window;
+    GtkWidget *dialog;
+    guint *timeout_id = g_new(guint, 1);
+    countdown_t *cd = g_new(countdown_t, 1);
+
+    cd->msg = message;
+    cd->action = action;
+    cd->timeout = timeout;
+    cd->ud = ud;
+
+    // Toss up a warning dialog
+    hb_window = GTK_WINDOW(GHB_WIDGET(ud->builder, "hb_window"));
+    dialog = gtk_message_dialog_new(hb_window, GTK_DIALOG_MODAL,
+        GTK_MESSAGE_INFO, GTK_BUTTONS_CANCEL, "%s", message);
+    gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dialog),
+        _("%s in %d seconds…"), action, timeout);
+
+    cd->dlg = GTK_MESSAGE_DIALOG(dialog);
+    *timeout_id = g_timeout_add(1000, action_func, cd);
+
+    g_signal_connect(dialog, "response",
+                     G_CALLBACK(countdown_dialog_response), timeout_id);
+    gtk_widget_show(dialog);
 }
 
 gboolean
-ghb_title_message_dialog(GtkWindow *parent, GtkMessageType type, const gchar *title,
-                         const gchar *message, const gchar *no, const gchar *yes)
+ghb_question_dialog_run (GtkWindow *parent, GhbActionStyle accept_style,
+                         const char *accept_button, const char *cancel_button,
+                         const char *title, const char *format, ...)
 {
-    GtkWidget *dialog, *yes_button;
+    GtkWidget *dialog, *button;
     GtkResponseType response;
-    GtkStyleContext *yes_style;
+
+    if (parent == NULL)
+    {
+        GtkApplication *app = GTK_APPLICATION(g_application_get_default());
+        parent = gtk_application_get_active_window(app);
+    }
 
     // Toss up a warning dialog
-    dialog = gtk_message_dialog_new(parent, GTK_DIALOG_MODAL, type,
-                                    GTK_BUTTONS_NONE, "%s", title);
-    if (message)
-        gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dialog), "%s", message);
-
-    gtk_dialog_add_buttons(GTK_DIALOG(dialog),
-                           no, GTK_RESPONSE_NO,
-                           yes, GTK_RESPONSE_YES, NULL);
-
-    if (yes != NULL)
+    dialog = gtk_message_dialog_new(parent, GTK_DIALOG_MODAL,
+                                    GTK_MESSAGE_QUESTION, GTK_BUTTONS_NONE,
+                                    "%s", title);
+    if (format)
     {
-        yes_button = gtk_dialog_get_widget_for_response(GTK_DIALOG(dialog),
-                                                        GTK_RESPONSE_YES);
-        yes_style = gtk_widget_get_style_context(yes_button);
+        va_list args;
+        char *message;
 
-        // Use GTK_MESSAGE_QUESTION for a neutral dialog,
-        // GTK_MESSAGE_INFO for a blue 'suggested-action' confirm button, or
-        // GTK_MESSAGE_WARNING for a red 'destructive-action' confirm button.
-        switch (type)
+        va_start(args, format);
+        message = g_strdup_vprintf(format, args);
+        va_end(args);
+        gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dialog), "%s", message);
+        g_free(message);
+    }
+
+    if (cancel_button != NULL)
+    {
+        gtk_dialog_add_button(GTK_DIALOG(dialog), cancel_button,
+                              GTK_RESPONSE_CANCEL);
+    }
+
+    if (accept_button != NULL)
+    {
+        button = gtk_dialog_add_button(GTK_DIALOG(dialog), accept_button,
+                                       GTK_RESPONSE_ACCEPT);
+
+        GtkStyleContext *style = gtk_widget_get_style_context(button);
+
+        switch (accept_style)
         {
-        case GTK_MESSAGE_INFO:
-            gtk_style_context_add_class(yes_style, "suggested-action");
+        case GHB_ACTION_SUGGESTED:
+            gtk_style_context_add_class(style, "suggested-action");
             break;
-        case GTK_MESSAGE_WARNING:
-        case GTK_MESSAGE_ERROR:
-            gtk_style_context_add_class(yes_style, "destructive-action");
+        case GHB_ACTION_DESTRUCTIVE:
+            gtk_style_context_add_class(style, "destructive-action");
         default:
             break;
         }
     }
-    response = gtk_dialog_run(GTK_DIALOG(dialog));
-    gtk_widget_destroy (dialog);
-    if (response == GTK_RESPONSE_NO)
+    response = ghb_dialog_run(GTK_DIALOG(dialog));
+    gtk_widget_destroy(dialog);
+    if (response == GTK_RESPONSE_ACCEPT)
     {
-        return FALSE;
+        return TRUE;
     }
-    return TRUE;
-}
-
-gboolean
-ghb_message_dialog(GtkWindow *parent, GtkMessageType type, const gchar *message,
-                   const gchar *no, const gchar *yes)
-{
-    return ghb_title_message_dialog(parent, type, message, NULL, no, yes);
-}
-
-
-void
-ghb_error_dialog(GtkWindow *parent, GtkMessageType type, const gchar *message, const gchar *cancel)
-{
-    ghb_message_dialog(parent, type, message, cancel, NULL);
+    return FALSE;
 }
 
 void
-ghb_cancel_encode(signal_user_data_t *ud, const gchar *extra_msg)
+message_dialog_destroy (GtkDialog *dialog, int response, gpointer user_data)
 {
-    GtkWindow *hb_window;
+    gtk_widget_destroy(GTK_WIDGET(dialog));
+}
+
+/**
+ * Displays a modal message dialog which will be destroyed automatically.
+ * Use for warnings which don't need a response.
+ *
+ * @type: The @GtkMessageType for the dialog
+ * @title: The title of the dialog
+ * @message: The detail text of the dialog
+ */
+void
+ghb_alert_dialog_show (GtkMessageType type, const char *title,
+                       const char *format, ...)
+{
+    GtkWindow *parent;
+    GtkWidget *dialog;
+    char *message;
+    va_list args;
+
+    parent = gtk_application_get_active_window(GTK_APPLICATION(g_application_get_default()));
+
+    dialog = gtk_message_dialog_new(parent, GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
+                                    type, GTK_BUTTONS_CLOSE, "%s", title);
+
+    if (format != NULL)
+    {
+        va_start(args, format);
+        message = g_strdup_vprintf(format, args);
+        va_end(args);
+        gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dialog), "%s", message);
+        g_free(message);
+    }
+    g_signal_connect(dialog, "response", G_CALLBACK(message_dialog_destroy), NULL);
+    gtk_widget_show(dialog);
+}
+
+GtkWidget *
+ghb_cancel_dialog_new (GtkWindow *parent, const char *title, const char *message,
+                       const char *cancel_all_button, const char *cancel_current_button,
+                       const char *finish_button, const char *continue_button)
+{
     GtkWidget *dialog, *cancel;
-    GtkResponseType response;
     GtkStyleContext *style;
 
-    if (extra_msg == NULL) extra_msg = "";
-    // Toss up a warning dialog
-    hb_window = GTK_WINDOW(GHB_WIDGET(ud->builder, "hb_window"));
-    dialog = gtk_message_dialog_new(hb_window, GTK_DIALOG_MODAL,
-                GTK_MESSAGE_WARNING, GTK_BUTTONS_NONE,
-                _("%sYour movie will be lost if you don't continue encoding."),
-                extra_msg);
-    gtk_dialog_add_buttons( GTK_DIALOG(dialog),
-                           _("Cancel Current and Stop"), 1,
-                           _("Cancel Current, Start Next"), 2,
-                           _("Finish Current, then Stop"), 3,
-                           _("Continue Encoding"), 4,
-                           NULL);
-
-    cancel = gtk_dialog_get_widget_for_response(GTK_DIALOG(dialog), 1);
+    dialog = gtk_message_dialog_new(parent, GTK_DIALOG_MODAL,
+                GTK_MESSAGE_WARNING, GTK_BUTTONS_NONE, "%s", title);
+    gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dialog), "%s", message);
+    gtk_window_set_transient_for(GTK_WINDOW(dialog), parent);
+    gtk_window_set_modal(GTK_WINDOW(dialog), TRUE);
+    cancel = gtk_dialog_add_button(GTK_DIALOG(dialog), cancel_all_button, 1);
     style = gtk_widget_get_style_context(cancel);
     gtk_style_context_add_class(style, "destructive-action");
-    cancel = gtk_dialog_get_widget_for_response(GTK_DIALOG(dialog), 2);
-    style = gtk_widget_get_style_context(cancel);
-    gtk_style_context_add_class(style, "destructive-action");
+    if (cancel_current_button != NULL)
+    {
+        cancel = gtk_dialog_add_button(GTK_DIALOG(dialog), cancel_current_button, 2);
+        style = gtk_widget_get_style_context(cancel);
+        gtk_style_context_add_class(style, "destructive-action");
+    }
+    if (finish_button != NULL)
+    {
+        gtk_dialog_add_button (GTK_DIALOG(dialog), finish_button, 3);
+    }
+    if (continue_button != NULL)
+    {
+        gtk_dialog_add_button(GTK_DIALOG(dialog), continue_button, 4);
+    }
+    return dialog;
+}
 
-    response = gtk_dialog_run(GTK_DIALOG(dialog));
-    gtk_widget_destroy (dialog);
-    switch ((int)response)
+static void
+stop_encode_dialog_response (GtkDialog *dialog, int response,
+                             signal_user_data_t *ud)
+{
+    g_signal_handlers_disconnect_by_data(dialog, ud);
+    gtk_widget_destroy(GTK_WIDGET(dialog));
+
+    switch (response)
     {
         case 1:
             ghb_stop_queue();
@@ -3905,43 +3883,39 @@ ghb_cancel_encode(signal_user_data_t *ud, const gchar *extra_msg)
     }
 }
 
-gboolean
-ghb_cancel_encode2(signal_user_data_t *ud, const gchar *extra_msg)
+void
+ghb_stop_encode_dialog_show (signal_user_data_t *ud)
 {
-    GtkWindow *hb_window;
-    GtkWidget *dialog, *cancel;
-    GtkResponseType response;
-    GtkStyleContext *style;
+    GtkWindow *window = gtk_application_get_active_window(
+        GTK_APPLICATION(g_application_get_default()));
+    GtkWidget *dialog = ghb_cancel_dialog_new(window, _("Stop Encoding?"),
+        _("Your movie will be lost if you don't continue encoding."),
+        _("Cancel Current and Stop"), _("Cancel Current, Start Next"),
+        _("Finish Current, Start Next"), _("Continue Encoding"));
+    g_signal_connect(dialog, "response",
+                     G_CALLBACK(stop_encode_dialog_response), ud);
+    gtk_widget_show(dialog);
+}
 
-    if (extra_msg == NULL) extra_msg = "";
-    // Toss up a warning dialog
-    hb_window = GTK_WINDOW(GHB_WIDGET(ud->builder, "hb_window"));
-    dialog = gtk_message_dialog_new(hb_window, GTK_DIALOG_MODAL,
-                GTK_MESSAGE_WARNING, GTK_BUTTONS_NONE,
-                _("%sYour movie will be lost if you don't continue encoding."),
-                extra_msg);
-    gtk_dialog_add_buttons( GTK_DIALOG(dialog),
-                           _("Cancel Current and Stop"), 1,
-                           _("Continue Encoding"), 4,
-                           NULL);
-
-    cancel = gtk_dialog_get_widget_for_response(GTK_DIALOG(dialog), 1);
-    style = gtk_widget_get_style_context(cancel);
-    gtk_style_context_add_class(style, "destructive-action");
-
-    response = gtk_dialog_run(GTK_DIALOG(dialog));
-    gtk_widget_destroy (dialog);
-    switch ((int)response)
+static void
+quit_dialog_response (GtkDialog *dialog, int response, signal_user_data_t *ud)
+{
+    gtk_widget_destroy(GTK_WIDGET(dialog));
+    if (response == 1)
     {
-        case 1:
-            ghb_stop_queue();
-            ud->cancel_encode = GHB_CANCEL_ALL;
-            return TRUE;
-        case 4:
-        default:
-            break;
+        application_quit(ud);
     }
-    return FALSE;
+}
+static void
+quit_dialog_show (signal_user_data_t *ud)
+{
+    GtkWindow *window = gtk_application_get_active_window(
+        GTK_APPLICATION(g_application_get_default()));
+    GtkWidget *dialog = ghb_cancel_dialog_new(window, _("Quit HandBrake?"),
+        _("Your movie will be lost if you don't continue encoding."),
+        _("Cancel All and Quit"), NULL, NULL, _("Continue Encoding"));
+    g_signal_connect(dialog, "response", G_CALLBACK(quit_dialog_response), ud);
+    gtk_widget_show(dialog);
 }
 
 static void
@@ -4149,7 +4123,8 @@ ghb_start_next_job(signal_user_data_t *ud)
     }
     // Nothing pending
     uninhibit_suspend(ud);
-    ghb_notify_done(ud);
+    ghb_send_notification(GHB_NOTIFY_QUEUE_DONE, 0, ud);
+    queue_done_action(ud);
     ghb_update_pending(ud);
     gtk_widget_hide(progress);
     ghb_dict_set_bool(ud->globals, "SkipDiskFreeCheck", FALSE);
@@ -4382,6 +4357,7 @@ ghb_backend_events(signal_user_data_t *ud)
         index = ghb_find_queue_job(ud->queue, status.queue.unique_id,
                                    &queueDict);
         if ((status.queue.state & GHB_STATE_WORKING) &&
+            !(status.queue.state & GHB_STATE_PAUSED) &&
             (event_sequence % 50 == 0)) // check every 10 seconds
         {
             ghb_low_disk_check(ud);
@@ -4436,6 +4412,7 @@ ghb_backend_events(signal_user_data_t *ud)
             case GHB_ERROR_NONE:
                 gtk_label_set_text(work_status, _("Encode Done!"));
                 qstatus = GHB_QUEUE_DONE;
+                ghb_send_notification (GHB_NOTIFY_ITEM_DONE, index, ud);
                 break;
             case GHB_ERROR_CANCELED:
                 gtk_label_set_text(work_status, _("Encode Canceled."));
@@ -4444,6 +4421,7 @@ ghb_backend_events(signal_user_data_t *ud)
             case GHB_ERROR_FAIL:
             default:
                 gtk_label_set_text(work_status, _("Encode Failed."));
+                ghb_send_notification (GHB_NOTIFY_ITEM_FAILED, index, ud);
                 qstatus = GHB_QUEUE_FAIL;
         }
         if (queueDict != NULL)
@@ -4711,8 +4689,7 @@ about_action_cb(GSimpleAction *action, GVariant *param, signal_user_data_t *ud)
                                 HB_PROJECT_URL_WEBSITE);
     gtk_about_dialog_set_website_label(GTK_ABOUT_DIALOG(widget),
                                         HB_PROJECT_URL_WEBSITE);
-    gtk_dialog_run(GTK_DIALOG(widget));
-    gtk_widget_hide(widget);
+    gtk_widget_set_visible(widget, TRUE);
 }
 
 #define HB_DOCS "https://handbrake.fr/docs/"
@@ -4790,17 +4767,17 @@ activity_font_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
     ghb_pref_set(ud->prefs, name);
 
     int size = ghb_dict_get_int(ud->prefs, "ActivityFontSize");
+    const char *font = ghb_dict_get_string(ud->prefs, "ActivityFontFamily");
 
     const gchar *css_template =
         "                                   \n\
-        #activity_view                      \n\
+        .ghb-monospace                      \n\
         {                                   \n\
-            font-family: monospace;         \n\
+            font-family: %s;                \n\
             font-size: %dpt;                \n\
-            font-weight: 300;               \n\
         }                                   \n\
         ";
-    char           * css      = g_strdup_printf(css_template, size);
+    char           * css      = g_strdup_printf(css_template, font, size);
     GtkCssProvider * provider = gtk_css_provider_new();
 
     ghb_css_provider_load_from_data(provider, css, -1);
@@ -4833,7 +4810,6 @@ when_complete_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 
     ghb_widget_to_setting (ud->prefs, widget);
 
-    ghb_check_dependency(ud, widget, NULL);
     const gchar *name = ghb_get_setting_key(widget);
     ghb_pref_set(ud->prefs, name);
     ghb_prefs_store();
@@ -4855,7 +4831,6 @@ pref_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
     ghb_widget_to_setting (ud->prefs, widget);
 
-    ghb_check_dependency(ud, widget, NULL);
     const gchar *name = ghb_get_setting_key(widget);
     ghb_pref_set(ud->prefs, name);
 }
@@ -4873,7 +4848,6 @@ use_m4v_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
     ghb_log_func();
     ghb_widget_to_setting (ud->prefs, widget);
-    ghb_check_dependency(ud, widget, NULL);
     const gchar *name = ghb_get_setting_key(widget);
     ghb_pref_set(ud->prefs, name);
     ghb_update_destination_extension(ud);
@@ -4898,7 +4872,6 @@ temp_dir_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
         orig_tmp_dir = g_strdup(tmp_dir);
     }
     ghb_widget_to_setting (ud->prefs, widget);
-    ghb_check_dependency(ud, widget, NULL);
 
     tmp_dir = ghb_dict_get_string(ud->prefs, "CustomTmpDir");
     if (tmp_dir == NULL)
@@ -4918,7 +4891,6 @@ vqual_granularity_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
     ghb_log_func();
     ghb_widget_to_setting (ud->prefs, widget);
-    ghb_check_dependency(ud, widget, NULL);
 
     const gchar *name = ghb_get_setting_key(widget);
     ghb_pref_set(ud->prefs, name);
@@ -5002,6 +4974,7 @@ ghb_file_menu_add_dvd(signal_user_data_t *ud)
                 g_menu_item_set_label(item, name);
                 g_menu_item_set_detailed_action(item, action);
                 g_menu_append_item(dvd_menu, item);
+                g_object_unref(item);
                 g_free(name);
             }
 
@@ -5276,53 +5249,35 @@ format_deblock_cb(GtkScale *scale, gdouble val, signal_user_data_t *ud)
     }
 }
 
-void
-ghb_notify_done(signal_user_data_t *ud)
+static void
+queue_done_action (signal_user_data_t *ud)
 {
-    if (ud->when_complete == 0)
-        return;
-
-    GNotification * notification;
-    GIcon         * icon;
-
-    notification = g_notification_new(_("Encode Complete"));
-    g_notification_set_body(notification,
-        _("Put down that cocktail, Your HandBrake queue is done!"));
-    icon = g_themed_icon_new("fr.handbrake.ghb");
-    g_notification_set_icon(notification, icon);
-
-    g_application_send_notification(G_APPLICATION(ud->app), "cocktail", notification);
-    g_object_unref(G_OBJECT(notification));
-    g_object_unref(G_OBJECT(icon));
-
     switch (ud->when_complete)    {
-	    case 2:
-            ghb_countdown_dialog(GTK_MESSAGE_INFO,
-                                _("Your encode is complete."),
-                                _("Quitting Handbrake"),
-                                _("Cancel"), (GSourceFunc)quit_cb, ud, 60);
+        case 1:
+            ghb_countdown_dialog_show(_("Your encode is complete."),
+                                      _("Quitting HandBrake"),
+                                      (GSourceFunc)quit_cb, 60, ud);
             break;
-        case 3:
+        case 2:
             if (can_suspend_logind())
             {
-                ghb_countdown_dialog(GTK_MESSAGE_INFO,
-                    _("Your encode is complete."),
-                    _("Putting computer to sleep"),
-                    _("Cancel"), (GSourceFunc)suspend_cb, ud, 60);
+                ghb_countdown_dialog_show(_("Your encode is complete."),
+                                          _("Putting computer to sleep"),
+                                          (GSourceFunc)suspend_cb, 60, ud);
             }
             break;
-	    case 4:
+        case 3:
             if (can_shutdown_logind())
             {
-                ghb_countdown_dialog(GTK_MESSAGE_INFO,
-                    _("Your encode is complete."),
-                    _("Shutting down the computer"),
-                    _("Cancel"), (GSourceFunc)shutdown_cb, ud, 60);
+                ghb_countdown_dialog_show(_("Your encode is complete."),
+                                          _("Shutting down the computer"),
+                                          (GSourceFunc)shutdown_cb, 60, ud);
             }
 
         default:
             break;    }
 }
+
 
 G_MODULE_EXPORT gboolean
 window_map_cb(
