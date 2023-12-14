@@ -1668,7 +1668,10 @@ static hb_buffer_t *vt_encode(hb_work_object_t *w, hb_buffer_t *in)
     else
     {
         CFDictionaryRef frameProperties = NULL;
-        if (in->s.new_chap && job->chapter_markers)
+        // macOS Sonoma has got an unfixed bug that makes the whole
+        // system crash and restart on M* Ultra if we force a keyframe
+        // on the first frame. So avoid that.
+        if (in->s.new_chap && job->chapter_markers && pv->frameno_in)
         {
             // chapters have to start with an IDR frame
             const void *keys[1] = { kVTEncodeFrameOptionKey_ForceKeyFrame };
