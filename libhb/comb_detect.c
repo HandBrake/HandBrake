@@ -647,6 +647,15 @@ static int comb_detect_init(hb_filter_object_t *filter,
         hb_dict_extract_int(&pv->block_height, dict, "block-height");
     }
 
+    if (pv->block_width > init->geometry.width)
+    {
+        pv->block_width = init->geometry.width;
+    }
+    if (pv->block_height > init->geometry.height)
+    {
+        pv->block_height = init->geometry.height;
+    }
+
     // Scale the thresholds for the current depth
     pv->motion_threshold  <<= (pv->depth - 8);
     pv->spatial_threshold <<= (pv->depth - 8);
