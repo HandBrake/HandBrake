@@ -1177,7 +1177,9 @@ static OSStatus init_vtsession(hb_work_object_t *w, hb_job_t *job, hb_work_priva
     {
         if (CFBooleanGetValue(allowFrameReordering))
         {
-            job->areBframes = job->vcodec == HB_VCODEC_VT_H265 || job->vcodec == HB_VCODEC_VT_H265_10BIT ? 2 : 1;
+            // There is no way to know if b-pyramid will be
+            // used or not, to be safe always assume it's enabled
+            job->areBframes = 2;
         }
         CFRelease(allowFrameReordering);
     }
