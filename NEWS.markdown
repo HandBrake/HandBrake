@@ -20,7 +20,9 @@ Windows users, please make sure to install [Microsoft .NET Desktop Runtime versi
 
 ### Mac
 
-- Fixed a crash that happened when opening an folder that contains no file.
+- Disabled the VideoToolbox H.264 hardware decoder for levels 6.1 and 6.2, the video was either not decoded properly on Intel, or some frames were not decoded at all on Apple Silicon.
+- Worked around a macOS 14 issue that causes the system to reboot when using the VideoToolbox encoders on an Apple Silicon Ultra CPU.
+- Fixed a crash that happened when opening a folder that contains no file.
 
 #### Windows
 
