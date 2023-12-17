@@ -100,7 +100,17 @@
   </requires>
 
   <releases>
-    <release version="1.7.0" date="2023-10-10">
+    <release version="1.7.2" date="2023-12-17">
+      <description>
+        <p>Addresses an issue where the file chooser opens in the home directory instead of the folder that was previously selected.</p>
+      </description>
+    </release>
+    <release version="1.7.1" date="2023-11-22">
+      <description>
+        <p>Fixed Intel QSV devices enumeration where devices from other vendors are present.</p>
+      </description>
+    </release>
+    <release version="1.7.0" date="2023-11-12">
       <description>
         <p>Drag and drop support, native file chooser, chapter import and export, Dolby Vision metadata passthrough, and various user interface improvements.</p>
       </description>
