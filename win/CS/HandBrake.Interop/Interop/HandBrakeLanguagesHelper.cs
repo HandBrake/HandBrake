@@ -123,7 +123,7 @@ namespace HandBrake.Interop.Interop
             foreach (Language item in languages)
             {
                 Language isoCode;
-                if (AllLanguagesDict.TryGetValue(item.EnglishName, out isoCode))
+                if (AllLanguagesDict.TryGetValue(item.Code, out isoCode))
                 {
                     orderedSet.Add(isoCode.Code);
                 }
