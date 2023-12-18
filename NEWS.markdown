@@ -28,6 +28,7 @@ Windows users, please make sure to install [Microsoft .NET Desktop Runtime versi
 
 - Fixed an issue where Nvidia NVDec option was ignored (#5569)
 - Fixed an issue with theme loading that could cause a crash on start (#5567)
+- Fixed an issue where subtitle language order was not honoured. (#5590)
 
 
 ## HandBrake 1.7.1
