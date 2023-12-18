@@ -63,13 +63,13 @@ jobs:
         make pkg.create.zip
 
     - name: Upload HandBrakeCLI
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: HandBrakeCLI
         path: ./build/HandBrakeCLI.exe
 
     - name: Upload LibHB
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: LibHandBrake
         path: ./build/libhb/hb.dll
@@ -108,13 +108,13 @@ jobs:
         msbuild win\cs\build.xml /t:x64 /p:PfxFile=$env:SigningCertificate /p:PfxPwd=${{ secrets.HandBrakeTeam_pfx_pwd }} /p:SignTimestampServer=http://time.certum.pl/
 
     - name: Upload HandBrake exe Installer
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: HandBrake-x86_64-Win_GUI-EXE
         path: win/CS/HandBrakeWPF/bin/publish/HandBrake-Nightly-x86_64-Win_GUI.exe
 
     - name: Upload HandBrake msi Installer
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name:  HandBrake-x86_64-Win_GUI-MSI
         path: win/CS/HandBrakeWPF/bin/publish/HandBrake-Nightly-x86_64-Win_GUI.msi
