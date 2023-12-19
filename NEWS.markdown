@@ -20,12 +20,15 @@ Windows users, please make sure to install [Microsoft .NET Desktop Runtime versi
 
 ### Mac
 
-- Fixed a crash that happened when opening an folder that contains no file.
+- Disabled the VideoToolbox H.264 hardware decoder for levels 6.1 and 6.2, the video was either not decoded properly on Intel, or some frames were not decoded at all on Apple Silicon.
+- Worked around a macOS 14 issue that causes the system to reboot when using the VideoToolbox encoders on an Apple Silicon Ultra CPU.
+- Fixed a crash that happened when opening a folder that contains no file.
 
 #### Windows
 
 - Fixed an issue where Nvidia NVDec option was ignored (#5569)
 - Fixed an issue with theme loading that could cause a crash on start (#5567)
+- Fixed an issue where subtitle language order was not honoured. (#5590)
 
 
 ## HandBrake 1.7.1

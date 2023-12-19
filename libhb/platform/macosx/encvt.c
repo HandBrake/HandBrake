@@ -1177,7 +1177,9 @@ static OSStatus init_vtsession(hb_work_object_t *w, hb_job_t *job, hb_work_priva
     {
         if (CFBooleanGetValue(allowFrameReordering))
         {
-            job->areBframes = job->vcodec == HB_VCODEC_VT_H265 || job->vcodec == HB_VCODEC_VT_H265_10BIT ? 2 : 1;
+            // There is no way to know if b-pyramid will be
+            // used or not, to be safe always assume it's enabled
+            job->areBframes = 2;
         }
         CFRelease(allowFrameReordering);
     }
@@ -1666,7 +1668,10 @@ static hb_buffer_t *vt_encode(hb_work_object_t *w, hb_buffer_t *in)
     else
     {
         CFDictionaryRef frameProperties = NULL;
-        if (in->s.new_chap && job->chapter_markers)
+        // macOS Sonoma has got an unfixed bug that makes the whole
+        // system crash and restart on M* Ultra if we force a keyframe
+        // on the first frame. So avoid that.
+        if (in->s.new_chap && job->chapter_markers && pv->frameno_in)
         {
             // chapters have to start with an IDR frame
             const void *keys[1] = { kVTEncodeFrameOptionKey_ForceKeyFrame };

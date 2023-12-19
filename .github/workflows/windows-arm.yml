@@ -8,7 +8,7 @@ jobs:
     runs-on: ubuntu-20.04
     steps:
     - uses: actions/checkout@v4
-    - uses: actions/setup-python@v3
+    - uses: actions/setup-python@v5
 
     - name: Environment Setup
       run: |
@@ -42,13 +42,13 @@ jobs:
         make pkg.create.zip
 
     - name: Upload HandBrakeCLI
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: HandBrakeCLI
         path: ./build/HandBrakeCLI.exe
 
     - name: Upload LibHB
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: LibHandBrake
         path: ./build/libhb/hb.dll

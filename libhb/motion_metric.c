@@ -40,7 +40,7 @@ hb_motion_metric_object_t hb_motion_metric =
 // small values being truncated to 0 which is ok for this usage.
 static void build_gamma_lut(hb_motion_metric_private_t *pv)
 {
-    for (int i = 0; i < pv->max_value; i++)
+    for (int i = 0; i <= pv->max_value; i++)
     {
         pv->gamma_lut[i] = 4095 * pow(((float)i / (float)(pv->max_value -1)), 2.2f);;
     }
