@@ -611,8 +611,8 @@ void hb_deinterlace(hb_buffer_t *dst, hb_buffer_t *src)
     for (int pp = 0; pp < 3; pp++)
     {
         int width  = src->plane[pp].width;
+        int height = src->plane[pp].height;
         int stride = src->plane[pp].stride;
-        int height = src->plane[pp].height_stride;
 
         // Filter parity lines
         uint8_t *pdst = &dst->plane[pp].data[0];

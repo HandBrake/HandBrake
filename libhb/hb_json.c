@@ -1989,7 +1989,6 @@ char* hb_get_preview_json(hb_handle_t * h, const char *json_param)
             "Width",        hb_value_int(image->plane[ii].width),
             "Height",       hb_value_int(image->plane[ii].height),
             "Stride",       hb_value_int(image->plane[ii].stride),
-            "HeightStride", hb_value_int(image->plane[ii].height_stride),
             "Size",         hb_value_int(base64size),
             "Data",         hb_value_string(plane_base64)
         );

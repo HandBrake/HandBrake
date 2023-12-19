@@ -128,7 +128,7 @@ int hb_picture_fill(uint8_t *data[], int stride[], hb_buffer_t *buf)
         stride[ii] = stride[ii - 1];
 
     ret = av_image_fill_pointers(data, buf->f.fmt,
-                                 buf->plane[0].height_stride,
+                                 buf->plane[0].height,
                                  buf->data, stride);
     if (ret != buf->size)
     {

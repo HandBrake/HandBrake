@@ -782,12 +782,10 @@ void hb_buffer_init_planes(hb_buffer_t * b)
     {
         b->plane[pp].data = data;
         b->plane[pp].stride        = hb_image_stride(b->f.fmt, b->f.width, pp);
-        b->plane[pp].height_stride = hb_image_height_stride(b->f.fmt,
-                                                            b->f.height, pp);
         b->plane[pp].width         = hb_image_width(b->f.fmt, b->f.width, pp);
         b->plane[pp].height        = hb_image_height(b->f.fmt, b->f.height, pp);
         b->plane[pp].size          = b->plane[pp].stride *
-                                     b->plane[pp].height_stride;
+                                     b->plane[pp].height;
         data                      += b->plane[pp].size;
     }
 }
@@ -818,7 +816,7 @@ hb_buffer_t * hb_frame_buffer_init( int pix_fmt, int width, int height )
         {
             has_plane[pp] = 1;
             size += hb_image_stride( pix_fmt, width, pp ) *
-                    hb_image_height_stride( pix_fmt, height, pp );
+                    hb_image_height( pix_fmt, height, pp );
         }
     }
 
@@ -841,7 +839,7 @@ hb_buffer_t * hb_frame_buffer_init( int pix_fmt, int width, int height )
 void hb_frame_buffer_blank_stride(hb_buffer_t * buf)
 {
     uint8_t * data;
-    int       pp, yy, width, height, stride, height_stride;
+    int       pp, yy, width, height, stride;
 
     for (pp = 0; pp <= buf->f.max_plane; pp++)
     {
@@ -849,7 +847,6 @@ void hb_frame_buffer_blank_stride(hb_buffer_t * buf)
         width         = buf->plane[pp].width;
         height        = buf->plane[pp].height;
         stride        = buf->plane[pp].stride;
-        height_stride = buf->plane[pp].height_stride;
 
         if (data != NULL)
         {
@@ -857,11 +854,6 @@ void hb_frame_buffer_blank_stride(hb_buffer_t * buf)
             for (yy = 0; yy < height; yy++)
             {
                 memset(data + yy * stride + width, 0x80, stride - width);
-            }
-            // Blank bottom margin
-            for (yy = height; yy < height_stride; yy++)
-            {
-                memset(data + yy * stride, 0x80, stride);
             }
         }
     }
@@ -871,7 +863,7 @@ void hb_frame_buffer_mirror_stride(hb_buffer_t * buf)
 {
     const AVPixFmtDescriptor * desc = av_pix_fmt_desc_get(buf->f.fmt);
     uint8_t * data;
-    int       pp, ii, yy, width, height, stride, height_stride;
+    int       pp, ii, yy, width, height, stride;
     int       bps, pos, margin, margin_front, margin_back;
 
     bps = desc->comp[0].depth > 8 ? 2 : 1;
@@ -882,7 +874,6 @@ void hb_frame_buffer_mirror_stride(hb_buffer_t * buf)
         width         = buf->plane[pp].width;
         height        = buf->plane[pp].height;
         stride        = buf->plane[pp].stride;
-        height_stride = buf->plane[pp].height_stride;
         if (data != NULL)
         {
             margin       = stride / bps - width;
@@ -903,13 +894,6 @@ void hb_frame_buffer_mirror_stride(hb_buffer_t * buf)
                 {
                     *(data + pos - ii) = *(data + pos + ii + 1);
                 }
-            }
-            // Mirror bottom rows into height_stride
-            pos = height * stride;
-            for (ii = 0; ii < height_stride - height; ii++)
-            {
-                memcpy(data + pos + ii * stride,
-                       data + pos - ((ii + 1) * stride), stride);
             }
         }
     }
@@ -941,7 +925,7 @@ void hb_video_buffer_realloc( hb_buffer_t * buf, int width, int height )
         {
             has_plane[pp] = 1;
             size += hb_image_stride(buf->f.fmt, width, pp) *
-                    hb_image_height_stride(buf->f.fmt, height, pp );
+                    hb_image_height(buf->f.fmt, height, pp );
         }
     }
 
@@ -1097,7 +1081,7 @@ hb_image_t * hb_image_init(int pix_fmt, int width, int height)
         {
             has_plane[pp] = 1;
             size += hb_image_stride( pix_fmt, width, pp ) *
-                    hb_image_height_stride( pix_fmt, height, pp );
+                    hb_image_height( pix_fmt, height, pp );
         }
     }
 
@@ -1117,12 +1101,10 @@ hb_image_t * hb_image_init(int pix_fmt, int width, int height)
     {
         image->plane[pp].data   = data;
         image->plane[pp].stride = hb_image_stride(pix_fmt, width, pp);
-        image->plane[pp].height_stride =
-                                hb_image_height_stride(pix_fmt, height, pp);
         image->plane[pp].width  = hb_image_width(pix_fmt, width, pp);
         image->plane[pp].height = hb_image_height(pix_fmt, height, pp);
         image->plane[pp].size   = image->plane[pp].stride *
-                                  image->plane[pp].height_stride;
+                                  image->plane[pp].height;
         data                   += image->plane[pp].size;
     }
     return image;
@@ -1154,7 +1136,6 @@ hb_image_t * hb_buffer_to_image(hb_buffer_t *buf)
         image->plane[p].width = buf->plane[p].width;
         image->plane[p].height = buf->plane[p].height;
         image->plane[p].stride = buf->plane[p].stride;
-        image->plane[p].height_stride = buf->plane[p].height_stride;
         image->plane[p].size = buf->plane[p].size;
 
         memcpy(image->plane[p].data, buf->plane[p].data, buf->plane[p].size);
