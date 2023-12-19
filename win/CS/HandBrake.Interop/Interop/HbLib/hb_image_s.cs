@@ -45,7 +45,6 @@ namespace HandBrake.Interop.Interop.HbLib
         public int width;
         public int height;
         public int stride;
-        public int height_stride;
         public int size;
 #pragma warning restore 0649
     }
