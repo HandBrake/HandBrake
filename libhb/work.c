@@ -1526,11 +1526,11 @@ static void sanitize_filter_list_post(hb_job_t *job)
     if (job->hw_pix_fmt == AV_PIX_FMT_VIDEOTOOLBOX)
     {
         hb_vt_setup_hw_filters(job);
+        return;
     }
 #endif
 
-    if ((job->hw_pix_fmt == AV_PIX_FMT_NONE || job->hw_pix_fmt == AV_PIX_FMT_QSV) &&
-        hb_video_encoder_pix_fmt_is_supported(job->vcodec, job->input_pix_fmt, job->encoder_profile) == 0)
+    if (hb_video_encoder_pix_fmt_is_supported(job->vcodec, job->input_pix_fmt, job->encoder_profile) == 0)
     {
         // Some encoders require a specific input pixel format
         // that could be different from the current pipeline format.
