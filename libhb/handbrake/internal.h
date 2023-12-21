@@ -526,8 +526,6 @@ DECLARE_MUX( mkv );
 DECLARE_MUX( webm );
 DECLARE_MUX( avformat );
 
-void hb_deinterlace(hb_buffer_t *dst, hb_buffer_t *src);
-
 struct hb_chapter_queue_item_s
 {
     int64_t start;
