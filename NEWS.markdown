@@ -11,24 +11,30 @@ Windows users, please make sure to install [Microsoft .NET Desktop Runtime versi
 
 #### Video
 
-- Fixed an issue in VP9, MPEG-4, MPEG-2, NVENC, and AMD VCN encoders that could cause the creation of an excessive number of keyframes (#5530)
-- Disabled automatic a53 cc SEI pass through in NVENC.
+- Improved automatic selection of Dolby Vision Level
+- Fixed an issue in AMD VCN, MPEG-2, MPEG-4, NVIDIA NVENC, and VP9 encoders that could cause the creation of an excessive number of keyframes (#5530)
+- Fixed unintentional automatic pass through of closed caption side data when using NVIDIA NVENC encoder
+- Miscellaneous bug fixes and improvements
 
 ### Linux
 
-- Addresses an issue where the file chooser opens in the home directory instead of the folder that was previously selected, when running as a Flatpak
+- Improved performance by removing duplicate graphic assets and reducing file size
+- Fixed Flatpak file chooser opening home directory instead of the previously selected directory
+- Fixed last item in the queue sometimes having the wrong destination path
+- Fixed some memory leaks in the graphical interface
 
 ### Mac
 
-- Disabled the VideoToolbox H.264 hardware decoder for levels 6.1 and 6.2, the video was either not decoded properly on Intel, or some frames were not decoded at all on Apple Silicon.
-- Worked around a macOS 14 issue that causes the system to reboot when using the VideoToolbox encoders on an Apple Silicon Ultra CPU.
-- Fixed a crash that happened when opening a folder that contains no file.
+- Added a workaround to prevent a system crash when using VideoToolbox encoders with macOS 14 Sonoma on Apple Silicon Ultra
+- Added a workaround to prevent issues decoding H.264 video by disabling VideoToolbox hardware decoding for Level 6.1 and 6.2
+- Fixed a crash opening an empty folder
 
 #### Windows
 
-- Fixed an issue where Nvidia NVDec option was ignored (#5569)
-- Fixed an issue with theme loading that could cause a crash on start (#5567)
-- Fixed an issue where subtitle language order was not honoured. (#5590)
+- Added Automation Properties to some controls on the audio tab to assist screen readers
+- Fixed NVIDIA NVDEC option being ignored (#5569)
+- Fixed startup crash related to theme loading (#5567)
+- Fixed subtitle language order not being honoured (#5590)
 
 
 ## HandBrake 1.7.1
