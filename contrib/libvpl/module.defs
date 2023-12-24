@@ -1,11 +1,11 @@
 $(eval $(call import.MODULE.defs,LIBVPL,libvpl))
 $(eval $(call import.CONTRIB.defs,LIBVPL))
 
-LIBVPL.FETCH.url       = https://github.com/oneapi-src/oneVPL/archive/refs/tags/v2023.3.1.tar.gz
-LIBVPL.FETCH.url      += https://github.com/HandBrake/HandBrake-contribs/releases/download/contribs/oneVPL-2023.3.1.tar.gz
-LIBVPL.FETCH.sha256    = 4411543519486a2450f6f5af06a077596e7888a551768594e9dfa2a46b23b6f5
-LIBVPL.FETCH.basename  = oneVPL-2023.3.1.tar.gz
-LIBVPL.EXTRACT.tarbase = oneVPL-2023.3.1
+LIBVPL.FETCH.url       = https://github.com/intel/libvpl/archive/refs/tags/v2.10.1.tar.gz
+LIBVPL.FETCH.url      += https://github.com/HandBrake/HandBrake-contribs/releases/download/contribs/libvpl-2.10.1.tar.gz
+LIBVPL.FETCH.sha256    = 524299a7b920ac0de1f6913ca90515858ea3a8ea2daaea60f8e0be62f22c8041
+LIBVPL.FETCH.basename  = libvpl-2.10.1.tar.gz
+LIBVPL.EXTRACT.tarbase = libvpl-2.10.1
 
 LIBVPL.build_dir             = build
 LIBVPL.CONFIGURE.exe         = cmake
