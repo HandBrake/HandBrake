@@ -5812,12 +5812,15 @@ static hb_title_t *ffmpeg_title_scan( hb_stream_t *stream, hb_title_t *title )
     if (dot_term)
         *dot_term = '\0';
 
-    uint64_t dur = ic->duration * 90000 / AV_TIME_BASE;
-    title->duration = dur;
-    dur /= 90000;
-    title->hours    = dur / 3600;
-    title->minutes  = ( dur % 3600 ) / 60;
-    title->seconds  = dur % 60;
+    if (ic->duration > 0)
+    {
+        uint64_t dur = ic->duration * 90000 / AV_TIME_BASE;
+        title->duration = dur;
+        dur /= 90000;
+        title->hours    = dur / 3600;
+        title->minutes  = ( dur % 3600 ) / 60;
+        title->seconds  = dur % 60;
+    }
 
     // set the title to decode the first video stream in the file
     title->demuxer = HB_NULL_DEMUXER;

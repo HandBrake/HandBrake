@@ -88,7 +88,7 @@ fail:
 static int is_mono(uint64_t layout)
 {
     int ii, channel_count;
-    int64_t mask;
+    uint64_t mask;
 
     if (layout == AV_CH_LAYOUT_NATIVE)
     {
