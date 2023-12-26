@@ -207,9 +207,9 @@ namespace HandBrakeWPF.Services
             {
                 string arguments = this.userSettingService.GetUserSetting<string>(UserSettingConstants.SendFileToArgs);
 
-                arguments = arguments.Replace("{source}", string.Format("\"{0}\"", source));
-                arguments = arguments.Replace("{destination}", string.Format("\"{0}\"", destination));
-                arguments = arguments.Replace("{exit_code}", string.Format("{0}", exitCode));
+                arguments = arguments.Replace(Constants.SourceArg, string.Format("\"{0}\"", source));
+                arguments = arguments.Replace(Constants.DestinationArg, string.Format("\"{0}\"", destination));
+                arguments = arguments.Replace(Constants.ExitCodeArg, string.Format("{0}", exitCode));
 
                 var process = new ProcessStartInfo(this.userSettingService.GetUserSetting<string>(UserSettingConstants.SendFileTo), arguments);
                 process.EnvironmentVariables.Add("HB_SOURCE", source);

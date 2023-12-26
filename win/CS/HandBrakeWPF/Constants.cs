@@ -51,5 +51,10 @@ namespace HandBrakeWPF
 
         public const string FileScanMru = "FileScanMru";
         public const string FileSaveMru = "FileSaveMru";
+
+        /* When Done Options*/
+        public const string SourceArg = "{source}";
+        public const string DestinationArg = "{destination}";
+        public const string ExitCodeArg = "{exit_code}";
     }
 }

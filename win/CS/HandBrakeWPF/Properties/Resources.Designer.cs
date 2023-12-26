@@ -4274,15 +4274,6 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Replacement Placeholders: {source} {destination} {exit_code}.
-        /// </summary>
-        public static string OptionsView_SendFileToArgPlaceholders {
-            get {
-                return ResourceManager.GetString("OptionsView_SendFileToArgPlaceholders", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Click &apos;Browse&apos; to set the default location.
         /// </summary>
         public static string OptionsView_SetDefaultLocationOutputFIle {
