@@ -42,24 +42,35 @@ namespace HandBrakeWPF.Services
             }
         }
 
-        public void SendNotification(string header, string content)
+        public bool SendNotification(string header, string content)
         {
-            this.id += 1;
-            ToastContentBuilder toast = new ToastContentBuilder().AddArgument("tag", this.id.ToString()).AddText(header);
-
-            if (!string.IsNullOrEmpty(content))
+            try
             {
-                toast.AddText(content);
+                this.id += 1;
+                ToastContentBuilder toast = new ToastContentBuilder().AddArgument("tag", this.id.ToString())
+                    .AddText(header);
+
+                if (!string.IsNullOrEmpty(content))
+                {
+                    toast.AddText(content);
+                }
+
+                ToastNotification notification = new ToastNotification(toast.GetXml());
+                notification.ExpirationTime = DateTime.Now.AddDays(1);
+                notification.Group = "HandBrake";
+                notification.Tag = this.id.ToString();
+
+                if (this.notifier != null)
+                {
+                    notifier.Show(notification);
+                }
+
+                return true;
             }
-
-            ToastNotification notification = new ToastNotification(toast.GetXml());
-            notification.ExpirationTime = DateTime.Now.AddDays(1);
-            notification.Group = "HandBrake";
-            notification.Tag = this.id.ToString();
-
-            if (this.notifier != null)
+            catch (Exception exc)
             {
-                notifier.Show(notification);
+                Debug.WriteLine(exc);
+                return false;
             }
         }
 
