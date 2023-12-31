@@ -20,6 +20,7 @@ namespace HandBrakeWPF.ViewModels
 
     using HandBrake.Interop.Interop.Interfaces;
 
+    using HandBrakeWPF.Helpers;
     using HandBrakeWPF.Properties;
     using HandBrakeWPF.Services.Encode.Model.Models;
     using HandBrakeWPF.Services.Interfaces;
@@ -660,7 +661,7 @@ namespace HandBrakeWPF.ViewModels
 
             if (e.ErrorInformation != "1")
             {
-                this.PlayFile();
+                ThreadHelper.OnUIThread(() => this.PlayFile());
             }
         }
     }

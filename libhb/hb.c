@@ -76,10 +76,6 @@ int disable_hardware = 0;
 
 static void thread_func( void * );
 
-void hb_avcodec_init()
-{
-}
-
 int hb_avcodec_open(AVCodecContext *avctx, const AVCodec *codec,
                     AVDictionary **av_opts, int thread_count)
 {
@@ -128,7 +124,7 @@ int hb_picture_fill(uint8_t *data[], int stride[], hb_buffer_t *buf)
         stride[ii] = stride[ii - 1];
 
     ret = av_image_fill_pointers(data, buf->f.fmt,
-                                 buf->plane[0].height_stride,
+                                 buf->plane[0].height,
                                  buf->data, stride);
     if (ret != buf->size)
     {
@@ -763,113 +759,6 @@ done:
     fclose(file);
 
     return buf;
-}
-
-hb_image_t* hb_get_preview2(hb_handle_t * h, int title_idx, int picture,
-                            hb_geometry_settings_t *geo, int deinterlace)
-{
-    char                 filename[1024];
-    hb_buffer_t        * in_buf = NULL, * deint_buf = NULL;
-    hb_buffer_t        * preview_buf = NULL;
-    uint32_t             swsflags;
-    uint8_t            * preview_data[4], * crop_data[4];
-    int                  preview_stride[4], crop_stride[4];
-    struct SwsContext  * context;
-
-    int width = geo->geometry.width *
-                geo->geometry.par.num / geo->geometry.par.den;
-    int height = geo->geometry.height;
-
-    // Set min/max dimensions to prevent failure to initialize
-    // sws context and absurd sizes.
-    //
-    // This means output image size may not match requested image size!
-    int ww = width, hh = height;
-    width  = MIN(MAX(width,                HB_MIN_WIDTH),  HB_MAX_WIDTH);
-    height = MIN(MAX(height * width  / ww, HB_MIN_HEIGHT), HB_MAX_HEIGHT);
-    width  = MIN(MAX(width  * height / hh, HB_MIN_WIDTH),  HB_MAX_WIDTH);
-
-    swsflags = SWS_LANCZOS | SWS_ACCURATE_RND;
-
-    preview_buf = hb_frame_buffer_init(AV_PIX_FMT_RGB32, width, height);
-    // fill in AVPicture
-    hb_picture_fill( preview_data, preview_stride, preview_buf );
-
-
-    memset( filename, 0, 1024 );
-
-    hb_title_t * title;
-    title = hb_find_title_by_index(h, title_idx);
-    if (title == NULL)
-    {
-        hb_error( "hb_get_preview2: invalid title (%d)", title_idx );
-        goto fail;
-    }
-
-    in_buf = hb_read_preview( h, title, picture, HB_PREVIEW_FORMAT_JPG );
-    if ( in_buf == NULL )
-    {
-        goto fail;
-    }
-
-    if (deinterlace)
-    {
-        // Deinterlace and crop
-        deint_buf = hb_frame_buffer_init( AV_PIX_FMT_YUV420P,
-                              title->geometry.width, title->geometry.height );
-        hb_deinterlace(deint_buf, in_buf);
-        hb_picture_crop(crop_data, crop_stride, deint_buf,
-                        geo->crop[0], geo->crop[2] );
-    }
-    else
-    {
-        // Crop
-        hb_picture_crop(crop_data, crop_stride, in_buf,
-                        geo->crop[0], geo->crop[2] );
-    }
-
-    int colorspace = hb_sws_get_colorspace(title->color_matrix);
-
-    // Get scaling context
-    context = hb_sws_get_context(
-                title->geometry.width  - (geo->crop[2] + geo->crop[3]),
-                title->geometry.height - (geo->crop[0] + geo->crop[1]),
-                AV_PIX_FMT_YUV420P, AVCOL_RANGE_MPEG,
-                width, height, AV_PIX_FMT_RGB32, AVCOL_RANGE_MPEG,
-                swsflags, colorspace);
-
-    if (context == NULL)
-    {
-        // if by chance hb_sws_get_context fails, don't crash in sws_scale
-        goto fail;
-    }
-
-    // Scale
-    sws_scale(context,
-              (const uint8_t * const *)crop_data, crop_stride,
-              0, title->geometry.height - (geo->crop[0] + geo->crop[1]),
-              preview_data, preview_stride);
-
-    // Free context
-    sws_freeContext( context );
-
-    hb_image_t *image = hb_buffer_to_image(preview_buf);
-
-    // Clean up
-    hb_buffer_close( &in_buf );
-    hb_buffer_close( &deint_buf );
-    hb_buffer_close( &preview_buf );
-
-    return image;
-
-fail:
-
-    hb_buffer_close( &in_buf );
-    hb_buffer_close( &deint_buf );
-    hb_buffer_close( &preview_buf );
-
-    image = hb_image_init(AV_PIX_FMT_RGB32, width, height);
-    return image;
 }
 
 static void process_filter(hb_filter_object_t * filter)
@@ -2233,9 +2122,6 @@ int hb_global_init()
         hb_error("Platform specific initialization failed!");
         return -1;
     }
-
-    /* libavcodec */
-    hb_avcodec_init();
 
     /* HB work objects */
     hb_register(&hb_muxer);

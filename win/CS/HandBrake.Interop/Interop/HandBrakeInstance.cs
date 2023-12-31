@@ -223,7 +223,7 @@ namespace HandBrake.Interop.Interop
 
             // Copy the filled image buffer to a managed array.
             int stride_width = image.plane[0].stride;
-            int stride_height = image.plane[0].height_stride;
+            int stride_height = image.plane[0].height;
             int imageBufferSize = stride_width * stride_height;
 
             byte[] managedBuffer = new byte[imageBufferSize];

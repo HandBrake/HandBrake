@@ -148,7 +148,6 @@ struct hb_buffer_s
         int           stride;
         int           width;
         int           height;
-        int           height_stride;
         int           size;
     } plane[4]; // 3 Color components + alpha
 
@@ -247,20 +246,6 @@ static inline int hb_image_width(int pix_fmt, int width, int plane)
     }
 
     return width;
-}
-
-static inline int hb_image_height_stride(int pix_fmt, int height, int plane)
-{
-    const AVPixFmtDescriptor *desc = av_pix_fmt_desc_get(pix_fmt);
-
-    // Decomb requires 6 extra lines and stride aligned to 32 bytes
-    height = MULTIPLE_MOD_UP(height + 6, 32);
-    if (desc != NULL && (plane == 1 || plane == 2))
-    {
-        height = height >> desc->log2_chroma_h;
-    }
-
-    return height;
 }
 
 static inline int hb_image_height(int pix_fmt, int height, int plane)
@@ -540,8 +525,6 @@ DECLARE_MUX( mp4 );
 DECLARE_MUX( mkv );
 DECLARE_MUX( webm );
 DECLARE_MUX( avformat );
-
-void hb_deinterlace(hb_buffer_t *dst, hb_buffer_t *src);
 
 struct hb_chapter_queue_item_s
 {

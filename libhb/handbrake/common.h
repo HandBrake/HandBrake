@@ -314,7 +314,6 @@ struct hb_image_s
         int width;
         int height;
         int stride;
-        int height_stride;
         int size;
     } plane[4];
 };
