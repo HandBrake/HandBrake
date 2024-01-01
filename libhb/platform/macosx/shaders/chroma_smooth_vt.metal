@@ -1,6 +1,6 @@
 /* chroma_smooth.metal
 
-   Copyright (c) 2003-2023 HandBrake Team
+   Copyright (c) 2003-2024 HandBrake Team
 
    port of FFmpeg unsharp.cl.
 

@@ -1,7 +1,7 @@
 /* -*- Mode: C; indent-tabs-mode: nil; c-basic-offset: 4; tab-width: 4 -*- */
 /*
  * audiohandler.c
- * Copyright (C) John Stebbins 2008-2023 <stebbins@stebbins>
+ * Copyright (C) John Stebbins 2008-2024 <stebbins@stebbins>
  *
  * audiohandler.c is free software.
  *

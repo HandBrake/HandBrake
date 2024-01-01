@@ -1,6 +1,6 @@
 /* grayscale.metal
 
-   Copyright (c) 2003-2023 HandBrake Team
+   Copyright (c) 2003-2024 HandBrake Team
    Copyright (c) 2021 Paul B Mahol
 
    port of vf_monochrome FFmpeg.
