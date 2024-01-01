@@ -1,6 +1,6 @@
 /* decavcodec.c
 
-   Copyright (c) 2003-2020 HandBrake Team
+   Copyright (c) 2003-2024 HandBrake Team
    Copyright 2022 NVIDIA Corporation
    This file is part of the HandBrake source code
    Homepage: <http://handbrake.fr/>.
