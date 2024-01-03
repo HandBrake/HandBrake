@@ -21,7 +21,7 @@
  *  Boston, MA  02110-1301, USA.
  */
 
-#include "ghbcompat.h"
+#include "compat.h"
 #include "hb-backend.h"
 #include "callbacks.h"
 #include "jobdict.h"

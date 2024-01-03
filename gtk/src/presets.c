@@ -20,7 +20,7 @@
  *  51 Franklin Street, Fifth Floor
  *  Boston, MA  02110-1301, USA.
  */
-#include "ghbcompat.h"
+#include "compat.h"
 
 #include <sys/types.h>
 #include <sys/stat.h>

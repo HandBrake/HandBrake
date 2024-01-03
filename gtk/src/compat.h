@@ -1,27 +1,23 @@
-/*
- * ghbcompat.h
- * Copyright (C) John Stebbins 2008-2024 <stebbins@stebbins>
+/* compat.h
  *
- * ghbcompat.h is free software.
+ * Copyright (C) 2008-2024 John Stebbins <stebbins@stebbins>
  *
- * You may redistribute it and/or modify it under the terms of the
- * GNU General Public License version 2, as published by the Free Software
- * Foundation.
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2,
+ * as published by the Free Software Foundation.
  *
- * ghbcompat.h is distributed in the hope that it will be useful,
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
- * See the GNU General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with callbacks.h.  If not, write to:
- *  The Free Software Foundation, Inc.,
- *  51 Franklin Street, Fifth Floor
- *  Boston, MA  02110-1301, USA.
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ *
+ * SPDX-License-Identifier: GPL-2.0-only
  */
 
-#if !defined(_GHB_COMPAT_H_)
-#define _GHB_COMPAT_H_
+#pragma once
 
 #define G_LOG_USE_STRUCTURED
 #define G_LOG_DOMAIN "ghb"
@@ -51,6 +47,8 @@
 #define GHB_STOCK_OPEN      _("_Open")
 #define GHB_STOCK_CANCEL    _("_Cancel")
 #define GHB_STOCK_SAVE      _("_Save")
+
+G_BEGIN_DECLS
 
 int ghb_dialog_run (GtkDialog *dialog);
 
@@ -432,4 +430,5 @@ ghb_file_chooser_set_initial_file (GtkFileChooser *chooser, const char *file)
     }
 }
 
-#endif // _GHB_COMPAT_H_
+G_END_DECLS
+
