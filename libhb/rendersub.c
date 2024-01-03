@@ -872,8 +872,16 @@ static int ssa_post_init( hb_filter_object_t * filter, hb_job_t * job )
 
     int height = job->title->geometry.height - job->crop[0] - job->crop[1];
     int width = job->title->geometry.width - job->crop[2] - job->crop[3];
+
+    //Set the right storage space, necessary for some ASS transforms.
+    double ass_par = 1.0;
+    if (job->title->geometry.par.den != 0 && job->title->geometry.par.num != 0)
+    {
+        ass_par /= hb_q2d(job->title->geometry.par);
+    }
+
     ass_set_frame_size(pv->renderer, width, height);
-    ass_set_storage_size(pv->renderer, width, height);
+    ass_set_pixel_aspect(pv->renderer, ass_par);
 
     return 0;
 }
