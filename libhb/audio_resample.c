@@ -1,6 +1,6 @@
 /* audio_resample.c
  *
- * Copyright (c) 2003-2022 HandBrake Team
+ * Copyright (c) 2003-2024 HandBrake Team
  * This file is part of the HandBrake source code
  * Homepage: <http://handbrake.fr/>
  * It may be used under the terms of the GNU General Public License v2.
@@ -88,7 +88,7 @@ fail:
 static int is_mono(uint64_t layout)
 {
     int ii, channel_count;
-    int64_t mask;
+    uint64_t mask;
 
     if (layout == AV_CH_LAYOUT_NATIVE)
     {

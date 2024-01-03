@@ -1,7 +1,7 @@
 /* -*- Mode: C; indent-tabs-mode: nil; c-basic-offset: 4; tab-width: 4 -*- */
 /*
  * queuehandler.c
- * Copyright (C) John Stebbins 2008-2022 <stebbins@stebbins>
+ * Copyright (C) John Stebbins 2008-2024 <stebbins@stebbins>
  *
  * queuehandler.c is free software.
  *
@@ -40,6 +40,7 @@
 #include "queuehandler.h"
 #include "title-add.h"
 #include "power-manager.h"
+#include "notifications.h"
 
 void ghb_queue_buttons_grey (signal_user_data_t *ud);
 
@@ -578,6 +579,7 @@ static void queue_update_summary (GhbValue * queueDict, signal_user_data_t *ud)
         const char         * lang;
         int                  gain;
         int                  track;
+        int                  bitrate;
 
         asettings     = ghb_array_get(audioList, ii);
         track         = ghb_dict_get_int(asettings, "Track");
@@ -585,6 +587,7 @@ static void queue_update_summary (GhbValue * queueDict, signal_user_data_t *ud)
         lang          = ghb_dict_get_string(asource, "Language");
         name          = ghb_dict_get_string(asettings, "Name");
         gain          = ghb_dict_get_int(asettings, "Gain");
+        bitrate       = ghb_dict_get_int(asettings, "Bitrate");
         audio_encoder = ghb_settings_audio_encoder(asettings, "Encoder");
         if (name)
         {
@@ -602,7 +605,8 @@ static void queue_update_summary (GhbValue * queueDict, signal_user_data_t *ud)
         else
         {
             audio_mix = ghb_settings_mixdown(asettings, "Mixdown");
-            g_string_append_printf(str, "%s, %s, %s", lang,
+            g_string_append_printf(str, "%s, %d %s %s, %s", lang,
+                                   bitrate, _("kbps"),
                                    audio_encoder->name, audio_mix->name);
         }
         if (gain)
@@ -1520,6 +1524,8 @@ static void save_queue_file (signal_user_data_t *ud)
                       GHB_STOCK_CANCEL);
     gtk_file_chooser_set_current_name(GTK_FILE_CHOOSER(chooser), "queue.json");
     gtk_file_chooser_set_do_overwrite_confirmation(GTK_FILE_CHOOSER(chooser), TRUE);
+    ghb_file_chooser_set_initial_file(GTK_FILE_CHOOSER(chooser),
+                                      ghb_dict_get_string(ud->prefs, "ExportDirectory"));
 
     gtk_native_dialog_set_modal(GTK_NATIVE_DIALOG(chooser), TRUE);
     g_signal_connect(G_OBJECT(chooser), "response", G_CALLBACK(save_queue_file_cb), ud);
@@ -1693,6 +1699,8 @@ static void open_queue_file (signal_user_data_t *ud)
     // Add filters
     ghb_add_file_filter(GTK_FILE_CHOOSER(chooser), ud, _("All Files"), "FilterAll");
     ghb_add_file_filter(GTK_FILE_CHOOSER(chooser), ud, g_content_type_get_description("application/json"), "FilterJSON");
+    ghb_file_chooser_set_initial_file(GTK_FILE_CHOOSER(chooser),
+                                      ghb_dict_get_string(ud->prefs, "ExportDirectory"));
 
     gtk_native_dialog_set_modal(GTK_NATIVE_DIALOG(chooser), TRUE);
     g_signal_connect(G_OBJECT(chooser), "response", G_CALLBACK(open_queue_file_cb), ud);
@@ -1758,13 +1766,37 @@ gint ghb_find_queue_job (GhbValue *queue, gint unique_id, GhbValue **job)
     return -1;
 }
 
+static void
+low_disk_check_response_cb (GtkDialog *dialog, int response,
+                            signal_user_data_t *ud)
+{
+    g_signal_handlers_disconnect_by_data(dialog, ud);
+    gtk_widget_destroy(GTK_WIDGET(dialog));
+    ghb_withdraw_notification(GHB_NOTIFY_PAUSED_LOW_DISK_SPACE);
+    switch (response)
+    {
+        case 1:
+            ghb_resume_queue();
+            break;
+        case 2:
+            ghb_dict_set_bool(ud->globals, "SkipDiskFreeCheck", TRUE);
+            ghb_resume_queue();
+            break;
+        case 3:
+            ghb_stop_queue();
+            ud->cancel_encode = GHB_CANCEL_ALL;
+            break;
+        default:
+            ghb_resume_queue();
+            break;
+    }
+}
+
 void ghb_low_disk_check (signal_user_data_t *ud)
 {
     GtkWindow       *hb_window;
     GtkWidget       *dialog, *cancel;
-    GtkResponseType  response;
     ghb_status_t     status;
-    const char      *paused_msg = "";
     const char      *dest;
     gint64           free_size;
     gint64           free_limit;
@@ -1804,20 +1836,19 @@ void ghb_low_disk_check (signal_user_data_t *ud)
         return;
     }
 
-    if ((status.queue.state & GHB_STATE_WORKING) &&
-        !(status.queue.state & GHB_STATE_PAUSED))
-    {
-        paused_msg = "Encoding has been paused.\n\n";
-        ghb_pause_queue();
-    }
+    ghb_pause_queue();
+    ghb_send_notification(GHB_NOTIFY_PAUSED_LOW_DISK_SPACE,
+                          free_size / (1024 * 1024), ud);
     dest      = ghb_dict_get_string(settings, "destination");
     hb_window = GTK_WINDOW(GHB_WIDGET(ud->builder, "hb_window"));
     dialog    = gtk_message_dialog_new(hb_window, GTK_DIALOG_MODAL,
-            GTK_MESSAGE_WARNING, GTK_BUTTONS_NONE,
-            _("%sThe destination filesystem is almost full: %"PRId64" MB free.\n"
-              "Destination: %s\n"
-              "Encode may be incomplete if you proceed.\n"),
-            paused_msg, free_size / (1024 * 1024), dest);
+                    GTK_MESSAGE_WARNING, GTK_BUTTONS_NONE,
+                    _("Low Disk Space: Encoding Paused"));
+    gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dialog),
+        _("The destination filesystem is almost full: %"PRId64" MB free.\n"
+          "Destination: %s\n"
+          "Encode may be incomplete if you proceed."),
+        free_size / (1024 * 1024), dest);
     gtk_dialog_add_buttons( GTK_DIALOG(dialog),
                            _("Resume, I've fixed the problem"), 1,
                            _("Resume, Don't tell me again"), 2,
@@ -1827,26 +1858,9 @@ void ghb_low_disk_check (signal_user_data_t *ud)
     cancel = gtk_dialog_get_widget_for_response(GTK_DIALOG(dialog), 3);
     style = gtk_widget_get_style_context(cancel);
     gtk_style_context_add_class(style, "destructive-action");
-
-    response = gtk_dialog_run(GTK_DIALOG(dialog));
-    gtk_widget_destroy(dialog);
-    switch ((gint) response)
-    {
-        case 1:
-            ghb_resume_queue();
-            break;
-        case 2:
-            ghb_dict_set_bool(ud->globals, "SkipDiskFreeCheck", TRUE);
-            ghb_resume_queue();
-            break;
-        case 3:
-            ghb_stop_queue();
-            ud->cancel_encode = GHB_CANCEL_ALL;
-            break;
-        default:
-            ghb_resume_queue();
-            break;
-    }
+    g_signal_connect(dialog, "response",
+                     G_CALLBACK(low_disk_check_response_cb), ud);
+    gtk_widget_set_visible(dialog, TRUE);
 }
 
 static GtkListBoxRow*
@@ -1859,17 +1873,64 @@ list_box_get_row(GtkWidget *widget)
     return GTK_LIST_BOX_ROW(widget);
 }
 
+static int queue_remove_index     = -1;
+static int queue_remove_unique_id = -1;
+
+static void
+queue_remove_response (GtkWidget *dialog, int response, signal_user_data_t *ud)
+{
+    if (dialog != NULL)
+    {
+        gtk_widget_destroy(dialog);
+    }
+
+    if (response != 1 || queue_remove_index < 0)
+    {
+        return;
+    }
+
+    if (queue_remove_unique_id >= 0)
+    {
+        ghb_stop_queue();
+        ud->cancel_encode = GHB_CANCEL_ALL;
+        ghb_remove_job(queue_remove_unique_id);
+    }
+    ghb_array_remove(ud->queue, queue_remove_index);
+
+    // Update UI
+    GtkListBox    *lb  = GTK_LIST_BOX(GHB_WIDGET(ud->builder, "queue_list"));
+    GtkListBoxRow *row = gtk_list_box_get_row_at_index(lb, queue_remove_index);
+    gtk_container_remove(GTK_CONTAINER(lb), GTK_WIDGET(row));
+
+    queue_remove_index = -1;
+}
+
+static void
+queue_remove_dialog_show (signal_user_data_t *ud)
+{
+    GtkWidget *dialog;
+    GtkWindow *queue_window;
+
+    queue_window = GTK_WINDOW(GHB_WIDGET(ud->builder, "queue_window"));
+    dialog = ghb_cancel_dialog_new(queue_window, _("Remove Item in Progress?"),
+                _("Your movie will be lost if you don't continue encoding."),
+                _("Cancel and Remove"), NULL, NULL, _("Continue Encoding"));
+
+    g_signal_connect(dialog, "response", G_CALLBACK(queue_remove_response), ud);
+    gtk_widget_show(dialog);
+}
+
 static void
 ghb_queue_remove_row_internal (signal_user_data_t *ud, int index)
 {
-    GtkListBox    * lb;
-    GtkListBoxRow * row;
-    GhbValue      * queueDict, * uiDict;
+    GhbValue *queueDict, *uiDict;
 
     if (index < 0 || index >= ghb_array_len(ud->queue))
     {
         return;
     }
+
+    queue_remove_index = index;
 
     queueDict  = ghb_array_get(ud->queue, index);
     uiDict     = ghb_dict_get(queueDict, "uiSettings");
@@ -1877,19 +1938,13 @@ ghb_queue_remove_row_internal (signal_user_data_t *ud, int index)
     if (status == GHB_QUEUE_RUNNING)
     {
         // Ask if wants to stop encode.
-        if (!ghb_cancel_encode2(ud, NULL))
-        {
-            return;
-        }
-        int unique_id = ghb_dict_get_int(uiDict, "job_unique_id");
-        ghb_remove_job(unique_id);
+        queue_remove_unique_id = ghb_dict_get_int(uiDict, "job_unique_id");
+        queue_remove_dialog_show(ud);
     }
-    ghb_array_remove(ud->queue, index);
-
-    // Update UI
-    lb  = GTK_LIST_BOX(GHB_WIDGET(ud->builder, "queue_list"));
-    row = gtk_list_box_get_row_at_index(lb, index);
-    gtk_container_remove(GTK_CONTAINER(lb), GTK_WIDGET(row));
+    else
+    {
+        queue_remove_response(NULL, 1, ud);
+    }
 }
 
 void
@@ -2045,13 +2100,15 @@ ghb_queue_buttons_grey (signal_user_data_t *ud)
         g_menu_item_set_label(item, _("S_top Encoding"));
         g_menu_remove(menu, 0);
         g_menu_prepend_item(menu, item);
+        g_object_unref(item);
     }
     else
     {
         item = g_menu_item_new_from_model(G_MENU_MODEL(menu), 0);
-        g_menu_item_set_label(item, _("Start Encoding"));
+        g_menu_item_set_label(item, _("_Start Encoding"));
         g_menu_remove(menu, 0);
         g_menu_prepend_item(menu, item);
+        g_object_unref(item);
     }
 
     widget = GHB_WIDGET (ud->builder, "queue_pause");
@@ -2086,6 +2143,7 @@ ghb_queue_buttons_grey (signal_user_data_t *ud)
         g_menu_item_set_label(item, _("_Resume Encoding"));
         g_menu_remove(menu, 1);
         g_menu_append_item(menu, item);
+        g_object_unref(item);
     }
     else
     {
@@ -2093,6 +2151,7 @@ ghb_queue_buttons_grey (signal_user_data_t *ud)
         g_menu_item_set_label(item, _("_Pause Encoding"));
         g_menu_remove(menu, 1);
         g_menu_append_item(menu, item);
+        g_object_unref(item);
     }
 }
 
@@ -2669,8 +2728,7 @@ queue_start_action_cb (GSimpleAction *action, GVariant *param,
     if (state & (GHB_STATE_WORKING | GHB_STATE_SEARCHING |
                  GHB_STATE_SCANNING | GHB_STATE_MUXING))
     {
-        ghb_cancel_encode(ud, _("You are currently encoding.  "
-                                "What would you like to do?\n\n"));
+        ghb_stop_encode_dialog_show(ud);
         return;
     }
 

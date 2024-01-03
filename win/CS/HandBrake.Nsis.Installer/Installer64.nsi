@@ -5,8 +5,8 @@
  	   It may be used under the terms of the GNU General Public License. */
 
 !define PRODUCT_NAME "HandBrake"
-!define PRODUCT_VERSION "1.6.1"
-!define PRODUCT_VERSION_NUMBER "1.6.1"
+!define PRODUCT_VERSION "1.7.2"
+!define PRODUCT_VERSION_NUMBER "1.7.2"
 !define PRODUCT_DIR_REGKEY "Software\Microsoft\Windows\CurrentVersion\App Paths\HandBrake.exe"
 !define PRODUCT_UNINST_KEY "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}"
 !define PRODUCT_UNINST_ROOT_KEY "HKLM"

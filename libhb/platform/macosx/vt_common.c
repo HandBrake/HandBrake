@@ -1,6 +1,6 @@
 /* vt_common.c
 
-   Copyright (c) 2003-2022 HandBrake Team
+   Copyright (c) 2003-2024 HandBrake Team
    This file is part of the HandBrake source code
    Homepage: <http://handbrake.fr/>.
    It may be used under the terms of the GNU General Public License v2.
@@ -402,47 +402,22 @@ int hb_vt_are_filters_supported(hb_list_t *filters)
 
         switch (filter->id)
         {
-            case HB_FILTER_PRE_VT:
-            case HB_FILTER_YADIF:
-            case HB_FILTER_YADIF_VT:
-            case HB_FILTER_BWDIF:
-            case HB_FILTER_BWDIF_VT:
-            case HB_FILTER_CHROMA_SMOOTH:
-            case HB_FILTER_CHROMA_SMOOTH_VT:
-            case HB_FILTER_CROP_SCALE:
-            case HB_FILTER_CROP_SCALE_VT:
-            case HB_FILTER_GRAYSCALE:
-            case HB_FILTER_GRAYSCALE_VT:
-            case HB_FILTER_LAPSHARP:
-            case HB_FILTER_LAPSHARP_VT:
-            case HB_FILTER_UNSHARP:
-            case HB_FILTER_UNSHARP_VT:
-            case HB_FILTER_PAD:
-            case HB_FILTER_PAD_VT:
-                break;
-            case HB_FILTER_ROTATE:
-            case HB_FILTER_ROTATE_VT:
-            {
-#ifdef MAC_OS_VERSION_13_0
-                if (__builtin_available(macOS 13, *)) {}
-                else { supported = 0; }
-                break;
-#else
+            case HB_FILTER_DECOMB:
+            case HB_FILTER_DEBLOCK:
+            case HB_FILTER_DENOISE:
+            case HB_FILTER_NLMEANS:
+            case HB_FILTER_RENDER_SUB:
+            case HB_FILTER_COLORSPACE:
+            case HB_FILTER_FORMAT:
                 supported = 0;
-                break;
-#endif
-            }
-            case HB_FILTER_VFR:
-                // Mode 0 doesn't require access to the frame data
-                supported = hb_dict_get_int(filter->settings, "mode") == 0;
                 break;
             default:
-                supported = 0;
+                break;
         }
 
         if (supported == 0)
         {
-            hb_deep_log(2, "hwaccel: %s isn't yet supported for hw video frames", filter->name);
+            hb_deep_log(2, "videotoolbox: %s isn't yet supported for hw video frames", filter->name);
             ret = 0;
         }
     }
@@ -498,6 +473,7 @@ void hb_vt_setup_hw_filters(hb_job_t *job)
         hb_filter_object_t *filter = hb_filter_init(HB_FILTER_PRE_VT);
         hb_add_filter(job, filter, NULL);
 
+        replace_filter(job, HB_FILTER_COMB_DETECT, HB_FILTER_COMB_DETECT_VT);
         replace_filter(job, HB_FILTER_YADIF, HB_FILTER_YADIF_VT);
         replace_filter(job, HB_FILTER_BWDIF, HB_FILTER_BWDIF_VT);
         replace_filter(job, HB_FILTER_CROP_SCALE, HB_FILTER_CROP_SCALE_VT);

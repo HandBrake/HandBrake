@@ -1,6 +1,6 @@
 /* ports.c
 
-   Copyright (c) 2003-2022 HandBrake Team
+   Copyright (c) 2003-2024 HandBrake Team
    This file is part of the HandBrake source code
    Homepage: <http://handbrake.fr/>.
    It may be used under the terms of the GNU General Public License v2.
@@ -389,24 +389,30 @@ static void init_cpu_info()
                   &hb_cpu_info.buf4[10],
                   &hb_cpu_info.buf4[11]);
 
-            hb_cpu_info.name    = hb_cpu_info.buf;
-
-            // ensure string is null-terminated and trim trailing whitespace
-            int ii = sizeof(hb_cpu_info.buf) - 1;
-            do {
-                hb_cpu_info.buf[ii] = '\0';
-                ii -= 1;
-            }
-            while (ii > 0 && isspace(hb_cpu_info.buf[ii]));
-
-            while (isspace(*hb_cpu_info.name))
-            {
-                // skip leading whitespace to prettify
-                hb_cpu_info.name++;
-            }
+            hb_cpu_info.name = hb_cpu_info.buf;
         }
     }
-#endif // ARCH_X86_64 || ARCH_X86_32
+#elif defined(SYS_DARWIN)
+    size_t buflen = sizeof(hb_cpu_info.buf);
+    if (sysctlbyname("machdep.cpu.brand_string", &hb_cpu_info.buf, &buflen, NULL, 0) == 0)
+    {
+        hb_cpu_info.name = hb_cpu_info.buf;
+    }
+#endif
+
+    // ensure string is null-terminated and trim trailing whitespace
+    int ii = sizeof(hb_cpu_info.buf) - 1;
+    do {
+        hb_cpu_info.buf[ii] = '\0';
+        ii -= 1;
+    }
+    while (ii > 0 && isspace(hb_cpu_info.buf[ii]));
+
+    while (isspace(*hb_cpu_info.name))
+    {
+        // skip leading whitespace to prettify
+        hb_cpu_info.name++;
+    }
 }
 
 /*

@@ -243,6 +243,15 @@ HB_OBJC_DIRECT_MEMBERS
 
         if (isDirectory.boolValue == YES)
         {
+            if ([directoryURL.pathExtension isEqualToString:@"eyetv"])
+            {
+                NSURL *eyetvMediaURL = [HBUtilities eyetvMediaURL:directoryURL];
+                if (eyetvMediaURL)
+                {
+                    return @[eyetvMediaURL];
+                }
+            }
+
             if ([directoryURL.pathExtension isEqualToString:@"dvdmedia"] ||
                 [directoryURL.lastPathComponent isEqualToString:@"VIDEO_TS"])
             {
@@ -285,7 +294,7 @@ HB_OBJC_DIRECT_MEMBERS
             NSURL *eyetvMediaURL = [HBUtilities eyetvMediaURL:url];
             if (eyetvMediaURL)
             {
-                [mutableFileURLs addObject:url];
+                [mutableFileURLs addObject:eyetvMediaURL];
             }
         }
         else if ([url.pathExtension isEqualToString:@"dvdmedia"] ||

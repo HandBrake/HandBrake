@@ -1,7 +1,7 @@
 /* -*- Mode: C; indent-tabs-mode: nil; c-basic-offset: 4; tab-width: 4 -*- */
 /*
  * resources.c
- * Copyright (C) John Stebbins 2008-2022 <stebbins@stebbins>
+ * Copyright (C) John Stebbins 2008-2024 <stebbins@stebbins>
  *
  * resources.c is free software.
  *
@@ -54,20 +54,6 @@ ghb_resource_init (void)
     val = ghb_json_parse(data);
     g_bytes_unref(gbytes);
     ghb_dict_set(resources, "internal-defaults", val);
-
-    gbytes = g_resource_lookup_data(data_res,
-                    "/fr/handbrake/ghb/data/widget.deps", 0, NULL);
-    data = g_bytes_get_data(gbytes, &data_size);
-    val = ghb_json_parse(data);
-    g_bytes_unref(gbytes);
-    ghb_dict_set(resources, "widget-deps", val);
-
-    gbytes = g_resource_lookup_data(data_res,
-                    "/fr/handbrake/ghb/data/widget_reverse.deps", 0, NULL);
-    data = g_bytes_get_data(gbytes, &data_size);
-    val = ghb_json_parse(data);
-    g_bytes_unref(gbytes);
-    ghb_dict_set(resources, "widget-reverse-deps", val);
 }
 
 GhbValue*

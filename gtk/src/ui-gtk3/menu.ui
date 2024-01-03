@@ -8,17 +8,17 @@
       <section>
         <item>
           <attribute name="action">app.source</attribute>
-          <attribute name="label" translatable="yes">_Open Source</attribute>
+          <attribute name="label" translatable="yes">_Open Source…</attribute>
           <attribute name="accel">&lt;control&gt;O</attribute>
         </item>
         <item>
           <attribute name="action">app.source-dir</attribute>
-          <attribute name="label" translatable="yes">Open _Directory</attribute>
+          <attribute name="label" translatable="yes">Open _Directory…</attribute>
           <attribute name="accel">&lt;shift&gt;&lt;control&gt;O</attribute>
         </item>
         <item>
           <attribute name="action">app.destination</attribute>
-          <attribute name="label" translatable="yes">Set _Destination</attribute>
+          <attribute name="label" translatable="yes">_Set Destination…</attribute>
           <attribute name="accel">&lt;control&gt;S</attribute>
         </item>
       </section>
@@ -46,7 +46,7 @@
         </item>
         <item>
           <attribute name="action">app.add-multiple</attribute>
-          <attribute name="label" translatable="yes">Add _Multiple</attribute>
+          <attribute name="label" translatable="yes">Add _Multiple…</attribute>
         </item>
         <item>
           <attribute name="action">app.add-all</attribute>
@@ -68,12 +68,12 @@
       </section>
       <section>
         <item>
-          <attribute name="action">app.queue-export</attribute>
-          <attribute name="label" translatable="yes">S_ave Queue</attribute>
+          <attribute name="action">app.queue-import</attribute>
+          <attribute name="label" translatable="yes">_Import Queue…</attribute>
         </item>
         <item>
-          <attribute name="action">app.queue-import</attribute>
-          <attribute name="label" translatable="yes">_Load Queue File</attribute>
+          <attribute name="action">app.queue-export</attribute>
+          <attribute name="label" translatable="yes">_Export Queue…</attribute>
         </item>
       </section>
     </submenu>
@@ -112,30 +112,30 @@
       </section>
       <section>
         <item>
+          <attribute name="action">app.preset-save-as</attribute>
+          <attribute name="label" translatable="yes">_New Preset…</attribute>
+        </item>
+        <item>
           <attribute name="action">app.preset-save</attribute>
           <attribute name="label" translatable="yes">_Save</attribute>
         </item>
         <item>
-          <attribute name="action">app.preset-save-as</attribute>
-          <attribute name="label" translatable="yes">Save _As</attribute>
-        </item>
-        <item>
           <attribute name="action">app.preset-rename</attribute>
-          <attribute name="label" translatable="yes">_Rename</attribute>
+          <attribute name="label" translatable="yes">_Rename…</attribute>
         </item>
         <item>
           <attribute name="action">app.preset-remove</attribute>
-          <attribute name="label" translatable="yes">_Delete</attribute>
+          <attribute name="label" translatable="yes">_Delete…</attribute>
         </item>
       </section>
       <section>
         <item>
           <attribute name="action">app.preset-import</attribute>
-          <attribute name="label" translatable="yes">_Import</attribute>
+          <attribute name="label" translatable="yes">_Import Preset…</attribute>
         </item>
         <item>
           <attribute name="action">app.preset-export</attribute>
-          <attribute name="label" translatable="yes">_Export</attribute>
+          <attribute name="label" translatable="yes">_Export Preset…</attribute>
         </item>
       </section>
       <section>
@@ -149,13 +149,13 @@
       <attribute name="label" translatable="yes">_Help</attribute>
       <section>
         <item>
-          <attribute name="action">app.about</attribute>
-          <attribute name="label" translatable="yes">_About</attribute>
+          <attribute name="action">app.guide</attribute>
+          <attribute name="label" translatable="yes">_Online Documentation</attribute>
+          <attribute name="accel">F1</attribute>
         </item>
         <item>
-          <attribute name="action">app.guide</attribute>
-          <attribute name="label" translatable="yes">_Guide</attribute>
-          <attribute name="accel">F1</attribute>
+          <attribute name="action">app.about</attribute>
+          <attribute name="label" translatable="yes">_About</attribute>
         </item>
       </section>
     </submenu>

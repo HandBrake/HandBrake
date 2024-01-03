@@ -1,6 +1,6 @@
 /*
  * hb-backend.c
- * Copyright (C) John Stebbins 2008-2022 <stebbins@stebbins>
+ * Copyright (C) John Stebbins 2008-2024 <stebbins@stebbins>
  *
  * hb-backend.c is free software.
  *
@@ -107,8 +107,7 @@ combo_opts_t point_to_point_opts =
 static options_map_t d_when_complete_opts[] =
 {
     {N_("Do Nothing"),            "nothing",  0},
-    {N_("Show Notification"),     "notify",   1},
-    {N_("Quit Handbrake"),        "quit",     4},
+    {N_("Quit Handbrake"),        "quit",     1},
     {N_("Put Computer To Sleep"), "sleep",    2},
     {N_("Shutdown Computer"),     "shutdown", 3},
 };
@@ -1462,6 +1461,7 @@ ghb_init_combo_box(GtkComboBox *combo)
     store = gtk_list_store_new(4, G_TYPE_STRING, G_TYPE_BOOLEAN,
                                G_TYPE_STRING, G_TYPE_DOUBLE);
     gtk_combo_box_set_model(combo, GTK_TREE_MODEL(store));
+    gtk_combo_box_set_id_column(combo, 2);
 
     if (!gtk_combo_box_get_has_entry(combo))
     {
@@ -4250,8 +4250,6 @@ ghb_set_custom_filter_tooltip(signal_user_data_t *ud,
 gboolean
 ghb_validate_filters(GhbValue *settings, GtkWindow *parent)
 {
-    gchar *message;
-
     // Detelecine
     const char *detel_preset;
     detel_preset = ghb_dict_get_string(settings, "PictureDetelecine");
@@ -4267,20 +4265,18 @@ ghb_validate_filters(GhbValue *settings, GtkWindow *parent)
         {
             if (detel_custom != NULL)
             {
-                message = g_strdup_printf(
-                            _("Invalid Detelecine Settings:\n\n"
-                              "Preset:\t%s\n"
-                              "Custom:\t%s\n"), detel_preset, detel_custom);
+                ghb_alert_dialog_show(GTK_MESSAGE_ERROR,
+                                      _("Invalid Detelecine Settings"),
+                                      "%s %s\n%s %s",
+                                      _("Preset:"), detel_preset,
+                                      _("Custom:"), detel_custom);
             }
             else
             {
-                message = g_strdup_printf(
-                            _("Invalid Detelecine Settings:\n\n"
-                              "Preset:\t%s\n"), detel_preset);
+                ghb_alert_dialog_show(GTK_MESSAGE_ERROR,
+                                      _("Invalid Detelecine Settings"),
+                                      "%s %s", _("Preset:"), detel_preset);
             }
-            ghb_message_dialog(parent, GTK_MESSAGE_ERROR,
-                               message, _("Cancel"), NULL);
-            g_free(message);
             return FALSE;
         }
     }
@@ -4300,20 +4296,19 @@ ghb_validate_filters(GhbValue *settings, GtkWindow *parent)
         {
             if (comb_custom != NULL && comb_custom[0] != 0)
             {
-                message = g_strdup_printf(
-                            _("Invalid Comb Detect Settings:\n\n"
-                              "Preset:\t%s\n"
-                              "Custom:\t%s\n"), comb_preset, comb_custom);
+                ghb_alert_dialog_show(GTK_MESSAGE_ERROR,
+                                      _("Invalid Comb Detect Settings"),
+                                      "%s %s\n%s %s",
+                                      _("Preset:"), comb_preset,
+                                      _("Custom:"), comb_custom);
             }
             else
             {
-                message = g_strdup_printf(
-                            _("Invalid Comb Detect Settings:\n\n"
-                              "Preset:\t%s\n"), comb_preset);
+                ghb_alert_dialog_show(GTK_MESSAGE_ERROR,
+                                      _("Invalid Comb Detect Settings"),
+                                      "%s %s",
+                                      _("Preset:"), comb_preset);
             }
-            ghb_message_dialog(parent, GTK_MESSAGE_ERROR,
-                               message, _("Cancel"), NULL);
-            g_free(message);
             return FALSE;
         }
     }
@@ -4336,23 +4331,21 @@ ghb_validate_filters(GhbValue *settings, GtkWindow *parent)
         {
             if (deint_custom != NULL)
             {
-                message = g_strdup_printf(
-                            _("Invalid Deinterlace Settings:\n\n"
-                              "Filter:\t%s\n"
-                              "Preset:\t%s\n"
-                              "Custom:\t%s\n"), deint_filter, deint_preset,
-                                                deint_custom);
+                ghb_alert_dialog_show(GTK_MESSAGE_ERROR,
+                                      _("Invalid Deinterlace Settings"),
+                                      "%s %s\n%s %s\n%s %s",
+                                      _("Filter:"), deint_filter,
+                                      _("Preset:"), deint_preset,
+                                      _("Custom:"), deint_custom);
             }
             else
             {
-                message = g_strdup_printf(
-                            _("Invalid Deinterlace Settings:\n\n"
-                              "Filter:\t%s\n"
-                              "Preset:\t%s\n"), deint_filter, deint_preset);
+                ghb_alert_dialog_show(GTK_MESSAGE_ERROR,
+                                      _("Invalid Deinterlace Settings"),
+                                      "%s %s\n%s %s",
+                                      _("Filter:"), deint_filter,
+                                      _("Preset:"), deint_preset);
             }
-            ghb_message_dialog(parent, GTK_MESSAGE_ERROR,
-                               message, _("Cancel"), NULL);
-            g_free(message);
             return FALSE;
         }
     }
@@ -4374,16 +4367,13 @@ ghb_validate_filters(GhbValue *settings, GtkWindow *parent)
         if (hb_validate_filter_preset(filter_id, denoise_preset, denoise_tune,
                                       denoise_custom))
         {
-            message = g_strdup_printf(
-                        _("Invalid Denoise Settings:\n\n"
-                          "Filter:\t%s\n"
-                          "Preset:\t%s\n"
-                          "Tune:\t%s\n"
-                          "Custom:\t%s\n"), denoise_filter, denoise_preset,
-                                           denoise_tune, denoise_custom);
-            ghb_message_dialog(parent, GTK_MESSAGE_ERROR,
-                               message, _("Cancel"), NULL);
-            g_free(message);
+            ghb_alert_dialog_show(GTK_MESSAGE_ERROR,
+                                  _("Invalid Denoise Settings"),
+                                  "%s %s\n%s %s\n%s %s\n%s %s",
+                                  _("Filter:"), denoise_filter,
+                                  _("Preset:"), denoise_preset,
+                                  _("Tune:"), denoise_tune,
+                                  _("Custom:"), denoise_custom);
             return FALSE;
         }
     }
@@ -4402,16 +4392,13 @@ ghb_validate_filters(GhbValue *settings, GtkWindow *parent)
         if (hb_validate_filter_preset(filter_id, sharpen_preset, sharpen_tune,
                                       sharpen_custom))
         {
-            message = g_strdup_printf(
-                        _("Invalid Sharpen Settings:\n\n"
-                          "Filter:\t%s\n"
-                          "Preset:\t%s\n"
-                          "Tune:\t%s\n"
-                          "Custom:\t%s\n"), sharpen_filter, sharpen_preset,
-                                           sharpen_tune, sharpen_custom);
-            ghb_message_dialog(parent, GTK_MESSAGE_ERROR,
-                               message, _("Cancel"), NULL);
-            g_free(message);
+            ghb_alert_dialog_show(GTK_MESSAGE_ERROR,
+                                  _("Invalid Sharpen Settings"),
+                                  "%s %s\n%s %s\n%s %s\n%s %s",
+                                  _("Filter:"), sharpen_filter,
+                                  _("Preset:"), sharpen_preset,
+                                  _("Tune:"), sharpen_tune,
+                                  _("Custom:"), sharpen_custom);
             return FALSE;
         }
     }
@@ -4423,8 +4410,7 @@ gboolean
 ghb_validate_video(GhbValue *settings, GtkWindow *parent)
 {
     gint vcodec;
-    gchar *message;
-    const char *mux_id;
+    const char *message, *mux_id;
     const hb_container_t *mux;
 
     mux_id = ghb_dict_get_string(settings, "FileFormat");
@@ -4436,32 +4422,28 @@ ghb_validate_video(GhbValue *settings, GtkWindow *parent)
     if ((mux->format & HB_MUX_MASK_MP4) && (vcodec == HB_VCODEC_THEORA))
     {
         // mp4/theora combination is not supported.
-        message = g_strdup_printf(
-                    _("Theora is not supported in the MP4 container.\n\n"
+        message = _("Theora is not supported in the MP4 container.\n\n"
                     "You should choose a different video codec or container.\n"
-                    "If you continue, FFMPEG will be chosen for you."));
+                    "If you continue, FFMPEG will be chosen for you.");
         v_unsup = TRUE;
     }
     else if ((mux->format & HB_MUX_MASK_WEBM) &&
              (vcodec != HB_VCODEC_FFMPEG_VP8 && vcodec != HB_VCODEC_FFMPEG_VP9 && vcodec != HB_VCODEC_FFMPEG_VP9_10BIT && vcodec != HB_VCODEC_SVT_AV1 && vcodec != HB_VCODEC_SVT_AV1_10BIT))
     {
         // webm only supports vp8, vp9 and av1.
-        message = g_strdup_printf(
-                    _("Only VP8, VP9 and AV1 is supported in the WebM container.\n\n"
+        message = _("Only VP8, VP9 and AV1 is supported in the WebM container.\n\n"
                     "You should choose a different video codec or container.\n"
-                    "If you continue, one will be chosen for you."));
+                    "If you continue, one will be chosen for you.");
         v_unsup = TRUE;
     }
 
     if (v_unsup)
     {
-        if (!ghb_message_dialog(parent, GTK_MESSAGE_QUESTION,
-                                message, _("Cancel"), _("Continue")))
+        if (!ghb_question_dialog_run(parent, GHB_ACTION_NORMAL, _("Continue"),
+                _("Cancel"), _("Invalid Video Codec"), "%s", message))
         {
-            g_free(message);
             return FALSE;
         }
-        g_free(message);
         vcodec = hb_video_encoder_get_default(mux->format);
         ghb_dict_set_string(settings, "VideoEncoder",
                                 hb_video_encoder_get_short_name(vcodec));
@@ -4475,7 +4457,6 @@ ghb_validate_subtitles(GhbValue *settings, GtkWindow *parent)
 {
     gint title_id, titleindex;
     const hb_title_t * title;
-    gchar *message;
 
     title_id = ghb_dict_get_int(settings, "title");
     title = ghb_lookup_title(title_id, &titleindex);
@@ -4508,17 +4489,14 @@ ghb_validate_subtitles(GhbValue *settings, GtkWindow *parent)
         {
             // MP4 can only handle burned vobsubs.  make sure there isn't
             // already something burned in the list
-            message = g_strdup_printf(
-            _("Only one subtitle may be burned into the video.\n\n"
-                "You should change your subtitle selections.\n"
-                "If you continue, some subtitles will be lost."));
-            if (!ghb_message_dialog(parent, GTK_MESSAGE_WARNING,
-                                    message, _("Cancel"), _("Continue")))
+            if (!ghb_question_dialog_run(parent, GHB_ACTION_DESTRUCTIVE,
+                    _("Continue"), _("Cancel"), _("Invalid Subtitle Selection"),
+                    _("Only one subtitle may be burned into the video.\n\n"
+                      "You should change your subtitle selections.\n"
+                      "If you continue, some subtitles will be lost.")))
             {
-                g_free(message);
                 return FALSE;
             }
-            g_free(message);
             break;
         }
         else if (burned)
@@ -4528,17 +4506,14 @@ ghb_validate_subtitles(GhbValue *settings, GtkWindow *parent)
         else if (mux->format & HB_MUX_MASK_WEBM)
         {
             // WebM can only handle burned subs afaik. Their specs are ambiguous here
-            message = g_strdup_printf(
-            _("WebM in HandBrake only supports burned subtitles.\n\n"
-                "You should change your subtitle selections.\n"
-                "If you continue, some subtitles will be lost."));
-            if (!ghb_message_dialog(parent, GTK_MESSAGE_WARNING,
-                                    message, _("Cancel"), _("Continue")))
+            if (!ghb_question_dialog_run(parent, GHB_ACTION_DESTRUCTIVE,
+                    _("Continue"), _("Cancel"), _("Invalid Subtitle Selection"),
+                    _("WebM in HandBrake only supports burned subtitles.\n\n"
+                      "You should change your subtitle selections.\n"
+                      "If you continue, some subtitles will be lost.")))
             {
-                g_free(message);
                 return FALSE;
             }
-            g_free(message);
             break;
         }
         if (import != NULL)
@@ -4548,17 +4523,14 @@ ghb_validate_subtitles(GhbValue *settings, GtkWindow *parent)
             filename = ghb_dict_get_string(import, "Filename");
             if (!g_file_test(filename, G_FILE_TEST_IS_REGULAR))
             {
-                message = g_strdup_printf(
-                _("SRT file does not exist or not a regular file.\n\n"
-                    "You should choose a valid file.\n"
-                    "If you continue, this subtitle will be ignored."));
-                if (!ghb_message_dialog(parent, GTK_MESSAGE_QUESTION, message,
-                    _("Cancel"), _("Continue")))
+                if (!ghb_question_dialog_run(parent, GHB_ACTION_NORMAL,
+                    _("Continue"), _("Cancel"), _("Subtitle File Not Found"),
+                    _("SRT file does not exist or not a regular file.\n\n"
+                      "You should choose a valid file.\n"
+                      "If you continue, this subtitle will be ignored.")))
                 {
-                    g_free(message);
                     return FALSE;
                 }
-                g_free(message);
                 break;
             }
         }
@@ -4571,7 +4543,6 @@ ghb_validate_audio(GhbValue *settings, GtkWindow *parent)
 {
     gint title_id, titleindex;
     const hb_title_t * title;
-    gchar *message;
 
     title_id = ghb_dict_get_int(settings, "title");
     title = ghb_lookup_title(title_id, &titleindex);
@@ -4609,17 +4580,14 @@ ghb_validate_audio(GhbValue *settings, GtkWindow *parent)
               (aconfig->in.codec & codec)))
         {
             // Not supported.  AC3 is passthrough only, so input must be AC3
-            message = g_strdup_printf(
-                        _("The source does not support Pass-Thru.\n\n"
-                        "You should choose a different audio codec.\n"
-                        "If you continue, one will be chosen for you."));
-            if (!ghb_message_dialog(parent, GTK_MESSAGE_QUESTION,
-                                    message, _("Cancel"), _("Continue")))
+            if (!ghb_question_dialog_run(parent, GHB_ACTION_NORMAL,
+                    _("Continue"), _("Cancel"), _("Invalid Audio Selection"),
+                    _("The source does not support Pass-Thru.\n\n"
+                      "You should choose a different audio codec.\n"
+                      "If you continue, one will be chosen for you.")))
             {
-                g_free(message);
                 return FALSE;
             }
-            g_free(message);
             if ((codec & HB_ACODEC_AC3) ||
                 (aconfig->in.codec & HB_ACODEC_MASK) == HB_ACODEC_DCA)
             {
@@ -4664,17 +4632,14 @@ ghb_validate_audio(GhbValue *settings, GtkWindow *parent)
         }
         if (a_unsup)
         {
-            message = g_strdup_printf(
-                        _("%s is not supported in the %s container.\n\n"
-                        "You should choose a different audio codec.\n"
-                        "If you continue, one will be chosen for you."), a_unsup, mux_s);
-            if (!ghb_message_dialog(parent, GTK_MESSAGE_QUESTION,
-                                    message, _("Cancel"), _("Continue")))
+            if (!ghb_question_dialog_run(parent, GHB_ACTION_NORMAL,
+                    _("Continue"), _("Cancel"), _("Invalid Audio Selection"),
+                    _("%s is not supported in the %s container.\n\n"
+                      "You should choose a different audio codec.\n"
+                      "If you continue, one will be chosen for you."), a_unsup, mux_s))
             {
-                g_free(message);
                 return FALSE;
             }
-            g_free(message);
             const char *name = hb_audio_encoder_get_short_name(codec);
             ghb_dict_set_string(asettings, "Encoder", name);
         }

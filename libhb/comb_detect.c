@@ -1,6 +1,6 @@
 /* comb_detect.c
 
-   Copyright (c) 2003-2022 HandBrake Team
+   Copyright (c) 2003-2024 HandBrake Team
    This file is part of the HandBrake source code
    Homepage: <http://handbrake.fr/>.
    It may be used under the terms of the GNU General Public License v2.
@@ -645,6 +645,15 @@ static int comb_detect_init(hb_filter_object_t *filter,
         hb_dict_extract_int(&pv->block_threshold, dict, "block-thresh");
         hb_dict_extract_int(&pv->block_width, dict, "block-width");
         hb_dict_extract_int(&pv->block_height, dict, "block-height");
+    }
+
+    if (pv->block_width > init->geometry.width)
+    {
+        pv->block_width = init->geometry.width;
+    }
+    if (pv->block_height > init->geometry.height)
+    {
+        pv->block_height = init->geometry.height;
     }
 
     // Scale the thresholds for the current depth

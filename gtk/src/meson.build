@@ -13,6 +13,7 @@ ghb_src = files(
   'icons.c',
   'jobdict.c',
   'main.c',
+  'notifications.c',
   'plist.c',
   'power-manager.c',
   'presets.c',

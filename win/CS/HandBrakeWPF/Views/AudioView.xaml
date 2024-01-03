@@ -192,10 +192,12 @@
 
                             <!--  Row 1  -->
                             <ComboBox Grid.Column="1"  Margin="5,0,5,0" HorizontalAlignment="Stretch" ToolTip="{Binding ScannedTrack.Description}"
+                                      AutomationProperties.Name="{x:Static Properties:Resources.AudioView_Source}"
                                       ItemsSource="{Binding DataContext.SourceTracks, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
                                       SelectedItem="{Binding ScannedTrack}" />
 
-                            <ComboBox Grid.Column="2" Margin="5,0,5,0" DisplayMemberPath="DisplayName" HorizontalAlignment="Stretch">
+                            <ComboBox Grid.Column="2" Margin="5,0,5,0" DisplayMemberPath="DisplayName" HorizontalAlignment="Stretch"
+                                      AutomationProperties.Name="{x:Static Properties:Resources.AudioView_Codec}" >
                                 <ComboBox.SelectedItem>
                                     <MultiBinding Converter="{StaticResource audioEncoderConverter}">
                                         <Binding Path="Encoder" />
@@ -212,39 +214,43 @@
 
                             <StackPanel Orientation="Horizontal" Grid.Column="3" HorizontalAlignment="Stretch">
                                 <ComboBox HorizontalAlignment="Stretch"
+                                          AutomationProperties.Name="{x:Static Properties:Resources.AudioView_QualityMode}"
                                           ItemsSource="{Binding AudioEncoderRateTypes, Converter={StaticResource audioRateTypeConverter}}"
                                           SelectedItem="{Binding EncoderRateType, Converter={StaticResource audioRateTypeConverter}}"
                                           Visibility="{Binding IsRateTypeVisible, Converter={StaticResource boolToVisConverter}, ConverterParameter=false}" />
 
                                 <ComboBox Margin="5,0,5,0" MinWidth="65" ItemsSource="{Binding EncoderQualityValues}" HorizontalAlignment="Stretch"
+                                          AutomationProperties.Name="{x:Static Properties:Resources.AudioView_AudioQuality}"
                                           SelectedItem="{Binding Quality}" ToolTip="{x:Static Properties:ResourcesTooltips.AudioView_Quality}"
                                           Visibility="{Binding IsQualityVisible, Converter={StaticResource boolToVisConverter}, ConverterParameter=false}" />
 
                                 <ComboBox Margin="5,0,5,0" MinWidth="65" ItemsSource="{Binding Bitrates}" HorizontalAlignment="Stretch"
+                                          AutomationProperties.Name="{x:Static Properties:Resources.AudioView_BitrateSelection}"
                                           SelectedItem="{Binding Bitrate}"
                                           Visibility="{Binding IsBitrateVisible, Converter={StaticResource boolToVisConverter}, ConverterParameter=false}" />
                             </StackPanel>
                       
 
                             <ComboBox Grid.Row="0" Grid.Column="4" Margin="5,0,5,0" HorizontalAlignment="Stretch"
+                                      AutomationProperties.Name="{x:Static Properties:Resources.AudioView_Mixdown}"
                                       ItemsSource="{Binding TrackReference,  Converter={StaticResource audioMixdownListConverter}}"
                                       SelectedItem="{Binding MixDown, Converter={StaticResource audioMixdownConverter}}"
                                       DisplayMemberPath="DisplayName"
                                       Visibility="{Binding IsPassthru, Converter={StaticResource boolToVisConverter}, ConverterParameter=true}" />
 
-
                             <ComboBox Margin="5,0,5,0" Grid.Column="5"
+                                      AutomationProperties.Name="{x:Static Properties:Resources.AudioView_Samplerate}"
                                       ItemsSource="{Binding DataContext.SampleRates, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
                                       SelectedItem="{Binding SampleRateDisplayValue}"
                                       Visibility="{Binding IsPassthru, Converter={StaticResource boolToVisConverter}, ConverterParameter=true}" />
 
-
                             <controls:NumberBox x:Name="gainNumericCtl" Margin="5,0,5,0" HorizontalAlignment="Stretch" Grid.Column="6"  VerticalAlignment="Center"
+                                                AutomationProperties.Name="{x:Static Properties:Resources.AudioView_Gain}"
                                                 Minimum="-20" Modulus="1" Maximum="20" Number="{Binding Gain, Mode=TwoWay}" UpdateBindingOnTextChange="True" ShowIncrementButtons="True" AllowEmpty="False"
                                                 Visibility="{Binding IsPassthru, Converter={StaticResource boolToHiddenVisConverter}, ConverterParameter=true}"/>
 
-
                             <controls:NumberBox x:Name="drcNumericCtl" Margin="5,0,5,0" HorizontalAlignment="Stretch" Grid.Column="7"
+                                                AutomationProperties.Name="{x:Static Properties:Resources.AudioView_DRC}"
                                                 Minimum="0" Modulus="0.1" Maximum="4" Number="{Binding DRC, Mode=TwoWay}" UpdateBindingOnTextChange="True" ShowIncrementButtons="True" AllowEmpty="False"
                                                 Visibility="{Binding IsPassthru, Converter={StaticResource boolToHiddenVisConverter}, ConverterParameter=true}"/>
 
@@ -270,7 +276,8 @@
 
                         <!--  Delete  -->
                         <StackPanel Grid.Column="2" Grid.Row="0" VerticalAlignment="Center">
-                            <Image Width="16" Height="16" Margin="10,0,10,0" Source="Images/close64.png">
+                            <Image Width="16" Height="16" Margin="10,0,10,0" Source="Images/close64.png"
+                                   AutomationProperties.Name="{x:Static Properties:Resources.AudioView_DeleteTrack}">
                                 <i:Interaction.Triggers>
                                     <i:EventTrigger EventName="MouseDown">
                                         <i:InvokeCommandAction Command="{Binding DataContext.RemoveCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}" CommandParameter="{Binding}" />
@@ -283,7 +290,8 @@
                         <Grid Grid.Column="1" Grid.Row="1" HorizontalAlignment="Stretch" Visibility="{Binding IsExpandedTrackView, Converter={StaticResource boolToVisConverter}}">
                             <StackPanel Orientation="Horizontal" Margin="22,5,0,5" >
                                 <TextBlock Text="{x:Static Properties:Resources.AudioView_TrackName}" Style="{StaticResource sectionHeader}"  VerticalAlignment="Center" Margin="0,0,5,0" />
-                                <TextBox Text="{Binding TrackName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="250" behaviours:TextBoxBehavior.TripleClickSelectAll="True" />                                                                
+                                <TextBox Text="{Binding TrackName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="250" behaviours:TextBoxBehavior.TripleClickSelectAll="True"
+                                         AutomationProperties.Name="{x:Static Properties:Resources.AudioView_AudioTrackName}"/>                                                                
                             </StackPanel>
                         </Grid>
                     </Grid>

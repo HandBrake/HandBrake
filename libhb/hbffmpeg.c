@@ -1,6 +1,6 @@
 /* hbffmpeg.c
 
-   Copyright (c) 2003-2022 HandBrake Team
+   Copyright (c) 2003-2024 HandBrake Team
    This file is part of the HandBrake source code
    Homepage: <http://handbrake.fr/>.
    It may be used under the terms of the GNU General Public License v2.
@@ -233,7 +233,6 @@ hb_buffer_t * hb_avframe_to_video_buffer(AVFrame *frame, AVRational time_base, i
             buf->plane[pp].width         = hb_image_width(buf->f.fmt, buf->f.width, pp);
             buf->plane[pp].height        = hb_image_height(buf->f.fmt, buf->f.height, pp);
             buf->plane[pp].stride        = frame_copy->linesize[pp];
-            buf->plane[pp].height_stride = buf->plane[pp].height;
             buf->plane[pp].size          = buf->plane[pp].stride * buf->plane[pp].height;
 
             buf->size += buf->plane[pp].size;

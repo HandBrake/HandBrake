@@ -1,6 +1,6 @@
-From ef33c5bd72846c5c93662a3e6a75c4f3273f0a35 Mon Sep 17 00:00:00 2001
+From d0f915c761cfba6ae46d20fa9b995311ef0f0727 Mon Sep 17 00:00:00 2001
 From: Damiano Galassi <damiog@gmail.com>
-Date: Tue, 11 Jul 2023 07:38:26 +0200
+Date: Fri, 3 Nov 2023 13:43:50 +0100
 Subject: [PATCH 1/2] avcodec: add ambient viewing environment packet side
  data.
 
@@ -12,10 +12,10 @@ Subject: [PATCH 1/2] avcodec: add ambient viewing environment packet side
  4 files changed, 12 insertions(+)
 
 diff --git a/fftools/ffprobe.c b/fftools/ffprobe.c
-index 4fcfe1164b..5663a12dc4 100644
+index 71f6cc3a74..58b07ac20c 100644
 --- a/fftools/ffprobe.c
 +++ b/fftools/ffprobe.c
-@@ -2349,6 +2349,9 @@ static void print_pkt_side_data(WriterContext *w,
+@@ -2392,6 +2392,9 @@ static void print_pkt_side_data(WriterContext *w,
              AVContentLightMetadata *metadata = (AVContentLightMetadata *)sd->data;
              print_int("max_content", metadata->MaxCLL);
              print_int("max_average", metadata->MaxFALL);
@@ -26,10 +26,10 @@ index 4fcfe1164b..5663a12dc4 100644
              AVDynamicHDRPlus *metadata = (AVDynamicHDRPlus *)sd->data;
              print_dynamic_hdr10_plus(w, metadata);
 diff --git a/libavcodec/avpacket.c b/libavcodec/avpacket.c
-index 5fef65e97a..db9c0c95e8 100644
+index e29725c2d2..9f3e9d7d7c 100644
 --- a/libavcodec/avpacket.c
 +++ b/libavcodec/avpacket.c
-@@ -300,6 +300,7 @@ const char *av_packet_side_data_name(enum AVPacketSideDataType type)
+@@ -301,6 +301,7 @@ const char *av_packet_side_data_name(enum AVPacketSideDataType type)
      case AV_PKT_DATA_DOVI_CONF:                  return "DOVI configuration record";
      case AV_PKT_DATA_S12M_TIMECODE:              return "SMPTE ST 12-1:2014 timecode";
      case AV_PKT_DATA_DYNAMIC_HDR10_PLUS:         return "HDR10+ Dynamic Metadata (SMPTE 2094-40)";
@@ -38,19 +38,19 @@ index 5fef65e97a..db9c0c95e8 100644
      return NULL;
  }
 diff --git a/libavcodec/decode.c b/libavcodec/decode.c
-index 7eada8e9ab..e58b462272 100644
+index ad39021354..6049fbb2dd 100644
 --- a/libavcodec/decode.c
 +++ b/libavcodec/decode.c
-@@ -1428,6 +1428,7 @@ int ff_decode_frame_props_from_pkt(const AVCodecContext *avctx,
-         { AV_PKT_DATA_S12M_TIMECODE,              AV_FRAME_DATA_S12M_TIMECODE },
-         { AV_PKT_DATA_DYNAMIC_HDR10_PLUS,         AV_FRAME_DATA_DYNAMIC_HDR_PLUS },
-         { AV_PKT_DATA_SKIP_SAMPLES,               AV_FRAME_DATA_SKIP_SAMPLES },
-+        { AV_PKT_DATA_AMBIENT_VIEWING_ENVIRONMENT,AV_FRAME_DATA_AMBIENT_VIEWING_ENVIRONMENT },
-     };
+@@ -1434,6 +1434,7 @@ static const struct {
+     { AV_PKT_DATA_CONTENT_LIGHT_LEVEL,        AV_FRAME_DATA_CONTENT_LIGHT_LEVEL },
+     { AV_PKT_DATA_ICC_PROFILE,                AV_FRAME_DATA_ICC_PROFILE },
+     { AV_PKT_DATA_DYNAMIC_HDR10_PLUS,         AV_FRAME_DATA_DYNAMIC_HDR_PLUS },
++    { AV_PKT_DATA_AMBIENT_VIEWING_ENVIRONMENT,AV_FRAME_DATA_AMBIENT_VIEWING_ENVIRONMENT },
+ };
  
-     frame->pts          = pkt->pts;
+ int ff_decode_frame_props_from_pkt(const AVCodecContext *avctx,
 diff --git a/libavcodec/packet.h b/libavcodec/packet.h
-index f28e7e7011..199baad763 100644
+index b19409b719..f5e0751497 100644
 --- a/libavcodec/packet.h
 +++ b/libavcodec/packet.h
 @@ -299,6 +299,13 @@ enum AVPacketSideDataType {

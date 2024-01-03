@@ -1,6 +1,6 @@
 /* bwdif.metal
 
-   Copyright (c) 2003-2023 HandBrake Team
+   Copyright (c) 2003-2024 HandBrake Team
    Copyright (c) 2019 Philip Langdale <philipl@overt.org>
 
    port of FFmpeg vf_bwdif_cuda.

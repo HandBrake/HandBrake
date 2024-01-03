@@ -1,6 +1,6 @@
 /* encx265.c
 
-   Copyright (c) 2003-2022 HandBrake Team
+   Copyright (c) 2003-2024 HandBrake Team
    This file is part of the HandBrake source code
    Homepage: <http://handbrake.fr/>.
    It may be used under the terms of the GNU General Public License v2.
@@ -304,6 +304,8 @@ int encx265Init(hb_work_object_t *w, hb_job_t *job)
         {
             goto fail;
         }
+
+        param->bHighTier = 0;
     }
 
     if (job->ambient.ambient_illuminance.num && job->ambient.ambient_illuminance.den)
@@ -436,11 +438,14 @@ int encx265Init(hb_work_object_t *w, hb_job_t *job)
      * Update Dolby Vision level in case custom
      * values were set in the encoder_options string.
      */
-    if (override_vbv_maxrate || override_vbv_bufsize)
+    if (override_vbv_maxrate || override_vbv_bufsize || param->bHighTier)
     {
+        int pps = (double)job->width * job->height * (job->vrate.num / job->vrate.den);
         int max_rate = param->rc.vbvMaxBitrate;
+
         for (int i = 0; hb_dolby_vision_levels[i].id != 0; i++)
         {
+            int max_pps = hb_dolby_vision_levels[i].max_pps;
             int max_width = hb_dolby_vision_levels[i].max_width;
             int tier_max_rate = param->bHighTier ?
                                     hb_dolby_vision_levels[i].max_bitrate_high_tier :
@@ -448,7 +453,7 @@ int encx265Init(hb_work_object_t *w, hb_job_t *job)
 
             tier_max_rate *= 1024;
 
-            if (max_rate <= tier_max_rate && job->width <= max_width)
+            if (pps <= max_pps && max_rate <= tier_max_rate && job->width <= max_width)
             {
                 job->dovi.dv_level = hb_dolby_vision_levels[i].id;
                 break;

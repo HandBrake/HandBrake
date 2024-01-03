@@ -1,6 +1,6 @@
 /* utils.h
 
-   Copyright (c) 2003-2022 HandBrake Team
+   Copyright (c) 2003-2024 HandBrake Team
    This file is part of the HandBrake source code
    Homepage: <http://handbrake.fr/>.
    It may be used under the terms of the GNU General Public License v2.
@@ -16,12 +16,13 @@
 
 struct hb_metal_context_s
 {
-    id<MTLDevice>               device;
-    id<MTLLibrary>              library;
-    id<MTLCommandQueue>         queue;
-    id<MTLComputePipelineState> pipeline;
-    id<MTLFunction>             function;
-    id<MTLBuffer>               params_buffer;
+    id<MTLDevice>                device;
+    id<MTLLibrary>               library;
+    id<MTLCommandQueue>          queue;
+    id<MTLBuffer>                params_buffer;
+    id<MTLComputePipelineState> *pipelines;
+    id<MTLFunction>             *functions;
+    size_t                       pipelines_count;
 
     CVMetalTextureCacheRef   cache;
     CVPixelBufferPoolRef     pool;
@@ -54,5 +55,7 @@ CVMetalTextureRef hb_metal_create_texture_from_pixbuf(CVMetalTextureCacheRef tex
                                                CVPixelBufferRef pixbuf,
                                                int plane,
                                                MTLPixelFormat format);
+
+int hb_metal_add_pipeline(hb_metal_context_t *ctx, const char *function_name, size_t index);
 
 #endif /* HB_METAL_UTILS_H */

@@ -2133,7 +2133,7 @@ Foreign Audio Preferred, else First：如果存在外语轨道，则会将其烧
     <value>当前有新版本可用！</value>
   </data>
   <data name="About_Copyright" xml:space="preserve">
-    <value>版权所有 (C) 2003-2022 HandBrake 团队</value>
+    <value>版权所有 (C) 2003-2023 HandBrake 团队</value>
   </data>
   <data name="Options_LowBatteryLevel" xml:space="preserve">
     <value>电量不足：</value>

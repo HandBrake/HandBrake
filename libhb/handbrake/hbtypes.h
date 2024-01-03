@@ -1,6 +1,6 @@
 /* hbtypes.h
 
-   Copyright (c) 2003-2022 HandBrake Team
+   Copyright (c) 2003-2024 HandBrake Team
    This file is part of the HandBrake source code
    Homepage: <http://handbrake.fr/>.
    It may be used under the terms of the GNU General Public License v2.
@@ -40,6 +40,8 @@ typedef struct hb_work_private_s hb_work_private_t;
 typedef struct hb_work_object_s  hb_work_object_t;
 typedef struct hb_filter_private_s hb_filter_private_t;
 typedef struct hb_filter_object_s  hb_filter_object_t;
+typedef struct hb_motion_metric_private_s  hb_motion_metric_private_t;
+typedef struct hb_motion_metric_object_s  hb_motion_metric_object_t;
 typedef struct hb_buffer_settings_s hb_buffer_settings_t;
 typedef struct hb_image_format_s hb_image_format_t;
 typedef struct hb_fifo_s hb_fifo_t;

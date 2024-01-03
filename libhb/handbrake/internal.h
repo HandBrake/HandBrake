@@ -1,6 +1,6 @@
 /* internal.h
 
-   Copyright (c) 2003-2022 HandBrake Team
+   Copyright (c) 2003-2024 HandBrake Team
    This file is part of the HandBrake source code
    Homepage: <http://handbrake.fr/>.
    It may be used under the terms of the GNU General Public License v2.
@@ -148,7 +148,6 @@ struct hb_buffer_s
         int           stride;
         int           width;
         int           height;
-        int           height_stride;
         int           size;
     } plane[4]; // 3 Color components + alpha
 
@@ -247,20 +246,6 @@ static inline int hb_image_width(int pix_fmt, int width, int plane)
     }
 
     return width;
-}
-
-static inline int hb_image_height_stride(int pix_fmt, int height, int plane)
-{
-    const AVPixFmtDescriptor *desc = av_pix_fmt_desc_get(pix_fmt);
-
-    // Decomb requires 6 extra lines and stride aligned to 32 bytes
-    height = MULTIPLE_MOD_UP(height + 6, 32);
-    if (desc != NULL && (plane == 1 || plane == 2))
-    {
-        height = height >> desc->log2_chroma_h;
-    }
-
-    return height;
 }
 
 static inline int hb_image_height(int pix_fmt, int height, int plane)
@@ -496,6 +481,7 @@ extern hb_filter_object_t hb_filter_format;
 
 #if defined(__APPLE__)
 extern hb_filter_object_t hb_filter_prefilter_vt;
+extern hb_filter_object_t hb_filter_comb_detect_vt;
 extern hb_filter_object_t hb_filter_yadif_vt;
 extern hb_filter_object_t hb_filter_bwdif_vt;
 extern hb_filter_object_t hb_filter_crop_scale_vt;
@@ -505,6 +491,12 @@ extern hb_filter_object_t hb_filter_grayscale_vt;
 extern hb_filter_object_t hb_filter_pad_vt;
 extern hb_filter_object_t hb_filter_lapsharp_vt;
 extern hb_filter_object_t hb_filter_unsharp_vt;
+#endif
+
+extern hb_motion_metric_object_t hb_motion_metric;
+
+#if defined(__APPLE__)
+extern hb_motion_metric_object_t hb_motion_metric_vt;
 #endif
 
 extern hb_work_object_t * hb_objects;
@@ -533,8 +525,6 @@ DECLARE_MUX( mp4 );
 DECLARE_MUX( mkv );
 DECLARE_MUX( webm );
 DECLARE_MUX( avformat );
-
-void hb_deinterlace(hb_buffer_t *dst, hb_buffer_t *src);
 
 struct hb_chapter_queue_item_s
 {

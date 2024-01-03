@@ -1,6 +1,6 @@
 /* encavcodecaudio.c
 
-   Copyright (c) 2003-2022 HandBrake Team
+   Copyright (c) 2003-2024 HandBrake Team
    This file is part of the HandBrake source code
    Homepage: <http://handbrake.fr/>.
    It may be used under the terms of the GNU General Public License v2.
@@ -134,6 +134,10 @@ static int encavcodecaInit(hb_work_object_t *w, hb_job_t *job)
                     bits_per_raw_sample = 16;
                     break;
             }
+            break;
+
+        case HB_ACODEC_FFTRUEHD:
+            codec_id = AV_CODEC_ID_TRUEHD;
             break;
 
         case HB_ACODEC_LAME:

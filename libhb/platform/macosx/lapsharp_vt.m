@@ -1,6 +1,6 @@
 /* lapsharp_vt.m
 
-   Copyright (c) 2003-2023 HandBrake Team
+   Copyright (c) 2003-2024 HandBrake Team
    This file is part of the HandBrake source code
    Homepage: <http://handbrake.fr/>.
    It may be used under the terms of the GNU General Public License v2.
@@ -301,7 +301,7 @@ static void call_kernel(hb_filter_private_t *pv,
     [encoder setBuffer:pv->mem[plane] offset:0 atIndex:0];
     [encoder setBuffer:pv->mtl->params_buffer offset:0 atIndex:1];
 
-    hb_metal_compute_encoder_dispatch(pv->mtl->device, pv->mtl->pipeline, encoder, dst.width, dst.height);
+    hb_metal_compute_encoder_dispatch(pv->mtl->device, pv->mtl->pipelines[0], encoder, dst.width, dst.height);
     [encoder endEncoding];
 
     [buffer commit];

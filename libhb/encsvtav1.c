@@ -1,6 +1,6 @@
 /* encsvtav1.c
 
-   Copyright (c) 2003-2023 HandBrake Team
+   Copyright (c) 2003-2024 HandBrake Team
    This file is part of the HandBrake source code
    partially based on FFmpeg libsvtav1.c
    Homepage: <http://handbrake.fr/>.

@@ -1,6 +1,6 @@
 /* hbffmpeg.h
 
-   Copyright (c) 2003-2022 HandBrake Team
+   Copyright (c) 2003-2024 HandBrake Team
    This file is part of the HandBrake source code
    Homepage: <http://handbrake.fr/>.
    It may be used under the terms of the GNU General Public License v2.
@@ -28,7 +28,6 @@
 
 #define HB_FFMPEG_THREADS_AUTO (-1) // let hb_avcodec_open() decide thread_count
 
-void hb_avcodec_init(void);
 int  hb_avcodec_open(AVCodecContext *, const AVCodec *, AVDictionary **, int);
 void hb_avcodec_free_context(AVCodecContext **avctx);
 const char* const* hb_av_preset_get_names(int encoder);

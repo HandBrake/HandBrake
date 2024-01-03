@@ -1,6 +1,6 @@
 /* avfilter.c
 
-   Copyright (c) 2003-2015 HandBrake Team
+   Copyright (c) 2003-2024 HandBrake Team
    This file is part of the HandBrake source code
    Homepage: <http://handbrake.fr/>.
    It may be used under the terms of the GNU General Public License v2.
@@ -276,6 +276,7 @@ static hb_buffer_t* filterFrame( hb_filter_private_t * pv, hb_buffer_t ** buf_in
         next = hb_buffer_list_head(&pv->list);
 
         buf->s.stop = next->s.start;
+        buf->s.duration = buf->s.stop - buf->s.start;
         hb_buffer_list_append(&list, buf);
     }
 

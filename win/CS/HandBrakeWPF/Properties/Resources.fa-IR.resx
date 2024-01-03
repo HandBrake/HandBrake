@@ -2136,7 +2136,7 @@ Where supported, any user presets will have been imported.</value>
     <value>A new version is available!</value>
   </data>
   <data name="About_Copyright" xml:space="preserve">
-    <value>حق نشر(C) 2003-2022 برای گروه HandBrake محفوظ است</value>
+    <value>حق نشر(C) 2003-2023 برای گروه HandBrake محفوظ است</value>
   </data>
   <data name="Options_LowBatteryLevel" xml:space="preserve">
     <value>سطح باتری کم:</value>

@@ -1,6 +1,6 @@
 /*
  * preview.h
- * Copyright (C) John Stebbins 2008-2022 <stebbins@stebbins>
+ * Copyright (C) John Stebbins 2008-2024 <stebbins@stebbins>
  *
  * preview.h is free software.
  *
@@ -34,5 +34,6 @@ void ghb_live_encode_done(signal_user_data_t *ud, gboolean success);
 void ghb_preview_cleanup(signal_user_data_t *ud);
 void ghb_live_reset(signal_user_data_t *ud);
 void ghb_par_scale(signal_user_data_t *ud, gint *width, gint *height, gint par_n, gint par_d);
+void ghb_preview_dispose (signal_user_data_t *ud);
 
 #endif // _GHB_PREVIEW_H_

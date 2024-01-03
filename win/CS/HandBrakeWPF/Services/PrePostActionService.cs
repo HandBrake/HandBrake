@@ -107,7 +107,11 @@ namespace HandBrakeWPF.Services
             if (this.userSettingService.GetUserSetting<bool>(UserSettingConstants.NotifyOnEncodeDone))
             {
                 string filename = Path.GetFileName(e.FileName);
-                this.notificationService.SendNotification(Resources.Notifications_EncodeDone, filename);
+
+                if (!this.notificationService.SendNotification(Resources.Notifications_EncodeDone, filename))
+                {
+                    this.ServiceLogMessage("Error: System didn't allow us to send a notification.");
+                }
             }
         }
 
@@ -134,7 +138,10 @@ namespace HandBrakeWPF.Services
 
             if (this.userSettingService.GetUserSetting<bool>(UserSettingConstants.NotifyOnQueueDone))
             {
-                this.notificationService.SendNotification(Resources.Notifications_QueueDone, null);
+                if (!this.notificationService.SendNotification(Resources.Notifications_QueueDone, null))
+                {
+                    this.ServiceLogMessage("Error: System didn't allow us to send a notification.");
+                }
             }
 
             // Allow the system to sleep again.
@@ -169,6 +176,14 @@ namespace HandBrakeWPF.Services
 
             if (!isCancelled)
             {
+                PerformPostAction();
+            }
+        }
+
+        private void PerformPostAction()
+        {
+            try
+            {
                 this.ServiceLogMessage(string.Format("Performing 'When Done' Action: {0}", this.userSettingService.GetUserSetting<int>(UserSettingConstants.WhenCompleteAction)));
 
                 // Do something when the encode ends.
@@ -198,6 +213,10 @@ namespace HandBrakeWPF.Services
                         break;
                 }
             }
+            catch (Exception ex)
+            {
+                this.ServiceLogMessage(string.Format("Post Action Failed: {0}", ex));
+            }
         }
 
         private void SendToApplication(string source, string destination, int exitCode)
@@ -207,9 +226,9 @@ namespace HandBrakeWPF.Services
             {
                 string arguments = this.userSettingService.GetUserSetting<string>(UserSettingConstants.SendFileToArgs);
 
-                arguments = arguments.Replace("{source}", string.Format("\"{0}\"", source));
-                arguments = arguments.Replace("{destination}", string.Format("\"{0}\"", destination));
-                arguments = arguments.Replace("{exit_code}", string.Format("{0}", exitCode));
+                arguments = arguments.Replace(Constants.SourceArg, string.Format("\"{0}\"", source));
+                arguments = arguments.Replace(Constants.DestinationArg, string.Format("\"{0}\"", destination));
+                arguments = arguments.Replace(Constants.ExitCodeArg, string.Format("{0}", exitCode));
 
                 var process = new ProcessStartInfo(this.userSettingService.GetUserSetting<string>(UserSettingConstants.SendFileTo), arguments);
                 process.EnvironmentVariables.Add("HB_SOURCE", source);
@@ -231,19 +250,26 @@ namespace HandBrakeWPF.Services
 
         private void PlayWhenDoneSound()
         {
-            string filePath = this.userSettingService.GetUserSetting<string>(UserSettingConstants.WhenDoneAudioFile);
-            if (!string.IsNullOrEmpty(filePath) && File.Exists(filePath))
+            try
             {
-                this.ServiceLogMessage("Playing Sound: " + filePath);
-                var uri = new Uri(filePath, UriKind.RelativeOrAbsolute);
-                var player = new MediaPlayer();
-                player.MediaFailed += (object sender, ExceptionEventArgs e) => { this.ServiceLogMessage(e?.ToString()); };
-                player.Open(uri);
-                player.Play();
+                string filePath = this.userSettingService.GetUserSetting<string>(UserSettingConstants.WhenDoneAudioFile);
+                if (!string.IsNullOrEmpty(filePath) && File.Exists(filePath))
+                {
+                    this.ServiceLogMessage("Playing Sound: " + filePath);
+                    var uri = new Uri(filePath, UriKind.RelativeOrAbsolute);
+                    var player = new MediaPlayer();
+                    player.MediaFailed += (object sender, ExceptionEventArgs e) => { this.ServiceLogMessage(e?.ToString()); };
+                    player.Open(uri);
+                    player.Play();
+                }
+                else
+                {
+                    this.ServiceLogMessage("Unable to play sound. Reason: File not found!");
+                }
             }
-            else
+            catch (Exception ex)
             {
-                this.ServiceLogMessage("Unable to play sound. Reason: File not found!");
+                this.ServiceLogMessage("Unable to play sound. Unknown Reason." + Environment.NewLine + ex);
             }
         }
 

@@ -605,6 +605,20 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
+
+        public BindingList<PlaceHolderBucket> WhenDoneArguments
+        {
+            get
+            {
+                return new BindingList<PlaceHolderBucket>
+                       {
+                           new PlaceHolderBucket { Name = Constants.SourceArg },
+                           new PlaceHolderBucket { Name = Constants.DestinationArg },
+                           new PlaceHolderBucket { Name = Constants.ExitCodeArg }
+                       };
+            }
+        }
+        
         public bool UseIsoDateFormat
         {
             get => this.useIsoDateFormat;

@@ -1,6 +1,6 @@
 /* decavcodec.c
 
-   Copyright (c) 2003-2020 HandBrake Team
+   Copyright (c) 2003-2024 HandBrake Team
    Copyright 2022 NVIDIA Corporation
    This file is part of the HandBrake source code
    Homepage: <http://handbrake.fr/>.
@@ -2080,6 +2080,7 @@ static int decodePacket( hb_work_object_t * w )
             // we didn't find the headers needed to set up extradata.
             // the codec will abort if we open it so just free the buf
             // and hope we eventually get the info we need.
+            hb_avcodec_free_context(&context);
             return HB_WORK_OK;
         }
 

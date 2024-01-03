@@ -8,7 +8,7 @@ namespace HandBrakeWPF.Services.Interfaces
 {
     public interface INotificationService
     {
-        void SendNotification(string header, string content);
+        bool SendNotification(string header, string content);
         void Uninstall();
         void Shutdown();
     }
