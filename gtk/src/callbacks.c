@@ -31,7 +31,7 @@
 #include <time.h>
 #include <math.h>
 
-#include "ghbcompat.h"
+#include "compat.h"
 
 #include <glib/gstdio.h>
 #include <glib/gi18n.h>

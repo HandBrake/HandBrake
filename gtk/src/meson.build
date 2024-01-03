@@ -8,7 +8,7 @@ ghb_src = files(
   'callbacks.c',
   'chapters.c',
   'color-scheme.c',
-  'ghbcompat.c',
+  'compat.c',
   'hb-backend.c',
   'hb-dvd.c',
   'jobdict.c',

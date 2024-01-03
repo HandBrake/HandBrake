@@ -4,7 +4,7 @@
 #ifndef POWER_MANAGEMENT_H
 #define POWER_MANAGEMENT_H
 
-#include "ghbcompat.h"
+#include "compat.h"
 #include "settings.h"
 
 typedef enum {

@@ -37,7 +37,7 @@
 #include <sys/utsname.h>
 #endif
 
-#include "ghbcompat.h"
+#include "compat.h"
 
 #if defined(_ENABLE_GST)
 #include <gst/gst.h>

@@ -21,7 +21,7 @@
  *  Boston, MA  02110-1301, USA.
  */
 
-#include "ghbcompat.h"
+#include "compat.h"
 #include "application.h"
 #include "handbrake/handbrake.h"
 #include "settings.h"
