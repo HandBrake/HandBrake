@@ -32,6 +32,7 @@
 #include <math.h>
 
 #include "compat.h"
+#include "ghb-file-button.h"
 
 #include <glib/gstdio.h>
 #include <glib/gi18n.h>
@@ -1869,7 +1870,8 @@ update_default_destination(signal_user_data_t *ud)
 }
 
 G_MODULE_EXPORT void
-dest_dir_set_cb(GtkFileChooserButton *dest_chooser, signal_user_data_t *ud)
+dest_dir_set_cb (GhbFileButton *dest_chooser, GParamSpec *pspec,
+                 signal_user_data_t *ud)
 {
     const gchar *dest_file, *dest_dir;
     gchar *dest;
@@ -1917,7 +1919,7 @@ destination_response_cb(GtkFileChooserNative *chooser,
     {
         GFile *file;
         char *filename, *dirname;
-        GtkFileChooser *dest_chooser;
+        GhbFileButton *dest_chooser;
 
         file = gtk_file_chooser_get_file(GTK_FILE_CHOOSER (chooser));
         filename = g_file_get_path(file);
@@ -1925,8 +1927,8 @@ destination_response_cb(GtkFileChooserNative *chooser,
         dirname = g_path_get_dirname(filename);
         entry = (GtkEntry*)GHB_WIDGET(ud->builder, "dest_file");
         ghb_editable_set_text(entry, basename);
-        dest_chooser = GTK_FILE_CHOOSER(GHB_WIDGET(ud->builder, "dest_dir"));
-        ghb_file_chooser_set_initial_file(dest_chooser, dirname);
+        dest_chooser = GHB_FILE_BUTTON(GHB_WIDGET(ud->builder, "dest_dir"));
+        ghb_file_button_set_filename(dest_chooser, dirname);
         g_object_unref(file);
         g_free (dirname);
         g_free (basename);
