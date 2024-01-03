@@ -9,6 +9,7 @@ ghb_src = files(
   'chapters.c',
   'color-scheme.c',
   'compat.c',
+  'ghb-file-button.c',
   'hb-backend.c',
   'hb-dvd.c',
   'jobdict.c',
@@ -33,6 +34,7 @@ ui_dir = get_option('gtk4') ? 'ui-gtk4' : 'ui-gtk3'
 ui_files = files(
   ui_dir / 'menu.ui',
   ui_dir / 'ghb.ui',
+  ui_dir / 'ghb-file-button.ui',
 )
 
 config_h = configuration_data()

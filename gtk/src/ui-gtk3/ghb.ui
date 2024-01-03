@@ -7415,14 +7415,15 @@ Only one subtitle track can be burned! Since conflicts can occur, the first chos
               </packing>
             </child>
             <child>
-              <object class="GtkFileChooserButton" id="dest_dir">
+              <object class="GhbFileButton" id="dest_dir">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
                 <property name="tooltip-text" translatable="yes">Destination directory for your encode.</property>
                 <property name="action">select-folder</property>
-                <property name="local-only">False</property>
                 <property name="title" translatable="yes">Destination Directory</property>
-                <signal name="selection-changed" handler="dest_dir_set_cb" swapped="no"/>
+                <property name="accept-label" translatable="yes">Select</property>
+                <property name="width-request">200</property>
+                <signal name="notify::file" handler="dest_dir_set_cb" swapped="no"/>
               </object>
               <packing>
                 <property name="top-attach">0</property>
@@ -9630,14 +9631,12 @@ The source's character code is needed in order to perform this translation.</pro
               </packing>
             </child>
             <child>
-              <object class="GtkFileChooserButton" id="ImportFile">
+              <object class="GhbFileButton" id="ImportFile">
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
                 <property name="tooltip-text" translatable="yes">Select the SRT file to import.</property>
-                <property name="local-only">False</property>
                 <property name="hexpand">True</property>
                 <property name="title" translatable="yes">Import File</property>
-                <signal name="selection-changed" handler="import_file_changed_cb" swapped="no"/>
               </object>
               <packing>
                 <property name="top-attach">2</property>
