@@ -1,9 +1,9 @@
 $(eval $(call import.MODULE.defs,FDKAAC,fdkaac))
 $(eval $(call import.CONTRIB.defs,FDKAAC))
 
-FDKAAC.FETCH.url     = https://github.com/HandBrake/HandBrake-contribs/releases/download/contribs/fdk-aac-2.0.2.tar.gz
-FDKAAC.FETCH.url    += https://github.com/mstorsjo/fdk-aac/archive/v2.0.2.tar.gz
-FDKAAC.FETCH.sha256  = 7812b4f0cf66acda0d0fe4302545339517e702af7674dd04e5fe22a5ade16a90
+FDKAAC.FETCH.url     = https://github.com/HandBrake/HandBrake-contribs/releases/download/contribs/fdk-aac-2.0.3.tar.gz
+FDKAAC.FETCH.url    += https://github.com/mstorsjo/fdk-aac/archive/v2.0.3.tar.gz
+FDKAAC.FETCH.sha256  = e25671cd96b10bad896aa42ab91a695a9e573395262baed4e4a2ff178d6a3a78
 
 FDKAAC.CONFIGURE.bootstrap = rm -fr aclocal.m4 autom4te.cache configure; autoreconf -I m4 -fiv;
 
