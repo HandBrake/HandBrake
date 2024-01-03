@@ -5,7 +5,6 @@ src/ui-gtk3/ghb.ui
 src/audiohandler.c
 src/callbacks.c
 src/chapters.c
-src/ghb-dvd.c
 src/hb-backend.c
 src/main.c
 src/notifications.c

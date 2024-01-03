@@ -34,7 +34,7 @@
 #include "callbacks.h"
 #include "presets.h"
 #include "audiohandler.h"
-#include "ghb-dvd.h"
+#include "hb-dvd.h"
 #include "queuehandler.h"
 #include "title-add.h"
 

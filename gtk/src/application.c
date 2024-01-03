@@ -55,7 +55,7 @@
 #include "handbrake/handbrake.h"
 #include "renderer_button.h"
 #include "hb-backend.h"
-#include "ghb-dvd.h"
+#include "hb-dvd.h"
 #include "values.h"
 #include "icon_res.h"
 #include "callbacks.h"

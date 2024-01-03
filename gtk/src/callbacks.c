@@ -73,7 +73,7 @@
 #include "preview.h"
 #include "values.h"
 #include "hb-backend.h"
-#include "ghb-dvd.h"
+#include "hb-dvd.h"
 #include "libavutil/parseutils.h"
 
 
