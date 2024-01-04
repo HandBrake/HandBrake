@@ -1,0 +1,40 @@
+From 91422bdb9497e8484b3248f5ae7eb50d41e2555d Mon Sep 17 00:00:00 2001
+From: Oleg Oshmyan <chortos@inbox.lv>
+Date: Fri, 28 Jul 2023 00:59:59 +0300
+Subject: [PATCH] Plug a memory leak when adding a font on some platforms
+
+On macOS (with Core Text) and some versions of Windows (with DirectWrite)
+(specifically, Windows 10+ Win32 as well as all versions of WinRT/UWP),
+we read font metadata on our own via FreeType, filling implicit_meta in
+ass_font_provider_add_font. However, we forgot to free it upon successful
+font registration, leaking the memory allocated for the font name strings.
+
+The list of affected platforms would likely have expanded in the future,
+as we eventually intend to read font names on our own across the board.
+
+Leak introduced in commit 887e6cc50bfbe8fc354993682edc03c51203e2fc.
+
+As a quick fix, add the corresponding frees on the successful path.
+Ideally, we should refactor this function to avoid copying any freshly
+allocated memory to begin with (and thus to avoid the need to free it).
+
+Fixes: https://github.com/libass/libass/issues/699
+---
+ libass/ass_fontselect.c | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/libass/ass_fontselect.c b/libass/ass_fontselect.c
+index df073366c..6d588ce0b 100644
+--- a/libass/ass_fontselect.c
++++ b/libass/ass_fontselect.c
+@@ -534,6 +534,10 @@ ass_font_provider_add_font(ASS_FontProvider *provider,
+     info->provider = provider;
+ 
+     selector->n_font++;
++
++    free_font_info(&implicit_meta);
++    free(implicit_meta.postscript_name);
++
+     return true;
+ 
+ error:
