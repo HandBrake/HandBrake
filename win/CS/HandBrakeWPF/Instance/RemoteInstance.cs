@@ -42,6 +42,7 @@ namespace HandBrakeWPF.Instance
         private Timer encodePollTimer;
         private int retryCount;
         private bool encodeCompleteFired;
+        private object lockObject = new object();
 
         public RemoteInstance(ILog logService, IUserSettingService userSettingService, IPortService portService) : base(logService, userSettingService, portService)
         {
@@ -116,7 +117,10 @@ namespace HandBrakeWPF.Instance
                 {
                     try
                     {
-                        this.PollEncodeProgress();
+                        lock (lockObject)
+                        {
+                            this.PollEncodeProgress();
+                        }
                     }
                     catch (Exception exc)
                     {
@@ -189,9 +193,14 @@ namespace HandBrakeWPF.Instance
 
                 response = await this.MakeHttpGetRequest("PollEncodeProgress");
             }
-            catch (Exception)
+            catch (Exception e)
             {
                 retryCount = this.retryCount + 1;
+
+                if (retryCount > 5)
+                {
+                    this.ServiceLogMessage("Worker: Final attempt to communicate failed: " + e);
+                }
             }
 
             if (response == null || !response.WasSuccessful)
