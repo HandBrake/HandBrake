@@ -1,10 +1,15 @@
 # List of source files containing translatable strings.
-data/fr.handbrake.ghb.desktop.in
+
+# UI files
 src/ui-gtk3/menu.ui
 src/ui-gtk3/ghb.ui
+src/ui-gtk3/ghb-file-button.ui
+
+# Source code
 src/audiohandler.c
 src/callbacks.c
 src/chapters.c
+src/ghb-chapter-row.c
 src/ghb-file-button.c
 src/hb-backend.c
 src/main.c
@@ -15,3 +20,6 @@ src/queuehandler.c
 src/subtitlehandler.c
 src/title-add.c
 src/videohandler.c
+
+# Other files
+data/fr.handbrake.ghb.desktop.in
