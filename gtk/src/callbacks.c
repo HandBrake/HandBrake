@@ -5400,7 +5400,7 @@ GtkFileFilter *ghb_add_file_filter(GtkFileChooser *chooser,
 static void
 add_video_file_filters (GtkFileChooser *chooser, signal_user_data_t *ud)
 {
-    ghb_add_file_filter(chooser, ud, _("All Files"), "SourceFilterAll");
+    ghb_add_file_filter(chooser, ud, _("All Files"), "FilterAll");
     ghb_add_file_filter(chooser, ud, _("Video"), "SourceFilterVideo");
     ghb_add_file_filter(chooser, ud, g_content_type_get_description("video/mp4"), "SourceFilterMP4");
     ghb_add_file_filter(chooser, ud, g_content_type_get_description("video/mp2t"), "SourceFilterTS");
