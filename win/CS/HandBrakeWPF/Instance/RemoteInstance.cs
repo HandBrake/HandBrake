@@ -93,18 +93,7 @@ namespace HandBrakeWPF.Instance
 
         public JsonState GetProgress()
         {
-            Task<ServerResponse> response = this.MakeHttpGetRequest("PollEncodeProgress");
-            response.Wait();
-
-            if (!response.Result.WasSuccessful)
-            {
-                return null;
-            }
-
-            string statusJson = response.Result?.JsonResponse;
-
-            JsonState state = JsonSerializer.Deserialize<JsonState>(statusJson, JsonSettings.Options);
-            return state;
+            throw new NotImplementedException("Not Used");
         }
 
         private void MonitorEncodeProgress()

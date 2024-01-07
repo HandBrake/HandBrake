@@ -324,7 +324,7 @@ namespace HandBrake.Interop.Interop
         /// </returns>
         public JsonState GetProgress()
         {
-            lock (this.lastProgressJson)
+            lock (this.progressJsonLockObj)
             {
                 return this.lastProgressJson ?? null;
             }

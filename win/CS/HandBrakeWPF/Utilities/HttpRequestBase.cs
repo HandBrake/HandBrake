@@ -32,7 +32,7 @@ namespace HandBrakeWPF.Utilities
                 throw new InvalidOperationException("No Post Values Found.");
             }
 
-            using (HttpClient client = new HttpClient())
+            using (HttpClient client = new HttpClient() { Timeout = TimeSpan.FromSeconds(20) })
             {
                 HttpRequestMessage requestMessage = new HttpRequestMessage(HttpMethod.Post, this.serverUrl + urlPath);
                 if (!string.IsNullOrEmpty(this.base64Token))
@@ -59,7 +59,7 @@ namespace HandBrakeWPF.Utilities
 
         public async Task<ServerResponse> MakeHttpGetRequest(string urlPath)
         {
-            using (HttpClient client = new HttpClient())
+            using (HttpClient client = new HttpClient { Timeout = TimeSpan.FromSeconds(20) })
             {
                 HttpRequestMessage requestMessage = new HttpRequestMessage(HttpMethod.Get, this.serverUrl + urlPath);
                 if (!string.IsNullOrEmpty(this.base64Token))
