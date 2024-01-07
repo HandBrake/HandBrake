@@ -1,15 +1,15 @@
-From bd3e5a9d0a3e5e909881b2ced8e0824d3d2bb01a Mon Sep 17 00:00:00 2001
+From db0cd1187ba72e2a140772e579e377f93575a418 Mon Sep 17 00:00:00 2001
 From: Damiano Galassi <damiog@gmail.com>
-Date: Fri, 3 Nov 2023 13:46:20 +0100
-Subject: [PATCH 2/2] avformat/mov: add support for 'amve' ambient viewing
+Date: Sat, 6 Jan 2024 15:17:20 +0100
+Subject: [PATCH] avformat/mov: add support for 'amve' ambient viewing
  environment box. As defined in ISOBMFF (ISO/IEC 14496-12) document.
 
 ---
  libavformat/dump.c   | 15 +++++++++++++++
  libavformat/isom.h   |  3 +++
  libavformat/mov.c    | 35 +++++++++++++++++++++++++++++++++++
- libavformat/movenc.c | 22 ++++++++++++++++++++++
- 4 files changed, 75 insertions(+)
+ libavformat/movenc.c | 26 ++++++++++++++++++++++++++
+ 4 files changed, 79 insertions(+)
 
 diff --git a/libavformat/dump.c b/libavformat/dump.c
 index c0868a1bb3..1058829cc7 100644
@@ -73,10 +73,10 @@ index 3d375d7a46..46247b0ec7 100644
      uint32_t format;
  
 diff --git a/libavformat/mov.c b/libavformat/mov.c
-index 2f29487beb..270b306711 100644
+index 606fe22f71..a6dcaca2f4 100644
 --- a/libavformat/mov.c
 +++ b/libavformat/mov.c
-@@ -6030,6 +6030,31 @@ static int mov_read_clli(MOVContext *c, AVIOContext *pb, MOVAtom atom)
+@@ -6046,6 +6046,31 @@ static int mov_read_clli(MOVContext *c, AVIOContext *pb, MOVAtom atom)
      return 0;
  }
  
@@ -108,7 +108,7 @@ index 2f29487beb..270b306711 100644
  static int mov_read_st3d(MOVContext *c, AVIOContext *pb, MOVAtom atom)
  {
      AVStream *st;
-@@ -7950,6 +7975,7 @@ static const MOVParseTableEntry mov_default_parse_table[] = {
+@@ -7966,6 +7991,7 @@ static const MOVParseTableEntry mov_default_parse_table[] = {
  { MKTAG('p','c','m','C'), mov_read_pcmc }, /* PCM configuration box */
  { MKTAG('p','i','t','m'), mov_read_pitm },
  { MKTAG('e','v','c','C'), mov_read_glbl },
@@ -116,7 +116,7 @@ index 2f29487beb..270b306711 100644
  { 0, NULL }
  };
  
-@@ -8420,6 +8446,7 @@ static int mov_read_close(AVFormatContext *s)
+@@ -8436,6 +8462,7 @@ static int mov_read_close(AVFormatContext *s)
          av_freep(&sc->spherical);
          av_freep(&sc->mastering);
          av_freep(&sc->coll);
@@ -124,7 +124,7 @@ index 2f29487beb..270b306711 100644
      }
  
      av_freep(&mov->dv_demux);
-@@ -8781,6 +8808,14 @@ static int mov_read_header(AVFormatContext *s)
+@@ -8797,6 +8824,14 @@ static int mov_read_header(AVFormatContext *s)
  
                  sc->coll = NULL;
              }
@@ -140,10 +140,10 @@ index 2f29487beb..270b306711 100644
          }
      }
 diff --git a/libavformat/movenc.c b/libavformat/movenc.c
-index e39f1ac987..41a87f5168 100644
+index e39f1ac987..fca16c5475 100644
 --- a/libavformat/movenc.c
 +++ b/libavformat/movenc.c
-@@ -2226,6 +2226,27 @@ static int mov_write_mdcv_tag(AVIOContext *pb, MOVTrack *track)
+@@ -2226,6 +2226,31 @@ static int mov_write_mdcv_tag(AVIOContext *pb, MOVTrack *track)
      return 32;
  }
  
@@ -151,11 +151,15 @@ index e39f1ac987..41a87f5168 100644
 +{
 +    const int illuminance_den = 10000;
 +    const int ambient_den = 50000;
-+    const uint8_t *side_data;
-+    const AVAmbientViewingEnvironment *ambient;
++    const AVPacketSideData *side_data;
++    const AVAmbientViewingEnvironment *ambient = NULL;
 +
-+    side_data = av_stream_get_side_data(track->st, AV_PKT_DATA_AMBIENT_VIEWING_ENVIRONMENT, NULL);
-+    ambient = (const AVAmbientViewingEnvironment*)side_data;
++    side_data = av_packet_side_data_get(track->st->codecpar->coded_side_data,
++                                        track->st->codecpar->nb_coded_side_data,
++                                        AV_PKT_DATA_AMBIENT_VIEWING_ENVIRONMENT);
++
++    if (side_data)
++        ambient = (const AVAmbientViewingEnvironment*)side_data->data;
 +    if (!ambient || !ambient->ambient_illuminance.num) {
 +        return 0;
 +    }
@@ -171,7 +175,7 @@ index e39f1ac987..41a87f5168 100644
  static void find_compressor(char * compressor_name, int len, MOVTrack *track)
  {
      AVDictionaryEntry *encoder;
-@@ -2437,6 +2458,7 @@ static int mov_write_video_tag(AVFormatContext *s, AVIOContext *pb, MOVMuxContex
+@@ -2437,6 +2462,7 @@ static int mov_write_video_tag(AVFormatContext *s, AVIOContext *pb, MOVMuxContex
      if (track->mode == MODE_MOV || track->mode == MODE_MP4) {
          mov_write_clli_tag(pb, track);
          mov_write_mdcv_tag(pb, track);
