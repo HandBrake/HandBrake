@@ -3,7 +3,7 @@
   <id>fr.handbrake.ghb.Plugin.IntelMediaSDK</id>
   <extends>fr.handbrake.ghb</extends>
   <name>IntelMediaSDK plugin for HandBrake</name>
-  <summary>Provides Intel QSV encoding options.</summary>
+  <summary>Provides Intel QSV encoding options</summary>
   <description>
     <p>
     QSV uses dedicated media processing features embedded in Intel graphics 
