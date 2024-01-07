@@ -11,6 +11,7 @@ ghb_src = files(
   'compat.c',
   'ghb-chapter-row.c',
   'ghb-file-button.c',
+  'ghb-queue-row.c',
   'hb-backend.c',
   'hb-dvd.c',
   'jobdict.c',
@@ -37,6 +38,7 @@ ui_files = files(
   ui_dir / 'ghb.ui',
   ui_dir / 'ghb-chapter-row.ui',
   ui_dir / 'ghb-file-button.ui',
+  ui_dir / 'ghb-queue-row.ui',
 )
 
 config_h = configuration_data()
