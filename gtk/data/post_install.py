@@ -8,10 +8,16 @@ datadir = sys.argv[1]
 
 # Packaging tools define DESTDIR and this isn't needed for them
 if 'DESTDIR' not in os.environ:
-    print('Updating icon cache...')
-    subprocess.call(['gtk-update-icon-cache', '-tf',
-                     os.path.join(datadir, 'icons', 'hicolor')])
+    try:
+        print('Updating icon cache...')
+        subprocess.run(['gtk-update-icon-cache', '-tf',
+                        os.path.join(datadir, 'icons', 'hicolor')])
+    except:
+        print('gtk-update-icon-cache was not found in PATH.')
 
-    print('Updating desktop database...')
-    subprocess.call(['update-desktop-database',
-                     os.path.join(datadir, 'applications')])
+    try:
+        print('Updating desktop database...')
+        subprocess.run(['update-desktop-database',
+                        os.path.join(datadir, 'applications')])
+    except:
+        print('update-desktop-database was not found in PATH.')
