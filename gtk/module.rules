@@ -25,6 +25,9 @@ gtk.reconfigure:
 gtk.build: $(GTK.CONFIGURE.stamp) | $(GTK.setup)
 	+$(NINJA.exe) -C $(GTK.build/)
 
+gtk.test:
+	$(MESON.exe) test -C $(GTK.build/)
+
 gtk.install-strip:
 	$(MESON.exe) install -C $(GTK.build/) --strip
 

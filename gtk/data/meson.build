@@ -11,7 +11,7 @@ marshalers = gnome.genmarshal('marshalers',
   prefix: 'ghb_marshal',
   extra_args: '--quiet')
 
-i18n.merge_file(
+desktop = i18n.merge_file(
   input: 'fr.handbrake.ghb.desktop.in',
   output: 'fr.handbrake.ghb.desktop',
   install: host_machine.system() not in ['windows', 'haiku'],
@@ -35,6 +35,13 @@ metainfo = i18n.merge_file(
   install_dir: get_option('datadir') / 'metainfo',
   po_dir: po_dir,
   type: 'xml')
+
+appstreamcli = find_program('appstreamcli', required: false, disabler: true)
+test('Validate metainfo file', appstreamcli,
+  args: ['validate', '--strict', '--no-net', '--explain', metainfo])
+
+desktop_utils = find_program('desktop-file-validate', required: false, disabler: true)
+test('Validate desktop file', desktop_utils, args: desktop)
 
 if host_machine.system() not in ['windows', 'haiku']
   meson.add_install_script('post_install.py',
