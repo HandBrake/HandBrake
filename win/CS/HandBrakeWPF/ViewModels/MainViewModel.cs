@@ -1876,6 +1876,8 @@ namespace HandBrakeWPF.ViewModels
                         }
                     }
 
+                    this.ReGenerateAutoName();
+
                     return true;
                 }
             }
