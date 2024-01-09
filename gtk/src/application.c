@@ -1,26 +1,29 @@
-/* -*- Mode: C; indent-tabs-mode: nil; c-basic-offset: 4; tab-width: 4 -*- */
-/*
- * main.c
- * Copyright (C) John Stebbins 2008-2024 <stebbins@stebbins>
+/* application.c
  *
- * main.c is free software.
+ * Copyright (C) 2008-2024 John Stebbins <stebbins@stebbins>
  *
- * You may redistribute it and/or modify it under the terms of the
- * GNU General Public License version 2, as published by the Free Software
- * Foundation.
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2,
+ * as published by the Free Software Foundation.
  *
- * main.c is distributed in the hope that it will be useful,
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
- * See the GNU General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with main.c.  If not, write to:
- *  The Free Software Foundation, Inc.,
- *  51 Franklin Street, Fifth Floor
- *  Boston, MA  02110-1301, USA.
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * SPDX-License-Identifier: GPL-2.0-only
  */
 
+#define G_LOG_DOMAIN "ghb"
+
+#include "config.h"
+
+#include <glib/gi18n.h>
+
+#include "application.h"
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <unistd.h>
@@ -33,8 +36,6 @@
 #ifndef _WIN32
 #include <sys/utsname.h>
 #endif
-
-#include "config.h"
 
 #include "ghbcompat.h"
 
@@ -69,27 +70,26 @@
 #include "color-scheme.h"
 #include "power-manager.h"
 
+struct _GhbApplication
+{
+    GtkApplication parent_instance;
+    char *app_cmd;
+    signal_user_data_t *ud;
+};
 
-/*
- * Standard gettext macros.
- */
-#ifndef ENABLE_NLS
-#  define textdomain(String) (String)
-#  define gettext(String) (String)
-#  define dgettext(Domain,Message) (Message)
-#  define dcgettext(Domain,Message,Type) (Message)
-#  define bindtextdomain(Domain,Directory) (Domain)
-#  define _(String) (String)
-#  define N_(String) (String)
-#endif
+G_DEFINE_TYPE (GhbApplication, ghb_application, GTK_TYPE_APPLICATION);
 
 #define BUILDER_NAME "ghb"
 
+static char *dvd_device = NULL;
+static char *arg_preset = NULL;
+static gboolean redirect_io = TRUE;
+
 static GtkBuilder*
-create_builder_or_die(const gchar * name)
+create_builder_or_die (const gchar *name)
 {
     GtkBuilder *xml;
-    GError *error = NULL;
+    g_autoptr(GError) error = NULL;
 
     ghb_log_func();
     xml = gtk_builder_new();
@@ -101,12 +101,11 @@ create_builder_or_die(const gchar * name)
     {
         g_error("Unable to load ui file: %s", error->message);
     }
-
     return xml;
 }
 
 static GCallback
-self_symbol_lookup(const gchar * symbol_name)
+self_symbol_lookup (const gchar *symbol_name)
 {
     static GModule *module = NULL;
     gpointer symbol = NULL;
@@ -115,19 +114,13 @@ self_symbol_lookup(const gchar * symbol_name)
         module = g_module_open(NULL, 0);
 
     g_module_symbol(module, symbol_name, &symbol);
-    return (GCallback) symbol;
+    return G_CALLBACK(symbol);
 }
 
-
 static void
-MyConnect(
-    GtkBuilder *builder,
-    GObject *object,
-    const gchar *signal_name,
-    const gchar *handler_name,
-    GObject *connect_object,
-    GConnectFlags flags,
-    gpointer user_data)
+MyConnect (GtkBuilder *builder, GObject *object, const char *signal_name,
+           const char *handler_name, GObject *connect_object,
+           GConnectFlags flags, gpointer user_data)
 {
     GCallback callback;
 
@@ -161,29 +154,6 @@ MyConnect(
         }
     }
 }
-
-#if 0
-// If you should ever need to change the font for the running application..
-// Ugly but effective.
-void
-change_font(GtkWidget *widget, gpointer data)
-{
-    PangoFontDescription *font_desc;
-    gchar *font = (gchar*)data;
-    const gchar *name;
-
-    font_desc = pango_font_description_from_string(font);
-    if (font_desc == NULL) exit(1);
-    gtk_widget_modify_font(widget, font_desc);
-    name = ghb_get_setting_key(widget);
-    g_debug("changing font for widget %s", name);
-    if (GTK_IS_CONTAINER(widget))
-    {
-        gtk_container_foreach((GtkContainer*)widget, change_font, data);
-    }
-}
-    //gtk_container_foreach((GtkContainer*)window, change_font, "sans 20");
-#endif
 
 // Create and bind the tree model to the tree view for the audio track list
 // Also, connect up the signal that lets us know the selection has changed
@@ -229,13 +199,13 @@ bind_audio_tree_model(signal_user_data_t *ud)
     gtk_tree_view_column_set_expand(column, TRUE);
     gtk_tree_view_column_set_max_width(column, 400);
 
-    column = gtk_tree_view_column_new_with_attributes(
-                                    _(" "), edit_cell, "icon-name", 3, NULL);
+    column = gtk_tree_view_column_new_with_attributes(_(" "), edit_cell,
+                                                      "icon-name", 3, NULL);
     //gtk_tree_view_column_set_min_width(column, 24);
     gtk_tree_view_append_column(treeview, GTK_TREE_VIEW_COLUMN(column));
 
-    column = gtk_tree_view_column_new_with_attributes(
-                                    _(" "), delete_cell, "icon-name", 4, NULL);
+    column = gtk_tree_view_column_new_with_attributes(_(" "), delete_cell,
+                                                      "icon-name", 4, NULL);
     //gtk_tree_view_column_set_min_width(column, 24);
     gtk_tree_view_append_column(treeview, GTK_TREE_VIEW_COLUMN(column));
 
@@ -290,12 +260,12 @@ bind_subtitle_tree_model(signal_user_data_t *ud)
     gtk_tree_view_column_set_expand(column, TRUE);
     gtk_tree_view_column_set_max_width(column, 400);
 
-    column = gtk_tree_view_column_new_with_attributes(
-                                    _(" "), edit_cell, "icon-name", 3, NULL);
+    column = gtk_tree_view_column_new_with_attributes(_(" "), edit_cell,
+                                                      "icon-name", 3, NULL);
     gtk_tree_view_append_column(treeview, GTK_TREE_VIEW_COLUMN(column));
 
-    column = gtk_tree_view_column_new_with_attributes(
-                                    _(" "), delete_cell, "icon-name", 4, NULL);
+    column = gtk_tree_view_column_new_with_attributes(_(" "), delete_cell,
+                                                      "icon-name", 4, NULL);
     gtk_tree_view_append_column(treeview, GTK_TREE_VIEW_COLUMN(column));
 
     g_signal_connect(selection, "changed", G_CALLBACK(subtitle_list_selection_changed_cb), ud);
@@ -316,7 +286,7 @@ static GtkTargetEntry presets_drag_entries[] = {
 // Create and bind the tree model to the tree view for the preset list
 // Also, connect up the signal that lets us know the selection has changed
 static void
-bind_presets_tree_model(signal_user_data_t *ud)
+bind_presets_tree_model (signal_user_data_t *ud)
 {
     GtkCellRenderer *cell;
     GtkTreeViewColumn *column;
@@ -437,35 +407,9 @@ clean_old_logs (void)
                 int pid;
 
                 sscanf(file, "Activity.log.%d", &pid);
-
-#if 0
-                int fd, lock = 1;
-
-                path = g_strdup_printf("%s/ghb.pid.%d", config, pid);
-                if (g_file_test(path, G_FILE_TEST_EXISTS))
-                {
-                    fd = open(path, O_RDWR);
-                    if (fd >= 0)
-                    {
-                        lock = lockf(fd, F_TLOCK, 0);
-                    }
-                    g_free(path);
-                    close(fd);
-                    if (lock == 0)
-                    {
-                        path = g_strdup_printf("%s/%s", config, file);
-                        g_unlink(path);
-                        g_free(path);
-                    }
-                }
-                else
-#endif
-                {
-                    //g_free(path);
-                    path = g_strdup_printf("%s/%s", config, file);
-                    g_unlink(path);
-                    g_free(path);
-                }
+                path = g_strdup_printf("%s/%s", config, file);
+                g_unlink(path);
+                g_free(path);
             }
             file = g_dir_read_name(gdir);
         }
@@ -476,12 +420,15 @@ clean_old_logs (void)
 }
 
 static void
-IoRedirect(signal_user_data_t *ud)
+io_redirect (signal_user_data_t *ud)
 {
     GIOChannel *channel;
     gint pfd[2];
     gchar *config, *path, *str;
     pid_t pid;
+
+    if (!redirect_io)
+        return;
 
     // I'm opening a pipe and attaching the writer end to stderr
     // The reader end will be polled by main event loop and I'll get
@@ -533,26 +480,6 @@ IoRedirect(signal_user_data_t *ud)
     g_io_channel_unref(channel);
 }
 
-static gchar *dvd_device = NULL;
-static gchar *arg_preset = NULL;
-static gboolean ghb_debug = FALSE;
-static gchar *arg_config_dir = NULL;
-#if defined(_WIN32)
-static gboolean win32_console = FALSE;
-#endif
-
-static GOptionEntry entries[] =
-{
-    { "device", 'd', 0, G_OPTION_ARG_FILENAME, &dvd_device, N_("The device or file to encode"), NULL },
-    { "preset", 'p', 0, G_OPTION_ARG_STRING, &arg_preset, N_("The preset values to use for encoding"), NULL },
-    { "debug",  'x', 0, G_OPTION_ARG_NONE, &ghb_debug, N_("Spam a lot"), NULL },
-    { "config", 'o', 0, G_OPTION_ARG_STRING, &arg_config_dir, N_("The path to override user config dir"), NULL },
-#if defined(_WIN32)
-    { "console",'c', 0, G_OPTION_ARG_NONE, &win32_console, N_("Open a console for debug output"), NULL },
-#endif
-    { NULL }
-};
-
 G_MODULE_EXPORT void drive_changed_cb(GVolumeMonitor *gvm, GDrive *gd, signal_user_data_t *ud);
 
 #if defined(_WIN32)
@@ -577,7 +504,7 @@ watch_volumes(signal_user_data_t *ud)
     GVolumeMonitor *gvm;
     gvm = g_volume_monitor_get();
 
-    g_signal_connect(gvm, "drive-changed", (GCallback)drive_changed_cb, ud);
+    g_signal_connect(gvm, "drive-changed", G_CALLBACK(drive_changed_cb), ud);
 #else
     GdkWindow *window;
     GtkWidget *widget;
@@ -593,233 +520,58 @@ G_MODULE_EXPORT void plot_changed_cb(GtkWidget *widget, signal_user_data_t *ud);
 G_MODULE_EXPORT void position_overlay_cb(GtkWidget *widget, signal_user_data_t *ud);
 G_MODULE_EXPORT void preview_hud_size_alloc_cb(GtkWidget *widget, signal_user_data_t *ud);
 
-// Important: any widgets named in CSS must have their widget names set
-// below before setting CSS properties on them.
-const gchar *MyCSS =
-"@define-color black  #000000;"
-"@define-color gray18 #2e2e2e;"
-"@define-color gray22 #383838;"
-"@define-color gray26 #424242;"
-"@define-color gray32 #525252;"
-"@define-color gray40 #666666;"
-"@define-color gray46 #757575;"
-"@define-color white  #ffffff;"
+#define GHB_DECLARE_ACTION_CB(a) G_MODULE_EXPORT void \
+    (a)(GSimpleAction *action, GVariant *param, gpointer ud)
 
-".progress-overlay"
-"{"
-"    min-height:1px;"
-"}"
+GHB_DECLARE_ACTION_CB(dvd_source_activate_cb);
+GHB_DECLARE_ACTION_CB(source_action_cb);
+GHB_DECLARE_ACTION_CB(source_dir_action_cb);
+GHB_DECLARE_ACTION_CB(destination_action_cb);
+GHB_DECLARE_ACTION_CB(preferences_action_cb);
+GHB_DECLARE_ACTION_CB(quit_action_cb);
+GHB_DECLARE_ACTION_CB(title_add_action_cb);
+GHB_DECLARE_ACTION_CB(title_add_multiple_action_cb);
+GHB_DECLARE_ACTION_CB(title_add_all_action_cb);
+GHB_DECLARE_ACTION_CB(queue_start_action_cb);
+GHB_DECLARE_ACTION_CB(queue_pause_action_cb);
+GHB_DECLARE_ACTION_CB(queue_play_file_action_cb);
+GHB_DECLARE_ACTION_CB(queue_export_action_cb);
+GHB_DECLARE_ACTION_CB(queue_import_action_cb);
+GHB_DECLARE_ACTION_CB(queue_move_top_action_cb);
+GHB_DECLARE_ACTION_CB(queue_move_bottom_action_cb);
+GHB_DECLARE_ACTION_CB(queue_open_source_action_cb);
+GHB_DECLARE_ACTION_CB(queue_open_dest_action_cb);
+GHB_DECLARE_ACTION_CB(queue_open_log_dir_action_cb);
+GHB_DECLARE_ACTION_CB(queue_open_log_action_cb);
+GHB_DECLARE_ACTION_CB(queue_delete_all_action_cb);
+GHB_DECLARE_ACTION_CB(queue_delete_complete_action_cb);
+GHB_DECLARE_ACTION_CB(queue_delete_action_cb);
+GHB_DECLARE_ACTION_CB(queue_reset_fail_action_cb);
+GHB_DECLARE_ACTION_CB(queue_reset_all_action_cb);
+GHB_DECLARE_ACTION_CB(queue_reset_action_cb);
+GHB_DECLARE_ACTION_CB(queue_edit_action_cb);
+GHB_DECLARE_ACTION_CB(show_presets_action_cb);
+GHB_DECLARE_ACTION_CB(hbfd_action_cb);
+GHB_DECLARE_ACTION_CB(show_queue_action_cb);
+GHB_DECLARE_ACTION_CB(show_preview_action_cb);
+GHB_DECLARE_ACTION_CB(show_activity_action_cb);
+GHB_DECLARE_ACTION_CB(preset_save_action_cb);
+GHB_DECLARE_ACTION_CB(preset_save_as_action_cb);
+GHB_DECLARE_ACTION_CB(preset_rename_action_cb);
+GHB_DECLARE_ACTION_CB(preset_remove_action_cb);
+GHB_DECLARE_ACTION_CB(preset_default_action_cb);
+GHB_DECLARE_ACTION_CB(preset_export_action_cb);
+GHB_DECLARE_ACTION_CB(preset_import_action_cb);
+GHB_DECLARE_ACTION_CB(presets_reload_action_cb);
+GHB_DECLARE_ACTION_CB(preview_fullscreen_action_cb);
+GHB_DECLARE_ACTION_CB(about_action_cb);
+GHB_DECLARE_ACTION_CB(guide_action_cb);
+GHB_DECLARE_ACTION_CB(preset_select_action_cb);
+GHB_DECLARE_ACTION_CB(preset_reload_action_cb);
+GHB_DECLARE_ACTION_CB(chapters_export_action_cb);
+GHB_DECLARE_ACTION_CB(chapters_import_action_cb);
 
-".progress-overlay trough"
-"{"
-"    border-radius: 0px;"
-"    border-color: transparent;"
-"    border-width: 1px 0px;"
-"    min-height: 3px;"
-"}"
-
-".progress-overlay progress"
-"{"
-"    border-radius: 0px;"
-"    border-width: 1px;"
-"    min-height: 3px;"
-"}"
-
-".ghb-preview-hud"
-"{"
-"    border-radius: 16px;"
-"    border-width: 1px;"
-"}"
-
-".ghb-preview-image-frame"
-"{"
-"    background-color: black;"
-"}"
-
-"textview"
-"{"
-"    padding: 5px 5px 5px 5px;"
-"}"
-
-".entry"
-"{"
-"    margin: 0px 5px 0px 5px;"
-"    padding: 0px 0px 0px 0px;"
-"}"
-
-"stackswitcher button.text-button"
-"{"
-"    min-width: 50px;"
-"}"
-
-".ghb-monospace"
-"{"
-"    font-family: monospace;"
-"    font-size: 8pt;"
-"    font-weight: 300;"
-"}"
-
-".row:not(:first-child)"
-"{"
-"    border-top: 1px solid transparent; "
-"    border-bottom: 1px solid transparent; "
-"}"
-".row:first-child"
-"{"
-"    border-top: 1px solid transparent; "
-"    border-bottom: 1px solid transparent; "
-"}"
-".row:last-child"
-"{"
-"    border-top: 1px solid transparent; "
-"    border-bottom: 1px solid transparent; "
-"}"
-".row.drag-icon"
-"{"
-"    background: white; "
-"    border: 1px solid black; "
-"}"
-".row.drag-row"
-"{"
-"    color: gray; "
-"    background: alpha(gray,0.2); "
-"}"
-".row.drag-row.drag-hover"
-"{"
-"    border-top: 1px solid #4e9a06; "
-"    border-bottom: 1px solid #4e9a06; "
-"}"
-".row.drag-hover image, "
-".row.drag-hover label"
-"{"
-"    color: #4e9a06; "
-"}"
-".row.drag-hover-top"
-"{"
-"    border-top: 1px solid #4e9a06; "
-"}"
-".row.drag-hover-bottom"
-"{"
-"    border-bottom: 1px solid #4e9a06; "
-"}"
-#if !GTK_CHECK_VERSION(3, 24, 0)
-"toolbar"
-"{"
-"    -gtk-icon-style: symbolic; "
-"}"
-#endif
-;
-
-extern G_MODULE_EXPORT void status_icon_query_tooltip_cb(void);
-
-extern G_MODULE_EXPORT void
-ghb_shutdown_cb(GApplication * app, signal_user_data_t *ud)
-{
-}
-
-G_MODULE_EXPORT void
-dvd_source_activate_cb(GSimpleAction *action, GVariant *param, gpointer ud);
-G_MODULE_EXPORT void
-source_action_cb(GSimpleAction *action, GVariant *param, gpointer ud);
-G_MODULE_EXPORT void
-source_dir_action_cb(GSimpleAction *action, GVariant *param, gpointer ud);
-G_MODULE_EXPORT void
-destination_action_cb(GSimpleAction *action, GVariant *param, gpointer ud);
-G_MODULE_EXPORT void
-preferences_action_cb(GSimpleAction *action, GVariant *param, gpointer ud);
-G_MODULE_EXPORT void
-quit_action_cb(GSimpleAction *action, GVariant *param, gpointer ud);
-G_MODULE_EXPORT void
-title_add_action_cb(GSimpleAction *action, GVariant *param, gpointer ud);
-G_MODULE_EXPORT void
-title_add_multiple_action_cb(GSimpleAction *action, GVariant *param, gpointer ud);
-G_MODULE_EXPORT void
-title_add_all_action_cb(GSimpleAction *action, GVariant *param, gpointer ud);
-G_MODULE_EXPORT void
-queue_start_action_cb(GSimpleAction *action, GVariant *param, gpointer ud);
-G_MODULE_EXPORT void
-queue_pause_action_cb(GSimpleAction *action, GVariant *param, gpointer ud);
-G_MODULE_EXPORT void
-queue_play_file_action_cb(GSimpleAction *action, GVariant *param, gpointer ud);
-G_MODULE_EXPORT void
-queue_export_action_cb(GSimpleAction *action, GVariant *param, gpointer ud);
-G_MODULE_EXPORT void
-queue_import_action_cb(GSimpleAction *action, GVariant *param, gpointer ud);
-G_MODULE_EXPORT void
-queue_move_top_action_cb(GSimpleAction *action, GVariant *param, gpointer ud);
-G_MODULE_EXPORT void
-queue_move_bottom_action_cb(GSimpleAction *action, GVariant *param, gpointer ud);
-G_MODULE_EXPORT void
-queue_open_source_action_cb(GSimpleAction *action, GVariant *param, gpointer ud);
-G_MODULE_EXPORT void
-queue_open_dest_action_cb(GSimpleAction *action, GVariant *param, gpointer ud);
-G_MODULE_EXPORT void
-queue_open_log_dir_action_cb(GSimpleAction *action, GVariant *param, gpointer ud);
-G_MODULE_EXPORT void
-queue_open_log_action_cb(GSimpleAction *action, GVariant *param, gpointer ud);
-G_MODULE_EXPORT void
-queue_delete_all_action_cb(GSimpleAction *action, GVariant *param,
-                           gpointer ud);
-G_MODULE_EXPORT void
-queue_delete_complete_action_cb(GSimpleAction *action, GVariant *param,
-                                gpointer ud);
-G_MODULE_EXPORT void
-queue_delete_action_cb(GSimpleAction *action, GVariant *param,
-                                gpointer ud);
-G_MODULE_EXPORT void
-queue_reset_fail_action_cb(GSimpleAction *action, GVariant *param,
-                           gpointer ud);
-G_MODULE_EXPORT void
-queue_reset_all_action_cb(GSimpleAction *action, GVariant *param,
-                          gpointer ud);
-G_MODULE_EXPORT void
-queue_reset_action_cb(GSimpleAction *action, GVariant *param,
-                      gpointer ud);
-G_MODULE_EXPORT void
-queue_edit_action_cb(GSimpleAction *action, GVariant *param,
-                     gpointer ud);
-G_MODULE_EXPORT void
-show_presets_action_cb(GSimpleAction *action, GVariant *value, gpointer ud);
-G_MODULE_EXPORT void
-hbfd_action_cb(GSimpleAction *action, GVariant *value, gpointer ud);
-G_MODULE_EXPORT void
-show_queue_action_cb(GSimpleAction *action, GVariant *value, gpointer ud);
-G_MODULE_EXPORT void
-show_preview_action_cb(GSimpleAction *action, GVariant *value, gpointer ud);
-G_MODULE_EXPORT void
-show_activity_action_cb(GSimpleAction *action, GVariant *value, gpointer ud);
-G_MODULE_EXPORT void
-preset_save_action_cb(GSimpleAction *action, GVariant *param, gpointer ud);
-G_MODULE_EXPORT void
-preset_save_as_action_cb(GSimpleAction *action, GVariant *param, gpointer ud);
-G_MODULE_EXPORT void
-preset_rename_action_cb(GSimpleAction *action, GVariant *param, gpointer ud);
-G_MODULE_EXPORT void
-preset_remove_action_cb(GSimpleAction *action, GVariant *param, gpointer ud);
-G_MODULE_EXPORT void
-preset_default_action_cb(GSimpleAction *action, GVariant *param, gpointer ud);
-G_MODULE_EXPORT void
-preset_export_action_cb(GSimpleAction *action, GVariant *param, gpointer ud);
-G_MODULE_EXPORT void
-preset_import_action_cb(GSimpleAction *action, GVariant *param, gpointer ud);
-G_MODULE_EXPORT void
-presets_reload_action_cb(GSimpleAction *action, GVariant *param, gpointer ud);
-G_MODULE_EXPORT void
-preview_fullscreen_action_cb(GSimpleAction *action, GVariant *param, gpointer ud);
-G_MODULE_EXPORT void
-about_action_cb(GSimpleAction *action, GVariant *param, gpointer ud);
-G_MODULE_EXPORT void
-guide_action_cb(GSimpleAction *action, GVariant *param, gpointer ud);
-G_MODULE_EXPORT void
-preset_select_action_cb(GSimpleAction *action, GVariant *param, gpointer ud);
-G_MODULE_EXPORT void
-preset_reload_action_cb(GSimpleAction *action, GVariant *param, gpointer ud);
-G_MODULE_EXPORT void
-chapters_export_action_cb(GSimpleAction *action, GVariant *param, gpointer ud);
-G_MODULE_EXPORT void
-chapters_import_action_cb(GSimpleAction *action, GVariant *param, gpointer ud);
-
-static void map_actions(GApplication * app, signal_user_data_t * ud)
+static void map_actions(GApplication *app, signal_user_data_t *ud)
 {
     const GActionEntry entries[] =
     {
@@ -877,8 +629,8 @@ static void map_actions(GApplication * app, signal_user_data_t * ud)
                                     G_N_ELEMENTS(entries), ud);
 }
 
-gboolean
-ghb_idle_ui_init(signal_user_data_t *ud)
+static gboolean
+_ghb_idle_ui_init (signal_user_data_t *ud)
 {
     ghb_settings_to_ui(ud, ud->globals);
     ghb_settings_to_ui(ud, ud->prefs);
@@ -907,7 +659,6 @@ ghb_idle_ui_init(signal_user_data_t *ud)
         ghb_select_default_preset(ud);
     }
 
-    // Grey out widgets that are dependent on a disabled feature
     ghb_bind_dependencies(ud);
 
     return FALSE;
@@ -973,49 +724,99 @@ video_file_drop_init (signal_user_data_t *ud)
     g_signal_connect(summary, "drag-data-received", G_CALLBACK(video_file_drop_received), ud);
 }
 
-static void
-print_system_information (void)
+char *
+ghb_application_get_app_path (GhbApplication *self)
 {
-#if GLIB_CHECK_VERSION(2, 64, 0)
-    char *os_info = g_get_os_info(G_OS_INFO_KEY_PRETTY_NAME);
-    fprintf(stderr, "OS: %s\n", os_info);
-    g_free(os_info);
-#endif
-#ifndef _WIN32
-    char *exe_path;
-    ssize_t result;
-    struct utsname *host_info;
+    g_return_val_if_fail(GHB_IS_APPLICATION(self), NULL);
 
-    host_info = calloc(1, sizeof(struct utsname));
-    uname(host_info);
+    // The preferred method, only works on Linux and certain other OSes
+    g_autofree char *link = g_file_read_link("/proc/self/exe", NULL);
+    if (link != NULL)
+        return g_steal_pointer(&link);
 
-    fprintf(stderr, "%s\n", HB_PROJECT_TITLE);
-    fprintf(stderr, "Kernel: %s %s (%s)\n", host_info->sysname,
-            host_info->release, host_info->machine);
-    fprintf(stderr, "CPU: %s x %d\n", hb_get_cpu_name(), hb_get_cpu_count());
-    free(host_info);
-    exe_path = calloc(1, PATH_MAX);
-    result = readlink( "/proc/self/exe", exe_path, PATH_MAX);
-    if (result > 0)
-    {
-        char *exe_dirname = g_path_get_dirname(exe_path);
-        fprintf(stderr, "Install Dir: %s\n", exe_dirname);
-        g_free(exe_dirname);
-    }
-    free(exe_path);
-#endif
-    char *config_dirname = ghb_get_user_config_dir(NULL);
-    fprintf(stderr, "Config Dir:  %s\n", config_dirname);
-    fprintf(stderr, "_______________________________\n\n");
-    g_free(config_dirname);
+    // Alternatively, work out the path from the command name, path and cwd
+    g_autofree char *app_cmd = NULL;
+    g_object_get(self, "app-cmd", &app_cmd, NULL);
+
+    if (g_path_is_absolute(app_cmd))
+        return g_steal_pointer(&app_cmd);
+
+    g_autofree char *path_cmd = g_find_program_in_path(app_cmd);
+    if (path_cmd != NULL)
+        return g_steal_pointer(&path_cmd);
+
+    g_autofree char *cwd = g_get_current_dir();
+    return g_canonicalize_filename(app_cmd, cwd);
 }
 
-extern G_MODULE_EXPORT void
-ghb_activate_cb(GApplication * app, signal_user_data_t * ud)
+char *
+ghb_application_get_app_dir (GhbApplication *self)
 {
-    GtkCssProvider     * provider = gtk_css_provider_new();
+    g_return_val_if_fail(GHB_IS_APPLICATION(self), NULL);
 
-    ghb_css_provider_load_from_data(provider, MyCSS, -1);
+    g_autofree char *app_path = ghb_application_get_app_path(self);
+    return g_path_get_dirname(app_path);
+}
+
+static void
+print_system_information (GhbApplication *self)
+{
+    g_printerr("%s\n", HB_PROJECT_TITLE);
+#if GLIB_CHECK_VERSION(2, 64, 0)
+    g_autofree char *os_info = g_get_os_info(G_OS_INFO_KEY_PRETTY_NAME);
+    g_printerr("OS: %s\n", os_info);
+#endif
+#ifndef _WIN32
+    g_autofree struct utsname *host_info = g_malloc0(sizeof(struct utsname));
+    uname(host_info);
+    g_printerr("Kernel: %s %s (%s)\n", host_info->sysname,
+               host_info->release, host_info->machine);
+#endif
+    g_autofree char *install_dir = ghb_application_get_app_dir(self);
+    g_autofree char *config_dir = ghb_get_user_config_dir(NULL);
+    g_printerr("CPU: %s x %d\n", hb_get_cpu_name(), hb_get_cpu_count());
+    g_printerr("Install Dir: %s\n", install_dir);
+    g_printerr("Config Dir:  %s\n", config_dir);
+    g_printerr("_______________________________\n\n");
+}
+
+static void
+ghb_application_constructed (GObject *object)
+{
+    GhbApplication *self = GHB_APPLICATION(object);
+    g_assert(GHB_IS_APPLICATION(self));
+
+    G_OBJECT_CLASS(ghb_application_parent_class)->constructed(object);
+
+    g_application_set_application_id(G_APPLICATION(self), "fr.handbrake.ghb");
+    g_set_prgname("fr.handbrake.ghb");
+    g_set_application_name("HandBrake");
+    g_application_set_flags(G_APPLICATION(self), G_APPLICATION_HANDLES_OPEN |
+                                                 G_APPLICATION_NON_UNIQUE);
+}
+
+static void
+ghb_application_activate (GApplication *app)
+{
+    GhbApplication *self = GHB_APPLICATION(app);
+
+    signal_user_data_t *ud = self->ud = g_malloc0(sizeof(signal_user_data_t));
+    g_autoptr(GtkCssProvider) provider = gtk_css_provider_new();
+
+    if (ghb_dict_get_bool(ud->prefs, "CustomTmpEnable"))
+    {
+        const char *tmp_dir = ghb_dict_get_string(ud->prefs, "CustomTmpDir");
+        if (tmp_dir != NULL && tmp_dir[0] != 0)
+        {
+#if defined(_WIN32)
+           _putenv_s("TEMP", tmp_dir);
+#else
+            setenv("TEMP", tmp_dir, 1);
+#endif
+        }
+    }
+
+    gtk_css_provider_load_from_resource(provider, "/fr/handbrake/ghb/ui/custom.css");
     color_scheme_set_async(APP_PREFERS_LIGHT);
 
 #if GTK_CHECK_VERSION(4, 4, 0)
@@ -1030,26 +831,12 @@ ghb_activate_cb(GApplication * app, signal_user_data_t * ud)
                                 GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
 #endif
 
-    g_object_unref(provider);
-
     ghb_resource_init();
     ghb_load_icons();
-
-    // Override user config dir
-    if (arg_config_dir != NULL)
-    {
-        ghb_override_user_config_dir(arg_config_dir);
-    }
 
     // map application actions (menu callbacks)
     map_actions(app, ud);
 
-    // connect shutdown signal for cleanup
-    g_signal_connect(app, "shutdown", (GCallback)ghb_shutdown_cb, ud);
-
-#if GLIB_CHECK_VERSION(2, 72, 0)
-    g_log_set_debug_enabled(ghb_debug);
-#endif
     ud->globals = ghb_dict_new();
     ud->prefs = ghb_dict_new();
     ud->settings_array = ghb_array_new();
@@ -1081,19 +868,19 @@ ghb_activate_cb(GApplication * app, signal_user_data_t * ud)
 
     // Redirect stderr to the activity window
     ghb_preview_init(ud);
-    IoRedirect(ud);
-    print_system_information();
+    io_redirect(ud);
+    print_system_information(self);
 
     GtkTextView   * textview;
     GtkTextBuffer * buffer;
 
     textview = GTK_TEXT_VIEW(GHB_WIDGET(ud->builder, "VideoOptionExtra"));
     buffer = gtk_text_view_get_buffer(textview);
-    g_signal_connect(buffer, "changed", (GCallback)video_option_changed_cb, ud);
+    g_signal_connect(buffer, "changed", G_CALLBACK(video_option_changed_cb), ud);
 
     textview = GTK_TEXT_VIEW(GHB_WIDGET(ud->builder, "MetaLongDescription"));
     buffer = gtk_text_view_get_buffer(textview);
-    g_signal_connect(buffer, "changed", (GCallback)plot_changed_cb, ud);
+    g_signal_connect(buffer, "changed", G_CALLBACK(plot_changed_cb), ud);
 
     // Initialize HB internal tables etc.
     hb_global_init();
@@ -1128,21 +915,6 @@ ghb_activate_cb(GApplication * app, signal_user_data_t * ud)
     // Store user preferences into ud->prefs
     ghb_prefs_to_settings(ud->prefs);
 
-    if (ghb_dict_get_bool(ud->prefs, "CustomTmpEnable"))
-    {
-        const char * tmp_dir;
-
-        tmp_dir = ghb_dict_get_string(ud->prefs, "CustomTmpDir");
-        if (tmp_dir != NULL && tmp_dir[0] != 0)
-        {
-#if defined(_WIN32)
-    // Tell gdk pixbuf where it's loader config file is.
-            _putenv_s("TEMP", tmp_dir);
-#else
-            setenv("TEMP", tmp_dir, 1);
-#endif
-        }
-    }
     int logLevel = ghb_dict_get_int(ud->prefs, "LoggingLevel");
 
     // Initialize HB work threads
@@ -1154,7 +926,7 @@ ghb_activate_cb(GApplication * app, signal_user_data_t * ud)
     // GActions associated with widgets do not fire when the widget
     // is changed from this GtkApplication "activate" signal.
     // So initialize UI when idle.
-    g_idle_add((GSourceFunc)ghb_idle_ui_init, ud);
+    g_idle_add((GSourceFunc)_ghb_idle_ui_init, ud);
 
     const gchar *source = ghb_dict_get_string(ud->prefs, "default_source");
     ghb_dvd_set_current(source, ud);
@@ -1246,42 +1018,68 @@ ghb_activate_cb(GApplication * app, signal_user_data_t * ud)
 #endif
 
     gtk_widget_show(ghb_window);
+
 }
 
-extern G_MODULE_EXPORT void
-ghb_open_file_cb(GApplication *app, gpointer pfiles, gint nfiles,
-                 gchar *hint, signal_user_data_t * ud)
+static GOptionEntry option_entries[] =
 {
-    GFile ** files = pfiles;
+    { "device", 'd', 0, G_OPTION_ARG_FILENAME, &dvd_device, N_("The device or file to encode"), "FILE" },
+    { "preset", 'p', 0, G_OPTION_ARG_STRING, &arg_preset, N_("The preset values to use for encoding"), "NAME" },
+    { "debug",  'x', 0, G_OPTION_ARG_NONE, NULL, N_("Spam a lot"), NULL },
+    { "config", 'o', 0, G_OPTION_ARG_STRING, NULL, N_("The path to override user config dir"), "DIR" },
+    { "console",'c', 0, G_OPTION_ARG_NONE, NULL, N_("Write debug output to console instead of capturing it"), NULL },
+    { NULL }
+};
 
-    if (nfiles < 1)
+static void
+ghb_application_init (GhbApplication *self)
+{
+    g_application_add_main_option_entries(G_APPLICATION (self), option_entries);
+#if defined(_ENABLE_GST)
+    g_application_add_option_group(G_APPLICATION(self), gst_init_get_option_group());
+#endif
+}
+
+GhbApplication *
+ghb_application_new (const char *app_cmd)
+{
+    return g_object_new(GHB_TYPE_APPLICATION, "app-cmd", app_cmd, NULL);
+}
+
+static void
+ghb_application_open (GApplication *app, GFile **files, gint n_files,
+                      const gchar *hint)
+{
+    if (n_files < 1)
         return;
 
     if (dvd_device == NULL)
     {
         dvd_device = g_file_get_path(files[0]);
     }
-    ghb_activate_cb(app, ud);
+    ghb_application_activate(app);
 }
 
-int
-main(int argc, char *argv[])
+static int
+ghb_application_handle_local_options (GApplication *app, GVariantDict *options)
 {
-#if defined(_WIN32)
-    // Tell gdk pixbuf where it's loader config file is.
-    _putenv_s("GDK_PIXBUF_MODULE_FILE", "ghb.exe.local/loaders.cache");
-    _putenv_s("GST_PLUGIN_PATH", "lib/gstreamer-1.0");
+    GhbApplication *self = GHB_APPLICATION(app);
+    g_assert(GHB_IS_APPLICATION(self) && options != NULL);
+
+    g_autofree char *config_dir = NULL;
+    g_autofree char *device = NULL;
+    g_autofree char *preset = NULL;
+
+    if (g_variant_dict_lookup(options, "config", "s", &config_dir))
+        ghb_override_user_config_dir(config_dir);
+
+#if GLIB_CHECK_VERSION(2, 72, 0)
+    if (g_variant_dict_lookup(options, "debug", "b", NULL))
+        g_log_set_debug_enabled(TRUE);
 #endif
 
-
-#ifdef ENABLE_NLS
-    bindtextdomain(GETTEXT_PACKAGE, PACKAGE_LOCALE_DIR);
-    bind_textdomain_codeset(GETTEXT_PACKAGE, "UTF-8");
-    textdomain(GETTEXT_PACKAGE);
-#endif
-
+    if (g_variant_dict_lookup(options, "console", "b", NULL))
 #if defined(_WIN32)
-    if (win32_console)
     {
         // Enable console logging
         if(AttachConsole(ATTACH_PARENT_PROCESS) || AllocConsole()){
@@ -1298,28 +1096,20 @@ main(int argc, char *argv[])
         stderr->_file = STDERR_FILENO;
         stdout->_file = STDOUT_FILENO;
     }
+#else
+    redirect_io = FALSE;
 #endif
 
-    int                  status;
-    signal_user_data_t * ud;
+    return G_APPLICATION_CLASS(ghb_application_parent_class)
+                ->handle_local_options(app, options);
+}
 
-    ghb_ui_register_resource();
-    ud = g_malloc0(sizeof(signal_user_data_t));
-    ud->app = gtk_application_new("fr.handbrake.ghb",
-                                  G_APPLICATION_NON_UNIQUE |
-                                  G_APPLICATION_HANDLES_OPEN);
-    g_set_prgname("fr.handbrake.ghb");
-    g_set_application_name("HandBrake");
-    // Connect application signals
-    g_signal_connect(ud->app, "activate", (GCallback)ghb_activate_cb, ud);
-    g_signal_connect(ud->app, "open", (GCallback)ghb_open_file_cb, ud);
-    // Set application options
-    g_application_add_main_option_entries(G_APPLICATION(ud->app), entries);
-#if defined(_ENABLE_GST)
-    g_application_add_option_group(G_APPLICATION(ud->app),
-                                   gst_init_get_option_group());
-#endif
-    status = g_application_run(G_APPLICATION(ud->app), argc, argv);
+static void
+ghb_application_shutdown (GApplication *app)
+{
+    GhbApplication *self = GHB_APPLICATION(app);
+    signal_user_data_t *ud = self->ud;
+    g_assert(GHB_IS_APPLICATION(self) && ud != NULL);
 
     ghb_backend_close();
 
@@ -1348,7 +1138,68 @@ main(int argc, char *argv[])
     ghb_preview_dispose(ud);
 
     g_free(ud->current_dvd_device);
-    g_free(ud);
+    g_free(self->ud);
 
-    return status;
+    G_APPLICATION_CLASS(ghb_application_parent_class)->shutdown(app);
+}
+
+enum {
+  PROP_0,
+  PROP_APP_CMD,
+  N_PROPS
+};
+
+static void
+ghb_application_get_property (GObject *object, guint prop_id,
+                              GValue *value, GParamSpec *pspec)
+{
+    GhbApplication *self = GHB_APPLICATION(object);
+
+    switch (prop_id)
+    {
+        case PROP_APP_CMD:
+            g_value_set_string(value, self->app_cmd);
+            break;
+        default:
+            G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
+    }
+}
+
+static void
+ghb_application_set_property (GObject *object, guint prop_id,
+                              const GValue *value, GParamSpec *pspec)
+{
+    GhbApplication *self = GHB_APPLICATION(object);
+
+    switch (prop_id)
+    {
+        case PROP_APP_CMD:
+            self->app_cmd = g_value_dup_string(value);
+            break;
+        default:
+            G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
+    }
+}
+
+static void
+ghb_application_class_init (GhbApplicationClass *klass)
+{
+    GObjectClass *object_class = G_OBJECT_CLASS (klass);
+    GApplicationClass *app_class = G_APPLICATION_CLASS (klass);
+
+    object_class->constructed = ghb_application_constructed;
+
+    app_class->activate = ghb_application_activate;
+    app_class->open = ghb_application_open;
+    app_class->handle_local_options = ghb_application_handle_local_options;
+    app_class->shutdown = ghb_application_shutdown;
+    object_class->get_property = ghb_application_get_property;
+    object_class->set_property = ghb_application_set_property;
+
+    g_autoptr(GParamSpec) prop = g_param_spec_string("app-cmd", "App Command",
+            "The full command-line name of the application", "ghb",
+            G_PARAM_READABLE | G_PARAM_WRITABLE |
+            G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
+
+    g_object_class_install_property (object_class, PROP_APP_CMD, prop);
 }

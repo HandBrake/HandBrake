@@ -3,6 +3,7 @@
 
 # Project sources
 ghb_src = files(
+  'application.c',
   'audiohandler.c',
   'callbacks.c',
   'chapters.c',

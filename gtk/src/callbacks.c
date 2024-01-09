@@ -59,6 +59,7 @@
 #endif
 
 #include "handbrake/handbrake.h"
+#include "application.h"
 #include "callbacks.h"
 #include "chapters.h"
 #include "notifications.h"
@@ -310,8 +311,8 @@ inhibit_suspend (signal_user_data_t *ud)
         // Already inhibited
         return;
     }
-    suspend_cookie = gtk_application_inhibit(ud->app, NULL,
-            GTK_APPLICATION_INHIBIT_SUSPEND | GTK_APPLICATION_INHIBIT_LOGOUT,
+    suspend_cookie = gtk_application_inhibit(GTK_APPLICATION(GHB_APPLICATION_DEFAULT),
+            NULL, GTK_APPLICATION_INHIBIT_SUSPEND | GTK_APPLICATION_INHIBIT_LOGOUT,
             _("An encode is in progress."));
     if (suspend_cookie != 0)
     {
@@ -326,7 +327,8 @@ uninhibit_suspend (signal_user_data_t *ud)
     switch (suspend_inhibited)
     {
         case GHB_SUSPEND_INHIBITED_GTK:
-            gtk_application_uninhibit(ud->app, suspend_cookie);
+            gtk_application_uninhibit(GTK_APPLICATION(GHB_APPLICATION_DEFAULT),
+                                      suspend_cookie);
             break;
         default:
             break;
@@ -509,7 +511,7 @@ application_quit (signal_user_data_t *ud)
 {
     ghb_hb_cleanup(FALSE);
     prune_logs(ud);
-    g_application_quit(G_APPLICATION(ud->app));
+    g_application_quit(g_application_get_default());
 }
 
 G_MODULE_EXPORT void
@@ -3608,7 +3610,7 @@ prefs_response_cb(GtkDialog *dialog, GdkEvent *event, signal_user_data_t *ud)
                                 _("You must restart HandBrake now."));
         ghb_hb_cleanup(FALSE);
         prune_logs(ud);
-        g_application_quit(G_APPLICATION(ud->app));
+        g_application_quit(g_application_get_default());
     }
     return TRUE;
 }
@@ -3632,7 +3634,7 @@ quit_cb(countdown_t *cd)
         prune_logs(cd->ud);
 
         gtk_widget_destroy (GTK_WIDGET(cd->dlg));
-        g_application_quit(G_APPLICATION(cd->ud->app));
+        g_application_quit(g_application_get_default());
         return FALSE;
     }
     gtk_message_dialog_format_secondary_text(cd->dlg, _("%s in %d seconds…"),
@@ -3652,7 +3654,7 @@ shutdown_cb(countdown_t *cd)
         prune_logs(cd->ud);
 
         shutdown_logind();
-        g_application_quit(G_APPLICATION(cd->ud->app));
+        g_application_quit(g_application_get_default());
         return FALSE;
     }
     return TRUE;
