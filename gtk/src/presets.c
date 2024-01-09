@@ -33,6 +33,7 @@
 #include <string.h>
 
 #include "handbrake/handbrake.h"
+#include "application.h"
 #include "settings.h"
 #include "callbacks.h"
 #include "audiohandler.h"
@@ -613,14 +614,11 @@ select_preset2(signal_user_data_t *ud, hb_preset_index_t *path)
     int type = preset_get_type(path);
     GSimpleAction * action;
 
-    action = G_SIMPLE_ACTION(g_action_map_lookup_action(
-                             G_ACTION_MAP(ud->app), "preset-rename"));
+    action =GHB_APPLICATION_ACTION("preset-rename");
     g_simple_action_set_enabled(action, type == HB_PRESET_TYPE_CUSTOM);
-    action = G_SIMPLE_ACTION(g_action_map_lookup_action(
-                             G_ACTION_MAP(ud->app), "preset-save"));
+    action = GHB_APPLICATION_ACTION("preset-save");
     g_simple_action_set_enabled(action, type == HB_PRESET_TYPE_CUSTOM);
-    action = G_SIMPLE_ACTION(g_action_map_lookup_action(
-                             G_ACTION_MAP(ud->app), "preset-default"));
+    action = GHB_APPLICATION_ACTION("preset-default");
     g_simple_action_set_enabled(action, !preset_is_default(path));
 }
 
@@ -3065,8 +3063,7 @@ presets_list_selection_changed_cb(GtkTreeSelection *selection, signal_user_data_
             GtkWidget     * widget;
 
             set_preset_menu_button_label(ud, path);
-            action = G_SIMPLE_ACTION(g_action_map_lookup_action(
-                                     G_ACTION_MAP(ud->app), "preset-reload"));
+            action = GHB_APPLICATION_ACTION("preset-reload");
             g_simple_action_set_enabled(action, FALSE);
             widget = GHB_WIDGET(ud->builder, "preset_selection_modified_label");
             gtk_widget_set_visible(widget, FALSE);
@@ -3078,14 +3075,11 @@ presets_list_selection_changed_cb(GtkTreeSelection *selection, signal_user_data_
         int type = preset_get_type(path);
         GSimpleAction * action;
 
-        action = G_SIMPLE_ACTION(g_action_map_lookup_action(
-                                 G_ACTION_MAP(ud->app), "preset-rename"));
+        action = GHB_APPLICATION_ACTION("preset-rename");
         g_simple_action_set_enabled(action, type == HB_PRESET_TYPE_CUSTOM);
-        action = G_SIMPLE_ACTION(g_action_map_lookup_action(
-                                 G_ACTION_MAP(ud->app), "preset-save"));
+        action = GHB_APPLICATION_ACTION("preset-save");
         g_simple_action_set_enabled(action, type == HB_PRESET_TYPE_CUSTOM);
-        action = G_SIMPLE_ACTION(g_action_map_lookup_action(
-                                 G_ACTION_MAP(ud->app), "preset-default"));
+        action = GHB_APPLICATION_ACTION("preset-default");
         g_simple_action_set_enabled(action, !preset_is_default(path));
         free(path);
     }
@@ -3106,8 +3100,7 @@ ghb_clear_presets_selection(signal_user_data_t *ud)
     ghb_dict_set_bool(ud->settings, "preset_modified", TRUE);
 
 
-    action = G_SIMPLE_ACTION(g_action_map_lookup_action(G_ACTION_MAP(ud->app),
-                                                        "preset-reload"));
+    action = GHB_APPLICATION_ACTION("preset-reload");
     g_simple_action_set_enabled(action, TRUE);
     widget = GHB_WIDGET(ud->builder, "preset_selection_modified_label");
     gtk_widget_set_visible(widget, TRUE);
@@ -3132,8 +3125,7 @@ preset_default_action_cb(GSimpleAction *action, GVariant *param,
             ghb_dict_set_bool(dict, "Default", 1);
             presets_list_show_default(ud);
             store_presets();
-            GSimpleAction *action = G_SIMPLE_ACTION(g_action_map_lookup_action(
-                                     G_ACTION_MAP(ud->app), "preset-default"));
+            GSimpleAction *action = GHB_APPLICATION_ACTION("preset-default");
             g_simple_action_set_enabled(action, FALSE);
         }
         g_free(path);

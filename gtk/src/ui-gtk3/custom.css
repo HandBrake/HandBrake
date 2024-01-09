@@ -1,0 +1,119 @@
+@define-color black  #000000;
+@define-color gray18 #2e2e2e;
+@define-color gray22 #383838;
+@define-color gray26 #424242;
+@define-color gray32 #525252;
+@define-color gray40 #666666;
+@define-color gray46 #757575;
+@define-color white  #ffffff;
+
+.progress-overlay
+{
+    min-height:1px;
+}
+
+.progress-overlay trough
+{
+    border-radius: 0px;
+    border-color: transparent;
+    border-width: 1px 0px;
+    min-height: 3px;
+}
+
+.progress-overlay progress
+{
+    border-radius: 0px;
+    border-width: 1px;
+    min-height: 3px;
+}
+
+.ghb-preview-hud
+{
+    border-radius: 16px;
+    border-width: 1px;
+}
+
+.ghb-preview-image-frame
+{
+    background-color: black;
+}
+
+textview
+{
+    padding: 5px 5px 5px 5px;
+}
+
+.entry
+{
+    margin: 0px 5px 0px 5px;
+    padding: 0px 0px 0px 0px;
+}
+
+stackswitcher button.text-button
+{
+    min-width: 50px;
+}
+
+.ghb-monospace
+{
+    font-family: monospace;
+    font-size: 8pt;
+    font-weight: 300;
+}
+
+.row:not(:first-child)
+{
+    border-top: 1px solid transparent;
+    border-bottom: 1px solid transparent;
+}
+
+.row:first-child
+{
+    border-top: 1px solid transparent;
+    border-bottom: 1px solid transparent;
+}
+
+.row:last-child
+{
+    border-top: 1px solid transparent;
+    border-bottom: 1px solid transparent;
+}
+
+.row.drag-icon
+{
+    background: white;
+    border: 1px solid black;
+}
+
+.row.drag-row
+{
+    color: gray;
+    background: alpha(gray,0.2);
+}
+
+.row.drag-row.drag-hover
+{
+    border-top: 1px solid #4e9a06;
+    border-bottom: 1px solid #4e9a06;
+}
+
+.row.drag-hover image,
+.row.drag-hover label
+{
+    color: #4e9a06;
+}
+
+.row.drag-hover-top
+{
+    border-top: 1px solid #4e9a06;
+}
+
+.row.drag-hover-bottom
+{
+    border-bottom: 1px solid #4e9a06;
+}
+
+toolbar
+{
+    -gtk-icon-style: symbolic;
+}

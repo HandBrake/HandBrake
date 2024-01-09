@@ -22,6 +22,7 @@
  */
 
 #include "ghbcompat.h"
+#include "application.h"
 #include "handbrake/handbrake.h"
 #include "settings.h"
 #include "jobdict.h"
