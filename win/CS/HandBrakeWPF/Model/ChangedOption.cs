@@ -12,6 +12,7 @@ namespace HandBrakeWPF.Model
         Quality,
         Bitrate,
         Encoder,
+        Chapters,
         Dimensions
     }
 }
