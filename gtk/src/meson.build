@@ -31,16 +31,6 @@ ghb_src = files(
   'videohandler.c',
 )
 
-ui_dir = get_option('gtk4') ? 'ui-gtk4' : 'ui-gtk3'
-
-ui_files = files(
-  ui_dir / 'menu.ui',
-  ui_dir / 'ghb.ui',
-  ui_dir / 'ghb-chapter-row.ui',
-  ui_dir / 'ghb-file-button.ui',
-  ui_dir / 'ghb-queue-row.ui',
-)
-
 config_h = configuration_data()
 config_h.set('GHB_FLATPAK', get_option('flatpak'),
   description: 'Define if building HandBrake for Flatpak.')
@@ -56,9 +46,8 @@ configure_file(configuration: config_h, output: 'config.h')
 
 # Generated files
 
-ui = gnome.compile_resources('ui_res', 'ui_res.gresource.xml',
-  dependencies: ui_files,
-  source_dir: ui_dir,
+ui = gnome.compile_resources('ui_res', 'ui/ui_res.gresource.xml',
+  source_dir: 'ui',
   c_name: 'ghb_ui')
 
 # Build targets

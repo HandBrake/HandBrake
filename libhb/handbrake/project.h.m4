@@ -44,7 +44,6 @@ dnl
 <<#>>define HB_PROJECT_FEATURE_FFMPEG_AAC        __FEATURE_ffmpeg_aac
 <<#>>define HB_PROJECT_FEATURE_FLATPAK           __FEATURE_flatpak
 <<#>>define HB_PROJECT_FEATURE_GTK               __FEATURE_gtk
-<<#>>define HB_PROJECT_FEATURE_GTK_MINGW         __FEATURE_gtk_mingw
 <<#>>define HB_PROJECT_FEATURE_GST               __FEATURE_gst
 <<#>>define HB_PROJECT_FEATURE_MF                __FEATURE_mf
 <<#>>define HB_PROJECT_FEATURE_NVENC             __FEATURE_nvenc

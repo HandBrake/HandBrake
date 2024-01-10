@@ -18,11 +18,6 @@ option('gstreamer',
        value: 'disabled',
        description: 'Disable gstreamer (live preview)')
 
-option('gtk4',
-       type: 'boolean',
-       value: false,
-       description: 'Enable building with GTK4')
-
 option('hb-dir',
        type: 'string',
        value: '',

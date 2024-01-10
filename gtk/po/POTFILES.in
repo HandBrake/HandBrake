@@ -1,10 +1,11 @@
 # List of source files containing translatable strings.
 
 # UI files
-src/ui-gtk3/menu.ui
-src/ui-gtk3/ghb.ui
-src/ui-gtk3/ghb-file-button.ui
-src/ui-gtk3/ghb-queue-row.ui
+src/ui/menu.ui
+src/ui/ghb.ui
+src/ui/ghb-chapter-row.ui
+src/ui/ghb-file-button.ui
+src/ui/ghb-queue-row.ui
 
 # Source code
 src/audiohandler.c

@@ -9,8 +9,7 @@ project('handbrake-gtk', 'c', 'cpp',
 
 # Minimum versions for dependencies
 glib_min = '>= 2.56'
-gtk4_min = '>= 4.4'
-gtk3_min = '>= 3.22'
+gtk_min = '>= 3.22'
 gst_min  = '>= 1.10'
 
 cc = meson.get_compiler('c')
@@ -40,6 +39,7 @@ ghb_deps = [
   dependency('gio-2.0', version: glib_min),
   dependency('gthread-2.0', version: glib_min),
   dependency('gmodule-2.0', version: glib_min),
+  dependency('gtk+-3.0', version: gtk_min),
   dependency('jansson'),
   dependency('libass'),
   dependency('libavcodec'),
@@ -66,12 +66,6 @@ ghb_deps = [
   dependency('zimg'),
   dependency('zlib'),
 ]
-
-if get_option('gtk4')
-  ghb_deps += dependency('gtk4', version: gtk4_min)
-else
-  ghb_deps += dependency('gtk+-3.0', version: gtk3_min)
-endif
 
 if get_option('gstreamer').enabled()
   gst = dependency('gstreamer-1.0', version: gst_min, required: false)
