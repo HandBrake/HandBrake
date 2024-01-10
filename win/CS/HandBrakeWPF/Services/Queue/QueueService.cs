@@ -14,7 +14,6 @@ namespace HandBrakeWPF.Services.Queue
     using System.Collections.ObjectModel;
     using System.IO;
     using System.Linq;
-    using System.Runtime.CompilerServices;
     using System.Text.Json;
     using System.Timers;
     using System.Windows;
@@ -49,6 +48,7 @@ namespace HandBrakeWPF.Services.Queue
         private static readonly object QueueLock = new object();
 
         private readonly List<ActiveJob> activeJobs = new List<ActiveJob>();
+        private readonly object activeJobLock = new object();
         private readonly IUserSettingService userSettingService;
         private readonly ILog logService;
         private readonly IErrorService errorService;
@@ -115,8 +115,17 @@ namespace HandBrakeWPF.Services.Queue
             }
         }
 
-        public int ActiveJobCount => this.activeJobs.Count;
-
+        public int ActiveJobCount
+        {
+            get
+            {
+                lock (activeJobLock)
+                {
+                    return this.activeJobs.Count;
+                }
+            }
+        }
+        
         public int ErrorCount
         {
             get
@@ -431,24 +440,27 @@ namespace HandBrakeWPF.Services.Queue
             lock (QueueLock)
             {
                 ActiveJob activeJob = null;
- 
-                foreach (ActiveJob ajob in this.activeJobs)
-                {
-                    if (Equals(ajob.Job, job))
-                    {
-                        activeJob = ajob;
-                        activeJob.JobFinished += (a, e) =>
-                        {
-                            this.activeJobs.Remove(activeJob);
 
-                            if (this.activeJobs.Count == 0 && this.IsPaused)
+                lock (activeJobLock)
+                {
+                    foreach (ActiveJob ajob in this.activeJobs)
+                    {
+                        if (Equals(ajob.Job, job))
+                        {
+                            activeJob = ajob;
+                            activeJob.JobFinished += (a, e) =>
                             {
-                                this.IsPaused = false;
-                            }
-                        };
-                        ajob.Stop();
-                        stoppedJob = true;
-                        break;
+                                this.activeJobs.Remove(activeJob);
+
+                                if (this.activeJobs.Count == 0 && this.IsPaused)
+                                {
+                                    this.IsPaused = false;
+                                }
+                            };
+                            ajob.Stop();
+                            stoppedJob = true;
+                            break;
+                        }
                     }
                 }
 
@@ -521,15 +533,18 @@ namespace HandBrakeWPF.Services.Queue
         {
             if (pauseJobs)
             {
-                foreach (ActiveJob job in this.activeJobs)
+                lock (activeJobLock)
                 {
-                    if (job.IsEncoding && !job.IsPaused)
+                    foreach (ActiveJob job in this.activeJobs)
                     {
-                        job.Pause();
+                        if (job.IsEncoding && !job.IsPaused)
+                        {
+                            job.Pause();
+                        }
                     }
                 }
             }
-            
+
             this.IsProcessing = false;
             this.IsPaused = true;
 
@@ -555,10 +570,13 @@ namespace HandBrakeWPF.Services.Queue
             this.IsProcessing = true;
 
             // Unpause all active jobs.
-            foreach (ActiveJob job in this.activeJobs)
+            lock (activeJobLock)
             {
-                job.Start();
-                this.InvokeJobProcessingStarted(new QueueProgressEventArgs(job.Job));
+                foreach (ActiveJob job in this.activeJobs)
+                {
+                    job.Start();
+                    this.InvokeJobProcessingStarted(new QueueProgressEventArgs(job.Job));
+                }
             }
 
             this.ProcessNextJob();
@@ -568,11 +586,14 @@ namespace HandBrakeWPF.Services.Queue
         {
             if (stopExistingJobs)
             {
-                foreach (ActiveJob job in this.activeJobs)
+                lock (activeJobLock)
                 {
-                    if (job.IsEncoding || job.IsPaused)
+                    foreach (ActiveJob job in this.activeJobs)
                     {
-                        job.Stop();
+                        if (job.IsEncoding || job.IsPaused)
+                        {
+                            job.Stop();
+                        }
                     }
                 }
 
@@ -582,9 +603,12 @@ namespace HandBrakeWPF.Services.Queue
                 this.StopJobPolling();
                 this.RemoveBreakPoints();
 
-                if (this.activeJobs.Count == 0)
+                lock (activeJobLock)
                 {
-                    this.InvokeQueueChanged(EventArgs.Empty);
+                    if (this.activeJobs.Count == 0)
+                    {
+                        this.InvokeQueueChanged(EventArgs.Empty);
+                    }
                 }
 
                 this.InvokeQueueCompleted(new QueueCompletedEventArgs(true));
@@ -601,29 +625,26 @@ namespace HandBrakeWPF.Services.Queue
         public List<QueueProgressStatus> GetQueueProgressStatus()
         {
             List<QueueProgressStatus> statuses = new List<QueueProgressStatus>();
-            ThreadHelper.OnUIThread(
-                () =>
+            lock (activeJobLock)
+            {
+                foreach (ActiveJob job in this.activeJobs)
                 {
-                    foreach (ActiveJob job in this.activeJobs)
-                    {
-                        statuses.Add(job.Job.JobProgress);
-                    }
-                });
+                    statuses.Add(job.Job.JobProgress);
+                }
+            }
             return statuses;
         }
 
         public List<string> GetActiveJobDestinationDirectories()
         {
             List<string> directories = new List<string>();
-
-            ThreadHelper.OnUIThread(
-                () =>
+            lock (activeJobLock)
+            {
+                foreach (ActiveJob job in this.activeJobs)
                 {
-                    foreach (ActiveJob job in this.activeJobs)
-                    {
-                        directories.Add(job.Job.Task.Destination);
-                    }
-                });
+                    directories.Add(job.Job.Task.Destination);
+                }
+            }
 
             return directories;
         }
@@ -698,9 +719,12 @@ namespace HandBrakeWPF.Services.Queue
                 this.allowedInstances = 1;
             }
 
-            if (this.activeJobs.Count >= this.allowedInstances)
+            lock (activeJobLock)
             {
-                return;
+                if (this.activeJobs.Count >= this.allowedInstances)
+                {
+                    return;
+                }
             }
 
             if (this.userSettingService.GetUserSetting<bool>(UserSettingConstants.ClearCompletedFromQueue))
@@ -733,7 +757,10 @@ namespace HandBrakeWPF.Services.Queue
                 ActiveJob activeJob = new ActiveJob(job, libEncode);
                 activeJob.JobFinished += this.ActiveJob_JobFinished;
                 activeJob.JobStatusUpdated += this.ActiveJob_JobStatusUpdated;
-                this.activeJobs.Add(activeJob);
+                lock (activeJobLock)
+                {
+                    this.activeJobs.Add(activeJob);
+                }
                 
                 activeJob.Start();
 
@@ -747,12 +774,15 @@ namespace HandBrakeWPF.Services.Queue
             {
                 this.BackupQueue(string.Empty);
 
-                if (!this.activeJobs.Any(a => a.IsEncoding))
+                lock (activeJobLock)
                 {
-                    this.StopJobPolling();
+                    if (!this.activeJobs.Any(a => a.IsEncoding))
+                    {
+                        this.StopJobPolling();
 
-                    // Fire the event to tell connected services.
-                    this.InvokeQueueCompleted(new QueueCompletedEventArgs(false));
+                        // Fire the event to tell connected services.
+                        this.InvokeQueueCompleted(new QueueCompletedEventArgs(false));
+                    }
                 }
             }
         }
@@ -766,7 +796,10 @@ namespace HandBrakeWPF.Services.Queue
         {
             this.hardwareResourceManager.ReleaseToken(e.Job.Job.Task.VideoEncoder, e.Job.Job.TaskToken);
 
-            ThreadHelper.OnUIThread(() => this.activeJobs.Remove(e.Job));
+            lock (activeJobLock)
+            {
+                this.activeJobs.Remove(e.Job);
+            }
 
             this.OnEncodeCompleted(e.EncodeEventArgs);
 
@@ -829,9 +862,12 @@ namespace HandBrakeWPF.Services.Queue
         {
             lock (QueueLock)
             {
-                if (this.activeJobs.Count != 0)
+                lock (activeJobLock)
                 {
-                    return; // Wait for jobs to finish!
+                    if (this.activeJobs.Count != 0)
+                    {
+                        return; // Wait for jobs to finish!
+                    }
                 }
 
                 this.StopJobPolling();
@@ -839,7 +875,6 @@ namespace HandBrakeWPF.Services.Queue
                 // Remove the Breakpoint
                 ThreadHelper.OnUIThread(() => this.queue.Remove(task));
             }
-
 
             this.IsProcessing = false;
             this.IsPaused = false;
