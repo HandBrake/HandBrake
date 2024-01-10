@@ -208,6 +208,8 @@ namespace HandBrakeWPF.Instance
 
             if (string.IsNullOrEmpty(statusJson))
             {
+                retryCount = this.retryCount + 1;
+                this.encodePollTimer?.Start(); // Reset and try again.
                 return;
             }
 
