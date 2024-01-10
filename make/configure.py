@@ -1411,9 +1411,6 @@ def createCLI( cross = None ):
     # Option deprecated
     grp.add_argument( '--disable-gtk-update-checks', default=False, action='store_true', help=argparse.SUPPRESS )
 
-    # Option hidden as GUI is not currently buildable with GTK4
-    grp.add_argument( '--enable-gtk4', default=False, action='store_true', help=argparse.SUPPRESS )
-
     h='disable GStreamer (GTK live preview)' if gtk_supported else argparse.SUPPRESS
     grp.add_argument( '--disable-gst', default=False, action='store_true', help=h )
 
@@ -2085,7 +2082,6 @@ int main()
     doc.add( 'FEATURE.fdk_aac',    int( options.enable_fdk_aac ))
     doc.add( 'FEATURE.ffmpeg_aac', int( options.enable_ffmpeg_aac ))
     doc.add( 'FEATURE.flatpak',    int( options.flatpak ))
-    doc.add( 'FEATURE.gtk4',       int( options.enable_gtk4 ))
     doc.add( 'FEATURE.gtk',        int( options.enable_gtk ))
     doc.add( 'FEATURE.gst',        int( not options.disable_gst ))
     doc.add( 'FEATURE.mf',         int( options.enable_mf ))
