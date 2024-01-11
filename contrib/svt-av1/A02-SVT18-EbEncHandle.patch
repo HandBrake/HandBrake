@@ -1,0 +1,7 @@
+--- a/Source/Lib/Encoder/Globals/EbEncHandle.c	Sat Dec  9 09:30:29 2023
++++ b/Source/Lib/Encoder/Globals/EbEncHandle.c	Sat Dec  9 09:31:35 2023
+@@ -657,3 +657,3 @@
+ 
+-        max_input  = min_input + (1 + mg_size) * n_extra_mg;
++        max_input  = min_input + (1 + mg_size) * (n_extra_mg + 1);
+         max_parent = max_input;
