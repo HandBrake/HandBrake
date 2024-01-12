@@ -603,7 +603,7 @@
         </Controls:AlertPanel>
 
         <!--  Status Bar  -->
-        <StatusBar Name="statusBar" Grid.Row="2" Grid.ColumnSpan="2"  HorizontalAlignment="Stretch" VerticalAlignment="Bottom" IsEnabled="{Binding HasSource, Converter={StaticResource booleanConverter}, ConverterParameter=false}">
+        <StatusBar Name="statusBar" Grid.Row="2" Grid.ColumnSpan="2"  HorizontalAlignment="Stretch" VerticalAlignment="Bottom">
 
             <StatusBarItem>
                 <ProgressBar Value="{Binding ProgressPercentage}" IsIndeterminate="{Binding IsMultiProcess}"  Visibility="{Binding IsEncoding, Converter={StaticResource boolToVisConverter}}"
