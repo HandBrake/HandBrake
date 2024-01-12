@@ -10,6 +10,14 @@
 namespace HandBrakeWPF.Views
 {
     using System.Windows.Controls;
+    using System.Windows.Input;
+
+    using HandBrakeWPF.Helpers;
+    using HandBrakeWPF.Services.Encode.Model.Models;
+
+    using KeyEventArgs = System.Windows.Input.KeyEventArgs;
+    using TextBox = System.Windows.Controls.TextBox;
+    using UserControl = System.Windows.Controls.UserControl;
 
     /// <summary>
     /// Interaction logic for ChaptersView.xaml
@@ -22,6 +30,31 @@ namespace HandBrakeWPF.Views
         public ChaptersView()
         {
             InitializeComponent();
+        }
+
+        private void ChaptersList_OnKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                this.chaptersList.Focus();
+                this.chaptersList.SelectedIndex += 1; // increase
+
+                this.chaptersList.ScrollIntoView(this.chaptersList.SelectedItem);
+            }
+        }
+        
+        private void ChapterName_OnPreviewMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            TextBox tb = sender as TextBox;
+            if (tb != null)
+            {
+                ChapterMarker c = tb.DataContext as ChapterMarker;
+                ListView lv = VisualTreeUtils.FindAncestor<ListView>(tb);
+                if (lv != null && c != null)
+                {
+                    lv.SelectedItem = c;
+                }
+            }
         }
     }
 }
