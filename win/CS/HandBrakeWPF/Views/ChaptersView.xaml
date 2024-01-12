@@ -4,7 +4,6 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:Properties="clr-namespace:HandBrakeWPF.Properties"
-             xmlns:dd="urn:gong-wpf-dragdrop"
              xmlns:behaviours="clr-namespace:HandBrakeWPF.Behaviours"
              d:DesignHeight="170"
              d:DesignWidth="616"
@@ -27,11 +26,12 @@
             <Button Content="{x:Static Properties:Resources.ChaptersView_Export}" Name="export" Grid.Column="3" Width="75" Command="{Binding RelayCommand}" CommandParameter="Export" />
         </Grid>
 
-        <ListView Grid.Row="1" Margin="10" VerticalAlignment="Stretch"
+        <ListView Grid.Row="1" Margin="10" VerticalAlignment="Stretch" x:Name="chaptersList"
                   Background="Transparent"
                   ItemsSource="{Binding Chapters}" 
                   BorderBrush="{StaticResource Ui.ContrastLight}"
                   KeyboardNavigation.TabNavigation="Continue"
+                  KeyDown="ChaptersList_OnKeyDown"
                   SelectionMode="Single">
 
             <ListView.Resources>
@@ -90,7 +90,7 @@
 
                         <TextBlock Grid.Column="1" Text="{Binding ChapterNumber}" HorizontalAlignment="Left" Margin="15,0,0,0" />
                         <TextBlock Grid.Column="2" Text="{Binding Duration}" />
-                        <TextBox Grid.Column="3" Text="{Binding ChapterName}" behaviours:TextBoxBehavior.TripleClickSelectAll="True" />
+                        <TextBox Grid.Column="3" Text="{Binding ChapterName}" x:Name="chapterName" behaviours:TextBoxBehavior.TripleClickSelectAll="True" PreviewMouseDown="ChapterName_OnPreviewMouseDown" />
 
                     </Grid>
 
