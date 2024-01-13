@@ -1,5 +1,5 @@
 # SPDX-License-Identifier: GPL-2.0-or-later
-# Copyright (c) 2023 HandBrake Team
+# Copyright (c) 2023-2024 HandBrake Team
 
 po_dir = meson.current_source_dir()
 
