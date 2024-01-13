@@ -31,6 +31,8 @@ struct _GhbButton
     GtkImage *icon;
     GtkLabel *label;
     GtkLabel *indicator;
+
+    GtkOrientation orientation;
 };
 
 G_DEFINE_TYPE (GhbButton, ghb_button, GTK_TYPE_BUTTON)
@@ -203,7 +205,7 @@ ghb_button_set_orientation (GhbButton *self, GtkOrientation orientation)
 {
     g_return_if_fail(GHB_IS_BUTTON(self));
 
-    gtk_orientable_set_orientation(GTK_ORIENTABLE(self->layout_box), orientation);
+    self->orientation = orientation;
 }
 
 const char *
@@ -235,7 +237,7 @@ ghb_button_get_orientation (GhbButton *self)
 {
     g_return_val_if_fail(GHB_IS_BUTTON(self), 0);
 
-    return gtk_orientable_get_orientation(GTK_ORIENTABLE(self->layout_box));
+    return self->orientation;
 }
 
 GhbButton *

@@ -41,9 +41,9 @@ char * ghb_subtitle_short_description(const GhbValue *subsource,
                                       const GhbValue *subsettings);
 
 
-void subtitle_list_selection_changed_cb(GtkTreeSelection *ts, signal_user_data_t *ud);
-void subtitle_edit_clicked_cb(GtkWidget *widget, gchar *path, signal_user_data_t *ud);
-void subtitle_remove_clicked_cb(GtkWidget *widget, gchar *path, signal_user_data_t *ud);
+void subtitle_list_selection_changed_cb(GtkTreeSelection *ts, gpointer data);
+void subtitle_edit_clicked_cb(GtkWidget *widget, gchar *path, gpointer data);
+void subtitle_remove_clicked_cb(GtkWidget *widget, gchar *path, gpointer data);
 
 
 #endif // _SUBTITLEHANDLER_H_

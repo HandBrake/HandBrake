@@ -20,7 +20,7 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE(GhbQueueRow, ghb_queue_row, GHB, QUEUE_ROW, GtkListBoxRow)
 
-GtkWidget *ghb_queue_row_new(const char *dest, int status, signal_user_data_t *ud);
+GtkWidget *ghb_queue_row_new(const char *dest, int status);
 
 const char *ghb_queue_row_get_destination(GhbQueueRow *self);
 void ghb_queue_row_set_destination(GhbQueueRow *self, const char *dest);

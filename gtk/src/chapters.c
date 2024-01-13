@@ -54,7 +54,7 @@ create_chapter_row (int index, gint64 start, gint64 duration,
 
 #if GTK_CHECK_VERSION(4, 4, 0)
     econ = gtk_event_controller_key_new();
-    gtk_widget_add_controller(econ, row);
+    gtk_widget_add_controller(row, econ);
 #else
     econ = gtk_event_controller_key_new(row);
 #endif
@@ -118,13 +118,9 @@ static void
 ghb_clear_chapter_list_ui(signal_user_data_t * ud)
 {
     GtkListBox    * lb;
-    GtkListBoxRow * row;
 
     lb = GTK_LIST_BOX(GHB_WIDGET(ud->builder, "chapters_list"));
-    while ((row = gtk_list_box_get_row_at_index(lb, 0)) != NULL)
-    {
-        gtk_container_remove(GTK_CONTAINER(lb), GTK_WIDGET(row));
-    }
+    ghb_list_box_remove_all(lb);
 }
 
 static void
@@ -263,7 +259,7 @@ chapter_list_export (GtkFileChooserNative *dialog,
             return;
         }
 
-        filename = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(dialog));
+        filename = ghb_file_chooser_get_filename(GTK_FILE_CHOOSER(dialog));
 
         chapter_list_export_xml(filename, chapter_list);
         exportDir = ghb_dict_get_string(ud->prefs, "ExportDirectory");
@@ -449,7 +445,7 @@ chapters_import_response_cb (GtkFileChooser *dialog,
 
     if (response == GTK_RESPONSE_ACCEPT)
     {
-        filename = gtk_file_chooser_get_filename(dialog);
+        filename = ghb_file_chooser_get_filename(dialog);
         chapter_list_import_xml(filename, ud);
         g_free(filename);
     }
@@ -475,7 +471,9 @@ chapters_export_action_cb (GSimpleAction *action, GVariant *param,
     filter = ghb_add_file_filter(GTK_FILE_CHOOSER(dialog), ud, _("Chapters (*.xml)"), "FilterXML");
     gtk_file_chooser_set_filter(GTK_FILE_CHOOSER(dialog), filter);
     gtk_file_chooser_set_current_name(GTK_FILE_CHOOSER(dialog), "chapters.xml");
+#if !GTK_CHECK_VERSION(4, 4, 0)
     gtk_file_chooser_set_do_overwrite_confirmation(GTK_FILE_CHOOSER(dialog), TRUE);
+#endif
 
     exportDir = ghb_dict_get_string(ud->prefs, "ExportDirectory");
     if (exportDir && exportDir[0] != '\0')

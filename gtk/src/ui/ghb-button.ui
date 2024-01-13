@@ -18,13 +18,14 @@
                 <property name="visible">False</property>
                 <property name="halign">end</property>
                 <property name="valign">start</property>
-                <property name="css-classes">ghb-button-indicator</property>
+                <property name="css-classes">ghb-indicator</property>
               </object>
             </child>
             <child>
               <object class="GtkImage" id="icon">
                 <property name="halign">center</property>
                 <property name="valign">end</property>
+                <property name="accessible-role">presentation</property>
               </object>
             </child>
           </object>

@@ -20,6 +20,7 @@
 
 #include "config.h"
 
+#include "compat.h"
 #include "ghb-file-button.h"
 
 struct _GhbFileButton {
@@ -51,10 +52,13 @@ static void ghb_file_button_get_property (GObject *object, guint prop_id,
 static void ghb_file_button_set_property (GObject *object, guint prop_id,
                                           const GValue *value, GParamSpec *pspec);
 
+static void ghb_file_button_clicked(GtkButton *button);
+
 static void
 ghb_file_button_class_init (GhbFileButtonClass *class_)
 {
     GtkWidgetClass *widget_class = GTK_WIDGET_CLASS(class_);
+    GtkButtonClass *button_class = GTK_BUTTON_CLASS(class_);
     GObjectClass *object_class = G_OBJECT_CLASS(class_);
 
     gtk_widget_class_set_template_from_resource(widget_class, "/fr/handbrake/ghb/ui/ghb-file-button.ui");
@@ -86,6 +90,8 @@ ghb_file_button_class_init (GhbFileButtonClass *class_)
     object_class->set_property = ghb_file_button_set_property;
     object_class->get_property = ghb_file_button_get_property;
     object_class->finalize = ghb_file_button_finalize;
+
+    button_class->clicked = ghb_file_button_clicked;
 
     g_object_class_install_properties(object_class, N_PROPS, props);
 }
@@ -225,10 +231,18 @@ file_icon_query_cb (GFile *file, GAsyncResult *result, GhbFileButton *self)
     if (info != NULL)
         icon = g_file_info_get_icon(info);
 
-    if (icon != NULL)
+    if (self->icon != NULL && icon != NULL)
+    {
+#if GTK_CHECK_VERSION(4, 4, 0)
+        gtk_image_set_from_gicon(self->icon, icon);
+#else
         gtk_image_set_from_gicon(self->icon, icon, GTK_ICON_SIZE_BUTTON);
+#endif
+    }
     else
+    {
         gtk_image_clear(self->icon);
+    }
 
     g_object_unref(info);
 }
@@ -300,18 +314,24 @@ chooser_response_cb (GtkFileChooser *chooser, GtkResponseType response,
     gtk_native_dialog_destroy(GTK_NATIVE_DIALOG(chooser));
 }
 
-G_MODULE_EXPORT void
-button_clicked_cb (GhbFileButton *self, gpointer user_data)
+static void
+ghb_file_button_clicked (GtkButton *button)
 {
     GtkWindow *window;
     GtkFileChooserNative *chooser;
+    GhbFileButton *self = GHB_FILE_BUTTON(button);
 
     g_return_if_fail(GHB_IS_FILE_BUTTON(self));
 
+#if GTK_CHECK_VERSION(4, 4, 0)
+    window = GTK_WINDOW(gtk_widget_get_root(GTK_WIDGET(self)));
+#else
     window = GTK_WINDOW(gtk_widget_get_toplevel(GTK_WIDGET(self)));
-
+#endif
     chooser = gtk_file_chooser_native_new(self->title, window, self->action,
                                           self->accept_label, NULL);
+    g_autofree char *selected_name = g_file_get_path(self->selected);
+    ghb_file_chooser_set_initial_file(GTK_FILE_CHOOSER(chooser), selected_name);
 
     g_signal_connect(chooser, "response", G_CALLBACK(chooser_response_cb), self);
 

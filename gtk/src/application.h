@@ -7,6 +7,7 @@
 #include <gtk/gtk.h>
 #include <glib.h>
 #include "config.h"
+#include "settings.h"
 
 G_BEGIN_DECLS
 
@@ -23,5 +24,8 @@ GhbApplication *ghb_application_new(const char *exe_name);
 
 char *ghb_application_get_app_path(GhbApplication *self);
 char *ghb_application_get_app_dir(GhbApplication *self);
+
+signal_user_data_t *ghb_ud (void);
+GtkWidget *ghb_builder_widget (const char *name);
 
 G_END_DECLS

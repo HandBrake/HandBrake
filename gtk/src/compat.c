@@ -71,6 +71,7 @@ run_response_handler (GtkDialog *dialog, int response_id, gpointer data)
     shutdown_loop(ri);
 }
 
+#if !GTK_CHECK_VERSION(4, 4, 0)
 static int
 run_delete_handler (GtkDialog *dialog, GdkEventAny *event, gpointer data)
 {
@@ -80,6 +81,7 @@ run_delete_handler (GtkDialog *dialog, GdkEventAny *event, gpointer data)
 
     return TRUE; /* Do not destroy */
 }
+#endif
 
 static void
 run_destroy_handler (GtkDialog *dialog, gpointer data)
@@ -98,7 +100,9 @@ int ghb_dialog_run (GtkDialog *dialog)
     gulong response_handler;
     gulong unmap_handler;
     gulong destroy_handler;
+#if !GTK_CHECK_VERSION(4, 4, 0)
     gulong delete_handler;
+#endif
 
     g_return_val_if_fail(GTK_IS_DIALOG(dialog), -1);
 
@@ -121,10 +125,12 @@ int ghb_dialog_run (GtkDialog *dialog)
                                      G_CALLBACK(run_unmap_handler),
                                      &ri);
 
+#if !GTK_CHECK_VERSION(4, 4, 0)
     delete_handler = g_signal_connect(dialog,
                                       "delete-event",
                                       G_CALLBACK(run_delete_handler),
                                       &ri);
+#endif
 
     destroy_handler = g_signal_connect(dialog,
                                        "destroy",
@@ -146,7 +152,9 @@ int ghb_dialog_run (GtkDialog *dialog)
 
         g_signal_handler_disconnect(dialog, response_handler);
         g_signal_handler_disconnect(dialog, unmap_handler);
+#if !GTK_CHECK_VERSION(4, 4, 0)
         g_signal_handler_disconnect(dialog, delete_handler);
+#endif
         g_signal_handler_disconnect(dialog, destroy_handler);
     }
 

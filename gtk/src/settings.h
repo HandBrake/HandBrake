@@ -27,9 +27,9 @@
 #include "values.h"
 
 #define GHB_WIDGET(b,n) GTK_WIDGET(gtk_builder_get_object ((b), (n)))
-#define GHB_ACTION(b,n) g_action_map_lookup_action(G_ACTION_MAP(gtk_builder_get_application (b)), (n))
 //#define GHB_WIDGET(b,n)   GTK_WIDGET(debug_get_object((b), (n)))
 #define GHB_OBJECT(b,n) gtk_builder_get_object ((b), (n))
+#define GHB_ACTION(n) g_action_map_lookup_action(G_ACTION_MAP(g_application_get_default()), (n))
 
 GObject* debug_get_object(GtkBuilder *b, const gchar *n);
 
@@ -77,7 +77,6 @@ typedef struct
     gboolean              append_queue_activity;
     preview_t           * preview;
     int                   stderr_src_id;
-    GtkFileChooserNative* source_dialog;
 } signal_user_data_t;
 
 enum
@@ -104,10 +103,8 @@ gint ghb_widget_int(GtkWidget *widget);
 gint ghb_widget_boolean(GtkWidget *widget);
 
 void ghb_widget_to_setting(GhbValue *settings, GtkWidget *widget);
-int ghb_ui_update(
-    signal_user_data_t *ud, const gchar *name, const GhbValue *value);
-int ghb_ui_update_from_settings(
-    signal_user_data_t *ud, const gchar *name, const GhbValue *settings);
+int ghb_ui_update(const char *name, const GhbValue *value);
+int ghb_ui_update_from_settings(const char *name, const GhbValue *settings);
 int ghb_ui_settings_update(
     signal_user_data_t *ud, GhbValue *settings, const gchar *name,
     const GhbValue *value);

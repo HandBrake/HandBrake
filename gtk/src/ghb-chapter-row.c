@@ -20,6 +20,7 @@
 
 #include "config.h"
 
+#include "compat.h"
 #include "ghb-chapter-row.h"
 
 struct _GhbChapterRow {
@@ -119,7 +120,7 @@ ghb_chapter_row_get_property (GObject *object, guint prop_id,
             break;
 
         case PROP_NAME:
-            g_value_set_string(value, gtk_entry_get_text(self->chapter_entry));
+            g_value_set_string(value, ghb_editable_get_text(self->chapter_entry));
             break;
 
         default:
@@ -206,7 +207,7 @@ ghb_chapter_row_get_name (GhbChapterRow *self)
 {
     g_return_val_if_fail(GHB_IS_CHAPTER_ROW(self), 0);
 
-    return gtk_entry_get_text(self->chapter_entry);
+    return ghb_editable_get_text(self->chapter_entry);
 }
 
 GtkWidget *
@@ -290,7 +291,7 @@ ghb_chapter_row_set_name (GhbChapterRow *self, const char *name)
     if (name == NULL)
         name = "";
 
-    gtk_entry_set_text(self->chapter_entry, name);
+    ghb_editable_set_text(self->chapter_entry, name);
 }
 
 void ghb_chapter_row_grab_focus (GhbChapterRow *self)
