@@ -7,6 +7,15 @@ Before updating HandBrake, please make sure there are no pending encodes in the 
 
 Windows users, please make sure to install [Microsoft .NET Desktop Runtime version 6.0.x](https://dotnet.microsoft.com/en-us/download/dotnet/6.0). Read carefully: you need the **DESKTOP** runtime. You must install .NET 6 even if you have installed .NET 7.
 
+
+## HandBrake 1.7.3
+
+#### Windows
+- Improved Keyboard Navigation on Chapter Tab (#5679)
+- Fixed an issue that could cause encodes to appear stalled when process isolation is turned on.
+- Fixed an issue that could prevent QSV decode from being used when a system has a non-intel GPU.
+
+
 ## HandBrake 1.7.2
 
 #### Video
