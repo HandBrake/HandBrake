@@ -3,6 +3,7 @@
 # UI files
 src/ui/menu.ui
 src/ui/ghb.ui
+src/ui/ghb-button.ui
 src/ui/ghb-chapter-row.ui
 src/ui/ghb-file-button.ui
 src/ui/ghb-queue-row.ui
