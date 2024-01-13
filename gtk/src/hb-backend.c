@@ -1780,6 +1780,9 @@ ghb_lookup_video_encoder(const char *name)
 int
 ghb_lookup_video_encoder_codec(const char *name)
 {
+    if (!name)
+        return -1;
+
     return ghb_lookup_video_encoder(name)->codec;
 }
 
@@ -3841,13 +3844,13 @@ ghb_picture_settings_deps(signal_user_data_t *ud)
     widget = GHB_WIDGET(ud->builder, "display_size_lock_image");
     if (keep_aspect)
     {
-        gtk_image_set_from_icon_name(GTK_IMAGE(widget), "emblem-readonly",
-                                     GTK_ICON_SIZE_BUTTON);
+        ghb_image_set_from_icon_name(GTK_IMAGE(widget), "emblem-readonly",
+                                     GHB_ICON_SIZE_BUTTON);
     }
     else
     {
-        gtk_image_set_from_icon_name(GTK_IMAGE(widget), "edit-clear",
-                                     GTK_ICON_SIZE_BUTTON);
+        ghb_image_set_from_icon_name(GTK_IMAGE(widget), "edit-clear",
+                                     GHB_ICON_SIZE_BUTTON);
     }
 }
 
@@ -4087,7 +4090,7 @@ ghb_set_scale_settings(signal_user_data_t * ud, GhbValue *settings, gint mode)
     char * storage_size;
     storage_size = hb_strdup_printf("%d x %d",
                                     resultGeo.width, resultGeo.height);
-    ghb_ui_update(ud, "final_storage_size", ghb_string_value(storage_size));
+    ghb_ui_update("final_storage_size", ghb_string_value(storage_size));
     g_free(storage_size);
 
     if (ghb_check_name_template(ud, "{width}") ||
@@ -4096,7 +4099,7 @@ ghb_set_scale_settings(signal_user_data_t * ud, GhbValue *settings, gint mode)
 
     char * aspect;
     aspect = ghb_get_display_aspect_string(disp_width, resultGeo.height);
-    ghb_ui_update(ud, "final_aspect_ratio", ghb_string_value(aspect));
+    ghb_ui_update("final_aspect_ratio", ghb_string_value(aspect));
     g_free(aspect);
 }
 
@@ -4148,29 +4151,29 @@ ghb_set_scale(signal_user_data_t *ud, gint mode)
     widget = GHB_WIDGET (ud->builder, "scale_height");
     gtk_spin_button_set_increments (GTK_SPIN_BUTTON(widget), mod, 16);
 
-    ghb_ui_update_from_settings(ud, "PictureUseMaximumSize", ud->settings);
-    ghb_ui_update_from_settings(ud, "PictureKeepRatio", ud->settings);
+    ghb_ui_update_from_settings("PictureUseMaximumSize", ud->settings);
+    ghb_ui_update_from_settings("PictureKeepRatio", ud->settings);
 
-    ghb_ui_update_from_settings(ud, "PictureTopCrop", ud->settings);
-    ghb_ui_update_from_settings(ud, "PictureBottomCrop", ud->settings);
-    ghb_ui_update_from_settings(ud, "PictureLeftCrop", ud->settings);
-    ghb_ui_update_from_settings(ud, "PictureRightCrop", ud->settings);
+    ghb_ui_update_from_settings("PictureTopCrop", ud->settings);
+    ghb_ui_update_from_settings("PictureBottomCrop", ud->settings);
+    ghb_ui_update_from_settings("PictureLeftCrop", ud->settings);
+    ghb_ui_update_from_settings("PictureRightCrop", ud->settings);
 
-    ghb_ui_update_from_settings(ud, "scale_width", ud->settings);
-    ghb_ui_update_from_settings(ud, "scale_height", ud->settings);
-    ghb_ui_update_from_settings(ud, "PictureWidth", ud->settings);
-    ghb_ui_update_from_settings(ud, "PictureHeight", ud->settings);
+    ghb_ui_update_from_settings("scale_width", ud->settings);
+    ghb_ui_update_from_settings("scale_height", ud->settings);
+    ghb_ui_update_from_settings("PictureWidth", ud->settings);
+    ghb_ui_update_from_settings("PictureHeight", ud->settings);
 
-    ghb_ui_update_from_settings(ud, "PicturePARWidth", ud->settings);
-    ghb_ui_update_from_settings(ud, "PicturePARHeight", ud->settings);
+    ghb_ui_update_from_settings("PicturePARWidth", ud->settings);
+    ghb_ui_update_from_settings("PicturePARHeight", ud->settings);
 
-    ghb_ui_update_from_settings(ud, "PicturePadTop", ud->settings);
-    ghb_ui_update_from_settings(ud, "PicturePadBottom", ud->settings);
-    ghb_ui_update_from_settings(ud, "PicturePadLeft", ud->settings);
-    ghb_ui_update_from_settings(ud, "PicturePadRight", ud->settings);
+    ghb_ui_update_from_settings("PicturePadTop", ud->settings);
+    ghb_ui_update_from_settings("PicturePadBottom", ud->settings);
+    ghb_ui_update_from_settings("PicturePadLeft", ud->settings);
+    ghb_ui_update_from_settings("PicturePadRight", ud->settings);
 
-    ghb_ui_update_from_settings(ud, "PictureDARWidth", ud->settings);
-    ghb_ui_update_from_settings(ud, "DisplayHeight", ud->settings);
+    ghb_ui_update_from_settings("PictureDARWidth", ud->settings);
+    ghb_ui_update_from_settings("DisplayHeight", ud->settings);
     ud->scale_busy = FALSE;
 }
 

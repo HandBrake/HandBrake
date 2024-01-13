@@ -22,7 +22,7 @@
 #define G_LOG_USE_STRUCTURED
 #define G_LOG_DOMAIN "ghb"
 
-#define ghb_log_func(x) g_debug("Function: %s", __func__)
+#define ghb_log_func(x)
 #define ghb_log_func_str(x) g_debug("Function: %s (%s)", __func__, (x))
 
 #include <gtk/gtk.h>
@@ -92,15 +92,15 @@ static inline void ghb_widget_get_preferred_height(
 #endif
 }
 
-static inline void ghb_button_set_icon_name(GtkButton *button,
-                                            const char * name)
+static inline void
+gtkc_button_set_icon_name (GtkButton *button, const char *name)
 {
 #if GTK_CHECK_VERSION(4, 4, 0)
     gtk_button_set_icon_name(button, name);
 #else
     GtkImage *image;
 
-    image = GTK_IMAGE(gtk_image_new_from_icon_name(name, GTK_ICON_SIZE_BUTTON));
+    image = GTK_IMAGE(gtk_image_new_from_icon_name(name, GHB_ICON_SIZE_BUTTON));
     gtk_button_set_image(button, GTK_WIDGET(image));
 #endif
 }
@@ -124,10 +124,7 @@ static inline void ghb_get_expand_fill(GtkBox * box, GtkWidget * child,
 static inline void ghb_box_append_child(GtkBox * box, GtkWidget * child)
 {
 #if GTK_CHECK_VERSION(4, 4, 0)
-    GtkWidget * sibling = NULL;
-
-    sibling = gtk_widget_get_last_child(GTK_WIDGET(box));
-    gtk_box_insert_child_after(box, child, sibling);
+    gtk_box_append(box, child);
 #else
     gboolean expand, fill;
 
@@ -147,43 +144,18 @@ static inline void ghb_css_provider_load_from_data(GtkCssProvider *provider,
 #endif
 }
 
-static inline GdkEventType ghb_event_get_event_type(const GdkEvent *event)
+static inline GdkEventType ghb_event_get_event_type(GdkEvent *event)
 {
     return gdk_event_get_event_type(event);
 }
 
-static inline gboolean ghb_event_get_keyval(const GdkEvent *event,
-                                            guint *keyval)
-{
-    return gdk_event_get_keyval(event, keyval);
-}
-
-static inline gboolean ghb_event_get_button(const GdkEvent *event,
-                                            guint *button)
-{
-    return gdk_event_get_button(event, button);
-}
-
-static inline PangoFontDescription* ghb_widget_get_font(GtkWidget *widget)
-{
-    PangoFontDescription *font = NULL;
-
-    GtkStyleContext *style;
-
-    style = gtk_widget_get_style_context(widget);
-
-    gtk_style_context_get(style, GTK_STATE_FLAG_NORMAL,
-                          "font", &font, NULL);
-    return font;
-}
-
 #if GTK_CHECK_VERSION(4, 4, 0)
 typedef GdkSurface      GhbSurface;
-typedef GdkSurfaceHints GhbSurfaceHints;
 
 static inline GhbSurface * ghb_widget_get_surface(GtkWidget * widget)
 {
-    return gtk_widget_get_surface(widget);
+    GtkRoot *root = gtk_widget_get_root(widget);
+    return gtk_native_get_surface(GTK_NATIVE(root));
 }
 
 static inline GdkMonitor *
@@ -191,17 +163,8 @@ ghb_display_get_monitor_at_surface(GdkDisplay * display, GhbSurface * surface)
 {
     return gdk_display_get_monitor_at_surface(display, surface);
 }
-
-static inline void
-ghb_surface_set_geometry_hints(GhbSurface * surface,
-                               const GdkGeometry * geometry,
-                               GhbSurfaceHints geom_mask)
-{
-    gdk_surface_set_geometry_hints(surface, geometry, geom_mask);
-}
 #else
 typedef GdkWindow       GhbSurface;
-typedef GdkWindowHints  GhbSurfaceHints;
 
 static inline GhbSurface * ghb_widget_get_surface(GtkWidget * widget)
 {
@@ -212,14 +175,6 @@ static inline GdkMonitor *
 ghb_display_get_monitor_at_surface(GdkDisplay * display, GhbSurface * surface)
 {
     return gdk_display_get_monitor_at_window(display, surface);
-}
-
-static inline void
-ghb_surface_set_geometry_hints(GhbSurface * surface,
-                               const GdkGeometry * geometry,
-                               GhbSurfaceHints geom_mask)
-{
-    gdk_window_set_geometry_hints(surface, geometry, geom_mask);
 }
 #endif
 
@@ -271,11 +226,25 @@ static inline gboolean ghb_strv_contains(const char ** strv, const char * str)
 
 #define ghb_editable_get_text(e) gtk_editable_get_text(GTK_EDITABLE(e))
 #define ghb_editable_set_text(e,t) gtk_editable_set_text(GTK_EDITABLE(e), (t))
+#define ghb_window_destroy(w) gtk_window_destroy(GTK_WINDOW(w))
+#define ghb_file_chooser_set_current_folder(c,f,e) gtk_file_chooser_set_current_folder((c), (f), (e))
+#define ghb_tool_button_set_icon_name(b,n) ghb_button_set_icon_name(GHB_BUTTON(b), (n))
+#define ghb_tool_button_set_label(b,l) ghb_button_set_label(GHB_BUTTON(b), (l))
+#define ghb_tool_item_set_tooltip_text(i,t) gtk_widget_set_tooltip_text(GTK_WIDGET(i), (t))
+#define ghb_check_button_get_active(b) gtk_check_button_get_active(GTK_CHECK_BUTTON(b))
+#define ghb_check_button_set_active(b,a) gtk_check_button_set_active(GTK_CHECK_BUTTON(b), (a))
 
 #else
 
 #define ghb_editable_get_text(e) gtk_entry_get_text(GTK_ENTRY(e))
 #define ghb_editable_set_text(e,t) gtk_entry_set_text(GTK_ENTRY(e), (t))
+#define ghb_window_destroy(w) gtk_widget_destroy(GTK_WIDGET(w))
+#define ghb_file_chooser_set_current_folder(c,f,e) gtk_file_chooser_set_current_folder_file((c), (f), (e))
+#define ghb_tool_button_set_icon_name(b,n) gtk_tool_button_set_icon_name(GTK_TOOL_BUTTON(b), (n))
+#define ghb_tool_button_set_label(b,l) gtk_tool_button_set_label(GTK_TOOL_BUTTON(b), (l))
+#define ghb_tool_item_set_tooltip_text(i,t) gtk_tool_item_set_tooltip_text(GTK_TOOL_ITEM(i), (t))
+#define ghb_check_button_get_active(b) gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(b))
+#define ghb_check_button_set_active(b,a) gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(b), (a))
 
 #endif
 
@@ -343,7 +312,7 @@ ghb_scale_button_new(gdouble min, gdouble max, gdouble step,
 static inline void ghb_drag_status(GdkDrop * ctx, GdkDragAction action,
                                    guint32 time)
 {
-    gdk_drop_status(ctx, action);
+    gdk_drop_status(ctx, action, GDK_ACTION_MOVE);
 }
 #else
 static inline void ghb_drag_status(GdkDragContext * ctx, GdkDragAction action,
@@ -365,12 +334,7 @@ static inline void ghb_entry_set_width_chars(GtkEntry * entry, gint n_chars)
 }
 #endif
 
-#if GTK_CHECK_VERSION(4, 4, 0)
-static inline GdkAtom ghb_atom_string(const char * str)
-{
-    return g_intern_static_string(str);
-}
-#else
+#if !GTK_CHECK_VERSION(4, 4, 0)
 static inline GdkAtom ghb_atom_string(const char * str)
 {
     return gdk_atom_intern_static_string(str);
@@ -428,6 +392,28 @@ ghb_file_chooser_set_initial_file (GtkFileChooser *chooser, const char *file)
             g_free(base);
         }
     }
+}
+
+static inline char *
+ghb_file_chooser_get_filename (GtkFileChooser *chooser)
+{
+#if GTK_CHECK_VERSION(4, 4, 0)
+    g_autoptr(GFile) file = gtk_file_chooser_get_file(chooser);
+    return g_file_get_path(file);
+#else
+    return gtk_file_chooser_get_filename(chooser);
+#endif
+}
+
+static inline char *
+ghb_file_chooser_get_current_folder (GtkFileChooser *chooser)
+{
+#if GTK_CHECK_VERSION(4, 4, 0)
+    g_autoptr(GFile) folder = gtk_file_chooser_get_current_folder(chooser);
+    return g_file_get_path(folder);
+#else
+    return gtk_file_chooser_get_current_folder(chooser);
+#endif
 }
 
 G_END_DECLS

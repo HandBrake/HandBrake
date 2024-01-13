@@ -46,6 +46,6 @@ void     ghb_queue_update_live_stats(signal_user_data_t * ud, int index,
 void     ghb_queue_drag_n_drop_init(signal_user_data_t * ud);
 void     ghb_add_to_queue_list(signal_user_data_t *ud, GhbValue *queueDict);
 void     ghb_queue_selection_init(signal_user_data_t * ud);
-void     ghb_queue_row_remove(GhbQueueRow *row, signal_user_data_t *ud);
+void     ghb_queue_row_remove(GhbQueueRow *row);
 
 #endif // _QUEUEHANDLER_H_

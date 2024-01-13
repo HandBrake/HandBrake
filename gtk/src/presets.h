@@ -63,11 +63,6 @@ void ghb_preset_menu_button_refresh(signal_user_data_t *ud,
 void presets_list_selection_changed_cb(
     GtkTreeSelection *selection, signal_user_data_t *ud);
 #if GTK_CHECK_VERSION(4, 4, 0)
-void presets_drag_data_received_cb(
-    GtkTreeView        *tv,
-    GdkDrop            *dc,
-    GtkSelectionData   *selection_data,
-    signal_user_data_t *ud);
 gboolean presets_drag_motion_cb(
     GtkTreeView        *tv,
     GdkDrop            *ctx,

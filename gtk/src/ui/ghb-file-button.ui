@@ -1,55 +1,41 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
-  <requires lib="gtk+" version="3.22"/>
+  <requires lib="gtk" version="4.0"/>
   <template class="GhbFileButton" parent="GtkButton">
-    <signal name="clicked" handler="button_clicked_cb" swapped="no"/>
     <child>
       <object class="GtkBox" id="box2">
-        <property name="visible">1</property>
         <property name="spacing">4</property>
         <child>
           <object class="GtkImage" id="icon">
-            <property name="visible">1</property>
+            <property name="halign">center</property>
             <property name="width-request">16</property>
+            <property name="accessible-role">presentation</property>
           </object>
-          <packing>
-            <property name="fill">0</property>
-          </packing>
         </child>
         <child>
           <object class="GtkLabel" id="label">
-            <property name="visible">1</property>
+            <property name="hexpand">1</property>
             <property name="halign">start</property>
             <property name="valign">baseline</property>
             <property name="xalign">0</property>
             <property name="ellipsize">end</property>
           </object>
-          <packing>
-            <property name="expand">1</property>
-            <property name="position">1</property>
-          </packing>
         </child>
         <child>
           <object class="GtkSeparator" id="separator1">
+            <property name="halign">center</property>
             <property name="visible">0</property>
             <property name="orientation">vertical</property>
           </object>
-          <packing>
-            <property name="fill">0</property>
-            <property name="position">2</property>
-          </packing>
         </child>
         <child>
           <object class="GtkImage" id="open_file_icon">
-            <property name="visible">1</property>
+            <property name="halign">center</property>
             <property name="icon-name">document-open-symbolic</property>
             <property name="use-fallback">1</property>
             <property name="valign">center</property>
+            <property name="accessible-role">presentation</property>
           </object>
-          <packing>
-            <property name="fill">0</property>
-            <property name="position">3</property>
-          </packing>
         </child>
       </object>
     </child>

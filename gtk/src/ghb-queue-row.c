@@ -22,17 +22,19 @@
 
 #include "compat.h"
 #include "ghb-queue-row.h"
+#include "application.h"
 #include "queuehandler.h"
 
 struct _GhbQueueRow {
     GtkListBoxRow parent_instance;
     GActionMap *actions;
 
-    signal_user_data_t *ud;
-
     GtkLabel *dest_label;
     GtkImage *status_icon;
     GtkProgressBar *encode_progress_bar;
+#if GTK_CHECK_VERSION(4, 4, 0)
+    GtkDragSource *drag_source;
+#endif
 
     char *destination;
     int status;
@@ -59,6 +61,28 @@ static void ghb_queue_row_set_property(GObject *object, guint prop_id,
 static GActionEntry action_entries[] = {
     {"delete", ghb_queue_row_delete_action, NULL, NULL, NULL},
 };
+
+#if GTK_CHECK_VERSION(4, 4, 0)
+static GdkContentProvider *
+ghb_queue_row_drag_prepare (GtkDragSource *source, double x, double y, GhbQueueRow *self)
+{
+    return gdk_content_provider_new_typed(GHB_TYPE_QUEUE_ROW, self);
+}
+
+static void
+ghb_queue_row_drag_begin (GtkDragSource *source, GdkDrag *drag, GhbQueueRow *self)
+{
+    g_object_set_data(G_OBJECT(gtk_widget_get_parent(GTK_WIDGET(self))), "drag-row", self);
+    gtk_style_context_add_class(gtk_widget_get_style_context(GTK_WIDGET(self)), "drag-icon");
+    GdkPaintable *paintable = gtk_widget_paintable_new(GTK_WIDGET(self));
+    GdkPaintable *current = gdk_paintable_get_current_image(paintable);
+    gtk_drag_source_set_icon(source, current, 0, 0);
+    g_object_unref(paintable);
+    g_object_unref(current);
+    gtk_style_context_remove_class(gtk_widget_get_style_context(GTK_WIDGET(self)), "drag-icon");
+    gtk_style_context_add_class(gtk_widget_get_style_context(GTK_WIDGET(self)), "drag-row");
+}
+#endif
 
 static void
 ghb_queue_row_class_init (GhbQueueRowClass *klass)
@@ -148,6 +172,15 @@ static void
 ghb_queue_row_init (GhbQueueRow *self)
 {
     gtk_widget_init_template(GTK_WIDGET(self));
+
+#if GTK_CHECK_VERSION(4, 4, 0)
+    self->drag_source = gtk_drag_source_new();
+
+    g_signal_connect(self->drag_source, "prepare", G_CALLBACK(ghb_queue_row_drag_prepare), self);
+    g_signal_connect(self->drag_source, "drag-begin", G_CALLBACK(ghb_queue_row_drag_begin), self);
+
+    gtk_widget_add_controller(GTK_WIDGET(self), GTK_EVENT_CONTROLLER(self->drag_source));
+#endif
 }
 
 static void
@@ -182,14 +215,12 @@ ghb_queue_row_get_destination (GhbQueueRow *self)
 }
 
 GtkWidget *
-ghb_queue_row_new (const char *dest, int status, signal_user_data_t *ud)
+ghb_queue_row_new (const char *dest, int status)
 {
     GhbQueueRow *row;
 
     row = g_object_new(GHB_TYPE_QUEUE_ROW, NULL);
     ghb_queue_row_set_destination(row, dest);
-
-    row->ud = ud;
 
     row->actions = G_ACTION_MAP(g_simple_action_group_new());
     g_action_map_add_action_entries(row->actions, action_entries,
@@ -215,29 +246,41 @@ ghb_queue_row_set_status (GhbQueueRow *self, int status)
     g_return_if_fail(GHB_IS_QUEUE_ROW(self));
 
     self->status = status;
-    const char *icon_name;
+    const char *icon_name, *accessible_name;
     switch (status)
     {
         case GHB_QUEUE_RUNNING:
             icon_name = "hb-start";
+            accessible_name = _("Running Queue Item");
             break;
         case GHB_QUEUE_PENDING:
             icon_name = "hb-source";
+            accessible_name = _("Pending Queue Item");
             break;
         case GHB_QUEUE_FAIL:
+            icon_name = "hb-stop";
+            accessible_name = _("Failed Queue Item");
+            break;
         case GHB_QUEUE_CANCELED:
             icon_name = "hb-stop";
+            accessible_name = _("Cancelled Queue Item");
             break;
         case GHB_QUEUE_DONE:
             icon_name = "hb-complete";
+            accessible_name = _("Completed Queue Item");
             break;
         default:
             icon_name = "document-edit";
+            accessible_name = _("Pending Queue Item");
             break;
     }
 
     ghb_image_set_from_icon_name(self->status_icon, icon_name,
                                  GHB_ICON_SIZE_BUTTON);
+#if GTK_CHECK_VERSION(4, 4, 0)
+    gtk_accessible_update_property(GTK_ACCESSIBLE(self->status_icon),
+                                   GTK_ACCESSIBLE_PROPERTY_LABEL, accessible_name, -1);
+#endif
 }
 
 int
@@ -283,5 +326,6 @@ ghb_queue_row_delete_action (GSimpleAction *action, GVariant *param,
     GhbQueueRow *self = data;
 
     g_return_if_fail(GHB_IS_QUEUE_ROW(self));
-    ghb_queue_row_remove(self, self->ud);
+
+    ghb_queue_row_remove(self);
 }

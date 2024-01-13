@@ -9,7 +9,7 @@
 
 .progress-overlay
 {
-    min-height:1px;
+    min-height: 1px;
 }
 
 .progress-overlay trough
@@ -62,6 +62,35 @@
     margin: 0px;
 }
 
+.ghb-button .ghb-indicator
+{
+    background-color: #3584e4;
+    color: white;
+    border-radius: 100px;
+    padding: 0px 4px;
+    margin: -6px -7px;
+    font-size: 7pt;
+    font-weight: 800;
+}
+
+.large-icons > .ghb-button .ghb-indicator
+{
+    padding: 1px 6px;
+    margin: -4px -6px;
+    font-size: 8pt;
+}
+
+.ghb-window-title
+{
+    margin: -4px 4px;
+}
+
+.subtitle
+{
+    font-size: smaller;
+    opacity: 0.6;
+}
+
 textview
 {
     padding: 5px 5px 5px 5px;
@@ -80,9 +109,8 @@ stackswitcher button.text-button
 
 .ghb-monospace
 {
-    font-family: monospace;
     font-size: 8pt;
-    font-weight: 300;
+    padding: 0px 5px;
 }
 
 .row:not(:first-child)
@@ -141,3 +169,4 @@ toolbar
 {
     -gtk-icon-style: symbolic;
 }
+

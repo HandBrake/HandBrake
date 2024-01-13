@@ -36,6 +36,7 @@
 #include <gst/pbutils/missing-plugins.h>
 #endif
 
+#include "application.h"
 #include "settings.h"
 #include "jobdict.h"
 #include "presets.h"
@@ -154,7 +155,14 @@ preview_set_render_size(signal_user_data_t *ud, int width, int height)
         ratio = (gfloat) width / height;
 
     gtk_widget_set_size_request(widget, width, height);
+#if GTK_CHECK_VERSION(4, 4, 0)
+    gtk_aspect_frame_set_xalign(GTK_ASPECT_FRAME(frame), 0.5);
+    gtk_aspect_frame_set_yalign(GTK_ASPECT_FRAME(frame), 0.5);
+    gtk_aspect_frame_set_ratio(GTK_ASPECT_FRAME(frame), ratio);
+    gtk_aspect_frame_set_obey_child(GTK_ASPECT_FRAME(frame), FALSE);
+#else
     gtk_aspect_frame_set(GTK_ASPECT_FRAME(frame), 0.5, 0.5, ratio, FALSE);
+#endif
 
     if (ud->preview->is_fullscreen)
     {
@@ -164,7 +172,11 @@ preview_set_render_size(signal_user_data_t *ud, int width, int height)
     else
     {
         gtk_window_unmaximize(window);
+#if GTK_CHECK_VERSION(4, 4, 0)
+        gtk_window_set_default_size(window, width, height);
+#else
         gtk_window_resize(window, width, height);
+#endif
     }
     gtk_widget_set_size_request(widget, -1, -1);
 
@@ -301,10 +313,11 @@ live_preview_pause(signal_user_data_t *ud)
 #endif
 
 static void
-live_preview_stop(signal_user_data_t *ud)
+live_preview_stop (void)
 {
     GtkImage *img;
     GtkRange *progress;
+    signal_user_data_t *ud = ghb_ud();
 
     if (!ud->preview->live_enabled)
         return;
@@ -333,7 +346,7 @@ ghb_live_reset(signal_user_data_t *ud)
     ud->preview->live_id = -1;
     ud->preview->encode_frame = -1;
     if (!ud->preview->pause)
-        live_preview_stop(ud);
+        live_preview_stop();
     if (ud->preview->current)
     {
         g_free(ud->preview->current);
@@ -445,7 +458,7 @@ live_preview_cb(GstBus *bus, GstMessage *msg, gpointer data)
         {
             // Done
             //printf("eos\n");
-            live_preview_stop(ud);
+            live_preview_stop();
             gst_element_seek(ud->preview->play, 1.0,
                 GST_FORMAT_TIME, GST_SEEK_FLAG_FLUSH | GST_SEEK_FLAG_KEY_UNIT,
                 GST_SEEK_TYPE_SET, 0,
@@ -679,10 +692,11 @@ live_preview_cb(GstBus *bus, GstMessage *msg, gpointer data)
 #endif
 
 G_MODULE_EXPORT void
-live_preview_start_cb(GtkWidget *xwidget, signal_user_data_t *ud)
+live_preview_start_cb (GtkWidget *xwidget, gpointer data)
 {
     gchar *tmp_dir;
     gchar *name;
+    signal_user_data_t *ud = ghb_ud();
     gint frame = ud->preview->frame;
 
     tmp_dir = ghb_get_tmp_dir();
@@ -823,11 +837,12 @@ unlock_seek_cb(signal_user_data_t *ud)
 #endif
 
 G_MODULE_EXPORT void
-live_preview_seek_cb(GtkWidget *widget, signal_user_data_t *ud)
+live_preview_seek_cb (GtkWidget *widget, gpointer data)
 {
 #if defined(_ENABLE_GST)
     gdouble dval;
     gint64 pos;
+    signal_user_data_t *ud = ghb_ud();
 
     if (!ud->preview->live_enabled)
         return;
@@ -995,7 +1010,7 @@ init_preview_image(signal_user_data_t *ud)
 {
     GtkWidget *widget;
 
-    live_preview_stop(ud);
+    live_preview_stop();
 
     widget = GHB_WIDGET (ud->builder, "preview_frame");
     ud->preview->frame = ghb_widget_int(widget) - 1;
@@ -1093,13 +1108,10 @@ ghb_reset_preview_image(signal_user_data_t *ud)
 
 #if GTK_CHECK_VERSION(4, 4, 0)
 G_MODULE_EXPORT void
-preview_draw_cb(
-    GtkDrawingArea * da,
-    cairo_t        * cr,
-    int              width,
-    int              height,
-    signal_user_data_t *ud)
+preview_draw_cb (GtkDrawingArea *da, cairo_t *cr, int width, int height,
+                 gpointer data)
 {
+    signal_user_data_t *ud = ghb_ud();
     if (ud->preview->scaled_pix != NULL)
     {
         _draw_pixbuf(ud, cr, ud->preview->scaled_pix);
@@ -1109,11 +1121,9 @@ preview_draw_cb(
 #else
 
 G_MODULE_EXPORT gboolean
-preview_draw_cb(
-    GtkWidget *widget,
-    cairo_t *cr,
-    signal_user_data_t *ud)
+preview_draw_cb (GtkWidget *widget, cairo_t *cr, gpointer data)
 {
+    signal_user_data_t *ud = ghb_ud();
     if (ud->preview->scaled_pix != NULL)
     {
         _draw_pixbuf(ud, cr, ud->preview->scaled_pix);
@@ -1132,12 +1142,14 @@ preview_button_size_allocate_cb(
 #else
     GdkRectangle *rect,
 #endif
-    signal_user_data_t *ud)
+    gpointer data)
 {
 #if !GTK_CHECK_VERSION(4, 4, 0)
     int width  = rect->width;
     int height = rect->height;
 #endif
+    signal_user_data_t *ud = ghb_ud();
+
     if (ud->preview->button_width  == width &&
         ud->preview->button_height == height)
     {
@@ -1178,9 +1190,11 @@ show_preview_action_cb(GSimpleAction *action, GVariant *value,
 }
 
 G_MODULE_EXPORT void
-preview_reset_clicked_cb(GtkWidget *toggle, signal_user_data_t *ud)
+preview_reset_clicked_cb (GtkWidget *toggle, gpointer data)
 {
     ghb_log_func();
+    signal_user_data_t *ud = ghb_ud();
+
     if (ud->preview->width <= 0 || ud->preview->height <= 0)
     {
         return;
@@ -1202,8 +1216,9 @@ preview_reset_clicked_cb(GtkWidget *toggle, signal_user_data_t *ud)
 }
 
 G_MODULE_EXPORT void
-preview_frame_value_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
+preview_frame_value_changed_cb (GtkWidget *widget, gpointer data)
 {
+    signal_user_data_t *ud = ghb_ud();
     if (ud->preview->live_id >= 0)
     {
         ghb_stop_live_encode();
@@ -1219,16 +1234,17 @@ preview_window_delete_cb(
 #if !GTK_CHECK_VERSION(4, 4, 0)
     GdkEvent *event,
 #endif
-    signal_user_data_t *ud)
+    gpointer data)
 {
-    live_preview_stop(ud);
+    live_preview_stop();
     gtk_widget_set_visible(widget, FALSE);
     return TRUE;
 }
 
 G_MODULE_EXPORT void
-preview_duration_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
+preview_duration_changed_cb (GtkWidget *widget, gpointer data)
 {
+    signal_user_data_t *ud = ghb_ud();
     ghb_log_func();
     ghb_live_reset(ud);
     ghb_widget_to_setting (ud->prefs, widget);
@@ -1254,22 +1270,15 @@ hud_timeout(signal_user_data_t *ud)
 
 #if GTK_CHECK_VERSION(4, 4, 0)
 G_MODULE_EXPORT void
-hud_enter_cb(
-    GtkEventControllerMotion * econ,
-    double                     x,
-    double                     y,
-    GdkCrossingMode            cross,
-    GdkNotifyType              notify,
-    signal_user_data_t *ud)
+hud_enter_cb (GtkEventControllerMotion *econ, double x, double y, gpointer data)
 #else
 G_MODULE_EXPORT gboolean
-hud_enter_cb(
-    GtkWidget *widget,
-    GdkEventCrossing *event,
-    signal_user_data_t *ud)
+hud_enter_cb (GtkWidget *widget, GdkEventCrossing *event, gpointer data)
 #endif
 {
     GtkWidget * hud;
+    signal_user_data_t *ud = ghb_ud();
+
     if (hud_timeout_id != 0)
     {
         GMainContext *mc;
@@ -1294,17 +1303,10 @@ hud_enter_cb(
 
 #if GTK_CHECK_VERSION(4, 4, 0)
 G_MODULE_EXPORT void
-hud_leave_cb(
-    GtkEventControllerMotion * econ,
-    GdkCrossingMode            cross,
-    GdkNotifyType              notify,
-    signal_user_data_t *ud)
+hud_leave_cb (GtkEventControllerMotion *econ, gpointer data)
 #else
 G_MODULE_EXPORT gboolean
-hud_leave_cb(
-    GtkWidget *widget,
-    GdkEventCrossing *event,
-    signal_user_data_t *ud)
+hud_leave_cb (GtkWidget *widget, GdkEventCrossing *event, gpointer data)
 #endif
 {
     in_hud = FALSE;
@@ -1314,31 +1316,22 @@ hud_leave_cb(
 }
 
 G_MODULE_EXPORT void
-preview_click_cb (GtkGesture *gest,
-                  gint n_press,
-                  gdouble x,
-                  gdouble y,
-                  signal_user_data_t *ud)
+preview_click_cb (GtkGesture *gest, int n_press, double x, double y, gpointer data)
 {
     if (n_press == 2)
-        g_action_activate(GHB_ACTION(ud->builder, "preview-fullscreen"), NULL);
+        g_action_activate(GHB_ACTION("preview-fullscreen"), NULL);
 }
 
 #if GTK_CHECK_VERSION(4, 4, 0)
 G_MODULE_EXPORT void
-preview_leave_cb(
-    GtkEventControllerMotion * econ,
-    GdkCrossingMode            cross,
-    GdkNotifyType              notify,
-    signal_user_data_t *ud)
+preview_leave_cb (GtkEventControllerMotion *econ, gpointer data)
 #else
 G_MODULE_EXPORT gboolean
-preview_leave_cb(
-    GtkWidget *widget,
-    GdkEventCrossing *event,
-    signal_user_data_t *ud)
+preview_leave_cb (GtkWidget *widget, GdkEventCrossing *event, gpointer data)
 #endif
 {
+    signal_user_data_t *ud = ghb_ud();
+
     if (hud_timeout_id != 0)
     {
         GMainContext *mc;
@@ -1357,20 +1350,15 @@ preview_leave_cb(
 
 #if GTK_CHECK_VERSION(4, 4, 0)
 G_MODULE_EXPORT void
-preview_motion_cb(
-    GtkEventControllerMotion * econ,
-    gdouble                    x,
-    gdouble                    y,
-    signal_user_data_t *ud)
+preview_motion_cb (GtkEventControllerMotion * econ, double x, double y,
+                   gpointer data)
 #else
 G_MODULE_EXPORT gboolean
-preview_motion_cb(
-    GtkWidget *widget,
-    GdkEventMotion *event,
-    signal_user_data_t *ud)
+preview_motion_cb (GtkWidget *widget, GdkEventMotion *event, gpointer data)
 #endif
 {
     GtkWidget * hud;
+    signal_user_data_t *ud = ghb_ud();
 
     if (hud_timeout_id != 0)
     {
@@ -1396,44 +1384,29 @@ preview_motion_cb(
 #endif
 }
 
-// TODO: GTK4 eliminated "configure-event" signal.
-// From a read of the gtk4 code, it appears GDK_CONFIGURE does
-// not get propagated.  And there is no way to set position of
-// a window :*(
-//
-// Hopefully they will fix this or provide a better alternative
-// before gtk4 is released.
-#if !GTK_CHECK_VERSION(4, 4, 0)
-G_MODULE_EXPORT gboolean
-preview_configure_cb(
-    GtkWidget *widget,
-    GdkEventConfigure *event,
-    signal_user_data_t *ud)
+#if GTK_CHECK_VERSION(4, 4, 0)
+G_MODULE_EXPORT void
+preview_notify_fullscreen_cb (GtkWindow *window, GParamSpec *pspec, gpointer data)
 {
-    if (gtk_widget_get_visible(widget))
-    {
-        // TODO: can this be done in GTK4?
-        gint x, y;
+    gboolean is_fullscreen = gtk_window_is_fullscreen(window);
+    ghb_ud()->preview->is_fullscreen = is_fullscreen;
 
-        gtk_window_get_position(GTK_WINDOW(widget), &x, &y);
-        ghb_dict_set_int(ud->prefs, "preview_x", x);
-        ghb_dict_set_int(ud->prefs, "preview_y", y);
-        ghb_pref_set(ud->prefs, "preview_x");
-        ghb_pref_set(ud->prefs, "preview_y");
-        ghb_prefs_store();
-    }
-    return FALSE;
+    GtkWidget *widget = ghb_builder_widget("live_preview_fullscreen");
+    gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), is_fullscreen);
+    gtk_button_set_icon_name(GTK_BUTTON(widget), is_fullscreen ?
+                             "view-restore-symbolic" : "view-fullscreen-symbolic");
 }
-#endif
+#else
+/*
+ * TODO: Recreate this in GTK4 by connecting to the notify::is-maximized,
+ * notify::is-fullscreened, and (>=4.12 only) notify::suspended
+ * signals.
+ */
 
-#if !GTK_CHECK_VERSION(4, 4, 0)
-// GTK4 no longer has GDK_WINDOW_STATE events :*(
 G_MODULE_EXPORT gboolean
-preview_state_cb(
-    GtkWidget *widget,
-    GdkEvent  *event,
-    signal_user_data_t *ud)
+preview_state_cb (GtkWidget *widget, GdkEvent *event, gpointer data)
 {
+    signal_user_data_t *ud = ghb_ud();
     GdkEventType type = ghb_event_get_event_type(event);
     if (type == GDK_WINDOW_STATE)
     {
@@ -1446,7 +1419,7 @@ preview_state_cb(
         if (wse->changed_mask & wse->new_window_state &
             GDK_WINDOW_STATE_ICONIFIED)
         {
-            live_preview_stop(ud);
+            live_preview_stop();
         }
         ud->preview->is_fullscreen = wse->new_window_state & GDK_WINDOW_STATE_FULLSCREEN;
     }
@@ -1464,12 +1437,14 @@ preview_resize_cb(
 #else
     GdkRectangle  *rect,
 #endif
-    signal_user_data_t *ud)
+    gpointer data)
 {
 #if !GTK_CHECK_VERSION(4, 4, 0)
     int width  = rect->width;
     int height = rect->height;
 #endif
+    signal_user_data_t *ud = ghb_ud();
+
     if (ud->preview->render_width != width ||
         ud->preview->render_height != height)
     {
@@ -1497,7 +1472,7 @@ preview_resize_cb(
 }
 
 G_MODULE_EXPORT void
-show_crop_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
+show_crop_changed_cb(GtkWidget *widget, gpointer data)
 {
 #if 0
     // Disabled until we reimplement this or come up with something better

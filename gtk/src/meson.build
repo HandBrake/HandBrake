@@ -22,7 +22,6 @@ ghb_src = files(
   'presets.c',
   'preview.c',
   'queuehandler.c',
-  'renderer_button.c',
   'resources.c',
   'settings.c',
   'subtitlehandler.c',
