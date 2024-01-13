@@ -9,6 +9,7 @@ ghb_src = files(
   'chapters.c',
   'color-scheme.c',
   'compat.c',
+  'ghb-button.c',
   'ghb-chapter-row.c',
   'ghb-file-button.c',
   'ghb-queue-row.c',

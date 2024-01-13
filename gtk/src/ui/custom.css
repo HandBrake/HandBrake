@@ -38,6 +38,30 @@
     background-color: black;
 }
 
+.ghb-button > box
+{
+    padding-left: 4px;
+    padding-right: 4px;
+}
+
+.ghb-button > box.horizontal > label
+{
+    margin: 0px;
+    padding-right: 0px;
+    padding-left: 6px;
+}
+
+.ghb-button > box.vertical > label
+{
+    margin: 0px;
+    padding: 0px;
+}
+
+.ghb-button > box image
+{
+    margin: 0px;
+}
+
 textview
 {
     padding: 5px 5px 5px 5px;
