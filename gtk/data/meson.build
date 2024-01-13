@@ -1,5 +1,5 @@
+# Copyright (C) 2023-2024 HandBrake Team
 # SPDX-License-Identifier: GPL-2.0-or-later
-# Copyright (c) 2023 HandBrake Team
 
 data = gnome.compile_resources('data_res', 'data_res.gresource.xml',
   source_dir: meson.current_build_dir(),
