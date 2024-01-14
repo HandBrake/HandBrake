@@ -1,24 +1,20 @@
-/* -*- Mode: C; indent-tabs-mode: nil; c-basic-offset: 4; tab-width: 4 -*- */
-/*
- * title-add.c
- * Copyright (C) John Stebbins 2008-2024 <stebbins@stebbins>
+/* title-add.c
  *
- * title-add.c is free software.
+ * Copyright (C) 2008-2024 John Stebbins <stebbins@stebbins>
  *
- * You may redistribute it and/or modify it under the terms of the
- * GNU General Public License version 2, as published by the Free Software
- * Foundation.
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2,
+ * as published by the Free Software Foundation.
  *
- * title-add.c is distributed in the hope that it will be useful,
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
- * See the GNU General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with title-add.c.  If not, write to:
- *  The Free Software Foundation, Inc.,
- *  51 Franklin Street, Fifth Floor
- *  Boston, MA  02110-1301, USA.
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ *
+ * SPDX-License-Identifier: GPL-2.0-only
  */
 
 #include "compat.h"
@@ -481,7 +477,6 @@ static GtkWidget *title_create_row (signal_user_data_t *ud)
     g_signal_connect(dest_file, "changed", (GCallback)title_dest_file_cb, ud);
     gtk_box_append(vbox_dest, dest_file);
     dest_dir = ghb_file_button_new(_("Destination Directory"), GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER);
-    ghb_file_button_set_accept_label(dest_dir, _("Select"));
     g_signal_connect(dest_dir, "notify::file",
                      G_CALLBACK(title_dest_dir_cb), ud);
     gtk_widget_set_name(GTK_WIDGET(dest_dir), "title_dir");

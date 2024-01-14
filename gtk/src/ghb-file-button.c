@@ -32,7 +32,7 @@ struct _GhbFileButton {
     char *title;
     char *accept_label;
     GtkFileChooserAction action;
-    GFile *selected;
+    GFile *selected_file;
 };
 
 G_DEFINE_TYPE(GhbFileButton, ghb_file_button, GTK_TYPE_BUTTON)
@@ -65,27 +65,19 @@ ghb_file_button_class_init (GhbFileButtonClass *class_)
     gtk_widget_class_bind_template_child(widget_class, GhbFileButton, icon);
     gtk_widget_class_bind_template_child(widget_class, GhbFileButton, label);
 
-    props[PROP_ACTION] = g_param_spec_enum("action",
-                                           "Action",
-                                           "The selection mode for the file button",
+    props[PROP_ACTION] = g_param_spec_enum("action", NULL, NULL,
                                            GTK_TYPE_FILE_CHOOSER_ACTION,
                                            GTK_FILE_CHOOSER_ACTION_OPEN,
-                                           G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY);
-    props[PROP_TITLE] = g_param_spec_string("title",
-                                           "Title",
-                                           "The title to use for the file dialog",
+                                           G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
+    props[PROP_TITLE] = g_param_spec_string("title", NULL, NULL,
                                            _("Select a File"),
-                                           G_PARAM_READWRITE);
-    props[PROP_ACCEPT_LABEL] = g_param_spec_string("accept-label",
-                                           "Accept label",
-                                           "The label to use for the accept button",
+                                           G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
+    props[PROP_ACCEPT_LABEL] = g_param_spec_string("accept-label", NULL, NULL,
                                            NULL,
-                                           G_PARAM_READWRITE);
-    props[PROP_FILE] = g_param_spec_string("file",
-                                           "File",
-                                           "The currently selected file or folder",
-                                           NULL,
-                                           G_PARAM_READWRITE);
+                                           G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
+    props[PROP_FILE] = g_param_spec_string("file", NULL, NULL,
+                                           "",
+                                           G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
 
     object_class->set_property = ghb_file_button_set_property;
     object_class->get_property = ghb_file_button_get_property;
@@ -105,24 +97,19 @@ ghb_file_button_get_property (GObject *object, guint prop_id,
     switch (prop_id)
     {
         case PROP_TITLE:
-            g_value_set_string(value, self->title);
+            g_value_set_string(value, ghb_file_button_get_title(self));
             break;
 
         case PROP_ACCEPT_LABEL:
-            g_value_set_string(value, self->accept_label);
+            g_value_set_string(value, ghb_file_button_get_accept_label(self));
             break;
 
         case PROP_FILE:
-            if (self->selected)
-            {
-                char *filename = g_file_get_path(self->selected);
-                g_value_set_string(value, filename);
-                g_free(filename);
-            }
+            g_value_take_string(value, ghb_file_button_get_filename(self));
             break;
 
         case PROP_ACTION:
-            g_value_set_enum(value, self->action);
+            g_value_set_enum(value, ghb_file_button_get_action(self));
             break;
 
         default:
@@ -152,7 +139,7 @@ ghb_file_button_set_property (GObject *object, guint prop_id,
             break;
 
         case PROP_ACTION:
-            self->action = g_value_get_enum(value);
+            ghb_file_button_set_action(self, g_value_get_enum(value));
             break;
 
         default:
@@ -172,7 +159,7 @@ ghb_file_button_finalize (GObject *object)
     GhbFileButton *self = GHB_FILE_BUTTON(object);
     g_return_if_fail(GHB_IS_FILE_BUTTON(self));
 
-    g_clear_object(&self->selected);
+    g_clear_object(&self->selected_file);
     g_clear_object(&self->icon);
     g_clear_object(&self->label);
 
@@ -187,10 +174,10 @@ ghb_file_button_get_file (GhbFileButton *self)
 {
     g_return_val_if_fail(GHB_IS_FILE_BUTTON(self), NULL);
 
-    return self->selected;
+    return self->selected_file;
 }
 
-const GtkFileChooserAction
+GtkFileChooserAction
 ghb_file_button_get_action (GhbFileButton *self)
 {
     g_return_val_if_fail(GHB_IS_FILE_BUTTON(self), 0);
@@ -198,26 +185,52 @@ ghb_file_button_get_action (GhbFileButton *self)
     return self->action;
 }
 
-const char *
+char *
 ghb_file_button_get_filename (GhbFileButton *self)
 {
     g_return_val_if_fail(GHB_IS_FILE_BUTTON(self), NULL);
 
-    if (self->selected)
-        return g_file_get_path(self->selected);
+    if (self->selected_file)
+        return g_file_get_path(self->selected_file);
     else
         return NULL;
 }
 
+const char *
+ghb_file_button_get_title (GhbFileButton *self)
+{
+    g_return_val_if_fail(GHB_IS_FILE_BUTTON(self), NULL);
+
+    return self->title;
+}
+
+const char *
+ghb_file_button_get_accept_label (GhbFileButton *self)
+{
+    g_return_val_if_fail(GHB_IS_FILE_BUTTON(self), NULL);
+
+    if (self->accept_label && self->accept_label[0])
+        return self->accept_label;
+
+    switch (self->action)
+    {
+        case GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER:
+            return _("_Select");
+        case GTK_FILE_CHOOSER_ACTION_SAVE:
+            return _("_Save");
+        case GTK_FILE_CHOOSER_ACTION_OPEN:
+        default:
+            return _("_Open");
+    }
+}
 
 GhbFileButton *
 ghb_file_button_new (const char *title, GtkFileChooserAction action)
 {
     GhbFileButton *button = g_object_new(GHB_TYPE_FILE_BUTTON,
                                          "action", action,
+                                         "title", title,
                                          NULL);
-
-    ghb_file_button_set_title(button, title);
     return button;
 }
 
@@ -244,6 +257,14 @@ file_icon_query_cb (GFile *file, GAsyncResult *result, GhbFileButton *self)
 }
 
 void
+ghb_file_button_set_action (GhbFileButton *self, GtkFileChooserAction action)
+{
+    g_return_if_fail(GHB_IS_FILE_BUTTON(self));
+
+    self->action = action;
+}
+
+void
 ghb_file_button_set_file (GhbFileButton *self, GFile *file)
 {
     char *file_base;
@@ -252,10 +273,10 @@ ghb_file_button_set_file (GhbFileButton *self, GFile *file)
 
     if (file == NULL) return;
 
-    if (self->selected)
-        g_object_unref(self->selected);
+    if (self->selected_file)
+        g_object_unref(self->selected_file);
 
-    self->selected = g_file_dup(file);
+    self->selected_file = g_file_dup(file);
     file_base = g_file_get_basename(file);
     gtk_label_set_label(self->label, file_base);
     g_free(file_base);
@@ -320,9 +341,10 @@ ghb_file_button_clicked (GtkButton *button)
     g_return_if_fail(GHB_IS_FILE_BUTTON(self));
 
     window = GTK_WINDOW(gtk_widget_get_root(GTK_WIDGET(self)));
-    chooser = gtk_file_chooser_native_new(self->title, window, self->action,
-                                          self->accept_label, NULL);
-    g_autofree char *selected_name = g_file_get_path(self->selected);
+    chooser = gtk_file_chooser_native_new(ghb_file_button_get_title(self), window,
+                                          ghb_file_button_get_action(self),
+                                          ghb_file_button_get_accept_label(self), NULL);
+    g_autofree char *selected_name = ghb_file_button_get_filename(self);
     ghb_file_chooser_set_initial_file(GTK_FILE_CHOOSER(chooser), selected_name);
 
     g_signal_connect(chooser, "response", G_CALLBACK(chooser_response_cb), self);

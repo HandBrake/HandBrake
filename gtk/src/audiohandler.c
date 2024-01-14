@@ -1,24 +1,20 @@
-/* -*- Mode: C; indent-tabs-mode: nil; c-basic-offset: 4; tab-width: 4 -*- */
-/*
- * audiohandler.c
- * Copyright (C) John Stebbins 2008-2024 <stebbins@stebbins>
+/* audiohandler.c
  *
- * audiohandler.c is free software.
+ * Copyright (C) 2008-2024 John Stebbins <stebbins@stebbins>
  *
- * You may redistribute it and/or modify it under the terms of the
- * GNU General Public License version 2, as published by the Free Software
- * Foundation.
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2,
+ * as published by the Free Software Foundation.
  *
- * audiohandler.c is distributed in the hope that it will be useful,
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
- * See the GNU General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with main.c.  If not, write to:
- *  The Free Software Foundation, Inc.,
- *  51 Franklin Street, Fifth Floor
- *  Boston, MA  02110-1301, USA.
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ *
+ * SPDX-License-Identifier: GPL-2.0-only
  */
 
 #include "compat.h"
@@ -197,8 +193,7 @@ static void enable_quality_widgets(
     if (!quality_sensitive)
     {
         widget = GHB_WIDGET(ud->builder, "AudioTrackBitrateEnable");
-        gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget),
-                                     !quality_sensitive);
+        gtk_check_button_set_active(GTK_CHECK_BUTTON(widget), !quality_sensitive);
     }
     widget = GHB_WIDGET(ud->builder, "AudioTrackQualityEnable");
     gtk_widget_set_sensitive(widget, quality_sensitive);

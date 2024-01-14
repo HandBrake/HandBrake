@@ -1,23 +1,20 @@
-/*
- * presets.h
- * Copyright (C) John Stebbins 2008-2024 <stebbins@stebbins>
+/* presets.h
  *
- * presets.h is free software.
+ * Copyright (C) 2008-2024 John Stebbins <stebbins@stebbins>
  *
- * You may redistribute it and/or modify it under the terms of the
- * GNU General Public License version 2, as published by the Free Software
- * Foundation.
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2,
+ * as published by the Free Software Foundation.
  *
- * presets.h is distributed in the hope that it will be useful,
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
- * See the GNU General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with callbacks.h.  If not, write to:
- *  The Free Software Foundation, Inc.,
- *  51 Franklin Street, Fifth Floor
- *  Boston, MA  02110-1301, USA.
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ *
+ * SPDX-License-Identifier: GPL-2.0-only
  */
 
 #if !defined(_GHB_PRESETS_H_)
@@ -26,6 +23,7 @@
 #include "handbrake/handbrake.h"
 #include "values.h"
 
+void ghb_presets_bind_tree_model(signal_user_data_t *ud);
 void ghb_presets_load(signal_user_data_t *ud);
 void ghb_update_from_preset(signal_user_data_t *ud, const gchar *key);
 void ghb_settings_init(GhbValue *settings, const char *name);
@@ -63,8 +61,12 @@ void ghb_preset_menu_button_refresh(signal_user_data_t *ud,
 void presets_list_selection_changed_cb(
     GtkTreeSelection *selection, signal_user_data_t *ud);
 
-gboolean presets_drag_motion_cb(GtkTreeView *tv, GdkDrop *ctx, int x, int y,
+gboolean presets_drag_accept_cb(GtkDropTarget *drop_target, GdkDrop *drop,
                                 signal_user_data_t *ud);
+GdkDragAction presets_drag_motion_cb(GtkDropTargetAsync *drop_target, GdkDrop *drop,
+                                     double x, double y, signal_user_data_t *ud);
+gboolean presets_drop_cb(GtkDropTargetAsync *drop_target, GdkDrop *drop,
+                         double x, double y, signal_user_data_t *ud);
 
 void preset_edited_cb(
     GtkCellRendererText *cell,

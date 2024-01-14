@@ -85,6 +85,11 @@
     margin: -4px 4px;
 }
 
+.numeric
+{
+    font-feature-settings: "tnum";
+}
+
 .subtitle
 {
     font-size: smaller;
@@ -113,56 +118,24 @@ stackswitcher button.text-button
     padding: 0px 5px;
 }
 
-.row:not(:first-child)
-{
-    border-top: 1px solid transparent;
-    border-bottom: 1px solid transparent;
-}
-
-.row:first-child
-{
-    border-top: 1px solid transparent;
-    border-bottom: 1px solid transparent;
-}
-
-.row:last-child
-{
-    border-top: 1px solid transparent;
-    border-bottom: 1px solid transparent;
-}
-
-.row.drag-icon
-{
-    background: white;
-    border: 1px solid black;
-}
-
-.row.drag-row
-{
-    color: gray;
-    background: alpha(gray,0.2);
-}
-
-.row.drag-row.drag-hover
-{
-    border-top: 1px solid #4e9a06;
-    border-bottom: 1px solid #4e9a06;
-}
-
-.row.drag-hover image,
-.row.drag-hover label
-{
-    color: #4e9a06;
-}
-
 .row.drag-hover-top
 {
-    border-top: 1px solid #4e9a06;
+    box-shadow: 0px 1px #4e9a06 inset;
+}
+
+.row.drag-hover-top:first-child
+{
+    box-shadow: 0px 2px #4e9a06 inset;
 }
 
 .row.drag-hover-bottom
 {
-    border-bottom: 1px solid #4e9a06;
+    box-shadow: 0px -1px #4e9a06 inset;
+}
+
+.row.drag-hover-bottom:last-child
+{
+    box-shadow: 0px -2px #4e9a06 inset;
 }
 
 toolbar

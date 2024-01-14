@@ -34,6 +34,9 @@
           <object class="GtkEntry" id="chapter_entry">
             <property name="margin-start">12</property>
             <property name="hexpand">1</property>
+            <accessibility>
+              <property name="label" translatable="yes">Chapter Title</property>
+            </accessibility>
           </object>
         </child>
       </object>

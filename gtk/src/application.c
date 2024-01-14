@@ -12,7 +12,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  *
  * SPDX-License-Identifier: GPL-2.0-only
  */
@@ -189,53 +189,6 @@ bind_subtitle_tree_model(signal_user_data_t *ud)
     gtk_tree_view_column_set_max_width(column, 400);
 
     g_signal_connect(selection, "changed", G_CALLBACK(subtitle_list_selection_changed_cb), ud);
-}
-
-static const char * presets_drag_entries[] = {
-    "widget/presets-list-row-drop"
-};
-
-// Create and bind the tree model to the tree view for the preset list
-// Also, connect up the signal that lets us know the selection has changed
-static void
-bind_presets_tree_model (signal_user_data_t *ud)
-{
-    GtkCellRenderer *cell;
-    GtkTreeViewColumn *column;
-    GtkTreeStore *treestore;
-    GtkTreeView  *treeview;
-    GtkTreeSelection *selection;
-
-    ghb_log_func();
-    treeview = GTK_TREE_VIEW(GHB_WIDGET(ud->builder, "presets_list"));
-    selection = gtk_tree_view_get_selection(treeview);
-    treestore = gtk_tree_store_new(5, G_TYPE_STRING, G_TYPE_INT, G_TYPE_INT,
-                                   G_TYPE_STRING, G_TYPE_BOOLEAN);
-    gtk_tree_view_set_model(treeview, GTK_TREE_MODEL(treestore));
-
-    cell = gtk_cell_renderer_text_new();
-    column = gtk_tree_view_column_new_with_attributes(_("Preset Name"), cell,
-        "text", 0, "weight", 1, "style", 2, "editable", 4, NULL);
-
-    g_signal_connect(cell, "edited", G_CALLBACK(preset_edited_cb), ud);
-
-    gtk_tree_view_append_column(treeview, GTK_TREE_VIEW_COLUMN(column));
-    gtk_tree_view_column_set_expand(column, TRUE);
-    gtk_tree_view_set_tooltip_column(treeview, 3);
-
-    GdkContentFormats * targets;
-
-    targets = gdk_content_formats_new(presets_drag_entries,
-                                      G_N_ELEMENTS(presets_drag_entries));
-    gtk_tree_view_enable_model_drag_dest(treeview, targets, GDK_ACTION_MOVE);
-    gtk_tree_view_enable_model_drag_source(treeview, GDK_BUTTON1_MASK,
-                                           targets, GDK_ACTION_MOVE);
-    gdk_content_formats_unref(targets);
-
-    g_signal_connect(treeview, "row_expanded", G_CALLBACK(presets_row_expanded_cb), ud);
-    g_signal_connect(treeview, "row_collapsed", G_CALLBACK(presets_row_expanded_cb), ud);
-    g_signal_connect(selection, "changed", G_CALLBACK(presets_list_selection_changed_cb), ud);
-    g_debug("Done");
 }
 
 static void
@@ -485,7 +438,7 @@ GHB_DECLARE_ACTION_CB(subtitle_add_fas_cb);
 GHB_DECLARE_ACTION_CB(subtitle_reset_cb);
 
 static void
-set_accel (GtkApplication *app, const char *name, const char *accel)
+set_action_accel (GtkApplication *app, const char *name, const char *accel)
 {
     const char *vaccel[] = { accel, NULL };
     gtk_application_set_accels_for_action(app, name, vaccel);
@@ -560,21 +513,21 @@ map_actions (GtkApplication *app, signal_user_data_t *ud)
     g_action_map_add_action_entries(G_ACTION_MAP(app), entries,
                                     G_N_ELEMENTS(entries), ud);
 
-    set_accel(app, "app.quit", "<control>q");
-    set_accel(app, "app.preferences", "<control>comma");
-    set_accel(app, "app.source", "<control>o");
-    set_accel(app, "app.source-dir", "<control><shift>o");
-    set_accel(app, "app.destination", "<control>s");
-    set_accel(app, "app.add-current", "<alt>a");
-    set_accel(app, "app.add-all", "<alt><shift>a");
-    set_accel(app, "app.queue-start", "<control>e");
-    set_accel(app, "app.queue-pause", "<control>p");
-    set_accel(app, "app.show-presets", "<alt>e");
-    set_accel(app, "app.show-queue", "<alt>u");
-    set_accel(app, "app.show-preview", "<alt>r");
-    set_accel(app, "app.show-activity", "<alt>w");
-    set_accel(app, "app.guide", "F1");
-    set_accel(app, "app.preset-save-as", "<control>n");
+    set_action_accel(app, "app.quit", "<control>q");
+    set_action_accel(app, "app.preferences", "<control>comma");
+    set_action_accel(app, "app.source", "<control>o");
+    set_action_accel(app, "app.source-dir", "<control><shift>o");
+    set_action_accel(app, "app.destination", "<control>s");
+    set_action_accel(app, "app.add-current", "<alt>a");
+    set_action_accel(app, "app.add-all", "<alt><shift>a");
+    set_action_accel(app, "app.queue-start", "<control>e");
+    set_action_accel(app, "app.queue-pause", "<control>p");
+    set_action_accel(app, "app.show-presets", "<alt>e");
+    set_action_accel(app, "app.show-queue", "<alt>u");
+    set_action_accel(app, "app.show-preview", "<alt>r");
+    set_action_accel(app, "app.show-activity", "<alt>w");
+    set_action_accel(app, "app.guide", "F1");
+    set_action_accel(app, "app.preset-save-as", "<control>n");
 }
 
 static gboolean
@@ -743,16 +696,20 @@ ghb_application_constructed (GObject *object)
     g_application_set_application_id(G_APPLICATION(self), "fr.handbrake.ghb");
     g_set_prgname("fr.handbrake.ghb");
     g_set_application_name("HandBrake");
-    g_application_set_flags(G_APPLICATION(self), G_APPLICATION_HANDLES_OPEN |
-                                                 G_APPLICATION_NON_UNIQUE);
+    g_application_set_flags(G_APPLICATION(self), G_APPLICATION_HANDLES_OPEN);
 }
 
 static void
 ghb_application_activate (GApplication *app)
 {
-    G_APPLICATION_CLASS(ghb_application_parent_class)->activate(app);
-
     GhbApplication *self = GHB_APPLICATION(app);
+    GtkWindow *window = gtk_application_get_active_window(GTK_APPLICATION(app));
+
+    if (window)
+    {
+        gtk_window_present(window);
+        return;
+    }
 
     signal_user_data_t *ud = self->ud = g_malloc0(sizeof(signal_user_data_t));
     g_autoptr(GtkCssProvider) provider = gtk_css_provider_new();
@@ -840,7 +797,7 @@ ghb_application_activate (GApplication *app)
 
     bind_audio_tree_model(ud);
     bind_subtitle_tree_model(ud);
-    bind_presets_tree_model(ud);
+    ghb_presets_bind_tree_model(ud);
 
     ghb_init_audio_defaults_ui(ud);
     ghb_init_subtitle_defaults_ui(ud);
@@ -887,13 +844,12 @@ ghb_application_activate (GApplication *app)
     ghb_volname_cache_init();
     g_thread_new("Cache Volume Names", (GThreadFunc)ghb_cache_volnames, ud);
 
-    GtkWidget *ghb_window = GHB_WIDGET(ud->builder, "hb_window");
+    GtkWindow *hb_window = GTK_WINDOW(ghb_builder_widget("hb_window"));
 
     gint window_width, window_height;
     window_width = ghb_dict_get_int(ud->prefs, "window_width");
     window_height = ghb_dict_get_int(ud->prefs, "window_height");
-    gtk_window_set_default_size(GTK_WINDOW(ghb_window),
-                                window_width, window_height);
+    gtk_window_set_default_size(hb_window, window_width, window_height);
 
     ghb_set_custom_filter_tooltip(ud, "PictureDetelecineCustom",
                                   "detelecine", HB_FILTER_DETELECINE);
@@ -904,17 +860,17 @@ ghb_application_activate (GApplication *app)
     ghb_set_custom_filter_tooltip(ud, "PictureChromaSmoothCustom",
                                   "chroma smooth", HB_FILTER_CHROMA_SMOOTH);
 
-    gtk_application_add_window(GTK_APPLICATION(app), GTK_WINDOW(ghb_window));
-    GtkWidget * window = GHB_WIDGET(ud->builder, "presets_window");
-    gtk_application_add_window(GTK_APPLICATION(app), GTK_WINDOW(window));
-    window = GHB_WIDGET(ud->builder, "queue_window");
-    gtk_application_add_window(GTK_APPLICATION(app), GTK_WINDOW(window));
-    window = GHB_WIDGET(ud->builder, "preview_window");
-    gtk_application_add_window(GTK_APPLICATION(app), GTK_WINDOW(window));
-    window = GHB_WIDGET(ud->builder, "activity_window");
-    gtk_application_add_window(GTK_APPLICATION(app), GTK_WINDOW(window));
-    window = GHB_WIDGET(ud->builder, "title_add_multiple_dialog");
-    gtk_application_add_window(GTK_APPLICATION(app), GTK_WINDOW(window));
+    gtk_application_add_window(GTK_APPLICATION(app), hb_window);
+    window = GTK_WINDOW(ghb_builder_widget("presets_window"));
+    gtk_application_add_window(GTK_APPLICATION(app), window);
+    window = GTK_WINDOW(ghb_builder_widget("queue_window"));
+    gtk_application_add_window(GTK_APPLICATION(app), window);
+    window = GTK_WINDOW(ghb_builder_widget("preview_window"));
+    gtk_application_add_window(GTK_APPLICATION(app), window);
+    window = GTK_WINDOW(ghb_builder_widget("activity_window"));
+    gtk_application_add_window(GTK_APPLICATION(app), window);
+    window = GTK_WINDOW(ghb_builder_widget("title_add_multiple_dialog"));
+    gtk_application_add_window(GTK_APPLICATION(app), window);
 
     GMenuModel *menu = G_MENU_MODEL(gtk_builder_get_object(ud->builder, "handbrake-menu-bar"));
     gtk_application_set_menubar(GTK_APPLICATION(app), menu);
@@ -923,8 +879,7 @@ ghb_application_activate (GApplication *app)
     gtk_drawing_area_set_draw_func(GTK_DRAWING_AREA(widget), preview_draw_cb,
                                    ud, NULL);
 
-    gtk_widget_show(ghb_window);
-
+    gtk_window_present(hb_window);
 }
 
 static GOptionEntry option_entries[] =
