@@ -32,9 +32,8 @@ struct _GhbQueueRow {
     GtkLabel *dest_label;
     GtkImage *status_icon;
     GtkProgressBar *encode_progress_bar;
-#if GTK_CHECK_VERSION(4, 4, 0)
+
     GtkDragSource *drag_source;
-#endif
 
     char *destination;
     int status;
@@ -62,7 +61,6 @@ static GActionEntry action_entries[] = {
     {"delete", ghb_queue_row_delete_action, NULL, NULL, NULL},
 };
 
-#if GTK_CHECK_VERSION(4, 4, 0)
 static GdkContentProvider *
 ghb_queue_row_drag_prepare (GtkDragSource *source, double x, double y, GhbQueueRow *self)
 {
@@ -82,7 +80,6 @@ ghb_queue_row_drag_begin (GtkDragSource *source, GdkDrag *drag, GhbQueueRow *sel
     gtk_style_context_remove_class(gtk_widget_get_style_context(GTK_WIDGET(self)), "drag-icon");
     gtk_style_context_add_class(gtk_widget_get_style_context(GTK_WIDGET(self)), "drag-row");
 }
-#endif
 
 static void
 ghb_queue_row_class_init (GhbQueueRowClass *klass)
@@ -173,14 +170,12 @@ ghb_queue_row_init (GhbQueueRow *self)
 {
     gtk_widget_init_template(GTK_WIDGET(self));
 
-#if GTK_CHECK_VERSION(4, 4, 0)
     self->drag_source = gtk_drag_source_new();
 
     g_signal_connect(self->drag_source, "prepare", G_CALLBACK(ghb_queue_row_drag_prepare), self);
     g_signal_connect(self->drag_source, "drag-begin", G_CALLBACK(ghb_queue_row_drag_begin), self);
 
     gtk_widget_add_controller(GTK_WIDGET(self), GTK_EVENT_CONTROLLER(self->drag_source));
-#endif
 }
 
 static void
@@ -275,12 +270,9 @@ ghb_queue_row_set_status (GhbQueueRow *self, int status)
             break;
     }
 
-    ghb_image_set_from_icon_name(self->status_icon, icon_name,
-                                 GHB_ICON_SIZE_BUTTON);
-#if GTK_CHECK_VERSION(4, 4, 0)
+    gtk_image_set_from_icon_name(self->status_icon, icon_name);
     gtk_accessible_update_property(GTK_ACCESSIBLE(self->status_icon),
                                    GTK_ACCESSIBLE_PROPERTY_LABEL, accessible_name, -1);
-#endif
 }
 
 int

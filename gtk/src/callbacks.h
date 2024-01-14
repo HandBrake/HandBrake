@@ -33,14 +33,6 @@
 #include "values.h"
 #include "settings.h"
 
-#if GLIB_CHECK_VERSION(2, 32, 0)
-#define GHB_THREAD_NEW(n, f, p) \
-                g_thread_new(n, (GThreadFunc)(f), (p))
-#else
-#define GHB_THREAD_NEW(n, f, p) \
-                g_thread_create((GThreadFunc)(f), (p), TRUE, NULL)
-#endif
-
 typedef enum {
     GHB_ACTION_NORMAL,
     GHB_ACTION_SUGGESTED,

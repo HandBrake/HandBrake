@@ -2080,7 +2080,7 @@ preset_category_opts_set(signal_user_data_t *ud, const char *opt_name,
             continue;
         }
 
-        if (ghb_strv_contains((const char**)categories, name))
+        if (g_strv_contains((const char**)categories, name))
         {
             // Category is already in the list
             continue;
@@ -2150,21 +2150,10 @@ srt_codeset_opts_set(signal_user_data_t *ud, const gchar *name,
                            -1);
     }
 }
-#if GTK_CHECK_VERSION(4, 4, 0)
+
 extern G_MODULE_EXPORT gboolean
-combo_search_key_press_cb(
-    GtkEventControllerKey * keycon,
-    guint                   keyval,
-    guint                   keycode,
-    GdkModifierType         state,
-    signal_user_data_t    * ud);
-#else
-extern G_MODULE_EXPORT gboolean
-combo_search_key_press_cb(
-    GtkWidget *widget,
-    GdkEvent *event,
-    signal_user_data_t *ud);
-#endif
+combo_search_key_press_cb(GtkEventControllerKey *keycon, guint keyval,
+    guint keycode, GdkModifierType state, signal_user_data_t *ud);
 
 static void
 language_opts_set(signal_user_data_t *ud, const gchar *name,
@@ -2199,11 +2188,6 @@ language_opts_set(signal_user_data_t *ud, const gchar *name,
                            -1);
         g_free(lang);
     }
-#if !GTK_CHECK_VERSION(4, 4, 0)
-    // This is handled by GtkEventControllerKey in gtk4
-    // Initialized in ghb_combo_init()
-    g_signal_connect(combo, "key-press-event", G_CALLBACK(combo_search_key_press_cb), ud);
-#endif
 }
 
 static void
@@ -3494,7 +3478,6 @@ ghb_combo_init(signal_user_data_t *ud)
     // Populate all the combos
     ghb_update_ui_combo_box(ud, NULL, NULL, TRUE);
 
-#if GTK_CHECK_VERSION(4, 4, 0)
     GtkWidget          * combo;
     GtkEventController * econ;
 
@@ -3505,7 +3488,6 @@ ghb_combo_init(signal_user_data_t *ud)
     gtk_widget_add_controller(combo, econ);
     g_signal_connect(econ, "key-pressed",
                      G_CALLBACK(combo_search_key_press_cb), ud);
-#endif
 }
 
 void
@@ -3844,13 +3826,11 @@ ghb_picture_settings_deps(signal_user_data_t *ud)
     widget = GHB_WIDGET(ud->builder, "display_size_lock_image");
     if (keep_aspect)
     {
-        ghb_image_set_from_icon_name(GTK_IMAGE(widget), "emblem-readonly",
-                                     GHB_ICON_SIZE_BUTTON);
+        gtk_image_set_from_icon_name(GTK_IMAGE(widget), "emblem-readonly");
     }
     else
     {
-        ghb_image_set_from_icon_name(GTK_IMAGE(widget), "edit-clear",
-                                     GHB_ICON_SIZE_BUTTON);
+        gtk_image_set_from_icon_name(GTK_IMAGE(widget), "edit-clear");
     }
 }
 

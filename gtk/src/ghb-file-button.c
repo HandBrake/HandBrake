@@ -233,13 +233,9 @@ file_icon_query_cb (GFile *file, GAsyncResult *result, GhbFileButton *self)
 
     if (self->icon != NULL && icon != NULL)
     {
-#if GTK_CHECK_VERSION(4, 4, 0)
         gtk_image_set_from_gicon(self->icon, icon);
-#else
-        gtk_image_set_from_gicon(self->icon, icon, GTK_ICON_SIZE_BUTTON);
-#endif
     }
-    else
+    else if (self->icon != NULL)
     {
         gtk_image_clear(self->icon);
     }
@@ -323,11 +319,7 @@ ghb_file_button_clicked (GtkButton *button)
 
     g_return_if_fail(GHB_IS_FILE_BUTTON(self));
 
-#if GTK_CHECK_VERSION(4, 4, 0)
     window = GTK_WINDOW(gtk_widget_get_root(GTK_WIDGET(self)));
-#else
-    window = GTK_WINDOW(gtk_widget_get_toplevel(GTK_WIDGET(self)));
-#endif
     chooser = gtk_file_chooser_native_new(self->title, window, self->action,
                                           self->accept_label, NULL);
     g_autofree char *selected_name = g_file_get_path(self->selected);
