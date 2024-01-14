@@ -64,21 +64,35 @@ static GActionEntry action_entries[] = {
 static GdkContentProvider *
 ghb_queue_row_drag_prepare (GtkDragSource *source, double x, double y, GhbQueueRow *self)
 {
+    g_return_val_if_fail(GHB_IS_QUEUE_ROW(self), NULL);
+
     return gdk_content_provider_new_typed(GHB_TYPE_QUEUE_ROW, self);
+}
+
+static void
+ghb_queue_row_drag_end (GtkDragSource* source, GdkDrag* drag, gboolean delete_data, GhbQueueRow *self)
+{
+    g_return_if_fail(GHB_IS_QUEUE_ROW(self));
+
+    GtkWidget *list_box = gtk_widget_get_parent(GTK_WIDGET(self));
+    g_object_set_data(G_OBJECT(list_box), "drag-row", NULL);
 }
 
 static void
 ghb_queue_row_drag_begin (GtkDragSource *source, GdkDrag *drag, GhbQueueRow *self)
 {
-    g_object_set_data(G_OBJECT(gtk_widget_get_parent(GTK_WIDGET(self))), "drag-row", self);
-    gtk_style_context_add_class(gtk_widget_get_style_context(GTK_WIDGET(self)), "drag-icon");
+    g_return_if_fail(GHB_IS_QUEUE_ROW(self));
+
+    GtkWidget *list_box = gtk_widget_get_parent(GTK_WIDGET(self));
+    g_object_set_data(G_OBJECT(list_box), "drag-row", self);
+    if (!gtk_list_box_row_is_selected(GTK_LIST_BOX_ROW(self)))
+    {
+        gtk_list_box_unselect_all(GTK_LIST_BOX(list_box));
+        gtk_list_box_select_row(GTK_LIST_BOX(list_box), GTK_LIST_BOX_ROW(self));
+    }
     GdkPaintable *paintable = gtk_widget_paintable_new(GTK_WIDGET(self));
-    GdkPaintable *current = gdk_paintable_get_current_image(paintable);
-    gtk_drag_source_set_icon(source, current, 0, 0);
+    gtk_drag_source_set_icon(source, paintable, 0, 0);
     g_object_unref(paintable);
-    g_object_unref(current);
-    gtk_style_context_remove_class(gtk_widget_get_style_context(GTK_WIDGET(self)), "drag-icon");
-    gtk_style_context_add_class(gtk_widget_get_style_context(GTK_WIDGET(self)), "drag-row");
 }
 
 static void
@@ -171,9 +185,11 @@ ghb_queue_row_init (GhbQueueRow *self)
     gtk_widget_init_template(GTK_WIDGET(self));
 
     self->drag_source = gtk_drag_source_new();
+    gtk_drag_source_set_actions (self->drag_source, GDK_ACTION_MOVE);
 
     g_signal_connect(self->drag_source, "prepare", G_CALLBACK(ghb_queue_row_drag_prepare), self);
     g_signal_connect(self->drag_source, "drag-begin", G_CALLBACK(ghb_queue_row_drag_begin), self);
+    g_signal_connect(self->drag_source, "drag-end", G_CALLBACK(ghb_queue_row_drag_end), self);
 
     gtk_widget_add_controller(GTK_WIDGET(self), GTK_EVENT_CONTROLLER(self->drag_source));
 }

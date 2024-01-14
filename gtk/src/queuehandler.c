@@ -1,24 +1,20 @@
-/* -*- Mode: C; indent-tabs-mode: nil; c-basic-offset: 4; tab-width: 4 -*- */
-/*
- * queuehandler.c
- * Copyright (C) John Stebbins 2008-2024 <stebbins@stebbins>
+/* queuehandler.c
  *
- * queuehandler.c is free software.
+ * Copyright (C) 2008-2024 John Stebbins <stebbins@stebbins>
  *
- * You may redistribute it and/or modify it under the terms of the
- * GNU General Public License version 2, as published by the Free Software
- * Foundation.
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2,
+ * as published by the Free Software Foundation.
  *
- * queuehandler.c is distributed in the hope that it will be useful,
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
- * See the GNU General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with queuehandler.c.  If not, write to:
- *  The Free Software Foundation, Inc.,
- *  51 Franklin Street, Fifth Floor
- *  Boston, MA  02110-1301, USA.
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ *
+ * SPDX-License-Identifier: GPL-2.0-only
  */
 
 #include "compat.h"
@@ -49,17 +45,6 @@ void ghb_queue_buttons_grey (signal_user_data_t *ud);
 G_MODULE_EXPORT void
 queue_remove_clicked_cb (GtkWidget *widget, signal_user_data_t *ud);
 
-G_MODULE_EXPORT void
-queue_drag_begin_cb (GtkWidget *widget, GdkDrag *context, gpointer data);
-G_MODULE_EXPORT void
-queue_drag_end_cb (GtkWidget *widget, GdkDrag *context, gpointer data);
-/*
-G_MODULE_EXPORT void
-queue_drag_data_get_cb (GtkWidget * widget, GdkDrag * context,
-                        GtkSelectionData * selection_data,
-                        signal_user_data_t * ud);
-*/
-
 G_MODULE_EXPORT gboolean
 queue_row_key_cb (GtkEventControllerKey * keycon, guint keyval,
                   guint keycode, GdkModifierType state,
@@ -72,11 +57,7 @@ G_MODULE_EXPORT gboolean queue_drag_data_received_cb (GtkDropTarget* self,
     const GValue* value, double x, double y, GtkListBox *lb);
 
 static gboolean
-queue_drag_accept_cb (
-  GtkDropTarget* self,
-  GdkDrop* drop,
-  gpointer user_data
-)
+queue_drag_accept_cb (GtkDropTarget* self, GdkDrop* drop, gpointer user_data)
 {
     GdkDragAction actions = gdk_drop_get_actions(drop);
     GdkContentFormats *formats = gdk_drop_get_formats(drop);
@@ -1476,19 +1457,6 @@ void ghb_add_to_queue_list (signal_user_data_t *ud, GhbValue *queueDict)
 
     gtk_list_box_insert(lb, row, -1);
 
-    // set row as a source for drag & drop
-    //GdkContentFormats * targets;
-
-    //targets = gdk_content_formats_new(queue_drag_entries,
-    //                                  G_N_ELEMENTS(queue_drag_entries));
-    //gtk_drag_source_set(ebox, GDK_BUTTON1_MASK, targets, GDK_ACTION_MOVE);
-    //gdk_content_formats_unref(targets);
-
-    //g_signal_connect(ebox, "drag-begin", G_CALLBACK(queue_drag_begin_cb), NULL);
-    //g_signal_connect(ebox, "drag-end", G_CALLBACK(queue_drag_end_cb), NULL);
-    //g_signal_connect(ebox, "drag-data-get",
-    //                G_CALLBACK(queue_drag_data_get_cb), NULL);
-
     // connect key event controller to capture "delete" key press on row
     GtkEventController * econ = gtk_event_controller_key_new();
     gtk_widget_add_controller(row, econ);
@@ -1660,7 +1628,6 @@ void ghb_low_disk_check (signal_user_data_t *ud)
     gint64           free_limit;
     GhbValue        *qDict;
     GhbValue        *settings;
-    GtkStyleContext *style;
 
     if (ghb_dict_get_bool(ud->globals, "SkipDiskFreeCheck") ||
         !ghb_dict_get_bool(ud->prefs, "DiskFreeCheck"))
@@ -1714,8 +1681,7 @@ void ghb_low_disk_check (signal_user_data_t *ud)
                            NULL);
 
     cancel = gtk_dialog_get_widget_for_response(GTK_DIALOG(dialog), 3);
-    style = gtk_widget_get_style_context(cancel);
-    gtk_style_context_add_class(style, "destructive-action");
+    gtk_widget_add_css_class(cancel, "destructive-action");
     g_signal_connect(dialog, "response",
                      G_CALLBACK(low_disk_check_response_cb), ud);
     gtk_widget_set_visible(dialog, TRUE);
@@ -2595,44 +2561,6 @@ queue_pause_action_cb (GSimpleAction *action, GVariant *param, gpointer data)
     ghb_pause_resume_queue();
 }
 
-// Set up view of row to be dragged
-G_MODULE_EXPORT void
-queue_drag_begin_cb (GtkWidget *widget, GdkDrag *context, gpointer data)
-{
-    GtkListBox      * lb;
-    GtkWidget       * row;
-
-    row = gtk_widget_get_ancestor(widget, GTK_TYPE_LIST_BOX_ROW);
-    lb  = GTK_LIST_BOX(gtk_widget_get_parent(row));
-    // If the user started dragging an item which wasn't selected,
-    // only that one should be moved. Unselect everything else
-    if (!gtk_list_box_row_is_selected(GTK_LIST_BOX_ROW(row)))
-    {
-        gtk_list_box_unselect_all(lb);
-        gtk_list_box_select_row(lb, GTK_LIST_BOX_ROW(row));
-    }
-
-    //GdkPaintable * paintable = gtk_widget_paintable_new(row);
-    //gtk_drag_set_icon_paintable(context, paintable, 0, 0);
-    //g_object_unref(paintable);
-
-    g_object_set_data(G_OBJECT(gtk_widget_get_parent(row)), "drag-row", row);
-    gtk_style_context_add_class(gtk_widget_get_style_context(row), "drag-row");
-}
-
-G_MODULE_EXPORT void
-queue_drag_end_cb (GtkWidget *widget, GdkDrag *context, gpointer data)
-{
-    GtkWidget * row;
-
-    row = gtk_widget_get_ancestor(widget, GTK_TYPE_LIST_BOX_ROW);
-    g_object_set_data(G_OBJECT(gtk_widget_get_parent(row)), "drag-row", NULL);
-    gtk_style_context_remove_class(gtk_widget_get_style_context(row),
-                                   "drag-row");
-    gtk_style_context_remove_class(gtk_widget_get_style_context(row),
-                                   "drag-hover");
-}
-
 G_MODULE_EXPORT void
 queue_drag_leave_cb (GtkDropTarget *target, GtkListBox *lb)
 {
@@ -2644,17 +2572,14 @@ queue_drag_leave_cb (GtkDropTarget *target, GtkListBox *lb)
     row_before = GTK_WIDGET(g_object_get_data(G_OBJECT(lb), "row-before"));
     row_after  = GTK_WIDGET(g_object_get_data(G_OBJECT(lb), "row-after"));
 
-    gtk_style_context_remove_class(gtk_widget_get_style_context(drag_row),
-                                   "drag-hover");
+    gtk_widget_remove_css_class(drag_row, "drag-hover");
     if (row_before)
     {
-        gtk_style_context_remove_class(gtk_widget_get_style_context(row_before),
-                                       "drag-hover-bottom");
+        gtk_widget_remove_css_class(row_before, "drag-hover-bottom");
     }
     if (row_after)
     {
-        gtk_style_context_remove_class(gtk_widget_get_style_context(row_after),
-                                       "drag-hover-top");
+        gtk_widget_remove_css_class(row_after, "drag-hover-top");
     }
 }
 
@@ -2704,17 +2629,14 @@ queue_drag_motion_cb (GtkDropTarget* target, double x, double y, GtkListBox *lb)
     row_before = GTK_WIDGET(g_object_get_data(G_OBJECT(lb), "row-before"));
     row_after  = GTK_WIDGET(g_object_get_data(G_OBJECT(lb), "row-after"));
 
-    gtk_style_context_remove_class(gtk_widget_get_style_context(drag_row),
-                                   "drag-hover");
+    gtk_widget_remove_css_class(drag_row, "drag-hover");
     if (row_before)
     {
-        gtk_style_context_remove_class(gtk_widget_get_style_context(row_before),
-                                       "drag-hover-bottom");
+        gtk_widget_remove_css_class(row_before, "drag-hover-bottom");
     }
     if (row_after)
     {
-        gtk_style_context_remove_class(gtk_widget_get_style_context(row_after),
-                                       "drag-hover-top");
+        gtk_widget_remove_css_class(row_after, "drag-hover-top");
     }
 
     if (row)
@@ -2745,19 +2667,16 @@ queue_drag_motion_cb (GtkDropTarget* target, double x, double y, GtkListBox *lb)
 
     if (drag_row == row_before || drag_row == row_after)
     {
-        gtk_style_context_add_class(gtk_widget_get_style_context(drag_row),
-                                    "drag-hover");
-        return 0;
+        return GDK_ACTION_MOVE;
     }
 
     if (row_before)
     {
-        gtk_style_context_add_class(gtk_widget_get_style_context(row_before),
-                                    "drag-hover-bottom");
+        gtk_widget_add_css_class(row_before, "drag-hover-bottom");
     }
     if (row_after)
     {
-        gtk_style_context_add_class(gtk_widget_get_style_context(row_after), "drag-hover-top");
+        gtk_widget_add_css_class(row_after, "drag-hover-top");
     }
 
     return GDK_ACTION_MOVE;
@@ -2855,7 +2774,6 @@ queue_drag_data_received_cb (GtkDropTarget* self, const GValue* value,
     GList         * rows, * r;
     GtkListBoxRow * row;
     gint32          dst_index;
-    printf("Dropped\n");
 
     row_before = GTK_WIDGET(g_object_get_data(G_OBJECT(lb), "row-before"));
     row_after  = GTK_WIDGET(g_object_get_data(G_OBJECT(lb), "row-after"));
@@ -2865,13 +2783,11 @@ queue_drag_data_received_cb (GtkDropTarget* self, const GValue* value,
 
     if (row_before)
     {
-        gtk_style_context_remove_class(gtk_widget_get_style_context(row_before),
-                                       "drag-hover-bottom");
+        gtk_widget_remove_css_class(row_before, "drag-hover-bottom");
     }
     if (row_after)
     {
-        gtk_style_context_remove_class(gtk_widget_get_style_context(row_after),
-                                       "drag-hover-top");
+        gtk_widget_remove_css_class(row_after, "drag-hover-top");
     }
 
     rows = r = gtk_list_box_get_selected_rows(lb);

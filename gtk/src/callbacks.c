@@ -1,24 +1,20 @@
-/* -*- Mode: C; indent-tabs-mode: nil; c-basic-offset: 4; tab-width: 4 -*- */
-/*
- * callbacks.c
- * Copyright (C) John Stebbins 2008-2024 <stebbins@stebbins>
+/* callbacks.c
  *
- * callbacks.c is free software.
+ * Copyright (C) 2008-2024 John Stebbins <stebbins@stebbins>
  *
- * You may redistribute it and/or modify it under the terms of the
- * GNU General Public License version 2, as published by the Free Software
- * Foundation.
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2,
+ * as published by the Free Software Foundation.
  *
- * callbacks.c is distributed in the hope that it will be useful,
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
- * See the GNU General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with main.c.  If not, write to:
- *  The Free Software Foundation, Inc.,
- *  51 Franklin Street, Fifth Floor
- *  Boston, MA  02110-1301, USA.
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ *
+ * SPDX-License-Identifier: GPL-2.0-only
  */
 
 #ifdef HAVE_CONFIG_H
@@ -1995,25 +1991,20 @@ destination_action_cb(GSimpleAction *action, GVariant *param,
 }
 
 G_MODULE_EXPORT gboolean
-window_destroy_event_cb (GtkWidget *widget, gpointer data)
-{
-    application_quit();
-    return FALSE;
-}
-
-G_MODULE_EXPORT gboolean
 window_close_request_cb(GtkWidget *widget, gpointer data)
 {
+    ghb_log_func();
     gint state = ghb_get_queue_state();
-    if (state & (GHB_STATE_WORKING|GHB_STATE_SEARCHING))
+    if (state & (GHB_STATE_WORKING | GHB_STATE_SEARCHING))
     {
         quit_dialog_show();
+        return TRUE;
     }
     else
     {
         application_quit();
+        return FALSE;
     }
-    return FALSE;
 }
 
 static void
@@ -3680,9 +3671,7 @@ prefs_response_cb (GtkDialog *dialog, GdkEvent *event, gpointer data)
         ghb_question_dialog_run(hb_window, GHB_ACTION_NORMAL, _("_Quit"), NULL,
                                 _("Temp Directory Changed"),
                                 _("You must restart HandBrake now."));
-        ghb_hb_cleanup(FALSE);
-        prune_logs();
-        g_application_quit(g_application_get_default());
+        application_quit();
     }
     return TRUE;
 }
@@ -3700,18 +3689,18 @@ static gboolean
 quit_cb(countdown_t *cd)
 {
     cd->timeout--;
-    if (cd->timeout == 0)
+    if (cd->timeout <= 0)
     {
-        ghb_hb_cleanup(FALSE);
-        prune_logs();
-
         gtk_window_destroy(GTK_WINDOW(cd->dlg));
-        g_application_quit(g_application_get_default());
+        application_quit();
         return FALSE;
     }
-    gtk_message_dialog_format_secondary_text(cd->dlg, _("%s in %d seconds…"),
-                                             cd->action, cd->timeout);
-    return TRUE;
+    else
+    {
+        gtk_message_dialog_format_secondary_text(cd->dlg, _("%s in %d seconds…"),
+                                                 cd->action, cd->timeout);
+        return TRUE;
+    }
 }
 
 static gboolean
@@ -3771,7 +3760,7 @@ ghb_countdown_dialog_show (const gchar *message, const gchar *action,
                            signal_user_data_t *ud)
 {
     GtkWindow *hb_window;
-    GtkWidget *dialog;
+    GtkWidget *dialog, *box, *label;
     guint *timeout_id = g_new(guint, 1);
     countdown_t *cd = g_new(countdown_t, 1);
 
@@ -3786,6 +3775,10 @@ ghb_countdown_dialog_show (const gchar *message, const gchar *action,
         GTK_MESSAGE_INFO, GTK_BUTTONS_CANCEL, "%s", message);
     gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dialog),
         _("%s in %d seconds…"), action, timeout);
+
+    box = gtk_message_dialog_get_message_area(GTK_MESSAGE_DIALOG(dialog));
+    label = gtk_widget_get_last_child(box);
+    gtk_widget_add_css_class(label, "numeric");
 
     cd->dlg = GTK_MESSAGE_DIALOG(dialog);
     *timeout_id = g_timeout_add(1000, action_func, cd);
@@ -3836,15 +3829,13 @@ ghb_question_dialog_run (GtkWindow *parent, GhbActionStyle accept_style,
         button = gtk_dialog_add_button(GTK_DIALOG(dialog), accept_button,
                                        GTK_RESPONSE_ACCEPT);
 
-        GtkStyleContext *style = gtk_widget_get_style_context(button);
-
         switch (accept_style)
         {
         case GHB_ACTION_SUGGESTED:
-            gtk_style_context_add_class(style, "suggested-action");
+            gtk_widget_add_css_class(button, "suggested-action");
             break;
         case GHB_ACTION_DESTRUCTIVE:
-            gtk_style_context_add_class(style, "destructive-action");
+            gtk_widget_add_css_class(button, "destructive-action");
         default:
             break;
         }
@@ -3904,7 +3895,6 @@ ghb_cancel_dialog_new (GtkWindow *parent, const char *title, const char *message
                        const char *finish_button, const char *continue_button)
 {
     GtkWidget *dialog, *cancel;
-    GtkStyleContext *style;
 
     dialog = gtk_message_dialog_new(parent, GTK_DIALOG_MODAL,
                 GTK_MESSAGE_WARNING, GTK_BUTTONS_NONE, "%s", title);
@@ -3912,13 +3902,11 @@ ghb_cancel_dialog_new (GtkWindow *parent, const char *title, const char *message
     gtk_window_set_transient_for(GTK_WINDOW(dialog), parent);
     gtk_window_set_modal(GTK_WINDOW(dialog), TRUE);
     cancel = gtk_dialog_add_button(GTK_DIALOG(dialog), cancel_all_button, 1);
-    style = gtk_widget_get_style_context(cancel);
-    gtk_style_context_add_class(style, "destructive-action");
+    gtk_widget_add_css_class(cancel, "destructive-action");
     if (cancel_current_button != NULL)
     {
         cancel = gtk_dialog_add_button(GTK_DIALOG(dialog), cancel_current_button, 2);
-        style = gtk_widget_get_style_context(cancel);
-        gtk_style_context_add_class(style, "destructive-action");
+        gtk_widget_add_css_class(cancel, "destructive-action");
     }
     if (finish_button != NULL)
     {
@@ -3986,6 +3974,8 @@ quit_dialog_show (void)
 {
     GtkWindow *window = gtk_application_get_active_window(
         GTK_APPLICATION(g_application_get_default()));
+    g_warn_if_fail(GTK_IS_APPLICATION_WINDOW(window));
+
     GtkWidget *dialog = ghb_cancel_dialog_new(window, _("Quit HandBrake?"),
         _("Your movie will be lost if you don't continue encoding."),
         _("Cancel All and Quit"), NULL, NULL, _("Continue Encoding"));

@@ -949,6 +949,9 @@ Resets the queue job to pending and ready to run again.</property>
                                         <property name="wrap-mode">char</property>
                                         <property name="cursor-visible">0</property>
                                         <property name="css-classes">ghb-monospace</property>
+                                        <accessibility>
+                                          <property name="label" translatable="yes">Activity Log</property>
+                                        </accessibility>
                                       </object>
                                     </property>
                                   </object>
@@ -1028,6 +1031,9 @@ Resets the queue job to pending and ready to run again.</property>
                 <property name="wrap-mode">char</property>
                 <property name="cursor-visible">0</property>
                 <property name="css-classes">ghb-monospace</property>
+                <accessibility>
+                  <property name="label" translatable="yes">Activity Log</property>
+                </accessibility>
               </object>
             </property>
           </object>
@@ -1494,7 +1500,7 @@ large-icons</property>
                   </object>
                 </child>
                 <child>
-                  <object class="GtkLabel" id="label20">
+                  <object class="GtkLabel" id="title_drop_down_label">
                     <property name="xalign">0</property>
                     <property name="use-markup">1</property>
                     <property name="label" translatable="yes">&lt;b&gt;Title:&lt;/b&gt;</property>
@@ -1520,14 +1526,9 @@ By default the longest title is chosen.
 This is often the feature title of a DVD.</property>
                         <property name="has-entry">1</property>
                         <signal name="changed" handler="title_changed_cb" swapped="no"/>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="GtkEntry" id="title_label">
-                        <property name="visible">false</property>
-                        <property name="width-chars">30</property>
-                        <property name="max-width-chars">30</property>
-                        <property name="halign">start</property>
+                        <accessibility>
+                          <relation name="labelled-by">title_drop_down_label</relation>
+                        </accessibility>
                       </object>
                     </child>
                     <child>
@@ -1943,6 +1944,9 @@ Modifications will be discarded.</property>
                             <property name="vexpand">1</property>
                             <property name="pixel-size">128</property>
                             <property name="icon-name">fr.handbrake.ghb</property>
+                            <accessibility>
+                              <property name="label" translatable="yes">Video Preview</property>
+                            </accessibility>
                           </object>
                         </child>
                       </object>
@@ -4819,6 +4823,9 @@ This permits Opus passthru to be selected when automatic passthru selection is e
                             <property name="width-chars">50</property>
                             <property name="truncate-multiline">1</property>
                             <signal name="changed" handler="meta_name_changed_cb" swapped="no"/>
+                            <accessibility>
+                              <relation name="labelled-by">tag_title_label</relation>
+                            </accessibility>
                             <layout>
                               <property name="row">0</property>
                               <property name="column">1</property>
@@ -4844,6 +4851,9 @@ This permits Opus passthru to be selected when automatic passthru selection is e
                             <property name="width-chars">50</property>
                             <property name="truncate-multiline">1</property>
                             <signal name="changed" handler="meta_artist_changed_cb" swapped="no"/>
+                            <accessibility>
+                              <relation name="labelled-by">tag_actors_label</relation>
+                            </accessibility>
                             <layout>
                               <property name="row">1</property>
                               <property name="column">1</property>
@@ -4869,6 +4879,9 @@ This permits Opus passthru to be selected when automatic passthru selection is e
                             <property name="width-chars">50</property>
                             <property name="truncate-multiline">1</property>
                             <signal name="changed" handler="meta_album_artist_changed_cb" swapped="no"/>
+                            <accessibility>
+                              <relation name="labelled-by">tag_director_label</relation>
+                            </accessibility>
                             <layout>
                               <property name="row">2</property>
                               <property name="column">1</property>
@@ -4894,6 +4907,9 @@ This permits Opus passthru to be selected when automatic passthru selection is e
                             <property name="width-chars">50</property>
                             <property name="truncate-multiline">1</property>
                             <signal name="changed" handler="meta_release_date_changed_cb" swapped="no"/>
+                            <accessibility>
+                              <relation name="labelled-by">tag_release_date_label</relation>
+                            </accessibility>
                             <layout>
                               <property name="row">3</property>
                               <property name="column">1</property>
@@ -4919,6 +4935,9 @@ This permits Opus passthru to be selected when automatic passthru selection is e
                             <property name="width-chars">50</property>
                             <property name="truncate-multiline">1</property>
                             <signal name="changed" handler="meta_comment_changed_cb" swapped="no"/>
+                            <accessibility>
+                              <relation name="labelled-by">tag_comment_label</relation>
+                            </accessibility>
                             <layout>
                               <property name="row">4</property>
                               <property name="column">1</property>
@@ -4944,6 +4963,9 @@ This permits Opus passthru to be selected when automatic passthru selection is e
                             <property name="width-chars">50</property>
                             <property name="truncate-multiline">1</property>
                             <signal name="changed" handler="meta_genre_changed_cb" swapped="no"/>
+                            <accessibility>
+                              <relation name="labelled-by">tag_genre_label</relation>
+                            </accessibility>
                             <layout>
                               <property name="row">5</property>
                               <property name="column">1</property>
@@ -4969,6 +4991,9 @@ This permits Opus passthru to be selected when automatic passthru selection is e
                             <property name="width-chars">50</property>
                             <property name="truncate-multiline">1</property>
                             <signal name="changed" handler="meta_description_changed_cb" swapped="no"/>
+                            <accessibility>
+                              <relation name="labelled-by">tag_description_label</relation>
+                            </accessibility>
                             <layout>
                               <property name="row">6</property>
                               <property name="column">1</property>
@@ -4997,6 +5022,9 @@ This permits Opus passthru to be selected when automatic passthru selection is e
                                 <property name="wrap-mode">char</property>
                                 <property name="accepts-tab">0</property>
                                 <property name="css-classes">frame</property>
+                                <accessibility>
+                                  <relation name="labelled-by">tag_long_description_label</relation>
+                                </accessibility>
                               </object>
                             </property>
                             <layout>
@@ -5066,7 +5094,6 @@ This permits Opus passthru to be selected when automatic passthru selection is e
                 <property name="tooltip-text" translatable="yes">Destination directory for your encode.</property>
                 <property name="action">select-folder</property>
                 <property name="title" translatable="yes">Destination Directory</property>
-                <property name="accept-label" translatable="yes">Select</property>
                 <property name="width-request">200</property>
                 <property name="hexpand">0</property>
                 <signal name="notify::file" handler="dest_dir_set_cb" swapped="no"/>
@@ -5256,6 +5283,7 @@ This permits Opus passthru to be selected when automatic passthru selection is e
                   <object class="GtkImage" id="image3">
                     <property name="pixel-size">64</property>
                     <property name="icon-name">fr.handbrake.ghb</property>
+                    <property name="accessible-role">presentation</property>
                     <child>
                       <object class="GtkGestureClick">
                         <signal name="pressed" handler="easter_egg_multi_cb" swapped="no"/>
@@ -5375,6 +5403,9 @@ This permits Opus passthru to be selected when automatic passthru selection is e
                                 <property name="width-chars">30</property>
                                 <property name="truncate-multiline">1</property>
                                 <signal name="changed" handler="pref_changed_cb" swapped="no"/>
+                                <accessibility>
+                                  <relation name="labelled-by">auto_name_template_label</relation>
+                                </accessibility>
                               </object>
                             </child>
                           </object>
@@ -5397,10 +5428,13 @@ This permits Opus passthru to be selected when automatic passthru selection is e
                                 <property name="adjustment">preview_count_adj</property>
                                 <property name="numeric">1</property>
                                 <signal name="value-changed" handler="pref_changed_cb" swapped="no"/>
+                                <accessibility>
+                                  <relation name="labelled-by">preview_count_label</relation>
+                                </accessibility>
                               </object>
                             </child>
                             <child>
-                              <object class="GtkLabel" id="label77">
+                              <object class="GtkLabel" id="preview_count_label">
                                 <property name="label" translatable="yes">Number of previews</property>
                                 <property name="use-markup">1</property>
                               </object>
@@ -5417,11 +5451,14 @@ This permits Opus passthru to be selected when automatic passthru selection is e
                                 <property name="adjustment">min_title_adj</property>
                                 <property name="numeric">1</property>
                                 <signal name="value-changed" handler="pref_changed_cb" swapped="no"/>
+                                <accessibility>
+                                  <relation name="labelled-by">min_title_duration_label</relation>
+                                </accessibility>
                               </object>
                             </child>
                             <child>
-                              <object class="GtkLabel" id="label70">
-                                <property name="label" translatable="yes">Filter short DVD and Blu-ray titles (seconds)</property>
+                              <object class="GtkLabel" id="min_title_duration_label">
+                                <property name="label" translatable="yes">Minimum DVD/Blu-ray title duration (seconds)</property>
                                 <property name="use-markup">1</property>
                               </object>
                             </child>
@@ -5595,6 +5632,9 @@ This permits Opus passthru to be selected when automatic passthru selection is e
                                         <property name="valign">center</property>
                                         <property name="adjustment">DiskFreeLimitAdjustment</property>
                                         <property name="width-request">55</property>
+                                        <accessibility>
+                                          <property name="label" translatable="yes">Disk Free Space Limit</property>
+                                        </accessibility>
                                         <signal name="value-changed" handler="pref_changed_cb" swapped="no"/>
                                       </object>
                                     </child>
@@ -5704,6 +5744,9 @@ This permits Opus passthru to be selected when automatic passthru selection is e
                                     <property name="valign">center</property>
                                     <property name="adjustment">ActivityFontSizeAdjustment</property>
                                     <signal name="value-changed" handler="activity_font_changed_cb" swapped="no"/>
+                                    <accessibility>
+                                      <relation name="labelled-by">ActivityFontSizeLabel</relation>
+                                    </accessibility>
                                   </object>
                                 </child>
                                 <child>
@@ -6060,6 +6103,9 @@ This permits Opus passthru to be selected when automatic passthru selection is e
               <object class="GtkDrawingArea" id="preview_image">
                 <property name="hexpand">1</property>
                 <property name="vexpand">1</property>
+                <accessibility>
+                  <property name="label" translatable="yes">Video Preview</property>
+                </accessibility>
                 <child>
                   <object class="GtkGestureClick">
                     <signal name="pressed" handler="preview_click_cb" swapped="no"/>
@@ -6134,6 +6180,9 @@ app-notification</property>
                         <property name="adjustment">preview_progress_adj</property>
                         <property name="value-pos">right</property>
                         <property name="hexpand">1</property>
+                        <accessibility>
+                          <property name="label" translatable="yes">Preview Video Position</property>
+                        </accessibility>
                         <signal name="value-changed" handler="live_preview_seek_cb" swapped="no"/>
                       </object>
                     </child>
@@ -6144,6 +6193,9 @@ app-notification</property>
                         <child>
                           <object class="GtkProgressBar" id="live_encode_progress">
                             <property name="height-request">20</property>
+                            <accessibility>
+                              <property name="label" translatable="yes">Preview Encode Progress</property>
+                            </accessibility>
                           </object>
                         </child>
                       </object>
