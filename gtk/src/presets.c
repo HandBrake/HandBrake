@@ -1158,29 +1158,11 @@ show_presets_action_cb(GSimpleAction *action, GVariant *value,
     {
         gtk_window_set_default_size(GTK_WINDOW(presets_window), w, h);
     }
-
-#if !GTK_CHECK_VERSION(4, 4, 0)
-    // Note: Only works on GTK3 and with X11
-    int x, y;
-
-    gtk_window_get_position(GTK_WINDOW(hb_window), &x, &y);
-    x -= w + 10;
-    if (x < 0)
-    {
-        gtk_window_move(GTK_WINDOW(hb_window), w + 10, y);
-        x = 0;
-    }
-    gtk_window_move(GTK_WINDOW(presets_window), x, y);
-#endif
     gtk_window_present(GTK_WINDOW(presets_window));
 }
 
 G_MODULE_EXPORT void
-#if GTK_CHECK_VERSION(4, 4, 0)
 presets_window_save_size_cb (GtkWidget *widget, GParamSpec *spec, gpointer data)
-#else
-presets_sz_alloc_cb (GtkWidget *widget, GdkRectangle *rect, gpointer data)
-#endif
 {
     signal_user_data_t *ud = ghb_ud();
     if (gtk_widget_get_visible(widget))
@@ -1188,12 +1170,8 @@ presets_sz_alloc_cb (GtkWidget *widget, GdkRectangle *rect, gpointer data)
         gint w, h, ww, wh;
         w = ghb_dict_get_int(ud->prefs, "presets_window_width");
         h = ghb_dict_get_int(ud->prefs, "presets_window_height");
-
-#if GTK_CHECK_VERSION(4, 4, 0)
         gtk_window_get_default_size(GTK_WINDOW(widget), &ww, &wh);
-#else
-        gtk_window_get_size(GTK_WINDOW(widget), &ww, &wh);
-#endif
+
         if ( w != ww || h != wh )
         {
             ghb_dict_set_int(ud->prefs, "presets_window_width", ww);
@@ -1330,7 +1308,7 @@ ghb_presets_menu_init(signal_user_data_t *ud)
                     free(detail_action);
                 }
                 if (type == HB_PRESET_TYPE_CUSTOM &&
-                    ghb_strv_contains((const char**)official_names, folder_name))
+                    g_strv_contains((const char**)official_names, folder_name))
                 {
                     menu_item_name = g_strdup_printf("My %s", folder_name);
                 }
@@ -2076,8 +2054,8 @@ preset_import_action_cb(GSimpleAction *action, GVariant *param,
     hb_window = GTK_WINDOW(GHB_WIDGET(ud->builder, "hb_window"));
     chooser = gtk_file_chooser_native_new("Import Preset", hb_window,
                 GTK_FILE_CHOOSER_ACTION_OPEN,
-                GHB_STOCK_OPEN,
-                GHB_STOCK_CANCEL);
+                _("_Open"),
+                _("_Cancel"));
 
     ghb_add_file_filter(GTK_FILE_CHOOSER(chooser), ud, _("All Files"), "FilterAll");
     filter = ghb_add_file_filter(GTK_FILE_CHOOSER(chooser), ud, _("Presets (*.json)"), "FilterJSON");
@@ -2193,8 +2171,8 @@ preset_export_action_cb(GSimpleAction *action, GVariant *param,
     hb_window = GTK_WINDOW(GHB_WIDGET(ud->builder, "hb_window"));
     chooser = gtk_file_chooser_native_new(_("Export Preset"), hb_window,
                 GTK_FILE_CHOOSER_ACTION_SAVE,
-                GHB_STOCK_SAVE,
-                GHB_STOCK_CANCEL);
+                _("_Save"),
+                _("_Cancel"));
 
     exportDir = ghb_dict_get_string(ud->prefs, "ExportDirectory");
     if (exportDir == NULL || exportDir[0] == '\0')
@@ -2209,9 +2187,6 @@ preset_export_action_cb(GSimpleAction *action, GVariant *param,
     filename = g_strdup_printf("%s.json", preset_name);
     ghb_file_chooser_set_initial_file(GTK_FILE_CHOOSER(chooser), exportDir);
     gtk_file_chooser_set_current_name(GTK_FILE_CHOOSER(chooser), filename);
-#if !GTK_CHECK_VERSION(4, 4, 0)
-    gtk_file_chooser_set_do_overwrite_confirmation(GTK_FILE_CHOOSER(chooser), TRUE);
-#endif
     g_free(filename);
     g_free(preset_name);
     hb_value_free(&dict);
@@ -2229,14 +2204,14 @@ preset_rename_response_cb (GtkDialog *dialog, int response,
     const gchar       * fullname;
     int                 type;
     hb_preset_index_t * path;
-    GtkEntry          * entry;
+    GtkEditable       * entry;
     GtkTextView       * tv;
     GhbValue          * dict;
 
     g_signal_handlers_disconnect_by_data(dialog, ud);
     gtk_widget_set_visible(GTK_WIDGET(dialog), FALSE);
 
-    entry    = GTK_ENTRY(GHB_WIDGET(ud->builder, "PresetReName"));
+    entry    = GTK_EDITABLE(GHB_WIDGET(ud->builder, "PresetReName"));
     tv       = GTK_TEXT_VIEW(GHB_WIDGET(ud->builder, "PresetReDescription"));
     fullname = ghb_dict_get_string(ud->settings, "PresetFullName");
     type     = ghb_dict_get_int(ud->settings, "Type");
@@ -2249,7 +2224,7 @@ preset_rename_response_cb (GtkDialog *dialog, int response,
         char          * desc;
 
         // save the new name
-        name = ghb_editable_get_text(entry);
+        name = gtk_editable_get_text(entry);
         dict = hb_preset_get(path);
         if (dict != NULL)
         {
@@ -2279,7 +2254,7 @@ preset_rename_action_cb(GSimpleAction *action, GVariant *param,
     const gchar       * name;
     int                 type;
     GtkWidget         * dialog;
-    GtkEntry          * entry;
+    GtkEditable       * entry;
 
     name      = ghb_dict_get_string(ud->settings, "PresetName");
     type      = ghb_dict_get_int(ud->settings, "Type");
@@ -2294,8 +2269,8 @@ preset_rename_action_cb(GSimpleAction *action, GVariant *param,
                   ghb_dict_get_value(ud->settings, "PresetDescription"));
 
     dialog   = GHB_WIDGET(ud->builder, "preset_rename_dialog");
-    entry    = GTK_ENTRY(GHB_WIDGET(ud->builder, "PresetReName"));
-    ghb_editable_set_text(entry, name);
+    entry    = GTK_EDITABLE(GHB_WIDGET(ud->builder, "PresetReName"));
+    gtk_editable_set_text(entry, name);
 
     g_signal_connect(dialog, "response",
                      G_CALLBACK(preset_rename_response_cb), ud);
@@ -2307,13 +2282,13 @@ preset_save_as_response_cb (GtkDialog *dialog, int response,
                             signal_user_data_t *ud)
 {
     const char *name, *category;
-    GtkEntry *entry;
+    GtkEditable *entry;
     GtkTextView *tv;
 
     g_signal_handlers_disconnect_by_data(dialog, ud);
     gtk_widget_set_visible(GTK_WIDGET(dialog), FALSE);
 
-    entry = GTK_ENTRY(GHB_WIDGET(ud->builder, "PresetName"));
+    entry = GTK_EDITABLE(GHB_WIDGET(ud->builder, "PresetName"));
     tv = GTK_TEXT_VIEW(GHB_WIDGET(ud->builder, "PresetDescription"));
 
     if (response == GTK_RESPONSE_OK)
@@ -2324,13 +2299,13 @@ preset_save_as_response_cb (GtkDialog *dialog, int response,
         gboolean        def;
 
         // save the preset
-        name = ghb_editable_get_text(entry);
+        name = gtk_editable_get_text(entry);
         category = ghb_dict_get_string(ud->settings, "PresetCategory");
         if (!g_strcmp0(category, "new"))
         {
-            entry = GTK_ENTRY(GHB_WIDGET(ud->builder,
+            entry = GTK_EDITABLE(GHB_WIDGET(ud->builder,
                                             "PresetCategoryName"));
-            category = ghb_editable_get_text(entry);
+            category = gtk_editable_get_text(entry);
         }
         if (category == NULL || category[0] == 0)
         {
@@ -2356,7 +2331,7 @@ preset_save_as_action_cb (GSimpleAction *action, GVariant *param,
     int                 type;
     hb_preset_index_t * path;
     GtkWidget         * dialog;
-    GtkEntry          * entry;
+    GtkEditable       * entry;
     GhbValue          * dict;
 
     name      = ghb_dict_get_string(ud->settings, "PresetName");
@@ -2408,8 +2383,8 @@ preset_save_as_action_cb (GSimpleAction *action, GVariant *param,
     ghb_ui_update("PresetCategory", ghb_string_value(category));
 
     dialog   = GHB_WIDGET(ud->builder, "preset_save_dialog");
-    entry    = GTK_ENTRY(GHB_WIDGET(ud->builder, "PresetName"));
-    ghb_editable_set_text(entry, name);
+    entry    = GTK_EDITABLE(GHB_WIDGET(ud->builder, "PresetName"));
+    gtk_editable_set_text(entry, name);
 
     g_signal_connect(dialog, "response",
                      G_CALLBACK(preset_save_as_response_cb), ud);
@@ -2464,7 +2439,7 @@ preset_save_action_cb(GSimpleAction *action, GVariant *param,
 static void
 preset_save_set_ok_sensitive (void)
 {
-    GtkEntry   * entry;
+    GtkEditable* entry;
     GtkWidget  * ok_button;
     const char * name;
     const char * category;
@@ -2475,10 +2450,10 @@ preset_save_set_ok_sensitive (void)
     ok_button = GHB_WIDGET(ud->builder, "preset_ok");
 
     category = ghb_dict_get_string(ud->settings, "PresetCategory");
-    entry = GTK_ENTRY(GHB_WIDGET(ud->builder, "PresetName"));
-    name = ghb_editable_get_text(entry);
-    entry = GTK_ENTRY(GHB_WIDGET(ud->builder, "PresetCategoryName"));
-    category_name = ghb_editable_get_text(entry);
+    entry = GTK_EDITABLE(GHB_WIDGET(ud->builder, "PresetName"));
+    name = gtk_editable_get_text(entry);
+    entry = GTK_EDITABLE(GHB_WIDGET(ud->builder, "PresetCategoryName"));
+    category_name = gtk_editable_get_text(entry);
 
     sensitive = name[0] && (strcmp(category, "new") || category_name[0]);
     gtk_widget_set_sensitive(ok_button, sensitive);
@@ -2641,22 +2616,8 @@ preset_remove_action_cb(GSimpleAction *action, GVariant *param,
 
 // controls where valid drop locations are
 G_MODULE_EXPORT gboolean
-#if GTK_CHECK_VERSION(4, 4, 0)
-presets_drag_motion_cb(
-    GtkTreeView        *tv,
-    GdkDrop            *ctx,
-    gint                x,
-    gint                y,
-    signal_user_data_t *ud)
-#else
-presets_drag_motion_cb(
-    GtkTreeView        *tv,
-    GdkDragContext     *ctx,
-    gint                x,
-    gint                y,
-    guint               time,
-    signal_user_data_t *ud)
-#endif
+presets_drag_motion_cb (GtkTreeView *tv, GdkDrop *ctx,
+                        int x, int y, signal_user_data_t *ud)
 {
     GtkTreeViewDropPosition  drop_pos;
     GtkTreeIter              iter;
@@ -2669,10 +2630,6 @@ presets_drag_motion_cb(
     gboolean                 src_folder, dst_folder;
     GhbValue                *src_preset, *dst_preset;
     GtkWidget               *widget = NULL;
-#if GTK_CHECK_VERSION(4, 4, 0)
-    // Dummy time for backwards compatibility
-    guint                    time = 0;
-#endif
 
     treepath = g_object_get_data(G_OBJECT(tv), "dst-tree-path");
     if (treepath != NULL)
@@ -2700,7 +2657,7 @@ presets_drag_motion_cb(
     free(path);
     if (src_preset == NULL)
     {
-        ghb_drag_status(ctx, 0, time);
+        gdk_drop_status(ctx, 0, GDK_ACTION_MOVE);
         return TRUE;
     }
 
@@ -2712,14 +2669,14 @@ presets_drag_motion_cb(
     gtk_tree_view_get_dest_row_at_pos(tv, x, y, &treepath, &drop_pos);
     if (treepath == NULL)
     {
-        ghb_drag_status(ctx, 0, time);
+        gdk_drop_status(ctx, 0, GDK_ACTION_MOVE);
         return TRUE;
     }
     // Don't allow repositioning of builtin presets
     if (src_ptype != HB_PRESET_TYPE_CUSTOM)
     {
         gtk_tree_view_set_drag_dest_row(tv, NULL, drop_pos);
-        ghb_drag_status(ctx, 0, time);
+        gdk_drop_status(ctx, 0, GDK_ACTION_MOVE);
         gtk_tree_path_free(treepath);
         return TRUE;
     }
@@ -2729,7 +2686,7 @@ presets_drag_motion_cb(
     free(path);
     if (dst_preset == NULL)
     {
-        ghb_drag_status(ctx, 0, time);
+        gdk_drop_status(ctx, 0, GDK_ACTION_MOVE);
         gtk_tree_path_free(treepath);
         return TRUE;
     }
@@ -2741,7 +2698,7 @@ presets_drag_motion_cb(
     if (dst_ptype != HB_PRESET_TYPE_CUSTOM)
     {
         gtk_tree_view_set_drag_dest_row(tv, NULL, drop_pos);
-        ghb_drag_status(ctx, 0, time);
+        gdk_drop_status(ctx, 0, GDK_ACTION_MOVE);
         gtk_tree_path_free(treepath);
         return TRUE;
     }
@@ -2755,7 +2712,7 @@ presets_drag_motion_cb(
         free(path);
         if (dst_preset == NULL)
         {
-            ghb_drag_status(ctx, 0, time);
+            gdk_drop_status(ctx, 0, GDK_ACTION_MOVE);
             gtk_tree_path_free(treepath);
             return TRUE;
         }
@@ -2780,7 +2737,7 @@ presets_drag_motion_cb(
     if (!src_folder && dst_folder && drop_pos == GTK_TREE_VIEW_DROP_BEFORE)
     {
         gtk_tree_view_set_drag_dest_row(tv, NULL, drop_pos);
-        ghb_drag_status(ctx, 0, time);
+        gdk_drop_status(ctx, 0, GDK_ACTION_MOVE);
         gtk_tree_path_free(treepath);
         return TRUE;
     }
@@ -2791,7 +2748,7 @@ presets_drag_motion_cb(
     }
 
     gtk_tree_view_set_drag_dest_row(tv, treepath, drop_pos);
-    ghb_drag_status(ctx, GDK_ACTION_MOVE, time);
+    gdk_drop_status(ctx, GDK_ACTION_MOVE, GDK_ACTION_MOVE);
 
     g_object_set_data(G_OBJECT(tv), "dst-tree-path", treepath);
     g_object_set_data(G_OBJECT(tv), "dst-drop-pos", (gpointer)drop_pos);

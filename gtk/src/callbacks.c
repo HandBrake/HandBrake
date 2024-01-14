@@ -607,9 +607,7 @@ get_dvd_device_name(GDrive *gd)
 #endif
 
 static GHashTable *volname_hash = NULL;
-#if GLIB_CHECK_VERSION(2, 32, 0)
 static GMutex     volname_mutex_static;
-#endif
 static GMutex     *volname_mutex;
 
 static void
@@ -685,12 +683,8 @@ get_dvd_volume_name(gpointer gd)
 void
 ghb_volname_cache_init(void)
 {
-#if GLIB_CHECK_VERSION(2, 32, 0)
     g_mutex_init(&volname_mutex_static);
     volname_mutex = &volname_mutex_static;
-#else
-    volname_mutex = g_mutex_new();
-#endif
     volname_hash = g_hash_table_new_full(g_str_hash, g_str_equal,
                                         free_volname_key, free_volname_value);
 }
@@ -867,13 +861,7 @@ get_file_modification_date_time (const char *filename)
 
     if (info != NULL)
     {
-#if GLIB_CHECK_VERSION(2, 62, 0)
         datetime = g_file_info_get_modification_date_time(info);
-#else
-        GTimeVal tv;
-        g_file_info_get_modification_time(info, &tv);
-        datetime = g_date_time_new_from_timeval_utc(&tv);
-#endif
         g_object_unref(info);
     }
     g_object_unref(file);
@@ -1526,9 +1514,9 @@ start_scan(
         return;
 
     widget = GHB_WIDGET(ud->builder, "sourcetoolbutton");
-    ghb_tool_button_set_icon_name(widget, "hb-stop");
-    ghb_tool_button_set_label(widget, _("Stop Scan"));
-    ghb_tool_item_set_tooltip_text(widget, _("Stop Scan"));
+    ghb_button_set_icon_name(GHB_BUTTON(widget), "hb-stop");
+    ghb_button_set_label(GHB_BUTTON(widget), _("Stop Scan"));
+    gtk_widget_set_tooltip_text(widget, _("Stop Scan"));
     ghb_backend_scan(path, title_id, preview_count,
             90000L * ghb_dict_get_int(ud->prefs, "MinTitleDuration"));
 }
@@ -1637,11 +1625,7 @@ single_title_dialog (GtkFileChooser *chooser)
     spin = gtk_spin_button_new(adj, 1, 0);
     gtk_widget_show(spin);
     msg = gtk_message_dialog_get_message_area(GTK_MESSAGE_DIALOG(dialog));
-#if GTK_CHECK_VERSION(4, 4, 0)
     gtk_box_append(GTK_BOX(msg), spin);
-#else
-    gtk_box_pack_end(GTK_BOX(msg), spin, FALSE, FALSE, 0);
-#endif
     g_signal_connect(dialog, "response", G_CALLBACK(single_title_dialog_response), chooser);
     gtk_widget_show(dialog);
 }
@@ -1736,8 +1720,8 @@ do_source_dialog(gboolean dir, signal_user_data_t *ud)
                 dir ? _("Open Source Directory") : _("Open Source"),
                 hb_window,
                 dir ? GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER : GTK_FILE_CHOOSER_ACTION_OPEN,
-                GHB_STOCK_OPEN,
-                GHB_STOCK_CANCEL);
+                _("_Open"),
+                _("_Cancel"));
 
     ghb_log_func();
     sourcename = ghb_dict_get_string(ud->globals, "scan_source");
@@ -1825,7 +1809,7 @@ ghb_update_destination_extension(signal_user_data_t *ud)
     gchar *filename;
     const gchar *extension;
     gint ii;
-    GtkEntry *entry;
+    GtkEditable *entry;
     static gboolean busy = FALSE;
 
     ghb_log_func();
@@ -1836,8 +1820,8 @@ ghb_update_destination_extension(signal_user_data_t *ud)
         return;
     busy = TRUE;
     extension = get_extension(ud, ud->settings);
-    entry = GTK_ENTRY(GHB_WIDGET(ud->builder, "dest_file"));
-    filename = g_strdup(ghb_editable_get_text(entry));
+    entry = GTK_EDITABLE(GHB_WIDGET(ud->builder, "dest_file"));
+    filename = g_strdup(gtk_editable_get_text(entry));
     for (ii = 0; containers[ii] != NULL; ii++)
     {
         if (g_str_has_suffix(filename, containers[ii]))
@@ -1873,7 +1857,7 @@ destination_select_title(GtkEntry *entry)
     const gchar *dest;
     gint start, end;
 
-    dest = ghb_editable_get_text(entry);
+    dest = gtk_editable_get_text(GTK_EDITABLE(entry));
     for (end = strlen(dest)-1; end > 0; end--)
     {
         if (dest[end] == '.')
@@ -1964,7 +1948,7 @@ static void
 destination_response_cb(GtkFileChooserNative *chooser,
                         GtkResponseType response, signal_user_data_t *ud)
 {
-    GtkEntry *entry;
+    GtkEditable *entry;
     gchar *basename;
 
     if (response == GTK_RESPONSE_ACCEPT)
@@ -1977,8 +1961,8 @@ destination_response_cb(GtkFileChooserNative *chooser,
         filename = g_file_get_path(file);
         basename = g_path_get_basename(filename);
         dirname = g_path_get_dirname(filename);
-        entry = (GtkEntry*)GHB_WIDGET(ud->builder, "dest_file");
-        ghb_editable_set_text(entry, basename);
+        entry = GTK_EDITABLE(GHB_WIDGET(ud->builder, "dest_file"));
+        gtk_editable_set_text(entry, basename);
         dest_chooser = GHB_FILE_BUTTON(GHB_WIDGET(ud->builder, "dest_dir"));
         ghb_file_button_set_filename(dest_chooser, dirname);
         g_object_unref(file);
@@ -2002,8 +1986,8 @@ destination_action_cb(GSimpleAction *action, GVariant *param,
     chooser = gtk_file_chooser_native_new("Choose Destination",
                                           hb_window,
                                           GTK_FILE_CHOOSER_ACTION_SAVE,
-                                          GHB_STOCK_SAVE,
-                                          GHB_STOCK_CANCEL);
+                                          _("_Save"),
+                                          _("_Cancel"));
     ghb_file_chooser_set_initial_file(GTK_FILE_CHOOSER(chooser), destname);
     gtk_native_dialog_set_modal(GTK_NATIVE_DIALOG(chooser), TRUE);
     g_signal_connect(chooser, "response", G_CALLBACK(destination_response_cb), ud);
@@ -2011,24 +1995,14 @@ destination_action_cb(GSimpleAction *action, GVariant *param,
 }
 
 G_MODULE_EXPORT gboolean
-window_destroy_event_cb(
-    GtkWidget *widget,
-#if !GTK_CHECK_VERSION(4, 4, 0)
-    GdkEvent *event,
-#endif
-    gpointer data)
+window_destroy_event_cb (GtkWidget *widget, gpointer data)
 {
     application_quit();
     return FALSE;
 }
 
 G_MODULE_EXPORT gboolean
-window_close_request_cb(
-    GtkWidget *widget,
-#if !GTK_CHECK_VERSION(4, 4, 0)
-    GdkEvent *event,
-#endif
-    gpointer data)
+window_close_request_cb(GtkWidget *widget, gpointer data)
 {
     gint state = ghb_get_queue_state();
     if (state & (GHB_STATE_WORKING|GHB_STATE_SEARCHING))
@@ -3277,7 +3251,7 @@ ptop_read_value_cb (GtkWidget *widget, gdouble *val, gpointer data)
     int hh = 0, mm = 0;
     signal_user_data_t *ud = ghb_ud();
 
-    text = ghb_editable_get_text(widget);
+    text = gtk_editable_get_text(GTK_EDITABLE(widget));
     if (ghb_settings_combo_int(ud->settings, "PtoPType") != 1)
     {
         result = strtol(text, NULL, 10);
@@ -3321,7 +3295,7 @@ ptop_format_value_cb (GtkWidget *widget, gpointer data)
     mm = (int) (ss / 60);
     ss = ss - mm * 60;
     text = g_strdup_printf ("%02d:%02d:%05.2f", hh, mm, ss);
-    ghb_editable_set_text(widget, text);
+    gtk_editable_set_text(GTK_EDITABLE(widget), text);
     g_free (text);
 
     return TRUE;
@@ -3731,7 +3705,7 @@ quit_cb(countdown_t *cd)
         ghb_hb_cleanup(FALSE);
         prune_logs();
 
-        ghb_window_destroy(cd->dlg);
+        gtk_window_destroy(GTK_WINDOW(cd->dlg));
         g_application_quit(g_application_get_default());
         return FALSE;
     }
@@ -3766,7 +3740,7 @@ suspend_cb(countdown_t *cd)
                                              cd->action, cd->timeout);
     if (cd->timeout == 0)
     {
-        ghb_window_destroy(cd->dlg);
+        gtk_window_destroy(GTK_WINDOW(cd->dlg));
         suspend_logind();
         return FALSE;
     }
@@ -3786,7 +3760,7 @@ countdown_dialog_response (GtkDialog *dialog, int response, guint *timeout_id)
         if (source != NULL)
             g_source_destroy(source);
 
-        ghb_window_destroy(dialog);
+        gtk_window_destroy(GTK_WINDOW(dialog));
     }
     g_free(timeout_id);
 }
@@ -3876,7 +3850,7 @@ ghb_question_dialog_run (GtkWindow *parent, GhbActionStyle accept_style,
         }
     }
     response = ghb_dialog_run(GTK_DIALOG(dialog));
-    ghb_window_destroy(dialog);
+    gtk_window_destroy(GTK_WINDOW(dialog));
     if (response == GTK_RESPONSE_ACCEPT)
     {
         return TRUE;
@@ -3887,7 +3861,7 @@ ghb_question_dialog_run (GtkWindow *parent, GhbActionStyle accept_style,
 void
 message_dialog_destroy (GtkDialog *dialog, int response, gpointer user_data)
 {
-    ghb_window_destroy(dialog);
+    gtk_window_destroy(GTK_WINDOW(dialog));
 }
 
 /**
@@ -3962,7 +3936,7 @@ stop_encode_dialog_response (GtkDialog *dialog, int response,
                              signal_user_data_t *ud)
 {
     g_signal_handlers_disconnect_by_data(dialog, ud);
-    ghb_window_destroy(dialog);
+    gtk_window_destroy(GTK_WINDOW(dialog));
 
     switch (response)
     {
@@ -4001,7 +3975,7 @@ ghb_stop_encode_dialog_show (signal_user_data_t *ud)
 static void
 quit_dialog_response (GtkDialog *dialog, int response, gpointer data)
 {
-    ghb_window_destroy(dialog);
+    gtk_window_destroy(GTK_WINDOW(dialog));
     if (response == 1)
     {
         application_quit();
@@ -4410,9 +4384,9 @@ ghb_backend_events(signal_user_data_t *ud)
         GtkWidget *widget;
 
         widget = GHB_WIDGET(ud->builder, "sourcetoolbutton");
-        ghb_tool_button_set_icon_name(widget, "hb-source");
-        ghb_tool_button_set_label(widget, _("Open Source"));
-        ghb_tool_item_set_tooltip_text(widget, _("Choose Video Source"));
+        ghb_button_set_icon_name(GHB_BUTTON(widget), "hb-source");
+        ghb_button_set_label(GHB_BUTTON(widget), _("Open Source"));
+        gtk_widget_set_tooltip_text(widget, _("Choose Video Source"));
 
         hide_scan_progress(ud);
 
@@ -4704,15 +4678,6 @@ show_activity_action_cb(GSimpleAction *action, GVariant *value,
     gtk_window_present(GTK_WINDOW(activity_window));
 }
 
-#if !GTK_CHECK_VERSION(4, 4, 0)
-G_MODULE_EXPORT gboolean
-activity_window_delete_cb(GtkWidget *xwidget, GdkEvent *event, gpointer data)
-{
-    gtk_widget_set_visible(xwidget, FALSE);
-    return TRUE;
-}
-#endif
-
 void
 ghb_log(gchar *log, ...)
 {
@@ -4730,46 +4695,23 @@ ghb_log(gchar *log, ...)
     va_end(args);
 }
 
+static void
+browse_uri_finish (GtkWindow *parent, GAsyncResult *result, gpointer data)
+{
+    g_autoptr(GError) error = NULL;
+    gtk_show_uri_full_finish(parent, result, &error);
+    if (error)
+    {
+        g_warning("Could not open URL: %s", error->message);
+    }
+}
+
 void
 ghb_browse_uri(signal_user_data_t *ud, const gchar *uri)
 {
-#if defined(_WIN32)
-    ShellExecute(NULL, "open", uri, NULL, NULL, SW_SHOWNORMAL);
-#elif GTK_CHECK_VERSION(4, 4, 0)
     GtkWindow *parent = GTK_WINDOW(GHB_WIDGET(ud->builder, "hb_window"));
-    gtk_show_uri(parent, uri, GDK_CURRENT_TIME);
-#else
-    GtkWindow *parent = GTK_WINDOW(GHB_WIDGET(ud->builder, "hb_window"));
-    gboolean result = gtk_show_uri_on_window(parent, uri, GDK_CURRENT_TIME, NULL);
-    if (result) return;
-    char *argv[] =
-        {"xdg-open",NULL,NULL,NULL};
-    argv[1] = (gchar*)uri;
-    result = g_spawn_async(NULL, argv, NULL, G_SPAWN_SEARCH_PATH, NULL,
-                NULL, NULL, NULL);
-    if (result) return;
-
-    argv[0] = "gnome-open";
-    result = g_spawn_async(NULL, argv, NULL, G_SPAWN_SEARCH_PATH, NULL,
-                NULL, NULL, NULL);
-    if (result) return;
-
-    argv[0] = "kfmclient";
-    argv[1] = "exec";
-    argv[2] = (gchar*)uri;
-    result = g_spawn_async(NULL, argv, NULL, G_SPAWN_SEARCH_PATH, NULL,
-                NULL, NULL, NULL);
-    if (result) return;
-
-    argv[0] = "firefox";
-    argv[1] = (gchar*)uri;
-    argv[2] = NULL;
-    result = g_spawn_async(NULL, argv, NULL, G_SPAWN_SEARCH_PATH, NULL,
-                NULL, NULL, NULL);
-
-    if (!result)
-        g_warning("No application to open URI was found");
-#endif
+    gtk_show_uri_full(parent, uri, GDK_CURRENT_TIME, NULL,
+                      (GAsyncReadyCallback)browse_uri_finish, NULL);
 }
 
 G_MODULE_EXPORT void
@@ -4851,7 +4793,6 @@ update_queue_labels(signal_user_data_t *ud)
     button = GHB_WIDGET(ud->builder, "show_queue");
     pending = queue_pending_count(ud->queue);
 
-#if GTK_CHECK_VERSION(4, 4, 0)
     if (pending > 0)
     {
         str = g_strdup_printf("%d", pending);
@@ -4862,18 +4803,6 @@ update_queue_labels(signal_user_data_t *ud)
     {
         ghb_button_set_indicator_label(GHB_BUTTON(button), NULL);
     }
-#else
-    if (pending > 0)
-    {
-        str = g_strdup_printf("%s (%d)", _("Queue"), pending);
-        ghb_tool_button_set_label(button, str);
-        g_free(str);
-    }
-    else
-    {
-        ghb_tool_button_set_label(button, _("Queue"));
-    }
-#endif
 }
 
 void
@@ -4895,11 +4824,8 @@ ghb_hbfd(signal_user_data_t *ud, gboolean hbfd)
     widget = GHB_WIDGET(ud->builder, "SettingsStack");
     gtk_widget_set_visible(widget, !hbfd);
     widget = GHB_WIDGET (ud->builder, "hb_window");
-#if GTK_CHECK_VERSION(4, 4, 0)
     gtk_window_set_default_size(GTK_WINDOW(widget), 16, 16);
-#else
-    gtk_window_resize(GTK_WINDOW(widget), 16, 16);
-#endif
+
 }
 
 G_MODULE_EXPORT void
@@ -4936,19 +4862,12 @@ activity_font_changed_cb(GtkWidget *widget, gpointer data)
     char           * css      = g_strdup_printf(css_template, font, size);
     GtkCssProvider * provider = gtk_css_provider_new();
 
-    ghb_css_provider_load_from_data(provider, css, -1);
+    gtk_css_provider_load_from_data(provider, css, -1);
     GtkWidget * win = GHB_WIDGET(ud->builder, "hb_window");
-#if GTK_CHECK_VERSION(4, 4, 0)
     GdkDisplay *dd = gtk_widget_get_display(win);
     gtk_style_context_add_provider_for_display(dd,
                                 GTK_STYLE_PROVIDER(provider),
                                 GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
-#else
-    GdkScreen *ss = gtk_window_get_screen(GTK_WINDOW(win));
-    gtk_style_context_add_provider_for_screen(ss,
-                                GTK_STYLE_PROVIDER(provider),
-                                GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
-#endif
     g_object_unref(provider);
     g_free(css);
 }
@@ -5260,7 +5179,7 @@ handle_media_change(const gchar *device, gboolean insert, signal_user_data_t *ud
         ins_count++;
         if (ins_count == 2)
         {
-            GHB_THREAD_NEW("Cache Volume Names",
+            g_thread_new("Cache Volume Names",
                     (GThreadFunc)ghb_cache_volnames, ud);
             if (ghb_dict_get_bool(ud->prefs, "AutoScan") &&
                 ud->current_dvd_device != NULL &&
@@ -5280,7 +5199,7 @@ handle_media_change(const gchar *device, gboolean insert, signal_user_data_t *ud
         rem_count++;
         if (rem_count == 2)
         {
-            GHB_THREAD_NEW("Cache Volume Names",
+            g_thread_new("Cache Volume Names",
                     (GThreadFunc)ghb_cache_volnames, ud);
             if (ud->current_dvd_device != NULL &&
                 strcmp(device, ud->current_dvd_device) == 0)
@@ -5356,7 +5275,7 @@ drive_changed_cb(GVolumeMonitor *gvm, GDrive *gd, signal_user_data_t *ud)
     gint state;
 
     ghb_log_func();
-    GHB_THREAD_NEW("Cache Volume Names", (GThreadFunc)ghb_cache_volnames, ud);
+    g_thread_new("Cache Volume Names", (GThreadFunc)ghb_cache_volnames, ud);
 
     state = ghb_get_scan_state();
     device = g_drive_get_identifier(gd, G_VOLUME_IDENTIFIER_KIND_UNIX_DEVICE);
@@ -5443,11 +5362,8 @@ queue_done_action (signal_user_data_t *ud)
 }
 
 G_MODULE_EXPORT void
-#if GTK_CHECK_VERSION(4, 4, 0)
 hb_window_save_size_cb (GtkWidget *widget, GParamSpec *spec, gpointer data)
-#else
-hb_win_sz_alloc_cb (GtkWidget *widget, GdkRectangle *rect, gpointer data)
-#endif
+
 {
     signal_user_data_t *ud = ghb_ud();
 
@@ -5456,12 +5372,8 @@ hb_win_sz_alloc_cb (GtkWidget *widget, GdkRectangle *rect, gpointer data)
         gint w, h, ww, wh;
         w = ghb_dict_get_int(ud->prefs, "window_width");
         h = ghb_dict_get_int(ud->prefs, "window_height");
-
-#if GTK_CHECK_VERSION(4, 4, 0)
         gtk_window_get_default_size(GTK_WINDOW(widget), &ww, &wh);
-#else
-        gtk_window_get_size(GTK_WINDOW(widget), &ww, &wh);
-#endif
+
         if ( w != ww || h != wh )
         {
             ghb_dict_set_int(ud->prefs, "window_width", ww);
@@ -5472,26 +5384,16 @@ hb_win_sz_alloc_cb (GtkWidget *widget, GdkRectangle *rect, gpointer data)
         }
     }
 }
-#if !GTK_CHECK_VERSION(4, 4, 0)
-static void container_empty_cb(GtkWidget *widget, gpointer data)
-{
-    gtk_widget_destroy(widget);
-}
-#endif
 
 void
 ghb_list_box_remove_all (GtkListBox *lb)
 {
-#if GTK_CHECK_VERSION(4, 4, 0)
     GtkWidget *row;
 
     while ((row = gtk_widget_get_last_child(GTK_WIDGET(lb))))
     {
         gtk_list_box_remove(lb, row);
     }
-#else
-    gtk_container_foreach(GTK_CONTAINER(lb), container_empty_cb, NULL);
-#endif
 }
 
 static void
@@ -5546,13 +5448,9 @@ presets_list_context_menu_cb (GtkGesture *gest, gint n_press, double x,
     if (n_press == 1)
     {
         GtkWidget *menu = ghb_builder_widget("preset-context-menu");
-#if GTK_CHECK_VERSION(4, 4, 0)
         gtk_popover_set_pointing_to(GTK_POPOVER(menu),
                                     &(const GdkRectangle){ x, y, 1, 1 });
         gtk_popover_popup(GTK_POPOVER(menu));
-#else
-        gtk_menu_popup_at_pointer(GTK_MENU(menu), NULL);
-#endif
     }
 }
 
@@ -5585,7 +5483,6 @@ add_video_file_filters (GtkFileChooser *chooser, signal_user_data_t *ud)
     ghb_add_file_filter(chooser, ud, "EVO", "SourceFilterEVO");
     ghb_add_file_filter(chooser, ud, "VOB", "SourceFilterVOB");
 }
-#if GTK_CHECK_VERSION(4, 4, 0)
 G_MODULE_EXPORT gboolean
 combo_search_key_press_cb(
     GtkEventControllerKey * keycon,
@@ -5601,30 +5498,12 @@ combo_search_key_press_cb(
     lang_combo_search(combo, keyval, ud);
     return FALSE;
 }
-#else
-G_MODULE_EXPORT gboolean
-combo_search_key_press_cb(
-    GtkWidget *widget,
-    GdkEvent *event,
-    signal_user_data_t *ud)
-{
-    guint          keyval;
-
-    gdk_event_get_keyval(event, &keyval);
-    lang_combo_search(GTK_COMBO_BOX(widget), keyval, ud);
-    return FALSE;
-}
-#endif
 
 G_MODULE_EXPORT void
 log_copy_action_cb (GSimpleAction *action, GVariant *param, signal_user_data_t *ud)
 {
     GtkTextIter start, end;
-#if GTK_CHECK_VERSION(4, 4, 0)
     GdkClipboard *clipboard = gdk_display_get_clipboard(gdk_display_get_default());
-#else
-    GtkClipboard *clipboard = gtk_clipboard_get_default(gdk_display_get_default());
-#endif
 
     GtkTextView *log = GTK_TEXT_VIEW(GHB_WIDGET(ud->builder, "activity_view"));
     GtkTextBuffer *buffer = gtk_text_view_get_buffer(log);

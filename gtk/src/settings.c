@@ -73,11 +73,7 @@ ghb_get_setting_key(GtkWidget *widget)
     ghb_log_func();
     if (widget == NULL) return NULL;
     g_return_val_if_fail(GTK_IS_WIDGET(widget), NULL);
-#if GTK_CHECK_VERSION(4, 4, 0)
     name = gtk_buildable_get_buildable_id(GTK_BUILDABLE(widget));
-#else
-    name = gtk_buildable_get_name(GTK_BUILDABLE(widget));
-#endif
 
     if (name == NULL || !strncmp(name, "Gtk", 3))
     {
@@ -109,53 +105,21 @@ ghb_widget_value(GtkWidget *widget)
     name = ghb_get_setting_key(widget);
     if (type == GTK_TYPE_ENTRY)
     {
-        const gchar *str = ghb_editable_get_text(widget);
+        const gchar *str = gtk_editable_get_text(GTK_EDITABLE(widget));
         value = ghb_string_value_new(str);
     }
-#if !GTK_CHECK_VERSION(4, 4, 0)
-    else if (type == GTK_TYPE_RADIO_BUTTON)
-    {
-        gboolean bval;
-        bval = gtk_toggle_button_get_inconsistent(GTK_TOGGLE_BUTTON(widget));
-        if (bval)
-        {
-            value = ghb_bool_value_new(FALSE);
-        }
-        else
-        {
-            bval = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
-            value = ghb_bool_value_new(bval);
-        }
-    }
-#endif
     else if (type == GTK_TYPE_CHECK_BUTTON)
     {
         gboolean bval;
-        bval = ghb_check_button_get_active(widget);
+        bval = gtk_check_button_get_active(GTK_CHECK_BUTTON(widget));
         value = ghb_bool_value_new(bval);
     }
-#if !GTK_CHECK_VERSION(4, 4, 0)
-    else if (type == GTK_TYPE_TOGGLE_TOOL_BUTTON)
-    {
-        gboolean bval;
-        bval = gtk_toggle_tool_button_get_active(GTK_TOGGLE_TOOL_BUTTON(widget));
-        value = ghb_bool_value_new(bval);
-    }
-#endif
     else if (type == GTK_TYPE_TOGGLE_BUTTON)
     {
         gboolean bval;
         bval = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
         value = ghb_bool_value_new(bval);
     }
-#if !GTK_CHECK_VERSION(4, 4, 0)
-    else if (type == GTK_TYPE_CHECK_MENU_ITEM)
-    {
-        gboolean bval;
-        bval = gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(widget));
-        value = ghb_bool_value_new(bval);
-    }
-#endif
     else if (type == GTK_TYPE_COMBO_BOX)
     {
         GtkTreeModel *store;
@@ -171,12 +135,10 @@ ghb_widget_value(GtkWidget *widget)
         }
         else if (gtk_combo_box_get_has_entry(GTK_COMBO_BOX(widget)))
         {
-            const gchar *str;
-#if GTK_CHECK_VERSION(4, 4, 0)
-            str = ghb_editable_get_text(gtk_combo_box_get_child(GTK_COMBO_BOX(widget)));
-#else
-            str = ghb_editable_get_text(gtk_bin_get_child(GTK_BIN(widget)));
-#endif
+            const char *str;
+            GtkWidget *entry = gtk_combo_box_get_child(GTK_COMBO_BOX(widget));
+            str = gtk_editable_get_text(GTK_EDITABLE(entry));
+
             if (str == NULL) str = "";
             value = ghb_string_value_new(str);
         }
@@ -352,35 +314,16 @@ ghb_update_widget(GtkWidget *widget, const GhbValue *value)
 
     if (type == GTK_TYPE_ENTRY)
     {
-        ghb_editable_set_text(widget, str);
+        gtk_editable_set_text(GTK_EDITABLE(widget), str);
     }
-#if !GTK_CHECK_VERSION(4, 4, 0)
-    else if (type == GTK_TYPE_RADIO_BUTTON)
-    {
-        if (ival)
-            gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), !!ival);
-    }
-#endif
     else if (type == GTK_TYPE_CHECK_BUTTON)
     {
-        ghb_check_button_set_active(widget, ival);
+        gtk_check_button_set_active(GTK_CHECK_BUTTON(widget), ival);
     }
-#if !GTK_CHECK_VERSION(4, 4, 0)
-    else if (type == GTK_TYPE_TOGGLE_TOOL_BUTTON)
-    {
-        gtk_toggle_tool_button_set_active(GTK_TOGGLE_TOOL_BUTTON(widget), ival);
-    }
-#endif
     else if (type == GTK_TYPE_TOGGLE_BUTTON)
     {
         gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), ival);
     }
-#if !GTK_CHECK_VERSION(4, 4, 0)
-    else if (type == GTK_TYPE_CHECK_MENU_ITEM)
-    {
-        gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(widget), ival);
-    }
-#endif
     else if (type == GTK_TYPE_COMBO_BOX)
     {
         GtkTreeModel *store;
@@ -424,14 +367,10 @@ ghb_update_widget(GtkWidget *widget, const GhbValue *value)
         {
             if (gtk_combo_box_get_has_entry(GTK_COMBO_BOX(widget)))
             {
-#if GTK_CHECK_VERSION(4, 4, 0)
-                GtkEntry *entry = GTK_ENTRY(gtk_combo_box_get_child(GTK_COMBO_BOX(widget)));
-#else
-                GtkEntry *entry = GTK_ENTRY(gtk_bin_get_child(GTK_BIN(widget)));
-#endif
+                GtkWidget *entry = gtk_combo_box_get_child(GTK_COMBO_BOX(widget));
                 if (entry)
                 {
-                    ghb_editable_set_text(entry, str);
+                    gtk_editable_set_text(GTK_EDITABLE(entry), str);
                 }
                 else
                 {

@@ -50,14 +50,8 @@ create_chapter_row (int index, gint64 start, gint64 duration,
     GtkWidget *row = ghb_chapter_row_new(index, start, duration, name);
     g_signal_connect(row, "notify::name", G_CALLBACK(chapter_changed_cb), ud);
 
-    GtkEventController * econ;
-
-#if GTK_CHECK_VERSION(4, 4, 0)
-    econ = gtk_event_controller_key_new();
+    GtkEventController *econ = gtk_event_controller_key_new();
     gtk_widget_add_controller(row, econ);
-#else
-    econ = gtk_event_controller_key_new(row);
-#endif
     g_signal_connect(econ, "key-pressed", G_CALLBACK(chapter_keypress_cb), ud);
 
     gtk_widget_show(row);
@@ -464,16 +458,13 @@ chapters_export_action_cb (GSimpleAction *action, GVariant *param,
     hb_window = GTK_WINDOW(GHB_WIDGET(ud->builder, "hb_window"));
     dialog = gtk_file_chooser_native_new("Export Chapters", hb_window,
                 GTK_FILE_CHOOSER_ACTION_SAVE,
-                GHB_STOCK_SAVE,
-                GHB_STOCK_CANCEL);
+                _("_Save"),
+                _("_Cancel"));
 
     ghb_add_file_filter(GTK_FILE_CHOOSER(dialog), ud, _("All Files"), "FilterAll");
     filter = ghb_add_file_filter(GTK_FILE_CHOOSER(dialog), ud, _("Chapters (*.xml)"), "FilterXML");
     gtk_file_chooser_set_filter(GTK_FILE_CHOOSER(dialog), filter);
     gtk_file_chooser_set_current_name(GTK_FILE_CHOOSER(dialog), "chapters.xml");
-#if !GTK_CHECK_VERSION(4, 4, 0)
-    gtk_file_chooser_set_do_overwrite_confirmation(GTK_FILE_CHOOSER(dialog), TRUE);
-#endif
 
     exportDir = ghb_dict_get_string(ud->prefs, "ExportDirectory");
     if (exportDir && exportDir[0] != '\0')
@@ -496,8 +487,8 @@ chapters_import_action_cb (GSimpleAction *action, GVariant *param,
     hb_window = GTK_WINDOW(GHB_WIDGET(ud->builder, "hb_window"));
     dialog = gtk_file_chooser_native_new("Import Chapters", hb_window,
                 GTK_FILE_CHOOSER_ACTION_OPEN,
-                GHB_STOCK_OPEN,
-                GHB_STOCK_CANCEL);
+                _("_Open"),
+                _("_Cancel"));
 
     ghb_add_file_filter(GTK_FILE_CHOOSER(dialog), ud, _("All Files"), "FilterAll");
     filter = ghb_add_file_filter(GTK_FILE_CHOOSER(dialog), ud, _("Chapters (*.xml)"), "FilterXML");

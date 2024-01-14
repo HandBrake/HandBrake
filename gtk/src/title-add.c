@@ -61,7 +61,6 @@ static GtkWidget *find_widget (GtkWidget *widget, gchar *name)
     {
         return widget;
     }
-#if GTK_CHECK_VERSION(4, 4, 0)
     GtkWidget *child = gtk_widget_get_first_child(widget);
     while (child != NULL)
     {
@@ -69,21 +68,6 @@ static GtkWidget *find_widget (GtkWidget *widget, gchar *name)
         if (result != NULL) break;
         child = gtk_widget_get_next_sibling(child);
     }
-#else
-    if (GTK_IS_CONTAINER(widget))
-    {
-        GList *list, *link;
-        link = list = gtk_container_get_children(GTK_CONTAINER(widget));
-        while (link)
-        {
-            result = find_widget(GTK_WIDGET(link->data), name);
-            if (result != NULL)
-                break;
-            link = link->next;
-        }
-        g_list_free(list);
-    }
-#endif
     return result;
 }
 
@@ -406,7 +390,7 @@ static void title_add_check_conflicts (signal_user_data_t *ud)
         settings = ghb_array_get(ud->settings_array, ii);
         can_select = title_destination_is_unique(ud->settings_array, ii);
         ghb_dict_set_bool(settings, "title_selected", FALSE);
-        ghb_check_button_set_active(selected, FALSE);
+        gtk_check_button_set_active(GTK_CHECK_BUTTON(selected), FALSE);
         title_add_set_sensitive(GTK_WIDGET(row), can_select);
         are_conflicts |= !can_select;
     }
@@ -448,7 +432,7 @@ static GtkWidget *title_create_row (signal_user_data_t *ud)
     GtkBox *hbox, *vbox_dest;
     GtkCheckButton *selected;
     GtkLabel *title;
-    GtkEntry *dest_file;
+    GtkWidget *dest_file;
     GhbFileButton *dest_dir;
 
     hbox = GTK_BOX(gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0));
@@ -466,7 +450,7 @@ static GtkWidget *title_create_row (signal_user_data_t *ud)
     gtk_widget_set_name(GTK_WIDGET(selected), "title_selected");
     gtk_widget_show(GTK_WIDGET(selected));
     g_signal_connect(selected, "toggled", (GCallback)title_selected_cb, ud);
-    ghb_box_append_child(hbox, GTK_WIDGET(selected));
+    gtk_box_append(hbox, GTK_WIDGET(selected));
 
     // Title label
     title = GTK_LABEL(gtk_label_new(_("No Title")));
@@ -475,7 +459,7 @@ static GtkWidget *title_create_row (signal_user_data_t *ud)
     gtk_widget_set_valign(GTK_WIDGET(title), GTK_ALIGN_CENTER);
     gtk_widget_set_name(GTK_WIDGET(title), "title_label");
     gtk_widget_show(GTK_WIDGET(title));
-    ghb_box_append_child(hbox, GTK_WIDGET(title));
+    gtk_box_append(hbox, GTK_WIDGET(title));
 
     default_title_attrs = gtk_label_get_attributes(title);
     gtk_widget_set_tooltip_text(GTK_WIDGET(title),
@@ -489,13 +473,13 @@ static GtkWidget *title_create_row (signal_user_data_t *ud)
     gtk_widget_set_hexpand(GTK_WIDGET(vbox_dest), TRUE);
     gtk_widget_set_halign(GTK_WIDGET(vbox_dest), GTK_ALIGN_FILL);
     //gtk_widget_set_hexpand(GTK_WIDGET(vbox_dest), TRUE);
-    dest_file = GTK_ENTRY(gtk_entry_new());
-    ghb_entry_set_width_chars(dest_file, 40);
-    gtk_widget_set_name(GTK_WIDGET(dest_file), "title_file");
-    //gtk_widget_set_hexpand(GTK_WIDGET(dest_file), TRUE);
-    gtk_widget_show(GTK_WIDGET(dest_file));
+    dest_file = gtk_entry_new();
+    gtk_editable_set_width_chars(GTK_EDITABLE(dest_file), 40);
+    gtk_widget_set_name(dest_file, "title_file");
+    //gtk_widget_set_hexpand(dest_file, TRUE);
+    gtk_widget_show(dest_file);
     g_signal_connect(dest_file, "changed", (GCallback)title_dest_file_cb, ud);
-    ghb_box_append_child(vbox_dest, GTK_WIDGET(dest_file));
+    gtk_box_append(vbox_dest, dest_file);
     dest_dir = ghb_file_button_new(_("Destination Directory"), GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER);
     ghb_file_button_set_accept_label(dest_dir, _("Select"));
     g_signal_connect(dest_dir, "notify::file",
@@ -503,9 +487,9 @@ static GtkWidget *title_create_row (signal_user_data_t *ud)
     gtk_widget_set_name(GTK_WIDGET(dest_dir), "title_dir");
     gtk_widget_set_hexpand(GTK_WIDGET(dest_dir), TRUE);
     gtk_widget_show(GTK_WIDGET(dest_dir));
-    ghb_box_append_child(vbox_dest, GTK_WIDGET(dest_dir));
+    gtk_box_append(vbox_dest, GTK_WIDGET(dest_dir));
     gtk_widget_show(GTK_WIDGET(vbox_dest));
-    ghb_box_append_child(hbox, GTK_WIDGET(vbox_dest));
+    gtk_box_append(hbox, GTK_WIDGET(vbox_dest));
 
     return GTK_WIDGET(hbox);
 }
@@ -538,7 +522,7 @@ title_add_select_all_cb (GSimpleAction *action, GVariant *param, gpointer data)
         settings = ghb_array_get(ud->settings_array, ii);
         can_select = title_destination_is_unique(ud->settings_array, ii);
         ghb_dict_set_bool(settings, "title_selected", can_select);
-        ghb_check_button_set_active(selected, TRUE);
+        gtk_check_button_set_active(GTK_CHECK_BUTTON(selected), TRUE);
         title_add_set_sensitive(GTK_WIDGET(row), can_select);
     }
     clear_select_all_busy = FALSE;
@@ -568,7 +552,7 @@ title_add_clear_all_cb (GSimpleAction *action, GVariant *param, gpointer data)
         selected = find_widget(row, "title_selected");
         settings = ghb_array_get(ud->settings_array, ii);
         ghb_dict_set_bool(settings, "title_selected", FALSE);
-        ghb_check_button_set_active(selected, FALSE);
+        gtk_check_button_set_active(GTK_CHECK_BUTTON(selected), FALSE);
     }
     clear_select_all_busy = FALSE;
 }
@@ -729,7 +713,7 @@ title_add_multiple_action_cb (GSimpleAction *action, GVariant *param,
     {
         GhbValue *settings;
         GtkLabel *label;
-        GtkEntry *entry;
+        GtkEditable *entry;
         GhbFileButton *button;
         gchar *title_label;
         const gchar *dest_dir, *dest_file;
@@ -738,7 +722,7 @@ title_add_multiple_action_cb (GSimpleAction *action, GVariant *param,
 
         row = title_create_row(ud);
         label = GTK_LABEL(find_widget(row, "title_label"));
-        entry = GTK_ENTRY(find_widget(row, "title_file"));
+        entry = GTK_EDITABLE(find_widget(row, "title_file"));
         button = GHB_FILE_BUTTON(find_widget(row, "title_dir"));
 
         settings = ghb_array_get(ud->settings_array, ii);
@@ -762,7 +746,7 @@ title_add_multiple_action_cb (GSimpleAction *action, GVariant *param,
             dest_dir = ghb_dict_get_string(settings, "dest_dir");
 
             gtk_label_set_markup(label, title_label);
-            ghb_editable_set_text(entry, dest_file);
+            gtk_editable_set_text(entry, dest_file);
             ghb_file_button_set_filename(button, dest_dir);
 
             g_free(title_label);

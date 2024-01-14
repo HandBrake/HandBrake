@@ -1410,11 +1410,7 @@ subtitle_update_pref_lang(signal_user_data_t *ud, const iso639_lang_t *lang)
         str = g_strdup_printf(
             _("Add subtitle track if default audio is not your preferred language"));
     }
-#if GTK_CHECK_VERSION(4, 4, 0)
     gtk_check_button_set_label(GTK_CHECK_BUTTON(button), str);
-#else
-    gtk_button_set_label(GTK_BUTTON(button), str);
-#endif
     g_free(str);
 
     gtk_widget_set_sensitive(button, sensitive);

@@ -191,15 +191,9 @@ bind_subtitle_tree_model(signal_user_data_t *ud)
     g_signal_connect(selection, "changed", G_CALLBACK(subtitle_list_selection_changed_cb), ud);
 }
 
-#if GTK_CHECK_VERSION(4, 4, 0)
 static const char * presets_drag_entries[] = {
     "widget/presets-list-row-drop"
 };
-#else
-static GtkTargetEntry presets_drag_entries[] = {
-   { "PRESETS_ROW", GTK_TARGET_SAME_WIDGET, 0 }
-};
-#endif
 
 // Create and bind the tree model to the tree view for the preset list
 // Also, connect up the signal that lets us know the selection has changed
@@ -229,7 +223,6 @@ bind_presets_tree_model (signal_user_data_t *ud)
     gtk_tree_view_column_set_expand(column, TRUE);
     gtk_tree_view_set_tooltip_column(treeview, 3);
 
-#if GTK_CHECK_VERSION(4, 4, 0)
     GdkContentFormats * targets;
 
     targets = gdk_content_formats_new(presets_drag_entries,
@@ -238,18 +231,7 @@ bind_presets_tree_model (signal_user_data_t *ud)
     gtk_tree_view_enable_model_drag_source(treeview, GDK_BUTTON1_MASK,
                                            targets, GDK_ACTION_MOVE);
     gdk_content_formats_unref(targets);
-#else
-    gtk_tree_view_enable_model_drag_dest(treeview, presets_drag_entries, 1,
-                                            GDK_ACTION_MOVE);
-    gtk_tree_view_enable_model_drag_source(treeview, GDK_BUTTON1_MASK,
-                                           presets_drag_entries, 1,
-                                           GDK_ACTION_MOVE);
-#endif
 
-#if !GTK_CHECK_VERSION(4, 4, 0)
-    g_signal_connect(treeview, "drag_data_received", G_CALLBACK(presets_drag_data_received_cb), ud);
-    g_signal_connect(treeview, "drag_motion", G_CALLBACK(presets_drag_motion_cb), ud);
-#endif
     g_signal_connect(treeview, "row_expanded", G_CALLBACK(presets_row_expanded_cb), ud);
     g_signal_connect(treeview, "row_collapsed", G_CALLBACK(presets_row_expanded_cb), ud);
     g_signal_connect(selection, "changed", G_CALLBACK(presets_list_selection_changed_cb), ud);
@@ -630,7 +612,6 @@ _ghb_idle_ui_init (signal_user_data_t *ud)
     return FALSE;
 }
 
-#if GTK_CHECK_VERSION(4, 4, 0)
 extern G_MODULE_EXPORT void preview_leave_cb(GtkEventControllerMotion * econ,
                                              GdkCrossingMode cross, GdkNotifyType notify,
                                              signal_user_data_t *ud);
@@ -643,23 +624,14 @@ extern G_MODULE_EXPORT void hud_enter_cb(GtkEventControllerMotion * econ, double
                                          signal_user_data_t *ud);
 extern G_MODULE_EXPORT void hud_leave_cb(GtkEventControllerMotion * econ, GdkCrossingMode cross,
                                          GdkNotifyType notify, signal_user_data_t *ud);
-#endif
 
-#if GTK_CHECK_VERSION(4, 4, 0)
 static gboolean
 video_file_drop_received (GtkDropTarget* self, const GValue* value,
                           double x, double y, signal_user_data_t *ud)
-#else
-static void
-video_file_drop_received (GtkWidget *widget, GdkDragContext *context,
-                          int x, int y, GtkSelectionData *data, guint info,
-                          guint time, signal_user_data_t *ud)
-#endif
 {
     g_autoptr(GFile) file = NULL;
     g_autofree gchar *filename = NULL;
 
-#if GTK_CHECK_VERSION(4, 4, 0)
     if (G_VALUE_HOLDS(value, G_TYPE_URI))
     {
         file = g_file_new_for_uri(g_value_get_string(value));
@@ -676,17 +648,6 @@ video_file_drop_received (GtkWidget *widget, GdkDragContext *context,
     {
         return FALSE;
     }
-#else
-    gchar **uris;
-
-    uris = gtk_selection_data_get_uris(data);
-    if (uris != NULL)
-    {
-        // Only one file or folder at a time is supported
-        file = g_file_new_for_uri(uris[0]);
-        g_strfreev(uris);
-    }
-#endif
     if (file != NULL)
     {
         filename = g_file_get_path(file);
@@ -699,16 +660,13 @@ video_file_drop_received (GtkWidget *widget, GdkDragContext *context,
         ghb_dvd_set_current(filename, ud);
         ghb_do_scan(ud, filename, 0, TRUE);
     }
-#if GTK_CHECK_VERSION(4, 4, 0)
     return TRUE;
-#endif
 }
 
 static void
 video_file_drop_init (signal_user_data_t *ud)
 {
     GtkWidget *window = GHB_WIDGET (ud->builder, "hb_window");
-#if GTK_CHECK_VERSION(4, 4, 0)
     GType types[] = {
         G_TYPE_URI,
         G_TYPE_STRING,
@@ -718,11 +676,6 @@ video_file_drop_init (signal_user_data_t *ud)
     gtk_drop_target_set_gtypes(target, types, G_N_ELEMENTS(types));
     gtk_widget_add_controller(GTK_WIDGET(window), GTK_EVENT_CONTROLLER(target));
     g_signal_connect(target, "drop", G_CALLBACK(video_file_drop_received), ud);
-#else
-    gtk_drag_dest_set(window, GTK_DEST_DEFAULT_ALL, NULL, 0, GDK_ACTION_COPY);
-    gtk_drag_dest_add_uri_targets(window);
-    g_signal_connect(window, "drag-data-received", G_CALLBACK(video_file_drop_received), ud);
-#endif
 }
 
 char *
@@ -763,10 +716,8 @@ static void
 print_system_information (GhbApplication *self)
 {
     g_printerr("%s\n", HB_PROJECT_TITLE);
-#if GLIB_CHECK_VERSION(2, 64, 0)
     g_autofree char *os_info = g_get_os_info(G_OS_INFO_KEY_PRETTY_NAME);
     g_printerr("OS: %s\n", os_info);
-#endif
 #ifndef _WIN32
     g_autofree struct utsname *host_info = g_malloc0(sizeof(struct utsname));
     uname(host_info);
@@ -822,24 +773,12 @@ ghb_application_activate (GApplication *app)
     gtk_css_provider_load_from_resource(provider, "/fr/handbrake/ghb/ui/custom.css");
     color_scheme_set_async(APP_PREFERS_LIGHT);
 
-#if GTK_CHECK_VERSION(4, 4, 0)
     GdkDisplay *dd = gdk_display_get_default();
     gtk_style_context_add_provider_for_display(dd,
                                 GTK_STYLE_PROVIDER(provider),
                                 GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
-#else
-    GdkScreen *ss = gdk_screen_get_default();
-    gtk_style_context_add_provider_for_screen(ss,
-                                GTK_STYLE_PROVIDER(provider),
-                                GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
-#endif
-
     ghb_resource_init();
-#if GTK_CHECK_VERSION(4, 4, 0)
     gtk_icon_theme_add_resource_path(gtk_icon_theme_get_for_display(gdk_display_get_default()),
-#else
-    gtk_icon_theme_add_resource_path(gtk_icon_theme_get_default(),
-#endif
                                      "/fr/handbrake/ghb/icons");
 
     // map application actions (menu callbacks)
@@ -903,10 +842,6 @@ ghb_application_activate (GApplication *app)
     bind_subtitle_tree_model(ud);
     bind_presets_tree_model(ud);
 
-#if !GTK_CHECK_VERSION(4, 4, 0)
-    gtk_builder_connect_signals(ud->builder, NULL);
-#endif
-
     ghb_init_audio_defaults_ui(ud);
     ghb_init_subtitle_defaults_ui(ud);
 
@@ -950,20 +885,15 @@ ghb_application_activate (GApplication *app)
 
     // Add dvd devices to File menu
     ghb_volname_cache_init();
-    GHB_THREAD_NEW("Cache Volume Names", (GThreadFunc)ghb_cache_volnames, ud);
+    g_thread_new("Cache Volume Names", (GThreadFunc)ghb_cache_volnames, ud);
 
     GtkWidget *ghb_window = GHB_WIDGET(ud->builder, "hb_window");
 
     gint window_width, window_height;
     window_width = ghb_dict_get_int(ud->prefs, "window_width");
     window_height = ghb_dict_get_int(ud->prefs, "window_height");
-
-#if GTK_CHECK_VERSION(4, 4, 0)
     gtk_window_set_default_size(GTK_WINDOW(ghb_window),
                                 window_width, window_height);
-#else
-    gtk_window_resize(GTK_WINDOW(ghb_window), window_width, window_height);
-#endif
 
     ghb_set_custom_filter_tooltip(ud, "PictureDetelecineCustom",
                                   "detelecine", HB_FILTER_DETELECINE);
@@ -989,12 +919,9 @@ ghb_application_activate (GApplication *app)
     GMenuModel *menu = G_MENU_MODEL(gtk_builder_get_object(ud->builder, "handbrake-menu-bar"));
     gtk_application_set_menubar(GTK_APPLICATION(app), menu);
 
-#if GTK_CHECK_VERSION(4, 4, 0)
     widget = GHB_WIDGET(ud->builder, "preview_image");
-
     gtk_drawing_area_set_draw_func(GTK_DRAWING_AREA(widget), preview_draw_cb,
                                    ud, NULL);
-#endif
 
     gtk_widget_show(ghb_window);
 

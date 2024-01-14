@@ -120,7 +120,7 @@ ghb_chapter_row_get_property (GObject *object, guint prop_id,
             break;
 
         case PROP_NAME:
-            g_value_set_string(value, ghb_editable_get_text(self->chapter_entry));
+            g_value_set_string(value, gtk_editable_get_text(GTK_EDITABLE(self->chapter_entry)));
             break;
 
         default:
@@ -207,7 +207,7 @@ ghb_chapter_row_get_name (GhbChapterRow *self)
 {
     g_return_val_if_fail(GHB_IS_CHAPTER_ROW(self), 0);
 
-    return ghb_editable_get_text(self->chapter_entry);
+    return gtk_editable_get_text(GTK_EDITABLE(self->chapter_entry));
 }
 
 GtkWidget *
@@ -291,7 +291,7 @@ ghb_chapter_row_set_name (GhbChapterRow *self, const char *name)
     if (name == NULL)
         name = "";
 
-    ghb_editable_set_text(self->chapter_entry, name);
+    gtk_editable_set_text(GTK_EDITABLE(self->chapter_entry), name);
 }
 
 void ghb_chapter_row_grab_focus (GhbChapterRow *self)
