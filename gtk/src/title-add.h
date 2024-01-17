@@ -20,7 +20,7 @@
 #if !defined(_TITLE_ADD_H_)
 #define _TITLE_ADD_H_
 
-#include <gtk/gtk.h>
+#include "common.h"
 #include "settings.h"
 #include "hb-backend.h"
 

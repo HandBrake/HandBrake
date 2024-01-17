@@ -17,10 +17,6 @@
  * SPDX-License-Identifier: GPL-2.0-only
  */
 
-#include "compat.h"
-#include <glib/gstdio.h>
-#include <glib/gi18n.h>
-#include <gio/gio.h>
 #include "application.h"
 #include "handbrake/handbrake.h"
 #include "settings.h"

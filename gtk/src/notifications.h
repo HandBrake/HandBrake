@@ -4,7 +4,7 @@
 #ifndef _NOTIFICATIONS_H_
 #define _NOTIFICATIONS_H_
 
-#include <gtk/gtk.h>
+#include "common.h"
 #include "handbrake/handbrake.h"
 #include "values.h"
 #include "settings.h"

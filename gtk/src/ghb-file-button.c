@@ -18,10 +18,9 @@
  * SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-#include "config.h"
+#include "ghb-file-button.h"
 
 #include "compat.h"
-#include "ghb-file-button.h"
 
 struct _GhbFileButton {
     GtkButton parent_instance;

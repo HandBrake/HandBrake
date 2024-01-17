@@ -20,6 +20,7 @@
 #if !defined(_VIDEOHANDLER_H_)
 #define _VIDEOHANDLER_H_
 
+#include "common.h"
 #include "values.h"
 #include "settings.h"
 

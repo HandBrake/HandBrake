@@ -23,10 +23,6 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <unistd.h>
-#include <glib.h>
-#include <glib-object.h>
-#include <glib/gstdio.h>
-#include <glib/gi18n.h>
 #include <string.h>
 
 #include "handbrake/handbrake.h"
@@ -43,6 +39,12 @@
 #include "videohandler.h"
 
 #define MAX_NESTED_PRESET 3
+
+#if defined(_WIN32)
+#define GHB_UNSAFE_FILENAME_CHARS "/:<>\"\\|?*"
+#else
+#define GHB_UNSAFE_FILENAME_CHARS "/"
+#endif
 
 static GhbValue *prefsDict = NULL;
 static gboolean prefs_modified = FALSE;

@@ -4,8 +4,7 @@
 #ifndef COLOR_SCHEME_H
 #define COLOR_SCHEME_H
 
-#include <gtk/gtk.h>
-#include <glib.h>
+#include "common.h"
 
 G_BEGIN_DECLS
 

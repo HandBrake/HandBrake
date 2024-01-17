@@ -3,10 +3,7 @@
 
 #pragma once
 
-#include <gio/gio.h>
-#include <gtk/gtk.h>
-#include <glib.h>
-#include "config.h"
+#include "common.h"
 #include "settings.h"
 
 G_BEGIN_DECLS

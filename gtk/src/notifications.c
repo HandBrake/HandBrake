@@ -19,7 +19,6 @@
  */
 
 #include "notifications.h"
-#include <glib/gi18n.h>
 
 static int n_succeeded = 0;
 static int n_failed = 0;

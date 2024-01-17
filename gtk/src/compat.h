@@ -19,21 +19,7 @@
 
 #pragma once
 
-#define G_LOG_USE_STRUCTURED
-#define G_LOG_DOMAIN "ghb"
-
-#define ghb_log_func() g_debug("Function: %s", __func__)
-#define ghb_log_func_str(x) g_debug("Function: %s (%s)", __func__, (x))
-
-#include <gtk/gtk.h>
-#include <gdk/gdk.h>
-#include <string.h>
-
-#if defined(_WIN32)
-#define GHB_UNSAFE_FILENAME_CHARS "/:<>\"\\|?*"
-#else
-#define GHB_UNSAFE_FILENAME_CHARS "/"
-#endif
+#include "common.h"
 
 G_BEGIN_DECLS
 

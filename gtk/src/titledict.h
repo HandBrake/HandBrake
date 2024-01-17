@@ -20,6 +20,7 @@
 #if !defined(_TITLEDICT_H_)
 #define _TITLEDICT_H_
 
+#include "common.h"
 #include "values.h"
 
 GhbValue* ghb_get_title_settings(GhbValue *settings);

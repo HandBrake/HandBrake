@@ -23,10 +23,6 @@
 #include "jobdict.h"
 #include "presets.h"
 #include <math.h>
-#include <glib.h>
-#include <glib-object.h>
-#include <glib/gstdio.h>
-#include <glib/gi18n.h>
 #include "libxml/parser.h"
 #include "libxml/xpath.h"
 

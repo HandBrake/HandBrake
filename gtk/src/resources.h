@@ -20,6 +20,7 @@
 #if !defined(_RESOURCES_H_)
 #define _RESOURCES_H_
 
+#include "common.h"
 #include "values.h"
 
 void ghb_resource_init(void);

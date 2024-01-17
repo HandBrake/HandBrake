@@ -17,13 +17,10 @@
  * SPDX-License-Identifier: GPL-2.0-only
  */
 
-#include "compat.h"
 #include "application.h"
 
 #include <fcntl.h>
 #include <unistd.h>
-#include <glib.h>
-#include <glib/gstdio.h>
 #include <string.h>
 #include "settings.h"
 #include "hb-backend.h"

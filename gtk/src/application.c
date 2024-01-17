@@ -19,10 +19,6 @@
 
 #define G_LOG_DOMAIN "ghb"
 
-#include "config.h"
-
-#include <glib/gi18n.h>
-
 #include "application.h"
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -37,8 +33,6 @@
 #include <sys/utsname.h>
 #endif
 
-#include "compat.h"
-
 #if defined(_ENABLE_GST)
 #include <gst/gst.h>
 #endif
@@ -49,9 +43,6 @@
 #define pipe(phandles)  _pipe (phandles, 4096, _O_BINARY)
 #endif
 
-#include <glib/gstdio.h>
-#include <glib/gi18n.h>
-#include <gio/gio.h>
 #include "handbrake/handbrake.h"
 #include "hb-backend.h"
 #include "hb-dvd.h"

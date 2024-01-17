@@ -20,6 +20,7 @@
 #if !defined(_AUDIOHANDLER_H_)
 #define _AUDIOHANDLER_H_
 
+#include "common.h"
 #include "values.h"
 #include "settings.h"
 

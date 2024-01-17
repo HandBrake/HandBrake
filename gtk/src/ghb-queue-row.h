@@ -3,9 +3,7 @@
 
 #pragma once
 
-#include <gtk/gtk.h>
-#include <glib/gi18n.h>
-
+#include "common.h"
 #include "settings.h"
 
 enum {
