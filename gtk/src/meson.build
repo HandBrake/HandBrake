@@ -52,7 +52,7 @@ ui = gnome.compile_resources('ui_res', 'ui/ui_res.gresource.xml',
 
 # Build targets
 executable('ghb',
-  sources: [ghb_src, data, icons, ui, marshalers],
+  sources: [ghb_src, data, icons, ui],
   dependencies: ghb_deps,
   include_directories: hb_incdirs,
   link_language: 'cpp',

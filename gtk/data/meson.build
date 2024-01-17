@@ -5,11 +5,6 @@ data = gnome.compile_resources('data_res', 'data_res.gresource.xml',
   source_dir: meson.current_build_dir(),
   c_name: 'ghb_data')
 
-marshalers = gnome.genmarshal('marshalers',
-  sources: 'marshalers.list',
-  prefix: 'ghb_marshal',
-  extra_args: '--quiet')
-
 desktop = i18n.merge_file(
   input: 'fr.handbrake.ghb.desktop.in',
   output: 'fr.handbrake.ghb.desktop',
