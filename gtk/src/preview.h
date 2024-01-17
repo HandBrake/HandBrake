@@ -20,6 +20,8 @@
 #if !defined(_GHB_PREVIEW_H_)
 #define _GHB_PREVIEW_H_
 
+#include "common.h"
+
 #define GHB_PREVIEW_MAX 60
 
 void ghb_preview_init(signal_user_data_t *ud);

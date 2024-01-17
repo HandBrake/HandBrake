@@ -31,10 +31,6 @@
 #include "ghb-button.h"
 #include "ghb-file-button.h"
 
-#include <glib/gstdio.h>
-#include <glib/gi18n.h>
-#include <gio/gio.h>
-
 #if !defined(_WIN32)
 #include <poll.h>
 

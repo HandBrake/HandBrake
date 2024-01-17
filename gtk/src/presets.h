@@ -20,6 +20,7 @@
 #if !defined(_GHB_PRESETS_H_)
 #define _GHB_PRESETS_H_
 
+#include "common.h"
 #include "handbrake/handbrake.h"
 #include "values.h"
 

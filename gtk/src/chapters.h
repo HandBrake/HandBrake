@@ -20,6 +20,7 @@
 #if !defined(_CHAPTERS_H_)
 #define _CHAPTERS_H_
 
+#include "common.h"
 #include "settings.h"
 
 void ghb_chapter_list_refresh_all(signal_user_data_t *ud);

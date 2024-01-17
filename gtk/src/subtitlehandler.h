@@ -20,6 +20,7 @@
 #if !defined(_SUBTITLEHANDLER_H_)
 #define _SUBTITLEHANDLER_H_
 
+#include "common.h"
 #include "values.h"
 #include "settings.h"
 

@@ -19,6 +19,7 @@
 
 #pragma once
 
+#include "common.h"
 #include "settings.h"
 
 G_BEGIN_DECLS

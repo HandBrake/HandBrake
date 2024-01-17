@@ -21,9 +21,6 @@
 #include <windows.h>
 #endif
 
-#include <glib.h>
-#include <gio/gio.h>
-
 #include "hb-dvd.h"
 
 #if 0

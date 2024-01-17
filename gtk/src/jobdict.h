@@ -20,6 +20,7 @@
 #if !defined(_JOBDICT_H_)
 #define _JOBDICT_H_
 
+#include "common.h"
 #include "values.h"
 
 GhbValue* ghb_get_job_settings(GhbValue *settings);

@@ -17,7 +17,6 @@
  * SPDX-License-Identifier: GPL-2.0-only
  */
 
-#include "compat.h"
 #include "application.h"
 #include "handbrake/handbrake.h"
 #include "settings.h"
@@ -30,8 +29,6 @@
 #include "presets.h"
 #include "audiohandler.h"
 #include "subtitlehandler.h"
-
-#include <glib/gi18n.h>
 
 static char * subtitle_get_track_description(GhbValue *settings,
                                              GhbValue *subsettings);

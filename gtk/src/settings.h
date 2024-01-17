@@ -20,7 +20,7 @@
 #if !defined(_SETTINGS_H_)
 #define _SETTINGS_H_
 
-#include <gtk/gtk.h>
+#include "common.h"
 #include "values.h"
 
 #define GHB_WIDGET(b,n) GTK_WIDGET(gtk_builder_get_object ((b), (n)))

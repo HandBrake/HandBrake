@@ -17,8 +17,7 @@
  * SPDX-License-Identifier: GPL-2.0-only
  */
 
-#include <glib/gi18n.h>
-#include "config.h"
+#include "common.h"
 #include "application.h"
 #include "settings.h"
 #include "ui_res.h"

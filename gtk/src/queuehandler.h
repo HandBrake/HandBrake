@@ -20,7 +20,7 @@
 #if !defined(_QUEUEHANDLER_H_)
 #define _QUEUEHANDLER_H_
 
-#include <gtk/gtk.h>
+#include "common.h"
 #include "settings.h"
 #include "ghb-queue-row.h"
 #include "hb-backend.h"

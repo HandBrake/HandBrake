@@ -20,6 +20,7 @@
 #if !defined(_HBBACKEND_H_)
 #define _HBBACKEND_H_
 
+#include "common.h"
 #include "values.h"
 #include "settings.h"
 #include "handbrake/handbrake.h"

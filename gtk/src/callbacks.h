@@ -24,7 +24,7 @@
 #include <windows.h>
 #endif
 
-#include <gtk/gtk.h>
+#include "common.h"
 #include "handbrake/handbrake.h"
 #include "values.h"
 #include "settings.h"

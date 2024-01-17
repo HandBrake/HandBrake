@@ -18,9 +18,6 @@
  * SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-#include "config.h"
-
-#include "compat.h"
 #include "ghb-queue-row.h"
 #include "application.h"
 #include "queuehandler.h"

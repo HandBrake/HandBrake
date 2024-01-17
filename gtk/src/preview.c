@@ -17,14 +17,7 @@
  * SPDX-License-Identifier: GPL-2.0-only
  */
 
-#include "compat.h"
-#include "config.h"
-
 #include <unistd.h>
-#include <glib.h>
-#include <glib/gstdio.h>
-#include <glib/gi18n.h>
-#include <glib-object.h>
 
 #if defined(_ENABLE_GST)
 #include <gst/gst.h>
