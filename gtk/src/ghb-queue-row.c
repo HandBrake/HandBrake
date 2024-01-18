@@ -19,6 +19,7 @@
  */
 
 #include "ghb-queue-row.h"
+
 #include "application.h"
 #include "queuehandler.h"
 

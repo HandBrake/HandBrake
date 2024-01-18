@@ -18,23 +18,22 @@
  */
 
 #define _GNU_SOURCE
-#include <limits.h>
-#include <ctype.h>
-#include <math.h>
-#include "handbrake/handbrake.h"
+
 #include "hb-backend.h"
-#include "settings.h"
-#include "jobdict.h"
-#include "callbacks.h"
-#include "subtitlehandler.h"
+
 #include "audiohandler.h"
-#include "videohandler.h"
-#include "title-add.h"
-#include "preview.h"
+#include "callbacks.h"
+#include "jobdict.h"
 #include "presets.h"
-#include "values.h"
-#include "handbrake/lang.h"
-#include "jansson.h"
+#include "preview.h"
+#include "subtitlehandler.h"
+#include "title-add.h"
+#include "videohandler.h"
+
+#include <ctype.h>
+#include <jansson.h>
+#include <limits.h>
+#include <math.h>
 
 typedef struct
 {

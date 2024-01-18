@@ -17,12 +17,13 @@
  * SPDX-License-Identifier: GPL-2.0-only
  */
 
-#if !defined(_CHAPTERS_H_)
-#define _CHAPTERS_H_
+#pragma once
 
 #include "common.h"
 #include "settings.h"
 
+G_BEGIN_DECLS
+
 void ghb_chapter_list_refresh_all(signal_user_data_t *ud);
 
-#endif // _CHAPTERS_H_
+G_END_DECLS

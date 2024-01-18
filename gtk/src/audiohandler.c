@@ -17,17 +17,16 @@
  * SPDX-License-Identifier: GPL-2.0-only
  */
 
-#include "handbrake/handbrake.h"
-#include "application.h"
-#include "settings.h"
-#include "jobdict.h"
-#include "titledict.h"
-#include "hb-backend.h"
-#include "values.h"
-#include "callbacks.h"
-#include "preview.h"
 #include "audiohandler.h"
+
+#include "application.h"
+#include "callbacks.h"
+#include "handbrake/handbrake.h"
+#include "hb-backend.h"
+#include "jobdict.h"
 #include "presets.h"
+#include "preview.h"
+#include "titledict.h"
 
 static void audio_add_to_settings(GhbValue *settings, GhbValue *asettings);
 static void audio_add_to_ui(signal_user_data_t *ud, const GhbValue *settings);

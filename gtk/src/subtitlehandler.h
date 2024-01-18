@@ -17,12 +17,13 @@
  * SPDX-License-Identifier: GPL-2.0-only
  */
 
-#if !defined(_SUBTITLEHANDLER_H_)
-#define _SUBTITLEHANDLER_H_
+#pragma once
 
 #include "common.h"
-#include "values.h"
 #include "settings.h"
+#include "values.h"
+
+G_BEGIN_DECLS
 
 void ghb_set_subtitle(signal_user_data_t *ud, gint track, GhbValue *settings);
 void ghb_subtitle_prune(signal_user_data_t *ud);
@@ -42,5 +43,4 @@ void subtitle_list_selection_changed_cb(GtkTreeSelection *ts, gpointer data);
 void subtitle_edit_clicked_cb(GtkWidget *widget, gchar *path, gpointer data);
 void subtitle_remove_clicked_cb(GtkWidget *widget, gchar *path, gpointer data);
 
-
-#endif // _SUBTITLEHANDLER_H_
+G_END_DECLS

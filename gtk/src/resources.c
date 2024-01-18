@@ -17,12 +17,11 @@
  * SPDX-License-Identifier: GPL-2.0-only
  */
 
-#include <string.h>
-
-#include "settings.h"
-#include "resources.h"
-#include "values.h"
 #include "data_res.h"
+#include "resources.h"
+#include "settings.h"
+
+#include <string.h>
 
 static GhbValue *resources;
 

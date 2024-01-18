@@ -17,20 +17,19 @@
  * SPDX-License-Identifier: GPL-2.0-only
  */
 
-#include "application.h"
-#include "handbrake/handbrake.h"
-#include "settings.h"
-#include "jobdict.h"
-#include "titledict.h"
-#include "hb-backend.h"
-#include "values.h"
-#include "callbacks.h"
-#include "presets.h"
-#include "audiohandler.h"
-#include "hb-dvd.h"
-#include "queuehandler.h"
 #include "title-add.h"
+
+#include "application.h"
+#include "audiohandler.h"
+#include "callbacks.h"
 #include "ghb-file-button.h"
+#include "handbrake/handbrake.h"
+#include "hb-dvd.h"
+#include "jobdict.h"
+#include "presets.h"
+#include "queuehandler.h"
+#include "titledict.h"
+#include "values.h"
 
 G_MODULE_EXPORT void
 title_selected_cb (GtkWidget *widget, signal_user_data_t *ud);

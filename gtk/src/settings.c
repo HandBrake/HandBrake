@@ -17,15 +17,15 @@
  * SPDX-License-Identifier: GPL-2.0-only
  */
 
+#include "settings.h"
+
 #include "application.h"
+#include "ghb-file-button.h"
+#include "hb-backend.h"
 
 #include <fcntl.h>
-#include <unistd.h>
 #include <string.h>
-#include "settings.h"
-#include "hb-backend.h"
-#include "values.h"
-#include "ghb-file-button.h"
+#include <unistd.h>
 
 void dump_settings(GhbValue *settings);
 void ghb_pref_audio_init(signal_user_data_t *ud);

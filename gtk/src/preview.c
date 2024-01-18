@@ -17,24 +17,24 @@
  * SPDX-License-Identifier: GPL-2.0-only
  */
 
-#include <unistd.h>
-
-#if defined(_ENABLE_GST)
-#include <gst/gst.h>
-#include <gst/video/video.h>
-#include <gst/pbutils/missing-plugins.h>
-#endif
+#include "preview.h"
 
 #include "application.h"
-#include "settings.h"
+#include "callbacks.h"
+#include "handbrake/handbrake.h"
+#include "hb-backend.h"
 #include "jobdict.h"
 #include "presets.h"
-#include "callbacks.h"
-#include "hb-backend.h"
-#include "preview.h"
-#include "values.h"
 #include "title-add.h"
-#include "handbrake/handbrake.h"
+#include "values.h"
+
+#include <unistd.h>
+
+#ifdef _ENABLE_GST
+#include <gst/gst.h>
+#include <gst/pbutils/missing-plugins.h>
+#include <gst/video/video.h>
+#endif
 
 #define PREVIEW_STATE_IMAGE 0
 #define PREVIEW_STATE_LIVE 1

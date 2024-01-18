@@ -17,14 +17,15 @@
  * SPDX-License-Identifier: GPL-2.0-only
  */
 
-#if !defined(_HBBACKEND_H_)
-#define _HBBACKEND_H_
+#pragma once
 
 #include "common.h"
-#include "values.h"
-#include "settings.h"
 #include "handbrake/handbrake.h"
 #include "handbrake/lang.h"
+#include "settings.h"
+#include "values.h"
+
+G_BEGIN_DECLS
 
 enum
 {
@@ -246,4 +247,4 @@ int ghb_lookup_resolution_limit_dimensions(const gchar * opt,
                                            int * width, int * height);
 const gchar * ghb_get_filter_name(hb_filter_object_t *filter);
 
-#endif // _HBBACKEND_H_
+G_END_DECLS

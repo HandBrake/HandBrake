@@ -17,16 +17,15 @@
  * SPDX-License-Identifier: GPL-2.0-only
  */
 
-#include <string.h>
+#include "videohandler.h"
 
 #include "application.h"
-#include "settings.h"
-#include "values.h"
 #include "callbacks.h"
+#include "hb-backend.h"
 #include "presets.h"
 #include "preview.h"
-#include "hb-backend.h"
-#include "videohandler.h"
+
+#include <string.h>
 
 int ghb_get_video_encoder(GhbValue *settings)
 {

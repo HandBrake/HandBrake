@@ -17,59 +17,43 @@
  * SPDX-License-Identifier: GPL-2.0-only
  */
 
-#ifdef HAVE_CONFIG_H
-#  include <config.h>
-#endif
+#include "callbacks.h"
 
-#include <string.h>
-#include <fcntl.h>
-#include <sys/stat.h>
-#include <time.h>
-#include <math.h>
-
+#include "application.h"
+#include "audiohandler.h"
+#include "chapters.h"
 #include "compat.h"
 #include "ghb-button.h"
 #include "ghb-file-button.h"
+#include "hb-backend.h"
+#include "hb-dvd.h"
+#include "jobdict.h"
+#include "notifications.h"
+#include "presets.h"
+#include "preview.h"
+#include "queuehandler.h"
+#include "resources.h"
+#include "subtitlehandler.h"
 
-#if !defined(_WIN32)
-#include <poll.h>
+#include <fcntl.h>
+#include <libavutil/parseutils.h>
+#include <math.h>
+#include <string.h>
+#include <sys/stat.h>
+#include <time.h>
 
 #if defined( __FreeBSD__ ) || defined(__OpenBSD__)
 #include <sys/socket.h>
 #endif
-#include <netinet/in.h>
-#include <netdb.h>
 
-#ifndef NOTIFY_CHECK_VERSION
-#define NOTIFY_CHECK_VERSION(x,y,z) 0
-#endif
-
-#ifndef NOTIFY_CHECK_VERSION
-#define NOTIFY_CHECK_VERSION(x,y,z) 0
-#endif
-#else
-#include <winsock2.h>
+#ifdef _WIN32
 #include <dbt.h>
+#include <winsock2.h>
+#else
+#include <netdb.h>
+#include <netinet/in.h>
+#include <poll.h>
 #endif
-
-#include "handbrake/handbrake.h"
-#include "application.h"
-#include "callbacks.h"
-#include "chapters.h"
-#include "notifications.h"
-#include "queuehandler.h"
-#include "audiohandler.h"
-#include "subtitlehandler.h"
-#include "resources.h"
-#include "settings.h"
-#include "jobdict.h"
-#include "presets.h"
-#include "preview.h"
-#include "values.h"
-#include "hb-backend.h"
-#include "hb-dvd.h"
-#include "libavutil/parseutils.h"
-
 
 static void add_video_file_filters(GtkFileChooser *chooser, signal_user_data_t *ud);
 static void update_queue_labels(signal_user_data_t *ud);

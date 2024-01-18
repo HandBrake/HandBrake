@@ -17,11 +17,12 @@
  * SPDX-License-Identifier: GPL-2.0-only
  */
 
-#if !defined(_SETTINGS_H_)
-#define _SETTINGS_H_
+#pragma once
 
 #include "common.h"
 #include "values.h"
+
+G_BEGIN_DECLS
 
 #define GHB_WIDGET(b,n) GTK_WIDGET(gtk_builder_get_object ((b), (n)))
 //#define GHB_WIDGET(b,n)   GTK_WIDGET(debug_get_object((b), (n)))
@@ -108,4 +109,4 @@ int ghb_ui_settings_update(
 const gchar* ghb_get_setting_key(GtkWidget *widget);
 void ghb_update_widget(GtkWidget *widget, const GhbValue *value);
 
-#endif // _SETTINGS_H_
+G_END_DECLS

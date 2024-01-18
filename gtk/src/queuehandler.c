@@ -17,24 +17,23 @@
  * SPDX-License-Identifier: GPL-2.0-only
  */
 
+#include "queuehandler.h"
+
+#include "application.h"
+#include "audiohandler.h"
+#include "callbacks.h"
 #include "compat.h"
 #include "ghb-button.h"
 #include "handbrake/handbrake.h"
-#include "settings.h"
-#include "application.h"
-#include "jobdict.h"
-#include "titledict.h"
-#include "hb-backend.h"
-#include "values.h"
-#include "callbacks.h"
-#include "presets.h"
-#include "audiohandler.h"
-#include "subtitlehandler.h"
 #include "hb-dvd.h"
-#include "queuehandler.h"
-#include "title-add.h"
-#include "power-manager.h"
+#include "jobdict.h"
 #include "notifications.h"
+#include "power-manager.h"
+#include "presets.h"
+#include "subtitlehandler.h"
+#include "titledict.h"
+#include "title-add.h"
+#include "values.h"
 
 void ghb_queue_buttons_grey (signal_user_data_t *ud);
 

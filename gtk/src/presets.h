@@ -17,12 +17,14 @@
  * SPDX-License-Identifier: GPL-2.0-only
  */
 
-#if !defined(_GHB_PRESETS_H_)
-#define _GHB_PRESETS_H_
+#pragma once
 
 #include "common.h"
 #include "handbrake/handbrake.h"
+#include "settings.h"
 #include "values.h"
+
+G_BEGIN_DECLS
 
 void ghb_presets_bind_tree_model(signal_user_data_t *ud);
 void ghb_presets_load(signal_user_data_t *ud);
@@ -80,4 +82,4 @@ void presets_row_expanded_cb(
     GtkTreePath        *treepath,
     signal_user_data_t *ud);
 
-#endif // _GHB_PRESETS_H_
+G_END_DECLS
