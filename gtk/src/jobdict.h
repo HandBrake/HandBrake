@@ -17,11 +17,12 @@
  * SPDX-License-Identifier: GPL-2.0-only
  */
 
-#if !defined(_JOBDICT_H_)
-#define _JOBDICT_H_
+#pragma once
 
 #include "common.h"
 #include "values.h"
+
+G_BEGIN_DECLS
 
 GhbValue* ghb_get_job_settings(GhbValue *settings);
 GhbValue* ghb_get_job_source_settings(GhbValue *settings);
@@ -41,4 +42,4 @@ GhbValue* ghb_get_job_subtitle_search(GhbValue *settings);
 GhbValue* ghb_get_job_filter_settings(GhbValue *settings);
 GhbValue* ghb_get_job_filter_list(GhbValue *settings);
 
-#endif // _JOBDICT_H_
+G_END_DECLS

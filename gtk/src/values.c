@@ -17,10 +17,11 @@
  * SPDX-License-Identifier: GPL-2.0-only
  */
 
+#include "values.h"
+
+#include <inttypes.h>
 #include <stdio.h>
 #include <string.h>
-#include <inttypes.h>
-#include "values.h"
 
 void
 debug_show_type(GhbType tp)

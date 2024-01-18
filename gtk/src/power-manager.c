@@ -19,9 +19,10 @@
  */
 
 #include "power-manager.h"
-#include "queuehandler.h"
+
 #include "callbacks.h"
 #include "notifications.h"
+#include "queuehandler.h"
 
 #define UPOWER_PATH "org.freedesktop.UPower"
 #define UPOWER_OBJECT "/org/freedesktop/UPower"

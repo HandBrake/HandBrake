@@ -17,10 +17,12 @@
  * SPDX-License-Identifier: GPL-2.0-only
  */
 
-#if !defined(_GHB_PREVIEW_H_)
-#define _GHB_PREVIEW_H_
+#pragma once
 
 #include "common.h"
+#include "settings.h"
+
+G_BEGIN_DECLS
 
 #define GHB_PREVIEW_MAX 60
 
@@ -35,4 +37,4 @@ void ghb_live_reset(signal_user_data_t *ud);
 void ghb_par_scale(signal_user_data_t *ud, gint *width, gint *height, gint par_n, gint par_d);
 void ghb_preview_dispose (signal_user_data_t *ud);
 
-#endif // _GHB_PREVIEW_H_
+G_END_DECLS

@@ -17,17 +17,18 @@
  * SPDX-License-Identifier: GPL-2.0-only
  */
 
-#if !defined(_CALLBACKS_H_)
-#define _CALLBACKS_H_
-
-#if defined(_WIN32)
-#include <windows.h>
-#endif
+#pragma once
 
 #include "common.h"
 #include "handbrake/handbrake.h"
-#include "values.h"
 #include "settings.h"
+#include "values.h"
+
+#ifdef _WIN32
+#include <windows.h>
+#endif
+
+G_BEGIN_DECLS
 
 typedef enum {
     GHB_ACTION_NORMAL,
@@ -86,4 +87,4 @@ GtkFileFilter *ghb_add_file_filter(GtkFileChooser *chooser,
                                    signal_user_data_t *ud,
                                    const char *name, const char *id);
 
-#endif // _CALLBACKS_H_
+G_END_DECLS

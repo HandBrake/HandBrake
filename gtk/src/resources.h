@@ -17,14 +17,15 @@
  * SPDX-License-Identifier: GPL-2.0-only
  */
 
-#if !defined(_RESOURCES_H_)
-#define _RESOURCES_H_
+#pragma once
 
 #include "common.h"
 #include "values.h"
+
+G_BEGIN_DECLS
 
 void ghb_resource_init(void);
 void ghb_resource_free(void);
 GhbValue* ghb_resource_get(const gchar *name);
 
-#endif // _RESOURCES_H_
+G_END_DECLS

@@ -17,7 +17,6 @@
  * SPDX-License-Identifier: GPL-2.0-only
  */
 
-#include "values.h"
 #include "jobdict.h"
 
 GhbValue *ghb_get_job_settings(GhbValue *settings)

@@ -17,11 +17,12 @@
  * SPDX-License-Identifier: GPL-2.0-only
  */
 
-#if !defined(_GHB_VALUES_H_)
-#define _GHB_VALUES_H_
+#pragma once
 
 #include "common.h"
 #include "handbrake/hb_dict.h"
+
+G_BEGIN_DECLS
 
 #define GHB_DICT    HB_VALUE_TYPE_DICT
 #define GHB_ARRAY   HB_VALUE_TYPE_ARRAY
@@ -101,4 +102,4 @@ gdouble ghb_dict_get_double(const GhbValue *dict, const gchar *key);
 gchar* ghb_dict_get_string_xform(const GhbValue *dict, const gchar *key);
 const gchar* ghb_dict_get_string(const GhbValue *dict, const gchar *key);
 
-#endif // _GHB_VALUES_H_
+G_END_DECLS

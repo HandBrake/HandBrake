@@ -4,15 +4,14 @@
 #pragma once
 
 #include "common.h"
-#include "settings.h"
+
+G_BEGIN_DECLS
 
 enum {
     GHB_QUEUE_STATUS_READY,
     GHB_QUEUE_STATUS_IN_PROGRESS,
     GHB_QUEUE_STATUS_DONE,
 };
-
-G_BEGIN_DECLS
 
 #define GHB_TYPE_QUEUE_ROW (ghb_queue_row_get_type())
 

@@ -17,12 +17,13 @@
  * SPDX-License-Identifier: GPL-2.0-only
  */
 
-#if !defined(_AUDIOHANDLER_H_)
-#define _AUDIOHANDLER_H_
+#pragma once
 
 #include "common.h"
-#include "values.h"
 #include "settings.h"
+#include "values.h"
+
+G_BEGIN_DECLS
 
 GhbValue *ghb_get_audio_settings(GhbValue *settings);
 GhbValue *ghb_get_audio_list(GhbValue *settings);
@@ -45,4 +46,4 @@ void audio_list_selection_changed_cb(GtkTreeSelection *ts, gpointer data);
 void audio_edit_clicked_cb(GtkWidget *widget, gchar *path, gpointer data);
 void audio_remove_clicked_cb(GtkWidget *widget, gchar *path, gpointer data);
 
-#endif // _AUDIOHANDLER_H_
+G_END_DECLS

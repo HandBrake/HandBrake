@@ -18,8 +18,6 @@
  * SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-#define G_LOG_DOMAIN "ghb"
-
 #include "color-scheme.h"
 
 #define APP_DARK  APP_PREFERS_DARK /* 1 */

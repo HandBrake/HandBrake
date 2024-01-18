@@ -17,26 +17,24 @@
  * SPDX-License-Identifier: GPL-2.0-only
  */
 
-#include "compat.h"
+#include "presets.h"
 
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <fcntl.h>
-#include <unistd.h>
-#include <string.h>
-
-#include "handbrake/handbrake.h"
 #include "application.h"
-#include "settings.h"
-#include "callbacks.h"
 #include "audiohandler.h"
-#include "subtitlehandler.h"
+#include "callbacks.h"
+#include "compat.h"
+#include "handbrake/handbrake.h"
+#include "handbrake/lang.h"
 #include "hb-backend.h"
 #include "resources.h"
-#include "presets.h"
-#include "values.h"
-#include "handbrake/lang.h"
+#include "subtitlehandler.h"
 #include "videohandler.h"
+
+#include <fcntl.h>
+#include <string.h>
+#include <sys/stat.h>
+#include <sys/types.h>
+#include <unistd.h>
 
 #define MAX_NESTED_PRESET 3
 

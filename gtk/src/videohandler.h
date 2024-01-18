@@ -17,15 +17,16 @@
  * SPDX-License-Identifier: GPL-2.0-only
  */
 
-#if !defined(_VIDEOHANDLER_H_)
-#define _VIDEOHANDLER_H_
+#pragma once
 
 #include "common.h"
-#include "values.h"
 #include "settings.h"
+#include "values.h"
+
+G_BEGIN_DECLS
 
 int ghb_get_video_encoder(GhbValue *settings);
 void ghb_video_setting_changed(GtkWidget *widget, signal_user_data_t *ud);
 int ghb_set_video_preset(GhbValue *settings, int encoder, const char * preset);
 
-#endif // _VIDEOHANDLER_H_
+G_END_DECLS

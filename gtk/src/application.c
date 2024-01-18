@@ -17,48 +17,44 @@
  * SPDX-License-Identifier: GPL-2.0-only
  */
 
-#define G_LOG_DOMAIN "ghb"
-
 #include "application.h"
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <unistd.h>
-#include <string.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <fcntl.h>
-#include <locale.h>
 
-#ifndef _WIN32
-#include <sys/utsname.h>
-#endif
-
-#if defined(_ENABLE_GST)
-#include <gst/gst.h>
-#endif
-
-#if defined(_WIN32)
-#include <windows.h>
-#include <io.h>
-#define pipe(phandles)  _pipe (phandles, 4096, _O_BINARY)
-#endif
-
+#include "audiohandler.h"
+#include "callbacks.h"
+#include "color-scheme.h"
 #include "handbrake/handbrake.h"
 #include "hb-backend.h"
 #include "hb-dvd.h"
-#include "values.h"
 #include "icon_res.h"
-#include "callbacks.h"
-#include "queuehandler.h"
-#include "audiohandler.h"
-#include "subtitlehandler.h"
-#include "settings.h"
-#include "resources.h"
+#include "power-manager.h"
 #include "presets.h"
 #include "preview.h"
+#include "queuehandler.h"
+#include "resources.h"
+#include "subtitlehandler.h"
 #include "ui_res.h"
-#include "color-scheme.h"
-#include "power-manager.h"
+#include "values.h"
+
+#include <fcntl.h>
+#include <locale.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <sys/stat.h>
+#include <sys/types.h>
+#include <unistd.h>
+
+#ifdef _WIN32
+#include <windows.h>
+#include <io.h>
+#define pipe(phandles)  _pipe (phandles, 4096, _O_BINARY)
+#else
+#include <sys/utsname.h>
+#endif
+
+#ifdef _ENABLE_GST
+#include <gst/gst.h>
+#endif
 
 struct _GhbApplication
 {

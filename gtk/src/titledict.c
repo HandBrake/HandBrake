@@ -17,7 +17,6 @@
  * SPDX-License-Identifier: GPL-2.0-only
  */
 
-#include "values.h"
 #include "titledict.h"
 
 GhbValue *ghb_get_title_settings(GhbValue *settings)

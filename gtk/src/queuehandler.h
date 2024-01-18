@@ -17,13 +17,14 @@
  * SPDX-License-Identifier: GPL-2.0-only
  */
 
-#if !defined(_QUEUEHANDLER_H_)
-#define _QUEUEHANDLER_H_
+#pragma once
 
 #include "common.h"
-#include "settings.h"
 #include "ghb-queue-row.h"
 #include "hb-backend.h"
+#include "settings.h"
+
+G_BEGIN_DECLS
 
 void     ghb_queue_buttons_grey(signal_user_data_t *ud);
 gboolean ghb_reload_queue(signal_user_data_t *ud);
@@ -44,4 +45,4 @@ void     ghb_add_to_queue_list(signal_user_data_t *ud, GhbValue *queueDict);
 void     ghb_queue_selection_init(signal_user_data_t * ud);
 void     ghb_queue_row_remove(GhbQueueRow *row);
 
-#endif // _QUEUEHANDLER_H_
+G_END_DECLS

@@ -17,11 +17,12 @@
  * SPDX-License-Identifier: GPL-2.0-only
  */
 
-#if !defined(_TITLEDICT_H_)
-#define _TITLEDICT_H_
+#pragma once
 
 #include "common.h"
 #include "values.h"
+
+G_BEGIN_DECLS
 
 GhbValue* ghb_get_title_settings(GhbValue *settings);
 GhbValue* ghb_get_title_audio_list(GhbValue *settings);
@@ -29,4 +30,4 @@ GhbValue *ghb_get_title_audio_track(GhbValue *settings, int track);
 GhbValue* ghb_get_title_subtitle_list(GhbValue *settings);
 GhbValue *ghb_get_title_subtitle_track(GhbValue *settings, int track);
 
-#endif // _TITLEDICT_H_
+G_END_DECLS
