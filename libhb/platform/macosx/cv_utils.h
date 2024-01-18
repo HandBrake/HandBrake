@@ -26,6 +26,7 @@ CFStringRef hb_cv_colr_pri_xlat(int color_prim);
 CFStringRef hb_cv_colr_tra_xlat(int color_transfer);
 CFNumberRef hb_cv_colr_gamma_xlat(int color_transfer) CF_RETURNS_RETAINED;
 CFStringRef hb_cv_colr_mat_xlat(int color_matrix);
+CFStringRef hb_cv_colr_range_xlat(int color_range);
 CFStringRef hb_cv_chroma_loc_xlat(int chroma_location);
 
 void hb_cv_add_color_tag(CVPixelBufferRef pix_buf,
