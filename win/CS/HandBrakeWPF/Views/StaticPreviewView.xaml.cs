@@ -14,6 +14,7 @@ namespace HandBrakeWPF.Views
     using System.Windows.Input;
     using System.Windows.Media.Imaging;
 
+    using HandBrakeWPF.Commands;
     using HandBrakeWPF.Helpers;
     using HandBrakeWPF.ViewModels;
     using HandBrakeWPF.ViewModels.Interfaces;
@@ -34,6 +35,8 @@ namespace HandBrakeWPF.Views
             this.Title = Properties.Resources.Preview;
 
             this.videoPlayer.MediaFailed += this.VideoPlayer_MediaFailed;
+
+            this.InputBindings.Add(new InputBinding(new CloseWindowCommand(this), new KeyGesture(Key.W, ModifierKeys.Control))); // Close Window
         }
 
         protected override void OnSourceInitialized(EventArgs e)

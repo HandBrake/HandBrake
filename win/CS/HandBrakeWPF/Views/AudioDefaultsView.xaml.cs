@@ -13,12 +13,16 @@ namespace HandBrakeWPF.Views
 
     using HandBrakeWPF.Helpers;
     using System.Windows;
-    
+    using System.Windows.Input;
+
+    using HandBrakeWPF.Commands;
+
     public partial class AudioDefaultsView : Window
     {
         public AudioDefaultsView()
         {
             this.InitializeComponent();
+            this.InputBindings.Add(new InputBinding(new CloseWindowCommand(this), new KeyGesture(Key.W, ModifierKeys.Control))); // Close Window
         }
 
         protected override void OnSourceInitialized(EventArgs e)
