@@ -12,6 +12,7 @@ namespace HandBrakeWPF.Services
     using System;
     using System.Diagnostics;
     using System.IO;
+    using System.Media;
     using System.Windows.Media;
 
     using HandBrakeWPF.EventArgs;
@@ -255,12 +256,16 @@ namespace HandBrakeWPF.Services
                 string filePath = this.userSettingService.GetUserSetting<string>(UserSettingConstants.WhenDoneAudioFile);
                 if (!string.IsNullOrEmpty(filePath) && File.Exists(filePath))
                 {
-                    this.ServiceLogMessage("Playing Sound: " + filePath);
-                    var uri = new Uri(filePath, UriKind.RelativeOrAbsolute);
-                    var player = new MediaPlayer();
-                    player.MediaFailed += (object sender, ExceptionEventArgs e) => { this.ServiceLogMessage(e?.ToString()); };
-                    player.Open(uri);
-                    player.Play();
+                    try
+                    {
+                        this.ServiceLogMessage("Playing Sound: " + filePath);
+                        var player = new SoundPlayer(filePath);
+                        player.Play();
+                    }
+                    catch (Exception ex)
+                    {
+                        this.ServiceLogMessage(ex.ToString());
+                    }
                 }
                 else
                 {
