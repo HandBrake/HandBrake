@@ -3,7 +3,7 @@ Only in libvpx-1.8.0/build: .DS_Store
 diff -ur libvpx-1.8.0.orig/libs.mk libvpx-1.8.0/libs.mk
 --- libvpx-1.8.0.orig/libs.mk	2019-02-04 12:02:33.000000000 -0500
 +++ libvpx-1.8.0/libs.mk	2019-02-28 10:43:03.000000000 -0500
-@@ -321,11 +321,10 @@
+@@ -401,11 +401,10 @@
  	$(qexec)echo 'Version: $(VERSION_MAJOR).$(VERSION_MINOR).$(VERSION_PATCH)' >> $@
  	$(qexec)echo 'Requires:' >> $@
  	$(qexec)echo 'Conflicts:' >> $@
