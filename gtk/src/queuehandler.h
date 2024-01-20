@@ -31,6 +31,7 @@ gboolean ghb_reload_queue(signal_user_data_t *ud);
 void     ghb_queue_remove_row(signal_user_data_t *ud, int row);
 gint     ghb_find_queue_job(GhbValue *queue, gint unique_id, GhbValue **job);
 void     ghb_low_disk_check(signal_user_data_t *ud);
+void     ghb_reset_disk_space_check(void);
 void     ghb_queue_progress_set_visible(signal_user_data_t *ud, int index,
                                         gboolean visible);
 void     ghb_queue_progress_set_fraction(signal_user_data_t *ud, int index,

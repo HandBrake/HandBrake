@@ -57,7 +57,6 @@ typedef struct
 {
     char                * current_dvd_device;
     GtkBuilder          * builder;
-    GhbValue            * globals;
     GhbValue            * prefs;
     GhbValue            * settings;
     GhbValue            * settings_array;

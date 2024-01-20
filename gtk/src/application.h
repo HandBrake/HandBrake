@@ -27,6 +27,8 @@ int ghb_get_cancel_status(void);
 void ghb_set_cancel_status(int status);
 int ghb_get_queue_done_action(void);
 void ghb_set_queue_done_action(int action);
+void ghb_set_scan_source(const char *source);
+const char *ghb_get_scan_source(void);
 
 GtkWidget *ghb_builder_widget (const char *name);
 

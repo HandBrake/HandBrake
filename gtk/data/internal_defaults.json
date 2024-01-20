@@ -1,9 +1,4 @@
 {
-    "Globals": {
-        "SkipDiskFreeCheck": false,
-        "scan_source": "",
-        "volume": "New Video"
-    },
     "OneTimeInitialization": {
         "title": "none"
     },
