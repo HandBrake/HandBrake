@@ -35,6 +35,8 @@
 #include "title-add.h"
 #include "values.h"
 
+static gboolean skip_disk_space_check = FALSE;
+
 void ghb_queue_buttons_grey (signal_user_data_t *ud);
 
 // Callbacks
@@ -1600,7 +1602,7 @@ low_disk_check_response_cb (GtkDialog *dialog, int response,
             ghb_resume_queue();
             break;
         case 2:
-            ghb_dict_set_bool(ud->globals, "SkipDiskFreeCheck", TRUE);
+            skip_disk_space_check = TRUE;
             ghb_resume_queue();
             break;
         case 3:
@@ -1624,8 +1626,7 @@ void ghb_low_disk_check (signal_user_data_t *ud)
     GhbValue        *qDict;
     GhbValue        *settings;
 
-    if (ghb_dict_get_bool(ud->globals, "SkipDiskFreeCheck") ||
-        !ghb_dict_get_bool(ud->prefs, "DiskFreeCheck"))
+    if (skip_disk_space_check || !ghb_dict_get_bool(ud->prefs, "DiskFreeCheck"))
     {
         return;
     }
@@ -1680,6 +1681,12 @@ void ghb_low_disk_check (signal_user_data_t *ud)
     g_signal_connect(dialog, "response",
                      G_CALLBACK(low_disk_check_response_cb), ud);
     gtk_widget_set_visible(dialog, TRUE);
+}
+
+void
+ghb_reset_disk_space_check (void)
+{
+    skip_disk_space_check = FALSE;
 }
 
 static int queue_remove_index     = -1;

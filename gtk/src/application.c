@@ -64,6 +64,7 @@ struct _GhbApplication
     int cancel_encode;
     int when_complete;
     int stderr_src_id;
+    char *scan_source;
 };
 
 G_DEFINE_TYPE (GhbApplication, ghb_application, GTK_TYPE_APPLICATION);
@@ -525,7 +526,6 @@ map_actions (GtkApplication *app, signal_user_data_t *ud)
 static gboolean
 _ghb_idle_ui_init (signal_user_data_t *ud)
 {
-    ghb_settings_to_ui(ud, ud->globals);
     ghb_settings_to_ui(ud, ud->prefs);
     // Note that ghb_settings_to_ui(ud->settings) happens when initial
     // empty title is initialized.
@@ -534,13 +534,13 @@ _ghb_idle_ui_init (signal_user_data_t *ud)
     if (dvd_device != NULL)
     {
         // Source overridden from command line option
-        ghb_dict_set_string(ud->globals, "scan_source", dvd_device);
+        ghb_set_scan_source(dvd_device);
         g_idle_add((GSourceFunc)ghb_idle_scan, ud);
     }
     else
     {
-        GhbValue *gval = ghb_dict_get_value(ud->prefs, "default_source");
-        ghb_dict_set(ud->globals, "scan_source", ghb_value_dup(gval));
+        const char *source = ghb_dict_get_string(ud->prefs, "default_source");
+        ghb_set_scan_source(source);
     }
 
     if (arg_preset != NULL)
@@ -733,7 +733,6 @@ ghb_application_activate (GApplication *app)
     // map application actions (menu callbacks)
     map_actions(GTK_APPLICATION(app), ud);
 
-    ud->globals = ghb_dict_new();
     ud->prefs = ghb_dict_new();
     ud->settings_array = ghb_array_new();
     ud->settings = ghb_dict_new();
@@ -798,7 +797,6 @@ ghb_application_activate (GApplication *app)
     // on preference settings.
     // First load default values
     ghb_settings_init(ud->prefs, "Preferences");
-    ghb_settings_init(ud->globals, "Globals");
     ghb_settings_init(ud->settings, "Initialization");
     ghb_settings_init(ud->settings, "OneTimeInitialization");
     // Load user preferences file
@@ -970,7 +968,6 @@ ghb_application_shutdown (GApplication *app)
     ghb_value_free(&ud->queue);
     ghb_value_free(&ud->settings_array);
     ghb_value_free(&ud->prefs);
-    ghb_value_free(&ud->globals);
 
     if (ud->activity_log != NULL)
         g_io_channel_unref(ud->activity_log);
@@ -990,6 +987,7 @@ ghb_application_shutdown (GApplication *app)
 
     g_free(ud->current_dvd_device);
     g_free(self->ud);
+    g_free(self->scan_source);
 
     G_APPLICATION_CLASS(ghb_application_parent_class)->shutdown(app);
 }
@@ -1113,5 +1111,28 @@ ghb_set_queue_done_action (int action)
     g_return_if_fail(GHB_IS_APPLICATION(app));
 
     app->when_complete = action;
+}
+
+const char *
+ghb_get_scan_source (void)
+{
+    GhbApplication *app = GHB_APPLICATION_DEFAULT;
+    g_return_val_if_fail(GHB_IS_APPLICATION(app), g_strdup(""));
+
+    return app->scan_source;
+
+}
+
+void
+ghb_set_scan_source (const char *source)
+{
+    GhbApplication *app = GHB_APPLICATION_DEFAULT;
+    g_return_if_fail(GHB_IS_APPLICATION(app));
+
+    g_free(app->scan_source);
+    if (source)
+        app->scan_source = g_strdup(source);
+    else
+        app->scan_source = g_strdup("");
 }
 

@@ -911,9 +911,7 @@ set_destination_settings(signal_user_data_t *ud, GhbValue *settings)
             (!strncasecmp(p, "{source-path}", strlen("{source-path}")) ||
              !strncasecmp(p, "{source_path}", strlen("{source_path}"))))
         {
-            const gchar * source;
-
-            source = ghb_dict_get_string(ud->globals, "scan_source");
+            const char *source = ghb_get_scan_source();
             if (source != NULL)
             {
                 char * dirname = g_path_get_dirname(source);
@@ -1002,7 +1000,7 @@ set_destination_settings(signal_user_data_t *ud, GhbValue *settings)
             else if (!strncasecmp(p, "{creation-date}", strlen("{creation-date}")))
             {
                 gchar *val;
-                const gchar *source = ghb_dict_get_string(ud->globals, "scan_source");
+                const char *source = ghb_get_scan_source();
                 val = get_creation_date("%Y-%m-%d", ghb_dict_get_string(settings, "MetaReleaseDate"), source);
                 g_string_append_printf(str, "%s", val);
                 p += strlen("{creation-date}");
@@ -1011,7 +1009,7 @@ set_destination_settings(signal_user_data_t *ud, GhbValue *settings)
             else if (!strncasecmp(p, "{creation-time}", strlen("{creation-time}")))
             {
                 gchar *val;
-                const gchar *source = ghb_dict_get_string(ud->globals, "scan_source");
+                const char *source = ghb_get_scan_source();
                 val = get_creation_date("%H:%M", ghb_dict_get_string(settings, "MetaReleaseDate"), source);
                 g_string_append_printf(str, "%s", val);
                 p += strlen("{creation-time}");
@@ -1020,7 +1018,7 @@ set_destination_settings(signal_user_data_t *ud, GhbValue *settings)
             else if (!strncasecmp(p, "{modification-date}", strlen("{modification-date}")))
             {
                 gchar *val;
-                const gchar *source = ghb_dict_get_string(ud->globals, "scan_source");
+                const char *source = ghb_get_scan_source();
                 val = get_file_modification_date(source);
                 if (val != NULL)
                     g_string_append_printf(str, "%s", val);
@@ -1030,7 +1028,7 @@ set_destination_settings(signal_user_data_t *ud, GhbValue *settings)
             else if (!strncasecmp(p, "{modification-time}", strlen("{modification-time}")))
             {
                 gchar *val;
-                const gchar *source = ghb_dict_get_string(ud->globals, "scan_source");
+                const char *source = ghb_get_scan_source();
                 val = get_file_modification_time(source);
                 if (val != NULL)
                     g_string_append_printf(str, "%s", val);
@@ -1503,7 +1501,7 @@ ghb_idle_scan(signal_user_data_t *ud)
     gchar *path;
     // ghb_do_scan replaces "scan_source" key in dict, so we must
     // make a copy of the string.
-    path = g_strdup(ghb_dict_get_string(ud->globals, "scan_source"));
+    path = g_strdup(ghb_get_scan_source());
     ghb_do_scan(ud, path, 0, TRUE);
     g_free(path);
     return FALSE;
@@ -1554,10 +1552,10 @@ ghb_do_scan(
         gint preview_count;
 
         last_scan_file = g_strdup(filename);
-        ghb_dict_set_string(ud->globals, "scan_source", filename);
+        ghb_set_scan_source(filename);
 
         show_scan_progress(ud);
-        path = ghb_dict_get_string(ud->globals, "scan_source");
+        path = ghb_get_scan_source();
         prune_logs();
 
         preview_count = ghb_dict_get_int(ud->prefs, "preview_count");
@@ -1652,7 +1650,7 @@ source_dialog_start_scan (GtkFileChooser *chooser, int title_id)
 
     if (filename != NULL)
     {
-        sourcename = ghb_dict_get_string(ud->globals, "scan_source");
+        sourcename = ghb_get_scan_source();
 
         // ghb_do_scan replaces "scan_source" key in dict, so we must
         // be finished with sourcename before calling ghb_do_scan
@@ -1700,7 +1698,7 @@ do_source_dialog(gboolean dir, signal_user_data_t *ud)
                 _("_Cancel"));
 
     ghb_log_func();
-    sourcename = ghb_dict_get_string(ud->globals, "scan_source");
+    sourcename = ghb_get_scan_source();
 
     if (!dir)
         add_video_file_filters(GTK_FILE_CHOOSER(chooser), ud);
@@ -1767,7 +1765,7 @@ dvd_source_activate_cb(GSimpleAction *action, GVariant *param,
     // ghb_do_scan replaces "scan_source" key in dict, so we must
     // be finished with sourcename before calling ghb_do_scan
     // since the memory it references will be freed
-    sourcename = ghb_dict_get_string(ud->globals, "scan_source");
+    sourcename = ghb_get_scan_source();
     filename = g_variant_get_string(param, NULL);
     if (strcmp(sourcename, filename) != 0)
     {
@@ -4170,7 +4168,7 @@ ghb_start_next_job(signal_user_data_t *ud)
     queue_done_action(ud);
     ghb_update_pending(ud);
     gtk_widget_hide(progress);
-    ghb_dict_set_bool(ud->globals, "SkipDiskFreeCheck", FALSE);
+    ghb_reset_disk_space_check();
 }
 
 static gchar*
@@ -4499,7 +4497,7 @@ ghb_backend_events(signal_user_data_t *ud)
         {
             uninhibit_suspend();
             gtk_widget_hide(GTK_WIDGET(progress));
-            ghb_dict_set_bool(ud->globals, "SkipDiskFreeCheck", FALSE);
+            ghb_reset_disk_space_check();
         }
         ghb_save_queue(ud->queue);
         ghb_set_cancel_status(GHB_CANCEL_NONE);
@@ -5157,7 +5155,7 @@ handle_media_change(const gchar *device, gboolean insert, signal_user_data_t *ud
                 show_scan_progress(ud);
                 gint preview_count;
                 preview_count = ghb_dict_get_int(ud->prefs, "preview_count");
-                ghb_dict_set_string(ud->globals, "scan_source", device);
+                ghb_set_scan_source(device);
                 start_scan(ud, device, 0, preview_count);
             }
         }
@@ -5175,7 +5173,7 @@ handle_media_change(const gchar *device, gboolean insert, signal_user_data_t *ud
             {
                 ghb_hb_cleanup(TRUE);
                 prune_logs();
-                ghb_dict_set_string(ud->globals, "scan_source", "/dev/null");
+                ghb_set_scan_source("/dev/null");
                 start_scan(ud, "/dev/null", 0, 1);
             }
         }
@@ -5261,7 +5259,7 @@ drive_changed_cb(GVolumeMonitor *gvm, GDrive *gd, signal_user_data_t *ud)
             show_scan_progress(ud);
             gint preview_count;
             preview_count = ghb_dict_get_int(ud->prefs, "preview_count");
-            ghb_dict_set_string(ud->globals, "scan_source", device);
+            ghb_set_scan_source(device);
             start_scan(ud, device, 0, preview_count);
         }
     }
@@ -5269,7 +5267,7 @@ drive_changed_cb(GVolumeMonitor *gvm, GDrive *gd, signal_user_data_t *ud)
     {
         ghb_hb_cleanup(TRUE);
         prune_logs();
-        ghb_dict_set_string(ud->globals, "scan_source", "/dev/null");
+        ghb_set_scan_source("/dev/null");
         start_scan(ud, "/dev/null", 0, 1);
     }
 }
