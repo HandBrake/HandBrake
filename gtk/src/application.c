@@ -59,8 +59,9 @@
 struct _GhbApplication
 {
     GtkApplication parent_instance;
-    char *app_cmd;
     signal_user_data_t *ud;
+    GtkBuilder *builder;
+    char *app_cmd;
     int cancel_encode;
     int when_complete;
     int stderr_src_id;
@@ -108,7 +109,7 @@ bind_audio_tree_model(signal_user_data_t *ud)
     GtkTreeSelection *selection;
 
     ghb_log_func();
-    treeview = GTK_TREE_VIEW(GHB_WIDGET(ud->builder, "audio_list_view"));
+    treeview = GTK_TREE_VIEW(ghb_builder_widget("audio_list_view"));
     selection = gtk_tree_view_get_selection(treeview);
     treestore = gtk_tree_store_new(6, G_TYPE_STRING, G_TYPE_STRING,
                                       G_TYPE_STRING, G_TYPE_STRING,
@@ -153,7 +154,7 @@ bind_subtitle_tree_model(signal_user_data_t *ud)
     GtkTreeSelection *selection;
 
     ghb_log_func();
-    treeview = GTK_TREE_VIEW(GHB_WIDGET(ud->builder, "subtitle_list_view"));
+    treeview = GTK_TREE_VIEW(ghb_builder_widget("subtitle_list_view"));
     selection = gtk_tree_view_get_selection(treeview);
     treestore = gtk_tree_store_new(6, G_TYPE_STRING, G_TYPE_STRING,
                                       G_TYPE_STRING, G_TYPE_STRING,
@@ -357,7 +358,7 @@ watch_volumes(signal_user_data_t *ud)
     GdkWindow *window;
     GtkWidget *widget;
 
-    widget = GHB_WIDGET(ud->builder, "hb_window");
+    widget = ghb_builder_widget("hb_window");
     window = gtk_widget_get_parent_window(widget);
     gdk_window_add_filter(window, win_message_cb, ud);
 #endif
@@ -611,7 +612,7 @@ video_file_drop_received (GtkDropTarget* self, const GValue* value,
 static void
 video_file_drop_init (signal_user_data_t *ud)
 {
-    GtkWidget *window = GHB_WIDGET (ud->builder, "hb_window");
+    GtkWidget *window = ghb_builder_widget("hb_window");
     GType types[] = {
         G_TYPE_URI,
         G_TYPE_STRING,
@@ -738,7 +739,7 @@ ghb_application_activate (GApplication *app)
     ud->settings = ghb_dict_new();
     ghb_array_append(ud->settings_array, ud->settings);
 
-    ud->builder = create_builder_or_die(BUILDER_NAME);
+    self->builder = create_builder_or_die(BUILDER_NAME);
 
     // Initialize D-Bus connections to monitor power settings
     ghb_power_manager_init(ud);
@@ -753,10 +754,10 @@ ghb_application_activate (GApplication *app)
     GtkWidget *widget;
 
     // Get GtkTextBuffers for activity logs
-    widget = GHB_WIDGET(ud->builder, "activity_view");
+    widget = ghb_builder_widget("activity_view");
     ud->activity_buffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(widget));
     g_object_ref(ud->activity_buffer);
-    widget = GHB_WIDGET(ud->builder, "queue_activity_view");
+    widget = ghb_builder_widget("queue_activity_view");
     ud->extra_activity_buffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(widget));
     g_object_ref(ud->extra_activity_buffer);
     ud->queue_activity_buffer = gtk_text_buffer_new(NULL);
@@ -769,11 +770,11 @@ ghb_application_activate (GApplication *app)
     GtkTextView   * textview;
     GtkTextBuffer * buffer;
 
-    textview = GTK_TEXT_VIEW(GHB_WIDGET(ud->builder, "VideoOptionExtra"));
+    textview = GTK_TEXT_VIEW(ghb_builder_widget("VideoOptionExtra"));
     buffer = gtk_text_view_get_buffer(textview);
     g_signal_connect(buffer, "changed", G_CALLBACK(video_option_changed_cb), ud);
 
-    textview = GTK_TEXT_VIEW(GHB_WIDGET(ud->builder, "MetaLongDescription"));
+    textview = GTK_TEXT_VIEW(ghb_builder_widget("MetaLongDescription"));
     buffer = gtk_text_view_get_buffer(textview);
     g_signal_connect(buffer, "changed", G_CALLBACK(plot_changed_cb), ud);
 
@@ -784,7 +785,7 @@ ghb_application_activate (GApplication *app)
     ghb_combo_init(ud);
 
     g_debug("ud %p", ud);
-    g_debug("ud->builder %p", ud->builder);
+    g_debug("builder %p", self->builder);
 
     bind_audio_tree_model(ud);
     bind_subtitle_tree_model(ud);
@@ -862,10 +863,10 @@ ghb_application_activate (GApplication *app)
     window = GTK_WINDOW(ghb_builder_widget("title_add_multiple_dialog"));
     gtk_application_add_window(GTK_APPLICATION(app), window);
 
-    GMenuModel *menu = G_MENU_MODEL(gtk_builder_get_object(ud->builder, "handbrake-menu-bar"));
+    GMenuModel *menu = G_MENU_MODEL(ghb_builder_object("handbrake-menu-bar"));
     gtk_application_set_menubar(GTK_APPLICATION(app), menu);
 
-    widget = GHB_WIDGET(ud->builder, "preview_image");
+    widget = ghb_builder_widget("preview_image");
     gtk_drawing_area_set_draw_func(GTK_DRAWING_AREA(widget), preview_draw_cb,
                                    ud, NULL);
 
@@ -974,8 +975,8 @@ ghb_application_shutdown (GApplication *app)
     ghb_settings_close();
     ghb_resource_free();
 
-    if (ud->builder != NULL)
-        g_object_unref(ud->builder);
+    if (self->builder != NULL)
+        g_object_unref(self->builder);
 
     ghb_power_manager_dispose(ud);
 
@@ -1072,9 +1073,18 @@ ghb_builder_widget (const char *name)
     GhbApplication *app = GHB_APPLICATION_DEFAULT;
     g_assert(GHB_IS_APPLICATION(app));
 
-    signal_user_data_t *ud = app->ud;
+    if (!app->builder) return NULL;
+    return GTK_WIDGET(gtk_builder_get_object(app->builder, name));
+}
 
-    return GTK_WIDGET(gtk_builder_get_object(ud->builder, name));
+GObject *
+ghb_builder_object (const char *name)
+{
+    GhbApplication *app = GHB_APPLICATION_DEFAULT;
+    g_assert(GHB_IS_APPLICATION(app));
+
+    if (!app->builder) return NULL;
+    return gtk_builder_get_object(app->builder, name);
 }
 
 int

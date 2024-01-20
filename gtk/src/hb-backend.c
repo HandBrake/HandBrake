@@ -21,6 +21,7 @@
 
 #include "hb-backend.h"
 
+#include "application.h"
 #include "audiohandler.h"
 #include "callbacks.h"
 #include "jobdict.h"
@@ -1306,9 +1307,9 @@ grey_combo_box_item(GtkComboBox *combo, gint value, gboolean grey)
 }
 
 static void
-grey_builder_combo_box_item(GtkBuilder *builder, const gchar *name, gint value, gboolean grey)
+grey_builder_combo_box_item(const gchar *name, gint value, gboolean grey)
 {
-    GtkComboBox *combo = GTK_COMBO_BOX(GHB_WIDGET(builder, name));
+    GtkComboBox *combo = GTK_COMBO_BOX(ghb_builder_widget(name));
     grey_combo_box_item(combo, value, grey);
 }
 
@@ -1335,7 +1336,7 @@ grey_mix_opts(signal_user_data_t *ud, gint acodec, uint64_t layout)
     for (mix = hb_mixdown_get_next(NULL); mix != NULL;
          mix = hb_mixdown_get_next(mix))
     {
-        grey_builder_combo_box_item(ud->builder, "AudioMixdown", mix->amixdown,
+        grey_builder_combo_box_item("AudioMixdown", mix->amixdown,
                 !hb_mixdown_is_supported(mix->amixdown, acodec, layout));
     }
 }
@@ -1355,8 +1356,7 @@ static void grey_passthru(signal_user_data_t *ud, hb_audio_config_t *aconfig)
         if ((enc->codec & HB_ACODEC_MASK) !=
             (aconfig->in.codec & HB_ACODEC_MASK))
         {
-            grey_builder_combo_box_item(ud->builder, "AudioEncoder",
-                enc->codec, TRUE);
+            grey_builder_combo_box_item("AudioEncoder", enc->codec, TRUE);
         }
     }
 }
@@ -1386,17 +1386,13 @@ ghb_grey_combo_options(signal_user_data_t *ud)
     {
         if (!(mux->format & enc->muxers) && enc->codec != HB_ACODEC_NONE)
         {
-            grey_builder_combo_box_item(ud->builder, "AudioEncoder",
-                enc->codec, TRUE);
-            grey_builder_combo_box_item(ud->builder, "AudioEncoderFallback",
-                enc->codec, TRUE);
+            grey_builder_combo_box_item("AudioEncoder", enc->codec, TRUE);
+            grey_builder_combo_box_item("AudioEncoderFallback", enc->codec, TRUE);
         }
         else
         {
-            grey_builder_combo_box_item(ud->builder, "AudioEncoder",
-                enc->codec, FALSE);
-            grey_builder_combo_box_item(ud->builder, "AudioEncoderFallback",
-                enc->codec, FALSE);
+            grey_builder_combo_box_item("AudioEncoder", enc->codec, FALSE);
+            grey_builder_combo_box_item("AudioEncoderFallback", enc->codec, FALSE);
         }
     }
     for (enc = hb_video_encoder_get_next(NULL); enc != NULL;
@@ -1404,13 +1400,11 @@ ghb_grey_combo_options(signal_user_data_t *ud)
     {
         if (!(mux->format & enc->muxers))
         {
-            grey_builder_combo_box_item(ud->builder, "VideoEncoder",
-                enc->codec, TRUE);
+            grey_builder_combo_box_item("VideoEncoder", enc->codec, TRUE);
         }
         else
         {
-            grey_builder_combo_box_item(ud->builder, "VideoEncoder",
-                enc->codec, FALSE);
+            grey_builder_combo_box_item("VideoEncoder", enc->codec, FALSE);
         }
     }
     grey_passthru(ud, aconfig);
@@ -1472,18 +1466,6 @@ ghb_init_combo_box(GtkComboBox *combo)
     }
 }
 
-// Set up the model for the combo box
-static void
-init_combo_box(GtkBuilder *builder, const gchar *name)
-{
-    GtkComboBox *combo;
-
-    ghb_log_func_str(name);
-    // First modify the combobox model to allow greying out of options
-    combo = GTK_COMBO_BOX(GHB_WIDGET(builder, name));
-    ghb_init_combo_box(combo);
-}
-
 void
 ghb_audio_samplerate_opts_set(GtkComboBox *combo)
 {
@@ -1527,7 +1509,7 @@ audio_samplerate_opts_set(signal_user_data_t *ud, const gchar *name,
     (void)opts; // Silence "unused variable" warning
     (void)data; // Silence "unused variable" warning
 
-    GtkComboBox *combo = GTK_COMBO_BOX(GHB_WIDGET(ud->builder, name));
+    GtkComboBox *combo = GTK_COMBO_BOX(ghb_builder_widget(name));
     ghb_audio_samplerate_opts_set(combo);
 }
 
@@ -1628,7 +1610,7 @@ video_framerate_opts_set(signal_user_data_t *ud, const gchar *name,
     GtkTreeIter iter;
     GtkListStore *store;
 
-    GtkComboBox *combo = GTK_COMBO_BOX(GHB_WIDGET(ud->builder, name));
+    GtkComboBox *combo = GTK_COMBO_BOX(ghb_builder_widget(name));
     store = GTK_LIST_STORE(gtk_combo_box_get_model (combo));
     gtk_list_store_clear(store);
     // Add an item for "Same As Source"
@@ -1730,7 +1712,7 @@ video_encoder_opts_set(signal_user_data_t *ud, const gchar *name,
     GtkListStore *store;
     gchar *str;
 
-    GtkComboBox *combo = GTK_COMBO_BOX(GHB_WIDGET(ud->builder, name));
+    GtkComboBox *combo = GTK_COMBO_BOX(ghb_builder_widget(name));
     store = GTK_LIST_STORE(gtk_combo_box_get_model (combo));
     gtk_list_store_clear(store);
 
@@ -1890,17 +1872,6 @@ ghb_settings_audio_encoder(const GhbValue *settings, const char *name)
     return ghb_lookup_audio_encoder(encoder_id);
 }
 
-static void
-audio_encoder_opts_set_with_mask(
-    GtkBuilder *builder,
-    const gchar *name,
-    int mask,
-    int neg_mask)
-{
-    GtkComboBox *combo = GTK_COMBO_BOX(GHB_WIDGET(builder, name));
-    ghb_audio_encoder_opts_set_with_mask(combo, mask, neg_mask);
-}
-
 void
 ghb_audio_encoder_opts_set(GtkComboBox *combo)
 {
@@ -1914,7 +1885,8 @@ audio_encoder_opts_set(signal_user_data_t *ud, const gchar *name,
 {
     (void)opts; // Silence "unused variable" warning
     (void)data; // Silence "unused variable" warning
-    GtkComboBox *combo = GTK_COMBO_BOX(GHB_WIDGET(ud->builder, name));
+
+    GtkComboBox *combo = GTK_COMBO_BOX(ghb_builder_widget(name));
     ghb_audio_encoder_opts_set_with_mask(combo, ~0, HB_ACODEC_NONE);
 }
 
@@ -1925,7 +1897,8 @@ acodec_fallback_opts_set(signal_user_data_t *ud, const gchar *name,
     (void)opts; // Silence "unused variable" warning
     (void)data; // Silence "unused variable" warning
 
-    audio_encoder_opts_set_with_mask(ud->builder, name, ~0, HB_ACODEC_PASS_FLAG);
+    GtkComboBox *combo = GTK_COMBO_BOX(ghb_builder_widget(name));
+    ghb_audio_encoder_opts_set_with_mask(combo, ~0, HB_ACODEC_PASS_FLAG);
 }
 
 void
@@ -2001,7 +1974,7 @@ mix_opts_set(signal_user_data_t *ud, const gchar *name,
     (void)opts; // Silence "unused variable" warning
     (void)data; // Silence "unused variable" warning
 
-    GtkComboBox *combo = GTK_COMBO_BOX(GHB_WIDGET(ud->builder, name));
+    GtkComboBox *combo = GTK_COMBO_BOX(ghb_builder_widget(name));
     ghb_mix_opts_set(combo);
 }
 
@@ -2015,7 +1988,7 @@ container_opts_set(signal_user_data_t *ud, const gchar *name,
     GtkListStore *store;
     gchar *str;
 
-    GtkComboBox *combo = GTK_COMBO_BOX(GHB_WIDGET(ud->builder, name));
+    GtkComboBox *combo = GTK_COMBO_BOX(ghb_builder_widget(name));
     store = GTK_LIST_STORE(gtk_combo_box_get_model (combo));
     gtk_list_store_clear(store);
 
@@ -2051,7 +2024,7 @@ preset_category_opts_set(signal_user_data_t *ud, const char *opt_name,
     presets = hb_presets_get();
     count   = hb_value_array_len(presets);
 
-    combo = GTK_COMBO_BOX(GHB_WIDGET(ud->builder, opt_name));
+    combo = GTK_COMBO_BOX(ghb_builder_widget(opt_name));
     store = GTK_LIST_STORE(gtk_combo_box_get_model (combo));
     gtk_list_store_clear(store);
 
@@ -2129,7 +2102,7 @@ srt_codeset_opts_set(signal_user_data_t *ud, const gchar *name,
     GtkListStore *store;
     guint ii;
 
-    GtkComboBox *combo = GTK_COMBO_BOX(GHB_WIDGET(ud->builder, name));
+    GtkComboBox *combo = GTK_COMBO_BOX(ghb_builder_widget(name));
     store = GTK_LIST_STORE(gtk_combo_box_get_model (combo));
     gtk_list_store_clear(store);
     for (ii = 0; ii < SRT_TABLE_SIZE; ii++)
@@ -2157,7 +2130,7 @@ language_opts_set(signal_user_data_t *ud, const gchar *name,
     GtkTreeIter iter;
     GtkListStore *store;
 
-    GtkComboBox *combo = GTK_COMBO_BOX(GHB_WIDGET(ud->builder, name));
+    GtkComboBox *combo = GTK_COMBO_BOX(ghb_builder_widget(name));
     store = GTK_LIST_STORE(gtk_combo_box_get_model (combo));
     gtk_list_store_clear(store);
     const iso639_lang_t *iso639;
@@ -2424,7 +2397,7 @@ title_opts_set(signal_user_data_t *ud, const gchar *name,
     gint count = 0;
 
 
-    GtkComboBox *combo = GTK_COMBO_BOX(GHB_WIDGET(ud->builder, name));
+    GtkComboBox *combo = GTK_COMBO_BOX(ghb_builder_widget(name));
     store = GTK_LIST_STORE(gtk_combo_box_get_model (combo));
     gtk_list_store_clear(store);
     if (h_scan != NULL)
@@ -2552,13 +2525,13 @@ video_tune_opts_set(signal_user_data_t *ud, const gchar *name,
     tunes = hb_video_encoder_get_tunes(encoder);
 
     while (tunes && tunes[count]) count++;
-    GtkWidget *w = GHB_WIDGET(ud->builder, "VideoTune");
+    GtkWidget *w = ghb_builder_widget("VideoTune");
     gtk_widget_set_visible(w, count > 0);
-    w = GHB_WIDGET(ud->builder, "VideoTuneLabel");
+    w = ghb_builder_widget("VideoTuneLabel");
     gtk_widget_set_visible(w, count > 0);
     if (count == 0) return;
 
-    GtkComboBox *combo = GTK_COMBO_BOX(GHB_WIDGET(ud->builder, name));
+    GtkComboBox *combo = GTK_COMBO_BOX(ghb_builder_widget(name));
     store = GTK_LIST_STORE(gtk_combo_box_get_model (combo));
     gtk_list_store_clear(store);
 
@@ -2609,13 +2582,13 @@ video_profile_opts_set(signal_user_data_t *ud, const gchar *name,
     profiles = hb_video_encoder_get_profiles(encoder);
 
     while (profiles && profiles[count]) count++;
-    GtkWidget *w = GHB_WIDGET(ud->builder, "VideoProfile");
+    GtkWidget *w = ghb_builder_widget("VideoProfile");
     gtk_widget_set_visible(w, count > 0);
-    w = GHB_WIDGET(ud->builder, "VideoProfileLabel");
+    w = ghb_builder_widget("VideoProfileLabel");
     gtk_widget_set_visible(w, count > 0);
     if (count == 0) return;
 
-    GtkComboBox *combo = GTK_COMBO_BOX(GHB_WIDGET(ud->builder, name));
+    GtkComboBox *combo = GTK_COMBO_BOX(ghb_builder_widget(name));
     store = GTK_LIST_STORE(gtk_combo_box_get_model (combo));
     gtk_list_store_clear(store);
 
@@ -2651,13 +2624,13 @@ video_level_opts_set(signal_user_data_t *ud, const gchar *name,
     levels = hb_video_encoder_get_levels(encoder);
 
     while (levels && levels[count]) count++;
-    GtkWidget *w = GHB_WIDGET(ud->builder, "VideoLevel");
+    GtkWidget *w = ghb_builder_widget("VideoLevel");
     gtk_widget_set_visible(w, count > 0);
-    w = GHB_WIDGET(ud->builder, "VideoLevelLabel");
+    w = ghb_builder_widget("VideoLevelLabel");
     gtk_widget_set_visible(w, count > 0);
     if (count <= 0) return;
 
-    GtkComboBox *combo = GTK_COMBO_BOX(GHB_WIDGET(ud->builder, name));
+    GtkComboBox *combo = GTK_COMBO_BOX(ghb_builder_widget(name));
     store = GTK_LIST_STORE(gtk_combo_box_get_model (combo));
     gtk_list_store_clear(store);
 
@@ -2707,7 +2680,7 @@ audio_track_opts_set(signal_user_data_t *ud, const gchar *name,
     gint count = 0;
     gchar *opt;
 
-    GtkComboBox *combo = GTK_COMBO_BOX(GHB_WIDGET(ud->builder, name));
+    GtkComboBox *combo = GTK_COMBO_BOX(ghb_builder_widget(name));
     store = GTK_LIST_STORE(gtk_combo_box_get_model (combo));
     gtk_list_store_clear(store);
     if (title != NULL)
@@ -2760,7 +2733,7 @@ subtitle_track_opts_set(signal_user_data_t *ud, const gchar *name,
     hb_subtitle_t * subtitle;
     gint ii, count = 0;
 
-    GtkComboBox *combo = GTK_COMBO_BOX(GHB_WIDGET(ud->builder, name));
+    GtkComboBox *combo = GTK_COMBO_BOX(ghb_builder_widget(name));
     store = GTK_LIST_STORE(gtk_combo_box_get_model (combo));
     gtk_list_store_clear(store);
 
@@ -2901,7 +2874,7 @@ small_opts_set(signal_user_data_t *ud, const gchar *name,
     gchar *str;
 
     if (name == NULL || opts == NULL) return;
-    GtkComboBox *combo = GTK_COMBO_BOX(GHB_WIDGET(ud->builder, name));
+    GtkComboBox *combo = GTK_COMBO_BOX(ghb_builder_widget(name));
     store = GTK_LIST_STORE(gtk_combo_box_get_model (combo));
     gtk_list_store_clear(store);
     for (ii = 0; ii < opts->count; ii++)
@@ -2929,7 +2902,7 @@ filter_opts_set2(signal_user_data_t *ud, const gchar *name,
     gchar *str;
 
     if (name == NULL) return;
-    GtkComboBox *combo = GTK_COMBO_BOX(GHB_WIDGET(ud->builder, name));
+    GtkComboBox *combo = GTK_COMBO_BOX(ghb_builder_widget(name));
     store = GTK_LIST_STORE(gtk_combo_box_get_model (combo));
     gtk_list_store_clear(store);
     hb_filter_param_t * param;
@@ -3222,7 +3195,7 @@ ghb_update_ui_combo_box(
         // Clearing a combo box causes a rash of "changed" events, even when
         // the active item is -1 (inactive).  To control things, I'm disabling
         // the event till things are settled down.
-        combo = GTK_COMBO_BOX(GHB_WIDGET(ud->builder, name));
+        combo = GTK_COMBO_BOX(ghb_builder_widget(name));
         signal_id = g_signal_lookup("changed", GTK_TYPE_COMBO_BOX);
         if (signal_id > 0)
         {
@@ -3260,13 +3233,15 @@ ghb_update_ui_combo_box(
 }
 
 static void
-init_ui_combo_boxes(GtkBuilder *builder)
+init_ui_combo_boxes (void)
 {
     gint ii;
+    GtkComboBox *combo;
 
     for (ii = 0; combo_name_map[ii].name != NULL; ii++)
     {
-        init_combo_box(builder, combo_name_map[ii].name);
+        combo = GTK_COMBO_BOX(ghb_builder_widget(combo_name_map[ii].name));
+        ghb_init_combo_box(combo);
     }
 }
 
@@ -3395,7 +3370,7 @@ audio_bitrate_opts_set(signal_user_data_t *ud, const gchar *name,
     (void)opts; // Silence "unused variable" warning
     (void)data; // Silence "unused variable" warning
 
-    GtkComboBox *combo = GTK_COMBO_BOX(GHB_WIDGET(ud->builder, name));
+    GtkComboBox *combo = GTK_COMBO_BOX(ghb_builder_widget(name));
     ghb_audio_bitrate_opts_set(combo);
 }
 
@@ -3467,7 +3442,7 @@ void
 ghb_combo_init(signal_user_data_t *ud)
 {
     // Set up the list model for the combos
-    init_ui_combo_boxes(ud->builder);
+    init_ui_combo_boxes();
     // Populate all the combos
     ghb_update_ui_combo_box(ud, NULL, NULL, TRUE);
 
@@ -3476,7 +3451,7 @@ ghb_combo_init(signal_user_data_t *ud)
 
     // Set key-press handler for subtitle import language combo.
     // Pressing a key warps to the next language that starts with that key.
-    combo = GHB_WIDGET(ud->builder, "ImportLanguage");
+    combo = ghb_builder_widget("ImportLanguage");
     econ  = gtk_event_controller_key_new();
     gtk_widget_add_controller(combo, econ);
     g_signal_connect(econ, "key-pressed",
@@ -3778,45 +3753,45 @@ ghb_picture_settings_deps(signal_user_data_t *ud)
     custom_crop             = !strcmp(crop_mode, "custom");
     custom_pad              = !strcmp(pad_mode, "custom");
 
-    widget = GHB_WIDGET(ud->builder, "scale_width");
+    widget = ghb_builder_widget("scale_width");
     gtk_widget_set_sensitive(widget, enable_scale_width);
-    widget = GHB_WIDGET(ud->builder, "scale_height");
+    widget = ghb_builder_widget("scale_height");
     gtk_widget_set_sensitive(widget, enable_scale_height);
 
-    widget = GHB_WIDGET(ud->builder, "PictureDARWidth");
+    widget = ghb_builder_widget("PictureDARWidth");
     gtk_widget_set_sensitive(widget, enable_disp_width);
-    widget = GHB_WIDGET(ud->builder, "DisplayHeight");
+    widget = ghb_builder_widget("DisplayHeight");
     gtk_widget_set_sensitive(widget, enable_disp_height);
 
-    widget = GHB_WIDGET(ud->builder, "PicturePARWidth");
+    widget = ghb_builder_widget("PicturePARWidth");
     gtk_widget_set_sensitive(widget, enable_par);
-    widget = GHB_WIDGET(ud->builder, "PicturePARHeight");
+    widget = ghb_builder_widget("PicturePARHeight");
     gtk_widget_set_sensitive(widget, enable_par);
 
-    widget = GHB_WIDGET(ud->builder, "PictureWidth");
+    widget = ghb_builder_widget("PictureWidth");
     gtk_widget_set_sensitive(widget, custom_resolution_limit);
-    widget = GHB_WIDGET(ud->builder, "PictureHeight");
+    widget = ghb_builder_widget("PictureHeight");
     gtk_widget_set_sensitive(widget, custom_resolution_limit);
 
-    widget = GHB_WIDGET(ud->builder, "PictureTopCrop");
+    widget = ghb_builder_widget("PictureTopCrop");
     gtk_widget_set_sensitive(widget, custom_crop);
-    widget = GHB_WIDGET(ud->builder, "PictureBottomCrop");
+    widget = ghb_builder_widget("PictureBottomCrop");
     gtk_widget_set_sensitive(widget, custom_crop);
-    widget = GHB_WIDGET(ud->builder, "PictureLeftCrop");
+    widget = ghb_builder_widget("PictureLeftCrop");
     gtk_widget_set_sensitive(widget, custom_crop);
-    widget = GHB_WIDGET(ud->builder, "PictureRightCrop");
+    widget = ghb_builder_widget("PictureRightCrop");
     gtk_widget_set_sensitive(widget, custom_crop);
 
-    widget = GHB_WIDGET(ud->builder, "PicturePadTop");
+    widget = ghb_builder_widget("PicturePadTop");
     gtk_widget_set_sensitive(widget, custom_pad);
-    widget = GHB_WIDGET(ud->builder, "PicturePadBottom");
+    widget = ghb_builder_widget("PicturePadBottom");
     gtk_widget_set_sensitive(widget, custom_pad);
-    widget = GHB_WIDGET(ud->builder, "PicturePadLeft");
+    widget = ghb_builder_widget("PicturePadLeft");
     gtk_widget_set_sensitive(widget, custom_pad);
-    widget = GHB_WIDGET(ud->builder, "PicturePadRight");
+    widget = ghb_builder_widget("PicturePadRight");
     gtk_widget_set_sensitive(widget, custom_pad);
 
-    widget = GHB_WIDGET(ud->builder, "display_size_lock_image");
+    widget = ghb_builder_widget("display_size_lock_image");
     if (keep_aspect)
     {
         gtk_image_set_from_icon_name(GTK_IMAGE(widget), "emblem-readonly");
@@ -4127,9 +4102,9 @@ ghb_set_scale(signal_user_data_t *ud, gint mode)
     // subsampled chroma requires even crop values.
     GtkWidget *widget;
     int mod = ghb_dict_get_int(ud->settings, "PictureModulus");
-    widget = GHB_WIDGET (ud->builder, "scale_width");
+    widget = ghb_builder_widget("scale_width");
     gtk_spin_button_set_increments (GTK_SPIN_BUTTON(widget), mod, 16);
-    widget = GHB_WIDGET (ud->builder, "scale_height");
+    widget = ghb_builder_widget("scale_height");
     gtk_spin_button_set_increments (GTK_SPIN_BUTTON(widget), mod, 16);
 
     ghb_ui_update_from_settings("PictureUseMaximumSize", ud->settings);
@@ -4227,7 +4202,7 @@ ghb_set_custom_filter_tooltip(signal_user_data_t *ud,
     }
     hb_str_vfree(keys);
 
-    GtkWidget *widget = GHB_WIDGET(ud->builder, name);
+    GtkWidget *widget = ghb_builder_widget(name);
     gtk_widget_set_tooltip_text(widget, tooltip);
 }
 

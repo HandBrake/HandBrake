@@ -93,7 +93,7 @@ vcodec_changed_cb (GtkWidget *widget, gpointer data)
 
     // Set the range of the preset slider
     int encoder = ghb_get_video_encoder(ud->settings);
-    GtkWidget *presetSlider = GHB_WIDGET(ud->builder, "VideoPresetSlider");
+    GtkWidget *presetSlider = ghb_builder_widget("VideoPresetSlider");
     const char * const *video_presets;
     int count = 0;
     video_presets = hb_video_encoder_get_presets(encoder);
@@ -119,7 +119,7 @@ vcodec_changed_cb (GtkWidget *widget, gpointer data)
 static void
 update_adv_settings_tooltip(signal_user_data_t *ud)
 {
-    GtkWidget *eo = GTK_WIDGET(GHB_WIDGET(ud->builder, "VideoOptionExtra"));
+    GtkWidget *eo = GTK_WIDGET(ghb_builder_widget("VideoOptionExtra"));
     const char *tooltip_msg = _("Additional advanced arguments that can be passed to the video encoder.");
 
     int encoder = ghb_get_video_encoder(ud->settings);

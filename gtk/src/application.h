@@ -30,7 +30,7 @@ void ghb_set_queue_done_action(int action);
 void ghb_set_scan_source(const char *source);
 const char *ghb_get_scan_source(void);
 
-GtkWidget *ghb_builder_widget (const char *name);
-
+GtkWidget *ghb_builder_widget(const char *name);
+GObject *ghb_builder_object(const char *name);
 
 G_END_DECLS

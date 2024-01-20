@@ -24,12 +24,7 @@
 
 G_BEGIN_DECLS
 
-#define GHB_WIDGET(b,n) GTK_WIDGET(gtk_builder_get_object ((b), (n)))
-//#define GHB_WIDGET(b,n)   GTK_WIDGET(debug_get_object((b), (n)))
-#define GHB_OBJECT(b,n) gtk_builder_get_object ((b), (n))
 #define GHB_ACTION(n) g_action_map_lookup_action(G_ACTION_MAP(g_application_get_default()), (n))
-
-GObject* debug_get_object(GtkBuilder *b, const gchar *n);
 
 enum
 {
@@ -56,7 +51,6 @@ typedef struct preview_s preview_t;
 typedef struct
 {
     char                * current_dvd_device;
-    GtkBuilder          * builder;
     GhbValue            * prefs;
     GhbValue            * settings;
     GhbValue            * settings_array;

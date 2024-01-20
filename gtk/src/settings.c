@@ -30,13 +30,6 @@
 void dump_settings(GhbValue *settings);
 void ghb_pref_audio_init(signal_user_data_t *ud);
 
-GObject*
-debug_get_object(GtkBuilder* b, const gchar *n)
-{
-    g_debug("name %s\n", n);
-    return gtk_builder_get_object(b, n);
-}
-
 gint
 ghb_settings_combo_int(const GhbValue *settings, const gchar *key)
 {
@@ -454,7 +447,7 @@ ghb_ui_update_from_settings (const char *name, const GhbValue *settings)
     value = ghb_dict_get_value(settings, name);
     if (value == NULL)
         return 0;
-    object = GHB_OBJECT(ud->builder, name);
+    object = ghb_builder_object(name);
     if (object == NULL)
     {
         g_debug("Failed to find widget for key: %s", name);
@@ -476,7 +469,7 @@ ghb_ui_update (const gchar *name, const GhbValue *value)
     ghb_log_func_str(name);
     if (name == NULL || value == NULL)
         return 0;
-    object = GHB_OBJECT(ud->builder, name);
+    object = ghb_builder_object(name);
     if (object == NULL)
     {
         g_debug("Failed to find widget for key: %s", name);
@@ -501,7 +494,7 @@ ghb_ui_settings_update(
     ghb_log_func_str(name);
     if (name == NULL || value == NULL)
         return 0;
-    object = GHB_OBJECT(ud->builder, name);
+    object = ghb_builder_object(name);
     if (object == NULL)
     {
         g_debug("Failed to find widget for key: %s", name);

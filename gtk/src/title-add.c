@@ -75,7 +75,7 @@ validate_settings (signal_user_data_t *ud, GhbValue *settings, gint batch)
     gboolean dest_in_queue = FALSE;
     gboolean dest_exists = FALSE;
 
-    hb_window = GTK_WINDOW(GHB_WIDGET(ud->builder, "hb_window"));
+    hb_window = GTK_WINDOW(ghb_builder_widget("hb_window"));
 
     title_id = ghb_dict_get_int(settings, "title");
     title = ghb_lookup_title(title_id, &titleindex);
@@ -318,7 +318,7 @@ title_add_are_conflicts (signal_user_data_t *ud)
     GtkWidget *row;
     gint count, ii;
 
-    list = GTK_LIST_BOX(GHB_WIDGET(ud->builder, "title_add_multiple_list"));
+    list = GTK_LIST_BOX(ghb_builder_widget("title_add_multiple_list"));
     count = ghb_array_len(ud->settings_array);
     for (ii = 0; ii < count; ii++)
     {
@@ -352,9 +352,8 @@ title_add_set_error_text (signal_user_data_t *ud, gboolean are_conflicts)
     }
     if (are_conflicts ^ conflict_showing)
     {
-        GtkInfoBar *info = GTK_INFO_BAR(GHB_WIDGET(ud->builder,
-                                        "title_add_multiple_infobar"));
-        GtkLabel *label = GTK_LABEL(GHB_WIDGET(ud->builder, "title_add_multiple_label1"));
+        GtkInfoBar *info = GTK_INFO_BAR(ghb_builder_widget("title_add_multiple_infobar"));
+        GtkLabel *label = GTK_LABEL(ghb_builder_widget("title_add_multiple_label1"));
         gtk_label_set_markup(label, msg);
         gtk_info_bar_set_message_type(info, msg_type);
         conflict_showing = are_conflicts;
@@ -371,7 +370,7 @@ static void title_add_check_conflicts (signal_user_data_t *ud)
     gboolean can_select;
     gboolean are_conflicts = FALSE;
 
-    list = GTK_LIST_BOX(GHB_WIDGET(ud->builder, "title_add_multiple_list"));
+    list = GTK_LIST_BOX(ghb_builder_widget("title_add_multiple_list"));
     count = ghb_array_len(ud->settings_array);
     for (ii = 0; ii < count; ii++)
     {
@@ -503,7 +502,7 @@ title_add_select_all_cb (GSimpleAction *action, GVariant *param, gpointer data)
 
     clear_select_all_busy = TRUE;
 
-    list = GTK_LIST_BOX(GHB_WIDGET(ud->builder, "title_add_multiple_list"));
+    list = GTK_LIST_BOX(ghb_builder_widget("title_add_multiple_list"));
     count = ghb_array_len(ud->settings_array);
     for (ii = 0; ii < count; ii++)
     {
@@ -534,7 +533,7 @@ title_add_clear_all_cb (GSimpleAction *action, GVariant *param, gpointer data)
     action = G_SIMPLE_ACTION(GHB_ACTION("title-add-select-all"));
     g_simple_action_set_enabled(action, TRUE);
 
-    list = GTK_LIST_BOX(GHB_WIDGET(ud->builder, "title_add_multiple_list"));
+    list = GTK_LIST_BOX(ghb_builder_widget("title_add_multiple_list"));
     count = ghb_array_len(ud->settings_array);
     for (ii = 0; ii < count; ii++)
     {
@@ -688,7 +687,7 @@ title_add_multiple_action_cb (GSimpleAction *action, GVariant *param,
     gint max_title_len = 0;
     GhbValue * preset = NULL;
 
-    list = GTK_LIST_BOX(GHB_WIDGET(ud->builder, "title_add_multiple_list"));
+    list = GTK_LIST_BOX(ghb_builder_widget("title_add_multiple_list"));
     // Clear title list
     ghb_list_box_remove_all(list);
 
@@ -777,7 +776,7 @@ title_add_multiple_action_cb (GSimpleAction *action, GVariant *param,
     title_add_check_conflicts(ud);
 
     // Pop up the title multiple selections dialog
-    GtkWidget *dialog = GHB_WIDGET(ud->builder, "title_add_multiple_dialog");
+    GtkWidget *dialog = ghb_builder_widget("title_add_multiple_dialog");
     g_signal_connect(dialog, "response",
                      G_CALLBACK(title_add_multiple_response_cb), ud);
     gtk_widget_set_visible(dialog, TRUE);
@@ -819,7 +818,7 @@ title_add_all_action_cb (GSimpleAction *action, GVariant *param,
     {
         if (!title_destination_is_unique(ud->settings_array, ii))
         {
-            ghb_question_dialog_run(GTK_WINDOW(GHB_WIDGET(ud->builder, "hb_window")),
+            ghb_question_dialog_run(GTK_WINDOW(ghb_builder_widget("hb_window")),
                 GHB_ACTION_NORMAL, _("OK"), NULL, _("Cannot Add Titles"),
                 _("The filenames are not unique. Please choose\n"
                   "a unique destination filename for each title."));
