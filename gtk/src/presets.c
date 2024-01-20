@@ -172,7 +172,7 @@ presets_list_show_default(signal_user_data_t *ud)
     GtkTreePath  *treepath;
     GtkTreeIter   iter;
 
-    treeview = GTK_TREE_VIEW(GHB_WIDGET(ud->builder, "presets_list"));
+    treeview = GTK_TREE_VIEW(ghb_builder_widget("presets_list"));
     store    = GTK_TREE_STORE(gtk_tree_view_get_model(treeview));
     treepath = tree_path_new_from_index(path);
     if (treepath)
@@ -203,7 +203,7 @@ presets_list_clear_default(signal_user_data_t *ud)
     GtkTreePath  *treepath;
     GtkTreeIter   iter;
 
-    treeview = GTK_TREE_VIEW(GHB_WIDGET(ud->builder, "presets_list"));
+    treeview = GTK_TREE_VIEW(ghb_builder_widget("presets_list"));
     store    = GTK_TREE_STORE(gtk_tree_view_get_model(treeview));
     treepath = tree_path_new_from_index(path);
     if (treepath)
@@ -606,7 +606,7 @@ set_preset_menu_button_label(signal_user_data_t *ud, hb_preset_index_t *path)
     dict = hb_preset_get(path);
     type = ghb_dict_get_int(dict, "Type");
     fullname = preset_get_fullname(path, "  >  ", TRUE);
-    widget = GHB_WIDGET(ud->builder, "presets_menu_button");
+    widget = ghb_builder_widget("presets_menu_button");
     text = g_strdup_printf("%s%s", type == HB_PRESET_TYPE_CUSTOM ?
                                    "Custom" : "Official", fullname);
     gtk_menu_button_set_label(GTK_MENU_BUTTON(widget), text);
@@ -639,7 +639,7 @@ select_preset2(signal_user_data_t *ud, hb_preset_index_t *path)
     if (path == NULL || path->depth == 0)
         return;
 
-    treeview  = GTK_TREE_VIEW(GHB_WIDGET(ud->builder, "presets_list"));
+    treeview  = GTK_TREE_VIEW(ghb_builder_widget("presets_list"));
     selection = gtk_tree_view_get_selection (treeview);
     store     = gtk_tree_view_get_model (treeview);
     treepath  = tree_path_new_from_index(path);
@@ -1179,7 +1179,7 @@ get_selected_path(signal_user_data_t *ud)
     GtkTreeModel     *store;
     GtkTreeIter       iter;
 
-    treeview  = GTK_TREE_VIEW(GHB_WIDGET(ud->builder, "presets_list"));
+    treeview  = GTK_TREE_VIEW(ghb_builder_widget("presets_list"));
     selection = gtk_tree_view_get_selection(treeview);
     if (gtk_tree_selection_get_selected(selection, &store, &iter))
     {
@@ -1196,7 +1196,7 @@ show_presets_action_cb(GSimpleAction *action, GVariant *value,
     GtkWidget *hb_window;
     int w, h;
 
-    hb_window = GHB_WIDGET(ud->builder, "hb_window");
+    hb_window = ghb_builder_widget("hb_window");
     if (!gtk_widget_is_visible(hb_window))
     {
         return;
@@ -1205,7 +1205,7 @@ show_presets_action_cb(GSimpleAction *action, GVariant *value,
     w = ghb_dict_get_int(ud->prefs, "presets_window_width");
     h = ghb_dict_get_int(ud->prefs, "presets_window_height");
 
-    presets_window = GHB_WIDGET(ud->builder, "presets_window");
+    presets_window = ghb_builder_widget("presets_window");
     if (w > 200 && h > 200)
     {
         gtk_window_set_default_size(GTK_WINDOW(presets_window), w, h);
@@ -1384,7 +1384,7 @@ ghb_presets_menu_init(signal_user_data_t *ud)
 
     GtkMenuButton * mb;
 
-    mb = GTK_MENU_BUTTON(GHB_WIDGET(ud->builder, "presets_menu_button"));
+    mb = GTK_MENU_BUTTON(ghb_builder_widget("presets_menu_button"));
     gtk_menu_button_set_menu_model(mb, G_MENU_MODEL(menu));
 }
 
@@ -1396,14 +1396,14 @@ presets_menu_clear(signal_user_data_t *ud)
     GMenuModel    * mm;
     GMenu         * presets;
 
-    mb = GTK_MENU_BUTTON(GHB_WIDGET(ud->builder, "presets_menu_button"));
+    mb = GTK_MENU_BUTTON(ghb_builder_widget("presets_menu_button"));
     mm = gtk_menu_button_get_menu_model(mb);
     gtk_menu_button_set_menu_model(mb, NULL);
     g_object_unref(G_OBJECT(mm));
 
-    presets = G_MENU(gtk_builder_get_object(ud->builder, "presets-menu-official"));
+    presets = G_MENU(ghb_builder_object("presets-menu-official"));
     g_menu_remove_all(presets);
-    presets = G_MENU(gtk_builder_get_object(ud->builder, "presets-menu-custom"));
+    presets = G_MENU(ghb_builder_object("presets-menu-custom"));
     g_menu_remove_all(presets);
 }
 
@@ -1440,7 +1440,7 @@ ghb_presets_list_init(signal_user_data_t *ud, const hb_preset_index_t *path)
         g_free(next_path);
         return;
     }
-    treeview    = GTK_TREE_VIEW(GHB_WIDGET(ud->builder, "presets_list"));
+    treeview    = GTK_TREE_VIEW(ghb_builder_widget("presets_list"));
     store       = GTK_TREE_STORE(gtk_tree_view_get_model(treeview));
     parent_path = tree_path_new_from_index(path);
     if (parent_path != NULL)
@@ -1517,7 +1517,7 @@ presets_list_clear(signal_user_data_t *ud)
     GtkTreeIter   iter;
     gboolean      valid;
 
-    treeview = GTK_TREE_VIEW(GHB_WIDGET(ud->builder, "presets_list"));
+    treeview = GTK_TREE_VIEW(ghb_builder_widget("presets_list"));
     store    = gtk_tree_view_get_model(treeview);
     valid    = gtk_tree_model_get_iter_first(store, &iter);
     while (valid)
@@ -1555,7 +1555,7 @@ presets_list_update_item(
     if (dict == NULL)
         return;
 
-    treeview = GTK_TREE_VIEW(GHB_WIDGET(ud->builder, "presets_list"));
+    treeview = GTK_TREE_VIEW(ghb_builder_widget("presets_list"));
     store    = GTK_TREE_STORE(gtk_tree_view_get_model(treeview));
     treepath = tree_path_new_from_index(path);
     gtk_tree_model_get_iter(GTK_TREE_MODEL(store), &iter, treepath);
@@ -1605,7 +1605,7 @@ presets_list_append(signal_user_data_t *ud, const hb_preset_index_t *path)
         return;
     }
 
-    treeview = GTK_TREE_VIEW(GHB_WIDGET(ud->builder, "presets_list"));
+    treeview = GTK_TREE_VIEW(ghb_builder_widget("presets_list"));
     store    = GTK_TREE_STORE(gtk_tree_view_get_model(treeview));
 
     folder_treepath = tree_path_new_from_index(folder_path);
@@ -1650,7 +1650,7 @@ presets_list_remove(signal_user_data_t *ud, hb_preset_index_t *path)
     GtkTreeIter   iter;
     GtkTreeStore *store;
 
-    treeview = GTK_TREE_VIEW(GHB_WIDGET(ud->builder, "presets_list"));
+    treeview = GTK_TREE_VIEW(ghb_builder_widget("presets_list"));
     store    = GTK_TREE_STORE(gtk_tree_view_get_model(treeview));
     treepath = tree_path_new_from_index(path);
     if (treepath)
@@ -1918,7 +1918,7 @@ ghb_presets_load(signal_user_data_t *ud)
         // more recent version of HandBrake than is currently running.
         // Look for a backup version that matches the currently running
         // version.
-        GtkWindow *hb_window = GTK_WINDOW(GHB_WIDGET(ud->builder, "hb_window"));
+        GtkWindow *hb_window = GTK_WINDOW(ghb_builder_widget("hb_window"));
         if (!ghb_question_dialog_run(hb_window, GHB_ACTION_DESTRUCTIVE,
             _("Load backup presets"), _("Get me out of here!"),
             _("Presets found are newer than what is supported by this version of HandBrake!\n\n"
@@ -2103,7 +2103,7 @@ preset_import_action_cb(GSimpleAction *action, GVariant *param,
     const gchar     *exportDir;
     GtkFileFilter   *filter;
 
-    hb_window = GTK_WINDOW(GHB_WIDGET(ud->builder, "hb_window"));
+    hb_window = GTK_WINDOW(ghb_builder_widget("hb_window"));
     chooser = gtk_file_chooser_native_new("Import Preset", hb_window,
                 GTK_FILE_CHOOSER_ACTION_OPEN,
                 _("_Open"),
@@ -2220,7 +2220,7 @@ preset_export_action_cb(GSimpleAction *action, GVariant *param,
     }
     preset_name = g_strdup(ghb_dict_get_string(dict, "PresetName"));
 
-    hb_window = GTK_WINDOW(GHB_WIDGET(ud->builder, "hb_window"));
+    hb_window = GTK_WINDOW(ghb_builder_widget("hb_window"));
     chooser = gtk_file_chooser_native_new(_("Export Preset"), hb_window,
                 GTK_FILE_CHOOSER_ACTION_SAVE,
                 _("_Save"),
@@ -2263,8 +2263,8 @@ preset_rename_response_cb (GtkDialog *dialog, int response,
     g_signal_handlers_disconnect_by_data(dialog, ud);
     gtk_widget_set_visible(GTK_WIDGET(dialog), FALSE);
 
-    entry    = GTK_EDITABLE(GHB_WIDGET(ud->builder, "PresetReName"));
-    tv       = GTK_TEXT_VIEW(GHB_WIDGET(ud->builder, "PresetReDescription"));
+    entry    = GTK_EDITABLE(ghb_builder_widget("PresetReName"));
+    tv       = GTK_TEXT_VIEW(ghb_builder_widget("PresetReDescription"));
     fullname = ghb_dict_get_string(ud->settings, "PresetFullName");
     type     = ghb_dict_get_int(ud->settings, "Type");
     path     = hb_preset_search_index(fullname, 0, type);
@@ -2320,8 +2320,8 @@ preset_rename_action_cb(GSimpleAction *action, GVariant *param,
     ghb_ui_update("PresetReDescription",
                   ghb_dict_get_value(ud->settings, "PresetDescription"));
 
-    dialog   = GHB_WIDGET(ud->builder, "preset_rename_dialog");
-    entry    = GTK_EDITABLE(GHB_WIDGET(ud->builder, "PresetReName"));
+    dialog   = ghb_builder_widget("preset_rename_dialog");
+    entry    = GTK_EDITABLE(ghb_builder_widget("PresetReName"));
     gtk_editable_set_text(entry, name);
 
     g_signal_connect(dialog, "response",
@@ -2340,8 +2340,8 @@ preset_save_as_response_cb (GtkDialog *dialog, int response,
     g_signal_handlers_disconnect_by_data(dialog, ud);
     gtk_widget_set_visible(GTK_WIDGET(dialog), FALSE);
 
-    entry = GTK_EDITABLE(GHB_WIDGET(ud->builder, "PresetName"));
-    tv = GTK_TEXT_VIEW(GHB_WIDGET(ud->builder, "PresetDescription"));
+    entry = GTK_EDITABLE(ghb_builder_widget("PresetName"));
+    tv = GTK_TEXT_VIEW(ghb_builder_widget("PresetDescription"));
 
     if (response == GTK_RESPONSE_OK)
     {
@@ -2355,8 +2355,7 @@ preset_save_as_response_cb (GtkDialog *dialog, int response,
         category = ghb_dict_get_string(ud->settings, "PresetCategory");
         if (!g_strcmp0(category, "new"))
         {
-            entry = GTK_EDITABLE(GHB_WIDGET(ud->builder,
-                                            "PresetCategoryName"));
+            entry = GTK_EDITABLE(ghb_builder_widget("PresetCategoryName"));
             category = gtk_editable_get_text(entry);
         }
         if (category == NULL || category[0] == 0)
@@ -2434,8 +2433,8 @@ preset_save_as_action_cb (GSimpleAction *action, GVariant *param,
     }
     ghb_ui_update("PresetCategory", ghb_string_value(category));
 
-    dialog   = GHB_WIDGET(ud->builder, "preset_save_dialog");
-    entry    = GTK_EDITABLE(GHB_WIDGET(ud->builder, "PresetName"));
+    dialog   = ghb_builder_widget("preset_save_dialog");
+    entry    = GTK_EDITABLE(ghb_builder_widget("PresetName"));
     gtk_editable_set_text(entry, name);
 
     g_signal_connect(dialog, "response",
@@ -2499,12 +2498,12 @@ preset_save_set_ok_sensitive (void)
     gboolean     sensitive;
     signal_user_data_t *ud = ghb_ud();
 
-    ok_button = GHB_WIDGET(ud->builder, "preset_ok");
+    ok_button = ghb_builder_widget("preset_ok");
 
     category = ghb_dict_get_string(ud->settings, "PresetCategory");
-    entry = GTK_EDITABLE(GHB_WIDGET(ud->builder, "PresetName"));
+    entry = GTK_EDITABLE(ghb_builder_widget("PresetName"));
     name = gtk_editable_get_text(entry);
-    entry = GTK_EDITABLE(GHB_WIDGET(ud->builder, "PresetCategoryName"));
+    entry = GTK_EDITABLE(ghb_builder_widget("PresetCategoryName"));
     category_name = gtk_editable_get_text(entry);
 
     sensitive = name[0] && (strcmp(category, "new") || category_name[0]);
@@ -2626,7 +2625,7 @@ preset_remove_action_cb(GSimpleAction *action, GVariant *param,
         GtkTreeSelection * selection;
 
         // unselect item to be deleted
-        treeview  = GTK_TREE_VIEW(GHB_WIDGET(ud->builder, "presets_list"));
+        treeview  = GTK_TREE_VIEW(ghb_builder_widget("presets_list"));
         selection = gtk_tree_view_get_selection(treeview);
         gtk_tree_selection_unselect_all(selection);
 
@@ -2991,7 +2990,7 @@ ghb_get_current_preset(signal_user_data_t *ud)
     GtkTreeIter       ti;
     GhbValue         *preset = NULL;
 
-    tv = GTK_TREE_VIEW(GHB_WIDGET(ud->builder, "presets_list"));
+    tv = GTK_TREE_VIEW(ghb_builder_widget("presets_list"));
     ts = gtk_tree_view_get_selection(tv);
     if (gtk_tree_selection_get_selected(ts, &tm, &ti))
     {
@@ -3040,11 +3039,11 @@ presets_list_selection_changed_cb(GtkTreeSelection *selection, signal_user_data_
             set_preset_menu_button_label(ud, path);
             action = GHB_APPLICATION_ACTION("preset-reload");
             g_simple_action_set_enabled(action, FALSE);
-            widget = GHB_WIDGET(ud->builder, "preset_selection_modified_label");
+            widget = ghb_builder_widget("preset_selection_modified_label");
             gtk_widget_set_visible(widget, FALSE);
-            widget = GHB_WIDGET(ud->builder, "preset_selection_reload");
+            widget = ghb_builder_widget("preset_selection_reload");
             gtk_widget_set_visible(widget, FALSE);
-            widget = GHB_WIDGET(ud->builder, "preset_save_new");
+            widget = ghb_builder_widget("preset_save_new");
             gtk_widget_set_visible(widget, FALSE);
         }
         int type = preset_get_type(path);
@@ -3069,7 +3068,7 @@ ghb_clear_presets_selection(signal_user_data_t *ud)
     GtkWidget        * widget;
 
     if (dont_clear_presets) return;
-    treeview  = GTK_TREE_VIEW(GHB_WIDGET(ud->builder, "presets_list"));
+    treeview  = GTK_TREE_VIEW(ghb_builder_widget("presets_list"));
     selection = gtk_tree_view_get_selection(treeview);
     gtk_tree_selection_unselect_all(selection);
     ghb_dict_set_bool(ud->settings, "preset_modified", TRUE);
@@ -3077,11 +3076,11 @@ ghb_clear_presets_selection(signal_user_data_t *ud)
 
     action = GHB_APPLICATION_ACTION("preset-reload");
     g_simple_action_set_enabled(action, TRUE);
-    widget = GHB_WIDGET(ud->builder, "preset_selection_modified_label");
+    widget = ghb_builder_widget("preset_selection_modified_label");
     gtk_widget_set_visible(widget, TRUE);
-    widget = GHB_WIDGET(ud->builder, "preset_selection_reload");
+    widget = ghb_builder_widget("preset_selection_reload");
     gtk_widget_set_visible(widget, TRUE);
-    widget = GHB_WIDGET(ud->builder, "preset_save_new");
+    widget = ghb_builder_widget("preset_save_new");
     gtk_widget_set_visible(widget, TRUE);
 }
 
@@ -3121,7 +3120,7 @@ preset_edited_cb(
     GhbValue          *dict;
     hb_preset_index_t *path;
 
-    treeview = GTK_TREE_VIEW(GHB_WIDGET(ud->builder, "presets_list"));
+    treeview = GTK_TREE_VIEW(ghb_builder_widget("presets_list"));
     store    = GTK_TREE_STORE(gtk_tree_view_get_model(treeview));
     treepath = gtk_tree_path_new_from_string(treepath_s);
     path     = tree_path_get_index(treepath);

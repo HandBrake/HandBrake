@@ -19,6 +19,7 @@
 
 #include "chapters.h"
 
+#include "application.h"
 #include "callbacks.h"
 #include "compat.h"
 #include "ghb-chapter-row.h"
@@ -106,7 +107,7 @@ ghb_clear_chapter_list_ui(signal_user_data_t * ud)
 {
     GtkListBox    * lb;
 
-    lb = GTK_LIST_BOX(GHB_WIDGET(ud->builder, "chapters_list"));
+    lb = GTK_LIST_BOX(ghb_builder_widget("chapters_list"));
     ghb_list_box_remove_all(lb);
 }
 
@@ -119,7 +120,7 @@ chapter_refresh_list_ui(signal_user_data_t *ud)
     gint         ii, count;
     gint64       start = 0, duration;
 
-    lb = GTK_LIST_BOX(GHB_WIDGET(ud->builder, "chapters_list"));
+    lb = GTK_LIST_BOX(ghb_builder_widget("chapters_list"));
 
     chapter_list = ghb_get_job_chapter_list(ud->settings);
     count = ghb_array_len(chapter_list);
@@ -448,7 +449,7 @@ chapters_export_action_cb (GSimpleAction *action, GVariant *param,
     const gchar     *exportDir;
     GtkFileFilter   *filter;
 
-    hb_window = GTK_WINDOW(GHB_WIDGET(ud->builder, "hb_window"));
+    hb_window = GTK_WINDOW(ghb_builder_widget("hb_window"));
     dialog = gtk_file_chooser_native_new("Export Chapters", hb_window,
                 GTK_FILE_CHOOSER_ACTION_SAVE,
                 _("_Save"),
@@ -477,7 +478,7 @@ chapters_import_action_cb (GSimpleAction *action, GVariant *param,
     GtkFileChooserNative *dialog;
     GtkFileFilter   *filter;
 
-    hb_window = GTK_WINDOW(GHB_WIDGET(ud->builder, "hb_window"));
+    hb_window = GTK_WINDOW(ghb_builder_widget("hb_window"));
     dialog = gtk_file_chooser_native_new("Import Chapters", hb_window,
                 GTK_FILE_CHOOSER_ACTION_OPEN,
                 _("_Open"),

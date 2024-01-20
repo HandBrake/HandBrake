@@ -32,7 +32,7 @@ void ghb_init_subtitle_defaults_ui(signal_user_data_t *ud);
 void ghb_subtitle_defaults_to_ui(signal_user_data_t *ud);
 void ghb_subtitle_title_change(signal_user_data_t *ud, gboolean show);
 void ghb_subtitle_set_pref_lang(GhbValue *settings);
-void ghb_clear_subtitle_selection(GtkBuilder *builder);
+void ghb_clear_subtitle_selection(void);
 GhbValue *ghb_get_subtitle_list(GhbValue *settings);
 GhbValue *ghb_get_subtitle_settings(GhbValue *settings);
 char * ghb_subtitle_short_description(const GhbValue *subsource,

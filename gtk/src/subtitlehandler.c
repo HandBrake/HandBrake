@@ -37,7 +37,7 @@ static void subtitle_add_to_settings(GhbValue *settings, GhbValue *subsettings);
 static void add_subtitle_to_ui(signal_user_data_t *ud, GhbValue *subsettings);
 static void add_to_subtitle_list_ui(signal_user_data_t *ud, GhbValue *settings);
 static void clear_subtitle_list_settings(GhbValue *settings);
-static void clear_subtitle_list_ui(GtkBuilder *builder);
+static void clear_subtitle_list_ui(void);
 static void subtitle_add_response(GtkWidget *dialog, int response, GhbValue *backup);
 static void subtitle_add_fas_response(GtkWidget *dialog, int response, GhbValue *backup);
 static void subtitle_edit_response(GtkWidget *dialog, int response, GhbValue *backup);
@@ -175,7 +175,7 @@ subtitle_refresh_list_ui_from_settings(signal_user_data_t *ud, GhbValue *setting
     gint ii, count, tm_count;
     gboolean search;
 
-    tv = GTK_TREE_VIEW(GHB_WIDGET(ud->builder, "subtitle_list_view"));
+    tv = GTK_TREE_VIEW(ghb_builder_widget("subtitle_list_view"));
     tm = gtk_tree_view_get_model(tv);
 
     tm_count = gtk_tree_model_iter_n_children(tm, NULL);
@@ -186,7 +186,7 @@ subtitle_refresh_list_ui_from_settings(signal_user_data_t *ud, GhbValue *setting
     count = ghb_array_len(subtitle_list);
     if (count + search != tm_count)
     {
-        clear_subtitle_list_ui(ud->builder);
+        clear_subtitle_list_ui();
         for (ii = 0; ii < count + search; ii++)
         {
             gtk_tree_store_append(GTK_TREE_STORE(tm), &ti, NULL);
@@ -520,7 +520,7 @@ ghb_subtitle_title_change(signal_user_data_t *ud, gboolean show)
     const hb_title_t *title = ghb_lookup_title(title_id, NULL);
     if (title != NULL)
     {
-        GtkWidget *w = GHB_WIDGET(ud->builder, "SubtitleImportDisable");
+        GtkWidget *w = ghb_builder_widget("SubtitleImportDisable");
         gtk_widget_set_sensitive(w, !!hb_list_count(title->list_subtitle));
     }
 }
@@ -535,7 +535,7 @@ set_pref_subtitle(signal_user_data_t *ud)
     title_id = ghb_dict_get_int(ud->settings, "title");
     title    = ghb_lookup_title(title_id, NULL);
 
-    clear_subtitle_list_ui(ud->builder);
+    clear_subtitle_list_ui();
     if (title == NULL)
     {
         // Clear the subtitle list
@@ -546,12 +546,12 @@ set_pref_subtitle(signal_user_data_t *ud)
     if (sub_count == 0)
     {
         // No source subtitles
-        widget = GHB_WIDGET(ud->builder, "SubtitleSrtEnable");
+        widget = ghb_builder_widget("SubtitleSrtEnable");
         gtk_widget_set_sensitive(widget, TRUE);
     }
     else
     {
-        widget = GHB_WIDGET(ud->builder, "SubtitleImportDisable");
+        widget = ghb_builder_widget("SubtitleImportDisable");
         gtk_widget_set_sensitive(widget, TRUE);
     }
     GhbValue *job = ghb_get_job_settings(ud->settings);
@@ -569,7 +569,7 @@ subtitle_get_selected_settings(signal_user_data_t *ud, int *index)
     GtkTreeIter iter;
     GhbValue *subsettings = NULL;
 
-    tv = GTK_TREE_VIEW(GHB_WIDGET(ud->builder, "subtitle_list_view"));
+    tv = GTK_TREE_VIEW(ghb_builder_widget("subtitle_list_view"));
     ts = gtk_tree_view_get_selection(tv);
     if (gtk_tree_selection_get_selected(ts, &tm, &iter))
     {
@@ -645,35 +645,35 @@ subtitle_update_dialog_widgets(signal_user_data_t *ud, GhbValue *subsettings)
             ghb_ui_update("SubtitleTrack", val);
 
             // Hide regular subtitle widgets
-            widget = GHB_WIDGET(ud->builder, "subtitle_track_label");
+            widget = ghb_builder_widget("subtitle_track_label");
             gtk_widget_set_visible(widget, import == NULL);
-            widget = GHB_WIDGET(ud->builder, "SubtitleTrack");
+            widget = ghb_builder_widget("SubtitleTrack");
             gtk_widget_set_visible(widget, import == NULL);
 
             // Show import subtitle widgets
-            widget = GHB_WIDGET(ud->builder, "subtitle_import_grid");
+            widget = ghb_builder_widget("subtitle_import_grid");
             gtk_widget_set_visible(widget, source == IMPORTSRT ||
                                            source == IMPORTSSA);
-            widget = GHB_WIDGET(ud->builder, "srt_code_label");
+            widget = ghb_builder_widget("srt_code_label");
             gtk_widget_set_visible(widget, source == IMPORTSRT);
-            widget = GHB_WIDGET(ud->builder, "SrtCodeset");
+            widget = ghb_builder_widget("SrtCodeset");
             gtk_widget_set_visible(widget, source == IMPORTSRT);
 
-            widget = GHB_WIDGET(ud->builder, "subtitle_import_switch_box");
+            widget = ghb_builder_widget("subtitle_import_switch_box");
             gtk_widget_set_visible(widget, TRUE);
         }
         else
         {
             // Hide widgets not needed for "Foreign audio search"
-            widget = GHB_WIDGET(ud->builder, "subtitle_track_label");
+            widget = ghb_builder_widget("subtitle_track_label");
             gtk_widget_set_visible(widget, FALSE);
-            widget = GHB_WIDGET(ud->builder, "SubtitleTrack");
-            gtk_widget_set_visible(widget, FALSE);
-
-            widget = GHB_WIDGET(ud->builder, "subtitle_import_grid");
+            widget = ghb_builder_widget("SubtitleTrack");
             gtk_widget_set_visible(widget, FALSE);
 
-            widget = GHB_WIDGET(ud->builder, "subtitle_import_switch_box");
+            widget = ghb_builder_widget("subtitle_import_grid");
+            gtk_widget_set_visible(widget, FALSE);
+
+            widget = ghb_builder_widget("subtitle_import_switch_box");
             gtk_widget_set_visible(widget, FALSE);
         }
 
@@ -701,14 +701,14 @@ subtitle_update_dialog_widgets(signal_user_data_t *ud, GhbValue *subsettings)
             ghb_ui_update("SubtitleImportDisable", ghb_boolean_value(TRUE));
         }
 
-        widget = GHB_WIDGET(ud->builder, "SubtitleBurned");
+        widget = ghb_builder_widget("SubtitleBurned");
         gtk_widget_set_sensitive(widget, hb_subtitle_can_burn(source) &&
                                  hb_subtitle_can_pass(source, mux->format));
 
-        widget = GHB_WIDGET(ud->builder, "SubtitleForced");
+        widget = ghb_builder_widget("SubtitleForced");
         gtk_widget_set_sensitive(widget, hb_subtitle_can_force(source));
 
-        widget = GHB_WIDGET(ud->builder, "SubtitleDefaultTrack");
+        widget = ghb_builder_widget("SubtitleDefaultTrack");
         gtk_widget_set_sensitive(widget,
                                  hb_subtitle_can_pass(source, mux->format));
 
@@ -740,13 +740,13 @@ subtitle_update_dialog_widgets(signal_user_data_t *ud, GhbValue *subsettings)
     else
     {
         // Hide SRT subtitle widgets
-        widget = GHB_WIDGET(ud->builder, "subtitle_import_grid");
+        widget = ghb_builder_widget("subtitle_import_grid");
         gtk_widget_set_visible(widget, FALSE);
 
         // Show regular subtitle widgets
-        widget = GHB_WIDGET(ud->builder, "subtitle_track_label");
+        widget = ghb_builder_widget("subtitle_track_label");
         gtk_widget_set_visible(widget, TRUE);
-        widget = GHB_WIDGET(ud->builder, "SubtitleTrack");
+        widget = ghb_builder_widget("SubtitleTrack");
         gtk_widget_set_visible(widget, TRUE);
     }
 }
@@ -920,7 +920,7 @@ subtitle_list_refresh_selected(signal_user_data_t *ud, GhbValue *subsettings)
     GtkTreeModel *tm;
     GtkTreeIter ti;
 
-    tv = GTK_TREE_VIEW(GHB_WIDGET(ud->builder, "subtitle_list_view"));
+    tv = GTK_TREE_VIEW(ghb_builder_widget("subtitle_list_view"));
     ts = gtk_tree_view_get_selection(tv);
     if (gtk_tree_selection_get_selected(ts, &tm, &ti))
     {
@@ -1027,12 +1027,12 @@ clear_subtitle_list_settings(GhbValue *settings)
 }
 
 void
-ghb_clear_subtitle_selection(GtkBuilder *builder)
+ghb_clear_subtitle_selection (void)
 {
     GtkTreeView *tv;
     GtkTreeSelection *tsel;
 
-    tv = GTK_TREE_VIEW(GHB_WIDGET(builder, "subtitle_list_view"));
+    tv = GTK_TREE_VIEW(ghb_builder_widget("subtitle_list_view"));
     // Clear tree selection so that updates are not triggered
     // that cause a recursive attempt to clear the tree selection (crasher)
     tsel = gtk_tree_view_get_selection(tv);
@@ -1040,13 +1040,13 @@ ghb_clear_subtitle_selection(GtkBuilder *builder)
 }
 
 static void
-clear_subtitle_list_ui(GtkBuilder *builder)
+clear_subtitle_list_ui (void)
 {
     GtkTreeView *tv;
     GtkTreeStore *ts;
     GtkTreeSelection *tsel;
 
-    tv = GTK_TREE_VIEW(GHB_WIDGET(builder, "subtitle_list_view"));
+    tv = GTK_TREE_VIEW(ghb_builder_widget("subtitle_list_view"));
     ts = GTK_TREE_STORE(gtk_tree_view_get_model(tv));
     // Clear tree selection so that updates are not triggered
     // that cause a recursive attempt to clear the tree selection (crasher)
@@ -1063,7 +1063,7 @@ add_to_subtitle_list_ui(signal_user_data_t *ud, GhbValue *subsettings)
     GtkTreeModel *tm;
     GtkTreeSelection *ts;
 
-    tv = GTK_TREE_VIEW(GHB_WIDGET(ud->builder, "subtitle_list_view"));
+    tv = GTK_TREE_VIEW(ghb_builder_widget("subtitle_list_view"));
     ts = gtk_tree_view_get_selection(tv);
     tm = gtk_tree_view_get_model(tv);
 
@@ -1171,7 +1171,7 @@ subtitle_add_cb (GSimpleAction *action, GVariant *param, gpointer data)
         add_subtitle_to_ui(ud, subsettings);
 
         // Pop up the edit dialog
-        GtkWidget *dialog = GHB_WIDGET(ud->builder, "subtitle_dialog");
+        GtkWidget *dialog = ghb_builder_widget("subtitle_dialog");
         gtk_window_set_title(GTK_WINDOW(dialog), _("Add Subtitles"));
         g_signal_connect(dialog, "response", G_CALLBACK(subtitle_add_response), backup);
         gtk_widget_show(dialog);
@@ -1190,7 +1190,7 @@ subtitle_add_response (GtkWidget *dialog, int response, GhbValue *backup)
     }
     else
     {
-        ghb_clear_subtitle_selection(ud->builder);
+        ghb_clear_subtitle_selection();
         ghb_dict_set(ghb_get_job_settings(ud->settings),
                      "Subtitle", backup);
         subtitle_refresh_list_ui(ud);
@@ -1223,7 +1223,7 @@ subtitle_add_fas_cb (GSimpleAction *action, GVariant *param, gpointer data)
     GtkTreeModel *tm;
     GtkTreeSelection *ts;
 
-    tv = GTK_TREE_VIEW(GHB_WIDGET(ud->builder, "subtitle_list_view"));
+    tv = GTK_TREE_VIEW(ghb_builder_widget("subtitle_list_view"));
     ts = gtk_tree_view_get_selection(tv);
     tm = gtk_tree_view_get_model(tv);
 
@@ -1233,7 +1233,7 @@ subtitle_add_fas_cb (GSimpleAction *action, GVariant *param, gpointer data)
     gtk_tree_selection_select_iter(ts, &ti);
     ghb_live_reset(ud);
 
-    GtkWidget *dialog = GHB_WIDGET(ud->builder, "subtitle_dialog");
+    GtkWidget *dialog = ghb_builder_widget("subtitle_dialog");
     gtk_window_set_title(GTK_WINDOW(dialog), _("Foreign Audio Scan"));
     g_signal_connect(dialog, "response", G_CALLBACK(subtitle_add_fas_response), backup);
     gtk_widget_show(dialog);
@@ -1255,7 +1255,7 @@ subtitle_add_fas_response (GtkWidget *dialog, int response, GhbValue *backup)
     }
     else
     {
-        ghb_clear_subtitle_selection(ud->builder);
+        ghb_clear_subtitle_selection();
         ghb_dict_set(ghb_get_job_settings(ud->settings),
                      "Subtitle", backup);
         subtitle_refresh_list_ui(ud);
@@ -1281,7 +1281,7 @@ subtitle_add_all_cb (GSimpleAction *action, GVariant *param, gpointer data)
     }
 
     clear_subtitle_list_settings(ud->settings);
-    clear_subtitle_list_ui(ud->builder);
+    clear_subtitle_list_ui();
 
     const char *mux_id;
     const hb_container_t *mux;
@@ -1371,7 +1371,7 @@ subtitle_update_pref_lang(signal_user_data_t *ud, const iso639_lang_t *lang)
     const char * name = _("None");
     const char * code = "und";
 
-    label = GTK_LABEL(GHB_WIDGET(ud->builder, "subtitle_preferred_language"));
+    label = GTK_LABEL(ghb_builder_widget("subtitle_preferred_language"));
     if (lang != NULL)
     {
         code = lang->iso639_2;
@@ -1391,7 +1391,7 @@ subtitle_update_pref_lang(signal_user_data_t *ud, const iso639_lang_t *lang)
     // If there is no preferred language, disable options that require
     // a preferred language to be set.
     gboolean sensitive = !(lang == NULL || !strncmp(code, "und", 4));
-    button = GHB_WIDGET(ud->builder, "SubtitleAddForeignAudioSubtitle");
+    button = ghb_builder_widget("SubtitleAddForeignAudioSubtitle");
     if (sensitive)
     {
         str = g_strdup_printf(
@@ -1406,7 +1406,7 @@ subtitle_update_pref_lang(signal_user_data_t *ud, const iso639_lang_t *lang)
     g_free(str);
 
     gtk_widget_set_sensitive(button, sensitive);
-    button = GHB_WIDGET(ud->builder, "SubtitleAddForeignAudioSearch");
+    button = ghb_builder_widget("SubtitleAddForeignAudioSearch");
     gtk_widget_set_sensitive(button, sensitive);
 }
 
@@ -1446,7 +1446,7 @@ subtitle_add_lang_iter(GtkTreeModel *tm, GtkTreeIter *iter,
     GhbValue            * glang, * slang_list;
     GtkTreeSelection    * tsel;
 
-    selected    = GTK_TREE_VIEW(GHB_WIDGET(ud->builder, "subtitle_selected_lang"));
+    selected    = GTK_TREE_VIEW(ghb_builder_widget("subtitle_selected_lang"));
     selected_ts = GTK_TREE_STORE(gtk_tree_view_get_model(selected));
     tsel        = gtk_tree_view_get_selection(selected);
 
@@ -1501,7 +1501,7 @@ subtitle_add_lang_clicked_cb (GtkWidget *widget, gpointer data)
     GtkTreeIter        iter;
     signal_user_data_t *ud = ghb_ud();
 
-    avail       = GTK_TREE_VIEW(GHB_WIDGET(ud->builder, "subtitle_avail_lang"));
+    avail       = GTK_TREE_VIEW(ghb_builder_widget("subtitle_avail_lang"));
     avail_tm    = gtk_tree_view_get_model(avail);
     tsel        = gtk_tree_view_get_selection(avail);
     if (gtk_tree_selection_get_selected(tsel, NULL, &iter))
@@ -1526,7 +1526,7 @@ subtitle_remove_lang_iter(GtkTreeModel *tm, GtkTreeIter *iter,
     GtkTreeSelection * tsel;
 
     gtk_tree_path_free(tp);
-    avail    = GTK_TREE_VIEW(GHB_WIDGET(ud->builder, "subtitle_avail_lang"));
+    avail    = GTK_TREE_VIEW(ghb_builder_widget("subtitle_avail_lang"));
     avail_ts = GTK_TREE_STORE(gtk_tree_view_get_model(avail));
     tsel     = gtk_tree_view_get_selection(avail);
 
@@ -1597,8 +1597,7 @@ subtitle_remove_lang_clicked_cb (GtkWidget *widget, gpointer data)
     GtkTreeIter        iter;
     signal_user_data_t *ud = ghb_ud();
 
-    selected    = GTK_TREE_VIEW(GHB_WIDGET(ud->builder,
-                                           "subtitle_selected_lang"));
+    selected    = GTK_TREE_VIEW(ghb_builder_widget("subtitle_selected_lang"));
     selected_tm = gtk_tree_view_get_model(selected);
     tsel        = gtk_tree_view_get_selection(selected);
     if (gtk_tree_selection_get_selected(tsel, NULL, &iter))
@@ -1614,10 +1613,9 @@ static void subtitle_def_selected_lang_list_clear(signal_user_data_t *ud)
     GtkTreeStore * avail_ts;
     GtkTreeIter    iter;
 
-    tv          = GTK_TREE_VIEW(GHB_WIDGET(ud->builder, "subtitle_avail_lang"));
+    tv          = GTK_TREE_VIEW(ghb_builder_widget("subtitle_avail_lang"));
     avail_ts    = GTK_TREE_STORE(gtk_tree_view_get_model(tv));
-    tv          = GTK_TREE_VIEW(GHB_WIDGET(ud->builder,
-                                           "subtitle_selected_lang"));
+    tv          = GTK_TREE_VIEW(ghb_builder_widget("subtitle_selected_lang"));
     selected_tm = gtk_tree_view_get_model(tv);
     if (gtk_tree_model_get_iter_first(selected_tm, &iter))
     {
@@ -1651,9 +1649,9 @@ static void subtitle_def_lang_list_init(signal_user_data_t *ud)
     GtkTreeStore * selected;
     int            ii, count;
 
-    tv       = GTK_TREE_VIEW(GHB_WIDGET(ud->builder, "subtitle_avail_lang"));
+    tv       = GTK_TREE_VIEW(ghb_builder_widget("subtitle_avail_lang"));
     avail    = gtk_tree_view_get_model(tv);
-    tv       = GTK_TREE_VIEW(GHB_WIDGET(ud->builder, "subtitle_selected_lang"));
+    tv       = GTK_TREE_VIEW(ghb_builder_widget("subtitle_selected_lang"));
     selected = GTK_TREE_STORE(gtk_tree_view_get_model(tv));
 
     // Clear selected languages.
@@ -1715,9 +1713,9 @@ void ghb_init_subtitle_defaults_ui(signal_user_data_t *ud)
 {
     GtkTreeView * tv;
 
-    tv = GTK_TREE_VIEW(GHB_WIDGET(ud->builder, "subtitle_avail_lang"));
+    tv = GTK_TREE_VIEW(ghb_builder_widget("subtitle_avail_lang"));
     ghb_init_lang_list(tv, ud);
-    tv = GTK_TREE_VIEW(GHB_WIDGET(ud->builder, "subtitle_selected_lang"));
+    tv = GTK_TREE_VIEW(ghb_builder_widget("subtitle_selected_lang"));
     ghb_init_lang_list_model(tv);
 }
 
@@ -1741,7 +1739,7 @@ subtitle_edit(GtkTreeView *tv, GtkTreePath *tp, signal_user_data_t *ud)
         backup = ghb_value_dup(ghb_get_job_subtitle_settings(ud->settings));
 
         // Pop up the edit dialog
-        GtkWidget *dialog = GHB_WIDGET(ud->builder, "subtitle_dialog");
+        GtkWidget *dialog = ghb_builder_widget("subtitle_dialog");
         gtk_window_set_title(GTK_WINDOW(dialog), _("Edit Subtitles"));
         g_signal_connect(dialog, "response", G_CALLBACK(subtitle_edit_response), backup);
         gtk_widget_show(dialog);
@@ -1779,7 +1777,7 @@ subtitle_edit_clicked_cb (GtkWidget *widget, gchar *path, gpointer data)
     GtkTreePath *tp;
     signal_user_data_t *ud = ghb_ud();
 
-    tv = GTK_TREE_VIEW(GHB_WIDGET(ud->builder, "subtitle_list_view"));
+    tv = GTK_TREE_VIEW(ghb_builder_widget("subtitle_list_view"));
     tp = gtk_tree_path_new_from_string (path);
     subtitle_edit(tv, tp, ud);
 }
@@ -1805,7 +1803,7 @@ subtitle_remove_clicked_cb (GtkWidget *widget, gchar *path, gpointer data)
     GhbValue *subtitle_list, *subtitle_search;
     signal_user_data_t *ud = ghb_ud();
 
-    tv = GTK_TREE_VIEW(GHB_WIDGET(ud->builder, "subtitle_list_view"));
+    tv = GTK_TREE_VIEW(ghb_builder_widget("subtitle_list_view"));
     ts = gtk_tree_view_get_selection(tv);
     tm = gtk_tree_view_get_model(tv);
     tp = gtk_tree_path_new_from_string (path);
@@ -1871,20 +1869,18 @@ subtitle_remove_clicked_cb (GtkWidget *widget, gchar *path, gpointer data)
 G_MODULE_EXPORT void
 subtitle_list_toggled_cb (GtkWidget *widget, gpointer data)
 {
-    signal_user_data_t *ud = ghb_ud();
     gboolean active = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
-    GtkToggleButton * selection = GTK_TOGGLE_BUTTON(GHB_WIDGET(ud->builder,
-                                                "subtitle_selection_toggle"));
+    GtkToggleButton *selection = GTK_TOGGLE_BUTTON(ghb_builder_widget("subtitle_selection_toggle"));
     gtk_toggle_button_set_active(selection, !active);
 
     GtkStack  * stack;
     GtkWidget * tab;
 
-    stack = GTK_STACK(GHB_WIDGET(ud->builder, "SubtitleStack"));
+    stack = GTK_STACK(ghb_builder_widget("SubtitleStack"));
     if (active)
-        tab = GHB_WIDGET(ud->builder, "subtitle_list_tab");
+        tab = ghb_builder_widget("subtitle_list_tab");
     else
-        tab = GHB_WIDGET(ud->builder, "subtitle_selection_tab");
+        tab = ghb_builder_widget("subtitle_selection_tab");
     gtk_stack_set_visible_child(stack, tab);
 }
 
@@ -1892,7 +1888,6 @@ G_MODULE_EXPORT void
 subtitle_selection_toggled_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
     gboolean active = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
-    GtkToggleButton * list = GTK_TOGGLE_BUTTON(GHB_WIDGET(ud->builder,
-                                                    "subtitle_list_toggle"));
+    GtkToggleButton *list = GTK_TOGGLE_BUTTON(ghb_builder_widget("subtitle_list_toggle"));
     gtk_toggle_button_set_active(list, !active);
 }
