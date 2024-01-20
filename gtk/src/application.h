@@ -23,6 +23,12 @@ char *ghb_application_get_app_path(GhbApplication *self);
 char *ghb_application_get_app_dir(GhbApplication *self);
 
 signal_user_data_t *ghb_ud (void);
+int ghb_get_cancel_status(void);
+void ghb_set_cancel_status(int status);
+int ghb_get_queue_done_action(void);
+void ghb_set_queue_done_action(int action);
+
 GtkWidget *ghb_builder_widget (const char *name);
+
 
 G_END_DECLS

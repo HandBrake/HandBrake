@@ -55,11 +55,7 @@ typedef struct preview_s preview_t;
 
 typedef struct
 {
-    gchar *current_dvd_device;
-    gboolean              dont_clear_presets;
-    gboolean              scale_busy;
-    gint                  cancel_encode;
-    gint                  when_complete;
+    char                * current_dvd_device;
     GtkBuilder          * builder;
     GhbValue            * globals;
     GhbValue            * prefs;
@@ -72,9 +68,7 @@ typedef struct
     GtkTextBuffer       * queue_activity_buffer;
     GtkTextBuffer       * extra_activity_buffer;
     char                * extra_activity_path;
-    gboolean              append_queue_activity;
     preview_t           * preview;
-    int                   stderr_src_id;
 } signal_user_data_t;
 
 enum

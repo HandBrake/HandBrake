@@ -47,6 +47,7 @@
 static GhbValue *prefsDict = NULL;
 static gboolean prefs_modified = FALSE;
 static gchar *override_user_config_dir = NULL;
+static gboolean dont_clear_presets = FALSE;
 
 static void store_prefs(void);
 static void store_presets(void);
@@ -2035,10 +2036,10 @@ settings_save(signal_user_data_t *ud, const char * category,
     store_presets();
     ghb_presets_menu_reinit(ud);
 
-    ud->dont_clear_presets = TRUE;
+    ghb_set_clear_presets_inhibited(TRUE);
     // Make the new preset the selected item
     select_preset2(ud, path);
-    ud->dont_clear_presets = FALSE;
+    ghb_set_clear_presets_inhibited(FALSE);
 
     free(folder_path);
     free(path);
@@ -3067,7 +3068,7 @@ ghb_clear_presets_selection(signal_user_data_t *ud)
     GSimpleAction    * action;
     GtkWidget        * widget;
 
-    if (ud->dont_clear_presets) return;
+    if (dont_clear_presets) return;
     treeview  = GTK_TREE_VIEW(GHB_WIDGET(ud->builder, "presets_list"));
     selection = gtk_tree_view_get_selection(treeview);
     gtk_tree_selection_unselect_all(selection);
@@ -3145,4 +3146,10 @@ preset_widget_changed_cb (GtkWidget *widget, gpointer data)
 {
     signal_user_data_t *ud = ghb_ud();
     ghb_widget_to_setting(ud->settings, widget);
+}
+
+void
+ghb_set_clear_presets_inhibited (gboolean inhibited)
+{
+    dont_clear_presets = inhibited;
 }

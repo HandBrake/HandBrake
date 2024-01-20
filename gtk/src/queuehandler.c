@@ -955,8 +955,7 @@ void ghb_queue_select_log (signal_user_data_t * ud)
             {
                 // No log file, encode is pending
                 // disable display of log
-                g_free(ud->extra_activity_path);
-                ud->extra_activity_path = NULL;
+                g_clear_pointer(&ud->extra_activity_path, g_free);
                 gtk_text_buffer_set_text(ud->extra_activity_buffer, "", 0);
             }
         }
@@ -1606,7 +1605,7 @@ low_disk_check_response_cb (GtkDialog *dialog, int response,
             break;
         case 3:
             ghb_stop_queue();
-            ud->cancel_encode = GHB_CANCEL_ALL;
+            ghb_set_cancel_status(GHB_CANCEL_ALL);
             break;
         default:
             ghb_resume_queue();
@@ -1702,7 +1701,7 @@ queue_remove_response (GtkWidget *dialog, int response, signal_user_data_t *ud)
     if (queue_remove_unique_id >= 0)
     {
         ghb_stop_queue();
-        ud->cancel_encode = GHB_CANCEL_ALL;
+        ghb_set_cancel_status(GHB_CANCEL_ALL);
         ghb_remove_job(queue_remove_unique_id);
     }
     ghb_array_remove(ud->queue, queue_remove_index);
