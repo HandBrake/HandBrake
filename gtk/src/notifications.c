@@ -20,6 +20,8 @@
 
 #include "notifications.h"
 
+#include "application.h"
+
 static int n_succeeded = 0;
 static int n_failed = 0;
 
@@ -126,8 +128,11 @@ notify_paused (GhbNotification type, int value, signal_user_data_t *ud)
     g_autofree char *body = NULL;
     int gigabyte, decimal;
 
-    if (!ud->when_complete && !ghb_dict_get_bool(ud->prefs, "NotifyOnEncodeDone"))
+    if (!ghb_get_queue_done_action() &&
+        !ghb_dict_get_bool(ud->prefs, "NotifyOnEncodeDone"))
+    {
         return;
+    }
 
     switch (type)
     {

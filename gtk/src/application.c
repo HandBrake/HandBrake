@@ -61,6 +61,9 @@ struct _GhbApplication
     GtkApplication parent_instance;
     char *app_cmd;
     signal_user_data_t *ud;
+    int cancel_encode;
+    int when_complete;
+    int stderr_src_id;
 };
 
 G_DEFINE_TYPE (GhbApplication, ghb_application, GTK_TYPE_APPLICATION);
@@ -262,12 +265,14 @@ clean_old_logs (void)
 }
 
 static void
-io_redirect (signal_user_data_t *ud)
+io_redirect (GhbApplication *self, signal_user_data_t *ud)
 {
     GIOChannel *channel;
     gint pfd[2];
     gchar *config, *path, *str;
     pid_t pid;
+
+    g_return_if_fail(GHB_IS_APPLICATION(self));
 
     if (!redirect_io)
         return;
@@ -316,7 +321,7 @@ io_redirect (signal_user_data_t *ud)
     // "Invalid byte sequence in conversion input"
     // Set disable encoding on the channel.
     g_io_channel_set_encoding(channel, NULL, NULL);
-    ud->stderr_src_id =
+    self->stderr_src_id =
         g_io_add_watch(channel, G_IO_IN, ghb_log_cb, (gpointer)ud );
 
     g_io_channel_unref(channel);
@@ -759,7 +764,7 @@ ghb_application_activate (GApplication *app)
 
     // Redirect stderr to the activity window
     ghb_preview_init(ud);
-    io_redirect(ud);
+    io_redirect(self, ud);
     print_system_information(self);
 
     GtkTextView   * textview;
@@ -960,8 +965,8 @@ ghb_application_shutdown (GApplication *app)
     ghb_backend_close();
 
     // Remove stderr redirection
-    if (ud->stderr_src_id > 0)
-        g_source_remove(ud->stderr_src_id);
+    if (self->stderr_src_id > 0)
+        g_source_remove(self->stderr_src_id);
     ghb_value_free(&ud->queue);
     ghb_value_free(&ud->settings_array);
     ghb_value_free(&ud->prefs);
@@ -980,7 +985,7 @@ ghb_application_shutdown (GApplication *app)
     g_object_unref(ud->extra_activity_buffer);
     g_object_unref(ud->queue_activity_buffer);
     g_object_unref(ud->activity_buffer);
-    g_free(ud->extra_activity_path);
+    g_clear_pointer(&ud->extra_activity_path, g_free);
     ghb_preview_dispose(ud);
 
     g_free(ud->current_dvd_device);
@@ -1072,5 +1077,41 @@ ghb_builder_widget (const char *name)
     signal_user_data_t *ud = app->ud;
 
     return GTK_WIDGET(gtk_builder_get_object(ud->builder, name));
+}
+
+int
+ghb_get_cancel_status (void)
+{
+    GhbApplication *app = GHB_APPLICATION_DEFAULT;
+    g_return_val_if_fail(GHB_IS_APPLICATION(app), 0);
+
+    return app->cancel_encode;
+}
+
+void
+ghb_set_cancel_status (int status)
+{
+    GhbApplication *app = GHB_APPLICATION_DEFAULT;
+    g_return_if_fail(GHB_IS_APPLICATION(app));
+
+    app->cancel_encode = status;
+}
+
+int
+ghb_get_queue_done_action (void)
+{
+    GhbApplication *app = GHB_APPLICATION_DEFAULT;
+    g_return_val_if_fail(GHB_IS_APPLICATION(app), 0);
+
+    return app->when_complete;
+}
+
+void
+ghb_set_queue_done_action (int action)
+{
+    GhbApplication *app = GHB_APPLICATION_DEFAULT;
+    g_return_if_fail(GHB_IS_APPLICATION(app));
+
+    app->when_complete = action;
 }
 

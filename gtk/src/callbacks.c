@@ -1413,8 +1413,8 @@ ghb_load_post_settings(signal_user_data_t * ud)
         return;
     busy = TRUE;
 
-    ud->dont_clear_presets = TRUE;
-    ud->scale_busy = TRUE;
+    ghb_set_clear_presets_inhibited(TRUE);
+    ghb_set_scale_busy(TRUE);
 
     set_widget_ranges(ud, ud->settings);
     ghb_show_container_options(ud);
@@ -1431,8 +1431,8 @@ ghb_load_post_settings(signal_user_data_t * ud)
     update_title_duration(ud);
     ghb_update_title_info(ud);
 
-    ud->dont_clear_presets = FALSE;
-    ud->scale_busy = FALSE;
+    ghb_set_clear_presets_inhibited(FALSE);
+    ghb_set_scale_busy(FALSE);
     busy = FALSE;
 
     ghb_picture_settings_deps(ud);
@@ -3910,18 +3910,18 @@ stop_encode_dialog_response (GtkDialog *dialog, int response,
     {
         case 1:
             ghb_stop_queue();
-            ud->cancel_encode = GHB_CANCEL_ALL;
+            ghb_set_cancel_status(GHB_CANCEL_ALL);
             break;
         case 2:
             ghb_stop_queue();
-            ud->cancel_encode = GHB_CANCEL_CURRENT;
+            ghb_set_cancel_status(GHB_CANCEL_CURRENT);
             break;
         case 3:
-            ud->cancel_encode = GHB_CANCEL_FINISH;
+            ghb_set_cancel_status(GHB_CANCEL_FINISH);
             break;
         case 4:
         default:
-            ud->cancel_encode = GHB_CANCEL_NONE;
+            ghb_set_cancel_status(GHB_CANCEL_NONE);
             break;
     }
 }
@@ -4490,8 +4490,8 @@ ghb_backend_events(signal_user_data_t *ud)
         {
             ghb_queue_remove_row(ud, index);
         }
-        if (ud->cancel_encode != GHB_CANCEL_ALL &&
-            ud->cancel_encode != GHB_CANCEL_FINISH)
+        if (ghb_get_cancel_status() != GHB_CANCEL_ALL &&
+            ghb_get_cancel_status() != GHB_CANCEL_FINISH)
         {
             ghb_start_next_job(ud);
         }
@@ -4502,7 +4502,7 @@ ghb_backend_events(signal_user_data_t *ud)
             ghb_dict_set_bool(ud->globals, "SkipDiskFreeCheck", FALSE);
         }
         ghb_save_queue(ud->queue);
-        ud->cancel_encode = GHB_CANCEL_NONE;
+        ghb_set_cancel_status(GHB_CANCEL_NONE);
     }
     else if (status.queue.state & GHB_STATE_MUXING)
     {
@@ -4849,7 +4849,7 @@ when_complete_changed_cb (GtkWidget *widget, gpointer data)
 {
     signal_user_data_t *ud = ghb_ud();
     GhbValue * value = ghb_widget_value(widget);
-    ud->when_complete = gtk_combo_box_get_active(GTK_COMBO_BOX(widget));
+    ghb_set_queue_done_action(gtk_combo_box_get_active(GTK_COMBO_BOX(widget)));
     ghb_ui_update("MainWhenComplete", value);
     ghb_ui_update("QueueWhenComplete", value);
     ghb_value_free(&value);
@@ -4865,9 +4865,8 @@ when_complete_changed_cb (GtkWidget *widget, gpointer data)
 G_MODULE_EXPORT void
 temp_when_complete_changed_cb (GtkWidget *widget, gpointer data)
 {
-    signal_user_data_t *ud = ghb_ud();
     GhbValue * value = ghb_widget_value(widget);
-    ud->when_complete = gtk_combo_box_get_active(GTK_COMBO_BOX(widget));
+    ghb_set_queue_done_action(gtk_combo_box_get_active(GTK_COMBO_BOX(widget)));
     ghb_ui_update("MainWhenComplete", value);
     ghb_ui_update("QueueWhenComplete", value);
     ghb_value_free(&value);
@@ -5305,7 +5304,7 @@ format_deblock_cb(GtkScale *scale, gdouble val, signal_user_data_t *ud)
 static void
 queue_done_action (signal_user_data_t *ud)
 {
-    switch (ud->when_complete)    {
+    switch (ghb_get_queue_done_action())    {
         case 1:
             ghb_countdown_dialog_show(_("Your encode is complete."),
                                       _("Quitting HandBrake"),

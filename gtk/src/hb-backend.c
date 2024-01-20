@@ -4105,11 +4105,19 @@ ghb_get_display_aspect_string(double disp_width, double disp_height)
     return str;
 }
 
+static gboolean scale_busy = FALSE;
+
+void
+ghb_set_scale_busy (gboolean busy)
+{
+    scale_busy = busy;
+}
+
 void
 ghb_set_scale(signal_user_data_t *ud, gint mode)
 {
-    if (ud->scale_busy) return;
-    ud->scale_busy = TRUE;
+    if (scale_busy) return;
+    ghb_set_scale_busy(TRUE);
 
     ghb_set_scale_settings(ud, ud->settings, mode);
     ghb_update_summary_info(ud);
@@ -4147,7 +4155,7 @@ ghb_set_scale(signal_user_data_t *ud, gint mode)
 
     ghb_ui_update_from_settings("PictureDARWidth", ud->settings);
     ghb_ui_update_from_settings("DisplayHeight", ud->settings);
-    ud->scale_busy = FALSE;
+    ghb_set_scale_busy(FALSE);
 }
 
 const char*
