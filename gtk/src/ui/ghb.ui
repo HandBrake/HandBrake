@@ -3755,542 +3755,125 @@ Overrides all other settings.</property>
                     <property name="title" translatable="yes">Audio</property>
                     <property name="child">
                       <object class="GtkBox" id="audio_tab">
-                        <property name="margin-top">12</property>
                         <property name="hexpand">1</property>
                         <property name="vexpand">1</property>
                         <child>
-                          <object class="GtkStackSidebar" id="AudioStackSidebar">
-                            <property name="stack">AudioStack</property>
-                            <property name="hexpand">0</property>
+                          <object class="GtkBox" id="vbox17">
+                            <property name="orientation">vertical</property>
                             <property name="vexpand">1</property>
-                            <property name="halign">start</property>
-                          </object>
-                        </child>
-                        <child>
-                          <object class="GtkStack" id="AudioStack">
                             <property name="hexpand">1</property>
-                            <property name="vexpand">1</property>
-                            <property name="margin-start">12</property>
                             <child>
-                              <object class="GtkStackPage">
-                                <property name="name">audio_list_tab</property>
-                                <property name="title" translatable="yes">Track List</property>
-                                <property name="child">
-                                  <object class="GtkBox" id="audio_list_tab">
-                                    <property name="orientation">vertical</property>
-                                    <child>
-                                      <object class="GtkBox" id="vbox17">
-                                        <property name="orientation">vertical</property>
-                                        <property name="spacing">2</property>
-                                        <property name="vexpand">1</property>
+                              <object class="GtkBox" id="audio_toolbar">
+                                <property name="css-classes">toolbar</property>
+                                <property name="can-focus">0</property>
+                                <child>
+                                  <object class="GtkButton" id="audio_add">
+                                    <property name="tooltip-text" translatable="yes">Add new audio settings to the list</property>
+                                    <property name="action-name">app.audio-add</property>
+                                    <property name="css-classes">flat</property>
+                                    <property name="child">
+                                      <object class="GtkBox">
+                                        <property name="spacing">6</property>
                                         <child>
-                                          <object class="GtkBox" id="audio_toolbar">
-                                            <property name="css-classes">toolbar</property>
-                                            <property name="can-focus">0</property>
-                                            <child>
-                                              <object class="GtkButton" id="audio_add">
-                                                <property name="tooltip-text" translatable="yes">Add new audio settings to the list</property>
-                                                <property name="action-name">app.audio-add</property>
-                                                <property name="css-classes">flat</property>
-                                                <property name="child">
-                                                  <object class="GtkBox">
-                                                    <property name="spacing">6</property>
-                                                    <child>
-                                                      <object class="GtkImage">
-                                                        <property name="icon-name">list-add</property>
-                                                        <property name="accessible-role">presentation</property>
-                                                      </object>
-                                                    </child>
-                                                    <child>
-                                                      <object class="GtkLabel">
-                                                        <property name="label" translatable="yes">Add</property>
-                                                      </object>
-                                                    </child>
-                                                  </object>
-                                                </property>
-                                              </object>
-                                            </child>
-                                            <child>
-                                              <object class="GtkButton" id="audio_add_all">
-                                                <property name="tooltip-text" translatable="yes">Add all audio tracks to the list</property>
-                                                <property name="action-name">app.audio-add-all</property>
-                                                <property name="css-classes">flat</property>
-                                                <property name="child">
-                                                  <object class="GtkBox">
-                                                    <property name="spacing">6</property>
-                                                    <child>
-                                                      <object class="GtkImage">
-                                                        <property name="icon-name">list-add</property>
-                                                        <property name="accessible-role">presentation</property>
-                                                      </object>
-                                                    </child>
-                                                    <child>
-                                                      <object class="GtkLabel">
-                                                        <property name="label" translatable="yes">Add All</property>
-                                                      </object>
-                                                    </child>
-                                                  </object>
-                                                </property>
-                                              </object>
-                                            </child>
-                                            <child>
-                                              <object class="GtkButton" id="audio_reset">
-                                                <property name="tooltip-text" translatable="yes">Reload all audio settings from defaults</property>
-                                                <property name="action-name">app.audio-reset</property>
-                                                <property name="css-classes">flat</property>
-                                                <property name="child">
-                                                  <object class="GtkBox">
-                                                    <property name="spacing">6</property>
-                                                    <child>
-                                                      <object class="GtkImage">
-                                                        <property name="icon-name">view-refresh</property>
-                                                        <property name="accessible-role">presentation</property>
-                                                      </object>
-                                                    </child>
-                                                    <child>
-                                                      <object class="GtkLabel">
-                                                        <property name="label" translatable="yes">Reload</property>
-                                                      </object>
-                                                    </child>
-                                                  </object>
-                                                </property>
-                                              </object>
-                                            </child>
+                                          <object class="GtkImage">
+                                            <property name="icon-name">list-add</property>
+                                            <property name="accessible-role">presentation</property>
                                           </object>
                                         </child>
                                         <child>
-                                          <object class="GtkScrolledWindow" id="scrolledwindow5">
-                                            <property name="hscrollbar-policy">never</property>
-                                            <property name="vexpand">1</property>
-                                            <property name="child">
-                                              <object class="GtkTreeView" id="audio_list_view">
-                                                <property name="focusable">1</property>
-                                                <property name="headers-visible">0</property>
-                                                <property name="headers-clickable">0</property>
-                                                <child internal-child="selection">
-                                                  <object class="GtkTreeSelection" id="treeview-selection1"/>
-                                                </child>
-                                                <signal name="row-activated" handler="audio_row_activated_cb" swapped="no"/>
-                                              </object>
-                                            </property>
+                                          <object class="GtkLabel">
+                                            <property name="label" translatable="yes">Add</property>
                                           </object>
                                         </child>
                                       </object>
-                                    </child>
+                                    </property>
                                   </object>
-                                </property>
+                                </child>
+                                <child>
+                                  <object class="GtkButton" id="audio_add_all">
+                                    <property name="tooltip-text" translatable="yes">Add all audio tracks to the list</property>
+                                    <property name="action-name">app.audio-add-all</property>
+                                    <property name="css-classes">flat</property>
+                                    <property name="child">
+                                      <object class="GtkBox">
+                                        <property name="spacing">6</property>
+                                        <child>
+                                          <object class="GtkImage">
+                                            <property name="icon-name">list-add</property>
+                                            <property name="accessible-role">presentation</property>
+                                          </object>
+                                        </child>
+                                        <child>
+                                          <object class="GtkLabel">
+                                            <property name="label" translatable="yes">Add All</property>
+                                          </object>
+                                        </child>
+                                      </object>
+                                    </property>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="GtkToggleButton">
+                                    <property name="tooltip-text" translatable="yes">Show audio default selection options</property>
+                                    <property name="action-name">app.show-audio-defaults</property>
+                                    <property name="css-classes">flat</property>
+                                    <property name="child">
+                                      <object class="GtkBox">
+                                        <property name="spacing">6</property>
+                                        <child>
+                                          <object class="GtkImage">
+                                            <property name="icon-name">document-properties-symbolic</property>
+                                            <property name="accessible-role">presentation</property>
+                                          </object>
+                                        </child>
+                                        <child>
+                                          <object class="GtkLabel">
+                                            <property name="label" translatable="yes">Selection Behavior…</property>
+                                          </object>
+                                        </child>
+                                      </object>
+                                    </property>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="GtkButton" id="audio_reset">
+                                    <property name="tooltip-text" translatable="yes">Reload all audio settings from defaults</property>
+                                    <property name="action-name">app.audio-reset</property>
+                                    <property name="css-classes">flat</property>
+                                    <property name="child">
+                                      <object class="GtkBox">
+                                        <property name="spacing">6</property>
+                                        <child>
+                                          <object class="GtkImage">
+                                            <property name="icon-name">view-refresh</property>
+                                            <property name="accessible-role">presentation</property>
+                                          </object>
+                                        </child>
+                                        <child>
+                                          <object class="GtkLabel">
+                                            <property name="label" translatable="yes">Reload</property>
+                                          </object>
+                                        </child>
+                                      </object>
+                                    </property>
+                                  </object>
+                                </child>
                               </object>
                             </child>
                             <child>
-                              <object class="GtkStackPage">
-                                <property name="name">audio_selection_tab</property>
-                                <property name="title" translatable="yes">Track Selection</property>
+                              <object class="GtkScrolledWindow" id="scrolledwindow5">
+                                <property name="hscrollbar-policy">never</property>
+                                <property name="vexpand">1</property>
+                                <property name="css-classes">frame</property>
                                 <property name="child">
-                                  <object class="GtkBox" id="audio_selection_tab">
-                                    <property name="orientation">vertical</property>
-                                    <property name="hexpand">1</property>
-                                    <child>
-                                      <object class="GtkBox" id="audio_selection_box1">
-                                        <property name="spacing">6</property>
-                                        <child>
-                                          <object class="GtkBox" id="audio_defaults_box2">
-                                            <property name="orientation">vertical</property>
-                                            <child>
-                                              <object class="GtkGrid" id="grid2">
-                                                <property name="column-spacing">5</property>
-                                                <property name="row-spacing">2</property>
-                                                <child>
-                                                  <object class="GtkLabel" id="label4">
-                                                    <property name="halign">end</property>
-                                                    <property name="label" translatable="yes">Selection Behavior:</property>
-                                                    <property name="justify">right</property>
-                                                    <layout>
-                                                      <property name="column">0</property>
-                                                      <property name="row">0</property>
-                                                    </layout>
-                                                  </object>
-                                                </child>
-                                                <child>
-                                                  <object class="GtkComboBox" id="AudioTrackSelectionBehavior">
-                                                    <property name="valign">center</property>
-                                                    <property name="tooltip-text" translatable="yes">Choose which audio tracks of the source media are used.</property>
-                                                    <signal name="changed" handler="audio_def_widget_changed_cb" swapped="no"/>
-                                                    <layout>
-                                                      <property name="column">1</property>
-                                                      <property name="row">0</property>
-                                                    </layout>
-                                                  </object>
-                                                </child>
-                                              </object>
-                                            </child>
-                                            <child>
-                                              <object class="GtkGrid" id="grid3">
-                                                <property name="column-spacing">5</property>
-                                                <property name="row-spacing">2</property>
-                                                <property name="halign">end</property>
-                                                <property name="margin-top">6</property>
-                                                <property name="margin-bottom">6</property>
-                                                <property name="vexpand">1</property>
-                                                <child>
-                                                  <object class="GtkScrolledWindow" id="scrolledwindow10">
-                                                    <property name="hscrollbar-policy">never</property>
-                                                    <property name="min-content-height">84</property>
-                                                    <property name="vexpand">1</property>
-                                                    <property name="child">
-                                                      <object class="GtkTreeView" id="audio_avail_lang">
-                                                        <property name="headers-visible">0</property>
-                                                        <property name="focusable">1</property>
-                                                        <property name="vexpand">1</property>
-                                                        <signal name="row-activated" handler="audio_avail_lang_activated_cb" swapped="no"/>
-                                                      </object>
-                                                    </property>
-                                                    <layout>
-                                                      <property name="column">0</property>
-                                                      <property name="row">1</property>
-                                                      <property name="row-span">4</property>
-                                                    </layout>
-                                                  </object>
-                                                </child>
-                                                <child>
-                                                  <object class="GtkScrolledWindow" id="scrolledwindow11">
-                                                    <property name="hscrollbar-policy">never</property>
-                                                    <property name="child">
-                                                      <object class="GtkTreeView" id="audio_selected_lang">
-                                                        <property name="headers-visible">0</property>
-                                                        <property name="focusable">1</property>
-                                                        <property name="tooltip-text" translatable="yes">Create a list of languages you would like to select audio for.
-Tracks matching these languages will be selected using the chosen Selection Behavior.</property>
-                                                        <signal name="row-activated" handler="audio_selected_lang_activated_cb" swapped="no"/>
-                                                      </object>
-                                                    </property>
-                                                    <layout>
-                                                      <property name="column">2</property>
-                                                      <property name="row">1</property>
-                                                      <property name="row-span">4</property>
-                                                    </layout>
-                                                  </object>
-                                                </child>
-                                                <child>
-                                                  <object class="GtkButton" id="audio_lang_add">
-                                                    <property name="label" translatable="yes">Add</property>
-                                                    <property name="focusable">1</property>
-                                                    <property name="receives-default">1</property>
-                                                    <property name="valign">center</property>
-                                                    <signal name="clicked" handler="audio_add_lang_clicked_cb" swapped="no"/>
-                                                    <layout>
-                                                      <property name="column">1</property>
-                                                      <property name="row">2</property>
-                                                    </layout>
-                                                  </object>
-                                                </child>
-                                                <child>
-                                                  <object class="GtkButton" id="audio_lang_remove">
-                                                    <property name="label" translatable="yes">Remove</property>
-                                                    <property name="focusable">1</property>
-                                                    <property name="receives-default">1</property>
-                                                    <property name="valign">center</property>
-                                                    <signal name="clicked" handler="audio_remove_lang_clicked_cb" swapped="no"/>
-                                                    <layout>
-                                                      <property name="column">1</property>
-                                                      <property name="row">3</property>
-                                                    </layout>
-                                                  </object>
-                                                </child>
-                                                <child>
-                                                  <object class="GtkLabel" id="label8">
-                                                    <property name="label" translatable="yes">Available Languages</property>
-                                                    <layout>
-                                                      <property name="column">0</property>
-                                                      <property name="row">0</property>
-                                                    </layout>
-                                                  </object>
-                                                </child>
-                                                <child>
-                                                  <object class="GtkLabel" id="label24">
-                                                    <property name="label" translatable="yes">Selected Languages</property>
-                                                    <layout>
-                                                      <property name="column">2</property>
-                                                      <property name="row">0</property>
-                                                    </layout>
-                                                  </object>
-                                                </child>
-                                              </object>
-                                            </child>
-                                            <child>
-                                              <object class="GtkCheckButton" id="AudioSecondaryEncoderMode">
-                                                <property name="label" translatable="yes">Use only first encoder for secondary audio</property>
-                                                <property name="focusable">1</property>
-                                                <property name="tooltip-text" translatable="yes">Only the primary audio track will be encoded with the full encoder list.
-All other secondary audio output tracks will be encoded with first encoder only.</property>
-                                                <property name="halign">start</property>
-                                                <property name="active">1</property>
-                                                <signal name="toggled" handler="audio_def_widget_changed_cb" swapped="no"/>
-                                              </object>
-                                            </child>
-                                          </object>
-                                        </child>
-                                        <child>
-                                          <object class="GtkBox" id="auto_pass_box">
-                                            <property name="orientation">vertical</property>
-                                            <property name="margin-start">6</property>
-                                            <property name="spacing">2</property>
-                                            <child>
-                                              <object class="GtkGrid" id="grid4">
-                                                <property name="column-spacing">5</property>
-                                                <property name="row-spacing">2</property>
-                                                <property name="halign">end</property>
-                                                <child>
-                                                  <object class="GtkLabel" id="labela3">
-                                                    <property name="halign">start</property>
-                                                    <property name="label" translatable="yes">Auto Passthru:</property>
-                                                    <layout>
-                                                      <property name="column">0</property>
-                                                      <property name="row">0</property>
-                                                    </layout>
-                                                  </object>
-                                                </child>
-                                                <child>
-                                                  <object class="GtkCheckButton" id="AudioAllowMP2Pass">
-                                                    <property name="label" translatable="yes">MP2</property>
-                                                    <property name="focusable">1</property>
-                                                    <property name="tooltip-text" translatable="yes">Enable this if your playback device supports MP2.
-This permits MP2 passthru to be selected when automatic passthru selection is enabled.</property>
-                                                    <property name="halign">start</property>
-                                                    <property name="active">1</property>
-                                                    <signal name="toggled" handler="audio_passthru_widget_changed_cb" swapped="no"/>
-                                                    <layout>
-                                                      <property name="column">1</property>
-                                                      <property name="row">0</property>
-                                                    </layout>
-                                                  </object>
-                                                </child>
-                                                <child>
-                                                  <object class="GtkCheckButton" id="AudioAllowMP3Pass">
-                                                    <property name="label" translatable="yes">MP3</property>
-                                                    <property name="focusable">1</property>
-                                                    <property name="tooltip-text" translatable="yes">Enable this if your playback device supports MP3.
-This permits MP3 passthru to be selected when automatic passthru selection is enabled.</property>
-                                                    <property name="halign">start</property>
-                                                    <property name="active">1</property>
-                                                    <signal name="toggled" handler="audio_passthru_widget_changed_cb" swapped="no"/>
-                                                    <layout>
-                                                      <property name="column">2</property>
-                                                      <property name="row">0</property>
-                                                    </layout>
-                                                  </object>
-                                                </child>
-                                                <child>
-                                                  <object class="GtkCheckButton" id="AudioAllowAC3Pass">
-                                                    <property name="label" translatable="yes">AC-3</property>
-                                                    <property name="focusable">1</property>
-                                                    <property name="tooltip-text" translatable="yes">Enable this if your playback device supports AC-3.
-This permits AC-3 passthru to be selected when automatic passthru selection is enabled.</property>
-                                                    <property name="halign">start</property>
-                                                    <property name="active">1</property>
-                                                    <signal name="toggled" handler="audio_passthru_widget_changed_cb" swapped="no"/>
-                                                    <layout>
-                                                      <property name="column">1</property>
-                                                      <property name="row">1</property>
-                                                    </layout>
-                                                  </object>
-                                                </child>
-                                                <child>
-                                                  <object class="GtkCheckButton" id="AudioAllowEAC3Pass">
-                                                    <property name="label" translatable="yes">EAC-3</property>
-                                                    <property name="focusable">1</property>
-                                                    <property name="tooltip-text" translatable="yes">Enable this if your playback device supports EAC-3.
-This permits EAC-3 passthru to be selected when automatic passthru selection is enabled.</property>
-                                                    <property name="halign">start</property>
-                                                    <property name="active">1</property>
-                                                    <signal name="toggled" handler="audio_passthru_widget_changed_cb" swapped="no"/>
-                                                    <layout>
-                                                      <property name="column">2</property>
-                                                      <property name="row">1</property>
-                                                    </layout>
-                                                  </object>
-                                                </child>
-                                                <child>
-                                                  <object class="GtkCheckButton" id="AudioAllowDTSPass">
-                                                    <property name="label" translatable="yes">DTS</property>
-                                                    <property name="focusable">1</property>
-                                                    <property name="tooltip-text" translatable="yes">Enable this if your playback device supports DTS.
-This permits DTS passthru to be selected when automatic passthru selection is enabled.</property>
-                                                    <property name="halign">start</property>
-                                                    <property name="active">1</property>
-                                                    <signal name="toggled" handler="audio_passthru_widget_changed_cb" swapped="no"/>
-                                                    <layout>
-                                                      <property name="column">1</property>
-                                                      <property name="row">2</property>
-                                                    </layout>
-                                                  </object>
-                                                </child>
-                                                <child>
-                                                  <object class="GtkCheckButton" id="AudioAllowDTSHDPass">
-                                                    <property name="label" translatable="yes">DTS-HD</property>
-                                                    <property name="focusable">1</property>
-                                                    <property name="tooltip-text" translatable="yes">Enable this if your playback device supports DTS-HD.
-This permits DTS-HD passthru to be selected when automatic passthru selection is enabled.</property>
-                                                    <property name="halign">start</property>
-                                                    <property name="active">1</property>
-                                                    <signal name="toggled" handler="audio_passthru_widget_changed_cb" swapped="no"/>
-                                                    <layout>
-                                                      <property name="column">2</property>
-                                                      <property name="row">2</property>
-                                                    </layout>
-                                                  </object>
-                                                </child>
-                                                <child>
-                                                  <object class="GtkCheckButton" id="AudioAllowTRUEHDPass">
-                                                    <property name="label" translatable="yes">TrueHD</property>
-                                                    <property name="focusable">1</property>
-                                                    <property name="tooltip-text" translatable="yes">Enable this if your playback device supports TrueHD.
-This permits TrueHD passthru to be selected when automatic passthru selection is enabled.</property>
-                                                    <property name="halign">start</property>
-                                                    <property name="active">1</property>
-                                                    <signal name="toggled" handler="audio_passthru_widget_changed_cb" swapped="no"/>
-                                                    <layout>
-                                                      <property name="column">1</property>
-                                                      <property name="row">3</property>
-                                                    </layout>
-                                                  </object>
-                                                </child>
-                                                <child>
-                                                  <object class="GtkCheckButton" id="AudioAllowFLACPass">
-                                                    <property name="label" translatable="yes">FLAC</property>
-                                                    <property name="focusable">1</property>
-                                                    <property name="tooltip-text" translatable="yes">Enable this if your playback device supports FLAC.
-This permits FLAC passthru to be selected when automatic passthru selection is enabled.</property>
-                                                    <property name="halign">start</property>
-                                                    <property name="active">1</property>
-                                                    <signal name="toggled" handler="audio_passthru_widget_changed_cb" swapped="no"/>
-                                                    <layout>
-                                                      <property name="column">2</property>
-                                                      <property name="row">3</property>
-                                                    </layout>
-                                                  </object>
-                                                </child>
-                                                <child>
-                                                  <object class="GtkCheckButton" id="AudioAllowAACPass">
-                                                    <property name="label" translatable="yes">AAC</property>
-                                                    <property name="focusable">1</property>
-                                                    <property name="tooltip-text" translatable="yes">Enable this if your playback device supports AAC.
-This permits AAC passthru to be selected when automatic passthru selection is enabled.</property>
-                                                    <property name="halign">start</property>
-                                                    <property name="active">1</property>
-                                                    <signal name="toggled" handler="audio_passthru_widget_changed_cb" swapped="no"/>
-                                                    <layout>
-                                                      <property name="column">1</property>
-                                                      <property name="row">4</property>
-                                                    </layout>
-                                                  </object>
-                                                </child>
-                                                <child>
-                                                  <object class="GtkCheckButton" id="AudioAllowOPUSPass">
-                                                    <property name="label" translatable="yes">Opus</property>
-                                                    <property name="focusable">1</property>
-                                                    <property name="tooltip-text" translatable="yes">Enable this if your playback device supports Opus.
-This permits Opus passthru to be selected when automatic passthru selection is enabled.</property>
-                                                    <property name="halign">start</property>
-                                                    <property name="active">1</property>
-                                                    <signal name="toggled" handler="audio_passthru_widget_changed_cb" swapped="no"/>
-                                                    <layout>
-                                                      <property name="column">2</property>
-                                                      <property name="row">4</property>
-                                                    </layout>
-                                                  </object>
-                                                </child>
-                                              </object>
-                                            </child>
-                                            <child>
-                                              <object class="GtkBox" id="auto_fallback_box">
-                                                <property name="spacing">6</property>
-                                                <property name="halign">end</property>
-                                                <child>
-                                                  <object class="GtkLabel" id="labela4">
-                                                    <property name="halign">end</property>
-                                                    <property name="hexpand">1</property>
-                                                    <property name="label" translatable="yes">Passthru Fallback:</property>
-                                                  </object>
-                                                </child>
-                                                <child>
-                                                  <object class="GtkComboBox" id="AudioEncoderFallback">
-                                                    <property name="valign">center</property>
-                                                    <property name="tooltip-text" translatable="yes">Set the audio codec to encode with when a suitable track can not be found for audio passthru.</property>
-                                                    <signal name="changed" handler="audio_fallback_widget_changed_cb" swapped="no"/>
-                                                  </object>
-                                                </child>
-                                              </object>
-                                            </child>
-                                          </object>
-                                        </child>
-                                      </object>
+                                  <object class="GtkTreeView" id="audio_list_view">
+                                    <property name="focusable">1</property>
+                                    <property name="headers-visible">0</property>
+                                    <property name="headers-clickable">0</property>
+                                    <child internal-child="selection">
+                                      <object class="GtkTreeSelection" id="treeview-selection1"/>
                                     </child>
-                                    <child>
-                                      <object class="GtkLabel" id="audio_def_settings_label">
-                                        <property name="margin-top">6</property>
-                                        <property name="halign">start</property>
-                                        <property name="use-markup">1</property>
-                                        <property name="label" translatable="yes">&lt;b&gt;Audio Encoder Settings:&lt;/b&gt;</property>
-                                        <property name="tooltip-markup" translatable="yes">Each selected source track will be encoded with all selected encoders</property>
-                                      </object>
-                                    </child>
-                                    <child>
-                                      <object class="GtkSeparator" id="sep1"/>
-                                    </child>
-                                    <child>
-                                      <object class="GtkBox" id="audio_list_default_header">
-                                        <child>
-                                          <object class="GtkLabel" id="audio_defaults_encoder_label">
-                                            <property name="label" translatable="yes">Encoder</property>
-                                            <property name="halign">center</property>
-                                          </object>
-                                        </child>
-                                        <child>
-                                          <object class="GtkLabel" id="audio_defaults_bitrate_label">
-                                            <property name="label" translatable="yes">Bitrate/Quality</property>
-                                            <property name="halign">center</property>
-                                          </object>
-                                        </child>
-                                        <child>
-                                          <object class="GtkLabel" id="audio_defaults_mixdown_label">
-                                            <property name="label" translatable="yes">Mixdown</property>
-                                            <property name="halign">center</property>
-                                          </object>
-                                        </child>
-                                        <child>
-                                          <object class="GtkLabel" id="audio_defaults_samplerate_label">
-                                            <property name="label" translatable="yes">Samplerate</property>
-                                            <property name="halign">center</property>
-                                          </object>
-                                        </child>
-                                        <child>
-                                          <object class="GtkLabel" id="audio_defaults_gain_label">
-                                            <property name="label" translatable="yes">Gain</property>
-                                            <property name="halign">center</property>
-                                          </object>
-                                        </child>
-                                        <child>
-                                          <object class="GtkLabel" id="audio_defaults_drc_label">
-                                            <property name="label" translatable="yes">DRC</property>
-                                            <property name="halign">center</property>
-                                          </object>
-                                        </child>
-                                      </object>
-                                    </child>
-                                    <child>
-                                      <object class="GtkScrolledWindow" id="scrolledwindow12">
-                                        <property name="hexpand">1</property>
-                                        <property name="vexpand">1</property>
-                                        <property name="child">
-                                          <object class="GtkListBox" id="audio_list_default">
-                                            <property name="focusable">1</property>
-                                            <property name="vexpand">1</property>
-                                            <property name="selection-mode">none</property>
-                                            <property name="activate-on-single-click">0</property>
-                                          </object>
-                                        </property>
-                                      </object>
-                                    </child>
+                                    <signal name="row-activated" handler="audio_row_activated_cb" swapped="no"/>
                                   </object>
                                 </property>
                               </object>
@@ -4307,415 +3890,150 @@ This permits Opus passthru to be selected when automatic passthru selection is e
                     <property name="title" translatable="yes">Subtitles</property>
                     <property name="child">
                       <object class="GtkBox" id="subtitle_tab">
-                        <property name="margin-top">12</property>
                         <property name="hexpand">1</property>
                         <property name="vexpand">1</property>
+                        <property name="orientation">vertical</property>
                         <child>
-                          <object class="GtkStackSidebar" id="SubtitleStackSidebar">
-                            <property name="stack">SubtitleStack</property>
-                            <property name="hexpand">0</property>
+                          <object class="GtkBox" id="vbox12">
+                            <property name="orientation">vertical</property>
                             <property name="vexpand">1</property>
-                            <property name="halign">start</property>
-                          </object>
-                        </child>
-                        <child>
-                          <object class="GtkStack" id="SubtitleStack">
-                            <property name="hexpand">1</property>
-                            <property name="vexpand">1</property>
-                            <property name="margin-start">12</property>
                             <child>
-                              <object class="GtkStackPage">
-                                <property name="name">subtitle_list_tab</property>
-                                <property name="title" translatable="yes">Track List</property>
-                                <property name="child">
-                                  <object class="GtkBox" id="subtitle_list_tab">
-                                    <property name="orientation">vertical</property>
-                                    <child>
-                                      <object class="GtkBox" id="vbox12">
-                                        <property name="orientation">vertical</property>
-                                        <property name="spacing">2</property>
-                                        <property name="vexpand">1</property>
+                              <object class="GtkBox" id="subtitle_toolbar">
+                                <property name="css-classes">toolbar</property>
+                                <property name="can-focus">0</property>
+                                <child>
+                                  <object class="GtkButton" id="subtitle_add">
+                                    <property name="tooltip-text" translatable="1">Add new subtitle settings to the list</property>
+                                    <property name="action-name">app.subtitle-add</property>
+                                    <property name="css-classes">flat</property>
+                                    <property name="child">
+                                      <object class="GtkBox">
+                                        <property name="spacing">6</property>
                                         <child>
-                                          <object class="GtkBox" id="subtitle_toolbar">
-                                            <property name="css-classes">toolbar</property>
-                                            <property name="can-focus">0</property>
-                                            <child>
-                                              <object class="GtkButton" id="subtitle_add">
-                                                <property name="tooltip-text" translatable="1">Add new subtitle settings to the list</property>
-                                                <property name="action-name">app.subtitle-add</property>
-                                                <property name="css-classes">flat</property>
-                                                <property name="child">
-                                                  <object class="GtkBox">
-                                                    <property name="spacing">6</property>
-                                                    <child>
-                                                      <object class="GtkImage">
-                                                        <property name="icon-name">list-add</property>
-                                                        <property name="accessible-role">presentation</property>
-                                                      </object>
-                                                    </child>
-                                                    <child>
-                                                      <object class="GtkLabel">
-                                                        <property name="label" translatable="yes">Add</property>
-                                                      </object>
-                                                    </child>
-                                                  </object>
-                                                </property>
-                                              </object>
-                                            </child>
-                                            <child>
-                                              <object class="GtkButton" id="subtitle_add_all">
-                                                <property name="tooltip-text" translatable="1">Add all subtitle tracks to the list</property>
-                                                <property name="action-name">app.subtitle-add-all</property>
-                                                <property name="css-classes">flat</property>
-                                                <property name="child">
-                                                  <object class="GtkBox">
-                                                    <property name="spacing">6</property>
-                                                    <child>
-                                                      <object class="GtkImage">
-                                                        <property name="icon-name">list-add</property>
-                                                        <property name="accessible-role">presentation</property>
-                                                      </object>
-                                                    </child>
-                                                    <child>
-                                                      <object class="GtkLabel">
-                                                        <property name="label" translatable="yes">Add All</property>
-                                                      </object>
-                                                    </child>
-                                                  </object>
-                                                </property>
-                                              </object>
-                                            </child>
-                                            <child>
-                                              <object class="GtkButton" id="subtitle_add_fas">
-                                                <property name="tooltip-text" translatable="1">Add an extra pass to the encode which searches
-                  for subtitle candidates that provide subtitles for
-                  segments of the audio that are in a foreign language.</property>
-                                                <property name="action-name">app.subtitle-add-fas</property>
-                                                <property name="css-classes">flat</property>
-                                                <property name="child">
-                                                  <object class="GtkBox">
-                                                    <property name="spacing">6</property>
-                                                    <child>
-                                                      <object class="GtkImage">
-                                                        <property name="icon-name">list-add</property>
-                                                        <property name="accessible-role">presentation</property>
-                                                      </object>
-                                                    </child>
-                                                    <child>
-                                                      <object class="GtkLabel">
-                                                        <property name="label" translatable="yes">Foreign Audio Scan</property>
-                                                      </object>
-                                                    </child>
-                                                  </object>
-                                                </property>
-                                              </object>
-                                            </child>
-                                            <child>
-                                              <object class="GtkButton" id="subtitle_reset">
-                                                <property name="tooltip-text" translatable="1">Reload all subtitle settings from defaults</property>
-                                                <property name="action-name">app.subtitle-reset</property>
-                                                <property name="css-classes">flat</property>
-                                                <property name="child">
-                                                  <object class="GtkBox">
-                                                    <property name="spacing">6</property>
-                                                    <child>
-                                                      <object class="GtkImage">
-                                                        <property name="icon-name">view-refresh</property>
-                                                        <property name="accessible-role">presentation</property>
-                                                      </object>
-                                                    </child>
-                                                    <child>
-                                                      <object class="GtkLabel">
-                                                        <property name="label" translatable="yes">Reload</property>
-                                                      </object>
-                                                    </child>
-                                                  </object>
-                                                </property>
-                                              </object>
-                                            </child>
+                                          <object class="GtkImage">
+                                            <property name="icon-name">list-add</property>
+                                            <property name="accessible-role">presentation</property>
                                           </object>
                                         </child>
                                         <child>
-                                          <object class="GtkScrolledWindow" id="scrolledwindow4">
-                                            <property name="hscrollbar-policy">never</property>
-                                            <property name="vexpand">1</property>
-                                            <property name="child">
-                                              <object class="GtkTreeView" id="subtitle_list_view">
-                                                <property name="focusable">1</property>
-                                                <property name="headers-visible">0</property>
-                                                <property name="headers-clickable">0</property>
-                                                <child internal-child="selection">
-                                                  <object class="GtkTreeSelection" id="treeview-selection2"/>
-                                                </child>
-                                                <signal name="row-activated" handler="subtitle_row_activated_cb" swapped="no"/>
-                                              </object>
-                                            </property>
+                                          <object class="GtkLabel">
+                                            <property name="label" translatable="yes">Add</property>
                                           </object>
                                         </child>
                                       </object>
-                                    </child>
+                                    </property>
                                   </object>
-                                </property>
+                                </child>
+                                <child>
+                                  <object class="GtkButton" id="subtitle_add_all">
+                                    <property name="tooltip-text" translatable="1">Add all subtitle tracks to the list</property>
+                                    <property name="action-name">app.subtitle-add-all</property>
+                                    <property name="css-classes">flat</property>
+                                    <property name="child">
+                                      <object class="GtkBox">
+                                        <property name="spacing">6</property>
+                                        <child>
+                                          <object class="GtkImage">
+                                            <property name="icon-name">list-add</property>
+                                            <property name="accessible-role">presentation</property>
+                                          </object>
+                                        </child>
+                                        <child>
+                                          <object class="GtkLabel">
+                                            <property name="label" translatable="yes">Add All</property>
+                                          </object>
+                                        </child>
+                                      </object>
+                                    </property>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="GtkButton" id="subtitle_add_fas">
+                                    <property name="tooltip-text" translatable="1">Add an extra pass to the encode which searches
+      for subtitle candidates that provide subtitles for
+      segments of the audio that are in a foreign language.</property>
+                                    <property name="action-name">app.subtitle-add-fas</property>
+                                    <property name="css-classes">flat</property>
+                                    <property name="child">
+                                      <object class="GtkBox">
+                                        <property name="spacing">6</property>
+                                        <child>
+                                          <object class="GtkImage">
+                                            <property name="icon-name">list-add</property>
+                                            <property name="accessible-role">presentation</property>
+                                          </object>
+                                        </child>
+                                        <child>
+                                          <object class="GtkLabel">
+                                            <property name="label" translatable="yes">Foreign Audio Scan</property>
+                                          </object>
+                                        </child>
+                                      </object>
+                                    </property>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="GtkToggleButton">
+                                    <property name="tooltip-text" translatable="yes">Show subtitle default selection options</property>
+                                    <property name="action-name">app.show-sub-defaults</property>
+                                    <property name="css-classes">flat</property>
+                                    <property name="child">
+                                      <object class="GtkBox">
+                                        <property name="spacing">6</property>
+                                        <child>
+                                          <object class="GtkImage">
+                                            <property name="icon-name">document-properties-symbolic</property>
+                                            <property name="accessible-role">presentation</property>
+                                          </object>
+                                        </child>
+                                        <child>
+                                          <object class="GtkLabel">
+                                            <property name="label" translatable="yes">Selection Behavior…</property>
+                                          </object>
+                                        </child>
+                                      </object>
+                                    </property>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="GtkButton" id="subtitle_reset">
+                                    <property name="tooltip-text" translatable="1">Reload all subtitle settings from defaults</property>
+                                    <property name="action-name">app.subtitle-reset</property>
+                                    <property name="css-classes">flat</property>
+                                    <property name="child">
+                                      <object class="GtkBox">
+                                        <property name="spacing">6</property>
+                                        <child>
+                                          <object class="GtkImage">
+                                            <property name="icon-name">view-refresh</property>
+                                            <property name="accessible-role">presentation</property>
+                                          </object>
+                                        </child>
+                                        <child>
+                                          <object class="GtkLabel">
+                                            <property name="label" translatable="yes">Reload</property>
+                                          </object>
+                                        </child>
+                                      </object>
+                                    </property>
+                                  </object>
+                                </child>
                               </object>
                             </child>
                             <child>
-                              <object class="GtkStackPage">
-                                <property name="title" translatable="1">Track Selection</property>
+                              <object class="GtkScrolledWindow" id="scrolledwindow4">
+                                <property name="hscrollbar-policy">never</property>
+                                <property name="vexpand">1</property>
+                                <property name="css-classes">frame</property>
                                 <property name="child">
-                                  <object class="GtkBox" id="subtitle_selection_tab">
-                                    <property name="orientation">vertical</property>
-                                    <property name="margin-start">12</property>
-                                    <property name="margin-end">12</property>
-                                    <property name="margin-top">12</property>
-                                    <property name="margin-bottom">12</property>
-                                    <property name="hexpand">1</property>
-                                    <child>
-                                      <object class="GtkBox" id="subtitle_selection_box1">
-                                        <property name="spacing">6</property>
-                                        <child>
-                                          <object class="GtkBox" id="subtitle_selection_box2">
-                                            <property name="orientation">vertical</property>
-                                            <child>
-                                              <object class="GtkGrid" id="sub_grid2">
-                                                <property name="column-spacing">5</property>
-                                                <property name="row-spacing">2</property>
-                                                <child>
-                                                  <object class="GtkLabel" id="sub_label4">
-                                                    <property name="halign">end</property>
-                                                    <property name="label" translatable="1">Selection Behavior:</property>
-                                                    <property name="justify">right</property>
-                                                    <layout>
-                                                      <property name="column">0</property>
-                                                      <property name="row">0</property>
-                                                    </layout>
-                                                  </object>
-                                                </child>
-                                                <child>
-                                                  <object class="GtkComboBox" id="SubtitleTrackSelectionBehavior">
-                                                    <property name="valign">center</property>
-                                                    <property name="tooltip-text" translatable="1">Choose which subtitle tracks of the source media are used.</property>
-                                                    <signal name="changed" handler="subtitle_def_widget_changed_cb" swapped="no"/>
-                                                    <layout>
-                                                      <property name="column">1</property>
-                                                      <property name="row">0</property>
-                                                    </layout>
-                                                  </object>
-                                                </child>
-                                              </object>
-                                            </child>
-                                            <child>
-                                              <object class="GtkGrid" id="sub_grid3">
-                                                <property name="column-spacing">5</property>
-                                                <property name="row-spacing">2</property>
-                                                <property name="halign">end</property>
-                                                <property name="margin-top">6</property>
-                                                <property name="margin-bottom">6</property>
-                                                <property name="vexpand">1</property>
-                                                <child>
-                                                  <object class="GtkScrolledWindow" id="sub_scrolledwindow10">
-                                                    <property name="hscrollbar-policy">never</property>
-                                                    <property name="min-content-height">108</property>
-                                                    <property name="vexpand">1</property>
-                                                    <property name="child">
-                                                      <object class="GtkTreeView" id="subtitle_avail_lang">
-                                                        <property name="headers-visible">0</property>
-                                                        <property name="focusable">1</property>
-                                                        <property name="vexpand">1</property>
-                                                        <signal name="row-activated" handler="subtitle_avail_lang_activated_cb" swapped="no"/>
-                                                      </object>
-                                                    </property>
-                                                    <layout>
-                                                      <property name="column">0</property>
-                                                      <property name="row">1</property>
-                                                      <property name="row-span">4</property>
-                                                    </layout>
-                                                  </object>
-                                                </child>
-                                                <child>
-                                                  <object class="GtkScrolledWindow" id="sub_scrolledwindow11">
-                                                    <property name="hscrollbar-policy">never</property>
-                                                    <property name="vexpand">1</property>
-                                                    <property name="child">
-                                                      <object class="GtkTreeView" id="subtitle_selected_lang">
-                                                        <property name="headers-visible">0</property>
-                                                        <property name="focusable">1</property>
-                                                        <property name="tooltip-text" translatable="1">Create a list of languages you would like to select subtitles for.
-                  Tracks matching these languages will be selected using the chosen Selection Behavior.
-
-                  The first language in this list is your &quot;preferred&quot; language and will be used
-                  for determining subtitle selection settings when there is foreign audio.</property>
-                                                        <property name="vexpand">1</property>
-                                                        <signal name="row-activated" handler="subtitle_selected_lang_activated_cb" swapped="no"/>
-                                                      </object>
-                                                    </property>
-                                                    <layout>
-                                                      <property name="column">2</property>
-                                                      <property name="row">1</property>
-                                                      <property name="row-span">4</property>
-                                                    </layout>
-                                                  </object>
-                                                </child>
-                                                <child>
-                                                  <object class="GtkButton" id="subtitle_lang_add">
-                                                    <property name="label" translatable="1">Add</property>
-                                                    <property name="focusable">1</property>
-                                                    <property name="receives-default">1</property>
-                                                    <property name="valign">center</property>
-                                                    <signal name="clicked" handler="subtitle_add_lang_clicked_cb" swapped="no"/>
-                                                    <layout>
-                                                      <property name="column">1</property>
-                                                      <property name="row">2</property>
-                                                    </layout>
-                                                  </object>
-                                                </child>
-                                                <child>
-                                                  <object class="GtkButton" id="subtitle_lang_remove">
-                                                    <property name="label" translatable="1">Remove</property>
-                                                    <property name="focusable">1</property>
-                                                    <property name="receives-default">1</property>
-                                                    <property name="valign">center</property>
-                                                    <signal name="clicked" handler="subtitle_remove_lang_clicked_cb" swapped="no"/>
-                                                    <layout>
-                                                      <property name="column">1</property>
-                                                      <property name="row">3</property>
-                                                    </layout>
-                                                  </object>
-                                                </child>
-                                                <child>
-                                                  <object class="GtkLabel" id="sub_label8">
-                                                    <property name="label" translatable="1">Available Languages</property>
-                                                    <layout>
-                                                      <property name="column">0</property>
-                                                      <property name="row">0</property>
-                                                    </layout>
-                                                  </object>
-                                                </child>
-                                                <child>
-                                                  <object class="GtkLabel" id="sub_label24">
-                                                    <property name="label" translatable="1">Selected Languages</property>
-                                                    <layout>
-                                                      <property name="column">2</property>
-                                                      <property name="row">0</property>
-                                                    </layout>
-                                                  </object>
-                                                </child>
-                                                <child>
-                                                  <object class="GtkLabel" id="subtitle_preferred_language">
-                                                    <property name="halign">end</property>
-                                                    <property name="label" translatable="1">Preferred Language: None</property>
-                                                    <property name="justify">right</property>
-                                                    <layout>
-                                                      <property name="column">3</property>
-                                                      <property name="row">1</property>
-                                                    </layout>
-                                                  </object>
-                                                </child>
-                                              </object>
-                                            </child>
-                                          </object>
-                                        </child>
-                                      </object>
+                                  <object class="GtkTreeView" id="subtitle_list_view">
+                                    <property name="focusable">1</property>
+                                    <property name="headers-visible">0</property>
+                                    <property name="headers-clickable">0</property>
+                                    <child internal-child="selection">
+                                      <object class="GtkTreeSelection" id="treeview-selection2"/>
                                     </child>
-                                    <child>
-                                      <object class="GtkCheckButton" id="SubtitleAddForeignAudioSearch">
-                                        <property name="label" translatable="1">Add Foreign Audio Scan Pass</property>
-                                        <property name="focusable">1</property>
-                                        <property name="tooltip-text" translatable="1">Add &quot;Foreign Audio Scan&quot; when the default audio track is your preferred language.
-                  This search pass finds short sequences of foreign audio and provides subtitles for them.
-
-                  This option requires a language to be set in the Selected Languages list.</property>
-                                        <property name="halign">start</property>
-                                        <property name="active">1</property>
-                                        <signal name="toggled" handler="subtitle_def_widget_changed_cb" swapped="no"/>
-                                      </object>
-                                    </child>
-                                    <child>
-                                      <object class="GtkCheckButton" id="SubtitleAddForeignAudioSubtitle">
-                                        <property name="label" translatable="1">Add subtitle track if default audio is foreign</property>
-                                        <property name="focusable">1</property>
-                                        <property name="tooltip-text" translatable="1">When the default audio track is not your preferred language, add a subtitle track.
-
-                  This option requires a language to be set in the Selected Languages list.</property>
-                                        <property name="halign">start</property>
-                                        <property name="active">1</property>
-                                        <signal name="toggled" handler="subtitle_def_widget_changed_cb" swapped="no"/>
-                                      </object>
-                                    </child>
-                                    <child>
-                                      <object class="GtkCheckButton" id="SubtitleAddCC">
-                                        <property name="label" translatable="1">Add Closed Captions when available</property>
-                                        <property name="focusable">1</property>
-                                        <property name="tooltip-text" translatable="1">Closed captions are text subtitles that can be added to any container as a soft subtitle track</property>
-                                        <property name="halign">start</property>
-                                        <signal name="toggled" handler="subtitle_def_widget_changed_cb" swapped="no"/>
-                                      </object>
-                                    </child>
-                                    <child>
-                                      <object class="GtkBox" id="subtitle_burn_box">
-                                        <property name="spacing">4</property>
-                                        <child>
-                                          <object class="GtkLabel" id="sub_burn_behavior_label">
-                                            <property name="halign">end</property>
-                                            <property name="label" translatable="1">Burn-In Behavior*:</property>
-                                            <property name="justify">right</property>
-                                          </object>
-                                        </child>
-                                        <child>
-                                          <object class="GtkComboBox" id="SubtitleBurnBehavior">
-                                            <property name="valign">center</property>
-                                            <property name="tooltip-text" translatable="1">Set the behavior of subtitle &quot;Burn-In&quot;.
-
-                  Burned-In subtitles are part of the video and can not be disabled during playback.
-                  Only one subtitle track can be burned! Since conflicts can occur, the first chosen wins.</property>
-                                            <signal name="changed" handler="subtitle_def_widget_changed_cb" swapped="no"/>
-                                          </object>
-                                        </child>
-                                      </object>
-                                    </child>
-                                    <child>
-                                      <object class="GtkBox" id="subtitle_additional_burn_box">
-                                        <property name="spacing">4</property>
-                                        <child>
-                                          <object class="GtkLabel" id="sub_additional_burn_label">
-                                            <property name="halign">end</property>
-                                            <property name="label" translatable="1">Burn-In for deficient players*:</property>
-                                            <property name="justify">right</property>
-                                          </object>
-                                        </child>
-                                        <child>
-                                          <object class="GtkCheckButton" id="SubtitleBurnDVDSub">
-                                            <property name="label" translatable="1">DVD Subtitles</property>
-                                            <property name="focusable">1</property>
-                                            <property name="tooltip-text" translatable="1">Burn the first selected DVD subtitle track. All other DVD subtitle tracks will be discarded.
-                  Use this option if your player software or device does not support DVD subtitles.
-
-                  Only one subtitle track can be burned! Since conflicts can occur, the first chosen wins.</property>
-                                            <property name="halign">start</property>
-                                            <signal name="toggled" handler="subtitle_def_widget_changed_cb" swapped="no"/>
-                                          </object>
-                                        </child>
-                                        <child>
-                                          <object class="GtkCheckButton" id="SubtitleBurnBDSub">
-                                            <property name="label" translatable="1">Blu-ray Subtitles</property>
-                                            <property name="focusable">1</property>
-                                            <property name="tooltip-text" translatable="1">Burn the first selected Blu-ray subtitle track. All other Blu-ray subtitle tracks will be discarded.
-                  Use this option if your player software or device does not support Blu-ray subtitles.
-
-                  Only one subtitle track can be burned! Since conflicts can occur, the first chosen wins.</property>
-                                            <property name="halign">start</property>
-                                            <signal name="toggled" handler="subtitle_def_widget_changed_cb" swapped="no"/>
-                                          </object>
-                                        </child>
-                                      </object>
-                                    </child>
-                                    <child>
-                                      <object class="GtkLabel" id="sub_burn_warning_label">
-                                        <property name="halign">start</property>
-                                        <property name="label" translatable="1">&lt;small&gt;* Only one of the above subtitle burn options will be applied, starting with the top.&lt;/small&gt;</property>
-                                        <property name="tooltip-text" translatable="1">Only one subtitle track can be burned! Since conflicts can occur, the first chosen wins.</property>
-                                        <property name="use-markup">1</property>
-                                      </object>
-                                    </child>
+                                    <signal name="row-activated" handler="subtitle_row_activated_cb" swapped="no"/>
                                   </object>
                                 </property>
                               </object>
@@ -5190,6 +4508,698 @@ This permits Opus passthru to be selected when automatic passthru selection is e
     <property name="value">10</property>
     <property name="step-increment">5</property>
     <property name="page-increment">10</property>
+  </object>
+  <object class="GtkDialog" id="subtitle_defaults_dialog">
+    <property name="title" translatable="yes">Subtitle Selection Behavior</property>
+    <property name="transient-for">hb_window</property>
+    <property name="modal">1</property>
+    <property name="use-header-bar">1</property>
+    <signal name="close-request" handler="gtk_widget_hide" swapped="no"/>
+    <child>
+      <object class="GtkBox" id="subtitle_selection_tab">
+        <property name="orientation">vertical</property>
+        <property name="margin-start">12</property>
+        <property name="margin-end">12</property>
+        <property name="margin-top">12</property>
+        <property name="margin-bottom">12</property>
+        <property name="hexpand">1</property>
+        <child>
+          <object class="GtkBox" id="subtitle_selection_box1">
+            <property name="spacing">6</property>
+            <child>
+              <object class="GtkBox" id="subtitle_selection_box2">
+                <property name="orientation">vertical</property>
+                <child>
+                  <object class="GtkGrid" id="sub_grid2">
+                    <property name="column-spacing">5</property>
+                    <property name="row-spacing">2</property>
+                    <child>
+                      <object class="GtkLabel" id="sub_label4">
+                        <property name="halign">end</property>
+                        <property name="label" translatable="1">Selection Behavior:</property>
+                        <property name="justify">right</property>
+                        <layout>
+                          <property name="column">0</property>
+                          <property name="row">0</property>
+                        </layout>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkComboBox" id="SubtitleTrackSelectionBehavior">
+                        <property name="valign">center</property>
+                        <property name="tooltip-text" translatable="1">Choose which subtitle tracks of the source media are used.</property>
+                        <signal name="changed" handler="subtitle_def_widget_changed_cb" swapped="no"/>
+                        <layout>
+                          <property name="column">1</property>
+                          <property name="row">0</property>
+                        </layout>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkGrid" id="sub_grid3">
+                    <property name="column-spacing">5</property>
+                    <property name="row-spacing">2</property>
+                    <property name="halign">fill</property>
+                    <property name="margin-top">6</property>
+                    <property name="margin-bottom">6</property>
+                    <property name="vexpand">1</property>
+                    <child>
+                      <object class="GtkScrolledWindow" id="sub_scrolledwindow10">
+                        <property name="hscrollbar-policy">never</property>
+                        <property name="min-content-height">108</property>
+                        <property name="hexpand">1</property>
+                        <property name="vexpand">1</property>
+                        <property name="css-classes">frame</property>
+                        <property name="child">
+                          <object class="GtkTreeView" id="subtitle_avail_lang">
+                            <property name="headers-visible">0</property>
+                            <property name="focusable">1</property>
+                            <property name="vexpand">1</property>
+                            <signal name="row-activated" handler="subtitle_avail_lang_activated_cb" swapped="no"/>
+                          </object>
+                        </property>
+                        <layout>
+                          <property name="column">0</property>
+                          <property name="row">1</property>
+                          <property name="row-span">4</property>
+                        </layout>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkScrolledWindow" id="sub_scrolledwindow11">
+                        <property name="hscrollbar-policy">never</property>
+                        <property name="hexpand">1</property>
+                        <property name="vexpand">1</property>
+                        <property name="css-classes">frame</property>
+                        <property name="child">
+                          <object class="GtkTreeView" id="subtitle_selected_lang">
+                            <property name="headers-visible">0</property>
+                            <property name="focusable">1</property>
+                            <property name="tooltip-text" translatable="1">Create a list of languages you would like to select subtitles for.
+  Tracks matching these languages will be selected using the chosen Selection Behavior.
+
+  The first language in this list is your &quot;preferred&quot; language and will be used
+  for determining subtitle selection settings when there is foreign audio.</property>
+                            <property name="vexpand">1</property>
+                            <signal name="row-activated" handler="subtitle_selected_lang_activated_cb" swapped="no"/>
+                          </object>
+                        </property>
+                        <layout>
+                          <property name="column">2</property>
+                          <property name="row">1</property>
+                          <property name="row-span">4</property>
+                        </layout>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkButton" id="subtitle_lang_add">
+                        <property name="label" translatable="1">Add</property>
+                        <property name="focusable">1</property>
+                        <property name="receives-default">1</property>
+                        <property name="valign">center</property>
+                        <signal name="clicked" handler="subtitle_add_lang_clicked_cb" swapped="no"/>
+                        <layout>
+                          <property name="column">1</property>
+                          <property name="row">2</property>
+                        </layout>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkButton" id="subtitle_lang_remove">
+                        <property name="label" translatable="1">Remove</property>
+                        <property name="focusable">1</property>
+                        <property name="receives-default">1</property>
+                        <property name="valign">center</property>
+                        <signal name="clicked" handler="subtitle_remove_lang_clicked_cb" swapped="no"/>
+                        <layout>
+                          <property name="column">1</property>
+                          <property name="row">3</property>
+                        </layout>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkLabel" id="sub_label8">
+                        <property name="label" translatable="1">Available Languages</property>
+                        <layout>
+                          <property name="column">0</property>
+                          <property name="row">0</property>
+                        </layout>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkLabel" id="sub_label24">
+                        <property name="label" translatable="1">Selected Languages</property>
+                        <layout>
+                          <property name="column">2</property>
+                          <property name="row">0</property>
+                        </layout>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkLabel" id="subtitle_preferred_language">
+                        <property name="halign">start</property>
+                        <property name="label" translatable="1">Preferred Language: None</property>
+                        <property name="justify">right</property>
+                        <layout>
+                          <property name="column">0</property>
+                          <property name="column-span">3</property>
+                          <property name="row">5</property>
+                        </layout>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="GtkCheckButton" id="SubtitleAddForeignAudioSearch">
+            <property name="label" translatable="1">Add Foreign Audio Scan Pass</property>
+            <property name="focusable">1</property>
+            <property name="tooltip-text" translatable="1">Add &quot;Foreign Audio Scan&quot; when the default audio track is your preferred language.
+  This search pass finds short sequences of foreign audio and provides subtitles for them.
+
+  This option requires a language to be set in the Selected Languages list.</property>
+            <property name="halign">start</property>
+            <property name="active">1</property>
+            <signal name="toggled" handler="subtitle_def_widget_changed_cb" swapped="no"/>
+          </object>
+        </child>
+        <child>
+          <object class="GtkCheckButton" id="SubtitleAddForeignAudioSubtitle">
+            <property name="label" translatable="1">Add subtitle track if default audio is foreign</property>
+            <property name="focusable">1</property>
+            <property name="tooltip-text" translatable="1">When the default audio track is not your preferred language, add a subtitle track.
+
+  This option requires a language to be set in the Selected Languages list.</property>
+            <property name="halign">start</property>
+            <property name="active">1</property>
+            <signal name="toggled" handler="subtitle_def_widget_changed_cb" swapped="no"/>
+          </object>
+        </child>
+        <child>
+          <object class="GtkCheckButton" id="SubtitleAddCC">
+            <property name="label" translatable="1">Add Closed Captions when available</property>
+            <property name="focusable">1</property>
+            <property name="tooltip-text" translatable="1">Closed captions are text subtitles that can be added to any container as a soft subtitle track</property>
+            <property name="halign">start</property>
+            <signal name="toggled" handler="subtitle_def_widget_changed_cb" swapped="no"/>
+          </object>
+        </child>
+        <child>
+          <object class="GtkBox" id="subtitle_burn_box">
+            <property name="spacing">4</property>
+            <child>
+              <object class="GtkLabel" id="sub_burn_behavior_label">
+                <property name="halign">end</property>
+                <property name="label" translatable="1">Burn-In Behavior*:</property>
+                <property name="justify">right</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkComboBox" id="SubtitleBurnBehavior">
+                <property name="valign">center</property>
+                <property name="tooltip-text" translatable="1">Set the behavior of subtitle &quot;Burn-In&quot;.
+
+  Burned-In subtitles are part of the video and can not be disabled during playback.
+  Only one subtitle track can be burned! Since conflicts can occur, the first chosen wins.</property>
+                <signal name="changed" handler="subtitle_def_widget_changed_cb" swapped="no"/>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="GtkBox" id="subtitle_additional_burn_box">
+            <property name="spacing">4</property>
+            <child>
+              <object class="GtkLabel" id="sub_additional_burn_label">
+                <property name="halign">end</property>
+                <property name="label" translatable="1">Burn-In for deficient players*:</property>
+                <property name="justify">right</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkCheckButton" id="SubtitleBurnDVDSub">
+                <property name="label" translatable="1">DVD Subtitles</property>
+                <property name="focusable">1</property>
+                <property name="tooltip-text" translatable="1">Burn the first selected DVD subtitle track. All other DVD subtitle tracks will be discarded.
+  Use this option if your player software or device does not support DVD subtitles.
+
+  Only one subtitle track can be burned! Since conflicts can occur, the first chosen wins.</property>
+                <property name="halign">start</property>
+                <signal name="toggled" handler="subtitle_def_widget_changed_cb" swapped="no"/>
+              </object>
+            </child>
+            <child>
+              <object class="GtkCheckButton" id="SubtitleBurnBDSub">
+                <property name="label" translatable="1">Blu-ray Subtitles</property>
+                <property name="focusable">1</property>
+                <property name="tooltip-text" translatable="1">Burn the first selected Blu-ray subtitle track. All other Blu-ray subtitle tracks will be discarded.
+  Use this option if your player software or device does not support Blu-ray subtitles.
+
+  Only one subtitle track can be burned! Since conflicts can occur, the first chosen wins.</property>
+                <property name="halign">start</property>
+                <signal name="toggled" handler="subtitle_def_widget_changed_cb" swapped="no"/>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="GtkLabel" id="sub_burn_warning_label">
+            <property name="halign">start</property>
+            <property name="label" translatable="1">&lt;small&gt;* Only one of the above subtitle burn options will be applied, starting with the top.&lt;/small&gt;</property>
+            <property name="tooltip-text" translatable="1">Only one subtitle track can be burned! Since conflicts can occur, the first chosen wins.</property>
+            <property name="use-markup">1</property>
+          </object>
+        </child>
+      </object>
+    </child>
+  </object>
+  <object class="GtkDialog" id="audio_defaults_dialog">
+    <property name="title" translatable="yes">Audio Selection Behavior</property>
+    <property name="transient-for">hb_window</property>
+    <property name="modal">1</property>
+    <property name="use-header-bar">1</property>
+    <signal name="close-request" handler="gtk_widget_hide" swapped="no"/>
+    <property name="child">
+      <object class="GtkBox">
+        <property name="orientation">vertical</property>
+        <property name="hexpand">1</property>
+        <property name="margin-start">8</property>
+        <property name="margin-end">8</property>
+        <property name="margin-top">8</property>
+        <property name="margin-bottom">8</property>
+        <property name="width-request">600</property>
+        <property name="height-request">400</property>
+        <child>
+          <object class="GtkBox" id="audio_selection_box1">
+            <property name="spacing">6</property>
+            <child>
+              <object class="GtkBox" id="audio_defaults_box2">
+                <property name="orientation">vertical</property>
+                <child>
+                  <object class="GtkGrid" id="grid2">
+                    <property name="column-spacing">5</property>
+                    <property name="row-spacing">2</property>
+                    <child>
+                      <object class="GtkLabel" id="label4">
+                        <property name="halign">end</property>
+                        <property name="label" translatable="yes">Selection Behavior:</property>
+                        <property name="justify">right</property>
+                        <layout>
+                          <property name="column">0</property>
+                          <property name="row">0</property>
+                        </layout>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkComboBox" id="AudioTrackSelectionBehavior">
+                        <property name="valign">center</property>
+                        <property name="tooltip-text" translatable="yes">Choose which audio tracks of the source media are used.</property>
+                        <signal name="changed" handler="audio_def_widget_changed_cb" swapped="no"/>
+                        <layout>
+                          <property name="column">1</property>
+                          <property name="row">0</property>
+                        </layout>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkGrid" id="grid3">
+                    <property name="column-spacing">5</property>
+                    <property name="row-spacing">2</property>
+                    <property name="halign">end</property>
+                    <property name="margin-top">6</property>
+                    <property name="margin-bottom">6</property>
+                    <property name="vexpand">1</property>
+                    <child>
+                      <object class="GtkScrolledWindow" id="scrolledwindow10">
+                        <property name="hscrollbar-policy">never</property>
+                        <property name="min-content-height">84</property>
+                        <property name="vexpand">1</property>
+                        <property name="css-classes">frame</property>
+                        <property name="child">
+                          <object class="GtkTreeView" id="audio_avail_lang">
+                            <property name="headers-visible">0</property>
+                            <property name="focusable">1</property>
+                            <property name="vexpand">1</property>
+                            <signal name="row-activated" handler="audio_avail_lang_activated_cb" swapped="no"/>
+                          </object>
+                        </property>
+                        <layout>
+                          <property name="column">0</property>
+                          <property name="row">1</property>
+                          <property name="row-span">4</property>
+                        </layout>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkScrolledWindow" id="scrolledwindow11">
+                        <property name="hscrollbar-policy">never</property>
+                        <property name="css-classes">frame</property>
+                        <property name="child">
+                          <object class="GtkTreeView" id="audio_selected_lang">
+                            <property name="headers-visible">0</property>
+                            <property name="focusable">1</property>
+                            <property name="tooltip-text" translatable="yes">Create a list of languages you would like to select audio for.
+Tracks matching these languages will be selected using the chosen Selection Behavior.</property>
+                            <signal name="row-activated" handler="audio_selected_lang_activated_cb" swapped="no"/>
+                          </object>
+                        </property>
+                        <layout>
+                          <property name="column">2</property>
+                          <property name="row">1</property>
+                          <property name="row-span">4</property>
+                        </layout>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkButton" id="audio_lang_add">
+                        <property name="label" translatable="yes">Add</property>
+                        <property name="focusable">1</property>
+                        <property name="receives-default">1</property>
+                        <property name="valign">center</property>
+                        <signal name="clicked" handler="audio_add_lang_clicked_cb" swapped="no"/>
+                        <layout>
+                          <property name="column">1</property>
+                          <property name="row">2</property>
+                        </layout>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkButton" id="audio_lang_remove">
+                        <property name="label" translatable="yes">Remove</property>
+                        <property name="focusable">1</property>
+                        <property name="receives-default">1</property>
+                        <property name="valign">center</property>
+                        <signal name="clicked" handler="audio_remove_lang_clicked_cb" swapped="no"/>
+                        <layout>
+                          <property name="column">1</property>
+                          <property name="row">3</property>
+                        </layout>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkLabel" id="label8">
+                        <property name="label" translatable="yes">Available Languages</property>
+                        <layout>
+                          <property name="column">0</property>
+                          <property name="row">0</property>
+                        </layout>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkLabel" id="label24">
+                        <property name="label" translatable="yes">Selected Languages</property>
+                        <layout>
+                          <property name="column">2</property>
+                          <property name="row">0</property>
+                        </layout>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkCheckButton" id="AudioSecondaryEncoderMode">
+                    <property name="label" translatable="yes">Use only first encoder for secondary audio</property>
+                    <property name="focusable">1</property>
+                    <property name="tooltip-text" translatable="yes">Only the primary audio track will be encoded with the full encoder list.
+All other secondary audio output tracks will be encoded with first encoder only.</property>
+                    <property name="halign">start</property>
+                    <property name="active">1</property>
+                    <signal name="toggled" handler="audio_def_widget_changed_cb" swapped="no"/>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="GtkBox" id="auto_pass_box">
+                <property name="orientation">vertical</property>
+                <property name="margin-start">6</property>
+                <property name="spacing">2</property>
+                <child>
+                  <object class="GtkGrid" id="grid4">
+                    <property name="column-spacing">5</property>
+                    <property name="row-spacing">2</property>
+                    <property name="halign">end</property>
+                    <child>
+                      <object class="GtkLabel" id="labela3">
+                        <property name="halign">start</property>
+                        <property name="label" translatable="yes">Auto Passthru:</property>
+                        <layout>
+                          <property name="column">0</property>
+                          <property name="row">0</property>
+                        </layout>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkCheckButton" id="AudioAllowMP2Pass">
+                        <property name="label" translatable="yes">MP2</property>
+                        <property name="focusable">1</property>
+                        <property name="tooltip-text" translatable="yes">Enable this if your playback device supports MP2.
+This permits MP2 passthru to be selected when automatic passthru selection is enabled.</property>
+                        <property name="halign">start</property>
+                        <property name="active">1</property>
+                        <signal name="toggled" handler="audio_passthru_widget_changed_cb" swapped="no"/>
+                        <layout>
+                          <property name="column">1</property>
+                          <property name="row">0</property>
+                        </layout>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkCheckButton" id="AudioAllowMP3Pass">
+                        <property name="label" translatable="yes">MP3</property>
+                        <property name="focusable">1</property>
+                        <property name="tooltip-text" translatable="yes">Enable this if your playback device supports MP3.
+This permits MP3 passthru to be selected when automatic passthru selection is enabled.</property>
+                        <property name="halign">start</property>
+                        <property name="active">1</property>
+                        <signal name="toggled" handler="audio_passthru_widget_changed_cb" swapped="no"/>
+                        <layout>
+                          <property name="column">2</property>
+                          <property name="row">0</property>
+                        </layout>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkCheckButton" id="AudioAllowAC3Pass">
+                        <property name="label" translatable="yes">AC-3</property>
+                        <property name="focusable">1</property>
+                        <property name="tooltip-text" translatable="yes">Enable this if your playback device supports AC-3.
+This permits AC-3 passthru to be selected when automatic passthru selection is enabled.</property>
+                        <property name="halign">start</property>
+                        <property name="active">1</property>
+                        <signal name="toggled" handler="audio_passthru_widget_changed_cb" swapped="no"/>
+                        <layout>
+                          <property name="column">1</property>
+                          <property name="row">1</property>
+                        </layout>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkCheckButton" id="AudioAllowEAC3Pass">
+                        <property name="label" translatable="yes">EAC-3</property>
+                        <property name="focusable">1</property>
+                        <property name="tooltip-text" translatable="yes">Enable this if your playback device supports EAC-3.
+This permits EAC-3 passthru to be selected when automatic passthru selection is enabled.</property>
+                        <property name="halign">start</property>
+                        <property name="active">1</property>
+                        <signal name="toggled" handler="audio_passthru_widget_changed_cb" swapped="no"/>
+                        <layout>
+                          <property name="column">2</property>
+                          <property name="row">1</property>
+                        </layout>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkCheckButton" id="AudioAllowDTSPass">
+                        <property name="label" translatable="yes">DTS</property>
+                        <property name="focusable">1</property>
+                        <property name="tooltip-text" translatable="yes">Enable this if your playback device supports DTS.
+This permits DTS passthru to be selected when automatic passthru selection is enabled.</property>
+                        <property name="halign">start</property>
+                        <property name="active">1</property>
+                        <signal name="toggled" handler="audio_passthru_widget_changed_cb" swapped="no"/>
+                        <layout>
+                          <property name="column">1</property>
+                          <property name="row">2</property>
+                        </layout>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkCheckButton" id="AudioAllowDTSHDPass">
+                        <property name="label" translatable="yes">DTS-HD</property>
+                        <property name="focusable">1</property>
+                        <property name="tooltip-text" translatable="yes">Enable this if your playback device supports DTS-HD.
+This permits DTS-HD passthru to be selected when automatic passthru selection is enabled.</property>
+                        <property name="halign">start</property>
+                        <property name="active">1</property>
+                        <signal name="toggled" handler="audio_passthru_widget_changed_cb" swapped="no"/>
+                        <layout>
+                          <property name="column">2</property>
+                          <property name="row">2</property>
+                        </layout>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkCheckButton" id="AudioAllowTRUEHDPass">
+                        <property name="label" translatable="yes">TrueHD</property>
+                        <property name="focusable">1</property>
+                        <property name="tooltip-text" translatable="yes">Enable this if your playback device supports TrueHD.
+This permits TrueHD passthru to be selected when automatic passthru selection is enabled.</property>
+                        <property name="halign">start</property>
+                        <property name="active">1</property>
+                        <signal name="toggled" handler="audio_passthru_widget_changed_cb" swapped="no"/>
+                        <layout>
+                          <property name="column">1</property>
+                          <property name="row">3</property>
+                        </layout>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkCheckButton" id="AudioAllowFLACPass">
+                        <property name="label" translatable="yes">FLAC</property>
+                        <property name="focusable">1</property>
+                        <property name="tooltip-text" translatable="yes">Enable this if your playback device supports FLAC.
+This permits FLAC passthru to be selected when automatic passthru selection is enabled.</property>
+                        <property name="halign">start</property>
+                        <property name="active">1</property>
+                        <signal name="toggled" handler="audio_passthru_widget_changed_cb" swapped="no"/>
+                        <layout>
+                          <property name="column">2</property>
+                          <property name="row">3</property>
+                        </layout>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkCheckButton" id="AudioAllowAACPass">
+                        <property name="label" translatable="yes">AAC</property>
+                        <property name="focusable">1</property>
+                        <property name="tooltip-text" translatable="yes">Enable this if your playback device supports AAC.
+This permits AAC passthru to be selected when automatic passthru selection is enabled.</property>
+                        <property name="halign">start</property>
+                        <property name="active">1</property>
+                        <signal name="toggled" handler="audio_passthru_widget_changed_cb" swapped="no"/>
+                        <layout>
+                          <property name="column">1</property>
+                          <property name="row">4</property>
+                        </layout>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkCheckButton" id="AudioAllowOPUSPass">
+                        <property name="label" translatable="yes">Opus</property>
+                        <property name="focusable">1</property>
+                        <property name="tooltip-text" translatable="yes">Enable this if your playback device supports Opus.
+This permits Opus passthru to be selected when automatic passthru selection is enabled.</property>
+                        <property name="halign">start</property>
+                        <property name="active">1</property>
+                        <signal name="toggled" handler="audio_passthru_widget_changed_cb" swapped="no"/>
+                        <layout>
+                          <property name="column">2</property>
+                          <property name="row">4</property>
+                        </layout>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkBox" id="auto_fallback_box">
+                    <property name="spacing">6</property>
+                    <property name="halign">end</property>
+                    <child>
+                      <object class="GtkLabel" id="labela4">
+                        <property name="halign">end</property>
+                        <property name="hexpand">1</property>
+                        <property name="label" translatable="yes">Passthru Fallback:</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkComboBox" id="AudioEncoderFallback">
+                        <property name="valign">center</property>
+                        <property name="tooltip-text" translatable="yes">Set the audio codec to encode with when a suitable track can not be found for audio passthru.</property>
+                        <signal name="changed" handler="audio_fallback_widget_changed_cb" swapped="no"/>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="GtkLabel" id="audio_def_settings_label">
+            <property name="margin-top">6</property>
+            <property name="halign">start</property>
+            <property name="use-markup">1</property>
+            <property name="label" translatable="yes">&lt;b&gt;Audio Encoder Settings:&lt;/b&gt;</property>
+            <property name="tooltip-markup" translatable="yes">Each selected source track will be encoded with all selected encoders</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkSeparator" id="sep1"/>
+        </child>
+        <child>
+          <object class="GtkBox" id="audio_list_default_header">
+            <child>
+              <object class="GtkLabel" id="audio_defaults_encoder_label">
+                <property name="label" translatable="yes">Encoder</property>
+                <property name="halign">center</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkLabel" id="audio_defaults_bitrate_label">
+                <property name="label" translatable="yes">Bitrate/Quality</property>
+                <property name="halign">center</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkLabel" id="audio_defaults_mixdown_label">
+                <property name="label" translatable="yes">Mixdown</property>
+                <property name="halign">center</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkLabel" id="audio_defaults_samplerate_label">
+                <property name="label" translatable="yes">Samplerate</property>
+                <property name="halign">center</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkLabel" id="audio_defaults_gain_label">
+                <property name="label" translatable="yes">Gain</property>
+                <property name="halign">center</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkLabel" id="audio_defaults_drc_label">
+                <property name="label" translatable="yes">DRC</property>
+                <property name="halign">center</property>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="GtkScrolledWindow" id="scrolledwindow12">
+            <property name="hexpand">1</property>
+            <property name="vexpand">1</property>
+            <property name="child">
+              <object class="GtkListBox" id="audio_list_default">
+                <property name="focusable">1</property>
+                <property name="vexpand">1</property>
+                <property name="selection-mode">none</property>
+                <property name="activate-on-single-click">0</property>
+              </object>
+            </property>
+          </object>
+        </child>
+      </object>
+    </property>
   </object>
   <object class="GtkDialog" id="title_add_multiple_dialog">
     <property name="title" translatable="yes">Add Multiple Titles</property>
