@@ -404,6 +404,9 @@ GHB_DECLARE_ACTION_CB(hbfd_action_cb);
 GHB_DECLARE_ACTION_CB(show_queue_action_cb);
 GHB_DECLARE_ACTION_CB(show_preview_action_cb);
 GHB_DECLARE_ACTION_CB(show_activity_action_cb);
+GHB_DECLARE_ACTION_CB(show_audio_defaults_cb);
+GHB_DECLARE_ACTION_CB(show_subtitle_defaults_cb);
+GHB_DECLARE_ACTION_CB(show_activity_action_cb);
 GHB_DECLARE_ACTION_CB(preset_save_action_cb);
 GHB_DECLARE_ACTION_CB(preset_save_as_action_cb);
 GHB_DECLARE_ACTION_CB(preset_rename_action_cb);
@@ -476,6 +479,8 @@ map_actions (GtkApplication *app, signal_user_data_t *ud)
         { "show-queue",            show_queue_action_cb            },
         { "show-preview",          show_preview_action_cb          },
         { "show-activity",         show_activity_action_cb         },
+        { "show-audio-defaults",   show_audio_defaults_cb          },
+        { "show-sub-defaults",     show_subtitle_defaults_cb       },
         { "preset-save",           preset_save_action_cb           },
         { "preset-save-as",        preset_save_as_action_cb        },
         { "preset-rename",         preset_rename_action_cb         },
