@@ -3769,9 +3769,9 @@ ghb_picture_settings_deps(signal_user_data_t *ud)
     gtk_widget_set_sensitive(widget, enable_par);
 
     widget = ghb_builder_widget("PictureWidth");
-    gtk_widget_set_sensitive(widget, custom_resolution_limit);
+    gtk_widget_set_visible(widget, custom_resolution_limit);
     widget = ghb_builder_widget("PictureHeight");
-    gtk_widget_set_sensitive(widget, custom_resolution_limit);
+    gtk_widget_set_visible(widget, custom_resolution_limit);
 
     widget = ghb_builder_widget("PictureTopCrop");
     gtk_widget_set_sensitive(widget, custom_crop);
@@ -4806,3 +4806,4 @@ const gchar *ghb_get_filter_name (hb_filter_object_t *filter)
             return filter->name;
     }
 }
+
