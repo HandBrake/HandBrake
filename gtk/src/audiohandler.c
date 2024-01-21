@@ -624,16 +624,19 @@ audio_select_and_add_track(
     return asettings;
 }
 
-void ghb_audio_title_change(signal_user_data_t *ud, gboolean title_valid)
+void
+ghb_audio_set_actions_enabled (signal_user_data_t *ud, gboolean enabled)
 {
     GSimpleAction *action;
 
     action = G_SIMPLE_ACTION(GHB_ACTION("audio-add"));
-    g_simple_action_set_enabled(action, title_valid);
+    g_simple_action_set_enabled(action, enabled);
     action = G_SIMPLE_ACTION(GHB_ACTION("audio-add-all"));
-    g_simple_action_set_enabled(action, title_valid);
+    g_simple_action_set_enabled(action, enabled);
     action = G_SIMPLE_ACTION(GHB_ACTION("audio-reset"));
-    g_simple_action_set_enabled(action, title_valid);
+    g_simple_action_set_enabled(action, enabled);
+    action = G_SIMPLE_ACTION(GHB_ACTION("audio-clear"));
+    g_simple_action_set_enabled(action, enabled);
 }
 
 static void
@@ -1589,6 +1592,15 @@ audio_remove_clicked_cb (GtkWidget *widget, gchar *path, gpointer data)
         ghb_live_reset(ud);
     }
     gtk_tree_path_free(tp);
+}
+
+G_MODULE_EXPORT void
+audio_clear_cb (GSimpleAction *action, GVariant *param, gpointer data)
+{
+    signal_user_data_t *ud = ghb_ud();
+
+    clear_audio_list_ui();
+    clear_audio_list_settings(ud->settings);
 }
 
 G_MODULE_EXPORT void

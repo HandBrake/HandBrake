@@ -404,5 +404,33 @@
       </item>
     </section>
   </menu>
+  <menu id="add-audio-menu">
+    <section>
+      <item>
+        <attribute name="action">app.audio-add</attribute>
+        <attribute name="label" translatable="yes">_Add New Track</attribute>
+      </item>
+      <item>
+        <attribute name="action">app.audio-add-all</attribute>
+        <attribute name="label" translatable="yes">Add A_ll Tracks</attribute>
+      </item>
+    </section>
+  </menu>
+  <menu id="add-subtitle-menu">
+    <section>
+      <item>
+        <attribute name="action">app.subtitle-add</attribute>
+        <attribute name="label" translatable="yes">_Add New Track</attribute>
+      </item>
+      <item>
+        <attribute name="action">app.subtitle-add-all</attribute>
+        <attribute name="label" translatable="yes">Add A_ll Tracks</attribute>
+      </item>
+      <item>
+        <attribute name="action">app.subtitle-add-fas</attribute>
+        <attribute name="label" translatable="yes">Add _Foreign Audio Scan</attribute>
+      </item>
+    </section>
+  </menu>
 </interface>
 

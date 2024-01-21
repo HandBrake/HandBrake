@@ -2743,8 +2743,8 @@ title_changed_cb (GtkWidget *widget, gpointer data)
     ud->settings = ghb_array_get(ud->settings_array, idx);
     ghb_load_settings(ud);
 
-    ghb_audio_title_change(ud, title != NULL);
-    ghb_subtitle_title_change(ud, title != NULL);
+    ghb_audio_set_actions_enabled(ud, title != NULL);
+    ghb_subtitle_set_actions_enabled(ud, title != NULL);
     ghb_grey_combo_options(ud);
 
     if (title != NULL)

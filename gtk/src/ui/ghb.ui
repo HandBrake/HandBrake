@@ -3767,47 +3767,14 @@ Overrides all other settings.</property>
                                 <property name="css-classes">toolbar</property>
                                 <property name="can-focus">0</property>
                                 <child>
-                                  <object class="GtkButton" id="audio_add">
-                                    <property name="tooltip-text" translatable="yes">Add new audio settings to the list</property>
-                                    <property name="action-name">app.audio-add</property>
-                                    <property name="css-classes">flat</property>
-                                    <property name="child">
-                                      <object class="GtkBox">
-                                        <property name="spacing">6</property>
-                                        <child>
-                                          <object class="GtkImage">
-                                            <property name="icon-name">list-add</property>
-                                            <property name="accessible-role">presentation</property>
-                                          </object>
-                                        </child>
-                                        <child>
-                                          <object class="GtkLabel">
-                                            <property name="label" translatable="yes">Add</property>
-                                          </object>
-                                        </child>
-                                      </object>
-                                    </property>
-                                  </object>
-                                </child>
-                                <child>
-                                  <object class="GtkButton" id="audio_add_all">
-                                    <property name="tooltip-text" translatable="yes">Add all audio tracks to the list</property>
-                                    <property name="action-name">app.audio-add-all</property>
-                                    <property name="css-classes">flat</property>
-                                    <property name="child">
-                                      <object class="GtkBox">
-                                        <property name="spacing">6</property>
-                                        <child>
-                                          <object class="GtkImage">
-                                            <property name="icon-name">list-add</property>
-                                            <property name="accessible-role">presentation</property>
-                                          </object>
-                                        </child>
-                                        <child>
-                                          <object class="GtkLabel">
-                                            <property name="label" translatable="yes">Add All</property>
-                                          </object>
-                                        </child>
+                                  <object class="GtkMenuButton">
+                                    <property name="label">Tracks</property>
+                                    <property name="tooltip-text" translatable="1">Add audio tracks to the list</property>
+                                    <property name="popover">
+                                      <object class="GtkPopoverMenu">
+                                        <property name="menu-model">add-audio-menu</property>
+                                        <property name="halign">start</property>
+                                        <property name="has-arrow">False</property>
                                       </object>
                                     </property>
                                   </object>
@@ -3845,13 +3812,42 @@ Overrides all other settings.</property>
                                         <property name="spacing">6</property>
                                         <child>
                                           <object class="GtkImage">
-                                            <property name="icon-name">view-refresh</property>
+                                            <property name="icon-name">view-refresh-symbolic</property>
                                             <property name="accessible-role">presentation</property>
                                           </object>
                                         </child>
                                         <child>
                                           <object class="GtkLabel">
                                             <property name="label" translatable="yes">Reload</property>
+                                          </object>
+                                        </child>
+                                      </object>
+                                    </property>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="GtkSeparator">
+                                    <property name="hexpand">True</property>
+                                    <property name="opacity">0.0</property>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="GtkButton" id="audio_clear">
+                                    <property name="tooltip-text" translatable="1">Remove all audio tracks</property>
+                                    <property name="action-name">app.audio-clear</property>
+                                    <property name="css-classes">flat</property>
+                                    <property name="child">
+                                      <object class="GtkBox">
+                                        <property name="spacing">6</property>
+                                        <child>
+                                          <object class="GtkImage">
+                                            <property name="icon-name">edit-clear-all-symbolic</property>
+                                            <property name="accessible-role">presentation</property>
+                                          </object>
+                                        </child>
+                                        <child>
+                                          <object class="GtkLabel">
+                                            <property name="label" translatable="yes">Clear</property>
                                           </object>
                                         </child>
                                       </object>
@@ -3902,72 +3898,14 @@ Overrides all other settings.</property>
                                 <property name="css-classes">toolbar</property>
                                 <property name="can-focus">0</property>
                                 <child>
-                                  <object class="GtkButton" id="subtitle_add">
-                                    <property name="tooltip-text" translatable="1">Add new subtitle settings to the list</property>
-                                    <property name="action-name">app.subtitle-add</property>
-                                    <property name="css-classes">flat</property>
-                                    <property name="child">
-                                      <object class="GtkBox">
-                                        <property name="spacing">6</property>
-                                        <child>
-                                          <object class="GtkImage">
-                                            <property name="icon-name">list-add</property>
-                                            <property name="accessible-role">presentation</property>
-                                          </object>
-                                        </child>
-                                        <child>
-                                          <object class="GtkLabel">
-                                            <property name="label" translatable="yes">Add</property>
-                                          </object>
-                                        </child>
-                                      </object>
-                                    </property>
-                                  </object>
-                                </child>
-                                <child>
-                                  <object class="GtkButton" id="subtitle_add_all">
-                                    <property name="tooltip-text" translatable="1">Add all subtitle tracks to the list</property>
-                                    <property name="action-name">app.subtitle-add-all</property>
-                                    <property name="css-classes">flat</property>
-                                    <property name="child">
-                                      <object class="GtkBox">
-                                        <property name="spacing">6</property>
-                                        <child>
-                                          <object class="GtkImage">
-                                            <property name="icon-name">list-add</property>
-                                            <property name="accessible-role">presentation</property>
-                                          </object>
-                                        </child>
-                                        <child>
-                                          <object class="GtkLabel">
-                                            <property name="label" translatable="yes">Add All</property>
-                                          </object>
-                                        </child>
-                                      </object>
-                                    </property>
-                                  </object>
-                                </child>
-                                <child>
-                                  <object class="GtkButton" id="subtitle_add_fas">
-                                    <property name="tooltip-text" translatable="1">Add an extra pass to the encode which searches
-      for subtitle candidates that provide subtitles for
-      segments of the audio that are in a foreign language.</property>
-                                    <property name="action-name">app.subtitle-add-fas</property>
-                                    <property name="css-classes">flat</property>
-                                    <property name="child">
-                                      <object class="GtkBox">
-                                        <property name="spacing">6</property>
-                                        <child>
-                                          <object class="GtkImage">
-                                            <property name="icon-name">list-add</property>
-                                            <property name="accessible-role">presentation</property>
-                                          </object>
-                                        </child>
-                                        <child>
-                                          <object class="GtkLabel">
-                                            <property name="label" translatable="yes">Foreign Audio Scan</property>
-                                          </object>
-                                        </child>
+                                  <object class="GtkMenuButton">
+                                    <property name="label" translatable="yes">Tracks</property>
+                                    <property name="tooltip-text" translatable="1">Add subtitle tracks to the list</property>
+                                    <property name="popover">
+                                      <object class="GtkPopoverMenu">
+                                        <property name="menu-model">add-subtitle-menu</property>
+                                        <property name="halign">start</property>
+                                        <property name="has-arrow">False</property>
                                       </object>
                                     </property>
                                   </object>
@@ -4005,13 +3943,42 @@ Overrides all other settings.</property>
                                         <property name="spacing">6</property>
                                         <child>
                                           <object class="GtkImage">
-                                            <property name="icon-name">view-refresh</property>
+                                            <property name="icon-name">view-refresh-symbolic</property>
                                             <property name="accessible-role">presentation</property>
                                           </object>
                                         </child>
                                         <child>
                                           <object class="GtkLabel">
                                             <property name="label" translatable="yes">Reload</property>
+                                          </object>
+                                        </child>
+                                      </object>
+                                    </property>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="GtkSeparator">
+                                    <property name="hexpand">True</property>
+                                    <property name="opacity">0.0</property>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="GtkButton" id="subtitle_clear">
+                                    <property name="tooltip-text" translatable="1">Remove all subtitle tracks</property>
+                                    <property name="action-name">app.subtitle-clear</property>
+                                    <property name="css-classes">flat</property>
+                                    <property name="child">
+                                      <object class="GtkBox">
+                                        <property name="spacing">6</property>
+                                        <child>
+                                          <object class="GtkImage">
+                                            <property name="icon-name">edit-clear-all-symbolic</property>
+                                            <property name="accessible-role">presentation</property>
+                                          </object>
+                                        </child>
+                                        <child>
+                                          <object class="GtkLabel">
+                                            <property name="label" translatable="yes">Clear</property>
                                           </object>
                                         </child>
                                       </object>

@@ -502,19 +502,21 @@ static GhbValue*  subtitle_add_track(
 }
 
 void
-ghb_subtitle_title_change(signal_user_data_t *ud, gboolean show)
+ghb_subtitle_set_actions_enabled (signal_user_data_t *ud, gboolean enabled)
 {
     GSimpleAction *action;
     int title_id;
 
     action = G_SIMPLE_ACTION(GHB_ACTION("subtitle-add"));
-    g_simple_action_set_enabled(action, show);
+    g_simple_action_set_enabled(action, enabled);
     action = G_SIMPLE_ACTION(GHB_ACTION("subtitle-add-all"));
-    g_simple_action_set_enabled(action, show);
+    g_simple_action_set_enabled(action, enabled);
     action = G_SIMPLE_ACTION(GHB_ACTION("subtitle-add-fas"));
-    g_simple_action_set_enabled(action, show);
+    g_simple_action_set_enabled(action, enabled);
     action = G_SIMPLE_ACTION(GHB_ACTION("subtitle-reset"));
-    g_simple_action_set_enabled(action, show);
+    g_simple_action_set_enabled(action, enabled);
+    action = G_SIMPLE_ACTION(GHB_ACTION("subtitle-clear"));
+    g_simple_action_set_enabled(action, enabled);
 
     title_id = ghb_dict_get_int(ud->settings, "title");
     const hb_title_t *title = ghb_lookup_title(title_id, NULL);
@@ -1298,6 +1300,15 @@ subtitle_add_all_cb (GSimpleAction *action, GVariant *param, gpointer data)
     subtitle_refresh_list_ui(ud);
     ghb_update_summary_info(ud);
     ghb_live_reset(ud);
+}
+
+G_MODULE_EXPORT void
+subtitle_clear_cb (GSimpleAction *action, GVariant *param, gpointer data)
+{
+    signal_user_data_t *ud = ghb_ud();
+
+    clear_subtitle_list_ui();
+    clear_subtitle_list_settings(ud->settings);
 }
 
 G_MODULE_EXPORT void
