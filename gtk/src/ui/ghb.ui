@@ -1692,11 +1692,104 @@ Modifications will be discarded.</property>
                     <property name="name">summary_tab</property>
                     <property name="title" translatable="yes">Summary</property>
                     <property name="child">
-                      <object class="GtkBox" id="summary_tab">
+                      <object class="GtkGrid" id="summary_tab">
                         <property name="hexpand">1</property>
                         <property name="vexpand">1</property>
                         <property name="margin-top">12</property>
-                        <property name="spacing">3</property>
+                        <property name="column-spacing">3</property>
+                        <child>
+                          <object class="GtkGrid" id="summary_table_1">
+                            <property name="row-spacing">2</property>
+                            <property name="column-spacing">6</property>
+                            <child>
+                              <object class="GtkLabel" id="format_summary_label">
+                                <property name="label" translatable="yes">Format:</property>
+                                <property name="xalign">0</property>
+                                <property name="hexpand">0</property>
+                                <property name="use-markup">1</property>
+                                <layout>
+                                  <property name="row">0</property>
+                                  <property name="column">0</property>
+                                </layout>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkComboBox" id="FileFormat">
+                                <property name="hexpand">0</property>
+                                <property name="halign">start</property>
+                                <property name="tooltip-text" translatable="yes">Format to mux encoded tracks to.</property>
+                                <signal name="changed" handler="container_changed_cb" swapped="no"/>
+                                <layout>
+                                  <property name="row">0</property>
+                                  <property name="column">1</property>
+                                </layout>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkCheckButton" id="Optimize">
+                                <property name="label" translatable="yes">Web Optimized</property>
+                                <property name="focusable">1</property>
+                                <property name="tooltip-text" translatable="yes">Optimize the layout of the MP4 file for progressive download.
+This allows a player to initiate playback before downloading the entire file.</property>
+                                <property name="halign">start</property>
+                                <property name="hexpand">0</property>
+                                <signal name="toggled" handler="setting_widget_changed_cb" swapped="no"/>
+                                <layout>
+                                  <property name="row">1</property>
+                                  <property name="column">1</property>
+                                </layout>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkCheckButton" id="AlignAVStart">
+                                <property name="label" translatable="yes">Align A/V Start</property>
+                                <property name="focusable">1</property>
+                                <property name="tooltip-text" translatable="yes">Aligns the initial timestamps of all audio and video streams by
+inserting blank frames or dropping frames. May improve audio/video
+sync for broken players that do not honor MP4 edit lists.</property>
+                                <property name="halign">start</property>
+                                <property name="hexpand">0</property>
+                                <signal name="toggled" handler="setting_widget_changed_cb" swapped="no"/>
+                                <layout>
+                                  <property name="row">2</property>
+                                  <property name="column">1</property>
+                                </layout>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkCheckButton" id="Mp4iPodCompatible">
+                                <property name="label" translatable="yes">iPod 5G Support</property>
+                                <property name="focusable">1</property>
+                                <property name="tooltip-text" translatable="yes">Add iPod Atom needed by some older iPods.</property>
+                                <property name="halign">start</property>
+                                <property name="hexpand">0</property>
+                                <signal name="toggled" handler="setting_widget_changed_cb" swapped="no"/>
+                                <layout>
+                                  <property name="row">3</property>
+                                  <property name="column">1</property>
+                                </layout>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkCheckButton" id="MetadataPassthrough">
+                                <property name="label" translatable="yes">Passthru Common Metadata</property>
+                                <property name="focusable">1</property>
+                                <property name="tooltip-text" translatable="yes">Copy metadata from source to output.</property>
+                                <property name="halign">start</property>
+                                <property name="hexpand">0</property>
+                                <signal name="toggled" handler="meta_pass_changed_cb" swapped="no"/>
+                                <layout>
+                                  <property name="row">4</property>
+                                  <property name="column">1</property>
+                                </layout>
+                              </object>
+                            </child>
+                            <layout>
+                              <property name="row">0</property>
+                              <property name="column">0</property>
+                            </layout>
+                          </object>
+                         </child>
                         <child>
                           <object class="GtkScrolledWindow">
                             <property name="vexpand">True</property>
@@ -1707,89 +1800,6 @@ Modifications will be discarded.</property>
                               <object class="GtkGrid" id="summary_table">
                                 <property name="row-spacing">2</property>
                                 <property name="column-spacing">6</property>
-                                <child>
-                                  <object class="GtkLabel" id="format_summary_label">
-                                    <property name="label" translatable="yes">Format:</property>
-                                    <property name="xalign">0</property>
-                                    <property name="hexpand">0</property>
-                                    <property name="use-markup">1</property>
-                                    <layout>
-                                      <property name="row">0</property>
-                                      <property name="column">0</property>
-                                    </layout>
-                                  </object>
-                                </child>
-                                <child>
-                                  <object class="GtkComboBox" id="FileFormat">
-                                    <property name="hexpand">0</property>
-                                    <property name="halign">start</property>
-                                    <property name="tooltip-text" translatable="yes">Format to mux encoded tracks to.</property>
-                                    <signal name="changed" handler="container_changed_cb" swapped="no"/>
-                                    <layout>
-                                      <property name="row">0</property>
-                                      <property name="column">1</property>
-                                    </layout>
-                                  </object>
-                                </child>
-                                <child>
-                                  <object class="GtkCheckButton" id="Optimize">
-                                    <property name="label" translatable="yes">Web Optimized</property>
-                                    <property name="focusable">1</property>
-                                    <property name="tooltip-text" translatable="yes">Optimize the layout of the MP4 file for progressive download.
-    This allows a player to initiate playback before downloading the entire file.</property>
-                                    <property name="halign">start</property>
-                                    <property name="hexpand">0</property>
-                                    <signal name="toggled" handler="setting_widget_changed_cb" swapped="no"/>
-                                    <layout>
-                                      <property name="row">1</property>
-                                      <property name="column">1</property>
-                                    </layout>
-                                  </object>
-                                </child>
-                                <child>
-                                  <object class="GtkCheckButton" id="AlignAVStart">
-                                    <property name="label" translatable="yes">Align A/V Start</property>
-                                    <property name="focusable">1</property>
-                                    <property name="tooltip-text" translatable="yes">Aligns the initial timestamps of all audio and video streams by
-    inserting blank frames or dropping frames. May improve audio/video
-    sync for broken players that do not honor MP4 edit lists.</property>
-                                    <property name="halign">start</property>
-                                    <property name="hexpand">0</property>
-                                    <signal name="toggled" handler="setting_widget_changed_cb" swapped="no"/>
-                                    <layout>
-                                      <property name="row">2</property>
-                                      <property name="column">1</property>
-                                    </layout>
-                                  </object>
-                                </child>
-                                <child>
-                                  <object class="GtkCheckButton" id="Mp4iPodCompatible">
-                                    <property name="label" translatable="yes">iPod 5G Support</property>
-                                    <property name="focusable">1</property>
-                                    <property name="tooltip-text" translatable="yes">Add iPod Atom needed by some older iPods.</property>
-                                    <property name="halign">start</property>
-                                    <property name="hexpand">0</property>
-                                    <signal name="toggled" handler="setting_widget_changed_cb" swapped="no"/>
-                                    <layout>
-                                      <property name="row">3</property>
-                                      <property name="column">1</property>
-                                    </layout>
-                                  </object>
-                                </child>
-                                <child>
-                                  <object class="GtkCheckButton" id="MetadataPassthrough">
-                                    <property name="label" translatable="yes">Passthru Common Metadata</property>
-                                    <property name="focusable">1</property>
-                                    <property name="tooltip-text" translatable="yes">Copy metadata from source to output.</property>
-                                    <property name="halign">start</property>
-                                    <property name="hexpand">0</property>
-                                    <signal name="toggled" handler="meta_pass_changed_cb" swapped="no"/>
-                                    <layout>
-                                      <property name="row">4</property>
-                                      <property name="column">1</property>
-                                    </layout>
-                                  </object>
-                                </child>
                                 <child>
                                   <object class="GtkLabel" id="label6">
                                     <property name="xalign">0</property>
@@ -1917,6 +1927,10 @@ Modifications will be discarded.</property>
                                 </child>
                               </object>
                             </child>
+                            <layout>
+                              <property name="row">1</property>
+                              <property name="column">0</property>
+                            </layout>
                           </object>
                         </child>
                         <child>
@@ -1932,6 +1946,11 @@ Modifications will be discarded.</property>
                             <accessibility>
                               <property name="label" translatable="yes">Video Preview</property>
                             </accessibility>
+                            <layout>
+                              <property name="row">0</property>
+                              <property name="column">1</property>
+                              <property name="row-span">2</property>
+                            </layout>
                           </object>
                         </child>
                         <child>
@@ -1947,6 +1966,11 @@ Modifications will be discarded.</property>
                             <accessibility>
                               <property name="label" translatable="yes">Video Preview</property>
                             </accessibility>
+                            <layout>
+                              <property name="row">0</property>
+                              <property name="column">1</property>
+                              <property name="row-span">2</property>
+                            </layout>
                           </object>
                         </child>
                       </object>
@@ -1961,7 +1985,7 @@ Modifications will be discarded.</property>
                       <object class="GtkBox" id="picture_tab">
                         <property name="orientation">vertical</property>
                         <property name="margin-top">8</property>
-                        <property name="spacing">16</property>
+                        <property name="spacing">8</property>
                         <child>
                           <object class="GtkBox" id="source_dimensions_frame">
                             <property name="margin-start">2</property>
@@ -1977,7 +2001,7 @@ Modifications will be discarded.</property>
                             </child>
                             <child>
                               <object class="GtkGrid" id="source_dimensions_grid">
-                                <property name="margin-top">8</property>
+                                <property name="margin-top">4</property>
                                 <property name="row-spacing">4</property>
                                 <property name="column-spacing">32</property>
                                 <child>
@@ -2061,7 +2085,6 @@ Modifications will be discarded.</property>
                                 <property name="margin-start">2</property>
                                 <property name="margin-end">2</property>
                                 <property name="orientation">vertical</property>
-                                <property name="spacing">2</property>
                                 <child type="label">
                                   <object class="GtkLabel" id="label26">
                                     <property name="label" translatable="yes">&lt;b&gt;Orientation &amp;amp; Cropping&lt;/b&gt;</property>
@@ -2077,10 +2100,8 @@ Modifications will be discarded.</property>
                                     <child>
                                       <object class="GtkGrid" id="table16">
                                         <property name="row-spacing">2</property>
-                                        <property name="column-spacing">5</property>
                                         <property name="halign">start</property>
                                         <property name="valign">start</property>
-                                        <property name="row-spacing">4</property>
                                         <property name="column-spacing">8</property>
                                         <child>
                                           <object class="GtkLabel" id="hflip_label">
@@ -2156,6 +2177,7 @@ Modifications will be discarded.</property>
                                           <object class="GtkSpinButton" id="PictureLeftCrop">
                                             <property name="width-chars">4</property>
                                             <property name="focusable">1</property>
+                                            <property name="halign">end</property>
                                             <property name="tooltip-text" translatable="yes">Left Crop</property>
                                             <property name="adjustment">LeftCropAdjustment</property>
                                             <signal name="value-changed" handler="crop_changed_cb" swapped="no"/>
@@ -2268,6 +2290,7 @@ Modifications will be discarded.</property>
                                         </child>
                                         <child>
                                           <object class="GtkLabel" id="maximum_size_label">
+                                            <property name="visible">false</property>
                                             <property name="halign">start</property>
                                             <property name="label" translatable="yes">Maximum Size:</property>
                                             <layout>
@@ -2278,6 +2301,7 @@ Modifications will be discarded.</property>
                                         </child>
                                         <child>
                                           <object class="GtkSpinButton" id="PictureWidth">
+                                            <property name="visible">false</property>
                                             <property name="width-chars">4</property>
                                             <property name="focusable">1</property>
                                             <property name="tooltip-text" translatable="yes">This is the maximum width that the video will be stored at.</property>
@@ -2291,8 +2315,9 @@ Modifications will be discarded.</property>
                                           </object>
                                         </child>
                                         <child>
-                                          <object class="GtkLabel" id="label23">
-                                            <property name="label" translatable="yes">x</property>
+                                          <object class="GtkLabel" id="maximum_size_x_label">
+                                            <property name="visible">false</property>
+                                            <property name="label">×</property>
                                             <layout>
                                               <property name="row">1</property>
                                               <property name="column">2</property>
@@ -2301,6 +2326,7 @@ Modifications will be discarded.</property>
                                         </child>
                                         <child>
                                           <object class="GtkSpinButton" id="PictureHeight">
+                                            <property name="visible">false</property>
                                             <property name="width-chars">4</property>
                                             <property name="focusable">1</property>
                                             <property name="tooltip-text" translatable="yes">This is the maximum height that the video will be stored at.</property>
@@ -2417,7 +2443,7 @@ The actual display dimensions will differ if the pixel aspect ratio is not 1:1.<
                                         </child>
                                         <child>
                                           <object class="GtkLabel" id="label28">
-                                            <property name="label" translatable="yes">x</property>
+                                            <property name="label" translatable="yes">×</property>
                                             <layout>
                                               <property name="row">4</property>
                                               <property name="column">2</property>
@@ -2492,7 +2518,7 @@ The actual display dimensions will differ if the pixel aspect ratio is not 1:1.<
                                     <child>
                                       <object class="GtkGrid" id="pad_options_grid">
                                         <property name="row-spacing">2</property>
-                                        <property name="column-spacing">4</property>
+                                        <property name="column-spacing">2</property>
                                         <property name="halign">start</property>
                                         <property name="valign">start</property>
                                         <property name="column-spacing">8</property>
@@ -2525,6 +2551,7 @@ The actual display dimensions will differ if the pixel aspect ratio is not 1:1.<
                                           <object class="GtkSpinButton" id="PicturePadLeft">
                                             <property name="width-chars">4</property>
                                             <property name="focusable">1</property>
+                                            <property name="halign">end</property>
                                             <property name="tooltip-text" translatable="yes">Left Pad</property>
                                             <property name="adjustment">LeftPadAdjustment</property>
                                             <signal name="value-changed" handler="pad_changed_cb" swapped="no"/>
@@ -2623,7 +2650,6 @@ The actual display dimensions will differ if the pixel aspect ratio is not 1:1.<
                             </child>
                             <child>
                               <object class="GtkGrid" id="final_dimensions_grid">
-                                <property name="margin-top">8</property>
                                 <property name="row-spacing">4</property>
                                 <property name="column-spacing">32</property>
                                 <child>
@@ -2681,7 +2707,7 @@ The actual display dimensions will differ if the pixel aspect ratio is not 1:1.<
                                     </child>
                                     <child>
                                       <object class="GtkLabel" id="display_size_x_label">
-                                        <property name="label" translatable="yes">x</property>
+                                        <property name="label" translatable="yes">×</property>
                                         <layout>
                                           <property name="row">0</property>
                                           <property name="column">2</property>
@@ -2758,7 +2784,7 @@ The actual display dimensions will differ if the pixel aspect ratio is not 1:1.<
                     <property name="child">
                       <object class="GtkGrid" id="filter_tab">
                         <property name="column-spacing">6</property>
-                        <property name="row-spacing">6</property>
+                        <property name="row-spacing">4</property>
                         <property name="margin-top">16</property>
                         <property name="valign">start</property>
                         <child>
