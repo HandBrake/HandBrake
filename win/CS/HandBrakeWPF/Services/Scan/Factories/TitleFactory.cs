@@ -28,23 +28,17 @@ namespace HandBrakeWPF.Services.Scan.Factories
         public Title CreateTitle(SourceTitle title, int mainFeature)
         {
             string driveLabel = null;
-            if ("VIDEO_TS".Equals(title.Name, StringComparison.CurrentCultureIgnoreCase))
-            {
-                foreach (DriveInformation info in DriveUtilities.GetDrives())
-                {
-                    if (title.Path.StartsWith(info.RootDirectory, StringComparison.CurrentCultureIgnoreCase))
-                    {
-                        driveLabel = info.VolumeLabel;
-                        break;
-                    }
-                }
 
-                if (string.IsNullOrEmpty(driveLabel))
+            foreach (DriveInformation info in DriveUtilities.GetDrives())
+            {
+                if (title.Path.StartsWith(info.RootDirectory, StringComparison.CurrentCultureIgnoreCase))
                 {
-                    driveLabel = Path.GetFileNameWithoutExtension(title.Path) ?? title.Path;
+                    driveLabel = info.VolumeLabel?.Trim();
+                    break;
                 }
             }
-            else if (title.Type == 0 || title.Type == 1)
+
+            if (string.IsNullOrEmpty(driveLabel))
             {
                 driveLabel = Path.GetFileNameWithoutExtension(title.Path) ?? title.Path;
             }
