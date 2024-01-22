@@ -192,7 +192,7 @@ static hb_buffer_t *tx3g_decode_to_ssa(hb_work_private_t *pv, hb_buffer_t *in)
                 }
                 styleIndex++;
             }
-            if (styleRecords[styleIndex].startChar == charIndex)
+            if (styleIndex < numStyleRecords && styleRecords[styleIndex].startChar == charIndex)
             {
                 dst += write_ssa_markup((char*)dst, &styleRecords[styleIndex]);
             }
