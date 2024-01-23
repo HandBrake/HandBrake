@@ -30,32 +30,19 @@
 
 #include <unistd.h>
 
-#ifdef _ENABLE_GST
-#include <gst/gst.h>
-#include <gst/pbutils/missing-plugins.h>
-#include <gst/video/video.h>
-#endif
-
 #define PREVIEW_STATE_IMAGE 0
 #define PREVIEW_STATE_LIVE 1
 
 struct preview_s
 {
-#if defined(_ENABLE_GST)
-    GstElement *play;
-    GstElement *vsink;
-#endif
-    gint64      len;
-    gint64      pos;
     gboolean    seek_lock;
     gboolean    progress_lock;
     gint        width;
     gint        height;
     gint        render_width;
     gint        render_height;
-    GtkWidget * view;
-    GdkPixbuf * pix;
-    GdkPixbuf * scaled_pix;
+    GtkWidget  *view;
+    GdkPixbuf  *pix;
     gint        button_width;
     gint        button_height;
     gint        frame;
@@ -64,14 +51,12 @@ struct preview_s
     gboolean    encoded[GHB_PREVIEW_MAX];
     gint        encode_frame;
     gint        live_id;
-    gchar     * current;
+    gchar      *current;
     gint        live_enabled;
-    gboolean    is_fullscreen;
+    GtkMediaStream *video;
 };
 
-#if defined(_ENABLE_GST)
-G_MODULE_EXPORT gboolean live_preview_cb(GstBus *bus, GstMessage *msg, gpointer data);
-#endif
+static void live_preview_progress_cb(GtkMediaStream *video, GParamSpec *spec, signal_user_data_t *ud);
 
 static void
 get_display_size (GtkWidget *widget, int *w, int *h)
@@ -174,7 +159,7 @@ preview_set_render_size(signal_user_data_t *ud, int width, int height)
     gtk_aspect_frame_set_ratio(GTK_ASPECT_FRAME(frame), ratio);
     gtk_aspect_frame_set_obey_child(GTK_ASPECT_FRAME(frame), FALSE);
 
-    if (ud->preview->is_fullscreen)
+    if (gtk_window_is_fullscreen(window))
     {
         reset = ghb_builder_widget("preview_reset");
         gtk_widget_hide(reset);
@@ -209,53 +194,62 @@ preview_set_size(signal_user_data_t *ud, int width, int height)
     ud->preview->height = height;
 }
 
+static void
+live_preview_play (signal_user_data_t *ud)
+{
+    GtkButton *play_button = GTK_BUTTON(ghb_builder_widget("live_preview_play"));
+    gtk_button_set_icon_name(play_button, "media-playback-pause-symbolic");
+    gtk_media_stream_play(ud->preview->video);
+}
+
+static void
+live_preview_pause (signal_user_data_t *ud)
+{
+    GtkButton *play_button = GTK_BUTTON(ghb_builder_widget("live_preview_play"));
+    gtk_button_set_icon_name(play_button, "media-playback-start-symbolic");
+    gtk_media_stream_pause(ud->preview->video);
+}
+
+static void
+live_preview_ended_cb (GtkMediaStream *video, GParamSpec *spec, signal_user_data_t *ud)
+{
+    if (gtk_media_stream_get_ended(video))
+        live_preview_pause(ud);
+}
+
+static void
+live_preview_error_cb (GtkMediaStream *video, GParamSpec *spec, signal_user_data_t *ud)
+{
+    const GError *error = gtk_media_stream_get_error(video);
+    if (error)
+    {
+        // Display an error dialog
+        GtkWindow *window = GTK_WINDOW(ghb_builder_widget("preview_window"));
+        GtkWidget *dialog = gtk_message_dialog_new(window, GTK_DIALOG_MODAL,
+            GTK_MESSAGE_WARNING, GTK_BUTTONS_CLOSE, _("Playback Error"));
+        // TODO: Make this message more useful
+        gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dialog),
+            _("The video could not be played. For more details, see the Activity Log."));
+
+        g_signal_connect(dialog, "response", G_CALLBACK(gtk_window_destroy), NULL);
+        gtk_widget_set_visible(dialog, TRUE);
+        // Also log the error to the activity log
+        g_warning("%s", error->message);
+    }
+}
+
 void
 ghb_preview_init(signal_user_data_t *ud)
 {
-    GtkWidget *widget;
-
     ud->preview               = g_malloc0(sizeof(preview_t));
-    ud->preview->pause        = TRUE;
     ud->preview->encode_frame = -1;
     ud->preview->live_id      = -1;
 
-    widget = ghb_builder_widget("preview_button_image");
-    gtk_widget_get_size_request(widget, &ud->preview->button_width,
-                                        &ud->preview->button_height);
-
-#if defined(_ENABLE_GST)
-    GstBus *bus;
-
-    ud->preview->play  = gst_element_factory_make("playbin", "play");
-    ud->preview->vsink = gst_element_factory_make("gdkpixbufsink", "pixsink");
-    if (ud->preview->play == NULL || ud->preview->vsink == NULL)
-    {
-        g_warning("Couldn't initialize gstreamer. Disabling live preview.");
-        widget = ghb_builder_widget("live_preview_box");
-        gtk_widget_hide (widget);
-        widget = ghb_builder_widget("live_preview_duration_box");
-        gtk_widget_hide (widget);
-        return;
-    }
-    else
-    {
-        g_object_set(ud->preview->vsink, "qos", FALSE,
-                                         "max-lateness", (gint64) - 1, NULL);
-        g_object_set(ud->preview->play, "video-sink", ud->preview->vsink, NULL);
-        g_object_set(ud->preview->play, "subtitle-font-desc",
-                                        "sans bold 20", NULL);
-
-        bus = gst_pipeline_get_bus(GST_PIPELINE(ud->preview->play));
-        gst_bus_add_watch(bus, live_preview_cb, ud);
-        gst_object_unref(bus);
-        ud->preview->live_enabled = 1;
-    }
-#else
-    widget = ghb_builder_widget("live_preview_box");
-    gtk_widget_hide (widget);
-    widget = ghb_builder_widget("live_preview_duration_box");
-    gtk_widget_hide (widget);
-#endif
+    ud->preview->video = gtk_media_file_new();
+    g_signal_connect(ud->preview->video, "notify::timestamp", G_CALLBACK(live_preview_progress_cb), ud);
+    g_signal_connect(ud->preview->video, "notify::ended", G_CALLBACK(live_preview_ended_cb), ud);
+    g_signal_connect(ud->preview->video, "notify::error", G_CALLBACK(live_preview_error_cb), ud);
+    ud->preview->live_enabled = 1;
 }
 
 void
@@ -268,72 +262,55 @@ ghb_preview_cleanup(signal_user_data_t *ud)
     }
 }
 
-#if defined(_ENABLE_GST)
 static void
-live_preview_start(signal_user_data_t *ud)
+live_preview_start_new (signal_user_data_t *ud)
 {
-    GtkImage *img;
-    gchar *uri;
-
     if (!ud->preview->live_enabled)
         return;
 
-    img = GTK_IMAGE(ghb_builder_widget("live_preview_play_image"));
     if (!ud->preview->encoded[ud->preview->frame])
     {
-        gtk_image_set_from_icon_name(img, "media-playback-start");
-        gst_element_set_state(ud->preview->play, GST_STATE_NULL);
-        ud->preview->pause = TRUE;
+        gtk_media_stream_pause(ud->preview->video);
         return;
     }
-
-    if (ud->preview->state != PREVIEW_STATE_LIVE)
-    {
-#if defined(_WIN32)
-        uri = g_strdup_printf("file:///%s", ud->preview->current);
-#else
-        uri = g_strdup_printf("file://%s", ud->preview->current);
-#endif
-        gtk_image_set_from_icon_name(img, "media-playback-pause");
-        ud->preview->state = PREVIEW_STATE_LIVE;
-        g_object_set(G_OBJECT(ud->preview->play), "uri", uri, NULL);
-        g_free(uri);
-    }
-    gst_element_set_state(ud->preview->play, GST_STATE_PLAYING);
-    ud->preview->pause = FALSE;
+    GtkPicture *preview_image = GTK_PICTURE(ghb_builder_widget("preview_image"));
+    gtk_media_file_set_filename(GTK_MEDIA_FILE(ud->preview->video), ud->preview->current);
+    gtk_picture_set_paintable(preview_image, GDK_PAINTABLE(ud->preview->video));
+    ud->preview->state = PREVIEW_STATE_LIVE;
+    live_preview_play(ud);
 }
 
 static void
-live_preview_pause(signal_user_data_t *ud)
+live_preview_toggle_playback (signal_user_data_t *ud)
 {
-    GtkImage *img;
-
     if (!ud->preview->live_enabled)
         return;
 
-    img = GTK_IMAGE(ghb_builder_widget("live_preview_play_image"));
-    gtk_image_set_from_icon_name(img, "media-playback-start");
-    gst_element_set_state(ud->preview->play, GST_STATE_PAUSED);
-    ud->preview->pause = TRUE;
+    if (!gtk_media_file_get_file(GTK_MEDIA_FILE(ud->preview->video)))
+    {
+        live_preview_start_new(ud);
+    }
+    else if (!gtk_media_stream_get_playing(ud->preview->video))
+    {
+        live_preview_play(ud);
+    }
+    else
+    {
+        live_preview_pause(ud);
+    }
 }
-#endif
 
 static void
 live_preview_stop (void)
 {
-    GtkImage *img;
     GtkRange *progress;
     signal_user_data_t *ud = ghb_ud();
 
     if (!ud->preview->live_enabled)
         return;
 
-    img = GTK_IMAGE(ghb_builder_widget("live_preview_play_image"));
-    gtk_image_set_from_icon_name(img, "media-playback-start");
-#if defined(_ENABLE_GST)
-    gst_element_set_state(ud->preview->play, GST_STATE_NULL);
-#endif
-    ud->preview->pause = TRUE;
+    live_preview_pause(ud);
+    gtk_media_file_clear(GTK_MEDIA_FILE(ud->preview->video));
     ud->preview->state = PREVIEW_STATE_IMAGE;
 
     progress = GTK_RANGE(ghb_builder_widget("live_preview_progress"));
@@ -351,8 +328,7 @@ ghb_live_reset(signal_user_data_t *ud)
     }
     ud->preview->live_id = -1;
     ud->preview->encode_frame = -1;
-    if (!ud->preview->pause)
-        live_preview_stop();
+    live_preview_stop();
     if (ud->preview->current)
     {
         g_free(ud->preview->current);
@@ -364,350 +340,13 @@ ghb_live_reset(signal_user_data_t *ud)
         ghb_set_preview_image(ud);
 }
 
-#if defined(_ENABLE_GST)
-static void
-caps_set(GstCaps *caps, signal_user_data_t *ud)
-{
-    GstStructure *ss;
-
-    ss = gst_caps_get_structure(caps, 0);
-    if (ss)
-    {
-        gint fps_n, fps_d, width, height;
-        guint num, den, par_n, par_d;
-        gint disp_par_n, disp_par_d;
-        const GValue *par;
-
-        gst_structure_get_fraction(ss, "framerate", &fps_n, &fps_d);
-        gst_structure_get_int(ss, "width", &width);
-        gst_structure_get_int(ss, "height", &height);
-        par = gst_structure_get_value(ss, "pixel-aspect-ratio");
-        par_n = gst_value_get_fraction_numerator(par);
-        par_d = gst_value_get_fraction_denominator(par);
-
-        screen_par(ud, &disp_par_n, &disp_par_d);
-        gst_video_calculate_display_ratio(
-            &num, &den, width, height, par_n, par_d, disp_par_n, disp_par_d);
-
-        if (par_n > par_d)
-            width = gst_util_uint64_scale_int(height, num, den);
-        else
-            height = gst_util_uint64_scale_int(width, den, num);
-
-        preview_set_size(ud, width, height);
-        if (ghb_dict_get_bool(ud->prefs, "reduce_hd_preview"))
-        {
-            gint s_w, s_h;
-
-            get_display_size(ghb_builder_widget("preview_window"),
-                                 &s_w, &s_h);
-            if (s_w > 0 && s_h > 0)
-            {
-                if (width > s_w * 80 / 100)
-                {
-                    width = s_w * 80 / 100;
-                    height = gst_util_uint64_scale_int(width, den, num);
-                }
-                if (height > s_h * 80 / 100)
-                {
-                    height = s_h * 80 / 100;
-                    width = gst_util_uint64_scale_int(height, num, den);
-                }
-            }
-        }
-    }
-}
-
-static void
-update_stream_info(signal_user_data_t *ud)
-{
-    GstPad *vpad = NULL;
-    gint n_video;
-
-    g_object_get(G_OBJECT(ud->preview->play), "n-video", &n_video, NULL);
-    if (n_video > 0)
-    {
-        gint ii;
-        for (ii = 0; ii < n_video && vpad == NULL; ii++)
-        {
-            g_signal_emit_by_name(ud->preview->play, "get-video-pad", ii, &vpad);
-        }
-    }
-
-    if (vpad)
-    {
-        GstCaps *caps;
-
-        caps = gst_pad_get_current_caps(vpad);
-        if (caps)
-        {
-            caps_set(caps, ud);
-            gst_caps_unref(caps);
-        }
-        gst_object_unref(vpad);
-    }
-}
-
-G_MODULE_EXPORT gboolean
-live_preview_cb(GstBus *bus, GstMessage *msg, gpointer data)
-{
-    signal_user_data_t *ud = (signal_user_data_t*)data;
-
-    switch (GST_MESSAGE_TYPE(msg))
-    {
-        case GST_MESSAGE_UNKNOWN:
-        {
-            //printf("unknown");
-        } break;
-
-        case GST_MESSAGE_EOS:
-        {
-            // Done
-            //printf("eos\n");
-            live_preview_stop();
-            gst_element_seek(ud->preview->play, 1.0,
-                GST_FORMAT_TIME, GST_SEEK_FLAG_FLUSH | GST_SEEK_FLAG_KEY_UNIT,
-                GST_SEEK_TYPE_SET, 0,
-                GST_SEEK_TYPE_NONE, GST_CLOCK_TIME_NONE);
-        } break;
-
-        case GST_MESSAGE_ERROR:
-        {
-            //printf("error\n");
-            GError *err;
-            gchar *debug;
-
-            gst_message_parse_error(msg, &err, &debug);
-            g_warning("Gstreamer Error: %s", err->message);
-            g_error_free(err);
-            g_free(debug);
-        } break;
-
-        case GST_MESSAGE_WARNING:
-        case GST_MESSAGE_INFO:
-        case GST_MESSAGE_TAG:
-        case GST_MESSAGE_BUFFERING:
-        case GST_MESSAGE_STATE_CHANGED:
-        {
-            //printf("state change %x\n", state);
-            GstState state, pending;
-            gst_element_get_state(ud->preview->play, &state, &pending, 0);
-            if (state == GST_STATE_PAUSED || state == GST_STATE_PLAYING)
-            {
-                update_stream_info(ud);
-            }
-        } break;
-
-        case GST_MESSAGE_STATE_DIRTY:
-        {
-            //printf("state dirty\n");
-        } break;
-
-        case GST_MESSAGE_STEP_DONE:
-        {
-            //printf("step done\n");
-        } break;
-
-        case GST_MESSAGE_CLOCK_PROVIDE:
-        {
-            //printf("clock provide\n");
-        } break;
-
-        case GST_MESSAGE_CLOCK_LOST:
-        {
-            //printf("clock lost\n");
-        } break;
-
-        case GST_MESSAGE_NEW_CLOCK:
-        {
-            //printf("new clock\n");
-        } break;
-
-        case GST_MESSAGE_STRUCTURE_CHANGE:
-        {
-            //printf("structure change\n");
-        } break;
-
-        case GST_MESSAGE_STREAM_STATUS:
-        {
-            //printf("stream status\n");
-        } break;
-
-        case GST_MESSAGE_APPLICATION:
-        {
-            //printf("application\n");
-        } break;
-
-        case GST_MESSAGE_ELEMENT:
-        {
-            //printf("element\n");
-            if (gst_is_missing_plugin_message(msg))
-            {
-                gst_element_set_state(ud->preview->play, GST_STATE_PAUSED);
-                gchar *desc = gst_missing_plugin_message_get_description(msg);
-                ghb_alert_dialog_show(GTK_MESSAGE_WARNING,_("Missing GStreamer plugin"),
-                                      "%s\n\n%s",
-                                      _("Audio or Video may not play as expected"),
-                                      desc);
-                gst_element_set_state(ud->preview->play, GST_STATE_PLAYING);
-            }
-            else if (msg->src == GST_OBJECT_CAST(ud->preview->vsink))
-            {
-                const GstStructure *gstStruct;
-                const GValue       *val;
-
-                gstStruct = gst_message_get_structure(msg);
-                if (gstStruct != NULL &&
-                    (gst_structure_has_name(gstStruct, "preroll-pixbuf") ||
-                     gst_structure_has_name(gstStruct, "pixbuf")))
-                {
-                    val = gst_structure_get_value(gstStruct, "pixbuf");
-                    if (val != NULL)
-                    {
-                        GdkPixbuf * pix;
-                        GtkWidget *widget;
-                        int        width, height;
-
-                        if (ud->preview->pix != NULL)
-                            g_object_unref(ud->preview->pix);
-                        if (ud->preview->scaled_pix != NULL)
-                            g_object_unref(ud->preview->scaled_pix);
-                        pix = GDK_PIXBUF(g_value_dup_object(val));
-                        width = gdk_pixbuf_get_width(pix);
-                        height = gdk_pixbuf_get_height(pix);
-                        if (width  != ud->preview->width ||
-                            height != ud->preview->height ||
-                            width  != ud->preview->render_width ||
-                            height != ud->preview->render_height)
-                        {
-                            double xscale, yscale;
-
-                            xscale = (double)ud->preview->render_width /
-                                             ud->preview->width;
-                            yscale = (double)ud->preview->render_height /
-                                             ud->preview->height;
-                            if (xscale <= yscale)
-                            {
-                                width  = ud->preview->render_width;
-                                height = ud->preview->height * xscale;
-                            }
-                            else
-                            {
-                                width  = ud->preview->width * yscale;
-                                height = ud->preview->render_height;
-                            }
-
-                            ud->preview->scaled_pix =
-                                gdk_pixbuf_scale_simple(pix,
-                                                        width, height,
-                                                        GDK_INTERP_BILINEAR);
-                            g_object_ref(pix);
-                        }
-                        else
-                        {
-                            ud->preview->scaled_pix = pix;
-                        }
-                        ud->preview->pix = ud->preview->scaled_pix;
-                        g_object_ref(ud->preview->pix);
-                        widget = ghb_builder_widget("preview_image");
-                        gtk_widget_queue_draw(widget);
-                    }
-                }
-            }
-        } break;
-
-        case GST_MESSAGE_SEGMENT_START:
-        {
-            //printf("segment start\n");
-        } break;
-
-        case GST_MESSAGE_SEGMENT_DONE:
-        {
-            //printf("segment done\n");
-        } break;
-
-        case GST_MESSAGE_DURATION_CHANGED:
-        {
-            //printf("duration change\n");
-        };
-
-        case GST_MESSAGE_LATENCY:
-        {
-            //printf("latency\n");
-        };
-
-        case GST_MESSAGE_ASYNC_START:
-        {
-            //printf("async start\n");
-        } break;
-
-        case GST_MESSAGE_ASYNC_DONE:
-        {
-            //printf("async done\n");
-        } break;
-
-        case GST_MESSAGE_REQUEST_STATE:
-        {
-            //printf("request state\n");
-        } break;
-
-        case GST_MESSAGE_STEP_START:
-        {
-            //printf("step start\n");
-        } break;
-
-        case GST_MESSAGE_QOS:
-        {
-            //printf("qos\n");
-        } break;
-
-        case GST_MESSAGE_PROGRESS:
-        {
-            //printf("progress\n");
-        } break;
-
-        case GST_MESSAGE_TOC:
-        {
-            //printf("toc\n");
-        } break;
-
-        case GST_MESSAGE_RESET_TIME:
-        {
-            //printf("reset time\n");
-        } break;
-
-        case GST_MESSAGE_STREAM_START:
-        {
-            //printf("stream start\n");
-        };
-
-        case GST_MESSAGE_ANY:
-        {
-            //printf("any\n");
-        } break;
-
-
-        default:
-        {
-            // Ignore
-            //printf("?msg? %x\n", GST_MESSAGE_TYPE(msg));
-        }
-    }
-    return TRUE;
-}
-#endif
-
 G_MODULE_EXPORT void
-live_preview_start_cb (GtkWidget *xwidget, gpointer data)
+live_preview_play_clicked_cb (GtkWidget *xwidget, gpointer data)
 {
-    gchar *tmp_dir;
-    gchar *name;
     signal_user_data_t *ud = ghb_ud();
     gint frame = ud->preview->frame;
-
-    tmp_dir = ghb_get_tmp_dir();
-    name = g_strdup_printf("%s/live%02d", tmp_dir, ud->preview->frame);
-    free(tmp_dir);
+    g_autofree char *tmp_dir = ghb_get_tmp_dir();
+    char *name = g_strdup_printf("%s/live%02d", tmp_dir, ud->preview->frame);
     if (ud->preview->current)
         g_free(ud->preview->current);
     ud->preview->current = name;
@@ -715,12 +354,7 @@ live_preview_start_cb (GtkWidget *xwidget, gpointer data)
     if (ud->preview->encoded[frame] &&
         g_file_test(name, G_FILE_TEST_IS_REGULAR))
     {
-#if defined(_ENABLE_GST)
-        if (ud->preview->pause)
-            live_preview_start(ud);
-        else
-            live_preview_pause(ud);
-#endif
+        live_preview_toggle_playback(ud);
     }
     else
     {
@@ -763,9 +397,7 @@ ghb_live_encode_done(signal_user_data_t *ud, gboolean success)
         gtk_progress_bar_set_text(GTK_PROGRESS_BAR(prog), "Done");
         gtk_progress_bar_set_fraction (GTK_PROGRESS_BAR(prog), 1);
         ud->preview->encoded[ud->preview->encode_frame] = TRUE;
-#if defined(_ENABLE_GST)
-        live_preview_start(ud);
-#endif
+        live_preview_start_new(ud);
         widget = ghb_builder_widget("live_progress_box");
         gtk_widget_hide (widget);
         widget = ghb_builder_widget("live_preview_progress");
@@ -779,23 +411,17 @@ ghb_live_encode_done(signal_user_data_t *ud, gboolean success)
     }
 }
 
-#if defined(_ENABLE_GST)
 G_MODULE_EXPORT gboolean
 unlock_progress_cb(signal_user_data_t *ud)
 {
     ud->preview->progress_lock = FALSE;
-    // This function is initiated by g_idle_add.  Must return false
-    // so that it is not called again
-    return FALSE;
+    return G_SOURCE_REMOVE;
 }
-#endif
 
-void
-ghb_live_preview_progress(signal_user_data_t *ud)
+static void
+live_preview_progress_cb (GtkMediaStream *video, GParamSpec *spec, signal_user_data_t *ud)
 {
-#if defined(_ENABLE_GST)
-    GstFormat fmt = GST_FORMAT_TIME;
-    gint64 len = -1, pos = -1;
+    int64_t len, pos;
 
     if (!ud->preview->live_enabled)
         return;
@@ -804,67 +430,47 @@ ghb_live_preview_progress(signal_user_data_t *ud)
         return;
 
     ud->preview->progress_lock = TRUE;
-    if (gst_element_query_duration(ud->preview->play, fmt, &len))
-    {
-        if (len != -1 && fmt == GST_FORMAT_TIME)
-        {
-            ud->preview->len = len / GST_MSECOND;
-        }
-    }
-    if (gst_element_query_position(ud->preview->play, fmt, &pos))
-    {
-        if (pos != -1 && fmt == GST_FORMAT_TIME)
-        {
-            ud->preview->pos = pos / GST_MSECOND;
-        }
-    }
-    if (ud->preview->len > 0)
-    {
-        GtkRange *progress;
-        gdouble percent;
 
-        percent = (gdouble)ud->preview->pos * 100 / ud->preview->len;
-        progress = GTK_RANGE(ghb_builder_widget("live_preview_progress"));
+    len = gtk_media_stream_get_duration(video);
+    pos = gtk_media_stream_get_timestamp(video);
+
+    if (len > 0)
+    {
+        double percent = (double) pos * 100 / len;
+        GtkRange *progress = GTK_RANGE(ghb_builder_widget("live_preview_progress"));
         gtk_range_set_value(progress, percent);
     }
     g_idle_add((GSourceFunc)unlock_progress_cb, ud);
-#endif
 }
 
-#if defined(_ENABLE_GST)
 G_MODULE_EXPORT gboolean
 unlock_seek_cb(signal_user_data_t *ud)
 {
     ud->preview->seek_lock = FALSE;
-    // This function is initiated by g_idle_add.  Must return false
-    // so that it is not called again
-    return FALSE;
+    return G_SOURCE_REMOVE;
 }
-#endif
 
 G_MODULE_EXPORT void
 live_preview_seek_cb (GtkWidget *widget, gpointer data)
 {
-#if defined(_ENABLE_GST)
-    gdouble dval;
-    gint64 pos;
+    double dval;
+    int64_t len, pos;
     signal_user_data_t *ud = ghb_ud();
 
-    if (!ud->preview->live_enabled)
+    if (!ud->preview->live_enabled || ud->preview->state != PREVIEW_STATE_LIVE)
         return;
 
     if (ud->preview->progress_lock)
         return;
 
     ud->preview->seek_lock = TRUE;
+
+    len = gtk_media_stream_get_duration(GTK_MEDIA_STREAM(ud->preview->video));
     dval = gtk_range_get_value(GTK_RANGE(widget));
-    pos = ((ud->preview->len * dval) / 100) * GST_MSECOND;
-    gst_element_seek(ud->preview->play, 1.0,
-        GST_FORMAT_TIME, GST_SEEK_FLAG_FLUSH | GST_SEEK_FLAG_ACCURATE,
-        GST_SEEK_TYPE_SET, pos,
-        GST_SEEK_TYPE_NONE, GST_CLOCK_TIME_NONE);
+    pos = (int64_t) (len * dval / 100);
+    gtk_media_stream_seek(GTK_MEDIA_STREAM(ud->preview->video), pos);
+
     g_idle_add((GSourceFunc)unlock_seek_cb, ud);
-#endif
 }
 
 G_MODULE_EXPORT void
@@ -874,10 +480,10 @@ preview_fullscreen_action_cb(GSimpleAction *action, GVariant *param,
     gboolean state = g_variant_get_boolean(param);
     GtkWindow *window = GTK_WINDOW(ghb_builder_widget("preview_window"));
 
-    if (state != ud->preview->is_fullscreen)
+    if (gtk_window_is_fullscreen(window) != state)
         g_simple_action_set_state(action, param);
 
-    if (!ud->preview->is_fullscreen)
+    if (!gtk_window_is_fullscreen(window))
     {
         gtk_window_fullscreen(window);
     }
@@ -887,124 +493,17 @@ preview_fullscreen_action_cb(GSimpleAction *action, GVariant *param,
     }
 }
 
-static void _draw_pixbuf(signal_user_data_t * ud, cairo_t *cr, GdkPixbuf *pix)
+static void
+set_preview_image_static (signal_user_data_t *ud, GdkPixbuf * pix)
 {
-    int pix_width, pix_height, hoff, voff;
-
-    cairo_save(cr);
-    cairo_rectangle(cr, 0, 0, ud->preview->render_width,
-                              ud->preview->render_height);
-    cairo_set_operator(cr, CAIRO_OPERATOR_SOURCE);
-    cairo_fill(cr);
-    cairo_restore(cr);
-
-    pix_width  = gdk_pixbuf_get_width(pix);
-    pix_height = gdk_pixbuf_get_height(pix);
-    hoff = MAX((ud->preview->render_width  - pix_width)  / 2, 0);
-    voff = MAX((ud->preview->render_height - pix_height) / 2, 0);
-    if (voff > 0 || hoff > 0)
-    {
-        cairo_translate(cr, hoff, voff);
-    }
-
-    gdk_cairo_set_source_pixbuf(cr, pix, 0, 0);
-    cairo_paint(cr);
-}
-
-static void set_mini_preview_image(signal_user_data_t *ud, GdkPixbuf * pix)
-{
-    int         preview_width, preview_height, width, height;
-    GdkPixbuf * scaled_preview;
-
-    if (pix == NULL)
+    if (pix == NULL || ud->preview->state == PREVIEW_STATE_LIVE)
     {
         return;
     }
-
-    preview_width  = gdk_pixbuf_get_width(pix);
-    preview_height = gdk_pixbuf_get_height(pix);
-
-    // Scale and display the mini-preview
-    height = MIN(ud->preview->button_height - 32, preview_height);
-    width = preview_width * height / preview_height;
-    if (width > ud->preview->button_width - 32)
-    {
-        width = MIN(ud->preview->button_width - 32, preview_width);
-        height = preview_height * width / preview_width;
-    }
-    if ((height >= 16) && (width >= 16))
-    {
-        scaled_preview = gdk_pixbuf_scale_simple(pix, width, height,
-                                                 GDK_INTERP_NEAREST);
-        if (scaled_preview != NULL)
-        {
-            GtkWidget * widget;
-
-            widget = ghb_builder_widget("preview_button_image");
-            gtk_picture_set_pixbuf(GTK_PICTURE(widget), scaled_preview);
-            g_object_unref(scaled_preview);
-        }
-    }
-}
-
-static GdkPixbuf *
-do_preview_scaling (signal_user_data_t *ud, GdkPixbuf *pix)
-{
-    int         preview_width, preview_height, width, height;
-    GdkPixbuf * scaled_preview;
-
-    if (pix == NULL)
-    {
-        return NULL;
-    }
-
-    preview_width  = gdk_pixbuf_get_width(pix);
-    preview_height = gdk_pixbuf_get_height(pix);
-
-    if (ud->preview->render_width <= 0 || ud->preview->render_height <= 0)
-    {
-        // resize preview window to fit preview
-        preview_set_render_size(ud, preview_width, preview_height);
-        g_object_ref(pix);
-        return pix;
-    }
-
-    // Scale if necessary
-    if (preview_width  != ud->preview->render_width ||
-        preview_height != ud->preview->render_height)
-    {
-        double xscale, yscale;
-
-        xscale = (double)ud->preview->render_width  / preview_width;
-        yscale = (double)ud->preview->render_height / preview_height;
-        if (xscale <= yscale)
-        {
-            width  = ud->preview->render_width;
-            height = preview_height * xscale;
-        }
-        else
-        {
-            width  = preview_width * yscale;
-            height = ud->preview->render_height;
-        }
-        // Allow some slop in aspect ratio so that we fill the window
-        int delta = ud->preview->render_width - width;
-        if (delta > 0 && delta <= 16)
-            width = ud->preview->render_width;
-
-        delta = ud->preview->render_height - height;
-        if (delta > 0 && delta <= 16)
-            height = ud->preview->render_height;
-
-        scaled_preview = gdk_pixbuf_scale_simple(pix, width, height,
-                                                 GDK_INTERP_BILINEAR);
-        return scaled_preview;
-    }
-    else
-    {
-        g_object_ref(pix);
-    }
-    return pix;
+    GtkWidget *widget = ghb_builder_widget("summary_preview_image");
+    gtk_picture_set_pixbuf(GTK_PICTURE(widget), pix);
+    widget = ghb_builder_widget("preview_image");
+    gtk_picture_set_pixbuf(GTK_PICTURE(widget), pix);
 }
 
 static void
@@ -1035,8 +534,6 @@ init_preview_image(signal_user_data_t *ud)
     }
     if (ud->preview->pix != NULL)
         g_object_unref(ud->preview->pix);
-    if (ud->preview->scaled_pix != NULL)
-        g_object_unref(ud->preview->scaled_pix);
 
     ud->preview->pix = ghb_get_preview_image(ud->preview->frame, ud);
     if (ud->preview->pix == NULL)
@@ -1053,38 +550,8 @@ ghb_set_preview_image(signal_user_data_t *ud)
 {
     init_preview_image(ud);
 
-    // Scale and display the mini-preview
-    set_mini_preview_image(ud, ud->preview->pix);
-
-    // Scale the full size preview
-    ud->preview->scaled_pix = do_preview_scaling(ud, ud->preview->pix);
-
-    // Display full size preview
-    GtkWidget *widget = ghb_builder_widget("preview_image");
-    gtk_widget_queue_draw(widget);
-}
-
-void
-ghb_rescale_preview_image(signal_user_data_t *ud)
-{
-    init_preview_image(ud);
-    if (ud->preview->width <= 0 || ud->preview->height <= 0)
-    {
-        return;
-    }
-    double scale = (double)ud->preview->render_width / ud->preview->width;
-    preview_set_render_size(ud, ud->preview->width * scale,
-                                ud->preview->height * scale);
-
-    // Scale and display the mini-preview
-    set_mini_preview_image(ud, ud->preview->pix);
-
-    // Scale the full size preview
-    ud->preview->scaled_pix = do_preview_scaling(ud, ud->preview->pix);
-
-    // Display full size preview
-    GtkWidget *widget = ghb_builder_widget("preview_image");
-    gtk_widget_queue_draw(widget);
+    // Display the preview
+    set_preview_image_static(ud, ud->preview->pix);
 }
 
 void
@@ -1097,44 +564,8 @@ ghb_reset_preview_image(signal_user_data_t *ud)
     }
     preview_set_render_size(ud, ud->preview->width, ud->preview->height);
 
-    // Scale and display the mini-preview
-    set_mini_preview_image(ud, ud->preview->pix);
-
-    // Scale the full size preview
-    ud->preview->scaled_pix = do_preview_scaling(ud, ud->preview->pix);
-
-    // Display full size preview
-    GtkWidget *widget = ghb_builder_widget("preview_image");
-    gtk_widget_queue_draw(widget);
-}
-
-G_MODULE_EXPORT void
-preview_draw_cb (GtkDrawingArea *da, cairo_t *cr, int width, int height,
-                 gpointer data)
-{
-    signal_user_data_t *ud = ghb_ud();
-    if (ud->preview->scaled_pix != NULL)
-    {
-        _draw_pixbuf(ud, cr, ud->preview->scaled_pix);
-    }
-}
-
-G_MODULE_EXPORT void
-preview_button_size_allocate_cb (GtkWidget *widget, int width, int height,
-                                 int baseline, gpointer data)
-{
-    signal_user_data_t *ud = ghb_ud();
-
-    if (ud->preview->button_width  == width &&
-        ud->preview->button_height == height)
-    {
-        // Nothing to do. Bug out.
-        g_debug("nothing to do");
-        return;
-    }
-    ud->preview->button_width  = width;
-    ud->preview->button_height = height;
-    set_mini_preview_image(ud, ud->preview->pix);
+    // Display the preview
+    set_preview_image_static(ud, ud->preview->pix);
 }
 
 G_MODULE_EXPORT void
@@ -1171,13 +602,6 @@ preview_reset_clicked_cb (GtkWidget *toggle, gpointer data)
     // "Source Resolution" button.
     GtkWidget * widget = ghb_builder_widget("preview_reset");
     gtk_widget_hide(widget);
-
-    if (ud->preview->scaled_pix != NULL)
-        g_object_unref(ud->preview->scaled_pix);
-    ud->preview->scaled_pix = do_preview_scaling(ud, ud->preview->pix);
-
-    widget = ghb_builder_widget("preview_image");
-    gtk_widget_queue_draw(widget);
 }
 
 G_MODULE_EXPORT void
@@ -1311,94 +735,18 @@ preview_motion_cb (GtkEventControllerMotion *econ, double x, double y,
     }
 }
 
+/*
+ * TODO: Connect to the notify::is-maximized signal.
+ */
 G_MODULE_EXPORT void
 preview_notify_fullscreen_cb (GtkWindow *window, GParamSpec *pspec, gpointer data)
 {
     gboolean is_fullscreen = gtk_window_is_fullscreen(window);
-    ghb_ud()->preview->is_fullscreen = is_fullscreen;
 
     GtkWidget *widget = ghb_builder_widget("live_preview_fullscreen");
     gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), is_fullscreen);
     gtk_button_set_icon_name(GTK_BUTTON(widget), is_fullscreen ?
                              "view-restore-symbolic" : "view-fullscreen-symbolic");
-}
-#if !GTK_CHECK_VERSION(4, 4, 0)
-/*
- * TODO: Recreate this in GTK4 by connecting to the notify::is-maximized,
- * notify::is-fullscreened, and (>=4.12 only) notify::suspended
- * signals.
- */
-
-G_MODULE_EXPORT gboolean
-preview_state_cb (GtkWidget *widget, GdkEvent *event, gpointer data)
-{
-    signal_user_data_t *ud = ghb_ud();
-    GdkEventType type = gdk_event_get_event_type(event);
-    if (type == GDK_WINDOW_STATE)
-    {
-        // Look for transition to iconified state.
-        // Toggle "Show Preview" button when iconified.
-        // I only do this because there seems to be no
-        // way to reliably disable the iconify button without
-        // also disabling the maximize button.
-        GdkEventWindowState * wse = (GdkEventWindowState*)event;
-        if (wse->changed_mask & wse->new_window_state &
-            GDK_WINDOW_STATE_ICONIFIED)
-        {
-            live_preview_stop();
-        }
-        ud->preview->is_fullscreen = wse->new_window_state & GDK_WINDOW_STATE_FULLSCREEN;
-    }
-    return FALSE;
-}
-#endif
-
-G_MODULE_EXPORT void
-preview_resize_cb (GtkWidget *widget, int width, int height, int baseline,
-                   gpointer data)
-{
-    signal_user_data_t *ud = ghb_ud();
-
-    if (ud->preview->render_width != width ||
-        ud->preview->render_height != height)
-    {
-        ud->preview->render_width  = width;
-        ud->preview->render_height = height;
-        if (ud->preview->scaled_pix != NULL)
-            g_object_unref(ud->preview->scaled_pix);
-        ud->preview->scaled_pix = do_preview_scaling(ud, ud->preview->pix);
-
-        GtkWidget *widget = ghb_builder_widget("preview_image");
-        gtk_widget_queue_draw(widget);
-
-        if (ABS(ud->preview->render_width  - ud->preview->width)  <= 2 ||
-            ABS(ud->preview->render_height - ud->preview->height) <= 2)
-        {
-            GtkWidget * widget = ghb_builder_widget("preview_reset");
-            gtk_widget_hide(widget);
-        }
-        else if (!ud->preview->is_fullscreen)
-        {
-            GtkWidget * widget = ghb_builder_widget("preview_reset");
-            gtk_widget_show(widget);
-        }
-    }
-}
-
-G_MODULE_EXPORT void
-show_crop_changed_cb(GtkWidget *widget, gpointer data)
-{
-#if 0
-    // Disabled until we reimplement this or come up with something better
-    //
-    ghb_log_func();
-    ghb_widget_to_setting(ud->prefs, widget);
-    ghb_live_reset(ud);
-    if (gtk_widget_is_sensitive(widget))
-        ghb_set_scale(ud, 0);
-    ghb_pref_save(ud->prefs, "preview_show_crop");
-    ghb_rescale_preview_image(ud);
-#endif
 }
 
 void
@@ -1408,7 +756,12 @@ ghb_preview_dispose (signal_user_data_t *ud)
         return;
     if (ud->preview->pix)
         g_object_unref(ud->preview->pix);
-    if (ud->preview->scaled_pix)
-        g_object_unref(ud->preview->scaled_pix);
+    if (ud->preview->video)
+    {
+        g_signal_handlers_disconnect_by_func(ud->preview->video, live_preview_ended_cb, ud);
+        g_signal_handlers_disconnect_by_func(ud->preview->video, live_preview_progress_cb, ud);
+        g_signal_handlers_disconnect_by_func(ud->preview->video, live_preview_error_cb, ud);
+        g_clear_object(&ud->preview->video);
+    }
     g_free(ud->preview);
 }

@@ -1408,11 +1408,9 @@ def createCLI( cross = None ):
     h = 'disable GTK GUI' if gtk_supported else argparse.SUPPRESS
     grp.add_argument( '--disable-gtk', dest="enable_gtk", action='store_false', help=h)
 
-    # Option deprecated
+    # Options deprecated
     grp.add_argument( '--disable-gtk-update-checks', default=False, action='store_true', help=argparse.SUPPRESS )
-
-    h='disable GStreamer (GTK live preview)' if gtk_supported else argparse.SUPPRESS
-    grp.add_argument( '--disable-gst', default=False, action='store_true', help=h )
+    grp.add_argument( '--disable-gst', default=False, action='store_true', help=argparse.SUPPRESS )
 
     h = IfHost( 'x265 video encoder', '*-*-*', none=argparse.SUPPRESS ).value
     grp.add_argument( '--enable-x265', dest="enable_x265", default=True, action='store_true', help=(( 'enable %s' %h ) if h != argparse.SUPPRESS else h) )
@@ -2083,7 +2081,6 @@ int main()
     doc.add( 'FEATURE.ffmpeg_aac', int( options.enable_ffmpeg_aac ))
     doc.add( 'FEATURE.flatpak',    int( options.flatpak ))
     doc.add( 'FEATURE.gtk',        int( options.enable_gtk ))
-    doc.add( 'FEATURE.gst',        int( not options.disable_gst ))
     doc.add( 'FEATURE.mf',         int( options.enable_mf ))
     doc.add( 'FEATURE.nvenc',      int( options.enable_nvenc ))
     doc.add( 'FEATURE.nvdec',      int( options.enable_nvdec ))
