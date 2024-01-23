@@ -1954,15 +1954,14 @@ sync for broken players that do not honor MP4 edit lists.</property>
                           </object>
                         </child>
                         <child>
-                          <object class="GtkImage" id="preview_button_image">
+                          <object class="GtkPicture" id="summary_preview_image">
                             <property name="visible">0</property>
                             <property name="margin-bottom">4</property>
                             <property name="margin-start">4</property>
                             <property name="margin-end">4</property>
                             <property name="hexpand">1</property>
                             <property name="vexpand">1</property>
-                            <property name="pixel-size">128</property>
-                            <property name="icon-name">fr.handbrake.ghb</property>
+                            <property name="keep-aspect-ratio">True</property>
                             <accessibility>
                               <property name="label" translatable="yes">Video Preview</property>
                             </accessibility>
@@ -6103,7 +6102,7 @@ This permits Opus passthru to be selected when automatic passthru selection is e
             <property name="vexpand">1</property>
             <property name="css-classes">ghb-preview-image-frame</property>
             <property name="child">
-              <object class="GtkDrawingArea" id="preview_image">
+              <object class="GtkPicture" id="preview_image">
                 <property name="hexpand">1</property>
                 <property name="vexpand">1</property>
                 <accessibility>
@@ -6168,12 +6167,8 @@ app-notification</property>
                         <property name="focusable">1</property>
                         <property name="receives-default">1</property>
                         <property name="tooltip-text" translatable="yes">Encode and play a short sequence of video starting from the current preview position.</property>
-                        <signal name="clicked" handler="live_preview_start_cb" swapped="no"/>
-                        <child>
-                          <object class="GtkImage" id="live_preview_play_image">
-                            <property name="icon-name">media-playback-start-symbolic</property>
-                          </object>
-                        </child>
+                        <signal name="clicked" handler="live_preview_play_clicked_cb" swapped="no"/>
+                        <property name="icon-name">media-playback-start-symbolic</property>
                       </object>
                     </child>
                     <child>
@@ -6195,7 +6190,10 @@ app-notification</property>
                         <property name="hexpand">1</property>
                         <child>
                           <object class="GtkProgressBar" id="live_encode_progress">
-                            <property name="height-request">20</property>
+                            <property name="margin-start">6</property>
+                            <property name="margin-end">6</property>
+                            <property name="vexpand">True</property>
+                            <property name="valign">center</property>
                             <accessibility>
                               <property name="label" translatable="yes">Preview Encode Progress</property>
                             </accessibility>
@@ -6237,16 +6235,6 @@ app-notification</property>
                             <signal name="value-changed" handler="preview_duration_changed_cb" swapped="no"/>
                           </object>
                         </child>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="GtkCheckButton" id="preview_show_crop">
-                        <property name="label" translatable="yes">Show Crop</property>
-                        <property name="visible">0</property>
-                        <property name="focusable">1</property>
-                        <property name="tooltip-text" translatable="yes">Show Cropped area of the preview</property>
-                        <property name="halign">start</property>
-                        <signal name="toggled" handler="show_crop_changed_cb" swapped="no"/>
                       </object>
                     </child>
                     <child>

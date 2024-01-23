@@ -2159,14 +2159,14 @@ mini_preview_update (gboolean has_preview, signal_user_data_t *ud)
     {
         widget = ghb_builder_widget("summary_image");
         gtk_widget_hide(widget);
-        widget = ghb_builder_widget("preview_button_image");
+        widget = ghb_builder_widget("summary_preview_image");
         gtk_widget_show(widget);
     }
     else
     {
         widget = ghb_builder_widget("summary_image");
         gtk_widget_show(widget);
-        widget = ghb_builder_widget("preview_button_image");
+        widget = ghb_builder_widget("summary_preview_image");
         gtk_widget_hide(widget);
     }
 }
@@ -4534,7 +4534,6 @@ ghb_timer_cb(gpointer data)
 {
     signal_user_data_t *ud = (signal_user_data_t*)data;
 
-    ghb_live_preview_progress(ud);
     ghb_backend_events(ud);
     if (update_preview)
     {
@@ -4707,9 +4706,6 @@ about_action_cb (GSimpleAction *action, GVariant *param, signal_user_data_t *ud)
 #endif
 #if HB_PROJECT_FEATURE_FDK_AAC
         "- fdk-aac\n"
-#endif
-#if HB_PROJECT_FEATURE_GST
-        "- gstreamer\n"
 #endif
 #if HB_PROJECT_FEATURE_X265
         "- x265\n"
@@ -5487,3 +5483,4 @@ log_directory_action_cb (GSimpleAction *action, GVariant *param, signal_user_dat
 
     ghb_browse_uri(ud, uri);
 }
+

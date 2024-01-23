@@ -67,19 +67,6 @@ ghb_deps = [
   dependency('zlib'),
 ]
 
-if get_option('gstreamer').enabled()
-  gst = dependency('gstreamer-1.0', version: gst_min, required: false)
-  gst_audio = dependency('gstreamer-audio-1.0', required: false)
-  gst_video = dependency('gstreamer-video-1.0', required: false)
-  gst_pbutils = dependency('gstreamer-pbutils-1.0', required: false)
-  if gst_pbutils.found()
-    ghb_deps += [gst, gst_audio, gst_video, gst_pbutils]
-    add_project_arguments('-D_ENABLE_GST', language: 'c')
-  else
-    message('Preview support disabled as gstreamer-plugins-base was not found.')
-  endif
-endif
-
 if get_option('libdovi').enabled()
   ghb_deps += dependency('dovi')
 endif

@@ -52,10 +52,6 @@
 #include <sys/utsname.h>
 #endif
 
-#ifdef _ENABLE_GST
-#include <gst/gst.h>
-#endif
-
 struct _GhbApplication
 {
     GtkApplication parent_instance;
@@ -572,8 +568,6 @@ extern G_MODULE_EXPORT void preview_leave_cb(GtkEventControllerMotion * econ,
                                              signal_user_data_t *ud);
 extern G_MODULE_EXPORT void preview_motion_cb(GtkEventControllerMotion * econ, double x,
                                               double y, signal_user_data_t *ud);
-extern G_MODULE_EXPORT void preview_draw_cb(GtkDrawingArea*, cairo_t*, int, int,
-                                            gpointer);
 extern G_MODULE_EXPORT void hud_enter_cb(GtkEventControllerMotion * econ, double x, double y,
                                          GdkCrossingMode cross, GdkNotifyType notify,
                                          signal_user_data_t *ud);
@@ -875,10 +869,6 @@ ghb_application_activate (GApplication *app)
     GMenuModel *menu = G_MENU_MODEL(ghb_builder_object("handbrake-menu-bar"));
     gtk_application_set_menubar(GTK_APPLICATION(app), menu);
 
-    widget = ghb_builder_widget("preview_image");
-    gtk_drawing_area_set_draw_func(GTK_DRAWING_AREA(widget), preview_draw_cb,
-                                   ud, NULL);
-
     gtk_window_present(hb_window);
 }
 
@@ -896,9 +886,6 @@ static void
 ghb_application_init (GhbApplication *self)
 {
     g_application_add_main_option_entries(G_APPLICATION (self), option_entries);
-#if defined(_ENABLE_GST)
-    g_application_add_option_group(G_APPLICATION(self), gst_init_get_option_group());
-#endif
 }
 
 GhbApplication *
