@@ -169,7 +169,7 @@ static hb_buffer_t *tx3g_decode_to_ssa(hb_work_private_t *pv, hb_buffer_t *in)
     int charIndex = 0;
     int styleIndex = 0;
 
-    snprintf((char*)dst, maxOutputSize, "%d,,Default,,0,0,0,,", pv->line);
+    snprintf((char*)dst, maxOutputSize, "%d,0,Default,,0,0,0,,", pv->line);
     dst += strlen((char*)dst);
     start = dst;
     for (pos = text, end = text + textLength; pos < end; pos++)
@@ -218,6 +218,8 @@ static hb_buffer_t *tx3g_decode_to_ssa(hb_work_private_t *pv, hb_buffer_t *in)
     }
     *dst = '\0';
     dst++;
+
+    pv->line++;
 
     // Trim output buffer to the actual amount of data written
     out->size = dst - out->data;
