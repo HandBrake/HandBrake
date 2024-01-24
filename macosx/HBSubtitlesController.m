@@ -121,7 +121,10 @@
         if (result == NSModalResponseOK)
         {
             NSMutableArray<HBSecurityAccessToken *> *tokens = [[NSMutableArray alloc] init];
-            [tokens addObjectsFromArray:self.fileTokens];
+            if (self.fileTokens)
+            {
+                [tokens addObjectsFromArray:self.fileTokens];
+            }
             for (NSURL *importFileURL in panel.URLs)
             {
                 [tokens addObject:[HBSecurityAccessToken tokenWithAlreadyAccessedObject:importFileURL]];
