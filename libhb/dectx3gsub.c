@@ -46,10 +46,10 @@ typedef struct {
 } StyleRecord;
 
 // NOTE: None of these macros check for buffer overflow
-#define READ_U8()       *pos;                                                       pos += 1;
-#define READ_U16()      (pos[0] << 8) | pos[1];                                     pos += 2;
-#define READ_U32()      (pos[0] << 24) | (pos[1] << 16) | (pos[2] << 8) | pos[3];   pos += 4;
-#define READ_ARRAY(n)   pos;                                                        pos += n;
+#define READ_U8()       *pos;                                                                 pos += 1;
+#define READ_U16()      (pos[0] << 8) | pos[1];                                               pos += 2;
+#define READ_U32()      ((uint32_t)pos[0] << 24) | (pos[1] << 16) | (pos[2] << 8) | pos[3];   pos += 4;
+#define READ_ARRAY(n)   pos;                                                                  pos += n;
 #define SKIP_ARRAY(n)   pos += n;
 
 #define WRITE_CHAR(c)       {dst[0]=c;                                              dst += 1;}
