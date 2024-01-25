@@ -104,6 +104,12 @@ namespace HandBrakeWPF.Services.Encode.Factories
                 hwDecode = (int)NativeConstants.HB_DECODE_SUPPORT_NVDEC;
             }
 
+            bool qsv = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.EnableQuickSyncDecoding);
+            if (qsv)
+            {
+                hwDecode |= (int)NativeConstants.HB_DECODE_SUPPORT_QSV;
+            }
+
             Source source = new Source
             {
                 Title = job.Title,

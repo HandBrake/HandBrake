@@ -59,6 +59,7 @@
 #endif
 
 #include "handbrake/handbrake.h"
+#include "application.h"
 #include "callbacks.h"
 #include "chapters.h"
 #include "notifications.h"
@@ -71,7 +72,6 @@
 #include "presets.h"
 #include "preview.h"
 #include "values.h"
-#include "plist.h"
 #include "hb-backend.h"
 #include "ghb-dvd.h"
 #include "libavutil/parseutils.h"
@@ -310,8 +310,8 @@ inhibit_suspend (signal_user_data_t *ud)
         // Already inhibited
         return;
     }
-    suspend_cookie = gtk_application_inhibit(ud->app, NULL,
-            GTK_APPLICATION_INHIBIT_SUSPEND | GTK_APPLICATION_INHIBIT_LOGOUT,
+    suspend_cookie = gtk_application_inhibit(GTK_APPLICATION(GHB_APPLICATION_DEFAULT),
+            NULL, GTK_APPLICATION_INHIBIT_SUSPEND | GTK_APPLICATION_INHIBIT_LOGOUT,
             _("An encode is in progress."));
     if (suspend_cookie != 0)
     {
@@ -326,7 +326,8 @@ uninhibit_suspend (signal_user_data_t *ud)
     switch (suspend_inhibited)
     {
         case GHB_SUSPEND_INHIBITED_GTK:
-            gtk_application_uninhibit(ud->app, suspend_cookie);
+            gtk_application_uninhibit(GTK_APPLICATION(GHB_APPLICATION_DEFAULT),
+                                      suspend_cookie);
             break;
         default:
             break;
@@ -509,7 +510,7 @@ application_quit (signal_user_data_t *ud)
 {
     ghb_hb_cleanup(FALSE);
     prune_logs(ud);
-    g_application_quit(G_APPLICATION(ud->app));
+    g_application_quit(g_application_get_default());
 }
 
 G_MODULE_EXPORT void
@@ -3608,7 +3609,7 @@ prefs_response_cb(GtkDialog *dialog, GdkEvent *event, signal_user_data_t *ud)
                                 _("You must restart HandBrake now."));
         ghb_hb_cleanup(FALSE);
         prune_logs(ud);
-        g_application_quit(G_APPLICATION(ud->app));
+        g_application_quit(g_application_get_default());
     }
     return TRUE;
 }
@@ -3632,7 +3633,7 @@ quit_cb(countdown_t *cd)
         prune_logs(cd->ud);
 
         gtk_widget_destroy (GTK_WIDGET(cd->dlg));
-        g_application_quit(G_APPLICATION(cd->ud->app));
+        g_application_quit(g_application_get_default());
         return FALSE;
     }
     gtk_message_dialog_format_secondary_text(cd->dlg, _("%s in %d seconds…"),
@@ -3652,7 +3653,7 @@ shutdown_cb(countdown_t *cd)
         prune_logs(cd->ud);
 
         shutdown_logind();
-        g_application_quit(G_APPLICATION(cd->ud->app));
+        g_application_quit(g_application_get_default());
         return FALSE;
     }
     return TRUE;
@@ -5400,7 +5401,7 @@ GtkFileFilter *ghb_add_file_filter(GtkFileChooser *chooser,
 static void
 add_video_file_filters (GtkFileChooser *chooser, signal_user_data_t *ud)
 {
-    ghb_add_file_filter(chooser, ud, _("All Files"), "SourceFilterAll");
+    ghb_add_file_filter(chooser, ud, _("All Files"), "FilterAll");
     ghb_add_file_filter(chooser, ud, _("Video"), "SourceFilterVideo");
     ghb_add_file_filter(chooser, ud, g_content_type_get_description("video/mp4"), "SourceFilterMP4");
     ghb_add_file_filter(chooser, ud, g_content_type_get_description("video/mp2t"), "SourceFilterTS");

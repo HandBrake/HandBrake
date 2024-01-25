@@ -13,6 +13,7 @@ namespace HandBrakeWPF.Views
     using System.Windows.Input;
     using System.Windows.Media;
 
+    using HandBrakeWPF.Commands;
     using HandBrakeWPF.Helpers;
     using HandBrakeWPF.Services.Queue.Model;
     using HandBrakeWPF.ViewModels;
@@ -25,6 +26,8 @@ namespace HandBrakeWPF.Views
         {
             this.InitializeComponent();
             this.SizeChanged += this.QueueView_SizeChanged;
+
+            this.InputBindings.Add(new InputBinding(new CloseWindowCommand(this), new KeyGesture(Key.W, ModifierKeys.Control))); // Close Window
         }
 
         protected override void OnSourceInitialized(EventArgs e)

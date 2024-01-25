@@ -1,8 +1,9 @@
+# Copyright (C) 2023-2024 HandBrake Team
 # SPDX-License-Identifier: GPL-2.0-or-later
-# Copyright (c) 2023 HandBrake Team
 
 # Project sources
 ghb_src = files(
+  'application.c',
   'audiohandler.c',
   'callbacks.c',
   'chapters.c',
@@ -10,11 +11,9 @@ ghb_src = files(
   'ghb-dvd.c',
   'ghbcompat.c',
   'hb-backend.c',
-  'icons.c',
   'jobdict.c',
   'main.c',
   'notifications.c',
-  'plist.c',
   'power-manager.c',
   'presets.c',
   'preview.c',
@@ -54,7 +53,6 @@ configure_file(configuration: config_h, output: 'config.h')
 ui = gnome.compile_resources('ui_res', 'ui_res.gresource.xml',
   dependencies: ui_files,
   source_dir: ui_dir,
-  extra_args: '--manual-register',
   c_name: 'ghb_ui')
 
 # Build targets

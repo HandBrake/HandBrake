@@ -47,6 +47,11 @@ namespace HandBrake.Interop.Interop.Json.State
 
         public static TaskState FromRepositoryValue(string code)
         {
+            if (string.IsNullOrEmpty(code))
+            {
+                return null;
+            }
+
             if (TaskStates.TryGetValue(code, out TaskState state))
             {
                 return state;

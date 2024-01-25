@@ -2329,23 +2329,18 @@ static int decavcodecvWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
 
 static void compute_frame_duration( hb_work_private_t *pv )
 {
+    int64_t max_fps = 256LL;
+    int64_t min_fps = 8LL;
     double duration = 0.;
-    int64_t max_fps = 64LL;
 
     // context->time_base may be in fields, so set the max *fields* per second
     const AVCodecDescriptor *desc = avcodec_descriptor_get(pv->context->codec_id);
     int ticks_per_frame = desc && (desc->props & AV_CODEC_PROP_FIELDS) ? 2 : 1;
 
-    if (ticks_per_frame > 1)
-    {
-        max_fps *= ticks_per_frame;
-    }
-
-    if ( pv->title->opaque_priv )
+    if (pv->title->opaque_priv)
     {
         // If ffmpeg is demuxing for us, it collects some additional
-        // information about framerates that is often more accurate
-        // than context->time_base.
+        // information about framerates that is often accurate
         AVFormatContext *ic = (AVFormatContext*)pv->title->opaque_priv;
         AVStream *st = ic->streams[pv->title->video_id];
         if (st->nb_frames && st->duration > 0)
@@ -2355,33 +2350,29 @@ static void compute_frame_duration( hb_work_private_t *pv )
             duration = ( (double)st->duration * (double)st->time_base.num ) /
                        ( (double)st->nb_frames * (double)st->time_base.den );
         }
-        // Raw demuxers set a default fps of 25 and do not parse
-        // a value from the container.  So use the codec time_base
-        // for raw demuxers.
-        else if (ic->iformat->raw_codec_id == AV_CODEC_ID_NONE)
+        else
         {
             AVRational *tb = NULL;
-            // Try r_frame_rate, which is usually set for cfr streams
-            if (st->r_frame_rate.num && st->r_frame_rate.den)
-            {
-                duration = (double)st->r_frame_rate.den / (double)st->r_frame_rate.num;
-            }
-            // XXX We don't have a frame count or duration so try to use the
-            // far less reliable time base info in the stream.
+            // We don't have a frame count or duration so try to use the
+            // far less reliable avg_frame_rate info in the stream.
             // Because the time bases are so screwed up, we only take values
-            // in the range 8fps - 64fps.
-            else if ( st->avg_frame_rate.den * 64LL > st->avg_frame_rate.num &&
-                 st->avg_frame_rate.num > st->avg_frame_rate.den * 8LL )
+            // in a restricted range.
+            if (st->avg_frame_rate.den * max_fps > st->avg_frame_rate.num &&
+                st->avg_frame_rate.num > st->avg_frame_rate.den * min_fps)
             {
                 tb = &(st->avg_frame_rate);
-                duration =  (double)tb->den / (double)tb->num;
             }
-            else if ( st->time_base.num * 64LL > st->time_base.den &&
-                      st->time_base.den > st->time_base.num * 8LL )
+            else if (st->time_base.num * max_fps > st->time_base.den &&
+                     st->time_base.den > st->time_base.num * min_fps)
             {
                 tb = &(st->time_base);
-                duration =  (double)tb->num / (double)tb->den;
             }
+            // Try r_frame_rate, which is usually set for cfr streams
+            else if (st->r_frame_rate.num && st->r_frame_rate.den)
+            {
+                tb = &(st->r_frame_rate);
+            }
+            duration = (double)tb->den / (double)tb->num;
         }
     }
     else if (pv->context->framerate.num && pv->context->framerate.den)
@@ -2389,22 +2380,7 @@ static void compute_frame_duration( hb_work_private_t *pv )
         duration = (double)pv->context->framerate.den / (double)pv->context->framerate.num;
     }
 
-    // time_base is not set by decoders, todo: investigate if this
-    // can be safely removed
-    if (!duration &&
-        pv->context->time_base.num * max_fps > pv->context->time_base.den &&
-        pv->context->time_base.den > pv->context->time_base.num * 8LL)
-    {
-        duration = (double)pv->context->time_base.num / (double)pv->context->time_base.den;
-        if (ticks_per_frame > 1)
-        {
-            // for ffmpeg 0.5 & later, the H.264 & MPEG-2 time base is
-            // field rate rather than frame rate so convert back to frames.
-            duration *= ticks_per_frame;
-        }
-    }
-
-    if ( duration == 0 )
+    if (duration == 0)
     {
         // No valid timing info found in the stream, so pick some value
         duration = 1001. / 24000.;

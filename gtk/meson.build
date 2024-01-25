@@ -1,8 +1,8 @@
+# Copyright (C) 2023-2024 HandBrake Team
 # SPDX-License-Identifier: GPL-2.0-or-later
-# Copyright (c) 2023 HandBrake Team
 
 project('handbrake-gtk', 'c', 'cpp',
-  version: run_command('data/version.sh', check: true).stdout().strip(),
+  version: run_command('data/version.py', check: true).stdout().strip(),
   license: 'GPL-2.0-only',
   meson_version: '>= 0.51.0',
   default_options: ['warning_level=1', 'buildtype=release'])

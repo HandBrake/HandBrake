@@ -661,6 +661,8 @@ void hb_display_job_info(hb_job_t *job)
 
         hb_log("     + color profile: %d-%d-%d",
                job->color_prim, job->color_transfer, job->color_matrix);
+        hb_log("     + color range: %s",
+                av_color_range_name(job->color_range));
         hb_log("     + chroma location: %s",
                av_chroma_location_name(job->chroma_location));
 
@@ -1522,7 +1524,8 @@ static void sanitize_dynamic_hdr_metadata_passthru(hb_job_t *job)
         return;
     }
 
-    if (job->vcodec != HB_VCODEC_X265_10BIT &&
+    if (job->vcodec != HB_VCODEC_X265_10BIT    &&
+        job->vcodec != HB_VCODEC_VT_H265_10BIT &&
         job->vcodec != HB_VCODEC_SVT_AV1_10BIT)
     {
         job->passthru_dynamic_hdr_metadata &= ~HDR_10_PLUS;
@@ -1532,7 +1535,8 @@ static void sanitize_dynamic_hdr_metadata_passthru(hb_job_t *job)
     if ((job->dovi.dv_profile != 5 &&
          job->dovi.dv_profile != 7 &&
          job->dovi.dv_profile != 8) ||
-         job->vcodec != HB_VCODEC_X265_10BIT)
+        (job->vcodec != HB_VCODEC_X265_10BIT &&
+         job->vcodec != HB_VCODEC_VT_H265_10BIT))
     {
         job->passthru_dynamic_hdr_metadata &= ~DOVI;
     }

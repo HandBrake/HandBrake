@@ -27,6 +27,7 @@
 #include <gio/gio.h>
 #include "handbrake/handbrake.h"
 #include "settings.h"
+#include "application.h"
 #include "jobdict.h"
 #include "titledict.h"
 #include "hb-backend.h"
@@ -36,7 +37,6 @@
 #include "audiohandler.h"
 #include "subtitlehandler.h"
 #include "ghb-dvd.h"
-#include "plist.h"
 #include "queuehandler.h"
 #include "title-add.h"
 #include "power-manager.h"
@@ -2004,67 +2004,50 @@ ghb_queue_buttons_grey (signal_user_data_t *ud)
 
     paused = queue_state & GHB_STATE_PAUSED;
 
-    action = G_SIMPLE_ACTION(g_action_map_lookup_action(G_ACTION_MAP(ud->app),
-                                                        "queue-export"));
+    action = GHB_APPLICATION_ACTION("queue-export");
     g_simple_action_set_enabled(action, !!queue_count);
-    action = G_SIMPLE_ACTION(g_action_map_lookup_action(G_ACTION_MAP(ud->app),
-                                                        "add-current"));
+    action = GHB_APPLICATION_ACTION("add-current");
     g_simple_action_set_enabled(action, allow_add);
-    action = G_SIMPLE_ACTION(g_action_map_lookup_action(G_ACTION_MAP(ud->app),
-                                                        "add-multiple"));
+    action = GHB_APPLICATION_ACTION("add-multiple");
     g_simple_action_set_enabled(action, allow_add);
-    action = G_SIMPLE_ACTION(g_action_map_lookup_action(G_ACTION_MAP(ud->app),
-                                                        "add-all"));
+    action = GHB_APPLICATION_ACTION("add-all");
     g_simple_action_set_enabled(action, allow_add);
-    action = G_SIMPLE_ACTION(g_action_map_lookup_action(G_ACTION_MAP(ud->app),
-                                                        "queue-start"));
+    action = GHB_APPLICATION_ACTION("queue-start");
     g_simple_action_set_enabled(action, allow_start || show_stop);
-    action = G_SIMPLE_ACTION(g_action_map_lookup_action(G_ACTION_MAP(ud->app),
-                                                        "queue-pause"));
+    action = GHB_APPLICATION_ACTION("queue-pause");
     g_simple_action_set_enabled(action, show_stop);
 
-    action = G_SIMPLE_ACTION(g_action_map_lookup_action(G_ACTION_MAP(ud->app),
-                                                        "queue-reset"));
+    action = GHB_APPLICATION_ACTION("queue-reset");
     g_simple_action_set_enabled(action, row != NULL);
 
-    action = G_SIMPLE_ACTION(g_action_map_lookup_action(G_ACTION_MAP(ud->app),
-                                                        "queue-edit"));
+    action = GHB_APPLICATION_ACTION("queue-edit");
     g_simple_action_set_enabled(action, row != NULL);
 
-    action = G_SIMPLE_ACTION(g_action_map_lookup_action(G_ACTION_MAP(ud->app),
-                                                        "queue-move-top"));
+    action = GHB_APPLICATION_ACTION("queue-move-top");
     g_simple_action_set_enabled(action, row != NULL);
 
-    action = G_SIMPLE_ACTION(g_action_map_lookup_action(G_ACTION_MAP(ud->app),
-                                                        "queue-move-bottom"));
+    action = GHB_APPLICATION_ACTION("queue-move-bottom");
     g_simple_action_set_enabled(action, row != NULL);
 
-    action = G_SIMPLE_ACTION(g_action_map_lookup_action(G_ACTION_MAP(ud->app),
-                                                        "queue-open-source"));
+    action = GHB_APPLICATION_ACTION("queue-open-source");
     g_simple_action_set_enabled(action, row != NULL);
 
-    action = G_SIMPLE_ACTION(g_action_map_lookup_action(G_ACTION_MAP(ud->app),
-                                                        "queue-open-dest"));
+    action = GHB_APPLICATION_ACTION("queue-open-dest");
     g_simple_action_set_enabled(action, row != NULL);
 
-    action = G_SIMPLE_ACTION(g_action_map_lookup_action(G_ACTION_MAP(ud->app),
-                                                        "queue-play-file"));
+    action = GHB_APPLICATION_ACTION("queue-play-file");
     g_simple_action_set_enabled(action, status == GHB_QUEUE_DONE);
 
-    action = G_SIMPLE_ACTION(g_action_map_lookup_action(G_ACTION_MAP(ud->app),
-                                                        "queue-open-log-dir"));
+    action = GHB_APPLICATION_ACTION("queue-open-log-dir");
     g_simple_action_set_enabled(action, status != GHB_QUEUE_PENDING);
 
-    action = G_SIMPLE_ACTION(g_action_map_lookup_action(G_ACTION_MAP(ud->app),
-                                                        "queue-open-log"));
+    action = GHB_APPLICATION_ACTION("queue-open-log");
     g_simple_action_set_enabled(action, status != GHB_QUEUE_PENDING);
 
-    action = G_SIMPLE_ACTION(g_action_map_lookup_action(G_ACTION_MAP(ud->app),
-                                                        "chapters-import"));
+    action = GHB_APPLICATION_ACTION("chapters-import");
     g_simple_action_set_enabled(action, allow_add);
 
-    action = G_SIMPLE_ACTION(g_action_map_lookup_action(G_ACTION_MAP(ud->app),
-                                                        "chapters-export"));
+    action = GHB_APPLICATION_ACTION("chapters-export");
     g_simple_action_set_enabled(action, allow_add);
 
     widget = GHB_WIDGET (ud->builder, "queue_start");

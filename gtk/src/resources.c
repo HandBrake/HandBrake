@@ -45,7 +45,6 @@ ghb_resource_init (void)
 
     resources = ghb_dict_new();
 
-    ghb_data_register_resource();
     GResource *data_res = ghb_data_get_resource();
 
     gbytes = g_resource_lookup_data(data_res,

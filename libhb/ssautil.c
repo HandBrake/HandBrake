@@ -116,6 +116,11 @@ static int ssa_update_style(const char *ssa, hb_subtitle_style_context_t *ctx)
         // Skip any malformed markup junk
         while (strchr("\\}", ssa[pos]) == NULL) pos++;
         pos++;
+        // Early exit if there is no tag
+        if (ssa[pos] == '\0')
+        {
+            break;
+        }
         // Check for an index that is in some markup (e.g. font color)
         if (isdigit(ssa[pos]))
         {

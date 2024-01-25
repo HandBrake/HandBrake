@@ -3,6 +3,7 @@
 <component type="console-application">
   <id>fr.handbrake.HandBrakeCLI</id>
   <update_contact>jstebbins.hb_AT_gmail.com</update_contact>
+  <developer_name>HandBrake Team</developer_name>
   <metadata_license>CC0-1.0</metadata_license>
   <project_license>GPL-2.0</project_license>
   <name>HandBrakeCLI</name>
@@ -21,43 +22,41 @@
   <url type="homepage">https://handbrake.fr/</url>
   <url type="help">https://handbrake.fr/docs/</url>
   <url type="bugtracker">https://github.com/HandBrake/HandBrake/issues</url>
-  <mimetypes>
-    <mimetype>application/ogg</mimetype>
-    <mimetype>application/x-extension-mp4</mimetype>
-    <mimetype>application/x-flac</mimetype>
-    <mimetype>application/x-matroska</mimetype>
-    <mimetype>application/x-ogg</mimetype>
-    <mimetype>audio/ac3</mimetype>
-    <mimetype>audio/mp4</mimetype>
-    <mimetype>audio/mpeg</mimetype>
-    <mimetype>audio/ogg</mimetype>
-    <mimetype>audio/x-flac</mimetype>
-    <mimetype>audio/x-matroska</mimetype>
-    <mimetype>audio/x-mp2</mimetype>
-    <mimetype>audio/x-mp3</mimetype>
-    <mimetype>audio/x-mpeg</mimetype>
-    <mimetype>audio/x-vorbis</mimetype>
-    <mimetype>video/mp4</mimetype>
-    <mimetype>video/mp4v-es</mimetype>
-    <mimetype>video/mpeg</mimetype>
-    <mimetype>video/msvideo</mimetype>
-    <mimetype>video/quicktime</mimetype>
-    <mimetype>video/vnd.divx</mimetype>
-    <mimetype>video/x-avi</mimetype>
-    <mimetype>video/x-m4v</mimetype>
-    <mimetype>video/x-matroska</mimetype>
-    <mimetype>video/x-mpeg</mimetype>
-    <mimetype>video/x-ms-wmv</mimetype>
-    <mimetype>video/ogg</mimetype>
-    <mimetype>video/x-ogm+ogg</mimetype>
-    <mimetype>video/x-theora+ogg</mimetype>
-    <mimetype>x-content/video-dvd</mimetype>
-    <mimetype>x-content/video-vcd</mimetype>
-    <mimetype>x-content/video-svcd</mimetype>
-  </mimetypes>
 
   <provides>
     <binary>HandBrakeCLI</binary>
+    <mediatype>application/ogg</mediatype>
+    <mediatype>application/x-extension-mp4</mediatype>
+    <mediatype>application/x-flac</mediatype>
+    <mediatype>application/x-matroska</mediatype>
+    <mediatype>application/x-ogg</mediatype>
+    <mediatype>audio/ac3</mediatype>
+    <mediatype>audio/mp4</mediatype>
+    <mediatype>audio/mpeg</mediatype>
+    <mediatype>audio/ogg</mediatype>
+    <mediatype>audio/x-flac</mediatype>
+    <mediatype>audio/x-matroska</mediatype>
+    <mediatype>audio/x-mp2</mediatype>
+    <mediatype>audio/x-mp3</mediatype>
+    <mediatype>audio/x-mpeg</mediatype>
+    <mediatype>audio/x-vorbis</mediatype>
+    <mediatype>video/mp4</mediatype>
+    <mediatype>video/mp4v-es</mediatype>
+    <mediatype>video/mpeg</mediatype>
+    <mediatype>video/msvideo</mediatype>
+    <mediatype>video/quicktime</mediatype>
+    <mediatype>video/vnd.divx</mediatype>
+    <mediatype>video/x-avi</mediatype>
+    <mediatype>video/x-m4v</mediatype>
+    <mediatype>video/x-matroska</mediatype>
+    <mediatype>video/x-mpeg</mediatype>
+    <mediatype>video/x-ms-wmv</mediatype>
+    <mediatype>video/ogg</mediatype>
+    <mediatype>video/x-ogm+ogg</mediatype>
+    <mediatype>video/x-theora+ogg</mediatype>
+    <mediatype>x-content/video-dvd</mediatype>
+    <mediatype>x-content/video-vcd</mediatype>
+    <mediatype>x-content/video-svcd</mediatype>
   </provides>
 
   <releases>

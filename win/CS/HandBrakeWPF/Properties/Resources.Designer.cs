@@ -6126,7 +6126,8 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Are you sure you want to delete the selected jobs?.
+        ///   Looks up a localized string similar to Are you sure you want to delete the selected jobs?
+        ///No encoded files will be deleted with this operation. .
         /// </summary>
         public static string QueueViewModel_DelSelectedJobConfirmation {
             get {

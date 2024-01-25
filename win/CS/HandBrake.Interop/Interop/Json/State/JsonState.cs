@@ -33,5 +33,10 @@ namespace HandBrake.Interop.Interop.Json.State
         /// Gets or sets the state.
         /// </summary>
         public string State { get; set; }
+
+        public static JsonState CreateDummy()
+        {
+            return new JsonState() { State = TaskState.Unknown.Code };
+        }
     }
 }

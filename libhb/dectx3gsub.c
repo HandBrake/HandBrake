@@ -46,10 +46,10 @@ typedef struct {
 } StyleRecord;
 
 // NOTE: None of these macros check for buffer overflow
-#define READ_U8()       *pos;                                                       pos += 1;
-#define READ_U16()      (pos[0] << 8) | pos[1];                                     pos += 2;
-#define READ_U32()      (pos[0] << 24) | (pos[1] << 16) | (pos[2] << 8) | pos[3];   pos += 4;
-#define READ_ARRAY(n)   pos;                                                        pos += n;
+#define READ_U8()       *pos;                                                                 pos += 1;
+#define READ_U16()      (pos[0] << 8) | pos[1];                                               pos += 2;
+#define READ_U32()      ((uint32_t)pos[0] << 24) | (pos[1] << 16) | (pos[2] << 8) | pos[3];   pos += 4;
+#define READ_ARRAY(n)   pos;                                                                  pos += n;
 #define SKIP_ARRAY(n)   pos += n;
 
 #define WRITE_CHAR(c)       {dst[0]=c;                                              dst += 1;}
@@ -169,7 +169,7 @@ static hb_buffer_t *tx3g_decode_to_ssa(hb_work_private_t *pv, hb_buffer_t *in)
     int charIndex = 0;
     int styleIndex = 0;
 
-    snprintf((char*)dst, maxOutputSize, "%d,,Default,,0,0,0,,", pv->line);
+    snprintf((char*)dst, maxOutputSize, "%d,0,Default,,0,0,0,,", pv->line);
     dst += strlen((char*)dst);
     start = dst;
     for (pos = text, end = text + textLength; pos < end; pos++)
@@ -192,7 +192,7 @@ static hb_buffer_t *tx3g_decode_to_ssa(hb_work_private_t *pv, hb_buffer_t *in)
                 }
                 styleIndex++;
             }
-            if (styleRecords[styleIndex].startChar == charIndex)
+            if (styleIndex < numStyleRecords && styleRecords[styleIndex].startChar == charIndex)
             {
                 dst += write_ssa_markup((char*)dst, &styleRecords[styleIndex]);
             }
@@ -218,6 +218,8 @@ static hb_buffer_t *tx3g_decode_to_ssa(hb_work_private_t *pv, hb_buffer_t *in)
     }
     *dst = '\0';
     dst++;
+
+    pv->line++;
 
     // Trim output buffer to the actual amount of data written
     out->size = dst - out->data;

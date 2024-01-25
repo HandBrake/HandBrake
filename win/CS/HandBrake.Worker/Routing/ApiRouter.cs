@@ -98,12 +98,15 @@ namespace HandBrake.Worker.Routing
             if (this.handbrakeInstance != null)
             {
                 JsonState statusJson = this.handbrakeInstance.GetProgress();
-                string json = JsonSerializer.Serialize(statusJson, JsonSettings.Options);
+                if (statusJson != null)
+                {
+                    return JsonSerializer.Serialize(statusJson, JsonSettings.Options);
+                }
 
-                return json;
+                return "";
             }
 
-            return null;
+            return "";
         }
 
 
