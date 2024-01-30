@@ -109,7 +109,7 @@ namespace HandBrake.Interop.Interop
             List<string> iso6392Codes = new List<string>();
             foreach (var item in userLanguages)
             {
-                iso6392Codes.Add(item.Code);
+                iso6392Codes.Add(item?.Code);
             }
 
             return iso6392Codes;

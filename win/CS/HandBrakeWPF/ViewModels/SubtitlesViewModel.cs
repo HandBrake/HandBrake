@@ -149,21 +149,6 @@ namespace HandBrakeWPF.ViewModels
             this.CheckAddState(count);
         }
 
-        public void AddAllRemainingForSelectedLanguagesUser()
-        {
-            int count = this.Task.SubtitleTracks.Count;
-            this.AddAllRemainingForSelectedLanguages();
-            this.CheckAddState(count);
-        }
-
-        public void AddFirstForSelectedLanguagesUser()
-        {
-            int count = this.Task.SubtitleTracks.Count;
-            this.AddFirstForSelectedLanguages();
-            this.CheckAddState(count);
-        }
-
-
         /// <summary>
         /// Add a new Track
         /// </summary>
@@ -192,60 +177,6 @@ namespace HandBrakeWPF.ViewModels
             {
                 this.Add(subtitle);
             }
-        }
-
-        /// <summary>
-        /// Add all remaining tracks for the users preferred and selected languages
-        /// </summary>
-        public void AddAllRemainingForSelectedLanguages()
-        {
-            List<Subtitle> availableTracks = this.subtitleRuleProcessor.GetSelectedLanguagesTracks(this.SubtitleBehaviours, this.SourceTracks);
-
-            foreach (Subtitle subtitle in this.SourceTitlesSubset(availableTracks))
-            {
-                this.Add(subtitle);
-            }
-        }
-
-        /// <summary>
-        /// The add first for selected languages.
-        /// </summary>
-        public void AddFirstForSelectedLanguages()
-        {
-            //bool anyLanguageSelected = this.SubtitleBehaviours.SelectedLanguages.Any(s => s.EnglishName == Constants.Any);
-            //foreach (Subtitle sourceTrack in this.GetSelectedLanguagesTracks())
-            //{
-            //    // Step 2: Check if the track list already contains this track
-            //    bool found = this.Task.SubtitleTracks.Any(track => Equals(track.SourceTrack, sourceTrack));
-            //    if (!found)
-            //    {
-            //        // Check if we are already using this language
-            //        bool foundLanguage = false;
-            //        Subtitle track = sourceTrack;
-
-            //        foreach (var item in this.Task.SubtitleTracks)
-            //        {
-            //            if (item.SourceTrack != null && item.SourceTrack.LanguageCode != null && track.LanguageCode.Contains(item.SourceTrack.LanguageCode))
-            //            {
-            //                foundLanguage = true;
-            //            }     
-            //        }
-
-            //        if (foundLanguage)
-            //        {
-            //            continue;
-            //        }
-
-            //        // If it doesn't, add it.
-            //        this.Add(sourceTrack);
-
-            //        // If we are using "(Any)" then break here. We only add the first track in this instance.
-            //        if (anyLanguageSelected)
-            //        {
-            //            break;
-            //        }
-            //    }
-            //}
         }
 
         /// <summary>
@@ -437,36 +368,19 @@ namespace HandBrakeWPF.ViewModels
 
         public bool MatchesPreset(Preset preset)
         {
-            //// Check the default behaviours.
-            //if (preset.SubtitleTrackBehaviours.AddClosedCaptions != this.SubtitleBehaviours.AddClosedCaptions)
-            //{
-            //    return false;
-            //}
+            if (preset.SubtitleTrackBehaviours != null && this.SubtitleBehaviours != null)
+            {
+                if (this.SubtitleBehaviours.Equals(preset.SubtitleTrackBehaviours))
+                {
+                    return true;
+                }
+            }
+            else
+            {
+                return true; // Presets probably havn't been reset so we'll treat this functionality as unavailable. 
+            }
 
-            //if (preset.SubtitleTrackBehaviours.AddForeignAudioScanTrack != this.SubtitleBehaviours.AddForeignAudioScanTrack)
-            //{
-            //    return false;
-            //}
-
-            //if (preset.SubtitleTrackBehaviours.SelectedBehaviour != this.SubtitleBehaviours.SelectedBehaviour)
-            //{
-            //    return false;
-            //}
-
-            //if (preset.SubtitleTrackBehaviours.SelectedBurnInBehaviour != this.SubtitleBehaviours.SelectedBurnInBehaviour)
-            //{
-            //    return false;
-            //}
-
-            //foreach (var item in this.SubtitleBehaviours.SelectedLanguages)
-            //{
-            //    if (!preset.SubtitleTrackBehaviours.SelectedLanguages.Contains(item))
-            //    {
-            //        return false;
-            //    }
-            //}
-
-            return true;
+            return false;
         }
 
         /// <summary>
@@ -578,25 +492,6 @@ namespace HandBrakeWPF.ViewModels
                                           SourceTrack = source,
                                       };
 
-            // Burn-in Behaviours
-            //if (this.SubtitleBehaviours.SelectedBurnInBehaviour == SubtitleBurnInBehaviourModes.ForeignAudio
-            //      || this.SubtitleBehaviours.SelectedBurnInBehaviour == SubtitleBurnInBehaviourModes.ForeignAudioPreferred)
-            //{
-            //    if (subtitle != null && subtitle.IsFakeForeignAudioScanTrack)
-            //    {
-            //        // Only set burned if it's an an available option.
-            //        if (this.Task.OutputFormat == OutputFormat.Mp4 && this.Task.SubtitleTracks.Any(s => s.Burned))
-            //        {
-            //            track.Burned = false;
-            //        }
-            //        else
-            //        {
-            //            track.Burned = true;
-            //            this.SetBurnedToFalseForAllExcept(track);
-            //        }
-            //    }
-            //}
-
             // For MP4, PGS Subtitles must be burned in.
             if (!track.Burned && (source.SubtitleType == SubtitleType.PGS) && this.Task != null && this.Task.OutputFormat == OutputFormat.Mp4)
             {
@@ -619,37 +514,6 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
-        /// <summary>
-        /// Gets a list of source tracks for the users selected languages.
-        /// </summary>
-        /// <returns>
-        /// A list of source subtitle tracks.
-        /// </returns>
-        private List<Subtitle> GetSelectedLanguagesTracks()
-        {
-            //// Translate to Iso Codes
-            //List<string> iso6392Codes = new List<string>();
-            //if (this.SubtitleBehaviours.SelectedLanguages.Any(s => s.EnglishName == Constants.Any))
-            //{
-            //    iso6392Codes = HandBrakeLanguagesHelper.GetIsoCodes();
-            //    iso6392Codes = HandBrakeLanguagesHelper.OrderIsoCodes(iso6392Codes, this.SubtitleBehaviours.SelectedLanguages);
-            //}
-            //else
-            //{
-            //    iso6392Codes = HandBrakeLanguagesHelper.GetLanguageCodes(this.SubtitleBehaviours.SelectedLanguages);
-            //}
-            
-            //List<Subtitle> orderedSubtitles = new List<Subtitle>();
-            //foreach (string code in iso6392Codes)
-            //{
-            //    orderedSubtitles.AddRange(this.SourceTracks.Where(subtitle => subtitle.LanguageCodeClean == code ));
-            //}
-
-            //return orderedSubtitles;
-
-            return null;
-        }
-        
         /// <summary>
         /// The get preferred subtitle track, or the first if none available.
         /// </summary>
@@ -715,6 +579,5 @@ namespace HandBrakeWPF.ViewModels
                     MessageBoxImage.Information);
             }
         }
-
     }
 }
