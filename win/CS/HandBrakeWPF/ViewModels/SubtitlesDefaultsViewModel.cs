@@ -20,7 +20,6 @@ namespace HandBrakeWPF.ViewModels
     using HandBrake.Interop.Utilities;
 
     using HandBrakeWPF.Commands;
-    using HandBrakeWPF.Model.Audio;
     using HandBrakeWPF.Model.Subtitles;
     using HandBrakeWPF.Properties;
     using HandBrakeWPF.Services.Interfaces;
@@ -36,6 +35,8 @@ namespace HandBrakeWPF.ViewModels
         private readonly IWindowManager windowManager;
 
         private BindingList<Language> availableLanguages;
+
+        private SubtitleBehaviourRule subtitleBehaviourRules;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SubtitlesDefaultsViewModel"/> class. 
@@ -57,7 +58,20 @@ namespace HandBrakeWPF.ViewModels
             this.RemoveTrackCommand = new SimpleRelayCommand<SubtitleBehaviourTrack>(this.RemoveTrack, null);
         }
 
-        public SubtitleBehaviourRule SubtitleBehaviourRules { get; }
+        public SubtitleBehaviourRule SubtitleBehaviourRules
+        {
+            get => this.subtitleBehaviourRules;
+            private set
+            {
+                if (Equals(value, this.subtitleBehaviourRules))
+                {
+                    return;
+                }
+
+                this.subtitleBehaviourRules = value;
+                this.NotifyOfPropertyChange(() => this.SubtitleBehaviourRules);
+            }
+        }
 
         public bool IsApplied { get; set; }
 
@@ -179,37 +193,10 @@ namespace HandBrakeWPF.ViewModels
         public void SetupPreset(SubtitleBehaviourRule behaviours)
         {
             // Reset
-            //this.IsApplied = false;
+            this.IsApplied = false;
 
-            //// Step 1, Set the behaviour mode
-            //this.SubtitleBehaviours.SelectedBehaviour = SubtitleBehaviourModes.FirstMatch;
-            //this.SubtitleBehaviours.SelectedBurnInBehaviour = SubtitleBurnInBehaviourModes.BurnDrop;
-            //this.SubtitleBehaviours.AddClosedCaptions = false;
-            //this.SubtitleBehaviours.AddForeignAudioScanTrack = false;
-            //this.SubtitleBehaviours.SelectedLanguages.Clear();
-
-            //// Step 2, Setup Available Languages
-            //this.AvailableLanguages.Clear();
-            //foreach (Language item in HandBrakeLanguagesHelper.AllLanguagesWithAny)
-            //{
-            //    this.AvailableLanguages.Add(item);
-            //}
-
-            //// Step 3, Set the Selected Languages        
-            //if (behaviours != null)
-            //{
-            //    this.SubtitleBehaviours.SelectedBehaviour = behaviours.SelectedBehaviour;
-            //    this.SubtitleBehaviours.SelectedBurnInBehaviour = behaviours.SelectedBurnInBehaviour;
-            //    this.SubtitleBehaviours.AddClosedCaptions = behaviours.AddClosedCaptions;
-            //    this.SubtitleBehaviours.AddForeignAudioScanTrack = behaviours.AddForeignAudioScanTrack;
-
-            //    foreach (Language selectedItem in behaviours.SelectedLanguages)
-            //    {
-            //        this.SubtitleBehaviours.SelectedLanguages.Add(selectedItem);
-            //    }
-
-            //    this.UpdateAvailableLanguages();
-            //}
+            // Step 1, Set the behaviour mode
+            this.SubtitleBehaviourRules = new SubtitleBehaviourRule(behaviours);
         }
 
         public bool ShowWindow()

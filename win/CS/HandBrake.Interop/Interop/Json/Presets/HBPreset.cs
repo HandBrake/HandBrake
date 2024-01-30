@@ -275,46 +275,14 @@ namespace HandBrake.Interop.Interop.Json.Presets
         /// Gets or sets the type.
         /// </summary>
         public int Type { get; set; }
+        
+        public List<SubtitleList> SubtitleBehaviours { get; set; }
 
-        /// <summary>
-        /// Gets or sets a value indicating whether subtitle add cc.
-        /// </summary>
-        public bool SubtitleAddCC { get; set; }
+        public bool SubtitleUseSourceOrder { get; set; }
 
-        /// <summary>
-        /// Gets or sets a value indicating whether subtitle add foreign audio search.
-        /// </summary>
-        public bool SubtitleAddForeignAudioSearch { get; set; }
+        public bool SubtitleAutoloadExternal { get; set; }
 
-        /// <summary>
-        /// Gets or sets a value indicating whether subtitle add foreign audio subtitle.
-        /// </summary>
-        public bool SubtitleAddForeignAudioSubtitle { get; set; }
-
-        /// <summary>
-        /// Gets or sets the subtitle burn behavior.
-        /// </summary>
-        public string SubtitleBurnBehavior { get; set; }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether subtitle burn bd sub.
-        /// </summary>
-        public bool SubtitleBurnBDSub { get; set; }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether subtitle burn dvd sub.
-        /// </summary>
-        public bool SubtitleBurnDVDSub { get; set; }
-
-        /// <summary>
-        /// Gets or sets the subtitle language list.
-        /// </summary>
-        public List<string> SubtitleLanguageList { get; set; }
-
-        /// <summary>
-        /// Gets or sets the subtitle track selection behavior.
-        /// </summary>
-        public string SubtitleTrackSelectionBehavior { get; set; }
+        public bool SubtitlePassthruTrackNames { get; set; }
 
         /// <summary>
         /// Gets or sets the video avg bitrate.

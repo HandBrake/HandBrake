@@ -61,7 +61,6 @@
                         <MenuItem Header="{x:Static Properties:Resources.Shared_AddNewTrack}" Command="{Binding RelayCommand}" CommandParameter="AddUser" />
                         <MenuItem Header="{x:Static Properties:Resources.Shared_AddAllRemaining}" Command="{Binding RelayCommand}" CommandParameter="AddAllRemainingUser" />
                         <MenuItem Header="{x:Static Properties:Resources.SubtitleView_AddRemainingCC}" Command="{Binding RelayCommand}" CommandParameter="AddAllClosedCaptionsUser" />
-                        <MenuItem Header="{x:Static Properties:Resources.Shared_AddAllForSelected}" Command="{Binding RelayCommand}" CommandParameter="AddAllRemainingForSelectedLanguagesUser" />
                         <Separator/>
                         <MenuItem Header="{x:Static Properties:Resources.SubtitlesView_ImportSubtitle}" Command="{Binding RelayCommand}" CommandParameter="ImportSubtitle" />
                     </ContextMenu>
