@@ -6,8 +6,9 @@
 
 namespace HandBrakeWPF.Model.Subtitles
 {
+    using System;
+
     using HandBrake.Interop.Interop.Interfaces.Model;
-    using HandBrake.Interop.Utilities;
 
     using HandBrakeWPF.ViewModels;
 
@@ -32,6 +33,7 @@ namespace HandBrakeWPF.Model.Subtitles
             this.DefaultMode = rule.DefaultMode;
             this.ForcedMode = rule.ForcedMode;
             this.TrackName = rule.TrackName;
+            this.BurnPassthruMode = rule.BurnPassthruMode;
         }
 
         public Language Language { get; set; }
@@ -71,6 +73,36 @@ namespace HandBrakeWPF.Model.Subtitles
                 this.isExport = value;
                 this.NotifyOfPropertyChange(() => this.IsExport);
             }
+        }
+
+        protected bool Equals(SubtitleBehaviourTrack other)
+        {
+            return this.burnPassthruMode == other.burnPassthruMode && Equals(this.Language, other.Language) && this.TrackSelectionMode == other.TrackSelectionMode && this.DefaultMode == other.DefaultMode && this.ForcedMode == other.ForcedMode && this.TrackName == other.TrackName;
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(null, obj))
+            {
+                return false;
+            }
+
+            if (ReferenceEquals(this, obj))
+            {
+                return true;
+            }
+
+            if (obj.GetType() != this.GetType())
+            {
+                return false;
+            }
+
+            return Equals((SubtitleBehaviourTrack)obj);
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine((int)this.burnPassthruMode, this.Language, (int)this.TrackSelectionMode, (int)this.DefaultMode, (int)this.ForcedMode, this.TrackName);
         }
     }
 }
