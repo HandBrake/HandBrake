@@ -81,7 +81,7 @@ namespace HandBrakeWPF.Services.Presets.Model
 
         public AudioBehaviours AudioTrackBehaviours { get; set; }
 
-        public  SubtitleBehaviourRule SubtitleTrackBehaviours { get; set; }
+        public SubtitleBehaviourRule SubtitleTrackBehaviours { get; set; }
 
         public bool IsPresetDisabled { get; set; }
 
