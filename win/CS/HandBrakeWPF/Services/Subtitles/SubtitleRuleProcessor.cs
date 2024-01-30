@@ -7,7 +7,6 @@
 namespace HandBrakeWPF.Services.Subtitles
 {
     using System.Linq;
-    using HandBrake.Interop.Utilities;
     using HandBrakeWPF.Model.Subtitles;
     using HandBrakeWPF.Services.Scan.Model;
     using System.Collections.Generic;
