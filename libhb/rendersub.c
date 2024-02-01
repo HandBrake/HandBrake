@@ -870,6 +870,12 @@ static int ssa_post_init( hb_filter_object_t * filter, hb_job_t * job )
         return 1;
     }
 
+    // Do not use Read Order to eliminate duplicates
+    // we never send the same subtitles sample twice,
+    // and some MKV have duplicated Read Orders
+    // that will breaks breaks when this is enabled.
+    ass_set_check_readorder(pv->ssaTrack, 0);
+
     int height = job->title->geometry.height - job->crop[0] - job->crop[1];
     int width = job->title->geometry.width - job->crop[2] - job->crop[3];
     ass_set_frame_size(pv->renderer, width, height);
@@ -983,27 +989,8 @@ static void textsub_close( hb_filter_object_t * filter )
 
 static void process_sub(hb_filter_private_t *pv, hb_buffer_t *sub)
 {
-    int64_t start, dur;
-    int size;
-    char *ssa, *tmp;
-
-    // libass expects every chunk to have a unique sequence number
-    // since we are repeating subs in some cases, we need to replace
-    // the sequence number.
-    tmp = strchr((char*)sub->data, ',');
-    if (tmp == NULL)
-        return;
-
-    ssa = hb_strdup_printf("%d%s", ++pv->line, tmp);
-
-    // Parse MKV-SSA packet
-    // SSA subtitles always have an explicit stop time, so we
-    // do not need to do special processing for stop == AV_NOPTS_VALUE
-    start = sub->s.start;
-    dur = sub->s.stop - sub->s.start;
-    size = strlen(ssa);
-    ass_process_chunk(pv->ssaTrack, ssa, size, start, dur);
-    free(ssa);
+    ass_process_chunk(pv->ssaTrack, (char *)sub->data, sub->size,
+                      sub->s.start, sub->s.stop - sub->s.start);
 }
 
 static int textsub_work(hb_filter_object_t * filter,
