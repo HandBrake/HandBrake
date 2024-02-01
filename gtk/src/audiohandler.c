@@ -1898,6 +1898,7 @@ create_audio_settings_row (signal_user_data_t *ud)
     gtk_widget_set_tooltip_markup(GTK_WIDGET(scale),
       _("<b>Audio Gain:</b> "
         "Adjust the amplification or attenuation of the output audio track."));
+    gtk_scale_button_set_value(scale, 0.0);
 
     gtk_widget_set_valign(GTK_WIDGET(scale), GTK_ALIGN_CENTER);
     gtk_widget_set_name(GTK_WIDGET(scale), "AudioTrackGainSlider");
