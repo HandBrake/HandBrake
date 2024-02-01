@@ -152,13 +152,24 @@ namespace HandBrakeWPF.ViewModels
         }
 
         /// <summary>
-        /// The select all.
+        /// The unselect all.
         /// </summary>
         public void UnSelectAll()
         {
             foreach (var item in TitleList)
             {
                 item.IsSelected = false;
+            }
+        }
+
+        /// <summary>
+        /// Invert selection
+        /// </summary>
+        public void InvertSelection()
+        {
+            foreach (var item in TitleList)
+            {
+                item.IsSelected = !item.IsSelected;
             }
         }
 
