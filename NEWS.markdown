@@ -10,7 +10,17 @@ Windows users, please make sure to install [Microsoft .NET Desktop Runtime versi
 
 ## HandBrake 1.7.3
 
+#### Subtitles
+
+- Fixed tx3g to SSA subtitles conversion
+
+#### Linux
+
+- Fixed the "All Files" open file dialog filter to really show all files
+- Fixes an issue where adding a new default audio track automatically set the gain to -20dBs
+
 #### Windows
+
 - Harden loading of DLL files within libhb.
 - Improved Keyboard Navigation on Chapter Tab (#5679)
 - Fixed an issue that could cause encodes to appear stalled when process isolation is turned on.
