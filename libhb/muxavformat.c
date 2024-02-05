@@ -255,7 +255,6 @@ static int avformatInit( hb_mux_object_t * m )
     }
 
     track->st->codecpar->codec_type = AVMEDIA_TYPE_VIDEO;
-    track->st->time_base            = m->time_base;
 
     uint8_t *priv_data = NULL;
     int priv_size = 0;
@@ -624,26 +623,40 @@ static int avformatInit( hb_mux_object_t * m )
     }
 
     hb_rational_t vrate = job->vrate;
+    hb_rational_t clock_vrate = { clock, av_rescale(vrate.den, clock, vrate.num)};
+    int standard_rate = 0;
 
-    // If the vrate is the internal clock rate, there's a good chance
-    // this is a standard rate that we have in our hb_video_rates table.
+    // Check if the vrate is similar to a standard rate that we have in our hb_video_rates table.
     // Because of rounding errors and approximations made while
     // measuring framerate, the actual value may not be exact.  So
-    // we look for rates that are "close" and make an adjustment
-    // to fps.den.
-    if (vrate.num == clock)
+    // we look for rates that are "close"
+    const hb_rate_t *video_framerate = NULL;
+    while ((video_framerate = hb_video_framerate_get_next(video_framerate)) != NULL)
     {
-        const hb_rate_t *video_framerate = NULL;
-        while ((video_framerate = hb_video_framerate_get_next(video_framerate)) != NULL)
+        if (abs(clock_vrate.den - video_framerate->rate) < 10)
         {
-            if (abs(vrate.den - video_framerate->rate) < 10)
-            {
-                vrate.den = video_framerate->rate;
-                break;
-            }
+            vrate.num = clock;
+            vrate.den = video_framerate->rate;
+            standard_rate = 1;
+            break;
         }
     }
+
     hb_reduce(&vrate.num, &vrate.den, vrate.num, vrate.den);
+
+    if (job->mux == HB_MUX_AV_MP4 && standard_rate &&
+        job->cfr == 1 && vrate.den * 90000L % vrate.num)
+    {
+        // Set the the correct video time base to avoid
+        // timestamps jitter when using NTSC framerates
+        track->st->time_base.num = vrate.den;
+        track->st->time_base.den = vrate.num;
+    }
+    else
+    {
+        track->st->time_base = m->time_base;
+    }
+
     track->st->avg_frame_rate.num = vrate.num;
     track->st->avg_frame_rate.den = vrate.den;
 
@@ -1312,7 +1325,7 @@ static int add_chapter(hb_mux_object_t *m, int64_t start, int64_t end, char * ti
     m->oc->nb_chapters = nchap;
 
     chap->id = nchap;
-    chap->time_base = m->time_base;
+    chap->time_base = m->tracks[0]->st->time_base;
     // libav does not currently have a good way to deal with chapters and
     // delayed stream timestamps.  It makes no corrections to the chapter
     // track.  A patch to libav would touch a lot of things, so for now,
