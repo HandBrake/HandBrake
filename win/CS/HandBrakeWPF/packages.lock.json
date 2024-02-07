@@ -38,12 +38,6 @@
           "System.ValueTuple": "4.5.0"
         }
       },
-      "Ookii.Dialogs.Wpf": {
-        "type": "Direct",
-        "requested": "[5.0.1, )",
-        "resolved": "5.0.1",
-        "contentHash": "iZNnZwqTpK0cfR0vkotncP1c025/PHlIdzc7iEKBYwhVv1V0zXp9/RT/O0kMhsmlwXqRxxbE4pdhfinbJXtjPg=="
-      },
       "System.Management": {
         "type": "Direct",
         "requested": "[7.0.0, )",
