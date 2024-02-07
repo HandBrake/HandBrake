@@ -12,6 +12,7 @@
 #import "NSArray+HBAdditions.h"
 
 #import <IOKit/pwr_mgt/IOPMLib.h>
+#import <IOKit/ps/IOPowerSources.h>
 
 static void *HBQueueContext = &HBQueueContext;
 
@@ -44,6 +45,7 @@ NSString * const HBQueueItemNotificationItemKey = @"HBQueueItemNotificationItemK
 @property (nonatomic, readonly) NSArray<HBQueueWorker *> *workers;
 
 @property (nonatomic) IOPMAssertionID assertionID;
+@property (nonatomic) CFRunLoopSourceRef sourceRunLoop;
 
 @property (nonatomic) NSUInteger pendingItemsCount;
 @property (nonatomic) NSUInteger failedItemsCount;
@@ -118,6 +120,30 @@ NSString * const HBQueueItemNotificationItemKey = @"HBQueueItemNotificationItemK
     }
 }
 
+static void powerSourceCallback(void *context)
+{
+    if ([NSUserDefaults.standardUserDefaults boolForKey:HBQueuePauseOnBatteryPower])
+    {
+        CFTypeRef sourceInfo =  IOPSCopyPowerSourcesInfo();
+        if (sourceInfo)
+        {
+            CFStringRef powerSourceType = IOPSGetProvidingPowerSourceType(sourceInfo);
+            if (CFStringCompare(powerSourceType, CFSTR(kIOPMBatteryPowerKey), 0) == kCFCompareEqualTo ||
+                CFStringCompare(powerSourceType, CFSTR(kIOPMUPSPowerKey), 0) == kCFCompareEqualTo)
+            {
+                HBQueue *queue = (__bridge HBQueue *)context;
+                [queue pause];
+            }
+            CFRelease(sourceInfo);
+        }
+    }
+}
+
+- (void)setUpIOPSNotificationRunLoop
+{
+    self.sourceRunLoop = IOPSNotificationCreateRunLoopSource(powerSourceCallback, (__bridge void *)(self));
+}
+
 - (instancetype)initWithURL:(NSURL *)fileURL
 {
     self = [super init];
@@ -129,11 +155,10 @@ NSString * const HBQueueItemNotificationItemKey = @"HBQueueItemNotificationItemK
         _assertionID = -1;
 
         [self setEncodingJobsAsPending];
-        [self removeCompletedAndCancelledItems];
-        [self updateStats];
 
         [self setUpWorkers];
         [self setUpObservers];
+        [self setUpIOPSNotificationRunLoop];
     }
     return self;
 }

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="19529" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="32700.99.1234" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="19529"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="22687"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -81,27 +81,24 @@
                             </popUpButtonCell>
                         </popUpButton>
                     </toolbarItem>
-                    <toolbarItem implicitItemIdentifier="938D3EC6-1547-4AAB-86AF-B3FD3C7AF8BD" label="When Done" paletteLabel="When Done" toolTip="Action to perform when encoding is complete." sizingBehavior="auto" id="a3c-kV-98E">
+                    <toolbarItem implicitItemIdentifier="938D3EC6-1547-4AAB-86AF-B3FD3C7AF8BD" label="When Done" paletteLabel="When Done" toolTip="Action to perform when encoding is complete." title="Do Nothing" sizingBehavior="auto" id="a3c-kV-98E">
                         <popUpButton key="view" verticalHuggingPriority="750" id="rfS-M1-CnB">
                             <rect key="frame" x="0.0" y="14" width="173" height="25"/>
                             <autoresizingMask key="autoresizingMask"/>
-                            <popUpButtonCell key="cell" type="roundTextured" bezelStyle="texturedRounded" alignment="left" lineBreakMode="truncatingTail" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="pch-jl-VXA">
+                            <popUpButtonCell key="cell" type="roundTextured" title="Do Nothing" bezelStyle="texturedRounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" selectedItem="sm5-26-sAg" id="pch-jl-VXA">
                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                 <font key="font" metaFont="menu"/>
                                 <menu key="menu" id="1Ee-Xt-VES">
                                     <items>
-                                        <menuItem title="Do Nothing" id="sm5-26-sAg"/>
-                                        <menuItem title="Alert" tag="1" id="fAD-ky-zo6"/>
-                                        <menuItem title="Notification" tag="2" id="jDL-sB-8e3"/>
-                                        <menuItem title="Alert and Notification" tag="3" id="aat-1N-Odn"/>
-                                        <menuItem title="Put Computer to Sleep" tag="4" id="GUQ-xb-HVS"/>
-                                        <menuItem title="Shut Down Computer" tag="5" id="QmP-SQ-XKK"/>
-                                        <menuItem title="Quit HandBrake" tag="6" id="tBG-Gf-ynI"/>
+                                        <menuItem title="Do Nothing" state="on" id="sm5-26-sAg"/>
+                                        <menuItem title="Put Computer to Sleep" tag="1" id="GUQ-xb-HVS"/>
+                                        <menuItem title="Shut Down Computer" tag="2" id="QmP-SQ-XKK"/>
+                                        <menuItem title="Quit HandBrake" tag="3" id="tBG-Gf-ynI"/>
                                     </items>
                                 </menu>
                             </popUpButtonCell>
                             <connections>
-                                <binding destination="z2J-h1-IDv" name="selectedTag" keyPath="values.HBAlertWhenDone" id="trt-6H-UtD"/>
+                                <binding destination="z2J-h1-IDv" name="selectedTag" keyPath="values.HBQueueDoneAction" id="uSr-Eh-prZ"/>
                             </connections>
                         </popUpButton>
                     </toolbarItem>
@@ -151,8 +148,8 @@
         <userDefaultsController representsSharedInstance="YES" id="z2J-h1-IDv"/>
     </objects>
     <resources>
-        <image name="NSActionTemplate" width="15" height="15"/>
-        <image name="NSQuickLookTemplate" width="21" height="13"/>
+        <image name="NSActionTemplate" width="20" height="20"/>
+        <image name="NSQuickLookTemplate" width="26" height="17"/>
         <image name="details" width="15" height="12"/>
         <image name="encode" width="32" height="32"/>
         <image name="pauseencode" width="32" height="32"/>

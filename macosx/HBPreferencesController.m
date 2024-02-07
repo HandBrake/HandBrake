@@ -9,21 +9,13 @@
 
 NSString * const HBShowOpenPanelAtLaunch              = @"HBShowOpenPanelAtLaunch";
 NSString * const HBShowSummaryPreview                 = @"HBShowSummaryPreview";
+NSString * const HBKeepPresetEdits               = @"HBKeepPresetEdits";
+NSString * const HBUseSourceFolderDestination    = @"HBUseSourceFolderDestination";
 
 NSString * const HBRecursiveScan                      = @"HBRecursiveScan";
 NSString * const HBLastDestinationDirectoryURL        = @"HBLastDestinationDirectoryURL";
 NSString * const HBLastDestinationDirectoryBookmark   = @"HBLastDestinationDirectoryBookmark";
 NSString * const HBLastSourceDirectoryURL             = @"HBLastSourceDirectoryURL";
-
-NSString * const HBDefaultMpegExtension          = @"DefaultMpegExtension";
-
-NSString * const HBAlertWhenDone                 = @"HBAlertWhenDone";
-NSString * const HBResetWhenDoneOnLaunch         = @"HBResetWhenDoneOnLaunch";
-NSString * const HBAlertWhenDoneSound            = @"HBAlertWhenDoneSound";
-NSString * const HBSendToAppEnabled              = @"HBSendToAppEnabled";
-NSString * const HBSendToApp                     = @"HBSendToApp";
-
-NSString * const HBUseSourceFolderDestination    = @"HBUseSourceFolderDestination";
 
 NSString * const HBDefaultAutoNaming             = @"DefaultAutoNaming";
 NSString * const HBAutoNamingFormat              = @"HBAutoNamingFormat";
@@ -31,6 +23,8 @@ NSString * const HBAutoNamingRemoveUnderscore    = @"HBAutoNamingRemoveUnderscor
 NSString * const HBAutoNamingRemovePunctuation   = @"HBAutoNamingRemovePunctuation";
 NSString * const HBAutoNamingTitleCase           = @"HBAutoNamingTitleCase";
 NSString * const HBAutoNamingISODateFormat       = @"HBAutoNamingISODateFormat";
+
+NSString * const HBDefaultMpegExtension          = @"DefaultMpegExtension";
 
 NSString * const HBCqSliderFractional            = @"HBx264CqSliderFractional";
 NSString * const HBUseDvdNav                     = @"UseDvdNav";
@@ -45,13 +39,25 @@ NSString * const HBClearOldLogs                  = @"HBClearOldLogs";
 
 NSString * const HBQueuePauseIfLowSpace          = @"HBQueuePauseIfLowSpace";
 NSString * const HBQueueMinFreeSpace             = @"HBQueueMinFreeSpace";
+NSString * const HBQueuePauseOnBatteryPower      = @"HBQueuePauseOnBatteryPower";
+
 NSString * const HBQueueAutoClearCompletedItems  = @"HBQueueAutoClearCompletedItems";
+NSString * const HBQueueAutoClearCompletedItemsAtLaunch = @"HBQueueAutoClearCompletedItemsAtLaunch";
+
 NSString * const HBQueueWorkerCounts             = @"HBQueueWorkerCounts";
 
-NSString * const HBKeepPresetEdits               = @"HBKeepPresetEdits";
+NSString * const HBResetWhenDoneOnLaunch         = @"HBResetWhenDoneOnLaunch";
+NSString * const HBQueueDoneAction               = @"HBQueueDoneAction";
+NSString * const HBQueueNotificationWhenDone     = @"HBQueueNotificationWhenDone";
+NSString * const HBQueueNotificationWhenJobDone  = @"HBQueueNotificationWhenJobDone";
+NSString * const HBQueueNotificationPlaySound    = @"HBQueueNotificationPlaySound";
+NSString * const HBSendToAppEnabled              = @"HBSendToAppEnabled";
+NSString * const HBSendToApp                     = @"HBSendToApp";
 
-#define TOOLBAR_GENERAL     @"TOOLBAR_GENERAL"
-#define TOOLBAR_ADVANCED    @"TOOLBAR_ADVANCED"
+#define TOOLBAR_GENERAL         @"TOOLBAR_GENERAL"
+#define TOOLBAR_OUTPUT_NAME     @"TOOLBAR_OUTPUT_NAME"
+#define TOOLBAR_QUEUE           @"TOOLBAR_QUEUE"
+#define TOOLBAR_ADVANCED        @"TOOLBAR_ADVANCED"
 
 /**
  * This class controls the preferences window of HandBrake. Default values for
@@ -65,13 +71,14 @@ NSString * const HBKeepPresetEdits               = @"HBKeepPresetEdits";
  */
 
 @interface HBPreferencesController () <NSTokenFieldDelegate, NSToolbarDelegate>
-{
-    IBOutlet NSView         * fGeneralView, * fAdvancedView;
-    IBOutlet NSTextField    * fSendEncodeToAppField;
-}
 
-@property (nonatomic, unsafe_unretained) IBOutlet NSTokenField *formatTokenField;
-@property (nonatomic, unsafe_unretained) IBOutlet NSTokenField *builtInTokenField;
+@property (nonatomic, weak) IBOutlet NSView *generalView;
+@property (nonatomic, weak) IBOutlet NSView *fileNameView;
+@property (nonatomic, weak) IBOutlet NSView *queueView;
+@property (nonatomic, weak) IBOutlet NSView *advancedView;
+
+@property (nonatomic, weak) IBOutlet NSTokenField *formatTokenField;
+@property (nonatomic, weak) IBOutlet NSTokenField *builtInTokenField;
 @property (nonatomic, readonly, strong) NSArray *buildInFormatTokens;
 @property (nonatomic, strong) NSArray *matches;
 
@@ -119,6 +126,7 @@ static BOOL _hardwareDecoderSupported = NO;
     [defaults registerDefaults:@{
         HBShowOpenPanelAtLaunch:            @YES,
         HBShowSummaryPreview:               @YES,
+        HBKeepPresetEdits:                  @YES,
         HBDefaultMpegExtension:             @".mp4",
         HBUseDvdNav:                        @YES,
         HBUseHardwareDecoder:               @NO,
@@ -130,9 +138,7 @@ static BOOL _hardwareDecoderSupported = NO;
         HBDefaultAutoNaming:                @NO,
         HBAutoNamingFormat:                 @[@"{Source}", @" ", @"{Title}"],
         HBAutoNamingISODateFormat:          @NO,
-        HBAlertWhenDone:                    @(HBDoneActionNotification),
         HBResetWhenDoneOnLaunch:            @NO,
-        HBAlertWhenDoneSound:               @YES,
         HBLoggingLevel:                     @1,
         HBClearOldLogs:                     @YES,
         HBEncodeLogLocation:                @NO,
@@ -141,9 +147,13 @@ static BOOL _hardwareDecoderSupported = NO;
         HBCqSliderFractional:               @2,
         HBQueuePauseIfLowSpace:             @YES,
         HBQueueMinFreeSpace:                @"2",
+        HBQueuePauseOnBatteryPower:         @NO,
         HBQueueAutoClearCompletedItems:     @NO,
+        HBQueueAutoClearCompletedItemsAtLaunch: @YES,
         HBQueueWorkerCounts:                @1,
-        HBKeepPresetEdits:                  @YES
+        HBQueueNotificationWhenDone:        @YES,
+        HBQueueNotificationWhenJobDone:     @NO,
+        HBQueueNotificationPlaySound:       @NO
     }];
 
     if (HBPreferencesController.areHardwareDecoderSupported == NO &&
@@ -218,29 +228,49 @@ static BOOL _hardwareDecoderSupported = NO;
     [self setPrefView:nil];
 }
 
-- (NSToolbarItem *)toolbar: (NSToolbar *)toolbar
-     itemForItemIdentifier: (NSString *)ident
- willBeInsertedIntoToolbar: (BOOL)flag
+- (nullable NSToolbarItem *)toolbar:(NSToolbar *)toolbar itemForItemIdentifier:(NSToolbarItemIdentifier)itemIdentifier willBeInsertedIntoToolbar:(BOOL)flag
 {
-    if ([ident isEqualToString:TOOLBAR_GENERAL])
+    if ([itemIdentifier isEqualToString:TOOLBAR_GENERAL])
     {
         NSImage *image = [NSImage imageNamed:NSImageNamePreferencesGeneral];
         if (@available (macOS 11, *))
         {
             image = [NSImage imageWithSystemSymbolName:@"gearshape" accessibilityDescription:@"General preferences"];
         }
-        return [self toolbarItemWithIdentifier:ident
+        return [self toolbarItemWithIdentifier:itemIdentifier
                                          label:NSLocalizedString(@"General", @"Preferences General Toolbar Item")
                                          image:image];
     }
-    else if ([ident isEqualToString:TOOLBAR_ADVANCED])
+    else if ([itemIdentifier isEqualToString:TOOLBAR_OUTPUT_NAME])
+    {
+        NSImage *image = [NSImage imageNamed:NSImageNameAdvanced];
+        if (@available (macOS 11, *))
+        {
+            image = [NSImage imageWithSystemSymbolName:@"character.textbox" accessibilityDescription:@"File output preferences"];
+        }
+        return [self toolbarItemWithIdentifier:itemIdentifier
+                                         label:NSLocalizedString(@"File name", @"Preferences Output File Name Toolbar Item")
+                                         image:image];
+    }
+    else if ([itemIdentifier isEqualToString:TOOLBAR_QUEUE])
+    {
+        NSImage *image = [NSImage imageNamed:NSImageNameAdvanced];
+        if (@available (macOS 11, *))
+        {
+            image = [NSImage imageWithSystemSymbolName:@"film.stack" accessibilityDescription:@"Queue preferences"];
+        }
+        return [self toolbarItemWithIdentifier:itemIdentifier
+                                         label:NSLocalizedString(@"Queue", @"Preferences Queue Toolbar Item")
+                                         image:image];
+    }
+    else if ([itemIdentifier isEqualToString:TOOLBAR_ADVANCED])
     {
         NSImage *image = [NSImage imageNamed:NSImageNameAdvanced];
         if (@available (macOS 11, *))
         {
             image = [NSImage imageWithSystemSymbolName:@"gearshape.2" accessibilityDescription:@"General preferences"];
         }
-        return [self toolbarItemWithIdentifier:ident
+        return [self toolbarItemWithIdentifier:itemIdentifier
                                          label:NSLocalizedString(@"Advanced", @"Preferences Advanced Toolbar Item")
                                          image:image];
     }
@@ -248,24 +278,22 @@ static BOOL _hardwareDecoderSupported = NO;
     return nil;
 }
 
-- (NSArray *) toolbarSelectableItemIdentifiers: (NSToolbar *) toolbar
+- (NSArray<NSToolbarItemIdentifier> *)toolbarSelectableItemIdentifiers:(NSToolbar *)toolbar
 {
-    return [self toolbarDefaultItemIdentifiers: toolbar];
+    return [self toolbarDefaultItemIdentifiers:toolbar];
 }
 
-- (NSArray *) toolbarDefaultItemIdentifiers: (NSToolbar *) toolbar
+- (NSArray<NSToolbarItemIdentifier> *)toolbarDefaultItemIdentifiers:(NSToolbar *)toolbar
 {
     return [self toolbarAllowedItemIdentifiers: toolbar];
 }
 
-- (NSArray *) toolbarAllowedItemIdentifiers: (NSToolbar *) toolbar
+- (NSArray<NSToolbarItemIdentifier> *)toolbarAllowedItemIdentifiers:(NSToolbar *)toolbar
 {
-    return @[TOOLBAR_GENERAL, TOOLBAR_ADVANCED];
+    return @[TOOLBAR_GENERAL, TOOLBAR_OUTPUT_NAME, TOOLBAR_QUEUE, TOOLBAR_ADVANCED];
 }
 
-/* Manage the send encode to xxx.app windows and field */
-/*Opens the app browse window*/
-- (IBAction) browseSendToApp: (id) sender
+- (IBAction)browseSendToApp:(id)sender
 {
     NSUserDefaults *ud = NSUserDefaults.standardUserDefaults;
     NSOpenPanel *panel = [NSOpenPanel openPanel];
@@ -297,9 +325,7 @@ static BOOL _hardwareDecoderSupported = NO;
 
             // We set the name of the app to send to in the display field
             NSString *sendToAppName = sendToAppURL.lastPathComponent.stringByDeletingPathExtension;
-            [self->fSendEncodeToAppField setStringValue:sendToAppName];
-
-            [ud setObject:self->fSendEncodeToAppField.stringValue forKey:HBSendToApp];
+            [ud setObject:sendToAppName forKey:HBSendToApp];
 
             [sendToAppURL stopAccessingSecurityScopedResource];
         }
@@ -444,15 +470,23 @@ static BOOL _hardwareDecoderSupported = NO;
 
 #pragma mark - Private methods
 
-- (void) setPrefView: (id) sender
+- (void)setPrefView:(id)sender
 {
-    NSView *view = fGeneralView;
+    NSView *view = self.generalView;
     if (sender)
     {
         NSString *identifier = [sender itemIdentifier];
-        if([identifier isEqualToString:TOOLBAR_ADVANCED])
+        if ([identifier isEqualToString:TOOLBAR_OUTPUT_NAME])
         {
-            view = fAdvancedView;
+            view = self.fileNameView;
+        }
+        else if ([identifier isEqualToString:TOOLBAR_QUEUE])
+        {
+            view = self.queueView;
+        }
+        else if ([identifier isEqualToString:TOOLBAR_ADVANCED])
+        {
+            view = self.advancedView;
         }
     }
 
