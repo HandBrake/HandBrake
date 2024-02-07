@@ -142,6 +142,10 @@ static void powerSourceCallback(void *context)
 - (void)setUpIOPSNotificationRunLoop
 {
     self.sourceRunLoop = IOPSNotificationCreateRunLoopSource(powerSourceCallback, (__bridge void *)(self));
+    if (self.sourceRunLoop)
+    {
+        CFRunLoopAddSource(CFRunLoopGetCurrent(), self.sourceRunLoop, kCFRunLoopDefaultMode);
+    }
 }
 
 - (instancetype)initWithURL:(NSURL *)fileURL
@@ -161,6 +165,14 @@ static void powerSourceCallback(void *context)
         [self setUpIOPSNotificationRunLoop];
     }
     return self;
+}
+
+- (void)dealloc
+{
+    if (self.sourceRunLoop)
+    {
+        CFRunLoopRemoveSource(CFRunLoopGetCurrent(), self.sourceRunLoop, kCFRunLoopDefaultMode);
+    }
 }
 
 #pragma mark - Load and save
