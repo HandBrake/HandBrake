@@ -46,6 +46,7 @@ NSString * const HBQueueItemNotificationItemKey = @"HBQueueItemNotificationItemK
 
 @property (nonatomic) IOPMAssertionID assertionID;
 @property (nonatomic) CFRunLoopSourceRef sourceRunLoop;
+@property (nonatomic) BOOL pausedOnBatteryPower;
 
 @property (nonatomic) NSUInteger pendingItemsCount;
 @property (nonatomic) NSUInteger failedItemsCount;
@@ -127,12 +128,19 @@ static void powerSourceCallback(void *context)
         CFTypeRef sourceInfo =  IOPSCopyPowerSourcesInfo();
         if (sourceInfo)
         {
+            HBQueue *queue = (__bridge HBQueue *)context;
             CFStringRef powerSourceType = IOPSGetProvidingPowerSourceType(sourceInfo);
-            if (CFStringCompare(powerSourceType, CFSTR(kIOPMBatteryPowerKey), 0) == kCFCompareEqualTo ||
-                CFStringCompare(powerSourceType, CFSTR(kIOPMUPSPowerKey), 0) == kCFCompareEqualTo)
+            if ((CFStringCompare(powerSourceType, CFSTR(kIOPMBatteryPowerKey), 0) == kCFCompareEqualTo ||
+                 CFStringCompare(powerSourceType, CFSTR(kIOPMUPSPowerKey), 0) == kCFCompareEqualTo) &&
+                queue.canPause)
             {
-                HBQueue *queue = (__bridge HBQueue *)context;
                 [queue pause];
+                queue.pausedOnBatteryPower = YES;
+            }
+            else if (CFStringCompare(powerSourceType, CFSTR(kIOPMACPowerKey), 0) == kCFCompareEqualTo &&
+                     queue.pausedOnBatteryPower)
+            {
+                [queue resume];
             }
             CFRelease(sourceInfo);
         }
@@ -617,6 +625,8 @@ static void powerSourceCallback(void *context)
             [worker resume];
         }
     }
+
+    self.pausedOnBatteryPower = NO;
     [self preventSleep];
 }
 
@@ -767,6 +777,7 @@ static void powerSourceCallback(void *context)
     if (self.canEncode)
     {
         [NSNotificationCenter.defaultCenter postNotificationName:HBQueueDidStartNotification object:self];
+        self.pausedOnBatteryPower = NO;
         [self preventSleep];
         [self encodeNextQueueItem];
     }
