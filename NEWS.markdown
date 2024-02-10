@@ -17,7 +17,7 @@ Windows users, please make sure to install [Microsoft .NET Desktop Runtime versi
 #### Linux
 
 - Fixed the "All Files" open file dialog filter to really show all files
-- Fixes an issue where adding a new default audio track automatically set the gain to -20dBs
+- Fixed an issue where adding a new default audio track automatically set the gain to -20dBs
 
 #### Windows
 
