@@ -7,7 +7,10 @@ Before updating HandBrake, please make sure there are no pending encodes in the 
 
 Windows users, please make sure to install [Microsoft .NET Desktop Runtime version 8.0.x](https://dotnet.microsoft.com/en-us/download/dotnet/8.0). Read carefully: you need the **DESKTOP** runtime.
 
+
 ## HandBrake 1.8.0
+
+### All platforms
 
 #### General
 
@@ -42,16 +45,18 @@ Windows users, please make sure to install [Microsoft .NET Desktop Runtime versi
 
 ## HandBrake 1.7.3
 
+### All platforms
+
 #### Subtitles
 
 - Fixed tx3g to SSA subtitles conversion
 
-#### Linux
+### Linux
 
 - Fixed the "All Files" open file dialog filter to really show all files
 - Fixes an issue where adding a new default audio track automatically set the gain to -20dBs
 
-#### Windows
+### Windows
 
 - Harden loading of DLL files within libhb.
 - Improved Keyboard Navigation on Chapter Tab (#5679)
@@ -61,6 +66,8 @@ Windows users, please make sure to install [Microsoft .NET Desktop Runtime versi
 
 
 ## HandBrake 1.7.2
+
+### All platforms
 
 #### Video
 
@@ -82,7 +89,7 @@ Windows users, please make sure to install [Microsoft .NET Desktop Runtime versi
 - Added a workaround to prevent issues decoding H.264 video by disabling VideoToolbox hardware decoding for Level 6.1 and 6.2
 - Fixed a crash opening an empty folder
 
-#### Windows
+### Windows
 
 - Added Automation Properties to some controls on the audio tab to assist screen readers
 - Fixed NVIDIA NVDEC option being ignored (#5569)
@@ -104,6 +111,8 @@ Windows users, please make sure to install [Microsoft .NET Desktop Runtime versi
 
 
 ## HandBrake 1.7.0
+
+### All platforms
 
 #### General
 
