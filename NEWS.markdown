@@ -47,6 +47,15 @@ Windows users, please make sure to install [Microsoft .NET Desktop Runtime versi
 
 ### All platforms
 
+#### General
+
+- Fixed formatting leading zeros for timestamps in logs
+- Miscellaneous bug fixes and improvements
+
+#### Video
+
+- Fixed an issue that could potentially cause incorrect detection of source FPS value (#5677)
+
 #### Subtitles
 
 - Fixed tx3g to SSA subtitles conversion
@@ -54,15 +63,21 @@ Windows users, please make sure to install [Microsoft .NET Desktop Runtime versi
 ### Linux
 
 - Fixed the "All Files" open file dialog filter to really show all files
-- Fixes an issue where adding a new default audio track automatically set the gain to -20dBs
+- Fixed an issue where adding a new default audio track automatically set the gain to -20 dB
+
+### macOS
+
+- Fixed a regression introduced in HandBrake 1.7.2 by the workaround for VideoToolbox crashes on Sonoma
+- Miscellaneous bug fixes and improvements
 
 ### Windows
 
-- Harden loading of DLL files within libhb.
-- Improved Keyboard Navigation on Chapter Tab (#5679)
-- Fixed an issue that could cause encodes to appear stalled when process isolation is turned on.
-- Fixed an issue that could prevent QSV decode from being used when a system has a non-intel GPU.
-- Fixed an issue where the drive label was not always correctly detected. Fixes #5711
+- Improved security hardening of loading of DLL files within libhb by limiting search scope (#5724)
+- Improved keyboard navigation on Chapters tab (#5679)
+- Fixed an issue that could cause encodes to appear stalled when process isolation is turned on
+- Fixed an issue that could prevent QSV decode from being used when a system also has a non-Intel GPU
+- Fixed an issue where the drive label was not always correctly detected (#5711)
+- Miscellaneous bug fixes and improvements
 
 
 ## HandBrake 1.7.2
