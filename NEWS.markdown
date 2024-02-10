@@ -79,6 +79,8 @@ Windows users, please make sure to install [Microsoft .NET Desktop Runtime versi
 
 ## HandBrake 1.7.1
 
+### All platforms
+
 #### Video
 
 - Fixed Decomb filter producing corrupted frames with 10-bit depth or higher source (#5518)
