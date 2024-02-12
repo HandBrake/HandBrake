@@ -72,11 +72,6 @@ struct hb_work_private_s
     unsigned int         sei_data_size;
 };
 
-static inline int64_t rescale(hb_rational_t q, int b)
-{
-    return av_rescale(q.num, b, q.den);
-}
-
 static int param_parse(hb_work_private_t *pv, x265_param *param,
                        const char *key, const char *value)
 {
@@ -238,16 +233,16 @@ int encx265Init(hb_work_object_t *w, hb_job_t *job)
             char masteringDisplayColorVolume[256];
             snprintf(masteringDisplayColorVolume, sizeof(masteringDisplayColorVolume),
                      "G(%hu,%hu)B(%hu,%hu)R(%hu,%hu)WP(%hu,%hu)L(%u,%u)",
-                     (unsigned short)rescale(job->mastering.display_primaries[1][0], MASTERING_CHROMA_DEN),
-                     (unsigned short)rescale(job->mastering.display_primaries[1][1], MASTERING_CHROMA_DEN),
-                     (unsigned short)rescale(job->mastering.display_primaries[2][0], MASTERING_CHROMA_DEN),
-                     (unsigned short)rescale(job->mastering.display_primaries[2][1], MASTERING_CHROMA_DEN),
-                     (unsigned short)rescale(job->mastering.display_primaries[0][0], MASTERING_CHROMA_DEN),
-                     (unsigned short)rescale(job->mastering.display_primaries[0][1], MASTERING_CHROMA_DEN),
-                     (unsigned short)rescale(job->mastering.white_point[0], MASTERING_CHROMA_DEN),
-                     (unsigned short)rescale(job->mastering.white_point[1], MASTERING_CHROMA_DEN),
-                     (unsigned)rescale(job->mastering.max_luminance, MASTERING_LUMA_DEN),
-                     (unsigned)rescale(job->mastering.min_luminance, MASTERING_LUMA_DEN));
+                     (unsigned short)hb_rescale_rational(job->mastering.display_primaries[1][0], MASTERING_CHROMA_DEN),
+                     (unsigned short)hb_rescale_rational(job->mastering.display_primaries[1][1], MASTERING_CHROMA_DEN),
+                     (unsigned short)hb_rescale_rational(job->mastering.display_primaries[2][0], MASTERING_CHROMA_DEN),
+                     (unsigned short)hb_rescale_rational(job->mastering.display_primaries[2][1], MASTERING_CHROMA_DEN),
+                     (unsigned short)hb_rescale_rational(job->mastering.display_primaries[0][0], MASTERING_CHROMA_DEN),
+                     (unsigned short)hb_rescale_rational(job->mastering.display_primaries[0][1], MASTERING_CHROMA_DEN),
+                     (unsigned short)hb_rescale_rational(job->mastering.white_point[0], MASTERING_CHROMA_DEN),
+                     (unsigned short)hb_rescale_rational(job->mastering.white_point[1], MASTERING_CHROMA_DEN),
+                     (unsigned)hb_rescale_rational(job->mastering.max_luminance, MASTERING_LUMA_DEN),
+                     (unsigned)hb_rescale_rational(job->mastering.min_luminance, MASTERING_LUMA_DEN));
 
             if (param_parse(pv, param, "master-display", masteringDisplayColorVolume))
             {
@@ -310,9 +305,9 @@ int encx265Init(hb_work_object_t *w, hb_job_t *job)
 
     if (job->ambient.ambient_illuminance.num && job->ambient.ambient_illuminance.den)
     {
-        param->ambientIlluminance = rescale(job->ambient.ambient_illuminance, 10000);
-        param->ambientLightX = rescale(job->ambient.ambient_light_x, 50000);
-        param->ambientLightY = rescale(job->ambient.ambient_light_y, 50000);
+        param->ambientIlluminance = hb_rescale_rational(job->ambient.ambient_illuminance, 10000);
+        param->ambientLightX = hb_rescale_rational(job->ambient.ambient_light_x, 50000);
+        param->ambientLightY = hb_rescale_rational(job->ambient.ambient_light_y, 50000);
         param->bEmitAmbientViewingEnvironment = 1;
     }
 

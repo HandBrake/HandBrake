@@ -277,11 +277,6 @@ static void hb_vt_add_dynamic_hdr_metadata(CMSampleBufferRef sampleBuffer, hb_bu
     }
 }
 
-static inline int64_t rescale(hb_rational_t q, int b)
-{
-    return av_rescale(q.num, b, q.den);
-}
-
 static CFDataRef hb_vt_mastering_display_xlat(hb_mastering_display_metadata_t mastering)
 {
     CFMutableDataRef data = CFDataCreateMutable(kCFAllocatorDefault, 24);
@@ -289,18 +284,18 @@ static CFDataRef hb_vt_mastering_display_xlat(hb_mastering_display_metadata_t ma
     const int chromaDen = 50000;
     const int lumaDen = 10000;
 
-    uint16_t display_primaries_gx = CFSwapInt16HostToBig(rescale(mastering.display_primaries[1][0], chromaDen));
-    uint16_t display_primaries_gy = CFSwapInt16HostToBig(rescale(mastering.display_primaries[1][1], chromaDen));
-    uint16_t display_primaries_bx = CFSwapInt16HostToBig(rescale(mastering.display_primaries[2][0], chromaDen));
-    uint16_t display_primaries_by = CFSwapInt16HostToBig(rescale(mastering.display_primaries[2][1], chromaDen));
-    uint16_t display_primaries_rx = CFSwapInt16HostToBig(rescale(mastering.display_primaries[0][0], chromaDen));
-    uint16_t display_primaries_ry = CFSwapInt16HostToBig(rescale(mastering.display_primaries[0][1], chromaDen));
+    uint16_t display_primaries_gx = CFSwapInt16HostToBig(hb_rescale_rational(mastering.display_primaries[1][0], chromaDen));
+    uint16_t display_primaries_gy = CFSwapInt16HostToBig(hb_rescale_rational(mastering.display_primaries[1][1], chromaDen));
+    uint16_t display_primaries_bx = CFSwapInt16HostToBig(hb_rescale_rational(mastering.display_primaries[2][0], chromaDen));
+    uint16_t display_primaries_by = CFSwapInt16HostToBig(hb_rescale_rational(mastering.display_primaries[2][1], chromaDen));
+    uint16_t display_primaries_rx = CFSwapInt16HostToBig(hb_rescale_rational(mastering.display_primaries[0][0], chromaDen));
+    uint16_t display_primaries_ry = CFSwapInt16HostToBig(hb_rescale_rational(mastering.display_primaries[0][1], chromaDen));
 
-    uint16_t white_point_x = CFSwapInt16HostToBig(rescale(mastering.white_point[0], chromaDen));
-    uint16_t white_point_y = CFSwapInt16HostToBig(rescale(mastering.white_point[1], chromaDen));
+    uint16_t white_point_x = CFSwapInt16HostToBig(hb_rescale_rational(mastering.white_point[0], chromaDen));
+    uint16_t white_point_y = CFSwapInt16HostToBig(hb_rescale_rational(mastering.white_point[1], chromaDen));
 
-    uint32_t max_display_mastering_luminance = CFSwapInt32HostToBig(rescale(mastering.max_luminance, lumaDen));
-    uint32_t min_display_mastering_luminance = CFSwapInt32HostToBig(rescale(mastering.min_luminance, lumaDen));
+    uint32_t max_display_mastering_luminance = CFSwapInt32HostToBig(hb_rescale_rational(mastering.max_luminance, lumaDen));
+    uint32_t min_display_mastering_luminance = CFSwapInt32HostToBig(hb_rescale_rational(mastering.min_luminance, lumaDen));
 
     CFDataAppendBytes(data, (UInt8 *)&display_primaries_gx, 2);
     CFDataAppendBytes(data, (UInt8 *)&display_primaries_gy, 2);
@@ -335,9 +330,9 @@ static CFDataRef hb_vt_ambient_viewing_enviroment_xlat(hb_ambient_viewing_enviro
 {
     CFMutableDataRef data = CFDataCreateMutable(kCFAllocatorDefault, 8);
 
-    uint32_t ambient_illuminance = CFSwapInt32HostToBig(rescale(ambient.ambient_illuminance, 10000));
-    uint16_t ambient_light_x =  CFSwapInt16HostToBig(rescale(ambient.ambient_light_x, 50000));
-    uint16_t ambient_light_y =  CFSwapInt16HostToBig(rescale(ambient.ambient_light_y, 50000));
+    uint32_t ambient_illuminance = CFSwapInt32HostToBig(hb_rescale_rational(ambient.ambient_illuminance, 10000));
+    uint16_t ambient_light_x =  CFSwapInt16HostToBig(hb_rescale_rational(ambient.ambient_light_x, 50000));
+    uint16_t ambient_light_y =  CFSwapInt16HostToBig(hb_rescale_rational(ambient.ambient_light_y, 50000));
 
     CFDataAppendBytes(data, (UInt8 *)&ambient_illuminance, 4);
     CFDataAppendBytes(data, (UInt8 *)&ambient_light_x, 2);

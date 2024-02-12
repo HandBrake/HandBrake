@@ -3338,6 +3338,11 @@ void hb_limit_rational( int *x, int *y, int64_t num, int64_t den, int limit )
     *y = den;
 }
 
+int64_t hb_rescale_rational(hb_rational_t q, int b)
+{
+    return av_rescale(q.num, b, q.den);
+}
+
 /**********************************************************************
  * hb_reduce64
  **********************************************************************

@@ -130,11 +130,6 @@ static void * x264_lib_open_ubuntu_10bit(void)
 }
 #endif
 
-static inline int64_t rescale(hb_rational_t q, int b)
-{
-    return av_rescale(q.num, b, q.den);
-}
-
 void hb_x264_global_init(void)
 {
 #if X264_BUILD < 153
@@ -412,16 +407,16 @@ int encx264Init( hb_work_object_t * w, hb_job_t * job )
         if (job->mastering.has_primaries && job->mastering.has_luminance)
         {
             param.mastering_display.b_mastering_display = 1;
-            param.mastering_display.i_red_x   = rescale(job->mastering.display_primaries[0][0], MASTERING_CHROMA_DEN);
-            param.mastering_display.i_red_y   = rescale(job->mastering.display_primaries[0][1], MASTERING_CHROMA_DEN);
-            param.mastering_display.i_green_x = rescale(job->mastering.display_primaries[1][0], MASTERING_CHROMA_DEN);
-            param.mastering_display.i_green_y = rescale(job->mastering.display_primaries[1][1], MASTERING_CHROMA_DEN);
-            param.mastering_display.i_blue_x  = rescale(job->mastering.display_primaries[2][0], MASTERING_CHROMA_DEN);
-            param.mastering_display.i_blue_y  = rescale(job->mastering.display_primaries[2][1], MASTERING_CHROMA_DEN);
-            param.mastering_display.i_white_x = rescale(job->mastering.white_point[0], MASTERING_CHROMA_DEN);
-            param.mastering_display.i_white_y = rescale(job->mastering.white_point[1], MASTERING_CHROMA_DEN);
-            param.mastering_display.i_display_max = rescale(job->mastering.max_luminance, MASTERING_LUMA_DEN);
-            param.mastering_display.i_display_min = rescale(job->mastering.min_luminance, MASTERING_LUMA_DEN);
+            param.mastering_display.i_red_x   = hb_rescale_rational(job->mastering.display_primaries[0][0], MASTERING_CHROMA_DEN);
+            param.mastering_display.i_red_y   = hb_rescale_rational(job->mastering.display_primaries[0][1], MASTERING_CHROMA_DEN);
+            param.mastering_display.i_green_x = hb_rescale_rational(job->mastering.display_primaries[1][0], MASTERING_CHROMA_DEN);
+            param.mastering_display.i_green_y = hb_rescale_rational(job->mastering.display_primaries[1][1], MASTERING_CHROMA_DEN);
+            param.mastering_display.i_blue_x  = hb_rescale_rational(job->mastering.display_primaries[2][0], MASTERING_CHROMA_DEN);
+            param.mastering_display.i_blue_y  = hb_rescale_rational(job->mastering.display_primaries[2][1], MASTERING_CHROMA_DEN);
+            param.mastering_display.i_white_x = hb_rescale_rational(job->mastering.white_point[0], MASTERING_CHROMA_DEN);
+            param.mastering_display.i_white_y = hb_rescale_rational(job->mastering.white_point[1], MASTERING_CHROMA_DEN);
+            param.mastering_display.i_display_max = hb_rescale_rational(job->mastering.max_luminance, MASTERING_LUMA_DEN);
+            param.mastering_display.i_display_min = hb_rescale_rational(job->mastering.min_luminance, MASTERING_LUMA_DEN);
         }
 
         /*  Content light level */

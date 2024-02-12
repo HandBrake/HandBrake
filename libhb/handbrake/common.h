@@ -250,9 +250,12 @@ static inline hb_rational_t hb_make_q(int num, int den)
     return r;
 }
 
-static inline double hb_q2d(hb_rational_t a){
+static inline double hb_q2d(hb_rational_t a)
+{
     return a.num / (double) a.den;
 }
+
+int64_t hb_rescale_rational(hb_rational_t q, int b);
 
 struct hb_geometry_s
 {
