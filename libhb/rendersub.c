@@ -872,8 +872,8 @@ static int ssa_post_init( hb_filter_object_t * filter, hb_job_t * job )
 
     // Do not use Read Order to eliminate duplicates
     // we never send the same subtitles sample twice,
-    // and some MKV have duplicated Read Orders
-    // that will breaks breaks when this is enabled.
+    // and some MKVs have duplicated Read Orders
+    // and won't render properly when this is enabled.
     ass_set_check_readorder(pv->ssaTrack, 0);
 
     int height = job->title->geometry.height - job->crop[0] - job->crop[1];
