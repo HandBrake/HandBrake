@@ -70,6 +70,10 @@ namespace HandBrakeWPF.Converters.Audio
                     {
                         encoders.Remove(encoder);
                     }
+                    else if (outputFormat == OutputFormat.Mkv && !encoder.SupportsMkv)
+                    {
+                        encoders.Remove(encoder);
+                    }
                     else if (outputFormat == OutputFormat.WebM && !encoder.SupportsWebM)
                     {
                         encoders.Remove(encoder);

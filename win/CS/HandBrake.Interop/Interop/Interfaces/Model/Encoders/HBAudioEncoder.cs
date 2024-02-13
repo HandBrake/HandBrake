@@ -105,6 +105,14 @@ namespace HandBrake.Interop.Interop.Interfaces.Model.Encoders
             }
         }
 
+        public bool SupportsMkv
+        {
+            get
+            {
+                return (this.CompatibleContainers & NativeConstants.HB_MUX_MASK_MKV) > 0 || this.CompatibleContainers == -1;
+            }
+        }
+
         /// <summary>
         /// Gets or sets the quality limits.
         /// </summary>
