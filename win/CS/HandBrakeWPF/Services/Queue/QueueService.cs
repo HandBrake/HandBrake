@@ -774,15 +774,21 @@ namespace HandBrakeWPF.Services.Queue
             {
                 this.BackupQueue(string.Empty);
 
+                bool queueComplete = false;
                 lock (activeJobLock)
                 {
                     if (!this.activeJobs.Any(a => a.IsEncoding))
                     {
                         this.StopJobPolling();
 
-                        // Fire the event to tell connected services.
-                        this.InvokeQueueCompleted(new QueueCompletedEventArgs(false));
+                        queueComplete = true;
                     }
+                }
+
+                if (queueComplete)
+                {
+                    // Fire the event to tell connected services.
+                    this.InvokeQueueCompleted(new QueueCompletedEventArgs(false));
                 }
             }
         }
