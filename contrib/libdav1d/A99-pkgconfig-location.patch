@@ -1,6 +1,6 @@
---- dav1d-0.5.1/src/meson.build.orig    2019-10-26 04:38:21.000000000 +0900
-+++ dav1d-0.5.1/src/meson.build 2020-02-27 16:48:19.664008000 +0900
-@@ -288,6 +288,7 @@
+--- dav1d-1.4.0/src/meson.build	2024-02-14 19:06:02.000000000 +0100
++++ dav1d-1.4.0-patched/src/meson.build	2024-02-15 17:27:23.400210200 +0100
+@@ -370,6 +370,7 @@
  #
  pkg_mod = import('pkgconfig')
  pkg_mod.generate(libraries: libdav1d,
