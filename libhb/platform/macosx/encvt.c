@@ -79,6 +79,9 @@ struct hb_work_private_s
         int profile;
         CFStringRef profileLevel;
 
+        int maxAllowedFrameQP;
+        int minAllowedFrameQP;
+        int maxReferenceBufferCount;
         int maxFrameDelayCount;
         int maxKeyFrameInterval;
         CFBooleanRef allowFrameReordering;
@@ -132,6 +135,9 @@ void hb_vt_param_default(struct hb_vt_param *param)
     param->quality                  = -1;
     param->vbv.maxrate              = 0;
     param->vbv.bufsize              = 0;
+    param->maxAllowedFrameQP        = -1;
+    param->minAllowedFrameQP        = -1;
+    param->maxReferenceBufferCount  = -1;
     param->maxFrameDelayCount       = kVTUnlimitedFrameDelayCount;
     param->allowFrameReordering     = kCFBooleanTrue;
     param->allowTemporalCompression = kCFBooleanTrue;
@@ -630,6 +636,30 @@ static int hb_vt_parse_options(hb_work_private_t *pv, hb_job_t *job)
                 pv->settings.registryID = registryID;
             }
         }
+        else if (!strcmp(key, "qpmin"))
+        {
+            int qpmin = hb_value_get_int(value);
+            if (qpmin >= 0)
+            {
+                pv->settings.minAllowedFrameQP = qpmin;
+            }
+        }
+        else if (!strcmp(key, "qpmax"))
+        {
+            int qpmax = hb_value_get_int(value);
+            if (qpmax >= 0)
+            {
+                pv->settings.maxAllowedFrameQP = qpmax;
+            }
+        }
+        else if (!strcmp(key, "ref"))
+        {
+            int ref = hb_value_get_int(value);
+            if (ref >= 0)
+            {
+                pv->settings.maxReferenceBufferCount = ref;
+            }
+        }
 
     }
     hb_dict_free(&opts);
@@ -896,6 +926,54 @@ static OSStatus init_vtsession(hb_work_object_t *w, hb_job_t *job, hb_work_priva
     if (err != noErr)
     {
         hb_log("VTSessionSetProperty: kVTCompressionPropertyKey_MaxKeyFrameInterval failed");
+    }
+
+    if (__builtin_available(macOS 12, *))
+    {
+        if (pv->settings.maxAllowedFrameQP > -1)
+        {
+            cfValue = CFNumberCreate(kCFAllocatorDefault, kCFNumberIntType,
+                                     &pv->settings.maxAllowedFrameQP);
+            err = VTSessionSetProperty(pv->session,
+                                       kVTCompressionPropertyKey_MaxAllowedFrameQP,
+                                       cfValue);
+            CFRelease(cfValue);
+            if (err != noErr)
+            {
+                hb_log("VTSessionSetProperty: kVTCompressionPropertyKey_MaxAllowedFrameQP failed");
+            }
+        }
+    }
+
+    if (__builtin_available(macOS 13, *))
+    {
+        if (pv->settings.minAllowedFrameQP > -1)
+        {
+            cfValue = CFNumberCreate(kCFAllocatorDefault, kCFNumberIntType,
+                                     &pv->settings.minAllowedFrameQP);
+            err = VTSessionSetProperty(pv->session,
+                                       kVTCompressionPropertyKey_MinAllowedFrameQP,
+                                       cfValue);
+            CFRelease(cfValue);
+            if (err != noErr)
+            {
+                hb_log("VTSessionSetProperty: kVTCompressionPropertyKey_MinAllowedFrameQP failed");
+            }
+        }
+
+        if (pv->settings.maxReferenceBufferCount > -1)
+        {
+            cfValue = CFNumberCreate(kCFAllocatorDefault, kCFNumberIntType,
+                                     &pv->settings.maxReferenceBufferCount);
+            err = VTSessionSetProperty(pv->session,
+                                       kVTCompressionPropertyKey_ReferenceBufferCount,
+                                       cfValue);
+            CFRelease(cfValue);
+            if (err != noErr)
+            {
+                hb_log("VTSessionSetProperty: kVTCompressionPropertyKey_ReferenceBufferCount failed");
+            }
+        }
     }
 
     if (pv->settings.maxFrameDelayCount >= 0)
