@@ -1,26 +1,29 @@
-/* Class = "NSTextFieldCell"; title = "Format:"; ObjectID = "3dN-MN-DcP"; */
-"3dN-MN-DcP.title" = "Формат:";
+/* Class = "NSTextField"; ibShadowedToolTip = "Determines the granularity of the x264 Constant Quality control. Smaller values allow for finer quality increments."; ObjectID = "1mY-Wc-qrc"; */
+"1mY-Wc-qrc.ibShadowedToolTip" = "Определяет зернистость настройки постоянное качество x264. Меньшие значения позволяют достичь большего сохранения качества.";
+
+/* Class = "NSMenuItem"; title = "Shut Down Computer"; ObjectID = "2Js-R4-g0K"; */
+"2Js-R4-g0K.title" = "Выключать компьютер";
 
 /* Class = "NSWindow"; title = "Preferences"; ObjectID = "5"; */
 "5.title" = "Настройки";
 
-/* Class = "NSMenu"; title = "OtherViews"; ObjectID = "290"; */
-"290.title" = "OtherViews";
+/* Class = "NSMenu"; title = "OtherViews"; ObjectID = "6c7-RK-g6v"; */
+"6c7-RK-g6v.title" = "OtherViews";
 
-/* Class = "NSMenuItem"; title = "Auto"; ObjectID = "292"; */
-"292.title" = "Авто";
+/* Class = "NSTextFieldCell"; title = "None"; ObjectID = "7hX-9H-spK"; */
+"7hX-9H-spK.title" = "Нет";
 
-/* Class = "NSButtonCell"; title = "Automatically name output files"; ObjectID = "302"; */
-"302.title" = "Автоматически именовать выходные файлы";
+/* Class = "NSMenuItem"; title = "Quit HandBrake"; ObjectID = "7JH-3c-gwW"; */
+"7JH-3c-gwW.title" = "Выйти из HandBrake";
 
-/* Class = "NSTextFieldCell"; title = "When Done:"; ObjectID = "304"; */
-"304.title" = "При завершении:";
+/* Class = "NSMenuItem"; title = "Do Nothing"; ObjectID = "7Qh-m6-OUo"; */
+"7Qh-m6-OUo.title" = "Ничего не делать";
+
+/* Class = "NSTextFieldCell"; title = "When Done:"; ObjectID = "9yk-Cr-cB6"; */
+"9yk-Cr-cB6.title" = "При завершении:";
 
 /* Class = "NSButtonCell"; title = "Automatically check for updates weekly"; ObjectID = "305"; */
 "305.title" = "Автоматически еженедельно проверять обновления";
-
-/* Class = "NSButtonCell"; title = "Send file to:"; ObjectID = "306"; */
-"306.title" = "Отправить файл:";
 
 /* Class = "NSTextFieldCell"; title = "At Launch:"; ObjectID = "307"; */
 "307.title" = "При запуске:";
@@ -109,15 +112,6 @@
 /* Class = "NSButtonCell"; title = "Use libdvdnav (instead of libdvdread)"; ObjectID = "399"; */
 "399.title" = "Использовать libdvdnav (вместо libdvdread)";
 
-/* Class = "NSTextFieldCell"; title = "None"; ObjectID = "449"; */
-"449.title" = "Нет";
-
-/* Class = "NSButtonCell"; title = "Browse…"; ObjectID = "451"; */
-"451.title" = "Выбрать...";
-
-/* Class = "NSButtonCell"; title = "Play System Alert Sound"; ObjectID = "458"; */
-"458.title" = "Проигрывать системный звук предупреждения";
-
 /* Class = "NSTextField"; ibShadowedToolTip = "Minimum DVD and Blu-ray title duration in seconds. Shorter titles will be skipped."; ObjectID = "463"; */
 "463.ibShadowedToolTip" = "Минимальная продолжительность заголовка DVD и Blu-ray в секундах. Заголовки с меньшим значением будут пропущены.";
 
@@ -126,39 +120,6 @@
 
 /* Class = "NSTextField"; ibShadowedToolTip = "Minimum title duration in seconds. Shorter titles will be skipped."; ObjectID = "480"; */
 "480.ibShadowedToolTip" = "Минимальная продолжительность заголовка в секундах. Заголовки с меньшим значением будут пропущены.";
-
-/* Class = "NSMenuItem"; title = ".m4v"; ObjectID = "484"; */
-"484.title" = ".m4v";
-
-/* Class = "NSMenuItem"; title = ".mp4"; ObjectID = "485"; */
-"485.title" = ".mp4";
-
-/* Class = "NSTextFieldCell"; title = "Default MP4 Extension:"; ObjectID = "487"; */
-"487.title" = "Расширение MP4 по умолчанию:";
-
-/* Class = "NSMenu"; title = "OtherViews"; ObjectID = "493"; */
-"493.title" = "OtherViews";
-
-/* Class = "NSMenuItem"; title = "Do Nothing"; ObjectID = "494"; */
-"494.title" = "Ничего не делать";
-
-/* Class = "NSMenuItem"; title = "Alert"; ObjectID = "495"; */
-"495.title" = "Предупреждение";
-
-/* Class = "NSMenuItem"; title = "Alert And Notification"; ObjectID = "496"; */
-"496.title" = "Предупреждение и уведомление";
-
-/* Class = "NSMenuItem"; title = "Put Computer To Sleep"; ObjectID = "497"; */
-"497.title" = "Перевести компьютер в спящий режим";
-
-/* Class = "NSMenuItem"; title = "Shut Down Computer"; ObjectID = "498"; */
-"498.title" = "Выключать компьютер";
-
-/* Class = "NSMenuItem"; title = "Notification"; ObjectID = "499"; */
-"499.title" = "Уведомление";
-
-/* Class = "NSMenuItem"; title = "Quit HandBrake"; ObjectID = "500"; */
-"500.title" = "Выйти из HandBrake";
 
 /* Class = "NSMenuItem"; title = "35"; ObjectID = "514"; */
 "514.title" = "35";
@@ -178,84 +139,96 @@
 /* Class = "NSMenuItem"; title = "60"; ObjectID = "519"; */
 "519.title" = "60";
 
-/* Class = "NSButtonCell"; title = "Show preview images"; ObjectID = "Aao-Tf-JeJ"; */
-"Aao-Tf-JeJ.title" = "Показать изображения предпросмотра";
+/* Class = "NSMenu"; title = "OtherViews"; ObjectID = "aYB-lm-mkU"; */
+"aYB-lm-mkU.title" = "OtherViews";
 
-/* Class = "NSButtonCell"; title = "Always clear completed items after an encode completes"; ObjectID = "BPU-E2-N8l"; */
-"BPU-E2-N8l.title" = "Всегда очищать завершенные задания после завершения кодирования";
+/* Class = "NSTextFieldCell"; title = "GB"; ObjectID = "BKV-oH-uht"; */
+"BKV-oH-uht.title" = "ГБ";
 
 /* Class = "NSTextFieldCell"; title = "Scan:"; ObjectID = "c0L-TU-WML"; */
 "c0L-TU-WML.title" = "Сканирование:";
 
+/* Class = "NSMenuItem"; title = "2"; ObjectID = "Cge-hb-Nh8"; */
+"Cge-hb-Nh8.title" = "2";
+
 /* Class = "NSTextFieldCell"; title = "Encoder:"; ObjectID = "cqp-xU-GOe"; */
 "cqp-xU-GOe.title" = "Кодировщик:";
 
-/* Class = "NSTextFieldCell"; title = "Drag labels to Format to compose a naming format."; ObjectID = "dQ6-Dh-9sD"; */
-"dQ6-Dh-9sD.title" = "Перемещайте лейблы в Формат для создания формата наименования.";
+/* Class = "NSMenuItem"; title = "Auto"; ObjectID = "cZP-RL-fcB"; */
+"cZP-RL-fcB.title" = "Авто";
 
-/* Class = "CocoaBindingsConnection"; ibShadowedIsNilPlaceholder = "None"; ObjectID = "f36-PN-c5F"; */
-"f36-PN-c5F.ibShadowedIsNilPlaceholder" = "Нет";
+/* Class = "NSButtonCell"; title = "Reset to \"Do nothing\" on launch"; ObjectID = "f47-PN-ctH"; */
+"f47-PN-ctH.title" = "Сбрасывать на \"Ничего не делать\" при запуске";
 
-/* Class = "NSTextFieldCell"; title = "Queue:"; ObjectID = "FKi-zh-5gc"; */
-"FKi-zh-5gc.title" = "Очередь:";
+/* Class = "NSMenuItem"; title = "4"; ObjectID = "FB2-Vr-VKP"; */
+"FB2-Vr-VKP.title" = "4";
 
-/* Class = "NSTextFieldCell"; title = "GB"; ObjectID = "FZE-ZR-g93"; */
-"FZE-ZR-g93.title" = "ГБ";
+/* Class = "NSTextFieldCell"; title = "Options:"; ObjectID = "ImU-Vn-SGr"; */
+"ImU-Vn-SGr.title" = "Опции:";
 
-/* Class = "NSButtonCell"; title = "Change case to Title Case"; ObjectID = "ggR-Zs-P8G"; */
-"ggR-Zs-P8G.title" = "Приводить регистр к регистру заголовка";
+/* Class = "NSMenuItem"; title = "3"; ObjectID = "IWj-tu-UhC"; */
+"IWj-tu-UhC.title" = "3";
 
-/* Class = "NSTextFieldCell"; title = "Summary:"; ObjectID = "GQJ-go-PoN"; */
-"GQJ-go-PoN.title" = "Сводка:";
-
-/* Class = "NSTextFieldCell"; title = "Number of simultaneous encodes:"; ObjectID = "iGS-b5-ip7"; */
-"iGS-b5-ip7.title" = "Количество одновременных кодирований:";
-
-/* Class = "NSMenuItem"; title = "2"; ObjectID = "JcO-br-AXz"; */
-"JcO-br-AXz.title" = "2";
+/* Class = "CocoaBindingsConnection"; ibShadowedIsNilPlaceholder = "None"; ObjectID = "JZb-Vz-cY4"; */
+"JZb-Vz-cY4.ibShadowedIsNilPlaceholder" = "Нет";
 
 /* Class = "NSTextFieldCell"; title = "seconds"; ObjectID = "klQ-DW-Kc6"; */
 "klQ-DW-Kc6.title" = "секунд";
 
-/* Class = "NSMenuItem"; title = "1"; ObjectID = "l8v-ns-6UR"; */
-"l8v-ns-6UR.title" = "1";
+/* Class = "NSTextFieldCell"; title = "Format:"; ObjectID = "Ktg-Bh-1Pt"; */
+"Ktg-Bh-1Pt.title" = "Формат:";
 
-/* Class = "NSButtonCell"; title = "Remove old logs from main Activity Logs folder after 30 days"; ObjectID = "lgn-RF-k0d"; */
-"lgn-RF-k0d.title" = "Удалять старые логи из основной папки логов активности после 30 дней";
+/* Class = "NSTextFieldCell"; title = "Drag labels to Format to compose a naming format."; ObjectID = "MSp-go-i1C"; */
+"MSp-go-i1C.title" = "Перемещайте лейблы в Формат для создания формата наименования.";
 
-/* Class = "NSTextFieldCell"; title = "Destination:"; ObjectID = "lo9-Hk-I6l"; */
-"lo9-Hk-I6l.title" = "Путь назначения:";
+/* Class = "NSButtonCell"; title = "Pause queue if disk space is lower than:"; ObjectID = "ODf-uW-BrD"; */
+"ODf-uW-BrD.title" = "Приостановить очередь, если на диске свободного пространства меньше, чем:";
 
-/* Class = "NSMenuItem"; title = "4"; ObjectID = "nTJ-DB-eOd"; */
-"nTJ-DB-eOd.title" = "4";
+/* Class = "NSButtonCell"; title = "Send file to:"; ObjectID = "P5f-Vq-TeL"; */
+"P5f-Vq-TeL.title" = "Отправить файл:";
 
-/* Class = "NSTextField"; ibShadowedToolTip = "Minimum free space on destination disk."; ObjectID = "PaR-zw-opS"; */
-"PaR-zw-opS.ibShadowedToolTip" = "Минимальное свободное пространство на диске назначения.";
+/* Class = "NSMenuItem"; title = ".m4v"; ObjectID = "phv-oU-WnC"; */
+"phv-oU-WnC.title" = ".m4v";
 
-/* Class = "NSButtonCell"; title = "Replace underscores with spaces"; ObjectID = "pUi-lK-cHw"; */
-"pUi-lK-cHw.title" = "Заменять символы нижнего подчеркивания пробелами";
+/* Class = "NSTextFieldCell"; title = "Options:"; ObjectID = "saX-n7-YV0"; */
+"saX-n7-YV0.title" = "Опции:";
 
-/* Class = "NSTokenField"; ibShadowedToolTip = "Drag labels to the Format field to compose a naming format."; ObjectID = "Tk3-Ig-fFI"; */
-"Tk3-Ig-fFI.ibShadowedToolTip" = "Перемещайте лейблы в поле Формат для создания формата наименования.";
+/* Class = "NSButtonCell"; title = "Replace underscores with spaces"; ObjectID = "tAb-w4-Xwt"; */
+"tAb-w4-Xwt.title" = "Заменять символы нижнего подчеркивания пробелами";
 
-/* Class = "NSMenu"; title = "OtherViews"; ObjectID = "TpU-3v-fhx"; */
-"TpU-3v-fhx.title" = "OtherViews";
+/* Class = "NSButtonCell"; title = "Automatically name output files"; ObjectID = "UCC-tm-0Sa"; */
+"UCC-tm-0Sa.title" = "Автоматически именовать выходные файлы";
 
-/* Class = "NSButtonCell"; title = "Reset to \"Do nothing\" on launch"; ObjectID = "Uxv-oN-c1r"; */
-"Uxv-oN-c1r.title" = "Сбрасывать на \"Ничего не делать\" при запуске";
+/* Class = "NSTextFieldCell"; title = "Default MP4 Extension:"; ObjectID = "v6r-mL-XmA"; */
+"v6r-mL-XmA.title" = "Расширение MP4 по умолчанию:";
 
-/* Class = "NSTextFieldCell"; title = "Preset:"; ObjectID = "wiP-Ia-DfB"; */
-"wiP-Ia-DfB.title" = "Пресет:";
+/* Class = "NSButtonCell"; title = "Remove common punctuation"; ObjectID = "vGu-jb-kdW"; */
+"vGu-jb-kdW.title" = "Удалять общеупотребимую пунктуацию";
 
-/* Class = "NSButtonCell"; title = "Remove common punctuation"; ObjectID = "wo5-iR-2mb"; */
-"wo5-iR-2mb.title" = "Удалять общеупотребимую пунктуацию";
+/* Class = "NSTextField"; ibShadowedToolTip = "Minimum free space on destination disk."; ObjectID = "VSi-rk-Vk2"; */
+"VSi-rk-Vk2.ibShadowedToolTip" = "Минимальное свободное пространство на диске назначения.";
 
-/* Class = "NSButtonCell"; title = "Pause queue if disk space is lower than:"; ObjectID = "yG9-mz-tqQ"; */
-"yG9-mz-tqQ.title" = "Приостановить очередь, если на диске свободного пространства меньше, чем:";
+/* Class = "NSMenuItem"; title = "1"; ObjectID = "WAI-Bu-jIu"; */
+"WAI-Bu-jIu.title" = "1";
 
-/* Class = "NSMenuItem"; title = "3"; ObjectID = "ZGL-FR-zSW"; */
-"ZGL-FR-zSW.title" = "3";
+/* Class = "NSMenuItem"; title = ".mp4"; ObjectID = "wgg-7I-LBB"; */
+"wgg-7I-LBB.title" = ".mp4";
+
+/* Class = "NSMenuItem"; title = "Put Computer To Sleep"; ObjectID = "x7i-WX-w6l"; */
+"x7i-WX-w6l.title" = "Перевести компьютер в спящий режим";
+
+/* Class = "NSButtonCell"; title = "Change case to Title Case"; ObjectID = "Y9B-ue-3sE"; */
+"Y9B-ue-3sE.title" = "Приводить регистр к регистру заголовка";
+
+/* Class = "NSMenu"; title = "OtherViews"; ObjectID = "ZkO-Z0-OCN"; */
+"ZkO-Z0-OCN.title" = "OtherViews";
+
+/* Class = "NSButtonCell"; title = "Browse…"; ObjectID = "zot-Bx-Ch3"; */
+"zot-Bx-Ch3.title" = "Выбрать...";
 
 /* Class = "NSButtonCell"; title = "Show Open Source panel"; ObjectID = "Zqz-Kn-xOS"; */
 "Zqz-Kn-xOS.title" = "Показывать панель \"Открыть источник\"";
+
+/* Class = "NSTokenField"; ibShadowedToolTip = "Drag labels to the Format field to compose a naming format."; ObjectID = "Zvg-MF-RQF"; */
+"Zvg-MF-RQF.ibShadowedToolTip" = "Перемещайте лейблы в поле Формат для создания формата наименования.";
 

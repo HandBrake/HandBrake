@@ -16,9 +16,6 @@
 /* Class = "NSToolbarItem"; toolTip = "Action to perform when encoding is complete."; ObjectID = "a3c-kV-98E"; */
 "a3c-kV-98E.toolTip" = "エンコードが完了した時に行う動作。";
 
-/* Class = "NSMenuItem"; title = "Alert and Notification"; ObjectID = "aat-1N-Odn"; */
-"aat-1N-Odn.title" = "アラートと通知";
-
 /* Class = "NSToolbarItem"; label = "Action"; ObjectID = "DCB-WP-NRs"; */
 "DCB-WP-NRs.label" = "アクション";
 
@@ -31,14 +28,8 @@
 /* Class = "NSToolbarItem"; paletteLabel = "Details"; ObjectID = "DfN-Iw-bzy"; */
 "DfN-Iw-bzy.paletteLabel" = "詳細";
 
-/* Class = "NSMenuItem"; title = "Alert"; ObjectID = "fAD-ky-zo6"; */
-"fAD-ky-zo6.title" = "警告";
-
 /* Class = "NSMenuItem"; title = "Put Computer to Sleep"; ObjectID = "GUQ-xb-HVS"; */
 "GUQ-xb-HVS.title" = "コンピューターをスリープ";
-
-/* Class = "NSMenuItem"; title = "Notification"; ObjectID = "jDL-sB-8e3"; */
-"jDL-sB-8e3.title" = "通知";
 
 /* Class = "NSMenuItem"; title = "Reset All Jobs"; ObjectID = "kPX-am-UX1"; */
 "kPX-am-UX1.title" = "全ジョブリセット";

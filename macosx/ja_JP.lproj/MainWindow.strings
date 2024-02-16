@@ -10,6 +10,9 @@
 /* Class = "NSButton"; ibShadowedToolTip = "Add To Queue"; ObjectID = "3xl-Xh-n9j"; */
 "3xl-Xh-n9j.ibShadowedToolTip" = "キューに追加";
 
+/* Class = "NSButton"; ibShadowedToolTip = "Recursively scan and open the content of every sub-folder."; ObjectID = "5hE-Ri-tcZ"; */
+"5hE-Ri-tcZ.ibShadowedToolTip" = "全ての子フォルダの内容に対してもスキャンし開きます。";
+
 /* Class = "NSTextFieldCell"; title = "0"; ObjectID = "6E4-AG-PEh"; */
 "6E4-AG-PEh.title" = "0";
 

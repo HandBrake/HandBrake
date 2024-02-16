@@ -315,14 +315,14 @@
 /* Touch bar */
 "Previews" = "Изображения предпросмотра";
 
-/* Queue done alert message
-   Queue notification alert message */
+/* Queue notification alert message */
 "Put down that cocktail…" = "Отложите в сторону этот коктейл...";
 
 /* Preferences -> Output Name Token */
 "Quality/Bitrate" = "Качетсво/битрейт";
 
-/* Queue window title */
+/* Preferences Queue Toolbar Item
+   Queue window title */
 "Queue" = "Очередь";
 
 /* Queue window title */
@@ -502,9 +502,6 @@
 
 /* Queue done notification message */
 "Your encode %@ is done!" = "Ваше кодирование %@ завершено!";
-
-/* Queue done alert informative text */
-"Your HandBrake queue is done!" = "Задания в вашей очереди HandBrake выполнены!";
 
 /* Queue Edit Alert -> stop and edit informative text
    Queue Stop Alert -> stop and remove informative text */

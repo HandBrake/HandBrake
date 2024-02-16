@@ -288,7 +288,8 @@
 /* Preferences -> Output Name Token */
 "Quality/Bitrate" = "품질/비트레이트";
 
-/* Queue window title */
+/* Preferences Queue Toolbar Item
+   Queue window title */
 "Queue" = "대기열";
 
 /* Queue window title */
@@ -450,9 +451,6 @@
 
 /* Queue done notification message */
 "Your encode %@ is done!" = "%@ 인코딩이 완료되었습니다!";
-
-/* Queue done alert informative text */
-"Your HandBrake queue is done!" = "HandBrake 대기열이 완료되었습니다!";
 
 /* Queue Edit Alert -> stop and edit informative text
    Queue Stop Alert -> stop and remove informative text */

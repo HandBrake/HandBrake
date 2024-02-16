@@ -318,14 +318,14 @@
 /* Touch bar */
 "Previews" = "Pré-visualizações";
 
-/* Queue done alert message
-   Queue notification alert message */
+/* Queue notification alert message */
 "Put down that cocktail…" = "Abaixe o coquetel...";
 
 /* Preferences -> Output Name Token */
 "Quality/Bitrate" = "Qualidade/Bitrate";
 
-/* Queue window title */
+/* Preferences Queue Toolbar Item
+   Queue window title */
 "Queue" = "Fila";
 
 /* Queue window title */
@@ -514,9 +514,6 @@
 
 /* Queue done notification message */
 "Your encode %@ is done!" = "Sua codificação %@ está concluída!";
-
-/* Queue done alert informative text */
-"Your HandBrake queue is done!" = "Sua fila do HandBrake está concluída!";
 
 /* Queue Edit Alert -> stop and edit informative text
    Queue Stop Alert -> stop and remove informative text */
