@@ -16,9 +16,6 @@
 /* Class = "NSToolbarItem"; toolTip = "Action to perform when encoding is complete."; ObjectID = "a3c-kV-98E"; */
 "a3c-kV-98E.toolTip" = "Aktion die ausgeführt werden soll, sobald die Encodierung abgeschlossen ist.";
 
-/* Class = "NSMenuItem"; title = "Alert and Notification"; ObjectID = "aat-1N-Odn"; */
-"aat-1N-Odn.title" = "Hinweis mit Nachricht und Alarm";
-
 /* Class = "NSToolbarItem"; label = "Action"; ObjectID = "DCB-WP-NRs"; */
 "DCB-WP-NRs.label" = "Dienste";
 
@@ -31,14 +28,8 @@
 /* Class = "NSToolbarItem"; paletteLabel = "Details"; ObjectID = "DfN-Iw-bzy"; */
 "DfN-Iw-bzy.paletteLabel" = "Details";
 
-/* Class = "NSMenuItem"; title = "Alert"; ObjectID = "fAD-ky-zo6"; */
-"fAD-ky-zo6.title" = "Hinweis mit Alarm";
-
 /* Class = "NSMenuItem"; title = "Put Computer to Sleep"; ObjectID = "GUQ-xb-HVS"; */
 "GUQ-xb-HVS.title" = "Computer in den Ruhezustand setzen";
-
-/* Class = "NSMenuItem"; title = "Notification"; ObjectID = "jDL-sB-8e3"; */
-"jDL-sB-8e3.title" = "Hinweis mit Nachricht";
 
 /* Class = "NSMenuItem"; title = "Reset All Jobs"; ObjectID = "kPX-am-UX1"; */
 "kPX-am-UX1.title" = "Alle Aufgaben zurücksetzen";

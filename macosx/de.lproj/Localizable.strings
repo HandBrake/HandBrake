@@ -205,6 +205,9 @@
 /* File already exists alert -> message */
 "File already exists." = "Die Datei existiert bereits.";
 
+/* Preferences Output File Name Toolbar Item */
+"File name" = "Dateiname";
+
 /* Preferences General Toolbar Item */
 "General" = "Allgemein";
 
@@ -342,8 +345,7 @@
 /* Touch bar */
 "Previews" = "Vorschau";
 
-/* Queue done alert message
-   Queue notification alert message */
+/* Queue notification alert message */
 "Put down that cocktail…" = "Stellen Sie den Cocktail ab …";
 
 /* Preferences -> Output Name Token */
@@ -352,7 +354,8 @@
 /* Preferences -> Output Name Token */
 "Quality/Bitrate" = "Qualität/Bitrate";
 
-/* Queue window title */
+/* Preferences Queue Toolbar Item
+   Queue window title */
 "Queue" = "Warteschlange";
 
 /* Queue window title */
@@ -545,10 +548,10 @@
 /* Queue done notification message */
 "Your encode %@ is done!" = "Die Encodierung %@ ist fertig!";
 
-/* Queue done alert informative text */
-"Your HandBrake queue is done!" = "Alle Aufgaben in Ihrer HandBrake-Warteschlange wurden erfolgreich ausgeführt!";
-
 /* Queue Edit Alert -> stop and edit informative text
    Queue Stop Alert -> stop and remove informative text */
 "Your movie will be lost if you don't continue encoding." = "Ihr Film wird verloren gehen, wenn Sie die Encodierung nicht fortsetzen.";
+
+/* Queue done notification message */
+"Your queue is done!" = "Warteschlange abgeschlossen!";
 

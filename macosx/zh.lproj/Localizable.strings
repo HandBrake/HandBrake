@@ -342,8 +342,7 @@
 /* Touch bar */
 "Previews" = "预览";
 
-/* Queue done alert message
-   Queue notification alert message */
+/* Queue notification alert message */
 "Put down that cocktail…" = "放下那杯鸡尾酒…";
 
 /* Preferences -> Output Name Token */
@@ -352,7 +351,8 @@
 /* Preferences -> Output Name Token */
 "Quality/Bitrate" = "质量/码率";
 
-/* Queue window title */
+/* Preferences Queue Toolbar Item
+   Queue window title */
 "Queue" = "队列";
 
 /* Queue window title */
@@ -544,9 +544,6 @@
 
 /* Queue done notification message */
 "Your encode %@ is done!" = "您的编码 %@ 已完成！";
-
-/* Queue done alert informative text */
-"Your HandBrake queue is done!" = "您的 HandBrake 队列已完成！";
 
 /* Queue Edit Alert -> stop and edit informative text
    Queue Stop Alert -> stop and remove informative text */

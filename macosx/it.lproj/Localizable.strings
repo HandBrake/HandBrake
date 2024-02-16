@@ -342,8 +342,7 @@
 /* Touch bar */
 "Previews" = "Anteprime";
 
-/* Queue done alert message
-   Queue notification alert message */
+/* Queue notification alert message */
 "Put down that cocktail…" = "Appoggia quel cocktail…";
 
 /* Preferences -> Output Name Token */
@@ -352,7 +351,8 @@
 /* Preferences -> Output Name Token */
 "Quality/Bitrate" = "Qualità/Frequenza dati";
 
-/* Queue window title */
+/* Preferences Queue Toolbar Item
+   Queue window title */
 "Queue" = "Coda";
 
 /* Queue window title */
@@ -544,9 +544,6 @@
 
 /* Queue done notification message */
 "Your encode %@ is done!" = "La tua conversione %@ è completa!";
-
-/* Queue done alert informative text */
-"Your HandBrake queue is done!" = "La tua coda di HandBrake è stata completata!";
 
 /* Queue Edit Alert -> stop and edit informative text
    Queue Stop Alert -> stop and remove informative text */

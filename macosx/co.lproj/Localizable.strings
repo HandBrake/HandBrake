@@ -205,6 +205,9 @@
 /* File already exists alert -> message */
 "File already exists." = "U schedariu esiste dighjà.";
 
+/* Preferences Output File Name Toolbar Item */
+"File name" = "Nome di schedariu";
+
 /* Preferences General Toolbar Item */
 "General" = "Generale";
 
@@ -342,8 +345,7 @@
 /* Touch bar */
 "Previews" = "Fighjulate";
 
-/* Queue done alert message
-   Queue notification alert message */
+/* Queue notification alert message */
 "Put down that cocktail…" = "Punite stu bichjeru…";
 
 /* Preferences -> Output Name Token */
@@ -352,7 +354,8 @@
 /* Preferences -> Output Name Token */
 "Quality/Bitrate" = "Qualità / Flussu binariu";
 
-/* Queue window title */
+/* Preferences Queue Toolbar Item
+   Queue window title */
 "Queue" = "Fila d’attesa";
 
 /* Queue window title */
@@ -544,9 +547,6 @@
 
 /* Queue done notification message */
 "Your encode %@ is done!" = "A vostra cudificazione hè compia !";
-
-/* Queue done alert informative text */
-"Your HandBrake queue is done!" = "A vostra fila d’attesa d’HandBrake hè compia !";
 
 /* Queue Edit Alert -> stop and edit informative text
    Queue Stop Alert -> stop and remove informative text */

@@ -342,8 +342,7 @@
 /* Touch bar */
 "Previews" = "プレビュー";
 
-/* Queue done alert message
-   Queue notification alert message */
+/* Queue notification alert message */
 "Put down that cocktail…" = "カクテルを置いて…";
 
 /* Preferences -> Output Name Token */
@@ -352,7 +351,8 @@
 /* Preferences -> Output Name Token */
 "Quality/Bitrate" = "品質/ビットレート";
 
-/* Queue window title */
+/* Preferences Queue Toolbar Item
+   Queue window title */
 "Queue" = "キュー";
 
 /* Queue window title */
@@ -544,9 +544,6 @@
 
 /* Queue done notification message */
 "Your encode %@ is done!" = "エンコード %@ は完了しました！";
-
-/* Queue done alert informative text */
-"Your HandBrake queue is done!" = "HandBrakeキューが完了しました！";
 
 /* Queue Edit Alert -> stop and edit informative text
    Queue Stop Alert -> stop and remove informative text */

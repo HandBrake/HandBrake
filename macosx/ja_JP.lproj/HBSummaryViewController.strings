@@ -22,6 +22,9 @@
 /* Class = "NSTextField"; ibExternalAccessibilityDescription = "Size summary"; ObjectID = "Jaw-pH-rhf"; */
 "Jaw-pH-rhf.ibExternalAccessibilityDescription" = "サイズ概要";
 
+/* Class = "NSButton"; ibShadowedToolTip = "Optimize for progressive download. After encoding, data is reorganized and rewritten to allow immediate playback over a network, without needing to download the entire file."; ObjectID = "lUi-Oc-208"; */
+"lUi-Oc-208.ibShadowedToolTip" = "プログレッシブダウンロードに最適化します。エンコードが終わるとデータの再整理が行われ、ファイル全体をダウンロードすることなくネットワークを通して直ちに再生ができるようになります。";
+
 /* Class = "NSView"; ibExternalAccessibilityDescription = "Preview"; ObjectID = "m5a-0z-QQ4"; */
 "m5a-0z-QQ4.ibExternalAccessibilityDescription" = "プレビュー";
 

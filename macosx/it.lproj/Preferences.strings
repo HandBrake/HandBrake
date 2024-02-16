@@ -1,32 +1,35 @@
-/* Class = "NSTextFieldCell"; title = "Format:"; ObjectID = "3dN-MN-DcP"; */
-"3dN-MN-DcP.title" = "Formato:";
+/* Class = "NSTextField"; ibShadowedToolTip = "Determines the granularity of the x264 Constant Quality control. Smaller values allow for finer quality increments."; ObjectID = "1mY-Wc-qrc"; */
+"1mY-Wc-qrc.ibShadowedToolTip" = "Determina la granularità del controllo qualità costante di x264. Valore più piccoli consentono incrementi di qualità più fini.";
+
+/* Class = "NSMenuItem"; title = "Shut Down Computer"; ObjectID = "2Js-R4-g0K"; */
+"2Js-R4-g0K.title" = "Spegni il computer";
 
 /* Class = "NSWindow"; title = "Preferences"; ObjectID = "5"; */
 "5.title" = "Preferenze";
 
-/* Class = "NSMenu"; title = "OtherViews"; ObjectID = "290"; */
-"290.title" = "OtherViews";
+/* Class = "NSMenu"; title = "OtherViews"; ObjectID = "6c7-RK-g6v"; */
+"6c7-RK-g6v.title" = "OtherViews";
 
-/* Class = "NSMenuItem"; title = "Auto"; ObjectID = "292"; */
-"292.title" = "Auto";
+/* Class = "NSButtonCell"; title = "Keep preset edits when selecting a new title"; ObjectID = "6Sg-su-vLd"; */
+"6Sg-su-vLd.title" = "Mantieni le modifiche del preset quando selezioni un nuovo titolo";
 
-/* Class = "NSButtonCell"; title = "Automatically name output files"; ObjectID = "302"; */
-"302.title" = "Imposta automaticamente il nome dei documenti";
+/* Class = "NSTextFieldCell"; title = "None"; ObjectID = "7hX-9H-spK"; */
+"7hX-9H-spK.title" = "Nessuno";
 
-/* Class = "NSTextFieldCell"; title = "When Done:"; ObjectID = "304"; */
-"304.title" = "Al completamento:";
+/* Class = "NSMenuItem"; title = "Quit HandBrake"; ObjectID = "7JH-3c-gwW"; */
+"7JH-3c-gwW.title" = "Esci da HandBrake";
+
+/* Class = "NSMenuItem"; title = "Do Nothing"; ObjectID = "7Qh-m6-OUo"; */
+"7Qh-m6-OUo.title" = "Non far nulla";
+
+/* Class = "NSTextFieldCell"; title = "When Done:"; ObjectID = "9yk-Cr-cB6"; */
+"9yk-Cr-cB6.title" = "Al completamento:";
 
 /* Class = "NSButtonCell"; title = "Automatically check for updates weekly"; ObjectID = "305"; */
 "305.title" = "Controlla automaticamente per aggiornamento settimanalmente";
 
-/* Class = "NSButtonCell"; title = "Send file to:"; ObjectID = "306"; */
-"306.title" = "Invia documento a:";
-
 /* Class = "NSTextFieldCell"; title = "At Launch:"; ObjectID = "307"; */
 "307.title" = "All'avvio:";
-
-/* Class = "NSTextFieldCell"; title = "File Name: "; ObjectID = "308"; */
-"308.title" = "Nome file:";
 
 /* Class = "NSButtonCell"; title = "Store Activity Logs in same location as video"; ObjectID = "348"; */
 "348.title" = "Registra i resoconti delle attività nella stessa posizione del video";
@@ -112,15 +115,6 @@
 /* Class = "NSButtonCell"; title = "Use libdvdnav (instead of libdvdread)"; ObjectID = "399"; */
 "399.title" = "Usa libdvdnav (al posto di libdvdread)";
 
-/* Class = "NSTextFieldCell"; title = "None"; ObjectID = "449"; */
-"449.title" = "Nessuno";
-
-/* Class = "NSButtonCell"; title = "Browse…"; ObjectID = "451"; */
-"451.title" = "Sfoglia…";
-
-/* Class = "NSButtonCell"; title = "Play System Alert Sound"; ObjectID = "458"; */
-"458.title" = "Riproduci avviso sonoro di sistema";
-
 /* Class = "NSTextField"; ibShadowedToolTip = "Minimum DVD and Blu-ray title duration in seconds. Shorter titles will be skipped."; ObjectID = "463"; */
 "463.ibShadowedToolTip" = "Durata minima del titolo DVD e Blu-ray in secondi. I titoli più corti verranno saltati.";
 
@@ -129,39 +123,6 @@
 
 /* Class = "NSTextField"; ibShadowedToolTip = "Minimum title duration in seconds. Shorter titles will be skipped."; ObjectID = "480"; */
 "480.ibShadowedToolTip" = "Durata minima del titolo in secondi. I titoli più corti verranno saltati.";
-
-/* Class = "NSMenuItem"; title = ".m4v"; ObjectID = "484"; */
-"484.title" = ".m4v";
-
-/* Class = "NSMenuItem"; title = ".mp4"; ObjectID = "485"; */
-"485.title" = ".mp4";
-
-/* Class = "NSTextFieldCell"; title = "Default MP4 Extension:"; ObjectID = "487"; */
-"487.title" = "Estensione MP4 di default:";
-
-/* Class = "NSMenu"; title = "OtherViews"; ObjectID = "493"; */
-"493.title" = "OtherViews";
-
-/* Class = "NSMenuItem"; title = "Do Nothing"; ObjectID = "494"; */
-"494.title" = "Non far nulla";
-
-/* Class = "NSMenuItem"; title = "Alert"; ObjectID = "495"; */
-"495.title" = "Avviso";
-
-/* Class = "NSMenuItem"; title = "Alert And Notification"; ObjectID = "496"; */
-"496.title" = "Avviso e notifica";
-
-/* Class = "NSMenuItem"; title = "Put Computer To Sleep"; ObjectID = "497"; */
-"497.title" = "Metti il computer in stop";
-
-/* Class = "NSMenuItem"; title = "Shut Down Computer"; ObjectID = "498"; */
-"498.title" = "Spegni il computer";
-
-/* Class = "NSMenuItem"; title = "Notification"; ObjectID = "499"; */
-"499.title" = "Notifica";
-
-/* Class = "NSMenuItem"; title = "Quit HandBrake"; ObjectID = "500"; */
-"500.title" = "Esci da HandBrake";
 
 /* Class = "NSMenuItem"; title = "35"; ObjectID = "514"; */
 "514.title" = "35";
@@ -181,20 +142,26 @@
 /* Class = "NSMenuItem"; title = "60"; ObjectID = "519"; */
 "519.title" = "60";
 
-/* Class = "NSButtonCell"; title = "Show preview images"; ObjectID = "Aao-Tf-JeJ"; */
-"Aao-Tf-JeJ.title" = "Mostra immagini d'anteprima";
+/* Class = "NSMenu"; title = "OtherViews"; ObjectID = "aYB-lm-mkU"; */
+"aYB-lm-mkU.title" = "OtherViews";
 
 /* Class = "NSButtonCell"; title = "Enable the VideoToolbox hardware decoders"; ObjectID = "BHK-QU-DwS"; */
 "BHK-QU-DwS.title" = "Abilita i decodificatori hardware VideoToolbox";
 
-/* Class = "NSButtonCell"; title = "Always clear completed items after an encode completes"; ObjectID = "BPU-E2-N8l"; */
-"BPU-E2-N8l.title" = "Rimuovi automaticamente gli elementi completati";
+/* Class = "NSTextFieldCell"; title = "GB"; ObjectID = "BKV-oH-uht"; */
+"BKV-oH-uht.title" = "GB";
 
 /* Class = "NSTextFieldCell"; title = "Scan:"; ObjectID = "c0L-TU-WML"; */
 "c0L-TU-WML.title" = "Scansione:";
 
+/* Class = "NSMenuItem"; title = "2"; ObjectID = "Cge-hb-Nh8"; */
+"Cge-hb-Nh8.title" = "2";
+
 /* Class = "NSTextFieldCell"; title = "Encoder:"; ObjectID = "cqp-xU-GOe"; */
 "cqp-xU-GOe.title" = "Codificatore:";
+
+/* Class = "NSMenuItem"; title = "Auto"; ObjectID = "cZP-RL-fcB"; */
+"cZP-RL-fcB.title" = "Auto";
 
 /* Class = "NSButtonCell"; title = "Also use in combination with software encoders"; ObjectID = "d9B-Vd-jMM"; */
 "d9B-Vd-jMM.title" = "Usa in combinazione con i codificatori software";
@@ -202,87 +169,87 @@
 /* Class = "NSButton"; ibShadowedToolTip = "Hardware decoders will reduce CPU usage and lower battery usage when combined with an hardware encoder. Depending on the CPU speed, they could either improve or decrease encoding speed."; ObjectID = "Doh-Ja-Gh7"; */
 "Doh-Ja-Gh7.ibShadowedToolTip" = "I decodificatori hardware ridurranno l'utilizzo della CPU e l'utilizzo della batteria se combinati con un codificatore hardware. A seconda della velocità della CPU, potrebbero migliorare o diminuire la velocità di codifica.";
 
-/* Class = "NSTextFieldCell"; title = "Drag labels to Format to compose a naming format."; ObjectID = "dQ6-Dh-9sD"; */
-"dQ6-Dh-9sD.title" = "Trascina le etichette su Formato per comporre un formato del nome.";
+/* Class = "NSButtonCell"; title = "Reset to \"Do nothing\" on launch"; ObjectID = "f47-PN-ctH"; */
+"f47-PN-ctH.title" = "Ripristina a \"Non far nulla\" all'avvio";
 
-/* Class = "CocoaBindingsConnection"; ibShadowedIsNilPlaceholder = "None"; ObjectID = "f36-PN-c5F"; */
-"f36-PN-c5F.ibShadowedIsNilPlaceholder" = "Nessuno";
+/* Class = "NSMenuItem"; title = "4"; ObjectID = "FB2-Vr-VKP"; */
+"FB2-Vr-VKP.title" = "4";
 
-/* Class = "NSTextFieldCell"; title = "Queue:"; ObjectID = "FKi-zh-5gc"; */
-"FKi-zh-5gc.title" = "Coda:";
+/* Class = "NSTextFieldCell"; title = "Options:"; ObjectID = "ImU-Vn-SGr"; */
+"ImU-Vn-SGr.title" = "Opzioni:";
 
-/* Class = "NSTextFieldCell"; title = "GB"; ObjectID = "FZE-ZR-g93"; */
-"FZE-ZR-g93.title" = "GB";
-
-/* Class = "NSButtonCell"; title = "Change case to Title Case"; ObjectID = "ggR-Zs-P8G"; */
-"ggR-Zs-P8G.title" = "Cambia minuscole/maiuscole in Tutte Iniziali Maiuscole";
-
-/* Class = "NSTextFieldCell"; title = "Summary:"; ObjectID = "GQJ-go-PoN"; */
-"GQJ-go-PoN.title" = "Sommario:";
-
-/* Class = "NSTextFieldCell"; title = "Number of simultaneous encodes:"; ObjectID = "iGS-b5-ip7"; */
-"iGS-b5-ip7.title" = "Numero di conversioni simultanee:";
+/* Class = "NSMenuItem"; title = "3"; ObjectID = "IWj-tu-UhC"; */
+"IWj-tu-UhC.title" = "3";
 
 /* Class = "NSTextFieldCell"; title = "Decoder:"; ObjectID = "j6w-xf-tC0"; */
 "j6w-xf-tC0.title" = "Decodificatore:";
 
-/* Class = "NSMenuItem"; title = "2"; ObjectID = "JcO-br-AXz"; */
-"JcO-br-AXz.title" = "2";
+/* Class = "CocoaBindingsConnection"; ibShadowedIsNilPlaceholder = "None"; ObjectID = "JZb-Vz-cY4"; */
+"JZb-Vz-cY4.ibShadowedIsNilPlaceholder" = "Nessuno";
 
 /* Class = "NSTextFieldCell"; title = "seconds"; ObjectID = "klQ-DW-Kc6"; */
 "klQ-DW-Kc6.title" = "secondi";
 
-/* Class = "NSButtonCell"; title = "Keep preset edits when selecting a new title"; ObjectID = "L3N-te-KLg"; */
-"L3N-te-KLg.title" = "Mantieni le modifiche del preset quando selezioni un nuovo titolo";
+/* Class = "NSTextFieldCell"; title = "Format:"; ObjectID = "Ktg-Bh-1Pt"; */
+"Ktg-Bh-1Pt.title" = "Formato:";
 
-/* Class = "NSMenuItem"; title = "1"; ObjectID = "l8v-ns-6UR"; */
-"l8v-ns-6UR.title" = "1";
+/* Class = "NSTextFieldCell"; title = "Drag labels to Format to compose a naming format."; ObjectID = "MSp-go-i1C"; */
+"MSp-go-i1C.title" = "Trascina le etichette su Formato per comporre un formato del nome.";
 
-/* Class = "NSButtonCell"; title = "Remove old logs from main Activity Logs folder after 30 days"; ObjectID = "lgn-RF-k0d"; */
-"lgn-RF-k0d.title" = "Rimuovi i vecchi resoconti dalla cartella dei Resoconti di attività dopo 30 giorni";
+/* Class = "NSButtonCell"; title = "Pause queue if disk space is lower than:"; ObjectID = "ODf-uW-BrD"; */
+"ODf-uW-BrD.title" = "Metti in pausa la coda se lo spazio sul disco è minore di:";
 
-/* Class = "NSTextFieldCell"; title = "Destination:"; ObjectID = "lo9-Hk-I6l"; */
-"lo9-Hk-I6l.title" = "Destinazione:";
+/* Class = "NSButtonCell"; title = "Send file to:"; ObjectID = "P5f-Vq-TeL"; */
+"P5f-Vq-TeL.title" = "Invia documento a:";
 
-/* Class = "NSPopUpButton"; ibShadowedToolTip = "Higher values may help to fully utilize the CPU if a single encode can't scale to all available CPU cores."; ObjectID = "MLd-Te-AbW"; */
-"MLd-Te-AbW.ibShadowedToolTip" = "Valori più alti possono aiutare a utilizzare completamente la CPU se una singola codifica non può riesce ad utilizzare tutti i core CPU disponibili.";
+/* Class = "NSMenuItem"; title = ".m4v"; ObjectID = "phv-oU-WnC"; */
+"phv-oU-WnC.title" = ".m4v";
 
-/* Class = "NSButtonCell"; title = "Use ISO Date Format (YYYY-MM-DD)"; ObjectID = "NO8-bA-kkw"; */
-"NO8-bA-kkw.title" = "Usa il formato data ISO (YYYY-MM-DD)";
+/* Class = "NSTextFieldCell"; title = "Options:"; ObjectID = "saX-n7-YV0"; */
+"saX-n7-YV0.title" = "Opzioni:";
 
-/* Class = "NSMenuItem"; title = "4"; ObjectID = "nTJ-DB-eOd"; */
-"nTJ-DB-eOd.title" = "4";
+/* Class = "NSButtonCell"; title = "Use ISO Date Format (YYYY-MM-DD)"; ObjectID = "t9b-CO-ShI"; */
+"t9b-CO-ShI.title" = "Usa il formato data ISO (YYYY-MM-DD)";
 
-/* Class = "NSTextField"; ibShadowedToolTip = "Minimum free space on destination disk."; ObjectID = "PaR-zw-opS"; */
-"PaR-zw-opS.ibShadowedToolTip" = "Minimo spazio libero sul disco di destinazione.";
+/* Class = "NSButtonCell"; title = "Replace underscores with spaces"; ObjectID = "tAb-w4-Xwt"; */
+"tAb-w4-Xwt.title" = "Sostituisci caratteri di sottolineatura con spazi";
 
-/* Class = "NSButtonCell"; title = "Replace underscores with spaces"; ObjectID = "pUi-lK-cHw"; */
-"pUi-lK-cHw.title" = "Sostituisci caratteri di sottolineatura con spazi";
+/* Class = "NSButtonCell"; title = "Automatically name output files"; ObjectID = "UCC-tm-0Sa"; */
+"UCC-tm-0Sa.title" = "Imposta automaticamente il nome dei documenti";
 
-/* Class = "NSTokenField"; ibShadowedToolTip = "Drag labels to the Format field to compose a naming format."; ObjectID = "Tk3-Ig-fFI"; */
-"Tk3-Ig-fFI.ibShadowedToolTip" = "Trascina le etichette nel campo Formato per comporre un formato del nome.";
+/* Class = "NSTextFieldCell"; title = "Default MP4 Extension:"; ObjectID = "v6r-mL-XmA"; */
+"v6r-mL-XmA.title" = "Estensione MP4 di default:";
 
-/* Class = "NSMenu"; title = "OtherViews"; ObjectID = "TpU-3v-fhx"; */
-"TpU-3v-fhx.title" = "OtherViews";
+/* Class = "NSButtonCell"; title = "Remove common punctuation"; ObjectID = "vGu-jb-kdW"; */
+"vGu-jb-kdW.title" = "Rimuovi la punteggiatura comune";
 
-/* Class = "NSButtonCell"; title = "Reset to \"Do nothing\" on launch"; ObjectID = "Uxv-oN-c1r"; */
-"Uxv-oN-c1r.title" = "Ripristina a \"Non far nulla\" all'avvio";
+/* Class = "NSTextField"; ibShadowedToolTip = "Minimum free space on destination disk."; ObjectID = "VSi-rk-Vk2"; */
+"VSi-rk-Vk2.ibShadowedToolTip" = "Minimo spazio libero sul disco di destinazione.";
 
-/* Class = "NSTextFieldCell"; title = "Preset:"; ObjectID = "wiP-Ia-DfB"; */
-"wiP-Ia-DfB.title" = "Preset:";
+/* Class = "NSMenuItem"; title = "1"; ObjectID = "WAI-Bu-jIu"; */
+"WAI-Bu-jIu.title" = "1";
 
-/* Class = "NSButtonCell"; title = "Remove common punctuation"; ObjectID = "wo5-iR-2mb"; */
-"wo5-iR-2mb.title" = "Rimuovi la punteggiatura comune";
+/* Class = "NSMenuItem"; title = ".mp4"; ObjectID = "wgg-7I-LBB"; */
+"wgg-7I-LBB.title" = ".mp4";
 
-/* Class = "NSButtonCell"; title = "Use same folder as source when possible"; ObjectID = "wXE-Fz-Dru"; */
-"wXE-Fz-Dru.title" = "Usa la stessa cartella della sorgente quando possibile";
+/* Class = "NSPopUpButton"; ibShadowedToolTip = "Higher values may help to fully utilize the CPU if a single encode can't scale to all available CPU cores."; ObjectID = "wOW-0q-lpT"; */
+"wOW-0q-lpT.ibShadowedToolTip" = "Valori più alti possono aiutare a utilizzare completamente la CPU se una singola codifica non può riesce ad utilizzare tutti i core CPU disponibili.";
 
-/* Class = "NSButtonCell"; title = "Pause queue if disk space is lower than:"; ObjectID = "yG9-mz-tqQ"; */
-"yG9-mz-tqQ.title" = "Metti in pausa la coda se lo spazio sul disco è minore di:";
+/* Class = "NSMenuItem"; title = "Put Computer To Sleep"; ObjectID = "x7i-WX-w6l"; */
+"x7i-WX-w6l.title" = "Metti il computer in stop";
 
-/* Class = "NSMenuItem"; title = "3"; ObjectID = "ZGL-FR-zSW"; */
-"ZGL-FR-zSW.title" = "3";
+/* Class = "NSButtonCell"; title = "Change case to Title Case"; ObjectID = "Y9B-ue-3sE"; */
+"Y9B-ue-3sE.title" = "Cambia minuscole/maiuscole in Tutte Iniziali Maiuscole";
+
+/* Class = "NSMenu"; title = "OtherViews"; ObjectID = "ZkO-Z0-OCN"; */
+"ZkO-Z0-OCN.title" = "OtherViews";
+
+/* Class = "NSButtonCell"; title = "Browse…"; ObjectID = "zot-Bx-Ch3"; */
+"zot-Bx-Ch3.title" = "Sfoglia…";
 
 /* Class = "NSButtonCell"; title = "Show Open Source panel"; ObjectID = "Zqz-Kn-xOS"; */
 "Zqz-Kn-xOS.title" = "Mostra il pannello apri sorgente";
+
+/* Class = "NSTokenField"; ibShadowedToolTip = "Drag labels to the Format field to compose a naming format."; ObjectID = "Zvg-MF-RQF"; */
+"Zvg-MF-RQF.ibShadowedToolTip" = "Trascina le etichette nel campo Formato per comporre un formato del nome.";
 
