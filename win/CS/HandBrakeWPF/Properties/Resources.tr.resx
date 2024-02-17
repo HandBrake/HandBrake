@@ -489,7 +489,8 @@ Etkinlik günlüğü daha fazla bilgi içerebilir.</value>
     <value>Sıra Duraklatıldı</value>
   </data>
   <data name="QueueViewModel_DelSelectedJobConfirmation" xml:space="preserve">
-    <value>Seçilen işleri silmek istediğinizden emin misiniz?</value>
+    <value>Are you sure you want to delete the selected jobs?
+No encoded files will be deleted with this operation. </value>
   </data>
   <data name="QueueViewModel_JobCurrentlyRunningWarning" xml:space="preserve">
     <value>Bu kodlama şu anda devam ediyor. Silerseniz, kodlama durur. Devam etmek istediğinizden emin misiniz?</value>
@@ -2133,15 +2134,11 @@ Desteklendiğinde, herhangi bir kullanıcı ön ayarı içe aktarılmış olacak
   <data name="OptionsView_RemotePortLimit" xml:space="preserve">
     <value>Bağlantı noktası aralığı 5000 ile 32767 arasında olmalıdır</value>
   </data>
-  <data name="OptionsView_SendFileToArgPlaceholders" xml:space="preserve">
-    <value>Değiştirilen Yer Tutucular: {source} {destination} {exit_code}</value>
-    <comment>Note: {source}, {destination} and {exit_code} are not translatable. </comment>
-  </data>
   <data name="SourceSelection_UpdateAvailable" xml:space="preserve">
     <value>Yeni bir sürümü mevcuttur!</value>
   </data>
   <data name="About_Copyright" xml:space="preserve">
-    <value>Telif Hakkı (C) 2003-2023 HandBrake Ekibi</value>
+    <value>Copyright (C) 2003-2024 The HandBrake Team</value>
   </data>
   <data name="Options_LowBatteryLevel" xml:space="preserve">
     <value>Düşük pil seviyesi:</value>
@@ -2797,5 +2794,20 @@ Birden fazla eşzamanlı kodlamaya izin vermek için Araçlar Menüsü -&gt; Ter
   </data>
   <data name="Options_RecursiveFolderScan" xml:space="preserve">
     <value>Klasör tarama modunu kullanırken dizinleri yinelemeli olarak tarayın.</value>
+  </data>
+  <data name="AudioView_AudioQuality" xml:space="preserve">
+    <value>Audio Track Quality</value>
+  </data>
+  <data name="AudioView_AudioTrackName" xml:space="preserve">
+    <value>Audio Track Name</value>
+  </data>
+  <data name="AudioView_BitrateSelection" xml:space="preserve">
+    <value>Audio Track Bitrate</value>
+  </data>
+  <data name="AudioView_DeleteTrack" xml:space="preserve">
+    <value>Delete this audio track</value>
+  </data>
+  <data name="AudioView_QualityMode" xml:space="preserve">
+    <value>Audio Encoder Quality Mode</value>
   </data>
 </root>

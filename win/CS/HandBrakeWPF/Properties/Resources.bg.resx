@@ -488,7 +488,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.<
     <value>Опашката е паузирана</value>
   </data>
   <data name="QueueViewModel_DelSelectedJobConfirmation" xml:space="preserve">
-    <value>Сигурен ли сте, че искате да изтриете избраните задачи?</value>
+    <value>Are you sure you want to delete the selected jobs?
+No encoded files will be deleted with this operation. </value>
   </data>
   <data name="QueueViewModel_JobCurrentlyRunningWarning" xml:space="preserve">
     <value>Това кодиране тече в момента. Ако го изтриете, кодирането ще спре. Сигурен ли сте, че искате да продължите?</value>
@@ -665,7 +666,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.<
   </data>
   <data name="TaskTrayStatusTitle" xml:space="preserve">
     <value>{0}
-Encoding 1 Job</value>
+Кодира 1 задача</value>
   </data>
   <data name="PauseOnLowDiskspace" xml:space="preserve">
     <value>Опашката е паузирана. Внимание, дялът, в който кодирате, е с ниско дисково пространство. Моля, освободете пространство и натиснете "Започни", за да продължите. Можете и да настроите минималното ниво на пространство в предпочитания.</value>
@@ -711,10 +712,10 @@ Encoding 1 Job</value>
     <value>Желаете ли да продължите с добавянето на останалите?</value>
   </data>
   <data name="Main_QueueOverwritePrompt" xml:space="preserve">
-    <value>The file '{0}' already exists!
-Would you like to overwrite it?
+    <value>Файлът '{0}' вече съществува!
+Бихте ли искали да го презапишете?
 
-Hint: File overwrite behaviour can be controlled in preferences. </value>
+Подсказка: Поведението при презаписване може да се променя в настройките.</value>
   </data>
   <data name="Clipboard_Unavailable" xml:space="preserve">
     <value>Системният клипборд в момента е недостъпен.</value>
@@ -807,7 +808,7 @@ Hint: File overwrite behaviour can be controlled in preferences. </value>
     <value>Име на глава</value>
   </data>
   <data name="ChaptersView_ChapterNumber" xml:space="preserve">
-    <value>Chapter</value>
+    <value>Глава</value>
   </data>
   <data name="ChaptersView_CreateChapterMarkers" xml:space="preserve">
     <value>Създай маркери на глави</value>
@@ -1212,7 +1213,7 @@ Hint: File overwrite behaviour can be controlled in preferences. </value>
     <value>Ниво на подробност на дневника:</value>
   </data>
   <data name="Options_LogPath" xml:space="preserve">
-    <value>Path:</value>
+    <value>Път:</value>
   </data>
   <data name="Options_LowDiskspaceSize" xml:space="preserve">
     <value>Паузирай опашката при ниско дисково пространство</value>
@@ -2130,15 +2131,11 @@ You can drag/drop or enter the text above.</value>
   <data name="OptionsView_RemotePortLimit" xml:space="preserve">
     <value>Интервалът за портове трябва да е между 5000 и 32767</value>
   </data>
-  <data name="OptionsView_SendFileToArgPlaceholders" xml:space="preserve">
-    <value>Полета за заместване: {source} {destination} {exit_code}</value>
-    <comment>Note: {source}, {destination} and {exit_code} are not translatable. </comment>
-  </data>
   <data name="SourceSelection_UpdateAvailable" xml:space="preserve">
     <value>Налична е нова версия!</value>
   </data>
   <data name="About_Copyright" xml:space="preserve">
-    <value>Copyright (C) 2003-2023 The HandBrake Team</value>
+    <value>Copyright (C) 2003-2024 The HandBrake Team</value>
   </data>
   <data name="Options_LowBatteryLevel" xml:space="preserve">
     <value>Ниско ниво на батерията:</value>
@@ -2686,7 +2683,7 @@ Please note certain codecs such as AV1 or HEVC require the Microsoft AV1 or HEVC
 Alternatively, check the "Use External Player" checkbox below.</value>
   </data>
   <data name="StaticPreviewView_ClosePlayer" xml:space="preserve">
-    <value>Close Player</value>
+    <value>Затвори плеър</value>
   </data>
   <data name="StaticPreviewView_Play" xml:space="preserve">
     <value>Изпълни</value>
@@ -2701,7 +2698,7 @@ Alternatively, check the "Use External Player" checkbox below.</value>
     <value>Encoding Preview ...</value>
   </data>
   <data name="StaticPreview_Previews" xml:space="preserve">
-    <value>Previews:</value>
+    <value>Визуализации:</value>
   </data>
   <data name="StaticPreview_Volume" xml:space="preserve">
     <value>Volume: 0</value>
@@ -2749,19 +2746,19 @@ To allow multiple simultaneous encodes, turn on "Process Isolation" in Tools Men
     <value>Качество</value>
   </data>
   <data name="AudioView_Source" xml:space="preserve">
-    <value>Source</value>
+    <value>Източник</value>
   </data>
   <data name="AboutView_Documentation" xml:space="preserve">
-    <value>Documentation:</value>
+    <value>Документация:</value>
   </data>
   <data name="AboutView_GithubTracker" xml:space="preserve">
     <value>GitHub Issue Tracker:</value>
   </data>
   <data name="AboutView_Website" xml:space="preserve">
-    <value>Website: </value>
+    <value>Уебсайт:</value>
   </data>
   <data name="MainView_PresetClone" xml:space="preserve">
-    <value>Clone Preset</value>
+    <value>Клонирай шаблон</value>
   </data>
   <data name="PresetPane_MoveDown" xml:space="preserve">
     <value>Move Down</value>
@@ -2795,5 +2792,20 @@ To allow multiple simultaneous encodes, turn on "Process Isolation" in Tools Men
   </data>
   <data name="Options_RecursiveFolderScan" xml:space="preserve">
     <value>Recursively scan directories when using the folder scan mode.</value>
+  </data>
+  <data name="AudioView_AudioQuality" xml:space="preserve">
+    <value>Audio Track Quality</value>
+  </data>
+  <data name="AudioView_AudioTrackName" xml:space="preserve">
+    <value>Audio Track Name</value>
+  </data>
+  <data name="AudioView_BitrateSelection" xml:space="preserve">
+    <value>Audio Track Bitrate</value>
+  </data>
+  <data name="AudioView_DeleteTrack" xml:space="preserve">
+    <value>Delete this audio track</value>
+  </data>
+  <data name="AudioView_QualityMode" xml:space="preserve">
+    <value>Audio Encoder Quality Mode</value>
   </data>
 </root>

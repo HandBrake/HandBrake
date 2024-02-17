@@ -118,2125 +118,2128 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Video_EncoderExtraArgs" xml:space="preserve">
-    <value>Kodetzailearen parametroen zerrenda osoa:
+    <value>La llista completa dels paràmetres del codificador:
 {0}</value>
   </data>
   <data name="Video_x264FastDecode" xml:space="preserve">
-    <value>Murriztu kodetzailearen CPUaren erabilera. 
+    <value>Redueix l'ús de CPU del descodificador.
 
-Ezarri hau zure gailuak irteera erreproduzitzeko zailtasunak baditu. (fotograma eroriak adibidez)</value>
+Activeu-ho si al dispositiu li costa reproduir el fitxer de sortida. (p. ex. perd fotogrames)</value>
   </data>
   <data name="Video_LosslessWarning" xml:space="preserve">
-    <value>Abisua: RF 0 galerarik gabekoa da!</value>
+    <value>Avís: l'RF 0 és sense pèrdua.</value>
   </data>
   <data name="Video_LosslessWarningTooltip" xml:space="preserve">
-    <value>0 balioak galerarik gabekoa esan nahi du eta jatorrizko fitxategia baino handiagoa den fitxategia sortuko du,
-iturria ere galerarik gabekoa izan ezean.
+    <value>Un valor de 0 significa que el fitxer serà sense pèrdua i que tindrà una mida superior a l'original,
+tret que l'original també fos sense pèrdua.
 
-x264 eta x265-en eskala logaritmikoa da eta balio baxuagoak kalitate handiagoari dagozkio. Beraz, balio-gehikuntza txikiek gero eta fitxategi handiagoak sortuko lituzkete.</value>
+Les escales de x264 i x265 són logarítmiques i els valors inferiors corresponen a qualitats superiors.
+
+Així doncs, petits increments de valor provocaran increments progressivament més grans en la mida del fitxer final.</value>
   </data>
   <data name="AddPreset_PictureSizeMode" xml:space="preserve">
-    <value>Irudi ezarpenak gorde ditzakezu aurrezarpen honekin. 3 modu daude:
+    <value>De manera opcional, podeu desar els paràmetres d'imatge amb aquesta configuració predefinida. N'hi ha 3 modes:
 
-Bat ere ez: Irudi ezarpenak ez dira aurrezarpenean gordetzen. Iturburu bat kargatzean, iturburu-ebazpenaren mugen barruan dauden moduan geratuko dira. Horrek anamorfikoari, moduluari, mozketari eta abarri ere eragiten die.
+Cap: Els paràmetres d'imatge no es desen amb aquesta configuració predefinida. Quan carregueu un fitxer, restarà igual dins dels límits de la resolució d'origen. Això també afecta l'anamorfisme, els mòduls, l'escapçament, etc.
 
-Pertsonalizatua: Gehienezko zabalera eta altuera ezar ditzakezu aukeran. Hau egitean kode bat balio horien berdina edo txikiagoa izango da. 'Mantendu itxura-erlazioa' automatikoki aktibatuko da.
+Personalitzat: De manera opcional, podeu establir una amplada i alçada màximes. Quan trieu aquesta opció, la codificació tindrà valors inferiors o iguals. Mantén la relació d'aspecte s'activarà automàticament.
 
-Iturburuaren gehienezkoa: kodetu beti iturburuaren bereizmenean, ahal denean.</value>
+Origen al màxim: Sempre que sigui possible es codificarà amb la resolució del fitxer d'origen.</value>
   </data>
   <data name="About_GPL" xml:space="preserve">
-    <value>Programa hau software librekoa da; birbana dezakezu eta/edo
-aldatu GNU Lizentzia Publiko Orokorraren baldintzen arabera
-Free Software Foundation-ek argitaratutakoaren arabera, bai lizentziaren  2. bertsioan
-edo (zure aukeran) ondorengo edozein bertsiotan.
+    <value>Aquest programa és programari lliure; el podeu redistribuir i/o
+modificar sota els termes de la Llicència General Pública de GNU
+tal com l'ha publicada la Free Software Foundation, ja sigui la versió 2
+com (a elecció vostra) qualsevol versió posterior.
 
-Programa hau erabilgarria izango den itxaropenarekin banatzen da,
-baina INOLAKO BERMErik GABE;
-eta MERKATARITZARAKO edo HELBURU BATEKO EGOKITASUNAREN berme inpliziturik gabe. Ikusi
-GNU Lizentzia Publiko Orokorra xehetasun gehiagorako.
+Aquest programa es distribueix amb l'esperança que serà útil,
+però SENSE CAP GARANTIA; sense ni tan sols la garantia implícita
+de MERCANTIBILITAT o ADEQUACIÓ A UNA FINALITAT DETERMINADA. 
+En trobareu més detalls a la Llicència General Pública de GNU.
 
-GNU Lizentzia Publiko Orokorraren kopia bat jaso beharko zenuke
-programa honekin batera; hala ez bada, idatzi hona:
-Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.</value>
+Heu d'haver rebut una còpia de la Llicència General Pública de GNU
+amb aquest programa; si no és així, escriviu a la
+Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, EUA. </value>
   </data>
   <data name="QueueSelection_AutoNameWarning" xml:space="preserve">
-    <value>KONTUZ: Ez duzu fitxategien izendatze automatikoa aktibatuta. Mesedez, gaitu ezazu ezarpenetan.</value>
+    <value>Avís: no teniu activats els noms de fitxer automàtics. Activeu-los a les opcions.</value>
   </data>
   <data name="QueueSelection_AutoTrackSelectionWarning" xml:space="preserve">
-    <value>KONTUZ: Une honetan ez duzu audio eta azpitituluen pista aukeratzeko konfigurazio automatikorik. Pista aukeratzeko portaera lehenetsia konfigura dezakezu ezarpenetan.</value>
+    <value>Avís: ara mateix no teniu la selecció automàtica de pistes d'àudio i subtítols activada. Podeu configurar les pistes per defecte a les opcions.</value>
   </data>
   <data name="Presets_ResetComplete" xml:space="preserve">
-    <value>Jatorrizko aurrezarpenak berrezarri dira.</value>
+    <value>Les configuracions predefinides originals s'han reinicialitzat.</value>
   </data>
   <data name="Presets_ResetHeader" xml:space="preserve">
-    <value>Berrezartzea amaitua</value>
+    <value>S'ha reinicialitzat correctament</value>
   </data>
   <data name="Video_HigherQuality" xml:space="preserve">
-    <value>Kalitate altua</value>
+    <value>Qualitat superior |</value>
   </data>
   <data name="Video_LowQuality" xml:space="preserve">
-    <value>Kalitate baxua</value>
+    <value>| Qualitat inferior</value>
   </data>
   <data name="Video_PlaceboQuality" xml:space="preserve">
-    <value>Plazebo kalitatea</value>
+    <value>Qualitat placebo |</value>
   </data>
   <data name="Error" xml:space="preserve">
-    <value>Akatsa</value>
+    <value>Error</value>
   </data>
   <data name="Main_TurnOnAutoFileNaming" xml:space="preserve">
-    <value>Ilarara gehitu aurretik, fitxategien izendatze automatikoa aktibatu eta bide lehenetsi bat ezarri behar duzu ezarpenetan.</value>
+    <value>Heu d'activar els noms de fitxer automàtics i establir un camí predeterminat a les preferències abans de poder afegir elements a la cua.</value>
   </data>
   <data name="Warning" xml:space="preserve">
-    <value>Kontuz</value>
+    <value>Avís</value>
   </data>
   <data name="AreYouSure" xml:space="preserve">
-    <value>Ziur zaude?</value>
+    <value>N'esteu segur?</value>
   </data>
   <data name="HandBrake_Title" xml:space="preserve">
     <value>HandBrake</value>
   </data>
   <data name="Main_AlreadyEncoding" xml:space="preserve">
-    <value>HandBrake kodetzen ari da dagoeneko.</value>
+    <value>El HandBrake ja està codificant.</value>
   </data>
   <data name="Main_DuplicateDestinationOnQueue" xml:space="preserve">
-    <value>Ilaran helmuga bide bera duten lanak daude. Mesedez, aukeratu beste bide bat lan honetarako.
+    <value>Hi ha tasques a la cua amb el mateix camí de destinació. Seleccioneu un camí diferent per a la tasca.
 
-Baliteke fitxategiak izendatzeko aukera automatikoak konfiguratu nahi izatea hemen: "Tresnak -&gt; Ezarpenak -&gt; Irteerako fitxategiak".
+Podeu configurar les opcions dels noms de fitxer automàtics a «Eines -&gt; Preferències -&gt; Fitxers de sortida»
 </value>
   </data>
   <data name="Main_JobsPending_addon" xml:space="preserve">
-    <value>Zain dauden lanak {0}</value>
+    <value>Tasques pendents {0}</value>
   </data>
   <data name="Main_NewDefaultPreset" xml:space="preserve">
-    <value>Aurrezarpen multzo berria: {0}</value>
+    <value>Configuració predefinida per defecte nova: {0}</value>
   </data>
   <data name="Main_NewUpdate" xml:space="preserve">
-    <value>Eguneratze berri bat dago eskuragarri. Instalatzeko joan Tresnak &gt; Aukerak</value>
+    <value>Hi ha una nova actualització disponible. Instal·leu-la anant a Eines &gt; Opcions</value>
   </data>
   <data name="Main_NoPresetSelected" xml:space="preserve">
-    <value>Ez dago aurrezarpenik.</value>
+    <value>No s'ha seleccionat cap configuració predefinida.</value>
   </data>
   <data name="Main_NoUpdateOfBuiltInPresets" xml:space="preserve">
-    <value>Ezin dituzu aurrezarpenak aldatu. Mesedez, hautatu zure aurrezarpenetako bat.</value>
+    <value>No podeu modificar les configuracions predefinides originals. Seleccioneu una configuració predefinida pròpia.</value>
   </data>
   <data name="Main_PleaseSelectFolder" xml:space="preserve">
-    <value>Mesedez, hautatu karpeta bat.</value>
+    <value>Seleccioneu una carpeta.</value>
   </data>
   <data name="Main_PreparingToEncode" xml:space="preserve">
-    <value>Kodetzeko prestatzen...</value>
+    <value>S'està preparant la codificació...</value>
   </data>
   <data name="Main_PresetErrorBuiltInName" xml:space="preserve">
-    <value>Ezin duzu aurrezarpen berri bat inportatu lehendik dagoen aurrezarpen baten izen berdina baldin badu.</value>
+    <value>No podeu importar una configuració predefinida que tingui el mateix nom que una configuració predefinida original.</value>
   </data>
   <data name="Main_PresetOverwriteWarning" xml:space="preserve">
-    <value>"{0}" aurrezarpena existitzen da dagoeneko. Gainidatzi nahi duzu?</value>
+    <value>La configuració predefinida «{0}» ja existeix. La voleu sobreescriure?</value>
   </data>
   <data name="Main_Presets" xml:space="preserve">
-    <value>Aurrezarpenak</value>
+    <value>Configuracions predefinides</value>
   </data>
   <data name="Main_PresetUpdateConfirmation" xml:space="preserve">
-    <value>Ziur hautatutako aurrezarpena eguneratu nahi duzula?</value>
+    <value>Segur que voleu actualitzar la configuració predefinida seleccionada?</value>
   </data>
   <data name="Main_PresetUpdated" xml:space="preserve">
-    <value>Aurrezarpena zure uneko ezarpenekin eguneratu da.</value>
+    <value>La configuració predefinida s'ha actualitzat amb la configuració actual.</value>
   </data>
   <data name="Main_PresetUpdateNotification" xml:space="preserve">
-    <value>HandBrake-ek erabaki du aurrezarpenak zaharkituta daudela... Aurrezarpen hauek eguneratuko dira orain.
-Zure aurrezarpen pertsonalizatuak ez dira eguneratu, beraz, baliteke hauek berriro sortu behar izatea, ezabatu eta berriro gehituz.
-Aurreko user_presets.xml fitxategiaren babeskopia egin da.</value>
+    <value>El HandBrake ha determinat que teniu les configuracions predefinides obsoletes i s'han d'actualitzar.
+Les vostres configuracions predefinides personalitzades no estan actualitzades i és possible que les hàgiu de recrear esborrant-les i tornant-les a afegir.
+S'ha fet una còpia de seguretat del fitxer user_presets.xml anterior.</value>
   </data>
   <data name="Main_QueueFinished" xml:space="preserve">
-    <value>Ilara amaituta</value>
+    <value>S'ha completat la cua</value>
   </data>
   <data name="Main_ScanCancelled" xml:space="preserve">
-    <value>Eskaneatzea bertan behera</value>
+    <value>S'ha cancel·lat l'escaneig</value>
   </data>
   <data name="Main_ScanCompleted" xml:space="preserve">
-    <value>Eskaneatzea amaituta</value>
+    <value>S'ha completat l'escaneig</value>
   </data>
   <data name="Main_ScanFailed_NoReason" xml:space="preserve">
-    <value>Eskaneatzeak huts egin du:</value>
+    <value>No s'ha pogut escanejar:</value>
   </data>
   <data name="Main_ScanFailed_CheckLog" xml:space="preserve">
-    <value>Eskaneatzeak huts egin du... Xehetasunetarako, ikusi jardueren erregistroa.</value>
+    <value>No s'ha pogut escanejar. Vegeu el registre d'activitat per a obtenir-ne més detalls.</value>
   </data>
   <data name="Main_ScanningPleaseWait" xml:space="preserve">
-    <value>Fitxategia aztertzen, itxaron mesedez...</value>
+    <value>S'està escanejant el fitxer d'origen, espereu...</value>
   </data>
   <data name="Main_ScanningTitleXOfY" xml:space="preserve">
-    <value>{0}izenburua aztertzen {1}-tik (%{2})</value>
+    <value>S'està escanejant el títol {0} de {1} ({2} %)</value>
   </data>
   <data name="Main_ScanSource" xml:space="preserve">
-    <value>Fitxategi bat eskaneatu eta zure lana konfiguratu behar duzu kodetze bat hasi aurretik. Klikatu tresna-barrako 'Fitxategia' botoian jarraitzeko.</value>
+    <value>Cal que escanegeu un fitxer d'origen i configureu la tasca per començar a codificar. Feu clic al botó «Fitxer d'origen» de la barra d'eines per continuar.</value>
   </data>
   <data name="Main_SelectPreset" xml:space="preserve">
-    <value>Mesedez, ziurtatu zure aurrezarpenetako bat hautatu duzula. Kontuan izan ezin dituzula berezko aurrezarpenak esportatu.</value>
+    <value>Assegureu-vos de seleccionar una configuració predefinida pròpia. Tingueu en compte que no podeu exportar les configuracions predeterminades originals.</value>
   </data>
   <data name="Main_SelectPresetForUpdate" xml:space="preserve">
-    <value>Mesedez, hautatu aurrezarpen bat eguneratzeko.</value>
+    <value>Seleccioneu la configuració predefinida que vulgueu actualitzar.</value>
   </data>
   <data name="Main_SelectSource" xml:space="preserve">
-    <value>Aukeratu 'Fitxategia' jarraitzeko</value>
+    <value>Seleccioneu «Fitxer d'origen» per a continuar</value>
   </data>
   <data name="Main_XEncodesPending" xml:space="preserve">
-    <value>{0}lan zain</value>
+    <value>{0} tasques pendents</value>
   </data>
   <data name="Notice" xml:space="preserve">
-    <value>Oharra</value>
+    <value>Avís</value>
   </data>
   <data name="Overwrite" xml:space="preserve">
-    <value>Berridatzi?</value>
+    <value>Voleu sobreescriure-ho?</value>
   </data>
   <data name="Question" xml:space="preserve">
-    <value>Galdera</value>
+    <value>Pregunta</value>
   </data>
   <data name="State_Ready" xml:space="preserve">
-    <value>Prest</value>
+    <value>Llest</value>
   </data>
   <data name="Updated" xml:space="preserve">
-    <value>Eguneratua</value>
+    <value>Actualitzat</value>
   </data>
   <data name="Preset_OldVersion_Header" xml:space="preserve">
-    <value>Aurrez ezarritako bertsioa</value>
+    <value>Versió de la configuració predefinida</value>
   </data>
   <data name="Preset_OldVersion_Message" xml:space="preserve">
-    <value>Inportatzen saiatzen ari zaren aurrezarpena HandBrake-ren beste bertsio batekoa da. 
-Baliteke aurrzarpen honetatik balio guztiak inportatu ezin izatea.
+    <value>La configuració predefinida que voleu importar és d'una versió diferent del HandBrake.
+És possible que no en pugueu importar tots els valors.
 
-Jarraitu nahi duzu?</value>
+Voleu continuar?</value>
   </data>
   <data name="Preset_UnableToImport_Header" xml:space="preserve">
-    <value>Ezin izan da aurrezarpena inportatu!</value>
+    <value>No s'ha pogut importar la configuració predefinida.</value>
   </data>
   <data name="Preset_UnableToImport_Message" xml:space="preserve">
-    <value>Ezin izan da aurrezarpena inportatu hondatuta dagoelako edo HandBrake-ren bertsio zaharrago batekoa delako.</value>
+    <value>No s'ha pogut importar la configuració predefinida atès que s'ha degut corrompre o prové d'una versió antiga del HandBrake.</value>
   </data>
   <data name="Main_SetDestination" xml:space="preserve">
-    <value>Irteerako fitxategiaren helmuga ezarri behar duzu ilaran gehitu aurretik.</value>
+    <value>Heu d'establir el camí de destinació del fitxer de sortida abans d'afegir-lo a la cua.</value>
   </data>
   <data name="Main_InvalidDestination" xml:space="preserve">
-    <value>Sartutako bideak onartzen ez diren karaktereak zituen eta ez da eguneratuko.</value>
+    <value>El camí de destinació que heu introduït conté caràcters no vàlids i no s'actualitzarà.</value>
   </data>
   <data name="Preview" xml:space="preserve">
-    <value>Aurrebista {0}</value>
+    <value>Previsualització {0}</value>
   </data>
   <data name="Preview_Scaled" xml:space="preserve">
-    <value>Aurrebista (eskalatua)</value>
+    <value>Previsualització (redimensionada)</value>
   </data>
   <data name="PictureSettings_OutputResolution" xml:space="preserve">
-    <value>Irteera: {0}</value>
+    <value>Fitxer de sortida: {0}</value>
   </data>
   <data name="Main_MatchingFileOverwriteWarning" xml:space="preserve">
-    <value>Ezin duzu jatorrizko fitxategiaren kokaleku eta izen berdina duen fitxategi bat sortu. Mesedez, eguneratu helmugako fitxategiaren izena jatorrizkoarekin bat egin ez dezan.</value>
+    <value>No es pot codificar un fitxer amb la mateixa ubicació i nom que l'original. Canvieu el nom del fitxer de destinació perquè no coincideixi amb el fitxer d'origen.</value>
   </data>
   <data name="Main_UnableToLoadHelpMessage" xml:space="preserve">
-    <value>Zure sistemak HandBrake-ri web nabigatzailea abiaraztea eragotzi dio.</value>
+    <value>El sistema ha evitat que el HandBrake obri un navegador.</value>
   </data>
   <data name="Main_UnableToLoadHelpSolution" xml:space="preserve">
-    <value>Laguntza-orrietara jo dezakezu gure webgunea bisitatuz: https://handbrake.fr</value>
+    <value>També pots accedir a les pàgines d'ajuda visitant el web directament a: https://handbrake.fr</value>
   </data>
   <data name="Main_PresetImportFailed" xml:space="preserve">
-    <value>Ezin izan da hautatutako aurrezarpena inportatu.</value>
+    <value>No s'ha pogut importar la configuració predefinida seleccionada.</value>
   </data>
   <data name="Main_PresetImportFailedSolution" xml:space="preserve">
-    <value>Baliteke aurrezarpena hondatuta egotea edo onartzen ez den HandBrake-ren bertsio zaharrago batekoa izatea.
-Bertsio zaharretako aurrezarpenak berriro sortu behar dira uneko bertsioan.</value>
+    <value>És possible que la configuració predefinida s'hagi corromput o que sigui d'una versió anterior del HandBrake ja no compatible.
+S'han de tornar a crear les configuracions predefinides anteriors a la versió actual.</value>
   </data>
   <data name="Video_EncoderExtraArgsTooltip" xml:space="preserve">
-    <value>Bideo kodetzailera pasa daitezkeen argumentu aurreratu gehigarriak.</value>
+    <value>Additional advanced arguments that can be passed to the video encoder.</value>
   </data>
   <data name="Subtitles_BurnInBehaviourModes" xml:space="preserve">
-    <value>Bat ere ez - Edukiontziak onartzen ez dituen formatuen pistak bakarrik erreko dira.
-Kanpoko audio pista - Kanpoko audio pista erreko da eskuragarri badago.
-Lehen pista - Lehenengo pista erreko da.
-Kanpoko audioa hobetsi, bestela lehena - Kanpoko audio pista badago, hura erreko da, bestela lehenengo pista.</value>
+    <value>None - Only tracks where the container does not support the format will be burned in.
+Foreign Audio Track - The Foreign Audio track will be burned in if available. 
+First Track - The first track will be burned in.
+Foreign Audio Preferred, else First - If the foreign audio track exists, it will be burned in, otherwise the first track will be chosen.</value>
   </data>
   <data name="Subtitles_WebmSubtitleIncompatibilityHeader" xml:space="preserve">
-    <value>WebM azpitituluen bateragarritasuna</value>
+    <value>WebM Subtitle Compatibility</value>
   </data>
   <data name="Subtitles_WebmSubtitleIncompatibilityError" xml:space="preserve">
-    <value>HandBrake-en WebM-k erretako azpitituluak soilik onartzen ditu.
+    <value>WebM in HandBrake only supports burned subtitles.
 
-Azpitituluen aukeraketa aldatu beharko zenuke.
+You should change your subtitle selections.
 
-Jarraitzen baduzu, erre gabeko azpitituluak galdu egingo dira.</value>
+If you continue, your non-burned subtitles will be lost.</value>
   </data>
   <data name="Main_ScanNoTitlesFound" xml:space="preserve">
-    <value>Ez da balio duen fitxategirik aurkitu.</value>
+    <value>No s'han trobat títols ni fitxers d'origen vàlids.</value>
   </data>
   <data name="Main_ScanNoTitlesFoundMessage" xml:space="preserve">
-    <value>HandBrake-ek ezingo du hautatutako fitxategia kodetu, ez baitu kodetzeko tituluak dituen iturri baliozkorik aurkitu. Hau arrazoi hauetako baten ondorioz izan daiteke:
+    <value>HandBrake will not be able to encode the selected source as it did not find a valid source with titles to encode. This could be due to one of the following reasons:
 
-- Fitxategiaren titulu bakoitzaren iraupena "Ezarpenak &gt; Aurreratua" atalean "Tituluen gutxieneko iraupena" aukeraren azpitik dago.
-- Fitxategia ez da baliozko bideo fitxategi bat edo HandBrake-ek onartzen ez duen formatu batean dago.
-- Baliteke fitxategia irakurtzeko sarbiderik ez izatea edo beste aplikazio batek fitxategia blokeatuta izatea.
-- Iturria kopietatik babestuta egon daiteke edo DRM darama. Kontuan izan HandBrake-ek ezin dituela kopien babesak kendu.
+- The duration of each source title is below the "Minimum Title Duration" threshold option in 'Preferences &gt; Advanced'. 
+- The source file is not a valid video file or is in a format that HandBrake does not support.
+- You may not have read access to the file or another application may have a lock on the file. 
+- The source may be copy protected or include DRM. Please note that HandBrake does not support the removal of copy protections.
 
-Aktibitateen erregistroak informazio gehiago izan dezake.</value>
+The Activity log may have further information.</value>
   </data>
   <data name="Main_QueueLabel" xml:space="preserve">
-    <value>Ilara {0}</value>
+    <value>Cua{0}</value>
   </data>
   <data name="Main_Start" xml:space="preserve">
-    <value>Hasi</value>
+    <value>Inicia la codificació</value>
   </data>
   <data name="Main_StartQueue" xml:space="preserve">
-    <value>Hasi ilara</value>
+    <value>Inicia la cua</value>
   </data>
   <data name="MainViewModel_CanNotDeleteDefaultPreset" xml:space="preserve">
-    <value>Ezin duzu lehenetsitako aurrezarpena ezabatu. Mesedez, ezarri beste aurrezarpen bat lehenetsi gisa lehenengo.</value>
+    <value>No podeu eliminar la configuració predefinida. Definiu abans una altra configuració predefinida per defecte.</value>
   </data>
   <data name="MainViewModel_PresetRemove_AreYouSure" xml:space="preserve">
-    <value>Ziur aurrezarpen hau ezabatu nahi duzula:</value>
+    <value>Segur que voleu eliminar la configuració predefinida:</value>
   </data>
   <data name="MainViewModel_EncodeStatusChanged_StatusLabel" xml:space="preserve">
-    <value>Kodetzen: {0}. itzulia {1}-tik,  %{2:00.00}, FPS: {3:000.0},  batez besteko FPS: {4:000.0},  Gelditzen den denbora: {5},  Igarotakoa: {6} {7}</value>
+    <value>Codificació: Passada {0} de {1},  {2:00.00} %, FPS: {3:000.0},  FPS mitj.: {4:000.0}, Temps restant: {5}, Transcorregut: {6} {7}</value>
   </data>
   <data name="AddPresetViewModel_PresetMustProvideName" xml:space="preserve">
-    <value>Aurrezarpen batek izena izan behar du. Mesedez, bete 'Aurrezarpenaren izena' eremua.</value>
+    <value>A Preset must have a Name. Please fill out the Preset Name field.</value>
   </data>
   <data name="AddPresetViewModel_PresetWithSameNameOverwriteWarning" xml:space="preserve">
-    <value>Izen hau duen aurrezarpena badago jada. Gainidatzi nahi duzu?</value>
+    <value>Ja existeix una configuració predefinida amb aquest nom. La voleu sobreescriure?</value>
   </data>
   <data name="AddPresetViewModel_YouMustFirstScanSource" xml:space="preserve">
-    <value>Fitxategi bat eskaneatu behar duzu 'Fitxategiaren Gehienezkoa' aukera erabili ahal izateko.</value>
+    <value>Heu d'escanejar un fitxer d'origen per a utilitzar l'opció «Origen al màxim».</value>
   </data>
   <data name="AddPresetViewModel_CustomWidthHeightFieldsRequired" xml:space="preserve">
-    <value>'Pertsonalizatua' aukerako zabalera edo altuera eremuak bete behar dira.</value>
+    <value>The Custom Width or Height fields must be filled in for the 'Custom' option.</value>
   </data>
   <data name="AddPresetViewModel_UnableToAddPreset" xml:space="preserve">
-    <value>Ezin izan da aurrezarpena gehitu</value>
+    <value>No s'han pogut afegir les configuracions predefinides.</value>
   </data>
   <data name="UnknownError" xml:space="preserve">
-    <value>Akats ezezaguna</value>
+    <value>Error desconegut</value>
   </data>
   <data name="AudioViewModel_AudioDefaults" xml:space="preserve">
-    <value>Audio lehenespenak</value>
+    <value>Valors per defecte de l'àudio</value>
   </data>
   <data name="AudioViewModel_AudioTracks" xml:space="preserve">
-    <value>Audio pistak</value>
+    <value>Pistes d'àudio</value>
   </data>
   <data name="AudioViewModel_ConfigureDefaults" xml:space="preserve">
-    <value>Hautaketen portaera...</value>
+    <value>Comportament de la selecció...</value>
   </data>
   <data name="AudioViewModel_SwitchBackToTracks" xml:space="preserve">
-    <value>Itzuli pistetara</value>
+    <value>Torna a les pistes</value>
   </data>
   <data name="ChaptersViewModel_UnableToExportChaptersWarning" xml:space="preserve">
-    <value>Ezin izan da kapitulu-markatzaileen fitxategia gorde!</value>
+    <value>No s'ha pogut desar el fitxer de marcadors de capítol.</value>
   </data>
   <data name="ChaptersViewModel_UnableToExportChaptersMsg" xml:space="preserve">
-    <value>Kapitulu markatzaileen izenak EZ dira gordeko zure kodetzean.</value>
+    <value>Els noms dels marcadors de capítol NO es desaran al fitxer codificat.</value>
   </data>
   <data name="CountdownAlertViewModel_NoticeMessage" xml:space="preserve">
-    <value>'{0}' akzioa {1} sugundu barru burutuko da.</value>
+    <value>L'acció següent «{0}» es produirà d'aquí {1} segons.</value>
   </data>
   <data name="ErrorViewModel_IfTheProblemPersists" xml:space="preserve">
-    <value>Arazoak jarraitzen badu, mesedez berrabiarazi HandBrake.</value>
+    <value>Si el problema continua, proveu de reiniciar el HandBrake.</value>
   </data>
   <data name="ErrorViewModel_NoFurtherInformation" xml:space="preserve">
-    <value>Ez dago akats honi buruzko informaziorik eskuragarri.</value>
+    <value>No hi ha més informació disponible sobre aquest error.</value>
   </data>
   <data name="ErrorViewModel_UnknownError" xml:space="preserve">
-    <value>Akats ezezagun bat gertatu da.</value>
+    <value>S'ha produït un error desconegut</value>
   </data>
   <data name="OptionsViewModel_NewUpdate" xml:space="preserve">
-    <value>Eguneratze berri bat eskuragarri! Mesedez, begiratu webgunea bertsioari buruzko informazioa ikusteko.</value>
+    <value>Hi ha una nova versió disponible. Visiteu al lloc web per a veure'n les notes de la versió.</value>
   </data>
   <data name="OptionsViewModel_64bitAvailable" xml:space="preserve">
-    <value>Zure sistemak HandBrake-ren 64 biteko bertsioa onartzen du! Honek errendimendu hobekuntzak eskaintzen ditu 32 biteko bertsioaren aldean.
-Mesedez, jo ezazu gure webgunera bertsioei buruz informatzeko.</value>
+    <value>El sistema és compatible amb la versió 64 bits del HandBrake. Aquesta versió suposa una millora d'estabilitat i rendiment en comparació amb la de 32 bits.
+Visiteu el lloc web per veure'n les notes de la versió.</value>
   </data>
   <data name="OptionsViewModel_NoNewUpdates" xml:space="preserve">
-    <value>Une honetan ez dago eguneratze berririk.</value>
+    <value>No hi ha actualitzacions ara mateix.</value>
   </data>
   <data name="OptionsViewModel_UpdateDownloaded" xml:space="preserve">
-    <value>Eguneratzea deskargatu da</value>
+    <value>S'ha baixat l'actualització</value>
   </data>
   <data name="OptionsViewModel_UpdateServiceUnavailable" xml:space="preserve">
-    <value>Eguneratze zerbitzua ez dago erabilgarri. Eguneraketa deskargatzen saia zaitezke https://handbrake.fr helbidetik</value>
+    <value>El servei d'actualitzacions no està disponible. Podeu provar de baixar l'actualització a https://handbrake.fr</value>
   </data>
   <data name="OptionsViewModel_UpdateFailed" xml:space="preserve">
-    <value>Eguneratzeak huts egin du. Eguneraketa deskargatzen saia zaitezke https://handbrake.fr helbidetik</value>
+    <value>No s'ha pogut actualitzar. Podeu provar de baixar-la a https://handbrake.fr</value>
   </data>
   <data name="PictureSettingsViewModel_StorageDisplayLabel" xml:space="preserve">
-    <value>Biltegiratze neurria: {0}x{1}</value>
+    <value>Mida del contenidor: {0}x{1}</value>
   </data>
   <data name="QueueSelectionViewModel_AddToQueue" xml:space="preserve">
-    <value>Ilarara gehitu</value>
+    <value>Afegeix a la cua</value>
   </data>
   <data name="QueueViewModel_NoEncodesPending" xml:space="preserve">
-    <value>Ez dago lanik ilaran zain</value>
+    <value>No hi ha cap codificació pendent</value>
   </data>
   <data name="QueueViewModel_NoJobsPending" xml:space="preserve">
-    <value>Une honetan ez dago lanik kodetzen</value>
+    <value>No hi ha res codificant-se</value>
   </data>
   <data name="QueueViewModel_Queue" xml:space="preserve">
-    <value>Ilara</value>
+    <value>Cua</value>
   </data>
   <data name="QueueViewModel_ClearQueueConfirmation" xml:space="preserve">
-    <value>Ziur ilara garbitu nahi duzula?</value>
+    <value>Segur que voleu esborrar la cua?</value>
   </data>
   <data name="Confirm" xml:space="preserve">
-    <value>Baieztatu</value>
+    <value>Confirma</value>
   </data>
   <data name="QueueViewModel_JobsPending" xml:space="preserve">
-    <value>{0} lan zain</value>
+    <value>{0} tasques pendents</value>
   </data>
   <data name="QueueViewModel_QueuePending" xml:space="preserve">
-    <value>Ilara pausatu da</value>
+    <value>S'ha pausat la cua</value>
   </data>
   <data name="QueueViewModel_DelSelectedJobConfirmation" xml:space="preserve">
-    <value>Are you sure you want to delete the selected jobs?
-No encoded files will be deleted with this operation. </value>
+    <value>Segur que voleu eliminar les tasques seleccionades?
+No s'eliminarà cap fitxer codificat.</value>
   </data>
   <data name="QueueViewModel_JobCurrentlyRunningWarning" xml:space="preserve">
-    <value>Kodetze hau abian da. Ezabatzen baduzu, kodetzea gelditu egingo da. Ziur jarraitu nahi duzula?</value>
+    <value>This encode is currently in progress. If you delete it, the encode will be stopped. Are you sure you wish to proceed?</value>
   </data>
   <data name="QueueViewModel_NoPendingJobs" xml:space="preserve">
-    <value>Ez dago lanik zain.</value>
+    <value>No hi ha tasques pendents.</value>
   </data>
   <data name="QueueViewModel_EditConfirmation" xml:space="preserve">
-    <value>Ziur lan hau editatu nahi duzula? Ilaratik kendu eta leiho nagusira bidaliko da.</value>
+    <value>Segur que voleu editar la tasca? S'eliminarà de la cua i anirà la finestra principal.</value>
   </data>
   <data name="QueueViewModel_QueueReady" xml:space="preserve">
-    <value>Ilara prest</value>
+    <value>La cua està llesta</value>
   </data>
   <data name="QueueViewModel_QueueNotRunning" xml:space="preserve">
-    <value>Ilara ez dabil</value>
+    <value>La cua no s'està executant</value>
   </data>
   <data name="QueueViewModel_QueueCompleted" xml:space="preserve">
-    <value>Ilara osatuta</value>
+    <value>S'ha completat la cua</value>
   </data>
   <data name="QueueViewModel_LastJobFinished" xml:space="preserve">
-    <value>Ilaran jarritako azken lana amaitu da</value>
+    <value>Last Queued Job Finished</value>
   </data>
   <data name="QueueViewModel_QueueStarted" xml:space="preserve">
-    <value>Ilara hasi da</value>
+    <value>S'ha iniciat la cua</value>
   </data>
   <data name="QueueViewModel_QueueStatusDisplay" xml:space="preserve">
-    <value>Kodetzen: {0}. itzulia {1}-tik, %{2:00.00}, FPS: {3:000.0}, batez besteko FPS: {4:000.0}, Gelditzen den denbora: {5}, Igarotakoa: {6:d\:hh\:mm\:ss}</value>
+    <value>Codificació: Passada {0} de {1},  {2:00.00} %, FPS: {3:000.0},  FPS mitj.: {4:000.0}, Temps restant: {5}, Transcorregut: {6:d\:hh\:mm\:ss}</value>
   </data>
   <data name="ShellViewModel_CanClose" xml:space="preserve">
-    <value>Lan bat dago martxan. HandBrake-etik irtetean lan hau gelditu egingo da.
-Ziur HandBrake-etik atera nahi duzula?</value>
+    <value>An Encode is currently running. Exiting HandBrake will stop this encode.
+Are you sure you wish to exit HandBrake?</value>
   </data>
   <data name="StaticPreviewViewModel_Title" xml:space="preserve">
-    <value>Irudiaren aurrebista</value>
+    <value>Picture Preview</value>
   </data>
   <data name="StaticPreview_UnableToDeletePreview" xml:space="preserve">
-    <value>Ezin da ezabatu aurreko aurrebista fitxategia. Baliteke multimedia erreproduzitzailean aurrebista irekita egotea. Mesedez, itxi ezazu.</value>
+    <value>Unable to delete previous preview file. You may still have a preview open in your media player. Please close this.</value>
   </data>
   <data name="StaticPreviewViewModel_ScanFirst" xml:space="preserve">
-    <value>Fitxategi bat eskaneatu eta kodetzea konfiguratu behar duzu aurrebista sortu aurretik.</value>
+    <value>Heu d'escanejar un fitxer d'origen i configurar la codificació per crear-ne una previsualització.</value>
   </data>
   <data name="StaticPreviewViewModel_UnableToPlayFile" xml:space="preserve">
-    <value>Ezin da aurrebista fitxategia aurkitu. Fitxategia ezabatu da edo kodetzeak huts egin du. Xehetasunetarako begiratu jardueren erregistroa.</value>
+    <value>No s'ha pogut trobar el fitxer de previsualització. Potser el fitxer s'ha eliminat o bé la codificació ha fallat. Comproveu el registre d'activitat per a obtenir-ne més detalls.</value>
   </data>
   <data name="StaticPreviewViewModel_AlreadyEncoding" xml:space="preserve">
-    <value>Handbrake bideo bat kodetzen ari da dagoeneko! Fitxategi bakarra kodetu daiteke aldi berean.</value>
+    <value>El HandBrake ja està codificant un vídeo. Només es pot codificar un fitxer a la vegada.</value>
   </data>
   <data name="SubtitlesViewModel_SubDefaults" xml:space="preserve">
-    <value>Azpitituluen lehenespenak</value>
+    <value>Subtítols per defecte</value>
   </data>
   <data name="SubtitlesViewModel_SubTracks" xml:space="preserve">
-    <value>Azpitituluen pistak</value>
+    <value>Pistes de subtítols</value>
   </data>
   <data name="SubtitlesViewModel_SwitchToTracks" xml:space="preserve">
-    <value>Itzuli pistetara</value>
+    <value>Torna a les pistes</value>
   </data>
   <data name="SubtitlesViewModel_ConfigureDefaults" xml:space="preserve">
-    <value>Hautaketen portaera...</value>
+    <value>Comportament de la selecció...</value>
   </data>
   <data name="PresetService_ArchiveFile" xml:space="preserve">
-    <value>Artxibatutako fitxategia:</value>
+    <value>Fitxer arxivat:</value>
   </data>
   <data name="PresetService_UnableToLoad" xml:space="preserve">
-    <value>Ezin dira aurrezarpenak kargatu.</value>
+    <value>No s'han pogut carregar les configuracions predefinides.</value>
   </data>
   <data name="PresetService_UnableToLoadPresets" xml:space="preserve">
-    <value>HandBrake-ek ezin izan du zure aurrezarpen fitxategia kargatu. Baliteke HandBrake-ren bertsio zaharrago batekoa izatea edo hondatuta egotea.
+    <value>HandBrake was unable to load your presets file. It may have been from an older unsupported version of HandBrake or corrupted. 
 
-Zure aurrezarpen fitxategi zaharrak honela artxibatu dira:</value>
+Your old presets file was archived to:</value>
   </data>
   <data name="Main_QueueFinishedErrors" xml:space="preserve">
-    <value>{0} akats aurkitu dira. Xehetasunetarako, begiratu Ilararen leihoa.</value>
+    <value> amb aquest nombre d'errors: {0}. Comproveu la finestra de la cua per a obtenir-ne més detalls.</value>
   </data>
   <data name="MainViewModel_LowDiskSpace" xml:space="preserve">
-    <value>Leku gutxi diskoan</value>
+    <value>Poc espai al disc</value>
   </data>
   <data name="MainViewModel_LowDiskSpaceWarning" xml:space="preserve">
-    <value>Kontuz, diskoan leku gutxi geratzen zaizu. HandBrake-ek ezin izango du kodetze hau bukatu lekurik gabe geratzen bazara.</value>
+    <value>Avís: s'està exhaurint l'espai del disc. El HandBrake no podrà acabar de codificar el fitxer si ja no hi teniu espai.</value>
   </data>
   <data name="ChaptersViewModel_UnableToImportChaptersMalformedLineMsg" xml:space="preserve">
-    <value>{0}. lerroa baliogabea da. Ez da ezer inportatuko.</value>
+    <value>La línia {0} és invàlida. No s'importarà res.</value>
   </data>
   <data name="ChaptersViewModel_UnableToImportChaptersWarning" xml:space="preserve">
-    <value>Ezin da kapitulu-fitxategia inportatu</value>
+    <value>No s'ha pogut importar el fitxer de capítol</value>
   </data>
   <data name="ChaptersViewModel_UnableToImportChaptersLineDoesNotHaveAtLeastTwoColumns" xml:space="preserve">
-    <value>Kapituluen fitxategiko lerro guztiek gutxienez 2 zutabe datu izan behar dituzte</value>
+    <value>Totes les línies del fitxer de capítols han de tenir almenys 2 columnes de dades</value>
   </data>
   <data name="ChaptersViewModel_UnableToImportChaptersFirstColumnMustContainOnlyIntegerNumber" xml:space="preserve">
-    <value>Kapituluen fitxategiko lehenengo zutabeak zero (0) baino handiagoa den zenbaki osoko balio bat izan behar du</value>
+    <value>First column in chapters file must only contain a integer number value higher than zero (0)</value>
   </data>
   <data name="ChaptersViewModel_UnsupportedFileFormatMsg" xml:space="preserve">
-    <value>Une honetan '{0}' motako kapitulu fitxategiak ez dira onartzen.</value>
+    <value>Els fitxers de capítol del tipus «{0}» actualment no són compatibles.</value>
   </data>
   <data name="ChaptersViewModel_UnsupportedFileFormatWarning" xml:space="preserve">
-    <value>Kapitulu-fitxategi mota honek ez du balio</value>
+    <value>El tipus de fitxer de capítol no és compatible</value>
   </data>
   <data name="ChaptersViewModel_ValidationFailedWarning" xml:space="preserve">
-    <value>Kapitulu informazio baliogabea aukeratutako euskarrirako</value>
+    <value>La informació dels capítols del fitxer d'origen és invàlida</value>
   </data>
   <data name="ChaptersViewModel_ValidateImportedChapters_ChapterCountMismatch" xml:space="preserve">
-    <value>Jatorrizko euskarriaren kapitulu kopurua
-eta sarrerako fitxategiaren kapitulu kopurua ez datoz bat ({0} vs {1}).
+    <value>The number of chapters on the source media 
+and the number of chapters in the input file do not match ({0} vs {1}).
 
-Oraindik kapituluen izenak inportatu nahi dituzu?</value>
+Do you still want to import the chapter names?</value>
   </data>
   <data name="ChaptersViewModel_ValidateImportedChapters_ChapterCountMismatchMsg" xml:space="preserve">
-    <value>Jatorrizko euskarriaren kapitulu kopurua
-eta sarrerako fitxategiaren kapitulu kopurua ez datoz bat ({0} vs {1}).
+    <value>The number of chapters on the source media 
+and the number of chapters in the input file do not match ({0} vs {1}).
 
-Oraindik kapituluen izenak inportatu nahi dituzu?</value>
+Do you still want to import the chapter names?</value>
   </data>
   <data name="ChaptersViewModel_ValidateImportedChapters_ChapterCountMismatchWarning" xml:space="preserve">
-    <value>Kapitulu kopurua ez dator bat iturburuaren eta sarrerako fitxategiaren artean</value>
+    <value>El nombre de capítols no coincideix entre el fitxer d'origen i el fitxer d'entrada</value>
   </data>
   <data name="ChaptersViewModel_ValidateImportedChapters_ChapterDurationMismatchMsg" xml:space="preserve">
-    <value>Jatorrizko kapituluen iraupena
-eta sarrerako fitxategiko kapituluen iraupena oso desberdinak dira.
-Oso litekeena da kapitulu fitxategi hau beste iturburu batetik ekoitzi izana.
+    <value>The reported duration of the chapters on the source media 
+and the duration of chapters in the input file differ greatly.
 
-Ziur kapituluen izenak inportatu nahi dituzula?</value>
+It is very likely that this chapter file was produced from a different source media.
+
+Are you sure you want to import the chapter names?</value>
   </data>
   <data name="ChaptersViewModel_ValidateImportedChapters_ChapterDurationMismatchWarning" xml:space="preserve">
-    <value>Kapituluaren iraupena ez dator bat iturburuaren eta sarrerako fitxategiaren artean</value>
+    <value>La durada dels capítols no coincideix entre el fitxer d'origen i el fitxer d'entrada</value>
   </data>
   <data name="ScanService_ScanStopFailed" xml:space="preserve">
-    <value>Akats bat gertatu da eskaneatzea gelditzen saiatzean. Mesedez, berrabiarazi HandBrake.</value>
+    <value>S'ha produït un error quan s'intentava aturar l'escaneig. Reinicieu el HandBrake.</value>
   </data>
   <data name="Presets_PresetForceReset" xml:space="preserve">
-    <value>HandBrake-ek ezin du zure aurrezarpenen fitxategia bertsio berrirako formatu batera eguneratu.
-Aurrezarpenen fitxategia artxibatu egingo da eta berria sortuko da. Zure aurrezarpenak berriro sortu beharko dituzu.</value>
+    <value>HandBrake is unable to upgrade your presets file to a new version format.
+Your preset file will be archived and new one created. You will need to re-create your own presets.</value>
   </data>
   <data name="SettingService_SaveErrorReset" xml:space="preserve">
-    <value>Baliteke aldatu dituzun ezarpen batzuk HandBrake abiarazten den hurrengoan berriz ezarri behar izatea.</value>
+    <value>Any settings you changed may need to be reset the next time HandBrake launches.</value>
   </data>
   <data name="UserSettings_AnErrorOccurred" xml:space="preserve">
-    <value>Arazo bat egon da zure ezarpenak gordetzen saiatzean.</value>
+    <value>S'ha produït un problema en intentar desar les preferències.</value>
   </data>
   <data name="UserSettings_YourSettingsHaveBeenReset" xml:space="preserve">
-    <value>Kontuz, zure ezarpenak berrezarri egin dira!</value>
+    <value>Compte, s'ha restablert la configuració.</value>
   </data>
   <data name="UserSettings_YourSettingsAreCorrupt" xml:space="preserve">
-    <value>Zure erabiltzaile ezarpenen fitxategia hondatuta edo eskuraezin zegoen. Ezarpenak lehenetsietara berrezarri dira.</value>
+    <value>Your user settings file was corrupted or inaccessible. Settings have been reset to defaults.</value>
   </data>
   <data name="UserSettings_UnableToLoad" xml:space="preserve">
-    <value>Ezin da erabiltzaile ezarpenen fitxategi hau kargatu: {0}</value>
+    <value>No s'ha pogut carregar el fitxer de configuració de l'usuari: {0}</value>
   </data>
   <data name="UserSettings_UnableToLoadSolution" xml:space="preserve">
-    <value>Zure erabiltzaile ezarpenen fitxategia hondatuta dagoela dirudi. Baliteke fitxategia ezabatu eta HandBrake-ek beste bat sortzen utzi behar izatea.</value>
+    <value>Your user settings file appears to be inaccessible or corrupted. You may have to delete the file and let HandBrake generate a new one.</value>
   </data>
   <data name="Main_NoPermissionsOrMissingDirectory" xml:space="preserve">
-    <value>Aukeratu duzun irteera-direktorioa ez da existitzen, edo ez duzu fitxategiak bertan idazteko baimenik.</value>
+    <value>The output directory you have chosen either does not exist, or you do not have permissions to write files to it.</value>
   </data>
   <data name="DirectoryUtils_CreateFolder" xml:space="preserve">
-    <value>Karpeta sortu?</value>
+    <value>Voleu crear una carpeta?</value>
   </data>
   <data name="DirectoryUtils_CreateFolderMsg" xml:space="preserve">
-    <value>Idazten saiatzen ari zaren karpeta ez dago. HandBrake-ek karpeta hau sortzea nahi duzu?
+    <value>The folder you are trying to write to does not exist. Would you like HandBrake to create the following folder?
 {0}</value>
   </data>
   <data name="MainViewModel_UnableToLaunchDestDir" xml:space="preserve">
-    <value>Ezin da helmugako direktorioa abiarazi.</value>
+    <value>No s'ha pogut obrir el directori de destinació.</value>
   </data>
   <data name="MainViewModel_UnableToLaunchDestDirSolution" xml:space="preserve">
-    <value>Mesedez, egiaztatu baliozko helmuga bat jarri duzula.</value>
+    <value>Comproveu que hàgiu establert un directori de destinació vàlid.</value>
   </data>
   <data name="MainViewModel_EncodeStatusChanged_SubScan_StatusLabel" xml:space="preserve">
-    <value>Prozesatzen, {0}. itzulia {1}-tik (azpitituluen eskaneatzea)  %{2:00.00}, Geratzen den denbora: {3},  Igarotakoa: {4}</value>
+    <value>Passada de processament {0} de {1}, (Exploració de subtítols)  {2:00.00} %, Temps d'exploració restant: {3}, Transcorregut: {4}</value>
   </data>
   <data name="NoAdditionalInformation" xml:space="preserve">
-    <value>Ez dago informazio gehigarririk</value>
+    <value>No hi ha informació addicional</value>
   </data>
   <data name="WindowTitleStatus" xml:space="preserve">
-    <value>{0} - (%{1},  {2}. itzulia {3}tik)</value>
+    <value>{0} - ({1} %, Passada {2} de {3})</value>
   </data>
   <data name="TaskTrayStatusTitle" xml:space="preserve">
     <value>{0}
-Lan 1 kodetzen</value>
+S'està codificant 1 tasca</value>
   </data>
   <data name="PauseOnLowDiskspace" xml:space="preserve">
-    <value>Ilara pausatu da. Kontuz, kodetzen ari zaren unitateak leku gutxi du diskoan. Mesedez, egin leku pixka bat eta sakatu Hasi lanarekin jarraitzeko. Ezarpenetan ere doitu dezakezu gutxieneko espazio-maila.</value>
+    <value>La cua s'ha pausat. Avís: el disc amb què esteu codificant té poc espai. Allibereu-ne una part i premeu per continuar. També podeu ajustar l'espai mínim a les preferències.</value>
   </data>
   <data name="Main_QueuePaused" xml:space="preserve">
-    <value>Ilara pausatu da</value>
+    <value>Cua pausada</value>
   </data>
   <data name="QueueViewModel_QueuePaused" xml:space="preserve">
-    <value>Ilara pausatu da</value>
+    <value>Cua pausada</value>
   </data>
   <data name="Main_LowDiskspace" xml:space="preserve">
-    <value>Zure helmuga direktorioko diskoan espazio gutxi dago.
+    <value>Your destination directory is low on diskspace. 
 
-Alerta hau zein mailatan agertzen den ezarpenetan konfigura dezakezu.
+You can configure the level at which this alert appears in preferences. 
 
-Jarraitu nahi duzu?</value>
+Do you wish to continue? </value>
   </data>
   <data name="Queue_UnableToResetJob" xml:space="preserve">
-    <value>Ezin izan da lanaren egoera berrezarri, ez dagoelako Akatsa edo Osatuta egoeran</value>
+    <value>Unable to reset job status as it is not in an Error or Completed state</value>
   </data>
   <data name="Queue_UnableToRestoreFile" xml:space="preserve">
-    <value>Ezin izan da ilararen fitxategia leheneratu.</value>
+    <value>No es pot restaurar el fitxer de la cua.</value>
   </data>
   <data name="Queue_UnableToRestoreFileExtended" xml:space="preserve">
-    <value>Baliteke fitxategia hondatuta egotea edo HandBrake-ren bertsio zaharrago bateraezin batekoa izatea</value>
+    <value>És possible que el fitxer s'hagi corromput o que sigui d'una versió anterior del HandBrake ja no compatible.</value>
   </data>
   <data name="Queue_AlreadyEncoding" xml:space="preserve">
-    <value>HandBrake fitxategi bat kodetzen ari da dagoeneko.</value>
+    <value>El HandBrake ja està codificant un fitxer.</value>
   </data>
   <data name="Queue_AlreadyEncodingSolution" xml:space="preserve">
-    <value>Mesedez, gelditu uneko kodetzea. Arazoak jarraitzen badu, mesedez berrabiarazi HandBrake.</value>
+    <value>Atureu la codificació actual. Si el problema persisteix, reinicieu el HandBrake.</value>
   </data>
   <data name="StaticPreviewView_Title" xml:space="preserve">
-    <value>Aurrebista (benetako tamainaren %{0})</value>
+    <value>Previsualització ({0} % de la mida actual)</value>
   </data>
   <data name="OsBitnessWarning" xml:space="preserve">
-    <value>HandBrake-ek Windows 10 edo berriagoa den 64 biteko bertsioa behar du exekutatzeko.</value>
+    <value>HandBrake requires a 64bit version of Windows 10 or later to run.</value>
   </data>
   <data name="OsVersionWarning" xml:space="preserve">
-    <value>HandBrake-ek Windows 10 edo berriagoa behar du exekutatzeko. 0.9.9 (XP), 0.10.5 (Vista), 1.3.3 (7 eta 8.x) bertsioak izan ziren sistema eragile zahar hauek onartzen zituzten azken bertsioak.</value>
+    <value>HandBrake requires Windows 10 or later to run. Version 0.9.9 (XP), 0.10.5 (Vista), 1.3.3 (7 and 8.x) were the last versions to support these older operating systems.</value>
   </data>
   <data name="Main_ContinueAddingToQueue" xml:space="preserve">
-    <value>Jarraitu nahi duzu gainerakoak gehitzen saiatzen?</value>
+    <value>Do you wish to proceed trying to add the rest?</value>
   </data>
   <data name="Main_QueueOverwritePrompt" xml:space="preserve">
-    <value>'{0}' fitxategia jada existitzen da!
-Gainidatzi nahi al duzu?
+    <value>The file '{0}' already exists!
+Would you like to overwrite it?
 
-Aholkua: fitxategiak gainidazteko portaera hobespenetatik kontrola daiteke.</value>
+Hint: File overwrite behaviour can be controlled in preferences. </value>
   </data>
   <data name="Clipboard_Unavailable" xml:space="preserve">
-    <value>Une honetan sistemaren arbela ez dago erabilgarri.</value>
+    <value>The system clipboard is currently unavailable.</value>
   </data>
   <data name="Clipboard_Unavailable_Solution" xml:space="preserve">
-    <value>Baliteke beste aplikazio bat arbela blokeatzen edo jarraipena egiten egotea. Ezingo duzu arbela erabili desblokeatu arte.</value>
+    <value>This may be due to another application monitoring or locking the clipboard for its own use. You will not be able to use the clipboard until it is unlocked.</value>
   </data>
   <data name="AboutView_License" xml:space="preserve">
-    <value>Lizentzia:</value>
+    <value>Llicència:</value>
   </data>
   <data name="AboutView_Version" xml:space="preserve">
-    <value>Bertsioa:</value>
+    <value>Versió:</value>
   </data>
   <data name="AddPresetView_AddNewCategory" xml:space="preserve">
-    <value>-- Kategoria berria gehitu --</value>
+    <value>-- Afegeix una categoria nova --</value>
   </data>
   <data name="AddPresetView_AddPreset" xml:space="preserve">
-    <value>Aurrezarpena gehitu</value>
+    <value>Afegeix una configuració predefinida</value>
   </data>
   <data name="AddPresetView_Category" xml:space="preserve">
-    <value>Kategoria:</value>
+    <value>Category:</value>
   </data>
   <data name="AddPresetView_Description" xml:space="preserve">
-    <value>Deskribapena:</value>
+    <value>Descripció:</value>
   </data>
   <data name="AddPresetView_Name" xml:space="preserve">
-    <value>Izena:</value>
+    <value>Nom:</value>
   </data>
   <data name="AddPresetView_SavePictureSize" xml:space="preserve">
-    <value>Neurriak:</value>
+    <value>Dimensions:</value>
   </data>
   <data name="AudioDefaultView_Behaviours" xml:space="preserve">
-    <value>Iturburu pista hautatu</value>
+    <value>Source Track Selection</value>
   </data>
   <data name="AudioView_AllowPassThruOf" xml:space="preserve">
-    <value>Baimendu hauen pasabidea:</value>
+    <value>Allow passthru of:</value>
   </data>
   <data name="AudioView_AudioDefaultsDescription" xml:space="preserve">
-    <value>Konfiguratu audio pistak automatikoki nola hautatu eta konfiguratzen diren fitxategi edo izenburu berri bat hautatzen duzunean.</value>
+    <value>Configure how the Audio Tracks are automatically selected and configured when you select a new title or source video.</value>
   </data>
   <data name="AudioView_AutoPassthruBehaviour" xml:space="preserve">
-    <value>'Pasatze Automatikoa'-ren portaera:</value>
+    <value>'Auto Passthru' Behaviour:</value>
   </data>
   <data name="AudioView_Bitrate" xml:space="preserve">
-    <value>Bit-tasa</value>
+    <value>Velocitat de transmissió</value>
   </data>
   <data name="AudioView_Codec" xml:space="preserve">
-    <value>Kodeka</value>
+    <value>Còdec</value>
   </data>
   <data name="AudioView_DRC" xml:space="preserve">
     <value>DRC</value>
   </data>
   <data name="AudioView_Gain" xml:space="preserve">
-    <value>Irabazia</value>
+    <value>Guany</value>
   </data>
   <data name="AudioView_Hide" xml:space="preserve">
-    <value>Ezkutatu</value>
+    <value>Amaga</value>
   </data>
   <data name="AudioView_Mixdown" xml:space="preserve">
-    <value>Nahasketa</value>
+    <value>Mescla</value>
   </data>
   <data name="AudioView_OtherwiseFallbackEncoder" xml:space="preserve">
-    <value>Badaezpadako kodetzailea:</value>
+    <value>Codificador alternatiu:</value>
   </data>
   <data name="AudioView_ReloadDefaults" xml:space="preserve">
-    <value>Berriz kargatu</value>
+    <value>Torna a recarregar</value>
   </data>
   <data name="AudioView_Samplerate" xml:space="preserve">
-    <value>Samplerate</value>
+    <value>Freqüència de mostratge</value>
   </data>
   <data name="AudioView_Show" xml:space="preserve">
-    <value>Erakutsi</value>
+    <value>Mostra</value>
   </data>
   <data name="AudioView_TrackName" xml:space="preserve">
-    <value>Pistaren izena</value>
+    <value>Nom de la pista</value>
   </data>
   <data name="AudioView_TrackSelectionBehaviour" xml:space="preserve">
-    <value>Pista hautatzeko portaera:</value>
+    <value>Comportament de la selecció de pistes:</value>
   </data>
   <data name="AudioView_TrackSettingDefaultBehaviour" xml:space="preserve">
-    <value>Pista gehigarrietarako:</value>
+    <value>Pistes addicionals:</value>
   </data>
   <data name="AudioView_WhenAutoPassthru" xml:space="preserve">
-    <value>Audio kodek gisa 'Pasatze Automatikoa' hautatzen denean.</value>
+    <value>When 'Auto Passthru' is selected as the audio codec.</value>
   </data>
   <data name="ChaptersView_ChapterMarkers" xml:space="preserve">
-    <value>Kapitulu markatzaileak</value>
+    <value>Marcadors de capítol</value>
   </data>
   <data name="ChaptersView_ChapterName" xml:space="preserve">
-    <value>Kapituluaren izena</value>
+    <value>Nom del capítol</value>
   </data>
   <data name="ChaptersView_ChapterNumber" xml:space="preserve">
-    <value>Kapitulua</value>
+    <value>Capítol</value>
   </data>
   <data name="ChaptersView_CreateChapterMarkers" xml:space="preserve">
-    <value>Sortu kapitulu markatzaileak</value>
+    <value>Crea marcadors de capítol</value>
   </data>
   <data name="ChaptersView_Duration" xml:space="preserve">
-    <value>Iraupena</value>
+    <value>Durada</value>
   </data>
   <data name="ChaptersView_Export" xml:space="preserve">
-    <value>Esportatu</value>
+    <value>Exporta</value>
   </data>
   <data name="ChaptersView_Import" xml:space="preserve">
-    <value>Inportatu</value>
+    <value>Importa</value>
   </data>
   <data name="ChapterView_ExportNames" xml:space="preserve">
-    <value>Izenak esportatu</value>
+    <value>Exporta noms</value>
   </data>
   <data name="ChapterView_ImportNames" xml:space="preserve">
-    <value>Izenak inportatu</value>
+    <value>Importa noms</value>
   </data>
   <data name="ChapterView_ResetChapterNames" xml:space="preserve">
-    <value>Kapituluen izenak berrezarri</value>
+    <value>Reinicialitza els noms dels capítols</value>
   </data>
   <data name="CountdownAlterView_CancelAction" xml:space="preserve">
-    <value>Utzi bertan behera</value>
+    <value>Cancel·la l'acció</value>
   </data>
   <data name="CountdownAlterView_Proceed" xml:space="preserve">
-    <value>Jarraitu</value>
+    <value>Continua</value>
   </data>
   <data name="CountdownAlterView_WhenDoneAction" xml:space="preserve">
-    <value>Amaitzean zer egin</value>
+    <value>Quan finalitzi l'acció</value>
   </data>
   <data name="ErrorView_ErrorDetails" xml:space="preserve">
-    <value>Akatsaren xehetasunak:</value>
+    <value>Detalls de l'error:</value>
   </data>
   <data name="FiltersView_Custom" xml:space="preserve">
-    <value>Pertsonalizatu:</value>
+    <value>Personalitzat:</value>
   </data>
   <data name="FiltersView_Deblock" xml:space="preserve">
-    <value>Desbloketzea:</value>
+    <value>Antiblocs:</value>
   </data>
   <data name="FiltersView_Decomb" xml:space="preserve">
-    <value>Decomb</value>
+    <value>Desentrellaçat variable</value>
   </data>
   <data name="FiltersView_Deinterlace" xml:space="preserve">
-    <value>Desentrelazatu:</value>
+    <value>Desentrellaçat:</value>
   </data>
   <data name="FiltersView_DeinterlacePreset" xml:space="preserve">
-    <value>Aurrezarpena:</value>
+    <value>Configuració predefinida:</value>
   </data>
   <data name="FiltersView_DeinterlacePresetAuto" xml:space="preserve">
-    <value>Desentrelazatze aurrezarpena</value>
+    <value>Deinterlace Preset</value>
   </data>
   <data name="FiltersView_Denoise" xml:space="preserve">
-    <value>Denoise:</value>
+    <value>Reducció de soroll:</value>
   </data>
   <data name="FiltersView_DenoisePresetAuto" xml:space="preserve">
-    <value>Denoise aurrezarpena</value>
+    <value>Denoise Preset</value>
   </data>
   <data name="FiltersView_DenoiseTuneAuto" xml:space="preserve">
-    <value>Denoise tonua</value>
+    <value>Denoise Tune</value>
   </data>
   <data name="FiltersView_Detelecine" xml:space="preserve">
     <value>Detelecine:</value>
   </data>
   <data name="FiltersView_Filters" xml:space="preserve">
-    <value>Iragazkiak</value>
+    <value>Filtres</value>
   </data>
   <data name="FiltersView_FlipVideo" xml:space="preserve">
-    <value>Horizontala</value>
+    <value>Horitzontal</value>
   </data>
   <data name="FiltersView_Grayscale" xml:space="preserve">
-    <value>Grisen eskala</value>
+    <value>Escala de grisos</value>
   </data>
   <data name="FiltersView_InterlaceDetection" xml:space="preserve">
-    <value>Entrelazatuaren detekzioa:</value>
+    <value>Detecció d'entrellaçament:</value>
   </data>
   <data name="FiltersView_Preset" xml:space="preserve">
-    <value>Aurrezarpena:</value>
+    <value>Configuració predefinida:</value>
   </data>
   <data name="FiltersView_Rotate" xml:space="preserve">
-    <value>Errotazioa:</value>
+    <value>Rotació:</value>
   </data>
   <data name="FiltersView_Sharpen" xml:space="preserve">
-    <value>Zorroztea:</value>
+    <value>Nitidesa:</value>
   </data>
   <data name="FiltersView_SharpenPresetAuto" xml:space="preserve">
-    <value>Zorrozte aurrezarpena</value>
+    <value>Sharpen Preset</value>
   </data>
   <data name="FiltersView_SharpenTuneAuto" xml:space="preserve">
-    <value>Zorrozte tonua</value>
+    <value>Sharpen Tune</value>
   </data>
   <data name="FiltersView_Tune" xml:space="preserve">
-    <value>Tonua:</value>
+    <value>Ajustament:</value>
   </data>
   <data name="Generic_Add" xml:space="preserve">
-    <value>Gehitu</value>
+    <value>Afegeix</value>
   </data>
   <data name="Generic_Cancel" xml:space="preserve">
-    <value>Utzi</value>
+    <value>Cancel·la</value>
   </data>
   <data name="Generic_Clear" xml:space="preserve">
-    <value>Garbitu</value>
+    <value>Esborra</value>
   </data>
   <data name="Generic_Close" xml:space="preserve">
-    <value>Itxi</value>
+    <value>Tanca</value>
   </data>
   <data name="Generic_CopyToClipboard" xml:space="preserve">
-    <value>Kopiatu arbelera</value>
+    <value>Copia al porta-retalls</value>
   </data>
   <data name="Generic_MoveLeft" xml:space="preserve">
-    <value>Mugitu ezkerrera</value>
+    <value>Mou a l'esquerra</value>
   </data>
   <data name="Generic_MoveRight" xml:space="preserve">
-    <value>Mugitu eskuinera</value>
+    <value>Mou a la dreta</value>
   </data>
   <data name="Generic_Save" xml:space="preserve">
-    <value>Gorde</value>
+    <value>Desa</value>
   </data>
   <data name="LogView_CopyClipboard" xml:space="preserve">
-    <value>Kopiatu arbelera</value>
+    <value>Copia al porta-retalls</value>
   </data>
   <data name="LogView_EncodeLog" xml:space="preserve">
-    <value>Kodetze erregistroa</value>
+    <value>Registre de codificació</value>
   </data>
   <data name="LogView_OpenLogDir" xml:space="preserve">
-    <value>Ireki erregistro direktorioa</value>
+    <value>Open Log Directory</value>
   </data>
   <data name="LogView_ScanLog" xml:space="preserve">
-    <value>Eskaneatze erregistroa</value>
+    <value>ScanLog</value>
   </data>
   <data name="MainView_ActivityLog" xml:space="preserve">
-    <value>Jardueren erregistroa</value>
+    <value>Registre d'activitat</value>
   </data>
   <data name="MainView_AddAll" xml:space="preserve">
-    <value>Gehitu guztiak</value>
+    <value>Afegeix-ho tot</value>
   </data>
   <data name="MainView_AddCurrent" xml:space="preserve">
-    <value>Gehitu hau</value>
+    <value>Afegeix l'element actual</value>
   </data>
   <data name="MainView_AddSelection" xml:space="preserve">
-    <value>Gehitu aukeraketa</value>
+    <value>Afegeix una selecció</value>
   </data>
   <data name="MainView_AddToQueue" xml:space="preserve">
-    <value>Ilarara gehitu</value>
+    <value>Afegeix a la cua</value>
   </data>
   <data name="MainView_AdvancedTab" xml:space="preserve">
-    <value>Aurreratua</value>
+    <value>Avançat</value>
   </data>
   <data name="MainView_AlignAVStart" xml:space="preserve">
-    <value>Lerrokatu A/V hasiera</value>
+    <value>Inici A/V alineat</value>
   </data>
   <data name="MainView_Angle" xml:space="preserve">
-    <value>Angelua:</value>
+    <value>Angle: </value>
   </data>
   <data name="MainView_AudioTab" xml:space="preserve">
-    <value>Audioa</value>
+    <value>Àudio</value>
   </data>
   <data name="MainView_AudioTrackCount" xml:space="preserve">
-    <value>Audio pistak</value>
+    <value>Pistes d'àudio</value>
   </data>
   <data name="MainView_Browser" xml:space="preserve">
-    <value>Bilatu</value>
+    <value>Explora</value>
   </data>
   <data name="MainView_ChaptersTab" xml:space="preserve">
-    <value>Kapituluak</value>
+    <value>Capítols</value>
   </data>
   <data name="MainView_Container" xml:space="preserve">
-    <value>Edukiontzia</value>
+    <value>Contenidor</value>
   </data>
   <data name="MainView_Destination" xml:space="preserve">
-    <value>Helmuga</value>
+    <value>Destinació</value>
   </data>
   <data name="MainView_Duration" xml:space="preserve">
-    <value>Iraupena:</value>
+    <value>Durada:</value>
   </data>
   <data name="MainView_File" xml:space="preserve">
-    <value>Gorde honela:</value>
+    <value>Anomena i desa:</value>
   </data>
   <data name="MainView_FiltersTab" xml:space="preserve">
-    <value>Iragazkiak</value>
+    <value>Filtres</value>
   </data>
   <data name="MainView_Format" xml:space="preserve">
-    <value>Formatua:</value>
+    <value>Format:</value>
   </data>
   <data name="MainView_Help" xml:space="preserve">
-    <value>Laguntza</value>
+    <value>Ajuda</value>
   </data>
   <data name="MainView_iPod5G" xml:space="preserve">
-    <value>iPod 5G laguntza</value>
+    <value>Compatibilitat amb iPod 5G</value>
   </data>
   <data name="MainView_MetaDataTab" xml:space="preserve">
-    <value>Metadatuak</value>
+    <value>Metadades</value>
   </data>
   <data name="MainView_ModifiedPreset" xml:space="preserve">
-    <value>(Aldatua)</value>
+    <value>(Modificat)</value>
   </data>
   <data name="MainView_Muxing" xml:space="preserve">
-    <value>Lanean: honek pixka bat iraun dezake...</value>
+    <value>S'està multiplexant: pot tardar una estona...</value>
   </data>
   <data name="MainView_Options" xml:space="preserve">
-    <value>Aukerak</value>
+    <value>Opcions</value>
   </data>
   <data name="MainView_OutputSettings" xml:space="preserve">
-    <value>Irteera ezarpenak</value>
+    <value>Configuració de la sortida</value>
   </data>
   <data name="MainView_Pause" xml:space="preserve">
-    <value>Pausatu</value>
+    <value>Pausa</value>
   </data>
   <data name="MainView_PictureTab" xml:space="preserve">
-    <value>Neurriak</value>
+    <value>Dimensions</value>
   </data>
   <data name="MainView_PresetManage" xml:space="preserve">
-    <value>Aurrezarpena editatu</value>
+    <value>Edita una configuració predefinida</value>
   </data>
   <data name="MainView_PresetOptionsContextMenu" xml:space="preserve">
-    <value>Aurrezarpenen aukeren menua</value>
+    <value>Preset Options Context Menu</value>
   </data>
   <data name="MainView_PresetRemove" xml:space="preserve">
-    <value>Aurrezarpena ezabatu</value>
+    <value>Elimina una configuració predefinida</value>
   </data>
   <data name="MainView_Presets" xml:space="preserve">
-    <value>Aurrezarpenak</value>
+    <value>Configuracions predefinides</value>
   </data>
   <data name="MainView_Preview" xml:space="preserve">
-    <value>Aurrebista</value>
+    <value>Previsualització</value>
   </data>
   <data name="MainView_ProgressStatusWithTask" xml:space="preserve">
-    <value>Kodetzen: {0}, %{1:00.00}, Geratzen den denbora: {2}, {3}</value>
+    <value>Codificació: {0}, {1:00.00} %, Temps restant: {2}, {3}</value>
   </data>
   <data name="MainView_Range" xml:space="preserve">
-    <value>Sorta:</value>
+    <value>Interval:</value>
   </data>
   <data name="MainView_Reload" xml:space="preserve">
-    <value>Berriz kargatu</value>
+    <value>Torna a recarregar</value>
   </data>
   <data name="MainView_Remove" xml:space="preserve">
-    <value>Kendu</value>
+    <value>Elimina</value>
   </data>
   <data name="MainView_ResetBuiltInPresets" xml:space="preserve">
-    <value>Berrezarri aurrezarpenak</value>
+    <value>Reinicialitza les configuracions predefinides originals</value>
   </data>
   <data name="MainView_SaveNewPreset" xml:space="preserve">
-    <value>Gorde aurrezarpen berria</value>
+    <value>Desa una configuració predefinida nova</value>
   </data>
   <data name="MainView_Searching" xml:space="preserve">
-    <value>Hasiera denbora bilatzen</value>
+    <value>Searching for start time</value>
   </data>
   <data name="MainView_SetDefault" xml:space="preserve">
-    <value>Lehenetsia ezarri</value>
+    <value>Set Default</value>
   </data>
   <data name="MainView_ShowPreview" xml:space="preserve">
-    <value>Aurrebista</value>
+    <value>Previsualització</value>
   </data>
   <data name="MainView_ShowQueue" xml:space="preserve">
-    <value>Ilara</value>
+    <value>Cua</value>
   </data>
   <data name="MainView_Source" xml:space="preserve">
-    <value>Fitxategia:</value>
+    <value>Fitxer d'origen:</value>
   </data>
   <data name="MainView_SourceOpen" xml:space="preserve">
-    <value>Fitxategia Ireki</value>
+    <value>Obre un fitxer d'origen</value>
   </data>
   <data name="MainView_StartEncode" xml:space="preserve">
-    <value>Hasi</value>
+    <value>Inicia la codificació</value>
   </data>
   <data name="MainView_StartQueue" xml:space="preserve">
-    <value>Hasi ilara</value>
+    <value>Inicia la cua</value>
   </data>
   <data name="MainView_Stop" xml:space="preserve">
-    <value>Gelditu</value>
+    <value>Atura</value>
   </data>
   <data name="MainView_StopEncode" xml:space="preserve">
-    <value>Gelditu</value>
+    <value>Atura la codificació</value>
   </data>
   <data name="MainView_StopEncodeConfirm" xml:space="preserve">
-    <value>Ziur kodeketa hau gelditu nahi duzula?</value>
+    <value>Segur que voleu aturar la codificació?</value>
   </data>
   <data name="MainView_SubtitleBeforeScanError" xml:space="preserve">
-    <value>Mesedez, aukeratu kodetzeko fitxategi bat azpititulu pista bat inportatzen saiatu aurretik.</value>
+    <value>Please choose a source to encode before trying to import a subtitle file.</value>
   </data>
   <data name="MainView_SubtitlesTab" xml:space="preserve">
-    <value>Azpitituluak</value>
+    <value>Subtítols</value>
   </data>
   <data name="MainView_SubtitleTracksCount" xml:space="preserve">
-    <value>Azpitituluen pistak</value>
+    <value>Pistes de subtítols</value>
   </data>
   <data name="MainView_SummaryTab" xml:space="preserve">
-    <value>Laburpena</value>
+    <value>Resum</value>
   </data>
   <data name="MainView_through" xml:space="preserve">
     <value> - </value>
   </data>
   <data name="MainView_Title" xml:space="preserve">
-    <value>Izenburua:</value>
+    <value>Títol:</value>
   </data>
   <data name="MainView_UpdateSelectedPreset" xml:space="preserve">
-    <value>Eguneratu uneko aurrezarpena</value>
+    <value>Actualitza la configuració predefinida actual</value>
   </data>
   <data name="MainView_VideoTab" xml:space="preserve">
-    <value>Bideoa</value>
+    <value>Vídeo</value>
   </data>
   <data name="MainView_WebOptimized" xml:space="preserve">
-    <value>Weberako optimizatua</value>
+    <value>Optimitzat per a web</value>
   </data>
   <data name="ManagePresetView_ManagePreset" xml:space="preserve">
-    <value>Aurrezarpenak kudeatu</value>
+    <value>Gestiona les configuracions predefinides</value>
   </data>
   <data name="MetaDataView_Title" xml:space="preserve">
-    <value>Metadatuak</value>
+    <value>Metadades</value>
   </data>
   <data name="OptionsView_EnableNvencEncoding" xml:space="preserve">
-    <value>Baimendu Nvidia NVENC kodetzaileak erabiltzea</value>
+    <value>Allow use of the Nvidia NVENC Encoders</value>
   </data>
   <data name="OptionsView_EnableQuicksyncEncoding" xml:space="preserve">
-    <value>Baimendu Intel QuickSync kodetzaileak erabiltzea</value>
+    <value>Allow use of the Intel QuickSync Encoders</value>
   </data>
   <data name="OptionsView_EnableVceEncoding" xml:space="preserve">
-    <value>Baimendu AMD VCN kodetzaileak erabiltzea</value>
+    <value>Allow use of the AMD VCN Encoders</value>
   </data>
   <data name="OptionsView_InvalidFileFormatChars" xml:space="preserve">
-    <value>Sartutako fitxategi formatuak karaktere baliogabeak zituen. Hauek kendu egin dira.</value>
+    <value>The file format entered contained invalid characters. These have been removed. </value>
   </data>
   <data name="OptionsView_PlaySoundWhenDone" xml:space="preserve">
-    <value>Soinu bat egin kodetze bakoitza amaitzen denean</value>
+    <value>Play a sound when each encode completes</value>
   </data>
   <data name="OptionsView_PlaySoundWhenQueueDone" xml:space="preserve">
-    <value>Erreproduzitu soinu bat ilara bukatzean</value>
+    <value>Play a sound when the queue completes</value>
   </data>
   <data name="OptionsView_ShowPreviewOnSummaryTab" xml:space="preserve">
-    <value>Erakutsi aurrebistak laburpen fitxan.</value>
+    <value>Show previews on summary tab.</value>
   </data>
   <data name="OptionsView_ShowStatusInTitleBar" xml:space="preserve">
-    <value>Erakutsi kodetze-egoera aplikazioaren izenburu-barran.</value>
+    <value>Show the encode status in the application title bar.</value>
   </data>
   <data name="Options_7DayLogClear" xml:space="preserve">
-    <value>Garbitu 7 egun baino zaharragoak diren erregistro-fitxategiak</value>
+    <value>Clear Log files older than 7 days</value>
   </data>
   <data name="Options_About" xml:space="preserve">
-    <value>HandBrake-ri buruz</value>
+    <value>Quant al HandBrake</value>
   </data>
   <data name="Options_Advanced" xml:space="preserve">
-    <value>Aurreratua</value>
+    <value>Avançat</value>
   </data>
   <data name="Options_AdvancedOptions" xml:space="preserve">
-    <value>Aukera aurreratuak</value>
+    <value>Opcions avançades</value>
   </data>
   <data name="Options_Arguments" xml:space="preserve">
-    <value>Argudioak:</value>
+    <value>Arguments:</value>
   </data>
   <data name="Options_AutomaticFileNaming" xml:space="preserve">
-    <value>Fitxategien izendatze automatikoa</value>
+    <value>Noms de fitxer automàtics</value>
   </data>
   <data name="Options_AutoNameOutput" xml:space="preserve">
-    <value>Automatikoki izendatu irteera fitxategiak</value>
+    <value>Anomena automàticament els fitxers de sortida</value>
   </data>
   <data name="Options_CheckForUpdates" xml:space="preserve">
-    <value>Eguneratzeak bilatu</value>
+    <value>Comprova les actualitzacions</value>
   </data>
   <data name="Options_ClearCompleted" xml:space="preserve">
-    <value>Garbitu beti osatutako ilarako lanak kodetze bat amaitu ondoren</value>
+    <value>Always clear completed queue items after an encode completes</value>
   </data>
   <data name="Options_ClearLogs" xml:space="preserve">
-    <value>Garbitu erregistroaren historia</value>
+    <value>Clear Log History</value>
   </data>
   <data name="Options_CopyLogToDir" xml:space="preserve">
-    <value>Jarri kodetze erregistro indibidualen kopia bat hemen:</value>
+    <value>Put a copy of individual encode logs in a specified location:</value>
   </data>
   <data name="Options_CopyLogToEncDir" xml:space="preserve">
-    <value>Jarri kodetze erregistro indibidualen kopia bat kodetutako bideoaren kokapen berean</value>
+    <value>Put a copy of individual encode logs in the same location as the encoded video</value>
   </data>
   <data name="Options_CurVersion" xml:space="preserve">
-    <value>Uneko bertsioa</value>
+    <value>Versió actual</value>
   </data>
   <data name="Options_Decoding" xml:space="preserve">
-    <value>Kodetzen</value>
+    <value>Descodificació</value>
   </data>
   <data name="Options_DefaultPath" xml:space="preserve">
-    <value>Bide lehenetsia:</value>
+    <value>Camí per defecte:</value>
   </data>
   <data name="Options_DownloadUpdates" xml:space="preserve">
-    <value>Deskargatu eguneratzea</value>
+    <value>Baixa l'actualització</value>
   </data>
   <data name="Options_DVD" xml:space="preserve">
-    <value>DVDa irakurtzen</value>
+    <value>Lectura de DVD</value>
   </data>
   <data name="Options_DvdRead" xml:space="preserve">
-    <value>Desgaitu LibDVDNav. (Libdvdread erabiliko da horren ordez)</value>
+    <value>Disable LibDVDNav. (libdvdread will be used instead)</value>
   </data>
   <data name="Options_Encoding" xml:space="preserve">
-    <value>Kodetzen</value>
+    <value>Codificació</value>
   </data>
   <data name="Options_Format" xml:space="preserve">
-    <value>Fitxategiaren formatua:</value>
+    <value>Format de fitxer:</value>
   </data>
   <data name="Options_General" xml:space="preserve">
-    <value>Orokorra</value>
+    <value>General</value>
   </data>
   <data name="Options_Logging" xml:space="preserve">
-    <value>Erregistratzen</value>
+    <value>Registre</value>
   </data>
   <data name="Options_LogLevel" xml:space="preserve">
-    <value>Erregistroaren hitzezkotasun maila:</value>
+    <value>Log Verbosity Level:</value>
   </data>
   <data name="Options_LogPath" xml:space="preserve">
-    <value>Bidea:</value>
+    <value>Camí:</value>
   </data>
   <data name="Options_LowDiskspaceSize" xml:space="preserve">
-    <value>Pausatu ilara diskoan leku gutxi badago</value>
+    <value>Pause queue if disk space is low</value>
   </data>
   <data name="Options_MinimiseTray" xml:space="preserve">
-    <value>Minimizatu sistemaren erretilura (Berrabiarazi behar da)</value>
+    <value>Minimize to system tray (Requires Restart)</value>
   </data>
   <data name="Options_MinTitleScanLength" xml:space="preserve">
-    <value>DVD eta Blu-rayen tituluen gutxieneko iraupena segundotan. Titulu laburragoak saltatu egingo dira:</value>
+    <value>Minimum DVD and Blu-ray title duration in seconds. Shorter titles will be skipped:</value>
   </data>
   <data name="Options_MP4FileExtension" xml:space="preserve">
-    <value>MP4 fitxategien luzapena:</value>
+    <value>MP4 File Extension:</value>
   </data>
   <data name="Options_OnStartup" xml:space="preserve">
-    <value>Abiatzean</value>
+    <value>En arrencar</value>
   </data>
   <data name="Options_Output" xml:space="preserve">
-    <value>Irteera fitxategiak</value>
+    <value>Fitxers de sortida</value>
   </data>
   <data name="Options_Path" xml:space="preserve">
-    <value>Bidea:</value>
+    <value>Camí</value>
   </data>
   <data name="Options_PathToMediaPlayer" xml:space="preserve">
-    <value>Erreproduktorerako bidea</value>
+    <value>Camí del reproductor</value>
   </data>
   <data name="Options_PreventSleep" xml:space="preserve">
-    <value>Saihestu sistemari lotara joatea kodetzen ari zaren bitartean</value>
+    <value>Evita la suspensió del sistema durant la codificació</value>
   </data>
   <data name="Options_PreviewScanCount" xml:space="preserve">
-    <value>Eskaneatu beharreko argazkien aurrebista kopurua:</value>
+    <value>Number of picture previews to scan:</value>
   </data>
   <data name="Options_PriorityLevel" xml:space="preserve">
-    <value>Lanaren lehentasun maila:</value>
+    <value>Work Priority Level:</value>
   </data>
   <data name="Options_QsvDecode" xml:space="preserve">
-    <value>Lehenetsi Intel QuickSync erabiltzea bideoa kodetzeko erabilgarri dagoenean.</value>
+    <value>Prefer use of Intel QuickSync for decoding video when using the QuickSync encoder and the hardware is available for use.</value>
   </data>
   <data name="Options_QsvDecodeForNonFullPath" xml:space="preserve">
-    <value>Erabili QuickSync deskodetzea QuickSync kodetzailea erabiltzen ez duzunean ere. (x265 adibidez)</value>
+    <value>Also use QuickSync decoding when not using a QuickSync encoder. (i.e. x265) </value>
   </data>
   <data name="Options_RemovePunctuation" xml:space="preserve">
-    <value>Kendu ohiko puntuazio ikurrak</value>
+    <value>Remove common punctuation</value>
   </data>
   <data name="Options_ReplaceUnderscores" xml:space="preserve">
-    <value>Ordezkatu azpimarrak hutsune batekin</value>
+    <value>Replace underscores with a space</value>
   </data>
   <data name="Options_ResetDoNothing" xml:space="preserve">
-    <value>Berrezarri "Ezer ez egin" modura aplikazioa berriro abiarazten denean.</value>
+    <value>Reset to 'Do nothing' when the app is re-launched.</value>
   </data>
   <data name="Options_Scaler" xml:space="preserve">
-    <value>Aukeratu Eskalatzailea:</value>
+    <value>Tria un redimensionador:</value>
   </data>
   <data name="Options_Scaling" xml:space="preserve">
-    <value>Eskalatzen</value>
+    <value>Scaling</value>
   </data>
   <data name="Options_SendFileTo" xml:space="preserve">
-    <value>Bidali fitxategia hona:</value>
+    <value>Envia el fitxer a:</value>
   </data>
   <data name="Options_TitleCase" xml:space="preserve">
-    <value>Izenburuak maiuzkulaz hasi</value>
+    <value>Change case to Title Case</value>
   </data>
   <data name="Options_Updates" xml:space="preserve">
-    <value>Eguneraketak</value>
+    <value>Actualitzacions</value>
   </data>
   <data name="Options_UserInterface" xml:space="preserve">
-    <value>Erabiltzaile interfazea</value>
+    <value>Interfície d'usuari</value>
   </data>
   <data name="Options_Version" xml:space="preserve">
-    <value>Bertsioa:</value>
+    <value>Versió:</value>
   </data>
   <data name="Options_Video" xml:space="preserve">
-    <value>Bideoa</value>
+    <value>Vídeo</value>
   </data>
   <data name="Options_VideoPreviewPath" xml:space="preserve">
-    <value>Bide hau bideoaren aurrebistarako soilik erabiltzen da.
-VLC eta MPC-HC onartzen dira. Beste errepdroduktore batzuek ere egin dezakete, baina ez daude balioztatuta.</value>
+    <value>This path is used for the video preview feature only.
+VLC and MPC-HC are supported. Other players may also work but are not validated.</value>
   </data>
   <data name="Options_ViewLogDirectory" xml:space="preserve">
-    <value>Ikusi erregistro direktorioa</value>
+    <value>View Log Directory</value>
   </data>
   <data name="Options_WhenDone" xml:space="preserve">
-    <value>Amaitzerakoan</value>
+    <value>Acció finalitzada</value>
   </data>
   <data name="Options_x264" xml:space="preserve">
-    <value>x264/5 ezarpenak</value>
+    <value>x264/5 Settings</value>
   </data>
   <data name="Options_x264Granularity" xml:space="preserve">
-    <value>Kalitate konstantearen pikortasuna:</value>
+    <value>Constant quality fractional granularity:</value>
   </data>
   <data name="PictureSettingsView_Anamorphic" xml:space="preserve">
-    <value>Anamorfikoa:</value>
+    <value>Anamorfisme:</value>
   </data>
   <data name="PictureSettingsView_Automatic" xml:space="preserve">
-    <value>Automatikoa</value>
+    <value>Automàtic</value>
   </data>
   <data name="PictureSettingsView_Bottom" xml:space="preserve">
-    <value>Behetik</value>
+    <value>Avall</value>
   </data>
   <data name="PictureSettingsView_Cropping" xml:space="preserve">
-    <value>Moztu:</value>
+    <value>Escapçat:</value>
   </data>
   <data name="PictureSettingsView_Custom" xml:space="preserve">
-    <value>Pertsonalizatua</value>
+    <value>Personalitzat</value>
   </data>
   <data name="PictureSettingsView_DisplayWidth" xml:space="preserve">
-    <value>Bistaratze tamaina:</value>
+    <value>Mida de la pantalla:</value>
   </data>
   <data name="PictureSettingsView_Height" xml:space="preserve">
-    <value>Altuera:</value>
+    <value>Alçada:</value>
   </data>
   <data name="PictureSettingsView_KeepAR" xml:space="preserve">
-    <value>Automatikoa</value>
+    <value>Automàtic</value>
   </data>
   <data name="PictureSettingsView_Left" xml:space="preserve">
-    <value>Ezkerretik</value>
+    <value>Esquerra</value>
   </data>
   <data name="PictureSettingsView_Output" xml:space="preserve">
-    <value>Bukaerako neurriak:</value>
+    <value>Dimensions finals:</value>
   </data>
   <data name="PictureSettingsView_PAR" xml:space="preserve">
-    <value>Pixelen itxura:</value>
+    <value>Aspecte de píxels:</value>
   </data>
   <data name="PictureSettingsView_Right" xml:space="preserve">
-    <value>Eskuinetik</value>
+    <value>Dreta</value>
   </data>
   <data name="PictureSettingsView_Size" xml:space="preserve">
-    <value>Tamaina</value>
+    <value>Mida</value>
   </data>
   <data name="PictureSettingsView_Top" xml:space="preserve">
-    <value>Goitik</value>
+    <value>Amunt</value>
   </data>
   <data name="PictureSettingsView_Width" xml:space="preserve">
-    <value>Tamaina eskalatua:</value>
+    <value>Mida redimensionada:</value>
   </data>
   <data name="Preset_Custom" xml:space="preserve">
-    <value>Pertsonalizatua</value>
+    <value>Personalitzat</value>
   </data>
   <data name="Preset_Export" xml:space="preserve">
-    <value>Esportatu fitxategira</value>
+    <value>Exporta a un fitxer</value>
   </data>
   <data name="Preset_Import" xml:space="preserve">
-    <value>Inportatu fitxategitik</value>
+    <value>Importa d'un fitxer</value>
   </data>
   <data name="Preset_Official" xml:space="preserve">
-    <value>Ofiziala</value>
+    <value>Oficial</value>
   </data>
   <data name="QueueSelectionView_ChooseTitles" xml:space="preserve">
-    <value>Aukeratu izenburuak:</value>
+    <value>Choose titles:</value>
   </data>
   <data name="QueueSelectionView_Title" xml:space="preserve">
-    <value>Ilarara gehitu</value>
+    <value>Afegeix a la cua</value>
   </data>
   <data name="QueueSelection_UsingPreset" xml:space="preserve">
-    <value>Hautatutako izenburuak "{0}" aurrezarpenarekin gehituko dira.</value>
+    <value>The selected titles will be added using the  "{0}"  preset.</value>
   </data>
   <data name="QueueView_Advanced" xml:space="preserve">
-    <value>Bideo aukerak:</value>
+    <value>Opcions de vídeo:</value>
   </data>
   <data name="QueueView_Audio" xml:space="preserve">
-    <value>Audioa:</value>
+    <value>Àudio:</value>
   </data>
   <data name="QueueView_ClearAll" xml:space="preserve">
-    <value>Dena garbitu</value>
+    <value>Esborra-ho tot</value>
   </data>
   <data name="QueueView_ClearCompleted" xml:space="preserve">
-    <value>Amaituak garbitu</value>
+    <value>Esborra els completats</value>
   </data>
   <data name="QueueView_ClearQueue" xml:space="preserve">
-    <value>Ilara garbitu</value>
+    <value>Esborra la cua</value>
   </data>
   <data name="QueueView_ClearSelected" xml:space="preserve">
-    <value>Aukeratutakoak garbitu</value>
+    <value>Esborra la selecció</value>
   </data>
   <data name="QueueView_Delete" xml:space="preserve">
-    <value>Ezabatu</value>
+    <value>Elimina</value>
   </data>
   <data name="QueueView_Destination" xml:space="preserve">
-    <value>Helmuga:</value>
+    <value>Destinació:</value>
   </data>
   <data name="WhenDone_DoNothing" xml:space="preserve">
-    <value>Ez egin ezer</value>
+    <value>No facis res</value>
   </data>
   <data name="QueueView_Duration" xml:space="preserve">
-    <value>Kodetzearen iraupena:</value>
+    <value>Durada de la codificació:</value>
   </data>
   <data name="QueueView_Edit" xml:space="preserve">
-    <value>Editatu</value>
+    <value>Edita</value>
   </data>
   <data name="QueueView_EndTime" xml:space="preserve">
-    <value>Bukatzeko denbora:</value>
+    <value>Hora de finalització:</value>
   </data>
   <data name="QueueView_Export" xml:space="preserve">
-    <value>Ilara esportatu</value>
+    <value>Exporta una cua</value>
   </data>
   <data name="QueueView_FileSize" xml:space="preserve">
-    <value>Irteerako fitxategiaren tamaina:</value>
+    <value>Mida del fitxer de sortida:</value>
   </data>
   <data name="WhenDone_Hibernate" xml:space="preserve">
-    <value>Hibernatu</value>
+    <value>Hiberna</value>
   </data>
   <data name="WhenDone_LockSystem" xml:space="preserve">
-    <value>Blokeo sistema</value>
+    <value>Bloca l'ordinador</value>
   </data>
   <data name="QueueView_LogNotAvailableYet" xml:space="preserve">
-    <value>Erregistroa eskuragarri egongo da kodeketzea amaitu ondoren.</value>
+    <value>El registre estarà disponible quan s'hagi acabat de codificar.</value>
   </data>
   <data name="WhenDone_Logoff" xml:space="preserve">
-    <value>Irten</value>
+    <value>Tanca la sessió</value>
   </data>
   <data name="QueueView_OpenDestDir" xml:space="preserve">
-    <value>Ireki helmugako direktorioa</value>
+    <value>Open Destination Directory</value>
   </data>
   <data name="QueueView_OpenSourceDir" xml:space="preserve">
-    <value>Ireki fitxategiaren karpeta</value>
+    <value>Obre el directori d'origen</value>
   </data>
   <data name="QueueView_Options" xml:space="preserve">
-    <value>Aukerak</value>
+    <value>Opcions</value>
   </data>
   <data name="QueueView_Pause" xml:space="preserve">
-    <value>Pausatu</value>
+    <value>Pausa</value>
   </data>
   <data name="QueueView_PausedDuration" xml:space="preserve">
-    <value>Pausatutako iraupena:</value>
+    <value>Paused Duration:</value>
   </data>
   <data name="QueueView_PictureSettings" xml:space="preserve">
-    <value>Irudiaren ezarpenak:</value>
+    <value>Picture Settings:</value>
   </data>
   <data name="WhenDone_QuitHandBrake" xml:space="preserve">
-    <value>HandBrake itxi</value>
+    <value>Surt del HandBrake</value>
   </data>
   <data name="QueueView_ResetAllJobs" xml:space="preserve">
-    <value>Saiatu berriro lan guztiak</value>
+    <value>Retry All Jobs</value>
   </data>
   <data name="QueueView_ResetFailed" xml:space="preserve">
-    <value>Berriro saiatu huts egindakoak</value>
+    <value>Retry Failed</value>
   </data>
   <data name="QueueView_ResetSelectedJobs" xml:space="preserve">
-    <value>Berrezarri hautatutako lanak</value>
+    <value>Reset Selected Jobs</value>
   </data>
   <data name="QueueView_Reset" xml:space="preserve">
-    <value>Berrezarri</value>
+    <value>Reinicialització</value>
   </data>
   <data name="WhenDone_Shutdown" xml:space="preserve">
-    <value>Itzali</value>
+    <value>Tanca l'ordinador</value>
   </data>
   <data name="QueueView_Source" xml:space="preserve">
-    <value>Fitxategia:</value>
+    <value>Fitxer d'origen:</value>
   </data>
   <data name="QueueView_Start" xml:space="preserve">
-    <value>Hasi ilara</value>
+    <value>Inicia la cua</value>
   </data>
   <data name="QueueView_StartTime" xml:space="preserve">
-    <value>Hasiera denbora:</value>
+    <value>Hora d'inici:</value>
   </data>
   <data name="QueueView_Statistics" xml:space="preserve">
-    <value>Estatistikak</value>
+    <value>Estadístiques</value>
   </data>
   <data name="QueueView_Subtitles" xml:space="preserve">
-    <value>Azpitituluak:</value>
+    <value>Subtítols:</value>
   </data>
   <data name="QueueView_Summary" xml:space="preserve">
-    <value>Laburpena</value>
+    <value>Resum</value>
   </data>
   <data name="WhenDone_Suspend" xml:space="preserve">
-    <value>Lotara</value>
+    <value>Suspèn</value>
   </data>
   <data name="QueueView_Video" xml:space="preserve">
-    <value>Bideoa:</value>
+    <value>Vídeo:</value>
   </data>
   <data name="QueueView_WhenDone" xml:space="preserve">
-    <value>Egindakoan:</value>
+    <value>En acabat:</value>
   </data>
   <data name="Shared_AddAllForSelected" xml:space="preserve">
-    <value>Gehitu hautatutako gainerako hizkuntza guztiak</value>
+    <value>Afegeix totes les llengües seleccionades restants</value>
   </data>
   <data name="Shared_AddAllRemaining" xml:space="preserve">
-    <value>Gehitu gainerako pista guztiak</value>
+    <value>Afegeix totes les pistes restants</value>
   </data>
   <data name="Shared_AddNewTrack" xml:space="preserve">
-    <value>Pista berria gehitu</value>
+    <value>Afegeix una pista nova</value>
   </data>
   <data name="Shared_AddTrack" xml:space="preserve">
-    <value>Pistak</value>
+    <value>Pistes</value>
   </data>
   <data name="Shared_AvailableLanguages" xml:space="preserve">
-    <value>Eskuragarri dauden hizkuntzak:</value>
+    <value>Llengües disponibles:</value>
   </data>
   <data name="Shared_ChooseLanguages" xml:space="preserve">
-    <value>Aukeratu hizkuntzak:</value>
+    <value>Tria les llengües:</value>
   </data>
   <data name="Shared_ChosenLanguages" xml:space="preserve">
-    <value>Aukeratutako hizkuntzak:</value>
+    <value>Llengües seleccionades:</value>
   </data>
   <data name="Shared_ConfigureDefaultBehaviours" xml:space="preserve">
-    <value>Konfiguratu portaera lehenetsiak</value>
+    <value>Configure Default Behaviours</value>
   </data>
   <data name="Shared_ReloadDefaults" xml:space="preserve">
-    <value>Berriz kargatu</value>
+    <value>Torna a carregar</value>
   </data>
   <data name="SourceSelection_ChooseDisc" xml:space="preserve">
-    <value>Aukeratu eskaneatu nahi duzun diskoa</value>
+    <value>Tria un disc a escanejar</value>
   </data>
   <data name="SourceSelection_ChooseFile" xml:space="preserve">
-    <value>Aukeratu eskaneatu nahi duzun fitxategia</value>
+    <value>Tria un fitxer a escanejar</value>
   </data>
   <data name="SourceSelection_ChooseFolder" xml:space="preserve">
-    <value>Aukeratu eskaneatu nahi duzun karpeta</value>
+    <value>Tria una carpeta a escanejar</value>
   </data>
   <data name="SourceSelection_ChooseSpecificTitle" xml:space="preserve">
-    <value>Aukeran, aukeratu izenburu zehatz bat:</value>
+    <value>Optionally choose a specific title: </value>
   </data>
   <data name="SourceSelection_ChooseVideo" xml:space="preserve">
-    <value>Ondoren, aukeratu kodetu nahi d(it)uzun bideoa(k):</value>
+    <value>Then choose the video(s) you'd like to encode: </value>
   </data>
   <data name="SourceSelection_File" xml:space="preserve">
-    <value>Fitxategia</value>
+    <value>Fitxer</value>
   </data>
   <data name="SourceSelection_FolderBatchScan" xml:space="preserve">
-    <value>Karpeta (multzoka eskaneatu)</value>
+    <value>Carpeta (escaneig massiu)</value>
   </data>
   <data name="SourceSelection_OpenDVDBluray" xml:space="preserve">
-    <value>Ireki DVD edo Blu-Ray hau</value>
+    <value>Open this DVD or Bluray Drive</value>
   </data>
   <data name="SourceSelection_OpenFolderWIth" xml:space="preserve">
-    <value>Ireki fitxategi bat edo gehiago dituen karpeta bat.</value>
+    <value>Open a folder with one or more files.</value>
   </data>
   <data name="SourceSelection_QueueArchiveRecovery" xml:space="preserve">
-    <value>Berreskuratu ilarako fitxategiak</value>
+    <value>Recover Queue Files</value>
   </data>
   <data name="SourceSelection_QueueArchiveRecoveryDesc" xml:space="preserve">
-    <value>Aurreko ilarako artxibo bat eskuragarri dago.</value>
+    <value>A previous queue archive is available. </value>
   </data>
   <data name="SourceSelection_SingleVideoFile" xml:space="preserve">
-    <value>Ireki bideo fitxategia(k)</value>
+    <value>Obre un fitxer de vídeo o més.</value>
   </data>
   <data name="SourceSelection_SourceSelection" xml:space="preserve">
-    <value>Aukeratu fitxategia</value>
+    <value>Selecció d'origen</value>
   </data>
   <data name="StaticPreviewView_Duration" xml:space="preserve">
-    <value>Iraupena:</value>
+    <value>Durada:</value>
   </data>
   <data name="StaticPreviewView_LivePreview" xml:space="preserve">
-    <value>Kodetu aurrebista</value>
+    <value>Previsualització de la codificació</value>
   </data>
   <data name="StaticPreviewView_SelectPreviewImage" xml:space="preserve">
-    <value>Aukeratu aurrebistako irudi bat</value>
+    <value>Select a preview image</value>
   </data>
   <data name="StaticPreviewView_UseExternalPlayer" xml:space="preserve">
-    <value>Erabili kanpoko erreproduzitzaile bat</value>
+    <value>Use External Player App</value>
   </data>
   <data name="SubtitlesView_AddCC" xml:space="preserve">
-    <value>Gehitu azpitituluak erabilgarri daudenean</value>
+    <value>Add Closed Captions when available</value>
   </data>
   <data name="SubtitlesView_AddForeignAudioSearch" xml:space="preserve">
-    <value>Gehitu 'Kanpoko Audioa Eskaneatu'</value>
+    <value>Afegeix «Escaneig d'àudios estrangers»</value>
   </data>
   <data name="SubtitlesView_BurnInBehaviour" xml:space="preserve">
-    <value>Erretzearen portaera:</value>
+    <value>Burn-In Behaviour:</value>
   </data>
   <data name="SubtitlesView_ImportSubtitle" xml:space="preserve">
-    <value>Azpititulua inportatu</value>
+    <value>Importa subtítols</value>
   </data>
   <data name="SubtitlesView_TrackSelectionBehaviour" xml:space="preserve">
-    <value>Pista hautatzeko portaera:</value>
+    <value>Comportament de la selecció de pista:</value>
   </data>
   <data name="SubtitleView_AddAllCC" xml:space="preserve">
-    <value>Gehitu gainerako azpitituluak</value>
+    <value>Add All Remaining Closed Captions</value>
   </data>
   <data name="SubtitleView_SubtitleDefaultsDescription" xml:space="preserve">
-    <value>Konfiguratu azpititulu pistak automatikoki nola hautatu eta konfiguratzen diren fitxategi berri bat hautatzen duzunean.</value>
+    <value>Configure how the Subtitle Tracks are automatically selected and configured when you select a new title or source video.</value>
   </data>
   <data name="SummaryView_AdditionalAudioTracks" xml:space="preserve">
-    <value>Audio pista gehigarriak</value>
+    <value>Pistes d'àudio addicionals</value>
   </data>
   <data name="SummaryView_AdditionalSubtitleTracks" xml:space="preserve">
-    <value>Azpitituluen pista gehigarriak</value>
+    <value>Pistes de subtítols addicionals</value>
   </data>
   <data name="SummaryView_Burned" xml:space="preserve">
-    <value>Erreta</value>
+    <value>Cremats</value>
   </data>
   <data name="SummaryView_Chapters" xml:space="preserve">
-    <value>Kapitulu markatzaileak</value>
+    <value>Marcadors de capítol</value>
   </data>
   <data name="SummaryView_Deblock" xml:space="preserve">
-    <value>Desbloketzea</value>
+    <value>Deblock</value>
   </data>
   <data name="SummaryView_Detelecine" xml:space="preserve">
     <value>Detelecine</value>
   </data>
   <data name="SummaryView_display" xml:space="preserve">
-    <value>bistaratzea</value>
+    <value>visualització</value>
   </data>
   <data name="SummaryView_Grayscale" xml:space="preserve">
-    <value>Grisen eskala</value>
+    <value>Escala de grisos</value>
   </data>
   <data name="SummaryView_NoAudioTracks" xml:space="preserve">
-    <value>Audio pistarik ez</value>
+    <value>No hi ha pistes d'àudio</value>
   </data>
   <data name="SummaryView_NoChapters" xml:space="preserve">
-    <value>Ez dago kapitulu markatzailerik</value>
+    <value>No hi ha marcadors de capítol</value>
   </data>
   <data name="SummaryView_NoFilters" xml:space="preserve">
-    <value>Iragazkirik ez</value>
+    <value>No hi ha filtres</value>
   </data>
   <data name="SummaryView_NoSource" xml:space="preserve">
-    <value>Fitxategirik ez</value>
+    <value>No hi ha fitxer d'origen</value>
   </data>
   <data name="SummaryView_NoSubtitleTracks" xml:space="preserve">
-    <value>Ez dago azpititulu pistarik</value>
+    <value>No hi ha pistes de subtítols</value>
   </data>
   <data name="SummaryView_NoTracks" xml:space="preserve">
-    <value>Ez dago pistarik</value>
+    <value>No hi ha pistes</value>
   </data>
   <data name="SummaryView_PreviewInfo" xml:space="preserve">
-    <value>{0}. aurrebista {1}tik </value>
+    <value>Previsualització {0} de {1}</value>
   </data>
   <data name="SummaryView_Rotation" xml:space="preserve">
-    <value>Errotazioa</value>
+    <value>Rotació</value>
   </data>
   <data name="SummaryView_storage" xml:space="preserve">
-    <value>biltegiratzea</value>
+    <value>emmagatzematge</value>
   </data>
   <data name="VideoView_MultiPass" xml:space="preserve">
-    <value>Itzuli anitzeko kodetzea</value>
+    <value>Multi-Pass Encoding</value>
   </data>
   <data name="VideoView_AverageBitrate" xml:space="preserve">
-    <value>Batez besteko bit-tasa (kbps):</value>
+    <value>Velocitat de transmissió mitjana (kbps):</value>
   </data>
   <data name="VideoView_Codec" xml:space="preserve">
-    <value>Bideo-kodetzailea:</value>
+    <value>Codificador de vídeo:</value>
   </data>
   <data name="VideoView_ConstantFramerate" xml:space="preserve">
-    <value>Fotograma tasa konstantea</value>
+    <value>Velocitat de fotogrames constants</value>
   </data>
   <data name="VideoView_ConstantQuality" xml:space="preserve">
-    <value>Kalitate konstantea:</value>
+    <value>Qualitat constant:</value>
   </data>
   <data name="VideoView_EncoderLevel" xml:space="preserve">
-    <value>Kodetze maila:</value>
+    <value>Encoder Level:</value>
   </data>
   <data name="VideoView_EncoderPreset" xml:space="preserve">
-    <value>Kodetze aurrezarpena:</value>
+    <value>Encoder Preset:</value>
   </data>
   <data name="VideoView_EncoderProfile" xml:space="preserve">
-    <value>Kodetze profila:</value>
+    <value>Encoder Profile:</value>
   </data>
   <data name="VideoView_EncodeTune" xml:space="preserve">
-    <value>Kodetze tonua:</value>
+    <value>Encoder Tune:</value>
   </data>
   <data name="VideoView_ExtraOptions" xml:space="preserve">
-    <value>Aukera aurreratuak:</value>
+    <value>Opcions avançades:</value>
   </data>
   <data name="VideoView_FastDecode" xml:space="preserve">
-    <value>Kodetze azkarra</value>
+    <value>Descodificació ràpida</value>
   </data>
   <data name="VideoView_Framerate" xml:space="preserve">
-    <value>Fotograma tasa (fps)</value>
+    <value>Velocitat de fotogrames (FPS):</value>
   </data>
   <data name="VideoView_OptimiseVideo" xml:space="preserve">
-    <value>Kodetze aukerak:</value>
+    <value>Opcions del codificador:</value>
   </data>
   <data name="VideoView_PeakFramerate" xml:space="preserve">
-    <value>Gehieneko fotograma tasa:</value>
+    <value>Velocitat de fotogrames màxima</value>
   </data>
   <data name="VideoView_Quality" xml:space="preserve">
-    <value>Kalitatea:</value>
+    <value>Qualitat:</value>
   </data>
   <data name="VideoView_TurboAnalysisPass" xml:space="preserve">
-    <value>Analisi azkarreko itzulia</value>
+    <value>Turbo analysis pass</value>
   </data>
   <data name="VideoView_VariableFramerate" xml:space="preserve">
-    <value>Fotograma tasa aldakorra</value>
+    <value>Velocitat de fotogrames variable</value>
   </data>
   <data name="VideoView_Video" xml:space="preserve">
-    <value>Bideoa:</value>
+    <value>Vídeo:</value>
   </data>
   <data name="OptionsView_Language" xml:space="preserve">
-    <value>Hizkuntza:</value>
+    <value>Llengua:</value>
   </data>
   <data name="Language_UseSystem" xml:space="preserve">
-    <value>Erabili sistemaren hizkuntza</value>
+    <value>Utilitza la llengua del sistema</value>
   </data>
   <data name="SourceSelection_AboutHandBrake" xml:space="preserve">
-    <value>HandBrake-ri buruz</value>
+    <value>Quant al HandBrake</value>
   </data>
   <data name="SourceSelection_DropFileHere" xml:space="preserve">
-    <value>Edo arrastatu hona fitxategi, fitxategi-multzo edo karpeta bat ...</value>
+    <value>Or drop a file, set of files or folder here ...</value>
   </data>
   <data name="SourceSelection_Help" xml:space="preserve">
-    <value>Laguntza</value>
+    <value>Ajuda</value>
   </data>
   <data name="Preferences" xml:space="preserve">
-    <value>Ezarpenak</value>
+    <value>Preferències</value>
   </data>
   <data name="AudioDefaultsView_AddTrack" xml:space="preserve">
-    <value>Gehitu pista</value>
+    <value>Afegeix una pista</value>
   </data>
   <data name="AudioDefaultsView_AutoAddTracks" xml:space="preserve">
-    <value>Aukeratutako pista bakoitzerako audio-kodetzailearen ezarpenak:</value>
+    <value>Audio encoder settings for each chosen track:</value>
   </data>
   <data name="AudioDefaultsView_Clear" xml:space="preserve">
-    <value>Garbitu</value>
+    <value>Esborra</value>
   </data>
   <data name="SubtitlesView_BurnIn" xml:space="preserve">
-    <value>Erre</value>
+    <value>Crema</value>
   </data>
   <data name="SubtitlesView_Default" xml:space="preserve">
-    <value>Lehenetsia</value>
+    <value>Per defecte</value>
   </data>
   <data name="SubtitlesView_ForcedOnly" xml:space="preserve">
-    <value>Behartuak bakarrik</value>
+    <value>Només forçats</value>
   </data>
   <data name="MainView_About" xml:space="preserve">
-    <value>_Honi buruz...</value>
+    <value>_Quant a...</value>
   </data>
   <data name="MainView_ActivityLogMenu" xml:space="preserve">
-    <value>_Jardueren erregistroa</value>
+    <value>_Registre d'activitat</value>
   </data>
   <data name="MainView_CheckForUpdates" xml:space="preserve">
-    <value>_Eguneratzeak bilatu</value>
+    <value>_Comprova les actualitzacions</value>
   </data>
   <data name="MainView_Exit" xml:space="preserve">
-    <value>_Irten</value>
+    <value>_Surt</value>
   </data>
   <data name="MainView_ExportToFile" xml:space="preserve">
-    <value>_Esportatu fitxategira</value>
+    <value>_Exporta a un fitxer</value>
   </data>
   <data name="MainView_FileMenu" xml:space="preserve">
-    <value>_Fitxategia</value>
+    <value>_Fitxer</value>
   </data>
   <data name="MainView_HandBrakeDocs" xml:space="preserve">
-    <value>_HandBrake-ren dokumentazioa (HTTPS)</value>
+    <value>_Documentació del HandBrake (HTTPS)</value>
   </data>
   <data name="MainView_HelpMenu" xml:space="preserve">
-    <value>_Laguntza</value>
+    <value>_Ajuda</value>
   </data>
   <data name="MainView_ImportFromFile" xml:space="preserve">
-    <value>_Artxibotik inportatu</value>
+    <value>_Importa d'un fitxer</value>
   </data>
   <data name="MainView_PreferencesMenu" xml:space="preserve">
-    <value>_Ezarpenak</value>
+    <value>_Preferències</value>
   </data>
   <data name="MainView_PresetsMenu" xml:space="preserve">
-    <value>_Aurrezarpenak</value>
+    <value>_Configuracions predefinides</value>
   </data>
   <data name="MainView_QueueMenu" xml:space="preserve">
-    <value>_Ilara</value>
+    <value>_Cua</value>
   </data>
   <data name="MainView_ResetPresets" xml:space="preserve">
-    <value>_Berrezarri aurrezarpenak</value>
+    <value>_Reinicialitza les configuracions predefinides originals</value>
   </data>
   <data name="MainView_SetCurrentAsDefault" xml:space="preserve">
-    <value>_Ezarri unekoa lehenetsi gisa</value>
+    <value>_Estableix com a predeterminada</value>
   </data>
   <data name="MainView_ShowPresetPanel" xml:space="preserve">
-    <value>S_how aurrezarpen panela</value>
+    <value>S_how Preset Panel</value>
   </data>
   <data name="MainView_ShowQueueMenu" xml:space="preserve">
-    <value>_Erakutsi Ilara</value>
+    <value>_Mostra la cua</value>
   </data>
   <data name="MainView_ToolsMenu" xml:space="preserve">
-    <value>_Tresnak</value>
+    <value>_Eines</value>
   </data>
   <data name="OptionsView_CheckingForUpdates" xml:space="preserve">
-    <value>Eguneratzeak bilatzen...</value>
+    <value>S'estan comprovant les actualitzacions...</value>
   </data>
   <data name="OptionsView_ClearLogDirConfirm" xml:space="preserve">
-    <value>Ziur erregistro-fitxategiaren direktorioa garbitu nahi duzula?</value>
+    <value>Segur que voleu esborrar el directori dels fitxers de registre?</value>
   </data>
   <data name="OptionsView_ClearLogs" xml:space="preserve">
-    <value>Garbitu erregistroak</value>
+    <value>Esborra els registres</value>
   </data>
   <data name="OptionsView_Downloading" xml:space="preserve">
-    <value>Deskargatzen...</value>
+    <value>S'està baixant...</value>
   </data>
   <data name="OptionsView_LogsCleared" xml:space="preserve">
-    <value>HandBrake-ren erregistro-fitxategiaren direktorioa garbitu da!</value>
+    <value>HandBrake's Log file directory has been cleared!</value>
   </data>
   <data name="OptionsView_Notice" xml:space="preserve">
-    <value>Oharra</value>
+    <value>Avís</value>
   </data>
   <data name="OptionsView_PreparingUpdate" xml:space="preserve">
-    <value>Eguneratzeko prestatzen...</value>
+    <value>S'està preparant l'actualització...</value>
   </data>
   <data name="OptionsView_SelectFolder" xml:space="preserve">
-    <value>Mesedez, hautatu karpeta bat.</value>
+    <value>Seleccioneu una carpeta.</value>
   </data>
   <data name="OptionsView_SetDefaultLocationOutputFIle" xml:space="preserve">
-    <value>Sakatu 'Bilatu' kokapen lehenetsia ezartzeko</value>
+    <value>Feu clic a «Explora» per definir la ubicació per defecte</value>
   </data>
   <data name="MainView_Hide" xml:space="preserve">
-    <value>Ezkutatu</value>
+    <value>Amaga</value>
   </data>
   <data name="MainView_Show" xml:space="preserve">
-    <value>Erakutsi</value>
+    <value>Mostra</value>
   </data>
   <data name="MainView_ShowAddAllToQueue" xml:space="preserve">
-    <value>"Gehitu guztiak" ilarara</value>
+    <value>'Add All' to Queue</value>
   </data>
   <data name="MainView_ShowAddSelectionToQueue" xml:space="preserve">
-    <value>'Gehitu hautaketa' ilarara</value>
+    <value>'Add Selection' to Queue</value>
   </data>
   <data name="QueueView_PlayMediaFile" xml:space="preserve">
-    <value>Erreproduzitu fitxategia</value>
+    <value>Reprodueix el fitxer</value>
   </data>
   <data name="Options_ApplicationToolbar" xml:space="preserve">
-    <value>Aplikazioaren tresna-barra</value>
+    <value>Application Toolbar</value>
   </data>
   <data name="Options_ShowToolbarAddAll" xml:space="preserve">
-    <value>Erakutsi "Gehitu guztiak ilarara" tresna-barran</value>
+    <value>Show 'Add All to Queue' on the toolbar</value>
   </data>
   <data name="Options_ShowToolbarAddSelection" xml:space="preserve">
-    <value>Erakutsi "Gehitu hautatuak ilarara" tresna-barran</value>
+    <value>Show 'Add Selection to Queue' on the toolbar</value>
   </data>
   <data name="OptionsView_HardwareDetectFailed" xml:space="preserve">
-    <value>Hardwarea kodetzeko laguntza desgaituta dago une honetan. HandBrake "Hardwarerik ez" aukerarekin hasi ez baduzu, ziurtatu sistemaren txartel grafiko guztien kontrolatzaileak eguneratuak dituzula.
+    <value>Hardware encoding support is currently disabled. If you did not start HandBrake with the "--no-hardware" option, please make sure you are running up-to-date drivers for all graphics adaptors in this system.
 
-Honek ez du eraginik izango software kodetzaileetan.</value>
+This will not impact any of the software encoders.</value>
   </data>
   <data name="Main_PleaseFixSubtitleSettings" xml:space="preserve">
-    <value>Mesedez, zuzendu azpitituluen ezarpenak jarraitu aurretik.</value>
+    <value>Corregiu la configuració dels subtítols abans de continuar.</value>
   </data>
   <data name="Generic_Apply" xml:space="preserve">
-    <value>Aplikatu</value>
+    <value>Aplica</value>
   </data>
   <data name="Main_ResumeEncode" xml:space="preserve">
-    <value>Berrekin kodetzeari</value>
+    <value>Reprèn la codificació</value>
   </data>
   <data name="QueueView_Actions" xml:space="preserve">
-    <value>Ekintzak</value>
+    <value>Accions</value>
   </data>
   <data name="QueueView_Import" xml:space="preserve">
-    <value>Ilara inportatu</value>
+    <value>Importa una cua</value>
   </data>
   <data name="QueueViewModel_EncodeStatusChanged_StatusLabel" xml:space="preserve">
-    <value>Kodetzen: {0}. itzulia {1}tik,  {%2:00.00}, FPS: {3:000.0},  Batez besteko FPS: {4:000.0}
-Gelditzen den denbora: {5},  Igarotakoa: {6} {7}</value>
+    <value>Codificació: Passada {0} de {1},  {2:00.00} %, FPS: {3:000.0},  FPS mitj.: {4:000.0}
+Temps restant: {5},  Transcorregut: {6} {7}</value>
   </data>
   <data name="QueueView_DeleteSelected" xml:space="preserve">
-    <value>Ezabatu aukeratutakoak</value>
+    <value>Elimina la selecció</value>
   </data>
   <data name="Portable_TmpNotWritable" xml:space="preserve">
-    <value>Modu eramangarria: ezin da TMP direktorioa sortu. Mesedez, egiaztatu bidea zuzena dela eta bertan idatzi daitekeela.</value>
+    <value>Portable Mode: Unable to create TMP directory. Please check the path is correct and is writable.</value>
   </data>
   <data name="Portable_StorageNotWritable" xml:space="preserve">
-    <value>Modu eramangarria: Ezin da biltegiratze direktorioa sortu. Mesedez, egiaztatu bidea zuzena dela eta bertan idatzi daitekeela.</value>
+    <value>Portable Mode: Unable to create Storage directory. Please check the path is correct and is writable.</value>
   </data>
   <data name="Portable_IniFileError" xml:space="preserve">
-    <value>Modu eramangarria: ezin da portable.ini irakurri. Baliteke fitxategi honetan akats bat egotea. Mesedez, saiatu berriro portable.ini.template gida gisa erabiliz.</value>
+    <value>Portable Mode: Unable to read portable.ini. There may be an error in this file. Please retry using portable.ini.template as a guide.</value>
   </data>
   <data name="OptionsView_FormatOptions" xml:space="preserve">
-    <value>Ordezkatzeko aukerak:
-Goiko testua arrastatu/jaregin edo sar dezakezu.</value>
+    <value>Replacement Options:
+You can drag/drop or enter the text above.</value>
   </data>
   <data name="FileOverwriteBehaviours_Ask" xml:space="preserve">
-    <value>Galdetu fitxategia gainidazteko</value>
+    <value>Ask to overwrite file</value>
   </data>
   <data name="FileOverwriteBehaviours_Autoname" xml:space="preserve">
-    <value>Saiatu fitxategia automatikoki berrizendatzen</value>
+    <value>Try to automatically rename file</value>
   </data>
   <data name="FileOverwriteBehaviours_Overwrite" xml:space="preserve">
-    <value>Berrizendatu fitxategia</value>
+    <value>Sobreescriu el fitxer</value>
   </data>
   <data name="Options_UIBehaviour" xml:space="preserve">
-    <value>Erabiltzaile interfazearen portaera</value>
+    <value>Comportament de la interfície d'usuari</value>
   </data>
   <data name="OptionsView_FileOverwriteBehaviour" xml:space="preserve">
-    <value>Fitxategiak gainidazteko portaera:</value>
+    <value>Comportament de sobreescriptura dels fitxers:</value>
   </data>
   <data name="Options_EncodeCompleted" xml:space="preserve">
-    <value>Kodetzea osatu da</value>
+    <value>Escaneig complet</value>
   </data>
   <data name="Options_Notifications" xml:space="preserve">
-    <value>Soinu jakinarazpenak</value>
+    <value>Notificacions de so</value>
   </data>
   <data name="Options_QueueCompleted" xml:space="preserve">
-    <value>Ilara osatuta</value>
+    <value>Cua completada</value>
   </data>
   <data name="Options_WhenDoneColon" xml:space="preserve">
-    <value>Egindakoan:</value>
+    <value>En acabat:</value>
   </data>
   <data name="OptionsView_FileCollisionBehaviour" xml:space="preserve">
-    <value>Fitxategi izenen talkaren portaera:</value>
+    <value>Filename collision behaviour:</value>
   </data>
   <data name="CollisionBehaviour_Post" xml:space="preserve">
-    <value>Atzizkia</value>
+    <value>Sufix</value>
   </data>
   <data name="CollisionBehaviour_Pre" xml:space="preserve">
-    <value>Aurrizkia</value>
+    <value>Prefix</value>
   </data>
   <data name="CollisionBehaviour_AppendNumber" xml:space="preserve">
-    <value>Erantsi zenbakia</value>
+    <value>Append Number</value>
   </data>
   <data name="FiltersViewAuto_DeblockPreset" xml:space="preserve">
     <value>FiltersView_DeblockPreset</value>
   </data>
   <data name="FiltersViewAuto_DeblockTune" xml:space="preserve">
-    <value>Desbloketze tonua</value>
+    <value>Deblock Tune</value>
   </data>
   <data name="OptionsView_ChoiceOfEncoderHint" xml:space="preserve">
-    <value>Kodetzailearen aukeraketa eskuragarri egongo da 'Bideoa' leihoan.</value>
+    <value>Choice of encoder will be made available on the 'Video' tab.</value>
   </data>
   <data name="Queue_RecoverQueueQuestionPlural" xml:space="preserve">
-    <value>HandBrake-ek amaitu gabeko fitxategiak detektatu ditu. Hauek HandBrake exekutatzen ari diren hainbat instantziatakoak izango dira. Bukatu gabeko lan guztiak berreskuratu nahi dituzu?</value>
+    <value>HandBrake has detected multiple unfinished queue files. These will be from multiple instances of HandBrake running. Would you like to recover all unfinished jobs?</value>
   </data>
   <data name="Queue_RecoverQueueQuestionSingular" xml:space="preserve">
-    <value>HandBrake-ek amaitu gabeko lanak detektatu ditu ilaran aplikazioa abiarazi zen azken alditik. Hauek berreskuratu nahi dituzu?</value>
+    <value>HandBrake has detected unfinished items on the queue from the last time the application was launched. Would you like to recover these?</value>
   </data>
   <data name="Queue_RecoveryPossible" xml:space="preserve">
-    <value>Ilara berreskuratu daiteke</value>
+    <value>És possible recuperar la cua</value>
   </data>
   <data name="PresetService_ImportingBuiltInWarning" xml:space="preserve">
-    <value>Zure aurrezarpen fitxategiak berezko aurrezarpenak ere zekartzan. Inportazio funtzioak ez du hauek inportatzea onartzen. Mesedez, erabili 'Aurrezarpenen menua -&gt; Berrezarri Berezko aurrezarpenak' aurrezarpen estandarrak leheneratzeko.
+    <value>Your presets file contained built-in presets. The import function does not support importing these. Please use 'Presets Menu -&gt; Reset Built In-Presets' to restore the standard presets.
 
-Onartzen denean, erabiltzaile aurrezarpenak inportatuko dira.</value>
+Where supported, any user presets will have been imported.</value>
   </data>
   <data name="Options_PromptBeforeAction" xml:space="preserve">
-    <value>Egin ekintza berehala. (Honek 60 segundoko berrespen koadroa desgaituko du)</value>
+    <value>Perform action immediately. (This will disable the 60 second confirmation dialog)</value>
   </data>
   <data name="Browse" xml:space="preserve">
-    <value>Bilatu</value>
+    <value>Explora</value>
   </data>
   <data name="OptionsView_MediaFileNotSet" xml:space="preserve">
-    <value>Ez da audio fitxategirik ezarri. Mesedez, sakatu 'Arakatu' wav edo mp3 fitxategi bat hautatzeko.</value>
+    <value>No audio file has been set. Please click 'Browse' to select a wav or mp3 file for playback.</value>
   </data>
   <data name="OptionsView_Play" xml:space="preserve">
-    <value>Ikusi</value>
+    <value>Reprodueix</value>
   </data>
   <data name="QueueView_ExportCLI" xml:space="preserve">
-    <value>Esportatu ilara (CLI bakarrik)</value>
+    <value>Exporta la cua (Només CLI)</value>
   </data>
   <data name="Options_DarkTheme" xml:space="preserve">
-    <value>Erabili Gai Iluna (berrabiarazi behar da, Windows 10erako soilik)</value>
+    <value>Utilitza el tema fosc. (Cal reiniciar, només per a Windows 10)</value>
   </data>
   <data name="QueueView_NotAvailable" xml:space="preserve">
-    <value>Ez erabilgarri</value>
+    <value>No disponible</value>
   </data>
   <data name="Options_LowDiskspaceSizeGB" xml:space="preserve">
     <value>GB</value>
   </data>
   <data name="SystemService_ACMains" xml:space="preserve">
-    <value>Korronte elektrikoa detektatu da. Kodetzea berresten... (%{0})</value>
+    <value>S'ha detectat l'energia de la xarxa elèctrica. Es reprendrà la codificació... ({0} %)</value>
   </data>
   <data name="SystemService_CriticalBattery" xml:space="preserve">
-    <value>Sistemaren bateria kritikoa! (%{0})</value>
+    <value>Bateria molt baixa! ({0} %)</value>
   </data>
   <data name="SystemService_LowBatteryLog" xml:space="preserve">
-    <value>Sistemaren bateria baxua! (%{0}). Kodetzea pausatu egin da.</value>
+    <value>Bateria baixa! ({0} %). S'ha pausat la codificació.</value>
   </data>
   <data name="SystemService_LowDiskSpaceLog" xml:space="preserve">
-    <value>Helmugako unitatean geratzen den biltegiratze lekua {0} GB baino gutxiagokoa da. Kodetzea pausatzen...</value>
+    <value>Remaining drive storage has dropped below {0} GB on the destination drive. Pausing encode...</value>
   </data>
   <data name="AudioDefaultsView_PaneTitle" xml:space="preserve">
-    <value>Audio aukeraketa automatikoak</value>
+    <value>Seleccions d'àudio automàtiques</value>
   </data>
   <data name="SubtitlesDefaultsView_PaneTitle" xml:space="preserve">
-    <value>Azpititulu aukeraketa automatikoak</value>
+    <value>Seleccions de subtítols automàtics</value>
   </data>
   <data name="Options_SystemOptions" xml:space="preserve">
     <value>Sistema</value>
   </data>
   <data name="MetadataView_Actors" xml:space="preserve">
-    <value>Aktoreak:</value>
+    <value>Actors:</value>
   </data>
   <data name="MetadataView_Comments" xml:space="preserve">
-    <value>Oharrak:</value>
+    <value>Comentaris:</value>
   </data>
   <data name="MetadataView_Description" xml:space="preserve">
-    <value>Deskribapena:</value>
+    <value>Descripció:</value>
   </data>
   <data name="MetadataView_Director" xml:space="preserve">
-    <value>Zuzendaria:</value>
+    <value>Director:</value>
   </data>
   <data name="MetadataView_Genre" xml:space="preserve">
-    <value>Generoa:</value>
+    <value>Gènere:</value>
   </data>
   <data name="MetadataView_Plot" xml:space="preserve">
-    <value>Sinopsia:</value>
+    <value>Sinopsi:</value>
   </data>
   <data name="MetadataView_ReleaseDate" xml:space="preserve">
-    <value>Argitaratze data:</value>
+    <value>Data de publicació:</value>
   </data>
   <data name="MetadataView_TitleTag" xml:space="preserve">
-    <value>Izenburua:</value>
+    <value>Títol:</value>
   </data>
   <data name="LogViewModel_Title" xml:space="preserve">
-    <value>Erregistro ikuslea</value>
+    <value>Visor de registre</value>
   </data>
   <data name="MainView_Aspect" xml:space="preserve">
-    <value>Itxura:</value>
+    <value>Aspecte:</value>
   </data>
   <data name="MainView_Filters" xml:space="preserve">
-    <value>Iragazkiak:</value>
+    <value>Filtres:</value>
   </data>
   <data name="MainView_Size" xml:space="preserve">
-    <value>Neurria:</value>
+    <value>Mida:</value>
   </data>
   <data name="MainView_Tracks" xml:space="preserve">
-    <value>Pistak:</value>
+    <value>Pistes:</value>
   </data>
   <data name="OptionsTab_General" xml:space="preserve">
-    <value>Orokorra</value>
+    <value>General</value>
   </data>
   <data name="OptionsViewModel_CheckForUpdatesMsg" xml:space="preserve">
-    <value>Klikatu 'Bilatu eguneratzeak' bertsio berriak bilatzeko</value>
+    <value>Fes clic a «Comprova les actualitzacions» per saber si hi ha versions noves</value>
   </data>
   <data name="OptionsView_BackButton" xml:space="preserve">
-    <value>&lt; Atzera</value>
+    <value>&lt; Enrere</value>
   </data>
   <data name="QueueView_CurrentlyPaused" xml:space="preserve">
-    <value>Une honetan pausatuta</value>
+    <value>Currently Paused</value>
   </data>
   <data name="Options_OutputFiles" xml:space="preserve">
-    <value>Irteera fitxategiak</value>
+    <value>Fitxers de sortida</value>
   </data>
   <data name="PointToPointMode_Chapters" xml:space="preserve">
-    <value>Kapituluak</value>
+    <value>Capítols</value>
   </data>
   <data name="PointToPointMode_Frames" xml:space="preserve">
-    <value>Fotogramak</value>
+    <value>Fotogrames</value>
   </data>
   <data name="PointToPointMode_Preview" xml:space="preserve">
-    <value>Aurrebista</value>
+    <value>Previsualització</value>
   </data>
   <data name="PointToPointMode_Seconds" xml:space="preserve">
-    <value>Segunduak</value>
+    <value>Segons</value>
   </data>
   <data name="SubtitleBehaviourModes_AllMatching" xml:space="preserve">
-    <value>Hautatutako hizkuntzekin bat datozen guztiak</value>
+    <value>All Matching Selected Languages</value>
   </data>
   <data name="SubtitleBehaviourModes_FirstMatching" xml:space="preserve">
-    <value>Hautatutako hizkuntzekin bat datorren lehenengoa</value>
+    <value>First Matching Selected Language</value>
   </data>
   <data name="SubtitleBehaviourModes_None" xml:space="preserve">
-    <value>Bat ere ez</value>
+    <value>Cap</value>
   </data>
   <data name="SubtitleBurnInBehaviourModes_FirstTrack" xml:space="preserve">
-    <value>Lehenengo pista</value>
+    <value>Primera pista</value>
   </data>
   <data name="SubtitleBurnInBehaviourModes_ForeignAudioPreferredElseFirst" xml:space="preserve">
-    <value>Kanpoko audioa hobetsi da, bestela lehenengoa</value>
+    <value>Es prefereix l'àudio estranger, si no, el primer</value>
   </data>
   <data name="SubtitleBurnInBehaviourModes_ForeignAudioTrack" xml:space="preserve">
-    <value>Kanpoko audio pista</value>
+    <value>Pista d'àudio estrangera</value>
   </data>
   <data name="SubtitleBurnInBehaviourModes_None" xml:space="preserve">
-    <value>Bat ere ez</value>
+    <value>Cap</value>
   </data>
   <data name="SubtitleViewModel_ForeignAudioSearch" xml:space="preserve">
-    <value>Kanpoko audioa bilatu</value>
+    <value>Cerca un àudio estranger</value>
   </data>
   <data name="Subtitle_ForeignAudioScan" xml:space="preserve">
-    <value>Kanpoko audioa eskaneatu</value>
+    <value>Escaneja àudios estrangers</value>
   </data>
   <data name="AudioBehaviourModes_AllMatching" xml:space="preserve">
-    <value>Hautatutako hizkuntzekin bat datozen guztiak</value>
+    <value>All Matching Selected Languages</value>
   </data>
   <data name="AudioBehaviourModes_AllTracks" xml:space="preserve">
-    <value>Erabili pista guztiak txantiloi gisa</value>
+    <value>Utilitza totes les pistes de plantilles</value>
   </data>
   <data name="AudioBehaviourModes_FirstMatch" xml:space="preserve">
-    <value>Hautatutako hizkuntzekin bat datorren lehenengoa</value>
+    <value>First Matching Selected Language</value>
   </data>
   <data name="AudioBehaviourModes_FirstTrack" xml:space="preserve">
-    <value>Erabili lehen pista txantiloi gisa</value>
+    <value>Utilitza la primera pista de plantilla</value>
   </data>
   <data name="AudioBehaviourModes_None" xml:space="preserve">
-    <value>Audiorik ez</value>
+    <value>Sense àudio</value>
   </data>
   <data name="ChapterViewModel_Chapter" xml:space="preserve">
-    <value>{0}. kapitulua</value>
+    <value>Capítol {0}</value>
   </data>
   <data name="Mp4Behaviour_Auto" xml:space="preserve">
-    <value>Automatikoa</value>
+    <value>Automàtic</value>
   </data>
   <data name="Mp4Behaviour_UseM4v" xml:space="preserve">
-    <value>Erabili beti M4V</value>
+    <value>Utilitza sempre M4V</value>
   </data>
   <data name="Mp4Behaviour_UseMp4" xml:space="preserve">
-    <value>Erabili beti MP4</value>
+    <value>Utilitza sempre MP4</value>
   </data>
   <data name="PresetPictureSettingsMode_Custom" xml:space="preserve">
-    <value>Pertsonalizatua</value>
+    <value>Personalitzat</value>
   </data>
   <data name="PresetPictureSettingsMode_None" xml:space="preserve">
-    <value>Bat ere ez</value>
+    <value>Cap</value>
   </data>
   <data name="PresetPictureSettingsMode_SourceMaximum" xml:space="preserve">
-    <value>Erabili beti iturburuaren bereizmena</value>
+    <value>Utilitza sempre la resolució d'origen</value>
   </data>
   <data name="ProcessPriority_AboveNormal" xml:space="preserve">
-    <value>Normalaren gainetik</value>
+    <value>Per sobre del normal</value>
   </data>
   <data name="ProcessPriority_BelowNormal" xml:space="preserve">
-    <value>Normalaren azpitik</value>
+    <value>Per sota del normal</value>
   </data>
   <data name="ProcessPriority_High" xml:space="preserve">
-    <value>Altua</value>
+    <value>Superior</value>
   </data>
   <data name="ProcessPriority_Low" xml:space="preserve">
-    <value>Baxua</value>
+    <value>Inferior</value>
   </data>
   <data name="ProcessPriority_Normal" xml:space="preserve">
-    <value>Normala</value>
+    <value>Normal</value>
   </data>
   <data name="UpdateCheck_Monthly" xml:space="preserve">
-    <value>Hilero</value>
+    <value>Cada mes</value>
   </data>
   <data name="UpdateCheck_Weekly" xml:space="preserve">
-    <value>Astero</value>
+    <value>Cada setmana</value>
   </data>
   <data name="OptionsView_AlwaysUseDefaultPath" xml:space="preserve">
-    <value>Erabili beti bide lehenetsia sortutako izen berri bakoitzeko.</value>
+    <value>Always use the default path for each new name generated.</value>
   </data>
   <data name="OptionsView_RemotePortLimit" xml:space="preserve">
-    <value>Portuak 5000 eta 32767 artekoa izan behar du</value>
+    <value>L'interval del port ha de ser del 5000 al 32767</value>
   </data>
   <data name="SourceSelection_UpdateAvailable" xml:space="preserve">
-    <value>Bertsio berri bat dago eskuragarri!</value>
+    <value>Hi ha una nova versió disponible!</value>
   </data>
   <data name="About_Copyright" xml:space="preserve">
-    <value>Copyright (C) 2003-2024 The HandBrake Team</value>
+    <value>Drets d'autor (C) 2003-2024 The HandBrake Team</value>
   </data>
   <data name="Options_LowBatteryLevel" xml:space="preserve">
-    <value>Bateria maila baxua:</value>
+    <value>Nivell de bateria baix:</value>
   </data>
   <data name="Options_PauseOnLowBattery" xml:space="preserve">
-    <value>Pausatu lanak bateria gutxi geratzen denean.</value>
+    <value>Pausa les tasques en curs quan la bateria estigui baixa.</value>
   </data>
   <data name="SubtitleView_AddRemainingCC" xml:space="preserve">
-    <value>Gehitu gainerako azpititulu guztiak</value>
+    <value>Add All Remaining Closed Captions</value>
   </data>
   <data name="QueueService_DuplicatesQuestion" xml:space="preserve">
-    <value>Bikoiztutako lanak hauteman dira inportatzen saiatzen ari zaren ilara-fitxategian. Lehendik dauden fitxategiak gainidatzi nahi dituzu?
-Horrek martxan dauden lanak ere geldituko ditu.</value>
+    <value>Duplicate jobs were detected in the queue file that you are trying to import. Do you wish to overwrite the existing records? 
+This will also stop any existing running jobs.</value>
   </data>
   <data name="QueueService_DuplicatesTitle" xml:space="preserve">
-    <value>Bikoizketak detektatu dira</value>
+    <value>Duplicates Detected</value>
   </data>
   <data name="OptionsView_EnableQuicksyncLowPower" xml:space="preserve">
-    <value>Gaitu Low Power QuickSync Hardware (onartzen denean).</value>
+    <value>Enable Low Power QuickSync Hardware (where supported).</value>
   </data>
   <data name="QueueView_JobInformationNotAvailable" xml:space="preserve">
-    <value>Aukeratu lan bakarra laburpen informazioa ikusteko.</value>
+    <value>Please select a single job to view summary information.</value>
   </data>
   <data name="OptionsView_EnableWorkerProcesses" xml:space="preserve">
-    <value>Exekutatu ilarako lan bakoitza lan-prozesu bereizi batean.</value>
+    <value>Run each queued job in a separate worker process.</value>
   </data>
   <data name="OptionsView_WorkerDefaultPort" xml:space="preserve">
-    <value>Sareko portu lehenetsia:</value>
+    <value>Default network port for worker:</value>
   </data>
   <data name="Presets_NotAvailableForUse" xml:space="preserve">
-    <value>Hautatu duzun aurrezarpena ez dago erabilgarri sistema honetan.
+    <value>The preset you have selected is not available for use on this system.
 
-Hau normalean zure sistemak aurrezarpenerako behar duen hardwarea onartzen ez duelako izaten da.
+This is typically an indication that your system does not support the hardware required to utilise it.
 
-Mesedez, aukeratu beste aurrezarpen bat.</value>
+Please choose a different preset.</value>
   </data>
   <data name="OptionsView_ProcessIsolation" xml:space="preserve">
-    <value>Prozesuaren isolamendua</value>
+    <value>Process Isolation</value>
   </data>
   <data name="OptionsView_ProcessIsolation_Warning1" xml:space="preserve">
-    <value>Kontuan izan, eginbide hau erabiliz 127.0.0.1-era lotuta dagoen HTTP zerbitzari bat abiaraziko dela adierazitako portuan.</value>
+    <value>Please note, using this feature will start an HTTP server bound to 127.0.0.1 on the port stated.</value>
   </data>
   <data name="OptionsView_ProcessIsolation_Warning2" xml:space="preserve">
-    <value>Ezarritako portua erabiltzen ari bada, definitutako portutik +100en barruan aurkituko da lehen portu librea.</value>
+    <value>If the set port is in use, it will find the first free port within +100 from the defined port.</value>
   </data>
   <data name="OptionsView_SimultaneousEncodes" xml:space="preserve">
-    <value>Aldibereko gehienezko kodetze kopurua:</value>
+    <value>Nombre màxim de codificacions simultànies:</value>
   </data>
   <data name="StaticPreviewView_CancelPreview" xml:space="preserve">
-    <value>Utzi</value>
+    <value>Cancel·la</value>
   </data>
   <data name="MainView_SelectedPresets" xml:space="preserve">
-    <value>Aurrezarpena:</value>
+    <value>Configuració predefinida:</value>
   </data>
   <data name="SummaryView_SameAsSource" xml:space="preserve">
-    <value>Fitxategiaren berdina</value>
+    <value>Igual que l'origen</value>
   </data>
   <data name="OptionsViewModel_ResetHandBrake" xml:space="preserve">
-    <value>Berrezarri ezarpenak</value>
+    <value>Restableix la configuració</value>
   </data>
   <data name="OptionsViewModel_ResetHandBrakeQuestion" xml:space="preserve">
-    <value>Ziur HandBrake ezarpen lehenetsietara berrezarri nahi duzula?</value>
+    <value>Segur que voleu restablir el HandBrake a la configuració per defecte?</value>
   </data>
   <data name="PaddingMode_Custom" xml:space="preserve">
-    <value>Pertsonalizatua (mugarik ez)</value>
+    <value>Custom (Not Limited)</value>
   </data>
   <data name="PaddingMode_Fill" xml:space="preserve">
-    <value>Bete (ingurua)</value>
+    <value>Fill (Surround)</value>
   </data>
   <data name="PaddingMode_Height" xml:space="preserve">
-    <value>Altuera (Pillarbox)</value>
+    <value>Alçada (enquadrament horitzontal)</value>
   </data>
   <data name="PaddingMode_None" xml:space="preserve">
-    <value>Bat ere ez</value>
+    <value>Cap</value>
   </data>
   <data name="PaddingMode_Width" xml:space="preserve">
-    <value>Zabalera (Letterbox)</value>
+    <value>Amplada (format de bústia)</value>
   </data>
   <data name="PictureSettingsView_Padding" xml:space="preserve">
-    <value>Bete:</value>
+    <value>Emplenament:</value>
   </data>
   <data name="PictureSettingsView_PaddingColour" xml:space="preserve">
-    <value>Kolorea:</value>
+    <value>Color:</value>
   </data>
   <data name="PictureSettingsView_Borders" xml:space="preserve">
-    <value>Ertzak:</value>
+    <value>Vores:</value>
   </data>
   <data name="PictureSettingsView_ResAndScaling" xml:space="preserve">
-    <value>Bereizmena eta eskalatzea:</value>
+    <value>Resolució i escala:</value>
   </data>
   <data name="PictureSettingsView_RotateAndCrop" xml:space="preserve">
-    <value>Orientazioa eta mozketa:</value>
+    <value>Orientació i escapçament:</value>
   </data>
   <data name="QueueView_FilterSettings" xml:space="preserve">
-    <value>Iragazkiak:</value>
+    <value>Filtres:</value>
   </data>
   <data name="SummaryView_Default" xml:space="preserve">
-    <value>Lehenetsia</value>
+    <value>Per defecte</value>
   </data>
   <data name="SummaryView_Forced" xml:space="preserve">
-    <value>Behartuak</value>
+    <value>Forçat</value>
   </data>
   <data name="PictureSettingsResLimitModes_1080p" xml:space="preserve">
     <value>1080p HD</value>
@@ -2257,554 +2260,554 @@ Mesedez, aukeratu beste aurrezarpen bat.</value>
     <value>4320p 8K Ultra HD</value>
   </data>
   <data name="PictureSettingsResLimitModes_custom" xml:space="preserve">
-    <value>Pertsonalizatua</value>
+    <value>Personalitzat</value>
   </data>
   <data name="PictureSettingsView_MaxSize" xml:space="preserve">
-    <value>Gehienezko tamaina:</value>
+    <value>Mida màxima:</value>
   </data>
   <data name="PictureSettingsView_ResLimit" xml:space="preserve">
-    <value>Bereizmen muga:</value>
+    <value>Límit de resolució:</value>
   </data>
   <data name="PictureSettingsResLimitModes_none" xml:space="preserve">
-    <value>Bat ere ez</value>
+    <value>Cap</value>
   </data>
   <data name="PresetManger_Title" xml:space="preserve">
-    <value>Aurrezarpenak kudeatu</value>
+    <value>Gestiona les configuracions predefinides</value>
   </data>
   <data name="ManagePresetView_DeleteBuiltIn" xml:space="preserve">
-    <value>Ezabatu berezko aurrezarpenak</value>
+    <value>Elimina les configuracions predefinides</value>
   </data>
   <data name="ManagePresetView_Export" xml:space="preserve">
-    <value>Esportatu hautatutako aurrezarpena</value>
+    <value>Export selected preset</value>
   </data>
   <data name="ManagePresetView_Import" xml:space="preserve">
-    <value>Inportatu aurrezarpena(k) fitxategitik</value>
+    <value>Import Preset(s) from file</value>
   </data>
   <data name="ManagePresetView_PresetInfo" xml:space="preserve">
-    <value>Aurrezarpenaren informazioa:</value>
+    <value>Preset Information:</value>
   </data>
   <data name="ManagePresetView_RestrictedPreset" xml:space="preserve">
-    <value>Berezko aurrezarpenak ezin dira aldatu</value>
+    <value>Built in presets can not be modified.</value>
   </data>
   <data name="ManagePresetView_SetDefault" xml:space="preserve">
-    <value>Ezarri hautatutako aurrezarpena lehenetsi gisa</value>
+    <value>Set selected preset as default</value>
   </data>
   <data name="PresetManagerView_Delete" xml:space="preserve">
-    <value>Aurrezarpena ezabatu</value>
+    <value>Elimina una configuració predefinida</value>
   </data>
   <data name="OptionsView_NotSupported" xml:space="preserve">
-    <value>(Ez da onartzen sistema honetan)</value>
+    <value>(No és compatible en aquest sistema)</value>
   </data>
   <data name="QueueView_Stop" xml:space="preserve">
-    <value>Gelditu</value>
+    <value>Atura</value>
   </data>
   <data name="String1" xml:space="preserve">
     <value/>
   </data>
   <data name="PresetService_CategoryAlreadyExists" xml:space="preserve">
-    <value>Sartu duzun kategoria-izena dagoeneko badago. Mesedez, aukeratu beste izen bat.</value>
+    <value>The category name you entered already exists. Please choose a different name.</value>
   </data>
   <data name="PresetService_CategoryNameEmpty" xml:space="preserve">
-    <value>Kategoriaren izena hutsik zegoen. Mesedez, eman izen bat.</value>
+    <value>The category name was empty. Please provide a name.</value>
   </data>
   <data name="TextEntryView_EnterName" xml:space="preserve">
-    <value>Sartu izen bat:</value>
+    <value>Introduïu un nom:</value>
   </data>
   <data name="ManagePresetView_NoPresetSelected" xml:space="preserve">
-    <value>Ez da aurrezarpenik hautatu.</value>
+    <value>No s'ha seleccionat cap configuració predefinida.</value>
   </data>
   <data name="ManagePresetView_ExportUserPresets" xml:space="preserve">
-    <value>Esportatu erabiltzailearen aurrezarpen guztiak</value>
+    <value>Export all user presets</value>
   </data>
   <data name="Options_LowDiskspaceLevelText" xml:space="preserve">
-    <value>Diskoan espazio gutxi alerta erakusteko maila:</value>
+    <value>Level at which low disk space alerts show:</value>
   </data>
   <data name="OptionsView_SimultaneousHardwareLimitNotice" xml:space="preserve">
-    <value>Oharra: hau da aldiberean egin daitezke lanen gehienezko kopurua. Hardware mugak eragina izan dezake eta aldibereko lan kopurua murrizten du. Ezarpenak hurrengo ilaran edo aplikazioa berrabiarazten denean bakarrik izango du eragina.</value>
+    <value>Notice: This is the upper limit of simultaneous jobs. Hardware limitations may take effect which lowers the actual number of simultaneous jobs during encoding. Setting will only take affect on the next queue batch or app restart.</value>
   </data>
   <data name="Preset_NotAvailable" xml:space="preserve">
-    <value>(Ez dago erabilgarri)</value>
+    <value>(No disponible)</value>
   </data>
   <data name="AddPresetView_IsDefault" xml:space="preserve">
-    <value>Lehenetsia:</value>
+    <value>Is Default:</value>
   </data>
   <data name="No" xml:space="preserve">
-    <value>Ez</value>
+    <value>No</value>
   </data>
   <data name="Yes" xml:space="preserve">
-    <value>Bai</value>
+    <value>Sí</value>
   </data>
   <data name="StaticPreviewView_FineTuning" xml:space="preserve">
-    <value>Egokitu irudiaren ezarpenak</value>
+    <value>Fine Tune Picture Settings</value>
   </data>
   <data name="StaticPreviewView_ShowPictureSettingsAdjustment" xml:space="preserve">
-    <value>Erakutsi mozketa kontrolak.</value>
+    <value>Show crop adjustment controls.</value>
   </data>
   <data name="DarkTheme_dark" xml:space="preserve">
-    <value>Erabili iluna</value>
+    <value>Fosc</value>
   </data>
   <data name="DarkTheme_light" xml:space="preserve">
-    <value>Erabili argia</value>
+    <value>Clar</value>
   </data>
   <data name="DarkTheme_system" xml:space="preserve">
-    <value>Sistemaren berdina</value>
+    <value>Coincideix amb el sistema</value>
   </data>
   <data name="OptionsView_DarkThemeMode" xml:space="preserve">
-    <value>Gaia:</value>
+    <value>Tema:</value>
   </data>
   <data name="OptionsView_RequiresRestart" xml:space="preserve">
-    <value>(Berrabiarazi behar da)</value>
+    <value>(Cal reiniciar)</value>
   </data>
   <data name="FiltersView_ChromaSmooth" xml:space="preserve">
-    <value>Kromaren leuntzea:</value>
+    <value>Suavització cromàtica:</value>
   </data>
   <data name="FiltersView_ColourSpace" xml:space="preserve">
-    <value>Kolore-espazioa:</value>
+    <value>Espai de color:</value>
   </data>
   <data name="SummaryView_Colourspace" xml:space="preserve">
-    <value>Kolore-espazioa</value>
+    <value>Espai de color</value>
   </data>
   <data name="PictureSettingsView_SeePreview" xml:space="preserve">
-    <value>Ireki aurrebista</value>
+    <value>Obre la previsualització</value>
   </data>
   <data name="SummaryView_SourcePreview" xml:space="preserve">
-    <value>Fitxategiaren aurrebista:</value>
+    <value>Previsualització del fitxer d'origen:</value>
   </data>
   <data name="QueueView_JobStatus" xml:space="preserve">
-    <value>Lanen egoera:</value>
+    <value>Estat de la tasca:</value>
   </data>
   <data name="QueueView_JobStatus_Cancelled" xml:space="preserve">
-    <value>Bertan behera utzita</value>
+    <value>Cancel·lada</value>
   </data>
   <data name="QueueView_JobStatus_Complete" xml:space="preserve">
-    <value>Eginda</value>
+    <value>Completada</value>
   </data>
   <data name="QueueView_JobStatus_InitFailed" xml:space="preserve">
-    <value>Ezarpen baliogabea. Ikusi erregistroa xehetasunetarako.</value>
+    <value>Invalid Settings. Check log for details.</value>
   </data>
   <data name="QueueView_JobStatus_InvalidInput" xml:space="preserve">
-    <value>Sarrera baliogabea. Ikusi erregistroa xehetasunetarako.</value>
+    <value>Invalid Input. Check log for details.</value>
   </data>
   <data name="QueueView_JobStatus_NoErrorCode" xml:space="preserve">
-    <value>Egoera ezezaguna. Ikusi erregistroa xehetasunetarako.</value>
+    <value>Status Unknown. Check log for details.</value>
   </data>
   <data name="QueueView_JobStatus_ReadError" xml:space="preserve">
-    <value>Akatsak hauteman dira fitxategia irakurtzen saiatzean.</value>
+    <value>Errors detected whist trying to read source.</value>
   </data>
   <data name="QueueView_JobStatus_Unknown" xml:space="preserve">
-    <value>Akats ezezaguna. Ikusi erregistroa xehetasunetarako.</value>
+    <value>Unknown failure. Check log for details.</value>
   </data>
   <data name="QueueView_JobStatus_WorkerCrash" xml:space="preserve">
-    <value>Lanak eten dira. Ikusi erregistroa xehetasunetarako.</value>
+    <value>Worker Crashed. Check log for details.</value>
   </data>
   <data name="Startup_HbDllMissing" xml:space="preserve">
-    <value>"hb.dll" fitxategia falta da. Mesedez, berriro instalatu.</value>
+    <value>Missing file "hb.dll". Please re-install.</value>
   </data>
   <data name="OptionsView_SafeMode" xml:space="preserve">
-    <value>Abisua: Kontuan izan hau HandBrake-ren "Modu segurua" bertsio bat dela, hardware kodetzaileentzako laguntzarik ez duena. Hardware kodetzaileen euskarria erabili nahi baduzu, deskargatu "Modu segurua" ez den bertsio bat webgunetik.</value>
+    <value>Warning: Please note that this is a "Safe Mode" build of HandBrake that does not include support for hardware encoders. If you wish to use hardware encoder support, please download a non-"Safe Mode" build from the website.</value>
   </data>
   <data name="PadColour_Black" xml:space="preserve">
-    <value>Beltza</value>
+    <value>Negre</value>
   </data>
   <data name="PadColour_Custom" xml:space="preserve">
-    <value>Pertsonalizatua</value>
+    <value>Personalitzat</value>
   </data>
   <data name="PadColour_White" xml:space="preserve">
-    <value>Zuria</value>
+    <value>Blanc</value>
   </data>
   <data name="PictureSettingsView_PaddingCustomColour" xml:space="preserve">
-    <value>RGB balioa:</value>
+    <value>Valor RGB:</value>
   </data>
   <data name="SummaryView_Padded" xml:space="preserve">
-    <value>(babestua)</value>
+    <value>(farcit)</value>
   </data>
   <data name="FiltersView_Flip" xml:space="preserve">
-    <value>Irauli:</value>
+    <value>Inversió:</value>
   </data>
   <data name="PictureSettingsView_SourceDimensions" xml:space="preserve">
-    <value>Fitxategiaren neurriak:</value>
+    <value>Dimensions d'origen:</value>
   </data>
   <data name="PictureSettingsViewModel_SourceInfo" xml:space="preserve">
-    <value>Biltegiratze tamaina: {0}x{1}     Pantailaratze tamaina: {2}x{3}      Aspektu erlazioa: {4}</value>
+    <value>Mida del contenidor: {0}x{1}  Mida de la pantalla: {2}x{3}  Relació d'aspecte: {4}</value>
   </data>
   <data name="MainViewModel_FilePathSelectError" xml:space="preserve">
-    <value>Akats bat hauteman da fitxategi arakatzailearen elkarrizketa koadroan.
+    <value>An error was detected in the File Browser Dialog. 
 
-- Kontuan izan fitxategien bide luzeak ez direla guztiz onartzen. Mesedez, fitxategiaren bideak 255 karaktere baino gutxiago izan ditzala.
-- Leiho honetan erabilitako azken direktorioa berrezarri da fitxategi bat eskaneatzen saiatzen zaren hurrengoan akatsak saihesteko.</value>
+- Please note, long file paths are not fully supported. Please keep file paths shorter than 255 characters. 
+- The last used directory for this window, has been reset to prevent errors the next time you try to scan a file.</value>
   </data>
   <data name="PictureSettingsView_MaxHeight" xml:space="preserve">
-    <value>Gehienezko altuera:</value>
+    <value>Alçada màxima:</value>
   </data>
   <data name="PictureSettingsView_MaxWidth" xml:space="preserve">
-    <value>Gehienezko zabalera:</value>
+    <value>Amplada màxima:</value>
   </data>
   <data name="PictureSettingsViewModel_AspectRatioLabel" xml:space="preserve">
-    <value>Aspektu erlazioa: {0}</value>
+    <value>Relació d'aspecte: {0}</value>
   </data>
   <data name="SummaryView_MetadataPassthru" xml:space="preserve">
-    <value>Metadatu komunak pasa</value>
+    <value>Passthru Common Metadata</value>
   </data>
   <data name="OptionsViewModel_InvalidAutonamePath" xml:space="preserve">
-    <value>Izendatze automatikoaren bide lehenetsia ez zen baliozkoa. {0} ez da {1}-ren aurretik egon behar</value>
+    <value>The default auto name path was not valid. {0} must not be before {1}</value>
   </data>
   <data name="FirstRun_EnableUpdateCheck" xml:space="preserve">
-    <value>HandBrake-ri eguneratzeak automatikoki bilatzea baimendu nahi diozu?
+    <value>Voleu permetre que el HandBrake comprovi automàticament les actualitzacions?
 
-Zure aukera edonoiz alda dezakezu hemen: Ezarpenak -&gt; Orokorra -&gt; Bilatu eguneratzeak</value>
+Podeu canviar la vostra elecció sempre que vulgueu anant a Preferències -&gt; General -&gt; Comprova les actualitzacions</value>
   </data>
   <data name="FirstRun_EnableUpdateCheckHeader" xml:space="preserve">
-    <value>Eguneratzeak bilatu?</value>
+    <value>Voleu comprovar les actualitzacions?</value>
   </data>
   <data name="OptionsViewModel_UpdateNotice" xml:space="preserve">
-    <value>Eguneratu aurretik:
-- Ziurtatu ez dagoela kodetzerik zain ilaran.
-- Egin babeskopiak edo ohar bat sortu dituzun aurrezarpen pertsonalizatuekin, hauek agian ez direlako bertsio berriekin guztiz bateragarriak izango.</value>
+    <value>Before Updating:
+- Make sure there are no pending encodes in the queue. 
+- Backup or make a note of any custom presets you have created as they may not be fully compatible with newer versions.</value>
   </data>
   <data name="Preset_Default" xml:space="preserve">
-    <value>(Lehenetsia)</value>
+    <value>(Per defecte)</value>
   </data>
   <data name="PresetDisplayMode_Category" xml:space="preserve">
-    <value>Kategoriak</value>
+    <value>Categories</value>
   </data>
   <data name="PresetDisplayMode_Flat" xml:space="preserve">
-    <value>Laua</value>
+    <value>Pla</value>
   </data>
   <data name="PresetDisplayMode_Partial" xml:space="preserve">
-    <value>Partzialki laua</value>
+    <value>Parcialment pla</value>
   </data>
   <data name="OptionsView_PresetDisplayMode" xml:space="preserve">
-    <value>Aukeratu aurrezarpenak nola bistaratzen diren menuetan:</value>
+    <value>Choose how presets are displayed in menus:</value>
   </data>
   <data name="QueueView_SelectedPresets" xml:space="preserve">
-    <value>Aurrezarpena:</value>
+    <value>Configuració predefinida:</value>
   </data>
   <data name="LogViewModel_Complete" xml:space="preserve">
-    <value>[Amaitua]</value>
+    <value>[Completat]</value>
   </data>
   <data name="QueueViewModel_EditJob" xml:space="preserve">
-    <value>Lana editatu?</value>
+    <value>Voleu editar la tasca?</value>
   </data>
   <data name="QueueView_Length" xml:space="preserve">
-    <value>Irteerako luzera:</value>
+    <value>Durada del fitxer de sortida:</value>
   </data>
   <data name="QueueView_MoveToBottom" xml:space="preserve">
-    <value>Mugitu behera</value>
+    <value>Move To Bottom</value>
   </data>
   <data name="QueueView_MoveToTop" xml:space="preserve">
-    <value>Mugitu gora</value>
+    <value>Move To Top</value>
   </data>
   <data name="QueueView_VideoOutputBitrate" xml:space="preserve">
-    <value>Irteerako bit-tasa:</value>
+    <value>Velocitat de transmissió del fitxer de sortida:</value>
   </data>
   <data name="QueueView_AverageEncodeSpeed" xml:space="preserve">
-    <value>Batez besteko kodetze abiadura:</value>
+    <value>Average Encoding Speed:</value>
   </data>
   <data name="QueueViewModel_DifferenceText" xml:space="preserve">
-    <value>iturburu fitxategiarena</value>
+    <value> del fitxer d'origen</value>
   </data>
   <data name="QueueViewModel_NotAvailable" xml:space="preserve">
-    <value>Ez erabilgarri</value>
+    <value>No disponible</value>
   </data>
   <data name="QueueView_SourceLength" xml:space="preserve">
-    <value>Fitxategiaren luzera:</value>
+    <value>Durada del fitxer d'origen:</value>
   </data>
   <data name="Options_Reset" xml:space="preserve">
-    <value>Berrezarri</value>
+    <value>Reinicialització</value>
   </data>
   <data name="OptionsViewModel_ResetHandBrakePresetsQuestion" xml:space="preserve">
-    <value>Ziur berezko aurrezarpen guztiak berrezarri nahi dituzula?</value>
+    <value>Segur que voleu reinicialitzar totes les configuracions predefinides originals?</value>
   </data>
   <data name="OptionsView_ResetBuildInPresets" xml:space="preserve">
-    <value>Berrezarri aurrezarpen guztiak HandBrake-en lehenetsietara:</value>
+    <value>Reinicialitza totes les configuracions predefinides al valor original:</value>
   </data>
   <data name="OptionsView_ResetBuildInPresetsNotice" xml:space="preserve">
-    <value>(Erabiltzailearen aurrezarpenak ez dira berrezarriko)</value>
+    <value>(Les configuracions predefinides de l'usuari no es restabliran)</value>
   </data>
   <data name="OptionsView_ResetSettingsToDefaults" xml:space="preserve">
-    <value>Berrezarri HandBrake-en ezarpen guztiak lehenetsietara:</value>
+    <value>Reset all HandBrake settings back to defaults:</value>
   </data>
   <data name="Options_BuiltInPresets" xml:space="preserve">
-    <value>Berezko aurrezarpenak</value>
+    <value>Configuracions predefinides originals</value>
   </data>
   <data name="Options_UserSettings" xml:space="preserve">
-    <value>Erabiltzailearen ezarpenak</value>
+    <value>User Settings</value>
   </data>
   <data name="PresetDisplayMode_FloatingPanel" xml:space="preserve">
-    <value>Zuhaitz-ikuspegi flotatzailea</value>
+    <value>Floating Treeview</value>
   </data>
   <data name="QueueViewModel_PlayFileErrorSolution" xml:space="preserve">
-    <value>Mesedez, ziurtatu konfigurazio egokia duzula Windows-ek fitxategi hau bideo-erreproduzitzaile batekin ireki dezan</value>
+    <value>Please make sure you have appropriate file associations setup in Windows to allow it to open this file with a supported video player</value>
   </data>
   <data name="QueueViewModel_ImportFail" xml:space="preserve">
-    <value>Ezin da ilararen fitxategia irakurri.</value>
+    <value>Unable to read the queue file.</value>
   </data>
   <data name="QueueViewModel_ImportFailSolution" xml:space="preserve">
-    <value>Baliteke fitxategia hondatuta egotea edo HandBrake-ren aurreko bertsio batekoa izatea.
-Uneko bertsioko ilara fitxategiak soilik onartzen dira.</value>
+    <value>The file may be corrupted or from an earlier version of HandBrake. 
+Only queue files from the current version are supported.</value>
   </data>
   <data name="Notifications_EncodeDone" xml:space="preserve">
-    <value>HandBrake-ek kodetzea bukatu du!</value>
+    <value>Your HandBrake encode is done!</value>
   </data>
   <data name="Notifications_QueueDone" xml:space="preserve">
-    <value>HandBrake-ek ilara bukatu du!</value>
+    <value>Your HandBrake queue is done!</value>
   </data>
   <data name="OptionsView_NotificationRemovalSubText" xml:space="preserve">
-    <value>Honek desgaitu egingo du ataza-barrako jakinarazpenen aukerak ikustea 'Bukatzean' leihoan. Birgaitu eginbide hau berriro aktibatu nahi baduzu.</value>
+    <value>This will also disable the show windows taskbar notifications options on the 'When Done' tab. Re-enable these if you want to re-activate this feature.</value>
   </data>
   <data name="OptionsView_NotificationRemovalText" xml:space="preserve">
-    <value>Kendu HandBrake Windowsen jakinarazpenen kontrol paneletik.</value>
+    <value>Remove HandBrake from the Windows notifications control panel.</value>
   </data>
   <data name="OptionsView_UninstallMessageBoxHeader" xml:space="preserve">
-    <value>Desinstalatua</value>
+    <value>S'ha desinstal·lat</value>
   </data>
   <data name="OptionsView_UninstallMessageBoxText" xml:space="preserve">
-    <value>Jakinarazpenen ezarpenak kendu egin dira.</value>
+    <value>Notification settings have been removed.</value>
   </data>
   <data name="OptionsView_UninstallToast" xml:space="preserve">
-    <value>Garbitu eta desinstalatu</value>
+    <value>Esborra i desinstal·la</value>
   </data>
   <data name="OptionsView_WindowsNotification" xml:space="preserve">
-    <value>Bidali jakinarazpen bat Windowsen ataza-barrara.</value>
+    <value>Send a notification to the Windows Taskbar.</value>
   </data>
   <data name="OptionsView_WindowsNotificationsBanner" xml:space="preserve">
-    <value>Windowsen jakinarazpenak</value>
+    <value>Notificacions del Windows</value>
   </data>
   <data name="Main_QueueMultiJobStatus" xml:space="preserve">
-    <value>{0} lan amaituta. {1} lanean {2} lan {3}ilaran zain.</value>
+    <value>{0} jobs completed. {1}Working on {2} jobs with {3} waiting to be processed.</value>
   </data>
   <data name="MainView_AutonameRegenerate" xml:space="preserve">
-    <value>Birsortu (autoizendatu)</value>
+    <value>Regenerate (Autoname)</value>
   </data>
   <data name="MainView_OpenDirectory" xml:space="preserve">
-    <value>Ireki direktorio hau</value>
+    <value>Obre el directori</value>
   </data>
   <data name="Shared_CollapseAll" xml:space="preserve">
-    <value>Bildu guztiak</value>
+    <value>Collapse All</value>
   </data>
   <data name="Shared_ExpandAll" xml:space="preserve">
-    <value>Zabaldu guztiak</value>
+    <value>Expand All</value>
   </data>
   <data name="OptionsView_RightToleftMode" xml:space="preserve">
-    <value>Eskuinetik ezkerrera bistaratzeko modua:</value>
+    <value>Mode de visualització de dreta a esquerra:</value>
   </data>
   <data name="RightToLeft_Off" xml:space="preserve">
-    <value>Itzali</value>
+    <value>Desactivat</value>
   </data>
   <data name="RightToLeft_TextOnly" xml:space="preserve">
-    <value>Testua soilik</value>
+    <value>Només text</value>
   </data>
   <data name="RightToLeft_WholeInterface" xml:space="preserve">
-    <value>Erabiltzaile interfaze osoa</value>
+    <value>Tota la interfície d'usuari</value>
   </data>
   <data name="SourceSelection_NightlyUpdate" xml:space="preserve">
-    <value>Erabiltzen ari zaren garapen eraikuntza zahartzen ari da. Baliteke eguneratu nahi izatea!</value>
+    <value>The current development build you are running is getting old. You may wish to update!</value>
   </data>
   <data name="SourceSelection_NightlyUpdateUrl" xml:space="preserve">
-    <value>Deskargatu Github bidez</value>
+    <value>Baixa de Github</value>
   </data>
   <data name="MainView_NightlyBuildsUpdate" xml:space="preserve">
-    <value>Deskargatu garapen eraikuntzak (HTTPS)</value>
+    <value>Download Development Builds (HTTPS)</value>
   </data>
   <data name="OptionsView_EnableQuicksyncHyperEncode" xml:space="preserve">
-    <value>Gaitu QuickSync Deep Link Hyper Encode</value>
+    <value>Enable QuickSync Deep Link Hyper Encode</value>
   </data>
   <data name="OptionsView_HyperEncodeDescription" xml:space="preserve">
-    <value>Onartzen den kasuetan, kodetze bakarra bizkortzeko hainbat multimedia-motor erabiltzea hobesten du. Desgaitu karga orekatzeko aldi bereko hainbat kodetze multimedia-motorretan.</value>
+    <value>Prefers the use of multiple media engines to speed up a single encode where supported. Disable to allow load balancing multiple parallel encodes across media engines.</value>
   </data>
   <data name="MainView_OpenHandBrake" xml:space="preserve">
-    <value>Ireki HandBrake</value>
+    <value>Obre el HandBrake</value>
   </data>
   <data name="Startup_UnableToStartInfo" xml:space="preserve">
-    <value>Hardwarearen kodetze euskarria desgaitu egin da, abiarazte arazoren batengatik izan daiteke.
-- Mesedez, saiatu HandBrake berrabiarazten.
-- Arazoak irauten badu, baliteke txartel grafikoen kontrolatzailea zaharkitua egotea eta arazoa horrek eragitea.
+    <value>Hardware encoding support has been disabled as it is a common cause of start-up issues.
+- Please try restarting HandBrake. 
+- If the problem persists, it may be an out-of-date graphics card driver (onboard or discrete) that is causing the problem.
 
-Hardwarearen kodetze euskarria berriro gaitu daiteke ezarpenetan.</value>
+Hardware encoding support can be re-enabled in preferences. </value>
   </data>
   <data name="Startup_UnableToStart" xml:space="preserve">
-    <value>HandBrake ezin izan da abiatu.</value>
+    <value>El HandBrake no s'ha pogut executar.</value>
   </data>
   <data name="OptionsView_ResetSafeMode" xml:space="preserve">
-    <value>Berrezarri modu segurua</value>
+    <value>Reset Safe Mode</value>
   </data>
   <data name="OptionsView_ResetSafeModeMessage" xml:space="preserve">
-    <value>Mesedez, berrabiarazi HandBrake.</value>
+    <value>Reinicieu el HandBrake.</value>
   </data>
   <data name="Debug_QueueDataExport" xml:space="preserve">
-    <value>Esportatu ilararen estatistika datuak (csv)</value>
+    <value>Export Queue Statistics Data (csv)</value>
   </data>
   <data name="Debug_QueueExportDataDone" xml:space="preserve">
-    <value>Esportatu da!</value>
+    <value>S'ha exportat correctament!</value>
   </data>
   <data name="Debug_QueueSweep_NotSetup" xml:space="preserve">
-    <value>Lehenik fitxategi bat ireki eta helmuga direktorioa ezarri behar duzu</value>
+    <value>You must first scan a source and have an initial destination directory set</value>
   </data>
   <data name="OptionsView_FileCollisionNotice" xml:space="preserve">
-    <value>Fitxategia dagoeneko diskoan dagoenean bakarrik.</value>
+    <value>Only when file already exists on disk.</value>
   </data>
   <data name="Info" xml:space="preserve">
-    <value>Informazioa</value>
+    <value>Informació</value>
   </data>
   <data name="SubtitleView_NoSubtitlesAdded" xml:space="preserve">
-    <value>Ez da azpititulu pistarik gehitu.
+    <value>There were no subtitle tracks added. 
 
-Hautatu duzun fitxategi edukiontziaren mugengatik izan daiteke. Mesedez, begiratu gure azpitituluen laguntza dokumentazioa informazio gehiago lortzeko.</value>
+This may be due to limitations of the file container you have selected. Please see our subtitle help documentation for more information.</value>
   </data>
   <data name="DarkTheme_None" xml:space="preserve">
-    <value>Bat ere ez</value>
+    <value>Cap</value>
   </data>
   <data name="SourceSelection_UpdateNow" xml:space="preserve">
-    <value>Eguneratu orain!</value>
+    <value>Actualitza ara!</value>
   </data>
   <data name="CropMode_Auto" xml:space="preserve">
-    <value>Automatikoa</value>
+    <value>Automàtic</value>
   </data>
   <data name="CropMode_Loose" xml:space="preserve">
-    <value>Kontserbadorea</value>
+    <value>Conservador</value>
   </data>
   <data name="CropMode_None" xml:space="preserve">
-    <value>Bat ere ez</value>
+    <value>Cap</value>
   </data>
   <data name="CropMode_Custom" xml:space="preserve">
-    <value>Pertsonalizatua</value>
+    <value>Personalitzat</value>
   </data>
   <data name="OptionsView_EnableNvDecSupport" xml:space="preserve">
-    <value>Erabili Nvidia NVDec bideoa kodetzeko NVEnc kodetzailea erabiltzean eta hardwarea erabiltzeko erabilgarri dagoenean.</value>
+    <value>Prefer use of Nvidia NVDec for decoding video when using the NVEnc encoder and the hardware is available for use.</value>
   </data>
   <data name="Options_Hardware" xml:space="preserve">
-    <value>Hardware laguntza</value>
+    <value>Assistència de programari</value>
   </data>
   <data name="StaticPreviewViewModel_MediaError" xml:space="preserve">
-    <value>Sistemak ezin izan du fitxategi hau erreproduzitu.
+    <value>The system was unable to play this file. 
 
-Kontuan izan zenbait kodek, AV1 edo HEVC adibidez, Microsoft dendako Microsoft AV1 edo HEVC kodeka-pluginak behar dituztela erreproduzitzeko.
-Bestela, aukeratu beheko "Erabili kanpoko erreproduzitzailea" laukia.</value>
+Please note certain codecs such as AV1 or HEVC require the Microsoft AV1 or HEVC codec plugins from the Microsoft Store to play.
+Alternatively, check the "Use External Player" checkbox below.</value>
   </data>
   <data name="StaticPreviewView_ClosePlayer" xml:space="preserve">
-    <value>Itxi erreproduzitzailea</value>
+    <value>Tanca el reproductor</value>
   </data>
   <data name="StaticPreviewView_Play" xml:space="preserve">
-    <value>Ikusi</value>
+    <value>Reprodueix</value>
   </data>
   <data name="StaticPreviewView_VideoPreview" xml:space="preserve">
-    <value>Bideoaren aurrebista</value>
+    <value>Previsualització del vídeo</value>
   </data>
   <data name="StaticPreviewViewModel_WebmNotSupported" xml:space="preserve">
-    <value>Aurrebista integratua ez dago erabilgarri WebM edukiontzirako. Kanpoko erreproduzitzaile bat erabili beharko da.</value>
+    <value>The Built-in preview is not available for the WebM container. An External player must be used.</value>
   </data>
   <data name="StaticPreview_EncodingPreview" xml:space="preserve">
-    <value>Aurrebista kodetzen ...</value>
+    <value>Codificació de la previsualització...</value>
   </data>
   <data name="StaticPreview_Previews" xml:space="preserve">
-    <value>Aurrebistak:</value>
+    <value>Previsualitzacions:</value>
   </data>
   <data name="StaticPreview_Volume" xml:space="preserve">
-    <value>Bolumena: 0</value>
+    <value>Volum: 0</value>
   </data>
   <data name="Reset" xml:space="preserve">
-    <value>Berrezarri</value>
+    <value>Reinicialització</value>
   </data>
   <data name="OptionsView_IsoDateFormat" xml:space="preserve">
-    <value>Erabili ISO data-formatuak (UUUU-HH-EE) sistemaren formatuaren ordez.</value>
+    <value>Utilitza el format de data ISO (AAAA-MM-DD) en comptes del format del sistema.</value>
   </data>
   <data name="QueueViewModel_ShortEncodeStatus" xml:space="preserve">
-    <value>{0}. itzulia {1}-tik, %{2:00.00}, {3:000.0} fps, batez beste {4:000.0} fps, Gelditzen den denbora: {5}</value>
+    <value>Passada {0} de {1}, {2:00.00} %, {3:000.0} fps, mitj. {4:000.0} fps, temps estimat: {5}</value>
   </data>
   <data name="QueueViewModel_ShortSubScanStatus" xml:space="preserve">
-    <value>Azpitituluak bilatzen %{0:00.00}, Denbora: {1}</value>
+    <value>S'estan cercant els subtítols {0:00.00} %, temps estimat: {1}</value>
   </data>
   <data name="QueueView_ExtendedQueueDisplay" xml:space="preserve">
-    <value>Zabaldu ilararen informazioa</value>
+    <value>Amplia la informació de la cua</value>
   </data>
   <data name="QueueView_MinimalQueueDisplay" xml:space="preserve">
-    <value>Minimizatu ilararen informazioa</value>
+    <value>Redueix la informació de la cua</value>
   </data>
   <data name="QueueStats_ShortOutputStats" xml:space="preserve">
-    <value>Irteera: {0}, batez beste {1} fps</value>
+    <value>Fitxer de sortida. {0}, mitj. {1} fps</value>
   </data>
   <data name="PresetPane_Desc" xml:space="preserve">
-    <value>Aurrezarpenaren deskribapena:</value>
+    <value>Descripció de la configuració predefinida:</value>
   </data>
   <data name="PresetPane_HidePresetDesc" xml:space="preserve">
-    <value>Ezkutatu aurrezarpenaren deskribapena</value>
+    <value>Amaga la descripció de la configuració predefinida</value>
   </data>
   <data name="PresetPane_ShowPresetDesc" xml:space="preserve">
-    <value>Erakutsi aurrezarpenaren deskribapena</value>
+    <value>Mostra la descripció de la configuració predefinida</value>
   </data>
   <data name="TaskTrayStatusManyTitle" xml:space="preserve">
     <value>{0}
-{1} lan kodetzen</value>
+S'estan codificant {1} tasques</value>
   </data>
   <data name="StaticPreviewViewModel_MultipleEncodes" xml:space="preserve">
-    <value>Ezin da aurrebista kodetu. Aplikazioa beste fitxategi bat kodetzen lanpetuta dago.
+    <value>Unable to encode a preview. The application is currently busy encoding another file.
 
-Aldibereko kode anitz onartzeko, aktibatu "Prozesuaren isolamendua" Tresnak menuan -&gt; Hobespenak -&gt; Aurreratua -&gt; Prozesuaren isolamendua -&gt; "Exekutatu ilaran dauden lan bakoitza lan-prozesu bereizi batean".</value>
+To allow multiple simultaneous encodes, turn on "Process Isolation" in Tools Menu -&gt; Preferences -&gt; Advanced -&gt; Process Isolation -&gt; "Run each queued job in a separate worker process".</value>
   </data>
   <data name="AudioView_Quality" xml:space="preserve">
-    <value>Kalitatea</value>
+    <value>Qualitat</value>
   </data>
   <data name="AudioView_Source" xml:space="preserve">
-    <value>Iturburua</value>
+    <value>Fitxer d'origen:</value>
   </data>
   <data name="AboutView_Documentation" xml:space="preserve">
-    <value>Dokumentazioa:</value>
+    <value>Documentació:</value>
   </data>
   <data name="AboutView_GithubTracker" xml:space="preserve">
-    <value>Arazoen jarraipena GitHub-en :</value>
+    <value>Seguiment d'assumptes de GitHub:</value>
   </data>
   <data name="AboutView_Website" xml:space="preserve">
-    <value>Webgunea:</value>
+    <value>Lloc web:</value>
   </data>
   <data name="MainView_PresetClone" xml:space="preserve">
-    <value>Klonatu aurrezarpena</value>
+    <value>Clona una configuració predefinida</value>
   </data>
   <data name="PresetPane_MoveDown" xml:space="preserve">
-    <value>Mugitu behera</value>
+    <value>Move Down</value>
   </data>
   <data name="PresetPane_MoveToBottom" xml:space="preserve">
-    <value>Mugitu beheraino</value>
+    <value>Move to Bottom</value>
   </data>
   <data name="PresetPane_MoveToTop" xml:space="preserve">
-    <value>Mugitu goraino</value>
+    <value>Move to Top</value>
   </data>
   <data name="PresetPane_MoveUp" xml:space="preserve">
-    <value>Mugitu gora</value>
+    <value>Mou amunt</value>
   </data>
   <data name="QueueViewModel_StopButContinueJob" xml:space="preserve">
-    <value>Une honetan lanak daude martxan. Ilara gelditu aurretik uneko lanak amaitu nahi al dituzu?</value>
+    <value>There are currently jobs running. Would you like to complete the current jobs before stopping the queue?</value>
   </data>
   <data name="Options_AddExt" xml:space="preserve">
-    <value>Gehitu luzapena</value>
+    <value>Afegeix l'extensió</value>
   </data>
   <data name="Options_ExcludeExtensions" xml:space="preserve">
-    <value>Baztertu fitxategi-luzapen hauek:</value>
+    <value>Exclusió d'extensions:</value>
   </data>
   <data name="Options_ExcludeExtensionsInfo" xml:space="preserve">
-    <value>Fitxategi-luzapen hauek ez dira kontuan hartuko karpeta bat eskaneatzean. Zerrendak maiuskulak eta minuskulak bereizten ditu. "." ez da beharrezkoa.</value>
+    <value>Les extensions de fitxer que hi ha a continuació s'obviaran quan s'escanegi una carpeta. La llista no distingeix entre majúscules i minúscules. El «.» no és necessari.</value>
   </data>
   <data name="Options_ExtensionExists" xml:space="preserve">
-    <value>Fitxategi-luzapen hau dagoeneko badago zerrendan.</value>
+    <value>L'extensió de fitxer ja és a la llista.</value>
   </data>
   <data name="Options_FileHandling" xml:space="preserve">
-    <value>Fitxategien kudeaketa (eskaneatzea)</value>
+    <value>Gestió dels fitxers (escaneig)</value>
   </data>
   <data name="Options_RecursiveFolderScan" xml:space="preserve">
-    <value>Eskaneatu errekurtsiboki direktorioak karpetak eskaneatzeko modua erabiltzean.</value>
+    <value>Recursively scan directories when using the folder scan mode.</value>
   </data>
   <data name="AudioView_AudioQuality" xml:space="preserve">
-    <value>Audio pistaren kalitatea</value>
+    <value>Qualitat de la pista d'àudio</value>
   </data>
   <data name="AudioView_AudioTrackName" xml:space="preserve">
-    <value>Audio pistaren izena</value>
+    <value>Nom de la pista d'àudio</value>
   </data>
   <data name="AudioView_BitrateSelection" xml:space="preserve">
-    <value>Audio pistaren bit-tasa</value>
+    <value>Velocitat de transmissió de la pista d'àudio</value>
   </data>
   <data name="AudioView_DeleteTrack" xml:space="preserve">
-    <value>Ezabatu audio pista hau</value>
+    <value>Elimina la pista d'àudio</value>
   </data>
   <data name="AudioView_QualityMode" xml:space="preserve">
-    <value>Audio kodetzailearen kalitate modua</value>
+    <value>Mode de qualitat del codificador d'àudio</value>
   </data>
 </root>

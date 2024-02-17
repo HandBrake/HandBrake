@@ -486,7 +486,8 @@ Foundation, Inc., Franklin Street 51, Fifth Floor, Boston, MA 02110-1301, USA.</
     <value>Η ουρά σταμάτησε</value>
   </data>
   <data name="QueueViewModel_DelSelectedJobConfirmation" xml:space="preserve">
-    <value>Είστε βέβαιοι ότι θέλετε να διαγράψετε τις επιλεγμένες εργασίες;</value>
+    <value>Are you sure you want to delete the selected jobs?
+No encoded files will be deleted with this operation. </value>
   </data>
   <data name="QueueViewModel_JobCurrentlyRunningWarning" xml:space="preserve">
     <value>Αυτή η κωδικοποίηση βρίσκεται σε εξέλιξη. Εάν την διαγράψετε, η κωδικοποίηση θα σταματήσει. Είστε σίγουροι ότι θέλετε να συνεχίσετε;</value>
@@ -2154,15 +2155,11 @@ You can drag/drop or enter the text above.</value>
   <data name="OptionsView_RemotePortLimit" xml:space="preserve">
     <value>Το εύρος της θύρας πρέπει να είναι μεταξύ 5000 και 32767</value>
   </data>
-  <data name="OptionsView_SendFileToArgPlaceholders" xml:space="preserve">
-    <value>Αντικατάσταση θέσεων: {source} {destination} {exit_code}</value>
-    <comment>Note: {source}, {destination} and {exit_code} are not translatable. </comment>
-  </data>
   <data name="SourceSelection_UpdateAvailable" xml:space="preserve">
     <value>Μια νέα έκδοση του HandBrake είναι διαθέσιμη!</value>
   </data>
   <data name="About_Copyright" xml:space="preserve">
-    <value>Πνευματικά δικαιώματα(C) 2003-2023 Η ομάδα του HandBrake</value>
+    <value>Copyright (C) 2003-2024 The HandBrake Team</value>
   </data>
   <data name="Options_LowBatteryLevel" xml:space="preserve">
     <value>Χαμηλό επίπεδο μπαταρίας:</value>
@@ -2819,5 +2816,20 @@ To allow multiple simultaneous encodes, turn on "Process Isolation" in Tools Men
   </data>
   <data name="Options_RecursiveFolderScan" xml:space="preserve">
     <value>Recursively scan directories when using the folder scan mode.</value>
+  </data>
+  <data name="AudioView_AudioQuality" xml:space="preserve">
+    <value>Audio Track Quality</value>
+  </data>
+  <data name="AudioView_AudioTrackName" xml:space="preserve">
+    <value>Audio Track Name</value>
+  </data>
+  <data name="AudioView_BitrateSelection" xml:space="preserve">
+    <value>Audio Track Bitrate</value>
+  </data>
+  <data name="AudioView_DeleteTrack" xml:space="preserve">
+    <value>Delete this audio track</value>
+  </data>
+  <data name="AudioView_QualityMode" xml:space="preserve">
+    <value>Audio Encoder Quality Mode</value>
   </data>
 </root>
