@@ -10,6 +10,8 @@ jobs:
   build:
     name: Build on macOS
     runs-on: macos-14
+    env:
+      DEVELOPER_DIR: /Applications/Xcode_15.2.app/Contents/Developer
     steps:
     - uses: actions/checkout@v4
 
