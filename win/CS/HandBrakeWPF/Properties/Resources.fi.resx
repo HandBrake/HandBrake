@@ -489,7 +489,8 @@ Lisätietoa voi löytyä toimintalokista.</value>
     <value>Jono on keskeytetty</value>
   </data>
   <data name="QueueViewModel_DelSelectedJobConfirmation" xml:space="preserve">
-    <value>Haluatko varmasti poistaa valitut työt?</value>
+    <value>Are you sure you want to delete the selected jobs?
+No encoded files will be deleted with this operation. </value>
   </data>
   <data name="QueueViewModel_JobCurrentlyRunningWarning" xml:space="preserve">
     <value>Tämä koodaus on käynnissä. Jos poistat sen, koodaus pysäytetään. Haluatko varmasti jatkaa?</value>
@@ -2133,15 +2134,11 @@ Sikäli kuin mahdollista, on tuotu käyttäjän esiasetukset.</value>
   <data name="OptionsView_RemotePortLimit" xml:space="preserve">
     <value>Porttialueen on oltava väliltä 5000–32767.</value>
   </data>
-  <data name="OptionsView_SendFileToArgPlaceholders" xml:space="preserve">
-    <value>Replacement Placeholders: {source} {destination} {exit_code}</value>
-    <comment>Note: {source}, {destination} and {exit_code} are not translatable. </comment>
-  </data>
   <data name="SourceSelection_UpdateAvailable" xml:space="preserve">
     <value>Saatavilla on uusi versio!</value>
   </data>
   <data name="About_Copyright" xml:space="preserve">
-    <value>Tekijänoikeudet © 2003–2023 HandBrake-työryhmä</value>
+    <value>Copyright (C) 2003-2024 The HandBrake Team</value>
   </data>
   <data name="Options_LowBatteryLevel" xml:space="preserve">
     <value>Akkutehon ollessa vähissä:</value>
@@ -2797,5 +2794,20 @@ Usean rinnakkaisen koodauksen voi ottaa käyttöön asetuksella ”Prosessien er
   </data>
   <data name="Options_RecursiveFolderScan" xml:space="preserve">
     <value>Recursively scan directories when using the folder scan mode.</value>
+  </data>
+  <data name="AudioView_AudioQuality" xml:space="preserve">
+    <value>Audio Track Quality</value>
+  </data>
+  <data name="AudioView_AudioTrackName" xml:space="preserve">
+    <value>Audio Track Name</value>
+  </data>
+  <data name="AudioView_BitrateSelection" xml:space="preserve">
+    <value>Audio Track Bitrate</value>
+  </data>
+  <data name="AudioView_DeleteTrack" xml:space="preserve">
+    <value>Delete this audio track</value>
+  </data>
+  <data name="AudioView_QualityMode" xml:space="preserve">
+    <value>Audio Encoder Quality Mode</value>
   </data>
 </root>

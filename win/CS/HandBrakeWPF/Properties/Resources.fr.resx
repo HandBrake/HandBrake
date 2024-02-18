@@ -489,7 +489,8 @@ Veuillez consulter le site Web pour les notes de version.</value>
     <value>File mise en pause</value>
   </data>
   <data name="QueueViewModel_DelSelectedJobConfirmation" xml:space="preserve">
-    <value>Êtes-vous sûr de vouloir supprimer les tâches sélectionnées ?</value>
+    <value>Are you sure you want to delete the selected jobs?
+No encoded files will be deleted with this operation. </value>
   </data>
   <data name="QueueViewModel_JobCurrentlyRunningWarning" xml:space="preserve">
     <value>Cet encodage est en cours. Si vous le supprimez, l'encodage sera arrêté. Êtes-vous sûr de vouloir continuer ?</value>
@@ -2133,15 +2134,11 @@ Là où pris en charge, tous les préréglages utilisateur auront été importé
   <data name="OptionsView_RemotePortLimit" xml:space="preserve">
     <value>La plage de ports doit être comprise entre 5000 et 32767</value>
   </data>
-  <data name="OptionsView_SendFileToArgPlaceholders" xml:space="preserve">
-    <value>Caractères de substitution: {source} {destination} {exit_code}</value>
-    <comment>Note: {source}, {destination} and {exit_code} are not translatable. </comment>
-  </data>
   <data name="SourceSelection_UpdateAvailable" xml:space="preserve">
     <value>Une nouvelle version est disponible !</value>
   </data>
   <data name="About_Copyright" xml:space="preserve">
-    <value>Copyright (C) 2003-2023 The HandBrake Team</value>
+    <value>Copyright (C) 2003-2024 The HandBrake Team</value>
   </data>
   <data name="Options_LowBatteryLevel" xml:space="preserve">
     <value>Niveau de batterie faible :</value>
@@ -2797,5 +2794,20 @@ Afin d'autoriser les encodages simultanés, activez l'option "Isolement des Proc
   </data>
   <data name="Options_RecursiveFolderScan" xml:space="preserve">
     <value>Analyse récursivement les dossiers lorsque le mode analyse de fichier est utilisé.</value>
+  </data>
+  <data name="AudioView_AudioQuality" xml:space="preserve">
+    <value>Qualité de la piste audio</value>
+  </data>
+  <data name="AudioView_AudioTrackName" xml:space="preserve">
+    <value>Nom de la piste audio</value>
+  </data>
+  <data name="AudioView_BitrateSelection" xml:space="preserve">
+    <value>Débit de la piste audio</value>
+  </data>
+  <data name="AudioView_DeleteTrack" xml:space="preserve">
+    <value>Supprimer cette piste audio</value>
+  </data>
+  <data name="AudioView_QualityMode" xml:space="preserve">
+    <value>Mode de Qualité de l'encodeur audio</value>
   </data>
 </root>

@@ -489,7 +489,8 @@ Controlla il sito web per le note di rilascio.</value>
     <value>Coda in pausa</value>
   </data>
   <data name="QueueViewModel_DelSelectedJobConfirmation" xml:space="preserve">
-    <value>Sei sicuro di voler eliminare le operazioni selezionate?</value>
+    <value>Sei sicuro di voler eliminare le operazioni selezionate?
+Nessun file codificato verrà eliminato dopo questa operazione.</value>
   </data>
   <data name="QueueViewModel_JobCurrentlyRunningWarning" xml:space="preserve">
     <value>Questa codifica è attualmente in corso. Se la cancelli, la codifica verrà interrotta. Sei sicuro di voler procedere?</value>
@@ -2133,15 +2134,11 @@ Se supportata, ogni preimpostazione dell'utente verrà importata.</value>
   <data name="OptionsView_RemotePortLimit" xml:space="preserve">
     <value>L'intervallo di porte deve essere tra 5000 e 32767</value>
   </data>
-  <data name="OptionsView_SendFileToArgPlaceholders" xml:space="preserve">
-    <value>Segnaposto da Sostituire: {source} {destination} {exit_code}</value>
-    <comment>Note: {source}, {destination} and {exit_code} are not translatable. </comment>
-  </data>
   <data name="SourceSelection_UpdateAvailable" xml:space="preserve">
     <value>È disponibile una nuova versione!</value>
   </data>
   <data name="About_Copyright" xml:space="preserve">
-    <value>Copyright (C) 2003-2023 The HandBrake Team</value>
+    <value>Copyright (C) 2003-2024 The HandBrake Team</value>
   </data>
   <data name="Options_LowBatteryLevel" xml:space="preserve">
     <value>Livello batteria basso:</value>
@@ -2797,5 +2794,20 @@ Per permettere più codifiche simultanee, attivare "Isolamento del Processo" nel
   </data>
   <data name="Options_RecursiveFolderScan" xml:space="preserve">
     <value>Scansiona ricorsivamente le cartelle durante la scansione delle cartelle.</value>
+  </data>
+  <data name="AudioView_AudioQuality" xml:space="preserve">
+    <value>Qualità Traccia Audio</value>
+  </data>
+  <data name="AudioView_AudioTrackName" xml:space="preserve">
+    <value>Nome Traccia Audio</value>
+  </data>
+  <data name="AudioView_BitrateSelection" xml:space="preserve">
+    <value>Bitrate Traccia Audio</value>
+  </data>
+  <data name="AudioView_DeleteTrack" xml:space="preserve">
+    <value>Elimina questa traccia audio</value>
+  </data>
+  <data name="AudioView_QualityMode" xml:space="preserve">
+    <value>Modo Qualità del Codificatore Audio</value>
   </data>
 </root>

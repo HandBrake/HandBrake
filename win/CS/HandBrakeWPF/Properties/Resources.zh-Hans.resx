@@ -484,7 +484,8 @@ Foreign Audio Preferred, else First：如果存在外语轨道，则会将其烧
     <value>列队已暂停</value>
   </data>
   <data name="QueueViewModel_DelSelectedJobConfirmation" xml:space="preserve">
-    <value>您确定要删除所选作业吗？</value>
+    <value>Are you sure you want to delete the selected jobs?
+No encoded files will be deleted with this operation. </value>
   </data>
   <data name="QueueViewModel_JobCurrentlyRunningWarning" xml:space="preserve">
     <value>此编码目前正在进行中。如果删除它，编码将停止。您确定要继续吗？</value>
@@ -1694,7 +1695,7 @@ Foreign Audio Preferred, else First：如果存在外语轨道，则会将其烧
     <value>关于 HandBrake</value>
   </data>
   <data name="SourceSelection_DropFileHere" xml:space="preserve">
-    <value>Or drop a file, set of files or folder here ...</value>
+    <value>可以将一个文件、多个文件或文件夹拖放到此处......</value>
   </data>
   <data name="SourceSelection_Help" xml:space="preserve">
     <value>帮助</value>
@@ -2125,15 +2126,11 @@ Foreign Audio Preferred, else First：如果存在外语轨道，则会将其烧
   <data name="OptionsView_RemotePortLimit" xml:space="preserve">
     <value>端口范围必须在5000到32767之间</value>
   </data>
-  <data name="OptionsView_SendFileToArgPlaceholders" xml:space="preserve">
-    <value>替换占位符：{source} {destination} {exit_code}</value>
-    <comment>Note: {source}, {destination} and {exit_code} are not translatable. </comment>
-  </data>
   <data name="SourceSelection_UpdateAvailable" xml:space="preserve">
     <value>当前有新版本可用！</value>
   </data>
   <data name="About_Copyright" xml:space="preserve">
-    <value>版权所有 (C) 2003-2023 HandBrake 团队</value>
+    <value>版权所有 (C) 2003-2024 HandBrake 团队</value>
   </data>
   <data name="Options_LowBatteryLevel" xml:space="preserve">
     <value>电量不足：</value>
@@ -2719,7 +2716,7 @@ Foreign Audio Preferred, else First：如果存在外语轨道，则会将其烧
     <value>折叠队列信息</value>
   </data>
   <data name="QueueStats_ShortOutputStats" xml:space="preserve">
-    <value>输出：{0}，平局帧率{1}</value>
+    <value>输出：{0}，平均帧率{1}</value>
   </data>
   <data name="PresetPane_Desc" xml:space="preserve">
     <value>预设描述：</value>
@@ -2779,15 +2776,30 @@ Foreign Audio Preferred, else First：如果存在外语轨道，则会将其烧
     <value>不包含文件扩展名：</value>
   </data>
   <data name="Options_ExcludeExtensionsInfo" xml:space="preserve">
-    <value>The following file extensions will be ignored when scanning a folder. The list is case insensitive. "." is not required.</value>
+    <value>扫描文件夹时将忽略以下文件扩展名。该列表不区分大小写。输入时可以不包含"."。</value>
   </data>
   <data name="Options_ExtensionExists" xml:space="preserve">
-    <value>This file extension already exists in the list.</value>
+    <value>该文件扩展名已存在于列表中。</value>
   </data>
   <data name="Options_FileHandling" xml:space="preserve">
-    <value>File Handling (Scanning)</value>
+    <value>文件处理中（正在扫描）</value>
   </data>
   <data name="Options_RecursiveFolderScan" xml:space="preserve">
-    <value>Recursively scan directories when using the folder scan mode.</value>
+    <value>使用文件夹扫描模式时扫描所有层级的目录。</value>
+  </data>
+  <data name="AudioView_AudioQuality" xml:space="preserve">
+    <value>音频轨道质量</value>
+  </data>
+  <data name="AudioView_AudioTrackName" xml:space="preserve">
+    <value>音频轨道名称</value>
+  </data>
+  <data name="AudioView_BitrateSelection" xml:space="preserve">
+    <value>音频轨道比特率</value>
+  </data>
+  <data name="AudioView_DeleteTrack" xml:space="preserve">
+    <value>删除此音频轨道</value>
+  </data>
+  <data name="AudioView_QualityMode" xml:space="preserve">
+    <value>音频编码器质量模式</value>
   </data>
 </root>

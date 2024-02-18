@@ -490,7 +490,8 @@ Bezoek de website voor release-opmerkingen.</value>
     <value>Wachtrij gepauzeerd</value>
   </data>
   <data name="QueueViewModel_DelSelectedJobConfirmation" xml:space="preserve">
-    <value>Geselecteerde taken verwijderen?</value>
+    <value>Weet u zeker dat u de geselecteerde taken wilt verwijderen?
+Met deze bewerking worden geen gecodeerde bestanden verwijderd.</value>
   </data>
   <data name="QueueViewModel_JobCurrentlyRunningWarning" xml:space="preserve">
     <value>Deze codering is momenteel aan de gang. Als u deze verwijdert, wordt de codering afgebroken. Wilt u doorgaan?</value>
@@ -2133,15 +2134,11 @@ Waar ondersteund, worden alle gebruikersvoorinstellingen geïmporteerd.</value>
   <data name="OptionsView_RemotePortLimit" xml:space="preserve">
     <value>Het poortnummer moet tussen 5000 en 32767 liggen</value>
   </data>
-  <data name="OptionsView_SendFileToArgPlaceholders" xml:space="preserve">
-    <value>Vervanging van plaatshouders: {source} {destination} {exit_code}</value>
-    <comment>Note: {source}, {destination} and {exit_code} are not translatable. </comment>
-  </data>
   <data name="SourceSelection_UpdateAvailable" xml:space="preserve">
     <value>Er is een nieuwe versie beschikbaar!</value>
   </data>
   <data name="About_Copyright" xml:space="preserve">
-    <value>Copyright (C) 2003-2023 The HandBrake Team</value>
+    <value>Auteursrecht (C) 2003-2024 The HandBrake Team</value>
   </data>
   <data name="Options_LowBatteryLevel" xml:space="preserve">
     <value>Laag accuniveau:</value>
@@ -2797,5 +2794,20 @@ Om meerdere gelijktijdige coderingen toe te staan dien je "Procesisolatie" in te
   </data>
   <data name="Options_RecursiveFolderScan" xml:space="preserve">
     <value>Mappen recursief scannen bij gebruik van de mappenscanmodus.</value>
+  </data>
+  <data name="AudioView_AudioQuality" xml:space="preserve">
+    <value>Audiospoor - kwaliteit</value>
+  </data>
+  <data name="AudioView_AudioTrackName" xml:space="preserve">
+    <value>Audiospoor - naam</value>
+  </data>
+  <data name="AudioView_BitrateSelection" xml:space="preserve">
+    <value>Audiospoor - bitsnelheid</value>
+  </data>
+  <data name="AudioView_DeleteTrack" xml:space="preserve">
+    <value>Dit audiospoor verwijderen</value>
+  </data>
+  <data name="AudioView_QualityMode" xml:space="preserve">
+    <value>Audiocodering - kwaliteitsmodus</value>
   </data>
 </root>

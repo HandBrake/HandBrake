@@ -41,6 +41,8 @@ Windows users, please make sure to install [Microsoft .NET Desktop Runtime versi
 
 - Requires Microsoft .NET Desktop Runtime 8.0.x
 - Added Invert Queue option to the Add to Queue Window (#5741)
+- Added new translations
+  - Catalan (Català)
 
 
 ## HandBrake 1.7.3
