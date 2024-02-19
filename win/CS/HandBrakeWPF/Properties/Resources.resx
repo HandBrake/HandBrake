@@ -2392,7 +2392,7 @@ Please choose a different preset.</value>
     <value>Status Unknown. Check log for details.</value>
   </data>
   <data name="QueueView_JobStatus_ReadError" xml:space="preserve">
-    <value>Errors detected whist trying to read source.</value>
+    <value>Errors detected while trying to read source.</value>
   </data>
   <data name="QueueView_JobStatus_Unknown" xml:space="preserve">
     <value>Unknown failure. Check log for details.</value>
