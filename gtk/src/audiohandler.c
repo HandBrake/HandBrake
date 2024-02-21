@@ -1714,26 +1714,6 @@ static void audio_def_settings_quality_set_sensitive(GtkWidget *w, gboolean s)
     gtk_widget_set_sensitive(GTK_WIDGET(quality_widget), s);
 }
 
-static void audio_def_settings_show(GtkWidget *widget, gboolean show)
-{
-    GtkWidget *settings_box;
-    GtkWidget *add_button;
-
-    settings_box = find_widget(widget, "settings_box");
-    add_button = find_widget(widget, "add_button");
-
-    if (show)
-    {
-        gtk_widget_hide(add_button);
-        gtk_widget_show(settings_box);
-    }
-    else
-    {
-        gtk_widget_hide(settings_box);
-        gtk_widget_show(add_button);
-    }
-}
-
 static void
 audio_def_settings_init_row(GhbValue *adict, GtkWidget *row)
 {
@@ -1758,7 +1738,7 @@ audio_def_settings_init_row(GhbValue *adict, GtkWidget *row)
 }
 
 G_MODULE_EXPORT void
-audio_def_setting_add_cb(GtkWidget *w, gpointer data);
+audio_def_setting_add_cb(GtkListBox *lb, GtkWidget *widget);
 G_MODULE_EXPORT void
 audio_def_setting_remove_cb(GtkWidget *w, gpointer data);
 G_MODULE_EXPORT void
@@ -1785,17 +1765,6 @@ create_audio_settings_row (signal_user_data_t *ud)
     GtkButton *button;
 
     box = GTK_BOX(gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0));
-
-    // Add Button
-    button = GTK_BUTTON(gtk_button_new_with_label(_("Add")));
-    gtk_widget_set_tooltip_markup(GTK_WIDGET(button),
-    _("Add an audio encoder.\n"
-      "Each selected source track will be encoded with all selected encoders."));
-    gtk_widget_set_valign(GTK_WIDGET(button), GTK_ALIGN_CENTER);
-    gtk_widget_set_name(GTK_WIDGET(button), "add_button");
-    gtk_widget_hide(GTK_WIDGET(button));
-    g_signal_connect(button, "clicked", (GCallback)audio_def_setting_add_cb, ud);
-    gtk_box_append(box, GTK_WIDGET(button));
 
     // Hidden widgets box
     box2 = GTK_BOX(gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0));
@@ -1830,6 +1799,7 @@ create_audio_settings_row (signal_user_data_t *ud)
     gtk_box_append(vbox, radio1);
     radio2 = gtk_check_button_new_with_label(_("Quality"));
     gtk_check_button_set_group(GTK_CHECK_BUTTON(radio2), GTK_CHECK_BUTTON(radio1));
+    gtk_check_button_set_active(GTK_CHECK_BUTTON(radio1), TRUE);
     gtk_widget_set_name(radio2, "AudioTrackQualityEnable");
     g_signal_connect(radio2, "toggled", G_CALLBACK(audio_def_quality_enable_changed_cb), ud);
     gtk_box_append(vbox, GTK_WIDGET(radio2));
@@ -1987,6 +1957,8 @@ create_audio_settings_row (signal_user_data_t *ud)
     gtk_widget_set_hexpand(GTK_WIDGET(button), TRUE);
     gtk_widget_set_halign(GTK_WIDGET(button), GTK_ALIGN_FILL);
     gtk_button_set_icon_name(button, "edit-delete");
+    gtk_widget_add_css_class(GTK_WIDGET(button), "flat");
+    gtk_widget_add_css_class(GTK_WIDGET(button), "circular");
     gtk_widget_set_tooltip_markup(GTK_WIDGET(button),
                                   _("Remove this audio encoder"));
     gtk_widget_set_valign(GTK_WIDGET(button), GTK_ALIGN_CENTER);
@@ -2393,10 +2365,11 @@ audio_def_drc_changed_cb (GtkWidget *widget, gdouble drc, gpointer data)
 }
 
 G_MODULE_EXPORT void
-audio_def_setting_add_cb (GtkWidget *widget, gpointer data)
+audio_def_setting_add_cb (GtkListBox *lb, GtkWidget *button)
 {
     signal_user_data_t *ud = ghb_ud();
-    GtkListBoxRow *row = audio_settings_get_row(widget);
+    GtkWidget *row = create_audio_settings_row(ud);
+    gtk_list_box_append(lb, row);
 
     GhbValue *adict;
     GhbValue *alist = ghb_dict_get_value(ud->settings, "AudioList");
@@ -2405,23 +2378,15 @@ audio_def_setting_add_cb (GtkWidget *widget, gpointer data)
     {
         // Use first item in list as defaults for new entries.
         adict = ghb_value_dup(ghb_array_get(alist, 0));
-        audio_def_update_widgets(GTK_WIDGET(row), adict);
+        audio_def_update_widgets(row, adict);
     }
     else
     {
         // Use hard coded defaults
         adict = ghb_dict_new();
-        audio_def_settings_init_row(adict, GTK_WIDGET(row));
+        audio_def_settings_init_row(adict, row);
     }
     ghb_array_append(alist, adict);
-    audio_def_settings_show(GTK_WIDGET(row), TRUE);
-
-    // Add new "Add" button
-    widget = create_audio_settings_row(ud);
-    audio_def_settings_show(widget, FALSE);
-    GtkListBox *list_box;
-    list_box = GTK_LIST_BOX(ghb_builder_widget("audio_list_default"));
-    gtk_list_box_insert(list_box, widget, -1);
     ghb_clear_presets_selection(ud);
 }
 
@@ -2602,10 +2567,6 @@ void ghb_audio_defaults_to_ui(signal_user_data_t *ud)
         gtk_list_box_insert(list_box, widget, -1);
         audio_def_update_widgets(widget, adict);
     }
-    // Add row with "Add" button
-    widget = create_audio_settings_row(ud);
-    audio_def_settings_show(widget, FALSE);
-    gtk_list_box_insert(list_box, widget, -1);
 }
 
 void ghb_init_audio_defaults_ui(signal_user_data_t *ud)

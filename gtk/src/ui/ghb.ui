@@ -280,7 +280,7 @@ conjunction with the &quot;Forced&quot; option.</property>
                     <child>
                       <object class="GtkGestureClick">
                         <property name="button">0</property>
-                        <signal name="pressed" handler="queue_button_press_cb" swapped="no" object="queue_list_window"/>
+                        <signal name="pressed" handler="queue_button_press_cb" object="queue_list_window" swapped="no"/>
                       </object>
                     </child>
                     <child>
@@ -4504,7 +4504,7 @@ Overrides all other settings.</property>
                     <child>
                       <object class="GtkLabel" id="sub_label4">
                         <property name="halign">end</property>
-                        <property name="label" translatable="1">Selection Behavior:</property>
+                        <property name="label" translatable="1">Track Selection Behavior:</property>
                         <property name="justify">right</property>
                         <layout>
                           <property name="column">0</property>
@@ -4751,6 +4751,7 @@ Overrides all other settings.</property>
     <property name="transient-for">hb_window</property>
     <property name="modal">1</property>
     <property name="use-header-bar">1</property>
+    <property name="height-request">540</property>
     <signal name="close-request" handler="gtk_widget_hide" swapped="no"/>
     <property name="child">
       <object class="GtkBox">
@@ -4768,6 +4769,7 @@ Overrides all other settings.</property>
             <child>
               <object class="GtkBox" id="audio_defaults_box2">
                 <property name="orientation">vertical</property>
+                <property name="vexpand">False</property>
                 <child>
                   <object class="GtkGrid" id="grid2">
                     <property name="column-spacing">5</property>
@@ -4775,7 +4777,7 @@ Overrides all other settings.</property>
                     <child>
                       <object class="GtkLabel" id="label4">
                         <property name="halign">end</property>
-                        <property name="label" translatable="yes">Selection Behavior:</property>
+                        <property name="label" translatable="yes">Track Selection Behavior:</property>
                         <property name="justify">right</property>
                         <layout>
                           <property name="column">0</property>
@@ -4800,7 +4802,6 @@ Overrides all other settings.</property>
                   <object class="GtkGrid" id="grid3">
                     <property name="column-spacing">5</property>
                     <property name="row-spacing">2</property>
-                    <property name="halign">end</property>
                     <property name="margin-top">6</property>
                     <property name="margin-bottom">6</property>
                     <property name="vexpand">1</property>
@@ -4808,6 +4809,7 @@ Overrides all other settings.</property>
                       <object class="GtkScrolledWindow" id="scrolledwindow10">
                         <property name="hscrollbar-policy">never</property>
                         <property name="min-content-height">84</property>
+                        <property name="hexpand">1</property>
                         <property name="vexpand">1</property>
                         <property name="css-classes">frame</property>
                         <property name="child">
@@ -4829,6 +4831,7 @@ Overrides all other settings.</property>
                       <object class="GtkScrolledWindow" id="scrolledwindow11">
                         <property name="hscrollbar-policy">never</property>
                         <property name="css-classes">frame</property>
+                        <property name="hexpand">1</property>
                         <property name="child">
                           <object class="GtkTreeView" id="audio_selected_lang">
                             <property name="headers-visible">0</property>
@@ -4889,17 +4892,6 @@ Tracks matching these languages will be selected using the chosen Selection Beha
                         </layout>
                       </object>
                     </child>
-                  </object>
-                </child>
-                <child>
-                  <object class="GtkCheckButton" id="AudioSecondaryEncoderMode">
-                    <property name="label" translatable="yes">Use only first encoder for secondary audio</property>
-                    <property name="focusable">1</property>
-                    <property name="tooltip-text" translatable="yes">Only the primary audio track will be encoded with the full encoder list.
-All other secondary audio output tracks will be encoded with first encoder only.</property>
-                    <property name="halign">start</property>
-                    <property name="active">1</property>
-                    <signal name="toggled" handler="audio_def_widget_changed_cb" swapped="no"/>
                   </object>
                 </child>
               </object>
@@ -5103,9 +5095,10 @@ This permits Opus passthru to be selected when automatic passthru selection is e
         <child>
           <object class="GtkLabel" id="audio_def_settings_label">
             <property name="margin-top">6</property>
+            <property name="margin-bottom">6</property>
             <property name="halign">start</property>
             <property name="use-markup">1</property>
-            <property name="label" translatable="yes">&lt;b&gt;Audio Encoder Settings:&lt;/b&gt;</property>
+            <property name="label" translatable="yes">Audio encoder settings for each selected track:</property>
             <property name="tooltip-markup" translatable="yes">Each selected source track will be encoded with all selected encoders</property>
           </object>
         </child>
@@ -5156,6 +5149,7 @@ This permits Opus passthru to be selected when automatic passthru selection is e
           <object class="GtkScrolledWindow" id="scrolledwindow12">
             <property name="hexpand">1</property>
             <property name="vexpand">1</property>
+            <property name="css-classes">frame</property>
             <property name="child">
               <object class="GtkListBox" id="audio_list_default">
                 <property name="focusable">1</property>
@@ -5164,6 +5158,32 @@ This permits Opus passthru to be selected when automatic passthru selection is e
                 <property name="activate-on-single-click">0</property>
               </object>
             </property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkBox">
+            <property name="margin-top">6</property>
+            <property name="orientation">horizontal</property>
+            <property name="spacing">12</property>
+            <child>
+              <object class="GtkButton">
+                <property name="label" translatable="yes">Add Track</property>
+                <property name="tooltip-text" translatable="yes">Add an audio encoder.
+Each selected source track will be encoded with all selected encoders.</property>
+                <signal name="clicked" handler="audio_def_setting_add_cb" object="audio_list_default" swapped="yes"/>
+              </object>
+            </child>
+            <child>
+              <object class="GtkCheckButton" id="AudioSecondaryEncoderMode">
+                <property name="label" translatable="yes">Use only first encoder for secondary audio</property>
+                <property name="focusable">1</property>
+                <property name="tooltip-text" translatable="yes">Only the primary audio track will be encoded with the full encoder list.
+  All other secondary audio output tracks will be encoded with first encoder only.</property>
+                <property name="halign">start</property>
+                <property name="active">1</property>
+                <signal name="toggled" handler="audio_def_widget_changed_cb" swapped="no"/>
+              </object>
+            </child>
           </object>
         </child>
       </object>
