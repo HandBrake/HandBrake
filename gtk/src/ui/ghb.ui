@@ -265,21 +265,38 @@ conjunction with the &quot;Forced&quot; option.</property>
       <object class="GtkBox" id="queue_tab">
         <property name="orientation">vertical</property>
         <child>
-          <object class="GtkPaned" id="queue_box1">
+          <object class="GtkPaned" id="queue_paned">
             <property name="shrink-end-child">0</property>
             <property name="shrink-start-child">0</property>
             <property name="position">500</property>
             <property name="start-child">
-              <object class="GtkBox" id="queue_box2">
+              <object class="GtkBox">
                 <property name="orientation">vertical</property>
                 <property name="hexpand">1</property>
                 <child>
-                  <object class="GtkScrolledWindow" id="queue_list_window">
+                  <object class="GtkBox">
+                    <property name="orientation">vertical</property>
                     <property name="hexpand">1</property>
-                    <property name="hscrollbar-policy">never</property>
-                    <property name="min-content-height">440</property>
-                    <property name="child">
-                      <object class="GtkBox" id="queue_list_container">
+                    <child>
+                      <object class="GtkGestureClick">
+                        <property name="button">0</property>
+                        <signal name="pressed" handler="queue_button_press_cb" swapped="no" object="queue_list_window"/>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkPopoverMenu" id="queue_context_menu">
+                        <property name="has-arrow">False</property>
+                        <property name="halign">start</property>
+                        <property name="valign">end</property>
+                        <property name="visible">false</property>
+                        <property name="menu-model">queue-context-menu-model</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkScrolledWindow" id="queue_list_window">
+                        <property name="hexpand">1</property>
+                        <property name="hscrollbar-policy">never</property>
+                        <property name="min-content-height">440</property>
                         <child>
                           <object class="GtkListBox" id="queue_list">
                             <property name="focusable">1</property>
@@ -288,25 +305,10 @@ conjunction with the &quot;Forced&quot; option.</property>
                             <property name="selection-mode">multiple</property>
                             <property name="activate-on-single-click">0</property>
                             <signal name="row-selected" handler="queue_list_selection_changed_cb" swapped="no"/>
-                            <child>
-                              <object class="GtkGestureClick">
-                                <property name="button">0</property>
-                                <signal name="pressed" handler="queue_button_press_cb" swapped="no"/>
-                              </object>
-                            </child>
-                          </object>
-                        </child>
-                        <child>
-                          <object class="GtkPopoverMenu" id="queue-context-menu">
-                            <property name="has-arrow">False</property>
-                            <property name="halign">start</property>
-                            <property name="valign">end</property>
-                            <property name="visible">false</property>
-                            <property name="menu-model">queue-context-menu-model</property>
                           </object>
                         </child>
                       </object>
-                    </property>
+                    </child>
                   </object>
                 </child>
                 <child>

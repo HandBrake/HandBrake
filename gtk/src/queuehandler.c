@@ -2055,25 +2055,26 @@ queue_row_key_cb (GtkEventControllerKey *keycon,
 
 G_MODULE_EXPORT void
 queue_button_press_cb (GtkGesture *gest, int n_press, double x, double y,
-                       gpointer data)
+                       GtkScrolledWindow *win)
 {
     GtkListBox *lb;
     GtkListBoxRow *row;
-    gint button;
+    int button;
+    double dy;
 
     lb = GTK_LIST_BOX(ghb_builder_widget("queue_list"));
-	button = gtk_gesture_single_get_current_button(GTK_GESTURE_SINGLE(gest));
-
+    button = gtk_gesture_single_get_current_button(GTK_GESTURE_SINGLE(gest));
+    dy = gtk_adjustment_get_value(gtk_scrolled_window_get_vadjustment(win));
 
     if (button == 1 && n_press == 2)
     {
-        row = gtk_list_box_get_row_at_y(lb, y);
+        row = gtk_list_box_get_row_at_y(lb, y + dy);
         if (row)
             g_action_activate(GHB_ACTION("queue-play-file"), NULL);
     }
     if (button == 3 && n_press == 1)
     {
-        row = gtk_list_box_get_row_at_y(lb, y);
+        row = gtk_list_box_get_row_at_y(lb, y + dy);
         if (!row)
         {
             return;
@@ -2083,8 +2084,7 @@ queue_button_press_cb (GtkGesture *gest, int n_press, double x, double y,
             gtk_list_box_unselect_all(lb);
             gtk_list_box_select_row(lb, row);
         }
-        GtkWidget *menu = ghb_builder_widget("queue-context-menu");
-        gtk_widget_set_parent(menu, ghb_builder_widget("queue_list_window"));
+        GtkWidget *menu = ghb_builder_widget("queue_context_menu");
         gtk_popover_set_pointing_to(GTK_POPOVER(menu),
                                     &(const GdkRectangle){ x, y, 1, 1 });
         gtk_popover_popup(GTK_POPOVER(menu));
