@@ -2245,9 +2245,8 @@ audio_def_set_limits (signal_user_data_t *ud, GtkWidget *widget, gboolean set_de
         enc = ghb_select_fallback(ud->settings, enc);
     }
     int sr = ghb_settings_audio_samplerate_rate(adict, "AudioSamplerate");
-    int mix = ghb_settings_mixdown_mix(adict, "AudioMixdown");
     int low, high;
-    hb_audio_bitrate_get_limits(enc, sr, mix, &low, &high);
+    hb_audio_bitrate_get_limits(enc, sr, HB_AMIXDOWN_MONO, &low, &high);
     GtkWidget *w = find_widget(GTK_WIDGET(row), "AudioBitrate");
     ghb_audio_bitrate_opts_filter(GTK_COMBO_BOX(w), low, high);
     w = find_widget(GTK_WIDGET(row), "AudioMixdown");
