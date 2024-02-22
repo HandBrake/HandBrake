@@ -859,41 +859,56 @@ void hb_frame_buffer_blank_stride(hb_buffer_t * buf)
     }
 }
 
+#define DEF_MIRROR_STRIDE_FUNC(name, nbits)                                  \
+static void name##_##nbits(uint8_t *data, int width, int height, int stride) \
+{                                                                            \
+    int pos, margin, margin_front, margin_back, bps;                         \
+    uint##nbits##_t *data_in = (uint##nbits##_t *)data;                      \
+                                                                             \
+    bps = nbits > 8 ? 2 : 1;                                                 \
+    stride      /= bps;                                                      \
+    margin       = stride - width;                                           \
+    margin_front = margin / 2;                                               \
+    margin_back  = margin - margin_front;                                    \
+    for (int yy = 0; yy < height; yy++)                                      \
+    {                                                                        \
+        /* Mirror final row pixels into front of stride region */            \
+        pos = yy * stride + width;                                           \
+        for (int ii = 0; ii < margin_back; ii++)                             \
+        {                                                                    \
+            *(data_in + pos + ii) = *(data_in + pos - ii - 1);               \
+        }                                                                    \
+        /* Mirror start of next row into end of stride region */             \
+        pos = (yy + 1) * stride - 1;                                         \
+        for (int ii = 0; ii < margin_front; ii++)                            \
+        {                                                                    \
+            *(data_in + pos - ii) = *(data_in + pos + ii + 1);               \
+        }                                                                    \
+    }                                                                        \
+}                                                                            \
+
+DEF_MIRROR_STRIDE_FUNC(mirror_stride, 16)
+DEF_MIRROR_STRIDE_FUNC(mirror_stride, 8)
+
 void hb_frame_buffer_mirror_stride(hb_buffer_t * buf)
 {
-    const AVPixFmtDescriptor * desc = av_pix_fmt_desc_get(buf->f.fmt);
-    uint8_t * data;
-    int       pp, ii, yy, width, height, stride;
-    int       bps, pos, margin, margin_front, margin_back;
+    const AVPixFmtDescriptor *desc = av_pix_fmt_desc_get(buf->f.fmt);
+    int   depth = desc->comp[0].depth > 8 ? 2 : 1;
 
-    bps = desc->comp[0].depth > 8 ? 2 : 1;
-
-    for (pp = 0; pp <= buf->f.max_plane; pp++)
+    for (int pp = 0; pp <= buf->f.max_plane; pp++)
     {
-        data          = buf->plane[pp].data;
-        width         = buf->plane[pp].width;
-        height        = buf->plane[pp].height;
-        stride        = buf->plane[pp].stride;
-        if (data != NULL)
+        if (buf->plane[pp].data != NULL)
         {
-            margin       = stride / bps - width;
-            margin_front = margin / 2;
-            margin_back  = margin - margin_front;
-            width       *= bps;
-            for (yy = 0; yy < height; yy++)
+            switch (depth)
             {
-                // Mirror final row pixels into front of stride region
-                pos = yy * stride + width;
-                for (ii = 0; ii < margin_back; ii++)
-                {
-                    *(data + pos + ii) = *(data + pos - ii - 1);
-                }
-                // Mirror start of next row into end of stride region
-                pos = (yy + 1) * stride - 1;
-                for (ii = 0; ii < margin_front; ii++)
-                {
-                    *(data + pos - ii) = *(data + pos + ii + 1);
-                }
+                case 8:
+                    mirror_stride_8(buf->plane[pp].data, buf->plane[pp].width,
+                                    buf->plane[pp].height, buf->plane[pp].stride);
+                    break;
+                default:
+                    mirror_stride_16(buf->plane[pp].data, buf->plane[pp].width,
+                                     buf->plane[pp].height, buf->plane[pp].stride);
+                    break;
             }
         }
     }
