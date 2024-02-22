@@ -425,11 +425,13 @@ GHB_DECLARE_ACTION_CB(title_add_clear_all_cb);
 GHB_DECLARE_ACTION_CB(audio_add_cb);
 GHB_DECLARE_ACTION_CB(audio_add_all_cb);
 GHB_DECLARE_ACTION_CB(audio_reset_cb);
+GHB_DECLARE_ACTION_CB(audio_remove_cb);
 GHB_DECLARE_ACTION_CB(audio_clear_cb);
 GHB_DECLARE_ACTION_CB(subtitle_add_cb);
 GHB_DECLARE_ACTION_CB(subtitle_add_all_cb);
 GHB_DECLARE_ACTION_CB(subtitle_add_fas_cb);
 GHB_DECLARE_ACTION_CB(subtitle_reset_cb);
+GHB_DECLARE_ACTION_CB(subtitle_remove_cb);
 GHB_DECLARE_ACTION_CB(subtitle_clear_cb);
 
 static void
@@ -502,11 +504,13 @@ map_actions (GtkApplication *app, signal_user_data_t *ud)
         { "audio-add",             audio_add_cb                    },
         { "audio-add-all",         audio_add_all_cb                },
         { "audio-reset",           audio_reset_cb                  },
+        { "audio-remove",          audio_remove_cb                 },
         { "audio-clear",           audio_clear_cb                  },
         { "subtitle-add",          subtitle_add_cb                 },
         { "subtitle-add-all",      subtitle_add_all_cb             },
         { "subtitle-add-fas",      subtitle_add_fas_cb             },
         { "subtitle-reset",        subtitle_reset_cb               },
+        { "subtitle-remove",       subtitle_remove_cb              },
         { "subtitle-clear",        subtitle_clear_cb               },
     };
     g_action_map_add_action_entries(G_ACTION_MAP(app), entries,

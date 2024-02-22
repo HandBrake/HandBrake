@@ -515,6 +515,8 @@ ghb_subtitle_set_actions_enabled (signal_user_data_t *ud, gboolean enabled)
     g_simple_action_set_enabled(action, enabled);
     action = G_SIMPLE_ACTION(GHB_ACTION("subtitle-reset"));
     g_simple_action_set_enabled(action, enabled);
+    action = G_SIMPLE_ACTION(GHB_ACTION("subtitle-remove"));
+    g_simple_action_set_enabled(action, enabled);
     action = G_SIMPLE_ACTION(GHB_ACTION("subtitle-clear"));
     g_simple_action_set_enabled(action, enabled);
 
@@ -1782,18 +1784,6 @@ subtitle_edit_response (GtkWidget *dialog, int response, GhbValue *backup)
 }
 
 G_MODULE_EXPORT void
-subtitle_edit_clicked_cb (GtkWidget *widget, gchar *path, gpointer data)
-{
-    GtkTreeView *tv;
-    GtkTreePath *tp;
-    signal_user_data_t *ud = ghb_ud();
-
-    tv = GTK_TREE_VIEW(ghb_builder_widget("subtitle_list_view"));
-    tp = gtk_tree_path_new_from_string (path);
-    subtitle_edit(tv, tp, ud);
-}
-
-G_MODULE_EXPORT void
 subtitle_row_activated_cb (GtkTreeView *tv, GtkTreePath *tp,
                            GtkTreeViewColumn *col, gpointer data)
 {
@@ -1802,7 +1792,7 @@ subtitle_row_activated_cb (GtkTreeView *tv, GtkTreePath *tp,
 }
 
 G_MODULE_EXPORT void
-subtitle_remove_clicked_cb (GtkWidget *widget, gchar *path, gpointer data)
+subtitle_remove_cb (GSimpleAction *action, GVariant *param, gpointer data)
 {
     GtkTreeView *tv;
     GtkTreePath *tp;
@@ -1817,9 +1807,7 @@ subtitle_remove_clicked_cb (GtkWidget *widget, gchar *path, gpointer data)
     tv = GTK_TREE_VIEW(ghb_builder_widget("subtitle_list_view"));
     ts = gtk_tree_view_get_selection(tv);
     tm = gtk_tree_view_get_model(tv);
-    tp = gtk_tree_path_new_from_string (path);
-    if (gtk_tree_path_get_depth(tp) > 1) return;
-    if (gtk_tree_model_get_iter(tm, &ti, tp))
+    if (gtk_tree_selection_get_selected(ts, &tm, &ti))
     {
         nextIter = ti;
         if (!gtk_tree_model_iter_next(tm, &nextIter))
@@ -1839,6 +1827,7 @@ subtitle_remove_clicked_cb (GtkWidget *widget, gchar *path, gpointer data)
         subtitle_list = ghb_get_job_subtitle_list(ud->settings);
 
         // Get the row number
+        tp = gtk_tree_model_get_path(tm, &ti);
         indices = gtk_tree_path_get_indices(tp);
         row = indices[0];
         if (ghb_dict_get_bool(subtitle_search, "Enable"))
@@ -1873,8 +1862,8 @@ subtitle_remove_clicked_cb (GtkWidget *widget, gchar *path, gpointer data)
 
         ghb_update_summary_info(ud);
         ghb_live_reset(ud);
+        gtk_tree_path_free(tp);
     }
-    gtk_tree_path_free(tp);
 }
 
 G_MODULE_EXPORT void

@@ -40,7 +40,6 @@ char * ghb_subtitle_short_description(const GhbValue *subsource,
 
 
 void subtitle_list_selection_changed_cb(GtkTreeSelection *ts, gpointer data);
-void subtitle_edit_clicked_cb(GtkWidget *widget, gchar *path, gpointer data);
-void subtitle_remove_clicked_cb(GtkWidget *widget, gchar *path, gpointer data);
+void subtitle_remove_cb(GSimpleAction *action, GVariant *param, gpointer data);
 
 G_END_DECLS
