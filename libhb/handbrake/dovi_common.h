@@ -1,4 +1,4 @@
-/* h265_common.h
+/* dovi_common.h
 
    Copyright (c) 2003-2024 HandBrake Team
    This file is part of the HandBrake source code
@@ -11,6 +11,7 @@
 #define HANDBRAKE_DOVI_COMMON_H
 
 #include "handbrake/project.h"
+#include <stdint.h>
 
 static struct
 {
@@ -37,5 +38,8 @@ hb_dolby_vision_levels[] =
     { 13, 3981312000, 7680, 240, 800 },
     { 0, 0, 0, 0, 0 }
 };
+
+int hb_dovi_max_rate(int width, int pps, int bitrate, int level, int high_tier);
+int hb_dovi_level(int width, int pps, int max_rate, int high_tier);
 
 #endif // HANDBRAKE_DOVI_COMMON_H

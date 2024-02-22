@@ -546,14 +546,6 @@ static int hb_vt_settings_xlat(hb_work_private_t *pv, hb_job_t *job)
         }
     }
 
-    if (job->passthru_dynamic_hdr_metadata & DOVI)
-    {
-        int max = hb_dolby_vision_levels[job->dovi.dv_level - 1].max_bitrate_main_tier * 1000;
-        pv->settings.vbv.maxrate = max;
-        pv->settings.vbv.bufsize = max;
-        hb_log("encvt_Init: encoding with automatic data limits: %d kbit/s", max);
-    }
-
     if (job->ambient.ambient_illuminance.num && job->ambient.ambient_illuminance.den)
     {
         pv->settings.color.ambientViewingEnviroment = hb_vt_ambient_viewing_enviroment_xlat(job->ambient);
@@ -1582,6 +1574,28 @@ int encvt_init(hb_work_object_t *w, hb_job_t *job)
     {
         *job->die = 1;
         return -1;
+    }
+
+    /*
+     * Update and set Dolby Vision level
+     * There is no way to select an high tier level
+     */
+    if (job->passthru_dynamic_hdr_metadata & DOVI)
+    {
+        int pps = (double)job->width * job->height * (job->vrate.num / job->vrate.den);
+        int bitrate = job->vquality == HB_INVALID_VIDEO_QUALITY ? job->vbitrate : -1;
+
+        // Dolby Vision requires VBV settings to enable HRD
+        // set the max value for the current level or guess one
+        if (pv->settings.vbv.maxrate == 0 || pv->settings.vbv.bufsize == 0)
+        {
+            int max_rate = hb_dovi_max_rate(job->width, pps, bitrate * 1.5, 0, 0);
+            pv->settings.vbv.maxrate = max_rate * 1000;
+            pv->settings.vbv.bufsize = max_rate * 1000;
+        }
+
+        job->dovi.dv_level = hb_dovi_level(job->width, pps, pv->settings.vbv.maxrate, 0);
+        hb_log("encvt_Init: encoding Dolby Vision with automatic data limits: %d kbit/s", pv->settings.vbv.maxrate);
     }
 
     pv->remainingPasses = job->pass_id == HB_PASS_ENCODE_ANALYSIS ? 1 : 0;
