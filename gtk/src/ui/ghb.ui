@@ -3833,6 +3833,29 @@ Overrides all other settings.</property>
                                   </object>
                                 </child>
                                 <child>
+                                  <object class="GtkButton" id="audio_remove">
+                                    <property name="tooltip-text" translatable="1">Remove the selected audio track</property>
+                                    <property name="action-name">app.audio-remove</property>
+                                    <property name="css-classes">flat</property>
+                                    <property name="child">
+                                      <object class="GtkBox">
+                                        <property name="spacing">6</property>
+                                        <child>
+                                          <object class="GtkImage">
+                                            <property name="icon-name">edit-delete-symbolic</property>
+                                            <property name="accessible-role">presentation</property>
+                                          </object>
+                                        </child>
+                                        <child>
+                                          <object class="GtkLabel">
+                                            <property name="label" translatable="yes">Remove</property>
+                                          </object>
+                                        </child>
+                                      </object>
+                                    </property>
+                                  </object>
+                                </child>
+                                <child>
                                   <object class="GtkButton" id="audio_clear">
                                     <property name="tooltip-text" translatable="1">Remove all audio tracks</property>
                                     <property name="action-name">app.audio-clear</property>
@@ -3961,6 +3984,29 @@ Overrides all other settings.</property>
                                   <object class="GtkSeparator">
                                     <property name="hexpand">True</property>
                                     <property name="opacity">0.0</property>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="GtkButton" id="subtitle_remove">
+                                    <property name="tooltip-text" translatable="1">Remove the selected subtitle track</property>
+                                    <property name="action-name">app.subtitle-remove</property>
+                                    <property name="css-classes">flat</property>
+                                    <property name="child">
+                                      <object class="GtkBox">
+                                        <property name="spacing">6</property>
+                                        <child>
+                                          <object class="GtkImage">
+                                            <property name="icon-name">edit-delete-symbolic</property>
+                                            <property name="accessible-role">presentation</property>
+                                          </object>
+                                        </child>
+                                        <child>
+                                          <object class="GtkLabel">
+                                            <property name="label" translatable="yes">Remove</property>
+                                          </object>
+                                        </child>
+                                      </object>
+                                    </property>
                                   </object>
                                 </child>
                                 <child>
