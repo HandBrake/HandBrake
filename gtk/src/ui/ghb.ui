@@ -6253,20 +6253,15 @@ app-notification</property>
                       </object>
                     </child>
                     <child>
-                      <object class="GtkBox" id="live_progress_box">
-                        <property name="orientation">vertical</property>
-                        <property name="hexpand">1</property>
-                        <child>
-                          <object class="GtkProgressBar" id="live_encode_progress">
-                            <property name="margin-start">6</property>
-                            <property name="margin-end">6</property>
-                            <property name="vexpand">True</property>
-                            <property name="valign">center</property>
-                            <accessibility>
-                              <property name="label" translatable="yes">Preview Encode Progress</property>
-                            </accessibility>
-                          </object>
-                        </child>
+                      <object class="GtkProgressBar" id="live_encode_progress">
+                        <property name="margin-start">6</property>
+                        <property name="margin-end">6</property>
+                        <property name="vexpand">True</property>
+                        <property name="hexpand">True</property>
+                        <property name="valign">center</property>
+                        <accessibility>
+                          <property name="label" translatable="yes">Preview Encode Progress</property>
+                        </accessibility>
                       </object>
                     </child>
                     <child>
