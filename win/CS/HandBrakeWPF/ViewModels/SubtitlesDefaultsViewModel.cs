@@ -170,7 +170,12 @@ namespace HandBrakeWPF.ViewModels
 
         public void AddForeignScanTrack()
         {
-            this.SubtitleBehaviourRules.Tracks.Add(new SubtitleBehaviourTrack() { IsForeignAudioScanRule = true});
+            SubtitleBehaviourTrack newTrack = new SubtitleBehaviourTrack() { IsForeignAudioScanRule = true };
+
+            if (!this.SubtitleBehaviourRules.Tracks.Any(s => s.IsForeignAudioScanRule))
+            {
+                this.SubtitleBehaviourRules.Tracks.Add(newTrack);
+            }
         }
 
         /// <summary>
