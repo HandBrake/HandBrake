@@ -18,11 +18,10 @@ namespace HandBrakeWPF.Services.Subtitles
     using HandBrakeWPF.Services.Interfaces;
 
     using SubtitleTrack = Encode.Model.Models.SubtitleTrack;
+    using HandBrakeWPF.Properties;
 
     public class SubtitleRuleProcessor : ISubtitleRuleProcessor
     {
-        // TODO: Add support for:  CC, Foreign Audio Scan
-
         private readonly ISubtitleFileHandler subtitleFileHandler;
 
         public SubtitleRuleProcessor(ISubtitleFileHandler fileHandler)
@@ -40,8 +39,24 @@ namespace HandBrakeWPF.Services.Subtitles
             // Now, lets run though the rules and setup the tracks
             foreach (SubtitleBehaviourTrack rule in rules.Tracks)
             {
-                List<SubtitleTrack> tracks = GenerateTracksForRule(rules, rule, soruceSubtitles, outputFormat, outputTracks);
-                outputTracks.AddRange(tracks);
+                if (rule.IsForeignAudioScanRule)
+                {
+                    Subtitle foreignAudioSearchTrack = new Subtitle { 
+                                                                        IsFakeForeignAudioScanTrack = true, 
+                                                                        Language = Resources.SubtitleViewModel_ForeignAudioSearch, 
+                                                                        SubtitleType = SubtitleType.VobSub, // Fake It.
+                                                                        CanBurnIn = true,
+                                                                        CanForce = true,
+                                                                        Name = Resources.SubtitleViewModel_ForeignAudioSearch
+                    };
+                    SubtitleTrack subtitleTrack = GenerateTrack(rules, rule, foreignAudioSearchTrack, outputFormat, outputTracks);
+                    outputTracks.Add(subtitleTrack);
+                }
+                else
+                {
+                    List<SubtitleTrack> tracks = GenerateTracksForRule(rules, rule, soruceSubtitles, outputFormat, outputTracks);
+                    outputTracks.AddRange(tracks);
+                }
             }
 
             if (rules.UseSourceOrder)
