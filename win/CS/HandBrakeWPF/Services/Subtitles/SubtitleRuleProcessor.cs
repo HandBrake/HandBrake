@@ -37,6 +37,12 @@ namespace HandBrakeWPF.Services.Subtitles
                 outputTracks.AddRange(tracks);
             }
 
+            if (rules.UseSourceOrder)
+            {
+                List<SubtitleTrack> orderedTrackList = outputTracks.OrderBy(s => s.SourceTrack.TrackNumber).ToList();
+                return orderedTrackList;
+            }
+
             return outputTracks;
         }
 

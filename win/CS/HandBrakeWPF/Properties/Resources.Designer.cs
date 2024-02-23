@@ -7596,6 +7596,52 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Automatically import SRT/SSA subitlte files..
+        /// </summary>
+        public static string SubtitleDefaultView_AutoAddExternal {
+            get {
+                return ResourceManager.GetString("SubtitleDefaultView_AutoAddExternal", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Setup rules to automatically add subtitle tracks.
+        ///Rules are applied in priority order and will attempt to match where possible. Subtitle limitations apply..
+        /// </summary>
+        public static string SubtitleDefaultView_Info {
+            get {
+                return ResourceManager.GetString("SubtitleDefaultView_Info", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Passthru track names if not overridden above..
+        /// </summary>
+        public static string SubtitleDefaultView_PassthruTrackNames {
+            get {
+                return ResourceManager.GetString("SubtitleDefaultView_PassthruTrackNames", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use source subtitle ordering. .
+        /// </summary>
+        public static string SubtitleDefaultView_SourceOrder {
+            get {
+                return ResourceManager.GetString("SubtitleDefaultView_SourceOrder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Automatic Subtitle Selections.
+        /// </summary>
+        public static string SubtitleDefaultView_Title {
+            get {
+                return ResourceManager.GetString("SubtitleDefaultView_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to None - Only tracks where the container does not support the format will be burned in.
         ///Foreign Audio Track - The Foreign Audio track will be burned in if available. 
         ///First Track - The first track will be burned in.

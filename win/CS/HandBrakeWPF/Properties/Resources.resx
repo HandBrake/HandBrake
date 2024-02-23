@@ -3004,4 +3004,20 @@ To allow multiple simultaneous encodes, turn on "Process Isolation" in Tools Men
   <data name="SubtitleBehaviourModes_SecondMatching" xml:space="preserve">
     <value>Second</value>
   </data>
+  <data name="SubtitleDefaultView_AutoAddExternal" xml:space="preserve">
+    <value>Automatically import SRT/SSA subitlte files.</value>
+  </data>
+  <data name="SubtitleDefaultView_Info" xml:space="preserve">
+    <value>Setup rules to automatically add subtitle tracks.
+Rules are applied in priority order and will attempt to match where possible. Subtitle limitations apply.</value>
+  </data>
+  <data name="SubtitleDefaultView_PassthruTrackNames" xml:space="preserve">
+    <value>Passthru track names if not overridden above.</value>
+  </data>
+  <data name="SubtitleDefaultView_SourceOrder" xml:space="preserve">
+    <value>Use source subtitle ordering. </value>
+  </data>
+  <data name="SubtitleDefaultView_Title" xml:space="preserve">
+    <value>Automatic Subtitle Selections</value>
+  </data>
 </root>
