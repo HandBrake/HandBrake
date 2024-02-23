@@ -341,7 +341,7 @@ ghb_live_reset(signal_user_data_t *ud)
 }
 
 G_MODULE_EXPORT void
-live_preview_play_clicked_cb (GtkWidget *xwidget, gpointer data)
+live_preview_play_clicked_cb (GtkWidget *widget, gpointer data)
 {
     signal_user_data_t *ud = ghb_ud();
     gint frame = ud->preview->frame;
@@ -356,7 +356,7 @@ live_preview_play_clicked_cb (GtkWidget *xwidget, gpointer data)
     {
         live_preview_toggle_playback(ud);
     }
-    else
+    else if (ud->preview->live_id < 0)
     {
         GhbValue *js;
         GhbValue *range, *dest;
@@ -380,6 +380,16 @@ live_preview_play_clicked_cb (GtkWidget *xwidget, gpointer data)
         ud->preview->live_id = ghb_add_job(ghb_live_handle(), job_dict);
         ghb_start_live_encode();
         ghb_value_free(&js);
+
+        gtk_button_set_icon_name(GTK_BUTTON(widget), "media-playback-stop-symbolic");
+    }
+    else
+    {
+        // An encode is running, stop it
+        ghb_stop_live_encode();
+        ud->preview->live_id = -1;
+        ud->preview->encode_frame = -1;
+        gtk_button_set_icon_name(GTK_BUTTON(widget), "media-playback-start-symbolic");
     }
 }
 
@@ -388,6 +398,9 @@ ghb_live_encode_done(signal_user_data_t *ud, gboolean success)
 {
     GtkWidget *widget;
     GtkWidget *prog;
+
+    widget = ghb_builder_widget("live_preview_play");
+    gtk_button_set_icon_name(GTK_BUTTON(widget), "media-playback-start-symbolic");
 
     ud->preview->live_id = -1;
     prog = ghb_builder_widget("live_encode_progress");
@@ -398,7 +411,7 @@ ghb_live_encode_done(signal_user_data_t *ud, gboolean success)
         gtk_progress_bar_set_fraction (GTK_PROGRESS_BAR(prog), 1);
         ud->preview->encoded[ud->preview->encode_frame] = TRUE;
         live_preview_start_new(ud);
-        widget = ghb_builder_widget("live_progress_box");
+        widget = ghb_builder_widget("live_encode_progress");
         gtk_widget_hide (widget);
         widget = ghb_builder_widget("live_preview_progress");
         gtk_widget_show (widget);
@@ -517,7 +530,7 @@ init_preview_image(signal_user_data_t *ud)
     ud->preview->frame = ghb_widget_int(widget) - 1;
     if (ud->preview->encoded[ud->preview->frame])
     {
-        widget = ghb_builder_widget("live_progress_box");
+        widget = ghb_builder_widget("live_encode_progress");
         gtk_widget_hide (widget);
         widget = ghb_builder_widget("live_preview_progress");
         gtk_widget_show (widget);
@@ -526,9 +539,8 @@ init_preview_image(signal_user_data_t *ud)
     {
         widget = ghb_builder_widget("live_preview_progress");
         gtk_widget_hide (widget);
-        widget = ghb_builder_widget("live_progress_box");
-        gtk_widget_show (widget);
         widget = ghb_builder_widget("live_encode_progress");
+        gtk_widget_show (widget);
         gtk_progress_bar_set_text(GTK_PROGRESS_BAR(widget), "");
         gtk_progress_bar_set_fraction (GTK_PROGRESS_BAR(widget), 0);
     }

@@ -413,6 +413,7 @@ static GhbBinding widget_bindings[] =
     {"angle_adj", "upper", "1", "angle", "visible"},
     {"angle_adj", "upper", "1", "angle_label", "visible"},
     {"title", "active-id", "none", "PtoPType", "sensitive", TRUE},
+    {"title", "active-id", "none", "live_preview_play", "sensitive", TRUE},
     {"title", "active-id", "none", "preview_frame", "sensitive", TRUE},
     {"title", "active-id", "none", "chapters_tab", "sensitive", TRUE},
     {"title", "active-id", "none", "start_point", "sensitive", TRUE},
