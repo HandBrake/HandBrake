@@ -68,7 +68,10 @@
 
             <Button Content="Add Rule" FontWeight="Bold" Margin="0,0,10,0" Grid.Column="0"
                     Command="{Binding RelayCommand}" CommandParameter="AddRule" />
-            
+
+            <Button Content="Add Foreign Audio Scan" FontWeight="Bold" Margin="0,0,10,0" Grid.Column="1"
+                    Command="{Binding RelayCommand}" CommandParameter="AddForeignScanTrack" />
+
             <Button MinWidth="65" Grid.Column="5"
                     Margin="0,0,0,0"
                     Command="{Binding RelayCommand}" CommandParameter="Clear"
@@ -112,9 +115,15 @@
                     <GridViewColumn Header="Language" Width="150" >
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
-                                <ComboBox HorizontalAlignment="Stretch" Width="130"
-                                          ItemsSource="{Binding DataContext.Languages, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}"
-                                          SelectedItem="{Binding Language}" DisplayMemberPath="DisplayNative" />
+                                <StackPanel Orientation="Vertical">
+                                    <ComboBox HorizontalAlignment="Stretch" Width="130" Visibility="{Binding IsForeignAudioScanRule, Converter={StaticResource booleanToVisibilityConverter}, ConverterParameter=true}"
+                                              ItemsSource="{Binding DataContext.Languages, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}"
+                                              SelectedItem="{Binding Language}" DisplayMemberPath="DisplayNative" />
+
+                                    <TextBlock Text="Foreign Audio Scan"  TextTrimming="CharacterEllipsis"
+                                               Visibility="{Binding IsForeignAudioScanRule, Converter={StaticResource booleanToVisibilityConverter}, ConverterParameter=false}"/>
+
+                                </StackPanel>
 
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
@@ -123,7 +132,7 @@
                     <GridViewColumn Header="Track Selection" Width="140" >
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
-                                <ComboBox HorizontalAlignment="Stretch" Width="125"
+                                <ComboBox HorizontalAlignment="Stretch" Width="125" Visibility="{Binding IsForeignAudioScanRule, Converter={StaticResource booleanToVisibilityConverter}, ConverterParameter=true}"
                                           ItemsSource="{Binding DataContext.TrackSelectionModes, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}, Converter={StaticResource trackSelectionConverter}}"
                                           SelectedItem="{Binding TrackSelectionMode, Converter={StaticResource trackSelectionConverter}}" />
 
@@ -145,7 +154,7 @@
                     <GridViewColumn Header="Burn in/Passthru (If Possible)" Width="200" >
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
-                                <ComboBox HorizontalAlignment="Stretch" Width="185"
+                                <ComboBox HorizontalAlignment="Stretch" Width="185" 
                                           ItemsSource="{Binding DataContext.BurnPassthruModes, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}, Converter={StaticResource burnPassthruModesConverter}}"
                                           SelectedItem="{Binding BurnPassthruMode, Converter={StaticResource burnPassthruModesConverter}}" />
 
