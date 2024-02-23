@@ -157,7 +157,7 @@ namespace HandBrakeWPF.Services.Subtitles
 
             track.Name = trackRule.TrackName;
 
-            if (!string.IsNullOrEmpty(track.Name) && rule.PassthruTrackNames)
+            if (!string.IsNullOrEmpty(sourceSubtitle.Name) && rule.PassthruTrackNames)
             {
                 track.Name = sourceSubtitle.Name;
             }
