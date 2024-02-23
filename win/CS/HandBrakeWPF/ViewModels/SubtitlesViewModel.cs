@@ -43,6 +43,7 @@ namespace HandBrakeWPF.ViewModels
         private readonly IErrorService errorService;
 
         private readonly ISubtitleRuleProcessor subtitleRuleProcessor;
+        private readonly ISubtitleFileHandler subtitleFileHandler;
 
         private readonly Subtitle foreignAudioSearchTrack;
         private IList<Subtitle> sourceTracks;
@@ -56,10 +57,11 @@ namespace HandBrakeWPF.ViewModels
         /// <param name="windowManager">
         /// The window Manager.
         /// </param>
-        public SubtitlesViewModel(IErrorService errorService, IWindowManager windowManager, ISubtitleRuleProcessor subtitleRuleProcessor)
+        public SubtitlesViewModel(IErrorService errorService, IWindowManager windowManager, ISubtitleRuleProcessor subtitleRuleProcessor, ISubtitleFileHandler subtitleFileHandler)
         {
             this.errorService = errorService;
             this.subtitleRuleProcessor = subtitleRuleProcessor;
+            this.subtitleFileHandler = subtitleFileHandler;
             this.SubtitleBehaviours = new SubtitleBehaviourRule();
             this.SubtitleDefaultsViewModel = new SubtitlesDefaultsViewModel(windowManager);
             this.Task = new EncodeTask();
@@ -204,7 +206,10 @@ namespace HandBrakeWPF.ViewModels
 
             if (dialog.FileNames != null)
             {
-                this.AddInputSubtitles(dialog.FileNames);
+                foreach (SubtitleTrack track in this.subtitleFileHandler.GetInputSubtitles(dialog.FileNames))
+                {
+                    this.Task.SubtitleTracks.Add(track);
+                }
             }
         }
 
@@ -212,7 +217,10 @@ namespace HandBrakeWPF.ViewModels
         {
             if (subtitleFiles != null && subtitleFiles.Any())
             {
-                this.AddInputSubtitles(subtitleFiles);
+                foreach (SubtitleTrack track in this.subtitleFileHandler.GetInputSubtitles(subtitleFiles))
+                {
+                    this.Task.SubtitleTracks.Add(track);
+                }
             }        
         }
 
@@ -284,7 +292,7 @@ namespace HandBrakeWPF.ViewModels
         {
             this.Task.SubtitleTracks.Clear();
 
-            List<SubtitleTrack> newTracks = this.subtitleRuleProcessor.GenerateTrackList(this.SubtitleBehaviours, this.SourceTracks.ToList(), this.Task.OutputFormat);
+            List<SubtitleTrack> newTracks = this.subtitleRuleProcessor.GenerateTrackList(this.SubtitleBehaviours, this.SourceTracks.ToList(), this.Task.OutputFormat, this.Task.Source);
             foreach (SubtitleTrack track in newTracks)
             {
                 this.Task.SubtitleTracks.Add(track);
@@ -542,30 +550,6 @@ namespace HandBrakeWPF.ViewModels
             return subtitles != null
                        ? subtitles.Where(subtitle => !this.Task.SubtitleTracks.Any(track => Equals(track.SourceTrack, subtitle))).ToList()
                        : this.SourceTracks.Where(subtitle => !this.Task.SubtitleTracks.Any(track => Equals(track.SourceTrack, subtitle))).ToList();
-        }
-
-        private void AddInputSubtitles(string[] filenames)
-        {
-            foreach (var srtFile in filenames)
-            {
-                if (!File.Exists(srtFile))
-                {
-                    continue;
-                }
-
-                string extension = Path.GetExtension(srtFile);
-
-                SubtitleTrack track = new SubtitleTrack
-                                          {
-                                              SrtFileName = Path.GetFileNameWithoutExtension(srtFile),
-                                              SrtOffset = 0,
-                                              SrtCharCode = "UTF-8",
-                                              SrtLang = HandBrakeLanguagesHelper.GetByName("English"),
-                                              SubtitleType = extension.Contains("ass", StringComparison.InvariantCultureIgnoreCase) ? SubtitleType.IMPORTSSA : SubtitleType.IMPORTSRT,
-                                              SrtPath = srtFile
-                                          };
-                this.Task.SubtitleTracks.Add(track);
-            }
         }
 
         private void CheckAddState(int before)
