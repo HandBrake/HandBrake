@@ -432,7 +432,8 @@ namespace HandBrakeWPF.Services.Presets.Factories
                     newTrack.BurnPassthruMode = (SubtitleBurnInBehaviourModes)importedTrack.BurnPassthruMode;
                     newTrack.ForcedMode = (ForcedModes)importedTrack.ForcedMode;
                     newTrack.TrackName = importedTrack.TrackNameOverride;
-                    
+                    newTrack.IsForeignAudioScanRule = importedTrack.IsForeignAudioScanRule;
+
                     preset.SubtitleTrackBehaviours.Tracks.Add(newTrack);
                 }
             }
@@ -557,6 +558,7 @@ namespace HandBrakeWPF.Services.Presets.Factories
                     subRecord.DefaultMode = (int)item.DefaultMode;
                     subRecord.ForcedMode = (int)item.ForcedMode;
                     subRecord.TrackNameOverride = item.TrackName;
+                    subRecord.IsForeignAudioScanRule = item.IsForeignAudioScanRule;
 
                     preset.SubtitleBehaviours.Add(subRecord);
                 }
