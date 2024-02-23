@@ -14,5 +14,6 @@ namespace HandBrake.Interop.Interop.Json.Presets
         public int BurnPassthruMode { get; set; }
         public int ForcedMode { get; set; }
         public string TrackNameOverride { get; set; }
+        public bool IsForeignAudioScanRule { get; set; }
     }
 }

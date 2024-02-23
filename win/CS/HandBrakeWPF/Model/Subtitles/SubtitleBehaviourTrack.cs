@@ -18,12 +18,15 @@ namespace HandBrakeWPF.Model.Subtitles
 
         private SubtitleBurnInBehaviourModes burnPassthruMode;
 
+        private bool isForeignAudioScanRule;
+
         public SubtitleBehaviourTrack()
         {
             DefaultMode = IsDefaultModes.No;
             TrackSelectionMode = SubtitleBehaviourModes.FirstMatch;
             ForcedMode = ForcedModes.No;
             BurnPassthruMode = SubtitleBurnInBehaviourModes.PassthruBurnDrop;
+            IsForeignAudioScanRule = false;
         }
 
         public SubtitleBehaviourTrack(SubtitleBehaviourTrack rule)
@@ -34,6 +37,16 @@ namespace HandBrakeWPF.Model.Subtitles
             this.ForcedMode = rule.ForcedMode;
             this.TrackName = rule.TrackName;
             this.BurnPassthruMode = rule.BurnPassthruMode;
+            this.IsForeignAudioScanRule = rule.IsForeignAudioScanRule;
+        }
+
+        public bool IsForeignAudioScanRule
+        {
+            get => this.isForeignAudioScanRule;
+            set
+            {
+                this.isForeignAudioScanRule = value;
+            }
         }
 
         public Language Language { get; set; }
@@ -77,7 +90,7 @@ namespace HandBrakeWPF.Model.Subtitles
 
         protected bool Equals(SubtitleBehaviourTrack other)
         {
-            return this.burnPassthruMode == other.burnPassthruMode && Equals(this.Language, other.Language) && this.TrackSelectionMode == other.TrackSelectionMode && this.DefaultMode == other.DefaultMode && this.ForcedMode == other.ForcedMode && this.TrackName == other.TrackName;
+            return this.isForeignAudioScanRule == other.isForeignAudioScanRule && Equals(this.Language, other.Language) && this.TrackSelectionMode == other.TrackSelectionMode && this.DefaultMode == other.DefaultMode && this.ForcedMode == other.ForcedMode && this.TrackName == other.TrackName;
         }
 
         public override bool Equals(object obj)
@@ -102,7 +115,7 @@ namespace HandBrakeWPF.Model.Subtitles
 
         public override int GetHashCode()
         {
-            return HashCode.Combine((int)this.burnPassthruMode, this.Language, (int)this.TrackSelectionMode, (int)this.DefaultMode, (int)this.ForcedMode, this.TrackName);
+            return HashCode.Combine(this.isForeignAudioScanRule, this.Language, (int)this.TrackSelectionMode, (int)this.DefaultMode, (int)this.ForcedMode, this.TrackName);
         }
     }
 }

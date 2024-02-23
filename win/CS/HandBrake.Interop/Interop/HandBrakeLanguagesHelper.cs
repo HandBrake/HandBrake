@@ -88,6 +88,11 @@ namespace HandBrake.Interop.Interop
                 return AnyLanguage;
             }
 
+            if (string.IsNullOrEmpty(code))
+            {
+                return null;
+            }
+
             iso639_lang_t language = InteropUtilities.ToStructureFromPtr<iso639_lang_t>(HBFunctions.lang_for_code2(code));
             return HandBrakeUnitConversionHelpers.NativeToLanguage(language);
         }
