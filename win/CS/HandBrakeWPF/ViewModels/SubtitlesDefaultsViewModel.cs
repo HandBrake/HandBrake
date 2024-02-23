@@ -46,8 +46,6 @@ namespace HandBrakeWPF.ViewModels
             this.windowManager = windowManager;
             this.Languages = HandBrakeLanguagesHelper.AllLanguagesWithAny;
             this.CharacterCodes = CharCodesUtilities.GetCharacterCodes();
-            this.SelectedAvailableToMove = new BindingList<Language>();
-            this.SelectedLanguagesToMove = new BindingList<Language>();
             this.availableLanguages = new BindingList<Language>();
             this.SubtitleBehaviourRules = new SubtitleBehaviourRule();
             
@@ -133,16 +131,6 @@ namespace HandBrakeWPF.ViewModels
                 this.NotifyOfPropertyChange(() => this.AvailableLanguages);
             }
         }
-
-        /// <summary>
-        /// Gets SelectedLanguages.
-        /// </summary>
-        public BindingList<Language> SelectedAvailableToMove { get; private set; }
-
-        /// <summary>
-        /// Gets SelectedLanguages.
-        /// </summary>
-        public BindingList<Language> SelectedLanguagesToMove { get; private set; }
         
         public void LaunchHelp()
         {
