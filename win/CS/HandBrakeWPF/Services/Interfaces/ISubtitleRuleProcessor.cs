@@ -16,7 +16,7 @@ namespace HandBrakeWPF.Services.Interfaces
 
     public interface ISubtitleRuleProcessor
     {
-        List<SubtitleTrack> GenerateTrackList(SubtitleBehaviourRule rules, List<Subtitle> sourceTracks, OutputFormat outputFormat);
+        List<SubtitleTrack> GenerateTrackList(SubtitleBehaviourRule rules, List<Subtitle> sourceTracks, OutputFormat outputFormat, string sourcePath);
 
         List<Subtitle> GetSelectedLanguagesTracks(SubtitleBehaviourRule rules, IList<Subtitle> sourceTracks);
 
