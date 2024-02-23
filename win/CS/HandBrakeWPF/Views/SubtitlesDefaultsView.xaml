@@ -50,9 +50,8 @@
         </Grid.ColumnDefinitions>
 
         <StackPanel Grid.Row="0" Margin="10,0,0,0" Orientation="Vertical">
-            <TextBlock Text="Automatic Subtitle Selections"  Style="{StaticResource windowTitle}"   />
-            <TextBlock Text="Setup rules to automatically add subtitle tracks."   />
-            <TextBlock Text="Rules are applied in priority order and will attempt to match where possible. Subtitle limitations apply."   />
+            <TextBlock Text="{x:Static Properties:Resources.SubtitleDefaultView_Title}"  Style="{StaticResource windowTitle}"   />
+            <TextBlock Text="{x:Static Properties:Resources.SubtitleDefaultView_Info}"   />
         </StackPanel>
 
         <!-- Row 0 -->
@@ -196,9 +195,9 @@
 
         <!-- Row 2 -->
         <StackPanel Grid.Row="3" Margin="10,0,0,0">
-            <CheckBox Content="Automatically load external subtitles matching the above rules." IsChecked="{Binding SubtitleBehaviourRules.AutoloadExternal}" />
-            <CheckBox Content="Passthru Track Names if not overridden above." IsChecked="{Binding SubtitleBehaviourRules.PassthruTrackNames}"/>
-            <CheckBox Content="Override order to match source" IsChecked="{Binding SubtitleBehaviourRules.UseSourceOrder}" />
+            <CheckBox Content="{x:Static Properties:Resources.SubtitleDefaultView_AutoAddExternal}" IsChecked="{Binding SubtitleBehaviourRules.AutoloadExternal}" />
+            <CheckBox Content="{x:Static Properties:Resources.SubtitleDefaultView_PassthruTrackNames}" IsChecked="{Binding SubtitleBehaviourRules.PassthruTrackNames}"/>
+            <CheckBox Content="{x:Static Properties:Resources.SubtitleDefaultView_SourceOrder}" IsChecked="{Binding SubtitleBehaviourRules.UseSourceOrder}" />
         </StackPanel>
 
         <Border BorderBrush="DarkGray" BorderThickness="0,1,0,0" SnapsToDevicePixels="True" Grid.Row="4" Grid.ColumnSpan="3" Margin="10,15,0,0" >
