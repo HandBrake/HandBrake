@@ -37,7 +37,7 @@ namespace HandBrakeWPF.ViewModels
         private BindingList<Language> availableLanguages;
 
         private SubtitleBehaviourRule subtitleBehaviourRules;
-
+        
         /// <summary>
         /// Initializes a new instance of the <see cref="SubtitlesDefaultsViewModel"/> class. 
         /// </summary>
@@ -50,7 +50,7 @@ namespace HandBrakeWPF.ViewModels
             this.SelectedLanguagesToMove = new BindingList<Language>();
             this.availableLanguages = new BindingList<Language>();
             this.SubtitleBehaviourRules = new SubtitleBehaviourRule();
-
+            
             this.SetupPreset((Preset)null);
 
             this.Title = Resources.SubtitlesViewModel_SubDefaults;
@@ -166,6 +166,11 @@ namespace HandBrakeWPF.ViewModels
         public void AddRule()
         {
             this.SubtitleBehaviourRules.Tracks.Add(new SubtitleBehaviourTrack());
+        }
+
+        public void AddForeignScanTrack()
+        {
+            this.SubtitleBehaviourRules.Tracks.Add(new SubtitleBehaviourTrack() { IsForeignAudioScanRule = true});
         }
 
         /// <summary>
