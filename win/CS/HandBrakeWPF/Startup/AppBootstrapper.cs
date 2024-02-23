@@ -60,8 +60,7 @@ namespace HandBrakeWPF.Startup
             builder.RegisterType<PortService>().As<IPortService>().SingleInstance();
             builder.RegisterType<NotificationService>().As<INotificationService>().SingleInstance();
             builder.RegisterType<SubtitleRuleProcessor>().As<ISubtitleRuleProcessor>().SingleInstance();
-
-            
+            builder.RegisterType<SubtitleFileHandler>().As<ISubtitleFileHandler>().SingleInstance();
 
             // ViewModels
             Assembly assembly = typeof(AppBootstrapper).Assembly;

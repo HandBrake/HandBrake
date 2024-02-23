@@ -23,7 +23,14 @@ namespace HandBrakeWPF.Services.Subtitles
     {
         // TODO: Add support for:  CC, Foreign Audio Scan
 
-        public List<SubtitleTrack> GenerateTrackList(SubtitleBehaviourRule rules, List<Subtitle> sourceTracks, OutputFormat outputFormat)
+        private readonly ISubtitleFileHandler subtitleFileHandler;
+
+        public SubtitleRuleProcessor(ISubtitleFileHandler fileHandler)
+        {
+            this.subtitleFileHandler = fileHandler;
+        }
+
+        public List<SubtitleTrack> GenerateTrackList(SubtitleBehaviourRule rules, List<Subtitle> sourceTracks, OutputFormat outputFormat, string sourcePath)
         {
             List<SubtitleTrack> outputTracks = new List<SubtitleTrack>();
 
@@ -40,7 +47,13 @@ namespace HandBrakeWPF.Services.Subtitles
             if (rules.UseSourceOrder)
             {
                 List<SubtitleTrack> orderedTrackList = outputTracks.OrderBy(s => s.SourceTrack.TrackNumber).ToList();
-                return orderedTrackList;
+                outputTracks = orderedTrackList;
+            }
+
+            if (rules.AutoloadExternal)
+            {
+                List<SubtitleTrack> tracks = this.subtitleFileHandler.FindLocalFiles(sourcePath);
+                outputTracks.AddRange(tracks);
             }
 
             return outputTracks;
