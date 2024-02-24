@@ -6155,7 +6155,7 @@ Each selected source track will be encoded with all selected encoders.</property
     <property name="default-width">854</property>
     <property name="default-height">480</property>
     <signal name="notify::fullscreened" handler="preview_notify_fullscreen_cb" swapped="no"/>
-    <signal name="close-request" handler="preview_window_delete_cb" swapped="no"/>
+    <signal name="close-request" handler="preview_close_request_cb" swapped="no"/>
     <property name="child">
       <object class="GtkOverlay" id="preview_overlay">
         <property name="width-request">480</property>
