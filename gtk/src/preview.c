@@ -699,42 +699,86 @@ preview_duration_changed_cb (GtkWidget *widget, gpointer data)
 }
 
 static guint hud_timeout_id = 0;
+static guint hud_fade_id = 0;
 
 static gboolean in_hud = FALSE;
 
-static gboolean
-hud_timeout(signal_user_data_t *ud)
+static void
+cancel_source_function (guint id)
 {
-    GtkWidget *widget;
+    if (id != 0)
+    {
+        GSource *source = g_main_context_find_source_by_id(g_main_context_default(), id);
+        if (source != NULL)
+        {
+            g_source_destroy(source);
+        }
+    }
+}
 
+static gboolean
+hud_fade_out (GtkWidget *hud)
+{
+    double opacity = gtk_widget_get_opacity(hud);
+
+    if (opacity > 0.0)
+    {
+        gtk_widget_set_opacity(hud, opacity - 0.0625);
+        return G_SOURCE_CONTINUE;
+    }
+    else
+    {
+        gtk_widget_set_visible(hud, FALSE);
+        hud_fade_id = 0;
+        return G_SOURCE_REMOVE;
+    }
+}
+
+static gboolean
+hud_fade_in (GtkWidget *hud)
+{
+    double opacity = gtk_widget_get_opacity(hud);
+    gtk_widget_set_visible(hud, TRUE);
+
+    if (opacity < 1.0)
+    {
+        gtk_widget_set_opacity(hud, opacity + 0.0625);
+        return G_SOURCE_CONTINUE;
+    }
+    else
+    {
+        hud_fade_id = 0;
+        return G_SOURCE_REMOVE;
+    }
+}
+
+static gboolean
+hud_timeout (signal_user_data_t *ud)
+{
     ghb_log_func();
-    widget = ghb_builder_widget("preview_hud");
-    gtk_widget_hide(widget);
-    hud_timeout_id = 0;
-    return G_SOURCE_REMOVE;
+    if (live_preview_get_state() != PREVIEW_STATE_ENCODING)
+    {
+        GtkWidget *widget = ghb_builder_widget("preview_hud");
+        cancel_source_function(hud_fade_id);
+        hud_fade_id = g_timeout_add(16, (GSourceFunc)hud_fade_out, widget);
+        hud_timeout_id = 0;
+        return G_SOURCE_REMOVE;
+    }
+    else
+    {
+        return G_SOURCE_CONTINUE;
+    }
 }
 
 G_MODULE_EXPORT void
 hud_enter_cb (GtkEventControllerMotion *econ, double x, double y, gpointer data)
 {
-    GtkWidget * hud;
+    GtkWidget *hud = ghb_builder_widget("preview_hud");
 
-    if (hud_timeout_id != 0)
-    {
-        GMainContext *mc;
-        GSource *source;
-
-        mc = g_main_context_default();
-        source = g_main_context_find_source_by_id(mc, hud_timeout_id);
-        if (source != NULL)
-            g_source_destroy(source);
-    }
-    hud = ghb_builder_widget("preview_hud");
-    if (!gtk_widget_get_visible(hud))
-    {
-        gtk_widget_show(hud);
-    }
+    cancel_source_function(hud_timeout_id);
     hud_timeout_id = 0;
+    cancel_source_function(hud_fade_id);
+    hud_fade_id = g_timeout_add(16, (GSourceFunc)hud_fade_in, hud);
     in_hud = TRUE;
 }
 
@@ -756,17 +800,8 @@ preview_leave_cb (GtkEventControllerMotion *econ, gpointer data)
 {
     signal_user_data_t *ud = ghb_ud();
 
-    if (hud_timeout_id != 0)
-    {
-        GMainContext *mc;
-        GSource *source;
-
-        mc = g_main_context_default();
-        source = g_main_context_find_source_by_id(mc, hud_timeout_id);
-        if (source != NULL)
-            g_source_destroy(source);
-    }
-    hud_timeout_id = g_timeout_add(300, (GSourceFunc)hud_timeout, ud);
+    cancel_source_function(hud_timeout_id);
+    hud_timeout_id = g_timeout_add(500, (GSourceFunc)hud_timeout, ud);
 }
 
 G_MODULE_EXPORT void
@@ -776,21 +811,16 @@ preview_motion_cb (GtkEventControllerMotion *econ, double x, double y,
     GtkWidget * hud;
     signal_user_data_t *ud = ghb_ud();
 
-    if (hud_timeout_id != 0)
-    {
-        GMainContext *mc;
-        GSource *source;
-
-        mc = g_main_context_default();
-        source = g_main_context_find_source_by_id(mc, hud_timeout_id);
-        if (source != NULL)
-            g_source_destroy(source);
-    }
+    cancel_source_function(hud_timeout_id);
+    hud_timeout_id = 0;
     hud = ghb_builder_widget("preview_hud");
-    if (!gtk_widget_get_visible(hud))
+    if (!gtk_widget_is_visible(hud))
     {
-        gtk_widget_show(hud);
+        gtk_widget_set_visible(hud, TRUE);
+        cancel_source_function(hud_fade_id);
+        hud_fade_id = g_timeout_add(16, (GSourceFunc)hud_fade_in, hud);
     }
+
     if (!in_hud)
     {
         hud_timeout_id = g_timeout_add_seconds(4, (GSourceFunc)hud_timeout, ud);

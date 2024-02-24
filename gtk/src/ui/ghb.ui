@@ -6193,7 +6193,6 @@ Each selected source track will be encoded with all selected encoders.</property
         </property>
         <child type="overlay">
           <object class="GtkBox" id="preview_hud">
-            <property name="visible">False</property>
             <property name="can-focus">False</property>
             <property name="halign">center</property>
             <property name="valign">end</property>
