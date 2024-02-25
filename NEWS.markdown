@@ -5,9 +5,86 @@
 
 Before updating HandBrake, please make sure there are no pending encodes in the queue, and be sure to make a backup of any custom presets and app preferences you have, as they may not be compatible with newer versions.
 
-Windows users, please make sure to install [Microsoft .NET Desktop Runtime version 6.0.x](https://dotnet.microsoft.com/en-us/download/dotnet/6.0). Read carefully: you need the **DESKTOP** runtime. You must install .NET 6 even if you have installed .NET 7.
+Windows users, please make sure to install [Microsoft .NET Desktop Runtime version 8.0.x](https://dotnet.microsoft.com/en-us/download/dotnet/8.0). Read carefully: you need the **DESKTOP** runtime.
+
+
+## HandBrake 1.8.0
+
+### All platforms
+
+#### General
+
+#### Video
+
+#### Command line interface
+
+#### Audio
+
+#### Subtitles
+
+#### Build system
+
+#### Third-party libraries
+
+- Updated libraries
+  - libvpx 1.14.0 (VP8/VP9 video encoding)
+
+### Linux
+
+### Mac
+
+- Added new preference to pause encodes when switching to battery.
+- Added new preference to Clear completed jobs at launch option.
+- Reworked notification options to allow per encode or per queue control.
+
+### Windows
+
+- Requires Microsoft .NET Desktop Runtime 8.0.x
+- Added Invert Queue option to the Add to Queue Window (#5741)
+- Added new translations
+  - Catalan (Català)
+
+
+## HandBrake 1.7.3
+
+### All platforms
+
+#### General
+
+- Fixed formatting leading zeros for timestamps in logs
+- Miscellaneous bug fixes and improvements
+
+#### Video
+
+- Fixed an issue that could potentially cause incorrect detection of source FPS value (#5677)
+
+#### Subtitles
+
+- Fixed tx3g to SSA subtitles conversion
+
+### Linux
+
+- Fixed the "All Files" open file dialog filter to really show all files
+- Fixed an issue where adding a new default audio track automatically set the gain to -20 dB
+
+### macOS
+
+- Fixed a regression introduced in HandBrake 1.7.2 by the workaround for VideoToolbox crashes on Sonoma
+- Miscellaneous bug fixes and improvements
+
+### Windows
+
+- Improved security hardening of loading of DLL files within libhb by limiting search scope (#5724)
+- Improved keyboard navigation on Chapters tab (#5679)
+- Fixed an issue that could cause encodes to appear stalled when process isolation is turned on
+- Fixed an issue that could prevent QSV decode from being used when a system also has a non-Intel GPU
+- Fixed an issue where the drive label was not always correctly detected (#5711)
+- Miscellaneous bug fixes and improvements
+
 
 ## HandBrake 1.7.2
+
+### All platforms
 
 #### Video
 
@@ -29,7 +106,7 @@ Windows users, please make sure to install [Microsoft .NET Desktop Runtime versi
 - Added a workaround to prevent issues decoding H.264 video by disabling VideoToolbox hardware decoding for Level 6.1 and 6.2
 - Fixed a crash opening an empty folder
 
-#### Windows
+### Windows
 
 - Added Automation Properties to some controls on the audio tab to assist screen readers
 - Fixed NVIDIA NVDEC option being ignored (#5569)
@@ -38,6 +115,8 @@ Windows users, please make sure to install [Microsoft .NET Desktop Runtime versi
 
 
 ## HandBrake 1.7.1
+
+### All platforms
 
 #### Video
 
@@ -51,6 +130,8 @@ Windows users, please make sure to install [Microsoft .NET Desktop Runtime versi
 
 
 ## HandBrake 1.7.0
+
+### All platforms
 
 #### General
 

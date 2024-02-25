@@ -31,7 +31,8 @@
 #include <time.h>
 #include <math.h>
 
-#include "ghbcompat.h"
+#include "compat.h"
+#include "ghb-file-button.h"
 
 #include <glib/gstdio.h>
 #include <glib/gi18n.h>
@@ -59,6 +60,7 @@
 #endif
 
 #include "handbrake/handbrake.h"
+#include "application.h"
 #include "callbacks.h"
 #include "chapters.h"
 #include "notifications.h"
@@ -71,9 +73,8 @@
 #include "presets.h"
 #include "preview.h"
 #include "values.h"
-#include "plist.h"
 #include "hb-backend.h"
-#include "ghb-dvd.h"
+#include "hb-dvd.h"
 #include "libavutil/parseutils.h"
 
 
@@ -310,8 +311,8 @@ inhibit_suspend (signal_user_data_t *ud)
         // Already inhibited
         return;
     }
-    suspend_cookie = gtk_application_inhibit(ud->app, NULL,
-            GTK_APPLICATION_INHIBIT_SUSPEND | GTK_APPLICATION_INHIBIT_LOGOUT,
+    suspend_cookie = gtk_application_inhibit(GTK_APPLICATION(GHB_APPLICATION_DEFAULT),
+            NULL, GTK_APPLICATION_INHIBIT_SUSPEND | GTK_APPLICATION_INHIBIT_LOGOUT,
             _("An encode is in progress."));
     if (suspend_cookie != 0)
     {
@@ -326,7 +327,8 @@ uninhibit_suspend (signal_user_data_t *ud)
     switch (suspend_inhibited)
     {
         case GHB_SUSPEND_INHIBITED_GTK:
-            gtk_application_uninhibit(ud->app, suspend_cookie);
+            gtk_application_uninhibit(GTK_APPLICATION(GHB_APPLICATION_DEFAULT),
+                                      suspend_cookie);
             break;
         default:
             break;
@@ -509,7 +511,7 @@ application_quit (signal_user_data_t *ud)
 {
     ghb_hb_cleanup(FALSE);
     prune_logs(ud);
-    g_application_quit(G_APPLICATION(ud->app));
+    g_application_quit(g_application_get_default());
 }
 
 G_MODULE_EXPORT void
@@ -1868,7 +1870,8 @@ update_default_destination(signal_user_data_t *ud)
 }
 
 G_MODULE_EXPORT void
-dest_dir_set_cb(GtkFileChooserButton *dest_chooser, signal_user_data_t *ud)
+dest_dir_set_cb (GhbFileButton *dest_chooser, GParamSpec *pspec,
+                 signal_user_data_t *ud)
 {
     const gchar *dest_file, *dest_dir;
     gchar *dest;
@@ -1916,7 +1919,7 @@ destination_response_cb(GtkFileChooserNative *chooser,
     {
         GFile *file;
         char *filename, *dirname;
-        GtkFileChooser *dest_chooser;
+        GhbFileButton *dest_chooser;
 
         file = gtk_file_chooser_get_file(GTK_FILE_CHOOSER (chooser));
         filename = g_file_get_path(file);
@@ -1924,8 +1927,8 @@ destination_response_cb(GtkFileChooserNative *chooser,
         dirname = g_path_get_dirname(filename);
         entry = (GtkEntry*)GHB_WIDGET(ud->builder, "dest_file");
         ghb_editable_set_text(entry, basename);
-        dest_chooser = GTK_FILE_CHOOSER(GHB_WIDGET(ud->builder, "dest_dir"));
-        ghb_file_chooser_set_initial_file(dest_chooser, dirname);
+        dest_chooser = GHB_FILE_BUTTON(GHB_WIDGET(ud->builder, "dest_dir"));
+        ghb_file_button_set_filename(dest_chooser, dirname);
         g_object_unref(file);
         g_free (dirname);
         g_free (basename);
@@ -3608,7 +3611,7 @@ prefs_response_cb(GtkDialog *dialog, GdkEvent *event, signal_user_data_t *ud)
                                 _("You must restart HandBrake now."));
         ghb_hb_cleanup(FALSE);
         prune_logs(ud);
-        g_application_quit(G_APPLICATION(ud->app));
+        g_application_quit(g_application_get_default());
     }
     return TRUE;
 }
@@ -3632,7 +3635,7 @@ quit_cb(countdown_t *cd)
         prune_logs(cd->ud);
 
         gtk_widget_destroy (GTK_WIDGET(cd->dlg));
-        g_application_quit(G_APPLICATION(cd->ud->app));
+        g_application_quit(g_application_get_default());
         return FALSE;
     }
     gtk_message_dialog_format_secondary_text(cd->dlg, _("%s in %d seconds…"),
@@ -3652,7 +3655,7 @@ shutdown_cb(countdown_t *cd)
         prune_logs(cd->ud);
 
         shutdown_logind();
-        g_application_quit(G_APPLICATION(cd->ud->app));
+        g_application_quit(g_application_get_default());
         return FALSE;
     }
     return TRUE;
@@ -5400,7 +5403,7 @@ GtkFileFilter *ghb_add_file_filter(GtkFileChooser *chooser,
 static void
 add_video_file_filters (GtkFileChooser *chooser, signal_user_data_t *ud)
 {
-    ghb_add_file_filter(chooser, ud, _("All Files"), "SourceFilterAll");
+    ghb_add_file_filter(chooser, ud, _("All Files"), "FilterAll");
     ghb_add_file_filter(chooser, ud, _("Video"), "SourceFilterVideo");
     ghb_add_file_filter(chooser, ud, g_content_type_get_description("video/mp4"), "SourceFilterMP4");
     ghb_add_file_filter(chooser, ud, g_content_type_get_description("video/mp2t"), "SourceFilterTS");

@@ -21,7 +21,7 @@
  *  Boston, MA  02110-1301, USA.
  */
 
-#include "ghbcompat.h"
+#include "compat.h"
 #include "hb-backend.h"
 #include "callbacks.h"
 #include "jobdict.h"
@@ -35,131 +35,83 @@
 #include "libxml/xpath.h"
 
 #include "chapters.h"
+#include "ghb-chapter-row.h"
 
-static void
-chapter_changed_cb(GtkEditable * edit, signal_user_data_t *ud);
-
-#if GTK_CHECK_VERSION(4, 4, 0)
-static gboolean
-chapter_keypress_cb(
-    GtkEventController * keycon,
-    guint                keyval,
-    guint                keycode,
-    GdkModifierType      state,
-    signal_user_data_t * ud);
-#else
-static gboolean
-chapter_keypress_cb(
-    GtkWidget          * widget,
-    GdkEvent           * event,
-    signal_user_data_t * ud);
-#endif
-
-static GtkWidget *find_widget(GtkWidget *widget, gchar *name)
-{
-    const char *wname;
-    GtkWidget *result = NULL;
-
-    if (widget == NULL || name == NULL)
-        return NULL;
-
-    wname = gtk_widget_get_name(widget);
-    if (wname != NULL && !strncmp(wname, name, 80))
-    {
-        return widget;
-    }
-    if (GTK_IS_CONTAINER(widget))
-    {
-        GList *list, *link;
-        link = list = gtk_container_get_children(GTK_CONTAINER(widget));
-        while (link)
-        {
-            result = find_widget(GTK_WIDGET(link->data), name);
-            if (result != NULL)
-                break;
-            link = link->next;
-        }
-        g_list_free(list);
-    }
-    return result;
-}
-
-static GtkListBoxRow *
-list_box_get_row(GtkWidget *widget)
-{
-    while (widget != NULL && G_OBJECT_TYPE(widget) != GTK_TYPE_LIST_BOX_ROW)
-    {
-        widget = gtk_widget_get_parent(widget);
-    }
-    return GTK_LIST_BOX_ROW(widget);
-}
+static gboolean chapter_keypress_cb (GtkEventController * keycon, guint keyval,
+                                     guint keycode, GdkModifierType state,
+                                     gpointer user_data);
+static void chapter_changed_cb (GhbChapterRow * row, GParamSpec *pspec,
+                                signal_user_data_t *ud);
 
 static GtkWidget *
-create_chapter_row(int index, int64_t start, int64_t duration,
-                   const char * name, signal_user_data_t * ud)
+create_chapter_row (int index, gint64 start, gint64 duration,
+                    const char * name, signal_user_data_t * ud)
 {
-    GtkWidget          * entry;
-    GtkWidget          * row;
-    GtkBox             * hbox;
-    GtkWidget          * label;
-    gchar              * str;
-    gint                 hh, mm, ss;
+    GtkWidget *row = ghb_chapter_row_new(index, start, duration, name);
+    g_signal_connect(row, "notify::name", G_CALLBACK(chapter_changed_cb), ud);
 
-    row  = gtk_list_box_row_new();
-    hbox = GTK_BOX(gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 6));
-
-    str = g_strdup_printf("%d", index);
-    label = gtk_label_new(str);
-    free(str);
-    gtk_label_set_width_chars(GTK_LABEL(label), 5);
-    gtk_label_set_xalign(GTK_LABEL(label), 0);
-    ghb_box_append_child(hbox, label);
-
-    ghb_break_duration(start, &hh, &mm, &ss);
-    str = g_strdup_printf("%02d:%02d:%02d", hh, mm, ss);
-    label = gtk_label_new(str);
-    free(str);
-    gtk_label_set_width_chars(GTK_LABEL(label), 10);
-    gtk_label_set_xalign(GTK_LABEL(label), 1);
-    ghb_box_append_child(hbox, label);
-
-    ghb_break_duration(duration, &hh, &mm, &ss);
-    str = g_strdup_printf("%02d:%02d:%02d", hh, mm, ss);
-    label = gtk_label_new(str);
-    free(str);
-    gtk_label_set_width_chars(GTK_LABEL(label), 10);
-    gtk_label_set_xalign(GTK_LABEL(label), 1);
-    ghb_box_append_child(hbox, label);
-
-#if GTK_CHECK_VERSION(4, 4, 0)
-    entry = gtk_text_new();
-#else
-    entry = gtk_entry_new();
-#endif
-    gtk_widget_set_name(entry, "chapter_entry");
-    gtk_widget_set_margin_start(entry, 12);
-    gtk_widget_set_hexpand(entry, TRUE);
-    ghb_editable_set_text(entry, name);
-    ghb_box_append_child(hbox, entry);
-
-#if GTK_CHECK_VERSION(4, 4, 0)
     GtkEventController * econ;
 
+#if GTK_CHECK_VERSION(4, 4, 0)
     econ = gtk_event_controller_key_new();
-    gtk_widget_add_controller(entry, econ);
-
-    g_signal_connect(econ, "key-pressed", G_CALLBACK(chapter_keypress_cb), ud);
+    gtk_widget_add_controller(econ, row);
 #else
-    g_signal_connect(entry, "key-press-event", G_CALLBACK(chapter_keypress_cb), ud);
+    econ = gtk_event_controller_key_new(row);
 #endif
-    g_signal_connect(entry, "changed", G_CALLBACK(chapter_changed_cb), ud);
+    g_signal_connect(econ, "key-pressed", G_CALLBACK(chapter_keypress_cb), ud);
 
-    gtk_container_add(GTK_CONTAINER(row), GTK_WIDGET(hbox));
-#if !GTK_CHECK_VERSION(4, 4, 0)
-    gtk_widget_show_all(row);
-#endif
-
+    gtk_widget_show(row);
     return row;
+}
+
+static gboolean
+chapter_keypress (GtkWidget *widget, guint keyval, gpointer user_data)
+{
+    GtkListBoxRow *row;
+    GtkListBox *lb;
+    int index;
+
+    if (keyval != GDK_KEY_Return &&
+        keyval != GDK_KEY_Tab &&
+        keyval != GDK_KEY_Down &&
+        keyval != GDK_KEY_Up)
+    {
+        return FALSE;
+    }
+
+    row = GTK_LIST_BOX_ROW(widget);
+    lb = GTK_LIST_BOX(gtk_widget_get_parent(GTK_WIDGET(row)));
+    index = gtk_list_box_row_get_index(row);
+    if (keyval == GDK_KEY_Return ||
+        keyval == GDK_KEY_Down ||
+        keyval == GDK_KEY_Tab)
+    {
+        index++;
+    }
+    else if (keyval == GDK_KEY_Up && index > 0)
+    {
+        index--;
+    }
+    if (index >= 0)
+    {
+        row = gtk_list_box_get_row_at_index(lb, index);
+        if (row != NULL)
+        {
+            ghb_chapter_row_grab_focus(GHB_CHAPTER_ROW(row));
+            return TRUE;
+        }
+    }
+    return FALSE;
+}
+
+static gboolean
+chapter_keypress_cb (GtkEventController * keycon, guint keyval, guint keycode,
+                     GdkModifierType state, gpointer user_data)
+{
+    GtkWidget *widget;
+
+    widget = gtk_event_controller_get_widget(keycon);
+    return chapter_keypress(widget, keyval, user_data);
 }
 
 static void
@@ -182,7 +134,7 @@ chapter_refresh_list_ui(signal_user_data_t *ud)
     GtkListBox * lb;
     GtkWidget  * row;
     gint         ii, count;
-    int64_t      start = 0, duration;
+    gint64       start = 0, duration;
 
     lb = GTK_LIST_BOX(GHB_WIDGET(ud->builder, "chapters_list"));
 
@@ -212,95 +164,14 @@ ghb_chapter_list_refresh_all(signal_user_data_t *ud)
     chapter_refresh_list_ui(ud);
 }
 
-static gboolean
-chapter_keypress(
-    GtkWidget          * widget,
-    guint                keyval,
-    signal_user_data_t * ud)
-{
-    GtkWidget     * entry;
-    GtkListBoxRow * row;
-    GtkListBox    * lb;
-    int             index;
-
-    if (keyval != GDK_KEY_Return &&
-        keyval != GDK_KEY_Down &&
-        keyval != GDK_KEY_Up)
-    {
-        return FALSE;
-    }
-
-    row    = list_box_get_row(widget);
-    lb     = GTK_LIST_BOX(gtk_widget_get_parent(GTK_WIDGET(row)));
-    index  = gtk_list_box_row_get_index(row);
-    if (keyval == GDK_KEY_Return || keyval == GDK_KEY_Down)
-    {
-        index++;
-    }
-    else if (keyval == GDK_KEY_Up && index > 0)
-    {
-        index--;
-    }
-    if (index >= 0)
-    {
-        row = gtk_list_box_get_row_at_index(lb, index);
-        if (row != NULL)
-        {
-            entry  = find_widget(GTK_WIDGET(row), "chapter_entry");
-            if (entry != NULL)
-            {
-                gtk_widget_grab_focus(entry);
-                return TRUE;
-            }
-        }
-    }
-    return FALSE;
-}
-
-#if GTK_CHECK_VERSION(4, 4, 0)
-static gboolean
-chapter_keypress_cb(
-    GtkEventController * keycon,
-    guint                keyval,
-    guint                keycode,
-    GdkModifierType      state,
-    signal_user_data_t * ud)
-{
-    GtkWidget     * widget;
-
-    widget = gtk_event_controller_get_widget(keycon);
-    return chapter_keypress(widget, keyval, ud);
-}
-#else
-static gboolean
-chapter_keypress_cb(
-    GtkWidget          * widget,
-    GdkEvent           * event,
-    signal_user_data_t * ud)
-{
-    guint keyval;
-
-    ghb_event_get_keyval(event, &keyval);
-    return chapter_keypress(widget, keyval, ud);
-}
-#endif
-
 static void
-chapter_changed_cb(
-    GtkEditable * edit,
-    signal_user_data_t *ud)
+chapter_changed_cb (GhbChapterRow *row, GParamSpec *pspec, signal_user_data_t *ud)
 {
-    GtkListBoxRow * row;
     const char    * text;
     int             index;
 
-    row = list_box_get_row(GTK_WIDGET(edit));
-    if (row == NULL)
-    {
-        return;
-    }
-    index = gtk_list_box_row_get_index(row);
-    text  = ghb_editable_get_text(edit);
+    index = gtk_list_box_row_get_index(GTK_LIST_BOX_ROW(row));
+    text  = ghb_chapter_row_get_name(row);
     if (text == NULL)
     {
         return;

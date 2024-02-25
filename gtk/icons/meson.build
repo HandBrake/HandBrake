@@ -1,5 +1,5 @@
+# Copyright (C) 2023-2024 HandBrake Team
 # SPDX-License-Identifier: GPL-2.0-or-later
-# Copyright (c) 2023 HandBrake Team
 
 icon_files = files(
   '24x24/apps/hb-advanced-symbolic.symbolic.png',
@@ -40,7 +40,6 @@ icon_files = files(
 
 icons = gnome.compile_resources('icon_res', 'icon_res.gresource.xml',
   dependencies: icon_files,
-  extra_args: '--manual-register',
   c_name: 'ghb_icons')
 
 if host_machine.system() not in ['windows', 'haiku']

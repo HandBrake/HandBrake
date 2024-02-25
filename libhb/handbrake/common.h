@@ -250,9 +250,12 @@ static inline hb_rational_t hb_make_q(int num, int den)
     return r;
 }
 
-static inline double hb_q2d(hb_rational_t a){
+static inline double hb_q2d(hb_rational_t a)
+{
     return a.num / (double) a.den;
 }
+
+int64_t hb_rescale_rational(hb_rational_t q, int b);
 
 struct hb_geometry_s
 {
@@ -732,6 +735,9 @@ struct hb_job_s
 #define HB_COLR_MAT_CD_CL        13 // chromaticity derived constant lum
 #define HB_COLR_MAT_ICTCP        14 // ITU-R BT.2100-0, ICtCp
 // 0, 3-5, 8, 11-65535: reserved/not implemented
+#define HB_COLR_RANGE_UNSET     -1
+#define HB_COLR_RANGE_LIMITED    1
+#define HB_COLR_RANGE_FULL       2
 
     hb_mastering_display_metadata_t mastering;
     hb_content_light_metadata_t coll;

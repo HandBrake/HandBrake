@@ -89,12 +89,6 @@ else
     GTK.CONFIGURE.extra += -Dflatpak=false
 endif
 
-ifeq (1,$(FEATURE.gtk4))
-    GTK.CONFIGURE.extra += -Dgtk4=true
-else
-    GTK.CONFIGURE.extra += -Dgtk4=false
-endif
-
 ifneq (,$(filter $(HOST.system),freebsd netbsd openbsd))
     GTK.CONFIGURE.extra += -Dextra-libdirs=$(LOCALBASE)/lib
 endif

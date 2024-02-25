@@ -481,7 +481,8 @@ The Activity log may have further information.</value>
     <value>已暫停佇列</value>
   </data>
   <data name="QueueViewModel_DelSelectedJobConfirmation" xml:space="preserve">
-    <value>您確定要刪除已選的工作嗎？</value>
+    <value>Are you sure you want to delete the selected jobs?
+No encoded files will be deleted with this operation. </value>
   </data>
   <data name="QueueViewModel_JobCurrentlyRunningWarning" xml:space="preserve">
     <value>此編碼工作正在進行中。若您刪除它，編碼也將停止。您確定要進行嗎？</value>
@@ -2124,15 +2125,11 @@ You can drag/drop or enter the text above.</value>
   <data name="OptionsView_RemotePortLimit" xml:space="preserve">
     <value>連接埠號必須介於 5000 及 32767</value>
   </data>
-  <data name="OptionsView_SendFileToArgPlaceholders" xml:space="preserve">
-    <value>替代預留位置：{source} {destination} {exit_code}</value>
-    <comment>Note: {source}, {destination} and {exit_code} are not translatable. </comment>
-  </data>
   <data name="SourceSelection_UpdateAvailable" xml:space="preserve">
     <value>A new version is available!</value>
   </data>
   <data name="About_Copyright" xml:space="preserve">
-    <value>版權所有 ©️ 2003-2023 HandBrake 團隊</value>
+    <value>Copyright (C) 2003-2024 The HandBrake Team</value>
   </data>
   <data name="Options_LowBatteryLevel" xml:space="preserve">
     <value>低電量：</value>
@@ -2788,5 +2785,20 @@ To allow multiple simultaneous encodes, turn on "Process Isolation" in Tools Men
   </data>
   <data name="Options_RecursiveFolderScan" xml:space="preserve">
     <value>Recursively scan directories when using the folder scan mode.</value>
+  </data>
+  <data name="AudioView_AudioQuality" xml:space="preserve">
+    <value>Audio Track Quality</value>
+  </data>
+  <data name="AudioView_AudioTrackName" xml:space="preserve">
+    <value>Audio Track Name</value>
+  </data>
+  <data name="AudioView_BitrateSelection" xml:space="preserve">
+    <value>Audio Track Bitrate</value>
+  </data>
+  <data name="AudioView_DeleteTrack" xml:space="preserve">
+    <value>Delete this audio track</value>
+  </data>
+  <data name="AudioView_QualityMode" xml:space="preserve">
+    <value>Audio Encoder Quality Mode</value>
   </data>
 </root>

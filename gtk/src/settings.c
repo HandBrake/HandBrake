@@ -21,7 +21,7 @@
  *  Boston, MA  02110-1301, USA.
  */
 
-#include "ghbcompat.h"
+#include "compat.h"
 
 #include <fcntl.h>
 #include <unistd.h>
@@ -31,6 +31,7 @@
 #include "settings.h"
 #include "hb-backend.h"
 #include "values.h"
+#include "ghb-file-button.h"
 
 void dump_settings(GhbValue *settings);
 void ghb_pref_audio_init(signal_user_data_t *ud);
@@ -229,6 +230,12 @@ ghb_widget_value(GtkWidget *widget)
         value = ghb_string_value_new(str);
         if (str != NULL)
             g_free(str);
+    }
+    else if (type == GHB_TYPE_FILE_BUTTON)
+    {
+        const gchar *str;
+        str = ghb_file_button_get_filename (GHB_FILE_BUTTON(widget));
+        value = ghb_string_value_new(str);
     }
     else
     {
@@ -459,6 +466,40 @@ ghb_update_widget(GtkWidget *widget, const GhbValue *value)
         if (str[0] != 0)
         {
             ghb_file_chooser_set_initial_file(GTK_FILE_CHOOSER(widget), str);
+        }
+    }
+    else if (type == GHB_TYPE_FILE_BUTTON)
+    {
+        GtkFileChooserAction act;
+        act = ghb_file_button_get_action(GHB_FILE_BUTTON(widget));
+
+        if (str[0] == 0)
+        {
+            // Do nothing
+            ;
+        }
+        else if (act == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER ||
+                 act == GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER ||
+                 act == GTK_FILE_CHOOSER_ACTION_SAVE)
+        {
+            ghb_file_button_set_filename (GHB_FILE_BUTTON(widget), str);
+        }
+        else
+        {
+            if (g_file_test(str, G_FILE_TEST_IS_DIR) ||
+                g_file_test(str, G_FILE_TEST_EXISTS))
+            {
+                ghb_file_button_set_filename (GHB_FILE_BUTTON(widget), str);
+            }
+            else
+            {
+                gchar * dirname;
+
+                dirname = g_path_get_dirname(str);
+                ghb_file_button_set_filename(
+                    GHB_FILE_BUTTON(widget), dirname);
+                g_free(dirname);
+            }
         }
     }
     else

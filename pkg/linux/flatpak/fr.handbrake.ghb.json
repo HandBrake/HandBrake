@@ -12,7 +12,6 @@
         "--filesystem=host",
         "--filesystem=xdg-run/gvfs",
         "--filesystem=xdg-run/gvfsd",
-        "--filesystem=xdg-config/gtk-3.0",
         "--talk-name=org.gtk.vfs.*",
         "--system-talk-name=org.freedesktop.login1",
         "--system-talk-name=org.freedesktop.UPower",

@@ -151,11 +151,6 @@ static int64_t get_frame_duration(hb_work_private_t *pv, hb_buffer_t *buf)
     return pv->frame_duration[i];
 }
 
-static inline int64_t rescale(hb_rational_t q, int b)
-{
-    return av_rescale(q.num, b, q.den);
-}
-
 static const char* hyper_encode_name(const int hyper_encode_mode)
 {
     switch (hyper_encode_mode)
@@ -1215,16 +1210,16 @@ int encqsvInit(hb_work_object_t *w, hb_job_t *job)
             if (job->mastering.has_primaries && job->mastering.has_luminance)
             {
                 pv->param.masteringDisplayColourVolume.InsertPayloadToggle = MFX_PAYLOAD_IDR;
-                pv->param.masteringDisplayColourVolume.DisplayPrimariesX[0] = FFMIN(rescale(job->mastering.display_primaries[1][0], masteringChromaDen), masteringChromaDen);
-                pv->param.masteringDisplayColourVolume.DisplayPrimariesY[0] = FFMIN(rescale(job->mastering.display_primaries[1][1], masteringChromaDen), masteringChromaDen);
-                pv->param.masteringDisplayColourVolume.DisplayPrimariesX[1] = FFMIN(rescale(job->mastering.display_primaries[2][0], masteringChromaDen), masteringChromaDen);
-                pv->param.masteringDisplayColourVolume.DisplayPrimariesY[1] = FFMIN(rescale(job->mastering.display_primaries[2][1], masteringChromaDen), masteringChromaDen);
-                pv->param.masteringDisplayColourVolume.DisplayPrimariesX[2] = FFMIN(rescale(job->mastering.display_primaries[0][0], masteringChromaDen), masteringChromaDen);
-                pv->param.masteringDisplayColourVolume.DisplayPrimariesY[2] = FFMIN(rescale(job->mastering.display_primaries[0][1], masteringChromaDen), masteringChromaDen);
-                pv->param.masteringDisplayColourVolume.WhitePointX = FFMIN(rescale(job->mastering.white_point[0], masteringChromaDen), masteringChromaDen);
-                pv->param.masteringDisplayColourVolume.WhitePointY = FFMIN(rescale(job->mastering.white_point[1], masteringChromaDen), masteringChromaDen);
-                pv->param.masteringDisplayColourVolume.MaxDisplayMasteringLuminance = rescale(job->mastering.max_luminance, masteringLumaDen);
-                pv->param.masteringDisplayColourVolume.MinDisplayMasteringLuminance = FFMIN(rescale(job->mastering.min_luminance, masteringLumaDen),
+                pv->param.masteringDisplayColourVolume.DisplayPrimariesX[0] = FFMIN(hb_rescale_rational(job->mastering.display_primaries[1][0], masteringChromaDen), masteringChromaDen);
+                pv->param.masteringDisplayColourVolume.DisplayPrimariesY[0] = FFMIN(hb_rescale_rational(job->mastering.display_primaries[1][1], masteringChromaDen), masteringChromaDen);
+                pv->param.masteringDisplayColourVolume.DisplayPrimariesX[1] = FFMIN(hb_rescale_rational(job->mastering.display_primaries[2][0], masteringChromaDen), masteringChromaDen);
+                pv->param.masteringDisplayColourVolume.DisplayPrimariesY[1] = FFMIN(hb_rescale_rational(job->mastering.display_primaries[2][1], masteringChromaDen), masteringChromaDen);
+                pv->param.masteringDisplayColourVolume.DisplayPrimariesX[2] = FFMIN(hb_rescale_rational(job->mastering.display_primaries[0][0], masteringChromaDen), masteringChromaDen);
+                pv->param.masteringDisplayColourVolume.DisplayPrimariesY[2] = FFMIN(hb_rescale_rational(job->mastering.display_primaries[0][1], masteringChromaDen), masteringChromaDen);
+                pv->param.masteringDisplayColourVolume.WhitePointX = FFMIN(hb_rescale_rational(job->mastering.white_point[0], masteringChromaDen), masteringChromaDen);
+                pv->param.masteringDisplayColourVolume.WhitePointY = FFMIN(hb_rescale_rational(job->mastering.white_point[1], masteringChromaDen), masteringChromaDen);
+                pv->param.masteringDisplayColourVolume.MaxDisplayMasteringLuminance = hb_rescale_rational(job->mastering.max_luminance, masteringLumaDen);
+                pv->param.masteringDisplayColourVolume.MinDisplayMasteringLuminance = FFMIN(hb_rescale_rational(job->mastering.min_luminance, masteringLumaDen),
                     pv->param.masteringDisplayColourVolume.MaxDisplayMasteringLuminance);
             }
 
@@ -1246,16 +1241,16 @@ int encqsvInit(hb_work_object_t *w, hb_job_t *job)
             if (job->mastering.has_primaries && job->mastering.has_luminance)
             {
                 pv->param.masteringDisplayColourVolume.InsertPayloadToggle = MFX_PAYLOAD_IDR;
-                pv->param.masteringDisplayColourVolume.DisplayPrimariesX[0] = rescale(job->mastering.display_primaries[0][0], masteringChromaDen);
-                pv->param.masteringDisplayColourVolume.DisplayPrimariesY[0] = rescale(job->mastering.display_primaries[0][1], masteringChromaDen);
-                pv->param.masteringDisplayColourVolume.DisplayPrimariesX[1] = rescale(job->mastering.display_primaries[1][0], masteringChromaDen);
-                pv->param.masteringDisplayColourVolume.DisplayPrimariesY[1] = rescale(job->mastering.display_primaries[1][1], masteringChromaDen);
-                pv->param.masteringDisplayColourVolume.DisplayPrimariesX[2] = rescale(job->mastering.display_primaries[2][0], masteringChromaDen);
-                pv->param.masteringDisplayColourVolume.DisplayPrimariesY[2] = rescale(job->mastering.display_primaries[2][1], masteringChromaDen);
-                pv->param.masteringDisplayColourVolume.WhitePointX = rescale(job->mastering.white_point[0], masteringChromaDen);
-                pv->param.masteringDisplayColourVolume.WhitePointY = rescale(job->mastering.white_point[1], masteringChromaDen);
-                pv->param.masteringDisplayColourVolume.MaxDisplayMasteringLuminance = rescale(job->mastering.max_luminance, max_luma_den);
-                pv->param.masteringDisplayColourVolume.MinDisplayMasteringLuminance = rescale(job->mastering.min_luminance, min_luma_den);
+                pv->param.masteringDisplayColourVolume.DisplayPrimariesX[0] = hb_rescale_rational(job->mastering.display_primaries[0][0], masteringChromaDen);
+                pv->param.masteringDisplayColourVolume.DisplayPrimariesY[0] = hb_rescale_rational(job->mastering.display_primaries[0][1], masteringChromaDen);
+                pv->param.masteringDisplayColourVolume.DisplayPrimariesX[1] = hb_rescale_rational(job->mastering.display_primaries[1][0], masteringChromaDen);
+                pv->param.masteringDisplayColourVolume.DisplayPrimariesY[1] = hb_rescale_rational(job->mastering.display_primaries[1][1], masteringChromaDen);
+                pv->param.masteringDisplayColourVolume.DisplayPrimariesX[2] = hb_rescale_rational(job->mastering.display_primaries[2][0], masteringChromaDen);
+                pv->param.masteringDisplayColourVolume.DisplayPrimariesY[2] = hb_rescale_rational(job->mastering.display_primaries[2][1], masteringChromaDen);
+                pv->param.masteringDisplayColourVolume.WhitePointX = hb_rescale_rational(job->mastering.white_point[0], masteringChromaDen);
+                pv->param.masteringDisplayColourVolume.WhitePointY = hb_rescale_rational(job->mastering.white_point[1], masteringChromaDen);
+                pv->param.masteringDisplayColourVolume.MaxDisplayMasteringLuminance = hb_rescale_rational(job->mastering.max_luminance, max_luma_den);
+                pv->param.masteringDisplayColourVolume.MinDisplayMasteringLuminance = hb_rescale_rational(job->mastering.min_luminance, min_luma_den);
             }
 
             /*  Content light level */

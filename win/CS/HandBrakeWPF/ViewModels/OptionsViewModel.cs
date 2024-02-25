@@ -16,6 +16,7 @@ namespace HandBrakeWPF.ViewModels
     using System.Globalization;
     using System.IO;
     using System.Linq;
+    using System.Media;
     using System.Windows;
     using System.Windows.Documents;
     using System.Windows.Media;
@@ -1197,7 +1198,7 @@ namespace HandBrakeWPF.ViewModels
 
         public void BrowseAutoNamePath()
         {
-            FolderBrowserDialog dialog = new FolderBrowserDialog { Description = Resources.OptionsView_SelectFolder, UseDescriptionForTitle = true, SelectedPath = this.AutoNameDefaultPath };
+            FolderBrowserDialog dialog = new FolderBrowserDialog { Description = Resources.OptionsView_SelectFolder, SelectedPath = this.AutoNameDefaultPath };
             bool? dialogResult = dialog.ShowDialog();
             if (dialogResult.HasValue && dialogResult.Value)
             {
@@ -1217,7 +1218,7 @@ namespace HandBrakeWPF.ViewModels
 
         public void BrowseLogPath()
         {
-            FolderBrowserDialog dialog = new FolderBrowserDialog { Description = Resources.OptionsView_SelectFolder, UseDescriptionForTitle = true, SelectedPath = this.LogDirectory };
+            FolderBrowserDialog dialog = new FolderBrowserDialog { Description = Resources.OptionsView_SelectFolder, SelectedPath = this.LogDirectory };
             bool? dialogResult = dialog.ShowDialog();
             if (dialogResult.HasValue && dialogResult.Value)
             {
@@ -1276,14 +1277,15 @@ namespace HandBrakeWPF.ViewModels
         {
             if (!string.IsNullOrEmpty(this.WhenDoneAudioFileFullPath) && File.Exists(this.WhenDoneAudioFileFullPath))
             {
-                var uri = new Uri(this.WhenDoneAudioFileFullPath, UriKind.RelativeOrAbsolute);
-                var player = new MediaPlayer();
-                player.Open(uri);
-                player.Play();
-                player.MediaFailed += (object sender, ExceptionEventArgs e) =>
+                try
                 {
-                    this.logService.LogMessage(string.Format("{1} # {0}{1}", e?.ErrorException, Environment.NewLine));
-                };
+                    var player = new SoundPlayer(this.WhenDoneAudioFileFullPath);
+                    player.Play();
+                }
+                catch (Exception exc)
+                {
+                    this.logService.LogMessage(string.Format("{1} # {0}{1}", exc, Environment.NewLine));
+                }
             }
             else
             {

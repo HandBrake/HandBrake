@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="21506" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="32700.99.1234" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="21506"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="22687"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -47,7 +47,7 @@
                                                 <rect key="frame" x="1" y="1" width="540" height="54"/>
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                 <subviews>
-                                                    <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" textCompletion="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ar9-Uk-6sM">
+                                                    <textField focusRingType="none" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" textCompletion="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ar9-Uk-6sM">
                                                         <rect key="frame" x="23" y="35" width="492" height="17"/>
                                                         <constraints>
                                                             <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="17" id="lzC-jf-dZI"/>
@@ -60,17 +60,17 @@
                                                     </textField>
                                                     <button horizontalHuggingPriority="750" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="hRX-N0-lCu">
                                                         <rect key="frame" x="521" y="35" width="16" height="16"/>
-                                                        <constraints>
-                                                            <constraint firstAttribute="width" constant="16" id="3lG-7h-l6p"/>
-                                                            <constraint firstAttribute="height" constant="16" id="R7j-DY-bWX"/>
-                                                        </constraints>
                                                         <buttonCell key="cell" type="bevel" bezelStyle="rounded" image="Delete" imagePosition="only" alignment="center" alternateImage="DeleteHighlightPressed" id="bPd-yn-PRB">
                                                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                             <font key="font" metaFont="system"/>
                                                         </buttonCell>
+                                                        <constraints>
+                                                            <constraint firstAttribute="width" constant="16" id="3lG-7h-l6p"/>
+                                                            <constraint firstAttribute="height" constant="16" id="R7j-DY-bWX"/>
+                                                        </constraints>
                                                     </button>
                                                     <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="1000" translatesAutoresizingMaskIntoConstraints="NO" id="7OO-Ut-UrC">
-                                                        <rect key="frame" x="3" y="32" width="16" height="22"/>
+                                                        <rect key="frame" x="3" y="30" width="16" height="27"/>
                                                         <constraints>
                                                             <constraint firstAttribute="height" constant="16" id="V3u-Yw-S0G"/>
                                                             <constraint firstAttribute="width" constant="16" id="dDq-xC-fYL"/>
@@ -80,7 +80,7 @@
                                                     <progressIndicator wantsLayer="YES" maxValue="1" style="bar" translatesAutoresizingMaskIntoConstraints="NO" id="xAK-4F-cCr">
                                                         <rect key="frame" x="25" y="13" width="488" height="23"/>
                                                     </progressIndicator>
-                                                    <textField verticalHuggingPriority="750" textCompletion="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fxw-eD-SmJ">
+                                                    <textField focusRingType="none" verticalHuggingPriority="750" textCompletion="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fxw-eD-SmJ">
                                                         <rect key="frame" x="23" y="3" width="492" height="14"/>
                                                         <textFieldCell key="cell" lineBreakMode="truncatingTail" enabled="NO" allowsUndo="NO" sendsActionOnEndEditing="YES" title="Encoding status" usesSingleLineMode="YES" id="eEU-Dr-Qh8">
                                                             <font key="font" metaFont="smallSystem"/>
@@ -117,7 +117,7 @@
                                                 <rect key="frame" x="1" y="57" width="540" height="22"/>
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                 <subviews>
-                                                    <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" textCompletion="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ns0-GA-WCh">
+                                                    <textField focusRingType="none" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" textCompletion="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ns0-GA-WCh">
                                                         <rect key="frame" x="23" y="3" width="492" height="17"/>
                                                         <constraints>
                                                             <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="17" id="5Tc-Oy-HWg"/>
@@ -130,17 +130,17 @@
                                                     </textField>
                                                     <button horizontalHuggingPriority="750" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="CSU-Pb-Uaw">
                                                         <rect key="frame" x="521" y="3" width="16" height="16"/>
-                                                        <constraints>
-                                                            <constraint firstAttribute="height" constant="16" id="NiA-3H-N2G"/>
-                                                            <constraint firstAttribute="width" constant="16" id="cei-uT-jX0"/>
-                                                        </constraints>
                                                         <buttonCell key="cell" type="bevel" bezelStyle="rounded" image="Delete" imagePosition="only" alignment="center" alternateImage="DeleteHighlightPressed" id="LOA-aO-spo">
                                                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                             <font key="font" metaFont="system"/>
                                                         </buttonCell>
+                                                        <constraints>
+                                                            <constraint firstAttribute="height" constant="16" id="NiA-3H-N2G"/>
+                                                            <constraint firstAttribute="width" constant="16" id="cei-uT-jX0"/>
+                                                        </constraints>
                                                     </button>
                                                     <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="kNw-fy-iYB">
-                                                        <rect key="frame" x="3" y="0.0" width="16" height="22"/>
+                                                        <rect key="frame" x="3" y="-2" width="16" height="27"/>
                                                         <constraints>
                                                             <constraint firstAttribute="width" constant="16" id="Sg7-eg-u2l"/>
                                                             <constraint firstAttribute="height" constant="16" id="udI-Cr-8CG"/>
@@ -266,6 +266,6 @@
     <resources>
         <image name="Delete" width="16" height="16"/>
         <image name="DeleteHighlightPressed" width="16" height="16"/>
-        <image name="NSActionTemplate" width="15" height="15"/>
+        <image name="NSActionTemplate" width="20" height="20"/>
     </resources>
 </document>

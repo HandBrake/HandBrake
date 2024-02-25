@@ -58,6 +58,7 @@
                     </MenuItem.Header>
                     <MenuItem Header="Select All" Command="{Binding RelayCommand}" CommandParameter="SelectAll" />
                     <MenuItem Header="Deselect All" Command="{Binding RelayCommand}" CommandParameter="UnSelectAll" />
+                    <MenuItem Header="Invert Selection" Command="{Binding RelayCommand}" CommandParameter="InvertSelection" />
                     <Separator />
                     <MenuItem Header="Order by Title"  Command="{Binding RelayCommand}" CommandParameter="OrderByTitle" />
                     <MenuItem Header="Order by Duration" IsChecked="{Binding OrderedByDuration}" Command="{Binding RelayCommand}" CommandParameter="OrderByDuration" />
@@ -89,6 +90,7 @@
                 <ContextMenu>
                     <MenuItem Header="Select All" Command="{Binding RelayCommand}" CommandParameter="SelectAll" />
                     <MenuItem Header="Deselect All" Command="{Binding RelayCommand}" CommandParameter="UnSelectAll" />
+                    <MenuItem Header="Invert Selection" Command="{Binding RelayCommand}" CommandParameter="InvertSelection" />
                     <Separator />
                     <MenuItem Header="Order by Title" Command="{Binding RelayCommand}" CommandParameter="OrderByTitle" />
                     <MenuItem Header="Order by Duration" Command="{Binding RelayCommand}" CommandParameter="OrderByDuration" />

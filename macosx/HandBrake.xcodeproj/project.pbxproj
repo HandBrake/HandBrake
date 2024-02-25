@@ -329,7 +329,6 @@
 		A9F217E61E2F934C00C10C6E /* container-migration.plist in Resources */ = {isa = PBXBuildFile; fileRef = A9F217E51E2F934C00C10C6E /* container-migration.plist */; };
 		A9F472891976B7F30009EC65 /* HBSubtitlesDefaultsController.m in Sources */ = {isa = PBXBuildFile; fileRef = A9F472871976B7F30009EC65 /* HBSubtitlesDefaultsController.m */; };
 		A9F7102619A475EC00F61301 /* HBDockTile.m in Sources */ = {isa = PBXBuildFile; fileRef = A9F7102519A475EC00F61301 /* HBDockTile.m */; };
-		D0AAA60F2ADF15260020A025 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = D0AAA60D2ADF15260020A025 /* Localizable.strings */; };
 		D0DC8F682331573500C12A24 /* libdav1d.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D0DC8F672331573500C12A24 /* libdav1d.a */; };
 		D0DC8F69233159C700C12A24 /* libdav1d.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D0DC8F672331573500C12A24 /* libdav1d.a */; };
 		D86C9DD51C6D372500F06F1B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D86C9DD41C6D372500F06F1B /* Assets.xcassets */; };
@@ -1356,7 +1355,6 @@
 		273F1FDE14AD9DA40021BE6D = {
 			isa = PBXGroup;
 			children = (
-				D0AAA60D2ADF15260020A025 /* Localizable.strings */,
 				273F204114ADBC210021BE6D /* HandBrake */,
 				273F200214ADAE950021BE6D /* HandBrakeCLI */,
 				A9736F031C7DA5FE008F1D18 /* HandBrakeKit */,
@@ -2241,7 +2239,6 @@
 				A94DC2DE20CADA2C00EAC8FD /* MainWindow.xib in Resources */,
 				D86C9DD51C6D372500F06F1B /* Assets.xcassets in Resources */,
 				A9A96BCE20CAD61F00A39AFB /* SubtitlesDefaults.xib in Resources */,
-				D0AAA60F2ADF15260020A025 /* Localizable.strings in Resources */,
 				A9A96BDA20CAD64B00A39AFB /* PicturePreview.xib in Resources */,
 				A958EAC222E24D6400D83AF4 /* HBQueueTableViewController.xib in Resources */,
 				A95BC1E71CD2548A008D6A33 /* volHighTemplate.pdf in Resources */,
@@ -3435,6 +3432,7 @@
 					"$(EXTERNAL_BUILD)/macosx/osl.filelist.txt",
 					"-lc++",
 					"-w",
+					"-Wl,-ld_classic",
 				);
 				SDKROOT = macosx;
 				SHARED_PRECOMPS_DIR = "$(CONFIGURATION_TEMP_DIR)/PrecompiledHeaders";
@@ -5190,6 +5188,7 @@
 					"$(EXTERNAL_BUILD)/macosx/osl.filelist.txt",
 					"-lc++",
 					"-w",
+					"-Wl,-ld_classic",
 				);
 				SDKROOT = macosx;
 				SHARED_PRECOMPS_DIR = "$(CONFIGURATION_TEMP_DIR)/PrecompiledHeaders";

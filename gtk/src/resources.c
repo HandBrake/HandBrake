@@ -21,7 +21,7 @@
  *  Boston, MA  02110-1301, USA.
  */
 
-#include "ghbcompat.h"
+#include "compat.h"
 
 #include <glib.h>
 #include <glib-object.h>
@@ -45,7 +45,6 @@ ghb_resource_init (void)
 
     resources = ghb_dict_new();
 
-    ghb_data_register_resource();
     GResource *data_res = ghb_data_get_resource();
 
     gbytes = g_resource_lookup_data(data_res,

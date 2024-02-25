@@ -487,7 +487,8 @@ Mesedez, jo ezazu gure webgunera bertsioei buruz informatzeko.</value>
     <value>Ilara pausatu da</value>
   </data>
   <data name="QueueViewModel_DelSelectedJobConfirmation" xml:space="preserve">
-    <value>Ziur hautatutako lanak ezabatu nahi dituzula?</value>
+    <value>Are you sure you want to delete the selected jobs?
+No encoded files will be deleted with this operation. </value>
   </data>
   <data name="QueueViewModel_JobCurrentlyRunningWarning" xml:space="preserve">
     <value>Kodetze hau abian da. Ezabatzen baduzu, kodetzea gelditu egingo da. Ziur jarraitu nahi duzula?</value>
@@ -1014,7 +1015,7 @@ Aholkua: fitxategiak gainidazteko portaera hobespenetatik kontrola daiteke.</val
     <value>Irteera ezarpenak</value>
   </data>
   <data name="MainView_Pause" xml:space="preserve">
-    <value>Gelditu</value>
+    <value>Pausatu</value>
   </data>
   <data name="MainView_PictureTab" xml:space="preserve">
     <value>Neurriak</value>
@@ -1432,7 +1433,7 @@ VLC eta MPC-HC onartzen dira. Beste errepdroduktore batzuek ere egin dezakete, b
     <value>Aukerak</value>
   </data>
   <data name="QueueView_Pause" xml:space="preserve">
-    <value>Gelditu</value>
+    <value>Pausatu</value>
   </data>
   <data name="QueueView_PausedDuration" xml:space="preserve">
     <value>Pausatutako iraupena:</value>
@@ -1669,13 +1670,13 @@ VLC eta MPC-HC onartzen dira. Beste errepdroduktore batzuek ere egin dezakete, b
     <value>Kodetze azkarra</value>
   </data>
   <data name="VideoView_Framerate" xml:space="preserve">
-    <value>Frame tasa (fps)</value>
+    <value>Fotograma tasa (fps)</value>
   </data>
   <data name="VideoView_OptimiseVideo" xml:space="preserve">
     <value>Kodetze aukerak:</value>
   </data>
   <data name="VideoView_PeakFramerate" xml:space="preserve">
-    <value>Gehieneko frame tasa:</value>
+    <value>Gehieneko fotograma tasa:</value>
   </data>
   <data name="VideoView_Quality" xml:space="preserve">
     <value>Kalitatea:</value>
@@ -1684,7 +1685,7 @@ VLC eta MPC-HC onartzen dira. Beste errepdroduktore batzuek ere egin dezakete, b
     <value>Analisi azkarreko itzulia</value>
   </data>
   <data name="VideoView_VariableFramerate" xml:space="preserve">
-    <value>Frame tasa aldakorra</value>
+    <value>Fotograma tasa aldakorra</value>
   </data>
   <data name="VideoView_Video" xml:space="preserve">
     <value>Bideoa:</value>
@@ -2130,15 +2131,11 @@ Onartzen denean, erabiltzaile aurrezarpenak inportatuko dira.</value>
   <data name="OptionsView_RemotePortLimit" xml:space="preserve">
     <value>Portuak 5000 eta 32767 artekoa izan behar du</value>
   </data>
-  <data name="OptionsView_SendFileToArgPlaceholders" xml:space="preserve">
-    <value>Ordezko leku-markak: {source} {destination} {exit_code}</value>
-    <comment>Note: {source}, {destination} and {exit_code} are not translatable. </comment>
-  </data>
   <data name="SourceSelection_UpdateAvailable" xml:space="preserve">
     <value>Bertsio berri bat dago eskuragarri!</value>
   </data>
   <data name="About_Copyright" xml:space="preserve">
-    <value>Copyright (C) 2003-2023 The HandBrake Team</value>
+    <value>Copyright (C) 2003-2024 The HandBrake Team</value>
   </data>
   <data name="Options_LowBatteryLevel" xml:space="preserve">
     <value>Bateria maila baxua:</value>
@@ -2794,5 +2791,20 @@ Aldibereko kode anitz onartzeko, aktibatu "Prozesuaren isolamendua" Tresnak menu
   </data>
   <data name="Options_RecursiveFolderScan" xml:space="preserve">
     <value>Eskaneatu errekurtsiboki direktorioak karpetak eskaneatzeko modua erabiltzean.</value>
+  </data>
+  <data name="AudioView_AudioQuality" xml:space="preserve">
+    <value>Audio pistaren kalitatea</value>
+  </data>
+  <data name="AudioView_AudioTrackName" xml:space="preserve">
+    <value>Audio pistaren izena</value>
+  </data>
+  <data name="AudioView_BitrateSelection" xml:space="preserve">
+    <value>Audio pistaren bit-tasa</value>
+  </data>
+  <data name="AudioView_DeleteTrack" xml:space="preserve">
+    <value>Ezabatu audio pista hau</value>
+  </data>
+  <data name="AudioView_QualityMode" xml:space="preserve">
+    <value>Audio kodetzailearen kalitate modua</value>
   </data>
 </root>

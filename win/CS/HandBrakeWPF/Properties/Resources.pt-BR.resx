@@ -490,7 +490,8 @@ Por favor, verifique as Notas de Versão no site.</value>
     <value>Fila Pausada</value>
   </data>
   <data name="QueueViewModel_DelSelectedJobConfirmation" xml:space="preserve">
-    <value>Tem certeza que quer excluir as tarefas selecionadas?</value>
+    <value>Are you sure you want to delete the selected jobs?
+No encoded files will be deleted with this operation. </value>
   </data>
   <data name="QueueViewModel_JobCurrentlyRunningWarning" xml:space="preserve">
     <value>Esta conversão está em andamento. Se você deletar, ela será interrompida. Tem certeza que quer continuar?</value>
@@ -2132,15 +2133,11 @@ Onde suportado, quaisquer predefinições de usuário serão importadas.</value>
   <data name="OptionsView_RemotePortLimit" xml:space="preserve">
     <value>O intervalo de portas deve estar entre 5000 e 32767</value>
   </data>
-  <data name="OptionsView_SendFileToArgPlaceholders" xml:space="preserve">
-    <value>Marcadores de substituição: {source} {destination} {exit_code}</value>
-    <comment>Note: {source}, {destination} and {exit_code} are not translatable. </comment>
-  </data>
   <data name="SourceSelection_UpdateAvailable" xml:space="preserve">
     <value>Uma nova versão está disponível!</value>
   </data>
   <data name="About_Copyright" xml:space="preserve">
-    <value>Direitos Autorais (C) 2003-2023 Equipe HandBrake</value>
+    <value>Copyright (C) 2003-2024 The HandBrake Team</value>
   </data>
   <data name="Options_LowBatteryLevel" xml:space="preserve">
     <value>Baixo nível de bateria:</value>
@@ -2795,5 +2792,20 @@ Para permitir várias codificações simultâneas, ative o "Isolamento do proces
   </data>
   <data name="Options_RecursiveFolderScan" xml:space="preserve">
     <value>Faça a varredura recursiva dos diretórios ao usar o modo de varredura de pastas.</value>
+  </data>
+  <data name="AudioView_AudioQuality" xml:space="preserve">
+    <value>Audio Track Quality</value>
+  </data>
+  <data name="AudioView_AudioTrackName" xml:space="preserve">
+    <value>Audio Track Name</value>
+  </data>
+  <data name="AudioView_BitrateSelection" xml:space="preserve">
+    <value>Audio Track Bitrate</value>
+  </data>
+  <data name="AudioView_DeleteTrack" xml:space="preserve">
+    <value>Delete this audio track</value>
+  </data>
+  <data name="AudioView_QualityMode" xml:space="preserve">
+    <value>Audio Encoder Quality Mode</value>
   </data>
 </root>

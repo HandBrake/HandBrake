@@ -488,7 +488,8 @@ Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  021
     <value>キュー一時停止</value>
   </data>
   <data name="QueueViewModel_DelSelectedJobConfirmation" xml:space="preserve">
-    <value>選択したジョブを本当に削除しますか？</value>
+    <value>Are you sure you want to delete the selected jobs?
+No encoded files will be deleted with this operation. </value>
   </data>
   <data name="QueueViewModel_JobCurrentlyRunningWarning" xml:space="preserve">
     <value>このエンコードは現在進行中です。削除されると、エンコードも停止します。本当に進めますか？</value>
@@ -2131,15 +2132,11 @@ VLCとMPC-HCがサポートされています。他のプレイヤーではお�
   <data name="OptionsView_RemotePortLimit" xml:space="preserve">
     <value>ポート番号は5000から32767の間でなければいけません</value>
   </data>
-  <data name="OptionsView_SendFileToArgPlaceholders" xml:space="preserve">
-    <value>利用できる変数: {source} {destination} {exit_code}</value>
-    <comment>Note: {source}, {destination} and {exit_code} are not translatable. </comment>
-  </data>
   <data name="SourceSelection_UpdateAvailable" xml:space="preserve">
     <value>新しいバージョンが利用できます！</value>
   </data>
   <data name="About_Copyright" xml:space="preserve">
-    <value>Copyright (C) 2003-2023 The HandBrake Team</value>
+    <value>Copyright (C) 2003-2024 The HandBrake Team</value>
   </data>
   <data name="Options_LowBatteryLevel" xml:space="preserve">
     <value>バッテリー残量低下:</value>
@@ -2796,5 +2793,20 @@ AV1やHEVCといった特定のコーデックは、再生するためにマイ�
   </data>
   <data name="Options_RecursiveFolderScan" xml:space="preserve">
     <value>フォルダースキャンを使用している時に子ディレクトリもスキャンする。</value>
+  </data>
+  <data name="AudioView_AudioQuality" xml:space="preserve">
+    <value>音声トラック品質</value>
+  </data>
+  <data name="AudioView_AudioTrackName" xml:space="preserve">
+    <value>音声トラック名</value>
+  </data>
+  <data name="AudioView_BitrateSelection" xml:space="preserve">
+    <value>音声トラックビットレート</value>
+  </data>
+  <data name="AudioView_DeleteTrack" xml:space="preserve">
+    <value>音声トラック削除</value>
+  </data>
+  <data name="AudioView_QualityMode" xml:space="preserve">
+    <value>オーディオエンコーダ品質モード</value>
   </data>
 </root>

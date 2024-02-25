@@ -661,6 +661,8 @@ void hb_display_job_info(hb_job_t *job)
 
         hb_log("     + color profile: %d-%d-%d",
                job->color_prim, job->color_transfer, job->color_matrix);
+        hb_log("     + color range: %s",
+                av_color_range_name(job->color_range));
         hb_log("     + chroma location: %s",
                av_chroma_location_name(job->chroma_location));
 
@@ -1483,32 +1485,16 @@ static void sanitize_filter_list_post(hb_job_t *job)
     }
 }
 
-static int dolby_vision_level(int width, int pps, int bitrate)
-{
-    for (int i = 0; hb_dolby_vision_levels[i].id != 0; i++)
-    {
-        if (pps <= hb_dolby_vision_levels[i].max_pps &&
-            width <= hb_dolby_vision_levels[i].max_width &&
-            bitrate <= (int)hb_dolby_vision_levels[i].max_bitrate_main_tier * 1024)
-        {
-            return hb_dolby_vision_levels[i].id;
-        }
-    }
-
-    hb_error("work: out of bound dolby vision level, using maximum");
-    return hb_dolby_vision_levels[12].id;
-}
-
 static void update_dolby_vision_level(hb_job_t *job)
 {
     // Dolby Vision has got its own definition of "level"
     // defined in section 2.2 of "Dolby Vision Profiles and Levels"
     // moreover, x265 requires vbv to be set, so do a rough guess here.
-    // Encoders can override it when needed.
+    // Encoders will override it when needed.
     int pps = (double)job->width * job->height * (job->vrate.num / job->vrate.den);
     int bitrate = job->vquality == HB_INVALID_VIDEO_QUALITY ? job->vbitrate : -1;
-
-    job->dovi.dv_level = dolby_vision_level(job->width, pps, bitrate);
+    int max_rate = hb_dovi_max_rate(job->width, pps, bitrate, 0, 1);
+    job->dovi.dv_level = hb_dovi_level(job->width, pps, max_rate, 1);
 }
 
 static void sanitize_dynamic_hdr_metadata_passthru(hb_job_t *job)
@@ -1522,7 +1508,8 @@ static void sanitize_dynamic_hdr_metadata_passthru(hb_job_t *job)
         return;
     }
 
-    if (job->vcodec != HB_VCODEC_X265_10BIT &&
+    if (job->vcodec != HB_VCODEC_X265_10BIT    &&
+        job->vcodec != HB_VCODEC_VT_H265_10BIT &&
         job->vcodec != HB_VCODEC_SVT_AV1_10BIT)
     {
         job->passthru_dynamic_hdr_metadata &= ~HDR_10_PLUS;
@@ -1532,7 +1519,8 @@ static void sanitize_dynamic_hdr_metadata_passthru(hb_job_t *job)
     if ((job->dovi.dv_profile != 5 &&
          job->dovi.dv_profile != 7 &&
          job->dovi.dv_profile != 8) ||
-         job->vcodec != HB_VCODEC_X265_10BIT)
+        (job->vcodec != HB_VCODEC_X265_10BIT &&
+         job->vcodec != HB_VCODEC_VT_H265_10BIT))
     {
         job->passthru_dynamic_hdr_metadata &= ~DOVI;
     }
@@ -1804,9 +1792,12 @@ static void do_job(hb_job_t *job)
     hb_reduce(&job->vrate.num, &job->vrate.den,
                job->vrate.num,  job->vrate.den);
 
-    // Dolby Vision level needs to be updated now that
-    // the final width, height and frame rate is known
-    update_dolby_vision_level(job);
+    if (job->passthru_dynamic_hdr_metadata & DOVI)
+    {
+        // Dolby Vision level needs to be updated now that
+        // the final width, height and frame rate is known
+        update_dolby_vision_level(job);
+    }
 
     job->fifo_mpeg2  = hb_fifo_init( FIFO_SMALL, FIFO_SMALL_WAKE );
     job->fifo_raw    = hb_fifo_init( FIFO_SMALL, FIFO_SMALL_WAKE );

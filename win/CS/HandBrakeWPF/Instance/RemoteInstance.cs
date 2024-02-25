@@ -42,6 +42,7 @@ namespace HandBrakeWPF.Instance
         private Timer encodePollTimer;
         private int retryCount;
         private bool encodeCompleteFired;
+        private object lockObject = new object();
 
         public RemoteInstance(ILog logService, IUserSettingService userSettingService, IPortService portService) : base(logService, userSettingService, portService)
         {
@@ -92,18 +93,7 @@ namespace HandBrakeWPF.Instance
 
         public JsonState GetProgress()
         {
-            Task<ServerResponse> response = this.MakeHttpGetRequest("PollEncodeProgress");
-            response.Wait();
-
-            if (!response.Result.WasSuccessful)
-            {
-                return null;
-            }
-
-            string statusJson = response.Result?.JsonResponse;
-
-            JsonState state = JsonSerializer.Deserialize<JsonState>(statusJson, JsonSettings.Options);
-            return state;
+            throw new NotImplementedException("Not Used");
         }
 
         private void MonitorEncodeProgress()
@@ -116,7 +106,10 @@ namespace HandBrakeWPF.Instance
                 {
                     try
                     {
-                        this.PollEncodeProgress();
+                        lock (lockObject)
+                        {
+                            this.PollEncodeProgress();
+                        }
                     }
                     catch (Exception exc)
                     {
@@ -189,9 +182,14 @@ namespace HandBrakeWPF.Instance
 
                 response = await this.MakeHttpGetRequest("PollEncodeProgress");
             }
-            catch (Exception)
+            catch (Exception e)
             {
                 retryCount = this.retryCount + 1;
+
+                if (retryCount > 5)
+                {
+                    this.ServiceLogMessage("Worker: Final attempt to communicate failed: " + e);
+                }
             }
 
             if (response == null || !response.WasSuccessful)
@@ -210,6 +208,8 @@ namespace HandBrakeWPF.Instance
 
             if (string.IsNullOrEmpty(statusJson))
             {
+                retryCount = this.retryCount + 1;
+                this.encodePollTimer?.Start(); // Reset and try again.
                 return;
             }
 

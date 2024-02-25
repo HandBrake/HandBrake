@@ -21,7 +21,7 @@
  *  Boston, MA  02110-1301, USA.
  */
 
-#include "ghbcompat.h"
+#include "compat.h"
 #include <glib/gstdio.h>
 #include <glib/gi18n.h>
 #include <gio/gio.h>
@@ -34,16 +34,17 @@
 #include "callbacks.h"
 #include "presets.h"
 #include "audiohandler.h"
-#include "ghb-dvd.h"
+#include "hb-dvd.h"
 #include "queuehandler.h"
 #include "title-add.h"
+#include "ghb-file-button.h"
 
 G_MODULE_EXPORT void
 title_selected_cb (GtkWidget *widget, signal_user_data_t *ud);
 G_MODULE_EXPORT void
 title_dest_file_cb (GtkWidget *widget, signal_user_data_t *ud);
 G_MODULE_EXPORT void
-title_dest_dir_cb (GtkWidget *widget, signal_user_data_t *ud);
+title_dest_dir_cb (GtkWidget *widget, GParamSpec *spec, signal_user_data_t *ud);
 
 
 static GtkWidget *find_widget (GtkWidget *widget, gchar *name)
@@ -442,7 +443,7 @@ static GtkWidget *title_create_row (signal_user_data_t *ud)
     GtkCheckButton *selected;
     GtkLabel *title;
     GtkEntry *dest_file;
-    GtkFileChooserButton *dest_dir;
+    GhbFileButton *dest_dir;
 
     hbox = GTK_BOX(gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0));
     gtk_box_set_spacing(hbox, 6);
@@ -474,7 +475,7 @@ static GtkWidget *title_create_row (signal_user_data_t *ud)
         "the output file name.\n"));
     gtk_widget_set_has_tooltip(GTK_WIDGET(title), FALSE);
 
-    // Destination entry and file chooser
+    // Destination entry and file button
     vbox_dest = GTK_BOX(gtk_box_new(GTK_ORIENTATION_VERTICAL, 0));
     gtk_widget_set_hexpand(GTK_WIDGET(vbox_dest), TRUE);
     gtk_widget_set_halign(GTK_WIDGET(vbox_dest), GTK_ALIGN_FILL);
@@ -486,11 +487,10 @@ static GtkWidget *title_create_row (signal_user_data_t *ud)
     gtk_widget_show(GTK_WIDGET(dest_file));
     g_signal_connect(dest_file, "changed", (GCallback)title_dest_file_cb, ud);
     ghb_box_append_child(vbox_dest, GTK_WIDGET(dest_file));
-    dest_dir = GTK_FILE_CHOOSER_BUTTON(
-            gtk_file_chooser_button_new(_("Destination Directory"),
-                                        GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER));
-    g_signal_connect(dest_dir, "selection-changed",
-                    (GCallback)title_dest_dir_cb, ud);
+    dest_dir = ghb_file_button_new(_("Destination Directory"), GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER);
+    ghb_file_button_set_accept_label(dest_dir, _("Select"));
+    g_signal_connect(dest_dir, "notify::file",
+                     G_CALLBACK(title_dest_dir_cb), ud);
     gtk_widget_set_name(GTK_WIDGET(dest_dir), "title_dir");
     gtk_widget_set_hexpand(GTK_WIDGET(dest_dir), TRUE);
     gtk_widget_show(GTK_WIDGET(dest_dir));
@@ -654,7 +654,7 @@ title_dest_file_cb (GtkWidget *widget, signal_user_data_t *ud)
 }
 
 G_MODULE_EXPORT void
-title_dest_dir_cb (GtkWidget *widget, signal_user_data_t *ud)
+title_dest_dir_cb (GtkWidget *widget, GParamSpec *spec, signal_user_data_t *ud)
 {
     GhbValue *settings;
     const gchar *dest_file;
@@ -741,7 +741,7 @@ title_add_multiple_action_cb (GSimpleAction *action, GVariant *param,
         GhbValue *settings;
         GtkLabel *label;
         GtkEntry *entry;
-        GtkFileChooser *chooser;
+        GhbFileButton *button;
         gchar *title_label;
         const gchar *dest_dir, *dest_file;
         gint title_id, titleindex;
@@ -750,7 +750,7 @@ title_add_multiple_action_cb (GSimpleAction *action, GVariant *param,
         row = title_create_row(ud);
         label = GTK_LABEL(find_widget(row, "title_label"));
         entry = GTK_ENTRY(find_widget(row, "title_file"));
-        chooser = GTK_FILE_CHOOSER(find_widget(row, "title_dir"));
+        button = GHB_FILE_BUTTON(find_widget(row, "title_dir"));
 
         settings = ghb_array_get(ud->settings_array, ii);
         if (preset != NULL)
@@ -774,7 +774,7 @@ title_add_multiple_action_cb (GSimpleAction *action, GVariant *param,
 
             gtk_label_set_markup(label, title_label);
             ghb_editable_set_text(entry, dest_file);
-            ghb_file_chooser_set_initial_file(chooser, dest_dir);
+            ghb_file_button_set_filename(button, dest_dir);
 
             g_free(title_label);
         }

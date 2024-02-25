@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
     <FileVersion>1.7.2.0</FileVersion>
     <Version>1.7.2</Version>
     <Authors>HandBrake Team</Authors>
@@ -17,9 +17,4 @@
     <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
   </PropertyGroup>
-
-  <ItemGroup>
-    <None Remove="StyleCop.Cache" />
-  </ItemGroup>
-
 </Project>

@@ -93,10 +93,15 @@
     NSApplication.sharedApplication.automaticCustomizeTouchBarMenuItemEnabled = YES;
     NSUserDefaults *ud = NSUserDefaults.standardUserDefaults;
 
+    if ([ud boolForKey:HBQueueAutoClearCompletedItemsAtLaunch])
+    {
+        [self.queue removeCompletedAndCancelledItems];
+    }
+
     // Reset "When done" action
     if ([ud boolForKey:HBResetWhenDoneOnLaunch])
     {
-        [ud setInteger:HBDoneActionDoNothing forKey:HBAlertWhenDone];
+        [ud setInteger:HBDoneActionDoNothing forKey:HBQueueDoneAction];
     }
 
 
@@ -230,7 +235,7 @@
                                                                         NSDirectoryEnumerationSkipsPackageDescendants
                                                                  error:NULL];
 
-        NSDate *limit = [NSDate dateWithTimeIntervalSinceNow: -(60 * 60 * 24 * 30)];
+        NSDate *limit = [NSDate dateWithTimeIntervalSinceNow: -(60 * 60 * 24 * 7)];
 
         for (NSURL *fileURL in contents)
         {

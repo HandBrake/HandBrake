@@ -13,6 +13,8 @@ namespace HandBrakeWPF.Views
 
     using HandBrakeWPF.Helpers;
     using System.Windows;
+    using HandBrakeWPF.Commands;
+    using System.Windows.Input;
 
     /// <summary>
     /// Interaction logic for AddPresetView.xaml
@@ -25,6 +27,7 @@ namespace HandBrakeWPF.Views
         public AddPresetView()
         {
             InitializeComponent();
+            this.InputBindings.Add(new InputBinding(new CloseWindowCommand(this), new KeyGesture(Key.W, ModifierKeys.Control))); // Close Window
         }
 
         protected override void OnSourceInitialized(EventArgs e)

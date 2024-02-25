@@ -426,9 +426,12 @@ NSString * const HBQueueItemNotificationPathKey = @"HBQueueItemNotificationPathK
     notification.title = title;
     notification.informativeText = description;
     notification.soundName = playSound ? NSUserNotificationDefaultSoundName : nil;
-    notification.hasActionButton = YES;
-    notification.actionButtonTitle = NSLocalizedString(@"Show", @"Notification -> Show in Finder");
-    notification.userInfo = @{ HBQueueItemNotificationPathKey: fileURL.path };
+    if (fileURL)
+    {
+        notification.hasActionButton = YES;
+        notification.actionButtonTitle = NSLocalizedString(@"Show", @"Notification -> Show in Finder");
+        notification.userInfo = @{ HBQueueItemNotificationPathKey: fileURL.path };
+    }
 
     [[NSUserNotificationCenter defaultUserNotificationCenter] deliverNotification:notification];
 }
@@ -484,13 +487,8 @@ NSString * const HBQueueItemNotificationPathKey = @"HBQueueItemNotificationPathK
 {
     NSUserDefaults *ud = NSUserDefaults.standardUserDefaults;
 
-    // Both the Notification and Sending to tagger can be done as encodes roll off the queue
-    if ([ud integerForKey:HBAlertWhenDone] == HBDoneActionNotification ||
-        [ud integerForKey:HBAlertWhenDone] == HBDoneActionAlertAndNotification)
+    if ([ud boolForKey:HBQueueNotificationWhenJobDone])
     {
-        // If Play System Alert has been selected in Preferences
-        bool playSound = [ud boolForKey:HBAlertWhenDoneSound];
-
         NSString *title;
         NSString *description;
         if (item.state == HBQueueItemStateCompleted)
@@ -507,6 +505,8 @@ NSString * const HBQueueItemNotificationPathKey = @"HBQueueItemNotificationPathK
                            item.destinationFileName];
         }
 
+        bool playSound = [ud boolForKey:HBQueueNotificationPlaySound];
+
         [self showNotificationWithTitle:title
                             description:description
                                     url:item.destinationURL
@@ -520,35 +520,27 @@ NSString * const HBQueueItemNotificationPathKey = @"HBQueueItemNotificationPathK
 - (void)queueCompletedAlerts
 {
     NSUserDefaults *ud = NSUserDefaults.standardUserDefaults;
-    // If Play System Alert has been selected in Preferences
-    if ([ud boolForKey:HBAlertWhenDoneSound] == YES)
-    {
-        NSBeep();
-    }
 
-    // If Alert Window or Window and Notification has been selected
-    if ([ud integerForKey:HBAlertWhenDone] == HBDoneActionAlert ||
-        [ud integerForKey:HBAlertWhenDone] == HBDoneActionAlertAndNotification)
+    if ([ud boolForKey:HBQueueNotificationWhenDone])
     {
-        // On Screen Notification
-        NSAlert *alert = [[NSAlert alloc] init];
-        [alert setMessageText:NSLocalizedString(@"Put down that cocktail…", @"Queue done alert message")];
-        [alert setInformativeText:NSLocalizedString(@"Your HandBrake queue is done!", @"Queue done alert informative text")];
-        [NSApp requestUserAttention:NSCriticalRequest];
-        [alert runModal];
+        bool playSound = [ud boolForKey:HBQueueNotificationPlaySound];
+
+        [self showNotificationWithTitle:NSLocalizedString(@"Put down that cocktail…", @"Queue notification alert message")
+                            description:NSLocalizedString(@"Your queue is done!", @"Queue done notification message")
+                                    url:nil
+                              playSound:playSound];
     }
 
     // If sleep has been selected
-    if ([ud integerForKey:HBAlertWhenDone] == HBDoneActionSleep)
+    if ([ud integerForKey:HBQueueDoneAction] == HBDoneActionSleep)
     {
         // Sleep
-        NSAppleScript *scriptObject = [[NSAppleScript alloc] initWithSource:
-                                       @"tell application \"System Events\" to sleep"];
+        NSAppleScript *scriptObject = [[NSAppleScript alloc] initWithSource:@"tell application \"System Events\" to sleep"];
         [scriptObject executeAndReturnError:NULL];
     }
 
     // If Shutdown has been selected
-    if ([ud integerForKey:HBAlertWhenDone] == HBDoneActionShutDown)
+    if ([ud integerForKey:HBQueueDoneAction] == HBDoneActionShutDown)
     {
         // Shut Down
         NSAppleScript *scriptObject = [[NSAppleScript alloc] initWithSource:@"tell application \"System Events\" to shut down"];
@@ -556,7 +548,7 @@ NSString * const HBQueueItemNotificationPathKey = @"HBQueueItemNotificationPathK
     }
 
     // If Quit HB has been selected
-    if ([ud integerForKey:HBAlertWhenDone] == HBDoneActionQuit)
+    if ([ud integerForKey:HBQueueDoneAction] == HBDoneActionQuit)
     {
         [NSApp terminate:self];
     }
@@ -575,7 +567,7 @@ NSString * const HBQueueItemNotificationPathKey = @"HBQueueItemNotificationPathK
 {
     NSUserDefaults *ud = NSUserDefaults.standardUserDefaults;
 
-    if ([ud integerForKey:HBAlertWhenDone] == HBDoneActionSleep)
+    if ([ud integerForKey:HBQueueDoneAction] == HBDoneActionSleep)
     {
         // Warn that computer will sleep after encoding
         NSBeep();
@@ -595,7 +587,7 @@ NSString * const HBQueueItemNotificationPathKey = @"HBQueueItemNotificationPathK
 
         [self promptForAppleEventAuthorization];
     }
-    else if ([ud integerForKey:HBAlertWhenDone] == HBDoneActionShutDown)
+    else if ([ud integerForKey:HBQueueDoneAction] == HBDoneActionShutDown)
     {
         // Warn that computer will shut down after encoding
         NSBeep();

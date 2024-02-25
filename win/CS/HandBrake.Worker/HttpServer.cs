@@ -21,15 +21,16 @@ namespace HandBrake.Worker
 
     public class HttpServer
     {
+        private readonly int port;
         private ITokenService tokenService;
-
-        private readonly HttpListener httpListener = new HttpListener();
+        private HttpListener httpListener;
         private Dictionary<string, Func<HttpListenerRequest, string>> apiHandlers;
-
         private bool failedStart;
+        private int count = 0;
 
         public HttpServer(Dictionary<string, Func<HttpListenerRequest, string>> apiCalls, int port, ITokenService tokenService)
         {
+            this.port = port;
             try
             {
                 Init(apiCalls, port, tokenService);
@@ -53,9 +54,9 @@ namespace HandBrake.Worker
                 return;
             }
 
-            if (this.httpListener.IsListening)
+            try
             {
-                try
+                if (this.httpListener.IsListening)
                 {
                     var context = this.httpListener.EndGetContext(result);
                     lock (this.httpListener)
@@ -63,13 +64,18 @@ namespace HandBrake.Worker
                         this.HandleRequest(context);
                     }
                 }
-                catch (Exception e)
+                else
                 {
-                    if (e is HttpListenerException)
-                    {
-                        Debug.WriteLine("Worker: " + e);
-                        return;
-                    }
+                    // This shouldn't happen, but if it does, try re-initialising the server. 
+                    StartServer(this.apiHandlers, port, this.tokenService);
+                }
+            }
+            catch (Exception e)
+            {
+                if (e is HttpListenerException)
+                {
+                    Console.WriteLine("Worker: " + e);
+                    return;
                 }
             }
 
@@ -78,8 +84,22 @@ namespace HandBrake.Worker
 
         public void Stop()
         {
-            this.httpListener.Stop();
-            this.httpListener.Close();
+            try
+            {
+                if (this.httpListener != null)
+                {
+                    this.httpListener.Stop();
+                    this.httpListener.Close();
+                }
+            }
+            catch (Exception e)
+            {
+                ConsoleOutput.WriteLine("Worker: Not able to close HttpListener: " + e);
+            }
+            finally
+            {
+                this.httpListener = null;
+            }
         }
 
         private void Init(Dictionary<string, Func<HttpListenerRequest, string>> apiCalls, int port, ITokenService tokenService)
@@ -108,6 +128,17 @@ namespace HandBrake.Worker
                 Console.WriteLine("All calls require a 'token' in the HTTP header ");
             }
 
+            StartServer(apiCalls, port, tokenService);
+        }
+
+        private void StartServer(Dictionary<string, Func<HttpListenerRequest, string>> apiCalls, int port, ITokenService tokenService)
+        {
+            this.count += 1;
+            ConsoleOutput.WriteLine("Worker: Starting Listener: " + count, ConsoleColor.White, true);
+
+            this.Stop(); // In the case that we are re-initialising.
+            this.httpListener = new HttpListener();
+            
             // Base URL
             string url = string.Format("http://127.0.0.1:{0}/", port);
             this.httpListener.Prefixes.Add(url);
@@ -211,7 +242,7 @@ namespace HandBrake.Worker
             }
             catch (Exception exc)
             {
-                Debug.WriteLine("Worker: Listener Thread: " + exc);
+                ConsoleOutput.WriteLine("Worker: Listener Thread: " + exc);
             }
             finally
             {

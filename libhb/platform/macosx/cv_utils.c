@@ -216,6 +216,19 @@ CFStringRef hb_cv_colr_mat_xlat(int color_matrix)
     }
 }
 
+CFStringRef hb_cv_colr_range_xlat(int color_range)
+{
+    switch (color_range)
+    {
+        case HB_COLR_RANGE_LIMITED:
+            return kCVPixelFormatComponentRange_VideoRange;
+        case HB_COLR_RANGE_FULL:
+            return kCVPixelFormatComponentRange_FullRange;
+        default:
+            return NULL;
+    }
+}
+
 CFStringRef hb_cv_chroma_loc_xlat(int chroma_location)
 {
     switch (chroma_location)

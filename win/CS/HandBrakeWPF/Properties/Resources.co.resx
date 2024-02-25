@@ -484,7 +484,8 @@ U ghjurnale d’attività puderia cuntene infurmazioni addiziunale.</value>
     <value>Fila d’attesa interrotta</value>
   </data>
   <data name="QueueViewModel_DelSelectedJobConfirmation" xml:space="preserve">
-    <value>Da veru, vulete squassà i travagli selezziunati ?</value>
+    <value>Da veru, vulete squassà i travagli selezziunati ?
+St’azzione ùn squasserà alcunu schedariu cudificatu.</value>
   </data>
   <data name="QueueViewModel_JobCurrentlyRunningWarning" xml:space="preserve">
     <value>Sta cudificazione hè in corsu. S’è vo a squassate, a cudificazione serà piantata. Vulete veramente fà què ?</value>
@@ -2128,15 +2129,11 @@ Induve hè accettatu, tutte e prerigature persunalizate seranu state impurtate.<
   <data name="OptionsView_RemotePortLimit" xml:space="preserve">
     <value>A stesa di porti deve esse scelta trà 5000 è 32767</value>
   </data>
-  <data name="OptionsView_SendFileToArgPlaceholders" xml:space="preserve">
-    <value>Campi di sustituzione : {source} {destination} {exit_code}</value>
-    <comment>Note: {source}, {destination} and {exit_code} are not translatable. </comment>
-  </data>
   <data name="SourceSelection_UpdateAvailable" xml:space="preserve">
     <value>Una nova versione hè dispunibule !</value>
   </data>
   <data name="About_Copyright" xml:space="preserve">
-    <value>Diritti di copia (C) 2003-2023 The HandBrake Team</value>
+    <value>Diritti di copia (C) 2003-2024 The HandBrake Team</value>
   </data>
   <data name="Options_LowBatteryLevel" xml:space="preserve">
     <value>Livellu di batteria debule :</value>
@@ -2792,5 +2789,20 @@ Per permette parechje cudificazioni simultanee, attivate st’ozzione in u listi
   </data>
   <data name="Options_RecursiveFolderScan" xml:space="preserve">
     <value>Analisa di i cartulari d’una manera recursiva quand’ella s’impiega u modu d’analisa di cartulare.</value>
+  </data>
+  <data name="AudioView_AudioQuality" xml:space="preserve">
+    <value>Qualità di a traccia audio</value>
+  </data>
+  <data name="AudioView_AudioTrackName" xml:space="preserve">
+    <value>Nome di a traccia audio</value>
+  </data>
+  <data name="AudioView_BitrateSelection" xml:space="preserve">
+    <value>Flussu binariu di a traccia audio</value>
+  </data>
+  <data name="AudioView_DeleteTrack" xml:space="preserve">
+    <value>Squassà sta traccia audio</value>
+  </data>
+  <data name="AudioView_QualityMode" xml:space="preserve">
+    <value>Modu di qualità di u cudificatore audio</value>
   </data>
 </root>

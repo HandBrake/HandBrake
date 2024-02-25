@@ -15,7 +15,7 @@ jobs:
 
     - name: Cargo-C Toolchain Cache
       id: windows-cargo-c-toolchain
-      uses: actions/cache@v3
+      uses: actions/cache@v4
       with:
         path: |
           ~/.cargo/bin/cargo-capi

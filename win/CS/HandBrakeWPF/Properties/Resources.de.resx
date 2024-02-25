@@ -491,7 +491,8 @@ Bitte die Webseite auf Versionshinweise prüfen.</value>
     <value>Warteschlange angehalten</value>
   </data>
   <data name="QueueViewModel_DelSelectedJobConfirmation" xml:space="preserve">
-    <value>Sollen die ausgewählten Aufgaben wirklich gelöscht werden?</value>
+    <value>Soll die ausgewählte Aufgabe wirklich gelöscht werden?
+Mit diesem Vorgang werden keine encodierten Dateien gelöscht.</value>
   </data>
   <data name="QueueViewModel_JobCurrentlyRunningWarning" xml:space="preserve">
     <value>Diese Encodierung ist momentan in Arbeit. Wenn sie gelöscht wird, wird die Encodierung abgebrochen. Soll wirklich fortgefahren werden?</value>
@@ -2135,15 +2136,11 @@ Falls unterstützt, wird jede benutzerdefinierte Voreinstellung übernommen. </v
   <data name="OptionsView_RemotePortLimit" xml:space="preserve">
     <value>Der Bereich der Ports muss zwischen 5000 und 32767 liegen.</value>
   </data>
-  <data name="OptionsView_SendFileToArgPlaceholders" xml:space="preserve">
-    <value>Austausch-Platzhalter: {source} {destination} {exit_code}</value>
-    <comment>Note: {source}, {destination} and {exit_code} are not translatable. </comment>
-  </data>
   <data name="SourceSelection_UpdateAvailable" xml:space="preserve">
     <value>Eine neue Version ist verfügbar!</value>
   </data>
   <data name="About_Copyright" xml:space="preserve">
-    <value>Copyright (C) 2003-2023 The HandBrake Team</value>
+    <value>Copyright (C) 2003-2024 The HandBrake Team</value>
   </data>
   <data name="Options_LowBatteryLevel" xml:space="preserve">
     <value>Geringe Batteriekapazität:</value>
@@ -2800,5 +2797,20 @@ Um mehrere gleichzeitige Encodierungen zu ermöglichen, aktivieren Sie die "Proz
   <data name="Options_RecursiveFolderScan" xml:space="preserve">
     <value>Beim Hinzufügen von Ordnern rekursives Einlesen aktivieren.
 (Nur aktiv bei "Quellenauswahl" -&gt; "Ordner (Stapelverarbeitung)"</value>
+  </data>
+  <data name="AudioView_AudioQuality" xml:space="preserve">
+    <value>Qualität Tonspur</value>
+  </data>
+  <data name="AudioView_AudioTrackName" xml:space="preserve">
+    <value>Name Tonspur</value>
+  </data>
+  <data name="AudioView_BitrateSelection" xml:space="preserve">
+    <value>Bitrate Tonspur</value>
+  </data>
+  <data name="AudioView_DeleteTrack" xml:space="preserve">
+    <value>Diese Tonspur löschen</value>
+  </data>
+  <data name="AudioView_QualityMode" xml:space="preserve">
+    <value>Qualitätsmodus Audioencoder</value>
   </data>
 </root>

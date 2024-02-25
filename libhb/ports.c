@@ -1262,7 +1262,7 @@ void hb_system_sleep_private_disable(void *opaque)
 void * hb_dlopen(const char *name)
 {
 #ifdef SYS_MINGW
-    HMODULE h = LoadLibraryA(name);
+    HMODULE h = LoadLibraryExA(name, NULL, LOAD_LIBRARY_SEARCH_SYSTEM32);
 #else
     void *h = dlopen(name, RTLD_LAZY | RTLD_LOCAL);
 #endif

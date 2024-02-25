@@ -1130,7 +1130,7 @@ class VersionProbe( Action ):
         if self.inadequate():
             self.fail = True
             if self.abort is True:
-                stdout.write('(%s) %s\n' % (self.msg_fail,self.svers))
+                print(f'({self.msg_fail}) {self.svers}')
                 raise AbortError( 'minimum required %s version is %s and %s is %s\n' % (self.name,'.'.join([str(i) for i in self.minversion]),self.command[0],self.svers) )
 
     def _dumpSession( self, printf ):
@@ -1411,9 +1411,6 @@ def createCLI( cross = None ):
     # Option deprecated
     grp.add_argument( '--disable-gtk-update-checks', default=False, action='store_true', help=argparse.SUPPRESS )
 
-    # Option hidden as GUI is not currently buildable with GTK4
-    grp.add_argument( '--enable-gtk4', default=False, action='store_true', help=argparse.SUPPRESS )
-
     h='disable GStreamer (GTK live preview)' if gtk_supported else argparse.SUPPRESS
     grp.add_argument( '--disable-gst', default=False, action='store_true', help=h )
 
@@ -1494,9 +1491,9 @@ class Launcher:
         self.infof( 'time begin: %s\n', time.asctime() )
         self.infof( 'launch: %s\n', cmd )
         if options.launch_quiet:
-            stdout.write( 'building to %s ...\n' % (os.path.abspath( cfg.build_final )))
+            print(f'building to {os.path.abspath(cfg.build_final)} ...')
         else:
-            stdout.write( '%s\n' % ('-' * 79) )
+            print('-' * 79)
 
         ## launch/pipe
         try:
@@ -1546,7 +1543,7 @@ class Launcher:
             segs.append( '%d seconds' % seconds )
 
         if not options.launch_quiet:
-            stdout.write( '%s\n' % ('-' * 79) )
+            print('-' * 79)
         self.infof( 'time end: %s\n', time.asctime() )
         self.infof( 'duration: %s (%.2fs)\n', ', '.join(segs), elapsed )
         self.infof( 'result: %s\n', result )
@@ -2085,7 +2082,6 @@ int main()
     doc.add( 'FEATURE.fdk_aac',    int( options.enable_fdk_aac ))
     doc.add( 'FEATURE.ffmpeg_aac', int( options.enable_ffmpeg_aac ))
     doc.add( 'FEATURE.flatpak',    int( options.flatpak ))
-    doc.add( 'FEATURE.gtk4',       int( options.enable_gtk4 ))
     doc.add( 'FEATURE.gtk',        int( options.enable_gtk ))
     doc.add( 'FEATURE.gst',        int( not options.disable_gst ))
     doc.add( 'FEATURE.mf',         int( options.enable_mf ))
@@ -2204,33 +2200,24 @@ int main()
     doc.write( 'm4' )
     encodeDistfileConfig()
 
-    note_required    = 'required on target platform'
-    note_unsupported = 'not supported on target platform'
+    note_required    = ' (required on target platform)'
+    note_unsupported = ' (not supported on target platform)'
 
-    stdout.write( '%s\n' % ('-' * 79) )
-    stdout.write( 'Build system:       %s\n' % build_tuple.spec.rstrip('-') )
-    stdout.write( 'Host system:        %s\n' % host_tuple.spec.rstrip('-') )
-    stdout.write( 'Target platform:    %s' % host_tuple.system )
-    stdout.write( ' (cross-compile)\n' ) if options.cross or build_tuple.machine != host_tuple.machine else stdout.write( '\n' )
-    stdout.write( 'Harden:             %s\n' % options.enable_harden )
-    stdout.write( 'Sandbox:            %s' % options.enable_sandbox )
-    stdout.write( ' (%s)\n' % note_unsupported ) if host_tuple.system != 'darwin' else stdout.write( '\n' )
-    stdout.write( 'Enable FDK-AAC:     %s\n' % options.enable_fdk_aac )
-    stdout.write( 'Enable FFmpeg AAC:  %s' % options.enable_ffmpeg_aac )
-    stdout.write( '  (%s)\n' % note_required ) if host_tuple.system != 'darwin' else stdout.write( '\n' )
-    stdout.write( 'Enable MediaFound.: %s' % options.enable_mf )
-    stdout.write( ' (%s)\n' % note_unsupported ) if not mf_supported else stdout.write( '\n' )
-    stdout.write( 'Enable NVENC:       %s' % options.enable_nvenc )
-    stdout.write( ' (%s)\n' % note_unsupported ) if not nvenc_supported else stdout.write( '\n' )
-    stdout.write( 'Enable NVDEC:       %s' % options.enable_nvdec )
-    stdout.write( ' (%s)\n' % note_unsupported ) if not nvenc_supported else stdout.write( '\n' )
-    stdout.write( 'Enable QSV:         %s' % options.enable_qsv )
-    stdout.write( ' (%s)\n' % note_unsupported ) if not qsv_supported else stdout.write( '\n' )
-    stdout.write( 'Enable VCE:         %s' % options.enable_vce )
-    stdout.write( ' (%s)\n' % note_unsupported ) if not vce_supported else stdout.write( '\n' )
-    stdout.write( 'Enable libdovi:     %s\n' % options.enable_libdovi )
-    stdout.write( 'Enable GTK GUI:     %s' % options.enable_gtk )
-    stdout.write( ' (%s)\n' % note_unsupported ) if not gtk_supported else stdout.write( '\n' )
+    print('-' * 79)
+    print(f'Build system:       {build_tuple.spec.rstrip("-")}')
+    print(f'Host system:        {host_tuple.spec.rstrip("-")}')
+    print(f'Target platform:    {host_tuple.system}' + (' (cross-compile)' if options.cross or build_tuple.machine != host_tuple.machine else ''))
+    print(f'Harden:             {options.enable_harden}')
+    print(f'Sandbox:            {options.enable_sandbox}' + ('' if host_tuple.system == 'darwin' else note_unsupported))
+    print(f'Enable FDK-AAC:     {options.enable_fdk_aac}')
+    print(f'Enable FFmpeg AAC:  {options.enable_ffmpeg_aac}' + ('' if host_tuple.system == 'darwin' else note_required))
+    print(f'Enable MediaFound.: {options.enable_mf}' + ('' if mf_supported else note_unsupported))
+    print(f'Enable NVENC:       {options.enable_nvenc}' + ('' if nvenc_supported else note_unsupported))
+    print(f'Enable NVDEC:       {options.enable_nvdec}' + ('' if nvenc_supported else note_unsupported))
+    print(f'Enable QSV:         {options.enable_qsv}' + ('' if qsv_supported else note_unsupported))
+    print(f'Enable VCE:         {options.enable_vce}' + ('' if vce_supported else note_unsupported))
+    print(f'Enable libdovi:     {options.enable_libdovi}')
+    print(f'Enable GTK GUI:     {options.enable_gtk}' + ('' if gtk_supported else note_unsupported))
 
     if len(targets) > 0:
         print( print_blue('Note:'), 'passthrough arguments:', *targets)
@@ -2242,7 +2229,7 @@ int main()
         print()
 
     if options.launch:
-        stdout.write( '%s\n' % ('-' * 79) )
+        print('-' * 79)
         launcher = Launcher( targets )
 
     cfg.record_log()
@@ -2252,24 +2239,24 @@ int main()
     else:
         nocd = False
 
-    stdout.write( '%s\n' % ('-' * 79) )
+    print('-' * 79)
     if options.launch:
-        stdout.write( print_bold( 'Build is finished!\n' ) )
+        print(print_bold('Build is finished!'))
         if nocd:
-            stdout.write( 'You may now examine the output.\n' )
+            print('You may now examine the output.')
         else:
-            stdout.write( 'You may now cd into %s and examine the output.\n' % (cfg.build_dir) )
+            print(f'You may now cd into {cfg.build_dir} and examine the output.')
         sys.exit( launcher.returncode )
     else:
-        stdout.write( print_bold( 'Build is configured!\n' ) )
+        print(print_bold('Build is configured!'))
         if nocd:
-            stdout.write( 'You may now run make (%s).\n' % (Tools.gmake.pathname) )
+            print(f'You may now run make ({Tools.gmake.pathname}).')
         else:
-            stdout.write( 'You may now cd into %s and run make (%s).\n' % (cfg.build_dir,Tools.gmake.pathname) )
+            print(f'You may now cd into {cfg.build_dir} and run make ({Tools.gmake.pathname}).')
         sys.exit( 0 )
 
 except AbortError as x:
-    stderr.write( '\n%s\n\n' % print_red( 'ERROR: %s' % x ) )
+    stderr.write('\n' + print_red(f'ERROR: {x}') + '\n\n')
     try:
         cfg.record_log()
     except:

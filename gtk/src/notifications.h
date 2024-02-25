@@ -1,5 +1,4 @@
-/* notifications.h
- * Copyright (C) HandBrake Team 2024
+/* Copyright (C) 2023-2024 HandBrake Team
  * SPDX-License-Identifier: GPL-2.0-or-later */
 
 #ifndef _NOTIFICATIONS_H_

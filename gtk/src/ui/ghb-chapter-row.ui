@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <requires lib="gtk+" version="3.22"/>
+  <template class="GhbChapterRow" parent="GtkListBoxRow">
+    <child>
+      <object class="GtkBox" id="hbox1">
+        <property name="visible">1</property>
+        <property name="orientation">horizontal</property>
+        <property name="spacing">6</property>
+        <child>
+          <object class="GtkLabel" id="index_label">
+            <property name="visible">1</property>
+            <property name="width-chars">3</property>
+            <property name="xalign">1.0</property>
+          </object>
+          <packing>
+            <property name="position">0</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="dummy_label">
+            <property name="visible">1</property>
+            <property name="width-chars">1</property>
+            <property name="xalign">1.0</property>
+          </object>
+          <packing>
+            <property name="position">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="start_label">
+            <property name="visible">1</property>
+            <property name="width-chars">10</property>
+            <property name="xalign">1.0</property>
+          </object>
+          <packing>
+            <property name="position">2</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="duration_label">
+            <property name="visible">1</property>
+            <property name="width-chars">10</property>
+            <property name="xalign">1.0</property>
+          </object>
+          <packing>
+            <property name="position">3</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkEntry" id="chapter_entry">
+            <property name="visible">1</property>
+            <property name="margin-start">12</property>
+            <property name="hexpand">1</property>
+            <signal name="changed" handler="chapter_name_changed_cb" swapped="yes"/>
+          </object>
+          <packing>
+            <property name="position">4</property>
+          </packing>
+        </child>
+      </object>
+    </child>
+  </template>
+</interface>

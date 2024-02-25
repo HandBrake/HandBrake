@@ -41,7 +41,8 @@ namespace HandBrakeWPF.Helpers
                 task.Destination = string.Empty;
             }
 
-            string sourceOrLabelName = !string.IsNullOrEmpty(titleName) ? titleName : sourceDisplayName;
+
+            string sourceOrLabelName = !string.IsNullOrEmpty(titleName) ? titleName.Trim() : sourceDisplayName?.Trim();
 
             if (task.Title != 0)
             {

@@ -1,10 +1,10 @@
-/* Copyright (C) 2024 HandBrake Team
+/* Copyright (C) 2023-2024 HandBrake Team
  * SPDX-License-Identifier: GPL-2.0-or-later */
 
 #ifndef POWER_MANAGEMENT_H
 #define POWER_MANAGEMENT_H
 
-#include "ghbcompat.h"
+#include "compat.h"
 #include "settings.h"
 
 typedef enum {
