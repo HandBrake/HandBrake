@@ -13,6 +13,7 @@ NSString * const HBKeepPresetEdits               = @"HBKeepPresetEdits";
 NSString * const HBUseSourceFolderDestination    = @"HBUseSourceFolderDestination";
 
 NSString * const HBRecursiveScan                      = @"HBRecursiveScan";
+NSString * const HBExcludedFileExtensions             = @"HBExcludedFileExtensions";
 NSString * const HBLastDestinationDirectoryURL        = @"HBLastDestinationDirectoryURL";
 NSString * const HBLastDestinationDirectoryBookmark   = @"HBLastDestinationDirectoryBookmark";
 NSString * const HBLastSourceDirectoryURL             = @"HBLastSourceDirectoryURL";
@@ -59,6 +60,59 @@ NSString * const HBSendToApp                     = @"HBSendToApp";
 #define TOOLBAR_QUEUE           @"TOOLBAR_QUEUE"
 #define TOOLBAR_ADVANCED        @"TOOLBAR_ADVANCED"
 
+// KVO Context
+static void *HBPreferencesControllerContext = &HBPreferencesControllerContext;
+
+@protocol HBFileExtensionDelegate
+- (void)extensionDidChange;
+@end
+
+@interface HBFileExtension : NSObject
+
+@property (nonatomic) NSString *extension;
+@property (nonatomic, readonly, weak) id<HBFileExtensionDelegate> delegate;
+
+- (instancetype)init NS_UNAVAILABLE;
+- (instancetype)initWithDelegate:(id<HBFileExtensionDelegate>)delegate;
+- (instancetype)initWithExtension:(NSString *)extension delegate:(id<HBFileExtensionDelegate>)delegate;
+
+@end
+
+@implementation HBFileExtension
+
+- (instancetype)initWithDelegate:(id<HBFileExtensionDelegate>)delegate
+{
+    self = [super self];
+    if (self)
+    {
+        _extension = NSLocalizedString(@"extension", "Default name for a newly added excluded file extension");
+        _delegate = delegate;
+    }
+    return self;
+}
+
+- (instancetype)initWithExtension:(NSString *)extension delegate:(id<HBFileExtensionDelegate>)delegate
+{
+    self = [super self];
+    if (self)
+    {
+        _extension = extension;
+        _delegate = delegate;
+    }
+    return self;
+}
+
+- (void)setExtension:(NSString *)extension
+{
+    if ([extension isEqualToString:_extension] == NO)
+    {
+        _extension = extension;
+        [self.delegate extensionDidChange];
+    }
+}
+
+@end
+
 /**
  * This class controls the preferences window of HandBrake. Default values for
  * all preferences and user defaults are specified in class method
@@ -70,7 +124,7 @@ NSString * const HBSendToApp                     = @"HBSendToApp";
  * preference settings are added that cannot be handled with Cocoa bindings).
  */
 
-@interface HBPreferencesController () <NSTokenFieldDelegate, NSToolbarDelegate>
+@interface HBPreferencesController () <NSTokenFieldDelegate, NSToolbarDelegate, HBFileExtensionDelegate>
 
 @property (nonatomic, weak) IBOutlet NSView *generalView;
 @property (nonatomic, weak) IBOutlet NSView *fileNameView;
@@ -81,6 +135,11 @@ NSString * const HBSendToApp                     = @"HBSendToApp";
 @property (nonatomic, weak) IBOutlet NSTokenField *builtInTokenField;
 @property (nonatomic, readonly, strong) NSArray *buildInFormatTokens;
 @property (nonatomic, strong) NSArray *matches;
+
+@property (nonatomic, weak) IBOutlet NSSegmentedControl *excludedExtensionsControl;
+@property (nonatomic, weak) IBOutlet NSArrayController *excludedExtensionsController;
+@property (nonatomic, weak) IBOutlet NSTableView *excludedExtensionsTableView;
+@property (nonatomic) NSMutableArray<HBFileExtension *> *excludedExtensions;
 
 @property (nonatomic) BOOL hardwareDecodersCheckboxesEnabled;
 
@@ -132,6 +191,7 @@ static BOOL _hardwareDecoderSupported = NO;
         HBUseHardwareDecoder:               @NO,
         HBAlwaysUseHardwareDecoder:         @NO,
         HBRecursiveScan:                    @NO,
+        HBExcludedFileExtensions:           @[@"jpg", @"png", @"srt", @"ssa", @"ass", @"txt"],
         HBLastDestinationDirectoryURL:      [NSKeyedArchiver archivedDataWithRootObject:moviesURL],
         HBLastSourceDirectoryURL:           [NSKeyedArchiver archivedDataWithRootObject:moviesURL],
         HBUseSourceFolderDestination:       @NO,
@@ -223,6 +283,27 @@ static BOOL _hardwareDecoderSupported = NO;
                              @"{Modification-Date}", @"{Modification-Time}"];
     [self.builtInTokenField setTokenizingCharacterSet:[NSCharacterSet characterSetWithCharactersInString:@"%%"]];
     [self.builtInTokenField setStringValue:[self.buildInFormatTokens componentsJoinedByString:@"%%"]];
+
+    self.excludedExtensions = [[NSMutableArray alloc] init];
+    for (NSString *extension in [NSUserDefaults.standardUserDefaults arrayForKey:HBExcludedFileExtensions])
+    {
+        if ([extension isKindOfClass:[NSString class]])
+        {
+            [self.excludedExtensions addObject:[[HBFileExtension alloc] initWithExtension:extension delegate:self]];
+        }
+    }
+    self.excludedExtensionsController.content = self.excludedExtensions;
+
+    [self.excludedExtensionsController addObserver:self
+                                        forKeyPath:@"selectedObjects"
+                                           options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionInitial
+                                           context:HBPreferencesControllerContext];
+
+    [self.excludedExtensionsController addObserver:self
+                                        forKeyPath:@"arrangedObjects"
+                                           options:NSKeyValueObservingOptionNew
+                                           context:HBPreferencesControllerContext];
+
 
     toolbar.selectedItemIdentifier = TOOLBAR_GENERAL;
     [self setPrefView:nil];
@@ -467,6 +548,60 @@ static BOOL _hardwareDecoderSupported = NO;
 
     return YES;
 }
+
+#pragma mark - Excluded file extensions
+
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
+{
+    if (context == HBPreferencesControllerContext)
+    {
+        if ([keyPath isEqualToString:@"selectedObjects"])
+        {
+            BOOL selected = self.excludedExtensionsController.selectedObjects.count > 0;
+            [self.excludedExtensionsControl setEnabled:selected forSegment:1];
+        }
+        else if ([keyPath isEqualToString:@"arrangedObjects"])
+        {
+            [self extensionDidChange];
+        }
+    }
+    else
+    {
+        [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
+    }
+}
+
+- (void)extensionDidChange
+{
+    NSMutableArray<NSString *> *extensions = [NSMutableArray array];
+    for (HBFileExtension *extension in self.excludedExtensions)
+    {
+        [extensions addObject:extension.extension];
+    }
+    [NSUserDefaults.standardUserDefaults setObject:extensions forKey:HBExcludedFileExtensions];
+}
+
+- (IBAction)addFileExtension:(id)sender
+{
+    if ([sender selectedSegment])
+    {
+        [self.excludedExtensionsController removeObjectsAtArrangedObjectIndexes:self.excludedExtensionsController.selectionIndexes];
+    }
+    else
+    {
+        HBFileExtension *extension = [[HBFileExtension alloc] initWithDelegate:self];
+        [self.excludedExtensionsController addObject:extension];
+
+        NSInteger row = [self.excludedExtensionsController.arrangedObjects count] - 1;
+        if (row >= 0)
+        {
+            [self.excludedExtensionsTableView selectRowIndexes:[NSIndexSet indexSetWithIndex:row]
+                                          byExtendingSelection:NO];
+            [self.excludedExtensionsTableView editColumn:0 row:row withEvent:nil select:YES];
+        }
+    }
+}
+
 
 #pragma mark - Private methods
 

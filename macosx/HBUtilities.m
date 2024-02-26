@@ -345,6 +345,31 @@ HB_OBJC_DIRECT_MEMBERS
     return mutableFileURLs;
 }
 
++ (NSArray<NSURL *> *)trimURLs:(NSArray<NSURL *> *)fileURLs withExtension:(NSArray<NSString *> *)excludedExtensions
+{
+    NSMutableArray<NSURL *> *trimmedURLs = [NSMutableArray array];
+    for (NSURL *fileURL in fileURLs)
+    {
+        BOOL excluded = NO;
+        NSString *extension = fileURL.pathExtension;
+
+        for (NSString *excludedExtension in excludedExtensions)
+        {
+            if ([excludedExtension isEqualToString:extension])
+            {
+                excluded = YES;
+                break;
+            }
+        }
+
+        if (excluded == NO)
+        {
+            [trimmedURLs addObject:fileURL];
+        }
+    }
+    return trimmedURLs;
+}
+
 + (NSString *)isoCodeForNativeLang:(NSString *)language
 {
     const iso639_lang_t *lang = lang_get_next(NULL);

@@ -815,11 +815,14 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
     }
     self.fileTokens = tokens;
 
-    NSArray<NSURL *> *expandedFileURLs = [HBUtilities expandURLs:fileURLs recursive:recursive];
+    NSArray<NSString *> *excludedExtensions = [NSUserDefaults.standardUserDefaults arrayForKey:HBExcludedFileExtensions];
 
-    [self scanURLs:expandedFileURLs titleIndex:index completionHandler:^(NSArray<HBTitle *> *titles)
+    NSArray<NSURL *> *expandedFileURLs = [HBUtilities expandURLs:fileURLs recursive:recursive];
+    NSArray<NSURL *> *trimmedFileURLs  = [HBUtilities trimURLs:expandedFileURLs withExtension:excludedExtensions];
+
+    [self scanURLs:trimmedFileURLs titleIndex:index completionHandler:^(NSArray<HBTitle *> *titles)
     {
-        NSArray<NSURL *> *baseURLs = [HBUtilities baseURLs:expandedFileURLs];
+        NSArray<NSURL *> *baseURLs = [HBUtilities baseURLs:trimmedFileURLs];
 
         if (titles.count)
         {

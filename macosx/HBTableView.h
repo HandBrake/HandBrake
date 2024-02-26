@@ -6,6 +6,8 @@
 
 #import <Cocoa/Cocoa.h>
 
+NS_ASSUME_NONNULL_BEGIN
+
 @protocol HBTableViewDelegate <NSTableViewDelegate>
 @optional
 - (void)HB_deleteSelectionFromTableView:(NSTableView *)tableView;
@@ -23,3 +25,5 @@
 @property (nonatomic, readonly, copy) NSIndexSet *targetedRowIndexes;
 
 @end
+
+NS_ASSUME_NONNULL_END
