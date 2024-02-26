@@ -5,15 +5,14 @@ on: [push, pull_request]
 jobs:
   build_mingw:
     name: CLI / LibHB (ARM)
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     steps:
     - uses: actions/checkout@v4
     - uses: actions/setup-python@v5
 
     - name: Environment Setup
       run: |
-        sudo apt-get purge cmake -y
-        sudo apt-get install automake autoconf build-essential libtool libtool-bin make nasm patch tar yasm zlib1g-dev ninja-build gzip pax cmake
+        sudo apt-get install automake autoconf build-essential libtool libtool-bin make nasm patch tar yasm zlib1g-dev ninja-build gzip pax
         sudo pip3 install meson
 
     - name: Setup Toolchain

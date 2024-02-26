@@ -32,20 +32,6 @@ jobs:
         sudo apt-get install gstreamer1.0-libav libappindicator-dev libdbus-glib-1-dev libglib2.0-dev libgtk-3-dev libnotify-dev
         sudo apt-get install libva-dev libdrm-dev llvm clang
 
-    - name: Setup Toolchain
-      run: |
-        wget https://github.com/HandBrake/HandBrake-toolchains/releases/download/1.0/cmake-3.16.3-Linux-x86_64.tar.gz
-        SHA=$(sha1sum cmake-3.16.3-Linux-x86_64.tar.gz)
-        EXPECTED="a0f48057d8ccb6d4e50e80c77796466315dd2bfb  cmake-3.16.3-Linux-x86_64.tar.gz"
-        if [ "$SHA" == "$EXPECTED" ];
-        then
-            echo "Extracting CMake"
-            tar xvf cmake-3.16.3-Linux-x86_64.tar.gz
-        else
-            echo "Toolchain Verification FAILED. Exiting!"
-            return -1
-        fi
-
     - name: Setup Cargo-C Toolchain
       if: steps.linux-cargo-c-toolchain.outputs.cache-hit != 'true'
       run: |
@@ -53,6 +39,4 @@ jobs:
 
     - name: Build HandBrake Linux
       run: |
-         PWD=$(pwd)
-         export PATH=$PWD/cmake-3.16.3-Linux-x86_64/bin:$PATH
          ./configure --enable-qsv --enable-vce --enable-nvenc --enable-nvdec --launch-jobs=0 --launch
