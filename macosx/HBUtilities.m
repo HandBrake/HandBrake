@@ -348,17 +348,21 @@ HB_OBJC_DIRECT_MEMBERS
 + (NSArray<NSURL *> *)trimURLs:(NSArray<NSURL *> *)fileURLs withExtension:(NSArray<NSString *> *)excludedExtensions
 {
     NSMutableArray<NSURL *> *trimmedURLs = [NSMutableArray array];
+
     for (NSURL *fileURL in fileURLs)
     {
         BOOL excluded = NO;
         NSString *extension = fileURL.pathExtension;
 
-        for (NSString *excludedExtension in excludedExtensions)
+        if (extension)
         {
-            if ([excludedExtension isEqualToString:extension])
+            for (NSString *excludedExtension in excludedExtensions)
             {
-                excluded = YES;
-                break;
+                if ([extension caseInsensitiveCompare:excludedExtension] == NSOrderedSame)
+                {
+                    excluded = YES;
+                    break;
+                }
             }
         }
 

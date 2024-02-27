@@ -815,7 +815,16 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
     }
     self.fileTokens = tokens;
 
-    NSArray<NSString *> *excludedExtensions = [NSUserDefaults.standardUserDefaults arrayForKey:HBExcludedFileExtensions];
+    NSMutableArray<NSString *> *excludedExtensions = [[NSMutableArray alloc] init];
+    for (NSString *extension in [NSUserDefaults.standardUserDefaults arrayForKey:HBExcludedFileExtensions])
+    {
+        // Make sure there are only NSString instances in the array
+        // Third parties can write to user defaults too and add different kind of objects.
+        if ([extension isKindOfClass:[NSString class]])
+        {
+            [excludedExtensions addObject:extension];
+        }
+    }
 
     NSArray<NSURL *> *expandedFileURLs = [HBUtilities expandURLs:fileURLs recursive:recursive];
     NSArray<NSURL *> *trimmedFileURLs  = [HBUtilities trimURLs:expandedFileURLs withExtension:excludedExtensions];

@@ -106,7 +106,7 @@ static void *HBPreferencesControllerContext = &HBPreferencesControllerContext;
 {
     if ([extension isEqualToString:_extension] == NO)
     {
-        _extension = extension;
+        _extension = extension ? extension : @"";
         [self.delegate extensionDidChange];
     }
 }
@@ -298,12 +298,10 @@ static BOOL _hardwareDecoderSupported = NO;
                                         forKeyPath:@"selectedObjects"
                                            options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionInitial
                                            context:HBPreferencesControllerContext];
-
     [self.excludedExtensionsController addObserver:self
                                         forKeyPath:@"arrangedObjects"
                                            options:NSKeyValueObservingOptionNew
                                            context:HBPreferencesControllerContext];
-
 
     toolbar.selectedItemIdentifier = TOOLBAR_GENERAL;
     [self setPrefView:nil];
@@ -581,6 +579,14 @@ static BOOL _hardwareDecoderSupported = NO;
     [NSUserDefaults.standardUserDefaults setObject:extensions forKey:HBExcludedFileExtensions];
 }
 
+- (IBAction)extensionDoubleClickAction:(NSTableView *)sender
+{
+    if (sender.clickedRow > -1)
+    {
+        [sender editColumn:0 row:sender.clickedRow withEvent:nil select:YES];
+    }
+}
+
 - (IBAction)addFileExtension:(id)sender
 {
     if ([sender selectedSegment])
@@ -593,15 +599,13 @@ static BOOL _hardwareDecoderSupported = NO;
         [self.excludedExtensionsController addObject:extension];
 
         NSInteger row = [self.excludedExtensionsController.arrangedObjects count] - 1;
-        if (row >= 0)
+        if (row > -1)
         {
-            [self.excludedExtensionsTableView selectRowIndexes:[NSIndexSet indexSetWithIndex:row]
-                                          byExtendingSelection:NO];
+            [self.excludedExtensionsTableView selectRowIndexes:[NSIndexSet indexSetWithIndex:row] byExtendingSelection:NO];
             [self.excludedExtensionsTableView editColumn:0 row:row withEvent:nil select:YES];
         }
     }
 }
-
 
 #pragma mark - Private methods
 
