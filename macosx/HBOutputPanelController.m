@@ -75,6 +75,8 @@
 {
     [super windowDidLoad];
 
+    self.window.tabbingMode = NSWindowTabbingModeDisallowed;
+
     [_textView.layoutManager replaceTextStorage:_outputTextStorage];
     [_textView.enclosingScrollView setLineScroll:10];
     [_textView.enclosingScrollView setPageScroll:20];
