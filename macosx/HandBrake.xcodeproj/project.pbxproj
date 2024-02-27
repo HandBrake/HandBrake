@@ -312,6 +312,7 @@
 		A9CF25F71990D6820023F727 /* HBPresetsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A9CF25F61990D6820023F727 /* HBPresetsViewController.m */; };
 		A9D0FA771C1C284D0003F2A9 /* HBFocusRingView.m in Sources */ = {isa = PBXBuildFile; fileRef = A9D0FA761C1C284D0003F2A9 /* HBFocusRingView.m */; };
 		A9D1E41718262364002F6424 /* HBPreviewGenerator.m in Sources */ = {isa = PBXBuildFile; fileRef = A9D1E41618262364002F6424 /* HBPreviewGenerator.m */; };
+		A9D2BA6C2B8DFAB400E0B2B9 /* HBPreferencesWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = A9D2BA6B2B8DFAB400E0B2B9 /* HBPreferencesWindow.m */; };
 		A9D363512209C08600D8EFEA /* HBQueueItemView.m in Sources */ = {isa = PBXBuildFile; fileRef = A9D363502209C08500D8EFEA /* HBQueueItemView.m */; };
 		A9DA024E233C9DBC00DFF1D0 /* HBTrackTitleViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A9DA024C233C9DBC00DFF1D0 /* HBTrackTitleViewController.m */; };
 		A9DC6C52196F04F6002AE6B4 /* HBSubtitlesController.m in Sources */ = {isa = PBXBuildFile; fileRef = A9DC6C50196F04F6002AE6B4 /* HBSubtitlesController.m */; };
@@ -826,6 +827,8 @@
 		A9D0FA751C1C284D0003F2A9 /* HBFocusRingView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBFocusRingView.h; sourceTree = "<group>"; };
 		A9D0FA761C1C284D0003F2A9 /* HBFocusRingView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBFocusRingView.m; sourceTree = "<group>"; };
 		A9D1E41618262364002F6424 /* HBPreviewGenerator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBPreviewGenerator.m; sourceTree = "<group>"; };
+		A9D2BA6A2B8DFAB400E0B2B9 /* HBPreferencesWindow.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HBPreferencesWindow.h; sourceTree = "<group>"; };
+		A9D2BA6B2B8DFAB400E0B2B9 /* HBPreferencesWindow.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HBPreferencesWindow.m; sourceTree = "<group>"; };
 		A9D2DDE524B3B1C2009C92DA /* pt_BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = pt_BR; path = pt_BR.lproj/Localizable.strings; sourceTree = "<group>"; };
 		A9D3634F2209C08500D8EFEA /* HBQueueItemView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBQueueItemView.h; sourceTree = "<group>"; };
 		A9D363502209C08500D8EFEA /* HBQueueItemView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBQueueItemView.m; sourceTree = "<group>"; };
@@ -1893,6 +1896,8 @@
 				A93B49211DA3AA6900DD70A3 /* HBToolbarBadgedItem.m */,
 				A9C61F9C22E31CDB00C28E7C /* HBFlippedClipView.h */,
 				A9C61F9D22E31CDB00C28E7C /* HBFlippedClipView.m */,
+				A9D2BA6A2B8DFAB400E0B2B9 /* HBPreferencesWindow.h */,
+				A9D2BA6B2B8DFAB400E0B2B9 /* HBPreferencesWindow.m */,
 			);
 			name = "UI Views";
 			sourceTree = "<group>";
@@ -2383,6 +2388,7 @@
 				A916C9961C8449BE00C7B560 /* HBJobOutputFileWriter.m in Sources */,
 				A916C9951C8449B000C7B560 /* HBChapterTitlesController.m in Sources */,
 				A97ED7FB22EC5E9300AEF29B /* HBQueueDetailsViewController.m in Sources */,
+				A9D2BA6C2B8DFAB400E0B2B9 /* HBPreferencesWindow.m in Sources */,
 				A916C9931C8449A100C7B560 /* HBAddPresetController.m in Sources */,
 				A916C9921C84498F00C7B560 /* HBDockTextField.m in Sources */,
 				A9706CB41AC1436F00BAEAA8 /* HBApplication.m in Sources */,

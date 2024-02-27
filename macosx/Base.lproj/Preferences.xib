@@ -22,7 +22,7 @@
         </customObject>
         <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
         <customObject id="-3" userLabel="Application" customClass="NSObject"/>
-        <window title="Preferences" allowsToolTipsWhenApplicationIsInactive="NO" visibleAtLaunch="NO" animationBehavior="default" id="5" userLabel="Preferences">
+        <window title="Preferences" allowsToolTipsWhenApplicationIsInactive="NO" visibleAtLaunch="NO" animationBehavior="default" id="5" userLabel="Preferences" customClass="HBPreferencesWindow">
             <windowStyleMask key="styleMask" titled="YES" closable="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
             <rect key="contentRect" x="136" y="318" width="590" height="200"/>
@@ -808,14 +808,14 @@
             <point key="canvasLocation" x="-764" y="-643"/>
         </customView>
         <customView id="236" userLabel="Advanced">
-            <rect key="frame" x="0.0" y="0.0" width="580" height="464"/>
+            <rect key="frame" x="0.0" y="0.0" width="580" height="436"/>
             <autoresizingMask key="autoresizingMask"/>
             <subviews>
                 <stackView distribution="fill" orientation="vertical" alignment="leading" spacing="16" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="1000" verticalHuggingPriority="1000" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="OVb-Af-BVd">
-                    <rect key="frame" x="45" y="20" width="490" height="424"/>
+                    <rect key="frame" x="45" y="20" width="490" height="396"/>
                     <subviews>
                         <stackView distribution="fill" orientation="horizontal" alignment="firstBaseline" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="750" verticalHuggingPriority="1000" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="vWO-gM-Ipq">
-                            <rect key="frame" x="0.0" y="363" width="469" height="61"/>
+                            <rect key="frame" x="0.0" y="335" width="469" height="61"/>
                             <subviews>
                                 <textField horizontalHuggingPriority="248" verticalHuggingPriority="1000" horizontalCompressionResistancePriority="1000" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="300" translatesAutoresizingMaskIntoConstraints="NO" id="IV7-SY-HLR">
                                     <rect key="frame" x="-2" y="44" width="134" height="14"/>
@@ -970,10 +970,10 @@
                             </customSpacing>
                         </stackView>
                         <stackView distribution="fill" orientation="horizontal" alignment="centerY" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="750" verticalHuggingPriority="1000" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="xIl-kd-cd8">
-                            <rect key="frame" x="0.0" y="203" width="378" height="144"/>
+                            <rect key="frame" x="0.0" y="203" width="378" height="116"/>
                             <subviews>
                                 <textField verticalHuggingPriority="1000" horizontalCompressionResistancePriority="1000" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="300" translatesAutoresizingMaskIntoConstraints="NO" id="Fjp-E6-rwY">
-                                    <rect key="frame" x="-2" y="130" width="134" height="14"/>
+                                    <rect key="frame" x="-2" y="102" width="134" height="14"/>
                                     <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="right" title="Excluded file extensions:" id="wFM-UD-vzS">
                                         <font key="font" metaFont="menu" size="11"/>
                                         <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -981,15 +981,15 @@
                                     </textFieldCell>
                                 </textField>
                                 <stackView distribution="fill" orientation="vertical" alignment="leading" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="1000" verticalHuggingPriority="1000" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="qXB-Yk-sr9">
-                                    <rect key="frame" x="138" y="0.0" width="240" height="144"/>
+                                    <rect key="frame" x="138" y="0.0" width="240" height="116"/>
                                     <subviews>
                                         <scrollView autohidesScrollers="YES" horizontalLineScroll="16" horizontalPageScroll="10" verticalLineScroll="16" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="D9g-2v-DEt">
-                                            <rect key="frame" x="0.0" y="24" width="240" height="120"/>
+                                            <rect key="frame" x="0.0" y="24" width="240" height="92"/>
                                             <clipView key="contentView" ambiguous="YES" id="XhB-aU-rTV">
-                                                <rect key="frame" x="1" y="1" width="238" height="118"/>
+                                                <rect key="frame" x="1" y="1" width="238" height="90"/>
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                 <subviews>
-                                                    <tableView toolTip="The following file extensions will be ignored when scanning a folder. The list is case insensitive" verticalHuggingPriority="750" ambiguous="YES" allowsExpansionToolTips="YES" columnAutoresizingStyle="firstColumnOnly" columnReordering="NO" columnResizing="NO" autosaveColumns="NO" rowHeight="16" rowSizeStyle="automatic" headerView="HCK-Pb-8fP" viewBased="YES" id="ax0-hR-WPq">
+                                                    <tableView toolTip="The following file extensions will be ignored when scanning a folder. The list is case insensitive" verticalHuggingPriority="750" ambiguous="YES" allowsExpansionToolTips="YES" columnAutoresizingStyle="firstColumnOnly" columnReordering="NO" columnResizing="NO" autosaveColumns="NO" rowHeight="16" rowSizeStyle="automatic" viewBased="YES" id="ax0-hR-WPq">
                                                         <rect key="frame" x="0.0" y="0.0" width="238" height="90"/>
                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                         <size key="intercellSpacing" width="17" height="0.0"/>
@@ -1020,9 +1020,10 @@
                                                                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                                                 </textFieldCell>
                                                                                 <connections>
-                                                                                    <binding destination="hrf-OF-7JQ" name="value" keyPath="objectValue.extension" id="APP-Y7-gr2">
+                                                                                    <binding destination="hrf-OF-7JQ" name="value" keyPath="objectValue.extension" id="htP-I2-Hq3">
                                                                                         <dictionary key="options">
                                                                                             <bool key="NSConditionallySetsEditable" value="NO"/>
+                                                                                            <bool key="NSValidatesImmediately" value="YES"/>
                                                                                         </dictionary>
                                                                                     </binding>
                                                                                 </connections>
@@ -1049,21 +1050,17 @@
                                                 </subviews>
                                             </clipView>
                                             <constraints>
-                                                <constraint firstAttribute="height" constant="120" id="50h-Wm-7Sz"/>
+                                                <constraint firstAttribute="height" constant="92" id="50h-Wm-7Sz"/>
                                                 <constraint firstAttribute="width" constant="240" id="qvn-wo-qOs"/>
                                             </constraints>
                                             <scroller key="horizontalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="YES" id="hEM-8a-P0e">
-                                                <rect key="frame" x="1" y="103" width="238" height="16"/>
+                                                <rect key="frame" x="1" y="75" width="238" height="16"/>
                                                 <autoresizingMask key="autoresizingMask"/>
                                             </scroller>
                                             <scroller key="verticalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="NO" id="3aV-QU-wwI">
                                                 <rect key="frame" x="224" y="17" width="15" height="102"/>
                                                 <autoresizingMask key="autoresizingMask"/>
                                             </scroller>
-                                            <tableHeaderView key="headerView" wantsLayer="YES" id="HCK-Pb-8fP">
-                                                <rect key="frame" x="0.0" y="0.0" width="238" height="28"/>
-                                                <autoresizingMask key="autoresizingMask"/>
-                                            </tableHeaderView>
                                         </scrollView>
                                         <segmentedControl verticalHuggingPriority="750" verticalCompressionResistancePriority="751" translatesAutoresizingMaskIntoConstraints="NO" id="HzZ-UL-arV">
                                             <rect key="frame" x="-3" y="-3" width="54" height="21"/>

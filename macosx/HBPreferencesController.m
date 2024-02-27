@@ -106,9 +106,27 @@ static void *HBPreferencesControllerContext = &HBPreferencesControllerContext;
 {
     if ([extension isEqualToString:_extension] == NO)
     {
-        _extension = extension ? extension : @"";
+        _extension = extension;
         [self.delegate extensionDidChange];
     }
+}
+
+- (BOOL)validateExtension:(id *)ioValue error:(NSError * __autoreleasing *)outError
+{
+    // Return an error is the name is empty
+    if (![*ioValue length])
+    {
+        if (outError)
+        {
+            *outError = [[NSError alloc] initWithDomain:@"HBErrorDomain"
+                                                   code:0
+                                               userInfo:@{NSLocalizedDescriptionKey:@"The file extension cannot be empty.",
+                                                          NSLocalizedRecoverySuggestionErrorKey:@"Please enter a file extension."}];
+        }
+        return NO;
+    }
+
+    return YES;
 }
 
 @end
