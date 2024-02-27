@@ -1,14 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="17506" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="32700.99.1234" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="17506"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="22689"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="HBPresetsViewController">
             <connections>
                 <outlet property="actionsControl" destination="K9F-81-kPO" id="cAi-q4-950"/>
+                <outlet property="headerBottomConstraint" destination="jy6-AG-t3l" id="00N-L2-0U3"/>
+                <outlet property="headerLabel" destination="jCz-Aw-giC" id="Vl8-2g-l9P"/>
                 <outlet property="outlineView" destination="00W-tb-wgY" id="T3u-ix-uIb"/>
                 <outlet property="treeController" destination="ohT-Pp-wBT" id="YGP-sN-dS3"/>
                 <outlet property="view" destination="Hz6-mo-xeY" id="xR8-5v-xDQ"/>
@@ -16,8 +18,8 @@
         </customObject>
         <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
         <customObject id="-3" userLabel="Application" customClass="NSObject"/>
-        <customView misplaced="YES" id="Hz6-mo-xeY">
-            <rect key="frame" x="0.0" y="0.0" width="300" height="328"/>
+        <customView id="Hz6-mo-xeY">
+            <rect key="frame" x="0.0" y="0.0" width="299" height="328"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
             <subviews>
                 <scrollView autohidesScrollers="YES" horizontalLineScroll="16" horizontalPageScroll="10" verticalLineScroll="16" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="uad-bt-uKD">
@@ -52,7 +54,7 @@ Overrides all encode settings. Settings may be further adjusted after selecting 
                                                 <rect key="frame" x="1" y="1" width="282" height="14"/>
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                 <subviews>
-                                                    <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="VdJ-Vk-fzJ">
+                                                    <textField focusRingType="none" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="VdJ-Vk-fzJ">
                                                         <rect key="frame" x="0.0" y="0.0" width="282" height="14"/>
                                                         <textFieldCell key="cell" controlSize="small" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" title="Table View Cell" id="oBC-Nh-TwB">
                                                             <font key="font" metaFont="menu" size="11"/>
@@ -69,7 +71,11 @@ Overrides all encode settings. Settings may be further adjusted after selecting 
                                                                 </dictionary>
                                                             </binding>
                                                             <binding destination="czB-kB-CXf" name="fontBold" keyPath="objectValue.isDefault" id="dvM-HC-sa7"/>
-                                                            <binding destination="czB-kB-CXf" name="value" keyPath="objectValue.name" id="1Ss-se-o7m"/>
+                                                            <binding destination="czB-kB-CXf" name="value" keyPath="objectValue.name" id="qme-QP-wgi">
+                                                                <dictionary key="options">
+                                                                    <bool key="NSValidatesImmediately" value="YES"/>
+                                                                </dictionary>
+                                                            </binding>
                                                             <binding destination="czB-kB-CXf" name="toolTip" keyPath="objectValue.presetDescription" id="DkC-o0-2Nf"/>
                                                         </connections>
                                                     </textField>
@@ -77,7 +83,6 @@ Overrides all encode settings. Settings may be further adjusted after selecting 
                                                 <constraints>
                                                     <constraint firstAttribute="trailing" secondItem="VdJ-Vk-fzJ" secondAttribute="trailing" constant="2" id="8cE-cE-M6l"/>
                                                     <constraint firstItem="VdJ-Vk-fzJ" firstAttribute="centerY" secondItem="czB-kB-CXf" secondAttribute="centerY" id="d3q-z9-Eh5"/>
-                                                    <constraint firstItem="VdJ-Vk-fzJ" firstAttribute="centerX" secondItem="czB-kB-CXf" secondAttribute="centerX" id="g5E-fI-10e"/>
                                                     <constraint firstItem="VdJ-Vk-fzJ" firstAttribute="leading" secondItem="czB-kB-CXf" secondAttribute="leading" constant="2" id="itw-vB-Yk6"/>
                                                 </constraints>
                                                 <connections>
@@ -107,7 +112,7 @@ Overrides all encode settings. Settings may be further adjusted after selecting 
                     </scroller>
                     <accessibility description="Presets"/>
                 </scrollView>
-                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="jCz-Aw-giC">
+                <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="jCz-Aw-giC">
                     <rect key="frame" x="126" y="308" width="47" height="14"/>
                     <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Presets" id="r4V-6L-SO8">
                         <font key="font" metaFont="smallSystemBold"/>
@@ -130,9 +135,6 @@ Overrides all encode settings. Settings may be further adjusted after selecting 
                 </segmentedControl>
                 <popUpButton toolTip="Show additional options." translatesAutoresizingMaskIntoConstraints="NO" id="Ybq-Zt-sta">
                     <rect key="frame" x="76" y="4" width="51" height="25"/>
-                    <constraints>
-                        <constraint firstAttribute="width" constant="44" id="ROP-Ic-SbK"/>
-                    </constraints>
                     <popUpButtonCell key="cell" type="roundTextured" bezelStyle="texturedRounded" imagePosition="only" alignment="center" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" pullsDown="YES" id="2JY-O9-FR6">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="menu"/>
@@ -169,6 +171,9 @@ Overrides all encode settings. Settings may be further adjusted after selecting 
                             </items>
                         </menu>
                     </popUpButtonCell>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="44" id="ROP-Ic-SbK"/>
+                    </constraints>
                     <accessibility description="Additional Options"/>
                 </popUpButton>
             </subviews>
@@ -183,6 +188,7 @@ Overrides all encode settings. Settings may be further adjusted after selecting 
                 <constraint firstItem="jCz-Aw-giC" firstAttribute="top" secondItem="Hz6-mo-xeY" secondAttribute="top" constant="6" id="WCV-tV-CtJ"/>
                 <constraint firstItem="Ybq-Zt-sta" firstAttribute="centerY" secondItem="K9F-81-kPO" secondAttribute="centerY" id="cKG-ER-z11"/>
                 <constraint firstItem="uad-bt-uKD" firstAttribute="top" secondItem="jCz-Aw-giC" secondAttribute="bottom" constant="6" id="jy6-AG-t3l"/>
+                <constraint firstItem="uad-bt-uKD" firstAttribute="top" secondItem="Hz6-mo-xeY" secondAttribute="top" priority="250" constant="8" id="pHI-00-oq1"/>
                 <constraint firstAttribute="bottom" secondItem="K9F-81-kPO" secondAttribute="bottom" constant="8" id="y22-EC-5uA"/>
             </constraints>
             <point key="canvasLocation" x="-15" y="-7"/>
@@ -194,14 +200,15 @@ Overrides all encode settings. Settings may be further adjusted after selecting 
                 <string>isBuiltIn</string>
                 <string>isDefault</string>
             </declaredKeys>
+            <classReference key="objectClass" className="HBPreset"/>
             <connections>
                 <binding destination="-2" name="contentArray" keyPath="presets.root.children" id="A8P-Hb-YE9"/>
             </connections>
         </treeController>
     </objects>
     <resources>
-        <image name="NSActionTemplate" width="15" height="15"/>
-        <image name="NSAddTemplate" width="14" height="13"/>
-        <image name="NSRemoveTemplate" width="14" height="4"/>
+        <image name="NSActionTemplate" width="20" height="20"/>
+        <image name="NSAddTemplate" width="18" height="17"/>
+        <image name="NSRemoveTemplate" width="18" height="5"/>
     </resources>
 </document>

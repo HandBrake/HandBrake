@@ -35,6 +35,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, readwrite) HBPreset *selectedPreset;
 
 @property (nonatomic, readwrite, getter=isEnabled) BOOL enabled;
+@property (nonatomic, readwrite) BOOL showHeader;
 
 @end
 

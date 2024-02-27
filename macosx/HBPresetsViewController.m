@@ -55,8 +55,11 @@ static void *HBPresetsViewControllerContext = &HBPresetsViewControllerContext;
 
 @property (nonatomic, strong) HBPresetsManager *presets;
 @property (nonatomic, readwrite) HBPreset *selectedPresetInternal;
-@property (nonatomic, unsafe_unretained) IBOutlet NSTreeController *treeController;
+@property (nonatomic, weak) IBOutlet NSTreeController *treeController;
 @property (nonatomic, weak) IBOutlet NSSegmentedControl *actionsControl;
+
+@property (nonatomic, strong) IBOutlet NSTextField *headerLabel;
+@property (nonatomic, strong) IBOutlet NSLayoutConstraint *headerBottomConstraint;
 
 /**
  *  Helper var for drag & drop
@@ -84,6 +87,7 @@ static void *HBPresetsViewControllerContext = &HBPresetsViewControllerContext;
         _selectedPresetInternal = presetManager.defaultPreset;
         _expandedNodes = [[NSArray arrayWithArray:[NSUserDefaults.standardUserDefaults
                                                    objectForKey:@"HBPreviewViewExpandedStatus"]] mutableCopy];
+        _showHeader = YES;
     }
     return self;
 }
@@ -99,6 +103,9 @@ static void *HBPresetsViewControllerContext = &HBPresetsViewControllerContext;
 
     // Re-expand the items
     [self expandNodes:self.treeController.arrangedObjects.childNodes];
+
+    // Update header state
+    self.showHeader = _showHeader;
 
     [self.treeController setSelectionIndexPath:[self.presets indexPathOfPreset:self.selectedPreset]];
     [self.treeController addObserver:self forKeyPath:@"selectedObjects" options:NSKeyValueObservingOptionNew context:HBPresetsViewControllerContext];
@@ -311,6 +318,14 @@ static void *HBPresetsViewControllerContext = &HBPresetsViewControllerContext;
 }
 
 #pragma mark - UI Methods
+
+- (void)setShowHeader:(BOOL)showHeader
+{
+    _showHeader = showHeader;
+
+    self.headerLabel.hidden = !showHeader;
+    self.headerBottomConstraint.active = showHeader;
+}
 
 - (IBAction)clicked:(id)sender
 {
