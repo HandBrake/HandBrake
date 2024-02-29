@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="13770" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="32700.99.1234" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="13770"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="22689"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -13,32 +13,33 @@
         </customObject>
         <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
         <customObject id="-3" userLabel="Application" customClass="NSObject"/>
-        <window title="Internal Error" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" oneShot="NO" animationBehavior="default" id="1">
+        <window title="Internal Error" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" animationBehavior="default" id="1">
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
             <rect key="contentRect" x="196" y="127" width="636" height="383"/>
-            <rect key="screenRect" x="0.0" y="0.0" width="2560" height="1417"/>
+            <rect key="screenRect" x="0.0" y="0.0" width="1920" height="1055"/>
             <value key="minSize" type="size" width="636" height="383"/>
             <view key="contentView" id="2">
                 <rect key="frame" x="0.0" y="0.0" width="636" height="383"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <imageView id="3">
+                    <imageView translatesAutoresizingMaskIntoConstraints="NO" id="3">
                         <rect key="frame" x="20" y="302" width="70" height="61"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="61" id="3sH-Fv-skE"/>
+                            <constraint firstAttribute="width" constant="70" id="nIV-8v-Xwy"/>
+                        </constraints>
                         <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="NSApplicationIcon" id="4"/>
                     </imageView>
-                    <textField verticalHuggingPriority="750" id="9">
-                        <rect key="frame" x="95" y="323" width="524" height="40"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                    <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="9">
+                        <rect key="frame" x="95" y="331" width="524" height="32"/>
                         <textFieldCell key="cell" sendsActionOnEndEditing="YES" title="An internal error has occurred. You can choose to continue in an unstable state, or crash." id="10">
                             <font key="font" metaFont="systemBold"/>
                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                     </textField>
-                    <textField verticalHuggingPriority="750" id="11">
-                        <rect key="frame" x="95" y="282" width="339" height="41"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMinY="YES"/>
+                    <textField horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="11">
+                        <rect key="frame" x="95" y="309" width="523" height="14"/>
                         <textFieldCell key="cell" selectable="YES" sendsActionOnEndEditing="YES" title="Reason contents go here." id="12">
                             <font key="font" metaFont="smallSystem"/>
                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -52,23 +53,8 @@
                             </binding>
                         </connections>
                     </textField>
-                    <button verticalHuggingPriority="750" id="13">
-                        <rect key="frame" x="418" y="12" width="96" height="32"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
-                        <buttonCell key="cell" type="push" title="Crash" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="14">
-                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                            <font key="font" metaFont="system"/>
-                            <string key="keyEquivalent" base64-UTF8="YES">
-Gw
-</string>
-                        </buttonCell>
-                        <connections>
-                            <action selector="btnCrashClicked:" target="-2" id="24"/>
-                        </connections>
-                    </button>
-                    <button verticalHuggingPriority="750" id="15">
-                        <rect key="frame" x="526" y="12" width="97" height="32"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
+                    <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="15">
+                        <rect key="frame" x="534" y="12" width="89" height="32"/>
                         <buttonCell key="cell" type="push" title="Continue" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="16">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                             <font key="font" metaFont="system"/>
@@ -80,18 +66,18 @@ DQ
                             <action selector="btnContinueClicked:" target="-2" id="23"/>
                         </connections>
                     </button>
-                    <scrollView horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" id="19">
-                        <rect key="frame" x="20" y="60" width="596" height="206"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <clipView key="contentView" id="RBQ-rK-0Rs">
-                            <rect key="frame" x="1" y="1" width="594" height="204"/>
+                    <scrollView horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="19">
+                        <rect key="frame" x="20" y="60" width="596" height="233"/>
+                        <clipView key="contentView" drawsBackground="NO" id="RBQ-rK-0Rs">
+                            <rect key="frame" x="1" y="1" width="594" height="231"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
                                 <textView importsGraphics="NO" verticallyResizable="YES" usesFontPanel="YES" findStyle="panel" continuousSpellChecking="YES" allowsUndo="YES" usesRuler="YES" allowsNonContiguousLayout="YES" spellingCorrection="YES" smartInsertDelete="YES" id="22">
-                                    <rect key="frame" x="0.0" y="0.0" width="594" height="204"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="594" height="231"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                    <size key="minSize" width="594" height="204"/>
+                                    <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                    <size key="minSize" width="594" height="231"/>
                                     <size key="maxSize" width="759" height="10000000"/>
                                     <color key="insertionPointColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                     <connections>
@@ -99,26 +85,57 @@ DQ
                                     </connections>
                                 </textView>
                             </subviews>
-                            <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         </clipView>
-                        <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="YES" id="21">
+                        <scroller key="horizontalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="YES" id="21">
                             <rect key="frame" x="-100" y="-100" width="87" height="18"/>
                             <autoresizingMask key="autoresizingMask"/>
                         </scroller>
-                        <scroller key="verticalScroller" verticalHuggingPriority="750" doubleValue="1" horizontal="NO" id="20">
-                            <rect key="frame" x="579" y="1" width="16" height="204"/>
+                        <scroller key="verticalScroller" wantsLayer="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="NO" id="20">
+                            <rect key="frame" x="579" y="1" width="16" height="231"/>
                             <autoresizingMask key="autoresizingMask"/>
                         </scroller>
                     </scrollView>
+                    <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="13">
+                        <rect key="frame" x="466" y="12" width="70" height="32"/>
+                        <buttonCell key="cell" type="push" title="Crash" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="14">
+                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                            <font key="font" metaFont="system"/>
+                            <string key="keyEquivalent" base64-UTF8="YES">
+Gw
+</string>
+                        </buttonCell>
+                        <connections>
+                            <action selector="btnCrashClicked:" target="-2" id="24"/>
+                        </connections>
+                    </button>
                 </subviews>
+                <constraints>
+                    <constraint firstItem="15" firstAttribute="leading" secondItem="13" secondAttribute="trailing" constant="12" symbolic="YES" id="2MM-hY-Ogw"/>
+                    <constraint firstItem="3" firstAttribute="leading" secondItem="2" secondAttribute="leading" constant="20" symbolic="YES" id="85T-sZ-jbC"/>
+                    <constraint firstAttribute="trailing" secondItem="9" secondAttribute="trailing" constant="19" id="BwN-GQ-utd"/>
+                    <constraint firstItem="19" firstAttribute="top" secondItem="11" secondAttribute="bottom" constant="16" id="Cf5-Gi-Na1"/>
+                    <constraint firstItem="3" firstAttribute="top" secondItem="2" secondAttribute="top" constant="20" symbolic="YES" id="QKp-lA-vaj"/>
+                    <constraint firstItem="9" firstAttribute="top" secondItem="2" secondAttribute="top" constant="20" symbolic="YES" id="RHg-dH-co7"/>
+                    <constraint firstItem="13" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="2" secondAttribute="leading" constant="20" symbolic="YES" id="RRn-8M-HJA"/>
+                    <constraint firstItem="19" firstAttribute="leading" secondItem="2" secondAttribute="leading" constant="20" symbolic="YES" id="TB9-X7-3zE"/>
+                    <constraint firstItem="15" firstAttribute="top" secondItem="19" secondAttribute="bottom" constant="21" id="Tn8-iG-7il"/>
+                    <constraint firstAttribute="trailing" secondItem="15" secondAttribute="trailing" constant="20" symbolic="YES" id="U6H-8T-hTf"/>
+                    <constraint firstAttribute="bottom" secondItem="15" secondAttribute="bottom" constant="19" id="Yo3-am-Jnl"/>
+                    <constraint firstAttribute="trailing" secondItem="19" secondAttribute="trailing" constant="20" symbolic="YES" id="bed-M3-WmD"/>
+                    <constraint firstAttribute="trailing" secondItem="11" secondAttribute="trailing" constant="20" symbolic="YES" id="lec-R7-210"/>
+                    <constraint firstItem="11" firstAttribute="top" secondItem="9" secondAttribute="bottom" constant="8" symbolic="YES" id="nim-Og-daU"/>
+                    <constraint firstItem="13" firstAttribute="firstBaseline" secondItem="15" secondAttribute="firstBaseline" id="qAe-Qp-2n9"/>
+                    <constraint firstItem="9" firstAttribute="leading" secondItem="3" secondAttribute="trailing" constant="7" id="t4J-t9-eAN"/>
+                    <constraint firstItem="11" firstAttribute="leading" secondItem="3" secondAttribute="trailing" constant="7" id="v1d-Tt-TUX"/>
+                </constraints>
             </view>
             <connections>
                 <outlet property="initialFirstResponder" destination="13" id="29"/>
             </connections>
-            <point key="canvasLocation" x="256" y="550.5"/>
+            <point key="canvasLocation" x="25" y="401.5"/>
         </window>
     </objects>
     <resources>
-        <image name="NSApplicationIcon" width="128" height="128"/>
+        <image name="NSApplicationIcon" width="32" height="32"/>
     </resources>
 </document>
