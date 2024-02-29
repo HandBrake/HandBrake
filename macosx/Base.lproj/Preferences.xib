@@ -482,7 +482,7 @@
                                                         </binding>
                                                     </connections>
                                                 </textField>
-                                                <button verticalHuggingPriority="750" verticalCompressionResistancePriority="751" translatesAutoresizingMaskIntoConstraints="NO" id="tPd-Py-Zin">
+                                                <button verticalHuggingPriority="750" verticalCompressionResistancePriority="1000" translatesAutoresizingMaskIntoConstraints="NO" id="tPd-Py-Zin">
                                                     <rect key="frame" x="117" y="-7" width="76" height="25"/>
                                                     <buttonCell key="cell" type="push" title="Browse…" bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="zot-Bx-Ch3">
                                                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
