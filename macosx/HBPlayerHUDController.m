@@ -10,8 +10,11 @@
 @interface HBPlayerHUDController ()
 
 @property (nonatomic, weak) IBOutlet NSButton *playButton;
+@property (nonatomic, weak) IBOutlet NSButton *beginButton;
+@property (nonatomic, weak) IBOutlet NSButton *endButton;
 @property (nonatomic, weak) IBOutlet NSSlider *slider;
 
+@property (nonatomic, weak) IBOutlet NSButton *volumeButton;
 @property (nonatomic, weak) IBOutlet NSSlider *volumeSlider;
 
 @property (nonatomic, weak) IBOutlet NSTextField *currentTimeLabel;
@@ -79,6 +82,22 @@
         self.player.volume = self.volumeSlider.floatValue;
 
         [self.player play];
+    }
+}
+
+- (void)viewDidLoad
+{
+    if (@available(macOS 11, *))
+    {
+        self.playButton.imageScaling = NSImageScaleProportionallyUpOrDown;
+
+        self.beginButton.imageScaling = NSImageScaleProportionallyUpOrDown;
+        self.beginButton.image = [NSImage imageWithSystemSymbolName:@"backward.end.alt.fill" accessibilityDescription:nil];
+
+        self.endButton.image = [NSImage imageWithSystemSymbolName:@"forward.end.alt.fill" accessibilityDescription:nil];
+        self.endButton.imageScaling = NSImageScaleProportionallyUpOrDown;
+
+        self.volumeButton.image = [NSImage imageWithSystemSymbolName:@"speaker.wave.3.fill" accessibilityDescription:nil];
     }
 }
 
@@ -210,11 +229,25 @@
     BOOL playing = self.player.rate != 0.0;
     if (playing)
     {
-        self.playButton.image = [NSImage imageNamed:@"PauseTemplate"];
+        if (@available(macOS 11, *))
+        {
+            self.playButton.image = [NSImage imageWithSystemSymbolName:@"pause.fill" accessibilityDescription:nil];
+        }
+        else
+        {
+            self.playButton.image = [NSImage imageNamed:@"PauseTemplate"];
+        }
     }
     else
     {
-        self.playButton.image = [NSImage imageNamed:@"PlayTemplate"];
+        if (@available(macOS 11, *))
+        {
+            self.playButton.image = [NSImage imageWithSystemSymbolName:@"play.fill" accessibilityDescription:nil];
+        }
+        else
+        {
+            self.playButton.image = [NSImage imageNamed:@"PlayTemplate"];
+        }
     }
 
     [self _touchBar_updatePlayState:playing];
@@ -260,13 +293,54 @@
 
 - (IBAction)mute:(id)sender
 {
-    self.volumeSlider.doubleValue = 0;
-    self.player.volume = 0;
+    if (self.volumeSlider.doubleValue == 0)
+    {
+        self.volumeSlider.doubleValue = 1;
+        self.player.volume = 1;
+    }
+    else
+    {
+        self.volumeSlider.doubleValue = 0;
+        self.player.volume = 0;
+    }
+    [self volumeSliderChanged:self.volumeSlider];
 }
 
 - (IBAction)volumeSliderChanged:(NSSlider *)sender
 {
-    self.player.volume = sender.floatValue;
+    float value = sender.floatValue;
+    self.player.volume = value;
+
+    if (@available(macOS 11, *))
+    {
+        if (value == 0)
+        {
+            self.volumeButton.image = [NSImage imageWithSystemSymbolName:@"speaker.slash.fill" accessibilityDescription:nil];
+        }
+        else if (value > 0 && value <= 0.33)
+        {
+            self.volumeButton.image = [NSImage imageWithSystemSymbolName:@"speaker.wave.1.fill" accessibilityDescription:nil];
+        }
+        else if (value > 0.33 && value <= 0.66)
+        {
+            self.volumeButton.image = [NSImage imageWithSystemSymbolName:@"speaker.wave.2.fill" accessibilityDescription:nil];
+        }
+        else if (value > 0.66)
+        {
+            self.volumeButton.image = [NSImage imageWithSystemSymbolName:@"speaker.wave.3.fill" accessibilityDescription:nil];
+        }
+    }
+    else
+    {
+        if (value == 0)
+        {
+            self.volumeButton.image = [NSImage imageNamed:@"volLowTemplate"];
+        }
+        else
+        {
+            self.volumeButton.image = [NSImage imageNamed:@"volHighTemplate"];
+        }
+    }
 }
 
 #pragma mark - Keyboard and mouse wheel control
