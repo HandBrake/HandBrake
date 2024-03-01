@@ -545,7 +545,11 @@ namespace HandBrakeWPF.ViewModels
             {
                 try
                 {
-                    Process.Start(this.SelectedTask.Task.Destination);
+                    Process p = new()
+                                {
+                                    StartInfo = new(this.SelectedTask.Task.Destination) { UseShellExecute = true }
+                                };
+                    p.Start();
                 }
                 catch (Win32Exception exc)
                 {
