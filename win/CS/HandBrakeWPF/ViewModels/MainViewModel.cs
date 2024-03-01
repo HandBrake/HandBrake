@@ -1870,10 +1870,7 @@ namespace HandBrakeWPF.ViewModels
 
                     if (this.userSettingService.GetUserSetting<bool>(UserSettingConstants.AutoNaming) && this.userSettingService.GetUserSetting<string>(UserSettingConstants.AutoNameFormat) != null)
                     {
-                        if (this.userSettingService.GetUserSetting<string>(UserSettingConstants.AutoNameFormat).Contains(Constants.Preset))
-                        {
-                            this.Destination = AutoNameHelper.AutoName(this.CurrentTask, this.SelectedTitle?.DisplaySourceName, this.SelectedTitle?.DisplaySourceName, this.selectedPreset);
-                        }
+                        this.ReGenerateAutoName();
                     }
 
                     return true;
