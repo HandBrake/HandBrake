@@ -209,18 +209,18 @@
 
                     <ListBox.ContextMenu>
                         <ContextMenu Opened="ContextMenu_OnOpened">
-                            <MenuItem Header="{x:Static Properties:Resources.QueueView_PlayMediaFile}" Command="{Binding RelayCommand}" CommandParameter="PlayFile" />
+                            <MenuItem Header="{x:Static Properties:Resources.QueueView_PlayMediaFile}" Command="{Binding RelayCommand}" CommandParameter="PlayFile" InputGestureText="Ctrl + P" />
                             <Separator />
-                            <MenuItem Header="{x:Static Properties:Resources.QueueView_MoveToTop}" x:Name="moveToTopMenuItem" Command="{Binding RelayCommand}" CommandParameter="MoveToTop" />
-                            <MenuItem Header="{x:Static Properties:Resources.QueueView_MoveToBottom}" x:Name="moveToBottomMenuItem" Command="{Binding RelayCommand}" CommandParameter="MoveToBottom" />
+                            <MenuItem Header="{x:Static Properties:Resources.QueueView_MoveToTop}" x:Name="moveToTopMenuItem" Command="{Binding RelayCommand}" CommandParameter="MoveToTop" InputGestureText="Ctrl + Up"  />
+                            <MenuItem Header="{x:Static Properties:Resources.QueueView_MoveToBottom}" x:Name="moveToBottomMenuItem" Command="{Binding RelayCommand}" CommandParameter="MoveToBottom" InputGestureText="Ctrl + Down"  />
                             <Separator />
-                            <MenuItem Header="{x:Static Properties:Resources.QueueView_Reset}" x:Name="ResetMenuItem" Click="QueueItem_Retry" />
-                            <MenuItem Header="{x:Static Properties:Resources.QueueView_Delete}" x:Name="DeleteMenuItem" Click="QueueItem_Delete" />
+                            <MenuItem Header="{x:Static Properties:Resources.QueueView_Reset}" x:Name="ResetMenuItem" Click="QueueItem_Retry"  InputGestureText="Ctrl + F5"/>
+                            <MenuItem Header="{x:Static Properties:Resources.QueueView_Delete}" x:Name="DeleteMenuItem" Click="QueueItem_Delete" InputGestureText="Del" />
                             <Separator />
-                            <MenuItem Header="{x:Static Properties:Resources.QueueView_Edit}" x:Name="EditMenuItem" Click="QueueItem_Edit" />
+                            <MenuItem Header="{x:Static Properties:Resources.QueueView_Edit}" x:Name="EditMenuItem" Click="QueueItem_Edit" InputGestureText="Ctrl +E" />
                             <Separator />
-                            <MenuItem Header="{x:Static Properties:Resources.QueueView_OpenSourceDir}" x:Name="openSourceDir" Click="OpenSourceDir_OnClick" />
-                            <MenuItem Header="{x:Static Properties:Resources.QueueView_OpenDestDir}" x:Name="openDestDir" Click="OpenDestDir_OnClick" />
+                            <MenuItem Header="{x:Static Properties:Resources.QueueView_OpenSourceDir}" x:Name="openSourceDir" Click="OpenSourceDir_OnClick" InputGestureText="Ctrl + I" />
+                            <MenuItem Header="{x:Static Properties:Resources.QueueView_OpenDestDir}" x:Name="openDestDir" Click="OpenDestDir_OnClick" InputGestureText="Ctrl + D" />
 
                         </ContextMenu>
                     </ListBox.ContextMenu>

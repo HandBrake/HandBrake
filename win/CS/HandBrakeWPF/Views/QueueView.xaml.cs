@@ -28,6 +28,15 @@ namespace HandBrakeWPF.Views
             this.SizeChanged += this.QueueView_SizeChanged;
 
             this.InputBindings.Add(new InputBinding(new CloseWindowCommand(this), new KeyGesture(Key.W, ModifierKeys.Control))); // Close Window
+
+            this.InputBindings.Add(new InputBinding(new ProcessQueueShortcutCommand(new KeyGesture(Key.P, ModifierKeys.Control)), new KeyGesture(Key.P, ModifierKeys.Control))); // Play File
+            this.InputBindings.Add(new InputBinding(new ProcessQueueShortcutCommand(new KeyGesture(Key.I, ModifierKeys.Control)), new KeyGesture(Key.I, ModifierKeys.Control))); // Source Dir
+            this.InputBindings.Add(new InputBinding(new ProcessQueueShortcutCommand(new KeyGesture(Key.D, ModifierKeys.Control)), new KeyGesture(Key.D, ModifierKeys.Control))); // Destination Dir
+            this.InputBindings.Add(new InputBinding(new ProcessQueueShortcutCommand(new KeyGesture(Key.E, ModifierKeys.Control)), new KeyGesture(Key.E, ModifierKeys.Control))); // Edit Job
+            this.InputBindings.Add(new InputBinding(new ProcessQueueShortcutCommand(new KeyGesture(Key.R, ModifierKeys.Control)), new KeyGesture(Key.R, ModifierKeys.Control))); // Refresh
+            this.InputBindings.Add(new InputBinding(new ProcessQueueShortcutCommand(new KeyGesture(Key.T, ModifierKeys.Control)), new KeyGesture(Key.T, ModifierKeys.Control))); // Move Up to Top
+            this.InputBindings.Add(new InputBinding(new ProcessQueueShortcutCommand(new KeyGesture(Key.B, ModifierKeys.Control)), new KeyGesture(Key.B, ModifierKeys.Control))); // Move to Bottom
+
         }
 
         protected override void OnSourceInitialized(EventArgs e)
