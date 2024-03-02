@@ -343,9 +343,13 @@ static BOOL _hardwareDecoderSupported = NO;
     }
     else if ([itemIdentifier isEqualToString:TOOLBAR_QUEUE])
     {
-        if (@available (macOS 11, *))
+        if (@available (macOS 13, *))
         {
             image = [NSImage imageWithSystemSymbolName:@"photo.stack" accessibilityDescription:@"Queue preferences"];
+        }
+        else if (@available (macOS 11, *))
+        {
+            image = [NSImage imageNamed:@"photo.stack"];
         }
         else
         {

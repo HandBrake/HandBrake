@@ -7,10 +7,11 @@
 #import "HBController.h"
 #import "HBAppDelegate.h"
 #import "HBFocusRingView.h"
-#import "HBToolbarBadgedItem.h"
+#import "HBControllerToolbarDelegate.h"
 #import "HBQueueController.h"
 #import "HBTitleSelectionController.h"
 #import "NSWindow+HBAdditions.h"
+#import "NSToolbar+HBAdditions.h"
 
 #import "HBQueue.h"
 #import "HBQueueWorker.h"
@@ -125,12 +126,7 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
 
 #pragma mark - Toolbar
 
-@property (nonatomic) IBOutlet NSToolbarItem *openSourceToolbarItem;
-@property (nonatomic) IBOutlet NSToolbarItem *ripToolbarItem;
-@property (nonatomic) IBOutlet NSToolbarItem *pauseToolbarItem;
-@property (nonatomic) IBOutlet NSToolbarItem *presetsItem;
-
-@property (nonatomic, weak) IBOutlet HBToolbarBadgedItem *showQueueToolbarItem;
+@property (nonatomic) HBControllerToolbarDelegate *toolbarDelegate;
 
 @end
 
@@ -196,6 +192,15 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
     {
         self.window.toolbarStyle = NSWindowToolbarStyleExpanded;
     }
+
+    self.toolbarDelegate = [[HBControllerToolbarDelegate alloc] init];
+
+    NSToolbar *toolbar = [[NSToolbar alloc] initWithIdentifier:@"HBMainWindowToolbar2"];
+    toolbar.delegate = self.toolbarDelegate;
+    toolbar.allowsUserCustomization = YES;
+    toolbar.autosavesConfiguration = YES;
+    toolbar.displayMode = NSToolbarDisplayModeIconAndLabel;
+    self.window.toolbar = toolbar;
 
     [self enableUI:NO];
 
@@ -341,7 +346,7 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
     if (context == HBControllerScanCoreContext)
     {
         HBState state = [change[NSKeyValueChangeNewKey] intValue];
-        [self updateToolbarButtonsStateForScanCore:state];
+        [self.toolbarDelegate updateToolbarButtonsStateForScanCore:state toolbar:self.window.toolbar];
         [self _touchBar_updateButtonsStateForScanCore:state];
         [self _touchBar_validateUserInterfaceItems];
     }
@@ -357,59 +362,14 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
 
 - (void)updateQueueUI
 {
-    [self updateToolbarButtonsState];
+    [self.toolbarDelegate updateToolbarButtonsState:self.queue toolbar:self.window.toolbar];
     [self.window.toolbar validateVisibleItems];
 
     [self _touchBar_updateQueueButtonsState];
     [self _touchBar_validateUserInterfaceItems];
 
     NSUInteger count = self.queue.pendingItemsCount;
-    self.showQueueToolbarItem.badgeValue = count ? @(count).stringValue : @"";
-}
-
-- (void)updateToolbarButtonsStateForScanCore:(HBState)state
-{
-    if (state == HBStateIdle)
-    {
-        _openSourceToolbarItem.image = [NSImage imageNamed: @"source"];
-        _openSourceToolbarItem.label = NSLocalizedString(@"Open Source",  @"Toolbar Open/Cancel Item");
-        _openSourceToolbarItem.toolTip = NSLocalizedString(@"Open Source", @"Toolbar Open/Cancel Item");
-    }
-    else
-    {
-        _openSourceToolbarItem.image = [NSImage imageNamed: @"stopencode"];
-        _openSourceToolbarItem.label = NSLocalizedString(@"Cancel Scan", @"Toolbar Open/Cancel Item");
-        _openSourceToolbarItem.toolTip = NSLocalizedString(@"Cancel Scanning Source", @"Toolbar Open/Cancel Item");
-    }
-}
-
-- (void)updateToolbarButtonsState
-{
-    if (self.queue.canResume)
-    {
-        _pauseToolbarItem.image = [NSImage imageNamed: @"encode"];
-        _pauseToolbarItem.label = NSLocalizedString(@"Resume", @"Toolbar Pause Item");
-        _pauseToolbarItem.toolTip = NSLocalizedString(@"Resume Encoding", @"Toolbar Pause Item");
-    }
-    else
-    {
-        _pauseToolbarItem.image = [NSImage imageNamed:@"pauseencode"];
-        _pauseToolbarItem.label = NSLocalizedString(@"Pause", @"Toolbar Pause Item");
-        _pauseToolbarItem.toolTip = NSLocalizedString(@"Pause Encoding", @"Toolbar Pause Item");
-
-    }
-    if (self.queue.isEncoding)
-    {
-        _ripToolbarItem.image = [NSImage imageNamed:@"stopencode"];
-        _ripToolbarItem.label = NSLocalizedString(@"Stop", @"Toolbar Start/Stop Item");
-        _ripToolbarItem.toolTip = NSLocalizedString(@"Stop Encoding", @"Toolbar Start/Stop Item");
-    }
-    else
-    {
-        _ripToolbarItem.image = [NSImage imageNamed: @"encode"];
-        _ripToolbarItem.label = _queue.pendingItemsCount > 0 ? NSLocalizedString(@"Start Queue", @"Toolbar Start/Stop Item") :  NSLocalizedString(@"Start", @"Toolbar Start/Stop Item");
-        _ripToolbarItem.toolTip = NSLocalizedString(@"Start Encoding", @"Toolbar Start/Stop Item");
-    }
+    [self.toolbarDelegate updateToolbarQueueBadge:count ? @(count).stringValue : @"" toolbar:self.window.toolbar];
 }
 
 - (void)enableUI:(BOOL)enabled
@@ -550,7 +510,8 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
         }
     }
 
-    if (action == @selector(togglePauseResume:)) {
+    if (action == @selector(togglePauseResume:))
+    {
         return self.queue.canPause || self.queue.canResume;
     }
 
@@ -1497,25 +1458,50 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
 
 - (BOOL)popoverShouldDetach:(NSPopover *)popover
 {
-    if (popover == self.presetsPopover) {
+    if (popover == self.presetsPopover)
+    {
         return YES;
     }
 
     return NO;
 }
 
+- (void)popoverDidDetach:(NSPopover *)popover
+{
+    if (popover == self.presetsPopover)
+    {
+        self.presetView.showHeader = YES;
+    }
+}
+
 - (IBAction)togglePresets:(id)sender
 {
-    if (self.presetsPopover)
+    NSToolbarItem *presetsToolbarItem = [self.window.toolbar HB_visibleToolbarItemWithIdentifier:TOOLBAR_PRESET];
+
+    if (self.presetsPopover.isShown)
     {
-        if (!self.presetsPopover.isShown)
+        [self.presetsPopover close];
+    }
+    else
+    {
+        NSView *target = presetsToolbarItem.view.window ? presetsToolbarItem.view : self.window.contentView;
+        if (self.window.toolbar.visible && presetsToolbarItem)
         {
-            NSView *target = [sender isKindOfClass:[NSView class]] ? (NSView *)sender : self.presetsItem.view.window ? self.presetsItem.view : self.window.contentView;
-            [self.presetsPopover showRelativeToRect:target.bounds ofView:target preferredEdge:NSMaxYEdge];
+#ifdef MAC_OS_VERSION_14_0
+            if (@available (macOS 14, *))
+            {
+                [self.presetsPopover showRelativeToToolbarItem:presetsToolbarItem];
+                self.presetView.showHeader = NO;
+            }
+            else
+#endif
+            {
+                [self.presetsPopover showRelativeToRect:target.bounds ofView:target preferredEdge:NSMaxYEdge];
+            }
         }
         else
         {
-            [self.presetsPopover close];
+            [self.presetsPopover showRelativeToRect:target.bounds ofView:target preferredEdge:NSMaxYEdge];
         }
     }
 }

@@ -15,6 +15,8 @@
 #import "HBQueueInfoViewController.h"
 #import "HBQueueMultiSelectionViewController.h"
 
+#import "HBQueueToolbarDelegate.h"
+
 #import "HBPreferencesKeys.h"
 #import "NSArray+HBAdditions.h"
 
@@ -32,6 +34,8 @@
 /// Whether the window is visible or occluded,
 /// useful to avoid updating the UI needlessly
 @property (nonatomic) BOOL visible;
+
+@property (nonatomic) HBQueueToolbarDelegate *toolbarDelegate;
 
 @property (nonatomic) IBOutlet NSToolbarItem *ripToolbarItem;
 @property (nonatomic) IBOutlet NSToolbarItem *pauseToolbarItem;
@@ -100,6 +104,16 @@
         self.window.titlebarSeparatorStyle = NSTitlebarSeparatorStyleLine;
     }
 
+    // Set up toolbar
+    self.toolbarDelegate = [[HBQueueToolbarDelegate alloc] init];
+
+    NSToolbar *toolbar = [[NSToolbar alloc] initWithIdentifier:@"HBQueueWindowToolbar2"];
+    toolbar.delegate = self.toolbarDelegate;
+    toolbar.allowsUserCustomization = YES;
+    toolbar.autosavesConfiguration = YES;
+    toolbar.displayMode = NSToolbarDisplayModeIconAndLabel;
+    self.window.toolbar = toolbar;
+
     // Set up the child view controllers
     _splitViewController = [[NSSplitViewController alloc] init];
     _splitViewController.view.wantsLayer = YES;
@@ -140,7 +154,7 @@
 
 - (void)updateUI
 {
-    [self updateToolbarButtonsState];
+    [self.toolbarDelegate updateToolbarButtonsState:self.queue toolbar:self.window.toolbar];
     [self.window.toolbar validateVisibleItems];
 
     [self _touchBar_updateButtonsState];
@@ -176,35 +190,6 @@
 }
 
 #pragma mark Toolbar
-
-- (void)updateToolbarButtonsState
-{
-    if (self.queue.canResume)
-    {
-        _pauseToolbarItem.image = [NSImage imageNamed: @"encode"];
-        _pauseToolbarItem.label = NSLocalizedString(@"Resume", @"Toolbar Pause Item");
-        _pauseToolbarItem.toolTip = NSLocalizedString(@"Resume Encoding", @"Toolbar Pause Item");
-    }
-    else
-    {
-        _pauseToolbarItem.image = [NSImage imageNamed:@"pauseencode"];
-        _pauseToolbarItem.label = NSLocalizedString(@"Pause", @"Toolbar Pause Item");
-        _pauseToolbarItem.toolTip = NSLocalizedString(@"Pause Encoding", @"Toolbar Pause Item");
-
-    }
-    if (self.queue.isEncoding)
-    {
-        _ripToolbarItem.image = [NSImage imageNamed:@"stopencode"];
-        _ripToolbarItem.label = NSLocalizedString(@"Stop", @"Toolbar Start/Stop Item");
-        _ripToolbarItem.toolTip = NSLocalizedString(@"Stop Encoding", @"Toolbar Start/Stop Item");
-    }
-    else
-    {
-        _ripToolbarItem.image = [NSImage imageNamed: @"encode"];
-        _ripToolbarItem.label = NSLocalizedString(@"Start", @"Toolbar Start/Stop Item");
-        _pauseToolbarItem.toolTip = NSLocalizedString(@"Start Encoding", @"Toolbar Start/Stop Item");
-    }
-}
 
 - (BOOL)validateMenuItem:(NSMenuItem *)menuItem
 {
@@ -268,13 +253,18 @@
         return self.queue.canPause || self.queue.canResume;
     }
 
+    if (action == @selector(toggleDetails:) ||
+        action == @selector(toggleQuickLook:))
+    {
+        return YES;
+    }
+
     return NO;
 }
 
 - (BOOL)validateToolbarItem:(NSToolbarItem *)theItem
 {
-    SEL action = theItem.action;
-    return [self validateUserIterfaceItemForAction:action];
+    return [self validateUserIterfaceItemForAction:theItem.action];
 }
 
 - (void)windowDidChangeOcclusionState:(NSNotification *)notification
@@ -660,13 +650,13 @@ NSString * const HBQueueItemNotificationPathKey = @"HBQueueItemNotificationPathK
     [alert addButtonWithTitle:NSLocalizedString(@"Skip Current Job", @"Queue Alert -> cancel rip second button")];
     if (@available(macOS 11, *))
     {
-        alert.buttons.lastObject.hasDestructiveAction = true;
+        alert.buttons.lastObject.hasDestructiveAction = YES;
     }
     [alert addButtonWithTitle:NSLocalizedString(@"Stop After Current Job", @"Queue Alert -> cancel rip third button")];
     [alert addButtonWithTitle:NSLocalizedString(@"Stop All", @"Queue Alert -> cancel rip fourth button")];
     if (@available(macOS 11, *))
     {
-        alert.buttons.lastObject.hasDestructiveAction = true;
+        alert.buttons.lastObject.hasDestructiveAction = YES;
     }
     [alert setAlertStyle:NSAlertStyleCritical];
 

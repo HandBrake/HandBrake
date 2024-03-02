@@ -209,13 +209,15 @@
 		A93341F0243E15BE003A82C2 /* HandBrakeXPCService4.xpc in Copy Files */ = {isa = PBXBuildFile; fileRef = A93341E6243E158E003A82C2 /* HandBrakeXPCService4.xpc */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		A93341F1243E15CE003A82C2 /* HandBrakeXPCService.xpc in Copy Files */ = {isa = PBXBuildFile; fileRef = A964D39522FDE8EE00DFCAEA /* HandBrakeXPCService.xpc */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		A939DD8B1FC8826A00135F2A /* HBPresetsMenuBuilder.m in Sources */ = {isa = PBXBuildFile; fileRef = A939DD8A1FC8826A00135F2A /* HBPresetsMenuBuilder.m */; };
-		A93B49221DA3AA6900DD70A3 /* HBToolbarBadgedItem.m in Sources */ = {isa = PBXBuildFile; fileRef = A93B49211DA3AA6900DD70A3 /* HBToolbarBadgedItem.m */; };
 		A93E0ED31972957000FD67FB /* HBVideoController.m in Sources */ = {isa = PBXBuildFile; fileRef = A93E0ED11972957000FD67FB /* HBVideoController.m */; };
 		A942B66D250BB1FE00049203 /* HBQueueActionItem.m in Sources */ = {isa = PBXBuildFile; fileRef = A942B66C250BB1FE00049203 /* HBQueueActionItem.m */; };
 		A943874122ED911B005F701B /* HBJob+HBAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = A943874022ED911B005F701B /* HBJob+HBAdditions.m */; };
 		A94A98F51C858EFB004BA9BA /* HBDictTests.m in Sources */ = {isa = PBXBuildFile; fileRef = A94A98F41C858EFB004BA9BA /* HBDictTests.m */; };
 		A94DC2DE20CADA2C00EAC8FD /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = A94DC2DC20CADA2C00EAC8FD /* MainWindow.xib */; };
 		A95121E61B5F7BE700FD773D /* NSArray+HBAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = A95121E51B5F7BE700FD773D /* NSArray+HBAdditions.m */; };
+		A95140932B8F6B1600B446C1 /* HBToolbarItem.m in Sources */ = {isa = PBXBuildFile; fileRef = A95140922B8F6B1600B446C1 /* HBToolbarItem.m */; };
+		A95140962B8F71E800B446C1 /* HBSegmentedControl.m in Sources */ = {isa = PBXBuildFile; fileRef = A95140952B8F71E800B446C1 /* HBSegmentedControl.m */; };
+		A95140992B8F7BD100B446C1 /* HBQueueToolbarDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = A95140982B8F7BD100B446C1 /* HBQueueToolbarDelegate.m */; };
 		A951D9CA243E5B50002579F2 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = A919992A23003CFC0037F526 /* Localizable.strings */; };
 		A954010022FF240E00F83A5F /* HBOutputRedirect.m in Sources */ = {isa = PBXBuildFile; fileRef = 273F209E14ADBE670021BE6D /* HBOutputRedirect.m */; };
 		A954010322FF397000F83A5F /* HBRedirect.m in Sources */ = {isa = PBXBuildFile; fileRef = A954010222FF397000F83A5F /* HBRedirect.m */; };
@@ -234,6 +236,7 @@
 		A96664B01CCE45BF00DA4A57 /* HBPlayerHUDController.m in Sources */ = {isa = PBXBuildFile; fileRef = A96664AE1CCE45BF00DA4A57 /* HBPlayerHUDController.m */; };
 		A96664B51CCE48F700DA4A57 /* HBPictureHUDController.m in Sources */ = {isa = PBXBuildFile; fileRef = A96664B31CCE48F700DA4A57 /* HBPictureHUDController.m */; };
 		A96664BA1CCE493D00DA4A57 /* HBEncodingProgressHUDController.m in Sources */ = {isa = PBXBuildFile; fileRef = A96664B81CCE493D00DA4A57 /* HBEncodingProgressHUDController.m */; };
+		A96E20642B90B0A20043CFCD /* HBBadgeView.m in Sources */ = {isa = PBXBuildFile; fileRef = A96E20632B90B0A20043CFCD /* HBBadgeView.m */; };
 		A96E461B278D99840016DCBB /* Sparkle in Frameworks */ = {isa = PBXBuildFile; productRef = A96E461A278D99840016DCBB /* Sparkle */; };
 		A9706CB41AC1436F00BAEAA8 /* HBApplication.m in Sources */ = {isa = PBXBuildFile; fileRef = A9706CB31AC1436F00BAEAA8 /* HBApplication.m */; };
 		A9706CB71AC1437800BAEAA8 /* HBExceptionAlertController.m in Sources */ = {isa = PBXBuildFile; fileRef = A9706CB61AC1437800BAEAA8 /* HBExceptionAlertController.m */; };
@@ -303,6 +306,8 @@
 		A9B6B9F1217B408E00B957AE /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = A9B6B9EF217B408E00B957AE /* InfoPlist.strings */; };
 		A9B6B9F4217B408E00B957AE /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = A9B6B9F2217B408E00B957AE /* Localizable.strings */; };
 		A9BC24C91A69293E007DC41A /* HBAttributedStringAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = A9BC24C81A69293E007DC41A /* HBAttributedStringAdditions.m */; };
+		A9C1722B2B8F4E890047C49D /* HBControllerToolbarDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = A9C1722A2B8F4E890047C49D /* HBControllerToolbarDelegate.m */; };
+		A9C1722E2B8F5F540047C49D /* NSToolbar+HBAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = A9C1722D2B8F5F540047C49D /* NSToolbar+HBAdditions.m */; };
 		A9C3A50123C7A66100269CA3 /* HBFilePromiseProvider.m in Sources */ = {isa = PBXBuildFile; fileRef = A9C3A50023C7A66100269CA3 /* HBFilePromiseProvider.m */; };
 		A9C3A8F6278DFF8D00839EDF /* libzimg.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A9935867256C349B00A6875E /* libzimg.a */; };
 		A9C3A8F7278DFFA500839EDF /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A95798D8278DEAE500AA7C7D /* Foundation.framework */; };
@@ -614,8 +619,6 @@
 		A939DD8A1FC8826A00135F2A /* HBPresetsMenuBuilder.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HBPresetsMenuBuilder.m; sourceTree = "<group>"; };
 		A93B0DF61C804CF50051A3FA /* NSDictionary+HBAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDictionary+HBAdditions.h"; sourceTree = "<group>"; };
 		A93B0DF71C804CF50051A3FA /* NSDictionary+HBAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDictionary+HBAdditions.m"; sourceTree = "<group>"; };
-		A93B49201DA3AA6900DD70A3 /* HBToolbarBadgedItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBToolbarBadgedItem.h; sourceTree = "<group>"; };
-		A93B49211DA3AA6900DD70A3 /* HBToolbarBadgedItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBToolbarBadgedItem.m; sourceTree = "<group>"; };
 		A93E0ED01972957000FD67FB /* HBVideoController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBVideoController.h; sourceTree = "<group>"; };
 		A93E0ED11972957000FD67FB /* HBVideoController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBVideoController.m; sourceTree = "<group>"; };
 		A93FD4731A62ABE800A6AC43 /* HBAudio.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBAudio.h; sourceTree = "<group>"; };
@@ -632,6 +635,12 @@
 		A94DC2DD20CADA2C00EAC8FD /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/MainWindow.xib; sourceTree = "<group>"; };
 		A95121E41B5F7BE700FD773D /* NSArray+HBAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSArray+HBAdditions.h"; sourceTree = "<group>"; };
 		A95121E51B5F7BE700FD773D /* NSArray+HBAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSArray+HBAdditions.m"; sourceTree = "<group>"; };
+		A95140912B8F6B1600B446C1 /* HBToolbarItem.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HBToolbarItem.h; sourceTree = "<group>"; };
+		A95140922B8F6B1600B446C1 /* HBToolbarItem.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HBToolbarItem.m; sourceTree = "<group>"; };
+		A95140942B8F71E800B446C1 /* HBSegmentedControl.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HBSegmentedControl.h; sourceTree = "<group>"; };
+		A95140952B8F71E800B446C1 /* HBSegmentedControl.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HBSegmentedControl.m; sourceTree = "<group>"; };
+		A95140972B8F7BD100B446C1 /* HBQueueToolbarDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HBQueueToolbarDelegate.h; sourceTree = "<group>"; };
+		A95140982B8F7BD100B446C1 /* HBQueueToolbarDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HBQueueToolbarDelegate.m; sourceTree = "<group>"; };
 		A9523935199A6AAE00588AEF /* HBFilters.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBFilters.h; sourceTree = "<group>"; };
 		A9523936199A6AAE00588AEF /* HBFilters.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBFilters.m; sourceTree = "<group>"; };
 		A9537BEE1A48A85C00141102 /* HBJob+UIAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "HBJob+UIAdditions.h"; sourceTree = "<group>"; };
@@ -711,6 +720,8 @@
 		A96664B81CCE493D00DA4A57 /* HBEncodingProgressHUDController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBEncodingProgressHUDController.m; sourceTree = "<group>"; };
 		A96CD1741BCC5F9100F372F1 /* HBMutablePreset.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBMutablePreset.h; sourceTree = "<group>"; };
 		A96CD1751BCC5F9100F372F1 /* HBMutablePreset.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBMutablePreset.m; sourceTree = "<group>"; };
+		A96E20622B90B0A20043CFCD /* HBBadgeView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HBBadgeView.h; sourceTree = "<group>"; };
+		A96E20632B90B0A20043CFCD /* HBBadgeView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HBBadgeView.m; sourceTree = "<group>"; };
 		A9706CB21AC1436F00BAEAA8 /* HBApplication.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBApplication.h; sourceTree = "<group>"; };
 		A9706CB31AC1436F00BAEAA8 /* HBApplication.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBApplication.m; sourceTree = "<group>"; };
 		A9706CB51AC1437800BAEAA8 /* HBExceptionAlertController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBExceptionAlertController.h; sourceTree = "<group>"; };
@@ -809,6 +820,10 @@
 		A9B6B9F3217B408E00B957AE /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/Localizable.strings; sourceTree = "<group>"; };
 		A9BC24C71A69293E007DC41A /* HBAttributedStringAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBAttributedStringAdditions.h; sourceTree = "<group>"; };
 		A9BC24C81A69293E007DC41A /* HBAttributedStringAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBAttributedStringAdditions.m; sourceTree = "<group>"; };
+		A9C172292B8F4E890047C49D /* HBControllerToolbarDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HBControllerToolbarDelegate.h; sourceTree = "<group>"; };
+		A9C1722A2B8F4E890047C49D /* HBControllerToolbarDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HBControllerToolbarDelegate.m; sourceTree = "<group>"; };
+		A9C1722C2B8F5F540047C49D /* NSToolbar+HBAdditions.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSToolbar+HBAdditions.h"; sourceTree = "<group>"; };
+		A9C1722D2B8F5F540047C49D /* NSToolbar+HBAdditions.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "NSToolbar+HBAdditions.m"; sourceTree = "<group>"; };
 		A9C183931A716B8F00C897C2 /* HBTitleSelectionController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBTitleSelectionController.h; sourceTree = "<group>"; };
 		A9C183941A716B8F00C897C2 /* HBTitleSelectionController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBTitleSelectionController.m; sourceTree = "<group>"; };
 		A9C313B222F98F0D0001C438 /* it */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = it; path = it.lproj/HBQueueInfoViewController.strings; sourceTree = "<group>"; };
@@ -1439,6 +1454,7 @@
 				A98F00771A972007001C2298 /* Output Redirect */,
 				A9B34D711976844500871B7D /* UI Views */,
 				A901C2431BC7D05000D77735 /* Others */,
+				273F20BD14ADC09F0021BE6D /* main.m */,
 			);
 			name = HandBrake;
 			sourceTree = "<group>";
@@ -1511,6 +1527,8 @@
 				A9C183931A716B8F00C897C2 /* HBTitleSelectionController.h */,
 				A9C183941A716B8F00C897C2 /* HBTitleSelectionController.m */,
 				A9A96BB420CAD5D600A39AFB /* HBTitleSelection.xib */,
+				A9C172292B8F4E890047C49D /* HBControllerToolbarDelegate.h */,
+				A9C1722A2B8F4E890047C49D /* HBControllerToolbarDelegate.m */,
 				273F208E14ADBE670021BE6D /* HBController.h */,
 				273F208F14ADBE670021BE6D /* HBController.m */,
 				A94DC2DC20CADA2C00EAC8FD /* MainWindow.xib */,
@@ -1533,6 +1551,8 @@
 				A95BA15C220C968500A2F9F9 /* HBQueueJobItem.m */,
 				A9A5F7D3243DD90100C82EC8 /* HBQueueWorker.h */,
 				A9A5F7D4243DD90100C82EC8 /* HBQueueWorker.m */,
+				A95140972B8F7BD100B446C1 /* HBQueueToolbarDelegate.h */,
+				A95140982B8F7BD100B446C1 /* HBQueueToolbarDelegate.m */,
 				A9AA447C1970726500D7DEFC /* HBQueueController.h */,
 				A9906B2B1A710920001D82D5 /* HBQueueController.m */,
 				A9A96BD220CAD63000A39AFB /* Queue.xib */,
@@ -1610,6 +1630,8 @@
 				A964D3A722FDE91B00DFCAEA /* HBRemoteCore.m */,
 				A9C3A4FF23C7A66100269CA3 /* HBFilePromiseProvider.h */,
 				A9C3A50023C7A66100269CA3 /* HBFilePromiseProvider.m */,
+				A9E05A062529E77F000E0E9A /* HBPasteboardItem.h */,
+				A9E05A072529E77F000E0E9A /* HBPasteboardItem.m */,
 				A9706CB51AC1437800BAEAA8 /* HBExceptionAlertController.h */,
 				A9706CB61AC1437800BAEAA8 /* HBExceptionAlertController.m */,
 				A9E52CD6218DD52A00E17B86 /* ExceptionAlert.xib */,
@@ -1617,9 +1639,10 @@
 				A95121E51B5F7BE700FD773D /* NSArray+HBAdditions.m */,
 				A943873F22ED911B005F701B /* HBJob+HBAdditions.h */,
 				A943874022ED911B005F701B /* HBJob+HBAdditions.m */,
-				273F20BD14ADC09F0021BE6D /* main.m */,
-				A9E05A062529E77F000E0E9A /* HBPasteboardItem.h */,
-				A9E05A072529E77F000E0E9A /* HBPasteboardItem.m */,
+				A9C1722C2B8F5F540047C49D /* NSToolbar+HBAdditions.h */,
+				A9C1722D2B8F5F540047C49D /* NSToolbar+HBAdditions.m */,
+				A9BC24C71A69293E007DC41A /* HBAttributedStringAdditions.h */,
+				A9BC24C81A69293E007DC41A /* HBAttributedStringAdditions.m */,
 			);
 			name = Others;
 			sourceTree = "<group>";
@@ -1882,8 +1905,6 @@
 		A9B34D711976844500871B7D /* UI Views */ = {
 			isa = PBXGroup;
 			children = (
-				A9BC24C71A69293E007DC41A /* HBAttributedStringAdditions.h */,
-				A9BC24C81A69293E007DC41A /* HBAttributedStringAdditions.m */,
 				46AB433315F98A2B009C0961 /* HBDockTextField.h */,
 				46AB433415F98A2B009C0961 /* HBDockTextField.m */,
 				A9F7102419A475EC00F61301 /* HBDockTile.h */,
@@ -1892,12 +1913,16 @@
 				A9EA43671A2210C400785E95 /* HBTableView.m */,
 				A9D0FA751C1C284D0003F2A9 /* HBFocusRingView.h */,
 				A9D0FA761C1C284D0003F2A9 /* HBFocusRingView.m */,
-				A93B49201DA3AA6900DD70A3 /* HBToolbarBadgedItem.h */,
-				A93B49211DA3AA6900DD70A3 /* HBToolbarBadgedItem.m */,
 				A9C61F9C22E31CDB00C28E7C /* HBFlippedClipView.h */,
 				A9C61F9D22E31CDB00C28E7C /* HBFlippedClipView.m */,
 				A9D2BA6A2B8DFAB400E0B2B9 /* HBPreferencesWindow.h */,
 				A9D2BA6B2B8DFAB400E0B2B9 /* HBPreferencesWindow.m */,
+				A95140942B8F71E800B446C1 /* HBSegmentedControl.h */,
+				A95140952B8F71E800B446C1 /* HBSegmentedControl.m */,
+				A96E20622B90B0A20043CFCD /* HBBadgeView.h */,
+				A96E20632B90B0A20043CFCD /* HBBadgeView.m */,
+				A95140912B8F6B1600B446C1 /* HBToolbarItem.h */,
+				A95140922B8F6B1600B446C1 /* HBToolbarItem.m */,
 			);
 			name = "UI Views";
 			sourceTree = "<group>";
@@ -2156,7 +2181,7 @@
 			isa = PBXProject;
 			attributes = {
 				CLASSPREFIX = HB;
-				LastUpgradeCheck = 1500;
+				LastUpgradeCheck = 1530;
 				ORGANIZATIONNAME = HandBrake;
 				TargetAttributes = {
 					273F203814ADBC200021BE6D = {
@@ -2377,6 +2402,8 @@
 				A954010322FF397000F83A5F /* HBRedirect.m in Sources */,
 				A916C99B1C844A0800C7B560 /* HBTableView.m in Sources */,
 				A916C9991C8449E200C7B560 /* main.m in Sources */,
+				A95140932B8F6B1600B446C1 /* HBToolbarItem.m in Sources */,
+				A9C1722B2B8F4E890047C49D /* HBControllerToolbarDelegate.m in Sources */,
 				A942B66D250BB1FE00049203 /* HBQueueActionItem.m in Sources */,
 				A973E10C216E74E900D498EC /* HBThumbnailItemView.m in Sources */,
 				A916C9981C8449DB00C7B560 /* HBTitleSelectionController.m in Sources */,
@@ -2389,6 +2416,8 @@
 				A916C9951C8449B000C7B560 /* HBChapterTitlesController.m in Sources */,
 				A97ED7FB22EC5E9300AEF29B /* HBQueueDetailsViewController.m in Sources */,
 				A9D2BA6C2B8DFAB400E0B2B9 /* HBPreferencesWindow.m in Sources */,
+				A95140962B8F71E800B446C1 /* HBSegmentedControl.m in Sources */,
+				A96E20642B90B0A20043CFCD /* HBBadgeView.m in Sources */,
 				A916C9931C8449A100C7B560 /* HBAddPresetController.m in Sources */,
 				A916C9921C84498F00C7B560 /* HBDockTextField.m in Sources */,
 				A9706CB41AC1436F00BAEAA8 /* HBApplication.m in Sources */,
@@ -2411,7 +2440,6 @@
 				A9A7E27C1FE2A0B5006BE79F /* HBPreviewViewController.m in Sources */,
 				A919430D1FB5E2FE001E9BB0 /* HBSummaryViewController.m in Sources */,
 				A9706CB71AC1437800BAEAA8 /* HBExceptionAlertController.m in Sources */,
-				A93B49221DA3AA6900DD70A3 /* HBToolbarBadgedItem.m in Sources */,
 				A91AD3401FB5D2FC00AEA822 /* HBAddCategoryController.m in Sources */,
 				A939DD8B1FC8826A00135F2A /* HBPresetsMenuBuilder.m in Sources */,
 				A92268781A6E555500A8D5C5 /* HBAppDelegate.m in Sources */,
@@ -2422,6 +2450,7 @@
 				273F20B414ADBE670021BE6D /* HBOutputRedirect.m in Sources */,
 				A95BA15D220C968500A2F9F9 /* HBQueueJobItem.m in Sources */,
 				A964D3A822FDE91B00DFCAEA /* HBRemoteCore.m in Sources */,
+				A9C1722E2B8F5F540047C49D /* NSToolbar+HBAdditions.m in Sources */,
 				A9D0FA771C1C284D0003F2A9 /* HBFocusRingView.m in Sources */,
 				A91AFD0C1A948827009BECED /* HBOutputFileWriter.m in Sources */,
 				A9D363512209C08600D8EFEA /* HBQueueItemView.m in Sources */,
@@ -2437,6 +2466,7 @@
 				A914BCB31BC441C700157917 /* HBPreviewView.m in Sources */,
 				273F20B714ADBE670021BE6D /* HBPreviewController.m in Sources */,
 				A9D1E41718262364002F6424 /* HBPreviewGenerator.m in Sources */,
+				A95140992B8F7BD100B446C1 /* HBQueueToolbarDelegate.m in Sources */,
 				273F20BA14ADBE670021BE6D /* HBCroppingController.m in Sources */,
 				A9CF25F71990D6820023F727 /* HBPresetsViewController.m in Sources */,
 				A9A5F7D5243DD90100C82EC8 /* HBQueueWorker.m in Sources */,
