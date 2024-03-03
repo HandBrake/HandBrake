@@ -696,7 +696,8 @@ ghb_application_constructed (GObject *object)
     g_application_set_application_id(G_APPLICATION(self), "fr.handbrake.ghb");
     g_set_prgname("fr.handbrake.ghb");
     g_set_application_name("HandBrake");
-    g_application_set_flags(G_APPLICATION(self), G_APPLICATION_HANDLES_OPEN);
+    g_application_set_flags(G_APPLICATION(self), G_APPLICATION_HANDLES_OPEN |
+                                                 G_APPLICATION_NON_UNIQUE);
 }
 
 static void
