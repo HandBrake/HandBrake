@@ -311,7 +311,7 @@ int hb_get_build( hb_handle_t * h )
 void hb_remove_previews( hb_handle_t * h )
 {
     char          * filename;
-    char          * dirname;
+    const char    * dirname;
     hb_title_t    * title;
     int             i, count, len;
     DIR           * dir;
@@ -321,7 +321,6 @@ void hb_remove_previews( hb_handle_t * h )
     dir = opendir( dirname );
     if (dir == NULL)
     {
-        free(dirname);
         return;
     }
 
@@ -351,7 +350,6 @@ void hb_remove_previews( hb_handle_t * h )
             free(filename);
         }
     }
-    free(dirname);
     closedir( dir );
 }
 
@@ -2176,7 +2174,7 @@ int hb_global_init()
  */
 void hb_global_close()
 {
-    char          * dirname;
+    const char    * dirname;
     DIR           * dir;
     struct dirent * entry;
 
@@ -2202,7 +2200,6 @@ void hb_global_close()
         closedir( dir );
         rmdir( dirname );
     }
-    free(dirname);
 }
 
 /**
@@ -2214,7 +2211,7 @@ void hb_global_close()
 static void thread_func( void * _h )
 {
     hb_handle_t * h = (hb_handle_t *) _h;
-    char * dirname;
+    const char * dirname;
 
     h->pid = getpid();
 
@@ -2222,7 +2219,6 @@ static void thread_func( void * _h )
     dirname = hb_get_temporary_directory();
 
     hb_mkdir( dirname );
-    free(dirname);
 
     while( !h->die )
     {

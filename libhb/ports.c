@@ -600,40 +600,66 @@ void hb_get_user_config_filename( char name[1024], char *fmt, ... )
 }
 
 /************************************************************************
- * Get a temporary directory for HB
+ * Creates a uniquely-named temporary directory for this process. On
+ * POSIX systems, mkdtemp(3) is used to ensure the directory name is
+ * unique even if multiple HandBrake instances have the same PID.
  ***********************************************************************/
-char * hb_get_temporary_directory()
-{
-    char * path, * base, * p;
+static pthread_once_t tmp_control = PTHREAD_ONCE_INIT;
+static char *tmp_dirname = NULL;
 
-    /* Create the base */
+static void
+hb_init_temporary_directory (void)
+{
+    char *path, *base, *p;
+
 #if defined( SYS_CYGWIN ) || defined( SYS_MINGW )
     base = malloc(MAX_PATH);
-    int i_size = GetTempPath( MAX_PATH, base );
-    if( i_size <= 0 || i_size >= MAX_PATH )
+    int i_size = GetTempPath(MAX_PATH, base);
+    if (i_size <= 0 || i_size >= MAX_PATH)
     {
-        if( getcwd( base, MAX_PATH ) == NULL )
-            strcpy( base, "c:" ); /* Bad fallback but ... */
+        if (getcwd(base, MAX_PATH) == NULL)
+            strcpy(base, "c:"); /* Bad fallback but ... */
     }
 
     /* c:/path/ works like a charm under cygwin(win32?) so use it */
-    while( ( p = strchr( base, '\\' ) ) )
+    while ((p = strchr(base, '\\')))
         *p = '/';
+
+    /* I prefer to remove eventual last '/' (for cygwin) */
+    if (base[strlen(base)-1] == '/')
+        base[strlen(base)-1] = '\0';
+
+    path = hb_strdup_printf("%s/HandBrake-%d", base, (int)getpid());
+    hb_mkdir(path);
+    free(base);
 #else
-    if( (p = getenv( "TMPDIR" ) ) != NULL ||
-        (p = getenv( "TEMP" ) )   != NULL )
+    if ((p = getenv("TMPDIR")) != NULL ||
+        (p = getenv("TEMP"))   != NULL)
         base = strdup(p);
     else
         base = strdup("/tmp");
-#endif
-    /* I prefer to remove eventual last '/' (for cygwin) */
-    if( base[strlen(base)-1] == '/' )
+
+    if (base[strlen(base)-1] == '/')
         base[strlen(base)-1] = '\0';
 
-    path = hb_strdup_printf("%s/hb.%d", base, (int)getpid());
+    /* Create a new randomly-named directory from the template */
+    path = hb_strdup_printf("%s/handbrake-XXXXXX", base);
+    if (!mkdtemp(path))
+    {
+        /* We still use the path even if directory creation fails */
+        hb_error("Failed to create a temporary directory at %s\n", path);
+    }
     free(base);
+#endif
+    tmp_dirname = path;
+}
 
-    return path;
+const char *
+hb_get_temporary_directory (void)
+{
+    /* Ensure the directory name is only created once */
+    pthread_once(&tmp_control, hb_init_temporary_directory);
+    return tmp_dirname;
 }
 
 /************************************************************************
@@ -643,14 +669,12 @@ char * hb_get_temporary_filename( char *fmt, ... )
 {
     va_list   args;
     char    * name, * path;
-    char    * dir = hb_get_temporary_directory();
 
     va_start( args, fmt );
     name = hb_strdup_vaprintf(fmt, args);
     va_end( args );
 
-    path = hb_strdup_printf("%s/%s", dir, name);
-    free(dir);
+    path = hb_strdup_printf("%s/%s", hb_get_temporary_directory(), name);
     free(name);
 
     return path;

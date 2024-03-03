@@ -405,7 +405,7 @@ live_preview_play_clicked_cb (GtkWidget *widget, gpointer data)
 {
     signal_user_data_t *ud = ghb_ud();
     gint frame = ud->preview->frame;
-    g_autofree char *tmp_dir = ghb_get_tmp_dir();
+    const char *tmp_dir = ghb_get_tmp_dir();
     char *name = g_strdup_printf("%s/live%02d", tmp_dir, ud->preview->frame);
     if (ud->preview->current)
         g_free(ud->preview->current);
