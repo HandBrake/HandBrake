@@ -1226,7 +1226,7 @@ hb_handle_t* ghb_live_handle(void)
     return h_live;
 }
 
-gchar*
+const char*
 ghb_get_tmp_dir (void)
 {
     return hb_get_temporary_directory();
@@ -1235,11 +1235,7 @@ ghb_get_tmp_dir (void)
 void
 ghb_hb_cleanup(gboolean partial)
 {
-    char * dir;
-
-    dir = hb_get_temporary_directory();
-    del_tree(dir, !partial);
-    free(dir);
+    del_tree(hb_get_temporary_directory(), !partial);
 }
 
 gint
