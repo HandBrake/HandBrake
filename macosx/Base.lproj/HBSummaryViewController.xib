@@ -49,7 +49,7 @@
                                                     <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="clipping" state="on" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="4NR-1i-weK" id="tqd-2J-YTU">
                                                         <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                                                         <font key="font" metaFont="smallSystem"/>
-                                                        <menu key="menu" title="OtherViews" id="Q1Z-yT-7iY">
+                                                        <menu key="menu" id="Q1Z-yT-7iY">
                                                             <items>
                                                                 <menuItem state="on" id="4NR-1i-weK"/>
                                                             </items>

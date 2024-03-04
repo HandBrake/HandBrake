@@ -314,7 +314,7 @@
                                                     <popUpButtonCell key="cell" type="push" title="1" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" tag="1" imageScaling="proportionallyDown" inset="2" selectedItem="WAI-Bu-jIu" id="dLH-AG-0Fw">
                                                         <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                                                         <font key="font" metaFont="menu" size="11"/>
-                                                        <menu key="menu" title="OtherViews" id="aYB-lm-mkU">
+                                                        <menu key="menu" id="aYB-lm-mkU">
                                                             <items>
                                                                 <menuItem title="1" state="on" tag="1" id="WAI-Bu-jIu"/>
                                                                 <menuItem title="2" tag="2" id="Cge-hb-Nh8"/>
@@ -400,7 +400,7 @@
                                             <popUpButtonCell key="cell" type="push" title="Do Nothing" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="7Qh-m6-OUo" id="35Z-1C-qrb">
                                                 <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                                                 <font key="font" metaFont="menu" size="11"/>
-                                                <menu key="menu" title="OtherViews" id="6c7-RK-g6v">
+                                                <menu key="menu" id="6c7-RK-g6v">
                                                     <items>
                                                         <menuItem title="Do Nothing" state="on" id="7Qh-m6-OUo"/>
                                                         <menuItem title="Put Computer To Sleep" tag="1" id="x7i-WX-w6l"/>
@@ -753,7 +753,7 @@
                                     <popUpButtonCell key="cell" type="push" title="Auto" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="cZP-RL-fcB" id="BkJ-7j-BRm">
                                         <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                                         <font key="font" metaFont="menu" size="11"/>
-                                        <menu key="menu" title="OtherViews" id="ZkO-Z0-OCN">
+                                        <menu key="menu" id="ZkO-Z0-OCN">
                                             <items>
                                                 <menuItem title="Auto" state="on" id="cZP-RL-fcB"/>
                                                 <menuItem title=".m4v" id="phv-oU-WnC"/>
@@ -890,7 +890,7 @@
                                                     <popUpButtonCell key="cell" type="push" title="15" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="356" id="353">
                                                         <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                                                         <font key="font" metaFont="menu" size="11"/>
-                                                        <menu key="menu" title="OtherViews" id="354">
+                                                        <menu key="menu" id="354">
                                                             <items>
                                                                 <menuItem title="10" id="355"/>
                                                                 <menuItem title="15" state="on" id="356"/>
@@ -1203,7 +1203,7 @@
                                             <popUpButtonCell key="cell" type="push" title="0.25" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" tag="4" imageScaling="proportionallyDown" inset="2" selectedItem="391" id="388">
                                                 <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                                                 <font key="font" metaFont="menu" size="11"/>
-                                                <menu key="menu" title="OtherViews" id="389">
+                                                <menu key="menu" id="389">
                                                     <items>
                                                         <menuItem title="1.0" tag="1" id="394"/>
                                                         <menuItem title="0.50" tag="2" id="393"/>
@@ -1277,7 +1277,7 @@
                                                     <popUpButtonCell key="cell" type="push" title="Standard" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" tag="1" imageScaling="proportionallyDown" inset="2" selectedItem="369" id="364">
                                                         <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                                                         <font key="font" metaFont="menu" size="11"/>
-                                                        <menu key="menu" title="OtherViews" id="365">
+                                                        <menu key="menu" id="365">
                                                             <items>
                                                                 <menuItem title="Minimised" id="370"/>
                                                                 <menuItem title="Standard" state="on" tag="1" id="369"/>

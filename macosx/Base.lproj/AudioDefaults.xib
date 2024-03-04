@@ -260,7 +260,7 @@ DQ
                                         <popUpButtonCell key="cell" type="push" title="Item" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="UJy-A2-Bb1" id="OqD-Tf-29c">
                                             <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                                             <font key="font" metaFont="menu" size="11"/>
-                                            <menu key="menu" title="OtherViews" id="PtB-Wp-B9X">
+                                            <menu key="menu" id="PtB-Wp-B9X">
                                                 <items>
                                                     <menuItem title="Item" state="on" id="UJy-A2-Bb1"/>
                                                 </items>
@@ -720,7 +720,7 @@ All Matching Selected Languages adds all audio tracks matching each of the selec
                                         <popUpButtonCell key="cell" type="push" title="None" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="mvw-Hg-JFM" id="21e-KY-8TR">
                                             <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                                             <font key="font" metaFont="menu" size="11"/>
-                                            <menu key="menu" title="OtherViews" id="Kwy-lU-VuU">
+                                            <menu key="menu" id="Kwy-lU-VuU">
                                                 <items>
                                                     <menuItem title="None" state="on" id="mvw-Hg-JFM"/>
                                                     <menuItem title="First Matching Selected Languages" id="jDd-Ji-7Sm"/>

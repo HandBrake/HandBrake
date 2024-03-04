@@ -778,7 +778,7 @@ Custom allows manually setting all parameters. Useful for correcting an incorrec
                                             <popUpButtonCell key="cell" type="push" title="Automatic" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" tag="4" inset="2" selectedItem="JyN-AK-Hae" id="vx1-8S-fyc">
                                                 <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                                                 <font key="font" metaFont="smallSystem"/>
-                                                <menu key="menu" title="OtherViews" id="qSV-uB-Iup">
+                                                <menu key="menu" id="qSV-uB-Iup">
                                                     <items>
                                                         <menuItem title="Automatic" state="on" tag="4" id="JyN-AK-Hae"/>
                                                         <menuItem title="Off" id="1O3-th-4M5"/>

@@ -77,7 +77,7 @@
                     <popUpButtonCell key="cell" type="push" title="240" bezelStyle="rounded" alignment="left" controlSize="mini" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" inset="2" selectedItem="XYh-Ls-slf" id="yDS-gf-Y4N">
                         <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="miniSystem"/>
-                        <menu key="menu" title="OtherViews" id="KrC-nR-rYk">
+                        <menu key="menu" id="KrC-nR-rYk">
                             <items>
                                 <menuItem title="240" state="on" id="XYh-Ls-slf"/>
                             </items>

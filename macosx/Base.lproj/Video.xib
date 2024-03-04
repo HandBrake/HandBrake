@@ -93,7 +93,7 @@
                     <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="clipping" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" id="0VS-Ah-Q3S">
                         <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="controlContent" size="11"/>
-                        <menu key="menu" title="OtherViews" id="Jj0-Qw-HF8">
+                        <menu key="menu" id="Jj0-Qw-HF8">
                             <items>
                                 <menuItem id="Xzy-hl-maq"/>
                             </items>
@@ -191,7 +191,7 @@
                     <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="clipping" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" id="KHu-7m-NR7">
                         <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="controlContent" size="11"/>
-                        <menu key="menu" title="OtherViews" id="6Cs-jo-8Q6">
+                        <menu key="menu" id="6Cs-jo-8Q6">
                             <items>
                                 <menuItem id="cZC-bI-lgS"/>
                             </items>
@@ -416,7 +416,7 @@ x264 is lossless at RF 0.</string>
                                     <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" id="DM4-nK-RoT">
                                         <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                                         <font key="font" metaFont="controlContent" size="11"/>
-                                        <menu key="menu" title="OtherViews" id="rXn-NC-pEv"/>
+                                        <menu key="menu" id="rXn-NC-pEv"/>
                                     </popUpButtonCell>
                                     <connections>
                                         <accessibilityConnection property="title" destination="O1a-XY-efg" id="trc-UR-fhX"/>
@@ -439,7 +439,7 @@ x264 is lossless at RF 0.</string>
                                     <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" id="Pod-LO-yvB">
                                         <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                                         <font key="font" metaFont="controlContent" size="11"/>
-                                        <menu key="menu" title="OtherViews" id="gIJ-Xs-uVF"/>
+                                        <menu key="menu" id="gIJ-Xs-uVF"/>
                                     </popUpButtonCell>
                                     <connections>
                                         <accessibilityConnection property="title" destination="LUQ-6T-KDP" id="zfD-Yv-FWB"/>
@@ -458,7 +458,7 @@ x264 is lossless at RF 0.</string>
                                     <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" id="hlv-UO-sPl">
                                         <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                                         <font key="font" metaFont="controlContent" size="11"/>
-                                        <menu key="menu" title="OtherViews" id="Aes-nP-7qS"/>
+                                        <menu key="menu" id="Aes-nP-7qS"/>
                                     </popUpButtonCell>
                                     <connections>
                                         <accessibilityConnection property="title" destination="Axj-zl-Cyb" id="v1S-v6-Ub4"/>

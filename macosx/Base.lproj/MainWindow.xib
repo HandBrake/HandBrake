@@ -119,7 +119,7 @@
                         <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="clipping" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" id="5514">
                             <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                             <font key="font" metaFont="message" size="11"/>
-                            <menu key="menu" title="OtherViews" id="5515"/>
+                            <menu key="menu" id="5515"/>
                         </popUpButtonCell>
                         <constraints>
                             <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="78" id="Zs8-pX-H7V"/>
@@ -363,7 +363,7 @@
                         <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="clipping" state="on" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="1547" id="4910">
                             <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                             <font key="font" metaFont="message" size="11"/>
-                            <menu key="menu" title="OtherViews" id="1546">
+                            <menu key="menu" id="1546">
                                 <items>
                                     <menuItem state="on" id="1547"/>
                                 </items>
@@ -388,7 +388,7 @@
                         <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="clipping" state="on" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="1550" id="4911">
                             <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                             <font key="font" metaFont="message" size="11"/>
-                            <menu key="menu" title="OtherViews" id="1549">
+                            <menu key="menu" id="1549">
                                 <items>
                                     <menuItem state="on" id="1550"/>
                                 </items>
@@ -413,7 +413,7 @@
                         <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="clipping" state="on" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="5184" id="5182">
                             <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                             <font key="font" metaFont="message" size="11"/>
-                            <menu key="menu" title="OtherViews" id="5183">
+                            <menu key="menu" id="5183">
                                 <items>
                                     <menuItem state="on" id="5184"/>
                                 </items>
@@ -458,7 +458,7 @@ Blu-ray and DVD sources often have multiple titles, the longest of which is typi
                         <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="clipping" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" id="4908">
                             <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                             <font key="font" metaFont="message" size="11"/>
-                            <menu key="menu" title="OtherViews" id="1542"/>
+                            <menu key="menu" id="1542"/>
                             <connections>
                                 <accessibilityConnection property="title" destination="1540" id="8YI-Kk-J0w"/>
                             </connections>
