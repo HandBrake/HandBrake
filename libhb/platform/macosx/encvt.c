@@ -873,7 +873,6 @@ static OSStatus init_vtsession(hb_work_object_t *w, hb_job_t *job, hb_work_priva
     {
         hb_log("Error retrieving the supported property dictionary err=%"PRId64"", (int64_t)err);
         CFRelease(encoderSpecifications);
-        return err;
     }
 
     CFRelease(encoderSpecifications);
@@ -897,7 +896,7 @@ static OSStatus init_vtsession(hb_work_object_t *w, hb_job_t *job, hb_work_priva
 
     if (__builtin_available(macOS 11, *))
     {
-        if (CFDictionaryContainsKey(supportedProps, kVTCompressionPropertyKey_PrioritizeEncodingSpeedOverQuality))
+        if (supportedProps != NULL && CFDictionaryContainsKey(supportedProps, kVTCompressionPropertyKey_PrioritizeEncodingSpeedOverQuality))
         {
             err = VTSessionSetProperty(pv->session,
                                        kVTCompressionPropertyKey_PrioritizeEncodingSpeedOverQuality,
@@ -1095,7 +1094,7 @@ static OSStatus init_vtsession(hb_work_object_t *w, hb_job_t *job, hb_work_priva
         hb_log("VTSessionSetProperty: ChromaLocationBottomField failed");
     }
 
-    if (CFDictionaryContainsKey(supportedProps, kVTCompressionPropertyKey_MasteringDisplayColorVolume) &&
+    if (supportedProps != NULL && CFDictionaryContainsKey(supportedProps, kVTCompressionPropertyKey_MasteringDisplayColorVolume) &&
         pv->settings.color.masteringDisplay != NULL)
     {
         err = VTSessionSetProperty(pv->session,
@@ -1107,7 +1106,7 @@ static OSStatus init_vtsession(hb_work_object_t *w, hb_job_t *job, hb_work_priva
         }
     }
 
-    if (CFDictionaryContainsKey(supportedProps, kVTCompressionPropertyKey_ContentLightLevelInfo) &&
+    if (supportedProps != NULL && CFDictionaryContainsKey(supportedProps, kVTCompressionPropertyKey_ContentLightLevelInfo) &&
         pv->settings.color.contentLightLevel != NULL)
     {
         err = VTSessionSetProperty(pv->session,
@@ -1119,7 +1118,7 @@ static OSStatus init_vtsession(hb_work_object_t *w, hb_job_t *job, hb_work_priva
         }
     }
 
-    if (CFDictionaryContainsKey(supportedProps, CFSTR("AmbientViewingEnvironment")) &&
+    if (supportedProps != NULL && CFDictionaryContainsKey(supportedProps, CFSTR("AmbientViewingEnvironment")) &&
         pv->settings.color.ambientViewingEnviroment != NULL)
     {
         err = VTSessionSetProperty(pv->session,
@@ -1136,7 +1135,7 @@ static OSStatus init_vtsession(hb_work_object_t *w, hb_job_t *job, hb_work_priva
         // VideoToolbox can generate Dolby Vision 8.4 RPU for HLG video,
         // however we preserve the RPU from the source file, so disable it
         // to avoid having two RPUs per frame.
-        if (CFDictionaryContainsKey(supportedProps, kVTCompressionPropertyKey_HDRMetadataInsertionMode))
+        if (supportedProps != NULL && CFDictionaryContainsKey(supportedProps, kVTCompressionPropertyKey_HDRMetadataInsertionMode))
         {
             err = VTSessionSetProperty(pv->session,
                                        kVTCompressionPropertyKey_HDRMetadataInsertionMode,
@@ -1147,7 +1146,7 @@ static OSStatus init_vtsession(hb_work_object_t *w, hb_job_t *job, hb_work_priva
             }
         }
 
-        if (CFDictionaryContainsKey(supportedProps, kVTCompressionPropertyKey_PreserveDynamicHDRMetadata))
+        if (supportedProps != NULL && CFDictionaryContainsKey(supportedProps, kVTCompressionPropertyKey_PreserveDynamicHDRMetadata))
         {
             err = VTSessionSetProperty(pv->session,
                                        kVTCompressionPropertyKey_PreserveDynamicHDRMetadata,
