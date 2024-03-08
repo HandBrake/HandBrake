@@ -244,7 +244,7 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
         case AV_CODEC_ID_FFV1:
         {
             switch (job->vcodec) {
-                case HB_VCODEC_FFV1:
+                case HB_VCODEC_FFMPEG_FFV1:
                     hb_log("encavcodecInit: FFV1 (libavcodec)");
                     codec_name = "ffv1";
                     break;

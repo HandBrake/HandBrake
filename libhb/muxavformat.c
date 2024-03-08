@@ -382,7 +382,7 @@ static int avformatInit( hb_mux_object_t * m )
                 track->st->codecpar->codec_tag = MKTAG('h','v','c','1');
             }
             break;
-        case HB_VCODEC_FFV1:
+        case HB_VCODEC_FFMPEG_FFV1:
             track->st->codecpar->codec_id = AV_CODEC_ID_FFV1;
             if (job->config.extradata.length > 0)
             {
