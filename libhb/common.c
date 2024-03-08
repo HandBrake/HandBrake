@@ -1534,7 +1534,13 @@ void hb_video_quality_get_limits(uint32_t codec, float *low, float *high,
             *low         = 0;
             *high        = 100;
             break;
-
+            
+        case HB_VCODEC_FFV1:
+            *direction   = 0;
+            *granularity = 0;
+            *low         = 0;
+            *high        = 0;
+            
         case HB_VCODEC_FFMPEG_MPEG2:
         case HB_VCODEC_FFMPEG_MPEG4:
         default:
@@ -1603,6 +1609,8 @@ int hb_video_quality_is_supported(uint32_t codec)
         case HB_VCODEC_VT_H265_10BIT:
             return hb_vt_is_constant_quality_available(codec);
 #endif
+        case HB_VCODEC_FFV1:
+            return 0;
 
         default:
             return 1;
