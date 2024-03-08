@@ -45,6 +45,16 @@ Windows users, please make sure to install [Microsoft .NET Desktop Runtime versi
   - Catalan (Català)
 
 
+
+## HandBrake 1.7.4
+
+### Windows
+
+- Fixed an issue where the "None" encoder should erroneously on the audio tab.
+- Fixed an issue where "When Done: Quit HandBrake" would cause an application freeze.
+- Fixed an issue where auto naming options would not update correctly when changing presets.
+
+
 ## HandBrake 1.7.3
 
 ### All platforms
