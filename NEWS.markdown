@@ -7,6 +7,14 @@ Before updating HandBrake, please make sure there are no pending encodes in the 
 
 Windows users, please make sure to install [Microsoft .NET Desktop Runtime version 6.0.x](https://dotnet.microsoft.com/en-us/download/dotnet/6.0). Read carefully: you need the **DESKTOP** runtime. You must install .NET 6 even if you have installed .NET 7.
 
+## HandBrake 1.7.4
+
+### Windows
+
+- Fixed an issue where the "None" encoder should erroneously on the audio tab.
+- Fixed an issue where "When Done: Quit HandBrake" would cause an application freeze.
+- Fixed an issue where auto naming options would not update correctly when changing presets.
+
 
 ## HandBrake 1.7.3
 
