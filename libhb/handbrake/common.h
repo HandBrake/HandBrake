@@ -597,6 +597,7 @@ struct hb_job_s
 #define HB_VCODEC_FFMPEG_MASK        0x00010000
 
 #define HB_VCODEC_THEORA             0x00000001
+#define HB_VCODEC_FFV1               0x80000000
 
 #define HB_VCODEC_X264_8BIT         (0x00000002 | HB_VCODEC_X264_MASK | HB_VCODEC_H264_MASK)
 #define HB_VCODEC_X264              HB_VCODEC_X264_8BIT

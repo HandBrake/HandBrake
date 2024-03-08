@@ -241,6 +241,15 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
                     break;
             }
         }break;
+        case AV_CODEC_ID_FFV1:
+        {
+            switch (job->vcodec) {
+                case HB_VCODEC_FFV1:
+                    hb_log("encavcodecInit: FFV1 (libavcodec)");
+                    codec_name = "ffv1";
+                    break;
+            }
+        }break;
     }
 
     if (codec_name == NULL)

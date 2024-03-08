@@ -382,7 +382,12 @@ static int avformatInit( hb_mux_object_t * m )
                 track->st->codecpar->codec_tag = MKTAG('h','v','c','1');
             }
             break;
-
+        case HB_VCODEC_FFV1:
+            track->st->codecpar->codec_id = AV_CODEC_ID_FFV1;
+            priv_data                  = NULL;
+            priv_size                  = 0;
+            break;
+            
         default:
             hb_error("muxavformat: Unknown video codec: %x", job->vcodec);
             goto error;
