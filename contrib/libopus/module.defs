@@ -14,6 +14,6 @@ LIBOPUS.GCC.args.extra += -DOPUS_WILL_BE_SLOW
 
 LIBOPUS.CONFIGURE.bootstrap = rm -fr aclocal.m4 autom4te.cache configure; autoreconf -fiv;
 
-ifeq (aarch64,$(HOST.arch))
-  LIBOPUS.CONFIGURE.extra += --disable-rtcd
+ifeq (aarch64,$(HOST.machine))
+   LIBOPUS.CONFIGURE.extra += --disable-rtcd
 endif
