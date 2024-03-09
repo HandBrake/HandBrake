@@ -1,0 +1,32 @@
+From 28eee4d55bfca3f6be5250634d5a1408816020d3 Mon Sep 17 00:00:00 2001
+From: Ponsanthini <ponsanthini.arunachalam@muticorewareinc.com>
+Date: Thu, 15 Feb 2024 15:12:14 +0530
+Subject: [PATCH] Fix concurrency issue in lookahead
+
+---
+ source/encoder/slicetype.cpp | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/source/encoder/slicetype.cpp b/source/encoder/slicetype.cpp
+index caf4cbf..61b5fb6 100644
+--- a/source/encoder/slicetype.cpp
++++ b/source/encoder/slicetype.cpp
+@@ -1263,6 +1263,7 @@ void Lookahead::findJob(int /*workerThreadID*/)
+     ProfileScopeEvent(slicetypeDecideEV);
+ 
+     slicetypeDecide();
++    m_sliceTypeBusy = false;
+ 
+     m_inputLock.acquire();
+     if (m_outputSignalRequired)
+@@ -1270,7 +1271,6 @@ void Lookahead::findJob(int /*workerThreadID*/)
+         m_outputSignal.trigger();
+         m_outputSignalRequired = false;
+     }
+-    m_sliceTypeBusy = false;
+     m_inputLock.release();
+ }
+ 
+-- 
+1.8.3.1
+
