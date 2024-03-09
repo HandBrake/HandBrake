@@ -9,7 +9,6 @@
         xmlns:Audio="clr-namespace:HandBrakeWPF.Converters.Audio"
         xmlns:Subtitles="clr-namespace:HandBrakeWPF.Converters.Subtitles"
         xmlns:video="clr-namespace:HandBrakeWPF.Converters.Video"
-        xmlns:commands="clr-namespace:HandBrakeWPF.Commands"
         xmlns:helpers="clr-namespace:HandBrakeWPF.Helpers"
         xmlns:Properties="clr-namespace:HandBrakeWPF.Properties"
         xmlns:queue="clr-namespace:HandBrakeWPF.Converters.Queue"
@@ -103,8 +102,8 @@
 
         <Grid Grid.Row="2" Margin="0,15,0,0">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="3*" MaxWidth="750" x:Name="leftTabPanel" />
-                <ColumnDefinition Width="4*" x:Name="rightTabPanel"  />
+                <ColumnDefinition Width="*" x:Name="leftTabPanel" />
+                <ColumnDefinition Width="Auto" x:Name="rightTabPanel"  />
             </Grid.ColumnDefinitions>
 
             <Grid>
@@ -181,8 +180,8 @@
                             <Separator />
                             <MenuItem Command="{Binding RelayCommand}" CommandParameter="ExportCli" Header="{x:Static Properties:Resources.QueueView_ExportCLI}" />
                             <Separator />
-                            <MenuItem Command="{Binding RelayCommand}" CommandParameter="ChangeQueueDisplay" x:Name="extendedQueueDisplay" 
-                                      Header="{x:Static Properties:Resources.QueueView_ExtendedQueueDisplay}" />
+                            <MenuItem Command="{Binding RelayCommand}" CommandParameter="ChangeQueueDisplay" x:Name="extendedQueueDisplay" Header="{x:Static Properties:Resources.QueueView_ExtendedQueueDisplay}" />
+                            <MenuItem Command="{Binding RelayCommand}" CommandParameter="ToggleSimpleQueueDisplay" x:Name="simpleQueueDisplay" Header="{x:Static Properties:Resources.QueueView_SimpleQueueDisplay}" />
 
                             <Separator Visibility="{Binding IsNightly, Converter={StaticResource boolToVisConverter}}" />
                             <MenuItem Header="Debug" Visibility="{Binding IsNightly, Converter={StaticResource boolToVisConverter}}">
@@ -360,7 +359,9 @@
                 </Border>
             </Grid>
 
-            <TabControl x:Name="summaryTabControl"  Grid.Column="1"  Margin="5,0,10,10" SelectedIndex="{Binding SelectedTabIndex}" >
+            <TabControl x:Name="summaryTabControl"  Grid.Column="1"  Margin="5,0,10,10" SelectedIndex="{Binding SelectedTabIndex}" 
+                        MinWidth="550" Width="550"
+                        Visibility="{Binding IsSimpleView, Converter={StaticResource boolToVisConverter}, ConverterParameter=true}" >
                 <TabItem Header="{x:Static Properties:Resources.QueueView_Summary}" IsEnabled="{Binding JobInfoVisible}" >
                     <ScrollViewer VerticalScrollBarVisibility="Auto" Margin="5,5,0,5">
 

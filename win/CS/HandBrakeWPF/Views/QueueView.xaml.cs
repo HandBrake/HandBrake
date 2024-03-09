@@ -37,6 +37,14 @@ namespace HandBrakeWPF.Views
             this.InputBindings.Add(new InputBinding(new ProcessQueueShortcutCommand(new KeyGesture(Key.T, ModifierKeys.Control)), new KeyGesture(Key.T, ModifierKeys.Control))); // Move Up to Top
             this.InputBindings.Add(new InputBinding(new ProcessQueueShortcutCommand(new KeyGesture(Key.B, ModifierKeys.Control)), new KeyGesture(Key.B, ModifierKeys.Control))); // Move to Bottom
 
+
+            this.DataContextChanged += this.QueueView_DataContextChanged;
+        }
+
+        private void QueueView_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
+        {
+            ((QueueViewModel)this.DataContext).SimpleViewChanged -= this.QueueView_SimpleViewChanged;
+            ((QueueViewModel)this.DataContext).SimpleViewChanged += this.QueueView_SimpleViewChanged;
         }
 
         protected override void OnSourceInitialized(EventArgs e)
@@ -45,16 +53,35 @@ namespace HandBrakeWPF.Views
             WindowHelper.SetDarkMode(this);
         }
 
+        private void QueueView_SimpleViewChanged(object sender, EventArgs e)
+        {
+            if (!((QueueViewModel)this.DataContext).IsSimpleView)
+            {
+                if (Width < 900)
+                {
+                    this.Width = 900;
+                    this.MinWidth = 900;
+                }
+            }
+            else
+            {
+                this.MinWidth = 400;
+            }
+        }
+
         private void QueueView_SizeChanged(object sender, SizeChangedEventArgs e)
         {
             // Make the view adaptive. 
             if (e.WidthChanged)
             {
-                int queueSizeLimit = 745;
-
-                this.summaryTabControl.Visibility = this.ActualWidth < queueSizeLimit ? Visibility.Collapsed : Visibility.Visible;
-                this.leftTabPanel.Width = this.ActualWidth < queueSizeLimit ? new GridLength(this.ActualWidth - 10, GridUnitType.Star) : new GridLength(3, GridUnitType.Star);
-                this.leftTabPanel.MaxWidth = this.ActualWidth < queueSizeLimit ? 750 : 650;
+                if (((QueueViewModel)this.DataContext).IsSimpleView)
+                {
+                    this.MinWidth = 400;
+                }
+                else
+                {
+                    this.MinWidth = 900;
+                }
             }
         }
 
@@ -206,6 +233,15 @@ namespace HandBrakeWPF.Views
             else
             {
                 this.extendedQueueDisplay.Header = Properties.Resources.QueueView_ExtendedQueueDisplay;
+            }
+
+            if (((QueueViewModel)this.DataContext).IsSimpleView)
+            {
+                this.simpleQueueDisplay.Header = Properties.Resources.QueueView_AdvancedQueueDisplay;
+            }
+            else
+            {
+                this.simpleQueueDisplay.Header = Properties.Resources.QueueView_SimpleQueueDisplay;
             }
         }
         

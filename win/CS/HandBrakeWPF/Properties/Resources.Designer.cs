@@ -5595,6 +5595,15 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Use Advanced Queue View.
+        /// </summary>
+        public static string QueueView_AdvancedQueueDisplay {
+            get {
+                return ResourceManager.GetString("QueueView_AdvancedQueueDisplay", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Audio:.
         /// </summary>
         public static string QueueView_Audio {
@@ -5829,7 +5838,7 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Errors detected whist trying to read source..
+        ///   Looks up a localized string similar to Errors detected while trying to read source..
         /// </summary>
         public static string QueueView_JobStatus_ReadError {
             get {
@@ -6014,6 +6023,15 @@ namespace HandBrakeWPF.Properties {
         public static string QueueView_SelectedPresets {
             get {
                 return ResourceManager.GetString("QueueView_SelectedPresets", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use Simple Queue View.
+        /// </summary>
+        public static string QueueView_SimpleQueueDisplay {
+            get {
+                return ResourceManager.GetString("QueueView_SimpleQueueDisplay", resourceCulture);
             }
         }
         

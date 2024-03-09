@@ -95,5 +95,6 @@ namespace HandBrakeWPF
         public const string ShowPresetDesc = "ShowPresetDescription";
         public const string ExcludedExtensions = "ExcludedFileExtensions";
         public static string RecursiveFolderScan = "RecursiveFolderScan";
+        public static string SimpleQueueView = "SimpleQueueView";
     }
 }

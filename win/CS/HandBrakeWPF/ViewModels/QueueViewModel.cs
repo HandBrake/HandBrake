@@ -45,7 +45,7 @@ namespace HandBrakeWPF.ViewModels
         private QueueTask selectedTask;
         private bool isQueueRunning;
         private bool extendedQueueDisplay;
-
+        
         public QueueViewModel(IUserSettingService userSettingService, IQueueService queueProcessor, IErrorService errorService)
         {
             this.userSettingService = userSettingService;
@@ -65,6 +65,8 @@ namespace HandBrakeWPF.ViewModels
             this.RetryCommand = new SimpleRelayCommand<QueueTask>(this.RetryJob);
             this.EditCommand = new SimpleRelayCommand<QueueTask>(this.EditJob);
         }
+
+        public event EventHandler SimpleViewChanged;
 
         public SimpleRelayCommand<QueueTask> EditCommand { get; set; }
         public SimpleRelayCommand<QueueTask> RetryCommand { get; set; }
@@ -154,6 +156,8 @@ namespace HandBrakeWPF.ViewModels
         public bool CanRemoveJob => this.SelectedTask != null;
 
         public bool CanPerformActionOnSource => this.SelectedTask != null;
+
+        public bool IsSimpleView { get; set; }
 
         public bool CanPlayFile =>
             this.SelectedTask != null && this.SelectedTask.Task != null && this.SelectedTask.Task.Destination != null && 
@@ -539,6 +543,14 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
+        public void ToggleSimpleQueueDisplay()
+        {
+            this.IsSimpleView = !this.IsSimpleView;
+            this.NotifyOfPropertyChange(() => this.IsSimpleView);
+            OnSimpleViewChanged();
+            this.userSettingService.SetUserSetting(UserSettingConstants.SimpleQueueView, this.IsSimpleView);
+        }
+
         public void PlayFile()
         {
             if (this.SelectedTask != null && this.SelectedTask.Task != null && File.Exists(this.SelectedTask.Task.Destination))
@@ -586,6 +598,10 @@ namespace HandBrakeWPF.ViewModels
 
             this.IsQueueRunning = this.queueProcessor.IsProcessing;
             this.JobsPending = string.Format(Resources.QueueViewModel_JobsPending, this.queueProcessor.Count);
+
+            this.IsSimpleView = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.SimpleQueueView);
+            this.NotifyOfPropertyChange(() => this.IsSimpleView);
+            this.OnSimpleViewChanged();
 
             base.Activate();
         }
@@ -744,6 +760,11 @@ namespace HandBrakeWPF.ViewModels
         {
             this.JobsPending = string.Format(Resources.QueueViewModel_JobsPending, this.queueProcessor.Count);
             this.IsQueueRunning = false;
+        }
+
+        protected virtual void OnSimpleViewChanged()
+        {
+            this.SimpleViewChanged?.Invoke(this, EventArgs.Empty);
         }
     }
 }
