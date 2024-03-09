@@ -2,7 +2,7 @@ $(eval $(call import.MODULE.defs,LIBOPUS,libopus))
 $(eval $(call import.CONTRIB.defs,LIBOPUS))
 
 LIBOPUS.FETCH.url     = https://github.com/HandBrake/HandBrake-contribs/releases/download/contribs/opus-1.5.1.tar.gz
-LIBOPUS.FETCH.url    += https://ftp.osuosl.org/pub/xiph/releases/opus/opus-1.5.1.tar.gz
+LIBOPUS.FETCH.url    += https://downloads.xiph.org/releases/opus/opus-1.5.1.tar.gz
 LIBOPUS.FETCH.sha256  = b84610959b8d417b611aa12a22565e0a3732097c6389d19098d844543e340f85
 
 LIBOPUS.CONFIGURE.shared = --enable-shared=no
