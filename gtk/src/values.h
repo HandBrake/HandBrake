@@ -1,31 +1,28 @@
-/*
- * values.h
- * Copyright (C) John Stebbins 2008-2024 <stebbins@stebbins>
+/* values.h
  *
- * values.h is free software.
+ * Copyright (C) 2008-2024 John Stebbins <stebbins@stebbins>
  *
- * You may redistribute it and/or modify it under the terms of the
- * GNU General Public License version 2, as published by the Free Software
- * Foundation.
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2,
+ * as published by the Free Software Foundation.
  *
- * values.h is distributed in the hope that it will be useful,
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
- * See the GNU General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with callbacks.h.  If not, write to:
- *  The Free Software Foundation, Inc.,
- *  51 Franklin Street, Fifth Floor
- *  Boston, MA  02110-1301, USA.
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ *
+ * SPDX-License-Identifier: GPL-2.0-only
  */
 
-#if !defined(_GHB_VALUES_H_)
-#define _GHB_VALUES_H_
+#pragma once
 
-#include <glib.h>
-#include <glib-object.h>
+#include "common.h"
 #include "handbrake/hb_dict.h"
+
+G_BEGIN_DECLS
 
 #define GHB_DICT    HB_VALUE_TYPE_DICT
 #define GHB_ARRAY   HB_VALUE_TYPE_ARRAY
@@ -105,4 +102,4 @@ gdouble ghb_dict_get_double(const GhbValue *dict, const gchar *key);
 gchar* ghb_dict_get_string_xform(const GhbValue *dict, const gchar *key);
 const gchar* ghb_dict_get_string(const GhbValue *dict, const gchar *key);
 
-#endif // _GHB_VALUES_H_
+G_END_DECLS

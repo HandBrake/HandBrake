@@ -75,12 +75,4 @@
     [super keyDown:event];
 }
 
-- (void)viewDidEndLiveResize
-{
-    // Since we disabled calculating row heights during a live resize, force them to
-    // recalculate now.
-    [self noteHeightOfRowsWithIndexesChanged:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, self.numberOfRows)]];
-    [super viewDidEndLiveResize];
-}
-
 @end

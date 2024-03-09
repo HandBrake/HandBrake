@@ -1,9 +1,4 @@
 {
-    "Globals": {
-        "SkipDiskFreeCheck": false,
-        "scan_source": "",
-        "volume": "New Video"
-    },
     "OneTimeInitialization": {
         "title": "none"
     },
@@ -114,7 +109,7 @@
         "SrtDir": "",
         "window_width": 1,
         "window_height": 1,
-        "preset_window_width": 1,
-        "preset_window_height": 1
+        "presets_window_width": 1,
+        "presets_window_height": 1
     }
 }

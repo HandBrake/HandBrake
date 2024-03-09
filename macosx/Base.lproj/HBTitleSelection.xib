@@ -1,18 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="17506" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="32700.99.1234" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="17506"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="22689"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="HBTitleSelectionController">
             <connections>
                 <outlet property="arrayController" destination="Btd-Nt-z41" id="zGL-0Q-Zf6"/>
+                <outlet property="tableView" destination="wM9-Ln-dr0" id="7ew-vT-Bjr"/>
                 <outlet property="window" destination="F0z-JX-Cv5" id="gIp-Ho-8D9"/>
             </connections>
         </customObject>
-        <arrayController objectClassName="HBTitleSelection" id="Btd-Nt-z41" userLabel="Titles Array Controller">
+        <arrayController objectClassName="HBTitleSelection" selectsInsertedObjects="NO" avoidsEmptySelection="NO" id="Btd-Nt-z41" userLabel="Titles Array Controller">
+            <classReference key="objectClass" className="HBTitleSelection"/>
             <connections>
                 <binding destination="-2" name="contentArray" keyPath="self.titles" id="ujR-MW-HYh"/>
             </connections>
@@ -22,15 +24,15 @@
         <window title="Window" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" restorable="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" frameAutosaveName="HBTitleSelectionWindow" animationBehavior="default" id="F0z-JX-Cv5">
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
-            <rect key="contentRect" x="196" y="240" width="554" height="250"/>
+            <rect key="contentRect" x="196" y="240" width="554" height="270"/>
             <rect key="screenRect" x="0.0" y="0.0" width="1920" height="1055"/>
             <value key="minSize" type="size" width="300" height="200"/>
-            <view key="contentView" misplaced="YES" id="se5-gp-TjO">
-                <rect key="frame" x="0.0" y="0.0" width="554" height="250"/>
+            <view key="contentView" id="se5-gp-TjO">
+                <rect key="frame" x="0.0" y="0.0" width="554" height="270"/>
                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                 <subviews>
-                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="6000" translatesAutoresizingMaskIntoConstraints="NO" id="5Jw-On-iU3">
-                        <rect key="frame" x="18" y="216" width="518" height="14"/>
+                    <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="6000" translatesAutoresizingMaskIntoConstraints="NO" id="5Jw-On-iU3">
+                        <rect key="frame" x="18" y="236" width="518" height="14"/>
                         <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Select the titles to add to the queue:" id="5tD-fg-g4t">
                             <font key="font" metaFont="smallSystemBold"/>
                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -58,13 +60,13 @@ DQ
                         </connections>
                     </button>
                     <scrollView autohidesScrollers="YES" horizontalLineScroll="18" horizontalPageScroll="10" verticalLineScroll="18" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="a1K-L9-fU9">
-                        <rect key="frame" x="20" y="55" width="514" height="153"/>
+                        <rect key="frame" x="20" y="55" width="514" height="173"/>
                         <clipView key="contentView" id="dTc-E7-D15">
-                            <rect key="frame" x="1" y="1" width="512" height="151"/>
+                            <rect key="frame" x="1" y="1" width="512" height="171"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
-                                <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" tableStyle="plain" alternatingRowBackgroundColors="YES" columnReordering="NO" columnSelection="YES" columnResizing="NO" multipleSelection="NO" autosaveColumns="NO" autosaveName="HBTitleSelectionTable" rowHeight="14" headerView="sEp-Wn-EWq" viewBased="YES" floatsGroupRows="NO" id="wM9-Ln-dr0">
-                                    <rect key="frame" x="0.0" y="0.0" width="512" height="128"/>
+                                <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" tableStyle="plain" alternatingRowBackgroundColors="YES" columnReordering="NO" columnSelection="YES" columnResizing="NO" autosaveColumns="NO" autosaveName="HBTitleSelectionTable" rowHeight="14" headerView="sEp-Wn-EWq" viewBased="YES" floatsGroupRows="NO" id="wM9-Ln-dr0" customClass="HBTableView">
+                                    <rect key="frame" x="0.0" y="0.0" width="512" height="148"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <size key="intercellSpacing" width="3" height="4"/>
                                     <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -87,7 +89,7 @@ DQ
                                                     <rect key="frame" x="1" y="2" width="40" height="15"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                     <subviews>
-                                                        <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="gLJ-VQ-3cg">
+                                                        <textField focusRingType="none" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="gLJ-VQ-3cg">
                                                             <rect key="frame" x="1" y="1" width="38" height="14"/>
                                                             <textFieldCell key="cell" controlSize="small" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" alignment="right" title="0" id="hQc-RA-phB">
                                                                 <font key="font" metaFont="smallSystem"/>
@@ -140,7 +142,7 @@ DQ
                                                                 <font key="font" metaFont="smallSystem"/>
                                                             </buttonCell>
                                                             <connections>
-                                                                <binding destination="Sil-eA-Flj" name="value" keyPath="objectValue.selected" id="DB2-Lb-KSc"/>
+                                                                <binding destination="Sil-eA-Flj" name="value" keyPath="objectValue.enabled" id="ITW-yX-d8A"/>
                                                                 <binding destination="Sil-eA-Flj" name="title" keyPath="objectValue.title.name" id="Iph-ut-pMv"/>
                                                             </connections>
                                                         </button>
@@ -173,7 +175,7 @@ DQ
                                                     <rect key="frame" x="420" y="2" width="90" height="15"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                     <subviews>
-                                                        <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="dTs-ND-Vgf">
+                                                        <textField focusRingType="none" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="dTs-ND-Vgf">
                                                             <rect key="frame" x="0.0" y="1" width="90" height="14"/>
                                                             <textFieldCell key="cell" controlSize="small" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" title="Table View Cell" id="dsG-Ho-vsT">
                                                                 <font key="font" metaFont="smallSystem"/>
@@ -206,17 +208,18 @@ DQ
                                     </tableColumns>
                                     <connections>
                                         <binding destination="Btd-Nt-z41" name="content" keyPath="arrangedObjects" id="Yyh-f8-EYR"/>
-                                        <binding destination="Btd-Nt-z41" name="sortDescriptors" keyPath="sortDescriptors" previousBinding="Yyh-f8-EYR" id="CCw-mO-9f0"/>
+                                        <binding destination="Btd-Nt-z41" name="selectionIndexes" keyPath="selectionIndexes" previousBinding="Yyh-f8-EYR" id="M9f-ae-ySP"/>
+                                        <binding destination="Btd-Nt-z41" name="sortDescriptors" keyPath="sortDescriptors" previousBinding="M9f-ae-ySP" id="hLj-oh-TUa"/>
                                         <outlet property="menu" destination="vdO-DI-vks" id="Iux-VV-EDo"/>
                                     </connections>
                                 </tableView>
                             </subviews>
                         </clipView>
-                        <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="YES" id="KUp-wz-bHB">
+                        <scroller key="horizontalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="YES" id="KUp-wz-bHB">
                             <rect key="frame" x="1" y="87" width="507" height="15"/>
                             <autoresizingMask key="autoresizingMask"/>
                         </scroller>
-                        <scroller key="verticalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="NO" id="iFv-s2-21F">
+                        <scroller key="verticalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="NO" id="iFv-s2-21F">
                             <rect key="frame" x="224" y="17" width="15" height="102"/>
                             <autoresizingMask key="autoresizingMask"/>
                         </scroller>
@@ -257,17 +260,44 @@ Gw
             <connections>
                 <outlet property="delegate" destination="-2" id="0bl-1N-AYu"/>
             </connections>
-            <point key="canvasLocation" x="61" y="-170"/>
+            <point key="canvasLocation" x="61" y="-114"/>
         </window>
         <menu id="vdO-DI-vks">
             <items>
-                <menuItem title="Deselect All" id="PXF-7D-BKR">
+                <menuItem title="Enable" id="pR6-xS-FyO">
                     <modifierMask key="keyEquivalentModifierMask"/>
                     <connections>
-                        <action selector="deselectAll:" target="-2" id="Sxn-Dj-lrs"/>
+                        <action selector="enable:" target="-2" id="fKr-AS-8li"/>
+                    </connections>
+                </menuItem>
+                <menuItem title="Disable" id="d4k-bC-FZa">
+                    <modifierMask key="keyEquivalentModifierMask"/>
+                    <connections>
+                        <action selector="disable:" target="-2" id="vfc-yf-ZHW"/>
+                    </connections>
+                </menuItem>
+                <menuItem isSeparatorItem="YES" id="hrK-eg-pzr"/>
+                <menuItem title="Enable All" id="D7Y-wr-PDj">
+                    <modifierMask key="keyEquivalentModifierMask"/>
+                    <connections>
+                        <action selector="enableAll:" target="-2" id="e94-Ms-DVi"/>
+                    </connections>
+                </menuItem>
+                <menuItem title="Disable All" id="MIb-bL-Z6i">
+                    <modifierMask key="keyEquivalentModifierMask"/>
+                    <connections>
+                        <action selector="disableAll:" target="-2" id="tfn-AS-BS8"/>
+                    </connections>
+                </menuItem>
+                <menuItem isSeparatorItem="YES" id="AS1-EA-luu"/>
+                <menuItem title="Invert state" id="tp1-g5-7XN">
+                    <modifierMask key="keyEquivalentModifierMask"/>
+                    <connections>
+                        <action selector="invertState:" target="-2" id="ODl-oY-ZgM"/>
                     </connections>
                 </menuItem>
             </items>
+            <point key="canvasLocation" x="135" y="88"/>
         </menu>
     </objects>
 </document>

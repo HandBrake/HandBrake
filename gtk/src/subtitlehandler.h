@@ -1,49 +1,45 @@
-/* -*- Mode: C; indent-tabs-mode: nil; c-basic-offset: 4; tab-width: 4 -*- */
-/*
- * subtitlehandler.h
- * Copyright (C) John Stebbins 2008-2024 <stebbins@stebbins>
+/* subtitlehandler.h
  *
- * subtitlehandler.h is free software.
+ * Copyright (C) 2008-2024 John Stebbins <stebbins@stebbins>
  *
- * You may redistribute it and/or modify it under the terms of the
- * GNU General Public License version 2, as published by the Free Software
- * Foundation.
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2,
+ * as published by the Free Software Foundation.
  *
- * subtitlehandler.h is distributed in the hope that it will be useful,
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
- * See the GNU General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with callbacks.h.  If not, write to:
- *  The Free Software Foundation, Inc.,
- *  51 Franklin Street, Fifth Floor
- *  Boston, MA  02110-1301, USA.
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ *
+ * SPDX-License-Identifier: GPL-2.0-only
  */
 
-#if !defined(_SUBTITLEHANDLER_H_)
-#define _SUBTITLEHANDLER_H_
+#pragma once
 
-#include "values.h"
+#include "common.h"
 #include "settings.h"
+#include "values.h"
+
+G_BEGIN_DECLS
 
 void ghb_set_subtitle(signal_user_data_t *ud, gint track, GhbValue *settings);
 void ghb_subtitle_prune(signal_user_data_t *ud);
 void ghb_subtitle_list_refresh_all(signal_user_data_t *ud);
 void ghb_init_subtitle_defaults_ui(signal_user_data_t *ud);
 void ghb_subtitle_defaults_to_ui(signal_user_data_t *ud);
-void ghb_subtitle_title_change(signal_user_data_t *ud, gboolean show);
+void ghb_subtitle_set_actions_enabled(signal_user_data_t *ud, gboolean enabled);
 void ghb_subtitle_set_pref_lang(GhbValue *settings);
-void ghb_clear_subtitle_selection(GtkBuilder *builder);
+void ghb_clear_subtitle_selection(void);
 GhbValue *ghb_get_subtitle_list(GhbValue *settings);
 GhbValue *ghb_get_subtitle_settings(GhbValue *settings);
 char * ghb_subtitle_short_description(const GhbValue *subsource,
                                       const GhbValue *subsettings);
 
 
-void subtitle_list_selection_changed_cb(GtkTreeSelection *ts, signal_user_data_t *ud);
-void subtitle_edit_clicked_cb(GtkWidget *widget, gchar *path, signal_user_data_t *ud);
-void subtitle_remove_clicked_cb(GtkWidget *widget, gchar *path, signal_user_data_t *ud);
+void subtitle_list_selection_changed_cb(GtkTreeSelection *ts, gpointer data);
+void subtitle_remove_cb(GSimpleAction *action, GVariant *param, gpointer data);
 
-
-#endif // _SUBTITLEHANDLER_H_
+G_END_DECLS

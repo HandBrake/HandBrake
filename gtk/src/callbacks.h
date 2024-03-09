@@ -1,45 +1,34 @@
-/* -*- Mode: C; indent-tabs-mode: nil; c-basic-offset: 4; tab-width: 4 -*- */
-/*
- * callbacks.h
- * Copyright (C) John Stebbins 2008-2024 <stebbins@stebbins>
+/* callbacks.h
  *
- * callbacks.h is free software.
+ * Copyright (C) 2008-2024 John Stebbins <stebbins@stebbins>
  *
- * You may redistribute it and/or modify it under the terms of the
- * GNU General Public License version 2, as published by the Free Software
- * Foundation.
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2,
+ * as published by the Free Software Foundation.
  *
- * callbacks.h is distributed in the hope that it will be useful,
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
- * See the GNU General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with callbacks.h.  If not, write to:
- *  The Free Software Foundation, Inc.,
- *  51 Franklin Street, Fifth Floor
- *  Boston, MA  02110-1301, USA.
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ *
+ * SPDX-License-Identifier: GPL-2.0-only
  */
 
-#if !defined(_CALLBACKS_H_)
-#define _CALLBACKS_H_
+#pragma once
 
-#if defined(_WIN32)
+#include "common.h"
+#include "handbrake/handbrake.h"
+#include "settings.h"
+#include "values.h"
+
+#ifdef _WIN32
 #include <windows.h>
 #endif
 
-#include <gtk/gtk.h>
-#include "handbrake/handbrake.h"
-#include "values.h"
-#include "settings.h"
-
-#if GLIB_CHECK_VERSION(2, 32, 0)
-#define GHB_THREAD_NEW(n, f, p) \
-                g_thread_new(n, (GThreadFunc)(f), (p))
-#else
-#define GHB_THREAD_NEW(n, f, p) \
-                g_thread_create((GThreadFunc)(f), (p), TRUE, NULL)
-#endif
+G_BEGIN_DECLS
 
 typedef enum {
     GHB_ACTION_NORMAL,
@@ -64,7 +53,7 @@ GtkWidget *ghb_cancel_dialog_new(GtkWindow *parent,
     const char *continue_button);
 void ghb_stop_encode_dialog_show(signal_user_data_t *ud);
 void ghb_start_next_job(signal_user_data_t *ud);
-void ghb_bind_dependencies (signal_user_data_t *ud);
+void ghb_bind_dependencies(void);
 void ghb_do_scan( signal_user_data_t *ud, const gchar *filename,
     gint titlenum, gboolean force);
 void ghb_log(gchar *log, ...);
@@ -82,7 +71,7 @@ void ghb_update_title_info(signal_user_data_t *ud);
 void ghb_load_settings(signal_user_data_t * ud);
 void ghb_load_post_settings(signal_user_data_t * ud);
 void ghb_set_current_title_settings(signal_user_data_t *ud);
-void ghb_container_empty(GtkContainer *c);
+void ghb_list_box_remove_all(GtkListBox *lb);
 void ghb_show_container_options(signal_user_data_t *ud);
 void ghb_scale_configure(signal_user_data_t *ud, char *name, double val,
                          double min, double max, double step, double page,
@@ -98,4 +87,4 @@ GtkFileFilter *ghb_add_file_filter(GtkFileChooser *chooser,
                                    signal_user_data_t *ud,
                                    const char *name, const char *id);
 
-#endif // _CALLBACKS_H_
+G_END_DECLS

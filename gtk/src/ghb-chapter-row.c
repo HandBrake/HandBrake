@@ -18,8 +18,6 @@
  * SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-#include "config.h"
-
 #include "ghb-chapter-row.h"
 
 struct _GhbChapterRow {
@@ -31,8 +29,8 @@ struct _GhbChapterRow {
     GtkEntry *chapter_entry;
 
     int idx;
-    gint64 start;
-    gint64 duration;
+    int64_t start;
+    int64_t duration;
 };
 
 G_DEFINE_TYPE(GhbChapterRow, ghb_chapter_row, GTK_TYPE_LIST_BOX_ROW)
@@ -46,10 +44,6 @@ enum {
 };
 static GParamSpec *props[N_PROPS] = {NULL};
 
-
-static void ghb_chapter_row_set_index(GhbChapterRow *self, gint idx);
-static void ghb_chapter_row_set_start(GhbChapterRow *self, gint64 duration);
-static void ghb_chapter_row_set_duration(GhbChapterRow *self, gint64 duration);
 static void ghb_chapter_row_finalize(GObject *object);
 static void ghb_chapter_row_get_property(GObject *object, guint prop_id,
                                          GValue *value, GParamSpec *pspec);
@@ -70,26 +64,18 @@ ghb_chapter_row_class_init (GhbChapterRowClass *klass)
     gtk_widget_class_bind_template_child(widget_class, GhbChapterRow, duration_label);
     gtk_widget_class_bind_template_child(widget_class, GhbChapterRow, chapter_entry);
 
-    props[PROP_INDEX] = g_param_spec_int("index",
-                                         "Index",
-                                         "The chapter number",
-                                         1, G_MAXINT, 1,
-                                         G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY);
-    props[PROP_START] = g_param_spec_int64("start",
-                                         "Start",
-                                         "The start time of the chapter",
-                                         0, G_MAXINT64, 0,
-                                         G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY);
-    props[PROP_DURATION] = g_param_spec_int64("duration",
-                                         "Duration",
-                                         "The duration of the chapter",
-                                         0, G_MAXINT64, 0,
-                                         G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY);
-    props[PROP_NAME] = g_param_spec_string("name",
-                                         "Chapter Name",
-                                         "The name of the chapter",
+    props[PROP_INDEX] = g_param_spec_int("index", NULL, NULL,
+                                         1, INT_MAX, 1,
+                                         G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
+    props[PROP_START] = g_param_spec_int64("start", NULL, NULL,
+                                         0, INT64_MAX, 0,
+                                         G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
+    props[PROP_DURATION] = g_param_spec_int64("duration", NULL, NULL,
+                                         0, INT64_MAX, 0,
+                                         G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
+    props[PROP_NAME] = g_param_spec_string("name", NULL, NULL,
                                          "",
-                                         G_PARAM_READWRITE);
+                                         G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
 
     object_class->set_property = ghb_chapter_row_set_property;
     object_class->get_property = ghb_chapter_row_get_property;
@@ -107,19 +93,19 @@ ghb_chapter_row_get_property (GObject *object, guint prop_id,
     switch (prop_id)
     {
         case PROP_INDEX:
-            g_value_set_int(value, self->idx);
+            g_value_set_int(value, ghb_chapter_row_get_index(self));
             break;
 
         case PROP_START:
-            g_value_set_int64(value, self->start);
+            g_value_set_int64(value, ghb_chapter_row_get_start(self));
             break;
 
         case PROP_DURATION:
-            g_value_set_int64(value, self->duration);
+            g_value_set_int64(value, ghb_chapter_row_get_duration(self));
             break;
 
         case PROP_NAME:
-            g_value_set_string(value, gtk_entry_get_text(self->chapter_entry));
+            g_value_set_string(value, ghb_chapter_row_get_name(self));
             break;
 
         default:
@@ -137,15 +123,15 @@ ghb_chapter_row_set_property (GObject *object, guint prop_id,
     switch (prop_id)
     {
         case PROP_INDEX:
-            self->idx = g_value_get_int(value);
+            ghb_chapter_row_set_index(self, g_value_get_int(value));
             break;
 
         case PROP_START:
-            self->start = g_value_get_int64(value);
+            ghb_chapter_row_set_start(self, g_value_get_int64(value));
             break;
 
         case PROP_DURATION:
-            self->duration = g_value_get_int64(value);
+            ghb_chapter_row_set_duration(self, g_value_get_int64(value));
             break;
 
         case PROP_NAME:
@@ -185,7 +171,7 @@ ghb_chapter_row_get_index (GhbChapterRow *self)
     return self->idx;
 }
 
-gint64
+int64_t
 ghb_chapter_row_get_start (GhbChapterRow *self)
 {
     g_return_val_if_fail(GHB_IS_CHAPTER_ROW(self), 0);
@@ -193,7 +179,7 @@ ghb_chapter_row_get_start (GhbChapterRow *self)
     return self->start;
 }
 
-gint64
+int64_t
 ghb_chapter_row_get_duration (GhbChapterRow *self)
 {
     g_return_val_if_fail(GHB_IS_CHAPTER_ROW(self), 0);
@@ -206,11 +192,11 @@ ghb_chapter_row_get_name (GhbChapterRow *self)
 {
     g_return_val_if_fail(GHB_IS_CHAPTER_ROW(self), 0);
 
-    return gtk_entry_get_text(self->chapter_entry);
+    return gtk_editable_get_text(GTK_EDITABLE(self->chapter_entry));
 }
 
 GtkWidget *
-ghb_chapter_row_new (int idx, gint64 start, gint64 duration,
+ghb_chapter_row_new (int idx, int64_t start, int64_t duration,
                      const char *chapter_name)
 {
     GhbChapterRow *row;
@@ -228,15 +214,15 @@ ghb_chapter_row_new (int idx, gint64 start, gint64 duration,
 }
 
 static void
-break_duration (gint64 duration, int *hh, int *mm, int *ss)
+break_duration (int64_t duration, int *hh, int *mm, int *ss)
 {
     *hh = duration / (60*60);
     *mm = (duration / 60) % 60;
     *ss = duration % 60;
 }
 
-static void
-ghb_chapter_row_set_index (GhbChapterRow *self, gint idx)
+void
+ghb_chapter_row_set_index (GhbChapterRow *self, int idx)
 {
     g_return_if_fail(GHB_IS_CHAPTER_ROW(self));
 
@@ -248,8 +234,8 @@ ghb_chapter_row_set_index (GhbChapterRow *self, gint idx)
     g_object_notify_by_pspec(G_OBJECT(self), props[PROP_INDEX]);
 }
 
-static void
-ghb_chapter_row_set_start (GhbChapterRow *self, gint64 start)
+void
+ghb_chapter_row_set_start (GhbChapterRow *self, int64_t start)
 {
     char *str;
     int hh, mm, ss;
@@ -265,8 +251,8 @@ ghb_chapter_row_set_start (GhbChapterRow *self, gint64 start)
     g_object_notify_by_pspec(G_OBJECT(self), props[PROP_START]);
 }
 
-static void
-ghb_chapter_row_set_duration (GhbChapterRow *self, gint64 duration)
+void
+ghb_chapter_row_set_duration (GhbChapterRow *self, int64_t duration)
 {
     char *str;
     int hh, mm, ss;
@@ -290,7 +276,7 @@ ghb_chapter_row_set_name (GhbChapterRow *self, const char *name)
     if (name == NULL)
         name = "";
 
-    gtk_entry_set_text(self->chapter_entry, name);
+    gtk_editable_set_text(GTK_EDITABLE(self->chapter_entry), name);
 }
 
 void ghb_chapter_row_grab_focus (GhbChapterRow *self)

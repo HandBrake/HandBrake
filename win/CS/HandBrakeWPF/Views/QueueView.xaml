@@ -9,7 +9,6 @@
         xmlns:Audio="clr-namespace:HandBrakeWPF.Converters.Audio"
         xmlns:Subtitles="clr-namespace:HandBrakeWPF.Converters.Subtitles"
         xmlns:video="clr-namespace:HandBrakeWPF.Converters.Video"
-        xmlns:commands="clr-namespace:HandBrakeWPF.Commands"
         xmlns:helpers="clr-namespace:HandBrakeWPF.Helpers"
         xmlns:Properties="clr-namespace:HandBrakeWPF.Properties"
         xmlns:queue="clr-namespace:HandBrakeWPF.Converters.Queue"
@@ -103,8 +102,8 @@
 
         <Grid Grid.Row="2" Margin="0,15,0,0">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="3*" MaxWidth="750" x:Name="leftTabPanel" />
-                <ColumnDefinition Width="4*" x:Name="rightTabPanel"  />
+                <ColumnDefinition Width="*" x:Name="leftTabPanel" />
+                <ColumnDefinition Width="Auto" x:Name="rightTabPanel"  />
             </Grid.ColumnDefinitions>
 
             <Grid>
@@ -181,8 +180,8 @@
                             <Separator />
                             <MenuItem Command="{Binding RelayCommand}" CommandParameter="ExportCli" Header="{x:Static Properties:Resources.QueueView_ExportCLI}" />
                             <Separator />
-                            <MenuItem Command="{Binding RelayCommand}" CommandParameter="ChangeQueueDisplay" x:Name="extendedQueueDisplay" 
-                                      Header="{x:Static Properties:Resources.QueueView_ExtendedQueueDisplay}" />
+                            <MenuItem Command="{Binding RelayCommand}" CommandParameter="ChangeQueueDisplay" x:Name="extendedQueueDisplay" Header="{x:Static Properties:Resources.QueueView_ExtendedQueueDisplay}" />
+                            <MenuItem Command="{Binding RelayCommand}" CommandParameter="ToggleSimpleQueueDisplay" x:Name="simpleQueueDisplay" Header="{x:Static Properties:Resources.QueueView_SimpleQueueDisplay}" />
 
                             <Separator Visibility="{Binding IsNightly, Converter={StaticResource boolToVisConverter}}" />
                             <MenuItem Header="Debug" Visibility="{Binding IsNightly, Converter={StaticResource boolToVisConverter}}">
@@ -209,18 +208,18 @@
 
                     <ListBox.ContextMenu>
                         <ContextMenu Opened="ContextMenu_OnOpened">
-                            <MenuItem Header="{x:Static Properties:Resources.QueueView_PlayMediaFile}" Command="{Binding RelayCommand}" CommandParameter="PlayFile" />
+                            <MenuItem Header="{x:Static Properties:Resources.QueueView_PlayMediaFile}" Command="{Binding RelayCommand}" CommandParameter="PlayFile" InputGestureText="Ctrl + P" />
                             <Separator />
-                            <MenuItem Header="{x:Static Properties:Resources.QueueView_MoveToTop}" x:Name="moveToTopMenuItem" Command="{Binding RelayCommand}" CommandParameter="MoveToTop" />
-                            <MenuItem Header="{x:Static Properties:Resources.QueueView_MoveToBottom}" x:Name="moveToBottomMenuItem" Command="{Binding RelayCommand}" CommandParameter="MoveToBottom" />
+                            <MenuItem Header="{x:Static Properties:Resources.QueueView_MoveToTop}" x:Name="moveToTopMenuItem" Command="{Binding RelayCommand}" CommandParameter="MoveToTop" InputGestureText="Ctrl + T"  />
+                            <MenuItem Header="{x:Static Properties:Resources.QueueView_MoveToBottom}" x:Name="moveToBottomMenuItem" Command="{Binding RelayCommand}" CommandParameter="MoveToBottom" InputGestureText="Ctrl + B"  />
                             <Separator />
-                            <MenuItem Header="{x:Static Properties:Resources.QueueView_Reset}" x:Name="ResetMenuItem" Click="QueueItem_Retry" />
-                            <MenuItem Header="{x:Static Properties:Resources.QueueView_Delete}" x:Name="DeleteMenuItem" Click="QueueItem_Delete" />
+                            <MenuItem Header="{x:Static Properties:Resources.QueueView_Reset}" x:Name="ResetMenuItem" Click="QueueItem_Retry"  InputGestureText="Ctrl + R"/>
+                            <MenuItem Header="{x:Static Properties:Resources.QueueView_Delete}" x:Name="DeleteMenuItem" Click="QueueItem_Delete" InputGestureText="Del" />
                             <Separator />
-                            <MenuItem Header="{x:Static Properties:Resources.QueueView_Edit}" x:Name="EditMenuItem" Click="QueueItem_Edit" />
+                            <MenuItem Header="{x:Static Properties:Resources.QueueView_Edit}" x:Name="EditMenuItem" Click="QueueItem_Edit" InputGestureText="Ctrl + E" />
                             <Separator />
-                            <MenuItem Header="{x:Static Properties:Resources.QueueView_OpenSourceDir}" x:Name="openSourceDir" Click="OpenSourceDir_OnClick" />
-                            <MenuItem Header="{x:Static Properties:Resources.QueueView_OpenDestDir}" x:Name="openDestDir" Click="OpenDestDir_OnClick" />
+                            <MenuItem Header="{x:Static Properties:Resources.QueueView_OpenSourceDir}" x:Name="openSourceDir" Click="OpenSourceDir_OnClick" InputGestureText="Ctrl + I" />
+                            <MenuItem Header="{x:Static Properties:Resources.QueueView_OpenDestDir}" x:Name="openDestDir" Click="OpenDestDir_OnClick" InputGestureText="Ctrl + D" />
 
                         </ContextMenu>
                     </ListBox.ContextMenu>
@@ -360,7 +359,9 @@
                 </Border>
             </Grid>
 
-            <TabControl x:Name="summaryTabControl"  Grid.Column="1"  Margin="5,0,10,10" SelectedIndex="{Binding SelectedTabIndex}" >
+            <TabControl x:Name="summaryTabControl"  Grid.Column="1"  Margin="5,0,10,10" SelectedIndex="{Binding SelectedTabIndex}" 
+                        MinWidth="550" Width="550"
+                        Visibility="{Binding IsSimpleView, Converter={StaticResource boolToVisConverter}, ConverterParameter=true}" >
                 <TabItem Header="{x:Static Properties:Resources.QueueView_Summary}" IsEnabled="{Binding JobInfoVisible}" >
                     <ScrollViewer VerticalScrollBarVisibility="Auto" Margin="5,5,0,5">
 

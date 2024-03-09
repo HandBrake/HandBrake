@@ -1,4 +1,4 @@
-/* HBToolbarBadgedItem.h
+/* HBPreferencesWindow.h
 
  This file is part of the HandBrake source code.
  Homepage: <http://handbrake.fr/>.
@@ -9,14 +9,8 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface HBToolbarBadgedItem : NSToolbarItem
-
-@property (nonatomic, copy) NSString *badgeValue;
-
-@property (nonatomic, copy) NSColor *badgeTextColor;
-@property (nonatomic, copy) NSColor *badgeFillColor;
+@interface HBPreferencesWindow : NSWindow
 
 @end
 
 NS_ASSUME_NONNULL_END
-

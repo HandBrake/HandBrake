@@ -53,7 +53,7 @@
                     <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" id="OXp-Ux-Kwq">
                         <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="smallSystem"/>
-                        <menu key="menu" title="OtherViews" id="tlc-kS-W8X"/>
+                        <menu key="menu" id="tlc-kS-W8X"/>
                     </popUpButtonCell>
                     <connections>
                         <accessibilityConnection property="title" destination="1a5-Yb-uwn" id="9sT-x7-00K"/>
@@ -151,7 +151,7 @@ Decomb switches between multiple interpolation algorithms for speed and quality.
                     <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" id="CsF-zp-vt2">
                         <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="smallSystem"/>
-                        <menu key="menu" title="OtherViews" id="PyP-FP-gGx"/>
+                        <menu key="menu" id="PyP-FP-gGx"/>
                     </popUpButtonCell>
                     <connections>
                         <accessibilityConnection property="title" destination="xKf-yr-nCk" id="9ol-TG-r46"/>
@@ -233,7 +233,7 @@ Bob attempts to better preserve motion for a slight penalty to perceived resolut
                     <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" id="at1-DR-WGs">
                         <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="smallSystem"/>
-                        <menu key="menu" title="OtherViews" id="qey-Yo-9sX"/>
+                        <menu key="menu" id="qey-Yo-9sX"/>
                     </popUpButtonCell>
                     <connections>
                         <binding destination="-2" name="hidden" keyPath="self.filters.deinterlaceEnabled" id="gBQ-b8-r6y">
@@ -285,7 +285,7 @@ Bob attempts to better preserve motion for a slight penalty to perceived resolut
                     <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" id="nfb-CJ-1J3">
                         <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="smallSystem"/>
-                        <menu key="menu" title="OtherViews" id="Qz4-EY-GFO"/>
+                        <menu key="menu" id="Qz4-EY-GFO"/>
                     </popUpButtonCell>
                     <connections>
                         <accessibilityConnection property="title" destination="Mg1-Yq-F9S" id="nhI-oN-u5h"/>
@@ -355,7 +355,7 @@ HQDN3D is an adaptive low-pass filter, faster than NLMeans but less effective at
                     <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" id="a2c-wR-CQ6">
                         <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="smallSystem"/>
-                        <menu key="menu" title="OtherViews" id="IHH-Se-l6d"/>
+                        <menu key="menu" id="IHH-Se-l6d"/>
                     </popUpButtonCell>
                     <connections>
                         <accessibilityConnection property="title" destination="9hM-c1-7hB" id="Y24-nk-rpo"/>
@@ -397,7 +397,7 @@ HQDN3D is an adaptive low-pass filter, faster than NLMeans but less effective at
                     <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" id="eym-Bg-FVe">
                         <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="smallSystem"/>
-                        <menu key="menu" title="OtherViews" id="akB-JW-MPe"/>
+                        <menu key="menu" id="akB-JW-MPe"/>
                     </popUpButtonCell>
                     <accessibility description="Denoise Preset"/>
                     <connections>
@@ -438,7 +438,7 @@ Sprite is useful for 1-/4-/8-/16-bit 2-dimensional games. Sprite is not designed
                     <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" id="QNk-3W-T3X">
                         <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="smallSystem"/>
-                        <menu key="menu" title="OtherViews" id="pIO-dE-81w"/>
+                        <menu key="menu" id="pIO-dE-81w"/>
                     </popUpButtonCell>
                     <accessibility description="Denoise Tune"/>
                     <connections>
@@ -527,7 +527,7 @@ HQDN3D default: y-spatial=3:cb-spatial=2:cr-spatial=2:y-temporal=2:cb-temporal=3
                     <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" id="U5y-F0-hVJ">
                         <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="smallSystem"/>
-                        <menu key="menu" title="OtherViews" id="rfp-ah-CVB"/>
+                        <menu key="menu" id="rfp-ah-CVB"/>
                     </popUpButtonCell>
                     <accessibility description="Deblock Preset"/>
                     <connections>
@@ -553,7 +553,7 @@ HQDN3D default: y-spatial=3:cb-spatial=2:cr-spatial=2:y-temporal=2:cb-temporal=3
                     <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" id="26D-4d-qNS">
                         <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="smallSystem"/>
-                        <menu key="menu" title="OtherViews" id="b6A-ax-2Ed"/>
+                        <menu key="menu" id="b6A-ax-2Ed"/>
                     </popUpButtonCell>
                     <accessibility description="Sharpen Tune"/>
                     <connections>
@@ -647,7 +647,7 @@ strength=s:thresh=t:blocksize=b</string>
                     <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" id="TCz-OC-qgk">
                         <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="smallSystem"/>
-                        <menu key="menu" title="OtherViews" id="zV7-gM-Qpk"/>
+                        <menu key="menu" id="zV7-gM-Qpk"/>
                     </popUpButtonCell>
                     <accessibility description="Colorspace Preset"/>
                     <connections>
@@ -727,7 +727,7 @@ Lapsharp sharpens using convolution kernels approximating Laplacian edge filters
                     <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" id="dOl-cy-AQW">
                         <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="smallSystem"/>
-                        <menu key="menu" title="OtherViews" id="jQg-bp-pb3"/>
+                        <menu key="menu" id="jQg-bp-pb3"/>
                     </popUpButtonCell>
                     <connections>
                         <accessibilityConnection property="title" destination="p9P-Fd-bNm" id="2KJ-Az-gNw"/>
@@ -769,7 +769,7 @@ Lapsharp sharpens using convolution kernels approximating Laplacian edge filters
                     <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" id="Vkj-aJ-U3q">
                         <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="smallSystem"/>
-                        <menu key="menu" title="OtherViews" id="ztV-i0-btG"/>
+                        <menu key="menu" id="ztV-i0-btG"/>
                     </popUpButtonCell>
                     <accessibility description="Sharpen Preset"/>
                     <connections>
@@ -808,7 +808,7 @@ Lapsharp's Sprite tune is useful for 1-/4-/8-/16-bit 2-dimensional games. Sprite
                     <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" id="hvW-B6-EF6">
                         <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="smallSystem"/>
-                        <menu key="menu" title="OtherViews" id="MJr-ob-Uoe"/>
+                        <menu key="menu" id="MJr-ob-Uoe"/>
                     </popUpButtonCell>
                     <accessibility description="Sharpen Tune"/>
                     <connections>
@@ -934,7 +934,7 @@ Lapsharp default: y-strength=0.2:y-kernel=isolap:cb-strength=0.2:cb-kernel=isola
                     <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" id="e4b-ge-mfc">
                         <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="smallSystem"/>
-                        <menu key="menu" title="OtherViews" id="lad-BT-Hgz"/>
+                        <menu key="menu" id="lad-BT-Hgz"/>
                     </popUpButtonCell>
                     <accessibility description="Chroma Smooth Preset"/>
                     <connections>
@@ -960,7 +960,7 @@ Lapsharp default: y-strength=0.2:y-kernel=isolap:cb-strength=0.2:cb-kernel=isola
                     <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" id="TQm-O5-qG1">
                         <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="smallSystem"/>
-                        <menu key="menu" title="OtherViews" id="r9i-tL-qtD"/>
+                        <menu key="menu" id="r9i-tL-qtD"/>
                     </popUpButtonCell>
                     <accessibility description="Chroma Smooth Tune"/>
                     <connections>

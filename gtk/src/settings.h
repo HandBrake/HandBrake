@@ -1,37 +1,30 @@
-/*
- * settings.h
- * Copyright (C) John Stebbins 2008-2024 <stebbins@stebbins>
+/* settings.h
  *
- * settings.h is free software.
+ * Copyright (C) 2008-2024 John Stebbins <stebbins@stebbins>
  *
- * You may redistribute it and/or modify it under the terms of the
- * GNU General Public License version 2, as published by the Free Software
- * Foundation.
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2,
+ * as published by the Free Software Foundation.
  *
- * settings.h is distributed in the hope that it will be useful,
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
- * See the GNU General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with callbacks.h.  If not, write to:
- *  The Free Software Foundation, Inc.,
- *  51 Franklin Street, Fifth Floor
- *  Boston, MA  02110-1301, USA.
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ *
+ * SPDX-License-Identifier: GPL-2.0-only
  */
 
-#if !defined(_SETTINGS_H_)
-#define _SETTINGS_H_
+#pragma once
 
-#include <gtk/gtk.h>
+#include "common.h"
 #include "values.h"
 
-#define GHB_WIDGET(b,n) GTK_WIDGET(gtk_builder_get_object ((b), (n)))
-#define GHB_ACTION(b,n) g_action_map_lookup_action(G_ACTION_MAP(gtk_builder_get_application (b)), (n))
-//#define GHB_WIDGET(b,n)   GTK_WIDGET(debug_get_object((b), (n)))
-#define GHB_OBJECT(b,n) gtk_builder_get_object ((b), (n))
+G_BEGIN_DECLS
 
-GObject* debug_get_object(GtkBuilder *b, const gchar *n);
+#define GHB_ACTION(n) g_action_map_lookup_action(G_ACTION_MAP(g_application_get_default()), (n))
 
 enum
 {
@@ -57,13 +50,7 @@ typedef struct preview_s preview_t;
 
 typedef struct
 {
-    gchar *current_dvd_device;
-    gboolean              dont_clear_presets;
-    gboolean              scale_busy;
-    gint                  cancel_encode;
-    gint                  when_complete;
-    GtkBuilder          * builder;
-    GhbValue            * globals;
+    char                * current_dvd_device;
     GhbValue            * prefs;
     GhbValue            * settings;
     GhbValue            * settings_array;
@@ -74,10 +61,7 @@ typedef struct
     GtkTextBuffer       * queue_activity_buffer;
     GtkTextBuffer       * extra_activity_buffer;
     char                * extra_activity_path;
-    gboolean              append_queue_activity;
     preview_t           * preview;
-    int                   stderr_src_id;
-    GtkFileChooserNative* source_dialog;
 } signal_user_data_t;
 
 enum
@@ -104,14 +88,12 @@ gint ghb_widget_int(GtkWidget *widget);
 gint ghb_widget_boolean(GtkWidget *widget);
 
 void ghb_widget_to_setting(GhbValue *settings, GtkWidget *widget);
-int ghb_ui_update(
-    signal_user_data_t *ud, const gchar *name, const GhbValue *value);
-int ghb_ui_update_from_settings(
-    signal_user_data_t *ud, const gchar *name, const GhbValue *settings);
+int ghb_ui_update(const char *name, const GhbValue *value);
+int ghb_ui_update_from_settings(const char *name, const GhbValue *settings);
 int ghb_ui_settings_update(
     signal_user_data_t *ud, GhbValue *settings, const gchar *name,
     const GhbValue *value);
 const gchar* ghb_get_setting_key(GtkWidget *widget);
 void ghb_update_widget(GtkWidget *widget, const GhbValue *value);
 
-#endif // _SETTINGS_H_
+G_END_DECLS

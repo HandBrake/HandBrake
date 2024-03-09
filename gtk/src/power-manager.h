@@ -1,11 +1,12 @@
 /* Copyright (C) 2023-2024 HandBrake Team
  * SPDX-License-Identifier: GPL-2.0-or-later */
 
-#ifndef POWER_MANAGEMENT_H
-#define POWER_MANAGEMENT_H
+#pragma once
 
-#include "compat.h"
+#include "common.h"
 #include "settings.h"
+
+G_BEGIN_DECLS
 
 typedef enum {
     GHB_POWER_OK,
@@ -18,4 +19,5 @@ void ghb_power_manager_init (signal_user_data_t *ud);
 void ghb_power_manager_reset (void);
 void ghb_power_manager_dispose (signal_user_data_t *ud);
 
-#endif // POWER_MANAGEMENT_H
+G_END_DECLS
+

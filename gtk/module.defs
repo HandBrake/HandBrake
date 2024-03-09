@@ -47,12 +47,6 @@ else
     GTK.CONFIGURE.extra += -Db_lto=false
 endif
 
-ifeq (1,$(FEATURE.gst))
-    GTK.CONFIGURE.extra += -Dgstreamer=enabled
-else
-    GTK.CONFIGURE.extra += -Dgstreamer=disabled
-endif
-
 ifeq (1,$(FEATURE.fdk_aac))
     GTK.CONFIGURE.extra += -Dfdk-aac=enabled
 else

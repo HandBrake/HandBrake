@@ -26,7 +26,7 @@
                     <popUpButtonCell key="cell" type="push" title="Tracks" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" pullsDown="YES" id="8ZD-D6-TLA">
                         <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="menu" size="11"/>
-                        <menu key="menu" title="OtherViews" id="Fr7-eG-NuL">
+                        <menu key="menu" id="Fr7-eG-NuL">
                             <items>
                                 <menuItem title="Tracks" state="on" hidden="YES" id="TJO-RZ-jgb"/>
                                 <menuItem title="Add All Tracks" id="4PX-In-DpF">
@@ -109,7 +109,7 @@
                                         <popUpButtonCell key="dataCell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" borderStyle="border" imageScaling="proportionallyDown" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" id="kzn-6s-3Ka">
                                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                             <font key="font" metaFont="menu" size="11"/>
-                                            <menu key="menu" title="OtherViews" id="Umu-1b-U1Z">
+                                            <menu key="menu" id="Umu-1b-U1Z">
                                                 <items>
                                                     <menuItem title="Pop Up" id="cSW-OC-qKA"/>
                                                 </items>
@@ -268,7 +268,7 @@
                                         <popUpButtonCell key="dataCell" type="bevel" title="Pop Up" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" continuous="YES" state="on" borderStyle="bezel" imageScaling="proportionallyDown" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="vHW-fn-RSG" id="2Qz-Lh-O8g">
                                             <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                                             <font key="font" metaFont="menu" size="11"/>
-                                            <menu key="menu" title="OtherViews" id="UOP-xa-WpP">
+                                            <menu key="menu" id="UOP-xa-WpP">
                                                 <items>
                                                     <menuItem title="Pop Up" state="on" id="vHW-fn-RSG"/>
                                                 </items>
@@ -321,7 +321,7 @@
                                         <popUpButtonCell key="dataCell" type="bevel" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" continuous="YES" borderStyle="bezel" imageScaling="proportionallyDown" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" id="AdJ-Mv-JI2">
                                             <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                                             <font key="font" metaFont="menu" size="11"/>
-                                            <menu key="menu" title="OtherViews" id="ABd-Ec-K2L"/>
+                                            <menu key="menu" id="ABd-Ec-K2L"/>
                                         </popUpButtonCell>
                                         <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                         <prototypeCellViews>

@@ -16,7 +16,7 @@ option('flatpak',
 option('gstreamer',
        type: 'feature',
        value: 'disabled',
-       description: 'Disable gstreamer (live preview)')
+       description: 'DEPRECATED: gstreamer is no longer used')
 
 option('hb-dir',
        type: 'string',

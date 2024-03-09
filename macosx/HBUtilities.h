@@ -77,6 +77,13 @@ NS_ASSUME_NONNULL_BEGIN
 ///   - recursive: whether to recursively expand sub folders
 + (NSArray<NSURL *> *)expandURLs:(NSArray<NSURL *> *)fileURLs recursive:(BOOL)recursive;
 
+/// Trim an array of NSURL into an array by removing the urls
+/// that contains one of the excluded extension
+/// - Parameters:
+///   - fileURLs: an array of NSURL
+///   - extensions: an array of file extensions
++ (NSArray<NSURL *> *)trimURLs:(NSArray<NSURL *> *)fileURLs withExtension:(NSArray<NSString *> *)extensions;
+
 + (NSString *)isoCodeForNativeLang:(NSString *)language;
 + (NSString *)iso6392CodeFor:(NSString *)language;
 + (NSString *)languageCodeForIso6392Code:(NSString *)language;

@@ -22,6 +22,13 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (IBAction)toggleStartCancel:(id)sender;
 - (IBAction)togglePauseResume:(id)sender;
+- (IBAction)toggleDetails:(id)sender;
+- (IBAction)toggleQuickLook:(id)sender;
+
+- (IBAction)resetAll:(id)sender;
+- (IBAction)resetFailed:(id)sender;
+- (IBAction)removeAll:(id)sender;
+- (IBAction)removeCompleted:(id)sender;
 
 @end
 

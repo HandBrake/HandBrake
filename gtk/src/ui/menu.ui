@@ -1,25 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
-  <requires lib="gtk+" version="3.22"/>
-
-  <menu id="handbrake-menu">
+  <requires lib="gtk" version="4.0"/>
+  <menu id="handbrake-menu-bar">
     <submenu>
       <attribute name="label" translatable="yes">_File</attribute>
       <section>
         <item>
           <attribute name="action">app.source</attribute>
           <attribute name="label" translatable="yes">_Open Source…</attribute>
-          <attribute name="accel">&lt;control&gt;O</attribute>
         </item>
         <item>
           <attribute name="action">app.source-dir</attribute>
           <attribute name="label" translatable="yes">Open _Directory…</attribute>
-          <attribute name="accel">&lt;shift&gt;&lt;control&gt;O</attribute>
         </item>
         <item>
           <attribute name="action">app.destination</attribute>
           <attribute name="label" translatable="yes">_Set Destination…</attribute>
-          <attribute name="accel">&lt;control&gt;S</attribute>
         </item>
       </section>
       <section id="dvd-list">
@@ -32,7 +28,6 @@
         <item>
           <attribute name="action">app.quit</attribute>
           <attribute name="label" translatable="yes">_Quit</attribute>
-          <attribute name="accel">&lt;control&gt;Q</attribute>
         </item>
       </section>
     </submenu>
@@ -42,7 +37,6 @@
         <item>
           <attribute name="action">app.add-current</attribute>
           <attribute name="label" translatable="yes">_Add</attribute>
-          <attribute name="accel">&lt;alt&gt;A</attribute>
         </item>
         <item>
           <attribute name="action">app.add-multiple</attribute>
@@ -51,19 +45,16 @@
         <item>
           <attribute name="action">app.add-all</attribute>
           <attribute name="label" translatable="yes">Add A_ll</attribute>
-          <attribute name="accel">&lt;shift&gt;&lt;alt&gt;A</attribute>
         </item>
       </section>
       <section id="queue-encoding-actions">
         <item>
           <attribute name="action">app.queue-start</attribute>
           <attribute name="label" translatable="yes">_Start Encoding</attribute>
-          <attribute name="accel">&lt;control&gt;E</attribute>
         </item>
         <item>
           <attribute name="action">app.queue-pause</attribute>
           <attribute name="label" translatable="yes">_Pause Encoding</attribute>
-          <attribute name="accel">&lt;control&gt;P</attribute>
         </item>
       </section>
       <section>
@@ -83,22 +74,18 @@
         <item>
           <attribute name="action">app.show-presets</attribute>
           <attribute name="label" translatable="yes">Presets _List</attribute>
-          <attribute name="accel">&lt;alt&gt;L</attribute>
         </item>
         <item>
           <attribute name="action">app.show-queue</attribute>
           <attribute name="label" translatable="yes">_Queue</attribute>
-          <attribute name="accel">&lt;alt&gt;U</attribute>
         </item>
         <item>
           <attribute name="action">app.show-preview</attribute>
           <attribute name="label" translatable="yes">_Preview</attribute>
-          <attribute name="accel">&lt;alt&gt;R</attribute>
         </item>
         <item>
           <attribute name="action">app.show-activity</attribute>
           <attribute name="label" translatable="yes">_Activity Window</attribute>
-          <attribute name="accel">&lt;alt&gt;W</attribute>
         </item>
       </section>
     </submenu>
@@ -144,6 +131,10 @@
           <attribute name="label" translatable="yes">Reset _Built-in Presets</attribute>
         </item>
       </section>
+      <section id="presets-menu-official">
+      </section>
+      <section id="presets-menu-custom">
+      </section>
     </submenu>
     <submenu>
       <attribute name="label" translatable="yes">_Help</attribute>
@@ -151,7 +142,6 @@
         <item>
           <attribute name="action">app.guide</attribute>
           <attribute name="label" translatable="yes">_Online Documentation</attribute>
-          <attribute name="accel">F1</attribute>
         </item>
         <item>
           <attribute name="action">app.about</attribute>
@@ -160,6 +150,7 @@
       </section>
     </submenu>
   </menu>
+
   <menu id="hbfd-menu">
     <section id="hbfd-section">
       <item>
@@ -168,6 +159,7 @@
       </item>
     </section>
   </menu>
+
   <menu id="dvd-menu">
     <section id="dvd">
       <item>
@@ -176,4 +168,269 @@
       </item>
     </section>
   </menu>
+
+  <menu id="handbrake-header-menu-model">
+    <section>
+      <item>
+        <attribute name="action">app.destination</attribute>
+        <attribute name="label" translatable="yes">_Set Destination…</attribute>
+      </item>
+    </section>
+    <section>
+      <item>
+        <attribute name="action">app.queue-import</attribute>
+        <attribute name="label" translatable="yes">_Import Queue…</attribute>
+      </item>
+      <item>
+        <attribute name="action">app.queue-export</attribute>
+        <attribute name="label" translatable="yes">_Export Queue…</attribute>
+      </item>
+    </section>
+    <section>
+      <item>
+        <attribute name="action">app.show-activity</attribute>
+        <attribute name="label" translatable="yes">_Activity Window</attribute>
+      </item>
+      <item>
+        <attribute name="action">app.preferences</attribute>
+        <attribute name="label" translatable="yes">_Preferences</attribute>
+      </item>
+      <item>
+        <attribute name="action">app.guide</attribute>
+        <attribute name="label" translatable="yes">_Help</attribute>
+      </item>
+      <item>
+        <attribute name="action">app.about</attribute>
+        <attribute name="label" translatable="yes">A_bout HandBrake</attribute>
+      </item>
+    </section>
+    <section>
+      <item>
+        <attribute name="action">app.quit</attribute>
+        <attribute name="label" translatable="yes">_Quit</attribute>
+      </item>
+    </section>
+  </menu>
+
+  <menu id="preset-actions-menu-model">
+    <section>
+      <item>
+        <attribute name="action">app.preset-default</attribute>
+        <attribute name="label" translatable="yes">Set De_fault</attribute>
+      </item>
+    </section>
+    <section>
+      <item>
+        <attribute name="action">app.preset-save-as</attribute>
+        <attribute name="label" translatable="yes">_New Preset…</attribute>
+      </item>
+      <item>
+        <attribute name="action">app.preset-save</attribute>
+        <attribute name="label" translatable="yes">_Save</attribute>
+      </item>
+      <item>
+        <attribute name="action">app.preset-rename</attribute>
+        <attribute name="label" translatable="yes">_Rename…</attribute>
+      </item>
+      <item>
+        <attribute name="action">app.preset-remove</attribute>
+        <attribute name="label" translatable="yes">_Delete…</attribute>
+      </item>
+    </section>
+    <section>
+      <item>
+        <attribute name="action">app.preset-import</attribute>
+        <attribute name="label" translatable="yes">_Import Preset…</attribute>
+      </item>
+      <item>
+        <attribute name="action">app.preset-export</attribute>
+        <attribute name="label" translatable="yes">_Export Preset…</attribute>
+      </item>
+    </section>
+    <section>
+      <item>
+        <attribute name="action">app.presets-reload</attribute>
+        <attribute name="label" translatable="yes">Reset _Built-in Presets</attribute>
+      </item>
+    </section>
+  </menu>
+
+  <menu id="preset-context-menu-model">
+    <section>
+      <item>
+        <attribute name="action">app.preset-default</attribute>
+        <attribute name="label" translatable="yes">Set De_fault</attribute>
+      </item>
+    </section>
+    <section>
+      <item>
+        <attribute name="action">app.preset-save</attribute>
+        <attribute name="label" translatable="yes">_Save</attribute>
+      </item>
+      <item>
+        <attribute name="action">app.preset-rename</attribute>
+        <attribute name="label" translatable="yes">_Rename…</attribute>
+      </item>
+      <item>
+        <attribute name="action">app.preset-remove</attribute>
+        <attribute name="label" translatable="yes">_Delete…</attribute>
+      </item>
+    </section>
+    <section>
+      <item>
+        <attribute name="action">app.preset-export</attribute>
+        <attribute name="label" translatable="yes">_Export Preset…</attribute>
+      </item>
+    </section>
+  </menu>
+
+  <menu id="queue-actions-menu-model">
+    <section>
+      <item>
+        <attribute name="label" translatable="yes">_Play File</attribute>
+        <attribute name="action">app.queue-play-file</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">Open _Source Directory</attribute>
+        <attribute name="action">app.queue-open-source</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">Open _Destination Directory</attribute>
+        <attribute name="action">app.queue-open-dest</attribute>
+      </item>
+    </section>
+    <section>
+      <item>
+        <attribute name="label" translatable="yes">Open _Encode Log Directory</attribute>
+        <attribute name="action">app.queue-open-log-dir</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">Open Encode _Log</attribute>
+        <attribute name="action">app.queue-open-log</attribute>
+      </item>
+    </section>
+  </menu>
+  <menu id="queue-options-menu-model">
+    <section>
+      <item>
+        <attribute name="label" translatable="yes">Reset _Failed Jobs</attribute>
+        <attribute name="action">app.queue-reset-fail</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">_Reset All Jobs</attribute>
+        <attribute name="action">app.queue-reset-all</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">_Clear Completed Jobs</attribute>
+        <attribute name="action">app.queue-delete-complete</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">Clear _All Jobs</attribute>
+        <attribute name="action">app.queue-delete-all</attribute>
+      </item>
+    </section>
+    <section>
+      <item>
+        <attribute name="label" translatable="yes">_Import Queue…</attribute>
+        <attribute name="action">app.queue-import</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">_Export Queue…</attribute>
+        <attribute name="action">app.queue-export</attribute>
+      </item>
+    </section>
+  </menu>
+  <menu id="subtitle-add-menu-model">
+    <section>
+      <item>
+        <attribute name="label" translatable="yes">_Add Track</attribute>
+        <attribute name="action">app.subtitle-add</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">Add A_ll Tracks</attribute>
+        <attribute name="action">app.subtitle-add-all</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">Add _Foreign Audio Scan</attribute>
+        <attribute name="action">app.subtitle-add-fas</attribute>
+      </item>
+    </section>
+    <section>
+      <item>
+        <attribute name="label" translatable="yes">Add External Subtitle File</attribute>
+        <attribute name="action">app.subtitle-import</attribute>
+      </item>
+    </section>
+  </menu>
+  <menu id="queue-context-menu-model">
+    <section>
+      <item>
+        <attribute name="action">app.queue-play-file</attribute>
+        <attribute name="label" translatable="yes">_Play File</attribute>
+      </item>
+      <item>
+        <attribute name="action">app.queue-open-source</attribute>
+        <attribute name="label" translatable="yes">Open _Source Directory</attribute>
+      </item>
+      <item>
+        <attribute name="action">app.queue-open-dest</attribute>
+        <attribute name="label" translatable="yes">Open _Destination Directory</attribute>
+      </item>
+    </section>
+    <section>
+      <item>
+        <attribute name="action">app.queue-move-top</attribute>
+        <attribute name="label" translatable="yes">Move to _Top</attribute>
+      </item>
+      <item>
+        <attribute name="action">app.queue-move-bottom</attribute>
+        <attribute name="label" translatable="yes">Move to _Bottom</attribute>
+      </item>
+    </section>
+    <section>
+      <item>
+        <attribute name="action">app.queue-edit</attribute>
+        <attribute name="label" translatable="yes">_Edit</attribute>
+      </item>
+      <item>
+        <attribute name="action">app.queue-reset</attribute>
+        <attribute name="label" translatable="yes">_Reset</attribute>
+      </item>
+    </section>
+    <section>
+      <item>
+        <attribute name="action">app.queue-delete</attribute>
+        <attribute name="label" translatable="yes">Re_move</attribute>
+      </item>
+    </section>
+  </menu>
+  <menu id="add-audio-menu">
+    <section>
+      <item>
+        <attribute name="action">app.audio-add</attribute>
+        <attribute name="label" translatable="yes">_Add New Track</attribute>
+      </item>
+      <item>
+        <attribute name="action">app.audio-add-all</attribute>
+        <attribute name="label" translatable="yes">Add A_ll Tracks</attribute>
+      </item>
+    </section>
+  </menu>
+  <menu id="add-subtitle-menu">
+    <section>
+      <item>
+        <attribute name="action">app.subtitle-add</attribute>
+        <attribute name="label" translatable="yes">_Add New Track</attribute>
+      </item>
+      <item>
+        <attribute name="action">app.subtitle-add-all</attribute>
+        <attribute name="label" translatable="yes">Add A_ll Tracks</attribute>
+      </item>
+      <item>
+        <attribute name="action">app.subtitle-add-fas</attribute>
+        <attribute name="label" translatable="yes">Add _Foreign Audio Scan</attribute>
+      </item>
+    </section>
+  </menu>
 </interface>
+

@@ -1,11 +1,9 @@
 /* Copyright (C) 2022-2024 HandBrake Team
  * SPDX-License-Identifier: GPL-2.0-or-later */
 
-#ifndef COLOR_SCHEME_H
-#define COLOR_SCHEME_H
+#pragma once
 
-#include <gtk/gtk.h>
-#include <glib.h>
+#include "common.h"
 
 G_BEGIN_DECLS
 
@@ -41,5 +39,3 @@ AppColorScheme color_scheme_get_app_scheme (void);
 DesktopColorScheme color_scheme_get_desktop_scheme (void);
 
 G_END_DECLS
-
-#endif /* COLOR_SCHEME_H */

@@ -8,8 +8,8 @@ project('handbrake-gtk', 'c', 'cpp',
   default_options: ['warning_level=1', 'buildtype=release'])
 
 # Minimum versions for dependencies
-glib_min = '>= 2.56'
-gtk_min = '>= 3.22'
+glib_min = '>= 2.68'
+gtk_min  = '>= 4.4'
 gst_min  = '>= 1.10'
 
 cc = meson.get_compiler('c')
@@ -40,7 +40,7 @@ ghb_deps = [
   dependency('gio-2.0', version: glib_min),
   dependency('gthread-2.0', version: glib_min),
   dependency('gmodule-2.0', version: glib_min),
-  dependency('gtk+-3.0', version: gtk_min),
+  dependency('gtk4', version: gtk_min),
   dependency('jansson'),
   dependency('libass'),
   dependency('libavcodec'),
@@ -67,19 +67,6 @@ ghb_deps = [
   dependency('zimg'),
   dependency('zlib'),
 ]
-
-if get_option('gstreamer').enabled()
-  gst = dependency('gstreamer-1.0', version: gst_min, required: false)
-  gst_audio = dependency('gstreamer-audio-1.0', required: false)
-  gst_video = dependency('gstreamer-video-1.0', required: false)
-  gst_pbutils = dependency('gstreamer-pbutils-1.0', required: false)
-  if gst_pbutils.found()
-    ghb_deps += [gst, gst_audio, gst_video, gst_pbutils]
-    add_project_arguments('-D_ENABLE_GST', language: 'c')
-  else
-    message('Preview support disabled as gstreamer-plugins-base was not found.')
-  endif
-endif
 
 if get_option('libdovi').enabled()
   ghb_deps += dependency('dovi')
@@ -137,6 +124,9 @@ link_args = cc.get_supported_link_arguments(
   '-Wl,--export-dynamic', '-Wl,--exclude-libs,ALL')
 
 add_project_link_arguments(link_args, language: ['c', 'cpp'])
+
+add_project_arguments('-DGDK_VERSION_MIN_REQUIRED=GDK_VERSION_4_4',
+  '-DGDK_VERSION_MAX_ALLOWED=GDK_VERSION_4_4', language: 'c')
 
 subdir('po')
 subdir('icons')

@@ -17,14 +17,11 @@
  * SPDX-License-Identifier: GPL-2.0-only
  */
 
-#if defined(_WIN32)
+#include "hb-dvd.h"
+
+#ifdef _WIN32
 #include <windows.h>
 #endif
-
-#include <glib.h>
-#include <gio/gio.h>
-
-#include "hb-dvd.h"
 
 #if 0
 #include <unistd.h>

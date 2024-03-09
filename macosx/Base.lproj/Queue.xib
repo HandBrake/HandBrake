@@ -2,14 +2,12 @@
 <document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="32700.99.1234" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="22687"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="22689"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="HBQueueController">
             <connections>
-                <outlet property="pauseToolbarItem" destination="s7o-pK-heI" id="SP7-Fq-gw9"/>
-                <outlet property="ripToolbarItem" destination="SX6-mq-Hck" id="va2-0n-3T0"/>
                 <outlet property="window" destination="2576" id="2645"/>
             </connections>
         </customObject>
@@ -26,120 +24,6 @@
                 <rect key="frame" x="0.0" y="0.0" width="584" height="424"/>
                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             </view>
-            <toolbar key="toolbar" implicitIdentifier="0FE76B40-49B7-48AE-B44E-D1B8034BC88A" explicitIdentifier="HBQueueToolbar" displayMode="iconAndLabel" sizeMode="regular" id="ZVb-ld-0UP">
-                <allowedToolbarItems>
-                    <toolbarItem implicitItemIdentifier="609C5CFE-D854-4567-9CC2-70E109CBA332" explicitItemIdentifier="HBQueueStartCancelToolbarIdentifier" label="Start" paletteLabel="Start/Cancel" toolTip="Start Encoding" tag="-1" image="encode" sizingBehavior="auto" id="SX6-mq-Hck">
-                        <connections>
-                            <action selector="toggleStartCancel:" target="-2" id="ABS-fA-RwJ"/>
-                        </connections>
-                    </toolbarItem>
-                    <toolbarItem implicitItemIdentifier="7DB01500-5492-42BC-BDEE-55E9EF3765A1" explicitItemIdentifier="HBQueuePauseResumeToolbarIdentifier" label="Pause" paletteLabel="Pause/Resume" toolTip="Pause Encoding" tag="-1" image="pauseencode" sizingBehavior="auto" id="s7o-pK-heI">
-                        <connections>
-                            <action selector="togglePauseResume:" target="-2" id="bmr-hx-loD"/>
-                        </connections>
-                    </toolbarItem>
-                    <toolbarItem implicitItemIdentifier="NSToolbarSpaceItem" id="rHN-a0-oZQ"/>
-                    <toolbarItem implicitItemIdentifier="NSToolbarFlexibleSpaceItem" id="QuV-M8-cet"/>
-                    <toolbarItem implicitItemIdentifier="E914B732-9FA4-42E0-AFA6-353A8ACC406B" label="Action" paletteLabel="Action" image="NSActionTemplate" sizingBehavior="auto" id="DCB-WP-NRs">
-                        <nil key="toolTip"/>
-                        <popUpButton key="view" verticalHuggingPriority="750" id="Wfu-Hw-JBC">
-                            <rect key="frame" x="0.0" y="14" width="50" height="25"/>
-                            <autoresizingMask key="autoresizingMask"/>
-                            <popUpButtonCell key="cell" type="roundTextured" bezelStyle="texturedRounded" alignment="left" lineBreakMode="truncatingTail" borderStyle="border" imageScaling="proportionallyDown" inset="2" pullsDown="YES" id="Zxj-rr-UnA">
-                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                <font key="font" metaFont="menu"/>
-                                <menu key="menu" id="BBi-6p-GyW">
-                                    <items>
-                                        <menuItem image="NSActionTemplate" hidden="YES" id="l0x-1G-MEr"/>
-                                        <menuItem title="Reset All Jobs" id="kPX-am-UX1">
-                                            <modifierMask key="keyEquivalentModifierMask"/>
-                                            <connections>
-                                                <action selector="resetAll:" target="-2" id="AYP-Za-Zyi"/>
-                                            </connections>
-                                        </menuItem>
-                                        <menuItem title="Reset Failed Jobs" id="0zn-7P-JbR">
-                                            <modifierMask key="keyEquivalentModifierMask"/>
-                                            <connections>
-                                                <action selector="resetFailed:" target="-2" id="gJP-lg-vxx"/>
-                                            </connections>
-                                        </menuItem>
-                                        <menuItem isSeparatorItem="YES" id="9Kv-XR-d3o"/>
-                                        <menuItem title="Remove All Jobs" id="Tvo-xt-sag">
-                                            <modifierMask key="keyEquivalentModifierMask"/>
-                                            <connections>
-                                                <action selector="removeAll:" target="-2" id="RYc-Bg-ORR"/>
-                                            </connections>
-                                        </menuItem>
-                                        <menuItem title="Remove Completed Jobs" id="9tg-YJ-DuI">
-                                            <modifierMask key="keyEquivalentModifierMask"/>
-                                            <connections>
-                                                <action selector="removeCompleted:" target="-2" id="J6v-wU-JAD"/>
-                                            </connections>
-                                        </menuItem>
-                                    </items>
-                                </menu>
-                            </popUpButtonCell>
-                        </popUpButton>
-                    </toolbarItem>
-                    <toolbarItem implicitItemIdentifier="938D3EC6-1547-4AAB-86AF-B3FD3C7AF8BD" label="When Done" paletteLabel="When Done" toolTip="Action to perform when encoding is complete." title="Do Nothing" sizingBehavior="auto" id="a3c-kV-98E">
-                        <popUpButton key="view" verticalHuggingPriority="750" id="rfS-M1-CnB">
-                            <rect key="frame" x="0.0" y="14" width="173" height="25"/>
-                            <autoresizingMask key="autoresizingMask"/>
-                            <popUpButtonCell key="cell" type="roundTextured" title="Do Nothing" bezelStyle="texturedRounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" selectedItem="sm5-26-sAg" id="pch-jl-VXA">
-                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                <font key="font" metaFont="menu"/>
-                                <menu key="menu" id="1Ee-Xt-VES">
-                                    <items>
-                                        <menuItem title="Do Nothing" state="on" id="sm5-26-sAg"/>
-                                        <menuItem title="Put Computer to Sleep" tag="1" id="GUQ-xb-HVS"/>
-                                        <menuItem title="Shut Down Computer" tag="2" id="QmP-SQ-XKK"/>
-                                        <menuItem title="Quit HandBrake" tag="3" id="tBG-Gf-ynI"/>
-                                    </items>
-                                </menu>
-                            </popUpButtonCell>
-                            <connections>
-                                <binding destination="z2J-h1-IDv" name="selectedTag" keyPath="values.HBQueueDoneAction" id="uSr-Eh-prZ"/>
-                            </connections>
-                        </popUpButton>
-                    </toolbarItem>
-                    <toolbarItem implicitItemIdentifier="963C2AD9-6708-4781-9411-3111E9713E3B" label="Details" paletteLabel="Details" image="details" sizingBehavior="auto" id="DfN-Iw-bzy">
-                        <nil key="toolTip"/>
-                        <button key="view" verticalHuggingPriority="750" id="KyK-r0-0eJ">
-                            <rect key="frame" x="9" y="14" width="27" height="23"/>
-                            <autoresizingMask key="autoresizingMask"/>
-                            <buttonCell key="cell" type="roundTextured" bezelStyle="texturedRounded" image="details" imagePosition="only" alignment="center" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="BjZ-aR-Hpe">
-                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                <font key="font" metaFont="system"/>
-                            </buttonCell>
-                        </button>
-                        <connections>
-                            <action selector="toggleDetails:" target="-2" id="EcM-0b-BRV"/>
-                        </connections>
-                    </toolbarItem>
-                    <toolbarItem implicitItemIdentifier="5C78EBF4-3788-4E56-8AFF-F458898F6A84" label="Quick Look" paletteLabel="Quick Look" image="NSQuickLookTemplate" bordered="YES" sizingBehavior="auto" id="nCq-Nc-EbB">
-                        <nil key="toolTip"/>
-                        <button key="view" verticalHuggingPriority="750" id="VlJ-Hc-dCl">
-                            <rect key="frame" x="17" y="14" width="33" height="23"/>
-                            <autoresizingMask key="autoresizingMask"/>
-                            <buttonCell key="cell" type="roundTextured" bezelStyle="texturedRounded" image="NSQuickLookTemplate" imagePosition="only" alignment="center" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="CfE-wU-25D">
-                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                <font key="font" metaFont="system"/>
-                            </buttonCell>
-                        </button>
-                        <connections>
-                            <action selector="toggleQuickLook:" target="-2" id="6da-8Y-VUg"/>
-                        </connections>
-                    </toolbarItem>
-                </allowedToolbarItems>
-                <defaultToolbarItems>
-                    <toolbarItem reference="SX6-mq-Hck"/>
-                    <toolbarItem reference="s7o-pK-heI"/>
-                    <toolbarItem reference="QuV-M8-cet"/>
-                    <toolbarItem reference="a3c-kV-98E"/>
-                    <toolbarItem reference="DCB-WP-NRs"/>
-                    <toolbarItem reference="DfN-Iw-bzy"/>
-                </defaultToolbarItems>
-            </toolbar>
             <connections>
                 <outlet property="delegate" destination="-2" id="2579"/>
             </connections>
@@ -147,11 +31,4 @@
         </window>
         <userDefaultsController representsSharedInstance="YES" id="z2J-h1-IDv"/>
     </objects>
-    <resources>
-        <image name="NSActionTemplate" width="20" height="20"/>
-        <image name="NSQuickLookTemplate" width="26" height="17"/>
-        <image name="details" width="15" height="12"/>
-        <image name="encode" width="32" height="32"/>
-        <image name="pauseencode" width="32" height="32"/>
-    </resources>
 </document>

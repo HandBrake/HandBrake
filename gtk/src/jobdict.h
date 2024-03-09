@@ -1,29 +1,28 @@
-/*
- * settings.h
- * Copyright (C) John Stebbins 2008-2024 <stebbins@stebbins>
+/* jobdict.h
  *
- * settings.h is free software.
+ * Copyright (C) 2008-2024 John Stebbins <stebbins@stebbins>
  *
- * You may redistribute it and/or modify it under the terms of the
- * GNU General Public License version 2, as published by the Free Software
- * Foundation.
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2,
+ * as published by the Free Software Foundation.
  *
- * settings.h is distributed in the hope that it will be useful,
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
- * See the GNU General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with callbacks.h.  If not, write to:
- *  The Free Software Foundation, Inc.,
- *  51 Franklin Street, Fifth Floor
- *  Boston, MA  02110-1301, USA.
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ *
+ * SPDX-License-Identifier: GPL-2.0-only
  */
 
-#if !defined(_JOBDICT_H_)
-#define _JOBDICT_H_
+#pragma once
 
+#include "common.h"
 #include "values.h"
+
+G_BEGIN_DECLS
 
 GhbValue* ghb_get_job_settings(GhbValue *settings);
 GhbValue* ghb_get_job_source_settings(GhbValue *settings);
@@ -43,4 +42,4 @@ GhbValue* ghb_get_job_subtitle_search(GhbValue *settings);
 GhbValue* ghb_get_job_filter_settings(GhbValue *settings);
 GhbValue* ghb_get_job_filter_list(GhbValue *settings);
 
-#endif // _JOBDICT_H_
+G_END_DECLS

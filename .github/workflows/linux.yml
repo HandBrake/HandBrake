@@ -27,24 +27,10 @@ jobs:
       run: |
         sudo apt-get update
         sudo apt-get install autoconf automake build-essential libass-dev libbz2-dev libfontconfig1-dev libfreetype6-dev libfribidi-dev libharfbuzz-dev libjansson-dev liblzma-dev libmp3lame-dev libnuma-dev libturbojpeg0-dev libssl-dev
-        sudo apt-get install libogg-dev libopus-dev libsamplerate-dev libspeex-dev libtheora-dev libtool libtool-bin libvorbis-dev libx264-dev libxml2-dev libvpx-dev make nasm ninja-build patch tar yasm zlib1g-dev appstream
+        sudo apt-get install libogg-dev libopus-dev libsamplerate-dev libspeex-dev libtheora-dev libtool libtool-bin libvorbis-dev libx264-dev libxml2-dev libvpx-dev make nasm ninja-build patch tar zlib1g-dev appstream
         sudo pip3 install meson
-        sudo apt-get install gstreamer1.0-libav libappindicator-dev libdbus-glib-1-dev libglib2.0-dev libgtk-3-dev libnotify-dev
+        sudo apt-get install gettext libglib2.0-dev libgtk-4-dev
         sudo apt-get install libva-dev libdrm-dev llvm clang
-
-    - name: Setup Toolchain
-      run: |
-        wget https://github.com/HandBrake/HandBrake-toolchains/releases/download/1.0/cmake-3.16.3-Linux-x86_64.tar.gz
-        SHA=$(sha1sum cmake-3.16.3-Linux-x86_64.tar.gz)
-        EXPECTED="a0f48057d8ccb6d4e50e80c77796466315dd2bfb  cmake-3.16.3-Linux-x86_64.tar.gz"
-        if [ "$SHA" == "$EXPECTED" ];
-        then
-            echo "Extracting CMake"
-            tar xvf cmake-3.16.3-Linux-x86_64.tar.gz
-        else
-            echo "Toolchain Verification FAILED. Exiting!"
-            return -1
-        fi
 
     - name: Setup Cargo-C Toolchain
       if: steps.linux-cargo-c-toolchain.outputs.cache-hit != 'true'
@@ -53,6 +39,4 @@ jobs:
 
     - name: Build HandBrake Linux
       run: |
-         PWD=$(pwd)
-         export PATH=$PWD/cmake-3.16.3-Linux-x86_64/bin:$PATH
          ./configure --enable-qsv --enable-vce --enable-nvenc --enable-nvdec --launch-jobs=0 --launch

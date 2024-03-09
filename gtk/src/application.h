@@ -3,10 +3,8 @@
 
 #pragma once
 
-#include <gio/gio.h>
-#include <gtk/gtk.h>
-#include <glib.h>
-#include "config.h"
+#include "common.h"
+#include "settings.h"
 
 G_BEGIN_DECLS
 
@@ -23,5 +21,16 @@ GhbApplication *ghb_application_new(const char *exe_name);
 
 char *ghb_application_get_app_path(GhbApplication *self);
 char *ghb_application_get_app_dir(GhbApplication *self);
+
+signal_user_data_t *ghb_ud (void);
+int ghb_get_cancel_status(void);
+void ghb_set_cancel_status(int status);
+int ghb_get_queue_done_action(void);
+void ghb_set_queue_done_action(int action);
+void ghb_set_scan_source(const char *source);
+const char *ghb_get_scan_source(void);
+
+GtkWidget *ghb_builder_widget(const char *name);
+GObject *ghb_builder_object(const char *name);
 
 G_END_DECLS

@@ -2,6 +2,7 @@
 <gresources>
   <gresource prefix="/fr/handbrake/ghb/ui">
     <file>ghb.ui</file>
+    <file>ghb-button.ui</file>
     <file>ghb-chapter-row.ui</file>
     <file>ghb-file-button.ui</file>
     <file>ghb-queue-row.ui</file>

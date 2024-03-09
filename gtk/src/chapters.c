@@ -1,41 +1,35 @@
-/* -*- Mode: C; indent-tabs-mode: nil; c-basic-offset: 4; tab-width: 4 -*- */
-/*
- * chapters.c
- * Copyright (C) John Stebbins 2008-2024 <stebbins@stebbins>
+/* chapters.c
  *
- * chapters.c is free software.
+ * Copyright (C) 2008-2024 John Stebbins <stebbins@stebbins>
  *
- * You may redistribute it and/or modify it under the terms of the
- * GNU General Public License version 2, as published by the Free Software
- * Foundation.
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2,
+ * as published by the Free Software Foundation.
  *
- * chapters.c is distributed in the hope that it will be useful,
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
- * See the GNU General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with main.c.  If not, write to:
- *  The Free Software Foundation, Inc.,
- *  51 Franklin Street, Fifth Floor
- *  Boston, MA  02110-1301, USA.
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ *
+ * SPDX-License-Identifier: GPL-2.0-only
  */
 
-#include "compat.h"
-#include "hb-backend.h"
+#include "chapters.h"
+
+#include "application.h"
 #include "callbacks.h"
+#include "compat.h"
+#include "ghb-chapter-row.h"
+#include "hb-backend.h"
 #include "jobdict.h"
 #include "presets.h"
-#include <math.h>
-#include <glib.h>
-#include <glib-object.h>
-#include <glib/gstdio.h>
-#include <glib/gi18n.h>
-#include "libxml/parser.h"
-#include "libxml/xpath.h"
 
-#include "chapters.h"
-#include "ghb-chapter-row.h"
+#include <libxml/parser.h>
+#include <libxml/xpath.h>
+#include <math.h>
 
 static gboolean chapter_keypress_cb (GtkEventController * keycon, guint keyval,
                                      guint keycode, GdkModifierType state,
@@ -50,14 +44,8 @@ create_chapter_row (int index, gint64 start, gint64 duration,
     GtkWidget *row = ghb_chapter_row_new(index, start, duration, name);
     g_signal_connect(row, "notify::name", G_CALLBACK(chapter_changed_cb), ud);
 
-    GtkEventController * econ;
-
-#if GTK_CHECK_VERSION(4, 4, 0)
-    econ = gtk_event_controller_key_new();
-    gtk_widget_add_controller(econ, row);
-#else
-    econ = gtk_event_controller_key_new(row);
-#endif
+    GtkEventController *econ = gtk_event_controller_key_new();
+    gtk_widget_add_controller(row, econ);
     g_signal_connect(econ, "key-pressed", G_CALLBACK(chapter_keypress_cb), ud);
 
     gtk_widget_show(row);
@@ -118,13 +106,9 @@ static void
 ghb_clear_chapter_list_ui(signal_user_data_t * ud)
 {
     GtkListBox    * lb;
-    GtkListBoxRow * row;
 
-    lb = GTK_LIST_BOX(GHB_WIDGET(ud->builder, "chapters_list"));
-    while ((row = gtk_list_box_get_row_at_index(lb, 0)) != NULL)
-    {
-        gtk_container_remove(GTK_CONTAINER(lb), GTK_WIDGET(row));
-    }
+    lb = GTK_LIST_BOX(ghb_builder_widget("chapters_list"));
+    ghb_list_box_remove_all(lb);
 }
 
 static void
@@ -136,7 +120,7 @@ chapter_refresh_list_ui(signal_user_data_t *ud)
     gint         ii, count;
     gint64       start = 0, duration;
 
-    lb = GTK_LIST_BOX(GHB_WIDGET(ud->builder, "chapters_list"));
+    lb = GTK_LIST_BOX(ghb_builder_widget("chapters_list"));
 
     chapter_list = ghb_get_job_chapter_list(ud->settings);
     count = ghb_array_len(chapter_list);
@@ -263,7 +247,7 @@ chapter_list_export (GtkFileChooserNative *dialog,
             return;
         }
 
-        filename = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(dialog));
+        filename = ghb_file_chooser_get_filename(GTK_FILE_CHOOSER(dialog));
 
         chapter_list_export_xml(filename, chapter_list);
         exportDir = ghb_dict_get_string(ud->prefs, "ExportDirectory");
@@ -449,7 +433,7 @@ chapters_import_response_cb (GtkFileChooser *dialog,
 
     if (response == GTK_RESPONSE_ACCEPT)
     {
-        filename = gtk_file_chooser_get_filename(dialog);
+        filename = ghb_file_chooser_get_filename(dialog);
         chapter_list_import_xml(filename, ud);
         g_free(filename);
     }
@@ -465,17 +449,16 @@ chapters_export_action_cb (GSimpleAction *action, GVariant *param,
     const gchar     *exportDir;
     GtkFileFilter   *filter;
 
-    hb_window = GTK_WINDOW(GHB_WIDGET(ud->builder, "hb_window"));
+    hb_window = GTK_WINDOW(ghb_builder_widget("hb_window"));
     dialog = gtk_file_chooser_native_new("Export Chapters", hb_window,
                 GTK_FILE_CHOOSER_ACTION_SAVE,
-                GHB_STOCK_SAVE,
-                GHB_STOCK_CANCEL);
+                _("_Save"),
+                _("_Cancel"));
 
     ghb_add_file_filter(GTK_FILE_CHOOSER(dialog), ud, _("All Files"), "FilterAll");
     filter = ghb_add_file_filter(GTK_FILE_CHOOSER(dialog), ud, _("Chapters (*.xml)"), "FilterXML");
     gtk_file_chooser_set_filter(GTK_FILE_CHOOSER(dialog), filter);
     gtk_file_chooser_set_current_name(GTK_FILE_CHOOSER(dialog), "chapters.xml");
-    gtk_file_chooser_set_do_overwrite_confirmation(GTK_FILE_CHOOSER(dialog), TRUE);
 
     exportDir = ghb_dict_get_string(ud->prefs, "ExportDirectory");
     if (exportDir && exportDir[0] != '\0')
@@ -495,11 +478,11 @@ chapters_import_action_cb (GSimpleAction *action, GVariant *param,
     GtkFileChooserNative *dialog;
     GtkFileFilter   *filter;
 
-    hb_window = GTK_WINDOW(GHB_WIDGET(ud->builder, "hb_window"));
+    hb_window = GTK_WINDOW(ghb_builder_widget("hb_window"));
     dialog = gtk_file_chooser_native_new("Import Chapters", hb_window,
                 GTK_FILE_CHOOSER_ACTION_OPEN,
-                GHB_STOCK_OPEN,
-                GHB_STOCK_CANCEL);
+                _("_Open"),
+                _("_Cancel"));
 
     ghb_add_file_filter(GTK_FILE_CHOOSER(dialog), ud, _("All Files"), "FilterAll");
     filter = ghb_add_file_filter(GTK_FILE_CHOOSER(dialog), ud, _("Chapters (*.xml)"), "FilterXML");

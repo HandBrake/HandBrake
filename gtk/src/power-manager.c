@@ -13,15 +13,17 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
  *
  * SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "power-manager.h"
-#include "queuehandler.h"
+
+#include "application.h"
 #include "callbacks.h"
 #include "notifications.h"
+#include "queuehandler.h"
 
 #define UPOWER_PATH "org.freedesktop.UPower"
 #define UPOWER_OBJECT "/org/freedesktop/UPower"
@@ -56,17 +58,15 @@ static GPowerProfileMonitor *power_monitor;
 #endif
 
 static void
-show_power_widgets (const char *widgets[], signal_user_data_t *ud)
+show_power_widgets (const char *widgets[])
 {
     GtkWidget *widget;
 
-    if (ud->builder == NULL)
-        return;
-
     for (int i = 0; widgets[i] != NULL; i++)
     {
-        widget = GHB_WIDGET(ud->builder, widgets[i]);
-        gtk_widget_set_visible(widget, TRUE);
+        widget = ghb_builder_widget(widgets[i]);
+        if (widget)
+            gtk_widget_set_visible(widget, TRUE);
     }
 }
 
@@ -140,7 +140,7 @@ battery_proxy_new_cb (GObject *source, GAsyncResult *result,
         {
             g_signal_connect(proxy, "g-properties-changed",
                          G_CALLBACK(battery_level_cb), ud);
-            show_power_widgets(battery_widgets, ud);
+            show_power_widgets(battery_widgets);
             battery_proxy = proxy;
         }
         else
@@ -272,7 +272,7 @@ power_monitor_new (signal_user_data_t *ud)
     {
         g_signal_connect(monitor, "notify::power-saver-enabled",
                          G_CALLBACK(power_save_cb), ud);
-        show_power_widgets(power_save_widgets, ud);
+        show_power_widgets(power_save_widgets);
     }
     else
     {

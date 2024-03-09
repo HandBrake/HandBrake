@@ -19,23 +19,10 @@
 
 #include "compat.h"
 
-G_MODULE_EXPORT gboolean
-ghb_widget_hide_on_close(
-    GtkWidget *widget,
-#if !GTK_CHECK_VERSION(4, 4, 0)
-    GdkEvent *event,
-#endif
-    gpointer *ud)
-{
-    gtk_widget_set_visible(widget, FALSE);
-    return TRUE;
-}
-
 /*
  * From https://gitlab.gnome.org/GNOME/gtk/-/blob/3.24.38/gtk/gtkdialog.c#L1240
  * Copyright (C) 1995-1997 Peter Mattis, Spencer Kimball and Josh MacDonald
  */
-#if GTK_CHECK_VERSION(4, 4, 0)
 typedef struct
 {
     GtkDialog *dialog;
@@ -71,16 +58,6 @@ run_response_handler (GtkDialog *dialog, int response_id, gpointer data)
     shutdown_loop(ri);
 }
 
-static int
-run_delete_handler (GtkDialog *dialog, GdkEventAny *event, gpointer data)
-{
-    RunInfo *ri = data;
-
-    shutdown_loop(ri);
-
-    return TRUE; /* Do not destroy */
-}
-
 static void
 run_destroy_handler (GtkDialog *dialog, gpointer data)
 {
@@ -98,7 +75,6 @@ int ghb_dialog_run (GtkDialog *dialog)
     gulong response_handler;
     gulong unmap_handler;
     gulong destroy_handler;
-    gulong delete_handler;
 
     g_return_val_if_fail(GTK_IS_DIALOG(dialog), -1);
 
@@ -121,11 +97,6 @@ int ghb_dialog_run (GtkDialog *dialog)
                                      G_CALLBACK(run_unmap_handler),
                                      &ri);
 
-    delete_handler = g_signal_connect(dialog,
-                                      "delete-event",
-                                      G_CALLBACK(run_delete_handler),
-                                      &ri);
-
     destroy_handler = g_signal_connect(dialog,
                                        "destroy",
                                        G_CALLBACK(run_destroy_handler),
@@ -146,7 +117,6 @@ int ghb_dialog_run (GtkDialog *dialog)
 
         g_signal_handler_disconnect(dialog, response_handler);
         g_signal_handler_disconnect(dialog, unmap_handler);
-        g_signal_handler_disconnect(dialog, delete_handler);
         g_signal_handler_disconnect(dialog, destroy_handler);
     }
 
@@ -154,9 +124,49 @@ int ghb_dialog_run (GtkDialog *dialog)
 
     return ri.response_id;
 }
-#else
-int ghb_dialog_run (GtkDialog *dialog)
+
+void
+ghb_file_chooser_set_initial_file (GtkFileChooser *chooser, const char *file)
 {
-    return gtk_dialog_run(dialog);
+    if (!file || !file[0])
+    {
+        return;
+    }
+    else if (g_file_test(file, G_FILE_TEST_IS_DIR))
+    {
+        GFile *gfile = g_file_new_for_path(file);
+        gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(chooser), gfile, NULL);
+        g_object_unref(gfile);
+    }
+    else
+    {
+        char *dir = g_path_get_dirname(file);
+        if (g_file_test(dir, G_FILE_TEST_IS_DIR))
+        {
+            GFile *gfile = g_file_new_for_path(dir);
+            gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(chooser), gfile, NULL);
+            g_object_unref(gfile);
+        }
+        g_free(dir);
+        if (gtk_file_chooser_get_action(chooser) == GTK_FILE_CHOOSER_ACTION_SAVE)
+        {
+            char *base = g_path_get_basename(file);
+            gtk_file_chooser_set_current_name(GTK_FILE_CHOOSER(chooser), base);
+            g_free(base);
+        }
+    }
 }
-#endif
+
+char *
+ghb_file_chooser_get_filename (GtkFileChooser *chooser)
+{
+    g_autoptr(GFile) file = gtk_file_chooser_get_file(chooser);
+    return g_file_get_path(file);
+}
+
+char *
+ghb_file_chooser_get_current_folder (GtkFileChooser *chooser)
+{
+    g_autoptr(GFile) folder = gtk_file_chooser_get_current_folder(chooser);
+    return g_file_get_path(folder);
+}

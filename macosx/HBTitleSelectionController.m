@@ -5,12 +5,13 @@
  It may be used under the terms of the GNU General Public License. */
 
 #import "HBTitleSelectionController.h"
+#import "HBTableView.h"
 
 @import HandBrakeKit;
 
 @interface HBTitleSelection : NSObject
 @property (nonatomic, readonly) HBTitle *title;
-@property (nonatomic, readonly) BOOL selected;
+@property (nonatomic, readonly) BOOL enabled;
 @property (nonatomic, readonly, assign) NSUndoManager *undo;
 @end
 
@@ -20,27 +21,29 @@
     if (self = [super init])
     {
         _title = title;
-        _selected = YES;
+        _enabled = YES;
         _undo = undo;
     }
     return self;
 }
 
-- (void)setSelected:(BOOL)selected
+- (void)setEnabled:(BOOL)enabled
 {
-    if (selected != _selected)
+    if (enabled != _enabled)
     {
-        [[self.undo prepareWithInvocationTarget:self] setSelected:_selected];
+        [[self.undo prepareWithInvocationTarget:self] setEnabled:_enabled];
     }
-    _selected = selected;
+    _enabled = enabled;
 }
 @end
 
 @interface HBTitleSelectionController () <NSTableViewDataSource, NSTableViewDelegate>
 
+@property (nonatomic, weak) IBOutlet HBTableView *tableView;
 @property (nonatomic, strong) IBOutlet NSArrayController *arrayController;
+
 @property (nonatomic, readwrite) NSArray<HBTitleSelection *> *titles;
-@property (nonatomic, readonly, assign) id<HBTitleSelectionDelegate> delegate;
+@property (nonatomic, readonly, weak) id<HBTitleSelectionDelegate> delegate;
 @property (nonatomic, readonly) NSString *message;
 
 @end
@@ -72,11 +75,45 @@
     self.arrayController.sortDescriptors = [NSArray arrayWithObject:mySortDescriptor];
 }
 
-- (IBAction)deselectAll:(id)sender
+- (IBAction)enable:(id)sender
+{
+    NSIndexSet *indexes = self.tableView.targetedRowIndexes;
+    for (HBTitleSelection *title in [self.arrayController.arrangedObjects objectsAtIndexes:indexes])
+    {
+        title.enabled = YES;
+    }
+}
+
+- (IBAction)disable:(id)sender
+{
+    NSIndexSet *indexes = self.tableView.targetedRowIndexes;
+    for (HBTitleSelection *title in [self.arrayController.arrangedObjects objectsAtIndexes:indexes])
+    {
+        title.enabled = NO;
+    }
+}
+
+- (IBAction)enableAll:(id)sender
 {
     for (HBTitleSelection *title in self.titles)
     {
-        title.selected = NO;
+        title.enabled = YES;
+    }
+}
+
+- (IBAction)disableAll:(id)sender
+{
+    for (HBTitleSelection *title in self.titles)
+    {
+        title.enabled = NO;
+    }
+}
+
+- (IBAction)invertState:(id)sender
+{
+    for (HBTitleSelection *title in self.titles)
+    {
+        title.enabled = !title.enabled;
     }
 }
 
@@ -84,7 +121,7 @@
 {
     NSMutableArray<HBTitle *> *titles = [NSMutableArray array];
     [self.arrayController.arrangedObjects enumerateObjectsUsingBlock:^(HBTitleSelection *obj, NSUInteger idx, BOOL *stop) {
-        if (obj.selected)
+        if (obj.enabled)
         {
             [titles addObject:obj.title];
         }
@@ -95,6 +132,32 @@
 - (IBAction)cancel:(id)sender
 {
     [self.delegate didSelectTitles:@[]];
+}
+
+- (BOOL)validateMenuItem:(NSMenuItem *)menuItem
+{
+    SEL action = menuItem.action;
+
+    if (action == @selector(enable:) || action == @selector(disable:))
+    {
+        NSIndexSet *targetedRowIndexes = self.tableView.targetedRowIndexes;
+        if (targetedRowIndexes.count == 1)
+        {
+            NSUInteger index = targetedRowIndexes.firstIndex;
+            HBTitleSelection *title = [self.arrayController.arrangedObjects objectAtIndex:index];
+            if ((action == @selector(enable:) && title.enabled) ||
+                (action == @selector(disable:) && !title.enabled))
+            {
+                return NO;
+            }
+        }
+        else
+        {
+            return targetedRowIndexes.count > 0;
+        }
+    }
+
+    return YES;
 }
 
 @end

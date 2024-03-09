@@ -9,7 +9,7 @@
 
 .progress-overlay
 {
-    min-height:1px;
+    min-height: 1px;
 }
 
 .progress-overlay trough
@@ -38,6 +38,64 @@
     background-color: black;
 }
 
+.ghb-button > box
+{
+    padding-left: 4px;
+    padding-right: 4px;
+}
+
+.ghb-button > box.horizontal > label
+{
+    margin: 0px;
+    padding-right: 0px;
+    padding-left: 6px;
+}
+
+.ghb-button > box.vertical > label
+{
+    margin: 0px;
+    padding: 0px;
+}
+
+.ghb-button > box image
+{
+    margin: 0px;
+}
+
+.ghb-button .ghb-indicator
+{
+    background-color: #3584e4;
+    color: white;
+    border-radius: 100px;
+    padding: 0px 4px;
+    margin: -6px -7px;
+    font-size: 7pt;
+    font-weight: 800;
+}
+
+.large-icons > .ghb-button .ghb-indicator
+{
+    padding: 1px 6px;
+    margin: -4px -6px;
+    font-size: 8pt;
+}
+
+.ghb-window-title
+{
+    margin: -4px 4px;
+}
+
+.numeric
+{
+    font-feature-settings: "tnum";
+}
+
+.subtitle
+{
+    font-size: smaller;
+    opacity: 0.6;
+}
+
 textview
 {
     padding: 5px 5px 5px 5px;
@@ -56,64 +114,32 @@ stackswitcher button.text-button
 
 .ghb-monospace
 {
-    font-family: monospace;
     font-size: 8pt;
-    font-weight: 300;
-}
-
-.row:not(:first-child)
-{
-    border-top: 1px solid transparent;
-    border-bottom: 1px solid transparent;
-}
-
-.row:first-child
-{
-    border-top: 1px solid transparent;
-    border-bottom: 1px solid transparent;
-}
-
-.row:last-child
-{
-    border-top: 1px solid transparent;
-    border-bottom: 1px solid transparent;
-}
-
-.row.drag-icon
-{
-    background: white;
-    border: 1px solid black;
-}
-
-.row.drag-row
-{
-    color: gray;
-    background: alpha(gray,0.2);
-}
-
-.row.drag-row.drag-hover
-{
-    border-top: 1px solid #4e9a06;
-    border-bottom: 1px solid #4e9a06;
-}
-
-.row.drag-hover image,
-.row.drag-hover label
-{
-    color: #4e9a06;
+    padding: 0px 5px;
 }
 
 .row.drag-hover-top
 {
-    border-top: 1px solid #4e9a06;
+    box-shadow: 0px 1px #4e9a06 inset;
+}
+
+.row.drag-hover-top:first-child
+{
+    box-shadow: 0px 2px #4e9a06 inset;
 }
 
 .row.drag-hover-bottom
 {
-    border-bottom: 1px solid #4e9a06;
+    box-shadow: 0px -1px #4e9a06 inset;
+}
+
+.row.drag-hover-bottom:last-child
+{
+    box-shadow: 0px -2px #4e9a06 inset;
 }
 
 toolbar
 {
     -gtk-icon-style: symbolic;
 }
+

@@ -13,6 +13,7 @@ NSString * const HBKeepPresetEdits               = @"HBKeepPresetEdits";
 NSString * const HBUseSourceFolderDestination    = @"HBUseSourceFolderDestination";
 
 NSString * const HBRecursiveScan                      = @"HBRecursiveScan";
+NSString * const HBExcludedFileExtensions             = @"HBExcludedFileExtensions";
 NSString * const HBLastDestinationDirectoryURL        = @"HBLastDestinationDirectoryURL";
 NSString * const HBLastDestinationDirectoryBookmark   = @"HBLastDestinationDirectoryBookmark";
 NSString * const HBLastSourceDirectoryURL             = @"HBLastSourceDirectoryURL";
@@ -59,6 +60,77 @@ NSString * const HBSendToApp                     = @"HBSendToApp";
 #define TOOLBAR_QUEUE           @"TOOLBAR_QUEUE"
 #define TOOLBAR_ADVANCED        @"TOOLBAR_ADVANCED"
 
+// KVO Context
+static void *HBPreferencesControllerContext = &HBPreferencesControllerContext;
+
+@protocol HBFileExtensionDelegate
+- (void)extensionDidChange;
+@end
+
+@interface HBFileExtension : NSObject
+
+@property (nonatomic) NSString *extension;
+@property (nonatomic, readonly, weak) id<HBFileExtensionDelegate> delegate;
+
+- (instancetype)init NS_UNAVAILABLE;
+- (instancetype)initWithDelegate:(id<HBFileExtensionDelegate>)delegate;
+- (instancetype)initWithExtension:(NSString *)extension delegate:(id<HBFileExtensionDelegate>)delegate;
+
+@end
+
+@implementation HBFileExtension
+
+- (instancetype)initWithDelegate:(id<HBFileExtensionDelegate>)delegate
+{
+    self = [super self];
+    if (self)
+    {
+        _extension = NSLocalizedString(@"extension", "Default name for a newly added excluded file extension");
+        _delegate = delegate;
+    }
+    return self;
+}
+
+- (instancetype)initWithExtension:(NSString *)extension delegate:(id<HBFileExtensionDelegate>)delegate
+{
+    self = [super self];
+    if (self)
+    {
+        _extension = extension;
+        _delegate = delegate;
+    }
+    return self;
+}
+
+- (void)setExtension:(NSString *)extension
+{
+    if ([extension isEqualToString:_extension] == NO)
+    {
+        _extension = extension;
+        [self.delegate extensionDidChange];
+    }
+}
+
+- (BOOL)validateExtension:(id *)ioValue error:(NSError * __autoreleasing *)outError
+{
+    // Return an error is the name is empty
+    if (![*ioValue length])
+    {
+        if (outError)
+        {
+            *outError = [[NSError alloc] initWithDomain:@"HBErrorDomain"
+                                                   code:0
+                                               userInfo:@{NSLocalizedDescriptionKey:@"The file extension cannot be empty.",
+                                                          NSLocalizedRecoverySuggestionErrorKey:@"Please enter a file extension."}];
+        }
+        return NO;
+    }
+
+    return YES;
+}
+
+@end
+
 /**
  * This class controls the preferences window of HandBrake. Default values for
  * all preferences and user defaults are specified in class method
@@ -70,7 +142,7 @@ NSString * const HBSendToApp                     = @"HBSendToApp";
  * preference settings are added that cannot be handled with Cocoa bindings).
  */
 
-@interface HBPreferencesController () <NSTokenFieldDelegate, NSToolbarDelegate>
+@interface HBPreferencesController () <NSTokenFieldDelegate, NSToolbarDelegate, HBFileExtensionDelegate>
 
 @property (nonatomic, weak) IBOutlet NSView *generalView;
 @property (nonatomic, weak) IBOutlet NSView *fileNameView;
@@ -81,6 +153,11 @@ NSString * const HBSendToApp                     = @"HBSendToApp";
 @property (nonatomic, weak) IBOutlet NSTokenField *builtInTokenField;
 @property (nonatomic, readonly, strong) NSArray *buildInFormatTokens;
 @property (nonatomic, strong) NSArray *matches;
+
+@property (nonatomic, weak) IBOutlet NSSegmentedControl *excludedExtensionsControl;
+@property (nonatomic, weak) IBOutlet NSArrayController *excludedExtensionsController;
+@property (nonatomic, weak) IBOutlet NSTableView *excludedExtensionsTableView;
+@property (nonatomic) NSMutableArray<HBFileExtension *> *excludedExtensions;
 
 @property (nonatomic) BOOL hardwareDecodersCheckboxesEnabled;
 
@@ -102,16 +179,11 @@ static BOOL _hardwareDecoderSupported = NO;
     _hardwareDecoderSupported = hardwareDecoderSupported;
 }
 
-/**
- * +[HBPreferencesController registerUserDefaults]
- *
- * Registers default values to user defaults. This is called immediately
- * when HandBrake starts, from [HBController init].
- */
+/// Registers default values to user defaults. This is called immediately
+/// when HandBrake starts, from [HBAppDelegate init].
 + (void)registerUserDefaults
 {
     NSUserDefaults *defaults = NSUserDefaults.standardUserDefaults;
-
     NSURL *moviesURL = HBUtilities.defaultDestinationFolderURL;
 
     if (@available(macOS 13, *))
@@ -132,6 +204,7 @@ static BOOL _hardwareDecoderSupported = NO;
         HBUseHardwareDecoder:               @NO,
         HBAlwaysUseHardwareDecoder:         @NO,
         HBRecursiveScan:                    @NO,
+        HBExcludedFileExtensions:           @[@"jpg", @"png", @"srt", @"ssa", @"ass", @"txt"],
         HBLastDestinationDirectoryURL:      [NSKeyedArchiver archivedDataWithRootObject:moviesURL],
         HBLastSourceDirectoryURL:           [NSKeyedArchiver archivedDataWithRootObject:moviesURL],
         HBUseSourceFolderDestination:       @NO,
@@ -151,13 +224,13 @@ static BOOL _hardwareDecoderSupported = NO;
         HBQueueAutoClearCompletedItems:     @NO,
         HBQueueAutoClearCompletedItemsAtLaunch: @YES,
         HBQueueWorkerCounts:                @1,
+        HBQueueDoneAction:                  @0,
         HBQueueNotificationWhenDone:        @YES,
         HBQueueNotificationWhenJobDone:     @NO,
         HBQueueNotificationPlaySound:       @NO
     }];
 
-    if (HBPreferencesController.areHardwareDecoderSupported == NO &&
-        [defaults boolForKey:HBUseHardwareDecoder] == YES)
+    if (HBPreferencesController.areHardwareDecoderSupported == NO && [defaults boolForKey:HBUseHardwareDecoder] == YES)
     {
         [defaults setBool:NO forKey:HBUseHardwareDecoder];
     }
@@ -168,12 +241,6 @@ static BOOL _hardwareDecoderSupported = NO;
     [defaults setObject:@(week) forKey:@"SUScheduledCheckInterval"];
 }
 
-/**
- * -[HBPreferencesController init]
- *
- * Initializes the preferences controller by loading Preferences.nib file.
- *
- */
 - (instancetype)init
 {
     self = [super initWithWindowNibName:@"Preferences"];
@@ -190,12 +257,6 @@ static BOOL _hardwareDecoderSupported = NO;
     [super showWindow:sender];
 }
 
-/**
- *
- * Called after all the outlets in the nib file have been attached. Sets up the
- * toolbar and shows the "General" pane.
- *
- */
 - (void)windowDidLoad
 {
     if (@available (macOS 11, *))
@@ -224,18 +285,44 @@ static BOOL _hardwareDecoderSupported = NO;
     [self.builtInTokenField setTokenizingCharacterSet:[NSCharacterSet characterSetWithCharactersInString:@"%%"]];
     [self.builtInTokenField setStringValue:[self.buildInFormatTokens componentsJoinedByString:@"%%"]];
 
+    // Excluded file extension initialization
+    self.excludedExtensions = [[NSMutableArray alloc] init];
+    for (NSString *extension in [NSUserDefaults.standardUserDefaults arrayForKey:HBExcludedFileExtensions])
+    {
+        if ([extension isKindOfClass:[NSString class]])
+        {
+            [self.excludedExtensions addObject:[[HBFileExtension alloc] initWithExtension:extension delegate:self]];
+        }
+    }
+    self.excludedExtensionsController.content = self.excludedExtensions;
+
+    [self.excludedExtensionsController addObserver:self
+                                        forKeyPath:@"selectedObjects"
+                                           options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionInitial
+                                           context:HBPreferencesControllerContext];
+    [self.excludedExtensionsController addObserver:self
+                                        forKeyPath:@"arrangedObjects"
+                                           options:NSKeyValueObservingOptionNew
+                                           context:HBPreferencesControllerContext];
+
+    // Set default tab
     toolbar.selectedItemIdentifier = TOOLBAR_GENERAL;
     [self setPrefView:nil];
 }
 
 - (nullable NSToolbarItem *)toolbar:(NSToolbar *)toolbar itemForItemIdentifier:(NSToolbarItemIdentifier)itemIdentifier willBeInsertedIntoToolbar:(BOOL)flag
 {
+    NSImage *image = nil;
+
     if ([itemIdentifier isEqualToString:TOOLBAR_GENERAL])
     {
-        NSImage *image = [NSImage imageNamed:NSImageNamePreferencesGeneral];
         if (@available (macOS 11, *))
         {
             image = [NSImage imageWithSystemSymbolName:@"gearshape" accessibilityDescription:@"General preferences"];
+        }
+        else
+        {
+            image = [NSImage imageNamed:NSImageNamePreferencesGeneral];
         }
         return [self toolbarItemWithIdentifier:itemIdentifier
                                          label:NSLocalizedString(@"General", @"Preferences General Toolbar Item")
@@ -243,10 +330,13 @@ static BOOL _hardwareDecoderSupported = NO;
     }
     else if ([itemIdentifier isEqualToString:TOOLBAR_OUTPUT_NAME])
     {
-        NSImage *image = [NSImage imageNamed:NSImageNameAdvanced];
         if (@available (macOS 11, *))
         {
             image = [NSImage imageWithSystemSymbolName:@"character.textbox" accessibilityDescription:@"File output preferences"];
+        }
+        else
+        {
+            image = [NSImage imageNamed:NSImageNameAdvanced];
         }
         return [self toolbarItemWithIdentifier:itemIdentifier
                                          label:NSLocalizedString(@"File name", @"Preferences Output File Name Toolbar Item")
@@ -254,10 +344,17 @@ static BOOL _hardwareDecoderSupported = NO;
     }
     else if ([itemIdentifier isEqualToString:TOOLBAR_QUEUE])
     {
-        NSImage *image = [NSImage imageNamed:NSImageNameAdvanced];
-        if (@available (macOS 11, *))
+        if (@available (macOS 13, *))
         {
-            image = [NSImage imageWithSystemSymbolName:@"film.stack" accessibilityDescription:@"Queue preferences"];
+            image = [NSImage imageWithSystemSymbolName:@"photo.stack" accessibilityDescription:@"Queue preferences"];
+        }
+        else if (@available (macOS 11, *))
+        {
+            image = [NSImage imageNamed:@"photo.stack"];
+        }
+        else
+        {
+            image = [NSImage imageNamed:@"showqueue"];
         }
         return [self toolbarItemWithIdentifier:itemIdentifier
                                          label:NSLocalizedString(@"Queue", @"Preferences Queue Toolbar Item")
@@ -265,10 +362,13 @@ static BOOL _hardwareDecoderSupported = NO;
     }
     else if ([itemIdentifier isEqualToString:TOOLBAR_ADVANCED])
     {
-        NSImage *image = [NSImage imageNamed:NSImageNameAdvanced];
         if (@available (macOS 11, *))
         {
             image = [NSImage imageWithSystemSymbolName:@"gearshape.2" accessibilityDescription:@"General preferences"];
+        }
+        else
+        {
+            image = [NSImage imageNamed:NSImageNameAdvanced];
         }
         return [self toolbarItemWithIdentifier:itemIdentifier
                                          label:NSLocalizedString(@"Advanced", @"Preferences Advanced Toolbar Item")
@@ -285,7 +385,7 @@ static BOOL _hardwareDecoderSupported = NO;
 
 - (NSArray<NSToolbarItemIdentifier> *)toolbarDefaultItemIdentifiers:(NSToolbar *)toolbar
 {
-    return [self toolbarAllowedItemIdentifiers: toolbar];
+    return [self toolbarAllowedItemIdentifiers:toolbar];
 }
 
 - (NSArray<NSToolbarItemIdentifier> *)toolbarAllowedItemIdentifiers:(NSToolbar *)toolbar
@@ -468,6 +568,66 @@ static BOOL _hardwareDecoderSupported = NO;
     return YES;
 }
 
+#pragma mark - Excluded file extensions
+
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
+{
+    if (context == HBPreferencesControllerContext)
+    {
+        if ([keyPath isEqualToString:@"selectedObjects"])
+        {
+            BOOL selected = self.excludedExtensionsController.selectedObjects.count > 0;
+            [self.excludedExtensionsControl setEnabled:selected forSegment:1];
+        }
+        else if ([keyPath isEqualToString:@"arrangedObjects"])
+        {
+            [self extensionDidChange];
+        }
+    }
+    else
+    {
+        [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
+    }
+}
+
+- (void)extensionDidChange
+{
+    NSMutableArray<NSString *> *extensions = [NSMutableArray array];
+    for (HBFileExtension *extension in self.excludedExtensions)
+    {
+        [extensions addObject:extension.extension];
+    }
+    [NSUserDefaults.standardUserDefaults setObject:extensions forKey:HBExcludedFileExtensions];
+}
+
+- (IBAction)extensionDoubleClickAction:(NSTableView *)sender
+{
+    if (sender.clickedRow > -1)
+    {
+        [sender editColumn:0 row:sender.clickedRow withEvent:nil select:YES];
+    }
+}
+
+- (IBAction)addFileExtension:(id)sender
+{
+    if ([sender selectedSegment])
+    {
+        [self.excludedExtensionsController removeObjectsAtArrangedObjectIndexes:self.excludedExtensionsController.selectionIndexes];
+    }
+    else
+    {
+        HBFileExtension *extension = [[HBFileExtension alloc] initWithDelegate:self];
+        [self.excludedExtensionsController addObject:extension];
+
+        NSInteger row = [self.excludedExtensionsController.arrangedObjects count] - 1;
+        if (row > -1)
+        {
+            [self.excludedExtensionsTableView selectRowIndexes:[NSIndexSet indexSetWithIndex:row] byExtendingSelection:NO];
+            [self.excludedExtensionsTableView editColumn:0 row:row withEvent:nil select:YES];
+        }
+    }
+}
+
 #pragma mark - Private methods
 
 - (void)setPrefView:(id)sender
@@ -500,15 +660,14 @@ static BOOL _hardwareDecoderSupported = NO;
 
     if (window.isVisible)
     {
-            view.hidden = YES;
+        view.hidden = YES;
 
-            [NSAnimationContext runAnimationGroup:^(NSAnimationContext *context) {
-                context.allowsImplicitAnimation = YES;
-                [window layoutIfNeeded];
-
-            } completionHandler:^{
-                view.hidden = NO;
-            }];
+        [NSAnimationContext runAnimationGroup:^(NSAnimationContext *context) {
+            context.allowsImplicitAnimation = YES;
+            [window layoutIfNeeded];
+        } completionHandler:^{
+            view.hidden = NO;
+        }];
     }
 
     // set title label
@@ -531,21 +690,15 @@ static BOOL _hardwareDecoderSupported = NO;
     }
 }
 
-/**
- * -[HBPreferencesController(Private) toolbarItemWithIdentifier:label:image:]
- *
- * Shared code for creating the NSToolbarItems for the Preferences toolbar.
- *
- */
-- (NSToolbarItem *)toolbarItemWithIdentifier: (NSString *)identifier
-                                       label: (NSString *)label
-                                       image: (NSImage *)image
+- (NSToolbarItem *)toolbarItemWithIdentifier:(NSString *)identifier
+                                       label:(NSString *)label
+                                       image:(NSImage *)image
 {
     NSToolbarItem *item = [[NSToolbarItem alloc] initWithItemIdentifier:identifier];
-    [item setLabel:label];
-    [item setImage:image];
-    [item setAction:@selector(setPrefView:)];
-    [item setAutovalidates:NO];
+    item.label = label;
+    item.image = image;
+    item.action = @selector(setPrefView:);
+    item.autovalidates = NO;
     return item;
 }
 

@@ -63,7 +63,7 @@
                     <popUpButtonCell key="cell" type="push" title="Tracks" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" pullsDown="YES" id="AoT-G9-aA4">
                         <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="smallSystem"/>
-                        <menu key="menu" title="OtherViews" id="Vxo-66-Mrx">
+                        <menu key="menu" id="Vxo-66-Mrx">
                             <items>
                                 <menuItem title="Tracks" state="on" hidden="YES" id="Pfh-Bc-83k"/>
                                 <menuItem title="Add All Tracks" id="AMA-Ul-v2f">

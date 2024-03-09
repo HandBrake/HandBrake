@@ -1,19 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="22154" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="32700.99.1234" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="22154"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="22689"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="HBPlayerHUDController">
             <connections>
+                <outlet property="beginButton" destination="WuP-9l-8AN" id="2NI-De-eaG"/>
                 <outlet property="currentTimeLabel" destination="uYx-2C-8et" id="8fD-0Q-308"/>
+                <outlet property="endButton" destination="CQ0-pk-SFk" id="Pyr-wI-7Qc"/>
                 <outlet property="playButton" destination="mLA-ei-4sK" id="Eag-8h-xCG"/>
                 <outlet property="remainingTimeLabel" destination="PVD-pq-1ZG" id="v4Q-DM-8bq"/>
                 <outlet property="slider" destination="lBp-JT-ehn" id="cNv-P0-agY"/>
                 <outlet property="tracksSelection" destination="Vj1-Za-AUV" id="8Se-0H-ILD"/>
                 <outlet property="view" destination="xT7-Bx-eCV" id="GXR-ZH-hT6"/>
+                <outlet property="volumeButton" destination="euL-Tg-dmT" id="edu-T1-ybf"/>
                 <outlet property="volumeSlider" destination="gzA-no-jdv" id="Yba-8g-L1Z"/>
             </connections>
         </customObject>
@@ -32,7 +35,7 @@
                     </connections>
                 </slider>
                 <button toolTip="Toggle Play/Pause" translatesAutoresizingMaskIntoConstraints="NO" id="mLA-ei-4sK">
-                    <rect key="frame" x="212" y="42" width="36" height="36"/>
+                    <rect key="frame" x="217" y="42" width="36" height="36"/>
                     <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="PlayTemplate" imagePosition="only" alignment="center" imageScaling="proportionallyDown" id="jG9-2O-OES">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="system"/>
@@ -47,7 +50,7 @@
                     </connections>
                 </button>
                 <button toolTip="Go To Beginning" translatesAutoresizingMaskIntoConstraints="NO" id="WuP-9l-8AN">
-                    <rect key="frame" x="170" y="47" width="32" height="26"/>
+                    <rect key="frame" x="175" y="47" width="32" height="26"/>
                     <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="PrevTemplate" imagePosition="only" alignment="center" imageScaling="proportionallyDown" id="IBZ-MN-bJO">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="system"/>
@@ -62,7 +65,7 @@
                     </connections>
                 </button>
                 <button toolTip="Go To End" translatesAutoresizingMaskIntoConstraints="NO" id="CQ0-pk-SFk">
-                    <rect key="frame" x="258" y="47" width="32" height="26"/>
+                    <rect key="frame" x="263" y="47" width="32" height="26"/>
                     <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="NextTemplate" imagePosition="only" alignment="center" controlSize="mini" imageScaling="proportionallyDown" id="LUb-dY-8hG">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="miniSystem"/>
@@ -76,7 +79,7 @@
                         <action selector="goToEnd:" target="-2" id="Rp0-53-4gw"/>
                     </connections>
                 </button>
-                <textField toolTip="Time remaining." focusRingType="none" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="100" translatesAutoresizingMaskIntoConstraints="NO" id="PVD-pq-1ZG">
+                <textField toolTip="Time remaining." verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="100" translatesAutoresizingMaskIntoConstraints="NO" id="PVD-pq-1ZG">
                     <rect key="frame" x="413" y="16" width="53" height="14"/>
                     <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="right" title="00:00:00" id="6A0-9h-5UY">
                         <font key="font" metaFont="smallSystem"/>
@@ -85,7 +88,7 @@
                     </textFieldCell>
                     <accessibility description="Time Remaining"/>
                 </textField>
-                <textField toolTip="Current timeline position." focusRingType="none" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="100" translatesAutoresizingMaskIntoConstraints="NO" id="uYx-2C-8et">
+                <textField toolTip="Current timeline position." verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="100" translatesAutoresizingMaskIntoConstraints="NO" id="uYx-2C-8et">
                     <rect key="frame" x="10" y="16" width="53" height="14"/>
                     <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="left" title="00:00:00" id="dGi-LK-P1E">
                         <font key="font" metaFont="smallSystem"/>
@@ -95,9 +98,9 @@
                     <accessibility description="Current Timeline Position"/>
                 </textField>
                 <slider toolTip="Drag to change volume." verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="gzA-no-jdv">
-                    <rect key="frame" x="32" y="50" width="69" height="20"/>
+                    <rect key="frame" x="38" y="50" width="90" height="20"/>
                     <constraints>
-                        <constraint firstAttribute="width" constant="65" id="bu2-Fj-XwN"/>
+                        <constraint firstAttribute="width" constant="86" id="bu2-Fj-XwN"/>
                     </constraints>
                     <sliderCell key="cell" controlSize="small" continuous="YES" state="on" alignment="left" maxValue="1" doubleValue="1" tickMarkPosition="above" sliderType="linear" id="aQz-j6-bQi"/>
                     <accessibility description="Volume Control"/>
@@ -106,7 +109,7 @@
                     </connections>
                 </slider>
                 <button toolTip="Exit player and return to still image previews." translatesAutoresizingMaskIntoConstraints="NO" id="84p-08-fGK" userLabel="Stop Button">
-                    <rect key="frame" x="436" y="50" width="20" height="20"/>
+                    <rect key="frame" x="441" y="50" width="15" height="20"/>
                     <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="NSStopProgressFreestandingTemplate" imagePosition="overlaps" alignment="center" imageScaling="proportionallyDown" id="hWC-BU-ynp">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="system"/>
@@ -117,13 +120,13 @@
                     </connections>
                 </button>
                 <button toolTip="Mute Volume" translatesAutoresizingMaskIntoConstraints="NO" id="euL-Tg-dmT">
-                    <rect key="frame" x="12" y="51" width="18" height="18"/>
-                    <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="volLowTemplate" imagePosition="only" alignment="center" imageScaling="proportionallyDown" id="njB-22-thn">
+                    <rect key="frame" x="12" y="51" width="24" height="18"/>
+                    <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="volHighTemplate" imagePosition="only" alignment="center" imageScaling="proportionallyDown" id="njB-22-thn">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="system"/>
                     </buttonCell>
                     <constraints>
-                        <constraint firstAttribute="width" constant="18" id="T8H-oI-ZPM"/>
+                        <constraint firstAttribute="width" constant="24" id="T8H-oI-ZPM"/>
                         <constraint firstAttribute="height" constant="18" id="gbJ-wm-eO2"/>
                     </constraints>
                     <accessibility description="Mute Volume"/>
@@ -131,23 +134,8 @@
                         <action selector="mute:" target="-2" id="CIm-ce-Lnf"/>
                     </connections>
                 </button>
-                <button toolTip="Full Volume" translatesAutoresizingMaskIntoConstraints="NO" id="Kiv-cL-wYI">
-                    <rect key="frame" x="103" y="51" width="18" height="18"/>
-                    <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="volHighTemplate" imagePosition="only" alignment="center" imageScaling="proportionallyDown" id="rgx-mB-Rva">
-                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                        <font key="font" metaFont="system"/>
-                    </buttonCell>
-                    <constraints>
-                        <constraint firstAttribute="width" constant="18" id="BMZ-v1-tgu"/>
-                        <constraint firstAttribute="height" constant="18" id="kB7-1B-FDd"/>
-                    </constraints>
-                    <accessibility description="Full Volume"/>
-                    <connections>
-                        <action selector="maxVolume:" target="-2" id="89B-BN-U8S"/>
-                    </connections>
-                </button>
                 <popUpButton toolTip="Enable or disable tracks." translatesAutoresizingMaskIntoConstraints="NO" id="Vj1-Za-AUV">
-                    <rect key="frame" x="334" y="48" width="86" height="22"/>
+                    <rect key="frame" x="339" y="48" width="86" height="22"/>
                     <popUpButtonCell key="cell" type="push" title="Tracks" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="border" tag="1" imageScaling="proportionallyDown" inset="2" pullsDown="YES" autoenablesItems="NO" altersStateOfSelectedItem="NO" id="uwd-kr-YUM">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="smallSystem"/>
@@ -169,7 +157,6 @@
                 <constraint firstItem="lBp-JT-ehn" firstAttribute="centerY" secondItem="uYx-2C-8et" secondAttribute="centerY" id="0Ae-58-HZk"/>
                 <constraint firstItem="mLA-ei-4sK" firstAttribute="centerY" secondItem="CQ0-pk-SFk" secondAttribute="centerY" id="5iK-al-YML"/>
                 <constraint firstAttribute="trailing" secondItem="PVD-pq-1ZG" secondAttribute="trailing" constant="12" id="6dk-cb-v2e"/>
-                <constraint firstItem="WuP-9l-8AN" firstAttribute="leading" secondItem="Kiv-cL-wYI" secondAttribute="trailing" constant="49" id="79A-5g-U7Q"/>
                 <constraint firstAttribute="bottom" secondItem="PVD-pq-1ZG" secondAttribute="bottom" constant="16" id="9cE-Nk-kcB"/>
                 <constraint firstItem="uYx-2C-8et" firstAttribute="leading" secondItem="xT7-Bx-eCV" secondAttribute="leading" constant="12" id="EmN-mc-qMr"/>
                 <constraint firstItem="lBp-JT-ehn" firstAttribute="leading" secondItem="uYx-2C-8et" secondAttribute="trailing" constant="8" id="Grx-ac-rC2"/>
@@ -178,17 +165,15 @@
                 <constraint firstItem="Vj1-Za-AUV" firstAttribute="leading" secondItem="CQ0-pk-SFk" secondAttribute="trailing" constant="48" id="KlG-3j-Fev"/>
                 <constraint firstItem="WuP-9l-8AN" firstAttribute="centerY" secondItem="mLA-ei-4sK" secondAttribute="centerY" id="Q4l-43-xPh"/>
                 <constraint firstAttribute="trailing" secondItem="84p-08-fGK" secondAttribute="trailing" constant="20" id="VH0-gL-7T0"/>
-                <constraint firstItem="Kiv-cL-wYI" firstAttribute="centerY" secondItem="WuP-9l-8AN" secondAttribute="centerY" id="Vqw-sb-0Co"/>
                 <constraint firstItem="lBp-JT-ehn" firstAttribute="centerY" secondItem="PVD-pq-1ZG" secondAttribute="centerY" id="b7z-6O-9eC"/>
                 <constraint firstItem="mLA-ei-4sK" firstAttribute="leading" secondItem="WuP-9l-8AN" secondAttribute="trailing" constant="10" id="cPY-cs-tor"/>
                 <constraint firstItem="PVD-pq-1ZG" firstAttribute="leading" secondItem="lBp-JT-ehn" secondAttribute="trailing" constant="8" id="eye-Bl-wmu"/>
                 <constraint firstItem="CQ0-pk-SFk" firstAttribute="centerY" secondItem="Vj1-Za-AUV" secondAttribute="centerY" id="fcb-yb-zym"/>
                 <constraint firstItem="CQ0-pk-SFk" firstAttribute="leading" secondItem="mLA-ei-4sK" secondAttribute="trailing" constant="10" id="fnn-T8-f6u"/>
-                <constraint firstItem="gzA-no-jdv" firstAttribute="centerY" secondItem="Kiv-cL-wYI" secondAttribute="centerY" id="ipl-TU-6il"/>
                 <constraint firstAttribute="bottom" secondItem="uYx-2C-8et" secondAttribute="bottom" constant="16" id="lVk-4b-i7C"/>
                 <constraint firstItem="84p-08-fGK" firstAttribute="leading" secondItem="Vj1-Za-AUV" secondAttribute="trailing" constant="20" id="leh-vT-GXl"/>
-                <constraint firstItem="Kiv-cL-wYI" firstAttribute="leading" secondItem="gzA-no-jdv" secondAttribute="trailing" constant="4" id="n5u-wZ-juV"/>
                 <constraint firstItem="84p-08-fGK" firstAttribute="centerY" secondItem="Vj1-Za-AUV" secondAttribute="centerY" id="pdv-6D-Oqe"/>
+                <constraint firstItem="WuP-9l-8AN" firstAttribute="centerY" secondItem="gzA-no-jdv" secondAttribute="centerY" id="q8y-h3-NoN"/>
                 <constraint firstItem="84p-08-fGK" firstAttribute="top" secondItem="xT7-Bx-eCV" secondAttribute="top" constant="29" id="skk-2D-f35"/>
                 <constraint firstItem="gzA-no-jdv" firstAttribute="leading" secondItem="euL-Tg-dmT" secondAttribute="trailing" constant="4" id="vyV-Ai-ba8"/>
                 <constraint firstItem="euL-Tg-dmT" firstAttribute="leading" secondItem="xT7-Bx-eCV" secondAttribute="leading" constant="12" id="z5G-Dw-ebP"/>
@@ -202,6 +187,5 @@
         <image name="PlayTemplate" width="48" height="48"/>
         <image name="PrevTemplate" width="48" height="48"/>
         <image name="volHighTemplate" width="48" height="48"/>
-        <image name="volLowTemplate" width="48" height="48"/>
     </resources>
 </document>

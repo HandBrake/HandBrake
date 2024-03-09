@@ -7,7 +7,7 @@ LIBDOVI.FETCH.sha256   = 23c339b08bf32b66144b8fe17bf9a39f2dc810a37f081e5bc50207a
 LIBDOVI.FETCH.basename = dovi_tool-libdovi-3.2.0.tar.gz
 
 define LIBDOVI.CONFIGURE
-     $(CARGO.exe) fetch $(LIBDOVI.manifest)
+     cd $(LIBDOVI_DV.dir); $(CARGO.exe) fetch
      $(TOUCH.exe) $@
 endef
 
@@ -23,18 +23,20 @@ ifeq (1,$(HOST.cross))
     endif
 endif
 
+LIBDOVI_DV.dir   = "$(LIBDOVI.EXTRACT.dir/)dolby_vision"
 LIBDOVI.manifest = --manifest-path="$(LIBDOVI.EXTRACT.dir/)dolby_vision/Cargo.toml"
 LIBDOVI.prefix   = --prefix "$(LIBDOVI.CONFIGURE.prefix)"
 LIBDOVI.extra    = --release --library-type staticlib $(LIBDOVI.prefix) $(LIBDOVI.target) \
                    --pkgconfigdir "$(LIBDOVI.CONFIGURE.prefix)/lib/pkgconfig"
 
-LIBDOVI.BUILD.make       = $(CARGO.exe) cbuild
+LIBDOVI.BUILD.make       = cd $(LIBDOVI_DV.dir); $(CARGO.exe) cbuild
 LIBDOVI.BUILD.extra      = $(LIBDOVI.extra)
-LIBDOVI.BUILD.args.dir   = $(LIBDOVI.manifest)
+LIBDOVI.BUILD.args.dir   =
 
-LIBDOVI.INSTALL.make     = $(CARGO.exe) cinstall
+LIBDOVI.INSTALL.make       = cd $(LIBDOVI_DV.dir); $(CARGO.exe) cinstall
+#LIBDOVI.INSTALL.make     = $(CARGO.exe) cinstall
 LIBDOVI.INSTALL.extra    = $(LIBDOVI.extra)
-LIBDOVI.INSTALL.args.dir = $(LIBDOVI.manifest)
+LIBDOVI.INSTALL.args.dir =
 
 LIBDOVI.CLEAN.make       = $(CARGO.exe) clean
 LIBDOVI.CLEAN.args.dir   = $(LIBDOVI.manifest)

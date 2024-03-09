@@ -1,12 +1,9 @@
 /* Copyright (C) 2023-2024 HandBrake Team
  * SPDX-License-Identifier: GPL-2.0-or-later */
 
-#ifndef _NOTIFICATIONS_H_
-#define _NOTIFICATIONS_H_
+#pragma once
 
-#include <gtk/gtk.h>
-#include "handbrake/handbrake.h"
-#include "values.h"
+#include "common.h"
 #include "settings.h"
 
 G_BEGIN_DECLS
@@ -27,4 +24,3 @@ void ghb_withdraw_notification(GhbNotification type);
 
 G_END_DECLS
 
-#endif  // _NOTIFICATIONS_H_

@@ -23,7 +23,8 @@
 - (instancetype)initWithFrame:(NSRect)frame
 {
     self = [super initWithFrame:frame];
-    if (self) {
+    if (self)
+    {
         [[self cell] setBezelStyle:NSBezelStyleRounded];
         _textAttributes = [self textAttributesWithFontSize:DOCK_TEXTFIELD_FONTSIZE];
         _smallTextAttributes = [self textAttributesWithFontSize:DOCK_TEXTFIELD_FONTSIZE - 2];

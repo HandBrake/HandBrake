@@ -20,6 +20,7 @@ extern NSString * const HBKeepPresetEdits;
 extern NSString * const HBUseSourceFolderDestination;
 
 extern NSString * const HBRecursiveScan;
+extern NSString * const HBExcludedFileExtensions;
 extern NSString * const HBLastDestinationDirectoryURL;
 extern NSString * const HBLastDestinationDirectoryBookmark;
 extern NSString * const HBLastSourceDirectoryURL;
