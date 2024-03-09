@@ -224,6 +224,7 @@ static BOOL _hardwareDecoderSupported = NO;
         HBQueueAutoClearCompletedItems:     @NO,
         HBQueueAutoClearCompletedItemsAtLaunch: @YES,
         HBQueueWorkerCounts:                @1,
+        HBQueueDoneAction:                  @0,
         HBQueueNotificationWhenDone:        @YES,
         HBQueueNotificationWhenJobDone:     @NO,
         HBQueueNotificationPlaySound:       @NO
