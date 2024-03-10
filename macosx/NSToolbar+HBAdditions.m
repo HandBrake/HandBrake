@@ -24,8 +24,8 @@
     item.action = action;
     [item HB_setSymbol:symbolName configuration:nil fallbackImage:imageName];
 
-    BOOL bordered = style & HBToolbarItemStyleBordered;
-    BOOL button   = style & HBToolbarItemStyleButton;
+    BOOL bordered = (style & HBToolbarItemStyleBordered) != 0;
+    BOOL button   = (style & HBToolbarItemStyleButton) != 0;
 
     if (style & HBToolbarItemStyleDefault)
     {
