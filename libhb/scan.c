@@ -345,6 +345,11 @@ static void ScanFunc( void * _data )
             /* Scan all titles */
             for( i = 0; i < hb_batch_title_count( data->batch ); i++ )
             {
+                if (*data->die)
+                {
+                    goto finish;
+                }
+
                 hb_title_t * title;
 
                 UpdateState1(data, i + 1);
@@ -361,6 +366,11 @@ static void ScanFunc( void * _data )
         // If dragging a batch of files, maybe not, but if the UI's implement a recursive folder maybe?
         for (i = 0; i < hb_list_count( data->paths ); i++)
         {
+            if (*data->die)
+            {
+                goto finish;
+            }
+
             single_path = hb_list_item(data->paths, i);
 
             UpdateState1(data, i + 1);
