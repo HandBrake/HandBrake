@@ -1332,6 +1332,7 @@ static int apply_ffv1_preset(AVCodecContext *context, AVDictionary **av_opts, co
         context->gop_size = 1;
         context->level = 3;
         av_dict_set(av_opts, "coder", "1", 0);
+        av_dict_set(av_opts, "context", "1", 0);
         av_dict_set(av_opts, "slicecrc", "1", 0);
     }
     return 0;
@@ -1443,10 +1444,8 @@ const char* const* hb_av_level_get_names(int encoder)
         case HB_VCODEC_FFMPEG_MF_H264:
             return hb_h264_level_names;
 
-#if HB_PROJECT_FEATURE_VCE
      case HB_VCODEC_FFMPEG_VCE_H264:
             return hb_vce_h264_level_names; // Not quite the same as x264
-#endif
 
         case HB_VCODEC_FFMPEG_NVENC_H265:
         case HB_VCODEC_FFMPEG_NVENC_H265_10BIT:
