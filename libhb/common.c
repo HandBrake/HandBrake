@@ -304,8 +304,8 @@ hb_encoder_internal_t hb_video_encoders[]  =
     { { "MPEG-4",                      "mpeg4",            "MPEG-4 (libavcodec)",            HB_VCODEC_FFMPEG_MPEG4,                       HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 0, 1, HB_GID_VCODEC_MPEG4,      },
     { { "MPEG-2",                      "mpeg2",            "MPEG-2 (libavcodec)",            HB_VCODEC_FFMPEG_MPEG2,                       HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 0, 1, HB_GID_VCODEC_MPEG2,      },
     { { "VP8",                         "VP8",              "VP8 (libvpx)",                   HB_VCODEC_FFMPEG_VP8,                        HB_MUX_MASK_WEBM|HB_MUX_MASK_MKV, }, NULL, 0, 1, HB_GID_VCODEC_VP8,        },
-    { { "VP9",                         "VP9",              "VP9 (libvpx)",                   HB_VCODEC_FFMPEG_VP9,                        HB_MUX_MASK_WEBM|HB_MUX_MASK_MKV, }, NULL, 0, 1, HB_GID_VCODEC_VP9,        },
-    { { "VP9 10-bit",                  "VP9_10bit",        "VP9 10-bit (libvpx)",            HB_VCODEC_FFMPEG_VP9_10BIT,                  HB_MUX_MASK_WEBM|HB_MUX_MASK_MKV, }, NULL, 0, 1, HB_GID_VCODEC_VP9,        },
+    { { "VP9",                         "VP9",              "VP9 (libvpx)",                   HB_VCODEC_FFMPEG_VP9,        HB_MUX_MASK_MP4|HB_MUX_MASK_WEBM|HB_MUX_MASK_MKV, }, NULL, 0, 1, HB_GID_VCODEC_VP9,        },
+    { { "VP9 10-bit",                  "VP9_10bit",        "VP9 10-bit (libvpx)",            HB_VCODEC_FFMPEG_VP9_10BIT,  HB_MUX_MASK_MP4|HB_MUX_MASK_WEBM|HB_MUX_MASK_MKV, }, NULL, 0, 1, HB_GID_VCODEC_VP9,        },
     { { "Theora",                      "theora",           "Theora (libtheora)",             HB_VCODEC_THEORA,                                             HB_MUX_MASK_MKV, }, NULL, 0, 1, HB_GID_VCODEC_THEORA,     },
 };
 int hb_video_encoders_count = sizeof(hb_video_encoders) / sizeof(hb_video_encoders[0]);
