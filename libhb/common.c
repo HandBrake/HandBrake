@@ -1644,7 +1644,6 @@ int hb_video_multipass_is_supported(uint32_t codec)
         case HB_VCODEC_QSV_H265_10BIT:
         case HB_VCODEC_QSV_AV1:
         case HB_VCODEC_QSV_AV1_10BIT:
-        case HB_VCODEC_FFMPEG_FFV1:
             return 0;
 
         default:
@@ -1855,12 +1854,15 @@ const char* const* hb_video_encoder_get_levels(int encoder)
     }
 #endif
 
+    if (encoder & HB_VCODEC_FFMPEG_MASK)
+    {
+        return hb_av_level_get_names(encoder);
+    }
+
     switch (encoder)
     {
         case HB_VCODEC_X264_8BIT:
         case HB_VCODEC_X264_10BIT:
-        case HB_VCODEC_FFMPEG_NVENC_H264:
-        case HB_VCODEC_FFMPEG_MF_H264:
             return hb_h264_level_names;
 
 #if HB_PROJECT_FEATURE_VCE
@@ -1872,11 +1874,6 @@ const char* const* hb_video_encoder_get_levels(int encoder)
         case HB_VCODEC_X265_10BIT:
         case HB_VCODEC_X265_12BIT:
         case HB_VCODEC_X265_16BIT:
-        case HB_VCODEC_FFMPEG_NVENC_H265:
-        case HB_VCODEC_FFMPEG_NVENC_H265_10BIT:
-        case HB_VCODEC_FFMPEG_VCE_H265:
-        case HB_VCODEC_FFMPEG_VCE_H265_10BIT:
-        case HB_VCODEC_FFMPEG_MF_H265:
             return hb_h265_level_names;
 
 #ifdef __APPLE__
@@ -1888,7 +1885,6 @@ const char* const* hb_video_encoder_get_levels(int encoder)
 
         case HB_VCODEC_SVT_AV1:
         case HB_VCODEC_SVT_AV1_10BIT:
-        case HB_VCODEC_FFMPEG_VCE_AV1:
             return hb_av1_level_names;
 
         default:

@@ -57,8 +57,9 @@ int  encavcodecInit( hb_work_object_t *, hb_job_t * );
 int  encavcodecWork( hb_work_object_t *, hb_buffer_t **, hb_buffer_t ** );
 void encavcodecClose( hb_work_object_t * );
 
-static int apply_encoder_preset(int vcodec, AVDictionary ** av_opts,
-                                const char * preset);
+static int apply_encoder_preset(int vcodec, AVCodecContext *context,
+                                AVDictionary **av_opts,
+                                const char *preset);
 static int apply_encoder_options(hb_job_t *job, AVCodecContext *context,
                                  AVDictionary **av_opts);
 
@@ -79,6 +80,11 @@ static const char * const vpx_preset_names[] =
 static const char * const h26x_nvenc_preset_names[] =
 {
     "fastest", "faster", "fast", "medium", "slow", "slower", "slowest", NULL
+};
+
+static const char * const ffv1_preset_names[] =
+{
+    "default", "preservation", NULL
 };
 
 static const char * const h264_nvenc_profile_names[] =
@@ -111,6 +117,21 @@ static const char * const h265_mf_profile_name[] =
     "auto", "main",  NULL
 };
 
+static const char * const ffv1_profile_names[] =
+{
+    "auto", NULL
+};
+
+static const char * const hb_ffv1_level_names[] =
+{
+    "auto", "1", "3", NULL
+};
+
+static const int hb_ffv1_level_values[] =
+{
+    -1,  1,  3,  0
+};
+
 static const enum AVPixelFormat standard_pix_fmts[] =
 {
     AV_PIX_FMT_YUV420P, AV_PIX_FMT_NONE
@@ -141,6 +162,13 @@ static const enum AVPixelFormat vce_pix_formats_10bit[] =
      AV_PIX_FMT_P010, AV_PIX_FMT_NONE
 };
 
+static const enum AVPixelFormat ffv1_pix_formats[] =
+{
+    AV_PIX_FMT_YUV444P16, AV_PIX_FMT_YUV444P12, AV_PIX_FMT_YUV444P10, AV_PIX_FMT_YUV444P,
+    AV_PIX_FMT_YUV422P16, AV_PIX_FMT_YUV422P12, AV_PIX_FMT_YUV422P10, AV_PIX_FMT_YUV422P,
+    AV_PIX_FMT_YUV420P16, AV_PIX_FMT_YUV420P12, AV_PIX_FMT_YUV420P10, AV_PIX_FMT_YUV420P,
+    AV_PIX_FMT_NONE
+};
 
 int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
 {
@@ -150,6 +178,7 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
     const AVCodec * codec = NULL;
     AVCodecContext * context;
     AVRational fps;
+    AVDictionary *av_opts = NULL;
 
     hb_work_private_t * pv = calloc( 1, sizeof( hb_work_private_t ) );
     w->private_data   = pv;
@@ -349,8 +378,7 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
         }
     }
 
-    AVDictionary * av_opts = NULL;
-    if (apply_encoder_preset(job->vcodec, &av_opts, job->encoder_preset))
+    if (apply_encoder_preset(job->vcodec, context, &av_opts, job->encoder_preset))
     {
         av_free( context );
         ret = 1;
@@ -720,6 +748,19 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
         // don't want to automatically preserve them
         av_dict_set(&av_opts, "a53cc", "0", 0);
         av_dict_set(&av_opts, "s12m_tc", "0", 0);
+    }
+    if (job->vcodec == HB_VCODEC_FFMPEG_FFV1)
+    {
+        if (job->encoder_level != NULL && *job->encoder_level)
+        {
+            int i = 1;
+            while (hb_ffv1_level_names[i] != NULL)
+            {
+                if (!strcasecmp(job->encoder_level, hb_ffv1_level_names[i]))
+                    context->level = hb_ffv1_level_values[i];
+                ++i;
+            }
+        }
     }
 
     // Make VCE h.265 encoder emit an IDR for every GOP
@@ -1284,8 +1325,21 @@ static int apply_vp9_10bit_preset(AVDictionary ** av_opts, const char * preset)
     return apply_vpx_preset(av_opts, preset);
 }
 
-static int apply_encoder_preset(int vcodec, AVDictionary ** av_opts,
-                                const char * preset)
+static int apply_ffv1_preset(AVCodecContext *context, AVDictionary **av_opts, const char *preset)
+{
+    if (!strcasecmp(preset, "preservation"))
+    {
+        context->gop_size = 1;
+        context->level = 3;
+        av_dict_set(av_opts, "coder", "1", 0);
+        av_dict_set(av_opts, "slicecrc", "1", 0);
+    }
+    return 0;
+}
+
+static int apply_encoder_preset(int vcodec, AVCodecContext *context,
+                                AVDictionary **av_opts,
+                                const char *preset)
 {
     switch (vcodec)
     {
@@ -1306,6 +1360,9 @@ static int apply_encoder_preset(int vcodec, AVDictionary ** av_opts,
             av_dict_set( av_opts, "preset", preset, 0);
             break;
 #endif
+
+        case HB_VCODEC_FFMPEG_FFV1:
+            return apply_ffv1_preset(context, av_opts, preset);
         default:
             break;
     }
@@ -1339,6 +1396,9 @@ const char* const* hb_av_preset_get_names(int encoder)
         case HB_VCODEC_FFMPEG_MF_H265:
             return h26x_mf_preset_name;
 
+        case HB_VCODEC_FFMPEG_FFV1:
+            return ffv1_preset_names;
+
         default:
             return NULL;
     }
@@ -1367,6 +1427,39 @@ const char* const* hb_av_profile_get_names(int encoder)
             return h264_mf_profile_name;
         case HB_VCODEC_FFMPEG_MF_H265:
             return h265_mf_profile_name;
+        case HB_VCODEC_FFMPEG_FFV1:
+            return ffv1_profile_names;
+
+         default:
+             return NULL;
+     }
+}
+
+const char* const* hb_av_level_get_names(int encoder)
+{
+    switch (encoder)
+    {
+        case HB_VCODEC_FFMPEG_NVENC_H264:
+        case HB_VCODEC_FFMPEG_MF_H264:
+            return hb_h264_level_names;
+
+#if HB_PROJECT_FEATURE_VCE
+     case HB_VCODEC_FFMPEG_VCE_H264:
+            return hb_vce_h264_level_names; // Not quite the same as x264
+#endif
+
+        case HB_VCODEC_FFMPEG_NVENC_H265:
+        case HB_VCODEC_FFMPEG_NVENC_H265_10BIT:
+        case HB_VCODEC_FFMPEG_VCE_H265:
+        case HB_VCODEC_FFMPEG_VCE_H265_10BIT:
+        case HB_VCODEC_FFMPEG_MF_H265:
+            return hb_h265_level_names;
+
+        case HB_VCODEC_FFMPEG_VCE_AV1:
+            return hb_av1_level_names;
+
+        case HB_VCODEC_FFMPEG_FFV1:
+            return hb_ffv1_level_names;
 
          default:
              return NULL;
@@ -1395,6 +1488,9 @@ const int* hb_av_get_pix_fmts(int encoder)
 
         case HB_VCODEC_FFMPEG_VP9_10BIT:
             return standard_10bit_pix_fmts;
+
+        case HB_VCODEC_FFMPEG_FFV1:
+            return ffv1_pix_formats;
 
          default:
              return standard_pix_fmts;
