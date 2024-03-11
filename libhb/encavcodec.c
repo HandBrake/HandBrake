@@ -761,6 +761,19 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
                 ++i;
             }
         }
+
+        int slices[] = {4, 6, 9, 12, 16, 24, 30};
+        context->slices = hb_get_cpu_count();
+
+        int slice_index = 0;
+        for (int i = 0; i < sizeof(slices) / sizeof(int); i++)
+        {
+            if (context->slices >= slices[i])
+            {
+                slice_index = i;
+            }
+        }
+        context->slices = slices[slice_index];
     }
 
     // Make VCE h.265 encoder emit an IDR for every GOP
