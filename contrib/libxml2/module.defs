@@ -2,9 +2,9 @@ __deps__ := LIBICONV
 $(eval $(call import.MODULE.defs,LIBXML2,libxml2,$(__deps__)))
 $(eval $(call import.CONTRIB.defs,LIBXML2))
 
-LIBXML2.FETCH.url     = https://github.com/HandBrake/HandBrake-contribs/releases/download/contribs/libxml2-2.12.3.tar.xz
-LIBXML2.FETCH.url    += https://download.gnome.org/sources/libxml2/2.12/libxml2-2.12.3.tar.xz
-LIBXML2.FETCH.sha256  = 8c8f1092340a89ff32bc44ad5c9693aff9bc8a7a3e161bb239666e5d15ac9aaa
+LIBXML2.FETCH.url     = https://github.com/HandBrake/HandBrake-contribs/releases/download/contribs/libxml2-2.12.5.tar.xz
+LIBXML2.FETCH.url    += https://download.gnome.org/sources/libxml2/2.12/libxml2-2.12.5.tar.xz
+LIBXML2.FETCH.sha256  = a972796696afd38073e0f59c283c3a2f5a560b5268b4babc391b286166526b21
 
 # We don't need LZMA / Zlib support
 LIBXML2.CONFIGURE.extra = --without-lzma --without-zlib
