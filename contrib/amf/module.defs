@@ -2,10 +2,10 @@ $(eval $(call import.MODULE.defs,AMF,amf))
 $(eval $(call import.CONTRIB.defs,AMF))
 
 # Repacked slim tarball removes large third party binaries included upstream
-#AMF.FETCH.url      = https://github.com/HandBrake/HandBrake-contribs/releases/download/contribs/AMF-1.4.33-slim.tar.gz
-#AMF.FETCH.sha256   = ee4621bd653360ddefb3d87e53752a37a1e8d49494a439298f7bfb100182c7d9
-AMF.FETCH.url      = https://github.com/GPUOpen-LibrariesAndSDKs/AMF/archive/refs/tags/v1.4.33.tar.gz
-AMF.FETCH.sha256   = 86b39d5bd4652338bf7b4e48efec58472bb57a985250bc149e7908534a915c8e
+AMF.FETCH.url       = https://github.com/HandBrake/HandBrake-contribs/releases/download/contribs/AMF-1.4.33-slim.tar.gz
+AMF.FETCH.sha256    = ee4621bd653360ddefb3d87e53752a37a1e8d49494a439298f7bfb100182c7d9
+#AMF.FETCH.url      = https://github.com/GPUOpen-LibrariesAndSDKs/AMF/archive/refs/tags/v1.4.33.tar.gz
+#AMF.FETCH.sha256   = 86b39d5bd4652338bf7b4e48efec58472bb57a985250bc149e7908534a915c8e
 AMF.FETCH.basename = AMF-1.4.33.tar.gz
 AMF.EXTRACT.tarbase = AMF-1.4.33
 
