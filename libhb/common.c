@@ -1656,10 +1656,6 @@ int hb_video_encoder_get_count_of_analysis_passes(int encoder)
 {
     switch (encoder)
     {
-        case HB_VCODEC_SVT_AV1:
-        case HB_VCODEC_SVT_AV1_10BIT:
-            return 2;
-
         default:
             return 1;
     }
