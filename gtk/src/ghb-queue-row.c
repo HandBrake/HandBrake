@@ -104,19 +104,13 @@ ghb_queue_row_class_init (GhbQueueRowClass *klass)
     gtk_widget_class_bind_template_child(widget_class, GhbQueueRow, status_icon);
     gtk_widget_class_bind_template_child(widget_class, GhbQueueRow, encode_progress_bar);
 
-    props[PROP_DEST] = g_param_spec_string("dest",
-            "Destination",
-            "The destination file name",
+    props[PROP_DEST] = g_param_spec_string("dest", NULL, NULL,
             "",
-            G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
-    props[PROP_STATUS] = g_param_spec_int("status",
-            "Status",
-            "The status of the queue item",
+            G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
+    props[PROP_STATUS] = g_param_spec_int("status" ,NULL, NULL,
             0, 10, 0,
             G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
-    props[PROP_PROGRESS] = g_param_spec_double("progress",
-            "Progress",
-            "The progress of the encode in percent",
+    props[PROP_PROGRESS] = g_param_spec_double("progress", NULL, NULL,
             0, 100.0f, 0,
             G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
 
@@ -137,14 +131,15 @@ ghb_queue_row_get_property (GObject *object, guint prop_id,
     switch (prop_id)
     {
         case PROP_DEST:
-            g_value_set_string(value, self->destination);
+            g_value_set_string(value, ghb_queue_row_get_destination(self));
             break;
 
         case PROP_STATUS:
+            g_value_set_int(value, ghb_queue_row_get_status(self));
             break;
 
         case PROP_PROGRESS:
-            g_value_set_double(value, gtk_progress_bar_get_fraction(self->encode_progress_bar));
+            g_value_set_double(value, ghb_queue_row_get_progress(self));
             break;
 
         default:
@@ -162,14 +157,15 @@ ghb_queue_row_set_property (GObject *object, guint prop_id,
     switch (prop_id)
     {
         case PROP_DEST:
-            self->destination = g_strdup(g_value_get_string(value));
+            ghb_queue_row_set_destination(self, g_value_get_string(value));
             break;
 
         case PROP_STATUS:
+            ghb_queue_row_set_status(self, g_value_get_int(value));
             break;
 
         case PROP_PROGRESS:
-            gtk_progress_bar_set_fraction(self->encode_progress_bar, g_value_get_double(value));
+            ghb_queue_row_set_progress(self, g_value_get_double(value));
             break;
 
         default:
@@ -256,11 +252,13 @@ ghb_queue_row_set_status (GhbQueueRow *self, int status)
 
     self->status = status;
     const char *icon_name, *accessible_name;
+    gboolean show_progress_bar = FALSE;
     switch (status)
     {
         case GHB_QUEUE_RUNNING:
             icon_name = "hb-start";
             accessible_name = _("Running Queue Item");
+            show_progress_bar = TRUE;
             break;
         case GHB_QUEUE_PENDING:
             icon_name = "hb-source";
@@ -283,10 +281,10 @@ ghb_queue_row_set_status (GhbQueueRow *self, int status)
             accessible_name = _("Pending Queue Item");
             break;
     }
-
     gtk_image_set_from_icon_name(self->status_icon, icon_name);
     gtk_accessible_update_property(GTK_ACCESSIBLE(self->status_icon),
                                    GTK_ACCESSIBLE_PROPERTY_LABEL, accessible_name, -1);
+    gtk_widget_set_visible(GTK_WIDGET(self->encode_progress_bar), show_progress_bar);
 }
 
 int
@@ -303,14 +301,6 @@ ghb_queue_row_set_progress (GhbQueueRow *self, double fraction)
     g_return_if_fail(GHB_IS_QUEUE_ROW(self));
 
     gtk_progress_bar_set_fraction(self->encode_progress_bar, fraction);
-}
-
-void
-ghb_queue_row_set_progress_bar_visible (GhbQueueRow *self, gboolean visible)
-{
-    g_return_if_fail(GHB_IS_QUEUE_ROW(self));
-
-    gtk_widget_set_visible(GTK_WIDGET(self->encode_progress_bar), visible);
 }
 
 void

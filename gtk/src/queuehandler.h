@@ -32,12 +32,11 @@ void     ghb_queue_remove_row(signal_user_data_t *ud, int row);
 gint     ghb_find_queue_job(GhbValue *queue, gint unique_id, GhbValue **job);
 void     ghb_low_disk_check(signal_user_data_t *ud);
 void     ghb_reset_disk_space_check(void);
-void     ghb_queue_progress_set_visible(signal_user_data_t *ud, int index,
-                                        gboolean visible);
+void     ghb_queue_item_set_status(signal_user_data_t *ud, int index,
+                                   int status);
 void     ghb_queue_progress_set_fraction(signal_user_data_t *ud, int index,
                                          gdouble frac);
 void     ghb_queue_update_status(signal_user_data_t *ud, int index, int status);
-void     ghb_queue_update_status_icon(signal_user_data_t *ud, int index);
 void     ghb_queue_select_log(signal_user_data_t * ud);
 void     ghb_queue_update_live_stats(signal_user_data_t * ud, int index,
                                      ghb_instance_status_t * status);

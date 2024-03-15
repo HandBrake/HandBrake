@@ -5,15 +5,13 @@
     <property name="css-classes">row</property>
     <property name="child">
       <object class="GtkBox" id="vbox1">
-        <property name="margin-start">12</property>
         <property name="orientation">vertical</property>
-        <property name="spacing">6</property>
         <child>
           <object class="GtkBox" id="hbox1">
-            <property name="spacing">6</property>
+            <property name="margin-start">8</property>
+            <property name="spacing">8</property>
             <child>
               <object class="GtkImage" id="status_icon">
-                <property name="pixel-size">16</property>
                 <property name="icon-name">hb-source</property>
                 <accessibility>
                   <property name="label" translatable="yes">Pending Queue Item</property>
@@ -23,7 +21,7 @@
             <child>
               <object class="GtkLabel" id="dest_label">
                 <property name="xalign">0.0</property>
-                <property name="width-chars">50</property>
+                <property name="hexpand">True</property>
                 <property name="ellipsize">end</property>
               </object>
             </child>
@@ -31,7 +29,8 @@
               <object class="GtkButton" id="delete_button">
                 <property name="action-name">queue.delete</property>
                 <property name="tooltip-text" translatable="yes">Delete this item</property>
-                <property name="css-classes">flat</property>
+                <property name="css-classes">flat
+circular</property>
                 <child>
                   <object class="GtkImage">
                     <property name="icon-name">edit-delete-symbolic</property>
@@ -45,7 +44,13 @@
         <child>
           <object class="GtkProgressBar" id="encode_progress_bar">
             <property name="visible">0</property>
-            <property name="margin-top">4</property>
+            <property name="margin-top">2</property>
+            <property name="margin-bottom">6</property>
+            <property name="margin-start">6</property>
+            <property name="margin-end">6</property>
+            <accessibility>
+              <property name="label" translatable="yes">Encode Progress</property>
+            </accessibility>
           </object>
         </child>
       </object>

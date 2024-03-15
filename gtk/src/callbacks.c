@@ -4040,7 +4040,7 @@ submit_job(signal_user_data_t *ud, GhbValue *queueDict)
 
     // Show queue progress bar
     int index = ghb_find_queue_job(ud->queue, unique_id, NULL);
-    ghb_queue_progress_set_visible(ud, index, 1);
+    ghb_queue_item_set_status(ud, index, GHB_QUEUE_RUNNING);
 }
 
 static void
@@ -4469,10 +4469,9 @@ ghb_backend_events(signal_user_data_t *ud)
             ghb_dict_set_int(uiDict, "job_finish_time", now);
             ghb_dict_set_int(uiDict, "job_pause_time_ms", status.queue.paused);
         }
-        ghb_queue_update_status_icon(ud, index);
         ghb_queue_update_live_stats(ud, index, &status.queue);
         gtk_progress_bar_set_fraction(progress, 1.0);
-        ghb_queue_progress_set_visible(ud, index, FALSE);
+        ghb_queue_item_set_status(ud, index, qstatus);
         ghb_queue_progress_set_fraction(ud, index, 1.0);
 
         ghb_clear_queue_state(GHB_STATE_WORKDONE);
