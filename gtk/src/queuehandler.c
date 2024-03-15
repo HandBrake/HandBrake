@@ -37,7 +37,7 @@
 
 static gboolean skip_disk_space_check = FALSE;
 
-void ghb_queue_buttons_grey (signal_user_data_t *ud);
+static void queue_window_show(signal_user_data_t *ud);
 
 // Callbacks
 G_MODULE_EXPORT void
@@ -1035,8 +1035,8 @@ char *ghb_subtitle_short_description (const GhbValue *subsource,
     return desc;
 }
 
-void ghb_queue_progress_set_visible (signal_user_data_t *ud,
-                                     int index, gboolean visible)
+void
+ghb_queue_item_set_status (signal_user_data_t *ud, int index, int status)
 {
     GtkListBox    * lb;
     GtkListBoxRow * row;
@@ -1054,7 +1054,7 @@ void ghb_queue_progress_set_visible (signal_user_data_t *ud,
     {
         return;
     }
-    ghb_queue_row_set_progress_bar_visible(GHB_QUEUE_ROW(row), visible);
+    ghb_queue_row_set_status(GHB_QUEUE_ROW(row), status);
 }
 
 void ghb_queue_progress_set_fraction (signal_user_data_t *ud,
@@ -1308,42 +1308,6 @@ void ghb_queue_update_live_stats (signal_user_data_t * ud, int index,
     gtk_label_set_text(label, result);
 }
 
-void ghb_queue_update_status_icon (signal_user_data_t *ud, int index)
-{
-    int count = ghb_array_len(ud->queue);
-    if (index < 0 || index >= count)
-    {
-        // invalid index
-        return;
-    }
-
-    GhbValue * queueDict, * uiDict;
-    queueDict = ghb_array_get(ud->queue, index);
-    if (queueDict == NULL) // should never happen
-    {
-        return;
-    }
-    uiDict    = ghb_dict_get(queueDict, "uiSettings");
-    if (uiDict == NULL) // should never happen
-    {
-        return;
-    }
-
-    int status = ghb_dict_get_int(uiDict, "job_status");
-
-    // Now update the UI
-    GtkListBox    * lb;
-    GtkListBoxRow * row;
-
-    lb = GTK_LIST_BOX(ghb_builder_widget("queue_list"));
-    row = gtk_list_box_get_row_at_index(lb, index);
-    if (row == NULL) // should never happen
-    {
-        return;
-    }
-    ghb_queue_row_set_status(GHB_QUEUE_ROW(row), status);
-}
-
 void ghb_queue_update_status (signal_user_data_t *ud, int index, int status)
 {
     int count = ghb_array_len(ud->queue);
@@ -1370,12 +1334,8 @@ void ghb_queue_update_status (signal_user_data_t *ud, int index, int status)
         return; // Never change the status of currently running jobs
     }
 
-    if (status == GHB_QUEUE_PENDING)
-    {
-        ghb_queue_progress_set_visible(ud, index, FALSE);
-    }
     ghb_dict_set_int(uiDict, "job_status", status);
-    ghb_queue_update_status_icon(ud, index);
+    ghb_queue_item_set_status(ud, index, status);
 }
 
 static void
@@ -2010,8 +1970,7 @@ find_pid:
     }
     else
     {
-        GtkWidget *widget = ghb_builder_widget("queue_window");
-        gtk_window_present(GTK_WINDOW(widget));
+        queue_window_show(ud);
         ud->queue = queue;
         for (ii = 0; ii < count; ii++)
         {
@@ -2091,12 +2050,43 @@ queue_button_press_cb (GtkGesture *gest, int n_press, double x, double y,
     }
 }
 
+static void
+queue_window_show (signal_user_data_t *ud)
+{
+    gboolean show_sidebar = ghb_dict_get_bool(ud->prefs, "show_queue_sidebar");
+    GtkWidget *widget = ghb_builder_widget("queue_sidebar");
+    gtk_widget_set_visible(widget, show_sidebar);
+
+    GActionMap *map = G_ACTION_MAP(g_application_get_default());
+    GSimpleAction *action = G_SIMPLE_ACTION(g_action_map_lookup_action(map, "queue-show-sidebar"));
+    g_simple_action_set_state(action, g_variant_new_boolean(show_sidebar));
+
+    widget = ghb_builder_widget("queue_window");
+    gtk_window_present(GTK_WINDOW(widget));
+}
+
 G_MODULE_EXPORT void
 show_queue_action_cb (GSimpleAction *action, GVariant *value,
                       signal_user_data_t *ud)
 {
-    GtkWidget *queue_window = ghb_builder_widget("queue_window");
-    gtk_window_present(GTK_WINDOW(queue_window));
+    queue_window_show(ud);
+}
+
+G_MODULE_EXPORT void
+queue_show_sidebar_action_cb (GSimpleAction *action, GVariant *param,
+                              signal_user_data_t *ud)
+{
+    int width, height;
+    gboolean state = g_variant_get_boolean(param);
+    GtkWidget *widget = ghb_builder_widget("queue_sidebar");
+    GtkWindow *window = GTK_WINDOW(ghb_builder_widget("queue_window"));
+
+    ghb_dict_set_bool(ud->prefs, "show_queue_sidebar", state);
+    ghb_pref_save(ud->prefs, "show_queue_sidebar");
+    gtk_window_get_default_size(window, &width, &height);
+    gtk_widget_set_visible(widget, state);
+    gtk_window_set_default_size(window, 1, height);
+    g_simple_action_set_state(action, param);
 }
 
 G_MODULE_EXPORT gboolean

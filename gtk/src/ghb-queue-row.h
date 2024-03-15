@@ -23,7 +23,6 @@ const char *ghb_queue_row_get_destination(GhbQueueRow *self);
 void ghb_queue_row_set_destination(GhbQueueRow *self, const char *dest);
 double ghb_queue_row_get_progress(GhbQueueRow *self);
 void ghb_queue_row_set_progress(GhbQueueRow *self, double fraction);
-void ghb_queue_row_set_progress_bar_visible(GhbQueueRow *self, gboolean visible);
 int ghb_queue_row_get_status(GhbQueueRow *self);
 void ghb_queue_row_set_status(GhbQueueRow *self, int status);
 

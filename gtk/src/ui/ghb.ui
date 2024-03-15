@@ -210,7 +210,6 @@ conjunction with the &quot;Forced&quot; option.</property>
   <object class="GtkWindow" id="queue_window">
     <property name="title" translatable="yes">HandBrake Queue</property>
     <property name="icon-name">fr.handbrake.ghb</property>
-    <property name="default-width">1024</property>
     <signal name="close-request" handler="queue_window_delete_cb" swapped="no"/>
     <child type="titlebar">
       <object class="GtkHeaderBar">
@@ -239,7 +238,7 @@ conjunction with the &quot;Forced&quot; option.</property>
             <property name="css-classes">ghb-window-title</property>
             <child>
               <object class="GtkLabel">
-                <property name="label" translatable="yes">HandBrake Queue</property>
+                <property name="label" translatable="yes">Queue</property>
                 <property name="css-classes">title</property>
               </object>
             </child>
@@ -273,6 +272,7 @@ conjunction with the &quot;Forced&quot; option.</property>
               <object class="GtkBox">
                 <property name="orientation">vertical</property>
                 <property name="hexpand">1</property>
+                <property name="css-classes">ghb-queue-panel</property>
                 <child>
                   <object class="GtkBox">
                     <property name="orientation">vertical</property>
@@ -335,14 +335,23 @@ conjunction with the &quot;Forced&quot; option.</property>
                         </child>
                       </object>
                     </child>
+                    <child type="end">
+                      <object class="GtkToggleButton">
+                        <property name="icon-name">sidebar-show-right-symbolic</property>
+                        <property name="tooltip-text" translatable="yes">Show/hide the queue details panel</property>
+                        <property name="action-name">app.queue-show-sidebar</property>
+                      </object>
+                    </child>
                   </object>
                 </child>
               </object>
             </property>
             <property name="end-child">
-              <object class="GtkBox" id="queue_box5">
+              <object class="GtkBox" id="queue_sidebar">
+                <property name="visible">False</property>
                 <property name="orientation">vertical</property>
                 <property name="margin-top">12</property>
+                <property name="css-classes">ghb-queue-panel</property>
                 <child>
                   <object class="GtkStackSwitcher" id="QueueStackSwitcher">
                     <property name="stack">QueueStack</property>
@@ -464,7 +473,7 @@ Resets the queue job to pending and ready to run again.</property>
                                         <property name="yalign">0</property>
                                         <property name="hexpand">0</property>
                                         <property name="label" translatable="yes"></property>
-                                        <property name="width-chars">50</property>
+                                        <property name="width-chars">30</property>
                                         <layout>
                                           <property name="row">0</property>
                                           <property name="column">1</property>
@@ -491,7 +500,7 @@ Resets the queue job to pending and ready to run again.</property>
                                         <property name="yalign">0</property>
                                         <property name="hexpand">0</property>
                                         <property name="label" translatable="yes"></property>
-                                        <property name="width-chars">50</property>
+                                        <property name="width-chars">30</property>
                                         <property name="lines">2</property>
                                         <property name="wrap-mode">word-char</property>
                                         <property name="ellipsize">middle</property>
@@ -523,7 +532,7 @@ Resets the queue job to pending and ready to run again.</property>
                                         <property name="yalign">0</property>
                                         <property name="hexpand">0</property>
                                         <property name="label" translatable="yes"></property>
-                                        <property name="width-chars">50</property>
+                                        <property name="width-chars">30</property>
                                         <property name="lines">2</property>
                                         <property name="wrap-mode">word-char</property>
                                         <property name="ellipsize">middle</property>
@@ -554,7 +563,7 @@ Resets the queue job to pending and ready to run again.</property>
                                         <property name="yalign">0</property>
                                         <property name="hexpand">0</property>
                                         <property name="label" translatable="yes"></property>
-                                        <property name="width-chars">50</property>
+                                        <property name="width-chars">30</property>
                                         <property name="lines">2</property>
                                         <property name="wrap-mode">word-char</property>
                                         <property name="ellipsize">middle</property>
@@ -586,7 +595,7 @@ Resets the queue job to pending and ready to run again.</property>
                                         <property name="yalign">0</property>
                                         <property name="hexpand">0</property>
                                         <property name="label" translatable="yes"></property>
-                                        <property name="width-chars">50</property>
+                                        <property name="width-chars">30</property>
                                         <layout>
                                           <property name="row">4</property>
                                           <property name="column">1</property>
@@ -613,7 +622,7 @@ Resets the queue job to pending and ready to run again.</property>
                                         <property name="yalign">0</property>
                                         <property name="hexpand">0</property>
                                         <property name="label" translatable="yes"></property>
-                                        <property name="width-chars">50</property>
+                                        <property name="width-chars">30</property>
                                         <layout>
                                           <property name="row">5</property>
                                           <property name="column">1</property>
@@ -640,7 +649,7 @@ Resets the queue job to pending and ready to run again.</property>
                                         <property name="yalign">0</property>
                                         <property name="hexpand">0</property>
                                         <property name="label" translatable="yes"></property>
-                                        <property name="width-chars">50</property>
+                                        <property name="width-chars">30</property>
                                         <layout>
                                           <property name="row">6</property>
                                           <property name="column">1</property>
@@ -667,7 +676,7 @@ Resets the queue job to pending and ready to run again.</property>
                                         <property name="yalign">0</property>
                                         <property name="hexpand">0</property>
                                         <property name="label" translatable="yes"></property>
-                                        <property name="width-chars">50</property>
+                                        <property name="width-chars">30</property>
                                         <layout>
                                           <property name="row">7</property>
                                           <property name="column">1</property>
@@ -729,7 +738,7 @@ Resets the queue job to pending and ready to run again.</property>
                                         <property name="yalign">0</property>
                                         <property name="hexpand">0</property>
                                         <property name="label" translatable="yes"></property>
-                                        <property name="width-chars">50</property>
+                                        <property name="width-chars">30</property>
                                         <layout>
                                           <property name="row">0</property>
                                           <property name="column">1</property>
@@ -756,7 +765,7 @@ Resets the queue job to pending and ready to run again.</property>
                                         <property name="yalign">0</property>
                                         <property name="hexpand">0</property>
                                         <property name="label" translatable="yes"></property>
-                                        <property name="width-chars">50</property>
+                                        <property name="width-chars">30</property>
                                         <layout>
                                           <property name="row">1</property>
                                           <property name="column">1</property>
@@ -783,7 +792,7 @@ Resets the queue job to pending and ready to run again.</property>
                                         <property name="yalign">0</property>
                                         <property name="hexpand">0</property>
                                         <property name="label" translatable="yes"></property>
-                                        <property name="width-chars">50</property>
+                                        <property name="width-chars">30</property>
                                         <property name="lines">2</property>
                                         <property name="wrap-mode">word-char</property>
                                         <property name="ellipsize">middle</property>
@@ -814,7 +823,7 @@ Resets the queue job to pending and ready to run again.</property>
                                         <property name="yalign">0</property>
                                         <property name="hexpand">0</property>
                                         <property name="label" translatable="yes"></property>
-                                        <property name="width-chars">50</property>
+                                        <property name="width-chars">30</property>
                                         <property name="lines">2</property>
                                         <property name="wrap-mode">word-char</property>
                                         <property name="ellipsize">middle</property>
@@ -845,7 +854,7 @@ Resets the queue job to pending and ready to run again.</property>
                                         <property name="yalign">0</property>
                                         <property name="hexpand">0</property>
                                         <property name="label" translatable="yes"></property>
-                                        <property name="width-chars">50</property>
+                                        <property name="width-chars">30</property>
                                         <layout>
                                           <property name="row">4</property>
                                           <property name="column">1</property>
@@ -872,7 +881,7 @@ Resets the queue job to pending and ready to run again.</property>
                                         <property name="yalign">0</property>
                                         <property name="hexpand">0</property>
                                         <property name="label" translatable="yes"></property>
-                                        <property name="width-chars">50</property>
+                                        <property name="width-chars">30</property>
                                         <layout>
                                           <property name="row">5</property>
                                           <property name="column">1</property>
@@ -899,7 +908,7 @@ Resets the queue job to pending and ready to run again.</property>
                                         <property name="yalign">0</property>
                                         <property name="hexpand">0</property>
                                         <property name="label" translatable="yes"></property>
-                                        <property name="width-chars">50</property>
+                                        <property name="width-chars">30</property>
                                         <layout>
                                           <property name="row">6</property>
                                           <property name="column">1</property>
@@ -6958,3 +6967,4 @@ DRC allows you to &apos;compress&apos; the range by making loud sounds softer an
     </widgets>
   </object>
 </interface>
+

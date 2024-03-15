@@ -301,12 +301,12 @@
     </section>
     <section>
       <item>
-        <attribute name="label" translatable="yes">Open _Encode Log Directory</attribute>
-        <attribute name="action">app.queue-open-log-dir</attribute>
-      </item>
-      <item>
         <attribute name="label" translatable="yes">Open Encode _Log</attribute>
         <attribute name="action">app.queue-open-log</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">Open _Encode Log Directory</attribute>
+        <attribute name="action">app.queue-open-log-dir</attribute>
       </item>
     </section>
   </menu>
@@ -375,6 +375,16 @@
       <item>
         <attribute name="action">app.queue-open-dest</attribute>
         <attribute name="label" translatable="yes">Open _Destination Directory</attribute>
+      </item>
+    </section>
+    <section>
+      <item>
+        <attribute name="label" translatable="yes">Open Encode _Log</attribute>
+        <attribute name="action">app.queue-open-log</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">Open _Encode Log Directory</attribute>
+        <attribute name="action">app.queue-open-log-dir</attribute>
       </item>
     </section>
     <section>
