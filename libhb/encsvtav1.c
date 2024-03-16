@@ -576,15 +576,12 @@ static void flush(hb_work_object_t *w, hb_buffer_t *in, hb_buffer_list_t *list)
     send(w, in);
 
     hb_buffer_t *out = NULL;
-
     while (receive(w, &out, 1) == 0)
     {
         hb_buffer_list_append(list, out);
     }
 
     // Store the first pass stats for the next
-    // N.B.: this is needed only for the first pass
-    // the second one will reuse the existing buffer
     if (job->pass_id == HB_PASS_ENCODE_ANALYSIS && interjob->context == NULL)
     {
         SvtAv1FixedBuf first_pass_stat;
@@ -606,7 +603,7 @@ static void flush(hb_work_object_t *w, hb_buffer_t *in, hb_buffer_list_t *list)
 int encsvtWork(hb_work_object_t *w, hb_buffer_t **buf_in,
                hb_buffer_t **buf_out)
 {
-    hb_buffer_t       *in = *buf_in;
+    hb_buffer_t      *in = *buf_in;
     hb_buffer_list_t  list;
 
     *buf_out = NULL;
@@ -615,7 +612,7 @@ int encsvtWork(hb_work_object_t *w, hb_buffer_t **buf_in,
     if (in->s.flags & HB_BUF_FLAG_EOF)
     {
         // EOF on input. Flush any frames still in the decoder then
-        // send the eof downstream to tell the muxer we're done.
+        // send the EOF downstream to tell the muxer we're done.
         flush(w, in, &list);
         hb_buffer_list_append(&list, hb_buffer_eof_init());
 
