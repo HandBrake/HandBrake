@@ -147,3 +147,28 @@ toolbar
 {
     min-width: 333pt;
 }
+
+.ghb-linked-button > button:dir(ltr):not(:first-child),
+.ghb-linked-button > button:dir(rtl):not(:last-child),
+.ghb-linked-button > menubutton:dir(ltr):not(:first-child) > button,
+.ghb-linked-button > menubutton:dir(rtl):not(:last-child) > button
+{
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    margin-left: -1px;
+}
+
+.ghb-linked-button > button:dir(ltr):not(:last-child),
+.ghb-linked-button > button:dir(rtl):not(:first-child),
+.ghb-linked-button > menubutton:dir(ltr):not(:last-child) > button,
+.ghb-linked-button > menubutton:dir(rtl):not(:first-child) > button
+{
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+.ghb-linked-button > menubutton > button
+{
+    padding-left: 1px;
+    padding-right: 1px;
+}

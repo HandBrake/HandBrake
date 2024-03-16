@@ -525,6 +525,7 @@ map_actions (GtkApplication *app, signal_user_data_t *ud)
     set_action_accel(app, "app.source-dir", "<control><shift>o");
     set_action_accel(app, "app.destination", "<control>s");
     set_action_accel(app, "app.add-current", "<alt>a");
+    set_action_accel(app, "app.add-multiple", "<alt>m");
     set_action_accel(app, "app.add-all", "<alt><shift>a");
     set_action_accel(app, "app.queue-start", "<control>e");
     set_action_accel(app, "app.queue-pause", "<control>p");

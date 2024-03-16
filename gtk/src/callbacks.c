@@ -4771,7 +4771,7 @@ ghb_hbfd(signal_user_data_t *ud, gboolean hbfd)
     ghb_log_func();
     widget = ghb_builder_widget("queue_pause");
     gtk_widget_set_visible(widget, !hbfd);
-    widget = ghb_builder_widget("queue_add");
+    widget = ghb_builder_widget("queue_add_split_button");
     gtk_widget_set_visible(widget, !hbfd);
     widget = ghb_builder_widget("show_queue");
     gtk_widget_set_visible(widget, !hbfd);

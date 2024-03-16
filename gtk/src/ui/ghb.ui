@@ -1368,18 +1368,39 @@ large-icons</property>
                   </object>
                 </child>
                 <child>
-                  <object class="GtkSeparator" id="main_tool_sep2">
+                  <object class="GtkSeparator">
                     <property name="orientation">vertical</property>
-                    <property name="width-request">60</property>
+                    <property name="width-request">10</property>
                     <property name="opacity">0.0</property>
                   </object>
                 </child>
                 <child>
-                  <object class="GhbButton" id="queue_add">
-                    <property name="tooltip-text" translatable="yes">Add to Queue</property>
-                    <property name="label" translatable="yes">Add To Queue</property>
-                    <property name="icon-name">hb-add-queue</property>
-                    <property name="action-name">app.add-current</property>
+                  <object class="GtkBox" id="queue_add_split_button">
+                    <property name="orientation">horizontal</property>
+                    <property name="css-classes">ghb-linked-button</property>
+                    <child>
+                      <object class="GhbButton" id="queue_add">
+                        <property name="tooltip-text" translatable="yes">Add to Queue</property>
+                        <property name="label" translatable="yes">Add To Queue</property>
+                        <property name="icon-name">hb-add-queue</property>
+                        <property name="action-name">app.add-current</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkMenuButton">
+                        <property name="css-classes">normal-icons</property>
+                        <property name="icon-name">pan-down-symbolic</property>
+                        <property name="menu-model">queue-add-menu-model</property>
+                        <property name="sensitive" bind-source="queue_add" bind-property="sensitive"/>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkSeparator">
+                    <property name="orientation">vertical</property>
+                    <property name="width-request">20</property>
+                    <property name="opacity">0.0</property>
                   </object>
                 </child>
                 <child>

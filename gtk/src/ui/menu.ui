@@ -442,5 +442,17 @@
       </item>
     </section>
   </menu>
+  <menu id="queue-add-menu-model">
+    <section>
+      <item>
+        <attribute name="action">app.add-multiple</attribute>
+        <attribute name="label" translatable="yes">Add _Multiple…</attribute>
+      </item>
+      <item>
+        <attribute name="action">app.add-all</attribute>
+        <attribute name="label" translatable="yes">Add A_ll</attribute>
+      </item>
+    </section>
+  </menu>
 </interface>
 
