@@ -3488,10 +3488,54 @@ void ghb_backend_scan_stop (void)
     hb_scan_stop( h_scan );
 }
 
-void
-ghb_backend_scan(const char *path, int titleindex, int preview_count, uint64_t min_duration)
+static void
+free_list (hb_list_t *list)
 {
-    hb_scan( h_scan, path, titleindex, preview_count, 1, min_duration, 0, 0, NULL, 0 );
+    for (int i = 0; i < hb_list_count(list); i++)
+    {
+        g_free(hb_list_item(list, i));
+    }
+    hb_list_close(&list);
+}
+
+hb_list_t *
+get_path_list(GListModel *files)
+{
+    g_return_val_if_fail(g_list_model_get_item_type(files) == G_TYPE_FILE, NULL);
+    hb_list_t *path_list = hb_list_init();
+    for (int i = 0; i < g_list_model_get_n_items(files); i++)
+    {
+        g_autoptr(GFile) file = g_list_model_get_item(files, i);
+        hb_list_add(path_list, g_file_get_path(file));
+    }
+    return path_list;
+}
+
+void
+ghb_backend_scan_list (GListModel *files, int titleindex, int preview_count, uint64_t min_duration)
+{
+    hb_list_t *path_list = get_path_list(files);
+    hb_scan_list(h_scan, path_list, titleindex, preview_count, 1, min_duration,
+                 0, 0, NULL, 0);
+    free_list(path_list);
+    hb_status.scan.state |= GHB_STATE_SCANNING;
+    // initialize count and cur to something that won't cause FPE
+    // when computing progress
+    hb_status.scan.title_count = 1;
+    hb_status.scan.title_cur = 0;
+    hb_status.scan.preview_count = 1;
+    hb_status.scan.preview_cur = 0;
+    hb_status.scan.progress = 0;
+}
+
+void
+ghb_backend_scan (const char *path, int titleindex, int preview_count, uint64_t min_duration)
+{
+    hb_list_t *path_list = hb_list_init();
+    hb_list_add(path_list, (gpointer)path);
+    hb_scan_list(h_scan, path_list, titleindex, preview_count, 1, min_duration,
+                 0, 0, NULL, 0);
+    hb_list_close(&path_list);
     hb_status.scan.state |= GHB_STATE_SCANNING;
     // initialize count and cur to something that won't cause FPE
     // when computing progress
@@ -3506,7 +3550,10 @@ void
 ghb_backend_queue_scan(const gchar *path, gint titlenum)
 {
     ghb_log_func();
-    hb_scan( h_queue, path, titlenum, -1, 0, 0, 0, 0, NULL, 0 );
+    hb_list_t *path_list = hb_list_init();
+    hb_list_add(path_list, (void *)path);
+    hb_scan_list(h_queue, path_list, titlenum, -1, 0, 0, 0, 0, NULL, 0);
+    hb_list_close(&path_list);
     hb_status.queue.state |= GHB_STATE_SCANNING;
 }
 

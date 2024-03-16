@@ -54,9 +54,9 @@ GtkWidget *ghb_cancel_dialog_new(GtkWindow *parent,
 void ghb_stop_encode_dialog_show(signal_user_data_t *ud);
 void ghb_start_next_job(signal_user_data_t *ud);
 void ghb_bind_dependencies(void);
-void ghb_do_scan( signal_user_data_t *ud, const gchar *filename,
-    gint titlenum, gboolean force);
-void ghb_log(gchar *log, ...);
+void ghb_do_scan(signal_user_data_t *ud, const char *filename, int titlenum, gboolean force);
+void ghb_do_scan_list(signal_user_data_t *ud, GListModel *files, int titlenum, gboolean force);
+void ghb_log(gchar *log, ...) G_GNUC_PRINTF(1, 2);
 #if defined(_WIN32)
 void wm_drive_changed(MSG *msg, signal_user_data_t *ud);
 #endif
@@ -84,7 +84,6 @@ void ghb_break_pts_duration(gint64 ptsDuration,
                             gint *hh, gint *mm, gdouble *ss);
 void ghb_break_duration(gint64 duration, gint *hh, gint *mm, gint *ss);
 GtkFileFilter *ghb_add_file_filter(GtkFileChooser *chooser,
-                                   signal_user_data_t *ud,
                                    const char *name, const char *id);
 
 G_END_DECLS

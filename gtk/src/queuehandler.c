@@ -1480,8 +1480,8 @@ static void open_queue_file (signal_user_data_t *ud)
                       _("_Cancel"));
 
     // Add filters
-    ghb_add_file_filter(GTK_FILE_CHOOSER(chooser), ud, _("All Files"), "FilterAll");
-    ghb_add_file_filter(GTK_FILE_CHOOSER(chooser), ud, g_content_type_get_description("application/json"), "FilterJSON");
+    ghb_add_file_filter(GTK_FILE_CHOOSER(chooser), _("All Files"), "FilterAll");
+    ghb_add_file_filter(GTK_FILE_CHOOSER(chooser), g_content_type_get_description("application/json"), "FilterJSON");
     ghb_file_chooser_set_initial_file(GTK_FILE_CHOOSER(chooser),
                                       ghb_dict_get_string(ud->prefs, "ExportDirectory"));
 
