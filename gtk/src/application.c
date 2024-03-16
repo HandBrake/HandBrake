@@ -61,7 +61,6 @@ struct _GhbApplication
     int cancel_encode;
     int when_complete;
     int stderr_src_id;
-    char *scan_source;
 };
 
 G_DEFINE_TYPE (GhbApplication, ghb_application, GTK_TYPE_APPLICATION);
@@ -993,7 +992,6 @@ ghb_application_shutdown (GApplication *app)
 
     g_free(ud->current_dvd_device);
     g_free(self->ud);
-    g_free(self->scan_source);
 
     G_APPLICATION_CLASS(ghb_application_parent_class)->shutdown(app);
 }
@@ -1132,9 +1130,10 @@ const char *
 ghb_get_scan_source (void)
 {
     GhbApplication *app = GHB_APPLICATION_DEFAULT;
-    g_return_val_if_fail(GHB_IS_APPLICATION(app), g_strdup(""));
+    g_return_val_if_fail(GHB_IS_APPLICATION(app), "");
+    g_return_val_if_fail(app->ud != NULL, "");
 
-    return app->scan_source;
+    return ghb_dict_get_string(app->ud->settings, "source");
 
 }
 
@@ -1143,11 +1142,8 @@ ghb_set_scan_source (const char *source)
 {
     GhbApplication *app = GHB_APPLICATION_DEFAULT;
     g_return_if_fail(GHB_IS_APPLICATION(app));
+    g_return_if_fail(app->ud != NULL);
 
-    g_free(app->scan_source);
-    if (source)
-        app->scan_source = g_strdup(source);
-    else
-        app->scan_source = g_strdup("");
+    ghb_dict_set_string(app->ud->settings, "source", source);
 }
 

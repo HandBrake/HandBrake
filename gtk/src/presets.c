@@ -2109,10 +2109,10 @@ preset_import_action_cb(GSimpleAction *action, GVariant *param,
                 _("_Open"),
                 _("_Cancel"));
 
-    ghb_add_file_filter(GTK_FILE_CHOOSER(chooser), ud, _("All Files"), "FilterAll");
-    filter = ghb_add_file_filter(GTK_FILE_CHOOSER(chooser), ud, _("Presets (*.json)"), "FilterJSON");
+    ghb_add_file_filter(GTK_FILE_CHOOSER(chooser), _("All Files"), "FilterAll");
+    filter = ghb_add_file_filter(GTK_FILE_CHOOSER(chooser), _("Presets (*.json)"), "FilterJSON");
     gtk_file_chooser_set_filter(GTK_FILE_CHOOSER(chooser), filter);
-    ghb_add_file_filter(GTK_FILE_CHOOSER(chooser), ud, _("Legacy Presets (*.plist)"), "FilterPlist");
+    ghb_add_file_filter(GTK_FILE_CHOOSER(chooser), _("Legacy Presets (*.plist)"), "FilterPlist");
 
     exportDir = ghb_dict_get_string(ud->prefs, "ExportDirectory");
     if (exportDir == NULL || exportDir[0] == '\0')

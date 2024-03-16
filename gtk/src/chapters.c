@@ -455,8 +455,8 @@ chapters_export_action_cb (GSimpleAction *action, GVariant *param,
                 _("_Save"),
                 _("_Cancel"));
 
-    ghb_add_file_filter(GTK_FILE_CHOOSER(dialog), ud, _("All Files"), "FilterAll");
-    filter = ghb_add_file_filter(GTK_FILE_CHOOSER(dialog), ud, _("Chapters (*.xml)"), "FilterXML");
+    ghb_add_file_filter(GTK_FILE_CHOOSER(dialog), _("All Files"), "FilterAll");
+    filter = ghb_add_file_filter(GTK_FILE_CHOOSER(dialog), _("Chapters (*.xml)"), "FilterXML");
     gtk_file_chooser_set_filter(GTK_FILE_CHOOSER(dialog), filter);
     gtk_file_chooser_set_current_name(GTK_FILE_CHOOSER(dialog), "chapters.xml");
 
@@ -484,8 +484,8 @@ chapters_import_action_cb (GSimpleAction *action, GVariant *param,
                 _("_Open"),
                 _("_Cancel"));
 
-    ghb_add_file_filter(GTK_FILE_CHOOSER(dialog), ud, _("All Files"), "FilterAll");
-    filter = ghb_add_file_filter(GTK_FILE_CHOOSER(dialog), ud, _("Chapters (*.xml)"), "FilterXML");
+    ghb_add_file_filter(GTK_FILE_CHOOSER(dialog), _("All Files"), "FilterAll");
+    filter = ghb_add_file_filter(GTK_FILE_CHOOSER(dialog), _("Chapters (*.xml)"), "FilterXML");
     gtk_file_chooser_set_filter(GTK_FILE_CHOOSER(dialog), filter);
     ghb_file_chooser_set_initial_file(GTK_FILE_CHOOSER(dialog),
                                       ghb_dict_get_string(ud->prefs, "ExportDirectory"));

@@ -55,7 +55,7 @@
 #include <poll.h>
 #endif
 
-static void add_video_file_filters(GtkFileChooser *chooser, signal_user_data_t *ud);
+static void add_video_file_filters(GtkFileChooser *chooser);
 static void update_queue_labels(signal_user_data_t *ud);
 static void load_all_titles(signal_user_data_t *ud, int titleindex);
 static GList* dvd_device_list(void);
@@ -1474,11 +1474,7 @@ hide_scan_progress(signal_user_data_t *ud)
 }
 
 static void
-start_scan(
-    signal_user_data_t *ud,
-    const gchar *path,
-    gint title_id,
-    gint preview_count)
+start_scan (signal_user_data_t *ud, const char *path, int title_id, int preview_count)
 {
     GtkWidget *widget;
     ghb_status_t status;
@@ -1495,11 +1491,29 @@ start_scan(
             90000L * ghb_dict_get_int(ud->prefs, "MinTitleDuration"));
 }
 
+static void
+start_scan_list (signal_user_data_t *ud, GListModel *files, int title_id, int preview_count)
+{
+    GtkWidget *widget;
+    ghb_status_t status;
+
+    ghb_get_status(&status);
+    if (status.scan.state != GHB_STATE_IDLE)
+        return;
+
+    widget = ghb_builder_widget("sourcetoolbutton");
+    ghb_button_set_icon_name(GHB_BUTTON(widget), "hb-stop-symbolic");
+    ghb_button_set_label(GHB_BUTTON(widget), _("Stop Scan"));
+    gtk_widget_set_tooltip_text(widget, _("Stop Scan"));
+    ghb_backend_scan_list(files, title_id, preview_count,
+            90000L * ghb_dict_get_int(ud->prefs, "MinTitleDuration"));
+}
+
 gboolean
 ghb_idle_scan(signal_user_data_t *ud)
 {
     gchar *path;
-    // ghb_do_scan replaces "scan_source" key in dict, so we must
+    // ghb_do_scan replaces "source" key in dict, so we must
     // make a copy of the string.
     path = g_strdup(ghb_get_scan_source());
     ghb_do_scan(ud, path, 0, TRUE);
@@ -1511,16 +1525,15 @@ extern GhbValue *ghb_queue_edit_settings;
 static gchar *last_scan_file = NULL;
 
 void
-ghb_do_scan(
-    signal_user_data_t *ud,
-    const gchar *filename,
-    gint title_id,
-    gboolean force)
+ghb_do_scan_list (signal_user_data_t *ud, GListModel *files, int title_id, gboolean force)
 {
     int titleindex;
-    const hb_title_t *title;
 
-    (void)title; // Silence "unused variable" warning
+    if (!g_list_model_get_n_items(files))
+        return;
+
+    g_autoptr(GFile) file = g_list_model_get_item(files, 0);
+    const char *filename = g_file_peek_path(file);
 
     ghb_log_func();
     if (!force && last_scan_file != NULL &&
@@ -1529,7 +1542,7 @@ ghb_do_scan(
         if (ghb_queue_edit_settings != NULL)
         {
             title_id = ghb_dict_get_int(ghb_queue_edit_settings, "title");
-            title = ghb_lookup_title(title_id, &titleindex);
+            ghb_lookup_title(title_id, &titleindex);
             ghb_array_replace(ud->settings_array, titleindex,
                               ghb_queue_edit_settings);
             ud->settings = ghb_queue_edit_settings;
@@ -1538,7 +1551,50 @@ ghb_do_scan(
         }
         else
         {
-            title = ghb_lookup_title(title_id, &titleindex);
+            ghb_lookup_title(title_id, &titleindex);
+            load_all_titles(ud, titleindex);
+        }
+        return;
+    }
+    if (last_scan_file != NULL)
+        g_free(last_scan_file);
+    last_scan_file = NULL;
+    if (filename != NULL)
+    {
+        gint preview_count;
+
+        last_scan_file = g_strdup(filename);
+        ghb_set_scan_source(filename);
+
+        show_scan_progress(ud);
+        prune_logs();
+
+        preview_count = ghb_dict_get_int(ud->prefs, "preview_count");
+        start_scan_list(ud, files, title_id, preview_count);
+    }
+}
+void
+ghb_do_scan (signal_user_data_t *ud, const char *filename, int title_id, gboolean force)
+{
+    int titleindex;
+
+    ghb_log_func();
+    if (!force && last_scan_file != NULL &&
+        strcmp(last_scan_file, filename) == 0)
+    {
+        if (ghb_queue_edit_settings != NULL)
+        {
+            title_id = ghb_dict_get_int(ghb_queue_edit_settings, "title");
+            ghb_lookup_title(title_id, &titleindex);
+            ghb_array_replace(ud->settings_array, titleindex,
+                              ghb_queue_edit_settings);
+            ud->settings = ghb_queue_edit_settings;
+            ghb_load_settings(ud);
+            ghb_queue_edit_settings = NULL;
+        }
+        else
+        {
+            ghb_lookup_title(title_id, &titleindex);
             load_all_titles(ud, titleindex);
         }
         return;
@@ -1630,29 +1686,32 @@ source_dialog_response_cb(GtkFileChooser *chooser,
 static void
 source_dialog_start_scan (GtkFileChooser *chooser, int title_id)
 {
-    const char *sourcename;
+    g_autoptr(GListModel) files = NULL;
+    g_autoptr(GFile) file = NULL;
+    const char *sourcename, *filename = NULL;
     const char *drivename = NULL;
-    GFile *file;
-    char *filename;
     signal_user_data_t *ud = ghb_ud();
 
     if (has_drive)
         drivename = gtk_file_chooser_get_choice(chooser, "drive");
 
     if (drivename && g_strcmp0(drivename, _("Not Selected")))
-        filename = g_strdup(drivename);
+        filename = drivename;
     else
     {
-        file = gtk_file_chooser_get_file(chooser);
-        filename = g_file_get_path(file);
-        g_object_unref(file);
+        files = gtk_file_chooser_get_files(chooser);
+        if (g_list_model_get_n_items(files))
+        {
+            file = g_list_model_get_item(files, 0);
+            filename = g_file_peek_path(file);
+        }
     }
 
-    if (filename != NULL)
+    if (filename != NULL && filename[0] != '\0')
     {
         sourcename = ghb_get_scan_source();
 
-        // ghb_do_scan replaces "scan_source" key in dict, so we must
+        // ghb_do_scan replaces "source" key in dict, so we must
         // be finished with sourcename before calling ghb_do_scan
         // since the memory it references will be freed
         if (strcmp(sourcename, filename) != 0)
@@ -1661,8 +1720,7 @@ source_dialog_start_scan (GtkFileChooser *chooser, int title_id)
             ghb_pref_save(ud->prefs, "default_source");
             ghb_dvd_set_current(filename, ud);
         }
-        ghb_do_scan(ud, filename, title_id, TRUE);
-        g_free(filename);
+        ghb_do_scan_list(ud, files, title_id, TRUE);
     }
     source_dialog = NULL;
     gtk_native_dialog_destroy(GTK_NATIVE_DIALOG(chooser));
@@ -1686,6 +1744,7 @@ do_source_dialog(gboolean dir, signal_user_data_t *ud)
     GtkWindow *hb_window;
     const gchar *sourcename;
 
+    ghb_log_func();
     if (source_dialog)
         return;
 
@@ -1697,11 +1756,13 @@ do_source_dialog(gboolean dir, signal_user_data_t *ud)
                 _("_Open"),
                 _("_Cancel"));
 
-    ghb_log_func();
     sourcename = ghb_get_scan_source();
 
     if (!dir)
-        add_video_file_filters(GTK_FILE_CHOOSER(chooser), ud);
+    {
+        gtk_file_chooser_set_select_multiple(GTK_FILE_CHOOSER(chooser), TRUE);
+        add_video_file_filters(GTK_FILE_CHOOSER(chooser));
+    }
 
     source_dialog_drive_list(GTK_FILE_CHOOSER(chooser), ud);
 
@@ -1762,7 +1823,7 @@ dvd_source_activate_cb(GSimpleAction *action, GVariant *param,
     const gchar *filename;
     const gchar *sourcename;
 
-    // ghb_do_scan replaces "scan_source" key in dict, so we must
+    // ghb_do_scan replaces "source" key in dict, so we must
     // be finished with sourcename before calling ghb_do_scan
     // since the memory it references will be freed
     sourcename = ghb_get_scan_source();
@@ -1923,26 +1984,18 @@ destination_response_cb(GtkFileChooserNative *chooser,
                         GtkResponseType response, signal_user_data_t *ud)
 {
     GtkEditable *entry;
-    gchar *basename;
+    g_autofree char *basename = NULL;
 
     if (response == GTK_RESPONSE_ACCEPT)
     {
-        GFile *file;
-        char *filename, *dirname;
-        GhbFileButton *dest_chooser;
-
-        file = gtk_file_chooser_get_file(GTK_FILE_CHOOSER (chooser));
-        filename = g_file_get_path(file);
+        g_autoptr(GFile) file = gtk_file_chooser_get_file(GTK_FILE_CHOOSER(chooser));
+        const char *filename = g_file_peek_path(file);
+        g_autofree char *dirname = g_path_get_dirname(filename);
         basename = g_path_get_basename(filename);
-        dirname = g_path_get_dirname(filename);
         entry = GTK_EDITABLE(ghb_builder_widget("dest_file"));
         gtk_editable_set_text(entry, basename);
-        dest_chooser = GHB_FILE_BUTTON(ghb_builder_widget("dest_dir"));
+        GhbFileButton *dest_chooser = GHB_FILE_BUTTON(ghb_builder_widget("dest_dir"));
         ghb_file_button_set_filename(dest_chooser, dirname);
-        g_object_unref(file);
-        g_free (dirname);
-        g_free (basename);
-        g_free (filename);
     }
     gtk_native_dialog_destroy(GTK_NATIVE_DIALOG(chooser));
 }
@@ -5414,7 +5467,6 @@ presets_list_context_menu_cb (GtkGesture *gest, gint n_press, double x,
 
 
 GtkFileFilter *ghb_add_file_filter(GtkFileChooser *chooser,
-                                   signal_user_data_t *ud,
                                    const char *name, const char *id)
 {
     g_autoptr(GtkFileFilter) filter = GTK_FILE_FILTER(ghb_builder_object(id));
@@ -5424,22 +5476,22 @@ GtkFileFilter *ghb_add_file_filter(GtkFileChooser *chooser,
 }
 
 static void
-add_video_file_filters (GtkFileChooser *chooser, signal_user_data_t *ud)
+add_video_file_filters (GtkFileChooser *chooser)
 {
-    ghb_add_file_filter(chooser, ud, _("All Files"), "FilterAll");
-    ghb_add_file_filter(chooser, ud, _("Video"), "SourceFilterVideo");
-    ghb_add_file_filter(chooser, ud, g_content_type_get_description("video/mp4"), "SourceFilterMP4");
-    ghb_add_file_filter(chooser, ud, g_content_type_get_description("video/mp2t"), "SourceFilterTS");
-    ghb_add_file_filter(chooser, ud, g_content_type_get_description("video/mpeg"), "SourceFilterMPG");
-    ghb_add_file_filter(chooser, ud, g_content_type_get_description("video/x-matroska"), "SourceFilterMKV");
-    ghb_add_file_filter(chooser, ud, g_content_type_get_description("video/webm"), "SourceFilterWebM");
-    ghb_add_file_filter(chooser, ud, g_content_type_get_description("video/ogg"), "SourceFilterOGG");
-    ghb_add_file_filter(chooser, ud, g_content_type_get_description("video/x-msvideo"), "SourceFilterAVI");
-    ghb_add_file_filter(chooser, ud, g_content_type_get_description("video/x-flv"), "SourceFilterFLV");
-    ghb_add_file_filter(chooser, ud, g_content_type_get_description("video/quicktime"), "SourceFilterMOV");
-    ghb_add_file_filter(chooser, ud, g_content_type_get_description("video/x-ms-wmv"), "SourceFilterWMV");
-    ghb_add_file_filter(chooser, ud, "EVO", "SourceFilterEVO");
-    ghb_add_file_filter(chooser, ud, "VOB", "SourceFilterVOB");
+    ghb_add_file_filter(chooser, _("All Files"), "FilterAll");
+    ghb_add_file_filter(chooser, _("Video"), "SourceFilterVideo");
+    ghb_add_file_filter(chooser, g_content_type_get_description("video/mp4"), "SourceFilterMP4");
+    ghb_add_file_filter(chooser, g_content_type_get_description("video/mp2t"), "SourceFilterTS");
+    ghb_add_file_filter(chooser, g_content_type_get_description("video/mpeg"), "SourceFilterMPG");
+    ghb_add_file_filter(chooser, g_content_type_get_description("video/x-matroska"), "SourceFilterMKV");
+    ghb_add_file_filter(chooser, g_content_type_get_description("video/webm"), "SourceFilterWebM");
+    ghb_add_file_filter(chooser, g_content_type_get_description("video/ogg"), "SourceFilterOGG");
+    ghb_add_file_filter(chooser, g_content_type_get_description("video/x-msvideo"), "SourceFilterAVI");
+    ghb_add_file_filter(chooser, g_content_type_get_description("video/x-flv"), "SourceFilterFLV");
+    ghb_add_file_filter(chooser, g_content_type_get_description("video/quicktime"), "SourceFilterMOV");
+    ghb_add_file_filter(chooser, g_content_type_get_description("video/x-ms-wmv"), "SourceFilterWMV");
+    ghb_add_file_filter(chooser, "EVO", "SourceFilterEVO");
+    ghb_add_file_filter(chooser, "VOB", "SourceFilterVOB");
 }
 G_MODULE_EXPORT gboolean
 combo_search_key_press_cb(
