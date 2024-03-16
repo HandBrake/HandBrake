@@ -8,6 +8,7 @@
 #import "NSToolbar+HBAdditions.h"
 #import "HBToolbarItem.h"
 #import "HBSegmentedControl.h"
+#import "HBComboView.h"
 #import "HBAppDelegate.h"
 #import "HBController.h"
 
@@ -60,50 +61,46 @@
         [menu addItemWithTitle:NSLocalizedString(@"Add All Titles To Queue", @"Main Window Add Toolbar Item")
                         action:@selector(addAllTitlesToQueue:) keyEquivalent:@""];
 
-        if (@available(macOS 11, *))
+        NSToolbarItem *item = [[HBToolbarItem alloc] initWithItemIdentifier:itemIdentifier];
+        item.label = label;
+        item.paletteLabel = label;
+
+        if (@available(macOS 14, *))
         {
-            NSToolbarItem *item = [[HBToolbarItem alloc] initWithItemIdentifier:itemIdentifier];
-            item.label = label;
-            item.paletteLabel = label;
+            NSImage *image = [NSImage imageWithSystemSymbolName:@"photo.badge.plus" accessibilityDescription:nil];
 
-            if (@available(macOS 14, *))
-            {
-                NSImage *image = [NSImage imageWithSystemSymbolName:@"photo.badge.plus" accessibilityDescription:nil];
+            NSComboButton *button = [NSComboButton comboButtonWithImage:image menu:menu target:nil action:action];
+            NSDictionary *items = NSDictionaryOfVariableBindings(button);
+            NSArray *constraints = [NSLayoutConstraint constraintsWithVisualFormat:@"H:[button(>=62)]" options:0 metrics:nil views:items];
+            [NSLayoutConstraint activateConstraints:constraints];
 
-                NSComboButton *button = [NSComboButton comboButtonWithImage:image menu:menu target:nil action:action];
-                NSDictionary *items = NSDictionaryOfVariableBindings(button);
-                NSArray *constraints = [NSLayoutConstraint constraintsWithVisualFormat:@"H:[button(>=62)]" options:0 metrics:nil views:items];
-                [NSLayoutConstraint activateConstraints:constraints];
+            item.view = button;
+        }
+        else if (@available(macOS 11, *))
+        {
+            NSImage *image = [NSImage imageNamed:@"photo.badge.plus"];
 
-                item.view = button;
-            }
-            else if (@available(macOS 11, *))
-            {
-                NSImage *image = [NSImage imageNamed:@"photo.badge.plus"];
+            NSSegmentedControl *control = [HBSegmentedControl segmentedControlWithImages:@[image, image]
+                                                                            trackingMode:NSSegmentSwitchTrackingMomentary
+                                                                                  target:nil action:action];
+            [control setWidth:36 forSegment:0];
+            [control setMenu:menu forSegment:1];
+            [control setShowsMenuIndicator:YES forSegment:1];
+            [control setWidth:14 forSegment:1];
+            [control setImage:nil forSegment:1];
 
-                NSSegmentedControl *control = [HBSegmentedControl segmentedControlWithImages:@[image, image]
-                                                                                trackingMode:NSSegmentSwitchTrackingMomentary
-                                                                                      target:nil action:action];
-                [control setWidth:36 forSegment:0];
-                [control setMenu:menu forSegment:1];
-                [control setShowsMenuIndicator:YES forSegment:1];
-                [control setWidth:14 forSegment:1];
-                [control setImage:nil forSegment:1];
-
-                item.view = control;
-            }
-            return item;
+            item.view = control;
         }
         else
         {
-            return [NSToolbarItem HB_toolbarItemWithIdentifier:itemIdentifier
-                                                         label:label
-                                                  paletteLabel:label
-                                                    symbolName:@"photo.badge.plus"
-                                                         image:@"addqueue"
-                                                         style:style
-                                                        action:@selector(addToQueue:)];
+            HBComboView *view = [[HBComboView alloc] initWithTitle:label
+                                                             image:[NSImage imageNamed:@"addqueue"]
+                                                            action:action
+                                                              menu:menu];
+            item.view = view;
         }
+
+        return item;
     }
     else if ([itemIdentifier isEqualToString:TOOLBAR_START])
     {
