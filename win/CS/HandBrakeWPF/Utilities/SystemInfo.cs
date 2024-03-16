@@ -55,7 +55,7 @@ namespace HandBrakeWPF.Utilities
 
         public static int MaximumSimultaneousInstancesSupported
         {
-            get => Math.Min((int)Math.Round((decimal)SystemInfo.GetCpuLogicalCount / 2, 0), 8);
+            get => Math.Min((int)Math.Round((decimal)SystemInfo.GetCpuLogicalCount / 2, 0), 12);
         }
 
         public static string ScreenBounds
