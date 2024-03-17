@@ -77,7 +77,7 @@
             <StackPanel Orientation="Vertical" Grid.Column="1">
                 <TextBlock Text="{x:Static Properties:Resources.VideoView_Quality}" Style="{StaticResource sectionHeader}" Margin="0,0,0,10"/>
 
-                <StackPanel Orientation="Horizontal" Margin="0,0,0,10" >
+                <StackPanel Orientation="Horizontal" Margin="0,0,0,10" Visibility="{Binding IsQualitySupported, Converter={StaticResource boolToVisConverter}}">
                     <RadioButton Content="{x:Static Properties:Resources.VideoView_ConstantQuality}" IsChecked="{Binding IsConstantQuantity}"  Margin="0,0,10,0"
                                  ToolTip="{x:Static Properties:ResourcesTooltips.Video_Quality}" />
                     <TextBlock Text="{Binding DisplayRF}" MinWidth="30" />
@@ -85,11 +85,11 @@
                 </StackPanel>
 
                 <Slider Value="{Binding RF, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Stretch"  Maximum="{Binding QualityMax}" Minimum="{Binding QualityMin}"
-                        IsEnabled="{Binding IsConstantQuantity}" Margin="20,0,10,10"
+                        IsEnabled="{Binding IsConstantQuantity}" Margin="20,0,10,10" Visibility="{Binding IsQualitySupported, Converter={StaticResource boolToVisConverter}}"
                         ToolTip="{x:Static Properties:ResourcesTooltips.Video_Quality}" Style="{StaticResource LongToolTipHolder}" 
                         IsSnapToTickEnabled="True" TickFrequency="1" TickPlacement="BottomRight" />
 
-                <Grid Margin="20,0,14,15" HorizontalAlignment="Stretch">
+                <Grid Margin="20,0,14,15" HorizontalAlignment="Stretch" Visibility="{Binding IsQualitySupported, Converter={StaticResource boolToVisConverter}}">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto" />
                         <ColumnDefinition Width="*" />

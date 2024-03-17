@@ -148,6 +148,8 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
+        public bool? IsQualitySupported => this.SelectedVideoEncoder?.SupportsQuality;
+        
         public bool IsPeakFramerate
         {
             get => this.Task.FramerateMode == FramerateMode.PFR;
@@ -340,6 +342,8 @@ namespace HandBrakeWPF.ViewModels
                     this.OnTabStatusChanged(null);
 
                     this.OnTabStatusChanged(new TabStatusEventArgs("filters", ChangedOption.Encoder));
+
+                    this.NotifyOfPropertyChange(() => this.IsQualitySupported);
                 }
             }
         }
