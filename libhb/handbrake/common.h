@@ -444,6 +444,7 @@ const char* const* hb_video_encoder_get_tunes   (int encoder);
 const char* const* hb_video_encoder_get_profiles(int encoder);
 const char* const* hb_video_encoder_get_levels  (int encoder);
 const int*         hb_video_encoder_get_pix_fmts(int encoder, const char *profile);
+int                hb_video_bitrate_is_supported(uint32_t codec);
 
 void  hb_audio_quality_get_limits(uint32_t codec, float *low, float *high, float *granularity, int *direction);
 float hb_audio_quality_get_best(uint32_t codec, float quality);
