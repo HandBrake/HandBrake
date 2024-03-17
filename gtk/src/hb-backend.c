@@ -3815,6 +3815,10 @@ ghb_picture_settings_deps(signal_user_data_t *ud)
     gtk_widget_set_visible(widget, custom_resolution_limit);
     widget = ghb_builder_widget("PictureHeight");
     gtk_widget_set_visible(widget, custom_resolution_limit);
+    widget = ghb_builder_widget("maximum_size_label");
+    gtk_widget_set_visible(widget, custom_resolution_limit);
+    widget = ghb_builder_widget("maximum_size_x_label");
+    gtk_widget_set_visible(widget, custom_resolution_limit);
 
     widget = ghb_builder_widget("PictureTopCrop");
     gtk_widget_set_sensitive(widget, custom_crop);

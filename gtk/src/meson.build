@@ -8,7 +8,6 @@ ghb_src = files(
   'callbacks.c',
   'chapters.c',
   'color-scheme.c',
-  'compat.c',
   'ghb-button.c',
   'ghb-chapter-row.c',
   'ghb-file-button.c',
@@ -27,6 +26,7 @@ ghb_src = files(
   'subtitlehandler.c',
   'title-add.c',
   'titledict.c',
+  'util.c',
   'values.c',
   'videohandler.c',
 )

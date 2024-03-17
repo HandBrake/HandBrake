@@ -1,4 +1,4 @@
-/* compat.c
+/* util.c
  *
  * Copyright (C) 2008-2024 John Stebbins <stebbins@stebbins>
  *
@@ -17,7 +17,9 @@
  * SPDX-License-Identifier: GPL-2.0-only
  */
 
-#include "compat.h"
+#include "util.h"
+
+#include "handbrake/common.h"
 
 /*
  * From https://gitlab.gnome.org/GNOME/gtk/-/blob/3.24.38/gtk/gtkdialog.c#L1240
@@ -169,4 +171,49 @@ ghb_file_chooser_get_current_folder (GtkFileChooser *chooser)
 {
     g_autoptr(GFile) folder = gtk_file_chooser_get_current_folder(chooser);
     return g_file_get_path(folder);
+}
+
+
+/*
+ * List of known suffixes for subtitles. Not case sensitive.
+ */
+static const char *ssa_extensions[] = { ".ass", ".ssa" };
+static const char *srt_extensions[] = { ".srt", ".txt" };
+
+/*
+ * Check whether an input file is a potential subtitle file.
+ */
+G_MODULE_EXPORT gboolean
+ghb_file_is_ssa_subtitle (const char *filename)
+{
+    for (int i = 0; i < G_N_ELEMENTS(ssa_extensions); i++)
+    {
+        if (hb_str_ends_with(filename, ssa_extensions[i]))
+            return TRUE;
+    }
+    return FALSE;
+}
+
+/*
+ * Check whether an input file is an SRT or text subtitle file.
+ */
+G_MODULE_EXPORT gboolean
+ghb_file_is_srt_subtitle (const char *filename)
+{
+    for (int i = 0; i < G_N_ELEMENTS(srt_extensions); i++)
+    {
+        if (hb_str_ends_with(filename, srt_extensions[i]))
+            return TRUE;
+    }
+    return FALSE;
+}
+
+/*
+ * Check whether an input file is a potential subtitle file.
+ */
+G_MODULE_EXPORT gboolean
+ghb_file_is_subtitle (const char *filename)
+{
+    return ghb_file_is_ssa_subtitle(filename) ||
+           ghb_file_is_srt_subtitle(filename);
 }

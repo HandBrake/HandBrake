@@ -22,12 +22,12 @@
 #include "application.h"
 #include "audiohandler.h"
 #include "callbacks.h"
-#include "compat.h"
 #include "handbrake/handbrake.h"
 #include "handbrake/lang.h"
 #include "hb-backend.h"
 #include "resources.h"
 #include "subtitlehandler.h"
+#include "util.h"
 #include "videohandler.h"
 
 #include <fcntl.h>

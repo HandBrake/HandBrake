@@ -20,7 +20,7 @@
 
 #include "ghb-file-button.h"
 
-#include "compat.h"
+#include "util.h"
 
 struct _GhbFileButton {
     GtkButton parent_instance;

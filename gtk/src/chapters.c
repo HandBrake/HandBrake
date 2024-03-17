@@ -21,11 +21,11 @@
 
 #include "application.h"
 #include "callbacks.h"
-#include "compat.h"
 #include "ghb-chapter-row.h"
 #include "hb-backend.h"
 #include "jobdict.h"
 #include "presets.h"
+#include "util.h"
 
 #include <libxml/parser.h>
 #include <libxml/xpath.h>
