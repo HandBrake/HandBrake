@@ -134,7 +134,7 @@ namespace HandBrakeWPF.ViewModels
         {
             get
             {
-                if (this.IsConstantQuantity)
+                if (this.IsConstantQuantity && !this.SelectedVideoEncoder.IsFFV1)
                 {
                     return false;
                 }

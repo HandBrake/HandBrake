@@ -166,5 +166,6 @@ namespace HandBrake.Interop.Interop.Interfaces.Model.Encoders
         public bool IsMpeg2 => this.ShortName.Contains("mpeg2");
         public bool IsVP9 => this.ShortName.Contains("VP9", StringComparison.InvariantCultureIgnoreCase);
         public bool IsHardwareEncoder => this.IsNVEnc || this.IsMediaFoundation || this.IsVCN || this.IsQuickSync;
+        public bool IsFFV1 => this.ShortName.Contains("ffv1", StringComparison.InvariantCultureIgnoreCase);
     }
 }
