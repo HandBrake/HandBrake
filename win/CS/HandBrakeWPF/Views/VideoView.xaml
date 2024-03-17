@@ -75,7 +75,7 @@
             </StackPanel>
 
             <StackPanel Orientation="Vertical" Grid.Column="1">
-                <TextBlock Text="{x:Static Properties:Resources.VideoView_Quality}" Style="{StaticResource sectionHeader}" Margin="0,0,0,10"/>
+                <TextBlock Text="{x:Static Properties:Resources.VideoView_Quality}" Style="{StaticResource sectionHeader}" Margin="0,0,0,10" />
 
                 <StackPanel Orientation="Horizontal" Margin="0,0,0,10" Visibility="{Binding IsQualitySupported, Converter={StaticResource boolToVisConverter}}">
                     <RadioButton Content="{x:Static Properties:Resources.VideoView_ConstantQuality}" IsChecked="{Binding IsConstantQuantity}"  Margin="0,0,10,0"
@@ -98,16 +98,17 @@
                     <TextBlock Text="{Binding HighQualityLabel}" HorizontalAlignment="Right" Grid.Column="1" />
                 </Grid>
 
-                <StackPanel Orientation="Horizontal" Margin="0,0,0,6">
+                <StackPanel Orientation="Horizontal" Margin="0,0,0,6" Visibility="{Binding IsBitrateSupported, Converter={StaticResource boolToVisConverter}}">
                     <RadioButton Content="{x:Static Properties:Resources.VideoView_AverageBitrate}" ToolTip="{x:Static Properties:ResourcesTooltips.Video_AvgBitrate}" 
                                  IsChecked="{Binding IsConstantQuantity, Converter={StaticResource boolConverter}, ConverterParameter=true}" Margin="0,0,10,0"/>
                     <TextBox Width="75" Text="{Binding VideoBitrate, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding IsConstantQuantity, Converter={StaticResource boolConverter}, ConverterParameter=true}"
                              ToolTip="{x:Static Properties:ResourcesTooltips.Video_AvgBitrate}" AutomationProperties.Name="{x:Static Properties:Resources.VideoView_AverageBitrate}"  />
                 </StackPanel>
 
-                <StackPanel Orientation="Horizontal" Margin="30,0,0,0" Visibility="{Binding DisplayMultiPass, Converter={StaticResource boolToVisConverter}}">
+                <StackPanel Orientation="Horizontal" Margin="30,0,0,0" >
                     <CheckBox Content="{x:Static Properties:Resources.VideoView_MultiPass}" IsEnabled="{Binding IsMultiPassEnabled, Converter={StaticResource boolConverter}}"
-                              IsChecked="{Binding MultiPass}" Margin="0,0,10,0" ToolTip="{x:Static Properties:ResourcesTooltips.Video_MultiPass}"  />
+                              IsChecked="{Binding MultiPass}" Margin="0,0,10,0" ToolTip="{x:Static Properties:ResourcesTooltips.Video_MultiPass}"
+                              Visibility="{Binding DisplayMultiPass, Converter={StaticResource boolToVisConverter}}"/>
                     <CheckBox Content="{x:Static Properties:Resources.VideoView_TurboAnalysisPass}" IsEnabled="{Binding IsConstantQuantity, Converter={StaticResource boolConverter}, ConverterParameter=true}"
                               IsChecked="{Binding TurboAnalysisPass}" Visibility="{Binding DisplayTurboAnalysisPass, Converter={StaticResource boolToVisConverter}}"
                               ToolTip="{x:Static Properties:ResourcesTooltips.Video_TurboAnalysisPass}" />

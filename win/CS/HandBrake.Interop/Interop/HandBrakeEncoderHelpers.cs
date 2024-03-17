@@ -327,6 +327,18 @@ namespace HandBrake.Interop.Interop
             return false;
         }
 
+        public static bool VideoEncoderSupportsBitrateMode(string encoderShortName)
+        {
+            HBVideoEncoder encoder = GetVideoEncoder(encoderShortName);
+
+            if (encoder != null)
+            {
+                return HBFunctions.hb_video_bitrate_is_supported(encoder.Id) > 0;
+            }
+
+            return false;
+        }
+
         /// <summary>
         /// Returns true if the subtitle source type can be set to forced only.
         /// </summary>
