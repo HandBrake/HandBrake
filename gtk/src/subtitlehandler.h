@@ -33,6 +33,7 @@ void ghb_subtitle_defaults_to_ui(signal_user_data_t *ud);
 void ghb_subtitle_set_actions_enabled(signal_user_data_t *ud, gboolean enabled);
 void ghb_subtitle_set_pref_lang(GhbValue *settings);
 void ghb_clear_subtitle_selection(void);
+void ghb_add_subtitle_files(GListModel *files, signal_user_data_t *ud);
 GhbValue *ghb_get_subtitle_list(GhbValue *settings);
 GhbValue *ghb_get_subtitle_settings(GhbValue *settings);
 char * ghb_subtitle_short_description(const GhbValue *subsource,

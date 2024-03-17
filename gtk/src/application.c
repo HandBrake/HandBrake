@@ -33,6 +33,7 @@
 #include "resources.h"
 #include "subtitlehandler.h"
 #include "ui_res.h"
+#include "util.h"
 #include "values.h"
 
 #include <fcntl.h>
@@ -593,23 +594,36 @@ G_GNUC_BEGIN_IGNORE_DEPRECATIONS
     {
         GdkFileList *gdk_file_list = g_value_get_boxed(value);
         GSList *slist = gdk_file_list_get_files(gdk_file_list);
-        g_autoptr(GListStore) files = g_list_store_new(G_TYPE_FILE);
+        g_autoptr(GListStore) video_files = g_list_store_new(G_TYPE_FILE);
+        g_autoptr(GListStore) subtitle_files = g_list_store_new(G_TYPE_FILE);
         const char *filename = NULL;
 
         while (slist)
         {
             filename = g_file_peek_path(slist->data);
-            g_debug("File dropped on window: %s", filename);
-            g_list_store_append(files, slist->data);
+            if (ghb_file_is_subtitle(filename))
+            {
+                g_debug("Subtitle file dropped on window: %s", filename);
+                g_list_store_append(subtitle_files, slist->data);
+            }
+            else
+            {
+                g_debug("Video file dropped on window: %s", filename);
+                g_list_store_append(video_files, slist->data);
+            }
             slist = slist->next;
         }
 
-        if (g_list_model_get_n_items(G_LIST_MODEL(files)))
+        if (g_list_model_get_n_items(G_LIST_MODEL(video_files)))
         {
             ghb_dict_set_string(ud->prefs, "default_source", filename);
             ghb_pref_save(ud->prefs, "default_source");
             ghb_dvd_set_current(filename, ud);
-            ghb_do_scan_list(ud, G_LIST_MODEL(files), 0, TRUE);
+            ghb_do_scan_list(ud, G_LIST_MODEL(video_files), 0, TRUE);
+        }
+        else if (subtitle_files)
+        {
+            ghb_add_subtitle_files(G_LIST_MODEL(subtitle_files), ud);
         }
         return TRUE;
     }

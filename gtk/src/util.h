@@ -1,4 +1,4 @@
-/* compat.h
+/* util.h
  *
  * Copyright (C) 2008-2024 John Stebbins <stebbins@stebbins>
  *
@@ -27,6 +27,9 @@ int ghb_dialog_run(GtkDialog *dialog);
 void ghb_file_chooser_set_initial_file(GtkFileChooser *chooser, const char *file);
 char *ghb_file_chooser_get_filename(GtkFileChooser *chooser);
 char *ghb_file_chooser_get_current_folder(GtkFileChooser *chooser);
+gboolean ghb_file_is_subtitle(const char *filename);
+gboolean ghb_file_is_ssa_subtitle(const char *filename);
+gboolean ghb_file_is_srt_subtitle(const char *filename);
 
 G_END_DECLS
 
