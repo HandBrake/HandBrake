@@ -56,8 +56,17 @@
    File already exists alert -> message */
 "A file already exists at the selected destination." = "Am ausgewählten Ziel existiert schon eine Datei.";
 
+/* Queue Window Action Toolbar Item */
+"Action" = "Dienste";
+
+/* Main Window Activity Toolbar Item */
+"Activity" = "Aktivität";
+
 /* Picture HUD -> scale button */
 "Actual Scale" = "Ursprüngliche Skalierung";
+
+/* Main Window Add Toolbar Item */
+"Add All Titles To Queue" = "Alle Titel zur Warteschlange hinzufügen";
 
 /* Queue undo action name */
 "Add Job To Queue" = "Aufgabe zu Warteschlange hinzufügen";
@@ -71,7 +80,11 @@
 /* Touch bar */
 "Add Titles To Queue" = "Alle Titel zur Warteschlange hinzufügen";
 
-/* Touch bar */
+/* Main Window Add Toolbar Item */
+"Add Titles To Queue…" = "Titel zur Warteschlange hinzufügen …";
+
+/* Main Window Add Toolbar Item
+   Touch bar */
 "Add To Queue" = "Zur Warteschlange hinzufügen";
 
 /* Preferences Advanced Toolbar Item */
@@ -158,6 +171,12 @@
 /* Delete preset alert -> first button */
 "Delete Presets" = "Voreinstellungen löschen";
 
+/* Queue Window Details Toolbar Item */
+"Details" = "Details";
+
+/* Queue Window When Done Toolbar Item */
+"Do Nothing" = "Nichts tun";
+
 /* File already exists alert -> informative text
    File already exists in queue alert -> informative text */
 "Do you want to overwrite %@?" = "Wollen Sie %@ überschreiben?";
@@ -201,6 +220,9 @@
 
 /* Export presets save panel title */
 "Export presets" = "Voreinstellungen exportieren";
+
+/* Default name for a newly added excluded file extension */
+"extension" = "erweiterung";
 
 /* File already exists alert -> message */
 "File already exists." = "Die Datei existiert bereits.";
@@ -288,7 +310,8 @@
 /* Preview -> live preview alert default button */
 "Open in external player" = "Extern öffnen";
 
-/* Toolbar Open/Cancel Item
+/* Main Window Open Toolbar Item
+   Toolbar Open/Cancel Item
    Touch bar */
 "Open Source" = "Quelle öffnen";
 
@@ -296,7 +319,8 @@
    File already exists in queue alert -> second button */
 "Overwrite" = "Überschreiben";
 
-/* Toolbar Pause Item */
+/* Main Window Pause Toolbar Item
+   Toolbar Pause Item */
 "Pause" = "Anhalten";
 
 /* Queue -> pause/resume menu
@@ -304,7 +328,8 @@
    Touch bar */
 "Pause Encoding" = "Encodierung anhalten";
 
-/* Touch bar */
+/* Main Window Pause Toolbar Item
+   Touch bar */
 "Pause/Resume Encoding" = "Encodierung Anhalten/Fortsetzen";
 
 /* Job statistics */
@@ -330,10 +355,14 @@
 /* Preferences -> Output Name Token */
 "Preset" = "Voreinstellung";
 
+/* Main Window Presets Toolbar Item */
+"Presets" = "Voreinstellungen";
+
 /* Preview -> progress formatter title */
 "preview" = "Vorschau";
 
-/* Preview -> window title */
+/* Main Window Preview Toolbar Item
+   Preview -> window title */
 "Preview" = "Vorschau";
 
 /* Preview -> window title format */
@@ -345,6 +374,9 @@
 /* Touch bar */
 "Previews" = "Vorschau";
 
+/* Queue Window When Done Toolbar Item */
+"Put Computer to Sleep" = "Computer in den Ruhezustand setzen";
+
 /* Queue notification alert message */
 "Put down that cocktail…" = "Stellen Sie den Cocktail ab …";
 
@@ -354,18 +386,31 @@
 /* Preferences -> Output Name Token */
 "Quality/Bitrate" = "Qualität/Bitrate";
 
-/* Preferences Queue Toolbar Item
+/* Main Window Presets Toolbar Item
+   Preferences Queue Toolbar Item
    Queue window title */
 "Queue" = "Warteschlange";
 
 /* Queue window title */
 "Queue (%@)" = "Warteschlange (%@)";
 
+/* Queue Window Quick Look Toolbar Item */
+"Quick Look" = "Quick Look";
+
 /* Quit Alert -> first button */
 "Quit" = "Beenden";
 
+/* Queue Window When Done Toolbar Item */
+"Quit HandBrake" = "HandBrake beenden";
+
 /* Touch bar */
 "Remaining Time" = "Verbleibende Zeit";
+
+/* Queue Window Action Toolbar Item */
+"Remove All Jobs" = "Alle Aufgaben entfernen";
+
+/* Queue Window Action Toolbar Item */
+"Remove Completed Jobs" = "Abgeschlossene Aufgaben entfernen";
 
 /* HBQueueItemView -> Remove button accessibility label */
 "Remove job" = "Aufgabe entfernen";
@@ -378,6 +423,12 @@
 
 /* HBQueueItemView -> Encode state accessibility label */
 "Rescanning for editing" = "Neues Einlesen zur Bearbeitung";
+
+/* Queue Window Action Toolbar Item */
+"Reset All Jobs" = "Alle Aufgaben zurücksetzen";
+
+/* Queue Window Action Toolbar Item */
+"Reset Failed Jobs" = "Fehlgeschlagene Aufgaben zurücksetzen";
 
 /* Toolbar Pause Item */
 "Resume" = "Fortsetzen";
@@ -411,11 +462,22 @@
 /* Notification -> Show in Finder */
 "Show" = "Zeigen";
 
-/* Touch bar */
+/* Main Window Activity Toolbar Item
+   Touch bar */
 "Show Activity Window" = "Aktivitätsfenster zeigen";
 
-/* Touch bar */
+/* Main Window Presets Toolbar Item */
+"Show Presets List" = "Voreinstellungen zeigen";
+
+/* Main Window Preview Toolbar Item
+   Touch bar */
 "Show Preview Window" = "Vorschau zeigen";
+
+/* Main Window Presets Toolbar Item */
+"Show Queue Window" = "Warteschlange zeigen";
+
+/* Queue Window When Done Toolbar Item */
+"Shut Down Computer" = "Computer herunterfahren";
 
 /* Job statistics */
 "Size:" = "Größe:";
@@ -429,7 +491,8 @@
 /* Preferences -> Output Name Token */
 "Source" = "Quelle";
 
-/* Toolbar Start/Stop Item */
+/* Main Window Start Toolbar Item
+   Toolbar Start/Stop Item */
 "Start" = "Start";
 
 /* Menu Start/Stop Item
@@ -440,7 +503,8 @@
 /* Toolbar Start/Stop Item */
 "Start Queue" = "Warteschlange starten";
 
-/* Touch bar */
+/* Main Window Start Toolbar Item
+   Touch bar */
 "Start/Stop Encoding" = "Encodierung Starten/Stoppen";
 
 /* Job statistics */
@@ -517,6 +581,9 @@
 
 /* Invalid destination alert -> message */
 "Warning!" = "Warnung!";
+
+/* Queue Window When Done Toolbar Item */
+"When Done" = "Wenn fertig";
 
 /* Preferences -> Output Name Token */
 "Width" = "Breite";

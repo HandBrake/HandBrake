@@ -56,8 +56,17 @@
    File already exists alert -> message */
 "A file already exists at the selected destination." = "Un documento esiste già nella destinazione selezionata.";
 
+/* Queue Window Action Toolbar Item */
+"Action" = "Azione";
+
+/* Main Window Activity Toolbar Item */
+"Activity" = "Attività";
+
 /* Picture HUD -> scale button */
 "Actual Scale" = "Dimensione reale";
+
+/* Main Window Add Toolbar Item */
+"Add All Titles To Queue" = "Aggiungi tutti i titoli alla coda";
 
 /* Queue undo action name */
 "Add Job To Queue" = "aggiungi lavoro alla coda";
@@ -71,7 +80,11 @@
 /* Touch bar */
 "Add Titles To Queue" = "Aggiungi titoli alla coda";
 
-/* Touch bar */
+/* Main Window Add Toolbar Item */
+"Add Titles To Queue…" = "Aggiungi titoli alla coda…";
+
+/* Main Window Add Toolbar Item
+   Touch bar */
 "Add To Queue" = "Aggiungi in coda";
 
 /* Preferences Advanced Toolbar Item */
@@ -158,6 +171,12 @@
 /* Delete preset alert -> first button */
 "Delete Presets" = "Elimina";
 
+/* Queue Window Details Toolbar Item */
+"Details" = "Dettagli";
+
+/* Queue Window When Done Toolbar Item */
+"Do Nothing" = "Non far nulla";
+
 /* File already exists alert -> informative text
    File already exists in queue alert -> informative text */
 "Do you want to overwrite %@?" = "Vuoi sostituire %@?";
@@ -202,8 +221,14 @@
 /* Export presets save panel title */
 "Export presets" = "Esporta preset";
 
+/* Default name for a newly added excluded file extension */
+"extension" = "estensione";
+
 /* File already exists alert -> message */
 "File already exists." = "Il documente esiste già.";
+
+/* Preferences Output File Name Toolbar Item */
+"File name" = "Nome documento";
 
 /* Preferences General Toolbar Item */
 "General" = "Generali";
@@ -285,7 +310,8 @@
 /* Preview -> live preview alert default button */
 "Open in external player" = "Apri in un riproduttore esterno";
 
-/* Toolbar Open/Cancel Item
+/* Main Window Open Toolbar Item
+   Toolbar Open/Cancel Item
    Touch bar */
 "Open Source" = "Apri sorgente";
 
@@ -293,16 +319,18 @@
    File already exists in queue alert -> second button */
 "Overwrite" = "Sostituisci";
 
-/* Toolbar Pause Item */
-"Pause" = "Pausa";
+/* Main Window Pause Toolbar Item
+   Toolbar Pause Item */
+"Pause" = "Sospendi";
 
 /* Queue -> pause/resume menu
    Toolbar Pause Item
    Touch bar */
 "Pause Encoding" = "Metti la conversione in pausa";
 
-/* Touch bar */
-"Pause/Resume Encoding" = "Pausa/Riprendi conversione";
+/* Main Window Pause Toolbar Item
+   Touch bar */
+"Pause/Resume Encoding" = "Sospendi/Riprendi conversione";
 
 /* Job statistics */
 "Paused time:" = "Tempo in pausa:";
@@ -327,10 +355,14 @@
 /* Preferences -> Output Name Token */
 "Preset" = "Preset";
 
+/* Main Window Presets Toolbar Item */
+"Presets" = "Preset";
+
 /* Preview -> progress formatter title */
 "preview" = "anteprima";
 
-/* Preview -> window title */
+/* Main Window Preview Toolbar Item
+   Preview -> window title */
 "Preview" = "Anteprima";
 
 /* Preview -> window title format */
@@ -342,6 +374,9 @@
 /* Touch bar */
 "Previews" = "Anteprime";
 
+/* Queue Window When Done Toolbar Item */
+"Put Computer to Sleep" = "Metti il computer in stop";
+
 /* Queue notification alert message */
 "Put down that cocktail…" = "Appoggia quel cocktail…";
 
@@ -351,18 +386,31 @@
 /* Preferences -> Output Name Token */
 "Quality/Bitrate" = "Qualità/Frequenza dati";
 
-/* Preferences Queue Toolbar Item
+/* Main Window Presets Toolbar Item
+   Preferences Queue Toolbar Item
    Queue window title */
 "Queue" = "Coda";
 
 /* Queue window title */
 "Queue (%@)" = "Coda (%@)";
 
+/* Queue Window Quick Look Toolbar Item */
+"Quick Look" = "Visualizzazione rapida";
+
 /* Quit Alert -> first button */
 "Quit" = "Esci";
 
+/* Queue Window When Done Toolbar Item */
+"Quit HandBrake" = "Esci da HandBrake";
+
 /* Touch bar */
 "Remaining Time" = "Tempo rimanente";
+
+/* Queue Window Action Toolbar Item */
+"Remove All Jobs" = "Rimuovi tutti i lavori";
+
+/* Queue Window Action Toolbar Item */
+"Remove Completed Jobs" = "Rimuovi i lavori completati";
 
 /* HBQueueItemView -> Remove button accessibility label */
 "Remove job" = "Rimuovi lavoro";
@@ -375,6 +423,12 @@
 
 /* HBQueueItemView -> Encode state accessibility label */
 "Rescanning for editing" = "Analizzo per rendere modificabile";
+
+/* Queue Window Action Toolbar Item */
+"Reset All Jobs" = "Ripristina tutti i lavori";
+
+/* Queue Window Action Toolbar Item */
+"Reset Failed Jobs" = "Ripristina i lavori falliti";
 
 /* Toolbar Pause Item */
 "Resume" = "Riprendi";
@@ -408,11 +462,22 @@
 /* Notification -> Show in Finder */
 "Show" = "Mostra";
 
-/* Touch bar */
+/* Main Window Activity Toolbar Item
+   Touch bar */
 "Show Activity Window" = "Mostra finestra di attività";
 
-/* Touch bar */
+/* Main Window Presets Toolbar Item */
+"Show Presets List" = "Mostra elenco preset";
+
+/* Main Window Preview Toolbar Item
+   Touch bar */
 "Show Preview Window" = "Mostra finestra di anteprima";
+
+/* Main Window Presets Toolbar Item */
+"Show Queue Window" = "Mostra finestra della coda";
+
+/* Queue Window When Done Toolbar Item */
+"Shut Down Computer" = "Spegni il computer";
 
 /* Job statistics */
 "Size:" = "Dimensione:";
@@ -426,7 +491,8 @@
 /* Preferences -> Output Name Token */
 "Source" = "Sorgente";
 
-/* Toolbar Start/Stop Item */
+/* Main Window Start Toolbar Item
+   Toolbar Start/Stop Item */
 "Start" = "Avvia";
 
 /* Menu Start/Stop Item
@@ -437,7 +503,8 @@
 /* Toolbar Start/Stop Item */
 "Start Queue" = "Avvia coda";
 
-/* Touch bar */
+/* Main Window Start Toolbar Item
+   Touch bar */
 "Start/Stop Encoding" = "Avvia/Interrompi conversione";
 
 /* Job statistics */
@@ -515,6 +582,9 @@
 /* Invalid destination alert -> message */
 "Warning!" = "Attenzione!";
 
+/* Queue Window When Done Toolbar Item */
+"When Done" = "Al completamento";
+
 /* Preferences -> Output Name Token */
 "Width" = "Larghezza";
 
@@ -548,4 +618,7 @@
 /* Queue Edit Alert -> stop and edit informative text
    Queue Stop Alert -> stop and remove informative text */
 "Your movie will be lost if you don't continue encoding." = "Il tuo filmato andrà perso se non continui la conversione.";
+
+/* Queue done notification message */
+"Your queue is done!" = "La tua coda è stata completata!";
 

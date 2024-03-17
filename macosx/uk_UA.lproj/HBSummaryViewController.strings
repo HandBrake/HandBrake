@@ -1,0 +1,60 @@
+/* Class = "NSTextFieldCell"; title = "Tracks:"; ObjectID = "3mF-Bb-Gon"; */
+"3mF-Bb-Gon.title" = "Tracks:";
+
+/* Class = "NSTextFieldCell"; title = "Size:"; ObjectID = "B4a-co-0ly"; */
+"B4a-co-0ly.title" = "Size:";
+
+/* Class = "NSTextField"; ibExternalAccessibilityDescription = "Filters summary"; ObjectID = "BHq-Mt-3eA"; */
+"BHq-Mt-3eA.ibExternalAccessibilityDescription" = "Filters summary";
+
+/* Class = "NSButtonCell"; title = "Passthru Common Metadata"; ObjectID = "CZZ-bW-jZc"; */
+"CZZ-bW-jZc.title" = "Passthru Common Metadata";
+
+/* Class = "NSButtonCell"; title = "Align A/V Start"; ObjectID = "De0-Je-MAm"; */
+"De0-Je-MAm.title" = "Align A/V Start";
+
+/* Class = "NSButton"; ibShadowedToolTip = "Copy metadata from source to output"; ObjectID = "eJx-BO-rhL"; */
+"eJx-BO-rhL.ibShadowedToolTip" = "Copy metadata from source to output";
+
+/* Class = "NSButton"; ibShadowedToolTip = "Aligns the initial timestamps of all audio and video streams by inserting blank frames or dropping frames. May improve audio/video sync for broken players that do not honor MP4 edit lists."; ObjectID = "fPv-Vw-I89"; */
+"fPv-Vw-I89.ibShadowedToolTip" = "Aligns the initial timestamps of all audio and video streams by inserting blank frames or dropping frames. May improve audio/video sync for broken players that do not honor MP4 edit lists.";
+
+/* Class = "NSTextField"; ibExternalAccessibilityDescription = "Size summary"; ObjectID = "Jaw-pH-rhf"; */
+"Jaw-pH-rhf.ibExternalAccessibilityDescription" = "Size summary";
+
+/* Class = "NSButton"; ibShadowedToolTip = "Optimize for progressive download. After encoding, data is reorganized and rewritten to allow immediate playback over a network, without needing to download the entire file."; ObjectID = "lUi-Oc-208"; */
+"lUi-Oc-208.ibShadowedToolTip" = "Optimize for progressive download. After encoding, data is reorganized and rewritten to allow immediate playback over a network, without needing to download the entire file.";
+
+/* Class = "NSView"; ibExternalAccessibilityDescription = "Preview"; ObjectID = "m5a-0z-QQ4"; */
+"m5a-0z-QQ4.ibExternalAccessibilityDescription" = "Preview";
+
+/* Class = "NSTextFieldCell"; title = "Filters:"; ObjectID = "OCw-f6-uA0"; */
+"OCw-f6-uA0.title" = "Фільтри:";
+
+/* Class = "NSButton"; ibShadowedToolTip = "Add a special MP4 marker to allow playback on vintage iPod 5th Generation devices circa 2006. Other settings may affect compatibility."; ObjectID = "QKv-GR-d2g"; */
+"QKv-GR-d2g.ibShadowedToolTip" = "Add a special MP4 marker to allow playback on vintage iPod 5th Generation devices circa 2006. Other settings may affect compatibility.";
+
+/* Class = "NSTextFieldCell"; title = "None"; ObjectID = "RIB-ME-Yhh"; */
+"RIB-ME-Yhh.title" = "Відсутня";
+
+/* Class = "NSTextFieldCell"; title = "Format:"; ObjectID = "RXJ-DZ-4mh"; */
+"RXJ-DZ-4mh.title" = "Формат:";
+
+/* Class = "NSPopUpButton"; ibShadowedToolTip = "Container format. Video, audio, and other tracks are combined into a single file of this type. Affects compatibility."; ObjectID = "txV-1R-WoD"; */
+"txV-1R-WoD.ibShadowedToolTip" = "Container format. Video, audio, and other tracks are combined into a single file of this type. Affects compatibility.";
+
+/* Class = "NSButtonCell"; title = "Web Optimized"; ObjectID = "wcc-5d-Dgj"; */
+"wcc-5d-Dgj.title" = "Web Optimized";
+
+/* Class = "NSTextFieldCell"; title = "None"; ObjectID = "xmy-Jl-mR4"; */
+"xmy-Jl-mR4.title" = "Відсутня";
+
+/* Class = "NSTextFieldCell"; title = "None"; ObjectID = "xzc-qg-AMn"; */
+"xzc-qg-AMn.title" = "Відсутня";
+
+/* Class = "NSTextField"; ibExternalAccessibilityDescription = "Tracks summary"; ObjectID = "yRE-5c-FhX"; */
+"yRE-5c-FhX.ibExternalAccessibilityDescription" = "Tracks summary";
+
+/* Class = "NSButtonCell"; title = "iPod 5G Support"; ObjectID = "zz5-qY-GSA"; */
+"zz5-qY-GSA.title" = "iPod 5G Support";
+

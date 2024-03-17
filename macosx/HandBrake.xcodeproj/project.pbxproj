@@ -1063,6 +1063,42 @@
 		D0A8A0342706E3710008018A /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = "ru.lproj/HandBrakeXPCService2-InfoPlist.strings"; sourceTree = "<group>"; };
 		D0A8A0352706E3710008018A /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = "ru.lproj/HandBrakeXPCService3-InfoPlist.strings"; sourceTree = "<group>"; };
 		D0A8A0362706E3710008018A /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = "ru.lproj/HandBrakeXPCService4-InfoPlist.strings"; sourceTree = "<group>"; };
+		D0B6CB8C2BA7775B0015F453 /* uk_UA */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "uk_UA"; path = "uk_UA.lproj/AddPreset.strings"; sourceTree = "<group>"; };
+		D0B6CB8D2BA7775B0015F453 /* uk_UA */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "uk_UA"; path = "uk_UA.lproj/Audio.strings"; sourceTree = "<group>"; };
+		D0B6CB8E2BA7775B0015F453 /* uk_UA */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "uk_UA"; path = "uk_UA.lproj/AudioDefaults.strings"; sourceTree = "<group>"; };
+		D0B6CB8F2BA7775B0015F453 /* uk_UA */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "uk_UA"; path = "uk_UA.lproj/ChaptersTitles.strings"; sourceTree = "<group>"; };
+		D0B6CB902BA7775B0015F453 /* uk_UA */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "uk_UA"; path = "uk_UA.lproj/ExceptionAlert.strings"; sourceTree = "<group>"; };
+		D0B6CB912BA7775B0015F453 /* uk_UA */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "uk_UA"; path = "uk_UA.lproj/HBAddCategoryController.strings"; sourceTree = "<group>"; };
+		D0B6CB922BA7775B0015F453 /* uk_UA */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "uk_UA"; path = "uk_UA.lproj/HBCroppingView.strings"; sourceTree = "<group>"; };
+		D0B6CB932BA7775B0015F453 /* uk_UA */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "uk_UA"; path = "uk_UA.lproj/HBEncodingProgressHUDController.strings"; sourceTree = "<group>"; };
+		D0B6CB942BA7775B0015F453 /* uk_UA */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "uk_UA"; path = "uk_UA.lproj/HBFiltersViewController.strings"; sourceTree = "<group>"; };
+		D0B6CB952BA7775B0015F453 /* uk_UA */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "uk_UA"; path = "uk_UA.lproj/HBPictureHUDController.strings"; sourceTree = "<group>"; };
+		D0B6CB962BA7775B0015F453 /* uk_UA */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "uk_UA"; path = "uk_UA.lproj/HBPictureViewController.strings"; sourceTree = "<group>"; };
+		D0B6CB972BA7775B0015F453 /* uk_UA */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "uk_UA"; path = "uk_UA.lproj/HBPlayerHUDController.strings"; sourceTree = "<group>"; };
+		D0B6CB982BA7775B0015F453 /* uk_UA */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "uk_UA"; path = "uk_UA.lproj/HBPreviewViewController.strings"; sourceTree = "<group>"; };
+		D0B6CB992BA7775B0015F453 /* uk_UA */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "uk_UA"; path = "uk_UA.lproj/HBQueueInfoViewController.strings"; sourceTree = "<group>"; };
+		D0B6CB9A2BA7775B0015F453 /* uk_UA */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "uk_UA"; path = "uk_UA.lproj/HBQueueTableViewController.strings"; sourceTree = "<group>"; };
+		D0B6CB9B2BA7775B0015F453 /* uk_UA */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "uk_UA"; path = "uk_UA.lproj/HBRenamePresetController.strings"; sourceTree = "<group>"; };
+		D0B6CB9C2BA7775B0015F453 /* uk_UA */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "uk_UA"; path = "uk_UA.lproj/HBSummaryViewController.strings"; sourceTree = "<group>"; };
+		D0B6CB9D2BA7775B0015F453 /* uk_UA */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "uk_UA"; path = "uk_UA.lproj/HBTitleSelection.strings"; sourceTree = "<group>"; };
+		D0B6CB9E2BA7775B0015F453 /* uk_UA */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "uk_UA"; path = "uk_UA.lproj/HBTrackTitleViewController.strings"; sourceTree = "<group>"; };
+		D0B6CB9F2BA7775B0015F453 /* uk_UA */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "uk_UA"; path = "uk_UA.lproj/MainMenu.strings"; sourceTree = "<group>"; };
+		D0B6CBA02BA7775B0015F453 /* uk_UA */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "uk_UA"; path = "uk_UA.lproj/MainWindow.strings"; sourceTree = "<group>"; };
+		D0B6CBA12BA7775B0015F453 /* uk_UA */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "uk_UA"; path = "uk_UA.lproj/OutputPanel.strings"; sourceTree = "<group>"; };
+		D0B6CBA22BA7775B0015F453 /* uk_UA */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "uk_UA"; path = "uk_UA.lproj/PicturePreview.strings"; sourceTree = "<group>"; };
+		D0B6CBA32BA7775B0015F453 /* uk_UA */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "uk_UA"; path = "uk_UA.lproj/Preferences.strings"; sourceTree = "<group>"; };
+		D0B6CBA42BA7775B0015F453 /* uk_UA */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "uk_UA"; path = "uk_UA.lproj/Presets.strings"; sourceTree = "<group>"; };
+		D0B6CBA52BA7775B0015F453 /* uk_UA */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "uk_UA"; path = "uk_UA.lproj/Queue.strings"; sourceTree = "<group>"; };
+		D0B6CBA62BA7775B0015F453 /* uk_UA */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "uk_UA"; path = "uk_UA.lproj/Subtitles.strings"; sourceTree = "<group>"; };
+		D0B6CBA72BA7775B0015F453 /* uk_UA */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "uk_UA"; path = "uk_UA.lproj/SubtitlesDefaults.strings"; sourceTree = "<group>"; };
+		D0B6CBA82BA7775B0015F453 /* uk_UA */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "uk_UA"; path = "uk_UA.lproj/Video.strings"; sourceTree = "<group>"; };
+		D0B6CBA92BA7775B0015F453 /* uk_UA */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "uk_UA"; path = "uk_UA.lproj/Localizable.strings"; sourceTree = "<group>"; };
+		D0B6CBAA2BA7775B0015F453 /* uk_UA */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "uk_UA"; path = "uk_UA.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
+		D0B6CBAB2BA7775B0015F453 /* uk_UA */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "uk_UA"; path = "uk_UA.lproj/Localizable.strings"; sourceTree = "<group>"; };
+		D0B6CBAC2BA7775B0015F453 /* uk_UA */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "uk_UA"; path = "uk_UA.lproj/HandBrakeXPCService1-InfoPlist.strings"; sourceTree = "<group>"; };
+		D0B6CBAD2BA7775B0015F453 /* uk_UA */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "uk_UA"; path = "uk_UA.lproj/HandBrakeXPCService2-InfoPlist.strings"; sourceTree = "<group>"; };
+		D0B6CBAE2BA7775B0015F453 /* uk_UA */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "uk_UA"; path = "uk_UA.lproj/HandBrakeXPCService3-InfoPlist.strings"; sourceTree = "<group>"; };
+		D0B6CBAF2BA7775B0015F453 /* uk_UA */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "uk_UA"; path = "uk_UA.lproj/HandBrakeXPCService4-InfoPlist.strings"; sourceTree = "<group>"; };
 		D0B806A426E7F2760013D332 /* co */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = co; path = co.lproj/AddPreset.strings; sourceTree = "<group>"; };
 		D0B806A526E7F2760013D332 /* co */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = co; path = co.lproj/Audio.strings; sourceTree = "<group>"; };
 		D0B806A626E7F2760013D332 /* co */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = co; path = co.lproj/AudioDefaults.strings; sourceTree = "<group>"; };
@@ -2238,6 +2274,7 @@
 				ja_JP,
 				ko,
 				bg,
+				uk_UA,
 			);
 			mainGroup = 273F1FDE14AD9DA40021BE6D;
 			packageReferences = (
@@ -2644,6 +2681,7 @@
 				D0924616280B72B900B79A40 /* ja_JP */,
 				D0A185F12AD5BDE60056C7BD /* ko */,
 				D0E25A652AD5BE3600D1B3F5 /* bg */,
+				D0B6CB9B2BA7775B0015F453 /* uk_UA */,
 			);
 			name = HBRenamePresetController.xib;
 			sourceTree = "<group>";
@@ -2670,6 +2708,7 @@
 				D0924617280B72BA00B79A40 /* ja_JP */,
 				D0A185F22AD5BDE60056C7BD /* ko */,
 				D0E25A662AD5BE3600D1B3F5 /* bg */,
+				D0B6CB9C2BA7775B0015F453 /* uk_UA */,
 			);
 			name = HBSummaryViewController.xib;
 			sourceTree = "<group>";
@@ -2703,6 +2742,7 @@
 				D092460C280B72B900B79A40 /* ja_JP */,
 				D0A185E72AD5BDE60056C7BD /* ko */,
 				D0E25A5B2AD5BE3600D1B3F5 /* bg */,
+				D0B6CB912BA7775B0015F453 /* uk_UA */,
 			);
 			name = HBAddCategoryController.xib;
 			sourceTree = "<group>";
@@ -2721,6 +2761,7 @@
 				D0924607280B72B900B79A40 /* ja_JP */,
 				D0A185E22AD5BDE60056C7BD /* ko */,
 				D0E25A562AD5BE3600D1B3F5 /* bg */,
+				D0B6CB8C2BA7775B0015F453 /* uk_UA */,
 			);
 			name = AddPreset.xib;
 			sourceTree = "<group>";
@@ -2738,6 +2779,7 @@
 				D0924629280B72BA00B79A40 /* ja_JP */,
 				D0A186022AD5BDE60056C7BD /* ko */,
 				D0E25A762AD5BE3600D1B3F5 /* bg */,
+				D0B6CBAC2BA7775B0015F453 /* uk_UA */,
 			);
 			name = "HandBrakeXPCService1-InfoPlist.strings";
 			sourceTree = "<group>";
@@ -2755,6 +2797,7 @@
 				D092462A280B72BA00B79A40 /* ja_JP */,
 				D0A186032AD5BDE60056C7BD /* ko */,
 				D0E25A772AD5BE3600D1B3F5 /* bg */,
+				D0B6CBAD2BA7775B0015F453 /* uk_UA */,
 			);
 			name = "HandBrakeXPCService2-InfoPlist.strings";
 			sourceTree = "<group>";
@@ -2772,6 +2815,7 @@
 				D092462B280B72BA00B79A40 /* ja_JP */,
 				D0A186042AD5BDE60056C7BD /* ko */,
 				D0E25A782AD5BE3600D1B3F5 /* bg */,
+				D0B6CBAE2BA7775B0015F453 /* uk_UA */,
 			);
 			name = "HandBrakeXPCService3-InfoPlist.strings";
 			sourceTree = "<group>";
@@ -2789,6 +2833,7 @@
 				D092462C280B72BA00B79A40 /* ja_JP */,
 				D0A186052AD5BDE60056C7BD /* ko */,
 				D0E25A792AD5BE3600D1B3F5 /* bg */,
+				D0B6CBAF2BA7775B0015F453 /* uk_UA */,
 			);
 			name = "HandBrakeXPCService4-InfoPlist.strings";
 			sourceTree = "<group>";
@@ -2807,6 +2852,7 @@
 				D092461B280B72BA00B79A40 /* ja_JP */,
 				D0A185F62AD5BDE60056C7BD /* ko */,
 				D0E25A6A2AD5BE3600D1B3F5 /* bg */,
+				D0B6CBA02BA7775B0015F453 /* uk_UA */,
 			);
 			name = MainWindow.xib;
 			sourceTree = "<group>";
@@ -2825,6 +2871,7 @@
 				D0924615280B72B900B79A40 /* ja_JP */,
 				D0A185F02AD5BDE60056C7BD /* ko */,
 				D0E25A642AD5BE3600D1B3F5 /* bg */,
+				D0B6CB9A2BA7775B0015F453 /* uk_UA */,
 			);
 			name = HBQueueTableViewController.xib;
 			sourceTree = "<group>";
@@ -2843,6 +2890,7 @@
 				D0924614280B72B900B79A40 /* ja_JP */,
 				D0A185EF2AD5BDE60056C7BD /* ko */,
 				D0E25A632AD5BE3600D1B3F5 /* bg */,
+				D0B6CB992BA7775B0015F453 /* uk_UA */,
 			);
 			name = HBQueueInfoViewController.xib;
 			sourceTree = "<group>";
@@ -2878,6 +2926,7 @@
 				D0924610280B72B900B79A40 /* ja_JP */,
 				D0A185EB2AD5BDE60056C7BD /* ko */,
 				D0E25A5F2AD5BE3600D1B3F5 /* bg */,
+				D0B6CB952BA7775B0015F453 /* uk_UA */,
 			);
 			name = HBPictureHUDController.xib;
 			sourceTree = "<group>";
@@ -2896,6 +2945,7 @@
 				D092460E280B72B900B79A40 /* ja_JP */,
 				D0A185E92AD5BDE60056C7BD /* ko */,
 				D0E25A5D2AD5BE3600D1B3F5 /* bg */,
+				D0B6CB932BA7775B0015F453 /* uk_UA */,
 			);
 			name = HBEncodingProgressHUDController.xib;
 			sourceTree = "<group>";
@@ -2914,6 +2964,7 @@
 				D0924612280B72B900B79A40 /* ja_JP */,
 				D0A185ED2AD5BDE60056C7BD /* ko */,
 				D0E25A612AD5BE3600D1B3F5 /* bg */,
+				D0B6CB972BA7775B0015F453 /* uk_UA */,
 			);
 			name = HBPlayerHUDController.xib;
 			sourceTree = "<group>";
@@ -2932,6 +2983,7 @@
 				D092461A280B72BA00B79A40 /* ja_JP */,
 				D0A185F52AD5BDE60056C7BD /* ko */,
 				D0E25A692AD5BE3600D1B3F5 /* bg */,
+				D0B6CB9F2BA7775B0015F453 /* uk_UA */,
 			);
 			name = MainMenu.xib;
 			sourceTree = "<group>";
@@ -2950,6 +3002,7 @@
 				D092461F280B72BA00B79A40 /* ja_JP */,
 				D0A185FA2AD5BDE60056C7BD /* ko */,
 				D0E25A6E2AD5BE3600D1B3F5 /* bg */,
+				D0B6CBA42BA7775B0015F453 /* uk_UA */,
 			);
 			name = Presets.xib;
 			sourceTree = "<group>";
@@ -2968,6 +3021,7 @@
 				D0924618280B72BA00B79A40 /* ja_JP */,
 				D0A185F32AD5BDE60056C7BD /* ko */,
 				D0E25A672AD5BE3600D1B3F5 /* bg */,
+				D0B6CB9D2BA7775B0015F453 /* uk_UA */,
 			);
 			name = HBTitleSelection.xib;
 			sourceTree = "<group>";
@@ -2986,6 +3040,7 @@
 				D0924611280B72B900B79A40 /* ja_JP */,
 				D0A185EC2AD5BDE60056C7BD /* ko */,
 				D0E25A602AD5BE3600D1B3F5 /* bg */,
+				D0B6CB962BA7775B0015F453 /* uk_UA */,
 			);
 			name = HBPictureViewController.xib;
 			sourceTree = "<group>";
@@ -3004,6 +3059,7 @@
 				D092460F280B72B900B79A40 /* ja_JP */,
 				D0A185EA2AD5BDE60056C7BD /* ko */,
 				D0E25A5E2AD5BE3600D1B3F5 /* bg */,
+				D0B6CB942BA7775B0015F453 /* uk_UA */,
 			);
 			name = HBFiltersViewController.xib;
 			sourceTree = "<group>";
@@ -3022,6 +3078,7 @@
 				D0924623280B72BA00B79A40 /* ja_JP */,
 				D0A185FE2AD5BDE60056C7BD /* ko */,
 				D0E25A722AD5BE3600D1B3F5 /* bg */,
+				D0B6CBA82BA7775B0015F453 /* uk_UA */,
 			);
 			name = Video.xib;
 			sourceTree = "<group>";
@@ -3040,6 +3097,7 @@
 				D0924608280B72B900B79A40 /* ja_JP */,
 				D0A185E32AD5BDE60056C7BD /* ko */,
 				D0E25A572AD5BE3600D1B3F5 /* bg */,
+				D0B6CB8D2BA7775B0015F453 /* uk_UA */,
 			);
 			name = Audio.xib;
 			sourceTree = "<group>";
@@ -3058,6 +3116,7 @@
 				D0924609280B72B900B79A40 /* ja_JP */,
 				D0A185E42AD5BDE60056C7BD /* ko */,
 				D0E25A582AD5BE3600D1B3F5 /* bg */,
+				D0B6CB8E2BA7775B0015F453 /* uk_UA */,
 			);
 			name = AudioDefaults.xib;
 			sourceTree = "<group>";
@@ -3076,6 +3135,7 @@
 				D0924621280B72BA00B79A40 /* ja_JP */,
 				D0A185FC2AD5BDE60056C7BD /* ko */,
 				D0E25A702AD5BE3600D1B3F5 /* bg */,
+				D0B6CBA62BA7775B0015F453 /* uk_UA */,
 			);
 			name = Subtitles.xib;
 			sourceTree = "<group>";
@@ -3094,6 +3154,7 @@
 				D0924622280B72BA00B79A40 /* ja_JP */,
 				D0A185FD2AD5BDE60056C7BD /* ko */,
 				D0E25A712AD5BE3600D1B3F5 /* bg */,
+				D0B6CBA72BA7775B0015F453 /* uk_UA */,
 			);
 			name = SubtitlesDefaults.xib;
 			sourceTree = "<group>";
@@ -3112,6 +3173,7 @@
 				D092460A280B72B900B79A40 /* ja_JP */,
 				D0A185E52AD5BDE60056C7BD /* ko */,
 				D0E25A592AD5BE3600D1B3F5 /* bg */,
+				D0B6CB8F2BA7775B0015F453 /* uk_UA */,
 			);
 			name = ChaptersTitles.xib;
 			sourceTree = "<group>";
@@ -3130,6 +3192,7 @@
 				D0924620280B72BA00B79A40 /* ja_JP */,
 				D0A185FB2AD5BDE60056C7BD /* ko */,
 				D0E25A6F2AD5BE3600D1B3F5 /* bg */,
+				D0B6CBA52BA7775B0015F453 /* uk_UA */,
 			);
 			name = Queue.xib;
 			sourceTree = "<group>";
@@ -3148,6 +3211,7 @@
 				D092460D280B72B900B79A40 /* ja_JP */,
 				D0A185E82AD5BDE60056C7BD /* ko */,
 				D0E25A5C2AD5BE3600D1B3F5 /* bg */,
+				D0B6CB922BA7775B0015F453 /* uk_UA */,
 			);
 			name = HBCroppingView.xib;
 			sourceTree = "<group>";
@@ -3166,6 +3230,7 @@
 				D092461D280B72BA00B79A40 /* ja_JP */,
 				D0A185F82AD5BDE60056C7BD /* ko */,
 				D0E25A6C2AD5BE3600D1B3F5 /* bg */,
+				D0B6CBA22BA7775B0015F453 /* uk_UA */,
 			);
 			name = PicturePreview.xib;
 			sourceTree = "<group>";
@@ -3184,6 +3249,7 @@
 				D092461C280B72BA00B79A40 /* ja_JP */,
 				D0A185F72AD5BDE60056C7BD /* ko */,
 				D0E25A6B2AD5BE3600D1B3F5 /* bg */,
+				D0B6CBA12BA7775B0015F453 /* uk_UA */,
 			);
 			name = OutputPanel.xib;
 			sourceTree = "<group>";
@@ -3202,6 +3268,7 @@
 				D092461E280B72BA00B79A40 /* ja_JP */,
 				D0A185F92AD5BDE60056C7BD /* ko */,
 				D0E25A6D2AD5BE3600D1B3F5 /* bg */,
+				D0B6CBA32BA7775B0015F453 /* uk_UA */,
 			);
 			name = Preferences.xib;
 			sourceTree = "<group>";
@@ -3220,6 +3287,7 @@
 				D0924613280B72B900B79A40 /* ja_JP */,
 				D0A185EE2AD5BDE60056C7BD /* ko */,
 				D0E25A622AD5BE3600D1B3F5 /* bg */,
+				D0B6CB982BA7775B0015F453 /* uk_UA */,
 			);
 			name = HBPreviewViewController.xib;
 			sourceTree = "<group>";
@@ -3238,6 +3306,7 @@
 				D0924619280B72BA00B79A40 /* ja_JP */,
 				D0A185F42AD5BDE60056C7BD /* ko */,
 				D0E25A682AD5BE3600D1B3F5 /* bg */,
+				D0B6CB9E2BA7775B0015F453 /* uk_UA */,
 			);
 			name = HBTrackTitleViewController.xib;
 			sourceTree = "<group>";
@@ -3256,6 +3325,7 @@
 				D0924627280B72BA00B79A40 /* ja_JP */,
 				D0A186002AD5BDE60056C7BD /* ko */,
 				D0E25A742AD5BE3600D1B3F5 /* bg */,
+				D0B6CBAA2BA7775B0015F453 /* uk_UA */,
 			);
 			name = InfoPlist.strings;
 			sourceTree = "<group>";
@@ -3273,6 +3343,7 @@
 				D0924628280B72BA00B79A40 /* ja_JP */,
 				D0A186012AD5BDE60056C7BD /* ko */,
 				D0E25A752AD5BE3600D1B3F5 /* bg */,
+				D0B6CBAB2BA7775B0015F453 /* uk_UA */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";
@@ -3291,6 +3362,7 @@
 				D092460B280B72B900B79A40 /* ja_JP */,
 				D0A185E62AD5BDE60056C7BD /* ko */,
 				D0E25A5A2AD5BE3600D1B3F5 /* bg */,
+				D0B6CB902BA7775B0015F453 /* uk_UA */,
 			);
 			name = ExceptionAlert.xib;
 			sourceTree = "<group>";
