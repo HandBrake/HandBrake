@@ -2160,6 +2160,68 @@ queue_open_clicked_cb (GtkWidget *widget, signal_user_data_t *ud)
     open_queue_file(ud);
 }
 
+#if GTK_CHECK_VERSION(4, 10, 0)
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+
+void
+open_file_finish (GtkFileLauncher *launcher, GAsyncResult *result, gpointer data)
+{
+    g_autoptr(GError) error = NULL;
+    if (!gtk_file_launcher_launch_finish(launcher, result, &error))
+    {
+        g_warning("Unable to open containing folder: %s", error->message);
+    }
+    g_object_unref(launcher);
+}
+
+void
+open_folder_finish (GtkFileLauncher *launcher, GAsyncResult *result,
+                    signal_user_data_t *ud)
+{
+    g_autoptr(GError) error = NULL;
+    if (!gtk_file_launcher_open_containing_folder_finish(launcher, result, &error))
+    {
+        g_warning("Unable to open containing folder: %s", error->message);
+    }
+    g_object_unref(launcher);
+}
+
+void
+ghb_file_open_containing_folder (const char *path)
+{
+    GtkWindow *parent = GTK_WINDOW(ghb_builder_widget("hb_window"));
+    if (g_file_test(path, G_FILE_TEST_EXISTS))
+    {
+        g_autoptr(GFile) file = g_file_new_for_path(path);
+        GtkFileLauncher *launcher = gtk_file_launcher_new(file);
+        gtk_file_launcher_open_containing_folder(launcher, parent, NULL,
+                (GAsyncReadyCallback) open_folder_finish, NULL);
+    }
+    else
+    {
+        g_autofree char *dir = g_path_get_dirname(path);
+        g_autoptr(GFile) file = g_file_new_for_path(dir);
+        GtkFileLauncher *launcher = gtk_file_launcher_new(file);
+        gtk_file_launcher_launch(launcher, parent, NULL,
+                (GAsyncReadyCallback) open_file_finish, NULL);
+    }
+}
+
+G_GNUC_END_IGNORE_DEPRECATIONS
+#else
+void
+ghb_file_open_containing_folder (const char *path)
+{
+    char *dir = g_path_get_dirname(path);
+    GString *str = g_string_new(NULL);
+    g_string_printf(str, "file://%s", dir);
+    char *uri = g_string_free(str, FALSE);
+    ghb_browse_uri(uri);
+    g_free(uri);
+    g_free(dir);
+}
+#endif
+
 G_MODULE_EXPORT void
 queue_open_source_action_cb (GSimpleAction *action, GVariant *param,
                              signal_user_data_t *ud)
@@ -2168,9 +2230,7 @@ queue_open_source_action_cb (GSimpleAction *action, GVariant *param,
     GtkListBoxRow * row;
     gint            index;
     GhbValue      * queueDict, * titleDict;
-    GString       * str;
     const char    * path;
-    char          * dir, * uri;
 
     lb  = GTK_LIST_BOX(ghb_builder_widget("queue_list"));
     row = gtk_list_box_get_selected_row(lb);
@@ -2184,13 +2244,7 @@ queue_open_source_action_cb (GSimpleAction *action, GVariant *param,
         queueDict = ghb_array_get(ud->queue, index);
         titleDict = ghb_dict_get(queueDict, "Title");
         path      = ghb_dict_get_string(titleDict, "Path");
-        dir       = g_path_get_dirname(path);
-        str       = g_string_new(NULL);
-        g_string_printf(str, "file://%s", dir);
-        uri       = g_string_free(str, FALSE);
-        ghb_browse_uri(ud, uri);
-        g_free(uri);
-        g_free(dir);
+        ghb_file_open_containing_folder(path);
     }
 }
 
@@ -2202,9 +2256,7 @@ queue_open_dest_action_cb (GSimpleAction *action, GVariant *param,
     GtkListBoxRow * row;
     gint            index;
     GhbValue      * queueDict, * uiDict;
-    GString       * str;
     const char    * path;
-    char          * dir, * uri;
 
     lb  = GTK_LIST_BOX(ghb_builder_widget("queue_list"));
     row = gtk_list_box_get_selected_row(lb);
@@ -2218,13 +2270,7 @@ queue_open_dest_action_cb (GSimpleAction *action, GVariant *param,
         queueDict = ghb_array_get(ud->queue, index);
         uiDict    = ghb_dict_get(queueDict, "uiSettings");
         path      = ghb_dict_get_string(uiDict, "destination");
-        dir       = g_path_get_dirname(path);
-        str       = g_string_new(NULL);
-        g_string_printf(str, "file://%s", dir);
-        uri       = g_string_free(str, FALSE);
-        ghb_browse_uri(ud, uri);
-        g_free(uri);
-        g_free(dir);
+        ghb_file_open_containing_folder(path);
     }
 }
 
@@ -2259,7 +2305,7 @@ queue_open_log_action_cb (GSimpleAction *action, GVariant *param,
         str       = g_string_new(NULL);
         g_string_printf(str, "file://%s", path);
         uri       = g_string_free(str, FALSE);
-        ghb_browse_uri(ud, uri);
+        ghb_browse_uri(uri);
         g_free(uri);
     }
 }
@@ -2272,9 +2318,7 @@ queue_open_log_dir_action_cb (GSimpleAction *action, GVariant *param,
     GtkListBoxRow * row;
     gint            index;
     GhbValue      * queueDict, * uiDict;
-    GString       * str;
     const char    * path;
-    char          * dir, * uri;
 
     lb  = GTK_LIST_BOX(ghb_builder_widget("queue_list"));
     row = gtk_list_box_get_selected_row(lb);
@@ -2292,13 +2336,7 @@ queue_open_log_dir_action_cb (GSimpleAction *action, GVariant *param,
         {
             return;
         }
-        dir       = g_path_get_dirname(path);
-        str       = g_string_new(NULL);
-        g_string_printf(str, "file://%s", dir);
-        uri       = g_string_free(str, FALSE);
-        ghb_browse_uri(ud, uri);
-        g_free(uri);
-        g_free(dir);
+        ghb_file_open_containing_folder(path);
     }
 }
 G_MODULE_EXPORT void
@@ -2328,7 +2366,7 @@ queue_play_file_action_cb (GSimpleAction *action, GVariant *param,
         str       = g_string_new(NULL);
         g_string_printf(str, "file://%s", path);
         uri       = g_string_free(str, FALSE);
-        ghb_browse_uri(ud, uri);
+        ghb_browse_uri(uri);
         g_free(uri);
     }
 }

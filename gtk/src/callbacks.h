@@ -78,7 +78,7 @@ void ghb_scale_configure(signal_user_data_t *ud, char *name, double val,
                          int digits, gboolean inverted);
 void ghb_update_summary_info(signal_user_data_t *ud);
 void ghb_set_title_settings(signal_user_data_t *ud, GhbValue *settings);
-void ghb_browse_uri(signal_user_data_t *ud, const gchar *uri);
+void ghb_browse_uri(const gchar *uri);
 void ghb_set_destination(signal_user_data_t *ud);
 void ghb_break_pts_duration(gint64 ptsDuration,
                             gint *hh, gint *mm, gdouble *ss);

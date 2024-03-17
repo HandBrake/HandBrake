@@ -4722,9 +4722,10 @@ browse_uri_finish (GtkWindow *parent, GAsyncResult *result, gpointer data)
 }
 
 void
-ghb_browse_uri(signal_user_data_t *ud, const gchar *uri)
+ghb_browse_uri (const gchar *uri)
 {
-    GtkWindow *parent = GTK_WINDOW(ghb_builder_widget("hb_window"));
+    GtkApplication *app = GTK_APPLICATION(g_application_get_default());
+    GtkWindow *parent = gtk_application_get_active_window(app);
     gtk_show_uri_full(parent, uri, GDK_CURRENT_TIME, NULL,
                       (GAsyncReadyCallback)browse_uri_finish, NULL);
 }
@@ -4792,7 +4793,7 @@ about_action_cb (GSimpleAction *action, GVariant *param, signal_user_data_t *ud)
 G_MODULE_EXPORT void
 guide_action_cb(GSimpleAction *action, GVariant *param, signal_user_data_t *ud)
 {
-    ghb_browse_uri(ud, HB_DOCS);
+    ghb_browse_uri(HB_DOCS);
 }
 
 static void
@@ -5533,6 +5534,6 @@ log_directory_action_cb (GSimpleAction *action, GVariant *param, signal_user_dat
     if (!uri || !uri[0])
         return;
 
-    ghb_browse_uri(ud, uri);
+    ghb_browse_uri(uri);
 }
 
