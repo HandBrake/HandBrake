@@ -585,20 +585,47 @@ static gboolean
 video_file_drop_received (GtkDropTarget* self, const GValue* value,
                           double x, double y, signal_user_data_t *ud)
 {
+/* The GdkFileList method is preferred where supported as it handles multiple
+ * files and also allows access to sandboxed files via the portal */
+#if GTK_CHECK_VERSION(4, 6, 0)
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+    if (G_VALUE_HOLDS(value, GDK_TYPE_FILE_LIST))
+    {
+        GdkFileList *gdk_file_list = g_value_get_boxed(value);
+        GSList *slist = gdk_file_list_get_files(gdk_file_list);
+        g_autoptr(GListStore) files = g_list_store_new(G_TYPE_FILE);
+        const char *filename = NULL;
+
+        while (slist)
+        {
+            filename = g_file_peek_path(slist->data);
+            g_debug("File dropped on window: %s", filename);
+            g_list_store_append(files, slist->data);
+            slist = slist->next;
+        }
+
+        if (g_list_model_get_n_items(G_LIST_MODEL(files)))
+        {
+            ghb_dict_set_string(ud->prefs, "default_source", filename);
+            ghb_pref_save(ud->prefs, "default_source");
+            ghb_dvd_set_current(filename, ud);
+            ghb_do_scan_list(ud, G_LIST_MODEL(files), 0, TRUE);
+        }
+        return TRUE;
+    }
+G_GNUC_END_IGNORE_DEPRECATIONS
+#endif
+
     g_autoptr(GFile) file = NULL;
     g_autofree gchar *filename = NULL;
 
-    if (G_VALUE_HOLDS(value, G_TYPE_URI))
-    {
-        file = g_file_new_for_uri(g_value_get_string(value));
-    }
-    else if (G_VALUE_HOLDS(value, G_TYPE_STRING))
-    {
-        file = g_file_new_for_path(g_value_get_string(value));
-    }
-    else if (G_VALUE_HOLDS(value, G_TYPE_FILE))
+    if (G_VALUE_HOLDS(value, G_TYPE_FILE))
     {
         file = g_value_dup_object(value);
+    }
+    else if (G_VALUE_HOLDS(value, G_TYPE_URI))
+    {
+        file = g_file_new_for_uri(g_value_get_string(value));
     }
     else
     {
@@ -624,9 +651,11 @@ video_file_drop_init (signal_user_data_t *ud)
 {
     GtkWidget *window = ghb_builder_widget("hb_window");
     GType types[] = {
-        G_TYPE_URI,
-        G_TYPE_STRING,
+#if GTK_CHECK_VERSION(4, 6, 0)
+        GDK_TYPE_FILE_LIST,
+#endif
         G_TYPE_FILE,
+        G_TYPE_URI,
     };
     GtkDropTarget *target = gtk_drop_target_new(G_TYPE_INVALID, GDK_ACTION_COPY);
     gtk_drop_target_set_gtypes(target, types, G_N_ELEMENTS(types));
