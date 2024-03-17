@@ -1,0 +1,36 @@
+/* Class = "NSButton"; ibShadowedToolTip = "Scale preview to fill the display."; ObjectID = "12K-c3-Z7A"; */
+"12K-c3-Z7A.ibShadowedToolTip" = "Scale preview to fill the display.";
+
+/* Class = "NSButton"; ibShadowedToolTip = "Encode and play a preview video using current settings."; ObjectID = "16b-R9-bBU"; */
+"16b-R9-bBU.ibShadowedToolTip" = "Encode and play a preview video using current settings.";
+
+/* Class = "NSPopUpButton"; ibShadowedToolTip = "Duration to encode in seconds."; ObjectID = "ASA-X8-16P"; */
+"ASA-X8-16P.ibShadowedToolTip" = "Duration to encode in seconds.";
+
+/* Class = "NSTextFieldCell"; title = "sec"; ObjectID = "ksF-Ma-hB1"; */
+"ksF-Ma-hB1.title" = "sec";
+
+/* Class = "NSButton"; ibShadowedToolTip = "Show cropping settings"; ObjectID = "mV7-hU-tMt"; */
+"mV7-hU-tMt.ibShadowedToolTip" = "Show cropping settings";
+
+/* Class = "NSButtonCell"; title = "Crop"; ObjectID = "NWd-Lq-c1A"; */
+"NWd-Lq-c1A.title" = "Crop";
+
+/* Class = "NSButtonCell"; title = "Scale To Screen"; ObjectID = "STc-Po-p1X"; */
+"STc-Po-p1X.title" = "Scale To Screen";
+
+/* Class = "NSTextFieldCell"; title = "Duration:"; ObjectID = "USR-Qf-N5v"; */
+"USR-Qf-N5v.title" = "Duration:";
+
+/* Class = "NSButtonCell"; title = "Live Preview"; ObjectID = "vkh-GY-5qx"; */
+"vkh-GY-5qx.title" = "Live Preview";
+
+/* Class = "NSSlider"; ibExternalAccessibilityDescription = "preview image"; ObjectID = "wUk-SQ-GhS"; */
+"wUk-SQ-GhS.ibExternalAccessibilityDescription" = "preview image";
+
+/* Class = "NSSlider"; ibShadowedToolTip = "Starting point for the preview encode."; ObjectID = "wUk-SQ-GhS"; */
+"wUk-SQ-GhS.ibShadowedToolTip" = "Starting point for the preview encode.";
+
+/* Class = "NSMenuItem"; title = "240"; ObjectID = "XYh-Ls-slf"; */
+"XYh-Ls-slf.title" = "240";
+

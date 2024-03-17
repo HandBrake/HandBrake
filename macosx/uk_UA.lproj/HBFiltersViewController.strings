@@ -1,0 +1,165 @@
+/* Class = "NSPopUpButton"; ibExternalAccessibilityDescription = "Denoise Tune"; ObjectID = "1XQ-md-5cQ"; */
+"1XQ-md-5cQ.ibExternalAccessibilityDescription" = "Очистити Звучання";
+
+/* Class = "NSPopUpButton"; ibShadowedToolTip = "Denoise tune. Further adjusts the Denoise preset to optimize settings for specific scenarios.\n\nNone uses the default preset settings.\n\nFilm refines settings for use with most live action content.\n\nGrain only processes color channels. Useful for preserving the film-like look of luminance grain while reducing or removing color noise.\n\nHigh Motion reduces color smearing in high motion scenes by avoiding temporal processing for color channels. Useful for sports and action videos.\n\nAnimation is useful for cel animation such as anime and cartoons.\n\nTape is useful for low-detail analog tape sources such as VHS, where Film does not produce a desirable result.\n\nSprite is useful for 1-/4-/8-/16-bit 2-dimensional games. Sprite is not designed for high definition video."; ObjectID = "1XQ-md-5cQ"; */
+"1XQ-md-5cQ.ibShadowedToolTip" = "Очистити звучання. Додаткове налаштування установки Очищення Звучання задля оптимізації параметрів для конкретних сценаріїв.\n\nНіяке використовує стандартні налаштування пресету.\n\nФільм уточнює налаштування для використання з найбільш реалістичним екшн-контентом.\n\nЗернистість обробляє лише колірні канали. Корисно для збереження схожого на плівку яркісного шуму при зменшенні або видаленні колірного шуму.\n\nВисока Швидкість зменшує розмиття кольору в сценах із високою швидкістю руху, уникаючи тимчасової обробки колірних каналів. Корисно для спортивних та екшн-відео.\n\nАнімація корисна для кадрових анімації, такий як аніме та мультфільми.\n\nСтрічка корисна для аналогових стрічок з низькою деталізацією, таких як VHS, де Фільм не дає бажаного результату.\n\nСпрайт корисний для 1-/4-/8-/16-бітних 2-вимірних ігор. Спрайт не призначений для відео високої чіткості.";
+
+/* Class = "NSTextFieldCell"; title = "Tune:"; ObjectID = "5Vt-0j-92R"; */
+"5Vt-0j-92R.title" = "Звучання:";
+
+/* Class = "NSPopUpButton"; ibShadowedToolTip = "Deinterlace filter preset.\n\nDefault is well balanced for speed and quality.\n\nSkip Spatial Check lets Yadif skip correcting certain avoidable artifacts for a slight speed boost.\n\nEEDI2 uses a slower, higher quality interpolation algorithm for Decomb. Useful for the most difficult sources.\n\nBob attempts to better preserve motion for a slight penalty to perceived resolution."; ObjectID = "6nG-zk-FMo"; */
+"6nG-zk-FMo.ibShadowedToolTip" = "Пресет фільтра деінтерлейсінгу.\n\nЗа замовчуванням є добре збалансованим для швидкості та якості.\n\nПропуск перевірки простору дозволяє Yadif уникнути коригування деяких уникнутих артефактів для невеликого прискорення.\n\nEEDI2 використовує повільніший, але вищої якості алгоритм інтерполяції для Decomb. Корисний для найскладніших джерел.\n\nBob намагається краще зберегти рух за невеликої втрати сприйнятої роздільної здатності.";
+
+/* Class = "NSTextFieldCell"; title = "Preset:"; ObjectID = "8am-ve-1Xl"; */
+"8am-ve-1Xl.title" = "Пресет:";
+
+/* Class = "NSTextFieldCell"; title = "Custom:"; ObjectID = "aem-qz-Cqk"; */
+"aem-qz-Cqk.title" = "Користувацький:";
+
+/* Class = "NSTextField"; ibShadowedToolTip = "Custom Sharpen parameters.\n\nUnsharp syntax: y-strength=y:y-size=y:cb-strength=c:cb-size=c:cr-strength=c:cr-size=c\n\nUnsharp default: y-strength=0.25:y-size=7:cb-strength=0.25:cb-size=7\n\nLapsharp syntax: y-strength=y:y-kernel=y:cb-strength=c:cb-kernel=c:cr-strength=c:cr-kernel=c\n\nLapsharp default: y-strength=0.2:y-kernel=isolap:cb-strength=0.2:cb-kernel=isolap"; ObjectID = "bBr-vV-iAz"; */
+"bBr-vV-iAz.ibShadowedToolTip" = "Параметри користувацького підвищення різкості.\n\nСинтаксис Unsharp: y-strength=y:y-size=y:cb-strength=c:cb-size=c:cr-strength=c:cr-size=c\n\nЗа замовчуванням для Unsharp: y-strength=0.25:y-size=7:cb-strength=0.25:cb-size=7\n\nСинтаксис Lapsharp: y-strength=y:y-kernel=y:cb-strength=c:cb-kernel=c:cr-strength=c:cr-kernel=c\n\nЗа замовчуванням для Lapsharp: y-strength=0.2:y-kernel=isolap:cb-strength=0.2:cb-kernel=isolap";
+
+/* Class = "NSPopUpButton"; ibShadowedToolTip = "Sharpening enhances the appearance of detail, especially edges. Overly strong Sharpen settings may damage picture quality by creating ringing artifacts and enhancing noise, which can reduce compression efficiency.\n\nUnsharp is a general purpose unsharp masking filter. It sharpens by blurring, then calculating the difference between the blurred picture and the original.\n\nLapsharp sharpens using convolution kernels approximating Laplacian edge filters, sometimes producing higher quality results than unsharp masking."; ObjectID = "boo-YC-gWm"; */
+"boo-YC-gWm.ibShadowedToolTip" = "Підвищення різкості покращує візуальне сприйняття деталей, особливо країв. Надто сильні налаштування різкості можуть пошкодити якість зображення, створюючи артефакти кільцевих відлунь та підсилюючи шум, що може знизити ефективність стиснення.\n\nUnsharp — це універсальний фільтр маскування нерізкості. Він підвищує різкість, розмиваючи зображення, а потім обчислюючи різницю між розмитим зображенням та оригіналом.\n\nLapsharp підвищує різкість за допомогою конволюційних ядер, що апроксимують фільтри країв Лапласа, іноді даючи вищу якість результатів, ніж маскування нерізкості.";
+
+/* Class = "NSPopUpButton"; ibExternalAccessibilityDescription = "Sharpen Tune"; ObjectID = "bRd-Km-Wa8"; */
+"bRd-Km-Wa8.ibExternalAccessibilityDescription" = "Налаштування різкості";
+
+/* Class = "NSPopUpButton"; ibShadowedToolTip = "Deblock tune. Further adjusts the Deblock preset to optimize settings for specific scenarios."; ObjectID = "bRd-Km-Wa8"; */
+"bRd-Km-Wa8.ibShadowedToolTip" = "Налаштування деблокування. Додатково коригує пресет деблокування для оптимізації налаштувань для конкретних сценаріїв.";
+
+/* Class = "NSPopUpButton"; ibExternalAccessibilityDescription = "Deblock Preset"; ObjectID = "bz8-FC-vYp"; */
+"bz8-FC-vYp.ibExternalAccessibilityDescription" = "Пресет деблокування";
+
+/* Class = "NSPopUpButton"; ibShadowedToolTip = "Deblock reduces blocky artifacts caused by low quality video compression."; ObjectID = "bz8-FC-vYp"; */
+"bz8-FC-vYp.ibShadowedToolTip" = "Деблокування зменшує блокові артефакти, спричинені низькою якістю відеокомпресії.";
+
+/* Class = "NSTextFieldCell"; title = "Custom:"; ObjectID = "CFV-ur-emt"; */
+"CFV-ur-emt.title" = "Користувацький:";
+
+/* Class = "NSPopUpButton"; ibExternalAccessibilityDescription = "Sharpen Preset"; ObjectID = "cG4-79-P9J"; */
+"cG4-79-P9J.ibExternalAccessibilityDescription" = "Налаштування різкості";
+
+/* Class = "NSPopUpButton"; ibShadowedToolTip = "Sharpen filter preset. Sets the strength of the filter."; ObjectID = "cG4-79-P9J"; */
+"cG4-79-P9J.ibShadowedToolTip" = "Пресет фільтра підвищення різкості. Встановлює силу фільтра.";
+
+/* Class = "NSPopUpButton"; ibExternalAccessibilityDescription = "Denoise Preset"; ObjectID = "cTy-PO-BSd"; */
+"cTy-PO-BSd.ibExternalAccessibilityDescription" = "Пресет зменшення шуму";
+
+/* Class = "NSPopUpButton"; ibShadowedToolTip = "Denoise filter preset. Sets the strength of the filter."; ObjectID = "cTy-PO-BSd"; */
+"cTy-PO-BSd.ibShadowedToolTip" = "Пресет фільтра зменшення шуму. Встановлює силу фільтра.";
+
+/* Class = "NSTextFieldCell"; title = "Preset:"; ObjectID = "D7G-kY-TSj"; */
+"D7G-kY-TSj.title" = "Пресет:";
+
+/* Class = "NSTextFieldCell"; title = "Custom:"; ObjectID = "Da7-pY-5vu"; */
+"Da7-pY-5vu.title" = "Користувацький:";
+
+/* Class = "NSPopUpButton"; ibShadowedToolTip = "Detelecine removes comb artifacts that are the result of telecine, a process for converting film frame rates to television frame rates."; ObjectID = "DER-tS-cLx"; */
+"DER-tS-cLx.ibShadowedToolTip" = "Детелекінопроєктор усуває артефакти гребінця, які є результатом телекінопроєктування, процесу перетворення кіноформатів у телевізійні формати.";
+
+/* Class = "NSTextField"; ibShadowedToolTip = "Custom Deblock parameters.\n\nstrength=s:thresh=t:blocksize=b"; ObjectID = "DI9-Ed-acp"; */
+"DI9-Ed-acp.ibShadowedToolTip" = "Параметри користувацького деблокування.\n\nstrength=s:thresh=t:blocksize=b";
+
+/* Class = "NSTextFieldCell"; title = "Custom:"; ObjectID = "DvX-m9-Q6u"; */
+"DvX-m9-Q6u.title" = "Користувацький:";
+
+/* Class = "NSTextFieldCell"; title = "Deblock:"; ObjectID = "gKq-xF-AZE"; */
+"gKq-xF-AZE.title" = "Деблокування:";
+
+/* Class = "NSButtonCell"; title = "Grayscale"; ObjectID = "h7g-eE-vgv"; */
+"h7g-eE-vgv.title" = "Відтінки сірого";
+
+/* Class = "NSPopUpButton"; ibExternalAccessibilityDescription = "Sharpen Tune"; ObjectID = "Hcn-5m-N9x"; */
+"Hcn-5m-N9x.ibExternalAccessibilityDescription" = "Налаштування різкості";
+
+/* Class = "NSPopUpButton"; ibShadowedToolTip = "Sharpen tune. Further adjusts the Sharpen preset to optimize settings for specific scenarios.\n\nNone uses the default preset settings.\n\nUnsharp can be tuned for Ultrafine, Fine, Medium, Coarse, or Very Coarse sharpening. Select one based on the output picture resolution and fineness of detail to enhance.\n\nLapsharp's Film tune refines settings for use with most live action content. Film uses an isotropic Laplacian kernel to sharpen all edges similarly, and luminance (brightness) information is sharpened more than chrominance (color) information.\n\nLapsharp's Grain tune is similar to Film, but uses an isotropic Laplacian of Gaussian kernel to reduce the effect on noise and grain. Useful for preserving grain and as a general alternative to the Film tune.\n\nLapsharp's Animation tune is useful for cel animation such as anime and cartoons. Animation is identical to Film, but overall strength is reduced to avoid creating artifacts.\n\nLapsharp's Sprite tune is useful for 1-/4-/8-/16-bit 2-dimensional games. Sprite uses a 4-neighbor Laplacian kernel that enhances vertical and horizontal edges more than diagonal edges."; ObjectID = "Hcn-5m-N9x"; */
+"Hcn-5m-N9x.ibShadowedToolTip" = "Налаштування різкості. Додатково коригує пресет різкості для оптимізації налаштувань для конкретних сценаріїв.\n\nNone використовує стандартні налаштування пресету.\n\nUnsharp може бути налаштований для Ultrafine, Fine, Medium, Coarse або Very Coarse різкості. Виберіть один в залежності від роздільної здатності вихідного зображення та детальності, яку потрібно покращити.\n\nLapsharp's Film тюнінг уточнює налаштування для використання з більшістю контенту живої дії. Film використовує ізотропний Лапласіанський ядро для різкості всіх країв однаково, і інформація про яскравість (світлість) робиться різкішою більше, ніж інформація про хромінанс (колір).\n\nLapsharp's Grain тюнінг схожий на Film, але використовує ізотропний Лапласіан Гауссівського ядра для зниження впливу на шум і зерно. Корисний для збереження зерна та як загальна альтернатива тюнінгу Film.\n\nLapsharp's Animation тюнінг корисний для целюлозної анімації, такої як аніме та мультфільми. Animation ідентичний до Film, але загальна міцність знижена для уникнення створення артефактів.\n\nLapsharp's Sprite тюнінг корисний для 2D ігор з роздільністю 1-/4-/8-/16-біт. Sprite використовує 4-сусіднє Лапласіанське ядро, яке підсилює вертикальні та горизонтальні краї більше, ніж діагональні.";
+
+/* Class = "NSPopUpButton"; ibExternalAccessibilityDescription = "Chroma Smooth Preset"; ObjectID = "hiK-Va-rbJ"; */
+"hiK-Va-rbJ.ibExternalAccessibilityDescription" = "Пресет хрома згладжування ";
+
+/* Class = "NSTextFieldCell"; title = "Colorspace:"; ObjectID = "HVj-4g-OVv"; */
+"HVj-4g-OVv.title" = "Кольоровий простір:";
+
+/* Class = "NSTextFieldCell"; title = "Tune:"; ObjectID = "hyH-QP-Zdi"; */
+"hyH-QP-Zdi.title" = "Звучання:";
+
+/* Class = "NSPopUpButton"; ibShadowedToolTip = "Denoise reduces or removes the appearance of noise and grain. This can improve compression efficiency and create higher quality video at smaller file sizes. Overly strong Denoise settings may damage picture quality by discarding detail.\n\nNLMeans is a high quality denoise filter with a cost to speed. Use where quality is more important than speed.\n\nHQDN3D is an adaptive low-pass filter, faster than NLMeans but less effective at preserving fine detail."; ObjectID = "ins-7X-kbN"; */
+"ins-7X-kbN.ibShadowedToolTip" = "Зменшення шуму знижує або усуває вигляд шуму та зернистості. Це може покращити ефективність стиснення і створити відео вищої якості з меншим розміром файлу. Надто сильні налаштування зменшення шуму можуть пошкодити якість зображення через втрату деталей.\n\nNLMeans — це фільтр високоякісного зменшення шуму, який вимагає більше часу на обробку. Використовуйте там, де якість важливіша за швидкість.\n\nHQDN3D є адаптивним низькочастотним фільтром, швидшим, ніж NLMeans, але менш ефективним у збереженні тонких деталей.";
+
+/* Class = "NSTextField"; ibExternalAccessibilityDescription = "Custom deleteline settings."; ObjectID = "ipJ-z3-XnJ"; */
+"ipJ-z3-XnJ.ibExternalAccessibilityDescription" = "Користувацькі налаштування видалення ліній.\n ";
+
+/* Class = "NSTextField"; ibShadowedToolTip = "Custom Detelecine parameters.\n\nSyntax: skip-left=s:skip-right=s:skip-top=s:skip-bottom=s:strict-breaks=s:plane=p:parity=p:disable=d\n\nDefault: skip-left=1:skip-right=1:skip-top=4:skip-bottom=4:plane=0"; ObjectID = "ipJ-z3-XnJ"; */
+"ipJ-z3-XnJ.ibShadowedToolTip" = "Custom Detelecine parameters.\n\nSyntax: skip-left=s:skip-right=s:skip-top=s:skip-bottom=s:strict-breaks=s:plane=p:parity=p:disable=d\n\nDefault: skip-left=1:skip-right=1:skip-top=4:skip-bottom=4:plane=0";
+
+/* Class = "NSPopUpButton"; ibShadowedToolTip = "Interlace Detection, when enabled, allows the Deinterlace filter to only process interlaced video frames."; ObjectID = "IQG-Nn-HTb"; */
+"IQG-Nn-HTb.ibShadowedToolTip" = "Виявлення черезстрочності, коли включено, дозволяє фільтру деінтерлейсінгу обробляти лише черезстрочні відеокадри.";
+
+/* Class = "NSPopUpButton"; ibExternalAccessibilityDescription = "Chroma Smooth Tune"; ObjectID = "jFk-Eg-o2W"; */
+"jFk-Eg-o2W.ibExternalAccessibilityDescription" = "Chroma Smooth Tune";
+
+/* Class = "NSPopUpButton"; ibShadowedToolTip = "Chroma Smooth tune. Further adjusts the Chroma Smooth preset to optimize settings for specific scenarios."; ObjectID = "jFk-Eg-o2W"; */
+"jFk-Eg-o2W.ibShadowedToolTip" = "Chroma Smooth tune. Further adjusts the Chroma Smooth preset to optimize settings for specific scenarios.";
+
+/* Class = "NSTextFieldCell"; title = "Custom:"; ObjectID = "KiY-kz-54k"; */
+"KiY-kz-54k.title" = "Користувацький:";
+
+/* Class = "NSTextFieldCell"; title = "Custom:"; ObjectID = "n6U-tH-vo0"; */
+"n6U-tH-vo0.title" = "Користувацький:";
+
+/* Class = "NSTextFieldCell"; title = "Custom:"; ObjectID = "oWz-qF-JYk"; */
+"oWz-qF-JYk.title" = "Користувацький:";
+
+/* Class = "NSButton"; ibShadowedToolTip = "Grayscale removes the color component of the video. Often referred to as Black & White video."; ObjectID = "Psx-nN-XiT"; */
+"Psx-nN-XiT.ibShadowedToolTip" = "Чорно-білий режим видаляє кольорову складову відео. Часто називають чорно-білим відео.";
+
+/* Class = "NSTextField"; ibShadowedToolTip = "Custom Deinterlace parameters.\n\nBwdif and Yadif syntax: mode=m:parity=p\n\nBwdif and Yadif default: mode=3\n\nDecomb syntax: mode=m:magnitude-thresh=m:variance-thresh=v:laplacian-thresh=l:dilation-thresh=d:erosion-thresh=e:noise-thresh=n:search-distance=s:postproc=p:parity=p\n\nDecomb default: mode=7"; ObjectID = "r64-vI-ymx"; */
+"r64-vI-ymx.ibShadowedToolTip" = "Custom Deinterlace parameters.\n\nBwdif and Yadif syntax: mode=m:parity=p\n\nBwdif and Yadif default: mode=3\n\nDecomb syntax: mode=m:magnitude-thresh=m:variance-thresh=v:laplacian-thresh=l:dilation-thresh=d:erosion-thresh=e:noise-thresh=n:search-distance=s:postproc=p:parity=p\n\nDecomb default: mode=7";
+
+/* Class = "NSTextField"; ibShadowedToolTip = "Custom Interlace Detection parameters.\n\nSyntax: mode=m:spatial-metric=s:motion-thresh=m:spatial-thresh=s:filter-mode=f:block-thresh=b:block-width=b:block-height=b:disable=d\n\nDefault: mode=3:spatial-metric=2:motion-thresh=1:spatial-thresh=1:filter-mode=2:block-thresh=40:block-width=16:block-height=16"; ObjectID = "rPg-F2-gtl"; */
+"rPg-F2-gtl.ibShadowedToolTip" = "Custom Interlace Detection parameters.\n\nSyntax: mode=m:spatial-metric=s:motion-thresh=m:spatial-thresh=s:filter-mode=f:block-thresh=b:block-width=b:block-height=b:disable=d\n\nDefault: mode=3:spatial-metric=2:motion-thresh=1:spatial-thresh=1:filter-mode=2:block-thresh=40:block-width=16:block-height=16";
+
+/* Class = "NSTextFieldCell"; title = "Denoise:"; ObjectID = "Rxe-Xm-vXj"; */
+"Rxe-Xm-vXj.title" = "Зменшення шуму:";
+
+/* Class = "NSPopUpButton"; ibExternalAccessibilityDescription = "Colorspace Preset"; ObjectID = "ScE-ad-pHc"; */
+"ScE-ad-pHc.ibExternalAccessibilityDescription" = "Пресет кольорового простору";
+
+/* Class = "NSTextFieldCell"; title = "Tune:"; ObjectID = "tje-4P-jKt"; */
+"tje-4P-jKt.title" = "Звучання:";
+
+/* Class = "NSTextFieldCell"; title = "Sharpen:"; ObjectID = "TwB-ag-L1L"; */
+"TwB-ag-L1L.title" = "Підвищення різкості:";
+
+/* Class = "NSTextFieldCell"; title = "Color:"; ObjectID = "uDH-ts-vs5"; */
+"uDH-ts-vs5.title" = "Color:";
+
+/* Class = "NSTextFieldCell"; title = "Deinterlace:"; ObjectID = "VsK-mC-9Pj"; */
+"VsK-mC-9Pj.title" = "Деінтерлейсінг:";
+
+/* Class = "NSTextFieldCell"; title = "Detelecine:"; ObjectID = "vTS-MJ-8nt"; */
+"vTS-MJ-8nt.title" = "Detelecine:";
+
+/* Class = "NSPopUpButton"; ibShadowedToolTip = "Deinterlace removes comb artifacts from the picture.\n\nBwdif and Yadif are two popular and fast deinterlacers.\n\nDecomb switches between multiple interpolation algorithms for speed and quality."; ObjectID = "xct-UB-bKm"; */
+"xct-UB-bKm.ibShadowedToolTip" = "Deinterlace removes comb artifacts from the picture.\n\nBwdif and Yadif are two popular and fast deinterlacers.\n\nDecomb switches between multiple interpolation algorithms for speed and quality.";
+
+/* Class = "NSTextFieldCell"; title = "Interlace Detection:"; ObjectID = "xHD-vC-ePQ"; */
+"xHD-vC-ePQ.title" = "Interlace Detection:";
+
+/* Class = "NSTextFieldCell"; title = "Custom:"; ObjectID = "xqk-dM-L3o"; */
+"xqk-dM-L3o.title" = "Користувацький:";
+
+/* Class = "NSTextFieldCell"; title = "Tune:"; ObjectID = "ydN-tP-vpt"; */
+"ydN-tP-vpt.title" = "Звучання:";
+
+/* Class = "NSTextFieldCell"; title = "Chroma Smooth:"; ObjectID = "ZLl-Q6-HpE"; */
+"ZLl-Q6-HpE.title" = "Згладжування кольоровості:";
+
+/* Class = "NSTextField"; ibShadowedToolTip = "Custom Denoise parameters.\n\nNLMeans syntax: y-strength=y:y-origin-tune=y:y-patch-size=y:y-range=y:y-frame-count=y:y-prefilter=y:cb-strength=c:cb-origin-tune=c:cb-patch-size=c:cb-range=c:cb-frame-count=c:cb-prefilter=c:cr-strength=c:cr-origin-tune=c:cr-patch-size=c:cr-range=c:cr-frame-count=c:cr-prefilter=c:threads=t\n\nNLMeans default: y-strength=6:y-origin-tune=1:y-patch-size=7:y-range=3:y-frame-count=2:y-prefilter=0:cb-strength=6:cb-origin-tune=1:cb-patch-size=7:cb-range=3:cb-frame-count=2:cb-prefilter=0\n\nHQDN3D syntax: y-spatial=y:cb-spatial=c:cr-spatial=c:y-temporal=y:cb-temporal=c:cr-temporal=c\n\nHQDN3D default: y-spatial=3:cb-spatial=2:cr-spatial=2:y-temporal=2:cb-temporal=3:cr-temporal=3"; ObjectID = "ZR9-YG-pfn"; */
+"ZR9-YG-pfn.ibShadowedToolTip" = "Параметри користувацького зменшення шуму.\n\nСинтаксис NLMeans: y-strength=y:y-origin-tune=y:y-patch-size=y:y-range=y:y-frame-count=y:y-prefilter=y:cb-strength=c:cb-origin-tune=c:cb-patch-size=c:cb-range=c:cb-frame-count=c:cb-prefilter=c:cr-strength=c:cr-origin-tune=c:cr-patch-size=c:cr-range=c:cr-frame-count=c:cr-prefilter=c:threads=t\n\nNLMeans за замовчуванням: y-strength=6:y-origin-tune=1:y-patch-size=7:y-range=3:y-frame-count=2:y-prefilter=0:cb-strength=6:cb-origin-tune=1:cb-patch-size=7:cb-range=3:cb-frame-count=2:cb-prefilter=0\n\nСинтаксис HQDN3D: y-spatial=y:cb-spatial=c:cr-spatial=c:y-temporal=y:cb-temporal=c:cr-temporal=c\n\nHQDN3D за замовчуванням: y-spatial=3:cb-spatial=2:cr-spatial=2:y-temporal=2:cb-temporal=3:cr-temporal=3";
+
+/* Class = "NSTextFieldCell"; title = "Preset:"; ObjectID = "zvZ-ZX-yKE"; */
+"zvZ-ZX-yKE.title" = "Пресет:";
+

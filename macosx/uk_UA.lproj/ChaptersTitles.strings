@@ -1,0 +1,57 @@
+/* Class = "NSTableColumn"; headerCell.title = "Index"; ObjectID = "0iF-eL-NOC"; */
+"0iF-eL-NOC.headerCell.title" = "Номер";
+
+/* Class = "NSButton"; ibShadowedToolTip = "Export the list of chapter names to a CSV file."; ObjectID = "3SP-6e-RPS"; */
+"3SP-6e-RPS.ibShadowedToolTip" = "Експортувати назви розділів в CSV файл.";
+
+/* Class = "NSButton"; ibShadowedToolTip = "Add a chapter markers track to the video."; ObjectID = "7Xf-c0-jsr"; */
+"7Xf-c0-jsr.ibShadowedToolTip" = "Додати до відео доріжку з маркерами розділів.";
+
+/* Class = "NSTextFieldCell"; title = "Text Cell"; ObjectID = "All-Bz-NLv"; */
+"All-Bz-NLv.title" = "Text Cell";
+
+/* Class = "NSTextFieldCell"; title = "Text Cell"; ObjectID = "FyM-2X-9xs"; */
+"FyM-2X-9xs.title" = "Text Cell";
+
+/* Class = "NSTextFieldCell"; title = "1"; ObjectID = "G9p-Cg-wyC"; */
+"G9p-Cg-wyC.title" = "1";
+
+/* Class = "NSButtonCell"; title = "Export Chapters…"; ObjectID = "h0O-zg-OF9"; */
+"h0O-zg-OF9.title" = "Експорт Розділів...";
+
+/* Class = "NSTableView"; ibExternalAccessibilityDescription = "Chapter titles"; ObjectID = "InF-gR-Lia"; */
+"InF-gR-Lia.ibExternalAccessibilityDescription" = "Назви розділів";
+
+/* Class = "NSButtonCell"; title = "Create chapter markers"; ObjectID = "lJL-wX-DVP"; */
+"lJL-wX-DVP.title" = "Створити маркери розділів";
+
+/* Class = "NSTableColumn"; headerCell.title = "Start"; ObjectID = "NlF-th-Cg9"; */
+"NlF-th-Cg9.headerCell.title" = "Почати";
+
+/* Class = "NSTextFieldCell"; title = "Text Cell"; ObjectID = "ozt-ED-g1M"; */
+"ozt-ED-g1M.title" = "Text Cell";
+
+/* Class = "NSTextFieldCell"; title = "Text Cell"; ObjectID = "pAo-XM-bvP"; */
+"pAo-XM-bvP.title" = "Text Cell";
+
+/* Class = "NSButtonCell"; title = "Import Chapters…"; ObjectID = "PM3-Ue-0kW"; */
+"PM3-Ue-0kW.title" = "Імпортувати розділи...";
+
+/* Class = "NSTableColumn"; headerCell.title = "Duration"; ObjectID = "QVB-Cw-DJD"; */
+"QVB-Cw-DJD.headerCell.title" = "Тривалість";
+
+/* Class = "NSButton"; ibShadowedToolTip = "Import a list of chapter names from a CSV file."; ObjectID = "Ron-3B-rYg"; */
+"Ron-3B-rYg.ibShadowedToolTip" = "Імпортувати назви розділів з CSV файлу.";
+
+/* Class = "NSTextFieldCell"; title = "Title"; ObjectID = "UjY-nz-uSt"; */
+"UjY-nz-uSt.title" = "Назва";
+
+/* Class = "NSTextFieldCell"; title = "Duration"; ObjectID = "Vmq-zJ-NEA"; */
+"Vmq-zJ-NEA.title" = "Тривалість";
+
+/* Class = "NSTableColumn"; headerCell.title = "Title"; ObjectID = "Z6H-lJ-ipr"; */
+"Z6H-lJ-ipr.headerCell.title" = "Назва";
+
+/* Class = "NSTextFieldCell"; title = "Timestamp"; ObjectID = "zaN-qY-tke"; */
+"zaN-qY-tke.title" = "Часова мітка";
+

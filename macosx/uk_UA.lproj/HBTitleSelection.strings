@@ -1,0 +1,57 @@
+/* Class = "NSTableColumn"; headerCell.title = "Title"; ObjectID = "4XY-C0-SwE"; */
+"4XY-C0-SwE.headerCell.title" = "Заголовок";
+
+/* Class = "NSTextFieldCell"; title = "Select the titles to add to the queue:"; ObjectID = "5tD-fg-g4t"; */
+"5tD-fg-g4t.title" = "Select the titles to add to the queue:";
+
+/* Class = "NSTableColumn"; headerCell.title = "Duration"; ObjectID = "a6r-ky-REh"; */
+"a6r-ky-REh.headerCell.title" = "Тривалість";
+
+/* Class = "NSMenuItem"; title = "Disable"; ObjectID = "d4k-bC-FZa"; */
+"d4k-bC-FZa.title" = "Disable";
+
+/* Class = "NSMenuItem"; title = "Enable All"; ObjectID = "D7Y-wr-PDj"; */
+"D7Y-wr-PDj.title" = "Enable All";
+
+/* Class = "NSTextFieldCell"; title = "Table View Cell"; ObjectID = "dsG-Ho-vsT"; */
+"dsG-Ho-vsT.title" = "Table View Cell";
+
+/* Class = "NSWindow"; title = "Window"; ObjectID = "F0z-JX-Cv5"; */
+"F0z-JX-Cv5.title" = "Window";
+
+/* Class = "NSTextFieldCell"; title = "Text Cell"; ObjectID = "Fcv-FE-8Fv"; */
+"Fcv-FE-8Fv.title" = "Text Cell";
+
+/* Class = "NSTableColumn"; headerCell.title = "Name"; ObjectID = "FQY-Ye-g0f"; */
+"FQY-Ye-g0f.headerCell.title" = "Name";
+
+/* Class = "NSTextFieldCell"; title = "0"; ObjectID = "hQc-RA-phB"; */
+"hQc-RA-phB.title" = "0";
+
+/* Class = "NSButtonCell"; title = "Cancel"; ObjectID = "jHg-nh-9NJ"; */
+"jHg-nh-9NJ.title" = "Скасувати";
+
+/* Class = "NSButtonCell"; title = "Check"; ObjectID = "JqJ-5C-Yhw"; */
+"JqJ-5C-Yhw.title" = "Check";
+
+/* Class = "NSButtonCell"; title = "Check"; ObjectID = "k84-a6-eZ7"; */
+"k84-a6-eZ7.title" = "Check";
+
+/* Class = "NSMenuItem"; title = "Disable All"; ObjectID = "MIb-bL-Z6i"; */
+"MIb-bL-Z6i.title" = "Disable All";
+
+/* Class = "NSButtonCell"; title = "Add"; ObjectID = "mOe-XL-tl1"; */
+"mOe-XL-tl1.title" = "Додати";
+
+/* Class = "NSMenuItem"; title = "Enable"; ObjectID = "pR6-xS-FyO"; */
+"pR6-xS-FyO.title" = "Enable";
+
+/* Class = "NSMenuItem"; title = "Invert state"; ObjectID = "tp1-g5-7XN"; */
+"tp1-g5-7XN.title" = "Invert state";
+
+/* Class = "CocoaBindingsConnection"; ibShadowedDisplayPattern = "%{value1}@"; ObjectID = "xTt-zi-wf0"; */
+"xTt-zi-wf0.ibShadowedDisplayPattern" = "%{value1}@";
+
+/* Class = "NSTextFieldCell"; title = "Text Cell"; ObjectID = "zwi-rc-q6x"; */
+"zwi-rc-q6x.title" = "Text Cell";
+
