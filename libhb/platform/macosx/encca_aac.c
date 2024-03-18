@@ -10,6 +10,8 @@
 #include "handbrake/handbrake.h"
 #include "handbrake/audio_remap.h"
 #include "handbrake/hbffmpeg.h"
+#include "handbrake/extradata.h"
+
 #include <AudioToolbox/AudioToolbox.h>
 #include <CoreAudio/CoreAudio.h>
 
@@ -313,15 +315,16 @@ int encCoreAudioInit(hb_work_object_t *w, hb_job_t *job, enum AAC_MODE mode)
 
     // get magic cookie (elementary stream descriptor)
     tmp = HB_CONFIG_MAX_SIZE;
+    UInt8 *magicCookie[HB_CONFIG_MAX_SIZE];
     AudioConverterGetProperty(pv->converter,
                               kAudioConverterCompressionMagicCookie,
-                              &tmp, w->config->extradata.bytes);
+                              &tmp, magicCookie);
     // CoreAudio returns a complete ESDS, but we only need
     // the DecoderSpecific info.
-    UInt8* buffer = NULL;
-    ReadESDSDescExt(w->config->extradata.bytes, &buffer, &tmpsiz, 0);
-    w->config->extradata.length = tmpsiz;
-    memmove(w->config->extradata.bytes, buffer, w->config->extradata.length);
+    UInt8 *buffer = NULL;
+    ReadESDSDescExt(magicCookie, &buffer, &tmpsiz, 0);
+
+    hb_set_extradata(w->extradata, buffer, tmpsiz);
     free(buffer);
 
     AudioConverterPrimeInfo primeInfo;
@@ -332,7 +335,7 @@ int encCoreAudioInit(hb_work_object_t *w, hb_job_t *job, enum AAC_MODE mode)
                               &piSize, &primeInfo);
 
     pv->delay = primeInfo.leadingFrames * 90000LL / pv->osamplerate;
-    w->config->init_delay = pv->delay;
+    *w->init_delay = pv->delay;
 
     pv->list = hb_list_init();
     pv->buf = NULL;

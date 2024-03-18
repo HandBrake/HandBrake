@@ -10,6 +10,7 @@
 #include "handbrake/handbrake.h"
 #include "handbrake/hbffmpeg.h"
 #include "handbrake/decavsub.h"
+#include "handbrake/extradata.h"
 
 struct hb_avsub_context_s
 {
@@ -129,14 +130,14 @@ hb_avsub_context_t * decavsubInit( hb_work_object_t * w, hb_job_t * job )
             case AV_CODEC_ID_EIA_608:
             {
                 // Mono font for CC
-                hb_subtitle_add_ssa_header(ctx->subtitle, HB_FONT_MONO,
-                    20, 384, 288);
+                hb_set_ssa_extradata(&ctx->subtitle->extradata,
+                                     HB_FONT_MONO, 20, 384, 288);
             } break;
 
             default:
             {
-                hb_subtitle_add_ssa_header(ctx->subtitle, HB_FONT_SANS,
-                    .066 * job->title->geometry.height, width, height);
+                hb_set_ssa_extradata(&ctx->subtitle->extradata, HB_FONT_SANS,
+                                     .066 * job->title->geometry.height, width, height);
             } break;
         }
     }

@@ -17,6 +17,7 @@
 #include "handbrake/av1_common.h"
 #include "handbrake/nal_units.h"
 #include "handbrake/nvenc_common.h"
+#include "handbrake/extradata.h"
 
 /*
  * The frame info struct remembers information about each frame across calls
@@ -852,9 +853,7 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
 
     if (context->extradata != NULL)
     {
-        memcpy(w->config->extradata.bytes, context->extradata,
-                                           context->extradata_size);
-        w->config->extradata.length = context->extradata_size;
+        hb_set_extradata(w->extradata, context->extradata, context->extradata_size);
     }
 
 done:
@@ -923,7 +922,7 @@ static void compute_dts_offset( hb_work_private_t * pv, hb_buffer_t * buf )
         if ( ( pv->frameno_in ) == pv->job->areBframes )
         {
             pv->dts_delay = buf->s.start;
-            pv->job->config.init_delay = pv->dts_delay;
+            pv->job->init_delay = pv->dts_delay;
         }
     }
 }

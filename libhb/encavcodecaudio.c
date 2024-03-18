@@ -9,6 +9,7 @@
 
 #include "handbrake/handbrake.h"
 #include "handbrake/hbffmpeg.h"
+#include "handbrake/extradata.h"
 
 struct hb_work_private_s
 {
@@ -224,8 +225,7 @@ static int encavcodecaInit(hb_work_object_t *w, hb_job_t *job)
         hb_error("encavcodecaInit: hb_avcodec_open() failed");
         return 1;
     }
-    w->config->init_delay = av_rescale(context->initial_padding,
-                                       90000, context->sample_rate);
+    *w->init_delay = av_rescale(context->initial_padding, 90000, context->sample_rate);
 
     // avcodec_open populates the opts dictionary with the
     // things it didn't recognize.
@@ -291,9 +291,7 @@ static int encavcodecaInit(hb_work_object_t *w, hb_job_t *job)
 
     if (context->extradata != NULL)
     {
-        memcpy(w->config->extradata.bytes, context->extradata,
-               context->extradata_size);
-        w->config->extradata.length = context->extradata_size;
+        hb_set_extradata(w->extradata, context->extradata, context->extradata_size);
     }
 
     return 0;
@@ -313,9 +311,8 @@ static void Finalize(hb_work_object_t *w)
     // Then we need to recopy the header since it was modified
     if (pv->context->extradata != NULL)
     {
-        memcpy(w->config->extradata.bytes, pv->context->extradata,
-               pv->context->extradata_size);
-        w->config->extradata.length = pv->context->extradata_size;
+        hb_set_extradata(w->extradata, pv->context->extradata,
+                         pv->context->extradata_size);
     }
 }
 

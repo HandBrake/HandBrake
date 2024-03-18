@@ -38,6 +38,7 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "handbrake/qsv_memory.h"
 #include "handbrake/h264_common.h"
 #include "handbrake/h265_common.h"
+#include "handbrake/extradata.h"
 
 #include "libavutil/hwcontext_qsv.h"
 #include "libavutil/hwcontext.h"
@@ -643,7 +644,9 @@ static int qsv_hevc_make_header(hb_work_object_t *w, mfxSession session, const m
     len = bitstream.DataLength;
     buf = bitstream.Data + bitstream.DataOffset;
     end = bitstream.Data + bitstream.DataOffset + bitstream.DataLength;
-    w->config->h265.headers_length = 0;
+
+    size_t extradata_size = 0;
+    uint8_t extradata[HB_CONFIG_MAX_SIZE];
 
     while ((buf = hb_annexb_find_next_nalu(buf, &len)) != NULL)
     {
@@ -660,18 +663,19 @@ static int qsv_hevc_make_header(hb_work_object_t *w, mfxSession session, const m
                 continue;
         }
 
-        size_t size = hb_nal_unit_write_annexb(NULL, buf, len) + w->config->h265.headers_length;
-        if (sizeof(w->config->h265.headers) < size)
+        size_t size = hb_nal_unit_write_annexb(NULL, buf, len) + extradata_size;
+        if (sizeof(extradata) < size)
         {
             /* Will never happen in practice */
             hb_log("qsv_hevc_make_header: header too large (size: %lu, max: %lu)",
-                   size, sizeof(w->config->h265.headers));
+                   size, sizeof(extradata));
         }
 
-        w->config->h265.headers_length += hb_nal_unit_write_annexb(w->config->h265.headers +
-                                                                   w->config->h265.headers_length, buf, len);
+        extradata_size += hb_nal_unit_write_annexb(extradata + extradata_size, buf, len);
         len = end - buf;
     }
+
+    hb_set_extradata(w->extradata, extradata, extradata_size);
 
 end:
     if (bitstream.Data)
@@ -1709,16 +1713,20 @@ int encqsvInit(hb_work_object_t *w, hb_job_t *job)
     memset(&videoParam, 0, sizeof(mfxVideoParam));
     videoParam.ExtParam = extParamArray;
     videoParam.NumExtParam = 0;
+
+    uint8_t sps[HB_CONFIG_MAX_SIZE];
+    uint8_t pps[HB_CONFIG_MAX_SIZE];
+
     // introduced in API 1.3
     memset(sps_pps, 0, sizeof(mfxExtCodingOptionSPSPPS));
     sps_pps->Header.BufferId = MFX_EXTBUFF_CODING_OPTION_SPSPPS;
     sps_pps->Header.BufferSz = sizeof(mfxExtCodingOptionSPSPPS);
     sps_pps->SPSId           = 0;
-    sps_pps->SPSBuffer       = w->config->h264.sps;
-    sps_pps->SPSBufSize      = sizeof(w->config->h264.sps);
+    sps_pps->SPSBuffer       = sps;
+    sps_pps->SPSBufSize      = sizeof(sps);
     sps_pps->PPSId           = 0;
-    sps_pps->PPSBuffer       = w->config->h264.pps;
-    sps_pps->PPSBufSize      = sizeof(w->config->h264.pps);
+    sps_pps->PPSBuffer       = pps;
+    sps_pps->PPSBufSize      = sizeof(pps);
     if (pv->param.videoParam->mfx.CodecId == MFX_CODEC_AVC)
     {
         videoParam.ExtParam[videoParam.NumExtParam++] = (mfxExtBuffer*)sps_pps;
@@ -1788,12 +1796,9 @@ int encqsvInit(hb_work_object_t *w, hb_job_t *job)
     if (videoParam.mfx.CodecId == MFX_CODEC_AVC)
     {
         // remove 4-byte Annex B NAL unit prefix (0x00 0x00 0x00 0x01)
-        w->config->h264.sps_length = sps_pps->SPSBufSize - 4;
-        memmove(w->config->h264.sps, w->config->h264.sps + 4,
-                w->config->h264.sps_length);
-        w->config->h264.pps_length = sps_pps->PPSBufSize - 4;
-        memmove(w->config->h264.pps, w->config->h264.pps + 4,
-                w->config->h264.pps_length);
+        hb_set_h264_extradata(w->extradata,
+                              sps + 4, sps_pps->SPSBufSize - 4,
+                              pps + 4, sps_pps->PPSBufSize - 4);
     }
     else if (videoParam.mfx.CodecId == MFX_CODEC_HEVC)
     {
@@ -1827,7 +1832,7 @@ int encqsvInit(hb_work_object_t *w, hb_job_t *job)
         {
             case MFX_CODEC_AVC:
             case MFX_CODEC_HEVC:
-                pv->init_delay = &w->config->init_delay;
+                pv->init_delay = &w->init_delay;
                 break;
             default:
                 break;

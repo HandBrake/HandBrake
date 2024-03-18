@@ -8,6 +8,7 @@
  */
 
 #include "handbrake/handbrake.h"
+#include "handbrake/extradata.h"
 #include "theora/codec.h"
 #include "theora/theoraenc.h"
 
@@ -169,17 +170,18 @@ int enctheoraInit( hb_work_object_t * w, hb_job_t * job )
 
     th_comment_init( &tc );
 
-    ogg_packet *header;
+    uint8_t headers[3][HB_CONFIG_MAX_SIZE];
 
-    int ii;
-    for (ii = 0; ii < 3; ii++)
+    for (int ii = 0; ii < 3; ii++)
     {
-        th_encode_flushheader( pv->ctx, &tc, &op );
-        header = (ogg_packet*)w->config->theora.headers[ii];
+        th_encode_flushheader(pv->ctx, &tc, &op);
+        ogg_packet *header = (ogg_packet *)headers[ii];
         memcpy(header, &op, sizeof(op));
-        header->packet = w->config->theora.headers[ii] + sizeof(ogg_packet);
-        memcpy(header->packet, op.packet, op.bytes );
+        header->packet = headers[ii] + sizeof(ogg_packet);
+        memcpy(header->packet, op.packet, op.bytes);
     }
+
+    hb_set_xiph_extradata(w->extradata, headers);
 
     th_comment_clear( &tc );
 

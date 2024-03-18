@@ -16,6 +16,7 @@
 #include "handbrake/dovi_common.h"
 #include "handbrake/hdr10plus.h"
 #include "handbrake/nal_units.h"
+#include "handbrake/extradata.h"
 #include "cv_utils.h"
 
 int  encvt_init(hb_work_object_t *, hb_job_t *);
@@ -222,7 +223,7 @@ static void compute_dts_offset(hb_work_private_t *pv, hb_buffer_t *buf)
         if ((pv->frameno_in) == pv->job->areBframes)
         {
             pv->dts_delay = buf->s.start;
-            pv->job->config.init_delay = pv->dts_delay;
+            pv->job->init_delay = pv->dts_delay;
         }
     }
 }
@@ -1342,31 +1343,40 @@ static void set_h264_cookie(hb_work_object_t *w, CMFormatDescriptionRef format)
 
         const uint8_t *avcCAtom = CFDataGetBytePtr(magicCookie);
 
-        SInt64 i;
+        uint8_t sps[HB_CONFIG_MAX_SIZE];
+        size_t sps_length = 0;
+        uint8_t pps[HB_CONFIG_MAX_SIZE];
+        size_t pps_length = 0;
+
         int8_t spsCount = (avcCAtom[5] & 0x1f);
         uint8_t ptrPos = 6;
         uint8_t spsPos = 0;
-        for (i = 0; i < spsCount; i++) {
+        for (SInt64 i = 0; i < spsCount; i++) {
             uint16_t spsSize = (avcCAtom[ptrPos++] << 8) & 0xff00;
             spsSize += avcCAtom[ptrPos++] & 0xff;
-            memcpy(w->config->h264.sps + spsPos, avcCAtom+ptrPos, spsSize);;
+            memcpy(sps + spsPos, avcCAtom+ptrPos, spsSize);;
             ptrPos += spsSize;
             spsPos += spsSize;
         }
-        w->config->h264.sps_length = spsPos;
+        sps_length = spsPos;
 
         int8_t ppsCount = avcCAtom[ptrPos++];
         uint8_t ppsPos = 0;
-        for (i = 0; i < ppsCount; i++)
+        for (SInt64 i = 0; i < ppsCount; i++)
         {
             uint16_t ppsSize = (avcCAtom[ptrPos++] << 8) & 0xff00;
             ppsSize += avcCAtom[ptrPos++] & 0xff;
-            memcpy(w->config->h264.pps + ppsPos, avcCAtom+ptrPos, ppsSize);;
+            memcpy(pps + ppsPos, avcCAtom+ptrPos, ppsSize);;
 
             ptrPos += ppsSize;
             ppsPos += ppsSize;
         }
-        w->config->h264.pps_length = ppsPos;
+        pps_length = ppsPos;
+
+        if (hb_set_h264_extradata(w->extradata, sps, sps_length, pps, pps_length))
+        {
+            hb_log("VTCompressionSession: Set extradata error");
+        }
     }
 }
 
@@ -1388,8 +1398,7 @@ static void set_h265_cookie(hb_work_object_t *w, CMFormatDescriptionRef format)
 
         const uint8_t *hvcCAtom = CFDataGetBytePtr(magicCookie);
         uint16_t size = CFDataGetLength(magicCookie);
-        memcpy(w->config->h265.headers, hvcCAtom, size);
-        w->config->h265.headers_length = size;
+        hb_set_extradata(w->extradata, hvcCAtom, size);
     }
 }
 

@@ -15,6 +15,7 @@
 
 #include "handbrake/handbrake.h"
 #include "handbrake/hbffmpeg.h"
+#include "handbrake/extradata.h"
 #include "x264.h"
 #include "handbrake/lang.h"
 #include "handbrake/common.h"
@@ -3936,6 +3937,58 @@ hb_list_t *hb_string_list_copy(const hb_list_t *src)
     return list;
 }
 
+hb_data_t * hb_data_init(size_t size)
+{
+    hb_data_t *data = av_mallocz(sizeof(hb_data_t));
+    if (data == NULL)
+    {
+        goto fail;
+    }
+
+    data->bytes = av_mallocz(size);
+    if (data->bytes == NULL)
+    {
+        goto fail;
+    }
+
+    data->size = size;
+    return data;
+
+fail:
+    hb_data_close(&data);
+    return NULL;
+}
+
+void hb_data_close(hb_data_t **data)
+{
+    if (data == NULL || *data == NULL)
+    {
+        return;
+    }
+
+    if ((*data)->bytes)
+    {
+        av_freep(&(*data)->bytes);
+    }
+
+    av_free(*data);
+    *data = NULL;
+}
+
+hb_data_t * hb_data_dup(const hb_data_t *src)
+{
+    if (src == NULL)
+    {
+        return NULL;
+    }
+
+    hb_data_t *data = hb_data_init(src->size);
+    if (data)
+    {
+        memcpy(data->bytes, src->bytes, src->size);
+    }
+    return data;
+}
 
 int global_verbosity_level; //Necessary for hb_deep_log
 /**********************************************************************
@@ -4369,6 +4422,8 @@ static void job_clean( hb_job_t * job )
         job->encoder_level = NULL;
         free(job->file);
         job->file = NULL;
+
+        hb_data_close(&job->extradata);
 
         // clean up chapter list
         while( ( chapter = hb_list_item( job->list_chapter, 0 ) ) )
@@ -5223,6 +5278,7 @@ hb_audio_t *hb_audio_copy(const hb_audio_t *src)
         {
             audio->config.in.name = strdup(src->config.in.name);
         }
+        audio->priv.extradata = hb_data_dup(src->priv.extradata);
     }
     return audio;
 }
@@ -5260,6 +5316,7 @@ void hb_audio_close( hb_audio_t **audio )
 {
     if ( audio && *audio )
     {
+        hb_data_close(&(*audio)->priv.extradata);
         free((char*)(*audio)->config.in.name);
         free((char*)(*audio)->config.out.name);
         free(*audio);
@@ -5379,10 +5436,9 @@ hb_subtitle_t *hb_subtitle_copy(const hb_subtitle_t *src)
     {
         subtitle = calloc(1, sizeof(*subtitle));
         memcpy(subtitle, src, sizeof(*subtitle));
-        if ( src->extradata )
+        if (src->extradata)
         {
-            subtitle->extradata = malloc( src->extradata_size );
-            memcpy( subtitle->extradata, src->extradata, src->extradata_size );
+            subtitle->extradata = hb_data_dup(src->extradata);
         }
         if (src->name != NULL)
         {
@@ -5437,7 +5493,7 @@ void hb_subtitle_close( hb_subtitle_t **_sub )
         free((char*)sub->name);
         free((char*)sub->config.name);
         free((char*)sub->config.src_filename);
-        free(sub->extradata);
+        hb_data_close(&sub->extradata);
         free(sub);
         *_sub = NULL;
     }
@@ -5448,58 +5504,6 @@ void hb_subtitle_close( hb_subtitle_t **_sub )
  **********************************************************************
  *
  *********************************************************************/
-int hb_subtitle_add_ssa_header(hb_subtitle_t *subtitle, const char *font,
-                               int fs, int w, int h)
-{
-    // Free any pre-existing extradata
-    free(subtitle->extradata);
-
-    float shadow_size = fs / 36.0;
-    float outline_size = fs / 30.0;
-
-    char *shadow_size_string = hb_strdup_printf("%.2f", shadow_size);
-    hb_str_from_locale(shadow_size_string);
-
-    char *outline_size_string = hb_strdup_printf("%.2f", outline_size);
-    hb_str_from_locale(outline_size_string);
-
-    if (shadow_size_string == NULL || outline_size_string == NULL)
-    {
-        hb_error("hb_subtitle_add_ssa_header: malloc failed");
-        return 0;
-    }
-
-    // SRT subtitles are represented internally as SSA
-    // Create an SSA header
-    const char * ssa_header =
-        "[Script Info]\r\n"
-        "ScriptType: v4.00+\r\n"
-        "Collisions: Normal\r\n"
-        "PlayResX: %d\r\n"
-        "PlayResY: %d\r\n"
-        "Timer: 100.0\r\n"
-        "WrapStyle: 0\r\n"
-        "ScaledBorderAndShadow: yes\r\n"
-        "\r\n"
-        "[V4+ Styles]\r\n"
-        "Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding\r\n"
-        "Style: Default,%s,%d,&H00FFFFFF,&H00FFFFFF,&H000F0F0F,&H000F0F0F,0,0,0,0,100,100,0,0.00,1,%s,%s,2,20,20,20,0\r\n";
-
-    subtitle->extradata = (uint8_t *)hb_strdup_printf(ssa_header, w, h, font, fs, outline_size_string, shadow_size_string);
-
-    free(shadow_size_string);
-    free(outline_size_string);
-
-    if (subtitle->extradata == NULL)
-    {
-        hb_error("hb_subtitle_add_ssa_header: malloc failed");
-        return 0;
-    }
-    subtitle->extradata_size = strlen((char*)subtitle->extradata) + 1;
-
-    return 1;
-}
-
 int hb_subtitle_add(const hb_job_t * job, const hb_subtitle_config_t * subtitlecfg, int track)
 {
     hb_title_t *title = job->title;

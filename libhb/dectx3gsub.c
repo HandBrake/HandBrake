@@ -21,6 +21,7 @@
 #include <stdio.h>
 #include "handbrake/handbrake.h"
 #include "handbrake/colormap.h"
+#include "handbrake/extradata.h"
 
 struct hb_work_private_s
 {
@@ -260,9 +261,9 @@ static int dectx3gInit( hb_work_object_t * w, hb_job_t * job )
     // For now we just create a generic SSA Script Info.
     int height = job->title->geometry.height - job->crop[0] - job->crop[1];
     int width = job->title->geometry.width - job->crop[2] - job->crop[3];
-    hb_subtitle_add_ssa_header(w->subtitle, HB_FONT_SANS,
-                               .066 * job->title->geometry.height,
-                               width, height);
+    hb_set_ssa_extradata(&w->subtitle->extradata, HB_FONT_SANS,
+                         .066 * job->title->geometry.height,
+                         width, height);
 
     return 0;
 }

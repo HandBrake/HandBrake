@@ -1206,10 +1206,6 @@ static int sanitize_audio(hb_job_t *job)
             continue;
         }
 
-        /* Vorbis language information */
-        if (audio->config.out.codec == HB_ACODEC_VORBIS)
-            audio->priv.config.vorbis.language = audio->config.lang.simple;
-
         /* sense-check the requested samplerate */
         if (audio->config.out.samplerate <= 0)
         {
@@ -1840,9 +1836,10 @@ static void do_job(hb_job_t *job)
                 *job->die = 1;
                 goto cleanup;
             }
+            w->init_delay = &audio->priv.init_delay;
+            w->extradata  = &audio->priv.extradata;
             w->fifo_in  = audio->priv.fifo_in;
             w->fifo_out = audio->priv.fifo_raw;
-            w->config   = &audio->priv.config;
             w->audio    = audio;
             w->codec_param = audio->config.in.codec_param;
 
@@ -1927,9 +1924,10 @@ static void do_job(hb_job_t *job)
                     *job->die = 1;
                     goto cleanup;
                 }
+                w->init_delay = &audio->priv.init_delay;
+                w->extradata  = &audio->priv.extradata;
                 w->fifo_in  = audio->priv.fifo_sync;
                 w->fifo_out = audio->priv.fifo_out;
-                w->config   = &audio->priv.config;
                 w->audio    = audio;
 
                 hb_list_add( job->list_work, w );
@@ -1974,8 +1972,10 @@ static void do_job(hb_job_t *job)
         else
             w->fifo_in  = job->fifo_sync;
 
-        w->fifo_out = job->fifo_mpeg4;
-        w->config   = &job->config;
+        w->fifo_out  =  job->fifo_mpeg4;
+
+        w->init_delay = &job->init_delay;
+        w->extradata  = &job->extradata;
 
         hb_list_add( job->list_work, w );
 

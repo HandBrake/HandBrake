@@ -16,6 +16,7 @@
 #include "handbrake/handbrake.h"
 #include "handbrake/colormap.h"
 #include "handbrake/decavsub.h"
+#include "handbrake/extradata.h"
 
 struct start_and_end {
     unsigned long start, end;
@@ -566,9 +567,9 @@ static int decsrtInit( hb_work_object_t * w, hb_job_t * job )
     // Generate generic SSA Script Info.
     int height = job->title->geometry.height - job->crop[0] - job->crop[1];
     int width = job->title->geometry.width - job->crop[2] - job->crop[3];
-    hb_subtitle_add_ssa_header(w->subtitle, HB_FONT_SANS,
-                               .066 * job->title->geometry.height,
-                               width, height);
+    hb_set_ssa_extradata(&w->subtitle->extradata, HB_FONT_SANS,
+                         .066 * job->title->geometry.height,
+                         width, height);
     return 0;
 
 fail:

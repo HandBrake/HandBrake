@@ -26,6 +26,7 @@
 
 #include "handbrake/handbrake.h"
 #include "handbrake/decavsub.h"
+#include "handbrake/extradata.h"
 #include "libavformat/avformat.h"
 
 struct hb_work_private_s
@@ -57,11 +58,7 @@ static int extradataInit( hb_work_private_t * pv )
     }
     if (st->codecpar->extradata != NULL)
     {
-        pv->subtitle->extradata = malloc(st->codecpar->extradata_size + 1);
-        memcpy(pv->subtitle->extradata,
-               st->codecpar->extradata, st->codecpar->extradata_size);
-        pv->subtitle->extradata[st->codecpar->extradata_size] = 0;
-        pv->subtitle->extradata_size = st->codecpar->extradata_size + 1;
+        hb_set_text_extradata(&pv->subtitle->extradata, st->codecpar->extradata, st->codecpar->extradata_size);
     }
     return 0;
 }

@@ -8,7 +8,7 @@
  */
 
 #include "handbrake/hbffmpeg.h"
-
+#include "handbrake/extradata.h"
 #include "handbrake/handbrake.h"
 #include "handbrake/audio_remap.h"
 
@@ -60,18 +60,8 @@ int encvorbisInit(hb_work_object_t *w, hb_job_t *job)
     w->private_data = pv;
     pv->job = job;
 
-    int i;
-    ogg_packet header[3];
-
     hb_log("encvorbis: opening libvorbis");
 
-    /* init */
-    for (i = 0; i < 3; i++)
-    {
-        // Zero vorbis headers so that we don't crash in mk_laceXiph
-        // when vorbis_encode_setup_managed fails.
-        memset(w->config->vorbis.headers[i], 0, sizeof(ogg_packet));
-    }
     vorbis_info_init(&pv->vi);
 
     pv->out_discrete_channels =
@@ -109,23 +99,27 @@ int encvorbisInit(hb_work_object_t *w, hb_job_t *job)
     /* add a comment */
     vorbis_comment_init(&pv->vc);
     vorbis_comment_add_tag(&pv->vc, "Encoder", "HandBrake");
-    vorbis_comment_add_tag(&pv->vc, "LANGUAGE", w->config->vorbis.language);
+    vorbis_comment_add_tag(&pv->vc, "LANGUAGE", audio->config.lang.simple);
 
     /* set up the analysis state and auxiliary encoding storage */
     vorbis_analysis_init(&pv->vd, &pv->vi);
     vorbis_block_init(&pv->vd, &pv->vb);
 
     /* get the 3 headers */
+    ogg_packet header[3];
     vorbis_analysis_headerout(&pv->vd, &pv->vc,
                               &header[0], &header[1], &header[2]);
-    ogg_packet *pheader;
-    for (i = 0; i < 3; i++)
+
+    uint8_t headers[3][HB_CONFIG_MAX_SIZE];
+    for (int i = 0; i < 3; i++)
     {
-        pheader = (ogg_packet*)w->config->vorbis.headers[i];
+        ogg_packet *pheader = (ogg_packet *)headers[i];
         memcpy(pheader, &header[i], sizeof(ogg_packet));
-        pheader->packet = w->config->vorbis.headers[i] + sizeof(ogg_packet);
+        pheader->packet = headers[i] + sizeof(ogg_packet);
         memcpy(pheader->packet, header[i].packet, header[i].bytes );
     }
+
+    hb_set_xiph_extradata(w->extradata, headers);
 
     pv->input_samples = pv->out_discrete_channels * OGGVORBIS_FRAME_SIZE;
     audio->config.out.samples_per_frame = OGGVORBIS_FRAME_SIZE;
