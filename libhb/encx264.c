@@ -12,6 +12,7 @@
 #include "handbrake/handbrake.h"
 #include "handbrake/hb_dict.h"
 #include "handbrake/encx264.h"
+#include "handbrake/extradata.h"
 
 int  encx264Init( hb_work_object_t *, hb_job_t * );
 int  encx264Work( hb_work_object_t *, hb_buffer_t **, hb_buffer_t ** );
@@ -644,13 +645,15 @@ int encx264Init( hb_work_object_t * w, hb_job_t * job )
 
     pv->api->encoder_headers( pv->x264, &nal, &nal_count );
 
-    /* Sequence Parameter Set */
-    memcpy(w->config->h264.sps, nal[0].p_payload + 4, nal[0].i_payload - 4);
-    w->config->h264.sps_length = nal[0].i_payload - 4;
-
-    /* Picture Parameter Set */
-    memcpy(w->config->h264.pps, nal[1].p_payload + 4, nal[1].i_payload - 4);
-    w->config->h264.pps_length = nal[1].i_payload - 4;
+    if (hb_set_h264_extradata(w->extradata,
+                              nal[0].p_payload + 4, nal[0].i_payload - 4,
+                              nal[1].p_payload + 4, nal[1].i_payload - 4))
+    {
+        hb_error("encx264: set extradata failed.");
+        free( pv );
+        w->private_data = NULL;
+        return 1;
+    }
 
     pv->api->picture_init( &pv->pic_in );
 
@@ -704,9 +707,9 @@ static hb_buffer_t *nal_encode( hb_work_object_t *w, x264_picture_t *pic_out,
     buf->s.start        = pic_out->i_pts;
     buf->s.stop         = AV_NOPTS_VALUE;
     buf->s.renderOffset = pic_out->i_dts;
-    if ( !w->config->init_delay && pic_out->i_dts < 0 )
+    if (!*w->init_delay && pic_out->i_dts < 0)
     {
-        w->config->init_delay = -pic_out->i_dts;
+        *w->init_delay = -pic_out->i_dts;
     }
 
     /* Determine what type of frame we have. */

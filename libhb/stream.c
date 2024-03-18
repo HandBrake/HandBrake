@@ -14,6 +14,7 @@
 #include "handbrake/handbrake.h"
 #include "handbrake/hbffmpeg.h"
 #include "handbrake/lang.h"
+#include "handbrake/extradata.h"
 #include "libbluray/bluray.h"
 
 #define min(a, b) a < b ? a : b
@@ -2001,10 +2002,9 @@ static void pes_add_subtitle_to_title(
                     subtitle->config.dest = RENDERSUB;
                     if (pes->extradata != NULL)
                     {
-                        subtitle->extradata = malloc(pes->extradata_size);
-                        subtitle->extradata_size = pes->extradata_size;
-                        memcpy(subtitle->extradata, pes->extradata,
-                                                    pes->extradata_size);
+                        hb_set_extradata(&subtitle->extradata,
+                                         pes->extradata,
+                                         pes->extradata_size);
                     }
                     break;
                 case AV_CODEC_ID_HDMV_PGS_SUBTITLE:
@@ -5390,14 +5390,12 @@ static void add_ffmpeg_audio(hb_title_t *title, hb_stream_t *stream, int id)
     {
         case AV_CODEC_ID_AAC:
         {
-            int len = MIN(codecpar->extradata_size, HB_CONFIG_MAX_SIZE);
-            memcpy(audio->priv.config.extradata.bytes, codecpar->extradata, len);
-            audio->priv.config.extradata.length = len;
-            audio->config.in.codec              = HB_ACODEC_FFAAC;
+            hb_set_extradata(&audio->priv.extradata, codecpar->extradata, codecpar->extradata_size);
+            audio->config.in.codec = HB_ACODEC_FFAAC;
         } break;
 
         case AV_CODEC_ID_AC3:
-            audio->config.in.codec       = HB_ACODEC_AC3;
+            audio->config.in.codec = HB_ACODEC_AC3;
             break;
 
         case AV_CODEC_ID_EAC3:
@@ -5433,10 +5431,8 @@ static void add_ffmpeg_audio(hb_title_t *title, hb_stream_t *stream, int id)
 
         case AV_CODEC_ID_FLAC:
         {
-            int len = MIN(codecpar->extradata_size, HB_CONFIG_MAX_SIZE);
-            memcpy(audio->priv.config.extradata.bytes, codecpar->extradata, len);
-            audio->priv.config.extradata.length = len;
-            audio->config.in.codec              = HB_ACODEC_FFFLAC;
+            hb_set_extradata(&audio->priv.extradata, codecpar->extradata, codecpar->extradata_size);
+            audio->config.in.codec = HB_ACODEC_FFFLAC;
         } break;
 
         case AV_CODEC_ID_MP2:
@@ -5449,10 +5445,8 @@ static void add_ffmpeg_audio(hb_title_t *title, hb_stream_t *stream, int id)
 
         case AV_CODEC_ID_OPUS:
         {
-            int len = MIN(codecpar->extradata_size, HB_CONFIG_MAX_SIZE);
-            memcpy(audio->priv.config.extradata.bytes, codecpar->extradata, len);
-            audio->priv.config.extradata.length = len;
-            audio->config.in.codec              = HB_ACODEC_OPUS;
+            hb_set_extradata(&audio->priv.extradata, codecpar->extradata, codecpar->extradata_size);
+            audio->config.in.codec = HB_ACODEC_OPUS;
         } break;
 
         default:
@@ -5694,11 +5688,7 @@ static void add_ffmpeg_subtitle( hb_title_t *title, hb_stream_t *stream, int id 
     // Copy the extradata for the subtitle track
     if (codecpar->extradata != NULL)
     {
-        subtitle->extradata = malloc(codecpar->extradata_size + 1);
-        memcpy(subtitle->extradata,
-               codecpar->extradata, codecpar->extradata_size);
-        subtitle->extradata[codecpar->extradata_size] = 0;
-        subtitle->extradata_size = codecpar->extradata_size + 1;
+        hb_set_text_extradata(&subtitle->extradata, codecpar->extradata, codecpar->extradata_size);
     }
 
     if (st->disposition & AV_DISPOSITION_DEFAULT)

@@ -8,11 +8,9 @@
  */
 
 #include <time.h>
-#include <ogg/ogg.h>
 #include "libavcodec/bsf.h"
 #include "libavformat/avformat.h"
 #include "libavutil/avstring.h"
-#include "libavutil/intreadwrite.h"
 
 #include "handbrake/handbrake.h"
 #include "handbrake/ssautil.h"
@@ -136,6 +134,32 @@ static char* lookup_lang_code(int mux, char *iso639_2)
     return out;
 }
 
+static int set_extradata(hb_data_t *extradata, uint8_t **priv_data, int *priv_size)
+{
+    if (*priv_data)
+    {
+        av_freep(priv_data);
+        *priv_size = 0;
+    }
+
+    if (extradata && extradata->size > 0)
+    {
+        // libavformat can over-read the buffer by up to 8 bytes
+        // when it fills it's get_bits cache.
+        //
+        // So allocate extra bytes
+        *priv_size = extradata->size;
+        *priv_data = av_malloc(extradata->size + AV_INPUT_BUFFER_PADDING_SIZE);
+        if (priv_data == NULL)
+        {
+            hb_error("extradata: malloc failure");
+            return 1;
+        }
+        memcpy(*priv_data, extradata->bytes, extradata->size);
+    }
+    return 0;
+}
+
 /**********************************************************************
  * avformatInit
  **********************************************************************
@@ -256,57 +280,12 @@ static int avformatInit( hb_mux_object_t * m )
 
     track->st->codecpar->codec_type = AVMEDIA_TYPE_VIDEO;
 
-    uint8_t *priv_data = NULL;
-    int priv_size = 0;
     switch (job->vcodec)
     {
         case HB_VCODEC_X264_8BIT:
         case HB_VCODEC_X264_10BIT:
         case HB_VCODEC_QSV_H264:
         case HB_VCODEC_VT_H264:
-            track->st->codecpar->codec_id = AV_CODEC_ID_H264;
-            if (job->mux == HB_MUX_AV_MP4 && job->inline_parameter_sets)
-            {
-                track->st->codecpar->codec_tag = MKTAG('a','v','c','3');
-            }
-            else
-            {
-                track->st->codecpar->codec_tag = MKTAG('a','v','c','1');
-            }
-
-            /* Taken from x264 muxers.c */
-            priv_size = 5 + 1 + 2 + job->config.h264.sps_length + 1 + 2 +
-                        job->config.h264.pps_length;
-            priv_data = av_malloc(priv_size + AV_INPUT_BUFFER_PADDING_SIZE);
-            if (priv_data == NULL)
-            {
-                hb_error("H.264 extradata: malloc failure");
-                goto error;
-            }
-
-            priv_data[0] = 1;
-            priv_data[1] = job->config.h264.sps[1]; /* AVCProfileIndication */
-            priv_data[2] = job->config.h264.sps[2]; /* profile_compat */
-            priv_data[3] = job->config.h264.sps[3]; /* AVCLevelIndication */
-            priv_data[4] = 0xff; // nalu size length is four bytes
-            priv_data[5] = 0xe1; // one sps
-
-            priv_data[6] = job->config.h264.sps_length >> 8;
-            priv_data[7] = job->config.h264.sps_length;
-
-            memcpy(priv_data+8, job->config.h264.sps,
-                   job->config.h264.sps_length);
-
-            priv_data[8+job->config.h264.sps_length] = 1; // one pps
-            priv_data[9+job->config.h264.sps_length] =
-                                        job->config.h264.pps_length >> 8;
-            priv_data[10+job->config.h264.sps_length] =
-                                        job->config.h264.pps_length;
-
-            memcpy(priv_data+11+job->config.h264.sps_length,
-                   job->config.h264.pps, job->config.h264.pps_length );
-            break;
-
         case HB_VCODEC_FFMPEG_VCE_H264:
         case HB_VCODEC_FFMPEG_NVENC_H264:
         case HB_VCODEC_FFMPEG_MF_H264:
@@ -319,68 +298,23 @@ static int avformatInit( hb_mux_object_t * m )
             {
                 track->st->codecpar->codec_tag = MKTAG('a','v','c','1');
             }
-            if (job->config.extradata.length > 0)
-            {
-                priv_size = job->config.extradata.length;
-                priv_data = av_malloc(priv_size + AV_INPUT_BUFFER_PADDING_SIZE);
-                if (priv_data == NULL)
-                {
-                    hb_error("H.264 extradata: malloc failure");
-                    goto error;
-                }
-                memcpy(priv_data,
-                       job->config.extradata.bytes,
-                       job->config.extradata.length);
-            }
             break;
 
         case HB_VCODEC_FFMPEG_MPEG4:
             track->st->codecpar->codec_id = AV_CODEC_ID_MPEG4;
-
-            if (job->config.extradata.length > 0)
-            {
-                priv_size = job->config.extradata.length;
-                priv_data = av_malloc(priv_size + AV_INPUT_BUFFER_PADDING_SIZE);
-                if (priv_data == NULL)
-                {
-                    hb_error("MPEG-4 extradata: malloc failure");
-                    goto error;
-                }
-                memcpy(priv_data,
-                       job->config.extradata.bytes,
-                       job->config.extradata.length);
-            }
             break;
 
         case HB_VCODEC_FFMPEG_MPEG2:
             track->st->codecpar->codec_id = AV_CODEC_ID_MPEG2VIDEO;
-
-            if (job->config.extradata.length > 0)
-            {
-                priv_size = job->config.extradata.length;
-                priv_data = av_malloc(priv_size + AV_INPUT_BUFFER_PADDING_SIZE);
-                if (priv_data == NULL)
-                {
-                    hb_error("MPEG-2 extradata: malloc failure");
-                    goto error;
-                }
-                memcpy(priv_data,
-                       job->config.extradata.bytes,
-                       job->config.extradata.length);
-            }
             break;
 
         case HB_VCODEC_FFMPEG_VP8:
             track->st->codecpar->codec_id = AV_CODEC_ID_VP8;
-            priv_data                  = NULL;
-            priv_size                  = 0;
             break;
 
         case HB_VCODEC_FFMPEG_VP9:
         case HB_VCODEC_FFMPEG_VP9_10BIT:
             track->st->codecpar->codec_id = AV_CODEC_ID_VP9;
-            priv_data                  = NULL;
-            priv_size                  = 0;
             break;
 
         case HB_VCODEC_SVT_AV1:
@@ -389,20 +323,6 @@ static int avformatInit( hb_mux_object_t * m )
         case HB_VCODEC_FFMPEG_NVENC_AV1_10BIT:
         case HB_VCODEC_FFMPEG_VCE_AV1:
             track->st->codecpar->codec_id = AV_CODEC_ID_AV1;
-
-            if (job->config.extradata.length > 0)
-            {
-                priv_size = job->config.extradata.length;
-                priv_data = av_malloc(priv_size + AV_INPUT_BUFFER_PADDING_SIZE);
-                if (priv_data == NULL)
-                {
-                    hb_error("AV1 extradata: malloc failure");
-                    goto error;
-                }
-                memcpy(priv_data,
-                       job->config.extradata.bytes,
-                       job->config.extradata.length);
-            }
             break;
 
         case HB_VCODEC_QSV_AV1_10BIT:
@@ -413,8 +333,6 @@ static int avformatInit( hb_mux_object_t * m )
             int                       ret;
 
             track->st->codecpar->codec_id = AV_CODEC_ID_AV1;
-            priv_data                  = NULL;
-            priv_size                  = 0;
 
             bsf = av_bsf_get_by_name("extract_extradata");
             ret = av_bsf_alloc(bsf, &ctx);
@@ -425,8 +343,6 @@ static int avformatInit( hb_mux_object_t * m )
             }
 
             track->bitstream_context = ctx;
-            track->st->codecpar->extradata = priv_data;
-            track->st->codecpar->extradata_size = priv_size;
             if (track->bitstream_context != NULL)
             {
                 avcodec_parameters_copy(track->bitstream_context->par_in,
@@ -440,36 +356,8 @@ static int avformatInit( hb_mux_object_t * m )
             }
         } break;
         case HB_VCODEC_THEORA:
-        {
             track->st->codecpar->codec_id = AV_CODEC_ID_THEORA;
-
-            int size = 0;
-            ogg_packet *ogg_headers[3];
-
-            for (ii = 0; ii < 3; ii++)
-            {
-                ogg_headers[ii] = (ogg_packet *)job->config.theora.headers[ii];
-                size += ogg_headers[ii]->bytes + 2;
-            }
-
-            priv_size = size;
-            priv_data = av_malloc(priv_size + AV_INPUT_BUFFER_PADDING_SIZE);
-            if (priv_data == NULL)
-            {
-                hb_error("Theora extradata: malloc failure");
-                goto error;
-            }
-
-            size = 0;
-            for(ii = 0; ii < 3; ii++)
-            {
-                AV_WB16(priv_data + size, ogg_headers[ii]->bytes);
-                size += 2;
-                memcpy(priv_data+size, ogg_headers[ii]->packet,
-                                       ogg_headers[ii]->bytes);
-                size += ogg_headers[ii]->bytes;
-            }
-        } break;
+            break;
 
         case HB_VCODEC_X265_8BIT:
         case HB_VCODEC_X265_10BIT:
@@ -479,29 +367,6 @@ static int avformatInit( hb_mux_object_t * m )
         case HB_VCODEC_QSV_H265_10BIT:
         case HB_VCODEC_VT_H265:
         case HB_VCODEC_VT_H265_10BIT:
-            track->st->codecpar->codec_id  = AV_CODEC_ID_HEVC;
-            if (job->mux == HB_MUX_AV_MP4 && job->inline_parameter_sets)
-            {
-                track->st->codecpar->codec_tag = MKTAG('h','e','v','1');
-            }
-            else
-            {
-                track->st->codecpar->codec_tag = MKTAG('h','v','c','1');
-            }
-
-            if (job->config.h265.headers_length > 0)
-            {
-                priv_size = job->config.h265.headers_length;
-                priv_data = av_malloc(priv_size + AV_INPUT_BUFFER_PADDING_SIZE);
-                if (priv_data == NULL)
-                {
-                    hb_error("H.265 extradata: malloc failure");
-                    goto error;
-                }
-                memcpy(priv_data, job->config.h265.headers, priv_size);
-            }
-            break;
-
         case HB_VCODEC_FFMPEG_VCE_H265:
         case HB_VCODEC_FFMPEG_VCE_H265_10BIT:
         case HB_VCODEC_FFMPEG_NVENC_H265:
@@ -516,27 +381,17 @@ static int avformatInit( hb_mux_object_t * m )
             {
                 track->st->codecpar->codec_tag = MKTAG('h','v','c','1');
             }
-            if (job->config.extradata.length > 0)
-            {
-                priv_size = job->config.extradata.length;
-                priv_data = av_malloc(priv_size + AV_INPUT_BUFFER_PADDING_SIZE);
-                if (priv_data == NULL)
-                {
-                    hb_error("H.265 extradata: malloc failure");
-                    goto error;
-                }
-                memcpy(priv_data,
-                       job->config.extradata.bytes,
-                       job->config.extradata.length);
-            }
             break;
 
         default:
             hb_error("muxavformat: Unknown video codec: %x", job->vcodec);
             goto error;
     }
-    track->st->codecpar->extradata = priv_data;
-    track->st->codecpar->extradata_size = priv_size;
+
+    if (set_extradata(job->extradata, &track->st->codecpar->extradata, &track->st->codecpar->extradata_size))
+    {
+        goto error;
+    }
 
     track->st->sample_aspect_ratio.num        = job->par.num;
     track->st->sample_aspect_ratio.den        = job->par.den;
@@ -544,6 +399,7 @@ static int avformatInit( hb_mux_object_t * m )
     track->st->codecpar->sample_aspect_ratio.den = job->par.den;
     track->st->codecpar->width                   = job->width;
     track->st->codecpar->height                  = job->height;
+    track->st->codecpar->format                  = job->output_pix_fmt;
     track->st->disposition |= AV_DISPOSITION_DEFAULT;
 
     track->st->codecpar->color_primaries = hb_output_color_prim(job);
@@ -677,7 +533,7 @@ static int avformatInit( hb_mux_object_t * m )
         }
 
         track->st->codecpar->codec_type = AVMEDIA_TYPE_AUDIO;
-        track->st->codecpar->initial_padding = audio->priv.config.init_delay *
+        track->st->codecpar->initial_padding = audio->priv.init_delay *
                                         audio->config.out.samplerate / 90000;
         track->st->codecpar->frame_size = audio->config.out.samples_per_frame;
         if (job->mux == HB_MUX_AV_MP4)
@@ -690,8 +546,6 @@ static int avformatInit( hb_mux_object_t * m )
             track->st->time_base = m->time_base;
         }
 
-        priv_data = NULL;
-        priv_size = 0;
         switch (audio->config.out.codec & HB_ACODEC_MASK)
         {
             case HB_ACODEC_DCA:
@@ -715,70 +569,14 @@ static int avformatInit( hb_mux_object_t * m )
                 track->st->codecpar->codec_id = AV_CODEC_ID_MP3;
                 break;
             case HB_ACODEC_VORBIS:
-            {
                 track->st->codecpar->codec_id = AV_CODEC_ID_VORBIS;
-
-                int jj, size = 0;
-                ogg_packet *ogg_headers[3];
-
-                for (jj = 0; jj < 3; jj++)
-                {
-                    ogg_headers[jj] = (ogg_packet *)audio->priv.config.vorbis.headers[jj];
-                    size += ogg_headers[jj]->bytes + 2;
-                }
-
-                priv_size = size;
-                priv_data = av_malloc(priv_size + AV_INPUT_BUFFER_PADDING_SIZE);
-                if (priv_data == NULL)
-                {
-                    hb_error("Vorbis extradata: malloc failure");
-                    goto error;
-                }
-
-                size = 0;
-                for(jj = 0; jj < 3; jj++)
-                {
-                    AV_WB16(priv_data + size, ogg_headers[jj]->bytes);
-                    size += 2;
-                    memcpy(priv_data+size, ogg_headers[jj]->packet,
-                                           ogg_headers[jj]->bytes);
-                    size += ogg_headers[jj]->bytes;
-                }
-            } break;
+                break;
             case HB_ACODEC_OPUS:
                 track->st->codecpar->codec_id = AV_CODEC_ID_OPUS;
-
-                if (audio->priv.config.extradata.length)
-                {
-                    priv_size = audio->priv.config.extradata.length;
-                    priv_data = av_malloc(priv_size + AV_INPUT_BUFFER_PADDING_SIZE);
-                    if (priv_data == NULL)
-                    {
-                        hb_error("OPUS extradata: malloc failure");
-                        goto error;
-                    }
-                    memcpy(priv_data,
-                           audio->priv.config.extradata.bytes,
-                           audio->priv.config.extradata.length);
-                }
                 break;
             case HB_ACODEC_FFFLAC:
             case HB_ACODEC_FFFLAC24:
                 track->st->codecpar->codec_id = AV_CODEC_ID_FLAC;
-
-                if (audio->priv.config.extradata.length)
-                {
-                    priv_size = audio->priv.config.extradata.length;
-                    priv_data = av_malloc(priv_size + AV_INPUT_BUFFER_PADDING_SIZE);
-                    if (priv_data == NULL)
-                    {
-                        hb_error("FLAC extradata: malloc failure");
-                        goto error;
-                    }
-                    memcpy(priv_data,
-                           audio->priv.config.extradata.bytes,
-                           audio->priv.config.extradata.length);
-                }
                 break;
             case HB_ACODEC_FFAAC:
             case HB_ACODEC_CA_AAC:
@@ -786,24 +584,6 @@ static int avformatInit( hb_mux_object_t * m )
             case HB_ACODEC_FDK_AAC:
             case HB_ACODEC_FDK_HAAC:
                 track->st->codecpar->codec_id = AV_CODEC_ID_AAC;
-
-                // libav mkv muxer expects there to be extradata for
-                // AAC and will crash if it is NULL.
-                //
-                // Also, libav can over-read the buffer by up to 8 bytes
-                // when it fills it's get_bits cache.
-                //
-                // So allocate extra bytes
-                priv_size = audio->priv.config.extradata.length;
-                priv_data = av_malloc(priv_size + AV_INPUT_BUFFER_PADDING_SIZE);
-                if (priv_data == NULL)
-                {
-                    hb_error("AAC extradata: malloc failure");
-                    goto error;
-                }
-                memcpy(priv_data,
-                       audio->priv.config.extradata.bytes,
-                       audio->priv.config.extradata.length);
 
                 // AAC from pass-through source may be ADTS.
                 // Therefore inserting "aac_adtstoasc" bitstream filter is
@@ -832,8 +612,12 @@ static int avformatInit( hb_mux_object_t * m )
                          audio->config.out.codec);
                 goto error;
         }
-        track->st->codecpar->extradata = priv_data;
-        track->st->codecpar->extradata_size = priv_size;
+
+        if (set_extradata(audio->priv.extradata, &track->st->codecpar->extradata, &track->st->codecpar->extradata_size))
+        {
+            goto error;
+        }
+
         if (track->bitstream_context != NULL)
         {
             int ret;
@@ -1021,8 +805,8 @@ static int avformatInit( hb_mux_object_t * m )
         track->st->codecpar->width = subtitle->width;
         track->st->codecpar->height = subtitle->height;
 
-        priv_data = NULL;
-        priv_size = 0;
+        uint8_t *priv_data = NULL;
+        size_t   priv_size = 0;
         switch (subtitle->source)
         {
             case VOBSUB:
@@ -1058,11 +842,11 @@ static int avformatInit( hb_mux_object_t * m )
             case DVBSUB:
             {
                 track->st->codecpar->codec_id = AV_CODEC_ID_DVB_SUBTITLE;
-                if (subtitle->extradata != NULL)
+                if (subtitle->extradata != NULL && subtitle->extradata->size)
                 {
-                    priv_size = subtitle->extradata_size;
+                    priv_size = subtitle->extradata->size;
                     priv_data = av_malloc(priv_size + AV_INPUT_BUFFER_PADDING_SIZE);
-                    memcpy(priv_data, subtitle->extradata, priv_size);
+                    memcpy(priv_data, subtitle->extradata->bytes, priv_size);
                 }
             } break;
 
@@ -1085,16 +869,16 @@ static int avformatInit( hb_mux_object_t * m )
                     track->st->codecpar->codec_id = AV_CODEC_ID_ASS;
                     need_fonts = 1;
 
-                    if (subtitle->extradata_size)
+                    if (subtitle->extradata && subtitle->extradata->size)
                     {
-                        priv_size = subtitle->extradata_size;
+                        priv_size = subtitle->extradata->size;
                         priv_data = av_malloc(priv_size + AV_INPUT_BUFFER_PADDING_SIZE);
                         if (priv_data == NULL)
                         {
                             hb_error("SSA extradata: malloc failure");
                             goto error;
                         }
-                        memcpy(priv_data, subtitle->extradata, priv_size);
+                        memcpy(priv_data, subtitle->extradata->bytes, priv_size);
                     }
                 }
             } break;
@@ -1218,8 +1002,8 @@ static int avformatInit( hb_mux_object_t * m )
                     av_dict_set(&st->metadata, "mimetype", "application/vnd.ms-opentype", 0);
                 }
 
-                priv_size = attachment->size;
-                priv_data = av_malloc(priv_size + AV_INPUT_BUFFER_PADDING_SIZE);
+                size_t   priv_size = attachment->size;
+                uint8_t *priv_data = av_malloc(priv_size + AV_INPUT_BUFFER_PADDING_SIZE);
                 if (priv_data == NULL)
                 {
                     hb_error("Font extradata: malloc failure");
@@ -1700,24 +1484,7 @@ static int avformatEnd(hb_mux_object_t *m)
         {
             case HB_ACODEC_FFFLAC:
             case HB_ACODEC_FFFLAC24:
-                if( audio->priv.config.extradata.length )
-                {
-                    uint8_t *priv_data;
-                    int priv_size;
-
-                    priv_size = audio->priv.config.extradata.length;
-                    priv_data = av_realloc(st->codecpar->extradata, priv_size +
-                                           AV_INPUT_BUFFER_PADDING_SIZE);
-                    if (priv_data == NULL)
-                    {
-                        break;
-                    }
-                    memcpy(priv_data,
-                           audio->priv.config.extradata.bytes,
-                           audio->priv.config.extradata.length);
-                    st->codecpar->extradata = priv_data;
-                    st->codecpar->extradata_size = priv_size;
-                }
+                set_extradata(audio->priv.extradata, &st->codecpar->extradata, &st->codecpar->extradata_size);
                 break;
             default:
                 break;

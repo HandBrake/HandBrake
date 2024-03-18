@@ -12,6 +12,7 @@
 #include "handbrake/hb_dict.h"
 #include "handbrake/av1_common.h"
 #include "handbrake/hdr10plus.h"
+#include "handbrake/extradata.h"
 #include "libavutil/avutil.h"
 #include "svt-av1/EbSvtAv1ErrorCodes.h"
 #include "svt-av1/EbSvtAv1Enc.h"
@@ -319,8 +320,11 @@ int encsvtInit(hb_work_object_t *w, hb_job_t *job)
         return 1;
     }
 
-    w->config->extradata.length = headerPtr->n_filled_len;
-    memcpy(w->config->extradata.bytes, headerPtr->p_buffer, headerPtr->n_filled_len);
+    if (hb_set_extradata(w->extradata, headerPtr->p_buffer, headerPtr->n_filled_len))
+    {
+        hb_error("encsvtav1: error setting extradata");
+        return 1;
+    }
 
     svt_ret = svt_av1_enc_stream_header_release(headerPtr);
     if (svt_ret != EB_ErrorNone)

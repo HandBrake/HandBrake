@@ -9,6 +9,7 @@
 
 #include "handbrake/handbrake.h"
 #include "handbrake/hbffmpeg.h"
+#include "handbrake/extradata.h"
 #include "libavutil/bswap.h"
 #include <ass/ass.h>
 
@@ -921,8 +922,8 @@ static int ssa_work( hb_filter_object_t * filter,
         // decoder initialization happens after filter initialization,
         // we need to postpone this.
         ass_process_codec_private(pv->ssaTrack,
-                                  (char*)filter->subtitle->extradata,
-                                  filter->subtitle->extradata_size);
+                                  (char *)filter->subtitle->extradata->bytes,
+                                  filter->subtitle->extradata->size);
         pv->script_initialized = 1;
     }
     if (in->s.flags & HB_BUF_FLAG_EOF)
@@ -965,8 +966,8 @@ static int cc608sub_post_init( hb_filter_object_t * filter, hb_job_t * job )
     int width = job->title->geometry.width - job->crop[2] - job->crop[3];
     int safe_height = 0.8 * job->title->geometry.height;
     // Use fixed width font for CC
-    hb_subtitle_add_ssa_header(filter->subtitle, HB_FONT_MONO,
-                               .08 * safe_height, width, height);
+    hb_set_ssa_extradata(&filter->subtitle->extradata, HB_FONT_MONO,
+                         .08 * safe_height, width, height);
     return ssa_post_init(filter, job);
 }
 
@@ -976,9 +977,9 @@ static int textsub_post_init( hb_filter_object_t * filter, hb_job_t * job )
     // to have the header rewritten with the correct dimensions.
     int height = job->title->geometry.height - job->crop[0] - job->crop[1];
     int width = job->title->geometry.width - job->crop[2] - job->crop[3];
-    hb_subtitle_add_ssa_header(filter->subtitle, HB_FONT_SANS,
-                               .066 * job->title->geometry.height,
-                               width, height);
+    hb_set_ssa_extradata(&filter->subtitle->extradata, HB_FONT_SANS,
+                         .066 * job->title->geometry.height,
+                         width, height);
     return ssa_post_init(filter, job);
 }
 
@@ -1004,8 +1005,8 @@ static int textsub_work(hb_filter_object_t * filter,
     if (!pv->script_initialized)
     {
         ass_process_codec_private(pv->ssaTrack,
-                                  (char*)filter->subtitle->extradata,
-                                  filter->subtitle->extradata_size);
+                                  (char*)filter->subtitle->extradata->bytes,
+                                  filter->subtitle->extradata->size);
         pv->script_initialized = 1;
     }
 

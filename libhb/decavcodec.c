@@ -50,6 +50,7 @@
 #include "handbrake/hwaccel.h"
 #include "handbrake/lang.h"
 #include "handbrake/audio_resample.h"
+#include "handbrake/extradata.h"
 
 #if HB_PROJECT_FEATURE_QSV
 #include "libavutil/hwcontext_qsv.h"
@@ -822,7 +823,8 @@ static int parse_adts_extradata( hb_audio_t * audio, AVCodecContext * context,
         return ret;
     }
 
-    if (audio->priv.config.extradata.length == 0)
+    if (audio->priv.extradata == NULL ||
+        (audio->priv.extradata && audio->priv.extradata->size == 0))
     {
         const uint8_t * extradata;
         size_t          size;
@@ -831,10 +833,7 @@ static int parse_adts_extradata( hb_audio_t * audio, AVCodecContext * context,
                                             &size);
         if (extradata != NULL && size > 0)
         {
-            int len;
-            len = MIN(size, HB_CONFIG_MAX_SIZE);
-            memcpy(audio->priv.config.extradata.bytes, extradata, len);
-            audio->priv.config.extradata.length = len;
+            hb_set_extradata(&audio->priv.extradata, extradata, size);
         }
     }
 

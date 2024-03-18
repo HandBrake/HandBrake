@@ -378,52 +378,18 @@ void hb_stream_set_need_keyframe( hb_stream_t *stream, int need_keyframe );
 /***********************************************************************
  * Work objects
  **********************************************************************/
+
 #define HB_CONFIG_MAX_SIZE (2*8192)
-struct hb_esconfig_s
+
+struct hb_data_s
 {
-    int init_delay;
-
-    union
-    {
-
-    struct
-    {
-        uint8_t bytes[HB_CONFIG_MAX_SIZE];
-        int     length;
-    } mpeg4;
-
-	struct
-	{
-	    uint8_t  sps[HB_CONFIG_MAX_SIZE];
-	    int       sps_length;
-	    uint8_t  pps[HB_CONFIG_MAX_SIZE];
-	    int       pps_length;
-	} h264;
-
-    struct
-    {
-        uint8_t headers[HB_CONFIG_MAX_SIZE];
-        int     headers_length;
-    } h265;
-
-    struct
-    {
-        uint8_t headers[3][HB_CONFIG_MAX_SIZE];
-    } theora;
-
-    struct
-    {
-        uint8_t bytes[HB_CONFIG_MAX_SIZE];
-        int     length;
-    } extradata;
-
-    struct
-    {
-        uint8_t headers[3][HB_CONFIG_MAX_SIZE];
-        char *language;
-    } vorbis;
-    };
+    uint8_t *bytes;
+    size_t   size;
 };
+
+hb_data_t * hb_data_init(size_t size);
+void        hb_data_close(hb_data_t **);
+hb_data_t * hb_data_dup(const hb_data_t *src);
 
 enum
 {
