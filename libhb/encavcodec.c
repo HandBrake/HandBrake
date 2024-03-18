@@ -17,6 +17,7 @@
 #include "handbrake/av1_common.h"
 #include "handbrake/nal_units.h"
 #include "handbrake/nvenc_common.h"
+#include "handbrake/vce_common.h"
 #include "handbrake/extradata.h"
 
 /*
