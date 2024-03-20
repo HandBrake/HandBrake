@@ -56,7 +56,7 @@ void ghb_start_next_job(signal_user_data_t *ud);
 void ghb_bind_dependencies(void);
 void ghb_do_scan(signal_user_data_t *ud, const char *filename, int titlenum, gboolean force);
 void ghb_do_scan_list(signal_user_data_t *ud, GListModel *files, int titlenum, gboolean force);
-void ghb_log(gchar *log, ...) G_GNUC_PRINTF(1, 2);
+void ghb_log(const char *log, ...) G_GNUC_PRINTF(1, 2);
 #if defined(_WIN32)
 void wm_drive_changed(MSG *msg, signal_user_data_t *ud);
 #endif
@@ -73,7 +73,7 @@ void ghb_load_post_settings(signal_user_data_t * ud);
 void ghb_set_current_title_settings(signal_user_data_t *ud);
 void ghb_list_box_remove_all(GtkListBox *lb);
 void ghb_show_container_options(signal_user_data_t *ud);
-void ghb_scale_configure(signal_user_data_t *ud, char *name, double val,
+void ghb_scale_configure(signal_user_data_t *ud, const char *name, double val,
                          double min, double max, double step, double page,
                          int digits, gboolean inverted);
 void ghb_update_summary_info(signal_user_data_t *ud);

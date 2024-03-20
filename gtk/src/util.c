@@ -186,7 +186,7 @@ static const char *srt_extensions[] = { ".srt", ".txt" };
 G_MODULE_EXPORT gboolean
 ghb_file_is_ssa_subtitle (const char *filename)
 {
-    for (int i = 0; i < G_N_ELEMENTS(ssa_extensions); i++)
+    for (guint i = 0; i < G_N_ELEMENTS(ssa_extensions); i++)
     {
         if (hb_str_ends_with(filename, ssa_extensions[i]))
             return TRUE;
@@ -200,7 +200,7 @@ ghb_file_is_ssa_subtitle (const char *filename)
 G_MODULE_EXPORT gboolean
 ghb_file_is_srt_subtitle (const char *filename)
 {
-    for (int i = 0; i < G_N_ELEMENTS(srt_extensions); i++)
+    for (guint i = 0; i < G_N_ELEMENTS(srt_extensions); i++)
     {
         if (hb_str_ends_with(filename, srt_extensions[i]))
             return TRUE;

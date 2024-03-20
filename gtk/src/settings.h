@@ -79,7 +79,6 @@ gint ghb_settings_combo_int(const GhbValue *settings, const gchar *key);
 gdouble ghb_settings_combo_double(const GhbValue *settings, const gchar *key);
 gchar* ghb_settings_combo_option(const GhbValue *settings, const gchar *key);
 
-GhbValue *ghb_get_job_settings(GhbValue *settings);
 GhbValue* ghb_widget_value(GtkWidget *widget);
 gchar* ghb_widget_string(GtkWidget *widget);
 gdouble ghb_widget_double(GtkWidget *widget);

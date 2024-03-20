@@ -64,7 +64,7 @@ struct _GhbApplication
     int stderr_src_id;
 };
 
-G_DEFINE_TYPE (GhbApplication, ghb_application, GTK_TYPE_APPLICATION);
+G_DEFINE_TYPE (GhbApplication, ghb_application, GTK_TYPE_APPLICATION)
 
 #define BUILDER_NAME "ghb"
 
@@ -403,7 +403,6 @@ GHB_DECLARE_ACTION_CB(show_preview_action_cb);
 GHB_DECLARE_ACTION_CB(show_activity_action_cb);
 GHB_DECLARE_ACTION_CB(show_audio_defaults_cb);
 GHB_DECLARE_ACTION_CB(show_subtitle_defaults_cb);
-GHB_DECLARE_ACTION_CB(show_activity_action_cb);
 GHB_DECLARE_ACTION_CB(preset_save_action_cb);
 GHB_DECLARE_ACTION_CB(preset_save_as_action_cb);
 GHB_DECLARE_ACTION_CB(preset_rename_action_cb);
@@ -840,8 +839,8 @@ ghb_application_activate (GApplication *app)
     // Set up UI combo boxes.  Some of these rely on HB global settings.
     ghb_combo_init(ud);
 
-    g_debug("ud %p", ud);
-    g_debug("builder %p", self->builder);
+    g_debug("ud %p", (void *)ud);
+    g_debug("builder %p", (void *)self->builder);
 
     bind_audio_tree_model(ud);
     bind_subtitle_tree_model(ud);

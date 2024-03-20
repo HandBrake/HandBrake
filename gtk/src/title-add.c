@@ -39,7 +39,8 @@ G_MODULE_EXPORT void
 title_dest_dir_cb (GtkWidget *widget, GParamSpec *spec, signal_user_data_t *ud);
 
 
-static GtkWidget *find_widget (GtkWidget *widget, gchar *name)
+static GtkWidget *
+find_widget (GtkWidget *widget, const char *name)
 {
     const char *wname;
     GtkWidget *result = NULL;

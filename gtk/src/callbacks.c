@@ -557,6 +557,7 @@ camel_convert(gchar *str)
 
             } break;
             case CAMEL_FIRST_UPPER:
+            default:
             {
                 if (*str >= 'A' && *str <= 'Z')
                     *str = *str - 'A' + 'a';
@@ -780,7 +781,7 @@ parse_datestring(const char *src, struct tm *tm)
     return 0;
 }
 
-static char*
+G_GNUC_STRFTIME(1) static char*
 get_creation_date(const char *pattern, const char *metaValue, const char *file)
 {
     char date[11] = "";
@@ -1239,7 +1240,8 @@ adjustment_configure(
 }
 
 static void
-spin_configure(signal_user_data_t *ud, char *name, double val, double min, double max)
+spin_configure (signal_user_data_t *ud, const char *name,
+                double val, double min, double max)
 {
     GtkSpinButton *spin;
     GtkAdjustment *adj;
@@ -1258,7 +1260,7 @@ spin_configure(signal_user_data_t *ud, char *name, double val, double min, doubl
 void
 ghb_scale_configure(
     signal_user_data_t *ud,
-    char *name,
+    const char *name,
     double val, double min, double max,
     double step, double page,
     int digits, gboolean inverted)
@@ -1840,7 +1842,7 @@ dvd_source_activate_cb(GSimpleAction *action, GVariant *param,
 void
 ghb_update_destination_extension(signal_user_data_t *ud)
 {
-    static gchar *containers[] = {".mkv", ".mp4", ".m4v", ".webm", ".error", NULL};
+    static const char *containers[] = {".mkv", ".mp4", ".m4v", ".webm", ".error", NULL};
     gchar *filename;
     const gchar *extension;
     gint ii;
@@ -4068,8 +4070,7 @@ start_new_log(signal_user_data_t *ud, GhbValue *uiDict)
 static void
 submit_job(signal_user_data_t *ud, GhbValue *queueDict)
 {
-    gchar *type, *modified;
-    const char *name;
+    const char *name, *type, *modified;
     GhbValue *uiDict;
     gboolean preset_modified;
 
@@ -4474,8 +4475,6 @@ ghb_backend_events(signal_user_data_t *ud)
     }
     else if (status.queue.state & GHB_STATE_SEARCHING)
     {
-        gchar *status_str;
-
         status_str = searching_status_string(ud, &status.queue);
         gtk_label_set_text (work_status, status_str);
         gtk_progress_bar_set_fraction(progress, status.queue.progress);
@@ -4484,8 +4483,6 @@ ghb_backend_events(signal_user_data_t *ud)
     }
     else if (status.queue.state & GHB_STATE_WORKING)
     {
-        gchar *status_str;
-
         status_str = working_status_string(ud, &status.queue);
         gtk_label_set_text (work_status, status_str);
         gtk_progress_bar_set_fraction (progress, status.queue.progress);
@@ -4694,7 +4691,7 @@ show_activity_action_cb(GSimpleAction *action, GVariant *value,
 }
 
 void
-ghb_log(gchar *log, ...)
+ghb_log (const char *log, ...)
 {
     va_list args;
     time_t _now;

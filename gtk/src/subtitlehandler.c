@@ -1153,7 +1153,7 @@ ghb_add_subtitle_files (GListModel *files, signal_user_data_t *ud)
     const char *mux_id = ghb_dict_get_string(ud->settings, "FileFormat");
     const hb_container_t *mux = ghb_lookup_container_by_name(mux_id);
 
-    for (int i = 0; i < g_list_model_get_n_items(files); i++)
+    for (guint i = 0; i < g_list_model_get_n_items(files); i++)
     {
         g_autoptr(GFile) file = g_list_model_get_item(files, i);
         const char *filename = g_file_peek_path(file);
@@ -1380,7 +1380,6 @@ ghb_subtitle_prune(signal_user_data_t *ud)
 {
     GhbValue *subtitle_list;
     GhbValue *subsettings;
-    gint ii;
     gboolean one_burned = FALSE;
 
     subtitle_list = ghb_get_job_subtitle_list(ud->settings);
@@ -1393,7 +1392,7 @@ ghb_subtitle_prune(signal_user_data_t *ud)
     mux_id = ghb_dict_get_string(ud->settings, "FileFormat");
     mux = ghb_lookup_container_by_name(mux_id);
 
-    for (ii = 0; ii < ghb_array_len(subtitle_list); )
+    for (guint ii = 0; ii < ghb_array_len(subtitle_list); )
     {
         gboolean burned;
         int source;
@@ -1889,8 +1888,8 @@ subtitle_remove_cb (GSimpleAction *action, GVariant *param, gpointer data)
                 gtk_tree_store_remove(GTK_TREE_STORE(tm), &ti);
 
                 // Enable FAS button
-                GSimpleAction *action = G_SIMPLE_ACTION(GHB_ACTION("subtitle-add-fas"));
-                g_simple_action_set_enabled(action, 1);
+                GSimpleAction *fas_action = G_SIMPLE_ACTION(GHB_ACTION("subtitle-add-fas"));
+                g_simple_action_set_enabled(fas_action, 1);
                 ghb_update_summary_info(ud);
                 return;
             }
