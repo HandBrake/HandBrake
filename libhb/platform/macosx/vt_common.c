@@ -402,6 +402,7 @@ int hb_vt_are_filters_supported(hb_list_t *filters)
 
         switch (filter->id)
         {
+            case HB_FILTER_DETELECINE:
             case HB_FILTER_DECOMB:
             case HB_FILTER_DEBLOCK:
             case HB_FILTER_DENOISE:
