@@ -8,7 +8,7 @@ GTK.CONFIGURE.stamp = $(GTK.build/)build.ninja
 
 GTK.CONFIGURE.exe   = $(MESON.exe)
 GTK.CONFIGURE.extra = -Dc_args="$(call fn.ARGS,GTK.GCC,*D ?extra)" \
-                      -Dc_link_args="$(call fn.ARGS,GTK.GCC,?extra.exe)" \
+                      -Dc_link_args="$(call fn.ARGS,GTK.GCC,?extra.exe) $(GTK.CONFIGURE.libdirs)" \
                       --pkg-config-path=$(call fn.ABSOLUTE,$(BUILD/))contrib/lib/pkgconfig:$(PKG_CONFIG_PATH) \
                       --prefix=$(PREFIX) -Dhb-dir=$(call fn.ABSOLUTE,$(BUILD/))
 GTK.CONFIGURE.env   =
@@ -84,7 +84,7 @@ else
 endif
 
 ifneq (,$(filter $(HOST.system),freebsd netbsd openbsd))
-    GTK.CONFIGURE.extra += -Dextra-libdirs=$(LOCALBASE)/lib
+    GTK.CONFIGURE.libdirs = -L$(LOCALBASE)/lib
 endif
 
 ifeq (mingw,$(HOST.system))

@@ -20,15 +20,21 @@ if hb_dir == ''
   hb_dir = meson.current_build_dir() / '..'
 endif
 
-hb_libdirs = [hb_dir / 'libhb', hb_dir / 'contrib/lib'] + get_option('extra-libdirs')
+hb_libdirs = [hb_dir / 'libhb', hb_dir / 'contrib/lib']
 hb_incdirs = include_directories(hb_dir / 'libhb', hb_dir / 'contrib/include')
+
+if host_machine.system() == 'windows'
+  win_libdirs = { 'dirs': hb_libdirs }
+else
+  win_libdirs = {}
+endif
 
 # External dependencies (required)
 ghb_deps = [
   cc.find_library('handbrake', dirs: hb_libdirs),
-  cc.find_library('bz2', dirs: hb_libdirs),
-  cc.find_library('m', required: false),
-  cc.find_library('mp3lame', dirs: hb_libdirs),
+  cc.find_library('bz2', kwargs: win_libdirs),
+  cc.find_library('m'),
+  cc.find_library('mp3lame', kwargs: win_libdirs),
   dependency('dvdnav'),
   dependency('dvdread'),
   dependency('dav1d'),
@@ -75,10 +81,9 @@ if get_option('fdk-aac').enabled()
 endif
 
 if get_option('qsv').enabled()
-  if host_machine.system() == 'windows'
-    ghb_deps += cc.find_library('vpl', dirs: hb_libdirs)
-  else
-    ghb_deps += [dependency('vpl'), dependency('libva'), dependency('libva-drm')]
+  ghb_deps += dependency('vpl')
+  if host_machine.system() != 'windows'
+    ghb_deps += [dependency('libva'), dependency('libva-drm')]
   endif
 endif
 
@@ -110,7 +115,7 @@ elif not cc.has_function('dlopen')
 endif
 
 if not cc.has_function('iconv')
-  ghb_deps += cc.find_library('iconv', dirs: get_option('extra-libdirs'))
+  ghb_deps += cc.find_library('iconv')
   add_project_arguments('-DLIBICONV_PLUG', language: ['c', 'cpp'])
 endif
 
