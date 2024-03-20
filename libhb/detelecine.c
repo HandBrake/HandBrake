@@ -139,10 +139,11 @@ static int init_background_line##_##nbits(struct pullup_context *c)             
 {                                                                                          \
     for (int p = 0; p < c->nplanes; p++)                                                   \
     {                                                                                      \
-        uint##nbits##_t *line = (uint##nbits##_t *)malloc(sizeof(uint8_t) * c->stride[p]); \
+        uint##nbits##_t *line = (uint##nbits##_t *)malloc(sizeof(uint##nbits##_t) *        \
+                                                          c->stride[p] / (nbits / 8));     \
         if (line == NULL)                                                                  \
         {                                                                                  \
-            return 0;                                                                      \
+            return -1;                                                                     \
         }                                                                                  \
         const uint##nbits##_t background = c->background[p];                               \
         for (int i = 0; i < c->w[p]; i++)                                                  \
@@ -151,7 +152,7 @@ static int init_background_line##_##nbits(struct pullup_context *c)             
         }                                                                                  \
         c->background_lines[p] = (void *)line;                                             \
     }                                                                                      \
-    return 1;                                                                              \
+    return 0;                                                                              \
 }
 
 #define DEF_DIFF_Y_FUNC(nbits)                                              \
@@ -577,7 +578,7 @@ struct pullup_context * pullup_alloc_context( void )
     return c;
 }
 
-void pullup_preinit_context( struct pullup_context * c )
+int pullup_preinit_context(struct pullup_context *c)
 {
     c->bpp        = calloc( c->nplanes, sizeof(int) );
     c->w          = calloc( c->nplanes, sizeof(int) );
@@ -585,9 +586,18 @@ void pullup_preinit_context( struct pullup_context * c )
     c->stride     = calloc( c->nplanes, sizeof(int) );
     c->background = calloc( c->nplanes, sizeof(int) );
     c->background_lines = calloc( c->nplanes, sizeof(void *) );
+
+    if (c->bpp == NULL || c->w == NULL || c->h == NULL ||
+        c->stride == NULL || c->background == NULL ||
+        c->background_lines == NULL)
+    {
+        return -1;
+    }
+
+    return 0;
 }
 
-void pullup_init_context( struct pullup_context * c )
+int pullup_init_context(struct pullup_context *c)
 {
     int mp = c->metric_plane;
     if ( c->nbuffers < 10 )
@@ -596,6 +606,11 @@ void pullup_init_context( struct pullup_context * c )
     }
     c->buffers = calloc( c->nbuffers, sizeof (struct pullup_buffer) );
 
+    if (c->buffers == NULL)
+    {
+        return -1;
+    }
+
     c->metric_w      = (c->w[mp] - ((c->junk_left + c->junk_right) << 3)) >> 3;
     c->metric_h      = (c->h[mp] - ((c->junk_top + c->junk_bottom) << 1)) >> 3;
     c->metric_offset = c->junk_left*c->bpp[mp] + (c->junk_top<<1)*c->stride[mp];
@@ -603,17 +618,33 @@ void pullup_init_context( struct pullup_context * c )
 
     c->head = pullup_make_field_queue( c, 8 );
 
+    if (c->head == NULL)
+    {
+        return -1;
+    }
+
     c->frame = calloc( 1, sizeof (struct pullup_frame) );
     c->frame->ifields = calloc( 3, sizeof (struct pullup_buffer *) );
 
+    if (c->frame == NULL || c->frame->ifields == NULL)
+    {
+        return -1;
+    }
+
+    int err = 0;
     switch (c->depth)
     {
         case 8:
-            init_background_line_8(c);
+            err = init_background_line_8(c);
             break;
         default:
-            init_background_line_16(c);
+            err = init_background_line_16(c);
             break;
+    }
+
+    if (err)
+    {
+        return -1;
     }
 
     if (c->format == PULLUP_FMT_Y)
@@ -633,6 +664,8 @@ void pullup_init_context( struct pullup_context * c )
                 break;
         }
     }
+
+    return 0;
 }
 
 void pullup_free_context( struct pullup_context * c )
@@ -664,22 +697,28 @@ void pullup_free_context( struct pullup_context * c )
     }
     free(c->background_lines);
 
-    struct pullup_field *f = c->head->next;
-    while (f != c->head)
+    if (c->head)
     {
+        struct pullup_field *f = c->head->next;
+        while (f != c->head)
+        {
+            free(f->diffs);
+            free(f->comb);
+            free(f->var);
+            f = f->next;
+            free(f->prev);
+        }
         free(f->diffs);
         free(f->comb);
         free(f->var);
-        f = f->next;
-        free(f->prev);
+        free(f);
     }
-    free(f->diffs);
-    free(f->comb);
-    free(f->var);
-    free(f);
 
-    free(c->frame->ifields);
-    free(c->frame);
+    if (c->frame)
+    {
+        free(c->frame->ifields);
+        free(c->frame);
+    }
     free(c);
 }
 
@@ -689,16 +728,29 @@ void pullup_free_context( struct pullup_context * c )
  *
  */
 
-static void pullup_alloc_buffer( struct pullup_context * c,
-                                 struct pullup_buffer * b )
+static int pullup_alloc_buffer(struct pullup_context *c,
+                               struct pullup_buffer *b)
 {
-    if( b->planes ) return;
-    b->planes = calloc( c->nplanes, sizeof(uint8_t *) );
-    b->size = calloc( c->nplanes, sizeof(int) );
+    if (b->planes) return 0;
+
+    b->planes = calloc(c->nplanes, sizeof(uint8_t *));
+    b->size = calloc(c->nplanes, sizeof(int));
+
+    if (b->planes == NULL || b->size == NULL)
+    {
+        return -1;
+    }
+
     for (int i = 0; i < c->nplanes; i++)
     {
         b->size[i] = c->h[i] * c->stride[i];
         b->planes[i] = malloc(b->size[i]);
+
+        if (b->planes[i] == NULL)
+        {
+            return -1;
+        }
+
         /* Deal with idiotic 128=0 for chroma: */
         if (c->depth == 8 || i == 0)
         {
@@ -713,6 +765,8 @@ static void pullup_alloc_buffer( struct pullup_context * c,
             }
         }
     }
+
+    return 0;
 }
 
 struct pullup_buffer * pullup_lock_buffer( struct pullup_buffer * b,
@@ -736,39 +790,55 @@ void pullup_release_buffer( struct pullup_buffer * b,
 struct pullup_buffer * pullup_get_buffer( struct pullup_context * c,
                                           int parity )
 {
-    int i;
-
     /* Try first to get the sister buffer for the previous field */
-    if( parity < 2 &&
+    if (parity < 2 &&
         c->last &&
         parity != c->last->parity &&
         !c->last->buffer->lock[parity])
     {
-        pullup_alloc_buffer( c, c->last->buffer );
-        return pullup_lock_buffer( c->last->buffer, parity );
+        if (pullup_alloc_buffer(c, c->last->buffer))
+        {
+            return NULL;
+        }
+        else
+        {
+            return pullup_lock_buffer(c->last->buffer, parity);
+        }
     }
 
     /* Prefer a buffer with both fields open */
-    for( i = 0; i < c->nbuffers; i++ )
+    for (int i = 0; i < c->nbuffers; i++)
     {
-        if( c->buffers[i].lock[0] ) continue;
-        if( c->buffers[i].lock[1] ) continue;
-        pullup_alloc_buffer( c, &c->buffers[i] );
-        return pullup_lock_buffer( &c->buffers[i], parity );
+        if (c->buffers[i].lock[0]) continue;
+        if (c->buffers[i].lock[1]) continue;
+        if (pullup_alloc_buffer(c, &c->buffers[i]))
+        {
+            return NULL;
+        }
+        else
+        {
+            return pullup_lock_buffer(&c->buffers[i], parity);
+        }
     }
 
-    if( parity == 2 ) return 0;
+    if (parity == 2) return 0;
 
     /* Search for any half-free buffer */
-    for( i = 0; i < c->nbuffers; i++ )
+    for (int i = 0; i < c->nbuffers; i++)
     {
-        if( ((parity+1) & 1) && c->buffers[i].lock[0] ) continue;
-        if( ((parity+1) & 2) && c->buffers[i].lock[1] ) continue;
-        pullup_alloc_buffer( c, &c->buffers[i] );
-        return pullup_lock_buffer( &c->buffers[i], parity );
+        if (((parity+1) & 1) && c->buffers[i].lock[0]) continue;
+        if (((parity+1) & 2) && c->buffers[i].lock[1]) continue;
+        if (pullup_alloc_buffer( c, &c->buffers[i]))
+        {
+            return NULL;
+        }
+        else
+        {
+            return pullup_lock_buffer(&c->buffers[i], parity);
+        }
     }
 
-    return 0;
+    return NULL;
 }
 
 /*
@@ -836,22 +906,31 @@ struct pullup_frame * pullup_get_frame( struct pullup_context * c )
     return fr;
 }
 
-void pullup_pack_frame( struct pullup_context * c, struct pullup_frame * fr)
+int pullup_pack_frame(struct pullup_context *c, struct pullup_frame *fr)
 {
-    int i;
-    if (fr->buffer) return;
-    if (fr->length < 2) return; /* FIXME: deal with this */
-    for( i = 0; i < 2; i++ )
+    if (fr->buffer) return 0;
+    if (fr->length < 2) return -1; /* FIXME: deal with this */
+
+    for (int i = 0; i < 2; i++)
     {
         if( fr->ofields[i]->lock[i^1] ) continue;
         fr->buffer = fr->ofields[i];
         pullup_lock_buffer(fr->buffer, 2);
         pullup_copy_field( c, fr->buffer, fr->ofields[i^1], i^1 );
-        return;
+        return 0;
     }
-    fr->buffer = pullup_get_buffer( c, 2 );
-    pullup_copy_field( c, fr->buffer, fr->ofields[0], 0 );
-    pullup_copy_field( c, fr->buffer, fr->ofields[1], 1 );
+
+    fr->buffer = pullup_get_buffer(c, 2);
+
+    if (fr->buffer == NULL)
+    {
+        return -1;
+    }
+
+    pullup_copy_field(c, fr->buffer, fr->ofields[0], 0);
+    pullup_copy_field(c, fr->buffer, fr->ofields[1], 1);
+
+    return 0;
 }
 
 void pullup_release_frame( struct pullup_frame * fr )
@@ -971,7 +1050,11 @@ static int hb_detelecine_init( hb_filter_object_t * filter,
     ctx->half_value         = (1 << ctx->depth) / 2;
     ctx->quarter_value      = (1 << ctx->depth) / 4;
 
-    pullup_preinit_context( ctx );
+    if (pullup_preinit_context(ctx))
+    {
+        hb_error("detelecine: pullup_preinit_context failed");
+        goto fail;
+    }
 
     ctx->bpp[0] = ctx->bpp[1] = ctx->bpp[2] = 8 * (ctx->depth > 8 ? 2 : 1);
     ctx->background[1] = ctx->background[2] = ctx->half_value;
@@ -992,7 +1075,11 @@ static int hb_detelecine_init( hb_filter_object_t * filter,
         ctx->metric_plane = 0;
     }
 
-    pullup_init_context( ctx );
+    if (pullup_init_context(ctx))
+    {
+        hb_error("detelecine: pullup_init_context failed");
+        goto fail;
+    }
 
     pv->pullup_fakecount = 1;
     pv->pullup_skipflag = 0;
@@ -1000,6 +1087,10 @@ static int hb_detelecine_init( hb_filter_object_t * filter,
     pv->output = *init;
 
     return 0;
+
+fail:
+    hb_detelecine_close(filter);
+    return -1;
 }
 
 static void hb_detelecine_close( hb_filter_object_t * filter )
@@ -1040,16 +1131,26 @@ static int hb_detelecine_work( hb_filter_object_t * filter,
     struct pullup_frame   * frame;
 
     buf = pullup_get_buffer( ctx, 2 );
-    if( !buf )
+    if (!buf)
     {
-        frame = pullup_get_frame( ctx );
-        pullup_release_frame( frame );
+        frame = pullup_get_frame(ctx);
+        pullup_release_frame(frame);
         hb_log( "Could not get buffer from pullup!" );
         return HB_FILTER_FAILED;
     }
 
+    for (int pp = 0; pp < 3; pp++)
+    {
+        if (buf->planes[pp] == NULL)
+        {
+            frame = pullup_get_frame( ctx );
+            pullup_release_frame( frame );
+            hb_log( "Could not get buffer from pullup!" );
+            return HB_FILTER_FAILED;
+        }
+    }
+
     /* Copy input buffer into pullup buffer */
-    /* Copy pullup frame buffer into output buffer */
     for (int pp = 0; pp < 3; pp++)
     {
         if (in->plane[pp].stride == ctx->stride[pp])
