@@ -21,8 +21,8 @@ struct hb_work_private_s
     int              samples_per_frame;
     unsigned long    max_output_bytes;
     unsigned long    input_samples;
-    uint8_t        * output_buf;
-    uint8_t        * input_buf;
+    float          * output_buf;
+    float          * input_buf;
     hb_list_t      * list;
 
     SwrContext     * swresample;
@@ -418,7 +418,7 @@ static void Encode(hb_work_object_t *w, hb_buffer_list_t *list)
     {
         int ret;
 
-        hb_list_getbytes(pv->list, pv->input_buf,
+        hb_list_getbytes(pv->list, (uint8_t *)pv->input_buf,
                          pv->input_samples * sizeof(float), &pts, &pos);
 
         // Prepare input frame
@@ -434,7 +434,7 @@ static void Encode(hb_work_object_t *w, hb_buffer_list_t *list)
                                               pv->context->sample_fmt, 1);
         avcodec_fill_audio_frame(&frame,
                                  pv->context->ch_layout.nb_channels, pv->context->sample_fmt,
-                                 pv->output_buf, out_size, 1);
+                                 (uint8_t *)pv->output_buf, out_size, 1);
         if (pv->swresample != NULL)
         {
             int out_samples;

@@ -116,7 +116,7 @@ HB_DIR* hb_opendir(const char *path);
 int hb_closedir(HB_DIR *dir);
 void hb_rewinddir(HB_DIR *dir);
 struct dirent * hb_readdir(HB_DIR *dir);
-int hb_mkdir(char * name);
+int hb_mkdir(const char *name);
 int hb_stat(const char *path, hb_stat_t *sb);
 FILE * hb_fopen(const char *path, const char *mode);
 char * hb_strr_dir_sep(const char *path);

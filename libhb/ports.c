@@ -806,7 +806,7 @@ char * hb_strr_dir_sep(const char *path)
  * Wrapper to the real mkdir, needed only because it doesn't take a
  * second argument on Win32. Grrr.
  ***********************************************************************/
-int hb_mkdir(char * path)
+int hb_mkdir(const char * path)
 {
 #ifdef SYS_MINGW
     wchar_t path_utf16[MAX_PATH];

@@ -2371,7 +2371,11 @@ static void compute_frame_duration( hb_work_private_t *pv )
             {
                 tb = &(st->r_frame_rate);
             }
-            duration = (double)tb->den / (double)tb->num;
+
+            if (tb != NULL)
+            {
+                duration = (double)tb->den / (double)tb->num;
+            }
         }
     }
     else if (pv->context->framerate.num && pv->context->framerate.den)

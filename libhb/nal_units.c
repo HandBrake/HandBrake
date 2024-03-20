@@ -501,6 +501,12 @@ hb_buffer_t * hb_isomp4_hevc_nal_bitstream_insert_payloads(const uint8_t *data,
         return NULL;
     }
 
+    if ((seis == NULL && sei_count > 0) ||
+        (nals == NULL && nal_count > 0))
+    {
+        return NULL;
+    }
+
     for (int i = 0; i < sei_count; i++)
     {
         size_t msg_size = get_sei_msg_bytes(seis[i].payload, seis[i].payload_size, seis[i].type);

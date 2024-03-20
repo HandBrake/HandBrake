@@ -31,7 +31,7 @@ hb_work_object_t hb_encvorbis =
 
 struct hb_work_private_s
 {
-    uint8_t   *buf;
+    float     *buf;
     hb_job_t  *job;
     hb_list_t *list;
 
@@ -229,7 +229,7 @@ static hb_buffer_t* Encode(hb_work_object_t *w)
     }
 
     /* Process more samples */
-    hb_list_getbytes(pv->list, pv->buf, pv->input_samples * sizeof(float),
+    hb_list_getbytes(pv->list, (uint8_t *)pv->buf, pv->input_samples * sizeof(float),
                      &pv->pts, NULL);
     buffer = vorbis_analysis_buffer(&pv->vd, OGGVORBIS_FRAME_SIZE);
     for (i = 0; i < OGGVORBIS_FRAME_SIZE; i++)
