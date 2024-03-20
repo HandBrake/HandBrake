@@ -496,10 +496,6 @@ title_add_select_all_cb (GSimpleAction *action, GVariant *param, gpointer data)
     GtkWidget *selected;
     signal_user_data_t *ud = (signal_user_data_t *)data;
 
-    g_simple_action_set_enabled(action, FALSE);
-    action = G_SIMPLE_ACTION(GHB_ACTION("title-add-clear-all"));
-    g_simple_action_set_enabled(action, TRUE);
-
     clear_select_all_busy = TRUE;
 
     list = GTK_LIST_BOX(ghb_builder_widget("title_add_multiple_list"));
@@ -529,10 +525,6 @@ title_add_clear_all_cb (GSimpleAction *action, GVariant *param, gpointer data)
 
     clear_select_all_busy = TRUE;
 
-    g_simple_action_set_enabled(action, FALSE);
-    action = G_SIMPLE_ACTION(GHB_ACTION("title-add-select-all"));
-    g_simple_action_set_enabled(action, TRUE);
-
     list = GTK_LIST_BOX(ghb_builder_widget("title_add_multiple_list"));
     count = ghb_array_len(ud->settings_array);
     for (ii = 0; ii < count; ii++)
@@ -547,11 +539,36 @@ title_add_clear_all_cb (GSimpleAction *action, GVariant *param, gpointer data)
 }
 
 G_MODULE_EXPORT void
+title_add_invert_cb (GSimpleAction *action, GVariant *param, gpointer data)
+{
+    gint count, ii;
+    GhbValue *settings;
+    GtkWidget *row;
+    GtkListBox *list;
+    GtkWidget *selected;
+    signal_user_data_t *ud = (signal_user_data_t *)data;
+
+    clear_select_all_busy = TRUE;
+
+    list = GTK_LIST_BOX(ghb_builder_widget("title_add_multiple_list"));
+    count = ghb_array_len(ud->settings_array);
+    for (ii = 0; ii < count; ii++)
+    {
+        row = GTK_WIDGET(gtk_list_box_get_row_at_index(list, ii));
+        selected = find_widget(row, "title_selected");
+        settings = ghb_array_get(ud->settings_array, ii);
+        gboolean is_selected = ghb_dict_get_bool(settings, "title_selected");
+        ghb_dict_set_bool(settings, "title_selected", !is_selected);
+        gtk_check_button_set_active(GTK_CHECK_BUTTON(selected), !is_selected);
+    }
+    clear_select_all_busy = FALSE;
+}
+
+G_MODULE_EXPORT void
 title_selected_cb (GtkWidget *widget, signal_user_data_t *ud)
 {
     GhbValue *settings;
     gboolean selected;
-    GSimpleAction *select_all, *clear_all;
     gboolean can_select;
 
     if (clear_select_all_busy)
@@ -560,12 +577,6 @@ title_selected_cb (GtkWidget *widget, signal_user_data_t *ud)
     GtkListBoxRow * row = list_box_get_row(widget);
     if (row == NULL)
         return;
-
-
-    clear_all = G_SIMPLE_ACTION(GHB_ACTION("title-add-clear-all"));
-    g_simple_action_set_enabled(clear_all, TRUE);
-    select_all = G_SIMPLE_ACTION(GHB_ACTION("title-add-select-all"));
-    g_simple_action_set_enabled(select_all, TRUE);
 
     gint index = gtk_list_box_row_get_index(row);
     selected = ghb_widget_boolean(widget);
@@ -763,14 +774,6 @@ title_add_multiple_action_cb (GSimpleAction *action, GVariant *param,
         gtk_label_set_width_chars(label, max_title_len);
         gtk_label_set_ellipsize(label, PANGO_ELLIPSIZE_END);
     }
-
-    // Clear "select all" and "clear all" options
-    GSimpleAction *select_all, *clear_all;
-
-    clear_all = G_SIMPLE_ACTION(GHB_ACTION("title-add-clear-all"));
-    g_simple_action_set_enabled(clear_all, TRUE);
-    select_all = G_SIMPLE_ACTION(GHB_ACTION("title-add-select-all"));
-    g_simple_action_set_enabled(select_all, TRUE);
 
     // Disable selection of files with duplicate file names.
     title_add_check_conflicts(ud);

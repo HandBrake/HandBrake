@@ -5316,6 +5316,16 @@ Each selected source track will be encoded with all selected encoders.</property
                 <property name="action-name">app.title-add-clear-all</property>
               </object>
             </child>
+            <child>
+              <object class="GtkButton" id="title_add_multiple_invert_selection">
+                <property name="label" translatable="yes">Invert Selection</property>
+                <property name="focusable">1</property>
+                <property name="halign">start</property>
+                <property name="vexpand">0</property>
+                <property name="halign">start</property>
+                <property name="action-name">app.title-add-invert</property>
+              </object>
+            </child>
           </object>
         </child>
         <child>
