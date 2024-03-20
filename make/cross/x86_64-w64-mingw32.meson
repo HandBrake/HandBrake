@@ -3,7 +3,7 @@ c = 'x86_64-w64-mingw32-gcc'
 cpp = 'x86_64-w64-mingw32-g++'
 rust = ['rustc', '--target', 'x86_64-pc-windows-msvc', '-C', 'linker=x86_64-w64-mingw32-gcc']
 ar = 'x86_64-w64-mingw32-ar'
-pkgconfig = 'x86_64-w64-mingw32-pkg-config'
+pkg-config = 'x86_64-w64-mingw32-pkg-config'
 ranlib = 'x86_64-w64-mingw32-ranlib'
 strip = 'x86_64-w64-mingw32-strip'
 windres = 'x86_64-w64-mingw32-windres'
