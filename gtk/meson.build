@@ -5,12 +5,11 @@ project('handbrake-gtk', 'c', 'cpp',
   version: run_command('data/version.py', check: true).stdout().strip(),
   license: 'GPL-2.0-only',
   meson_version: '>= 0.51.0',
-  default_options: ['warning_level=1', 'buildtype=release'])
+  default_options: ['warning_level=2', 'buildtype=release'])
 
 # Minimum versions for dependencies
 glib_min = '>= 2.68'
 gtk_min  = '>= 4.4'
-gst_min  = '>= 1.10'
 
 cc = meson.get_compiler('c')
 i18n = import('i18n')
@@ -119,13 +118,40 @@ if not get_option('c_std').contains('gnu')
   add_project_arguments('-D_DEFAULT_SOURCE', language: ['c', 'cpp'])
 endif
 
-link_args = cc.get_supported_link_arguments(
-  '-Wl,--export-dynamic', '-Wl,--exclude-libs,ALL')
-
-add_project_link_arguments(link_args, language: ['c', 'cpp'])
+if (cc.has_function('strerror_r'))
+  add_project_arguments('-DHAS_STRERROR_R', language: 'c')
+endif
 
 add_project_arguments('-DGDK_VERSION_MIN_REQUIRED=GDK_VERSION_4_4',
-  '-DGDK_VERSION_MAX_ALLOWED=GDK_VERSION_4_4', language: 'c')
+'-DGDK_VERSION_MAX_ALLOWED=GDK_VERSION_4_4', language: 'c')
+
+compile_args = cc.get_supported_arguments(
+  '-Wno-missing-field-initializers',
+  '-Wno-sign-compare',
+  '-Wno-unused-parameter',
+  '-Wignored-qualifiers',
+  '-Wimplicit-function-declaration',
+  '-Wincompatible-pointer-types',
+  '-Wint-conversion',
+  '-Wint-to-pointer-cast',
+  '-Wlogical-op',
+  '-Wmissing-format-attribute',
+  '-Wmissing-noreturn',
+  '-Wmissing-include-dirs',
+  '-Wnested-externs',
+  '-Wold-style-definition',
+  '-Woverflow',
+  '-Wpointer-to-int-cast',
+  '-Wshadow',
+  '-Wstrict-prototypes',
+  '-Wunused',
+  '-Wwrite-strings')
+
+add_project_arguments(compile_args, language: 'c')
+
+link_args = cc.get_supported_link_arguments(
+  '-Wl,--export-dynamic', '-Wl,--exclude-libs,ALL')
+add_project_link_arguments(link_args, language: ['c', 'cpp'])
 
 subdir('po')
 subdir('icons')

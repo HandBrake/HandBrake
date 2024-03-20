@@ -713,7 +713,7 @@ ghb_select_default_preset(signal_user_data_t *ud)
 }
 
 gchar *
-ghb_get_user_config_dir(gchar *subdir)
+ghb_get_user_config_dir (const char *subdir)
 {
     const gchar * dir, * ghb = "ghb";
     gchar       * config;
@@ -3099,7 +3099,6 @@ preset_default_action_cb(GSimpleAction *action, GVariant *param,
             ghb_dict_set_bool(dict, "Default", 1);
             presets_list_show_default(ud);
             store_presets();
-            GSimpleAction *action = GHB_APPLICATION_ACTION("preset-default");
             g_simple_action_set_enabled(action, FALSE);
         }
         g_free(path);

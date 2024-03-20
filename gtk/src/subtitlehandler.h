@@ -38,9 +38,6 @@ GhbValue *ghb_get_subtitle_list(GhbValue *settings);
 GhbValue *ghb_get_subtitle_settings(GhbValue *settings);
 char * ghb_subtitle_short_description(const GhbValue *subsource,
                                       const GhbValue *subsettings);
-
-
 void subtitle_list_selection_changed_cb(GtkTreeSelection *ts, gpointer data);
-void subtitle_remove_cb(GSimpleAction *action, GVariant *param, gpointer data);
 
 G_END_DECLS

@@ -297,7 +297,7 @@ ghb_update_widget(GtkWidget *widget, const GhbValue *value)
     type = G_OBJECT_TYPE(widget);
 
     if (str == NULL)
-        str = "";
+        str = g_strdup("");
 
     if (type == GTK_TYPE_ENTRY)
     {

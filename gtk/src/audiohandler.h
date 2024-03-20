@@ -43,6 +43,5 @@ void ghb_clear_audio_selection(void);
 gboolean ghb_audio_quality_enabled(const GhbValue *asettings);
 
 void audio_list_selection_changed_cb(GtkTreeSelection *ts, gpointer data);
-void audio_remove_cb(GSimpleAction *action, GVariant *param, gpointer data);
 
 G_END_DECLS

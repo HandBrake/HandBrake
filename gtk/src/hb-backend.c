@@ -38,14 +38,14 @@
 
 typedef struct
 {
-    gchar *option;
-    const gchar *shortOpt;
-    gdouble ivalue;
+    const char *option;
+    const char *shortOpt;
+    double ivalue;
 } options_map_t;
 
 typedef struct
 {
-    gint count;
+    int count;
     options_map_t *map;
 } combo_opts_t;
 
@@ -1622,8 +1622,8 @@ video_framerate_opts_set(signal_user_data_t *ud, const gchar *name,
     for (rate = hb_video_framerate_get_next(NULL); rate != NULL;
          rate = hb_video_framerate_get_next(rate))
     {
-        gchar *desc = "";
-        gchar *option;
+        const char *desc = "";
+        char *option;
         if (strcmp(rate->name, "23.976") == 0)
         {
             desc = _("(NTSC Film)");
@@ -2254,6 +2254,7 @@ camel_convert(gchar *str)
 
             } break;
             case CAMEL_FIRST_UPPER:
+            default:
             {
                 if (*str >= 'A' && *str <= 'Z')
                     *str = *str - 'A' + 'a';
@@ -3017,6 +3018,7 @@ generic_opt_get(const char *name, const void *vopts,
             return ghb_double_value_new(val);
         } break;
         case GHB_STRING:
+        default:
         {
             const char *val;
             val = lookup_generic_option(opts, gval);
@@ -3052,6 +3054,7 @@ filter_opt_get2(const char *name, const GhbValue *gval, GhbType type,
             return ghb_int_value_new(val);
         } break;
         case GHB_STRING:
+        default:
         {
             const char *val;
             val = lookup_param_option(param, gval);
@@ -3503,7 +3506,7 @@ get_path_list(GListModel *files)
 {
     g_return_val_if_fail(g_list_model_get_item_type(files) == G_TYPE_FILE, NULL);
     hb_list_t *path_list = hb_list_init();
-    for (int i = 0; i < g_list_model_get_n_items(files); i++)
+    for (guint i = 0; i < g_list_model_get_n_items(files); i++)
     {
         g_autoptr(GFile) file = g_list_model_get_item(files, i);
         hb_list_add(path_list, g_file_get_path(file));
@@ -4218,7 +4221,7 @@ ghb_set_custom_filter_tooltip(signal_user_data_t *ud,
                               int filter_id)
 {
     char ** keys = hb_filter_get_keys(filter_id);
-    char  * colon = "", * newline;
+    const char *colon = "";
     char    tooltip[1024];
     int     ii, linelen = 0, pos = 0;
 
@@ -4231,6 +4234,7 @@ ghb_set_custom_filter_tooltip(signal_user_data_t *ud,
                     "Custom %s filter string format:\n\n", desc);
     for (ii = 0; keys[ii] != NULL && pos < 1024; ii++)
     {
+        const char *newline;
         int c = tolower(keys[ii][0]);
         int len = strlen(keys[ii]) + 3;
         if (linelen + len > 60)

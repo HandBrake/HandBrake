@@ -45,7 +45,7 @@ item_complete_name (const char *filename)
 }
 
 static char *
-queue_complete_message (int n_succeeded, int n_failed)
+queue_complete_message (void)
 {
     char *msg;
 
@@ -105,7 +105,7 @@ notify_done (gboolean final, gboolean success, gint idx, signal_user_data_t *ud)
         {
             title = g_strdup(_("Put down that cocktail…"));
         }
-        body = queue_complete_message(n_succeeded, n_failed);
+        body = queue_complete_message();
     }
     else if (notify_item && !final)
     {
