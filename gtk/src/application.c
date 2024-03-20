@@ -423,6 +423,7 @@ GHB_DECLARE_ACTION_CB(log_copy_action_cb);
 GHB_DECLARE_ACTION_CB(log_directory_action_cb);
 GHB_DECLARE_ACTION_CB(title_add_select_all_cb);
 GHB_DECLARE_ACTION_CB(title_add_clear_all_cb);
+GHB_DECLARE_ACTION_CB(title_add_invert_cb);
 GHB_DECLARE_ACTION_CB(audio_add_cb);
 GHB_DECLARE_ACTION_CB(audio_add_all_cb);
 GHB_DECLARE_ACTION_CB(audio_reset_cb);
@@ -504,6 +505,7 @@ map_actions (GtkApplication *app, signal_user_data_t *ud)
         { "log-directory",         log_directory_action_cb         },
         { "title-add-select-all",  title_add_select_all_cb         },
         { "title-add-clear-all",   title_add_clear_all_cb          },
+        { "title-add-invert",      title_add_invert_cb             },
         { "audio-add",             audio_add_cb                    },
         { "audio-add-all",         audio_add_all_cb                },
         { "audio-reset",           audio_reset_cb                  },
