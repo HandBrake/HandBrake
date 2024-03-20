@@ -1496,6 +1496,14 @@ static int avformatEnd(hb_mux_object_t *m)
     avformat_free_context(m->oc);
     av_packet_free(&m->pkt);
     av_packet_free(&m->empty_pkt);
+
+    for (int i = 0; i < m->ntracks; i++)
+    {
+        hb_mux_data_t *track = m->tracks[i];
+        m->tracks[i] = NULL;
+        free(track);
+    }
+
     free(m->tracks);
     m->oc = NULL;
 

@@ -88,14 +88,20 @@ static int hb_bitvec_add_bits(hb_bitvec_t *bv, int bits)
 static hb_bitvec_t* hb_bitvec_new(int size)
 {
     hb_bitvec_t *bv = calloc(sizeof(hb_bitvec_t), 1);
-    hb_bitvec_add_bits(bv, size);
+    if (bv)
+    {
+        hb_bitvec_add_bits(bv, size);
+    }
     return bv;
 }
 
 static void hb_bitvec_free(hb_bitvec_t **_bv)
 {
     hb_bitvec_t *bv = *_bv;
-    free(bv->vec);
+    if (bv)
+    {
+        free(bv->vec);
+    }
     free(bv);
     *_bv = NULL;
 }
@@ -216,7 +222,7 @@ static int hb_bitvec_cpy(hb_bitvec_t *bv1, hb_bitvec_t *bv2)
 // routine OutputTrackChunk). 'is_continuous' must be 1 for an audio or video
 // track and 0 otherwise (see above).
 
-static void add_mux_track( hb_mux_t *mux, hb_mux_data_t *mux_data,
+static int add_mux_track( hb_mux_t *mux, hb_mux_data_t *mux_data,
                            int is_continuous )
 {
     if ( mux->ntracks + 1 > mux->max_tracks )
@@ -228,22 +234,33 @@ static void add_mux_track( hb_mux_t *mux, hb_mux_data_t *mux_data,
         {
             hb_error("add_mux_track: realloc failed, too many tracks (>%d)",
                      max_tracks);
-            return;
+            return -1;
         }
         mux->track = tmp;
         mux->max_tracks = max_tracks;
     }
 
     hb_track_t *track = calloc( sizeof( hb_track_t ), 1 );
-    track->mux_data = mux_data;
-    track->mf.flen = 8;
-    track->mf.fifo = calloc( sizeof(track->mf.fifo[0]), track->mf.flen );
+    if (track)
+    {
+        track->mux_data = mux_data;
+        track->mf.flen = 8;
+        track->mf.fifo = calloc( sizeof(track->mf.fifo[0]), track->mf.flen );
+    }
+
+    if (track == NULL || track->mf.fifo == NULL)
+    {
+        free(track);
+        return -1;
+    }
 
     int t = mux->ntracks++;
     mux->track[t] = track;
     hb_bitvec_set(mux->allEof, t);
     if (is_continuous)
         hb_bitvec_set(mux->allRdy, t);
+
+    return 0;
 }
 
 static int mf_full( hb_track_t * track )
@@ -487,6 +504,14 @@ static void muxClose( hb_work_object_t * muxer )
     }
 
     hb_mux_t          * mux = pv->mux;
+
+    if (mux == NULL)
+    {
+        free(pv);
+        muxer->private_data = NULL;
+        return;
+    }
+
     hb_job_t          * job = pv->job;
     hb_track_t        * track;
     hb_work_object_t  * w;
@@ -563,7 +588,6 @@ static void muxClose( hb_work_object_t * muxer )
         {
             hb_buffer_close( &b );
         }
-        free(track->mux_data);
         free(track->mf.fifo);
         free(track);
     }
@@ -594,12 +618,28 @@ static void muxClose( hb_work_object_t * muxer )
 
 static int muxInit( hb_work_object_t * muxer, hb_job_t * job )
 {
-    muxer->private_data = calloc( sizeof( hb_work_private_t ), 1 );
-    hb_work_private_t * pv = muxer->private_data;
+    muxer->private_data = calloc( sizeof(hb_work_private_t ), 1);
+    if (muxer->private_data == NULL)
+    {
+        return -1;
+    }
+    hb_work_private_t *pv = muxer->private_data;
 
-    hb_mux_t         * mux = calloc( sizeof( hb_mux_t ), 1 );
-    int                i;
-    hb_work_object_t * w;
+    hb_mux_t *mux = calloc( sizeof( hb_mux_t ), 1 );
+    if (mux == NULL)
+    {
+        goto fail;
+    }
+
+    mux->mutex = hb_lock_init();
+    if (mux->mutex == NULL)
+    {
+        goto fail;
+    }
+
+    pv->mux = mux;
+    pv->job = job;
+    pv->track = mux->ntracks;
 
     /* Get a real muxer */
     if( job->pass_id == HB_PASS_ENCODE || job->pass_id == HB_PASS_ENCODE_FINAL )
@@ -612,11 +652,8 @@ static int muxInit( hb_work_object_t * muxer, hb_job_t * job )
                 mux->m = hb_mux_avformat_init( job );
                 break;
             default:
-                hb_error( "No muxer selected, exiting" );
-                free(mux);
-                *job->done_error = HB_ERROR_INIT;
-                *job->die = 1;
-                return -1;
+                hb_error("No muxer selected, exiting");
+                goto fail;
         }
     }
 
@@ -631,7 +668,11 @@ static int muxInit( hb_work_object_t * muxer, hb_job_t * job )
     mux->allRdy = hb_bitvec_new(bit_vec_size);
     mux->allEof = hb_bitvec_new(bit_vec_size);
 
-    mux->mutex = hb_lock_init();
+    if (mux->rdy    == NULL || mux->eof    == NULL ||
+        mux->allRdy == NULL || mux->allEof == NULL)
+    {
+        goto fail;
+    }
 
     // set up to interleave track data in blocks of 1 video frame time.
     // (the best case for buffering and playout latency). The container-
@@ -649,51 +690,77 @@ static int muxInit( hb_work_object_t * muxer, hb_job_t * job )
     }
 
     /* Initialize the work objects that will receive fifo data */
-    pv->job = job;
-    pv->mux = mux;
-    pv->track = mux->ntracks;
     muxer->fifo_in = job->fifo_mpeg4;
-    add_mux_track( mux, job->mux_data, 1 );
-
-    for (i = 0; i < hb_list_count(job->list_audio); i++)
+    if (add_mux_track(mux, job->mux_data, 1))
     {
-        hb_audio_t  *audio = hb_list_item( job->list_audio, i );
-
-        w = hb_get_work(job->h, WORK_MUX);
-        w->private_data = calloc(sizeof(hb_work_private_t), 1);
-        w->private_data->job = job;
-        w->private_data->mux = mux;
-        w->private_data->track = mux->ntracks;
-        w->fifo_in = audio->priv.fifo_out;
-        add_mux_track(mux, audio->priv.mux_data, 1);
-        hb_list_add(pv->list_work, w);
+        goto fail;
     }
 
-    for (i = 0; i < hb_list_count(job->list_subtitle); i++)
+    for (int i = 0; i < hb_list_count(job->list_audio); i++)
     {
+        int err = 0;
+        hb_audio_t  *audio = hb_list_item( job->list_audio, i );
+
+        hb_work_object_t *w = hb_get_work(job->h, WORK_MUX);
+        w->private_data = calloc(sizeof(hb_work_private_t), 1);
+        if (w->private_data)
+        {
+            w->private_data->job = job;
+            w->private_data->mux = mux;
+            w->private_data->track = mux->ntracks;
+            w->fifo_in = audio->priv.fifo_out;
+            err = add_mux_track(mux, audio->priv.mux_data, 1);
+            hb_list_add(pv->list_work, w);
+        }
+        if (w->private_data == NULL || err == -1)
+        {
+            goto fail;
+        }
+    }
+
+    for (int i = 0; i < hb_list_count(job->list_subtitle); i++)
+    {
+        int err = 0;
         hb_subtitle_t  *subtitle = hb_list_item( job->list_subtitle, i );
 
         if (subtitle->config.dest != PASSTHRUSUB)
             continue;
 
-        w = hb_get_work(job->h, WORK_MUX);
+        hb_work_object_t *w = hb_get_work(job->h, WORK_MUX);
         w->private_data = calloc(sizeof(hb_work_private_t), 1);
-        w->private_data->job = job;
-        w->private_data->mux = mux;
-        w->private_data->track = mux->ntracks;
-        w->fifo_in = subtitle->fifo_out;
-        add_mux_track(mux, subtitle->mux_data, 0);
-        hb_list_add(pv->list_work, w);
+        if (w->private_data)
+        {
+            w->private_data->job = job;
+            w->private_data->mux = mux;
+            w->private_data->track = mux->ntracks;
+            w->fifo_in = subtitle->fifo_out;
+            err = add_mux_track(mux, subtitle->mux_data, 0);
+            hb_list_add(pv->list_work, w);
+        }
+        if (w->private_data == NULL || err == -1)
+        {
+            goto fail;
+        }
     }
 
     /* Launch processing threads */
-    for (i = 0; i < hb_list_count(pv->list_work); i++)
+    for (int i = 0; i < hb_list_count(pv->list_work); i++)
     {
-        w = hb_list_item(pv->list_work, i);
+        hb_work_object_t *w = hb_list_item(pv->list_work, i);
         w->done = muxer->done;
         w->thread = hb_thread_init(w->name, hb_work_loop, w, HB_LOW_PRIORITY);
     }
     return 0;
+
+fail:
+    if (pv->mux == NULL)
+    {
+        hb_lock_close(&mux->mutex);
+        free(mux);
+    }
+    *job->done_error = HB_ERROR_INIT;
+    *job->die = 1;
+    return -1;
 }
 
 hb_work_object_t hb_muxer =
