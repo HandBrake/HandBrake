@@ -4,6 +4,7 @@ $(eval $(call import.GCC,GTK))
 GTK.src/   = $(SRC/)gtk/
 GTK.build/ = $(BUILD/)gtk/
 
+GTK.SETUP.stamp     = $(GTK.build/)compile_commands.json
 GTK.CONFIGURE.stamp = $(GTK.build/)build.ninja
 
 GTK.CONFIGURE.exe   = $(MESON.exe)
@@ -11,7 +12,7 @@ GTK.CONFIGURE.extra = -Dc_args="$(call fn.ARGS,GTK.GCC,*D ?extra)" \
                       -Dc_link_args="$(call fn.ARGS,GTK.GCC,?extra.exe) $(GTK.CONFIGURE.libdirs)" \
                       --pkg-config-path=$(call fn.ABSOLUTE,$(BUILD/))contrib/lib/pkgconfig:$(PKG_CONFIG_PATH) \
                       --prefix=$(PREFIX) -Dhb-dir=$(call fn.ABSOLUTE,$(BUILD/))
-GTK.CONFIGURE.env   =
+GTK.CONFIGURE.env   = CC="$(GCC.gcc)" CXX="$(GCC.gxx)"
 
 ###############################################################################
 
@@ -92,7 +93,11 @@ ifeq (mingw,$(HOST.system))
 endif
 
 ifeq (1,$(HOST.cross))
-    GTK.CONFIGURE.extra += --cross-file=$(SRC/)make/cross/$(HOST.spec).meson
+    GTK.CONFIGURE.cross = --cross-file=$(SRC/)make/cross/$(HOST.spec).meson
+endif
+
+ifneq (-,$(V)-$(VERBOSE))
+    GTK.BUILD.extra     = -v
 endif
 
 export HB.version HB.repo.date
