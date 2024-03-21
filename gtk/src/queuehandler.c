@@ -1839,26 +1839,26 @@ ghb_queue_buttons_grey (signal_user_data_t *ud)
     widget = ghb_builder_widget("queue_start");
     if (show_stop)
     {
-        ghb_button_set_icon_name(GHB_BUTTON(widget), "hb-stop");
+        ghb_button_set_icon_name(GHB_BUTTON(widget), "hb-stop-small-symbolic");
         ghb_button_set_label(GHB_BUTTON(widget), _("Stop"));
         gtk_widget_set_tooltip_text(widget, _("Stop Encoding"));
     }
     else
     {
-        ghb_button_set_icon_name(GHB_BUTTON(widget), "hb-start");
+        ghb_button_set_icon_name(GHB_BUTTON(widget), "hb-start-small-symbolic");
         ghb_button_set_label(GHB_BUTTON(widget), _("Start"));
         gtk_widget_set_tooltip_text(widget, _("Start Encoding"));
     }
     widget = ghb_builder_widget("queue_list_start");
     if (show_stop)
     {
-        ghb_button_set_icon_name(GHB_BUTTON(widget), "hb-stop");
+        ghb_button_set_icon_name(GHB_BUTTON(widget), "hb-stop-symbolic");
         ghb_button_set_label(GHB_BUTTON(widget), _("Stop"));
         gtk_widget_set_tooltip_text(widget, _("Stop Encoding"));
     }
     else
     {
-        ghb_button_set_icon_name(GHB_BUTTON(widget), "hb-start");
+        ghb_button_set_icon_name(GHB_BUTTON(widget), "hb-start-symbolic");
         ghb_button_set_label(GHB_BUTTON(widget), _("Start"));
         gtk_widget_set_tooltip_text(widget, _("Start Encoding"));
     }
@@ -1883,26 +1883,26 @@ ghb_queue_buttons_grey (signal_user_data_t *ud)
     widget = ghb_builder_widget("queue_pause");
     if (paused)
     {
-        ghb_button_set_icon_name(GHB_BUTTON(widget), "hb-start");
+        ghb_button_set_icon_name(GHB_BUTTON(widget), "hb-start-small-symbolic");
         ghb_button_set_label(GHB_BUTTON(widget), _("Resume"));
         gtk_widget_set_tooltip_text(widget, _("Resume Encoding"));
     }
     else
     {
-        ghb_button_set_icon_name(GHB_BUTTON(widget), "hb-pause");
+        ghb_button_set_icon_name(GHB_BUTTON(widget), "hb-pause-small-symbolic");
         ghb_button_set_label(GHB_BUTTON(widget), _("Pause"));
         gtk_widget_set_tooltip_text(widget, _("Pause Encoding"));
     }
     widget = ghb_builder_widget("queue_list_pause");
     if (paused)
     {
-        ghb_button_set_icon_name(GHB_BUTTON(widget), "hb-start");
+        ghb_button_set_icon_name(GHB_BUTTON(widget), "hb-start-symbolic");
         ghb_button_set_label(GHB_BUTTON(widget), _("Resume"));
         gtk_widget_set_tooltip_text(widget, _("Resume Encoding"));
     }
     else
     {
-        ghb_button_set_icon_name(GHB_BUTTON(widget), "hb-pause");
+        ghb_button_set_icon_name(GHB_BUTTON(widget), "hb-pause-symbolic");
         ghb_button_set_label(GHB_BUTTON(widget), _("Pause"));
         gtk_widget_set_tooltip_text(widget, _("Pause Encoding"));
     }

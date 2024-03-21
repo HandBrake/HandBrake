@@ -1486,7 +1486,7 @@ start_scan (signal_user_data_t *ud, const char *path, int title_id, int preview_
         return;
 
     widget = ghb_builder_widget("sourcetoolbutton");
-    ghb_button_set_icon_name(GHB_BUTTON(widget), "hb-stop");
+    ghb_button_set_icon_name(GHB_BUTTON(widget), "hb-stop-small-symbolic");
     ghb_button_set_label(GHB_BUTTON(widget), _("Stop Scan"));
     gtk_widget_set_tooltip_text(widget, _("Stop Scan"));
     ghb_backend_scan(path, title_id, preview_count,
@@ -1504,7 +1504,7 @@ start_scan_list (signal_user_data_t *ud, GListModel *files, int title_id, int pr
         return;
 
     widget = ghb_builder_widget("sourcetoolbutton");
-    ghb_button_set_icon_name(GHB_BUTTON(widget), "hb-stop-symbolic");
+    ghb_button_set_icon_name(GHB_BUTTON(widget), "hb-stop-small-symbolic");
     ghb_button_set_label(GHB_BUTTON(widget), _("Stop Scan"));
     gtk_widget_set_tooltip_text(widget, _("Stop Scan"));
     ghb_backend_scan_list(files, title_id, preview_count,

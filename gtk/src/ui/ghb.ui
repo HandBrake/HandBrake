@@ -217,7 +217,7 @@ conjunction with the &quot;Forced&quot; option.</property>
           <object class="GhbButton" id="queue_list_start">
             <property name="tooltip-text" translatable="yes">Start Encoding</property>
             <property name="label" translatable="yes">Start</property>
-            <property name="icon-name">hb-start</property>
+            <property name="icon-name">hb-start-symbolic</property>
             <property name="action-name">app.queue-start</property>
             <property name="orientation">horizontal</property>
           </object>
@@ -226,7 +226,7 @@ conjunction with the &quot;Forced&quot; option.</property>
           <object class="GhbButton" id="queue_list_pause">
             <property name="tooltip-text" translatable="yes">Pause Encoding</property>
             <property name="label" translatable="yes">Pause</property>
-            <property name="icon-name">hb-pause</property>
+            <property name="icon-name">hb-pause-symbolic</property>
             <property name="action-name">app.queue-pause</property>
             <property name="orientation">horizontal</property>
           </object>
@@ -1407,7 +1407,7 @@ large-icons</property>
                   <object class="GhbButton" id="queue_start">
                     <property name="tooltip-text" translatable="yes">Start Encoding</property>
                     <property name="label" translatable="yes">Start</property>
-                    <property name="icon-name">hb-start</property>
+                    <property name="icon-name">hb-start-small-symbolic</property>
                     <property name="action-name">app.queue-start</property>
                   </object>
                 </child>
@@ -1415,7 +1415,7 @@ large-icons</property>
                   <object class="GhbButton" id="queue_pause">
                     <property name="tooltip-text" translatable="yes">Pause Encoding</property>
                     <property name="label" translatable="yes">Pause</property>
-                    <property name="icon-name">hb-pause</property>
+                    <property name="icon-name">hb-pause-small-symbolic</property>
                     <property name="action-name">app.queue-pause</property>
                   </object>
                 </child>

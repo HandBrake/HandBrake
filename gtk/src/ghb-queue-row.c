@@ -256,20 +256,20 @@ ghb_queue_row_set_status (GhbQueueRow *self, int status)
     switch (status)
     {
         case GHB_QUEUE_RUNNING:
-            icon_name = "hb-start";
+            icon_name = "hb-running-symbolic";
             accessible_name = _("Running Queue Item");
             show_progress_bar = TRUE;
             break;
         case GHB_QUEUE_PENDING:
-            icon_name = "hb-source";
+            icon_name = "hb-ready-symbolic";
             accessible_name = _("Pending Queue Item");
             break;
         case GHB_QUEUE_FAIL:
-            icon_name = "hb-stop";
+            icon_name = "hb-error";
             accessible_name = _("Failed Queue Item");
             break;
         case GHB_QUEUE_CANCELED:
-            icon_name = "hb-stop";
+            icon_name = "hb-cancelled";
             accessible_name = _("Cancelled Queue Item");
             break;
         case GHB_QUEUE_DONE:
@@ -277,7 +277,7 @@ ghb_queue_row_set_status (GhbQueueRow *self, int status)
             accessible_name = _("Completed Queue Item");
             break;
         default:
-            icon_name = "document-edit";
+            icon_name = "hb-ready-symbolic";
             accessible_name = _("Pending Queue Item");
             break;
     }

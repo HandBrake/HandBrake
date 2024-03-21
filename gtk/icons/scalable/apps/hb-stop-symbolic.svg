@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg height="16px" viewBox="0 0 16 16" width="16px" xmlns="http://www.w3.org/2000/svg">
+  <path class="error" d="m 3.5,2 h 9 C 13.328125,2 14,2.671875 14,3.5 v 9 c 0,0.828125 -0.671875,1.5 -1.5,1.5 h -9 C 2.671875,14 2,13.328125 2,12.5 v -9 C 2,2.671875 2.671875,2 3.5,2 Z m 0,0" fill="#222222"/>
+</svg>
