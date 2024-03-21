@@ -12,7 +12,7 @@
             <property name="spacing">8</property>
             <child>
               <object class="GtkImage" id="status_icon">
-                <property name="icon-name">hb-source</property>
+                <property name="icon-name">hb-ready-symbolic</property>
                 <accessibility>
                   <property name="label" translatable="yes">Pending Queue Item</property>
                 </accessibility>

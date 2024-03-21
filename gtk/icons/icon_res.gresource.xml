@@ -1,39 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <gresources>
   <gresource prefix="/fr/handbrake/ghb/icons">
-    <file>24x24/apps/hb-advanced-symbolic.symbolic.png</file>
-    <file>32x32/apps/hb-source-symbolic.symbolic.png</file>
-    <file>32x32/apps/hb-picture-symbolic.symbolic.png</file>
-    <file>32x32/apps/hb-add-queue-symbolic.symbolic.png</file>
-    <file>32x32/apps/hb-showqueue-symbolic.symbolic.png</file>
-    <file>32x32/apps/hb-activity-symbolic.symbolic.png</file>
-    <file>32x32/apps/hb-presets-symbolic.symbolic.png</file>
-    <file>32x32/apps/hb-start.png</file>
-    <file>32x32/apps/hb-stop.png</file>
-    <file>32x32/apps/hb-pause.png</file>
-    <file>48x48/apps/hb-advanced-symbolic.symbolic.png</file>
-    <file>64x64/apps/hb-source-symbolic.symbolic.png</file>
-    <file>64x64/apps/hb-picture-symbolic.symbolic.png</file>
-    <file>64x64/apps/hb-add-queue-symbolic.symbolic.png</file>
-    <file>64x64/apps/hb-showqueue-symbolic.symbolic.png</file>
-    <file>64x64/apps/hb-activity-symbolic.symbolic.png</file>
-    <file>64x64/apps/hb-presets-symbolic.symbolic.png</file>
-    <file>64x64/apps/hb-start.png</file>
-    <file>64x64/apps/hb-stop.png</file>
-    <file>64x64/apps/hb-pause.png</file>
     <file>128x128/apps/fr.handbrake.ghb.png</file>
     <file>256x256/apps/fr.handbrake.ghb.png</file>
     <file>scalable/apps/fr.handbrake.ghb.svg</file>
-    <file>scalable/apps/hb-advanced-symbolic.svg</file>
     <file>scalable/apps/hb-source-symbolic.svg</file>
     <file>scalable/apps/hb-picture-symbolic.svg</file>
     <file>scalable/apps/hb-add-queue-symbolic.svg</file>
     <file>scalable/apps/hb-showqueue-symbolic.svg</file>
     <file>scalable/apps/hb-activity-symbolic.svg</file>
     <file>scalable/apps/hb-presets-symbolic.svg</file>
-    <file>scalable/apps/hb-start.svg</file>
-    <file>scalable/apps/hb-stop.svg</file>
-    <file>scalable/apps/hb-pause.svg</file>
     <file>scalable/apps/hb-complete.svg</file>
+    <file>scalable/apps/hb-cancelled.svg</file>
+    <file>scalable/apps/hb-error.svg</file>
+    <file>scalable/apps/hb-start-symbolic.svg</file>
+    <file>scalable/apps/hb-pause-symbolic.svg</file>
+    <file>scalable/apps/hb-stop-symbolic.svg</file>
+    <file>scalable/apps/hb-start-small-symbolic.svg</file>
+    <file>scalable/apps/hb-pause-small-symbolic.svg</file>
+    <file>scalable/apps/hb-stop-small-symbolic.svg</file>
+    <file>scalable/apps/hb-ready-symbolic.svg</file>
+    <file>scalable/apps/hb-running-symbolic.svg</file>
+    <file>scalable/apps/sidebar-show-right-symbolic.svg</file>
   </gresource>
 </gresources>
+
