@@ -2647,7 +2647,7 @@ static void decodeAudio(hb_work_private_t *pv, packet_info_t * packet_info)
                 av_channel_layout_default(&default_ch_layout, pv->frame->ch_layout.nb_channels);
                 channel_layout = default_ch_layout;
             }
-            hb_audio_resample_set_channel_layout(pv->resample, channel_layout.u.mask);
+            hb_audio_resample_set_ch_layout(pv->resample, &channel_layout);
             hb_audio_resample_set_sample_fmt(pv->resample,
                                              pv->frame->format);
             hb_audio_resample_set_sample_rate(pv->resample,

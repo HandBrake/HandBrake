@@ -38,7 +38,7 @@ typedef struct
     struct
     {
         int sample_rate;
-        uint64_t channel_layout;
+        AVChannelLayout ch_layout;
         double lfe_mix_level;
         double center_mix_level;
         double surround_mix_level;
@@ -48,8 +48,7 @@ typedef struct
     struct
     {
         int sample_rate;
-        int channels;
-        uint64_t channel_layout;
+        AVChannelLayout ch_layout;
         double lfe_mix_level;
         double center_mix_level;
         double surround_mix_level;
@@ -59,9 +58,8 @@ typedef struct
     struct
     {
         int sample_rate;
-        int channels;
         int sample_size;
-        uint64_t channel_layout;
+        AVChannelLayout ch_layout;
         enum AVSampleFormat sample_fmt;
         enum AVMatrixEncoding matrix_encoding;
         double maxval;
@@ -84,8 +82,8 @@ hb_audio_resample_t* hb_audio_resample_init(enum AVSampleFormat sample_fmt,
  * requested output characteristics, or if they may have changed in the source.
  */
 
-void                 hb_audio_resample_set_channel_layout(hb_audio_resample_t *resample,
-                                                          uint64_t channel_layout);
+void                 hb_audio_resample_set_ch_layout(hb_audio_resample_t *resample,
+                                                     const AVChannelLayout *ch_layout);
 
 void                 hb_audio_resample_set_mix_levels(hb_audio_resample_t *resample,
                                                       double surround_mix_level,
