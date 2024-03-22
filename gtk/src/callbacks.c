@@ -4177,7 +4177,7 @@ ghb_update_pending(signal_user_data_t *ud)
                                    pending), pending);
 
     label = GTK_LABEL(ghb_builder_widget("pending_status"));
-    gtk_label_set_text(label, str);
+    gtk_label_set_text(label, pending ? str : ""); // Hide this label if no pending items
     label = GTK_LABEL(ghb_builder_widget("queue_status_label"));
     gtk_label_set_text(label, str);
     g_free(str);
