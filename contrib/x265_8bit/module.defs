@@ -2,12 +2,13 @@ __deps__ :=
 $(eval $(call import.MODULE.defs,X265_8,x265_8,$(__deps__),x265))
 $(eval $(call import.CONTRIB.defs,X265_8))
 
-X265_8.FETCH.url     = https://github.com/HandBrake/HandBrake-contribs/releases/download/contribs/x265-snapshot-20230403-12776.tar.gz
-X265_8.FETCH.sha256  = 23898695c5520e9e971d12e88125d5ad03ad67f462fc8ecaa016b48adad7cb20
+X265_8.FETCH.url     = https://github.com/HandBrake/HandBrake-contribs/releases/download/contribs/x265-snapshot-20240222-12833.tar.gz
+X265_8.FETCH.sha256  = f7de9c0e9f74901dff3ad00e4654dd880f92694877db9a47ffd0af59ae3e9049
 
 X265_8.build_dir             = 8bit
 X265_8.CONFIGURE.exe         = cmake
 X265_8.CONFIGURE.args.prefix = -DCMAKE_INSTALL_PREFIX="$(X265_8.CONFIGURE.prefix)"
+X265_8.CONFIGURE.args.host   = -DCMAKE_HOST_SYSTEM="$(X265_8.CONFIGURE.build)"
 X265_8.CONFIGURE.deps        =
 X265_8.CONFIGURE.static      =
 X265_8.CONFIGURE.shared      = -DENABLE_SHARED=OFF
@@ -57,8 +58,7 @@ ifeq (1,$(HOST.cross))
         X265_8.CONFIGURE.extra += -DCMAKE_RC_COMPILER=$(HOST.cross.prefix)windres
         X265_8.CONFIGURE.args.host  = -DCMAKE_HOST_SYSTEM="$(X265_8.CONFIGURE.host)"
     endif
-    X265_8.CONFIGURE.args.build = -DCMAKE_HOST_SYSTEM="$(X265_8.CONFIGURE.build)"
-    X265_8.CONFIGURE.extra     += -DCMAKE_SYSTEM_PROCESSOR=$(HOST.machine)
+    X265_8.CONFIGURE.args.build = -DCMAKE_SYSTEM_PROCESSOR=$(HOST.machine)
 endif
 
 ## find CMakeLists.txt

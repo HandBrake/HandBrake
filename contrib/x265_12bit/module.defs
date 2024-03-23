@@ -2,8 +2,8 @@ __deps__ := X265_8
 $(eval $(call import.MODULE.defs,X265_12,x265_12,$(__deps__),x265))
 $(eval $(call import.CONTRIB.defs,X265_12))
 
-X265_12.FETCH.url     = https://github.com/HandBrake/HandBrake-contribs/releases/download/contribs/x265-snapshot-20230403-12776.tar.gz
-X265_12.FETCH.sha256  = 23898695c5520e9e971d12e88125d5ad03ad67f462fc8ecaa016b48adad7cb20
+X265_12.FETCH.url     = https://github.com/HandBrake/HandBrake-contribs/releases/download/contribs/x265-snapshot-20240222-12833.tar.gz
+X265_12.FETCH.sha256  = f7de9c0e9f74901dff3ad00e4654dd880f92694877db9a47ffd0af59ae3e9049
 
 # Silence "warning: overriding recipe for target" messages
 X265_12.FETCH.target =
@@ -11,6 +11,7 @@ X265_12.FETCH.target =
 X265_12.build_dir             = 12bit
 X265_12.CONFIGURE.exe         = cmake
 X265_12.CONFIGURE.args.prefix = -DCMAKE_INSTALL_PREFIX="$(X265_12.CONFIGURE.prefix)"
+X265_12.CONFIGURE.args.host   = -DCMAKE_HOST_SYSTEM="$(X265_12.CONFIGURE.build)"
 X265_12.CONFIGURE.deps        =
 X265_12.CONFIGURE.static      =
 X265_12.CONFIGURE.shared      = -DENABLE_SHARED=OFF
@@ -58,15 +59,8 @@ ifeq (1,$(HOST.cross))
         X265_12.CONFIGURE.extra += -DCMAKE_SHARED_LIBRARY_LINK_CXX_FLAGS="-static-libgcc -static-libstdc++ -static"
         X265_12.CONFIGURE.extra += -DCMAKE_RC_COMPILER=$(HOST.cross.prefix)windres
         X265_12.CONFIGURE.args.host  = -DCMAKE_HOST_SYSTEM="$(X265_12.CONFIGURE.host)"
-    else ifeq ($(HOST.system),darwin)
-        X265_12.CONFIGURE.args.host  = -DCMAKE_HOST_SYSTEM="$(X265_12.CONFIGURE.host)"
-    else
-        X265_12.CONFIGURE.args.host = -DCMAKE_SYSTEM_NAME="$(X265_12.CONFIGURE.host)"
     endif
-    X265_12.CONFIGURE.args.build = -DCMAKE_HOST_SYSTEM="$(X265_12.CONFIGURE.build)"
-    X265_12.CONFIGURE.extra     += -DCMAKE_SYSTEM_PROCESSOR=$(HOST.machine)
-else
-    X265_12.CONFIGURE.args.host  = -DCMAKE_HOST_SYSTEM="$(X265_12.CONFIGURE.host)"
+    X265_12.CONFIGURE.args.build = -DCMAKE_SYSTEM_PROCESSOR=$(HOST.machine)
 endif
 
 ## find CMakeLists.txt
