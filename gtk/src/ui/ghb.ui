@@ -1278,9 +1278,10 @@ Resets the queue job to pending and ready to run again.</property>
     <property name="page-increment">1</property>
   </object>
   <object class="GtkAdjustment" id="DiskFreeLimitAdjustment">
-    <property name="upper">1000000</property>
-    <property name="step-increment">500</property>
-    <property name="page-increment">1000</property>
+    <property name="lower">1</property>
+    <property name="upper">10000</property>
+    <property name="step-increment">1</property>
+    <property name="page-increment">10</property>
   </object>
   <object class="GtkAdjustment" id="ActivityFontSizeAdjustment">
     <property name="upper">32</property>
@@ -5414,74 +5415,6 @@ Each selected source track will be encoded with all selected encoders.</property
                         <property name="orientation">vertical</property>
                         <property name="spacing">2</property>
                         <child>
-                          <object class="GtkLabel">
-                            <property name="halign">start</property>
-                            <property name="margin-start">4</property>
-                            <property name="margin-top">4</property>
-                            <property name="margin-bottom">4</property>
-                            <property name="label" translatable="yes">When Done</property>
-                            <attributes>
-                              <attribute name="weight" value="bold"></attribute>
-                            </attributes>
-                          </object>
-                        </child>
-                        <child>
-                          <object class="GtkBox" id="hbox82">
-                            <property name="spacing">4</property>
-                            <child>
-                              <object class="GtkLabel" id="labela1">
-                                <property name="margin-start">4</property>
-                                <property name="label" translatable="yes">Default action when queue is completed:</property>
-                                <property name="use-markup">1</property>
-                              </object>
-                            </child>
-                            <child>
-                              <object class="GtkComboBox" id="WhenComplete">
-                                <signal name="changed" handler="when_complete_changed_cb" swapped="no"/>
-                              </object>
-                            </child>
-                          </object>
-                        </child>
-                        <child>
-                          <object class="GtkCheckButton" id="NotifyOnQueueDone">
-                            <property name="label" translatable="yes">Show notification when queue is completed</property>
-                            <property name="focusable">1</property>
-                            <property name="halign">start</property>
-                            <signal name="toggled" handler="pref_changed_cb" swapped="no"/>
-                          </object>
-                        </child>
-                        <child>
-                          <object class="GtkCheckButton" id="NotifyOnEncodeDone">
-                            <property name="label" translatable="yes">Show notification when each item is completed</property>
-                            <property name="focusable">1</property>
-                            <property name="halign">start</property>
-                            <signal name="toggled" handler="pref_changed_cb" swapped="no"/>
-                          </object>
-                        </child>
-                        <child>
-                          <object class="GtkCheckButton" id="RemoveFinishedJobs">
-                            <property name="label" translatable="yes">Remove completed items from queue</property>
-                            <property name="focusable">1</property>
-                            <property name="tooltip-text" translatable="yes">By default, completed jobs remain in the queue and are marked as complete.
-  Check this if you want the queue to clean itself up by deleting completed jobs.</property>
-                            <property name="halign">start</property>
-                            <signal name="toggled" handler="pref_changed_cb" swapped="no"/>
-                          </object>
-                        </child>
-                        <child>
-                          <object class="GtkLabel">
-                            <property name="halign">start</property>
-                            <property name="margin-start">4</property>
-                            <property name="margin-start">4</property>
-                            <property name="margin-top">4</property>
-                            <property name="margin-bottom">4</property>
-                            <property name="label" translatable="yes">General</property>
-                            <attributes>
-                              <attribute name="weight" value="bold"></attribute>
-                            </attributes>
-                          </object>
-                        </child>
-                        <child>
                           <object class="GtkCheckButton" id="auto_name">
                             <property name="label" translatable="yes">Use automatic naming (uses modified source name)</property>
                             <property name="focusable">1</property>
@@ -5575,52 +5508,187 @@ Each selected source track will be encoded with all selected encoders.</property
                           </object>
                         </child>
                         <child>
-                          <object class="GtkLabel" id="pause_encoding_label">
-                            <property name="label" translatable="yes">Power Saving</property>
-                            <property name="visible">0</property>
-                            <property name="margin-start">4</property>
+                          <object class="GtkCheckButton" id="SyncTitleSettings">
+                            <property name="label" translatable="yes">Use the same settings for all titles in a batch</property>
+                            <property name="focusable">1</property>
+                            <property name="tooltip-text" translatable="yes">When checked, every title will use the same settings when adding a
+batch of titles to the queue.
+
+Uncheck this if you want to allow changing each title&apos;s settings independently.</property>
+                            <property name="halign">start</property>
+                            <signal name="toggled" handler="pref_changed_cb" swapped="no"/>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkCheckButton" id="ShowMiniPreview">
+                            <property name="label" translatable="yes">Show preview image in Summary tab</property>
+                            <property name="focusable">1</property>
+                            <property name="halign">start</property>
+                            <property name="tooltip-text" translatable="yes">Uncheck this if you want to hide the video preview image on the Summary tab for privacy reasons.</property>
+                            <signal name="toggled" handler="show_preview_changed_cb" swapped="no"/>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkBox">
+                            <property name="margin-start">8</property>
+                            <property name="margin-end">4</property>
+                            <property name="spacing">8</property>
+                            <property name="tooltip-text" translatable="yes">File extensions to exclude when scanning folders, separated by spaces.</property>
+                          </object>
+                        </child>
+                      </object>
+                    </property>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkStackPage">
+                    <property name="title" translatable="yes" context="Queue tab in Preferences window">Queue</property>
+                    <property name="child">
+                      <object class="GtkBox">
+                        <property name="orientation">vertical</property>
+                        <property name="margin-top">6</property>
+                        <property name="margin-bottom">6</property>
+                        <property name="margin-start">12</property>
+                        <child>
+                          <object class="GtkBox" id="DiskFreeBox">
+                            <property name="orientation">horizontal</property>
+                            <property name="spacing">2</property>
+                            <child>
+                              <object class="GtkCheckButton" id="DiskFreeCheck">
+                                <property name="label" translatable="yes">Pause queue if disk space is lower than:</property>
+                                <property name="focusable">1</property>
+                                <property name="halign">start</property>
+                                <signal name="toggled" handler="pref_changed_cb" swapped="no"/>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkBox" id="DiskFreeLimitBox">
+                                <property name="spacing">4</property>
+                                <child>
+                                  <object class="GtkSpinButton" id="DiskFreeLimitGB">
+                                    <property name="width-chars">4</property>
+                                    <property name="focusable">1</property>
+                                    <property name="valign">center</property>
+                                    <property name="adjustment">DiskFreeLimitAdjustment</property>
+                                    <accessibility>
+                                      <property name="label" translatable="yes">Disk Free Space Limit</property>
+                                    </accessibility>
+                                    <signal name="value-changed" handler="pref_changed_cb" swapped="no"/>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="GtkLabel" id="DiskFreeLimitLabel">
+                                    <property name="halign">start</property>
+                                    <property name="label" translatable="yes">GB</property>
+                                    <property name="hexpand">1</property>
+                                  </object>
+                                </child>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkCheckButton" id="RemoveFinishedJobs">
+                            <property name="label" translatable="yes">Clear completed jobs after an encode completes</property>
+                            <property name="focusable">1</property>
+                            <property name="tooltip-text" translatable="yes">By default, completed jobs remain in the queue and are marked as complete.
+  Check this if you want the queue to clean itself up by deleting completed jobs.</property>
+                            <property name="halign">start</property>
+                            <signal name="toggled" handler="pref_changed_cb" swapped="no"/>
+                          </object>
+                        </child>
+                        <child>
+                      <object class="GtkLabel" id="pause_encoding_label">
+                        <property name="label" translatable="yes">Power Saving</property>
+                        <property name="visible">0</property>
+                        <property name="margin-start">4</property>
+                        <property name="margin-start">4</property>
+                        <property name="margin-top">4</property>
+                        <property name="margin-bottom">4</property>
+                        <property name="halign">start</property>
+                        <attributes>
+                          <attribute name="weight" value="bold"></attribute>
+                        </attributes>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkCheckButton" id="PauseEncodingOnPowerSave">
+                        <property name="label" translatable="yes">Pause encoding when in Power Saver mode</property>
+                        <property name="visible">0</property>
+                        <property name="focusable">1</property>
+                        <property name="halign">start</property>
+                        <property name="tooltip-text" translatable="yes">If checked, encoding will be paused when the device
+enters Power Saver mode. Encoding will resume when
+Power Saver mode is disabled.</property>
+                        <signal name="toggled" handler="pref_changed_cb" swapped="no"/>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkCheckButton" id="PauseEncodingOnBatteryPower">
+                        <property name="label" translatable="yes">Pause encoding when on battery power</property>
+                        <property name="visible">0</property>
+                        <property name="focusable">1</property>
+                        <property name="halign">start</property>
+                        <property name="tooltip-text" translatable="yes">If checked, encoding will be paused when charger is
+unplugged. Encoding will resume when reconnected to
+a mains power source.</property>
+                        <signal name="toggled" handler="pref_changed_cb" swapped="no"/>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkCheckButton" id="PauseEncodingOnLowBattery">
+                        <property name="label" translatable="yes">Pause encoding when battery is low</property>
+                        <property name="visible">0</property>
+                        <property name="focusable">1</property>
+                        <property name="halign">start</property>
+                        <property name="tooltip-text" translatable="yes">If checked, encoding will be paused when the battery
+level is low. Encoding will resume when the
+battery is charged.</property>
+                        <signal name="toggled" handler="pref_changed_cb" swapped="no"/>
+                      </object>
+                    </child>
+                        <child>
+                          <object class="GtkLabel">
+                            <property name="halign">start</property>
                             <property name="margin-start">4</property>
                             <property name="margin-top">4</property>
                             <property name="margin-bottom">4</property>
-                            <property name="halign">start</property>
+                            <property name="label" translatable="yes">When Done</property>
                             <attributes>
                               <attribute name="weight" value="bold"></attribute>
                             </attributes>
                           </object>
                         </child>
                         <child>
-                          <object class="GtkCheckButton" id="PauseEncodingOnPowerSave">
-                            <property name="label" translatable="yes">Pause encoding when in Power Saver mode</property>
-                            <property name="visible">0</property>
+                          <object class="GtkBox" id="hbox82">
+                            <property name="spacing">4</property>
+                            <child>
+                              <object class="GtkLabel" id="labela1">
+                                <property name="margin-start">4</property>
+                                <property name="label" translatable="yes">Default action when queue is completed:</property>
+                                <property name="use-markup">1</property>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkComboBox" id="WhenComplete">
+                                <signal name="changed" handler="when_complete_changed_cb" swapped="no"/>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkCheckButton" id="NotifyOnQueueDone">
+                            <property name="label" translatable="yes">Show notification when queue is completed</property>
                             <property name="focusable">1</property>
                             <property name="halign">start</property>
-                            <property name="tooltip-text" translatable="yes">If checked, encoding will be paused when the device
-  enters Power Saver mode. Encoding will resume when
-  Power Saver mode is disabled.</property>
                             <signal name="toggled" handler="pref_changed_cb" swapped="no"/>
                           </object>
                         </child>
                         <child>
-                          <object class="GtkCheckButton" id="PauseEncodingOnBatteryPower">
-                            <property name="label" translatable="yes">Pause encoding when on battery power</property>
-                            <property name="visible">0</property>
+                          <object class="GtkCheckButton" id="NotifyOnEncodeDone">
+                            <property name="label" translatable="yes">Show notification when each item is completed</property>
                             <property name="focusable">1</property>
                             <property name="halign">start</property>
-                            <property name="tooltip-text" translatable="yes">If checked, encoding will be paused when charger is
-  unplugged. Encoding will resume when reconnected to
-  a mains power source.</property>
-                            <signal name="toggled" handler="pref_changed_cb" swapped="no"/>
-                          </object>
-                        </child>
-                        <child>
-                          <object class="GtkCheckButton" id="PauseEncodingOnLowBattery">
-                            <property name="label" translatable="yes">Pause encoding when battery is low</property>
-                            <property name="visible">0</property>
-                            <property name="focusable">1</property>
-                            <property name="halign">start</property>
-                            <property name="tooltip-text" translatable="yes">If checked, encoding will be paused when the battery
-  level is low. Encoding will resume when the
-  battery is charged.</property>
                             <signal name="toggled" handler="pref_changed_cb" swapped="no"/>
                           </object>
                         </child>
@@ -5675,7 +5743,6 @@ Each selected source track will be encoded with all selected encoders.</property
                                     <property name="hexpand">True</property>
                                     <property name="title" translatable="yes">Temp Directory</property>
                                     <property name="margin-start">21</property>
-                                    <property name="margin-end">21</property>
                                   </object>
                                 </child>
                                 <layout>
@@ -5720,48 +5787,6 @@ Each selected source track will be encoded with all selected encoders.</property
                               </object>
                             </child>
                             <child>
-                              <object class="GtkBox" id="DiskFreeBox">
-                                <property name="orientation">vertical</property>
-                                <property name="spacing">2</property>
-                                <child>
-                                  <object class="GtkCheckButton" id="DiskFreeCheck">
-                                    <property name="label" translatable="yes">Pause encoding if free disk space drops below:</property>
-                                    <property name="focusable">1</property>
-                                    <property name="halign">start</property>
-                                    <signal name="toggled" handler="pref_changed_cb" swapped="no"/>
-                                  </object>
-                                </child>
-                                <child>
-                                  <object class="GtkBox" id="DiskFreeLimitBox">
-                                    <property name="spacing">4</property>
-                                    <property name="margin-start">21</property>
-                                    <child>
-                                      <object class="GtkSpinButton" id="DiskFreeLimit">
-                                        <property name="width-chars">7</property>
-                                        <property name="focusable">1</property>
-                                        <property name="valign">center</property>
-                                        <property name="adjustment">DiskFreeLimitAdjustment</property>
-                                        <property name="width-request">55</property>
-                                        <accessibility>
-                                          <property name="label" translatable="yes">Disk Free Space Limit</property>
-                                        </accessibility>
-                                        <signal name="value-changed" handler="pref_changed_cb" swapped="no"/>
-                                      </object>
-                                    </child>
-                                    <child>
-                                      <object class="GtkLabel" id="DiskFreeLimitLabel">
-                                        <property name="halign">start</property>
-                                        <property name="label" translatable="yes">MB</property>
-                                        <property name="hexpand">1</property>
-                                      </object>
-                                    </child>
-                                  </object>
-                                </child>
-                                <layout>
-                                  <property name="row">3</property>
-                                  <property name="column">0</property>
-                                </layout>
-                              </object>
                             </child>
                             <child>
                               <object class="GtkBox" id="vbox2">
@@ -5868,35 +5893,6 @@ Each selected source track will be encoded with all selected encoders.</property
                                 </child>
                                 <layout>
                                   <property name="row">7</property>
-                                  <property name="column">0</property>
-                                </layout>
-                              </object>
-                            </child>
-                            <child>
-                              <object class="GtkCheckButton" id="SyncTitleSettings">
-                                <property name="label" translatable="yes">Use the same settings for all titles in a batch</property>
-                                <property name="focusable">1</property>
-                                <property name="tooltip-text" translatable="yes">When checked, every title will use the same settings when adding a
-  batch of titles to the queue.
-
-  Uncheck this if you want to allow changing each title&apos;s settings independently.</property>
-                                <property name="halign">start</property>
-                                <signal name="toggled" handler="pref_changed_cb" swapped="no"/>
-                                <layout>
-                                  <property name="row">8</property>
-                                  <property name="column">0</property>
-                                </layout>
-                              </object>
-                            </child>
-                            <child>
-                              <object class="GtkCheckButton" id="ShowMiniPreview">
-                                <property name="label" translatable="yes">Show preview image in Summary tab</property>
-                                <property name="focusable">1</property>
-                                <property name="halign">start</property>
-                                <property name="tooltip-text" translatable="yes">Uncheck this if you want to hide the video preview image on the Summary tab for privacy reasons.</property>
-                                <signal name="toggled" handler="show_preview_changed_cb" swapped="no"/>
-                                <layout>
-                                  <property name="row">9</property>
                                   <property name="column">0</property>
                                 </layout>
                               </object>

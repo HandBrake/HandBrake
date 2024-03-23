@@ -1150,6 +1150,14 @@ ghb_prefs_load(signal_user_data_t *ud)
 #endif
         store_prefs();
     }
+    // Migrate from legacy preferences
+    if (ghb_dict_get_int(dict, "DiskFreeLimit"))
+    {
+        int limit_gb = ghb_dict_get_int(dict, "DiskFreeLimit") / 1000;
+        if (limit_gb <= 0) limit_gb = 1;
+        ghb_dict_set_int(dict, "DiskFreeLimitGB", limit_gb);
+        ghb_dict_remove(dict, "DiskFreeLimit");
+    }
     ghb_dict_remove(dict, "show_presets");
 }
 

@@ -69,7 +69,7 @@
         "CustomTmpEnable": false,
         "CustomTmpDir": "",
         "DiskFreeCheck": true,
-        "DiskFreeLimit": 2000,
+        "DiskFreeLimitGB": 2,
         "RemoveFinishedJobs": false,
         "SyncTitleSettings": true,
         "AutoScan": false,
