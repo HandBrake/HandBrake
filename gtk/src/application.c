@@ -70,6 +70,8 @@ G_DEFINE_TYPE (GhbApplication, ghb_application, GTK_TYPE_APPLICATION)
 
 static char *dvd_device = NULL;
 static char *arg_preset = NULL;
+static gboolean auto_start_queue = FALSE;
+static gboolean clear_queue = FALSE;
 static gboolean redirect_io = TRUE;
 
 static GtkBuilder*
@@ -931,6 +933,8 @@ static GOptionEntry option_entries[] =
     { "debug",  'x', 0, G_OPTION_ARG_NONE, NULL, N_("Spam a lot"), NULL },
     { "config", 'o', 0, G_OPTION_ARG_STRING, NULL, N_("The path to override user config dir"), "DIR" },
     { "console",'c', 0, G_OPTION_ARG_NONE, NULL, N_("Write debug output to console instead of capturing it"), NULL },
+    { "auto-start-queue", 0, 0, G_OPTION_ARG_NONE, &auto_start_queue, N_("Automatically start the queue"), NULL },
+    { "clear-queue", 0, 0, G_OPTION_ARG_NONE, &clear_queue, N_("Clear previous items from the queue"), NULL },
     { NULL }
 };
 
@@ -1191,3 +1195,14 @@ ghb_set_scan_source (const char *source)
     ghb_dict_set_string(app->ud->settings, "source", source);
 }
 
+gboolean
+ghb_get_load_queue (void)
+{
+    return !clear_queue;
+}
+
+gboolean
+ghb_get_auto_start_queue (void)
+{
+    return auto_start_queue;
+}

@@ -42,6 +42,8 @@ static void queue_window_show(signal_user_data_t *ud);
 // Callbacks
 G_MODULE_EXPORT void
 queue_remove_clicked_cb (GtkWidget *widget, signal_user_data_t *ud);
+G_MODULE_EXPORT void
+queue_start_action_cb (GSimpleAction *action, GVariant *param, signal_user_data_t *ud);
 
 G_MODULE_EXPORT gboolean
 queue_row_key_cb (GtkEventControllerKey * keycon, guint keyval,
@@ -1942,6 +1944,11 @@ find_pid:
 
     queue = ghb_load_old_queue(pid);
     ghb_remove_old_queue_file(pid);
+    if (!ghb_get_load_queue())
+    {
+        ghb_value_free(&queue);
+        goto find_pid;
+    }
 
     // Look for unfinished entries
     count = ghb_array_len(queue);
@@ -1988,6 +1995,9 @@ find_pid:
 
 done:
     ghb_write_pid_file();
+
+    if (ghb_get_auto_start_queue())
+        queue_start_action_cb(NULL, NULL, ud);
 
     return FALSE;
 }

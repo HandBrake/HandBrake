@@ -25,6 +25,8 @@ char *ghb_application_get_app_dir(GhbApplication *self);
 signal_user_data_t *ghb_ud (void);
 int ghb_get_cancel_status(void);
 void ghb_set_cancel_status(int status);
+gboolean ghb_get_load_queue(void);
+gboolean ghb_get_auto_start_queue(void);
 int ghb_get_queue_done_action(void);
 void ghb_set_queue_done_action(int action);
 void ghb_set_scan_source(const char *source);
