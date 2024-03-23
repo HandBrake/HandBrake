@@ -453,7 +453,7 @@ static GhbBinding widget_bindings[] =
     {"CustomTmpEnable", "active", NULL, "CustomTmpDir", "sensitive"},
     {"PresetCategory", "active-id", "new", "PresetCategoryName", "visible"},
     {"PresetCategory", "active-id", "new", "PresetCategoryEntryLabel", "visible"},
-    {"DiskFreeCheck", "active", NULL, "DiskFreeLimit", "sensitive"}
+    {"DiskFreeCheck", "active", NULL, "DiskFreeLimitGB", "sensitive"}
 };
 
 void

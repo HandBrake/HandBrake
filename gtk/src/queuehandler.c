@@ -1612,8 +1612,8 @@ void ghb_low_disk_check (signal_user_data_t *ud)
         // Failed to read free space
         return;
     }
-    // limit is in MB
-    free_limit = ghb_dict_get_int(ud->prefs, "DiskFreeLimit") * 1024 * 1024;
+    // limit is in GB
+    free_limit = ghb_dict_get_int(ud->prefs, "DiskFreeLimitGB") * 1024;
     if (free_size > free_limit)
     {
         return;
@@ -1621,7 +1621,7 @@ void ghb_low_disk_check (signal_user_data_t *ud)
 
     ghb_pause_queue();
     ghb_send_notification(GHB_NOTIFY_PAUSED_LOW_DISK_SPACE,
-                          free_size / (1024 * 1024), ud);
+                          free_size / 1024, ud);
     dest      = ghb_dict_get_string(settings, "destination");
     hb_window = GTK_WINDOW(ghb_builder_widget("hb_window"));
     dialog    = gtk_message_dialog_new(hb_window, GTK_DIALOG_MODAL,
