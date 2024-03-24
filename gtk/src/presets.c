@@ -1913,7 +1913,7 @@ store_prefs(void)
         if (source != NULL)
             g_source_destroy(source);
     }
-    prefs_timeout_id = g_timeout_add_seconds(1, (GSourceFunc)delayed_store_prefs, NULL);
+    prefs_timeout_id = g_timeout_add(100, (GSourceFunc)delayed_store_prefs, NULL);
 }
 
 void

@@ -5533,7 +5533,24 @@ Uncheck this if you want to allow changing each title&apos;s settings independen
                             <property name="margin-start">8</property>
                             <property name="margin-end">4</property>
                             <property name="spacing">8</property>
-                            <property name="tooltip-text" translatable="yes">File extensions to exclude when scanning folders, separated by spaces.</property>
+                            <child>
+                              <object class="GtkLabel" id="exclude_extensions_label">
+                                <property name="halign">end</property>
+                                <property name="valign">start</property>
+                                <property name="label" translatable="yes">Excluded Extensions:</property>
+                                <property name="use-markup">1</property>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GhbStringList" id="ExcludedFileExtensions">
+                                <property name="focusable">1</property>
+                                <property name="tooltip-text" translatable="yes">The following file extensions will be ignored when scanning a folder. The list is case insensitive.</property>
+                                <signal name="notify::items" handler="pref_changed_cb" swapped="no"/>
+                                <accessibility>
+                                  <relation name="labelled-by">exclude_extensions_label</relation>
+                                </accessibility>
+                              </object>
+                            </child>
                           </object>
                         </child>
                       </object>

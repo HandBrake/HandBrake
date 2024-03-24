@@ -4923,6 +4923,19 @@ pref_changed_cb (GtkWidget *widget, gpointer data)
 }
 
 G_MODULE_EXPORT void
+excluded_extensions_update (GObject *gobject, GParamSpec *pspec,
+                            gpointer user_data)
+{
+    GtkWidget *widget = ghb_builder_widget("ExcludedFileExtensions");
+    signal_user_data_t *ud = ghb_ud();
+
+    ghb_widget_to_setting(ud->prefs, widget);
+
+    const gchar *name = ghb_get_setting_key(widget);
+    ghb_pref_set(ud->prefs, name);
+}
+
+G_MODULE_EXPORT void
 log_level_changed_cb (GtkWidget *widget, gpointer data)
 {
     signal_user_data_t *ud = ghb_ud();
@@ -5534,3 +5547,12 @@ log_directory_action_cb (GSimpleAction *action, GVariant *param, signal_user_dat
     ghb_browse_uri(uri);
 }
 
+G_MODULE_EXPORT void
+string_list_changed_cb (GtkStringList *self, guint position,
+                        guint removed, guint added, gpointer user_data)
+{
+    for (int i = 0; i < g_list_model_get_n_items(G_LIST_MODEL(self)); i++)
+    {
+         printf("String: %s\n", gtk_string_list_get_string(self, i));
+    }
+}
