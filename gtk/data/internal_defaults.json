@@ -84,6 +84,14 @@
         "default_source": "/dev/dvd",
         "ExportDirectory": "",
         "destination_dir": "",
+        "ExcludedFileExtensions": [
+            "jpg",
+            "png",
+            "srt",
+            "ssa",
+            "ass",
+            "txt"
+        ],
         "hbfd": false,
         "hbfd_feature": false,
         "live_duration": 15,

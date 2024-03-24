@@ -12,6 +12,7 @@ ghb_src = files(
   'ghb-chapter-row.c',
   'ghb-file-button.c',
   'ghb-queue-row.c',
+  'ghb-string-list.c',
   'hb-backend.c',
   'hb-dvd.c',
   'jobdict.c',

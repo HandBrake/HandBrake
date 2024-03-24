@@ -21,6 +21,7 @@
 
 #include "application.h"
 #include "ghb-file-button.h"
+#include "ghb-string-list.h"
 #include "hb-backend.h"
 
 #include <fcntl.h>
@@ -187,6 +188,17 @@ ghb_widget_value(GtkWidget *widget)
         g_free(str);
 
     }
+    else if (type == GHB_TYPE_STRING_LIST)
+    {
+        char **strings = ghb_string_list_get_items(GHB_STRING_LIST(widget));
+        value = ghb_array_new();
+        for (guint i = 0; i < g_strv_length(strings); i++)
+        {
+            GhbValue *ival = ghb_string_value_new(strings[i]);
+            ghb_array_append(value, ival);
+        }
+        g_strfreev(strings);
+    }
     else
     {
         g_warning("Attempt to get unknown widget type, name %s", name);
@@ -288,7 +300,7 @@ ghb_update_widget(GtkWidget *widget, const GhbValue *value)
 
     const char *name = ghb_get_setting_key(widget);
     type = ghb_value_type(value);
-    if (type == GHB_ARRAY || type == GHB_DICT)
+    if (type == GHB_DICT)
         return;
     if (value == NULL) return;
     str = tmp = ghb_value_get_string_xform(value);
@@ -426,6 +438,17 @@ ghb_update_widget(GtkWidget *widget, const GhbValue *value)
                 g_free(dirname);
             }
         }
+    }
+    else if (type == GHB_TYPE_STRING_LIST)
+    {
+        const char **strings = g_malloc0_n(ghb_array_len(value) + 1, sizeof(char *));
+        for (int j = 0; j < ghb_array_len(value); j++)
+        {
+            GhbValue *item = ghb_array_get(value, j);
+            strings[j] = ghb_value_get_string(item);
+        }
+        ghb_string_list_set_items(GHB_STRING_LIST(widget), strings);
+        g_free(strings);
     }
     else
     {
