@@ -73,4 +73,7 @@ const char* const* hb_av_profile_get_names(int encoder);
 const char* const* hb_av_level_get_names(int encoder);
 const int* hb_av_get_pix_fmts(int encoder);
 
+int hb_av_can_use_zscale(enum AVPixelFormat pix_fmt, int width, int height);
+
+
 #endif // HANDBRAKE_FFMPEG_H
