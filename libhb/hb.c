@@ -915,8 +915,21 @@ hb_image_t * hb_get_preview3(hb_handle_t * h, int picture,
     }
     hb_dict_set_int(filter->settings, "width", scaled_width);
     hb_dict_set_int(filter->settings, "height", scaled_height);
-    hb_dict_set_string(filter->settings, "out_pix_fmt", av_get_pix_fmt_name(AV_PIX_FMT_RGB32));
     hb_list_add(job->list_filter, filter);
+
+    if (filter->init != NULL && filter->init(filter, &init))
+    {
+        hb_error("hb_get_preview3: Failure to initialize filter '%s'",
+                 filter->name);
+        hb_list_rem(list_filter, filter);
+        hb_filter_close(&filter);
+    }
+
+    filter = hb_filter_init(HB_FILTER_FORMAT);
+    filter->settings = hb_dict_init();
+    hb_dict_set_string(filter->settings, "format", av_get_pix_fmt_name(AV_PIX_FMT_RGB32));
+    hb_list_add(job->list_filter, filter);
+
     if (filter->init != NULL && filter->init(filter, &init))
     {
         hb_error("hb_get_preview3: Failure to initialize filter '%s'",
