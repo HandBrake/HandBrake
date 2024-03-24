@@ -9,6 +9,7 @@
 
 #include "handbrake/common.h"
 #include "handbrake/avfilter_priv.h"
+#include "handbrake/hbffmpeg.h"
 #if HB_PROJECT_FEATURE_QSV && (defined( _WIN32 ) || defined( __MINGW32__ ))
 #include "handbrake/qsv_common.h"
 #include "libavutil/hwcontext_qsv.h"
@@ -149,8 +150,7 @@ static int crop_scale_init(hb_filter_object_t * filter, hb_filter_init_t * init)
             hb_dict_set_string(avsettings, "format", av_get_pix_fmt_name(init->pix_fmt));
             hb_dict_set(avfilter, "scale_cuda", avsettings);
         }
-        else if ((width % 2) == 0 && (height % 2) == 0 &&
-            (cropped_width % 2) == 0 && (cropped_height % 2) == 0)
+        else if (hb_av_can_use_zscale(init->pix_fmt, init->geometry.width, init->geometry.height))
         {
             hb_dict_set_int(avsettings, "width", width);
             hb_dict_set_int(avsettings, "height", height);
@@ -167,32 +167,6 @@ static int crop_scale_init(hb_filter_object_t * filter, hb_filter_init_t * init)
     }
     
     hb_value_array_append(avfilters, avfilter);
-
-    avfilter   = hb_dict_init();
-    avsettings = hb_dict_init();
-
-#if HB_PROJECT_FEATURE_QSV && (defined( _WIN32 ) || defined( __MINGW32__ ))
-    if (!(hb_qsv_hw_filters_via_video_memory_are_enabled(init->job) || hb_qsv_hw_filters_via_system_memory_are_enabled(init->job)))
-#endif
-    {
-        char * out_pix_fmt = NULL;
-
-        // "out_pix_fmt" is a private option used internally by
-        // handbrake for preview generation
-        hb_dict_extract_string(&out_pix_fmt, settings, "out_pix_fmt");
-        if (out_pix_fmt != NULL)
-        {
-            hb_dict_set_string(avsettings, "pix_fmts", out_pix_fmt);
-            free(out_pix_fmt);
-        }
-        else
-        {
-            hb_dict_set_string(avsettings, "pix_fmts",
-                av_get_pix_fmt_name(init->pix_fmt));
-        }
-        hb_dict_set(avfilter, "format", avsettings);
-        hb_value_array_append(avfilters, avfilter);
-    }
 
     init->crop[0] = top;
     init->crop[1] = bottom;
