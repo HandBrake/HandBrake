@@ -5911,7 +5911,10 @@ static hb_title_t *ffmpeg_title_scan( hb_stream_t *stream, hb_title_t *title )
             // title->video_timebase.den = st->time_base.den;
             title->video_timebase.num = 1;
             title->video_timebase.den = 90000;
-            if (ic->iformat->raw_codec_id != AV_CODEC_ID_NONE)
+
+            // If neither the start_time neither the duration is set,
+            // it's probably a raw video with no timestamps
+            if (st->start_time == AV_NOPTS_VALUE && st->duration == AV_NOPTS_VALUE)
             {
                 title->flags |= HBTF_RAW_VIDEO;
             }
