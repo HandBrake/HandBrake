@@ -3491,14 +3491,12 @@ void ghb_backend_scan_stop (void)
     hb_scan_stop( h_scan );
 }
 
-static hb_list_t *
-get_exclude_extensions_list (void)
+hb_list_t *
+ghb_get_excluded_extensions_list (void)
 {
     signal_user_data_t *ud = ghb_ud();
 
     GhbValue *ext_array = ghb_dict_get(ud->prefs, "ExcludedFileExtensions");
-    g_autofree char *json = hb_value_get_json(ext_array);
-    printf("%s\n", json);
 
     if (!ext_array) return NULL;
 
@@ -3509,14 +3507,13 @@ get_exclude_extensions_list (void)
         const char *ext = ghb_value_get_string(value);
         if (ext && ext[0])
             hb_list_add(ext_list, g_strdup(ext));
-
-        printf("Excluded extension: %s\n", ext);
+        ghb_log("Excluded extension %s", ext);
     }
     return ext_list;
 }
 
-static void
-free_list (hb_list_t *list)
+void
+ghb_free_list (hb_list_t *list)
 {
     for (int i = 0; i < hb_list_count(list); i++)
     {
@@ -3542,11 +3539,11 @@ void
 ghb_backend_scan_list (GListModel *files, int titleindex, int preview_count, uint64_t min_duration)
 {
     hb_list_t *path_list = get_path_list(files);
-    hb_list_t *exclude_extensions = get_exclude_extensions_list();
+    hb_list_t *extensions = ghb_get_excluded_extensions_list();
     hb_scan_list(h_scan, path_list, titleindex, preview_count, 1, min_duration,
-                 0, 0, exclude_extensions, 0);
-    free_list(path_list);
-    free_list(exclude_extensions);
+                 0, 0, extensions, 0);
+    ghb_free_list(path_list);
+    ghb_free_list(extensions);
     hb_status.scan.state |= GHB_STATE_SCANNING;
     // initialize count and cur to something that won't cause FPE
     // when computing progress
@@ -3561,12 +3558,12 @@ void
 ghb_backend_scan (const char *path, int titleindex, int preview_count, uint64_t min_duration)
 {
     hb_list_t *path_list = hb_list_init();
-    hb_list_add(path_list, (gpointer)path);
-    hb_list_t *exclude_extensions = get_exclude_extensions_list();
+    hb_list_add(path_list, (void *)path);
+    hb_list_t *extensions = ghb_get_excluded_extensions_list();
     hb_scan_list(h_scan, path_list, titleindex, preview_count, 1, min_duration,
-                 0, 0, exclude_extensions, 0);
+                 0, 0, extensions, 0);
     hb_list_close(&path_list);
-    free_list(exclude_extensions);
+    ghb_free_list(extensions);
     hb_status.scan.state |= GHB_STATE_SCANNING;
     // initialize count and cur to something that won't cause FPE
     // when computing progress
@@ -3581,9 +3578,11 @@ void
 ghb_backend_queue_scan(const gchar *path, gint titlenum)
 {
     ghb_log_func();
+    hb_list_t *extensions = ghb_get_excluded_extensions_list();
     hb_list_t *path_list = hb_list_init();
     hb_list_add(path_list, (void *)path);
-    hb_scan_list(h_queue, path_list, titlenum, -1, 0, 0, 0, 0, NULL, 0);
+    hb_scan_list(h_queue, path_list, titlenum, -1, 0, 0, 0, 0, extensions, 0);
+    ghb_free_list(extensions);
     hb_list_close(&path_list);
     hb_status.queue.state |= GHB_STATE_SCANNING;
 }
