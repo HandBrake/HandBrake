@@ -79,6 +79,7 @@
         "PauseEncodingOnPowerSave": true,
         "PauseEncodingOnBatteryPower": false,
         "PauseEncodingOnLowBattery": false,
+        "RecursiveFolderScan": false,
         "LowBatteryLevel": 15,
         "allow_tweaks": false,
         "default_source": "/dev/dvd",

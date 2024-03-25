@@ -1668,6 +1668,7 @@ source_dialog_response_cb(GtkFileChooser *chooser,
 {
     if (response == GTK_RESPONSE_ACCEPT)
     {
+
         if (g_strcmp0(gtk_file_chooser_get_choice(chooser, "single"), "true") == 0)
         {
             single_title_dialog(chooser);
@@ -1685,44 +1686,148 @@ source_dialog_response_cb(GtkFileChooser *chooser,
     }
 }
 
+static int
+file_name_compare (GFile *file1, GFile *file2, gpointer data)
+{
+    return g_strcmp0(g_file_peek_path(file1), g_file_peek_path(file2));
+}
+
+static gboolean
+file_has_allowed_extension (GFile *file, hb_list_t *exclude_extensions)
+{
+    const char *filename = g_file_peek_path(file);
+
+    for (int i = 0; i < hb_list_count(exclude_extensions); i++)
+    {
+        if (hb_str_ends_with(filename, hb_list_item(exclude_extensions, i)))
+        {
+            g_debug("Excluded file %s", filename);
+            return FALSE;
+        }
+    }
+    g_debug("Found file %s", filename);
+    return TRUE;
+}
+
+static void
+scan_directory (GFile *dir, GListStore *file_list, gboolean recursive)
+{
+    g_autoptr(GFileEnumerator) dir_enum = NULL;
+    g_autoptr(GError) error = NULL;
+
+    ghb_log("Searching directory %s", g_file_peek_path(dir));
+
+    // Get info about the files in the directory
+    dir_enum = g_file_enumerate_children(dir, "standard::name,standard::is-symlink,standard::type",
+                                         G_FILE_QUERY_INFO_NONE, NULL, &error);
+
+    if (dir_enum)
+    {
+        GFileInfo *info;
+        GFile *file;
+        hb_list_t *extensions = ghb_get_excluded_extensions_list();
+
+        while (g_file_enumerator_iterate(dir_enum, &info, &file, NULL, &error))
+        {
+            if (!info) break;
+
+            // Avoid symlinks to directories in order to avoid infinite loops
+            if (recursive && !g_file_info_get_is_symlink(info)
+                && g_file_info_get_file_type(info) == G_FILE_TYPE_DIRECTORY)
+            {
+                scan_directory(file, file_list, TRUE);
+            }
+            else if (g_file_info_get_file_type(info) == G_FILE_TYPE_REGULAR
+                     && file_has_allowed_extension(file, extensions))
+            {
+                g_debug("Found file: %s", g_file_peek_path(file));
+                g_list_store_insert_sorted(file_list, g_object_ref(file),
+                                           (GCompareDataFunc) file_name_compare, NULL);
+            }
+        }
+        if (error)
+        {
+            g_warning("Could not scan files: %s", error->message);
+        }
+        ghb_free_list(extensions);
+    }
+    else
+    {
+        g_warning("Could not enumerate directory: %s", error->message);
+    }
+}
+
 static void
 source_dialog_start_scan (GtkFileChooser *chooser, int title_id)
 {
+    gboolean recursive = FALSE;
     g_autoptr(GListModel) files = NULL;
-    g_autoptr(GFile) file = NULL;
-    const char *sourcename, *filename = NULL;
-    const char *drivename = NULL;
+    g_autofree char *def_src = NULL;
     signal_user_data_t *ud = ghb_ud();
 
-    if (has_drive)
-        drivename = gtk_file_chooser_get_choice(chooser, "drive");
-
-    if (drivename && g_strcmp0(drivename, _("Not Selected")))
-        filename = drivename;
-    else
+    if (gtk_file_chooser_get_action(chooser) == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER)
     {
-        files = gtk_file_chooser_get_files(chooser);
-        if (g_list_model_get_n_items(files))
+        // The recursive choice only exists in directory mode
+        recursive = !g_strcmp0(gtk_file_chooser_get_choice(chooser, "recursive"), "true");
+        ghb_dict_set_bool(ud->prefs, "RecursiveFolderScan", recursive);
+        ghb_pref_save(ud->prefs, "RecursiveFolderScan");
+    }
+    else if (has_drive)
+    {
+        // The drive choice only exists in file mode when a DVD drive is detected
+        const char *drivename = gtk_file_chooser_get_choice(chooser, "drive");
+        if (drivename && g_strcmp0(drivename, _("Not Selected")))
         {
-            file = g_list_model_get_item(files, 0);
-            filename = g_file_peek_path(file);
+            files = G_LIST_MODEL(g_list_store_new(G_TYPE_FILE));
+            g_list_store_append(G_LIST_STORE(files), g_file_new_for_path(drivename));
+            def_src = g_strdup(drivename);
         }
     }
 
-    if (filename != NULL && filename[0] != '\0')
+    if (!def_src)
     {
-        sourcename = ghb_get_scan_source();
+        g_autoptr(GListModel) selected_files = gtk_file_chooser_get_files(chooser);
+
+        if (g_list_model_get_n_items(selected_files))
+        {
+            g_autoptr(GFile) file = g_list_model_get_item(selected_files, 0);
+            def_src = g_file_get_path(file);
+        }
+
+        if (recursive)
+        {
+            // Scan the directories provided for files
+            GListStore *out_files = g_list_store_new(G_TYPE_FILE);
+            for (guint i = 0; i < g_list_model_get_n_items(selected_files); i++)
+            {
+                g_autoptr(GFile) dir = g_list_model_get_item(selected_files, i);
+                scan_directory(dir, out_files, TRUE);
+            }
+            files = G_LIST_MODEL(out_files);
+            ghb_log("Recursive scan found %u files", g_list_model_get_n_items(files));
+        }
+        else
+        {
+            // Use the list of chosen files or folders directly
+            files = g_steal_pointer(&selected_files);
+        }
+    }
+
+    if (def_src != NULL && def_src[0] != '\0')
+    {
+        const char *sourcename = ghb_get_scan_source();
 
         // ghb_do_scan replaces "source" key in dict, so we must
         // be finished with sourcename before calling ghb_do_scan
         // since the memory it references will be freed
-        if (strcmp(sourcename, filename) != 0)
+        if (strcmp(sourcename, def_src) != 0)
         {
-            ghb_dict_set_string(ud->prefs, "default_source", filename);
+            ghb_dict_set_string(ud->prefs, "default_source", def_src);
             ghb_pref_save(ud->prefs, "default_source");
-            ghb_dvd_set_current(filename, ud);
+            ghb_dvd_set_current(def_src, ud);
         }
-        ghb_do_scan_list(ud, files, title_id, TRUE);
+        if (files)
+            ghb_do_scan_list(ud, files, title_id, TRUE);
     }
     source_dialog = NULL;
     gtk_native_dialog_destroy(GTK_NATIVE_DIALOG(chooser));
@@ -1760,13 +1865,19 @@ do_source_dialog(gboolean dir, signal_user_data_t *ud)
 
     sourcename = ghb_get_scan_source();
 
-    if (!dir)
+    if (dir)
+    {
+        gtk_file_chooser_add_choice(GTK_FILE_CHOOSER(chooser), "recursive",
+                _("Recursively scan directories"), NULL, NULL);
+        gtk_file_chooser_set_choice(GTK_FILE_CHOOSER(chooser), "recursive",
+                ghb_dict_get_bool(ud->prefs, "RecursiveFolderScan") ? "true" : "false");
+    }
+    else
     {
         gtk_file_chooser_set_select_multiple(GTK_FILE_CHOOSER(chooser), TRUE);
+        source_dialog_drive_list(GTK_FILE_CHOOSER(chooser), ud);
         add_video_file_filters(GTK_FILE_CHOOSER(chooser));
     }
-
-    source_dialog_drive_list(GTK_FILE_CHOOSER(chooser), ud);
 
     gtk_file_chooser_add_choice(GTK_FILE_CHOOSER(chooser), "single",
                                 _("Single Title"), NULL, NULL);
