@@ -263,10 +263,10 @@ static int encavcodecaInit(hb_work_object_t *w, hb_job_t *job)
                        AV_SAMPLE_FMT_FLT, 0);
         av_opt_set_int(pv->swresample, "out_sample_fmt",
                        context->sample_fmt, 0);
-        av_opt_set_int(pv->swresample, "in_channel_layout",
-                       context->ch_layout.u.mask, 0);
-        av_opt_set_int(pv->swresample, "out_channel_layout",
-                       context->ch_layout.u.mask, 0);
+        av_opt_set_chlayout(pv->swresample, "in_chlayout",
+                       &context->ch_layout, 0);
+        av_opt_set_chlayout(pv->swresample, "out_chlayout",
+                       &context->ch_layout, 0);
         av_opt_set_int(pv->swresample, "in_sample_rate",
                        context->sample_rate, 0);
         av_opt_set_int(pv->swresample, "out_sample_rate",
