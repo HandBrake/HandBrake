@@ -1,4 +1,4 @@
-/* dovi_common.h
+/* rpu.h
 
    Copyright (c) 2003-2024 HandBrake Team
    This file is part of the HandBrake source code
@@ -7,12 +7,13 @@
    For full terms see the file COPYING file or visit http://www.gnu.org/licenses/gpl-2.0.html
  */
 
-#ifndef HANDBRAKE_DOVI_COMMON_H
-#define HANDBRAKE_DOVI_COMMON_H
+#ifndef HANDBRAKE_RPU_H
+#define HANDBRAKE_RPU_H
 
-#include <stdint.h>
+#define RPU_MODE_UPDATE_ACTIVE_AREA  1
+#define RPU_MODE_CONVERT_TO_8_1      2
 
-int hb_dovi_max_rate(int vcodec, int width, int pps, int bitrate, int level, int high_tier);
-int hb_dovi_level(int width, int pps, int max_rate, int high_tier);
+#define RPU_MODE_EMIT_UNSPECT_62_NAL 3
+#define RPU_MODE_EMIT_T35_OBU        4
 
-#endif // HANDBRAKE_DOVI_COMMON_H
+#endif // HANDBRAKE_RPU_H

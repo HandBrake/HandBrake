@@ -509,7 +509,8 @@ int encx265Init(hb_work_object_t *w, hb_job_t *job)
         // set the max value for the current level or guess one
         if (param->rc.vbvMaxBitrate == 0 || param->rc.vbvBufferSize == 0)
         {
-            int max_rate = hb_dovi_max_rate(job->width, pps, bitrate, param->levelIdc, param->bHighTier);
+            int max_rate = hb_dovi_max_rate(job->vcodec, job->width, pps, bitrate,
+                                            param->levelIdc, param->bHighTier);
             param->rc.vbvMaxBitrate = max_rate;
             param->rc.vbvBufferSize = max_rate;
         }
