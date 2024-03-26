@@ -274,6 +274,7 @@ static int comb_detect_vt_init(hb_filter_object_t *filter,
     descriptor.height           = init->geometry.height;
     descriptor.depth            = 1;
     descriptor.storageMode      = MTLStorageModePrivate;
+    descriptor.usage            = MTLResourceUsageRead | MTLResourceUsageWrite;
 
     pv->mask   = [pv->mtl->device newTextureWithDescriptor:descriptor];
     pv->temp   = [pv->mtl->device newTextureWithDescriptor:descriptor];
