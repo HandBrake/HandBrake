@@ -133,6 +133,7 @@ int hb_buffer_list_size(hb_buffer_list_t *list);
 hb_list_t * hb_list_init(void);
 int         hb_list_count( const hb_list_t * );
 void        hb_list_add( hb_list_t *, void * );
+void        hb_list_add_dup( hb_list_t *, void *, int );
 void        hb_list_insert( hb_list_t * l, int pos, void * p );
 void        hb_list_rem( hb_list_t *, void * );
 void      * hb_list_item( const hb_list_t *, int );
@@ -922,6 +923,17 @@ struct hb_job_s
 // Update win/CS/HandBrake.Interop/HandBrakeInterop/HbLib/hb_audio_config_s.cs when changing this struct
 struct hb_audio_config_s
 {
+    // index of this item in title.list_audio
+    int index;
+
+    // index of a "linked" audio item in title.list_audio
+    // a linked audio is *exactly* the same audio encoded differently
+    //
+    // e.g. TrueHD tracks that have embedded AC3 and DTSHD that have
+    // embedded DTS are split into distinct "tracks" by HandBrake but
+    // are actually the exact same source track.
+    hb_list_t * list_linked_index;
+
     /* Output */
     struct
     {
@@ -958,7 +970,7 @@ struct hb_audio_config_s
     /* Input */
     struct
     {
-        int track; /* Input track number */
+        PRIVATE int track; /* Input track number */
         PRIVATE uint32_t codec; /* Input audio codec */
         PRIVATE uint32_t codec_param; /* Per-codec config info */
         PRIVATE uint32_t reg_desc; /* Registration descriptor of source */

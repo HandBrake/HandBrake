@@ -2096,15 +2096,48 @@ static void pes_add_subtitle_to_title(
     }
 }
 
+// Fix up title.list_audio indexes since audio can be inserted
+// out of order in pes_add_audio_to_title
+static void pes_set_audio_indices(hb_title_t * title)
+{
+    int ii, jj, count;
+
+    count = hb_list_count( title->list_audio );
+
+    for ( ii = 0; ii < count; ii++ )
+    {
+        hb_audio_t *audio_ii;
+
+        audio_ii = hb_list_item( title->list_audio, ii );
+        audio_ii->config.index = ii;
+        for ( jj = 0; jj < count; jj++ )
+        {
+            hb_audio_t *audio_jj;
+
+            audio_jj = hb_list_item( title->list_audio, jj );
+            // if same PID or stream_id and not same audio track, link
+            if ((audio_ii->id & 0xffff) == (audio_jj->id & 0xffff) && ii != jj)
+            {
+                if (audio_ii->config.list_linked_index == NULL)
+                {
+                    audio_ii->config.list_linked_index = hb_list_init();
+                }
+                hb_list_add_dup(audio_ii->config.list_linked_index,
+                                &jj, sizeof(jj));
+            }
+        }
+    }
+}
+
 // Sort specifies the index in the audio list where you would
 // like sorted items to begin.
 static void pes_add_audio_to_title(
     hb_stream_t *stream,
-    int         idx,
+    int         track,
     hb_title_t  *title,
     int         sort)
 {
-    hb_pes_stream_t *pes = &stream->pes.list[idx];
+    hb_pes_stream_t *pes = &stream->pes.list[track];
 
     // Sort by id when adding to the list
     // This assures that they are always displayed in the same order
@@ -2139,7 +2172,7 @@ static void pes_add_audio_to_title(
     hb_log("stream id 0x%x (type 0x%x substream 0x%x) audio 0x%x",
            pes->stream_id, pes->stream_type, pes->stream_id_ext, audio->id);
 
-    audio->config.in.track = idx;
+    audio->config.in.track = track;
 
     // Search for the sort position
     if ( sort >= 0 )
@@ -2236,6 +2269,7 @@ static void hb_init_audio_list(hb_stream_t *stream, hb_title_t *title)
             pes_add_audio_to_title( stream, ii, title, count );
         }
     }
+    pes_set_audio_indices(title);
 }
 
 /***********************************************************************
@@ -5361,6 +5395,51 @@ static const char * ffmpeg_track_name(AVStream * st, const char * lang)
     return NULL;
 }
 
+static void find_ffmpeg_fallback_audio(hb_title_t *title)
+{
+    int count = hb_list_count(title->list_audio);
+    int ii, jj, kk;
+
+    for (ii = 0; ii < count; ii++)
+    {
+        hb_audio_t *audio_ii = hb_list_item(title->list_audio, ii);
+
+        if (audio_ii->config.list_linked_index != NULL)
+        {
+            hb_list_t * list_linked_index = audio_ii->config.list_linked_index;
+            hb_list_t * new_list_linked_index = hb_list_init();
+            int         linked_count = hb_list_count(list_linked_index);
+            for (jj = 0; jj < linked_count; jj++)
+            {
+                int linked_index = *(int*)hb_list_item(list_linked_index, jj);
+                for (kk = 0; kk < count; kk++)
+                {
+                    hb_audio_t *audio_kk = hb_list_item(title->list_audio, kk);
+                    if (linked_index == audio_kk->id && kk != ii)
+                    {
+                        hb_list_add_dup(new_list_linked_index, &kk, sizeof(kk));
+                    }
+                }
+            }
+            int * item;
+            while ((item = hb_list_item(list_linked_index, 0)))
+            {
+                hb_list_rem(list_linked_index, item);
+                free(item);
+            }
+            hb_list_close(&audio_ii->config.list_linked_index);
+            if (hb_list_count(new_list_linked_index) > 0)
+            {
+                audio_ii->config.list_linked_index = new_list_linked_index;
+            }
+            else
+            {
+                hb_list_close(&new_list_linked_index);
+            }
+        }
+    }
+}
+
 static void add_ffmpeg_audio(hb_title_t *title, hb_stream_t *stream, int id)
 {
     AVStream *st                = stream->ffmpeg_ic->streams[id];
@@ -5370,8 +5449,39 @@ static void add_ffmpeg_audio(hb_title_t *title, hb_stream_t *stream, int id)
                                               tag_lang->value : "und");
     const char        * name = ffmpeg_track_name(st, lang->iso639_2);
 
-    hb_audio_t *audio              = calloc(1, sizeof(*audio));
+    hb_audio_t        * audio = calloc(1, sizeof(*audio));
+    int ii;
+    for (ii = 0; ii < st->nb_side_data; ii++)
+    {
+        AVPacketSideData *sd = &st->side_data[ii];
+        switch (sd->type)
+        {
+            case AV_PKT_DATA_FALLBACK_TRACK:
+            {
+                if (sd->size == sizeof(int))
+                {
+                    int fallback = *(int*)sd->data;
+                    if (audio->config.list_linked_index == NULL)
+                    {
+                        audio->config.list_linked_index = hb_list_init();
+                    }
+                    // This is not actually the "right" index to store
+                    // in list_linked_index. But we need the complete
+                    // audio list before we can correct it.
+                    //
+                    // This gets corrected in find_ffmpeg_fallback_audio
+                    // after all tracks have been scanned.
+                    hb_list_add_dup(audio->config.list_linked_index,
+                                    &fallback, sizeof(fallback));
+                }
+            } break;
+
+            default:
+                break;
+        }
+    }
     audio->id                      = id;
+    audio->config.index            = hb_list_count(title->list_audio);
     audio->config.in.track         = id;
     audio->config.in.codec         = HB_ACODEC_FFMPEG;
     audio->config.in.codec_param   = codecpar->codec_id;
@@ -5930,6 +6040,7 @@ static hb_title_t *ffmpeg_title_scan( hb_stream_t *stream, hb_title_t *title )
             add_ffmpeg_attachment( title, stream, i );
         }
     }
+    find_ffmpeg_fallback_audio(title);
 
     title->container_name = strdup( ic->iformat->name );
     title->data_rate = ic->bit_rate;
