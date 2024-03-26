@@ -8,6 +8,7 @@
  */
 
 #include "handbrake/extradata.h"
+#include "handbrake/bitstream.h"
 #include "libavutil/intreadwrite.h"
 #include <ogg/ogg.h>
 
@@ -178,5 +179,163 @@ int hb_set_xiph_extradata(hb_data_t **extradata, uint8_t headers[3][HB_CONFIG_MA
         size += ogg_headers[ii]->bytes;
     }
 
+    return 0;
+}
+
+static int64_t get_uvlc(hb_bitstream_t *bs)
+{
+    int leadingZeros = 0;
+
+    while (1)
+    {
+        int done = hb_bitstream_get_bits(bs, 1);
+        if (done)
+        {
+            break;
+        }
+        leadingZeros += 1;
+    }
+    if (leadingZeros >= 32)
+    {
+        return ((int64_t)1 << 32) - 1;
+    }
+
+    return hb_bitstream_get_bits(bs, leadingZeros);
+}
+
+static int get_leb128(hb_bitstream_t *bs)
+{
+    int value = 0;
+    for (int i = 0; i < 8; i++)
+    {
+        int leb128_byte = hb_bitstream_get_bits(bs, 8);
+        value |= ((leb128_byte & 0x7f) << (i * 7));
+        if (!(leb128_byte & 0x80))
+        {
+            break;
+        }
+    }
+    return value;
+}
+
+int hb_parse_av1_extradata(hb_data_t *extradata, int *level_idx, int *high_tier)
+{
+    hb_bitstream_t bs;
+    int obu_type, obu_extension_flag, obu_has_size_field, obu_size = 0;
+    int seq_level_idx, seq_tier;
+
+    hb_bitstream_init(&bs, extradata->bytes, extradata->size, 0);
+
+    hb_bitstream_skip_bits(&bs, 1);  // obu_forbidden_bit
+    obu_type = hb_bitstream_get_bits(&bs, 4);
+    obu_extension_flag = hb_bitstream_get_bits(&bs, 1);
+    obu_has_size_field = hb_bitstream_get_bits(&bs, 1);
+    hb_bitstream_skip_bits(&bs, 1);  // obu_reserved_1bit
+
+    if (obu_type != 1)
+    {
+        goto fail;
+    }
+
+    if (obu_extension_flag)
+    {
+        hb_bitstream_skip_bits(&bs, 3);  // temporal_id
+        hb_bitstream_skip_bits(&bs, 2);  // spatial_id
+        hb_bitstream_skip_bits(&bs, 3);  // extension_header_reserved_3bits
+    }
+
+    if (obu_has_size_field)
+    {
+        obu_size = get_leb128(&bs);
+    }
+    else
+    {
+        obu_size = extradata->size - 1 - obu_extension_flag;
+    }
+
+    if (obu_size == 0)
+    {
+        goto fail;
+    }
+
+    hb_bitstream_skip_bits(&bs, 3);  // seq_profile
+    hb_bitstream_skip_bits(&bs, 1);  // still_picture
+    int reduced_still_picture_header = hb_bitstream_get_bits(&bs, 1);
+    if (reduced_still_picture_header)
+    {
+        seq_level_idx = hb_bitstream_get_bits(&bs, 5);
+        seq_tier = 0;
+    }
+    else
+    {
+        int timing_info_present_flag = hb_bitstream_get_bits(&bs, 1);
+        if (timing_info_present_flag)
+        {
+            hb_bitstream_skip_bits(&bs, 32);  // num_units_in_display_tick
+            hb_bitstream_skip_bits(&bs, 32);  // time_scale
+            int equal_picture_interval = hb_bitstream_get_bits(&bs, 1);  // time_scale
+            if (equal_picture_interval)
+            {
+                get_uvlc(&bs); // num_ticks_per_picture_minus_1
+            }
+
+            int decoder_model_info_present_flag = hb_bitstream_get_bits(&bs, 1);
+            if (decoder_model_info_present_flag)
+            {
+                hb_bitstream_skip_bits(&bs, 5);  // buffer_delay_length_minus_1
+                hb_bitstream_skip_bits(&bs, 32); // num_units_in_decoding_tick
+                hb_bitstream_skip_bits(&bs, 5);  // buffer_removal_time_length_minus_1
+                hb_bitstream_skip_bits(&bs, 3);  // frame_presentation_time_length_minus_1
+            }
+        }
+
+        hb_bitstream_skip_bits(&bs, 1); // initial_display_delay_present_flag
+        int operating_points_cnt_minus_1 = hb_bitstream_get_bits(&bs, 5);
+        for (int i = 0; i <= operating_points_cnt_minus_1; i++)
+        {
+            hb_bitstream_skip_bits(&bs, 12);
+            seq_level_idx = hb_bitstream_get_bits(&bs, 5);
+            if (seq_level_idx > 7)
+            {
+                seq_tier = hb_bitstream_get_bits(&bs, 1);
+            }
+        }
+    }
+
+    *high_tier = seq_tier;
+    *level_idx = seq_level_idx;
+    return 0;
+
+fail:
+    *high_tier = 0;
+    *level_idx = 0;
+    return 1;
+}
+
+int hb_parse_h265_extradata(hb_data_t *extradata, int *level_idc, int *high_tier)
+{
+    hb_bitstream_t bs;
+
+    if (extradata->size < 13)
+    {
+        *level_idc = 0;
+        *high_tier = 0;
+        return 1;
+    }
+
+    hb_bitstream_init(&bs, extradata->bytes, extradata->size, 0);
+
+    hb_bitstream_skip_bits(&bs, 8);  // configurationVersion
+    hb_bitstream_skip_bits(&bs, 2);  // general_profile_space
+    int general_tier_flag = hb_bitstream_get_bits(&bs, 1);
+    hb_bitstream_skip_bits(&bs, 5);  // general_profile_idc
+    hb_bitstream_skip_bits(&bs, 32); // general_profile_compatibility_flags
+
+    hb_bitstream_skip_bits(&bs, 32); // << 16 general_constraint_indicator_flags
+    hb_bitstream_skip_bits(&bs, 16);
+    int general_level_idc = hb_bitstream_get_bits(&bs, 8);
+
+    *high_tier = general_tier_flag;
+    *level_idc = general_level_idc / 3;
     return 0;
 }

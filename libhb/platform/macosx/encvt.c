@@ -682,27 +682,6 @@ static int hb_vt_parse_options(hb_work_private_t *pv, hb_job_t *job)
     return 0;
 }
 
-static void parse_hvcC(hb_data_t *magic_cookie, int *level_idc, int *high_tier)
-{
-    hb_bitstream_t bs;
-    hb_bitstream_init(&bs, magic_cookie->bytes, magic_cookie->size, 0);
-
-    hb_bitstream_skip_bits(&bs, 8);  // configurationVersion
-    hb_bitstream_skip_bits(&bs, 2);  // general_profile_space
-    int general_tier_flag = hb_bitstream_get_bits(&bs, 1);
-    hb_bitstream_skip_bits(&bs, 5);  // general_profile_idc
-    hb_bitstream_skip_bits(&bs, 32); // general_profile_compatibility_flags
-
-    hb_bitstream_skip_bits(&bs, 32); // << 16 general_constraint_indicator_flags
-    hb_bitstream_skip_bits(&bs, 16);
-    int general_level_idc = hb_bitstream_get_bits(&bs, 8);
-
-    *high_tier = general_tier_flag;
-    *level_idc = general_level_idc / 3;
-
-    return;
-}
-
 static void set_data_rate_limits(VTCompressionSessionRef session, int bufsize, int maxrate)
 {
     OSStatus err = 0;
@@ -1579,7 +1558,7 @@ int encvt_init(hb_work_object_t *w, hb_job_t *job)
         if (job->passthru_dynamic_hdr_metadata & DOVI)
         {
             int level_idc, high_tier;
-            parse_hvcC(*w->extradata, &level_idc, &high_tier);
+            hb_parse_h265_extradata(*w->extradata, &level_idc, &high_tier);
 
             int pps = (double)job->width * job->height * (job->vrate.num / job->vrate.den);
             int bitrate = job->vquality == HB_INVALID_VIDEO_QUALITY ? job->vbitrate : -1;
@@ -1588,7 +1567,8 @@ int encvt_init(hb_work_object_t *w, hb_job_t *job)
             // set the max value for the current level or guess one
             if (pv->settings.vbv.maxrate == 0 || pv->settings.vbv.bufsize == 0)
             {
-                int max_rate = hb_dovi_max_rate(job->width, pps, bitrate * 1.5, level_idc, high_tier);
+                int max_rate = hb_dovi_max_rate(job->vcodec, job->width, pps, bitrate * 1.5,
+                                                level_idc, high_tier);
                 pv->settings.vbv.maxrate = max_rate;
                 pv->settings.vbv.bufsize = max_rate;
             }

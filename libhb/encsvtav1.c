@@ -12,7 +12,9 @@
 #include "handbrake/hb_dict.h"
 #include "handbrake/av1_common.h"
 #include "handbrake/hdr10plus.h"
+#include "handbrake/dovi_common.h"
 #include "handbrake/extradata.h"
+
 #include "libavutil/avutil.h"
 #include "svt-av1/EbSvtAv1ErrorCodes.h"
 #include "svt-av1/EbSvtAv1Enc.h"
@@ -326,6 +328,29 @@ int encsvtInit(hb_work_object_t *w, hb_job_t *job)
         return 1;
     }
 
+    // Update and set Dolby Vision level
+    if (job->passthru_dynamic_hdr_metadata & DOVI)
+    {
+        int level_idx, high_tier;
+        hb_parse_av1_extradata(*w->extradata, &level_idx, &high_tier);
+
+        int pps = (double)job->width * job->height * (job->vrate.num / job->vrate.den);
+        int bitrate = job->vquality == HB_INVALID_VIDEO_QUALITY ? job->vbitrate : -1;
+
+        // Dolby Vision requires VBV settings to enable HRD
+        // but SVT-AV1 supports max-bit-rate only in CFR mode
+        // so that the Dolby Vision level to something comparable
+        // to the current AV1 level
+        if (param->max_bit_rate == 0)
+        {
+            int max_rate = hb_dovi_max_rate(job->vcodec, job->width, pps, bitrate,
+                                            level_idx, high_tier);
+            param->max_bit_rate = max_rate * 1000;
+        }
+
+        job->dovi.dv_level = hb_dovi_level(job->width, pps, param->max_bit_rate / 1000, high_tier);
+    }
+
     svt_ret = svt_av1_enc_stream_header_release(headerPtr);
     if (svt_ret != EB_ErrorNone)
     {
@@ -476,6 +501,12 @@ static int send(hb_work_object_t *w, hb_buffer_t *in)
                 svt_add_metadata(headerPtr, EB_AV1_METADATA_TYPE_ITUT_T35, payload, playload_size);
                 av_freep(&payload);
             }
+            else if (job->passthru_dynamic_hdr_metadata & DOVI &&
+                     side_data->type == AV_FRAME_DATA_DOVI_RPU_BUFFER)
+            {
+                svt_add_metadata(headerPtr, EB_AV1_METADATA_TYPE_ITUT_T35, side_data->data, side_data->size);
+            }
+
         }
     }
 

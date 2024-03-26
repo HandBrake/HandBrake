@@ -8,12 +8,11 @@
  */
 
 #include "handbrake/handbrake.h"
+#include "handbrake/rpu.h"
 
 #if HB_PROJECT_FEATURE_LIBDOVI
 #include "libdovi/rpu_parser.h"
 #endif
-
-#define RPU_DEFAULT_MODE 1
 
 struct hb_filter_private_s
 {
@@ -81,7 +80,7 @@ static int rpu_init(hb_filter_object_t *filter,
 
     pv->input = *init;
 
-    int mode = RPU_DEFAULT_MODE;
+    int mode = RPU_MODE_UPDATE_ACTIVE_AREA | RPU_MODE_EMIT_UNSPECT_62_NAL;
     double scale_factor_x = 1, scale_factor_y = 1;
     int crop_top = 0, crop_bottom = 0, crop_left = 0, crop_right = 0;
     int pad_top = 0, pad_bottom = 0, pad_left = 0, pad_right = 0;
@@ -212,7 +211,7 @@ static int rpu_work(hb_filter_object_t *filter,
                 break;
             }
 
-            if (pv->mode & 2)
+            if (pv->mode & RPU_MODE_CONVERT_TO_8_1)
             {
                 const DoviRpuDataHeader *header = dovi_rpu_get_header(rpu_in);
                 if (header && header->guessed_profile == 7)
@@ -231,7 +230,7 @@ static int rpu_work(hb_filter_object_t *filter,
                 }
             }
 
-            if (pv->mode & 1)
+            if (pv->mode & RPU_MODE_UPDATE_ACTIVE_AREA)
             {
                 uint16_t left_offset = 0, right_offset = 0;
                 uint16_t top_offset  = 0, bottom_offset = 0;
@@ -284,14 +283,24 @@ static int rpu_work(hb_filter_object_t *filter,
 
             if (pv->mode)
             {
-                const DoviData *rpu_data = dovi_write_unspec62_nalu(rpu_in);
+                const DoviData *rpu_data = NULL;
+
+                if (pv->mode & RPU_MODE_EMIT_UNSPECT_62_NAL)
+                {
+                    rpu_data = dovi_write_unspec62_nalu(rpu_in);
+                }
+                else if (pv->mode & RPU_MODE_EMIT_T35_OBU)
+                {
+                    rpu_data = dovi_write_av1_rpu_metadata_obu_t35_complete(rpu_in);
+                }
 
                 if (rpu_data)
                 {
                     hb_buffer_remove_side_data(in, side_data->type);
+                    const int offset = pv->mode & RPU_MODE_EMIT_UNSPECT_62_NAL ? 2 : 0;
 
-                    AVBufferRef *ref = av_buffer_alloc(rpu_data->len - 2);
-                    memcpy(ref->data, rpu_data->data + 2, rpu_data->len - 2);
+                    AVBufferRef *ref = av_buffer_alloc(rpu_data->len - offset);
+                    memcpy(ref->data, rpu_data->data + offset, rpu_data->len - offset);
                     AVFrameSideData *sd_dst = hb_buffer_new_side_data_from_buf(in, AV_FRAME_DATA_DOVI_RPU_BUFFER, ref);
 
                     if (!sd_dst)
@@ -303,7 +312,7 @@ static int rpu_work(hb_filter_object_t *filter,
                 }
                 else
                 {
-                    hb_log("dovi_write_unspec62_nalu failed");
+                    hb_log("rpu: dovi_write failed");
                 }
             }
 
