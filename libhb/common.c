@@ -79,6 +79,7 @@ enum
     HB_GID_VCODEC_AV1_QSV,
     HB_GID_VCODEC_AV1_NVENC,
     HB_GID_VCODEC_AV1_VCE,
+    HB_GID_VCODEC_FFV1,
     HB_GID_ACODEC_AAC,
     HB_GID_ACODEC_AAC_HE,
     HB_GID_ACODEC_AAC_PASS,
@@ -308,6 +309,7 @@ hb_encoder_internal_t hb_video_encoders[]  =
     { { "VP9",                         "VP9",              "VP9 (libvpx)",                   HB_VCODEC_FFMPEG_VP9,        HB_MUX_MASK_MP4|HB_MUX_MASK_WEBM|HB_MUX_MASK_MKV, }, NULL, 0, 1, HB_GID_VCODEC_VP9,        },
     { { "VP9 10-bit",                  "VP9_10bit",        "VP9 10-bit (libvpx)",            HB_VCODEC_FFMPEG_VP9_10BIT,  HB_MUX_MASK_MP4|HB_MUX_MASK_WEBM|HB_MUX_MASK_MKV, }, NULL, 0, 1, HB_GID_VCODEC_VP9,        },
     { { "Theora",                      "theora",           "Theora (libtheora)",             HB_VCODEC_THEORA,                                             HB_MUX_MASK_MKV, }, NULL, 0, 1, HB_GID_VCODEC_THEORA,     },
+    { { "FFV1",                        "ffv1",             "FFv1 (libavcodec)",              HB_VCODEC_FFMPEG_FFV1,                                               HB_MUX_MASK_MKV, }, NULL, 0, 1, HB_GID_VCODEC_FFV1,     },
 };
 int hb_video_encoders_count = sizeof(hb_video_encoders) / sizeof(hb_video_encoders[0]);
 static int hb_video_encoder_is_enabled(int encoder, int disable_hardware)
@@ -375,6 +377,7 @@ static int hb_video_encoder_is_enabled(int encoder, int disable_hardware)
         case HB_VCODEC_FFMPEG_VP9_10BIT:
         case HB_VCODEC_SVT_AV1:
         case HB_VCODEC_SVT_AV1_10BIT:
+        case HB_VCODEC_FFMPEG_FFV1:
             return 1;
 
 #if HB_PROJECT_FEATURE_X265
@@ -1531,7 +1534,13 @@ void hb_video_quality_get_limits(uint32_t codec, float *low, float *high,
             *low         = 0;
             *high        = 100;
             break;
-
+            
+        case HB_VCODEC_FFMPEG_FFV1:
+            *direction   = 0;
+            *granularity = 0;
+            *low         = 0;
+            *high        = 0;
+            
         case HB_VCODEC_FFMPEG_MPEG2:
         case HB_VCODEC_FFMPEG_MPEG4:
         default:
@@ -1600,6 +1609,20 @@ int hb_video_quality_is_supported(uint32_t codec)
         case HB_VCODEC_VT_H265_10BIT:
             return hb_vt_is_constant_quality_available(codec);
 #endif
+        case HB_VCODEC_FFMPEG_FFV1:
+            return 0;
+
+        default:
+            return 1;
+    }
+}
+
+int hb_video_bitrate_is_supported(uint32_t codec)
+{
+    switch (codec)
+    {
+        case HB_VCODEC_FFMPEG_FFV1:
+            return 0;
 
         default:
             return 1;
@@ -1843,12 +1866,15 @@ const char* const* hb_video_encoder_get_levels(int encoder)
     }
 #endif
 
+    if (encoder & HB_VCODEC_FFMPEG_MASK)
+    {
+        return hb_av_level_get_names(encoder);
+    }
+
     switch (encoder)
     {
         case HB_VCODEC_X264_8BIT:
         case HB_VCODEC_X264_10BIT:
-        case HB_VCODEC_FFMPEG_NVENC_H264:
-        case HB_VCODEC_FFMPEG_MF_H264:
             return hb_h264_level_names;
 
 #if HB_PROJECT_FEATURE_VCE
@@ -1860,11 +1886,6 @@ const char* const* hb_video_encoder_get_levels(int encoder)
         case HB_VCODEC_X265_10BIT:
         case HB_VCODEC_X265_12BIT:
         case HB_VCODEC_X265_16BIT:
-        case HB_VCODEC_FFMPEG_NVENC_H265:
-        case HB_VCODEC_FFMPEG_NVENC_H265_10BIT:
-        case HB_VCODEC_FFMPEG_VCE_H265:
-        case HB_VCODEC_FFMPEG_VCE_H265_10BIT:
-        case HB_VCODEC_FFMPEG_MF_H265:
             return hb_h265_level_names;
 
 #ifdef __APPLE__
@@ -1876,7 +1897,6 @@ const char* const* hb_video_encoder_get_levels(int encoder)
 
         case HB_VCODEC_SVT_AV1:
         case HB_VCODEC_SVT_AV1_10BIT:
-        case HB_VCODEC_FFMPEG_VCE_AV1:
             return hb_av1_level_names;
 
         default:

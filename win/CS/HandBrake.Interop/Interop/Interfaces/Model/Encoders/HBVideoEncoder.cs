@@ -148,6 +148,10 @@ namespace HandBrake.Interop.Interop.Interfaces.Model.Encoders
 
         public bool SupportsMultiPass => HandBrakeEncoderHelpers.VideoEncoderSupportsMultiPass(this.ShortName);
 
+        public bool SupportsQuality => HandBrakeEncoderHelpers.VideoEncoderSupportsQualityMode(this.ShortName);
+
+        public bool SupportsBitrate => HandBrakeEncoderHelpers.VideoEncoderSupportsBitrateMode(this.ShortName);
+
         // TODO check if there is a nicer way of doing this.
         public bool IsSVTAV1 => this.ShortName.Contains("svt_av1");
         public bool IsX264 => this.ShortName.Contains("x264");
@@ -162,5 +166,6 @@ namespace HandBrake.Interop.Interop.Interfaces.Model.Encoders
         public bool IsMpeg2 => this.ShortName.Contains("mpeg2");
         public bool IsVP9 => this.ShortName.Contains("VP9", StringComparison.InvariantCultureIgnoreCase);
         public bool IsHardwareEncoder => this.IsNVEnc || this.IsMediaFoundation || this.IsVCN || this.IsQuickSync;
+        public bool IsFFV1 => this.ShortName.Contains("ffv1", StringComparison.InvariantCultureIgnoreCase);
     }
 }
