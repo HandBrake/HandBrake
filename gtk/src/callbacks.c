@@ -2772,8 +2772,6 @@ ghb_set_title_settings(signal_user_data_t *ud, GhbValue *settings)
 
         if (ghb_dict_get_bool(settings, "MetadataPassthrough"))
         {
-            ghb_dict_set_string(settings, "MetaName", title->name);
-            update_meta(settings, "Name", title->name);
             if (title->metadata && title->metadata->dict)
             {
 
@@ -3010,8 +3008,6 @@ meta_pass_changed_cb (GtkWidget *widget, gpointer data)
         ghb_dict_get_bool(ud->settings, "MetadataPassthrough"))
     {
         // Reload metadata from title
-        ghb_dict_set_string(ud->settings, "MetaName", title->name);
-        update_meta(ud->settings, "Name", title->name);
         if (title->metadata && title->metadata->dict)
         {
 
