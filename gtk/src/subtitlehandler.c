@@ -1012,7 +1012,7 @@ import_file_changed_cb (GtkWidget *widget, gpointer data)
 }
 
 G_MODULE_EXPORT void
-import_lang_changed_cb (GtkWidget *widget, gpointer data)
+import_lang_changed_cb (GtkWidget *widget, GParamSpec *pspec, gpointer userdata)
 {
     signal_user_data_t *ud = ghb_ud();
     ghb_widget_to_setting(ud->settings, widget);

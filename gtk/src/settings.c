@@ -412,31 +412,9 @@ ghb_update_widget(GtkWidget *widget, const GhbValue *value)
     }
     else if (type == GHB_TYPE_FILE_BUTTON)
     {
-        GtkFileChooserAction action = ghb_file_button_get_action(GHB_FILE_BUTTON(widget));
-
-        if (str[0] == 0)
-        {
-            // Do nothing
-            ;
-        }
-        else if (action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER ||
-                 action == GTK_FILE_CHOOSER_ACTION_SAVE)
+        if (str[0] != 0)
         {
             ghb_file_button_set_filename(GHB_FILE_BUTTON(widget), str);
-        }
-        else
-        {
-            if (g_file_test(str, G_FILE_TEST_IS_DIR) ||
-                g_file_test(str, G_FILE_TEST_EXISTS))
-            {
-                ghb_file_button_set_filename(GHB_FILE_BUTTON(widget), str);
-            }
-            else
-            {
-                char *dirname = g_path_get_dirname(str);
-                ghb_file_button_set_filename(GHB_FILE_BUTTON(widget), dirname);
-                g_free(dirname);
-            }
         }
     }
     else if (type == GHB_TYPE_STRING_LIST)
