@@ -79,7 +79,7 @@ if get_option('qsv').enabled()
   if host_machine.system() == 'windows'
     ghb_deps += cc.find_library('vpl', dirs: hb_libdirs)
   else
-    ghb_deps += [dependency('vpl'), dependency('libva'), dependency('libva-drm')]
+    ghb_deps += [dependency('vpl'), dependency('libva'), dependency('libva-drm'), dependency('libdrm')]
   endif
 endif
 
