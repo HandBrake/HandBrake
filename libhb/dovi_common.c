@@ -39,7 +39,7 @@ int hb_dovi_max_rate(int width, int pps, int bitrate, int level, int high_tier)
                 width <= hb_dolby_vision_levels[i].max_width &&
                 bitrate <= level_max_rate * 1000)
             {
-                max_rate = level_max_rate;
+                max_rate = level_max_rate * 1000;
                 break;
             }
         }
