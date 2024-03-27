@@ -94,18 +94,22 @@ STAGE.out.flatpak/ = $(STAGE.out.abs/)flatpak/
 PKG.repo.flatpak = $(PKG.out.flatpak/)$(HB.name)-Flatpak.repo
 
 PKG.gui.name.flatpak = fr.handbrake.ghb
+PKG.gui.name.debug.flatpak = $(PKG.gui.name.flatpak).Debug
 PKG.gui.manifest.flathub = $(PKG.out.flatpak/)$(PKG.gui.name.flatpak).json
 PKG.gui.template.flatpak = $(PKG.flatpak/)$(PKG.gui.name.flatpak).json
 PKG.gui.manifest.flatpak = $(STAGE.out.flatpak/)$(PKG.gui.name.flatpak).json
 PKG.gui.build.flatpak = $(STAGE.out.flatpak/)$(PKG.gui.name.flatpak)-$(HB.version)-$(HOST.machine).build
 PKG.gui.flatpak = $(PKG.out.flatpak/)$(PKG.gui.name.flatpak)-$(HB.version)-$(HOST.machine).flatpak
+PKG.gui.debug.flatpak = $(PKG.out.flatpak/)$(PKG.gui.name.debug.flatpak)-$(HB.version)-$(HOST.machine).flatpak
 
 PKG.cli.name.flatpak = fr.handbrake.HandBrakeCLI
+PKG.cli.name.debug.flatpak = $(PKG.cli.name.flatpak).Debug
 PKG.cli.manifest.flathub = $(PKG.out.flatpak/)$(PKG.cli.name.flatpak).json
 PKG.cli.template.flatpak = $(PKG.flatpak/)$(PKG.cli.name.flatpak).json
 PKG.cli.manifest.flatpak = $(STAGE.out.flatpak/)$(PKG.cli.name.flatpak).json
 PKG.cli.build.flatpak = $(STAGE.out.flatpak/)$(PKG.cli.name.flatpak)-$(HB.version)-$(HOST.machine).build
 PKG.cli.flatpak = $(PKG.out.flatpak/)$(PKG.cli.name.flatpak)-$(HB.version)-$(HOST.machine).flatpak
+PKG.cli.debug.flatpak = $(PKG.out.flatpak/)$(PKG.cli.name.debug.flatpak)-$(HB.version)-$(HOST.machine).flatpak
 
 PKG.mediasdk.name.flatpak = fr.handbrake.ghb.Plugin.IntelMediaSDK
 PKG.mediasdk.manifest.flathub = $(PKG.out.flatpak/)$(PKG.mediasdk.name.flatpak).json
@@ -115,6 +119,7 @@ PKG.mediasdk.manifest.flatpak = $(STAGE.out.flatpak/)$(PKG.mediasdk.name.flatpak
 PKG.mediasdk.patch.flatpak = $(PKG.flatpak/)intel-mediasdk-gcc13.patch
 PKG.mediasdk.build.flatpak = $(STAGE.out.flatpak/)$(PKG.mediasdk.name.flatpak)-$(HB.version)-$(HOST.machine).build
 PKG.mediasdk.flatpak = $(PKG.out.flatpak/)$(PKG.mediasdk.name.flatpak)-$(HB.version)-$(HOST.machine).flatpak
+PKG.debug.flatpak = $(PKG.gui.debug.flatpak) $(PKG.cli.debug.flatpak)
 
 PKG.all.flatpak = $(PKG.gui.flatpak) $(PKG.cli.flatpak)
 ifeq (1,$(FEATURE.qsv))
