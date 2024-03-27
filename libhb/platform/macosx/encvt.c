@@ -1329,7 +1329,7 @@ static OSStatus init_vtsession(hb_work_object_t *w, hb_job_t *job, hb_work_priva
     return err;
 }
 
-static void set_h264_cookie(hb_work_object_t *w, CMFormatDescriptionRef format)
+static void set_cookie(hb_work_object_t *w, CMFormatDescriptionRef format)
 {
     CFDictionaryRef extentions = CMFormatDescriptionGetExtensions(format);
     if (!extentions)
@@ -1338,67 +1338,23 @@ static void set_h264_cookie(hb_work_object_t *w, CMFormatDescriptionRef format)
     }
     else
     {
+        CFStringRef key = CMVideoFormatDescriptionGetCodecType(format) == kCMVideoCodecType_H264 ? CFSTR("avcC") : CFSTR("hvcC");
         CFDictionaryRef atoms = CFDictionaryGetValue(extentions, kCMFormatDescriptionExtension_SampleDescriptionExtensionAtoms);
-        CFDataRef magicCookie = CFDictionaryGetValue(atoms, CFSTR("avcC"));
-
-        const uint8_t *avcCAtom = CFDataGetBytePtr(magicCookie);
-
-        uint8_t sps[HB_CONFIG_MAX_SIZE];
-        size_t sps_length = 0;
-        uint8_t pps[HB_CONFIG_MAX_SIZE];
-        size_t pps_length = 0;
-
-        int8_t spsCount = (avcCAtom[5] & 0x1f);
-        uint8_t ptrPos = 6;
-        uint8_t spsPos = 0;
-        for (SInt64 i = 0; i < spsCount; i++) {
-            uint16_t spsSize = (avcCAtom[ptrPos++] << 8) & 0xff00;
-            spsSize += avcCAtom[ptrPos++] & 0xff;
-            memcpy(sps + spsPos, avcCAtom+ptrPos, spsSize);;
-            ptrPos += spsSize;
-            spsPos += spsSize;
-        }
-        sps_length = spsPos;
-
-        int8_t ppsCount = avcCAtom[ptrPos++];
-        uint8_t ppsPos = 0;
-        for (SInt64 i = 0; i < ppsCount; i++)
+        if (atoms)
         {
-            uint16_t ppsSize = (avcCAtom[ptrPos++] << 8) & 0xff00;
-            ppsSize += avcCAtom[ptrPos++] & 0xff;
-            memcpy(pps + ppsPos, avcCAtom+ptrPos, ppsSize);;
+            CFDataRef magicCookie = CFDictionaryGetValue(atoms, key);
 
-            ptrPos += ppsSize;
-            ppsPos += ppsSize;
+            if (magicCookie)
+            {
+                const uint8_t *hvcCAtom = CFDataGetBytePtr(magicCookie);
+                CFIndex size = CFDataGetLength(magicCookie);
+                hb_set_extradata(w->extradata, hvcCAtom, size);
+            }
+            else
+            {
+                hb_log("VTCompressionSession: Magic Cookie error");
+            }
         }
-        pps_length = ppsPos;
-
-        if (hb_set_h264_extradata(w->extradata, sps, sps_length, pps, pps_length))
-        {
-            hb_log("VTCompressionSession: Set extradata error");
-        }
-    }
-}
-
-static void set_h265_cookie(hb_work_object_t *w, CMFormatDescriptionRef format)
-{
-    CFDictionaryRef extensions = CMFormatDescriptionGetExtensions(format);
-    if (!extensions)
-    {
-        hb_log("VTCompressionSession: Format Description Extensions error");
-    }
-    else
-    {
-        CFDictionaryRef atoms = CFDictionaryGetValue(extensions, kCMFormatDescriptionExtension_SampleDescriptionExtensionAtoms);
-        CFDataRef magicCookie = CFDictionaryGetValue(atoms, CFSTR("hvcC"));
-        if (!magicCookie)
-        {
-            hb_log("VTCompressionSession: HEVC Magic Cookie error");
-        }
-
-        const uint8_t *hvcCAtom = CFDataGetBytePtr(magicCookie);
-        uint16_t size = CFDataGetLength(magicCookie);
-        hb_set_extradata(w->extradata, hvcCAtom, size);
     }
 }
 
@@ -1466,15 +1422,7 @@ static OSStatus create_cookie(hb_work_object_t *w, hb_job_t *job, hb_work_privat
         {
             pv->format = format;
             CFRetain(pv->format);
-
-            if (pv->settings.codec == kCMVideoCodecType_H264)
-            {
-                set_h264_cookie(w, format);
-            }
-            else
-            {
-                set_h265_cookie(w, format);
-            }
+            set_cookie(w, format);
         }
         CFRelease(sampleBuffer);
     }
@@ -1497,14 +1445,7 @@ static OSStatus reuse_vtsession(hb_work_object_t *w, hb_job_t * job, hb_work_pri
     hb_interjob_t *interjob = hb_interjob_get(job->h);
     vt_interjob_t *context = interjob->context;
 
-    if (job->vcodec == HB_VCODEC_VT_H264)
-    {
-        set_h264_cookie(w, context->format);
-    }
-    else
-    {
-        set_h265_cookie(w, context->format);
-    }
+    set_cookie(w, context->format);
 
     pv->session = context->session;
     pv->passStorage = context->passStorage;
