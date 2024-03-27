@@ -1,27 +1,27 @@
-From 78b2d7bf731c6be284fc16c93012eb84eac867fe Mon Sep 17 00:00:00 2001
+From 86431df08fe51ebf123305714939d0495fe1044b Mon Sep 17 00:00:00 2001
 From: Damiano Galassi <damiog@gmail.com>
-Date: Fri, 8 Mar 2024 08:40:08 +0100
-Subject: [PATCH] dvdsubdec: add an option to output subtitles with empty or
- fully transparent rects.
+Date: Wed, 20 Mar 2024 09:14:19 +0100
+Subject: [PATCH 08/16]  dvdsubdec: add an option to output subtitles with
+ empty or fully transparent rects.
 
 ---
  libavcodec/dvdsubdec.c | 4 +++-
  1 file changed, 3 insertions(+), 1 deletion(-)
 
 diff --git a/libavcodec/dvdsubdec.c b/libavcodec/dvdsubdec.c
-index bee42e3c61..b3ce026d16 100644
+index 2dd10b4d8b..aa4b1367d2 100644
 --- a/libavcodec/dvdsubdec.c
 +++ b/libavcodec/dvdsubdec.c
-@@ -43,6 +43,7 @@ typedef struct DVDSubContext
-   uint8_t  buf[0x10000];
-   int      buf_size;
+@@ -45,6 +45,7 @@ typedef struct DVDSubContext
    int      forced_subs_only;
-+  int      output_empty_rects;
    uint8_t  used_color[256];
+   int64_t  pts;
++  int      output_empty_rects;
  } DVDSubContext;
  
-@@ -558,7 +559,7 @@ static int dvdsub_decode(AVCodecContext *avctx, AVSubtitle *sub,
- 
+ static void yuv_a_to_rgba(const uint8_t *ycbcr, const uint8_t *alpha, uint32_t *rgba, int num_values)
+@@ -568,7 +569,7 @@ static int dvdsub_decode(AVCodecContext *avctx, AVSubtitle *sub,
+         ctx->pts = AV_NOPTS_VALUE;
          return buf_size;
      }
 -    if (!is_menu && find_smallest_bounding_rectangle(ctx, sub) == 0)
@@ -29,7 +29,7 @@ index bee42e3c61..b3ce026d16 100644
          goto no_subtitle;
  
      if (ctx->forced_subs_only && !(sub->rects[0]->flags & AV_SUBTITLE_FLAG_FORCED))
-@@ -707,6 +708,7 @@ static const AVOption options[] = {
+@@ -720,6 +721,7 @@ static const AVOption options[] = {
      { "palette", "set the global palette", OFFSET(palette_str), AV_OPT_TYPE_STRING, { .str = NULL }, 0, 0, SD },
      { "ifo_palette", "obtain the global palette from .IFO file", OFFSET(ifo_str), AV_OPT_TYPE_STRING, { .str = NULL }, 0, 0, SD },
      { "forced_subs_only", "Only show forced subtitles", OFFSET(forced_subs_only), AV_OPT_TYPE_BOOL, {.i64 = 0}, 0, 1, SD},

@@ -1,14 +1,14 @@
-From dbfa7cab8c9951ec13481a9ca7f6f219dd2aba94 Mon Sep 17 00:00:00 2001
+From 8fe918795b1eee8f9232a2051f519638e6a849c7 Mon Sep 17 00:00:00 2001
 From: Vladyslav Sosunovych <vladyslav.sosunovych@intel.com>
-Date: Wed, 26 Apr 2023 15:53:52 +0200
-Subject: [PATCH] libswscale: fix yuv420p to p01xle color conversion bug
+Date: Wed, 20 Mar 2024 09:17:42 +0100
+Subject: [PATCH 12/16] libswscale: fix yuv420p to p01xle color conversion bug
 
 ---
  libswscale/swscale_unscaled.c | 6 +++---
  1 file changed, 3 insertions(+), 3 deletions(-)
 
 diff --git a/libswscale/swscale_unscaled.c b/libswscale/swscale_unscaled.c
-index 9af2e7ecc3..9f9d505d9e 100644
+index a5c9917799..108910dde7 100644
 --- a/libswscale/swscale_unscaled.c
 +++ b/libswscale/swscale_unscaled.c
 @@ -297,7 +297,7 @@ static int planar8ToP01xleWrapper(SwsContext *c, const uint8_t *src[],
@@ -33,5 +33,5 @@ index 9af2e7ecc3..9f9d505d9e 100644
              src[1] += srcStride[1];
              src[2] += srcStride[2];
 -- 
-2.39.0
+2.39.3 (Apple Git-146)
 
