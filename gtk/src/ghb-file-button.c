@@ -236,12 +236,12 @@ ghb_file_button_new (const char *title, GtkFileChooserAction action)
 static void
 file_icon_query_cb (GFile *file, GAsyncResult *result, GhbFileButton *self)
 {
-    GFileInfo *info = NULL;
     GIcon *icon = NULL;
+    GFileInfo *info = g_file_query_info_finish(file, result, NULL);
 
-    info = g_file_query_info_finish(file, result, NULL);
-    if (info != NULL)
-        icon = g_file_info_get_icon(info);
+    if (info == NULL) return;
+
+    icon = g_file_info_get_icon(info);
 
     if (self->icon != NULL && icon != NULL)
     {
@@ -251,7 +251,10 @@ file_icon_query_cb (GFile *file, GAsyncResult *result, GhbFileButton *self)
     {
         gtk_image_clear(self->icon);
     }
-
+    else if (icon != NULL)
+    {
+        g_object_unref(icon);
+    }
     g_object_unref(info);
 }
 
@@ -266,23 +269,30 @@ ghb_file_button_set_action (GhbFileButton *self, GtkFileChooserAction action)
 void
 ghb_file_button_set_file (GhbFileButton *self, GFile *file)
 {
-    char *file_base;
-
     g_return_if_fail(GHB_IS_FILE_BUTTON(self));
 
     if (file == NULL) return;
 
     if (self->selected_file)
+    {
         g_object_unref(self->selected_file);
+    }
 
-    self->selected_file = g_file_dup(file);
-    file_base = g_file_get_basename(file);
-    gtk_label_set_label(self->label, file_base);
-    g_free(file_base);
+    self->selected_file = g_object_ref(file);
 
-    g_file_query_info_async(file, G_FILE_ATTRIBUTE_STANDARD_ICON,
-                            G_FILE_QUERY_INFO_NONE, G_PRIORITY_LOW, NULL,
-                            (GAsyncReadyCallback) file_icon_query_cb, self);
+    if (g_file_test(g_file_peek_path(file), G_FILE_TEST_EXISTS))
+    {
+        g_autofree char *file_base = g_file_get_basename(file);
+        gtk_label_set_label(self->label, file_base);
+        g_file_query_info_async(file, G_FILE_ATTRIBUTE_STANDARD_ICON,
+                                G_FILE_QUERY_INFO_NONE, G_PRIORITY_LOW, NULL,
+                                (GAsyncReadyCallback) file_icon_query_cb, self);
+    }
+    else
+    {
+        gtk_label_set_label(self->label, _("(None)"));
+        gtk_image_clear(self->icon);
+    }
 
     g_object_notify_by_pspec(G_OBJECT(self), props[PROP_FILE]);
 }
@@ -292,9 +302,8 @@ ghb_file_button_set_filename (GhbFileButton *self, const char *filename)
 {
     g_return_if_fail(GHB_IS_FILE_BUTTON(self));
 
-    GFile *file = g_file_new_for_path(filename);
+    g_autoptr(GFile) file = g_file_new_for_path(filename);
     ghb_file_button_set_file(self, file);
-    g_object_unref(file);
 }
 
 void

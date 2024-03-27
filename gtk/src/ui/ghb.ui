@@ -6579,6 +6579,7 @@ The source&apos;s character code is needed in order to perform this translation.
                 <property name="tooltip-text" translatable="1">Select the SRT file to import.</property>
                 <property name="hexpand">True</property>
                 <property name="title" translatable="1">Import File</property>
+                <signal name="notify::file" handler="import_file_changed_cb"/>
                 <layout>
                   <property name="row">2</property>
                   <property name="column">1</property>
