@@ -476,6 +476,12 @@ static int send(hb_work_object_t *w, hb_buffer_t *in)
                 svt_add_metadata(headerPtr, EB_AV1_METADATA_TYPE_ITUT_T35, payload, playload_size);
                 av_freep(&payload);
             }
+            else if (job->passthru_dynamic_hdr_metadata & DOVI &&
+                     side_data->type == AV_FRAME_DATA_DOVI_RPU_BUFFER)
+            {
+                svt_add_metadata(headerPtr, EB_AV1_METADATA_TYPE_ITUT_T35, side_data->data, side_data->size);
+            }
+
         }
     }
 
