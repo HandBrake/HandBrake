@@ -434,6 +434,7 @@ const char* hb_video_quality_get_name(uint32_t codec);
 int         hb_video_quality_is_supported(uint32_t codec);
 
 int         hb_video_multipass_is_supported(uint32_t codec);
+int         hb_video_cq_multipass_is_supported(uint32_t codec);
 
 int                hb_video_encoder_is_supported(int encoder);
 int                hb_video_encoder_get_count_of_analysis_passes(int encoder);

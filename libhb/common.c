@@ -1640,6 +1640,19 @@ int hb_video_multipass_is_supported(uint32_t codec)
     }
 }
 
+int hb_video_cq_multipass_is_supported(uint32_t codec)
+{
+    switch (codec)
+    {
+        case HB_VCODEC_FFMPEG_VP9:
+        case HB_VCODEC_FFMPEG_VP9_10BIT:
+            return 1;
+        
+        default:
+            return 0;
+    }
+}
+
 int hb_video_encoder_is_supported(int encoder)
 {
     const hb_encoder_t *video_encoder = NULL;

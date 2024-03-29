@@ -4288,22 +4288,22 @@ static hb_dict_t * PreparePreset(const char *preset_name)
     {
         hb_dict_set(preset, "VideoQualityType", hb_value_int(1));
         hb_dict_set(preset, "VideoAvgBitrate", hb_value_int(vbitrate));
-        if (multiPass == 1)
-        {
-            hb_dict_set(preset, "VideoMultiPass", hb_value_bool(1));
-        }
-        else if (multiPass == 0)
-        {
-            hb_dict_set(preset, "VideoMultiPass", hb_value_bool(0));
-        }
-        if (fastanalysispass == 1)
-        {
-            hb_dict_set(preset, "VideoTurboMultiPass", hb_value_bool(1));
-        }
-        else if (fastanalysispass == 0)
-        {
-            hb_dict_set(preset, "VideoTurboMultiPass", hb_value_bool(0));
-        }
+    }
+    if (multiPass == 1)
+    {
+        hb_dict_set(preset, "VideoMultiPass", hb_value_bool(1));
+    }
+    else if (multiPass == 0)
+    {
+        hb_dict_set(preset, "VideoMultiPass", hb_value_bool(0));
+    }
+    if (fastanalysispass == 1)
+    {
+        hb_dict_set(preset, "VideoTurboMultiPass", hb_value_bool(1));
+    }
+    else if (fastanalysispass == 0)
+    {
+        hb_dict_set(preset, "VideoTurboMultiPass", hb_value_bool(0));
     }
     const char *vrate_preset;
     const char *cfr_preset;
