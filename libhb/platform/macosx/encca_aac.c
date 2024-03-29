@@ -314,18 +314,20 @@ int encCoreAudioInit(hb_work_object_t *w, hb_job_t *job, enum AAC_MODE mode)
     pv->omaxpacket = tmp;
 
     // get magic cookie (elementary stream descriptor)
-    tmp = HB_CONFIG_MAX_SIZE;
-    UInt8 *magicCookie[HB_CONFIG_MAX_SIZE];
+    AudioConverterGetPropertyInfo(pv->converter,
+                                  kAudioConverterCompressionMagicCookie,
+                                  &tmpsiz, NULL);
+    UInt8 *magicCookie = malloc(tmpsiz);
     AudioConverterGetProperty(pv->converter,
                               kAudioConverterCompressionMagicCookie,
-                              &tmp, magicCookie);
+                              &tmpsiz, magicCookie);
     // CoreAudio returns a complete ESDS, but we only need
     // the DecoderSpecific info.
     UInt8 *buffer = NULL;
     ReadESDSDescExt(magicCookie, &buffer, &tmpsiz, 0);
-
     hb_set_extradata(w->extradata, buffer, tmpsiz);
     free(buffer);
+    free(magicCookie);
 
     AudioConverterPrimeInfo primeInfo;
     UInt32 piSize = sizeof(primeInfo);
