@@ -59,6 +59,8 @@ void encavcodecClose( hb_work_object_t * );
 
 static int apply_encoder_preset(int vcodec, AVDictionary ** av_opts,
                                 const char * preset);
+static int apply_encoder_tune(int vcodec, AVDictionary ** av_opts,
+                                const char * tune);
 static int apply_encoder_options(hb_job_t *job, AVCodecContext *context,
                                  AVDictionary **av_opts);
 
@@ -74,6 +76,11 @@ hb_work_object_t hb_encavcodec =
 static const char * const vpx_preset_names[] =
 {
     "veryfast", "faster", "fast", "medium", "slow", "slower", "veryslow", NULL
+};
+
+static const char * const vp9_tune_names[] = 
+{
+    "screen", "film", NULL 
 };
 
 static const char * const h26x_nvenc_preset_names[] =
@@ -344,6 +351,13 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
     if (apply_encoder_preset(job->vcodec, &av_opts, job->encoder_preset))
     {
         av_free( context );
+        ret = 1;
+        goto done;
+    }
+
+    if (apply_encoder_tune(job->vcodec, &av_opts, job->encoder_tune))
+    {
+        av_free(context);
         ret = 1;
         goto done;
     }
@@ -1304,6 +1318,27 @@ static int apply_encoder_preset(int vcodec, AVDictionary ** av_opts,
     return 0;
 }
 
+static int apply_vp9_tune(AVDictionary ** av_opts, const char * tune)
+{
+    av_dict_set(av_opts, "tune-content", tune, 0);
+    return 0;
+}
+
+static int apply_encoder_tune(int vcodec, AVDictionary ** av_opts,
+                                const char * tune)
+{
+    switch (vcodec)
+    {
+        case HB_VCODEC_FFMPEG_VP9:
+        case HB_VCODEC_FFMPEG_VP9_10BIT:
+            return apply_vp9_tune(av_opts, tune);
+        default:
+            break;
+    }
+
+    return 0;
+}
+
 const char* const* hb_av_preset_get_names(int encoder)
 {
     switch (encoder)
@@ -1339,6 +1374,9 @@ const char* const* hb_av_tune_get_names(int encoder)
 {
     switch (encoder)
     {
+        case HB_VCODEC_FFMPEG_VP9:
+        case HB_VCODEC_FFMPEG_VP9_10BIT:
+            return vp9_tune_names;
         default:
             return NULL;
     }
