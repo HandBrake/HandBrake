@@ -175,7 +175,8 @@
     [self removeTracksAtIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, self.tracks.count)]];
 
     // Add the remaining tracks
-    for (NSUInteger idx = 1; idx < self.sourceTracksArray.count; idx++) {
+    for (NSUInteger idx = 1; idx < self.sourceTracksArray.count; idx++)
+    {
         [self addTrack:[self trackFromSourceTrackIndex:idx]];
     }
 
@@ -194,7 +195,7 @@
     [self addDefaultTracksFromJobSettings:self.job.jobDict];
 }
 
-- (void)addExternalTrackFromURL:(NSURL *)fileURL
+- (void)addExternalSourceTrackFromURL:(NSURL *)fileURL addImmediately:(BOOL)addImmediately
 {
     int type = [fileURL.pathExtension.lowercaseString isEqualToString:@"srt"] ? IMPORTSRT : IMPORTSSA;
 
@@ -204,7 +205,10 @@
 
     self.sourceTracks = [sourceTracks copy];
     HBSubtitlesTrack *track = [self trackFromSourceTrackIndex:self.sourceTracksArray.count - 1];
-    [self insertObject:track inTracksAtIndex:[self countOfTracks] - 1];
+    if (addImmediately)
+    {
+        [self insertObject:track inTracksAtIndex:[self countOfTracks] - 1];
+    }
 }
 
 - (void)setContainer:(int)container

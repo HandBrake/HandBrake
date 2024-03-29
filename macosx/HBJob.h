@@ -36,6 +36,7 @@ typedef NS_ENUM(NSUInteger, HBJobHardwareDecoderUsage) {
 @interface HBJob : NSObject <NSSecureCoding, NSCopying, HBPresetCoding, HBSecurityScope>
 
 - (nullable instancetype)initWithTitle:(HBTitle *)title preset:(HBPreset *)preset;
+- (nullable instancetype)initWithTitle:(HBTitle *)title preset:(HBPreset *)preset subtitles:(NSArray<NSURL *> *)subtitlesURLs;
 
 @property (nonatomic, readwrite, weak, nullable) HBTitle *title;
 @property (nonatomic, readonly) int titleIdx;

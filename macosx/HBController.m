@@ -48,6 +48,7 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
 @property (nonatomic, readonly, strong) HBAppDelegate *delegate;
 
 @property (nonatomic, strong) NSArray<HBSecurityAccessToken *> *fileTokens;
+@property (nonatomic, strong) NSArray<NSURL *> *subsURLs;
 @property (nonatomic, strong) NSURL *destinationFolderURL;
 @property (nonatomic, strong) HBSecurityAccessToken *destinationFolderToken;
 
@@ -327,8 +328,18 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
     NSArray<NSURL *> *fileURLs = [self fileURLsFromPasteboard:[sender draggingPasteboard]];
     if (fileURLs.count)
     {
-        BOOL recursive = [NSUserDefaults.standardUserDefaults boolForKey:HBRecursiveScan];
-        [self openURLs:fileURLs recursive:recursive];
+        NSArray<NSURL *> *subtitlesFileURLs = [HBUtilities extractURLs:fileURLs withExtension:HBUtilities.supportedExtensions];
+        if (subtitlesFileURLs.count == fileURLs.count && self.job)
+        {
+            [self.subtitlesViewController addTracksFromExternalFiles:fileURLs];
+            NSUInteger index = [self.mainTabView indexOfTabViewItem:self.subtitlesTab];
+            [self.mainTabView selectTabViewItemAtIndex:index];
+        }
+        else
+        {
+            BOOL recursive = [NSUserDefaults.standardUserDefaults boolForKey:HBRecursiveScan];
+            [self openURLs:fileURLs recursive:recursive];
+        }
     }
     [self.window.contentView setShowFocusRing:NO];
     return YES;
@@ -639,16 +650,7 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
  */
 - (void)scanURLs:(NSArray<NSURL *> *)fileURLs titleIndex:(NSUInteger)index completionHandler:(void(^)(NSArray<HBTitle *> *titles))completionHandler
 {
-    // Save the current settings
-    [self updateCurrentPreset];
-
-    self.job = nil;
-    [self.titlePopUp removeAllItems];
-    self.window.representedURL = nil;
-    self.window.title = NSLocalizedString(@"HandBrake", @"Main Window -> title");
-
-    // Clear the undo manager, we can't undo this action
-    [self.window.undoManager removeAllActions];
+    [self showWindow:self];
 
     // Check if we can scan the source and if there is any warning.
     NSError *outError = NULL;
@@ -765,9 +767,25 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
     }
 }
 
+- (void)cleanUp
+{
+    self.job = nil;
+    self.fileTokens = nil;
+    self.subsURLs = nil;
+
+    [self.titlePopUp removeAllItems];
+    self.window.representedURL = nil;
+    self.window.title = NSLocalizedString(@"HandBrake", @"Main Window -> title");
+
+    // Clear the undo manager, we can't undo this action
+    [self.window.undoManager removeAllActions];
+}
+
 - (void)openURLs:(NSArray<NSURL *> *)fileURLs recursive:(BOOL)recursive titleIndex:(NSUInteger)index
 {
-    [self showWindow:self];
+    // Save the current settings
+    [self updateCurrentPreset];
+    [self cleanUp];
 
     NSMutableArray<HBSecurityAccessToken *> *tokens = [[NSMutableArray alloc] init];
     for (NSURL *fileURL in fileURLs)
@@ -787,8 +805,9 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
         }
     }
 
-    NSArray<NSURL *> *expandedFileURLs = [HBUtilities expandURLs:fileURLs recursive:recursive];
-    NSArray<NSURL *> *trimmedFileURLs  = [HBUtilities trimURLs:expandedFileURLs withExtension:excludedExtensions];
+    NSArray<NSURL *> *expandedFileURLs  = [HBUtilities expandURLs:fileURLs recursive:recursive];
+    NSArray<NSURL *> *subtitlesFileURLs = [HBUtilities extractURLs:expandedFileURLs withExtension:HBUtilities.supportedExtensions];
+    NSArray<NSURL *> *trimmedFileURLs   = [HBUtilities trimURLs:expandedFileURLs withExtension:excludedExtensions];
 
     [self scanURLs:trimmedFileURLs titleIndex:index completionHandler:^(NSArray<HBTitle *> *titles)
     {
@@ -810,6 +829,8 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
                 }
             }
 
+            self.subsURLs = subtitlesFileURLs;
+
             HBJob *job = [self jobFromTitle:featuredTitle];
             if (job)
             {
@@ -821,8 +842,7 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
             }
             else
             {
-                self.job = nil;
-                [self.titlePopUp removeAllItems];
+                [self cleanUp];
                 self.sourceLabel.stringValue = NSLocalizedString(@"No Valid Preset", @"Main Window -> Info text");
             }
         }
@@ -847,6 +867,7 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
 {
     if (self.core.state != HBStateScanning)
     {
+        [self cleanUp];
         [job refreshSecurityScopedResources];
         self.fileTokens = @[[HBSecurityAccessToken tokenWithObject:job.fileURL]];
 
@@ -867,9 +888,9 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
             else
             {
                 handler(NO);
+                [self cleanUp];
             }
         }];
-        [self showWindow:self];
     }
     else
     {
@@ -877,13 +898,30 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
     }
 }
 
+- (NSArray<NSURL *> *)matchSubtitlesURLsWith:(NSURL *)sourceURL
+{
+    NSMutableArray<NSURL *> *URLs = [[NSMutableArray alloc] init];
+    NSString *sourcePrefix = [sourceURL.path stringByDeletingPathExtension];
+
+    for (NSURL *url in self.subsURLs)
+    {
+        if ([url.path hasPrefix:sourcePrefix])
+        {
+            [URLs addObject:url];
+        }
+    }
+
+    return URLs;
+}
+
 - (HBJob *)jobFromTitle:(HBTitle *)title
 {
-    // If there is already a title load, save the current settings to a preset
-    // Save the current settings
+    // If there is already a title loaded, save the current settings to a preset
     [self updateCurrentPreset];
 
-    HBJob *job = [[HBJob alloc] initWithTitle:title preset:self.currentPreset];
+    NSArray<NSURL *> *subtitlesURLs = [self matchSubtitlesURLsWith:title.url];
+    HBJob *job = [[HBJob alloc] initWithTitle:title preset:self.currentPreset subtitles:subtitlesURLs];
+
     if (job)
     {
         [job setDestinationFolderURL:self.destinationFolderURL

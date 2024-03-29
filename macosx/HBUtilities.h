@@ -77,6 +77,14 @@ NS_ASSUME_NONNULL_BEGIN
 ///   - recursive: whether to recursively expand sub folders
 + (NSArray<NSURL *> *)expandURLs:(NSArray<NSURL *> *)fileURLs recursive:(BOOL)recursive;
 
+@property (nonatomic, class, readonly) NSArray<NSString *> *supportedExtensions;
+
+/// Extract the urls that contains one of the extension
+/// - Parameters:
+///   - fileURLs: an array of NSURL
+///   - extensions: an array of valid file extensions
++ (NSArray<NSURL *> *)extractURLs:(NSArray<NSURL *> *)fileURLs withExtension:(NSArray<NSString *> *)extensions;
+
 /// Trim an array of NSURL into an array by removing the urls
 /// that contains one of the excluded extension
 /// - Parameters:

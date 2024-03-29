@@ -91,6 +91,25 @@
 
 #pragma mark - External subtitles import
 
+- (void)addTracksFromExternalFiles:(NSArray<NSURL *> *)fileURLs
+{
+    NSMutableArray<HBSecurityAccessToken *> *tokens = [[NSMutableArray alloc] init];
+
+    if (self.fileTokens)
+    {
+        [tokens addObjectsFromArray:self.fileTokens];
+    }
+
+    for (NSURL *importFileURL in fileURLs)
+    {
+        [tokens addObject:[HBSecurityAccessToken tokenWithAlreadyAccessedObject:importFileURL]];
+        [NSUserDefaults.standardUserDefaults setURL:importFileURL.URLByDeletingLastPathComponent forKey:@"LastExternalSubImportDirectoryURL"];
+        [self.subtitles addExternalSourceTrackFromURL:importFileURL addImmediately:YES];
+    }
+
+    self.fileTokens = tokens;
+}
+
 /**
  *  Imports a srt/ssa file.
  *
@@ -114,24 +133,13 @@
     }
 
     panel.directoryURL = sourceDirectory;
-    panel.allowedFileTypes = @[@"srt", @"ssa", @"ass"];
+    panel.allowedFileTypes = HBUtilities.supportedExtensions;
 
     [panel beginSheetModalForWindow:self.view.window completionHandler:^(NSInteger result)
     {
         if (result == NSModalResponseOK)
         {
-            NSMutableArray<HBSecurityAccessToken *> *tokens = [[NSMutableArray alloc] init];
-            if (self.fileTokens)
-            {
-                [tokens addObjectsFromArray:self.fileTokens];
-            }
-            for (NSURL *importFileURL in panel.URLs)
-            {
-                [tokens addObject:[HBSecurityAccessToken tokenWithAlreadyAccessedObject:importFileURL]];
-                [NSUserDefaults.standardUserDefaults setURL:importFileURL.URLByDeletingLastPathComponent forKey:@"LastExternalSubImportDirectoryURL"];
-                [self.subtitles addExternalTrackFromURL:importFileURL];
-            }
-            self.fileTokens = tokens;
+            [self addTracksFromExternalFiles:panel.URLs];
         }
     }];
 }

@@ -45,7 +45,7 @@ NSString *HBChaptersChangedNotification  = @"HBChaptersChangedNotification";
 
 @implementation HBJob
 
-- (nullable instancetype)initWithTitle:(HBTitle *)title preset:(HBPreset *)preset
+- (nullable instancetype)initWithTitle:(HBTitle *)title preset:(HBPreset *)preset subtitles:(NSArray<NSURL *> *)subtitlesURLs
 {
     self = [super init];
     if (self) {
@@ -74,12 +74,23 @@ NSString *HBChaptersChangedNotification  = @"HBChaptersChangedNotification";
         _metadataPassthru = YES;
         _presetName = @"";
 
+        for (NSURL *url in subtitlesURLs)
+        {
+            [self.subtitles addExternalSourceTrackFromURL:url addImmediately:NO];
+        }
+
         if ([self applyPreset:preset error:NULL] == NO)
         {
             return nil;
         }
     }
 
+    return self;
+}
+
+- (nullable instancetype)initWithTitle:(HBTitle *)title preset:(HBPreset *)preset
+{
+    self = [self initWithTitle:title preset:preset subtitles:@[]];
     return self;
 }
 
