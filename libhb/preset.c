@@ -1843,6 +1843,16 @@ int hb_preset_apply_video(const hb_dict_t *preset, hb_dict_t *job_dict)
         hb_dict_set(video_dict, "Quality",
                     hb_value_xform(hb_dict_get(preset, "VideoQualitySlider"),
                                    HB_VALUE_TYPE_DOUBLE));
+        
+        if (hb_video_cq_multipass_is_supported(vcodec))
+        {
+            hb_dict_set(video_dict, "MultiPass",
+                        hb_value_xform(hb_dict_get(preset, "VideoMultiPass"),
+                                       HB_VALUE_TYPE_BOOL));
+            hb_dict_set(video_dict, "Turbo",
+                        hb_value_xform(hb_dict_get(preset, "VideoTurboMultiPass"),
+                                       HB_VALUE_TYPE_BOOL));
+        }
         hb_dict_remove(video_dict, "Bitrate");
     }
     else if (vqtype == 1)   // ABR
@@ -1868,6 +1878,15 @@ int hb_preset_apply_video(const hb_dict_t *preset, hb_dict_t *job_dict)
         {
             hb_dict_set(video_dict, "Quality",
                         hb_value_xform(value, HB_VALUE_TYPE_DOUBLE));
+            if (hb_video_cq_multipass_is_supported(vcodec))
+            {
+                hb_dict_set(video_dict, "MultiPass",
+                            hb_value_xform(hb_dict_get(preset, "VideoMultiPass"),
+                                        HB_VALUE_TYPE_BOOL));
+                hb_dict_set(video_dict, "Turbo",
+                            hb_value_xform(hb_dict_get(preset, "VideoTurboMultiPass"),
+                                        HB_VALUE_TYPE_BOOL));
+            }
             hb_dict_remove(video_dict, "Bitrate");
         }
         else
