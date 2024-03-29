@@ -178,7 +178,7 @@ static int colorspace_init(hb_filter_object_t * filter, hb_filter_init_t * init)
     hb_dict_set_int(avsettings, "primaries", color_prim);
     hb_dict_set_int(avsettings, "transfer", color_transfer);
     hb_dict_set_int(avsettings, "matrix", color_matrix);
-    hb_dict_set_int(avsettings, "range", color_range);
+    hb_dict_set_string(avsettings, "range", av_color_range_name(color_range));
 
     hb_dict_set(avfilter, "zscale", avsettings);
     hb_value_array_append(avfilters, avfilter);

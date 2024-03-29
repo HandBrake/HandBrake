@@ -1329,33 +1329,6 @@ static hb_buffer_t *copy_frame( hb_work_private_t *pv )
     return out;
 }
 
-static const char * get_range_name(int color_range)
-{
-    switch (color_range)
-    {
-        case AVCOL_RANGE_UNSPECIFIED:
-        case AVCOL_RANGE_MPEG:
-            return "limited";
-        case AVCOL_RANGE_JPEG:
-            return "full";
-    }
-    return "limited";
-}
-
-static const char * get_range_name_cuda(int color_range)
-{
-    // Different names for totally no reason
-    switch (color_range)
-    {
-        case AVCOL_RANGE_UNSPECIFIED:
-        case AVCOL_RANGE_MPEG:
-            return "mpeg";
-        case AVCOL_RANGE_JPEG:
-            return "jpeg";
-    }
-    return "mpeg";
-}
-
 int reinit_video_filters(hb_work_private_t * pv)
 {
     int                orig_width;
@@ -1458,7 +1431,7 @@ int reinit_video_filters(hb_work_private_t * pv)
         {
             if (color_range != pv->frame->color_range)
             {
-                hb_dict_set_string(settings, "range", get_range_name_cuda(color_range));
+                hb_dict_set_int(settings, "range", color_range);
                 hb_avfilter_append_dict(filters, "colorspace_cuda", settings);
                 settings = hb_dict_init();
             }
@@ -1473,7 +1446,7 @@ int reinit_video_filters(hb_work_private_t * pv)
             hb_dict_set(settings, "w", hb_value_int(orig_width));
             hb_dict_set(settings, "h", hb_value_int(orig_height));
             hb_dict_set_string(settings, "filter", "lanczos");
-            hb_dict_set_string(settings, "range", get_range_name(color_range));
+            hb_dict_set_string(settings, "range", av_color_range_name(color_range));
             hb_avfilter_append_dict(filters, "zscale", settings);
 
             settings = hb_dict_init();
@@ -1486,8 +1459,8 @@ int reinit_video_filters(hb_work_private_t * pv)
             hb_dict_set(settings, "w", hb_value_int(orig_width));
             hb_dict_set(settings, "h", hb_value_int(orig_height));
             hb_dict_set(settings, "flags", hb_value_string("lanczos+accurate_rnd"));
-            hb_dict_set_string(settings, "in_range", get_range_name(pv->frame->color_range));
-            hb_dict_set_string(settings, "out_range", get_range_name(color_range));
+            hb_dict_set_int(settings, "in_range", pv->frame->color_range);
+            hb_dict_set_int(settings, "out_range", color_range);
             hb_avfilter_append_dict(filters, "scale", settings);
 
             settings = hb_dict_init();
