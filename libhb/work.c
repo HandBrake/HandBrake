@@ -555,6 +555,8 @@ void hb_display_job_info(hb_job_t *job)
                 case HB_VCODEC_X265_16BIT:
                 case HB_VCODEC_SVT_AV1:
                 case HB_VCODEC_SVT_AV1_10BIT:
+                case HB_VCODEC_FFMPEG_VP9:
+                case HB_VCODEC_FFMPEG_VP9_10BIT:
                     hb_log("     + tune:    %s", job->encoder_tune);
                 default:
                     break;
