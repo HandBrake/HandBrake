@@ -79,6 +79,13 @@ NSString * const HBVideoChangedNotification = @"HBVideoChangedNotification";
     // Ensure the quality value is not out of the new bounds
     if (!(self.undo.isUndoing || self.undo.isRedoing))
     {
+        double integral;
+        double fractional = modf(self.quality, &integral);
+
+        if ((int)(fractional * 100) % (int)(granularity * 100))
+        {
+            self.quality = ceil(self.quality);
+        }
         if (self.quality > maxValue)
         {
             self.quality = maxValue;

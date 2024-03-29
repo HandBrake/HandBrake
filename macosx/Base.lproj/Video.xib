@@ -247,7 +247,7 @@ Adjust the quality slider to the right to increase quality or to the left to dec
 Recommended values for the x264 and x265 encoders are RF 18-28. Higher quality settings may produce extremely large files.
 
 x264 is lossless at RF 0.</string>
-                    <sliderCell key="cell" controlSize="mini" continuous="YES" state="on" alignment="left" maxValue="51" doubleValue="33.149999999999999" tickMarkPosition="above" numberOfTickMarks="101" allowsTickMarkValuesOnly="YES" sliderType="linear" id="hOs-xu-ZdT">
+                    <sliderCell key="cell" controlSize="mini" continuous="YES" state="on" alignment="left" maxValue="51" doubleValue="33.149999999999999" tickMarkPosition="above" sliderType="linear" id="hOs-xu-ZdT">
                         <font key="font" metaFont="label" size="9"/>
                     </sliderCell>
                     <connections>

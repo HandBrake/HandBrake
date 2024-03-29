@@ -370,14 +370,15 @@
     BOOL _reverse;
     double _min;
     double _max;
+    double _granularity;
 }
 
 - (instancetype)init
 {
-    return [self initWithReversedDirection:NO min:0 max:50];
+    return [self initWithReversedDirection:NO min:0 max:50 granularity:1];
 }
 
-- (instancetype)initWithReversedDirection:(BOOL)reverse min:(double)min max:(double)max
+- (instancetype)initWithReversedDirection:(BOOL)reverse min:(double)min max:(double)max granularity:(float)granularity
 {
     self = [super init];
     if (self)
@@ -385,6 +386,7 @@
         _reverse = reverse;
         _min = min;
         _max = max;
+        _granularity = granularity > 0 ? granularity : 1;
     }
 
     return self;
@@ -418,11 +420,14 @@
     if (_reverse)
     {
         double inverseValue = _min + _max - [value doubleValue];
+        inverseValue = round(inverseValue / _granularity) * _granularity;
         return @(inverseValue);
     }
     else
     {
-        return value;
+        double doubleValue = [value doubleValue];
+        doubleValue = round(doubleValue / _granularity) * _granularity;
+        return @(doubleValue);
     }
 }
 
