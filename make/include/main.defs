@@ -18,7 +18,6 @@ ifneq (,$(filter $(HOST.system),darwin cygwin mingw))
     MODULES += contrib/freetype
     MODULES += contrib/fribidi
     MODULES += contrib/harfbuzz
-    MODULES += contrib/libxml2
     MODULES += contrib/libass
     MODULES += contrib/libogg
     MODULES += contrib/libvorbis

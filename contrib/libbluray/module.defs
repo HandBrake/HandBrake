@@ -1,4 +1,4 @@
-$(eval $(call import.MODULE.defs,LIBBLURAY,libbluray,LIBXML2 FREETYPE))
+$(eval $(call import.MODULE.defs,LIBBLURAY,libbluray, FREETYPE))
 $(eval $(call import.CONTRIB.defs,LIBBLURAY))
 
 LIBBLURAY.FETCH.url     = https://github.com/HandBrake/HandBrake-contribs/releases/download/contribs/libbluray-1.3.4.tar.bz2
@@ -10,7 +10,7 @@ ifeq (none,$(LIBBLURAY.GCC.O))
 endif
 
 LIBBLURAY.CONFIGURE.extra += --disable-doxygen-doc --disable-examples --disable-bdjava-jar --without-freetype --without-fontconfig
-LIBBLURAY.CONFIGURE.extra += --without-external-libudfread
+LIBBLURAY.CONFIGURE.extra += --without-external-libudfread --without-libxml2
 
 ifeq (mingw,$(HOST.system))
     LIBBLURAY.GCC.D += MINGW_HAS_SECURE_API=1
