@@ -1,2 +1,0 @@
-$(eval $(call import.MODULE.rules,LIBXML2))
-$(eval $(call import.CONTRIB.rules,LIBXML2))

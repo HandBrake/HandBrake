@@ -1,6 +1,6 @@
 __deps__ := A52DEC BZIP2 LIBVPX SVT-AV1 FFMPEG FREETYPE LAME LIBASS LIBDCA \
     LIBDVDREAD LIBDVDNAV LIBICONV LIBSAMPLERATE LIBTHEORA LIBVORBIS LIBOGG \
-    LIBXML2 X264 X265 ZLIB LIBBLURAY FDKAAC LIBVPL LIBGNURX JANSSON \
+    X264 X265 ZLIB LIBBLURAY FDKAAC LIBVPL LIBGNURX JANSSON \
     HARFBUZZ LIBOPUS LIBSPEEX LIBDAV1D LIBJPEGTURBO LIBDOVI
 
 ifeq (,$(filter $(HOST.system),darwin cygwin mingw))
@@ -61,21 +61,6 @@ endif
 
 ifneq (,$(filter $(HOST.system),freebsd netbsd openbsd))
     LIBHB.GCC.I += $(LOCALBASE)/include
-    LIBHB.GCC.I += $(LOCALBASE)/include/libxml2
-else ifneq (,$(filter $(HOST.system),darwin cygwin mingw))
-    LIBHB.GCC.I += $(CONTRIB.build/)include/libxml2
-    LIBHB.GCC.D += LIBXML_STATIC
-else
-    LIBHB.libxml2 := $(shell $(PKGCONFIG.exe) --silence-errors --cflags libxml2)
-    ifeq (,$(LIBHB.libxml2))
-        LIBHB.libxml2 := $(shell $(PKGCONFIG.exe) --silence-errors --cflags libxml-2.0)
-    endif
-    ifneq (,$(LIBHB.libxml2))
-        LIBHB.libxml2 := $(patsubst -I%,%,$(LIBHB.libxml2))
-        LIBHB.GCC.I += $(LIBHB.libxml2)
-    else
-        LIBHB.GCC.I += /usr/include/libxml2
-    endif
 endif
 
 ifeq ($(HOST.system),cygwin)
@@ -132,7 +117,7 @@ LIBHB.lib = $(LIBHB.build/)hb.lib
 
 LIBHB.dll.libs = $(foreach n, \
         ass avformat avfilter avcodec avutil swresample postproc dvdnav dvdread \
-        freetype mp3lame swscale vpx theora vorbis vorbisenc ogg x264 xml2 \
+        freetype mp3lame swscale vpx theora vorbis vorbisenc ogg x264 \
         bluray jansson harfbuzz opus speex dav1d turbojpeg zimg SvtAv1Enc, \
         $(CONTRIB.build/)lib/lib$(n).a )
 

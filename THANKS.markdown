@@ -32,7 +32,6 @@ HandBrake uses many cool libraries from the GNU/Linux world. We thank them and t
 - [libvpx](https://github.com/webmproject/libvpx/)
 - [libx264](https://www.videolan.org/developers/x264.html)
 - [libx265](http://x265.org/)
-- [libxml2](http://xmlsoft.org/)
 - [libzlib](http://zlib.net/)
 
 Windows UI:
