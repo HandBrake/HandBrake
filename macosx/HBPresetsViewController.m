@@ -290,7 +290,7 @@ static void *HBPresetsViewControllerContext = &HBPresetsViewControllerContext;
     panel.allowsMultipleSelection = YES;
     panel.canChooseFiles = YES;
     panel.canChooseDirectories = NO;
-    panel.allowedFileTypes = @[@"plist", @"xml", @"json"];
+    panel.allowedFileTypes = @[@"json"];
 
     if ([NSUserDefaults.standardUserDefaults URLForKey:@"LastPresetImportDirectoryURL"])
     {

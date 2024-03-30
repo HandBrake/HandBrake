@@ -63,22 +63,6 @@ NSString *HBPresetsChangedNotification = @"HBPresetsChangedNotification";
 
 #pragma mark - Load/Save
 
-/**
- *  Loads the old presets format (0.10 and earlier) plist
- *
- *  @param url the url of the plist
- */
-- (void)loadOldPresetsFromURL:(NSURL *)url
-{
-    NSError *error;
-    HBPreset *oldPresets = [[HBPreset alloc] initWithContentsOfURL:url error:&error];
-
-    for (HBPreset *preset in oldPresets.children)
-    {
-        [self.root insertObject:preset inChildrenAtIndex:self.root.countOfChildren];
-    }
-}
-
 - (BOOL)isNewer:(NSDictionary *)dict
 {
     int major, minor, micro;
@@ -221,9 +205,6 @@ typedef NS_ENUM(NSUInteger, HBPresetLoadingResult) {
     // If there is no json presets file try to read the old plist
     if (result == HBPresetLoadingResultFailed && presetsDict == nil)
     {
-        // Try to load to load the old presets file
-        // if the new one is empty
-        [self loadOldPresetsFromURL:[url.URLByDeletingPathExtension URLByAppendingPathExtension:@"plist"]];
         [self generateBuiltInPresets];
     }
 
