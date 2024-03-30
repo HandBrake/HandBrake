@@ -852,8 +852,6 @@ read_config_file(const gchar *name)
     if (g_file_test(path, G_FILE_TEST_IS_REGULAR))
     {
         gval = ghb_json_parse_file(path);
-        if (gval == NULL)
-            gval = hb_plist_parse_file(path);
     }
     g_free(path);
     return gval;
@@ -867,8 +865,6 @@ ghb_read_settings_file(const gchar *path)
     if (g_file_test(path, G_FILE_TEST_IS_REGULAR))
     {
         gval = ghb_json_parse_file(path);
-        if (gval == NULL)
-            gval = hb_plist_parse_file(path);
     }
     return gval;
 }
@@ -2120,7 +2116,6 @@ preset_import_action_cb(GSimpleAction *action, GVariant *param,
     ghb_add_file_filter(GTK_FILE_CHOOSER(chooser), _("All Files"), "FilterAll");
     filter = ghb_add_file_filter(GTK_FILE_CHOOSER(chooser), _("Presets (*.json)"), "FilterJSON");
     gtk_file_chooser_set_filter(GTK_FILE_CHOOSER(chooser), filter);
-    ghb_add_file_filter(GTK_FILE_CHOOSER(chooser), _("Legacy Presets (*.plist)"), "FilterPlist");
 
     exportDir = ghb_dict_get_string(ud->prefs, "ExportDirectory");
     if (exportDir == NULL || exportDir[0] == '\0')
