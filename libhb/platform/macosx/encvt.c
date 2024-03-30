@@ -923,7 +923,6 @@ static OSStatus init_vtsession(hb_work_object_t *w, hb_job_t *job, hb_work_priva
     if (err != noErr)
     {
         hb_log("Error retrieving the supported property dictionary err=%"PRId64"", (int64_t)err);
-        CFRelease(encoderSpecifications);
     }
 
     CFRelease(encoderSpecifications);
