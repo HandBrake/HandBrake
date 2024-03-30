@@ -19,7 +19,6 @@ extern "C" {
 #include "handbrake/compat.h"
 #include "handbrake/hb_json.h"
 #include "handbrake/preset.h"
-#include "handbrake/plist.h"
 #include "handbrake/param.h"
 #include "handbrake/colormap.h"
 

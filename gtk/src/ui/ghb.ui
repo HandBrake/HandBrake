@@ -89,12 +89,6 @@
       <mime-type>application/xml</mime-type>
     </mime-types>
   </object>
-  <object class="GtkFileFilter" id="FilterPlist">
-    <patterns>
-      <pattern>*.plist</pattern>
-      <pattern>*.PLIST</pattern>
-    </patterns>
-  </object>
   <object class="GtkLabel" id="SubBurnedLabel">
     <property name="tooltip-text" translatable="yes">Render the subtitle over the video.
 

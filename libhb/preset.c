@@ -10,17 +10,13 @@
 #include "handbrake/preset_builtin.h"
 #include "handbrake/handbrake.h"
 #include "handbrake/hb_dict.h"
-#include "handbrake/plist.h"
 #include "handbrake/lang.h"
 
 #if defined(SYS_LINUX)
-#define HB_PRESET_PLIST_FILE    "ghb/presets"
 #define HB_PRESET_JSON_FILE     "ghb/presets.json"
 #elif defined(SYS_MINGW)
-#define HB_PRESET_PLIST_FILE    "HandBrake\\presets.xml"
 #define HB_PRESET_JSON_FILE     "HandBrake\\presets.json"
 #elif defined(SYS_DARWIN)
-#define HB_PRESET_PLIST_FILE    "HandBrake/UserPresets.plist"
 #define HB_PRESET_JSON_FILE     "HandBrake/UserPresets.json"
 #endif
 
@@ -3910,21 +3906,11 @@ int hb_presets_gui_init(void)
     hb_get_user_config_filename(path, "%s", HB_PRESET_JSON_FILE);
     dict = hb_value_read_json(path);
 #endif
-#if defined(HB_PRESET_PLIST_FILE)
-    if (dict == NULL)
-    {
-        hb_get_user_config_filename(path, "%s", HB_PRESET_PLIST_FILE);
-        dict = hb_plist_parse_file(path);
-    }
-#endif
     if (dict == NULL)
     {
         hb_error("Failed to load GUI presets file");
 #if defined(HB_PRESET_JSON_FILE)
         hb_error("Attempted: %s", HB_PRESET_JSON_FILE);
-#endif
-#if defined(HB_PRESET_PLIST_FILE)
-        hb_error("Attempted: %s", HB_PRESET_PLIST_FILE);
 #endif
         return -1;
     }
@@ -4163,8 +4149,6 @@ int hb_presets_version_file(const char *filename,
 
     hb_value_t *preset = hb_value_read_json(filename);
     if (preset == NULL)
-        preset = hb_plist_parse_file(filename);
-    if (preset == NULL)
         return -1;
 
     result = hb_presets_version(preset, major, minor, micro);
@@ -4177,8 +4161,6 @@ hb_value_t* hb_presets_read_file(const char *filename)
 {
     hb_value_t *preset = hb_value_read_json(filename);
     if (preset == NULL)
-        preset = hb_plist_parse_file(filename);
-    if (preset == NULL)
         return NULL;
 
     return preset;
@@ -4189,8 +4171,6 @@ char * hb_presets_read_file_json(const char *filename)
     char *result;
     hb_value_t *preset = hb_value_read_json(filename);
     if (preset == NULL)
-        preset = hb_plist_parse_file(filename);
-    if (preset == NULL)
         return NULL;
 
     result = hb_value_get_json(preset);
@@ -4200,8 +4180,6 @@ char * hb_presets_read_file_json(const char *filename)
 int hb_presets_add_file(const char *filename)
 {
     hb_value_t *preset = hb_value_read_json(filename);
-    if (preset == NULL)
-        preset = hb_plist_parse_file(filename);
     if (preset == NULL)
         return -1;
 
