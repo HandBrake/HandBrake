@@ -123,7 +123,7 @@
                         <font key="font" metaFont="controlContent" size="11"/>
                     </buttonCell>
                     <connections>
-                        <binding destination="-2" name="enabled2" keyPath="self.video" previousBinding="7aV-7j-MzB" id="c4g-dz-q05">
+                        <binding destination="-2" name="enabled" keyPath="self.video" id="c4g-dz-q05">
                             <dictionary key="options">
                                 <integer key="NSMultipleValuesPlaceholder" value="-1"/>
                                 <integer key="NSNoSelectionPlaceholder" value="-1"/>
@@ -133,17 +133,12 @@
                             </dictionary>
                         </binding>
                         <binding destination="-2" name="value" keyPath="self.video.multiPass" id="oMA-Mr-zX3"/>
-                        <binding destination="-2" name="enabled3" keyPath="self.video.multiPassSupported" previousBinding="c4g-dz-q05" id="e4I-LB-isN">
+                        <binding destination="-2" name="enabled2" keyPath="self.video.multiPassSupported" previousBinding="c4g-dz-q05" id="e4I-LB-isN">
                             <dictionary key="options">
                                 <integer key="NSMultipleValuesPlaceholder" value="-1"/>
                                 <integer key="NSNoSelectionPlaceholder" value="-1"/>
                                 <integer key="NSNotApplicablePlaceholder" value="-1"/>
                                 <integer key="NSNullPlaceholder" value="-1"/>
-                            </dictionary>
-                        </binding>
-                        <binding destination="-2" name="enabled" keyPath="self.video.qualityType" id="7aV-7j-MzB">
-                            <dictionary key="options">
-                                <string key="NSValueTransformerName">NSNegateBoolean</string>
                             </dictionary>
                         </binding>
                     </connections>
@@ -683,7 +678,7 @@ Syntax: option-1=foo:opt2=bar</string>
                 <constraint firstItem="GPu-Ht-bKg" firstAttribute="leading" secondItem="Vae-sv-7Up" secondAttribute="leading" constant="16" id="8oT-Pe-dhL"/>
                 <constraint firstItem="brN-9J-qa1" firstAttribute="firstBaseline" secondItem="A3o-Zx-OfM" secondAttribute="firstBaseline" id="Aaw-iQ-f0a"/>
                 <constraint firstItem="1au-ZO-l1i" firstAttribute="baseline" secondItem="gfa-Hb-cDP" secondAttribute="baseline" id="BfH-Qs-3mV"/>
-                <constraint firstItem="bnV-aE-FVh" firstAttribute="leading" secondItem="brN-9J-qa1" secondAttribute="leading" constant="16" id="D6T-CW-ala"/>
+                <constraint firstItem="bnV-aE-FVh" firstAttribute="leading" secondItem="brN-9J-qa1" secondAttribute="leading" constant="0" id="D6T-CW-ala"/>
                 <constraint firstItem="A3o-Zx-OfM" firstAttribute="leading" secondItem="1au-ZO-l1i" secondAttribute="leading" id="F0a-Kc-s3X"/>
                 <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="olm-zg-k9Y" secondAttribute="trailing" constant="20" id="Fsh-Kh-XyK"/>
                 <constraint firstItem="Pai-3Q-Gs3" firstAttribute="leading" secondItem="1au-ZO-l1i" secondAttribute="trailing" constant="8" symbolic="YES" id="GPO-LT-xtY"/>
