@@ -4,7 +4,7 @@
 // </copyright>
 // <summary>
 //   The preset transport container.
-//   This is a model for importing the JSON / Plist presets into the GUI.
+//   This is a model for importing the JSON presets into the GUI.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -14,7 +14,7 @@ namespace HandBrake.Interop.Interop.Json.Presets
 
     /// <summary>
     /// The preset transport container.
-    /// This is a model for importing the JSON / Plist presets into the GUI.
+    /// This is a model for importing the JSON presets into the GUI.
     /// </summary>
     public class PresetTransportContainer
     {

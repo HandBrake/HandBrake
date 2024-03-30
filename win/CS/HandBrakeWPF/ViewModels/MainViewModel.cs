@@ -1736,7 +1736,7 @@ namespace HandBrakeWPF.ViewModels
 
         public void PresetImport()
         {
-            OpenFileDialog dialog = new OpenFileDialog { Filter = "Preset Files|*.json;*.plist", CheckFileExists = true };
+            OpenFileDialog dialog = new OpenFileDialog { Filter = "Preset Files|*.json", CheckFileExists = true };
             bool? dialogResult = dialog.ShowDialog();
             if (dialogResult.HasValue && dialogResult.Value)
             {
