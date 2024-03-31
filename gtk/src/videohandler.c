@@ -79,7 +79,8 @@ ghb_update_multipass(signal_user_data_t *ud)
     bool constant_quality = ghb_dict_get_bool(ud->settings, "vquality_type_constant");
     if (constant_quality)
     {
-        gtk_widget_set_sensitive(multi_pass, false);
+        bool supports_cq_multi_pass = hb_video_cq_multipass_is_supported(encoder);
+        gtk_widget_set_sensitive(multi_pass, supports_cq_multi_pass);
     }
     else
     {
