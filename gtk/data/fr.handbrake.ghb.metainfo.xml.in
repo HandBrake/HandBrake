@@ -95,7 +95,7 @@
   </supports>
 
   <requires>
-    <display_length compare="ge">medium</display_length>
+    <display_length compare="ge">1280</display_length>
   </requires>
 
   <releases>
