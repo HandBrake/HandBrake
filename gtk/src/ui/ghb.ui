@@ -3523,7 +3523,6 @@ to limit instantaneous bitrate, look into x264&apos;s vbv-bufsize and vbv-maxrat
                                 <child>
                                   <object class="GtkBox" id="VideoMultiPassBox">
                                     <property name="spacing">20</property>
-                                    <property name="margin-start">10</property>
                                     <child>
                                       <object class="GtkCheckButton" id="VideoMultiPass">
                                         <property name="label" translatable="yes">Multi-Pass Encoding</property>
