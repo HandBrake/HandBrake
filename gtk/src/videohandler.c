@@ -64,6 +64,29 @@ int ghb_set_video_preset(GhbValue *settings, int encoder, const char * preset)
     return result;
 }
 
+void
+ghb_update_multipass(signal_user_data_t *ud)
+{
+    GtkWidget *multi_pass = GTK_WIDGET(ghb_builder_widget("VideoMultiPassBox"));
+    GtkWidget *turbo_multi_pass = GTK_WIDGET(ghb_builder_widget("VideoTurboMultiPass"));
+    int encoder = ghb_get_video_encoder(ud->settings);
+    
+    bool supports_multi_pass = hb_video_multipass_is_supported(encoder);
+    bool turbo_supported = (encoder & HB_VCODEC_X264_MASK) || (encoder & HB_VCODEC_X265_MASK);
+    
+    gtk_widget_set_visible(turbo_multi_pass, supports_multi_pass && turbo_supported);
+    
+    bool constant_quality = ghb_dict_get_bool(ud->settings, "vquality_type_constant");
+    if (constant_quality)
+    {
+        gtk_widget_set_sensitive(multi_pass, false);
+    }
+    else
+    {
+        gtk_widget_set_sensitive(multi_pass, supports_multi_pass);
+    }
+}
+
 G_MODULE_EXPORT void
 vcodec_changed_cb (GtkWidget *widget, gpointer data)
 {
@@ -76,6 +99,7 @@ vcodec_changed_cb (GtkWidget *widget, gpointer data)
     ghb_update_summary_info(ud);
     ghb_clear_presets_selection(ud);
     ghb_live_reset(ud);
+    ghb_update_multipass(ud);
 
     // Set the range of the video quality slider
     val = ghb_vquality_default(ud);
