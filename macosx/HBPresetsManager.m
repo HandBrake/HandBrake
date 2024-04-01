@@ -202,12 +202,6 @@ typedef NS_ENUM(NSUInteger, HBPresetLoadingResult) {
         }
     }
 
-    // If there is no json presets file try to read the old plist
-    if (result == HBPresetLoadingResultFailed && presetsDict == nil)
-    {
-        [self generateBuiltInPresets];
-    }
-
     // If the preset list contains no leaf,
     // add back the built in presets.
     __block BOOL leafFound = NO;
@@ -225,6 +219,11 @@ typedef NS_ENUM(NSUInteger, HBPresetLoadingResult) {
     }
 
     [self selectNewDefault];
+
+    if (result == HBPresetLoadingResultOKUpgraded)
+    {
+        [self savePresets];
+    }
 }
 
 - (BOOL)savePresetsToURL:(NSURL *)url
