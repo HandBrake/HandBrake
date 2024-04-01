@@ -2812,6 +2812,20 @@ static void und_to_any(hb_value_array_t * list)
     }
 }
 
+static void import_vp9_multipass_settings_53_0_0(hb_value_t *preset)
+{
+    const char *enc = hb_dict_get_string(preset, "VideoEncoder");
+    int codec = hb_video_encoder_get_from_name(enc);
+
+    int vquality_type = hb_dict_get_int(preset, "VideoQualityType");
+
+    if ((codec == HB_VCODEC_FFMPEG_VP9 || codec == HB_VCODEC_FFMPEG_VP9_10BIT)
+        && vquality_type == 2) // constant quality
+    {
+        hb_dict_set_bool(preset, "VideoMultiPass", 0);
+    }
+}
+
 static void import_container_settings_51_0_0(hb_value_t *preset)
 {
     int optimize = hb_dict_get_bool(preset, "Mp4HttpOptimize");
@@ -3522,9 +3536,16 @@ static void import_video_0_0_0(hb_value_t *preset)
     }
 }
 
+static void import_53_0_0(hb_value_t *preset)
+{
+    import_vp9_multipass_settings_53_0_0(preset);
+}
+
 static void import_51_0_0(hb_value_t *preset)
 {
     import_container_settings_51_0_0(preset);
+
+    import_53_0_0(preset);
 }
 
 static void import_50_0_0(hb_value_t *preset)
@@ -3702,6 +3723,11 @@ static int preset_import(hb_value_t *preset, int major, int minor, int micro)
         else if (cmpVersion(major, minor, micro, 51, 0, 0) <= 0)
         {
             import_51_0_0(preset);
+            result = 1;
+        }
+        else if (cmpVersion(major, minor, micro, 53, 0, 0) <= 0)
+        {
+            import_53_0_0(preset);
             result = 1;
         }
 
