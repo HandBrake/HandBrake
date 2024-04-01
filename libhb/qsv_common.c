@@ -4073,8 +4073,24 @@ hb_buffer_t * hb_qsv_copy_video_buffer_to_hw_video_buffer(hb_job_t *job, hb_buff
     frame->width            = in->f.width;
     frame->height           = in->f.height;
     frame->format           = in->f.fmt;
-    frame->interlaced_frame = !!in->s.combed;
-    frame->top_field_first  = !!(in->s.flags & PIC_FLAG_TOP_FIELD_FIRST);
+
+    if (in->s.combed)
+    {
+        frame->flags |= AV_FRAME_FLAG_INTERLACED;
+    }
+    else
+    {
+        frame->flags &= ~AV_FRAME_FLAG_INTERLACED;
+    }
+
+    if (in->s.flags & PIC_FLAG_TOP_FIELD_FIRST)
+    {
+        frame->flags |= AV_FRAME_FLAG_TOP_FIELD_FIRST;
+    }
+    else
+    {
+        frame->flags &= ~AV_FRAME_FLAG_TOP_FIELD_FIRST;
+    }
 
     frame->format          = in->f.fmt;
     frame->color_primaries = hb_colr_pri_hb_to_ff(in->f.color_prim);
