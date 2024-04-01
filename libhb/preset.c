@@ -3511,11 +3511,15 @@ static void import_51_0_0(hb_value_t *preset)
 static void import_50_0_0(hb_value_t *preset)
 {
     import_video_pass_settings_50_0_0(preset);
+
+    import_51_0_0(preset);
 }
 
 static void import_47_0_0(hb_value_t *preset)
 {
     import_pic_settings_47_0_0(preset);
+
+    import_50_0_0(preset);
 }
 
 static void import_44_0_0(hb_value_t *preset)
