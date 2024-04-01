@@ -9464,8 +9464,8 @@
                     "VideoQualityType": 2,
                     "VideoQualitySlider": 55.0,
                     "VideoQSVDecode": false,
-                    "VideoTwoPass": false,
-                    "VideoTurboTwoPass": false,
+                    "VideoMultiPass": false,
+                    "VideoTurboMultiPass": false,
                     "x264Option": "",
                     "x264UseAdvancedOptions": false
                 },
@@ -9573,8 +9573,8 @@
                     "VideoQualityType": 2,
                     "VideoQualitySlider": 60.0,
                     "VideoQSVDecode": false,
-                    "VideoTwoPass": false,
-                    "VideoTurboTwoPass": false,
+                    "VideoMultiPass": false,
+                    "VideoTurboMultiPass": false,
                     "x264Option": "",
                     "x264UseAdvancedOptions": false
                 }
