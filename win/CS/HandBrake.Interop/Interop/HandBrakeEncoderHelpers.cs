@@ -300,6 +300,17 @@ namespace HandBrake.Interop.Interop
 
             return false;
         }
+        public static bool VideoEncoderSupportsCQMultiPass(string encoderShortName)
+        {
+            HBVideoEncoder encoder = GetVideoEncoder(encoderShortName);
+
+            if (encoder != null)
+            {
+                return VideoEncoderSupportsCQMultiPass(encoder.Id);
+            }
+
+            return false;
+        }
 
         /// <summary>
         /// Returns true if the given video encoder supports multi-pass mode.
@@ -313,6 +324,20 @@ namespace HandBrake.Interop.Interop
         public static bool VideoEncoderSupportsMultiPass(int encoderId)
         {
             return HBFunctions.hb_video_multipass_is_supported((uint)encoderId) > 0;
+        }
+
+        /// <summary>
+        /// Returns true if the given video encoder supports multi-pass mode.
+        /// </summary>
+        /// <param name="encoderId">
+        /// The encoder ID.
+        /// </param>
+        /// <returns>
+        /// True if the given video encoder supports multi-pass mode.
+        /// </returns>
+        public static bool VideoEncoderSupportsCQMultiPass(int encoderId)
+        {
+            return HBFunctions.hb_video_cq_multipass_is_supported((uint)encoderId) > 0;
         }
 
         /// <summary>

@@ -251,10 +251,10 @@ namespace HandBrakeWPF.Services.Encode.Factories
             if (job.VideoEncodeRateType == VideoEncodeRateType.AverageBitrate)
             {
                 video.Bitrate = job.VideoBitrate;
-                video.MultiPass = job.MultiPass;
-                video.Turbo = job.TurboAnalysisPass;
             }
 
+            video.MultiPass = job.MultiPass;
+            video.Turbo = job.TurboAnalysisPass;
 
             bool enableQuickSyncEncoding = userSettingService.GetUserSetting<bool>(UserSettingConstants.EnableQuickSyncEncoding);
             bool enableQuickSyncDecoding = userSettingService.GetUserSetting<bool>(UserSettingConstants.EnableQuickSyncDecoding);
