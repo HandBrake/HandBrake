@@ -25,7 +25,6 @@ HandBrake uses many cool libraries from the GNU/Linux world. We thank them and t
 - [libmpeg2dec](http://libmpeg2.sourceforge.net/)
 - [libogg](https://xiph.org/ogg/)
 - [libopus](https://www.opus-codec.org/)
-- [libsamplerate](http://mega-nerd.com/SRC/)
 - [libspeex](https://www.speex.org/)
 - [libtheora](https://theora.org/)
 - [libvorbis](http://vorbis.com/)
