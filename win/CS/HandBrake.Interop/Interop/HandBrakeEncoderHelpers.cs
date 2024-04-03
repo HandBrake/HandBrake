@@ -289,24 +289,13 @@ namespace HandBrake.Interop.Interop
             return Containers.SingleOrDefault(c => c.ShortName == shortName);
         }
 
-        public static bool VideoEncoderSupportsMultiPass(string encoderShortName)
+        public static bool VideoEncoderSupportsMultiPass(string encoderShortName, bool constantQuality)
         {
             HBVideoEncoder encoder = GetVideoEncoder(encoderShortName);
 
             if (encoder != null)
             {
-                return VideoEncoderSupportsMultiPass(encoder.Id);
-            }
-
-            return false;
-        }
-        public static bool VideoEncoderSupportsCQMultiPass(string encoderShortName)
-        {
-            HBVideoEncoder encoder = GetVideoEncoder(encoderShortName);
-
-            if (encoder != null)
-            {
-                return VideoEncoderSupportsCQMultiPass(encoder.Id);
+                return VideoEncoderSupportsMultiPass(encoder.Id, constantQuality);
             }
 
             return false;
@@ -321,23 +310,9 @@ namespace HandBrake.Interop.Interop
         /// <returns>
         /// True if the given video encoder supports multi-pass mode.
         /// </returns>
-        public static bool VideoEncoderSupportsMultiPass(int encoderId)
+        public static bool VideoEncoderSupportsMultiPass(int encoderId, bool constantQuality)
         {
-            return HBFunctions.hb_video_multipass_is_supported((uint)encoderId) > 0;
-        }
-
-        /// <summary>
-        /// Returns true if the given video encoder supports multi-pass mode.
-        /// </summary>
-        /// <param name="encoderId">
-        /// The encoder ID.
-        /// </param>
-        /// <returns>
-        /// True if the given video encoder supports multi-pass mode.
-        /// </returns>
-        public static bool VideoEncoderSupportsCQMultiPass(int encoderId)
-        {
-            return HBFunctions.hb_video_cq_multipass_is_supported((uint)encoderId) > 0;
+            return HBFunctions.hb_video_multipass_is_supported((uint)encoderId, Convert.ToInt32(constantQuality)) > 0;
         }
 
         /// <summary>

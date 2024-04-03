@@ -294,7 +294,8 @@ NSString * const HBVideoChangedNotification = @"HBVideoChangedNotification";
         self.qualityType = 0;
     }
 
-    if (!hb_video_multipass_is_supported(self.encoder))
+    if (! (hb_video_multipass_is_supported(self.encoder, false)
+            || hb_video_multipass_is_supported(self.encoder, true)))
     {
         self.multiPass = NO;
     }

@@ -1606,7 +1606,7 @@ int hb_video_quality_is_supported(uint32_t codec)
     }
 }
 
-int hb_video_multipass_is_supported(uint32_t codec)
+int hb_video_multipass_is_supported(uint32_t codec, int constant_quality)
 {
     switch (codec)
     {
@@ -1614,7 +1614,7 @@ int hb_video_multipass_is_supported(uint32_t codec)
         case HB_VCODEC_VT_H264:
         case HB_VCODEC_VT_H265:
         case HB_VCODEC_VT_H265_10BIT:
-            return hb_vt_is_multipass_available(codec);
+            return !constant_quality && hb_vt_is_multipass_available(codec);
 #endif
 
         case HB_VCODEC_FFMPEG_MF_H264:
@@ -1635,21 +1635,12 @@ int hb_video_multipass_is_supported(uint32_t codec)
         case HB_VCODEC_QSV_AV1_10BIT:
             return 0;
 
-        default:
-            return 1;
-    }
-}
-
-int hb_video_cq_multipass_is_supported(uint32_t codec)
-{
-    switch (codec)
-    {
         case HB_VCODEC_FFMPEG_VP9:
         case HB_VCODEC_FFMPEG_VP9_10BIT:
             return 1;
-        
+
         default:
-            return 0;
+            return !constant_quality;
     }
 }
 
