@@ -116,14 +116,7 @@
 
 - (BOOL)multiPassSupported
 {
-    if (self.qualityType == 0)
-    {
-        return hb_video_multipass_is_supported(self.encoder);
-    }
-    else
-    {
-        return hb_video_cq_multipass_is_supported(self.encoder);
-    }
+    return hb_video_multipass_is_supported(self.encoder, self.qualityType != 0);
 }
 
 + (NSSet<NSString *> *)keyPathsForValuesAffectingConstantQualityLabel

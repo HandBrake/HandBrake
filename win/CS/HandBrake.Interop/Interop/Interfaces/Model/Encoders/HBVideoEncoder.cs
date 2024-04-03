@@ -146,9 +146,11 @@ namespace HandBrake.Interop.Interop.Interfaces.Model.Encoders
         public bool SupportsWebM => (this.CompatibleContainers & NativeConstants.HB_MUX_MASK_WEBM) == NativeConstants.HB_MUX_MASK_WEBM
                                     || (this.CompatibleContainers & NativeConstants.HB_MUX_AV_WEBM) == NativeConstants.HB_MUX_AV_WEBM;
 
-        public bool SupportsMultiPass => HandBrakeEncoderHelpers.VideoEncoderSupportsMultiPass(this.ShortName);
+        public bool SupportsMultiPass() => HandBrakeEncoderHelpers.VideoEncoderSupportsMultiPass(this.ShortName, true)
+                                    || HandBrakeEncoderHelpers.VideoEncoderSupportsMultiPass(this.ShortName, false);
 
-        public bool SupportsCQMultiPass => HandBrakeEncoderHelpers.VideoEncoderSupportsCQMultiPass(this.ShortName);
+        public bool SupportsMultiPass(bool constantQuality) => HandBrakeEncoderHelpers.VideoEncoderSupportsMultiPass(this.ShortName, constantQuality);
+        
 
         // TODO check if there is a nicer way of doing this.
         public bool IsSVTAV1 => this.ShortName.Contains("svt_av1");
