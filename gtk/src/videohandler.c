@@ -67,13 +67,13 @@ int ghb_set_video_preset(GhbValue *settings, int encoder, const char * preset)
 void
 ghb_update_multipass(signal_user_data_t *ud)
 {
-    GtkWidget *multi_pass = GTK_WIDGET(ghb_builder_widget("VideoMultiPassBox"));
-    GtkWidget *turbo_multi_pass = GTK_WIDGET(ghb_builder_widget("VideoTurboMultiPass"));
+    GtkWidget *multi_pass = ghb_builder_widget("VideoMultiPassBox");
+    GtkWidget *turbo_multi_pass = ghb_builder_widget("VideoTurboMultiPass");
     int encoder = ghb_get_video_encoder(ud->settings);
     
-    bool constant_quality = ghb_dict_get_bool(ud->settings, "vquality_type_constant");
-    bool supports_multi_pass = hb_video_multipass_is_supported(encoder, constant_quality);
-    bool turbo_supported = (encoder & HB_VCODEC_X264_MASK) || (encoder & HB_VCODEC_X265_MASK);
+    gboolean constant_quality = ghb_dict_get_bool(ud->settings, "vquality_type_constant");
+    gboolean supports_multi_pass = hb_video_multipass_is_supported(encoder, constant_quality);
+    gboolean turbo_supported = (encoder & HB_VCODEC_X264_MASK) || (encoder & HB_VCODEC_X265_MASK);
     
     gtk_widget_set_sensitive(multi_pass, supports_multi_pass);
     gtk_widget_set_visible(turbo_multi_pass, turbo_supported);
