@@ -34,6 +34,7 @@
 #include "resources.h"
 #include "subtitlehandler.h"
 #include "util.h"
+#include "videohandler.h"
 
 #include <fcntl.h>
 #include <libavutil/parseutils.h>
