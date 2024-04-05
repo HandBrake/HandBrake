@@ -454,5 +454,18 @@
       </item>
     </section>
   </menu>
+
+  <menu id="open-source-menu-model">
+    <section>
+      <item>
+        <attribute name="action">app.source</attribute>
+        <attribute name="label" translatable="yes">_Open Source…</attribute>
+      </item>
+      <item>
+        <attribute name="action">app.source-dir</attribute>
+        <attribute name="label" translatable="yes">Open _Directory…</attribute>
+      </item>
+    </section>
+  </menu>
 </interface>
 

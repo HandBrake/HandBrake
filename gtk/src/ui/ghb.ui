@@ -1355,11 +1355,24 @@ Van Jacobson</property>
 large-icons</property>
                 <property name="hexpand">1</property>
                 <child>
-                  <object class="GhbButton" id="sourcetoolbutton">
-                    <property name="tooltip-text" translatable="yes">Choose Video Source</property>
-                    <property name="label" translatable="yes">Open Source</property>
-                    <property name="icon-name">hb-source</property>
-                    <property name="action-name">app.source</property>
+                  <object class="GtkBox" id="open_source_split_button">
+                  <property name="orientation">horizontal</property>
+                  <property name="css-classes">ghb-linked-button</property>
+                    <child>
+                      <object class="GhbButton" id="sourcetoolbutton">
+                        <property name="tooltip-text" translatable="yes">Choose Video Source</property>
+                        <property name="label" translatable="yes">Open Source</property>
+                        <property name="icon-name">hb-source</property>
+                        <property name="action-name">app.source</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkMenuButton" id="sourcetoolmenubutton">
+                        <property name="css-classes">normal-icons</property>
+                        <property name="icon-name">pan-down-symbolic</property>
+                        <property name="menu-model">open-source-menu-model</property>
+                      </object>
+                    </child>
                   </object>
                 </child>
                 <child>
