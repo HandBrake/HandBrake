@@ -1335,10 +1335,152 @@ Van Jacobson</property>
     <property name="default-width">500</property>
     <property name="default-height">400</property>
     <property name="icon-name">fr.handbrake.ghb</property>
-    <property name="show-menubar">True</property>
+    <property name="show-menubar">False</property>
     <signal name="close-request" handler="window_close_request_cb" swapped="no"/>
     <signal name="notify::default-height" handler="hb_window_save_size_cb" swapped="no"/>
     <signal name="notify::default-width" handler="hb_window_save_size_cb" swapped="no"/>
+    <child type="titlebar">
+      <object class="GtkHeaderBar">
+        <child type="start">
+          <object class="GtkBox">
+            <property name="orientation">horizontal</property>
+            <property name="css-classes">ghb-linked-button</property>
+            <child>
+              <object class="GhbButton" id="sourcetoolbutton">
+                <property name="tooltip-text" translatable="yes">Choose Video Source</property>
+                <property name="label" translatable="yes">Open Source</property>
+                <property name="icon-name">hb-source</property>
+                <property name="action-name">app.source</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkMenuButton" id="sourcetoolmenubutton">
+                <property name="css-classes">normal-icons</property>
+                <property name="icon-name">pan-down-symbolic</property>
+                <property name="menu-model">open-source-menu-model</property>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child type="start">
+          <object class="GtkSeparator">
+            <property name="orientation">vertical</property>
+            <property name="width-request">10</property>
+            <property name="opacity">0.0</property>
+          </object>
+        </child>
+        <child type="start">
+          <object class="GtkBox" id="queue_add_split_button">
+            <property name="orientation">horizontal</property>
+            <property name="css-classes">ghb-linked-button</property>
+            <child>
+              <object class="GhbButton" id="queue_add">
+                <property name="tooltip-text" translatable="yes">Add to Queue</property>
+                <property name="label" translatable="yes">Add To Queue</property>
+                <property name="icon-name">hb-add-queue</property>
+                <property name="action-name">app.add-current</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkMenuButton">
+                <property name="css-classes">normal-icons</property>
+                <property name="icon-name">pan-down-symbolic</property>
+                <property name="menu-model">queue-add-menu-model</property>
+                <property name="sensitive" bind-source="queue_add" bind-property="sensitive"/>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child type="start">
+          <object class="GtkSeparator">
+            <property name="orientation">vertical</property>
+            <property name="width-request">10</property>
+            <property name="opacity">0.0</property>
+          </object>
+        </child>
+        <child type="start">
+          <object class="GhbButton" id="queue_start">
+            <property name="tooltip-text" translatable="yes">Start Encoding</property>
+            <property name="label" translatable="yes">Start</property>
+            <property name="icon-name">hb-start-small-symbolic</property>
+            <property name="action-name">app.queue-start</property>
+          </object>
+        </child>
+        <child type="start">
+          <object class="GhbButton" id="queue_pause">
+            <property name="tooltip-text" translatable="yes">Pause Encoding</property>
+            <property name="label" translatable="yes">Pause</property>
+            <property name="icon-name">hb-pause-small-symbolic</property>
+            <property name="action-name">app.queue-pause</property>
+          </object>
+        </child>
+        <child type="end">
+          <object class="GtkMenuButton">
+            <property name="icon-name">view-more-symbolic</property>
+            <property name="tooltip-text" translatable="yes">Menu</property>
+            <property name="menu-model">hb-main-menu-model</property>
+          </object>
+        </child>
+        <child type="end">
+          <object class="GhbButton" id="show_activity">
+            <property name="tooltip-text" translatable="yes">Show Activity Window</property>
+            <property name="label" translatable="yes">Activity</property>
+            <property name="icon-name">hb-activity</property>
+            <property name="action-name">app.show-activity</property>
+          </object>
+        </child>
+        <child type="end">
+          <object class="GtkBox">
+            <property name="orientation">horizontal</property>
+            <property name="css-classes">ghb-linked-button</property>
+            <child>
+              <object class="GhbButton" id="show_queue">
+                <property name="tooltip-text" translatable="yes">Show Queue</property>
+                <property name="label" translatable="yes">Queue</property>
+                <property name="icon-name">hb-showqueue</property>
+                <property name="action-name">app.show-queue</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkMenuButton">
+                <property name="css-classes">normal-icons</property>
+                <property name="icon-name">pan-down-symbolic</property>
+                <property name="menu-model">queue-menu-model</property>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child type="end">
+          <object class="GhbButton" id="show_preview">
+            <property name="tooltip-text" translatable="yes">Show Preview Window</property>
+            <property name="label" translatable="yes">Preview</property>
+            <property name="icon-name">hb-picture</property>
+            <property name="action-name">app.show-preview</property>
+          </object>
+        </child>
+        <child type="end">
+          <object class="GtkBox">
+            <property name="orientation">horizontal</property>
+            <property name="css-classes">ghb-linked-button</property>
+            <child>
+              <object class="GhbButton" id="show_presets">
+                <property name="tooltip-text" translatable="yes">Show Presets Window</property>
+                <property name="label" translatable="yes">Presets</property>
+                <property name="icon-name">hb-presets</property>
+                <property name="action-name">app.show-presets</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkMenuButton">
+                <property name="css-classes">normal-icons</property>
+                <property name="icon-name">pan-down-symbolic</property>
+                <property name="menu-model">presets-menu</property>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
     <child>
       <object class="GtkBox" id="vbox48">
         <property name="orientation">vertical</property>
@@ -1349,112 +1491,6 @@ Van Jacobson</property>
             <property name="orientation">vertical</property>
             <property name="hexpand">1</property>
             <property name="vexpand">0</property>
-            <child>
-              <object class="GtkBox" id="toolbar1">
-                <property name="css-classes">toolbar
-large-icons</property>
-                <property name="hexpand">1</property>
-                <child>
-                  <object class="GhbButton" id="sourcetoolbutton">
-                    <property name="tooltip-text" translatable="yes">Choose Video Source</property>
-                    <property name="label" translatable="yes">Open Source</property>
-                    <property name="icon-name">hb-source</property>
-                    <property name="action-name">app.source</property>
-                  </object>
-                </child>
-                <child>
-                  <object class="GtkSeparator">
-                    <property name="orientation">vertical</property>
-                    <property name="width-request">10</property>
-                    <property name="opacity">0.0</property>
-                  </object>
-                </child>
-                <child>
-                  <object class="GtkBox" id="queue_add_split_button">
-                    <property name="orientation">horizontal</property>
-                    <property name="css-classes">ghb-linked-button</property>
-                    <child>
-                      <object class="GhbButton" id="queue_add">
-                        <property name="tooltip-text" translatable="yes">Add to Queue</property>
-                        <property name="label" translatable="yes">Add To Queue</property>
-                        <property name="icon-name">hb-add-queue</property>
-                        <property name="action-name">app.add-current</property>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="GtkMenuButton">
-                        <property name="css-classes">normal-icons</property>
-                        <property name="icon-name">pan-down-symbolic</property>
-                        <property name="menu-model">queue-add-menu-model</property>
-                        <property name="sensitive" bind-source="queue_add" bind-property="sensitive"/>
-                      </object>
-                    </child>
-                  </object>
-                </child>
-                <child>
-                  <object class="GtkSeparator">
-                    <property name="orientation">vertical</property>
-                    <property name="width-request">20</property>
-                    <property name="opacity">0.0</property>
-                  </object>
-                </child>
-                <child>
-                  <object class="GhbButton" id="queue_start">
-                    <property name="tooltip-text" translatable="yes">Start Encoding</property>
-                    <property name="label" translatable="yes">Start</property>
-                    <property name="icon-name">hb-start-small-symbolic</property>
-                    <property name="action-name">app.queue-start</property>
-                  </object>
-                </child>
-                <child>
-                  <object class="GhbButton" id="queue_pause">
-                    <property name="tooltip-text" translatable="yes">Pause Encoding</property>
-                    <property name="label" translatable="yes">Pause</property>
-                    <property name="icon-name">hb-pause-small-symbolic</property>
-                    <property name="action-name">app.queue-pause</property>
-                  </object>
-                </child>
-                <child>
-                  <object class="GtkSeparator" id="main_tool_sep1">
-                    <property name="orientation">vertical</property>
-                    <property name="opacity">0.0</property>
-                    <property name="hexpand">1</property>
-                  </object>
-                </child>
-                <child>
-                  <object class="GhbButton" id="show_presets">
-                    <property name="tooltip-text" translatable="yes">Show Presets Window</property>
-                    <property name="label" translatable="yes">Presets</property>
-                    <property name="icon-name">hb-presets</property>
-                    <property name="action-name">app.show-presets</property>
-                  </object>
-                </child>
-                <child>
-                  <object class="GhbButton" id="show_preview">
-                    <property name="tooltip-text" translatable="yes">Show Preview Window</property>
-                    <property name="label" translatable="yes">Preview</property>
-                    <property name="icon-name">hb-picture</property>
-                    <property name="action-name">app.show-preview</property>
-                  </object>
-                </child>
-                <child>
-                  <object class="GhbButton" id="show_queue">
-                    <property name="tooltip-text" translatable="yes">Show Queue</property>
-                    <property name="label" translatable="yes">Queue</property>
-                    <property name="icon-name">hb-showqueue</property>
-                    <property name="action-name">app.show-queue</property>
-                  </object>
-                </child>
-                <child>
-                  <object class="GhbButton" id="show_activity">
-                    <property name="tooltip-text" translatable="yes">Show Activity Window</property>
-                    <property name="label" translatable="yes">Activity</property>
-                    <property name="icon-name">hb-activity</property>
-                    <property name="action-name">app.show-activity</property>
-                  </object>
-                </child>
-              </object>
-            </child>
             <child>
               <object class="GtkGrid" id="source_title_preset_grid">
                 <property name="row-homogeneous">1</property>

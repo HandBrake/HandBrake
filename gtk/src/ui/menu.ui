@@ -1,155 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <requires lib="gtk" version="4.0"/>
-  <menu id="handbrake-menu-bar">
-    <submenu>
-      <attribute name="label" translatable="yes">_File</attribute>
-      <section>
-        <item>
-          <attribute name="action">app.source</attribute>
-          <attribute name="label" translatable="yes">_Open Source…</attribute>
-        </item>
-        <item>
-          <attribute name="action">app.source-dir</attribute>
-          <attribute name="label" translatable="yes">Open _Directory…</attribute>
-        </item>
-        <item>
-          <attribute name="action">app.destination</attribute>
-          <attribute name="label" translatable="yes">_Set Destination…</attribute>
-        </item>
-      </section>
-      <section id="dvd-list">
-      </section>
-      <section>
-        <item>
-          <attribute name="action">app.preferences</attribute>
-          <attribute name="label" translatable="yes">_Preferences</attribute>
-        </item>
-        <item>
-          <attribute name="action">app.quit</attribute>
-          <attribute name="label" translatable="yes">_Quit</attribute>
-        </item>
-      </section>
-    </submenu>
-    <submenu>
-      <attribute name="label" translatable="yes">_Queue</attribute>
-      <section>
-        <item>
-          <attribute name="action">app.add-current</attribute>
-          <attribute name="label" translatable="yes">_Add</attribute>
-        </item>
-        <item>
-          <attribute name="action">app.add-multiple</attribute>
-          <attribute name="label" translatable="yes">Add _Multiple…</attribute>
-        </item>
-        <item>
-          <attribute name="action">app.add-all</attribute>
-          <attribute name="label" translatable="yes">Add A_ll</attribute>
-        </item>
-      </section>
-      <section id="queue-encoding-actions">
-        <item>
-          <attribute name="action">app.queue-start</attribute>
-          <attribute name="label" translatable="yes">_Start Encoding</attribute>
-        </item>
-        <item>
-          <attribute name="action">app.queue-pause</attribute>
-          <attribute name="label" translatable="yes">_Pause Encoding</attribute>
-        </item>
-      </section>
-      <section>
-        <item>
-          <attribute name="action">app.queue-import</attribute>
-          <attribute name="label" translatable="yes">_Import Queue…</attribute>
-        </item>
-        <item>
-          <attribute name="action">app.queue-export</attribute>
-          <attribute name="label" translatable="yes">_Export Queue…</attribute>
-        </item>
-      </section>
-    </submenu>
-    <submenu>
-      <attribute name="label" translatable="yes">_View</attribute>
-      <section id="view-menu">
-        <item>
-          <attribute name="action">app.show-presets</attribute>
-          <attribute name="label" translatable="yes">Presets _List</attribute>
-        </item>
-        <item>
-          <attribute name="action">app.show-queue</attribute>
-          <attribute name="label" translatable="yes">_Queue</attribute>
-        </item>
-        <item>
-          <attribute name="action">app.show-preview</attribute>
-          <attribute name="label" translatable="yes">_Preview</attribute>
-        </item>
-        <item>
-          <attribute name="action">app.show-activity</attribute>
-          <attribute name="label" translatable="yes">_Activity Window</attribute>
-        </item>
-      </section>
-    </submenu>
-    <submenu id="presets-menu">
-      <attribute name="label" translatable="yes">_Presets</attribute>
-      <section>
-        <item>
-          <attribute name="action">app.preset-default</attribute>
-          <attribute name="label" translatable="yes">Set De_fault</attribute>
-        </item>
-      </section>
-      <section>
-        <item>
-          <attribute name="action">app.preset-save-as</attribute>
-          <attribute name="label" translatable="yes">_New Preset…</attribute>
-        </item>
-        <item>
-          <attribute name="action">app.preset-save</attribute>
-          <attribute name="label" translatable="yes">_Save</attribute>
-        </item>
-        <item>
-          <attribute name="action">app.preset-rename</attribute>
-          <attribute name="label" translatable="yes">_Rename…</attribute>
-        </item>
-        <item>
-          <attribute name="action">app.preset-remove</attribute>
-          <attribute name="label" translatable="yes">_Delete…</attribute>
-        </item>
-      </section>
-      <section>
-        <item>
-          <attribute name="action">app.preset-import</attribute>
-          <attribute name="label" translatable="yes">_Import Preset…</attribute>
-        </item>
-        <item>
-          <attribute name="action">app.preset-export</attribute>
-          <attribute name="label" translatable="yes">_Export Preset…</attribute>
-        </item>
-      </section>
-      <section>
-        <item>
-          <attribute name="action">app.presets-reload</attribute>
-          <attribute name="label" translatable="yes">Reset _Built-in Presets</attribute>
-        </item>
-      </section>
-      <section id="presets-menu-official">
-      </section>
-      <section id="presets-menu-custom">
-      </section>
-    </submenu>
-    <submenu>
-      <attribute name="label" translatable="yes">_Help</attribute>
-      <section>
-        <item>
-          <attribute name="action">app.guide</attribute>
-          <attribute name="label" translatable="yes">_Online Documentation</attribute>
-        </item>
-        <item>
-          <attribute name="action">app.about</attribute>
-          <attribute name="label" translatable="yes">_About</attribute>
-        </item>
-      </section>
-    </submenu>
-  </menu>
 
   <menu id="hbfd-menu">
     <section id="hbfd-section">
@@ -452,6 +303,113 @@
         <attribute name="action">app.add-all</attribute>
         <attribute name="label" translatable="yes">Add A_ll</attribute>
       </item>
+    </section>
+    <section>
+      <item>
+        <attribute name="action">app.queue-import</attribute>
+        <attribute name="label" translatable="yes">_Import Queue…</attribute>
+      </item>
+      <item>
+        <attribute name="action">app.queue-export</attribute>
+        <attribute name="label" translatable="yes">_Export Queue…</attribute>
+      </item>
+    </section>
+  </menu>
+
+  <menu id="queue-menu-model">
+    <section id="queue-encoding-actions">
+      <item>
+        <attribute name="action">app.queue-start</attribute>
+        <attribute name="label" translatable="yes">_Start Encoding</attribute>
+      </item>
+      <item>
+        <attribute name="action">app.queue-pause</attribute>
+        <attribute name="label" translatable="yes">_Pause Encoding</attribute>
+      </item>
+    </section>
+  </menu>
+
+  <menu id="open-source-menu-model">
+    <section>
+      <item>
+        <attribute name="action">app.source</attribute>
+        <attribute name="label" translatable="yes">_Open Source…</attribute>
+      </item>
+      <item>
+        <attribute name="action">app.source-dir</attribute>
+        <attribute name="label" translatable="yes">Open _Directory…</attribute>
+      </item>
+    </section>
+    <section id="dvd-list">
+    </section>
+  </menu>
+  <menu id="hb-main-menu-model">
+    <section>
+      <item>
+        <attribute name="action">app.destination</attribute>
+        <attribute name="label" translatable="yes">_Set Destination…</attribute>
+      </item>
+    </section>
+    <section>
+      <item>
+        <attribute name="action">app.preferences</attribute>
+        <attribute name="label" translatable="yes">_Preferences</attribute>
+      </item>
+      <item>
+        <attribute name="action">app.guide</attribute>
+        <attribute name="label" translatable="yes">_Online Documentation</attribute>
+      </item>
+      <item>
+        <attribute name="action">app.about</attribute>
+        <attribute name="label" translatable="yes">_About</attribute>
+      </item>
+    </section>
+  </menu>
+
+  <menu id="presets-menu">
+    <section>
+      <item>
+        <attribute name="action">app.preset-default</attribute>
+        <attribute name="label" translatable="yes">Set De_fault</attribute>
+      </item>
+    </section>
+    <section>
+      <item>
+        <attribute name="action">app.preset-save-as</attribute>
+        <attribute name="label" translatable="yes">_New Preset…</attribute>
+      </item>
+      <item>
+        <attribute name="action">app.preset-save</attribute>
+        <attribute name="label" translatable="yes">_Save</attribute>
+      </item>
+      <item>
+        <attribute name="action">app.preset-rename</attribute>
+        <attribute name="label" translatable="yes">_Rename…</attribute>
+      </item>
+      <item>
+        <attribute name="action">app.preset-remove</attribute>
+        <attribute name="label" translatable="yes">_Delete…</attribute>
+      </item>
+    </section>
+    <section>
+      <item>
+        <attribute name="action">app.preset-import</attribute>
+        <attribute name="label" translatable="yes">_Import Preset…</attribute>
+      </item>
+      <item>
+        <attribute name="action">app.preset-export</attribute>
+        <attribute name="label" translatable="yes">_Export Preset…</attribute>
+      </item>
+    </section>
+    <section>
+      <item>
+        <attribute name="action">app.presets-reload</attribute>
+        <attribute name="label" translatable="yes">Reset _Built-in Presets</attribute>
+      </item>
+    </section>
+    <section id="presets-menu-official">
+    </section>
+    <section id="presets-menu-custom">
     </section>
   </menu>
 </interface>

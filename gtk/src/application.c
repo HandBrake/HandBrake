@@ -920,9 +920,6 @@ ghb_application_activate (GApplication *app)
     window = GTK_WINDOW(ghb_builder_widget("title_add_multiple_dialog"));
     gtk_application_add_window(GTK_APPLICATION(app), window);
 
-    GMenuModel *menu = G_MENU_MODEL(ghb_builder_object("handbrake-menu-bar"));
-    gtk_application_set_menubar(GTK_APPLICATION(app), menu);
-
     gtk_window_present(hb_window);
 }
 
