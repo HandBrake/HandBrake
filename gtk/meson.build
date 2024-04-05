@@ -83,7 +83,7 @@ endif
 if get_option('qsv').enabled()
   ghb_deps += dependency('vpl')
   if host_machine.system() != 'windows'
-    ghb_deps += [dependency('libva'), dependency('libva-drm')]
+    ghb_deps += [dependency('libva'), dependency('libva-drm'), dependency('libdrm')]
   endif
 endif
 

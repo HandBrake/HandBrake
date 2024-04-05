@@ -1,15 +1,14 @@
-From 5645a9a66ef6827dd4404daa667e31f48588b090 Mon Sep 17 00:00:00 2001
-From: Damiano Galassi <damiog@gmail.com>
-Date: Sun, 20 Aug 2023 08:04:20 +0200
-Subject: [PATCH 3/3] avcodec/amfenc: HDR metadata.
+From 6aab7de92bce42236e84d0d4b8a06f7cbf965ef0 Mon Sep 17 00:00:00 2001
+From: nyanmisaka <nst799610810@gmail.com>
+Date: Wed, 20 Mar 2024 09:33:17 +0100
+Subject: [PATCH 16/16] avcodec/amfenc: HDR metadata.
 
-Original patch by nyanmisaka <nst799610810@gmail.com>.
 ---
  libavcodec/amfenc.c | 82 +++++++++++++++++++++++++++++++++++++++++++++
  1 file changed, 82 insertions(+)
 
 diff --git a/libavcodec/amfenc.c b/libavcodec/amfenc.c
-index 0fbb2d897f..4c333b4381 100644
+index eb6b2901f2..ba55a6a0e5 100644
 --- a/libavcodec/amfenc.c
 +++ b/libavcodec/amfenc.c
 @@ -36,6 +36,55 @@
@@ -116,5 +115,5 @@ index 0fbb2d897f..4c333b4381 100644
              if (res_resubmit != AMF_INPUT_FULL) {
                  int64_t pts = ctx->delayed_surface->pVtbl->GetPts(ctx->delayed_surface);
 -- 
-2.39.3 (Apple Git-145)
+2.39.3 (Apple Git-146)
 
