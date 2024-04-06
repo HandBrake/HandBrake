@@ -1,0 +1,11 @@
+diff --git a/dolby_vision/.cargo/config.toml b/dolby_vision/.cargo/config.toml
+index 38a7058..1546867 100644
+--- a/dolby_vision/.cargo/config.toml
++++ b/dolby_vision/.cargo/config.toml
+@@ -0,0 +1,5 @@
++[source.crates-io]
++replace-with = "vendored-sources"
++
++[source.vendored-sources]
++directory = "vendor"
+\ No newline at end of file

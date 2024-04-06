@@ -7,7 +7,7 @@ LIBDOVI.FETCH.sha256   = 4b7e28322a5b15ea0eff5ed19e626468b17d5fc17aab9befaa9f725
 LIBDOVI.FETCH.basename = dovi_tool-libdovi-3.3.0.tar.gz
 
 define LIBDOVI.CONFIGURE
-     cd $(LIBDOVI_DV.dir); $(CARGO.exe) fetch
+     cd $(LIBDOVI_DV.dir); $(CARGO.exe) vendor; $(CARGO.exe) fetch
      $(TOUCH.exe) $@
 endef
 
