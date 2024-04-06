@@ -14,6 +14,7 @@ HARFBUZZ.CONFIGURE.deps        =
 HARFBUZZ.CONFIGURE.static      =
 HARFBUZZ.CONFIGURE.shared      = -DBUILD_SHARED_LIBS=OFF
 HARFBUZZ.CONFIGURE.extra       = -DHB_BUILD_UTILS=OFF -DHB_BUILD_TESTS=OFF
+HARFBUZZ.CONFIGURE.extra      += -DCMAKE_INSTALL_LIBDIR=lib
 HARFBUZZ.CONFIGURE.extra      += -DHB_HAVE_FREETYPE=ON \
                                  -DFREETYPE_LIBRARIES="$(call fn.ABSOLUTE,$(CONTRIB.build/))lib" \
                                  -DFREETYPE_INCLUDE_DIRS="$(call fn.ABSOLUTE,$(CONTRIB.build/))include/freetype2" \
