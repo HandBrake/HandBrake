@@ -8,10 +8,6 @@ LIBOPUS.FETCH.sha256  = b84610959b8d417b611aa12a22565e0a3732097c6389d19098d84454
 LIBOPUS.CONFIGURE.shared = --enable-shared=no
 LIBOPUS.CONFIGURE.extra = --disable-doc --disable-extra-programs
 
-# Suppress a warning given by opus_decoder.c that tells us
-# optimizations are turned off.
-LIBOPUS.GCC.args.extra += -DOPUS_WILL_BE_SLOW
-
 # Disable Run-time CPU detection
 # otherwise it crashes when opus bitrate is set to 48kbps or less
 LIBOPUS.CONFIGURE.extra += --disable-rtcd
