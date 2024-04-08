@@ -315,6 +315,30 @@ namespace HandBrake.Interop.Interop
             return HBFunctions.hb_video_multipass_is_supported((uint)encoderId, Convert.ToInt32(constantQuality)) > 0;
         }
 
+        public static bool VideoEncoderSupportsQualityMode(string encoderShortName)
+        {
+            HBVideoEncoder encoder = GetVideoEncoder(encoderShortName);
+
+            if (encoder != null)
+            {
+                return HBFunctions.hb_video_quality_is_supported(encoder.Id) > 0;
+            }
+
+            return false;
+        }
+
+        public static bool VideoEncoderSupportsBitrateMode(string encoderShortName)
+        {
+            HBVideoEncoder encoder = GetVideoEncoder(encoderShortName);
+
+            if (encoder != null)
+            {
+                return HBFunctions.hb_video_bitrate_is_supported(encoder.Id) > 0;
+            }
+
+            return false;
+        }
+
         /// <summary>
         /// Returns true if the subtitle source type can be set to forced only.
         /// </summary>

@@ -2816,4 +2816,7 @@ To allow multiple simultaneous encodes, turn on "Process Isolation" in Tools Men
   <data name="QueueView_SimpleQueueDisplay" xml:space="preserve">
     <value>Use Simple Queue View</value>
   </data>
+  <data name="VideoView_LosslessEncodeOnly" xml:space="preserve">
+    <value>Lossless encoding only.</value>
+  </data>
 </root>

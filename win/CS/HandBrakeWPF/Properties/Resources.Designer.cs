@@ -7787,6 +7787,15 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Lossless encoding only..
+        /// </summary>
+        public static string VideoView_LosslessEncodeOnly {
+            get {
+                return ResourceManager.GetString("VideoView_LosslessEncodeOnly", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Multi-Pass Encoding.
         /// </summary>
         public static string VideoView_MultiPass {
