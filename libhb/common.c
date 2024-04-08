@@ -1616,6 +1616,18 @@ int hb_video_quality_is_supported(uint32_t codec)
     }
 }
 
+int hb_video_bitrate_is_supported(uint32_t codec)
+{
+    switch (codec)
+    {
+        case HB_VCODEC_FFMPEG_FFV1:
+            return 0;
+
+        default:
+            return 1;
+    }
+}
+
 int hb_video_multipass_is_supported(uint32_t codec, int constant_quality)
 {
     switch (codec)

@@ -431,8 +431,9 @@ const hb_rate_t* hb_audio_bitrate_get_next(const hb_rate_t *last);
 
 void        hb_video_quality_get_limits(uint32_t codec, float *low, float *high, float *granularity, int *direction);
 const char* hb_video_quality_get_name(uint32_t codec);
-int         hb_video_quality_is_supported(uint32_t codec);
 
+int         hb_video_quality_is_supported(uint32_t codec);
+int         hb_video_bitrate_is_supported(uint32_t codec);
 int         hb_video_multipass_is_supported(uint32_t codec, int constant_quality);
 
 int                hb_video_encoder_is_supported(int encoder);
