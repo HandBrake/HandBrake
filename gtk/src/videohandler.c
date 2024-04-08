@@ -127,6 +127,21 @@ vcodec_changed_cb (GtkWidget *widget, gpointer data)
     ghb_set_video_preset(ud->settings, encoder, NULL);
     GhbValue *gval = ghb_dict_get_value(ud->settings, "VideoPresetSlider");
     ghb_ui_settings_update(ud, ud->settings, "VideoPresetSlider", gval);
+
+    // update quality type
+    GtkWidget *cqRadioButton = ghb_builder_widget("vquality_type_constant");
+    GtkWidget *abrRadioButton = ghb_builder_widget("vquality_type_bitrate");
+    gtk_widget_set_sensitive(cqRadioButton, hb_video_quality_is_supported(encoder));
+    gtk_widget_set_sensitive(abrRadioButton, hb_video_bitrate_is_supported(encoder));
+    if (ghb_widget_boolean(cqRadioButton) && ! hb_video_quality_is_supported(encoder))
+    {
+        ghb_update_widget(abrRadioButton, ghb_boolean_value(true));
+    }
+    if (ghb_widget_boolean(abrRadioButton) && ! hb_video_bitrate_is_supported(encoder))
+    {
+        ghb_update_widget(cqRadioButton, ghb_boolean_value(true));
+    }
+
     if (ghb_check_name_template(ud, "{bit-depth}") ||
         ghb_check_name_template(ud, "{codec}"))
         ghb_set_destination(ud);
