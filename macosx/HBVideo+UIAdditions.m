@@ -139,6 +139,16 @@
     return hb_video_quality_is_supported(self.encoder);
 }
 
++ (NSSet<NSString *> *)keyPathsForValuesAffectingIsAverageBitrateSupported
+{
+    return [NSSet setWithObjects:@"encoder", nil];
+}
+
+- (BOOL)isAverageBitrateSupported
+{
+    return hb_video_bitrate_is_supported(self.encoder);
+}
+
 + (NSSet<NSString *> *)keyPathsForValuesAffectingUnparseOptions
 {
     return [NSSet setWithObjects:@"encoder", @"preset", @"tune", @"profile", @"level",

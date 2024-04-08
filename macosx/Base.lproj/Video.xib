@@ -49,6 +49,14 @@
                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
                     <connections>
+                        <binding destination="-2" name="enabled3" keyPath="self.video.isAverageBitrateSupported" previousBinding="VTs-xH-tZg" id="AFt-8F-tsu">
+                            <dictionary key="options">
+                                <integer key="NSMultipleValuesPlaceholder" value="-1"/>
+                                <integer key="NSNoSelectionPlaceholder" value="-1"/>
+                                <integer key="NSNotApplicablePlaceholder" value="-1"/>
+                                <integer key="NSNullPlaceholder" value="-1"/>
+                            </dictionary>
+                        </binding>
                         <binding destination="-2" name="enabled2" keyPath="self.video" previousBinding="mjs-X8-KV8" id="VTs-xH-tZg">
                             <dictionary key="options">
                                 <integer key="NSMultipleValuesPlaceholder" value="-1"/>
@@ -309,6 +317,14 @@ x264 is lossless at RF 0.</string>
                         <font key="font" metaFont="controlContent" size="11"/>
                     </buttonCell>
                     <connections>
+                        <binding destination="-2" name="enabled2" keyPath="self.video.isAverageBitrateSupported" previousBinding="Lf0-yc-zAF" id="XaR-Gg-soY">
+                            <dictionary key="options">
+                                <integer key="NSMultipleValuesPlaceholder" value="-1"/>
+                                <integer key="NSNoSelectionPlaceholder" value="-1"/>
+                                <integer key="NSNotApplicablePlaceholder" value="-1"/>
+                                <integer key="NSNullPlaceholder" value="-1"/>
+                            </dictionary>
+                        </binding>
                         <binding destination="-2" name="enabled" keyPath="self.video" id="Lf0-yc-zAF">
                             <dictionary key="options">
                                 <string key="NSValueTransformerName">NSIsNotNil</string>
