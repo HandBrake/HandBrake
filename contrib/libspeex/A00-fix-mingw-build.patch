@@ -1,0 +1,49 @@
+From e394c217298498b415a2d20cbc4983a4054fec71 Mon Sep 17 00:00:00 2001
+From: Christoph Reiter <reiter.christoph@gmail.com>
+Date: Sun, 16 Oct 2022 22:32:28 +0200
+Subject: [PATCH] build: fix mingw build with -D_FORTIFY_SOURCE=2
+
+The Windows specific header wave_out.h is redefining various
+gnu compiler specific keywords. It was likely introduced when things
+got ported to MSVC, but it didn't take mingw into account.
+
+There are two problems, __attribute__() gets used in system headers and
+removing it can change behaviour and "restrict" being removed can
+lead to less optimized code. __inline seems to work fine though, but is not needed.
+
+CFLAGS="-D_FORTIFY_SOURCE=2 -O2" exposed this now because a required
+__attribute__() is missing:
+
+In file included from speexdec.c:54:
+C:/msys64/ucrt64/include/io.h: In function '_open':
+C:/msys64/ucrt64/include/io.h:407:7: error: invalid use of '__builtin_va_arg_pack_len ()'
+  407 |   if (__builtin_va_arg_pack_len() > 1)
+
+Fix by only enabling those macros when building with MSVC.
+---
+ src/wave_out.h | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/src/wave_out.h b/src/wave_out.h
+index a4aa3c18..1121d852 100644
+--- a/src/wave_out.h
++++ b/src/wave_out.h
+@@ -41,11 +41,14 @@
+ 
+ #define VERSION_STRING "\n 0.7.0\n"
+ 
++#define sleep(__sec)        Sleep ((__sec) * 1000)
+ #define Cdecl               __cdecl
++
++#ifdef _MSC_VER
+ #define __attribute__(x)
+-#define sleep(__sec)        Sleep ((__sec) * 1000)
+ #define inline              __inline
+ #define restrict
++#endif
+ 
+ //// constants /////////////////////////////////////////////////////
+ 
+-- 
+GitLab
+

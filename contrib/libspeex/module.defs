@@ -5,3 +5,5 @@ LIBSPEEX.FETCH.url     = https://github.com/HandBrake/HandBrake-contribs/release
 LIBSPEEX.FETCH.url    += https://downloads.us.xiph.org/releases/speex/speex-1.2.1.tar.gz
 LIBSPEEX.FETCH.sha256  = 4b44d4f2b38a370a2d98a78329fefc56a0cf93d1c1be70029217baae6628feea
 LIBSPEEX.EXTRACT.tarbase = speex-1.2.1
+
+LIBSPEEX.GCC.args.extra += $(LIBSPEEX.GCC.args.O.$(LIBSPEEX.GCC.O))
