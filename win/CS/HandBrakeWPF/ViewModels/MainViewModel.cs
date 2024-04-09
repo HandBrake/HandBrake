@@ -1304,6 +1304,11 @@ namespace HandBrakeWPF.ViewModels
             var addError = this.AddToQueue(false);
             if (addError == null)
             {
+                if (this.queueProcessor.Count == 0)
+                {
+                    return;
+                }
+
                 this.NotifyOfPropertyChange(() => this.IsEncoding);
                 this.queueProcessor.Start();               
             }
