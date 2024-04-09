@@ -12,6 +12,8 @@ LIBGNURX.CONFIGURE.static =
 LIBGNURX.CONFIGURE.env   += AR="$(AR.exe)"
 LIBGNURX.CONFIGURE.bootstrap = autoreconf -fiv;
 
+LIBGNURX.GCC.args.extra += $(LIBGNURX.GCC.args.O.$(LIBGNURX.GCC.O))
+
 LIBGNURX.BUILD.ntargets = libregex.a-static
 
 define LIBGNURX.INSTALL

@@ -13,3 +13,4 @@ XZ.CONFIGURE.extra = \
     --disable-scripts \
     --disable-doc
 
+XZ.GCC.args.extra += $(XZ.GCC.args.O.$(XZ.GCC.O))

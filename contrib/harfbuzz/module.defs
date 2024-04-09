@@ -21,6 +21,8 @@ HARFBUZZ.CONFIGURE.extra      += -DHB_HAVE_FREETYPE=ON \
                                  -DFREETYPE_INCLUDE_DIR_freetype2="$(call fn.ABSOLUTE,$(CONTRIB.build/))include/freetype2" \
                                  -DFREETYPE_INCLUDE_DIR_ft2build="$(call fn.ABSOLUTE,$(CONTRIB.build/))include/freetype2"
 
+HARFBUZZ.GCC.args.extra += $(HARFBUZZ.GCC.args.O.$(HARFBUZZ.GCC.O))
+
 ifeq (1,$(HOST.cross))
     ifeq (mingw,$(HOST.system))
         HARFBUZZ.CONFIGURE.extra += -DWIN32=ON -DMINGW=ON
