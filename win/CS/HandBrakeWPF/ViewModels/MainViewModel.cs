@@ -1222,7 +1222,7 @@ namespace HandBrakeWPF.ViewModels
 
             if (dialogResult.HasValue && dialogResult.Value)
             {
-                if (this.userSettingService.GetUserSetting<bool>(UserSettingConstants.RecursiveFolderScan))
+                if (this.userSettingService.GetUserSetting<bool>(UserSettingConstants.RecursiveFolderScan) &&  !FileHelper.IsDvdOrBluray(dialog.SelectedPath))
                 {
                     this.StartScan(FileHelper.FileList(dialog.SelectedPath, true, this.userSettingService.GetUserSetting<List<string>>(UserSettingConstants.ExcludedExtensions)), this.TitleSpecificScan);
                 }
@@ -1478,7 +1478,20 @@ namespace HandBrakeWPF.ViewModels
                 if (fileNames != null && fileNames.Any() && (File.Exists(fileNames[0]) || Directory.Exists(fileNames[0])))
                 {
                     List<string> videoContent = fileNames.Where(f => Path.GetExtension(f)?.ToLower() != ".srt" && Path.GetExtension(f)?.ToLower() != ".ssa" && Path.GetExtension(f)?.ToLower() != ".ass").ToList();
-                    if (videoContent.Count > 0)
+
+                    if (videoContent.Count == 1 && Directory.Exists(videoContent[0]))
+                    {
+                        // Is a directory.
+                        if (this.userSettingService.GetUserSetting<bool>(UserSettingConstants.RecursiveFolderScan) && !FileHelper.IsDvdOrBluray(videoContent[0]))
+                        {
+                            this.StartScan(FileHelper.FileList(videoContent[0], true, this.userSettingService.GetUserSetting<List<string>>(UserSettingConstants.ExcludedExtensions)), this.TitleSpecificScan);
+                        }
+                        else
+                        {
+                            this.StartScan(videoContent, 0);
+                        }
+                    } 
+                    else if (videoContent.Count >= 1)
                     {
                         this.StartScan(videoContent, 0);
                         return;
