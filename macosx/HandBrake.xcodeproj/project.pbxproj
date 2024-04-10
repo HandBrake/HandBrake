@@ -22,8 +22,6 @@
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
-		1C0695AC20BD193D001543DA /* libpostproc.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1C0695AA20BD193D001543DA /* libpostproc.a */; };
-		1C0695AD20BD193D001543DA /* libpostproc.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1C0695AA20BD193D001543DA /* libpostproc.a */; };
 		1C0695AE20BD193D001543DA /* libswresample.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1C0695AB20BD193D001543DA /* libswresample.a */; };
 		1C0695AF20BD193D001543DA /* libswresample.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1C0695AB20BD193D001543DA /* libswresample.a */; };
 		1C53DE8C20BD598D006BBCA8 /* libspeex.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1C280BF320BD58DD00D5ECC2 /* libspeex.a */; };
@@ -449,7 +447,6 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		1C0695AA20BD193D001543DA /* libpostproc.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libpostproc.a; path = external/contrib/lib/libpostproc.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		1C0695AB20BD193D001543DA /* libswresample.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libswresample.a; path = external/contrib/lib/libswresample.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		1C15C82B1CD7722500368223 /* libharfbuzz.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libharfbuzz.a; path = external/contrib/lib/libharfbuzz.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		1C280BF320BD58DD00D5ECC2 /* libspeex.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libspeex.a; path = external/contrib/lib/libspeex.a; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -1238,7 +1235,6 @@
 				27D6C75A14B102DA00B785E4 /* libfribidi.a in Frameworks */,
 				27D6C75F14B102DA00B785E4 /* libmp3lame.a in Frameworks */,
 				1CBC683420BE014800A26CC2 /* liblzma.a in Frameworks */,
-				1C0695AC20BD193D001543DA /* libpostproc.a in Frameworks */,
 				27D6C76514B102DA00B785E4 /* libogg.a in Frameworks */,
 				27D6C76914B102DA00B785E4 /* libswscale.a in Frameworks */,
 				27D6C76B14B102DA00B785E4 /* libtheora.a in Frameworks */,
@@ -1334,7 +1330,6 @@
 				A91CE2BF1C7DABBC0068F46F /* libjansson.a in Frameworks */,
 				A91CE2C01C7DABBC0068F46F /* libmp3lame.a in Frameworks */,
 				A91CE2C11C7DABBC0068F46F /* libogg.a in Frameworks */,
-				1C0695AD20BD193D001543DA /* libpostproc.a in Frameworks */,
 				A91CE2C31C7DABBC0068F46F /* libswscale.a in Frameworks */,
 				A91CE2C41C7DABBC0068F46F /* libtheora.a in Frameworks */,
 				A91CE2C51C7DABBC0068F46F /* libvorbis.a in Frameworks */,
@@ -1364,7 +1359,6 @@
 				1CDCF0C1241F28D400FB62C6 /* libturbojpeg.a */,
 				1C280BF320BD58DD00D5ECC2 /* libspeex.a */,
 				1CBC683320BE014800A26CC2 /* liblzma.a */,
-				1C0695AA20BD193D001543DA /* libpostproc.a */,
 				1C0695AB20BD193D001543DA /* libswresample.a */,
 				27D6C72414B1019100B785E4 /* libhandbrake.a */,
 				27D6C72814B102DA00B785E4 /* libass.a */,
