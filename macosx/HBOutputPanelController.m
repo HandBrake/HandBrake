@@ -19,15 +19,12 @@
 
 @interface HBOutputPanelController () <HBOutputRedirectListening>
 
-/// Textview that displays debug output.
 @property (nonatomic, unsafe_unretained) IBOutlet NSTextView *textView;
 
-/// Text storage for the debug output.
-@property (nonatomic, readonly) NSTextStorage *outputTextStorage;
+@property (nonatomic, readonly) NSMutableString *textBuffer;
 @property (nonatomic, readonly) NSDictionary *textAttributes;
 
-/// Path to log text file.
-@property (nonatomic, copy, readonly) HBOutputFileWriter *outputFile;
+@property (nonatomic, copy, readonly) HBOutputFileWriter *outputWriter;
 
 @end
 
@@ -40,24 +37,24 @@
 {
     if( (self = [super initWithWindowNibName:@"OutputPanel"]) )
     {
-        // We initialize the outputTextStorage object for the activity window
-        _outputTextStorage = [[NSTextStorage alloc] init];
-
-        // Text attributes
         _textAttributes = @{NSForegroundColorAttributeName: NSColor.textColor};
+        _textBuffer = [[NSMutableString alloc] init];
 
         // Add ourself as stderr/stdout listener
         [HBOutputRedirect.stderrRedirect addListener:self queue:dispatch_get_main_queue()];
         [HBOutputRedirect.stdoutRedirect addListener:self queue:dispatch_get_main_queue()];
 
         // Redirect the output to a file on the disk.
-        NSURL *outputLogFile = [HBUtilities.appSupportURL URLByAppendingPathComponent:@"HandBrake-activitylog.txt"];
-
-        _outputFile = [[HBOutputFileWriter alloc] initWithFileURL:outputLogFile];
-        if (_outputFile)
+        NSURL *outputLogURL = [HBUtilities.appSupportURL URLByAppendingPathComponent:@"HandBrake-activitylog.txt"];
+        if (outputLogURL)
         {
-            [HBOutputRedirect.stderrRedirect addListener:_outputFile queue:dispatch_get_main_queue()];
-            [HBOutputRedirect.stdoutRedirect addListener:_outputFile queue:dispatch_get_main_queue()];
+            _outputWriter = [[HBOutputFileWriter alloc] initWithFileURL:outputLogURL];
+
+            if (_outputWriter)
+            {
+                [HBOutputRedirect.stderrRedirect addListener:_outputWriter queue:dispatch_get_main_queue()];
+                [HBOutputRedirect.stdoutRedirect addListener:_outputWriter queue:dispatch_get_main_queue()];
+            }
         }
 
         [self writeHeader];
@@ -73,21 +70,13 @@
 
 - (void)windowDidLoad
 {
-    [super windowDidLoad];
-
     self.window.tabbingMode = NSWindowTabbingModeDisallowed;
-
-    [_textView.layoutManager replaceTextStorage:_outputTextStorage];
-    [_textView.enclosingScrollView setLineScroll:10];
-    [_textView.enclosingScrollView setPageScroll:20];
-
-    [_textView scrollToEndOfDocument:self];
 }
 
 - (IBAction)showWindow:(id)sender
 {
-    [_textView scrollToEndOfDocument:self];
     [super showWindow:sender];
+    [self displayBuffer];
 }
 
 /**
@@ -100,24 +89,49 @@
     [HBUtilities writeToActivityLog:"%s", versionStringFull.UTF8String];
 }
 
+- (void)appendToTextView:(NSString *)text
+{
+    NSTextStorage *textStorage = self.textView.textStorage;
+    NSAttributedString *attributedString = [[NSAttributedString alloc] initWithString:text attributes:_textAttributes];
+
+    [textStorage appendAttributedString:attributedString];
+
+    // Remove text from outputTextStorage as defined by TextStorageUpperSizeLimit and TextStorageLowerSizeLimit
+    if (textStorage.length > TextStorageUpperSizeLimit)
+    {
+        [textStorage deleteCharactersInRange:NSMakeRange(0, textStorage.length - TextStorageLowerSizeLimit)];
+    }
+
+    [_textView scrollToEndOfDocument:self];
+}
+
+- (void)appendToBuffer:(NSString *)text
+{
+    [_textBuffer appendString:text];
+    if (_textBuffer.length > TextStorageUpperSizeLimit)
+    {
+        [_textBuffer deleteCharactersInRange:NSMakeRange(0, _textBuffer.length - TextStorageLowerSizeLimit)];
+    }
+}
+
+- (void)displayBuffer
+{
+    [self appendToTextView:self.textBuffer];
+    [self.textBuffer deleteCharactersInRange:NSMakeRange(0, self.textBuffer.length)];
+}
+
 /**
  * Displays text received from HBOutputRedirect in the text view
  */
 - (void)redirect:(NSString *)text type:(HBRedirectType)type
 {
-    NSAttributedString *attributedString = [[NSAttributedString alloc] initWithString:text attributes:_textAttributes];
-	// Actually write the libhb output to the text view (outputTextStorage)
-    [_outputTextStorage appendAttributedString:attributedString];
-
-	// remove text from outputTextStorage as defined by TextStorageUpperSizeLimit and TextStorageLowerSizeLimit */
-    if (_outputTextStorage.length > TextStorageUpperSizeLimit)
-    {
-		[_outputTextStorage deleteCharactersInRange:NSMakeRange(0, _outputTextStorage.length - TextStorageLowerSizeLimit)];
-    }
-
     if (self.windowLoaded && self.window.isVisible)
     {
-        [_textView scrollToEndOfDocument:self];
+        [self appendToTextView:text];
+    }
+    else
+    {
+        [self appendToBuffer:text];
     }
 }
 
@@ -126,7 +140,7 @@
  */
 - (IBAction)clearOutput:(id)sender
 {
-	[_outputTextStorage deleteCharactersInRange:NSMakeRange(0, _outputTextStorage.length)];
+	[self.textView.textStorage deleteCharactersInRange:NSMakeRange(0, self.textView.textStorage.length)];
     [self writeHeader];
 }
 
@@ -137,7 +151,7 @@
 {
 	NSPasteboard *pboard = NSPasteboard.generalPasteboard;
     [pboard declareTypes:@[NSPasteboardTypeString] owner:nil];
-    [pboard setString:_outputTextStorage.string forType:NSPasteboardTypeString];
+    [pboard setString:self.textView.textStorage.string forType:NSPasteboardTypeString];
 }
 
 /**
@@ -145,7 +159,7 @@
  */
 - (IBAction)openActivityLogFile:(id)sender
 {
-    [NSWorkspace.sharedWorkspace openURL:self.outputFile.url];
+    [NSWorkspace.sharedWorkspace openURL:self.outputWriter.url];
 }
 
 /**
@@ -167,7 +181,7 @@
 
 - (IBAction)clearActivityLogFile:(id)sender
 {
-    [self.outputFile clear];
+    [self.outputWriter clear];
 }
 
 @end
