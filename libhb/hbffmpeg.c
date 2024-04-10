@@ -784,9 +784,12 @@ void hb_ff_set_sample_fmt(AVCodecContext *context, const AVCodec *codec,
     }
 }
 
-int hb_av_can_use_zscale(enum AVPixelFormat pix_fmt, int width, int height)
+int hb_av_can_use_zscale(enum AVPixelFormat pix_fmt,
+                         int in_width, int in_height,
+                         int out_width, int out_height)
 {
-    if ((width % 2) != 0 || (height % 2) != 0)
+    if ((in_width % 2)  != 0 || (in_height % 2)  != 0 ||
+        (out_width % 2) != 0 || (out_height % 2) != 0)
     {
         return 0;
     }

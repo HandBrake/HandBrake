@@ -1441,7 +1441,9 @@ int reinit_video_filters(hb_work_private_t * pv)
             hb_dict_set(settings, "format", hb_value_string(av_get_pix_fmt_name(pv->job->input_pix_fmt)));
             hb_avfilter_append_dict(filters, "scale_cuda", settings);
         }
-        else if (hb_av_can_use_zscale(pv->frame->format, pv->frame->width, pv->frame->height))
+        else if (hb_av_can_use_zscale(pv->frame->format,
+                                      pv->frame->width, pv->frame->height,
+                                      orig_width, orig_height))
         {
             hb_dict_set(settings, "w", hb_value_int(orig_width));
             hb_dict_set(settings, "h", hb_value_int(orig_height));
