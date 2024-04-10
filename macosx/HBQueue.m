@@ -532,21 +532,16 @@ static void powerSourceCallback(void *context)
  */
 - (void)setEncodingJobsAsPending
 {
-    NSMutableIndexSet *indexes = [NSMutableIndexSet indexSet];
-    NSUInteger idx = 0;
     for (id<HBQueueItem> item in self.itemsInternal)
     {
         // We want to keep any queue item that is pending or was previously being encoded
         if (item.state == HBQueueItemStateWorking || item.state == HBQueueItemStateRescanning)
         {
             item.state = HBQueueItemStateReady;
-            [indexes addIndex:idx];
         }
-        idx++;
     }
 
     [self updateStats];
-    [self save];
 }
 
 - (BOOL)canEncode
