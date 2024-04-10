@@ -53,7 +53,6 @@ ghb_deps = [
   dependency('libavutil'),
   dependency('libbluray'),
   dependency('liblzma'),
-  dependency('libpostproc'),
   dependency('libswresample'),
   dependency('libswscale'),
   dependency('libxml-2.0'),
