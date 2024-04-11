@@ -263,7 +263,7 @@ hb_buffer_t* hb_audio_resample(hb_audio_resample_t *resample,
     {
         out_samples = nsamples  * resample->out.sample_rate /
                                   resample->in.sample_rate + 1;
-        out_size = av_samples_get_buffer_size(NULL, resample->in.ch_layout.nb_channels,
+        out_size = av_samples_get_buffer_size(NULL, resample->out.ch_layout.nb_channels,
                                               out_samples,
                                               resample->out.sample_fmt, 0);
         out = hb_buffer_init(out_size);
