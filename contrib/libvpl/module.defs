@@ -32,10 +32,7 @@ ifeq (1,$(HOST.cross))
         LIBVPL.CONFIGURE.extra += -DWIN32=ON -DMINGW=ON
         LIBVPL.CONFIGURE.extra += -DCMAKE_SYSTEM_NAME=Windows
         LIBVPL.CONFIGURE.extra += -DCMAKE_C_COMPILER=$(LIBVPL.GCC.gcc)
-        LIBVPL.CONFIGURE.extra += -DCMAKE_C_FLAGS="-static-libgcc -static-libstdc++ -static"
-        LIBVPL.CONFIGURE.extra += -DCMAKE_SHARED_LIBRARY_LINK_C_FLAGS="-static-libgcc -static-libstdc++ -static"
         LIBVPL.CONFIGURE.extra += -DCMAKE_CXX_COMPILER=$(LIBVPL.GCC.gxx)
-        LIBVPL.CONFIGURE.extra += -DCMAKE_CXX_FLAGS="-static-libgcc -static-libstdc++ -static"
         LIBVPL.CONFIGURE.extra += -DCMAKE_RC_COMPILER=$(HOST.cross.prefix)windres
     endif
     LIBVPL.CONFIGURE.extra     += -DCMAKE_SYSTEM_PROCESSOR=$(HOST.machine)

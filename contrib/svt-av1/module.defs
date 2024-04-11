@@ -43,10 +43,7 @@ ifeq (1,$(HOST.cross))
         SVT-AV1.CONFIGURE.extra += -DCMAKE_SYSTEM_NAME=Windows
         SVT-AV1.CONFIGURE.extra += -DCMAKE_SYSTEM_PROCESSOR=$(HOST.machine)
         SVT-AV1.CONFIGURE.extra += -DCMAKE_C_COMPILER=$(SVT-AV1.GCC.gcc)
-        SVT-AV1.CONFIGURE.extra += -DCMAKE_C_FLAGS="-static-libgcc -static-libstdc++ -static"
-        SVT-AV1.CONFIGURE.extra += -DCMAKE_SHARED_LIBRARY_LINK_C_FLAGS="-static-libgcc -static-libstdc++ -static"
         SVT-AV1.CONFIGURE.extra += -DCMAKE_CXX_COMPILER=$(SVT-AV1.GCC.gxx)
-        SVT-AV1.CONFIGURE.extra += -DCMAKE_CXX_FLAGS="-static-libgcc -static-libstdc++ -static"
         SVT-AV1.CONFIGURE.extra += -DCMAKE_RC_COMPILER=$(HOST.cross.prefix)windres
 
         SVT-AV1.CONFIGURE.args.host  = -DCMAKE_HOST_SYSTEM="$(SVT-AV1.CONFIGURE.host)"
