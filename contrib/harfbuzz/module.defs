@@ -28,10 +28,7 @@ ifeq (1,$(HOST.cross))
         HARFBUZZ.CONFIGURE.extra += -DWIN32=ON -DMINGW=ON
         HARFBUZZ.CONFIGURE.extra += -DCMAKE_SYSTEM_NAME=Windows
         HARFBUZZ.CONFIGURE.extra += -DCMAKE_C_COMPILER=$(HARFBUZZ.GCC.gcc)
-        HARFBUZZ.CONFIGURE.extra += -DCMAKE_C_FLAGS="-Wa,-mbig-obj -static-libgcc -static-libstdc++ -static"
-        HARFBUZZ.CONFIGURE.extra += -DCMAKE_SHARED_LIBRARY_LINK_C_FLAGS="-Wa,-mbig-obj -static-libgcc -static-libstdc++ -static"
         HARFBUZZ.CONFIGURE.extra += -DCMAKE_CXX_COMPILER=$(HARFBUZZ.GCC.gxx)
-        HARFBUZZ.CONFIGURE.extra += -DCMAKE_CXX_FLAGS="-Wa,-mbig-obj -static-libgcc -static-libstdc++ -static"
         HARFBUZZ.CONFIGURE.extra += -DCMAKE_RC_COMPILER=$(HOST.cross.prefix)windres
         HARFBUZZ.CONFIGURE.extra += -DHB_HAVE_DIRECTWRITE=OFF \
                                     -DHB_HAVE_GLIB=OFF \

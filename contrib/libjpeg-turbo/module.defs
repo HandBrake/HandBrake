@@ -38,10 +38,7 @@ ifeq (1,$(HOST.cross))
         LIBJPEGTURBO.CONFIGURE.extra += -DCMAKE_SYSTEM_NAME=Windows
         LIBJPEGTURBO.CONFIGURE.extra += -DCMAKE_SYSTEM_PROCESSOR=$(HOST.machine)
         LIBJPEGTURBO.CONFIGURE.extra += -DCMAKE_C_COMPILER=$(LIBJPEGTURBO.GCC.gcc)
-        LIBJPEGTURBO.CONFIGURE.extra += -DCMAKE_C_FLAGS="-static-libgcc -static-libstdc++ -static"
-        LIBJPEGTURBO.CONFIGURE.extra += -DCMAKE_SHARED_LIBRARY_LINK_C_FLAGS="-static-libgcc -static-libstdc++ -static"
         LIBJPEGTURBO.CONFIGURE.extra += -DCMAKE_CXX_COMPILER=$(LIBJPEGTURBO.GCC.gxx)
-        LIBJPEGTURBO.CONFIGURE.extra += -DCMAKE_CXX_FLAGS="-static-libgcc -static-libstdc++ -static"
         LIBJPEGTURBO.CONFIGURE.extra += -DCMAKE_RC_COMPILER=$(HOST.cross.prefix)windres
         LIBJPEGTURBO.CONFIGURE.args.host  = -DCMAKE_HOST_SYSTEM="$(LIBJPEGTURBO.CONFIGURE.host)"
     else ifeq ($(HOST.system),darwin)
