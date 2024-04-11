@@ -4000,6 +4000,10 @@ static hb_dict_t * PreparePreset(const char *preset_name)
                     hb_value_double(strtod(aqualities[ii], NULL)));
                 last_quality = ii;
             }
+        }
+
+        if (hb_str_vlen(abitrates) > 0 || hb_str_vlen(aqualities) > 0)
+        {
             if (last_audio_dict == NULL)
             {
                 // No defaults exist in original preset.
