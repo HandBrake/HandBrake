@@ -1323,9 +1323,14 @@ skip_preview:
             title->color_transfer = get_color_transfer(title->color_transfer);
             title->color_matrix   = get_color_matrix(title->color_matrix, vid_info.geometry);
         }
-        // Let's try to guess a color profile only if the source is not Dolby Vision 5
-        // which requires the values to be unset
-        else if (title->dovi.dv_profile != 5)
+        else if (title->dovi.dv_profile == 5 ||
+                 (title->dovi.dv_profile == 10 && title->dovi.dv_bl_signal_compatibility_id == 0))
+        {
+            title->color_prim     = HB_COLR_PRI_UNDEF;
+            title->color_transfer = HB_COLR_TRA_UNDEF;
+            title->color_matrix   = HB_COLR_MAT_UNDEF;
+        }
+        else
         {
             title->color_prim     = get_color_prim(vid_info.color_prim, vid_info.geometry, vid_info.rate);
             title->color_transfer = get_color_transfer(vid_info.color_transfer);
