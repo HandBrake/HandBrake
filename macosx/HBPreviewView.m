@@ -43,6 +43,11 @@
     return self;
 }
 
+- (BOOL)clipsToBounds
+{
+    return YES;
+}
+
 /**
  *  Setups the sublayers,
  *  called by every initializer.
