@@ -909,13 +909,13 @@ int hb_audio_samplerate_is_supported(int samplerate, uint32_t codec)
             // ca_haac can't do samplerates < 32 kHz
             // libav's E-AC-3 encoder can't do samplerates < 32 kHz
             // AC-3 < 32 kHz suffers from poor hardware compatibility
-            if (samplerate < 32000)
+            if (samplerate < 32000 || samplerate > 48000)
                 return 0;
             else
                 return 1;
         case HB_ACODEC_FDK_HAAC:
             // fdk_haac can't do samplerates < 16 kHz
-            if (samplerate < 16000)
+            if (samplerate < 16000 || samplerate > 48000)
                 return 0;
              else
                 return 1;
@@ -947,6 +947,18 @@ int hb_audio_samplerate_is_supported(int samplerate, uint32_t codec)
                     return 1;
                 default:
                     return 0;
+            }
+        case HB_ACODEC_LAME:
+        case HB_ACODEC_VORBIS:
+        case HB_ACODEC_CA_AAC:
+        case HB_ACODEC_FFAAC:
+            if (samplerate > 48000)
+            {
+                return 0;
+            }
+            else
+            {
+                return 1;
             }
         default:
             return 1;
