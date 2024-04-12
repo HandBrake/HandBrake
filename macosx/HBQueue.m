@@ -125,7 +125,7 @@ static void powerSourceCallback(void *context)
 {
     if ([NSUserDefaults.standardUserDefaults boolForKey:HBQueuePauseOnBatteryPower])
     {
-        CFTypeRef sourceInfo =  IOPSCopyPowerSourcesInfo();
+        CFTypeRef sourceInfo = IOPSCopyPowerSourcesInfo();
         if (sourceInfo)
         {
             HBQueue *queue = (__bridge HBQueue *)context;
@@ -149,7 +149,7 @@ static void powerSourceCallback(void *context)
 
 - (void)setUpIOPSNotificationRunLoop
 {
-    self.sourceRunLoop = IOPSNotificationCreateRunLoopSource(powerSourceCallback, (__bridge void *)(self));
+    self.sourceRunLoop = IOPSCreateLimitedPowerNotification(powerSourceCallback, (__bridge void *)(self));
     if (self.sourceRunLoop)
     {
         CFRunLoopAddSource(CFRunLoopGetCurrent(), self.sourceRunLoop, kCFRunLoopDefaultMode);

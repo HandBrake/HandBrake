@@ -173,7 +173,7 @@
 
     if (generator)
     {
-        [self resizeToOptimalSize];
+        [self resizeIfNeeded:NO];
     }
 }
 
@@ -183,7 +183,7 @@
     {
         [self.generator cancel];
         [self switchStateToHUD:self.pictureHUD];
-        [self resizeToOptimalSize];
+        [self resizeIfNeeded:NO];
     }
 }
 
@@ -213,7 +213,7 @@
 
 #pragma mark - Window sizing
 
-- (void)resizeToOptimalSize
+- (void)resizeIfNeeded:(BOOL)forceResize
 {
     if (!(self.window.styleMask & NSWindowStyleMaskFullScreen))
     {
@@ -227,8 +227,14 @@
             NSSize windowSize = [self.previewView optimalViewSizeForImageSize:self.generator.imageSize
                                                                       minSize:NSMakeSize(MIN_WIDTH, MIN_HEIGHT)
                                                                   scaleFactor:self.window.backingScaleFactor];
-            // Scale the window to the image size
-            [self.window HB_resizeToBestSizeForViewSize:windowSize keepInScreenRect:YES centerPoint:NSZeroPoint animate:self.window.isVisible];
+
+            if (forceResize ||
+                windowSize.width  > self.window.contentView.frame.size.width ||
+                windowSize.height > self.window.contentView.frame.size.height)
+            {
+                // Scale the window to the image size
+                [self.window HB_resizeToBestSizeForViewSize:windowSize keepInScreenRect:YES centerPoint:NSZeroPoint animate:self.window.isVisible];
+            }
         }
     }
 
@@ -247,7 +253,7 @@
         // Scale factor changed, resize the preview window
         if (self.generator)
         {
-            [self resizeToOptimalSize];
+            [self resizeIfNeeded:NO];
         }
     }
 }
@@ -309,7 +315,7 @@
 - (void)toggleScaleToScreen
 {
     self.previewView.fitToView = !self.previewView.fitToView;
-    [self resizeToOptimalSize];
+    [self resizeIfNeeded:YES];
 }
 
 #pragma mark - Hud State
