@@ -6,9 +6,11 @@ LAME.FETCH.url    += https://sourceforge.net/projects/lame/files/lame/3.100/lame
 LAME.FETCH.sha256  = ddfe36cab873794038ae2c1210557ad34857a4b6bdc515785d1da9e175b1da1e
 
 LAME.CONFIGURE.extra += --disable-frontend
-ifneq (none,$(FFMPEG.GCC.g))
+ifneq (none,$(LAME.GCC.g))
 	LAME.CONFIGURE.extra += --enable-debug
 endif
+
+LAME.GCC.args.extra += $(LAME.GCC.args.O.$(LAME.GCC.O))
 
 ifeq (1-msys,$(HOST.cross)-$(BUILD.system))
     LAME.CONFIGURE.args.build = --build=$(BUILD.machine)-unknown-linux-gnu
