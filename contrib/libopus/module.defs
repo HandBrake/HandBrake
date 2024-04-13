@@ -8,8 +8,6 @@ LIBOPUS.FETCH.sha256  = b84610959b8d417b611aa12a22565e0a3732097c6389d19098d84454
 LIBOPUS.CONFIGURE.shared = --enable-shared=no
 LIBOPUS.CONFIGURE.extra = --disable-doc --disable-extra-programs
 
-# Disable Run-time CPU detection
-# otherwise it crashes when opus bitrate is set to 48kbps or less
-LIBOPUS.CONFIGURE.extra += --disable-rtcd
+LIBOPUS.GCC.args.extra += $(LIBOPUS.GCC.args.O.$(LIBOPUS.GCC.O))
 
 LIBOPUS.CONFIGURE.bootstrap = rm -fr aclocal.m4 autom4te.cache configure; autoreconf -fiv;
