@@ -11,3 +11,11 @@ LIBOPUS.CONFIGURE.extra = --disable-doc --disable-extra-programs
 LIBOPUS.GCC.args.extra += $(LIBOPUS.GCC.args.O.$(LIBOPUS.GCC.O))
 
 LIBOPUS.CONFIGURE.bootstrap = rm -fr aclocal.m4 autom4te.cache configure; autoreconf -fiv;
+
+# Disable Run-time CPU detection on Windows ARM architecture
+# because libopus could not detect CPU machine type properly
+ifeq (mingw,$(HOST.system))
+	ifeq (aarch64,$(HOST.machine))
+		LIBOPUS.CONFIGURE.extra += --disable-rtcd
+	endif
+endif
