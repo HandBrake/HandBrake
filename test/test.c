@@ -3929,22 +3929,29 @@ static hb_dict_t * PreparePreset(const char *preset_name)
                         hb_str_vlen(anames)))))))))));
 
         hb_dict_t *audio_dict, *last_audio_dict = NULL;
+
         // Add audio dict entries to list if needed
+        // Keep track of if the list was empty, we use this to decide whether or not to apply
+        // settings to all presets
+        int audio_list_was_empty = 0;
+        if (hb_value_array_len(list) == 0)
+        {
+            audio_list_was_empty = 1;
+            hb_value_array_append(list, hb_dict_init());
+        }
+
         for (ii = 0; ii < count; ii++)
         {
             audio_dict = hb_value_array_get(list, ii);
+            
             if (audio_dict == NULL)
             {
-                break;
+                // More settings specified than preset currently supports.
+                // Duplicate the last audio encoder settings in the preset.
+                audio_dict = hb_value_dup(last_audio_dict);
+                hb_value_array_append(list, audio_dict);
             }
             last_audio_dict = audio_dict;
-        }
-        // More settings specified than preset currently supports.
-        // Duplicate the last audio encoder settings in the preset.
-        for (; ii < count && last_audio_dict != NULL; ii++)
-        {
-            audio_dict = hb_value_dup(last_audio_dict);
-            hb_value_array_append(list, audio_dict);
         }
 
         // Update codecs
@@ -3959,7 +3966,7 @@ static hb_dict_t * PreparePreset(const char *preset_name)
                                     hb_value_string(acodecs[ii]));
                 last = ii;
             }
-            if (last_audio_dict == NULL && last >= 0)
+            if (audio_list_was_empty && last >= 0)
             {
                 // No defaults exist in original preset.
                 // Apply last codec in list to all other entries
@@ -4004,7 +4011,7 @@ static hb_dict_t * PreparePreset(const char *preset_name)
 
         if (hb_str_vlen(abitrates) > 0 || hb_str_vlen(aqualities) > 0)
         {
-            if (last_audio_dict == NULL)
+            if (audio_list_was_empty)
             {
                 // No defaults exist in original preset.
                 // Apply last bitrate/quality in list to all other entries
@@ -4046,7 +4053,7 @@ static hb_dict_t * PreparePreset(const char *preset_name)
                             hb_value_string(arates[ii]));
                 last = ii;
             }
-            if (last_audio_dict == NULL && last >= 0)
+            if (audio_list_was_empty && last >= 0)
             {
                 // No defaults exist in original preset.
                 // Apply last samplerate in list to all other entries
@@ -4071,7 +4078,7 @@ static hb_dict_t * PreparePreset(const char *preset_name)
                             hb_value_string(mixdowns[ii]));
                 last = ii;
             }
-            if (last_audio_dict == NULL && last >= 0)
+            if (audio_list_was_empty && last >= 0)
             {
                 // No defaults exist in original preset.
                 // Apply last codec in list to all other entries
@@ -4096,7 +4103,7 @@ static hb_dict_t * PreparePreset(const char *preset_name)
                     hb_value_bool(atoi(normalize_mix_level[ii])));
                 last = ii;
             }
-            if (last_audio_dict == NULL && last >= 0)
+            if (audio_list_was_empty && last >= 0)
             {
                 // No defaults exist in original preset.
                 // Apply last mix norm in list to all other entries
@@ -4124,7 +4131,7 @@ static hb_dict_t * PreparePreset(const char *preset_name)
                     strtod(dynamic_range_compression[ii], NULL)));
                 last = ii;
             }
-            if (last_audio_dict == NULL && last >= 0)
+            if (audio_list_was_empty && last >= 0)
             {
                 // No defaults exist in original preset.
                 // Apply last DRC in list to all other entries
@@ -4152,7 +4159,7 @@ static hb_dict_t * PreparePreset(const char *preset_name)
                     strtod(audio_gain[ii], NULL)));
                 last = ii;
             }
-            if (last_audio_dict == NULL && last >= 0)
+            if (audio_list_was_empty && last >= 0)
             {
                 // No defaults exist in original preset.
                 // Apply last gain in list to all other entries
@@ -4178,7 +4185,7 @@ static hb_dict_t * PreparePreset(const char *preset_name)
                             hb_value_string(audio_dither[ii]));
                 last = ii;
             }
-            if (last_audio_dict == NULL && last >= 0)
+            if (audio_list_was_empty && last >= 0)
             {
                 // No defaults exist in original preset.
                 // Apply last dither in list to all other entries
@@ -4204,7 +4211,7 @@ static hb_dict_t * PreparePreset(const char *preset_name)
                     strtod(acompressions[ii], NULL)));
                 last = ii;
             }
-            if (last_audio_dict == NULL && last >= 0)
+            if (audio_list_was_empty && last >= 0)
             {
                 // No defaults exist in original preset.
                 // Apply last compression in list to all other entries
