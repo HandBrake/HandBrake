@@ -293,24 +293,22 @@ static void queue_update_summary (GhbValue * queueDict, signal_user_data_t *ud)
     {
         // ABR
         int br = ghb_dict_get_int(uiDict, "VideoAvgBitrate");
-        if (!multi_pass)
-        {
-            g_string_append_printf(str, _("%s, Bitrate %dkbps"),
-                                   video_encoder->name, br);
-        }
-        else
-        {
-            g_string_append_printf(str, _("%s, Bitrate %dkbps (Multi Pass)"),
-                                   video_encoder->name, br);
-        }
+        g_string_append_printf(str, _("%s, Bitrate %dkbps"),
+                                video_encoder->name, br);
     }
     else
     {
         gdouble quality = ghb_dict_get_double(uiDict, "VideoQualitySlider");
         g_string_append_printf(str, _("%s, Constant Quality %.4g(%s)"),
-                               video_encoder->name, quality,
-                               hb_video_quality_get_name(video_encoder->codec));
+                            video_encoder->name, quality,
+                            hb_video_quality_get_name(video_encoder->codec));
     }
+
+    if (multi_pass && hb_video_multipass_is_supported(video_encoder->codec, vqtype))
+    {
+        g_string_append_printf(str, _(" (Multi Pass)"));
+    }
+
     const char * enc_preset  = NULL;
     const char * enc_tune    = NULL;
     const char * enc_level   = NULL;

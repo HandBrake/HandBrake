@@ -64,6 +64,21 @@ int ghb_set_video_preset(GhbValue *settings, int encoder, const char * preset)
     return result;
 }
 
+void
+ghb_update_multipass(signal_user_data_t *ud)
+{
+    GtkWidget *multi_pass = ghb_builder_widget("VideoMultiPassBox");
+    GtkWidget *turbo_multi_pass = ghb_builder_widget("VideoTurboMultiPass");
+    int encoder = ghb_get_video_encoder(ud->settings);
+    
+    gboolean constant_quality = ghb_dict_get_bool(ud->settings, "vquality_type_constant");
+    gboolean supports_multi_pass = hb_video_multipass_is_supported(encoder, constant_quality);
+    gboolean turbo_supported = (encoder & HB_VCODEC_X264_MASK) || (encoder & HB_VCODEC_X265_MASK);
+    
+    gtk_widget_set_sensitive(multi_pass, supports_multi_pass);
+    gtk_widget_set_visible(turbo_multi_pass, turbo_supported);
+}
+
 G_MODULE_EXPORT void
 vcodec_changed_cb (GtkWidget *widget, gpointer data)
 {
@@ -76,6 +91,7 @@ vcodec_changed_cb (GtkWidget *widget, gpointer data)
     ghb_update_summary_info(ud);
     ghb_clear_presets_selection(ud);
     ghb_live_reset(ud);
+    ghb_update_multipass(ud);
 
     // Set the range of the video quality slider
     val = ghb_vquality_default(ud);
@@ -111,6 +127,21 @@ vcodec_changed_cb (GtkWidget *widget, gpointer data)
     ghb_set_video_preset(ud->settings, encoder, NULL);
     GhbValue *gval = ghb_dict_get_value(ud->settings, "VideoPresetSlider");
     ghb_ui_settings_update(ud, ud->settings, "VideoPresetSlider", gval);
+
+    // update quality type
+    GtkWidget *cqRadioButton = ghb_builder_widget("vquality_type_constant");
+    GtkWidget *abrRadioButton = ghb_builder_widget("vquality_type_bitrate");
+    gtk_widget_set_sensitive(cqRadioButton, hb_video_quality_is_supported(encoder));
+    gtk_widget_set_sensitive(abrRadioButton, hb_video_bitrate_is_supported(encoder));
+    if (ghb_widget_boolean(cqRadioButton) && ! hb_video_quality_is_supported(encoder))
+    {
+        ghb_update_widget(abrRadioButton, ghb_boolean_value(true));
+    }
+    if (ghb_widget_boolean(abrRadioButton) && ! hb_video_bitrate_is_supported(encoder))
+    {
+        ghb_update_widget(cqRadioButton, ghb_boolean_value(true));
+    }
+
     if (ghb_check_name_template(ud, "{bit-depth}") ||
         ghb_check_name_template(ud, "{codec}"))
         ghb_set_destination(ud);

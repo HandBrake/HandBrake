@@ -289,12 +289,18 @@ NSString * const HBVideoChangedNotification = @"HBVideoChangedNotification";
 
 - (void)validateQualityType
 {
-    if (self.qualityType != 0 && !hb_video_quality_is_supported(self.encoder))
+    if (self.qualityType != HBVideoQualityTypeAvgBitrate && !hb_video_quality_is_supported(self.encoder))
     {
-        self.qualityType = 0;
+        self.qualityType = HBVideoQualityTypeAvgBitrate;
     }
 
-    if (!hb_video_multipass_is_supported(self.encoder))
+    if (self.qualityType != HBVideoQualityTypeConstantQuality && !hb_video_bitrate_is_supported(self.encoder))
+    {
+        self.qualityType = HBVideoQualityTypeConstantQuality;
+    }
+
+    if (! (hb_video_multipass_is_supported(self.encoder, false)
+            || hb_video_multipass_is_supported(self.encoder, true)))
     {
         self.multiPass = NO;
     }

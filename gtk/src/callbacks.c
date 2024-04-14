@@ -34,6 +34,7 @@
 #include "resources.h"
 #include "subtitlehandler.h"
 #include "util.h"
+#include "videohandler.h"
 
 #include <fcntl.h>
 #include <libavutil/parseutils.h>
@@ -421,9 +422,10 @@ static GhbBinding widget_bindings[] =
     {"title", "active-id", "none", "angle", "sensitive", TRUE},
     {"title", "active-id", "none", "angle_label", "sensitive", TRUE},
     {"vquality_type_bitrate", "active", NULL, "VideoAvgBitrate", "sensitive"},
+    {"vquality_type_bitrate", "sensitive", NULL, "VideoAvgBitrate", "sensitive"},
     {"vquality_type_constant", "active", NULL, "VideoQualitySlider", "sensitive"},
+    {"vquality_type_constant", "sensitive", NULL, "VideoQualitySlider", "sensitive"},
     {"vquality_type_constant", "active", NULL, "video_quality_label", "sensitive"},
-    {"vquality_type_constant", "active", NULL, "VideoMultiPassBox", "sensitive", TRUE},
     {"VideoFramerate", "active-id", "auto", "VideoFrameratePFR", "visible", TRUE},
     {"VideoFramerate", "active-id", "auto", "VideoFramerateVFR", "visible"},
     {"VideoMultiPass", "active", NULL, "VideoTurboMultiPass", "sensitive"},
@@ -3277,6 +3279,7 @@ vquality_type_changed_cb (GtkWidget *widget, gpointer data)
     signal_user_data_t *ud = ghb_ud();
 
     ghb_widget_to_setting(ud->settings, widget);
+    ghb_update_multipass(ud);
     ghb_clear_presets_selection(ud);
     ghb_live_reset(ud);
     if (ghb_check_name_template(ud, "{quality}") ||

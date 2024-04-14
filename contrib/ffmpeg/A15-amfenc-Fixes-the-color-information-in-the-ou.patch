@@ -1,7 +1,7 @@
-From 41b7ae39c7f01c435bdd59479ce954e6b1c2e371 Mon Sep 17 00:00:00 2001
-From: Damiano Galassi <damiog@gmail.com>
-Date: Sun, 20 Aug 2023 08:01:43 +0200
-Subject: [PATCH 2/3] avcodec/amfenc: Fixes the color  information in the
+From 03a995f5d49aed79cd39b3961ccca2617cf7ed00 Mon Sep 17 00:00:00 2001
+From: Michael Fabian 'Xaymar' Dirks <michael.dirks@xaymar.com>
+Date: Wed, 20 Mar 2024 09:32:29 +0100
+Subject: [PATCH 15/16] avcodec/amfenc: Fixes the color  information in the 
  output.
 
 added 10 bit support for amf hevc.
@@ -21,8 +21,6 @@ command - ffmpeg.exe -hide_banner -y -hwaccel d3d11va -hwaccel_output_format d3d
 output -  10bit file
 
 v2 - lost line returned in ff_amf_pix_fmts.
-
-Original patch by Michael Fabian 'Xaymar' Dirks <michael.dirks@xaymar.com>.
 ---
  libavcodec/amfenc.c      |  2 ++
  libavcodec/amfenc.h      |  1 +
@@ -31,7 +29,7 @@ Original patch by Michael Fabian 'Xaymar' Dirks <michael.dirks@xaymar.com>.
  4 files changed, 103 insertions(+), 3 deletions(-)
 
 diff --git a/libavcodec/amfenc.c b/libavcodec/amfenc.c
-index 12a06b4a42..0fbb2d897f 100644
+index a4293fa20c..eb6b2901f2 100644
 --- a/libavcodec/amfenc.c
 +++ b/libavcodec/amfenc.c
 @@ -60,6 +60,7 @@ const enum AVPixelFormat ff_amf_pix_fmts[] = {
@@ -63,7 +61,7 @@ index 2dbd378ef8..267eb593a2 100644
  #include <AMF/components/VideoEncoderHEVC.h>
  #include <AMF/components/VideoEncoderAV1.h>
 diff --git a/libavcodec/amfenc_h264.c b/libavcodec/amfenc_h264.c
-index 2380aa4e90..abdb9f249d 100644
+index c1d5f4054e..05443f996f 100644
 --- a/libavcodec/amfenc_h264.c
 +++ b/libavcodec/amfenc_h264.c
 @@ -199,6 +199,9 @@ static av_cold int amf_encode_init_h264(AVCodecContext *avctx)
@@ -130,21 +128,21 @@ index 2380aa4e90..abdb9f249d 100644
      // autodetect rate control method
      if (ctx->rate_control_mode == AMF_VIDEO_ENCODER_RATE_CONTROL_METHOD_UNKNOWN) {
 diff --git a/libavcodec/amfenc_hevc.c b/libavcodec/amfenc_hevc.c
-index dd232cc8ac..8598998610 100644
+index 33a167aa52..8fad6c24fa 100644
 --- a/libavcodec/amfenc_hevc.c
 +++ b/libavcodec/amfenc_hevc.c
 @@ -34,8 +34,9 @@ static const AVOption options[] = {
-     { "high_quality",           "high quality trancoding",                  0, AV_OPT_TYPE_CONST, {.i64 = AMF_VIDEO_ENCODER_HEVC_USAGE_HIGH_QUALITY              }, 0, 0, VE, "usage" },
-     { "lowlatency_high_quality","low latency yet high quality trancoding",  0, AV_OPT_TYPE_CONST, {.i64 = AMF_VIDEO_ENCODER_HEVC_USAGE_LOW_LATENCY_HIGH_QUALITY  }, 0, 0, VE, "usage" },
+     { "high_quality",           "high quality trancoding",                  0, AV_OPT_TYPE_CONST, {.i64 = AMF_VIDEO_ENCODER_HEVC_USAGE_HIGH_QUALITY              }, 0, 0, VE, .unit = "usage" },
+     { "lowlatency_high_quality","low latency yet high quality trancoding",  0, AV_OPT_TYPE_CONST, {.i64 = AMF_VIDEO_ENCODER_HEVC_USAGE_LOW_LATENCY_HIGH_QUALITY  }, 0, 0, VE, .unit = "usage" },
  
--    { "profile",        "Set the profile (default main)",           OFFSET(profile),   AV_OPT_TYPE_INT,{ .i64 = AMF_VIDEO_ENCODER_HEVC_PROFILE_MAIN }, AMF_VIDEO_ENCODER_HEVC_PROFILE_MAIN, AMF_VIDEO_ENCODER_HEVC_PROFILE_MAIN, VE, "profile" },
--    { "main",           "", 0,                      AV_OPT_TYPE_CONST,{ .i64 = AMF_VIDEO_ENCODER_HEVC_PROFILE_MAIN }, 0, 0, VE, "profile" },
+-    { "profile",        "Set the profile (default main)",           OFFSET(profile),   AV_OPT_TYPE_INT,{ .i64 = AMF_VIDEO_ENCODER_HEVC_PROFILE_MAIN }, AMF_VIDEO_ENCODER_HEVC_PROFILE_MAIN, AMF_VIDEO_ENCODER_HEVC_PROFILE_MAIN, VE, .unit = "profile" },
+-    { "main",           "", 0,                      AV_OPT_TYPE_CONST,{ .i64 = AMF_VIDEO_ENCODER_HEVC_PROFILE_MAIN }, 0, 0, VE, .unit = "profile" },
 +    { "profile",        "Set the profile (default main)",           OFFSET(profile),   AV_OPT_TYPE_INT,{ .i64 = AMF_VIDEO_ENCODER_HEVC_PROFILE_MAIN }, AMF_VIDEO_ENCODER_HEVC_PROFILE_MAIN, AMF_VIDEO_ENCODER_HEVC_PROFILE_MAIN_10, VE, "profile" },
 +    { "main",           "", 0,                      AV_OPT_TYPE_CONST,{ .i64 = AMF_VIDEO_ENCODER_HEVC_PROFILE_MAIN }, AMF_VIDEO_ENCODER_HEVC_PROFILE_MAIN, AMF_VIDEO_ENCODER_HEVC_PROFILE_MAIN_10, VE, "profile" },
 +    { "main10",         "", 0,                      AV_OPT_TYPE_CONST,{ .i64 = AMF_VIDEO_ENCODER_HEVC_PROFILE_MAIN_10 }, 0, 0, VE, "profile" },
  
-     { "profile_tier",   "Set the profile tier (default main)",      OFFSET(tier), AV_OPT_TYPE_INT,{ .i64 = AMF_VIDEO_ENCODER_HEVC_TIER_MAIN }, AMF_VIDEO_ENCODER_HEVC_TIER_MAIN, AMF_VIDEO_ENCODER_HEVC_TIER_HIGH, VE, "tier" },
-     { "main",           "", 0, AV_OPT_TYPE_CONST, { .i64 = AMF_VIDEO_ENCODER_HEVC_TIER_MAIN }, 0, 0, VE, "tier" },
+     { "profile_tier",   "Set the profile tier (default main)",      OFFSET(tier), AV_OPT_TYPE_INT,{ .i64 = AMF_VIDEO_ENCODER_HEVC_TIER_MAIN }, AMF_VIDEO_ENCODER_HEVC_TIER_MAIN, AMF_VIDEO_ENCODER_HEVC_TIER_HIGH, VE, .unit = "tier" },
+     { "main",           "", 0, AV_OPT_TYPE_CONST, { .i64 = AMF_VIDEO_ENCODER_HEVC_TIER_MAIN }, 0, 0, VE, .unit = "tier" },
 @@ -160,6 +161,9 @@ static av_cold int amf_encode_init_hevc(AVCodecContext *avctx)
      AMFRate             framerate;
      AMFSize             framesize = AMFConstructSize(avctx->width, avctx->height);
@@ -223,5 +221,5 @@ index dd232cc8ac..8598998610 100644
      AMF_ASSIGN_PROPERTY_INT64(res, ctx->encoder, AMF_VIDEO_ENCODER_HEVC_NUM_GOPS_PER_IDR, ctx->gops_per_idr);
      AMF_ASSIGN_PROPERTY_INT64(res, ctx->encoder, AMF_VIDEO_ENCODER_HEVC_GOP_SIZE, avctx->gop_size);
 -- 
-2.39.3 (Apple Git-145)
+2.39.3 (Apple Git-146)
 

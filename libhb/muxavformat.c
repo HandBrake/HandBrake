@@ -355,6 +355,7 @@ static int avformatInit( hb_mux_object_t * m )
                 }
             }
         } break;
+
         case HB_VCODEC_THEORA:
             track->st->codecpar->codec_id = AV_CODEC_ID_THEORA;
             break;
@@ -381,6 +382,10 @@ static int avformatInit( hb_mux_object_t * m )
             {
                 track->st->codecpar->codec_tag = MKTAG('h','v','c','1');
             }
+            break;
+
+        case HB_VCODEC_FFMPEG_FFV1:
+            track->st->codecpar->codec_id = AV_CODEC_ID_FFV1;
             break;
 
         default:

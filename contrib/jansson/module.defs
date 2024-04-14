@@ -6,3 +6,5 @@ JANSSON.FETCH.url    += https://github.com/akheron/jansson/releases/download/v2.
 JANSSON.FETCH.sha256  = fba956f27c6ae56ce6dfd52fbf9d20254aad42821f74fa52f83957625294afb9
 
 JANSSON.CONFIGURE.bootstrap = rm -fr aclocal.m4 autom4te.cache; mkdir m4; autoreconf -fiv;
+
+JANSSON.GCC.args.extra += $(JANSSON.GCC.args.O.$(JANSSON.GCC.O))

@@ -24,7 +24,6 @@
 struct hb_avfilter_graph_s
 {
     AVFilterGraph    * avgraph;
-    AVFilterContext  * last;
     AVFilterContext  * input;
     AVFilterContext  * output;
     char             * settings;
@@ -33,53 +32,14 @@ struct hb_avfilter_graph_s
     hb_job_t         * job;
 };
 
-static AVFilterContext * append_filter( hb_avfilter_graph_t * graph,
-                                        const char * name, const char * args, AVBufferSrcParameters *par)
-{
-    AVFilterContext * filter;
-    int               result;
-
-    result = avfilter_graph_create_filter(&filter, avfilter_get_by_name(name),
-                                          name, args, NULL, graph->avgraph);
-    if (result < 0)
-    {
-        return NULL;
-    }
-
-    if (par)
-    {
-        result = av_buffersrc_parameters_set(filter, par);
-        if (result < 0)
-        {
-            avfilter_free(filter);
-            return NULL;
-        }
-    }
-
-    if (graph->last != NULL)
-    {
-        result = avfilter_link(graph->last, 0, filter, 0);
-        if (result < 0)
-        {
-            avfilter_free(filter);
-            return NULL;
-        }
-    }
-    graph->last = filter;
-
-    return filter;
-}
-
 hb_avfilter_graph_t *
 hb_avfilter_graph_init(hb_value_t * settings, hb_filter_init_t * init)
 {
     hb_avfilter_graph_t   * graph;
     AVFilterInOut         * in = NULL, * out = NULL;
     AVBufferSrcParameters * par = NULL;
-    AVFilterContext       * avfilter;
-    char                  * settings_str;
-    int                     result;
     char                  * filter_args;
+    int                     result;
 
     graph = calloc(1, sizeof(hb_avfilter_graph_t));
     if (graph == NULL)
@@ -87,28 +47,24 @@ hb_avfilter_graph_init(hb_value_t * settings, hb_filter_init_t * init)
         return NULL;
     }
 
-    settings_str = hb_filter_settings_string(HB_FILTER_AVFILTER, settings);
-    if (settings_str == NULL)
+    graph->settings = hb_filter_settings_string(HB_FILTER_AVFILTER, settings);
+    if (graph->settings == NULL)
     {
         hb_error("hb_avfilter_graph_init: no filter settings specified");
         goto fail;
     }
 
     graph->job = init->job;
-    graph->settings = settings_str;
     graph->avgraph = avfilter_graph_alloc();
     if (graph->avgraph == NULL)
     {
         hb_error("hb_avfilter_graph_init: avfilter_graph_alloc failed");
         goto fail;
     }
-    result = avfilter_graph_parse2(graph->avgraph, settings_str, &in, &out);
-    if (result < 0 || in == NULL || out == NULL)
-    {
-        hb_error("hb_avfilter_graph_init: avfilter_graph_parse2 failed (%s)",
-                 settings_str);
-        goto fail;
-    }
+
+#if 0
+    avfilter_graph_set_auto_convert(graph->avgraph, AVFILTER_AUTO_CONVERT_NONE);
+#endif
 
     // Build filter input
 #if HB_PROJECT_FEATURE_QSV
@@ -116,7 +72,7 @@ hb_avfilter_graph_init(hb_value_t * settings, hb_filter_init_t * init)
     if (hb_qsv_full_path_is_enabled(graph->job) && init->pix_fmt != AV_PIX_FMT_YUV420P)
     {
         enum AVPixelFormat pix_fmt = init->hw_pix_fmt;
-        if(pix_fmt == AV_PIX_FMT_NONE)
+        if (pix_fmt == AV_PIX_FMT_NONE)
         {
             pix_fmt = init->pix_fmt;
         }
@@ -135,9 +91,11 @@ hb_avfilter_graph_init(hb_value_t * settings, hb_filter_init_t * init)
 
         filter_args = hb_strdup_printf(
                 "video_size=%dx%d:pix_fmt=%d:sar=%d/%d:"
+                "colorspace=%d:range=%d:"
                 "time_base=%d/%d:frame_rate=%d/%d",
                 init->geometry.width, init->geometry.height, pix_fmt,
                 init->geometry.par.num, init->geometry.par.den,
+                init->color_matrix, init->color_range,
                 init->time_base.num, init->time_base.den,
                 init->vrate.num, init->vrate.den);
 
@@ -192,48 +150,64 @@ hb_avfilter_graph_init(hb_value_t * settings, hb_filter_init_t * init)
         }
         filter_args = hb_strdup_printf(
                     "width=%d:height=%d:pix_fmt=%d:sar=%d/%d:"
+                    "colorspace=%d:range=%d:"
                     "time_base=%d/%d:frame_rate=%d/%d",
                     init->geometry.width, init->geometry.height, pix_fmt,
                     init->geometry.par.num, init->geometry.par.den,
+                    init->color_matrix, init->color_range,
                     init->time_base.num, init->time_base.den,
                     init->vrate.num, init->vrate.den);
     }
-    avfilter = append_filter(graph, "buffer", filter_args, par);
+
+    // buffer video source: the decoded frames from the decoder will be inserted here.
+    result = avfilter_graph_create_filter(&graph->input, avfilter_get_by_name("buffer"), "in",
+                                          filter_args, NULL, graph->avgraph);
     free(filter_args);
-    if (avfilter == NULL)
+    if (graph->input == NULL)
     {
         hb_error("hb_avfilter_graph_init: failed to create buffer source filter");
         goto fail;
     }
-    graph->input = avfilter;
+    if (par)
+    {
+        result = av_buffersrc_parameters_set(graph->input, par);
+        if (result < 0)
+        {
+            goto fail;
+        }
+    }
 
-    // Link input to filter chain created by avfilter_graph_parse2
-    result = avfilter_link(graph->last, 0, in->filter_ctx, 0);
+    // parse set settings and create the graph
+    result = avfilter_graph_parse2(graph->avgraph, graph->settings, &in, &out);
     if (result < 0)
     {
+        hb_error("hb_avfilter_graph_init: avfilter_graph_parse2 failed (%s)",
+                 graph->settings);
         goto fail;
     }
-    graph->last = out->filter_ctx;
 
-    // Build filter output
-    avfilter = append_filter(graph, "buffersink", NULL, 0);
-    if (avfilter == NULL)
+    result = avfilter_link(graph->input, 0, in->filter_ctx, 0);
+    if (result != 0)
     {
-        hb_error("hb_avfilter_graph_init: failed to create buffer output filter");
+        hb_error("hb_avfilter_graph_init: failed to link buffer source filter");
         goto fail;
     }
-#if 0
-    // Set output pix fmt to YUV420P
-    enum AVPixelFormat pix_fmts[2] = {AV_PIX_FMT_YUV420P, AV_PIX_FMT_NONE};
-    if (av_opt_set_int_list(avfilter, "pix_fmts", pix_fmts,
-                            AV_PIX_FMT_NONE, AV_OPT_SEARCH_CHILDREN) < 0)
-    {
-        hb_error("hb_avfilter_graph_init: failed to set buffersink pix_fmt");
-        goto fail;
-    }
-#endif
 
-    graph->output = avfilter;
+    // buffer video sink: to terminate the filter chain.
+    result = avfilter_graph_create_filter(&graph->output, avfilter_get_by_name("buffersink"), "out",
+                                          NULL, NULL, graph->avgraph);
+    if (graph->output == NULL)
+    {
+        hb_error("hb_avfilter_graph_init: failed to create buffer sink filter");
+        goto fail;
+    }
+
+    result = avfilter_link(out->filter_ctx, 0, graph->output, 0);
+    if (result != 0)
+    {
+        hb_error("hb_avfilter_graph_init: failed to link buffer sink filter");
+        goto fail;
+    }
 
     result = avfilter_graph_config(graph->avgraph, NULL);
     if (result < 0)
@@ -241,6 +215,12 @@ hb_avfilter_graph_init(hb_value_t * settings, hb_filter_init_t * init)
         hb_error("hb_avfilter_graph_init: failed to configure filter graph");
         goto fail;
     }
+
+#if 0
+    char *dump = avfilter_graph_dump(graph->avgraph, NULL);
+    hb_log("\n%s", dump);
+    free(dump);
+#endif
 
     graph->frame = av_frame_alloc();
     if (graph->frame == NULL)
@@ -254,7 +234,6 @@ hb_avfilter_graph_init(hb_value_t * settings, hb_filter_init_t * init)
     av_free(par);
     avfilter_inout_free(&in);
     avfilter_inout_free(&out);
-
     return graph;
 
 fail:

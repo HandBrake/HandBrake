@@ -222,7 +222,7 @@ int hb_parse_av1_extradata(hb_data_t *extradata, int *level_idx, int *high_tier)
 {
     hb_bitstream_t bs;
     int obu_type, obu_extension_flag, obu_has_size_field, obu_size = 0;
-    int seq_level_idx, seq_tier;
+    int seq_level_idx = 0, seq_tier = 0;
 
     hb_bitstream_init(&bs, extradata->bytes, extradata->size, 0);
 

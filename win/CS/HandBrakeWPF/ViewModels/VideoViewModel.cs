@@ -114,8 +114,6 @@ namespace HandBrakeWPF.ViewModels
                 if (value)
                 {
                     this.Task.VideoEncodeRateType = VideoEncodeRateType.ConstantQuality;
-                    this.MultiPass = false;
-                    this.TurboAnalysisPass = false;
                     this.VideoBitrate = null;
                     this.NotifyOfPropertyChange(() => this.Task);
                 }
@@ -134,20 +132,14 @@ namespace HandBrakeWPF.ViewModels
         {
             get
             {
-                if (this.IsConstantQuantity)
-                {
-                    return false;
-                }
-
-                if (!this.SelectedVideoEncoder.SupportsMultiPass)
-                {
-                    return false;
-                }
-
-                return true;
+                return this.SelectedVideoEncoder.SupportsMultiPass(this.IsConstantQuantity);
             }
         }
 
+        public bool? IsQualitySupported => this.SelectedVideoEncoder?.SupportsQuality;
+        public bool? IsQualityAdjustmentSupported => this.SelectedVideoEncoder?.SupportsQualityAdjustment;
+        public bool? IsBitrateSupported => this.SelectedVideoEncoder?.SupportsBitrate;
+        
         public bool IsPeakFramerate
         {
             get => this.Task.FramerateMode == FramerateMode.PFR;
@@ -340,6 +332,10 @@ namespace HandBrakeWPF.ViewModels
                     this.OnTabStatusChanged(null);
 
                     this.OnTabStatusChanged(new TabStatusEventArgs("filters", ChangedOption.Encoder));
+
+                    this.NotifyOfPropertyChange(() => this.IsQualitySupported);
+                    this.NotifyOfPropertyChange(() => this.IsQualityAdjustmentSupported);
+                    this.NotifyOfPropertyChange(() => this.IsBitrateSupported);
                 }
             }
         }
@@ -383,7 +379,7 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
-        public bool DisplayMultiPass => this.SelectedVideoEncoder.SupportsMultiPass;
+        public bool DisplayMultiPass => this.SelectedVideoEncoder.SupportsMultiPass();
 
         public bool DisplayTuneControls
         {
@@ -1108,7 +1104,7 @@ namespace HandBrakeWPF.ViewModels
             this.NotifyOfPropertyChange(() => this.IsMultiPassEnabled);
             this.NotifyOfPropertyChange(() => this.DisplayMultiPass);
 
-            if (this.SelectedVideoEncoder != null && !this.SelectedVideoEncoder.SupportsMultiPass)
+            if (this.SelectedVideoEncoder != null && !this.SelectedVideoEncoder.SupportsMultiPass())
             {
                 this.MultiPass = false;
                 this.TurboAnalysisPass = false;

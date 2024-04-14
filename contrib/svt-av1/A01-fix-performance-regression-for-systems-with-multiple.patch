@@ -1,0 +1,139 @@
+From 4579ddcfe28d56aca15cd6bb932ed35f59e9fca7 Mon Sep 17 00:00:00 2001
+From: Artem Galin <artem.galin@intel.com>
+Date: Tue, 2 Apr 2024 23:40:35 +0000
+Subject: [PATCH] Fix performance regression for systems with multiple
+ processor groups
+
+---
+ Source/Lib/Common/Codec/EbThreads.h      | 24 +++++++++++++-----------
+ Source/Lib/Decoder/Codec/EbDecHandle.c   |  3 ++-
+ Source/Lib/Decoder/Codec/EbDecProcess.c  |  1 +
+ Source/Lib/Encoder/Globals/EbEncHandle.c | 21 ++++++++++++++-------
+ 4 files changed, 30 insertions(+), 19 deletions(-)
+
+diff --git a/Source/Lib/Common/Codec/EbThreads.h b/Source/Lib/Common/Codec/EbThreads.h
+index b6c69ba9..5d79a957 100644
+--- a/Source/Lib/Common/Codec/EbThreads.h
++++ b/Source/Lib/Common/Codec/EbThreads.h
+@@ -56,17 +56,19 @@ extern EbErrorType svt_block_on_mutex(EbHandle mutex_handle);
+ extern EbErrorType svt_destroy_mutex(EbHandle mutex_handle);
+ #ifdef _WIN32
+ 
+-#define EB_CREATE_THREAD(pointer, thread_function, thread_context)           \
+-    do {                                                                     \
+-        pointer = svt_create_thread(thread_function, thread_context);        \
+-        EB_ADD_MEM(pointer, 1, EB_THREAD);                                   \
+-        if (num_groups == 1)                                                 \
+-            SetThreadAffinityMask(pointer, svt_aom_group_affinity.Mask);     \
+-        else if (num_groups == 2 && alternate_groups) {                      \
+-            svt_aom_group_affinity.Group = 1 - svt_aom_group_affinity.Group; \
+-            SetThreadGroupAffinity(pointer, &svt_aom_group_affinity, NULL);  \
+-        } else if (num_groups == 2 && !alternate_groups)                     \
+-            SetThreadGroupAffinity(pointer, &svt_aom_group_affinity, NULL);  \
++#define EB_CREATE_THREAD(pointer, thread_function, thread_context)               \
++    do {                                                                         \
++        pointer = svt_create_thread(thread_function, thread_context);            \
++        EB_ADD_MEM(pointer, 1, EB_THREAD);                                       \
++        if (svt_aom_group_affinity_enabled) {                                    \
++            if (num_groups == 1)                                                 \
++                SetThreadAffinityMask(pointer, svt_aom_group_affinity.Mask);     \
++            else if (num_groups == 2 && alternate_groups) {                      \
++                svt_aom_group_affinity.Group = 1 - svt_aom_group_affinity.Group; \
++                SetThreadGroupAffinity(pointer, &svt_aom_group_affinity, NULL);  \
++            } else if (num_groups == 2 && !alternate_groups)                     \
++                SetThreadGroupAffinity(pointer, &svt_aom_group_affinity, NULL);  \
++        }                                                                        \
+     } while (0)
+ 
+ #else
+diff --git a/Source/Lib/Decoder/Codec/EbDecHandle.c b/Source/Lib/Decoder/Codec/EbDecHandle.c
+index 643b4c0b..74c901dd 100644
+--- a/Source/Lib/Decoder/Codec/EbDecHandle.c
++++ b/Source/Lib/Decoder/Codec/EbDecHandle.c
+@@ -50,7 +50,8 @@
+ #ifdef _WIN32
+ uint8_t        num_groups = 0;
+ GROUP_AFFINITY svt_aom_group_affinity;
+-Bool           alternate_groups = 0;
++Bool           alternate_groups               = 0;
++int8_t         svt_aom_group_affinity_enabled = 0;
+ #elif defined(__linux__)
+ cpu_set_t svt_aom_group_affinity;
+ #endif
+diff --git a/Source/Lib/Decoder/Codec/EbDecProcess.c b/Source/Lib/Decoder/Codec/EbDecProcess.c
+index dbca6ef2..72b1a6f5 100644
+--- a/Source/Lib/Decoder/Codec/EbDecProcess.c
++++ b/Source/Lib/Decoder/Codec/EbDecProcess.c
+@@ -45,6 +45,7 @@
+ extern uint8_t        num_groups;
+ extern GROUP_AFFINITY svt_aom_group_affinity;
+ extern Bool           alternate_groups;
++extern uint8_t        svt_aom_group_affinity_enabled;
+ #elif defined(__linux__)
+ extern cpu_set_t svt_aom_group_affinity;
+ #endif
+diff --git a/Source/Lib/Encoder/Globals/EbEncHandle.c b/Source/Lib/Encoder/Globals/EbEncHandle.c
+index be262d38..34566723 100644
+--- a/Source/Lib/Encoder/Globals/EbEncHandle.c
++++ b/Source/Lib/Encoder/Globals/EbEncHandle.c
+@@ -109,6 +109,7 @@
+  **************************************/
+ static uint8_t                   num_groups = 0;
+ #ifdef _WIN32
++static uint8_t                   svt_aom_group_affinity_enabled = 0;
+ static GROUP_AFFINITY            svt_aom_group_affinity;
+ static Bool                    alternate_groups = 0;
+ #elif defined(__linux__)
+@@ -175,9 +176,7 @@ static const char *get_asm_level_name_str(EbCpuFlags cpu_flags) {
+ //Get Number of logical processors
+ static uint32_t get_num_processors() {
+ #ifdef _WIN32
+-    SYSTEM_INFO sysinfo;
+-    GetSystemInfo(&sysinfo);
+-    return num_groups == 1 ? sysinfo.dwNumberOfProcessors : sysinfo.dwNumberOfProcessors << 1;
++    return GetActiveProcessorCount(ALL_PROCESSOR_GROUPS);
+ #else
+     return sysconf(_SC_NPROCESSORS_ONLN);
+ #endif
+@@ -248,6 +247,7 @@ uint64_t get_affinity_mask(uint32_t lpnum) {
+ void svt_set_thread_management_parameters(EbSvtAv1EncConfiguration *config_ptr)
+ {
+ #ifdef _WIN32
++    svt_aom_group_affinity_enabled = 1;
+     const uint32_t num_logical_processors = get_num_processors();
+     // For system with a single processor group(no more than 64 logic processors all together)
+     // Affinity of the thread can be set to one or more logical processors
+@@ -262,8 +262,9 @@ void svt_set_thread_management_parameters(EbSvtAv1EncConfiguration *config_ptr)
+                 svt_aom_group_affinity.Group = config_ptr->target_socket;
+         }
+         else {
+-            const uint32_t num_lp_per_group = num_logical_processors / num_groups;
+             if (config_ptr->target_socket == -1) {
++                // target socket is not set, use current group
++                const uint32_t num_lp_per_group = GetActiveProcessorCount(svt_aom_group_affinity.Group);
+                 if (config_ptr->logical_processors > num_lp_per_group) {
+                     alternate_groups = TRUE;
+                     SVT_WARN("-lp(logical processors) setting is ignored. Run on both sockets. \n");
+@@ -272,10 +273,16 @@ void svt_set_thread_management_parameters(EbSvtAv1EncConfiguration *config_ptr)
+                     svt_aom_group_affinity.Mask = get_affinity_mask(config_ptr->logical_processors);
+             }
+             else {
+-                const uint32_t lps =
++                // run on target socket only
++                if (config_ptr->target_socket < num_groups) {
++                    const uint32_t num_lp_per_group = GetActiveProcessorCount(config_ptr->target_socket);
++                    const uint32_t lps =
+                     config_ptr->logical_processors < num_lp_per_group ? config_ptr->logical_processors : num_lp_per_group;
+-                svt_aom_group_affinity.Mask = get_affinity_mask(lps);
+-                svt_aom_group_affinity.Group = config_ptr->target_socket;
++                    svt_aom_group_affinity.Mask = get_affinity_mask(lps);
++                    svt_aom_group_affinity.Group = config_ptr->target_socket;
++                }
++                else
++                    SVT_WARN("target socket setting is ignored. \n");
+             }
+         }
+     }
+-- 
+2.25.1
+

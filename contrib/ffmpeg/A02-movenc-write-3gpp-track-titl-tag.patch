@@ -1,22 +1,18 @@
-From 95a64ac34f4273b32f2eeabbdf28b40bf0bf6391 Mon Sep 17 00:00:00 2001
-From: Damiano galassi <damiog@gmail.com>
-Date: Tue, 28 Feb 2023 11:20:07 +0100
-Subject: [PATCH 1/3] movenc: write 3gpp track 'titl' tag
+From fbd97ecdb9e6f58770768355635c5ffda64b4a2b Mon Sep 17 00:00:00 2001
+From: John Stebbins <jstebbins@jetheaddev.com>
+Date: Wed, 20 Mar 2024 09:08:52 +0100
+Subject: [PATCH 02/16] movenc: write 3gpp track 'titl' tag
 
-Apple software used to use 'name' raw tag for track titles.  When they
-rewrote everything with AVFoundation, they switched to using 3gpp 'titl'
-tag for track titles and 'name' no longer works.
-
-Original patch by John Stebbins <jstebbins@jetheaddev.com>
+Apple software used to use 'name' raw tag for track titles.  When they rewrote everything with AVFoundation, they switched to using 3gpp 'titl' tag for track titles and 'name' no longer works.
 ---
  libavformat/movenc.c | 77 ++++++++++++++++++++++----------------------
  1 file changed, 39 insertions(+), 38 deletions(-)
 
 diff --git a/libavformat/movenc.c b/libavformat/movenc.c
-index 319f02b..cba6ce1 100644
+index 724a1eb673..f7192002f1 100644
 --- a/libavformat/movenc.c
 +++ b/libavformat/movenc.c
-@@ -3567,6 +3567,34 @@ static int mov_write_udta_sdp(AVIOContext *pb, MOVTrack *track)
+@@ -3761,6 +3761,34 @@ static int mov_write_udta_sdp(AVIOContext *pb, MOVTrack *track)
      return len + 24;
  }
  
@@ -51,7 +47,7 @@ index 319f02b..cba6ce1 100644
  static int mov_write_track_metadata(AVIOContext *pb, AVStream *st,
                                      const char *tag, const char *str)
  {
-@@ -3641,8 +3669,10 @@ static int mov_write_track_udta_tag(AVIOContext *pb, MOVMuxContext *mov,
+@@ -3835,8 +3863,10 @@ static int mov_write_track_udta_tag(AVIOContext *pb, MOVMuxContext *mov,
      if (ret < 0)
          return ret;
  
@@ -63,7 +59,7 @@ index 319f02b..cba6ce1 100644
  
      if (mov->mode & MODE_MP4) {
          if ((ret = mov_write_track_kinds(pb_buf, st)) < 0)
-@@ -4240,35 +4270,6 @@ static int ascii_to_wc(AVIOContext *pb, const uint8_t *b)
+@@ -4433,35 +4463,6 @@ static int ascii_to_wc(AVIOContext *pb, const uint8_t *b)
      return 0;
  }
  
@@ -99,7 +95,7 @@ index 319f02b..cba6ce1 100644
  static int mov_write_chpl_tag(AVIOContext *pb, AVFormatContext *s)
  {
      int64_t pos = avio_tell(pb);
-@@ -4307,14 +4308,14 @@ static int mov_write_udta_tag(AVIOContext *pb, MOVMuxContext *mov,
+@@ -4500,14 +4501,14 @@ static int mov_write_udta_tag(AVIOContext *pb, MOVMuxContext *mov,
          return ret;
  
      if (mov->mode & MODE_3GP) {
@@ -123,5 +119,5 @@ index 319f02b..cba6ce1 100644
      } else if (mov->mode == MODE_MOV && !(mov->flags & FF_MOV_FLAG_USE_MDTA)) { // the title field breaks gtkpod with mp4 and my suspicion is that stuff is not valid in mp4
          mov_write_string_metadata(s, pb_buf, "\251ART", "artist",      0);
 -- 
-2.37.1 (Apple Git-137.1)
+2.39.3 (Apple Git-146)
 

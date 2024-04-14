@@ -8,3 +8,5 @@ FREETYPE.FETCH.sha256  = 1ac27e16c134a7f2ccea177faba19801131116fd682efc1f5737037
 
 FREETYPE.CONFIGURE.deps  =
 FREETYPE.CONFIGURE.extra = --with-harfbuzz=no --with-png=no --with-brotli=no
+
+FREETYPE.GCC.args.extra += $(FREETYPE.GCC.args.O.$(FREETYPE.GCC.O))
