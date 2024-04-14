@@ -1,9 +1,9 @@
 $(eval $(call import.MODULE.defs,LIBOPUS,libopus))
 $(eval $(call import.CONTRIB.defs,LIBOPUS))
 
-LIBOPUS.FETCH.url     = https://github.com/HandBrake/HandBrake-contribs/releases/download/contribs/opus-1.4.tar.gz
-LIBOPUS.FETCH.url    += https://github.com/xiph/opus/releases/download/v1.4/opus-1.4.tar.gz
-LIBOPUS.FETCH.sha256  = c9b32b4253be5ae63d1ff16eea06b94b5f0f2951b7a02aceef58e3a3ce49c51f
+LIBOPUS.FETCH.url     = https://github.com/HandBrake/HandBrake-contribs/releases/download/contribs2/opus-1.5.2.tar.gz
+LIBOPUS.FETCH.url    += https://downloads.xiph.org/releases/opus/opus-1.5.2.tar.gz
+LIBOPUS.FETCH.sha256  = 65c1d2f78b9f2fb20082c38cbe47c951ad5839345876e46941612ee87f9a7ce1
 
 LIBOPUS.CONFIGURE.shared = --enable-shared=no
 LIBOPUS.CONFIGURE.extra = --disable-doc --disable-extra-programs
@@ -11,3 +11,11 @@ LIBOPUS.CONFIGURE.extra = --disable-doc --disable-extra-programs
 LIBOPUS.GCC.args.extra += $(LIBOPUS.GCC.args.O.$(LIBOPUS.GCC.O))
 
 LIBOPUS.CONFIGURE.bootstrap = rm -fr aclocal.m4 autom4te.cache configure; autoreconf -fiv;
+
+# Disable Run-time CPU detection on Windows ARM architecture
+# because libopus could not detect CPU machine type properly
+ifeq (mingw,$(HOST.system))
+    ifeq (aarch64,$(HOST.machine))
+        LIBOPUS.CONFIGURE.extra += --disable-rtcd
+    endif
+endif
