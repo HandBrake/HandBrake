@@ -228,18 +228,18 @@ define import.GCC
     $(1).GCC.i = $$(4)
 
     # FUNCTION: C link dynamic-lib
-    $(1).GCC.DYLIB.args = !gcc ?c_std ?pipe ?strip ?dylib ?extra.dylib ?ML *W *archs *sysroot *minver ?vis ?pic .g .O ?extra .lto *D *I !o ?muldefs ?start !i *F *f *L *l *pkgconfig *i !a ?end
+    $(1).GCC.DYLIB.args = !gcc ?c_std ?pipe ?strip ?dylib ?extra.dylib ?ML *W *archs *sysroot *minver ?vis ?pic .g .O ?extra .lto *D *I !o ?muldefs ?start !i *F *f *L *l !pkgconfig *i !a ?end
     $(1).GCC.DYLIB = $$(call fn.ARGS,$(1).GCC,$$($(1).GCC.DYLIB.args),$$(1),$$(2))
 
     # FUNCTION: C link executable
-    $(1).GCC.EXE.args = !gcc ?c_std ?pipe ?strip ?extra.exe ?ML *W *archs *sysroot *minver ?vis ?pic .g .O ?extra .lto *D *I !o ?muldefs ?start !i *F *f *L *l *pkgconfig *i !a ?end
+    $(1).GCC.EXE.args = !gcc ?c_std ?pipe ?strip ?extra.exe ?ML *W *archs *sysroot *minver ?vis ?pic .g .O ?extra .lto *D *I !o ?muldefs ?start !i *F *f *L *l !pkgconfig *i !a ?end
     $(1).GCC.EXE = $$(call fn.ARGS,$(1).GCC,$$($(1).GCC.EXE.args),$$(1),$$(2))
 
     # FUNCTION: C++ link dynamic-lib
-    $(1).GCC.DYLIB++.args = !gxx ?cxx_std ?pipe ?strip ?dylib ?extra.dylib++ ?ML *W *archs *sysroot *minvers ?vis ?pic .g .O ?extra .lto *D *I !o ?muldefs ?start !i *F *f *L *l *pkgconfig *i !a ?end
+    $(1).GCC.DYLIB++.args = !gxx ?cxx_std ?pipe ?strip ?dylib ?extra.dylib++ ?ML *W *archs *sysroot *minvers ?vis ?pic .g .O ?extra .lto *D *I !o ?muldefs ?start !i *F *f *L *l !pkgconfig *i !a ?end
     $(1).GCC.DYLIB++ = $$(call fn.ARGS,$(1).GCC,$$($(1).GCC.DYLIB++.args),$$(1),$$(2))
 
     # FUNCTION: C++ link executable
-    $(1).GCC.EXE++.args = !gxx ?cxx_std ?pipe ?strip ?extra.exe++ ?ML *W *archs *sysroot *minver ?vis ?pic .g .O ?extra .lto *D *I !o ?muldefs ?start !i *F *f *L *l *pkgconfig *i !a ?end
+    $(1).GCC.EXE++.args = !gxx ?cxx_std ?pipe ?strip ?extra.exe++ ?ML *W *archs *sysroot *minver ?vis ?pic .g .O ?extra .lto *D *I !o ?muldefs ?start !i *F *f *L *l !pkgconfig *i !a ?end
     $(1).GCC.EXE++ = $$(call fn.ARGS,$(1).GCC,$$($(1).GCC.EXE++.args),$$(1),$$(2))
 endef
