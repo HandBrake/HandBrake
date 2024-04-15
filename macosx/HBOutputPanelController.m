@@ -17,14 +17,15 @@
 /// left in outputTextStorage.
 #define TextStorageLowerSizeLimit 120000
 
-@interface HBOutputPanelController () <HBOutputRedirectListening>
+@interface HBOutputPanelController () <HBOutputRedirectListening, NSWindowDelegate>
 
 @property (nonatomic, unsafe_unretained) IBOutlet NSTextView *textView;
 
 @property (nonatomic, readonly) NSMutableString *textBuffer;
 @property (nonatomic, readonly) NSDictionary *textAttributes;
 
-@property (nonatomic, copy, readonly) HBOutputFileWriter *outputWriter;
+@property (nonatomic, readonly) HBOutputFileWriter *outputWriter;
+@property (nonatomic) NSTimer *timer;
 
 @end
 
@@ -64,6 +65,7 @@
 
 - (void)dealloc
 {
+    [self stopTimer];
     [HBOutputRedirect.stderrRedirect removeListener:self];
     [HBOutputRedirect.stdoutRedirect removeListener:self];
 }
@@ -77,6 +79,18 @@
 {
     [super showWindow:sender];
     [self displayBuffer];
+}
+
+- (void)windowDidChangeOcclusionState:(NSNotification *)notification
+{
+    if (self.window.occlusionState & NSWindowOcclusionStateVisible)
+    {
+        [self startTimer];
+    }
+    else
+    {
+        [self stopTimer];
+    }
 }
 
 /**
@@ -116,23 +130,41 @@
 
 - (void)displayBuffer
 {
-    [self appendToTextView:self.textBuffer];
-    [self.textBuffer deleteCharactersInRange:NSMakeRange(0, self.textBuffer.length)];
+    NSUInteger length = self.textBuffer.length;
+    if (length)
+    {
+        [self appendToTextView:self.textBuffer];
+        [self.textBuffer deleteCharactersInRange:NSMakeRange(0, length)];
+    }
 }
 
-/**
- * Displays text received from HBOutputRedirect in the text view
- */
 - (void)redirect:(NSString *)text type:(HBRedirectType)type
 {
-    if (self.windowLoaded && self.window.isVisible)
+    [self appendToBuffer:text];
+}
+
+- (void)startTimer
+{
+    if (self.timer == nil)
     {
-        [self appendToTextView:text];
+        self.timer = [NSTimer scheduledTimerWithTimeInterval:0.1
+                                                      target:self
+                                                    selector:@selector(timerFired:)
+                                                    userInfo:nil
+                                                     repeats:YES];
+        self.timer.tolerance = 0.1;
     }
-    else
-    {
-        [self appendToBuffer:text];
-    }
+}
+
+- (void)stopTimer
+{
+    [self.timer invalidate];
+    self.timer = nil;
+}
+
+- (void)timerFired:(NSTimer *)timer
+{
+    [self displayBuffer];
 }
 
 /**
