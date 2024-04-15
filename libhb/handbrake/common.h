@@ -431,8 +431,9 @@ const hb_rate_t* hb_audio_bitrate_get_next(const hb_rate_t *last);
 
 void        hb_video_quality_get_limits(uint32_t codec, float *low, float *high, float *granularity, int *direction);
 const char* hb_video_quality_get_name(uint32_t codec);
-int         hb_video_quality_is_supported(uint32_t codec);
 
+int         hb_video_quality_is_supported(uint32_t codec);
+int         hb_video_bitrate_is_supported(uint32_t codec);
 int         hb_video_multipass_is_supported(uint32_t codec, int constant_quality);
 
 int                hb_video_encoder_is_supported(int encoder);
@@ -628,6 +629,8 @@ struct hb_job_s
 #define HB_VCODEC_FFMPEG_NVENC_H265_10BIT   (0x00000032 | HB_VCODEC_FFMPEG_MASK | HB_VCODEC_H265_MASK)
 #define HB_VCODEC_FFMPEG_NVENC_AV1          (0x00000033 | HB_VCODEC_FFMPEG_MASK | HB_VCODEC_AV1_MASK)
 #define HB_VCODEC_FFMPEG_NVENC_AV1_10BIT    (0x00000034 | HB_VCODEC_FFMPEG_MASK | HB_VCODEC_AV1_MASK)
+
+#define HB_VCODEC_FFMPEG_FFV1        (0x00000040 | HB_VCODEC_FFMPEG_MASK)
 
 #define HB_VCODEC_SVT_AV1_8BIT       (0x00000041 | HB_VCODEC_SVT_AV1_MASK | HB_VCODEC_AV1_MASK)
 #define HB_VCODEC_SVT_AV1            HB_VCODEC_SVT_AV1_8BIT

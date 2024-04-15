@@ -11,6 +11,8 @@ LIBASS.FETCH.url     = https://github.com/HandBrake/HandBrake-contribs/releases/
 LIBASS.FETCH.url    += https://github.com/libass/libass/releases/download/0.17.1/libass-0.17.1.tar.gz
 LIBASS.FETCH.sha256  = d653be97198a0543c69111122173c41a99e0b91426f9e17f06a858982c2fb03d
 
+LIBASS.GCC.args.extra += $(LIBASS.GCC.args.O.$(LIBASS.GCC.O))
+
 # Tell configure where to find our versions of these libs
 ifneq (1,$(FEATURE.flatpak))
 LIBASS.CONFIGURE.extra = \

@@ -10,7 +10,7 @@
 #include "handbrake/project.h"
 
 #ifdef SYS_MINGW
-#define _WIN32_WINNT 0x600
+#define _WIN32_WINNT 0x0601
 #endif
 
 #ifdef SYS_LINUX
@@ -424,9 +424,7 @@ static int init_cpu_count()
     int cpu_count = 1;
 
 #if defined(SYS_CYGWIN) || defined(SYS_MINGW)
-    SYSTEM_INFO cpuinfo;
-    GetSystemInfo( &cpuinfo );
-    cpu_count = cpuinfo.dwNumberOfProcessors;
+    cpu_count = GetActiveProcessorCount(ALL_PROCESSOR_GROUPS);
 
 #elif defined(SYS_LINUX)
     unsigned int bit;

@@ -30,119 +30,6 @@ hb_filter_object_t hb_filter_colorspace =
     .settings_template = colorspace_template,
 };
 
-static const char * get_matrix_name(int colorspace)
-{
-    switch (colorspace) {
-    case AVCOL_SPC_RGB:
-        return "gbr";
-    case AVCOL_SPC_BT709:
-        return "bt709";
-    case AVCOL_SPC_UNSPECIFIED:
-        return "unknown";
-    case AVCOL_SPC_FCC:
-        return "fcc";
-    case AVCOL_SPC_BT470BG:
-        return "bt470bg";
-    case AVCOL_SPC_SMPTE170M:
-        return "smpte170m";
-    case AVCOL_SPC_SMPTE240M:
-        return "smpte2400m";
-    case AVCOL_SPC_YCGCO:
-        return "ycgco";
-    case AVCOL_SPC_BT2020_NCL:
-        return "bt2020nc";
-    case AVCOL_SPC_BT2020_CL:
-        return "bt2020c";
-    case AVCOL_SPC_CHROMA_DERIVED_NCL:
-        return "chroma-derived-nc";
-    case AVCOL_SPC_CHROMA_DERIVED_CL:
-        return "chroma-derived-c";
-    case AVCOL_SPC_ICTCP:
-        return "ictcp";
-    }
-    return "unspecified";
-}
-
-static const char * get_transfer_name(int color_trc)
-{
-    switch (color_trc) {
-    case AVCOL_TRC_UNSPECIFIED:
-        return "unspecified";
-    case AVCOL_TRC_BT709:
-        return "709";
-    case AVCOL_TRC_GAMMA22:
-        return "bt470m";
-    case AVCOL_TRC_GAMMA28:
-        return "bt470bg";
-    case AVCOL_TRC_SMPTE170M:
-        return "smpte170m";
-    case AVCOL_TRC_SMPTE240M:
-        return "240m"; // fixme
-    case AVCOL_TRC_LINEAR:
-        return "linear";
-    case AVCOL_TRC_LOG:
-        return "log100";
-    case AVCOL_TRC_LOG_SQRT:
-        return "log316";
-    case AVCOL_TRC_IEC61966_2_4:
-        return "iec61966-2-4";
-    case AVCOL_TRC_BT2020_10:
-        return "2020_10";
-    case AVCOL_TRC_BT2020_12:
-        return "2020_12";
-    case AVCOL_TRC_SMPTE2084:
-        return "smpte2084";
-    case AVCOL_TRC_ARIB_STD_B67:
-        return "arib-std-b67";
-    case AVCOL_TRC_IEC61966_2_1:
-        return "iec61966-2-1";
-    }
-    return "unspecified";
-}
-
-static const char * get_primaries_name(int color_primaries)
-{
-    switch (color_primaries) {
-    case AVCOL_PRI_UNSPECIFIED:
-        return "unspecified";
-    case AVCOL_PRI_BT709:
-        return "709";
-    case AVCOL_PRI_BT470M:
-        return "bt470m";
-    case AVCOL_PRI_BT470BG:
-        return "bt470bg";
-    case AVCOL_PRI_SMPTE170M:
-        return "smpte170m";
-    case AVCOL_PRI_SMPTE240M:
-        return "smpte240m";
-    case AVCOL_PRI_FILM:
-        return "film";
-    case AVCOL_PRI_BT2020:
-        return "bt2020";
-    case AVCOL_PRI_SMPTE428:
-        return "smpte428";
-    case AVCOL_PRI_SMPTE431:
-        return "smpte431";
-    case AVCOL_PRI_SMPTE432:
-        return "smpte432";
-    case AVCOL_PRI_JEDEC_P22:
-        return "jedec-p22";
-    }
-    return "unspecified";
-}
-
-static const char * get_range_name(int color_range)
-{
-    switch (color_range) {
-    case AVCOL_RANGE_UNSPECIFIED:
-    case AVCOL_RANGE_MPEG:
-        return "limited";
-    case AVCOL_RANGE_JPEG:
-        return "full";
-    }
-    return "limited";
-}
-
 #define REFERENCE_WHITE 100.0f
 
 static double determine_signal_peak(hb_filter_init_t * init)
@@ -288,22 +175,10 @@ static int colorspace_init(hb_filter_object_t * filter, hb_filter_init_t * init)
     avfilter   = hb_dict_init();
     avsettings = hb_dict_init();
 
-    if (color_prim != init->color_prim)
-    {
-        hb_dict_set_string(avsettings, "primaries", get_primaries_name(color_prim));
-    }
-    if (color_transfer != init->color_transfer)
-    {
-        hb_dict_set_string(avsettings, "transfer", get_transfer_name(color_transfer));
-    }
-    if (color_matrix != init->color_matrix)
-    {
-        hb_dict_set_string(avsettings, "matrix", get_matrix_name(color_matrix));
-    }
-    if (color_range != init->color_range)
-    {
-        hb_dict_set_string(avsettings, "range", get_range_name(color_range));
-    }
+    hb_dict_set_int(avsettings, "primaries", color_prim);
+    hb_dict_set_int(avsettings, "transfer", color_transfer);
+    hb_dict_set_int(avsettings, "matrix", color_matrix);
+    hb_dict_set_string(avsettings, "range", av_color_range_name(color_range));
 
     hb_dict_set(avfilter, "zscale", avsettings);
     hb_value_array_append(avfilters, avfilter);

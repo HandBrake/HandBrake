@@ -584,6 +584,17 @@ namespace HandBrakeWPF.Services.Queue
 
         public void Stop(bool stopExistingJobs)
         {
+            if (!this.IsProcessing)
+            {
+                // Just in Case, tidyup.
+                this.StopJobPolling();
+                this.RemoveBreakPoints();
+
+                this.IsPaused = false;
+
+                return;
+            }
+
             if (stopExistingJobs)
             {
                 lock (activeJobLock)

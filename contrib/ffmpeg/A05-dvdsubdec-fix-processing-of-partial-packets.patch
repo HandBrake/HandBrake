@@ -1,13 +1,11 @@
-From 263190a74a245423833bd6e1bc10726577e5502d Mon Sep 17 00:00:00 2001
-From: Damiano Galassi <damiog@gmail.com>
-Date: Sun, 25 Feb 2024 16:52:20 +0100
-Subject: [PATCH] dvdsubdec: fix processing of partial packets
+From 839a13d816cf1d499d3f93100124dcc609a55f2f Mon Sep 17 00:00:00 2001
+From: John Stebbins <jstebbins@jetheaddev.com>
+Date: Wed, 20 Mar 2024 09:11:09 +0100
+Subject: [PATCH 05/16] dvdsubdec: fix processing of partial packets
 
 Wait for a complete dvd subtitle before processing.
 
 If the input packet is large enough to start processing, but does not contain complete data, unfinished results are emitted and the following input packet causes an error because the stream is no longer in sync with the decoder.
-
-Original patch by John Stebbins.
 ---
  libavcodec/dvdsubdec.c | 24 +++++++++++++++++-------
  1 file changed, 17 insertions(+), 7 deletions(-)

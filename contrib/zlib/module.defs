@@ -7,6 +7,8 @@ ZLIB.FETCH.sha256  = ff0ba4c292013dbc27530b3a81e1f9a813cd39de01ca5e0f8bf355702ef
 
 ZLIB.CONFIGURE.args = !sete @dir !env !exe @prefix !extra
 
+ZLIB.GCC.args.extra += $(ZLIB.GCC.args.O.$(ZLIB.GCC.O))
+
 ifeq (1-mingw,$(HOST.cross)-$(HOST.system))
     ZLIB.CONFIGURE.env.AR      = AR="$(AR.exe)"
     ZLIB.CONFIGURE.env.ARFLAGS = ARFLAGS="rc"

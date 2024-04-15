@@ -502,6 +502,11 @@ NSString * const HBQueueItemNotificationPathKey = @"HBQueueItemNotificationPathK
                                     url:item.destinationURL
                               playSound:playSound];
     }
+
+    if ([ud boolForKey:HBQueueAutoClearCompletedItems])
+    {
+        [self.queue removeCompletedItems];
+    }
 }
 
 /**

@@ -2,8 +2,9 @@ __deps__ := X265_8
 $(eval $(call import.MODULE.defs,X265_10,x265_10,$(__deps__),x265))
 $(eval $(call import.CONTRIB.defs,X265_10))
 
-X265_10.FETCH.url     = https://github.com/HandBrake/HandBrake-contribs/releases/download/contribs/x265-snapshot-20240222-12833.tar.gz
-X265_10.FETCH.sha256  = f7de9c0e9f74901dff3ad00e4654dd880f92694877db9a47ffd0af59ae3e9049
+X265_10.FETCH.url     = https://github.com/HandBrake/HandBrake-contribs/releases/download/contribs/x265_3.6.tar.gz
+X265_10.FETCH.url    += https://bitbucket.org/multicoreware/x265_git/downloads/x265_3.6.tar.gz
+X265_10.FETCH.sha256  = 663531f341c5389f460d730e62e10a4fcca3428ca2ca109693867bc5fe2e2807
 
 # Silence "warning: overriding recipe for target" messages
 X265_10.FETCH.target =
@@ -52,11 +53,7 @@ ifeq (1,$(HOST.cross))
         X265_10.CONFIGURE.extra += -DWIN32=ON
         X265_10.CONFIGURE.extra += -DCMAKE_SYSTEM_NAME=Windows
         X265_10.CONFIGURE.extra += -DCMAKE_C_COMPILER=$(X265_10.GCC.gcc)
-        X265_10.CONFIGURE.extra += -DCMAKE_C_FLAGS="-static-libgcc -static-libstdc++ -static"
-        X265_10.CONFIGURE.extra += -DCMAKE_SHARED_LIBRARY_LINK_C_FLAGS="-static-libgcc -static-libstdc++ -static"
         X265_10.CONFIGURE.extra += -DCMAKE_CXX_COMPILER=$(X265_10.GCC.gxx)
-        X265_10.CONFIGURE.extra += -DCMAKE_CXX_FLAGS="-static-libgcc -static-libstdc++ -static"
-        X265_10.CONFIGURE.extra += -DCMAKE_SHARED_LIBRARY_LINK_CXX_FLAGS="-static-libgcc -static-libstdc++ -static"
         X265_10.CONFIGURE.extra += -DCMAKE_RC_COMPILER=$(HOST.cross.prefix)windres
         X265_10.CONFIGURE.args.host  = -DCMAKE_HOST_SYSTEM="$(X265_10.CONFIGURE.host)"
     endif

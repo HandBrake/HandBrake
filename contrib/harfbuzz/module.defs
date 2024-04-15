@@ -14,21 +14,21 @@ HARFBUZZ.CONFIGURE.deps        =
 HARFBUZZ.CONFIGURE.static      =
 HARFBUZZ.CONFIGURE.shared      = -DBUILD_SHARED_LIBS=OFF
 HARFBUZZ.CONFIGURE.extra       = -DHB_BUILD_UTILS=OFF -DHB_BUILD_TESTS=OFF
+HARFBUZZ.CONFIGURE.extra      += -DCMAKE_INSTALL_LIBDIR=lib
 HARFBUZZ.CONFIGURE.extra      += -DHB_HAVE_FREETYPE=ON \
                                  -DFREETYPE_LIBRARIES="$(call fn.ABSOLUTE,$(CONTRIB.build/))lib" \
                                  -DFREETYPE_INCLUDE_DIRS="$(call fn.ABSOLUTE,$(CONTRIB.build/))include/freetype2" \
                                  -DFREETYPE_INCLUDE_DIR_freetype2="$(call fn.ABSOLUTE,$(CONTRIB.build/))include/freetype2" \
                                  -DFREETYPE_INCLUDE_DIR_ft2build="$(call fn.ABSOLUTE,$(CONTRIB.build/))include/freetype2"
 
+HARFBUZZ.GCC.args.extra += $(HARFBUZZ.GCC.args.O.$(HARFBUZZ.GCC.O))
+
 ifeq (1,$(HOST.cross))
     ifeq (mingw,$(HOST.system))
         HARFBUZZ.CONFIGURE.extra += -DWIN32=ON -DMINGW=ON
         HARFBUZZ.CONFIGURE.extra += -DCMAKE_SYSTEM_NAME=Windows
         HARFBUZZ.CONFIGURE.extra += -DCMAKE_C_COMPILER=$(HARFBUZZ.GCC.gcc)
-        HARFBUZZ.CONFIGURE.extra += -DCMAKE_C_FLAGS="-Wa,-mbig-obj -static-libgcc -static-libstdc++ -static"
-        HARFBUZZ.CONFIGURE.extra += -DCMAKE_SHARED_LIBRARY_LINK_C_FLAGS="-Wa,-mbig-obj -static-libgcc -static-libstdc++ -static"
         HARFBUZZ.CONFIGURE.extra += -DCMAKE_CXX_COMPILER=$(HARFBUZZ.GCC.gxx)
-        HARFBUZZ.CONFIGURE.extra += -DCMAKE_CXX_FLAGS="-Wa,-mbig-obj -static-libgcc -static-libstdc++ -static"
         HARFBUZZ.CONFIGURE.extra += -DCMAKE_RC_COMPILER=$(HOST.cross.prefix)windres
         HARFBUZZ.CONFIGURE.extra += -DHB_HAVE_DIRECTWRITE=OFF \
                                     -DHB_HAVE_GLIB=OFF \

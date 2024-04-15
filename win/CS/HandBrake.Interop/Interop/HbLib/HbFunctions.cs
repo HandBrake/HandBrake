@@ -274,6 +274,11 @@ namespace HandBrake.Interop.Interop.HbLib
         [DllImport("hb", EntryPoint = "hb_image_close", CallingConvention = CallingConvention.Cdecl)]
         public static extern IntPtr hb_image_close(IntPtr image);
 
+        [DllImport("hb", EntryPoint = "hb_video_quality_is_supported", CallingConvention = CallingConvention.Cdecl)]
+        public static extern IntPtr hb_video_quality_is_supported(int encoder);
+
+        [DllImport("hb", EntryPoint = "hb_video_bitrate_is_supported", CallingConvention = CallingConvention.Cdecl)]
+        public static extern IntPtr hb_video_bitrate_is_supported(int encoder);
 
         /* JSON API */
 

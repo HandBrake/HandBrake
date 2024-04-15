@@ -1,23 +1,18 @@
-From 11dc5ab732c306e00563914245cb705f52007b64 Mon Sep 17 00:00:00 2001
-From: Damiano Galassi <damiog@gmail.com>
-Date: Sun, 20 Aug 2023 07:52:09 +0200
-Subject: [PATCH 1/3] amfenc: Add support for pict_type field From: Michael
- Fabian 'Xaymar' Dirks <info@xaymar.com> X-Patchwork-Id: 11748 Message-Id:
- <20190114190220.16236-1-info@xaymar.com> To: ffmpeg-devel@ffmpeg.org Cc:
- Michael Fabian 'Xaymar' Dirks <info@xaymar.com> Date: Mon, 14 Jan 2019
- 20:02:20 +0100
-
-Adds support for the pict_type field in AVFrame to amf_h264 and amf_h265 simultaneously. This field is needed in cases where the application wishes to override the frame type with another one, such as forcefully inserting a key frame for chapter markers or similar.
+From 18f7ffa4bc90953292faed17dec2e6ebcbec4eae Mon Sep 17 00:00:00 2001
+From: Michael Fabian 'Xaymar' Dirks <info@xaymar.com>
+Date: Wed, 20 Mar 2024 09:25:32 +0100
+Subject: [PATCH 14/16] Adds support for the pict_type field in AVFrame to
+ amf_h264 and amf_h265 simultaneously. This field is needed in cases where the
+ application wishes to override the frame type with another one, such as
+ forcefully inserting a key frame for chapter markers or similar.
 
 Additionally this abuses AV_PICTURE_TYPE_S for marking Skip frames, a special type of frame in AVC, SVC and HEVC which is a flag for the decoder to repeat the last frame.
-
-Signed-off-by: Michael Fabian 'Xaymar' Dirks <info@xaymar.com>
 ---
  libavcodec/amfenc.c | 47 +++++++++++++++++++++++++++++++++++++++++++++
  1 file changed, 47 insertions(+)
 
 diff --git a/libavcodec/amfenc.c b/libavcodec/amfenc.c
-index 518b8396e7..12a06b4a42 100644
+index 061859f85c..a4293fa20c 100644
 --- a/libavcodec/amfenc.c
 +++ b/libavcodec/amfenc.c
 @@ -696,6 +696,53 @@ int ff_amf_receive_packet(AVCodecContext *avctx, AVPacket *avpkt)
@@ -75,5 +70,5 @@ index 518b8396e7..12a06b4a42 100644
          res = ctx->encoder->pVtbl->SubmitInput(ctx->encoder, (AMFData*)surface);
          if (res == AMF_INPUT_FULL) { // handle full queue
 -- 
-2.39.3 (Apple Git-145)
+2.39.3 (Apple Git-146)
 

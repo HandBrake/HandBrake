@@ -173,7 +173,7 @@
 
     if (generator)
     {
-        [self resizeToOptimalSize];
+        [self resizeIfNeeded:NO];
     }
 }
 
@@ -183,7 +183,7 @@
     {
         [self.generator cancel];
         [self switchStateToHUD:self.pictureHUD];
-        [self resizeToOptimalSize];
+        [self resizeIfNeeded:NO];
     }
 }
 
@@ -195,6 +195,8 @@
     {
         [self reloadPreviews];
     }
+
+    [self showHud:self.currentHUD];
 }
 
 - (void)windowWillClose:(NSNotification *)aNotification
@@ -213,7 +215,7 @@
 
 #pragma mark - Window sizing
 
-- (void)resizeToOptimalSize
+- (void)resizeIfNeeded:(BOOL)forceResize
 {
     if (!(self.window.styleMask & NSWindowStyleMaskFullScreen))
     {
@@ -227,8 +229,14 @@
             NSSize windowSize = [self.previewView optimalViewSizeForImageSize:self.generator.imageSize
                                                                       minSize:NSMakeSize(MIN_WIDTH, MIN_HEIGHT)
                                                                   scaleFactor:self.window.backingScaleFactor];
-            // Scale the window to the image size
-            [self.window HB_resizeToBestSizeForViewSize:windowSize keepInScreenRect:YES centerPoint:NSZeroPoint animate:self.window.isVisible];
+
+            if (forceResize ||
+                windowSize.width  > self.window.contentView.frame.size.width ||
+                windowSize.height > self.window.contentView.frame.size.height)
+            {
+                // Scale the window to the image size
+                [self.window HB_resizeToBestSizeForViewSize:windowSize keepInScreenRect:YES centerPoint:NSZeroPoint animate:self.window.isVisible];
+            }
         }
     }
 
@@ -247,7 +255,7 @@
         // Scale factor changed, resize the preview window
         if (self.generator)
         {
-            [self resizeToOptimalSize];
+            [self resizeIfNeeded:NO];
         }
     }
 }
@@ -309,7 +317,7 @@
 - (void)toggleScaleToScreen
 {
     self.previewView.fitToView = !self.previewView.fitToView;
-    [self resizeToOptimalSize];
+    [self resizeIfNeeded:YES];
 }
 
 #pragma mark - Hud State
@@ -339,22 +347,11 @@
         [self enterPlayerState];
     }
 
-    // Show the current hud
-    NSMutableArray<NSViewController<HBHUD> *> *huds = [@[self.pictureHUD, self.encodingHUD, self.playerHUD] mutableCopy];
-    [huds removeObject:hud];
-    for (NSViewController *controller in huds)
+    if (self.generator && self.currentHUD != hud)
     {
-        controller.view.hidden = YES;
+        [self showHud:hud];
     }
 
-    if (self.generator)
-    {
-        hud.view.hidden = NO;
-        hud.view.layer.opacity = 1.0;
-    }
-
-    [self.window makeFirstResponder:hud.view];
-    [self startHudTimer];
     self.currentHUD = hud;
 }
 
@@ -364,9 +361,7 @@
 {
     if (self.generator)
     {
-        NSView *hud = self.currentHUD.view;
-
-        [self showHudWithAnimation:hud];
+        [self showHudWithAnimation:self.currentHUD];
         [self startHudTimer];
     }
     self.mouseInWindow = YES;
@@ -385,39 +380,57 @@
     // Test for mouse location to show/hide hud controls
     if (self.generator && self.mouseInWindow)
     {
-        NSView *hud = self.currentHUD.view;
         NSPoint mouseLoc = theEvent.locationInWindow;
 
-        if (NSPointInRect(mouseLoc, hud.frame))
+        if (NSPointInRect(mouseLoc, self.currentHUD.view.frame))
         {
             [self stopHudTimer];
         }
         else
         {
-            [self showHudWithAnimation:hud];
+            [self showHudWithAnimation:self.currentHUD];
             [self startHudTimer];
         }
 	}
 }
 
-- (void)showHudWithAnimation:(NSView *)hud
+- (void)showHud:(NSViewController<HBHUD> *)HUD
+{
+    NSMutableArray<NSViewController<HBHUD> *> *HUDs = [@[self.pictureHUD, self.encodingHUD, self.playerHUD] mutableCopy];
+    [HUDs removeObject:HUD];
+    for (NSViewController *controller in HUDs)
+    {
+        controller.view.hidden = YES;
+    }
+
+    HUD.view.hidden = NO;
+    HUD.view.layer.opacity = 1.0;
+
+    [self.window makeFirstResponder:HUD.view];
+    [self startHudTimer];
+}
+
+- (void)showHudWithAnimation:(NSViewController<HBHUD> *)HUD
 {
     // The standard view animator doesn't play
     // nicely with the Yosemite visual effects yet.
     // So let's do the fade ourself.
-    if (hud.layer.opacity == 0 || hud.isHidden)
+    NSView *view = HUD.view;
+    CALayer *layer = view.layer;
+
+    if (layer.opacity == 0 || view.isHidden)
     {
-        [hud setHidden:NO];
+        view.hidden = NO;
 
         [CATransaction begin];
         CABasicAnimation *fadeInAnimation = [CABasicAnimation animationWithKeyPath:@"opacity"];
-        fadeInAnimation.fromValue = @([hud.layer.presentationLayer opacity]);
+        fadeInAnimation.fromValue = @([layer.presentationLayer opacity]);
         fadeInAnimation.toValue = @1.0;
         fadeInAnimation.beginTime = 0.0;
         fadeInAnimation.duration = ANIMATION_DUR;
 
-        [hud.layer addAnimation:fadeInAnimation forKey:nil];
-        [hud.layer setOpacity:1];
+        [layer addAnimation:fadeInAnimation forKey:nil];
+        [layer setOpacity:1];
 
         [CATransaction commit];
     }

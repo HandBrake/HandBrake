@@ -15,6 +15,8 @@ BZIP2.BUILD.extra = \
 
 BZIP2.BUILD.ntargets = libbz2.a
 
+BZIP2.GCC.args.extra += $(BZIP2.GCC.args.O.$(BZIP2.GCC.O))
+
 define BZIP2.INSTALL
     $(CP.exe) $(BZIP2.EXTRACT.dir/)libbz2.a $(CONTRIB.build/)lib/
     $(CP.exe) $(BZIP2.EXTRACT.dir/)bzlib.h $(CONTRIB.build/)include/

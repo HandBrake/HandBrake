@@ -53,7 +53,6 @@ ghb_deps = [
   dependency('libavutil'),
   dependency('libbluray'),
   dependency('liblzma'),
-  dependency('libpostproc'),
   dependency('libswresample'),
   dependency('libswscale'),
   dependency('libxml-2.0'),
@@ -83,7 +82,7 @@ endif
 if get_option('qsv').enabled()
   ghb_deps += dependency('vpl')
   if host_machine.system() != 'windows'
-    ghb_deps += [dependency('libva'), dependency('libva-drm')]
+    ghb_deps += [dependency('libva'), dependency('libva-drm'), dependency('libdrm')]
   endif
 endif
 
