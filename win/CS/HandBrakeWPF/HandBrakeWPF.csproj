@@ -14,8 +14,8 @@
     <PackageProjectUrl>https://handbrake.fr</PackageProjectUrl>
     <RepositoryUrl>https://github.com/HandBrake/HandBrake</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
-    <AssemblyVersion>1.7.2.0</AssemblyVersion>
-    <Version>1.7.2</Version>
+    <AssemblyVersion>1.8.0.0</AssemblyVersion>
+    <Version>1.8.0</Version>
     <Platforms>AnyCPU</Platforms>
     <PlatformTarget>AnyCPU</PlatformTarget>
     <ApplicationIcon>handbrakepineapple.ico</ApplicationIcon>
