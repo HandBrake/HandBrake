@@ -100,6 +100,14 @@
 
   <releases>
     <release version="@RELEASE_TAG@" date="@RELEASE_DATE@">
+      <description>
+        <p>Migrates the UI to GTK 4, adds support for recursive scanning, and improves drag-and-drop to support multiple files and subtitle files.</p>
+      </description>
+    </release>
+    <release version="1.7.3" date="2024-02-09">
+      <description>
+        <p>Fixes an issue where adding a new default audio track automatically set the gain to -20dB.</p>
+      </description>
     </release>
     <release version="1.7.2" date="2023-12-17">
       <description>
