@@ -20,26 +20,14 @@ if hb_dir == ''
   hb_dir = meson.current_build_dir() / '..'
 endif
 
-hb_libdirs = [hb_dir / 'libhb', hb_dir / 'contrib/lib']
 hb_incdirs = include_directories(hb_dir / 'libhb', hb_dir / 'contrib/include')
-
-if host_machine.system() == 'windows'
-  win_libdirs = { 'dirs': hb_libdirs }
-else
-  win_libdirs = {}
-endif
 
 # External dependencies (required)
 ghb_deps = [
-  cc.find_library('handbrake', dirs: hb_libdirs),
-  cc.find_library('bz2', kwargs: win_libdirs),
-  cc.find_library('m'),
-  cc.find_library('mp3lame', kwargs: win_libdirs),
+  cc.find_library('handbrake', dirs: hb_dir / 'libhb'),
   dependency('dvdnav'),
   dependency('dvdread'),
-  dependency('dav1d'),
   dependency('SvtAv1Enc'),
-  dependency('fribidi'),
   dependency('glib-2.0', version: glib_min),
   dependency('gio-2.0', version: glib_min),
   dependency('gthread-2.0', version: glib_min),
@@ -52,23 +40,17 @@ ghb_deps = [
   dependency('libavformat'),
   dependency('libavutil'),
   dependency('libbluray'),
-  dependency('liblzma'),
   dependency('libswresample'),
   dependency('libswscale'),
+  dependency('libturbojpeg'),
   dependency('libxml-2.0'),
   dependency('ogg'),
-  dependency('opus'),
-  dependency('speex'),
   dependency('theoradec'),
   dependency('theoraenc'),
   dependency('threads'),
-  dependency('libturbojpeg'),
   dependency('vorbis'),
   dependency('vorbisenc'),
-  dependency('vpx'),
   dependency('x264'),
-  dependency('zimg'),
-  dependency('zlib'),
 ]
 
 if get_option('libdovi').enabled()
@@ -81,9 +63,6 @@ endif
 
 if get_option('qsv').enabled()
   ghb_deps += dependency('vpl')
-  if host_machine.system() != 'windows'
-    ghb_deps += [dependency('libva'), dependency('libva-drm'), dependency('libdrm')]
-  endif
 endif
 
 if get_option('x265').enabled()
