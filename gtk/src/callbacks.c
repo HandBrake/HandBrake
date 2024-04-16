@@ -1655,7 +1655,7 @@ single_title_dialog (GtkFileChooser *chooser)
                                     GTK_BUTTONS_OK,
                                     "Title Number:");
 
-    adj = gtk_adjustment_new(1, 0, 100, 1, 10, 10);
+    adj = gtk_adjustment_new(1, 0, 1000, 1, 10, 10);
     spin = gtk_spin_button_new(adj, 1, 0);
     gtk_widget_show(spin);
     msg = gtk_message_dialog_get_message_area(GTK_MESSAGE_DIALOG(dialog));
