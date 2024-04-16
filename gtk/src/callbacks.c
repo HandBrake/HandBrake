@@ -1491,6 +1491,8 @@ start_scan (signal_user_data_t *ud, const char *path, int title_id, int preview_
     ghb_button_set_icon_name(GHB_BUTTON(widget), "hb-stop-small-symbolic");
     ghb_button_set_label(GHB_BUTTON(widget), _("Stop Scan"));
     gtk_widget_set_tooltip_text(widget, _("Stop Scan"));
+    widget = ghb_builder_widget("sourcetoolmenubutton");
+    gtk_widget_set_sensitive(widget, false);
     ghb_backend_scan(path, title_id, preview_count,
             90000L * ghb_dict_get_int(ud->prefs, "MinTitleDuration"));
 }
@@ -1509,6 +1511,8 @@ start_scan_list (signal_user_data_t *ud, GListModel *files, int title_id, int pr
     ghb_button_set_icon_name(GHB_BUTTON(widget), "hb-stop-small-symbolic");
     ghb_button_set_label(GHB_BUTTON(widget), _("Stop Scan"));
     gtk_widget_set_tooltip_text(widget, _("Stop Scan"));
+    widget = ghb_builder_widget("sourcetoolmenubutton");
+    gtk_widget_set_sensitive(widget, false);
     ghb_backend_scan_list(files, title_id, preview_count,
             90000L * ghb_dict_get_int(ud->prefs, "MinTitleDuration"));
 }
@@ -1655,7 +1659,7 @@ single_title_dialog (GtkFileChooser *chooser)
                                     GTK_BUTTONS_OK,
                                     "Title Number:");
 
-    adj = gtk_adjustment_new(1, 0, 100, 1, 10, 10);
+    adj = gtk_adjustment_new(1, 0, 1000, 1, 10, 10);
     spin = gtk_spin_button_new(adj, 1, 0);
     gtk_widget_show(spin);
     msg = gtk_message_dialog_get_message_area(GTK_MESSAGE_DIALOG(dialog));
@@ -4515,6 +4519,8 @@ ghb_backend_events(signal_user_data_t *ud)
         ghb_button_set_icon_name(GHB_BUTTON(widget), "hb-source");
         ghb_button_set_label(GHB_BUTTON(widget), _("Open Source"));
         gtk_widget_set_tooltip_text(widget, _("Choose Video Source"));
+        widget = ghb_builder_widget("sourcetoolmenubutton");
+        gtk_widget_set_sensitive(widget, true);
 
         hide_scan_progress(ud);
 

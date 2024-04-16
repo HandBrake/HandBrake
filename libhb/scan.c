@@ -1658,7 +1658,7 @@ static void LookForAudio(hb_scan_t *scan, hb_title_t * title, hb_buffer_t * b)
                     codec_name = "TrueHD";
                     break;
                 case AV_CODEC_ID_DTS:
-                    if (profile_name == NULL &&
+                    if ((profile_name == NULL || info.profile == AV_PROFILE_DTS) &&
                         audio->config.in.codec == HB_ACODEC_DCA_HD)
                         codec_name = "DTS-HD";
                     else
