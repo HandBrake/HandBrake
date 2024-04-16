@@ -14,7 +14,15 @@ Windows users, please make sure to install [Microsoft .NET Desktop Runtime versi
 
 #### General
 
+- Removed support for importing legacy plist based presets from much older versions of HandBrake.
+
+
 #### Video
+
+- Added support for the FFV1 preset, including a new preset "Preservation FFV1" under the Professional category 
+- Added support multi-pass with VP9
+- Added support for VP9 Tunes.
+
 
 #### Command line interface
 
@@ -28,31 +36,46 @@ Windows users, please make sure to install [Microsoft .NET Desktop Runtime versi
 
 - Updated libraries
   - libvpx 1.14.0 (VP8/VP9 video encoding)
+  - libopus 1.5.2 (Opus audio encoding)
+  - FFmpeg 7.0 (decoding and filters)
+  - x265 3.6 (H.265/HEVC video encoding)
+  - libdovi 3.3.0 (Dolby Vision dynamic range metadata)
+  - libjpeg-turbo 3.0.2 (preview image compression)
+  - HarfBuzz 8.3.1 (subtitles)
+  - libdav1d 1.4.1 (AV1 video decoding)
+  - SVT-AV1 2.0 (AV1 video encoding)
+  - AMF 1.4.33 (AMD VCN video encoding)
+  - oneVPL 2.10.1 (Intel QSV video encoding/decoding)
+  - libvpx 1.14.0 (VP8/VP9 video encoding)
+- Removed libraries
+  - libxml
+  
 
 ### Linux
+
+- Migrated the UI to GTK 4
+- Added support for resursive file scan
+- Added support for drag/drop/multi-file scanning. (Including subtitle files)
+- Added --clear-queue and --auto-start-queue flags to the linux ui app.
+- Update the "Open Source" button to make the folder/batch mode more discoverable. 
+- Refreshed app icons
+- Miscellaneous bug fixes and improvements
 
 ### Mac
 
 - Added new preference to pause encodes when switching to battery.
 - Added new preference to Clear completed jobs at launch option.
 - Reworked notification options to allow per encode or per queue control.
+- Miscellaneous bug fixes and improvements
 
 ### Windows
 
 - Requires Microsoft .NET Desktop Runtime 8.0.x
 - Added Invert Queue option to the Add to Queue Window (#5741)
+- Drag/Drop now supports resursive folder scan mode.
+- Miscellaneous bug fixes and improvements
 - Added new translations
   - Catalan (Català)
-
-
-
-## HandBrake 1.7.4
-
-### Windows
-
-- Fixed an issue where the "None" encoder should erroneously on the audio tab.
-- Fixed an issue where "When Done: Quit HandBrake" would cause an application freeze.
-- Fixed an issue where auto naming options would not update correctly when changing presets.
 
 
 ## HandBrake 1.7.3
