@@ -1,0 +1,30 @@
+From 96e15ee540a004219f0be74e8c2d045582b4b219 Mon Sep 17 00:00:00 2001
+From: Christopher Degawa <ccom@randomderp.com>
+Date: Fri, 16 Apr 2021 10:46:36 -0500
+Subject: [PATCH] src/motiondetect: Use ASCII mode for compability with FFmpeg
+
+Currently there isn't a way to set either ascii or binary format in FFmpeg
+and that causes an issue with FFmpeg on Windows it seems. It will be better
+to wait until the flag can be exposed through the API or wait until an ABI
+update to set the binary mode as the default
+
+https://github.com/georgmartius/vid.stab/issues/104
+
+Signed-off-by: Christopher Degawa <ccom@randomderp.com>
+---
+ src/motiondetect.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/motiondetect.c b/src/motiondetect.c
+index af96772..b95aaa5 100644
+--- a/src/motiondetect.c
++++ b/src/motiondetect.c
+@@ -108,7 +108,7 @@ int vsMotionDetectInit(VSMotionDetect* md, const VSMotionDetectConfig* conf, con
+   md->frameNum = 0;
+ 
+   if(md->serializationMode != ASCII_SERIALIZATION_MODE && md->serializationMode != BINARY_SERIALIZATION_MODE) {
+-    md->serializationMode = BINARY_SERIALIZATION_MODE;
++    md->serializationMode = ASCII_SERIALIZATION_MODE;
+   }
+ 
+   // TODO: get rid of shakiness parameter in the long run

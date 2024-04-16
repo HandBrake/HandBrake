@@ -48,6 +48,7 @@ ifeq (1,$(FEATURE.x265))
     MODULES += contrib/x265_12bit
 endif
 
+MODULES += contrib/vidstab
 MODULES += contrib/libdav1d
 MODULES += contrib/svt-av1
 MODULES += contrib/zimg

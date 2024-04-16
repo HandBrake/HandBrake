@@ -1,0 +1,48 @@
+$(eval $(call import.MODULE.defs,VIDSTAB,vidstab,$(__deps__)))
+$(eval $(call import.CONTRIB.defs,VIDSTAB))
+
+VIDSTAB.FETCH.url     = https://github.com/georgmartius/vid.stab/archive/refs/tags/v1.1.1.tar.gz
+VIDSTAB.FETCH.sha256  = 9001b6df73933555e56deac19a0f225aae152abbc0e97dc70034814a1943f3d4
+VIDSTAB.FETCH.basename  = vid.stab-1.1.1.tar.gz
+VIDSTAB.EXTRACT.tarbase = vid.stab-1.1.1
+
+VIDSTAB.build_dir             = build
+VIDSTAB.CONFIGURE.exe         = cmake
+VIDSTAB.CONFIGURE.args.prefix = -DCMAKE_INSTALL_PREFIX="$(VIDSTAB.CONFIGURE.prefix)" -DCMAKE_INSTALL_LIBDIR=lib
+VIDSTAB.CONFIGURE.deps        =
+VIDSTAB.CONFIGURE.static      =
+VIDSTAB.CONFIGURE.shared      = -DBUILD_SHARED_LIBS=OFF
+VIDSTAB.CONFIGURE.extra       = -DUNIX=on
+
+ifeq ($(GCC.O),$(filter $(GCC.O),size size-aggressive))
+    VIDSTAB.CONFIGURE.extra += -DCMAKE_BUILD_TYPE=MinSizeRel
+else
+    ifneq (none,$(VIDSTAB.GCC.g))
+        VIDSTAB.CONFIGURE.extra += -DCMAKE_BUILD_TYPE=Debug
+    else
+        VIDSTAB.CONFIGURE.extra += -DCMAKE_BUILD_TYPE=Release
+    endif
+endif
+
+ifeq (1,$(HOST.cross))
+    ifeq (mingw,$(HOST.system))
+	    VIDSTAB.CONFIGURE.extra += -DWIN32=ON -DMINGW=ON
+        VIDSTAB.CONFIGURE.extra += -DCMAKE_SYSTEM_NAME=Windows
+        VIDSTAB.CONFIGURE.extra += -DCMAKE_C_COMPILER=$(VIDSTAB.GCC.gcc)
+        VIDSTAB.CONFIGURE.extra += -DCMAKE_C_FLAGS="-static-libgcc -static-libstdc++ -static"
+        VIDSTAB.CONFIGURE.extra += -DCMAKE_SHARED_LIBRARY_LINK_C_FLAGS="-static-libgcc -static-libstdc++ -static"
+        VIDSTAB.CONFIGURE.extra += -DCMAKE_CXX_COMPILER=$(VIDSTAB.GCC.gxx)
+        VIDSTAB.CONFIGURE.extra += -DCMAKE_CXX_FLAGS="-static-libgcc -static-libstdc++ -static"
+        VIDSTAB.CONFIGURE.args.host  = -DCMAKE_HOST_SYSTEM="$(VIDSTAB.CONFIGURE.host)"
+    else ifeq ($(HOST.system),darwin)
+        VIDSTAB.CONFIGURE.args.host  = -DCMAKE_HOST_SYSTEM="$(VIDSTAB.CONFIGURE.host)"
+    else
+        VIDSTAB.CONFIGURE.args.host  = -DCMAKE_SYSTEM_NAME="$(VIDSTAB.CONFIGURE.host)"
+    endif
+    VIDSTAB.CONFIGURE.args.build = -DCMAKE_HOST_SYSTEM="$(VIDSTAB.CONFIGURE.build)"
+else
+    VIDSTAB.CONFIGURE.args.host  = -DCMAKE_HOST_SYSTEM="$(VIDSTAB.CONFIGURE.host)"
+endif
+
+## find CMakeLists.txt
+VIDSTAB.CONFIGURE.extra += "$(call fn.ABSOLUTE,$(VIDSTAB.EXTRACT.dir/))"

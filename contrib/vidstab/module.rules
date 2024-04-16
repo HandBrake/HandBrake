@@ -1,0 +1,2 @@
+$(eval $(call import.MODULE.rules,VIDSTAB))
+$(eval $(call import.CONTRIB.rules,VIDSTAB))

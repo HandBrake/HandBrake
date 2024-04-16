@@ -14,7 +14,7 @@ TEST.GCC.L = $(CONTRIB.build/)lib
 TEST.libs = $(LIBHB.a)
 
 TEST.GCC.l = \
-        ass avformat avfilter avcodec avutil swresample mp3lame dvdnav \
+        ass avformat avfilter avcodec avutil swresample vidstab mp3lame dvdnav \
         dvdread fribidi swscale vpx theoraenc theoradec vorbis vorbisenc ogg \
         x264 bluray freetype bz2 z jansson harfbuzz opus speex lzma dav1d \
         turbojpeg zimg SvtAv1Enc
@@ -65,7 +65,7 @@ ifeq ($(HOST.system),darwin)
     TEST.GCC.f += IOKit CoreServices CoreText CoreGraphics AudioToolbox VideoToolbox CoreMedia CoreVideo Foundation DiskArbitration Metal
     TEST.GCC.l += iconv
 else ifeq ($(HOST.system),linux)
-    TEST.GCC.l += pthread dl m
+    TEST.GCC.l += pthread dl m gomp
 ifeq (1, $(FEATURE.numa))
     TEST.GCC.l += numa
 endif
