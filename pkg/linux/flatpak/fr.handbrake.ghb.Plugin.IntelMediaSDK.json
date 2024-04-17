@@ -3,7 +3,7 @@
     "branch": "1",
     "runtime": "fr.handbrake.ghb",
     "runtime-version": "development",
-    "sdk": "org.gnome.Sdk//45",
+    "sdk": "org.gnome.Sdk//46",
     "build-extension": true,
     "separate-locales": false,
     "appstream-compose": false,
@@ -139,8 +139,8 @@
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://github.com/oneapi-src/oneVPL-intel-gpu/archive/refs/tags/intel-onevpl-23.2.4.tar.gz",
-                    "sha256": "77a768645c323dfd3e395e6e7e1aff886a7d3af75fb9f38ee9e7014d11e6356f"
+                    "url": "https://github.com/intel/vpl-gpu-rt/archive/refs/tags/intel-onevpl-23.4.3.tar.gz",
+                    "sha256": "d4d54637bae1e00b977bb9a865c1787b2c88c4102099d73daa18f82598d94b77"
                 },
                 {
                     "type": "file",
