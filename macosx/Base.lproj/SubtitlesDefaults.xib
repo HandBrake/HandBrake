@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="17506" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="32700.99.1234" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="17506"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="22689"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -19,12 +19,12 @@
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
             <rect key="contentRect" x="283" y="305" width="427" height="422"/>
             <rect key="screenRect" x="0.0" y="0.0" width="1920" height="1055"/>
-            <view key="contentView" id="ZP2-Cp-K5w">
+            <view key="contentView" misplaced="YES" id="ZP2-Cp-K5w">
                 <rect key="frame" x="0.0" y="0.0" width="427" height="422"/>
                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                 <subviews>
                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="300" translatesAutoresizingMaskIntoConstraints="NO" id="fPg-3n-1TN">
-                        <rect key="frame" x="18" y="386" width="138" height="14"/>
+                        <rect key="frame" x="18" y="368" width="138" height="14"/>
                         <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="Track Selection Behavior:" id="GbM-vm-RC2">
                             <font key="font" metaFont="smallSystem"/>
                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -32,15 +32,15 @@
                         </textFieldCell>
                     </textField>
                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="300" translatesAutoresizingMaskIntoConstraints="NO" id="Jsz-Er-bsF">
-                        <rect key="frame" x="18" y="363" width="138" height="14"/>
+                        <rect key="frame" x="18" y="345" width="138" height="14"/>
                         <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="right" title="Languages:" id="mAT-Jp-SG1">
                             <font key="font" metaFont="smallSystem"/>
                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                     </textField>
-                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" ambiguous="YES" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="300" translatesAutoresizingMaskIntoConstraints="NO" id="Hqz-Lw-gAu">
-                        <rect key="frame" x="18" y="187" width="138" height="14"/>
+                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="300" translatesAutoresizingMaskIntoConstraints="NO" id="Hqz-Lw-gAu">
+                        <rect key="frame" x="18" y="185" width="138" height="14"/>
                         <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="Options:" id="NJl-q3-zXL">
                             <font key="font" metaFont="smallSystem"/>
                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -48,7 +48,7 @@
                         </textFieldCell>
                     </textField>
                     <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="oiD-QI-wly">
-                        <rect key="frame" x="158" y="381" width="253" height="22"/>
+                        <rect key="frame" x="158" y="363" width="253" height="22"/>
                         <string key="toolTip">Track Selection Behavior.
 
 None will not select any audio tracks by default.
@@ -72,8 +72,8 @@ All Matching Selected Languages adds all audio tracks matching each of the selec
                             <binding destination="-2" name="selectedIndex" keyPath="self.settings.trackSelectionBehavior" id="sKn-Mr-Hce"/>
                         </connections>
                     </popUpButton>
-                    <button toolTip="Add Closed Caption subtitles as a soft subtitle track (not burned-in)." ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="uF5-6E-EIe">
-                        <rect key="frame" x="161" y="186" width="246" height="16"/>
+                    <button toolTip="Add Closed Caption subtitles as a soft subtitle track (not burned-in)." translatesAutoresizingMaskIntoConstraints="NO" id="uF5-6E-EIe">
+                        <rect key="frame" x="161" y="184" width="246" height="16"/>
                         <buttonCell key="cell" type="check" title="Add Closed Captions when available" bezelStyle="regularSquare" imagePosition="left" controlSize="small" state="on" inset="2" id="66v-2g-DHn">
                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                             <font key="font" metaFont="smallSystem"/>
@@ -82,8 +82,8 @@ All Matching Selected Languages adds all audio tracks matching each of the selec
                             <binding destination="-2" name="value" keyPath="self.settings.addCC" id="JNz-WE-LD3"/>
                         </connections>
                     </button>
-                    <button toolTip="Foreign Audio Search scans the source for short sequences of foreign or alien audio that are displayed by default." ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="OOC-GZ-OFA">
-                        <rect key="frame" x="161" y="166" width="246" height="16"/>
+                    <button toolTip="Foreign Audio Search scans the source for short sequences of foreign or alien audio that are displayed by default." verticalHuggingPriority="751" translatesAutoresizingMaskIntoConstraints="NO" id="OOC-GZ-OFA">
+                        <rect key="frame" x="161" y="164" width="246" height="16"/>
                         <buttonCell key="cell" type="check" title="Add Foreign Audio Search" bezelStyle="regularSquare" imagePosition="left" controlSize="small" state="on" inset="2" id="vNY-OC-hTJ">
                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                             <font key="font" metaFont="smallSystem"/>
@@ -93,13 +93,13 @@ All Matching Selected Languages adds all audio tracks matching each of the selec
                         </connections>
                     </button>
                     <scrollView toolTip="Select the languages to use with the Track Selection Behavior setting." wantsLayer="YES" autohidesScrollers="YES" horizontalLineScroll="16" horizontalPageScroll="10" verticalLineScroll="16" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="aTC-39-h6S">
-                        <rect key="frame" x="162" y="224" width="245" height="153"/>
+                        <rect key="frame" x="162" y="219" width="245" height="140"/>
                         <clipView key="contentView" id="TdE-Sh-NcS">
-                            <rect key="frame" x="1" y="1" width="243" height="151"/>
+                            <rect key="frame" x="1" y="1" width="243" height="138"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
                                 <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" tableStyle="plain" columnReordering="NO" columnResizing="NO" autosaveColumns="NO" rowHeight="14" viewBased="YES" id="Of7-71-Ci6">
-                                    <rect key="frame" x="0.0" y="0.0" width="243" height="151"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="243" height="138"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <size key="intercellSpacing" width="3" height="2"/>
                                     <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -117,7 +117,7 @@ All Matching Selected Languages adds all audio tracks matching each of the selec
                                             <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                             <prototypeCellViews>
                                                 <tableCellView id="HzO-IC-pgS">
-                                                    <rect key="frame" x="1" y="1" width="211" height="17"/>
+                                                    <rect key="frame" x="1" y="1" width="202" height="17"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                     <subviews>
                                                         <button translatesAutoresizingMaskIntoConstraints="NO" id="8lG-Fl-ywI">
@@ -132,10 +132,7 @@ All Matching Selected Languages adds all audio tracks matching each of the selec
                                                             </connections>
                                                         </button>
                                                         <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="5jc-Ll-JCQ">
-                                                            <rect key="frame" x="15" y="2" width="221" height="14"/>
-                                                            <constraints>
-                                                                <constraint firstAttribute="width" constant="217" id="DZU-aZ-riC"/>
-                                                            </constraints>
+                                                            <rect key="frame" x="17" y="2" width="84" height="14"/>
                                                             <textFieldCell key="cell" controlSize="small" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" title="Table View Cell" id="qVQ-fS-w1S">
                                                                 <font key="font" metaFont="smallSystem"/>
                                                                 <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -150,7 +147,7 @@ All Matching Selected Languages adds all audio tracks matching each of the selec
                                                         <constraint firstItem="8lG-Fl-ywI" firstAttribute="leading" secondItem="HzO-IC-pgS" secondAttribute="leading" constant="3" id="1cF-fd-WLC"/>
                                                         <constraint firstItem="5jc-Ll-JCQ" firstAttribute="centerY" secondItem="HzO-IC-pgS" secondAttribute="centerY" id="Jcd-6h-low"/>
                                                         <constraint firstItem="8lG-Fl-ywI" firstAttribute="top" secondItem="HzO-IC-pgS" secondAttribute="top" constant="1" id="KaA-tF-dl6"/>
-                                                        <constraint firstItem="5jc-Ll-JCQ" firstAttribute="leading" secondItem="8lG-Fl-ywI" secondAttribute="trailing" constant="2" id="L0w-Xr-orb"/>
+                                                        <constraint firstItem="5jc-Ll-JCQ" firstAttribute="leading" secondItem="8lG-Fl-ywI" secondAttribute="trailing" constant="4" id="L0w-Xr-orb"/>
                                                     </constraints>
                                                     <connections>
                                                         <outlet property="textField" destination="5jc-Ll-JCQ" id="vUb-nB-17f"/>
@@ -183,8 +180,8 @@ All Matching Selected Languages adds all audio tracks matching each of the selec
                         </scroller>
                         <accessibility description="Subtitles Track Languages"/>
                     </scrollView>
-                    <popUpButton verticalHuggingPriority="750" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Lsa-kB-2BP">
-                        <rect key="frame" x="158" y="131" width="253" height="22"/>
+                    <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Lsa-kB-2BP">
+                        <rect key="frame" x="158" y="130" width="253" height="22"/>
                         <string key="toolTip">Burn-In Behavior. Select which subtitles to make permanent by overlaying them onto the video track.
 
 Only one subtitles track can be burned in.</string>
@@ -205,15 +202,15 @@ Only one subtitles track can be burned in.</string>
                             <binding destination="-2" name="selectedIndex" keyPath="self.settings.burnInBehavior" id="VvM-Ka-msm"/>
                         </connections>
                     </popUpButton>
-                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" ambiguous="YES" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="300" translatesAutoresizingMaskIntoConstraints="NO" id="qAf-lQ-GN4">
-                        <rect key="frame" x="18" y="134" width="138" height="14"/>
+                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="300" translatesAutoresizingMaskIntoConstraints="NO" id="qAf-lQ-GN4">
+                        <rect key="frame" x="18" y="135" width="138" height="14"/>
                         <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="Burn-In Behavior:" id="640-NB-Uby">
                             <font key="font" metaFont="smallSystem"/>
                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                     </textField>
-                    <button ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ceZ-On-t5S">
+                    <button verticalHuggingPriority="752" translatesAutoresizingMaskIntoConstraints="NO" id="ceZ-On-t5S">
                         <rect key="frame" x="161" y="111" width="246" height="16"/>
                         <string key="toolTip">Burn in the first selected DVD subtitle track. All other DVD subtitle tracks will be discarded. Use this option if your playback software or device does not support DVD subtitles.
 
@@ -226,7 +223,7 @@ Only one subtitles track can be burned in.</string>
                             <binding destination="-2" name="value" keyPath="self.settings.burnInDVDSubtitles" id="JoG-RB-CFT"/>
                         </connections>
                     </button>
-                    <button ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Px8-G6-NVX">
+                    <button verticalHuggingPriority="752" translatesAutoresizingMaskIntoConstraints="NO" id="Px8-G6-NVX">
                         <rect key="frame" x="161" y="91" width="246" height="16"/>
                         <string key="toolTip">Burn in the first selected Blu-ray subtitle track. All other Blu-ray subtitle tracks will be discarded. Use this option if your playback software or device does not support Blu-ray subtitles.
 
@@ -289,6 +286,7 @@ Gw
                     <constraint firstItem="nfu-VW-cTe" firstAttribute="leading" secondItem="ZP2-Cp-K5w" secondAttribute="leading" constant="20" id="4u3-4b-4ps"/>
                     <constraint firstAttribute="trailing" secondItem="Lsa-kB-2BP" secondAttribute="trailing" constant="20" id="7cO-6T-zv0"/>
                     <constraint firstItem="Px8-G6-NVX" firstAttribute="leading" secondItem="Lsa-kB-2BP" secondAttribute="leading" id="8S5-Gb-lK8"/>
+                    <constraint firstItem="uF5-6E-EIe" firstAttribute="firstBaseline" secondItem="Hqz-Lw-gAu" secondAttribute="firstBaseline" id="BEU-Fh-9qW"/>
                     <constraint firstAttribute="bottom" secondItem="nfu-VW-cTe" secondAttribute="bottom" constant="18" id="D3B-WT-db0"/>
                     <constraint firstAttribute="trailing" secondItem="oiD-QI-wly" secondAttribute="trailing" constant="20" id="DCH-xM-c7M"/>
                     <constraint firstItem="MlS-tB-pEv" firstAttribute="top" secondItem="Px8-G6-NVX" secondAttribute="bottom" constant="8" id="DuC-dI-6lg"/>
@@ -301,6 +299,7 @@ Gw
                     <constraint firstAttribute="trailing" secondItem="Px8-G6-NVX" secondAttribute="trailing" constant="20" id="T4u-wo-tvG"/>
                     <constraint firstItem="aTC-39-h6S" firstAttribute="top" secondItem="oiD-QI-wly" secondAttribute="bottom" constant="8" id="TFb-ud-8Gn"/>
                     <constraint firstItem="uF5-6E-EIe" firstAttribute="leading" secondItem="Hqz-Lw-gAu" secondAttribute="trailing" constant="8" id="Tc8-wG-e4Q"/>
+                    <constraint firstItem="AAX-DK-L3G" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="nfu-VW-cTe" secondAttribute="trailing" constant="12" symbolic="YES" id="U3Y-Zd-acm"/>
                     <constraint firstItem="QdJ-64-GgC" firstAttribute="width" secondItem="AAX-DK-L3G" secondAttribute="width" id="V7Q-Z0-mdN"/>
                     <constraint firstItem="Jsz-Er-bsF" firstAttribute="top" secondItem="aTC-39-h6S" secondAttribute="top" id="Vjm-7V-1cC"/>
                     <constraint firstItem="OOC-GZ-OFA" firstAttribute="leading" secondItem="uF5-6E-EIe" secondAttribute="leading" id="WKZ-HH-AyA"/>
@@ -330,13 +329,14 @@ Gw
                     <constraint firstItem="qAf-lQ-GN4" firstAttribute="width" secondItem="fPg-3n-1TN" secondAttribute="width" id="zyM-7a-twX"/>
                 </constraints>
             </view>
-            <point key="canvasLocation" x="50.5" y="139"/>
+            <point key="canvasLocation" x="74.5" y="97.5"/>
         </window>
         <arrayController objectClassName="HBLang" id="ZBe-aP-wvq" userLabel="Table Controller" customClass="HBLanguageArrayController">
             <declaredKeys>
                 <string>language</string>
                 <string>isSelected</string>
             </declaredKeys>
+            <classReference key="objectClass" className="HBLang"/>
             <connections>
                 <binding destination="-2" name="contentArray" keyPath="languagesList.languagesArray" id="vKV-y3-Zbg"/>
                 <outlet property="tableView" destination="Of7-71-Ci6" id="QIg-ml-iKO"/>
