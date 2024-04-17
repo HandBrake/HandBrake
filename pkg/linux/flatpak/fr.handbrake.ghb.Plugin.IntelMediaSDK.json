@@ -13,8 +13,8 @@
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://github.com/intel/gmmlib/archive/refs/tags/intel-gmmlib-22.3.12.tar.gz",
-                    "sha256": "14ec859936aea696a65e6b9488e95a0ac26b15126ef65b20956ef219004dd9a6"
+                    "url": "https://github.com/intel/gmmlib/archive/refs/tags/intel-gmmlib-22.3.19.tar.gz",
+                    "sha256": "ea9c418b0fd84a982850f230cb2d783dfe2e1f9923065f54b2fcaad1e9b33417"
                 }
             ],
             "buildsystem": "cmake-ninja",
@@ -38,8 +38,8 @@
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://github.com/intel/libva/archive/refs/tags/2.19.0.tar.gz",
-                    "sha256": "8cb5e2a9287a76b12c0b6cb96f4f27a0321bbe693df43cd950e5d4542db7f227"
+                    "url": "https://github.com/intel/libva/archive/refs/tags/2.21.0.tar.gz",
+                    "sha256": "f7c3fffef3f04eb146e036dad2587d852bfb70e4926d014bf437244915ef7425"
                 }
             ],
             "no-autogen": false,
@@ -54,8 +54,8 @@
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://github.com/intel/libva-utils/archive/refs/tags/2.19.0.tar.gz",
-                    "sha256": "4135992ab534d0cfd71a93c28e1a22f79c0003cf8d157ffd4621e5e482191b4f"
+                    "url": "https://github.com/intel/libva-utils/archive/refs/tags/2.21.0.tar.gz",
+                    "sha256": "15ca12bd11c7001c04af5079512754fea6ba8d79151b9f07908c99b27622714e"
                 }
             ],
             "no-autogen": false,
@@ -70,8 +70,8 @@
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://github.com/intel/media-driver/archive/refs/tags/intel-media-23.2.4.tar.gz",
-                    "sha256": "dfcf2facc4f8bf3df6b147222786032be195874adacc2f4071fc6c91a0abdf0a"
+                    "url": "https://github.com/intel/media-driver/archive/refs/tags/intel-media-23.4.3.tar.gz",
+                    "sha256": "83b95eefe86c9d58d92c2a77793541ea3cb643dff419599ffa87899fd58738cd"
                 }
             ],
             "buildsystem": "cmake-ninja",
