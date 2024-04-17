@@ -196,7 +196,10 @@
         [self reloadPreviews];
     }
 
-    [self showHud:self.currentHUD];
+    if (self.generator)
+    {
+        [self showHud:self.currentHUD];
+    }
 }
 
 - (void)windowWillClose:(NSNotification *)aNotification
