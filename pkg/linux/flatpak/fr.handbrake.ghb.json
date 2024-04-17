@@ -39,14 +39,15 @@
                 {
                     "type": "git",
                     "url": "https://github.com/numactl/numactl.git",
-                    "tag": "v2.0.16",
-                    "commit": "10285f1a1bad49306839b2c463936460b604e3ea",
+                    "tag": "v2.0.18",
+                    "commit": "3871b1c42fc71bceadafd745d2eff5dddfc2d67e",
                     "x-checker-data": {
                         "type": "git",
                         "tag-pattern": "^v([\\d.]+)$"
                     }
                 }
             ],
+            "rm-configure": true,
             "cleanup": [
                 "/include",
                 "/lib/pkgconfig",
