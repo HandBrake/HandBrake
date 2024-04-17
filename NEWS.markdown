@@ -21,8 +21,8 @@ Windows users, please make sure to install [Microsoft .NET Desktop Runtime versi
 #### Video
 
 - Added support for the FFV1 preset, including a new preset "Preservation FFV1" under the Professional category 
-- Added support multi-pass CQ with VP9
-- Added support for VP9 Tunes
+- Added support for multi-pass CQ with VP9
+- Added support for VP9 tunes
 - Added Dolby Vision dynamic metadata pass through for SVT-AV1
 - Improved Decomb speed by removing unneeded frame copies
 - Improved Framerate Shaper metrics for high depth frames
@@ -31,7 +31,9 @@ Windows users, please make sure to install [Microsoft .NET Desktop Runtime versi
 
 #### Audio
 
-- Fixed incorrect channel layout when encoding a 6.1 track with Opus
+- Added TrueHD encoder
+- Added 88.2/96/176.4/192 kHz sample rates for TrueHD and FLAC encoders
+- Fixed incorrect channel layout when encoding a 6.1 track to Opus
 
 #### Subtitles
 
@@ -50,7 +52,7 @@ Windows users, please make sure to install [Microsoft .NET Desktop Runtime versi
   - libopus 1.5.2 (Opus audio encoding)
   - FFmpeg 7.0 (decoding and filters)
   - x265 3.6 (H.265/HEVC video encoding)
-  - libdovi 3.3.0 (Dolby Vision dynamic range metadata)
+  - libdovi 3.3.0 (Dolby Vision dynamic metadata)
   - libjpeg-turbo 3.0.2 (preview image compression)
   - HarfBuzz 8.3.1 (subtitles)
   - libdav1d 1.4.1 (AV1 video decoding)
@@ -61,7 +63,6 @@ Windows users, please make sure to install [Microsoft .NET Desktop Runtime versi
 - Removed libraries
   - libxml2
   
-
 ### Linux
 
 - Migrated the UI to GTK 4
