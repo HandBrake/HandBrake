@@ -14,23 +14,34 @@ Windows users, please make sure to install [Microsoft .NET Desktop Runtime versi
 
 #### General
 
-- Removed support for importing legacy plist based presets from much older versions of HandBrake.
-
+- Allowed muxing VP9 and FLAC in the MP4 container
+- Removed timestamp jitters when using a constant NTSC frame rate in the MP4 container
+- Removed support for importing legacy plist based presets from much older versions of HandBrake
 
 #### Video
 
 - Added support for the FFV1 preset, including a new preset "Preservation FFV1" under the Professional category 
-- Added support multi-pass with VP9
-- Added support for VP9 Tunes.
-
+- Added support multi-pass CQ with VP9
+- Added support for VP9 Tunes
+- Added Dolby Vision dynamic metadata pass through for SVT-AV1
+- Improved Decomb speed by removing unneeded frame copies
+- Improved Framerate Shaper metrics for high depth frames
 
 #### Command line interface
 
 #### Audio
 
+- Fixed incorrect channel layout when encoding a 6.1 track with Opus
+
 #### Subtitles
 
+- Fixed passthru of VobSub tracks that contains empty of fully transparent subtitles samples
+- Fixed an issue that prevented decoding VobSub tracks stored inside MP4
+- Fixed burn-in of SSA/ASS subtitles inside MKV that have duplicated Read Orders
+
 #### Build system
+
+- Reviewed and improved compiler optimization options for the third-party libraries
 
 #### Third-party libraries
 
@@ -48,7 +59,7 @@ Windows users, please make sure to install [Microsoft .NET Desktop Runtime versi
   - oneVPL 2.10.1 (Intel QSV video encoding/decoding)
   - libvpx 1.14.0 (VP8/VP9 video encoding)
 - Removed libraries
-  - libxml
+  - libxml2
   
 
 ### Linux
@@ -63,9 +74,17 @@ Windows users, please make sure to install [Microsoft .NET Desktop Runtime versi
 
 ### Mac
 
-- Added new preference to pause encodes when switching to battery.
-- Added new preference to Clear completed jobs at launch option.
-- Reworked notification options to allow per encode or per queue control.
+- Added Dolby Vision and HDR10+ dynamic metadata pass through for VideoToolbox H.265 10-bit
+- Added Metal accelerated Comb Detect and Framerate Shaper filters
+- Added ability to drag and drop SRT and ASS subtitles files onto the main window
+- Added support for excluding file extensions when opening files in batch mode
+  - Default exclusions are common image, subtitles, and text file extensions; edit list in Preferences > Advanced
+- Added new preference to pause encodes when switching to battery
+- Added new preference to clear completed jobs at launch option
+- Reworked notification options to allow per encode or per queue control
+- Reworked toolbar to follow macOS UI style
+- Improved performance of the Activity Log window
+- Improved UI performances by avoiding uneeded window resizes and slow AppKit controls
 - Miscellaneous bug fixes and improvements
 
 ### Windows
