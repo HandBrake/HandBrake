@@ -812,17 +812,20 @@ static void add_audio_for_lang(hb_value_array_t *list, const hb_dict_t *preset,
             }
 
             hb_audio_config_t * aconfig;
-            hb_audio_config_t * linked_aconfig;
 
             aconfig = hb_list_audio_config_item(title->list_audio, track);
-            linked_aconfig = best_linked_audio(title->list_audio, aconfig,
-                                               out_codec, copy_mask,
-                                               mix_channels);
-            if (aconfig != linked_aconfig)
+            if (behavior != 2)
             {
-                hb_log("Substituting linked audio track %d for track %d\n",
-                        linked_aconfig->index, aconfig->index);
-                aconfig = linked_aconfig;
+                hb_audio_config_t * linked_aconfig;
+                linked_aconfig = best_linked_audio(title->list_audio, aconfig,
+                                                   out_codec, copy_mask,
+                                                   mix_channels);
+                if (aconfig != linked_aconfig)
+                {
+                    hb_log("Substituting linked audio track %d for track %d\n",
+                            linked_aconfig->index, aconfig->index);
+                    aconfig = linked_aconfig;
+                }
             }
 
             // Check if this source track has already been added using these
