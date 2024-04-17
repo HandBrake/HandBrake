@@ -58,7 +58,6 @@ FFMPEG.CONFIGURE.extra = \
     --enable-encoder=libvpx_vp8 \
     --enable-encoder=libvpx_vp9 \
     --enable-encoder=ffv1 \
-    --disable-decoder=*_crystalhd \
     --enable-demuxer=av1 \
     --enable-demuxer=obu \
     --enable-decoder=av1 \
