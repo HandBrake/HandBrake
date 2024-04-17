@@ -1,6 +1,9 @@
 $(eval $(call import.MODULE.defs,TEST,test,LIBHB))
 $(eval $(call import.GCC,TEST))
 
+TEST.PKGCONFIG.env = PKG_CONFIG_PATH="$(call fn.ABSOLUTE,$(CONTRIB.build/))lib/pkgconfig:$(PKG_CONFIG_PATH)"
+TEST.PKGCONFIG.exe = $(TEST.PKGCONFIG.env) $(PKGCONFIG.exe)
+
 TEST.src/   = $(SRC/)test/
 TEST.build/ = $(BUILD/)test/
 
@@ -13,28 +16,17 @@ TEST.GCC.L = $(CONTRIB.build/)lib
 
 TEST.libs = $(LIBHB.a)
 
-TEST.GCC.l = \
-        ass avformat avfilter avcodec avutil swresample mp3lame dvdnav \
-        dvdread fribidi swscale vpx theoraenc theoradec vorbis vorbisenc ogg \
-        x264 bluray freetype bz2 z jansson harfbuzz opus speex lzma dav1d \
-        turbojpeg zimg SvtAv1Enc
+TEST.pkgconfig_libs = libass libavformat libavfilter libavcodec libavutil libswresample dvdnav \
+	dvdread libswscale theoraenc theoradec vorbis vorbisenc ogg x264 libbluray \
+	jansson libturbojpeg SvtAv1Enc
 
-ifeq (,$(filter $(HOST.system),darwin cygwin mingw))
-    TEST.GCC.l += fontconfig
-endif
-
-ifeq (1,$(FEATURE.qsv))
-    TEST.GCC.l += vpl
-ifneq (,$(filter $(HOST.system),linux freebsd))
-    TEST.GCC.l += va va-drm drm
-endif
-endif
+TEST.pkgconfig_libs += $(foreach m,$(MODULES.NAMES),$($m.OSL.libs))
 
 ifeq (1,$(FEATURE.flatpak))
-    TEST.GCC.l += glib-2.0
+    TEST.pkgconfig_libs += glib-2.0
 endif
 
-TEST.GCC.l += $(foreach m,$(MODULES.NAMES),$($m.OSL.libs))
+TEST.GCC.pkgconfig = $(shell $(TEST.PKGCONFIG.exe) --libs $(TEST.pkgconfig_libs))
 
 TEST.install.exe = $(DESTDIR)$(PREFIX/)bin/$(notdir $(TEST.exe))
 ifeq (1,$(FEATURE.flatpak))
