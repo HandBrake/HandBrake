@@ -140,7 +140,6 @@ else ifeq (1-mingw,$(HOST.cross)-$(HOST.system))
         --pkg-config=$(PKGCONFIG.exe) \
         --pkg-config-flags="--static"
     FFMPEG.GCC.args.extra += -fno-common
-    FFMPEG.GCC.args.extra-ldflags = -static-libgcc -static-libstdc++ -static
 else ifeq (darwin,$(HOST.system))
     FFMPEG.GCC.args.extra-ldflags = -lc++
 else

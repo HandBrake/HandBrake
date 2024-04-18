@@ -9,9 +9,6 @@ strip = 'aarch64-w64-mingw32-strip'
 windres = 'aarch64-w64-mingw32-windres'
 dlltool = 'aarch64-w64-mingw32-dlltool'
 
-[builtin_options]
-c_link_args = ['-static-libgcc']
-
 [properties]
 needs_exe_wrapper = true
 
