@@ -40,11 +40,11 @@ struct hb_filter_private_s
 };
 
 static int pad_vt_init(hb_filter_object_t   *filter,
-                           hb_filter_init_t *init);
+                       hb_filter_init_t *init);
 
 static int pad_vt_work(hb_filter_object_t *filter,
-                           hb_buffer_t **buf_in,
-                           hb_buffer_t **buf_out);
+                       hb_buffer_t **buf_in,
+                       hb_buffer_t **buf_out);
 
 static void pad_vt_close(hb_filter_object_t *filter);
 
@@ -67,7 +67,7 @@ hb_filter_object_t hb_filter_pad_vt =
 };
 
 static int pad_vt_init(hb_filter_object_t *filter,
-                        hb_filter_init_t   *init)
+                       hb_filter_init_t   *init)
 {
     filter->private_data = calloc(sizeof(struct hb_filter_private_s), 1);
     if (filter->private_data == NULL)
@@ -75,7 +75,7 @@ static int pad_vt_init(hb_filter_object_t *filter,
         hb_error("pad_vt: calloc failed");
         return -1;
     }
-    hb_filter_private_t * pv = filter->private_data;
+    hb_filter_private_t *pv = filter->private_data;
     pv->input = *init;
     pv->desc = av_pix_fmt_desc_get(init->pix_fmt);
 
@@ -171,6 +171,7 @@ static int pad_vt_init(hb_filter_object_t *filter,
     pv->mtl = hb_metal_context_init(hb_pad_vt_metallib_data,
                                     hb_pad_vt_metallib_len,
                                     "pad",
+                                    NULL,
                                     sizeof(struct mtl_pad_params),
                                     width, height,
                                     init->pix_fmt, init->color_range);
@@ -187,7 +188,7 @@ static int pad_vt_init(hb_filter_object_t *filter,
     return 0;
 }
 
-static void pad_vt_close(hb_filter_object_t * filter)
+static void pad_vt_close(hb_filter_object_t *filter)
 {
     hb_filter_private_t *pv = filter->private_data;
 

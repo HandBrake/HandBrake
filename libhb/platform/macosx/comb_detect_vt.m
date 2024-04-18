@@ -18,23 +18,7 @@ extern unsigned int hb_comb_detect_vt_metallib_len;
 
 struct mtl_comb_detect_params
 {
-    int spatial_metric;
-
-    float motion_threshold;
-    float spatial_threshold;
-    int   block_threshold;
-    int   block_width;
-    int   block_height;
-
-    float gamma_motion_threshold;
-    float gamma_spatial_threshold;
-    float gamma_spatial_threshold6;
-    float spatial_threshold_squared;
-    float spatial_threshold6;
-    float comb32detect_min;
-    float comb32detect_max;
-
-    bool  force_exaustive_check;
+    bool force_exaustive_check;
 };
 
 #define MODE_GAMMA        1 // Scale gamma when decombing
@@ -144,7 +128,7 @@ static int comb_detect_vt_init(hb_filter_object_t *filter,
 
     hb_buffer_list_clear(&pv->out_list);
 
-    pv->desc   = av_pix_fmt_desc_get(init->pix_fmt);
+    pv->desc = av_pix_fmt_desc_get(init->pix_fmt);
 
     pv->frames = 0;
     pv->force_exaustive_check = 1;
@@ -198,9 +182,26 @@ static int comb_detect_vt_init(hb_filter_object_t *filter,
     if (pv->block_width < 8)   {pv->block_width  = 8; }
     if (pv->block_height < 8)  {pv->block_height = 8; }
 
+    MTLFunctionConstantValues *constant_values = [MTLFunctionConstantValues new];
+    [constant_values setConstantValue:&pv->spatial_metric    type:MTLDataTypeInt withName:@"spatial_metric"];
+    [constant_values setConstantValue:&pv->motion_threshold  type:MTLDataTypeFloat withName:@"motion_threshold"];
+    [constant_values setConstantValue:&pv->spatial_threshold type:MTLDataTypeFloat withName:@"spatial_threshold"];
+    [constant_values setConstantValue:&pv->block_threshold   type:MTLDataTypeInt withName:@"block_threshold"];
+    [constant_values setConstantValue:&pv->block_width       type:MTLDataTypeInt withName:@"block_width"];
+    [constant_values setConstantValue:&pv->block_height      type:MTLDataTypeInt withName:@"block_height"];
+
+    [constant_values setConstantValue:&pv->gamma_motion_threshold    type:MTLDataTypeFloat withName:@"gamma_motion_threshold"];
+    [constant_values setConstantValue:&pv->gamma_spatial_threshold   type:MTLDataTypeFloat withName:@"gamma_spatial_threshold"];
+    [constant_values setConstantValue:&pv->gamma_spatial_threshold6  type:MTLDataTypeFloat withName:@"gamma_spatial_threshold6"];
+    [constant_values setConstantValue:&pv->spatial_threshold_squared type:MTLDataTypeFloat withName:@"spatial_threshold_squared"];
+    [constant_values setConstantValue:&pv->spatial_threshold6 type:MTLDataTypeFloat withName:@"spatial_threshold6"];
+    [constant_values setConstantValue:&pv->comb32detect_min   type:MTLDataTypeFloat withName:@"comb32detect_min"];
+    [constant_values setConstantValue:&pv->comb32detect_max   type:MTLDataTypeFloat withName:@"comb32detect_max"];
+
     pv->mtl = hb_metal_context_init(hb_comb_detect_vt_metallib_data,
                                     hb_comb_detect_vt_metallib_len,
                                     pv->mode & MODE_GAMMA ? "comb_detect_gamma" : "comb_detect",
+                                    constant_values,
                                     sizeof(struct mtl_comb_detect_params),
                                     init->geometry.width, init->geometry.height,
                                     init->pix_fmt, init->color_range);
@@ -212,32 +213,19 @@ static int comb_detect_vt_init(hb_filter_object_t *filter,
 
     struct mtl_comb_detect_params *params = (struct mtl_comb_detect_params *)pv->mtl->params_buffer.contents;
     *params = (struct mtl_comb_detect_params) {
-        .spatial_metric     = pv->spatial_metric,
-        .motion_threshold   = pv->motion_threshold,
-        .spatial_threshold  = pv->spatial_threshold,
-        .block_threshold    = pv->block_threshold,
-        .block_width        = pv->block_width,
-        .block_height       = pv->block_height,
-        .gamma_motion_threshold    = pv->gamma_motion_threshold,
-        .gamma_spatial_threshold   = pv->gamma_spatial_threshold,
-        .gamma_spatial_threshold6  = pv->gamma_spatial_threshold6,
-        .spatial_threshold_squared = pv->spatial_threshold_squared,
-        .spatial_threshold6 = pv->spatial_threshold6,
-        .comb32detect_min   = pv->comb32detect_min,
-        .comb32detect_max   = pv->comb32detect_max,
         .force_exaustive_check = pv->force_exaustive_check
     };
 
     if (hb_metal_add_pipeline(pv->mtl, pv->filter_mode == FILTER_ERODE_DILATE ? "filter_erode_dilate" : "filter_classic",
-                              pv->mtl->pipelines_count))
+                               constant_values, pv->mtl->pipelines_count))
     {
         return -1;
     }
-    if (hb_metal_add_pipeline(pv->mtl, "erode_mask", pv->mtl->pipelines_count))
+    if (hb_metal_add_pipeline(pv->mtl, "erode_mask", NULL, pv->mtl->pipelines_count))
     {
         return -1;
     }
-    if (hb_metal_add_pipeline(pv->mtl, "dilate_mask", pv->mtl->pipelines_count))
+    if (hb_metal_add_pipeline(pv->mtl, "dilate_mask", NULL, pv->mtl->pipelines_count))
     {
         return -1;
     }
@@ -257,14 +245,16 @@ static int comb_detect_vt_init(hb_filter_object_t *filter,
             check_combing_name = pv->mode & MODE_FILTER ? "check_filtered_combing_mask_quad" : "check_combing_mask_quad";
         }
     }
-    if (hb_metal_add_pipeline(pv->mtl,check_combing_name, pv->mtl->pipelines_count))
+    if (hb_metal_add_pipeline(pv->mtl,check_combing_name, constant_values, pv->mtl->pipelines_count))
     {
         return -1;
     }
-    if (hb_metal_add_pipeline(pv->mtl, "apply_mask", pv->mtl->pipelines_count))
+    if (hb_metal_add_pipeline(pv->mtl, "apply_mask", constant_values, pv->mtl->pipelines_count))
     {
         return -1;
     }
+
+    [constant_values release];
 
     // Allocate buffers to store the mask and the comb result
     MTLTextureDescriptor *descriptor = [[MTLTextureDescriptor alloc] init];
