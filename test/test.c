@@ -3564,7 +3564,7 @@ static int foreign_audio_scan(char **subtracks)
         int ii;
         for (ii = 0; ii < count; ii++)
         {
-            if (!strcasecmp(subtracks[0], "scan"))
+            if (!strcasecmp(subtracks[ii], "scan"))
             {
                 return 1;
             }
