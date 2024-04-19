@@ -165,7 +165,7 @@ static int      crop_threshold_frames    = 0;
 static char *   vrate                    = NULL;
 static float    vquality                 = HB_INVALID_VIDEO_QUALITY;
 static int      vbitrate                 = 0;
-static int      mux                      = HB_MUX_AV_MP4;
+static int      mux                      = HB_MUX_INVALID;
 static int      anamorphic_mode     = -1;
 static int      modulus             = 0;
 static int      par_height          = -1;
@@ -3689,6 +3689,8 @@ static hb_dict_t * PreparePreset(const char *preset_name)
 {
     int ii;
     hb_dict_t *preset;
+    int preset_mux;
+    const char *preset_format;
 
     if (preset_name != NULL)
     {
@@ -3719,6 +3721,8 @@ static hb_dict_t * PreparePreset(const char *preset_name)
     {
         hb_dict_set(preset, "FileFormat", hb_value_string(format));
     }
+    preset_format = hb_dict_get_string(preset, "FileFormat");
+    preset_mux = hb_container_get_from_name(preset_format);
     if (optimize != -1)
     {
         hb_dict_set(preset, "Optimize", hb_value_bool(optimize));
@@ -3964,7 +3968,7 @@ static hb_dict_t * PreparePreset(const char *preset_name)
                 // it is a required entry
                 const char *enc;
                 enc = hb_audio_encoder_get_short_name(
-                        hb_audio_encoder_get_default(mux));
+                        hb_audio_encoder_get_default(preset_mux));
                 hb_dict_set(audio_dict_stub, "AudioEncoder",
                         hb_value_string(enc));
             }
