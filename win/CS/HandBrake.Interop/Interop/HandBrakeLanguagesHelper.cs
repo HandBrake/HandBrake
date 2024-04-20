@@ -36,7 +36,10 @@ namespace HandBrake.Interop.Interop
             allLanguagesDict = new Dictionary<string, Language>();
             foreach (Language lang in allLanguages)
             {
-                allLanguagesDict.Add(lang.Code, lang);
+                if (!allLanguagesDict.ContainsKey(lang.Code))
+                {
+                    allLanguagesDict.Add(lang.Code, lang);
+                }
             }
         }
 
