@@ -654,10 +654,11 @@ hb_title_t * hb_bd_title_scan( hb_bd_t * d, int tt, uint64_t min_duration )
         char chapter_title[80];
 
         // Sanity check start time of this chapter.
-        // If it is beyond the end of the title, drop it.
-        if (ti->chapters[ii].start > ti->duration)
+        // If the chapter starts within 1.5 seconds of the end of
+        // the title, drop it.
+        if (ti->duration - ti->chapters[ii].start < 90000 * 1.5)
         {
-            hb_log("bd: chapter %d invalid start %"PRIu64", dropping", ii+1,
+            hb_log("bd: chapter %d too short %"PRIu64", dropping", ii+1,
                    ti->chapters[ii].start);
             continue;
         }
@@ -712,7 +713,7 @@ hb_title_t * hb_bd_title_scan( hb_bd_t * d, int tt, uint64_t min_duration )
 
         hb_list_add( title->list_chapter, chapter );
     }
-    hb_log( "bd: title %d has %d chapters", tt, ti->chapter_count );
+    hb_log( "bd: title %d has %d chapters", tt, hb_list_count(title->list_chapter));
 
     /* This title is ok so far */
     goto cleanup;
