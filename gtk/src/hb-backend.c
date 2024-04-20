@@ -2133,7 +2133,16 @@ language_opts_set(signal_user_data_t *ud, const gchar *name,
     for (iso639 = lang_get_next(NULL); iso639 != NULL;
          iso639 = lang_get_next(iso639))
     {
-        int     index = lang_lookup_index(iso639->iso639_1);
+        int     index;
+
+        if (iso639->iso639_1 != NULL && iso639->iso639_1[0] != 0)
+        {
+            index = lang_lookup_index(iso639->iso639_1);
+        }
+        else
+        {
+            index = lang_lookup_index(iso639->iso639_2);
+        }
         gchar * lang;
 
         if (iso639->native_name[0] != 0)
