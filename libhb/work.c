@@ -1532,7 +1532,8 @@ static void sanitize_dynamic_hdr_metadata_passthru(hb_job_t *job)
 #if HB_PROJECT_FEATURE_LIBDOVI
     if ((job->dovi.dv_profile != 5 &&
          job->dovi.dv_profile != 7 &&
-         job->dovi.dv_profile != 8) ||
+         job->dovi.dv_profile != 8 &&
+         job->dovi.dv_profile != 10) ||
         (job->vcodec != HB_VCODEC_X265_10BIT &&
          job->vcodec != HB_VCODEC_VT_H265_10BIT &&
          job->vcodec != HB_VCODEC_SVT_AV1_10BIT))
