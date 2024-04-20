@@ -163,7 +163,7 @@ hb_avfilter_graph_init(hb_value_t * settings, hb_filter_init_t * init)
     result = avfilter_graph_create_filter(&graph->input, avfilter_get_by_name("buffer"), "in",
                                           filter_args, NULL, graph->avgraph);
     free(filter_args);
-    if (graph->input == NULL)
+    if (result < 0)
     {
         hb_error("hb_avfilter_graph_init: failed to create buffer source filter");
         goto fail;
@@ -196,7 +196,7 @@ hb_avfilter_graph_init(hb_value_t * settings, hb_filter_init_t * init)
     // buffer video sink: to terminate the filter chain.
     result = avfilter_graph_create_filter(&graph->output, avfilter_get_by_name("buffersink"), "out",
                                           NULL, NULL, graph->avgraph);
-    if (graph->output == NULL)
+    if (result < 0)
     {
         hb_error("hb_avfilter_graph_init: failed to create buffer sink filter");
         goto fail;
