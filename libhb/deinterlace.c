@@ -106,6 +106,7 @@ static int deinterlace_init(hb_filter_object_t * filter,
             hb_dict_set(avsettings, "mode",
                         hb_value_string("send_field_nospatial"));
         }
+        init->vrate.num *= 2;
     }
     else
     {
