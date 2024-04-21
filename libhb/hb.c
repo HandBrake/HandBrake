@@ -365,11 +365,12 @@ void hb_remove_previews( hb_handle_t * h )
  * @param crop_threshold_pixels The variance in pixels detected that are allowed for.
  * @param exclude_extensions A list of extensions to exclude for this scan.
  * @param hw_decode  The preferred hardware decoder to use..
+ * @param keep_duplicate_titles
  */
 void hb_scan( hb_handle_t * h, hb_list_t * paths, int title_index,
               int preview_count, int store_previews, uint64_t min_duration,
               int crop_threshold_frames, int crop_threshold_pixels,
-              hb_list_t * exclude_extensions, int hw_decode)
+              hb_list_t * exclude_extensions, int hw_decode, int keep_duplicate_titles)
 {
     hb_title_t * title;
 
@@ -457,7 +458,7 @@ void hb_scan( hb_handle_t * h, hb_list_t * paths, int title_index,
                                    &h->title_set, preview_count,
                                    store_previews, min_duration,
                                    crop_threshold_frames, crop_threshold_pixels,
-                                   exclude_extensions, hw_decode);
+                                   exclude_extensions, hw_decode, keep_duplicate_titles);
 }
 
 void hb_force_rescan( hb_handle_t * h )

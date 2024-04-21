@@ -51,6 +51,7 @@ namespace HandBrakeWPF.Services.Encode.Model
             this.Source = task.Source;
             this.StartPoint = task.StartPoint;
             this.Title = task.Title;
+            this.KeepDuplicateTitles = task.KeepDuplicateTitles;
             this.Angle = task.Angle;
             this.EndPoint = task.EndPoint;
             this.PointToPointMode = task.PointToPointMode;
@@ -161,6 +162,8 @@ namespace HandBrakeWPF.Services.Encode.Model
         public string Source { get; set; }
 
         public int Title { get; set; }
+
+        public bool KeepDuplicateTitles { get; set; }
 
         public int Angle { get; set; }
 

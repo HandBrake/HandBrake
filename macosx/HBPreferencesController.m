@@ -33,6 +33,7 @@ NSString * const HBUseHardwareDecoder            = @"HBUseHardwareDecoder";
 NSString * const HBAlwaysUseHardwareDecoder      = @"HBAlwaysUseHardwareDecoder";
 NSString * const HBMinTitleScanSeconds           = @"MinTitleScanSeconds";
 NSString * const HBPreviewsNumber                = @"PreviewsNumber";
+NSString * const HBKeepDuplicateTitles           = @"HBKeepDuplicateTitles";
 
 NSString * const HBLoggingLevel                  = @"LoggingLevel";
 NSString * const HBEncodeLogLocation             = @"EncodeLogLocation";

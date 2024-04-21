@@ -29,6 +29,7 @@ typedef struct
     int            store_previews;
 
     uint64_t       min_title_duration;
+    int            keep_duplicate_titles;
     
     int            crop_threshold_frames;
     int            crop_threshold_pixels;
@@ -228,7 +229,8 @@ hb_thread_t * hb_scan_init( hb_handle_t * handle, volatile int * die,
                             hb_title_set_t * title_set, int preview_count,
                             int store_previews, uint64_t min_duration,
                             int crop_threshold_frames, int crop_threshold_pixels,
-                            hb_list_t * exclude_extensions, int hw_decode)
+                            hb_list_t * exclude_extensions, int hw_decode,
+                            int keep_duplicate_titles)
 {
     hb_scan_t * data = calloc( sizeof( hb_scan_t ), 1 );
 
@@ -246,6 +248,7 @@ hb_thread_t * hb_scan_init( hb_handle_t * handle, volatile int * die,
     data->crop_threshold_pixels = crop_threshold_pixels;
     data->exclude_extensions    = hb_string_list_copy(exclude_extensions);
     data->hw_decode             = hw_decode;
+    data->keep_duplicate_titles = keep_duplicate_titles;
     
     // Initialize scan state
     hb_state_t state;
@@ -281,7 +284,7 @@ static void ScanFunc( void * _data )
     }
         
     /* Try to open the path as a DVD. If it fails, try as a file */
-    if( single_path != NULL && !is_known_filetype(single_path) && ( data->bd = hb_bd_init( data->h, single_path ) ) )
+    if( single_path != NULL && !is_known_filetype(single_path) && ( data->bd = hb_bd_init( data->h, single_path, data->keep_duplicate_titles ) ) )
     {
         hb_log( "scan: BD has %d title(s)",
                 hb_bd_title_count( data->bd ) );

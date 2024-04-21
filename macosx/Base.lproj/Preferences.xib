@@ -26,7 +26,7 @@
             <windowStyleMask key="styleMask" titled="YES" closable="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
             <rect key="contentRect" x="136" y="318" width="590" height="200"/>
-            <rect key="screenRect" x="0.0" y="0.0" width="1920" height="1055"/>
+            <rect key="screenRect" x="0.0" y="0.0" width="1512" height="944"/>
             <value key="minSize" type="size" width="590" height="108"/>
             <view key="contentView" id="6">
                 <rect key="frame" x="0.0" y="0.0" width="590" height="200"/>
@@ -807,18 +807,18 @@
             </constraints>
             <point key="canvasLocation" x="-764" y="-643"/>
         </customView>
-        <customView id="236" userLabel="Advanced">
+        <customView misplaced="YES" id="236" userLabel="Advanced">
             <rect key="frame" x="0.0" y="0.0" width="580" height="436"/>
             <autoresizingMask key="autoresizingMask"/>
             <subviews>
                 <stackView distribution="fill" orientation="vertical" alignment="leading" spacing="16" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="1000" verticalHuggingPriority="1000" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="OVb-Af-BVd">
-                    <rect key="frame" x="45" y="20" width="490" height="396"/>
+                    <rect key="frame" x="45" y="20" width="490" height="416"/>
                     <subviews>
                         <stackView distribution="fill" orientation="horizontal" alignment="firstBaseline" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="750" verticalHuggingPriority="1000" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="vWO-gM-Ipq">
-                            <rect key="frame" x="0.0" y="335" width="469" height="61"/>
+                            <rect key="frame" x="0.0" y="335" width="469" height="81"/>
                             <subviews>
                                 <textField horizontalHuggingPriority="248" verticalHuggingPriority="1000" horizontalCompressionResistancePriority="1000" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="300" translatesAutoresizingMaskIntoConstraints="NO" id="IV7-SY-HLR">
-                                    <rect key="frame" x="-2" y="44" width="134" height="14"/>
+                                    <rect key="frame" x="-2" y="64" width="134" height="14"/>
                                     <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="right" title="Scan:" id="c0L-TU-WML">
                                         <font key="font" metaFont="menu" size="11"/>
                                         <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -826,10 +826,10 @@
                                     </textFieldCell>
                                 </textField>
                                 <stackView distribution="fill" orientation="vertical" alignment="leading" spacing="6" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="1000" verticalHuggingPriority="1000" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="dmh-H9-na9">
-                                    <rect key="frame" x="138" y="0.0" width="331" height="61"/>
+                                    <rect key="frame" x="138" y="0.0" width="331" height="81"/>
                                     <subviews>
                                         <stackView distribution="fill" orientation="horizontal" alignment="firstBaseline" spacing="6" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="250" verticalHuggingPriority="1000" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="WJs-Wy-S1o">
-                                            <rect key="frame" x="0.0" y="42" width="331" height="19"/>
+                                            <rect key="frame" x="0.0" y="62" width="331" height="19"/>
                                             <subviews>
                                                 <textField toolTip="Minimum DVD and Blu-ray title duration in seconds. Shorter titles will be skipped." verticalHuggingPriority="1000" horizontalCompressionResistancePriority="250" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="400" translatesAutoresizingMaskIntoConstraints="NO" id="463">
                                                     <rect key="frame" x="-2" y="2" width="228" height="14"/>
@@ -875,7 +875,7 @@
                                             </customSpacing>
                                         </stackView>
                                         <stackView distribution="fill" orientation="horizontal" alignment="firstBaseline" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" verticalHuggingPriority="1000" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="O8F-xH-gTY">
-                                            <rect key="frame" x="0.0" y="20" width="238" height="16"/>
+                                            <rect key="frame" x="0.0" y="40" width="238" height="16"/>
                                             <subviews>
                                                 <textField toolTip="Number of picture previews to scan. Higher values may increase automatic cropping accuracy at the expense of title scan time." verticalHuggingPriority="1000" horizontalCompressionResistancePriority="250" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="400" translatesAutoresizingMaskIntoConstraints="NO" id="359">
                                                     <rect key="frame" x="-2" y="1" width="195" height="14"/>
@@ -938,7 +938,7 @@
                                             </customSpacing>
                                         </stackView>
                                         <button toolTip="Use libdvdnav to read DVDs. Only disable this for problematic DVDs where libdvdread works better (rare)." verticalHuggingPriority="1000" verticalCompressionResistancePriority="751" translatesAutoresizingMaskIntoConstraints="NO" id="398">
-                                            <rect key="frame" x="-1" y="-1" width="218" height="16"/>
+                                            <rect key="frame" x="-1" y="19" width="218" height="16"/>
                                             <buttonCell key="cell" type="check" title="Use libdvdnav (instead of libdvdread)" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" inset="2" id="399">
                                                 <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                 <font key="font" metaFont="menu" size="11"/>
@@ -947,13 +947,25 @@
                                                 <binding destination="61" name="value" keyPath="values.UseDvdNav" id="400"/>
                                             </connections>
                                         </button>
+                                        <button verticalHuggingPriority="1000" verticalCompressionResistancePriority="751" translatesAutoresizingMaskIntoConstraints="NO" id="AYI-kG-it2">
+                                            <rect key="frame" x="-1" y="-1" width="128" height="16"/>
+                                            <buttonCell key="cell" type="check" title="Keep duplicate titles" bezelStyle="regularSquare" imagePosition="left" controlSize="small" inset="2" id="FOr-iY-GVl">
+                                                <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                                <font key="font" metaFont="smallSystem"/>
+                                            </buttonCell>
+                                            <connections>
+                                                <binding destination="61" name="value" keyPath="values.HBKeepDuplicateTitles" id="IPp-p4-DAk"/>
+                                            </connections>
+                                        </button>
                                     </subviews>
                                     <visibilityPriorities>
                                         <integer value="1000"/>
                                         <integer value="1000"/>
                                         <integer value="1000"/>
+                                        <integer value="1000"/>
                                     </visibilityPriorities>
                                     <customSpacing>
+                                        <real value="3.4028234663852886e+38"/>
                                         <real value="3.4028234663852886e+38"/>
                                         <real value="3.4028234663852886e+38"/>
                                         <real value="3.4028234663852886e+38"/>
@@ -985,11 +997,11 @@
                                     <subviews>
                                         <scrollView autohidesScrollers="YES" horizontalLineScroll="16" horizontalPageScroll="10" verticalLineScroll="16" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="D9g-2v-DEt">
                                             <rect key="frame" x="0.0" y="24" width="240" height="92"/>
-                                            <clipView key="contentView" ambiguous="YES" id="XhB-aU-rTV">
+                                            <clipView key="contentView" id="XhB-aU-rTV">
                                                 <rect key="frame" x="1" y="1" width="238" height="90"/>
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                 <subviews>
-                                                    <tableView toolTip="The following file extensions will be ignored when scanning a folder. The list is case insensitive" verticalHuggingPriority="750" ambiguous="YES" allowsExpansionToolTips="YES" columnAutoresizingStyle="firstColumnOnly" columnReordering="NO" columnResizing="NO" autosaveColumns="NO" rowHeight="16" rowSizeStyle="automatic" viewBased="YES" id="ax0-hR-WPq">
+                                                    <tableView toolTip="The following file extensions will be ignored when scanning a folder. The list is case insensitive" verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="firstColumnOnly" columnReordering="NO" columnResizing="NO" autosaveColumns="NO" rowHeight="16" rowSizeStyle="automatic" viewBased="YES" id="ax0-hR-WPq">
                                                         <rect key="frame" x="0.0" y="0.0" width="238" height="90"/>
                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                         <size key="intercellSpacing" width="17" height="0.0"/>
@@ -1054,7 +1066,7 @@
                                                 <constraint firstAttribute="width" constant="240" id="qvn-wo-qOs"/>
                                             </constraints>
                                             <scroller key="horizontalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="YES" id="hEM-8a-P0e">
-                                                <rect key="frame" x="1" y="75" width="238" height="16"/>
+                                                <rect key="frame" x="1" y="76" width="238" height="15"/>
                                                 <autoresizingMask key="autoresizingMask"/>
                                             </scroller>
                                             <scroller key="verticalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="NO" id="3aV-QU-wwI">

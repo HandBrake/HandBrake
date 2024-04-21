@@ -71,6 +71,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, readonly) NSURL *url;
 
 @property (nonatomic, readonly) int index;
+@property (nonatomic, readonly) BOOL keepDuplicateTitles;
 @property (nonatomic, readonly) int angles;
 @property (nonatomic, readonly) int duration;
 @property (nonatomic, readonly) int frames;

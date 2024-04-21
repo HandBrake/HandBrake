@@ -648,7 +648,7 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
 /**
  * Here we actually tell hb_scan to perform the source scan, using the path to source and title number
  */
-- (void)scanURLs:(NSArray<NSURL *> *)fileURLs titleIndex:(NSUInteger)index completionHandler:(void(^)(NSArray<HBTitle *> *titles))completionHandler
+- (void)scanURLs:(NSArray<NSURL *> *)fileURLs titleIndex:(NSUInteger)index keepDuplicateTitles:(BOOL)keepDuplicateTitles completionHandler:(void(^)(NSArray<HBTitle *> *titles))completionHandler
 {
     [self showWindow:self];
 
@@ -688,6 +688,7 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
                    previews:hb_num_previews minDuration:min_title_duration_seconds
                keepPreviews:YES
             hardwareDecoder:[NSUserDefaults.standardUserDefaults boolForKey:HBUseHardwareDecoder]
+            keepDuplicateTitles:keepDuplicateTitles
             progressHandler:^(HBState state, HBProgress progress, NSString *info)
          {
              self.sourceLabel.stringValue = info;
@@ -825,7 +826,7 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
     NSArray<NSURL *> *subtitlesFileURLs = [HBUtilities extractURLs:expandedFileURLs withExtension:HBUtilities.supportedExtensions];
     NSArray<NSURL *> *trimmedFileURLs   = [HBUtilities trimURLs:expandedFileURLs withExtension:excludedExtensions];
 
-    [self scanURLs:trimmedFileURLs titleIndex:index completionHandler:^(NSArray<HBTitle *> *titles)
+    [self scanURLs:trimmedFileURLs titleIndex:index keepDuplicateTitles:[NSUserDefaults.standardUserDefaults boolForKey:HBKeepDuplicateTitles] completionHandler:^(NSArray<HBTitle *> *titles)
     {
         NSArray<NSURL *> *baseURLs = [HBUtilities baseURLs:trimmedFileURLs];
 
@@ -887,7 +888,7 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
         [job refreshSecurityScopedResources];
         self.fileTokens = @[[HBSecurityAccessToken tokenWithObject:job.fileURL]];
 
-        [self scanURLs:@[job.fileURL] titleIndex:job.titleIdx completionHandler:^(NSArray<HBTitle *> *titles)
+        [self scanURLs:@[job.fileURL] titleIndex:job.titleIdx keepDuplicateTitles:job.keepDuplicateTitles completionHandler:^(NSArray<HBTitle *> *titles)
         {
             if (titles.count)
             {

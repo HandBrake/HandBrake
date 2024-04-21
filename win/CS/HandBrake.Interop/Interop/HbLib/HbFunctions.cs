@@ -48,7 +48,7 @@ namespace HandBrake.Interop.Interop.HbLib
         public static extern void hb_dvd_set_dvdnav(int enable);
 
         [DllImport("hb", EntryPoint = "hb_scan", CallingConvention = CallingConvention.Cdecl)]
-        public static extern void hb_scan(IntPtr hbHandle, IntPtr paths, int title_index, int preview_count, int store_previews, ulong min_duration, int crop_auto_switch_threshold, int crop_median_threshold, IntPtr exclude_extensions, int hw_decode);
+        public static extern void hb_scan(IntPtr hbHandle, IntPtr path, int title_index, int preview_count, int store_previews, ulong min_duration, int crop_auto_switch_threshold, int crop_median_threshold, IntPtr exclude_extensions, int hw_decode, int keep_duplicate_titles);
 
         [DllImport("hb", EntryPoint = "hb_scan_stop", CallingConvention = CallingConvention.Cdecl)]
         public static extern void hb_scan_stop(IntPtr hbHandle);
