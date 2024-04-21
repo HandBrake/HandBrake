@@ -341,7 +341,7 @@ static hb_buffer_t *Decode( hb_work_object_t *w )
     }
 
     AVChannelLayout channel_layout;
-    av_channel_layout_default(&channel_layout, hdr2layout[pv->nchannels - 1]);
+    av_channel_layout_from_mask(&channel_layout, hdr2layout[pv->nchannels - 1]);
     hb_audio_resample_set_ch_layout(pv->resample,
                                     &channel_layout);
     av_channel_layout_uninit(&channel_layout);
