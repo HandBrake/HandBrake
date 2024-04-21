@@ -832,6 +832,7 @@ struct hb_job_s
     } qsv;
 
     int hw_decode;
+    int keep_duplicate_titles;
 
 #ifdef __LIBHB__
     /* Internal data */
@@ -1189,6 +1190,7 @@ struct hb_title_s
     const char    * path;
     const char    * name;
     int             index;
+    int             keep_duplicate_titles;
     int             playlist;
     int             angle_count;
     void          * opaque_priv;

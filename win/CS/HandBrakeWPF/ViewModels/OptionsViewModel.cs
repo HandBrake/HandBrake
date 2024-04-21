@@ -121,6 +121,7 @@ namespace HandBrakeWPF.ViewModels
         private bool useIsoDateFormat;
         private BindingList<string> excludedFileExtensions;
         private bool recursiveFolderScan;
+        private bool keepDuplicateTitles;
 
         public OptionsViewModel(
             IUserSettingService userSettingService,
@@ -928,6 +929,17 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
+        public bool KeepDuplicateTitles
+        {
+            get => this.keepDuplicateTitles;
+            set
+            {
+                if (value == this.keepDuplicateTitles) return;
+                this.keepDuplicateTitles = value;
+                this.NotifyOfPropertyChange(() => this.KeepDuplicateTitles);
+            }
+        }
+
         /* Video */
         public bool EnableQuickSyncEncoding
         {
@@ -1541,6 +1553,8 @@ namespace HandBrakeWPF.ViewModels
             this.PreviewPicturesToScan.Add(60);
             this.SelectedPreviewCount = this.userSettingService.GetUserSetting<int>(UserSettingConstants.PreviewScanCount);
 
+            this.KeepDuplicateTitles = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.KeepDuplicateTitles);
+
             // x264 step
             this.ConstantQualityGranularity.Clear();
             this.ConstantQualityGranularity.Add("1.00");
@@ -1693,6 +1707,7 @@ namespace HandBrakeWPF.ViewModels
             this.userSettingService.SetUserSetting(UserSettingConstants.MainWindowMinimize, this.MinimiseToTray);
             this.userSettingService.SetUserSetting(UserSettingConstants.ClearCompletedFromQueue, this.ClearQueueOnEncodeCompleted);
             this.userSettingService.SetUserSetting(UserSettingConstants.PreviewScanCount, this.SelectedPreviewCount);
+            this.userSettingService.SetUserSetting(UserSettingConstants.KeepDuplicateTitles, this.KeepDuplicateTitles);
             this.userSettingService.SetUserSetting(UserSettingConstants.X264Step, double.Parse(this.SelectedGranularity, CultureInfo.InvariantCulture));
             this.userSettingService.SetUserSetting(UserSettingConstants.ExcludedExtensions, new List<string>(this.ExcludedFileExtensions));
             this.userSettingService.SetUserSetting(UserSettingConstants.RecursiveFolderScan, this.RecursiveFolderScan);

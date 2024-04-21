@@ -429,6 +429,11 @@ fail:
     return self.hb_title->index;
 }
 
+- (BOOL)keepDuplicateTitles
+{
+    return self.hb_title->keep_duplicate_titles;
+}
+
 - (int)angles
 {
     return self.hb_title->angle_count;

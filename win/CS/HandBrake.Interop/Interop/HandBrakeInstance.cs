@@ -146,7 +146,7 @@ namespace HandBrake.Interop.Interop
         /// <param name="hwDecode">
         /// Hardware decoding during scans.
         /// </param>
-        public void StartScan(List<string> paths, int previewCount, TimeSpan minDuration, int titleIndex, List<string> excludedExtensions, int hwDecode)
+        public void StartScan(List<string> paths, int previewCount, TimeSpan minDuration, int titleIndex, List<string> excludedExtensions, int hwDecode, bool keepDuplicateTitles)
         {
             this.PreviewCount = previewCount;
 
@@ -170,7 +170,7 @@ namespace HandBrake.Interop.Interop
 
             // Start the Scan
             IntPtr excludedExtensionsPtr = excludedExtensionsNative?.Ptr ?? IntPtr.Zero;
-            HBFunctions.hb_scan(this.Handle, scanPathsList.Ptr, titleIndex, previewCount, 1, (ulong)(minDuration.TotalSeconds * 90000), 0, 0, excludedExtensionsPtr, hwDecode);
+            HBFunctions.hb_scan(this.Handle, scanPathsList.Ptr, titleIndex, previewCount, 1, (ulong)(minDuration.TotalSeconds * 90000), 0, 0, excludedExtensionsPtr, hwDecode, Convert.ToInt32(keepDuplicateTitles));
 
             this.scanPollTimer = new Timer();
             this.scanPollTimer.Interval = ScanPollIntervalMs;

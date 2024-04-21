@@ -537,7 +537,7 @@ namespace HandBrakeWPF.ViewModels
                 return;
             }
 
-            QueueTask task = new QueueTask(encodeTask, this.SelectedTitle.SourcePath, null, false, null);
+            QueueTask task = new QueueTask(encodeTask, this.SelectedTitle.SourcePath, null, false, this.SelectedTitle);
             ThreadPool.QueueUserWorkItem(this.CreatePreview, task);
         }
 

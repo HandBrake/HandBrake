@@ -256,9 +256,10 @@ namespace HandBrakeWPF.Services.Scan
                     hwDecode = (int)NativeConstants.HB_DECODE_SUPPORT_NVDEC;
                 }
 
+                bool keepDuplicateTitles = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.KeepDuplicateTitles);
 
                 this.ServiceLogMessage("Starting Scan ...");
-                this.instance.StartScan(sourcePaths, previewCount, minDuration, title != 0 ? title : 0, excludedExtensions, hwDecode);
+                this.instance.StartScan(sourcePaths, previewCount, minDuration, title != 0 ? title : 0, excludedExtensions, hwDecode, keepDuplicateTitles);
 
                 this.ScanStarted?.Invoke(this, System.EventArgs.Empty);
             }
