@@ -411,6 +411,10 @@ static int hb_decomb_init(hb_filter_object_t *filter,
             eedi2_thread_args->arg.segment = ii;
         }
     }
+    if (pv->mode & MODE_DECOMB_BOB)
+    {
+        init->vrate.num *= 2;
+    }
 
     pv->output = *init;
 
