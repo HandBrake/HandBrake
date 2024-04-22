@@ -268,17 +268,23 @@
                                             <ColumnDefinition Width="Auto" />
                                         </Grid.ColumnDefinitions>
 
-                                        <StackPanel Grid.Row="0" Grid.Column="0"  VerticalAlignment="Center">
+                                        <Grid Grid.Row="0" Grid.Column="0"  VerticalAlignment="Center">
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="Auto" />
+                                                <RowDefinition Height="Auto" />
+                                                <RowDefinition Height="Auto" />
+                                            </Grid.RowDefinitions>
                                             <TextBlock Text="{Binding Task.Destination, Converter={StaticResource filePathToFilenameConverter}}"
-                                                   TextWrapping="Wrap" VerticalAlignment="Center" Margin="0,0,5,0"
-                                                   Style="{StaticResource subHeaderSmall}"/>
+                                                       TextWrapping="Wrap" VerticalAlignment="Center" Margin="0,0,5,0" Grid.Row="0"
+                                                       Style="{StaticResource subHeaderSmall}"/>
 
-                                            <ProgressBar Minimum="0" Height="4" Maximum="100" Name="pbStatus" HorizontalAlignment="Stretch" Margin="0,8,10,0"
+                                            <ProgressBar Minimum="0" Height="4" Maximum="100" Grid.Row="1" Name="pbStatus" HorizontalAlignment="Stretch" Margin="0,8,10,0"
                                                      Value="{Binding JobProgress.ProgressValue}" IsIndeterminate="{Binding JobProgress.IntermediateProgress}"
                                                      Visibility="{Binding ShowEncodeProgress, Converter={StaticResource boolToVisConverter}}" />
 
                                             <!-- Extended Info -->
-                                            <Grid Visibility="{Binding DataContext.ExtendedQueueDisplay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}, Converter={StaticResource boolToVisConverter}}" >
+                                            <Grid Visibility="{Binding DataContext.ExtendedQueueDisplay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}, Converter={StaticResource boolToVisConverter}}"
+                                                  Grid.Row="2">
 
                                                 <TextBlock Text="{Binding JobProgress.JobStatusShort}" TextWrapping="WrapWithOverflow" VerticalAlignment="Top" TextTrimming="CharacterEllipsis"
                                                            Visibility="{Binding ShowEncodeProgress, Converter={StaticResource boolToVisConverter}}"
@@ -288,7 +294,7 @@
                                                            Visibility="{Binding ShowJobCompleteInfo, Converter={StaticResource boolToVisConverter}}"
                                                            Margin="0,4,0,2" Style="{StaticResource subTextSmall}" />
                                             </Grid>
-                                        </StackPanel>
+                                        </Grid>
 
                                         <Button Grid.Row="0" Grid.Column="1" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="0,0,0,0" Click="QueueDeleteJob_OnClick"
                                             AutomationProperties.Name="{x:Static Properties:ResourcesTooltips.QueueView_DeleteJob}" ToolTip="{x:Static Properties:ResourcesTooltips.QueueView_DeleteJob}" >
