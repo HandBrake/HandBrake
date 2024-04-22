@@ -1,9 +1,10 @@
---- zlib-1.3/configure	2023-08-18 10:45:36.000000000 +0200
-+++ zlib-1.3-patched/configure	2023-08-19 23:06:46.875730600 +0200
-@@ -31,14 +31,6 @@
+--- zlib-1.3.1/configure	2023-08-18 10:45:36.000000000 +0200
++++ zlib-1.3.1-patched/configure	2023-08-19 23:06:46.875730600 +0200
+@@ -30,15 +30,6 @@
+     SRCDIR="$SRCDIR/"
  fi
  
- # set command prefix for cross-compilation
+-# set command prefix for cross-compilation
 -if [ -n "${CHOST}" ]; then
 -    uname=${CHOST}
 -    mname=${CHOST}
@@ -15,10 +16,11 @@
  # destination name for static library
  STATICLIB=libz.a
  
-@@ -47,27 +39,6 @@
- VER1=`sed -n -e '/VERSION "/s/.*"\([0-9]*\)\\..*/\1/p' < ${SRCDIR}zlib.h`
+@@ -47,28 +38,6 @@
+ VER3=`echo ${VER}|sed -n -e 's/\([0-9]\{1,\}\(\\.[0-9]\{1,\}\)\{1,2\}\).*/\1/p'`
+ VER1=`echo ${VER}|sed -n -e 's/\([0-9]\{1,\}\)\\..*/\1/p'`
  
- # establish commands for library building
+-# establish commands for library building
 -if "${CROSS_PREFIX}ar" --version >/dev/null 2>/dev/null || test $? -lt 126; then
 -    AR=${AR-"${CROSS_PREFIX}ar"}
 -    test -n "${CROSS_PREFIX}" && echo Using ${AR} | tee -a configure.log
@@ -43,7 +45,7 @@
  # set defaults before processing command line options
  LDCONFIG=${LDCONFIG-"ldconfig"}
  LDSHAREDLIBC="${LDSHAREDLIBC--lc}"
-@@ -225,56 +196,7 @@
+@@ -226,56 +195,7 @@
    if test -z "$uname"; then
      uname=`(uname -s || echo unknown) 2>/dev/null`
    fi
@@ -85,7 +87,7 @@
 -        SHAREDLIB=libz$shared_ext
 -        SHAREDLIBV=libz.$VER$shared_ext
 -        SHAREDLIBM=libz.$VER1$shared_ext
--        LDSHARED=${LDSHARED-"$cc -dynamiclib -install_name $libdir/$SHAREDLIBM -compatibility_version $VER1 -current_version $VER"}
+-        LDSHARED=${LDSHARED-"$cc -dynamiclib -install_name $libdir/$SHAREDLIBM -compatibility_version $VER1 -current_version $VER3"}
 -        if "${CROSS_PREFIX}libtool" -V 2>&1 | grep Apple > /dev/null; then
 -            AR="${CROSS_PREFIX}libtool"
 -        elif libtool -V 2>&1 | grep Apple > /dev/null; then
