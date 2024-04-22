@@ -138,6 +138,7 @@ typedef struct {
     int               pid;
     uint8_t           is_pcr;
     int               pes_list;
+    int               start;
 } hb_ts_stream_t;
 
 typedef struct {
@@ -4988,7 +4989,7 @@ hb_buffer_t * hb_ts_decode_pkt( hb_stream_t *stream, const uint8_t * pkt,
     // Continuity only increments for adaption values of 0x3 or 0x01
     // and is not checked for start packets.
     hb_ts_stream_t * ts_stream = &stream->ts.list[curstream];
-    int start = (pkt[1] & 0x40) != 0;
+    ts_stream->start = ts_stream->start || ((pkt[1] & 0x40) != 0);
 
     if ( (adaption & 0x01) != 0 )
     {
@@ -5021,7 +5022,7 @@ hb_buffer_t * hb_ts_decode_pkt( hb_stream_t *stream, const uint8_t * pkt,
                 return hb_buffer_list_clear(&list);
             }
         }
-        if ( !start && (ts_stream->continuity != -1) &&
+        if ( !ts_stream->start && (ts_stream->continuity != -1) &&
              !ts_stream->skipbad &&
              (continuity != ( (ts_stream->continuity + 1) & 0xf ) ) )
         {
@@ -5066,7 +5067,7 @@ hb_buffer_t * hb_ts_decode_pkt( hb_stream_t *stream, const uint8_t * pkt,
     }
 
     /* If we get here the packet is valid - process its data */
-    if (start)
+    if (ts_stream->start)
     {
         // Found the start of a new PES packet.
         // If we have previous packet data on this stream,
@@ -5084,6 +5085,11 @@ hb_buffer_t * hb_ts_decode_pkt( hb_stream_t *stream, const uint8_t * pkt,
 
         // PES must begin with an mpeg start code
         const uint8_t *pes = pkt + adapt_len + 4;
+        if (adapt_len + 4 + 3 > stream->packetsize)
+        {
+            return hb_buffer_list_clear(&list);
+        }
+        ts_stream->start = 0;
         if (pes[0] != 0x00 || pes[1] != 0x00 || pes[2] != 0x01)
         {
             ts_err( stream, curstream, "missing start code" );
@@ -5104,6 +5110,10 @@ hb_buffer_t * hb_ts_decode_pkt( hb_stream_t *stream, const uint8_t * pkt,
             {
                 // PES must begin with an mpeg start code & contain
                 // a DTS or PTS.
+                if (adapt_len + 4 + 19 >= stream->packetsize)
+                {
+                    return hb_buffer_list_clear(&list);
+                }
                 if (stream->ts.last_timestamp < 0 && (pes[7] >> 6) == 0)
                 {
                     return hb_buffer_list_clear(&list);
