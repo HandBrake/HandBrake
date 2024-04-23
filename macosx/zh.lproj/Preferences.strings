@@ -7,11 +7,11 @@
 /* Class = "NSWindow"; title = "Preferences"; ObjectID = "5"; */
 "5.title" = "首选项";
 
-/* Class = "NSMenu"; title = "OtherViews"; ObjectID = "6c7-RK-g6v"; */
-"6c7-RK-g6v.title" = "其他视图";
-
 /* Class = "NSButtonCell"; title = "Keep preset edits when selecting a new title"; ObjectID = "6Sg-su-vLd"; */
 "6Sg-su-vLd.title" = "选择新标题时保留预设的编辑内容";
+
+/* Class = "NSButtonCell"; title = "Show preview images on summary tab"; ObjectID = "7CY-9s-SGl"; */
+"7CY-9s-SGl.title" = "在概要标签页显示预览图";
 
 /* Class = "NSTextFieldCell"; title = "None"; ObjectID = "7hX-9H-spK"; */
 "7hX-9H-spK.title" = "无";
@@ -40,9 +40,6 @@
 /* Class = "NSPopUpButton"; ibShadowedToolTip = "Number of picture previews to scan. Higher values may increase automatic cropping accuracy at the expense of title scan time."; ObjectID = "352"; */
 "352.ibShadowedToolTip" = "要扫描的预览画面数。较高的值可能会增加自动裁剪精度，但会牺牲标题扫描时间。";
 
-/* Class = "NSMenu"; title = "OtherViews"; ObjectID = "354"; */
-"354.title" = "其他视图";
-
 /* Class = "NSMenuItem"; title = "10"; ObjectID = "355"; */
 "355.title" = "10";
 
@@ -67,9 +64,6 @@
 /* Class = "NSPopUpButton"; ibShadowedToolTip = "Verbosity Level. Extended verbosity records more technical information to the Activity Log. Minimal verbosity records less."; ObjectID = "363"; */
 "363.ibShadowedToolTip" = "详细程度。扩展详细程度将更多技术信息记录到活动日志中。最小的详细程度记录较少。";
 
-/* Class = "NSMenu"; title = "OtherViews"; ObjectID = "365"; */
-"365.title" = "其他视图";
-
 /* Class = "NSMenuItem"; title = "Extended"; ObjectID = "368"; */
 "368.title" = "扩展";
 
@@ -87,9 +81,6 @@
 
 /* Class = "NSPopUpButton"; ibShadowedToolTip = "Determines the granularity of the x264 Constant Quality control. Smaller values allow for finer quality increments."; ObjectID = "387"; */
 "387.ibShadowedToolTip" = "设定 x264 恒定质量控件的颗粒度。值越小质量越高。";
-
-/* Class = "NSMenu"; title = "OtherViews"; ObjectID = "389"; */
-"389.title" = "其他视图";
 
 /* Class = "NSMenuItem"; title = "0.20"; ObjectID = "390"; */
 "390.title" = "0.20";
@@ -142,8 +133,8 @@
 /* Class = "NSMenuItem"; title = "60"; ObjectID = "519"; */
 "519.title" = "60";
 
-/* Class = "NSMenu"; title = "OtherViews"; ObjectID = "aYB-lm-mkU"; */
-"aYB-lm-mkU.title" = "其他视图";
+/* Class = "NSTableView"; ibShadowedToolTip = "The following file extensions will be ignored when scanning a folder. The list is case insensitive"; ObjectID = "ax0-hR-WPq"; */
+"ax0-hR-WPq.ibShadowedToolTip" = "扫描文件夹时将忽略以下文件扩展名。 列表不区分大小写";
 
 /* Class = "NSButtonCell"; title = "Enable the VideoToolbox hardware decoders"; ObjectID = "BHK-QU-DwS"; */
 "BHK-QU-DwS.title" = "启用 VideoToolbox 硬件解码器";
@@ -157,6 +148,9 @@
 /* Class = "NSMenuItem"; title = "2"; ObjectID = "Cge-hb-Nh8"; */
 "Cge-hb-Nh8.title" = "2";
 
+/* Class = "NSTextFieldCell"; title = "Encode up to"; ObjectID = "cI9-ML-lqx"; */
+"cI9-ML-lqx.title" = "最高编码至";
+
 /* Class = "NSTextFieldCell"; title = "Encoder:"; ObjectID = "cqp-xU-GOe"; */
 "cqp-xU-GOe.title" = "编码：";
 
@@ -166,6 +160,9 @@
 /* Class = "NSButtonCell"; title = "Also use in combination with software encoders"; ObjectID = "d9B-Vd-jMM"; */
 "d9B-Vd-jMM.title" = "也可与软件编码器结合使用";
 
+/* Class = "NSButtonCell"; title = "Pause queue when switching to battery power"; ObjectID = "dMs-sk-W4G"; */
+"dMs-sk-W4G.title" = "切换到电池供电时暂停队列";
+
 /* Class = "NSButton"; ibShadowedToolTip = "Hardware decoders will reduce CPU usage and lower battery usage when combined with an hardware encoder. Depending on the CPU speed, they could either improve or decrease encoding speed."; ObjectID = "Doh-Ja-Gh7"; */
 "Doh-Ja-Gh7.ibShadowedToolTip" = "硬件解码器与硬件编码器结合使用时，可减少 CPU 占用率，降低电池使用率。根据 CPU 的速度，它们可以提高或降低编码速度。";
 
@@ -174,6 +171,12 @@
 
 /* Class = "NSMenuItem"; title = "4"; ObjectID = "FB2-Vr-VKP"; */
 "FB2-Vr-VKP.title" = "4";
+
+/* Class = "NSButtonCell"; title = "Show notification when each job is completed"; ObjectID = "fdI-zP-r7j"; */
+"fdI-zP-r7j.title" = "每个任务完成后显示通知";
+
+/* Class = "NSButtonCell"; title = "Play notification sound"; ObjectID = "GFD-Ju-1n9"; */
+"GFD-Ju-1n9.title" = "播放提示音";
 
 /* Class = "NSTextFieldCell"; title = "Options:"; ObjectID = "ImU-Vn-SGr"; */
 "ImU-Vn-SGr.title" = "选项：";
@@ -187,11 +190,23 @@
 /* Class = "CocoaBindingsConnection"; ibShadowedIsNilPlaceholder = "None"; ObjectID = "JZb-Vz-cY4"; */
 "JZb-Vz-cY4.ibShadowedIsNilPlaceholder" = "无";
 
+/* Class = "NSTextFieldCell"; title = "jobs simultaneously"; ObjectID = "kBl-mO-erf"; */
+"kBl-mO-erf.title" = "并行任务";
+
+/* Class = "NSTextFieldCell"; title = "Table View Cell"; ObjectID = "kCF-8e-gXS"; */
+"kCF-8e-gXS.title" = "表单视图单元格";
+
 /* Class = "NSTextFieldCell"; title = "seconds"; ObjectID = "klQ-DW-Kc6"; */
 "klQ-DW-Kc6.title" = "秒";
 
 /* Class = "NSTextFieldCell"; title = "Format:"; ObjectID = "Ktg-Bh-1Pt"; */
 "Ktg-Bh-1Pt.title" = "格式：";
+
+/* Class = "NSTextFieldCell"; title = "Text Cell"; ObjectID = "l9y-MS-HnS"; */
+"l9y-MS-HnS.title" = "文本单元格";
+
+/* Class = "NSButtonCell"; title = "Remove old logs from main Activity Logs folder after 7 days"; ObjectID = "lgn-RF-k0d"; */
+"lgn-RF-k0d.title" = "7天后从主活动日志文件夹中移除旧日志";
 
 /* Class = "NSTextFieldCell"; title = "Drag labels to Format to compose a naming format."; ObjectID = "MSp-go-i1C"; */
 "MSp-go-i1C.title" = "将标签拖到格式栏以组成命名格式。";
@@ -199,14 +214,23 @@
 /* Class = "NSButtonCell"; title = "Pause queue if disk space is lower than:"; ObjectID = "ODf-uW-BrD"; */
 "ODf-uW-BrD.title" = "如果磁盘空间少于以下，则暂停队列：";
 
+/* Class = "NSTableColumn"; headerCell.title = "Extensions"; ObjectID = "p5b-EU-Y2V"; */
+"p5b-EU-Y2V.headerCell.title" = "扩展名";
+
 /* Class = "NSButtonCell"; title = "Send file to:"; ObjectID = "P5f-Vq-TeL"; */
 "P5f-Vq-TeL.title" = "发送文件至：";
 
 /* Class = "NSMenuItem"; title = ".m4v"; ObjectID = "phv-oU-WnC"; */
 "phv-oU-WnC.title" = ".m4v";
 
+/* Class = "NSButtonCell"; title = "Show notification when queue is completed"; ObjectID = "Qdg-Tw-rlf"; */
+"Qdg-Tw-rlf.title" = "队列完成后显示通知";
+
 /* Class = "NSTextFieldCell"; title = "Options:"; ObjectID = "saX-n7-YV0"; */
 "saX-n7-YV0.title" = "选项：";
+
+/* Class = "NSButtonCell"; title = "Clear completed jobs after an encode completes"; ObjectID = "szf-YE-Wml"; */
+"szf-YE-Wml.title" = "编码完成时清除已完成的任务";
 
 /* Class = "NSButtonCell"; title = "Use ISO Date Format (YYYY-MM-DD)"; ObjectID = "t9b-CO-ShI"; */
 "t9b-CO-ShI.title" = "使用 ISO 日期格式（YYYY-MM-DD）";
@@ -216,6 +240,9 @@
 
 /* Class = "NSButtonCell"; title = "Automatically name output files"; ObjectID = "UCC-tm-0Sa"; */
 "UCC-tm-0Sa.title" = "自动命名输出文件";
+
+/* Class = "NSButtonCell"; title = "Clear completed jobs at launch"; ObjectID = "uIJ-tX-PEA"; */
+"uIJ-tX-PEA.title" = "启动时清空已完成的任务";
 
 /* Class = "NSTextFieldCell"; title = "Default MP4 Extension:"; ObjectID = "v6r-mL-XmA"; */
 "v6r-mL-XmA.title" = "默认 MP4 扩展名：";
@@ -229,20 +256,29 @@
 /* Class = "NSMenuItem"; title = "1"; ObjectID = "WAI-Bu-jIu"; */
 "WAI-Bu-jIu.title" = "1";
 
+/* Class = "NSSegmentedCell"; wbU-4j-344.ibShadowedToolTips[0] = "Add Extension"; ObjectID = "wbU-4j-344"; */
+"wbU-4j-344.ibShadowedToolTips[0]" = "添加扩展名";
+
+/* Class = "NSSegmentedCell"; wbU-4j-344.ibShadowedToolTips[1] = "Remove Selected Extension"; ObjectID = "wbU-4j-344"; */
+"wbU-4j-344.ibShadowedToolTips[1]" = "移除选中的扩展名";
+
+/* Class = "NSTextFieldCell"; title = "Excluded file extensions:"; ObjectID = "wFM-UD-vzS"; */
+"wFM-UD-vzS.title" = "排除的文件扩展名：";
+
 /* Class = "NSMenuItem"; title = ".mp4"; ObjectID = "wgg-7I-LBB"; */
 "wgg-7I-LBB.title" = ".mp4";
 
 /* Class = "NSPopUpButton"; ibShadowedToolTip = "Higher values may help to fully utilize the CPU if a single encode can't scale to all available CPU cores."; ObjectID = "wOW-0q-lpT"; */
 "wOW-0q-lpT.ibShadowedToolTip" = "如果单个编码不能扩展到所有可用的 CPU 内核，更高的值可能有助于充分利用 CPU。";
 
+/* Class = "NSButtonCell"; title = "Use same destination folder as source when possible"; ObjectID = "wXE-Fz-Dru"; */
+"wXE-Fz-Dru.title" = "使用与源相同的目标文件夹，如果可用";
+
 /* Class = "NSMenuItem"; title = "Put Computer To Sleep"; ObjectID = "x7i-WX-w6l"; */
 "x7i-WX-w6l.title" = "让电脑进入睡眠状态";
 
 /* Class = "NSButtonCell"; title = "Change case to Title Case"; ObjectID = "Y9B-ue-3sE"; */
 "Y9B-ue-3sE.title" = "更改为标题大小写";
-
-/* Class = "NSMenu"; title = "OtherViews"; ObjectID = "ZkO-Z0-OCN"; */
-"ZkO-Z0-OCN.title" = "其他视图";
 
 /* Class = "NSButtonCell"; title = "Browse…"; ObjectID = "zot-Bx-Ch3"; */
 "zot-Bx-Ch3.title" = "浏览…";

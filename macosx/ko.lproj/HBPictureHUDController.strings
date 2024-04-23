@@ -4,9 +4,6 @@
 /* Class = "NSButton"; ibShadowedToolTip = "Encode and play a preview video using current settings."; ObjectID = "16b-R9-bBU"; */
 "16b-R9-bBU.ibShadowedToolTip" = "현재 설정을 사용하여 미리 보기 영상을 인코딩하고 재생";
 
-/* Class = "NSMenu"; title = "OtherViews"; ObjectID = "KrC-nR-rYk"; */
-"KrC-nR-rYk.title" = "다른 견해들";
-
 /* Class = "NSTextFieldCell"; title = "sec"; ObjectID = "ksF-Ma-hB1"; */
 "ksF-Ma-hB1.title" = "초";
 

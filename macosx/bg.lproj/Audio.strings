@@ -124,9 +124,6 @@
 /* Class = "NSButton"; ibShadowedToolTip = "Configure audio tracks Selection Behavior. These settings affect which tracks will be added to the audio tracks list, and the settings used for each track."; ObjectID = "vFP-nq-IQg"; */
 "vFP-nq-IQg.ibShadowedToolTip" = "Конфигуриране на поведението на избрани аудио пътечки. Тези настройки влияят на това кои пътечки да бъдат добавени в списъка с аудио пътечки и на използваните настройки за всяка пътечка.";
 
-/* Class = "NSMenu"; title = "OtherViews"; ObjectID = "Vxo-66-Mrx"; */
-"Vxo-66-Mrx.title" = "ДругиИзгледи";
-
 /* Class = "NSButton"; ibShadowedToolTip = "Reload the audio tracks list using the configured Selection Behavior."; ObjectID = "wcL-rL-aYS"; */
 "wcL-rL-aYS.ibShadowedToolTip" = "Презареждане на списък с аудио пътечки чрез конфигурираното поведение на селекция.";
 

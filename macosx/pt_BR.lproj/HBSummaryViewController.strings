@@ -28,9 +28,6 @@
 /* Class = "NSTextFieldCell"; title = "Filters:"; ObjectID = "OCw-f6-uA0"; */
 "OCw-f6-uA0.title" = "Filtros:";
 
-/* Class = "NSMenu"; title = "OtherViews"; ObjectID = "Q1Z-yT-7iY"; */
-"Q1Z-yT-7iY.title" = "OutrosViews";
-
 /* Class = "NSButton"; ibShadowedToolTip = "Add a special MP4 marker to allow playback on vintage iPod 5th Generation devices circa 2006. Other settings may affect compatibility."; ObjectID = "QKv-GR-d2g"; */
 "QKv-GR-d2g.ibShadowedToolTip" = "Adicione um marcador MP4 especial para permitir a reprodução em dispositivos vintage iPod 5ª Geração por volta de 2006. Outras configurações podem afetar a compatibilidade.";
 

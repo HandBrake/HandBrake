@@ -16,12 +16,6 @@
 /* Class = "NSTextFieldCell"; title = "Custom:"; ObjectID = "aem-qz-Cqk"; */
 "aem-qz-Cqk.title" = "カスタム:";
 
-/* Class = "NSMenu"; title = "OtherViews"; ObjectID = "akB-JW-MPe"; */
-"akB-JW-MPe.title" = "他のビュー";
-
-/* Class = "NSMenu"; title = "OtherViews"; ObjectID = "b6A-ax-2Ed"; */
-"b6A-ax-2Ed.title" = "他のビュー";
-
 /* Class = "NSTextField"; ibShadowedToolTip = "Custom Sharpen parameters.\n\nUnsharp syntax: y-strength=y:y-size=y:cb-strength=c:cb-size=c:cr-strength=c:cr-size=c\n\nUnsharp default: y-strength=0.25:y-size=7:cb-strength=0.25:cb-size=7\n\nLapsharp syntax: y-strength=y:y-kernel=y:cb-strength=c:cb-kernel=c:cr-strength=c:cr-kernel=c\n\nLapsharp default: y-strength=0.2:y-kernel=isolap:cb-strength=0.2:cb-kernel=isolap"; ObjectID = "bBr-vV-iAz"; */
 "bBr-vV-iAz.ibShadowedToolTip" = "カスタムシャープ化のパラメーターです。\n\nUnsharp syntax: y-strength=y:y-size=y:cb-strength=c:cb-size=c:cr-strength=c:cr-size=c\n\nUnsharp default: y-strength=0.25:y-size=7:cb-strength=0.25:cb-size=7\n\nLapsharp syntax: y-strength=y:y-kernel=y:cb-strength=c:cb-kernel=c:cr-strength=c:cr-kernel=c\n\nLapsharp default: y-strength=0.2:y-kernel=isolap:cb-strength=0.2:cb-kernel=isolap";
 
@@ -91,9 +85,6 @@
 /* Class = "NSTextFieldCell"; title = "Tune:"; ObjectID = "hyH-QP-Zdi"; */
 "hyH-QP-Zdi.title" = "チューニング:";
 
-/* Class = "NSMenu"; title = "OtherViews"; ObjectID = "IHH-Se-l6d"; */
-"IHH-Se-l6d.title" = "他のビュー";
-
 /* Class = "NSPopUpButton"; ibShadowedToolTip = "Denoise reduces or removes the appearance of noise and grain. This can improve compression efficiency and create higher quality video at smaller file sizes. Overly strong Denoise settings may damage picture quality by discarding detail.\n\nNLMeans is a high quality denoise filter with a cost to speed. Use where quality is more important than speed.\n\nHQDN3D is an adaptive low-pass filter, faster than NLMeans but less effective at preserving fine detail."; ObjectID = "ins-7X-kbN"; */
 "ins-7X-kbN.ibShadowedToolTip" = "デノイズはノイズやざらつきを軽減/除去します。圧縮効率を高め、高い品質の映像を小さいファイルサイズで実現することが可能です。\n過度に強いデノイズ設定は細部を損ない画質を落とします。\n\nNLMeansは速度を犠牲にした高い品質のデノイズフィルターです。速度より品質が重要である場合に使用してください。\n\nHQDN3Dは適応性ローパスフィルターで、NLMeansよりは高速ですが細部を残す効果に劣ります。";
 
@@ -112,17 +103,8 @@
 /* Class = "NSPopUpButton"; ibShadowedToolTip = "Chroma Smooth tune. Further adjusts the Chroma Smooth preset to optimize settings for specific scenarios."; ObjectID = "jFk-Eg-o2W"; */
 "jFk-Eg-o2W.ibShadowedToolTip" = "クロマスムーズのチューニングです。より詳しい状況に応じてクロマスムーズのプリセット設定を最適化できます。";
 
-/* Class = "NSMenu"; title = "OtherViews"; ObjectID = "jQg-bp-pb3"; */
-"jQg-bp-pb3.title" = "他のビュー";
-
 /* Class = "NSTextFieldCell"; title = "Custom:"; ObjectID = "KiY-kz-54k"; */
 "KiY-kz-54k.title" = "カスタム:";
-
-/* Class = "NSMenu"; title = "OtherViews"; ObjectID = "lad-BT-Hgz"; */
-"lad-BT-Hgz.title" = "他のビュー";
-
-/* Class = "NSMenu"; title = "OtherViews"; ObjectID = "MJr-ob-Uoe"; */
-"MJr-ob-Uoe.title" = "他のビュー";
 
 /* Class = "NSTextFieldCell"; title = "Custom:"; ObjectID = "n6U-tH-vo0"; */
 "n6U-tH-vo0.title" = "カスタム:";
@@ -130,29 +112,11 @@
 /* Class = "NSTextFieldCell"; title = "Custom:"; ObjectID = "oWz-qF-JYk"; */
 "oWz-qF-JYk.title" = "カスタム:";
 
-/* Class = "NSMenu"; title = "OtherViews"; ObjectID = "pIO-dE-81w"; */
-"pIO-dE-81w.title" = "他のビュー";
-
 /* Class = "NSButton"; ibShadowedToolTip = "Grayscale removes the color component of the video. Often referred to as Black & White video."; ObjectID = "Psx-nN-XiT"; */
 "Psx-nN-XiT.ibShadowedToolTip" = "グレースケールは映像の色成分を除去します。モノクロ動画と呼ばれるものです。";
 
-/* Class = "NSMenu"; title = "OtherViews"; ObjectID = "PyP-FP-gGx"; */
-"PyP-FP-gGx.title" = "他のビュー";
-
-/* Class = "NSMenu"; title = "OtherViews"; ObjectID = "qey-Yo-9sX"; */
-"qey-Yo-9sX.title" = "他のビュー";
-
-/* Class = "NSMenu"; title = "OtherViews"; ObjectID = "Qz4-EY-GFO"; */
-"Qz4-EY-GFO.title" = "他のビュー";
-
-/* Class = "NSMenu"; title = "OtherViews"; ObjectID = "r9i-tL-qtD"; */
-"r9i-tL-qtD.title" = "他のビュー";
-
 /* Class = "NSTextField"; ibShadowedToolTip = "Custom Deinterlace parameters.\n\nBwdif and Yadif syntax: mode=m:parity=p\n\nBwdif and Yadif default: mode=3\n\nDecomb syntax: mode=m:magnitude-thresh=m:variance-thresh=v:laplacian-thresh=l:dilation-thresh=d:erosion-thresh=e:noise-thresh=n:search-distance=s:postproc=p:parity=p\n\nDecomb default: mode=7"; ObjectID = "r64-vI-ymx"; */
 "r64-vI-ymx.ibShadowedToolTip" = "インターレース解除のカスタムパラメーターです。\n\nBwdif and Yadif syntax: mode=m:parity=p\n\nBwdif and Yadif default: mode=3\n\nDecomb syntax: mode=m:magnitude-thresh=m:variance-thresh=v:laplacian-thresh=l:dilation-thresh=d:erosion-thresh=e:noise-thresh=n:search-distance=s:postproc=p:parity=p\n\nDecomb default: mode=7";
-
-/* Class = "NSMenu"; title = "OtherViews"; ObjectID = "rfp-ah-CVB"; */
-"rfp-ah-CVB.title" = "他のビュー";
 
 /* Class = "NSTextField"; ibShadowedToolTip = "Custom Interlace Detection parameters.\n\nSyntax: mode=m:spatial-metric=s:motion-thresh=m:spatial-thresh=s:filter-mode=f:block-thresh=b:block-width=b:block-height=b:disable=d\n\nDefault: mode=3:spatial-metric=2:motion-thresh=1:spatial-thresh=1:filter-mode=2:block-thresh=40:block-width=16:block-height=16"; ObjectID = "rPg-F2-gtl"; */
 "rPg-F2-gtl.ibShadowedToolTip" = "インターレース検出のカスタムパラメーターです。\n\nSyntax: mode=m:spatial-metric=s:motion-thresh=m:spatial-thresh=s:filter-mode=f:block-thresh=b:block-width=b:block-height=b:disable=d\n\nDefault: mode=3:spatial-metric=2:motion-thresh=1:spatial-thresh=1:filter-mode=2:block-thresh=40:block-width=16:block-height=16";
@@ -165,9 +129,6 @@
 
 /* Class = "NSTextFieldCell"; title = "Tune:"; ObjectID = "tje-4P-jKt"; */
 "tje-4P-jKt.title" = "チューニング:";
-
-/* Class = "NSMenu"; title = "OtherViews"; ObjectID = "tlc-kS-W8X"; */
-"tlc-kS-W8X.title" = "他のビュー";
 
 /* Class = "NSTextFieldCell"; title = "Sharpen:"; ObjectID = "TwB-ag-L1L"; */
 "TwB-ag-L1L.title" = "シャープ化:";
@@ -198,12 +159,6 @@
 
 /* Class = "NSTextField"; ibShadowedToolTip = "Custom Denoise parameters.\n\nNLMeans syntax: y-strength=y:y-origin-tune=y:y-patch-size=y:y-range=y:y-frame-count=y:y-prefilter=y:cb-strength=c:cb-origin-tune=c:cb-patch-size=c:cb-range=c:cb-frame-count=c:cb-prefilter=c:cr-strength=c:cr-origin-tune=c:cr-patch-size=c:cr-range=c:cr-frame-count=c:cr-prefilter=c:threads=t\n\nNLMeans default: y-strength=6:y-origin-tune=1:y-patch-size=7:y-range=3:y-frame-count=2:y-prefilter=0:cb-strength=6:cb-origin-tune=1:cb-patch-size=7:cb-range=3:cb-frame-count=2:cb-prefilter=0\n\nHQDN3D syntax: y-spatial=y:cb-spatial=c:cr-spatial=c:y-temporal=y:cb-temporal=c:cr-temporal=c\n\nHQDN3D default: y-spatial=3:cb-spatial=2:cr-spatial=2:y-temporal=2:cb-temporal=3:cr-temporal=3"; ObjectID = "ZR9-YG-pfn"; */
 "ZR9-YG-pfn.ibShadowedToolTip" = "デノイズのカスタムパラメーターです。\n\nNLMeans syntax: y-strength=y:y-origin-tune=y:y-patch-size=y:y-range=y:y-frame-count=y:y-prefilter=y:cb-strength=c:cb-origin-tune=c:cb-patch-size=c:cb-range=c:cb-frame-count=c:cb-prefilter=c:cr-strength=c:cr-origin-tune=c:cr-patch-size=c:cr-range=c:cr-frame-count=c:cr-prefilter=c:threads=t\n\nNLMeans default: y-strength=6:y-origin-tune=1:y-patch-size=7:y-range=3:y-frame-count=2:y-prefilter=0:cb-strength=6:cb-origin-tune=1:cb-patch-size=7:cb-range=3:cb-frame-count=2:cb-prefilter=0\n\nHQDN3D syntax: y-spatial=y:cb-spatial=c:cr-spatial=c:y-temporal=y:cb-temporal=c:cr-temporal=c\n\nHQDN3D default: y-spatial=3:cb-spatial=2:cr-spatial=2:y-temporal=2:cb-temporal=3:cr-temporal=3";
-
-/* Class = "NSMenu"; title = "OtherViews"; ObjectID = "ztV-i0-btG"; */
-"ztV-i0-btG.title" = "他のビュー";
-
-/* Class = "NSMenu"; title = "OtherViews"; ObjectID = "zV7-gM-Qpk"; */
-"zV7-gM-Qpk.title" = "他のビュー";
 
 /* Class = "NSTextFieldCell"; title = "Preset:"; ObjectID = "zvZ-ZX-yKE"; */
 "zvZ-ZX-yKE.title" = "プリセット:";

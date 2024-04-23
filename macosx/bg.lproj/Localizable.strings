@@ -56,8 +56,17 @@
    File already exists alert -> message */
 "A file already exists at the selected destination." = "Вече съществува файл в избраната изходна директория.";
 
+/* Queue Window Action Toolbar Item */
+"Action" = "Действие";
+
+/* Main Window Activity Toolbar Item */
+"Activity" = "Дейност";
+
 /* Picture HUD -> scale button */
 "Actual Scale" = "Истински мащаб";
+
+/* Main Window Add Toolbar Item */
+"Add All Titles To Queue" = "Добави всички заглавия на опашката";
 
 /* Queue undo action name */
 "Add Job To Queue" = "Добави задача на опашката";
@@ -71,7 +80,11 @@
 /* Touch bar */
 "Add Titles To Queue" = "Добави заглавия на опашката";
 
-/* Touch bar */
+/* Main Window Add Toolbar Item */
+"Add Titles To Queue…" = "Добави заглавия на опашката...";
+
+/* Main Window Add Toolbar Item
+   Touch bar */
 "Add To Queue" = "Добави на опашката";
 
 /* Preferences Advanced Toolbar Item */
@@ -148,6 +161,12 @@
 
 /* Delete preset alert -> first button */
 "Delete Presets" = "Изтрий шаблони";
+
+/* Queue Window Details Toolbar Item */
+"Details" = "Подробности";
+
+/* Queue Window When Done Toolbar Item */
+"Do Nothing" = "Не прави нищо";
 
 /* File already exists alert -> informative text
    File already exists in queue alert -> informative text */
@@ -258,7 +277,8 @@
 /* Preview -> live preview alert default button */
 "Open in external player" = "Отвори във външен плеър";
 
-/* Toolbar Open/Cancel Item
+/* Main Window Open Toolbar Item
+   Toolbar Open/Cancel Item
    Touch bar */
 "Open Source" = "Отвори източник";
 
@@ -266,7 +286,8 @@
    File already exists in queue alert -> second button */
 "Overwrite" = "Презапиши";
 
-/* Toolbar Pause Item */
+/* Main Window Pause Toolbar Item
+   Toolbar Pause Item */
 "Pause" = "Пауза";
 
 /* Queue -> pause/resume menu
@@ -274,7 +295,8 @@
    Touch bar */
 "Pause Encoding" = "Паузирай кодиране";
 
-/* Touch bar */
+/* Main Window Pause Toolbar Item
+   Touch bar */
 "Pause/Resume Encoding" = "Пауза/Продължи кодиране";
 
 /* Job statistics */
@@ -297,10 +319,14 @@
    Queue Done Alert -> sleep second button */
 "Preferences…" = "Предпочитания...";
 
+/* Main Window Presets Toolbar Item */
+"Presets" = "Шаблони";
+
 /* Preview -> progress formatter title */
 "preview" = "визуализация";
 
-/* Preview -> window title */
+/* Main Window Preview Toolbar Item
+   Preview -> window title */
 "Preview" = "Визуализация";
 
 /* Preview -> window title format */
@@ -312,24 +338,40 @@
 /* Touch bar */
 "Previews" = "Визуализации";
 
+/* Queue Window When Done Toolbar Item */
+"Put Computer to Sleep" = "Заспиване на компютъра";
+
 /* Queue notification alert message */
 "Put down that cocktail…" = "Оставете коктейла...";
 
 /* Preferences -> Output Name Token */
 "Quality/Bitrate" = "Качество/Побитова скорост";
 
-/* Preferences Queue Toolbar Item
+/* Main Window Presets Toolbar Item
+   Preferences Queue Toolbar Item
    Queue window title */
 "Queue" = "Опашка";
 
 /* Queue window title */
 "Queue (%@)" = "Опашка (%@)";
 
+/* Queue Window Quick Look Toolbar Item */
+"Quick Look" = "Бърз преглед";
+
 /* Quit Alert -> first button */
 "Quit" = "Изход";
 
+/* Queue Window When Done Toolbar Item */
+"Quit HandBrake" = "Изход от HandBrake";
+
 /* Touch bar */
 "Remaining Time" = "Оставащо време";
+
+/* Queue Window Action Toolbar Item */
+"Remove All Jobs" = "Премахни всички задачи";
+
+/* Queue Window Action Toolbar Item */
+"Remove Completed Jobs" = "Премахване на завършените задачи";
 
 /* HBQueueItemView -> Remove button accessibility label */
 "Remove job" = "Махни задача";
@@ -342,6 +384,12 @@
 
 /* HBQueueItemView -> Encode state accessibility label */
 "Rescanning for editing" = "Повторно сканиране за редакция";
+
+/* Queue Window Action Toolbar Item */
+"Reset All Jobs" = "Възстановяване на всички задачи";
+
+/* Queue Window Action Toolbar Item */
+"Reset Failed Jobs" = "Рестартирай провалени задачи";
 
 /* Toolbar Pause Item */
 "Resume" = "Продължи";
@@ -369,11 +417,22 @@
 /* Notification -> Show in Finder */
 "Show" = "Покажи";
 
-/* Touch bar */
+/* Main Window Activity Toolbar Item
+   Touch bar */
 "Show Activity Window" = "Покажи прозорец на дейностите";
 
-/* Touch bar */
+/* Main Window Presets Toolbar Item */
+"Show Presets List" = "Покажи списък с шаблони";
+
+/* Main Window Preview Toolbar Item
+   Touch bar */
 "Show Preview Window" = "Покажи прозорец на визуализация";
+
+/* Main Window Presets Toolbar Item */
+"Show Queue Window" = "Покажи прозорец на опашката";
+
+/* Queue Window When Done Toolbar Item */
+"Shut Down Computer" = "Изключване на компютъра";
 
 /* Job statistics */
 "Size:" = "Размер:";
@@ -387,7 +446,8 @@
 /* Preferences -> Output Name Token */
 "Source" = "Източник";
 
-/* Toolbar Start/Stop Item */
+/* Main Window Start Toolbar Item
+   Toolbar Start/Stop Item */
 "Start" = "Начало";
 
 /* Menu Start/Stop Item
@@ -398,7 +458,8 @@
 /* Toolbar Start/Stop Item */
 "Start Queue" = "Начало на опашката";
 
-/* Touch bar */
+/* Main Window Start Toolbar Item
+   Touch bar */
 "Start/Stop Encoding" = "Стартиране/Спиране на кодирането";
 
 /* Job statistics */
@@ -469,6 +530,9 @@
 
 /* Invalid destination alert -> message */
 "Warning!" = "Внимание!";
+
+/* Queue Window When Done Toolbar Item */
+"When Done" = " При завършване";
 
 /* No comment provided by engineer. */
 "Working" = "Работи";

@@ -121,9 +121,6 @@
 /* Class = "NSTextFieldCell"; title = "Text Cell"; ObjectID = "U4U-1b-rQF"; */
 "U4U-1b-rQF.title" = "텍스트 셀";
 
-/* Class = "NSMenu"; title = "OtherViews"; ObjectID = "Vxo-66-Mrx"; */
-"Vxo-66-Mrx.title" = "다른 견해들";
-
 /* Class = "NSTableView"; ibExternalAccessibilityDescription = "Audio tracks"; ObjectID = "yix-PF-sqH"; */
 "yix-PF-sqH.ibExternalAccessibilityDescription" = "오디오 트랙";
 

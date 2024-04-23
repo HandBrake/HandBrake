@@ -28,9 +28,6 @@
 /* Class = "NSButtonCell"; title = "OK"; ObjectID = "iLI-Nb-D7t"; */
 "iLI-Nb-D7t.title" = "확인";
 
-/* Class = "NSMenu"; title = "OtherViews"; ObjectID = "Kwy-lU-VuU"; */
-"Kwy-lU-VuU.title" = "다른 견해들";
-
 /* Class = "NSTextFieldCell"; title = "Languages:"; ObjectID = "mAT-Jp-SG1"; */
 "mAT-Jp-SG1.title" = "언어:";
 

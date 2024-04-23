@@ -28,9 +28,6 @@
 /* Class = "NSTextFieldCell"; title = "Filters:"; ObjectID = "OCw-f6-uA0"; */
 "OCw-f6-uA0.title" = "필터:";
 
-/* Class = "NSMenu"; title = "OtherViews"; ObjectID = "Q1Z-yT-7iY"; */
-"Q1Z-yT-7iY.title" = "다른 견해들";
-
 /* Class = "NSTextFieldCell"; title = "None"; ObjectID = "RIB-ME-Yhh"; */
 "RIB-ME-Yhh.title" = "없음";
 

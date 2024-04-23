@@ -87,6 +87,9 @@ Windows users, please make sure to install [Microsoft .NET Desktop Runtime versi
 - Improved performance of the Activity Log window
 - Improved UI performances by avoiding uneeded window resizes and slow AppKit controls
 - Miscellaneous bug fixes and improvements
+- Updated existing translations
+- Added new translations
+  - Ukrainian
 
 ### Windows
 

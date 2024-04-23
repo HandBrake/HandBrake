@@ -112,9 +112,6 @@
 /* Class = "NSWindow"; title = "Audio Selection Behaviour"; ObjectID = "kwM-lz-5lG"; */
 "kwM-lz-5lG.title" = "Поведение на избрано аудио";
 
-/* Class = "NSMenu"; title = "OtherViews"; ObjectID = "Kwy-lU-VuU"; */
-"Kwy-lU-VuU.title" = "ДругиИзгледи";
-
 /* Class = "NSPopUpButton"; ibShadowedToolTip = "Audio encoder to use when a track suitable for passthru is unavailable."; ObjectID = "LdN-Cx-ZJY"; */
 "LdN-Cx-ZJY.ibShadowedToolTip" = "Аудио енкодер, който да се използва, когато не е налична подходяща пътечка за подаване.";
 
@@ -153,9 +150,6 @@
 
 /* Class = "NSTableColumn"; headerCell.title = "Codec"; ObjectID = "pR9-d4-SNf"; */
 "pR9-d4-SNf.headerCell.title" = "Кодек";
-
-/* Class = "NSMenu"; title = "OtherViews"; ObjectID = "PtB-Wp-B9X"; */
-"PtB-Wp-B9X.title" = "ДругиИзгледи";
 
 /* Class = "NSPopUpButton"; ibExternalAccessibilityDescription = "Samplerate"; ObjectID = "r80-yv-59n"; */
 "r80-yv-59n.ibExternalAccessibilityDescription" = "Честота на дискретизация";

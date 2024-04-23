@@ -7,11 +7,11 @@
 /* Class = "NSWindow"; title = "Preferences"; ObjectID = "5"; */
 "5.title" = "Preferenze";
 
-/* Class = "NSMenu"; title = "OtherViews"; ObjectID = "6c7-RK-g6v"; */
-"6c7-RK-g6v.title" = "Altre viste";
-
 /* Class = "NSButtonCell"; title = "Keep preset edits when selecting a new title"; ObjectID = "6Sg-su-vLd"; */
 "6Sg-su-vLd.title" = "Cunservà e mudificazioni di prerigatura quandu un novu titulu hè selezziunatu";
+
+/* Class = "NSButtonCell"; title = "Show preview images on summary tab"; ObjectID = "7CY-9s-SGl"; */
+"7CY-9s-SGl.title" = "Affissà e fiure di fighjulata nant’à l’unghjetta di riassuntu";
 
 /* Class = "NSTextFieldCell"; title = "None"; ObjectID = "7hX-9H-spK"; */
 "7hX-9H-spK.title" = "Nisuna";
@@ -40,9 +40,6 @@
 /* Class = "NSPopUpButton"; ibShadowedToolTip = "Number of picture previews to scan. Higher values may increase automatic cropping accuracy at the expense of title scan time."; ObjectID = "352"; */
 "352.ibShadowedToolTip" = "Numeru di e fighjulate di fiura à analizà. Valori più alti ponu aumentà a precisione di a rifilatura autumatica à u preghjudiziu di u tempu d’analisa di u titulu.";
 
-/* Class = "NSMenu"; title = "OtherViews"; ObjectID = "354"; */
-"354.title" = "Altre viste";
-
 /* Class = "NSMenuItem"; title = "10"; ObjectID = "355"; */
 "355.title" = "10";
 
@@ -67,9 +64,6 @@
 /* Class = "NSPopUpButton"; ibShadowedToolTip = "Verbosity Level. Extended verbosity records more technical information to the Activity Log. Minimal verbosity records less."; ObjectID = "363"; */
 "363.ibShadowedToolTip" = "Livellu di verbusità. A verbusità estesa arregistreghja più d’infurmazioni tecniche in u ghjurnale d’attività. A verbusità minimale ne arregistreghja menu.";
 
-/* Class = "NSMenu"; title = "OtherViews"; ObjectID = "365"; */
-"365.title" = "Altre viste";
-
 /* Class = "NSMenuItem"; title = "Extended"; ObjectID = "368"; */
 "368.title" = "Estesa";
 
@@ -87,9 +81,6 @@
 
 /* Class = "NSPopUpButton"; ibShadowedToolTip = "Determines the granularity of the x264 Constant Quality control. Smaller values allow for finer quality increments."; ObjectID = "387"; */
 "387.ibShadowedToolTip" = "Determineghja a granularità di u cuntrollu di qualità custente di x264. I chjuchi valori permettenu aumenti più fini di qualità.";
-
-/* Class = "NSMenu"; title = "OtherViews"; ObjectID = "389"; */
-"389.title" = "Altre viste";
 
 /* Class = "NSMenuItem"; title = "0.20"; ObjectID = "390"; */
 "390.title" = "0,20";
@@ -142,8 +133,8 @@
 /* Class = "NSMenuItem"; title = "60"; ObjectID = "519"; */
 "519.title" = "60";
 
-/* Class = "NSMenu"; title = "OtherViews"; ObjectID = "aYB-lm-mkU"; */
-"aYB-lm-mkU.title" = "Altre viste";
+/* Class = "NSTableView"; ibShadowedToolTip = "The following file extensions will be ignored when scanning a folder. The list is case insensitive"; ObjectID = "ax0-hR-WPq"; */
+"ax0-hR-WPq.ibShadowedToolTip" = "Quelle estensioni di schedariu seranu ignurate durante un’analisa di cartulare. Sta lista ùn sfarenzieghja micca maiuscule è minuscule";
 
 /* Class = "NSButtonCell"; title = "Enable the VideoToolbox hardware decoders"; ObjectID = "BHK-QU-DwS"; */
 "BHK-QU-DwS.title" = "Attivà i discudificatori materiale VideoToolbox";
@@ -157,6 +148,9 @@
 /* Class = "NSMenuItem"; title = "2"; ObjectID = "Cge-hb-Nh8"; */
 "Cge-hb-Nh8.title" = "2";
 
+/* Class = "NSTextFieldCell"; title = "Encode up to"; ObjectID = "cI9-ML-lqx"; */
+"cI9-ML-lqx.title" = "Cudificà fine à";
+
 /* Class = "NSTextFieldCell"; title = "Encoder:"; ObjectID = "cqp-xU-GOe"; */
 "cqp-xU-GOe.title" = "Cudificatore :";
 
@@ -166,6 +160,9 @@
 /* Class = "NSButtonCell"; title = "Also use in combination with software encoders"; ObjectID = "d9B-Vd-jMM"; */
 "d9B-Vd-jMM.title" = "Si pò dinù impiegalli cù cudificatori logichi";
 
+/* Class = "NSButtonCell"; title = "Pause queue when switching to battery power"; ObjectID = "dMs-sk-W4G"; */
+"dMs-sk-W4G.title" = "Interrompe a fila d’attesa quandu l’apparechju passa nant’à a batteria";
+
 /* Class = "NSButton"; ibShadowedToolTip = "Hardware decoders will reduce CPU usage and lower battery usage when combined with an hardware encoder. Depending on the CPU speed, they could either improve or decrease encoding speed."; ObjectID = "Doh-Ja-Gh7"; */
 "Doh-Ja-Gh7.ibShadowedToolTip" = "I discudificatori materiale riducenu l’usu di a CPU è l’impiegu di a batteria quand’elli sò cumbinati cù un cudificatore materiale. Secondu à a vitezza di a CPU, i dui ponu megliurà o diminuisce a vitezza di a cudificazione.";
 
@@ -174,6 +171,12 @@
 
 /* Class = "NSMenuItem"; title = "4"; ObjectID = "FB2-Vr-VKP"; */
 "FB2-Vr-VKP.title" = "4";
+
+/* Class = "NSButtonCell"; title = "Show notification when each job is completed"; ObjectID = "fdI-zP-r7j"; */
+"fdI-zP-r7j.title" = "Affissà una nutificazione quandu ogni travagliu hè compiu";
+
+/* Class = "NSButtonCell"; title = "Play notification sound"; ObjectID = "GFD-Ju-1n9"; */
+"GFD-Ju-1n9.title" = "Sunà un sonu di nutificazione";
 
 /* Class = "NSTextFieldCell"; title = "Options:"; ObjectID = "ImU-Vn-SGr"; */
 "ImU-Vn-SGr.title" = "Ozzioni :";
@@ -187,11 +190,23 @@
 /* Class = "CocoaBindingsConnection"; ibShadowedIsNilPlaceholder = "None"; ObjectID = "JZb-Vz-cY4"; */
 "JZb-Vz-cY4.ibShadowedIsNilPlaceholder" = "Nisuna";
 
+/* Class = "NSTextFieldCell"; title = "jobs simultaneously"; ObjectID = "kBl-mO-erf"; */
+"kBl-mO-erf.title" = "travagli attempu";
+
+/* Class = "NSTextFieldCell"; title = "Table View Cell"; ObjectID = "kCF-8e-gXS"; */
+"kCF-8e-gXS.title" = "Cellula di vista di tavula";
+
 /* Class = "NSTextFieldCell"; title = "seconds"; ObjectID = "klQ-DW-Kc6"; */
 "klQ-DW-Kc6.title" = "seconde";
 
 /* Class = "NSTextFieldCell"; title = "Format:"; ObjectID = "Ktg-Bh-1Pt"; */
 "Ktg-Bh-1Pt.title" = "Furmatu :";
+
+/* Class = "NSTextFieldCell"; title = "Text Cell"; ObjectID = "l9y-MS-HnS"; */
+"l9y-MS-HnS.title" = "Cellula di testu";
+
+/* Class = "NSButtonCell"; title = "Remove old logs from main Activity Logs folder after 7 days"; ObjectID = "lgn-RF-k0d"; */
+"lgn-RF-k0d.title" = "Caccià i ghjurnali anziani da u cartulare principale di i ghjurnali d’attività dopu à 7 ghjorni";
 
 /* Class = "NSTextFieldCell"; title = "Drag labels to Format to compose a naming format."; ObjectID = "MSp-go-i1C"; */
 "MSp-go-i1C.title" = "Fate trascinà l’etichette in Furmatu per cumpone un furmatu di dinuminazione.";
@@ -199,14 +214,23 @@
 /* Class = "NSButtonCell"; title = "Pause queue if disk space is lower than:"; ObjectID = "ODf-uW-BrD"; */
 "ODf-uW-BrD.title" = "Interrompe a fila d’attesa s’è u spaziu di discu hè inferiore à :";
 
+/* Class = "NSTableColumn"; headerCell.title = "Extensions"; ObjectID = "p5b-EU-Y2V"; */
+"p5b-EU-Y2V.headerCell.title" = "Estensioni";
+
 /* Class = "NSButtonCell"; title = "Send file to:"; ObjectID = "P5f-Vq-TeL"; */
 "P5f-Vq-TeL.title" = "Mandà u schedariu à :";
 
 /* Class = "NSMenuItem"; title = ".m4v"; ObjectID = "phv-oU-WnC"; */
 "phv-oU-WnC.title" = ".m4v";
 
+/* Class = "NSButtonCell"; title = "Show notification when queue is completed"; ObjectID = "Qdg-Tw-rlf"; */
+"Qdg-Tw-rlf.title" = "Affissà una nutificazione quandu a fila d’attesa hè compia";
+
 /* Class = "NSTextFieldCell"; title = "Options:"; ObjectID = "saX-n7-YV0"; */
 "saX-n7-YV0.title" = "Ozzioni :";
+
+/* Class = "NSButtonCell"; title = "Clear completed jobs after an encode completes"; ObjectID = "szf-YE-Wml"; */
+"szf-YE-Wml.title" = "Squassà i travagli compii dopu à a fine di a cudificazione";
 
 /* Class = "NSButtonCell"; title = "Use ISO Date Format (YYYY-MM-DD)"; ObjectID = "t9b-CO-ShI"; */
 "t9b-CO-ShI.title" = "Impiegà u furmatu di data ISO (AAAA-MM-GG)";
@@ -216,6 +240,9 @@
 
 /* Class = "NSButtonCell"; title = "Automatically name output files"; ObjectID = "UCC-tm-0Sa"; */
 "UCC-tm-0Sa.title" = "Numinà autumaticamente i schedarii d’esciuta";
+
+/* Class = "NSButtonCell"; title = "Clear completed jobs at launch"; ObjectID = "uIJ-tX-PEA"; */
+"uIJ-tX-PEA.title" = "Squassà i travagli compii à l’iniziu";
 
 /* Class = "NSTextFieldCell"; title = "Default MP4 Extension:"; ObjectID = "v6r-mL-XmA"; */
 "v6r-mL-XmA.title" = "Estensione MP4 predefinita :";
@@ -229,20 +256,29 @@
 /* Class = "NSMenuItem"; title = "1"; ObjectID = "WAI-Bu-jIu"; */
 "WAI-Bu-jIu.title" = "1";
 
+/* Class = "NSSegmentedCell"; wbU-4j-344.ibShadowedToolTips[0] = "Add Extension"; ObjectID = "wbU-4j-344"; */
+"wbU-4j-344.ibShadowedToolTips[0]" = "Aghjunghje un’estensione";
+
+/* Class = "NSSegmentedCell"; wbU-4j-344.ibShadowedToolTips[1] = "Remove Selected Extension"; ObjectID = "wbU-4j-344"; */
+"wbU-4j-344.ibShadowedToolTips[1]" = "Caccià l’estensione selezziunata";
+
+/* Class = "NSTextFieldCell"; title = "Excluded file extensions:"; ObjectID = "wFM-UD-vzS"; */
+"wFM-UD-vzS.title" = "Estensioni di schedariu escluse :";
+
 /* Class = "NSMenuItem"; title = ".mp4"; ObjectID = "wgg-7I-LBB"; */
 "wgg-7I-LBB.title" = ".mp4";
 
 /* Class = "NSPopUpButton"; ibShadowedToolTip = "Higher values may help to fully utilize the CPU if a single encode can't scale to all available CPU cores."; ObjectID = "wOW-0q-lpT"; */
 "wOW-0q-lpT.ibShadowedToolTip" = "Valori più alti ponu aiutà à aduprà cumpletamente a CPU s’è una sola cudificazione ùn pò riesce à impiegà tutti i cori CPU dispunibule.";
 
+/* Class = "NSButtonCell"; title = "Use same destination folder as source when possible"; ObjectID = "wXE-Fz-Dru"; */
+"wXE-Fz-Dru.title" = "Impiegà u listessu cartulare di destinazione chè a fonte quand’ella hè pussibule";
+
 /* Class = "NSMenuItem"; title = "Put Computer To Sleep"; ObjectID = "x7i-WX-w6l"; */
 "x7i-WX-w6l.title" = "Mette l’urdinatore in veghja";
 
 /* Class = "NSButtonCell"; title = "Change case to Title Case"; ObjectID = "Y9B-ue-3sE"; */
 "Y9B-ue-3sE.title" = "Maiuscula Per Ogni Lettera Iniziale";
-
-/* Class = "NSMenu"; title = "OtherViews"; ObjectID = "ZkO-Z0-OCN"; */
-"ZkO-Z0-OCN.title" = "Altre viste";
 
 /* Class = "NSButtonCell"; title = "Browse…"; ObjectID = "zot-Bx-Ch3"; */
 "zot-Bx-Ch3.title" = "Navigà…";

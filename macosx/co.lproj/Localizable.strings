@@ -56,8 +56,17 @@
    File already exists alert -> message */
 "A file already exists at the selected destination." = "Un schedariu esiste dighjà in a destinazione selezziunata.";
 
+/* Queue Window Action Toolbar Item */
+"Action" = "Azzione";
+
+/* Main Window Activity Toolbar Item */
+"Activity" = "Attività";
+
 /* Picture HUD -> scale button */
 "Actual Scale" = "Scala attuale";
+
+/* Main Window Add Toolbar Item */
+"Add All Titles To Queue" = "Aghjunghje tutti i tituli à a fila d’attesa";
 
 /* Queue undo action name */
 "Add Job To Queue" = "Aghjunghje un travagliu à a fila d’attesa";
@@ -71,7 +80,11 @@
 /* Touch bar */
 "Add Titles To Queue" = "Aghjunghje tituli à a fila d’attesa";
 
-/* Touch bar */
+/* Main Window Add Toolbar Item */
+"Add Titles To Queue…" = "Aghjunghje i tituli à a fila d’attesa…";
+
+/* Main Window Add Toolbar Item
+   Touch bar */
 "Add To Queue" = "Aghjunghje à a fila d’attesa";
 
 /* Preferences Advanced Toolbar Item */
@@ -158,6 +171,12 @@
 /* Delete preset alert -> first button */
 "Delete Presets" = "Squassà e prerigature";
 
+/* Queue Window Details Toolbar Item */
+"Details" = "Detaglii";
+
+/* Queue Window When Done Toolbar Item */
+"Do Nothing" = "Ùn fà nunda";
+
 /* File already exists alert -> informative text
    File already exists in queue alert -> informative text */
 "Do you want to overwrite %@?" = "Vulete rimpiazzà %@ ?";
@@ -201,6 +220,9 @@
 
 /* Export presets save panel title */
 "Export presets" = "Espurtà e prerigature";
+
+/* Default name for a newly added excluded file extension */
+"extension" = "estensione";
 
 /* File already exists alert -> message */
 "File already exists." = "U schedariu esiste dighjà.";
@@ -288,7 +310,8 @@
 /* Preview -> live preview alert default button */
 "Open in external player" = "Apre cù un lettore esternu";
 
-/* Toolbar Open/Cancel Item
+/* Main Window Open Toolbar Item
+   Toolbar Open/Cancel Item
    Touch bar */
 "Open Source" = "Apre a fonte";
 
@@ -296,7 +319,8 @@
    File already exists in queue alert -> second button */
 "Overwrite" = "Rimpiazzà";
 
-/* Toolbar Pause Item */
+/* Main Window Pause Toolbar Item
+   Toolbar Pause Item */
 "Pause" = "Pausa";
 
 /* Queue -> pause/resume menu
@@ -304,7 +328,8 @@
    Touch bar */
 "Pause Encoding" = "Interrompe a cudificazione";
 
-/* Touch bar */
+/* Main Window Pause Toolbar Item
+   Touch bar */
 "Pause/Resume Encoding" = "Interrompe / cuntinuà a cudificazione";
 
 /* Job statistics */
@@ -330,10 +355,14 @@
 /* Preferences -> Output Name Token */
 "Preset" = "Prerigatura";
 
+/* Main Window Presets Toolbar Item */
+"Presets" = "Prerigature";
+
 /* Preview -> progress formatter title */
 "preview" = "fighjulata";
 
-/* Preview -> window title */
+/* Main Window Preview Toolbar Item
+   Preview -> window title */
 "Preview" = "Fighjulata";
 
 /* Preview -> window title format */
@@ -345,8 +374,11 @@
 /* Touch bar */
 "Previews" = "Fighjulate";
 
+/* Queue Window When Done Toolbar Item */
+"Put Computer to Sleep" = "Mette l’urdinatore in veghja";
+
 /* Queue notification alert message */
-"Put down that cocktail…" = "Punite stu bichjeru…";
+"Put down that cocktail…" = "Ripunite stu bichjeru…";
 
 /* Preferences -> Output Name Token */
 "Quality Type" = "Tipu di qualità";
@@ -354,18 +386,31 @@
 /* Preferences -> Output Name Token */
 "Quality/Bitrate" = "Qualità / Flussu binariu";
 
-/* Preferences Queue Toolbar Item
+/* Main Window Presets Toolbar Item
+   Preferences Queue Toolbar Item
    Queue window title */
 "Queue" = "Fila d’attesa";
 
 /* Queue window title */
 "Queue (%@)" = "Fila d’attesa (%@)";
 
+/* Queue Window Quick Look Toolbar Item */
+"Quick Look" = "Fighjulata";
+
 /* Quit Alert -> first button */
 "Quit" = "Esce";
 
+/* Queue Window When Done Toolbar Item */
+"Quit HandBrake" = "Piantà Handbrake";
+
 /* Touch bar */
 "Remaining Time" = "Tempu rimanentu";
+
+/* Queue Window Action Toolbar Item */
+"Remove All Jobs" = "Caccià tutti i travagli";
+
+/* Queue Window Action Toolbar Item */
+"Remove Completed Jobs" = "Caccià i travagli compii";
 
 /* HBQueueItemView -> Remove button accessibility label */
 "Remove job" = "Caccià u travagliu";
@@ -378,6 +423,12 @@
 
 /* HBQueueItemView -> Encode state accessibility label */
 "Rescanning for editing" = "Nova esplurazione per pudè mudificà";
+
+/* Queue Window Action Toolbar Item */
+"Reset All Jobs" = "Reinizià tutti i travagli";
+
+/* Queue Window Action Toolbar Item */
+"Reset Failed Jobs" = "Reinizià i travagli fiaschi";
 
 /* Toolbar Pause Item */
 "Resume" = "Ripiglià";
@@ -411,11 +462,22 @@
 /* Notification -> Show in Finder */
 "Show" = "Affissà";
 
-/* Touch bar */
+/* Main Window Activity Toolbar Item
+   Touch bar */
 "Show Activity Window" = "Affissà a finestra d’attività";
 
-/* Touch bar */
+/* Main Window Presets Toolbar Item */
+"Show Presets List" = "Affissà a lista di e prerigature";
+
+/* Main Window Preview Toolbar Item
+   Touch bar */
 "Show Preview Window" = "Affissà a finestra di fighjulata";
+
+/* Main Window Presets Toolbar Item */
+"Show Queue Window" = "Affissà a finestra di a fila d’attesa";
+
+/* Queue Window When Done Toolbar Item */
+"Shut Down Computer" = "Piantà l’urdinatore";
 
 /* Job statistics */
 "Size:" = "Dimensione :";
@@ -429,7 +491,8 @@
 /* Preferences -> Output Name Token */
 "Source" = "Fonte";
 
-/* Toolbar Start/Stop Item */
+/* Main Window Start Toolbar Item
+   Toolbar Start/Stop Item */
 "Start" = "Principià";
 
 /* Menu Start/Stop Item
@@ -440,7 +503,8 @@
 /* Toolbar Start/Stop Item */
 "Start Queue" = "Principià a fila d’attesa";
 
-/* Touch bar */
+/* Main Window Start Toolbar Item
+   Touch bar */
 "Start/Stop Encoding" = "Principià / Piantà a cudificazione";
 
 /* Job statistics */
@@ -518,6 +582,9 @@
 /* Invalid destination alert -> message */
 "Warning!" = "Avertimentu !";
 
+/* Queue Window When Done Toolbar Item */
+"When Done" = "Quandu hè compiu";
+
 /* Preferences -> Output Name Token */
 "Width" = "Larghezza";
 
@@ -551,4 +618,7 @@
 /* Queue Edit Alert -> stop and edit informative text
    Queue Stop Alert -> stop and remove informative text */
 "Your movie will be lost if you don't continue encoding." = "U vostru filmu serà persu s’è vo ùn cuntinuate micca a cudificazione.";
+
+/* Queue done notification message */
+"Your queue is done!" = "A vostra fila d’attesa hè compia !";
 

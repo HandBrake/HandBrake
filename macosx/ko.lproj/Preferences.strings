@@ -4,9 +4,6 @@
 /* Class = "NSWindow"; title = "Preferences"; ObjectID = "5"; */
 "5.title" = "환경설정";
 
-/* Class = "NSMenu"; title = "OtherViews"; ObjectID = "6c7-RK-g6v"; */
-"6c7-RK-g6v.title" = "다른 견해들";
-
 /* Class = "NSButtonCell"; title = "Keep preset edits when selecting a new title"; ObjectID = "6Sg-su-vLd"; */
 "6Sg-su-vLd.title" = "새 영상 선택시 사전 설정 편집 유지";
 
@@ -34,9 +31,6 @@
 /* Class = "NSTextFieldCell"; title = "Activity Logs:"; ObjectID = "351"; */
 "351.title" = "작업 로그:";
 
-/* Class = "NSMenu"; title = "OtherViews"; ObjectID = "354"; */
-"354.title" = "다른 견해들";
-
 /* Class = "NSMenuItem"; title = "10"; ObjectID = "355"; */
 "355.title" = "10";
 
@@ -55,9 +49,6 @@
 /* Class = "NSPopUpButton"; ibShadowedToolTip = "Verbosity Level. Extended verbosity records more technical information to the Activity Log. Minimal verbosity records less."; ObjectID = "363"; */
 "363.ibShadowedToolTip" = "로그 상세 레벨. 레벨이 확장될 수도록 더 많은 기술 정보가 활동 로그에 기록됩니다. 레벨이 낮아질수록 정보가 적어집니다.";
 
-/* Class = "NSMenu"; title = "OtherViews"; ObjectID = "365"; */
-"365.title" = "다른 견해들";
-
 /* Class = "NSMenuItem"; title = "Extended"; ObjectID = "368"; */
 "368.title" = "확장";
 
@@ -72,9 +63,6 @@
 
 /* Class = "NSTextFieldCell"; title = "Verbosity Level:"; ObjectID = "372"; */
 "372.title" = "로그 상세 레벨:";
-
-/* Class = "NSMenu"; title = "OtherViews"; ObjectID = "389"; */
-"389.title" = "다른 견해들";
 
 /* Class = "NSMenuItem"; title = "0.20"; ObjectID = "390"; */
 "390.title" = "0.20";
@@ -115,9 +103,6 @@
 /* Class = "NSMenuItem"; title = "60"; ObjectID = "519"; */
 "519.title" = "60";
 
-/* Class = "NSMenu"; title = "OtherViews"; ObjectID = "aYB-lm-mkU"; */
-"aYB-lm-mkU.title" = "다른 견해들";
-
 /* Class = "NSTextFieldCell"; title = "GB"; ObjectID = "BKV-oH-uht"; */
 "BKV-oH-uht.title" = "GB";
 
@@ -145,11 +130,17 @@
 /* Class = "CocoaBindingsConnection"; ibShadowedIsNilPlaceholder = "None"; ObjectID = "JZb-Vz-cY4"; */
 "JZb-Vz-cY4.ibShadowedIsNilPlaceholder" = "없음";
 
+/* Class = "NSTextFieldCell"; title = "Table View Cell"; ObjectID = "kCF-8e-gXS"; */
+"kCF-8e-gXS.title" = "테이블 보기 셀";
+
 /* Class = "NSTextFieldCell"; title = "seconds"; ObjectID = "klQ-DW-Kc6"; */
 "klQ-DW-Kc6.title" = "초";
 
 /* Class = "NSTextFieldCell"; title = "Format:"; ObjectID = "Ktg-Bh-1Pt"; */
 "Ktg-Bh-1Pt.title" = "형식:";
+
+/* Class = "NSTextFieldCell"; title = "Text Cell"; ObjectID = "l9y-MS-HnS"; */
+"l9y-MS-HnS.title" = "텍스트 셀";
 
 /* Class = "NSButtonCell"; title = "Pause queue if disk space is lower than:"; ObjectID = "ODf-uW-BrD"; */
 "ODf-uW-BrD.title" = "작업을 일시중지할 디스크 남은 공간:";
@@ -186,9 +177,6 @@
 
 /* Class = "NSMenuItem"; title = "Put Computer To Sleep"; ObjectID = "x7i-WX-w6l"; */
 "x7i-WX-w6l.title" = "컴퓨터를 잠자기 상태로 변경";
-
-/* Class = "NSMenu"; title = "OtherViews"; ObjectID = "ZkO-Z0-OCN"; */
-"ZkO-Z0-OCN.title" = "다른 견해들";
 
 /* Class = "NSButtonCell"; title = "Browse…"; ObjectID = "zot-Bx-Ch3"; */
 "zot-Bx-Ch3.title" = "탐색...";

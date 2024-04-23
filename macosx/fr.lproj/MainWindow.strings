@@ -7,20 +7,8 @@
 /* Class = "NSTextField"; ibShadowedToolTip = "Title to scan."; ObjectID = "3w9-Iu-3u2"; */
 "3w9-Iu-3u2.ibShadowedToolTip" = "Titre à scanner.";
 
-/* Class = "NSButton"; ibShadowedToolTip = "Add To Queue"; ObjectID = "3xl-Xh-n9j"; */
-"3xl-Xh-n9j.ibShadowedToolTip" = "Ajouter à la file d'attente";
-
 /* Class = "NSTextFieldCell"; title = "0"; ObjectID = "6E4-AG-PEh"; */
 "6E4-AG-PEh.title" = "0";
-
-/* Class = "NSToolbarItem"; label = "Open Source"; ObjectID = "8r8-nZ-dYs"; */
-"8r8-nZ-dYs.label" = "Ouvrir une source";
-
-/* Class = "NSToolbarItem"; paletteLabel = "Open Source"; ObjectID = "8r8-nZ-dYs"; */
-"8r8-nZ-dYs.paletteLabel" = "Ouvrir une source";
-
-/* Class = "NSToolbarItem"; toolTip = "Open Source"; ObjectID = "8r8-nZ-dYs"; */
-"8r8-nZ-dYs.toolTip" = "Ouvrir une source";
 
 /* Class = "NSWindow"; title = "HandBrake"; ObjectID = "21"; */
 "21.title" = "HandBrake";
@@ -40,26 +28,17 @@
 /* Class = "NSPopUpButton"; ibShadowedToolTip = "Title, or video clip, to encode. The longest title is selected by default.\n\nBlu-ray and DVD sources often have multiple titles, the longest of which is typically the main feature."; ObjectID = "1541"; */
 "1541.ibShadowedToolTip" = "Titre ou vidéo à encoder. Le titre le plus long est sélectionné par défaut.\n\nLes Blu-ray et DVD ont souvent plusieurs titres ; le plus long est en général le titre principal.";
 
-/* Class = "NSMenu"; title = "OtherViews"; ObjectID = "1542"; */
-"1542.title" = "AutresVues";
-
 /* Class = "NSPopUpButton"; ibExternalAccessibilityDescription = "Start Chapter"; ObjectID = "1545"; */
 "1545.ibExternalAccessibilityDescription" = "Chapitre de début";
 
 /* Class = "NSPopUpButton"; ibShadowedToolTip = "First chapter to encode."; ObjectID = "1545"; */
 "1545.ibShadowedToolTip" = "Premier chapitre à encoder.";
 
-/* Class = "NSMenu"; title = "OtherViews"; ObjectID = "1546"; */
-"1546.title" = "AutresVues";
-
 /* Class = "NSPopUpButton"; ibExternalAccessibilityDescription = "End Chapter"; ObjectID = "1548"; */
 "1548.ibExternalAccessibilityDescription" = "Chapitre de fin";
 
 /* Class = "NSPopUpButton"; ibShadowedToolTip = "Last chapter to encode."; ObjectID = "1548"; */
 "1548.ibShadowedToolTip" = "Dernier chapitre à encoder.";
-
-/* Class = "NSMenu"; title = "OtherViews"; ObjectID = "1549"; */
-"1549.title" = "AutresVues";
 
 /* Class = "NSTextField"; ibExternalAccessibilityDescription = "Duration"; ObjectID = "1554"; */
 "1554.ibExternalAccessibilityDescription" = "Durée";
@@ -109,9 +88,6 @@
 /* Class = "NSPopUpButton"; ibShadowedToolTip = "Video angle to encode. Only applicable to multi-angle DVD and Blu-ray."; ObjectID = "5181"; */
 "5181.ibShadowedToolTip" = "Angle vidéo à encoder. Applicable seulement sur les DVD et Blu-ray multi-angles.";
 
-/* Class = "NSMenu"; title = "OtherViews"; ObjectID = "5183"; */
-"5183.title" = "AutresVues";
-
 /* Class = "NSTextFieldCell"; title = "Angle:"; ObjectID = "5185"; */
 "5185.title" = "Angle :";
 
@@ -139,9 +115,6 @@
 /* Class = "NSPopUpButton"; ibShadowedToolTip = "Source range selection. By default, all chapters are selected and the entire source is encoded."; ObjectID = "5513"; */
 "5513.ibShadowedToolTip" = "Sélection de la plage de la source. Par défaut, tous les chapitres seront sélectionnés et la source est intégralement encodée.";
 
-/* Class = "NSMenu"; title = "OtherViews"; ObjectID = "5515"; */
-"5515.title" = "AutresVues";
-
 /* Class = "NSTextField"; ibExternalAccessibilityDescription = "Start time in frames"; ObjectID = "5521"; */
 "5521.ibExternalAccessibilityDescription" = "Heure de début en images";
 
@@ -153,9 +126,6 @@
 
 /* Class = "NSTextField"; ibShadowedToolTip = "Last frame to encode."; ObjectID = "5523"; */
 "5523.ibShadowedToolTip" = "Dernière image à encoder.";
-
-/* Class = "NSMenuItem"; title = "Add All Titles To Queue"; ObjectID = "a37-Yd-bYR"; */
-"a37-Yd-bYR.title" = "Ajouter tous les titres à la file d'attente";
 
 /* Class = "NSButton"; ibShadowedToolTip = "Reload the encoding settings for the currently selected preset. Modifications will be discarded."; ObjectID = "AhR-pK-Oz4"; */
 "AhR-pK-Oz4.ibShadowedToolTip" = "Recharger les réglages par défaut pour le préréglage en cours. Toute modification sera perdue.";
@@ -169,29 +139,11 @@
 /* Class = "NSPopUpButton"; ibExternalAccessibilityDescription = "Preset selection"; ObjectID = "bWH-Lp-mKY"; */
 "bWH-Lp-mKY.ibExternalAccessibilityDescription" = "Sélection de préréglage";
 
-/* Class = "NSToolbarItem"; label = "Start"; ObjectID = "byg-kj-sEM"; */
-"byg-kj-sEM.label" = "Démarrer";
-
-/* Class = "NSToolbarItem"; paletteLabel = "Start Encoding"; ObjectID = "byg-kj-sEM"; */
-"byg-kj-sEM.paletteLabel" = "Démarrer l'encodage";
-
-/* Class = "NSToolbarItem"; toolTip = "Start Encoding"; ObjectID = "byg-kj-sEM"; */
-"byg-kj-sEM.toolTip" = "Démarrer l'encodage";
-
 /* Class = "NSButtonCell"; title = "Reload"; ObjectID = "cgS-BU-Nfd"; */
 "cgS-BU-Nfd.title" = "Recharger";
 
 /* Class = "NSBox"; title = "Box"; ObjectID = "d0E-xw-bxh"; */
 "d0E-xw-bxh.title" = "Boîte";
-
-/* Class = "NSToolbarItem"; label = "Preview"; ObjectID = "dK4-jt-v4K"; */
-"dK4-jt-v4K.label" = "Aperçu";
-
-/* Class = "NSToolbarItem"; paletteLabel = "Show Preview Window"; ObjectID = "dK4-jt-v4K"; */
-"dK4-jt-v4K.paletteLabel" = "Afficher la fenêtre d'aperçu";
-
-/* Class = "NSToolbarItem"; toolTip = "Show Preview Window"; ObjectID = "dK4-jt-v4K"; */
-"dK4-jt-v4K.toolTip" = "Afficher la fenêtre d'aperçu";
 
 /* Class = "NSButton"; ibShadowedToolTip = "Scan only the specified title instead of all titles."; ObjectID = "DN4-48-aOI"; */
 "DN4-48-aOI.ibShadowedToolTip" = "Scanner uniquement les titres spécifiés parmi tous les titres.";
@@ -202,15 +154,6 @@
 /* Class = "NSButtonCell"; title = "Scan only title:"; ObjectID = "eQA-t2-FcV"; */
 "eQA-t2-FcV.title" = "Scanner uniquement le titre :";
 
-/* Class = "NSToolbarItem"; label = "Queue"; ObjectID = "HCx-ku-nF7"; */
-"HCx-ku-nF7.label" = "File d'attente";
-
-/* Class = "NSToolbarItem"; paletteLabel = "Show Queue Window"; ObjectID = "HCx-ku-nF7"; */
-"HCx-ku-nF7.paletteLabel" = "Afficher la fenêtre de la file d'attente";
-
-/* Class = "NSToolbarItem"; toolTip = "Show Queue Window"; ObjectID = "HCx-ku-nF7"; */
-"HCx-ku-nF7.toolTip" = "Afficher la fenêtre de la file d'attente";
-
 /* Class = "NSButtonCell"; title = "Recursively scan folders"; ObjectID = "Hwu-gp-tRZ"; */
 "Hwu-gp-tRZ.title" = "Analyse récursivement les dossiers";
 
@@ -219,9 +162,6 @@
 
 /* Class = "NSButtonCell"; title = "Save New Preset…"; ObjectID = "IOU-3L-nvB"; */
 "IOU-3L-nvB.title" = "Sauvegarder le nouveau préréglage…";
-
-/* Class = "NSMenuItem"; title = "Add Titles To Queue…"; ObjectID = "iVg-1G-9ym"; */
-"iVg-1G-9ym.title" = "Ajouter les titres à la file d'attente…";
 
 /* Class = "NSTextFieldCell"; title = "Range:"; ObjectID = "IxV-PW-oYh"; */
 "IxV-PW-oYh.title" = "Plage :";
@@ -232,48 +172,12 @@
 /* Class = "NSMenuItem"; title = "Selected Preset"; ObjectID = "OYP-3T-FnA"; */
 "OYP-3T-FnA.title" = "Préréglage sélectionné";
 
-/* Class = "NSToolbarItem"; label = "Activity"; ObjectID = "p7Q-L3-zcW"; */
-"p7Q-L3-zcW.label" = "Activité";
-
-/* Class = "NSToolbarItem"; paletteLabel = "Show Activity Window"; ObjectID = "p7Q-L3-zcW"; */
-"p7Q-L3-zcW.paletteLabel" = "Afficher la fenêtre d'activité";
-
-/* Class = "NSToolbarItem"; toolTip = "Show Activity Window"; ObjectID = "p7Q-L3-zcW"; */
-"p7Q-L3-zcW.toolTip" = "Afficher la fenêtre d'activité";
-
 /* Class = "NSPathControl"; ibExternalAccessibilityDescription = "Destination folder path"; ObjectID = "PJi-21-hie"; */
 "PJi-21-hie.ibExternalAccessibilityDescription" = "Chemin du dossier de destination";
-
-/* Class = "NSToolbarItem"; label = "Presets"; ObjectID = "qhv-9l-2FH"; */
-"qhv-9l-2FH.label" = "Préréglages";
-
-/* Class = "NSToolbarItem"; paletteLabel = "Show Presets List"; ObjectID = "qhv-9l-2FH"; */
-"qhv-9l-2FH.paletteLabel" = "Montrer la liste des préréglages";
-
-/* Class = "NSToolbarItem"; toolTip = "Show Presets List"; ObjectID = "qhv-9l-2FH"; */
-"qhv-9l-2FH.toolTip" = "Montrer la liste des préréglages";
-
-/* Class = "NSToolbarItem"; label = "Add To Queue"; ObjectID = "Qoa-tj-Rj2"; */
-"Qoa-tj-Rj2.label" = "Ajouter à la file d'attente";
-
-/* Class = "NSToolbarItem"; paletteLabel = "Add To Queue"; ObjectID = "Qoa-tj-Rj2"; */
-"Qoa-tj-Rj2.paletteLabel" = "Ajouter à la file d'attente";
 
 /* Class = "NSTextFieldCell"; title = "To:"; ObjectID = "rfK-nQ-Aq2"; */
 "rfK-nQ-Aq2.title" = "Vers :";
 
 /* Class = "NSMenuItem"; title = "Reveal in Finder"; ObjectID = "rK6-EB-N9Z"; */
 "rK6-EB-N9Z.title" = "Afficher dans le Finder ";
-
-/* Class = "NSToolbarItem"; label = "Pause"; ObjectID = "wTQ-KF-5KW"; */
-"wTQ-KF-5KW.label" = "Pause";
-
-/* Class = "NSToolbarItem"; paletteLabel = "Pause Encoding"; ObjectID = "wTQ-KF-5KW"; */
-"wTQ-KF-5KW.paletteLabel" = "Mettre en pause l'encodage";
-
-/* Class = "NSToolbarItem"; toolTip = "Pause Encoding"; ObjectID = "wTQ-KF-5KW"; */
-"wTQ-KF-5KW.toolTip" = "Mettre en pause l'encodage";
-
-/* Class = "NSBox"; title = "Box"; ObjectID = "zcd-K2-F7w"; */
-"zcd-K2-F7w.title" = "Boîte";
 

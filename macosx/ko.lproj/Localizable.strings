@@ -56,6 +56,15 @@
    File already exists alert -> message */
 "A file already exists at the selected destination." = "파일이 이미 대상 위치에 있습니다.";
 
+/* Queue Window Action Toolbar Item */
+"Action" = "동작";
+
+/* Main Window Activity Toolbar Item */
+"Activity" = "작업";
+
+/* Main Window Add Toolbar Item */
+"Add All Titles To Queue" = "대기열에 모든 제목 추가";
+
 /* Queue undo action name */
 "Add Job To Queue" = "대기열에 작업 추가";
 
@@ -68,7 +77,11 @@
 /* Touch bar */
 "Add Titles To Queue" = "대기열에 제목 추가...";
 
-/* Touch bar */
+/* Main Window Add Toolbar Item */
+"Add Titles To Queue…" = "대기열에 제목 추가...";
+
+/* Main Window Add Toolbar Item
+   Touch bar */
 "Add To Queue" = "대기열에 추가";
 
 /* Preferences Advanced Toolbar Item */
@@ -139,6 +152,12 @@
 
 /* Delete preset alert -> first button */
 "Delete Presets" = "사전설정 삭제";
+
+/* Queue Window Details Toolbar Item */
+"Details" = "상세정보";
+
+/* Queue Window When Done Toolbar Item */
+"Do Nothing" = "아무것도 안 함";
 
 /* File already exists alert -> informative text
    File already exists in queue alert -> informative text */
@@ -237,7 +256,8 @@
 /* Preview -> live preview alert default button */
 "Open in external player" = "외부 플레이어에서 열기";
 
-/* Toolbar Open/Cancel Item
+/* Main Window Open Toolbar Item
+   Toolbar Open/Cancel Item
    Touch bar */
 "Open Source" = "원본 열기";
 
@@ -245,7 +265,8 @@
    File already exists in queue alert -> second button */
 "Overwrite" = "덮어쓰기";
 
-/* Toolbar Pause Item */
+/* Main Window Pause Toolbar Item
+   Toolbar Pause Item */
 "Pause" = "일시중지";
 
 /* Queue -> pause/resume menu
@@ -253,7 +274,8 @@
    Touch bar */
 "Pause Encoding" = "인코딩 일시중지";
 
-/* Touch bar */
+/* Main Window Pause Toolbar Item
+   Touch bar */
 "Pause/Resume Encoding" = "인코딩 일시중지/이어하기";
 
 /* Job statistics */
@@ -273,10 +295,14 @@
    Queue Done Alert -> sleep second button */
 "Preferences…" = "환경설정...";
 
+/* Main Window Presets Toolbar Item */
+"Presets" = "사전설정";
+
 /* Preview -> progress formatter title */
 "preview" = "미리보기";
 
-/* Preview -> window title */
+/* Main Window Preview Toolbar Item
+   Preview -> window title */
 "Preview" = "미리보기";
 
 /* Preview -> window title format */
@@ -285,21 +311,37 @@
 /* Touch bar */
 "Previews" = "미리보기";
 
+/* Queue Window When Done Toolbar Item */
+"Put Computer to Sleep" = "컴퓨터를 잠자기 상태로 변경";
+
 /* Preferences -> Output Name Token */
 "Quality/Bitrate" = "품질/비트레이트";
 
-/* Preferences Queue Toolbar Item
+/* Main Window Presets Toolbar Item
+   Preferences Queue Toolbar Item
    Queue window title */
 "Queue" = "대기열";
 
 /* Queue window title */
 "Queue (%@)" = "대기열 (%@)";
 
+/* Queue Window Quick Look Toolbar Item */
+"Quick Look" = "Quick Look";
+
 /* Quit Alert -> first button */
 "Quit" = "중단";
 
+/* Queue Window When Done Toolbar Item */
+"Quit HandBrake" = "HandBrake 종료";
+
 /* Touch bar */
 "Remaining Time" = "남은 시간";
+
+/* Queue Window Action Toolbar Item */
+"Remove All Jobs" = "모든 작업 제거";
+
+/* Queue Window Action Toolbar Item */
+"Remove Completed Jobs" = "완료된 작업 제거";
 
 /* HBQueueItemView -> Remove button accessibility label */
 "Remove job" = "작업 제거";
@@ -309,6 +351,12 @@
 
 /* Queue undo action name */
 "Remove Jobs From Queue" = "대기열에서 여러 작업 제거";
+
+/* Queue Window Action Toolbar Item */
+"Reset All Jobs" = "모든 작업 재설정";
+
+/* Queue Window Action Toolbar Item */
+"Reset Failed Jobs" = "실패한 작업 재설정";
 
 /* Toolbar Pause Item */
 "Resume" = "이어하기";
@@ -333,11 +381,22 @@
 /* Notification -> Show in Finder */
 "Show" = "표시";
 
-/* Touch bar */
+/* Main Window Activity Toolbar Item
+   Touch bar */
 "Show Activity Window" = "작업 창 표시";
 
-/* Touch bar */
+/* Main Window Presets Toolbar Item */
+"Show Presets List" = "사전설정 목록 표시";
+
+/* Main Window Preview Toolbar Item
+   Touch bar */
 "Show Preview Window" = "미리보기 창 표시";
+
+/* Main Window Presets Toolbar Item */
+"Show Queue Window" = "대기열 창 표시";
+
+/* Queue Window When Done Toolbar Item */
+"Shut Down Computer" = "컴퓨터 끄기";
 
 /* Job statistics */
 "Size:" = "크기:";
@@ -351,7 +410,8 @@
 /* Preferences -> Output Name Token */
 "Source" = "원본";
 
-/* Toolbar Start/Stop Item */
+/* Main Window Start Toolbar Item
+   Toolbar Start/Stop Item */
 "Start" = "시작";
 
 /* Menu Start/Stop Item
@@ -362,7 +422,8 @@
 /* Toolbar Start/Stop Item */
 "Start Queue" = "대기열 시작";
 
-/* Touch bar */
+/* Main Window Start Toolbar Item
+   Touch bar */
 "Start/Stop Encoding" = "인코딩 시작/중지";
 
 /* Job statistics */
@@ -427,6 +488,9 @@
 
 /* Invalid destination alert -> message */
 "Warning!" = "경고!";
+
+/* Queue Window When Done Toolbar Item */
+"When Done" = "완료시";
 
 /* No comment provided by engineer. */
 "Working" = "작업중";

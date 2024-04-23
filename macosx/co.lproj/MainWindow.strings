@@ -7,23 +7,11 @@
 /* Class = "NSTextField"; ibShadowedToolTip = "Title to scan."; ObjectID = "3w9-Iu-3u2"; */
 "3w9-Iu-3u2.ibShadowedToolTip" = "Titulu à analizà.";
 
-/* Class = "NSButton"; ibShadowedToolTip = "Add To Queue"; ObjectID = "3xl-Xh-n9j"; */
-"3xl-Xh-n9j.ibShadowedToolTip" = "Aghjunghje à a fila d’attesa";
-
 /* Class = "NSButton"; ibShadowedToolTip = "Recursively scan and open the content of every sub-folder."; ObjectID = "5hE-Ri-tcZ"; */
 "5hE-Ri-tcZ.ibShadowedToolTip" = "Analizà di manera ripetitiva è apre u cuntenutu d’ogni sottucartulare.";
 
 /* Class = "NSTextFieldCell"; title = "0"; ObjectID = "6E4-AG-PEh"; */
 "6E4-AG-PEh.title" = "0";
-
-/* Class = "NSToolbarItem"; label = "Open Source"; ObjectID = "8r8-nZ-dYs"; */
-"8r8-nZ-dYs.label" = "Apre a fonte";
-
-/* Class = "NSToolbarItem"; paletteLabel = "Open Source"; ObjectID = "8r8-nZ-dYs"; */
-"8r8-nZ-dYs.paletteLabel" = "Apre a fonte";
-
-/* Class = "NSToolbarItem"; toolTip = "Open Source"; ObjectID = "8r8-nZ-dYs"; */
-"8r8-nZ-dYs.toolTip" = "Apre a fonte";
 
 /* Class = "NSWindow"; title = "HandBrake"; ObjectID = "21"; */
 "21.title" = "HandBrake";
@@ -43,26 +31,17 @@
 /* Class = "NSPopUpButton"; ibShadowedToolTip = "Title, or video clip, to encode. The longest title is selected by default.\n\nBlu-ray and DVD sources often have multiple titles, the longest of which is typically the main feature."; ObjectID = "1541"; */
 "1541.ibShadowedToolTip" = "Titulu o video à cudificà. A predefinizione selezziuneghja u titulu u più longu.\n\nI dischi di fonte Blu-ray è DVD anu aspessu parechji tituli, è di regula, u più longu hè l’elementu principale.";
 
-/* Class = "NSMenu"; title = "OtherViews"; ObjectID = "1542"; */
-"1542.title" = "Altre viste";
-
 /* Class = "NSPopUpButton"; ibExternalAccessibilityDescription = "Start Chapter"; ObjectID = "1545"; */
 "1545.ibExternalAccessibilityDescription" = "Capitulu di principiu";
 
 /* Class = "NSPopUpButton"; ibShadowedToolTip = "First chapter to encode."; ObjectID = "1545"; */
 "1545.ibShadowedToolTip" = "Primu capitulu à cudificà.";
 
-/* Class = "NSMenu"; title = "OtherViews"; ObjectID = "1546"; */
-"1546.title" = "Altre viste";
-
 /* Class = "NSPopUpButton"; ibExternalAccessibilityDescription = "End Chapter"; ObjectID = "1548"; */
 "1548.ibExternalAccessibilityDescription" = "Capitulu di fine";
 
 /* Class = "NSPopUpButton"; ibShadowedToolTip = "Last chapter to encode."; ObjectID = "1548"; */
 "1548.ibShadowedToolTip" = "Ultimu capitulu à cudificà.";
-
-/* Class = "NSMenu"; title = "OtherViews"; ObjectID = "1549"; */
-"1549.title" = "Altre viste";
 
 /* Class = "NSTextField"; ibExternalAccessibilityDescription = "Duration"; ObjectID = "1554"; */
 "1554.ibExternalAccessibilityDescription" = "Durata";
@@ -112,9 +91,6 @@
 /* Class = "NSPopUpButton"; ibShadowedToolTip = "Video angle to encode. Only applicable to multi-angle DVD and Blu-ray."; ObjectID = "5181"; */
 "5181.ibShadowedToolTip" = "Angulu di video à cudificà. Cuncerne solu i dischi DVD è Blu-ray multi-anguli.";
 
-/* Class = "NSMenu"; title = "OtherViews"; ObjectID = "5183"; */
-"5183.title" = "Altre viste";
-
 /* Class = "NSTextFieldCell"; title = "Angle:"; ObjectID = "5185"; */
 "5185.title" = "Angulu :";
 
@@ -142,9 +118,6 @@
 /* Class = "NSPopUpButton"; ibShadowedToolTip = "Source range selection. By default, all chapters are selected and the entire source is encoded."; ObjectID = "5513"; */
 "5513.ibShadowedToolTip" = "Selezzione di a stesa di fonte. Senza precisà, tutti i capituli sò selezziunati è a fonte hè cudificata sana sana.";
 
-/* Class = "NSMenu"; title = "OtherViews"; ObjectID = "5515"; */
-"5515.title" = "Altre viste";
-
 /* Class = "NSTextField"; ibExternalAccessibilityDescription = "Start time in frames"; ObjectID = "5521"; */
 "5521.ibExternalAccessibilityDescription" = "Ora di principiu in fiure";
 
@@ -156,9 +129,6 @@
 
 /* Class = "NSTextField"; ibShadowedToolTip = "Last frame to encode."; ObjectID = "5523"; */
 "5523.ibShadowedToolTip" = "Ultima fiura à cudificà.";
-
-/* Class = "NSMenuItem"; title = "Add All Titles To Queue"; ObjectID = "a37-Yd-bYR"; */
-"a37-Yd-bYR.title" = "Aghjunghje tutti i tituli à a fila d’attesa";
 
 /* Class = "NSButton"; ibShadowedToolTip = "Reload the encoding settings for the currently selected preset. Modifications will be discarded."; ObjectID = "AhR-pK-Oz4"; */
 "AhR-pK-Oz4.ibShadowedToolTip" = "Ricaricà e preferenze per a prerigatura attualmente selezziunata. I cambiamenti seranu persi.";
@@ -172,29 +142,11 @@
 /* Class = "NSPopUpButton"; ibExternalAccessibilityDescription = "Preset selection"; ObjectID = "bWH-Lp-mKY"; */
 "bWH-Lp-mKY.ibExternalAccessibilityDescription" = "Selezzione di a prerigatura";
 
-/* Class = "NSToolbarItem"; label = "Start"; ObjectID = "byg-kj-sEM"; */
-"byg-kj-sEM.label" = "Principià";
-
-/* Class = "NSToolbarItem"; paletteLabel = "Start Encoding"; ObjectID = "byg-kj-sEM"; */
-"byg-kj-sEM.paletteLabel" = "Principià a cudificazione";
-
-/* Class = "NSToolbarItem"; toolTip = "Start Encoding"; ObjectID = "byg-kj-sEM"; */
-"byg-kj-sEM.toolTip" = "Principià a cudificazione";
-
 /* Class = "NSButtonCell"; title = "Reload"; ObjectID = "cgS-BU-Nfd"; */
 "cgS-BU-Nfd.title" = "Ricaricà";
 
 /* Class = "NSBox"; title = "Box"; ObjectID = "d0E-xw-bxh"; */
 "d0E-xw-bxh.title" = "Scatula";
-
-/* Class = "NSToolbarItem"; label = "Preview"; ObjectID = "dK4-jt-v4K"; */
-"dK4-jt-v4K.label" = "Fighjulata";
-
-/* Class = "NSToolbarItem"; paletteLabel = "Show Preview Window"; ObjectID = "dK4-jt-v4K"; */
-"dK4-jt-v4K.paletteLabel" = "Affissà a finestra di fighjulata";
-
-/* Class = "NSToolbarItem"; toolTip = "Show Preview Window"; ObjectID = "dK4-jt-v4K"; */
-"dK4-jt-v4K.toolTip" = "Affissà a finestra di fighjulata";
 
 /* Class = "NSButton"; ibShadowedToolTip = "Scan only the specified title instead of all titles."; ObjectID = "DN4-48-aOI"; */
 "DN4-48-aOI.ibShadowedToolTip" = "Analizà solu u titulu specificatu invece di tutti i tituli.";
@@ -205,15 +157,6 @@
 /* Class = "NSButtonCell"; title = "Scan only title:"; ObjectID = "eQA-t2-FcV"; */
 "eQA-t2-FcV.title" = "Analizà solu u titulu :";
 
-/* Class = "NSToolbarItem"; label = "Queue"; ObjectID = "HCx-ku-nF7"; */
-"HCx-ku-nF7.label" = "Fila d’attesa";
-
-/* Class = "NSToolbarItem"; paletteLabel = "Show Queue Window"; ObjectID = "HCx-ku-nF7"; */
-"HCx-ku-nF7.paletteLabel" = "Affissà a finestra di a fila d’attesa";
-
-/* Class = "NSToolbarItem"; toolTip = "Show Queue Window"; ObjectID = "HCx-ku-nF7"; */
-"HCx-ku-nF7.toolTip" = "Affissà a finestra di a fila d’attesa";
-
 /* Class = "NSButtonCell"; title = "Recursively scan folders"; ObjectID = "Hwu-gp-tRZ"; */
 "Hwu-gp-tRZ.title" = "Analisa di i cartulari d’una manera recursiva";
 
@@ -222,9 +165,6 @@
 
 /* Class = "NSButtonCell"; title = "Save New Preset…"; ObjectID = "IOU-3L-nvB"; */
 "IOU-3L-nvB.title" = "Arregistrà a nova prerigatura…";
-
-/* Class = "NSMenuItem"; title = "Add Titles To Queue…"; ObjectID = "iVg-1G-9ym"; */
-"iVg-1G-9ym.title" = "Aghjunghje i tituli à a fila d’attesa…";
 
 /* Class = "NSTextFieldCell"; title = "Range:"; ObjectID = "IxV-PW-oYh"; */
 "IxV-PW-oYh.title" = "Stesa :";
@@ -235,48 +175,12 @@
 /* Class = "NSMenuItem"; title = "Selected Preset"; ObjectID = "OYP-3T-FnA"; */
 "OYP-3T-FnA.title" = "Prerigatura selezziunata";
 
-/* Class = "NSToolbarItem"; label = "Activity"; ObjectID = "p7Q-L3-zcW"; */
-"p7Q-L3-zcW.label" = "Attività";
-
-/* Class = "NSToolbarItem"; paletteLabel = "Show Activity Window"; ObjectID = "p7Q-L3-zcW"; */
-"p7Q-L3-zcW.paletteLabel" = "Affissà a finestra d’attività";
-
-/* Class = "NSToolbarItem"; toolTip = "Show Activity Window"; ObjectID = "p7Q-L3-zcW"; */
-"p7Q-L3-zcW.toolTip" = "Affissà a finestra d’attività";
-
 /* Class = "NSPathControl"; ibExternalAccessibilityDescription = "Destination folder path"; ObjectID = "PJi-21-hie"; */
 "PJi-21-hie.ibExternalAccessibilityDescription" = "Chjassu di u cartulare di destinazione";
-
-/* Class = "NSToolbarItem"; label = "Presets"; ObjectID = "qhv-9l-2FH"; */
-"qhv-9l-2FH.label" = "Prerigature";
-
-/* Class = "NSToolbarItem"; paletteLabel = "Show Presets List"; ObjectID = "qhv-9l-2FH"; */
-"qhv-9l-2FH.paletteLabel" = "Affissà a lista di e prerigature";
-
-/* Class = "NSToolbarItem"; toolTip = "Show Presets List"; ObjectID = "qhv-9l-2FH"; */
-"qhv-9l-2FH.toolTip" = "Affissà a lista di e prerigature";
-
-/* Class = "NSToolbarItem"; label = "Add To Queue"; ObjectID = "Qoa-tj-Rj2"; */
-"Qoa-tj-Rj2.label" = "Aghjunghje à a fila d’attesa";
-
-/* Class = "NSToolbarItem"; paletteLabel = "Add To Queue"; ObjectID = "Qoa-tj-Rj2"; */
-"Qoa-tj-Rj2.paletteLabel" = "Aghjunghje à a fila d’attesa";
 
 /* Class = "NSTextFieldCell"; title = "To:"; ObjectID = "rfK-nQ-Aq2"; */
 "rfK-nQ-Aq2.title" = "In :";
 
 /* Class = "NSMenuItem"; title = "Reveal in Finder"; ObjectID = "rK6-EB-N9Z"; */
 "rK6-EB-N9Z.title" = "Palisà cù Finder";
-
-/* Class = "NSToolbarItem"; label = "Pause"; ObjectID = "wTQ-KF-5KW"; */
-"wTQ-KF-5KW.label" = "Pausa";
-
-/* Class = "NSToolbarItem"; paletteLabel = "Pause Encoding"; ObjectID = "wTQ-KF-5KW"; */
-"wTQ-KF-5KW.paletteLabel" = "Interrompe a cudificazione";
-
-/* Class = "NSToolbarItem"; toolTip = "Pause Encoding"; ObjectID = "wTQ-KF-5KW"; */
-"wTQ-KF-5KW.toolTip" = "Interrompe a cudificazione";
-
-/* Class = "NSBox"; title = "Box"; ObjectID = "zcd-K2-F7w"; */
-"zcd-K2-F7w.title" = "Scatula";
 

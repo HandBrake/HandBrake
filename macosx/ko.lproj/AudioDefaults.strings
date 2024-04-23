@@ -82,9 +82,6 @@
 /* Class = "NSWindow"; title = "Audio Selection Behaviour"; ObjectID = "kwM-lz-5lG"; */
 "kwM-lz-5lG.title" = "오디오 선택 동작";
 
-/* Class = "NSMenu"; title = "OtherViews"; ObjectID = "Kwy-lU-VuU"; */
-"Kwy-lU-VuU.title" = "다른 견해들";
-
 /* Class = "NSButtonCell"; title = "DTS-HD"; ObjectID = "LX6-kc-5vq"; */
 "LX6-kc-5vq.title" = "DTS-HD";
 
@@ -117,9 +114,6 @@
 
 /* Class = "NSTableColumn"; headerCell.title = "Codec"; ObjectID = "pR9-d4-SNf"; */
 "pR9-d4-SNf.headerCell.title" = "코덱";
-
-/* Class = "NSMenu"; title = "OtherViews"; ObjectID = "PtB-Wp-B9X"; */
-"PtB-Wp-B9X.title" = "다른 견해들";
 
 /* Class = "NSPopUpButton"; ibExternalAccessibilityDescription = "Samplerate"; ObjectID = "r80-yv-59n"; */
 "r80-yv-59n.ibExternalAccessibilityDescription" = "샘플레이트";

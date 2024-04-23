@@ -7,9 +7,6 @@
 /* Class = "NSWindow"; title = "Preferences"; ObjectID = "5"; */
 "5.title" = "Предпочитания";
 
-/* Class = "NSMenu"; title = "OtherViews"; ObjectID = "6c7-RK-g6v"; */
-"6c7-RK-g6v.title" = "ДругиИзгледи";
-
 /* Class = "NSTextFieldCell"; title = "None"; ObjectID = "7hX-9H-spK"; */
 "7hX-9H-spK.title" = "Няма";
 
@@ -34,9 +31,6 @@
 /* Class = "NSTextFieldCell"; title = "Activity Logs:"; ObjectID = "351"; */
 "351.title" = "Дневници на дейностите:";
 
-/* Class = "NSMenu"; title = "OtherViews"; ObjectID = "354"; */
-"354.title" = "ДругиИзгледи";
-
 /* Class = "NSMenuItem"; title = "10"; ObjectID = "355"; */
 "355.title" = "10";
 
@@ -55,9 +49,6 @@
 /* Class = "NSPopUpButton"; ibShadowedToolTip = "Verbosity Level. Extended verbosity records more technical information to the Activity Log. Minimal verbosity records less."; ObjectID = "363"; */
 "363.ibShadowedToolTip" = "Ниво на подробност. Разширена подробност записва повече техническа информация в дневника на дейностите. Минимална подробност записва по-малко.";
 
-/* Class = "NSMenu"; title = "OtherViews"; ObjectID = "365"; */
-"365.title" = "ДругиИзгледи";
-
 /* Class = "NSMenuItem"; title = "Extended"; ObjectID = "368"; */
 "368.title" = "Разширена";
 
@@ -75,9 +66,6 @@
 
 /* Class = "NSPopUpButton"; ibShadowedToolTip = "Determines the granularity of the x264 Constant Quality control. Smaller values allow for finer quality increments."; ObjectID = "387"; */
 "387.ibShadowedToolTip" = "Определя грануларността на x264 постоянното качество. По-малки стойности позволяват по-фин контрол над качеството.";
-
-/* Class = "NSMenu"; title = "OtherViews"; ObjectID = "389"; */
-"389.title" = "ДругиИзгледи";
 
 /* Class = "NSMenuItem"; title = "0.20"; ObjectID = "390"; */
 "390.title" = "0.20";
@@ -130,9 +118,6 @@
 /* Class = "NSMenuItem"; title = "60"; ObjectID = "519"; */
 "519.title" = "60";
 
-/* Class = "NSMenu"; title = "OtherViews"; ObjectID = "aYB-lm-mkU"; */
-"aYB-lm-mkU.title" = "ДругиИзгледи";
-
 /* Class = "NSTextFieldCell"; title = "GB"; ObjectID = "BKV-oH-uht"; */
 "BKV-oH-uht.title" = "GB";
 
@@ -163,11 +148,17 @@
 /* Class = "CocoaBindingsConnection"; ibShadowedIsNilPlaceholder = "None"; ObjectID = "JZb-Vz-cY4"; */
 "JZb-Vz-cY4.ibShadowedIsNilPlaceholder" = "Няма";
 
+/* Class = "NSTextFieldCell"; title = "Table View Cell"; ObjectID = "kCF-8e-gXS"; */
+"kCF-8e-gXS.title" = "Клетка от табличен изглед";
+
 /* Class = "NSTextFieldCell"; title = "seconds"; ObjectID = "klQ-DW-Kc6"; */
 "klQ-DW-Kc6.title" = "секунди";
 
 /* Class = "NSTextFieldCell"; title = "Format:"; ObjectID = "Ktg-Bh-1Pt"; */
 "Ktg-Bh-1Pt.title" = "Формат:";
+
+/* Class = "NSTextFieldCell"; title = "Text Cell"; ObjectID = "l9y-MS-HnS"; */
+"l9y-MS-HnS.title" = "Текстова клетка";
 
 /* Class = "NSButtonCell"; title = "Pause queue if disk space is lower than:"; ObjectID = "ODf-uW-BrD"; */
 "ODf-uW-BrD.title" = "Паузирай опашката, ако дисковото пространство е под:";
@@ -210,9 +201,6 @@
 
 /* Class = "NSButtonCell"; title = "Change case to Title Case"; ObjectID = "Y9B-ue-3sE"; */
 "Y9B-ue-3sE.title" = "Промени първите букви на главни";
-
-/* Class = "NSMenu"; title = "OtherViews"; ObjectID = "ZkO-Z0-OCN"; */
-"ZkO-Z0-OCN.title" = "ДругиИзгледи";
 
 /* Class = "NSButtonCell"; title = "Browse…"; ObjectID = "zot-Bx-Ch3"; */
 "zot-Bx-Ch3.title" = "Прелистване...";

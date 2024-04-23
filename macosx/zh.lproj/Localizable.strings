@@ -56,8 +56,17 @@
    File already exists alert -> message */
 "A file already exists at the selected destination." = "所选目标上已存在文件。";
 
+/* Queue Window Action Toolbar Item */
+"Action" = "动作";
+
+/* Main Window Activity Toolbar Item */
+"Activity" = "活动";
+
 /* Picture HUD -> scale button */
 "Actual Scale" = "实际比例";
+
+/* Main Window Add Toolbar Item */
+"Add All Titles To Queue" = "添加所有标题到队列";
 
 /* Queue undo action name */
 "Add Job To Queue" = "将任务添加到队列";
@@ -71,7 +80,11 @@
 /* Touch bar */
 "Add Titles To Queue" = "添加标题到队列";
 
-/* Touch bar */
+/* Main Window Add Toolbar Item */
+"Add Titles To Queue…" = "添加标题到队列...";
+
+/* Main Window Add Toolbar Item
+   Touch bar */
 "Add To Queue" = "添加到队列";
 
 /* Preferences Advanced Toolbar Item */
@@ -158,6 +171,12 @@
 /* Delete preset alert -> first button */
 "Delete Presets" = "删除预设";
 
+/* Queue Window Details Toolbar Item */
+"Details" = "详情";
+
+/* Queue Window When Done Toolbar Item */
+"Do Nothing" = "无操作";
+
 /* File already exists alert -> informative text
    File already exists in queue alert -> informative text */
 "Do you want to overwrite %@?" = "您是否确认覆盖 %@？";
@@ -202,8 +221,14 @@
 /* Export presets save panel title */
 "Export presets" = "导出预设";
 
+/* Default name for a newly added excluded file extension */
+"extension" = "扩展名";
+
 /* File already exists alert -> message */
 "File already exists." = "文件已存在。";
+
+/* Preferences Output File Name Toolbar Item */
+"File name" = "文件名称";
 
 /* Preferences General Toolbar Item */
 "General" = "通用";
@@ -285,7 +310,8 @@
 /* Preview -> live preview alert default button */
 "Open in external player" = "在外部播放器中打开";
 
-/* Toolbar Open/Cancel Item
+/* Main Window Open Toolbar Item
+   Toolbar Open/Cancel Item
    Touch bar */
 "Open Source" = "打开源";
 
@@ -293,7 +319,8 @@
    File already exists in queue alert -> second button */
 "Overwrite" = "覆盖";
 
-/* Toolbar Pause Item */
+/* Main Window Pause Toolbar Item
+   Toolbar Pause Item */
 "Pause" = "暂停";
 
 /* Queue -> pause/resume menu
@@ -301,7 +328,8 @@
    Touch bar */
 "Pause Encoding" = "暂停编码";
 
-/* Touch bar */
+/* Main Window Pause Toolbar Item
+   Touch bar */
 "Pause/Resume Encoding" = "暂停/继续编码";
 
 /* Job statistics */
@@ -327,10 +355,14 @@
 /* Preferences -> Output Name Token */
 "Preset" = "预设";
 
+/* Main Window Presets Toolbar Item */
+"Presets" = "预设";
+
 /* Preview -> progress formatter title */
 "preview" = "预览";
 
-/* Preview -> window title */
+/* Main Window Preview Toolbar Item
+   Preview -> window title */
 "Preview" = "预览";
 
 /* Preview -> window title format */
@@ -342,6 +374,9 @@
 /* Touch bar */
 "Previews" = "预览";
 
+/* Queue Window When Done Toolbar Item */
+"Put Computer to Sleep" = "让电脑进入睡眠状态";
+
 /* Queue notification alert message */
 "Put down that cocktail…" = "放下那杯鸡尾酒…";
 
@@ -351,18 +386,31 @@
 /* Preferences -> Output Name Token */
 "Quality/Bitrate" = "质量/码率";
 
-/* Preferences Queue Toolbar Item
+/* Main Window Presets Toolbar Item
+   Preferences Queue Toolbar Item
    Queue window title */
 "Queue" = "队列";
 
 /* Queue window title */
 "Queue (%@)" = "队列（%@）";
 
+/* Queue Window Quick Look Toolbar Item */
+"Quick Look" = "预览";
+
 /* Quit Alert -> first button */
 "Quit" = "退出";
 
+/* Queue Window When Done Toolbar Item */
+"Quit HandBrake" = "退出 HandBrake";
+
 /* Touch bar */
 "Remaining Time" = "剩余时间";
+
+/* Queue Window Action Toolbar Item */
+"Remove All Jobs" = "移除所有任务";
+
+/* Queue Window Action Toolbar Item */
+"Remove Completed Jobs" = "移除已完成的任务";
 
 /* HBQueueItemView -> Remove button accessibility label */
 "Remove job" = "移除任务";
@@ -375,6 +423,12 @@
 
 /* HBQueueItemView -> Encode state accessibility label */
 "Rescanning for editing" = "重新扫描以进行编辑";
+
+/* Queue Window Action Toolbar Item */
+"Reset All Jobs" = "重置所有任务";
+
+/* Queue Window Action Toolbar Item */
+"Reset Failed Jobs" = "重置失败的任务";
 
 /* Toolbar Pause Item */
 "Resume" = "继续";
@@ -408,11 +462,22 @@
 /* Notification -> Show in Finder */
 "Show" = "显示";
 
-/* Touch bar */
+/* Main Window Activity Toolbar Item
+   Touch bar */
 "Show Activity Window" = "显示活动窗口";
 
-/* Touch bar */
+/* Main Window Presets Toolbar Item */
+"Show Presets List" = "显示预设列表";
+
+/* Main Window Preview Toolbar Item
+   Touch bar */
 "Show Preview Window" = "显示预览窗口";
+
+/* Main Window Presets Toolbar Item */
+"Show Queue Window" = "显示队列窗口";
+
+/* Queue Window When Done Toolbar Item */
+"Shut Down Computer" = "关闭电脑";
 
 /* Job statistics */
 "Size:" = "大小：";
@@ -426,7 +491,8 @@
 /* Preferences -> Output Name Token */
 "Source" = "来源";
 
-/* Toolbar Start/Stop Item */
+/* Main Window Start Toolbar Item
+   Toolbar Start/Stop Item */
 "Start" = "开始";
 
 /* Menu Start/Stop Item
@@ -437,7 +503,8 @@
 /* Toolbar Start/Stop Item */
 "Start Queue" = "开始队列";
 
-/* Touch bar */
+/* Main Window Start Toolbar Item
+   Touch bar */
 "Start/Stop Encoding" = "开始/停止编码";
 
 /* Job statistics */
@@ -515,6 +582,9 @@
 /* Invalid destination alert -> message */
 "Warning!" = "警告！";
 
+/* Queue Window When Done Toolbar Item */
+"When Done" = "当任务完成后";
+
 /* Preferences -> Output Name Token */
 "Width" = "宽度";
 
@@ -548,4 +618,7 @@
 /* Queue Edit Alert -> stop and edit informative text
    Queue Stop Alert -> stop and remove informative text */
 "Your movie will be lost if you don't continue encoding." = "如果不继续编码您的视频将会丢失。";
+
+/* Queue done notification message */
+"Your queue is done!" = "你的队列已完成！";
 

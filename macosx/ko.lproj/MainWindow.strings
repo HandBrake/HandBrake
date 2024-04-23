@@ -7,20 +7,8 @@
 /* Class = "NSTextField"; ibShadowedToolTip = "Title to scan."; ObjectID = "3w9-Iu-3u2"; */
 "3w9-Iu-3u2.ibShadowedToolTip" = "스캔할 영상";
 
-/* Class = "NSButton"; ibShadowedToolTip = "Add To Queue"; ObjectID = "3xl-Xh-n9j"; */
-"3xl-Xh-n9j.ibShadowedToolTip" = "대기열에 추가";
-
 /* Class = "NSTextFieldCell"; title = "0"; ObjectID = "6E4-AG-PEh"; */
 "6E4-AG-PEh.title" = "0";
-
-/* Class = "NSToolbarItem"; label = "Open Source"; ObjectID = "8r8-nZ-dYs"; */
-"8r8-nZ-dYs.label" = "원본 열기";
-
-/* Class = "NSToolbarItem"; paletteLabel = "Open Source"; ObjectID = "8r8-nZ-dYs"; */
-"8r8-nZ-dYs.paletteLabel" = "원본 열기";
-
-/* Class = "NSToolbarItem"; toolTip = "Open Source"; ObjectID = "8r8-nZ-dYs"; */
-"8r8-nZ-dYs.toolTip" = "원본 열기";
 
 /* Class = "NSWindow"; title = "HandBrake"; ObjectID = "21"; */
 "21.title" = "HandBrake";
@@ -37,26 +25,17 @@
 /* Class = "NSTextField"; ibShadowedToolTip = "Source file name."; ObjectID = "1539"; */
 "1539.ibShadowedToolTip" = "원본 파일 이름.";
 
-/* Class = "NSMenu"; title = "OtherViews"; ObjectID = "1542"; */
-"1542.title" = "다른 견해들";
-
 /* Class = "NSPopUpButton"; ibExternalAccessibilityDescription = "Start Chapter"; ObjectID = "1545"; */
 "1545.ibExternalAccessibilityDescription" = "챕터 시작";
 
 /* Class = "NSPopUpButton"; ibShadowedToolTip = "First chapter to encode."; ObjectID = "1545"; */
 "1545.ibShadowedToolTip" = "인코딩할 첫 챕터";
 
-/* Class = "NSMenu"; title = "OtherViews"; ObjectID = "1546"; */
-"1546.title" = "다른 견해들";
-
 /* Class = "NSPopUpButton"; ibExternalAccessibilityDescription = "End Chapter"; ObjectID = "1548"; */
 "1548.ibExternalAccessibilityDescription" = "챕터 끝";
 
 /* Class = "NSPopUpButton"; ibShadowedToolTip = "Last chapter to encode."; ObjectID = "1548"; */
 "1548.ibShadowedToolTip" = "인코딩할 마지막 챕터";
-
-/* Class = "NSMenu"; title = "OtherViews"; ObjectID = "1549"; */
-"1549.title" = "다른 견해들";
 
 /* Class = "NSTextField"; ibExternalAccessibilityDescription = "Duration"; ObjectID = "1554"; */
 "1554.ibExternalAccessibilityDescription" = "지속 시간";
@@ -100,9 +79,6 @@
 /* Class = "NSTextFieldCell"; title = "Preset:"; ObjectID = "4923"; */
 "4923.title" = "사전설정:";
 
-/* Class = "NSMenu"; title = "OtherViews"; ObjectID = "5183"; */
-"5183.title" = "다른 견해들";
-
 /* Class = "NSTextFieldCell"; title = "Angle:"; ObjectID = "5185"; */
 "5185.title" = "각도:";
 
@@ -127,9 +103,6 @@
 /* Class = "NSPopUpButton"; ibExternalAccessibilityDescription = "Range Selection"; ObjectID = "5513"; */
 "5513.ibExternalAccessibilityDescription" = "범위 선택";
 
-/* Class = "NSMenu"; title = "OtherViews"; ObjectID = "5515"; */
-"5515.title" = "다른 견해들";
-
 /* Class = "NSTextField"; ibExternalAccessibilityDescription = "Start time in frames"; ObjectID = "5521"; */
 "5521.ibExternalAccessibilityDescription" = "시작 시간 - 프레임";
 
@@ -141,9 +114,6 @@
 
 /* Class = "NSTextField"; ibShadowedToolTip = "Last frame to encode."; ObjectID = "5523"; */
 "5523.ibShadowedToolTip" = "인코딩할 마지막 프레임";
-
-/* Class = "NSMenuItem"; title = "Add All Titles To Queue"; ObjectID = "a37-Yd-bYR"; */
-"a37-Yd-bYR.title" = "대기열에 모든 제목 추가";
 
 /* Class = "NSButton"; ibShadowedToolTip = "Reload the encoding settings for the currently selected preset. Modifications will be discarded."; ObjectID = "AhR-pK-Oz4"; */
 "AhR-pK-Oz4.ibShadowedToolTip" = "현재 선택된 사전설정에 대한 인코딩 설정을 다시 불러오십시오. 수정 사항은 삭제됩니다. ";
@@ -157,26 +127,8 @@
 /* Class = "NSPopUpButton"; ibExternalAccessibilityDescription = "Preset selection"; ObjectID = "bWH-Lp-mKY"; */
 "bWH-Lp-mKY.ibExternalAccessibilityDescription" = "사전설정 선택";
 
-/* Class = "NSToolbarItem"; label = "Start"; ObjectID = "byg-kj-sEM"; */
-"byg-kj-sEM.label" = "시작";
-
-/* Class = "NSToolbarItem"; paletteLabel = "Start Encoding"; ObjectID = "byg-kj-sEM"; */
-"byg-kj-sEM.paletteLabel" = "인코딩 시작";
-
-/* Class = "NSToolbarItem"; toolTip = "Start Encoding"; ObjectID = "byg-kj-sEM"; */
-"byg-kj-sEM.toolTip" = "인코딩 시작";
-
 /* Class = "NSButtonCell"; title = "Reload"; ObjectID = "cgS-BU-Nfd"; */
 "cgS-BU-Nfd.title" = "다시 로드";
-
-/* Class = "NSToolbarItem"; label = "Preview"; ObjectID = "dK4-jt-v4K"; */
-"dK4-jt-v4K.label" = "미리보기";
-
-/* Class = "NSToolbarItem"; paletteLabel = "Show Preview Window"; ObjectID = "dK4-jt-v4K"; */
-"dK4-jt-v4K.paletteLabel" = "미리보기 창 표시";
-
-/* Class = "NSToolbarItem"; toolTip = "Show Preview Window"; ObjectID = "dK4-jt-v4K"; */
-"dK4-jt-v4K.toolTip" = "미리보기 창 표시";
 
 /* Class = "NSButton"; ibShadowedToolTip = "Scan only the specified title instead of all titles."; ObjectID = "DN4-48-aOI"; */
 "DN4-48-aOI.ibShadowedToolTip" = "전체 영상 대신 선택한 영상만 스캔합니다.";
@@ -184,23 +136,11 @@
 /* Class = "NSButtonCell"; title = "Scan only title:"; ObjectID = "eQA-t2-FcV"; */
 "eQA-t2-FcV.title" = "스캔할 영상:";
 
-/* Class = "NSToolbarItem"; label = "Queue"; ObjectID = "HCx-ku-nF7"; */
-"HCx-ku-nF7.label" = "대기열";
-
-/* Class = "NSToolbarItem"; paletteLabel = "Show Queue Window"; ObjectID = "HCx-ku-nF7"; */
-"HCx-ku-nF7.paletteLabel" = "대기열 창 표시";
-
-/* Class = "NSToolbarItem"; toolTip = "Show Queue Window"; ObjectID = "HCx-ku-nF7"; */
-"HCx-ku-nF7.toolTip" = "대기열 창 표시";
-
 /* Class = "CocoaBindingsConnection"; ibShadowedIsNilPlaceholder = " "; ObjectID = "Iat-pL-ttI"; */
 "Iat-pL-ttI.ibShadowedIsNilPlaceholder" = "";
 
 /* Class = "NSButtonCell"; title = "Save New Preset…"; ObjectID = "IOU-3L-nvB"; */
 "IOU-3L-nvB.title" = "새 사전설정 저장...";
-
-/* Class = "NSMenuItem"; title = "Add Titles To Queue…"; ObjectID = "iVg-1G-9ym"; */
-"iVg-1G-9ym.title" = "대기열에 제목 추가...";
 
 /* Class = "NSTextFieldCell"; title = "Range:"; ObjectID = "IxV-PW-oYh"; */
 "IxV-PW-oYh.title" = "범위:";
@@ -211,42 +151,9 @@
 /* Class = "NSMenuItem"; title = "Selected Preset"; ObjectID = "OYP-3T-FnA"; */
 "OYP-3T-FnA.title" = "선택된 사전설정";
 
-/* Class = "NSToolbarItem"; label = "Activity"; ObjectID = "p7Q-L3-zcW"; */
-"p7Q-L3-zcW.label" = "작업";
-
-/* Class = "NSToolbarItem"; paletteLabel = "Show Activity Window"; ObjectID = "p7Q-L3-zcW"; */
-"p7Q-L3-zcW.paletteLabel" = "작업 창 표시";
-
-/* Class = "NSToolbarItem"; toolTip = "Show Activity Window"; ObjectID = "p7Q-L3-zcW"; */
-"p7Q-L3-zcW.toolTip" = "작업 창 표시";
-
 /* Class = "NSPathControl"; ibExternalAccessibilityDescription = "Destination folder path"; ObjectID = "PJi-21-hie"; */
 "PJi-21-hie.ibExternalAccessibilityDescription" = "대상 폴더 경로";
 
-/* Class = "NSToolbarItem"; label = "Presets"; ObjectID = "qhv-9l-2FH"; */
-"qhv-9l-2FH.label" = "사전설정";
-
-/* Class = "NSToolbarItem"; paletteLabel = "Show Presets List"; ObjectID = "qhv-9l-2FH"; */
-"qhv-9l-2FH.paletteLabel" = "사전설정 목록 표시";
-
-/* Class = "NSToolbarItem"; toolTip = "Show Presets List"; ObjectID = "qhv-9l-2FH"; */
-"qhv-9l-2FH.toolTip" = "사전설정 목록 표시";
-
-/* Class = "NSToolbarItem"; label = "Add To Queue"; ObjectID = "Qoa-tj-Rj2"; */
-"Qoa-tj-Rj2.label" = "대기열에 추가";
-
-/* Class = "NSToolbarItem"; paletteLabel = "Add To Queue"; ObjectID = "Qoa-tj-Rj2"; */
-"Qoa-tj-Rj2.paletteLabel" = "대기열에 추가";
-
 /* Class = "NSMenuItem"; title = "Reveal in Finder"; ObjectID = "rK6-EB-N9Z"; */
 "rK6-EB-N9Z.title" = "Finder에서 보기";
-
-/* Class = "NSToolbarItem"; label = "Pause"; ObjectID = "wTQ-KF-5KW"; */
-"wTQ-KF-5KW.label" = "일시중지";
-
-/* Class = "NSToolbarItem"; paletteLabel = "Pause Encoding"; ObjectID = "wTQ-KF-5KW"; */
-"wTQ-KF-5KW.paletteLabel" = "인코딩 일시중지";
-
-/* Class = "NSToolbarItem"; toolTip = "Pause Encoding"; ObjectID = "wTQ-KF-5KW"; */
-"wTQ-KF-5KW.toolTip" = "인코딩 일시중지";
 

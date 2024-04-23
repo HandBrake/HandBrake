@@ -53,8 +53,17 @@
    File already exists alert -> message */
 "A file already exists at the selected destination." = "Файл уже существует в выбранной папке назначения.";
 
+/* Queue Window Action Toolbar Item */
+"Action" = "Действие";
+
+/* Main Window Activity Toolbar Item */
+"Activity" = "Активность";
+
 /* Picture HUD -> scale button */
 "Actual Scale" = "Реальный масштаб";
+
+/* Main Window Add Toolbar Item */
+"Add All Titles To Queue" = "Добавить все заголовки в очередь";
 
 /* Queue undo action name */
 "Add Job To Queue" = "Добавить задание в очередь";
@@ -68,7 +77,11 @@
 /* Touch bar */
 "Add Titles To Queue" = "Добавить заголовки в очередь";
 
-/* Touch bar */
+/* Main Window Add Toolbar Item */
+"Add Titles To Queue…" = "Добавить заголовки в очередь...";
+
+/* Main Window Add Toolbar Item
+   Touch bar */
 "Add To Queue" = "Добавить в очередь";
 
 /* Preferences Advanced Toolbar Item */
@@ -148,6 +161,12 @@
 
 /* Delete preset alert -> first button */
 "Delete Presets" = "Удалить Пресеты";
+
+/* Queue Window Details Toolbar Item */
+"Details" = "Детали";
+
+/* Queue Window When Done Toolbar Item */
+"Do Nothing" = "Ничего не делать";
 
 /* File already exists alert -> informative text
    File already exists in queue alert -> informative text */
@@ -261,7 +280,8 @@
 /* Preview -> live preview alert default button */
 "Open in external player" = "Открыть во внешнем проигрывателе";
 
-/* Toolbar Open/Cancel Item
+/* Main Window Open Toolbar Item
+   Toolbar Open/Cancel Item
    Touch bar */
 "Open Source" = "Открыть источник";
 
@@ -269,7 +289,8 @@
    File already exists in queue alert -> second button */
 "Overwrite" = "Перезаписать";
 
-/* Toolbar Pause Item */
+/* Main Window Pause Toolbar Item
+   Toolbar Pause Item */
 "Pause" = "Пауза";
 
 /* Queue -> pause/resume menu
@@ -277,7 +298,8 @@
    Touch bar */
 "Pause Encoding" = "Поставить кодирование на паузу";
 
-/* Touch bar */
+/* Main Window Pause Toolbar Item
+   Touch bar */
 "Pause/Resume Encoding" = "Поставить на паузу/продолжить кодирование";
 
 /* Job statistics */
@@ -300,10 +322,14 @@
    Queue Done Alert -> sleep second button */
 "Preferences…" = "Настройки...";
 
+/* Main Window Presets Toolbar Item */
+"Presets" = "Пресеты";
+
 /* Preview -> progress formatter title */
 "preview" = "предпросмотр";
 
-/* Preview -> window title */
+/* Main Window Preview Toolbar Item
+   Preview -> window title */
 "Preview" = "Предпросмотр";
 
 /* Preview -> window title format */
@@ -315,24 +341,40 @@
 /* Touch bar */
 "Previews" = "Изображения предпросмотра";
 
+/* Queue Window When Done Toolbar Item */
+"Put Computer to Sleep" = "Перевести компьютер в спящий режим";
+
 /* Queue notification alert message */
 "Put down that cocktail…" = "Отложите в сторону этот коктейл...";
 
 /* Preferences -> Output Name Token */
 "Quality/Bitrate" = "Качетсво/битрейт";
 
-/* Preferences Queue Toolbar Item
+/* Main Window Presets Toolbar Item
+   Preferences Queue Toolbar Item
    Queue window title */
 "Queue" = "Очередь";
 
 /* Queue window title */
 "Queue (%@)" = "Очередь (%@)";
 
+/* Queue Window Quick Look Toolbar Item */
+"Quick Look" = "Быстрый Просмотр";
+
 /* Quit Alert -> first button */
 "Quit" = "Выход";
 
+/* Queue Window When Done Toolbar Item */
+"Quit HandBrake" = "Выйти из HandBrake";
+
 /* Touch bar */
 "Remaining Time" = "Осталось времени";
+
+/* Queue Window Action Toolbar Item */
+"Remove All Jobs" = "Удалить все задания";
+
+/* Queue Window Action Toolbar Item */
+"Remove Completed Jobs" = "Удалить завершенные задания";
 
 /* HBQueueItemView -> Remove button accessibility label */
 "Remove job" = "Удалить задание";
@@ -342,6 +384,12 @@
 
 /* Queue undo action name */
 "Remove Jobs From Queue" = "Удалить задания из очереди";
+
+/* Queue Window Action Toolbar Item */
+"Reset All Jobs" = "Сбросить все задания";
+
+/* Queue Window Action Toolbar Item */
+"Reset Failed Jobs" = "Сбросить неудавшиеся задания";
 
 /* Toolbar Pause Item */
 "Resume" = "Продолжить";
@@ -375,11 +423,22 @@
 /* Notification -> Show in Finder */
 "Show" = "Показать";
 
-/* Touch bar */
+/* Main Window Activity Toolbar Item
+   Touch bar */
 "Show Activity Window" = "Показать окно активности";
 
-/* Touch bar */
+/* Main Window Presets Toolbar Item */
+"Show Presets List" = "Показать список пресетов";
+
+/* Main Window Preview Toolbar Item
+   Touch bar */
 "Show Preview Window" = "Показать окно предпросмотра";
+
+/* Main Window Presets Toolbar Item */
+"Show Queue Window" = "Показать окно очереди";
+
+/* Queue Window When Done Toolbar Item */
+"Shut Down Computer" = "Выключать компьютер";
 
 /* Job statistics */
 "Size:" = "Размеры:";
@@ -393,7 +452,8 @@
 /* Preferences -> Output Name Token */
 "Source" = "Исходный файл";
 
-/* Toolbar Start/Stop Item */
+/* Main Window Start Toolbar Item
+   Toolbar Start/Stop Item */
 "Start" = "Начало";
 
 /* Menu Start/Stop Item
@@ -404,7 +464,8 @@
 /* Toolbar Start/Stop Item */
 "Start Queue" = "Запустить очередь";
 
-/* Touch bar */
+/* Main Window Start Toolbar Item
+   Touch bar */
 "Start/Stop Encoding" = "Начать/остановить кодирование";
 
 /* Job statistics */
@@ -478,6 +539,9 @@
 
 /* Invalid destination alert -> message */
 "Warning!" = "Предупреждение!";
+
+/* Queue Window When Done Toolbar Item */
+"When Done" = "При завершении";
 
 /* Queue Alert -> cancel rip message */
 "You are currently encoding. What would you like to do?" = "В данный момент вы кодируете. Что вы хотите сделать?";
