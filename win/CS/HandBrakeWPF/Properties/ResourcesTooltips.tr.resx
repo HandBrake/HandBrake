@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="FilterView_Deblock" xml:space="preserve">
-    <value>Deblok, düşük kaliteli video sıkıştırma işleminden kaynaklanan bloklu eserleri azaltır.</value>
+    <value>Serbest blok, düşük kaliteli video sıkıştırma işleminden kaynaklanan bloklu eserleri azaltır.</value>
   </data>
   <data name="FilterView_DecombDeinterlace" xml:space="preserve">
     <value>Ayrıştırmayı seç veya filtre seçeneklerini değiştir.
@@ -130,27 +130,27 @@ Klasik geçmeli filtre tüm çerçevelere uygulanır.
 Geçmeli olmayan çerçeveler bazı kalite bozulmalarına neden olur.</value>
   </data>
   <data name="FilterView_Denoise" xml:space="preserve">
-    <value>Gürültüsüzlük, ses ve taneli görünümünü azaltır veya kaldırır. Bu, sıkıştırma verimini artırabilir ve daha küçük dosya boyutlarında daha yüksek kalitede video oluşturabilir. 
-Aşırı güçlü Gürültüsüzlük ayarları, ayrıntıları kaldırarak görüntü kalitesine zarar verebilir.
+    <value>Gürültü giderme, gürültü ve tanecik görünümünü azaltır veya ortadan kaldırır. Bu, sıkıştırma verimliliğini artırabilir ve daha küçük dosya boyutlarında daha yüksek kalitede video oluşturabilir. 
+Aşırı güçlü Gürültü giderme ayarları, ayrıntıları kaldırarak görüntü kalitesine zarar verebilir.
          
-NLMeans, hızlandırma maliyeti yüksek kaliteli bir gürültüsüzlük filtresidir. Kalitenin hızdan daha önemli olduğu yerlerde kullanın.
+NLMeans, hız maliyeti yüksek olan, yüksek kaliteli bir gürültü giderme filtresidir. Kalitenin hızdan daha önemli olduğu yerlerde kullanın.
          
 HQDN3D, NLMeans'dan daha hızlı ancak ince detayların korunmasında daha az etkili olan, uyarlamalı bir düşük geçirgen filtredir.</value>
   </data>
   <data name="FilterView_Detelecine" xml:space="preserve">
-    <value>Detelecine, film kare hızlarını televizyon kare hızlarına dönüştürmek için bir işlem olan telesine ait tarak eserlerini ortadan kaldırır.</value>
+    <value>Detelesin, film kare hızlarını televizyon kare hızlarına dönüştürme işlemi olan telesinenin sonucu olan tarak bozulmalarını ortadan kaldırır.</value>
   </data>
   <data name="FilterView_Grayscale" xml:space="preserve">
-    <value>Gri tonlama, videonun renk bileşenini kaldırır. Genellikle Siyah Beyaz video olarak anılır.</value>
+    <value>Gri tonlama, videonun renk bileşenini kaldırır. Genellikle Siyah &amp; Beyaz video olarak bilinir.</value>
   </data>
   <data name="MainView_Destination" xml:space="preserve">
-    <value>Dizin ve dosya adı dahil olmak üzere hedef yolu. Yeni videonuzun yaratılacağı yer ve adı ne olacak.</value>
+    <value>Dizin ve dosya adı da dahil olmak üzere hedef yol. Yeni videonuzun oluşturulacağı ve adının verileceği yer burasıdır.</value>
   </data>
   <data name="MainView_IpodAtom" xml:space="preserve">
     <value>2006 dolaylarında, eski iPod 5. Nesil cihazlarda çalınmasını sağlamak için özel bir MP4 işaretleyici ekleyin. Diğer ayarlar uyumluluğu etkileyebilir.</value>
   </data>
   <data name="MainView_Mux" xml:space="preserve">
-    <value>Konteyner formatı Video, ses ve diğer parçalar bu tür tek bir dosyada birleştirilir. Uyumluluğu etkiler.</value>
+    <value>Konteyner formatı. Video, ses ve diğer parçalar bu türden tek bir dosyada birleştirilir. Uyumluluğu etkiler.</value>
   </data>
   <data name="MainView_Optimise" xml:space="preserve">
     <value>Aşamalı indirme için MP4'ü optimize edin. Kodlamadan sonra, tüm dosyayı indirmeye gerek kalmadan ağ üzerinden anında oynatmaya izin vermek için veriler yeniden düzenlenir ve yeniden yazılır.</value>
@@ -167,9 +167,9 @@ Blu-ray ve DVD kaynakları genellikle birden fazla başlığa sahiptir, en uzun 
 
 Hiçbiri anamorfiği devre dışı bırakmaz. Video depolama boyutları ve ekran boyutları aynı olacaktır. Yalnızca belirli eski cihazlarla uyumluluk için kullanışlıdır.
 
-Otomatik, orijinal ekran en boy oranını korurken depolama çözünürlüğünü en üst düzeye çıkarır. Önerilen.
+Otomatik, orijinal ekran en boy oranını korurken depolama çözünürlüğünü en üst düzeye çıkarır. Önerilir.
 
-Gevşek, Otomatik'e benzer, ancak depolama en boy oranını korumaya çalışır. Bu, Otomatik'e kıyasla hafif bir depolama çözünürlüğü kaybına neden olabilir.
+Serbest, Otomatik'e benzer, ancak depolama en boy oranını korumaya çalışır. Bu, Otomatik'e kıyasla hafif bir depolama çözünürlüğü kaybına neden olabilir.
 
 Özel, tüm parametreleri manuel olarak ayarlamaya izin verir. Yanlış bir kaynak gösterimi yönünü düzeltmek ve post prodüksiyonda gelişmiş kontrole ihtiyaç duyan profesyoneller için kullanışlıdır.</value>
   </data>

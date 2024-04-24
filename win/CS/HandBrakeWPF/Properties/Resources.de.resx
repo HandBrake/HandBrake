@@ -2394,7 +2394,7 @@ Bitte eine andere Voreinstellung auswählen.</value>
     <value>Unbekannter Status. Siehe Protokoll für Details.</value>
   </data>
   <data name="QueueView_JobStatus_ReadError" xml:space="preserve">
-    <value>Beim Versuch, die Quelle zu lesen, wurden Fehler entdeckt.</value>
+    <value>Es wurden Fehler während des Einlesens der Quelle festgestellt.</value>
   </data>
   <data name="QueueView_JobStatus_Unknown" xml:space="preserve">
     <value>Unbekannter Fehler. Siehe Protokoll für Details.</value>
@@ -2812,5 +2812,14 @@ Um mehrere gleichzeitige Encodierungen zu ermöglichen, aktivieren Sie die "Proz
   </data>
   <data name="AudioView_QualityMode" xml:space="preserve">
     <value>Qualitätsmodus Audioencoder</value>
+  </data>
+  <data name="QueueView_AdvancedQueueDisplay" xml:space="preserve">
+    <value>Erweiterte Anzeige der Warteschlange</value>
+  </data>
+  <data name="QueueView_SimpleQueueDisplay" xml:space="preserve">
+    <value>Einfache Anzeige der Warteschlange</value>
+  </data>
+  <data name="VideoView_LosslessEncodeOnly" xml:space="preserve">
+    <value>Nur verlustfreie Encodierung.</value>
   </data>
 </root>

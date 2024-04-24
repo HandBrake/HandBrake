@@ -419,7 +419,7 @@ The Activity log may have further information.</value>
     <value>Звукові доріжки</value>
   </data>
   <data name="AudioViewModel_ConfigureDefaults" xml:space="preserve">
-    <value>Selection Behavior ...</value>
+    <value>Поведінка вибору…</value>
   </data>
   <data name="AudioViewModel_SwitchBackToTracks" xml:space="preserve">
     <value>Перемикнутися назад до доріжок</value>
@@ -548,7 +548,7 @@ No encoded files will be deleted with this operation. </value>
     <value>Перемикнутися назад до доріжок</value>
   </data>
   <data name="SubtitlesViewModel_ConfigureDefaults" xml:space="preserve">
-    <value>Selection Behavior ...</value>
+    <value>Поведінка вибору…</value>
   </data>
   <data name="PresetService_ArchiveFile" xml:space="preserve">
     <value>Файлу архіву:</value>
@@ -811,7 +811,7 @@ Hint: File overwrite behaviour can be controlled in preferences. </value>
     <value>Назва глави</value>
   </data>
   <data name="ChaptersView_ChapterNumber" xml:space="preserve">
-    <value>Chapter</value>
+    <value>Глава</value>
   </data>
   <data name="ChaptersView_CreateChapterMarkers" xml:space="preserve">
     <value>Створити маркери глав</value>
@@ -1216,7 +1216,7 @@ Hint: File overwrite behaviour can be controlled in preferences. </value>
     <value>Рівень детальності журналу:</value>
   </data>
   <data name="Options_LogPath" xml:space="preserve">
-    <value>Path:</value>
+    <value>Шлях: </value>
   </data>
   <data name="Options_LowDiskspaceSize" xml:space="preserve">
     <value>Призупиняти чергу при браку дискового простору</value>
@@ -1541,7 +1541,7 @@ Hint: File overwrite behaviour can be controlled in preferences. </value>
     <value>Відкрийте цей DVD або Blu-ray диск</value>
   </data>
   <data name="SourceSelection_OpenFolderWIth" xml:space="preserve">
-    <value>Відкрийте папку з одним або кількома файлами.</value>
+    <value>Відкрити папку з одним або кількома файлами.</value>
   </data>
   <data name="SourceSelection_QueueArchiveRecovery" xml:space="preserve">
     <value>Відновити файли черги</value>
@@ -1550,7 +1550,7 @@ Hint: File overwrite behaviour can be controlled in preferences. </value>
     <value>Доступний архів попередньої черги.</value>
   </data>
   <data name="SourceSelection_SingleVideoFile" xml:space="preserve">
-    <value>Open video file(s).</value>
+    <value>Відрити відео файл(и).</value>
   </data>
   <data name="SourceSelection_SourceSelection" xml:space="preserve">
     <value>Вибір джерела</value>
@@ -1559,13 +1559,13 @@ Hint: File overwrite behaviour can be controlled in preferences. </value>
     <value>Тривалість:</value>
   </data>
   <data name="StaticPreviewView_LivePreview" xml:space="preserve">
-    <value>Encode Preview</value>
+    <value>Кодувати попередній перегляд</value>
   </data>
   <data name="StaticPreviewView_SelectPreviewImage" xml:space="preserve">
     <value>Виберіть зображення для попереднього перегляду</value>
   </data>
   <data name="StaticPreviewView_UseExternalPlayer" xml:space="preserve">
-    <value>Use External Player App</value>
+    <value>Використати зовнішній програвач</value>
   </data>
   <data name="SubtitlesView_AddCC" xml:space="preserve">
     <value>Додавати приховані субтитри, при наявності</value>
@@ -1703,7 +1703,7 @@ Hint: File overwrite behaviour can be controlled in preferences. </value>
     <value>Про HandBrake</value>
   </data>
   <data name="SourceSelection_DropFileHere" xml:space="preserve">
-    <value>Or drop a file, set of files or folder here ...</value>
+    <value>Або перетягніть сюди файл, групу файлів чи папку…</value>
   </data>
   <data name="SourceSelection_Help" xml:space="preserve">
     <value>Довідка</value>
@@ -1868,8 +1868,8 @@ Hint: File overwrite behaviour can be controlled in preferences. </value>
     <value>Портативний режим: не вдається прочитати portable.ini. Можливо, виникла помилка у цьому файлі. Повторіть спробу, використовуючи portable.ini.template як основу.</value>
   </data>
   <data name="OptionsView_FormatOptions" xml:space="preserve">
-    <value>Replacement Options:
-You can drag/drop or enter the text above.</value>
+    <value>Варіанти заміни:
+Ви можете перетягнути або ввести текст вище.</value>
   </data>
   <data name="FileOverwriteBehaviours_Ask" xml:space="preserve">
     <value>Питати про перезапис файлу</value>
@@ -1970,10 +1970,10 @@ You can drag/drop or enter the text above.</value>
     <value>Обсяг вільного дискового простору на диску, на якому розташований каталог призначення, зменшився нижче {0} ГБ. Призупиняємо кодування…</value>
   </data>
   <data name="AudioDefaultsView_PaneTitle" xml:space="preserve">
-    <value>Automatic Audio Selections</value>
+    <value>Автоматичний вибір аудіо</value>
   </data>
   <data name="SubtitlesDefaultsView_PaneTitle" xml:space="preserve">
-    <value>Automatic Subtitle Selections</value>
+    <value>Автоматичний вибір субтитрів</value>
   </data>
   <data name="Options_SystemOptions" xml:space="preserve">
     <value>Система</value>
@@ -2323,7 +2323,7 @@ You can drag/drop or enter the text above.</value>
     <value>Значення, коли показуються сповіщення про брак дискового простору:</value>
   </data>
   <data name="OptionsView_SimultaneousHardwareLimitNotice" xml:space="preserve">
-    <value>Notice: This is the upper limit of simultaneous jobs. Hardware limitations may take effect which lowers the actual number of simultaneous jobs during encoding. Setting will only take affect on the next queue batch or app restart.</value>
+    <value>Зауважте: Це верхня межа одночасних завдань. Можуть вступати в дію апаратні обмеження, які знижують фактичну кількість одночасних завдань під час кодування. Налаштування набуде чинності лише при обробці наступного елементу черги, або перезапуску програми.</value>
   </data>
   <data name="Preset_NotAvailable" xml:space="preserve">
     <value>(Недоступно)</value>
@@ -2392,7 +2392,7 @@ You can drag/drop or enter the text above.</value>
     <value>Невідомий статус. Погляньте в журнал для отримання детальнішої інформації.</value>
   </data>
   <data name="QueueView_JobStatus_ReadError" xml:space="preserve">
-    <value>Помилка при спробі прочитати джерело.</value>
+    <value>Errors detected while trying to read source.</value>
   </data>
   <data name="QueueView_JobStatus_Unknown" xml:space="preserve">
     <value>Невідома помилка. Погляньте в журнал для отримання детальнішої інформації.</value>
@@ -2498,7 +2498,7 @@ You can drag/drop or enter the text above.</value>
     <value>Move To Top</value>
   </data>
   <data name="QueueView_VideoOutputBitrate" xml:space="preserve">
-    <value>Output Bitrate:</value>
+    <value>Вихідний бітрейт:</value>
   </data>
   <data name="QueueView_AverageEncodeSpeed" xml:space="preserve">
     <value>Average Encoding Speed:</value>
@@ -2540,7 +2540,7 @@ You can drag/drop or enter the text above.</value>
     <value>Please make sure you have appropriate file associations setup in Windows to allow it to open this file with a supported video player</value>
   </data>
   <data name="QueueViewModel_ImportFail" xml:space="preserve">
-    <value>Unable to read the queue file.</value>
+    <value>Не вдалося прочитати файл черги.</value>
   </data>
   <data name="QueueViewModel_ImportFailSolution" xml:space="preserve">
     <value>The file may be corrupted or from an earlier version of HandBrake. 
@@ -2553,7 +2553,7 @@ Only queue files from the current version are supported.</value>
     <value>Your HandBrake queue is done!</value>
   </data>
   <data name="OptionsView_NotificationRemovalSubText" xml:space="preserve">
-    <value>This will also disable the show windows taskbar notifications options on the 'When Done' tab. Re-enable these if you want to re-activate this feature.</value>
+    <value>Це також вимкне опції показу сповіщень на панелі завдань на вкладці "Після завершення". Увімкніть знову, якщо ви хочете знову активувати цю функцію.</value>
   </data>
   <data name="OptionsView_NotificationRemovalText" xml:space="preserve">
     <value>Видалити HandBrake з панелі керування сповіщеннями Windows.</value>
@@ -2565,7 +2565,7 @@ Only queue files from the current version are supported.</value>
     <value>Notification settings have been removed.</value>
   </data>
   <data name="OptionsView_UninstallToast" xml:space="preserve">
-    <value>Clear &amp; Uninstall</value>
+    <value>Очистити та видалити</value>
   </data>
   <data name="OptionsView_WindowsNotification" xml:space="preserve">
     <value>Надіслати сповіщення на панель завдань Windows.</value>
@@ -2580,13 +2580,13 @@ Only queue files from the current version are supported.</value>
     <value>Regenerate (Autoname)</value>
   </data>
   <data name="MainView_OpenDirectory" xml:space="preserve">
-    <value>Open this Directory</value>
+    <value>Відкрити цей каталог</value>
   </data>
   <data name="Shared_CollapseAll" xml:space="preserve">
-    <value>Collapse All</value>
+    <value>Згорнути все</value>
   </data>
   <data name="Shared_ExpandAll" xml:space="preserve">
-    <value>Expand All</value>
+    <value>Розгорнути все</value>
   </data>
   <data name="OptionsView_RightToleftMode" xml:space="preserve">
     <value>Режим показу справа наліво:</value>
@@ -2604,7 +2604,7 @@ Only queue files from the current version are supported.</value>
     <value>The current development build you are running is getting old. You may wish to update!</value>
   </data>
   <data name="SourceSelection_NightlyUpdateUrl" xml:space="preserve">
-    <value>Download via Github</value>
+    <value>Завантажити через Github</value>
   </data>
   <data name="MainView_NightlyBuildsUpdate" xml:space="preserve">
     <value>Download Development Builds (HTTPS)</value>
@@ -2616,7 +2616,7 @@ Only queue files from the current version are supported.</value>
     <value>Prefers the use of multiple media engines to speed up a single encode where supported. Disable to allow load balancing multiple parallel encodes across media engines.</value>
   </data>
   <data name="MainView_OpenHandBrake" xml:space="preserve">
-    <value>Open HandBrake</value>
+    <value>Відкрити HandBrake</value>
   </data>
   <data name="Startup_UnableToStartInfo" xml:space="preserve">
     <value>Hardware encoding support has been disabled as it is a common cause of start-up issues.
@@ -2626,19 +2626,19 @@ Only queue files from the current version are supported.</value>
 Hardware encoding support can be re-enabled in preferences. </value>
   </data>
   <data name="Startup_UnableToStart" xml:space="preserve">
-    <value>HandBrake was unable to start.</value>
+    <value>HandBrake не зміг запуститися.</value>
   </data>
   <data name="OptionsView_ResetSafeMode" xml:space="preserve">
     <value>Reset Safe Mode</value>
   </data>
   <data name="OptionsView_ResetSafeModeMessage" xml:space="preserve">
-    <value>Please restart HandBrake.</value>
+    <value>Будь ласка, перезавантажте HandBrake.</value>
   </data>
   <data name="Debug_QueueDataExport" xml:space="preserve">
     <value>Export Queue Statistics Data (csv)</value>
   </data>
   <data name="Debug_QueueExportDataDone" xml:space="preserve">
-    <value>Export Done!</value>
+    <value>Експорт завершено!</value>
   </data>
   <data name="Debug_QueueSweep_NotSetup" xml:space="preserve">
     <value>You must first scan a source and have an initial destination directory set</value>
@@ -2658,7 +2658,7 @@ This may be due to limitations of the file container you have selected. Please s
     <value>Немає</value>
   </data>
   <data name="SourceSelection_UpdateNow" xml:space="preserve">
-    <value>Update Now!</value>
+    <value>Оновити зараз!</value>
   </data>
   <data name="CropMode_Auto" xml:space="preserve">
     <value>Автоматично</value>
@@ -2676,7 +2676,7 @@ This may be due to limitations of the file container you have selected. Please s
     <value>Prefer use of Nvidia NVDec for decoding video when using the NVEnc encoder and the hardware is available for use.</value>
   </data>
   <data name="Options_Hardware" xml:space="preserve">
-    <value>Hardware Support</value>
+    <value>Апаратна підтримка</value>
   </data>
   <data name="StaticPreviewViewModel_MediaError" xml:space="preserve">
     <value>The system was unable to play this file. 
@@ -2685,7 +2685,7 @@ Please note certain codecs such as AV1 or HEVC require the Microsoft AV1 or HEVC
 Alternatively, check the "Use External Player" checkbox below.</value>
   </data>
   <data name="StaticPreviewView_ClosePlayer" xml:space="preserve">
-    <value>Close Player</value>
+    <value>Закрити програвач</value>
   </data>
   <data name="StaticPreviewView_Play" xml:space="preserve">
     <value>Відтворити</value>
@@ -2697,19 +2697,19 @@ Alternatively, check the "Use External Player" checkbox below.</value>
     <value>The Built-in preview is not available for the WebM container. An External player must be used.</value>
   </data>
   <data name="StaticPreview_EncodingPreview" xml:space="preserve">
-    <value>Encoding Preview ...</value>
+    <value>Кодування попереднього перегляду…</value>
   </data>
   <data name="StaticPreview_Previews" xml:space="preserve">
-    <value>Previews:</value>
+    <value>Фрагменти:</value>
   </data>
   <data name="StaticPreview_Volume" xml:space="preserve">
-    <value>Volume: 0</value>
+    <value>Гучність: 0</value>
   </data>
   <data name="Reset" xml:space="preserve">
     <value>Скинути</value>
   </data>
   <data name="OptionsView_IsoDateFormat" xml:space="preserve">
-    <value>Use ISO Date Formats (YYYY-MM-DD) instead of system format.</value>
+    <value>Використовувати формати дат ISO (РРРР-ММ-ДД) замість системного формату.</value>
   </data>
   <data name="QueueViewModel_ShortEncodeStatus" xml:space="preserve">
     <value>Pass {0} of {1}, {2:00.00}%, {3:000.0} fps, avg {4:000.0} fps, ETA: {5}</value>
@@ -2727,13 +2727,13 @@ Alternatively, check the "Use External Player" checkbox below.</value>
     <value>Output: {0}, avg {1} fps</value>
   </data>
   <data name="PresetPane_Desc" xml:space="preserve">
-    <value>Preset Description:</value>
+    <value>Опис набору:</value>
   </data>
   <data name="PresetPane_HidePresetDesc" xml:space="preserve">
-    <value>Hide Preset Description</value>
+    <value>Приховати опис набору</value>
   </data>
   <data name="PresetPane_ShowPresetDesc" xml:space="preserve">
-    <value>Show Preset Description</value>
+    <value>Показати опис набору</value>
   </data>
   <data name="TaskTrayStatusManyTitle" xml:space="preserve">
     <value>{0}
@@ -2748,19 +2748,19 @@ To allow multiple simultaneous encodes, turn on "Process Isolation" in Tools Men
     <value>Якість</value>
   </data>
   <data name="AudioView_Source" xml:space="preserve">
-    <value>Source</value>
+    <value>Джерело</value>
   </data>
   <data name="AboutView_Documentation" xml:space="preserve">
-    <value>Documentation:</value>
+    <value>Документація:</value>
   </data>
   <data name="AboutView_GithubTracker" xml:space="preserve">
-    <value>GitHub Issue Tracker:</value>
+    <value>Трекер проблем GitHub:</value>
   </data>
   <data name="AboutView_Website" xml:space="preserve">
     <value>Вебсайт:</value>
   </data>
   <data name="MainView_PresetClone" xml:space="preserve">
-    <value>Clone Preset</value>
+    <value>Клонувати набір</value>
   </data>
   <data name="PresetPane_MoveDown" xml:space="preserve">
     <value>Move Down</value>
@@ -2778,36 +2778,45 @@ To allow multiple simultaneous encodes, turn on "Process Isolation" in Tools Men
     <value>There are currently jobs running. Would you like to complete the current jobs before stopping the queue?</value>
   </data>
   <data name="Options_AddExt" xml:space="preserve">
-    <value>Add Extension</value>
+    <value>Додати розширення</value>
   </data>
   <data name="Options_ExcludeExtensions" xml:space="preserve">
-    <value>Exclude File Extensions:</value>
+    <value>Виключити розширення файлів:</value>
   </data>
   <data name="Options_ExcludeExtensionsInfo" xml:space="preserve">
-    <value>The following file extensions will be ignored when scanning a folder. The list is case insensitive. "." is not required.</value>
+    <value>Наступні розширення файлів буде проігноровано під час сканування папки. Список не залежить від регістру. "." не є обов'язковим.</value>
   </data>
   <data name="Options_ExtensionExists" xml:space="preserve">
     <value>This file extension already exists in the list.</value>
   </data>
   <data name="Options_FileHandling" xml:space="preserve">
-    <value>File Handling (Scanning)</value>
+    <value>Робота з файлами (сканування)</value>
   </data>
   <data name="Options_RecursiveFolderScan" xml:space="preserve">
-    <value>Recursively scan directories when using the folder scan mode.</value>
+    <value>Рекурсивно сканувати каталоги при використанні режиму сканування папок.</value>
   </data>
   <data name="AudioView_AudioQuality" xml:space="preserve">
-    <value>Audio Track Quality</value>
+    <value>Якість аудіозапису</value>
   </data>
   <data name="AudioView_AudioTrackName" xml:space="preserve">
-    <value>Audio Track Name</value>
+    <value>Назва аудіозапису</value>
   </data>
   <data name="AudioView_BitrateSelection" xml:space="preserve">
-    <value>Audio Track Bitrate</value>
+    <value>Бітрейт аудіозапису</value>
   </data>
   <data name="AudioView_DeleteTrack" xml:space="preserve">
-    <value>Delete this audio track</value>
+    <value>Видалити цей аудіозапис</value>
   </data>
   <data name="AudioView_QualityMode" xml:space="preserve">
     <value>Audio Encoder Quality Mode</value>
+  </data>
+  <data name="QueueView_AdvancedQueueDisplay" xml:space="preserve">
+    <value>Use Advanced Queue View</value>
+  </data>
+  <data name="QueueView_SimpleQueueDisplay" xml:space="preserve">
+    <value>Use Simple Queue View</value>
+  </data>
+  <data name="VideoView_LosslessEncodeOnly" xml:space="preserve">
+    <value>Lossless encoding only.</value>
   </data>
 </root>

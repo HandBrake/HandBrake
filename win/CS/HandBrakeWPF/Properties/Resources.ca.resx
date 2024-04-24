@@ -168,10 +168,10 @@ Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 0211
     <value>Avís: ara mateix no teniu la selecció automàtica de pistes d'àudio i subtítols activada. Podeu configurar les pistes per defecte a les opcions.</value>
   </data>
   <data name="Presets_ResetComplete" xml:space="preserve">
-    <value>Les configuracions predefinides originals s'han reinicialitzat.</value>
+    <value>Les configuracions predefinides originals s'han restablert.</value>
   </data>
   <data name="Presets_ResetHeader" xml:space="preserve">
-    <value>S'ha reinicialitzat correctament</value>
+    <value>S'ha restablert correctament</value>
   </data>
   <data name="Video_HigherQuality" xml:space="preserve">
     <value>Qualitat superior |</value>
@@ -240,7 +240,7 @@ Podeu configurar les opcions dels noms de fitxer automàtics a «Eines -&gt; Pre
     <value>Segur que voleu actualitzar la configuració predefinida seleccionada?</value>
   </data>
   <data name="Main_PresetUpdated" xml:space="preserve">
-    <value>La configuració predefinida s'ha actualitzat amb la configuració actual.</value>
+    <value>La configuració predefinida s'ha actualitzat amb els paràmetres actuals.</value>
   </data>
   <data name="Main_PresetUpdateNotification" xml:space="preserve">
     <value>El HandBrake ha determinat que teniu les configuracions predefinides obsoletes i s'han d'actualitzar.
@@ -248,7 +248,7 @@ Les vostres configuracions predefinides personalitzades no estan actualitzades i
 S'ha fet una còpia de seguretat del fitxer user_presets.xml anterior.</value>
   </data>
   <data name="Main_QueueFinished" xml:space="preserve">
-    <value>S'ha completat la cua</value>
+    <value>S'ha finalitzat la cua</value>
   </data>
   <data name="Main_ScanCancelled" xml:space="preserve">
     <value>S'ha cancel·lat l'escaneig</value>
@@ -335,7 +335,7 @@ Voleu continuar?</value>
     <value>El sistema ha evitat que el HandBrake obri un navegador.</value>
   </data>
   <data name="Main_UnableToLoadHelpSolution" xml:space="preserve">
-    <value>També pots accedir a les pàgines d'ajuda visitant el web directament a: https://handbrake.fr</value>
+    <value>També podeu accedir a les pàgines d'ajuda visitant el web directament a: https://handbrake.fr</value>
   </data>
   <data name="Main_PresetImportFailed" xml:space="preserve">
     <value>No s'ha pogut importar la configuració predefinida seleccionada.</value>
@@ -345,36 +345,32 @@ Voleu continuar?</value>
 S'han de tornar a crear les configuracions predefinides anteriors a la versió actual.</value>
   </data>
   <data name="Video_EncoderExtraArgsTooltip" xml:space="preserve">
-    <value>Additional advanced arguments that can be passed to the video encoder.</value>
+    <value>Arguments avançats addicionals que es poden transferir al codificador de vídeo.</value>
   </data>
   <data name="Subtitles_BurnInBehaviourModes" xml:space="preserve">
-    <value>None - Only tracks where the container does not support the format will be burned in.
-Foreign Audio Track - The Foreign Audio track will be burned in if available. 
-First Track - The first track will be burned in.
-Foreign Audio Preferred, else First - If the foreign audio track exists, it will be burned in, otherwise the first track will be chosen.</value>
+    <value>Cap: Només s'incrustaran les pistes el contenidor de les quals el format no sigui compatible.
+Pista d'àudio estranger: S'incrustarà la pista d'àudio estranger si està disponible.
+Primera pista: S'incrustarà la primera pista.
+Preferència d'àudio estranger: Si hi ha una pista d'àudio estranger, s'incrustarà, si no, es triarà la primera pista.</value>
   </data>
   <data name="Subtitles_WebmSubtitleIncompatibilityHeader" xml:space="preserve">
-    <value>WebM Subtitle Compatibility</value>
+    <value>Compatibilitat amb subtítols WebM</value>
   </data>
   <data name="Subtitles_WebmSubtitleIncompatibilityError" xml:space="preserve">
-    <value>WebM in HandBrake only supports burned subtitles.
-
-You should change your subtitle selections.
-
-If you continue, your non-burned subtitles will be lost.</value>
+    <value>El format WebM només admet subtítols incrustats.
+Heu de canviar la selecció de subtítols.
+Si procediu, els subtítols no incrustats es perdran.</value>
   </data>
   <data name="Main_ScanNoTitlesFound" xml:space="preserve">
     <value>No s'han trobat títols ni fitxers d'origen vàlids.</value>
   </data>
   <data name="Main_ScanNoTitlesFoundMessage" xml:space="preserve">
-    <value>HandBrake will not be able to encode the selected source as it did not find a valid source with titles to encode. This could be due to one of the following reasons:
-
-- The duration of each source title is below the "Minimum Title Duration" threshold option in 'Preferences &gt; Advanced'. 
-- The source file is not a valid video file or is in a format that HandBrake does not support.
-- You may not have read access to the file or another application may have a lock on the file. 
-- The source may be copy protected or include DRM. Please note that HandBrake does not support the removal of copy protections.
-
-The Activity log may have further information.</value>
+    <value>El HandBrake no podrà codificar el fitxer seleccionat atès que no ha trobat un títol vàlid a codificar. Això pot ser a causa de diverses raons:
+- La durada de cada fitxer és inferior a la de l'opció «Durada mínima del títol» establerta a «Preferències &gt; Avançat».
+- El fitxer d'origen no és un fitxer de vídeo vàlid o té un format que el HandBrake no admet.
+- No teniu accés al fitxer o un altre programa el bloca.
+- El fitxer d'origen és una còpia o té DRM. Tingueu en compte que el HandBrake no ofereix l'eliminació de protecció de còpia.
+És possible que el registre d'activitat en tingui informació addicional.</value>
   </data>
   <data name="Main_QueueLabel" xml:space="preserve">
     <value>Cua{0}</value>
@@ -386,7 +382,7 @@ The Activity log may have further information.</value>
     <value>Inicia la cua</value>
   </data>
   <data name="MainViewModel_CanNotDeleteDefaultPreset" xml:space="preserve">
-    <value>No podeu eliminar la configuració predefinida. Definiu abans una altra configuració predefinida per defecte.</value>
+    <value>No podeu eliminar la configuració predefinida per defecte. Definiu abans una altra configuració predefinida per defecte.</value>
   </data>
   <data name="MainViewModel_PresetRemove_AreYouSure" xml:space="preserve">
     <value>Segur que voleu eliminar la configuració predefinida:</value>
@@ -395,7 +391,7 @@ The Activity log may have further information.</value>
     <value>Codificació: Passada {0} de {1},  {2:00.00} %, FPS: {3:000.0},  FPS mitj.: {4:000.0}, Temps restant: {5}, Transcorregut: {6} {7}</value>
   </data>
   <data name="AddPresetViewModel_PresetMustProvideName" xml:space="preserve">
-    <value>A Preset must have a Name. Please fill out the Preset Name field.</value>
+    <value>Les configuracions predefinides han de tenir un nom. Poseu-li'n un.</value>
   </data>
   <data name="AddPresetViewModel_PresetWithSameNameOverwriteWarning" xml:space="preserve">
     <value>Ja existeix una configuració predefinida amb aquest nom. La voleu sobreescriure?</value>
@@ -404,7 +400,7 @@ The Activity log may have further information.</value>
     <value>Heu d'escanejar un fitxer d'origen per a utilitzar l'opció «Origen al màxim».</value>
   </data>
   <data name="AddPresetViewModel_CustomWidthHeightFieldsRequired" xml:space="preserve">
-    <value>The Custom Width or Height fields must be filled in for the 'Custom' option.</value>
+    <value>Heu d'emplenar els camps Amplada o Alçada personalitzada a l'opció «Personalitzat».</value>
   </data>
   <data name="AddPresetViewModel_UnableToAddPreset" xml:space="preserve">
     <value>No s'han pogut afegir les configuracions predefinides.</value>
@@ -493,7 +489,7 @@ Visiteu el lloc web per veure'n les notes de la versió.</value>
 No s'eliminarà cap fitxer codificat.</value>
   </data>
   <data name="QueueViewModel_JobCurrentlyRunningWarning" xml:space="preserve">
-    <value>This encode is currently in progress. If you delete it, the encode will be stopped. Are you sure you wish to proceed?</value>
+    <value>Actualment s'està codificant. Si esborreu la selecció, s'aturarà la codificació. Segur que voleu continuar?</value>
   </data>
   <data name="QueueViewModel_NoPendingJobs" xml:space="preserve">
     <value>No hi ha tasques pendents.</value>
@@ -508,10 +504,10 @@ No s'eliminarà cap fitxer codificat.</value>
     <value>La cua no s'està executant</value>
   </data>
   <data name="QueueViewModel_QueueCompleted" xml:space="preserve">
-    <value>S'ha completat la cua</value>
+    <value>S'ha finalitzat la cua</value>
   </data>
   <data name="QueueViewModel_LastJobFinished" xml:space="preserve">
-    <value>Last Queued Job Finished</value>
+    <value>S'ha completat l'última tasca de la cua</value>
   </data>
   <data name="QueueViewModel_QueueStarted" xml:space="preserve">
     <value>S'ha iniciat la cua</value>
@@ -520,14 +516,14 @@ No s'eliminarà cap fitxer codificat.</value>
     <value>Codificació: Passada {0} de {1},  {2:00.00} %, FPS: {3:000.0},  FPS mitj.: {4:000.0}, Temps restant: {5}, Transcorregut: {6:d\:hh\:mm\:ss}</value>
   </data>
   <data name="ShellViewModel_CanClose" xml:space="preserve">
-    <value>An Encode is currently running. Exiting HandBrake will stop this encode.
-Are you sure you wish to exit HandBrake?</value>
+    <value>Actualment s'està codificant. Si sortiu del HandBrake, s'aturarà la codificació.
+Segur que voleu sortir-ne?</value>
   </data>
   <data name="StaticPreviewViewModel_Title" xml:space="preserve">
-    <value>Picture Preview</value>
+    <value>Previsualització de la imatge</value>
   </data>
   <data name="StaticPreview_UnableToDeletePreview" xml:space="preserve">
-    <value>Unable to delete previous preview file. You may still have a preview open in your media player. Please close this.</value>
+    <value>No es pot esborrar el fitxer de previsualització anterior. És possible que tingueu una previsualització oberta al reproductor. Tanqueu-la.</value>
   </data>
   <data name="StaticPreviewViewModel_ScanFirst" xml:space="preserve">
     <value>Heu d'escanejar un fitxer d'origen i configurar la codificació per crear-ne una previsualització.</value>
@@ -557,9 +553,9 @@ Are you sure you wish to exit HandBrake?</value>
     <value>No s'han pogut carregar les configuracions predefinides.</value>
   </data>
   <data name="PresetService_UnableToLoadPresets" xml:space="preserve">
-    <value>HandBrake was unable to load your presets file. It may have been from an older unsupported version of HandBrake or corrupted. 
+    <value>El HandBrake no ha pogut carregar el fitxer de configuració predefinida. És possible que sigui d'una versió antiga del HandBrake no compatible o que s'hagi corromput.
 
-Your old presets file was archived to:</value>
+El fitxer de configuració predefinida antic s'ha arxivat a:</value>
   </data>
   <data name="Main_QueueFinishedErrors" xml:space="preserve">
     <value> amb aquest nombre d'errors: {0}. Comproveu la finestra de la cua per a obtenir-ne més detalls.</value>
@@ -580,7 +576,7 @@ Your old presets file was archived to:</value>
     <value>Totes les línies del fitxer de capítols han de tenir almenys 2 columnes de dades</value>
   </data>
   <data name="ChaptersViewModel_UnableToImportChaptersFirstColumnMustContainOnlyIntegerNumber" xml:space="preserve">
-    <value>First column in chapters file must only contain a integer number value higher than zero (0)</value>
+    <value>La primera columna d'un fitxer de capítols ha de contenir obligatòriament un valor de nombre enter superior a zero (0)</value>
   </data>
   <data name="ChaptersViewModel_UnsupportedFileFormatMsg" xml:space="preserve">
     <value>Els fitxers de capítol del tipus «{0}» actualment no són compatibles.</value>
@@ -592,27 +588,27 @@ Your old presets file was archived to:</value>
     <value>La informació dels capítols del fitxer d'origen és invàlida</value>
   </data>
   <data name="ChaptersViewModel_ValidateImportedChapters_ChapterCountMismatch" xml:space="preserve">
-    <value>The number of chapters on the source media 
-and the number of chapters in the input file do not match ({0} vs {1}).
+    <value>El nombre de capítols del mitjà d'origen
+i el nombre de capítols del fitxer d'entrada no coincideix ({0} enfront de {1})
 
-Do you still want to import the chapter names?</value>
+Segur que voleu importar els noms de capítol?</value>
   </data>
   <data name="ChaptersViewModel_ValidateImportedChapters_ChapterCountMismatchMsg" xml:space="preserve">
-    <value>The number of chapters on the source media 
-and the number of chapters in the input file do not match ({0} vs {1}).
+    <value>El nombre de capítols del mitjà d'origen
+i el nombre de capítols del fitxer d'entrada no coincideix ({0} i {1})
 
-Do you still want to import the chapter names?</value>
+Segur que voleu importar els noms de capítol?</value>
   </data>
   <data name="ChaptersViewModel_ValidateImportedChapters_ChapterCountMismatchWarning" xml:space="preserve">
     <value>El nombre de capítols no coincideix entre el fitxer d'origen i el fitxer d'entrada</value>
   </data>
   <data name="ChaptersViewModel_ValidateImportedChapters_ChapterDurationMismatchMsg" xml:space="preserve">
-    <value>The reported duration of the chapters on the source media 
-and the duration of chapters in the input file differ greatly.
+    <value>La durada obtinguda dels capítols del mitjà d'origen
+i la durada dels capítols del fitxer d'entrada difereix molt.
 
-It is very likely that this chapter file was produced from a different source media.
+És possible que aquest fitxer de capítols s'hagi produït a partir d'un mitjà d'origen diferent.
 
-Are you sure you want to import the chapter names?</value>
+Segur que voleu importar els noms de capítol?</value>
   </data>
   <data name="ChaptersViewModel_ValidateImportedChapters_ChapterDurationMismatchWarning" xml:space="preserve">
     <value>La durada dels capítols no coincideix entre el fitxer d'origen i el fitxer d'entrada</value>
@@ -621,11 +617,11 @@ Are you sure you want to import the chapter names?</value>
     <value>S'ha produït un error quan s'intentava aturar l'escaneig. Reinicieu el HandBrake.</value>
   </data>
   <data name="Presets_PresetForceReset" xml:space="preserve">
-    <value>HandBrake is unable to upgrade your presets file to a new version format.
-Your preset file will be archived and new one created. You will need to re-create your own presets.</value>
+    <value>El HandBrake no pot actualitzar el fitxer de configuració predefinida a una nova versió.
+S'arxivarà la configuració predefinida i se'n crearà una de nova. Per tant, haureu de refer les vostres configuracions predefinides.</value>
   </data>
   <data name="SettingService_SaveErrorReset" xml:space="preserve">
-    <value>Any settings you changed may need to be reset the next time HandBrake launches.</value>
+    <value>Si heu canviat alguna opció de la configuració, és possible que s'hagi de reinicialitzar el pròxim cop que s'obri el HandBrake.</value>
   </data>
   <data name="UserSettings_AnErrorOccurred" xml:space="preserve">
     <value>S'ha produït un problema en intentar desar les preferències.</value>
@@ -634,22 +630,22 @@ Your preset file will be archived and new one created. You will need to re-creat
     <value>Compte, s'ha restablert la configuració.</value>
   </data>
   <data name="UserSettings_YourSettingsAreCorrupt" xml:space="preserve">
-    <value>Your user settings file was corrupted or inaccessible. Settings have been reset to defaults.</value>
+    <value>No es pot accedir al fitxer de configuració de l'usuari o s'ha corromput. La configuració s'ha restablert als valors predefinits.</value>
   </data>
   <data name="UserSettings_UnableToLoad" xml:space="preserve">
     <value>No s'ha pogut carregar el fitxer de configuració de l'usuari: {0}</value>
   </data>
   <data name="UserSettings_UnableToLoadSolution" xml:space="preserve">
-    <value>Your user settings file appears to be inaccessible or corrupted. You may have to delete the file and let HandBrake generate a new one.</value>
+    <value>No es pot accedir al fitxer de configuració de l'usuari o s'ha corromput. És possible que hàgiu d'eliminar el fitxer i deixar que el HandBrake en generi un de nou.</value>
   </data>
   <data name="Main_NoPermissionsOrMissingDirectory" xml:space="preserve">
-    <value>The output directory you have chosen either does not exist, or you do not have permissions to write files to it.</value>
+    <value>El directori de sortida que heu triat no existeix, o bé no hi teniu permís d'escriptura.</value>
   </data>
   <data name="DirectoryUtils_CreateFolder" xml:space="preserve">
     <value>Voleu crear una carpeta?</value>
   </data>
   <data name="DirectoryUtils_CreateFolderMsg" xml:space="preserve">
-    <value>The folder you are trying to write to does not exist. Would you like HandBrake to create the following folder?
+    <value>La carpeta que voleu modificar no existeix. Voleu que el HandBrake creï la següent carpeta?
 {0}</value>
   </data>
   <data name="MainViewModel_UnableToLaunchDestDir" xml:space="preserve">
@@ -681,14 +677,14 @@ S'està codificant 1 tasca</value>
     <value>Cua pausada</value>
   </data>
   <data name="Main_LowDiskspace" xml:space="preserve">
-    <value>Your destination directory is low on diskspace. 
+    <value>El directori de destinació té poc espai.
 
-You can configure the level at which this alert appears in preferences. 
+Podeu configurar quan voleu que aparegui aquesta alerta a «Preferències».
 
-Do you wish to continue? </value>
+Voleu continuar?</value>
   </data>
   <data name="Queue_UnableToResetJob" xml:space="preserve">
-    <value>Unable to reset job status as it is not in an Error or Completed state</value>
+    <value>No s'ha pogut restablir l'estat de la tasca atès que no té l'estat «Error» o «Completat»</value>
   </data>
   <data name="Queue_UnableToRestoreFile" xml:space="preserve">
     <value>No es pot restaurar el fitxer de la cua.</value>
@@ -706,25 +702,25 @@ Do you wish to continue? </value>
     <value>Previsualització ({0} % de la mida actual)</value>
   </data>
   <data name="OsBitnessWarning" xml:space="preserve">
-    <value>HandBrake requires a 64bit version of Windows 10 or later to run.</value>
+    <value>El HandBrake només funciona amb una versió 64 bits de Windows 10 o superior.</value>
   </data>
   <data name="OsVersionWarning" xml:space="preserve">
-    <value>HandBrake requires Windows 10 or later to run. Version 0.9.9 (XP), 0.10.5 (Vista), 1.3.3 (7 and 8.x) were the last versions to support these older operating systems.</value>
+    <value>El HandBrake només funciona amb Windows 10 o superior. Les versions 0.9.9 (XP), 0.10.5 (Vista), 1.3.3 (7 i 8.x) són les últimes versions del programa en què aquests sistemes operatius eren compatibles.</value>
   </data>
   <data name="Main_ContinueAddingToQueue" xml:space="preserve">
-    <value>Do you wish to proceed trying to add the rest?</value>
+    <value>Segur que voleu continuar i afegir la resta?</value>
   </data>
   <data name="Main_QueueOverwritePrompt" xml:space="preserve">
-    <value>The file '{0}' already exists!
-Would you like to overwrite it?
+    <value>El fitxer «{0}» ja existeix!
+El voleu sobreescriure?
 
-Hint: File overwrite behaviour can be controlled in preferences. </value>
+Consell: El comportament de la sobreescriptura de fitxers es pot modificar a «Preferències». </value>
   </data>
   <data name="Clipboard_Unavailable" xml:space="preserve">
-    <value>The system clipboard is currently unavailable.</value>
+    <value>El porta-retalls del sistema no està disponible en aquest moment.</value>
   </data>
   <data name="Clipboard_Unavailable_Solution" xml:space="preserve">
-    <value>This may be due to another application monitoring or locking the clipboard for its own use. You will not be able to use the clipboard until it is unlocked.</value>
+    <value>Això pot ser a causa que un altre programa estigui monitorant o blocant el porta-retalls per al seu ús. No podreu fer servir el porta-retalls fins que no es desbloqui.</value>
   </data>
   <data name="AboutView_License" xml:space="preserve">
     <value>Llicència:</value>
@@ -739,7 +735,7 @@ Hint: File overwrite behaviour can be controlled in preferences. </value>
     <value>Afegeix una configuració predefinida</value>
   </data>
   <data name="AddPresetView_Category" xml:space="preserve">
-    <value>Category:</value>
+    <value>Categoria:</value>
   </data>
   <data name="AddPresetView_Description" xml:space="preserve">
     <value>Descripció:</value>
@@ -751,16 +747,16 @@ Hint: File overwrite behaviour can be controlled in preferences. </value>
     <value>Dimensions:</value>
   </data>
   <data name="AudioDefaultView_Behaviours" xml:space="preserve">
-    <value>Source Track Selection</value>
+    <value>Selecció de pista d'origen</value>
   </data>
   <data name="AudioView_AllowPassThruOf" xml:space="preserve">
-    <value>Allow passthru of:</value>
+    <value>Permet el pas directe de:</value>
   </data>
   <data name="AudioView_AudioDefaultsDescription" xml:space="preserve">
-    <value>Configure how the Audio Tracks are automatically selected and configured when you select a new title or source video.</value>
+    <value>Configureu com se seleccionen i configuren automàticament les pistes d'àudio quan seleccioneu un títol nou o un vídeo d'origen.</value>
   </data>
   <data name="AudioView_AutoPassthruBehaviour" xml:space="preserve">
-    <value>'Auto Passthru' Behaviour:</value>
+    <value>Comportament del «Pas directe automàtic»:</value>
   </data>
   <data name="AudioView_Bitrate" xml:space="preserve">
     <value>Velocitat de transmissió</value>
@@ -802,7 +798,7 @@ Hint: File overwrite behaviour can be controlled in preferences. </value>
     <value>Pistes addicionals:</value>
   </data>
   <data name="AudioView_WhenAutoPassthru" xml:space="preserve">
-    <value>When 'Auto Passthru' is selected as the audio codec.</value>
+    <value>Quan el «Pas directe automàtic» se selecciona com a còdec d'àudio.</value>
   </data>
   <data name="ChaptersView_ChapterMarkers" xml:space="preserve">
     <value>Marcadors de capítol</value>
@@ -832,7 +828,7 @@ Hint: File overwrite behaviour can be controlled in preferences. </value>
     <value>Importa noms</value>
   </data>
   <data name="ChapterView_ResetChapterNames" xml:space="preserve">
-    <value>Reinicialitza els noms dels capítols</value>
+    <value>Restableix els noms dels capítols</value>
   </data>
   <data name="CountdownAlterView_CancelAction" xml:space="preserve">
     <value>Cancel·la l'acció</value>
@@ -853,28 +849,28 @@ Hint: File overwrite behaviour can be controlled in preferences. </value>
     <value>Antiblocs:</value>
   </data>
   <data name="FiltersView_Decomb" xml:space="preserve">
-    <value>Desentrellaçat variable</value>
+    <value>Desentrellaçament variable</value>
   </data>
   <data name="FiltersView_Deinterlace" xml:space="preserve">
-    <value>Desentrellaçat:</value>
+    <value>Desentrellaçament:</value>
   </data>
   <data name="FiltersView_DeinterlacePreset" xml:space="preserve">
     <value>Configuració predefinida:</value>
   </data>
   <data name="FiltersView_DeinterlacePresetAuto" xml:space="preserve">
-    <value>Deinterlace Preset</value>
+    <value>Configuració predefinida de desentrellaçament</value>
   </data>
   <data name="FiltersView_Denoise" xml:space="preserve">
     <value>Reducció de soroll:</value>
   </data>
   <data name="FiltersView_DenoisePresetAuto" xml:space="preserve">
-    <value>Denoise Preset</value>
+    <value>Configuració predefinida de reducció de soroll</value>
   </data>
   <data name="FiltersView_DenoiseTuneAuto" xml:space="preserve">
-    <value>Denoise Tune</value>
+    <value>Ajustament de la reducció de soroll</value>
   </data>
   <data name="FiltersView_Detelecine" xml:space="preserve">
-    <value>Detelecine:</value>
+    <value>Destelecine:</value>
   </data>
   <data name="FiltersView_Filters" xml:space="preserve">
     <value>Filtres</value>
@@ -898,10 +894,10 @@ Hint: File overwrite behaviour can be controlled in preferences. </value>
     <value>Nitidesa:</value>
   </data>
   <data name="FiltersView_SharpenPresetAuto" xml:space="preserve">
-    <value>Sharpen Preset</value>
+    <value>Configuració predefinida de nitidesa</value>
   </data>
   <data name="FiltersView_SharpenTuneAuto" xml:space="preserve">
-    <value>Sharpen Tune</value>
+    <value>Ajustament de la nitidesa</value>
   </data>
   <data name="FiltersView_Tune" xml:space="preserve">
     <value>Ajustament:</value>
@@ -937,10 +933,10 @@ Hint: File overwrite behaviour can be controlled in preferences. </value>
     <value>Registre de codificació</value>
   </data>
   <data name="LogView_OpenLogDir" xml:space="preserve">
-    <value>Open Log Directory</value>
+    <value>Obre el directori del registre</value>
   </data>
   <data name="LogView_ScanLog" xml:space="preserve">
-    <value>ScanLog</value>
+    <value>Escaneig del registre</value>
   </data>
   <data name="MainView_ActivityLog" xml:space="preserve">
     <value>Registre d'activitat</value>
@@ -952,7 +948,7 @@ Hint: File overwrite behaviour can be controlled in preferences. </value>
     <value>Afegeix l'element actual</value>
   </data>
   <data name="MainView_AddSelection" xml:space="preserve">
-    <value>Afegeix una selecció</value>
+    <value>Afegeix la selecció</value>
   </data>
   <data name="MainView_AddToQueue" xml:space="preserve">
     <value>Afegeix a la cua</value>
@@ -1027,7 +1023,7 @@ Hint: File overwrite behaviour can be controlled in preferences. </value>
     <value>Edita una configuració predefinida</value>
   </data>
   <data name="MainView_PresetOptionsContextMenu" xml:space="preserve">
-    <value>Preset Options Context Menu</value>
+    <value>Menú contextual de les opcions de configuració predefinida</value>
   </data>
   <data name="MainView_PresetRemove" xml:space="preserve">
     <value>Elimina una configuració predefinida</value>
@@ -1045,22 +1041,22 @@ Hint: File overwrite behaviour can be controlled in preferences. </value>
     <value>Interval:</value>
   </data>
   <data name="MainView_Reload" xml:space="preserve">
-    <value>Torna a recarregar</value>
+    <value>Torna a carregar</value>
   </data>
   <data name="MainView_Remove" xml:space="preserve">
     <value>Elimina</value>
   </data>
   <data name="MainView_ResetBuiltInPresets" xml:space="preserve">
-    <value>Reinicialitza les configuracions predefinides originals</value>
+    <value>Restableix les configuracions predefinides originals</value>
   </data>
   <data name="MainView_SaveNewPreset" xml:space="preserve">
     <value>Desa una configuració predefinida nova</value>
   </data>
   <data name="MainView_Searching" xml:space="preserve">
-    <value>Searching for start time</value>
+    <value>S'està cercant l'hora d'inici</value>
   </data>
   <data name="MainView_SetDefault" xml:space="preserve">
-    <value>Set Default</value>
+    <value>Estableix un valor per defecte</value>
   </data>
   <data name="MainView_ShowPreview" xml:space="preserve">
     <value>Previsualització</value>
@@ -1090,7 +1086,7 @@ Hint: File overwrite behaviour can be controlled in preferences. </value>
     <value>Segur que voleu aturar la codificació?</value>
   </data>
   <data name="MainView_SubtitleBeforeScanError" xml:space="preserve">
-    <value>Please choose a source to encode before trying to import a subtitle file.</value>
+    <value>Trieu el fitxer d'origen que vulgueu codificar abans d'importar un fitxer de subtítols.</value>
   </data>
   <data name="MainView_SubtitlesTab" xml:space="preserve">
     <value>Subtítols</value>
@@ -1123,31 +1119,31 @@ Hint: File overwrite behaviour can be controlled in preferences. </value>
     <value>Metadades</value>
   </data>
   <data name="OptionsView_EnableNvencEncoding" xml:space="preserve">
-    <value>Allow use of the Nvidia NVENC Encoders</value>
+    <value>Permet l'ús dels codificadors Nvidia NVENC</value>
   </data>
   <data name="OptionsView_EnableQuicksyncEncoding" xml:space="preserve">
-    <value>Allow use of the Intel QuickSync Encoders</value>
+    <value>Permet l'ús dels codificadors Intel QuickSync</value>
   </data>
   <data name="OptionsView_EnableVceEncoding" xml:space="preserve">
-    <value>Allow use of the AMD VCN Encoders</value>
+    <value>Permet l'ús dels codificadors VCN d'AMD</value>
   </data>
   <data name="OptionsView_InvalidFileFormatChars" xml:space="preserve">
-    <value>The file format entered contained invalid characters. These have been removed. </value>
+    <value>El format del fitxer que heu introduït conté caràcters no vàlids i s'han eliminat.</value>
   </data>
   <data name="OptionsView_PlaySoundWhenDone" xml:space="preserve">
-    <value>Play a sound when each encode completes</value>
+    <value>Reprodueix un so quan finalitzi una codificació</value>
   </data>
   <data name="OptionsView_PlaySoundWhenQueueDone" xml:space="preserve">
-    <value>Play a sound when the queue completes</value>
+    <value>Reprodueix un so quan finalitzi la cua</value>
   </data>
   <data name="OptionsView_ShowPreviewOnSummaryTab" xml:space="preserve">
-    <value>Show previews on summary tab.</value>
+    <value>Mostra les previsualitzacions a la pestanya de resum.</value>
   </data>
   <data name="OptionsView_ShowStatusInTitleBar" xml:space="preserve">
-    <value>Show the encode status in the application title bar.</value>
+    <value>Mostra l'estat de la codificació a la barra de títol del programa.</value>
   </data>
   <data name="Options_7DayLogClear" xml:space="preserve">
-    <value>Clear Log files older than 7 days</value>
+    <value>Esborra els fitxers de registre de més de 7 dies d'antiguitat</value>
   </data>
   <data name="Options_About" xml:space="preserve">
     <value>Quant al HandBrake</value>
@@ -1171,16 +1167,16 @@ Hint: File overwrite behaviour can be controlled in preferences. </value>
     <value>Comprova les actualitzacions</value>
   </data>
   <data name="Options_ClearCompleted" xml:space="preserve">
-    <value>Always clear completed queue items after an encode completes</value>
+    <value>Esborra sempre els fitxers completats de la cua quan finalitzi una codificació</value>
   </data>
   <data name="Options_ClearLogs" xml:space="preserve">
-    <value>Clear Log History</value>
+    <value>Esborra l'historial del registre</value>
   </data>
   <data name="Options_CopyLogToDir" xml:space="preserve">
-    <value>Put a copy of individual encode logs in a specified location:</value>
+    <value>Posa una còpia dels registres de codificació individuals en una ubicació específica:</value>
   </data>
   <data name="Options_CopyLogToEncDir" xml:space="preserve">
-    <value>Put a copy of individual encode logs in the same location as the encoded video</value>
+    <value>Posa una còpia dels registres de codificació individuals a la mateixa ubicació que el vídeo codificat</value>
   </data>
   <data name="Options_CurVersion" xml:space="preserve">
     <value>Versió actual</value>
@@ -1198,7 +1194,7 @@ Hint: File overwrite behaviour can be controlled in preferences. </value>
     <value>Lectura de DVD</value>
   </data>
   <data name="Options_DvdRead" xml:space="preserve">
-    <value>Disable LibDVDNav. (libdvdread will be used instead)</value>
+    <value>Desactiva el LibDVDNav. (libdvdread s'utilitzarà en lloc seu)</value>
   </data>
   <data name="Options_Encoding" xml:space="preserve">
     <value>Codificació</value>
@@ -1213,22 +1209,22 @@ Hint: File overwrite behaviour can be controlled in preferences. </value>
     <value>Registre</value>
   </data>
   <data name="Options_LogLevel" xml:space="preserve">
-    <value>Log Verbosity Level:</value>
+    <value>Nivell de detall del registre:</value>
   </data>
   <data name="Options_LogPath" xml:space="preserve">
     <value>Camí:</value>
   </data>
   <data name="Options_LowDiskspaceSize" xml:space="preserve">
-    <value>Pause queue if disk space is low</value>
+    <value>Pausa la cua si el disc té massa poc espai</value>
   </data>
   <data name="Options_MinimiseTray" xml:space="preserve">
-    <value>Minimize to system tray (Requires Restart)</value>
+    <value>Minimitza a la safata del sistema (Cal reiniciar)</value>
   </data>
   <data name="Options_MinTitleScanLength" xml:space="preserve">
-    <value>Minimum DVD and Blu-ray title duration in seconds. Shorter titles will be skipped:</value>
+    <value>Durada mínima dels títols DVD i Blu-ray en segons. S'ometran els títols massa curts:</value>
   </data>
   <data name="Options_MP4FileExtension" xml:space="preserve">
-    <value>MP4 File Extension:</value>
+    <value>Extensió de fitxer MP4:</value>
   </data>
   <data name="Options_OnStartup" xml:space="preserve">
     <value>En arrencar</value>
@@ -1246,37 +1242,37 @@ Hint: File overwrite behaviour can be controlled in preferences. </value>
     <value>Evita la suspensió del sistema durant la codificació</value>
   </data>
   <data name="Options_PreviewScanCount" xml:space="preserve">
-    <value>Number of picture previews to scan:</value>
+    <value>Nombre de previsualitzacions d'imatges a escanejar:</value>
   </data>
   <data name="Options_PriorityLevel" xml:space="preserve">
-    <value>Work Priority Level:</value>
+    <value>Nivell de prioritat de la tasca:</value>
   </data>
   <data name="Options_QsvDecode" xml:space="preserve">
-    <value>Prefer use of Intel QuickSync for decoding video when using the QuickSync encoder and the hardware is available for use.</value>
+    <value>Prefereix l'ús d'Intel QuickSync per a la decodificació de vídeos quan utilitzis el codificador QuickSync i el maquinari estigui disponible.</value>
   </data>
   <data name="Options_QsvDecodeForNonFullPath" xml:space="preserve">
-    <value>Also use QuickSync decoding when not using a QuickSync encoder. (i.e. x265) </value>
+    <value>Utilitza també la codificació QuickSync tot i no utilitzar el codificador QuickSync. (p. e. x265) </value>
   </data>
   <data name="Options_RemovePunctuation" xml:space="preserve">
-    <value>Remove common punctuation</value>
+    <value>Treu la puntuació comuna</value>
   </data>
   <data name="Options_ReplaceUnderscores" xml:space="preserve">
-    <value>Replace underscores with a space</value>
+    <value>Substitueix els guions baixos per espais</value>
   </data>
   <data name="Options_ResetDoNothing" xml:space="preserve">
-    <value>Reset to 'Do nothing' when the app is re-launched.</value>
+    <value>Restableix a «No facis res» quan es torni a obrir el programa.</value>
   </data>
   <data name="Options_Scaler" xml:space="preserve">
     <value>Tria un redimensionador:</value>
   </data>
   <data name="Options_Scaling" xml:space="preserve">
-    <value>Scaling</value>
+    <value>Escala</value>
   </data>
   <data name="Options_SendFileTo" xml:space="preserve">
     <value>Envia el fitxer a:</value>
   </data>
   <data name="Options_TitleCase" xml:space="preserve">
-    <value>Change case to Title Case</value>
+    <value>Posa les inicials en majúscula</value>
   </data>
   <data name="Options_Updates" xml:space="preserve">
     <value>Actualitzacions</value>
@@ -1291,20 +1287,20 @@ Hint: File overwrite behaviour can be controlled in preferences. </value>
     <value>Vídeo</value>
   </data>
   <data name="Options_VideoPreviewPath" xml:space="preserve">
-    <value>This path is used for the video preview feature only.
-VLC and MPC-HC are supported. Other players may also work but are not validated.</value>
+    <value>Aquest camí es fa servir únicament per a la previsualització dels vídeos.
+Els reproductors VLC i MPC-HC són compatibles. Potser uns altres reproductors també funcionen, però no han estat validats.</value>
   </data>
   <data name="Options_ViewLogDirectory" xml:space="preserve">
-    <value>View Log Directory</value>
+    <value>Visualitza el directori del registre</value>
   </data>
   <data name="Options_WhenDone" xml:space="preserve">
     <value>Acció finalitzada</value>
   </data>
   <data name="Options_x264" xml:space="preserve">
-    <value>x264/5 Settings</value>
+    <value>Opcions de x264/5</value>
   </data>
   <data name="Options_x264Granularity" xml:space="preserve">
-    <value>Constant quality fractional granularity:</value>
+    <value>Granularitat fraccionària de qualitat constant:</value>
   </data>
   <data name="PictureSettingsView_Anamorphic" xml:space="preserve">
     <value>Anamorfisme:</value>
@@ -1364,13 +1360,13 @@ VLC and MPC-HC are supported. Other players may also work but are not validated.
     <value>Oficial</value>
   </data>
   <data name="QueueSelectionView_ChooseTitles" xml:space="preserve">
-    <value>Choose titles:</value>
+    <value>Tria els títols:</value>
   </data>
   <data name="QueueSelectionView_Title" xml:space="preserve">
     <value>Afegeix a la cua</value>
   </data>
   <data name="QueueSelection_UsingPreset" xml:space="preserve">
-    <value>The selected titles will be added using the  "{0}"  preset.</value>
+    <value>Els títols seleccionats s'afegiran amb la configuració predefinida «{0}».</value>
   </data>
   <data name="QueueView_Advanced" xml:space="preserve">
     <value>Opcions de vídeo:</value>
@@ -1427,7 +1423,7 @@ VLC and MPC-HC are supported. Other players may also work but are not validated.
     <value>Tanca la sessió</value>
   </data>
   <data name="QueueView_OpenDestDir" xml:space="preserve">
-    <value>Open Destination Directory</value>
+    <value>Obre el directori de destinació</value>
   </data>
   <data name="QueueView_OpenSourceDir" xml:space="preserve">
     <value>Obre el directori d'origen</value>
@@ -1439,25 +1435,25 @@ VLC and MPC-HC are supported. Other players may also work but are not validated.
     <value>Pausa</value>
   </data>
   <data name="QueueView_PausedDuration" xml:space="preserve">
-    <value>Paused Duration:</value>
+    <value>Durada de la pausa:</value>
   </data>
   <data name="QueueView_PictureSettings" xml:space="preserve">
-    <value>Picture Settings:</value>
+    <value>Opcions d'imatge:</value>
   </data>
   <data name="WhenDone_QuitHandBrake" xml:space="preserve">
     <value>Surt del HandBrake</value>
   </data>
   <data name="QueueView_ResetAllJobs" xml:space="preserve">
-    <value>Retry All Jobs</value>
+    <value>Reintenta totes les tasques</value>
   </data>
   <data name="QueueView_ResetFailed" xml:space="preserve">
-    <value>Retry Failed</value>
+    <value>No s'ha pogut reintentar</value>
   </data>
   <data name="QueueView_ResetSelectedJobs" xml:space="preserve">
-    <value>Reset Selected Jobs</value>
+    <value>Restableix les tasques seleccionades</value>
   </data>
   <data name="QueueView_Reset" xml:space="preserve">
-    <value>Reinicialització</value>
+    <value>Restabliment</value>
   </data>
   <data name="WhenDone_Shutdown" xml:space="preserve">
     <value>Tanca l'ordinador</value>
@@ -1511,7 +1507,7 @@ VLC and MPC-HC are supported. Other players may also work but are not validated.
     <value>Llengües seleccionades:</value>
   </data>
   <data name="Shared_ConfigureDefaultBehaviours" xml:space="preserve">
-    <value>Configure Default Behaviours</value>
+    <value>Configura els comportaments per defecte</value>
   </data>
   <data name="Shared_ReloadDefaults" xml:space="preserve">
     <value>Torna a carregar</value>
@@ -1526,10 +1522,10 @@ VLC and MPC-HC are supported. Other players may also work but are not validated.
     <value>Tria una carpeta a escanejar</value>
   </data>
   <data name="SourceSelection_ChooseSpecificTitle" xml:space="preserve">
-    <value>Optionally choose a specific title: </value>
+    <value>Podeu triar un títol en específic:</value>
   </data>
   <data name="SourceSelection_ChooseVideo" xml:space="preserve">
-    <value>Then choose the video(s) you'd like to encode: </value>
+    <value>I llavors triar els vídeos que vulgueu codificar:</value>
   </data>
   <data name="SourceSelection_File" xml:space="preserve">
     <value>Fitxer</value>
@@ -1538,22 +1534,22 @@ VLC and MPC-HC are supported. Other players may also work but are not validated.
     <value>Carpeta (escaneig massiu)</value>
   </data>
   <data name="SourceSelection_OpenDVDBluray" xml:space="preserve">
-    <value>Open this DVD or Bluray Drive</value>
+    <value>Obre la unitat de DVD o Blu-ray</value>
   </data>
   <data name="SourceSelection_OpenFolderWIth" xml:space="preserve">
-    <value>Open a folder with one or more files.</value>
+    <value>Obre una carpeta amb un fitxer o més</value>
   </data>
   <data name="SourceSelection_QueueArchiveRecovery" xml:space="preserve">
-    <value>Recover Queue Files</value>
+    <value>Recupera els fitxers de la cua</value>
   </data>
   <data name="SourceSelection_QueueArchiveRecoveryDesc" xml:space="preserve">
-    <value>A previous queue archive is available. </value>
+    <value>Un arxiu anterior de la cua està disponible.</value>
   </data>
   <data name="SourceSelection_SingleVideoFile" xml:space="preserve">
     <value>Obre un fitxer de vídeo o més.</value>
   </data>
   <data name="SourceSelection_SourceSelection" xml:space="preserve">
-    <value>Selecció d'origen</value>
+    <value>Selecció de fitxer d'origen</value>
   </data>
   <data name="StaticPreviewView_Duration" xml:space="preserve">
     <value>Durada:</value>
@@ -1562,19 +1558,19 @@ VLC and MPC-HC are supported. Other players may also work but are not validated.
     <value>Previsualització de la codificació</value>
   </data>
   <data name="StaticPreviewView_SelectPreviewImage" xml:space="preserve">
-    <value>Select a preview image</value>
+    <value>Selecciona una imatge de previsualització</value>
   </data>
   <data name="StaticPreviewView_UseExternalPlayer" xml:space="preserve">
-    <value>Use External Player App</value>
+    <value>Utilitza un reproductor extern</value>
   </data>
   <data name="SubtitlesView_AddCC" xml:space="preserve">
-    <value>Add Closed Captions when available</value>
+    <value>Afegeix subtítols descriptius quan sigui possible </value>
   </data>
   <data name="SubtitlesView_AddForeignAudioSearch" xml:space="preserve">
     <value>Afegeix «Escaneig d'àudios estrangers»</value>
   </data>
   <data name="SubtitlesView_BurnInBehaviour" xml:space="preserve">
-    <value>Burn-In Behaviour:</value>
+    <value>Comportament d'incrustació:</value>
   </data>
   <data name="SubtitlesView_ImportSubtitle" xml:space="preserve">
     <value>Importa subtítols</value>
@@ -1583,10 +1579,10 @@ VLC and MPC-HC are supported. Other players may also work but are not validated.
     <value>Comportament de la selecció de pista:</value>
   </data>
   <data name="SubtitleView_AddAllCC" xml:space="preserve">
-    <value>Add All Remaining Closed Captions</value>
+    <value>Afegeix tots els subtítols descriptius restants</value>
   </data>
   <data name="SubtitleView_SubtitleDefaultsDescription" xml:space="preserve">
-    <value>Configure how the Subtitle Tracks are automatically selected and configured when you select a new title or source video.</value>
+    <value>Configureu com se seleccionen i configuren automàticament les pistes de subtítols quan seleccioneu un títol nou o un vídeo d'origen.</value>
   </data>
   <data name="SummaryView_AdditionalAudioTracks" xml:space="preserve">
     <value>Pistes d'àudio addicionals</value>
@@ -1595,16 +1591,16 @@ VLC and MPC-HC are supported. Other players may also work but are not validated.
     <value>Pistes de subtítols addicionals</value>
   </data>
   <data name="SummaryView_Burned" xml:space="preserve">
-    <value>Cremats</value>
+    <value>Incrustats</value>
   </data>
   <data name="SummaryView_Chapters" xml:space="preserve">
     <value>Marcadors de capítol</value>
   </data>
   <data name="SummaryView_Deblock" xml:space="preserve">
-    <value>Deblock</value>
+    <value>Antiblocs</value>
   </data>
   <data name="SummaryView_Detelecine" xml:space="preserve">
-    <value>Detelecine</value>
+    <value>Destelecine</value>
   </data>
   <data name="SummaryView_display" xml:space="preserve">
     <value>visualització</value>
@@ -1640,7 +1636,7 @@ VLC and MPC-HC are supported. Other players may also work but are not validated.
     <value>emmagatzematge</value>
   </data>
   <data name="VideoView_MultiPass" xml:space="preserve">
-    <value>Multi-Pass Encoding</value>
+    <value>Codificació en multipassada</value>
   </data>
   <data name="VideoView_AverageBitrate" xml:space="preserve">
     <value>Velocitat de transmissió mitjana (kbps):</value>
@@ -1655,16 +1651,16 @@ VLC and MPC-HC are supported. Other players may also work but are not validated.
     <value>Qualitat constant:</value>
   </data>
   <data name="VideoView_EncoderLevel" xml:space="preserve">
-    <value>Encoder Level:</value>
+    <value>Nivell del codificador:</value>
   </data>
   <data name="VideoView_EncoderPreset" xml:space="preserve">
-    <value>Encoder Preset:</value>
+    <value>Configuració predefinida del codificador:</value>
   </data>
   <data name="VideoView_EncoderProfile" xml:space="preserve">
-    <value>Encoder Profile:</value>
+    <value>Perfil del codificador:</value>
   </data>
   <data name="VideoView_EncodeTune" xml:space="preserve">
-    <value>Encoder Tune:</value>
+    <value>Ajustament del codificador:</value>
   </data>
   <data name="VideoView_ExtraOptions" xml:space="preserve">
     <value>Opcions avançades:</value>
@@ -1685,7 +1681,7 @@ VLC and MPC-HC are supported. Other players may also work but are not validated.
     <value>Qualitat:</value>
   </data>
   <data name="VideoView_TurboAnalysisPass" xml:space="preserve">
-    <value>Turbo analysis pass</value>
+    <value>Passada d'anàlisi turbo</value>
   </data>
   <data name="VideoView_VariableFramerate" xml:space="preserve">
     <value>Velocitat de fotogrames variable</value>
@@ -1703,7 +1699,7 @@ VLC and MPC-HC are supported. Other players may also work but are not validated.
     <value>Quant al HandBrake</value>
   </data>
   <data name="SourceSelection_DropFileHere" xml:space="preserve">
-    <value>Or drop a file, set of files or folder here ...</value>
+    <value>O deixeu anar aquí un fitxer, un conjunt de fitxers, una carpeta...</value>
   </data>
   <data name="SourceSelection_Help" xml:space="preserve">
     <value>Ajuda</value>
@@ -1715,13 +1711,13 @@ VLC and MPC-HC are supported. Other players may also work but are not validated.
     <value>Afegeix una pista</value>
   </data>
   <data name="AudioDefaultsView_AutoAddTracks" xml:space="preserve">
-    <value>Audio encoder settings for each chosen track:</value>
+    <value>Opcions del codificador d'àudio de cada pista seleccionada:</value>
   </data>
   <data name="AudioDefaultsView_Clear" xml:space="preserve">
     <value>Esborra</value>
   </data>
   <data name="SubtitlesView_BurnIn" xml:space="preserve">
-    <value>Crema</value>
+    <value>Incrusta</value>
   </data>
   <data name="SubtitlesView_Default" xml:space="preserve">
     <value>Per defecte</value>
@@ -1772,7 +1768,7 @@ VLC and MPC-HC are supported. Other players may also work but are not validated.
     <value>_Estableix com a predeterminada</value>
   </data>
   <data name="MainView_ShowPresetPanel" xml:space="preserve">
-    <value>S_how Preset Panel</value>
+    <value>M_ostra panell de configuracions predefinides</value>
   </data>
   <data name="MainView_ShowQueueMenu" xml:space="preserve">
     <value>_Mostra la cua</value>
@@ -1793,7 +1789,7 @@ VLC and MPC-HC are supported. Other players may also work but are not validated.
     <value>S'està baixant...</value>
   </data>
   <data name="OptionsView_LogsCleared" xml:space="preserve">
-    <value>HandBrake's Log file directory has been cleared!</value>
+    <value>S'ha esborrat el directori de fitxers de registre del HandBrake!</value>
   </data>
   <data name="OptionsView_Notice" xml:space="preserve">
     <value>Avís</value>
@@ -1814,27 +1810,27 @@ VLC and MPC-HC are supported. Other players may also work but are not validated.
     <value>Mostra</value>
   </data>
   <data name="MainView_ShowAddAllToQueue" xml:space="preserve">
-    <value>'Add All' to Queue</value>
+    <value>«Afegeix-ho tot» a la cua</value>
   </data>
   <data name="MainView_ShowAddSelectionToQueue" xml:space="preserve">
-    <value>'Add Selection' to Queue</value>
+    <value>«Afegeix la selecció» a la cua</value>
   </data>
   <data name="QueueView_PlayMediaFile" xml:space="preserve">
     <value>Reprodueix el fitxer</value>
   </data>
   <data name="Options_ApplicationToolbar" xml:space="preserve">
-    <value>Application Toolbar</value>
+    <value>Barra d'eines del programa</value>
   </data>
   <data name="Options_ShowToolbarAddAll" xml:space="preserve">
-    <value>Show 'Add All to Queue' on the toolbar</value>
+    <value>Mostra «Afegeix-ho tot a la cua» a la barra d'eines</value>
   </data>
   <data name="Options_ShowToolbarAddSelection" xml:space="preserve">
-    <value>Show 'Add Selection to Queue' on the toolbar</value>
+    <value>Mostra «Afegeix la selecció a la cua» a la barra d'eines</value>
   </data>
   <data name="OptionsView_HardwareDetectFailed" xml:space="preserve">
-    <value>Hardware encoding support is currently disabled. If you did not start HandBrake with the "--no-hardware" option, please make sure you are running up-to-date drivers for all graphics adaptors in this system.
+    <value>El suport de codificació per maquinari està desactivat. Si no heu obert el HandBrake amb l'opció «--no-hardware», assegureu-vos que tingueu actualitzats els controladors dels adaptadors de gràfics del sistema.
 
-This will not impact any of the software encoders.</value>
+Això no afectarà cap dels codificadors de programari.</value>
   </data>
   <data name="Main_PleaseFixSubtitleSettings" xml:space="preserve">
     <value>Corregiu la configuració dels subtítols abans de continuar.</value>
@@ -1859,23 +1855,23 @@ Temps restant: {5},  Transcorregut: {6} {7}</value>
     <value>Elimina la selecció</value>
   </data>
   <data name="Portable_TmpNotWritable" xml:space="preserve">
-    <value>Portable Mode: Unable to create TMP directory. Please check the path is correct and is writable.</value>
+    <value>Mode portàtil: No s'ha pogut crear el directori TMP. Comproveu que el camí és correcte i té permisos d'escriptura.</value>
   </data>
   <data name="Portable_StorageNotWritable" xml:space="preserve">
-    <value>Portable Mode: Unable to create Storage directory. Please check the path is correct and is writable.</value>
+    <value>Mode portàtil: No s'ha pogut crear el directori d'emmagatzematge. Comproveu que el camí és correcte i té permisos d'escriptura.</value>
   </data>
   <data name="Portable_IniFileError" xml:space="preserve">
-    <value>Portable Mode: Unable to read portable.ini. There may be an error in this file. Please retry using portable.ini.template as a guide.</value>
+    <value>Mode portàtil: No s'ha pogut llegir portable.ini. És possible que el fitxer tingui un error. Proveu d'utilitzar protable.ini.template de guia.</value>
   </data>
   <data name="OptionsView_FormatOptions" xml:space="preserve">
-    <value>Replacement Options:
-You can drag/drop or enter the text above.</value>
+    <value>Opcions de substitució:
+Arrossegueu/deixeu anar o introduïu el text superior.</value>
   </data>
   <data name="FileOverwriteBehaviours_Ask" xml:space="preserve">
-    <value>Ask to overwrite file</value>
+    <value>Demana sobreescriure el fitxer</value>
   </data>
   <data name="FileOverwriteBehaviours_Autoname" xml:space="preserve">
-    <value>Try to automatically rename file</value>
+    <value>Prova de reanomenar el fitxer automàticament</value>
   </data>
   <data name="FileOverwriteBehaviours_Overwrite" xml:space="preserve">
     <value>Sobreescriu el fitxer</value>
@@ -1893,13 +1889,13 @@ You can drag/drop or enter the text above.</value>
     <value>Notificacions de so</value>
   </data>
   <data name="Options_QueueCompleted" xml:space="preserve">
-    <value>Cua completada</value>
+    <value>Cua finalitzada</value>
   </data>
   <data name="Options_WhenDoneColon" xml:space="preserve">
     <value>En acabat:</value>
   </data>
   <data name="OptionsView_FileCollisionBehaviour" xml:space="preserve">
-    <value>Filename collision behaviour:</value>
+    <value>Comportament del nom del fitxer en cas de conflicte:</value>
   </data>
   <data name="CollisionBehaviour_Post" xml:space="preserve">
     <value>Sufix</value>
@@ -1908,39 +1904,39 @@ You can drag/drop or enter the text above.</value>
     <value>Prefix</value>
   </data>
   <data name="CollisionBehaviour_AppendNumber" xml:space="preserve">
-    <value>Append Number</value>
+    <value>Afegeix un número</value>
   </data>
   <data name="FiltersViewAuto_DeblockPreset" xml:space="preserve">
     <value>FiltersView_DeblockPreset</value>
   </data>
   <data name="FiltersViewAuto_DeblockTune" xml:space="preserve">
-    <value>Deblock Tune</value>
+    <value>Ajustament d'antiblocs</value>
   </data>
   <data name="OptionsView_ChoiceOfEncoderHint" xml:space="preserve">
-    <value>Choice of encoder will be made available on the 'Video' tab.</value>
+    <value>L'elecció del codificador estarà disponible a la pestanya «Vídeo».</value>
   </data>
   <data name="Queue_RecoverQueueQuestionPlural" xml:space="preserve">
-    <value>HandBrake has detected multiple unfinished queue files. These will be from multiple instances of HandBrake running. Would you like to recover all unfinished jobs?</value>
+    <value>El HandBrake ha detectat múltiples fitxers inacabats a la cua, els quals són de diverses instàncies del HandBrake en execució. Voleu recuperar totes les tasques inacabades?</value>
   </data>
   <data name="Queue_RecoverQueueQuestionSingular" xml:space="preserve">
-    <value>HandBrake has detected unfinished items on the queue from the last time the application was launched. Would you like to recover these?</value>
+    <value>El HandBrake ha detectat fitxers inacabats a la cua del darrer cop que es va iniciar el programa. Voleu recuperar-los?</value>
   </data>
   <data name="Queue_RecoveryPossible" xml:space="preserve">
     <value>És possible recuperar la cua</value>
   </data>
   <data name="PresetService_ImportingBuiltInWarning" xml:space="preserve">
-    <value>Your presets file contained built-in presets. The import function does not support importing these. Please use 'Presets Menu -&gt; Reset Built In-Presets' to restore the standard presets.
+    <value>El vostre fitxer de configuracions predefinides conté configuracions predefinides originals. La funció d'importació no n'admet la importació. Aneu al menú «Configuracions predefinides -&gt; Restableix les configuracions predefinides originals» per restaurar les configuracions predefinides estàndard.
 
-Where supported, any user presets will have been imported.</value>
+Quan sigui possible, s'importaran les configuracions predefinides de l'usuari.</value>
   </data>
   <data name="Options_PromptBeforeAction" xml:space="preserve">
-    <value>Perform action immediately. (This will disable the 60 second confirmation dialog)</value>
+    <value>Executa l'acció immediatament. (Això desactivarà el quadre de diàleg de confirmació de 60 segons)</value>
   </data>
   <data name="Browse" xml:space="preserve">
     <value>Explora</value>
   </data>
   <data name="OptionsView_MediaFileNotSet" xml:space="preserve">
-    <value>No audio file has been set. Please click 'Browse' to select a wav or mp3 file for playback.</value>
+    <value>No s'ha definit cap fitxer d'àudio. Feu clic a «Explora» per seleccionar un fitxer .wav o .mp3 a reproduir.</value>
   </data>
   <data name="OptionsView_Play" xml:space="preserve">
     <value>Reprodueix</value>
@@ -1967,7 +1963,7 @@ Where supported, any user presets will have been imported.</value>
     <value>Bateria baixa! ({0} %). S'ha pausat la codificació.</value>
   </data>
   <data name="SystemService_LowDiskSpaceLog" xml:space="preserve">
-    <value>Remaining drive storage has dropped below {0} GB on the destination drive. Pausing encode...</value>
+    <value>L'espai d'emmagatzematge de la unitat de destinació ha baixat per sota {0} GB. La codificació es posarà en pausa...</value>
   </data>
   <data name="AudioDefaultsView_PaneTitle" xml:space="preserve">
     <value>Seleccions d'àudio automàtiques</value>
@@ -2027,7 +2023,7 @@ Where supported, any user presets will have been imported.</value>
     <value>&lt; Enrere</value>
   </data>
   <data name="QueueView_CurrentlyPaused" xml:space="preserve">
-    <value>Currently Paused</value>
+    <value>En pausa</value>
   </data>
   <data name="Options_OutputFiles" xml:space="preserve">
     <value>Fitxers de sortida</value>
@@ -2045,10 +2041,10 @@ Where supported, any user presets will have been imported.</value>
     <value>Segons</value>
   </data>
   <data name="SubtitleBehaviourModes_AllMatching" xml:space="preserve">
-    <value>All Matching Selected Languages</value>
+    <value>Totes les llengües seleccionades coincidents</value>
   </data>
   <data name="SubtitleBehaviourModes_FirstMatching" xml:space="preserve">
-    <value>First Matching Selected Language</value>
+    <value>La primera llengua seleccionada coincident</value>
   </data>
   <data name="SubtitleBehaviourModes_None" xml:space="preserve">
     <value>Cap</value>
@@ -2072,13 +2068,13 @@ Where supported, any user presets will have been imported.</value>
     <value>Escaneja àudios estrangers</value>
   </data>
   <data name="AudioBehaviourModes_AllMatching" xml:space="preserve">
-    <value>All Matching Selected Languages</value>
+    <value>Totes les llengües seleccionades coincidents</value>
   </data>
   <data name="AudioBehaviourModes_AllTracks" xml:space="preserve">
     <value>Utilitza totes les pistes de plantilles</value>
   </data>
   <data name="AudioBehaviourModes_FirstMatch" xml:space="preserve">
-    <value>First Matching Selected Language</value>
+    <value>La primera llengua seleccionada coincident</value>
   </data>
   <data name="AudioBehaviourModes_FirstTrack" xml:space="preserve">
     <value>Utilitza la primera pista de plantilla</value>
@@ -2129,7 +2125,7 @@ Where supported, any user presets will have been imported.</value>
     <value>Cada setmana</value>
   </data>
   <data name="OptionsView_AlwaysUseDefaultPath" xml:space="preserve">
-    <value>Always use the default path for each new name generated.</value>
+    <value>Utilitza sempre el camí per defecte a cada nom nou generat.</value>
   </data>
   <data name="OptionsView_RemotePortLimit" xml:space="preserve">
     <value>L'interval del port ha de ser del 5000 al 32767</value>
@@ -2138,7 +2134,7 @@ Where supported, any user presets will have been imported.</value>
     <value>Hi ha una nova versió disponible!</value>
   </data>
   <data name="About_Copyright" xml:space="preserve">
-    <value>Drets d'autor (C) 2003-2024 The HandBrake Team</value>
+    <value>Drets d'autor © 2003-2024 The HandBrake Team</value>
   </data>
   <data name="Options_LowBatteryLevel" xml:space="preserve">
     <value>Nivell de bateria baix:</value>
@@ -2147,42 +2143,42 @@ Where supported, any user presets will have been imported.</value>
     <value>Pausa les tasques en curs quan la bateria estigui baixa.</value>
   </data>
   <data name="SubtitleView_AddRemainingCC" xml:space="preserve">
-    <value>Add All Remaining Closed Captions</value>
+    <value>Afegeix tots els subtítols descriptius restants</value>
   </data>
   <data name="QueueService_DuplicatesQuestion" xml:space="preserve">
-    <value>Duplicate jobs were detected in the queue file that you are trying to import. Do you wish to overwrite the existing records? 
-This will also stop any existing running jobs.</value>
+    <value>S'han detectat tasques duplicades al fitxer de cua que voleu importar. Voleu sobreescriure els registres existents?
+Això també aturarà les tasques en procés que hi hagi.</value>
   </data>
   <data name="QueueService_DuplicatesTitle" xml:space="preserve">
-    <value>Duplicates Detected</value>
+    <value>S'han detectat tasques duplicades</value>
   </data>
   <data name="OptionsView_EnableQuicksyncLowPower" xml:space="preserve">
-    <value>Enable Low Power QuickSync Hardware (where supported).</value>
+    <value>Activa el maquinari QuickSync de baix consum (en cas que sigui compatible)</value>
   </data>
   <data name="QueueView_JobInformationNotAvailable" xml:space="preserve">
-    <value>Please select a single job to view summary information.</value>
+    <value>Seleccioneu una sola tasca per veure'n un resum.</value>
   </data>
   <data name="OptionsView_EnableWorkerProcesses" xml:space="preserve">
-    <value>Run each queued job in a separate worker process.</value>
+    <value>Executa cada tasca de la cua en un procés diferent.</value>
   </data>
   <data name="OptionsView_WorkerDefaultPort" xml:space="preserve">
-    <value>Default network port for worker:</value>
+    <value>Port de xarxa per defecte del procés de treball.</value>
   </data>
   <data name="Presets_NotAvailableForUse" xml:space="preserve">
-    <value>The preset you have selected is not available for use on this system.
+    <value>La configuració predefinida que heu seleccionat no està disponible en aquest sistema.
 
-This is typically an indication that your system does not support the hardware required to utilise it.
+Això normalment vol dir que el vostre sistema no és compatible amb el maquinari necessari per utilitzar-lo.
 
-Please choose a different preset.</value>
+Seleccioneu una configuració predefinida diferent.</value>
   </data>
   <data name="OptionsView_ProcessIsolation" xml:space="preserve">
-    <value>Process Isolation</value>
+    <value>Aïllament de processos</value>
   </data>
   <data name="OptionsView_ProcessIsolation_Warning1" xml:space="preserve">
-    <value>Please note, using this feature will start an HTTP server bound to 127.0.0.1 on the port stated.</value>
+    <value>Tingueu en compte que aquesta característica iniciarà un servidor HTTP enllaçat a 127.0.0.1 al port indicat.</value>
   </data>
   <data name="OptionsView_ProcessIsolation_Warning2" xml:space="preserve">
-    <value>If the set port is in use, it will find the first free port within +100 from the defined port.</value>
+    <value>Si el port definit s'està utilitzant, cercarà el primer port lliure en un interval de +100 del port configurat.</value>
   </data>
   <data name="OptionsView_SimultaneousEncodes" xml:space="preserve">
     <value>Nombre màxim de codificacions simultànies:</value>
@@ -2203,10 +2199,10 @@ Please choose a different preset.</value>
     <value>Segur que voleu restablir el HandBrake a la configuració per defecte?</value>
   </data>
   <data name="PaddingMode_Custom" xml:space="preserve">
-    <value>Custom (Not Limited)</value>
+    <value>Personalitzat (Sense límit)</value>
   </data>
   <data name="PaddingMode_Fill" xml:space="preserve">
-    <value>Fill (Surround)</value>
+    <value>Emplenament (Envoltant)</value>
   </data>
   <data name="PaddingMode_Height" xml:space="preserve">
     <value>Alçada (enquadrament horitzontal)</value>
@@ -2278,19 +2274,19 @@ Please choose a different preset.</value>
     <value>Elimina les configuracions predefinides</value>
   </data>
   <data name="ManagePresetView_Export" xml:space="preserve">
-    <value>Export selected preset</value>
+    <value>Exporta la configuració predefinida seleccionada</value>
   </data>
   <data name="ManagePresetView_Import" xml:space="preserve">
-    <value>Import Preset(s) from file</value>
+    <value>Importa una configuració predefinida d'un fitxer</value>
   </data>
   <data name="ManagePresetView_PresetInfo" xml:space="preserve">
-    <value>Preset Information:</value>
+    <value>Informació de la configuració predefinida:</value>
   </data>
   <data name="ManagePresetView_RestrictedPreset" xml:space="preserve">
-    <value>Built in presets can not be modified.</value>
+    <value>Les configuracions predefinides originals no es poden modificar.</value>
   </data>
   <data name="ManagePresetView_SetDefault" xml:space="preserve">
-    <value>Set selected preset as default</value>
+    <value>Defineix la configuració predefinida seleccionada com a predeterminada.</value>
   </data>
   <data name="PresetManagerView_Delete" xml:space="preserve">
     <value>Elimina una configuració predefinida</value>
@@ -2305,10 +2301,10 @@ Please choose a different preset.</value>
     <value/>
   </data>
   <data name="PresetService_CategoryAlreadyExists" xml:space="preserve">
-    <value>The category name you entered already exists. Please choose a different name.</value>
+    <value>El nom de categoria que heu introduït ja existeix. Trieu un nom diferent.</value>
   </data>
   <data name="PresetService_CategoryNameEmpty" xml:space="preserve">
-    <value>The category name was empty. Please provide a name.</value>
+    <value>El nom de categoria és buit. Poseu-li un nom.</value>
   </data>
   <data name="TextEntryView_EnterName" xml:space="preserve">
     <value>Introduïu un nom:</value>
@@ -2317,19 +2313,19 @@ Please choose a different preset.</value>
     <value>No s'ha seleccionat cap configuració predefinida.</value>
   </data>
   <data name="ManagePresetView_ExportUserPresets" xml:space="preserve">
-    <value>Export all user presets</value>
+    <value>Exporta totes les configuracions predefinides de l'usuari</value>
   </data>
   <data name="Options_LowDiskspaceLevelText" xml:space="preserve">
-    <value>Level at which low disk space alerts show:</value>
+    <value>Avisa quan el disc tingui poc espai a partir de:</value>
   </data>
   <data name="OptionsView_SimultaneousHardwareLimitNotice" xml:space="preserve">
-    <value>Notice: This is the upper limit of simultaneous jobs. Hardware limitations may take effect which lowers the actual number of simultaneous jobs during encoding. Setting will only take affect on the next queue batch or app restart.</value>
+    <value>Alerta: Has arribat al límit superior de tasques simultànies. Es poden produir limitacions de maquinari que disminueixin el nombre de tasques simultànies actuals durant la codificació. Aquest paràmetre tindrà efecte a partir del següent lot de la cua o quan es reiniciï el programa.</value>
   </data>
   <data name="Preset_NotAvailable" xml:space="preserve">
     <value>(No disponible)</value>
   </data>
   <data name="AddPresetView_IsDefault" xml:space="preserve">
-    <value>Is Default:</value>
+    <value>És per defecte:</value>
   </data>
   <data name="No" xml:space="preserve">
     <value>No</value>
@@ -2338,10 +2334,10 @@ Please choose a different preset.</value>
     <value>Sí</value>
   </data>
   <data name="StaticPreviewView_FineTuning" xml:space="preserve">
-    <value>Fine Tune Picture Settings</value>
+    <value>Ajustaments precisos d'imatge</value>
   </data>
   <data name="StaticPreviewView_ShowPictureSettingsAdjustment" xml:space="preserve">
-    <value>Show crop adjustment controls.</value>
+    <value>Mostra els controls de modificació de l'escapçament.</value>
   </data>
   <data name="DarkTheme_dark" xml:space="preserve">
     <value>Fosc</value>
@@ -2383,28 +2379,28 @@ Please choose a different preset.</value>
     <value>Completada</value>
   </data>
   <data name="QueueView_JobStatus_InitFailed" xml:space="preserve">
-    <value>Invalid Settings. Check log for details.</value>
+    <value>Configuració invàlida. Més detalls al registre.</value>
   </data>
   <data name="QueueView_JobStatus_InvalidInput" xml:space="preserve">
-    <value>Invalid Input. Check log for details.</value>
+    <value>Entrada invàlida. Més detalls al registre.</value>
   </data>
   <data name="QueueView_JobStatus_NoErrorCode" xml:space="preserve">
-    <value>Status Unknown. Check log for details.</value>
+    <value>Estat desconegut. Més detalls al registre.</value>
   </data>
   <data name="QueueView_JobStatus_ReadError" xml:space="preserve">
-    <value>Errors detected whist trying to read source.</value>
+    <value>S'han detectat errors en llegir el fitxer d'origen.</value>
   </data>
   <data name="QueueView_JobStatus_Unknown" xml:space="preserve">
-    <value>Unknown failure. Check log for details.</value>
+    <value>Error desconegut. Més detalls al registre.</value>
   </data>
   <data name="QueueView_JobStatus_WorkerCrash" xml:space="preserve">
-    <value>Worker Crashed. Check log for details.</value>
+    <value>El procés ha fallat. Més detalls al registre.</value>
   </data>
   <data name="Startup_HbDllMissing" xml:space="preserve">
-    <value>Missing file "hb.dll". Please re-install.</value>
+    <value>Falta el fitxer «hb.dll». Reinstal·leu el programa.</value>
   </data>
   <data name="OptionsView_SafeMode" xml:space="preserve">
-    <value>Warning: Please note that this is a "Safe Mode" build of HandBrake that does not include support for hardware encoders. If you wish to use hardware encoder support, please download a non-"Safe Mode" build from the website.</value>
+    <value>Avís: tingueu en compte que això és una versió «Mode Segur» del HandBrake que no inclou suport per a codificadors de maquinari. Si voleu utilitzar el suport per a codificadors de maquinari, baixeu una versió que no sigui «Mode Segur» del web.</value>
   </data>
   <data name="PadColour_Black" xml:space="preserve">
     <value>Negre</value>
@@ -2431,10 +2427,10 @@ Please choose a different preset.</value>
     <value>Mida del contenidor: {0}x{1}  Mida de la pantalla: {2}x{3}  Relació d'aspecte: {4}</value>
   </data>
   <data name="MainViewModel_FilePathSelectError" xml:space="preserve">
-    <value>An error was detected in the File Browser Dialog. 
+    <value>S'ha detectat un error al quadre de diàleg de l'explorador de fitxers.
 
-- Please note, long file paths are not fully supported. Please keep file paths shorter than 255 characters. 
-- The last used directory for this window, has been reset to prevent errors the next time you try to scan a file.</value>
+- Tingueu en compte que els camins de fitxer llargs no són del tot compatibles. Els camins haurien d'estar per sota dels 255 caràcters.
+- El darrer directori utilitzat d'aquesta finestra ha estat restablert per prevenir errors el pròxim cop que escanegeu un fitxer.</value>
   </data>
   <data name="PictureSettingsView_MaxHeight" xml:space="preserve">
     <value>Alçada màxima:</value>
@@ -2446,10 +2442,10 @@ Please choose a different preset.</value>
     <value>Relació d'aspecte: {0}</value>
   </data>
   <data name="SummaryView_MetadataPassthru" xml:space="preserve">
-    <value>Passthru Common Metadata</value>
+    <value>Metadades comunes del pas directe</value>
   </data>
   <data name="OptionsViewModel_InvalidAutonamePath" xml:space="preserve">
-    <value>The default auto name path was not valid. {0} must not be before {1}</value>
+    <value>El camí de l'anomenament automàtic per defecte no és vàlid. {0} no ha d'anar abans de {1}</value>
   </data>
   <data name="FirstRun_EnableUpdateCheck" xml:space="preserve">
     <value>Voleu permetre que el HandBrake comprovi automàticament les actualitzacions?
@@ -2460,9 +2456,9 @@ Podeu canviar la vostra elecció sempre que vulgueu anant a Preferències -&gt; 
     <value>Voleu comprovar les actualitzacions?</value>
   </data>
   <data name="OptionsViewModel_UpdateNotice" xml:space="preserve">
-    <value>Before Updating:
-- Make sure there are no pending encodes in the queue. 
-- Backup or make a note of any custom presets you have created as they may not be fully compatible with newer versions.</value>
+    <value>Abans d'actualitzar:
+- Comproveu que no hi hagi codificacions pendents a la cua.
+- Feu una còpia de seguretat o apunteu-vos les configuracions predefinides personalitzades que hàgiu creat perquè potser no són del tot compatibles amb les versions més noves.</value>
   </data>
   <data name="Preset_Default" xml:space="preserve">
     <value>(Per defecte)</value>
@@ -2477,7 +2473,7 @@ Podeu canviar la vostra elecció sempre que vulgueu anant a Preferències -&gt; 
     <value>Parcialment pla</value>
   </data>
   <data name="OptionsView_PresetDisplayMode" xml:space="preserve">
-    <value>Choose how presets are displayed in menus:</value>
+    <value>Decideix com vols que es vegin les configuracions predefinides als menús:</value>
   </data>
   <data name="QueueView_SelectedPresets" xml:space="preserve">
     <value>Configuració predefinida:</value>
@@ -2492,16 +2488,16 @@ Podeu canviar la vostra elecció sempre que vulgueu anant a Preferències -&gt; 
     <value>Durada del fitxer de sortida:</value>
   </data>
   <data name="QueueView_MoveToBottom" xml:space="preserve">
-    <value>Move To Bottom</value>
+    <value>Mou a baix de tot</value>
   </data>
   <data name="QueueView_MoveToTop" xml:space="preserve">
-    <value>Move To Top</value>
+    <value>Mou a dalt de tot</value>
   </data>
   <data name="QueueView_VideoOutputBitrate" xml:space="preserve">
     <value>Velocitat de transmissió del fitxer de sortida:</value>
   </data>
   <data name="QueueView_AverageEncodeSpeed" xml:space="preserve">
-    <value>Average Encoding Speed:</value>
+    <value>Velocitat de codificació mitjana:</value>
   </data>
   <data name="QueueViewModel_DifferenceText" xml:space="preserve">
     <value> del fitxer d'origen</value>
@@ -2513,80 +2509,80 @@ Podeu canviar la vostra elecció sempre que vulgueu anant a Preferències -&gt; 
     <value>Durada del fitxer d'origen:</value>
   </data>
   <data name="Options_Reset" xml:space="preserve">
-    <value>Reinicialització</value>
+    <value>Restabliment</value>
   </data>
   <data name="OptionsViewModel_ResetHandBrakePresetsQuestion" xml:space="preserve">
-    <value>Segur que voleu reinicialitzar totes les configuracions predefinides originals?</value>
+    <value>Segur que voleu restablir totes les configuracions predefinides originals?</value>
   </data>
   <data name="OptionsView_ResetBuildInPresets" xml:space="preserve">
-    <value>Reinicialitza totes les configuracions predefinides al valor original:</value>
+    <value>Restableix totes les configuracions predefinides al valor original:</value>
   </data>
   <data name="OptionsView_ResetBuildInPresetsNotice" xml:space="preserve">
     <value>(Les configuracions predefinides de l'usuari no es restabliran)</value>
   </data>
   <data name="OptionsView_ResetSettingsToDefaults" xml:space="preserve">
-    <value>Reset all HandBrake settings back to defaults:</value>
+    <value>Restableix tota la configuració del HandBrake al valor original:</value>
   </data>
   <data name="Options_BuiltInPresets" xml:space="preserve">
     <value>Configuracions predefinides originals</value>
   </data>
   <data name="Options_UserSettings" xml:space="preserve">
-    <value>User Settings</value>
+    <value>Configuració de l'usuari</value>
   </data>
   <data name="PresetDisplayMode_FloatingPanel" xml:space="preserve">
-    <value>Floating Treeview</value>
+    <value>Vista d'arbre flotant</value>
   </data>
   <data name="QueueViewModel_PlayFileErrorSolution" xml:space="preserve">
-    <value>Please make sure you have appropriate file associations setup in Windows to allow it to open this file with a supported video player</value>
+    <value>Comproveu que tingueu les associacions de fitxers del Windows ben configurades perquè el sistema pugui obrir aquest fitxer amb un reproductor compatible.</value>
   </data>
   <data name="QueueViewModel_ImportFail" xml:space="preserve">
-    <value>Unable to read the queue file.</value>
+    <value>No s'ha pogut llegir el fitxer de la cua.</value>
   </data>
   <data name="QueueViewModel_ImportFailSolution" xml:space="preserve">
-    <value>The file may be corrupted or from an earlier version of HandBrake. 
-Only queue files from the current version are supported.</value>
+    <value>És possible que el fitxer estigui corromput o que sigui d'una versió anterior del HandBrake.
+Només són compatibles els fitxers de cua de la versió actual.</value>
   </data>
   <data name="Notifications_EncodeDone" xml:space="preserve">
-    <value>Your HandBrake encode is done!</value>
+    <value>HandBrake ha finalitzat la codificació!</value>
   </data>
   <data name="Notifications_QueueDone" xml:space="preserve">
-    <value>Your HandBrake queue is done!</value>
+    <value>HandBrake ha completat la cua!</value>
   </data>
   <data name="OptionsView_NotificationRemovalSubText" xml:space="preserve">
-    <value>This will also disable the show windows taskbar notifications options on the 'When Done' tab. Re-enable these if you want to re-activate this feature.</value>
+    <value>Això també deshabilitarà les opcions per mostrar les notificacions de la barra de tasques del Windows a la pestanya «En acabat». Torneu-les a habilitar si voleu recuperar aquesta característica.</value>
   </data>
   <data name="OptionsView_NotificationRemovalText" xml:space="preserve">
-    <value>Remove HandBrake from the Windows notifications control panel.</value>
+    <value>Elimina el HandBrake del tauler de control de notificacions del Windows.</value>
   </data>
   <data name="OptionsView_UninstallMessageBoxHeader" xml:space="preserve">
     <value>S'ha desinstal·lat</value>
   </data>
   <data name="OptionsView_UninstallMessageBoxText" xml:space="preserve">
-    <value>Notification settings have been removed.</value>
+    <value>Els paràmetres de les notificacions han estat eliminats.</value>
   </data>
   <data name="OptionsView_UninstallToast" xml:space="preserve">
     <value>Esborra i desinstal·la</value>
   </data>
   <data name="OptionsView_WindowsNotification" xml:space="preserve">
-    <value>Send a notification to the Windows Taskbar.</value>
+    <value>Envia una notificació a la barra de tasques del Windows.</value>
   </data>
   <data name="OptionsView_WindowsNotificationsBanner" xml:space="preserve">
     <value>Notificacions del Windows</value>
   </data>
   <data name="Main_QueueMultiJobStatus" xml:space="preserve">
-    <value>{0} jobs completed. {1}Working on {2} jobs with {3} waiting to be processed.</value>
+    <value>{0} tasques completades. {1}S'estan processant {2} tasques i hi ha {3} tasques en espera.</value>
   </data>
   <data name="MainView_AutonameRegenerate" xml:space="preserve">
-    <value>Regenerate (Autoname)</value>
+    <value>Regenera (anomenament automàtic)</value>
   </data>
   <data name="MainView_OpenDirectory" xml:space="preserve">
     <value>Obre el directori</value>
   </data>
   <data name="Shared_CollapseAll" xml:space="preserve">
-    <value>Collapse All</value>
+    <value>Replega-ho tot</value>
   </data>
   <data name="Shared_ExpandAll" xml:space="preserve">
-    <value>Expand All</value>
+    <value>Desplega-ho tot</value>
   </data>
   <data name="OptionsView_RightToleftMode" xml:space="preserve">
     <value>Mode de visualització de dreta a esquerra:</value>
@@ -2601,19 +2597,19 @@ Only queue files from the current version are supported.</value>
     <value>Tota la interfície d'usuari</value>
   </data>
   <data name="SourceSelection_NightlyUpdate" xml:space="preserve">
-    <value>The current development build you are running is getting old. You may wish to update!</value>
+    <value>La versió en desenvolupament que esteu fent servir s'està tornant antiquada. Us recomanem que l'actualitzeu!</value>
   </data>
   <data name="SourceSelection_NightlyUpdateUrl" xml:space="preserve">
     <value>Baixa de Github</value>
   </data>
   <data name="MainView_NightlyBuildsUpdate" xml:space="preserve">
-    <value>Download Development Builds (HTTPS)</value>
+    <value>Baixa les versions en desenvolupament (HTTPS)</value>
   </data>
   <data name="OptionsView_EnableQuicksyncHyperEncode" xml:space="preserve">
-    <value>Enable QuickSync Deep Link Hyper Encode</value>
+    <value>Habilita la hipercodificació de QuickSync Deep Link</value>
   </data>
   <data name="OptionsView_HyperEncodeDescription" xml:space="preserve">
-    <value>Prefers the use of multiple media engines to speed up a single encode where supported. Disable to allow load balancing multiple parallel encodes across media engines.</value>
+    <value>Dona preferència a l'ús de diversos motors multimèdia per accelerar una sola codificació on sigui possible. Desactiveu l'opció per permetre l'equilibri de càrrega de diverses codificacions paral·leles entre els motors multimèdia.</value>
   </data>
   <data name="MainView_OpenHandBrake" xml:space="preserve">
     <value>Obre el HandBrake</value>
@@ -2629,22 +2625,22 @@ Hardware encoding support can be re-enabled in preferences. </value>
     <value>El HandBrake no s'ha pogut executar.</value>
   </data>
   <data name="OptionsView_ResetSafeMode" xml:space="preserve">
-    <value>Reset Safe Mode</value>
+    <value>Restableix el Mode segur</value>
   </data>
   <data name="OptionsView_ResetSafeModeMessage" xml:space="preserve">
     <value>Reinicieu el HandBrake.</value>
   </data>
   <data name="Debug_QueueDataExport" xml:space="preserve">
-    <value>Export Queue Statistics Data (csv)</value>
+    <value>Exporta les estadístiques de la cua (csv)</value>
   </data>
   <data name="Debug_QueueExportDataDone" xml:space="preserve">
     <value>S'ha exportat correctament!</value>
   </data>
   <data name="Debug_QueueSweep_NotSetup" xml:space="preserve">
-    <value>You must first scan a source and have an initial destination directory set</value>
+    <value>Primer heu d'escanejar un fitxer d'origen i haver triat un directori de destinació</value>
   </data>
   <data name="OptionsView_FileCollisionNotice" xml:space="preserve">
-    <value>Only when file already exists on disk.</value>
+    <value>Només si el fitxer ja existeix al disc.</value>
   </data>
   <data name="Info" xml:space="preserve">
     <value>Informació</value>
@@ -2706,7 +2702,7 @@ Alternatively, check the "Use External Player" checkbox below.</value>
     <value>Volum: 0</value>
   </data>
   <data name="Reset" xml:space="preserve">
-    <value>Reinicialització</value>
+    <value>Restabliment</value>
   </data>
   <data name="OptionsView_IsoDateFormat" xml:space="preserve">
     <value>Utilitza el format de data ISO (AAAA-MM-DD) en comptes del format del sistema.</value>
@@ -2763,13 +2759,13 @@ To allow multiple simultaneous encodes, turn on "Process Isolation" in Tools Men
     <value>Clona una configuració predefinida</value>
   </data>
   <data name="PresetPane_MoveDown" xml:space="preserve">
-    <value>Move Down</value>
+    <value>Mou avall</value>
   </data>
   <data name="PresetPane_MoveToBottom" xml:space="preserve">
-    <value>Move to Bottom</value>
+    <value>Mou a baix de tot</value>
   </data>
   <data name="PresetPane_MoveToTop" xml:space="preserve">
-    <value>Move to Top</value>
+    <value>Mou a dalt de tot</value>
   </data>
   <data name="PresetPane_MoveUp" xml:space="preserve">
     <value>Mou amunt</value>
@@ -2809,5 +2805,14 @@ To allow multiple simultaneous encodes, turn on "Process Isolation" in Tools Men
   </data>
   <data name="AudioView_QualityMode" xml:space="preserve">
     <value>Mode de qualitat del codificador d'àudio</value>
+  </data>
+  <data name="QueueView_AdvancedQueueDisplay" xml:space="preserve">
+    <value>Utilitza la vista de cua avançada</value>
+  </data>
+  <data name="QueueView_SimpleQueueDisplay" xml:space="preserve">
+    <value>Utilitza la vista de cua simple</value>
+  </data>
+  <data name="VideoView_LosslessEncodeOnly" xml:space="preserve">
+    <value>Lossless encoding only.</value>
   </data>
 </root>

@@ -2392,7 +2392,7 @@ Veuillez choisir un autre préréglage.</value>
     <value>Statut inconnu. Vérifiez le journal pour plus de détails.</value>
   </data>
   <data name="QueueView_JobStatus_ReadError" xml:space="preserve">
-    <value>Erreurs détectées lors de la lecture de la source.</value>
+    <value>Errors detected while trying to read source.</value>
   </data>
   <data name="QueueView_JobStatus_Unknown" xml:space="preserve">
     <value>Erreur inconnue. Vérifiez le journal pour plus de détails.</value>
@@ -2809,5 +2809,14 @@ Afin d'autoriser les encodages simultanés, activez l'option "Isolement des Proc
   </data>
   <data name="AudioView_QualityMode" xml:space="preserve">
     <value>Mode de Qualité de l'encodeur audio</value>
+  </data>
+  <data name="QueueView_AdvancedQueueDisplay" xml:space="preserve">
+    <value>Use Advanced Queue View</value>
+  </data>
+  <data name="QueueView_SimpleQueueDisplay" xml:space="preserve">
+    <value>Use Simple Queue View</value>
+  </data>
+  <data name="VideoView_LosslessEncodeOnly" xml:space="preserve">
+    <value>Lossless encoding only.</value>
   </data>
 </root>

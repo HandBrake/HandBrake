@@ -488,8 +488,8 @@ Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  021
     <value>キュー一時停止</value>
   </data>
   <data name="QueueViewModel_DelSelectedJobConfirmation" xml:space="preserve">
-    <value>Are you sure you want to delete the selected jobs?
-No encoded files will be deleted with this operation. </value>
+    <value>選択したジョブを削除しますか？
+エンコードしたファイルはこの操作で削除されません。</value>
   </data>
   <data name="QueueViewModel_JobCurrentlyRunningWarning" xml:space="preserve">
     <value>このエンコードは現在進行中です。削除されると、エンコードも停止します。本当に進めますか？</value>
@@ -2391,7 +2391,7 @@ VLCとMPC-HCがサポートされています。他のプレイヤーではお�
     <value>状態不明。ログを確認してください。</value>
   </data>
   <data name="QueueView_JobStatus_ReadError" xml:space="preserve">
-    <value>ソースを読み込もうとしたときにエラーが発生しました。</value>
+    <value>ソースの読み込み中にエラーが発生しました。</value>
   </data>
   <data name="QueueView_JobStatus_Unknown" xml:space="preserve">
     <value>不明な失敗。ログを確認してください。</value>
@@ -2808,5 +2808,14 @@ AV1やHEVCといった特定のコーデックは、再生するためにマイ�
   </data>
   <data name="AudioView_QualityMode" xml:space="preserve">
     <value>オーディオエンコーダ品質モード</value>
+  </data>
+  <data name="QueueView_AdvancedQueueDisplay" xml:space="preserve">
+    <value>拡張キュービューを使う</value>
+  </data>
+  <data name="QueueView_SimpleQueueDisplay" xml:space="preserve">
+    <value>シンプルキュービューを使う</value>
+  </data>
+  <data name="VideoView_LosslessEncodeOnly" xml:space="preserve">
+    <value>ロスレスエンコードのみ。</value>
   </data>
 </root>

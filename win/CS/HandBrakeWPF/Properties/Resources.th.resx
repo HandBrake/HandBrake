@@ -2389,7 +2389,7 @@ You can drag/drop or enter the text above.</value>
     <value>ไม่ทราบสถานะ ตรวจสอบบันทึกสำหรับรายละเอียด</value>
   </data>
   <data name="QueueView_JobStatus_ReadError" xml:space="preserve">
-    <value>ตรวจพบข้อผิดพลาดขณะพยายามอ่านไฟล์ต้นทาง</value>
+    <value>Errors detected while trying to read source.</value>
   </data>
   <data name="QueueView_JobStatus_Unknown" xml:space="preserve">
     <value>กระบวนการล้มเหลวที่ไม่รู้จัก ตรวจสอบบันทึกสำหรับรายละเอียด</value>
@@ -2806,5 +2806,14 @@ To allow multiple simultaneous encodes, turn on "Process Isolation" in Tools Men
   </data>
   <data name="AudioView_QualityMode" xml:space="preserve">
     <value>Audio Encoder Quality Mode</value>
+  </data>
+  <data name="QueueView_AdvancedQueueDisplay" xml:space="preserve">
+    <value>Use Advanced Queue View</value>
+  </data>
+  <data name="QueueView_SimpleQueueDisplay" xml:space="preserve">
+    <value>Use Simple Queue View</value>
+  </data>
+  <data name="VideoView_LosslessEncodeOnly" xml:space="preserve">
+    <value>Lossless encoding only.</value>
   </data>
 </root>
