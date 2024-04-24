@@ -1,5 +1,5 @@
 # SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR HandBrake Team
+# Copyright (C) 2024 HandBrake Team
 # This file is distributed under the same license as the ghb package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 # 
@@ -8,9 +8,9 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: ghb 1.6.0-git-a6a111e86\n"
+"Project-Id-Version: ghb 20240416-git-d9791800c\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-09-20 09:46+0100\n"
+"POT-Creation-Date: 2024-04-16 19:10+0100\n"
 "PO-Revision-Date: 2018-10-10 18:14+0000\n"
 "Language-Team: Thai (https://app.transifex.com/HandBrakeProject/teams/92423/th/)\n"
 "MIME-Version: 1.0\n"
@@ -19,150 +19,214 @@ msgstr ""
 "Language: th\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
-#: data/fr.handbrake.ghb.desktop.in:3 src/ui-gtk3/ghb.ui:2236
-msgid "HandBrake"
-msgstr "HandBrake"
-
-#: data/fr.handbrake.ghb.desktop.in:4
-msgid "Media Transcoder"
-msgstr ""
-
-#: data/fr.handbrake.ghb.desktop.in:5
-msgid "Transcodes DVD, Blu-ray, and other media"
-msgstr ""
-
-#: data/fr.handbrake.ghb.desktop.in:11
-msgid "Format Converter;Video Encoder;"
-msgstr ""
-
-#: src/ui-gtk3/menu.ui:7
+#: src/ui/menu.ui:6
 msgid "_File"
 msgstr "ไ_ฟล์"
 
-#: src/ui-gtk3/menu.ui:11
-msgid "_Open Source"
+#: src/ui/menu.ui:10 src/ui/menu.ui:462
+msgid "_Open Source…"
 msgstr ""
 
-#: src/ui-gtk3/menu.ui:16
-msgid "Open _Directory"
+#: src/ui/menu.ui:14 src/ui/menu.ui:466
+msgid "Open _Directory…"
 msgstr ""
 
-#: src/ui-gtk3/menu.ui:21
-msgid "Set _Destination"
+#: src/ui/menu.ui:18 src/ui/menu.ui:176
+msgid "_Set Destination…"
 msgstr ""
 
-#: src/ui-gtk3/menu.ui:30
+#: src/ui/menu.ui:26 src/ui/menu.ui:196
 msgid "_Preferences"
 msgstr "การ_ตั้งค่า"
 
-#: src/ui-gtk3/menu.ui:34
+#. Toss up a warning dialog
+#: src/ui/menu.ui:30 src/ui/menu.ui:210 src/callbacks.c:3814
 msgid "_Quit"
 msgstr "_ออก"
 
-#: src/ui-gtk3/menu.ui:40 src/ui-gtk3/menu.ui:90
+#: src/ui/menu.ui:35 src/ui/menu.ui:80
 msgid "_Queue"
 msgstr "_คิว"
 
-#: src/ui-gtk3/menu.ui:44
+#: src/ui/menu.ui:39
 msgid "_Add"
 msgstr "เ_พิ่ม"
 
-#: src/ui-gtk3/menu.ui:49
-msgid "Add _Multiple"
-msgstr "_เพิ่มหลายสิ่ง"
+#: src/ui/menu.ui:43 src/ui/menu.ui:449
+msgid "Add _Multiple…"
+msgstr ""
 
-#: src/ui-gtk3/menu.ui:53
+#: src/ui/menu.ui:47 src/ui/menu.ui:453
 msgid "Add A_ll"
 msgstr ""
 
-#: src/ui-gtk3/menu.ui:60
+#: src/ui/menu.ui:53 src/queuehandler.c:1877
 msgid "_Start Encoding"
 msgstr ""
 
-#: src/ui-gtk3/menu.ui:65 src/queuehandler.c:2093
+#: src/ui/menu.ui:57 src/queuehandler.c:1920
 msgid "_Pause Encoding"
 msgstr ""
 
-#: src/ui-gtk3/menu.ui:72
-msgid "S_ave Queue"
+#: src/ui/menu.ui:63 src/ui/menu.ui:182 src/ui/menu.ui:334
+msgid "_Import Queue…"
 msgstr ""
 
-#: src/ui-gtk3/menu.ui:76
-msgid "_Load Queue File"
+#: src/ui/menu.ui:67 src/ui/menu.ui:186 src/ui/menu.ui:338
+msgid "_Export Queue…"
 msgstr ""
 
-#: src/ui-gtk3/menu.ui:81
+#: src/ui/menu.ui:72
 msgid "_View"
 msgstr "_มุมมอง"
 
-#: src/ui-gtk3/menu.ui:85
+#: src/ui/menu.ui:76
 msgid "Presets _List"
 msgstr ""
 
-#: src/ui-gtk3/menu.ui:95
+#: src/ui/menu.ui:84
 msgid "_Preview"
 msgstr "_ตัวอย่าง"
 
-#: src/ui-gtk3/menu.ui:100
+#: src/ui/menu.ui:88 src/ui/menu.ui:192
 msgid "_Activity Window"
 msgstr "หน้าต่าง_กิจกรรม"
 
-#: src/ui-gtk3/menu.ui:106 src/ui-gtk3/ghb.ui:390
+#: src/ui/menu.ui:93
 msgid "_Presets"
 msgstr "ค่า_สำเร็จรูป"
 
-#: src/ui-gtk3/menu.ui:110 src/ui-gtk3/ghb.ui:166 src/ui-gtk3/ghb.ui:398
+#: src/ui/menu.ui:97 src/ui/menu.ui:219 src/ui/menu.ui:262
 msgid "Set De_fault"
 msgstr ""
 
-#: src/ui-gtk3/menu.ui:116 src/ui-gtk3/ghb.ui:172 src/ui-gtk3/ghb.ui:412
-#: src/ui-gtk3/ghb.ui:8713 src/ui-gtk3/ghb.ui:9278 src/ui-gtk3/ghb.ui:9688
+#: src/ui/menu.ui:103 src/ui/menu.ui:225
+msgid "_New Preset…"
+msgstr ""
+
+#: src/ui/menu.ui:107 src/ui/menu.ui:229 src/ui/menu.ui:268 src/ui/ghb.ui:5975
+#: src/ui/ghb.ui:6065 src/callbacks.c:2135 src/chapters.c:455
+#: src/ghb-file-button.c:219 src/presets.c:2229 src/queuehandler.c:1391
 msgid "_Save"
 msgstr "_บันทึก"
 
-#: src/ui-gtk3/menu.ui:120 src/ui-gtk3/ghb.ui:176 src/ui-gtk3/ghb.ui:294
-#: src/ui-gtk3/ghb.ui:421
-msgid "Save _As"
+#: src/ui/menu.ui:111 src/ui/menu.ui:233 src/ui/menu.ui:272
+msgid "_Rename…"
 msgstr ""
 
-#: src/ui-gtk3/menu.ui:124 src/ui-gtk3/ghb.ui:180 src/ui-gtk3/ghb.ui:430
-#: src/ui-gtk3/ghb.ui:8556
-msgid "_Rename"
+#: src/ui/menu.ui:115 src/ui/menu.ui:237 src/ui/menu.ui:276
+msgid "_Delete…"
 msgstr ""
 
-#: src/ui-gtk3/menu.ui:128 src/ui-gtk3/ghb.ui:184 src/ui-gtk3/ghb.ui:439
-msgid "_Delete"
-msgstr "_ลบ"
+#: src/ui/menu.ui:121 src/ui/menu.ui:243
+msgid "_Import Preset…"
+msgstr ""
 
-#: src/ui-gtk3/menu.ui:134 src/ui-gtk3/ghb.ui:190
-msgid "_Import"
-msgstr "_นำเข้า"
+#: src/ui/menu.ui:125 src/ui/menu.ui:247 src/ui/menu.ui:282
+msgid "_Export Preset…"
+msgstr ""
 
-#: src/ui-gtk3/menu.ui:138 src/ui-gtk3/ghb.ui:194 src/ui-gtk3/ghb.ui:453
-msgid "_Export"
-msgstr "_ส่งออก"
-
-#: src/ui-gtk3/menu.ui:144 src/ui-gtk3/ghb.ui:200
+#: src/ui/menu.ui:131 src/ui/menu.ui:253
 msgid "Reset _Built-in Presets"
 msgstr ""
 
-#: src/ui-gtk3/menu.ui:149
+#: src/ui/menu.ui:140 src/ui/menu.ui:200
 msgid "_Help"
 msgstr "_ช่วยเหลือ"
 
-#: src/ui-gtk3/menu.ui:153
+#: src/ui/menu.ui:144
+msgid "_Online Documentation"
+msgstr ""
+
+#: src/ui/menu.ui:148
 msgid "_About"
 msgstr "เ_กี่ยวกับ"
 
-#: src/ui-gtk3/menu.ui:157
-msgid "_Guide"
-msgstr "แ_นวทาง"
-
-#: src/ui-gtk3/menu.ui:167
+#: src/ui/menu.ui:158
 msgid "HandBrake For _Dummies"
 msgstr ""
 
-#: src/ui-gtk3/ghb.ui:101
+#: src/ui/menu.ui:204
+msgid "A_bout HandBrake"
+msgstr ""
+
+#: src/ui/menu.ui:290 src/ui/menu.ui:369
+msgid "_Play File"
+msgstr ""
+
+#: src/ui/menu.ui:294 src/ui/menu.ui:373
+msgid "Open _Source Directory"
+msgstr ""
+
+#: src/ui/menu.ui:298 src/ui/menu.ui:377
+msgid "Open _Destination Directory"
+msgstr ""
+
+#: src/ui/menu.ui:304 src/ui/menu.ui:382
+msgid "Open Encode _Log"
+msgstr ""
+
+#: src/ui/menu.ui:308 src/ui/menu.ui:386
+msgid "Open _Encode Log Directory"
+msgstr ""
+
+#: src/ui/menu.ui:316
+msgid "Reset _Failed Jobs"
+msgstr ""
+
+#: src/ui/menu.ui:320
+msgid "_Reset All Jobs"
+msgstr ""
+
+#: src/ui/menu.ui:324
+msgid "_Clear Completed Jobs"
+msgstr ""
+
+#: src/ui/menu.ui:328
+msgid "Clear _All Jobs"
+msgstr ""
+
+#: src/ui/menu.ui:346
+msgid "_Add Track"
+msgstr ""
+
+#: src/ui/menu.ui:350 src/ui/menu.ui:425 src/ui/menu.ui:437
+msgid "Add A_ll Tracks"
+msgstr ""
+
+#: src/ui/menu.ui:354 src/ui/menu.ui:441
+msgid "Add _Foreign Audio Scan"
+msgstr ""
+
+#: src/ui/menu.ui:360
+msgid "Add External Subtitle File"
+msgstr ""
+
+#: src/ui/menu.ui:393
+msgid "Move to _Top"
+msgstr ""
+
+#: src/ui/menu.ui:397
+msgid "Move to _Bottom"
+msgstr ""
+
+#: src/ui/menu.ui:403
+msgid "_Edit"
+msgstr ""
+
+#: src/ui/menu.ui:407
+msgid "_Reset"
+msgstr ""
+
+#: src/ui/menu.ui:413
+msgid "Re_move"
+msgstr ""
+
+#: src/ui/menu.ui:421 src/ui/menu.ui:433
+msgid "_Add New Track"
+msgstr ""
+
+#: src/ui/ghb.ui:93
 msgid ""
 "Render the subtitle over the video.\n"
 "\n"
@@ -172,11 +236,11 @@ msgstr ""
 "\n"
 "ศัพท์บรรยายจะเป็นส่วนหนึ่งของวิดีโอ และไม่สามารถปิดการใช้งานได้"
 
-#: src/ui-gtk3/ghb.ui:104
+#: src/ui/ghb.ui:96
 msgid "<b>Burned In</b>"
 msgstr "<b>ประทับลงใน</b>"
 
-#: src/ui-gtk3/ghb.ui:110 src/ui-gtk3/ghb.ui:9643
+#: src/ui/ghb.ui:100
 msgid ""
 "Set the default output subtitle track.\n"
 "\n"
@@ -193,11 +257,11 @@ msgstr ""
 "\n"
 "สิ่งนี้มีประโยชน์สำหรับสร้างแทร็คแบบ \"บังคับ\" ในผลลัพธ์ของคุณ"
 
-#: src/ui-gtk3/ghb.ui:117
+#: src/ui/ghb.ui:107
 msgid "<b>Default</b>"
 msgstr "<b>ค่าตั้งต้น</b>"
 
-#: src/ui-gtk3/ghb.ui:123 src/ui-gtk3/ghb.ui:9605
+#: src/ui/ghb.ui:111
 msgid ""
 "Use only subtitles that have been flagged\n"
 "as forced in the source subtitle track\n"
@@ -213,11 +277,11 @@ msgstr ""
 "ศัพท์บรรยายระหว่างฉากที่บางคนกำลังพูด\n"
 "ภาษาต่างประเทศ"
 
-#: src/ui-gtk3/ghb.ui:129
+#: src/ui/ghb.ui:117
 msgid "<b>Forced Only</b>"
 msgstr "<b>บังคับเท่านั้น</b>"
 
-#: src/ui-gtk3/ghb.ui:135
+#: src/ui/ghb.ui:121
 msgid ""
 "Add (or subtract) an offset (in milliseconds)\n"
 "to the start of the SRT subtitle track.\n"
@@ -233,11 +297,11 @@ msgstr ""
 "แสดงไม่ตรงกับการเริ่มของวิดีโอ\n"
 "การตั้งค่านี้ช่วยให้คุณซิงค์ไฟล์ให้ตรงกัน"
 
-#: src/ui-gtk3/ghb.ui:141
+#: src/ui/ghb.ui:127
 msgid "<b>SRT Offset</b>"
 msgstr "<b>ค่าชดเชย SRT</b>"
 
-#: src/ui-gtk3/ghb.ui:147
+#: src/ui/ghb.ui:131
 msgid ""
 "The source subtitle track\n"
 "\n"
@@ -252,139 +316,71 @@ msgid ""
 "conjunction with the \"Forced\" option."
 msgstr ""
 
-#: src/ui-gtk3/ghb.ui:158
+#: src/ui/ghb.ui:142
 msgid "<b>Track</b>"
 msgstr "<b>แทร็ค</b>"
 
-#: src/ui-gtk3/ghb.ui:208
-msgid "Play File"
+#: src/ui/ghb.ui:146 src/ui/ghb.ui:1440
+msgid "Presets"
+msgstr "ค่าสำเร็จรูป"
+
+#: src/ui/ghb.ui:157
+msgid "Save as new preset"
 msgstr ""
 
-#: src/ui-gtk3/ghb.ui:212 src/callbacks.c:1708
-msgid "Open Source Directory"
-msgstr ""
-
-#: src/ui-gtk3/ghb.ui:216
-msgid "Open Destination Directory"
-msgstr ""
-
-#: src/ui-gtk3/ghb.ui:222
-msgid "Open Encode Log Directory"
-msgstr ""
-
-#: src/ui-gtk3/ghb.ui:226
-msgid "Open Encode Log"
-msgstr ""
-
-#: src/ui-gtk3/ghb.ui:235
-msgid "Reset Failed Jobs"
-msgstr ""
-
-#: src/ui-gtk3/ghb.ui:239
-msgid "Reset All Jobs"
-msgstr ""
-
-#: src/ui-gtk3/ghb.ui:243
-msgid "Clear Completed Jobs"
-msgstr ""
-
-#: src/ui-gtk3/ghb.ui:247
-msgid "Clear All Jobs"
-msgstr ""
-
-#: src/ui-gtk3/ghb.ui:253 src/queuehandler.c:1687
-msgid "Import Queue"
-msgstr ""
-
-#: src/ui-gtk3/ghb.ui:257 src/queuehandler.c:1516
-msgid "Export Queue"
-msgstr ""
-
-#: src/ui-gtk3/ghb.ui:264
-msgid "HandBrake Presets"
-msgstr ""
-
-#: src/ui-gtk3/ghb.ui:357 src/ui-gtk3/ghb.ui:982
+#: src/ui/ghb.ui:166 src/ui/ghb.ui:430
 msgid "Actions"
 msgstr ""
 
-#: src/ui-gtk3/ghb.ui:507
+#: src/ui/ghb.ui:205
 msgid "HandBrake Queue"
 msgstr ""
 
-#: src/ui-gtk3/ghb.ui:534
-msgid "_Play File"
-msgstr ""
-
-#: src/ui-gtk3/ghb.ui:543
-msgid "Open _Source Directory"
-msgstr ""
-
-#: src/ui-gtk3/ghb.ui:552
-msgid "Open _Destination Directory"
-msgstr ""
-
-#: src/ui-gtk3/ghb.ui:566
-msgid "Move to _Top"
-msgstr ""
-
-#: src/ui-gtk3/ghb.ui:575
-msgid "Move to _Bottom"
-msgstr ""
-
-#: src/ui-gtk3/ghb.ui:589
-msgid "_Edit"
-msgstr ""
-
-#: src/ui-gtk3/ghb.ui:598
-msgid "_Reset"
-msgstr ""
-
-#: src/ui-gtk3/ghb.ui:612
-msgid "Re_move"
-msgstr ""
-
-#: src/ui-gtk3/ghb.ui:642
-msgid "<span size=\"x-large\">Queue</span>"
-msgstr ""
-
-#: src/ui-gtk3/ghb.ui:657
-msgid "0 jobs pending"
-msgstr ""
-
-#: src/ui-gtk3/ghb.ui:694 src/ui-gtk3/ghb.ui:2313 src/queuehandler.c:2026
-#: src/queuehandler.c:2039 src/queuehandler.c:2052
+#: src/ui/ghb.ui:212 src/ui/ghb.ui:1416 src/queuehandler.c:1850
+#: src/queuehandler.c:1863
 msgid "Start Encoding"
 msgstr "เริ่มการเข้ารหัส"
 
-#: src/ui-gtk3/ghb.ui:696 src/ui-gtk3/ghb.ui:2315 src/ui-gtk3/ghb.ui:6981
-#: src/queuehandler.c:2025 src/queuehandler.c:2038
+#: src/ui/ghb.ui:213 src/ui/ghb.ui:1417 src/ui/ghb.ui:4156
+#: src/queuehandler.c:1849 src/queuehandler.c:1862
 msgid "Start"
 msgstr "เริ่ม"
 
-#: src/ui-gtk3/ghb.ui:710 src/ui-gtk3/ghb.ui:2328 src/queuehandler.c:2068
-#: src/queuehandler.c:2081
+#: src/ui/ghb.ui:221 src/ui/ghb.ui:1424 src/queuehandler.c:1894
+#: src/queuehandler.c:1907
 msgid "Pause Encoding"
 msgstr "พักการเข้ารหัส"
 
-#: src/ui-gtk3/ghb.ui:712 src/ui-gtk3/ghb.ui:2330 src/queuehandler.c:2067
-#: src/queuehandler.c:2080
+#: src/ui/ghb.ui:222 src/ui/ghb.ui:1425 src/queuehandler.c:1893
+#: src/queuehandler.c:1906
 msgid "Pause"
 msgstr "พัก"
 
-#: src/ui-gtk3/ghb.ui:771
+#: src/ui/ghb.ui:235 src/ui/ghb.ui:1456
+msgid "Queue"
+msgstr "คิว"
+
+#: src/ui/ghb.ui:241
+msgid "0 jobs pending"
+msgstr ""
+
+#: src/ui/ghb.ui:251
 msgid "Options"
 msgstr ""
 
-#: src/ui-gtk3/ghb.ui:840 src/ui-gtk3/ghb.ui:7498
+#: src/ui/ghb.ui:322 src/ui/ghb.ui:4540
 msgid "When Done:"
 msgstr ""
 
-#: src/ui-gtk3/ghb.ui:919
-msgid "Reset"
+#: src/ui/ghb.ui:335
+msgid "Show/hide the queue details panel"
 msgstr ""
 
-#: src/ui-gtk3/ghb.ui:921
+#: src/ui/ghb.ui:364 src/ui/ghb.ui:1733
+msgid "Summary"
+msgstr "สรุป"
+
+#: src/ui/ghb.ui:382
 msgid ""
 "Mark selected queue entry as pending.\n"
 "Resets the queue job to pending and ready to run again."
@@ -392,180 +388,165 @@ msgstr ""
 "หมายเหตุรายการคิวที่เลือกเป็นกำลังรอคอย\n"
 "คืนค่างานคิวเป็นกำลังรอคอย และพร้อมจะปฏิบัติการอีกครั้ง"
 
-#: src/ui-gtk3/ghb.ui:936
+#: src/ui/ghb.ui:397
+msgid "Reset"
+msgstr ""
+
+#: src/ui/ghb.ui:419
 msgid "Edit"
 msgstr "แก้ไข"
 
-#: src/ui-gtk3/ghb.ui:1031 src/ui-gtk3/ghb.ui:4481 src/ui-gtk3/ghb.ui:4641
-#: src/ui-gtk3/ghb.ui:4823 src/ui-gtk3/ghb.ui:5303
+#: src/ui/ghb.ui:456 src/ui/ghb.ui:2947 src/ui/ghb.ui:3071 src/ui/ghb.ui:3212
+#: src/ui/ghb.ui:3587 src/hb-backend.c:4308 src/hb-backend.c:4315
+#: src/hb-backend.c:4339 src/hb-backend.c:4347 src/hb-backend.c:4375
+#: src/hb-backend.c:4384 src/hb-backend.c:4411 src/hb-backend.c:4436
 msgid "Preset:"
 msgstr "ค่าสำเร็จรูป:"
 
-#: src/ui-gtk3/ghb.ui:1067
+#: src/ui/ghb.ui:483
 msgid "Source:"
 msgstr ""
 
-#: src/ui-gtk3/ghb.ui:1108 src/ui-gtk3/ghb.ui:7061
+#: src/ui/ghb.ui:515 src/ui/ghb.ui:4205
 msgid "Title:"
 msgstr "หัวเรื่อง:"
 
-#: src/ui-gtk3/ghb.ui:1148
+#: src/ui/ghb.ui:546
 msgid "Destination:"
 msgstr ""
 
-#: src/ui-gtk3/ghb.ui:1189
+#: src/ui/ghb.ui:578
 msgid "Dimensions:"
 msgstr ""
 
-#: src/ui-gtk3/ghb.ui:1225
+#: src/ui/ghb.ui:605
 msgid "Video:"
 msgstr ""
 
-#: src/ui-gtk3/ghb.ui:1261
+#: src/ui/ghb.ui:632
 msgid "Audio:"
 msgstr ""
 
-#: src/ui-gtk3/ghb.ui:1297
+#: src/ui/ghb.ui:659
 msgid "Subtitles:"
 msgstr ""
 
-#: src/ui-gtk3/ghb.ui:1336 src/ui-gtk3/ghb.ui:3182
-msgid "Summary"
-msgstr "สรุป"
-
-#: src/ui-gtk3/ghb.ui:1374
-msgid "Pass:"
-msgstr ""
-
-#: src/ui-gtk3/ghb.ui:1410
-msgid "Start Time:"
-msgstr ""
-
-#: src/ui-gtk3/ghb.ui:1446
-msgid "End Time:"
-msgstr ""
-
-#: src/ui-gtk3/ghb.ui:1486
-msgid "Paused Duration:"
-msgstr ""
-
-#: src/ui-gtk3/ghb.ui:1526
-msgid "Encode Time:"
-msgstr ""
-
-#: src/ui-gtk3/ghb.ui:1562
-msgid "File Size:"
-msgstr ""
-
-#: src/ui-gtk3/ghb.ui:1598
-msgid "Status:"
-msgstr ""
-
-#: src/ui-gtk3/ghb.ui:1637
+#: src/ui/ghb.ui:691
 msgid "Statistics"
 msgstr ""
 
-#: src/ui-gtk3/ghb.ui:1702
+#: src/ui/ghb.ui:720
+msgid "Pass:"
+msgstr ""
+
+#: src/ui/ghb.ui:748
+msgid "Start Time:"
+msgstr ""
+
+#: src/ui/ghb.ui:775
+msgid "End Time:"
+msgstr ""
+
+#: src/ui/ghb.ui:806
+msgid "Paused Duration:"
+msgstr ""
+
+#: src/ui/ghb.ui:837
+msgid "Encode Time:"
+msgstr ""
+
+#: src/ui/ghb.ui:864
+msgid "File Size:"
+msgstr ""
+
+#: src/ui/ghb.ui:891
+msgid "Status:"
+msgstr ""
+
+#: src/ui/ghb.ui:923 src/ui/ghb.ui:958 src/ui/ghb.ui:980 src/ui/ghb.ui:1008
+#: src/ui/ghb.ui:1040
 msgid "Activity Log"
 msgstr ""
 
-#: src/ui-gtk3/ghb.ui:1725
-msgid "HandBrake Activity Log"
-msgstr ""
-
-#: src/ui-gtk3/ghb.ui:2039
+#: src/ui/ghb.ui:1300
 msgid "About HandBrake"
 msgstr "เกี่ยวกับ HandBrake"
 
-#: src/ui-gtk3/ghb.ui:2045
+#: src/ui/ghb.ui:1303
 msgid ""
-"Copyright © 2008 -  John Stebbins\n"
-"Copyright © 2004 - , HandBrake Devs"
+"Copyright © 2008-2024 John Stebbins\n"
+"Copyright © 2004-2024, HandBrake Devs"
 msgstr ""
 
-#: src/ui-gtk3/ghb.ui:2047
-msgid ""
-"HandBrake is a GPL-licensed, multiplatform, multithreaded video transcoder."
+#: src/ui/ghb.ui:1305
+msgid "Multithreaded video transcoder"
 msgstr ""
 
-#: src/ui-gtk3/ghb.ui:2050
-msgid ""
-"HandBrake is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License version 2, as published by the Free Software Foundation.\n"
-"\n"
-"HandBrake is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.\n"
-"\n"
-"You should have received a copy of the GNU General Public License along with Glade; if not, write to the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA."
-msgstr ""
+#: src/ui/ghb.ui:1334 data/fr.handbrake.ghb.desktop.in:3
+msgid "HandBrake"
+msgstr "HandBrake"
 
-#: src/ui-gtk3/ghb.ui:2273 src/callbacks.c:4339
+#: src/ui/ghb.ui:1363 src/callbacks.c:4521
 msgid "Choose Video Source"
 msgstr "เลือกแหล่งวิดีโอ"
 
-#: src/ui-gtk3/ghb.ui:2275 src/callbacks.c:1708 src/callbacks.c:4338
+#: src/ui/ghb.ui:1364 src/callbacks.c:1866 src/callbacks.c:4520
 msgid "Open Source"
 msgstr ""
 
-#: src/ui-gtk3/ghb.ui:2298
+#: src/ui/ghb.ui:1391
 msgid "Add to Queue"
 msgstr "เพิ่มสู่คิว"
 
-#: src/ui-gtk3/ghb.ui:2300
+#: src/ui/ghb.ui:1392
 msgid "Add To Queue"
 msgstr ""
 
-#: src/ui-gtk3/ghb.ui:2355
+#: src/ui/ghb.ui:1439
 msgid "Show Presets Window"
 msgstr ""
 
-#: src/ui-gtk3/ghb.ui:2357
-msgid "Presets"
-msgstr "ค่าสำเร็จรูป"
-
-#: src/ui-gtk3/ghb.ui:2370
+#: src/ui/ghb.ui:1447
 msgid "Show Preview Window"
 msgstr ""
 
-#: src/ui-gtk3/ghb.ui:2372
+#: src/ui/ghb.ui:1448
 msgid "Preview"
 msgstr "ตัวอย่าง"
 
-#: src/ui-gtk3/ghb.ui:2385
+#: src/ui/ghb.ui:1455
 msgid "Show Queue"
 msgstr "แสดงคิว"
 
-#: src/ui-gtk3/ghb.ui:2387 src/callbacks.c:4735
-msgid "Queue"
-msgstr "คิว"
-
-#: src/ui-gtk3/ghb.ui:2400
+#: src/ui/ghb.ui:1463
 msgid "Show Activity Window"
 msgstr "แสดงหน้าต่างกิจกรรม"
 
-#: src/ui-gtk3/ghb.ui:2402
+#: src/ui/ghb.ui:1464
 msgid "Activity"
 msgstr "กิจกรรม"
 
-#: src/ui-gtk3/ghb.ui:2432
+#: src/ui/ghb.ui:1482
 msgid "<b>Source:</b>"
 msgstr "<b>แหล่ง:</b>"
 
-#: src/ui-gtk3/ghb.ui:2458 src/hb-backend.c:60 src/hb-backend.c:72
-#: src/hb-backend.c:85 src/hb-backend.c:124 src/hb-backend.c:224
-#: src/hb-backend.c:257 src/hb-backend.c:268 src/hb-backend.c:295
-#: src/hb-backend.c:380 src/hb-backend.c:2587 src/hb-backend.c:2812
-#: src/subtitlehandler.c:1344
+#: src/ui/ghb.ui:1498 src/hb-backend.c:54 src/hb-backend.c:66
+#: src/hb-backend.c:79 src/hb-backend.c:117 src/hb-backend.c:217
+#: src/hb-backend.c:250 src/hb-backend.c:261 src/hb-backend.c:288
+#: src/hb-backend.c:373 src/hb-backend.c:2537 src/hb-backend.c:2762
+#: src/subtitlehandler.c:1434
 msgid "None"
 msgstr "ไม่มี"
 
-#: src/ui-gtk3/ghb.ui:2504 src/callbacks.c:4311
+#: src/ui/ghb.ui:1526 src/callbacks.c:4493
 msgid "Scanning..."
 msgstr "กำลังอ่าน..."
 
-#: src/ui-gtk3/ghb.ui:2538
+#: src/ui/ghb.ui:1546
 msgid "<b>Title:</b>"
 msgstr ""
 
-#: src/ui-gtk3/ghb.ui:2566
+#: src/ui/ghb.ui:1564
 msgid ""
 "Set the title to encode.\n"
 "By default the longest title is chosen.\n"
@@ -575,77 +556,77 @@ msgstr ""
 "หัวเรื่องที่ยาวที่สุดจะถูกเลือกเป็นค่าตั้งต้น\n"
 "สิ่งนี้มักเป็นคุณลักษณะหัวเรื่องของ DVD"
 
-#: src/ui-gtk3/ghb.ui:2593
+#: src/ui/ghb.ui:1580
 msgid "<b>Angle:</b>"
 msgstr ""
 
-#: src/ui-gtk3/ghb.ui:2605
+#: src/ui/ghb.ui:1588
 msgid "For multi-angle DVD's, select the desired angle to encode."
 msgstr "สำหรับ DVD แบบหลายมุมกล้อง, เลือกมุมกล้องที่ต้องการจะเข้ารหัส"
 
-#: src/ui-gtk3/ghb.ui:2621
+#: src/ui/ghb.ui:1599
 msgid "<b>Range:</b>"
 msgstr ""
 
-#: src/ui-gtk3/ghb.ui:2632
+#: src/ui/ghb.ui:1605
 msgid "Range of title to encode. Can be chapters, seconds, or frames."
 msgstr "ช่วงหัวเรื่องเพื่อเข้ารหัส โดยสามารถเป็นได้ทั้ง ตอน, วินาที, หรือเฟรม"
 
-#: src/ui-gtk3/ghb.ui:2645
+#: src/ui/ghb.ui:1613
 msgid "Set the first chapter to encode."
 msgstr "กำหนดตอนแรก เพื่อเข้ารหัส"
 
-#: src/ui-gtk3/ghb.ui:2661
+#: src/ui/ghb.ui:1624
 msgid "-"
 msgstr ""
 
-#: src/ui-gtk3/ghb.ui:2673
+#: src/ui/ghb.ui:1631
 msgid "Set the last chapter to encode."
 msgstr "กำหนดตอนสุดท้าย เพื่อเข้ารหัส"
 
-#: src/ui-gtk3/ghb.ui:2699
+#: src/ui/ghb.ui:1649
 msgid "<b>Preset:</b>"
 msgstr ""
 
-#: src/ui-gtk3/ghb.ui:2735
+#: src/ui/ghb.ui:1666
 msgid "Choose Preset"
 msgstr ""
 
-#: src/ui-gtk3/ghb.ui:2766
+#: src/ui/ghb.ui:1675
 msgid "<u><i>Modified</i></u>"
 msgstr ""
 
-#: src/ui-gtk3/ghb.ui:2775 src/ui-gtk3/ghb.ui:5645 src/ui-gtk3/ghb.ui:6429
+#: src/ui/ghb.ui:1681 src/ui/ghb.ui:3859 src/ui/ghb.ui:4013
 msgid "Reload"
 msgstr "โหลดใหม่"
 
-#: src/ui-gtk3/ghb.ui:2778
+#: src/ui/ghb.ui:1684
 msgid ""
 "Reload the settings for the currently selected preset.\n"
 "Modifications will be discarded."
 msgstr ""
 
-#: src/ui-gtk3/ghb.ui:2790
+#: src/ui/ghb.ui:1693
 msgid "Save New Preset"
 msgstr ""
 
-#: src/ui-gtk3/ghb.ui:2793
+#: src/ui/ghb.ui:1696
 msgid "Save the current settings to a new Preset."
 msgstr ""
 
-#: src/ui-gtk3/ghb.ui:2873
+#: src/ui/ghb.ui:1746
 msgid "Format:"
 msgstr "รูปแบบ:"
 
-#: src/ui-gtk3/ghb.ui:2891
+#: src/ui/ghb.ui:1760
 msgid "Format to mux encoded tracks to."
 msgstr "รูปแบบที่จะทำการผสานแทร็คที่เข้ารหัสลงไป"
 
-#: src/ui-gtk3/ghb.ui:2903 src/queuehandler.c:286
+#: src/ui/ghb.ui:1770 src/queuehandler.c:230
 msgid "Web Optimized"
 msgstr "ให้เหมาะกับเว็บ"
 
-#: src/ui-gtk3/ghb.ui:2908
+#: src/ui/ghb.ui:1772
 msgid ""
 "Optimize the layout of the MP4 file for progressive download.\n"
 "This allows a player to initiate playback before downloading the entire file."
@@ -653,151 +634,154 @@ msgstr ""
 "ปรับเค้าโครงของไฟล์ MP4 ให้เหมาะสมสำหรับการดาวน์โหลดไว้ล่วงหน้า\n"
 "สิ่งนี้อนุญาตให้เครื่องเล่นสามารถเริ่มเล่นก่อนการดาวน์โหลดจะครบทั้งไฟล์"
 
-#: src/ui-gtk3/ghb.ui:2924
+#: src/ui/ghb.ui:1785
 msgid "Align A/V Start"
 msgstr ""
 
-#: src/ui-gtk3/ghb.ui:2929
+#: src/ui/ghb.ui:1787
 msgid ""
 "Aligns the initial timestamps of all audio and video streams by\n"
 "inserting blank frames or dropping frames. May improve audio/video\n"
 "sync for broken players that do not honor MP4 edit lists."
 msgstr ""
 
-#: src/ui-gtk3/ghb.ui:2946
+#: src/ui/ghb.ui:1801
 msgid "iPod 5G Support"
 msgstr "รองรับ iPod 5G"
 
-#: src/ui-gtk3/ghb.ui:2951
+#: src/ui/ghb.ui:1803
 msgid "Add iPod Atom needed by some older iPods."
 msgstr "เพิ่ม iPod Atom ที่ต้องการโดย iPods เก่าบางรุ่น"
 
-#: src/ui-gtk3/ghb.ui:2966
+#: src/ui/ghb.ui:1815
 msgid "Passthru Common Metadata"
 msgstr ""
 
-#: src/ui-gtk3/ghb.ui:2971
+#: src/ui/ghb.ui:1817
 msgid "Copy metadata from source to output."
 msgstr ""
 
-#: src/ui-gtk3/ghb.ui:2993
+#: src/ui/ghb.ui:1850
 msgid "Duration:"
 msgstr "ระยะเวลา:"
 
-#: src/ui-gtk3/ghb.ui:3011
+#: src/ui/ghb.ui:1863
 msgid "hh:mm:ss"
 msgstr ""
 
-#: src/ui-gtk3/ghb.ui:3026
+#: src/ui/ghb.ui:1874
 msgid "Tracks:"
 msgstr ""
 
-#: src/ui-gtk3/ghb.ui:3066
+#: src/ui/ghb.ui:1907
 msgid "Filters:"
 msgstr ""
 
-#: src/ui-gtk3/ghb.ui:3106
+#: src/ui/ghb.ui:1940
 msgid "Size:"
 msgstr ""
 
-#: src/ui-gtk3/ghb.ui:3131 src/ui-gtk3/ghb.ui:3230 src/ui-gtk3/ghb.ui:3268
-#: src/ui-gtk3/ghb.ui:3306 src/ui-gtk3/ghb.ui:4142 src/ui-gtk3/ghb.ui:4280
-msgid "--"
+#: src/ui/ghb.ui:1987 src/ui/ghb.ui:2006 src/ui/ghb.ui:6229
+msgid "Video Preview"
 msgstr ""
 
-#: src/ui-gtk3/ghb.ui:3218 src/ui-gtk3/ghb.ui:4130
-msgid "Storage Size:"
+#: src/ui/ghb.ui:2022
+msgid "Dimensions"
 msgstr ""
 
-#: src/ui-gtk3/ghb.ui:3256 src/ui-gtk3/ghb.ui:4174
-msgid "Display Size:"
-msgstr ""
-
-#: src/ui-gtk3/ghb.ui:3294 src/ui-gtk3/ghb.ui:4268
-msgid "Aspect Ratio:"
-msgstr ""
-
-#: src/ui-gtk3/ghb.ui:3331
+#: src/ui/ghb.ui:2036
 msgid "<b>Source Dimensions</b>"
 msgstr ""
 
-#: src/ui-gtk3/ghb.ui:3378
-msgid "Flipping:"
+#: src/ui/ghb.ui:2051 src/ui/ghb.ui:2699
+msgid "Storage Size:"
 msgstr ""
 
-#: src/ui-gtk3/ghb.ui:3389
-msgid "Horizontal ⇌"
+#: src/ui/ghb.ui:2074 src/ui/ghb.ui:2726
+msgid "Display Size:"
 msgstr ""
 
-#: src/ui-gtk3/ghb.ui:3394
-msgid "Flip video horizontally."
+#: src/ui/ghb.ui:2097 src/ui/ghb.ui:2793
+msgid "Aspect Ratio:"
 msgstr ""
 
-#: src/ui-gtk3/ghb.ui:3411
-msgid "Rotation:"
-msgstr ""
-
-#: src/ui-gtk3/ghb.ui:3427
-msgid "Rotate the video clockwise in 90 degree increments."
-msgstr ""
-
-#: src/ui-gtk3/ghb.ui:3442
-msgid "Cropping:"
-msgstr ""
-
-#: src/ui-gtk3/ghb.ui:3458
-msgid "How to apply crop settings."
-msgstr ""
-
-#: src/ui-gtk3/ghb.ui:3474
-msgid "Left Crop"
-msgstr "ขลิบซ้าย"
-
-#: src/ui-gtk3/ghb.ui:3491
-msgid "Top Crop"
-msgstr "ขลิบบน"
-
-#: src/ui-gtk3/ghb.ui:3508
-msgid "Bottom Crop"
-msgstr "ขลิบล่าง"
-
-#: src/ui-gtk3/ghb.ui:3525
-msgid "Right Crop"
-msgstr "ขลิบขวา"
-
-#: src/ui-gtk3/ghb.ui:3561
+#: src/ui/ghb.ui:2129
 msgid "<b>Orientation &amp; Cropping</b>"
 msgstr ""
 
-#: src/ui-gtk3/ghb.ui:3600
+#: src/ui/ghb.ui:2148
+msgid "Flipping:"
+msgstr ""
+
+#: src/ui/ghb.ui:2157
+msgid "Horizontal ⇌"
+msgstr ""
+
+#: src/ui/ghb.ui:2159
+msgid "Flip video horizontally."
+msgstr ""
+
+#: src/ui/ghb.ui:2172
+msgid "Rotation:"
+msgstr ""
+
+#: src/ui/ghb.ui:2183
+msgid "Rotate the video clockwise in 90 degree increments."
+msgstr ""
+
+#: src/ui/ghb.ui:2195
+msgid "Cropping:"
+msgstr ""
+
+#: src/ui/ghb.ui:2206
+msgid "How to apply crop settings."
+msgstr ""
+
+#: src/ui/ghb.ui:2220
+msgid "Left Crop"
+msgstr "ขลิบซ้าย"
+
+#: src/ui/ghb.ui:2234
+msgid "Top Crop"
+msgstr "ขลิบบน"
+
+#: src/ui/ghb.ui:2248
+msgid "Bottom Crop"
+msgstr "ขลิบล่าง"
+
+#: src/ui/ghb.ui:2262
+msgid "Right Crop"
+msgstr "ขลิบขวา"
+
+#: src/ui/ghb.ui:2293
+msgid "<b>Resolution &amp; Scaling</b>"
+msgstr ""
+
+#: src/ui/ghb.ui:2311
 msgid "Resolution Limit:"
 msgstr ""
 
-#: src/ui-gtk3/ghb.ui:3615
+#: src/ui/ghb.ui:2321
 msgid "Resolution limits for common video formats."
 msgstr ""
 
-#: src/ui-gtk3/ghb.ui:3631
+#: src/ui/ghb.ui:2334
 msgid "Maximum Size:"
 msgstr ""
 
-#: src/ui-gtk3/ghb.ui:3646
+#: src/ui/ghb.ui:2346
 msgid "This is the maximum width that the video will be stored at."
 msgstr ""
 
-#: src/ui-gtk3/ghb.ui:3663 src/ui-gtk3/ghb.ui:3832 src/ui-gtk3/ghb.ui:4206
-msgid "x"
-msgstr ""
-
-#: src/ui-gtk3/ghb.ui:3678
+#: src/ui/ghb.ui:2371
 msgid "This is the maximum height that the video will be stored at."
 msgstr ""
 
-#: src/ui-gtk3/ghb.ui:3694
+#: src/ui/ghb.ui:2383
 msgid "Anamorphic:"
 msgstr "อนามอร์ฟิก:"
 
-#: src/ui-gtk3/ghb.ui:3709
+#: src/ui/ghb.ui:2393
 msgid ""
 "<b>Anamorphic Modes:</b><small><tt>\n"
 "    Automatic - Use a pixel aspect ratio that maximizes\n"
@@ -807,11 +791,11 @@ msgid ""
 "    Custom    - Enter a custom pixel aspect ratio.</tt></small>"
 msgstr ""
 
-#: src/ui-gtk3/ghb.ui:3730
+#: src/ui/ghb.ui:2410
 msgid "Pixel Aspect:"
 msgstr "สัดส่วนพิกเซล:"
 
-#: src/ui-gtk3/ghb.ui:3745
+#: src/ui/ghb.ui:2421
 msgid ""
 "Pixel aspect defines the shape of the pixels.\n"
 "\n"
@@ -823,11 +807,11 @@ msgstr ""
 "อัตราส่วน 1:1 จะกำหนดพิกเซลสี่เหลี่ยมจัตุรัส  ค่าอื่นๆจะกำหนดรูปทรงสี่เหลี่ยมผืนผ้า\n"
 "เครื่องเล่นจะสเกลภาพเพื่อที่จะให้ได้ตามสัดส่วนที่ระบุ"
 
-#: src/ui-gtk3/ghb.ui:3765
+#: src/ui/ghb.ui:2436
 msgid ":"
 msgstr ":"
 
-#: src/ui-gtk3/ghb.ui:3780
+#: src/ui/ghb.ui:2447
 msgid ""
 "Pixel aspect defines the shape of the pixels.\n"
 "A 1:1 ratio defines a square pixel.  Other values define rectangular shapes.\n"
@@ -837,11 +821,11 @@ msgstr ""
 "อัตราส่วน 1:1 จะกำหนดพิกเซลสี่เหลี่ยมจัตุรัส  ค่าอื่นๆจะกำหนดรูปทรงสี่เหลี่ยมผืนผ้า\n"
 "เครื่องเล่นจะสเกลภาพเพื่อที่จะให้ได้ตามสัดส่วนที่ระบุ"
 
-#: src/ui-gtk3/ghb.ui:3799
+#: src/ui/ghb.ui:2461
 msgid "Scaled Size:"
 msgstr ""
 
-#: src/ui-gtk3/ghb.ui:3814
+#: src/ui/ghb.ui:2472
 msgid ""
 "This is the width that the video will be stored at.\n"
 "The actual display dimensions will differ if the pixel aspect ratio is not 1:1."
@@ -849,7 +833,11 @@ msgstr ""
 "นี่คือความกว้างที่วิดีโอจะถูกจัดเก็บไว้\n"
 "มิติการแสดงผลที่แท้จริงจะแตกต่างถ้าอัตราส่วนภาพพิกเซลไม่ใช่ 1:1"
 
-#: src/ui-gtk3/ghb.ui:3847
+#: src/ui/ghb.ui:2485 src/ui/ghb.ui:2749
+msgid "×"
+msgstr ""
+
+#: src/ui/ghb.ui:2496
 msgid ""
 "This is the height that the video will be stored at.\n"
 "The actual display dimensions will differ if the pixel aspect ratio is not 1:1."
@@ -857,85 +845,81 @@ msgstr ""
 "นี่คือความสูงที่วิดีโอจะถูกจัดเก็บไว้\n"
 "มิติการแสดงผลที่แท้จริงจะแตกต่างถ้าอัตราส่วนภาพพิกเซลไม่ใช่ 1:1"
 
-#: src/ui-gtk3/ghb.ui:3861
+#: src/ui/ghb.ui:2508
 msgid "Optimal Size"
 msgstr ""
 
-#: src/ui-gtk3/ghb.ui:3866
+#: src/ui/ghb.ui:2510
 msgid "Use highest resolution permitted by above settings."
 msgstr ""
 
-#: src/ui-gtk3/ghb.ui:3881
+#: src/ui/ghb.ui:2522
 msgid "Allow Upscaling"
 msgstr ""
 
-#: src/ui-gtk3/ghb.ui:3886
+#: src/ui/ghb.ui:2524
 msgid ""
 "If not enabled, scaled dimensions will be limited to source dimensions."
 msgstr ""
 
-#: src/ui-gtk3/ghb.ui:3911
-msgid "<b>Resolution &amp; Scaling</b>"
-msgstr ""
-
-#: src/ui-gtk3/ghb.ui:3951
-msgid "Fill:"
-msgstr ""
-
-#: src/ui-gtk3/ghb.ui:3968
-msgid "Add a border around the video."
-msgstr ""
-
-#: src/ui-gtk3/ghb.ui:3985
-msgid "Left Pad"
-msgstr ""
-
-#: src/ui-gtk3/ghb.ui:4002
-msgid "Top Pad"
-msgstr ""
-
-#: src/ui-gtk3/ghb.ui:4019
-msgid "Bottom Pad"
-msgstr ""
-
-#: src/ui-gtk3/ghb.ui:4036
-msgid "Right Pad"
-msgstr ""
-
-#: src/ui-gtk3/ghb.ui:4052
-msgid "Color:"
-msgstr ""
-
-#: src/ui-gtk3/ghb.ui:4069
-msgid "Color of border added around video."
-msgstr ""
-
-#: src/ui-gtk3/ghb.ui:4091
+#: src/ui/ghb.ui:2548
 msgid "<b>Borders</b>"
 msgstr ""
 
-#: src/ui-gtk3/ghb.ui:4189 src/ui-gtk3/ghb.ui:4221 src/ui-gtk3/ghb.ui:4239
-msgid "Changing the display size will stretch the video."
+#: src/ui/ghb.ui:2568
+msgid "Fill:"
 msgstr ""
 
-#: src/ui-gtk3/ghb.ui:4234 src/hb-backend.c:123 src/hb-backend.c:226
-#: src/hb-backend.c:298
-msgid "Automatic"
-msgstr "อัตโนมัติ"
+#: src/ui/ghb.ui:2580
+msgid "Add a border around the video."
+msgstr ""
 
-#: src/ui-gtk3/ghb.ui:4305
+#: src/ui/ghb.ui:2594
+msgid "Left Pad"
+msgstr ""
+
+#: src/ui/ghb.ui:2608
+msgid "Top Pad"
+msgstr ""
+
+#: src/ui/ghb.ui:2622
+msgid "Bottom Pad"
+msgstr ""
+
+#: src/ui/ghb.ui:2636
+msgid "Right Pad"
+msgstr ""
+
+#: src/ui/ghb.ui:2649
+msgid "Color:"
+msgstr ""
+
+#: src/ui/ghb.ui:2661
+msgid "Color of border added around video."
+msgstr ""
+
+#: src/ui/ghb.ui:2685
 msgid "<b>Final Dimensions</b>"
 msgstr ""
 
-#: src/ui-gtk3/ghb.ui:4318
-msgid "Dimensions"
+#: src/ui/ghb.ui:2737 src/ui/ghb.ui:2760 src/ui/ghb.ui:2773
+msgid "Changing the display size will stretch the video."
 msgstr ""
 
-#: src/ui-gtk3/ghb.ui:4336
+#: src/ui/ghb.ui:2771 src/hb-backend.c:116 src/hb-backend.c:219
+#: src/hb-backend.c:291
+msgid "Automatic"
+msgstr "อัตโนมัติ"
+
+#: src/ui/ghb.ui:2822
+msgid "Filters"
+msgstr ""
+
+#: src/ui/ghb.ui:2832
 msgid "Detelecine:"
 msgstr "Detelecine:"
 
-#: src/ui-gtk3/ghb.ui:4352
+#: src/ui/ghb.ui:2843
 msgid ""
 "This filter removes 'combing' artifacts that are the result of telecining.\n"
 "\n"
@@ -945,7 +929,7 @@ msgstr ""
 "\n"
 "Telecining คือกระบวนการที่ปรับอัตราเฟรมหนัง 24fps เป็นอัตราเฟรมวิดีโอ NTSC ซึ่งเป็น 30fps"
 
-#: src/ui-gtk3/ghb.ui:4367 src/ui-gtk3/ghb.ui:4913
+#: src/ui/ghb.ui:2859 src/ui/ghb.ui:3285
 msgid ""
 "Custom detelecine filter string format\n"
 "\n"
@@ -955,11 +939,11 @@ msgstr ""
 "\n"
 "JunkLeft:JunkRight:JunkTop:JunkBottom:StrictBreaks:MetricPlane:Parity"
 
-#: src/ui-gtk3/ghb.ui:4386
+#: src/ui/ghb.ui:2874
 msgid "Interlace Detection:"
 msgstr ""
 
-#: src/ui-gtk3/ghb.ui:4402
+#: src/ui/ghb.ui:2885
 msgid ""
 "This filter detects interlaced frames.\n"
 "\n"
@@ -967,7 +951,7 @@ msgid ""
 "to be interlaced will be deinterlaced."
 msgstr ""
 
-#: src/ui-gtk3/ghb.ui:4418
+#: src/ui/ghb.ui:2900
 msgid ""
 "Custom interlace detection filter string format\n"
 "\n"
@@ -975,11 +959,11 @@ msgid ""
 "Block Thresh: Block Width: Block Height"
 msgstr ""
 
-#: src/ui-gtk3/ghb.ui:4438
+#: src/ui/ghb.ui:2916
 msgid "Deinterlace:"
 msgstr "Deinterlace:"
 
-#: src/ui-gtk3/ghb.ui:4454
+#: src/ui/ghb.ui:2927
 msgid ""
 "Choose decomb or deinterlace filter.\n"
 "\n"
@@ -987,7 +971,7 @@ msgid ""
 "The deinterlace filter is a classic YADIF deinterlacer.\n"
 msgstr ""
 
-#: src/ui-gtk3/ghb.ui:4491
+#: src/ui/ghb.ui:2954
 msgid ""
 "Choose decomb or deinterlace filter options.\n"
 "\n"
@@ -996,11 +980,11 @@ msgid ""
 "    "
 msgstr ""
 
-#: src/ui-gtk3/ghb.ui:4521
+#: src/ui/ghb.ui:2981
 msgid "Deblock Filter:"
 msgstr ""
 
-#: src/ui-gtk3/ghb.ui:4537
+#: src/ui/ghb.ui:2992
 msgid ""
 "The deblocking filter removes a common type of compression artifact.\n"
 "If your source exhibits 'blockiness', this filter may help clean it up."
@@ -1008,29 +992,29 @@ msgstr ""
 "ตัวกรองการ Deblock จะลบชนิดธรรมดาของวัตถุการบีบอัด\n"
 "ถ้าแหล่งคุณแสดงออกว่า 'blockiness', ตัวกรองนี้จะช่วยล้างมันออกไป"
 
-#: src/ui-gtk3/ghb.ui:4561 src/ui-gtk3/ghb.ui:4664 src/ui-gtk3/ghb.ui:4744
-#: src/ui-gtk3/ghb.ui:4845 src/ui-gtk3/ghb.ui:5343
+#: src/ui/ghb.ui:3009 src/ui/ghb.ui:3089 src/ui/ghb.ui:3151 src/ui/ghb.ui:3229
+#: src/ui/ghb.ui:3643 src/hb-backend.c:4412 src/hb-backend.c:4437
 msgid "Tune:"
 msgstr "จูน:"
 
-#: src/ui-gtk3/ghb.ui:4571
+#: src/ui/ghb.ui:3016
 msgid ""
 "The deblocking filter removes a common type of compression artifact.\n"
 "    If your source exhibits 'blockiness', this filter may help clean it up."
 msgstr ""
 
-#: src/ui-gtk3/ghb.ui:4579 src/ui-gtk3/ghb.ui:4762
+#: src/ui/ghb.ui:3025 src/ui/ghb.ui:3167
 msgid ""
 "Custom deblock filter string format\n"
 "\n"
 "    strength=weak|strong:thresh=0-100:blocksize=4-512"
 msgstr ""
 
-#: src/ui-gtk3/ghb.ui:4600
+#: src/ui/ghb.ui:3042
 msgid "Denoise Filter:"
 msgstr "ตัวกรอง Denoise:"
 
-#: src/ui-gtk3/ghb.ui:4616
+#: src/ui/ghb.ui:3053
 msgid ""
 "Denoise filtering reduces or removes the appearance of noise and grain.\n"
 "Film grain and other types of high frequency noise are difficult to compress.\n"
@@ -1040,85 +1024,85 @@ msgstr ""
 "Film grain และนอยส์ความถี่สูงชนิดอื่นจะยากต่อการบีบอัด\n"
 "การใช้ตัวกรองนี้กับบางแหล่งจะสามารถทำให้ขนาดไฟล์มีขนาดเล็กลงได้"
 
-#: src/ui-gtk3/ghb.ui:4651 src/ui-gtk3/ghb.ui:4674
+#: src/ui/ghb.ui:3078 src/ui/ghb.ui:3096
 msgid ""
 "Denoise filtering reduces or removes the appearance of noise and grain.\n"
 "    Film grain and other types of high frequency noise are difficult to compress.\n"
 "    Using this filter on such sources can result in smaller file sizes."
 msgstr ""
 
-#: src/ui-gtk3/ghb.ui:4683 src/ui-gtk3/ghb.ui:4863
+#: src/ui/ghb.ui:3106 src/ui/ghb.ui:3245
 msgid ""
 "Custom denoise filter string format\n"
 "\n"
 "    SpatialLuma:SpatialChroma:TemporalLuma:TemporalChroma"
 msgstr ""
 
-#: src/ui-gtk3/ghb.ui:4704
+#: src/ui/ghb.ui:3123
 msgid "Chroma Smooth Filter:"
 msgstr ""
 
-#: src/ui-gtk3/ghb.ui:4720
+#: src/ui/ghb.ui:3134
 msgid ""
 "The chroma smooth filter removes common color artifacts.\n"
 "Lower resolution analog source content may benefit from this filter."
 msgstr ""
 
-#: src/ui-gtk3/ghb.ui:4754
+#: src/ui/ghb.ui:3158
 msgid ""
 "The chroma smooth filter removes common color artifacts.\n"
 "    Lower resolution analog source content may benefit from this filter."
 msgstr ""
 
-#: src/ui-gtk3/ghb.ui:4783
+#: src/ui/ghb.ui:3184
 msgid "Sharpen Filter:"
 msgstr ""
 
-#: src/ui-gtk3/ghb.ui:4799
+#: src/ui/ghb.ui:3195
 msgid ""
 "Sharpen filtering enhances edges and other\n"
 "high frequency components in the video."
 msgstr ""
 
-#: src/ui-gtk3/ghb.ui:4833 src/ui-gtk3/ghb.ui:4855
+#: src/ui/ghb.ui:3219 src/ui/ghb.ui:3236
 msgid ""
 "Sharpen filtering enhances edges and other\n"
 "    high frequency components in the video."
 msgstr ""
 
-#: src/ui-gtk3/ghb.ui:4884
+#: src/ui/ghb.ui:3262
 msgid "Colorspace:"
 msgstr ""
 
-#: src/ui-gtk3/ghb.ui:4900
+#: src/ui/ghb.ui:3273
 msgid "Translate the colorspace of the source."
 msgstr ""
 
-#: src/ui-gtk3/ghb.ui:4929 src/hb-backend.c:4878
+#: src/ui/ghb.ui:3299 src/hb-backend.c:4880
 msgid "Grayscale"
 msgstr "สเกลสีเทา"
 
-#: src/ui-gtk3/ghb.ui:4934
+#: src/ui/ghb.ui:3301
 msgid "If enabled, filter colour components out of video."
 msgstr "ถ้าถูกใช้งาน จะกรององค์ประกอบสีออกจากวิดีโอ"
 
-#: src/ui-gtk3/ghb.ui:4951
-msgid "Filters"
-msgstr ""
+#: src/ui/ghb.ui:3318 src/callbacks.c:5609
+msgid "Video"
+msgstr "วิดีโอ"
 
-#: src/ui-gtk3/ghb.ui:4982
+#: src/ui/ghb.ui:3333
 msgid "Video Encoder:"
 msgstr "ตัวเข้ารหัสวิดีโอ:"
 
-#: src/ui-gtk3/ghb.ui:4996
+#: src/ui/ghb.ui:3343
 msgid "Available video encoders."
 msgstr "ตัวเข้ารหัสวิดีโอที่มี"
 
-#: src/ui-gtk3/ghb.ui:5012
+#: src/ui/ghb.ui:3354
 msgid "Framerate:"
 msgstr "อัตราเฟรม:"
 
-#: src/ui-gtk3/ghb.ui:5027
+#: src/ui/ghb.ui:3364
 msgid ""
 "Output framerate.\n"
 "\n"
@@ -1129,45 +1113,58 @@ msgstr ""
 "\n"
 "'เหมือนกับแหล่ง' จะถูกแนะนำ ถ้าวิดีโอแหล่งของคุณมีอัตราเฟรมที่แปรผัน, 'เหมือนกับแหล่ง' จะคงค่ามันเอาไว้"
 
-#: src/ui-gtk3/ghb.ui:5042
+#: src/ui/ghb.ui:3380
 msgid "Constant Framerate"
 msgstr "อัตราเฟรมคงที่"
 
-#: src/ui-gtk3/ghb.ui:5047
+#: src/ui/ghb.ui:3381
 msgid "Enables constant framerate output."
 msgstr "เปิดใช้งานผลลัพท์อัตราเฟรมที่คงที่"
 
-#: src/ui-gtk3/ghb.ui:5061
+#: src/ui/ghb.ui:3388
 msgid "Peak Framerate (VFR)"
 msgstr "อัตราเฟรมสูงสุด (VFR)"
 
-#: src/ui-gtk3/ghb.ui:5066
+#: src/ui/ghb.ui:3389
 msgid ""
 "Enables variable framerate output with a peak\n"
-"rate determined by the framerate setting.\n"
+"    rate determined by the framerate setting.\n"
 "\n"
-"VFR is not compatible with some players."
+"    VFR is not compatible with some players."
 msgstr ""
-"ใช้งานผลลัพธ์อัตราเฟรมแปรผันกับอัตราสูงสุด\n"
-"ที่บ่งโดยการตั้งค่าอัตราเฟรม\n"
-"\n"
-"อัตราเฟรมแปรผันหรือ VFR จะไม่เข้ากับบางเครื่องเล่น"
 
-#: src/ui-gtk3/ghb.ui:5084
+#: src/ui/ghb.ui:3400
 msgid "Variable Framerate"
 msgstr "อัตราเฟรมแปรผัน"
 
-#: src/ui-gtk3/ghb.ui:5089
+#: src/ui/ghb.ui:3401
 msgid ""
 "Enables variable framerate output.\n"
 "\n"
-"VFR is not compatible with some players."
+"    VFR is not compatible with some players."
 msgstr ""
-"ใช้งานผลลัพธ์อัตราเฟรมแปรผัน\n"
-"\n"
-"อัตราเฟรมแปรผันหรือ VFR จะไม่เข้ากับบางเครื่องเล่น"
 
-#: src/ui-gtk3/ghb.ui:5125 src/ui-gtk3/ghb.ui:5157
+#: src/ui/ghb.ui:3427
+msgid "Constant Quality:"
+msgstr "คุณภาพคงที่:"
+
+#: src/ui/ghb.ui:3428
+msgid ""
+"Set the desired quality factor.\n"
+"  The encoder targets a certain quality.\n"
+"  The scale used by each video encoder is different.\n"
+"\n"
+"  x264's scale is logarithmic and lower values correspond to higher quality.\n"
+"  So small decreases in value will result in progressively larger increases\n"
+"  in the resulting file size.  A value of 0 means lossless and will result\n"
+"  in a file size that is larger than the original source, unless the source\n"
+"  was also lossless.\n"
+"\n"
+"  FFMpeg's and Theora's scale is more linear.\n"
+"  These encoders do not have a lossless mode."
+msgstr ""
+
+#: src/ui/ghb.ui:3467
 msgid ""
 "Set the desired quality factor.\n"
 "The encoder targets a certain quality.\n"
@@ -1194,15 +1191,15 @@ msgstr ""
 "สเกลของ FFMpeg และ Theora จะเป็นเส้นตรงมากกว่า\n"
 "ตัวเข้ารหัสเหล่านี้ไม่มีโหมดไม่สูญเสีย"
 
-#: src/ui-gtk3/ghb.ui:5152
-msgid "Constant Quality:"
-msgstr "คุณภาพคงที่:"
+#: src/ui/ghb.ui:3483 src/audiohandler.c:1783
+msgid "Quality"
+msgstr "คุณภาพ"
 
-#: src/ui-gtk3/ghb.ui:5183
+#: src/ui/ghb.ui:3494
 msgid "Bitrate (kbps):    "
 msgstr "อัตราบิต (kbps):    "
 
-#: src/ui-gtk3/ghb.ui:5188 src/ui-gtk3/ghb.ui:5210
+#: src/ui/ghb.ui:3495 src/ui/ghb.ui:3512
 msgid ""
 "Set the average bitrate.\n"
 "\n"
@@ -1216,11 +1213,11 @@ msgstr ""
 "แต่ค่าเฉลี่ยของระยะเวลาที่ยาวนานจะเป็นค่าที่กำหนดที่นี่\n"
 "ถ้าคุณต้องการจำกัดอัตราบิตฉับพลัน ดูที่ x264's vbv-bufsize และการตั้งค่า vbv-maxrate"
 
-#: src/ui-gtk3/ghb.ui:5227
+#: src/ui/ghb.ui:3541
 msgid "Multi-Pass Encoding"
 msgstr ""
 
-#: src/ui-gtk3/ghb.ui:5232
+#: src/ui/ghb.ui:3543
 msgid ""
 "Perform Multi Pass Encoding.\n"
 "\n"
@@ -1229,17 +1226,17 @@ msgid ""
 "to make bitrate allocation decisions."
 msgstr ""
 
-#: src/ui-gtk3/ghb.ui:5250
+#: src/ui/ghb.ui:3554
 msgid "Turbo Analysis Pass"
 msgstr ""
 
-#: src/ui-gtk3/ghb.ui:5255
+#: src/ui/ghb.ui:3556
 msgid ""
 "During the analysis pass of a multi pass encode, use settings that speed "
 "things along."
 msgstr ""
 
-#: src/ui-gtk3/ghb.ui:5317
+#: src/ui/ghb.ui:3601
 msgid ""
 "Adjusts encoder settings to trade off compression efficiency against encoding speed.\n"
 "\n"
@@ -1249,7 +1246,11 @@ msgid ""
 "settings will result in better quality or smaller files."
 msgstr ""
 
-#: src/ui-gtk3/ghb.ui:5360
+#: src/ui/ghb.ui:3616
+msgid "Encoder Preset"
+msgstr ""
+
+#: src/ui/ghb.ui:3653
 msgid ""
 "Tune settings to optimize for common scenarios.\n"
 "\n"
@@ -1258,11 +1259,11 @@ msgid ""
 "preset but before all other parameters."
 msgstr ""
 
-#: src/ui-gtk3/ghb.ui:5376
+#: src/ui/ghb.ui:3667
 msgid "Fast Decode"
 msgstr "ถอดรหัสรวดเร็ว"
 
-#: src/ui-gtk3/ghb.ui:5381
+#: src/ui/ghb.ui:3669
 msgid ""
 "Reduce decoder CPU usage.\n"
 "\n"
@@ -1272,11 +1273,11 @@ msgstr ""
 "\n"
 "กำหนดสิ่งนี้ถ้าอุปกรณ์ดิ้นรนเพื่อเล่นไฟล์ผลลัพธ์ (เฟรมที่ตก)"
 
-#: src/ui-gtk3/ghb.ui:5399
+#: src/ui/ghb.ui:3684
 msgid "Zero Latency"
 msgstr "การแฝงเป็นศูนย์"
 
-#: src/ui-gtk3/ghb.ui:5403
+#: src/ui/ghb.ui:3686
 msgid ""
 "Minimize latency between input to encoder and output of decoder.\n"
 "\n"
@@ -1286,11 +1287,11 @@ msgid ""
 "this setting is of little value here."
 msgstr ""
 
-#: src/ui-gtk3/ghb.ui:5427
+#: src/ui/ghb.ui:3704
 msgid "Profile:"
 msgstr "โปรไฟล์:"
 
-#: src/ui-gtk3/ghb.ui:5444
+#: src/ui/ghb.ui:3714
 msgid ""
 "Sets and ensures compliance with the specified profile.\n"
 "\n"
@@ -1300,11 +1301,11 @@ msgstr ""
 "\n"
 "มีผลเหนือการตั้งค่าอื่นทั้งหมด"
 
-#: src/ui-gtk3/ghb.ui:5462
+#: src/ui/ghb.ui:3727
 msgid "Level:"
 msgstr "ระดับ:"
 
-#: src/ui-gtk3/ghb.ui:5479
+#: src/ui/ghb.ui:3737
 msgid ""
 "Sets and ensures compliance with the specified level.\n"
 "\n"
@@ -1314,195 +1315,281 @@ msgstr ""
 "\n"
 "มีผลเหนือการตั้งค่าอื่นทั้งหมด"
 
-#: src/ui-gtk3/ghb.ui:5504
-msgid "More Settings:"
-msgstr "การตั้งค่าเพิ่มเติม:"
-
-#: src/ui-gtk3/ghb.ui:5522
-msgid ""
-"Additional encoder settings.\n"
-"\n"
-"Colon separated list of encoder options."
+#: src/ui/ghb.ui:3753
+msgid "Additional Options:"
 msgstr ""
-"การตั้งค่าตัวเข้ารหัสเพิ่มเติม\n"
-"\n"
-"รายการที่คั่นด้วยเครื่องหมาย Colon ของตัวเลือกตัวเข้ารหัส"
 
-#: src/ui-gtk3/ghb.ui:5556 src/callbacks.c:5447
-msgid "Video"
-msgstr "วิดีโอ"
+#: src/ui/ghb.ui:3793
+msgid "Audio"
+msgstr ""
 
-#. Add Button
-#: src/ui-gtk3/ghb.ui:5620 src/ui-gtk3/ghb.ui:5813 src/ui-gtk3/ghb.ui:6390
-#: src/ui-gtk3/ghb.ui:6610 src/ui-gtk3/ghb.ui:7555 src/audiohandler.c:1758
-msgid "Add"
-msgstr "เพิ่ม"
+#: src/ui/ghb.ui:3822
+msgid "Show audio default selection options"
+msgstr ""
 
-#: src/ui-gtk3/ghb.ui:5622
-msgid "Add new audio settings to the list"
-msgstr "เพิ่มการตั้งค่าเสียงใหม่สู่รายการ"
+#: src/ui/ghb.ui:3836 src/ui/ghb.ui:3990
+msgid "Selection Behavior…"
+msgstr ""
 
-#: src/ui-gtk3/ghb.ui:5632 src/ui-gtk3/ghb.ui:6402
-msgid "Add All"
-msgstr "เพิ่มทั้งหมด"
-
-#: src/ui-gtk3/ghb.ui:5634
-msgid "Add all audio tracks to the list"
-msgstr "เพิ่มแทร็คเสียงทั้งหมดสู่รายการ"
-
-#: src/ui-gtk3/ghb.ui:5647
+#: src/ui/ghb.ui:3845
 msgid "Reload all audio settings from defaults"
 msgstr "โหลดการตั้งค่าเสียงทั้งหมดใหม่จากค่าตั้งต้น"
 
-#: src/ui-gtk3/ghb.ui:5691 src/ui-gtk3/ghb.ui:6475
-msgid "Track List"
+#: src/ui/ghb.ui:3888 src/ui/ghb.ui:4042 src/ui/ghb.ui:4949
+msgid "Remove"
+msgstr "เอาออก"
+
+#: src/ui/ghb.ui:3911 src/ui/ghb.ui:4065
+msgid "Clear"
 msgstr ""
 
-#: src/ui-gtk3/ghb.ui:5722 src/ui-gtk3/ghb.ui:6510
-msgid "Selection Behavior:"
-msgstr "พฤติกรรมการเลือก:"
+#: src/ui/ghb.ui:3947
+msgid "Subtitles"
+msgstr "ศัพท์บรรยาย"
 
-#: src/ui-gtk3/ghb.ui:5737
+#: src/ui/ghb.ui:3963
+msgid "Tracks"
+msgstr ""
+
+#: src/ui/ghb.ui:3976
+msgid "Show subtitle default selection options"
+msgstr ""
+
+#: src/ui/ghb.ui:4101
+msgid "Chapters"
+msgstr "ตอน"
+
+#: src/ui/ghb.ui:4112 src/callbacks.c:2533 src/queuehandler.c:220
+msgid "Chapter Markers"
+msgstr "ตัวหมายตอน"
+
+#: src/ui/ghb.ui:4114
+msgid "Add chapter markers to output file."
+msgstr "เพิ่มตัวหมายตอนสู่ไฟล์ผลลัพธ์"
+
+#: src/ui/ghb.ui:4121
+msgid "Import Chapters"
+msgstr ""
+
+#: src/ui/ghb.ui:4123
+msgid "Import chapter list from an XML file"
+msgstr ""
+
+#: src/ui/ghb.ui:4131
+msgid "Export Chapters"
+msgstr ""
+
+#: src/ui/ghb.ui:4133
+msgid "Export chapter list as an XML file"
+msgstr ""
+
+#: src/ui/ghb.ui:4149
+msgid "Index"
+msgstr "ดัชนี"
+
+#: src/ui/ghb.ui:4163
+msgid "Duration"
+msgstr "ระยะเวลา"
+
+#: src/ui/ghb.ui:4169
+msgid "Title"
+msgstr "หัวเรื่อง"
+
+#: src/ui/ghb.ui:4195
+msgid "Tags"
+msgstr "แท็ก"
+
+#: src/ui/ghb.ui:4233
+msgid "Actors:"
+msgstr "นักแสดง:"
+
+#: src/ui/ghb.ui:4261
+msgid "Director:"
+msgstr "ผู้กำกับ:"
+
+#: src/ui/ghb.ui:4289
+msgid "Release Date:"
+msgstr "วันเผยแพร่:"
+
+#: src/ui/ghb.ui:4317
+msgid "Comment:"
+msgstr "ข้อคิดเห็น:"
+
+#: src/ui/ghb.ui:4345
+msgid "Genre:"
+msgstr "ประเภท:"
+
+#: src/ui/ghb.ui:4373 src/ui/ghb.ui:6026 src/ui/ghb.ui:6178
+msgid "Description:"
+msgstr "คำบรรยาย:"
+
+#: src/ui/ghb.ui:4401
+msgid "Plot:"
+msgstr "เค้าเรื่อง:"
+
+#: src/ui/ghb.ui:4452
+msgid "<b>Save As:</b>"
+msgstr ""
+
+#: src/ui/ghb.ui:4464
+msgid "Destination filename for your encode."
+msgstr "ชื่อไฟล์ปลายทางสำหรับการเข้ารหัสของคุณ"
+
+#: src/ui/ghb.ui:4478
+msgid "<b>To:</b>"
+msgstr ""
+
+#: src/ui/ghb.ui:4489
+msgid "Destination directory for your encode."
+msgstr "เส้นทางปลายทางสำหรับการเข้ารหัสของคุณ"
+
+#: src/ui/ghb.ui:4491 src/title-add.c:474
+msgid "Destination Directory"
+msgstr "เส้นทางปลายทาง"
+
+#: src/ui/ghb.ui:4564
+msgid "Subtitle Selection Behavior"
+msgstr ""
+
+#: src/ui/ghb.ui:4833
+msgid "Audio Selection Behavior"
+msgstr ""
+
+#: src/ui/ghb.ui:4863
+msgid "Track Selection Behavior:"
+msgstr ""
+
+#: src/ui/ghb.ui:4874
 msgid "Choose which audio tracks of the source media are used."
 msgstr ""
 
-#: src/ui-gtk3/ghb.ui:5798
+#: src/ui/ghb.ui:4922
 msgid ""
 "Create a list of languages you would like to select audio for.\n"
 "Tracks matching these languages will be selected using the chosen Selection Behavior."
 msgstr ""
 
-#: src/ui-gtk3/ghb.ui:5829 src/ui-gtk3/ghb.ui:6626
-msgid "Remove"
-msgstr "เอาออก"
+#: src/ui/ghb.ui:4936 src/ui/ghb.ui:5288
+msgid "Add"
+msgstr "เพิ่ม"
 
-#: src/ui-gtk3/ghb.ui:5847 src/ui-gtk3/ghb.ui:6644
+#: src/ui/ghb.ui:4962
 msgid "Available Languages"
 msgstr "ภาษาที่มี"
 
-#: src/ui-gtk3/ghb.ui:5860 src/ui-gtk3/ghb.ui:6657
+#: src/ui/ghb.ui:4971
 msgid "Selected Languages"
 msgstr "ภาษาที่เลือก"
 
-#: src/ui-gtk3/ghb.ui:5876
-msgid "Use only first encoder for secondary audio"
-msgstr "ใช้เฉพาะตัวเข้ารหัสแรกสำหรับเสียงที่สอง"
-
-#: src/ui-gtk3/ghb.ui:5881
-msgid ""
-"Only the primary audio track will be encoded with the full encoder list.\n"
-"All other secondary audio output tracks will be encoded with first encoder only."
-msgstr ""
-
-#: src/ui-gtk3/ghb.ui:5917
+#: src/ui/ghb.ui:4995
 msgid "Auto Passthru:"
 msgstr "ส่งผ่านอัตโนมัติ:"
 
-#: src/ui-gtk3/ghb.ui:5928
+#: src/ui/ghb.ui:5004
 msgid "MP2"
 msgstr ""
 
-#: src/ui-gtk3/ghb.ui:5933
+#: src/ui/ghb.ui:5006
 msgid ""
 "Enable this if your playback device supports MP2.\n"
 "This permits MP2 passthru to be selected when automatic passthru selection is enabled."
 msgstr ""
 
-#: src/ui-gtk3/ghb.ui:5949
+#: src/ui/ghb.ui:5019
 msgid "MP3"
 msgstr "MP3"
 
-#: src/ui-gtk3/ghb.ui:5954
+#: src/ui/ghb.ui:5021
 msgid ""
 "Enable this if your playback device supports MP3.\n"
 "This permits MP3 passthru to be selected when automatic passthru selection is enabled."
 msgstr ""
 
-#: src/ui-gtk3/ghb.ui:5970
+#: src/ui/ghb.ui:5034
 msgid "AC-3"
 msgstr ""
 
-#: src/ui-gtk3/ghb.ui:5975
+#: src/ui/ghb.ui:5036
 msgid ""
 "Enable this if your playback device supports AC-3.\n"
 "This permits AC-3 passthru to be selected when automatic passthru selection is enabled."
 msgstr ""
 
-#: src/ui-gtk3/ghb.ui:5991
+#: src/ui/ghb.ui:5049
 msgid "EAC-3"
 msgstr ""
 
-#: src/ui-gtk3/ghb.ui:5996
+#: src/ui/ghb.ui:5051
 msgid ""
 "Enable this if your playback device supports EAC-3.\n"
 "This permits EAC-3 passthru to be selected when automatic passthru selection is enabled."
 msgstr ""
 
-#: src/ui-gtk3/ghb.ui:6012
+#: src/ui/ghb.ui:5064
 msgid "DTS"
 msgstr ""
 
-#: src/ui-gtk3/ghb.ui:6017
+#: src/ui/ghb.ui:5066
 msgid ""
 "Enable this if your playback device supports DTS.\n"
 "This permits DTS passthru to be selected when automatic passthru selection is enabled."
 msgstr ""
 
-#: src/ui-gtk3/ghb.ui:6033
+#: src/ui/ghb.ui:5079
 msgid "DTS-HD"
 msgstr ""
 
-#: src/ui-gtk3/ghb.ui:6038
+#: src/ui/ghb.ui:5081
 msgid ""
 "Enable this if your playback device supports DTS-HD.\n"
 "This permits DTS-HD passthru to be selected when automatic passthru selection is enabled."
 msgstr ""
 
-#: src/ui-gtk3/ghb.ui:6054
+#: src/ui/ghb.ui:5094
 msgid "TrueHD"
 msgstr ""
 
-#: src/ui-gtk3/ghb.ui:6059
+#: src/ui/ghb.ui:5096
 msgid ""
 "Enable this if your playback device supports TrueHD.\n"
 "This permits TrueHD passthru to be selected when automatic passthru selection is enabled."
 msgstr ""
 
-#: src/ui-gtk3/ghb.ui:6075
+#: src/ui/ghb.ui:5109
 msgid "FLAC"
 msgstr ""
 
-#: src/ui-gtk3/ghb.ui:6080
+#: src/ui/ghb.ui:5111
 msgid ""
 "Enable this if your playback device supports FLAC.\n"
 "This permits FLAC passthru to be selected when automatic passthru selection is enabled."
 msgstr ""
 
-#: src/ui-gtk3/ghb.ui:6096
+#: src/ui/ghb.ui:5124
 msgid "AAC"
 msgstr ""
 
-#: src/ui-gtk3/ghb.ui:6101
+#: src/ui/ghb.ui:5126
 msgid ""
 "Enable this if your playback device supports AAC.\n"
 "This permits AAC passthru to be selected when automatic passthru selection is enabled."
 msgstr ""
 
-#: src/ui-gtk3/ghb.ui:6117
+#: src/ui/ghb.ui:5139
 msgid "Opus"
 msgstr ""
 
-#: src/ui-gtk3/ghb.ui:6122
+#: src/ui/ghb.ui:5141
 msgid ""
 "Enable this if your playback device supports Opus.\n"
 "This permits Opus passthru to be selected when automatic passthru selection is enabled."
 msgstr ""
 
-#: src/ui-gtk3/ghb.ui:6155
+#: src/ui/ghb.ui:5162
 msgid "Passthru Fallback:"
 msgstr "การส่งผ่านยืนพื้น:"
 
-#: src/ui-gtk3/ghb.ui:6167
+#: src/ui/ghb.ui:5168
 msgid ""
 "Set the audio codec to encode with when a suitable track can not be found "
 "for audio passthru."
@@ -1510,468 +1597,139 @@ msgstr ""
 "กำหนด codec เสียงเพื่อเข้ารหัส "
 "เมื่อไม่พบแทร็คที่เหมาะสมสำหรับการส่งผ่านเสียง"
 
-#: src/ui-gtk3/ghb.ui:6196
-msgid "<b>Audio Encoder Settings:</b>"
-msgstr "<b>การตั้งค่าตัวเข้ารหัสเสียง:</b>"
+#: src/ui/ghb.ui:5184
+msgid "Audio encoder settings for each selected track:"
+msgstr ""
 
-#: src/ui-gtk3/ghb.ui:6197
+#: src/ui/ghb.ui:5185
 msgid "Each selected source track will be encoded with all selected encoders"
 msgstr "แต่ละแทร็คแหล่งที่เลือกจะถูกเข้ารหัสด้วยตัวเข้ารหัสที่เลือกทั้งหมด"
 
-#: src/ui-gtk3/ghb.ui:6222 src/ui-gtk3/ghb.ui:9805
+#: src/ui/ghb.ui:5195
 msgid "Encoder"
 msgstr "ตัวเข้ารหัส"
 
-#: src/ui-gtk3/ghb.ui:6233 src/ui-gtk3/ghb.ui:9818
+#: src/ui/ghb.ui:5201
 msgid "Bitrate/Quality"
 msgstr "อัตราบิต/คุณภาพ"
 
-#: src/ui-gtk3/ghb.ui:6244
+#: src/ui/ghb.ui:5207
 msgid "Mixdown"
 msgstr "ปรับลง"
 
-#: src/ui-gtk3/ghb.ui:6255
+#: src/ui/ghb.ui:5213
 msgid "Samplerate"
 msgstr "อัตราสุ่มฯ"
 
-#: src/ui-gtk3/ghb.ui:6266 src/ui-gtk3/ghb.ui:9862 src/queuehandler.c:610
+#: src/ui/ghb.ui:5219 src/queuehandler.c:555
 msgid "Gain"
 msgstr "ฟื้นค่า"
 
-#: src/ui-gtk3/ghb.ui:6277 src/ui-gtk3/ghb.ui:9881
+#: src/ui/ghb.ui:5225
 msgid "DRC"
 msgstr ""
 
-#: src/ui-gtk3/ghb.ui:6314 src/ui-gtk3/ghb.ui:6870
-msgid "Track Selection"
+#: src/ui/ghb.ui:5253
+msgid "Add Track"
 msgstr ""
 
-#: src/ui-gtk3/ghb.ui:6326
-msgid "Audio"
-msgstr ""
-
-#: src/ui-gtk3/ghb.ui:6392
-msgid "Add new subtitle settings to the list"
-msgstr "เพิ่มการตั้งค่าศัพท์บรรยายใหม่สู่รายการ"
-
-#: src/ui-gtk3/ghb.ui:6404
-msgid "Add all subtitle tracks to the list"
-msgstr "เพิ่มแทร็คศัพท์บรรยายทั้งหมดสู่รายการ"
-
-#: src/ui-gtk3/ghb.ui:6414 src/callbacks.c:2344 src/queuehandler.c:647
-#: src/queuehandler.c:1083 src/subtitlehandler.c:414
-#: src/subtitlehandler.c:1221
-msgid "Foreign Audio Scan"
-msgstr ""
-
-#: src/ui-gtk3/ghb.ui:6416
+#: src/ui/ghb.ui:5254
 msgid ""
-"Add an extra pass to the encode which searches\n"
-"for subtitle candidates that provide subtitles for\n"
-"segments of the audio that are in a foreign language."
+"Add an audio encoder.\n"
+"Each selected source track will be encoded with all selected encoders."
 msgstr ""
+"เพิ่มตัวเข้ารหัสเสียง\n"
+"แต่ละแทร็คแหล่งที่ถูกเลือก จะถูกเข้ารหัสด้วยตัวเข้ารหัสที่เลือกทั้งหมด"
 
-#: src/ui-gtk3/ghb.ui:6431
-msgid "Reload all subtitle settings from defaults"
-msgstr "โหลดการตั้งค่าศัพท์บรรยายทั้งหมดใหม่จากค่าตั้งต้น"
+#: src/ui/ghb.ui:5261
+msgid "Use only first encoder for secondary audio"
+msgstr "ใช้เฉพาะตัวเข้ารหัสแรกสำหรับเสียงที่สอง"
 
-#: src/ui-gtk3/ghb.ui:6525
-msgid "Choose which subtitle tracks of the source media are used."
-msgstr ""
-
-#: src/ui-gtk3/ghb.ui:6590
+#: src/ui/ghb.ui:5263
 msgid ""
-"Create a list of languages you would like to select subtitles for.\n"
-"Tracks matching these languages will be selected using the chosen Selection Behavior.\n"
-"\n"
-"The first language in this list is your \"preferred\" language and will be used\n"
-"for determining subtitle selection settings when there is foreign audio."
+"Only the primary audio track will be encoded with the full encoder list.\n"
+"  All other secondary audio output tracks will be encoded with first encoder only."
 msgstr ""
 
-#: src/ui-gtk3/ghb.ui:6671
-msgid "Preferred Language: None"
-msgstr "ภาษาที่ชอบ: ไม่มี"
-
-#: src/ui-gtk3/ghb.ui:6698
-msgid "Add Foreign Audio Scan Pass"
-msgstr ""
-
-#: src/ui-gtk3/ghb.ui:6703
-msgid ""
-"Add \"Foreign Audio Scan\" when the default audio track is your preferred language.\n"
-"This search pass finds short sequences of foreign audio and provides subtitles for them.\n"
-"\n"
-"This option requires a language to be set in the Selected Languages list."
-msgstr ""
-
-#: src/ui-gtk3/ghb.ui:6718
-msgid "Add subtitle track if default audio is foreign"
-msgstr "เพิ่มแทร็คศัพท์บรรยาย ถ้าเสียงตั้งต้นเป็นเสียงต่างประเทศ"
-
-#: src/ui-gtk3/ghb.ui:6723
-msgid ""
-"When the default audio track is not your preferred language, add a subtitle track.\n"
-"\n"
-"This option requires a language to be set in the Selected Languages list."
-msgstr ""
-
-#: src/ui-gtk3/ghb.ui:6737
-msgid "Add Closed Captions when available"
-msgstr "เพิ่มศัพท์บรรยายเหตุการณ์ถ้ามี"
-
-#: src/ui-gtk3/ghb.ui:6742
-msgid ""
-"Closed captions are text subtitles that can be added to any container as a "
-"soft subtitle track"
-msgstr ""
-
-#: src/ui-gtk3/ghb.ui:6763
-msgid "Burn-In Behavior*:"
-msgstr ""
-
-#: src/ui-gtk3/ghb.ui:6775
-msgid ""
-"Set the behavior of subtitle \"Burn-In\".\n"
-"\n"
-"Burned-In subtitles are part of the video and can not be disabled during playback.\n"
-"Only one subtitle track can be burned! Since conflicts can occur, the first chosen wins."
-msgstr ""
-
-#: src/ui-gtk3/ghb.ui:6802
-msgid "Burn-In for deficient players*:"
-msgstr ""
-
-#: src/ui-gtk3/ghb.ui:6811
-msgid "DVD Subtitles"
-msgstr ""
-
-#: src/ui-gtk3/ghb.ui:6816
-msgid ""
-"Burn the first selected DVD subtitle track. All other DVD subtitle tracks will be discarded.\n"
-"Use this option if your player software or device does not support DVD subtitles.\n"
-"\n"
-"Only one subtitle track can be burned! Since conflicts can occur, the first chosen wins."
-msgstr ""
-
-#: src/ui-gtk3/ghb.ui:6830
-msgid "Blu-ray Subtitles"
-msgstr ""
-
-#: src/ui-gtk3/ghb.ui:6835
-msgid ""
-"Burn the first selected Blu-ray subtitle track. All other Blu-ray subtitle tracks will be discarded.\n"
-"Use this option if your player software or device does not support Blu-ray subtitles.\n"
-"\n"
-"Only one subtitle track can be burned! Since conflicts can occur, the first chosen wins."
-msgstr ""
-
-#: src/ui-gtk3/ghb.ui:6857
-msgid ""
-"<small>* Only one of the above subtitle burn options will be applied, "
-"starting with the top.</small>"
-msgstr ""
-
-#: src/ui-gtk3/ghb.ui:6858
-msgid ""
-"Only one subtitle track can be burned! Since conflicts can occur, the first "
-"chosen wins."
-msgstr ""
-
-#: src/ui-gtk3/ghb.ui:6882
-msgid "Subtitles"
-msgstr "ศัพท์บรรยาย"
-
-#: src/ui-gtk3/ghb.ui:6900 src/callbacks.c:2401 src/queuehandler.c:276
-msgid "Chapter Markers"
-msgstr "ตัวหมายตอน"
-
-#: src/ui-gtk3/ghb.ui:6905
-msgid "Add chapter markers to output file."
-msgstr "เพิ่มตัวหมายตอนสู่ไฟล์ผลลัพธ์"
-
-#: src/ui-gtk3/ghb.ui:6916
-msgid "Import Chapters"
-msgstr ""
-
-#: src/ui-gtk3/ghb.ui:6920
-msgid "Import chapter list from an XML file"
-msgstr ""
-
-#: src/ui-gtk3/ghb.ui:6931
-msgid "Export Chapters"
-msgstr ""
-
-#: src/ui-gtk3/ghb.ui:6935
-msgid "Export chapter list as an XML file"
-msgstr ""
-
-#: src/ui-gtk3/ghb.ui:6969
-msgid "Index"
-msgstr "ดัชนี"
-
-#: src/ui-gtk3/ghb.ui:6993
-msgid "Duration"
-msgstr "ระยะเวลา"
-
-#: src/ui-gtk3/ghb.ui:7004
-msgid "Title"
-msgstr "หัวเรื่อง"
-
-#: src/ui-gtk3/ghb.ui:7041
-msgid "Chapters"
-msgstr "ตอน"
-
-#: src/ui-gtk3/ghb.ui:7096
-msgid "Actors:"
-msgstr "นักแสดง:"
-
-#: src/ui-gtk3/ghb.ui:7131
-msgid "Director:"
-msgstr "ผู้กำกับ:"
-
-#: src/ui-gtk3/ghb.ui:7166
-msgid "Release Date:"
-msgstr "วันเผยแพร่:"
-
-#: src/ui-gtk3/ghb.ui:7201
-msgid "Comment:"
-msgstr "ข้อคิดเห็น:"
-
-#: src/ui-gtk3/ghb.ui:7236
-msgid "Genre:"
-msgstr "ประเภท:"
-
-#: src/ui-gtk3/ghb.ui:7271
-msgid "Description:"
-msgstr "คำบรรยาย:"
-
-#: src/ui-gtk3/ghb.ui:7306
-msgid "Plot:"
-msgstr "เค้าเรื่อง:"
-
-#: src/ui-gtk3/ghb.ui:7344
-msgid "Tags"
-msgstr "แท็ก"
-
-#: src/ui-gtk3/ghb.ui:7374
-msgid "<b>Save As:</b>"
-msgstr ""
-
-#: src/ui-gtk3/ghb.ui:7388
-msgid "Destination filename for your encode."
-msgstr "ชื่อไฟล์ปลายทางสำหรับการเข้ารหัสของคุณ"
-
-#: src/ui-gtk3/ghb.ui:7408
-msgid "<b>To:</b>"
-msgstr ""
-
-#: src/ui-gtk3/ghb.ui:7421
-msgid "Destination directory for your encode."
-msgstr "เส้นทางปลายทางสำหรับการเข้ารหัสของคุณ"
-
-#: src/ui-gtk3/ghb.ui:7424 src/title-add.c:514
-msgid "Destination Directory"
-msgstr "เส้นทางปลายทาง"
-
-#: src/ui-gtk3/ghb.ui:7539
+#: src/ui/ghb.ui:5276
 msgid "Add Multiple Titles"
 msgstr ""
 
-#: src/ui-gtk3/ghb.ui:7547 src/ui-gtk3/ghb.ui:8548 src/ui-gtk3/ghb.ui:8705
-#: src/ui-gtk3/ghb.ui:9270 src/ui-gtk3/ghb.ui:9680 src/callbacks.c:5301
-#: src/callbacks.c:5309 src/callbacks.c:5318 src/hb-backend.c:4282
-#: src/hb-backend.c:4315 src/hb-backend.c:4354 src/hb-backend.c:4385
-#: src/hb-backend.c:4413 src/hb-backend.c:4459 src/hb-backend.c:4516
-#: src/hb-backend.c:4536 src/hb-backend.c:4556 src/hb-backend.c:4617
-#: src/hb-backend.c:4672 src/presets.c:2500 src/title-add.c:114
-#: src/title-add.c:132 src/title-add.c:147 src/title-add.c:163
+#: src/ui/ghb.ui:5282 src/ui/ghb.ui:5969 src/ui/ghb.ui:6059
+#: src/hb-backend.c:4480 src/hb-backend.c:4530 src/hb-backend.c:4547
+#: src/hb-backend.c:4564 src/hb-backend.c:4621 src/hb-backend.c:4673
+#: src/presets.c:2583 src/title-add.c:124 src/title-add.c:134
 msgid "Cancel"
 msgstr "ยกเลิก"
 
-#: src/ui-gtk3/ghb.ui:7588
+#: src/ui/ghb.ui:5306
 msgid "Select All"
 msgstr "เลือกทั้งหมด"
 
-#: src/ui-gtk3/ghb.ui:7592
+#: src/ui/ghb.ui:5308
 msgid "Mark all titles for adding to the queue"
 msgstr "หมายหัวเรื่องทั้งหมดสำหรับเพิ่มสู่คิว"
 
-#: src/ui-gtk3/ghb.ui:7605
+#: src/ui/ghb.ui:5317
 msgid "Clear All"
 msgstr "ล้างทั้งหมด"
 
-#: src/ui-gtk3/ghb.ui:7609
+#: src/ui/ghb.ui:5319
 msgid "Unmark all titles"
 msgstr "เลิกหมายหัวเรื่องทั้งหมด"
 
-#: src/ui-gtk3/ghb.ui:7670
+#: src/ui/ghb.ui:5328
+msgid "Invert Selection"
+msgstr ""
+
+#: src/ui/ghb.ui:5361 src/title-add.c:351
 msgid "Destination files OK.  No duplicates detected."
 msgstr "ไฟล์ปลายทางโอเค ไม่พบการซ้ำซ้อน"
 
-#: src/ui-gtk3/ghb.ui:7692 src/ui-gtk3/ghb.ui:7704
+#: src/ui/ghb.ui:5373
 msgid "Preferences"
 msgstr "การตั้งค่า"
 
-#: src/ui-gtk3/ghb.ui:7796
-msgid "Default action when all encodes are complete"
-msgstr ""
+#: src/ui/ghb.ui:5418
+msgid "General"
+msgstr "ทั่วไป"
 
-#: src/ui-gtk3/ghb.ui:7818
+#: src/ui/ghb.ui:5425
 msgid "Use automatic naming (uses modified source name)"
 msgstr "ใช้การตั้งชื่ออัตโนมัติ (ใช้ชื่อแหล่งที่ปรับเปลี่ยน)"
 
-#: src/ui-gtk3/ghb.ui:7819
+#: src/ui/ghb.ui:5427
 msgid "Create destination filename from source filename or volume label"
 msgstr ""
 
-#: src/ui-gtk3/ghb.ui:7843
+#: src/ui/ghb.ui:5442
 msgid "Auto-Name Template"
 msgstr "แม่แบบชื่ออัตโนมัติ"
 
-#: src/ui-gtk3/ghb.ui:7854
+#: src/ui/ghb.ui:5450
 msgid ""
 "Available Options: {source-path} {source} {title} {preset} {chapters} {date}"
 " {time} {creation-date} {creation-time} {modification-date} {modification-"
 "time} {codec} {bit-depth} {quality} {bitrate} {width} {height}"
 msgstr ""
 
-#: src/ui-gtk3/ghb.ui:7874
+#: src/ui/ghb.ui:5464
 msgid "Use iPod/iTunes friendly (.m4v) file extension for MP4"
 msgstr "ใช้สกุลไฟล์ (.m4v) ซึ่งเหมาะกับ iPod/iTunes สำหรับรูปแบบ MP4"
 
-#: src/ui-gtk3/ghb.ui:7917
+#: src/ui/ghb.ui:5487
 msgid "Number of previews"
 msgstr "จำนวนตัวอย่าง"
 
-#: src/ui-gtk3/ghb.ui:7955
-msgid "Filter short DVD and Blu-ray titles (seconds)"
+#: src/ui/ghb.ui:5510
+msgid "Minimum DVD/Blu-ray title duration (seconds)"
 msgstr ""
 
-#: src/ui-gtk3/ghb.ui:7969
-msgid "Clear completed queue items after an encode completes"
-msgstr ""
-
-#: src/ui-gtk3/ghb.ui:7973
-msgid ""
-"By default, completed jobs remain in the queue and are marked as complete.\n"
-"Check this if you want the queue to clean itself up by deleting completed jobs."
-msgstr ""
-"โดยตั้งต้น, งานที่เสร็จแล้วจะยังคงอยู่ในคิว และถูกหมายเหตุว่าเสร็จสมบูรณ์\n"
-"กาเลือกสิ่งนี้ถ้าคุณต้องการให้คิวทำการลบงานที่เสร็จแล้วออกไปเลย"
-
-#: src/ui-gtk3/ghb.ui:7986
-msgid "Power Saving"
-msgstr ""
-
-#: src/ui-gtk3/ghb.ui:8004
-msgid "Pause encoding when in Power Saver mode"
-msgstr ""
-
-#: src/ui-gtk3/ghb.ui:8010
-msgid ""
-"If checked, encoding will be paused when the device\n"
-"enters Power Saver mode. Encoding will resume when\n"
-"Power Saver mode is disabled."
-msgstr ""
-
-#: src/ui-gtk3/ghb.ui:8021
-msgid "Pause encoding when on battery power"
-msgstr ""
-
-#: src/ui-gtk3/ghb.ui:8027
-msgid ""
-"If checked, encoding will be paused when charger is\n"
-"unplugged. Encoding will resume when reconnected to\n"
-"a mains power source."
-msgstr ""
-
-#: src/ui-gtk3/ghb.ui:8038
-msgid "Pause encoding when battery is low"
-msgstr ""
-
-#: src/ui-gtk3/ghb.ui:8044
-msgid ""
-"If checked, encoding will be paused when the battery\n"
-"level is low. Encoding will resume when the\n"
-"battery is charged."
-msgstr ""
-
-#: src/ui-gtk3/ghb.ui:8055
-msgid "General"
-msgstr "ทั่วไป"
-
-#: src/ui-gtk3/ghb.ui:8080
-msgid "Set a custom directory for Handbrake temporary files"
-msgstr ""
-
-#: src/ui-gtk3/ghb.ui:8084 src/ui-gtk3/ghb.ui:8104
-msgid ""
-"Temporary files that HandBrake creates will be placed under this directory.\n"
-"\n"
-"Changing this setting will require restarting HandBrake.\n"
-"\n"
-"This setting overrides the TEMP environment variable that is normally used to define this directory.\n"
-"\n"
-"Flatpak users may need to set this for certain workflows to work properly. The default size of the TEMP directory in a flatpak sandbox is 1/2 physical memory size and may be too small for things like the 2-pass stats file."
-msgstr ""
-
-#: src/ui-gtk3/ghb.ui:8114
-msgid "Temp Directory"
-msgstr ""
-
-#: src/ui-gtk3/ghb.ui:8154
-msgid "Constant Quality fractional granularity"
-msgstr ""
-
-#: src/ui-gtk3/ghb.ui:8171
-msgid "Use dvdnav (instead of libdvdread)"
-msgstr "ใช้ dvdnav (แทน libdvdread)"
-
-#: src/ui-gtk3/ghb.ui:8194
-msgid "Monitor destination disk free space"
-msgstr ""
-
-#: src/ui-gtk3/ghb.ui:8198 src/ui-gtk3/ghb.ui:8220
-msgid "Pause encoding if free disk space drops below limit"
-msgstr ""
-
-#: src/ui-gtk3/ghb.ui:8235
-msgid "MB Limit"
-msgstr ""
-
-#: src/ui-gtk3/ghb.ui:8263
-msgid "Put individual encode logs in same location as movie"
-msgstr "วางบันทึกกิจกรรมการเข้ารหัสรายตัว ในที่ตั้งเดียวกับภาพยนตร์"
-
-#: src/ui-gtk3/ghb.ui:8299
-msgid "Activity Log Verbosity Level"
-msgstr "ระดับความมากของการจดบันทึกกิจกรรม"
-
-#: src/ui-gtk3/ghb.ui:8334
-msgid "Activity Log Longevity"
-msgstr "ความยืนนานของการจดบัทึกกิจกรรม"
-
-#: src/ui-gtk3/ghb.ui:8355
-msgid "Scale down High Definition previews"
-msgstr "สเกลตัวอย่างที่มีความละเอียดสูงให้ลดลง"
-
-#: src/ui-gtk3/ghb.ui:8372
-msgid "Automatically Scan DVD when loaded"
-msgstr "อ่าน DVD อัตโนมัติเมื่อถูกโหลด"
-
-#: src/ui-gtk3/ghb.ui:8376
-msgid "Scans the DVD whenever a new disc is loaded"
-msgstr "อ่าน DVD เมื่อใดก็ตามที่ดิสก์ใหม่ถูกโหลด"
-
-#: src/ui-gtk3/ghb.ui:8414
-msgid "Activity Window Font Size"
-msgstr ""
-
-#: src/ui-gtk3/ghb.ui:8431
+#: src/ui/ghb.ui:5518
 msgid "Use the same settings for all titles in a batch"
 msgstr ""
 
-#: src/ui-gtk3/ghb.ui:8435
+#: src/ui/ghb.ui:5520
 msgid ""
 "When checked, every title will use the same settings when adding a\n"
 "batch of titles to the queue.\n"
@@ -1979,262 +1737,374 @@ msgid ""
 "Uncheck this if you want to allow changing each title's settings independently."
 msgstr ""
 
-#: src/ui-gtk3/ghb.ui:8452
+#: src/ui/ghb.ui:5530
 msgid "Show preview image in Summary tab"
 msgstr ""
 
-#: src/ui-gtk3/ghb.ui:8458
+#: src/ui/ghb.ui:5533
 msgid ""
 "Uncheck this if you want to hide the video preview image on the Summary tab "
 "for privacy reasons."
 msgstr ""
 
-#: src/ui-gtk3/ghb.ui:8481
-msgid "Allow Tweaks"
-msgstr "อนุญาตการปรับแต่ง"
+#: src/ui/ghb.ui:5542
+msgid "Excluded File Extensions:"
+msgstr ""
 
-#: src/ui-gtk3/ghb.ui:8497
-msgid "Allow HandBrake For Dummies"
-msgstr "อนุญาต HandBrake For Dummies"
+#: src/ui/ghb.ui:5551
+msgid ""
+"The following file extensions will be ignored when scanning a folder. The "
+"list is case insensitive."
+msgstr ""
 
-#: src/ui-gtk3/ghb.ui:8519
+#: src/ui/ghb.ui:5561
+msgctxt "Queue tab in Preferences window"
+msgid "Queue"
+msgstr "คิว"
+
+#: src/ui/ghb.ui:5574
+msgid "Pause queue if disk space is lower than:"
+msgstr ""
+
+#: src/ui/ghb.ui:5590
+msgid "Disk Free Space Limit"
+msgstr ""
+
+#: src/ui/ghb.ui:5598 src/queuehandler.c:803 src/queuehandler.c:1293
+msgid "GB"
+msgstr ""
+
+#: src/ui/ghb.ui:5608
+msgid "Clear completed jobs after an encode completes"
+msgstr ""
+
+#: src/ui/ghb.ui:5610
+msgid ""
+"By default, completed jobs remain in the queue and are marked as complete.\n"
+"  Check this if you want the queue to clean itself up by deleting completed jobs."
+msgstr ""
+
+#: src/ui/ghb.ui:5618
+msgid "Power Saving"
+msgstr ""
+
+#: src/ui/ghb.ui:5632
+msgid "Pause encoding when in Power Saver mode"
+msgstr ""
+
+#: src/ui/ghb.ui:5636
+msgid ""
+"If checked, encoding will be paused when the device\n"
+"enters Power Saver mode. Encoding will resume when\n"
+"Power Saver mode is disabled."
+msgstr ""
+
+#: src/ui/ghb.ui:5644
+msgid "Pause encoding when on battery power"
+msgstr ""
+
+#: src/ui/ghb.ui:5648
+msgid ""
+"If checked, encoding will be paused when charger is\n"
+"unplugged. Encoding will resume when reconnected to\n"
+"a mains power source."
+msgstr ""
+
+#: src/ui/ghb.ui:5656
+msgid "Pause encoding when battery is low"
+msgstr ""
+
+#: src/ui/ghb.ui:5660
+msgid ""
+"If checked, encoding will be paused when the battery\n"
+"level is low. Encoding will resume when the\n"
+"battery is charged."
+msgstr ""
+
+#: src/ui/ghb.ui:5672
+msgid "When Done"
+msgstr ""
+
+#: src/ui/ghb.ui:5684
+msgid "Default action when queue is completed:"
+msgstr ""
+
+#: src/ui/ghb.ui:5697
+msgid "Show notification when queue is completed"
+msgstr ""
+
+#: src/ui/ghb.ui:5705
+msgid "Show notification when each item is completed"
+msgstr ""
+
+#: src/ui/ghb.ui:5717
 msgid "Advanced"
 msgstr "ขั้นสูง"
 
-#: src/ui-gtk3/ghb.ui:8536
+#: src/ui/ghb.ui:5733
+msgid "Set a custom directory for Handbrake temporary files"
+msgstr ""
+
+#: src/ui/ghb.ui:5735 src/ui/ghb.ui:5751
+msgid ""
+"Temporary files that HandBrake creates will be placed under this directory.\n"
+"\n"
+"  Changing this setting will require restarting HandBrake.\n"
+"\n"
+"  This setting overrides the TEMP environment variable that is normally used to define this directory.\n"
+"\n"
+"  Flatpak users may need to set this for certain workflows to work properly. The default size of the TEMP directory in a flatpak sandbox is 1/2 physical memory size and may be too small for things like the 2-pass stats file."
+msgstr ""
+
+#: src/ui/ghb.ui:5760
+msgid "Temp Directory"
+msgstr ""
+
+#: src/ui/ghb.ui:5783
+msgid "Constant Quality fractional granularity"
+msgstr ""
+
+#: src/ui/ghb.ui:5795
+msgid "Use dvdnav (instead of libdvdread)"
+msgstr "ใช้ dvdnav (แทน libdvdread)"
+
+#: src/ui/ghb.ui:5813
+msgid "Put individual encode logs in same location as movie"
+msgstr "วางบันทึกกิจกรรมการเข้ารหัสรายตัว ในที่ตั้งเดียวกับภาพยนตร์"
+
+#: src/ui/ghb.ui:5833
+msgid "Activity Log Verbosity Level"
+msgstr "ระดับความมากของการจดบันทึกกิจกรรม"
+
+#: src/ui/ghb.ui:5852
+msgid "Activity Log Longevity"
+msgstr "ความยืนนานของการจดบัทึกกิจกรรม"
+
+#: src/ui/ghb.ui:5865
+msgid "Scale down High Definition previews"
+msgstr "สเกลตัวอย่างที่มีความละเอียดสูงให้ลดลง"
+
+#: src/ui/ghb.ui:5877
+msgid "Automatically Scan DVD when loaded"
+msgstr "อ่าน DVD อัตโนมัติเมื่อถูกโหลด"
+
+#: src/ui/ghb.ui:5879
+msgid "Scans the DVD whenever a new disc is loaded"
+msgstr "อ่าน DVD เมื่อใดก็ตามที่ดิสก์ใหม่ถูกโหลด"
+
+#: src/ui/ghb.ui:5906
+msgid "Activity Window Font Size"
+msgstr ""
+
+#: src/ui/ghb.ui:5924
+msgid "Allow Tweaks"
+msgstr "อนุญาตการปรับแต่ง"
+
+#: src/ui/ghb.ui:5937
+msgid "Allow HandBrake For Dummies"
+msgstr "อนุญาต HandBrake For Dummies"
+
+#: src/ui/ghb.ui:5961
 msgid "Rename Preset"
 msgstr ""
 
-#: src/ui-gtk3/ghb.ui:8598
-msgid "<span size=\"x-large\">Rename Preset</span>"
-msgstr ""
-
-#: src/ui-gtk3/ghb.ui:8618
-msgid "Name:"
-msgstr ""
-
-#: src/ui-gtk3/ghb.ui:8675 src/ui-gtk3/ghb.ui:8948
-msgid "<b>Description</b>"
-msgstr "<b>คำบรรยาย</b>"
-
-#: src/ui-gtk3/ghb.ui:8693
-msgid "Save Preset"
-msgstr ""
-
-#: src/ui-gtk3/ghb.ui:8761
-msgid "Category:"
-msgstr ""
-
-#: src/ui-gtk3/ghb.ui:8776
-msgid "Set the category that this preset will be shown under."
-msgstr ""
-
-#: src/ui-gtk3/ghb.ui:8792
-msgid "Category Name:"
-msgstr ""
-
-#: src/ui-gtk3/ghb.ui:8825
+#: src/ui/ghb.ui:6005 src/ui/ghb.ui:6139
 msgid "Preset Name:"
 msgstr "ชื่อค่าสำเร็จรูป:"
 
-#: src/ui-gtk3/ghb.ui:8859
+#: src/ui/ghb.ui:6051
+msgid "New Preset"
+msgstr ""
+
+#: src/ui/ghb.ui:6094
+msgid "Category:"
+msgstr ""
+
+#: src/ui/ghb.ui:6104
+msgid "Set the category that this preset will be shown under."
+msgstr ""
+
+#: src/ui/ghb.ui:6115
+msgid "Category Name:"
+msgstr ""
+
+#: src/ui/ghb.ui:6164
 msgid "Default Preset"
 msgstr ""
 
-#: src/ui-gtk3/ghb.ui:8864
+#: src/ui/ghb.ui:6166
 msgid "Make this the default Preset when HandBrake starts"
 msgstr ""
 
-#: src/ui-gtk3/ghb.ui:8890
-msgid "<b>Dimensions</b>"
-msgstr ""
-
-#: src/ui-gtk3/ghb.ui:8971
+#: src/ui/ghb.ui:6205
 msgid "HandBrake Preview"
 msgstr ""
 
-#: src/ui-gtk3/ghb.ui:9051
+#: src/ui/ghb.ui:6273
 msgid "Select preview frames."
 msgstr "เลือกเฟรมดูตัวอย่าง"
 
-#: src/ui-gtk3/ghb.ui:9073
+#: src/ui/ghb.ui:6288 src/preview.c:167
 msgid ""
 "Encode and play a short sequence of video starting from the current preview "
 "position."
 msgstr "เข้ารหัสและเล่นช่วงสั้นๆของวิดีโอเริ่มจากตำแหน่งตัวอย่างปัจจุบัน"
 
-#: src/ui-gtk3/ghb.ui:9129
+#: src/ui/ghb.ui:6301
+msgid "Preview Video Position"
+msgstr ""
+
+#: src/ui/ghb.ui:6314
+msgid "Preview Encode Progress"
+msgstr ""
+
+#: src/ui/ghb.ui:6323
 msgid "Click to toggle full screen mode"
 msgstr ""
 
-#: src/ui-gtk3/ghb.ui:9165
+#: src/ui/ghb.ui:6338
 msgid "<b>Duration:</b>"
 msgstr "<b>ระยะเวลา:</b>"
 
-#: src/ui-gtk3/ghb.ui:9177
+#: src/ui/ghb.ui:6346
 msgid "Set the duration of the live preview in seconds."
 msgstr "กำหนดระยะเวลาของตัวอย่างสดเป็นวินาที"
 
-#: src/ui-gtk3/ghb.ui:9193
-msgid "Show Crop"
-msgstr "แสดงการขลิบ"
-
-#: src/ui-gtk3/ghb.ui:9197
-msgid "Show Cropped area of the preview"
-msgstr "แสดงพื้นที่ที่ถูกขลิบของตัวอย่าง"
-
-#: src/ui-gtk3/ghb.ui:9208
+#: src/ui/ghb.ui:6356
 msgid "Source Resolution"
 msgstr ""
 
-#: src/ui-gtk3/ghb.ui:9212
+#: src/ui/ghb.ui:6359
 msgid "Reset preview window to the source video's resolution"
 msgstr ""
 
-#: src/ui-gtk3/ghb.ui:9257 src/subtitlehandler.c:1719
-msgid "Edit Subtitles"
+#: src/ui/ghb-chapter-row.ui:38
+msgid "Chapter Title"
 msgstr ""
 
-#: src/ui-gtk3/ghb.ui:9312
-msgid "Import SRT"
-msgstr "นำเข้า SRT"
-
-#: src/ui-gtk3/ghb.ui:9317
-msgid "Enable settings to import an SRT subtitle file"
-msgstr "ใช้งานการตั้งค่าเพื่อนำเข้าไฟล์ศัพท์บรรยายชนิด SRT"
-
-#: src/ui-gtk3/ghb.ui:9328
-msgid "Import SSA"
+#: src/ui/ghb-file-button.ui:23 src/ghb-file-button.c:293
+msgid "(None)"
 msgstr ""
 
-#: src/ui-gtk3/ghb.ui:9333
-msgid "Enable settings to import an SSA subtitle file"
+#: src/ui/ghb-queue-row.ui:17 src/ghb-queue-row.c:265 src/ghb-queue-row.c:281
+msgid "Pending Queue Item"
 msgstr ""
 
-#: src/ui-gtk3/ghb.ui:9345
-msgid "Embedded Subtitle List"
-msgstr "รายการศัพท์บรรยายที่ถูกฝัง"
+#: src/ui/ghb-queue-row.ui:31
+msgid "Delete this item"
+msgstr ""
 
-#: src/ui-gtk3/ghb.ui:9350
-msgid "Enable settings to select embedded subtitles"
-msgstr "ใช้งานการตั้งค่าเพื่อเลือกศัพท์บรรยายที่ถูกฝัง"
+#: src/ui/ghb-queue-row.ui:52
+msgid "Encode Progress"
+msgstr ""
 
-#: src/ui-gtk3/ghb.ui:9377 src/ui-gtk3/ghb.ui:9725
-msgid "Source Track"
-msgstr "แทร็คแหล่ง"
+#. Audio DRC Label
+#: src/audiohandler.c:419 src/audiohandler.c:764 src/audiohandler.c:1175
+#: src/audiohandler.c:1929 src/callbacks.c:5465 src/hb-backend.c:180
+#: src/hb-backend.c:193 src/hb-backend.c:205 src/hb-backend.c:230
+#: src/hb-backend.c:301 src/hb-backend.c:313 src/hb-backend.c:325
+#: src/hb-backend.c:386
+#, c-format
+msgid "Off"
+msgstr "ปิด"
 
-#: src/ui-gtk3/ghb.ui:9392
-msgid "List of subtitle tracks available from your source."
-msgstr "รายการแทร็คศัพท์บรรยายที่มีจากแหล่งของคุณ"
+#: src/audiohandler.c:431 src/audiohandler.c:760 src/audiohandler.c:1245
+#, c-format
+msgid "%ddB"
+msgstr "%ddB"
 
-#: src/ui-gtk3/ghb.ui:9406 src/ui-gtk3/ghb.ui:9755
-msgid "Track Name:"
-msgstr "ชื่อแทร็ค:"
+#: src/audiohandler.c:736
+msgid "Quality: "
+msgstr "คุณภาพ:"
 
-#: src/ui-gtk3/ghb.ui:9422
+#: src/audiohandler.c:743
+#, c-format
+msgid "Bitrate: %dkbps\n"
+msgstr ""
+
+#: src/audiohandler.c:755
+#, c-format
+msgid "%.4gkHz"
+msgstr "%.4gkHz"
+
+#: src/audiohandler.c:770
+#, c-format
+msgid "<small>%d - %s (%.4gkHz)</small>"
+msgstr "<small>%d - %s (%.4gkHz)</small>"
+
+#: src/audiohandler.c:775
+#, c-format
+msgid "Bitrate: %.4gkbps"
+msgstr "อัตราบิต: %.4gkbps"
+
+#: src/audiohandler.c:781
+#, c-format
+msgid "<small>Passthrough</small>"
+msgstr "<small>ส่งผ่าน</small>"
+
+#: src/audiohandler.c:790
+#, c-format
 msgid ""
-"Set the subtitle track name.\n"
-"\n"
-"Players may use this in the subtitle selection list."
+"%sGain: %s\n"
+"DRC: %s\n"
+"Track Name: %s"
 msgstr ""
 
-#: src/ui-gtk3/ghb.ui:9455
-msgid "Language"
-msgstr "ภาษา"
-
-#: src/ui-gtk3/ghb.ui:9469
-msgid "Character Code"
-msgstr "รหัสอักขระ"
-
-#: src/ui-gtk3/ghb.ui:9483
-msgid "File:"
-msgstr "ไฟล์:"
-
-#: src/ui-gtk3/ghb.ui:9498
-msgid "Offset (ms)"
-msgstr "ค่าชดเชย (ms)"
-
-#: src/ui-gtk3/ghb.ui:9513
+#: src/audiohandler.c:795
+#, c-format
 msgid ""
-"Set the language of this subtitle.\n"
-"This value will be used by players in subtitle menus."
-msgstr ""
-"กำหนดภาษาของศัพท์บรรยายนี้\n"
-"ค่านี้จะถูกใช้โดยเครื่องเล่นในเมนูศัพท์บรรยาย"
-
-#: src/ui-gtk3/ghb.ui:9531
-msgid ""
-"Set the character code used by the SRT file you are importing.\n"
-"\n"
-"SRTs come in all flavours of character sets.\n"
-"We translate the character set to UTF-8.\n"
-"The source's character code is needed in order to perform this translation."
-msgstr ""
-"กำหนดรหัสอักขระที่ใช้โดยไฟล์ SRT ที่คุณกำลังนำเข้า\n"
-"\n"
-"SRTs มาในรูปแบบทั้งหมดของชุดอักขระ\n"
-"เราแปลชุดอักขระเป็น UTF-8\n"
-"รหัสอักขระของแหล่งจึงจำเป็นเพื่อที่จะกระทำการแปลนี้"
-
-#: src/ui-gtk3/ghb.ui:9555
-msgid "Select the SRT file to import."
-msgstr "เลือกไฟล์ SRT เพื่อนำเข้า"
-
-#: src/ui-gtk3/ghb.ui:9558
-msgid "Import File"
+"%sGain: %s\n"
+"DRC: %s"
 msgstr ""
 
-#: src/ui-gtk3/ghb.ui:9576
-msgid "Adjust the offset in milliseconds between video and SRT timestamps"
-msgstr "ปรับค่าชดเชยเป็นมิลลิวินาทีระหว่างค่าเวลาของวิดีโอและ SRT"
-
-#: src/ui-gtk3/ghb.ui:9600 src/subtitlehandler.c:119
-msgid "Forced Subtitles Only"
-msgstr "เฉพาะศัพท์บรรยายที่ถูกบังคับ"
-
-#: src/ui-gtk3/ghb.ui:9621
-msgid "Burn into video"
-msgstr "ประทับลงในวิดีโอ"
-
-#: src/ui-gtk3/ghb.ui:9626
-msgid ""
-"Render the subtitle over the video.\n"
-"The subtitle will be part of the video and can not be disabled."
+#: src/audiohandler.c:1401
+msgid "Add Audio Track"
 msgstr ""
-"แสดงผลศัพท์บรรยายบนวิดีโอ\n"
-"ศัพท์บรรยายจะเป็นส่วนหนึ่งของวิดีโอและไม่สามารถปิดการใช้งานได้"
 
-#: src/ui-gtk3/ghb.ui:9638
-msgid "Set Default Track"
-msgstr "กำหนดแทร็คตั้งต้น"
-
-#: src/ui-gtk3/ghb.ui:9667 src/audiohandler.c:1473
+#: src/audiohandler.c:1493
 msgid "Edit Audio Track"
 msgstr ""
 
-#: src/ui-gtk3/ghb.ui:9741
-msgid "List of audio tracks available from your source."
-msgstr "รายการแทร็คเสียงที่มีจากแหล่งของคุณ"
+#: src/audiohandler.c:1766
+msgid "Set the audio codec to encode this track with."
+msgstr "กำหนด codec เสียงเพื่อเข้ารหัสกับแทร็คนี้"
 
-#: src/ui-gtk3/ghb.ui:9771
+#: src/audiohandler.c:1780
+msgid "Bitrate"
+msgstr "อัตราบิต"
+
+#: src/audiohandler.c:1798
+msgid "Set the bitrate to encode this track with."
+msgstr "กำหนดอัตราบิตเพื่อเข้ารหัสกับแทร็คนี้"
+
+#: src/audiohandler.c:1823
 msgid ""
-"Set the audio track name.\n"
-"\n"
-"Players may use this in the audio selection list."
+"<b>Audio Quality:</b>\n"
+"For encoders that support it, adjust the quality of the output."
 msgstr ""
-"กำหนดชื่อแทร็คเสียง\n"
-"\n"
-"เครื่องเล่นอาจใช้สิ่งนี้ในรายการเพื่อเลือกเสียง"
+"<b>คุณภาพเสียง:</b>\n"
+"สำหรับตัวเข้ารหัสที่รองรับมัน, ปรับคุณภาพของผลลัพธ์"
 
-#: src/ui-gtk3/ghb.ui:9834
-msgid "Mix"
-msgstr "ผสม"
+#: src/audiohandler.c:1850
+msgid "Set the mixdown of the output audio track."
+msgstr "กำหนดการผสมเสียงของแทร็คเสียงผลลัพธ์"
 
-#: src/ui-gtk3/ghb.ui:9847
-msgid "Sample Rate"
-msgstr "อัตราสุ่มฯ"
+#: src/audiohandler.c:1863
+msgid "Set the sample rate of the output audio track."
+msgstr "กำหนดอัตราสุ่มฯของแทร็คเสียงผลลัพธ์"
 
-#: src/ui-gtk3/ghb.ui:9877 src/ui-gtk3/ghb.ui:10116 src/audiohandler.c:1931
+#: src/audiohandler.c:1884
+msgid ""
+"<b>Audio Gain:</b> Adjust the amplification or attenuation of the output "
+"audio track."
+msgstr "<b>ฟื้นค่าเสียง:</b> ปรับการขยายเสียงหรือลดเสียงของแทร็คเสียงผลลัพธ์"
+
+#. Audio Gain Label
+#: src/audiohandler.c:1895
+msgid "0dB"
+msgstr "0dB"
+
+#: src/audiohandler.c:1915
 msgid ""
 "<b>Dynamic Range Compression:</b> Adjust the dynamic range of the output audio track.\n"
 "\n"
@@ -2246,839 +2116,708 @@ msgstr ""
 "สำหรับเสียงแหล่งที่มีช่วงจลน์กว้าง (มีการดังมากและเบามาก),\n"
 "DRC อนุญาตให้คุณ 'บีบอัด' ช่วง โดยการทำให้เสียงที่ดังเบาลง และทำให้เสียงที่เบาดังขึ้น"
 
-#: src/ui-gtk3/ghb.ui:9898 src/audiohandler.c:1782
-msgid "Set the audio codec to encode this track with."
-msgstr "กำหนด codec เสียงเพื่อเข้ารหัสกับแทร็คนี้"
-
-#: src/ui-gtk3/ghb.ui:9920 src/audiohandler.c:1796
-msgid "Bitrate"
-msgstr "อัตราบิต"
-
-#: src/ui-gtk3/ghb.ui:9925
-msgid "Enable bitrate setting"
-msgstr "ใช้งานการตั้งค่าอัตราบิต"
-
-#: src/ui-gtk3/ghb.ui:9935 src/audiohandler.c:1801
-msgid "Quality"
-msgstr "คุณภาพ"
-
-#: src/ui-gtk3/ghb.ui:9940
-msgid "Enable quality setting"
-msgstr "ใช้งานการตั้งค่าคุณภาพ"
-
-#: src/ui-gtk3/ghb.ui:9961 src/audiohandler.c:1815
-msgid "Set the bitrate to encode this track with."
-msgstr "กำหนดอัตราบิตเพื่อเข้ารหัสกับแทร็คนี้"
-
-#: src/ui-gtk3/ghb.ui:9981
-msgid ""
-"<b>Quality:</b> For output codec's that support it, adjust the quality of "
-"the output."
-msgstr "<b>คุณภาพ:</b> สำหรับ codec ผลลัพธ์ที่รองรับมัน, ปรับคุณภาพของผลลัพธ์"
-
-#: src/ui-gtk3/ghb.ui:10003
-msgid "00.0"
-msgstr "00.0"
-
-#: src/ui-gtk3/ghb.ui:10030 src/audiohandler.c:1867
-msgid "Set the mixdown of the output audio track."
-msgstr "กำหนดการผสมเสียงของแทร็คเสียงผลลัพธ์"
-
-#: src/ui-gtk3/ghb.ui:10046 src/audiohandler.c:1880
-msgid "Set the sample rate of the output audio track."
-msgstr "กำหนดอัตราสุ่มฯของแทร็คเสียงผลลัพธ์"
-
-#: src/ui-gtk3/ghb.ui:10069 src/audiohandler.c:1901
-msgid ""
-"<b>Audio Gain:</b> Adjust the amplification or attenuation of the output "
-"audio track."
-msgstr "<b>ฟื้นค่าเสียง:</b> ปรับการขยายเสียงหรือลดเสียงของแทร็คเสียงผลลัพธ์"
-
-#. Audio Gain Label
-#: src/ui-gtk3/ghb.ui:10087 src/audiohandler.c:1911
-msgid "0dB"
-msgstr "0dB"
-
-#. Audio DRC Label
-#: src/ui-gtk3/ghb.ui:10134 src/audiohandler.c:427 src/audiohandler.c:765
-#: src/audiohandler.c:1168 src/audiohandler.c:1945 src/callbacks.c:5269
-#: src/hb-backend.c:187 src/hb-backend.c:200 src/hb-backend.c:212
-#: src/hb-backend.c:237 src/hb-backend.c:308 src/hb-backend.c:320
-#: src/hb-backend.c:332 src/hb-backend.c:393
-#, c-format
-msgid "Off"
-msgstr "ปิด"
-
-#: src/audiohandler.c:439 src/audiohandler.c:761 src/audiohandler.c:1236
-#, c-format
-msgid "%ddB"
-msgstr "%ddB"
-
-#: src/audiohandler.c:737
-msgid "Quality: "
-msgstr "คุณภาพ:"
-
-#: src/audiohandler.c:744
-#, c-format
-msgid "Bitrate: %dkbps\n"
-msgstr ""
-
-#: src/audiohandler.c:756
-#, c-format
-msgid "%.4gkHz"
-msgstr "%.4gkHz"
-
-#: src/audiohandler.c:771
-#, c-format
-msgid "<small>%d - %s (%.4gkHz)</small>"
-msgstr "<small>%d - %s (%.4gkHz)</small>"
-
-#: src/audiohandler.c:776
-#, c-format
-msgid "Bitrate: %.4gkbps"
-msgstr "อัตราบิต: %.4gkbps"
-
-#: src/audiohandler.c:782
-#, c-format
-msgid "<small>Passthrough</small>"
-msgstr "<small>ส่งผ่าน</small>"
-
-#: src/audiohandler.c:791
-#, c-format
-msgid ""
-"%sGain: %s\n"
-"DRC: %s\n"
-"Track Name: %s"
-msgstr ""
-
-#: src/audiohandler.c:796
-#, c-format
-msgid ""
-"%sGain: %s\n"
-"DRC: %s"
-msgstr ""
-
-#: src/audiohandler.c:1391
-msgid "Add Audio Track"
-msgstr ""
-
-#: src/audiohandler.c:1760
-msgid ""
-"Add an audio encoder.\n"
-"Each selected source track will be encoded with all selected encoders."
-msgstr ""
-"เพิ่มตัวเข้ารหัสเสียง\n"
-"แต่ละแทร็คแหล่งที่ถูกเลือก จะถูกเข้ารหัสด้วยตัวเข้ารหัสที่เลือกทั้งหมด"
-
-#: src/audiohandler.c:1840
-msgid ""
-"<b>Audio Quality:</b>\n"
-"For encoders that support it, adjust the quality of the output."
-msgstr ""
-"<b>คุณภาพเสียง:</b>\n"
-"สำหรับตัวเข้ารหัสที่รองรับมัน, ปรับคุณภาพของผลลัพธ์"
-
-#: src/audiohandler.c:1960
+#: src/audiohandler.c:1946
 msgid "Remove this audio encoder"
 msgstr "เอาตัวเข้ารหัสเสียงนี้ออก"
 
-#: src/callbacks.c:542 src/callbacks.c:2014
-msgid "Closing HandBrake will terminate encoding.\n"
-msgstr "การปิด HandBrake จะยุติการเข้ารหัส\n"
+#: src/callbacks.c:296
+msgid "An encode is in progress."
+msgstr ""
 
-#: src/callbacks.c:1178 src/callbacks.c:1189 src/callbacks.c:1662
+#: src/callbacks.c:1124 src/callbacks.c:1135 src/callbacks.c:1785
 msgid "Not Selected"
 msgstr "ไม่ถูกเลือก"
 
-#: src/callbacks.c:1187
+#: src/callbacks.c:1133
 msgid "Detected DVD devices:"
 msgstr "อุปกรณ์ DVD ที่ตรวจพบ:"
 
 #. This needs to be in scanning and working since scanning
 #. happens fast enough that it can be missed
-#: src/callbacks.c:1514 src/callbacks.c:4393
+#: src/callbacks.c:1460 src/callbacks.c:4578
 msgid "Scanning ..."
 msgstr "กำลังอ่าน ..."
 
-#: src/callbacks.c:1550 src/callbacks.c:1551
+#: src/callbacks.c:1492 src/callbacks.c:1493 src/callbacks.c:1512
+#: src/callbacks.c:1513
 msgid "Stop Scan"
 msgstr "หยุดอ่าน"
 
-#: src/callbacks.c:1723
+#: src/callbacks.c:1866
+msgid "Open Source Directory"
+msgstr ""
+
+#: src/callbacks.c:1869 src/chapters.c:484 src/ghb-file-button.c:222
+#: src/presets.c:2113 src/queuehandler.c:1479
+msgid "_Open"
+msgstr ""
+
+#: src/callbacks.c:1870 src/callbacks.c:2136 src/chapters.c:456
+#: src/chapters.c:485 src/presets.c:2114 src/presets.c:2230
+#: src/queuehandler.c:1392 src/queuehandler.c:1480
+msgid "_Cancel"
+msgstr ""
+
+#: src/callbacks.c:1877
+msgid "Recursively scan directories"
+msgstr ""
+
+#: src/callbacks.c:1889
 msgid "Single Title"
 msgstr ""
 
-#: src/callbacks.c:2115 src/callbacks.c:2259
+#: src/callbacks.c:2247 src/callbacks.c:2391
 msgid "FPS"
 msgstr ""
 
-#: src/callbacks.c:2119
+#: src/callbacks.c:2251
 #, c-format
 msgid "Dolby Vision %d.%d"
 msgstr ""
 
-#: src/callbacks.c:2123 src/callbacks.c:2126
+#: src/callbacks.c:2255 src/callbacks.c:2258
 msgid "HDR10+"
 msgstr ""
 
-#: src/callbacks.c:2128
+#: src/callbacks.c:2260
 msgid "HDR10"
 msgstr ""
 
-#: src/callbacks.c:2130
+#: src/callbacks.c:2262
 msgid "HDR"
 msgstr ""
 
-#: src/callbacks.c:2132
+#: src/callbacks.c:2264
 msgid "SDR"
 msgstr ""
 
 #. TRANSLATORS: This is the bit depth of the video
-#: src/callbacks.c:2140
+#: src/callbacks.c:2272
 #, c-format
 msgid "%d-bit"
 msgstr ""
 
-#: src/callbacks.c:2162
+#: src/callbacks.c:2294
 msgid "Audio Track"
 msgid_plural "Audio Tracks"
 msgstr[0] ""
 
-#: src/callbacks.c:2165
+#: src/callbacks.c:2297
 msgid "Subtitle Track"
 msgid_plural "Subtitle Tracks"
 msgstr[0] ""
 
-#: src/callbacks.c:2263
+#: src/callbacks.c:2395
 msgid "CFR"
 msgstr ""
 
-#: src/callbacks.c:2267
+#: src/callbacks.c:2399
 msgid "PFR"
 msgstr ""
 
-#: src/callbacks.c:2271
+#: src/callbacks.c:2403
 msgid "VFR"
 msgstr ""
 
-#: src/callbacks.c:2313
+#: src/callbacks.c:2445
 #, c-format
 msgid "+ %d more audio track"
 msgid_plural "+ %d more audio tracks"
 msgstr[0] ""
 
-#: src/callbacks.c:2347 src/callbacks.c:2379 src/queuehandler.c:650
-#: src/queuehandler.c:687
+#: src/callbacks.c:2476 src/queuehandler.c:592 src/queuehandler.c:1027
+#: src/subtitlehandler.c:415 src/subtitlehandler.c:1292
+msgid "Foreign Audio Scan"
+msgstr ""
+
+#: src/callbacks.c:2479 src/callbacks.c:2511 src/queuehandler.c:595
+#: src/queuehandler.c:632
 #, c-format
 msgid ", Forced Only"
 msgstr ""
 
-#: src/callbacks.c:2351 src/callbacks.c:2383 src/queuehandler.c:654
-#: src/queuehandler.c:691
+#: src/callbacks.c:2483 src/callbacks.c:2515 src/queuehandler.c:599
+#: src/queuehandler.c:636
 #, c-format
 msgid ", Burned"
 msgstr ""
 
-#: src/callbacks.c:2355 src/callbacks.c:2387 src/queuehandler.c:658
-#: src/queuehandler.c:695
+#: src/callbacks.c:2487 src/callbacks.c:2519 src/queuehandler.c:603
+#: src/queuehandler.c:640
 #, c-format
 msgid ", Default"
 msgstr ""
 
-#: src/callbacks.c:2393
+#: src/callbacks.c:2525
 #, c-format
 msgid "+ %d more subtitle track"
 msgid_plural "+ %d more subtitle tracks"
 msgstr[0] ""
 
-#: src/callbacks.c:2548
+#: src/callbacks.c:2680
 msgid "storage"
 msgstr ""
 
-#: src/callbacks.c:2549
+#: src/callbacks.c:2681
 msgid "display"
 msgstr ""
 
-#: src/callbacks.c:2550
+#: src/callbacks.c:2682
 msgid "Pixel Aspect Ratio"
 msgstr ""
 
-#: src/callbacks.c:2551
+#: src/callbacks.c:2683
 msgid "Display Aspect Ratio"
 msgstr ""
 
-#: src/callbacks.c:2688 src/hb-backend.c:2257 src/hb-backend.c:2377
-#: src/hb-backend.c:2389
+#: src/callbacks.c:2818 src/hb-backend.c:2206 src/hb-backend.c:2327
+#: src/hb-backend.c:2339
 msgid "No Title Found"
 msgstr "ไม่พบหัวเรื่อง"
 
-#: src/callbacks.c:2689
+#: src/callbacks.c:2819
 msgid "New Video"
 msgstr ""
 
-#: src/callbacks.c:3698 src/callbacks.c:3711 src/callbacks.c:3733
-#: src/callbacks.c:3771
-#, c-format
-msgid ""
-"%s\n"
-"\n"
-"%s in %d seconds ..."
+#: src/callbacks.c:3815
+msgid "Temp Directory Changed"
 msgstr ""
-"%s\n"
-"\n"
-"%s ใน %d วินาที ..."
 
-#: src/callbacks.c:3868 src/callbacks.c:3919
+#: src/callbacks.c:3816
+msgid "You must restart HandBrake now."
+msgstr ""
+
+#: src/callbacks.c:3843 src/callbacks.c:3853 src/callbacks.c:3871
+#: src/callbacks.c:3920
 #, c-format
-msgid "%sYour movie will be lost if you don't continue encoding."
-msgstr "%sภาพยนตร์ของคุณจะสูญหาย ถ้าคุณไม่ทำการเข้ารหัสต่อ"
+msgid "%s in %d seconds…"
+msgstr ""
 
-#: src/callbacks.c:3871 src/callbacks.c:3922 src/queuehandler.c:1824
+#: src/callbacks.c:4097
+msgid "Stop Encoding?"
+msgstr ""
+
+#: src/callbacks.c:4098 src/callbacks.c:4123 src/queuehandler.c:1702
+msgid "Your movie will be lost if you don't continue encoding."
+msgstr ""
+
+#: src/callbacks.c:4099 src/queuehandler.c:1636
 msgid "Cancel Current and Stop"
 msgstr "ยกเลิกรายการปัจจุบัน และหยุด"
 
-#: src/callbacks.c:3872
+#: src/callbacks.c:4099
 msgid "Cancel Current, Start Next"
 msgstr "ยกเลิกรายการปัจจุบัน, เริ่มรายการถัดไป"
 
-#: src/callbacks.c:3873
-msgid "Finish Current, then Stop"
-msgstr "เสร็จรายการปัจจุบัน, แล้วจึงหยุด"
+#: src/callbacks.c:4100
+msgid "Finish Current, Start Next"
+msgstr ""
 
-#: src/callbacks.c:3874 src/callbacks.c:3923
+#: src/callbacks.c:4100 src/callbacks.c:4124 src/queuehandler.c:1703
 msgid "Continue Encoding"
 msgstr "เข้ารหัสต่อไป"
 
-#: src/callbacks.c:4106
+#: src/callbacks.c:4122
+msgid "Quit HandBrake?"
+msgstr ""
+
+#: src/callbacks.c:4124
+msgid "Cancel All and Quit"
+msgstr ""
+
+#: src/callbacks.c:4290
 #, c-format
 msgid "%d encode pending"
-msgstr ""
+msgid_plural "%d encodes pending"
+msgstr[0] ""
 
-#: src/callbacks.c:4110
-#, c-format
-msgid "%d encodes pending"
-msgstr ""
-
-#: src/callbacks.c:4167 src/callbacks.c:4235
+#: src/callbacks.c:4349 src/callbacks.c:4417
 #, c-format
 msgid "job %d of %d, "
 msgstr "งาน %d จาก %d, "
 
-#: src/callbacks.c:4177
+#: src/callbacks.c:4359
 #, c-format
 msgid "pass %d (subtitle scan) of %d, "
 msgstr "ผ่าน %d (อ่านศัพท์บรรยาย) จาก %d, "
 
-#: src/callbacks.c:4182
+#: src/callbacks.c:4364
 #, c-format
 msgid "pass %d of %d, "
 msgstr "ผ่าน %d จาก %d, "
 
-#: src/callbacks.c:4195
+#: src/callbacks.c:4377
 #, c-format
 msgid "Encoding: %s%s%.2f %% (%.2f fps, avg %.2f fps, ETA %02dh%02dm%02ds)"
 msgstr ""
 "การเข้ารหัส: %s%s%.2f %% (%.2f fps, avg %.2f fps, ETA %02dh%02dm%02ds)"
 
-#: src/callbacks.c:4205 src/callbacks.c:4245
+#: src/callbacks.c:4387 src/callbacks.c:4427
 #, c-format
 msgid "Encoding: %s%s%.2f %% (ETA %02dh%02dm%02ds)"
 msgstr "การเข้ารหัส: %s%s%.2f %% (ETA %02dh%02dm%02ds)"
 
-#: src/callbacks.c:4215 src/callbacks.c:4254
+#: src/callbacks.c:4397 src/callbacks.c:4436
 #, c-format
 msgid "Encoding: %s%s%.2f %%"
 msgstr "การเข้ารหัส: %s%s%.2f %%"
 
-#: src/callbacks.c:4241
+#: src/callbacks.c:4423
 #, c-format
 msgid "Searching for start time, "
 msgstr "กำลังค้นหาเวลาเริ่มต้น,"
 
-#: src/callbacks.c:4316
+#: src/callbacks.c:4498
 #, c-format
 msgid "Scanning title %d of %d..."
 msgstr "กำลังอ่านหัวเรื่อง %d จาก %d..."
 
-#: src/callbacks.c:4320
+#: src/callbacks.c:4502
 #, c-format
 msgid "Scanning title %d of %d preview %d..."
 msgstr "กำลังอ่านหัวเรื่อง %d จาก %d ตัวอย่าง %d..."
 
-#: src/callbacks.c:4404
+#: src/callbacks.c:4589
 msgid "Paused"
 msgstr "ถูกพัก"
 
-#: src/callbacks.c:4435
+#: src/callbacks.c:4616
 msgid "Encode Done!"
 msgstr "เข้ารหัสเสร็จแล้ว!"
 
-#: src/callbacks.c:4439
+#: src/callbacks.c:4621
 msgid "Encode Canceled."
 msgstr "การเข้ารหัสถูกยกเลิก"
 
-#: src/callbacks.c:4444
+#: src/callbacks.c:4626
 msgid "Encode Failed."
 msgstr "การเข้ารหัสล้มเหลว"
 
-#: src/callbacks.c:4486
+#: src/callbacks.c:4668
 msgid "Muxing: This may take a while..."
 msgstr "กำลังผสาน: สิ่งนี้อาจใช้เวลาสักพัก..."
 
-#: src/callbacks.c:5286
-msgid "Encode Complete"
-msgstr "เข้ารหัสเสร็จสมบูรณ์"
-
-#: src/callbacks.c:5288
-msgid "Put down that cocktail, Your HandBrake queue is done!"
-msgstr "วางเครื่องดื่มนั่นลง, คิว HandBrake ของคุณเสร็จแล้ว!"
-
-#: src/callbacks.c:5299 src/callbacks.c:5307 src/callbacks.c:5316
+#: src/callbacks.c:5478 src/callbacks.c:5485 src/callbacks.c:5493
 msgid "Your encode is complete."
 msgstr "การเข้ารหัสเสร็จสมบูรณ์"
 
-#: src/callbacks.c:5300
-msgid "Quitting Handbrake"
-msgstr "กำลังออกจาก Handbrake"
+#: src/callbacks.c:5479
+msgid "Quitting HandBrake"
+msgstr ""
 
-#: src/callbacks.c:5308
+#: src/callbacks.c:5486
 msgid "Putting computer to sleep"
 msgstr "กำลังทำให้คอมพิวเตอร์สลีป"
 
-#: src/callbacks.c:5317
+#: src/callbacks.c:5494
 msgid "Shutting down the computer"
 msgstr "กำลังปิดเครื่องคอมพิวเตอร์"
 
 #. Add filters
-#: src/callbacks.c:5446 src/chapters.c:603 src/chapters.c:633
-#: src/presets.c:2078 src/queuehandler.c:1694
+#: src/callbacks.c:5608 src/chapters.c:458 src/chapters.c:487
+#: src/presets.c:2116 src/queuehandler.c:1483
 msgid "All Files"
 msgstr ""
 
-#: src/chapters.c:604 src/chapters.c:634
+#: src/chapters.c:459 src/chapters.c:488
 msgid "Chapters (*.xml)"
 msgstr ""
 
-#: src/hb-backend.c:61 src/hb-backend.c:86
-msgid "First Track Matching Selected Languages"
-msgstr "แทร็คแรกที่ตรงกับภาษาที่เลือก"
+#: src/ghb-file-button.c:72
+msgid "Select a File"
+msgstr ""
 
-#: src/hb-backend.c:62 src/hb-backend.c:87
-msgid "All Tracks Matching Selected Languages"
-msgstr "แทร็คทั้งหมดที่ตรงกับภาษาที่เลือก"
+#: src/ghb-file-button.c:217
+msgid "_Select"
+msgstr ""
 
-#: src/hb-backend.c:73
+#: src/ghb-queue-row.c:260
+msgid "Running Queue Item"
+msgstr ""
+
+#: src/ghb-queue-row.c:269
+msgid "Failed Queue Item"
+msgstr ""
+
+#: src/ghb-queue-row.c:273
+msgid "Cancelled Queue Item"
+msgstr ""
+
+#: src/ghb-queue-row.c:277
+msgid "Completed Queue Item"
+msgstr ""
+
+#: src/hb-backend.c:55 src/hb-backend.c:80
+msgid "First Matching Selected Languages"
+msgstr ""
+
+#: src/hb-backend.c:56 src/hb-backend.c:81
+msgid "All Matching Selected Languages"
+msgstr ""
+
+#: src/hb-backend.c:67
 msgid "Foreign Audio Subtitle Track"
 msgstr ""
 
-#: src/hb-backend.c:74
+#: src/hb-backend.c:68
 msgid "First Selected Track"
 msgstr ""
 
-#: src/hb-backend.c:75
+#: src/hb-backend.c:69
 msgid "Foreign Audio, then First Selected Track"
 msgstr ""
 
-#: src/hb-backend.c:97 src/queuehandler.c:223
+#: src/hb-backend.c:91 src/queuehandler.c:167
 msgid "Chapters:"
 msgstr "ตอน:"
 
-#: src/hb-backend.c:98
+#: src/hb-backend.c:92
 msgid "Seconds:"
 msgstr "วินาที:"
 
-#: src/hb-backend.c:99 src/queuehandler.c:244
+#: src/hb-backend.c:93 src/queuehandler.c:188
 msgid "Frames:"
 msgstr "เฟรม:"
 
-#: src/hb-backend.c:109
+#: src/hb-backend.c:103
 msgid "Do Nothing"
 msgstr "ไม่ต้องทำอะไร"
 
-#: src/hb-backend.c:110
-msgid "Show Notification"
-msgstr "แสดงการแจ้ง"
-
-#: src/hb-backend.c:111
+#: src/hb-backend.c:104
 msgid "Quit Handbrake"
 msgstr "ออกจาก Handbrake"
 
-#: src/hb-backend.c:112
+#: src/hb-backend.c:105
 msgid "Put Computer To Sleep"
 msgstr "ทำให้คอมพิวเตอร์สลีป"
 
-#: src/hb-backend.c:113
+#: src/hb-backend.c:106
 msgid "Shutdown Computer"
 msgstr "ปิดเครื่องคอมพิวเตอร์"
 
-#: src/hb-backend.c:125 src/hb-backend.c:227 src/hb-backend.c:258
-#: src/hb-backend.c:272 src/hb-backend.c:383
+#: src/hb-backend.c:118 src/hb-backend.c:220 src/hb-backend.c:251
+#: src/hb-backend.c:265 src/hb-backend.c:376
 msgid "Custom"
 msgstr "กำหนดเอง"
 
-#: src/hb-backend.c:161
+#: src/hb-backend.c:154
 msgid "Week"
 msgstr "สัปดาห์"
 
-#: src/hb-backend.c:162
+#: src/hb-backend.c:155
 msgid "Month"
 msgstr "เดือน"
 
-#: src/hb-backend.c:163
+#: src/hb-backend.c:156
 msgid "Year"
 msgstr "ปี"
 
-#: src/hb-backend.c:164
+#: src/hb-backend.c:157
 msgid "Immortal"
 msgstr "อมตะ"
 
-#: src/hb-backend.c:188 src/hb-backend.c:4862
+#: src/hb-backend.c:181 src/hb-backend.c:4864
 msgid "Decomb"
 msgstr "Decomb"
 
-#: src/hb-backend.c:189
+#: src/hb-backend.c:182
 msgid "Yadif"
 msgstr ""
 
-#: src/hb-backend.c:190
+#: src/hb-backend.c:183
 msgid "Bwdif"
 msgstr ""
 
-#: src/hb-backend.c:201
+#: src/hb-backend.c:194
 msgid "NLMeans"
 msgstr ""
 
-#: src/hb-backend.c:202
+#: src/hb-backend.c:195
 msgid "HQDN3D"
 msgstr ""
 
-#: src/hb-backend.c:213
+#: src/hb-backend.c:206
 msgid "Unsharp"
 msgstr ""
 
-#: src/hb-backend.c:214
+#: src/hb-backend.c:207
 msgid "Lapsharp"
 msgstr ""
 
-#: src/hb-backend.c:225
+#: src/hb-backend.c:218
 msgid "Conservative"
 msgstr ""
 
-#: src/hb-backend.c:238
+#: src/hb-backend.c:231
 msgid "90°"
 msgstr ""
 
-#: src/hb-backend.c:239
+#: src/hb-backend.c:232
 msgid "180°"
 msgstr ""
 
-#: src/hb-backend.c:240
+#: src/hb-backend.c:233
 msgid "270°"
 msgstr ""
 
-#: src/hb-backend.c:250
+#: src/hb-backend.c:243
 msgid "4320p 8K Ultra HD"
 msgstr ""
 
-#: src/hb-backend.c:251
+#: src/hb-backend.c:244
 msgid "2160p 4K Ultra HD"
 msgstr ""
 
-#: src/hb-backend.c:252
+#: src/hb-backend.c:245
 msgid "1440p 2.5K Quad HD"
 msgstr ""
 
-#: src/hb-backend.c:253
+#: src/hb-backend.c:246
 msgid "1080p Full HD"
 msgstr ""
 
-#: src/hb-backend.c:254
+#: src/hb-backend.c:247
 msgid "720p HD"
 msgstr ""
 
-#: src/hb-backend.c:255
+#: src/hb-backend.c:248
 msgid "576p PAL"
 msgstr ""
 
-#: src/hb-backend.c:256
+#: src/hb-backend.c:249
 msgid "480p NTSC"
 msgstr ""
 
-#: src/hb-backend.c:269
+#: src/hb-backend.c:262
 msgid "Height (Letterbox)"
 msgstr ""
 
-#: src/hb-backend.c:270
+#: src/hb-backend.c:263
 msgid "Width (Pillarbox)"
 msgstr ""
 
-#: src/hb-backend.c:271
+#: src/hb-backend.c:264
 msgid "Width &amp; Height"
 msgstr ""
 
-#: src/hb-backend.c:282
+#: src/hb-backend.c:275
 msgid "Black"
 msgstr ""
 
-#: src/hb-backend.c:283
+#: src/hb-backend.c:276
 msgid "Dark Gray"
 msgstr ""
 
-#: src/hb-backend.c:284
+#: src/hb-backend.c:277
 msgid "Gray"
 msgstr ""
 
-#: src/hb-backend.c:285
+#: src/hb-backend.c:278
 msgid "White"
 msgstr ""
 
-#: src/hb-backend.c:296
+#: src/hb-backend.c:289
 msgid "Spatial"
 msgstr ""
 
-#: src/hb-backend.c:297
+#: src/hb-backend.c:290
 msgid "Temporal"
 msgstr ""
 
-#: src/hb-backend.c:309
+#: src/hb-backend.c:302
 msgid "Fast"
 msgstr "เร็ว"
 
-#: src/hb-backend.c:310
+#: src/hb-backend.c:303
 msgid "Optimal"
 msgstr "เหมาะสม"
 
-#: src/hb-backend.c:321
+#: src/hb-backend.c:314
 msgid "Strict"
 msgstr "เข้มงวด"
 
-#: src/hb-backend.c:322
+#: src/hb-backend.c:315
 msgid "Normal"
 msgstr "ปกติ"
 
-#: src/hb-backend.c:333
+#: src/hb-backend.c:326
 msgid "Simple"
 msgstr "อย่างง่าย"
 
-#: src/hb-backend.c:334
+#: src/hb-backend.c:327
 msgid "Smart"
 msgstr ""
 
-#: src/hb-backend.c:344
+#: src/hb-backend.c:337
 msgid "Diamond"
 msgstr ""
 
-#: src/hb-backend.c:345
+#: src/hb-backend.c:338
 msgid "Hexagon"
 msgstr ""
 
-#: src/hb-backend.c:346
+#: src/hb-backend.c:339
 msgid "Uneven Multi-Hexagon"
 msgstr ""
 
-#: src/hb-backend.c:347
+#: src/hb-backend.c:340
 msgid "Exhaustive"
 msgstr ""
 
-#: src/hb-backend.c:348
+#: src/hb-backend.c:341
 msgid "Hadamard Exhaustive"
 msgstr ""
 
-#: src/hb-backend.c:358
+#: src/hb-backend.c:351
 msgid "0: SAD, no subpel"
 msgstr ""
 
-#: src/hb-backend.c:359
+#: src/hb-backend.c:352
 msgid "1: SAD, qpel"
 msgstr ""
 
-#: src/hb-backend.c:360
+#: src/hb-backend.c:353
 msgid "2: SATD, qpel"
 msgstr ""
 
-#: src/hb-backend.c:361
+#: src/hb-backend.c:354
 msgid "3: SATD: multi-qpel"
 msgstr ""
 
-#: src/hb-backend.c:362
+#: src/hb-backend.c:355
 msgid "4: SATD, qpel on all"
 msgstr ""
 
-#: src/hb-backend.c:363
+#: src/hb-backend.c:356
 msgid "5: SATD, multi-qpel on all"
 msgstr ""
 
-#: src/hb-backend.c:364
+#: src/hb-backend.c:357
 msgid "6: RD in I/P-frames"
 msgstr ""
 
-#: src/hb-backend.c:365
+#: src/hb-backend.c:358
 msgid "7: RD in all frames"
 msgstr "7: RD ในเฟรมทั้งหมด"
 
-#: src/hb-backend.c:366
+#: src/hb-backend.c:359
 msgid "8: RD refine in I/P-frames"
 msgstr ""
 
-#: src/hb-backend.c:367
+#: src/hb-backend.c:360
 msgid "9: RD refine in all frames"
 msgstr ""
 
-#: src/hb-backend.c:368
+#: src/hb-backend.c:361
 msgid "10: QPRD in all frames"
 msgstr "10: QPRD ในเฟรมทั้งหมด"
 
-#: src/hb-backend.c:369
+#: src/hb-backend.c:362
 msgid "11: No early terminations in analysis"
 msgstr "11: ไม่มีการยุติก่อนนี้ในการวิเคราะห์"
 
-#: src/hb-backend.c:379
+#: src/hb-backend.c:372
 msgid "Most"
 msgstr "ส่วนใหญ่"
 
-#: src/hb-backend.c:381
+#: src/hb-backend.c:374
 msgid "Some"
 msgstr "บางส่วน"
 
-#: src/hb-backend.c:382
+#: src/hb-backend.c:375
 msgid "All"
 msgstr "ทั้งหมด"
 
-#: src/hb-backend.c:394
+#: src/hb-backend.c:387
 msgid "Encode only"
 msgstr "เข้ารหัสเท่านั้น"
 
-#: src/hb-backend.c:395
+#: src/hb-backend.c:388
 msgid "Always"
 msgstr "เสมอ"
 
-#: src/hb-backend.c:1505 src/hb-backend.c:1565 src/hb-backend.c:1644
+#: src/hb-backend.c:1476 src/hb-backend.c:1536 src/hb-backend.c:1615
 msgid "Same as source"
 msgstr "เหมือนกับแหล่ง"
 
-#: src/hb-backend.c:1658
+#: src/hb-backend.c:1629
 msgid "(NTSC Film)"
 msgstr "(หนัง NTSC)"
 
-#: src/hb-backend.c:1662
+#: src/hb-backend.c:1633
 msgid "(PAL Film/Video)"
 msgstr "(หนัง/วิดีโอ PAL)"
 
-#: src/hb-backend.c:1666
+#: src/hb-backend.c:1637
 msgid "(NTSC Video)"
 msgstr "(วิดีโอ NTSC)"
 
-#: src/hb-backend.c:2246
+#: src/hb-backend.c:2195
 #, c-format
 msgid "%s - (%05d.MPLS)"
 msgstr ""
 
-#: src/hb-backend.c:2396
+#: src/hb-backend.c:2346
 #, c-format
 msgid "%3d - %02dh%02dm%02ds - %s"
 msgstr ""
 
-#: src/hb-backend.c:2415
+#: src/hb-backend.c:2365
 #, c-format
 msgid "%3d - %02dh%02dm%02ds - (%05d.MPLS)"
 msgstr ""
 
-#: src/hb-backend.c:2421
+#: src/hb-backend.c:2371
 #, c-format
 msgid "%3d - (%05d.MPLS)"
 msgstr ""
 
-#: src/hb-backend.c:2427
+#: src/hb-backend.c:2377
 #, c-format
 msgid "%3d - %02dh%02dm%02ds"
 msgstr ""
 
-#: src/hb-backend.c:2460
+#: src/hb-backend.c:2410
 msgid "No Titles"
 msgstr "ไม่มีหัวเรื่อง"
 
 #. No audio. set some default
-#: src/hb-backend.c:2740
+#: src/hb-backend.c:2690
 msgid "No Audio"
 msgstr "ไม่มีเสียง"
 
-#: src/hb-backend.c:4271
-#, c-format
-msgid ""
-"Invalid Detelecine Settings:\n"
-"\n"
-"Preset:\t%s\n"
-"Custom:\t%s\n"
+#: src/hb-backend.c:4306 src/hb-backend.c:4314
+msgid "Invalid Detelecine Settings"
 msgstr ""
 
-#: src/hb-backend.c:4278
-#, c-format
-msgid ""
-"Invalid Detelecine Settings:\n"
-"\n"
-"Preset:\t%s\n"
+#: src/hb-backend.c:4309 src/hb-backend.c:4340 src/hb-backend.c:4376
+#: src/hb-backend.c:4413 src/hb-backend.c:4438
+msgid "Custom:"
 msgstr ""
 
-#: src/hb-backend.c:4304
-#, c-format
-msgid ""
-"Invalid Comb Detect Settings:\n"
-"\n"
-"Preset:\t%s\n"
-"Custom:\t%s\n"
+#: src/hb-backend.c:4337 src/hb-backend.c:4345
+msgid "Invalid Comb Detect Settings"
 msgstr ""
 
-#: src/hb-backend.c:4311
-#, c-format
-msgid ""
-"Invalid Comb Detect Settings:\n"
-"\n"
-"Preset:\t%s\n"
+#: src/hb-backend.c:4372 src/hb-backend.c:4381
+msgid "Invalid Deinterlace Settings"
 msgstr ""
 
-#: src/hb-backend.c:4340
-#, c-format
-msgid ""
-"Invalid Deinterlace Settings:\n"
-"\n"
-"Filter:\t%s\n"
-"Preset:\t%s\n"
-"Custom:\t%s\n"
+#: src/hb-backend.c:4374 src/hb-backend.c:4383 src/hb-backend.c:4410
+#: src/hb-backend.c:4435
+msgid "Filter:"
 msgstr ""
 
-#: src/hb-backend.c:4349
-#, c-format
-msgid ""
-"Invalid Deinterlace Settings:\n"
-"\n"
-"Filter:\t%s\n"
-"Preset:\t%s\n"
+#: src/hb-backend.c:4408
+msgid "Invalid Denoise Settings"
 msgstr ""
 
-#: src/hb-backend.c:4378
-#, c-format
-msgid ""
-"Invalid Denoise Settings:\n"
-"\n"
-"Filter:\t%s\n"
-"Preset:\t%s\n"
-"Tune:\t%s\n"
-"Custom:\t%s\n"
+#: src/hb-backend.c:4433
+msgid "Invalid Sharpen Settings"
 msgstr ""
 
-#: src/hb-backend.c:4406
-#, c-format
-msgid ""
-"Invalid Sharpen Settings:\n"
-"\n"
-"Filter:\t%s\n"
-"Preset:\t%s\n"
-"Tune:\t%s\n"
-"Custom:\t%s\n"
-msgstr ""
-
-#: src/hb-backend.c:4440
-#, c-format
+#. mp4/theora combination is not supported.
+#: src/hb-backend.c:4462
 msgid ""
 "Theora is not supported in the MP4 container.\n"
 "\n"
@@ -3090,8 +2829,8 @@ msgstr ""
 "คุณสามารถเลือก codec วิดีโอหรือตัวบรรจุอื่น\n"
 "ถ้าคุณทำต่อ, FFMPEG จะถูกเลือกให้กับคุณ"
 
-#: src/hb-backend.c:4450
-#, c-format
+#. webm only supports vp8, vp9 and av1.
+#: src/hb-backend.c:4471
 msgid ""
 "Only VP8, VP9 and AV1 is supported in the WebM container.\n"
 "\n"
@@ -3099,18 +2838,25 @@ msgid ""
 "If you continue, one will be chosen for you."
 msgstr ""
 
-#: src/hb-backend.c:4459 src/hb-backend.c:4516 src/hb-backend.c:4536
-#: src/hb-backend.c:4556 src/hb-backend.c:4617 src/hb-backend.c:4672
+#: src/hb-backend.c:4479 src/hb-backend.c:4530 src/hb-backend.c:4547
+#: src/hb-backend.c:4564 src/hb-backend.c:4621 src/hb-backend.c:4673
 msgid "Continue"
 msgstr "ทำต่อไป"
 
+#: src/hb-backend.c:4480
+msgid "Invalid Video Codec"
+msgstr ""
+
 #. No valid title, stop right there
-#: src/hb-backend.c:4485 src/hb-backend.c:4581
+#: src/hb-backend.c:4503 src/hb-backend.c:4589
 msgid "No title found.\n"
 msgstr "ไม่พบหัวเรื่อง\n"
 
-#: src/hb-backend.c:4512
-#, c-format
+#: src/hb-backend.c:4530 src/hb-backend.c:4547
+msgid "Invalid Subtitle Selection"
+msgstr ""
+
+#: src/hb-backend.c:4531
 msgid ""
 "Only one subtitle may be burned into the video.\n"
 "\n"
@@ -3122,8 +2868,7 @@ msgstr ""
 "คุณควรเปลี่ยนการเลือกศัพท์บรรยายของคุณ\n"
 "ถ้าคุณทำต่อ, บางศัพท์ฯจะสูญหาย"
 
-#: src/hb-backend.c:4532
-#, c-format
+#: src/hb-backend.c:4548
 msgid ""
 "WebM in HandBrake only supports burned subtitles.\n"
 "\n"
@@ -3131,8 +2876,11 @@ msgid ""
 "If you continue, some subtitles will be lost."
 msgstr ""
 
-#: src/hb-backend.c:4552
-#, c-format
+#: src/hb-backend.c:4564
+msgid "Subtitle File Not Found"
+msgstr ""
+
+#: src/hb-backend.c:4565
 msgid ""
 "SRT file does not exist or not a regular file.\n"
 "\n"
@@ -3140,8 +2888,11 @@ msgid ""
 "If you continue, this subtitle will be ignored."
 msgstr ""
 
-#: src/hb-backend.c:4613
-#, c-format
+#: src/hb-backend.c:4621 src/hb-backend.c:4673
+msgid "Invalid Audio Selection"
+msgstr ""
+
+#: src/hb-backend.c:4622
 msgid ""
 "The source does not support Pass-Thru.\n"
 "\n"
@@ -3153,7 +2904,7 @@ msgstr ""
 "คุณควรเลือก codec เสียงอื่น\n"
 "ถ้าคุณทำต่อ, หนึ่งอย่างจะถูกเลือกให้คุณ"
 
-#: src/hb-backend.c:4668
+#: src/hb-backend.c:4674
 #, c-format
 msgid ""
 "%s is not supported in the %s container.\n"
@@ -3166,193 +2917,191 @@ msgstr ""
 "คุณควรเลือก codec เสียงที่แตกต่าง\n"
 "ถ้าคุณทำต่อ, หนึ่งอย่างจะถูกเลือกให้คุณ"
 
-#: src/hb-backend.c:4854
+#: src/hb-backend.c:4856
 msgid "Comb Detect"
 msgstr ""
 
-#: src/hb-backend.c:4856
+#: src/hb-backend.c:4858
 msgid "Detelecine"
 msgstr ""
 
-#: src/hb-backend.c:4858
+#: src/hb-backend.c:4860
 msgid "Deinterlace (Yadif)"
 msgstr ""
 
-#: src/hb-backend.c:4860
+#: src/hb-backend.c:4862
 msgid "Deinterlace (Bwdif)"
 msgstr ""
 
-#: src/hb-backend.c:4864
+#: src/hb-backend.c:4866
 msgid "Deblock"
 msgstr ""
 
-#: src/hb-backend.c:4866
+#: src/hb-backend.c:4868
 msgid "Denoise (NLMeans)"
 msgstr ""
 
-#: src/hb-backend.c:4868
+#: src/hb-backend.c:4870
 msgid "Denoise (HQDN3D)"
 msgstr ""
 
-#: src/hb-backend.c:4870
+#: src/hb-backend.c:4872
 msgid "Chroma Smooth"
 msgstr ""
 
-#: src/hb-backend.c:4872
+#: src/hb-backend.c:4874
 msgid "Sharpen (Unsharp)"
 msgstr ""
 
-#: src/hb-backend.c:4874
+#: src/hb-backend.c:4876
 msgid "Rotate"
 msgstr ""
 
-#: src/hb-backend.c:4876
+#: src/hb-backend.c:4878
 msgid "Sharpen (lapsharp)"
 msgstr ""
 
-#: src/hb-backend.c:4880
+#: src/hb-backend.c:4882
 msgid "Colorspace"
 msgstr ""
 
-#: src/main.c:102
+#: src/notifications.c:54
 #, c-format
-msgid ""
-"<b><big>Unable to create %s.</big></b>\n"
-"\n"
-"Internal error. Could not parse UI description.\n"
-"%s"
-msgstr ""
-"<b><big>ไม่สามารถสร้าง %s</big></b>\n"
-"\n"
-"ข้อผิดพลาดภายใน ไม่สามารถกระจายคำบรรยาย UI\n"
-"%s"
+msgid "%d item complete, %d failed"
+msgid_plural "%d items complete, %d failed"
+msgstr[0] ""
 
-#: src/main.c:233 src/main.c:294
-msgid "Track Information"
-msgstr "ข้อมูลแทร็ค"
+#: src/notifications.c:60
+#, c-format
+msgid "%d item has finished encoding"
+msgid_plural "%d items have finished encoding"
+msgstr[0] ""
 
-#: src/main.c:247 src/main.c:252 src/main.c:308 src/main.c:312
-msgid " "
+#: src/notifications.c:106
+msgid "Put down that cocktail…"
 msgstr ""
 
-#: src/main.c:349
+#: src/notifications.c:116
+msgid "Encode Complete"
+msgstr "เข้ารหัสเสร็จสมบูรณ์"
+
+#: src/notifications.c:116
+msgid "Encode Failed"
+msgstr ""
+
+#: src/notifications.c:140
+msgid "Battery level is low."
+msgstr ""
+
+#: src/notifications.c:143
+msgid "Charger has been disconnected."
+msgstr ""
+
+#: src/notifications.c:146
+msgid "Power Saver mode has been activated."
+msgstr ""
+
+#: src/notifications.c:153
+#, c-format
+msgid "%d.%d GB free space remaining."
+msgstr ""
+
+#: src/notifications.c:165 src/queuehandler.c:1176
+msgid "Encoding Paused"
+msgstr ""
+
+#: src/presets.c:78
 msgid "Preset Name"
 msgstr "ชื่อค่าสำเร็จรูป"
 
-#: src/main.c:558
-msgid "The device or file to encode"
-msgstr "อุปกรณ์หรือไฟล์เพื่อเข้ารหัส"
-
-#: src/main.c:559
-msgid "The preset values to use for encoding"
-msgstr "ค่าของค่าสำเร็จรูปเพื่อใช้สำหรับการเข้ารหัส"
-
-#: src/main.c:560
-msgid "Spam a lot"
-msgstr "ขยะเยอะมาก"
-
-#: src/main.c:561
-msgid "The path to override user config dir"
-msgstr ""
-
-#: src/main.c:563
-msgid "Open a console for debug output"
-msgstr ""
-
-#: src/presets.c:1247
+#: src/presets.c:1281
 msgid "ghb_presets_menu_init: Failed to find presets folder."
 msgstr ""
 
-#: src/presets.c:1403
+#: src/presets.c:1443
 msgid "Failed to find parent folder when adding child."
 msgstr "ล้มเหลวในการค้นหาโฟลเดอร์แม่เมื่อกำลังเพิ่มส่วนลูก"
 
-#: src/presets.c:1887
-#, c-format
+#: src/presets.c:1927
+msgid "Load backup presets"
+msgstr ""
+
+#: src/presets.c:1927
+msgid "Get me out of here!"
+msgstr ""
+
+#: src/presets.c:1928
 msgid ""
 "Presets found are newer than what is supported by this version of HandBrake!\n"
 "\n"
 "Would you like to continue?"
 msgstr ""
 
-#: src/presets.c:1890
-msgid "Get me out of here!"
-msgstr ""
-
-#: src/presets.c:1890
-msgid "Load backup presets"
-msgstr ""
-
-#: src/presets.c:2079
+#: src/presets.c:2117
 msgid "Presets (*.json)"
 msgstr ""
 
-#: src/presets.c:2081
-msgid "Legacy Presets (*.plist)"
-msgstr ""
-
-#: src/presets.c:2190
+#: src/presets.c:2227
 msgid "Export Preset"
 msgstr "ส่งออกค่าสำเร็จรูป"
 
-#: src/presets.c:2494
+#: src/presets.c:2583
+msgid "_Delete"
+msgstr "_ลบ"
+
+#: src/presets.c:2584
+msgid "Delete Folder?"
+msgstr ""
+
+#: src/presets.c:2584
+msgid "Delete Preset?"
+msgstr ""
+
+#: src/presets.c:2585
 #, c-format
 msgid ""
-"Confirm deletion of %s:\n"
-"\n"
-"%s"
-msgstr ""
-"ยืนยันการลบของ %s:\n"
-"\n"
-"%s"
-
-#: src/presets.c:2495
-msgid "folder"
-msgstr "โฟลเดอร์"
-
-#: src/presets.c:2495
-msgid "preset"
-msgstr "ค่าสำเร็จรูป"
-
-#: src/presets.c:2501
-msgid "Delete"
+"Are you sure you want to delete “%s”?\n"
+"Deleted items cannot be recovered."
 msgstr ""
 
-#: src/preview.c:533
-#, c-format
-msgid ""
-"Missing GStreamer plugin\n"
-"Audio or Video may not play as expected\n"
-"\n"
-"%s"
+#: src/preview.c:154
+msgid "Pause Preview"
 msgstr ""
-"ขาดปลั๊กอิน GStreamer\n"
-"เสียงหรือวิดีโออาจไม่เล่นดังที่หวัง\n"
-"\n"
-"%s"
 
-#: src/preview.c:537 src/title-add.c:874
-msgid "OK"
-msgstr "ตกลง"
+#: src/preview.c:158
+msgid "Stop Encoding Preview"
+msgstr ""
 
-#: src/queuehandler.c:189
+#: src/preview.c:162
+msgid "Play Preview"
+msgstr ""
+
+#: src/preview.c:288
+msgid "Playback Error"
+msgstr ""
+
+#: src/preview.c:291
+msgid "The video could not be played. For more details, see the Activity Log."
+msgstr ""
+
+#: src/queuehandler.c:133
 #, c-format
 msgid "%s (Modified)"
 msgstr ""
 
-#: src/queuehandler.c:237
+#: src/queuehandler.c:181
 msgid "Time:"
 msgstr ""
 
-#: src/queuehandler.c:281
+#: src/queuehandler.c:225
 msgid "Align A/V"
 msgstr ""
 
-#: src/queuehandler.c:291
+#: src/queuehandler.c:235
 msgid "iPod 5G"
 msgstr ""
 
-#: src/queuehandler.c:323
+#: src/queuehandler.c:267
 #, c-format
 msgid ""
 "%d:%d:%d:%d Crop\n"
@@ -3361,240 +3110,285 @@ msgid ""
 "%s Display Aspect Ratio"
 msgstr ""
 
-#: src/queuehandler.c:354
+#: src/queuehandler.c:296
 #, c-format
 msgid "%s, Bitrate %dkbps"
 msgstr ""
 
-#: src/queuehandler.c:359
-#, c-format
-msgid "%s, Bitrate %dkbps (Multi Pass)"
-msgstr ""
-
-#: src/queuehandler.c:366
+#: src/queuehandler.c:302
 #, c-format
 msgid "%s, Constant Quality %.4g(%s)"
 msgstr ""
 
-#: src/queuehandler.c:399
+#: src/queuehandler.c:309
+#, c-format
+msgid " (Multi Pass)"
+msgstr ""
+
+#: src/queuehandler.c:341
 #, c-format
 msgid "%sPreset %s"
 msgstr ""
 
-#: src/queuehandler.c:404
+#: src/queuehandler.c:346
 #, c-format
 msgid "%sTune %s"
 msgstr ""
 
-#: src/queuehandler.c:409
+#: src/queuehandler.c:351
 #, c-format
 msgid "%sProfile %s"
 msgstr ""
 
-#: src/queuehandler.c:414
+#: src/queuehandler.c:356
 #, c-format
 msgid "%sLevel %s"
 msgstr ""
 
-#: src/queuehandler.c:431
+#: src/queuehandler.c:373
 #, c-format
 msgid ""
 "\n"
 "Constant Framerate %s fps"
 msgstr ""
 
-#: src/queuehandler.c:435
+#: src/queuehandler.c:377
 #, c-format
 msgid ""
 "\n"
 "Peak Framerate %s fps (may be lower)"
 msgstr ""
 
-#: src/queuehandler.c:440
+#: src/queuehandler.c:382
 #, c-format
 msgid ""
 "\n"
 "Variable Framerate %s fps"
 msgstr ""
 
-#: src/queuehandler.c:739 src/queuehandler.c:764
+#: src/queuehandler.c:550
+msgid "kbps"
+msgstr "kbps"
+
+#: src/queuehandler.c:684 src/queuehandler.c:709
 msgid "Pending"
 msgstr ""
 
-#: src/queuehandler.c:751 src/queuehandler.c:1248
+#: src/queuehandler.c:696 src/queuehandler.c:1187
 msgid "Completed"
 msgstr ""
 
-#: src/queuehandler.c:755 src/queuehandler.c:1252
+#: src/queuehandler.c:700 src/queuehandler.c:1191
 msgid "Canceled"
 msgstr ""
 
-#: src/queuehandler.c:759 src/queuehandler.c:1256
+#: src/queuehandler.c:704 src/queuehandler.c:1195
 msgid "Failed"
 msgstr ""
 
-#: src/queuehandler.c:800 src/queuehandler.c:828 src/queuehandler.c:1296
-#: src/queuehandler.c:1324
+#: src/queuehandler.c:745 src/queuehandler.c:773 src/queuehandler.c:1235
+#: src/queuehandler.c:1263
 #, c-format
 msgid "%d Day %02d:%02d:%02d"
 msgstr ""
 
-#: src/queuehandler.c:803 src/queuehandler.c:831 src/queuehandler.c:1299
-#: src/queuehandler.c:1327
+#: src/queuehandler.c:748 src/queuehandler.c:776 src/queuehandler.c:1238
+#: src/queuehandler.c:1266
 #, c-format
 msgid "%d Days %02d:%02d:%02d"
 msgstr ""
 
-#: src/queuehandler.c:844 src/queuehandler.c:1340
+#: src/queuehandler.c:789 src/queuehandler.c:1279
 msgid "B"
 msgstr ""
 
-#: src/queuehandler.c:848 src/queuehandler.c:1344
+#: src/queuehandler.c:793 src/queuehandler.c:1283
 msgid "KB"
 msgstr ""
 
-#: src/queuehandler.c:853 src/queuehandler.c:1349
+#: src/queuehandler.c:798 src/queuehandler.c:1288
 msgid "MB"
 msgstr ""
 
-#: src/queuehandler.c:858 src/queuehandler.c:1354
-msgid "GB"
-msgstr ""
-
-#: src/queuehandler.c:869 src/queuehandler.c:1365
+#: src/queuehandler.c:814 src/queuehandler.c:1304
 msgid "Not Available"
 msgstr ""
 
-#: src/queuehandler.c:1200
+#: src/queuehandler.c:1139
 msgid "Foreign Audio Search"
 msgstr ""
 
-#: src/queuehandler.c:1204
+#: src/queuehandler.c:1143
 msgid "Encode"
 msgstr ""
 
-#: src/queuehandler.c:1208
+#: src/queuehandler.c:1147
 msgid "Encode Analysis Pass"
 msgstr ""
 
-#: src/queuehandler.c:1212
+#: src/queuehandler.c:1151
 msgid "Encode Final Pass"
 msgstr ""
 
 #. Should never happen
-#: src/queuehandler.c:1217
+#: src/queuehandler.c:1156
 msgid "Error"
 msgstr "ผิดพลาด"
 
-#: src/queuehandler.c:1221
+#: src/queuehandler.c:1160
 #, c-format
 msgid ""
 "pass %d of %d\n"
 "%s"
 msgstr ""
 
-#: src/queuehandler.c:1233
+#: src/queuehandler.c:1172
 msgid "Scanning Title"
 msgstr ""
 
-#: src/queuehandler.c:1237
-msgid "Encoding Paused"
-msgstr ""
-
-#: src/queuehandler.c:1241
+#: src/queuehandler.c:1180
 msgid "Encoding In Progress"
 msgstr ""
 
 #. Should never happen
-#: src/queuehandler.c:1261
+#: src/queuehandler.c:1200
 msgid "Unknown"
 msgstr ""
 
-#: src/queuehandler.c:1817
-#, c-format
-msgid ""
-"%sThe destination filesystem is almost full: %<PRId64> MB free.\n"
-"Destination: %s\n"
-"Encode may be incomplete if you proceed.\n"
+#: src/queuehandler.c:1388
+msgid "Export Queue"
 msgstr ""
 
-#: src/queuehandler.c:1822
+#: src/queuehandler.c:1476
+msgid "Import Queue"
+msgstr ""
+
+#: src/queuehandler.c:1627
+msgid "Low Disk Space: Encoding Paused"
+msgstr ""
+
+#: src/queuehandler.c:1629
+#, c-format
+msgid ""
+"The destination filesystem is almost full: %<PRId64> MB free.\n"
+"Destination: %s\n"
+"Encode may be incomplete if you proceed."
+msgstr ""
+
+#: src/queuehandler.c:1634
 msgid "Resume, I've fixed the problem"
 msgstr ""
 
-#: src/queuehandler.c:1823
+#: src/queuehandler.c:1635
 msgid "Resume, Don't tell me again"
 msgstr ""
 
-#: src/queuehandler.c:2019 src/queuehandler.c:2032
+#: src/queuehandler.c:1701
+msgid "Remove Item in Progress?"
+msgstr ""
+
+#: src/queuehandler.c:1703
+msgid "Cancel and Remove"
+msgstr ""
+
+#: src/queuehandler.c:1843 src/queuehandler.c:1856
 msgid "Stop"
 msgstr "หยุด"
 
-#: src/queuehandler.c:2020 src/queuehandler.c:2033
+#: src/queuehandler.c:1844 src/queuehandler.c:1857
 msgid "Stop Encoding"
 msgstr "หยุดการเข้ารหัส"
 
-#: src/queuehandler.c:2045
+#: src/queuehandler.c:1869
 msgid "S_top Encoding"
 msgstr ""
 
-#: src/queuehandler.c:2061 src/queuehandler.c:2074
+#: src/queuehandler.c:1887 src/queuehandler.c:1900
 msgid "Resume"
 msgstr "ทำต่อ"
 
-#: src/queuehandler.c:2062 src/queuehandler.c:2075
+#: src/queuehandler.c:1888 src/queuehandler.c:1901
 msgid "Resume Encoding"
 msgstr "เข้ารหัสต่อ"
 
-#: src/queuehandler.c:2086
+#: src/queuehandler.c:1912
 msgid "_Resume Encoding"
 msgstr ""
 
-#: src/queuehandler.c:2672
-msgid ""
-"You are currently encoding.  What would you like to do?\n"
-"\n"
-msgstr ""
-"ขณะนี้คุณกำลังเข้ารหัสอยู่  คุณอยากจะทำอะไร?\n"
-"\n"
-
-#: src/subtitlehandler.c:110
+#: src/subtitlehandler.c:107
 #, c-format
 msgid "Offset: %dms"
 msgstr ""
 
-#: src/subtitlehandler.c:115
+#: src/subtitlehandler.c:112
 msgid "Burned Into Video"
 msgstr ""
 
-#: src/subtitlehandler.c:116
+#: src/subtitlehandler.c:113
 msgid "Passthrough"
 msgstr ""
 
-#: src/subtitlehandler.c:123
+#: src/subtitlehandler.c:116
+msgid "Forced Subtitles Only"
+msgstr "เฉพาะศัพท์บรรยายที่ถูกบังคับ"
+
+#: src/subtitlehandler.c:120
 msgid "Default"
 msgstr ""
 
-#: src/subtitlehandler.c:1167
+#: src/subtitlehandler.c:1230
 msgid "Add Subtitles"
 msgstr ""
 
-#: src/subtitlehandler.c:1358
+#: src/subtitlehandler.c:1448
 #, c-format
 msgid "Preferred Language: %s"
 msgstr "ภาษาที่ชอบ: %s"
 
-#: src/subtitlehandler.c:1372
+#: src/subtitlehandler.c:1461
 #, c-format
 msgid "Add %s subtitle track if default audio is not %s"
 msgstr "เพิ่มแทร็คศัพท์บรรยาย %s ถ้าเสียงตั้งต้นไม่ใช่ %s"
 
-#: src/subtitlehandler.c:1377
+#: src/subtitlehandler.c:1466
 #, c-format
 msgid "Add subtitle track if default audio is not your preferred language"
 msgstr ""
 
-#: src/title-add.c:108
+#: src/subtitlehandler.c:1806
+msgid "Edit Subtitles"
+msgstr ""
+
+#: src/title-add.c:103 src/title-add.c:112
+msgid "Invalid Destination"
+msgstr ""
+
+#: src/title-add.c:104
+#, c-format
+msgid "“%s” is is not a valid directory."
+msgstr ""
+
+#: src/title-add.c:113
+#, c-format
+msgid "“%s” is not a writable directory."
+msgstr ""
+
+#: src/title-add.c:124 src/title-add.c:134
+msgid "Overwrite"
+msgstr "เขียนทับ"
+
+#: src/title-add.c:124 src/title-add.c:134
+msgid "Overwrite File?"
+msgstr ""
+
+#: src/title-add.c:125
+#, c-format
+msgid ""
+"The file “%s” already exists.\n"
+"Do you want to overwrite it?"
+msgstr ""
+
+#: src/title-add.c:135
 #, c-format
 msgid ""
 "Destination: %s\n"
@@ -3607,63 +3401,22 @@ msgstr ""
 "งานคิวอื่นได้ถูกระบุปลายทางเดียวกัน\n"
 "คุณต้องการเขียนทับหรือไม่?"
 
-#: src/title-add.c:113 src/title-add.c:162
-msgid "Overwrite File?"
-msgstr ""
-
-#: src/title-add.c:114 src/title-add.c:163
-msgid "Overwrite"
-msgstr "เขียนทับ"
-
-#: src/title-add.c:127
-#, c-format
+#: src/title-add.c:346
 msgid ""
-"Destination: %s\n"
-"\n"
-"This is not a valid directory."
-msgstr ""
-"ปลายทาง: %s\n"
-"\n"
-"นี่ไม่ใช่เส้นทางที่ถูกต้อง"
-
-#: src/title-add.c:131 src/title-add.c:146
-msgid "Invalid Destination"
+"Duplicate destination files detected. Duplicates will not be added to the "
+"queue."
 msgstr ""
 
-#: src/title-add.c:142
-#, c-format
-msgid ""
-"Destination: %s\n"
-"\n"
-"Can not read or write the directory."
-msgstr ""
-"ปลายทาง: %s\n"
-"\n"
-"ไม่สามารถอ่านหรือเขียนสู่เส้นทางได้"
-
-#: src/title-add.c:157
-#, c-format
-msgid ""
-"Destination: %s\n"
-"\n"
-"File already exists.\n"
-"Do you want to overwrite?"
-msgstr ""
-"ปลายทาง: %s\n"
-"\n"
-"ไฟล์มีอยู่แล้ว\n"
-"คุณต้องการเขียนทับหรือไม่?"
-
-#: src/title-add.c:478
+#: src/title-add.c:439
 msgid "Select this title for adding to the queue.\n"
 msgstr "เลือกหัวเรื่องนี้เพื่อเพิ่มสู่คิว\n"
 
 #. Title label
-#: src/title-add.c:486
+#: src/title-add.c:447
 msgid "No Title"
 msgstr "ไม่มีหัวเรื่อง"
 
-#: src/title-add.c:496
+#: src/title-add.c:457
 msgid ""
 "There is another title with the same destination file name.\n"
 "This title will not be added to the queue unless you change\n"
@@ -3673,35 +3426,40 @@ msgstr ""
 "หัวเรื่องนี้จะไม่ถูกเพิ่มสู่คิว เว้นแต่\n"
 "คุณจะเปลี่ยนชื่อไฟล์ผลลัพธ์\n"
 
-#: src/title-add.c:871
+#: src/title-add.c:826
+msgid "OK"
+msgstr "ตกลง"
+
+#: src/title-add.c:826
 msgid "Cannot Add Titles"
 msgstr ""
 
-#: src/title-add.c:872
+#: src/title-add.c:827
 msgid ""
 "The filenames are not unique. Please choose\n"
 "a unique destination filename for each title."
 msgstr ""
 
-#: src/videohandler.c:208
-#, c-format
-msgid ""
-"%s\n"
-"\n"
-"Expanded Options:\n"
-"\"%s\""
+#: src/videohandler.c:154
+msgid "Additional advanced arguments that can be passed to the video encoder."
 msgstr ""
 
-#: src/videohandler.c:211
-#, c-format
-msgid ""
-"%s\n"
-"\n"
-"Expanded Options:\n"
-"\"\""
+#: src/videohandler.c:227
+msgid "The full list of encoder parameters:"
 msgstr ""
 
-#: src/videohandler.c:356
-#, c-format
-msgid "%s: %.4g (Warning: lossless)"
-msgstr "%s: %.4g (คำเตือน: ไร้การสูญเสีย)"
+#: src/videohandler.c:345
+msgid "Warning: lossless"
+msgstr ""
+
+#: data/fr.handbrake.ghb.desktop.in:4
+msgid "Media Transcoder"
+msgstr ""
+
+#: data/fr.handbrake.ghb.desktop.in:5
+msgid "Transcodes DVD, Blu-ray, and other media"
+msgstr ""
+
+#: data/fr.handbrake.ghb.desktop.in:11
+msgid "Format Converter;Video Encoder;"
+msgstr ""

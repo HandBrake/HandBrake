@@ -1,19 +1,19 @@
 # SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR HandBrake Team
+# Copyright (C) 2024 HandBrake Team
 # This file is distributed under the same license as the ghb package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 # 
 # Translators:
-# Åke Engelbrektson, 2023
+# Åke Engelbrektson, 2024
 # 
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: ghb 1.6.0-git-a6a111e86\n"
+"Project-Id-Version: ghb 20240416-git-d9791800c\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-09-20 09:46+0100\n"
+"POT-Creation-Date: 2024-04-16 19:10+0100\n"
 "PO-Revision-Date: 2018-10-10 18:14+0000\n"
-"Last-Translator: Åke Engelbrektson, 2023\n"
+"Last-Translator: Åke Engelbrektson, 2024\n"
 "Language-Team: Swedish (Sweden) (https://app.transifex.com/HandBrakeProject/teams/92423/sv_SE/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -21,150 +21,214 @@ msgstr ""
 "Language: sv_SE\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: data/fr.handbrake.ghb.desktop.in:3 src/ui-gtk3/ghb.ui:2236
-msgid "HandBrake"
-msgstr "HandBrake"
-
-#: data/fr.handbrake.ghb.desktop.in:4
-msgid "Media Transcoder"
-msgstr "Mediaomkodare"
-
-#: data/fr.handbrake.ghb.desktop.in:5
-msgid "Transcodes DVD, Blu-ray, and other media"
-msgstr "Omkodar DVD, Blu-ray och andra media"
-
-#: data/fr.handbrake.ghb.desktop.in:11
-msgid "Format Converter;Video Encoder;"
-msgstr "Formatkonverterare;Video-kodare;"
-
-#: src/ui-gtk3/menu.ui:7
+#: src/ui/menu.ui:6
 msgid "_File"
 msgstr "_Arkiv"
 
-#: src/ui-gtk3/menu.ui:11
-msgid "_Open Source"
-msgstr "_Öppna källkod"
+#: src/ui/menu.ui:10 src/ui/menu.ui:462
+msgid "_Open Source…"
+msgstr "_Öppna källfil"
 
-#: src/ui-gtk3/menu.ui:16
-msgid "Open _Directory"
-msgstr "Öppna _mapp"
+#: src/ui/menu.ui:14 src/ui/menu.ui:466
+msgid "Open _Directory…"
+msgstr "Öppna _mapp..."
 
-#: src/ui-gtk3/menu.ui:21
-msgid "Set _Destination"
-msgstr "Ange _plats"
+#: src/ui/menu.ui:18 src/ui/menu.ui:176
+msgid "_Set Destination…"
+msgstr "_Ange målmapp..."
 
-#: src/ui-gtk3/menu.ui:30
+#: src/ui/menu.ui:26 src/ui/menu.ui:196
 msgid "_Preferences"
 msgstr "_Inställningar"
 
-#: src/ui-gtk3/menu.ui:34
+#. Toss up a warning dialog
+#: src/ui/menu.ui:30 src/ui/menu.ui:210 src/callbacks.c:3814
 msgid "_Quit"
 msgstr "A_vsluta"
 
-#: src/ui-gtk3/menu.ui:40 src/ui-gtk3/menu.ui:90
+#: src/ui/menu.ui:35 src/ui/menu.ui:80
 msgid "_Queue"
 msgstr "_Kö"
 
-#: src/ui-gtk3/menu.ui:44
+#: src/ui/menu.ui:39
 msgid "_Add"
 msgstr "_Lägg till"
 
-#: src/ui-gtk3/menu.ui:49
-msgid "Add _Multiple"
-msgstr "Lägg till _flera"
+#: src/ui/menu.ui:43 src/ui/menu.ui:449
+msgid "Add _Multiple…"
+msgstr "Lägg till _flera..."
 
-#: src/ui-gtk3/menu.ui:53
+#: src/ui/menu.ui:47 src/ui/menu.ui:453
 msgid "Add A_ll"
 msgstr "Lägg till _alla"
 
-#: src/ui-gtk3/menu.ui:60
+#: src/ui/menu.ui:53 src/queuehandler.c:1877
 msgid "_Start Encoding"
 msgstr "_Starta kodningen"
 
-#: src/ui-gtk3/menu.ui:65 src/queuehandler.c:2093
+#: src/ui/menu.ui:57 src/queuehandler.c:1920
 msgid "_Pause Encoding"
 msgstr "_Pausa kodning"
 
-#: src/ui-gtk3/menu.ui:72
-msgid "S_ave Queue"
-msgstr "S_para kön"
+#: src/ui/menu.ui:63 src/ui/menu.ui:182 src/ui/menu.ui:334
+msgid "_Import Queue…"
+msgstr "_Importera kö..."
 
-#: src/ui-gtk3/menu.ui:76
-msgid "_Load Queue File"
-msgstr "_Läs in köfil"
+#: src/ui/menu.ui:67 src/ui/menu.ui:186 src/ui/menu.ui:338
+msgid "_Export Queue…"
+msgstr "_Exportera kö..."
 
-#: src/ui-gtk3/menu.ui:81
+#: src/ui/menu.ui:72
 msgid "_View"
 msgstr "_Visa"
 
-#: src/ui-gtk3/menu.ui:85
+#: src/ui/menu.ui:76
 msgid "Presets _List"
 msgstr "Mal_lista"
 
-#: src/ui-gtk3/menu.ui:95
+#: src/ui/menu.ui:84
 msgid "_Preview"
 msgstr "_Förhandsgranskning"
 
-#: src/ui-gtk3/menu.ui:100
+#: src/ui/menu.ui:88 src/ui/menu.ui:192
 msgid "_Activity Window"
 msgstr "_Aktivitetsfönster"
 
-#: src/ui-gtk3/menu.ui:106 src/ui-gtk3/ghb.ui:390
+#: src/ui/menu.ui:93
 msgid "_Presets"
 msgstr "_Mallar"
 
-#: src/ui-gtk3/menu.ui:110 src/ui-gtk3/ghb.ui:166 src/ui-gtk3/ghb.ui:398
+#: src/ui/menu.ui:97 src/ui/menu.ui:219 src/ui/menu.ui:262
 msgid "Set De_fault"
 msgstr "Ange som sta_ndard"
 
-#: src/ui-gtk3/menu.ui:116 src/ui-gtk3/ghb.ui:172 src/ui-gtk3/ghb.ui:412
-#: src/ui-gtk3/ghb.ui:8713 src/ui-gtk3/ghb.ui:9278 src/ui-gtk3/ghb.ui:9688
+#: src/ui/menu.ui:103 src/ui/menu.ui:225
+msgid "_New Preset…"
+msgstr "_Ny mall..."
+
+#: src/ui/menu.ui:107 src/ui/menu.ui:229 src/ui/menu.ui:268 src/ui/ghb.ui:5975
+#: src/ui/ghb.ui:6065 src/callbacks.c:2135 src/chapters.c:455
+#: src/ghb-file-button.c:219 src/presets.c:2229 src/queuehandler.c:1391
 msgid "_Save"
 msgstr "_Spara"
 
-#: src/ui-gtk3/menu.ui:120 src/ui-gtk3/ghb.ui:176 src/ui-gtk3/ghb.ui:294
-#: src/ui-gtk3/ghb.ui:421
-msgid "Save _As"
-msgstr "Spara _som"
+#: src/ui/menu.ui:111 src/ui/menu.ui:233 src/ui/menu.ui:272
+msgid "_Rename…"
+msgstr "_Byt namn..."
 
-#: src/ui-gtk3/menu.ui:124 src/ui-gtk3/ghb.ui:180 src/ui-gtk3/ghb.ui:430
-#: src/ui-gtk3/ghb.ui:8556
-msgid "_Rename"
-msgstr "_Byt namn"
+#: src/ui/menu.ui:115 src/ui/menu.ui:237 src/ui/menu.ui:276
+msgid "_Delete…"
+msgstr "_Ta bort..."
 
-#: src/ui-gtk3/menu.ui:128 src/ui-gtk3/ghb.ui:184 src/ui-gtk3/ghb.ui:439
-msgid "_Delete"
-msgstr "_Ta bort"
+#: src/ui/menu.ui:121 src/ui/menu.ui:243
+msgid "_Import Preset…"
+msgstr "_Importera mall..."
 
-#: src/ui-gtk3/menu.ui:134 src/ui-gtk3/ghb.ui:190
-msgid "_Import"
-msgstr "_Importera"
+#: src/ui/menu.ui:125 src/ui/menu.ui:247 src/ui/menu.ui:282
+msgid "_Export Preset…"
+msgstr "_Exportera mall..."
 
-#: src/ui-gtk3/menu.ui:138 src/ui-gtk3/ghb.ui:194 src/ui-gtk3/ghb.ui:453
-msgid "_Export"
-msgstr "_Exportera"
-
-#: src/ui-gtk3/menu.ui:144 src/ui-gtk3/ghb.ui:200
+#: src/ui/menu.ui:131 src/ui/menu.ui:253
 msgid "Reset _Built-in Presets"
 msgstr "Återställ _inbyggda mallar"
 
-#: src/ui-gtk3/menu.ui:149
+#: src/ui/menu.ui:140 src/ui/menu.ui:200
 msgid "_Help"
 msgstr "_Hjälp"
 
-#: src/ui-gtk3/menu.ui:153
+#: src/ui/menu.ui:144
+msgid "_Online Documentation"
+msgstr "_Online-dokumentation"
+
+#: src/ui/menu.ui:148
 msgid "_About"
 msgstr "_Om"
 
-#: src/ui-gtk3/menu.ui:157
-msgid "_Guide"
-msgstr "_Guide"
-
-#: src/ui-gtk3/menu.ui:167
+#: src/ui/menu.ui:158
 msgid "HandBrake For _Dummies"
 msgstr "HandBrake For _Dummies"
 
-#: src/ui-gtk3/ghb.ui:101
+#: src/ui/menu.ui:204
+msgid "A_bout HandBrake"
+msgstr "O_m HandBrake"
+
+#: src/ui/menu.ui:290 src/ui/menu.ui:369
+msgid "_Play File"
+msgstr "_Spela upp fil"
+
+#: src/ui/menu.ui:294 src/ui/menu.ui:373
+msgid "Open _Source Directory"
+msgstr "Öppna _källmappen"
+
+#: src/ui/menu.ui:298 src/ui/menu.ui:377
+msgid "Open _Destination Directory"
+msgstr "Ö_ppna målmappen"
+
+#: src/ui/menu.ui:304 src/ui/menu.ui:382
+msgid "Open Encode _Log"
+msgstr "Öppna kodnings_loggen"
+
+#: src/ui/menu.ui:308 src/ui/menu.ui:386
+msgid "Open _Encode Log Directory"
+msgstr "Öppna _kodloggmappen"
+
+#: src/ui/menu.ui:316
+msgid "Reset _Failed Jobs"
+msgstr "Återställ _misslyckade jobb"
+
+#: src/ui/menu.ui:320
+msgid "_Reset All Jobs"
+msgstr "_Återställ alla jobb"
+
+#: src/ui/menu.ui:324
+msgid "_Clear Completed Jobs"
+msgstr "Ta bort _slutförda jobb"
+
+#: src/ui/menu.ui:328
+msgid "Clear _All Jobs"
+msgstr "Ta bort _alla jobb"
+
+#: src/ui/menu.ui:346
+msgid "_Add Track"
+msgstr "_Lägg till spår"
+
+#: src/ui/menu.ui:350 src/ui/menu.ui:425 src/ui/menu.ui:437
+msgid "Add A_ll Tracks"
+msgstr "Lägg till a_lla spår"
+
+#: src/ui/menu.ui:354 src/ui/menu.ui:441
+msgid "Add _Foreign Audio Scan"
+msgstr "Lägg till _främmande ljudsökning"
+
+#: src/ui/menu.ui:360
+msgid "Add External Subtitle File"
+msgstr "Lägg till extern undertextfil"
+
+#: src/ui/menu.ui:393
+msgid "Move to _Top"
+msgstr "Flytta till _början"
+
+#: src/ui/menu.ui:397
+msgid "Move to _Bottom"
+msgstr "Flytta till _slutet"
+
+#: src/ui/menu.ui:403
+msgid "_Edit"
+msgstr "_Redigera"
+
+#: src/ui/menu.ui:407
+msgid "_Reset"
+msgstr "_Återställ"
+
+#: src/ui/menu.ui:413
+msgid "Re_move"
+msgstr "_Ta bort"
+
+#: src/ui/menu.ui:421 src/ui/menu.ui:433
+msgid "_Add New Track"
+msgstr "_Lägg till nytt spår"
+
+#: src/ui/ghb.ui:93
 msgid ""
 "Render the subtitle over the video.\n"
 "\n"
@@ -174,11 +238,11 @@ msgstr ""
 "\n"
 "Undertexten blir en del av videon och kan inte avaktiveras."
 
-#: src/ui-gtk3/ghb.ui:104
+#: src/ui/ghb.ui:96
 msgid "<b>Burned In</b>"
 msgstr "<b>Inbränd</b>"
 
-#: src/ui-gtk3/ghb.ui:110 src/ui-gtk3/ghb.ui:9643
+#: src/ui/ghb.ui:100
 msgid ""
 "Set the default output subtitle track.\n"
 "\n"
@@ -196,11 +260,11 @@ msgstr ""
 "Detta är användbart för att skapa ett\n"
 "\"obligatoriskt\" spår i din utdata."
 
-#: src/ui-gtk3/ghb.ui:117
+#: src/ui/ghb.ui:107
 msgid "<b>Default</b>"
 msgstr "<b>Standard</b>"
 
-#: src/ui-gtk3/ghb.ui:123 src/ui-gtk3/ghb.ui:9605
+#: src/ui/ghb.ui:111
 msgid ""
 "Use only subtitles that have been flagged\n"
 "as forced in the source subtitle track\n"
@@ -216,11 +280,11 @@ msgstr ""
 "för att visa undertext i scener där någon pratar\n"
 "ett främmande språk."
 
-#: src/ui-gtk3/ghb.ui:129
+#: src/ui/ghb.ui:117
 msgid "<b>Forced Only</b>"
 msgstr "<b>Endast obligatorisk</b>"
 
-#: src/ui-gtk3/ghb.ui:135
+#: src/ui/ghb.ui:121
 msgid ""
 "Add (or subtract) an offset (in milliseconds)\n"
 "to the start of the SRT subtitle track.\n"
@@ -236,11 +300,11 @@ msgstr ""
 "SRT-fil, med början på videon.\n"
 "Denna inställning låter dig synkronisera filerna."
 
-#: src/ui-gtk3/ghb.ui:141
+#: src/ui/ghb.ui:127
 msgid "<b>SRT Offset</b>"
 msgstr "<b>SRT-förskjutning</b>"
 
-#: src/ui-gtk3/ghb.ui:147
+#: src/ui/ghb.ui:131
 msgid ""
 "The source subtitle track\n"
 "\n"
@@ -266,139 +330,71 @@ msgstr ""
 "främmande språk.  Det här alternativet används bäst\n"
 "tillsammans med alternativet  \"Obligatorisk\"."
 
-#: src/ui-gtk3/ghb.ui:158
+#: src/ui/ghb.ui:142
 msgid "<b>Track</b>"
 msgstr "<b>Spår</b>"
 
-#: src/ui-gtk3/ghb.ui:208
-msgid "Play File"
-msgstr "Spela upp fil"
+#: src/ui/ghb.ui:146 src/ui/ghb.ui:1440
+msgid "Presets"
+msgstr "Mallar"
 
-#: src/ui-gtk3/ghb.ui:212 src/callbacks.c:1708
-msgid "Open Source Directory"
-msgstr "Öppna källmappen"
+#: src/ui/ghb.ui:157
+msgid "Save as new preset"
+msgstr "Spara som ny mall"
 
-#: src/ui-gtk3/ghb.ui:216
-msgid "Open Destination Directory"
-msgstr "Öppna målmappen"
-
-#: src/ui-gtk3/ghb.ui:222
-msgid "Open Encode Log Directory"
-msgstr "Öppna kodloggmappen"
-
-#: src/ui-gtk3/ghb.ui:226
-msgid "Open Encode Log"
-msgstr "Öppna kodloggen"
-
-#: src/ui-gtk3/ghb.ui:235
-msgid "Reset Failed Jobs"
-msgstr "Återställ misslyckade jobb"
-
-#: src/ui-gtk3/ghb.ui:239
-msgid "Reset All Jobs"
-msgstr "Återställ alla jobb"
-
-#: src/ui-gtk3/ghb.ui:243
-msgid "Clear Completed Jobs"
-msgstr "Ta bort slutförda jobb"
-
-#: src/ui-gtk3/ghb.ui:247
-msgid "Clear All Jobs"
-msgstr "Ta bort alla jobb"
-
-#: src/ui-gtk3/ghb.ui:253 src/queuehandler.c:1687
-msgid "Import Queue"
-msgstr "Importera kö"
-
-#: src/ui-gtk3/ghb.ui:257 src/queuehandler.c:1516
-msgid "Export Queue"
-msgstr "Exportera kö"
-
-#: src/ui-gtk3/ghb.ui:264
-msgid "HandBrake Presets"
-msgstr "Handbrake förinställningar"
-
-#: src/ui-gtk3/ghb.ui:357 src/ui-gtk3/ghb.ui:982
+#: src/ui/ghb.ui:166 src/ui/ghb.ui:430
 msgid "Actions"
 msgstr "Åtgärder"
 
-#: src/ui-gtk3/ghb.ui:507
+#: src/ui/ghb.ui:205
 msgid "HandBrake Queue"
 msgstr "Handbrake-kö"
 
-#: src/ui-gtk3/ghb.ui:534
-msgid "_Play File"
-msgstr "_Spela upp fil"
-
-#: src/ui-gtk3/ghb.ui:543
-msgid "Open _Source Directory"
-msgstr "Öppna _källmappen"
-
-#: src/ui-gtk3/ghb.ui:552
-msgid "Open _Destination Directory"
-msgstr "Ö_ppna målmappen"
-
-#: src/ui-gtk3/ghb.ui:566
-msgid "Move to _Top"
-msgstr "Flytta till _början"
-
-#: src/ui-gtk3/ghb.ui:575
-msgid "Move to _Bottom"
-msgstr "Flytta till _slutet"
-
-#: src/ui-gtk3/ghb.ui:589
-msgid "_Edit"
-msgstr "_Redigera"
-
-#: src/ui-gtk3/ghb.ui:598
-msgid "_Reset"
-msgstr "_Återställ"
-
-#: src/ui-gtk3/ghb.ui:612
-msgid "Re_move"
-msgstr "_Ta bort"
-
-#: src/ui-gtk3/ghb.ui:642
-msgid "<span size=\"x-large\">Queue</span>"
-msgstr "<span size=\"x-large\">Kö</span>"
-
-#: src/ui-gtk3/ghb.ui:657
-msgid "0 jobs pending"
-msgstr "0 väntande jobb"
-
-#: src/ui-gtk3/ghb.ui:694 src/ui-gtk3/ghb.ui:2313 src/queuehandler.c:2026
-#: src/queuehandler.c:2039 src/queuehandler.c:2052
+#: src/ui/ghb.ui:212 src/ui/ghb.ui:1416 src/queuehandler.c:1850
+#: src/queuehandler.c:1863
 msgid "Start Encoding"
 msgstr "Starta kodning"
 
-#: src/ui-gtk3/ghb.ui:696 src/ui-gtk3/ghb.ui:2315 src/ui-gtk3/ghb.ui:6981
-#: src/queuehandler.c:2025 src/queuehandler.c:2038
+#: src/ui/ghb.ui:213 src/ui/ghb.ui:1417 src/ui/ghb.ui:4156
+#: src/queuehandler.c:1849 src/queuehandler.c:1862
 msgid "Start"
 msgstr "Start"
 
-#: src/ui-gtk3/ghb.ui:710 src/ui-gtk3/ghb.ui:2328 src/queuehandler.c:2068
-#: src/queuehandler.c:2081
+#: src/ui/ghb.ui:221 src/ui/ghb.ui:1424 src/queuehandler.c:1894
+#: src/queuehandler.c:1907
 msgid "Pause Encoding"
 msgstr "Pausa kodning"
 
-#: src/ui-gtk3/ghb.ui:712 src/ui-gtk3/ghb.ui:2330 src/queuehandler.c:2067
-#: src/queuehandler.c:2080
+#: src/ui/ghb.ui:222 src/ui/ghb.ui:1425 src/queuehandler.c:1893
+#: src/queuehandler.c:1906
 msgid "Pause"
 msgstr "Paus"
 
-#: src/ui-gtk3/ghb.ui:771
+#: src/ui/ghb.ui:235 src/ui/ghb.ui:1456
+msgid "Queue"
+msgstr "Kö"
+
+#: src/ui/ghb.ui:241
+msgid "0 jobs pending"
+msgstr "0 väntande jobb"
+
+#: src/ui/ghb.ui:251
 msgid "Options"
 msgstr "Alternativ"
 
-#: src/ui-gtk3/ghb.ui:840 src/ui-gtk3/ghb.ui:7498
+#: src/ui/ghb.ui:322 src/ui/ghb.ui:4540
 msgid "When Done:"
 msgstr "Vid slutfört:"
 
-#: src/ui-gtk3/ghb.ui:919
-msgid "Reset"
-msgstr "Återställ"
+#: src/ui/ghb.ui:335
+msgid "Show/hide the queue details panel"
+msgstr "Visa/Dölj köns detaljpanel"
 
-#: src/ui-gtk3/ghb.ui:921
+#: src/ui/ghb.ui:364 src/ui/ghb.ui:1733
+msgid "Summary"
+msgstr "Sammanfattning"
+
+#: src/ui/ghb.ui:382
 msgid ""
 "Mark selected queue entry as pending.\n"
 "Resets the queue job to pending and ready to run again."
@@ -406,189 +402,167 @@ msgstr ""
 "Märk markerad köpost som väntande.\n"
 "Återställer köat jobb till väntande och klart att köra igen."
 
-#: src/ui-gtk3/ghb.ui:936
+#: src/ui/ghb.ui:397
+msgid "Reset"
+msgstr "Återställ"
+
+#: src/ui/ghb.ui:419
 msgid "Edit"
 msgstr "Redigera"
 
-#: src/ui-gtk3/ghb.ui:1031 src/ui-gtk3/ghb.ui:4481 src/ui-gtk3/ghb.ui:4641
-#: src/ui-gtk3/ghb.ui:4823 src/ui-gtk3/ghb.ui:5303
+#: src/ui/ghb.ui:456 src/ui/ghb.ui:2947 src/ui/ghb.ui:3071 src/ui/ghb.ui:3212
+#: src/ui/ghb.ui:3587 src/hb-backend.c:4308 src/hb-backend.c:4315
+#: src/hb-backend.c:4339 src/hb-backend.c:4347 src/hb-backend.c:4375
+#: src/hb-backend.c:4384 src/hb-backend.c:4411 src/hb-backend.c:4436
 msgid "Preset:"
 msgstr "Mall:"
 
-#: src/ui-gtk3/ghb.ui:1067
+#: src/ui/ghb.ui:483
 msgid "Source:"
 msgstr "Källa:"
 
-#: src/ui-gtk3/ghb.ui:1108 src/ui-gtk3/ghb.ui:7061
+#: src/ui/ghb.ui:515 src/ui/ghb.ui:4205
 msgid "Title:"
 msgstr "Titel:"
 
-#: src/ui-gtk3/ghb.ui:1148
+#: src/ui/ghb.ui:546
 msgid "Destination:"
 msgstr "Målmapp:"
 
-#: src/ui-gtk3/ghb.ui:1189
+#: src/ui/ghb.ui:578
 msgid "Dimensions:"
 msgstr "Dimensioner:"
 
-#: src/ui-gtk3/ghb.ui:1225
+#: src/ui/ghb.ui:605
 msgid "Video:"
 msgstr "Video:"
 
-#: src/ui-gtk3/ghb.ui:1261
+#: src/ui/ghb.ui:632
 msgid "Audio:"
 msgstr "Ljud:"
 
-#: src/ui-gtk3/ghb.ui:1297
+#: src/ui/ghb.ui:659
 msgid "Subtitles:"
 msgstr "Undertexter:"
 
-#: src/ui-gtk3/ghb.ui:1336 src/ui-gtk3/ghb.ui:3182
-msgid "Summary"
-msgstr "Sammanfattning"
-
-#: src/ui-gtk3/ghb.ui:1374
-msgid "Pass:"
-msgstr "Pass:"
-
-#: src/ui-gtk3/ghb.ui:1410
-msgid "Start Time:"
-msgstr "Starttid:"
-
-#: src/ui-gtk3/ghb.ui:1446
-msgid "End Time:"
-msgstr "Sluttid:"
-
-#: src/ui-gtk3/ghb.ui:1486
-msgid "Paused Duration:"
-msgstr "Pausad varaktighet:"
-
-#: src/ui-gtk3/ghb.ui:1526
-msgid "Encode Time:"
-msgstr "Kodningstid:"
-
-#: src/ui-gtk3/ghb.ui:1562
-msgid "File Size:"
-msgstr "Filstorlek:"
-
-#: src/ui-gtk3/ghb.ui:1598
-msgid "Status:"
-msgstr "Status:"
-
-#: src/ui-gtk3/ghb.ui:1637
+#: src/ui/ghb.ui:691
 msgid "Statistics"
 msgstr "Statistik"
 
-#: src/ui-gtk3/ghb.ui:1702
+#: src/ui/ghb.ui:720
+msgid "Pass:"
+msgstr "Pass:"
+
+#: src/ui/ghb.ui:748
+msgid "Start Time:"
+msgstr "Starttid:"
+
+#: src/ui/ghb.ui:775
+msgid "End Time:"
+msgstr "Sluttid:"
+
+#: src/ui/ghb.ui:806
+msgid "Paused Duration:"
+msgstr "Pausad varaktighet:"
+
+#: src/ui/ghb.ui:837
+msgid "Encode Time:"
+msgstr "Kodningstid:"
+
+#: src/ui/ghb.ui:864
+msgid "File Size:"
+msgstr "Filstorlek:"
+
+#: src/ui/ghb.ui:891
+msgid "Status:"
+msgstr "Status:"
+
+#: src/ui/ghb.ui:923 src/ui/ghb.ui:958 src/ui/ghb.ui:980 src/ui/ghb.ui:1008
+#: src/ui/ghb.ui:1040
 msgid "Activity Log"
 msgstr "Aktivitetslogg"
 
-#: src/ui-gtk3/ghb.ui:1725
-msgid "HandBrake Activity Log"
-msgstr "Handbrake aktivitetslogg"
-
-#: src/ui-gtk3/ghb.ui:2039
+#: src/ui/ghb.ui:1300
 msgid "About HandBrake"
 msgstr "Om HandBrake"
 
-#: src/ui-gtk3/ghb.ui:2045
+#: src/ui/ghb.ui:1303
 msgid ""
-"Copyright © 2008 -  John Stebbins\n"
-"Copyright © 2004 - , HandBrake Devs"
+"Copyright © 2008-2024 John Stebbins\n"
+"Copyright © 2004-2024, HandBrake Devs"
 msgstr ""
-"Copyright © 2008 -  John Stebbins\n"
-"Copyright © 2004 - , HandBrake Devs"
+"Copyright © 2008-2024 John Stebbins\n"
+"Copyright © 2004-2024, HandBrake Devs"
 
-#: src/ui-gtk3/ghb.ui:2047
-msgid ""
-"HandBrake is a GPL-licensed, multiplatform, multithreaded video transcoder."
-msgstr ""
-"HandBrake är en GPL-licensierad, multiplattform, flertrådad video-"
-"transkoder."
+#: src/ui/ghb.ui:1305
+msgid "Multithreaded video transcoder"
+msgstr "Flertrådig videoomkodare"
 
-#: src/ui-gtk3/ghb.ui:2050
-msgid ""
-"HandBrake is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License version 2, as published by the Free Software Foundation.\n"
-"\n"
-"HandBrake is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.\n"
-"\n"
-"You should have received a copy of the GNU General Public License along with Glade; if not, write to the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA."
-msgstr ""
-"HandBrake är fri mjukvara! Du kan återdistribuera det och/eller modifiera det, under villkoren för GNU General Public License version 2, som den publiceras av Free Software Foundation.\n"
-"\n"
-"HandBrake distribueras i hopp om att det skall vara användbart, men UTAN NÅGRA GARANTIER. Utan ens underförstådd garanti om SÄLJBARHET eller LÄMPLIGHET FÖR ETT VISST ÄNDAMÅL. Se GNU General Public License för mer detaljerad info.\n"
-"\n"
-"Du bör ha fått en kopia av GNU General Public License, tillsammans med Glade. Om inte, skriv till Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA."
+#: src/ui/ghb.ui:1334 data/fr.handbrake.ghb.desktop.in:3
+msgid "HandBrake"
+msgstr "HandBrake"
 
-#: src/ui-gtk3/ghb.ui:2273 src/callbacks.c:4339
+#: src/ui/ghb.ui:1363 src/callbacks.c:4521
 msgid "Choose Video Source"
 msgstr "Välj videokälla"
 
-#: src/ui-gtk3/ghb.ui:2275 src/callbacks.c:1708 src/callbacks.c:4338
+#: src/ui/ghb.ui:1364 src/callbacks.c:1866 src/callbacks.c:4520
 msgid "Open Source"
 msgstr "Öppna källfil"
 
-#: src/ui-gtk3/ghb.ui:2298
+#: src/ui/ghb.ui:1391
 msgid "Add to Queue"
 msgstr "Lägg till i kön"
 
-#: src/ui-gtk3/ghb.ui:2300
+#: src/ui/ghb.ui:1392
 msgid "Add To Queue"
 msgstr "Lägg till i kön"
 
-#: src/ui-gtk3/ghb.ui:2355
+#: src/ui/ghb.ui:1439
 msgid "Show Presets Window"
 msgstr "Visa mallfönster"
 
-#: src/ui-gtk3/ghb.ui:2357
-msgid "Presets"
-msgstr "Mallar"
-
-#: src/ui-gtk3/ghb.ui:2370
+#: src/ui/ghb.ui:1447
 msgid "Show Preview Window"
 msgstr "Visa förhandsgranskningsfönstret"
 
-#: src/ui-gtk3/ghb.ui:2372
+#: src/ui/ghb.ui:1448
 msgid "Preview"
 msgstr "Förhandsgranska"
 
-#: src/ui-gtk3/ghb.ui:2385
+#: src/ui/ghb.ui:1455
 msgid "Show Queue"
 msgstr "Visa kön"
 
-#: src/ui-gtk3/ghb.ui:2387 src/callbacks.c:4735
-msgid "Queue"
-msgstr "Kö"
-
-#: src/ui-gtk3/ghb.ui:2400
+#: src/ui/ghb.ui:1463
 msgid "Show Activity Window"
 msgstr "Visa aktivitetsfönster"
 
-#: src/ui-gtk3/ghb.ui:2402
+#: src/ui/ghb.ui:1464
 msgid "Activity"
 msgstr "Aktivitet"
 
-#: src/ui-gtk3/ghb.ui:2432
+#: src/ui/ghb.ui:1482
 msgid "<b>Source:</b>"
 msgstr "<b>Källa:</b>"
 
-#: src/ui-gtk3/ghb.ui:2458 src/hb-backend.c:60 src/hb-backend.c:72
-#: src/hb-backend.c:85 src/hb-backend.c:124 src/hb-backend.c:224
-#: src/hb-backend.c:257 src/hb-backend.c:268 src/hb-backend.c:295
-#: src/hb-backend.c:380 src/hb-backend.c:2587 src/hb-backend.c:2812
-#: src/subtitlehandler.c:1344
+#: src/ui/ghb.ui:1498 src/hb-backend.c:54 src/hb-backend.c:66
+#: src/hb-backend.c:79 src/hb-backend.c:117 src/hb-backend.c:217
+#: src/hb-backend.c:250 src/hb-backend.c:261 src/hb-backend.c:288
+#: src/hb-backend.c:373 src/hb-backend.c:2537 src/hb-backend.c:2762
+#: src/subtitlehandler.c:1434
 msgid "None"
 msgstr "Inget"
 
-#: src/ui-gtk3/ghb.ui:2504 src/callbacks.c:4311
+#: src/ui/ghb.ui:1526 src/callbacks.c:4493
 msgid "Scanning..."
 msgstr "Söker..."
 
-#: src/ui-gtk3/ghb.ui:2538
+#: src/ui/ghb.ui:1546
 msgid "<b>Title:</b>"
 msgstr "<b>Titel:</b>"
 
-#: src/ui-gtk3/ghb.ui:2566
+#: src/ui/ghb.ui:1564
 msgid ""
 "Set the title to encode.\n"
 "By default the longest title is chosen.\n"
@@ -598,51 +572,51 @@ msgstr ""
 "Som standard väljs den längsta titeln.\n"
 "Detta är ofta titeln på en DVD-skiva."
 
-#: src/ui-gtk3/ghb.ui:2593
+#: src/ui/ghb.ui:1580
 msgid "<b>Angle:</b>"
 msgstr "<b>Vinkel:</b>"
 
-#: src/ui-gtk3/ghb.ui:2605
+#: src/ui/ghb.ui:1588
 msgid "For multi-angle DVD's, select the desired angle to encode."
 msgstr "För flervinklade DVD:er, välj önskad vinkling att koda."
 
-#: src/ui-gtk3/ghb.ui:2621
+#: src/ui/ghb.ui:1599
 msgid "<b>Range:</b>"
 msgstr "<b>Intervall:</b>"
 
-#: src/ui-gtk3/ghb.ui:2632
+#: src/ui/ghb.ui:1605
 msgid "Range of title to encode. Can be chapters, seconds, or frames."
 msgstr "Intervall att koda om. Kan vara avsnitt, sekunder eller bildrutor."
 
-#: src/ui-gtk3/ghb.ui:2645
+#: src/ui/ghb.ui:1613
 msgid "Set the first chapter to encode."
 msgstr "Ange första avsnittet att koda om."
 
-#: src/ui-gtk3/ghb.ui:2661
+#: src/ui/ghb.ui:1624
 msgid "-"
 msgstr "-"
 
-#: src/ui-gtk3/ghb.ui:2673
+#: src/ui/ghb.ui:1631
 msgid "Set the last chapter to encode."
 msgstr "Ange sista avsnittet att koda om."
 
-#: src/ui-gtk3/ghb.ui:2699
+#: src/ui/ghb.ui:1649
 msgid "<b>Preset:</b>"
 msgstr "<b>Mall:</b>"
 
-#: src/ui-gtk3/ghb.ui:2735
+#: src/ui/ghb.ui:1666
 msgid "Choose Preset"
 msgstr "Välj mall"
 
-#: src/ui-gtk3/ghb.ui:2766
+#: src/ui/ghb.ui:1675
 msgid "<u><i>Modified</i></u>"
 msgstr "<u><i>Modifierad</i></u>"
 
-#: src/ui-gtk3/ghb.ui:2775 src/ui-gtk3/ghb.ui:5645 src/ui-gtk3/ghb.ui:6429
+#: src/ui/ghb.ui:1681 src/ui/ghb.ui:3859 src/ui/ghb.ui:4013
 msgid "Reload"
 msgstr "Läs in igen"
 
-#: src/ui-gtk3/ghb.ui:2778
+#: src/ui/ghb.ui:1684
 msgid ""
 "Reload the settings for the currently selected preset.\n"
 "Modifications will be discarded."
@@ -650,27 +624,27 @@ msgstr ""
 "Läs in inställningarna för aktuell mall igen.\n"
 "Ändringar kommer att tas bort."
 
-#: src/ui-gtk3/ghb.ui:2790
+#: src/ui/ghb.ui:1693
 msgid "Save New Preset"
 msgstr "Spara ny mall"
 
-#: src/ui-gtk3/ghb.ui:2793
+#: src/ui/ghb.ui:1696
 msgid "Save the current settings to a new Preset."
 msgstr "Spara aktuella inställningar som en ny mall."
 
-#: src/ui-gtk3/ghb.ui:2873
+#: src/ui/ghb.ui:1746
 msgid "Format:"
 msgstr "Format:"
 
-#: src/ui-gtk3/ghb.ui:2891
+#: src/ui/ghb.ui:1760
 msgid "Format to mux encoded tracks to."
 msgstr "Format att muxa kodade spår till."
 
-#: src/ui-gtk3/ghb.ui:2903 src/queuehandler.c:286
+#: src/ui/ghb.ui:1770 src/queuehandler.c:230
 msgid "Web Optimized"
 msgstr "Webboptimerat"
 
-#: src/ui-gtk3/ghb.ui:2908
+#: src/ui/ghb.ui:1772
 msgid ""
 "Optimize the layout of the MP4 file for progressive download.\n"
 "This allows a player to initiate playback before downloading the entire file."
@@ -678,11 +652,11 @@ msgstr ""
 "Optimera MP4-filens layout, för progressiv nedladdning.\n"
 "Detta låter en spelare starta uppspelning innan hela filen är nedladdad."
 
-#: src/ui-gtk3/ghb.ui:2924
+#: src/ui/ghb.ui:1785
 msgid "Align A/V Start"
 msgstr "Justera A/V Start"
 
-#: src/ui-gtk3/ghb.ui:2929
+#: src/ui/ghb.ui:1787
 msgid ""
 "Aligns the initial timestamps of all audio and video streams by\n"
 "inserting blank frames or dropping frames. May improve audio/video\n"
@@ -693,140 +667,143 @@ msgstr ""
 "Kan förbättra ljud-/videosynkronisering för bristfälliga spelare\n"
 "som inte hedrar MP4-redigeringslistor."
 
-#: src/ui-gtk3/ghb.ui:2946
+#: src/ui/ghb.ui:1801
 msgid "iPod 5G Support"
 msgstr "iPod 5G-stöd"
 
-#: src/ui-gtk3/ghb.ui:2951
+#: src/ui/ghb.ui:1803
 msgid "Add iPod Atom needed by some older iPods."
 msgstr "Lägg till iPod Atom, nödvändiga för vissa äldre iPod:ar."
 
-#: src/ui-gtk3/ghb.ui:2966
+#: src/ui/ghb.ui:1815
 msgid "Passthru Common Metadata"
 msgstr "Genomströmma vanlig metadata"
 
-#: src/ui-gtk3/ghb.ui:2971
+#: src/ui/ghb.ui:1817
 msgid "Copy metadata from source to output."
 msgstr "Kopiera metadata från källa till utdata."
 
-#: src/ui-gtk3/ghb.ui:2993
+#: src/ui/ghb.ui:1850
 msgid "Duration:"
 msgstr "Varaktighet:"
 
-#: src/ui-gtk3/ghb.ui:3011
+#: src/ui/ghb.ui:1863
 msgid "hh:mm:ss"
 msgstr "hh:mm:ss"
 
-#: src/ui-gtk3/ghb.ui:3026
+#: src/ui/ghb.ui:1874
 msgid "Tracks:"
 msgstr "Spår:"
 
-#: src/ui-gtk3/ghb.ui:3066
+#: src/ui/ghb.ui:1907
 msgid "Filters:"
 msgstr "Filter:"
 
-#: src/ui-gtk3/ghb.ui:3106
+#: src/ui/ghb.ui:1940
 msgid "Size:"
 msgstr "Storlek:"
 
-#: src/ui-gtk3/ghb.ui:3131 src/ui-gtk3/ghb.ui:3230 src/ui-gtk3/ghb.ui:3268
-#: src/ui-gtk3/ghb.ui:3306 src/ui-gtk3/ghb.ui:4142 src/ui-gtk3/ghb.ui:4280
-msgid "--"
-msgstr "--"
+#: src/ui/ghb.ui:1987 src/ui/ghb.ui:2006 src/ui/ghb.ui:6229
+msgid "Video Preview"
+msgstr "Förhandsgranskning av video"
 
-#: src/ui-gtk3/ghb.ui:3218 src/ui-gtk3/ghb.ui:4130
-msgid "Storage Size:"
-msgstr "Lagringsstorlek:"
+#: src/ui/ghb.ui:2022
+msgid "Dimensions"
+msgstr "Storlek"
 
-#: src/ui-gtk3/ghb.ui:3256 src/ui-gtk3/ghb.ui:4174
-msgid "Display Size:"
-msgstr "Visningsstorlek:"
-
-#: src/ui-gtk3/ghb.ui:3294 src/ui-gtk3/ghb.ui:4268
-msgid "Aspect Ratio:"
-msgstr "Proportioner:"
-
-#: src/ui-gtk3/ghb.ui:3331
+#: src/ui/ghb.ui:2036
 msgid "<b>Source Dimensions</b>"
 msgstr "<b>Källdimensioner</b>"
 
-#: src/ui-gtk3/ghb.ui:3378
-msgid "Flipping:"
-msgstr "Vändning:"
+#: src/ui/ghb.ui:2051 src/ui/ghb.ui:2699
+msgid "Storage Size:"
+msgstr "Lagringsstorlek:"
 
-#: src/ui-gtk3/ghb.ui:3389
-msgid "Horizontal ⇌"
-msgstr "Horisontellt ⇌"
+#: src/ui/ghb.ui:2074 src/ui/ghb.ui:2726
+msgid "Display Size:"
+msgstr "Visningsstorlek:"
 
-#: src/ui-gtk3/ghb.ui:3394
-msgid "Flip video horizontally."
-msgstr "Vänd videon horisontellt."
+#: src/ui/ghb.ui:2097 src/ui/ghb.ui:2793
+msgid "Aspect Ratio:"
+msgstr "Proportioner:"
 
-#: src/ui-gtk3/ghb.ui:3411
-msgid "Rotation:"
-msgstr "Rotation:"
-
-#: src/ui-gtk3/ghb.ui:3427
-msgid "Rotate the video clockwise in 90 degree increments."
-msgstr "Rotera videon medurs i steg om 90 grader."
-
-#: src/ui-gtk3/ghb.ui:3442
-msgid "Cropping:"
-msgstr "Beskärning:"
-
-#: src/ui-gtk3/ghb.ui:3458
-msgid "How to apply crop settings."
-msgstr "Hur man tillämpar beskärningsinställningar."
-
-#: src/ui-gtk3/ghb.ui:3474
-msgid "Left Crop"
-msgstr "Beskär vänsterkant"
-
-#: src/ui-gtk3/ghb.ui:3491
-msgid "Top Crop"
-msgstr "Beskär överkant"
-
-#: src/ui-gtk3/ghb.ui:3508
-msgid "Bottom Crop"
-msgstr "Beskär underkant"
-
-#: src/ui-gtk3/ghb.ui:3525
-msgid "Right Crop"
-msgstr "Beskär högerkant"
-
-#: src/ui-gtk3/ghb.ui:3561
+#: src/ui/ghb.ui:2129
 msgid "<b>Orientation &amp; Cropping</b>"
 msgstr "<b>Orientering &amp; beskärning</b>"
 
-#: src/ui-gtk3/ghb.ui:3600
+#: src/ui/ghb.ui:2148
+msgid "Flipping:"
+msgstr "Vändning:"
+
+#: src/ui/ghb.ui:2157
+msgid "Horizontal ⇌"
+msgstr "Horisontellt ⇌"
+
+#: src/ui/ghb.ui:2159
+msgid "Flip video horizontally."
+msgstr "Vänd videon horisontellt."
+
+#: src/ui/ghb.ui:2172
+msgid "Rotation:"
+msgstr "Rotation:"
+
+#: src/ui/ghb.ui:2183
+msgid "Rotate the video clockwise in 90 degree increments."
+msgstr "Rotera videon medurs i steg om 90 grader."
+
+#: src/ui/ghb.ui:2195
+msgid "Cropping:"
+msgstr "Beskärning:"
+
+#: src/ui/ghb.ui:2206
+msgid "How to apply crop settings."
+msgstr "Hur man tillämpar beskärningsinställningar."
+
+#: src/ui/ghb.ui:2220
+msgid "Left Crop"
+msgstr "Beskär vänsterkant"
+
+#: src/ui/ghb.ui:2234
+msgid "Top Crop"
+msgstr "Beskär överkant"
+
+#: src/ui/ghb.ui:2248
+msgid "Bottom Crop"
+msgstr "Beskär underkant"
+
+#: src/ui/ghb.ui:2262
+msgid "Right Crop"
+msgstr "Beskär högerkant"
+
+#: src/ui/ghb.ui:2293
+msgid "<b>Resolution &amp; Scaling</b>"
+msgstr "<b>Upplösning &amp; skalning</b>"
+
+#: src/ui/ghb.ui:2311
 msgid "Resolution Limit:"
 msgstr "Upplösningsgräns:"
 
-#: src/ui-gtk3/ghb.ui:3615
+#: src/ui/ghb.ui:2321
 msgid "Resolution limits for common video formats."
 msgstr "Upplösningsgränser för vanliga videoformat."
 
-#: src/ui-gtk3/ghb.ui:3631
+#: src/ui/ghb.ui:2334
 msgid "Maximum Size:"
 msgstr "Maximal storlek:"
 
-#: src/ui-gtk3/ghb.ui:3646
+#: src/ui/ghb.ui:2346
 msgid "This is the maximum width that the video will be stored at."
 msgstr "Detta är den maximala bredden som videon lagras i."
 
-#: src/ui-gtk3/ghb.ui:3663 src/ui-gtk3/ghb.ui:3832 src/ui-gtk3/ghb.ui:4206
-msgid "x"
-msgstr "x"
-
-#: src/ui-gtk3/ghb.ui:3678
+#: src/ui/ghb.ui:2371
 msgid "This is the maximum height that the video will be stored at."
 msgstr "Detta är den maximala höjden som videon lagras i."
 
-#: src/ui-gtk3/ghb.ui:3694
+#: src/ui/ghb.ui:2383
 msgid "Anamorphic:"
 msgstr "Anamorft:"
 
-#: src/ui-gtk3/ghb.ui:3709
+#: src/ui/ghb.ui:2393
 msgid ""
 "<b>Anamorphic Modes:</b><small><tt>\n"
 "    Automatic - Use a pixel aspect ratio that maximizes\n"
@@ -842,11 +819,11 @@ msgstr ""
 "    Inget     - Tvinga pixelproportionerna till 1:1.\n"
 "    Anpassat    - Ange anpassade pixelproportioner.</tt></small>"
 
-#: src/ui-gtk3/ghb.ui:3730
+#: src/ui/ghb.ui:2410
 msgid "Pixel Aspect:"
 msgstr "Pixelproportion:"
 
-#: src/ui-gtk3/ghb.ui:3745
+#: src/ui/ghb.ui:2421
 msgid ""
 "Pixel aspect defines the shape of the pixels.\n"
 "\n"
@@ -858,11 +835,11 @@ msgstr ""
 "Förhållandet 1:1 definierar en kvadratisk bildpunkt. Andra värden definierar rektangulära former.\n"
 "Mediaspelare skalar bilden för att uppnå specificerade proportioner."
 
-#: src/ui-gtk3/ghb.ui:3765
+#: src/ui/ghb.ui:2436
 msgid ":"
 msgstr ":"
 
-#: src/ui-gtk3/ghb.ui:3780
+#: src/ui/ghb.ui:2447
 msgid ""
 "Pixel aspect defines the shape of the pixels.\n"
 "A 1:1 ratio defines a square pixel.  Other values define rectangular shapes.\n"
@@ -872,11 +849,11 @@ msgstr ""
 "Förhållandet 1:1 definierar en kvadratisk bildpunkt. Andra värden definierar rektangulära former.\n"
 "Mediaspelare skalar bilden för att uppnå specificerade proportioner."
 
-#: src/ui-gtk3/ghb.ui:3799
+#: src/ui/ghb.ui:2461
 msgid "Scaled Size:"
 msgstr "Skalad storlek:"
 
-#: src/ui-gtk3/ghb.ui:3814
+#: src/ui/ghb.ui:2472
 msgid ""
 "This is the width that the video will be stored at.\n"
 "The actual display dimensions will differ if the pixel aspect ratio is not 1:1."
@@ -884,7 +861,11 @@ msgstr ""
 "Detta är den bredd som videon kommer att sparas i.\n"
 "Den verkliga skärmstorleken kommer att differentieras om pixelproportionerna inte är 1:1."
 
-#: src/ui-gtk3/ghb.ui:3847
+#: src/ui/ghb.ui:2485 src/ui/ghb.ui:2749
+msgid "×"
+msgstr "×"
+
+#: src/ui/ghb.ui:2496
 msgid ""
 "This is the height that the video will be stored at.\n"
 "The actual display dimensions will differ if the pixel aspect ratio is not 1:1."
@@ -892,88 +873,84 @@ msgstr ""
 "Detta är den höjd som videon kommer att sparas i.\n"
 "Den verkliga skärmstorleken kommer att differentieras om pixelproportionerna inte är 1:1."
 
-#: src/ui-gtk3/ghb.ui:3861
+#: src/ui/ghb.ui:2508
 msgid "Optimal Size"
 msgstr "Optimal storlek"
 
-#: src/ui-gtk3/ghb.ui:3866
+#: src/ui/ghb.ui:2510
 msgid "Use highest resolution permitted by above settings."
 msgstr ""
 "Använd den högsta upplösning som tillåts med ovanstående inställningar."
 
-#: src/ui-gtk3/ghb.ui:3881
+#: src/ui/ghb.ui:2522
 msgid "Allow Upscaling"
 msgstr "Tillåt uppskalning"
 
-#: src/ui-gtk3/ghb.ui:3886
+#: src/ui/ghb.ui:2524
 msgid ""
 "If not enabled, scaled dimensions will be limited to source dimensions."
 msgstr ""
 "Om inte aktiverad, begränsas de skalade dimensionerna till "
 "källdimensionerna."
 
-#: src/ui-gtk3/ghb.ui:3911
-msgid "<b>Resolution &amp; Scaling</b>"
-msgstr "<b>Upplösning &amp; skalning</b>"
-
-#: src/ui-gtk3/ghb.ui:3951
-msgid "Fill:"
-msgstr "Fyll:"
-
-#: src/ui-gtk3/ghb.ui:3968
-msgid "Add a border around the video."
-msgstr "Lägg till en kant runt videon."
-
-#: src/ui-gtk3/ghb.ui:3985
-msgid "Left Pad"
-msgstr "Vänster sida"
-
-#: src/ui-gtk3/ghb.ui:4002
-msgid "Top Pad"
-msgstr "Översida"
-
-#: src/ui-gtk3/ghb.ui:4019
-msgid "Bottom Pad"
-msgstr "Undersida"
-
-#: src/ui-gtk3/ghb.ui:4036
-msgid "Right Pad"
-msgstr "Höger sida"
-
-#: src/ui-gtk3/ghb.ui:4052
-msgid "Color:"
-msgstr "Färg:"
-
-#: src/ui-gtk3/ghb.ui:4069
-msgid "Color of border added around video."
-msgstr "Färg på kanten runt videon."
-
-#: src/ui-gtk3/ghb.ui:4091
+#: src/ui/ghb.ui:2548
 msgid "<b>Borders</b>"
 msgstr "<b>Kanter</b>"
 
-#: src/ui-gtk3/ghb.ui:4189 src/ui-gtk3/ghb.ui:4221 src/ui-gtk3/ghb.ui:4239
-msgid "Changing the display size will stretch the video."
-msgstr "Om du ändrar visningsstorleken sträcker du ut videon."
+#: src/ui/ghb.ui:2568
+msgid "Fill:"
+msgstr "Fyll:"
 
-#: src/ui-gtk3/ghb.ui:4234 src/hb-backend.c:123 src/hb-backend.c:226
-#: src/hb-backend.c:298
-msgid "Automatic"
-msgstr "Automatiskt"
+#: src/ui/ghb.ui:2580
+msgid "Add a border around the video."
+msgstr "Lägg till en kant runt videon."
 
-#: src/ui-gtk3/ghb.ui:4305
+#: src/ui/ghb.ui:2594
+msgid "Left Pad"
+msgstr "Vänster sida"
+
+#: src/ui/ghb.ui:2608
+msgid "Top Pad"
+msgstr "Översida"
+
+#: src/ui/ghb.ui:2622
+msgid "Bottom Pad"
+msgstr "Undersida"
+
+#: src/ui/ghb.ui:2636
+msgid "Right Pad"
+msgstr "Höger sida"
+
+#: src/ui/ghb.ui:2649
+msgid "Color:"
+msgstr "Färg:"
+
+#: src/ui/ghb.ui:2661
+msgid "Color of border added around video."
+msgstr "Färg på kanten runt videon."
+
+#: src/ui/ghb.ui:2685
 msgid "<b>Final Dimensions</b>"
 msgstr "<b>Slutliga dimensioner</b>"
 
-#: src/ui-gtk3/ghb.ui:4318
-msgid "Dimensions"
-msgstr "Storlek"
+#: src/ui/ghb.ui:2737 src/ui/ghb.ui:2760 src/ui/ghb.ui:2773
+msgid "Changing the display size will stretch the video."
+msgstr "Om du ändrar visningsstorleken sträcker du ut videon."
 
-#: src/ui-gtk3/ghb.ui:4336
+#: src/ui/ghb.ui:2771 src/hb-backend.c:116 src/hb-backend.c:219
+#: src/hb-backend.c:291
+msgid "Automatic"
+msgstr "Automatiskt"
+
+#: src/ui/ghb.ui:2822
+msgid "Filters"
+msgstr "Filter"
+
+#: src/ui/ghb.ui:2832
 msgid "Detelecine:"
 msgstr "Detelecine:"
 
-#: src/ui-gtk3/ghb.ui:4352
+#: src/ui/ghb.ui:2843
 msgid ""
 "This filter removes 'combing' artifacts that are the result of telecining.\n"
 "\n"
@@ -983,7 +960,7 @@ msgstr ""
 "\n"
 "Telecining är en process som justerar filmbildfrekvens på 24fps till NTSC videobildfrekvens på 30fps."
 
-#: src/ui-gtk3/ghb.ui:4367 src/ui-gtk3/ghb.ui:4913
+#: src/ui/ghb.ui:2859 src/ui/ghb.ui:3285
 msgid ""
 "Custom detelecine filter string format\n"
 "\n"
@@ -993,11 +970,11 @@ msgstr ""
 "\n"
 "JunkLeft:JunkRight:JunkTop:JunkBottom:StrictBreaks:MetricPlane:Parity"
 
-#: src/ui-gtk3/ghb.ui:4386
+#: src/ui/ghb.ui:2874
 msgid "Interlace Detection:"
 msgstr "Sammanflätningsidentifiering:"
 
-#: src/ui-gtk3/ghb.ui:4402
+#: src/ui/ghb.ui:2885
 msgid ""
 "This filter detects interlaced frames.\n"
 "\n"
@@ -1009,7 +986,7 @@ msgstr ""
 "Om ett avflätningsfilter aktiveras, kommer endast bildrutor\n"
 "som identifieras av detta filter att bli avflätade."
 
-#: src/ui-gtk3/ghb.ui:4418
+#: src/ui/ghb.ui:2900
 msgid ""
 "Custom interlace detection filter string format\n"
 "\n"
@@ -1021,11 +998,11 @@ msgstr ""
 "Mode:Spatial Metric:Motion Thresh:Spatial Thresh:Mask Filter Mode:\n"
 "Block Thresh: Block Width: Block Height"
 
-#: src/ui-gtk3/ghb.ui:4438
+#: src/ui/ghb.ui:2916
 msgid "Deinterlace:"
 msgstr "Avflätning:"
 
-#: src/ui-gtk3/ghb.ui:4454
+#: src/ui/ghb.ui:2927
 msgid ""
 "Choose decomb or deinterlace filter.\n"
 "\n"
@@ -1037,7 +1014,7 @@ msgstr ""
 "Decomb-filtret stödjer en mängd interpoleringsalgoritmer.\n"
 "Avflätningsfiltret är en klassisk YADIF-avflätare.\n"
 
-#: src/ui-gtk3/ghb.ui:4491
+#: src/ui/ghb.ui:2954
 msgid ""
 "Choose decomb or deinterlace filter options.\n"
 "\n"
@@ -1050,11 +1027,11 @@ msgstr ""
 "Decomb-filtret stödjer en mängd interpoleringsalgoritmer.\n"
 "Avflätningsfiltret är en klassisk YADIF-avflätare."
 
-#: src/ui-gtk3/ghb.ui:4521
+#: src/ui/ghb.ui:2981
 msgid "Deblock Filter:"
 msgstr "Deblock-filter:"
 
-#: src/ui-gtk3/ghb.ui:4537
+#: src/ui/ghb.ui:2992
 msgid ""
 "The deblocking filter removes a common type of compression artifact.\n"
 "If your source exhibits 'blockiness', this filter may help clean it up."
@@ -1062,12 +1039,12 @@ msgstr ""
 "Blockborttagningsfiltret tar bort en vanlig typ av komprimeringsartefakt.\n"
 "Tillämpas på avkodad, komprimerad video för att förbättra visuell kvalitet genom att jämna ut vassa kanter."
 
-#: src/ui-gtk3/ghb.ui:4561 src/ui-gtk3/ghb.ui:4664 src/ui-gtk3/ghb.ui:4744
-#: src/ui-gtk3/ghb.ui:4845 src/ui-gtk3/ghb.ui:5343
+#: src/ui/ghb.ui:3009 src/ui/ghb.ui:3089 src/ui/ghb.ui:3151 src/ui/ghb.ui:3229
+#: src/ui/ghb.ui:3643 src/hb-backend.c:4412 src/hb-backend.c:4437
 msgid "Tune:"
 msgstr "Justera:"
 
-#: src/ui-gtk3/ghb.ui:4571
+#: src/ui/ghb.ui:3016
 msgid ""
 "The deblocking filter removes a common type of compression artifact.\n"
 "    If your source exhibits 'blockiness', this filter may help clean it up."
@@ -1075,7 +1052,7 @@ msgstr ""
 "Blockborttagningsfiltret tar bort en vanlig typ av komprimeringsartefakt.\n"
 "Tillämpas på avkodad, komprimerad video för att förbättra visuell kvalitet genom att jämna ut vassa kanter."
 
-#: src/ui-gtk3/ghb.ui:4579 src/ui-gtk3/ghb.ui:4762
+#: src/ui/ghb.ui:3025 src/ui/ghb.ui:3167
 msgid ""
 "Custom deblock filter string format\n"
 "\n"
@@ -1085,11 +1062,11 @@ msgstr ""
 "\n"
 "strength=weak|strong:thresh=0-100:blocksize=4-512"
 
-#: src/ui-gtk3/ghb.ui:4600
+#: src/ui/ghb.ui:3042
 msgid "Denoise Filter:"
 msgstr "Brusreduceringsfilter:"
 
-#: src/ui-gtk3/ghb.ui:4616
+#: src/ui/ghb.ui:3053
 msgid ""
 "Denoise filtering reduces or removes the appearance of noise and grain.\n"
 "Film grain and other types of high frequency noise are difficult to compress.\n"
@@ -1099,7 +1076,7 @@ msgstr ""
 "Grynighet och andra typer av högfrekvent brus är svårt att komprimera.\n"
 "Användning av detta filter på sådana källor, kan resultera i mindre filstorlek."
 
-#: src/ui-gtk3/ghb.ui:4651 src/ui-gtk3/ghb.ui:4674
+#: src/ui/ghb.ui:3078 src/ui/ghb.ui:3096
 msgid ""
 "Denoise filtering reduces or removes the appearance of noise and grain.\n"
 "    Film grain and other types of high frequency noise are difficult to compress.\n"
@@ -1109,7 +1086,7 @@ msgstr ""
 "Grynighet och andra typer av högfrekvent brus är svårt att komprimera.\n"
 "Användning av detta filter på sådana källor, kan resultera i mindre filstorlek."
 
-#: src/ui-gtk3/ghb.ui:4683 src/ui-gtk3/ghb.ui:4863
+#: src/ui/ghb.ui:3106 src/ui/ghb.ui:3245
 msgid ""
 "Custom denoise filter string format\n"
 "\n"
@@ -1119,11 +1096,11 @@ msgstr ""
 "\n"
 "SpatialLuma:SpatialChroma:TemporalLuma:TemporalChroma"
 
-#: src/ui-gtk3/ghb.ui:4704
+#: src/ui/ghb.ui:3123
 msgid "Chroma Smooth Filter:"
 msgstr "Kromautjämningsfilter:"
 
-#: src/ui-gtk3/ghb.ui:4720
+#: src/ui/ghb.ui:3134
 msgid ""
 "The chroma smooth filter removes common color artifacts.\n"
 "Lower resolution analog source content may benefit from this filter."
@@ -1131,7 +1108,7 @@ msgstr ""
 "Kromautjämningsfiltret tar bort vanliga färgartefakter.\n"
 "Analogt källmaterial med lägre upplösning kan ha nytta av detta filter."
 
-#: src/ui-gtk3/ghb.ui:4754
+#: src/ui/ghb.ui:3158
 msgid ""
 "The chroma smooth filter removes common color artifacts.\n"
 "    Lower resolution analog source content may benefit from this filter."
@@ -1139,11 +1116,11 @@ msgstr ""
 "Kromautjämningsfiltret tar bort vanliga färgartefakter.\n"
 "Analogt källmaterial med lägre upplösning kan ha nytta av detta filter."
 
-#: src/ui-gtk3/ghb.ui:4783
+#: src/ui/ghb.ui:3184
 msgid "Sharpen Filter:"
 msgstr "Skärpefilter:"
 
-#: src/ui-gtk3/ghb.ui:4799
+#: src/ui/ghb.ui:3195
 msgid ""
 "Sharpen filtering enhances edges and other\n"
 "high frequency components in the video."
@@ -1151,7 +1128,7 @@ msgstr ""
 "Skärpefiltrering förbättrar kanter och andra\n"
 "högfrekvenskomponenter i filmen."
 
-#: src/ui-gtk3/ghb.ui:4833 src/ui-gtk3/ghb.ui:4855
+#: src/ui/ghb.ui:3219 src/ui/ghb.ui:3236
 msgid ""
 "Sharpen filtering enhances edges and other\n"
 "    high frequency components in the video."
@@ -1159,39 +1136,39 @@ msgstr ""
 "Skärpefiltrering förbättrar kanter och andra\n"
 "högfrekvenskomponenter i filmen."
 
-#: src/ui-gtk3/ghb.ui:4884
+#: src/ui/ghb.ui:3262
 msgid "Colorspace:"
 msgstr "Färgrymd:"
 
-#: src/ui-gtk3/ghb.ui:4900
+#: src/ui/ghb.ui:3273
 msgid "Translate the colorspace of the source."
 msgstr "Översätt färgrymden från källan."
 
-#: src/ui-gtk3/ghb.ui:4929 src/hb-backend.c:4878
+#: src/ui/ghb.ui:3299 src/hb-backend.c:4880
 msgid "Grayscale"
 msgstr "Gråskala"
 
-#: src/ui-gtk3/ghb.ui:4934
+#: src/ui/ghb.ui:3301
 msgid "If enabled, filter colour components out of video."
 msgstr "Om aktiverad, filtreras färgkomponenter bort från videon."
 
-#: src/ui-gtk3/ghb.ui:4951
-msgid "Filters"
-msgstr "Filter"
+#: src/ui/ghb.ui:3318 src/callbacks.c:5609
+msgid "Video"
+msgstr "Video"
 
-#: src/ui-gtk3/ghb.ui:4982
+#: src/ui/ghb.ui:3333
 msgid "Video Encoder:"
 msgstr "Videokodare:"
 
-#: src/ui-gtk3/ghb.ui:4996
+#: src/ui/ghb.ui:3343
 msgid "Available video encoders."
 msgstr "Tillgängliga videokodare."
 
-#: src/ui-gtk3/ghb.ui:5012
+#: src/ui/ghb.ui:3354
 msgid "Framerate:"
 msgstr "Bildfrekvens:"
 
-#: src/ui-gtk3/ghb.ui:5027
+#: src/ui/ghb.ui:3364
 msgid ""
 "Output framerate.\n"
 "\n"
@@ -1203,45 +1180,77 @@ msgstr ""
 "\"Samma som källan\" rekommenderas, om din video har\n"
 "en variabel bildfrekvens. \"Samma som källan\" bevarar den."
 
-#: src/ui-gtk3/ghb.ui:5042
+#: src/ui/ghb.ui:3380
 msgid "Constant Framerate"
 msgstr "Konstant bildfrekvens"
 
-#: src/ui-gtk3/ghb.ui:5047
+#: src/ui/ghb.ui:3381
 msgid "Enables constant framerate output."
 msgstr "Aktiverar konstant bildfrekvens i utdata."
 
-#: src/ui-gtk3/ghb.ui:5061
+#: src/ui/ghb.ui:3388
 msgid "Peak Framerate (VFR)"
 msgstr "Toppad bildfrekvens (VFR)"
 
-#: src/ui-gtk3/ghb.ui:5066
+#: src/ui/ghb.ui:3389
 msgid ""
 "Enables variable framerate output with a peak\n"
-"rate determined by the framerate setting.\n"
+"    rate determined by the framerate setting.\n"
 "\n"
-"VFR is not compatible with some players."
+"    VFR is not compatible with some players."
 msgstr ""
-"Aktiverar variabel bildfrekvens med toppar,\n"
-"beräknade efter bildfrekvensinställning.\n"
+"Möjliggör variabel bildfrekvens med en topp\n"
+"Hastigheten bestäms av inställningen för bildhastighet.\n"
 "\n"
-"VFR är inte kompatibel med alla mediaspelare."
+"VFR är inte kompatibelt med vissa spelare."
 
-#: src/ui-gtk3/ghb.ui:5084
+#: src/ui/ghb.ui:3400
 msgid "Variable Framerate"
 msgstr "Variabel bildfrekvens"
 
-#: src/ui-gtk3/ghb.ui:5089
+#: src/ui/ghb.ui:3401
 msgid ""
 "Enables variable framerate output.\n"
 "\n"
-"VFR is not compatible with some players."
+"    VFR is not compatible with some players."
 msgstr ""
-"Aktiverar variabel bildfrekvens i utdata.\n"
+"Aktiverar variabel bildfrekvens.\n"
 "\n"
-"VFR är inte kompatibel med alla mediaspelare."
+"VFR är inte kompatibelt med vissa spelare."
 
-#: src/ui-gtk3/ghb.ui:5125 src/ui-gtk3/ghb.ui:5157
+#: src/ui/ghb.ui:3427
+msgid "Constant Quality:"
+msgstr "Konstant kvalitet:"
+
+#: src/ui/ghb.ui:3428
+msgid ""
+"Set the desired quality factor.\n"
+"  The encoder targets a certain quality.\n"
+"  The scale used by each video encoder is different.\n"
+"\n"
+"  x264's scale is logarithmic and lower values correspond to higher quality.\n"
+"  So small decreases in value will result in progressively larger increases\n"
+"  in the resulting file size.  A value of 0 means lossless and will result\n"
+"  in a file size that is larger than the original source, unless the source\n"
+"  was also lossless.\n"
+"\n"
+"  FFMpeg's and Theora's scale is more linear.\n"
+"  These encoders do not have a lossless mode."
+msgstr ""
+"Ange önskad kvalitetsfaktor.\n"
+"Kodaren har en viss målkvalitet.\n"
+"Skalan som används av enskilda kodare är olika.\n"
+"\n"
+"Skalan för x264 är logaritmisk och lägre värden motsvarar högre kvalitet.\n"
+"Små minskningar i värdet, resulterar alltså i progressivt högre ökningar i\n"
+"resulterande filstorlek. 0-värde innebär förlustfri kodning och resulterar i\n"
+"en filstorlek som är större än den ursprungliga källan, om inte källan också\n"
+"är förlustfri.\n"
+"\n"
+"FFMpeg- och Theora-skalan är mer linjär.\n"
+"Dessa kodare har inget förlustfritt läge."
+
+#: src/ui/ghb.ui:3467
 msgid ""
 "Set the desired quality factor.\n"
 "The encoder targets a certain quality.\n"
@@ -1269,15 +1278,15 @@ msgstr ""
 "FFMpeg- och Theora-skalan är mer linjär.\n"
 "Dessa kodare har inget förlustfritt läge."
 
-#: src/ui-gtk3/ghb.ui:5152
-msgid "Constant Quality:"
-msgstr "Konstant kvalitet:"
+#: src/ui/ghb.ui:3483 src/audiohandler.c:1783
+msgid "Quality"
+msgstr "Kvalitet"
 
-#: src/ui-gtk3/ghb.ui:5183
+#: src/ui/ghb.ui:3494
 msgid "Bitrate (kbps):    "
 msgstr "Bithastighet (kbps):    "
 
-#: src/ui-gtk3/ghb.ui:5188 src/ui-gtk3/ghb.ui:5210
+#: src/ui/ghb.ui:3495 src/ui/ghb.ui:3512
 msgid ""
 "Set the average bitrate.\n"
 "\n"
@@ -1292,11 +1301,11 @@ msgstr ""
 "begränsa den momentana bithastigheten, kan du titta på x264-inställningarna för\n"
 "vbv-bufsize och vbv-maxrate."
 
-#: src/ui-gtk3/ghb.ui:5227
+#: src/ui/ghb.ui:3541
 msgid "Multi-Pass Encoding"
 msgstr "Multipasskodning"
 
-#: src/ui-gtk3/ghb.ui:5232
+#: src/ui/ghb.ui:3543
 msgid ""
 "Perform Multi Pass Encoding.\n"
 "\n"
@@ -1310,11 +1319,11 @@ msgstr ""
 "om videon in. I slutpasset används sedan den statistiken för att fatta beslut om\n"
 "bithastighetsallokering."
 
-#: src/ui-gtk3/ghb.ui:5250
+#: src/ui/ghb.ui:3554
 msgid "Turbo Analysis Pass"
 msgstr "Turboanalyspass"
 
-#: src/ui-gtk3/ghb.ui:5255
+#: src/ui/ghb.ui:3556
 msgid ""
 "During the analysis pass of a multi pass encode, use settings that speed "
 "things along."
@@ -1322,7 +1331,7 @@ msgstr ""
 "Under analyspasset i en multipasskodning används inställningar som påskyndar"
 " saker."
 
-#: src/ui-gtk3/ghb.ui:5317
+#: src/ui/ghb.ui:3601
 msgid ""
 "Adjusts encoder settings to trade off compression efficiency against encoding speed.\n"
 "\n"
@@ -1338,7 +1347,11 @@ msgstr ""
 "Generellt bör du sätta detta alternativ så långsamt som du står ut med, eftersom\n"
 "långsammare inställningar resulterar i bättre kvalitet eller mindre filer."
 
-#: src/ui-gtk3/ghb.ui:5360
+#: src/ui/ghb.ui:3616
+msgid "Encoder Preset"
+msgstr "Kodningsmall"
+
+#: src/ui/ghb.ui:3653
 msgid ""
 "Tune settings to optimize for common scenarios.\n"
 "\n"
@@ -1352,11 +1365,11 @@ msgstr ""
 "utdatafilens egenskaper. Ändringar kommer att tillämpas efter\n"
 "mallen, men före alla andra parametrar."
 
-#: src/ui-gtk3/ghb.ui:5376
+#: src/ui/ghb.ui:3667
 msgid "Fast Decode"
 msgstr "Snabb avkodning"
 
-#: src/ui-gtk3/ghb.ui:5381
+#: src/ui/ghb.ui:3669
 msgid ""
 "Reduce decoder CPU usage.\n"
 "\n"
@@ -1366,11 +1379,11 @@ msgstr ""
 "\n"
 "Aktivera det här om din enhet får kämpa vid uppspelning (tappade bildrutor)."
 
-#: src/ui-gtk3/ghb.ui:5399
+#: src/ui/ghb.ui:3684
 msgid "Zero Latency"
 msgstr "Nollfördröjning"
 
-#: src/ui-gtk3/ghb.ui:5403
+#: src/ui/ghb.ui:3686
 msgid ""
 "Minimize latency between input to encoder and output of decoder.\n"
 "\n"
@@ -1386,11 +1399,11 @@ msgstr ""
 "Eftersom HandBrake inte är lämplig för direktsändningsändamål,\n"
 "är denna inställning av litet värde här."
 
-#: src/ui-gtk3/ghb.ui:5427
+#: src/ui/ghb.ui:3704
 msgid "Profile:"
 msgstr "Profil:"
 
-#: src/ui-gtk3/ghb.ui:5444
+#: src/ui/ghb.ui:3714
 msgid ""
 "Sets and ensures compliance with the specified profile.\n"
 "\n"
@@ -1400,11 +1413,11 @@ msgstr ""
 "\n"
 "Åsidosätter alla andra inställningar."
 
-#: src/ui-gtk3/ghb.ui:5462
+#: src/ui/ghb.ui:3727
 msgid "Level:"
 msgstr "Nivå:"
 
-#: src/ui-gtk3/ghb.ui:5479
+#: src/ui/ghb.ui:3737
 msgid ""
 "Sets and ensures compliance with the specified level.\n"
 "\n"
@@ -1414,59 +1427,155 @@ msgstr ""
 "\n"
 "Åsidosätter alla andra inställningar."
 
-#: src/ui-gtk3/ghb.ui:5504
-msgid "More Settings:"
-msgstr "Fler inställningar:"
+#: src/ui/ghb.ui:3753
+msgid "Additional Options:"
+msgstr "Fler alternativ:"
 
-#: src/ui-gtk3/ghb.ui:5522
-msgid ""
-"Additional encoder settings.\n"
-"\n"
-"Colon separated list of encoder options."
-msgstr ""
-"Fler kodningsinställningar.\n"
-"\n"
-"Kolonseparerad lista över kodningsalternativ."
+#: src/ui/ghb.ui:3793
+msgid "Audio"
+msgstr "Ljud"
 
-#: src/ui-gtk3/ghb.ui:5556 src/callbacks.c:5447
-msgid "Video"
-msgstr "Video"
+#: src/ui/ghb.ui:3822
+msgid "Show audio default selection options"
+msgstr "Visa standardalternativ för ljud"
 
-#. Add Button
-#: src/ui-gtk3/ghb.ui:5620 src/ui-gtk3/ghb.ui:5813 src/ui-gtk3/ghb.ui:6390
-#: src/ui-gtk3/ghb.ui:6610 src/ui-gtk3/ghb.ui:7555 src/audiohandler.c:1758
-msgid "Add"
-msgstr "Lägg till"
+#: src/ui/ghb.ui:3836 src/ui/ghb.ui:3990
+msgid "Selection Behavior…"
+msgstr "Urvalsbeteende..."
 
-#: src/ui-gtk3/ghb.ui:5622
-msgid "Add new audio settings to the list"
-msgstr "Lägg till nya ljudinställningar i listan"
-
-#: src/ui-gtk3/ghb.ui:5632 src/ui-gtk3/ghb.ui:6402
-msgid "Add All"
-msgstr "Lägg till alla"
-
-#: src/ui-gtk3/ghb.ui:5634
-msgid "Add all audio tracks to the list"
-msgstr "Lägg till alla ljudspår till listan"
-
-#: src/ui-gtk3/ghb.ui:5647
+#: src/ui/ghb.ui:3845
 msgid "Reload all audio settings from defaults"
 msgstr "Läs in alla ljudinställningar från standard igen"
 
-#: src/ui-gtk3/ghb.ui:5691 src/ui-gtk3/ghb.ui:6475
-msgid "Track List"
-msgstr "Spårlista"
+#: src/ui/ghb.ui:3888 src/ui/ghb.ui:4042 src/ui/ghb.ui:4949
+msgid "Remove"
+msgstr "Ta bort"
 
-#: src/ui-gtk3/ghb.ui:5722 src/ui-gtk3/ghb.ui:6510
-msgid "Selection Behavior:"
-msgstr "Välj beteende:"
+#: src/ui/ghb.ui:3911 src/ui/ghb.ui:4065
+msgid "Clear"
+msgstr "Rensa"
 
-#: src/ui-gtk3/ghb.ui:5737
+#: src/ui/ghb.ui:3947
+msgid "Subtitles"
+msgstr "Undertexter"
+
+#: src/ui/ghb.ui:3963
+msgid "Tracks"
+msgstr "Spår"
+
+#: src/ui/ghb.ui:3976
+msgid "Show subtitle default selection options"
+msgstr "Visa standardalternativ för undertexter"
+
+#: src/ui/ghb.ui:4101
+msgid "Chapters"
+msgstr "Avsnitt"
+
+#: src/ui/ghb.ui:4112 src/callbacks.c:2533 src/queuehandler.c:220
+msgid "Chapter Markers"
+msgstr "Avsnittsmarkörer"
+
+#: src/ui/ghb.ui:4114
+msgid "Add chapter markers to output file."
+msgstr "Lägg till avsnittsmarkörer i utdatafilen."
+
+#: src/ui/ghb.ui:4121
+msgid "Import Chapters"
+msgstr "Importera kapitel"
+
+#: src/ui/ghb.ui:4123
+msgid "Import chapter list from an XML file"
+msgstr "Importera kapitellista från en XML-fil"
+
+#: src/ui/ghb.ui:4131
+msgid "Export Chapters"
+msgstr "Exportera kapitel"
+
+#: src/ui/ghb.ui:4133
+msgid "Export chapter list as an XML file"
+msgstr "Exportera kapitellista som en XML-fil"
+
+#: src/ui/ghb.ui:4149
+msgid "Index"
+msgstr "Index"
+
+#: src/ui/ghb.ui:4163
+msgid "Duration"
+msgstr "Varaktighet"
+
+#: src/ui/ghb.ui:4169
+msgid "Title"
+msgstr "Titel"
+
+#: src/ui/ghb.ui:4195
+msgid "Tags"
+msgstr "Taggar"
+
+#: src/ui/ghb.ui:4233
+msgid "Actors:"
+msgstr "Aktörer:"
+
+#: src/ui/ghb.ui:4261
+msgid "Director:"
+msgstr "Regissör:"
+
+#: src/ui/ghb.ui:4289
+msgid "Release Date:"
+msgstr "Publiceringsdatum:"
+
+#: src/ui/ghb.ui:4317
+msgid "Comment:"
+msgstr "Kommentar:"
+
+#: src/ui/ghb.ui:4345
+msgid "Genre:"
+msgstr "Genre:"
+
+#: src/ui/ghb.ui:4373 src/ui/ghb.ui:6026 src/ui/ghb.ui:6178
+msgid "Description:"
+msgstr "Beskrivning:"
+
+#: src/ui/ghb.ui:4401
+msgid "Plot:"
+msgstr "Graf:"
+
+#: src/ui/ghb.ui:4452
+msgid "<b>Save As:</b>"
+msgstr "<b>Spara som:</b>"
+
+#: src/ui/ghb.ui:4464
+msgid "Destination filename for your encode."
+msgstr "Målfilsnamn för din omkodning."
+
+#: src/ui/ghb.ui:4478
+msgid "<b>To:</b>"
+msgstr "<b>Till:</b>"
+
+#: src/ui/ghb.ui:4489
+msgid "Destination directory for your encode."
+msgstr "Målmapp för din omkodning."
+
+#: src/ui/ghb.ui:4491 src/title-add.c:474
+msgid "Destination Directory"
+msgstr "Målmapp"
+
+#: src/ui/ghb.ui:4564
+msgid "Subtitle Selection Behavior"
+msgstr "Beteende för val av undertexter"
+
+#: src/ui/ghb.ui:4833
+msgid "Audio Selection Behavior"
+msgstr "Beteende för val av ljud"
+
+#: src/ui/ghb.ui:4863
+msgid "Track Selection Behavior:"
+msgstr "Beteende för val av spår:"
+
+#: src/ui/ghb.ui:4874
 msgid "Choose which audio tracks of the source media are used."
 msgstr "Välj vilket källljudspår som skall användas."
 
-#: src/ui-gtk3/ghb.ui:5798
+#: src/ui/ghb.ui:4922
 msgid ""
 "Create a list of languages you would like to select audio for.\n"
 "Tracks matching these languages will be selected using the chosen Selection Behavior."
@@ -1474,39 +1583,27 @@ msgstr ""
 "Skapa en lista över de språk som du vill kunna välja ljudspår för.\n"
 "Spår som matchar dessa språk kommer att väljas med hjälp av det valda urvalsbeteendet."
 
-#: src/ui-gtk3/ghb.ui:5829 src/ui-gtk3/ghb.ui:6626
-msgid "Remove"
-msgstr "Ta bort"
+#: src/ui/ghb.ui:4936 src/ui/ghb.ui:5288
+msgid "Add"
+msgstr "Lägg till"
 
-#: src/ui-gtk3/ghb.ui:5847 src/ui-gtk3/ghb.ui:6644
+#: src/ui/ghb.ui:4962
 msgid "Available Languages"
 msgstr "Tillgängliga språk"
 
-#: src/ui-gtk3/ghb.ui:5860 src/ui-gtk3/ghb.ui:6657
+#: src/ui/ghb.ui:4971
 msgid "Selected Languages"
 msgstr "Välj språk"
 
-#: src/ui-gtk3/ghb.ui:5876
-msgid "Use only first encoder for secondary audio"
-msgstr "Använd endast första kodaren för sekundärt ljud"
-
-#: src/ui-gtk3/ghb.ui:5881
-msgid ""
-"Only the primary audio track will be encoded with the full encoder list.\n"
-"All other secondary audio output tracks will be encoded with first encoder only."
-msgstr ""
-"Endast det primära ljudspåret kommer att kodas med hela kodarlistan.\n"
-"Alla andra sekundära ljudspår kommer endast att kodas med första kodaren."
-
-#: src/ui-gtk3/ghb.ui:5917
+#: src/ui/ghb.ui:4995
 msgid "Auto Passthru:"
 msgstr "Automatisk genomströmning:"
 
-#: src/ui-gtk3/ghb.ui:5928
+#: src/ui/ghb.ui:5004
 msgid "MP2"
 msgstr "MP2"
 
-#: src/ui-gtk3/ghb.ui:5933
+#: src/ui/ghb.ui:5006
 msgid ""
 "Enable this if your playback device supports MP2.\n"
 "This permits MP2 passthru to be selected when automatic passthru selection is enabled."
@@ -1514,11 +1611,11 @@ msgstr ""
 "Aktivera detta om din uppspelningsenhet stödjer MP2.\n"
 "Detta tillåter att MP2-genomströmning väljs när automatisk genomströmning är aktiverat."
 
-#: src/ui-gtk3/ghb.ui:5949
+#: src/ui/ghb.ui:5019
 msgid "MP3"
 msgstr "MP3"
 
-#: src/ui-gtk3/ghb.ui:5954
+#: src/ui/ghb.ui:5021
 msgid ""
 "Enable this if your playback device supports MP3.\n"
 "This permits MP3 passthru to be selected when automatic passthru selection is enabled."
@@ -1526,11 +1623,11 @@ msgstr ""
 "Aktivera detta om din uppspelningsenhet stödjer MP3.\n"
 "Detta tillåter att MP3-genomströmning väljs när automatisk genomströmning är aktiverat."
 
-#: src/ui-gtk3/ghb.ui:5970
+#: src/ui/ghb.ui:5034
 msgid "AC-3"
 msgstr "AC-3"
 
-#: src/ui-gtk3/ghb.ui:5975
+#: src/ui/ghb.ui:5036
 msgid ""
 "Enable this if your playback device supports AC-3.\n"
 "This permits AC-3 passthru to be selected when automatic passthru selection is enabled."
@@ -1538,11 +1635,11 @@ msgstr ""
 "Aktivera detta om din uppspelningsenhet stödjer AC-3.\n"
 "Detta tillåter att AC-3-genomströmning väljs när automatisk genomströmning är aktiverat."
 
-#: src/ui-gtk3/ghb.ui:5991
+#: src/ui/ghb.ui:5049
 msgid "EAC-3"
 msgstr "EAC-3"
 
-#: src/ui-gtk3/ghb.ui:5996
+#: src/ui/ghb.ui:5051
 msgid ""
 "Enable this if your playback device supports EAC-3.\n"
 "This permits EAC-3 passthru to be selected when automatic passthru selection is enabled."
@@ -1550,11 +1647,11 @@ msgstr ""
 "Aktivera detta om din uppspelningsenhet stödjer EAC-3.\n"
 "Detta tillåter att EAC-3-genomströmning väljs när automatisk genomströmning är aktiverat."
 
-#: src/ui-gtk3/ghb.ui:6012
+#: src/ui/ghb.ui:5064
 msgid "DTS"
 msgstr "DTS"
 
-#: src/ui-gtk3/ghb.ui:6017
+#: src/ui/ghb.ui:5066
 msgid ""
 "Enable this if your playback device supports DTS.\n"
 "This permits DTS passthru to be selected when automatic passthru selection is enabled."
@@ -1562,11 +1659,11 @@ msgstr ""
 "Aktivera detta om din uppspelningsenhet stödjer DTS.\n"
 "Detta tillåter att DTS-genomströmning väljs när automatisk genomströmning är aktiverat."
 
-#: src/ui-gtk3/ghb.ui:6033
+#: src/ui/ghb.ui:5079
 msgid "DTS-HD"
 msgstr "DTS-HD"
 
-#: src/ui-gtk3/ghb.ui:6038
+#: src/ui/ghb.ui:5081
 msgid ""
 "Enable this if your playback device supports DTS-HD.\n"
 "This permits DTS-HD passthru to be selected when automatic passthru selection is enabled."
@@ -1574,11 +1671,11 @@ msgstr ""
 "Aktivera detta om din uppspelningsenhet stödjer DTS-HD.\n"
 "Detta tillåter att DTS-HD-genomströmning väljs när automatisk genomströmning är aktiverat."
 
-#: src/ui-gtk3/ghb.ui:6054
+#: src/ui/ghb.ui:5094
 msgid "TrueHD"
 msgstr "TrueHD"
 
-#: src/ui-gtk3/ghb.ui:6059
+#: src/ui/ghb.ui:5096
 msgid ""
 "Enable this if your playback device supports TrueHD.\n"
 "This permits TrueHD passthru to be selected when automatic passthru selection is enabled."
@@ -1586,11 +1683,11 @@ msgstr ""
 "Aktivera detta om din uppspelningsenhet stödjer ThrueHD.\n"
 "Detta tillåter att ThrueHD-genomströmning väljs när automatisk genomströmning är aktiverat."
 
-#: src/ui-gtk3/ghb.ui:6075
+#: src/ui/ghb.ui:5109
 msgid "FLAC"
 msgstr "FLAC"
 
-#: src/ui-gtk3/ghb.ui:6080
+#: src/ui/ghb.ui:5111
 msgid ""
 "Enable this if your playback device supports FLAC.\n"
 "This permits FLAC passthru to be selected when automatic passthru selection is enabled."
@@ -1598,11 +1695,11 @@ msgstr ""
 "Aktivera detta om din uppspelningsenhet stödjer FLAC.\n"
 "Detta tillåter att FLAC-genomströmning väljs när automatisk genomströmning är aktiverat."
 
-#: src/ui-gtk3/ghb.ui:6096
+#: src/ui/ghb.ui:5124
 msgid "AAC"
 msgstr "AAC"
 
-#: src/ui-gtk3/ghb.ui:6101
+#: src/ui/ghb.ui:5126
 msgid ""
 "Enable this if your playback device supports AAC.\n"
 "This permits AAC passthru to be selected when automatic passthru selection is enabled."
@@ -1610,11 +1707,11 @@ msgstr ""
 "Aktivera detta om din uppspelningsenhet stödjer AAC.\n"
 "Detta tillåter att AAC-genomströmning väljs när automatisk genomströmning är aktiverat."
 
-#: src/ui-gtk3/ghb.ui:6117
+#: src/ui/ghb.ui:5139
 msgid "Opus"
 msgstr "Opus"
 
-#: src/ui-gtk3/ghb.ui:6122
+#: src/ui/ghb.ui:5141
 msgid ""
 "Enable this if your playback device supports Opus.\n"
 "This permits Opus passthru to be selected when automatic passthru selection is enabled."
@@ -1622,11 +1719,11 @@ msgstr ""
 "Aktivera detta om din uppspelningsenhet stödjer Opus.\n"
 "Detta tillåter att Opus-genomströmning väljs när automatisk genomströmning är aktiverat."
 
-#: src/ui-gtk3/ghb.ui:6155
+#: src/ui/ghb.ui:5162
 msgid "Passthru Fallback:"
 msgstr "Genomströmningsreserv:"
 
-#: src/ui-gtk3/ghb.ui:6167
+#: src/ui/ghb.ui:5168
 msgid ""
 "Set the audio codec to encode with when a suitable track can not be found "
 "for audio passthru."
@@ -1634,358 +1731,118 @@ msgstr ""
 "Ange ljudkodek att koda om med, när ett passande spår för ljudgenomströmning"
 " inte kan hittas."
 
-#: src/ui-gtk3/ghb.ui:6196
-msgid "<b>Audio Encoder Settings:</b>"
-msgstr "<b>Ljudkodningsinställningar:</b>"
+#: src/ui/ghb.ui:5184
+msgid "Audio encoder settings for each selected track:"
+msgstr "Ljudinställningar för varje valt spår:"
 
-#: src/ui-gtk3/ghb.ui:6197
+#: src/ui/ghb.ui:5185
 msgid "Each selected source track will be encoded with all selected encoders"
 msgstr "Varje markerat källspår kommer att kodas med alla valda kodare"
 
-#: src/ui-gtk3/ghb.ui:6222 src/ui-gtk3/ghb.ui:9805
+#: src/ui/ghb.ui:5195
 msgid "Encoder"
 msgstr "Kodare"
 
-#: src/ui-gtk3/ghb.ui:6233 src/ui-gtk3/ghb.ui:9818
+#: src/ui/ghb.ui:5201
 msgid "Bitrate/Quality"
 msgstr "Bithastighet/Kvalitet"
 
-#: src/ui-gtk3/ghb.ui:6244
+#: src/ui/ghb.ui:5207
 msgid "Mixdown"
 msgstr "Nermixning"
 
-#: src/ui-gtk3/ghb.ui:6255
+#: src/ui/ghb.ui:5213
 msgid "Samplerate"
 msgstr "Samplingsfrekvens"
 
-#: src/ui-gtk3/ghb.ui:6266 src/ui-gtk3/ghb.ui:9862 src/queuehandler.c:610
+#: src/ui/ghb.ui:5219 src/queuehandler.c:555
 msgid "Gain"
 msgstr "Förstärkning"
 
-#: src/ui-gtk3/ghb.ui:6277 src/ui-gtk3/ghb.ui:9881
+#: src/ui/ghb.ui:5225
 msgid "DRC"
 msgstr "DRC"
 
-#: src/ui-gtk3/ghb.ui:6314 src/ui-gtk3/ghb.ui:6870
-msgid "Track Selection"
-msgstr "Spårval"
+#: src/ui/ghb.ui:5253
+msgid "Add Track"
+msgstr "Lägg till spår"
 
-#: src/ui-gtk3/ghb.ui:6326
-msgid "Audio"
-msgstr "Ljud"
-
-#: src/ui-gtk3/ghb.ui:6392
-msgid "Add new subtitle settings to the list"
-msgstr "Lägg till nya undertextinställningar i listan"
-
-#: src/ui-gtk3/ghb.ui:6404
-msgid "Add all subtitle tracks to the list"
-msgstr "Lägg till alla undertextspår i listan"
-
-#: src/ui-gtk3/ghb.ui:6414 src/callbacks.c:2344 src/queuehandler.c:647
-#: src/queuehandler.c:1083 src/subtitlehandler.c:414
-#: src/subtitlehandler.c:1221
-msgid "Foreign Audio Scan"
-msgstr "Främmande ljudsökning"
-
-#: src/ui-gtk3/ghb.ui:6416
+#: src/ui/ghb.ui:5254
 msgid ""
-"Add an extra pass to the encode which searches\n"
-"for subtitle candidates that provide subtitles for\n"
-"segments of the audio that are in a foreign language."
+"Add an audio encoder.\n"
+"Each selected source track will be encoded with all selected encoders."
 msgstr ""
-"Lägger till ett extra pass till omkodningen, som söker\n"
-"efter undertextkandidater med undertext till segment\n"
-"av det ljud som är på främmande språk."
+"Lägg till en ljudkodare.\n"
+"Varje valt källspår kommer att kodas med alla valda kodare."
 
-#: src/ui-gtk3/ghb.ui:6431
-msgid "Reload all subtitle settings from defaults"
-msgstr "Läs in alla undertextinställningar från standard igen"
+#: src/ui/ghb.ui:5261
+msgid "Use only first encoder for secondary audio"
+msgstr "Använd endast första kodaren för sekundärt ljud"
 
-#: src/ui-gtk3/ghb.ui:6525
-msgid "Choose which subtitle tracks of the source media are used."
-msgstr "Välj vilket undertextspår som skall användas."
-
-#: src/ui-gtk3/ghb.ui:6590
+#: src/ui/ghb.ui:5263
 msgid ""
-"Create a list of languages you would like to select subtitles for.\n"
-"Tracks matching these languages will be selected using the chosen Selection Behavior.\n"
-"\n"
-"The first language in this list is your \"preferred\" language and will be used\n"
-"for determining subtitle selection settings when there is foreign audio."
+"Only the primary audio track will be encoded with the full encoder list.\n"
+"  All other secondary audio output tracks will be encoded with first encoder only."
 msgstr ""
-"Skapa en lista över de språk som du vill kunna välja ljudspår för.\n"
-"Spår som matchar dessa språk kommer att väljas med hjälp av det valda urvalsbeteendet.\n"
-"\n"
-"Första språket i listan är ditt \"föredragna\" språk och kommer att användas\n"
-"för att avgöra undertextvalet vid förekomst av främmande språk."
+"Endast det primära ljudspåret kommer att kodas med hela kodarlistan.\n"
+"Alla andra sekundära ljudspår kommer endast att kodas med första kodaren."
 
-#: src/ui-gtk3/ghb.ui:6671
-msgid "Preferred Language: None"
-msgstr "Föredraget språk: Inget"
-
-#: src/ui-gtk3/ghb.ui:6698
-msgid "Add Foreign Audio Scan Pass"
-msgstr "Lägg till främmande ljudsökningspass"
-
-#: src/ui-gtk3/ghb.ui:6703
-msgid ""
-"Add \"Foreign Audio Scan\" when the default audio track is your preferred language.\n"
-"This search pass finds short sequences of foreign audio and provides subtitles for them.\n"
-"\n"
-"This option requires a language to be set in the Selected Languages list."
-msgstr ""
-"Lägg till \"Främmande ljudsökning\" när standardljudspåret är ditt föredragna språk.\n"
-"Detta sökpass hittar korta sekvenser på främmande språk och tillhandahåller undertexter för dem.\n"
-"\n"
-"Detta alternativ kräver att ett språk har valts från listan med \"Tillgängliga språk\"."
-
-#: src/ui-gtk3/ghb.ui:6718
-msgid "Add subtitle track if default audio is foreign"
-msgstr "Lägg till undertextspår om standardspråket är främmande"
-
-#: src/ui-gtk3/ghb.ui:6723
-msgid ""
-"When the default audio track is not your preferred language, add a subtitle track.\n"
-"\n"
-"This option requires a language to be set in the Selected Languages list."
-msgstr ""
-"Lägg till ett undertextspår, när standardljudspåret inte är ditt föredragna språk.\n"
-"\n"
-"Detta alternativ kräver att ett språk har valts från listan med \"Tillgängliga språk\"."
-
-#: src/ui-gtk3/ghb.ui:6737
-msgid "Add Closed Captions when available"
-msgstr "Lägg till textning när det finns tillgängligt"
-
-#: src/ui-gtk3/ghb.ui:6742
-msgid ""
-"Closed captions are text subtitles that can be added to any container as a "
-"soft subtitle track"
-msgstr ""
-"Stängd textning är undertexter som kan läggas till i valfri behållare, som "
-"ett fristående undertextspår"
-
-#: src/ui-gtk3/ghb.ui:6763
-msgid "Burn-In Behavior*:"
-msgstr "Inbränningsbeteende*:"
-
-#: src/ui-gtk3/ghb.ui:6775
-msgid ""
-"Set the behavior of subtitle \"Burn-In\".\n"
-"\n"
-"Burned-In subtitles are part of the video and can not be disabled during playback.\n"
-"Only one subtitle track can be burned! Since conflicts can occur, the first chosen wins."
-msgstr ""
-"Ange inbränningsbeteende för undertext.\n"
-"\n"
-"Inbrända undertexter är en del av videon och kan inte inaktiveras vid uppspelning.\n"
-"Endast en undertext kan brännas! Eftersom konflikter kan uppstå, vinner det först valda."
-
-#: src/ui-gtk3/ghb.ui:6802
-msgid "Burn-In for deficient players*:"
-msgstr "Inbränning för bristfälliga spelare*:"
-
-#: src/ui-gtk3/ghb.ui:6811
-msgid "DVD Subtitles"
-msgstr "DVD-undertexter"
-
-#: src/ui-gtk3/ghb.ui:6816
-msgid ""
-"Burn the first selected DVD subtitle track. All other DVD subtitle tracks will be discarded.\n"
-"Use this option if your player software or device does not support DVD subtitles.\n"
-"\n"
-"Only one subtitle track can be burned! Since conflicts can occur, the first chosen wins."
-msgstr ""
-"Bränn den först valda DVD-undertexten. Alla andra DVD-undertexter kommer att tas bort.\n"
-"Använd detta alternativ om ditt spelarprogram eller enhet inte stödjer DVD-undertexter.\n"
-"\n"
-"Endast ett undertextspår kan brännas! Eftersom konflikter kan uppstå, vinner det först valda."
-
-#: src/ui-gtk3/ghb.ui:6830
-msgid "Blu-ray Subtitles"
-msgstr "Blu-ray-undertexter"
-
-#: src/ui-gtk3/ghb.ui:6835
-msgid ""
-"Burn the first selected Blu-ray subtitle track. All other Blu-ray subtitle tracks will be discarded.\n"
-"Use this option if your player software or device does not support Blu-ray subtitles.\n"
-"\n"
-"Only one subtitle track can be burned! Since conflicts can occur, the first chosen wins."
-msgstr ""
-"Bränn den först valda Blu-ray-undertexten. Alla andra Blu-ray-undertexter kommer att tas bort.\n"
-"Använd detta alternativ om ditt spelarprogram eller enhet inte stödjer Blu-ray-undertexter.\n"
-"\n"
-"Endast ett undertextspår kan brännas! Eftersom konflikter kan uppstå, vinner det först valda."
-
-#: src/ui-gtk3/ghb.ui:6857
-msgid ""
-"<small>* Only one of the above subtitle burn options will be applied, "
-"starting with the top.</small>"
-msgstr ""
-"<small>* Endast ett av ovanstående undertextalternativ kommer att tillämpas,"
-" med början överst.</small>"
-
-#: src/ui-gtk3/ghb.ui:6858
-msgid ""
-"Only one subtitle track can be burned! Since conflicts can occur, the first "
-"chosen wins."
-msgstr ""
-"Endast ett undertextspår kan brännas in, eftersom konflikter kan uppstå! Det"
-" först valda vinner."
-
-#: src/ui-gtk3/ghb.ui:6882
-msgid "Subtitles"
-msgstr "Undertexter"
-
-#: src/ui-gtk3/ghb.ui:6900 src/callbacks.c:2401 src/queuehandler.c:276
-msgid "Chapter Markers"
-msgstr "Avsnittsmarkörer"
-
-#: src/ui-gtk3/ghb.ui:6905
-msgid "Add chapter markers to output file."
-msgstr "Lägg till avsnittsmarkörer i utdatafilen."
-
-#: src/ui-gtk3/ghb.ui:6916
-msgid "Import Chapters"
-msgstr "Importera kapitel"
-
-#: src/ui-gtk3/ghb.ui:6920
-msgid "Import chapter list from an XML file"
-msgstr "Importera kapitellista från en XML-fil"
-
-#: src/ui-gtk3/ghb.ui:6931
-msgid "Export Chapters"
-msgstr "Exportera kapitel"
-
-#: src/ui-gtk3/ghb.ui:6935
-msgid "Export chapter list as an XML file"
-msgstr "Exportera kapitellista som en XML-fil"
-
-#: src/ui-gtk3/ghb.ui:6969
-msgid "Index"
-msgstr "Index"
-
-#: src/ui-gtk3/ghb.ui:6993
-msgid "Duration"
-msgstr "Varaktighet"
-
-#: src/ui-gtk3/ghb.ui:7004
-msgid "Title"
-msgstr "Titel"
-
-#: src/ui-gtk3/ghb.ui:7041
-msgid "Chapters"
-msgstr "Avsnitt"
-
-#: src/ui-gtk3/ghb.ui:7096
-msgid "Actors:"
-msgstr "Aktörer:"
-
-#: src/ui-gtk3/ghb.ui:7131
-msgid "Director:"
-msgstr "Regissör:"
-
-#: src/ui-gtk3/ghb.ui:7166
-msgid "Release Date:"
-msgstr "Publiceringsdatum:"
-
-#: src/ui-gtk3/ghb.ui:7201
-msgid "Comment:"
-msgstr "Kommentar:"
-
-#: src/ui-gtk3/ghb.ui:7236
-msgid "Genre:"
-msgstr "Genre:"
-
-#: src/ui-gtk3/ghb.ui:7271
-msgid "Description:"
-msgstr "Beskrivning:"
-
-#: src/ui-gtk3/ghb.ui:7306
-msgid "Plot:"
-msgstr "Graf:"
-
-#: src/ui-gtk3/ghb.ui:7344
-msgid "Tags"
-msgstr "Taggar"
-
-#: src/ui-gtk3/ghb.ui:7374
-msgid "<b>Save As:</b>"
-msgstr "<b>Spara som:</b>"
-
-#: src/ui-gtk3/ghb.ui:7388
-msgid "Destination filename for your encode."
-msgstr "Målfilsnamn för din omkodning."
-
-#: src/ui-gtk3/ghb.ui:7408
-msgid "<b>To:</b>"
-msgstr "<b>Till:</b>"
-
-#: src/ui-gtk3/ghb.ui:7421
-msgid "Destination directory for your encode."
-msgstr "Målmapp för din omkodning."
-
-#: src/ui-gtk3/ghb.ui:7424 src/title-add.c:514
-msgid "Destination Directory"
-msgstr "Målmapp"
-
-#: src/ui-gtk3/ghb.ui:7539
+#: src/ui/ghb.ui:5276
 msgid "Add Multiple Titles"
 msgstr "Lägg till flera titlar"
 
-#: src/ui-gtk3/ghb.ui:7547 src/ui-gtk3/ghb.ui:8548 src/ui-gtk3/ghb.ui:8705
-#: src/ui-gtk3/ghb.ui:9270 src/ui-gtk3/ghb.ui:9680 src/callbacks.c:5301
-#: src/callbacks.c:5309 src/callbacks.c:5318 src/hb-backend.c:4282
-#: src/hb-backend.c:4315 src/hb-backend.c:4354 src/hb-backend.c:4385
-#: src/hb-backend.c:4413 src/hb-backend.c:4459 src/hb-backend.c:4516
-#: src/hb-backend.c:4536 src/hb-backend.c:4556 src/hb-backend.c:4617
-#: src/hb-backend.c:4672 src/presets.c:2500 src/title-add.c:114
-#: src/title-add.c:132 src/title-add.c:147 src/title-add.c:163
+#: src/ui/ghb.ui:5282 src/ui/ghb.ui:5969 src/ui/ghb.ui:6059
+#: src/hb-backend.c:4480 src/hb-backend.c:4530 src/hb-backend.c:4547
+#: src/hb-backend.c:4564 src/hb-backend.c:4621 src/hb-backend.c:4673
+#: src/presets.c:2583 src/title-add.c:124 src/title-add.c:134
 msgid "Cancel"
 msgstr "Avbryt"
 
-#: src/ui-gtk3/ghb.ui:7588
+#: src/ui/ghb.ui:5306
 msgid "Select All"
 msgstr "Markera alla"
 
-#: src/ui-gtk3/ghb.ui:7592
+#: src/ui/ghb.ui:5308
 msgid "Mark all titles for adding to the queue"
 msgstr "Markera titlar för att lägga till i kön"
 
-#: src/ui-gtk3/ghb.ui:7605
+#: src/ui/ghb.ui:5317
 msgid "Clear All"
 msgstr "Rensa alla"
 
-#: src/ui-gtk3/ghb.ui:7609
+#: src/ui/ghb.ui:5319
 msgid "Unmark all titles"
 msgstr "Avmarkera alla titlar"
 
-#: src/ui-gtk3/ghb.ui:7670
+#: src/ui/ghb.ui:5328
+msgid "Invert Selection"
+msgstr "Invertera markerat"
+
+#: src/ui/ghb.ui:5361 src/title-add.c:351
 msgid "Destination files OK.  No duplicates detected."
 msgstr "Målfilerna är OK. Inga dubbletter identifierade."
 
-#: src/ui-gtk3/ghb.ui:7692 src/ui-gtk3/ghb.ui:7704
+#: src/ui/ghb.ui:5373
 msgid "Preferences"
 msgstr "Inställningar"
 
-#: src/ui-gtk3/ghb.ui:7796
-msgid "Default action when all encodes are complete"
-msgstr "Standardåtgärd när alla kodningar är slutförda"
+#: src/ui/ghb.ui:5418
+msgid "General"
+msgstr "Allmänt"
 
-#: src/ui-gtk3/ghb.ui:7818
+#: src/ui/ghb.ui:5425
 msgid "Use automatic naming (uses modified source name)"
 msgstr "Använd automatisk namngivning (använder modifierade källnamn)"
 
-#: src/ui-gtk3/ghb.ui:7819
+#: src/ui/ghb.ui:5427
 msgid "Create destination filename from source filename or volume label"
 msgstr "Skapa målfilsnamn från källfilsnamn eller volymetikett"
 
-#: src/ui-gtk3/ghb.ui:7843
+#: src/ui/ghb.ui:5442
 msgid "Auto-Name Template"
 msgstr "Mall för autonamn"
 
-#: src/ui-gtk3/ghb.ui:7854
+#: src/ui/ghb.ui:5450
 msgid ""
 "Available Options: {source-path} {source} {title} {preset} {chapters} {date}"
 " {time} {creation-date} {creation-time} {modification-date} {modification-"
@@ -1996,159 +1853,23 @@ msgstr ""
 "{modification-time} {codec} {bit-depth}  {quality} {bitrate} {width} "
 "{height}"
 
-#: src/ui-gtk3/ghb.ui:7874
+#: src/ui/ghb.ui:5464
 msgid "Use iPod/iTunes friendly (.m4v) file extension for MP4"
 msgstr "Använd iPod-/iTunes-vänligt (.m4v) filtillägg för MP4"
 
-#: src/ui-gtk3/ghb.ui:7917
+#: src/ui/ghb.ui:5487
 msgid "Number of previews"
 msgstr "Antal förhandsvisningar"
 
-#: src/ui-gtk3/ghb.ui:7955
-msgid "Filter short DVD and Blu-ray titles (seconds)"
-msgstr "Filtrera korta DVD- och Blu-ray-titlar (sekunder)"
+#: src/ui/ghb.ui:5510
+msgid "Minimum DVD/Blu-ray title duration (seconds)"
+msgstr "Minsta varaktighet för DVD-/Blu-ray-titel (sekunder)"
 
-#: src/ui-gtk3/ghb.ui:7969
-msgid "Clear completed queue items after an encode completes"
-msgstr "Ta bort slutförda köobjekt när en kodning har slutförts"
-
-#: src/ui-gtk3/ghb.ui:7973
-msgid ""
-"By default, completed jobs remain in the queue and are marked as complete.\n"
-"Check this if you want the queue to clean itself up by deleting completed jobs."
-msgstr ""
-"Som standard, behålls slutförda jobb i kön och markeras som slutförda.\n"
-"Markera det här, om du vill att kön skall rensa sig själv och ta bort slutförda jobb."
-
-#: src/ui-gtk3/ghb.ui:7986
-msgid "Power Saving"
-msgstr "Energisparande"
-
-#: src/ui-gtk3/ghb.ui:8004
-msgid "Pause encoding when in Power Saver mode"
-msgstr "Pausa kodningen i energisparläge"
-
-#: src/ui-gtk3/ghb.ui:8010
-msgid ""
-"If checked, encoding will be paused when the device\n"
-"enters Power Saver mode. Encoding will resume when\n"
-"Power Saver mode is disabled."
-msgstr ""
-"Om det här alternativet är markerat pausas kodningen när enheten\n"
-"går in i energisparläge. Kodningen återupptas när\n"
-"energisparläget är inaktiverat."
-
-#: src/ui-gtk3/ghb.ui:8021
-msgid "Pause encoding when on battery power"
-msgstr "Pausa kodningen vid batteridrift"
-
-#: src/ui-gtk3/ghb.ui:8027
-msgid ""
-"If checked, encoding will be paused when charger is\n"
-"unplugged. Encoding will resume when reconnected to\n"
-"a mains power source."
-msgstr ""
-"Om det här alternativet är markerat pausas kodningen när \n"
-"laddaren är urkopplad. Kodningen återupptas när enheten \n"
-"återansluts till en nätkälla."
-
-#: src/ui-gtk3/ghb.ui:8038
-msgid "Pause encoding when battery is low"
-msgstr "Pausa kodningen när batterinivån är låg"
-
-#: src/ui-gtk3/ghb.ui:8044
-msgid ""
-"If checked, encoding will be paused when the battery\n"
-"level is low. Encoding will resume when the\n"
-"battery is charged."
-msgstr ""
-"Om det här alternativet är markerat pausas kodningen\n"
-"när batterinivån är låg. Kodningen återupptas när\n"
-"batteriet är laddat."
-
-#: src/ui-gtk3/ghb.ui:8055
-msgid "General"
-msgstr "Allmänt"
-
-#: src/ui-gtk3/ghb.ui:8080
-msgid "Set a custom directory for Handbrake temporary files"
-msgstr "Ange en anpassad katalog för Handbrakes temporära filer"
-
-#: src/ui-gtk3/ghb.ui:8084 src/ui-gtk3/ghb.ui:8104
-msgid ""
-"Temporary files that HandBrake creates will be placed under this directory.\n"
-"\n"
-"Changing this setting will require restarting HandBrake.\n"
-"\n"
-"This setting overrides the TEMP environment variable that is normally used to define this directory.\n"
-"\n"
-"Flatpak users may need to set this for certain workflows to work properly. The default size of the TEMP directory in a flatpak sandbox is 1/2 physical memory size and may be too small for things like the 2-pass stats file."
-msgstr ""
-"Temporära filer som HandBrake skapar placeras i denna katalog.\n"
-"\n"
-"Om denna inställning ändras måste du starta om HandBrake.\n"
-"\n"
-"Den här inställningen åsidosätter miljövariabeln TEMP som normalt används för att definiera den här katalogen.\n"
-"\n"
-"Flatpak-användare kan behöva ställa in detta för att vissa arbetsflöden ska fungera korrekt. Standardstorleken på TEMP-katalogen i en flatpak-sandlåda är 1/2 fysisk minnesstorlek och kan vara för liten för saker som 2-pass-statistikfilen."
-
-#: src/ui-gtk3/ghb.ui:8114
-msgid "Temp Directory"
-msgstr "Temp-katalog"
-
-#: src/ui-gtk3/ghb.ui:8154
-msgid "Constant Quality fractional granularity"
-msgstr "Fraktionerad kornighet i konstant kvalitet"
-
-#: src/ui-gtk3/ghb.ui:8171
-msgid "Use dvdnav (instead of libdvdread)"
-msgstr "Använd dvdnav (istället för libdvdread)"
-
-#: src/ui-gtk3/ghb.ui:8194
-msgid "Monitor destination disk free space"
-msgstr "Övervaka måldiskens lediga utrymme"
-
-#: src/ui-gtk3/ghb.ui:8198 src/ui-gtk3/ghb.ui:8220
-msgid "Pause encoding if free disk space drops below limit"
-msgstr "Pausa kodningen om ledigt diskutrymme sjunker under gränsen"
-
-#: src/ui-gtk3/ghb.ui:8235
-msgid "MB Limit"
-msgstr "MB-gräns"
-
-#: src/ui-gtk3/ghb.ui:8263
-msgid "Put individual encode logs in same location as movie"
-msgstr "Spara individuella omkodningsloggar i samma mapp som filmen"
-
-#: src/ui-gtk3/ghb.ui:8299
-msgid "Activity Log Verbosity Level"
-msgstr "Utförlig aktivitetslogg"
-
-#: src/ui-gtk3/ghb.ui:8334
-msgid "Activity Log Longevity"
-msgstr "Varaktig aktivitetslogg"
-
-#: src/ui-gtk3/ghb.ui:8355
-msgid "Scale down High Definition previews"
-msgstr "Skala ner HD-förhandsvisningar"
-
-#: src/ui-gtk3/ghb.ui:8372
-msgid "Automatically Scan DVD when loaded"
-msgstr "Skanna DVD automatiskt vid inmatning"
-
-#: src/ui-gtk3/ghb.ui:8376
-msgid "Scans the DVD whenever a new disc is loaded"
-msgstr "Skannar DVD:n när en ny skiva matas in"
-
-#: src/ui-gtk3/ghb.ui:8414
-msgid "Activity Window Font Size"
-msgstr "Aktivitetsfönstrets teckenstorlek"
-
-#: src/ui-gtk3/ghb.ui:8431
+#: src/ui/ghb.ui:5518
 msgid "Use the same settings for all titles in a batch"
 msgstr "Använd samma inställningar för alla titlar i en omgång"
 
-#: src/ui-gtk3/ghb.ui:8435
+#: src/ui/ghb.ui:5520
 msgid ""
 "When checked, every title will use the same settings when adding a\n"
 "batch of titles to the queue.\n"
@@ -2160,11 +1881,11 @@ msgstr ""
 "\n"
 "Avaktivera om du vill göra oberoende inställningar för enskilda titlar."
 
-#: src/ui-gtk3/ghb.ui:8452
+#: src/ui/ghb.ui:5530
 msgid "Show preview image in Summary tab"
 msgstr "Visa förhandsgranskningsbild i sammanfattningsflik"
 
-#: src/ui-gtk3/ghb.ui:8458
+#: src/ui/ghb.ui:5533
 msgid ""
 "Uncheck this if you want to hide the video preview image on the Summary tab "
 "for privacy reasons."
@@ -2172,75 +1893,224 @@ msgstr ""
 "Avmarkera detta om du vill dölja förhandsgranskningsbilden på "
 "sammanfattningsfliken, av integritetsskäl."
 
-#: src/ui-gtk3/ghb.ui:8481
-msgid "Allow Tweaks"
-msgstr "Tillåt justeringar"
+#: src/ui/ghb.ui:5542
+msgid "Excluded File Extensions:"
+msgstr "Undantagna filändelser:"
 
-#: src/ui-gtk3/ghb.ui:8497
-msgid "Allow HandBrake For Dummies"
-msgstr "Tillåt HandBrake för nybörjare"
+#: src/ui/ghb.ui:5551
+msgid ""
+"The following file extensions will be ignored when scanning a folder. The "
+"list is case insensitive."
+msgstr ""
+"Följande filändelser kommer att undantas när en mapp genomsöks. Listan är "
+"skiftlägeskänslig. "
 
-#: src/ui-gtk3/ghb.ui:8519
+#: src/ui/ghb.ui:5561
+msgctxt "Queue tab in Preferences window"
+msgid "Queue"
+msgstr "Kö"
+
+#: src/ui/ghb.ui:5574
+msgid "Pause queue if disk space is lower than:"
+msgstr "Pausa kön om diskutrymmet är lägre än:"
+
+#: src/ui/ghb.ui:5590
+msgid "Disk Free Space Limit"
+msgstr "Gräns för fritt diskutrymme"
+
+#: src/ui/ghb.ui:5598 src/queuehandler.c:803 src/queuehandler.c:1293
+msgid "GB"
+msgstr "GB"
+
+#: src/ui/ghb.ui:5608
+msgid "Clear completed jobs after an encode completes"
+msgstr "Ta bort slutförda arbeten när en kodning har slutförts"
+
+#: src/ui/ghb.ui:5610
+msgid ""
+"By default, completed jobs remain in the queue and are marked as complete.\n"
+"  Check this if you want the queue to clean itself up by deleting completed jobs."
+msgstr ""
+"Som standard, behålls slutförda arbeten i kön och markeras som slutförda.\n"
+"Markera det här, om du vill att kön skall rensa sig själv och ta bort slutförda arbeten."
+
+#: src/ui/ghb.ui:5618
+msgid "Power Saving"
+msgstr "Energisparande"
+
+#: src/ui/ghb.ui:5632
+msgid "Pause encoding when in Power Saver mode"
+msgstr "Pausa kodningen i energisparläge"
+
+#: src/ui/ghb.ui:5636
+msgid ""
+"If checked, encoding will be paused when the device\n"
+"enters Power Saver mode. Encoding will resume when\n"
+"Power Saver mode is disabled."
+msgstr ""
+"Om det här alternativet är markerat pausas kodningen när enheten\n"
+"går in i energisparläge. Kodningen återupptas när\n"
+"energisparläget är inaktiverat."
+
+#: src/ui/ghb.ui:5644
+msgid "Pause encoding when on battery power"
+msgstr "Pausa kodningen vid batteridrift"
+
+#: src/ui/ghb.ui:5648
+msgid ""
+"If checked, encoding will be paused when charger is\n"
+"unplugged. Encoding will resume when reconnected to\n"
+"a mains power source."
+msgstr ""
+"Om det här alternativet är markerat pausas kodningen när \n"
+"laddaren är urkopplad. Kodningen återupptas när enheten \n"
+"återansluts till en nätkälla."
+
+#: src/ui/ghb.ui:5656
+msgid "Pause encoding when battery is low"
+msgstr "Pausa kodningen när batterinivån är låg"
+
+#: src/ui/ghb.ui:5660
+msgid ""
+"If checked, encoding will be paused when the battery\n"
+"level is low. Encoding will resume when the\n"
+"battery is charged."
+msgstr ""
+"Om det här alternativet är markerat pausas kodningen\n"
+"när batterinivån är låg. Kodningen återupptas när\n"
+"batteriet är laddat."
+
+#: src/ui/ghb.ui:5672
+msgid "When Done"
+msgstr "Vid slutfört"
+
+#: src/ui/ghb.ui:5684
+msgid "Default action when queue is completed:"
+msgstr "Standardåtgärd när kön är slutförd:"
+
+#: src/ui/ghb.ui:5697
+msgid "Show notification when queue is completed"
+msgstr "Visa avisering när kön är slutförd"
+
+#: src/ui/ghb.ui:5705
+msgid "Show notification when each item is completed"
+msgstr "Visa avisering när varje objekt är slutfört"
+
+#: src/ui/ghb.ui:5717
 msgid "Advanced"
 msgstr "Avancerat"
 
-#: src/ui-gtk3/ghb.ui:8536
+#: src/ui/ghb.ui:5733
+msgid "Set a custom directory for Handbrake temporary files"
+msgstr "Ange en anpassad katalog för Handbrakes temporära filer"
+
+#: src/ui/ghb.ui:5735 src/ui/ghb.ui:5751
+msgid ""
+"Temporary files that HandBrake creates will be placed under this directory.\n"
+"\n"
+"  Changing this setting will require restarting HandBrake.\n"
+"\n"
+"  This setting overrides the TEMP environment variable that is normally used to define this directory.\n"
+"\n"
+"  Flatpak users may need to set this for certain workflows to work properly. The default size of the TEMP directory in a flatpak sandbox is 1/2 physical memory size and may be too small for things like the 2-pass stats file."
+msgstr ""
+"Temporära filer som HandBrake skapar placeras i denna katalog.\n"
+"\n"
+"Om denna inställning ändras måste du starta om HandBrake.\n"
+"\n"
+"Den här inställningen åsidosätter miljövariabeln TEMP som normalt används för att definiera den här katalogen.\n"
+"\n"
+"Flatpak-användare kan behöva ställa in detta för att vissa arbetsflöden ska fungera korrekt. Standardstorleken på TEMP-katalogen i en flatpak-sandlåda är 1/2 fysisk minnesstorlek och kan vara för liten för saker som 2-pass-statistikfilen."
+
+#: src/ui/ghb.ui:5760
+msgid "Temp Directory"
+msgstr "Temp-katalog"
+
+#: src/ui/ghb.ui:5783
+msgid "Constant Quality fractional granularity"
+msgstr "Fraktionerad kornighet i konstant kvalitet"
+
+#: src/ui/ghb.ui:5795
+msgid "Use dvdnav (instead of libdvdread)"
+msgstr "Använd dvdnav (istället för libdvdread)"
+
+#: src/ui/ghb.ui:5813
+msgid "Put individual encode logs in same location as movie"
+msgstr "Spara individuella omkodningsloggar i samma mapp som filmen"
+
+#: src/ui/ghb.ui:5833
+msgid "Activity Log Verbosity Level"
+msgstr "Utförlig aktivitetslogg"
+
+#: src/ui/ghb.ui:5852
+msgid "Activity Log Longevity"
+msgstr "Varaktig aktivitetslogg"
+
+#: src/ui/ghb.ui:5865
+msgid "Scale down High Definition previews"
+msgstr "Skala ner HD-förhandsvisningar"
+
+#: src/ui/ghb.ui:5877
+msgid "Automatically Scan DVD when loaded"
+msgstr "Skanna DVD automatiskt vid inmatning"
+
+#: src/ui/ghb.ui:5879
+msgid "Scans the DVD whenever a new disc is loaded"
+msgstr "Skannar DVD:n när en ny skiva matas in"
+
+#: src/ui/ghb.ui:5906
+msgid "Activity Window Font Size"
+msgstr "Aktivitetsfönstrets teckenstorlek"
+
+#: src/ui/ghb.ui:5924
+msgid "Allow Tweaks"
+msgstr "Tillåt justeringar"
+
+#: src/ui/ghb.ui:5937
+msgid "Allow HandBrake For Dummies"
+msgstr "Tillåt HandBrake för nybörjare"
+
+#: src/ui/ghb.ui:5961
 msgid "Rename Preset"
 msgstr "Byt namn på mallen"
 
-#: src/ui-gtk3/ghb.ui:8598
-msgid "<span size=\"x-large\">Rename Preset</span>"
-msgstr "<span size=\"x-large\">Byt mallnamn</span>"
-
-#: src/ui-gtk3/ghb.ui:8618
-msgid "Name:"
-msgstr "Namn:"
-
-#: src/ui-gtk3/ghb.ui:8675 src/ui-gtk3/ghb.ui:8948
-msgid "<b>Description</b>"
-msgstr "<b>Beskrivning</b>"
-
-#: src/ui-gtk3/ghb.ui:8693
-msgid "Save Preset"
-msgstr "Spara mall"
-
-#: src/ui-gtk3/ghb.ui:8761
-msgid "Category:"
-msgstr "Kategori:"
-
-#: src/ui-gtk3/ghb.ui:8776
-msgid "Set the category that this preset will be shown under."
-msgstr "Ange under vilken kategori denna mall skall visas."
-
-#: src/ui-gtk3/ghb.ui:8792
-msgid "Category Name:"
-msgstr "Kategorinamn:"
-
-#: src/ui-gtk3/ghb.ui:8825
+#: src/ui/ghb.ui:6005 src/ui/ghb.ui:6139
 msgid "Preset Name:"
 msgstr "Mallnamn:"
 
-#: src/ui-gtk3/ghb.ui:8859
+#: src/ui/ghb.ui:6051
+msgid "New Preset"
+msgstr "Ny mall"
+
+#: src/ui/ghb.ui:6094
+msgid "Category:"
+msgstr "Kategori:"
+
+#: src/ui/ghb.ui:6104
+msgid "Set the category that this preset will be shown under."
+msgstr "Ange under vilken kategori denna mall skall visas."
+
+#: src/ui/ghb.ui:6115
+msgid "Category Name:"
+msgstr "Kategorinamn:"
+
+#: src/ui/ghb.ui:6164
 msgid "Default Preset"
 msgstr "Standardmall"
 
-#: src/ui-gtk3/ghb.ui:8864
+#: src/ui/ghb.ui:6166
 msgid "Make this the default Preset when HandBrake starts"
 msgstr "Gör det här till standardmall när HandBrake startas"
 
-#: src/ui-gtk3/ghb.ui:8890
-msgid "<b>Dimensions</b>"
-msgstr "<b>Dimensioner</b>"
-
-#: src/ui-gtk3/ghb.ui:8971
+#: src/ui/ghb.ui:6205
 msgid "HandBrake Preview"
 msgstr "Handbrake förhandsvisning"
 
-#: src/ui-gtk3/ghb.ui:9051
+#: src/ui/ghb.ui:6273
 msgid "Select preview frames."
 msgstr "Välj förhandsgranskningsrutor."
 
-#: src/ui-gtk3/ghb.ui:9073
+#: src/ui/ghb.ui:6288 src/preview.c:167
 msgid ""
 "Encode and play a short sequence of video starting from the current preview "
 "position."
@@ -2248,182 +2118,168 @@ msgstr ""
 "Koda om och spela upp en kort sekvens av videon, med början från aktuell "
 "förhandsgranskningsposition."
 
-#: src/ui-gtk3/ghb.ui:9129
+#: src/ui/ghb.ui:6301
+msgid "Preview Video Position"
+msgstr "Förhandsgranska videoposition"
+
+#: src/ui/ghb.ui:6314
+msgid "Preview Encode Progress"
+msgstr "Förhandsgranska kodningsförloppet"
+
+#: src/ui/ghb.ui:6323
 msgid "Click to toggle full screen mode"
 msgstr "Klicka för att helskärmsläge på/av"
 
-#: src/ui-gtk3/ghb.ui:9165
+#: src/ui/ghb.ui:6338
 msgid "<b>Duration:</b>"
 msgstr "<b>Varaktighet:</b>"
 
-#: src/ui-gtk3/ghb.ui:9177
+#: src/ui/ghb.ui:6346
 msgid "Set the duration of the live preview in seconds."
 msgstr "Ange varaktighet för förhandsgranskningen, i sekunder."
 
-#: src/ui-gtk3/ghb.ui:9193
-msgid "Show Crop"
-msgstr "Visa beskärning"
-
-#: src/ui-gtk3/ghb.ui:9197
-msgid "Show Cropped area of the preview"
-msgstr "Visa beskuret område"
-
-#: src/ui-gtk3/ghb.ui:9208
+#: src/ui/ghb.ui:6356
 msgid "Source Resolution"
 msgstr "Källupplösning"
 
-#: src/ui-gtk3/ghb.ui:9212
+#: src/ui/ghb.ui:6359
 msgid "Reset preview window to the source video's resolution"
 msgstr "Återställ förhandsgranskningsfönstret till källvideons upplösning"
 
-#: src/ui-gtk3/ghb.ui:9257 src/subtitlehandler.c:1719
-msgid "Edit Subtitles"
-msgstr "Redigera undertexter"
+#: src/ui/ghb-chapter-row.ui:38
+msgid "Chapter Title"
+msgstr "Avsnittstitel"
 
-#: src/ui-gtk3/ghb.ui:9312
-msgid "Import SRT"
-msgstr "Importera SRT"
+#: src/ui/ghb-file-button.ui:23 src/ghb-file-button.c:293
+msgid "(None)"
+msgstr "(Ingen)"
 
-#: src/ui-gtk3/ghb.ui:9317
-msgid "Enable settings to import an SRT subtitle file"
-msgstr "Aktivera inställningar för import av SRT undertextfil"
+#: src/ui/ghb-queue-row.ui:17 src/ghb-queue-row.c:265 src/ghb-queue-row.c:281
+msgid "Pending Queue Item"
+msgstr "Väntande köobjekt"
 
-#: src/ui-gtk3/ghb.ui:9328
-msgid "Import SSA"
-msgstr "Importera SSA"
+#: src/ui/ghb-queue-row.ui:31
+msgid "Delete this item"
+msgstr "Ta bort det här objektet"
 
-#: src/ui-gtk3/ghb.ui:9333
-msgid "Enable settings to import an SSA subtitle file"
-msgstr "Aktivera inställningar för import av SSA undertextfil"
+#: src/ui/ghb-queue-row.ui:52
+msgid "Encode Progress"
+msgstr "Kodningsförlopp"
 
-#: src/ui-gtk3/ghb.ui:9345
-msgid "Embedded Subtitle List"
-msgstr "Inbäddad undertextlista"
+#. Audio DRC Label
+#: src/audiohandler.c:419 src/audiohandler.c:764 src/audiohandler.c:1175
+#: src/audiohandler.c:1929 src/callbacks.c:5465 src/hb-backend.c:180
+#: src/hb-backend.c:193 src/hb-backend.c:205 src/hb-backend.c:230
+#: src/hb-backend.c:301 src/hb-backend.c:313 src/hb-backend.c:325
+#: src/hb-backend.c:386
+#, c-format
+msgid "Off"
+msgstr "Av"
 
-#: src/ui-gtk3/ghb.ui:9350
-msgid "Enable settings to select embedded subtitles"
-msgstr "Aktivera inställningar för val av inbäddade undertexter"
+#: src/audiohandler.c:431 src/audiohandler.c:760 src/audiohandler.c:1245
+#, c-format
+msgid "%ddB"
+msgstr "%ddB"
 
-#: src/ui-gtk3/ghb.ui:9377 src/ui-gtk3/ghb.ui:9725
-msgid "Source Track"
-msgstr "Källspår"
+#: src/audiohandler.c:736
+msgid "Quality: "
+msgstr "Kvalitet: "
 
-#: src/ui-gtk3/ghb.ui:9392
-msgid "List of subtitle tracks available from your source."
-msgstr "Lista över undertextspår, tillgängliga från din källa."
+#: src/audiohandler.c:743
+#, c-format
+msgid "Bitrate: %dkbps\n"
+msgstr "Bithastighet: %dkbps\n"
 
-#: src/ui-gtk3/ghb.ui:9406 src/ui-gtk3/ghb.ui:9755
-msgid "Track Name:"
-msgstr "Spårnamn:"
+#: src/audiohandler.c:755
+#, c-format
+msgid "%.4gkHz"
+msgstr "%.4gkHz"
 
-#: src/ui-gtk3/ghb.ui:9422
+#: src/audiohandler.c:770
+#, c-format
+msgid "<small>%d - %s (%.4gkHz)</small>"
+msgstr "<small>%d - %s (%.4gkHz)</small>"
+
+#: src/audiohandler.c:775
+#, c-format
+msgid "Bitrate: %.4gkbps"
+msgstr "Bithastighet: %.4gkbps"
+
+#: src/audiohandler.c:781
+#, c-format
+msgid "<small>Passthrough</small>"
+msgstr "<small>Genomströmning</small>"
+
+#: src/audiohandler.c:790
+#, c-format
 msgid ""
-"Set the subtitle track name.\n"
-"\n"
-"Players may use this in the subtitle selection list."
+"%sGain: %s\n"
+"DRC: %s\n"
+"Track Name: %s"
 msgstr ""
-"Ange undertextnamn.\n"
-"\n"
-"Spelare kan använda detta i undertextlistan."
+"%sGain: %s\n"
+"DRC: %s\n"
+"Spårnamn: %s"
 
-#: src/ui-gtk3/ghb.ui:9455
-msgid "Language"
-msgstr "Språk"
-
-#: src/ui-gtk3/ghb.ui:9469
-msgid "Character Code"
-msgstr "Teckenkod"
-
-#: src/ui-gtk3/ghb.ui:9483
-msgid "File:"
-msgstr "Fil:"
-
-#: src/ui-gtk3/ghb.ui:9498
-msgid "Offset (ms)"
-msgstr "Förskjutning (ms)"
-
-#: src/ui-gtk3/ghb.ui:9513
+#: src/audiohandler.c:795
+#, c-format
 msgid ""
-"Set the language of this subtitle.\n"
-"This value will be used by players in subtitle menus."
+"%sGain: %s\n"
+"DRC: %s"
 msgstr ""
-"Ange språket i denna undertext.\n"
-"Detta värde används av spelare, i undertextmenyer."
+"%sGain: %s\n"
+"DRC: %s"
 
-#: src/ui-gtk3/ghb.ui:9531
-msgid ""
-"Set the character code used by the SRT file you are importing.\n"
-"\n"
-"SRTs come in all flavours of character sets.\n"
-"We translate the character set to UTF-8.\n"
-"The source's character code is needed in order to perform this translation."
-msgstr ""
-"Ange teckentabell för SRT-filen du importerar.\n"
-"\n"
-"SRT-filer finns, kodade med många olika teckentabeller.\n"
-"Vi konverterar teckentabellen till UTF-8.\n"
-"Källans teckentabell behövs för att utföra denna konvertering."
+#: src/audiohandler.c:1401
+msgid "Add Audio Track"
+msgstr "Lägg till ljudspår"
 
-#: src/ui-gtk3/ghb.ui:9555
-msgid "Select the SRT file to import."
-msgstr "Välj SRT-fil för import."
-
-#: src/ui-gtk3/ghb.ui:9558
-msgid "Import File"
-msgstr "Importera fil"
-
-#: src/ui-gtk3/ghb.ui:9576
-msgid "Adjust the offset in milliseconds between video and SRT timestamps"
-msgstr ""
-"Justera förskjutningen i millisekunder, mellan video och SRT-tidsstämplar"
-
-#: src/ui-gtk3/ghb.ui:9600 src/subtitlehandler.c:119
-msgid "Forced Subtitles Only"
-msgstr "Endast obligatoriska undertexter"
-
-#: src/ui-gtk3/ghb.ui:9621
-msgid "Burn into video"
-msgstr "Bränn in i videon"
-
-#: src/ui-gtk3/ghb.ui:9626
-msgid ""
-"Render the subtitle over the video.\n"
-"The subtitle will be part of the video and can not be disabled."
-msgstr ""
-"Rendera undertexten över videon.\n"
-"Undertexten blir en del av videon och kan inte avaktiveras."
-
-#: src/ui-gtk3/ghb.ui:9638
-msgid "Set Default Track"
-msgstr "Ange standardspår"
-
-#: src/ui-gtk3/ghb.ui:9667 src/audiohandler.c:1473
+#: src/audiohandler.c:1493
 msgid "Edit Audio Track"
 msgstr "Redigera ljudspår"
 
-#: src/ui-gtk3/ghb.ui:9741
-msgid "List of audio tracks available from your source."
-msgstr "Lista över ljudspår, tillgängliga från din källa."
+#: src/audiohandler.c:1766
+msgid "Set the audio codec to encode this track with."
+msgstr "Ange ljudkodek att koda om detta spår med."
 
-#: src/ui-gtk3/ghb.ui:9771
+#: src/audiohandler.c:1780
+msgid "Bitrate"
+msgstr "Bithastighet"
+
+#: src/audiohandler.c:1798
+msgid "Set the bitrate to encode this track with."
+msgstr "Ange bithastighet att koda om detta spår med."
+
+#: src/audiohandler.c:1823
 msgid ""
-"Set the audio track name.\n"
-"\n"
-"Players may use this in the audio selection list."
+"<b>Audio Quality:</b>\n"
+"For encoders that support it, adjust the quality of the output."
 msgstr ""
-"Ange ljudspårsnamn.\n"
-"\n"
-"Spelare kan använda detta i ljudspårslistan."
+"<b>Ljudkvalitet:</b>\n"
+"Justera kvaliteten på utdata, för kodare som stödjer det."
 
-#: src/ui-gtk3/ghb.ui:9834
-msgid "Mix"
-msgstr "Mix"
+#: src/audiohandler.c:1850
+msgid "Set the mixdown of the output audio track."
+msgstr "Ange nermixning för utdataljudet."
 
-#: src/ui-gtk3/ghb.ui:9847
-msgid "Sample Rate"
-msgstr "Samplingsfrekvens"
+#: src/audiohandler.c:1863
+msgid "Set the sample rate of the output audio track."
+msgstr "Ange samplingsfrekvens för utdataljudet."
 
-#: src/ui-gtk3/ghb.ui:9877 src/ui-gtk3/ghb.ui:10116 src/audiohandler.c:1931
+#: src/audiohandler.c:1884
+msgid ""
+"<b>Audio Gain:</b> Adjust the amplification or attenuation of the output "
+"audio track."
+msgstr ""
+"<b>Ljudförstärkning:</b> Justera förstärkning eller försvagning av utgående "
+"ljudspår."
+
+#. Audio Gain Label
+#: src/audiohandler.c:1895
+msgid "0dB"
+msgstr "0 dB"
+
+#: src/audiohandler.c:1915
 msgid ""
 "<b>Dynamic Range Compression:</b> Adjust the dynamic range of the output audio track.\n"
 "\n"
@@ -2435,885 +2291,712 @@ msgstr ""
 "För källjud som har ett brett dynamiskt intervall (mycket högt och mycket låga sekvenser),\n"
 "Låter DRC dig \"komprimera\" intervallet genom att göra höga ljud lägre och låga ljud högre."
 
-#: src/ui-gtk3/ghb.ui:9898 src/audiohandler.c:1782
-msgid "Set the audio codec to encode this track with."
-msgstr "Ange ljudkodek att koda om detta spår med."
-
-#: src/ui-gtk3/ghb.ui:9920 src/audiohandler.c:1796
-msgid "Bitrate"
-msgstr "Bithastighet"
-
-#: src/ui-gtk3/ghb.ui:9925
-msgid "Enable bitrate setting"
-msgstr "Aktivera bithastighetsinställningar"
-
-#: src/ui-gtk3/ghb.ui:9935 src/audiohandler.c:1801
-msgid "Quality"
-msgstr "Kvalitet"
-
-#: src/ui-gtk3/ghb.ui:9940
-msgid "Enable quality setting"
-msgstr "Aktivera kvalitetsinställningar"
-
-#: src/ui-gtk3/ghb.ui:9961 src/audiohandler.c:1815
-msgid "Set the bitrate to encode this track with."
-msgstr "Ange bithastighet att koda om detta spår med."
-
-#: src/ui-gtk3/ghb.ui:9981
-msgid ""
-"<b>Quality:</b> For output codec's that support it, adjust the quality of "
-"the output."
-msgstr ""
-"<b>Kvalitet:</b> Justera utdatakvalitet, för de kodekar som stöder det."
-
-#: src/ui-gtk3/ghb.ui:10003
-msgid "00.0"
-msgstr "00.0"
-
-#: src/ui-gtk3/ghb.ui:10030 src/audiohandler.c:1867
-msgid "Set the mixdown of the output audio track."
-msgstr "Ange nermixning för utdataljudet."
-
-#: src/ui-gtk3/ghb.ui:10046 src/audiohandler.c:1880
-msgid "Set the sample rate of the output audio track."
-msgstr "Ange samplingsfrekvens för utdataljudet."
-
-#: src/ui-gtk3/ghb.ui:10069 src/audiohandler.c:1901
-msgid ""
-"<b>Audio Gain:</b> Adjust the amplification or attenuation of the output "
-"audio track."
-msgstr ""
-"<b>Ljudförstärkning:</b> Justera förstärkning eller försvagning av utgående "
-"ljudspår."
-
-#. Audio Gain Label
-#: src/ui-gtk3/ghb.ui:10087 src/audiohandler.c:1911
-msgid "0dB"
-msgstr "0 dB"
-
-#. Audio DRC Label
-#: src/ui-gtk3/ghb.ui:10134 src/audiohandler.c:427 src/audiohandler.c:765
-#: src/audiohandler.c:1168 src/audiohandler.c:1945 src/callbacks.c:5269
-#: src/hb-backend.c:187 src/hb-backend.c:200 src/hb-backend.c:212
-#: src/hb-backend.c:237 src/hb-backend.c:308 src/hb-backend.c:320
-#: src/hb-backend.c:332 src/hb-backend.c:393
-#, c-format
-msgid "Off"
-msgstr "Av"
-
-#: src/audiohandler.c:439 src/audiohandler.c:761 src/audiohandler.c:1236
-#, c-format
-msgid "%ddB"
-msgstr "%ddB"
-
-#: src/audiohandler.c:737
-msgid "Quality: "
-msgstr "Kvalitet: "
-
-#: src/audiohandler.c:744
-#, c-format
-msgid "Bitrate: %dkbps\n"
-msgstr "Bithastighet: %dkbps\n"
-
-#: src/audiohandler.c:756
-#, c-format
-msgid "%.4gkHz"
-msgstr "%.4gkHz"
-
-#: src/audiohandler.c:771
-#, c-format
-msgid "<small>%d - %s (%.4gkHz)</small>"
-msgstr "<small>%d - %s (%.4gkHz)</small>"
-
-#: src/audiohandler.c:776
-#, c-format
-msgid "Bitrate: %.4gkbps"
-msgstr "Bithastighet: %.4gkbps"
-
-#: src/audiohandler.c:782
-#, c-format
-msgid "<small>Passthrough</small>"
-msgstr "<small>Genomströmning</small>"
-
-#: src/audiohandler.c:791
-#, c-format
-msgid ""
-"%sGain: %s\n"
-"DRC: %s\n"
-"Track Name: %s"
-msgstr ""
-"%sGain: %s\n"
-"DRC: %s\n"
-"Spårnamn: %s"
-
-#: src/audiohandler.c:796
-#, c-format
-msgid ""
-"%sGain: %s\n"
-"DRC: %s"
-msgstr ""
-"%sGain: %s\n"
-"DRC: %s"
-
-#: src/audiohandler.c:1391
-msgid "Add Audio Track"
-msgstr "Lägg till ljudspår"
-
-#: src/audiohandler.c:1760
-msgid ""
-"Add an audio encoder.\n"
-"Each selected source track will be encoded with all selected encoders."
-msgstr ""
-"Lägg till en ljudkodare.\n"
-"Varje valt källspår kommer att kodas med alla valda kodare."
-
-#: src/audiohandler.c:1840
-msgid ""
-"<b>Audio Quality:</b>\n"
-"For encoders that support it, adjust the quality of the output."
-msgstr ""
-"<b>Ljudkvalitet:</b>\n"
-"Justera kvaliteten på utdata, för kodare som stödjer det."
-
-#: src/audiohandler.c:1960
+#: src/audiohandler.c:1946
 msgid "Remove this audio encoder"
 msgstr "Ta bort den här ljudkodaren"
 
-#: src/callbacks.c:542 src/callbacks.c:2014
-msgid "Closing HandBrake will terminate encoding.\n"
-msgstr "Om HandBrake avslutas, avbryts kodningen.\n"
+#: src/callbacks.c:296
+msgid "An encode is in progress."
+msgstr "En kodning pågår."
 
-#: src/callbacks.c:1178 src/callbacks.c:1189 src/callbacks.c:1662
+#: src/callbacks.c:1124 src/callbacks.c:1135 src/callbacks.c:1785
 msgid "Not Selected"
 msgstr "Inte valt"
 
-#: src/callbacks.c:1187
+#: src/callbacks.c:1133
 msgid "Detected DVD devices:"
 msgstr "Identifierade DVD-enheter:"
 
 #. This needs to be in scanning and working since scanning
 #. happens fast enough that it can be missed
-#: src/callbacks.c:1514 src/callbacks.c:4393
+#: src/callbacks.c:1460 src/callbacks.c:4578
 msgid "Scanning ..."
 msgstr "Söker..."
 
-#: src/callbacks.c:1550 src/callbacks.c:1551
+#: src/callbacks.c:1492 src/callbacks.c:1493 src/callbacks.c:1512
+#: src/callbacks.c:1513
 msgid "Stop Scan"
 msgstr "Stoppa sökning"
 
-#: src/callbacks.c:1723
+#: src/callbacks.c:1866
+msgid "Open Source Directory"
+msgstr "Öppna källmappen"
+
+#: src/callbacks.c:1869 src/chapters.c:484 src/ghb-file-button.c:222
+#: src/presets.c:2113 src/queuehandler.c:1479
+msgid "_Open"
+msgstr "_Öppna"
+
+#: src/callbacks.c:1870 src/callbacks.c:2136 src/chapters.c:456
+#: src/chapters.c:485 src/presets.c:2114 src/presets.c:2230
+#: src/queuehandler.c:1392 src/queuehandler.c:1480
+msgid "_Cancel"
+msgstr "_Avbryt"
+
+#: src/callbacks.c:1877
+msgid "Recursively scan directories"
+msgstr "Genomsök kataloger rekursivt"
+
+#: src/callbacks.c:1889
 msgid "Single Title"
 msgstr "Enskild titel"
 
-#: src/callbacks.c:2115 src/callbacks.c:2259
+#: src/callbacks.c:2247 src/callbacks.c:2391
 msgid "FPS"
 msgstr "FPS"
 
-#: src/callbacks.c:2119
+#: src/callbacks.c:2251
 #, c-format
 msgid "Dolby Vision %d.%d"
 msgstr "Dolby Vision %d.%d"
 
-#: src/callbacks.c:2123 src/callbacks.c:2126
+#: src/callbacks.c:2255 src/callbacks.c:2258
 msgid "HDR10+"
 msgstr "HDR10+"
 
-#: src/callbacks.c:2128
+#: src/callbacks.c:2260
 msgid "HDR10"
 msgstr "HDR10"
 
-#: src/callbacks.c:2130
+#: src/callbacks.c:2262
 msgid "HDR"
 msgstr "HDR"
 
-#: src/callbacks.c:2132
+#: src/callbacks.c:2264
 msgid "SDR"
 msgstr "SDR"
 
 #. TRANSLATORS: This is the bit depth of the video
-#: src/callbacks.c:2140
+#: src/callbacks.c:2272
 #, c-format
 msgid "%d-bit"
 msgstr "%d-bit"
 
-#: src/callbacks.c:2162
+#: src/callbacks.c:2294
 msgid "Audio Track"
 msgid_plural "Audio Tracks"
 msgstr[0] "Ljudspår"
 msgstr[1] "Ljudspår"
 
-#: src/callbacks.c:2165
+#: src/callbacks.c:2297
 msgid "Subtitle Track"
 msgid_plural "Subtitle Tracks"
 msgstr[0] "Undertextspår"
 msgstr[1] "Undertextspår"
 
-#: src/callbacks.c:2263
+#: src/callbacks.c:2395
 msgid "CFR"
 msgstr "CFR"
 
-#: src/callbacks.c:2267
+#: src/callbacks.c:2399
 msgid "PFR"
 msgstr "PFR"
 
-#: src/callbacks.c:2271
+#: src/callbacks.c:2403
 msgid "VFR"
 msgstr "VFR"
 
-#: src/callbacks.c:2313
+#: src/callbacks.c:2445
 #, c-format
 msgid "+ %d more audio track"
 msgid_plural "+ %d more audio tracks"
 msgstr[0] "+ %d ljudspår till"
 msgstr[1] "+ %d ljudspår till"
 
-#: src/callbacks.c:2347 src/callbacks.c:2379 src/queuehandler.c:650
-#: src/queuehandler.c:687
+#: src/callbacks.c:2476 src/queuehandler.c:592 src/queuehandler.c:1027
+#: src/subtitlehandler.c:415 src/subtitlehandler.c:1292
+msgid "Foreign Audio Scan"
+msgstr "Främmande ljudsökning"
+
+#: src/callbacks.c:2479 src/callbacks.c:2511 src/queuehandler.c:595
+#: src/queuehandler.c:632
 #, c-format
 msgid ", Forced Only"
 msgstr ", Endast tvingad"
 
-#: src/callbacks.c:2351 src/callbacks.c:2383 src/queuehandler.c:654
-#: src/queuehandler.c:691
+#: src/callbacks.c:2483 src/callbacks.c:2515 src/queuehandler.c:599
+#: src/queuehandler.c:636
 #, c-format
 msgid ", Burned"
 msgstr ", Bränd"
 
-#: src/callbacks.c:2355 src/callbacks.c:2387 src/queuehandler.c:658
-#: src/queuehandler.c:695
+#: src/callbacks.c:2487 src/callbacks.c:2519 src/queuehandler.c:603
+#: src/queuehandler.c:640
 #, c-format
 msgid ", Default"
 msgstr ", Standard"
 
-#: src/callbacks.c:2393
+#: src/callbacks.c:2525
 #, c-format
 msgid "+ %d more subtitle track"
 msgid_plural "+ %d more subtitle tracks"
 msgstr[0] "+ %d undertextspår till"
 msgstr[1] "+ %d undertextspår till"
 
-#: src/callbacks.c:2548
+#: src/callbacks.c:2680
 msgid "storage"
 msgstr "lagring"
 
-#: src/callbacks.c:2549
+#: src/callbacks.c:2681
 msgid "display"
 msgstr "skärm"
 
-#: src/callbacks.c:2550
+#: src/callbacks.c:2682
 msgid "Pixel Aspect Ratio"
 msgstr "Pixelproportioner"
 
-#: src/callbacks.c:2551
+#: src/callbacks.c:2683
 msgid "Display Aspect Ratio"
 msgstr "Skärmproportioner"
 
-#: src/callbacks.c:2688 src/hb-backend.c:2257 src/hb-backend.c:2377
-#: src/hb-backend.c:2389
+#: src/callbacks.c:2818 src/hb-backend.c:2206 src/hb-backend.c:2327
+#: src/hb-backend.c:2339
 msgid "No Title Found"
 msgstr "Ingen titel hittades"
 
-#: src/callbacks.c:2689
+#: src/callbacks.c:2819
 msgid "New Video"
 msgstr "Ny video"
 
-#: src/callbacks.c:3698 src/callbacks.c:3711 src/callbacks.c:3733
-#: src/callbacks.c:3771
-#, c-format
-msgid ""
-"%s\n"
-"\n"
-"%s in %d seconds ..."
-msgstr ""
-"%s\n"
-"\n"
-"%s på %d sekunder ..."
+#: src/callbacks.c:3815
+msgid "Temp Directory Changed"
+msgstr "Temp-katalog ändrad"
 
-#: src/callbacks.c:3868 src/callbacks.c:3919
-#, c-format
-msgid "%sYour movie will be lost if you don't continue encoding."
-msgstr "%sDin film kommer att förloras om du inte fortsätter kodningen."
+#: src/callbacks.c:3816
+msgid "You must restart HandBrake now."
+msgstr "Du måste starta om HandBrake nu."
 
-#: src/callbacks.c:3871 src/callbacks.c:3922 src/queuehandler.c:1824
+#: src/callbacks.c:3843 src/callbacks.c:3853 src/callbacks.c:3871
+#: src/callbacks.c:3920
+#, c-format
+msgid "%s in %d seconds…"
+msgstr "%s på %d sekunder…"
+
+#: src/callbacks.c:4097
+msgid "Stop Encoding?"
+msgstr "Vill du stoppa kodningen?"
+
+#: src/callbacks.c:4098 src/callbacks.c:4123 src/queuehandler.c:1702
+msgid "Your movie will be lost if you don't continue encoding."
+msgstr "Din film kommer att förloras om du inte fortsätter kodningen."
+
+#: src/callbacks.c:4099 src/queuehandler.c:1636
 msgid "Cancel Current and Stop"
 msgstr "Avbryt pågående och stoppa"
 
-#: src/callbacks.c:3872
+#: src/callbacks.c:4099
 msgid "Cancel Current, Start Next"
 msgstr "Avbryt pågående, starta nästa"
 
-#: src/callbacks.c:3873
-msgid "Finish Current, then Stop"
-msgstr "Slutför aktuell, stoppa sedan"
+#: src/callbacks.c:4100
+msgid "Finish Current, Start Next"
+msgstr "Slutför aktuell, starta nästa"
 
-#: src/callbacks.c:3874 src/callbacks.c:3923
+#: src/callbacks.c:4100 src/callbacks.c:4124 src/queuehandler.c:1703
 msgid "Continue Encoding"
 msgstr "Fortsätt koda"
 
-#: src/callbacks.c:4106
+#: src/callbacks.c:4122
+msgid "Quit HandBrake?"
+msgstr "Vill du avsluta HandBrake?"
+
+#: src/callbacks.c:4124
+msgid "Cancel All and Quit"
+msgstr "Avbryt allt och avsluta"
+
+#: src/callbacks.c:4290
 #, c-format
 msgid "%d encode pending"
-msgstr "%d kodning väntar"
+msgid_plural "%d encodes pending"
+msgstr[0] "%d kodning väntar"
+msgstr[1] "%d kodningar väntar"
 
-#: src/callbacks.c:4110
-#, c-format
-msgid "%d encodes pending"
-msgstr "%d kodningar väntar"
-
-#: src/callbacks.c:4167 src/callbacks.c:4235
+#: src/callbacks.c:4349 src/callbacks.c:4417
 #, c-format
 msgid "job %d of %d, "
 msgstr "jobb %d av %d, "
 
-#: src/callbacks.c:4177
+#: src/callbacks.c:4359
 #, c-format
 msgid "pass %d (subtitle scan) of %d, "
 msgstr "pass %d (undertextsökning) av %d, "
 
-#: src/callbacks.c:4182
+#: src/callbacks.c:4364
 #, c-format
 msgid "pass %d of %d, "
 msgstr "pass %d av %d, "
 
-#: src/callbacks.c:4195
+#: src/callbacks.c:4377
 #, c-format
 msgid "Encoding: %s%s%.2f %% (%.2f fps, avg %.2f fps, ETA %02dh%02dm%02ds)"
 msgstr "Kodning: %s%s%.2f %% (%.2f fps, avg %.2f fps, ETA %02dh%02dm%02ds)"
 
-#: src/callbacks.c:4205 src/callbacks.c:4245
+#: src/callbacks.c:4387 src/callbacks.c:4427
 #, c-format
 msgid "Encoding: %s%s%.2f %% (ETA %02dh%02dm%02ds)"
 msgstr "Kodning: %s%s%.2f %% (ETA %02dh%02dm%02ds)"
 
-#: src/callbacks.c:4215 src/callbacks.c:4254
+#: src/callbacks.c:4397 src/callbacks.c:4436
 #, c-format
 msgid "Encoding: %s%s%.2f %%"
 msgstr "Kodning: %s%s%.2f %%"
 
-#: src/callbacks.c:4241
+#: src/callbacks.c:4423
 #, c-format
 msgid "Searching for start time, "
 msgstr "Söker efter starttid, "
 
-#: src/callbacks.c:4316
+#: src/callbacks.c:4498
 #, c-format
 msgid "Scanning title %d of %d..."
 msgstr "Genomsöker titel %d av %d..."
 
-#: src/callbacks.c:4320
+#: src/callbacks.c:4502
 #, c-format
 msgid "Scanning title %d of %d preview %d..."
 msgstr "Genomsöker %d av %d förhandsgranskning %d..."
 
-#: src/callbacks.c:4404
+#: src/callbacks.c:4589
 msgid "Paused"
 msgstr "Pausad"
 
-#: src/callbacks.c:4435
+#: src/callbacks.c:4616
 msgid "Encode Done!"
 msgstr "Omkodning klar!"
 
-#: src/callbacks.c:4439
+#: src/callbacks.c:4621
 msgid "Encode Canceled."
 msgstr "Omkodning avbruten."
 
-#: src/callbacks.c:4444
+#: src/callbacks.c:4626
 msgid "Encode Failed."
 msgstr "Omkodning misslyckades."
 
-#: src/callbacks.c:4486
+#: src/callbacks.c:4668
 msgid "Muxing: This may take a while..."
 msgstr "Muxning: Detta kan ta en stund..."
 
-#: src/callbacks.c:5286
-msgid "Encode Complete"
-msgstr "Omkodning slutförd"
-
-#: src/callbacks.c:5288
-msgid "Put down that cocktail, Your HandBrake queue is done!"
-msgstr "Ställ ner drinken, din HandBrake-kö är klar!"
-
-#: src/callbacks.c:5299 src/callbacks.c:5307 src/callbacks.c:5316
+#: src/callbacks.c:5478 src/callbacks.c:5485 src/callbacks.c:5493
 msgid "Your encode is complete."
 msgstr "Din omkodning är slutförd."
 
-#: src/callbacks.c:5300
-msgid "Quitting Handbrake"
+#: src/callbacks.c:5479
+msgid "Quitting HandBrake"
 msgstr "Avslutar HandBrake"
 
-#: src/callbacks.c:5308
+#: src/callbacks.c:5486
 msgid "Putting computer to sleep"
 msgstr "Försätter datorn i viloläge"
 
-#: src/callbacks.c:5317
+#: src/callbacks.c:5494
 msgid "Shutting down the computer"
 msgstr "Stänger av datorn"
 
 #. Add filters
-#: src/callbacks.c:5446 src/chapters.c:603 src/chapters.c:633
-#: src/presets.c:2078 src/queuehandler.c:1694
+#: src/callbacks.c:5608 src/chapters.c:458 src/chapters.c:487
+#: src/presets.c:2116 src/queuehandler.c:1483
 msgid "All Files"
 msgstr "Alla filer"
 
-#: src/chapters.c:604 src/chapters.c:634
+#: src/chapters.c:459 src/chapters.c:488
 msgid "Chapters (*.xml)"
 msgstr "Kapitel (*.xml)"
 
-#: src/hb-backend.c:61 src/hb-backend.c:86
-msgid "First Track Matching Selected Languages"
-msgstr "Första spår som matchar valda språk"
+#: src/ghb-file-button.c:72
+msgid "Select a File"
+msgstr "Välj en fil"
 
-#: src/hb-backend.c:62 src/hb-backend.c:87
-msgid "All Tracks Matching Selected Languages"
-msgstr "Alla spår som matchar de valda språken"
+#: src/ghb-file-button.c:217
+msgid "_Select"
+msgstr "_Välj"
 
-#: src/hb-backend.c:73
+#: src/ghb-queue-row.c:260
+msgid "Running Queue Item"
+msgstr "Pågående köobjekt"
+
+#: src/ghb-queue-row.c:269
+msgid "Failed Queue Item"
+msgstr "Misslyckat köobjekt"
+
+#: src/ghb-queue-row.c:273
+msgid "Cancelled Queue Item"
+msgstr "Avbrutet köobjekt"
+
+#: src/ghb-queue-row.c:277
+msgid "Completed Queue Item"
+msgstr "Slutfört köobjekt"
+
+#: src/hb-backend.c:55 src/hb-backend.c:80
+msgid "First Matching Selected Languages"
+msgstr "Första matchande av valda språk"
+
+#: src/hb-backend.c:56 src/hb-backend.c:81
+msgid "All Matching Selected Languages"
+msgstr "Alla matchande valda språk"
+
+#: src/hb-backend.c:67
 msgid "Foreign Audio Subtitle Track"
 msgstr "Främmande språks undertextspår"
 
-#: src/hb-backend.c:74
+#: src/hb-backend.c:68
 msgid "First Selected Track"
 msgstr "Först valda spår"
 
-#: src/hb-backend.c:75
+#: src/hb-backend.c:69
 msgid "Foreign Audio, then First Selected Track"
 msgstr "Främmande ljudspråk, sedan först valda spår"
 
-#: src/hb-backend.c:97 src/queuehandler.c:223
+#: src/hb-backend.c:91 src/queuehandler.c:167
 msgid "Chapters:"
 msgstr "Avsnitt:"
 
-#: src/hb-backend.c:98
+#: src/hb-backend.c:92
 msgid "Seconds:"
 msgstr "Sekunder:"
 
-#: src/hb-backend.c:99 src/queuehandler.c:244
+#: src/hb-backend.c:93 src/queuehandler.c:188
 msgid "Frames:"
 msgstr "Bildrutor:"
 
-#: src/hb-backend.c:109
+#: src/hb-backend.c:103
 msgid "Do Nothing"
 msgstr "Gör ingenting"
 
-#: src/hb-backend.c:110
-msgid "Show Notification"
-msgstr "Visa avisering"
-
-#: src/hb-backend.c:111
+#: src/hb-backend.c:104
 msgid "Quit Handbrake"
 msgstr "Avsluta HandBrake"
 
-#: src/hb-backend.c:112
+#: src/hb-backend.c:105
 msgid "Put Computer To Sleep"
 msgstr "Försätt datorn i viloläge"
 
-#: src/hb-backend.c:113
+#: src/hb-backend.c:106
 msgid "Shutdown Computer"
 msgstr "Stäng av datorn"
 
-#: src/hb-backend.c:125 src/hb-backend.c:227 src/hb-backend.c:258
-#: src/hb-backend.c:272 src/hb-backend.c:383
+#: src/hb-backend.c:118 src/hb-backend.c:220 src/hb-backend.c:251
+#: src/hb-backend.c:265 src/hb-backend.c:376
 msgid "Custom"
 msgstr "Anpassad"
 
-#: src/hb-backend.c:161
+#: src/hb-backend.c:154
 msgid "Week"
 msgstr "Vecka"
 
-#: src/hb-backend.c:162
+#: src/hb-backend.c:155
 msgid "Month"
 msgstr "Månad"
 
-#: src/hb-backend.c:163
+#: src/hb-backend.c:156
 msgid "Year"
 msgstr "År"
 
-#: src/hb-backend.c:164
+#: src/hb-backend.c:157
 msgid "Immortal"
 msgstr "Odödlig"
 
-#: src/hb-backend.c:188 src/hb-backend.c:4862
+#: src/hb-backend.c:181 src/hb-backend.c:4864
 msgid "Decomb"
 msgstr "Decomb"
 
-#: src/hb-backend.c:189
+#: src/hb-backend.c:182
 msgid "Yadif"
 msgstr "Yadif"
 
-#: src/hb-backend.c:190
+#: src/hb-backend.c:183
 msgid "Bwdif"
 msgstr "Bwdif"
 
-#: src/hb-backend.c:201
+#: src/hb-backend.c:194
 msgid "NLMeans"
 msgstr "NLMeans"
 
-#: src/hb-backend.c:202
+#: src/hb-backend.c:195
 msgid "HQDN3D"
 msgstr "HQDN3D"
 
-#: src/hb-backend.c:213
+#: src/hb-backend.c:206
 msgid "Unsharp"
 msgstr "Oskärpa"
 
-#: src/hb-backend.c:214
+#: src/hb-backend.c:207
 msgid "Lapsharp"
 msgstr "Laserskärpa"
 
-#: src/hb-backend.c:225
+#: src/hb-backend.c:218
 msgid "Conservative"
 msgstr "Konservativ"
 
-#: src/hb-backend.c:238
+#: src/hb-backend.c:231
 msgid "90°"
 msgstr "90°"
 
-#: src/hb-backend.c:239
+#: src/hb-backend.c:232
 msgid "180°"
 msgstr "180°"
 
-#: src/hb-backend.c:240
+#: src/hb-backend.c:233
 msgid "270°"
 msgstr "270°"
 
-#: src/hb-backend.c:250
+#: src/hb-backend.c:243
 msgid "4320p 8K Ultra HD"
 msgstr "4320p 8K Ultra HD"
 
-#: src/hb-backend.c:251
+#: src/hb-backend.c:244
 msgid "2160p 4K Ultra HD"
 msgstr "2160p 4K Ultra HD"
 
-#: src/hb-backend.c:252
+#: src/hb-backend.c:245
 msgid "1440p 2.5K Quad HD"
 msgstr "1440p 2.5K Quad HD"
 
-#: src/hb-backend.c:253
+#: src/hb-backend.c:246
 msgid "1080p Full HD"
 msgstr "1080p Full HD"
 
-#: src/hb-backend.c:254
+#: src/hb-backend.c:247
 msgid "720p HD"
 msgstr "720p HD"
 
-#: src/hb-backend.c:255
+#: src/hb-backend.c:248
 msgid "576p PAL"
 msgstr "576p PAL"
 
-#: src/hb-backend.c:256
+#: src/hb-backend.c:249
 msgid "480p NTSC"
 msgstr "480p NTSC"
 
-#: src/hb-backend.c:269
+#: src/hb-backend.c:262
 msgid "Height (Letterbox)"
 msgstr "Höjd (Letterbox)"
 
-#: src/hb-backend.c:270
+#: src/hb-backend.c:263
 msgid "Width (Pillarbox)"
 msgstr "Bredd (Pillarbox)"
 
-#: src/hb-backend.c:271
+#: src/hb-backend.c:264
 msgid "Width &amp; Height"
 msgstr "Bredd &amp; höjd"
 
-#: src/hb-backend.c:282
+#: src/hb-backend.c:275
 msgid "Black"
 msgstr "Svart"
 
-#: src/hb-backend.c:283
+#: src/hb-backend.c:276
 msgid "Dark Gray"
 msgstr "Mörkgrå"
 
-#: src/hb-backend.c:284
+#: src/hb-backend.c:277
 msgid "Gray"
 msgstr "Grå"
 
-#: src/hb-backend.c:285
+#: src/hb-backend.c:278
 msgid "White"
 msgstr "Vit"
 
-#: src/hb-backend.c:296
+#: src/hb-backend.c:289
 msgid "Spatial"
 msgstr "Rumsliga"
 
-#: src/hb-backend.c:297
+#: src/hb-backend.c:290
 msgid "Temporal"
 msgstr "Temporär"
 
-#: src/hb-backend.c:309
+#: src/hb-backend.c:302
 msgid "Fast"
 msgstr "Snabb"
 
-#: src/hb-backend.c:310
+#: src/hb-backend.c:303
 msgid "Optimal"
 msgstr "Optimal"
 
-#: src/hb-backend.c:321
+#: src/hb-backend.c:314
 msgid "Strict"
 msgstr "Strikt"
 
-#: src/hb-backend.c:322
+#: src/hb-backend.c:315
 msgid "Normal"
 msgstr "Normal"
 
-#: src/hb-backend.c:333
+#: src/hb-backend.c:326
 msgid "Simple"
 msgstr "Enkel"
 
-#: src/hb-backend.c:334
+#: src/hb-backend.c:327
 msgid "Smart"
 msgstr "Smart"
 
-#: src/hb-backend.c:344
+#: src/hb-backend.c:337
 msgid "Diamond"
 msgstr "Diamant"
 
-#: src/hb-backend.c:345
+#: src/hb-backend.c:338
 msgid "Hexagon"
 msgstr "Hexagon"
 
-#: src/hb-backend.c:346
+#: src/hb-backend.c:339
 msgid "Uneven Multi-Hexagon"
 msgstr "Ojämn multihexagon"
 
-#: src/hb-backend.c:347
+#: src/hb-backend.c:340
 msgid "Exhaustive"
 msgstr "Uttömmande"
 
-#: src/hb-backend.c:348
+#: src/hb-backend.c:341
 msgid "Hadamard Exhaustive"
 msgstr "Hadamard uttömmande"
 
-#: src/hb-backend.c:358
+#: src/hb-backend.c:351
 msgid "0: SAD, no subpel"
 msgstr "0: SAD, ingen subpel"
 
-#: src/hb-backend.c:359
+#: src/hb-backend.c:352
 msgid "1: SAD, qpel"
 msgstr "1: SAD, qpel"
 
-#: src/hb-backend.c:360
+#: src/hb-backend.c:353
 msgid "2: SATD, qpel"
 msgstr "2: SATD, qpel"
 
-#: src/hb-backend.c:361
+#: src/hb-backend.c:354
 msgid "3: SATD: multi-qpel"
 msgstr "3: SATD: multi-qpel"
 
-#: src/hb-backend.c:362
+#: src/hb-backend.c:355
 msgid "4: SATD, qpel on all"
 msgstr "4: SATD, qpel på alla"
 
-#: src/hb-backend.c:363
+#: src/hb-backend.c:356
 msgid "5: SATD, multi-qpel on all"
 msgstr "5: SATD, multi-qpel på alla"
 
-#: src/hb-backend.c:364
+#: src/hb-backend.c:357
 msgid "6: RD in I/P-frames"
 msgstr "6: RD i I-/P-bildrutor"
 
-#: src/hb-backend.c:365
+#: src/hb-backend.c:358
 msgid "7: RD in all frames"
 msgstr "7: RD i alla bildrutor"
 
-#: src/hb-backend.c:366
+#: src/hb-backend.c:359
 msgid "8: RD refine in I/P-frames"
 msgstr "8: RD-förfining i I-/P-bildrutor"
 
-#: src/hb-backend.c:367
+#: src/hb-backend.c:360
 msgid "9: RD refine in all frames"
 msgstr "9: RD-förfining i alla bildrutor"
 
-#: src/hb-backend.c:368
+#: src/hb-backend.c:361
 msgid "10: QPRD in all frames"
 msgstr "10: QPRD i alla bildrutor"
 
-#: src/hb-backend.c:369
+#: src/hb-backend.c:362
 msgid "11: No early terminations in analysis"
 msgstr "11: Inga tidiga avslut i analysen"
 
-#: src/hb-backend.c:379
+#: src/hb-backend.c:372
 msgid "Most"
 msgstr "Mest"
 
-#: src/hb-backend.c:381
+#: src/hb-backend.c:374
 msgid "Some"
 msgstr "Vissa"
 
-#: src/hb-backend.c:382
+#: src/hb-backend.c:375
 msgid "All"
 msgstr "Alla"
 
-#: src/hb-backend.c:394
+#: src/hb-backend.c:387
 msgid "Encode only"
 msgstr "Koda endast"
 
-#: src/hb-backend.c:395
+#: src/hb-backend.c:388
 msgid "Always"
 msgstr "Alltid"
 
-#: src/hb-backend.c:1505 src/hb-backend.c:1565 src/hb-backend.c:1644
+#: src/hb-backend.c:1476 src/hb-backend.c:1536 src/hb-backend.c:1615
 msgid "Same as source"
 msgstr "Samma som källan"
 
-#: src/hb-backend.c:1658
+#: src/hb-backend.c:1629
 msgid "(NTSC Film)"
 msgstr "(NTSC-film)"
 
-#: src/hb-backend.c:1662
+#: src/hb-backend.c:1633
 msgid "(PAL Film/Video)"
 msgstr "(PAL Film/Video)"
 
-#: src/hb-backend.c:1666
+#: src/hb-backend.c:1637
 msgid "(NTSC Video)"
 msgstr "(NTSC-video)"
 
-#: src/hb-backend.c:2246
+#: src/hb-backend.c:2195
 #, c-format
 msgid "%s - (%05d.MPLS)"
 msgstr "%s - (%05d.MPLS)"
 
-#: src/hb-backend.c:2396
+#: src/hb-backend.c:2346
 #, c-format
 msgid "%3d - %02dh%02dm%02ds - %s"
 msgstr "%3d - %02dh%02dm%02ds - %s"
 
-#: src/hb-backend.c:2415
+#: src/hb-backend.c:2365
 #, c-format
 msgid "%3d - %02dh%02dm%02ds - (%05d.MPLS)"
 msgstr "%3d - %02dh%02dm%02ds - (%05d.MPLS)"
 
-#: src/hb-backend.c:2421
+#: src/hb-backend.c:2371
 #, c-format
 msgid "%3d - (%05d.MPLS)"
 msgstr "%3d - (%05d.MPLS)"
 
-#: src/hb-backend.c:2427
+#: src/hb-backend.c:2377
 #, c-format
 msgid "%3d - %02dh%02dm%02ds"
 msgstr "%3d - %02dh%02dm%02ds"
 
-#: src/hb-backend.c:2460
+#: src/hb-backend.c:2410
 msgid "No Titles"
 msgstr "Inga titlar"
 
 #. No audio. set some default
-#: src/hb-backend.c:2740
+#: src/hb-backend.c:2690
 msgid "No Audio"
 msgstr "Inget ljud"
 
-#: src/hb-backend.c:4271
-#, c-format
-msgid ""
-"Invalid Detelecine Settings:\n"
-"\n"
-"Preset:\t%s\n"
-"Custom:\t%s\n"
-msgstr ""
-"Ogiltig detelecine-inställning:\n"
-"\n"
-"Mall:\t%s\n"
-"Anpassat:\t%s\n"
+#: src/hb-backend.c:4306 src/hb-backend.c:4314
+msgid "Invalid Detelecine Settings"
+msgstr "Ogiltiga detelecine-inställningar"
 
-#: src/hb-backend.c:4278
-#, c-format
-msgid ""
-"Invalid Detelecine Settings:\n"
-"\n"
-"Preset:\t%s\n"
-msgstr ""
-"Ogiltig detelecine-inställning:\n"
-"\n"
-"Mall:\t%s\n"
+#: src/hb-backend.c:4309 src/hb-backend.c:4340 src/hb-backend.c:4376
+#: src/hb-backend.c:4413 src/hb-backend.c:4438
+msgid "Custom:"
+msgstr "Anpassat:"
 
-#: src/hb-backend.c:4304
-#, c-format
-msgid ""
-"Invalid Comb Detect Settings:\n"
-"\n"
-"Preset:\t%s\n"
-"Custom:\t%s\n"
-msgstr ""
-"Ogiltig comb detect-inställning:\n"
-"\n"
-"Mall:\t%s\n"
-"Anpassat:\t%s\n"
+#: src/hb-backend.c:4337 src/hb-backend.c:4345
+msgid "Invalid Comb Detect Settings"
+msgstr "Ogiltiga comb detect-inställningar"
 
-#: src/hb-backend.c:4311
-#, c-format
-msgid ""
-"Invalid Comb Detect Settings:\n"
-"\n"
-"Preset:\t%s\n"
-msgstr ""
-"Ogiltig comb detect-inställning:\n"
-"\n"
-"Mall:\t%s\n"
+#: src/hb-backend.c:4372 src/hb-backend.c:4381
+msgid "Invalid Deinterlace Settings"
+msgstr "Ogiltiga detelecine-inställningar"
 
-#: src/hb-backend.c:4340
-#, c-format
-msgid ""
-"Invalid Deinterlace Settings:\n"
-"\n"
-"Filter:\t%s\n"
-"Preset:\t%s\n"
-"Custom:\t%s\n"
-msgstr ""
-"Ogiltig deinterlace-inställning:\n"
-"\n"
-"Filter:\t%s\n"
-"Mall:\t%s\n"
-"Anpassat:\t%s\n"
+#: src/hb-backend.c:4374 src/hb-backend.c:4383 src/hb-backend.c:4410
+#: src/hb-backend.c:4435
+msgid "Filter:"
+msgstr "Filter:"
 
-#: src/hb-backend.c:4349
-#, c-format
-msgid ""
-"Invalid Deinterlace Settings:\n"
-"\n"
-"Filter:\t%s\n"
-"Preset:\t%s\n"
-msgstr ""
-"Ogiltig deinterlace-inställning:\n"
-"\n"
-"Filter:\t%s\n"
-"Mall:\t%s\n"
+#: src/hb-backend.c:4408
+msgid "Invalid Denoise Settings"
+msgstr "Ogiltiga Denoise-inställningar"
 
-#: src/hb-backend.c:4378
-#, c-format
-msgid ""
-"Invalid Denoise Settings:\n"
-"\n"
-"Filter:\t%s\n"
-"Preset:\t%s\n"
-"Tune:\t%s\n"
-"Custom:\t%s\n"
-msgstr ""
-"Ogiltig brusreduseringsinställning:\n"
-"\n"
-"Filter:\t%s\n"
-"Mall:\t%s\n"
-"Justering:\t%s\n"
-"Anpassat:\t%s\n"
+#: src/hb-backend.c:4433
+msgid "Invalid Sharpen Settings"
+msgstr "Ogiltiga skärpeinställningar"
 
-#: src/hb-backend.c:4406
-#, c-format
-msgid ""
-"Invalid Sharpen Settings:\n"
-"\n"
-"Filter:\t%s\n"
-"Preset:\t%s\n"
-"Tune:\t%s\n"
-"Custom:\t%s\n"
-msgstr ""
-"Ogiltig skärpeinställning:\n"
-"\n"
-"Filter:\t%s\n"
-"Mall:\t%s\n"
-"Justering:\t%s\n"
-"Anpassat:\t%s\n"
-
-#: src/hb-backend.c:4440
-#, c-format
+#. mp4/theora combination is not supported.
+#: src/hb-backend.c:4462
 msgid ""
 "Theora is not supported in the MP4 container.\n"
 "\n"
@@ -3325,8 +3008,8 @@ msgstr ""
 "Du bör välja en annan videokodek eller behållare.\n"
 "Om du fortsätter, kommer FFMPEG att användas."
 
-#: src/hb-backend.c:4450
-#, c-format
+#. webm only supports vp8, vp9 and av1.
+#: src/hb-backend.c:4471
 msgid ""
 "Only VP8, VP9 and AV1 is supported in the WebM container.\n"
 "\n"
@@ -3338,18 +3021,25 @@ msgstr ""
 "Du bör välja en annan videokodek eller behållare.\n"
 "Om du fortsätter, kommer en att väljas åt dig."
 
-#: src/hb-backend.c:4459 src/hb-backend.c:4516 src/hb-backend.c:4536
-#: src/hb-backend.c:4556 src/hb-backend.c:4617 src/hb-backend.c:4672
+#: src/hb-backend.c:4479 src/hb-backend.c:4530 src/hb-backend.c:4547
+#: src/hb-backend.c:4564 src/hb-backend.c:4621 src/hb-backend.c:4673
 msgid "Continue"
 msgstr "Fortsätt"
 
+#: src/hb-backend.c:4480
+msgid "Invalid Video Codec"
+msgstr "Ogiltig videokodek"
+
 #. No valid title, stop right there
-#: src/hb-backend.c:4485 src/hb-backend.c:4581
+#: src/hb-backend.c:4503 src/hb-backend.c:4589
 msgid "No title found.\n"
 msgstr "Ingen titel hittades.\n"
 
-#: src/hb-backend.c:4512
-#, c-format
+#: src/hb-backend.c:4530 src/hb-backend.c:4547
+msgid "Invalid Subtitle Selection"
+msgstr "Ogiltigt undertextval"
+
+#: src/hb-backend.c:4531
 msgid ""
 "Only one subtitle may be burned into the video.\n"
 "\n"
@@ -3361,8 +3051,7 @@ msgstr ""
 "Du bör ändra dina undertextinställningar.\n"
 "Om du fortsätter kan vissa undertexter förloras."
 
-#: src/hb-backend.c:4532
-#, c-format
+#: src/hb-backend.c:4548
 msgid ""
 "WebM in HandBrake only supports burned subtitles.\n"
 "\n"
@@ -3374,8 +3063,11 @@ msgstr ""
 "Du bör ändra dina undertextinställningar.\n"
 "Om du fortsätter kommer vissa undertexter att förloras."
 
-#: src/hb-backend.c:4552
-#, c-format
+#: src/hb-backend.c:4564
+msgid "Subtitle File Not Found"
+msgstr "Undertextfil kunde inte hittas"
+
+#: src/hb-backend.c:4565
 msgid ""
 "SRT file does not exist or not a regular file.\n"
 "\n"
@@ -3387,8 +3079,11 @@ msgstr ""
 "Du måste välja en giltig fil.\n"
 "Om du fortsätter, kommer undertexten att undantas."
 
-#: src/hb-backend.c:4613
-#, c-format
+#: src/hb-backend.c:4621 src/hb-backend.c:4673
+msgid "Invalid Audio Selection"
+msgstr "Ogiltigt ljudval"
+
+#: src/hb-backend.c:4622
 msgid ""
 "The source does not support Pass-Thru.\n"
 "\n"
@@ -3400,7 +3095,7 @@ msgstr ""
 "Du bör välja en annan ljudkodek.\n"
 "Om du fortsätter, kommer en att väljas åt dig."
 
-#: src/hb-backend.c:4668
+#: src/hb-backend.c:4674
 #, c-format
 msgid ""
 "%s is not supported in the %s container.\n"
@@ -3413,109 +3108,122 @@ msgstr ""
 "Välj en annan videokodek.\n"
 "Om du fortsätter, kommer en att väljas åt dig."
 
-#: src/hb-backend.c:4854
+#: src/hb-backend.c:4856
 msgid "Comb Detect"
 msgstr "Comb-identifiering"
 
-#: src/hb-backend.c:4856
+#: src/hb-backend.c:4858
 msgid "Detelecine"
 msgstr "Detelecine"
 
-#: src/hb-backend.c:4858
+#: src/hb-backend.c:4860
 msgid "Deinterlace (Yadif)"
 msgstr "Avflätning (Yadif)"
 
-#: src/hb-backend.c:4860
+#: src/hb-backend.c:4862
 msgid "Deinterlace (Bwdif)"
 msgstr "Avflätning (Bwdif)"
 
-#: src/hb-backend.c:4864
+#: src/hb-backend.c:4866
 msgid "Deblock"
 msgstr "Blockborttagning"
 
-#: src/hb-backend.c:4866
+#: src/hb-backend.c:4868
 msgid "Denoise (NLMeans)"
 msgstr "Brusreducering (NLMeans)"
 
-#: src/hb-backend.c:4868
+#: src/hb-backend.c:4870
 msgid "Denoise (HQDN3D)"
 msgstr "Brusreducering (HQDN3D)"
 
-#: src/hb-backend.c:4870
+#: src/hb-backend.c:4872
 msgid "Chroma Smooth"
 msgstr "Kromautjämning"
 
-#: src/hb-backend.c:4872
+#: src/hb-backend.c:4874
 msgid "Sharpen (Unsharp)"
 msgstr "Skärpa (Oskärpa)"
 
-#: src/hb-backend.c:4874
+#: src/hb-backend.c:4876
 msgid "Rotate"
 msgstr "Rotera"
 
-#: src/hb-backend.c:4876
+#: src/hb-backend.c:4878
 msgid "Sharpen (lapsharp)"
 msgstr "Skärpa (lapsharp)"
 
-#: src/hb-backend.c:4880
+#: src/hb-backend.c:4882
 msgid "Colorspace"
 msgstr "Färgrymd"
 
-#: src/main.c:102
+#: src/notifications.c:54
 #, c-format
-msgid ""
-"<b><big>Unable to create %s.</big></b>\n"
-"\n"
-"Internal error. Could not parse UI description.\n"
-"%s"
-msgstr ""
-"<b><big>Kunde inte skapa %s.</big></b>\n"
-"\n"
-"Internt fel. Kunde inte tolka UI-beskrivning.\n"
-"%s"
+msgid "%d item complete, %d failed"
+msgid_plural "%d items complete, %d failed"
+msgstr[0] "%d objekt slutfört, %d misslyckat"
+msgstr[1] "%d objekt slutförda, %d misslyckade"
 
-#: src/main.c:233 src/main.c:294
-msgid "Track Information"
-msgstr "Spårinformation"
+#: src/notifications.c:60
+#, c-format
+msgid "%d item has finished encoding"
+msgid_plural "%d items have finished encoding"
+msgstr[0] "%d objekt har slutfört kodning"
+msgstr[1] "%d objekt har slutfört kodning"
 
-#: src/main.c:247 src/main.c:252 src/main.c:308 src/main.c:312
-msgid " "
-msgstr " "
+#: src/notifications.c:106
+msgid "Put down that cocktail…"
+msgstr "Ställ ner den där drinken..."
 
-#: src/main.c:349
+#: src/notifications.c:116
+msgid "Encode Complete"
+msgstr "Omkodning slutförd"
+
+#: src/notifications.c:116
+msgid "Encode Failed"
+msgstr "Kodning misslyckades."
+
+#: src/notifications.c:140
+msgid "Battery level is low."
+msgstr "Batterinivån är låg."
+
+#: src/notifications.c:143
+msgid "Charger has been disconnected."
+msgstr "Laddaren av kopplats bort."
+
+#: src/notifications.c:146
+msgid "Power Saver mode has been activated."
+msgstr "Strömsparläge har aktiverats."
+
+#: src/notifications.c:153
+#, c-format
+msgid "%d.%d GB free space remaining."
+msgstr "%d.%d GB fritt utrymme återstår."
+
+#: src/notifications.c:165 src/queuehandler.c:1176
+msgid "Encoding Paused"
+msgstr "Kodning pausad"
+
+#: src/presets.c:78
 msgid "Preset Name"
 msgstr "Mallnamn"
 
-#: src/main.c:558
-msgid "The device or file to encode"
-msgstr "Enhet eller fil att koda om"
-
-#: src/main.c:559
-msgid "The preset values to use for encoding"
-msgstr "Mallvärden att använda för kodning"
-
-#: src/main.c:560
-msgid "Spam a lot"
-msgstr "Spam a lot"
-
-#: src/main.c:561
-msgid "The path to override user config dir"
-msgstr "Sökväg för att åsidosätta användarkonfigurationsmappen"
-
-#: src/main.c:563
-msgid "Open a console for debug output"
-msgstr "Öppna en konsol för felsökningsutdata"
-
-#: src/presets.c:1247
+#: src/presets.c:1281
 msgid "ghb_presets_menu_init: Failed to find presets folder."
 msgstr "ghb_presets_menu_init: Kunde inte hitta mallmappen."
 
-#: src/presets.c:1403
+#: src/presets.c:1443
 msgid "Failed to find parent folder when adding child."
 msgstr "Kunde inte hitta överordnad mapp när undermapp lades till."
 
-#: src/presets.c:1887
-#, c-format
+#: src/presets.c:1927
+msgid "Load backup presets"
+msgstr "Läs in säkerhetskopierade mallar"
+
+#: src/presets.c:1927
+msgid "Get me out of here!"
+msgstr "Ta mig härifrån!"
+
+#: src/presets.c:1928
 msgid ""
 "Presets found are newer than what is supported by this version of HandBrake!\n"
 "\n"
@@ -3525,84 +3233,73 @@ msgstr ""
 "\n"
 "Vill du fortsätta?"
 
-#: src/presets.c:1890
-msgid "Get me out of here!"
-msgstr "Ta mig härifrån!"
-
-#: src/presets.c:1890
-msgid "Load backup presets"
-msgstr "Läs in säkerhetskopierade mallar"
-
-#: src/presets.c:2079
+#: src/presets.c:2117
 msgid "Presets (*.json)"
 msgstr "Mallar (*.json)"
 
-#: src/presets.c:2081
-msgid "Legacy Presets (*.plist)"
-msgstr "Äldre mallar (*.plist)"
-
-#: src/presets.c:2190
+#: src/presets.c:2227
 msgid "Export Preset"
 msgstr "Exportera mallar"
 
-#: src/presets.c:2494
+#: src/presets.c:2583
+msgid "_Delete"
+msgstr "_Ta bort"
+
+#: src/presets.c:2584
+msgid "Delete Folder?"
+msgstr "Vill du ta bort mappen?"
+
+#: src/presets.c:2584
+msgid "Delete Preset?"
+msgstr "Vill du ta bort mallen?"
+
+#: src/presets.c:2585
 #, c-format
 msgid ""
-"Confirm deletion of %s:\n"
-"\n"
-"%s"
+"Are you sure you want to delete “%s”?\n"
+"Deleted items cannot be recovered."
 msgstr ""
-"Bekräfta borttagning av %s:\n"
-"\n"
-"%s"
+"Vill du verkligen ta bort \"%s\"?\n"
+"Borttagna objekt kan inte återställas."
 
-#: src/presets.c:2495
-msgid "folder"
-msgstr "mapp"
+#: src/preview.c:154
+msgid "Pause Preview"
+msgstr "Pausa förhandsgranskning"
 
-#: src/presets.c:2495
-msgid "preset"
-msgstr "mall"
+#: src/preview.c:158
+msgid "Stop Encoding Preview"
+msgstr "Stoppa förhandsgranskning av kodning"
 
-#: src/presets.c:2501
-msgid "Delete"
-msgstr "Ta bort"
+#: src/preview.c:162
+msgid "Play Preview"
+msgstr "Spela upp förhandsgranskning"
 
-#: src/preview.c:533
-#, c-format
-msgid ""
-"Missing GStreamer plugin\n"
-"Audio or Video may not play as expected\n"
-"\n"
-"%s"
-msgstr ""
-"GStreamer-instick saknas\n"
-"Ljud eller video kanske inte kan spelas som förväntat.\n"
-"\n"
-"%s"
+#: src/preview.c:288
+msgid "Playback Error"
+msgstr "Uppspelningsfel"
 
-#: src/preview.c:537 src/title-add.c:874
-msgid "OK"
-msgstr "OK"
+#: src/preview.c:291
+msgid "The video could not be played. For more details, see the Activity Log."
+msgstr "Videon kunde inte spelas upp. Se aktivitetsloggen för fler detaljer."
 
-#: src/queuehandler.c:189
+#: src/queuehandler.c:133
 #, c-format
 msgid "%s (Modified)"
 msgstr "%s (Ändrad)"
 
-#: src/queuehandler.c:237
+#: src/queuehandler.c:181
 msgid "Time:"
 msgstr "Tid:"
 
-#: src/queuehandler.c:281
+#: src/queuehandler.c:225
 msgid "Align A/V"
 msgstr "Justera A/V"
 
-#: src/queuehandler.c:291
+#: src/queuehandler.c:235
 msgid "iPod 5G"
 msgstr "iPod 5G"
 
-#: src/queuehandler.c:323
+#: src/queuehandler.c:267
 #, c-format
 msgid ""
 "%d:%d:%d:%d Crop\n"
@@ -3615,42 +3312,42 @@ msgstr ""
 "%d:%d Pixel-bildförhållande\n"
 "%s Visningsbildförhållande"
 
-#: src/queuehandler.c:354
+#: src/queuehandler.c:296
 #, c-format
 msgid "%s, Bitrate %dkbps"
 msgstr "%s, Bithastighet: %dkbps"
 
-#: src/queuehandler.c:359
-#, c-format
-msgid "%s, Bitrate %dkbps (Multi Pass)"
-msgstr "%s, Bithastighet %dkbps (Multipass)"
-
-#: src/queuehandler.c:366
+#: src/queuehandler.c:302
 #, c-format
 msgid "%s, Constant Quality %.4g(%s)"
 msgstr "%s, Konstant kvalitet %.4g(%s)"
 
-#: src/queuehandler.c:399
+#: src/queuehandler.c:309
+#, c-format
+msgid " (Multi Pass)"
+msgstr " (Multipass)"
+
+#: src/queuehandler.c:341
 #, c-format
 msgid "%sPreset %s"
 msgstr "%sFörinställning %s"
 
-#: src/queuehandler.c:404
+#: src/queuehandler.c:346
 #, c-format
 msgid "%sTune %s"
 msgstr "%sJustering %s"
 
-#: src/queuehandler.c:409
+#: src/queuehandler.c:351
 #, c-format
 msgid "%sProfile %s"
 msgstr "%sProfil %s"
 
-#: src/queuehandler.c:414
+#: src/queuehandler.c:356
 #, c-format
 msgid "%sLevel %s"
 msgstr "%sNivå %s"
 
-#: src/queuehandler.c:431
+#: src/queuehandler.c:373
 #, c-format
 msgid ""
 "\n"
@@ -3659,7 +3356,7 @@ msgstr ""
 "\n"
 "Konstant bildfrekvens %s fps"
 
-#: src/queuehandler.c:435
+#: src/queuehandler.c:377
 #, c-format
 msgid ""
 "\n"
@@ -3668,7 +3365,7 @@ msgstr ""
 "\n"
 "Peak-bildfrekvens %s fps (kan vara lägre)"
 
-#: src/queuehandler.c:440
+#: src/queuehandler.c:382
 #, c-format
 msgid ""
 "\n"
@@ -3677,76 +3374,76 @@ msgstr ""
 "\n"
 "Variabel bildfrekvens %s fps"
 
-#: src/queuehandler.c:739 src/queuehandler.c:764
+#: src/queuehandler.c:550
+msgid "kbps"
+msgstr "kbps"
+
+#: src/queuehandler.c:684 src/queuehandler.c:709
 msgid "Pending"
 msgstr "Väntar"
 
-#: src/queuehandler.c:751 src/queuehandler.c:1248
+#: src/queuehandler.c:696 src/queuehandler.c:1187
 msgid "Completed"
 msgstr "Slutförd"
 
-#: src/queuehandler.c:755 src/queuehandler.c:1252
+#: src/queuehandler.c:700 src/queuehandler.c:1191
 msgid "Canceled"
 msgstr "Avbruten"
 
-#: src/queuehandler.c:759 src/queuehandler.c:1256
+#: src/queuehandler.c:704 src/queuehandler.c:1195
 msgid "Failed"
 msgstr "Misslyckad"
 
-#: src/queuehandler.c:800 src/queuehandler.c:828 src/queuehandler.c:1296
-#: src/queuehandler.c:1324
+#: src/queuehandler.c:745 src/queuehandler.c:773 src/queuehandler.c:1235
+#: src/queuehandler.c:1263
 #, c-format
 msgid "%d Day %02d:%02d:%02d"
 msgstr "%d Dag %02d:%02d:%02d"
 
-#: src/queuehandler.c:803 src/queuehandler.c:831 src/queuehandler.c:1299
-#: src/queuehandler.c:1327
+#: src/queuehandler.c:748 src/queuehandler.c:776 src/queuehandler.c:1238
+#: src/queuehandler.c:1266
 #, c-format
 msgid "%d Days %02d:%02d:%02d"
 msgstr "%d Dagar %02d:%02d:%02d"
 
-#: src/queuehandler.c:844 src/queuehandler.c:1340
+#: src/queuehandler.c:789 src/queuehandler.c:1279
 msgid "B"
 msgstr "B"
 
-#: src/queuehandler.c:848 src/queuehandler.c:1344
+#: src/queuehandler.c:793 src/queuehandler.c:1283
 msgid "KB"
 msgstr "KB"
 
-#: src/queuehandler.c:853 src/queuehandler.c:1349
+#: src/queuehandler.c:798 src/queuehandler.c:1288
 msgid "MB"
 msgstr "MB"
 
-#: src/queuehandler.c:858 src/queuehandler.c:1354
-msgid "GB"
-msgstr "GB"
-
-#: src/queuehandler.c:869 src/queuehandler.c:1365
+#: src/queuehandler.c:814 src/queuehandler.c:1304
 msgid "Not Available"
 msgstr "Ej tillgänglig"
 
-#: src/queuehandler.c:1200
+#: src/queuehandler.c:1139
 msgid "Foreign Audio Search"
 msgstr "Främmande ljudsökning"
 
-#: src/queuehandler.c:1204
+#: src/queuehandler.c:1143
 msgid "Encode"
 msgstr "Koda"
 
-#: src/queuehandler.c:1208
+#: src/queuehandler.c:1147
 msgid "Encode Analysis Pass"
 msgstr "Koda analyspass"
 
-#: src/queuehandler.c:1212
+#: src/queuehandler.c:1151
 msgid "Encode Final Pass"
 msgstr "Koda slutpass"
 
 #. Should never happen
-#: src/queuehandler.c:1217
+#: src/queuehandler.c:1156
 msgid "Error"
 msgstr "Fel"
 
-#: src/queuehandler.c:1221
+#: src/queuehandler.c:1160
 #, c-format
 msgid ""
 "pass %d of %d\n"
@@ -3755,112 +3452,159 @@ msgstr ""
 "pass %d av %d\n"
 "%s"
 
-#: src/queuehandler.c:1233
+#: src/queuehandler.c:1172
 msgid "Scanning Title"
 msgstr "Söker titel"
 
-#: src/queuehandler.c:1237
-msgid "Encoding Paused"
-msgstr "Kodning pausad"
-
-#: src/queuehandler.c:1241
+#: src/queuehandler.c:1180
 msgid "Encoding In Progress"
 msgstr "Kodning pågår"
 
 #. Should never happen
-#: src/queuehandler.c:1261
+#: src/queuehandler.c:1200
 msgid "Unknown"
 msgstr "Okänd"
 
-#: src/queuehandler.c:1817
+#: src/queuehandler.c:1388
+msgid "Export Queue"
+msgstr "Exportera kö"
+
+#: src/queuehandler.c:1476
+msgid "Import Queue"
+msgstr "Importera kö"
+
+#: src/queuehandler.c:1627
+msgid "Low Disk Space: Encoding Paused"
+msgstr "Lågt diskutrymme: Kodning pausad"
+
+#: src/queuehandler.c:1629
 #, c-format
 msgid ""
-"%sThe destination filesystem is almost full: %<PRId64> MB free.\n"
+"The destination filesystem is almost full: %<PRId64> MB free.\n"
 "Destination: %s\n"
-"Encode may be incomplete if you proceed.\n"
+"Encode may be incomplete if you proceed."
 msgstr ""
-"%sMålets filsystem är nästan fullt: %<PRId64>MB ledigt.\n"
+"Målets filsystem är nästan fullt: %<PRId64>MB ledigt.\n"
 "Mål: %s\n"
-"Kodningen kanske blir ofullständig om du fortsätter.\n"
+"Kodningen kanske blir ofullständig om du fortsätter."
 
-#: src/queuehandler.c:1822
+#: src/queuehandler.c:1634
 msgid "Resume, I've fixed the problem"
 msgstr "Återuppta, jag har fixat problemet"
 
-#: src/queuehandler.c:1823
+#: src/queuehandler.c:1635
 msgid "Resume, Don't tell me again"
 msgstr "Återuppta, berätta inte igen"
 
-#: src/queuehandler.c:2019 src/queuehandler.c:2032
+#: src/queuehandler.c:1701
+msgid "Remove Item in Progress?"
+msgstr "Vill du ta bort objektet som pågår?"
+
+#: src/queuehandler.c:1703
+msgid "Cancel and Remove"
+msgstr "Avbryt och ta bort"
+
+#: src/queuehandler.c:1843 src/queuehandler.c:1856
 msgid "Stop"
 msgstr "Stopp"
 
-#: src/queuehandler.c:2020 src/queuehandler.c:2033
+#: src/queuehandler.c:1844 src/queuehandler.c:1857
 msgid "Stop Encoding"
 msgstr "Stoppa omkodning"
 
-#: src/queuehandler.c:2045
+#: src/queuehandler.c:1869
 msgid "S_top Encoding"
 msgstr "S_toppa omkodning"
 
-#: src/queuehandler.c:2061 src/queuehandler.c:2074
+#: src/queuehandler.c:1887 src/queuehandler.c:1900
 msgid "Resume"
 msgstr "Återuppta"
 
-#: src/queuehandler.c:2062 src/queuehandler.c:2075
+#: src/queuehandler.c:1888 src/queuehandler.c:1901
 msgid "Resume Encoding"
 msgstr "Återuppta omkodning"
 
-#: src/queuehandler.c:2086
+#: src/queuehandler.c:1912
 msgid "_Resume Encoding"
 msgstr "_Återuppta omkodning"
 
-#: src/queuehandler.c:2672
-msgid ""
-"You are currently encoding.  What would you like to do?\n"
-"\n"
-msgstr ""
-"Det pågår en omkodning. Vad vill du göra?\n"
-"\n"
-
-#: src/subtitlehandler.c:110
+#: src/subtitlehandler.c:107
 #, c-format
 msgid "Offset: %dms"
 msgstr "Förskjutning: %dms"
 
-#: src/subtitlehandler.c:115
+#: src/subtitlehandler.c:112
 msgid "Burned Into Video"
 msgstr "Inbränd i videon"
 
-#: src/subtitlehandler.c:116
+#: src/subtitlehandler.c:113
 msgid "Passthrough"
 msgstr "Genomströmning"
 
-#: src/subtitlehandler.c:123
+#: src/subtitlehandler.c:116
+msgid "Forced Subtitles Only"
+msgstr "Endast obligatoriska undertexter"
+
+#: src/subtitlehandler.c:120
 msgid "Default"
 msgstr "Standard"
 
-#: src/subtitlehandler.c:1167
+#: src/subtitlehandler.c:1230
 msgid "Add Subtitles"
 msgstr "Lägg till undertexter"
 
-#: src/subtitlehandler.c:1358
+#: src/subtitlehandler.c:1448
 #, c-format
 msgid "Preferred Language: %s"
 msgstr "Föredraget språk: %s"
 
-#: src/subtitlehandler.c:1372
+#: src/subtitlehandler.c:1461
 #, c-format
 msgid "Add %s subtitle track if default audio is not %s"
 msgstr "Lägg till %s undertextspår om standardljudet inte är %s"
 
-#: src/subtitlehandler.c:1377
+#: src/subtitlehandler.c:1466
 #, c-format
 msgid "Add subtitle track if default audio is not your preferred language"
 msgstr ""
 "Lägg till undertextspår om standardljudet inte är ditt föredragna språk"
 
-#: src/title-add.c:108
+#: src/subtitlehandler.c:1806
+msgid "Edit Subtitles"
+msgstr "Redigera undertexter"
+
+#: src/title-add.c:103 src/title-add.c:112
+msgid "Invalid Destination"
+msgstr "Ogiltig destination"
+
+#: src/title-add.c:104
+#, c-format
+msgid "“%s” is is not a valid directory."
+msgstr "“%s” är ingen giltig målmapp."
+
+#: src/title-add.c:113
+#, c-format
+msgid "“%s” is not a writable directory."
+msgstr "“%s” är ingen skrivbar mapp."
+
+#: src/title-add.c:124 src/title-add.c:134
+msgid "Overwrite"
+msgstr "Skriv över"
+
+#: src/title-add.c:124 src/title-add.c:134
+msgid "Overwrite File?"
+msgstr "Vill du skriva över filen?"
+
+#: src/title-add.c:125
+#, c-format
+msgid ""
+"The file “%s” already exists.\n"
+"Do you want to overwrite it?"
+msgstr ""
+"Filen \"%s\" finns redan.\n"
+"Vill du skriva över den?"
+
+#: src/title-add.c:135
 #, c-format
 msgid ""
 "Destination: %s\n"
@@ -3873,63 +3617,24 @@ msgstr ""
 "Ett annat köat jobb har specificerat samma målplats.\n"
 "Vill du skriva över?"
 
-#: src/title-add.c:113 src/title-add.c:162
-msgid "Overwrite File?"
-msgstr "Vill du skriva över filen?"
-
-#: src/title-add.c:114 src/title-add.c:163
-msgid "Overwrite"
-msgstr "Skriv över"
-
-#: src/title-add.c:127
-#, c-format
+#: src/title-add.c:346
 msgid ""
-"Destination: %s\n"
-"\n"
-"This is not a valid directory."
+"Duplicate destination files detected. Duplicates will not be added to the "
+"queue."
 msgstr ""
-"Målplats: %s\n"
-"\n"
-"Detta är ingen giltig målmapp."
+"Dubbletter av målfiler har identifierats. Dubbletter kommer inte att läggas "
+"till i kön."
 
-#: src/title-add.c:131 src/title-add.c:146
-msgid "Invalid Destination"
-msgstr "Ogiltig destination"
-
-#: src/title-add.c:142
-#, c-format
-msgid ""
-"Destination: %s\n"
-"\n"
-"Can not read or write the directory."
-msgstr ""
-"Målplats: %s\n"
-"\n"
-"Kan inte läsa eller skriva målmappen."
-
-#: src/title-add.c:157
-#, c-format
-msgid ""
-"Destination: %s\n"
-"\n"
-"File already exists.\n"
-"Do you want to overwrite?"
-msgstr ""
-"Målplats: %s\n"
-"\n"
-"Filen finns redan.\n"
-"Vill du skriva över den?"
-
-#: src/title-add.c:478
+#: src/title-add.c:439
 msgid "Select this title for adding to the queue.\n"
 msgstr "Välj den här titeln för att läggas till i kön.\n"
 
 #. Title label
-#: src/title-add.c:486
+#: src/title-add.c:447
 msgid "No Title"
 msgstr "Ingen titel"
 
-#: src/title-add.c:496
+#: src/title-add.c:457
 msgid ""
 "There is another title with the same destination file name.\n"
 "This title will not be added to the queue unless you change\n"
@@ -3939,11 +3644,15 @@ msgstr ""
 "Denna titel kommer inte att läggas till i kön, om du\n"
 "inte först ändrar utdatafilens namn.\n"
 
-#: src/title-add.c:871
+#: src/title-add.c:826
+msgid "OK"
+msgstr "OK"
+
+#: src/title-add.c:826
 msgid "Cannot Add Titles"
 msgstr "Kan inte lägga till titlar"
 
-#: src/title-add.c:872
+#: src/title-add.c:827
 msgid ""
 "The filenames are not unique. Please choose\n"
 "a unique destination filename for each title."
@@ -3951,33 +3660,26 @@ msgstr ""
 "Filnamnen är inte unika. Välj ett unikt\n"
 "målfilnamn för varje titel."
 
-#: src/videohandler.c:208
-#, c-format
-msgid ""
-"%s\n"
-"\n"
-"Expanded Options:\n"
-"\"%s\""
-msgstr ""
-"%s\n"
-"\n"
-"Utökade alternativ:\n"
-"\"%s\""
+#: src/videohandler.c:154
+msgid "Additional advanced arguments that can be passed to the video encoder."
+msgstr "Ytterligare avancerade argument som kan skickas till videokodaren."
 
-#: src/videohandler.c:211
-#, c-format
-msgid ""
-"%s\n"
-"\n"
-"Expanded Options:\n"
-"\"\""
-msgstr ""
-"%s\n"
-"\n"
-"Utökade alternativ:\n"
-"\"\""
+#: src/videohandler.c:227
+msgid "The full list of encoder parameters:"
+msgstr "Full lista över kodningsparametrar:"
 
-#: src/videohandler.c:356
-#, c-format
-msgid "%s: %.4g (Warning: lossless)"
-msgstr "%s: %.4g (Varning: förlustfri)"
+#: src/videohandler.c:345
+msgid "Warning: lossless"
+msgstr "Varning: Förlustfri"
+
+#: data/fr.handbrake.ghb.desktop.in:4
+msgid "Media Transcoder"
+msgstr "Mediaomkodare"
+
+#: data/fr.handbrake.ghb.desktop.in:5
+msgid "Transcodes DVD, Blu-ray, and other media"
+msgstr "Omkodar DVD, Blu-ray och andra media"
+
+#: data/fr.handbrake.ghb.desktop.in:11
+msgid "Format Converter;Video Encoder;"
+msgstr "Formatkonverterare;Video-kodare;"
