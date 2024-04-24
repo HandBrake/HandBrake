@@ -2330,7 +2330,6 @@ static int decavcodecvWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
     return result;
 }
 
-
 static void compute_frame_duration( hb_work_private_t *pv )
 {
     int64_t max_fps = 256LL;
@@ -2359,22 +2358,21 @@ static void compute_frame_duration( hb_work_private_t *pv )
             AVRational *tb = NULL;
             // We don't have a frame count or duration so try to use the
             // far less reliable avg_frame_rate info in the stream.
-            // Because the time bases are so screwed up, we only take values
-            // in a restricted range.
-            if (st->avg_frame_rate.den * max_fps > st->avg_frame_rate.num &&
-                st->avg_frame_rate.num > st->avg_frame_rate.den * min_fps)
+            if (st->avg_frame_rate.den && st->avg_frame_rate.num)
             {
                 tb = &(st->avg_frame_rate);
-            }
-            else if (st->time_base.num * max_fps > st->time_base.den &&
-                     st->time_base.den > st->time_base.num * min_fps)
-            {
-                tb = &(st->time_base);
             }
             // Try r_frame_rate, which is usually set for cfr streams
             else if (st->r_frame_rate.num && st->r_frame_rate.den)
             {
                 tb = &(st->r_frame_rate);
+            }
+            // Because the time bases are so screwed up, we only take values
+            // in a restricted range.
+            else if (st->time_base.num * max_fps > st->time_base.den &&
+                     st->time_base.den > st->time_base.num * min_fps)
+            {
+                tb = &(st->time_base);
             }
 
             if (tb != NULL)
@@ -2388,21 +2386,17 @@ static void compute_frame_duration( hb_work_private_t *pv )
         duration = (double)pv->context->framerate.den / (double)pv->context->framerate.num;
     }
 
-    if (duration == 0)
-    {
-        // No valid timing info found in the stream, so pick some value
-        duration = 1001. / 24000.;
-    }
-    pv->duration = duration * 90000.;
-
     int clock_min, clock_max, clock;
     hb_video_framerate_get_limits(&clock_min, &clock_max, &clock);
-    if (pv->duration < 1 / (clock / 90000.))
+
+    if (duration == 0 || duration > INT_MAX / clock || duration < 1. / clock)
     {
-        // Not representable, probably a broken file, so pick some value
-        pv->duration = 1001. / 24000. * 90000;
+        // No valid timing info found in the stream
+        // or not representable, probably a broken file, so pick some value
+        duration = 1001. / 24000.;
     }
 
+    pv->duration = duration * 90000.;
     pv->field_duration = pv->duration;
     if ( ticks_per_frame > 1 )
     {
