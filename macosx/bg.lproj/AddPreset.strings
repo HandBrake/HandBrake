@@ -61,14 +61,8 @@
 /* Class = "NSTextFieldCell"; title = "Subtitles:"; ObjectID = "OYE-GG-Vo3"; */
 "OYE-GG-Vo3.title" = "Субтитри:";
 
-/* Class = "NSMenu"; title = "OtherViews"; ObjectID = "qsA-gt-zdK"; */
-"qsA-gt-zdK.title" = "ДругиИзгледи";
-
 /* Class = "NSMenuItem"; title = "New Category…"; ObjectID = "Sf8-HP-mhE"; */
 "Sf8-HP-mhE.title" = "Нова категория...";
-
-/* Class = "NSMenu"; title = "OtherViews"; ObjectID = "tQ1-PN-kvh"; */
-"tQ1-PN-kvh.title" = "ДругиИзгледи";
 
 /* Class = "NSPopUpButton"; ibShadowedToolTip = "Resolution Limit allows you to set a maximum width and/or height."; ObjectID = "z6B-ig-ouq"; */
 "z6B-ig-ouq.ibShadowedToolTip" = "\"Лимит на разделителна способност\" позволява задаването на максимална ширина и/или височина.";

@@ -16,12 +16,6 @@
 /* Class = "NSTextFieldCell"; title = "Custom:"; ObjectID = "aem-qz-Cqk"; */
 "aem-qz-Cqk.title" = "Пользовательские:";
 
-/* Class = "NSMenu"; title = "OtherViews"; ObjectID = "akB-JW-MPe"; */
-"akB-JW-MPe.title" = "OtherViews";
-
-/* Class = "NSMenu"; title = "OtherViews"; ObjectID = "b6A-ax-2Ed"; */
-"b6A-ax-2Ed.title" = "OtherViews";
-
 /* Class = "NSTextField"; ibShadowedToolTip = "Custom Sharpen parameters.\n\nUnsharp syntax: y-strength=y:y-size=y:cb-strength=c:cb-size=c:cr-strength=c:cr-size=c\n\nUnsharp default: y-strength=0.25:y-size=7:cb-strength=0.25:cb-size=7\n\nLapsharp syntax: y-strength=y:y-kernel=y:cb-strength=c:cb-kernel=c:cr-strength=c:cr-kernel=c\n\nLapsharp default: y-strength=0.2:y-kernel=isolap:cb-strength=0.2:cb-kernel=isolap"; ObjectID = "bBr-vV-iAz"; */
 "bBr-vV-iAz.ibShadowedToolTip" = "Пользовательские параметры увеличения резкости.\n\nСинтаксис Unsharp: y-strength=y:y-size=y:cb-strength=c:cb-size=c:cr-strength=c:cr-size=c\n\nUnsharp по умолчанию: y-strength=0.25:y-size=7:cb-strength=0.25:cb-size=7\n\nСинтаксис Lapsharp: y-strength=y:y-kernel=y:cb-strength=c:cb-kernel=c:cr-strength=c:cr-kernel=c\n\nLapsharp по умолчанию: y-strength=0.2:y-kernel=isolap:cb-strength=0.2:cb-kernel=isolap";
 
@@ -85,9 +79,6 @@
 /* Class = "NSTextFieldCell"; title = "Tune:"; ObjectID = "hyH-QP-Zdi"; */
 "hyH-QP-Zdi.title" = "Настройка:";
 
-/* Class = "NSMenu"; title = "OtherViews"; ObjectID = "IHH-Se-l6d"; */
-"IHH-Se-l6d.title" = "OtherViews";
-
 /* Class = "NSPopUpButton"; ibShadowedToolTip = "Denoise reduces or removes the appearance of noise and grain. This can improve compression efficiency and create higher quality video at smaller file sizes. Overly strong Denoise settings may damage picture quality by discarding detail.\n\nNLMeans is a high quality denoise filter with a cost to speed. Use where quality is more important than speed.\n\nHQDN3D is an adaptive low-pass filter, faster than NLMeans but less effective at preserving fine detail."; ObjectID = "ins-7X-kbN"; */
 "ins-7X-kbN.ibShadowedToolTip" = "Шумодав снижает или убирает шумы и зерно изображения. Это может улучшить эффективность сжатия и поможет создать видео более высокого качества при меньшем размере файла.\nЧересчур сильное Удаление шумов может снизить качество изображения путем снижения детализации.\n\nNLMeans - высококачественный фильтр удаления шумов, но обладающий низкой скоростью работы. Используйте в тех случаях, когда качество важнее скорости.\n\nHQDN3D - адаптивный низкочастотный фильтр, он быстрее, чем NLMeans, но менее эффективный для сохранения мелких деталей.";
 
@@ -100,17 +91,8 @@
 /* Class = "NSPopUpButton"; ibShadowedToolTip = "Interlace Detection, when enabled, allows the Deinterlace filter to only process interlaced video frames."; ObjectID = "IQG-Nn-HTb"; */
 "IQG-Nn-HTb.ibShadowedToolTip" = "Отбнаружение интерлейсинга, когда включено, позволяет применять Деинтерлейсинг только для кадров с чересстрочностью.";
 
-/* Class = "NSMenu"; title = "OtherViews"; ObjectID = "jQg-bp-pb3"; */
-"jQg-bp-pb3.title" = "OtherViews";
-
 /* Class = "NSTextFieldCell"; title = "Custom:"; ObjectID = "KiY-kz-54k"; */
 "KiY-kz-54k.title" = "Пользовательские:";
-
-/* Class = "NSMenu"; title = "OtherViews"; ObjectID = "lad-BT-Hgz"; */
-"lad-BT-Hgz.title" = "OtherViews";
-
-/* Class = "NSMenu"; title = "OtherViews"; ObjectID = "MJr-ob-Uoe"; */
-"MJr-ob-Uoe.title" = "OtherViews";
 
 /* Class = "NSTextFieldCell"; title = "Custom:"; ObjectID = "n6U-tH-vo0"; */
 "n6U-tH-vo0.title" = "Пользовательские:";
@@ -118,26 +100,8 @@
 /* Class = "NSTextFieldCell"; title = "Custom:"; ObjectID = "oWz-qF-JYk"; */
 "oWz-qF-JYk.title" = "Пользовательские:";
 
-/* Class = "NSMenu"; title = "OtherViews"; ObjectID = "pIO-dE-81w"; */
-"pIO-dE-81w.title" = "OtherViews";
-
 /* Class = "NSButton"; ibShadowedToolTip = "Grayscale removes the color component of the video. Often referred to as Black & White video."; ObjectID = "Psx-nN-XiT"; */
 "Psx-nN-XiT.ibShadowedToolTip" = "Оттенки серого убирают цветовую составляющую видео. Другое название - черно-белое видео.";
-
-/* Class = "NSMenu"; title = "OtherViews"; ObjectID = "PyP-FP-gGx"; */
-"PyP-FP-gGx.title" = "OtherViews";
-
-/* Class = "NSMenu"; title = "OtherViews"; ObjectID = "qey-Yo-9sX"; */
-"qey-Yo-9sX.title" = "OtherViews";
-
-/* Class = "NSMenu"; title = "OtherViews"; ObjectID = "Qz4-EY-GFO"; */
-"Qz4-EY-GFO.title" = "OtherViews";
-
-/* Class = "NSMenu"; title = "OtherViews"; ObjectID = "r9i-tL-qtD"; */
-"r9i-tL-qtD.title" = "OtherViews";
-
-/* Class = "NSMenu"; title = "OtherViews"; ObjectID = "rfp-ah-CVB"; */
-"rfp-ah-CVB.title" = "OtherViews";
 
 /* Class = "NSTextField"; ibShadowedToolTip = "Custom Interlace Detection parameters.\n\nSyntax: mode=m:spatial-metric=s:motion-thresh=m:spatial-thresh=s:filter-mode=f:block-thresh=b:block-width=b:block-height=b:disable=d\n\nDefault: mode=3:spatial-metric=2:motion-thresh=1:spatial-thresh=1:filter-mode=2:block-thresh=40:block-width=16:block-height=16"; ObjectID = "rPg-F2-gtl"; */
 "rPg-F2-gtl.ibShadowedToolTip" = "Пользовательские параметры обнаружение интерлейсинга.\n\nСинтаксис: mode=m:spatial-metric=s:motion-thresh=m:spatial-thresh=s:filter-mode=f:block-thresh=b:block-width=b:block-height=b:disable=d\n\nПо умолчанию: mode=3:spatial-metric=2:motion-thresh=1:spatial-thresh=1:filter-mode=2:block-thresh=40:block-width=16:block-height=16";
@@ -147,9 +111,6 @@
 
 /* Class = "NSTextFieldCell"; title = "Tune:"; ObjectID = "tje-4P-jKt"; */
 "tje-4P-jKt.title" = "Настройка:";
-
-/* Class = "NSMenu"; title = "OtherViews"; ObjectID = "tlc-kS-W8X"; */
-"tlc-kS-W8X.title" = "OtherViews";
 
 /* Class = "NSTextFieldCell"; title = "Sharpen:"; ObjectID = "TwB-ag-L1L"; */
 "TwB-ag-L1L.title" = "Увеличение резкости";
@@ -174,12 +135,6 @@
 
 /* Class = "NSTextField"; ibShadowedToolTip = "Custom Denoise parameters.\n\nNLMeans syntax: y-strength=y:y-origin-tune=y:y-patch-size=y:y-range=y:y-frame-count=y:y-prefilter=y:cb-strength=c:cb-origin-tune=c:cb-patch-size=c:cb-range=c:cb-frame-count=c:cb-prefilter=c:cr-strength=c:cr-origin-tune=c:cr-patch-size=c:cr-range=c:cr-frame-count=c:cr-prefilter=c:threads=t\n\nNLMeans default: y-strength=6:y-origin-tune=1:y-patch-size=7:y-range=3:y-frame-count=2:y-prefilter=0:cb-strength=6:cb-origin-tune=1:cb-patch-size=7:cb-range=3:cb-frame-count=2:cb-prefilter=0\n\nHQDN3D syntax: y-spatial=y:cb-spatial=c:cr-spatial=c:y-temporal=y:cb-temporal=c:cr-temporal=c\n\nHQDN3D default: y-spatial=3:cb-spatial=2:cr-spatial=2:y-temporal=2:cb-temporal=3:cr-temporal=3"; ObjectID = "ZR9-YG-pfn"; */
 "ZR9-YG-pfn.ibShadowedToolTip" = "Пользовательские параметры Шумодава.\n\nСинтаксис NLMeans: y-strength=y:y-origin-tune=y:y-patch-size=y:y-range=y:y-frame-count=y:y-prefilter=y:cb-strength=c:cb-origin-tune=c:cb-patch-size=c:cb-range=c:cb-frame-count=c:cb-prefilter=c:cr-strength=c:cr-origin-tune=c:cr-patch-size=c:cr-range=c:cr-frame-count=c:cr-prefilter=c:threads=t\n\nNLMeans по умолчанию: y-strength=6:y-origin-tune=1:y-patch-size=7:y-range=3:y-frame-count=2:y-prefilter=0:cb-strength=6:cb-origin-tune=1:cb-patch-size=7:cb-range=3:cb-frame-count=2:cb-prefilter=0\n\nСинтаксис HQDN3D: y-spatial=y:cb-spatial=c:cr-spatial=c:y-temporal=y:cb-temporal=c:cr-temporal=c\n\nHQDN3D по умолчанию: y-spatial=3:cb-spatial=2:cr-spatial=2:y-temporal=2:cb-temporal=3:cr-temporal=3";
-
-/* Class = "NSMenu"; title = "OtherViews"; ObjectID = "ztV-i0-btG"; */
-"ztV-i0-btG.title" = "OtherViews";
-
-/* Class = "NSMenu"; title = "OtherViews"; ObjectID = "zV7-gM-Qpk"; */
-"zV7-gM-Qpk.title" = "OtherViews";
 
 /* Class = "NSTextFieldCell"; title = "Preset:"; ObjectID = "zvZ-ZX-yKE"; */
 "zvZ-ZX-yKE.title" = "Пресет:";

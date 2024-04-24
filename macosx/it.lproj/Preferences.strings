@@ -224,13 +224,13 @@
 "phv-oU-WnC.title" = ".m4v";
 
 /* Class = "NSButtonCell"; title = "Show notification when queue is completed"; ObjectID = "Qdg-Tw-rlf"; */
-"Qdg-Tw-rlf.title" = "Mostra una notifica quando la cosa è completata";
+"Qdg-Tw-rlf.title" = "Mostra una notifica quando la coda è completata";
 
 /* Class = "NSTextFieldCell"; title = "Options:"; ObjectID = "saX-n7-YV0"; */
 "saX-n7-YV0.title" = "Opzioni:";
 
 /* Class = "NSButtonCell"; title = "Clear completed jobs after an encode completes"; ObjectID = "szf-YE-Wml"; */
-"szf-YE-Wml.title" = "Rimuovi i lavori completato dopo le conversione";
+"szf-YE-Wml.title" = "Rimuovi i lavori completati dopo le conversioni";
 
 /* Class = "NSButtonCell"; title = "Use ISO Date Format (YYYY-MM-DD)"; ObjectID = "t9b-CO-ShI"; */
 "t9b-CO-ShI.title" = "Usa il formato data ISO (YYYY-MM-DD)";

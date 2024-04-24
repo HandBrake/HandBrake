@@ -56,8 +56,17 @@
    File already exists alert -> message */
 "A file already exists at the selected destination." = "出力先に既にファイルが存在します。";
 
+/* Queue Window Action Toolbar Item */
+"Action" = "アクション";
+
+/* Main Window Activity Toolbar Item */
+"Activity" = "アクティビティ";
+
 /* Picture HUD -> scale button */
 "Actual Scale" = "実際の大きさ";
+
+/* Main Window Add Toolbar Item */
+"Add All Titles To Queue" = "全タイトルをキューに追加";
 
 /* Queue undo action name */
 "Add Job To Queue" = "ジョブをキューに追加";
@@ -71,7 +80,11 @@
 /* Touch bar */
 "Add Titles To Queue" = "タイトルをキューに追加";
 
-/* Touch bar */
+/* Main Window Add Toolbar Item */
+"Add Titles To Queue…" = "タイトルをキューに追加…";
+
+/* Main Window Add Toolbar Item
+   Touch bar */
 "Add To Queue" = "キューに追加";
 
 /* Preferences Advanced Toolbar Item */
@@ -158,6 +171,12 @@
 /* Delete preset alert -> first button */
 "Delete Presets" = "プリセット削除";
 
+/* Queue Window Details Toolbar Item */
+"Details" = "詳細";
+
+/* Queue Window When Done Toolbar Item */
+"Do Nothing" = "何もしない";
+
 /* File already exists alert -> informative text
    File already exists in queue alert -> informative text */
 "Do you want to overwrite %@?" = "%@ を上書きしますか？";
@@ -202,8 +221,14 @@
 /* Export presets save panel title */
 "Export presets" = "プリセットをエクスポート";
 
+/* Default name for a newly added excluded file extension */
+"extension" = "拡張機能";
+
 /* File already exists alert -> message */
 "File already exists." = "ファイルが既に存在します。";
+
+/* Preferences Output File Name Toolbar Item */
+"File name" = "ファイル名";
 
 /* Preferences General Toolbar Item */
 "General" = "一般";
@@ -285,7 +310,8 @@
 /* Preview -> live preview alert default button */
 "Open in external player" = "外部プレイヤーで開く";
 
-/* Toolbar Open/Cancel Item
+/* Main Window Open Toolbar Item
+   Toolbar Open/Cancel Item
    Touch bar */
 "Open Source" = "ソースを開く";
 
@@ -293,7 +319,8 @@
    File already exists in queue alert -> second button */
 "Overwrite" = "上書き";
 
-/* Toolbar Pause Item */
+/* Main Window Pause Toolbar Item
+   Toolbar Pause Item */
 "Pause" = "一時停止";
 
 /* Queue -> pause/resume menu
@@ -301,7 +328,8 @@
    Touch bar */
 "Pause Encoding" = "エンコードを一時停止";
 
-/* Touch bar */
+/* Main Window Pause Toolbar Item
+   Touch bar */
 "Pause/Resume Encoding" = "エンコード一時停止/再開";
 
 /* Job statistics */
@@ -327,10 +355,14 @@
 /* Preferences -> Output Name Token */
 "Preset" = "プリセット";
 
+/* Main Window Presets Toolbar Item */
+"Presets" = "プリセット";
+
 /* Preview -> progress formatter title */
 "preview" = "プレビュー";
 
-/* Preview -> window title */
+/* Main Window Preview Toolbar Item
+   Preview -> window title */
 "Preview" = "プレビュー";
 
 /* Preview -> window title format */
@@ -342,6 +374,9 @@
 /* Touch bar */
 "Previews" = "プレビュー";
 
+/* Queue Window When Done Toolbar Item */
+"Put Computer to Sleep" = "コンピューターをスリープ";
+
 /* Queue notification alert message */
 "Put down that cocktail…" = "カクテルを置いて…";
 
@@ -351,18 +386,31 @@
 /* Preferences -> Output Name Token */
 "Quality/Bitrate" = "品質/ビットレート";
 
-/* Preferences Queue Toolbar Item
+/* Main Window Presets Toolbar Item
+   Preferences Queue Toolbar Item
    Queue window title */
 "Queue" = "キュー";
 
 /* Queue window title */
 "Queue (%@)" = "キュー (%@)";
 
+/* Queue Window Quick Look Toolbar Item */
+"Quick Look" = "クイックルック";
+
 /* Quit Alert -> first button */
 "Quit" = "終了";
 
+/* Queue Window When Done Toolbar Item */
+"Quit HandBrake" = "HandBrakeを終了";
+
 /* Touch bar */
 "Remaining Time" = "残り時間";
+
+/* Queue Window Action Toolbar Item */
+"Remove All Jobs" = "全ジョブ削除";
+
+/* Queue Window Action Toolbar Item */
+"Remove Completed Jobs" = "完了したジョブを削除";
 
 /* HBQueueItemView -> Remove button accessibility label */
 "Remove job" = "ジョブを削除";
@@ -375,6 +423,12 @@
 
 /* HBQueueItemView -> Encode state accessibility label */
 "Rescanning for editing" = "編集のために再スキャン中";
+
+/* Queue Window Action Toolbar Item */
+"Reset All Jobs" = "全ジョブリセット";
+
+/* Queue Window Action Toolbar Item */
+"Reset Failed Jobs" = "失敗したジョブをリセット";
 
 /* Toolbar Pause Item */
 "Resume" = "再開";
@@ -408,11 +462,22 @@
 /* Notification -> Show in Finder */
 "Show" = "表示";
 
-/* Touch bar */
+/* Main Window Activity Toolbar Item
+   Touch bar */
 "Show Activity Window" = "アクティビティウインドウを表示";
 
-/* Touch bar */
+/* Main Window Presets Toolbar Item */
+"Show Presets List" = "プリセットリストを表示";
+
+/* Main Window Preview Toolbar Item
+   Touch bar */
 "Show Preview Window" = "プレビューウインドウを表示";
+
+/* Main Window Presets Toolbar Item */
+"Show Queue Window" = "キューウインドウを表示";
+
+/* Queue Window When Done Toolbar Item */
+"Shut Down Computer" = "コンピューターをシャットダウン";
 
 /* Job statistics */
 "Size:" = "サイズ:";
@@ -426,7 +491,8 @@
 /* Preferences -> Output Name Token */
 "Source" = "ソース";
 
-/* Toolbar Start/Stop Item */
+/* Main Window Start Toolbar Item
+   Toolbar Start/Stop Item */
 "Start" = "開始";
 
 /* Menu Start/Stop Item
@@ -437,7 +503,8 @@
 /* Toolbar Start/Stop Item */
 "Start Queue" = "キューを開始";
 
-/* Touch bar */
+/* Main Window Start Toolbar Item
+   Touch bar */
 "Start/Stop Encoding" = "エンコードを開始/停止";
 
 /* Job statistics */
@@ -515,6 +582,9 @@
 /* Invalid destination alert -> message */
 "Warning!" = "警告！";
 
+/* Queue Window When Done Toolbar Item */
+"When Done" = "完了時";
+
 /* Preferences -> Output Name Token */
 "Width" = "幅";
 
@@ -548,4 +618,7 @@
 /* Queue Edit Alert -> stop and edit informative text
    Queue Stop Alert -> stop and remove informative text */
 "Your movie will be lost if you don't continue encoding." = "エンコードを実行しなければ処理中の映画は失われます。";
+
+/* Queue done notification message */
+"Your queue is done!" = "キューが完了しました！";
 
