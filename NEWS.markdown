@@ -17,10 +17,11 @@ Windows users, please make sure to install [Microsoft .NET Desktop Runtime versi
 - Allowed muxing VP9 and FLAC in the MP4 container
 - Removed timestamp jitters when using a constant NTSC frame rate in the MP4 container
 - Removed support for importing legacy plist based presets from much older versions of HandBrake
+- Updated iso639 language codes list
 
 #### Video
 
-- Added support for the FFV1 preset, including a new preset "Preservation FFV1" under the Professional category 
+- Added support for the FFV1 encoder, including a new preset "Preservation FFV1" under the Professional category
 - Added support for multi-pass CQ with VP9
 - Added support for VP9 tunes
 - Added Dolby Vision dynamic metadata pass through for SVT-AV1
@@ -29,10 +30,15 @@ Windows users, please make sure to install [Microsoft .NET Desktop Runtime versi
 
 #### Command line interface
 
+- Fixed subtitle "scan" when not first in --subtitle list
+- Fixed override of subtitle settings
+- Fixed processing audio overrides to preset
+
 #### Audio
 
 - Added TrueHD encoder
 - Added 88.2/96/176.4/192 kHz sample rates for TrueHD and FLAC encoders
+- Improved audio tracks selection by tracking "linked" audio tracks
 - Fixed incorrect channel layout when encoding a 6.1 track to Opus
 
 #### Subtitles
@@ -44,22 +50,23 @@ Windows users, please make sure to install [Microsoft .NET Desktop Runtime versi
 #### Build system
 
 - Reviewed and improved compiler optimization options for the third-party libraries
+- Improved libdovi package to make it possible to ship it in Flathub flatpak version
 
 #### Third-party libraries
 
 - Updated libraries
-  - libvpx 1.14.0 (VP8/VP9 video encoding)
-  - libopus 1.5.2 (Opus audio encoding)
-  - FFmpeg 7.0 (decoding and filters)
-  - x265 3.6 (H.265/HEVC video encoding)
-  - libdovi 3.3.0 (Dolby Vision dynamic metadata)
-  - libjpeg-turbo 3.0.2 (preview image compression)
-  - HarfBuzz 8.3.1 (subtitles)
-  - libdav1d 1.4.1 (AV1 video decoding)
-  - SVT-AV1 2.0 (AV1 video encoding)
   - AMF 1.4.33 (AMD VCN video encoding)
-  - oneVPL 2.10.1 (Intel QSV video encoding/decoding)
+  - FFmpeg 7.0 (decoding and filters)
+  - HarfBuzz 8.4.0 (subtitles)
+  - libdav1d 1.4.1 (AV1 video decoding)
+  - libdovi 3.3.0 (Dolby Vision dynamic metadata)
+  - libopus 1.5.2 (Opus audio encoding)
+  - libjpeg-turbo 3.0.2 (preview image compression)
   - libvpx 1.14.0 (VP8/VP9 video encoding)
+  - oneVPL 2.10.1 (Intel QSV video encoding/decoding)
+  - SVT-AV1 2.0 (AV1 video encoding)
+  - x264 164 r3186 (H.264/AVC video encoding)
+  - x265 3.6 (H.265/HEVC video encoding)
 - Removed libraries
   - libxml2
   
