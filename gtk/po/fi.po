@@ -200,7 +200,7 @@ msgstr "Lisää k_aikki raidat"
 
 #: src/ui/menu.ui:354 src/ui/menu.ui:441
 msgid "Add _Foreign Audio Scan"
-msgstr ""
+msgstr "Lisää _vieraan äänen tutkiminen"
 
 #: src/ui/menu.ui:360
 msgid "Add External Subtitle File"
@@ -1007,10 +1007,10 @@ msgid ""
 "The decomb filter supports a variety of interpolation algorithms.\n"
 "The deinterlace filter is a classic YADIF deinterlacer.\n"
 msgstr ""
-"Valitse kampauksenpoisto tai lomituksen poistava suodin.\n"
+"Valitse kampamaisuuden tai lomituksen poistava suodatin.\n"
 "\n"
-"Kampapoistosuodin tukee useita interpolaation algoritmejä.\n"
-"Lomituspoiston suodin on perinteinen YADIF-lomituspoisto.\n"
+"Kampapoistosuodatin tukee monia interpolaatioalgoritmeja.\n"
+"Lomituspoistosuodatin on perinteinen YADIF-lomituspoisto.\n"
 
 #: src/ui/ghb.ui:2954
 msgid ""
@@ -1020,9 +1020,9 @@ msgid ""
 "    The deinterlace filter is a classic YADIF deinterlacer.\n"
 "    "
 msgstr ""
-"Valitse kamman- tai lomituksenpoistosuodattimen asetukset.\n"
+"Valitse kampamaisuuden tai lomituksen poistosuodattimen asetukset.\n"
 "\n"
-"    Kammanpoistosuodatin tukee eri interpolointialgoritmeja.\n"
+"    Kammanpoistosuodatin tukee monia interpolointialgoritmeja.\n"
 "    Lomituksenpoistosuodatin on perinteinen Yadif-lomituksenpoistaja."
 
 #: src/ui/ghb.ui:2981
@@ -1730,7 +1730,7 @@ msgstr ""
 
 #: src/ui/ghb.ui:5184
 msgid "Audio encoder settings for each selected track:"
-msgstr ""
+msgstr "Äänikoodainasetukset kullekin valitulle raidalle:"
 
 #: src/ui/ghb.ui:5185
 msgid "Each selected source track will be encoded with all selected encoders"
@@ -2609,27 +2609,27 @@ msgstr "_Valitse"
 
 #: src/ghb-queue-row.c:260
 msgid "Running Queue Item"
-msgstr ""
+msgstr "Käynnissä oleva jonon kohde"
 
 #: src/ghb-queue-row.c:269
 msgid "Failed Queue Item"
-msgstr ""
+msgstr "Epäonnistunut jonon kohde"
 
 #: src/ghb-queue-row.c:273
 msgid "Cancelled Queue Item"
-msgstr ""
+msgstr "Peruttu jonon kohde"
 
 #: src/ghb-queue-row.c:277
 msgid "Completed Queue Item"
-msgstr ""
+msgstr "Valmis jonon kohde"
 
 #: src/hb-backend.c:55 src/hb-backend.c:80
 msgid "First Matching Selected Languages"
-msgstr ""
+msgstr "Ensimmäiset sopivat valitut kielet"
 
 #: src/hb-backend.c:56 src/hb-backend.c:81
 msgid "All Matching Selected Languages"
-msgstr ""
+msgstr "Kaikki sopivat valitut kielet"
 
 #: src/hb-backend.c:67
 msgid "Foreign Audio Subtitle Track"
@@ -2694,7 +2694,7 @@ msgstr "Kuolematon"
 
 #: src/hb-backend.c:181 src/hb-backend.c:4864
 msgid "Decomb"
-msgstr "Lohkoutumisenpoisto"
+msgstr "Kampamaisuuden poisto"
 
 #: src/hb-backend.c:182
 msgid "Yadif"
@@ -2964,7 +2964,7 @@ msgstr "Ei ääntä"
 
 #: src/hb-backend.c:4306 src/hb-backend.c:4314
 msgid "Invalid Detelecine Settings"
-msgstr ""
+msgstr "Virheelliset detelecine-asetukset"
 
 #: src/hb-backend.c:4309 src/hb-backend.c:4340 src/hb-backend.c:4376
 #: src/hb-backend.c:4413 src/hb-backend.c:4438
@@ -2973,7 +2973,7 @@ msgstr "Mukautettu:"
 
 #: src/hb-backend.c:4337 src/hb-backend.c:4345
 msgid "Invalid Comb Detect Settings"
-msgstr ""
+msgstr "Virheelliset kampamaisuuden tunnistuksen asetukset"
 
 #: src/hb-backend.c:4372 src/hb-backend.c:4381
 msgid "Invalid Deinterlace Settings"
@@ -3111,7 +3111,7 @@ msgstr "Kampamaisuuden tunnistus"
 
 #: src/hb-backend.c:4858
 msgid "Detelecine"
-msgstr ""
+msgstr "Detelecine"
 
 #: src/hb-backend.c:4860
 msgid "Deinterlace (Yadif)"
@@ -3322,7 +3322,7 @@ msgstr "%s, vakiolaatu %.4g(%s)"
 #: src/queuehandler.c:309
 #, c-format
 msgid " (Multi Pass)"
-msgstr ""
+msgstr "(Monivaiheinen)"
 
 #: src/queuehandler.c:341
 #, c-format
@@ -3657,11 +3657,11 @@ msgstr ""
 
 #: src/videohandler.c:154
 msgid "Additional advanced arguments that can be passed to the video encoder."
-msgstr ""
+msgstr "Videokoodaimelle välitettävät lisäparametrit."
 
 #: src/videohandler.c:227
 msgid "The full list of encoder parameters:"
-msgstr ""
+msgstr "Täysi koodainparametriluettelo:"
 
 #: src/videohandler.c:345
 msgid "Warning: lossless"
@@ -3669,12 +3669,12 @@ msgstr "Varoitus: häviötön"
 
 #: data/fr.handbrake.ghb.desktop.in:4
 msgid "Media Transcoder"
-msgstr ""
+msgstr "Mediatranskoodain"
 
 #: data/fr.handbrake.ghb.desktop.in:5
 msgid "Transcodes DVD, Blu-ray, and other media"
-msgstr ""
+msgstr "Transkoodaa DVD-, Bluray- ja muita tietovälineitä."
 
 #: data/fr.handbrake.ghb.desktop.in:11
 msgid "Format Converter;Video Encoder;"
-msgstr ""
+msgstr "Tiedostomuodon muunto;Videokoodain;"
