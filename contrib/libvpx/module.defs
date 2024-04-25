@@ -49,7 +49,3 @@ ifeq (darwin,$(HOST.system))
         LIBVPX.CONFIGURE.extra += --target=x86_64-darwin14-gcc
     endif
 endif
-
-ifeq (1-mingw,$(HOST.cross)-$(HOST.system))
-    LIBVPX.CONFIGURE.extra += --disable-avx512
-endif
