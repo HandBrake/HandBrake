@@ -1339,13 +1339,6 @@ int reinit_video_filters(hb_work_private_t * pv)
     enum AVPixelFormat pix_fmt;
     enum AVColorRange  color_range;
 
-    memset((void*)&filter_init, 0, sizeof(filter_init));
-
-    if (pv->job && pv->job->hw_pix_fmt == AV_PIX_FMT_VIDEOTOOLBOX)
-    {
-        // Filtering is done in a separate filter
-        return 0;
-    }
     if (!pv->job)
     {
         // HandBrake's preview pipeline uses yuv420 color.  This means all
@@ -1358,6 +1351,12 @@ int reinit_video_filters(hb_work_private_t * pv)
     }
     else
     {
+        if (pv->job->hw_pix_fmt == AV_PIX_FMT_VIDEOTOOLBOX)
+        {
+            // Filtering is done in a separate filter
+            return 0;
+        }
+
         if (pv->title->rotation == HB_ROTATION_90 ||
             pv->title->rotation == HB_ROTATION_270)
         {
@@ -1541,6 +1540,8 @@ int reinit_video_filters(hb_work_private_t * pv)
         sw_pix_fmt = frames_ctx->sw_format;
         hw_pix_fmt = frames_ctx->format;
     }
+
+    memset((void*)&filter_init, 0, sizeof(filter_init));
 
     filter_init.job               = pv->job;
     filter_init.pix_fmt           = sw_pix_fmt;
