@@ -1609,7 +1609,7 @@ static void LookForAudio(hb_scan_t *scan, hb_title_t * title, hb_audio_t * audio
     w->codec_param = audio->config.in.codec_param;
     b = hb_fifo_see( audio->priv.scan_cache );
     int ret = w->bsinfo( w, b, &info );
-    if ( ret < 0 )
+    if ( ret < 0 && ret != AVERROR(EAGAIN) )
     {
         // No point in attempting to decode the
         // same data again the next time around
