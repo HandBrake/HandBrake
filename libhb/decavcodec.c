@@ -905,12 +905,13 @@ static int decavcodecaBSInfo( hb_work_object_t *w, const hb_buffer_t *buf,
     unsigned char *parse_buffer;
     int parse_pos, parse_buffer_size;
 
+    int avcodec_result = 0;
     while (buf != NULL && !done)
     {
         parse_pos = 0;
         while (parse_pos < buf->size && !done)
         {
-            int parse_len, ret;
+            int parse_len;
 
             if (parser != NULL)
             {
@@ -937,8 +938,8 @@ static int decavcodecaBSInfo( hb_work_object_t *w, const hb_buffer_t *buf,
             avp->pts  = buf->s.start;
             avp->dts  = AV_NOPTS_VALUE;
 
-            ret = avcodec_send_packet(context, avp);
-            if (ret < 0 && ret != AVERROR_EOF)
+            avcodec_result = avcodec_send_packet(context, avp);
+            if (avcodec_result < 0 && avcodec_result != AVERROR_EOF)
             {
                 parse_pos += parse_len;
                 av_packet_free(&avp);
@@ -952,8 +953,8 @@ static int decavcodecaBSInfo( hb_work_object_t *w, const hb_buffer_t *buf,
                 {
                     frame = av_frame_alloc();
                 }
-                ret = avcodec_receive_frame(context, frame);
-                if (ret >= 0)
+                avcodec_result = avcodec_receive_frame(context, frame);
+                if (avcodec_result >= 0)
                 {
                     // libavcoded doesn't consistently set frame->sample_rate
                     if (frame->sample_rate != 0)
@@ -1056,7 +1057,7 @@ static int decavcodecaBSInfo( hb_work_object_t *w, const hb_buffer_t *buf,
                     av_frame_unref(frame);
                     break;
                 }
-            } while (ret >= 0);
+            } while (avcodec_result >= 0);
             av_packet_free(&avp);
             av_frame_free(&frame);
             parse_pos += parse_len;
@@ -1071,6 +1072,10 @@ static int decavcodecaBSInfo( hb_work_object_t *w, const hb_buffer_t *buf,
     if ( parser != NULL )
         av_parser_close( parser );
     hb_avcodec_free_context(&context);
+    if (!result && avcodec_result < 0 && avcodec_result != AVERROR_EOF)
+    {
+        result = avcodec_result;
+    }
     return result;
 }
 
