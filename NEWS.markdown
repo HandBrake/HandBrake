@@ -79,6 +79,7 @@ Windows users, please make sure to install [Microsoft .NET Desktop Runtime versi
 - Update the "Open Source" button to make the folder/batch mode more discoverable. 
 - Refreshed app icons
 - Miscellaneous bug fixes and improvements
+- Updated existing translations
 
 ### Mac
 
