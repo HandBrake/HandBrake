@@ -489,8 +489,8 @@ Veuillez consulter le site Web pour les notes de version.</value>
     <value>File mise en pause</value>
   </data>
   <data name="QueueViewModel_DelSelectedJobConfirmation" xml:space="preserve">
-    <value>Are you sure you want to delete the selected jobs?
-No encoded files will be deleted with this operation. </value>
+    <value>Êtes-vous sûr de vouloir supprimer la tâche sélectionnée ?
+Aucun des fichiers encodés ne sera supprimé lors de cette opération.</value>
   </data>
   <data name="QueueViewModel_JobCurrentlyRunningWarning" xml:space="preserve">
     <value>Cet encodage est en cours. Si vous le supprimez, l'encodage sera arrêté. Êtes-vous sûr de vouloir continuer ?</value>
@@ -2392,7 +2392,7 @@ Veuillez choisir un autre préréglage.</value>
     <value>Statut inconnu. Vérifiez le journal pour plus de détails.</value>
   </data>
   <data name="QueueView_JobStatus_ReadError" xml:space="preserve">
-    <value>Erreurs détectées lors de la lecture de la source.</value>
+    <value>Des erreurs ont été détectées en essayant de lire la source.</value>
   </data>
   <data name="QueueView_JobStatus_Unknown" xml:space="preserve">
     <value>Erreur inconnue. Vérifiez le journal pour plus de détails.</value>
@@ -2809,5 +2809,14 @@ Afin d'autoriser les encodages simultanés, activez l'option "Isolement des Proc
   </data>
   <data name="AudioView_QualityMode" xml:space="preserve">
     <value>Mode de Qualité de l'encodeur audio</value>
+  </data>
+  <data name="QueueView_AdvancedQueueDisplay" xml:space="preserve">
+    <value>Utiliser la vue avancée de la file d'attente</value>
+  </data>
+  <data name="QueueView_SimpleQueueDisplay" xml:space="preserve">
+    <value>Utiliser la vue simple de la file d'attente</value>
+  </data>
+  <data name="VideoView_LosslessEncodeOnly" xml:space="preserve">
+    <value>Encodage sans perte uniquement.</value>
   </data>
 </root>

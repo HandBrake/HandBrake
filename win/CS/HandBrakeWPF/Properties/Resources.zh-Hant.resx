@@ -2383,7 +2383,7 @@ You can drag/drop or enter the text above.</value>
     <value>未知的狀態。檢閱紀錄檔以了解詳情。</value>
   </data>
   <data name="QueueView_JobStatus_ReadError" xml:space="preserve">
-    <value>嘗試讀取來源時偵測到錯誤。</value>
+    <value>Errors detected while trying to read source.</value>
   </data>
   <data name="QueueView_JobStatus_Unknown" xml:space="preserve">
     <value>未知的故障。檢閱紀錄檔以了解詳情。</value>
@@ -2800,5 +2800,14 @@ To allow multiple simultaneous encodes, turn on "Process Isolation" in Tools Men
   </data>
   <data name="AudioView_QualityMode" xml:space="preserve">
     <value>Audio Encoder Quality Mode</value>
+  </data>
+  <data name="QueueView_AdvancedQueueDisplay" xml:space="preserve">
+    <value>Use Advanced Queue View</value>
+  </data>
+  <data name="QueueView_SimpleQueueDisplay" xml:space="preserve">
+    <value>Use Simple Queue View</value>
+  </data>
+  <data name="VideoView_LosslessEncodeOnly" xml:space="preserve">
+    <value>Lossless encoding only.</value>
   </data>
 </root>

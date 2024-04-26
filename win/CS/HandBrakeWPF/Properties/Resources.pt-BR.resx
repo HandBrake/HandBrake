@@ -490,8 +490,8 @@ Por favor, verifique as Notas de Versão no site.</value>
     <value>Fila Pausada</value>
   </data>
   <data name="QueueViewModel_DelSelectedJobConfirmation" xml:space="preserve">
-    <value>Are you sure you want to delete the selected jobs?
-No encoded files will be deleted with this operation. </value>
+    <value>Tem certeza de que deseja excluir os trabalhos selecionados?
+Nenhum arquivo codificado será excluído com esta operação. </value>
   </data>
   <data name="QueueViewModel_JobCurrentlyRunningWarning" xml:space="preserve">
     <value>Esta conversão está em andamento. Se você deletar, ela será interrompida. Tem certeza que quer continuar?</value>
@@ -2137,7 +2137,7 @@ Onde suportado, quaisquer predefinições de usuário serão importadas.</value>
     <value>Uma nova versão está disponível!</value>
   </data>
   <data name="About_Copyright" xml:space="preserve">
-    <value>Copyright (C) 2003-2024 The HandBrake Team</value>
+    <value>Direitos Autorais (C) 2003-2024 Equipe HandBrake</value>
   </data>
   <data name="Options_LowBatteryLevel" xml:space="preserve">
     <value>Baixo nível de bateria:</value>
@@ -2794,18 +2794,27 @@ Para permitir várias codificações simultâneas, ative o "Isolamento do proces
     <value>Faça a varredura recursiva dos diretórios ao usar o modo de varredura de pastas.</value>
   </data>
   <data name="AudioView_AudioQuality" xml:space="preserve">
-    <value>Audio Track Quality</value>
+    <value>Qualidade da trilha de áudio</value>
   </data>
   <data name="AudioView_AudioTrackName" xml:space="preserve">
-    <value>Audio Track Name</value>
+    <value>Nome da trilha de áudio</value>
   </data>
   <data name="AudioView_BitrateSelection" xml:space="preserve">
-    <value>Audio Track Bitrate</value>
+    <value>Bitrate da trilha de áudio</value>
   </data>
   <data name="AudioView_DeleteTrack" xml:space="preserve">
-    <value>Delete this audio track</value>
+    <value>Excluir esta trilha de áudio</value>
   </data>
   <data name="AudioView_QualityMode" xml:space="preserve">
-    <value>Audio Encoder Quality Mode</value>
+    <value>Modo de qualidade do codificador de áudio</value>
+  </data>
+  <data name="QueueView_AdvancedQueueDisplay" xml:space="preserve">
+    <value>Usar a visualização avançada da fila</value>
+  </data>
+  <data name="QueueView_SimpleQueueDisplay" xml:space="preserve">
+    <value>Usar a visualização simplificada da fila</value>
+  </data>
+  <data name="VideoView_LosslessEncodeOnly" xml:space="preserve">
+    <value>Apenas codificação sem perdas.</value>
   </data>
 </root>

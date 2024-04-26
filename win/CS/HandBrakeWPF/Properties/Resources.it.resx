@@ -1018,7 +1018,7 @@ Suggerimento: le opzioni della sovrascrittura possono essere modificate nelle Pr
     <value>Impostazioni output</value>
   </data>
   <data name="MainView_Pause" xml:space="preserve">
-    <value>Pausa</value>
+    <value>Sospendi</value>
   </data>
   <data name="MainView_PictureTab" xml:space="preserve">
     <value>Dimensioni</value>
@@ -1436,7 +1436,7 @@ Sono supportati VLC e MPC-HC. Altri riproduttori multimediali potrebbero funzion
     <value>Opzioni</value>
   </data>
   <data name="QueueView_Pause" xml:space="preserve">
-    <value>Pausa</value>
+    <value>Sospendi</value>
   </data>
   <data name="QueueView_PausedDuration" xml:space="preserve">
     <value>Tempo trascorso in pausa:</value>
@@ -2809,5 +2809,14 @@ Per permettere più codifiche simultanee, attivare "Isolamento del Processo" nel
   </data>
   <data name="AudioView_QualityMode" xml:space="preserve">
     <value>Modo Qualità del Codificatore Audio</value>
+  </data>
+  <data name="QueueView_AdvancedQueueDisplay" xml:space="preserve">
+    <value>Visualizza Coda Avanzata</value>
+  </data>
+  <data name="QueueView_SimpleQueueDisplay" xml:space="preserve">
+    <value>Visualizza Coda Semplificata</value>
+  </data>
+  <data name="VideoView_LosslessEncodeOnly" xml:space="preserve">
+    <value>Solo codifica senza perdita.</value>
   </data>
 </root>

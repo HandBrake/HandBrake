@@ -2389,7 +2389,7 @@ Mesedez, aukeratu beste aurrezarpen bat.</value>
     <value>Egoera ezezaguna. Ikusi erregistroa xehetasunetarako.</value>
   </data>
   <data name="QueueView_JobStatus_ReadError" xml:space="preserve">
-    <value>Akatsak hauteman dira fitxategia irakurtzen saiatzean.</value>
+    <value>Errors detected while trying to read source.</value>
   </data>
   <data name="QueueView_JobStatus_Unknown" xml:space="preserve">
     <value>Akats ezezaguna. Ikusi erregistroa xehetasunetarako.</value>
@@ -2806,5 +2806,14 @@ Aldibereko kode anitz onartzeko, aktibatu "Prozesuaren isolamendua" Tresnak menu
   </data>
   <data name="AudioView_QualityMode" xml:space="preserve">
     <value>Audio kodetzailearen kalitate modua</value>
+  </data>
+  <data name="QueueView_AdvancedQueueDisplay" xml:space="preserve">
+    <value>Use Advanced Queue View</value>
+  </data>
+  <data name="QueueView_SimpleQueueDisplay" xml:space="preserve">
+    <value>Use Simple Queue View</value>
+  </data>
+  <data name="VideoView_LosslessEncodeOnly" xml:space="preserve">
+    <value>Lossless encoding only.</value>
   </data>
 </root>

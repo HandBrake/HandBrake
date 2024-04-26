@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Video_EncoderExtraArgs" xml:space="preserve">
-    <value>Koodausparametrien koko luettelo:
+    <value>Koko koodausparametriluettelo:
 {0}</value>
   </data>
   <data name="Video_x264FastDecode" xml:space="preserve">
@@ -489,8 +489,8 @@ Lisätietoa voi löytyä toimintalokista.</value>
     <value>Jono on keskeytetty</value>
   </data>
   <data name="QueueViewModel_DelSelectedJobConfirmation" xml:space="preserve">
-    <value>Are you sure you want to delete the selected jobs?
-No encoded files will be deleted with this operation. </value>
+    <value>Haluatko varmasti poistaa valitut työt?
+Toiminto ei poista koodattuja tiedostoja.</value>
   </data>
   <data name="QueueViewModel_JobCurrentlyRunningWarning" xml:space="preserve">
     <value>Tämä koodaus on käynnissä. Jos poistat sen, koodaus pysäytetään. Haluatko varmasti jatkaa?</value>
@@ -1550,7 +1550,7 @@ VLC ja MPC-HC ovat tuettuja, muut toistimet voivat toimia, mutta sitä ei ole va
     <value>Aiempi jonoarkisto on käytettävissä.</value>
   </data>
   <data name="SourceSelection_SingleVideoFile" xml:space="preserve">
-    <value>Open video file(s).</value>
+    <value>Avaa videotiedosto(ja).</value>
   </data>
   <data name="SourceSelection_SourceSelection" xml:space="preserve">
     <value>Lähteen valinta</value>
@@ -1559,13 +1559,13 @@ VLC ja MPC-HC ovat tuettuja, muut toistimet voivat toimia, mutta sitä ei ole va
     <value>Kesto:</value>
   </data>
   <data name="StaticPreviewView_LivePreview" xml:space="preserve">
-    <value>Encode Preview</value>
+    <value>Koodausesikatselu</value>
   </data>
   <data name="StaticPreviewView_SelectPreviewImage" xml:space="preserve">
     <value>Valitse esikatselukuva</value>
   </data>
   <data name="StaticPreviewView_UseExternalPlayer" xml:space="preserve">
-    <value>Use External Player App</value>
+    <value>Käytä ulkoista toistosovellusta</value>
   </data>
   <data name="SubtitlesView_AddCC" xml:space="preserve">
     <value>Lisää dynaamiset tekstitykset, kun saatavilla</value>
@@ -1640,7 +1640,7 @@ VLC ja MPC-HC ovat tuettuja, muut toistimet voivat toimia, mutta sitä ei ole va
     <value>tallennustila</value>
   </data>
   <data name="VideoView_MultiPass" xml:space="preserve">
-    <value>Multi-Pass Encoding</value>
+    <value>Monivaiheinen koodaus</value>
   </data>
   <data name="VideoView_AverageBitrate" xml:space="preserve">
     <value>Keskim. bittinopeus (kbps):</value>
@@ -1703,7 +1703,7 @@ VLC ja MPC-HC ovat tuettuja, muut toistimet voivat toimia, mutta sitä ei ole va
     <value>Tietoa HandBrakestä</value>
   </data>
   <data name="SourceSelection_DropFileHere" xml:space="preserve">
-    <value>Or drop a file, set of files or folder here ...</value>
+    <value>Tai pudota tähän tiedosto tai tiedostoja…</value>
   </data>
   <data name="SourceSelection_Help" xml:space="preserve">
     <value>Ohje</value>
@@ -2138,7 +2138,7 @@ Sikäli kuin mahdollista, on tuotu käyttäjän esiasetukset.</value>
     <value>Saatavilla on uusi versio!</value>
   </data>
   <data name="About_Copyright" xml:space="preserve">
-    <value>Copyright (C) 2003-2024 The HandBrake Team</value>
+    <value>Tekijänoikeudet © 2003–2004 HandBrake-työryhmä</value>
   </data>
   <data name="Options_LowBatteryLevel" xml:space="preserve">
     <value>Akkutehon ollessa vähissä:</value>
@@ -2392,7 +2392,7 @@ Valitse toinen esiasetus.</value>
     <value>Tuntematon tila. Katso lisätietoa lokista.</value>
   </data>
   <data name="QueueView_JobStatus_ReadError" xml:space="preserve">
-    <value>Havaittiin virheitä yritettäessä lukea lähdettä.</value>
+    <value>Yritettäessä lukea lähdettä havaittiin virheitä.</value>
   </data>
   <data name="QueueView_JobStatus_Unknown" xml:space="preserve">
     <value>Tuntematon ongelma. Katso lisätietoa lokista.</value>
@@ -2760,54 +2760,63 @@ Usean rinnakkaisen koodauksen voi ottaa käyttöön asetuksella ”Prosessien er
     <value>Sivusto:</value>
   </data>
   <data name="MainView_PresetClone" xml:space="preserve">
-    <value>Clone Preset</value>
+    <value>Monista esiasetus</value>
   </data>
   <data name="PresetPane_MoveDown" xml:space="preserve">
-    <value>Move Down</value>
+    <value>Siirrä alemmas</value>
   </data>
   <data name="PresetPane_MoveToBottom" xml:space="preserve">
-    <value>Move to Bottom</value>
+    <value>Siirrä alimmas</value>
   </data>
   <data name="PresetPane_MoveToTop" xml:space="preserve">
-    <value>Move to Top</value>
+    <value>Siirrä ylimmäs</value>
   </data>
   <data name="PresetPane_MoveUp" xml:space="preserve">
-    <value>Move Up</value>
+    <value>Siirrä ylemmäs</value>
   </data>
   <data name="QueueViewModel_StopButContinueJob" xml:space="preserve">
-    <value>There are currently jobs running. Would you like to complete the current jobs before stopping the queue?</value>
+    <value>Töitä on yhä käynnissä. Haluatko päättää nykyiset työt ennen jonon pysäyttämistä?</value>
   </data>
   <data name="Options_AddExt" xml:space="preserve">
-    <value>Add Extension</value>
+    <value>Lisää pääte</value>
   </data>
   <data name="Options_ExcludeExtensions" xml:space="preserve">
-    <value>Exclude File Extensions:</value>
+    <value>Sivuuta tiedostopäätteet:</value>
   </data>
   <data name="Options_ExcludeExtensionsInfo" xml:space="preserve">
-    <value>The following file extensions will be ignored when scanning a folder. The list is case insensitive. "." is not required.</value>
+    <value>Seuraavat tiedostopäätteet sivuutetaan kansiota tutkittaessa. Luettelo erottaa pien- ja suuraakkoset. ”.” ei ole tarpeen.</value>
   </data>
   <data name="Options_ExtensionExists" xml:space="preserve">
-    <value>This file extension already exists in the list.</value>
+    <value>Tämä pääte on jo luettelossa.</value>
   </data>
   <data name="Options_FileHandling" xml:space="preserve">
-    <value>File Handling (Scanning)</value>
+    <value>Tiedostojen käsittely (tutkitaan)</value>
   </data>
   <data name="Options_RecursiveFolderScan" xml:space="preserve">
-    <value>Recursively scan directories when using the folder scan mode.</value>
+    <value>Etsi kansiontutkimistilassa koko alikansiorakenteesta.</value>
   </data>
   <data name="AudioView_AudioQuality" xml:space="preserve">
-    <value>Audio Track Quality</value>
+    <value>Ääniraidan laatu</value>
   </data>
   <data name="AudioView_AudioTrackName" xml:space="preserve">
-    <value>Audio Track Name</value>
+    <value>Ääniraidan nimi</value>
   </data>
   <data name="AudioView_BitrateSelection" xml:space="preserve">
-    <value>Audio Track Bitrate</value>
+    <value>Ääniraidan bittinopeus</value>
   </data>
   <data name="AudioView_DeleteTrack" xml:space="preserve">
-    <value>Delete this audio track</value>
+    <value>Poista tämä ääniraita</value>
   </data>
   <data name="AudioView_QualityMode" xml:space="preserve">
-    <value>Audio Encoder Quality Mode</value>
+    <value>Äänikoodaimen laatutila</value>
+  </data>
+  <data name="QueueView_AdvancedQueueDisplay" xml:space="preserve">
+    <value>Käytä edistynyttä jononäkymää</value>
+  </data>
+  <data name="QueueView_SimpleQueueDisplay" xml:space="preserve">
+    <value>Käytä yksinkertaista jononäkymää</value>
+  </data>
+  <data name="VideoView_LosslessEncodeOnly" xml:space="preserve">
+    <value>Vain häviötön koodaus.</value>
   </data>
 </root>

@@ -2103,7 +2103,7 @@ Induve hè accettatu, tutte e prerigature persunalizate seranu state impurtate.<
     <value>Sempre impiegà a risuluzione di a video di a fonte</value>
   </data>
   <data name="ProcessPriority_AboveNormal" xml:space="preserve">
-    <value>Più altu chì a nurmale</value>
+    <value>Più altu chè a nurmale</value>
   </data>
   <data name="ProcessPriority_BelowNormal" xml:space="preserve">
     <value>Più bassu chì a nurmale</value>
@@ -2656,16 +2656,16 @@ Forse, ghjè una limitazione nant’à u cuntenidore di schedariu chì vo avete 
     <value>Rinnovà subitu !</value>
   </data>
   <data name="CropMode_Auto" xml:space="preserve">
-    <value>Autumaticu</value>
+    <value>Autumatica</value>
   </data>
   <data name="CropMode_Loose" xml:space="preserve">
     <value>Cunservatrice</value>
   </data>
   <data name="CropMode_None" xml:space="preserve">
-    <value>Nisunu</value>
+    <value>Nisuna</value>
   </data>
   <data name="CropMode_Custom" xml:space="preserve">
-    <value>Persunalizatu</value>
+    <value>Persunalizata</value>
   </data>
   <data name="OptionsView_EnableNvDecSupport" xml:space="preserve">
     <value>Preferisce l’usu di NVDec di Nvidia per discudificà e video quandu s’impiegheghja u cudificatore NVEnc è chì l’usu di u materiale hè pussibule.</value>
@@ -2804,5 +2804,14 @@ Per permette parechje cudificazioni simultanee, attivate st’ozzione in u listi
   </data>
   <data name="AudioView_QualityMode" xml:space="preserve">
     <value>Modu di qualità di u cudificatore audio</value>
+  </data>
+  <data name="QueueView_AdvancedQueueDisplay" xml:space="preserve">
+    <value>Impiegà a vista esperta di fila d’attesa</value>
+  </data>
+  <data name="QueueView_SimpleQueueDisplay" xml:space="preserve">
+    <value>Impiegà a vista simplice di fila d’attesa</value>
+  </data>
+  <data name="VideoView_LosslessEncodeOnly" xml:space="preserve">
+    <value>Solu cudificazione senza perdita.</value>
   </data>
 </root>

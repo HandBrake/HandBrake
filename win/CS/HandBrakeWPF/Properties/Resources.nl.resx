@@ -2810,4 +2810,13 @@ Om meerdere gelijktijdige coderingen toe te staan dien je "Procesisolatie" in te
   <data name="AudioView_QualityMode" xml:space="preserve">
     <value>Audiocodering - kwaliteitsmodus</value>
   </data>
+  <data name="QueueView_AdvancedQueueDisplay" xml:space="preserve">
+    <value>Geavanceerde wachtrijweergave gebruiken</value>
+  </data>
+  <data name="QueueView_SimpleQueueDisplay" xml:space="preserve">
+    <value>Eenvoudige wachtrijweergave gebruiken</value>
+  </data>
+  <data name="VideoView_LosslessEncodeOnly" xml:space="preserve">
+    <value>Alleen verliesloze codering.</value>
+  </data>
 </root>

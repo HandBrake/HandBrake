@@ -484,8 +484,8 @@ Foreign Audio Preferred, else First：如果存在外语轨道，则会将其烧
     <value>列队已暂停</value>
   </data>
   <data name="QueueViewModel_DelSelectedJobConfirmation" xml:space="preserve">
-    <value>Are you sure you want to delete the selected jobs?
-No encoded files will be deleted with this operation. </value>
+    <value>你确定要删除所选的任务吗？ 
+此操作不会删除任何已编码的文件。</value>
   </data>
   <data name="QueueViewModel_JobCurrentlyRunningWarning" xml:space="preserve">
     <value>此编码目前正在进行中。如果删除它，编码将停止。您确定要继续吗？</value>
@@ -2130,7 +2130,7 @@ No encoded files will be deleted with this operation. </value>
     <value>当前有新版本可用！</value>
   </data>
   <data name="About_Copyright" xml:space="preserve">
-    <value>版权所有 (C) 2003-2024 HandBrake 团队</value>
+    <value>Copyright (C) 2003-2024 The HandBrake Team</value>
   </data>
   <data name="Options_LowBatteryLevel" xml:space="preserve">
     <value>电量不足：</value>
@@ -2384,7 +2384,7 @@ No encoded files will be deleted with this operation. </value>
     <value>状态未知。检查日志以了解详情。</value>
   </data>
   <data name="QueueView_JobStatus_ReadError" xml:space="preserve">
-    <value>尝试读取源时检测到错误。</value>
+    <value>尝试读取源代码时检测到错误。</value>
   </data>
   <data name="QueueView_JobStatus_Unknown" xml:space="preserve">
     <value>未知故障。检查日志以了解详情。</value>
@@ -2801,5 +2801,14 @@ No encoded files will be deleted with this operation. </value>
   </data>
   <data name="AudioView_QualityMode" xml:space="preserve">
     <value>音频编码器质量模式</value>
+  </data>
+  <data name="QueueView_AdvancedQueueDisplay" xml:space="preserve">
+    <value>使用高级队列视图</value>
+  </data>
+  <data name="QueueView_SimpleQueueDisplay" xml:space="preserve">
+    <value>使用简易队列视图</value>
+  </data>
+  <data name="VideoView_LosslessEncodeOnly" xml:space="preserve">
+    <value>仅无损编码。</value>
   </data>
 </root>
