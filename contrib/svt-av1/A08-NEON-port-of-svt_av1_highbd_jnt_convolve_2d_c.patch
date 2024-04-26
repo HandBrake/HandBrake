@@ -1,0 +1,688 @@
+From 5d5a93236f210e530c3326c0d03334924d646d1a Mon Sep 17 00:00:00 2001
+From: Gerardo Puga <glpuga@gmail.com>
+Date: Tue, 5 Mar 2024 22:10:12 +0000
+Subject: [PATCH 1/3] NEON port of svt_av1_highbd_jnt_convolve_2d_c
+
+---
+ Source/Lib/Common/ASM_NEON/CMakeLists.txt     |   1 +
+ Source/Lib/Common/ASM_NEON/convolve_neon.h    |  42 +++
+ .../Common/ASM_NEON/highbd_convolve_2d_neon.c | 277 ++++++++++++++++++
+ Source/Lib/Common/Codec/common_dsp_rtcd.c     |   2 +-
+ Source/Lib/Common/Codec/common_dsp_rtcd.h     |   5 +
+ test/CMakeLists.txt                           |   4 +-
+ test/convolve_2d_test.cc                      |  92 +++++-
+ 7 files changed, 417 insertions(+), 6 deletions(-)
+ create mode 100644 Source/Lib/Common/ASM_NEON/convolve_neon.h
+ create mode 100644 Source/Lib/Common/ASM_NEON/highbd_convolve_2d_neon.c
+
+diff --git a/Source/Lib/Common/ASM_NEON/CMakeLists.txt b/Source/Lib/Common/ASM_NEON/CMakeLists.txt
+index fbf1e96f..b70d7d3f 100644
+--- a/Source/Lib/Common/ASM_NEON/CMakeLists.txt
++++ b/Source/Lib/Common/ASM_NEON/CMakeLists.txt
+@@ -29,6 +29,7 @@ target_sources(
+   PUBLIC EbDeblockingFilter_Intrinsic_neon.c
+   PUBLIC EbIntraPrediction_neon.c
+   PUBLIC EbPictureOperators_Intrinsic_neon.c
++  PUBLIC highbd_convolve_2d_neon.c
+   PUBLIC selfguided_neon.c
+   PUBLIC sse_neon.c
+   PUBLIC warp_plane_neon.c
+diff --git a/Source/Lib/Common/ASM_NEON/convolve_neon.h b/Source/Lib/Common/ASM_NEON/convolve_neon.h
+new file mode 100644
+index 00000000..6c5fef83
+--- /dev/null
++++ b/Source/Lib/Common/ASM_NEON/convolve_neon.h
+@@ -0,0 +1,42 @@
++/*
++ * Copyright (c) 2024, Alliance for Open Media. All rights reserved
++ *
++ * This source code is subject to the terms of the BSD 2 Clause License and
++ * the Alliance for Open Media Patent License 1.0. If the BSD 2 Clause License
++ * was not distributed with this source code in the LICENSE file, you can
++ * obtain it at https://www.aomedia.org/license/software-license. If the Alliance for Open
++ * Media Patent License 1.0 was not distributed with this source code in the
++ * PATENTS file, you can obtain it at https://www.aomedia.org/license/patent-license.
++ */
++
++#ifndef AOM_AV1_COMMON_ARM_CONVOLVE_NEON_H_
++#define AOM_AV1_COMMON_ARM_CONVOLVE_NEON_H_
++
++#include "EbInterPrediction.h"
++
++static INLINE Bool is_convolve_2tap(const int16_t *const filter) {
++    return (const void *)filter == (const void *)bilinear_filters;
++}
++
++static INLINE Bool is_convolve_4tap(const int16_t *const filter) {
++    return (const void *)filter == (const void *)sub_pel_filters_4 ||
++        (const void *)filter == (const void *)sub_pel_filters_4smooth;
++}
++
++static INLINE Bool is_convolve_6tap(const int16_t *const filter) {
++    return (const void *)filter == (const void *)sub_pel_filters_8 ||
++        (const void *)filter == (const void *)sub_pel_filters_8smooth;
++}
++
++static INLINE int32_t get_convolve_tap(const int16_t *const filter) {
++    if (is_convolve_2tap(filter))
++        return 2;
++    else if (is_convolve_4tap(filter))
++        return 4;
++    else if (is_convolve_6tap(filter))
++        return 6;
++    else
++        return 8;
++}
++
++#endif
+diff --git a/Source/Lib/Common/ASM_NEON/highbd_convolve_2d_neon.c b/Source/Lib/Common/ASM_NEON/highbd_convolve_2d_neon.c
+new file mode 100644
+index 00000000..63721782
+--- /dev/null
++++ b/Source/Lib/Common/ASM_NEON/highbd_convolve_2d_neon.c
+@@ -0,0 +1,277 @@
++/*
++ * Copyright (c) 2024, Alliance for Open Media. All rights reserved
++ *
++ * This source code is subject to the terms of the BSD 2 Clause License and
++ * the Alliance for Open Media Patent License 1.0. If the BSD 2 Clause License
++ * was not distributed with this source code in the LICENSE file, you can
++ * obtain it at www.aomedia.org/license/software. If the Alliance for Open
++ * Media Patent License 1.0 was not distributed with this source code in the
++ * PATENTS file, you can obtain it at www.aomedia.org/license/patent.
++ */
++
++#include <assert.h>
++
++#include <arm_neon.h>
++
++#include "EbDefinitions.h"
++#include "common_dsp_rtcd.h"
++#include "convolve.h"
++
++static INLINE int32x4_t highbd_comp_avg_neon(const int32x4_t *const data_ref_0, const int32x4_t *const res_unsigned,
++                                             const int32x4_t *const wt0, const int32x4_t *const wt1,
++                                             const int use_dist_wtd_avg) {
++    int32x4_t res;
++    if (use_dist_wtd_avg) {
++        const int32x4_t wt0_res = vmulq_s32(*data_ref_0, *wt0);
++        const int32x4_t wt1_res = vmulq_s32(*res_unsigned, *wt1);
++
++        const int32x4_t wt_res = vaddq_s32(wt0_res, wt1_res);
++        res                    = vshrq_n_s32(wt_res, DIST_PRECISION_BITS);
++    } else {
++        const int32x4_t wt_res = vaddq_s32(*data_ref_0, *res_unsigned);
++        res                    = vshrq_n_s32(wt_res, 1);
++    }
++    return res;
++}
++
++static INLINE int32x4_t highbd_convolve_rounding_neon(const int32x4_t *const res_unsigned,
++                                                      const int32x4_t *const offset_const,
++                                                      const int32x4_t *const round_const, const int round_shift) {
++    const int32x4_t res_signed = vsubq_s32(*res_unsigned, *offset_const);
++    const int32x4_t res_round  = vshlq_s32(vaddq_s32(res_signed, *round_const), vdupq_n_s32(-round_shift));
++
++    return res_round;
++}
++
++static INLINE int32x4_t multiply_then_pairwise_add(const int16x8_t a, const int16x8_t b) {
++    int32x4_t a_even = vmovl_s16(vget_low_s16(vuzp1q_s16(a, a)));
++    int32x4_t a_odd  = vmovl_s16(vget_low_s16(vuzp2q_s16(a, a)));
++
++    int32x4_t b_even = vmovl_s16(vget_low_s16(vuzp1q_s16(b, b)));
++    int32x4_t b_odd  = vmovl_s16(vget_low_s16(vuzp2q_s16(b, b)));
++
++    int32x4_t res_even = vmulq_s32(a_even, b_even);
++    int32x4_t res_odd  = vmulq_s32(a_odd, b_odd);
++
++    return vaddq_s32(res_even, res_odd);
++}
++
++void svt_av1_highbd_jnt_convolve_2d_neon(const uint16_t *src, int32_t src_stride, uint16_t *dst16, int32_t dst16_stride,
++                                         int32_t w, int32_t h, const InterpFilterParams *filter_params_x,
++                                         const InterpFilterParams *filter_params_y, const int32_t subpel_x_q4,
++                                         const int32_t subpel_y_q4, ConvolveParams *conv_params, int32_t bd) {
++    if (w < 8) {
++        svt_av1_highbd_jnt_convolve_2d_c(src,
++                                         src_stride,
++                                         dst16,
++                                         dst16_stride,
++                                         w,
++                                         h,
++                                         filter_params_x,
++                                         filter_params_y,
++                                         subpel_x_q4,
++                                         subpel_y_q4,
++                                         conv_params,
++                                         bd);
++        return;
++    }
++
++    DECLARE_ALIGNED(16, int16_t, im_block[(MAX_SB_SIZE + MAX_FILTER_TAP - 1) * MAX_SB_SIZE]);
++    ConvBufType          *dst        = conv_params->dst;
++    int                   dst_stride = conv_params->dst_stride;
++    int                   im_h       = h + filter_params_y->taps - 1;
++    int                   im_stride  = MAX_SB_SIZE;
++    int                   i, j;
++    const int             do_average       = conv_params->do_average;
++    const int             use_jnt_comp_avg = conv_params->use_jnt_comp_avg;
++    const int             fo_vert          = filter_params_y->taps / 2 - 1;
++    const int             fo_horiz         = filter_params_x->taps / 2 - 1;
++    const uint16_t *const src_ptr          = src - fo_vert * src_stride - fo_horiz;
++
++    const int w0 = conv_params->fwd_offset;
++    const int w1 = conv_params->bck_offset;
++
++    const int offset_0       = bd + 2 * FILTER_BITS - conv_params->round_0 - conv_params->round_1;
++    const int offset         = (1 << offset_0) + (1 << (offset_0 - 1));
++    const int rounding_shift = 2 * FILTER_BITS - conv_params->round_0 - conv_params->round_1;
++
++    const int32x4_t wt0 = vdupq_n_s32(w0);
++    const int32x4_t wt1 = vdupq_n_s32(w1);
++
++    const int32x4_t offset_const   = vdupq_n_s32(offset);
++    const int32x4_t rounding_const = vdupq_n_s32((1 << rounding_shift) >> 1);
++
++    const uint16x8_t clip_pixel_to_bd_128 = vdupq_n_u16(bd == 10 ? 1023 : (bd == 12 ? 4095 : 255));
++
++    // Check that, even with 12-bit input, the intermediate values will fit
++    // into an unsigned 16-bit intermediate array.
++    assert(bd + FILTER_BITS + 2 - conv_params->round_0 <= 16);
++
++    /* Horizontal filter */
++    {
++        const int16_t  *x_filter = av1_get_interp_filter_subpel_kernel(*filter_params_x, subpel_x_q4 & SUBPEL_MASK);
++        const int16x8_t coeffs_x = vld1q_s16(x_filter);
++
++        // coeffs 0 1 0 1 2 3 2 3
++        const int16x8_t tmp_0 = vreinterpretq_s16_s32(
++            vzip1q_s32(vreinterpretq_s32_s16(coeffs_x), vreinterpretq_s32_s16(coeffs_x)));
++        // coeffs 4 5 4 5 6 7 6 7
++        const int16x8_t tmp_1 = vreinterpretq_s16_s32(
++            vzip2q_s32(vreinterpretq_s32_s16(coeffs_x), vreinterpretq_s32_s16(coeffs_x)));
++
++        // coeffs 0 1 0 1 0 1 0 1
++        const int16x8_t coeff_01 = vreinterpretq_s16_s64(
++            vzip1q_s64(vreinterpretq_s64_s16(tmp_0), vreinterpretq_s64_s16(tmp_0)));
++        // coeffs 2 3 2 3 2 3 2 3
++        const int16x8_t coeff_23 = vreinterpretq_s16_s64(
++            vzip2q_s64(vreinterpretq_s64_s16(tmp_0), vreinterpretq_s64_s16(tmp_0)));
++        // coeffs 4 5 4 5 4 5 4 5
++        const int16x8_t coeff_45 = vreinterpretq_s16_s64(
++            vzip1q_s64(vreinterpretq_s64_s16(tmp_1), vreinterpretq_s64_s16(tmp_1)));
++        // coeffs 6 7 6 7 6 7 6 7
++        const int16x8_t coeff_67 = vreinterpretq_s16_s64(
++            vzip2q_s64(vreinterpretq_s64_s16(tmp_1), vreinterpretq_s64_s16(tmp_1)));
++
++        const int32x4_t round_const  = vdupq_n_s32(((1 << conv_params->round_0) >> 1) + (1 << (bd + FILTER_BITS - 1)));
++        const int32_t   round_shift  = conv_params->round_0;
++        const int32x4_t vround_shift = vdupq_n_s32(round_shift);
++
++        for (i = 0; i < im_h; ++i) {
++            for (j = 0; j < w; j += 8) {
++                const int16x8_t data  = vld1q_s16((int16_t *)&src_ptr[i * src_stride + j]);
++                const int16x8_t data2 = vld1q_s16((int16_t *)&src_ptr[i * src_stride + j + 8]);
++
++                // Filter even-index pixels
++                const int32x4_t res_0 = multiply_then_pairwise_add(data, coeff_01);
++                const int32x4_t res_2 = multiply_then_pairwise_add(vextq_s16(data, data2, 4 / 2), coeff_23);
++                const int32x4_t res_4 = multiply_then_pairwise_add(vextq_s16(data, data2, 8 / 2), coeff_45);
++                const int32x4_t res_6 = multiply_then_pairwise_add(vextq_s16(data, data2, 12 / 2), coeff_67);
++
++                int32x4_t res_even = vaddq_s32(vaddq_s32(res_0, res_4), vaddq_s32(res_2, res_6));
++                res_even           = vshlq_s32(vaddq_s32(res_even, round_const), -vround_shift);
++
++                // Filter odd-index pixels
++                const int32x4_t res_1 = multiply_then_pairwise_add(vextq_s16(data, data2, 2 / 2), coeff_01);
++                const int32x4_t res_3 = multiply_then_pairwise_add(vextq_s16(data, data2, 6 / 2), coeff_23);
++                const int32x4_t res_5 = multiply_then_pairwise_add(vextq_s16(data, data2, 10 / 2), coeff_45);
++                const int32x4_t res_7 = multiply_then_pairwise_add(vextq_s16(data, data2, 14 / 2), coeff_67);
++
++                int32x4_t res_odd = vaddq_s32(vaddq_s32(res_1, res_5), vaddq_s32(res_3, res_7));
++                res_odd           = vshlq_s32(vaddq_s32(res_odd, round_const), -vround_shift);
++
++                // Pack in the column order 0, 2, 4, 6, 1, 3, 5, 7
++                int16x8_t res = vcombine_s16(vqmovn_s32(res_even), vqmovn_s32(res_odd));
++                vst1q_s16(&im_block[i * im_stride + j], res);
++            }
++        }
++    }
++
++    /* Vertical filter */
++    {
++        const int16_t  *y_filter = av1_get_interp_filter_subpel_kernel(*filter_params_y, subpel_y_q4 & SUBPEL_MASK);
++        const int16x8_t coeffs_y = vld1q_s16(y_filter);
++
++        // coeffs 0 1 0 1 2 3 2 3
++        const int16x8_t tmp_0 = vreinterpretq_s16_s32(
++            vzip1q_s32(vreinterpretq_s32_s16(coeffs_y), vreinterpretq_s32_s16(coeffs_y)));
++        // coeffs 4 5 4 5 6 7 6 7
++        const int16x8_t tmp_1 = vreinterpretq_s16_s32(
++            vzip2q_s32(vreinterpretq_s32_s16(coeffs_y), vreinterpretq_s32_s16(coeffs_y)));
++
++        // coeffs 0 1 0 1 0 1 0 1
++        const int16x8_t coeff_01 = vreinterpretq_s16_s64(
++            vzip1q_s64(vreinterpretq_s64_s16(tmp_0), vreinterpretq_s64_s16(tmp_0)));
++        // coeffs 2 3 2 3 2 3 2 3
++        const int16x8_t coeff_23 = vreinterpretq_s16_s64(
++            vzip2q_s64(vreinterpretq_s64_s16(tmp_0), vreinterpretq_s64_s16(tmp_0)));
++        // coeffs 4 5 4 5 4 5 4 5
++        const int16x8_t coeff_45 = vreinterpretq_s16_s64(
++            vzip1q_s64(vreinterpretq_s64_s16(tmp_1), vreinterpretq_s64_s16(tmp_1)));
++        // coeffs 6 7 6 7 6 7 6 7
++        const int16x8_t coeff_67 = vreinterpretq_s16_s64(
++            vzip2q_s64(vreinterpretq_s64_s16(tmp_1), vreinterpretq_s64_s16(tmp_1)));
++
++        const int32x4_t round_const  = vdupq_n_s32(((1 << conv_params->round_1) >> 1) -
++                                                  (1 << (bd + 2 * FILTER_BITS - conv_params->round_0 - 1)));
++        const int32_t   round_shift  = conv_params->round_1;
++        const int32x4_t vround_shift = vdupq_n_s32(round_shift);
++
++        for (i = 0; i < h; ++i) {
++            for (j = 0; j < w; j += 8) {
++                const int16_t *data = &im_block[i * im_stride + j];
++
++                // Filter even-index pixels
++                const int16x8_t data_0 = vld1q_s16(data + 0 * im_stride);
++                const int16x8_t data_1 = vld1q_s16(data + 1 * im_stride);
++                const int16x8_t data_2 = vld1q_s16(data + 2 * im_stride);
++                const int16x8_t data_3 = vld1q_s16(data + 3 * im_stride);
++                const int16x8_t data_4 = vld1q_s16(data + 4 * im_stride);
++                const int16x8_t data_5 = vld1q_s16(data + 5 * im_stride);
++                const int16x8_t data_6 = vld1q_s16(data + 6 * im_stride);
++                const int16x8_t data_7 = vld1q_s16(data + 7 * im_stride);
++
++                const int16x8_t src_0 = vzip1q_s16(data_0, data_1);
++                const int16x8_t src_2 = vzip1q_s16(data_2, data_3);
++                const int16x8_t src_4 = vzip1q_s16(data_4, data_5);
++                const int16x8_t src_6 = vzip1q_s16(data_6, data_7);
++
++                const int32x4_t res_0 = multiply_then_pairwise_add(src_0, coeff_01);
++                const int32x4_t res_2 = multiply_then_pairwise_add(src_2, coeff_23);
++                const int32x4_t res_4 = multiply_then_pairwise_add(src_4, coeff_45);
++                const int32x4_t res_6 = multiply_then_pairwise_add(src_6, coeff_67);
++
++                const int32x4_t res_even = vaddq_s32(vaddq_s32(res_0, res_2), vaddq_s32(res_4, res_6));
++
++                // Filter odd-index pixels
++                const int16x8_t src_1 = vzip2q_s16(data_0, data_1);
++                const int16x8_t src_3 = vzip2q_s16(data_2, data_3);
++                const int16x8_t src_5 = vzip2q_s16(data_4, data_5);
++                const int16x8_t src_7 = vzip2q_s16(data_6, data_7);
++
++                const int32x4_t res_1 = multiply_then_pairwise_add(src_1, coeff_01);
++                const int32x4_t res_3 = multiply_then_pairwise_add(src_3, coeff_23);
++                const int32x4_t res_5 = multiply_then_pairwise_add(src_5, coeff_45);
++                const int32x4_t res_7 = multiply_then_pairwise_add(src_7, coeff_67);
++
++                const int32x4_t res_odd = vaddq_s32(vaddq_s32(res_1, res_3), vaddq_s32(res_5, res_7));
++
++                // Rearrange pixels back into the order 0 ... 7
++                const int32x4_t res_lo = vzip1q_s32(res_even, res_odd);
++                const int32x4_t res_hi = vzip2q_s32(res_even, res_odd);
++
++                const int32x4_t res_lo_round    = vshlq_s32(vaddq_s32(res_lo, round_const), -vround_shift);
++                const int32x4_t res_unsigned_lo = vaddq_s32(res_lo_round, offset_const);
++
++                const int32x4_t res_hi_round    = vshlq_s32(vaddq_s32(res_hi, round_const), -vround_shift);
++                const int32x4_t res_unsigned_hi = vaddq_s32(res_hi_round, offset_const);
++
++                if (do_average) {
++                    const uint16x4_t data_lo = vld1_u16(&dst[i * dst_stride + j + 0]);
++                    const uint16x4_t data_hi = vld1_u16(&dst[i * dst_stride + j + 4]);
++
++                    const int32x4_t data_ref_0_lo = vreinterpretq_s32_u32(vmovl_u16(data_lo));
++                    const int32x4_t data_ref_0_hi = vreinterpretq_s32_u32(vmovl_u16(data_hi));
++
++                    const int32x4_t comp_avg_res_lo = highbd_comp_avg_neon(
++                        &data_ref_0_lo, &res_unsigned_lo, &wt0, &wt1, use_jnt_comp_avg);
++                    const int32x4_t comp_avg_res_hi = highbd_comp_avg_neon(
++                        &data_ref_0_hi, &res_unsigned_hi, &wt0, &wt1, use_jnt_comp_avg);
++
++                    const int32x4_t round_result_lo = highbd_convolve_rounding_neon(
++                        &comp_avg_res_lo, &offset_const, &rounding_const, rounding_shift);
++                    const int32x4_t round_result_hi = highbd_convolve_rounding_neon(
++                        &comp_avg_res_hi, &offset_const, &rounding_const, rounding_shift);
++
++                    const uint16x8_t res_16b = vcombine_u16(vqmovun_s32(round_result_lo), vqmovun_s32(round_result_hi));
++                    const uint16x8_t res_clip = vminq_u16(res_16b, clip_pixel_to_bd_128);
++
++                    vst1q_u16(&dst16[i * dst16_stride + j], res_clip);
++                } else {
++                    const uint16x8_t res_16b = vcombine_u16(vqmovun_s32(res_unsigned_lo), vqmovun_s32(res_unsigned_hi));
++
++                    vst1q_u16(&dst[i * dst_stride + j], res_16b);
++                }
++            }
++        }
++    }
++}
+diff --git a/Source/Lib/Common/Codec/common_dsp_rtcd.c b/Source/Lib/Common/Codec/common_dsp_rtcd.c
+index bbf9510a..4ce04538 100644
+--- a/Source/Lib/Common/Codec/common_dsp_rtcd.c
++++ b/Source/Lib/Common/Codec/common_dsp_rtcd.c
+@@ -891,7 +891,7 @@ void svt_aom_setup_common_rtcd_internal(EbCpuFlags flags) {
+     SET_ONLY_C(svt_av1_highbd_convolve_2d_sr, svt_av1_highbd_convolve_2d_sr_c);
+     SET_ONLY_C(svt_av1_highbd_convolve_2d_scale, svt_av1_highbd_convolve_2d_scale_c);
+     SET_ONLY_C(svt_av1_highbd_convolve_2d_copy_sr, svt_av1_highbd_convolve_2d_copy_sr_c);
+-    SET_ONLY_C(svt_av1_highbd_jnt_convolve_2d, svt_av1_highbd_jnt_convolve_2d_c);
++    SET_NEON(svt_av1_highbd_jnt_convolve_2d, svt_av1_highbd_jnt_convolve_2d_c, svt_av1_highbd_jnt_convolve_2d_neon);
+     SET_ONLY_C(svt_av1_highbd_jnt_convolve_2d_copy, svt_av1_highbd_jnt_convolve_2d_copy_c);
+     SET_ONLY_C(svt_av1_highbd_jnt_convolve_x, svt_av1_highbd_jnt_convolve_x_c);
+     SET_ONLY_C(svt_av1_highbd_jnt_convolve_y, svt_av1_highbd_jnt_convolve_y_c);
+diff --git a/Source/Lib/Common/Codec/common_dsp_rtcd.h b/Source/Lib/Common/Codec/common_dsp_rtcd.h
+index dd6aa53e..3202cdc4 100644
+--- a/Source/Lib/Common/Codec/common_dsp_rtcd.h
++++ b/Source/Lib/Common/Codec/common_dsp_rtcd.h
+@@ -1369,6 +1369,11 @@ extern "C" {
+     void svt_av1_inv_txfm2d_add_16x16_neon(const int32_t *input, uint16_t *output_r, int32_t stride_r, uint16_t *output_w, int32_t stride_w, TxType tx_type, int32_t bd);
+     void svt_av1_inv_txfm2d_add_32x32_neon(const int32_t *input, uint16_t *output_r, int32_t stride_r, uint16_t *output_w, int32_t stride_w, TxType tx_type, int32_t bd);
+     void svt_av1_inv_txfm2d_add_64x64_neon(const int32_t *input, uint16_t *output_r, int32_t stride_r, uint16_t *output_w, int32_t stride_w, TxType tx_type, int32_t bd);
++    void svt_av1_highbd_jnt_convolve_2d_neon(const uint16_t *src, int32_t src_stride, uint16_t *dst16,
++                                           int32_t dst16_stride, int32_t w, int32_t h,
++                                           const InterpFilterParams *filter_params_x,
++                                           const InterpFilterParams *filter_params_y, const int32_t subpel_x_q4,
++                                           const int32_t subpel_y_q4, ConvolveParams *conv_params, int32_t bd);
+ 
+ #endif
+ 
+diff --git a/test/CMakeLists.txt b/test/CMakeLists.txt
+index a0511124..1a857b29 100644
+--- a/test/CMakeLists.txt
++++ b/test/CMakeLists.txt
+@@ -23,12 +23,14 @@ include_directories(${PROJECT_SOURCE_DIR}/test/
+     ${PROJECT_SOURCE_DIR}/Source/Lib/Common/ASM_SSE4_1/
+     ${PROJECT_SOURCE_DIR}/Source/Lib/Common/ASM_AVX2/
+     ${PROJECT_SOURCE_DIR}/Source/Lib/Common/ASM_AVX512/
++    ${PROJECT_SOURCE_DIR}/Source/Lib/Common/ASM_NEON/
+     ${PROJECT_SOURCE_DIR}/Source/Lib/Encoder/C_DEFAULT/
+     ${PROJECT_SOURCE_DIR}/Source/Lib/Encoder/ASM_SSE2/
+     ${PROJECT_SOURCE_DIR}/Source/Lib/Encoder/ASM_SSSE3/
+     ${PROJECT_SOURCE_DIR}/Source/Lib/Encoder/ASM_SSE4_1/
+     ${PROJECT_SOURCE_DIR}/Source/Lib/Encoder/ASM_AVX2/
+     ${PROJECT_SOURCE_DIR}/Source/Lib/Encoder/ASM_AVX512/
++    ${PROJECT_SOURCE_DIR}/Source/Lib/Encoder/ASM_NEON/
+     ${PROJECT_SOURCE_DIR}/Source/Lib/Encoder/Codec
+     ${PROJECT_SOURCE_DIR}/Source/Lib/Encoder/Globals
+     ${PROJECT_SOURCE_DIR}/Source/Lib/Decoder/Codec
+@@ -90,6 +92,7 @@ set(multi_arch_files
+     CdefTest.cc
+     SpatialFullDistortionTest.cc
+     TemporalFilterTestPlanewise.cc
++    convolve_2d_test.cc
+     )
+ 
+ if(HAVE_X86_PLATFORM)
+@@ -124,7 +127,6 @@ if(HAVE_X86_PLATFORM)
+         WedgeUtilTest.cc
+         av1_convolve_scale_test.cc
+         compute_mean_test.cc
+-        convolve_2d_test.cc
+         corner_match_test.cc
+         dwt_test.cc
+         frame_error_test.cc
+diff --git a/test/convolve_2d_test.cc b/test/convolve_2d_test.cc
+index ee1cebda..6e98b796 100644
+--- a/test/convolve_2d_test.cc
++++ b/test/convolve_2d_test.cc
+@@ -43,8 +43,16 @@
+ #include "EbTime.h"
+ #include "EbUtility.h"
+ #include "convolve.h"
+-#include "convolve_avx2.h"
+ #include "filter.h"
++
++#ifdef ARCH_X86_64
++#include "convolve_avx2.h"
++#endif  // ARCH_X86_64
++
++#ifdef ARCH_AARCH64
++#include "convolve_neon.h"
++#endif  // ARCH_AARCH64
++
+ #if defined(_MSC_VER)
+ #pragma warning(suppress : 4324)
+ #endif
+@@ -67,68 +75,84 @@ using lowbd_convolve_func = void (*)(const uint8_t *src, int src_stride,
+                                      ConvolveParams *conv_params);
+ 
+ static const lowbd_convolve_func lowbd_convolve_2d_sr_func_table[] = {
++#ifdef ARCH_X86_64
+     svt_av1_convolve_2d_sr_avx2,
+     svt_av1_convolve_2d_sr_sse2,
+ #if EN_AVX512_SUPPORT
+     svt_av1_convolve_2d_sr_avx512
+ #endif
++#endif  // ARCH_X86_64
+ };
+ 
+ static const lowbd_convolve_func lowbd_convolve_x_sr_func_table[] = {
++#ifdef ARCH_X86_64
+     svt_av1_convolve_x_sr_avx2,
+     svt_av1_convolve_x_sr_sse2,
+ #if EN_AVX512_SUPPORT
+     svt_av1_convolve_x_sr_avx512
+ #endif
++#endif  // ARCH_X86_64
+ };
+ 
+ static const lowbd_convolve_func lowbd_convolve_y_sr_func_table[] = {
++#ifdef ARCH_X86_64
+     svt_av1_convolve_y_sr_avx2,
+     svt_av1_convolve_y_sr_sse2,
+ #if EN_AVX512_SUPPORT
+     svt_av1_convolve_y_sr_avx512
+ #endif
++#endif  // ARCH_X86_64
+ };
+ 
+ static const lowbd_convolve_func lowbd_convolve_copy_sr_func_table[] = {
++#ifdef ARCH_X86_64
+     svt_av1_convolve_2d_copy_sr_avx2,
+     svt_av1_convolve_2d_copy_sr_sse2,
+ #if EN_AVX512_SUPPORT
+     svt_av1_convolve_2d_copy_sr_avx512
+ #endif
++#endif  // ARCH_X86_64
+ };
+ 
+ static const lowbd_convolve_func lowbd_jnt_convolve_2d_func_table[] = {
++#ifdef ARCH_X86_64
+     svt_av1_jnt_convolve_2d_avx2,
+     svt_av1_jnt_convolve_2d_sse2,
+     svt_av1_jnt_convolve_2d_ssse3,
+ #if EN_AVX512_SUPPORT
+     svt_av1_jnt_convolve_2d_avx512
+ #endif
++#endif  // ARCH_X86_64
+ };
+ 
+ static const lowbd_convolve_func lowbd_jnt_convolve_x_func_table[] = {
++#ifdef ARCH_X86_64
+     svt_av1_jnt_convolve_x_avx2,
+     svt_av1_jnt_convolve_x_sse2,
+ #if EN_AVX512_SUPPORT
+     svt_av1_jnt_convolve_x_avx512
+ #endif
++#endif  // ARCH_X86_64
+ };
+ 
+ static const lowbd_convolve_func lowbd_jnt_convolve_y_func_table[] = {
++#ifdef ARCH_X86_64
+     svt_av1_jnt_convolve_y_avx2,
+     svt_av1_jnt_convolve_y_sse2,
+ #if EN_AVX512_SUPPORT
+     svt_av1_jnt_convolve_y_avx512
+ #endif
++#endif  // ARCH_X86_64
+ };
+ 
+ static const lowbd_convolve_func lowbd_jnt_convolve_copy_func_table[] = {
++#ifdef ARCH_X86_64
+     svt_av1_jnt_convolve_2d_copy_avx2,
+     svt_av1_jnt_convolve_2d_copy_sse2,
+ #if EN_AVX512_SUPPORT
+     svt_av1_jnt_convolve_2d_copy_avx512
+ #endif
++#endif  // ARCH_X86_64
+ };
+ 
+ /**
+@@ -163,7 +187,7 @@ class AV1Convolve2DTest : public ::testing::TestWithParam<Convolve2DParam> {
+     virtual ~AV1Convolve2DTest() {
+     }
+ 
+-    // make the address algined to 32.
++    // make the address aligned to 32.
+     void SetUp() override {
+         conv_buf_init_ = reinterpret_cast<ConvBufType *>(
+             svt_aom_memalign(32, MAX_SB_SQUARE * sizeof(ConvBufType)));
+@@ -770,6 +794,8 @@ class AV1LbdConvolve2DTest
+     }
+ };
+ 
++#ifdef ARCH_X86_64
++
+ class AV1LbdJntConvolve2DTest : public AV1LbdConvolve2DTest {
+   public:
+     AV1LbdJntConvolve2DTest() {
+@@ -800,6 +826,10 @@ TEST_P(AV1LbdJntConvolve2DTest, DISABLED_SpeedTest) {
+     speed_test();
+ }
+ 
++#endif  // ARCH_X86_64
++
++#ifdef ARCH_X86_64
++
+ INSTANTIATE_TEST_CASE_P(ConvolveTestCOPY, AV1LbdJntConvolve2DTest,
+                         BuildParams(0, 0, 0, 0));
+ INSTANTIATE_TEST_CASE_P(ConvolveTestX, AV1LbdJntConvolve2DTest,
+@@ -830,6 +860,10 @@ INSTANTIATE_TEST_CASE_P(ConvolveTest2D_AVX512, AV1LbdJntConvolve2DTest,
+                         BuildParams(1, 1, 3, 0));
+ #endif
+ 
++#endif  // ARCH_X86_64
++
++#ifdef ARCH_X86_64
++
+ class AV1LbdSrConvolve2DTest : public AV1LbdConvolve2DTest {
+   public:
+     AV1LbdSrConvolve2DTest() {
+@@ -860,6 +894,10 @@ TEST_P(AV1LbdSrConvolve2DTest, DISABLED_SpeedTest) {
+     speed_test();
+ }
+ 
++#endif  // ARCH_X86_64
++
++#ifdef ARCH_X86_64
++
+ INSTANTIATE_TEST_CASE_P(ConvolveTestCopy, AV1LbdSrConvolve2DTest,
+                         BuildParams(0, 0, 0, 0));
+ INSTANTIATE_TEST_CASE_P(ConvolveTestX, AV1LbdSrConvolve2DTest,
+@@ -888,6 +926,8 @@ INSTANTIATE_TEST_CASE_P(ConvolveTest2D_AVX512, AV1LbdSrConvolve2DTest,
+                         BuildParams(1, 1, 2, 0));
+ #endif
+ 
++#endif  // ARCH_X86_64
++
+ class AV1HbdConvolve2DTest
+     : public AV1Convolve2DTest<uint16_t, highbd_convolve_func> {
+   public:
+@@ -996,10 +1036,12 @@ class AV1HbdJntConvolve2DTest : public AV1HbdConvolve2DTest {
+     AV1HbdJntConvolve2DTest() {
+         is_jnt_ = 1;
+         func_ref_ = svt_av1_highbd_jnt_convolve_2d_c;
++
+         const int has_subx = TEST_GET_PARAM(1);
+         const int has_suby = TEST_GET_PARAM(2);
+-
+         const int fn_idx = TEST_GET_PARAM(3);
++
++#ifdef ARCH_X86_64
+         if (fn_idx == 0) {  // avx2
+             if (has_subx == 1 && has_suby == 1)
+                 func_tst_ = svt_av1_highbd_jnt_convolve_2d_avx2;
+@@ -1009,7 +1051,8 @@ class AV1HbdJntConvolve2DTest : public AV1HbdConvolve2DTest {
+                 func_tst_ = svt_av1_highbd_jnt_convolve_y_avx2;
+             else
+                 func_tst_ = svt_av1_highbd_jnt_convolve_2d_copy_avx2;
+-        } else {  // SSE
++        }
++        if (fn_idx == 1) {  // SSE
+             if (has_subx == 1 && has_suby == 1)
+                 func_tst_ = svt_av1_highbd_jnt_convolve_2d_sse4_1;
+             else if (has_subx == 1)
+@@ -1019,9 +1062,25 @@ class AV1HbdJntConvolve2DTest : public AV1HbdConvolve2DTest {
+             else
+                 func_tst_ = svt_av1_highbd_jnt_convolve_2d_copy_sse4_1;
+         }
++#endif  // ARCH_X86_64
++
++#ifdef ARCH_AARCH64
++        if (fn_idx == 2) {  // NEON
++            if (has_subx == 1 && has_suby == 1) {
++                func_tst_ = svt_av1_highbd_jnt_convolve_2d_neon;
++            } else if (has_subx == 1) {
++                func_tst_ = func_ref_;  // not yet ported
++            } else if (has_suby == 1) {
++                func_tst_ = func_ref_;  // not yet ported
++            } else {
++                func_tst_ = func_ref_;  // not yet ported
++            }
++        }
++#endif  // ARCH_AARCH64
+ 
+         bd_ = TEST_GET_PARAM(0);
+     }
++
+     virtual ~AV1HbdJntConvolve2DTest() {
+     }
+ };
+@@ -1034,6 +1093,8 @@ TEST_P(AV1HbdJntConvolve2DTest, DISABLED_SpeedTest) {
+     speed_test();
+ }
+ 
++#ifdef ARCH_X86_64
++
+ INSTANTIATE_TEST_CASE_P(SSE41_COPY, AV1HbdJntConvolve2DTest,
+                         BuildParams(0, 0, 1, 1));
+ INSTANTIATE_TEST_CASE_P(SSE41_ConvolveTest2D, AV1HbdJntConvolve2DTest,
+@@ -1052,6 +1113,26 @@ INSTANTIATE_TEST_CASE_P(ConvolveTestX, AV1HbdJntConvolve2DTest,
+ INSTANTIATE_TEST_CASE_P(ConvolveTestY, AV1HbdJntConvolve2DTest,
+                         BuildParams(0, 1, 0, 1));
+ 
++#endif  // ARCH_X86_64
++
++#ifdef ARCH_AARCH64
++
++// not yet ported
++// INSTANTIATE_TEST_CASE_P(NEON_COPY, AV1HbdJntConvolve2DTest,
++//                         BuildParams(0, 0, 2, 1));
++INSTANTIATE_TEST_CASE_P(NEON_ConvolveTest2D, AV1HbdJntConvolve2DTest,
++                        BuildParams(1, 1, 2, 1));
++// not yet ported
++// INSTANTIATE_TEST_CASE_P(NEON_ConvolveTestX, AV1HbdJntConvolve2DTest,
++//                         BuildParams(1, 0, 2, 1));
++// not yet ported
++// INSTANTIATE_TEST_CASE_P(NEON_ConvolveTestY, AV1HbdJntConvolve2DTest,
++//                         BuildParams(0, 1, 2, 1));
++
++#endif  // ARCH_AARCH64
++
++#ifdef ARCH_X86_64
++
+ class AV1HbdSrConvolve2DTest : public AV1HbdConvolve2DTest {
+   public:
+     AV1HbdSrConvolve2DTest() {
+@@ -1110,4 +1191,7 @@ INSTANTIATE_TEST_CASE_P(ConvolveTestY, AV1HbdSrConvolve2DTest,
+                         BuildParams(0, 1, 0, 1));
+ INSTANTIATE_TEST_CASE_P(ConvolveTestCopy, AV1HbdSrConvolve2DTest,
+                         BuildParams(0, 0, 0, 1));
++
++#endif  // ARCH_X86_64
++
+ }  // namespace
+-- 
+2.39.3 (Apple Git-146)
+
