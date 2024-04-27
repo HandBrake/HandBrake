@@ -2556,12 +2556,11 @@ The actual display dimensions will differ if the pixel aspect ratio is not 1:1.<
                                     <property name="spacing">2</property>
                                     <child>
                                       <object class="GtkGrid" id="pad_options_grid">
-                                        <property name="row-spacing">2</property>
-                                        <property name="column-spacing">2</property>
+                                        <property name="row-spacing">4</property>
+                                        <property name="column-spacing">4</property>
+                                        <property name="column-homogeneous">True</property>
                                         <property name="halign">start</property>
                                         <property name="valign">start</property>
-                                        <property name="column-spacing">8</property>
-                                        <property name="row-spacing">4</property>
                                         <child>
                                           <object class="GtkLabel" id="pad_mode_label">
                                             <property name="halign">start</property>
@@ -2590,7 +2589,6 @@ The actual display dimensions will differ if the pixel aspect ratio is not 1:1.<
                                           <object class="GtkSpinButton" id="PicturePadLeft">
                                             <property name="width-chars">4</property>
                                             <property name="focusable">1</property>
-                                            <property name="halign">end</property>
                                             <property name="tooltip-text" translatable="yes">Left Pad</property>
                                             <property name="adjustment">LeftPadAdjustment</property>
                                             <signal name="value-changed" handler="pad_changed_cb" swapped="no"/>
