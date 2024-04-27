@@ -1025,6 +1025,7 @@ struct hb_audio_s
 
         hb_mux_data_t * mux_data;
         hb_fifo_t     * scan_cache;
+        int             scan_error_count;
     } priv;
 };
 #endif

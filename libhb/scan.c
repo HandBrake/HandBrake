@@ -40,10 +40,12 @@ typedef struct
 } hb_scan_t;
 
 #define PREVIEW_READ_THRESH (200)
+#define AUDIO_DECODE_ERROR_LIMIT (10)
 
 static void ScanFunc( void * );
 static int  DecodePreviews( hb_scan_t *, hb_title_t * title, int flush );
-static void LookForAudio(hb_scan_t *scan, hb_title_t *title, hb_buffer_t *b);
+static hb_audio_t * find_audio_for_id(hb_title_t * title, int id);
+static void LookForAudio(hb_scan_t *scan, hb_title_t *title, hb_audio_t * audio, hb_buffer_t *b);
 static int  AllAudioOK( hb_title_t * title );
 static void UpdateState1(hb_scan_t *scan, int title);
 static void UpdateState2(hb_scan_t *scan, int title);
@@ -1041,8 +1043,12 @@ static int DecodePreviews( hb_scan_t * data, hb_title_t * title, int flush )
                 }
                 else if (!AllAudioOK(title) && !abort_audio)
                 {
-                    LookForAudio( data, title, buf_es );
-                    buf_es = NULL;
+                    hb_audio_t * audio = find_audio_for_id(title, buf_es->s.id);
+                    if (audio != NULL && audio->priv.scan_error_count < AUDIO_DECODE_ERROR_LIMIT)
+                    {
+                        LookForAudio( data, title, audio, buf_es );
+                        buf_es = NULL;
+                    }
                 }
                 if ( buf_es )
                     hb_buffer_close( &buf_es );
@@ -1537,6 +1543,23 @@ skip_preview:
     return npreviews;
 }
 
+static hb_audio_t * find_audio_for_id(hb_title_t * title, int id)
+{
+    int i;
+    hb_audio_t * audio = NULL;
+
+    for( i = 0; i < hb_list_count( title->list_audio ); i++ )
+    {
+        audio = hb_list_item( title->list_audio, i );
+        /* check if this elementary stream is one we want */
+        if ( audio->id == id )
+        {
+            return audio;
+        }
+    }
+    return NULL;
+}
+
 /*
  * This routine is called for every frame from a non-video elementary stream.
  * These are a mix of audio & subtitle streams, some of which we want & some
@@ -1551,24 +1574,8 @@ skip_preview:
  * aren't (e.g., some European DVD Teletext streams use the same IDs as US ATSC
  * AC-3 audio).
  */
-static void LookForAudio(hb_scan_t *scan, hb_title_t * title, hb_buffer_t * b)
+static void LookForAudio(hb_scan_t *scan, hb_title_t * title, hb_audio_t * audio, hb_buffer_t * b)
 {
-    int i;
-
-    hb_audio_t * audio = NULL;
-    for( i = 0; i < hb_list_count( title->list_audio ); i++ )
-    {
-        audio = hb_list_item( title->list_audio, i );
-        /* check if this elementary stream is one we want */
-        if ( audio->id == b->s.id )
-        {
-            break;
-        }
-        else
-        {
-            audio = NULL;
-        }
-    }
     if( !audio || audio->config.in.bitrate != 0 )
     {
         /* not found or already done */
@@ -1602,16 +1609,22 @@ static void LookForAudio(hb_scan_t *scan, hb_title_t * title, hb_buffer_t * b)
     w->codec_param = audio->config.in.codec_param;
     b = hb_fifo_see( audio->priv.scan_cache );
     int ret = w->bsinfo( w, b, &info );
-    if ( ret < 0 )
+    if ( ret < 0 && ret != AVERROR(EAGAIN) )
     {
-        hb_log( "no info on audio type %d/0x%x for id 0x%x",
-                audio->config.in.codec, audio->config.in.codec_param,
-                audio->id );
-        goto drop_audio;
+        // No point in attempting to decode the
+        // same data again the next time around
+        hb_buffer_t * tmp;
+        tmp = hb_fifo_get( audio->priv.scan_cache );
+        hb_buffer_close( &tmp );
+        free( w );
+        audio->priv.scan_error_count++;
+        return;
     }
     if ( !info.bitrate )
     {
-        /* didn't find any info */
+        // didn't find any info
+        // Additional buffer data may be required to obtain
+        // audio attributes
         free( w );
         return;
     }
@@ -1875,7 +1888,7 @@ static int  AllAudioOK( hb_title_t * title )
     for( i = 0; i < hb_list_count( title->list_audio ); i++ )
     {
         audio = hb_list_item( title->list_audio, i );
-        if( audio->config.in.bitrate == 0 )
+        if ( audio->priv.scan_error_count < AUDIO_DECODE_ERROR_LIMIT && audio->config.in.bitrate == 0 )
         {
             return 0;
         }
