@@ -1376,27 +1376,27 @@ save_queue_file_cb (GtkFileChooser *chooser, gint response,
         g_free (filename); 
         ghb_value_free(&queue);
     }
-    gtk_native_dialog_destroy(GTK_NATIVE_DIALOG(chooser));
+    ghb_file_chooser_destroy(chooser);
 }
 
 static void save_queue_file (signal_user_data_t *ud)
 {
-    GtkFileChooserNative *chooser;
+    GtkFileChooser *chooser;
     GtkWindow *hb_window;
 
     hb_window = GTK_WINDOW(ghb_builder_widget("hb_window"));
-    chooser = gtk_file_chooser_native_new(_("Export Queue"),
-                      hb_window,
-                      GTK_FILE_CHOOSER_ACTION_SAVE,
-                      _("_Save"),
-                      _("_Cancel"));
-    gtk_file_chooser_set_current_name(GTK_FILE_CHOOSER(chooser), "queue.json");
-    ghb_file_chooser_set_initial_file(GTK_FILE_CHOOSER(chooser),
+    chooser = ghb_file_chooser_new(_("Export Queue"),
+                                   hb_window,
+                                   GTK_FILE_CHOOSER_ACTION_SAVE,
+                                   _("_Save"),
+                                   _("_Cancel"));
+    gtk_file_chooser_set_current_name(chooser, "queue.json");
+    ghb_file_chooser_set_initial_file(chooser,
                                       ghb_dict_get_string(ud->prefs, "ExportDirectory"));
 
-    gtk_native_dialog_set_modal(GTK_NATIVE_DIALOG(chooser), TRUE);
+    ghb_file_chooser_set_modal(chooser, TRUE);
     g_signal_connect(G_OBJECT(chooser), "response", G_CALLBACK(save_queue_file_cb), ud);
-    gtk_native_dialog_show(GTK_NATIVE_DIALOG(chooser));
+    ghb_file_chooser_show(chooser);
 }
 
 void ghb_add_to_queue_list (signal_user_data_t *ud, GhbValue *queueDict)
@@ -1432,13 +1432,13 @@ open_queue_file_cb (GtkFileChooser *chooser, gint response,
 
     if (response != GTK_RESPONSE_ACCEPT || file == NULL)
     {
-        gtk_native_dialog_destroy(GTK_NATIVE_DIALOG(chooser));
+        ghb_file_chooser_destroy(chooser);
         return;
     }
 
     filename = g_file_get_path(file);
     g_object_unref(file);
-    gtk_native_dialog_destroy(GTK_NATIVE_DIALOG(chooser));
+    ghb_file_chooser_destroy(chooser);
 
     queue = ghb_read_settings_file(filename);
     if (queue != NULL)
@@ -1469,25 +1469,25 @@ open_queue_file_cb (GtkFileChooser *chooser, gint response,
 
 static void open_queue_file (signal_user_data_t *ud)
 {
-    GtkFileChooserNative *chooser;
+    GtkFileChooser *chooser;
     GtkWindow *hb_window;
 
     hb_window = GTK_WINDOW(ghb_builder_widget("hb_window"));
-    chooser = gtk_file_chooser_native_new(_("Import Queue"),
-                      hb_window,
-                      GTK_FILE_CHOOSER_ACTION_OPEN,
-                      _("_Open"),
-                      _("_Cancel"));
+    chooser = ghb_file_chooser_new(_("Import Queue"),
+                                   hb_window,
+                                   GTK_FILE_CHOOSER_ACTION_OPEN,
+                                   _("_Open"),
+                                   _("_Cancel"));
 
     // Add filters
-    ghb_add_file_filter(GTK_FILE_CHOOSER(chooser), _("All Files"), "FilterAll");
-    ghb_add_file_filter(GTK_FILE_CHOOSER(chooser), g_content_type_get_description("application/json"), "FilterJSON");
-    ghb_file_chooser_set_initial_file(GTK_FILE_CHOOSER(chooser),
+    ghb_add_file_filter(chooser, _("All Files"), "FilterAll");
+    ghb_add_file_filter(chooser, g_content_type_get_description("application/json"), "FilterJSON");
+    ghb_file_chooser_set_initial_file(chooser,
                                       ghb_dict_get_string(ud->prefs, "ExportDirectory"));
 
-    gtk_native_dialog_set_modal(GTK_NATIVE_DIALOG(chooser), TRUE);
-    g_signal_connect(G_OBJECT(chooser), "response", G_CALLBACK(open_queue_file_cb), ud);
-    gtk_native_dialog_show(GTK_NATIVE_DIALOG(chooser));
+    ghb_file_chooser_set_modal(chooser, TRUE);
+    g_signal_connect(chooser, "response", G_CALLBACK(open_queue_file_cb), ud);
+    ghb_file_chooser_show(chooser);
 }
 
 static gint64 dest_free_space (GhbValue *settings)

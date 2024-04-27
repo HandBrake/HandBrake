@@ -336,27 +336,28 @@ chooser_response_cb (GtkFileChooser *chooser, GtkResponseType response,
         ghb_file_button_set_file(self, file);
         g_object_unref(file);
     }
-    gtk_native_dialog_destroy(GTK_NATIVE_DIALOG(chooser));
+    ghb_file_chooser_destroy(chooser);
 }
 
 static void
 ghb_file_button_clicked (GtkButton *button)
 {
     GtkWindow *window;
-    GtkFileChooserNative *chooser;
+    GtkFileChooser *chooser;
     GhbFileButton *self = GHB_FILE_BUTTON(button);
 
     g_return_if_fail(GHB_IS_FILE_BUTTON(self));
 
     window = GTK_WINDOW(gtk_widget_get_root(GTK_WIDGET(self)));
-    chooser = gtk_file_chooser_native_new(ghb_file_button_get_title(self), window,
-                                          ghb_file_button_get_action(self),
-                                          ghb_file_button_get_accept_label(self), NULL);
+    chooser = ghb_file_chooser_new(ghb_file_button_get_title(self), window,
+                                   ghb_file_button_get_action(self),
+                                   ghb_file_button_get_accept_label(self),
+                                   _("_Cancel"));
     g_autofree char *selected_name = ghb_file_button_get_filename(self);
-    ghb_file_chooser_set_initial_file(GTK_FILE_CHOOSER(chooser), selected_name);
+    ghb_file_chooser_set_initial_file(chooser, selected_name);
 
     g_signal_connect(chooser, "response", G_CALLBACK(chooser_response_cb), self);
 
-    gtk_native_dialog_set_modal(GTK_NATIVE_DIALOG(chooser), GTK_IS_WINDOW(window));
-    gtk_native_dialog_show(GTK_NATIVE_DIALOG(chooser));
+    ghb_file_chooser_set_modal(chooser, GTK_IS_WINDOW(window));
+    ghb_file_chooser_show(chooser);
 }

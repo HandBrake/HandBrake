@@ -2095,7 +2095,7 @@ preset_import_response_cb (GtkFileChooser *chooser, GtkResponseType response,
             select_preset2(ud, &path);
         }
     }
-    gtk_native_dialog_destroy(GTK_NATIVE_DIALOG(chooser));
+    ghb_file_chooser_destroy(chooser);
 }
 
 G_MODULE_EXPORT void
@@ -2103,31 +2103,30 @@ preset_import_action_cb(GSimpleAction *action, GVariant *param,
                         signal_user_data_t *ud)
 {
     GtkWindow       *hb_window;
-    GtkFileChooserNative *chooser;
+    GtkFileChooser  *chooser;
     const gchar     *exportDir;
     GtkFileFilter   *filter;
 
     hb_window = GTK_WINDOW(ghb_builder_widget("hb_window"));
-    chooser = gtk_file_chooser_native_new("Import Preset", hb_window,
-                GTK_FILE_CHOOSER_ACTION_OPEN,
-                _("_Open"),
-                _("_Cancel"));
+    chooser = ghb_file_chooser_new(_("Import Preset"), hb_window,
+                                   GTK_FILE_CHOOSER_ACTION_OPEN,
+                                   _("_Open"),
+                                   _("_Cancel"));
 
-    ghb_add_file_filter(GTK_FILE_CHOOSER(chooser), _("All Files"), "FilterAll");
-    filter = ghb_add_file_filter(GTK_FILE_CHOOSER(chooser), _("Presets (*.json)"), "FilterJSON");
-    gtk_file_chooser_set_filter(GTK_FILE_CHOOSER(chooser), filter);
+    ghb_add_file_filter(chooser, _("All Files"), "FilterAll");
+    filter = ghb_add_file_filter(chooser, _("Presets (*.json)"), "FilterJSON");
+    gtk_file_chooser_set_filter(chooser, filter);
 
     exportDir = ghb_dict_get_string(ud->prefs, "ExportDirectory");
     if (exportDir == NULL || exportDir[0] == '\0')
     {
         exportDir = ".";
     }
-    ghb_file_chooser_set_initial_file(GTK_FILE_CHOOSER(chooser), exportDir);
+    ghb_file_chooser_set_initial_file(chooser, exportDir);
 
-    gtk_native_dialog_set_modal(GTK_NATIVE_DIALOG(chooser), TRUE);
-    gtk_native_dialog_set_transient_for(GTK_NATIVE_DIALOG(chooser), GTK_WINDOW(hb_window));
+    ghb_file_chooser_set_modal(chooser, TRUE);
     g_signal_connect(chooser, "response", G_CALLBACK(preset_import_response_cb), ud);
-    gtk_native_dialog_show(GTK_NATIVE_DIALOG(chooser));
+    ghb_file_chooser_show(chooser);
 }
 
 static void
@@ -2162,7 +2161,7 @@ preset_export_response_cb(GtkFileChooser *chooser,
 
         if (dict == NULL)
         {
-            gtk_native_dialog_destroy(GTK_NATIVE_DIALOG(chooser));
+            ghb_file_chooser_destroy(chooser);
             return;
         }
 
@@ -2183,7 +2182,7 @@ preset_export_response_cb(GtkFileChooser *chooser,
         g_free(filename);
         hb_value_free(&dict);
     }
-    gtk_native_dialog_destroy(GTK_NATIVE_DIALOG(chooser));
+    ghb_file_chooser_destroy(chooser);
 }
 
 G_MODULE_EXPORT void
@@ -2192,7 +2191,7 @@ preset_export_action_cb(GSimpleAction *action, GVariant *param,
 {
     hb_preset_index_t    *path;
     GtkWindow            *hb_window;
-    GtkFileChooserNative *chooser;
+    GtkFileChooser       *chooser;
     const gchar          *exportDir;
     gchar                *filename;
     GhbValue             *dict;
@@ -2224,10 +2223,10 @@ preset_export_action_cb(GSimpleAction *action, GVariant *param,
     preset_name = g_strdup(ghb_dict_get_string(dict, "PresetName"));
 
     hb_window = GTK_WINDOW(ghb_builder_widget("hb_window"));
-    chooser = gtk_file_chooser_native_new(_("Export Preset"), hb_window,
-                GTK_FILE_CHOOSER_ACTION_SAVE,
-                _("_Save"),
-                _("_Cancel"));
+    chooser = ghb_file_chooser_new(_("Export Preset"), hb_window,
+                                   GTK_FILE_CHOOSER_ACTION_SAVE,
+                                   _("_Save"),
+                                   _("_Cancel"));
 
     exportDir = ghb_dict_get_string(ud->prefs, "ExportDirectory");
     if (exportDir == NULL || exportDir[0] == '\0')
@@ -2240,15 +2239,15 @@ preset_export_action_cb(GSimpleAction *action, GVariant *param,
     g_strstrip(preset_name);
     g_strdelimit(preset_name, GHB_UNSAFE_FILENAME_CHARS, '_');
     filename = g_strdup_printf("%s.json", preset_name);
-    ghb_file_chooser_set_initial_file(GTK_FILE_CHOOSER(chooser), exportDir);
-    gtk_file_chooser_set_current_name(GTK_FILE_CHOOSER(chooser), filename);
+    ghb_file_chooser_set_initial_file(chooser, exportDir);
+    gtk_file_chooser_set_current_name(chooser, filename);
     g_free(filename);
     g_free(preset_name);
     hb_value_free(&dict);
 
-    gtk_native_dialog_set_modal(GTK_NATIVE_DIALOG(chooser), TRUE);
+    ghb_file_chooser_set_modal(chooser, TRUE);
     g_signal_connect(chooser, "response", G_CALLBACK(preset_export_response_cb), ud);
-    gtk_native_dialog_show(GTK_NATIVE_DIALOG(chooser));
+    ghb_file_chooser_show(chooser);
 }
 
 static void

@@ -101,6 +101,7 @@
         "use_dvdnav": true,
         "reduce_hd_preview": true,
         "MinTitleDuration": 10,
+        "NativeFileChooser": true,
         "preview_count": 10,
         "preview_show_crop": false,
         "preview_x": -1,

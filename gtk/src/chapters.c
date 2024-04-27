@@ -229,7 +229,7 @@ chapter_list_export_xml (const gchar *filename, GhbValue *chapter_dict)
 }
 
 static void
-chapter_list_export (GtkFileChooserNative *dialog,
+chapter_list_export (GtkFileChooser *chooser,
                      GtkResponseType response, signal_user_data_t *ud)
 {
     gchar             *filename, *dir;
@@ -243,11 +243,11 @@ chapter_list_export (GtkFileChooserNative *dialog,
 
         if (chapter_list == NULL)
         {
-            gtk_native_dialog_destroy(GTK_NATIVE_DIALOG(dialog));
+            ghb_file_chooser_destroy(chooser);
             return;
         }
 
-        filename = ghb_file_chooser_get_filename(GTK_FILE_CHOOSER(dialog));
+        filename = ghb_file_chooser_get_filename(chooser);
 
         chapter_list_export_xml(filename, chapter_list);
         exportDir = ghb_dict_get_string(ud->prefs, "ExportDirectory");
@@ -260,7 +260,7 @@ chapter_list_export (GtkFileChooserNative *dialog,
         g_free(dir);
         g_free(filename);
     }
-    gtk_native_dialog_destroy(GTK_NATIVE_DIALOG(dialog));
+    ghb_file_chooser_destroy(chooser);
 }
 
 static xmlNodePtr
@@ -437,7 +437,7 @@ chapters_import_response_cb (GtkFileChooser *dialog,
         chapter_list_import_xml(filename, ud);
         g_free(filename);
     }
-    gtk_native_dialog_destroy(GTK_NATIVE_DIALOG(dialog));
+    ghb_file_chooser_destroy(dialog);
 }
 
 G_MODULE_EXPORT void
@@ -445,29 +445,28 @@ chapters_export_action_cb (GSimpleAction *action, GVariant *param,
                            signal_user_data_t *ud)
 {
     GtkWindow       *hb_window;
-    GtkFileChooserNative *dialog;
+    GtkFileChooser  *dialog;
     const gchar     *exportDir;
     GtkFileFilter   *filter;
 
     hb_window = GTK_WINDOW(ghb_builder_widget("hb_window"));
-    dialog = gtk_file_chooser_native_new("Export Chapters", hb_window,
-                GTK_FILE_CHOOSER_ACTION_SAVE,
-                _("_Save"),
-                _("_Cancel"));
+    dialog = ghb_file_chooser_new("Export Chapters", hb_window,
+                                  GTK_FILE_CHOOSER_ACTION_SAVE,
+                                  _("_Save"),
+                                  _("_Cancel"));
 
-    ghb_add_file_filter(GTK_FILE_CHOOSER(dialog), _("All Files"), "FilterAll");
-    filter = ghb_add_file_filter(GTK_FILE_CHOOSER(dialog), _("Chapters (*.xml)"), "FilterXML");
-    gtk_file_chooser_set_filter(GTK_FILE_CHOOSER(dialog), filter);
-    gtk_file_chooser_set_current_name(GTK_FILE_CHOOSER(dialog), "chapters.xml");
+    ghb_add_file_filter(dialog, _("All Files"), "FilterAll");
+    filter = ghb_add_file_filter(dialog, _("Chapters (*.xml)"), "FilterXML");
+    gtk_file_chooser_set_filter(dialog, filter);
+    gtk_file_chooser_set_current_name(dialog, "chapters.xml");
 
     exportDir = ghb_dict_get_string(ud->prefs, "ExportDirectory");
     if (exportDir && exportDir[0] != '\0')
-        ghb_file_chooser_set_initial_file(GTK_FILE_CHOOSER(dialog), exportDir);
+        ghb_file_chooser_set_initial_file(dialog, exportDir);
 
-    gtk_native_dialog_set_modal(GTK_NATIVE_DIALOG(dialog), TRUE);
-    gtk_native_dialog_set_transient_for(GTK_NATIVE_DIALOG(dialog), GTK_WINDOW(hb_window));
+    ghb_file_chooser_set_modal(dialog, TRUE);
     g_signal_connect(dialog, "response", G_CALLBACK(chapter_list_export), ud);
-    gtk_native_dialog_show(GTK_NATIVE_DIALOG(dialog));
+    ghb_file_chooser_show(dialog);
 }
 
 G_MODULE_EXPORT void
@@ -475,24 +474,22 @@ chapters_import_action_cb (GSimpleAction *action, GVariant *param,
                            signal_user_data_t *ud)
 {
     GtkWindow       *hb_window;
-    GtkFileChooserNative *dialog;
+    GtkFileChooser  *dialog;
     GtkFileFilter   *filter;
 
     hb_window = GTK_WINDOW(ghb_builder_widget("hb_window"));
-    dialog = gtk_file_chooser_native_new("Import Chapters", hb_window,
-                GTK_FILE_CHOOSER_ACTION_OPEN,
-                _("_Open"),
-                _("_Cancel"));
+    dialog = ghb_file_chooser_new("Import Chapters", hb_window,
+                                  GTK_FILE_CHOOSER_ACTION_OPEN,
+                                  _("_Open"),
+                                  _("_Cancel"));
 
-    ghb_add_file_filter(GTK_FILE_CHOOSER(dialog), _("All Files"), "FilterAll");
-    filter = ghb_add_file_filter(GTK_FILE_CHOOSER(dialog), _("Chapters (*.xml)"), "FilterXML");
-    gtk_file_chooser_set_filter(GTK_FILE_CHOOSER(dialog), filter);
-    ghb_file_chooser_set_initial_file(GTK_FILE_CHOOSER(dialog),
+    ghb_add_file_filter(dialog, _("All Files"), "FilterAll");
+    filter = ghb_add_file_filter(dialog, _("Chapters (*.xml)"), "FilterXML");
+    gtk_file_chooser_set_filter(dialog, filter);
+    ghb_file_chooser_set_initial_file(dialog,
                                       ghb_dict_get_string(ud->prefs, "ExportDirectory"));
 
-    gtk_native_dialog_set_modal(GTK_NATIVE_DIALOG(dialog), TRUE);
-    gtk_native_dialog_set_transient_for(GTK_NATIVE_DIALOG(dialog), GTK_WINDOW(hb_window));
+    ghb_file_chooser_set_modal(dialog, TRUE);
     g_signal_connect(dialog, "response", G_CALLBACK(chapters_import_response_cb), ud);
-    gtk_native_dialog_show(GTK_NATIVE_DIALOG(dialog));
-
+    ghb_file_chooser_show(dialog);
 }
