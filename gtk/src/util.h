@@ -24,6 +24,11 @@
 G_BEGIN_DECLS
 
 int ghb_dialog_run(GtkDialog *dialog);
+GtkFileChooser *ghb_file_chooser_new(const char *title, GtkWindow *parent,
+    GtkFileChooserAction action, const char *accept_label, const char *cancel_label);
+void ghb_file_chooser_set_modal(GtkFileChooser *chooser, gboolean modal);
+void ghb_file_chooser_show(GtkFileChooser *chooser);
+void ghb_file_chooser_destroy(GtkFileChooser *chooser);
 void ghb_file_chooser_set_initial_file(GtkFileChooser *chooser, const char *file);
 char *ghb_file_chooser_get_filename(GtkFileChooser *chooser);
 char *ghb_file_chooser_get_current_folder(GtkFileChooser *chooser);

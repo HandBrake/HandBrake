@@ -67,7 +67,7 @@ static void quit_dialog_show(void);
 static void quit_dialog_response(GtkDialog *dialog, int response, gpointer data);
 static void queue_done_action(signal_user_data_t *ud);
 static gboolean has_drive = FALSE;
-static GtkFileChooserNative* source_dialog = NULL;
+static GtkFileChooser *source_dialog = NULL;
 static void source_dialog_start_scan(GtkFileChooser *chooser, int title_id);
 
 #if !defined(_WIN32)
@@ -1642,7 +1642,7 @@ single_title_dialog_response (GtkMessageDialog *dialog, int response,
     else
     {
         source_dialog = NULL;
-        gtk_native_dialog_destroy(GTK_NATIVE_DIALOG(chooser));
+        ghb_file_chooser_destroy(chooser);
     }
 }
 
@@ -1688,7 +1688,7 @@ source_dialog_response_cb(GtkFileChooser *chooser,
     else
     {
         source_dialog = NULL;
-        gtk_native_dialog_destroy(GTK_NATIVE_DIALOG(chooser));
+        ghb_file_chooser_destroy(chooser);
     }
 }
 
@@ -1836,7 +1836,7 @@ source_dialog_start_scan (GtkFileChooser *chooser, int title_id)
             ghb_do_scan_list(ud, files, title_id, TRUE);
     }
     source_dialog = NULL;
-    gtk_native_dialog_destroy(GTK_NATIVE_DIALOG(chooser));
+    ghb_file_chooser_destroy(chooser);
 }
 
 /* This set of functions became very complicated in GTK4 due to the removal
@@ -1853,7 +1853,7 @@ source_dialog_start_scan (GtkFileChooser *chooser, int title_id)
 static void
 do_source_dialog(gboolean dir, signal_user_data_t *ud)
 {
-    GtkFileChooserNative *chooser;
+    GtkFileChooser *chooser;
     GtkWindow *hb_window;
     const gchar *sourcename;
 
@@ -1862,7 +1862,7 @@ do_source_dialog(gboolean dir, signal_user_data_t *ud)
         return;
 
     hb_window = gtk_application_get_active_window(GTK_APPLICATION(GHB_APPLICATION_DEFAULT));
-    chooser = source_dialog = gtk_file_chooser_native_new(
+    chooser = source_dialog = ghb_file_chooser_new(
                 dir ? _("Open Source Directory") : _("Open Source"),
                 hb_window,
                 dir ? GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER : GTK_FILE_CHOOSER_ACTION_OPEN,
@@ -1873,26 +1873,25 @@ do_source_dialog(gboolean dir, signal_user_data_t *ud)
 
     if (dir)
     {
-        gtk_file_chooser_add_choice(GTK_FILE_CHOOSER(chooser), "recursive",
+        gtk_file_chooser_add_choice(chooser, "recursive",
                 _("Recursively scan directories"), NULL, NULL);
-        gtk_file_chooser_set_choice(GTK_FILE_CHOOSER(chooser), "recursive",
+        gtk_file_chooser_set_choice(chooser, "recursive",
                 ghb_dict_get_bool(ud->prefs, "RecursiveFolderScan") ? "true" : "false");
     }
     else
     {
-        gtk_file_chooser_set_select_multiple(GTK_FILE_CHOOSER(chooser), TRUE);
-        source_dialog_drive_list(GTK_FILE_CHOOSER(chooser), ud);
-        add_video_file_filters(GTK_FILE_CHOOSER(chooser));
+        gtk_file_chooser_set_select_multiple(chooser, TRUE);
+        source_dialog_drive_list(chooser, ud);
+        add_video_file_filters(chooser);
     }
 
-    gtk_file_chooser_add_choice(GTK_FILE_CHOOSER(chooser), "single",
+    gtk_file_chooser_add_choice(chooser, "single",
                                 _("Single Title"), NULL, NULL);
 
-    gtk_native_dialog_set_modal(GTK_NATIVE_DIALOG(chooser), TRUE);
-    gtk_native_dialog_set_transient_for(GTK_NATIVE_DIALOG(chooser), hb_window);
+    ghb_file_chooser_set_modal(chooser, TRUE);
     g_signal_connect(chooser, "response", G_CALLBACK(source_dialog_response_cb), ud);
-    ghb_file_chooser_set_initial_file(GTK_FILE_CHOOSER(chooser), sourcename);
-    gtk_native_dialog_show(GTK_NATIVE_DIALOG(chooser));
+    ghb_file_chooser_set_initial_file(chooser, sourcename);
+    ghb_file_chooser_show(chooser);
 }
 
 #if 0
@@ -2099,7 +2098,7 @@ dest_file_changed_cb (GtkEntry *entry, gpointer data)
 }
 
 static void
-destination_response_cb(GtkFileChooserNative *chooser,
+destination_response_cb(GtkFileChooser *chooser,
                         GtkResponseType response, signal_user_data_t *ud)
 {
     GtkEditable *entry;
@@ -2107,7 +2106,7 @@ destination_response_cb(GtkFileChooserNative *chooser,
 
     if (response == GTK_RESPONSE_ACCEPT)
     {
-        g_autoptr(GFile) file = gtk_file_chooser_get_file(GTK_FILE_CHOOSER(chooser));
+        g_autoptr(GFile) file = gtk_file_chooser_get_file(chooser);
         const char *filename = g_file_peek_path(file);
         g_autofree char *dirname = g_path_get_dirname(filename);
         basename = g_path_get_basename(filename);
@@ -2116,28 +2115,28 @@ destination_response_cb(GtkFileChooserNative *chooser,
         GhbFileButton *dest_chooser = GHB_FILE_BUTTON(ghb_builder_widget("dest_dir"));
         ghb_file_button_set_filename(dest_chooser, dirname);
     }
-    gtk_native_dialog_destroy(GTK_NATIVE_DIALOG(chooser));
+    ghb_file_chooser_destroy(chooser);
 }
 
 G_MODULE_EXPORT void
 destination_action_cb(GSimpleAction *action, GVariant *param,
                       signal_user_data_t *ud)
 {
-    GtkFileChooserNative *chooser;
+    GtkFileChooser *chooser;
     GtkWindow *hb_window;
     const gchar *destname;
 
     hb_window = GTK_WINDOW(ghb_builder_widget("hb_window"));
     destname = ghb_dict_get_string(ud->settings, "destination");
-    chooser = gtk_file_chooser_native_new("Choose Destination",
-                                          hb_window,
-                                          GTK_FILE_CHOOSER_ACTION_SAVE,
-                                          _("_Save"),
-                                          _("_Cancel"));
-    ghb_file_chooser_set_initial_file(GTK_FILE_CHOOSER(chooser), destname);
-    gtk_native_dialog_set_modal(GTK_NATIVE_DIALOG(chooser), TRUE);
+    chooser = ghb_file_chooser_new("Choose Destination",
+                                   hb_window,
+                                   GTK_FILE_CHOOSER_ACTION_SAVE,
+                                   _("_Save"),
+                                   _("_Cancel"));
+    ghb_file_chooser_set_initial_file(chooser, destname);
+    ghb_file_chooser_set_modal(chooser, TRUE);
     g_signal_connect(chooser, "response", G_CALLBACK(destination_response_cb), ud);
-    gtk_native_dialog_show(GTK_NATIVE_DIALOG(chooser));
+    ghb_file_chooser_show(chooser);
 }
 
 G_MODULE_EXPORT gboolean
@@ -5596,7 +5595,7 @@ presets_list_context_menu_cb (GtkGesture *gest, gint n_press, double x,
 GtkFileFilter *ghb_add_file_filter(GtkFileChooser *chooser,
                                    const char *name, const char *id)
 {
-    g_autoptr(GtkFileFilter) filter = GTK_FILE_FILTER(ghb_builder_object(id));
+    GtkFileFilter *filter = GTK_FILE_FILTER(ghb_builder_object(id));
     gtk_file_filter_set_name(filter, name);
     gtk_file_chooser_add_filter(chooser, filter);
     return filter;

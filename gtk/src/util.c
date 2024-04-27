@@ -19,6 +19,7 @@
 
 #include "util.h"
 
+#include "application.h"
 #include "handbrake/common.h"
 
 /*
@@ -137,7 +138,7 @@ ghb_file_chooser_set_initial_file (GtkFileChooser *chooser, const char *file)
     else if (g_file_test(file, G_FILE_TEST_IS_DIR))
     {
         GFile *gfile = g_file_new_for_path(file);
-        gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(chooser), gfile, NULL);
+        gtk_file_chooser_set_current_folder(chooser, gfile, NULL);
         g_object_unref(gfile);
     }
     else
@@ -146,14 +147,14 @@ ghb_file_chooser_set_initial_file (GtkFileChooser *chooser, const char *file)
         if (g_file_test(dir, G_FILE_TEST_IS_DIR))
         {
             GFile *gfile = g_file_new_for_path(dir);
-            gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(chooser), gfile, NULL);
+            gtk_file_chooser_set_current_folder(chooser, gfile, NULL);
             g_object_unref(gfile);
         }
         g_free(dir);
         if (gtk_file_chooser_get_action(chooser) == GTK_FILE_CHOOSER_ACTION_SAVE)
         {
             char *base = g_path_get_basename(file);
-            gtk_file_chooser_set_current_name(GTK_FILE_CHOOSER(chooser), base);
+            gtk_file_chooser_set_current_name(chooser, base);
             g_free(base);
         }
     }
@@ -173,6 +174,56 @@ ghb_file_chooser_get_current_folder (GtkFileChooser *chooser)
     return g_file_get_path(folder);
 }
 
+GtkFileChooser *
+ghb_file_chooser_new (const char *title, GtkWindow *parent, GtkFileChooserAction action,
+                      const char *accept_label, const char *cancel_label)
+{
+    if (!ghb_dict_get_bool(ghb_ud()->prefs, "NativeFileChooser"))
+    {
+        return GTK_FILE_CHOOSER(gtk_file_chooser_dialog_new(title, parent, action,
+                                                            accept_label, GTK_RESPONSE_ACCEPT,
+                                                            cancel_label, GTK_RESPONSE_CANCEL,
+                                                            NULL));
+    }
+    else
+    {
+        return GTK_FILE_CHOOSER(gtk_file_chooser_native_new(title, parent, action,
+                                                            accept_label, cancel_label));
+    }
+}
+
+void
+ghb_file_chooser_set_modal (GtkFileChooser *chooser, gboolean modal)
+{
+    g_return_if_fail(GTK_IS_NATIVE_DIALOG(chooser) || GTK_IS_WINDOW(chooser));
+
+    if (GTK_IS_NATIVE_DIALOG(chooser))
+        gtk_native_dialog_set_modal(GTK_NATIVE_DIALOG(chooser), modal);
+    else if (GTK_IS_WINDOW(chooser))
+        gtk_window_set_modal(GTK_WINDOW(chooser), modal);
+}
+
+void
+ghb_file_chooser_show (GtkFileChooser *chooser)
+{
+    g_return_if_fail(GTK_IS_NATIVE_DIALOG(chooser) || GTK_IS_WINDOW(chooser));
+
+    if (GTK_IS_NATIVE_DIALOG(chooser))
+        gtk_native_dialog_show(GTK_NATIVE_DIALOG(chooser));
+    else if (GTK_IS_WINDOW(chooser))
+        gtk_window_present(GTK_WINDOW(chooser));
+}
+
+void
+ghb_file_chooser_destroy (GtkFileChooser *chooser)
+{
+    g_return_if_fail(GTK_IS_NATIVE_DIALOG(chooser) || GTK_IS_WINDOW(chooser));
+
+    if (GTK_IS_NATIVE_DIALOG(chooser))
+        gtk_native_dialog_destroy(GTK_NATIVE_DIALOG(chooser));
+    else if (GTK_IS_WINDOW(chooser))
+        gtk_window_destroy(GTK_WINDOW(chooser));
+}
 
 /*
  * List of known suffixes for subtitles. Not case sensitive.
