@@ -864,6 +864,7 @@ static int DecodePreviews( hb_scan_t * data, hb_title_t * title, int flush )
         crop_record_free(crops);
         free( vid_decoder );
         hb_stream_close(&stream);
+        hb_hwaccel_hw_ctx_close(&hw_device_ctx);
         return 0;
     }
 
@@ -880,6 +881,7 @@ static int DecodePreviews( hb_scan_t * data, hb_title_t * title, int flush )
             vid_decoder->close( vid_decoder );
             free( vid_decoder );
             hb_stream_close(&stream);
+            hb_hwaccel_hw_ctx_close(&hw_device_ctx);
             return 0;
         }
         if (data->bd)
