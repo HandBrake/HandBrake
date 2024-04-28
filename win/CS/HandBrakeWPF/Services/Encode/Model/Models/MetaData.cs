@@ -9,87 +9,26 @@
 
 namespace HandBrakeWPF.Services.Encode.Model.Models
 {
-    using HandBrakeWPF.Services.Scan.Model;
+    using System.Collections.Generic;
 
     public class MetaData
     {
         public MetaData()
         {
+            this.MetaDataInfo = new Dictionary<string, string>();
         }
 
         public MetaData(MetaData metadata)
         {
             if (metadata != null)
             {
-                this.AlbumArtist = metadata.AlbumArtist;
-                this.Album = metadata.Album;
-                this.Artist = metadata.Artist;
-                this.Comment = metadata.Comment;
-                this.Composer = metadata.Composer;
-                this.Description = metadata.Description;
-                this.Genre = metadata.Genre;
-                this.LongDescription = metadata.LongDescription;
-                this.Name = metadata.Name;
-                this.ReleaseDate = metadata.ReleaseDate;
+                this.MetaDataInfo = metadata.MetaDataInfo;
                 this.PassthruMetadataEnabled = metadata.PassthruMetadataEnabled;
-            }
-        }
-
-        public MetaData(Metadata metadata, bool metadataEnabled)
-        {
-            this.PassthruMetadataEnabled = metadataEnabled;
-
-            if (metadata != null)
-            {
-                this.AlbumArtist = metadata.AlbumArtist;
-                this.Album = metadata.Album;
-                this.Artist = metadata.Artist;
-                this.Comment = metadata.Comment;
-                this.Composer = metadata.Composer;
-                this.Description = metadata.Description;
-                this.Genre = metadata.Genre;
-                this.LongDescription = metadata.LongDescription;
-                this.Name = metadata.Name;
-                this.ReleaseDate = metadata.ReleaseDate;
             }
         }
 
         public bool PassthruMetadataEnabled { get; set; }
 
-        public string AlbumArtist { get; set; }
-
-        public string Album { get; set; }
-
-        public string Artist { get; set; }
-
-        public string Comment { get; set; }
-
-        public string Composer { get; set; }
-
-        public string Description { get; set; }
-
-        public string Genre { get; set; }
-
-        public string LongDescription { get; set; }
-
-        public string Name { get; set; }
-
-        public string ReleaseDate { get; set; }
-
-        public bool IsMetadataSet
-        {
-            get
-            {
-                return !string.IsNullOrEmpty(AlbumArtist) || !string.IsNullOrEmpty(Album)
-                                                          || !string.IsNullOrEmpty(Artist)
-                                                          || !string.IsNullOrEmpty(Comment)
-                                                          || !string.IsNullOrEmpty(Composer)
-                                                          || !string.IsNullOrEmpty(Description)
-                                                          || !string.IsNullOrEmpty(Genre)
-                                                          || !string.IsNullOrEmpty(LongDescription)
-                                                          || !string.IsNullOrEmpty(Name)
-                                                          || !string.IsNullOrEmpty(ReleaseDate);
-            }
-        }
+        public Dictionary<string, string> MetaDataInfo { get; set; }
     }
 }

@@ -326,10 +326,10 @@ namespace HandBrakeWPF.ViewModels
 
         public bool MetadataPassthru
         {
-            get => this.task?.MetaData.PassthruMetadataEnabled ?? false;
+            get => this.task?.PassthruMetadataEnabled ?? false;
             set
             {
-                this.task.MetaData.PassthruMetadataEnabled = value;
+                this.task.PassthruMetadataEnabled = value;
                 this.NotifyOfPropertyChange(() => this.MetadataPassthru);
             }
         }
@@ -341,7 +341,6 @@ namespace HandBrakeWPF.ViewModels
             this.Source = scannedSource;
             this.CurrentTitle = selectedTitle;
             this.Task = encodeTask;
-            this.Task.MetaData = new MetaData(selectedTitle.Metadata, this.MetadataPassthru);
             this.UpdateDisplayedInfo();
             this.SetPreviewControlVisibility();
         }
@@ -481,7 +480,7 @@ namespace HandBrakeWPF.ViewModels
             this.Optimize = selectedPreset.Task.Optimize;
             this.IPod5GSupport = selectedPreset.Task.IPod5GSupport;
             this.AlignAVStart = selectedPreset.Task.AlignAVStart;
-            this.MetadataPassthru = selectedPreset.Task?.MetaData.PassthruMetadataEnabled ?? false;
+            this.MetadataPassthru = selectedPreset.Task?.PassthruMetadataEnabled ?? false;
         }
 
         private void SetExtension(string newExtension)

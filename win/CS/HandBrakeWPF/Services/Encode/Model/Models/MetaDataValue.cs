@@ -1,20 +1,24 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="Metadata.cs" company="HandBrake Project (https://handbrake.fr)">
+// <copyright file="MetaDataValue.cs" company="HandBrake Project (http://handbrake.fr)">
 //   This file is part of the HandBrake source code - It may be used under the terms of the GNU General Public License.
 // </copyright>
 // <summary>
-//   The meta data.
+//   A UI representation of a metadata attribute. 
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrake.Interop.Interop.Json.Encode
+namespace HandBrakeWPF.Services.Encode.Model.Models
 {
-    /// <summary>
-    ///     The meta data.
-    /// </summary>
-    public class Metadata
+    public class MetaDataValue
     {
+        public MetaDataValue(string annotation, string value)
+        {
+            this.Annotation = annotation;
+            this.Value = value;
+        }
+
         public string Annotation { get; set; }
+
         public string Value { get; set; }
     }
 }

@@ -602,27 +602,20 @@ namespace HandBrakeWPF.Services.Encode.Factories
             return filter;
         }
 
-        private Metadata CreateMetadata(EncodeTask job)
+        private Dictionary<string, string> CreateMetadata(EncodeTask job)
         {
-            if (job.MetaData != null && job.MetaData.PassthruMetadataEnabled)
+            if (job.MetaData != null && job.PassthruMetadataEnabled)
             {
-                Metadata metaData = new Metadata
-                                    {
-                                        Artist = job.MetaData.Artist,
-                                        Album = job.MetaData.Album,
-                                        AlbumArtist = job.MetaData.AlbumArtist,
-                                        Comment = job.MetaData.Comment,
-                                        Composer = job.MetaData.Composer,
-                                        Description = job.MetaData.Description,
-                                        Genre = job.MetaData.Genre,
-                                        LongDescription = job.MetaData.LongDescription,
-                                        Name = job.MetaData.Name,
-                                        ReleaseDate = job.MetaData.ReleaseDate
-                                    };
-                return metaData;
+                Dictionary<string, string> metadata = new Dictionary<string, string>();
+                foreach (var item in job.MetaData)
+                {
+                    metadata.Add(item.Annotation, item.Value);
+                }
+
+                return metadata;
             }
 
-            return new Metadata(); // Empty Metadata will not pass through to the destination.  
+            return new Dictionary<string, string>(); // Empty Metadata will not pass through to the destination.  
         }
     }
 }

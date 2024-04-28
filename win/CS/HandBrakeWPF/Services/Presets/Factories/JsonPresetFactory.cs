@@ -60,7 +60,7 @@ namespace HandBrakeWPF.Services.Presets.Factories
             preset.Task.IPod5GSupport = importedPreset.Mp4iPodCompatible;
             preset.Task.OutputFormat = GetFileFormat(importedPreset.FileFormat.Replace("file", string.Empty).Trim());
             preset.Task.AlignAVStart = importedPreset.AlignAVStart;
-            preset.Task.MetaData.PassthruMetadataEnabled = importedPreset.MetadataPassthrough;
+            preset.Task.PassthruMetadataEnabled = importedPreset.MetadataPassthrough;
 
             /* Picture Settings */
             preset.Task.MaxWidth = importedPreset.PictureWidth.HasValue && importedPreset.PictureWidth.Value > 0 ? importedPreset.PictureWidth.Value : (int?)null;
@@ -544,7 +544,7 @@ namespace HandBrakeWPF.Services.Presets.Factories
             preset.Optimize = export.Task.Optimize;
             preset.Mp4iPodCompatible = export.Task.IPod5GSupport;
             preset.AlignAVStart = export.Task.AlignAVStart;
-            preset.MetadataPassthrough = export.Task.MetaData?.PassthruMetadataEnabled ?? false;
+            preset.MetadataPassthrough = export.Task.PassthruMetadataEnabled;
 
             // Picture Settings
             preset.PictureForceHeight = 0; // TODO

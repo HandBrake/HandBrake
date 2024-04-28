@@ -10,6 +10,7 @@
 namespace HandBrakeWPF.Services.Scan.Factories
 {
     using System;
+    using System.Collections.Generic;
     using System.IO;
 
     using HandBrake.App.Core.Model;
@@ -138,20 +139,10 @@ namespace HandBrakeWPF.Services.Scan.Factories
                 currentSubtitleTrack++;
             }
 
-            SourceMetadata metadata = title.MetaData;
+            Dictionary<string, string> metadata = title.MetaData;
             if (title.MetaData != null)
             {
-                converted.Metadata = new Metadata(
-                    metadata.AlbumArtist,
-                    metadata.Album,
-                    metadata.Artist,
-                    metadata.Comment,
-                    metadata.Composer,
-                    metadata.Description,
-                    metadata.Genre,
-                    metadata.LongDescription,
-                    metadata.Name,
-                    metadata.ReleaseDate);
+                converted.Metadata = metadata;
             }
 
             return converted;

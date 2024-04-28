@@ -9,6 +9,8 @@
 
 namespace HandBrake.Interop.Interop.Json.Encode
 {
+    using System.Collections.Generic;
+
     using HandBrake.Interop.Interop.Json.Shared;
 
     /// <summary>
@@ -39,7 +41,7 @@ namespace HandBrake.Interop.Interop.Json.Encode
         /// <summary>
         /// Gets or sets the meta data.
         /// </summary>
-        public Metadata Metadata { get; set; }
+        public Dictionary<string, string> Metadata { get; set; }
 
         /// <summary>
         /// Gets or sets the sequence id.

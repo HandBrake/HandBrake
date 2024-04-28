@@ -82,7 +82,7 @@ namespace HandBrake.Interop.Interop.Json.Scan
         /// <summary>
         /// Gets or sets the meta data.
         /// </summary>
-        public SourceMetadata MetaData { get; set; }
+        public Dictionary<string, string> MetaData { get; set; }
 
         /// <summary>
         /// Gets or sets the name.
