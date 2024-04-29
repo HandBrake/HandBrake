@@ -3,10 +3,10 @@
     {
       "identity" : "sparkle",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/sparkle-project/Sparkle",
+      "location" : "https://github.com/HandBrake/Sparkle",
       "state" : {
-        "revision" : "0a4caaf7a81eea2cece651ef4b17331fa0634dff",
-        "version" : "2.6.0"
+        "revision" : "764a73a7ed54efe80b5d305b513a2f807a76a1c1",
+        "version" : "2.6.0-handbrake"
       }
     }
   ],

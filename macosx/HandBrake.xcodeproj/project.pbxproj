@@ -5605,10 +5605,10 @@
 /* Begin XCRemoteSwiftPackageReference section */
 		A96E4619278D99840016DCBB /* XCRemoteSwiftPackageReference "Sparkle" */ = {
 			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/sparkle-project/Sparkle";
+			repositoryURL = "https://github.com/HandBrake/Sparkle";
 			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 2.0.0;
+				kind = exactVersion;
+				version = "2.6.0-handbrake";
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
