@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="FilterView_Deblock" xml:space="preserve">
-    <value>Deblock reduces blocky artifacts caused by low quality video compression.</value>
+    <value>L'antiblocs redueix els artefactes causats per una compressió de vídeo de baixa qualitat.</value>
   </data>
   <data name="FilterView_DecombDeinterlace" xml:space="preserve">
     <value>Choose decomb or deinterlace filter options.
@@ -177,23 +177,23 @@ Custom allows manually setting all parameters. Useful for correcting an incorrec
     <value>Automatically crop black borders around edges of the video.</value>
   </data>
   <data name="PictureSettingsView_CropBottom" xml:space="preserve">
-    <value>Crop the video from the bottom.</value>
+    <value>Escapça el vídeo per sota.</value>
   </data>
   <data name="PictureSettingsView_CropLeft" xml:space="preserve">
-    <value>Crop the video from the left side.</value>
+    <value>Escapça el vídeo per l'esquerra.</value>
   </data>
   <data name="PictureSettingsView_CropRight" xml:space="preserve">
-    <value>Crop the video from the right side.</value>
+    <value>Escapça el vídeo per la dreta.</value>
   </data>
   <data name="PictureSettingsView_CropTop" xml:space="preserve">
-    <value>Crop the video from the top.</value>
+    <value>Escapça el vídeo per dalt.</value>
   </data>
   <data name="PictureSettingsView_Height" xml:space="preserve">
     <value>This is the height that the video will be stored at.
 The actual display dimensions will differ if the pixel aspect ratio is not 1:1.</value>
   </data>
   <data name="PictureSettingsView_ManualCrop" xml:space="preserve">
-    <value>Manually crop the video.</value>
+    <value>Escapça manualment el vídeo.</value>
   </data>
   <data name="PictureSettingsView_Modulus" xml:space="preserve">
     <value>Align storage dimensions to multiples of this value.
@@ -315,10 +315,10 @@ VFR is not compatible with some players.</value>
     <value>Video angle to encode. Only applicable to multi-angle DVD and Blu-ray.</value>
   </data>
   <data name="MainView_AddPreset" xml:space="preserve">
-    <value>Add a new preset.</value>
+    <value>Afegeix una nova configuració predefinida.</value>
   </data>
   <data name="MainView_PresetAdditionalOptions" xml:space="preserve">
-    <value>Additional Preset Options.</value>
+    <value>Opcions addicionals de les configuracions predefinides.</value>
   </data>
   <data name="MainView_Presets" xml:space="preserve">
     <value>Presets are groups of encode settings tailored for specific scenarios. Select the one closest matching your intent.
@@ -468,10 +468,10 @@ Lapsharp's Sprite tune is useful for 1-/4-/8-/16-bit 2-dimensional games. Sprite
 When disabled, it will use the path in the destination box on the main window if populated, otherwise it will use the default path.</value>
   </data>
   <data name="FiltersView_ColourSpace" xml:space="preserve">
-    <value>Colourspace Filter.</value>
+    <value>Filtre d'espai de color.</value>
   </data>
   <data name="FiltersView_ChromaSmooth" xml:space="preserve">
-    <value>Chroma Smooth Filter</value>
+    <value>Filtre de suavització cromàtica</value>
   </data>
   <data name="PictureSettingsView_PaddingCustomColourTooltip" xml:space="preserve">
     <value>This field can accept RGB values such as: "0xFF0000" or colour names such as "red". For a full list of named colours, see the padding filter documentation. </value>

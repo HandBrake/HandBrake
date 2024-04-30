@@ -2615,11 +2615,11 @@ Només són compatibles els fitxers de cua de la versió actual.</value>
     <value>Obre el HandBrake</value>
   </data>
   <data name="Startup_UnableToStartInfo" xml:space="preserve">
-    <value>Hardware encoding support has been disabled as it is a common cause of start-up issues.
-- Please try restarting HandBrake. 
-- If the problem persists, it may be an out-of-date graphics card driver (onboard or discrete) that is causing the problem.
+    <value>La codificació per maquinari ha estat desactivada perquè és la causa més comuna dels problemes d'arrencada.
+- Proveu de reiniciar el HandBrake.
+- Si el problema continua, pot ser un controlador de targeta gràfica (integrada o independent) obsolet.
 
-Hardware encoding support can be re-enabled in preferences. </value>
+Podeu tornar a activar la codificació de maquinar a les preferències.</value>
   </data>
   <data name="Startup_UnableToStart" xml:space="preserve">
     <value>El HandBrake no s'ha pogut executar.</value>
@@ -2646,9 +2646,9 @@ Hardware encoding support can be re-enabled in preferences. </value>
     <value>Informació</value>
   </data>
   <data name="SubtitleView_NoSubtitlesAdded" xml:space="preserve">
-    <value>There were no subtitle tracks added. 
+    <value>No s'ha afegit cap pista de subtítols.
 
-This may be due to limitations of the file container you have selected. Please see our subtitle help documentation for more information.</value>
+Això pot ser a causa de les limitacions del contenidor del fitxer que heu seleccionat. Vegeu la nostra documentació d'ajuda dels subtítols si voleu més informació.</value>
   </data>
   <data name="DarkTheme_None" xml:space="preserve">
     <value>Cap</value>
@@ -2669,16 +2669,16 @@ This may be due to limitations of the file container you have selected. Please s
     <value>Personalitzat</value>
   </data>
   <data name="OptionsView_EnableNvDecSupport" xml:space="preserve">
-    <value>Prefer use of Nvidia NVDec for decoding video when using the NVEnc encoder and the hardware is available for use.</value>
+    <value>Dona preferència a l'ús de Nvidia NVDec per a descodificar vídeos quan utilitzeu el codificador NVEnc i el maquinari estigui disponible.</value>
   </data>
   <data name="Options_Hardware" xml:space="preserve">
     <value>Assistència de programari</value>
   </data>
   <data name="StaticPreviewViewModel_MediaError" xml:space="preserve">
-    <value>The system was unable to play this file. 
+    <value>El sistema no ha pogut reproduir el fitxer.
 
-Please note certain codecs such as AV1 or HEVC require the Microsoft AV1 or HEVC codec plugins from the Microsoft Store to play.
-Alternatively, check the "Use External Player" checkbox below.</value>
+Tingueu en compte que alguns còdecs com AV1 o HEVC necessiten els complements de còdec Microsoft AV1 o HVEC de la Botiga Microsoft per funcionar.
+Altrament, marqueu la casella "Utilitza un reproductor extern" de sota.</value>
   </data>
   <data name="StaticPreviewView_ClosePlayer" xml:space="preserve">
     <value>Tanca el reproductor</value>
@@ -2690,7 +2690,7 @@ Alternatively, check the "Use External Player" checkbox below.</value>
     <value>Previsualització del vídeo</value>
   </data>
   <data name="StaticPreviewViewModel_WebmNotSupported" xml:space="preserve">
-    <value>The Built-in preview is not available for the WebM container. An External player must be used.</value>
+    <value>El contenidor WebM no té la previsualització integrada disponible. Utilitzeu un reproductor extern.</value>
   </data>
   <data name="StaticPreview_EncodingPreview" xml:space="preserve">
     <value>Codificació de la previsualització...</value>
@@ -2736,9 +2736,9 @@ Alternatively, check the "Use External Player" checkbox below.</value>
 S'estan codificant {1} tasques</value>
   </data>
   <data name="StaticPreviewViewModel_MultipleEncodes" xml:space="preserve">
-    <value>Unable to encode a preview. The application is currently busy encoding another file.
+    <value>No s'ha pogut codificar la previsualització. El programa està ocupat codificant un altre fitxer.
 
-To allow multiple simultaneous encodes, turn on "Process Isolation" in Tools Menu -&gt; Preferences -&gt; Advanced -&gt; Process Isolation -&gt; "Run each queued job in a separate worker process".</value>
+Si voleu permetre múltiples codificacions simultànies, activeu "Aïllament de processos" al menú Eines -&gt; Preferències -&gt; Avançat -&gt; Aïllament de processos -&gt; «Executa cada tasca de la cua en un procés separat».</value>
   </data>
   <data name="AudioView_Quality" xml:space="preserve">
     <value>Qualitat</value>
@@ -2771,7 +2771,7 @@ To allow multiple simultaneous encodes, turn on "Process Isolation" in Tools Men
     <value>Mou amunt</value>
   </data>
   <data name="QueueViewModel_StopButContinueJob" xml:space="preserve">
-    <value>There are currently jobs running. Would you like to complete the current jobs before stopping the queue?</value>
+    <value>Hi ha tasques en execució. Voleu completar les tasques actuals abans d'aturar la cua?</value>
   </data>
   <data name="Options_AddExt" xml:space="preserve">
     <value>Afegeix l'extensió</value>
@@ -2789,7 +2789,7 @@ To allow multiple simultaneous encodes, turn on "Process Isolation" in Tools Men
     <value>Gestió dels fitxers (escaneig)</value>
   </data>
   <data name="Options_RecursiveFolderScan" xml:space="preserve">
-    <value>Recursively scan directories when using the folder scan mode.</value>
+    <value>Escaneja els directoris de manera recurrent amb el mode escaneig de carpetes.</value>
   </data>
   <data name="AudioView_AudioQuality" xml:space="preserve">
     <value>Qualitat de la pista d'àudio</value>
@@ -2813,6 +2813,6 @@ To allow multiple simultaneous encodes, turn on "Process Isolation" in Tools Men
     <value>Utilitza la vista de cua simple</value>
   </data>
   <data name="VideoView_LosslessEncodeOnly" xml:space="preserve">
-    <value>Lossless encoding only.</value>
+    <value>Només codificació sense pèrdua.</value>
   </data>
 </root>
