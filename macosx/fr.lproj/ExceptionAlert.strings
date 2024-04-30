@@ -1,5 +1,5 @@
 /* Class = "NSWindow"; title = "Internal Error"; ObjectID = "1"; */
-"1.title" = "Erreur Interne";
+"1.title" = "Erreur interne";
 
 /* Class = "NSTextFieldCell"; title = "An internal error has occurred. You can choose to continue in an unstable state, or crash."; ObjectID = "10"; */
 "10.title" = "Une erreur interne s'est produite. Vous pouvez choisir de continuer dans un environnement instable ou de fermer l'application.";

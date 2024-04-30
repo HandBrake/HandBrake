@@ -221,8 +221,14 @@
 /* Export presets save panel title */
 "Export presets" = "Exporter les préréglages";
 
+/* Default name for a newly added excluded file extension */
+"extension" = "extension";
+
 /* File already exists alert -> message */
 "File already exists." = "Le fichier existe déjà.";
+
+/* Preferences Output File Name Toolbar Item */
+"File name" = "Nom de fichier";
 
 /* Preferences General Toolbar Item */
 "General" = "Général";
@@ -612,4 +618,7 @@
 /* Queue Edit Alert -> stop and edit informative text
    Queue Stop Alert -> stop and remove informative text */
 "Your movie will be lost if you don't continue encoding." = "Votre film va être perdu si vous ne continuez pas l'encodage.";
+
+/* Queue done notification message */
+"Your queue is done!" = "Votre file d'attente est terminée !";
 
