@@ -16,6 +16,8 @@ FFMPEG.FETCH.url    = https://github.com/HandBrake/HandBrake-contribs/releases/d
 FFMPEG.FETCH.url   += https://ffmpeg.org/releases/ffmpeg-7.0.tar.bz2
 FFMPEG.FETCH.sha256 = a24d9074bf5523a65aaa9e7bd02afe4109ce79d69bd77d104fed3dab4b934d7a
 
+FFMPEG.GCC.args.c_std =
+
 FFMPEG.CONFIGURE.deps  =
 FFMPEG.CONFIGURE.host  =
 FFMPEG.CONFIGURE.build =
