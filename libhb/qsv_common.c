@@ -1068,6 +1068,13 @@ static int query_capabilities(mfxSession session, int index, mfxVersion version,
     }
 
     {
+    	// Will fail MFXVideoENCODE_Init if not available
+    	if (inputParam.mfx.LowPower &&
+    	    inputParam.mfx.LowPower == MFX_CODINGOPTION_ON)
+    	{
+    		info->capabilities |= HB_QSV_CAP_LOWPOWER_ENCODE;
+    	}
+
         /* Implementation-specific features that can't be queried */
         if (info->codec_id == MFX_CODEC_AVC || info->codec_id == MFX_CODEC_HEVC || info->codec_id == MFX_CODEC_AV1)
         {
@@ -1076,21 +1083,6 @@ static int query_capabilities(mfxSession session, int index, mfxVersion version,
                 if (hb_qsv_hardware_generation(hb_qsv_get_platform(index)) >= QSV_G3)
                 {
                     info->capabilities |= HB_QSV_CAP_B_REF_PYRAMID;
-                }
-                if (info->codec_id == MFX_CODEC_AVC &&
-                    (hb_qsv_hardware_generation(hb_qsv_get_platform(index)) >= QSV_G7))
-                {
-                    info->capabilities |= HB_QSV_CAP_LOWPOWER_ENCODE;
-                }
-                if (info->codec_id == MFX_CODEC_HEVC &&
-                    (hb_qsv_hardware_generation(hb_qsv_get_platform(index)) >= QSV_G7))
-                {
-                    info->capabilities |= HB_QSV_CAP_LOWPOWER_ENCODE;
-                }
-                if (info->codec_id == MFX_CODEC_AV1 &&
-                    (hb_qsv_hardware_generation(hb_qsv_get_platform(index)) > QSV_G8))
-                {
-                    info->capabilities |= HB_QSV_CAP_LOWPOWER_ENCODE;
                 }
             }
             else
@@ -1122,7 +1114,7 @@ static int query_capabilities(mfxSession session, int index, mfxVersion version,
         {
             init_video_param(&inputParam);
             inputParam.mfx.CodecId           = info->codec_id;
-            inputParam.mfx.LowPower          = lowpower;
+            inputParam.mfx.LowPower          = MFX_CODINGOPTION_OFF;
             inputParam.mfx.RateControlMethod = MFX_RATECONTROL_LA;
             inputParam.mfx.TargetKbps        = 5000;
 
@@ -1137,7 +1129,7 @@ static int query_capabilities(mfxSession session, int index, mfxVersion version,
                 // also check for LA + interlaced support
                 init_video_param(&inputParam);
                 inputParam.mfx.CodecId             = info->codec_id;
-                inputParam.mfx.LowPower            = lowpower;
+                inputParam.mfx.LowPower            = MFX_CODINGOPTION_OFF;
                 inputParam.mfx.RateControlMethod   = MFX_RATECONTROL_LA;
                 inputParam.mfx.FrameInfo.PicStruct = MFX_PICSTRUCT_FIELD_TFF;
                 inputParam.mfx.TargetKbps          = 5000;
@@ -1157,7 +1149,7 @@ static int query_capabilities(mfxSession session, int index, mfxVersion version,
         {
             init_video_param(&inputParam);
             inputParam.mfx.CodecId           = info->codec_id;
-            inputParam.mfx.LowPower          = lowpower;
+            inputParam.mfx.LowPower          = MFX_CODINGOPTION_OFF;
             inputParam.mfx.RateControlMethod = MFX_RATECONTROL_ICQ;
             inputParam.mfx.ICQQuality        = 20;
 
@@ -1178,7 +1170,7 @@ static int query_capabilities(mfxSession session, int index, mfxVersion version,
         {
             init_video_param(&videoParam);
             videoParam.mfx.CodecId = info->codec_id;
-            videoParam.mfx.LowPower = lowpower;
+            videoParam.mfx.LowPower = MFX_CODINGOPTION_OFF;
             init_ext_video_signal_info(&extVideoSignalInfo);
             videoParam.ExtParam    = videoExtParam;
             videoParam.ExtParam[0] = (mfxExtBuffer*)&extVideoSignalInfo;
@@ -1210,7 +1202,7 @@ static int query_capabilities(mfxSession session, int index, mfxVersion version,
         {
             init_video_param(&videoParam);
             videoParam.mfx.CodecId = info->codec_id;
-            videoParam.mfx.LowPower = lowpower;
+            videoParam.mfx.LowPower = MFX_CODINGOPTION_OFF;
             init_ext_coding_option(&extCodingOption);
             videoParam.ExtParam    = videoExtParam;
             videoParam.ExtParam[0] = (mfxExtBuffer*)&extCodingOption;
@@ -1246,7 +1238,7 @@ static int query_capabilities(mfxSession session, int index, mfxVersion version,
         {
             init_video_param(&videoParam);
             videoParam.mfx.CodecId = info->codec_id;
-            videoParam.mfx.LowPower = lowpower;
+            videoParam.mfx.LowPower = MFX_CODINGOPTION_OFF;
             init_ext_coding_option2(&extCodingOption2);
             videoParam.ExtParam    = videoExtParam;
             videoParam.ExtParam[0] = (mfxExtBuffer*)&extCodingOption2;
@@ -1360,7 +1352,7 @@ static int query_capabilities(mfxSession session, int index, mfxVersion version,
         {
             init_video_param(&videoParam);
             videoParam.mfx.CodecId = info->codec_id;
-            videoParam.mfx.LowPower = lowpower;
+            videoParam.mfx.LowPower = MFX_CODINGOPTION_OFF;
             init_ext_chroma_loc_info(&extChromaLocInfo);
             videoParam.ExtParam    = videoExtParam;
             videoParam.ExtParam[0] = (mfxExtBuffer*)&extChromaLocInfo;
@@ -1385,7 +1377,7 @@ static int query_capabilities(mfxSession session, int index, mfxVersion version,
         {
             init_video_param(&videoParam);
             videoParam.mfx.CodecId = info->codec_id;
-            videoParam.mfx.LowPower = lowpower;
+            videoParam.mfx.LowPower = MFX_CODINGOPTION_OFF;
             init_ext_mastering_display_colour_volume(&extMasteringDisplayColourVolume);
             videoParam.ExtParam    = videoExtParam;
             videoParam.ExtParam[0] = (mfxExtBuffer*)&extMasteringDisplayColourVolume;
@@ -1400,7 +1392,7 @@ static int query_capabilities(mfxSession session, int index, mfxVersion version,
 
             init_video_param(&videoParam);
             videoParam.mfx.CodecId = info->codec_id;
-            videoParam.mfx.LowPower = lowpower;
+            videoParam.mfx.LowPower = MFX_CODINGOPTION_OFF;
             init_ext_content_light_level_info(&extContentLightLevelInfo);
             videoParam.ExtParam    = videoExtParam;
             videoParam.ExtParam[0] = (mfxExtBuffer*)&extContentLightLevelInfo;
@@ -1420,12 +1412,12 @@ static int query_capabilities(mfxSession session, int index, mfxVersion version,
                 info->capabilities |= HB_QSV_CAP_VPP_INTERPOLATION;
             }
         }
-        if (lowpower == MFX_CODINGOPTION_ON)
+
         {
             init_video_param(&videoParam);
             videoParam.mfx.CodecId = info->codec_id;
             init_video_hyperencode_param(&videoParam, info->codec_id);
-            videoParam.mfx.LowPower = lowpower;
+            videoParam.mfx.LowPower = MFX_CODINGOPTION_OFF;
 
             init_ext_hyperencode_option(&extHyperEncodeParam);
             videoParam.ExtParam    = videoExtParam;
@@ -1438,11 +1430,11 @@ static int query_capabilities(mfxSession session, int index, mfxVersion version,
                 info->capabilities |= HB_QSV_CAP_HYPERENCODE;
             }
         }
-        if ((lowpower == MFX_CODINGOPTION_ON) && (info->codec_id == MFX_CODEC_AV1))
+        if (info->codec_id == MFX_CODEC_AV1)
         {
             init_video_param(&videoParam);
             videoParam.mfx.CodecId = info->codec_id;
-            videoParam.mfx.LowPower = lowpower;
+            videoParam.mfx.LowPower = MFX_CODINGOPTION_OFF;
 
             init_ext_av1bitstream_option(&extAV1BitstreamParam);
             videoParam.ExtParam    = videoExtParam;
