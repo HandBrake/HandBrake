@@ -11,7 +11,6 @@ FDKAAC.CONFIGURE.bootstrap = rm -fr aclocal.m4 autom4te.cache configure; autorec
 # CFLAGS env variable is set during configure.  Since we set it, we
 # also need to set the desired optimization option
 FDKAAC.GCC.args.extra += $(FDKAAC.GCC.args.O.$(FDKAAC.GCC.O))
-FDKAAC.GCC.cxx_std = 1
 
 ## optional static libs need to be marked
 FDKAAC.OSL.libs  = fdk-aac
