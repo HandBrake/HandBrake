@@ -93,10 +93,22 @@ HB_OBJC_DIRECT_MEMBERS
     hb_register_error_handler(&hb_error_handler);
 }
 
-+ (void)cleanTemporaryFiles
++ (nullable NSURL *)temporaryDirectoryURL
 {
     const char *path = hb_get_temporary_directory();
-    NSURL *directory = [[NSURL alloc] initFileURLWithFileSystemRepresentation:path isDirectory:YES relativeToURL:nil];
+    if (path)
+    {
+        return [[NSURL alloc] initFileURLWithFileSystemRepresentation:path isDirectory:YES relativeToURL:nil];
+    }
+    else
+    {
+        return nil;
+    }
+}
+
++ (void)cleanTemporaryFiles
+{
+    NSURL *directory = [HBCore temporaryDirectoryURL];
 
     if (directory)
     {
@@ -116,7 +128,6 @@ HB_OBJC_DIRECT_MEMBERS
             }
         }
     }
-
 }
 
 - (instancetype)init
@@ -144,6 +155,16 @@ HB_OBJC_DIRECT_MEMBERS
         if (!_hb_handle)
         {
             return nil;
+        }
+
+        // macOS Sonoma moved the parent of our temporary folder
+        // to the app sandbox container, and the user might have deleted it,
+        // so ensure the whole path is available to avoid failing later
+        // when trying to write the temp files
+        NSURL *directoryURL = HBCore.temporaryDirectoryURL;
+        if (directoryURL)
+        {
+            [NSFileManager.defaultManager createDirectoryAtURL:directoryURL withIntermediateDirectories:YES attributes:nil error:NULL];
         }
     }
 
