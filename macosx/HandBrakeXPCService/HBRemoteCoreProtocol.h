@@ -11,9 +11,10 @@ NS_ASSUME_NONNULL_BEGIN
 @protocol HBRemoteCoreProtocol
 
 - (void)setDVDNav:(BOOL)enabled;
+- (void)initGlobal;
+- (void)closeGlobal;
 
 - (void)setUpWithLogLevel:(NSInteger)level name:(NSString *)name;
-- (void)tearDown;
 
 - (void)setLogLevel:(NSInteger)logLevel;
 

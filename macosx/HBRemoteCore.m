@@ -85,6 +85,7 @@
 
     [_connection resume];
 
+    [_proxy initGlobal];
     [_proxy setDVDNav:[NSUserDefaults.standardUserDefaults boolForKey:HBUseDvdNav]];
     [_proxy setUpWithLogLevel:self.level name:self.name];
     [_proxy setAutomaticallyPreventSleep:self.automaticallyPreventSleep];
@@ -92,7 +93,7 @@
 
 - (void)invalidate
 {
-    [[_connection synchronousRemoteObjectProxyWithErrorHandler:^(NSError * _Nonnull error) {}] tearDown];
+    [[_connection synchronousRemoteObjectProxyWithErrorHandler:^(NSError * _Nonnull error) {}] closeGlobal];
     [_connection invalidate];
     _connection = nil;
     _proxy = nil;

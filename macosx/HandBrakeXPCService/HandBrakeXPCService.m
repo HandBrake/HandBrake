@@ -53,8 +53,6 @@ static void *HandBrakeXPCServiceContext = &HandBrakeXPCServiceContext;
 
 - (void)setUpWithLogLevel:(NSInteger)level name:(NSString *)name
 {
-    [HBCore initGlobal];
-
     _core = [[HBCore alloc] initWithLogLevel:level queue:_queue];
     _core.name = name;
 
@@ -71,6 +69,7 @@ static void *HandBrakeXPCServiceContext = &HandBrakeXPCServiceContext;
 
     void (^completionHandler)(HBCoreResult result) = ^(HBCoreResult result)
     {
+        [HBCore cleanTemporaryFiles];
         [self stopAccessingSecurityScopedResources];
         self.reply(result);
         self.reply = nil;
@@ -83,9 +82,13 @@ static void *HandBrakeXPCServiceContext = &HandBrakeXPCServiceContext;
                    context:HandBrakeXPCServiceContext];
 }
 
-- (void)tearDown
+- (void)initGlobal
 {
-    _core = nil;
+    [HBCore initGlobal];
+}
+
+- (void)closeGlobal
+{
     [HBCore closeGlobal];
 }
 

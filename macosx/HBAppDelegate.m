@@ -183,6 +183,7 @@
 
     _mainController = nil;
     _queueController = nil;
+    [_queue invalidateWorkers];
     _queue = nil;
 
     [HBCore closeGlobal];

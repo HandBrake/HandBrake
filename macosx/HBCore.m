@@ -93,6 +93,32 @@ HB_OBJC_DIRECT_MEMBERS
     hb_register_error_handler(&hb_error_handler);
 }
 
++ (void)cleanTemporaryFiles
+{
+    const char *path = hb_get_temporary_directory();
+    NSURL *directory = [[NSURL alloc] initFileURLWithFileSystemRepresentation:path isDirectory:YES relativeToURL:nil];
+
+    if (directory)
+    {
+        NSFileManager *manager = [[NSFileManager alloc] init];
+        NSArray<NSURL *> *contents = [manager contentsOfDirectoryAtURL:directory
+                                            includingPropertiesForKeys:nil
+                                                               options:NSDirectoryEnumerationSkipsSubdirectoryDescendants | NSDirectoryEnumerationSkipsPackageDescendants
+                                                                 error:NULL];
+
+        for (NSURL *url in contents)
+        {
+            NSError *error = nil;
+            BOOL result = [manager removeItemAtURL:url error:&error];
+            if (result == NO && error)
+            {
+                [HBUtilities writeToActivityLog:"Could not remove existing temporary file at: %s", url.lastPathComponent.UTF8String];
+            }
+        }
+    }
+
+}
+
 - (instancetype)init
 {
     return [self initWithLogLevel:0 queue:dispatch_get_main_queue()];

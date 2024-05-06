@@ -921,4 +921,12 @@ static void powerSourceCallback(void *context)
     return nil;
 }
 
+- (void)invalidateWorkers
+{
+    for (HBQueueWorker *worker in self.workers)
+    {
+        [worker invalidate];
+    }
+}
+
 @end

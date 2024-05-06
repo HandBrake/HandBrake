@@ -88,6 +88,11 @@ typedef void (^HBCoreCompletionHandler)(HBCoreResult result);
 + (void)closeGlobal;
 
 /**
+ *  Clear temporary files (for example analyze pass stats).
+ */
++ (void)cleanTemporaryFiles;
+
+/**
  *  Registers a global error handler block.
  *
  *  @param handler a block called with the error message.
