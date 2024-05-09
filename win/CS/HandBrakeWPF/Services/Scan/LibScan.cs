@@ -176,7 +176,7 @@ namespace HandBrakeWPF.Services.Scan
             BitmapImage bitmapImage = null;
             try
             {
-                EncodeTaskFactory factory = new EncodeTaskFactory(this.userSettingService);
+                EncodeTaskFactory factory = new EncodeTaskFactory(this.userSettingService, false);
                 JsonEncodeObject jobDict = factory.Create(job);
                 RawPreviewData bitmapData = this.instance.GetPreview(jobDict, preview);
                 if (bitmapData != null)
