@@ -137,7 +137,7 @@ namespace HandBrakeWPF.Instance
             }
             catch (Exception e)
             {
-                logService.LogMessage("Stop Server: " + e);
+                this.logService.LogMessage("Stop Server: " + e, true);
             }
         }
 
@@ -173,11 +173,11 @@ namespace HandBrakeWPF.Instance
             {
                 if (count > 10)
                 {
-                    logService.LogMessage("Unable to connect to the HandBrake Worker instance after 10 attempts. Try disabling this option in Tools -> Preferences -> Advanced.");
+                    this.logService.LogMessage("Unable to connect to the HandBrake Worker instance after 10 attempts. Try disabling this option in Tools -> Preferences -> Advanced.", true);
                     if (recordedException != null)
                     {
-                        logService.LogMessage("Error Information: " + Environment.NewLine);
-                        this.logService.LogMessage(recordedException?.ToString());
+                        this.logService.LogMessage("Error Information: " + Environment.NewLine, true);
+                        this.logService.LogMessage(recordedException?.ToString(), true);
                     }
 
                     this.StopServer(); // Kill our process.
@@ -197,7 +197,7 @@ namespace HandBrakeWPF.Instance
                     }
                     else
                     {
-                        this.logService.LogMessage(string.Format("Unexpected Response: State: {0}, StatusCode: {1}, Response: {2}", task.Result.WasSuccessful, task.Result.StatusCode,  task.Result.JsonResponse));
+                        this.logService.LogMessage(string.Format("Unexpected Response: State: {0}, StatusCode: {1}, Response: {2}", task.Result.WasSuccessful, task.Result.StatusCode,  task.Result.JsonResponse), true);
                     }
                 }
                 catch (Exception exc)
@@ -215,8 +215,7 @@ namespace HandBrakeWPF.Instance
 
         public void ServiceLogMessage(string text)
         {
-            string time = DateTime.Now.ToString("HH:mm:ss", System.Globalization.DateTimeFormatInfo.InvariantInfo);
-            logService.LogMessage(string.Format("[{0}] {1}", time, text));
+            logService.LogMessage(text, true);
         }
 
         private void WorkerProcess_Exited(object sender, EventArgs e)
