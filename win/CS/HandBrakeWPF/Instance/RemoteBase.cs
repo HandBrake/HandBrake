@@ -161,11 +161,18 @@ namespace HandBrakeWPF.Instance
             }
 
             int count = 0;
+            Exception recordedException = null; // Print only once.
             while (!this.serverStarted)
             {
                 if (count > 10)
                 {
                     logService.LogMessage("Unable to connect to the HandBrake Worker instance after 10 attempts. Try disabling this option in Tools -> Preferences -> Advanced.");
+                    if (recordedException != null)
+                    {
+                        logService.LogMessage("Error Information: " + Environment.NewLine);
+                        this.logService.LogMessage(recordedException?.ToString());
+                    }
+
                     return false;
                 }
 
@@ -180,9 +187,9 @@ namespace HandBrakeWPF.Instance
                         return true;
                     }
                 }
-                catch (Exception)
+                catch (Exception exc)
                 {
-                    // Do nothing. We'll try again. The service isn't ready yet.
+                    recordedException = exc;
                 }
                 finally
                 {
