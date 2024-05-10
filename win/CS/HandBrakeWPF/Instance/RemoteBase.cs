@@ -128,9 +128,16 @@ namespace HandBrakeWPF.Instance
 
         private void StopServer()
         {
-            if (this.workerProcess != null && !this.workerProcess.HasExited)
+            try
             {
-                this.workerProcess.Kill();
+                if (this.workerProcess != null && !this.workerProcess.HasExited)
+                {
+                    this.workerProcess.Kill();
+                }
+            }
+            catch (Exception e)
+            {
+                logService.LogMessage("Stop Server: " + e);
             }
         }
 
@@ -173,6 +180,8 @@ namespace HandBrakeWPF.Instance
                         this.logService.LogMessage(recordedException?.ToString());
                     }
 
+                    this.StopServer(); // Kill our process.
+
                     return false;
                 }
 
@@ -185,6 +194,10 @@ namespace HandBrakeWPF.Instance
                     {
                         this.serverStarted = true;
                         return true;
+                    }
+                    else
+                    {
+                        this.logService.LogMessage(string.Format("Unexpected Response: State: {0}, StatusCode: {1}, Response: {2}", task.Result.WasSuccessful, task.Result.StatusCode,  task.Result.JsonResponse));
                     }
                 }
                 catch (Exception exc)
