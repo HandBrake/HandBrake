@@ -55,7 +55,7 @@ namespace HandBrakeWPF.Services.Encode
             this.logInstanceManager = logInstanceManager;
             this.encodeCounter = encodeCounter;
             this.portService = portService;
-            this.encodeTaskFactory = new EncodeTaskFactory(this.userSettingService);
+            this.encodeTaskFactory = new EncodeTaskFactory(this.userSettingService, true);
         }
 
         public event EventHandler EncodeStarted;

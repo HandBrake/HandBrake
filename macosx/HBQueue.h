@@ -84,6 +84,7 @@ extern NSString * const HBQueueItemNotificationItemKey;              // HBQueueJ
 - (void)resume;
 
 - (nullable HBQueueWorker *)workerForItem:(HBQueueJobItem *)item;
+- (void)invalidateWorkers;
 
 @end
 

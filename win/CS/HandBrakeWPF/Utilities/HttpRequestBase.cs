@@ -47,7 +47,7 @@ namespace HandBrakeWPF.Utilities
                     if (response != null)
                     {
                         string returnContent = await response.Content.ReadAsStringAsync();
-                        ServerResponse serverResponse = new ServerResponse(response.IsSuccessStatusCode, returnContent);
+                        ServerResponse serverResponse = new ServerResponse(response.IsSuccessStatusCode, returnContent, response.StatusCode.ToString());
 
                         return serverResponse;
                     }
@@ -72,8 +72,9 @@ namespace HandBrakeWPF.Utilities
                     if (response != null)
                     {
                         string returnContent = await response.Content.ReadAsStringAsync();
-                        ServerResponse serverResponse = null;
-                        serverResponse = response.StatusCode == HttpStatusCode.Unauthorized ? new ServerResponse(false, returnContent) : new ServerResponse(response.IsSuccessStatusCode, returnContent);
+                        ServerResponse serverResponse = response.StatusCode == HttpStatusCode.Unauthorized 
+                            ? new ServerResponse(false, returnContent, response.StatusCode.ToString()) 
+                            : new ServerResponse(response.IsSuccessStatusCode, returnContent, response.StatusCode.ToString());
 
                         return serverResponse;
                     }

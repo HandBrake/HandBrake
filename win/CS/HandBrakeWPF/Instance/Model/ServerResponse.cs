@@ -11,14 +11,17 @@ namespace HandBrakeWPF.Instance.Model
 {
     public class ServerResponse
     {
-        public ServerResponse(bool wasSuccessful, string jsonResponse)
+        public ServerResponse(bool wasSuccessful, string jsonResponse, string statusCode)
         {
             this.WasSuccessful = wasSuccessful;
             this.JsonResponse = jsonResponse;
+            this.StatusCode = statusCode;
         }
 
         public bool WasSuccessful { get; private set; }
 
         public string JsonResponse { get; private set; }
+
+        public string StatusCode { get; private set; }
     }
 }

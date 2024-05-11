@@ -65,11 +65,17 @@ namespace HandBrakeWPF.Services.Logging
 
         public string FullLogPath { get; private set; }
 
-        public void LogMessage(string content)
+        public void LogMessage(string content, bool enableTimeCode = false)
         {
             if (!this.isLoggingEnabled)
             {
                 return;
+            }
+
+            if (enableTimeCode)
+            {
+                string time = DateTime.Now.ToString("HH:mm:ss", System.Globalization.DateTimeFormatInfo.InvariantInfo);
+                content = String.Format("[{0}] {1}", time, content);
             }
 
             LogMessage msg = new LogMessage(content, this.messageIndex);

@@ -128,9 +128,16 @@ namespace HandBrakeWPF.Instance
 
         private void StopServer()
         {
-            if (this.workerProcess != null && !this.workerProcess.HasExited)
+            try
             {
-                this.workerProcess.Kill();
+                if (this.workerProcess != null && !this.workerProcess.HasExited)
+                {
+                    this.workerProcess.Kill();
+                }
+            }
+            catch (Exception e)
+            {
+                this.logService.LogMessage("Stop Server: " + e, true);
             }
         }
 
@@ -161,11 +168,20 @@ namespace HandBrakeWPF.Instance
             }
 
             int count = 0;
+            Exception recordedException = null; // Print only once.
             while (!this.serverStarted)
             {
                 if (count > 10)
                 {
-                    logService.LogMessage("Unable to connect to the HandBrake Worker instance after 10 attempts. Try disabling this option in Tools -> Preferences -> Advanced.");
+                    this.logService.LogMessage("Unable to connect to the HandBrake Worker instance after 10 attempts. Try disabling this option in Tools -> Preferences -> Advanced.", true);
+                    if (recordedException != null)
+                    {
+                        this.logService.LogMessage("Error Information: " + Environment.NewLine, true);
+                        this.logService.LogMessage(recordedException?.ToString(), true);
+                    }
+
+                    this.StopServer(); // Kill our process.
+
                     return false;
                 }
 
@@ -179,10 +195,14 @@ namespace HandBrakeWPF.Instance
                         this.serverStarted = true;
                         return true;
                     }
+                    else
+                    {
+                        this.logService.LogMessage(string.Format("Unexpected Response: State: {0}, StatusCode: {1}, Response: {2}", task.Result.WasSuccessful, task.Result.StatusCode,  task.Result.JsonResponse), true);
+                    }
                 }
-                catch (Exception)
+                catch (Exception exc)
                 {
-                    // Do nothing. We'll try again. The service isn't ready yet.
+                    recordedException = exc;
                 }
                 finally
                 {
@@ -195,8 +215,7 @@ namespace HandBrakeWPF.Instance
 
         public void ServiceLogMessage(string text)
         {
-            string time = DateTime.Now.ToString("HH:mm:ss", System.Globalization.DateTimeFormatInfo.InvariantInfo);
-            logService.LogMessage(string.Format("[{0}] {1}", time, text));
+            logService.LogMessage(text, true);
         }
 
         private void WorkerProcess_Exited(object sender, EventArgs e)

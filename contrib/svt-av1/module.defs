@@ -5,6 +5,8 @@ SVT-AV1.FETCH.url     = https://github.com/HandBrake/HandBrake-contribs/releases
 SVT-AV1.FETCH.url    += https://gitlab.com/AOMediaCodec/SVT-AV1/-/archive/v2.0.0/SVT-AV1-v2.0.0.tar.gz
 SVT-AV1.FETCH.sha256  = 1ff917e2c866bd35dc9c35fd416575a4fbb0a2605878465e1a0e838dbd882082
 
+SVT-AV1.GCC.args.c_std =
+
 SVT-AV1.build_dir             = build
 SVT-AV1.CONFIGURE.exe         = cmake
 SVT-AV1.CONFIGURE.args.prefix = -DCMAKE_INSTALL_PREFIX="$(SVT-AV1.CONFIGURE.prefix)"

@@ -85,6 +85,7 @@
 
     [_connection resume];
 
+    [_proxy initGlobal];
     [_proxy setDVDNav:[NSUserDefaults.standardUserDefaults boolForKey:HBUseDvdNav]];
     [_proxy setUpWithLogLevel:self.level name:self.name];
     [_proxy setAutomaticallyPreventSleep:self.automaticallyPreventSleep];
@@ -92,7 +93,7 @@
 
 - (void)invalidate
 {
-    [[_connection synchronousRemoteObjectProxyWithErrorHandler:^(NSError * _Nonnull error) {}] tearDown];
+    [[_connection synchronousRemoteObjectProxyWithErrorHandler:^(NSError * _Nonnull error) {}] closeGlobal];
     [_connection invalidate];
     _connection = nil;
     _proxy = nil;
@@ -100,25 +101,33 @@
 
 - (void)handleInterruption
 {
-    [_proxy setDVDNav:[NSUserDefaults.standardUserDefaults boolForKey:HBUseDvdNav]];
-    [_proxy setUpWithLogLevel:self.level name:self.name];
-    [_proxy setAutomaticallyPreventSleep:self.automaticallyPreventSleep];
+    [_connection invalidate];
+    _connection = nil;
+    _proxy = nil;
 
-    HBCoreCompletionHandler handler = self.completionHandler;
-
-    self.progressHandler = nil;
-    self.completionHandler = nil;
-
-    self.state = HBStateIdle;
-
-    if (handler)
+    if (self.state == HBStateIdle)
     {
-        HBCoreResult result = {0, HBCoreResultCodeUnknown};
-        result.code = HBCoreResultCodeUnknown;
-        handler(result);
+        // XPC was idle and the system closed it
+        // to free ram, no need to restart it.
+        return;
     }
+    else
+    {
+        HBCoreCompletionHandler handler = self.completionHandler;
 
-    [self forwardError:@"XPC: Service did crash\n"];
+        self.progressHandler = nil;
+        self.completionHandler = nil;
+        self.state = HBStateIdle;
+
+        if (handler)
+        {
+            HBCoreResult result = {0, HBCoreResultCodeUnknown};
+            result.code = HBCoreResultCodeUnknown;
+            handler(result);
+        }
+
+        [self forwardError:@"XPC: Service did crash\n"];
+    }
 }
 
 - (void)updateState:(HBState)state

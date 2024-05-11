@@ -79,6 +79,11 @@ NSString * const HBQueueWorkerItemNotificationItemKey = @"HBQueueWorkerItemNotif
     [self.core invalidate];
 }
 
+- (void)invalidate
+{
+    [self.core invalidate];
+}
+
 - (BOOL)canEncode
 {
     return self.item == nil;

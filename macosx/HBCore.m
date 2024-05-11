@@ -93,6 +93,43 @@ HB_OBJC_DIRECT_MEMBERS
     hb_register_error_handler(&hb_error_handler);
 }
 
++ (nullable NSURL *)temporaryDirectoryURL
+{
+    const char *path = hb_get_temporary_directory();
+    if (path)
+    {
+        return [[NSURL alloc] initFileURLWithFileSystemRepresentation:path isDirectory:YES relativeToURL:nil];
+    }
+    else
+    {
+        return nil;
+    }
+}
+
++ (void)cleanTemporaryFiles
+{
+    NSURL *directory = [HBCore temporaryDirectoryURL];
+
+    if (directory)
+    {
+        NSFileManager *manager = [[NSFileManager alloc] init];
+        NSArray<NSURL *> *contents = [manager contentsOfDirectoryAtURL:directory
+                                            includingPropertiesForKeys:nil
+                                                               options:NSDirectoryEnumerationSkipsSubdirectoryDescendants | NSDirectoryEnumerationSkipsPackageDescendants
+                                                                 error:NULL];
+
+        for (NSURL *url in contents)
+        {
+            NSError *error = nil;
+            BOOL result = [manager removeItemAtURL:url error:&error];
+            if (result == NO && error)
+            {
+                [HBUtilities writeToActivityLog:"Could not remove existing temporary file at: %s", url.lastPathComponent.UTF8String];
+            }
+        }
+    }
+}
+
 - (instancetype)init
 {
     return [self initWithLogLevel:0 queue:dispatch_get_main_queue()];
@@ -118,6 +155,16 @@ HB_OBJC_DIRECT_MEMBERS
         if (!_hb_handle)
         {
             return nil;
+        }
+
+        // macOS Sonoma moved the parent of our temporary folder
+        // to the app sandbox container, and the user might have deleted it,
+        // so ensure the whole path is available to avoid failing later
+        // when trying to write the temp files
+        NSURL *directoryURL = HBCore.temporaryDirectoryURL;
+        if (directoryURL)
+        {
+            [NSFileManager.defaultManager createDirectoryAtURL:directoryURL withIntermediateDirectories:YES attributes:nil error:NULL];
         }
     }
 

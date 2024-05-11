@@ -58,7 +58,7 @@ namespace HandBrakeWPF.Services.Logging.Interfaces
         /// <param name="content">
         /// The content of the log message,
         /// </param>
-        void LogMessage(string content);
+        void LogMessage(string content, bool enableTimeCode = false);
 
         string GetFullLog();
 
