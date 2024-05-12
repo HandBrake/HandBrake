@@ -1784,7 +1784,16 @@ static NSTouchBarItemIdentifier HBTouchBarActivity = @"fr.handbrake.activity";
         NSCustomTouchBarItem *item = [[NSCustomTouchBarItem alloc] initWithIdentifier:identifier];
         item.customizationLabel = NSLocalizedString(@"Add To Queue", @"Touch bar");
 
-        NSButton *button = [NSButton buttonWithTitle:NSLocalizedString(@"Add To Queue", @"Touch bar") target:self action:@selector(addToQueue:)];
+        NSButton *button = nil;
+        if (@available (macOS 11, *))
+        {
+            NSImage *image = [NSImage imageNamed:@"photo.badge.plus"];
+            button = [NSButton buttonWithImage:image target:self action:@selector(addToQueue:)];
+        }
+        else
+        {
+            button = [NSButton buttonWithTitle:NSLocalizedString(@"Add To Queue", @"Touch bar") target:self action:@selector(addToQueue:)];
+        }
 
         item.view = button;
         return item;
@@ -1834,7 +1843,17 @@ static NSTouchBarItemIdentifier HBTouchBarActivity = @"fr.handbrake.activity";
         NSCustomTouchBarItem *item = [[NSCustomTouchBarItem alloc] initWithIdentifier:identifier];
         item.customizationLabel = NSLocalizedString(@"Show Activity Window", @"Touch bar");
 
-        NSButton *button = [NSButton buttonWithImage:[NSImage imageNamed:NSImageNameTouchBarGetInfoTemplate] target:nil action:@selector(showOutputPanel:)];
+        NSImage *image = nil;
+        if (@available (macOS 11, *))
+        {
+            image = [NSImage imageNamed:@"text.viewfinder"];
+        }
+        else
+        {
+            image = [NSImage imageNamed:NSImageNameTouchBarPlayTemplate];
+        }
+
+        NSButton *button = [NSButton buttonWithImage:image target:nil action:@selector(showOutputPanel:)];
 
         item.view = button;
         return item;
