@@ -6,8 +6,6 @@
 
 #import "HBPictureHUDController.h"
 
-#import "HBThumbnailItemView.h"
-
 @interface HBPictureHUDController ()
 
 @property (nonatomic, weak) IBOutlet NSTextField *scaleLabel;
@@ -22,13 +20,10 @@
 @property (nonatomic, weak) IBOutlet NSTextField *durationUnitLabel;
 
 @property (nonatomic) BOOL fitToView;
-@property (nonatomic) BOOL ignoreUpdates;
 
 @end
 
-@interface HBPictureHUDController (TouchBar) <NSTouchBarProvider, NSTouchBarDelegate, NSScrubberDataSource, NSScrubberDelegate>
-- (void)_touchBar_reloadScrubberData;
-- (void)_touchBar_updateScrubberSelectedIndex:(NSUInteger)selectedIndex;
+@interface HBPictureHUDController (TouchBar) <NSTouchBarProvider, NSTouchBarDelegate>
 - (void)_touchBar_updateFitToView:(BOOL)fitToView;
 - (void)_touchBar_validateUserInterfaceItems;
 @end
@@ -83,7 +78,6 @@
         }
     }
 
-    [self _touchBar_reloadScrubberData];
     [self _touchBar_validateUserInterfaceItems];
 }
 
@@ -91,7 +85,6 @@
 {
     _selectedIndex = selectedIndex;
     self.slider.integerValue = selectedIndex;
-    [self _touchBar_updateScrubberSelectedIndex:selectedIndex];
     [self.delegate displayPreviewAtIndex:self.selectedIndex];
 }
 
@@ -160,13 +153,11 @@
     unichar key = [event.charactersIgnoringModifiers characterAtIndex:0];
     if (key == NSLeftArrowFunctionKey)
     {
-        self.ignoreUpdates = YES;
         self.selectedIndex = self.selectedIndex > 0 ? self.selectedIndex - 1 : self.selectedIndex;
         return YES;
     }
     else if (key == NSRightArrowFunctionKey)
     {
-        self.ignoreUpdates = YES;
         self.selectedIndex = self.selectedIndex < self.generator.imagesCount - 1 ? self.selectedIndex + 1 : self.selectedIndex;
         return YES;
     }
@@ -193,49 +184,11 @@
 
 @implementation HBPictureHUDController (TouchBar)
 
-#pragma mark - NSScrubberDataSource
-
-NSString *thumbnailScrubberItemIdentifier = @"thumbnailItem";
-
-- (NSInteger)numberOfItemsForScrubber:(NSScrubber *)scrubber
-{
-    return self.generator.imagesCount;
-}
-
-- (NSScrubberItemView *)scrubber:(NSScrubber *)scrubber viewForItemAtIndex:(NSInteger)index
-{
-    HBThumbnailItemView *itemView = [scrubber makeItemWithIdentifier:thumbnailScrubberItemIdentifier owner:nil];
-    itemView.generator = self.generator;
-    itemView.thumbnailIndex = index;
-    return itemView;
-}
-
-#pragma mark - NSScrubberFlowLayoutDelegate
-
-// Scrubber is asking for the size for a particular item.
-- (NSSize)scrubber:(NSScrubber *)scrubber layout:(NSScrubberFlowLayout *)layout sizeForItemAtIndex:(NSInteger)itemIndex
-{
-    NSInteger val = 50;
-    return NSMakeSize(val, 30);
-}
-
-#pragma mark - NSScrubberDelegate
-
-- (void)scrubber:(NSScrubber *)scrubber didSelectItemAtIndex:(NSInteger)selectedIndex
-{
-    if (self.selectedIndex != selectedIndex && self.ignoreUpdates == NO)
-    {
-        self.selectedIndex = selectedIndex;
-    }
-    self.ignoreUpdates = NO;
-}
-
 #pragma mark - NSTouchBar
 
 static NSTouchBarItemIdentifier HBTouchBarMain = @"fr.handbrake.previewWindowTouchBar";
 
 static NSTouchBarItemIdentifier HBTouchBarRip = @"fr.handbrake.rip";
-static NSTouchBarItemIdentifier HBTouchBarScrubber = @"fr.handbrake.scrubber";
 static NSTouchBarItemIdentifier HBTouchBarFitToScreen = @"fr.handbrake.fitToScreen";
 
 @dynamic touchBar;
@@ -245,10 +198,10 @@ static NSTouchBarItemIdentifier HBTouchBarFitToScreen = @"fr.handbrake.fitToScre
     NSTouchBar *bar = [[NSTouchBar alloc] init];
     bar.delegate = self;
 
-    bar.defaultItemIdentifiers = @[HBTouchBarRip, NSTouchBarItemIdentifierFlexibleSpace, HBTouchBarScrubber, NSTouchBarItemIdentifierFlexibleSpace, HBTouchBarFitToScreen];
+    bar.defaultItemIdentifiers = @[HBTouchBarRip, HBTouchBarFitToScreen, NSTouchBarItemIdentifierFlexibleSpace];
 
     bar.customizationIdentifier = HBTouchBarMain;
-    bar.customizationAllowedItemIdentifiers = @[HBTouchBarRip, HBTouchBarScrubber, HBTouchBarFitToScreen, NSTouchBarItemIdentifierFlexibleSpace];
+    bar.customizationAllowedItemIdentifiers = @[HBTouchBarRip, HBTouchBarFitToScreen, NSTouchBarItemIdentifierFlexibleSpace];
 
     return bar;
 }
@@ -266,34 +219,6 @@ static NSTouchBarItemIdentifier HBTouchBarFitToScreen = @"fr.handbrake.fitToScre
         item.view = button;
         return item;
     }
-    else if ([identifier isEqualTo:HBTouchBarScrubber])
-    {
-        NSCustomTouchBarItem *item = [[NSCustomTouchBarItem alloc] initWithIdentifier:identifier];
-        item.customizationLabel = NSLocalizedString(@"Previews", @"Touch bar");
-
-        NSScrubber *scrubber = [[NSScrubber alloc] init];
-        scrubber.delegate = self;
-        scrubber.dataSource = self;
-
-        [scrubber registerClass:[HBThumbnailItemView class] forItemIdentifier:thumbnailScrubberItemIdentifier];
-
-        NSScrubberLayout *scrubberLayout = [[NSScrubberFlowLayout alloc] init];
-        scrubber.scrubberLayout = scrubberLayout;
-        scrubber.showsAdditionalContentIndicators = YES;
-        scrubber.selectedIndex = 0;
-        scrubber.selectionOverlayStyle = [NSScrubberSelectionStyle outlineOverlayStyle];
-        scrubber.continuous = YES;
-        scrubber.mode = NSScrubberModeFree;
-        scrubber.itemAlignment = NSScrubberAlignmentCenter;
-
-        // Set the layout constraints on this scrubber so that it's 400 pixels wide.
-        NSDictionary *items = NSDictionaryOfVariableBindings(scrubber);
-        NSArray *theConstraints = [NSLayoutConstraint constraintsWithVisualFormat:@"H:[scrubber(500)]" options:0 metrics:nil views:items];
-        [NSLayoutConstraint activateConstraints:theConstraints];
-
-        item.view = scrubber;
-        return item;
-    }
     else if ([identifier isEqualTo:HBTouchBarFitToScreen])
     {
         NSCustomTouchBarItem *item = [[NSCustomTouchBarItem alloc] initWithIdentifier:identifier];
@@ -307,22 +232,6 @@ static NSTouchBarItemIdentifier HBTouchBarFitToScreen = @"fr.handbrake.fitToScre
     }
 
     return nil;
-}
-
-- (void)_touchBar_reloadScrubberData
-{
-    NSScrubber *scrubber = (NSScrubber *)[[self.touchBar itemForIdentifier:HBTouchBarScrubber] view];
-    [scrubber reloadData];
-    if (self.selectedIndex < scrubber.numberOfItems)
-    {
-        scrubber.animator.selectedIndex = self.selectedIndex;
-    }
-}
-
-- (void)_touchBar_updateScrubberSelectedIndex:(NSUInteger)selectedIndex
-{
-    NSScrubber *scrubber = (NSScrubber *)[[self.touchBar itemForIdentifier:HBTouchBarScrubber] view];
-    scrubber.animator.selectedIndex = selectedIndex;
 }
 
 - (void)_touchBar_updateFitToView:(BOOL)fitToView

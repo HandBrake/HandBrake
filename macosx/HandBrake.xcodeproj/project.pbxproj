@@ -242,7 +242,6 @@
 		A9736F171C7DA5FE008F1D18 /* HandBrakeKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A9736F021C7DA5FE008F1D18 /* HandBrakeKit.framework */; };
 		A9736F181C7DA5FE008F1D18 /* HandBrakeKit.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = A9736F021C7DA5FE008F1D18 /* HandBrakeKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		A973E109216E74AC00D498EC /* HBImageUtilities.h in Headers */ = {isa = PBXBuildFile; fileRef = A9CE0A931F57EC4600724577 /* HBImageUtilities.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		A973E10C216E74E900D498EC /* HBThumbnailItemView.m in Sources */ = {isa = PBXBuildFile; fileRef = A973E10B216E74E900D498EC /* HBThumbnailItemView.m */; };
 		A975B02220F7AF29004675CC /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = A975B02020F7AF29004675CC /* Localizable.strings */; };
 		A97D8DCF24DBD3C000B16AF5 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = A91CE2D11C7DABDA0068F46F /* libz.tbd */; };
 		A97D8DD024DBD3EF00B16AF5 /* libbz2.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = A91CE2CF1C7DABCE0068F46F /* libbz2.tbd */; };
@@ -730,8 +729,6 @@
 		A9736F061C7DA5FE008F1D18 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A9736F0B1C7DA5FE008F1D18 /* HandBrakeKitTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = HandBrakeKitTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		A9736F141C7DA5FE008F1D18 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		A973E10A216E74E800D498EC /* HBThumbnailItemView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBThumbnailItemView.h; sourceTree = "<group>"; };
-		A973E10B216E74E900D498EC /* HBThumbnailItemView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBThumbnailItemView.m; sourceTree = "<group>"; };
 		A975B02120F7AF29004675CC /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/Localizable.strings; sourceTree = "<group>"; };
 		A975C08C1AE8C5270061870D /* HBStateFormatter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBStateFormatter.h; sourceTree = "<group>"; };
 		A975C08D1AE8C5270061870D /* HBStateFormatter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBStateFormatter.m; sourceTree = "<group>"; };
@@ -1961,8 +1958,6 @@
 				A941ACB91CD75B4E0029D06A /* HBHUD.h */,
 				A92B148020CA9F7600146FD8 /* HBHUDView.h */,
 				A92B148120CA9F7600146FD8 /* HBHUDView.m */,
-				A973E10A216E74E800D498EC /* HBThumbnailItemView.h */,
-				A973E10B216E74E900D498EC /* HBThumbnailItemView.m */,
 				A96664B21CCE48F700DA4A57 /* HBPictureHUDController.h */,
 				A96664B31CCE48F700DA4A57 /* HBPictureHUDController.m */,
 				A9A96B8420CAD2C200A39AFB /* HBPictureHUDController.xib */,
@@ -2434,7 +2429,6 @@
 				A95140932B8F6B1600B446C1 /* HBToolbarItem.m in Sources */,
 				A9C1722B2B8F4E890047C49D /* HBControllerToolbarDelegate.m in Sources */,
 				A942B66D250BB1FE00049203 /* HBQueueActionItem.m in Sources */,
-				A973E10C216E74E900D498EC /* HBThumbnailItemView.m in Sources */,
 				A916C9981C8449DB00C7B560 /* HBTitleSelectionController.m in Sources */,
 				A943874122ED911B005F701B /* HBJob+HBAdditions.m in Sources */,
 				A96127E422E09ADD0086E6DC /* HBQueueTableViewController.m in Sources */,
