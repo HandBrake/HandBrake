@@ -178,6 +178,15 @@ static int crop_scale_vt_init(hb_filter_object_t *filter,
         return -1;
     }
 
+    err = VTSessionSetProperty(pv->session,
+                               kVTPixelTransferPropertyKey_DownsamplingMode,
+                               kVTDownsamplingMode_Average);
+    if (err != noErr)
+    {
+        hb_log("cropscale_vt: kVTPixelTransferPropertyKey_DownsamplingMode failed");
+        return err;
+    }
+
     init->crop[0] = top;
     init->crop[1] = bottom;
     init->crop[2] = left;
