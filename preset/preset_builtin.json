@@ -2162,7 +2162,7 @@
                     "VideoFramerateMode": "pfr",
                     "VideoGrayScale": false,
                     "VideoScaler": "swscale",
-                    "VideoPreset": "6",
+                    "VideoPreset": "5",
                     "VideoTune": "",
                     "VideoProfile": "main",
                     "VideoLevel": "auto",
