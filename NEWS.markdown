@@ -61,12 +61,13 @@ Windows users, please make sure to install [Microsoft .NET Desktop Runtime versi
   - libdav1d 1.4.1 (AV1 video decoding)
   - libdovi 3.3.0 (Dolby Vision dynamic metadata)
   - libopus 1.5.2 (Opus audio encoding)
-  - libjpeg-turbo 3.0.2 (preview image compression)
+  - libjpeg-turbo 3.0.3 (preview image compression)
   - libvpx 1.14.0 (VP8/VP9 video encoding)
   - oneVPL 2.10.1 (Intel QSV video encoding/decoding)
-  - SVT-AV1 2.0 (AV1 video encoding)
+  - SVT-AV1 2.1.0 (AV1 video encoding)
   - x264 164 r3186 (H.264/AVC video encoding)
   - x265 3.6 (H.265/HEVC video encoding)
+  - zlib 1.3.1 (general)
 - Removed libraries
   - libxml2
   
