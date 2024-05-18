@@ -2,7 +2,7 @@
 <document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="32700.99.1234" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="22687"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="22690"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -47,8 +47,8 @@
                                                 <rect key="frame" x="1" y="1" width="540" height="54"/>
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                 <subviews>
-                                                    <textField focusRingType="none" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" textCompletion="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ar9-Uk-6sM">
-                                                        <rect key="frame" x="23" y="35" width="492" height="17"/>
+                                                    <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" textCompletion="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ar9-Uk-6sM">
+                                                        <rect key="frame" x="28" y="35" width="482" height="17"/>
                                                         <constraints>
                                                             <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="17" id="lzC-jf-dZI"/>
                                                         </constraints>
@@ -59,7 +59,7 @@
                                                         </textFieldCell>
                                                     </textField>
                                                     <button horizontalHuggingPriority="750" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="hRX-N0-lCu">
-                                                        <rect key="frame" x="521" y="35" width="16" height="16"/>
+                                                        <rect key="frame" x="516" y="35" width="16" height="16"/>
                                                         <buttonCell key="cell" type="bevel" bezelStyle="rounded" image="Delete" imagePosition="only" alignment="center" alternateImage="DeleteHighlightPressed" id="bPd-yn-PRB">
                                                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                             <font key="font" metaFont="system"/>
@@ -70,7 +70,7 @@
                                                         </constraints>
                                                     </button>
                                                     <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="1000" translatesAutoresizingMaskIntoConstraints="NO" id="7OO-Ut-UrC">
-                                                        <rect key="frame" x="3" y="30" width="16" height="27"/>
+                                                        <rect key="frame" x="8" y="30" width="16" height="27"/>
                                                         <constraints>
                                                             <constraint firstAttribute="height" constant="16" id="V3u-Yw-S0G"/>
                                                             <constraint firstAttribute="width" constant="16" id="dDq-xC-fYL"/>
@@ -78,10 +78,10 @@
                                                         <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="NSActionTemplate" id="bqz-sk-X31"/>
                                                     </imageView>
                                                     <progressIndicator wantsLayer="YES" maxValue="1" style="bar" translatesAutoresizingMaskIntoConstraints="NO" id="xAK-4F-cCr">
-                                                        <rect key="frame" x="25" y="13" width="488" height="23"/>
+                                                        <rect key="frame" x="30" y="13" width="478" height="23"/>
                                                     </progressIndicator>
-                                                    <textField focusRingType="none" verticalHuggingPriority="750" textCompletion="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fxw-eD-SmJ">
-                                                        <rect key="frame" x="23" y="3" width="492" height="14"/>
+                                                    <textField verticalHuggingPriority="750" textCompletion="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fxw-eD-SmJ">
+                                                        <rect key="frame" x="28" y="3" width="482" height="14"/>
                                                         <textFieldCell key="cell" lineBreakMode="truncatingTail" enabled="NO" allowsUndo="NO" sendsActionOnEndEditing="YES" title="Encoding status" usesSingleLineMode="YES" id="eEU-Dr-Qh8">
                                                             <font key="font" metaFont="smallSystem"/>
                                                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -92,7 +92,7 @@
                                                 <constraints>
                                                     <constraint firstItem="7OO-Ut-UrC" firstAttribute="top" secondItem="XcX-ea-XWm" secondAttribute="top" constant="3" id="HF1-Wf-uIT"/>
                                                     <constraint firstItem="fxw-eD-SmJ" firstAttribute="leading" secondItem="7OO-Ut-UrC" secondAttribute="trailing" constant="6" id="Nj6-XZ-SEs"/>
-                                                    <constraint firstAttribute="trailing" secondItem="hRX-N0-lCu" secondAttribute="trailing" constant="3" id="Syk-aw-gZV"/>
+                                                    <constraint firstAttribute="trailing" secondItem="hRX-N0-lCu" secondAttribute="trailing" constant="8" id="Syk-aw-gZV"/>
                                                     <constraint firstItem="ar9-Uk-6sM" firstAttribute="top" secondItem="XcX-ea-XWm" secondAttribute="top" constant="2" id="T9f-ov-BLW"/>
                                                     <constraint firstItem="xAK-4F-cCr" firstAttribute="top" secondItem="ar9-Uk-6sM" secondAttribute="bottom" id="Ujw-UU-Sqh"/>
                                                     <constraint firstItem="hRX-N0-lCu" firstAttribute="leading" secondItem="fxw-eD-SmJ" secondAttribute="trailing" constant="8" id="Vl3-R0-TIy"/>
@@ -103,7 +103,7 @@
                                                     <constraint firstAttribute="bottom" secondItem="fxw-eD-SmJ" secondAttribute="bottom" constant="3" id="e8w-3K-333"/>
                                                     <constraint firstItem="ar9-Uk-6sM" firstAttribute="leading" secondItem="7OO-Ut-UrC" secondAttribute="trailing" constant="6" id="iaK-Ol-CUC"/>
                                                     <constraint firstItem="fxw-eD-SmJ" firstAttribute="top" secondItem="xAK-4F-cCr" secondAttribute="bottom" constant="-3" id="ihq-42-fa8"/>
-                                                    <constraint firstItem="7OO-Ut-UrC" firstAttribute="leading" secondItem="XcX-ea-XWm" secondAttribute="leading" constant="3" id="l3I-Nv-u7l"/>
+                                                    <constraint firstItem="7OO-Ut-UrC" firstAttribute="leading" secondItem="XcX-ea-XWm" secondAttribute="leading" constant="8" id="l3I-Nv-u7l"/>
                                                 </constraints>
                                                 <connections>
                                                     <outlet property="imageView" destination="7OO-Ut-UrC" id="QPs-kQ-diT"/>
@@ -117,8 +117,8 @@
                                                 <rect key="frame" x="1" y="57" width="540" height="22"/>
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                 <subviews>
-                                                    <textField focusRingType="none" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" textCompletion="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ns0-GA-WCh">
-                                                        <rect key="frame" x="23" y="3" width="492" height="17"/>
+                                                    <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" textCompletion="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ns0-GA-WCh">
+                                                        <rect key="frame" x="28" y="3" width="482" height="17"/>
                                                         <constraints>
                                                             <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="17" id="5Tc-Oy-HWg"/>
                                                         </constraints>
@@ -129,7 +129,7 @@
                                                         </textFieldCell>
                                                     </textField>
                                                     <button horizontalHuggingPriority="750" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="CSU-Pb-Uaw">
-                                                        <rect key="frame" x="521" y="3" width="16" height="16"/>
+                                                        <rect key="frame" x="516" y="3" width="16" height="16"/>
                                                         <buttonCell key="cell" type="bevel" bezelStyle="rounded" image="Delete" imagePosition="only" alignment="center" alternateImage="DeleteHighlightPressed" id="LOA-aO-spo">
                                                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                             <font key="font" metaFont="system"/>
@@ -140,7 +140,7 @@
                                                         </constraints>
                                                     </button>
                                                     <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="kNw-fy-iYB">
-                                                        <rect key="frame" x="3" y="-2" width="16" height="27"/>
+                                                        <rect key="frame" x="8" y="-2" width="16" height="27"/>
                                                         <constraints>
                                                             <constraint firstAttribute="width" constant="16" id="Sg7-eg-u2l"/>
                                                             <constraint firstAttribute="height" constant="16" id="udI-Cr-8CG"/>
@@ -150,8 +150,8 @@
                                                 </subviews>
                                                 <constraints>
                                                     <constraint firstItem="Ns0-GA-WCh" firstAttribute="leading" secondItem="kNw-fy-iYB" secondAttribute="trailing" constant="6" id="KxO-Fj-XQO"/>
-                                                    <constraint firstItem="kNw-fy-iYB" firstAttribute="leading" secondItem="Til-BP-Zag" secondAttribute="leading" constant="3" id="LIY-lT-8dm"/>
-                                                    <constraint firstAttribute="trailing" secondItem="CSU-Pb-Uaw" secondAttribute="trailing" constant="3" id="dIt-QV-ws7"/>
+                                                    <constraint firstItem="kNw-fy-iYB" firstAttribute="leading" secondItem="Til-BP-Zag" secondAttribute="leading" constant="8" id="LIY-lT-8dm"/>
+                                                    <constraint firstAttribute="trailing" secondItem="CSU-Pb-Uaw" secondAttribute="trailing" constant="8" id="dIt-QV-ws7"/>
                                                     <constraint firstItem="Ns0-GA-WCh" firstAttribute="top" secondItem="Til-BP-Zag" secondAttribute="top" constant="2" id="emx-1Y-YDk"/>
                                                     <constraint firstItem="CSU-Pb-Uaw" firstAttribute="top" secondItem="Til-BP-Zag" secondAttribute="top" constant="3" id="g9F-L6-mfh"/>
                                                     <constraint firstItem="CSU-Pb-Uaw" firstAttribute="leading" secondItem="Ns0-GA-WCh" secondAttribute="trailing" constant="8" id="nds-NF-PaH"/>
