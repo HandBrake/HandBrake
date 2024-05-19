@@ -58,6 +58,7 @@ Windows users, please make sure to install [Microsoft .NET Desktop Runtime versi
   - AMF 1.4.33 (AMD VCN video encoding)
   - FFmpeg 7.0 (decoding and filters)
   - HarfBuzz 8.4.0 (subtitles)
+  - libass 0.17.2 (subtitles)
   - libdav1d 1.4.1 (AV1 video decoding)
   - libdovi 3.3.0 (Dolby Vision dynamic metadata)
   - libopus 1.5.2 (Opus audio encoding)
