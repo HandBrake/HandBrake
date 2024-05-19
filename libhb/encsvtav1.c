@@ -512,7 +512,10 @@ static int send(hb_work_object_t *w, hb_buffer_t *in)
 
     if (in->s.new_chap > 0 && pv->job->chapter_markers)
     {
-        headerPtr->pic_type = EB_AV1_KEY_PICTURE;
+        if (pv->enc_params.force_key_frames)
+        {
+            headerPtr->pic_type = EB_AV1_KEY_PICTURE;
+        }
         hb_chapter_enqueue(pv->chapter_queue, in);
     }
     else
