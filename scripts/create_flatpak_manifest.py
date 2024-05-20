@@ -87,7 +87,6 @@ class FlatpakManifest:
             self.hbconfig.append("--enable-libdovi");
             self.extensions += ['org.freedesktop.Sdk.Extension.rust-stable'];
             self.build_path += ['/usr/lib/sdk/rust-stable/bin'];
-            self.build_args += ['--share=network'];
 
         if len(self.extensions) > 0:
             self.manifest["sdk-extensions"] = self.extensions
