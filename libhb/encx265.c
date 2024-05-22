@@ -386,11 +386,15 @@ int encx265Init(hb_work_object_t *w, hb_job_t *job)
         job->chroma_location = param->vui.chromaSampleLocTypeBottomField + 1;
     }
 
+    if (job->inline_parameter_sets)
+    {
+        param->bRepeatHeaders = job->inline_parameter_sets;
+    }
+
     /*
      * Settings which can't be overridden in the encoder_options string
      * (muxer-specific settings, resolution, ratecontrol, etc.).
      */
-    param->bRepeatHeaders = job->inline_parameter_sets;
     param->sourceWidth    = job->width;
     param->sourceHeight   = job->height;
 
