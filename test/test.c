@@ -600,7 +600,7 @@ int main( int argc, char ** argv )
 
         hb_list_t *file_paths = hb_list_init();
         hb_list_add(file_paths, input);
-        hb_scan_list(h, file_paths, titleindex, preview_count, store_previews,
+        hb_scan(h, file_paths, titleindex, preview_count, store_previews,
                 min_title_duration * 90000LL,
                 crop_threshold_frames, crop_threshold_pixels,
                 NULL, hw_decode);

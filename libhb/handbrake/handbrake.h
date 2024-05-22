@@ -42,10 +42,10 @@ int           hb_get_build( hb_handle_t * );
 char *        hb_dvd_name( char * path );
 void          hb_dvd_set_dvdnav( int enable );
 
-/* hb_scan_list()
+/* hb_scan()
    Scan the specified paths. Can be a DVD device, a VIDEO_TS folder or
    a VOB file. If title_index is 0, scan all titles. */
-void          hb_scan_list( hb_handle_t * h, hb_list_t * paths, int title_index,
+void          hb_scan( hb_handle_t * h, hb_list_t * paths, int title_index,
                       int preview_count, int store_previews, uint64_t min_duration,
                       int crop_threshold_frames, int crop_threshold_pixels,
                       hb_list_t * exclude_extensions, int hw_decode);

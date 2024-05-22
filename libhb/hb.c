@@ -366,7 +366,7 @@ void hb_remove_previews( hb_handle_t * h )
  * @param exclude_extensions A list of extensions to exclude for this scan.
  * @param hw_decode  The preferred hardware decoder to use..
  */
-void hb_scan_list( hb_handle_t * h, hb_list_t * paths, int title_index,
+void hb_scan( hb_handle_t * h, hb_list_t * paths, int title_index,
               int preview_count, int store_previews, uint64_t min_duration,
               int crop_threshold_frames, int crop_threshold_pixels,
               hb_list_t * exclude_extensions, int hw_decode)
