@@ -283,12 +283,14 @@ static void FUNC(eedi2_planer)(hb_filter_private_t *pv)
     // Copy the first field from the source to a half-height frame.
     for (int pp = 0;  pp < 3; pp++)
     {
-        const int pitch = pv->ref[1]->plane[pp].stride / pv->bps;
+        const int src_pitch = pv->ref[1]->plane[pp].stride / pv->bps;
+        const int dst_pitch = pv->eedi_half[SRCPF]->plane[pp].stride / pv->bps;
         const int height = pv->ref[1]->plane[pp].height;
         const int start_line = !pv->tff;
 
-        FUNC(eedi2_fill_half_height_buffer_plane)(&((pixel *)pv->ref[1]->plane[pp].data)[pitch * start_line],
-                                                  (pixel *)pv->eedi_half[SRCPF]->plane[pp].data, pitch, height);
+        FUNC(eedi2_fill_half_height_buffer_plane)(&((pixel *)pv->ref[1]->plane[pp].data)[src_pitch * start_line],
+                                                  (pixel *)pv->eedi_half[SRCPF]->plane[pp].data,
+                                                  src_pitch, dst_pitch, height);
     }
 
     // Now that all data is ready for our threads, fire them off

@@ -32,7 +32,7 @@ void eedi2_bit_blit_8(uint8_t *dstp, const int dst_pitch, const uint8_t *srcp, c
                       const int row_size, const int height);
 
 // Sets up the initial field-sized bitmap EEDI2 interpolates from
-void eedi2_fill_half_height_buffer_plane_8(const uint8_t *src, uint8_t *dst, const int pitch, const int height);
+void eedi2_fill_half_height_buffer_plane_8(const uint8_t *src, uint8_t *dst, const int src_pitch, const int dst_pitch, const int height);
 
 // Simple line doubler
 void eedi2_upscale_by_2_8(const uint8_t *srcp, uint8_t *dstp, const int height, const int pitch);
@@ -112,7 +112,7 @@ void eedi2_bit_blit_16(uint16_t *dstp, const int dst_pitch, const uint16_t *srcp
                       const int row_size, const int height);
 
 // Sets up the initial field-sized bitmap EEDI2 interpolates from
-void eedi2_fill_half_height_buffer_plane_16(const uint16_t *src, uint16_t *dst, const int pitch, const int height);
+void eedi2_fill_half_height_buffer_plane_16(const uint16_t *src, uint16_t *dst, const int src_pitch, const int dst_pitch, const int height);
 
 // Simple line doubler
 void eedi2_upscale_by_2_16(const uint16_t *srcp, uint16_t *dstp, const int height, const int pitch);
