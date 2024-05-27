@@ -655,6 +655,10 @@ static int hb_vt_parse_options(hb_work_private_t *pv, hb_job_t *job)
                 pv->settings.maxReferenceBufferCount = ref;
             }
         }
+        else
+        {
+            hb_log("encvt_Init: unknown option '%s'", key);
+        }
 
     }
     hb_dict_free(&opts);
