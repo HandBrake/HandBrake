@@ -97,7 +97,10 @@ hb_avsub_context_t * decavsubInit( hb_work_object_t * w, hb_job_t * job )
         // subtitles, to avoid collecting valid packets together.
         // There is no way to distinguish a partial packet from a zero
         // rect packet with the info returned by avcodec_decode_subtitle2()
-        av_dict_set(&av_opts, "output_empty_rects", "1", 0);
+        if (ctx->subtitle->config.dest == PASSTHRUSUB)
+        {
+            av_dict_set(&av_opts, "output_empty_rects", "1", 0);
+        }
     }
 
     if (hb_avcodec_open(ctx->context, codec, &av_opts, 0))
