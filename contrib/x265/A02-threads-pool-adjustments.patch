@@ -1,8 +1,56 @@
+
+---
+ source/common/threadpool.cpp | 44 +++++++++++++++++++++++++++++++++++-
+ 1 file changed, 43 insertions(+), 1 deletion(-)
+
 diff --git a/source/common/threadpool.cpp b/source/common/threadpool.cpp
-index 4ed534d..f67f752 100644
+index 2db7a146b..eda10895e 100644
 --- a/source/common/threadpool.cpp
 +++ b/source/common/threadpool.cpp
-@@ -661,9 +661,17 @@ void ThreadPool::getFrameThreadsCount(x265_param* p, int cpuCount)
+@@ -25,6 +25,7 @@
+ #include "common.h"
+ #include "threadpool.h"
+ #include "threading.h"
++#include <string>
+ 
+ #include <new>
+ 
+@@ -659,6 +660,34 @@ int ThreadPool::getCpuCount()
+ #endif
+ }
+ 
++#if _WIN32 && X265_ARCH_ARM64
++
++bool checkSnapdragon()
++{
++	std::string powershell_output;
++	FILE* pipe = _popen("powershell -ExecutionPolicy Bypass -Command \"(Get-CimInstance -ClassName Win32_Processor).Name\" 2>&1", "r");
++	char buffer[128];
++
++	while (!feof(pipe))
++    {
++		if (fgets(buffer, 128, pipe) != NULL)
++			powershell_output += buffer;
++	}
++
++	_pclose(pipe);
++
++	if (powershell_output.find("Snapdragon") != std::string::npos)
++	{
++		return true;
++	}
++	else
++	{
++		return false;
++	}
++}
++
++#endif
++
+ void ThreadPool::getFrameThreadsCount(x265_param* p, int cpuCount)
+ {
+     int rows = (p->sourceHeight + p->maxCUSize - 1) >> g_log2Size[p->maxCUSize];
+@@ -667,9 +696,22 @@ void ThreadPool::getFrameThreadsCount(x265_param* p, int cpuCount)
      else if (cpuCount >= 32)
          p->frameNumThreads = (p->sourceHeight > 2000) ? 6 : 5; 
      else if (cpuCount >= 16)
@@ -11,6 +59,11 @@ index 4ed534d..f67f752 100644
 +        p->frameNumThreads = 16;
 +#else
 +        p->frameNumThreads = 4;
++#endif
++
++#if _WIN32 && X265_ARCH_ARM64
++    else if (checkSnapdragon() && cpuCount >= 10)
++        p->frameNumThreads = 8;
 +#endif
      else if (cpuCount >= 8)
 +#if MACOS && X265_ARCH_ARM64
@@ -21,3 +74,6 @@ index 4ed534d..f67f752 100644
      else if (cpuCount >= 4)
          p->frameNumThreads = 2;
      else
+-- 
+2.43.0.windows.1
+
