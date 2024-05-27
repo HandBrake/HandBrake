@@ -74,16 +74,17 @@ void FUNC(eedi2_bit_blit)(pixel *dstp, const int dst_pitch,
  * @param pitch Stride of both bitmaps
  * @param height Height of the original, full-size src plane being copied from
  */
-void FUNC(eedi2_fill_half_height_buffer_plane)(const pixel *src, pixel *dst, const int pitch, const int height)
+void FUNC(eedi2_fill_half_height_buffer_plane)(const pixel *src, pixel *dst, const int src_pitch, const int dst_pitch, const int height)
 {
     /* When TFF, we want to copy alternating
        lines starting at 0, the top field.
        When BFF, we want to start at line 1. */
+    const int pitch = MIN(src_pitch, dst_pitch) * BPS;
     for (int y = height; y > 0; y = y - 2)
     {
-      memcpy(dst, src, pitch * BPS);
-      dst += pitch;
-      src += pitch * 2;
+      memcpy(dst, src, pitch);
+      dst += dst_pitch;
+      src += src_pitch * 2;
     }
 }
 
