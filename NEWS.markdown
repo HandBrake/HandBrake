@@ -7,6 +7,27 @@ Before updating HandBrake, please make sure there are no pending encodes in the 
 
 Windows users, please make sure to install [Microsoft .NET Desktop Runtime version 8.0.x](https://dotnet.microsoft.com/en-us/download/dotnet/8.0). Read carefully: you need the **DESKTOP** runtime.
 
+## HandBrake 1.8.1
+
+### All platforms
+
+#### Video
+
+- Fixed a warning / misconfiguration when repeat-headers is used with the x265 encoder. (#6061)
+
+#### Subtitles
+
+- Fixed an issue where dvd subtitles could be corrupted during rendering. 
+
+#### Filters
+
+- Fixed an issue that caused video artefacts to occur when using the eedi2 filter. (#6073)
+
+### Windows
+
+- Fixed an issue where auto name was triggering too aggressively. (#6079)
+- Removed an erroneous error message when dragging files onto the main window that include a subtitle file. (#6065)
+
 
 ## HandBrake 1.8.0
 
