@@ -818,6 +818,10 @@ namespace HandBrakeWPF.ViewModels
 
         public bool IsPresetDescriptionVisible { get; set; }
 
+        public bool IsLegacyMenuShown { get; set; }
+
+        public string ShowHideMenuText => this.IsLegacyMenuShown ? Resources.MainView_HideClassicMenu : Resources.MainView_ShowClassicMenu;
+
         /* Commands */
 
         public ICommand QueueCommand { get; set; }
@@ -889,6 +893,11 @@ namespace HandBrakeWPF.ViewModels
             this.ChaptersViewModel.TabStatusChanged += this.TabStatusChanged;
             this.MetaDataViewModel.TabStatusChanged += this.TabStatusChanged;
             this.SummaryViewModel.TabStatusChanged += this.TabStatusChanged;
+
+            // Menu State
+            this.IsLegacyMenuShown = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.IsLegacyMenuShown);
+            this.NotifyOfPropertyChange(() => this.IsLegacyMenuShown);
+            this.NotifyOfPropertyChange(() => this.ShowHideMenuText);
         }
 
         public void Shutdown()
@@ -1471,6 +1480,15 @@ namespace HandBrakeWPF.ViewModels
             {
                 this.SelectedTitle = this.ScannedSource.Titles[index -1];
             }
+        }
+
+        public void ShowHideMenu()
+        {
+            this.IsLegacyMenuShown = !this.IsLegacyMenuShown;
+            this.NotifyOfPropertyChange(() => this.IsLegacyMenuShown);
+            this.NotifyOfPropertyChange(() => this.ShowHideMenuText);
+
+            this.userSettingService.SetUserSetting(UserSettingConstants.IsLegacyMenuShown, this.IsLegacyMenuShown);
         }
 
         /* Main Window Public Methods*/

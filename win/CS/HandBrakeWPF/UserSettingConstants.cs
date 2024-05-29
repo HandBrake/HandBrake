@@ -96,5 +96,6 @@ namespace HandBrakeWPF
         public const string ExcludedExtensions = "ExcludedFileExtensions";
         public static string RecursiveFolderScan = "RecursiveFolderScan";
         public static string SimpleQueueView = "SimpleQueueView";
+        public static string IsLegacyMenuShown = "IsLegacyMenuShown";
     }
 }

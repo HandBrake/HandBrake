@@ -360,8 +360,8 @@ namespace HandBrakeWPF.Services
             defaults.Add(UserSettingConstants.ExtendedQueueDisplay, true);
             defaults.Add(UserSettingConstants.HardwareDetectTimeoutSeconds, 12);
             defaults.Add(UserSettingConstants.SimpleQueueView, false);
-
             defaults.Add(UserSettingConstants.ShowPresetDesc, true);
+            defaults.Add(UserSettingConstants.IsLegacyMenuShown, true);
 
             return defaults;
         }
