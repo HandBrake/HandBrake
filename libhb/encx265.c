@@ -388,7 +388,7 @@ int encx265Init(hb_work_object_t *w, hb_job_t *job)
 
     if (job->inline_parameter_sets)
     {
-        param->bRepeatHeaders = job->inline_parameter_sets;
+        param->bRepeatHeaders = 1;
     }
 
     /*
