@@ -212,7 +212,7 @@ static int rpu_work(hb_filter_object_t *filter,
             {
                 rpu_in = dovi_parse_unspec62_nalu(side_data->data, side_data->size);
             }
-            else
+            else if (side_data->type == AV_FRAME_DATA_DOVI_RPU_BUFFER_T35)
             {
                 rpu_in = dovi_parse_itu_t35_dovi_metadata_obu(side_data->data, side_data->size);
             }
@@ -313,7 +313,16 @@ static int rpu_work(hb_filter_object_t *filter,
 
                     AVBufferRef *ref = av_buffer_alloc(rpu_data->len - offset);
                     memcpy(ref->data, rpu_data->data + offset, rpu_data->len - offset);
-                    AVFrameSideData *sd_dst = hb_buffer_new_side_data_from_buf(in, AV_FRAME_DATA_DOVI_RPU_BUFFER, ref);
+                    AVFrameSideData *sd_dst = NULL;
+
+                    if (pv->mode & RPU_MODE_EMIT_UNSPECT_62_NAL)
+                    {
+                        sd_dst = hb_buffer_new_side_data_from_buf(in, AV_FRAME_DATA_DOVI_RPU_BUFFER, ref);
+                    }
+                    else if (pv->mode & RPU_MODE_EMIT_T35_OBU)
+                    {
+                        sd_dst = hb_buffer_new_side_data_from_buf(in, AV_FRAME_DATA_DOVI_RPU_BUFFER_T35, ref);
+                    }
 
                     if (!sd_dst)
                     {
