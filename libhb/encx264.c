@@ -395,6 +395,7 @@ int encx264Init( hb_work_object_t * w, hb_job_t * job )
     param.vui.i_colorprim = hb_output_color_prim(job);
     param.vui.i_transfer  = hb_output_color_transfer(job);
     param.vui.i_colmatrix = hb_output_color_matrix(job);
+    param.vui.b_fullrange = (job->color_range == AVCOL_RANGE_JPEG);
     if (job->chroma_location != AVCHROMA_LOC_UNSPECIFIED)
     {
         param.vui.i_chroma_loc = job->chroma_location - 1;
