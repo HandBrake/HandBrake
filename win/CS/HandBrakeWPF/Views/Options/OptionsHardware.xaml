@@ -82,7 +82,14 @@
                 <TextBlock Text="{x:Static Properties:Resources.OptionsView_ChoiceOfEncoderHint}" Margin="0,0,0,10" Style="{StaticResource subText}" />
 
                 <!-- QuickSync -->
-                <CheckBox Content="{x:Static Properties:Resources.OptionsView_EnableQuicksyncEncoding}" x:Name="qsvEncoding" IsEnabled="{Binding IsQuickSyncAvailable}" IsChecked="{Binding EnableQuickSyncEncoding}" />
+                <StackPanel Orientation="Horizontal">
+                    <CheckBox Content="{x:Static Properties:Resources.OptionsView_EnableQuicksyncEncoding}" x:Name="qsvEncoding" IsEnabled="{Binding IsQuickSyncAvailable}" IsChecked="{Binding EnableQuickSyncEncoding}" />
+
+                    <Image Source="../Images/warningsmall.png" Margin="15,0,0,0" Visibility="{Binding DisplayIntelDriverWarning, Converter={StaticResource boolToVisConverter}}" />
+                    <TextBlock Text="{x:Static Properties:Resources.OptionsViewVideo_UnsupportedIntelDriver}" Margin="5,0,0,0" FontWeight="SemiBold" Visibility="{Binding DisplayIntelDriverWarning, Converter={StaticResource boolToVisConverter}}" />
+
+                </StackPanel>
+
                 <CheckBox Content="{x:Static Properties:Resources.OptionsView_EnableQuicksyncLowPower}" Margin="25,5,0,10" Visibility="{Binding IsQuickSyncAvailable, Converter={StaticResource boolToVisConverter}}" IsChecked="{Binding EnableQuickSyncLowPower}"
                           IsEnabled="{Binding IsChecked, ElementName=qsvEncoding}"/>
                 <CheckBox Content="{x:Static Properties:Resources.OptionsView_EnableQuicksyncHyperEncode}" Margin="25,5,0,0" Visibility="{Binding IsQuickSyncHyperEncodeAvailable, Converter={StaticResource boolToVisConverter}}"
@@ -98,7 +105,13 @@
                 <CheckBox Content="{x:Static Properties:Resources.OptionsView_EnableVceEncoding}" Margin="0,25,0,0"  IsEnabled="{Binding IsVceAvailable}" IsChecked="{Binding EnableVceEncoder}" />
 
                 <!-- NVENC -->
-                <CheckBox Content="{x:Static Properties:Resources.OptionsView_EnableNvencEncoding}" Margin="0,25,0,0" IsEnabled="{Binding IsNvencAvailable}" IsChecked="{Binding EnableNvencEncoder}" />
+                <StackPanel Orientation="Horizontal">
+                    <CheckBox Content="{x:Static Properties:Resources.OptionsView_EnableNvencEncoding}" Margin="0,25,0,0" IsEnabled="{Binding IsNvencAvailable}" IsChecked="{Binding EnableNvencEncoder}" />
+
+                    <Image Source="../Images/warningsmall.png" Margin="15,25,0,0" Visibility="{Binding DisplayNvidiaDriverWarning, Converter={StaticResource boolToVisConverter}}" />
+                    <TextBlock Text="{x:Static Properties:Resources.OptionsViewVideo_UnsupportedIntelDriver}" Margin="5,25,0,0" FontWeight="SemiBold" Visibility="{Binding DisplayNvidiaDriverWarning, Converter={StaticResource boolToVisConverter}}" />
+                </StackPanel>
+
                 <CheckBox Content="{x:Static Properties:Resources.OptionsView_EnableNvDecSupport}" Margin="25,5,0,0" IsEnabled="{Binding IsNvencAvailable}"
                                       Visibility="{Binding IsNvdecAvailable, Converter={StaticResource boolToVisConverter}}" IsChecked="{Binding EnableNvDecSupport}" />
 

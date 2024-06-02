@@ -59,6 +59,7 @@ namespace HandBrake.Interop.Interop
 
         /* QuickSync Support */
 
+
         public static bool IsQsvAvailable
         {
             get

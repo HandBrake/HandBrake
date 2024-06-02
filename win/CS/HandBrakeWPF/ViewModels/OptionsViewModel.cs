@@ -1023,6 +1023,34 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
+        public bool DisplayIntelDriverWarning
+        {
+            get
+            {
+                 GpuInfo info = SystemInfo.GetGPUInfo.FirstOrDefault(s => s.IsIntel);
+                 if (info != null)
+                 {
+                     return !info.IsIntelDriverSupported;
+                 }
+
+                 return false;
+            }
+        }
+
+        public bool DisplayNvidiaDriverWarning
+        {
+            get
+            {
+                GpuInfo info = SystemInfo.GetGPUInfo.FirstOrDefault(s => s.IsNvidia);
+                if (info != null)
+                {
+                    return !info.IsNvidiaDriverSupported;
+                }
+
+                return false;
+            }
+        }
+
         public VideoScaler SelectedScalingMode { get; set; }
 
         public bool IsQuickSyncAvailable { get; } = HandBrakeHardwareEncoderHelper.IsQsvAvailable;
