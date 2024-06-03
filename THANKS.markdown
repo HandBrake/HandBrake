@@ -32,20 +32,18 @@ HandBrake uses many cool libraries from the GNU/Linux world. We thank them and t
 - [libx264](https://www.videolan.org/developers/x264.html)
 - [libx265](http://x265.org/)
 - [libzlib](http://zlib.net/)
+- [SVT-AV1](https://gitlab.com/AOMediaCodec/SVT-AV1)
 
 Windows UI:
 - [Caliburn Micro](https://caliburnmicro.com/)
-- [Ookii Dialogs](http://www.ookii.org/software/dialogs/)
-- [Newtonsoft Json.NET](https://www.newtonsoft.com/json)
 - [GongSolutions.WPF.DragDrop](https://github.com/punker76/gong-wpf-dragdrop)
-
+- [Autofac](https://autofac.org/)
 
 ## Services and Software
 
 - [handbrake.fr](https://handbrake.fr) web hosting courtesy of Eric Petit
 - [Libera.Chat IRC](https://libera.chat/)
 - [GitHub](https://github.com)
-- [JetBrains](https://www.jetbrains.com/?from=HandBrake) Thanks for providing an All Products License!
 - [phpBB](http://www.phpbb.com/)
 - [MacStadium](https://www.macstadium.com/) MacMini Server Hosting. 
 <img width="200" alt="MacStadium" src="https://uploads-ssl.webflow.com/5ac3c046c82724970fc60918/5c019d917bba312af7553b49_MacStadium-developerlogo.png">
