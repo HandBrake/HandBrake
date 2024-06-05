@@ -229,7 +229,7 @@ namespace HandBrakeWPF.Services.Scan
 
                 bool nvdec = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.EnableNvDecSupport);
                 int hwDecode = 0;
-                if (nvdec)
+                if (nvdec && HandBrakeHardwareEncoderHelper.IsNVDecAvailable)
                 {
                     hwDecode = (int)NativeConstants.HB_DECODE_SUPPORT_NVDEC;
                 }
