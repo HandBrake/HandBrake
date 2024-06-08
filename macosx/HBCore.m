@@ -329,6 +329,11 @@ HB_OBJC_DIRECT_MEMBERS
     self.progressHandler = progressHandler;
     self.completionHandler = completionHandler;
 
+    // Set the state, so the UI can be update
+    // to reflect the current state instead of
+    // waiting for libhb to set it in a background thread.
+    self.state = HBStateScanning;
+
     // convert minTitleDuration from seconds to the internal HB time
     uint64_t min_title_duration_ticks = 90000LL * seconds;
 
@@ -362,11 +367,6 @@ HB_OBJC_DIRECT_MEMBERS
 
     // Start the timer to handle libhb state changes
     [self startUpdateTimerWithInterval:0.2];
-
-    // Set the state, so the UI can be update
-    // to reflect the current state instead of
-    // waiting for libhb to set it in a background thread.
-    self.state = HBStateScanning;
 }
 
 /**
@@ -479,6 +479,11 @@ HB_OBJC_DIRECT_MEMBERS
     self.progressHandler = progressHandler;
     self.completionHandler = completionHandler;
 
+    // Set the state, so the UI can be update
+    // to reflect the current state instead of
+    // waiting for libhb to set it in a background thread.
+    self.state = HBStateWorking;
+
 #ifdef __SANDBOX_ENABLED__
     HBJob *jobCopy = [job copy];
     __block HBSecurityAccessToken *token = [HBSecurityAccessToken tokenWithObject:jobCopy];
@@ -499,11 +504,6 @@ HB_OBJC_DIRECT_MEMBERS
 
     // Start the timer to handle libhb state changes
     [self startUpdateTimerWithInterval:0.5];
-
-    // Set the state, so the UI can be update
-    // to reflect the current state instead of
-    // waiting for libhb to set it in a background thread.
-    self.state = HBStateWorking;
 
     [HBUtilities writeToActivityLog:"%s started encoding %s", self.name.UTF8String, job.destinationFileName.UTF8String];
     [HBUtilities writeToActivityLog:"%s with preset %s", self.name.UTF8String, job.presetName.UTF8String];
