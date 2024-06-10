@@ -750,11 +750,27 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
      }];
 }
 
-- (void)askForPermissionAndSetDestinationURLs:(NSArray<NSURL *> *)destinationURLs
+- (void)askForPermissionAndSetDestinationURLs:(NSArray<NSURL *> *)destinationURLs sourceURLs:(NSArray<NSURL *> *)sourceURLs
 {
     if (destinationURLs.count == 0)
     {
         return;
+    }
+
+    if (sourceURLs.firstObject)
+    {
+        // There is no need to ask for permission
+        // if the source is a already a folder
+        NSNumber *isDirectory = nil;
+        NSURL *sourceURL = sourceURLs.firstObject;
+        [sourceURL getResourceValue:&isDirectory forKey:NSURLIsDirectoryKey error:nil];
+
+        if (isDirectory.boolValue == YES)
+        {
+            self.destinationFolderURL = sourceURL;
+            self.destinationFolderToken = [HBSecurityAccessToken tokenWithObject:sourceURL];
+            return;
+        }
     }
 
     if (![self.destinationFolderURL isEqualTo:destinationURLs.firstObject])
@@ -837,7 +853,7 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
                 self.job = job;
                 if (featuredTitle.isStream && [NSUserDefaults.standardUserDefaults boolForKey:HBUseSourceFolderDestination])
                 {
-                    [self askForPermissionAndSetDestinationURLs:baseURLs];
+                    [self askForPermissionAndSetDestinationURLs:baseURLs sourceURLs:fileURLs];
                 }
             }
             else
