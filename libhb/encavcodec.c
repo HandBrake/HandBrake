@@ -67,7 +67,7 @@ static int apply_encoder_tune(int vcodec, AVDictionary ** av_opts,
 static int apply_encoder_options(hb_job_t *job, AVCodecContext *context,
                                  AVDictionary **av_opts);
 
-static int apply_encoder_level(AVCodecContext *context,
+static int apply_encoder_level(AVCodecContext *context, AVDictionary **av_opts,
                                int vcodec, const char *encoder_level);
 
 hb_work_object_t hb_encavcodec =
@@ -373,7 +373,7 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
     context->gop_size  = ((double)job->orig_vrate.num / job->orig_vrate.den +
                                   0.5) * 10;
 
-    if (apply_encoder_level(context, job->vcodec, job->encoder_level))
+    if (apply_encoder_level(context, &av_opts, job->vcodec, job->encoder_level))
     {
         av_free(context);
         ret = 1;
@@ -1296,7 +1296,7 @@ static int apply_ffv1_preset(AVCodecContext *context, AVDictionary **av_opts, co
     if (!strcasecmp(preset, "preservation"))
     {
         context->gop_size = 1;
-        context->level = 3;
+        av_dict_set(av_opts, "level", "3", 0);
         av_dict_set(av_opts, "coder", "1", 0);
         av_dict_set(av_opts, "context", "1", 0);
         av_dict_set(av_opts, "slicecrc", "1", 0);
@@ -1364,7 +1364,7 @@ static int apply_encoder_tune(int vcodec, AVDictionary ** av_opts,
     return 0;
 }
 
-static int apply_encoder_level(AVCodecContext *context, int vcodec, const char *encoder_level)
+static int apply_encoder_level(AVCodecContext *context, AVDictionary **av_opts, int vcodec, const char *encoder_level)
 {
     const char * const *level_names = NULL;
     const int  *level_values = NULL;
@@ -1414,7 +1414,7 @@ static int apply_encoder_level(AVCodecContext *context, int vcodec, const char *
         {
             if (!strcasecmp(encoder_level, level_names[i]))
             {
-                context->level = level_values[i];
+                av_dict_set(av_opts, "level", level_names[i], 0);
             }
             ++i;
         }
