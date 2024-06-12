@@ -1,67 +1,61 @@
 
 ---
- common/base.c | 34 ++++++++++++++++++++++++++++++++++
- 1 file changed, 34 insertions(+)
+ common/base.c | 28 ++++++++++++++++++++++++++++
+ 1 file changed, 28 insertions(+)
 
 diff --git a/common/base.c b/common/base.c
-index d302fed..298f6d3 100644
+index d302fed..82894bb 100644
 --- a/common/base.c
 +++ b/common/base.c
 @@ -27,6 +27,7 @@
  #include "base.h"
  
  #include <ctype.h>
-+#include<string.h>
++#include <string.h>
  
  #if HAVE_MALLOC_H
  #include <malloc.h>
-@@ -338,6 +339,33 @@ REALIGN_STACK void x264_picture_clean( x264_picture_t *pic )
+@@ -338,6 +339,26 @@ REALIGN_STACK void x264_picture_clean( x264_picture_t *pic )
      memset( pic, 0, sizeof( x264_picture_t ) );
  }
  
 +#ifdef _WIN32 && HAVE_AARCH64
-+int checkSnapdragon()
-+{
-+    int BUFFER_SIZE = 128;
-+    char powershell_output[BUFFER_SIZE * 10];
-+    FILE* pipe = _popen("powershell -ExecutionPolicy Bypass -Command \"(Get-CimInstance -ClassName Win32_Processor).Name\" 2>&1", "r");
 +
-+    char buffer[BUFFER_SIZE];
-+
-+    while (fgets(buffer, BUFFER_SIZE, pipe) != NULL)
++    int checkSnapdragon()
 +    {
-+        strncat(powershell_output, buffer, BUFFER_SIZE);
++        char processorName[128];
++        DWORD bufferSize = sizeof(processorName);
++
++        LONG result = RegGetValueA(HKEY_LOCAL_MACHINE, "HARDWARE\\DESCRIPTION\\System\\CentralProcessor\\0", "ProcessorNameString", RRF_RT_ANY, NULL, (PVOID)processorName, &bufferSize);
++
++        if (strstr(processorName, "Snapdragon") != NULL)
++        {
++            return 1;
++        }
++        else
++        {
++            return 0;
++        }
 +    }
 +
-+    _pclose(pipe);
-+
-+    if (strstr(powershell_output, "Snapdragon"))
-+    {
-+        return 1;
-+    }
-+    else
-+    {
-+       return 0;
-+    }
-+}
 +#endif
-+
  /****************************************************************************
   * x264_param_default:
   ****************************************************************************/
-@@ -352,6 +380,12 @@ REALIGN_STACK void x264_param_default( x264_param_t *param )
-     param->i_lookahead_threads = X264_THREADS_AUTO;
+@@ -353,6 +374,13 @@ REALIGN_STACK void x264_param_default( x264_param_t *param )
      param->b_deterministic = 1;
      param->i_sync_lookahead = X264_SYNC_LOOKAHEAD_AUTO;
+ 
 +#ifdef _WIN32 && HAVE_AARCH64
 +    if (checkSnapdragon() && (x264_cpu_num_processors() >= 10))
 +    {
 +        param->i_threads = 6;
 +    }
 +#endif
- 
++
      /* Video properties */
      param->i_csp           = X264_CHROMA_FORMAT ? X264_CHROMA_FORMAT : X264_CSP_I420;
+     param->i_width         = 0;
 -- 
 2.43.0.windows.1
 

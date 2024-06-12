@@ -1,10 +1,10 @@
 
 ---
- source/common/threadpool.cpp | 44 +++++++++++++++++++++++++++++++++++-
- 1 file changed, 43 insertions(+), 1 deletion(-)
+ source/common/threadpool.cpp | 38 +++++++++++++++++++++++++++++++++++-
+ 1 file changed, 37 insertions(+), 1 deletion(-)
 
 diff --git a/source/common/threadpool.cpp b/source/common/threadpool.cpp
-index 2db7a146b..eda10895e 100644
+index 2db7a146b..0013fa0c8 100644
 --- a/source/common/threadpool.cpp
 +++ b/source/common/threadpool.cpp
 @@ -25,6 +25,7 @@
@@ -15,7 +15,7 @@ index 2db7a146b..eda10895e 100644
  
  #include <new>
  
-@@ -659,6 +660,34 @@ int ThreadPool::getCpuCount()
+@@ -659,6 +660,27 @@ int ThreadPool::getCpuCount()
  #endif
  }
  
@@ -23,26 +23,19 @@ index 2db7a146b..eda10895e 100644
 +
 +bool checkSnapdragon()
 +{
-+	std::string powershell_output;
-+	FILE* pipe = _popen("powershell -ExecutionPolicy Bypass -Command \"(Get-CimInstance -ClassName Win32_Processor).Name\" 2>&1", "r");
-+	char buffer[128];
 +
-+	while (!feof(pipe))
++    char processorName[128];
++    DWORD bufferSize = 128;
++
++    LONG result = RegGetValue(HKEY_LOCAL_MACHINE,"HARDWARE\\DESCRIPTION\\System\\CentralProcessor\\0", "ProcessorNameString", RRF_RT_ANY,NULL,(PVOID)&processorName,&bufferSize);
++    if (strstr(processorName, "Snapdragon") != NULL)
 +    {
-+		if (fgets(buffer, 128, pipe) != NULL)
-+			powershell_output += buffer;
-+	}
-+
-+	_pclose(pipe);
-+
-+	if (powershell_output.find("Snapdragon") != std::string::npos)
-+	{
-+		return true;
-+	}
-+	else
-+	{
-+		return false;
-+	}
++        return true;
++    }
++    else
++    {
++        return false;
++    }
 +}
 +
 +#endif
@@ -50,7 +43,7 @@ index 2db7a146b..eda10895e 100644
  void ThreadPool::getFrameThreadsCount(x265_param* p, int cpuCount)
  {
      int rows = (p->sourceHeight + p->maxCUSize - 1) >> g_log2Size[p->maxCUSize];
-@@ -667,9 +696,22 @@ void ThreadPool::getFrameThreadsCount(x265_param* p, int cpuCount)
+@@ -667,9 +689,23 @@ void ThreadPool::getFrameThreadsCount(x265_param* p, int cpuCount)
      else if (cpuCount >= 32)
          p->frameNumThreads = (p->sourceHeight > 2000) ? 6 : 5; 
      else if (cpuCount >= 16)
@@ -65,6 +58,7 @@ index 2db7a146b..eda10895e 100644
 +    else if (checkSnapdragon() && cpuCount >= 10)
 +        p->frameNumThreads = 8;
 +#endif
++
      else if (cpuCount >= 8)
 +#if MACOS && X265_ARCH_ARM64
 +        p->frameNumThreads = 8;
