@@ -1296,7 +1296,7 @@ static int apply_ffv1_preset(AVCodecContext *context, AVDictionary **av_opts, co
     if (!strcasecmp(preset, "preservation"))
     {
         context->gop_size = 1;
-        av_dict_set(av_opts, "level", "3", 0);
+        context->level = 3;
         av_dict_set(av_opts, "coder", "1", 0);
         av_dict_set(av_opts, "context", "1", 0);
         av_dict_set(av_opts, "slicecrc", "1", 0);
@@ -1414,7 +1414,18 @@ static int apply_encoder_level(AVCodecContext *context, AVDictionary **av_opts, 
         {
             if (!strcasecmp(encoder_level, level_names[i]))
             {
-                av_dict_set(av_opts, "level", level_names[i], 0);
+                if (vcodec == HB_VCODEC_FFMPEG_NVENC_H264 ||
+                    vcodec == HB_VCODEC_FFMPEG_NVENC_H265 ||
+                    vcodec == HB_VCODEC_FFMPEG_NVENC_H265_10BIT ||
+                    vcodec == HB_VCODEC_FFMPEG_NVENC_AV1 ||
+                    vcodec == HB_VCODEC_FFMPEG_NVENC_AV1_10BIT)
+                {
+                    av_dict_set(av_opts, "level", level_names[i], 0);
+                }
+                else
+                {
+                    context->level = level_values[i];
+                }
             }
             ++i;
         }
