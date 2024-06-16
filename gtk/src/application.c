@@ -995,8 +995,8 @@ ghb_application_handle_local_options (GApplication *app, GVariantDict *options)
     {
         // Non-console windows apps do not have a stderr->_file
         // assigned properly
-        stderr->_file = STDERR_FILENO;
-        stdout->_file = STDOUT_FILENO;
+        (void) freopen("NUL", "w", stderr);
+        (void) freopen("NUL", "w", stdout);
     }
 #else
     redirect_io = FALSE;
