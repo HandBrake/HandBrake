@@ -358,7 +358,7 @@ HB_OBJC_DIRECT_MEMBERS
         hb_list_add(files_list, (char *)url.fileSystemRepresentation);
     }
 
-    hb_scan_list(_hb_handle, files_list,
+    hb_scan(_hb_handle, files_list,
               (int)index, (int)previewsNum,
               keepPreviews, min_title_duration_ticks,
               0, 0, NULL, hardwareDecoder ? HB_DECODE_SUPPORT_VIDEOTOOLBOX : 0);
