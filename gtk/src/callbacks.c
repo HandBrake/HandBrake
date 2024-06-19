@@ -4491,7 +4491,16 @@ send_to_external_app(gint index, signal_user_data_t * ud)
         destDict = ghb_dict_get(jobDict, "Destination");
 
         gchar * file = g_shell_quote(ghb_dict_get_string(destDict, "File"));
-        gchar * command_str = g_strjoin(" ", send_file_to_target, file, NULL);
+        gchar * command_str;
+        if (g_access("/.flatpak-info", F_OK) == 0)
+        {
+            command_str = g_strjoin(" ", "flatpak-spawn", "--host", "--", send_file_to_target, file, NULL);
+        }
+        else
+        {
+            command_str = g_strjoin(" ", send_file_to_target, file, NULL);
+        }
+
         gchar ** command_array = NULL;
         GError * error = NULL;
         ghb_log("Running command `%s`", command_str);
