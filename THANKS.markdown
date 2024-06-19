@@ -22,7 +22,6 @@ HandBrake uses many cool libraries from the GNU/Linux world. We thank them and t
 - [liblame](http://lame.sourceforge.net/)
 - [liblzma (xz)](https://tukaani.org/xz/)
 - [libmfx](https://github.com/Rodeo314/libmfx)
-- [libmpeg2dec](http://libmpeg2.sourceforge.net/)
 - [libogg](https://xiph.org/ogg/)
 - [libopus](https://www.opus-codec.org/)
 - [libspeex](https://www.speex.org/)
