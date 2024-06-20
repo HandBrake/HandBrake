@@ -82,10 +82,10 @@ class FlatpakManifest:
             self.extensions += ['org.freedesktop.Sdk.Extension.llvm16'];
             self.build_path += ['/usr/lib/sdk/llvm16/bin'];
             self.ld_path    += ['/usr/lib/sdk/llvm16/lib'];
-        
+
         if vcn:
             self.hbconfig.append("--enable-vce");
-            
+
         if dovi:
             self.hbconfig.append("--enable-libdovi");
             self.extensions += ['org.freedesktop.Sdk.Extension.rust-stable'];
@@ -151,7 +151,7 @@ def usage():
 
 if __name__ == "__main__":
     try:
-        opts, args = getopt.getopt(sys.argv[1:], "a:c:s:b:t:r:qedph",
+        opts, args = getopt.getopt(sys.argv[1:], "a:c:s:b:t:r:qvedph",
             ["archive=", "contrib=", "sha256=", "basename=",
              "template=", "runtime=", "qsv", "vcn", "nvenc", "dovi", "plugin", "help"])
     except getopt.GetoptError:
