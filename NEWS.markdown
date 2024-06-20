@@ -14,6 +14,7 @@ Windows users, please make sure to install [Microsoft .NET Desktop Runtime versi
 #### Video
 
 - Fixed a warning / misconfiguration when repeat-headers is used with the x265 encoder. (#6061)
+- Fixed an issue where the NVEnc encoder ignored the level option.
 
 #### Subtitles
 
@@ -23,8 +24,16 @@ Windows users, please make sure to install [Microsoft .NET Desktop Runtime versi
 
 - Fixed an issue that caused video artefacts to occur when using the eedi2 filter. (#6073)
 
+#### Third-party libraries
+
+- Updated libraries
+  - FFmpeg 7.0.1 (decoding and filters)
+  - libdav1d 1.4.2 (AV1 video decoding)
+
 ### Windows
 
+- Hardware decoding is now defaulted to off for new installations. Users can opt-in whilst making sure they are running up-to-date drivers.
+- Fixed an issue where hardware decoding could erroneously be used for previews. 
 - Fixed an issue where auto name was triggering too aggressively. (#6079)
 - Removed an erroneous error message when dragging files onto the main window that include a subtitle file. (#6065)
 
