@@ -13,6 +13,7 @@
         xmlns:Properties="clr-namespace:HandBrakeWPF.Properties"
         xmlns:queue="clr-namespace:HandBrakeWPF.Converters.Queue"
         xmlns:main="clr-namespace:HandBrakeWPF.Converters.Main"
+        xmlns:model="clr-namespace:HandBrakeWPF.Services.Queue.Model"
         Title="{Binding Title}"
         Width="975"
         Height="600"
@@ -36,6 +37,7 @@
         <queue:FilterSettingsDescConverter x:Key="filterSettingsDescConverter" />
         <Converters:ThemeImageConverter x:Key="themeConverter" />
         <main:PointToPointConverter x:Key="PointToPointConverter" />
+        <Converters:EnumToVisibilityConverter x:Key="EnumToVisibilityConverter" />
 
         <Style x:Key="LongToolTipHolder" TargetType="FrameworkElement">
             <Setter Property="ToolTipService.ShowDuration" Value="10000" />
@@ -238,7 +240,7 @@
                                     <RowDefinition Height="Auto" />
                                 </Grid.RowDefinitions>
 
-                                <Grid Visibility="{Binding IsBreakpointTask, Converter={StaticResource boolToVisConverter}, ConverterParameter=true}">
+                                <Grid  Visibility="{Binding TaskType, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter={x:Static model:QueueTaskType.EncodeTask}}" >
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="40" />
                                         <ColumnDefinition Width="*" />
@@ -280,18 +282,18 @@
 
                                             <ProgressBar Minimum="0" Height="4" Maximum="100" Grid.Row="1" Name="pbStatus" HorizontalAlignment="Stretch" Margin="0,8,10,0"
                                                      Value="{Binding JobProgress.ProgressValue}" IsIndeterminate="{Binding JobProgress.IntermediateProgress}"
-                                                     Visibility="{Binding ShowEncodeProgress, Converter={StaticResource boolToVisConverter}}" />
+                                                     Visibility="{Binding Status, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter={x:Static model:QueueItemStatus.InProgress}}" />
 
                                             <!-- Extended Info -->
                                             <Grid Visibility="{Binding DataContext.ExtendedQueueDisplay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}, Converter={StaticResource boolToVisConverter}}"
                                                   Grid.Row="2">
 
                                                 <TextBlock Text="{Binding JobProgress.JobStatusShort}" TextWrapping="WrapWithOverflow" VerticalAlignment="Top" TextTrimming="CharacterEllipsis"
-                                                           Visibility="{Binding ShowEncodeProgress, Converter={StaticResource boolToVisConverter}}"
+                                                           Visibility="{Binding Status, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter={x:Static model:QueueItemStatus.InProgress}}"
                                                            Margin="0,4,0,2" Style="{StaticResource subTextSmall}" />
 
                                                 <TextBlock Text="{Binding Statistics.SummaryCompleteStats}" TextWrapping="WrapWithOverflow" VerticalAlignment="Top" TextTrimming="CharacterEllipsis"
-                                                           Visibility="{Binding ShowJobCompleteInfo, Converter={StaticResource boolToVisConverter}}"
+                                                           Visibility="{Binding Status, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter={x:Static model:QueueItemStatus.Completed}}"
                                                            Margin="0,4,0,2" Style="{StaticResource subTextSmall}" />
                                             </Grid>
                                         </Grid>
@@ -309,7 +311,7 @@
                   
                                 </Grid>
 
-                                <Grid Visibility="{Binding IsBreakpointTask, Converter={StaticResource boolToVisConverter}, ConverterParameter=false}">
+                                <Grid Visibility="{Binding TaskType, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter={x:Static model:QueueTaskType.Breakpoint}}" >
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="40" />
                                         <ColumnDefinition Width="*" />

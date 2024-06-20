@@ -39,7 +39,6 @@ namespace HandBrakeWPF.Services.Queue.Model
             this.TaskType = type;
             id = id + 1;
             this.Id = string.Format("{0}.{1}", GeneralUtilities.ProcessId, id);
-            this.NotifyOfPropertyChange(() => this.IsBreakpointTask);
         }
 
         public QueueTask(EncodeTask task, string scannedSourcePath, Preset currentPreset, bool isPresetModified, Title selectedTitle)
@@ -74,10 +73,6 @@ namespace HandBrakeWPF.Services.Queue.Model
 
         public QueueTaskType TaskType { get; set; }
 
-        /* Breakpoint Task */
-
-        public bool IsBreakpointTask => TaskType == QueueTaskType.Breakpoint;
-
         /* Encode Task*/
 
         public string ScannedSourcePath { get; set; }
@@ -95,9 +90,6 @@ namespace HandBrakeWPF.Services.Queue.Model
             {
                 this.status = value;
                 this.NotifyOfPropertyChange(() => this.Status);
-                this.NotifyOfPropertyChange(() => this.ShowEncodeProgress);
-                this.NotifyOfPropertyChange(() => this.IsJobStatusVisible);
-                this.NotifyOfPropertyChange(() => this.ShowJobCompleteInfo);
             }
         }
 
@@ -109,15 +101,6 @@ namespace HandBrakeWPF.Services.Queue.Model
 
         [JsonIgnore]
         public QueueProgressStatus JobProgress { get; set; }
-
-        [JsonIgnore]
-        public bool IsJobStatusVisible => this.Status == QueueItemStatus.InProgress;
-        
-        [JsonIgnore]
-        public bool ShowEncodeProgress => this.Status == QueueItemStatus.InProgress;
-
-        [JsonIgnore]
-        public bool ShowJobCompleteInfo => this.Status == QueueItemStatus.Completed;
 
         /* Overrides */
 
