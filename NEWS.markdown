@@ -7,35 +7,41 @@ Before updating HandBrake, please make sure there are no pending encodes in the 
 
 Windows users, please make sure to install [Microsoft .NET Desktop Runtime version 8.0.x](https://dotnet.microsoft.com/en-us/download/dotnet/8.0). Read carefully: you need the **DESKTOP** runtime.
 
+
 ## HandBrake 1.8.1
 
 ### All platforms
 
 #### Video
 
-- Fixed a warning / misconfiguration when repeat-headers is used with the x265 encoder. (#6061)
-- Fixed an issue where the NVEnc encoder ignored the level option.
+- Fixed a warning / misconfiguration when repeat-headers is used with the x265 encoder.(#6061)
+- Fixed an issue where the NVEnc encoder ignored the level option
 
 #### Subtitles
 
-- Fixed an issue where dvd subtitles could be corrupted during rendering. 
+- Fixed an issue where dvd subtitles could be corrupted during rendering.
 
 #### Filters
 
-- Fixed an issue that caused video artefacts to occur when using the eedi2 filter. (#6073)
+- Fixed an issue that caused video artefacts to occur when using the eedi2 filter (#6073)
 
 #### Third-party libraries
 
 - Updated libraries
   - FFmpeg 7.0.1 (decoding and filters)
-  - libdav1d 1.4.2 (AV1 video decoding)
+  - libdav1d 1.4.3 (AV1 video decoding)
+
+### Mac
+
+- Fixed a stall in the queue that could happen if the encoding process crashes when configuring a job
+- Removed the "Show" button from the notifications when there is nothing to show
 
 ### Windows
 
-- Hardware decoding is now defaulted to off for new installations. Users can opt-in whilst making sure they are running up-to-date drivers.
-- Fixed an issue where hardware decoding could erroneously be used for previews. 
-- Fixed an issue where auto name was triggering too aggressively. (#6079)
-- Removed an erroneous error message when dragging files onto the main window that include a subtitle file. (#6065)
+- Hardware decoding is now defaulted to off for new installations. Users can opt-in whilst making sure they are running up-to-date drivers
+- Fixed an issue where hardware decoding could erroneously be used for previews
+- Fixed an issue where auto name was triggering too aggressively (#6079)
+- Removed an erroneous error message when dragging files onto the main window that include a subtitle file.(#6065)
 
 
 ## HandBrake 1.8.0
