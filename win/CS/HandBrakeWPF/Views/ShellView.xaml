@@ -5,7 +5,7 @@
         xmlns:Converters="clr-namespace:HandBrakeWPF.Converters"
         xmlns:views="clr-namespace:HandBrakeWPF.Views"
         Title="{Data:Binding Path=MainViewModel.WindowTitle}"
-        Width="1018"
+        Width="1060"
         Height="690"
         MinWidth="1018"
         MinHeight="690"

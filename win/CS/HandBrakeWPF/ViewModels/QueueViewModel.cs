@@ -143,7 +143,7 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
-        public bool JobInfoVisible => SelectedItems.Count == 1 && this.SelectedTask != null && !this.SelectedTask.IsBreakpointTask;
+        public bool JobInfoVisible => SelectedItems.Count == 1 && this.SelectedTask != null && this.SelectedTask.TaskType != QueueTaskType.Breakpoint;
 
         public int SelectedTabIndex { get; set; }
 

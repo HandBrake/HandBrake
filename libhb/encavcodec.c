@@ -67,7 +67,7 @@ static int apply_encoder_tune(int vcodec, AVDictionary ** av_opts,
 static int apply_encoder_options(hb_job_t *job, AVCodecContext *context,
                                  AVDictionary **av_opts);
 
-static int apply_encoder_level(AVCodecContext *context,
+static int apply_encoder_level(AVCodecContext *context, AVDictionary **av_opts,
                                int vcodec, const char *encoder_level);
 
 hb_work_object_t hb_encavcodec =
@@ -373,7 +373,7 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
     context->gop_size  = ((double)job->orig_vrate.num / job->orig_vrate.den +
                                   0.5) * 10;
 
-    if (apply_encoder_level(context, job->vcodec, job->encoder_level))
+    if (apply_encoder_level(context, &av_opts, job->vcodec, job->encoder_level))
     {
         av_free(context);
         ret = 1;
@@ -455,14 +455,21 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
         if ( w->codec_param == AV_CODEC_ID_VP8 ||
              w->codec_param == AV_CODEC_ID_VP9 )
         {
-            // These settings produce better image quality than
-            // what was previously used
-            context->flags |= AV_CODEC_FLAG_QSCALE;
-            context->global_quality = FF_QP2LAMBDA * job->vquality + 0.5;
+            if (w->codec_param == AV_CODEC_ID_VP9 && job->vquality == 0)
+            {
+                av_dict_set( &av_opts, "lossless", "1", 0 );
+            }
+            else
+            {
+                // These settings produce better image quality than
+                // what was previously used
+                context->flags |= AV_CODEC_FLAG_QSCALE;
+                context->global_quality = FF_QP2LAMBDA * job->vquality + 0.5;
 
-            char quality[7];
-            snprintf(quality, 7, "%.2f", job->vquality);
-            av_dict_set( &av_opts, "crf", quality, 0 );
+                char quality[7];
+                snprintf(quality, 7, "%.2f", job->vquality);
+                av_dict_set( &av_opts, "crf", quality, 0 );
+            }
 
             if (w->codec_param == AV_CODEC_ID_VP8)
             {
@@ -1364,7 +1371,7 @@ static int apply_encoder_tune(int vcodec, AVDictionary ** av_opts,
     return 0;
 }
 
-static int apply_encoder_level(AVCodecContext *context, int vcodec, const char *encoder_level)
+static int apply_encoder_level(AVCodecContext *context, AVDictionary **av_opts, int vcodec, const char *encoder_level)
 {
     const char * const *level_names = NULL;
     const int  *level_values = NULL;
@@ -1414,7 +1421,18 @@ static int apply_encoder_level(AVCodecContext *context, int vcodec, const char *
         {
             if (!strcasecmp(encoder_level, level_names[i]))
             {
-                context->level = level_values[i];
+                if (vcodec == HB_VCODEC_FFMPEG_NVENC_H264 ||
+                    vcodec == HB_VCODEC_FFMPEG_NVENC_H265 ||
+                    vcodec == HB_VCODEC_FFMPEG_NVENC_H265_10BIT ||
+                    vcodec == HB_VCODEC_FFMPEG_NVENC_AV1 ||
+                    vcodec == HB_VCODEC_FFMPEG_NVENC_AV1_10BIT)
+                {
+                    av_dict_set(av_opts, "level", level_names[i], 0);
+                }
+                else
+                {
+                    context->level = level_values[i];
+                }
             }
             ++i;
         }

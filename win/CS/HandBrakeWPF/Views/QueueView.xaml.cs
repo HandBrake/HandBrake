@@ -134,7 +134,7 @@ namespace HandBrakeWPF.Views
             }
 
             this.DeleteMenuItem.Header = this.queueJobs.SelectedItems.Count > 1 ? Properties.Resources.QueueView_DeleteSelected : Properties.Resources.QueueView_Delete;
-            this.DeleteMenuItem.IsEnabled = (this.mouseActiveQueueTask != null || this.queueJobs.SelectedItems.Count >= 1) && (!this.mouseActiveQueueTask?.IsBreakpointTask ?? true);
+            this.DeleteMenuItem.IsEnabled = (this.mouseActiveQueueTask != null || this.queueJobs.SelectedItems.Count >= 1) && (this.mouseActiveQueueTask?.TaskType != QueueTaskType.Breakpoint);
             this.EditMenuItem.IsEnabled = this.mouseActiveQueueTask != null && this.queueJobs.SelectedItems.Count == 1;
             this.openSourceDir.IsEnabled = this.mouseActiveQueueTask != null && this.queueJobs.SelectedItems.Count == 1;
             this.openDestDir.IsEnabled = this.mouseActiveQueueTask != null && this.queueJobs.SelectedItems.Count == 1;

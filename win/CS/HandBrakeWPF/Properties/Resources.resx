@@ -2819,4 +2819,13 @@ To allow multiple simultaneous encodes, turn on "Process Isolation" in Tools Men
   <data name="VideoView_LosslessEncodeOnly" xml:space="preserve">
     <value>Lossless encoding only.</value>
   </data>
+  <data name="MainView_HideClassicMenu" xml:space="preserve">
+    <value>Hide Classic Menu</value>
+  </data>
+  <data name="MainView_ShowClassicMenu" xml:space="preserve">
+    <value>Show Classic Menu</value>
+  </data>
+  <data name="OptionsViewVideo_UnsupportedIntelDriver" xml:space="preserve">
+    <value>(Warning: Unsupported Driver Detected! - Update Recommended)</value>
+  </data>
 </root>

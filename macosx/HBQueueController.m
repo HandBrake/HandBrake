@@ -416,11 +416,16 @@ NSString * const HBQueueItemNotificationPathKey = @"HBQueueItemNotificationPathK
     notification.title = title;
     notification.informativeText = description;
     notification.soundName = playSound ? NSUserNotificationDefaultSoundName : nil;
+
     if (fileURL)
     {
         notification.hasActionButton = YES;
         notification.actionButtonTitle = NSLocalizedString(@"Show", @"Notification -> Show in Finder");
         notification.userInfo = @{ HBQueueItemNotificationPathKey: fileURL.path };
+    }
+    else
+    {
+        notification.hasActionButton = NO;
     }
 
     [[NSUserNotificationCenter defaultUserNotificationCenter] deliverNotification:notification];

@@ -45,7 +45,7 @@
                     VerticalAlignment="Stretch"
                     Orientation="Vertical">
             <!--  Main Menu  -->
-            <Menu Height="23" x:Name="mainAppMenu"
+            <Menu Height="23" x:Name="mainAppMenu" Visibility="{Binding IsLegacyMenuShown, Converter={StaticResource boolToVisConverter}}"
                   HorizontalAlignment="Stretch"
                   VerticalAlignment="Top">
                 <Menu.Resources>
@@ -138,7 +138,13 @@
             </Menu>
 
             <!--  ToolBar  -->
-            <ToolBar HorizontalAlignment="Stretch"
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <ToolBar HorizontalAlignment="Stretch"
                      VerticalAlignment="Stretch"
                      SnapsToDevicePixels="True"
                      ToolBar.OverflowMode="AsNeeded"
@@ -146,185 +152,235 @@
                      KeyboardNavigation.TabNavigation="Continue"
                      >
 
-                <ToolBar.ContextMenu>
-                    <ContextMenu AutomationProperties.Name="Presets List Context Menu">
-                        <MenuItem Header="{Binding ShowAddAllMenuName}" Command="{Binding RelayCommand}" CommandParameter="FlipAddAllToQueue" />
-                        <MenuItem Header="{Binding ShowAddSelectionMenuName}" Command="{Binding RelayCommand}" CommandParameter="FlipAddSelectionToQueue" />
-                    </ContextMenu>
-                </ToolBar.ContextMenu>
+                    <ToolBar.ContextMenu>
+                        <ContextMenu AutomationProperties.Name="Presets List Context Menu">
+                            <MenuItem Header="{Binding  ShowHideMenuText}" Command="{Binding RelayCommand}" CommandParameter="ShowHideMenu" />
+                            <Separator />
+                            <MenuItem Header="{Binding ShowAddAllMenuName}" Command="{Binding RelayCommand}" CommandParameter="FlipAddAllToQueue" />
+                            <MenuItem Header="{Binding ShowAddSelectionMenuName}" Command="{Binding RelayCommand}" CommandParameter="FlipAddSelectionToQueue" />
+                        </ContextMenu>
+                    </ToolBar.ContextMenu>
 
-                <Button Name="SelectSource" x:Uid="Choose Source" AutomationProperties.Name="{x:Static Properties:Resources.MainView_SourceOpen}"
+                    <Button Name="SelectSource" x:Uid="Choose Source" AutomationProperties.Name="{x:Static Properties:Resources.MainView_SourceOpen}"
                         Command="{Binding RelayCommand}" CommandParameter="SelectSourceWindow">
-                    <StackPanel Orientation="Horizontal">
-                        <Image Width="32"
+                        <StackPanel Orientation="Horizontal">
+                            <Image Width="32"
                                Height="32"
                                Source="{Binding Converter={StaticResource themeConverter}, ConverterParameter='Source.png'}"/>
-                        <Label Margin="8,0,0,0"
+                            <Label Margin="2,0,0,0"
                                VerticalAlignment="Center"
                                Content="{x:Static Properties:Resources.MainView_SourceOpen}"/>
-                    </StackPanel>
-                </Button>
-
-                <Separator />
-
-                <Button PreviewMouseLeftButtonDown="AddToQueue_PreviewMouseDown" ContextMenuService.IsEnabled="False" AutomationProperties.Name="{x:Static Properties:Resources.MainView_AddToQueue}">
-                    <StackPanel Orientation="Horizontal">
-                        <StackPanel Orientation="Horizontal">
-                            <Image Width="32" Height="32" SnapsToDevicePixels="True" Source="{Binding Converter={StaticResource themeConverter}, ConverterParameter='AddToQueue.png'}" />
-                            <Label Margin="8,0,0,0" VerticalAlignment="Center" Content="{x:Static Properties:Resources.MainView_AddToQueue}" />
                         </StackPanel>
+                    </Button>
 
-                        <Grid x:Name="dropdown" Background="Transparent" >
-                            <Path Height="5" Margin="4,2,2,0" VerticalAlignment="Center" HorizontalAlignment="Center"
+                    <Separator />
+
+                    <Button PreviewMouseLeftButtonDown="AddToQueue_PreviewMouseDown" ContextMenuService.IsEnabled="False" AutomationProperties.Name="{x:Static Properties:Resources.MainView_AddToQueue}">
+                        <StackPanel Orientation="Horizontal">
+                            <StackPanel Orientation="Horizontal">
+                                <Image Width="32" Height="32" SnapsToDevicePixels="True" Source="{Binding Converter={StaticResource themeConverter}, ConverterParameter='AddToQueue.png'}" />
+                                <Label Margin="2,0,0,0" VerticalAlignment="Center" Content="{x:Static Properties:Resources.MainView_AddToQueue}" />
+                            </StackPanel>
+
+                            <Grid x:Name="dropdown" Background="Transparent" >
+                                <Path Height="5" Margin="4,2,2,0" VerticalAlignment="Center" HorizontalAlignment="Center"
                                   Data="M 0 0 L 4 4 L 8 0 Z"
                                   Fill="{DynamicResource ButtonGlyphBrush}" x:Name="dropdownArrow" />
-                        </Grid>
+                            </Grid>
 
-                    </StackPanel>
-                    <Button.ContextMenu>
-                        <ContextMenu>
-                            <MenuItem Header="{x:Static Properties:Resources.MainView_AddCurrent}" Command="{Binding RelayCommand}" CommandParameter="AddToQueueWithErrorHandling" AutomationProperties.Name="Add Current" InputGestureText="Alt + A" />
-                            <MenuItem Header="{x:Static Properties:Resources.MainView_AddAll}" Command="{Binding RelayCommand}" CommandParameter="AddAllToQueue" AutomationProperties.Name="Add all to Queue" InputGestureText="Ctrl + Alt + A" />
-                            <MenuItem Header="{x:Static Properties:Resources.MainView_AddSelection}" Command="{Binding RelayCommand}" CommandParameter="AddSelectionToQueue" AutomationProperties.Name="Add Selection to Queue" InputGestureText="Ctrl + Shift + A" />
-                        </ContextMenu>
-                    </Button.ContextMenu>
-                </Button>
+                        </StackPanel>
+                        <Button.ContextMenu>
+                            <ContextMenu>
+                                <MenuItem Header="{x:Static Properties:Resources.MainView_AddCurrent}" Command="{Binding RelayCommand}" CommandParameter="AddToQueueWithErrorHandling" AutomationProperties.Name="Add Current" InputGestureText="Alt + A" />
+                                <MenuItem Header="{x:Static Properties:Resources.MainView_AddAll}" Command="{Binding RelayCommand}" CommandParameter="AddAllToQueue" AutomationProperties.Name="Add all to Queue" InputGestureText="Ctrl + Alt + A" />
+                                <MenuItem Header="{x:Static Properties:Resources.MainView_AddSelection}" Command="{Binding RelayCommand}" CommandParameter="AddSelectionToQueue" AutomationProperties.Name="Add Selection to Queue" InputGestureText="Ctrl + Shift + A" />
+                            </ContextMenu>
+                        </Button.ContextMenu>
+                    </Button>
 
-                <Button Name="AddSelectionToQueue" AutomationProperties.Name="{x:Static Properties:Resources.MainView_AddSelection}"
+                    <Button Name="AddSelectionToQueue" AutomationProperties.Name="{x:Static Properties:Resources.MainView_AddSelection}"
                         Command="{Binding RelayCommand}" CommandParameter="AddSelectionToQueue"
                         Visibility="{Binding ShowAddSelectionToQueue,
                                              Converter={StaticResource boolToVisConverter}}">
-                    <StackPanel Orientation="Horizontal">
-                        <Image Width="32"
+                        <StackPanel Orientation="Horizontal">
+                            <Image Width="32"
                                Height="32"
                                Source="{Binding Converter={StaticResource themeConverter}, ConverterParameter='AddToQueue.png'}"/>
-                        <Label Margin="8,0,0,0"
+                            <Label Margin="2,0,0,0"
                                VerticalAlignment="Center"
                                Content="{x:Static Properties:Resources.MainView_AddSelection}"/>
-                    </StackPanel>
-                </Button>
+                        </StackPanel>
+                    </Button>
 
-                <Button Name="AddAllToQueue" AutomationProperties.Name="{x:Static Properties:Resources.MainView_AddAll}"
+                    <Button Name="AddAllToQueue" AutomationProperties.Name="{x:Static Properties:Resources.MainView_AddAll}"
                         Command="{Binding RelayCommand}" CommandParameter="AddAllToQueue"
                         Visibility="{Binding ShowAddAllToQueue,
                                              Converter={StaticResource boolToVisConverter}}">
-                    <StackPanel Orientation="Horizontal">
-                        <Image Width="32"
+                        <StackPanel Orientation="Horizontal">
+                            <Image Width="32"
                                Height="32"
                                Source="{Binding Converter={StaticResource themeConverter}, ConverterParameter='AddToQueue.png'}"/>
-                        <Label Margin="8,0,0,0"
+                            <Label Margin="2,0,0,0"
                                VerticalAlignment="Center"
                                Content="{x:Static Properties:Resources.MainView_AddAll}"/>
-                    </StackPanel>
-                </Button>
+                        </StackPanel>
+                    </Button>
 
-                <Button Name="Start" AutomationProperties.Name="{x:Static Properties:Resources.MainView_StartEncode}"
+                    <Button Name="Start" AutomationProperties.Name="{x:Static Properties:Resources.MainView_StartEncode}"
                         Command="{Binding RelayCommand}" CommandParameter="StartEncode"
                         Visibility="{Binding IsEncoding,
                                              Converter={StaticResource boolToVisConverter},
                                              ConverterParameter=true}">
-                    <StackPanel Orientation="Horizontal">
-                        <Image Width="32"
+                        <StackPanel Orientation="Horizontal">
+                            <Image Width="32"
                                Height="32"
                                Source="Images/Play.png"/>
-                        <Label Margin="8,0,0,0"
+                            <Label Margin="2,0,0,0"
                                VerticalAlignment="Center"
                                Content="{Binding StartLabel, FallbackValue='{x:Static Properties:Resources.MainView_StartEncode}'}"/>
-                    </StackPanel>
-                </Button>
+                        </StackPanel>
+                    </Button>
 
-                <Button Name="Stop" AutomationProperties.Name="{x:Static Properties:Resources.MainView_Stop}"
+                    <Button Name="Stop" AutomationProperties.Name="{x:Static Properties:Resources.MainView_Stop}"
                         Command="{Binding RelayCommand}" CommandParameter="StopEncode"
                         Visibility="{Binding IsEncoding,
                                              Converter={StaticResource boolToVisConverter},
                                              ConverterParameter=false}">
-                    <StackPanel Orientation="Horizontal">
-                        <Image Width="32"
+                        <StackPanel Orientation="Horizontal">
+                            <Image Width="32"
                                Height="32"
                                SnapsToDevicePixels="True"
                                Source="Images/stop.png"/>
-                        <Label Margin="8,0,0,0"
+                            <Label Margin="2,0,0,0"
                                VerticalAlignment="Center"
                                Content="{x:Static Properties:Resources.MainView_Stop}"/>
-                    </StackPanel>
-                </Button>
+                        </StackPanel>
+                    </Button>
 
-                <Button Name="Pause" AutomationProperties.Name="{x:Static Properties:Resources.MainView_Pause}"
+                    <Button Name="Pause" AutomationProperties.Name="{x:Static Properties:Resources.MainView_Pause}"
                         Command="{Binding RelayCommand}" CommandParameter="PauseEncode"
                         Visibility="{Binding IsEncoding,
                                              Converter={StaticResource boolToVisConverter},
                                              ConverterParameter=false}">
-                    <StackPanel Orientation="Horizontal">
-                        <Image Width="32"
+                        <StackPanel Orientation="Horizontal">
+                            <Image Width="32"
                                Height="32"
                                SnapsToDevicePixels="True"
                                Source="Images/Pause.png"/>
-                        <Label Margin="8,0,0,0"
+                            <Label Margin="2,0,0,0"
                                VerticalAlignment="Center"
                                Content="{x:Static Properties:Resources.MainView_Pause}"/>
-                    </StackPanel>
-                </Button>
+                        </StackPanel>
+                    </Button>
 
-                <Separator />
+                    <Separator />
 
-                <Button Name="ShowQueue" AutomationProperties.Name="Queue" Command="{Binding RelayCommand}" CommandParameter="OpenQueueWindow">
-                    <StackPanel Orientation="Horizontal">
-                        <Image Width="32"
+                    <Button Name="ShowQueue" AutomationProperties.Name="Queue" Command="{Binding RelayCommand}" CommandParameter="OpenQueueWindow">
+                        <StackPanel Orientation="Horizontal">
+                            <Image Width="32"
                                Height="32"
                                SnapsToDevicePixels="True"
                                Source="{Binding Converter={StaticResource themeConverter}, ConverterParameter='Queue.png'}"/>
-                        <Label Margin="8,0,0,0"
+                            <Label Margin="2,0,0,0"
                                    VerticalAlignment="Center"
                                    Content="{Binding QueueLabel, FallbackValue='{x:Static Properties:Resources.MainView_ShowQueue}'}"/>
 
-                        <Border Background="#00579f" CornerRadius="9" BorderThickness="1" VerticalAlignment="Center" Visibility="{Binding IsQueueCountVisible, Converter={StaticResource boolToVisConverter}}">
-                            <TextBlock Text="{Binding QueueCount}" VerticalAlignment="Center" Foreground="White" HorizontalAlignment="Center" Margin="9,2" />
-                        </Border>
-                    </StackPanel>
-                </Button>
+                            <Border Background="#00579f" CornerRadius="9" BorderThickness="1" VerticalAlignment="Center" Visibility="{Binding IsQueueCountVisible, Converter={StaticResource boolToVisConverter}}">
+                                <TextBlock Text="{Binding QueueCount}" VerticalAlignment="Center" Foreground="White" HorizontalAlignment="Center" Margin="9,2" />
+                            </Border>
+                        </StackPanel>
+                    </Button>
 
-                <Button Name="Preview" AutomationProperties.Name="{x:Static Properties:Resources.MainView_ShowPreview}" Command="{Binding RelayCommand}" CommandParameter="OpenPreviewWindow" >
-                    <StackPanel Orientation="Horizontal">
-                        <Image Width="32"
+                    <Button Name="Preview" AutomationProperties.Name="{x:Static Properties:Resources.MainView_ShowPreview}" Command="{Binding RelayCommand}" CommandParameter="OpenPreviewWindow" >
+                        <StackPanel Orientation="Horizontal">
+                            <Image Width="32"
                                Height="32"
                                SnapsToDevicePixels="True"
                                Source="{Binding Converter={StaticResource themeConverter}, ConverterParameter='Preview.png'}"/>
-                        <Label Margin="8,0,0,0"
+                            <Label Margin="2,0,0,0"
                                VerticalAlignment="Center"
                                Content="{x:Static Properties:Resources.MainView_ShowPreview}"/>
-                    </StackPanel>
-                </Button>
+                        </StackPanel>
+                    </Button>
 
-                <Button Name="ActivityWindow" AutomationProperties.Name="Activity Window" Command="{Binding RelayCommand}" CommandParameter="OpenLogWindow">
-                    <StackPanel Orientation="Horizontal">
-                        <Image Width="32"
+                    <Button Name="ActivityWindow" AutomationProperties.Name="Activity Window" Command="{Binding RelayCommand}" CommandParameter="OpenLogWindow">
+                        <StackPanel Orientation="Horizontal">
+                            <Image Width="32"
                                Height="32"
                                Source="{Binding Converter={StaticResource themeConverter}, ConverterParameter='Activity2.png'}"/>
-                        <Label Margin="8,0,0,0"
+                            <Label Margin="2,0,0,0"
                                VerticalAlignment="Center"
                                Content="{x:Static Properties:Resources.MainView_ActivityLog}"/>
-                    </StackPanel>
-                </Button>
-
-                <Button x:Name="presetbtn" PreviewMouseLeftButtonDown="Presets_PreviewMouseDown" ContextMenuService.IsEnabled="False" AutomationProperties.Name="{x:Static Properties:Resources.MainView_Presets}">
-                    <StackPanel Orientation="Horizontal">
-                        <StackPanel Orientation="Horizontal">
-                            <Image Width="32" Height="32" SnapsToDevicePixels="True" Source="{Binding Converter={StaticResource themeConverter}, ConverterParameter='Presets2.png'}" />
-                            <Label Margin="8,0,0,0" VerticalAlignment="Center" Content="{x:Static Properties:Resources.MainView_Presets}" />
                         </StackPanel>
+                    </Button>
 
-                        <Grid x:Name="presetsDropdown" Background="Transparent" >
-                            <Path Height="5" Margin="4,2,2,0" VerticalAlignment="Center" HorizontalAlignment="Center"
+                    <Button x:Name="presetbtn" PreviewMouseLeftButtonDown="Presets_PreviewMouseDown" ContextMenuService.IsEnabled="False" AutomationProperties.Name="{x:Static Properties:Resources.MainView_Presets}">
+                        <StackPanel Orientation="Horizontal">
+                            <StackPanel Orientation="Horizontal">
+                                <Image Width="32" Height="32" SnapsToDevicePixels="True" Source="{Binding Converter={StaticResource themeConverter}, ConverterParameter='Presets2.png'}" />
+                                <Label Margin="2,0,0,0" VerticalAlignment="Center" Content="{x:Static Properties:Resources.MainView_Presets}" />
+                            </StackPanel>
+
+                            <Grid x:Name="presetsDropdown" Background="Transparent" >
+                                <Path Height="5" Margin="4,2,2,0" VerticalAlignment="Center" HorizontalAlignment="Center"
                                   Data="M 0 0 L 4 4 L 8 0 Z"
                                   Fill="{DynamicResource ButtonGlyphBrush}" x:Name="presetsDropdownArrow" />
-                        </Grid>
-                    </StackPanel>
+                            </Grid>
+                        </StackPanel>
 
-                    <Button.ContextMenu>
-                        <ContextMenu ItemsSource="{Binding PresetsCategories, Converter={StaticResource presetsMenuConverter}, ConverterParameter=true}" MaxHeight="600" />
-                    </Button.ContextMenu>
-                </Button>
-            </ToolBar>
+                        <Button.ContextMenu>
+                            <ContextMenu ItemsSource="{Binding PresetsCategories, Converter={StaticResource presetsMenuConverter}, ConverterParameter=true}" MaxHeight="600" />
+                        </Button.ContextMenu>
+                    </Button>
+                </ToolBar>
+
+                <ToolBar HorizontalAlignment="Stretch" Grid.Column="1" Visibility="{Binding IsLegacyMenuShown, Converter={StaticResource boolToVisConverter}, ConverterParameter=true}"
+                  VerticalAlignment="Stretch"
+                  SnapsToDevicePixels="True"
+                  ToolBar.OverflowMode="AsNeeded"
+                  ToolBarTray.IsLocked="True"
+                  KeyboardNavigation.TabNavigation="Continue">
+
+                    <Button x:Name="infoButton" PreviewMouseLeftButtonDown="InfoButton_OnPreviewMouseLeftButtonDown"  AutomationProperties.Name="{x:Static Properties:Resources.MainView_Options}">
+                        <StackPanel Orientation="Horizontal">
+                            <StackPanel Orientation="Horizontal">
+                                <Image Width="32" Height="32" SnapsToDevicePixels="True" Source="{Binding Converter={StaticResource themeConverter}, ConverterParameter='Settings.png'}" />
+                            </StackPanel>
+
+                            <Grid x:Name="infoDropdown" Background="Transparent" >
+                                <Path Height="5" Margin="4,2,2,0" VerticalAlignment="Center" HorizontalAlignment="Center"
+                               Data="M 0 0 L 4 4 L 8 0 Z"
+                               Fill="{DynamicResource ButtonGlyphBrush}" x:Name="infoDropdownArrow" />
+                            </Grid>
+                        </StackPanel>
+                        <Button.ContextMenu>
+                            <ContextMenu>
+                                <MenuItem Header="{x:Static Properties:Resources.MainView_HandBrakeDocs}" Command="{Binding RelayCommand}" CommandParameter="LaunchHelp" InputGestureText="F1">
+                                    <MenuItem.Icon>
+                                        <Image Width="16" Height="16"  Source="Images/information.png" />
+                                    </MenuItem.Icon>
+                                </MenuItem>
+                                <Separator />
+                                <MenuItem Header="{Binding  ShowHideMenuText}" Command="{Binding RelayCommand}" CommandParameter="ShowHideMenu" />
+                                <Separator />
+                                <MenuItem x:Name="queueRecoveryMenuItem2" Header="{x:Static Properties:Resources.SourceSelection_QueueArchiveRecovery}" Command="{Binding RelayCommand}" CommandParameter="RecoverQueue" />
+                                <Separator />
+                                <MenuItem Header="{x:Static Properties:Resources.MainView_CheckForUpdates}" Command="{Binding RelayCommand}" CommandParameter="CheckForUpdates" />
+                                <MenuItem Header="{x:Static Properties:Resources.MainView_NightlyBuildsUpdate}" Command="{Binding RelayCommand}" CommandParameter="NightlyUpdate" Visibility="{Binding IsNightly, Converter={StaticResource boolToVisConverter}}" />
+                                <Separator />
+                                <MenuItem Header="{x:Static Properties:Resources.MainView_PreferencesMenu}" Command="{Binding RelayCommand}" CommandParameter="OpenOptionsWindow">
+                                    <MenuItem.Icon>
+                                        <Image Width="16" Source="{Binding Converter={StaticResource themeConverter}, ConverterParameter='Settings.png'}" />
+                                    </MenuItem.Icon>
+                                </MenuItem>
+                                <Separator />
+                                <MenuItem Header="{x:Static Properties:Resources.MainView_About}" Command="{Binding RelayCommand}" CommandParameter="OpenAboutApplication" />
+                            </ContextMenu>
+                        </Button.ContextMenu>
+                    </Button>
+                </ToolBar>
+
+            </Grid>
         </StackPanel>
 
         <!--  Main Body  -->

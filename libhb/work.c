@@ -1678,13 +1678,10 @@ static void do_job(hb_job_t *job)
 
     // Allow the usage of the hardware decoder
     // only if it was marked as supported in the scan
-    // TODO: remove the ifdef after WinUI is updated
-#ifdef __APPLE__
     if ((title->video_decode_support & job->hw_decode) == 0)
     {
         job->hw_decode = 0;
     }
-#endif
 
     // This must be performed before initializing filters because
     // it can add the subtitle render filter.

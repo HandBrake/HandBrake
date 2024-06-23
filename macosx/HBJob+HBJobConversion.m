@@ -280,29 +280,34 @@
                 // if we are getting the subtitles from an external file
                 if (subTrack.type == IMPORTSRT || subTrack.type == IMPORTSSA)
                 {
-                    hb_subtitle_config_t sub_config;
-                    int type = subTrack.type;
-
-                    sub_config.name = subTrack.title.UTF8String;
-                    sub_config.offset = subTrack.offset;
-
-                    // we need to strncpy file name and codeset
-                    sub_config.src_filename = subTrack.fileURL.fileSystemRepresentation;
-                    strncpy(sub_config.src_codeset, subTrack.charCode.UTF8String, 39);
-                    sub_config.src_codeset[39] = 0;
-
-                    if (!subTrack.burnedIn && hb_subtitle_can_pass(type, job->mux))
+                    if (subTrack.fileURL)
                     {
-                        sub_config.dest = PASSTHRUSUB;
-                    }
-                    else if (hb_subtitle_can_burn(type))
-                    {
-                        sub_config.dest = RENDERSUB;
-                    }
+                        hb_subtitle_config_t sub_config;
+                        sub_config.name = subTrack.title.UTF8String;
+                        sub_config.offset = subTrack.offset;
 
-                    sub_config.force = 0;
-                    sub_config.default_track = subTrack.def;
-                    hb_import_subtitle_add( job, &sub_config, subTrack.isoLanguage.UTF8String, type);
+                        // we need to strncpy file name and codeset
+                        sub_config.src_filename = subTrack.fileURL.fileSystemRepresentation;
+                        if (subTrack.charCode)
+                        {
+                            size_t len = sizeof(sub_config.src_codeset) - 1;
+                            strncpy(sub_config.src_codeset, subTrack.charCode.UTF8String, len);
+                            sub_config.src_codeset[len] = 0;
+                        }
+
+                        if (!subTrack.burnedIn && hb_subtitle_can_pass(subTrack.type, job->mux))
+                        {
+                            sub_config.dest = PASSTHRUSUB;
+                        }
+                        else if (hb_subtitle_can_burn(subTrack.type))
+                        {
+                            sub_config.dest = RENDERSUB;
+                        }
+
+                        sub_config.force = 0;
+                        sub_config.default_track = subTrack.def;
+                        hb_import_subtitle_add(job, &sub_config, subTrack.isoLanguage.UTF8String, subTrack.type);
+                    }
                 }
                 else
                 {

@@ -11,6 +11,9 @@
     <SolidColorBrush x:Key="Ui.ListBoxSelect" />
     <SolidColorBrush x:Key="Ui.Arrow" />
     <SolidColorBrush x:Key="Ui.Blue" Color="#00579f" />
+    <SolidColorBrush x:Key="Ui.BlueBright" Color="#006cc5" />
+    <SolidColorBrush x:Key="Ui.Background" />
+    <SolidColorBrush x:Key="ButtonGlyphBrush" Color="#444"/>
 
     <!-- TextBlock -->
     <Style x:Key="BaseTextBlockStyle" TargetType="TextBlock">

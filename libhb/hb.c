@@ -353,20 +353,6 @@ void hb_remove_previews( hb_handle_t * h )
     closedir( dir );
 }
 
-void hb_scan( hb_handle_t * h, const char * path, int title_index,
-              int preview_count, int store_previews, uint64_t min_duration,
-              int crop_threshold_frames, int crop_threshold_pixels,
-              hb_list_t * exclude_extensions, int hw_decode)
-{
-    // TODO: Compatibility later for the other UI's.  Remove when they are updated.
-    hb_list_t *file_paths = hb_list_init();
-    hb_list_add(file_paths, (char *)path);
-
-    hb_scan_list(h, file_paths, title_index, preview_count, store_previews, min_duration, crop_threshold_frames, crop_threshold_pixels, exclude_extensions, hw_decode);
-
-    hb_list_close(&file_paths);
-}
-
 /**
  * Initializes a scan of the by calling hb_scan_init
  * @param h Handle to hb_handle_t
@@ -380,7 +366,7 @@ void hb_scan( hb_handle_t * h, const char * path, int title_index,
  * @param exclude_extensions A list of extensions to exclude for this scan.
  * @param hw_decode  The preferred hardware decoder to use..
  */
-void hb_scan_list( hb_handle_t * h, hb_list_t * paths, int title_index,
+void hb_scan( hb_handle_t * h, hb_list_t * paths, int title_index,
               int preview_count, int store_previews, uint64_t min_duration,
               int crop_threshold_frames, int crop_threshold_pixels,
               hb_list_t * exclude_extensions, int hw_decode)
@@ -2310,11 +2296,15 @@ static void redirect_thread_func(void * _data)
     if (pipe(pfd))
        return;
 #if defined( SYS_MINGW )
-    // dup2 doesn't work on windows for some stupid reason
-    stderr->_file = pfd[1];
+    // Non-console windows apps do not have a stderr->_file
+    // assigned properly
+    (void) freopen("NUL", "w", stderr);
+    _dup2(pfd[1], _fileno(stderr));
 #else
-    dup2(pfd[1], /*stderr*/ 2);
+    dup2(pfd[1], STDERR_FILENO);
 #endif
+    setvbuf(stderr, NULL, _IONBF, 0);
+
     FILE * log_f = fdopen(pfd[0], "rb");
 
     char line_buffer[500];

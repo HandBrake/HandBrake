@@ -2278,6 +2278,15 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Hide Classic Menu.
+        /// </summary>
+        public static string MainView_HideClassicMenu {
+            get {
+                return ResourceManager.GetString("MainView_HideClassicMenu", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to _Import from file.
         /// </summary>
         public static string MainView_ImportFromFile {
@@ -2589,6 +2598,15 @@ namespace HandBrakeWPF.Properties {
         public static string MainView_ShowAddSelectionToQueue {
             get {
                 return ResourceManager.GetString("MainView_ShowAddSelectionToQueue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Show Classic Menu.
+        /// </summary>
+        public static string MainView_ShowClassicMenu {
+            get {
+                return ResourceManager.GetString("MainView_ShowClassicMenu", resourceCulture);
             }
         }
         
@@ -4480,6 +4498,15 @@ namespace HandBrakeWPF.Properties {
         public static string OptionsViewModel_UpdateServiceUnavailable {
             get {
                 return ResourceManager.GetString("OptionsViewModel_UpdateServiceUnavailable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to (Warning: Unsupported Driver Detected! - Update Recommended).
+        /// </summary>
+        public static string OptionsViewVideo_UnsupportedIntelDriver {
+            get {
+                return ResourceManager.GetString("OptionsViewVideo_UnsupportedIntelDriver", resourceCulture);
             }
         }
         

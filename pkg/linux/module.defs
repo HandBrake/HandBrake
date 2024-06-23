@@ -71,6 +71,10 @@ ifeq (1,$(FEATURE.nvenc))
     FPFLAGS += -e
 endif
 
+ifeq (1,$(FEATURE.vce))
+    FPFLAGS += -v
+endif
+
 ifeq (1,$(FEATURE.libdovi))
     FPFLAGS += -d
 endif

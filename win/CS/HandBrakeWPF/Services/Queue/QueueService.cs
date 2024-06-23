@@ -747,7 +747,7 @@ namespace HandBrakeWPF.Services.Queue
             QueueTask job = this.GetNextJobForProcessing();
             if (job != null)
             {
-                if (job.IsBreakpointTask)
+                if (job.TaskType == QueueTaskType.Breakpoint)
                 {
                     this.HandleBreakPoint(job);
                     return;
@@ -907,7 +907,7 @@ namespace HandBrakeWPF.Services.Queue
 
         private void RemoveBreakPoints()
         {
-            List<QueueTask> tasks = this.queue.Where(t => t.IsBreakpointTask).ToList();
+            List<QueueTask> tasks = this.queue.Where(t => t.TaskType == QueueTaskType.Breakpoint).ToList();
             foreach (var task in tasks)
             {
                 this.queue.Remove(task);

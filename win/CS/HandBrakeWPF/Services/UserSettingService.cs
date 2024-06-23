@@ -314,12 +314,12 @@ namespace HandBrakeWPF.Services
 
             // Video
             defaults.Add(UserSettingConstants.EnableQuickSyncEncoding, true);
-            defaults.Add(UserSettingConstants.EnableQuickSyncDecoding, true);
+            defaults.Add(UserSettingConstants.EnableQuickSyncDecoding, false);
             defaults.Add(UserSettingConstants.EnableQuickSyncHyperEncode, false);
             defaults.Add(UserSettingConstants.UseQSVDecodeForNonQSVEnc, false);
             defaults.Add(UserSettingConstants.EnableVceEncoder, true);
             defaults.Add(UserSettingConstants.EnableNvencEncoder, true);
-            defaults.Add(UserSettingConstants.EnableNvDecSupport, true);
+            defaults.Add(UserSettingConstants.EnableNvDecSupport, false);
             defaults.Add(UserSettingConstants.EnableQuickSyncLowPower, true);
             
             // Advanced
@@ -360,8 +360,8 @@ namespace HandBrakeWPF.Services
             defaults.Add(UserSettingConstants.ExtendedQueueDisplay, true);
             defaults.Add(UserSettingConstants.HardwareDetectTimeoutSeconds, 12);
             defaults.Add(UserSettingConstants.SimpleQueueView, false);
-
             defaults.Add(UserSettingConstants.ShowPresetDesc, true);
+            defaults.Add(UserSettingConstants.IsLegacyMenuShown, true);
 
             return defaults;
         }

@@ -8,6 +8,11 @@
     </Style>
 
     <Style TargetType="{x:Type ComboBox}" BasedOn="{StaticResource {x:Type ComboBox}}">
+        <Style.Resources>
+            <Style TargetType="Border">
+                <Setter Property="CornerRadius" Value="2" />
+            </Style>
+        </Style.Resources>
         <Setter Property="MinHeight" Value="23"/>
         <Setter Property="Margin" Value="0,2,0,2" />
         <Setter Property="ToolTipService.ShowDuration" Value="20000" />
@@ -24,11 +29,21 @@
     </Style>
 
     <Style TargetType="{x:Type TextBox}" BasedOn="{StaticResource {x:Type TextBox}}">
+        <Style.Resources>
+            <Style TargetType="Border">
+                <Setter Property="CornerRadius" Value="2" />
+            </Style>
+        </Style.Resources>
         <Setter Property="VerticalContentAlignment" Value="Center"/>
         <Setter Property="MinHeight" Value="23"/>
     </Style>
 
     <Style TargetType="{x:Type Button}" BasedOn="{StaticResource {x:Type Button}}">
+        <Style.Resources>
+            <Style TargetType="Border">
+                <Setter Property="CornerRadius" Value="2" />
+            </Style>
+        </Style.Resources>
         <Setter Property="MinHeight" Value="23"/>
         <Setter Property="VerticalAlignment" Value="Center" />
         <Setter Property="Padding" Value="8,2" />
@@ -36,6 +51,48 @@
 
     <Style TargetType="{x:Type RadioButton}">
         <Setter Property="Margin" Value="0,0,0,8" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type RadioButton}">
+                    <BulletDecorator Background="Transparent">
+                        <BulletDecorator.Bullet>
+                            <Grid Width="18" Height="18" >
+                                <Ellipse x:Name="Border"  
+                                         Fill="{StaticResource Ui.Background}"
+                                         StrokeThickness="1"
+                                         Stroke="{StaticResource Ui.ContrastLight}" />
+                                <Ellipse x:Name="CheckMark"
+                                         Margin="4"
+                                         Fill="{StaticResource Ui.BlueBright}" />
+                            </Grid>
+                        </BulletDecorator.Bullet>
+                        <ContentPresenter 
+                            Margin="4,0,0,0"
+                            VerticalAlignment="Center"
+                            HorizontalAlignment="Left"
+                            RecognizesAccessKey="True"/>
+                    </BulletDecorator>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsChecked" Value="false">
+                            <Setter TargetName="CheckMark" Property="Visibility" Value="Collapsed"/>
+                        </Trigger>
+                        <Trigger Property="IsMouseOver" Value="true">
+                            <Setter TargetName="Border" Property="Fill" Value="{StaticResource Ui.ToolbarHover}" />
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="true">
+                            <Setter TargetName="Border" Property="Fill" Value="{StaticResource Ui.ContrastLight}" />
+                            <Setter TargetName="Border" Property="Stroke" Value="{StaticResource Ui.ContrastLight}" />
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="false">
+                            <Setter TargetName="Border" Property="Fill" Value="{StaticResource Ui.ContrastLight}" />
+                            <Setter TargetName="Border" Property="Stroke" Value="#40000000" />
+                            <Setter Property="Foreground" Value="#80000000"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+
     </Style>
 
     <Style TargetType="{x:Type controls:NumberBox}" >
@@ -66,9 +123,55 @@
     </Style>
 
     <Style TargetType="{x:Type CheckBox}">
-        <Setter Property="VerticalAlignment" Value="Center" />
-        <Setter Property="VerticalContentAlignment" Value="Center" />
+        <Style.Resources>
+            <Style TargetType="Border">
+                <Setter Property="CornerRadius" Value="2" />
+            </Style>
+        </Style.Resources>
         <Setter Property="Margin" Value="0,2,0,2" />
+        <Setter Property="SnapsToDevicePixels" Value="true"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="CheckBox">
+                    <BulletDecorator Background="Transparent">
+                        <BulletDecorator.Bullet>
+                            <Border x:Name="Border"  Width="18" Height="18" Background="{StaticResource Ui.Background}"
+                                    BorderThickness="1" BorderBrush="{StaticResource Ui.ContrastLight}">
+                                <Grid>
+                                    <Grid Background="{TemplateBinding Foreground}" Margin="1" Visibility="Collapsed" Name="nullBlock"/>
+                                    <Path Stretch="Uniform" Width="16" Height="11" Fill="{StaticResource Ui.BlueBright}" Name="CheckMark" 
+                                          Data="F1 M 9.97498,1.22334L 4.6983,9.09834L 4.52164,9.09834L 0,5.19331L 1.27664,3.52165L 4.255,6.08833L 8.33331,1.52588e-005L 9.97498,1.22334 Z " Visibility="Collapsed"/>
+                                </Grid>
+                            </Border>
+                        </BulletDecorator.Bullet>
+                        <ContentPresenter Margin="4,0,0,0" VerticalAlignment="Center" HorizontalAlignment="Left" RecognizesAccessKey="True"/>
+                    </BulletDecorator>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsChecked" Value="True">
+                            <Setter TargetName="CheckMark" Property="Visibility" Value="Visible"></Setter>
+                        </Trigger>
+                        <Trigger Property="IsChecked" Value="{x:Null}">
+                            <Setter TargetName="nullBlock" Property="Visibility" Value="Visible"></Setter>
+                        </Trigger>
+                        <Trigger Property="IsMouseOver" Value="true">
+                            <Setter TargetName="Border" Property="Background" Value="{StaticResource Ui.ToolbarHover}" />
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter Property="Background" Value="LightGray" />
+                            <Setter Property="Foreground" Value="Gray" />
+                            <Setter Property="BorderBrush" Value="Gray"/>
+                            <Setter TargetName="CheckMark" Property="Opacity" Value="0.5" />
+                        </Trigger>
+
+                        <Trigger Property="IsPressed" Value="true">
+                            <!--<Setter TargetName="Border" Property="Background" Value="{StaticResource PressedBrush}" />
+                            <Setter TargetName="Border" Property="BorderBrush" Value="{StaticResource PressedBorderBrush}" />-->
+                        </Trigger>
+                 
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
     </Style>
 
     <Style x:Key="DropButtonStyle" TargetType="ToggleButton"  BasedOn="{StaticResource {x:Type ToggleButton}}">
