@@ -11,6 +11,12 @@ Download available from Microsoft:
 - [For Arm64 (Qualcomm or other)](https://aka.ms/dotnet/8.0/windowsdesktop-runtime-win-arm64.exe)
 
 
+## HandBrake 1.8.2
+
+### Windows
+- Fixed an issue where auto name wasn't triggering correclty with preset changes (#6159)
+
+
 ## HandBrake 1.8.1
 
 ### All platforms
