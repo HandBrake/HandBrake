@@ -2160,6 +2160,11 @@ namespace HandBrakeWPF.ViewModels
                 is_execute = true;
             }
 
+            if (!is_execute && option == ChangedOption.Preset)
+            {
+                is_execute = true;
+            }
+
             if (is_execute)
             {
                 this.Destination = AutoNameHelper.AutoName(this.CurrentTask, this.SelectedTitle?.DisplaySourceName, this.SelectedTitle?.DisplaySourceName, this.selectedPreset);
