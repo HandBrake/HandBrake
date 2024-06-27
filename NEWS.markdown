@@ -8,6 +8,12 @@ Before updating HandBrake, please make sure there are no pending encodes in the 
 Windows users, please make sure to install [Microsoft .NET Desktop Runtime version 8.0.x](https://dotnet.microsoft.com/en-us/download/dotnet/8.0). Read carefully: you need the **DESKTOP** runtime.
 
 
+## HandBrake 1.8.2
+
+### Windows
+- Fixed an issue where auto name wasn't triggering correclty with preset changes (#6159)
+
+
 ## HandBrake 1.8.1
 
 ### All platforms
