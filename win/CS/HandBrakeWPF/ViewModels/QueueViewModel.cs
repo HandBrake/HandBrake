@@ -16,6 +16,7 @@ namespace HandBrakeWPF.ViewModels
     using System.Diagnostics;
     using System.IO;
     using System.Linq;
+    using System.Threading.Tasks;
     using System.Windows;
     using System.Windows.Input;
 
@@ -32,6 +33,7 @@ namespace HandBrakeWPF.ViewModels
     using HandBrakeWPF.Services.Interfaces;
     using HandBrakeWPF.Services.Queue.Interfaces;
     using HandBrakeWPF.Services.Queue.Model;
+    using HandBrakeWPF.Utilities;
     using HandBrakeWPF.Utilities.FileDialogs;
     using HandBrakeWPF.ViewModels.Interfaces;
 
@@ -45,7 +47,11 @@ namespace HandBrakeWPF.ViewModels
         private QueueTask selectedTask;
         private bool isQueueRunning;
         private bool extendedQueueDisplay;
-        
+        private TaskExecutor queueStartRunner;
+        private bool isStartTimeEnabled;
+        private int startHour;
+        private int startMinute;
+
         public QueueViewModel(IUserSettingService userSettingService, IQueueService queueProcessor, IErrorService errorService)
         {
             this.userSettingService = userSettingService;
@@ -64,6 +70,8 @@ namespace HandBrakeWPF.ViewModels
             this.WhenDoneCommand = new SimpleRelayCommand<int>(this.WhenDone);
             this.RetryCommand = new SimpleRelayCommand<QueueTask>(this.RetryJob);
             this.EditCommand = new SimpleRelayCommand<QueueTask>(this.EditJob);
+
+            this.queueStartRunner = new TaskExecutor();
         }
 
         public event EventHandler SimpleViewChanged;
@@ -185,6 +193,53 @@ namespace HandBrakeWPF.ViewModels
                 if (value == this.extendedQueueDisplay) return;
                 this.extendedQueueDisplay = value;
                 this.NotifyOfPropertyChange(() => this.ExtendedQueueDisplay);
+            }
+        }
+
+        public int StartHour
+        {
+            get => this.startHour;
+            set
+            {
+                if (value == this.startHour)
+                {
+                    return;
+                }
+
+                this.startHour = value;
+                this.NotifyOfPropertyChange(() => this.StartHour);
+                this.UpdateDelayedQueueStart();
+            }
+        }
+
+        public int StartMinute
+        {
+            get => this.startMinute;
+            set
+            {
+                if (value == this.startMinute)
+                {
+                    return;
+                }
+
+                this.startMinute = value;
+                this.NotifyOfPropertyChange(() => this.StartMinute);
+                this.UpdateDelayedQueueStart();
+            }
+        }
+
+        public bool IsStartTimeEnabled
+        {
+            get => this.isStartTimeEnabled;
+            set
+            {
+                if (value == this.isStartTimeEnabled)
+                {
+                    return;
+                }
+
+                this.isStartTimeEnabled = value;
+                this.NotifyOfPropertyChange(() => this.IsStartTimeEnabled);
             }
         }
 
@@ -403,6 +458,42 @@ namespace HandBrakeWPF.ViewModels
             this.IsQueueRunning = true;
 
             this.queueProcessor.Start();
+        }
+
+        public void StartQueueAtTime()
+        {
+            this.IsStartTimeEnabled = true;
+            DateTime start = DateTime.Now.AddHours(1);
+            this.startHour = start.Hour;
+            this.startMinute = start.Minute;
+            this.NotifyOfPropertyChange(() => this.StartHour);
+            this.NotifyOfPropertyChange(() => this.StartMinute);
+
+            UpdateDelayedQueueStart();
+        }
+
+        public void UpdateDelayedQueueStart()
+        {
+            queueStartRunner.ScheduleTask(this.StartHour, StartMinute,
+                () =>
+                {
+                    queueStartRunner.CancelTask();
+                    ThreadHelper.OnUIThread(
+                        () =>
+                        {
+                            if (!this.IsQueueRunning)
+                            {
+                                this.queueProcessor.Start();
+                                this.IsStartTimeEnabled = false;
+                            }
+                        });
+                });
+        }
+
+        public void CancelDelayedStart()
+        {
+            this.IsStartTimeEnabled = false;
+            queueStartRunner.CancelTask();
         }
 
         public void ExportCli()

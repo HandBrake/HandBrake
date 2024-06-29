@@ -2840,4 +2840,10 @@ To allow multiple simultaneous encodes, turn on "Process Isolation" in Tools Men
   <data name="AddToQueue_RangeLimitError" xml:space="preserve">
     <value>Some titles could not be added to the queue due to being outside of the selected range limits.</value>
   </data>
+  <data name="QueueView_StartAtTime" xml:space="preserve">
+    <value>Start Later</value>
+  </data>
+  <data name="QueueView_QueueStartTime" xml:space="preserve">
+    <value>Queue Start Time:</value>
+  </data>
 </root>

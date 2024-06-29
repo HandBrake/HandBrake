@@ -6045,6 +6045,15 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Queue Start Time:.
+        /// </summary>
+        public static string QueueView_QueueStartTime {
+            get {
+                return ResourceManager.GetString("QueueView_QueueStartTime", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Reset.
         /// </summary>
         public static string QueueView_Reset {
@@ -6122,6 +6131,15 @@ namespace HandBrakeWPF.Properties {
         public static string QueueView_Start {
             get {
                 return ResourceManager.GetString("QueueView_Start", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Start Later.
+        /// </summary>
+        public static string QueueView_StartAtTime {
+            get {
+                return ResourceManager.GetString("QueueView_StartAtTime", resourceCulture);
             }
         }
         

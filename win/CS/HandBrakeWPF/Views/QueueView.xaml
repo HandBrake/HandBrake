@@ -14,6 +14,7 @@
         xmlns:queue="clr-namespace:HandBrakeWPF.Converters.Queue"
         xmlns:main="clr-namespace:HandBrakeWPF.Converters.Main"
         xmlns:model="clr-namespace:HandBrakeWPF.Services.Queue.Model"
+        xmlns:controls="clr-namespace:HandBrakeWPF.Controls"
         Title="{Binding Title}"
         Width="975"
         Height="600"
@@ -111,6 +112,7 @@
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
                     <RowDefinition Height="*" />
                     <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
@@ -128,13 +130,28 @@
                         <ColumnDefinition Width="Auto" />
                     </Grid.ColumnDefinitions>
 
-                    <Button Name="Start" AutomationProperties.Name="Start Queue" Command="{Binding RelayCommand}" CommandParameter="StartQueue" Grid.Column="0"
-                                IsEnabled="{Binding IsQueueRunning, Converter={StaticResource notBooleanConverter}}"
+                    <Button Name="Start" AutomationProperties.Name="Start Queue" Grid.Column="0"
+                                IsEnabled="{Binding IsQueueRunning, Converter={StaticResource notBooleanConverter}}" ContextMenuService.IsEnabled="False" PreviewMouseLeftButtonDown="Start_OnPreviewMouseLeftButtonDown"
                                 Visibility="{Binding IsQueueRunning, Converter={StaticResource boolToVisConverter}, ConverterParameter=true}">
+
                         <StackPanel Orientation="Horizontal">
-                            <Image Width="16" Height="16" Margin="2,0,0,0" Source="Images/Play.png"  />
-                            <Label Margin="5,0,5,0" VerticalAlignment="Center" Content="{x:Static Properties:Resources.QueueView_Start}" />
+                            <StackPanel Orientation="Horizontal">
+                                <Image Width="16" Height="16" Margin="2,0,0,0" Source="Images/Play.png"  />
+                                <Label Margin="5,0,5,0" VerticalAlignment="Center" Content="{x:Static Properties:Resources.QueueView_Start}" />
+                            </StackPanel>
+
+                            <Grid x:Name="dropdown" Background="Transparent" >
+                                <Path Height="5" Margin="4,2,2,0" VerticalAlignment="Center" HorizontalAlignment="Center"
+                                  Data="M 0 0 L 4 4 L 8 0 Z"
+                                  Fill="{DynamicResource ButtonGlyphBrush}" x:Name="dropdownArrow" />
+                            </Grid>
+
                         </StackPanel>
+                        <Button.ContextMenu>
+                            <ContextMenu>
+                                <MenuItem Header="{x:Static Properties:Resources.QueueView_StartAtTime}" Command="{Binding RelayCommand}" CommandParameter="StartQueueAtTime"/>
+                            </ContextMenu>
+                        </Button.ContextMenu>
                     </Button>
 
                     <StackPanel Grid.Column="1" Orientation="Horizontal">
@@ -193,7 +210,26 @@
                     </Menu>
                 </Grid>
 
-                <ListBox Tag="{Binding}" x:Name="queueJobs" Grid.Row="1" Margin="10,0,5,0"
+                <Border BorderThickness="1,1,1,0" BorderBrush="DarkGray" Grid.Row="1" Margin="10,0,5,0" SnapsToDevicePixels="True" Visibility="{Binding IsStartTimeEnabled, Converter={StaticResource boolToVisConverter}}" >
+                    <Grid HorizontalAlignment="Center" >
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+
+                        <!--  Settings  -->
+                        <StackPanel Orientation="Horizontal" Grid.Column="0" Margin="0,3,5,3" VerticalAlignment="Center" MinHeight="27">
+
+                            <TextBlock Text="{x:Static Properties:Resources.QueueView_QueueStartTime}" HorizontalAlignment="Left" Margin="0,0,10,0" VerticalAlignment="Center" />
+
+                            <controls:SimpleTimeControl Hour="{Binding StartHour, Mode=TwoWay}" Minute="{Binding StartMinute, Mode=TwoWay}" DataContext="{Binding}" Width="90" />
+
+                            <Button Content="{x:Static Properties:Resources.Generic_Cancel}" Margin="10,0,0,0" Command="{Binding RelayCommand}" CommandParameter="CancelDelayedStart" />
+                        </StackPanel>
+                    </Grid>
+                </Border>
+
+                <ListBox Tag="{Binding}" x:Name="queueJobs" Grid.Row="2" Margin="10,0,5,0"
                              dd:DragDrop.DropHandler="{Binding}"
                              dd:DragDrop.IsDragSource="True"
                              dd:DragDrop.IsDropTarget="True"
@@ -336,7 +372,7 @@
                     </ListBox.ItemTemplate>
                 </ListBox>
 
-                <Border BorderThickness="1,0,1,1" BorderBrush="DarkGray" Grid.Row="2" Margin="10,0,5,10" SnapsToDevicePixels="True" >
+                <Border BorderThickness="1,0,1,1" BorderBrush="DarkGray" Grid.Row="3" Margin="10,0,5,10" SnapsToDevicePixels="True" >
                     <Menu HorizontalAlignment="Center" VerticalAlignment="Center" Background="Transparent"   
                               AutomationProperties.Name="{x:Static Properties:Resources.QueueView_WhenDone}">
                         <MenuItem>
