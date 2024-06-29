@@ -3,7 +3,7 @@ __deps__ := FREETYPE
 $(eval $(call import.MODULE.defs,HARFBUZZ,harfbuzz,$(__deps__)))
 $(eval $(call import.CONTRIB.defs,HARFBUZZ))
 
-+HARFBUZZ.FETCH.url     = https://github.com/HandBrake/HandBrake-contribs2/releases/download/contribs/harfbuzz-9.0.0.tar.xz
++HARFBUZZ.FETCH.url     = https://github.com/HandBrake/HandBrake-contribs/releases/download/contribs2/harfbuzz-9.0.0.tar.xz
 +HARFBUZZ.FETCH.url    += https://github.com/harfbuzz/harfbuzz/releases/download/9.0.0/harfbuzz-9.0.0.tar.xz
 +HARFBUZZ.FETCH.sha256  = a41b272ceeb920c57263ec851604542d9ec85ee3030506d94662067c7b6ab89e
 
