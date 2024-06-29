@@ -25,6 +25,7 @@ HARFBUZZ.GCC.args.extra += $(HARFBUZZ.GCC.args.O.$(HARFBUZZ.GCC.O))
 
 ifeq (1,$(HOST.cross))
     ifeq (mingw,$(HOST.system))
+        HARFBUZZ.BUILD.env        = export MSYS=winsymlinks:lnk && 
         HARFBUZZ.CONFIGURE.extra += -DWIN32=ON -DMINGW=ON
         HARFBUZZ.CONFIGURE.extra += -DCMAKE_SYSTEM_NAME=Windows
         HARFBUZZ.CONFIGURE.extra += -DCMAKE_C_COMPILER=$(HARFBUZZ.GCC.gcc)
