@@ -95,6 +95,7 @@ namespace HandBrakeWPF.Instance
                     workerProcess.BeginOutputReadLine();
                     workerProcess.BeginErrorReadLine();
 
+
                     // Set Process Priority
                     switch ((ProcessPriority)this.userSettingService.GetUserSetting<int>(UserSettingConstants.ProcessPriorityInt))
                     {

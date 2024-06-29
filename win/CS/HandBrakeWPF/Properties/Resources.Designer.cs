@@ -257,6 +257,15 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Some titles could not be added to the queue due to being outside of the selected range limits..
+        /// </summary>
+        public static string AddToQueue_RangeLimitError {
+            get {
+                return ResourceManager.GetString("AddToQueue_RangeLimitError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Are you sure?.
         /// </summary>
         public static string AreYouSure {
@@ -5554,6 +5563,33 @@ namespace HandBrakeWPF.Properties {
         public static string QueueSelectionView_ChooseTitles {
             get {
                 return ResourceManager.GetString("QueueSelectionView_ChooseTitles", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Range Limits:.
+        /// </summary>
+        public static string QueueSelectionView_RangeLimits {
+            get {
+                return ResourceManager.GetString("QueueSelectionView_RangeLimits", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Limit the length of the titles added to the queue..
+        /// </summary>
+        public static string QueueSelectionView_RangeLimitsDesc {
+            get {
+                return ResourceManager.GetString("QueueSelectionView_RangeLimitsDesc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enable Range Limits.
+        /// </summary>
+        public static string QueueSelectionView_RangeLimitsEnable {
+            get {
+                return ResourceManager.GetString("QueueSelectionView_RangeLimitsEnable", resourceCulture);
             }
         }
         

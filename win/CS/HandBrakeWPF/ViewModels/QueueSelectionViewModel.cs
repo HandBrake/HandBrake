@@ -15,7 +15,9 @@ namespace HandBrakeWPF.ViewModels
     using System.Linq;
 
     using HandBrakeWPF.Model;
+    using HandBrakeWPF.Model.Queue;
     using HandBrakeWPF.Properties;
+    using HandBrakeWPF.Services.Encode.Model.Models;
     using HandBrakeWPF.Services.Interfaces;
     using HandBrakeWPF.Services.Presets.Model;
     using HandBrakeWPF.Services.Scan.Model;
@@ -28,10 +30,10 @@ namespace HandBrakeWPF.ViewModels
     {
         private readonly IErrorService errorService;
         private readonly IUserSettingService userSettingService;
-        private Action<IEnumerable<SelectionTitle>> addToQueue;
+        private Action<IEnumerable<SelectionTitle>, QueueAddRangeLimit> addToQueue;
+        private BindingList<int> startEndRangeItems1;
 
         private string currentPreset;
-
         public bool titleDesc = true;
         public bool durationDesc = true;
         public bool nameDesc = true;
@@ -51,6 +53,17 @@ namespace HandBrakeWPF.ViewModels
             this.userSettingService = userSettingService;
             this.Title = Resources.QueueSelectionViewModel_AddToQueue;
             this.TitleList = new BindingList<SelectionTitle>();
+            this.RangeLimits = new QueueAddRangeLimit();
+
+
+            List<int>  startEndRangeItems = new List<int>();
+
+            for (int i = 1; i <= 99; i++)
+            {
+                startEndRangeItems.Add(i);
+            }
+
+            this.StartEndRangeItems = new BindingList<int>(startEndRangeItems);
         }
 
         /// <summary>
@@ -94,6 +107,24 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
+        public QueueAddRangeLimit RangeLimits { get; set; }
+
+        public BindingList<PointToPointMode> RangeMode { get; } = new BindingList<PointToPointMode> { PointToPointMode.Chapters, PointToPointMode.Seconds, PointToPointMode.Frames };
+
+        public BindingList<int> StartEndRangeItems
+        {
+            get => this.startEndRangeItems1;
+            private set
+            {
+                if (Equals(value, this.startEndRangeItems1))
+                {
+                    return;
+                }
+
+                this.startEndRangeItems1 = value;
+                this.NotifyOfPropertyChange(() => this.StartEndRangeItems);
+            }
+        }
 
         public void OrderByTitle()
         {
@@ -178,7 +209,7 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         public void Add()
         {
-            this.addToQueue(this.TitleList.Where(c => c.IsSelected));
+            this.addToQueue(this.TitleList.Where(c => c.IsSelected), this.RangeLimits);
             this.Close();
         }
 
@@ -211,7 +242,7 @@ namespace HandBrakeWPF.ViewModels
         /// <param name="preset">
         /// The preset.
         /// </param>
-        public void Setup(Source scannedSource, Action<IEnumerable<SelectionTitle>> addAction, Preset preset)
+        public void Setup(Source scannedSource, Action<IEnumerable<SelectionTitle>, QueueAddRangeLimit> addAction, Preset preset)
         {
             this.TitleList.Clear();
             this.addToQueue = addAction;
