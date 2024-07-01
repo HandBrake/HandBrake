@@ -238,8 +238,8 @@ static hb_dict_t* hb_title_to_dict_internal( hb_title_t *title )
 
     dict = json_pack_ex(&error, 0,
     "{"
-        // Type, Path, Name, Index, Playlist, AngleCount
-        "s:o, s:o, s:o, s:o, s:o, s:o,"
+        // Type, Path, Name, Index, KeepDuplicateTitles, Playlist, AngleCount
+        "s:o, s:o, s:o, s:o, s:o, s:o, s:o,"
         // Duration {Ticks, Hours, Minutes, Seconds}
         "s:{s:o, s:o, s:o, s:o},"
         // Geometry {Width, Height, PAR {Num, Den},
@@ -261,6 +261,7 @@ static hb_dict_t* hb_title_to_dict_internal( hb_title_t *title )
     "Path",                 hb_value_string(title->path),
     "Name",                 hb_value_string(title->name),
     "Index",                hb_value_int(title->index),
+    "KeepDuplicateTitles",  hb_value_bool(title->keep_duplicate_titles),
     "Playlist",             hb_value_int(title->playlist),
     "AngleCount",           hb_value_int(title->angle_count),
     "Duration",
@@ -594,8 +595,8 @@ hb_dict_t* hb_job_to_dict( const hb_job_t * job )
     // Destination {Mux, InlineParameterSets, AlignAVStart,
     //              ChapterMarkers, ChapterList}
     "s:{s:o, s:o, s:o, s:o, s:[]},"
-    // Source {Path, Title, Angle, HWDecode}
-    "s:{s:o, s:o, s:o, s:o},"
+    // Source {Path, Title, Angle, HWDecode, KeepDuplicateTitles}
+    "s:{s:o, s:o, s:o, s:o, s:o},"
     // PAR {Num, Den}
     "s:{s:o, s:o},"
     // Video {Encoder, HardwareDecode, QSV {Decode, AsyncDepth, AdapterIndex}}
@@ -621,6 +622,7 @@ hb_dict_t* hb_job_to_dict( const hb_job_t * job )
             "Title",            hb_value_int(job->title->index),
             "Angle",            hb_value_int(job->angle),
             "HWDecode",         hb_value_int(job->hw_decode),
+            "KeepDuplicateTitles", hb_value_bool(job->keep_duplicate_titles),
         "PAR",
             "Num",              hb_value_int(job->par.num),
             "Den",              hb_value_int(job->par.den),
@@ -1014,14 +1016,15 @@ void hb_json_job_scan( hb_handle_t * h, const char * json_job )
 
     dict = hb_value_json(json_job);
 
-    int title_index, hw_decode;
+    int title_index, hw_decode, keep_duplicate_titles;
     const char *path = NULL;
 
-    result = json_unpack_ex(dict, &error, 0, "{s:{s:s, s:i, s?i}}",
+    result = json_unpack_ex(dict, &error, 0, "{s:{s:s, s:i, s?i, s?b}}",
                             "Source",
                                 "Path",     unpack_s(&path),
                                 "Title",    unpack_i(&title_index),
-                                "HWDecode", unpack_i(&hw_decode)
+                                "HWDecode", unpack_i(&hw_decode),
+                                "KeepDuplicateTitles", unpack_b(&keep_duplicate_titles)
                            );
     if (result < 0)
     {
@@ -1034,7 +1037,7 @@ void hb_json_job_scan( hb_handle_t * h, const char * json_job )
     // enabled during scan.  So enable it here.
     hb_list_t *file_paths = hb_list_init();
     hb_list_add(file_paths, (char *)path);
-    hb_scan(h, file_paths, title_index, -1, 0, 0, 0, 0, NULL, hw_decode);
+    hb_scan(h, file_paths, title_index, -1, 0, 0, 0, 0, NULL, hw_decode, keep_duplicate_titles);
     hb_list_close(&file_paths);
 
     // Wait for scan to complete
@@ -1127,8 +1130,8 @@ hb_job_t* hb_dict_to_job( hb_handle_t * h, hb_dict_t *dict )
     //              ChapterMarkers, ChapterList,
     //              Options {Optimize, IpodAtom}}
     "s:{s?s, s:o, s?b, s?b, s:b, s?o s?{s?b, s?b}},"
-    // Source {Angle, Range {Type, Start, End, SeekPoints}}
-    "s:{s?i, s?{s:s, s?I, s?I, s?I}},"
+    // Source {Angle, KeepDuplicateTitles, Range {Type, Start, End, SeekPoints}}
+    "s:{s?i, s?b, s?{s:s, s?I, s?I, s?I}},"
     // PAR {Num, Den}
     "s?{s:i, s:i},"
     // Video {Codec, Quality, Bitrate, Preset, Tune, Profile, Level, Options
@@ -1173,6 +1176,7 @@ hb_job_t* hb_dict_to_job( hb_handle_t * h, hb_dict_t *dict )
                 "IpodAtom",         unpack_b(&job->ipod_atom),
         "Source",
             "Angle",                unpack_i(&job->angle),
+            "KeepDuplicateTitles",  unpack_b(&job->keep_duplicate_titles),
             "Range",
                 "Type",             unpack_s(&range_type),
                 "Start",            unpack_I(&range_start),

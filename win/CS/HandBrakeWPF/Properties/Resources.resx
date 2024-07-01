@@ -1227,6 +1227,9 @@ Hint: File overwrite behaviour can be controlled in preferences. </value>
   <data name="Options_MinTitleScanLength" xml:space="preserve">
     <value>Minimum DVD and Blu-ray title duration in seconds. Shorter titles will be skipped:</value>
   </data>
+  <data name="Options_KeepDuplicateTitles" xml:space="preserve">
+    <value>Keep duplicate titles on Blu-ray sources (Requires Restart)</value>	
+  </data>
   <data name="Options_MP4FileExtension" xml:space="preserve">
     <value>MP4 File Extension:</value>
   </data>

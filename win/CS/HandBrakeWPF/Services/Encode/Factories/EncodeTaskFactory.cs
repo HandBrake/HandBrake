@@ -119,7 +119,8 @@ namespace HandBrakeWPF.Services.Encode.Factories
                 Range = range,
                 Angle = job.Angle,
                 Path = job.Source,
-                HWDecode = hwDecode
+                HWDecode = hwDecode,
+                KeepDuplicateTitles = job.KeepDuplicateTitles
             };
             return source;
         }

@@ -37,5 +37,7 @@ namespace HandBrake.Worker.Routing.Commands
         public int Mode { get; set; }
 
         public int HwDecode { get; set; }
+
+        public bool KeepDuplicateTitles { get; set; }
     }
 }

@@ -4352,7 +4352,7 @@ static void job_setup(hb_job_t * job, hb_title_t * title)
     job->chapter_start = 1;
     job->chapter_end   = hb_list_count( title->list_chapter );
     job->list_chapter = hb_chapter_list_copy( title->list_chapter );
-
+    job->keep_duplicate_titles = title->keep_duplicate_titles;
     /* Autocrop by default. Gnark gnark */
     memcpy( job->crop, title->crop, 4 * sizeof( int ) );
 

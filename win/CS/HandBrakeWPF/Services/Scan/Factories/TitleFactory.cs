@@ -47,6 +47,7 @@ namespace HandBrakeWPF.Services.Scan.Factories
             Title converted = new Title
             {
                 TitleNumber = title.Index,
+                KeepDuplicateTitles = title.KeepDuplicateTitles,
                 Duration = new TimeSpan(0, title.Duration.Hours, title.Duration.Minutes, title.Duration.Seconds),
                 Resolution = new Size(title.Geometry.Width, title.Geometry.Height),
                 AngleCount = title.AngleCount,

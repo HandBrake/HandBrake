@@ -209,6 +209,7 @@ static int      qsv_adapter        = -1;
 static int      qsv_decode         = -1;
 #endif
 static int      hw_decode          = -1;
+static int      keep_duplicate_titles = 0;
 
 /* Exit cleanly on Ctrl-C */
 static volatile hb_error_code done_error = HB_ERROR_NONE;
@@ -603,7 +604,7 @@ int main( int argc, char ** argv )
         hb_scan(h, file_paths, titleindex, preview_count, store_previews,
                 min_title_duration * 90000LL,
                 crop_threshold_frames, crop_threshold_pixels,
-                NULL, hw_decode);
+                NULL, hw_decode, keep_duplicate_titles);
         hb_list_close(&file_paths);
 
         EventLoop(h, preset_dict);
@@ -1358,6 +1359,8 @@ static void ShowHelp(void)
 "                           Shorter titles will be ignored (default: 10).\n"
 "       --scan              Scan selected title only.\n"
 "       --main-feature      Detect and select the main feature title.\n"
+"       --keep-duplicate-titles\n"
+"                           Keep duplicate titles when scanning (Blu-ray only)\n"
 "   -c, --chapters <string> Select chapters (e.g. \"1-3\" for chapters\n"
 "                           1 to 3 or \"3\" for chapter 3 only,\n"
 "                           default: all chapters)\n"
@@ -2229,6 +2232,7 @@ static int ParseOptions( int argc, char ** argv )
     #define CROP_THRESHOLD_FRAMES         329
     #define CROP_MODE                     330
     #define HW_DECODE                     331
+    #define KEEP_DUPLICATE_TITLES         332
     
     for( ;; )
     {
@@ -2249,6 +2253,7 @@ static int ParseOptions( int argc, char ** argv )
 #endif
             { "disable-hw-decoding", no_argument,        &hw_decode,  0, },
             { "enable-hw-decoding",  required_argument,  NULL,  HW_DECODE, },
+            { "keep-duplicate-titles", no_argument,      NULL, KEEP_DUPLICATE_TITLES },
 
             { "format",      required_argument, NULL,    'f' },
             { "input",       required_argument, NULL,    'i' },
@@ -3219,6 +3224,9 @@ static int ParseOptions( int argc, char ** argv )
                         hw_decode = 0;
                     }
                 } break;
+            case KEEP_DUPLICATE_TITLES:
+                keep_duplicate_titles = 1;
+                break;
             case ':':
                 fprintf( stderr, "missing parameter (%s)\n", argv[cur_optind] );
                 return -1;
@@ -4939,9 +4947,10 @@ PrepareJob(hb_handle_t *h, hb_title_t *title, hb_dict_t *preset_dict)
                     hb_value_int(range_seek_points));
     }
 
+    hb_dict_t *source_dict = hb_dict_get(job_dict, "Source");
+
     if (angle)
     {
-        hb_dict_t *source_dict = hb_dict_get(job_dict, "Source");
         hb_dict_set(source_dict, "Angle", hb_value_int(angle));
     }
 

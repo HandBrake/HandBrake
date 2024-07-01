@@ -74,6 +74,8 @@ namespace HandBrake.Interop.Interop.Json.Scan
         /// </summary>
         public int Index { get; set; }
 
+        public bool KeepDuplicateTitles { get; set; }
+
         /// <summary>
         /// Gets or sets a value indicating whether interlace detected.
         /// </summary>

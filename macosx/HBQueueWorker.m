@@ -204,6 +204,7 @@ NSString * const HBQueueWorkerItemNotificationItemKey = @"HBQueueWorkerItemNotif
            minDuration:0
           keepPreviews:NO
        hardwareDecoder:[NSUserDefaults.standardUserDefaults boolForKey:HBUseHardwareDecoder]
+       keepDuplicateTitles:item.job.keepDuplicateTitles
        progressHandler:progressHandler
      completionHandler:completionHandler];
 }

@@ -82,7 +82,7 @@ namespace HandBrake.Interop.Interop.Interfaces
         /// <param name="hwDecode">
         /// From NativeConstants, allow for Hardware decode probing during scans.
         /// </param>
-        void StartScan(List<string> paths, int previewCount, TimeSpan minDuration, int titleIndex, List<string> excludedExtensions, int hwDecode);
+        void StartScan(List<string> paths, int previewCount, TimeSpan minDuration, int titleIndex, List<string> excludedExtensions, int hwDecode, bool keepDuplicateTitles);
 
         /// <summary>
         /// Stop any running scans
