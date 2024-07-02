@@ -913,6 +913,8 @@ static int decavcodecaBSInfo( hb_work_object_t *w, const hb_buffer_t *buf,
         {
             int parse_len;
 
+            // Start with a clean error slate on each parsing iteration
+            avcodec_result = 0;
             if (parser != NULL)
             {
                 parse_len = av_parser_parse2(parser, context,
@@ -938,6 +940,10 @@ static int decavcodecaBSInfo( hb_work_object_t *w, const hb_buffer_t *buf,
             avp->pts  = buf->s.start;
             avp->dts  = AV_NOPTS_VALUE;
 
+            // Note: The first buffer returned by av_parser_parse2() may
+            // not be aligned to start of valid codec data which can cause
+            // the first call to avcodec_send_packet() to fail with
+            // AVERROR_INVALIDDATA.
             avcodec_result = avcodec_send_packet(context, avp);
             if (avcodec_result < 0 && avcodec_result != AVERROR_EOF)
             {
