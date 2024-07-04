@@ -192,9 +192,9 @@ Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 0211
     <value>HandBrake 已經在編碼。</value>
   </data>
   <data name="Main_DuplicateDestinationOnQueue" xml:space="preserve">
-    <value>There are jobs on the queue with the same destination path. Please choose a different path for this job.
- 
-You may wish to configure the automatic file naming options in "Tools Menu -&gt; Preferences -&gt; Output Files"
+    <value>佇列中有目的地路徑相同的工作。請為此工作選擇另一個路徑。
+
+您可能會希望到「工具選單→偏好設定→輸出檔案」設定自動檔案名稱選項。
 </value>
   </data>
   <data name="Main_JobsPending_addon" xml:space="preserve">
@@ -802,7 +802,7 @@ Hint: File overwrite behaviour can be controlled in preferences. </value>
     <value>章節名稱</value>
   </data>
   <data name="ChaptersView_ChapterNumber" xml:space="preserve">
-    <value>Chapter</value>
+    <value>章節</value>
   </data>
   <data name="ChaptersView_CreateChapterMarkers" xml:space="preserve">
     <value>建立章節標記點</value>
@@ -1120,7 +1120,7 @@ Hint: File overwrite behaviour can be controlled in preferences. </value>
     <value>允許使用 Intel QuickSync 編碼器</value>
   </data>
   <data name="OptionsView_EnableVceEncoding" xml:space="preserve">
-    <value>Allow use of the AMD VCN Encoders</value>
+    <value>允許使用 AMD VCN 編碼器</value>
   </data>
   <data name="OptionsView_InvalidFileFormatChars" xml:space="preserve">
     <value>輸入的檔案格式包含無效字元。這些字元已被移除。</value>
@@ -1207,7 +1207,7 @@ Hint: File overwrite behaviour can be controlled in preferences. </value>
     <value>紀錄檔詳盡度：</value>
   </data>
   <data name="Options_LogPath" xml:space="preserve">
-    <value>Path:</value>
+    <value>路徑：</value>
   </data>
   <data name="Options_LowDiskspaceSize" xml:space="preserve">
     <value>若磁碟空間不足，暫停佇列</value>
@@ -2126,7 +2126,7 @@ You can drag/drop or enter the text above.</value>
     <value>連接埠號必須介於 5000 及 32767</value>
   </data>
   <data name="SourceSelection_UpdateAvailable" xml:space="preserve">
-    <value>A new version is available!</value>
+    <value>有新版本可供使用！</value>
   </data>
   <data name="About_Copyright" xml:space="preserve">
     <value>Copyright (C) 2003-2024 The HandBrake Team</value>
@@ -2607,7 +2607,7 @@ You can drag/drop or enter the text above.</value>
     <value>Prefers the use of multiple media engines to speed up a single encode where supported. Disable to allow load balancing multiple parallel encodes across media engines.</value>
   </data>
   <data name="MainView_OpenHandBrake" xml:space="preserve">
-    <value>Open HandBrake</value>
+    <value>開啟 HandBrake</value>
   </data>
   <data name="Startup_UnableToStartInfo" xml:space="preserve">
     <value>Hardware encoding support has been disabled as it is a common cause of start-up issues.
@@ -2617,19 +2617,19 @@ You can drag/drop or enter the text above.</value>
 Hardware encoding support can be re-enabled in preferences. </value>
   </data>
   <data name="Startup_UnableToStart" xml:space="preserve">
-    <value>HandBrake was unable to start.</value>
+    <value>HandBrake 無法啟動。</value>
   </data>
   <data name="OptionsView_ResetSafeMode" xml:space="preserve">
     <value>Reset Safe Mode</value>
   </data>
   <data name="OptionsView_ResetSafeModeMessage" xml:space="preserve">
-    <value>Please restart HandBrake.</value>
+    <value>請重新啟動 HandBrake。</value>
   </data>
   <data name="Debug_QueueDataExport" xml:space="preserve">
-    <value>Export Queue Statistics Data (csv)</value>
+    <value>匯出佇列統計資料 (CSV)</value>
   </data>
   <data name="Debug_QueueExportDataDone" xml:space="preserve">
-    <value>Export Done!</value>
+    <value>匯出完成！</value>
   </data>
   <data name="Debug_QueueSweep_NotSetup" xml:space="preserve">
     <value>You must first scan a source and have an initial destination directory set</value>
@@ -2641,9 +2641,9 @@ Hardware encoding support can be re-enabled in preferences. </value>
     <value>Info</value>
   </data>
   <data name="SubtitleView_NoSubtitlesAdded" xml:space="preserve">
-    <value>There were no subtitle tracks added. 
+    <value>未新增字幕軌。
 
-This may be due to limitations of the file container you have selected. Please see our subtitle help documentation for more information.</value>
+這可能是源自於您選取的檔案容器的限制。更多資訊請見我們的字幕說明文件。</value>
   </data>
   <data name="DarkTheme_None" xml:space="preserve">
     <value>無</value>
@@ -2706,7 +2706,7 @@ Alternatively, check the "Use External Player" checkbox below.</value>
     <value>Pass {0} of {1}, {2:00.00}%, {3:000.0} fps, avg {4:000.0} fps, ETA: {5}</value>
   </data>
   <data name="QueueViewModel_ShortSubScanStatus" xml:space="preserve">
-    <value>Scanning for Subtitles {0:00.00}%, ETA: {1}</value>
+    <value>正在掃描字幕 {0:00.00}%，預計剩餘時間：{1}</value>
   </data>
   <data name="QueueView_ExtendedQueueDisplay" xml:space="preserve">
     <value>Extend Queue Info</value>
@@ -2809,5 +2809,32 @@ To allow multiple simultaneous encodes, turn on "Process Isolation" in Tools Men
   </data>
   <data name="VideoView_LosslessEncodeOnly" xml:space="preserve">
     <value>Lossless encoding only.</value>
+  </data>
+  <data name="MainView_HideClassicMenu" xml:space="preserve">
+    <value>Hide Classic Menu</value>
+  </data>
+  <data name="MainView_ShowClassicMenu" xml:space="preserve">
+    <value>Show Classic Menu</value>
+  </data>
+  <data name="OptionsViewVideo_UnsupportedIntelDriver" xml:space="preserve">
+    <value>(Warning: Unsupported Driver Detected! - Update Recommended)</value>
+  </data>
+  <data name="QueueSelectionView_RangeLimits" xml:space="preserve">
+    <value>Range Limits:</value>
+  </data>
+  <data name="QueueSelectionView_RangeLimitsDesc" xml:space="preserve">
+    <value>Limit the length of the titles added to the queue.</value>
+  </data>
+  <data name="QueueSelectionView_RangeLimitsEnable" xml:space="preserve">
+    <value>Enable Range Limits</value>
+  </data>
+  <data name="AddToQueue_RangeLimitError" xml:space="preserve">
+    <value>Some titles could not be added to the queue due to being outside of the selected range limits.</value>
+  </data>
+  <data name="QueueView_StartAtTime" xml:space="preserve">
+    <value>Start Later</value>
+  </data>
+  <data name="QueueView_QueueStartTime" xml:space="preserve">
+    <value>Queue Start Time:</value>
   </data>
 </root>
