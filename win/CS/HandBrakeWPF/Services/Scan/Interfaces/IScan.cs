@@ -93,10 +93,11 @@ namespace HandBrakeWPF.Services.Scan.Interfaces
         /// <param name="preview">
         /// The preview.
         /// </param>
+        /// <param name="showCropBoundaries">Render crop boundary borders on the preview image.</param>
         /// <returns>
         /// The <see cref="BitmapImage"/>.
         /// </returns>
-        BitmapImage GetPreview(EncodeTask task, int preview);
+        BitmapImage GetPreview(EncodeTask task, int preview, bool showCropBoundaries);
 
         /// <summary>
         /// Kill the scan
