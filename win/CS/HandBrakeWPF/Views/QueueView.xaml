@@ -360,7 +360,7 @@
                                             </Image.LayoutTransform>
                                         </Image>
 
-                                        <TextBlock Text="Shutting Down Encode ..." Margin="10" Grid.Column="1" />
+                                        <TextBlock Text="{x:Static Properties:Resources.QueueView_EncodeShutdown}" Margin="10" Grid.Column="1" />
                                     </Grid>
 
 

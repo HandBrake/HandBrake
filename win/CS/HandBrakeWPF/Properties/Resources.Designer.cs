@@ -5775,6 +5775,15 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Shutting Down Encode ....
+        /// </summary>
+        public static string QueueView_EncodeShutdown {
+            get {
+                return ResourceManager.GetString("QueueView_EncodeShutdown", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to End Time:.
         /// </summary>
         public static string QueueView_EndTime {

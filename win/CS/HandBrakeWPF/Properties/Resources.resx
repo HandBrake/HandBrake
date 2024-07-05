@@ -2846,4 +2846,7 @@ To allow multiple simultaneous encodes, turn on "Process Isolation" in Tools Men
   <data name="QueueView_QueueStartTime" xml:space="preserve">
     <value>Queue Start Time:</value>
   </data>
+  <data name="QueueView_EncodeShutdown" xml:space="preserve">
+    <value>Shutting Down Encode ...</value>
+  </data>
 </root>
