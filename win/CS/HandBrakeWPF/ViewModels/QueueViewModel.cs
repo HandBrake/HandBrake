@@ -462,6 +462,14 @@ namespace HandBrakeWPF.ViewModels
 
         public void StartQueueAtTime()
         {
+            // Check for Pending Jobs
+            if (!this.QueueTasks.Any(a => a.Status == QueueItemStatus.Waiting || a.Status == QueueItemStatus.InProgress || a.Status == QueueItemStatus.Paused))
+            {
+                this.errorService.ShowMessageBox(
+                    Resources.QueueViewModel_NoPendingJobs, Resources.Error, MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+
             this.IsStartTimeEnabled = true;
             DateTime start = DateTime.Now.AddHours(1);
             this.startHour = start.Hour;
