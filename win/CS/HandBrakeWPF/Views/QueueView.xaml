@@ -277,74 +277,93 @@
                                 </Grid.RowDefinitions>
 
                                 <Grid  Visibility="{Binding TaskType, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter={x:Static model:QueueTaskType.EncodeTask}}" >
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="40" />
-                                        <ColumnDefinition Width="*" />
-                                        <ColumnDefinition Width="Auto" />
-                                    </Grid.ColumnDefinitions>
-
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition Height="Auto" />
-                                        <RowDefinition Height="Auto" />
-                                    </Grid.RowDefinitions>
-
-                                    <!--  Marker  -->
-                                    <Image Grid.Column="0" Width="16" Height="16" SnapsToDevicePixels="True" Style="{StaticResource RotatingImageStyle}">
-                                        <Image.LayoutTransform>
-                                            <RotateTransform CenterX="8" CenterY="8" Angle="0"/>
-                                        </Image.LayoutTransform>
-                                    </Image>
-
-                                    <!--  Settings  -->
-                                    <Grid Grid.Column="1" Margin="0,3,5,3" VerticalAlignment="Center" MinHeight="27">
-                                        <Grid.RowDefinitions>
-                                            <RowDefinition Height="Auto" />
-                                        </Grid.RowDefinitions>
-
+                                    <Grid Visibility="{Binding IsShuttingDown, Converter={StaticResource boolToVisConverter}, ConverterParameter=true}">
                                         <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="40" />
                                             <ColumnDefinition Width="*" />
                                             <ColumnDefinition Width="Auto" />
                                         </Grid.ColumnDefinitions>
 
-                                        <Grid Grid.Row="0" Grid.Column="0"  VerticalAlignment="Center">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto" />
+                                            <RowDefinition Height="Auto" />
+                                        </Grid.RowDefinitions>
+
+                                        <!--  Marker  -->
+                                        <Image Grid.Column="0" Width="16" Height="16" SnapsToDevicePixels="True" Style="{StaticResource RotatingImageStyle}">
+                                            <Image.LayoutTransform>
+                                                <RotateTransform CenterX="8" CenterY="8" Angle="0"/>
+                                            </Image.LayoutTransform>
+                                        </Image>
+
+                                        <!--  Settings  -->
+                                        <Grid Grid.Column="1" Margin="0,3,5,3" VerticalAlignment="Center" MinHeight="27">
                                             <Grid.RowDefinitions>
                                                 <RowDefinition Height="Auto" />
-                                                <RowDefinition Height="Auto" />
-                                                <RowDefinition Height="Auto" />
                                             </Grid.RowDefinitions>
-                                            <TextBlock Text="{Binding Task.Destination, Converter={StaticResource filePathToFilenameConverter}}"
-                                                       TextWrapping="Wrap" VerticalAlignment="Center" Margin="0,0,5,0" Grid.Row="0"
-                                                       Style="{StaticResource subHeaderSmall}"/>
 
-                                            <ProgressBar Minimum="0" Height="4" Maximum="100" Grid.Row="1" Name="pbStatus" HorizontalAlignment="Stretch" Margin="0,8,10,0"
-                                                     Value="{Binding JobProgress.ProgressValue}" IsIndeterminate="{Binding JobProgress.IntermediateProgress}"
-                                                     Visibility="{Binding Status, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter={x:Static model:QueueItemStatus.InProgress}}" />
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="*" />
+                                                <ColumnDefinition Width="Auto" />
+                                            </Grid.ColumnDefinitions>
 
-                                            <!-- Extended Info -->
-                                            <Grid Visibility="{Binding DataContext.ExtendedQueueDisplay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}, Converter={StaticResource boolToVisConverter}}"
-                                                  Grid.Row="2">
+                                            <Grid Grid.Row="0" Grid.Column="0"  VerticalAlignment="Center">
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition Height="Auto" />
+                                                    <RowDefinition Height="Auto" />
+                                                    <RowDefinition Height="Auto" />
+                                                </Grid.RowDefinitions>
+                                                <TextBlock Text="{Binding Task.Destination, Converter={StaticResource filePathToFilenameConverter}}" TextWrapping="Wrap" VerticalAlignment="Center" Margin="0,0,5,0" Grid.Row="0" 
+                                                           Style="{StaticResource subHeaderSmall}"/>
 
-                                                <TextBlock Text="{Binding JobProgress.JobStatusShort}" TextWrapping="WrapWithOverflow" VerticalAlignment="Top" TextTrimming="CharacterEllipsis"
-                                                           Visibility="{Binding Status, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter={x:Static model:QueueItemStatus.InProgress}}"
-                                                           Margin="0,4,0,2" Style="{StaticResource subTextSmall}" />
+                                                <ProgressBar Minimum="0" Height="4" Maximum="100" Grid.Row="1" Name="pbStatus" HorizontalAlignment="Stretch" Margin="0,8,10,0"
+                                                             Value="{Binding JobProgress.ProgressValue}" IsIndeterminate="{Binding JobProgress.IntermediateProgress}"
+                                                             Visibility="{Binding Status, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter={x:Static model:QueueItemStatus.InProgress}}" />
 
-                                                <TextBlock Text="{Binding Statistics.SummaryCompleteStats}" TextWrapping="WrapWithOverflow" VerticalAlignment="Top" TextTrimming="CharacterEllipsis"
-                                                           Visibility="{Binding Status, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter={x:Static model:QueueItemStatus.Completed}}"
-                                                           Margin="0,4,0,2" Style="{StaticResource subTextSmall}" />
+                                                <!-- Extended Info -->
+                                                <Grid Visibility="{Binding DataContext.ExtendedQueueDisplay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}, Converter={StaticResource boolToVisConverter}}"
+                                                      Grid.Row="2">
+
+                                                    <TextBlock Text="{Binding JobProgress.JobStatusShort}" TextWrapping="WrapWithOverflow" VerticalAlignment="Top" TextTrimming="CharacterEllipsis"
+                                                               Visibility="{Binding Status, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter={x:Static model:QueueItemStatus.InProgress}}"
+                                                               Margin="0,4,0,2" Style="{StaticResource subTextSmall}" />
+
+                                                    <TextBlock Text="{Binding Statistics.SummaryCompleteStats}" TextWrapping="WrapWithOverflow" VerticalAlignment="Top" TextTrimming="CharacterEllipsis"
+                                                               Visibility="{Binding Status, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter={x:Static model:QueueItemStatus.Completed}}"
+                                                               Margin="0,4,0,2" Style="{StaticResource subTextSmall}" />
+                                                </Grid>
                                             </Grid>
-                                        </Grid>
 
-                                        <Button Grid.Row="0" Grid.Column="1" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="0,0,0,0" Click="QueueDeleteJob_OnClick"
-                                            AutomationProperties.Name="{x:Static Properties:ResourcesTooltips.QueueView_DeleteJob}" ToolTip="{x:Static Properties:ResourcesTooltips.QueueView_DeleteJob}" >
-                                            <Button.Template>
-                                                <ControlTemplate>
-                                                    <Image Width="16" Height="16" VerticalAlignment="Center" Source="Images/close64.png" />
-                                                </ControlTemplate>
-                                            </Button.Template>
-                                        </Button>
+                                            <Button Grid.Row="0" Grid.Column="1" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="0,0,0,0" Click="QueueDeleteJob_OnClick"
+                                                    AutomationProperties.Name="{x:Static Properties:ResourcesTooltips.QueueView_DeleteJob}" ToolTip="{x:Static Properties:ResourcesTooltips.QueueView_DeleteJob}" >
+                                                <Button.Template>
+                                                    <ControlTemplate>
+                                                        <Image Width="16" Height="16" VerticalAlignment="Center" Source="Images/close64.png" />
+                                                    </ControlTemplate>
+                                                </Button.Template>
+                                            </Button>
+                                        </Grid>
+                                    </Grid>
+                                    <Grid Visibility="{Binding IsShuttingDown, Converter={StaticResource boolToVisConverter}, ConverterParameter=false}">
+
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="40" />
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="Auto" />
+                                        </Grid.ColumnDefinitions>
+
+
+                                        <!--  Marker  -->
+                                        <Image Grid.Column="0" Width="16" Height="16" Source="Images/information.png" SnapsToDevicePixels="True">
+                                            <Image.LayoutTransform>
+                                                <RotateTransform CenterX="8" CenterY="8" Angle="0"/>
+                                            </Image.LayoutTransform>
+                                        </Image>
+
+                                        <TextBlock Text="Shutting Down Encode ..." Margin="10" Grid.Column="1" />
                                     </Grid>
 
-                  
+
                                 </Grid>
 
                                 <Grid Visibility="{Binding TaskType, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter={x:Static model:QueueTaskType.Breakpoint}}" >

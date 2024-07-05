@@ -25,6 +25,8 @@ namespace HandBrakeWPF.Services.Queue.Model
         private QueueItemStatus status;
         private string presetKey;
 
+        private bool isShuttingDown;
+
         public QueueTask()
         {
             this.Status = QueueItemStatus.Waiting;
@@ -81,6 +83,22 @@ namespace HandBrakeWPF.Services.Queue.Model
         public Guid? TaskToken { get; set; }
 
         public Title SourceTitleInfo { get; }
+
+        [JsonIgnore]
+        public bool IsShuttingDown
+        {
+            get => this.isShuttingDown;
+            set
+            {
+                if (value == this.isShuttingDown)
+                {
+                    return;
+                }
+
+                this.isShuttingDown = value;
+                this.NotifyOfPropertyChange(() => this.IsShuttingDown);
+            }
+        }
 
         public QueueItemStatus Status
         {
