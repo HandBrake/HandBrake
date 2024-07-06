@@ -2849,4 +2849,10 @@ Um mehrere gleichzeitige Encodierungen zu ermöglichen, aktivieren Sie die "Proz
   <data name="QueueView_QueueStartTime" xml:space="preserve">
     <value>Startzeit der Warteschlange:</value>
   </data>
+  <data name="PictureSettingsView_AllowUpscaling" xml:space="preserve">
+    <value>Hochskalierung erlauben</value>
+  </data>
+  <data name="PictureSettingsView_OptimalSize" xml:space="preserve">
+    <value>Optimale Größe</value>
+  </data>
 </root>
