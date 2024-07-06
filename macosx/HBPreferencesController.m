@@ -195,6 +195,8 @@ static BOOL _hardwareDecoderSupported = NO;
         HBPreferencesController.hardwareDecoderSupported = NO;
     }
 
+    NSData *moviesData = [NSKeyedArchiver archivedDataWithRootObject:moviesURL requiringSecureCoding:YES error:NULL];
+
     [defaults registerDefaults:@{
         HBShowOpenPanelAtLaunch:            @YES,
         HBShowSummaryPreview:               @YES,
@@ -205,8 +207,8 @@ static BOOL _hardwareDecoderSupported = NO;
         HBAlwaysUseHardwareDecoder:         @NO,
         HBRecursiveScan:                    @NO,
         HBExcludedFileExtensions:           @[@"jpg", @"png", @"srt", @"ssa", @"ass", @"txt"],
-        HBLastDestinationDirectoryURL:      [NSKeyedArchiver archivedDataWithRootObject:moviesURL],
-        HBLastSourceDirectoryURL:           [NSKeyedArchiver archivedDataWithRootObject:moviesURL],
+        HBLastDestinationDirectoryURL:      moviesData,
+        HBLastSourceDirectoryURL:           moviesData,
         HBUseSourceFolderDestination:       @NO,
         HBDefaultAutoNaming:                @NO,
         HBAutoNamingFormat:                 @[@"{Source}", @" ", @"{Title}"],
