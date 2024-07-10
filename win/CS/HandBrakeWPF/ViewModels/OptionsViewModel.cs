@@ -97,6 +97,7 @@ namespace HandBrakeWPF.ViewModels
         private bool playSoundWhenQueueDone;
         private bool enableQuickSyncEncoding;
         private bool enableVceEncoder;    
+        private bool enableDirectXDecoding;
         private bool enableNvencEncoder;
         private InterfaceLanguage selectedLanguage;
         private bool showAddSelectionToQueue;
@@ -960,6 +961,21 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
+        public bool EnableDirectXDecoding
+        {
+            get => this.enableDirectXDecoding;
+            set
+            {
+                if (value == this.enableDirectXDecoding)
+                {
+                    return;
+                }
+
+                this.enableDirectXDecoding = value;
+                this.NotifyOfPropertyChange(() => this.EnableDirectXDecoding);
+            }
+        }
+
         public bool EnableNvencEncoder
         {
             get => this.enableNvencEncoder && this.IsNvencAvailable;
@@ -1060,6 +1076,7 @@ namespace HandBrakeWPF.ViewModels
         public bool IsVceAvailable { get; } = HandBrakeHardwareEncoderHelper.IsVceH264Available;
 
         public bool IsNvencAvailable { get; } = HandBrakeHardwareEncoderHelper.IsNVEncH264Available;
+        public bool IsDirectXAvailable { get; } = true;
 
         public bool IsUseQsvDecAvailable => this.IsQuickSyncAvailable && this.EnableQuickSyncDecoding;
 
@@ -1483,6 +1500,7 @@ namespace HandBrakeWPF.ViewModels
             this.EnableVceEncoder = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.EnableVceEncoder);
             this.EnableNvencEncoder = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.EnableNvencEncoder);
             this.EnableNvDecSupport = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.EnableNvDecSupport);
+            this.EnableDirectXDecoding = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.EnableDirectXDecoding);
 
             // #############################
             // Process
@@ -1676,6 +1694,7 @@ namespace HandBrakeWPF.ViewModels
             this.userSettingService.SetUserSetting(UserSettingConstants.EnableVceEncoder, this.EnableVceEncoder);
             this.userSettingService.SetUserSetting(UserSettingConstants.EnableNvencEncoder, this.EnableNvencEncoder);
             this.userSettingService.SetUserSetting(UserSettingConstants.EnableNvDecSupport, this.EnableNvDecSupport);
+            this.userSettingService.SetUserSetting(UserSettingConstants.EnableDirectXDecoding, this.EnableDirectXDecoding);
             this.userSettingService.SetUserSetting(UserSettingConstants.EnableQuickSyncLowPower, this.EnableQuickSyncLowPower);
 
             /* System and Logging */

@@ -194,6 +194,7 @@ endif
 
 ifeq (1,$(FEATURE.mf))
 FFMPEG.CONFIGURE.extra += \
+      --enable-hwaccels \
       --enable-encoder=h264_mf \
       --enable-encoder=hevc_mf
 endif
