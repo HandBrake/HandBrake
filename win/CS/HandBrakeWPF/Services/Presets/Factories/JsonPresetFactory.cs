@@ -23,7 +23,6 @@ namespace HandBrakeWPF.Services.Presets.Factories
     using HandBrake.Interop.Interop.Interfaces.Model.Picture;
     using HandBrake.Interop.Interop.Interfaces.Model.Presets;
     using HandBrake.Interop.Interop.Json.Presets;
-    using HandBrake.Interop.Utilities;
 
     using HandBrakeWPF.Model.Audio;
     using HandBrakeWPF.Model.Filters;
@@ -280,7 +279,7 @@ namespace HandBrakeWPF.Services.Presets.Factories
             }
 
             /* Video Settings */
-            preset.Task.VideoEncoder = HandBrakeEncoderHelpers.VideoEncoders.FirstOrDefault(s => s.ShortName == importedPreset.VideoEncoder);
+            preset.Task.VideoEncoder = HandBrakeEncoderHelpers.VideoEncoders.FirstOrDefault(s => s.ShortName == importedPreset.VideoEncoder) ?? new HBVideoEncoder(0, importedPreset.VideoEncoder, 0, importedPreset.VideoEncoder);
             preset.Task.VideoBitrate = importedPreset.VideoAvgBitrate;
             preset.Task.MultiPass = importedPreset.VideoMultiPass;
             preset.Task.TurboAnalysisPass = importedPreset.VideoTurboMultiPass;
