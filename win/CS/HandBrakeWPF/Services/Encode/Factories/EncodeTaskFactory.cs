@@ -275,7 +275,7 @@ namespace HandBrakeWPF.Services.Encode.Factories
                 video.QSV.Decode = HandBrakeHardwareEncoderHelper.IsQsvAvailable && useQSVDecodeForNonQSVEnc;
             }
 
-            if (this.isEncodePath && HandBrakeHardwareEncoderHelper.IsQsvAvailable && (HandBrakeHardwareEncoderHelper.QsvHardwareGeneration > 6) && job.VideoEncoder.IsQuickSync)
+            if (this.isEncodePath && HandBrakeHardwareEncoderHelper.IsQsvAvailable && (HandBrakeHardwareEncoderHelper.QsvHardwareGeneration > 6) && (job.VideoEncoder?.IsQuickSync ?? false))
             {
                 if (enableQsvLowPower && !video.Options.Contains("lowpower"))
                 {

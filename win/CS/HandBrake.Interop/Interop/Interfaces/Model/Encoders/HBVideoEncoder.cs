@@ -37,7 +37,7 @@ namespace HandBrake.Interop.Interop.Interfaces.Model.Encoders
             this.CompatibleContainers = compatibleContainers;
             this.DisplayName = displayName;
             this.Id = id;
-            this.ShortName = shortName;
+            this.ShortName = shortName ?? string.Empty;
         }
 
         /// <summary>
