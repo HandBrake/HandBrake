@@ -501,7 +501,7 @@ namespace HandBrakeWPF.Services.Presets.Factories
 
             // Audio
             preset.AudioCopyMask = export.AudioTrackBehaviours.AllowedPassthruOptions.Select(s => s.ShortName).ToList();
-            preset.AudioEncoderFallback = export.AudioTrackBehaviours.AudioFallbackEncoder.ShortName;
+            preset.AudioEncoderFallback = export.AudioTrackBehaviours.AudioFallbackEncoder?.ShortName;
             preset.AudioLanguageList = HandBrakeLanguagesHelper.GetLanguageCodes(export.AudioTrackBehaviours.SelectedLanguages);
             preset.AudioTrackSelectionBehavior = EnumHelper<AudioBehaviourModes>.GetShortName(export.AudioTrackBehaviours.SelectedBehaviour);
             preset.AudioSecondaryEncoderMode = export.AudioTrackBehaviours.SelectedTrackDefaultBehaviour == AudioTrackDefaultsMode.FirstTrack; // 1 = First Track, 0 = All
