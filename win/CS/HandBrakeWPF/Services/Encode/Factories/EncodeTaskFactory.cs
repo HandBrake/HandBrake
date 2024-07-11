@@ -258,6 +258,7 @@ namespace HandBrakeWPF.Services.Encode.Factories
 
             video.MultiPass = job.MultiPass;
             video.Turbo = job.TurboAnalysisPass;
+            video.Options = job.ExtraAdvancedArguments;
 
             bool enableQuickSyncEncoding = userSettingService.GetUserSetting<bool>(UserSettingConstants.EnableQuickSyncEncoding);
             bool enableQuickSyncDecoding = userSettingService.GetUserSetting<bool>(UserSettingConstants.EnableQuickSyncDecoding);
@@ -291,8 +292,6 @@ namespace HandBrakeWPF.Services.Encode.Factories
             {
                 video.HardwareDecode = (int)NativeConstants.HB_DECODE_SUPPORT_NVDEC;
             }
-
-            video.Options = job.ExtraAdvancedArguments;
 
             return video;
         }
