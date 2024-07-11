@@ -24,6 +24,8 @@ namespace HandBrakeWPF.Utilities
     /// </summary>
     public class SystemInfo
     {
+        private static List<GpuInfo> gpuInfoCache;
+
         public static ulong TotalPhysicalMemory
         {
             get
@@ -73,6 +75,11 @@ namespace HandBrakeWPF.Utilities
         {
             get
             {
+                if (gpuInfoCache != null)
+                {
+                    return gpuInfoCache;
+                }
+
                 List<GpuInfo> gpuInfo = new List<GpuInfo>();
 
                 if (IsArmDevice)
@@ -109,6 +116,8 @@ namespace HandBrakeWPF.Utilities
                 {
                     // Do Nothing. We couldn't get GPU Information.
                 }
+
+                gpuInfoCache = gpuInfo;
 
                 return gpuInfo;
             }
