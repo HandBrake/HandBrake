@@ -86,6 +86,8 @@ endif
 
 ifeq (on,$(GCC.lto))
     FFMPEG.CONFIGURE.extra += --enable-lto
+else ifeq (thin,$(GCC.lto))
+    FFMPEG.CONFIGURE.extra += --enable-lto=thin
 endif
 
 ifneq (,$(filter $(FEATURE.qsv)-$(HOST.system),1-linux 1-freebsd))
