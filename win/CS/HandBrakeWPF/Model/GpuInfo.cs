@@ -77,5 +77,29 @@ namespace HandBrakeWPF.Model
                 return false;
             }
         }
+
+        public bool IsNvidiaDriverSupported
+        {
+            get
+            {
+                if (this.IsNvidia && !string.IsNullOrEmpty(Version))
+                {
+                    // 551.76  or later is required
+                    string result = Version.Substring(Version.Length - 6);
+                    if (!string.IsNullOrEmpty(result))
+                    {
+                        result = result.Replace(".", "");
+                        int.TryParse(result, out int version);
+
+                        if (version > 55176)
+                        {
+                            return true;
+                        }
+                    }
+                }
+
+                return false;
+            }
+        }
     }
 }
