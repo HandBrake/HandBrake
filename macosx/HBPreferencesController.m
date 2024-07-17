@@ -184,13 +184,7 @@ static BOOL _hardwareDecoderSupported = NO;
 + (void)registerUserDefaults
 {
     NSUserDefaults *defaults = NSUserDefaults.standardUserDefaults;
-
-    NSData *moviesData = nil;
-    NSURL *moviesURL = HBUtilities.defaultDestinationFolderURL;
-    if (moviesURL)
-    {
-        moviesData = [NSKeyedArchiver archivedDataWithRootObject:moviesURL requiringSecureCoding:YES error:NULL];
-    }
+    NSData *moviesData = [NSKeyedArchiver archivedDataWithRootObject:HBUtilities.defaultDestinationFolderURL requiringSecureCoding:YES error:NULL];
 
     if (@available(macOS 13, *))
     {
