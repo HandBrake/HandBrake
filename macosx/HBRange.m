@@ -33,7 +33,7 @@ NSString *HBRangeChangedNotification = @"HBRangeChangedNotification";
 
 - (void)postChangedNotification
 {
-    [[NSNotificationCenter defaultCenter] postNotificationName:HBRangeChangedNotification object:self];
+    [NSNotificationCenter.defaultCenter postNotificationName:HBRangeChangedNotification object:self];
 }
 
 - (void)setType:(HBRangeType)type

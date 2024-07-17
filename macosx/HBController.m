@@ -1376,14 +1376,14 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
     [self.window beginSheet:self.titlesSelectionController.window completionHandler:nil];
 }
 
-- (void)didSelectTitles:(NSArray<HBTitle *> *)titles
+- (void)didSelectTitles:(NSArray<HBTitle *> *)titles range:(nullable HBTitleSelectionRange *)range
 {
     [self.window endSheet:self.titlesSelectionController.window];
 
-    [self doAddTitlesToQueue:titles];
+    [self doAddTitlesToQueue:titles range:range];
 }
 
-- (void)doAddTitlesToQueue:(NSArray<HBTitle *> *)titles
+- (void)doAddTitlesToQueue:(NSArray<HBTitle *> *)titles range:(nullable HBTitleSelectionRange *)range
 {
     NSMutableArray<HBJob *> *jobs = [[NSMutableArray alloc] init];
     BOOL fileExists = NO;
@@ -1397,13 +1397,14 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
     {
         HBJob *job = [[HBJob alloc] initWithTitle:title preset:preset];
 
-        [job setDestinationFolderURL:self.destinationFolderURL
-                        sameAsSource:useSourceFolderDestination];
-
-        job.destinationFileName = job.defaultName;
-        job.title = nil;
         if (job)
         {
+            [job applySelectionRange:range];
+            [job setDestinationFolderURL:self.destinationFolderURL
+                            sameAsSource:useSourceFolderDestination];
+            job.destinationFileName = job.defaultName;
+            job.title = nil;
+
             [jobs addObject:job];
         }
     }
@@ -1472,7 +1473,7 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
 
 - (IBAction)addAllTitlesToQueue:(id)sender
 {
-    [self doAddTitlesToQueue:self.core.titles];
+    [self doAddTitlesToQueue:self.core.titles range:nil];
 }
 
 #pragma mark - Picture

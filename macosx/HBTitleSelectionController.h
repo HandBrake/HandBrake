@@ -5,6 +5,7 @@
  It may be used under the terms of the GNU General Public License. */
 
 #import <Cocoa/Cocoa.h>
+#import "HBTitleSelectionRange.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -12,7 +13,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @protocol HBTitleSelectionDelegate <NSObject>
 
-- (void)didSelectTitles:(NSArray<HBTitle *> *)titles;
+- (void)didSelectTitles:(NSArray<HBTitle *> *)titles range:(nullable HBTitleSelectionRange *)range;
 
 @end
 
