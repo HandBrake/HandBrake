@@ -187,7 +187,7 @@ static BOOL _hardwareDecoderSupported = NO;
 
     NSData *moviesData = nil;
     NSURL *moviesURL = HBUtilities.defaultDestinationFolderURL;
-    if (moviesData)
+    if (moviesURL)
     {
         moviesData = [NSKeyedArchiver archivedDataWithRootObject:moviesURL requiringSecureCoding:YES error:NULL];
     }
