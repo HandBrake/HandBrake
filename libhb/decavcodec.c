@@ -599,7 +599,9 @@ static void closePrivData( hb_work_private_t ** ppv )
         if ( pv->context )
         {
             if (pv->context->hw_device_ctx)
+            {
                 av_buffer_unref(&pv->context->hw_device_ctx);
+            }
             hb_avcodec_free_context(&pv->context);
         }
         av_packet_free(&pv->pkt);
