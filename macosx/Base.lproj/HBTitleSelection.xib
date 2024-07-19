@@ -28,12 +28,12 @@
             <rect key="contentRect" x="196" y="240" width="554" height="294"/>
             <rect key="screenRect" x="0.0" y="0.0" width="1440" height="875"/>
             <value key="minSize" type="size" width="300" height="200"/>
-            <view key="contentView" id="se5-gp-TjO">
-                <rect key="frame" x="0.0" y="0.0" width="554" height="294"/>
+            <view key="contentView" misplaced="YES" id="se5-gp-TjO">
+                <rect key="frame" x="0.0" y="0.0" width="554" height="270"/>
                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                 <subviews>
                     <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="6000" translatesAutoresizingMaskIntoConstraints="NO" id="5Jw-On-iU3">
-                        <rect key="frame" x="18" y="260" width="208" height="14"/>
+                        <rect key="frame" x="18" y="236" width="208" height="14"/>
                         <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Select the titles to add to the queue:" id="5tD-fg-g4t">
                             <font key="font" metaFont="smallSystemBold"/>
                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -61,7 +61,7 @@ DQ
                         </connections>
                     </button>
                     <scrollView autohidesScrollers="YES" horizontalLineScroll="18" horizontalPageScroll="10" verticalLineScroll="18" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="a1K-L9-fU9">
-                        <rect key="frame" x="20" y="100" width="514" height="152"/>
+                        <rect key="frame" x="20" y="76" width="514" height="152"/>
                         <clipView key="contentView" id="dTc-E7-D15">
                             <rect key="frame" x="1" y="1" width="512" height="150"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -246,9 +246,10 @@ Gw
                         </connections>
                     </button>
                     <customView translatesAutoresizingMaskIntoConstraints="NO" id="IvD-Mu-WFQ">
-                        <rect key="frame" x="20" y="44" width="514" height="48"/>
+                        <rect key="frame" x="20" y="44" width="514" height="24"/>
                         <constraints>
                             <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="24" id="4Ca-Iz-UP6"/>
+                            <constraint firstAttribute="height" priority="750" constant="24" id="Xgc-fp-JUK"/>
                         </constraints>
                     </customView>
                 </subviews>
