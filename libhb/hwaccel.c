@@ -303,7 +303,7 @@ int hb_hwaccel_decode_is_enabled(hb_job_t *job)
 {
     if (job != NULL)
     {
-        if (job->hw_decode & HB_DECODE_SUPPORT_FORCE_HW || job->hw_decode & HB_DECODE_SUPPORT_MF)
+        if (job->hw_decode & HB_DECODE_SUPPORT_FORCE_HW)
         {
             return hb_hwaccel_is_enabled(job);
         }

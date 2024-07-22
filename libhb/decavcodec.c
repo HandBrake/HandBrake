@@ -1884,8 +1884,8 @@ static int decavcodecvInit( hb_work_object_t * w, hb_job_t * job )
         pv->context->opaque = job;
         av_buffer_replace(&pv->context->hw_device_ctx, w->hw_device_ctx);
 
-        if (job == NULL || (pv->hw_frame==NULL && job->hw_decode & HB_DECODE_SUPPORT_MF) ||
-             (job->hw_pix_fmt == AV_PIX_FMT_NONE && job->hw_decode & HB_DECODE_SUPPORT_FORCE_HW))
+        if (job == NULL ||
+            (job->hw_pix_fmt == AV_PIX_FMT_NONE && job->hw_decode & HB_DECODE_SUPPORT_FORCE_HW))
         {
             pv->hw_frame = av_frame_alloc();
         }
