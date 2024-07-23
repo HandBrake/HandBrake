@@ -55,8 +55,8 @@ index 2db7a146b..0013fa0c8 100644
 +#endif
 +
 +#if _WIN32 && X265_ARCH_ARM64
-+    else if (checkSnapdragon() && cpuCount >= 10)
-+        p->frameNumThreads = 8;
++    else if (checkSnapdragon() && cpuCount >= 8)
++        p->frameNumThreads = cpuCount;
 +#endif
 +
      else if (cpuCount >= 8)
