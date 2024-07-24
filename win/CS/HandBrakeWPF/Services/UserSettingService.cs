@@ -315,7 +315,7 @@ namespace HandBrakeWPF.Services
             // Video
             GpuInfo info = SystemInfo.GetGPUInfo.FirstOrDefault(s => s.IsIntel);
             bool intelDefaultSetting = (info != null && info.IsIntelDriverSupported);
-            info = SystemInfo.GetGPUInfo.FirstOrDefault(s => s.IsIntel);
+            info = SystemInfo.GetGPUInfo.FirstOrDefault(s => s.IsNvidia);
             bool nvidiaDefaultSetting = (info != null  && info.IsNvidiaDriverSupported);
 
             defaults.Add(UserSettingConstants.EnableQuickSyncEncoding, intelDefaultSetting);
