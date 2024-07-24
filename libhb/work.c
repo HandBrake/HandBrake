@@ -1529,7 +1529,6 @@ static void sanitize_dynamic_hdr_metadata_passthru(hb_job_t *job)
         job->passthru_dynamic_hdr_metadata &= ~HDR_10_PLUS;
     }
 
-#if HB_PROJECT_FEATURE_LIBDOVI
     if ((job->dovi.dv_profile != 5 &&
          job->dovi.dv_profile != 7 &&
          job->dovi.dv_profile != 8 &&
@@ -1543,6 +1542,7 @@ static void sanitize_dynamic_hdr_metadata_passthru(hb_job_t *job)
 
     if (job->passthru_dynamic_hdr_metadata & DOVI)
     {
+#if HB_PROJECT_FEATURE_LIBDOVI
         int mode = 0;
 
         if (job->dovi.dv_profile == 7 ||
@@ -1622,10 +1622,11 @@ static void sanitize_dynamic_hdr_metadata_passthru(hb_job_t *job)
                                           pad_top, pad_bottom, pad_left, pad_right);
         hb_add_filter(job, filter, settings);
         free(settings);
-    }
 #else
-    job->passthru_dynamic_hdr_metadata &= ~DOVI;
+        hb_log("work: libdovi not available, disabling Dolby Vision");
+        job->passthru_dynamic_hdr_metadata &= ~DOVI;
 #endif
+    }
 }
 
 /**

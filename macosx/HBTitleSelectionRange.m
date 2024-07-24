@@ -58,7 +58,24 @@
     if (trim != _trim)
     {
         [[self.undo prepareWithInvocationTarget:self] setTrim:_trim];
+
+        if (!(self.undo.isUndoing || self.undo.isRedoing))
+        {
+            if (trim == HBTitleSelectionTrimTypeNormal)
+            {
+                self.chapterStop = self.chaptersCount;
+                self.secondsStop = self.secondsCount;
+                self.frameStop = self.framesCount;
+            }
+            else
+            {
+                self.chapterStop = 0;
+                self.secondsStop = 0;
+                self.frameStop = 0;
+            }
+        }
     }
+
     _trim = trim;
 }
 
