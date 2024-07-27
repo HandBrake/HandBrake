@@ -954,6 +954,15 @@ namespace HandBrakeWPF.Properties {
             }
         }
         
+		/// <summary>
+        ///   Looks up a localized string similar to Remove common punctuation
+        /// </summary>
+        public static string Options_RemovePunctuation {
+            get {
+                return ResourceManager.GetString("Options_RemovePunctuation", resourceCulture);
+            }
+        }
+		
         /// <summary>
         ///   Looks up a localized string similar to Enables variable framerate output.
         ///
