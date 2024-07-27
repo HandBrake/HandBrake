@@ -77,7 +77,7 @@
 
     if (@available(macOS 11, *))
     {
-        image = [NSImage imageWithSystemSymbolName:symbolName accessibilityDescription:@""];
+        image = [NSImage imageWithSystemSymbolName:symbolName accessibilityDescription:nil];
         if (configuration)
         {
             image = [image imageWithSymbolConfiguration:configuration];

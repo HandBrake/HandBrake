@@ -10,7 +10,7 @@
 
 @implementation HBRange (UIAdditions)
 
-- (NSArray *)chapters
+- (NSArray<NSString *> *)chapters
 {
     NSMutableArray *chapters = [NSMutableArray array];
     [self.title.chapters enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
@@ -19,7 +19,7 @@
     return chapters;
 }
 
-- (NSArray *)types
+- (NSArray<NSString *> *)types
 {
     return @[HBKitLocalizedString(@"Chapters", @"HBRange -> display name"),
              HBKitLocalizedString(@"Seconds", @"HBRange -> display name"),

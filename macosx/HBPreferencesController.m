@@ -184,7 +184,7 @@ static BOOL _hardwareDecoderSupported = NO;
 + (void)registerUserDefaults
 {
     NSUserDefaults *defaults = NSUserDefaults.standardUserDefaults;
-    NSURL *moviesURL = HBUtilities.defaultDestinationFolderURL;
+    NSData *moviesData = [NSKeyedArchiver archivedDataWithRootObject:HBUtilities.defaultDestinationFolderURL requiringSecureCoding:YES error:NULL];
 
     if (@available(macOS 13, *))
     {
@@ -194,8 +194,6 @@ static BOOL _hardwareDecoderSupported = NO;
     {
         HBPreferencesController.hardwareDecoderSupported = NO;
     }
-
-    NSData *moviesData = [NSKeyedArchiver archivedDataWithRootObject:moviesURL requiringSecureCoding:YES error:NULL];
 
     [defaults registerDefaults:@{
         HBShowOpenPanelAtLaunch:            @YES,

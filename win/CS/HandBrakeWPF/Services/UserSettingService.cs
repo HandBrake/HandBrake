@@ -313,13 +313,18 @@ namespace HandBrakeWPF.Services
             defaults.Add(UserSettingConstants.WhenDoneAudioFile, string.Empty);
 
             // Video
-            defaults.Add(UserSettingConstants.EnableQuickSyncEncoding, true);
-            defaults.Add(UserSettingConstants.EnableQuickSyncDecoding, false);
-            defaults.Add(UserSettingConstants.EnableQuickSyncHyperEncode, false);
+            GpuInfo info = SystemInfo.GetGPUInfo.FirstOrDefault(s => s.IsIntel);
+            bool intelDefaultSetting = (info != null && info.IsIntelDriverSupported);
+            info = SystemInfo.GetGPUInfo.FirstOrDefault(s => s.IsNvidia);
+            bool nvidiaDefaultSetting = (info != null  && info.IsNvidiaDriverSupported);
+
+            defaults.Add(UserSettingConstants.EnableQuickSyncEncoding, intelDefaultSetting);
+            defaults.Add(UserSettingConstants.EnableQuickSyncDecoding, intelDefaultSetting);
+            defaults.Add(UserSettingConstants.EnableQuickSyncHyperEncode, intelDefaultSetting);
             defaults.Add(UserSettingConstants.UseQSVDecodeForNonQSVEnc, false);
             defaults.Add(UserSettingConstants.EnableVceEncoder, true);
-            defaults.Add(UserSettingConstants.EnableNvencEncoder, true);
-            defaults.Add(UserSettingConstants.EnableNvDecSupport, false);
+            defaults.Add(UserSettingConstants.EnableNvencEncoder, nvidiaDefaultSetting);
+            defaults.Add(UserSettingConstants.EnableNvDecSupport, nvidiaDefaultSetting);
             defaults.Add(UserSettingConstants.EnableQuickSyncLowPower, true);
             
             // Advanced
