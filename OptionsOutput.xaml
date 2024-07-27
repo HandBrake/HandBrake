@@ -1,0 +1,165 @@
+﻿<UserControl x:Class="HandBrakeWPF.Views.Options.OptionsOutput"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:Properties="clr-namespace:HandBrakeWPF.Properties"
+             xmlns:converters="clr-namespace:HandBrakeWPF.Converters"
+             xmlns:behaviours="clr-namespace:HandBrakeWPF.Behaviours"
+             xmlns:options="clr-namespace:HandBrakeWPF.Converters.Options"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+
+    <UserControl.Resources>
+        <Style TargetType="TextBlock" BasedOn="{StaticResource {x:Type TextBlock}}">
+            <Setter Property="Margin" Value="0,0,5,0" />
+        </Style>
+
+        <Style TargetType="TextBox" BasedOn="{StaticResource {x:Type TextBox}}">
+            <Setter Property="Padding" Value="5,2" />
+            <Setter Property="MinHeight" Value="22" />
+            <Setter Property="VerticalContentAlignment" Value="Center" />
+            <Setter Property="ToolTipService.ShowDuration" Value="20000" />
+        </Style>
+
+        <Style TargetType="CheckBox" BasedOn="{StaticResource {x:Type CheckBox}}">
+            <Setter Property="Margin" Value="0,2,0,2" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+        </Style>
+
+        <converters:BooleanToVisibilityConverter x:Key="boolToVisConverter" />
+
+        <DataTemplate x:Key="PlaceholderItemTemplate">
+            <StackPanel Orientation="Horizontal" Height="Auto" Width="Auto">
+                <StackPanel VerticalAlignment="Center" >
+                    <Border Background="{StaticResource Ui.Blue}" CornerRadius="9" BorderThickness="1" VerticalAlignment="Center" >
+                        <TextBlock Text="{Binding Name}" VerticalAlignment="Center" Foreground="White" HorizontalAlignment="Center" Margin="5,2" />
+                    </Border>
+                </StackPanel>
+            </StackPanel>
+        </DataTemplate>
+
+        <converters:EnumComboConverter x:Key="enumComboConverter" />
+        <options:Mp4BehaviourConverter x:Key="Mp4BehaviourConverter" />
+
+    </UserControl.Resources>
+
+    <StackPanel Name="Output" Orientation="Vertical" Margin="10,5,0,0">
+
+        <TextBlock Text="{x:Static Properties:Resources.Options_Output}" Style="{StaticResource pageHeader}" />
+
+        <StackPanel Orientation="Vertical" Margin="0,10,0,10">
+
+            <TextBlock Text="{x:Static Properties:Resources.Options_AutomaticFileNaming}" Style="{StaticResource subHeader}" Margin="0,0,0,10"/>
+
+            <StackPanel Orientation="Vertical" Margin="20,0,0,0">
+                <CheckBox Content="{x:Static Properties:Resources.Options_AutoNameOutput}" IsChecked="{Binding AutomaticallyNameFiles}" />
+
+                <Grid Margin="0,5,0,0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="7"/>
+
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+
+
+                    <!-- Path Format -->
+                    <TextBlock VerticalAlignment="Center" Text="{x:Static Properties:Resources.Options_DefaultPath}" Grid.Column="0" Grid.Row="0" />
+                    <TextBox Name="autoNameOutputPath" Text="{Binding AutoNameDefaultPath}" Width="380" Grid.Column="1" Grid.Row="0" ToolTip="{x:Static Properties:ResourcesTooltips.OptionsView_DestinationReplacementOptions}" 
+                                         HorizontalAlignment="Left" DragEnter="AutoNameOutputPath_OnDragEnter"
+                                         behaviours:TextBoxBehavior.TripleClickSelectAll="True" />
+                    <Button Content="{x:Static Properties:Resources.Browse}" Margin="5,0,0,0" Grid.Column="2" Grid.Row="0" Command="{Binding RelayCommand}" CommandParameter="BrowseAutoNamePath" HorizontalAlignment="Left" />
+                    <TextBlock Text="{x:Static Properties:Resources.OptionsView_FormatOptions}" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" Style="{StaticResource subText}" TextWrapping="Wrap"
+                                          />
+                    <ListView x:Name="pathFormatChoices" ItemsSource="{Binding PathFilenamePlaceholders}"  Background="Transparent"
+                                          ItemTemplate="{StaticResource PlaceholderItemTemplate}" BorderThickness="0" Margin="0,10,10,10" 
+                                          Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2" MaxWidth="400" HorizontalAlignment="Left"
+                                          ScrollViewer.HorizontalScrollBarVisibility="Disabled" Panel.ZIndex="1"
+                                          ScrollViewer.VerticalScrollBarVisibility="Disabled"
+                                          ToolTip="{x:Static Properties:ResourcesTooltips.OptionsView_DestinationReplacementOptions}"
+                                          PreviewMouseDown="PathFormatChoices_OnPreviewMouseDown">
+
+                        <ListView.ItemsPanel>
+                            <ItemsPanelTemplate >
+                                <WrapPanel  />
+                            </ItemsPanelTemplate>
+                        </ListView.ItemsPanel>
+                    </ListView>
+
+                    <CheckBox IsChecked="{Binding AlwaysUseDefaultPath}" Content="{x:Static Properties:Resources.OptionsView_AlwaysUseDefaultPath}" ToolTip="{x:Static Properties:ResourcesTooltips.OptionsView_AlwaysUseDefaultPath}" Grid.Row="3" Grid.Column="1" />
+
+
+                    <!-- File Format -->
+                    <TextBlock VerticalAlignment="Center" Text="{x:Static Properties:Resources.Options_Format}"  Grid.Column="0" Grid.Row="5" Margin="0,5,0,0" />
+                    <TextBox Name="autoNameFormat" Text="{Binding AutonameFormat, UpdateSourceTrigger=PropertyChanged}" Width="380"  Grid.Column="1" Grid.Row="5"   Margin="0,0,0,0" 
+                                 ToolTip="{x:Static Properties:ResourcesTooltips.Options_AdditionalFormatOptions}" HorizontalAlignment="Left" 
+                                 AllowDrop="True" DragEnter="AutoNameFormat_OnDragEnter" 
+                                 behaviours:TextBoxBehavior.TripleClickSelectAll="True"/>
+                    <Button Margin="5,0,0,0" Content="{x:Static Properties:Resources.Reset}" Grid.Column="2" Grid.Row="5" HorizontalAlignment="Left"
+                                Command="{Binding RelayCommand}" CommandParameter="ResetAutoNameFormat" />
+
+                    <TextBlock Text="{x:Static Properties:Resources.OptionsView_FormatOptions}" Grid.Row="6" Grid.Column="1" Grid.ColumnSpan="2" Style="{StaticResource subText}" TextWrapping="Wrap" />
+                    <ListView x:Name="fileFormatChoices" ItemsSource="{Binding OutputFilenamePlaceholders}" Background="Transparent"
+                                          ItemTemplate="{StaticResource PlaceholderItemTemplate}" BorderThickness="0" Margin="0,8,10,10" 
+                                          Grid.Row="7" Grid.Column="1" Grid.ColumnSpan="2" MaxWidth="600" HorizontalAlignment="Left"
+                                          ScrollViewer.HorizontalScrollBarVisibility="Disabled" Panel.ZIndex="2"
+                                          ScrollViewer.VerticalScrollBarVisibility="Disabled"
+                                          ToolTip="{x:Static Properties:ResourcesTooltips.Options_AdditionalFormatOptions}"
+                                          PreviewMouseDown="FileFormatChoices_OnPreviewMouseDown">
+
+                        <ListView.ItemsPanel>
+                            <ItemsPanelTemplate >
+                                <WrapPanel  />
+                            </ItemsPanelTemplate>
+                        </ListView.ItemsPanel>
+                    </ListView>
+
+                    <CheckBox Content="{x:Static Properties:Resources.OptionsView_IsoDateFormat}" Grid.Column="1" Grid.Row="8" IsChecked="{Binding UseIsoDateFormat}" />
+
+                </Grid>
+
+                <StackPanel Orientation="Horizontal" Margin="0,15,0,0">
+                    <TextBlock VerticalAlignment="Center" Text="{x:Static Properties:Resources.OptionsView_FileCollisionBehaviour}" />
+                    <ComboBox Width="120" ItemsSource="{Binding AutonameFileCollisionBehaviours, Converter={StaticResource enumComboConverter}}" SelectedIndex="{Binding SelectedCollisionBehaviour}" HorizontalAlignment="Left" />
+                    <TextBox Text="{Binding PrePostFilenameText, UpdateSourceTrigger=PropertyChanged}" Width="150"  VerticalAlignment="Center" Visibility="{Binding ShowPrePostFilenameBox, Converter={StaticResource boolToVisConverter}}" HorizontalAlignment="Left"  Margin="5,0,0,0" />
+                    <TextBlock Text="{x:Static Properties:Resources.OptionsView_FileCollisionNotice}" FontStyle="Italic" Margin="5,0,0,0" />
+                </StackPanel>
+
+                <StackPanel Orientation="Vertical" Margin="0,15,0,0">
+                    <CheckBox Content="{x:Static Properties:Resources.Options_TitleCase}" IsChecked="{Binding ChangeToTitleCase}" />
+                    <CheckBox Content="{x:Static Properties:Resources.Options_ReplaceUnderscores}" IsChecked="{Binding RemoveUnderscores}"/>
+                    <CheckBox Content="{x:Static Properties:Resources.Options_RemovePunctuation}" ToolTip="{x:Static Properties:ResourcesTooltips.Options_RemovePunctuation}" IsChecked="{Binding RemovePunctuation}"/>
+                </StackPanel>
+
+                <StackPanel Orientation="Horizontal" Margin="0,15,0,0">
+                    <TextBlock VerticalAlignment="Center" Text="{x:Static Properties:Resources.Options_MP4FileExtension}" />
+                    <ComboBox Name="mp4FileExtension" ItemsSource="{Binding Mp4ExtensionOptions, Converter={StaticResource Mp4BehaviourConverter}}" SelectedItem="{Binding SelectedMp4Extension, Converter={StaticResource Mp4BehaviourConverter}}" Width="120" HorizontalAlignment="Left"  />
+                </StackPanel>
+
+            </StackPanel>
+
+            <TextBlock Text="{x:Static Properties:Resources.Options_UIBehaviour}" Style="{StaticResource subHeader}" Margin="0,20,0,10"/>
+            <StackPanel Orientation="Vertical" Margin="20,0,0,0">
+                <StackPanel Orientation="Horizontal" Margin="0,0,0,0">
+
+                    <TextBlock VerticalAlignment="Center" Text="{x:Static Properties:Resources.OptionsView_FileOverwriteBehaviour}" />
+                    <ComboBox Width="200" ItemsSource="{Binding FileOverwriteBehaviourList, Converter={StaticResource enumComboConverter}}" SelectedIndex="{Binding SelectedOverwriteBehaviour}" HorizontalAlignment="Left" />
+                </StackPanel>
+            </StackPanel>
+
+        </StackPanel>
+    </StackPanel>
+</UserControl>
