@@ -36,6 +36,7 @@ namespace HandBrake.Interop.Interop
 
         private JsonState lastProgressJson;
         private readonly object progressJsonLockObj = new object();
+        private EncodeProgressEventArgs lastEncodeProgress = null;
 
         /// <summary>
         /// Finalizes an instance of the HandBrakeInstance class.
@@ -263,6 +264,7 @@ namespace HandBrake.Interop.Interop
 
             this.encodePollTimer = new Timer();
             this.encodePollTimer.Interval = EncodePollIntervalMs;
+            this.lastEncodeProgress = null;
 
             this.encodePollTimer.Elapsed += (o, e) =>
             {
@@ -502,7 +504,11 @@ namespace HandBrake.Interop.Interop
                         progressEventArgs = new EncodeProgressEventArgs(state.Working.Progress, state.Working.Rate, state.Working.RateAvg, eta, state.Working.PassID, state.Working.Pass, state.Working.PassCount, taskState.Code);
                     }
 
-                    this.EncodeProgress(this, progressEventArgs);
+                    if (!ProgressIsEqual(progressEventArgs, this.lastEncodeProgress))
+                    {
+                        this.EncodeProgress(this, progressEventArgs);
+                        this.lastEncodeProgress = progressEventArgs;
+                    }
                 }
             }
             else if (taskState != null && taskState == TaskState.WorkDone)
@@ -516,6 +522,29 @@ namespace HandBrake.Interop.Interop
                         new EncodeCompletedEventArgs(state.WorkDone.Error));
                 }
             }
+        }
+
+        /// <summary>
+        /// Returns true if the two progress events are equal. Used to throttle unnecessary progress events.
+        /// </summary>
+        /// <param name="a">The first progress event.</param>
+        /// <param name="b">The second progress event.</param>
+        /// <returns>True if the progress events are equal.</returns>
+        private static bool ProgressIsEqual(EncodeProgressEventArgs a, EncodeProgressEventArgs b)
+        {
+            if (a == null || b == null)
+            {
+                return false;
+            }
+
+            return a.FractionComplete == b.FractionComplete &&
+                   a.CurrentFrameRate == b.CurrentFrameRate &&
+                   a.AverageFrameRate == b.AverageFrameRate &&
+                   a.EstimatedTimeLeft == b.EstimatedTimeLeft &&
+                   a.PassId == b.PassId &&
+                   a.Pass == b.Pass &&
+                   a.PassCount == b.PassCount &&
+                   a.StateCode == b.StateCode;
         }
     }
 }
