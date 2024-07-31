@@ -239,7 +239,7 @@ HB_OBJC_DIRECT_MEMBERS
         __unused HBSecurityAccessToken *token = [HBSecurityAccessToken tokenWithObject:url];
 #endif
 
-        if (![NSFileManager.defaultManager fileExistsAtPath:url.path])
+        if (![url checkResourceIsReachableAndReturnError:NULL])
         {
             if (error)
             {

@@ -239,7 +239,7 @@ NSString *HBChaptersChangedNotification  = @"HBChaptersChangedNotification";
 
 - (NSURL *)destinationURL
 {
-    return [self.destinationFolderURL URLByAppendingPathComponent:self.destinationFileName];
+    return [self.destinationFolderURL URLByAppendingPathComponent:self.destinationFileName isDirectory:NO];
 }
 
 - (void)setContainer:(int)container

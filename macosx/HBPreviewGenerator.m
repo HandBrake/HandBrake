@@ -205,17 +205,18 @@
 
 + (NSURL *) generateFileURLForType:(NSString *) type
 {
-    NSURL *previewDirectory = [[HBUtilities appSupportURL] URLByAppendingPathComponent:[NSString stringWithFormat:@"/Previews/%d", getpid()] isDirectory:YES];
+    NSURL *previewDirectory = [[HBUtilities appSupportURL] URLByAppendingPathComponent:[NSString stringWithFormat:@"/Previews/%d", getpid()]
+                                                                           isDirectory:YES];
 
-    if (![[NSFileManager defaultManager] createDirectoryAtPath:previewDirectory.path
-                                  withIntermediateDirectories:YES
-                                                   attributes:nil
-                                                        error:nil])
+    if (![NSFileManager.defaultManager createDirectoryAtURL:previewDirectory
+                                 withIntermediateDirectories:YES
+                                                  attributes:nil
+                                                       error:nil])
     {
         return nil;
     }
 
-    return [previewDirectory URLByAppendingPathComponent:[NSString stringWithFormat:@"preview_temp.%@", type]];
+    return [previewDirectory URLByAppendingPathComponent:[NSString stringWithFormat:@"preview_temp.%@", type] isDirectory:NO];
 }
 
 /**
@@ -244,7 +245,7 @@
     }
 
     // See if there is an existing preview file, if so, delete it.
-    [[NSFileManager defaultManager] removeItemAtURL:destURL error:NULL];
+    [NSFileManager.defaultManager removeItemAtURL:destURL error:NULL];
 
     HBJob *job = [self.job copy];
     job.title = self.job.title;

@@ -172,7 +172,7 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
 #else
         _destinationFolderURL = [NSUserDefaults.standardUserDefaults URLForKey:HBLastDestinationDirectoryURL];
 #endif
-        if (!_destinationFolderURL || [NSFileManager.defaultManager fileExistsAtPath:_destinationFolderURL.path isDirectory:nil] == NO)
+        if (!_destinationFolderURL || [_destinationFolderURL checkResourceIsReachableAndReturnError:NULL] == NO)
         {
             _destinationFolderURL = HBUtilities.defaultDestinationFolderURL;
         }
@@ -1246,7 +1246,7 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
  */
 - (void)runDestinationAlerts:(HBJob *)job completionHandler:(void (^ __nullable)(NSModalResponse returnCode))handler
 {
-    if ([NSFileManager.defaultManager fileExistsAtPath:job.destinationFolderURL.path] == NO)
+    if ([job.destinationFolderURL checkResourceIsReachableAndReturnError:NULL] == NO)
     {
         NSAlert *alert = [[NSAlert alloc] init];
         [alert setMessageText:NSLocalizedString(@"Warning!", @"Invalid destination alert -> message")];
@@ -1263,7 +1263,7 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
         [alert setAlertStyle:NSAlertStyleCritical];
         [alert beginSheetModalForWindow:self.window completionHandler:handler];
     }
-    else if ([NSFileManager.defaultManager fileExistsAtPath:job.destinationURL.path])
+    else if ([job.destinationURL checkResourceIsReachableAndReturnError:NULL])
     {
         NSAlert *alert = [[NSAlert alloc] init];
         [alert setMessageText:NSLocalizedString(@"A file already exists at the selected destination.", @"File already exists alert -> message")];
@@ -1423,7 +1423,7 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
             [destinations addObject:job.destinationURL];
         }
 
-        if ([[NSFileManager defaultManager] fileExistsAtPath:job.destinationURL.path] || [_queue itemExistAtURL:job.destinationURL])
+        if ([job.destinationURL checkResourceIsReachableAndReturnError:NULL] || [_queue itemExistAtURL:job.destinationURL])
         {
             fileExists = YES;
             break;
