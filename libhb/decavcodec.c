@@ -1543,6 +1543,15 @@ int reinit_video_filters(hb_work_private_t * pv)
 
     enum AVPixelFormat sw_pix_fmt = pv->frame->format;
     enum AVPixelFormat hw_pix_fmt = AV_PIX_FMT_NONE;
+    enum AVColorSpace color_matrix = pv->frame->colorspace;
+
+    if (!pv->job)
+    {
+        // Sanitize the color_matrix when decoding preview images
+        hb_rational_t par = {pv->frame->sample_aspect_ratio.num, pv->frame->sample_aspect_ratio.den};
+        hb_geometry_t geo = {pv->frame->width, pv->frame->height, par};
+        color_matrix = hb_get_color_matrix(pv->frame->colorspace, geo);
+    }
 
     AVHWFramesContext *frames_ctx = NULL;
     if (pv->frame->hw_frames_ctx)
@@ -1561,7 +1570,7 @@ int reinit_video_filters(hb_work_private_t * pv)
     filter_init.geometry.height   = pv->frame->height;
     filter_init.geometry.par.num  = pv->frame->sample_aspect_ratio.num;
     filter_init.geometry.par.den  = pv->frame->sample_aspect_ratio.den;
-    filter_init.color_matrix      = pv->frame->colorspace;
+    filter_init.color_matrix      = color_matrix;
     filter_init.color_range       = pv->frame->color_range;
     filter_init.time_base.num     = 1;
     filter_init.time_base.den     = 1;
