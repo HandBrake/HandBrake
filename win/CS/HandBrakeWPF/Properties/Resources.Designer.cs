@@ -8038,6 +8038,24 @@ namespace HandBrakeWPF.Properties {
             }
         }
         
+		/// <summary>
+        ///   Looks up a localized string similar to Allow Upscaling:.
+        /// </summary>
+        public static string PictureSettingsView_AllowUpscaling {
+            get {
+                return ResourceManager.GetString("PictureSettingsView_AllowUpscaling", resourceCulture);
+            }
+        }
+		
+		/// <summary>
+        ///   Looks up a localized string similar to Optimal Size:.
+        /// </summary>
+        public static string PictureSettingsView_OptimalSize {
+            get {
+                return ResourceManager.GetString("PictureSettingsView_OptimalSize", resourceCulture);
+            }
+        }
+		
         /// <summary>
         ///   Looks up a localized string similar to Yes.
         /// </summary>

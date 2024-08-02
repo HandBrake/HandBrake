@@ -141,7 +141,7 @@
                 <StackPanel Orientation="Vertical" Margin="0,15,0,0">
                     <CheckBox Content="{x:Static Properties:Resources.Options_TitleCase}" IsChecked="{Binding ChangeToTitleCase}" />
                     <CheckBox Content="{x:Static Properties:Resources.Options_ReplaceUnderscores}" IsChecked="{Binding RemoveUnderscores}"/>
-                    <CheckBox Content="{x:Static Properties:Resources.Options_RemovePunctuation}" ToolTip="Dash (-), Period (.) and Comma (,) " IsChecked="{Binding RemovePunctuation}"  />
+                    <CheckBox Content="{x:Static Properties:Resources.Options_RemovePunctuation}" ToolTip="{x:Static Properties:ResourcesTooltips.Options_RemovePunctuation}" IsChecked="{Binding RemovePunctuation}"/>
                 </StackPanel>
 
                 <StackPanel Orientation="Horizontal" Margin="0,15,0,0">

@@ -197,8 +197,8 @@
                                     AutomationProperties.Name="{x:Static Properties:Resources.PictureSettingsView_Height}" />
             </StackPanel>
 
-            <CheckBox Content="Optimal Size" IsChecked="{Binding OptimalSize}" Grid.Row="5" Grid.Column="1" Grid.ColumnSpan="3" Margin="0,5,0,0" VerticalContentAlignment="Center" />
-            <CheckBox Content="Allow Upscaling" IsChecked="{Binding AllowUpscaling}" Grid.Row="6" Grid.Column="1" Grid.ColumnSpan="3" Margin="0,5,0,0" VerticalContentAlignment="Center" />
+            <CheckBox Content="{x:Static Properties:Resources.PictureSettingsView_OptimalSize}" IsChecked="{Binding OptimalSize}" Grid.Row="5" Grid.Column="1" Grid.ColumnSpan="3" Margin="0,5,0,0" VerticalContentAlignment="Center" />
+            <CheckBox Content="{x:Static Properties:Resources.PictureSettingsView_AllowUpscaling}" IsChecked="{Binding AllowUpscaling}" Grid.Row="6" Grid.Column="1" Grid.ColumnSpan="3" Margin="0,5,0,0" VerticalContentAlignment="Center" />
         </Grid>
 
         <!-- Padding Panel -->
