@@ -2829,7 +2829,7 @@ ghb_set_title_settings(signal_user_data_t *ud, GhbValue *settings)
     dest_dir = ghb_dict_get_string(settings, "dest_dir");
     dest = g_strdup_printf("%s" G_DIR_SEPARATOR_S "%s", dest_dir, dest_file);
     ghb_dict_set_string(settings, "destination", dest);
-    GhbValue *dest_dict = ghb_get_job_dest_settings(ud->settings);
+    GhbValue *dest_dict = ghb_get_job_dest_settings(settings);
     ghb_dict_set_string(dest_dict, "File", dest);
     g_free(dest);
 
