@@ -678,14 +678,18 @@ static int DecodePreviews( hb_scan_t * data, hb_title_t * title, int flush )
         title->angle_count = hb_dvd_angle_count( data->dvd );
         hb_log( "scan: title angle(s) %d", title->angle_count );
     }
-    else if (data->batch)
+    else // data->batch or a single file
     {
         stream = hb_stream_open(data->h, title->path, title, 0);
     }
-    else 
+
+    if (data->bd == NULL && data->dvd == NULL && stream == NULL)
     {
-        // We have a batch of files.
-        stream = hb_stream_open(data->h, title->path, title, 0);
+        hb_error("Can't open stream!");
+        free(info_list);
+        crop_record_free(crops);
+        hb_stream_close(&stream);
+        return 0;
     }
 
     if (title->video_codec == WORK_NONE)
