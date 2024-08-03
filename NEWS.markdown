@@ -18,6 +18,20 @@ Download available from Microsoft:
 
 ## HandBrake 1.8.2
 
+### All platforms
+
+#### General
+
+- Fixed a potential crash when trying to scan deleted files
+- Fixed scan of broken video that uses reserved color matrix values
+- Fixed an issue that could cause some audio tracks to be dropped
+
+#### Third-party libraries
+
+- Updated libraries
+  - libass 0.17.3 (subtitles)
+  - libvpx 1.14.1 (VP8/VP9 video encoding)
+
 ### Windows
 - Fixed an issue where auto name wasn't triggering correclty with preset changes (#6159)
 
