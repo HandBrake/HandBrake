@@ -11,7 +11,7 @@ diff --git a/libavformat/mov.c b/libavformat/mov.c
 index 8d1135270c..e91da339ee 100644
 --- a/libavformat/mov.c
 +++ b/libavformat/mov.c
-@@ -336,6 +336,7 @@ static int mov_read_udta_string(MOVContext *c, AVIOContext *pb, MOVAtom atom)
+@@ -337,6 +337,7 @@ static int mov_read_udta_string(MOVContext *c, AVIOContext *pb, MOVAtom atom)
      int (*parse)(MOVContext*, AVIOContext*, unsigned, const char*) = NULL;
      int raw = 0;
      int num = 0;
@@ -19,7 +19,7 @@ index 8d1135270c..e91da339ee 100644
  
      switch (atom.type) {
      case MKTAG( '@','P','R','M'): key = "premiere_version"; raw = 1; break;
-@@ -368,6 +369,7 @@ static int mov_read_udta_string(MOVContext *c, AVIOContext *pb, MOVAtom atom)
+@@ -369,6 +370,7 @@ static int mov_read_udta_string(MOVContext *c, AVIOContext *pb, MOVAtom atom)
          return mov_metadata_loci(c, pb, atom.size);
      case MKTAG( 'm','a','n','u'): key = "make"; break;
      case MKTAG( 'm','o','d','l'): key = "model"; break;
@@ -27,7 +27,7 @@ index 8d1135270c..e91da339ee 100644
      case MKTAG( 'p','c','s','t'): key = "podcast";
          parse = mov_metadata_int8_no_padding; break;
      case MKTAG( 'p','g','a','p'): key = "gapless_playback";
-@@ -553,17 +555,23 @@ retry:
+@@ -554,17 +556,23 @@ retry:
              }
              str[str_size] = 0;
          }
