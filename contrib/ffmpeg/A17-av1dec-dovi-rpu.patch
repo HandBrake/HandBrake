@@ -2,7 +2,7 @@ diff --git a/libavcodec/av1dec.c b/libavcodec/av1dec.c
 index 32a795e758..053d342169 100644
 --- a/libavcodec/av1dec.c
 +++ b/libavcodec/av1dec.c
-@@ -996,6 +996,8 @@ static int export_itut_t35(AVCodecContext *avctx, AVFrame *frame,
+@@ -1028,6 +1029,8 @@ static int export_itut_t35(AVCodecContext *avctx, AVFrame *frame,
          break;
      }
      case ITU_T_T35_PROVIDER_CODE_DOLBY: {
@@ -11,7 +11,7 @@ index 32a795e758..053d342169 100644
          int provider_oriented_code = bytestream2_get_be32(&gb);
          if (itut_t35->itu_t_t35_country_code != ITU_T_T35_COUNTRY_CODE_US ||
              provider_oriented_code != 0x800)
-@@ -1007,6 +1009,18 @@ static int export_itut_t35(AVCodecContext *avctx, AVFrame *frame,
+@@ -1039,6 +1041,18 @@ static int export_itut_t35(AVCodecContext *avctx, AVFrame *frame,
              break; // ignore
          }
  
