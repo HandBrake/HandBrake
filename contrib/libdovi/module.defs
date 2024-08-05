@@ -7,8 +7,8 @@ ifeq (1,$(FEATURE.flatpak))
     LIBDOVI.FETCH.basename = dovi_tool-libdovi-3.3.1_vendor.tar.gz
 else
     LIBDOVI.FETCH.url      = https://github.com/HandBrake/HandBrake-contribs/releases/download/contribs/libdovi-3.3.1.tar.gz
-	LIBDOVI.FETCH.url      += https://github.com/quietvoid/dovi_tool/archive/refs/tags/libdovi-3.3.1.tar.gz
-    LIBDOVI.FETCH.sha256   = 4b7e28322a5b15ea0eff5ed19e626468b17d5fc17aab9befaa9f725e466a7b40
+    LIBDOVI.FETCH.url     += https://github.com/quietvoid/dovi_tool/archive/refs/tags/libdovi-3.3.1.tar.gz
+    LIBDOVI.FETCH.sha256   = 4cd7a4c418fd8af1da13278ce7524c15b7fdf61e1fe53663aa291c68c5062777
     LIBDOVI.FETCH.basename = dovi_tool-libdovi-3.3.1.tar.gz
 endif
 
