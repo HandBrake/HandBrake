@@ -24,6 +24,7 @@ namespace HandBrakeWPF.Services.Encode.Factories
 
     using HandBrakeWPF.Model.Filters;
     using HandBrakeWPF.Services.Interfaces;
+    using HandBrakeWPF.Utilities;
 
     using AudioEncoderRateType = Model.Models.AudioEncoderRateType;
     using AudioTrack = Model.Models.AudioTrack;
@@ -107,7 +108,8 @@ namespace HandBrakeWPF.Services.Encode.Factories
             {
                 hwDecode = (int)NativeConstants.HB_DECODE_SUPPORT_NVDEC;
             }
-            if (directx)
+
+            if (directx && HandBrakeHardwareEncoderHelper.IsDirectXAvailable)
             {
                 hwDecode = (int)NativeConstants.HB_DECODE_SUPPORT_MF;
             }
@@ -299,7 +301,7 @@ namespace HandBrakeWPF.Services.Encode.Factories
                 video.HardwareDecode = (int)NativeConstants.HB_DECODE_SUPPORT_NVDEC;
             }
 
-            if (this.userSettingService.GetUserSetting<bool>(UserSettingConstants.EnableDirectXDecoding))
+            if (HandBrakeHardwareEncoderHelper.IsDirectXAvailable && this.userSettingService.GetUserSetting<bool>(UserSettingConstants.EnableDirectXDecoding))
             {
                 video.HardwareDecode = (int)NativeConstants.HB_DECODE_SUPPORT_MF;
             }

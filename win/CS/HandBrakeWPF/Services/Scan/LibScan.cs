@@ -257,7 +257,7 @@ namespace HandBrakeWPF.Services.Scan
                 {
                     hwDecode = (int)NativeConstants.HB_DECODE_SUPPORT_NVDEC;
                 }
-                if (directx)
+                if (directx && HandBrakeHardwareEncoderHelper.IsDirectXAvailable)
                 {
                     hwDecode = (int)NativeConstants.HB_DECODE_SUPPORT_MF;
                 }

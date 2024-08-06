@@ -325,9 +325,9 @@ namespace HandBrakeWPF.Services
             defaults.Add(UserSettingConstants.EnableVceEncoder, true);
             defaults.Add(UserSettingConstants.EnableNvencEncoder, nvidiaDefaultSetting);
             defaults.Add(UserSettingConstants.EnableNvDecSupport, nvidiaDefaultSetting);
-            defaults.Add(UserSettingConstants.EnableDirectXDecoding, true);
             defaults.Add(UserSettingConstants.EnableQuickSyncLowPower, true);
-            
+            defaults.Add(UserSettingConstants.EnableDirectXDecoding, SystemInfo.IsArmDevice);
+
             // Advanced
             defaults.Add(UserSettingConstants.PreventSleep, true);
             defaults.Add(UserSettingConstants.PauseEncodingOnLowBattery, true);
