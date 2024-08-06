@@ -3963,6 +3963,15 @@ namespace HandBrakeWPF.Properties {
                 return ResourceManager.GetString("OptionsView_EnableNvencEncoding", resourceCulture);
             }
         }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Allow use of the Direct X Decoding
+        /// </summary>
+        public static string OptionsView_EnableDirectXDecoding {
+            get {
+                return ResourceManager.GetString("OptionsView_EnableDirectXDecoding", resourceCulture);
+            }
+        }
         
         /// <summary>
         ///   Looks up a localized string similar to Allow use of the Intel QuickSync Encoders.

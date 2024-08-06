@@ -100,11 +100,16 @@ namespace HandBrakeWPF.Services.Encode.Factories
             }
 
             bool nvdec = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.EnableNvDecSupport);
+            bool directx = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.EnableDirectXDecoding);
 
             int hwDecode = 0;
             if (nvdec)
             {
                 hwDecode = (int)NativeConstants.HB_DECODE_SUPPORT_NVDEC;
+            }
+            if (directx)
+            {
+                hwDecode = (int)NativeConstants.HB_DECODE_SUPPORT_MF;
             }
 
             bool qsv = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.EnableQuickSyncDecoding);
@@ -293,6 +298,12 @@ namespace HandBrakeWPF.Services.Encode.Factories
             {
                 video.HardwareDecode = (int)NativeConstants.HB_DECODE_SUPPORT_NVDEC;
             }
+
+            if (this.userSettingService.GetUserSetting<bool>(UserSettingConstants.EnableDirectXDecoding))
+            {
+                video.HardwareDecode = (int)NativeConstants.HB_DECODE_SUPPORT_MF;
+            }
+
 
             return video;
         }

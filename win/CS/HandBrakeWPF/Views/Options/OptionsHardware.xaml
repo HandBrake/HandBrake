@@ -114,6 +114,9 @@
 
                 <CheckBox Content="{x:Static Properties:Resources.OptionsView_EnableNvDecSupport}" Margin="25,5,0,0" IsEnabled="{Binding IsNvencAvailable}"
                                       Visibility="{Binding IsNvdecAvailable, Converter={StaticResource boolToVisConverter}}" IsChecked="{Binding EnableNvDecSupport}" />
+                
+                <!-- DirectX -->
+                <CheckBox Content="{x:Static Properties:Resources.OptionsView_EnableDirectXDecoding}" Margin="0,25,0,0" IsEnabled="{Binding IsDirectXAvailable}" IsChecked="{Binding EnableDirectXDecoding}" />
 
             </StackPanel>
 

@@ -1246,8 +1246,9 @@ struct hb_title_s
 #define HB_DECODE_SUPPORT_QSV            0x02 // Intel Quick Sync Video
 #define HB_DECODE_SUPPORT_NVDEC          0x04
 #define HB_DECODE_SUPPORT_VIDEOTOOLBOX   0x08
+#define HB_DECODE_SUPPORT_MF             0x10 // Windows Media Foundation
 
-#define HB_DECODE_SUPPORT_HWACCEL        (HB_DECODE_SUPPORT_NVDEC | HB_DECODE_SUPPORT_VIDEOTOOLBOX)
+#define HB_DECODE_SUPPORT_HWACCEL        (HB_DECODE_SUPPORT_NVDEC | HB_DECODE_SUPPORT_VIDEOTOOLBOX | HB_DECODE_SUPPORT_MF)
 #define HB_DECODE_SUPPORT_FORCE_HW       0x80000000
 
     hb_metadata_t * metadata;

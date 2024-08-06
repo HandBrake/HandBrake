@@ -66,6 +66,7 @@ namespace HandBrakeWPF
         public const string EnableQuickSyncEncoding = "EnableQuickSyncEncoding";
         public const string EnableQuickSyncHyperEncode = "EnableQuickSyncHyperEncode";
         public const string EnableVceEncoder = "EnableVceEncoder";
+        public const string EnableDirectXDecoding = "EnableDirectXDecoding";
         public const string EnableNvencEncoder = "EnableNvencEncoder";
         public const string UiLanguage = "UiLanguage";
         public const string ShowAddAllToQueue = "ShowAddAllToQueue";

@@ -1125,6 +1125,9 @@ Hint: File overwrite behaviour can be controlled in preferences. </value>
   <data name="OptionsView_EnableNvencEncoding" xml:space="preserve">
     <value>Allow use of the Nvidia NVENC Encoders</value>
   </data>
+  <data name="OptionsView_EnableDirectXDecoding" xml:space="preserve">
+    <value>Allow use of DirectX Decoding</value>
+  </data>
   <data name="OptionsView_EnableQuicksyncEncoding" xml:space="preserve">
     <value>Allow use of the Intel QuickSync Encoders</value>
   </data>

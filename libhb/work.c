@@ -1683,6 +1683,10 @@ static void do_job(hb_job_t *job)
     {
         job->hw_decode = 0;
     }
+    if (job->hw_decode == HB_DECODE_SUPPORT_MF)
+    {
+        job->hw_decode |= HB_DECODE_SUPPORT_FORCE_HW;
+    }
 
     // This must be performed before initializing filters because
     // it can add the subtitle render filter.

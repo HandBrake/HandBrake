@@ -713,6 +713,11 @@ static int DecodePreviews( hb_scan_t * data, hb_title_t * title, int flush )
     {
         hw_decode = HB_DECODE_SUPPORT_VIDEOTOOLBOX;
     }
+    else if (data->hw_decode & HB_DECODE_SUPPORT_MF &&
+             hb_hwaccel_available(title->video_codec_param, "d3d11va"))
+    {
+        hw_decode = HB_DECODE_SUPPORT_MF;
+    }
 
     void *hw_device_ctx = NULL;
     if (hw_decode)

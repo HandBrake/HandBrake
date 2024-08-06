@@ -552,6 +552,9 @@ static void hb_common_global_hw_init()
 #if HB_PROJECT_FEATURE_VCE
     hb_vce_h264_available();
 #endif
+#if HB_PROJECT_FEATURE_MF
+    hb_directx_available();
+#endif
     // first initialization and QSV adapters list collection should happen after other hw vendors initializations to prevent device order issues
 #if HB_PROJECT_FEATURE_QSV
     hb_qsv_available();
@@ -6720,6 +6723,11 @@ static int pix_hw_fmt_is_supported(hb_job_t *job, int pix_fmt)
         {
             return 1;
         }
+        if (pix_fmt == AV_PIX_FMT_D3D11 &&
+            job->hw_decode & HB_DECODE_SUPPORT_MF)
+        {
+            return 1;
+        }
     }
 
     return 0;
@@ -6727,7 +6735,7 @@ static int pix_hw_fmt_is_supported(hb_job_t *job, int pix_fmt)
 
 static const enum AVPixelFormat hw_pipeline_pix_fmts[] =
 {
-    AV_PIX_FMT_QSV, AV_PIX_FMT_CUDA, AV_PIX_FMT_VIDEOTOOLBOX, AV_PIX_FMT_NONE
+    AV_PIX_FMT_QSV, AV_PIX_FMT_CUDA, AV_PIX_FMT_VIDEOTOOLBOX, AV_PIX_FMT_D3D11, AV_PIX_FMT_NONE
 };
 
 int hb_get_best_hw_pix_fmt(hb_job_t *job)

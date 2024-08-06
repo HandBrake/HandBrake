@@ -3219,6 +3219,10 @@ static int ParseOptions( int argc, char ** argv )
                         }
 #endif
                     }
+                    else if (!strcmp(optarg, "mf"))
+                    {
+                        hw_decode = HB_DECODE_SUPPORT_MF;
+                    }
                     else
                     {
                         hw_decode = 0;

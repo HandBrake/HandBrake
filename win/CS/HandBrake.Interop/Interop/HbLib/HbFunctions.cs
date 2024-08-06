@@ -250,6 +250,9 @@ namespace HandBrake.Interop.Interop.HbLib
             int width,
             int height);
 
+        [DllImport("hb", EntryPoint = "hb_directx_available", CallingConvention = CallingConvention.Cdecl)]
+        public static extern int hb_directx_available();
+
         [DllImport("hb", EntryPoint = "hb_qsv_available", CallingConvention = CallingConvention.Cdecl)]
         public static extern int hb_qsv_available();
 

@@ -598,6 +598,10 @@ static void closePrivData( hb_work_private_t ** ppv )
         }
         if ( pv->context )
         {
+            if (pv->context->hw_device_ctx)
+            {
+                av_buffer_unref(&pv->context->hw_device_ctx);
+            }
             hb_avcodec_free_context(&pv->context);
         }
         av_packet_free(&pv->pkt);
@@ -2496,6 +2500,10 @@ static int decavcodecvInfo( hb_work_object_t *w, hb_work_info_t *info )
     else if (pv->context->pix_fmt == AV_PIX_FMT_VIDEOTOOLBOX)
     {
         info->video_decode_support |= HB_DECODE_SUPPORT_VIDEOTOOLBOX;
+    }
+    else if (pv->context->pix_fmt == AV_PIX_FMT_D3D11)
+    {
+        info->video_decode_support |= HB_DECODE_SUPPORT_MF;
     }
 
     return 1;
