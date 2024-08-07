@@ -14,6 +14,8 @@ Download available from Microsoft:
 
 ### Windows
 - Add Range Limit controls to the "Add to Queue" selection window. (#4146)
+- Add support for DirectX based video decoding when using the Media Foundation encoder on ARM devices. 
+- Miscellaneous bug fixes and improvements
 
 
 ## HandBrake 1.8.2
@@ -33,7 +35,13 @@ Download available from Microsoft:
   - libvpx 1.14.1 (VP8/VP9 video encoding)
 
 ### Windows
-- Fixed an issue where auto name wasn't triggering correclty with preset changes (#6159)
+- Fixed an issue where auto name wasn't triggering correctly with preset changes (#6159)
+- Fixed a potential crash when importing presets from the mac version. (#6186)
+- Fixed an issue loading presets where a video encode isn't available on the system. (#6184)
+- Minor startup performance improvement on some Intel based systems.
+
+### Linux
+- Fixed an issue where an encoded file could be output to the wrong filename when using the queue (#6067)
 
 
 ## HandBrake 1.8.1
