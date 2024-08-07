@@ -25,7 +25,13 @@ Windows users, please make sure to install [Microsoft .NET Desktop Runtime versi
   - libvpx 1.14.1 (VP8/VP9 video encoding)
 
 ### Windows
-- Fixed an issue where auto name wasn't triggering correclty with preset changes (#6159)
+- Fixed an issue where auto name wasn't triggering correctly with preset changes (#6159)
+- Fixed a potential crash when importing presets from the mac version. (#6186)
+- Fixed an issue loading presets where a video encode isn't available on the system. (#6184)
+- Minor startup performance improvement on some Intel based systems.
+
+### Linux
+- Fixed an issue where an encoded file could be output to the wrong filename when using the queue (#6067)
 
 
 ## HandBrake 1.8.1
