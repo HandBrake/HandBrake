@@ -31,6 +31,7 @@ Download available from Microsoft:
 #### Third-party libraries
 
 - Updated libraries
+  - FFmpeg 7.0.2 (decoding and filters)
   - libass 0.17.3 (subtitles)
   - libvpx 1.14.1 (VP8/VP9 video encoding)
 
