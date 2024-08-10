@@ -93,7 +93,7 @@ index e91da339ee..f9012db994 100644
  static int mov_read_udta_string(MOVContext *c, AVIOContext *pb, MOVAtom atom)
  {
      char tmp_key[AV_FOURCC_MAX_STRING_SIZE] = {0};
-@@ -350,15 +418,33 @@ static int mov_read_udta_string(MOVContext *c, AVIOContext *pb, MOVAtom atom)
+@@ -351,15 +419,33 @@ static int mov_read_udta_string(MOVContext *c, AVIOContext *pb, MOVAtom atom)
      case MKTAG( 'c','a','t','g'): key = "category"; break;
      case MKTAG( 'c','p','i','l'): key = "compilation";
          parse = mov_metadata_int8_no_padding; break;
@@ -130,7 +130,7 @@ index e91da339ee..f9012db994 100644
      case MKTAG( 'h','d','v','d'): key = "hd_video";
          parse = mov_metadata_int8_no_padding; break;
      case MKTAG( 'H','M','M','T'):
-@@ -429,6 +515,15 @@ static int mov_read_udta_string(MOVContext *c, AVIOContext *pb, MOVAtom atom)
+@@ -430,6 +516,15 @@ static int mov_read_udta_string(MOVContext *c, AVIOContext *pb, MOVAtom atom)
      case MKTAG(0xa9,'w','r','n'): key = "warning";   break;
      case MKTAG(0xa9,'w','r','t'): key = "composer";  break;
      case MKTAG(0xa9,'x','y','z'): key = "location";  break;

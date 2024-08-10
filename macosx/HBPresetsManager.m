@@ -98,7 +98,7 @@ NSString *HBPresetsChangedNotification = @"HBPresetsChangedNotification";
                             url.lastPathComponent.stringByDeletingPathExtension,
                             major, minor, micro];
 
-    return [url.URLByDeletingLastPathComponent URLByAppendingPathComponent:backupName];
+    return [url.URLByDeletingLastPathComponent URLByAppendingPathComponent:backupName isDirectory:NO];
 }
 
 typedef NS_ENUM(NSUInteger, HBPresetLoadingResult) {
@@ -134,7 +134,7 @@ typedef NS_ENUM(NSUInteger, HBPresetLoadingResult) {
                                                  versionMajor:[presetsDict[@"VersionMajor"] intValue]
                                                         minor:[presetsDict[@"VersionMinor"] intValue]
                                                         micro:[presetsDict[@"VersionMicro"] intValue]];
-                    [[NSFileManager defaultManager] copyItemAtURL:url toURL:backupURL error:NULL];
+                    [NSFileManager.defaultManager copyItemAtURL:url toURL:backupURL error:NULL];
                 }
 
                 // Update the presets to the current format.

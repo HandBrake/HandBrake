@@ -145,6 +145,7 @@
                     <TextBox x:Name="MinTitleLength" VerticalAlignment="Center" Text="{Binding MinLength}"  Width="120"/>
                     <!-- Find a control for this-->
                 </StackPanel>
+                <CheckBox Content="{x:Static Properties:Resources.Options_KeepDuplicateTitles}" IsChecked="{Binding KeepDuplicateTitles}" Margin="0,8,0,0" />
             </StackPanel>
         </StackPanel>
 

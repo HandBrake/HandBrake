@@ -38,7 +38,7 @@
     if ([NSUserDefaults.standardUserDefaults boolForKey:HBEncodeLogLocation])
     {
         // if we are putting it in the same directory with the movie
-        destinationURL = [job.destinationFolderURL URLByAppendingPathComponent:outputDateFileName];
+        destinationURL = [job.destinationFolderURL URLByAppendingPathComponent:outputDateFileName isDirectory:NO];
 
 #ifdef __SANDBOX_ENABLED__
         _outputFolderURL = job.destinationFolderURL;
@@ -49,8 +49,8 @@
     else
     {
         // if we are putting it in the default ~/Libraries/Application Support/HandBrake/EncodeLogs logs directory
-        NSURL *encodeLogDirectory = [[HBUtilities appSupportURL] URLByAppendingPathComponent:@"EncodeLogs"];
-        destinationURL = [encodeLogDirectory URLByAppendingPathComponent:outputDateFileName];
+        NSURL *encodeLogDirectory = [[HBUtilities appSupportURL] URLByAppendingPathComponent:@"EncodeLogs" isDirectory:YES];
+        destinationURL = [encodeLogDirectory URLByAppendingPathComponent:outputDateFileName isDirectory:NO];
     }
 
     self = [super initWithFileURL:destinationURL];

@@ -26,7 +26,7 @@ diff --git a/libavformat/mov.c b/libavformat/mov.c
 index 0c892b56c8..a490e78b83 100644
 --- a/libavformat/mov.c
 +++ b/libavformat/mov.c
-@@ -8465,6 +8465,23 @@ fail:
+@@ -8632,6 +8632,23 @@ fail:
      return ret;
  }
  
@@ -50,7 +50,7 @@ index 0c892b56c8..a490e78b83 100644
  static const MOVParseTableEntry mov_default_parse_table[] = {
  { MKTAG('A','C','L','R'), mov_read_aclr },
  { MKTAG('A','P','R','G'), mov_read_avid },
-@@ -8563,6 +8580,7 @@ static const MOVParseTableEntry mov_default_parse_table[] = {
+@@ -8730,6 +8747,7 @@ static const MOVParseTableEntry mov_default_parse_table[] = {
  { MKTAG('v','p','c','C'), mov_read_vpcc },
  { MKTAG('m','d','c','v'), mov_read_mdcv },
  { MKTAG('c','l','l','i'), mov_read_clli },
@@ -58,7 +58,7 @@ index 0c892b56c8..a490e78b83 100644
  { MKTAG('d','v','c','C'), mov_read_dvcc_dvvc },
  { MKTAG('d','v','v','C'), mov_read_dvcc_dvvc },
  { MKTAG('d','v','w','C'), mov_read_dvcc_dvvc },
-@@ -9675,6 +9693,23 @@ static int mov_read_header(AVFormatContext *s)
+@@ -9847,6 +9865,23 @@ static int mov_read_header(AVFormatContext *s)
              err = ff_replaygain_export(st, s->metadata);
              if (err < 0)
                  return err;

@@ -48,7 +48,7 @@ void          hb_dvd_set_dvdnav( int enable );
 void          hb_scan( hb_handle_t * h, hb_list_t * paths, int title_index,
                       int preview_count, int store_previews, uint64_t min_duration,
                       int crop_threshold_frames, int crop_threshold_pixels,
-                      hb_list_t * exclude_extensions, int hw_decode);
+                      hb_list_t * exclude_extensions, int hw_decode, int keep_duplicate_titles);
 
 void          hb_scan_stop( hb_handle_t * );
 void          hb_force_rescan( hb_handle_t * );

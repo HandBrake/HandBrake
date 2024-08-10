@@ -31,6 +31,10 @@ Original "Faster" settings:
 #include "handbrake/handbrake.h"
 #include "handbrake/taskset.h"
 
+#if defined(__aarch64__)
+#include <arm_neon.h>
+#endif
+
 typedef struct comb_detect_thread_arg_s
 {
     taskset_thread_arg_t arg;
@@ -142,6 +146,77 @@ hb_filter_object_t hb_filter_comb_detect =
 #include "templates/comb_detect_template.c"
 #undef BIT_DEPTH
 
+#if defined (__aarch64__)
+static void check_filtered_combing_mask(hb_filter_private_t *pv, int segment, int start, int stop)
+{
+    // Go through the mask in X*Y blocks. If any of these windows
+    // have threshold or more combed pixels, consider the whole
+    // frame to be combed and send it on to be deinterlaced.
+    // Block mask threshold -- The number of pixels
+    // in a block_width * block_height window of
+    // the mask that need to show combing for the
+    // whole frame to be seen as such.
+
+    const int threshold     = pv->block_threshold;
+    const int block_width   = pv->block_width;
+    const int block_height  = pv->block_height;
+
+    const int stride = pv->mask_filtered->plane[0].stride;
+    const int width = pv->mask_filtered->plane[0].width;
+
+    for (int y = start; y < (stop - block_height + 1); y = y + block_height)
+    {
+        for (int x = 0; x < (width - block_width); x = x + block_width)
+        {
+            int block_score = 0;
+
+            for (int block_y = 0; block_y < block_height; block_y++)
+            {
+                const int my = y + block_y;
+                const uint8_t *mask_p = &pv->mask_filtered->plane[0].data[my * stride + x];
+
+                if (block_width == 16)
+                {
+                    uint8x16_t mask = vld1q_u8(&mask_p[0]);
+                    block_score +=  vaddvq_u8(mask);
+                }
+                else
+                {
+                    int block_x = 0;
+                    for (; block_x < block_width-7; block_x += 8)
+                    {
+                        uint8x8_t mask = vld1_u8(&mask_p[block_x]);
+                        block_score +=  vaddv_u8(mask);
+                    } 
+                    for (;block_x < block_width; block_x++)
+                    {
+                        block_score += mask_p[block_x];
+                    }
+                }
+            }
+
+            if (pv->comb_check_complete)
+            {
+                // Some other thread found coming before this one
+                return;
+            }
+
+            if (block_score >= (threshold / 2))
+            {
+                pv->mask_box_x = x;
+                pv->mask_box_y = y;
+
+                pv->block_score[segment] = block_score;
+                if (block_score > threshold)
+                {
+                    pv->comb_check_complete = 1;
+                    return;
+                }
+            }
+        }
+    }
+}
+#else
 static void check_filtered_combing_mask(hb_filter_private_t *pv, int segment, int start, int stop)
 {
     // Go through the mask in X*Y blocks. If any of these windows
@@ -198,7 +273,113 @@ static void check_filtered_combing_mask(hb_filter_private_t *pv, int segment, in
         }
     }
 }
+#endif
 
+#if defined(__aarch64__)
+static void check_combing_mask(hb_filter_private_t *pv, int segment, int start, int stop)
+{
+    // Go through the mask in X*Y blocks. If any of these windows
+    // have threshold or more combed pixels, consider the whole
+    // frame to be combed and send it on to be deinterlaced.
+    // Block mask threshold -- The number of pixels
+    // in a block_width * block_height window of
+    // the mask that need to show combing for the
+    // whole frame to be seen as such.
+
+    const int threshold    = pv->block_threshold;
+    const int block_width  = pv->block_width;
+    const int block_height = pv->block_height;
+
+    const int stride = pv->mask->plane[0].stride;
+    const int width = pv->mask->plane[0].width;
+
+    uint8x16_t one_vector = vdupq_n_u8(255);
+    for (int y = start; y < (stop - block_height + 1); y = y + block_height)
+    {
+        for (int x = 0; x < (width - block_width); x = x + block_width)
+        {
+            int block_score = 0;
+
+            for (int block_y = 0; block_y < block_height; block_y++)
+            {
+                const int mask_y = y + block_y;
+                const uint8_t *mask_p = &pv->mask->plane[0].data[mask_y * stride + x];
+
+                int block_x = 0;
+                if (block_width == 16)
+                {
+                    uint8x16_t mask = vld1q_u8(&mask_p[0]);
+                    uint8x16_t mask_left, mask_right;
+                    if (x == 0)
+                    {
+                         mask_left = vextq_u8(one_vector, mask, 15);
+                    }
+                    else
+                    {
+                         mask_left = vld1q_u8(&mask_p[-1]);
+                    }
+                    if (x == width-block_width - 1)
+                    {
+                        mask_right = vextq_u8(mask, one_vector, 1);
+                    }
+                    else
+                    {
+                         mask_right = vld1q_u8(&mask_p[1]);
+                    }
+                    uint8x16_t res1 = vandq_u8(vandq_u8(mask_left, mask), mask_right);
+                    block_score +=  vaddvq_u8(res1);
+                }
+                else
+                {
+                    if ((x + block_x) == 0)
+                    {
+                        block_score += mask_p[0] & mask_p[1];
+                        block_x += 1;
+                    }
+                    for (; block_x < block_width - 8; block_x += 8)
+                    {
+                        uint8x8_t mask = vld1_u8(&mask_p[block_x]);
+                        uint8x8_t mask_left = vld1_u8(&mask_p[block_x-1]);
+                        uint8x8_t mask_right = vld1_u8(&mask_p[block_x+1]);
+                        uint8x8_t result = vand_u8(vand_u8(mask_left, mask), mask_right );
+                        block_score += vaddv_u8(result);
+                    }
+                    for (; block_x < block_width; block_x++)
+                    {
+                        if ((x + block_x) == (width -1))
+                        {
+                            block_score += mask_p[block_x-1] & mask_p[block_x];
+                        }
+                        else
+                        {
+                            block_score += mask_p[block_x-1] & mask_p[block_x] & mask_p[block_x+1];
+                        }
+                    }
+                }
+            }
+
+            if (pv->comb_check_complete)
+            {
+                // Some other thread found coming before this one
+                return;
+            }
+
+            if (block_score >= (threshold / 2))
+            {
+                pv->mask_box_x = x;
+                pv->mask_box_y = y;
+
+                pv->block_score[segment] = block_score;
+                if (block_score > threshold)
+                {
+                    pv->comb_check_complete = 1;
+                    return;
+                }
+            }
+        }
+    }
+}
+#else
 static void check_combing_mask(hb_filter_private_t *pv, int segment, int start, int stop)
 {
     // Go through the mask in X*Y blocks. If any of these windows
@@ -270,7 +451,107 @@ static void check_combing_mask(hb_filter_private_t *pv, int segment, int start, 
         }
     }
 }
+#endif
 
+#if defined(__aarch64__)
+static void mask_dilate_work(void *thread_args_v)
+{
+    comb_detect_thread_arg_t *thread_args = thread_args_v;
+    hb_filter_private_t *pv = thread_args->pv;
+
+    const int segment_start = thread_args->segment_start[0];
+    const int segment_stop = segment_start + thread_args->segment_height[0];
+
+    const int dilation_threshold = 4;
+
+    const int width = pv->mask_filtered->plane[0].width;
+    const int height = pv->mask_filtered->plane[0].height;
+    const int stride = pv->mask_filtered->plane[0].stride;
+
+    int start, stop, p, c, n;
+
+    if (segment_start == 0)
+    {
+        start = 1;
+        p = 0;
+        c = 1;
+        n = 2;
+    }
+    else
+    {
+        start = segment_start;
+        p = segment_start - 1;
+        c = segment_start;
+        n = segment_start + 1;
+    }
+
+    if (segment_stop == height)
+    {
+        stop = height -1;
+    }
+    else
+    {
+        stop = segment_stop;
+    }
+
+    uint8_t *curp = &pv->mask_filtered->plane[0].data[p * stride + 1];
+    uint8_t *cur  = &pv->mask_filtered->plane[0].data[c * stride + 1];
+    uint8_t *curn = &pv->mask_filtered->plane[0].data[n * stride + 1];
+    uint8_t *dst = &pv->mask_temp->plane[0].data[c * stride + 1];
+
+    uint8x8_t threshold = vdup_n_u8(dilation_threshold);
+    uint8x8_t zero_vector = vdup_n_u8(0);
+    uint8x8_t result_if_nonzero = vdup_n_u8(1);
+    for (int yy = start; yy < stop; yy++)
+    {
+        int xx = 1;
+        for (; xx < width - 8; xx += 8)
+        {
+            uint8x8_t cur_left = vld1_u8(&cur[xx-1]);
+            uint8x8_t curp_left = vld1_u8(&curp[xx-1]);
+            uint8x8_t curn_left = vld1_u8(&curn[xx-1]);
+
+            uint8x8_t curp_vec = vext_u8(curp_left, vld1_u8(&curp[xx+7]), 1);
+            uint8x8_t curp_right = vext_u8(curp_left, vld1_u8(&curp[xx+7]), 2);
+
+            uint8x8_t cur_vec = vext_u8(cur_left, vld1_u8(&cur[xx+7]), 1);
+            uint8x8_t cur_right = vext_u8(cur_left, vld1_u8(&cur[xx+7]), 2);
+
+            uint8x8_t curn_vec = vext_u8(curn_left, vld1_u8(&curn[xx+7]), 1);
+            uint8x8_t curn_right = vext_u8(curn_left, vld1_u8(&curn[xx+7]), 2);
+
+            uint8x8_t sum_p = vadd_u8(vadd_u8(curp_left, curp_vec), curp_right);
+            uint8x8_t sum_c = vadd_u8(cur_left, cur_right);
+            uint8x8_t sum_n = vadd_u8(vadd_u8(curn_left, curn_vec), curn_right);
+            uint8x8_t sum = vadd_u8(vadd_u8(sum_p, sum_c), sum_n);
+
+            uint8x8_t result_8 = vcge_u8(sum, threshold);
+            uint8x8_t result = vand_u8(result_8, result_if_nonzero);
+            uint8x8_t nonzero_mask = vcgt_u8(cur_vec, zero_vector);
+
+            result = vbsl_u8(nonzero_mask, result_if_nonzero, result);
+            vst1_u8(&dst[xx], result);
+        }
+        for (; xx < width - 1; xx++)
+        {
+            if (cur[xx])
+            {
+                dst[xx] = 1;
+                continue;
+            }
+            const int count = curp[xx-1] + curp[xx] + curp[xx+1] +
+                              cur[xx-1]  +            cur [xx+1] +
+                              curn[xx-1] + curn[xx] + curn[xx+1];
+
+            dst[xx] = count >= dilation_threshold;
+        }
+        curp += stride;
+        cur += stride;
+        curn += stride;
+        dst += stride;
+    }
+}
+#else
 static void mask_dilate_work(void *thread_args_v)
 {
     comb_detect_thread_arg_t *thread_args = thread_args_v;
@@ -338,7 +619,109 @@ static void mask_dilate_work(void *thread_args_v)
         dst += stride;
     }
 }
+#endif
 
+#if defined (__aarch64__)
+static void mask_erode_work(void *thread_args_v)
+{
+    comb_detect_thread_arg_t *thread_args = thread_args_v;
+    hb_filter_private_t *pv = thread_args->pv;
+
+    const int segment_start = thread_args->segment_start[0];
+    const int segment_stop = segment_start + thread_args->segment_height[0];
+
+    const int erosion_threshold = 2;
+
+    const int width = pv->mask_filtered->plane[0].width;
+    const int height = pv->mask_filtered->plane[0].height;
+    const int stride = pv->mask_filtered->plane[0].stride;
+
+    int start, stop, p, c, n;
+
+    if (segment_start == 0)
+    {
+        start = 1;
+        p = 0;
+        c = 1;
+        n = 2;
+    }
+    else
+    {
+        start = segment_start;
+        p = segment_start - 1;
+        c = segment_start;
+        n = segment_start + 1;
+    }
+
+    if (segment_stop == height)
+    {
+        stop = height -1;
+    }
+    else
+    {
+        stop = segment_stop;
+    }
+
+    const uint8_t *curp = &pv->mask_temp->plane[0].data[p * stride + 1];
+    const uint8_t *cur  = &pv->mask_temp->plane[0].data[c * stride + 1];
+    const uint8_t *curn = &pv->mask_temp->plane[0].data[n * stride + 1];
+    uint8_t *dst = &pv->mask_filtered->plane[0].data[c * stride + 1];
+
+    uint8x8_t threshold = vdup_n_u8(erosion_threshold);
+    uint8x8_t result_if_zero = vdup_n_u8(0);
+    uint8x8_t conv_vector = vdup_n_u8(1);
+
+    for (int yy = start; yy < stop; yy++)
+    {
+        int xx = 1;
+        for (; xx < width - 8; xx += 8)
+        {
+            uint8x8_t cur_left = vld1_u8(&cur[xx-1]);
+            uint8x8_t curp_left = vld1_u8(&curp[xx-1]);
+            uint8x8_t curn_left = vld1_u8(&curn[xx-1]);
+
+            uint8x8_t curp_vec = vext_u8(curp_left, vld1_u8(&curp[xx+7]), 1);
+            uint8x8_t curp_right = vext_u8(curp_left, vld1_u8(&curp[xx+7]), 2);
+
+            uint8x8_t cur_vec = vext_u8(cur_left, vld1_u8(&cur[xx+7]), 1);
+            uint8x8_t cur_right = vext_u8(cur_left, vld1_u8(&cur[xx+7]), 2);
+
+            uint8x8_t curn_vec = vext_u8(curn_left, vld1_u8(&curn[xx+7]), 1);
+            uint8x8_t curn_right = vext_u8(curn_left, vld1_u8(&curn[xx+7]), 2);
+
+            uint8x8_t sum_p = vadd_u8(vadd_u8(curp_left, curp_vec), curp_right);
+            uint8x8_t sum_c = vadd_u8(cur_left, cur_right);
+            uint8x8_t sum_n = vadd_u8(vadd_u8(curn_left, curn_vec), curn_right);
+            uint8x8_t sum = vadd_u8(vadd_u8(sum_p, sum_c), sum_n);
+
+            uint8x8_t result = vcge_u8(sum, threshold);
+            result = vand_u8(result, conv_vector);
+            uint8x8_t nonzero_mask = vceq_u8(cur_vec, result_if_zero); 
+
+            result = vbsl_u8(nonzero_mask, result_if_zero, result);
+            vst1_u8(&dst[xx], result);
+
+        }
+        for (; xx < width - 1; xx++)
+        {
+            if (cur[xx] == 0)
+            {
+                dst[xx] = 0;
+                continue;
+            }
+            const int count = curp[xx-1] + curp[xx] + curp[xx+1] +
+                              cur [xx-1] +            cur [xx+1] +
+                              curn[xx-1] + curn[xx] + curn[xx+1];
+
+            dst[xx] = count >= erosion_threshold;
+        }
+        curp += stride;
+        cur += stride;
+        curn += stride;
+        dst += stride;
+    }
+}
+#else
 static void mask_erode_work(void *thread_args_v)
 {
     comb_detect_thread_arg_t *thread_args = thread_args_v;
@@ -406,7 +789,114 @@ static void mask_erode_work(void *thread_args_v)
         dst += stride;
     }
 }
+#endif
 
+#if defined (__aarch64__)
+static void mask_filter_work(void *thread_args_v)
+{
+    comb_detect_thread_arg_t *thread_args = thread_args_v;
+    hb_filter_private_t *pv = thread_args->pv;
+
+    const int width = pv->mask->plane[0].width;
+    const int height = pv->mask->plane[0].height;
+    const int stride = pv->mask->plane[0].stride;
+
+    int start, stop, p, c, n;
+    int segment_start = thread_args->segment_start[0];
+    int segment_stop = segment_start + thread_args->segment_height[0];
+
+    if (segment_start == 0)
+    {
+        start = 1;
+        p = 0;
+        c = 1;
+        n = 2;
+    }
+    else
+    {
+        start = segment_start;
+        p = segment_start - 1;
+        c = segment_start;
+        n = segment_start + 1;
+    }
+
+    if (segment_stop == height)
+    {
+        stop = height - 1;
+    }
+    else
+    {
+        stop = segment_stop;
+    }
+
+    uint8_t *curp = &pv->mask->plane[0].data[p * stride + 1];
+    uint8_t *cur  = &pv->mask->plane[0].data[c * stride + 1];
+    uint8_t *curn = &pv->mask->plane[0].data[n * stride + 1];
+    uint8_t *dst = (pv->filter_mode == FILTER_CLASSIC) ?
+                     &pv->mask_filtered->plane[0].data[c * stride + 1] :
+                     &pv->mask_temp->plane[0].data[c * stride + 1] ;
+    if (pv->filter_mode == FILTER_CLASSIC)
+    {
+        for (int yy = start; yy < stop; yy++)
+        {
+            int xx = 1;
+            for (; xx < width - 8; xx += 8)
+            {
+                uint8x8_t cur_left = vld1_u8(&cur[xx-1]);
+                uint8x8_t cur_vec = vext_u8(cur_left, vld1_u8(&cur[xx+7]), 1);
+                uint8x8_t cur_right = vext_u8(cur_left, vld1_u8(&cur[xx+7]), 2);
+
+                uint8x8_t h_count = vand_u8(vand_u8(cur_left, cur_vec), cur_right);
+                vst1_u8(&dst[xx], h_count);
+            }
+            for (; xx < width - 1; xx++)
+            {
+                const int h_count = cur[xx-1] & cur[xx] & cur[xx+1];
+                dst[xx] = h_count;
+            }
+
+            curp += stride;
+            cur += stride;
+            curn +=stride;
+            dst+=stride;
+        }
+    }
+    else
+    {
+        for (int yy = start; yy < stop; yy++)
+        {
+            int xx = 1;
+            for (; xx < width - 8; xx += 8)
+            {
+                uint8x8_t curp_vec = vld1_u8(&curp[xx]);
+                uint8x8_t cur_left = vld1_u8(&cur[xx-1]);
+                uint8x8_t curn_vec = vld1_u8(&curn[xx]);
+
+                uint8x8_t cur_vec = vext_u8(cur_left, vld1_u8(&cur[xx+7]), 1);
+                uint8x8_t cur_right = vext_u8(cur_left, vld1_u8(&cur[xx+7]), 2);
+
+                uint8x8_t h_count = vand_u8(vand_u8(cur_left, cur_vec), cur_right);
+                uint8x8_t v_count = vand_u8(vand_u8(curp_vec, cur_vec), curn_vec);
+
+                uint8x8_t result = vand_u8(h_count, v_count);
+
+                vst1_u8(&dst[xx], result);
+            }
+            for (; xx < width - 1; xx++)
+            {
+                const int h_count = cur[xx-1] & cur[xx] & cur[xx+1];
+                const int v_count = curp[xx] & cur[xx] & curn[xx];
+
+                dst[xx] = h_count & v_count;
+            }
+            curp += stride;
+            cur += stride;
+            curn += stride;
+            dst += stride;
+        }
+    }
+}
+#else
 static void mask_filter_work(void *thread_args_v)
 {
     comb_detect_thread_arg_t *thread_args = thread_args_v;
@@ -473,6 +963,7 @@ static void mask_filter_work(void *thread_args_v)
         dst += stride;
     }
 }
+#endif
 
 static void comb_detect_check_work(void *thread_args_v)
 {

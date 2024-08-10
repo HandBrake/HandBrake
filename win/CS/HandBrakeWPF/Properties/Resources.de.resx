@@ -2822,4 +2822,31 @@ Um mehrere gleichzeitige Encodierungen zu ermöglichen, aktivieren Sie die "Proz
   <data name="VideoView_LosslessEncodeOnly" xml:space="preserve">
     <value>Nur verlustfreie Encodierung.</value>
   </data>
+  <data name="MainView_HideClassicMenu" xml:space="preserve">
+    <value>Menüleiste ausblenden</value>
+  </data>
+  <data name="MainView_ShowClassicMenu" xml:space="preserve">
+    <value>Menüleiste einblenden</value>
+  </data>
+  <data name="OptionsViewVideo_UnsupportedIntelDriver" xml:space="preserve">
+    <value>(Achtung: Nicht unterstützter Treiber! - Aktualisierung empfohlen)</value>
+  </data>
+  <data name="QueueSelectionView_RangeLimits" xml:space="preserve">
+    <value>Bereichsgrenzen:</value>
+  </data>
+  <data name="QueueSelectionView_RangeLimitsDesc" xml:space="preserve">
+    <value>Begrenzt die Länge der Titel, die der Warteschlange hinzugefügt werden.</value>
+  </data>
+  <data name="QueueSelectionView_RangeLimitsEnable" xml:space="preserve">
+    <value>Bereichsgrenzen aktivieren</value>
+  </data>
+  <data name="AddToQueue_RangeLimitError" xml:space="preserve">
+    <value>Einige Titel konnten nicht in die Warteschlange aufgenommen werden, da sie außerhalb der gewählten Bereichsgrenzen lagen.</value>
+  </data>
+  <data name="QueueView_StartAtTime" xml:space="preserve">
+    <value>Später starten</value>
+  </data>
+  <data name="QueueView_QueueStartTime" xml:space="preserve">
+    <value>Startzeit der Warteschlange:</value>
+  </data>
 </root>

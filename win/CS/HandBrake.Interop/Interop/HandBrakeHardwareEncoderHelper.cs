@@ -26,6 +26,8 @@ namespace HandBrake.Interop.Interop
         private static int? qsvHardwareGeneration;
         private static bool? isQsvAvailable;
 
+        private static bool? isDirectXAvailable;
+
         private static bool? isSafeMode;
 
         public static bool IsSafeMode
@@ -221,6 +223,30 @@ namespace HandBrake.Interop.Interop
                 catch (Exception)
                 {
                     // Silent failure. Typically this means the dll hasn't been built with --enable-qsv
+                    return false;
+                }
+            }
+        }
+
+        /* DirectX Support */
+
+        public static bool IsDirectXAvailable
+        {
+            get
+            {
+                try
+                {
+                    if (isDirectXAvailable != null)
+                    {
+                        return isDirectXAvailable.Value;
+                    }
+
+                    isDirectXAvailable = HBFunctions.hb_directx_available() > 0;
+                    
+                    return isDirectXAvailable.Value; 
+                }
+                catch (Exception)
+                {
                     return false;
                 }
             }

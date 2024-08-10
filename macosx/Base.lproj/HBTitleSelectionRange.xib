@@ -1,0 +1,325 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="22505" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+    <dependencies>
+        <deployment identifier="macosx"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="22505"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <customObject id="-2" userLabel="File's Owner" customClass="HBTitleSelectionRangeController">
+            <connections>
+                <outlet property="view" destination="Ql9-1i-cLd" id="znT-2t-4zL"/>
+            </connections>
+        </customObject>
+        <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
+        <customObject id="-3" userLabel="Application" customClass="NSObject"/>
+        <customView id="Ql9-1i-cLd" userLabel="View">
+            <rect key="frame" x="0.0" y="0.0" width="359" height="68"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+            <subviews>
+                <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="0vE-dh-0EO">
+                    <rect key="frame" x="-1" y="49" width="58" height="16"/>
+                    <buttonCell key="cell" type="check" title="Range:" bezelStyle="regularSquare" imagePosition="left" controlSize="small" state="on" inset="2" id="4nB-36-clJ">
+                        <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                        <font key="font" metaFont="smallSystem"/>
+                    </buttonCell>
+                    <connections>
+                        <binding destination="-2" name="value" keyPath="self.enabled" id="a7b-b6-KtP"/>
+                    </connections>
+                </button>
+                <popUpButton toolTip="Source range selection. By default, all chapters are selected and the entire source is encoded." horizontalHuggingPriority="1000" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="aM2-P8-m4w">
+                    <rect key="frame" x="61" y="45" width="32" height="22"/>
+                    <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="clipping" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" id="bTw-9o-d96">
+                        <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                        <font key="font" metaFont="message" size="11"/>
+                        <menu key="menu" id="RjJ-kQ-wJu"/>
+                    </popUpButtonCell>
+                    <accessibility description="Range Selection"/>
+                    <connections>
+                        <binding destination="-2" name="enabled" keyPath="self.enabled" id="CGI-mK-3nQ"/>
+                        <binding destination="-2" name="selectedIndex" keyPath="self.range.type" previousBinding="Pgx-Z3-yJb" id="5Jq-bX-4GQ"/>
+                        <binding destination="-2" name="content" keyPath="self.range.types" id="Pgx-Z3-yJb"/>
+                    </connections>
+                </popUpButton>
+                <stackView distribution="fill" orientation="vertical" alignment="leading" spacing="0.0" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="PJa-oG-z7t">
+                    <rect key="frame" x="97" y="5" width="214" height="62"/>
+                    <subviews>
+                        <customView translatesAutoresizingMaskIntoConstraints="NO" id="2E7-j8-87T" userLabel="Chapters View">
+                            <rect key="frame" x="0.0" y="42" width="214" height="20"/>
+                            <subviews>
+                                <popUpButton toolTip="First chapter to encode." verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="eoO-dc-hc3" userLabel="Chapter Start">
+                                    <rect key="frame" x="-2" y="-2" width="66" height="22"/>
+                                    <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="clipping" state="on" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="ppT-ZZ-wGK" id="JR6-Cn-rwn">
+                                        <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                                        <font key="font" metaFont="message" size="11"/>
+                                        <menu key="menu" id="Yee-Ui-i5i">
+                                            <items>
+                                                <menuItem state="on" id="ppT-ZZ-wGK"/>
+                                            </items>
+                                        </menu>
+                                    </popUpButtonCell>
+                                    <constraints>
+                                        <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="58" id="wRd-QJ-BKX"/>
+                                    </constraints>
+                                    <accessibility description="Start Chapter"/>
+                                    <connections>
+                                        <binding destination="-2" name="enabled" keyPath="self.enabled" id="1h9-qy-eh0"/>
+                                        <binding destination="-2" name="selectedIndex" keyPath="self.range.chapterStart" previousBinding="KI2-Qz-Or5" id="Rit-NU-8iE"/>
+                                        <binding destination="-2" name="content" keyPath="self.range.chapters" id="KI2-Qz-Or5"/>
+                                    </connections>
+                                </popUpButton>
+                                <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="u5k-Yo-HFB">
+                                    <rect key="frame" x="64" y="-2" width="78" height="22"/>
+                                    <popUpButtonCell key="cell" type="push" title="To" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="6gI-bi-QlH" id="fYx-9m-xf8">
+                                        <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                                        <font key="font" metaFont="smallSystem"/>
+                                        <menu key="menu" id="rck-aK-SuW">
+                                            <items>
+                                                <menuItem title="To" state="on" id="6gI-bi-QlH"/>
+                                                <menuItem title="Trim end" id="gKJ-mm-7Zy"/>
+                                            </items>
+                                        </menu>
+                                    </popUpButtonCell>
+                                    <connections>
+                                        <binding destination="-2" name="enabled" keyPath="self.enabled" id="7Oo-UW-q7Y"/>
+                                        <binding destination="-2" name="selectedIndex" keyPath="self.range.trim" id="s8E-Gr-w6j"/>
+                                    </connections>
+                                </popUpButton>
+                                <popUpButton toolTip="Last chapter to encode." verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="OHn-dK-gFi" userLabel="Chapter End">
+                                    <rect key="frame" x="141" y="-2" width="66" height="22"/>
+                                    <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="clipping" state="on" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="ShP-aF-55r" id="SPb-EK-Szu">
+                                        <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                                        <font key="font" metaFont="message" size="11"/>
+                                        <menu key="menu" id="sPy-WO-9kb">
+                                            <items>
+                                                <menuItem state="on" id="ShP-aF-55r"/>
+                                            </items>
+                                        </menu>
+                                    </popUpButtonCell>
+                                    <constraints>
+                                        <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="58" id="Ih1-ch-Idh"/>
+                                    </constraints>
+                                    <accessibility description="End Chapter"/>
+                                    <connections>
+                                        <binding destination="-2" name="enabled" keyPath="self.enabled" id="NXV-xz-H0M"/>
+                                        <binding destination="-2" name="selectedIndex" keyPath="self.range.chapterStop" previousBinding="b6w-CV-oOG" id="Nl4-El-xuE"/>
+                                        <binding destination="-2" name="content" keyPath="self.range.chapters" id="b6w-CV-oOG"/>
+                                    </connections>
+                                </popUpButton>
+                            </subviews>
+                            <constraints>
+                                <constraint firstItem="eoO-dc-hc3" firstAttribute="firstBaseline" secondItem="u5k-Yo-HFB" secondAttribute="firstBaseline" id="PzQ-47-lxs"/>
+                                <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="OHn-dK-gFi" secondAttribute="trailing" constant="2" id="Xe5-32-eC0"/>
+                                <constraint firstAttribute="bottom" secondItem="eoO-dc-hc3" secondAttribute="bottom" constant="2" id="bbP-B4-crM"/>
+                                <constraint firstItem="eoO-dc-hc3" firstAttribute="leading" secondItem="2E7-j8-87T" secondAttribute="leading" constant="2" id="dOI-Bd-wur"/>
+                                <constraint firstItem="u5k-Yo-HFB" firstAttribute="leading" secondItem="eoO-dc-hc3" secondAttribute="trailing" constant="8" symbolic="YES" id="gaC-it-ogj"/>
+                                <constraint firstItem="eoO-dc-hc3" firstAttribute="top" secondItem="2E7-j8-87T" secondAttribute="top" constant="2" id="pcn-Tb-x4w"/>
+                                <constraint firstItem="u5k-Yo-HFB" firstAttribute="firstBaseline" secondItem="OHn-dK-gFi" secondAttribute="firstBaseline" id="tcf-Uj-a7Y"/>
+                                <constraint firstItem="OHn-dK-gFi" firstAttribute="leading" secondItem="u5k-Yo-HFB" secondAttribute="trailing" constant="7" id="ueA-4Q-NMf"/>
+                            </constraints>
+                            <connections>
+                                <binding destination="-2" name="hidden" keyPath="self.range.chaptersSelected" id="Xle-Bw-99d">
+                                    <dictionary key="options">
+                                        <string key="NSValueTransformerName">NSNegateBoolean</string>
+                                    </dictionary>
+                                </binding>
+                            </connections>
+                        </customView>
+                        <customView translatesAutoresizingMaskIntoConstraints="NO" id="wOa-G6-6Ir" userLabel="Seconds View">
+                            <rect key="frame" x="0.0" y="21" width="214" height="21"/>
+                            <subviews>
+                                <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="vhn-3v-6Y4">
+                                    <rect key="frame" x="64" y="-1" width="78" height="22"/>
+                                    <popUpButtonCell key="cell" type="push" title="To" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="eap-Rn-0qW" id="HUP-EV-akg">
+                                        <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                                        <font key="font" metaFont="smallSystem"/>
+                                        <menu key="menu" id="DL7-Ih-sD7">
+                                            <items>
+                                                <menuItem title="To" state="on" id="eap-Rn-0qW"/>
+                                                <menuItem title="Trim end" id="9A3-Zn-guz"/>
+                                            </items>
+                                        </menu>
+                                    </popUpButtonCell>
+                                    <connections>
+                                        <binding destination="-2" name="enabled" keyPath="self.enabled" id="YBN-IR-0Yq"/>
+                                        <binding destination="-2" name="selectedIndex" keyPath="self.range.trim" id="xdG-6f-Bd2"/>
+                                    </connections>
+                                </popUpButton>
+                                <textField toolTip="First second to encode." focusRingType="none" verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="5mE-y0-UqZ" userLabel="Time Start Encoding Field">
+                                    <rect key="frame" x="2" y="2" width="58" height="19"/>
+                                    <constraints>
+                                        <constraint firstAttribute="width" constant="58" id="da9-l9-fDE"/>
+                                    </constraints>
+                                    <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="right" drawsBackground="YES" id="0Rg-a0-rgF">
+                                        <font key="font" metaFont="message" size="11"/>
+                                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                    </textFieldCell>
+                                    <accessibility description="Start time in seconds"/>
+                                    <connections>
+                                        <binding destination="-2" name="enabled" keyPath="self.enabled" id="RAU-bN-tXo"/>
+                                        <binding destination="-2" name="value" keyPath="self.range.secondsStart" id="pX0-cV-rg6">
+                                            <dictionary key="options">
+                                                <bool key="NSContinuouslyUpdatesValue" value="YES"/>
+                                                <bool key="NSValidatesImmediately" value="YES"/>
+                                                <string key="NSValueTransformerName">HBTimeInSecondsTransformer</string>
+                                            </dictionary>
+                                        </binding>
+                                    </connections>
+                                </textField>
+                                <textField toolTip="Last second to encode." focusRingType="none" verticalHuggingPriority="750" textCompletion="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7ug-HX-q9j" userLabel="Time End Encoding Field">
+                                    <rect key="frame" x="146" y="2" width="58" height="19"/>
+                                    <constraints>
+                                        <constraint firstAttribute="width" constant="58" id="mh8-5Q-QFk"/>
+                                        <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="58" id="sjE-L1-0I8"/>
+                                    </constraints>
+                                    <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="left" drawsBackground="YES" id="srM-H4-dN4">
+                                        <font key="font" metaFont="message" size="11"/>
+                                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                    </textFieldCell>
+                                    <accessibility description="End time in seconds"/>
+                                    <connections>
+                                        <binding destination="-2" name="enabled" keyPath="self.enabled" id="5Wq-6E-ZkH"/>
+                                        <binding destination="-2" name="value" keyPath="self.range.secondsStop" id="LqZ-JX-qei">
+                                            <dictionary key="options">
+                                                <bool key="NSContinuouslyUpdatesValue" value="YES"/>
+                                                <bool key="NSValidatesImmediately" value="YES"/>
+                                                <string key="NSValueTransformerName">HBTimeInSecondsTransformer</string>
+                                            </dictionary>
+                                        </binding>
+                                    </connections>
+                                </textField>
+                            </subviews>
+                            <constraints>
+                                <constraint firstItem="5mE-y0-UqZ" firstAttribute="leading" secondItem="wOa-G6-6Ir" secondAttribute="leading" constant="2" id="FrW-OS-NMh"/>
+                                <constraint firstItem="7ug-HX-q9j" firstAttribute="leading" secondItem="vhn-3v-6Y4" secondAttribute="trailing" constant="8" symbolic="YES" id="IpH-wg-5NK"/>
+                                <constraint firstAttribute="bottom" secondItem="5mE-y0-UqZ" secondAttribute="bottom" constant="2" id="Kbw-o8-OXy"/>
+                                <constraint firstItem="5mE-y0-UqZ" firstAttribute="top" secondItem="wOa-G6-6Ir" secondAttribute="top" id="L37-NK-Qpn"/>
+                                <constraint firstItem="vhn-3v-6Y4" firstAttribute="leading" secondItem="5mE-y0-UqZ" secondAttribute="trailing" constant="8" symbolic="YES" id="cT2-FO-pKY"/>
+                                <constraint firstItem="5mE-y0-UqZ" firstAttribute="firstBaseline" secondItem="vhn-3v-6Y4" secondAttribute="firstBaseline" id="idt-xa-OwU"/>
+                                <constraint firstItem="vhn-3v-6Y4" firstAttribute="firstBaseline" secondItem="7ug-HX-q9j" secondAttribute="firstBaseline" id="ueJ-8t-E01"/>
+                                <constraint firstAttribute="trailing" secondItem="7ug-HX-q9j" secondAttribute="trailing" constant="10" id="ul9-dN-gg9"/>
+                            </constraints>
+                            <connections>
+                                <binding destination="-2" name="hidden" keyPath="self.range.secondsSelected" id="DVu-zT-BgS">
+                                    <dictionary key="options">
+                                        <string key="NSValueTransformerName">NSNegateBoolean</string>
+                                    </dictionary>
+                                </binding>
+                            </connections>
+                        </customView>
+                        <customView translatesAutoresizingMaskIntoConstraints="NO" id="yYG-rL-Vhb" userLabel="Frames View">
+                            <rect key="frame" x="0.0" y="0.0" width="214" height="21"/>
+                            <subviews>
+                                <textField toolTip="First frame to encode." focusRingType="none" verticalHuggingPriority="750" textCompletion="NO" translatesAutoresizingMaskIntoConstraints="NO" id="guU-KE-TeY" userLabel="Frame Start Encoding Field">
+                                    <rect key="frame" x="2" y="2" width="58" height="19"/>
+                                    <constraints>
+                                        <constraint firstAttribute="width" constant="58" id="bof-a8-Alg"/>
+                                    </constraints>
+                                    <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="right" drawsBackground="YES" id="TGt-S5-bss">
+                                        <numberFormatter key="formatter" formatterBehavior="default10_4" usesGroupingSeparator="NO" minimumIntegerDigits="0" maximumIntegerDigits="42" id="HDg-e6-FfN">
+                                            <real key="minimum" value="0.0"/>
+                                        </numberFormatter>
+                                        <font key="font" metaFont="message" size="11"/>
+                                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                    </textFieldCell>
+                                    <accessibility description="Start time in frames"/>
+                                    <connections>
+                                        <binding destination="-2" name="enabled" keyPath="self.enabled" id="dVQ-zs-nch"/>
+                                        <binding destination="-2" name="value" keyPath="self.range.frameStart" id="E6Z-MY-yAS">
+                                            <dictionary key="options">
+                                                <bool key="NSContinuouslyUpdatesValue" value="YES"/>
+                                                <bool key="NSValidatesImmediately" value="YES"/>
+                                            </dictionary>
+                                        </binding>
+                                    </connections>
+                                </textField>
+                                <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="SiD-l5-86f">
+                                    <rect key="frame" x="64" y="-1" width="78" height="22"/>
+                                    <popUpButtonCell key="cell" type="push" title="To" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="YpG-jj-qV2" id="916-1K-UXt">
+                                        <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                                        <font key="font" metaFont="smallSystem"/>
+                                        <menu key="menu" id="iH9-dg-Tbs">
+                                            <items>
+                                                <menuItem title="To" state="on" id="YpG-jj-qV2"/>
+                                                <menuItem title="Trim end" id="tOX-Dr-TiC"/>
+                                            </items>
+                                        </menu>
+                                    </popUpButtonCell>
+                                    <connections>
+                                        <binding destination="-2" name="enabled" keyPath="self.enabled" id="bpe-hG-Bvk"/>
+                                        <binding destination="-2" name="selectedIndex" keyPath="self.range.trim" id="7sP-1U-Wn0"/>
+                                    </connections>
+                                </popUpButton>
+                                <textField toolTip="Last frame to encode." focusRingType="none" verticalHuggingPriority="750" textCompletion="NO" translatesAutoresizingMaskIntoConstraints="NO" id="aeA-ul-8yt" userLabel="Frame End Encoding Field">
+                                    <rect key="frame" x="146" y="2" width="58" height="19"/>
+                                    <constraints>
+                                        <constraint firstAttribute="width" constant="58" id="Rd4-MM-rap"/>
+                                    </constraints>
+                                    <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="left" drawsBackground="YES" id="GR2-rv-b9C">
+                                        <numberFormatter key="formatter" formatterBehavior="default10_4" usesGroupingSeparator="NO" minimumIntegerDigits="0" maximumIntegerDigits="42" id="ADT-IC-TQb">
+                                            <real key="minimum" value="0.0"/>
+                                        </numberFormatter>
+                                        <font key="font" metaFont="message" size="11"/>
+                                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                    </textFieldCell>
+                                    <accessibility description="End time in frames"/>
+                                    <connections>
+                                        <binding destination="-2" name="enabled" keyPath="self.enabled" id="7g7-Ug-6WM"/>
+                                        <binding destination="-2" name="value" keyPath="self.range.frameStop" id="GLB-m7-aAj">
+                                            <dictionary key="options">
+                                                <bool key="NSContinuouslyUpdatesValue" value="YES"/>
+                                                <bool key="NSValidatesImmediately" value="YES"/>
+                                            </dictionary>
+                                        </binding>
+                                    </connections>
+                                </textField>
+                            </subviews>
+                            <constraints>
+                                <constraint firstItem="guU-KE-TeY" firstAttribute="leading" secondItem="yYG-rL-Vhb" secondAttribute="leading" constant="2" id="7CO-zd-HjM"/>
+                                <constraint firstAttribute="trailing" secondItem="aeA-ul-8yt" secondAttribute="trailing" constant="10" id="C2q-tJ-rQd"/>
+                                <constraint firstItem="aeA-ul-8yt" firstAttribute="leading" secondItem="SiD-l5-86f" secondAttribute="trailing" constant="8" symbolic="YES" id="DOV-x5-Dde"/>
+                                <constraint firstItem="guU-KE-TeY" firstAttribute="firstBaseline" secondItem="SiD-l5-86f" secondAttribute="firstBaseline" id="VnF-vF-CGk"/>
+                                <constraint firstItem="guU-KE-TeY" firstAttribute="top" secondItem="yYG-rL-Vhb" secondAttribute="top" id="c1v-Wq-uai"/>
+                                <constraint firstItem="SiD-l5-86f" firstAttribute="firstBaseline" secondItem="aeA-ul-8yt" secondAttribute="firstBaseline" id="fFM-9a-G5V"/>
+                                <constraint firstItem="SiD-l5-86f" firstAttribute="leading" secondItem="guU-KE-TeY" secondAttribute="trailing" constant="8" symbolic="YES" id="umz-zG-Vlg"/>
+                                <constraint firstAttribute="bottom" secondItem="guU-KE-TeY" secondAttribute="bottom" constant="2" id="xqn-bW-NaW"/>
+                            </constraints>
+                            <connections>
+                                <binding destination="-2" name="hidden" keyPath="self.range.framesSelected" id="T9O-RL-PRE">
+                                    <dictionary key="options">
+                                        <string key="NSValueTransformerName">NSNegateBoolean</string>
+                                    </dictionary>
+                                </binding>
+                            </connections>
+                        </customView>
+                    </subviews>
+                    <visibilityPriorities>
+                        <integer value="1000"/>
+                        <integer value="1000"/>
+                        <integer value="1000"/>
+                    </visibilityPriorities>
+                    <customSpacing>
+                        <real value="3.4028234663852886e+38"/>
+                        <real value="3.4028234663852886e+38"/>
+                        <real value="3.4028234663852886e+38"/>
+                    </customSpacing>
+                </stackView>
+            </subviews>
+            <constraints>
+                <constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="PJa-oG-z7t" secondAttribute="bottom" constant="2" id="4Ic-rN-DFq"/>
+                <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="PJa-oG-z7t" secondAttribute="trailing" id="Hj5-yl-5tj"/>
+                <constraint firstItem="0vE-dh-0EO" firstAttribute="top" secondItem="Ql9-1i-cLd" secondAttribute="top" constant="4" id="Okb-FJ-0UA"/>
+                <constraint firstItem="PJa-oG-z7t" firstAttribute="leading" secondItem="aM2-P8-m4w" secondAttribute="trailing" constant="8" symbolic="YES" id="U9P-2e-pd3"/>
+                <constraint firstItem="aM2-P8-m4w" firstAttribute="firstBaseline" secondItem="0vE-dh-0EO" secondAttribute="firstBaseline" id="cI0-Ro-Iwf"/>
+                <constraint firstItem="aM2-P8-m4w" firstAttribute="leading" secondItem="0vE-dh-0EO" secondAttribute="trailing" constant="8" symbolic="YES" id="fTQ-Uu-fTk"/>
+                <constraint firstItem="PJa-oG-z7t" firstAttribute="top" secondItem="aM2-P8-m4w" secondAttribute="top" constant="-2" id="rTm-gn-pBn"/>
+                <constraint firstItem="0vE-dh-0EO" firstAttribute="leading" secondItem="Ql9-1i-cLd" secondAttribute="leading" id="rzY-H2-69O"/>
+            </constraints>
+            <point key="canvasLocation" x="148.5" y="120"/>
+        </customView>
+    </objects>
+</document>

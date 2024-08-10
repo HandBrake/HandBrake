@@ -387,7 +387,7 @@ namespace HandBrakeWPF.ViewModels
             BitmapSource image = null;
             try
             {
-                image = this.scanService.GetPreview(this.Task, this.SelectedPreviewImage);
+                image = this.scanService.GetPreview(this.Task, this.SelectedPreviewImage, false);
             }
             catch (Exception exc)
             {
@@ -537,7 +537,7 @@ namespace HandBrakeWPF.ViewModels
                 return;
             }
 
-            QueueTask task = new QueueTask(encodeTask, this.SelectedTitle.SourcePath, null, false, null);
+            QueueTask task = new QueueTask(encodeTask, this.SelectedTitle.SourcePath, null, false, this.SelectedTitle);
             ThreadPool.QueueUserWorkItem(this.CreatePreview, task);
         }
 

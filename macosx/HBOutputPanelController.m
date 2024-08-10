@@ -46,7 +46,7 @@
         [HBOutputRedirect.stdoutRedirect addListener:self queue:dispatch_get_main_queue()];
 
         // Redirect the output to a file on the disk.
-        NSURL *outputLogURL = [HBUtilities.appSupportURL URLByAppendingPathComponent:@"HandBrake-activitylog.txt"];
+        NSURL *outputLogURL = [HBUtilities.appSupportURL URLByAppendingPathComponent:@"HandBrake-activitylog.txt" isDirectory:NO];
         if (outputLogURL)
         {
             _outputWriter = [[HBOutputFileWriter alloc] initWithFileURL:outputLogURL];
@@ -200,15 +200,14 @@
 - (IBAction)openEncodeLogDirectory:(id)sender
 {
     // Opens the activity window log file in the users default text editor
-    NSURL *encodeLogDirectory = [HBUtilities.appSupportURL URLByAppendingPathComponent:@"EncodeLogs"];
-    if (![NSFileManager.defaultManager fileExistsAtPath:encodeLogDirectory.path])
+    NSURL *encodeLogDirectory = [HBUtilities.appSupportURL URLByAppendingPathComponent:@"EncodeLogs" isDirectory:YES];
+    if (encodeLogDirectory)
     {
-        [NSFileManager.defaultManager createDirectoryAtPath:encodeLogDirectory.path
-                                withIntermediateDirectories:NO
-                                                 attributes:nil
-                                                      error:nil];
+        if ([NSFileManager.defaultManager createDirectoryAtURL:encodeLogDirectory withIntermediateDirectories:YES attributes:nil error:NULL])
+        {
+            [NSWorkspace.sharedWorkspace openURL:encodeLogDirectory];
+        }
     }
-    [NSWorkspace.sharedWorkspace openURL:encodeLogDirectory];
 }
 
 - (IBAction)clearActivityLogFile:(id)sender

@@ -474,11 +474,6 @@ namespace HandBrakeWPF.Services.Queue
             }
         }
 
-        private void ActiveJob_JobFinished1(object sender, ActiveJobCompletedEventArgs e)
-        {
-            throw new NotImplementedException();
-        }
-
         public void RestoreQueue(string importPath)
         {
             string appDataPath = DirectoryUtilities.GetUserStoragePath(HandBrakeVersionHelper.IsNightly());

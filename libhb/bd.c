@@ -25,6 +25,7 @@ struct hb_bd_s
     int                       chapter;
     int                       next_chap;
     hb_handle_t             * h;
+    int                       keep_duplicate_titles;
 };
 
 /***********************************************************************
@@ -38,13 +39,14 @@ static int title_info_compare_mpls(const void *, const void *);
  ***********************************************************************
  *
  **********************************************************************/
-hb_bd_t * hb_bd_init( hb_handle_t *h, const char * path )
+hb_bd_t * hb_bd_init( hb_handle_t *h, const char * path, int keep_duplicate_titles )
 {
     hb_bd_t * d;
     int ii;
 
     d = calloc( sizeof( hb_bd_t ), 1 );
     d->h = h;
+    d->keep_duplicate_titles = keep_duplicate_titles;
 
     /* Open device */
     d->bd = bd_open( path, NULL );
@@ -57,7 +59,12 @@ hb_bd_t * hb_bd_init( hb_handle_t *h, const char * path )
         goto fail;
     }
 
-    d->title_count = bd_get_titles( d->bd, TITLES_RELEVANT, 0 );
+    uint8_t flags = TITLES_FILTER_DUP_CLIP;
+    if (!keep_duplicate_titles)
+    {
+        flags |= TITLES_FILTER_DUP_TITLE;
+    }
+    d->title_count = bd_get_titles( d->bd, flags, 0 );
     if ( d->title_count == 0 )
     {
         hb_log( "bd: not a bd - trying as a stream/file instead" );
@@ -286,6 +293,7 @@ hb_title_t * hb_bd_title_scan( hb_bd_t * d, int tt, uint64_t min_duration )
     title->demuxer = HB_TS_DEMUXER;
     title->type = HB_BD_TYPE;
     title->reg_desc = STR4_TO_UINT32("HDMV");
+    title->keep_duplicate_titles = d->keep_duplicate_titles;
 
     if (d->disc_info->disc_name != NULL && d->disc_info->disc_name[0] != 0)
     {

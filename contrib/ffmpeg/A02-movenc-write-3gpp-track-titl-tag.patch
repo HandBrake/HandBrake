@@ -12,7 +12,7 @@ diff --git a/libavformat/movenc.c b/libavformat/movenc.c
 index 724a1eb673..f7192002f1 100644
 --- a/libavformat/movenc.c
 +++ b/libavformat/movenc.c
-@@ -3761,6 +3761,34 @@ static int mov_write_udta_sdp(AVIOContext *pb, MOVTrack *track)
+@@ -3766,6 +3766,34 @@ static int mov_write_udta_sdp(AVIOContext *pb, MOVTrack *track)
      return len + 24;
  }
  
@@ -47,7 +47,7 @@ index 724a1eb673..f7192002f1 100644
  static int mov_write_track_metadata(AVIOContext *pb, AVStream *st,
                                      const char *tag, const char *str)
  {
-@@ -3835,8 +3863,10 @@ static int mov_write_track_udta_tag(AVIOContext *pb, MOVMuxContext *mov,
+@@ -3840,8 +3868,10 @@ static int mov_write_track_udta_tag(AVIOContext *pb, MOVMuxContext *mov,
      if (ret < 0)
          return ret;
  
@@ -59,7 +59,7 @@ index 724a1eb673..f7192002f1 100644
  
      if (mov->mode & MODE_MP4) {
          if ((ret = mov_write_track_kinds(pb_buf, st)) < 0)
-@@ -4433,35 +4463,6 @@ static int ascii_to_wc(AVIOContext *pb, const uint8_t *b)
+@@ -4438,35 +4468,6 @@ static int ascii_to_wc(AVIOContext *pb, const uint8_t *b)
      return 0;
  }
  
@@ -95,7 +95,7 @@ index 724a1eb673..f7192002f1 100644
  static int mov_write_chpl_tag(AVIOContext *pb, AVFormatContext *s)
  {
      int64_t pos = avio_tell(pb);
-@@ -4500,14 +4501,14 @@ static int mov_write_udta_tag(AVIOContext *pb, MOVMuxContext *mov,
+@@ -4505,14 +4506,14 @@ static int mov_write_udta_tag(AVIOContext *pb, MOVMuxContext *mov,
          return ret;
  
      if (mov->mode & MODE_3GP) {

@@ -6,10 +6,12 @@
         xmlns:Converters="clr-namespace:HandBrakeWPF.Converters"
         xmlns:Properties="clr-namespace:HandBrakeWPF.Properties"
         xmlns:dd="urn:gong-wpf-dragdrop"
+        xmlns:controls="clr-namespace:HandBrakeWPF.Controls"
+        xmlns:main="clr-namespace:HandBrakeWPF.Converters.Main"
         Title="{Binding Title}"
         MinWidth="750"
         Width="750"
-        Height="475"
+        Height="600"
         MinHeight="600"
         WindowStartupLocation="CenterScreen"
         TextOptions.TextFormattingMode="Display"
@@ -18,6 +20,9 @@
     <Window.Resources>
         <Converters:BooleanToVisibilityConverter x:Key="boolToVisConverter" />
         <Converters:ThemeImageConverter x:Key="themeConverter" />
+        <main:PointToPointConverter x:Key="PointToPointConverter" />
+        <Converters:LongToIntConverter x:Key="longToIntConverter" />
+
     </Window.Resources>
 
     <Grid HorizontalAlignment="Stretch"
@@ -26,6 +31,7 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
@@ -41,7 +47,7 @@
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
 
-            <TextBlock Text="{x:Static Properties:Resources.QueueSelectionView_ChooseTitles}" />
+            <TextBlock Text="{x:Static Properties:Resources.QueueSelectionView_ChooseTitles}" FontSize="14" />
 
             <Menu HorizontalAlignment="Right" Background="Transparent" VerticalAlignment="Bottom" Grid.Column="2" Margin="0,0,0,0">
                 <MenuItem>
@@ -128,10 +134,47 @@
             </ListBox.ItemTemplate>
         </ListBox>
 
+        <!-- Range Limits -->
+        <StackPanel Orientation="Vertical" Grid.Row="3" Margin="10,0,0,0">
+
+            <TextBlock Text="{x:Static Properties:Resources.QueueSelectionView_RangeLimits}" FontSize="14" />
+
+            <CheckBox Content="{x:Static Properties:Resources.QueueSelectionView_RangeLimitsDesc}" IsChecked="{Binding RangeLimits.IsEnabled}" Margin="0,5,0,5" />
+
+            <StackPanel Orientation="Horizontal" Margin="17,0,0,0" IsEnabled="{Binding RangeLimits.IsEnabled}">
+                <ComboBox Name="PointToPointMode" MinWidth="80" Margin="5,0,0,0"
+                          ItemsSource="{Binding RangeMode, Converter={StaticResource PointToPointConverter}}" ToolTip="{x:Static Properties:ResourcesTooltips.MainView_Range}"
+                          SelectedItem="{Binding RangeLimits.SelectedPointToPoint, Converter={StaticResource PointToPointConverter}}" />
+                <ComboBox Name="StartPoint" MinWidth="60" Margin="5,0,0,0" ItemsSource="{Binding StartEndRangeItems}"
+                          SelectedItem="{Binding RangeLimits.SelectedStartPoint, Converter={StaticResource longToIntConverter}}"
+                          ToolTip="{x:Static Properties:ResourcesTooltips.MainView_StartPoint}"
+                          Visibility="{Binding RangeLimits.ShowTextEntryForPointToPointMode, Converter={StaticResource boolToVisConverter}, ConverterParameter=true}" />
+                <controls:TimeSpanBox  Number="{Binding RangeLimits.SelectedStartPoint, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                          Minimum="0" AllowEmpty="False" ShowTimeSpan="{Binding RangeLimits.IsTimespanRange}"
+                          ToolTip="{x:Static Properties:ResourcesTooltips.MainView_StartPoint}"
+                          MinWidth="72" Margin="5,0,0,0"  Visibility="{Binding RangeLimits.ShowTextEntryForPointToPointMode, Converter={StaticResource boolToVisConverter}, ConverterParameter=false}" />
+
+                <TextBlock Margin="4,0,0,0" Text="{x:Static Properties:Resources.MainView_through}" />
+                <ComboBox Name="EndPoint" MinWidth="60" Margin="4,0,0,0" 
+                          ItemsSource="{Binding StartEndRangeItems}" 
+                          SelectedItem="{Binding RangeLimits.SelectedEndPoint, Converter={StaticResource longToIntConverter}}"
+                          ToolTip="{x:Static Properties:ResourcesTooltips.MainView_EndPoint}"
+                          Visibility="{Binding RangeLimits.ShowTextEntryForPointToPointMode, Converter={StaticResource boolToVisConverter}, ConverterParameter=true}" />
+                <controls:TimeSpanBox  Number="{Binding RangeLimits.SelectedEndPoint, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                          Minimum="0" AllowEmpty="False" ShowTimeSpan="{Binding RangeLimits.IsTimespanRange}"
+                          ToolTip="{x:Static Properties:ResourcesTooltips.MainView_EndPoint}"
+                          MinWidth="72" Margin="5,0,0,0"  
+                          Visibility="{Binding RangeLimits.ShowTextEntryForPointToPointMode,  Converter={StaticResource boolToVisConverter},  ConverterParameter=false}" />
+
+            </StackPanel>
+        </StackPanel>
+ 
+
         <!-- Checklist -->
-        <StackPanel Orientation="Vertical" Grid.Row="3" Margin="10,10,10,0">
-            <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
-                <TextBlock Text="{Binding CurrentPreset}" TextWrapping="Wrap" />
+        <StackPanel Orientation="Vertical" Grid.Row="4" Margin="10,10,10,0">
+            <StackPanel Orientation="Vertical" Margin="0,0,0,5">
+                <TextBlock Text="{x:Static Properties:Resources.MainView_SelectedPresets}" FontSize="14" />
+                <TextBlock Text="{Binding CurrentPreset}" TextWrapping="Wrap" Margin="0,5,0,0" />
             </StackPanel>
           
             <TextBlock Text="{x:Static Properties:Resources.QueueSelection_AutoNameWarning}"
@@ -139,7 +182,7 @@
         </StackPanel>
 
         <!--  Controls  -->
-        <Grid Grid.Row="4"
+        <Grid Grid.Row="5"
               Margin="0,20,0,0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />

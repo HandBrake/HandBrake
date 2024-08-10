@@ -2819,4 +2819,31 @@ Om meerdere gelijktijdige coderingen toe te staan dien je "Procesisolatie" in te
   <data name="VideoView_LosslessEncodeOnly" xml:space="preserve">
     <value>Alleen verliesloze codering.</value>
   </data>
+  <data name="MainView_HideClassicMenu" xml:space="preserve">
+    <value>Klassiek menu verbergen</value>
+  </data>
+  <data name="MainView_ShowClassicMenu" xml:space="preserve">
+    <value>Klassiek menu weergeven</value>
+  </data>
+  <data name="OptionsViewVideo_UnsupportedIntelDriver" xml:space="preserve">
+    <value>(Waarschuwing: Niet-ondersteund stuurprogramma gedetecteerd! - Update aanbevolen)</value>
+  </data>
+  <data name="QueueSelectionView_RangeLimits" xml:space="preserve">
+    <value>Bereiklimieten:</value>
+  </data>
+  <data name="QueueSelectionView_RangeLimitsDesc" xml:space="preserve">
+    <value>Beperk de lengte van de titels die aan de wachtrij zijn toegevoegd.</value>
+  </data>
+  <data name="QueueSelectionView_RangeLimitsEnable" xml:space="preserve">
+    <value>Bereiklimieten inschakelen</value>
+  </data>
+  <data name="AddToQueue_RangeLimitError" xml:space="preserve">
+    <value>Sommige titels konden niet aan de wachtrij worden toegevoegd omdat ze buiten de geselecteerde bereiklimieten lagen.</value>
+  </data>
+  <data name="QueueView_StartAtTime" xml:space="preserve">
+    <value>Later starten</value>
+  </data>
+  <data name="QueueView_QueueStartTime" xml:space="preserve">
+    <value>Starttijd van wachtrij:</value>
+  </data>
 </root>
