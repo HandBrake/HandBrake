@@ -1,0 +1,40 @@
+From dbdd9ccded9018718bad6df14b56bdd4b7e327f1 Mon Sep 17 00:00:00 2001
+From: Haihao Xiang <haihao.xiang@intel.com>
+Date: Wed, 22 May 2024 12:31:53 +0800
+Subject: [PATCH] lavc/qsvdec: fix keyframes
+
+MFX_FRAMETYPE_IDR is ORed to the frame type for AVC and HEVC keyframes,
+and MFX_FRAMETYPE_I is taken as keyframe flag for other codecs when
+getting the output surface from the SDK, hence we may mark the output
+frame as keyframe accordingly.
+
+Signed-off-by: Haihao Xiang <haihao.xiang@intel.com>
+---
+ libavcodec/qsvdec.c | 10 ++++++++--
+ 1 file changed, 8 insertions(+), 2 deletions(-)
+
+diff --git a/libavcodec/qsvdec.c b/libavcodec/qsvdec.c
+index 768968fd7bca0..f2cd6ae05c0a9 100644
+--- a/libavcodec/qsvdec.c
++++ b/libavcodec/qsvdec.c
+@@ -931,12 +931,18 @@ static int qsv_decode(AVCodecContext *avctx, QSVContext *q,
+         frame->flags |= AV_FRAME_FLAG_INTERLACED *
+             !(outsurf->Info.PicStruct & MFX_PICSTRUCT_PROGRESSIVE);
+         frame->pict_type = ff_qsv_map_pictype(aframe.frame->dec_info.FrameType);
+-        //Key frame is IDR frame is only suitable for H264. For HEVC, IRAPs are key frames.
+-        if (avctx->codec_id == AV_CODEC_ID_H264) {
++
++        if (avctx->codec_id == AV_CODEC_ID_H264 ||
++            avctx->codec_id == AV_CODEC_ID_HEVC) {
+             if (aframe.frame->dec_info.FrameType & MFX_FRAMETYPE_IDR)
+                 frame->flags |= AV_FRAME_FLAG_KEY;
+             else
+                 frame->flags &= ~AV_FRAME_FLAG_KEY;
++        } else {
++            if (aframe.frame->dec_info.FrameType & MFX_FRAMETYPE_I)
++                frame->flags |= AV_FRAME_FLAG_KEY;
++            else
++                frame->flags &= ~AV_FRAME_FLAG_KEY;
+         }
+         frame->crop_left   = outsurf->Info.CropX;
+         frame->crop_top    = outsurf->Info.CropY;
