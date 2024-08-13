@@ -165,10 +165,8 @@ namespace HandBrakeWPF.Services.Logging
                     this.EnableLoggingToDisk(this.diskLogPath);
                 }
 
-                if (!string.IsNullOrEmpty(this.logHeader))
-                {
-                    this.SetupLogHeader(this.logHeader);
-                }
+                this.logHeader = GeneralUtilities.CreateLogHeader(true).ToString();
+                this.SetupLogHeader(this.logHeader);
 
                 this.OnLogReset();
             }
