@@ -17,6 +17,7 @@ namespace HandBrakeWPF.ViewModels
     using System.IO;
     using System.Linq;
     using System.Media;
+    using System.Threading;
     using System.Windows;
     using System.Windows.Documents;
     using System.Windows.Media;
@@ -1001,33 +1002,8 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
-        public bool DisplayIntelDriverWarning
-        {
-            get
-            {
-                 GpuInfo info = SystemInfo.GetGPUInfo.FirstOrDefault(s => s.IsIntel);
-                 if (info != null)
-                 {
-                     return !info.IsIntelDriverSupported;
-                 }
-
-                 return false;
-            }
-        }
-
-        public bool DisplayNvidiaDriverWarning
-        {
-            get
-            {
-                GpuInfo info = SystemInfo.GetGPUInfo.FirstOrDefault(s => s.IsNvidia);
-                if (info != null)
-                {
-                    return !info.IsNvidiaDriverSupported;
-                }
-
-                return false;
-            }
-        }
+        public bool DisplayIntelDriverWarning { get; set; }
+        public bool DisplayNvidiaDriverWarning { get; set; }
 
         public VideoScaler SelectedScalingMode { get; set; }
 
@@ -1546,6 +1522,34 @@ namespace HandBrakeWPF.ViewModels
             // #############################
             this.IsAutomaticSafeMode = userSettingService.GetUserSetting<bool>(UserSettingConstants.ForceDisableHardwareSupport);
             this.NotifyOfPropertyChange(() => this.IsAutomaticSafeMode);
+
+
+            // Warnings
+            ThreadPool.QueueUserWorkItem(
+                delegate
+                {
+                    try
+                    {
+                        GpuInfo info = SystemInfo.GetGPUInfo.FirstOrDefault(s => s.IsIntel);
+                        if (info != null)
+                        {
+                            this.DisplayIntelDriverWarning = !info.IsIntelDriverSupported;
+                        }
+
+                        info = SystemInfo.GetGPUInfo.FirstOrDefault(s => s.IsNvidia);
+                        if (info != null)
+                        {
+                            this.DisplayNvidiaDriverWarning = !info.IsNvidiaDriverSupported;
+                        }
+
+                        this.NotifyOfPropertyChange(() => this.DisplayIntelDriverWarning);
+                        this.NotifyOfPropertyChange(() => this.DisplayNvidiaDriverWarning);
+                    }
+                    catch (Exception exc)
+                    {
+                        // Nothing to do. Just don't display the warnings.
+                    }
+                });
         }
 
         public void UpdateSettings()

@@ -53,6 +53,8 @@ namespace HandBrakeWPF
             AppDomain.CurrentDomain.ProcessExit += this.CurrentDomain_ProcessExit;
             
             ToolTipService.ShowDurationProperty.OverrideMetadata(typeof(DependencyObject), new FrameworkPropertyMetadata(15000));
+
+            SystemInfo.InitGPUInfo(); // Background Thread.
         }
 
         private void Init(StartupEventArgs e)

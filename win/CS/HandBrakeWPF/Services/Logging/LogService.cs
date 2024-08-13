@@ -101,7 +101,7 @@ namespace HandBrakeWPF.Services.Logging
             this.OnMessageLogged(msg); // Must be outside lock to be thread safe. 
         }
 
-        public void ConfigureLogging(string filename, string fullLogPath)
+        public void ConfigureLogging(string filename, string fullLogPath, bool includeGpuInfo)
         {
             this.isLoggingEnabled = true;
             this.FileName = filename;
@@ -114,7 +114,7 @@ namespace HandBrakeWPF.Services.Logging
 
             this.EnableLoggingToDisk(fullLogPath);
 
-            this.logHeader = GeneralUtilities.CreateLogHeader().ToString();
+            this.logHeader = GeneralUtilities.CreateLogHeader(includeGpuInfo).ToString();
             this.LogMessage(logHeader);
         }
 

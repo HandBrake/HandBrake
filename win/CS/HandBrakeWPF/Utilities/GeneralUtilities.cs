@@ -76,21 +76,24 @@ namespace HandBrakeWPF.Utilities
         /// <returns>
         /// The generatedlog header.
         /// </returns>
-        public static StringBuilder CreateLogHeader()
+        public static StringBuilder CreateLogHeader(bool includeGpuInfo)
         {
             var logHeader = new StringBuilder();
 
             StringBuilder gpuBuilder = new StringBuilder();
-            foreach (var item in SystemInfo.GetGPUInfo)
+            if (includeGpuInfo)
             {
-                gpuBuilder.AppendLine(string.Format("  {0}", item.DisplayValue));
-            }
+                foreach (var item in SystemInfo.GetGPUInfo)
+                {
+                    gpuBuilder.AppendLine(string.Format("  {0}", item.DisplayValue));
+                }
 
-            if (string.IsNullOrEmpty(gpuBuilder.ToString().Trim()))
-            {
-                gpuBuilder.Append("GPU Information is unavailable");
+                if (string.IsNullOrEmpty(gpuBuilder.ToString().Trim()))
+                {
+                    gpuBuilder.Append("GPU Information is unavailable");
+                }
             }
-
+           
             logHeader.AppendLine(string.Format("HandBrake {0}", HandBrakeVersionHelper.GetVersion()));
             logHeader.AppendLine(string.Format("OS: {0}", Environment.OSVersion));
             logHeader.AppendLine(string.Format("CPU: {0}", SystemInfo.GetCpu));
