@@ -69,8 +69,6 @@ namespace HandBrakeWPF.ViewModels
             this.VideoTunes = new BindingList<VideoTune>();
             this.VideoPresets = new BindingList<VideoPreset>();
             this.VideoLevels = new BindingList<VideoLevel>();
-
-            this.userSettingService.SettingChanged += this.UserSettingServiceSettingChanged;
         }
 
         public event EventHandler<TabStatusEventArgs> TabStatusChanged;
@@ -878,14 +876,6 @@ namespace HandBrakeWPF.ViewModels
             catch (Exception)
             {
                 return "Error: Libhb not loaded.";
-            }
-        }
-
-        private void UserSettingServiceSettingChanged(object sender, SettingChangedEventArgs e)
-        {
-            if (e.Key == UserSettingConstants.EnableVceEncoder || e.Key == UserSettingConstants.EnableNvencEncoder || e.Key == UserSettingConstants.EnableQuickSyncEncoding)
-            {
-                this.NotifyOfPropertyChange(() => this.VideoEncoders);
             }
         }
 
