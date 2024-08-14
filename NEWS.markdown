@@ -12,6 +12,9 @@ Download available from Microsoft:
 
 ## HandBrake 1.9.0
 
+#### General
+- Added Intel QSV VVC (hardware) video decoder
+
 ### Windows
 - Add Range Limit controls to the "Add to Queue" selection window. (#4146)
 - Add support for DirectX based video decoding when using the Media Foundation encoder on ARM devices. 
