@@ -13,6 +13,9 @@
 #include "libavutil/bswap.h"
 #include <ass/ass.h>
 
+//Compute adaptive weights based on chroma location and output pix fmt to improve subsampling.
+#define HB_USE_COMPLEX_CHROMA_SMOOTH
+
 #define ABS(a) ((a) > 0 ? (a) : (-(a)))
 
 struct hb_filter_private_s
@@ -43,7 +46,9 @@ struct hb_filter_private_s
 
     void (*blend)(hb_buffer_t *dst, const hb_buffer_t *src,
                   const int left, const int top, const int shift);
-
+#ifdef HB_USE_COMPLEX_CHROMA_SMOOTH
+    unsigned            chromaCoeffs[2][4];
+#endif
     hb_filter_init_t    input;
     hb_filter_init_t    output;
 };
@@ -809,11 +814,8 @@ static hb_buffer_t * SubsampleOverlay(const hb_filter_private_t *pv, const hb_bu
     }
 
     unsigned int accuA, accuB, accuC;
-#if 0
+#ifdef HB_USE_COMPLEX_CHROMA_SMOOTH
     unsigned int coeff;
-    const unsigned coeffSubSampling[3][4] = {{ 1, 0, 0, 0},
-                                             { 3, 1, 0, 0},
-                                             {48,16, 4, 1}};
 #endif
 
     //process UV
@@ -823,33 +825,32 @@ static hb_buffer_t * SubsampleOverlay(const hb_filter_private_t *pv, const hb_bu
     {
         for (int xx = 0, xo = 0; xx < overlay->f.width >> pv->wshift; xx++, xo = xx << pv->wshift)
         {
-#if 1
-            accuC = 1;
-            accuA = pA_in[xo];
-            accuB = pB_in[xo];
-            //do some basic chroma smoothing if either direction are subsampled
-            if (pv->wshift >= 1) {
-                accuA += 2*pA_in[xo] + pA_in[xo + 1];
-                accuB += 2*pB_in[xo] + pB_in[xo + 1];
-                accuC += 3;
-            }
-            if (pv->hshift >= 1) {
-                accuA += 2*pA_in[xo] + (pA_in + overlay->plane[1].stride)[xo];
-                accuB += 2*pB_in[xo] + (pB_in + overlay->plane[2].stride)[xo];
-                accuC += 3;
-            }
-#else
-            //Advanced chroma smoothing, probably excessive
+#ifdef HB_USE_COMPLEX_CHROMA_SMOOTH
             accuA = accuB = accuC = 0;
             for (int yz = 0; yz < (1 << pv->hshift); yz++) {
                 for (int xz = 0; xz < (1 << pv->wshift); xz++) {
-                    coeff = coeffSubSampling[pv->wshift][xz]*coeffSubSampling[pv->hshift][yz];
+                    coeff = pv->chromaCoeffs[0][xz]*pv->chromaCoeffs[1][yz];
                     accuA += coeff*(pA_in + yz*overlay->plane[1].stride)[xo + xz];
                     accuB += coeff*(pB_in + yz*overlay->plane[2].stride)[xo + xz];
                     accuC += coeff;
                 }
             }
-#endif
+#else //HB_USE_COMPLEX_CHROMA_SMOOTH
+            accuC = 1;
+            accuA = pA_in[xo];
+            accuB = pB_in[xo];
+            //basic chroma smoothing with direct neighbour
+            if (pv->wshift > 0) {
+                accuA += 2*pA_in[xo] + pA_in[xo + 1];
+                accuB += 2*pB_in[xo] + pB_in[xo + 1];
+                accuC += 3;
+            }
+            if (pv->hshift > 0) {
+                accuA += 2*pA_in[xo] + (pA_in + overlay->plane[1].stride)[xo];
+                accuB += 2*pB_in[xo] + (pB_in + overlay->plane[2].stride)[xo];
+                accuC += 3;
+            }
+#endif //HB_USE_COMPLEX_CHROMA_SMOOTH
             u_out[xx] = (accuA + (accuC - 1))/accuC;
             v_out[xx] = (accuB + (accuC - 1))/accuC;
         }
@@ -1330,6 +1331,39 @@ static int hb_rendersub_init( hb_filter_object_t * filter,
     pv->depth      = desc->comp[0].depth;
     pv->wshift     = desc->log2_chroma_w;
     pv->hshift     = desc->log2_chroma_h;
+
+#ifdef HB_USE_COMPLEX_CHROMA_SMOOTH
+    //Compute chroma smoothing coefficients
+    int wX, wY;
+    wX = 4 - (1 << desc->log2_chroma_w);
+    wY = 4 - (1 << desc->log2_chroma_h);
+
+    switch (init->chroma_location)
+    {
+    case AVCHROMA_LOC_TOPLEFT:
+        wX += (1 << desc->log2_chroma_w) - 1;
+    case AVCHROMA_LOC_TOP:
+        wY += (1 << desc->log2_chroma_h) - 1;
+        break;
+    case AVCHROMA_LOC_LEFT:
+        wX += (1 << desc->log2_chroma_w) - 1;
+        break;
+    case AVCHROMA_LOC_BOTTOMLEFT:
+        wX += (1 << desc->log2_chroma_w) - 1;
+    case AVCHROMA_LOC_BOTTOM:
+        wY += (1 << desc->log2_chroma_h) - 1;
+    case AVCHROMA_LOC_CENTER:
+    default: //center chroma value for unknown/unsupported
+        break;
+    }
+
+    const unsigned baseCoefficients[] = {1, 4, 16, 48, 16, 4, 1};
+    //If wZ is even, an intermediate value is interpolated for symmetry.
+    for (int x = 0; x < 4; x++) {
+        pv->chromaCoeffs[0][x] = (baseCoefficients[x + wX] + baseCoefficients[x + wX + !(wX & 0x1)]) >> 1;
+        pv->chromaCoeffs[1][x] = (baseCoefficients[x + wY] + baseCoefficients[x + wY + !(wY & 0x1)]) >> 1;
+    }
+#endif //HB_USE_COMPLEX_CHROMA_SMOOTH
 
     switch (init->pix_fmt)
     {
