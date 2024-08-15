@@ -812,8 +812,8 @@ static hb_buffer_t * SubsampleOverlay(const hb_filter_private_t *pv, const hb_bu
 #if 0
     unsigned int coeff;
     const unsigned coeffSubSampling[3][4] = {{ 1, 0, 0, 0},
-                                             { 6, 2, 1, 0},
-                                             { 48,16,4, 1}};
+                                             { 3, 1, 0, 0},
+                                             {48,16, 4, 1}};
 #endif
 
     //process UV
@@ -842,17 +842,16 @@ static hb_buffer_t * SubsampleOverlay(const hb_filter_private_t *pv, const hb_bu
             //Advanced chroma smoothing, probably excessive
             accuA = accuB = accuC = 0;
             for (int yz = 0; yz < (1 << pv->hshift); yz++) {
-                coeff = coeffSubSampling[pv->hshift][yz];
                 for (int xz = 0; xz < (1 << pv->wshift); xz++) {
-                    coeff *= coeffSubSampling[pv->wshift][xz];
-                    accuA += coeff*pA_in[xo + xz + (yz*overlay->plane[1].stride)];
-                    accuB += coeff*pB_in[xo + xz + (yz*overlay->plane[2].stride)];
+                    coeff = coeffSubSampling[pv->wshift][xz]*coeffSubSampling[pv->hshift][yz];
+                    accuA += coeff*(pA_in + yz*overlay->plane[1].stride)[xo + xz];
+                    accuB += coeff*(pB_in + yz*overlay->plane[2].stride)[xo + xz];
                     accuC += coeff;
                 }
             }
 #endif
-            u_out[xx] = accuA/accuC;
-            v_out[xx] = accuB/accuC;
+            u_out[xx] = (accuA + (accuC - 1))/accuC;
+            v_out[xx] = (accuB + (accuC - 1))/accuC;
         }
         u_out += sub->plane[1].stride;
         v_out += sub->plane[2].stride;
@@ -899,8 +898,8 @@ static void ApplySSASubs( hb_filter_private_t * pv, hb_buffer_t * buf )
 
         overlay_out = SubsampleOverlay( pv, overlay );
         if ( overlay_out ) {
-            overlay_out->f.x -= pv->crop[2];
-            overlay_out->f.y -= pv->crop[0];
+            overlay_out->f.x += pv->crop[2];
+            overlay_out->f.y += pv->crop[0];
             ApplySub( pv, buf, overlay_out );
             hb_buffer_close( &overlay_out );
         }
