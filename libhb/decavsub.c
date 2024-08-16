@@ -572,7 +572,7 @@ int decavsubWork( hb_avsub_context_t * ctx,
             // PICTURESUB && RENDERSUB
             if (!clear_sub)
             {
-                unsigned ii, x0, y0, x1, y1, w, h;
+                unsigned ii, x0, y0, x1, y1;
 
                 x0 = subtitle.rects[0]->x;
                 y0 = subtitle.rects[0]->y;
@@ -591,16 +591,15 @@ int decavsubWork( hb_avsub_context_t * ctx,
                     if (subtitle.rects[ii]->y + subtitle.rects[ii]->h > y1)
                         y1 = subtitle.rects[ii]->y + subtitle.rects[ii]->h;
                 }
-                w = x1 - x0;
-                h = y1 - y0;
 
-                out = hb_frame_buffer_init(AV_PIX_FMT_YUVA420P, w, h);
-                memset(out->data, 0, out->size);
+                out = hb_frame_buffer_init(AV_PIX_FMT_YUVA444P, x1 - x0, y1 - y0);
+                memset(out->plane[3].data, 0, out->plane[3].stride*out->plane[3].height);
 
                 out->f.x             = x0;
                 out->f.y             = y0;
                 out->f.window_width  = ctx->context->width;
                 out->f.window_height = ctx->context->height;
+
                 for (ii = 0; ii < subtitle.num_rects; ii++)
                 {
                     AVSubtitleRect *rect = subtitle.rects[ii];
@@ -613,38 +612,55 @@ int decavsubWork( hb_avsub_context_t * ctx,
                     uint8_t *alpha   = out->plane[3].data;
 
                     lum     += off_y * out->plane[0].stride + off_x;
+                    chromaU += off_y * out->plane[1].stride + off_x;
+                    chromaV += off_y * out->plane[2].stride + off_x;
                     alpha   += off_y * out->plane[3].stride + off_x;
-                    chromaU += (off_y >> 1) * out->plane[1].stride + (off_x >> 1);
-                    chromaV += (off_y >> 1) * out->plane[2].stride + (off_x >> 1);
 
                     int xx, yy;
+                    uint32_t argb, ayuv;
+
+                    typedef int (*csp_f)(int);
+                    csp_f rgb2yuv_fn;
+
+                    switch (ctx->job->color_matrix)
+                    {
+                        case HB_COLR_MAT_BT470BG:
+                        case HB_COLR_MAT_SMPTE170M:
+                        case HB_COLR_MAT_FCC:
+                            rgb2yuv_fn = hb_rgb2yuv;
+                            break;
+                        case HB_COLR_MAT_BT2020_NCL:
+                        case HB_COLR_MAT_BT2020_CL: //wrong
+                            rgb2yuv_fn = hb_rgb2yuv_bt2020;
+                            break;
+                        default: //assume 709 for the rest
+                            rgb2yuv_fn = hb_rgb2yuv_bt709;
+                    }
+
+                    //Convert the palette at once to YUV
+                    for (xx = 0; xx < rect->nb_colors; xx++)
+                    {
+                        argb = ((uint32_t*)rect->data[1])[xx];
+                        ayuv = rgb2yuv_fn(argb);
+                        ((uint32_t*)rect->data[1])[xx] = (ayuv & 0x00FFFFFF) | (argb & 0xFF000000);
+                    }
+
                     for (yy = 0; yy < rect->h; yy++)
                     {
                         for (xx = 0; xx < rect->w; xx++)
                         {
-                            uint32_t argb, yuv;
-                            int pixel;
-                            uint8_t color;
+                            int pixel = yy * rect->w + xx;
+                            //map pixel to palette entry
+                            ayuv = ((uint32_t*)rect->data[1])[rect->data[0][pixel]];
 
-                            pixel = yy * rect->w + xx;
-                            color = rect->data[0][pixel];
-                            argb = ((uint32_t*)rect->data[1])[color];
-                            yuv = hb_rgb2yuv(argb);
-
-                            lum[xx] = (yuv >> 16) & 0xff;
-                            alpha[xx] = (argb >> 24) & 0xff;
-                            if ((xx & 1) == 0 && (yy & 1) == 0)
-                            {
-                                chromaV[xx>>1] = (yuv >> 8) & 0xff;
-                                chromaU[xx>>1] = yuv & 0xff;
-                            }
+                            lum[xx] = (ayuv >> 16) & 0xff;
+                            alpha[xx] = (ayuv >> 24) & 0xff;
+                            chromaV[xx] = (ayuv >> 8) & 0xff;
+                            chromaU[xx] = ayuv & 0xff;
                         }
                         lum += out->plane[0].stride;
-                        if ((yy & 1) == 0)
-                        {
-                            chromaU += out->plane[1].stride;
-                            chromaV += out->plane[2].stride;
-                        }
+                        chromaU += out->plane[1].stride;
+                        chromaV += out->plane[2].stride;
                         alpha += out->plane[3].stride;
                     }
                 }
