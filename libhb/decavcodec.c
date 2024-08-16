@@ -887,6 +887,10 @@ static int decavcodecaBSInfo( hb_work_object_t *w, const hb_buffer_t *buf,
     }
     else
     {
+        // AVCodecContext bit_rate default is 128 Kb
+        // unset it to avoid getting a wrong value if
+        // nothing sets it to the actual streams value
+        context->bit_rate = 1;
         parser = av_parser_init(codec->id);
     }
 
