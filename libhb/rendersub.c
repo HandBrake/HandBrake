@@ -821,6 +821,7 @@ static hb_buffer_t * SubsampleOverlay(const hb_filter_private_t *pv, const hb_bu
     //process UV
     pA_in = overlay->plane[1].data;
     pB_in = overlay->plane[2].data;
+    a_out = sub->plane[3].data;
     for (int yy = 0; yy < overlay->f.height >> pv->hshift; yy++)
     {
         for (int xx = 0, xo = 0; xx < overlay->f.width >> pv->wshift; xx++, xo = xx << pv->wshift)
@@ -829,7 +830,7 @@ static hb_buffer_t * SubsampleOverlay(const hb_filter_private_t *pv, const hb_bu
             accuA = accuB = accuC = 0;
             for (int yz = 0; yz < (1 << pv->hshift); yz++) {
                 for (int xz = 0; xz < (1 << pv->wshift); xz++) {
-                    coeff = pv->chromaCoeffs[0][xz]*pv->chromaCoeffs[1][yz];
+                    coeff = pv->chromaCoeffs[0][xz]*pv->chromaCoeffs[1][yz]*(a_out + yz*sub->plane[3].stride)[xo + xz];
                     accuA += coeff*(pA_in + yz*overlay->plane[1].stride)[xo + xz];
                     accuB += coeff*(pB_in + yz*overlay->plane[2].stride)[xo + xz];
                     accuC += coeff;
@@ -851,11 +852,14 @@ static hb_buffer_t * SubsampleOverlay(const hb_filter_private_t *pv, const hb_bu
                 accuC += 3;
             }
 #endif //HB_USE_COMPLEX_CHROMA_SMOOTH
-            u_out[xx] = (accuA + (accuC - 1))/accuC;
-            v_out[xx] = (accuB + (accuC - 1))/accuC;
+            if (accuC) {
+                u_out[xx] = (accuA + (accuC - 1))/accuC;
+                v_out[xx] = (accuB + (accuC - 1))/accuC;
+            }
         }
         u_out += sub->plane[1].stride;
         v_out += sub->plane[2].stride;
+        a_out += sub->plane[3].stride << pv->hshift;
         pA_in += overlay->plane[1].stride << pv->hshift;
         pB_in += overlay->plane[2].stride << pv->hshift;
     }
