@@ -25,8 +25,7 @@
 
   <url type="homepage">https://handbrake.fr/</url>
   <url type="bugtracker">https://github.com/HandBrake/HandBrake/issues</url>
-  <url type="help">https://handbrake.fr/docs/</url>
-  <url type="donation">https://handbrake.fr/docs/credits.html</url>
+  <url type="help">https://handbrake.fr/docs/en/latest/help/community-support.html</url>
   <url type="translate">https://www.transifex.com/HandBrakeProject/</url>
   <url type="contact">https://handbrake.fr/community.php</url>
   <url type="vcs-browser">https://github.com/HandBrake/HandBrake</url>
