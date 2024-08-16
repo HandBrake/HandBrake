@@ -886,18 +886,20 @@ static void ApplySSASubs( hb_filter_private_t * pv, hb_buffer_t * buf )
         }
     }
 
+    //overlay must be aligned to the chroma plane, pad as needed.
+    x1 -= (x1 + pv->crop[2]) & ((1 << pv->wshift) - 1);
+    y1 -= (y1 + pv->crop[0]) & ((1 << pv->hshift) - 1);
+
     overlay = hb_frame_buffer_init( AV_PIX_FMT_YUVA444P, x2-x1, y2-y1 );
     if ( overlay ) {
         // Start with a fully transparent overlay
         memset(overlay->plane[3].data, 0x00, overlay->plane[3].stride*overlay->plane[3].height);
-
-        overlay->f.width = x2 - x1;
-        overlay->f.height = y2 - y1;
         overlay->f.x = x1;
         overlay->f.y = y1;
-        ComposeASS( frameList, overlay );
 
+        ComposeASS( frameList, overlay );
         overlay_out = SubsampleOverlay( pv, overlay );
+
         if ( overlay_out ) {
             overlay_out->f.x += pv->crop[2];
             overlay_out->f.y += pv->crop[0];
@@ -1357,7 +1359,7 @@ static int hb_rendersub_init( hb_filter_object_t * filter,
         break;
     }
 
-    const unsigned baseCoefficients[] = {1, 4, 16, 48, 16, 4, 1};
+    const unsigned baseCoefficients[] = {1, 3, 9, 27, 9, 3, 1};
     //If wZ is even, an intermediate value is interpolated for symmetry.
     for (int x = 0; x < 4; x++) {
         pv->chromaCoeffs[0][x] = (baseCoefficients[x + wX] + baseCoefficients[x + wX + !(wX & 0x1)]) >> 1;
