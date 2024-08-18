@@ -39,6 +39,7 @@ struct hb_filter_private_s
     ASS_Renderer      * renderer;
     ASS_Track         * ssaTrack;
     uint8_t             script_initialized;
+    hb_buffer_t       * last_render;
 
     // SRT
     int                 line;
@@ -718,8 +719,8 @@ static int vobsub_work( hb_filter_object_t * filter,
     return HB_FILTER_OK;
 }
 
-#define ALPHA_BLEND(srcA, srcRGB, dstA, dstRGB, outA) \
-    (((srcA * 255 * srcRGB + dstRGB * dstA * (255 - srcA) + (outA >> 1)) / outA))
+#define ALPHA_BLEND(srcA, srcRGB, dstAc, dstRGB, outA) \
+    (((srcA * srcRGB + dstRGB * dstAc + (outA >> 1)) / outA))
 #define div255(x) (((x + ((x + 128) >> 8)) + 128) >> 8)
 
 static uint8_t ssaAlpha(const ASS_Image *frame, const int x, const int y)
@@ -744,7 +745,7 @@ static void ComposeASS(const ASS_Image *frameList, hb_buffer_t *overlay)
             const unsigned frameY = (yuv >> 16) & 0xff;
             const unsigned frameV = (yuv >> 8 ) & 0xff;
             const unsigned frameU = (yuv >> 0 ) & 0xff;
-            unsigned frameA, resAlpha, iniXo, iniYo;
+            unsigned frameA, resAlpha, iniXo, iniYo, alphaCompo, alphaInScaled;
 
             iniXo = frame->dst_x - overlay->f.x;
             iniYo = frame->dst_y - overlay->f.y;
@@ -761,10 +762,13 @@ static void ComposeASS(const ASS_Image *frameList, hb_buffer_t *overlay)
                     frameA = ssaAlpha( frame, xx, yy );
 
                     if (a_out[xo]) {
-                        resAlpha = (frameA * 255 + a_out[xo] * ( 255 - frameA ));
-                        y_out[xo] = ALPHA_BLEND(frameA, frameY, a_out[xo], y_out[xo], resAlpha);
-                        u_out[xo] = ALPHA_BLEND(frameA, frameU, a_out[xo], u_out[xo], resAlpha);
-                        v_out[xo] = ALPHA_BLEND(frameA, frameV, a_out[xo], v_out[xo], resAlpha);
+                        alphaInScaled = frameA * 255;
+                        alphaCompo = a_out[xo] * (255 - frameA);
+                        resAlpha = (alphaInScaled + alphaCompo);
+
+                        y_out[xo] = ALPHA_BLEND(alphaInScaled, frameY, alphaCompo, y_out[xo], resAlpha);
+                        u_out[xo] = ALPHA_BLEND(alphaInScaled, frameU, alphaCompo, u_out[xo], resAlpha);
+                        v_out[xo] = ALPHA_BLEND(alphaInScaled, frameV, alphaCompo, v_out[xo], resAlpha);
                         a_out[xo] = div255(resAlpha);
                     } else if (frameA) {
                         y_out[xo] = frameY;
@@ -868,50 +872,60 @@ static hb_buffer_t * SubsampleOverlay(const hb_filter_private_t *pv, const hb_bu
 
 static void ApplySSASubs( hb_filter_private_t * pv, hb_buffer_t * buf )
 {
-    ASS_Image *frameList, *frame;
-    hb_buffer_t *overlay, *overlay_out;
+    ASS_Image *frameList;
+    int changed;
 
     frameList = ass_render_frame( pv->renderer, pv->ssaTrack,
-                                  buf->s.start / 90, NULL );
+                                  buf->s.start / 90, &changed );
     if ( !frameList )
         return;
 
-    unsigned int x1, y1, x2, y2;
-    x1 = y1 = (unsigned)(-1);
-    x2 = y2 = 0;
+    // re-use cached overlay, whenever possible
+    if ( changed ) {
+        if ( pv->last_render )
+            hb_buffer_close( &pv->last_render );
 
-    //Find overlay size and pos (faster than composing at the video dimensions)
-    for ( frame = frameList; frame; frame = frame->next ) {
-        if ( frame->w && frame->h ) {
-            x2 = FFMAX(x2, frame->dst_x + frame->w);
-            y2 = FFMAX(y2, frame->dst_y + frame->h);
-            x1 = FFMIN(x1, frame->dst_x);
-            y1 = FFMIN(y1, frame->dst_y);
+        ASS_Image *frame;
+        hb_buffer_t *overlay;
+
+        unsigned int x1, y1, x2, y2;
+        x1 = y1 = (unsigned)(-1);
+        x2 = y2 = 0;
+
+        //Find overlay size and pos (faster than composing at the video dimensions)
+        for ( frame = frameList; frame; frame = frame->next ) {
+            if ( frame->w && frame->h ) {
+                x2 = FFMAX(x2, frame->dst_x + frame->w);
+                y2 = FFMAX(y2, frame->dst_y + frame->h);
+                x1 = FFMIN(x1, frame->dst_x);
+                y1 = FFMIN(y1, frame->dst_y);
+            }
+        }
+
+        //overlay must be aligned to the chroma plane, pad as needed.
+        x1 -= (x1 + pv->crop[2]) & ((1 << pv->wshift) - 1);
+        y1 -= (y1 + pv->crop[0]) & ((1 << pv->hshift) - 1);
+
+        overlay = hb_frame_buffer_init( AV_PIX_FMT_YUVA444P, x2-x1, y2-y1 );
+        if ( overlay ) {
+            // Start with a fully transparent overlay
+            memset(overlay->plane[3].data, 0x00, overlay->plane[3].stride*overlay->plane[3].height);
+            overlay->f.x = x1;
+            overlay->f.y = y1;
+
+            ComposeASS( frameList, overlay );
+            pv->last_render = SubsampleOverlay( pv, overlay );
+            hb_buffer_close( &overlay );
+
+            if ( pv->last_render ) {
+                pv->last_render->f.x += pv->crop[2];
+                pv->last_render->f.y += pv->crop[0];
+            }
         }
     }
 
-    //overlay must be aligned to the chroma plane, pad as needed.
-    x1 -= (x1 + pv->crop[2]) & ((1 << pv->wshift) - 1);
-    y1 -= (y1 + pv->crop[0]) & ((1 << pv->hshift) - 1);
-
-    overlay = hb_frame_buffer_init( AV_PIX_FMT_YUVA444P, x2-x1, y2-y1 );
-    if ( overlay ) {
-        // Start with a fully transparent overlay
-        memset(overlay->plane[3].data, 0x00, overlay->plane[3].stride*overlay->plane[3].height);
-        overlay->f.x = x1;
-        overlay->f.y = y1;
-
-        ComposeASS( frameList, overlay );
-        overlay_out = SubsampleOverlay( pv, overlay );
-
-        if ( overlay_out ) {
-            overlay_out->f.x += pv->crop[2];
-            overlay_out->f.y += pv->crop[0];
-            ApplySub( pv, buf, overlay_out );
-            hb_buffer_close( &overlay_out );
-        }
-        hb_buffer_close( &overlay );
-    }
+    if ( pv->last_render )
+        ApplySub( pv, buf, pv->last_render );
 }
 
 static void ssa_log(int level, const char *fmt, va_list args, void *data)
@@ -994,6 +1008,11 @@ static int ssa_post_init( hb_filter_object_t * filter, hb_job_t * job )
     ass_set_frame_size(pv->renderer, width, height);
     ass_set_storage_size(pv->renderer, width, height);
 
+    if ( pv->last_render ) {
+        hb_buffer_close(&pv->last_render);
+        pv->last_render = NULL;
+    }
+
     return 0;
 }
 
@@ -1012,6 +1031,8 @@ static void ssa_close( hb_filter_object_t * filter )
         ass_renderer_done( pv->renderer );
     if ( pv->ssa )
         ass_library_done( pv->ssa );
+    if ( pv->last_render )
+        hb_buffer_close( &pv->last_render );
 
     free( pv );
     filter->private_data = NULL;
