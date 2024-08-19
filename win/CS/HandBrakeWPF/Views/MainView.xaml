@@ -673,7 +673,8 @@
                               ActionText="Cancel"
                               SecondaryActionText="Open Log Window"
                               SecondaryAction="{Binding OpenLogWindowAction}"
-                              CancelAction="{Binding CancelAction}" />
+                              CancelAction="{Binding CancelAction}"
+                              ProgressPercentage="{Binding ProgressAmount}" />
 
         <Controls:AlertPanel x:Name="alertPanel"
                              KeyboardNavigation.DirectionalNavigation="Contained"

@@ -7,7 +7,6 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:helpers="clr-namespace:HandBrakeWPF.Helpers"
              xmlns:Properties="clr-namespace:HandBrakeWPF.Properties"
-             xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
              xmlns:controls="clr-namespace:HandBrakeWPF.Controls"
              d:DesignHeight="500"
              d:DesignWidth="800"
@@ -352,15 +351,13 @@
 
                             <!--  Delete  -->
                             <StackPanel Grid.Column="2" Grid.Row="0" VerticalAlignment="Center">
-                                <Image Width="16" Height="16" Margin="10,0,10,0" Source="Images/close64.png">
-                                    <i:Interaction.Triggers>
-                                        <i:EventTrigger EventName="MouseDown">
-                                            <i:InvokeCommandAction Command="{Binding DataContext.RemoveTrackCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}" CommandParameter="{Binding}" />
-                                        </i:EventTrigger>
-                                    </i:Interaction.Triggers>
-                                </Image>
+                                <Button Style="{StaticResource TransparentButtonStyle}" Command="{Binding DataContext.RemoveTrackCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}" 
+                                        CommandParameter="{Binding}">
+                                    <Button.Content>
+                                        <Image Width="16" Height="16" Margin="10,0,10,0" Source="Images/close64.png" />
+                                    </Button.Content>
+                                </Button>
                             </StackPanel>
-
                         </Grid>
 
                     </DataTemplate>
