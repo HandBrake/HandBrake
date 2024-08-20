@@ -13,9 +13,6 @@
 #include "libavutil/bswap.h"
 #include <ass/ass.h>
 
-//Compute adaptive weights based on chroma location and output pix fmt to improve subsampling.
-#define HB_USE_COMPLEX_CHROMA_SMOOTH
-
 #define ABS(a) ((a) > 0 ? (a) : (-(a)))
 
 struct hb_filter_private_s
@@ -47,9 +44,8 @@ struct hb_filter_private_s
 
     void (*blend)(hb_buffer_t *dst, const hb_buffer_t *src,
                   const int left, const int top, const int shift);
-#ifdef HB_USE_COMPLEX_CHROMA_SMOOTH
     unsigned            chromaCoeffs[2][4];
-#endif
+
     hb_filter_init_t    input;
     hb_filter_init_t    output;
 };
@@ -723,7 +719,7 @@ static int vobsub_work( hb_filter_object_t * filter,
     (((srcA * srcRGB + dstRGB * dstAc + (outA >> 1)) / outA))
 #define div255(x) (((x + ((x + 128) >> 8)) + 128) >> 8)
 
-static uint8_t ssaAlpha(const ASS_Image *frame, const int x, const int y)
+static uint8_t inline ssaAlpha(const ASS_Image *frame, const int x, const int y)
 {
     const unsigned frameA = (frame->color) & 0xff;
     const unsigned gliphA = frame->bitmap[y*frame->stride + x];
@@ -733,10 +729,17 @@ static uint8_t ssaAlpha(const ASS_Image *frame, const int x, const int y)
     return (uint8_t)div255((255 - frameA) * gliphA);
 }
 
-static void ComposeASS(const ASS_Image *frameList, hb_buffer_t *overlay)
+static hb_buffer_t* ComposeSubsampleASS( hb_filter_private_t *pv, const ASS_Image *frameList,
+                                         const unsigned width, const unsigned height,
+                                         const unsigned x, const unsigned y )
 {
-    uint8_t *y_out, *u_out, *v_out, *a_out;
     const ASS_Image *frame = frameList;
+    const unsigned flatStride = width << 2;
+    uint8_t *compo = calloc( flatStride*height, sizeof(uint8_t) );
+
+    if ( !compo ) {
+        return NULL;
+    }
 
     while ( frame ) {
         if ( frame->w && frame->h ) {
@@ -745,48 +748,98 @@ static void ComposeASS(const ASS_Image *frameList, hb_buffer_t *overlay)
             const unsigned frameY = (yuv >> 16) & 0xff;
             const unsigned frameV = (yuv >> 8 ) & 0xff;
             const unsigned frameU = (yuv >> 0 ) & 0xff;
-            unsigned frameA, resAlpha, iniXo, iniYo, alphaCompo, alphaInScaled;
+            unsigned frameA, resAlpha, alphaCompo, alphaInScaled;
 
-            iniXo = frame->dst_x - overlay->f.x;
-            iniYo = frame->dst_y - overlay->f.y;
+            const unsigned iniFx = (frame->dst_x - x)*4 + (frame->dst_y - y)*flatStride;
 
-            y_out = overlay->plane[0].data + iniYo*overlay->plane[0].stride;
-            u_out = overlay->plane[1].data + iniYo*overlay->plane[1].stride;
-            v_out = overlay->plane[2].data + iniYo*overlay->plane[2].stride;
-            a_out = overlay->plane[3].data + iniYo*overlay->plane[3].stride;
-
-            for (int yy = 0; yy < frame->h; yy++)
+            for ( int yy = 0, fx = iniFx; yy < frame->h; yy++, fx = iniFx + yy*flatStride )
             {
-                for (int xx = 0, xo = iniXo; xx < frame->w; xx++, xo++)
+                for ( int xx = 0; xx < frame->w; xx++, fx += 4 )
                 {
                     frameA = ssaAlpha( frame, xx, yy );
 
-                    if (a_out[xo]) {
-                        alphaInScaled = frameA * 255;
-                        alphaCompo = a_out[xo] * (255 - frameA);
-                        resAlpha = (alphaInScaled + alphaCompo);
+                    //skip if transparent
+                    if ( frameA ) {
+                        if ( compo[fx+3] ) {
+                            alphaInScaled = frameA * 255;
+                            alphaCompo = compo[fx+3] * (255 - frameA);
+                            resAlpha = (alphaInScaled + alphaCompo);
 
-                        y_out[xo] = ALPHA_BLEND(alphaInScaled, frameY, alphaCompo, y_out[xo], resAlpha);
-                        u_out[xo] = ALPHA_BLEND(alphaInScaled, frameU, alphaCompo, u_out[xo], resAlpha);
-                        v_out[xo] = ALPHA_BLEND(alphaInScaled, frameV, alphaCompo, v_out[xo], resAlpha);
-                        a_out[xo] = div255(resAlpha);
-                    } else if (frameA) {
-                        y_out[xo] = frameY;
-                        u_out[xo] = frameU;
-                        v_out[xo] = frameV;
-                        a_out[xo] = frameA;
+                            compo[fx  ] = ALPHA_BLEND( alphaInScaled, frameY, alphaCompo, compo[fx  ], resAlpha );
+                            compo[fx+1] = ALPHA_BLEND( alphaInScaled, frameU, alphaCompo, compo[fx+1], resAlpha );
+                            compo[fx+2] = ALPHA_BLEND( alphaInScaled, frameV, alphaCompo, compo[fx+2], resAlpha );
+                            compo[fx+3] = div255( resAlpha );
+                        } else {
+                            compo[fx  ] = frameY;
+                            compo[fx+1] = frameU;
+                            compo[fx+2] = frameV;
+                            compo[fx+3] = frameA;
+                        }
                     }
                 }
-                y_out += overlay->plane[0].stride;
-                u_out += overlay->plane[1].stride;
-                v_out += overlay->plane[2].stride;
-                a_out += overlay->plane[3].stride;
             }
         }
         frame = frame->next;
     }
+
+    hb_buffer_t *sub = hb_frame_buffer_init( pv->pix_fmt_alpha, width, height );
+    if ( !sub ) {
+        free(compo);
+        return NULL;
+    }
+
+    sub->f.x = x;
+    sub->f.y = y;
+
+    uint8_t *y_out, *u_out, *v_out, *a_out;
+    y_out = sub->plane[0].data;
+    u_out = sub->plane[1].data;
+    v_out = sub->plane[2].data;
+    a_out = sub->plane[3].data;
+
+    unsigned int accuA, accuB, accuC, coeff, isChromaLine;
+
+    for ( int yy = 0, ys = 0, fx = 0; yy < height; yy++, ys = yy >> pv->hshift, fx = yy*flatStride )
+    {
+        isChromaLine = yy == ys << pv->hshift;
+        for ( int xx = 0, xs = 0; xx < width; xx++, xs = xx >> pv->wshift, fx += 4 )
+        {
+            y_out[xx] = compo[ fx ];
+            a_out[xx] = compo[fx+3];
+
+            //Are we on a chroma sample?
+            if ( isChromaLine && xx == xs << pv->wshift ) {
+                accuA = accuB = accuC = 0;
+                for ( int yz = 0; yz < (1 << pv->hshift) && (yz + yy < height); yz++ ) {
+                    for ( int xz = 0; xz < (1 << pv->wshift) && (xz + xx < width); xz++ ) {
+                        //Access compo to avoid cache misses with a_out.
+                        coeff = pv->chromaCoeffs[0][xz]*pv->chromaCoeffs[1][yz]*compo[fx + yz*flatStride + 3];
+                        accuA += coeff*compo[fx + yz*flatStride + 1];
+                        accuB += coeff*compo[fx + yz*flatStride + 2];
+                        accuC += coeff;
+                    }
+                }
+                if (accuC) {
+                    u_out[xs] = (accuA + (accuC - 1))/accuC;
+                    v_out[xs] = (accuB + (accuC - 1))/accuC;
+                }
+            }
+        }
+
+        if (isChromaLine) {
+            u_out += sub->plane[1].stride;
+            v_out += sub->plane[2].stride;
+        }
+        y_out += sub->plane[0].stride;
+        a_out += sub->plane[3].stride;
+    }
+
+    free(compo);
+    return sub;
 }
 
+// To enable and use with bitmap subtitles
+#if 0
 // Output a YUVA4**P frame from a YUVA444P8 frame
 static hb_buffer_t * SubsampleOverlay(const hb_filter_private_t *pv, const hb_buffer_t *overlay)
 {
@@ -818,9 +871,7 @@ static hb_buffer_t * SubsampleOverlay(const hb_filter_private_t *pv, const hb_bu
     }
 
     unsigned int accuA, accuB, accuC;
-#ifdef HB_USE_COMPLEX_CHROMA_SMOOTH
     unsigned int coeff;
-#endif
 
     //process UV
     pA_in = overlay->plane[1].data;
@@ -830,7 +881,6 @@ static hb_buffer_t * SubsampleOverlay(const hb_filter_private_t *pv, const hb_bu
     {
         for (int xx = 0, xo = 0; xx < overlay->f.width >> pv->wshift; xx++, xo = xx << pv->wshift)
         {
-#ifdef HB_USE_COMPLEX_CHROMA_SMOOTH
             accuA = accuB = accuC = 0;
             for (int yz = 0; yz < (1 << pv->hshift); yz++) {
                 for (int xz = 0; xz < (1 << pv->wshift); xz++) {
@@ -840,22 +890,6 @@ static hb_buffer_t * SubsampleOverlay(const hb_filter_private_t *pv, const hb_bu
                     accuC += coeff;
                 }
             }
-#else //HB_USE_COMPLEX_CHROMA_SMOOTH
-            accuC = 1;
-            accuA = pA_in[xo];
-            accuB = pB_in[xo];
-            //basic chroma smoothing with direct neighbour
-            if (pv->wshift > 0) {
-                accuA += 2*pA_in[xo] + pA_in[xo + 1];
-                accuB += 2*pB_in[xo] + pB_in[xo + 1];
-                accuC += 3;
-            }
-            if (pv->hshift > 0) {
-                accuA += 2*pA_in[xo] + (pA_in + overlay->plane[1].stride)[xo];
-                accuB += 2*pB_in[xo] + (pB_in + overlay->plane[2].stride)[xo];
-                accuC += 3;
-            }
-#endif //HB_USE_COMPLEX_CHROMA_SMOOTH
             if (accuC) {
                 u_out[xx] = (accuA + (accuC - 1))/accuC;
                 v_out[xx] = (accuB + (accuC - 1))/accuC;
@@ -869,6 +903,7 @@ static hb_buffer_t * SubsampleOverlay(const hb_filter_private_t *pv, const hb_bu
     }
     return sub;
 }
+#endif
 
 static void ApplySSASubs( hb_filter_private_t * pv, hb_buffer_t * buf )
 {
@@ -885,37 +920,27 @@ static void ApplySSASubs( hb_filter_private_t * pv, hb_buffer_t * buf )
         if ( pv->last_render )
             hb_buffer_close( &pv->last_render );
 
-        ASS_Image *frame;
-        hb_buffer_t *overlay;
-
         unsigned int x1, y1, x2, y2;
         x1 = y1 = (unsigned)(-1);
         x2 = y2 = 0;
 
         //Find overlay size and pos (faster than composing at the video dimensions)
-        for ( frame = frameList; frame; frame = frame->next ) {
+        for ( ASS_Image *frame = frameList; frame; frame = frame->next ) {
             if ( frame->w && frame->h ) {
-                x2 = FFMAX(x2, frame->dst_x + frame->w);
-                y2 = FFMAX(y2, frame->dst_y + frame->h);
-                x1 = FFMIN(x1, frame->dst_x);
-                y1 = FFMIN(y1, frame->dst_y);
+                x2 = FFMAX( x2, frame->dst_x + frame->w );
+                y2 = FFMAX( y2, frame->dst_y + frame->h );
+                x1 = FFMIN( x1, frame->dst_x );
+                y1 = FFMIN( y1, frame->dst_y );
             }
         }
 
-        //overlay must be aligned to the chroma plane, pad as needed.
-        x1 -= (x1 + pv->crop[2]) & ((1 << pv->wshift) - 1);
-        y1 -= (y1 + pv->crop[0]) & ((1 << pv->hshift) - 1);
+        //don't process empty framelist
+        if (x2 > 0) {
+            //overlay must be aligned to the chroma plane, pad as needed.
+            x1 -= (x1 + pv->crop[2]) & ((1 << pv->wshift) - 1);
+            y1 -= (y1 + pv->crop[0]) & ((1 << pv->hshift) - 1);
 
-        overlay = hb_frame_buffer_init( AV_PIX_FMT_YUVA444P, x2-x1, y2-y1 );
-        if ( overlay ) {
-            // Start with a fully transparent overlay
-            memset(overlay->plane[3].data, 0x00, overlay->plane[3].stride*overlay->plane[3].height);
-            overlay->f.x = x1;
-            overlay->f.y = y1;
-
-            ComposeASS( frameList, overlay );
-            pv->last_render = SubsampleOverlay( pv, overlay );
-            hb_buffer_close( &overlay );
+            pv->last_render = ComposeSubsampleASS( pv, frameList, x2-x1, y2-y1, x1, y1 );
 
             if ( pv->last_render ) {
                 pv->last_render->f.x += pv->crop[2];
@@ -1359,8 +1384,7 @@ static int hb_rendersub_init( hb_filter_object_t * filter,
     pv->wshift     = desc->log2_chroma_w;
     pv->hshift     = desc->log2_chroma_h;
 
-#ifdef HB_USE_COMPLEX_CHROMA_SMOOTH
-    //Compute chroma smoothing coefficients
+    //Compute chroma smoothing coefficients wrt video chroma location
     int wX, wY;
     wX = 4 - (1 << desc->log2_chroma_w);
     wY = 4 - (1 << desc->log2_chroma_h);
@@ -1390,7 +1414,6 @@ static int hb_rendersub_init( hb_filter_object_t * filter,
         pv->chromaCoeffs[0][x] = (baseCoefficients[x + wX] + baseCoefficients[x + wX + !(wX & 0x1)]) >> 1;
         pv->chromaCoeffs[1][x] = (baseCoefficients[x + wY] + baseCoefficients[x + wY + !(wY & 0x1)]) >> 1;
     }
-#endif //HB_USE_COMPLEX_CHROMA_SMOOTH
 
     switch (init->pix_fmt)
     {
