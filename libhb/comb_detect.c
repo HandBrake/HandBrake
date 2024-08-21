@@ -1505,7 +1505,7 @@ static void process_frame(hb_filter_private_t *pv)
     if (((pv->mode & MODE_MASK) || (pv->mode & MODE_COMPOSITE)) && combed)
     {
         hb_buffer_t *out;
-        out = hb_buffer_dup(pv->ref[1]);
+        out = hb_buffer_shallow_dup(pv->ref[1]);
         pv->apply_mask(pv, out);
         out->s.combed = combed;
         hb_buffer_list_append(&pv->out_list, out);
@@ -1532,7 +1532,7 @@ static int comb_detect_work(hb_filter_object_t *filter,
     if (in->s.flags & HB_BUF_FLAG_EOF)
     {
         // Duplicate last frame and process refs
-        store_ref(pv, hb_buffer_dup(pv->ref[2]));
+        store_ref(pv, hb_buffer_shallow_dup(pv->ref[2]));
         if (pv->ref[0] != NULL)
         {
             pv->force_exaustive_check = 1;
@@ -1548,7 +1548,7 @@ static int comb_detect_work(hb_filter_object_t *filter,
     if (!pv->comb_detect_ready)
     {
         // If not ready, store duplicate ref and return HB_FILTER_DELAY
-        store_ref(pv, hb_buffer_dup(in));
+        store_ref(pv, hb_buffer_shallow_dup(in));
         store_ref(pv, in);
         pv->comb_detect_ready = 1;
         // Wait for next
