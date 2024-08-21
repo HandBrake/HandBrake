@@ -624,6 +624,23 @@ void hb_buffer_copy_props(hb_buffer_t *dst, const hb_buffer_t *src)
     hb_buffer_copy_side_data(dst, src);
 }
 
+int hb_buffer_is_writable(const hb_buffer_t *buf)
+{
+    switch (buf->storage_type)
+    {
+        case AVFRAME:
+            return av_frame_is_writable((AVFrame *)buf->storage);
+        case STANDARD:
+            return 1;
+#ifdef __APPLE__
+        case COREMEDIA:
+            return CFGetRetainCount(buf->storage);
+#endif
+        default:
+            return 0;
+    }
+}
+
 static int copy_hwframe_to_video_buffer(const AVFrame *frame, hb_buffer_t *buf)
 {
     int ret;
