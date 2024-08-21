@@ -1175,7 +1175,7 @@ static hb_buffer_t *copy_frame( hb_work_private_t *pv )
     else
 #endif
     {
-        out = hb_avframe_to_video_buffer(pv->frame, (AVRational){1,1}, 1);
+        out = hb_avframe_to_video_buffer(pv->frame, (AVRational){1,1});
     }
 
     if (pv->frame->pts != AV_NOPTS_VALUE)

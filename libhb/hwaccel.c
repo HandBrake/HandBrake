@@ -233,7 +233,7 @@ hb_buffer_t * hb_hwaccel_copy_video_buffer_to_hw_video_buffer(hb_job_t *job, hb_
             goto fail;
         }
 
-        hb_buffer_t *out = hb_avframe_to_video_buffer(hw_frame, (AVRational){1,1}, 1);
+        hb_buffer_t *out = hb_avframe_to_video_buffer(hw_frame, (AVRational){1,1});
 
         av_frame_unref(&frame);
         av_frame_unref(hw_frame);
