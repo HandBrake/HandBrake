@@ -2429,7 +2429,7 @@ msgid "Cancel Current, Start Next"
 msgstr "現在のエンコードをキャンセルして次を開始"
 
 #: src/callbacks.c:4100
-msgid "Finish Current, Start Next"
+msgid "Finish Current and Stop"
 msgstr "現在のエンコードを完了して次を開始"
 
 #: src/callbacks.c:4100 src/callbacks.c:4124 src/queuehandler.c:1703

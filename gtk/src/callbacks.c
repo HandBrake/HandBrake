@@ -4098,7 +4098,7 @@ ghb_stop_encode_dialog_show (signal_user_data_t *ud)
     GtkWidget *dialog = ghb_cancel_dialog_new(window, _("Stop Encoding?"),
         _("Your movie will be lost if you don't continue encoding."),
         _("Cancel Current and Stop"), _("Cancel Current, Start Next"),
-        _("Finish Current, Start Next"), _("Continue Encoding"));
+        _("Finish Current and Stop"), _("Continue Encoding"));
     g_signal_connect(dialog, "response",
                      G_CALLBACK(stop_encode_dialog_response), ud);
     gtk_widget_show(dialog);
