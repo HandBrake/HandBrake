@@ -687,10 +687,19 @@ static hb_buffer_t* x265_encode(hb_work_object_t *w, hb_buffer_t *in)
 {
     hb_work_private_t *pv = w->private_data;
     hb_job_t *job         = pv->job;
-    x265_picture pic_in, pic_out;
+
+    x265_picture pic_in;
+    x265_picture  pic_layers_out[MAX_SCALABLE_LAYERS];
+    x265_picture *pic_lyrptr_out[MAX_SCALABLE_LAYERS];
+
     x265_nal *nal;
     uint32_t nnal;
     int ret;
+
+    for (int i = 0; i < MAX_SCALABLE_LAYERS; i++)
+    {
+        pic_lyrptr_out[i] = &pic_layers_out[i];
+    }
 
     pv->api->picture_init(pv->param, &pic_in);
 
@@ -777,7 +786,7 @@ static hb_buffer_t* x265_encode(hb_work_object_t *w, hb_buffer_t *in)
     pv->last_stop = in->s.stop;
     save_frame_info(pv, in);
 
-    ret = pv->api->encoder_encode(pv->x265, &nal, &nnal, &pic_in, &pic_out);
+    ret = pv->api->encoder_encode(pv->x265, &nal, &nnal, &pic_in, pic_lyrptr_out);
 
     for (int i = 0; i < sei->numPayloads; i++)
     {
@@ -787,7 +796,7 @@ static hb_buffer_t* x265_encode(hb_work_object_t *w, hb_buffer_t *in)
 
     if (ret > 0)
     {
-        return nal_encode(w, &pic_out, nal, nnal);
+        return nal_encode(w, pic_lyrptr_out[0], nal, nnal);
     }
     return NULL;
 }
@@ -801,16 +810,22 @@ int encx265Work(hb_work_object_t *w, hb_buffer_t **buf_in, hb_buffer_t **buf_out
     {
         uint32_t nnal;
         x265_nal *nal;
-        x265_picture pic_out;
+        x265_picture  pic_layers_out[MAX_SCALABLE_LAYERS];
+        x265_picture *pic_lyrptr_out[MAX_SCALABLE_LAYERS];
         hb_buffer_list_t list;
 
         hb_buffer_list_clear(&list);
 
+        for (int i = 0; i < MAX_SCALABLE_LAYERS; i++)
+        {
+            pic_lyrptr_out[i] = &pic_layers_out[i];
+        }
+
         // flush delayed frames
         while (pv->api->encoder_encode(pv->x265, &nal,
-                                       &nnal, NULL, &pic_out) > 0)
+                                       &nnal, NULL, pic_lyrptr_out) > 0)
         {
-            hb_buffer_t *buf = nal_encode(w, &pic_out, nal, nnal);
+            hb_buffer_t *buf = nal_encode(w, pic_lyrptr_out[0], nal, nnal);
             hb_buffer_list_append(&list, buf);
         }
         // add the EOF to the end of the chain
