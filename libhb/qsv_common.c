@@ -401,6 +401,8 @@ int hb_qsv_hardware_generation(int cpu_platform)
             return QSV_G8;
         case HB_CPU_PLATFORM_INTEL_DG2:
             return QSV_G9;
+        case HB_CPU_PLATFORM_INTEL_LNL:
+            return QSV_G10;
         default:
             return QSV_FU;
     }
@@ -461,7 +463,12 @@ int qsv_map_mfx_platform_codename(int mfx_platform_codename)
     case MFX_PLATFORM_DG2:
     case MFX_PLATFORM_ALDERLAKE_N:
     case MFX_PLATFORM_KEEMBAY:
+    case MFX_PLATFORM_METEORLAKE:
+    case MFX_PLATFORM_ARROWLAKE:
         platform = HB_CPU_PLATFORM_INTEL_DG2;
+        break;
+    case MFX_PLATFORM_LUNARLAKE:
+        platform = HB_CPU_PLATFORM_INTEL_LNL;
         break;
     default:
         platform = HB_CPU_PLATFORM_UNSPECIFIED;
