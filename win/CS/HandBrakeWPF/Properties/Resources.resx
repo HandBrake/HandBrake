@@ -2852,4 +2852,13 @@ To allow multiple simultaneous encodes, turn on "Process Isolation" in Tools Men
   <data name="OptionsView_NotAvailable" xml:space="preserve">
     <value>Not available on this system.</value>
   </data>
+    <data name="MainView_ScanningStatus" xml:space="preserve">
+    <value>Please wait ...</value>
+  </data>
+  <data name="MainView_Cancel" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="MainView_OpenLog" xml:space="preserve">
+    <value>Open Log Window</value>
+  </data>
 </root>
