@@ -137,6 +137,7 @@ enum
     QSV_G7, // Ice Lake or equivalent
     QSV_G8, // Tiger Lake or equivalent
     QSV_G9, // DG2 or equivalent
+    QSV_G10,// Lunar Lake or equivalent
     QSV_FU, // always last (future processors)
 };
 
