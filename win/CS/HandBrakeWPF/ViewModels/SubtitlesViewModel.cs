@@ -205,7 +205,7 @@ namespace HandBrakeWPF.ViewModels
 
             if (dialog.FileNames != null)
             {
-                foreach (SubtitleTrack track in this.subtitleFileHandler.GetInputSubtitles(dialog.FileNames))
+                foreach (SubtitleTrack track in this.subtitleFileHandler.GetInputSubtitles(dialog.FileNames, true))
                 {
                     this.Task.SubtitleTracks.Add(track);
                 }
@@ -216,7 +216,7 @@ namespace HandBrakeWPF.ViewModels
         {
             if (subtitleFiles != null && subtitleFiles.Any())
             {
-                foreach (SubtitleTrack track in this.subtitleFileHandler.GetInputSubtitles(subtitleFiles))
+                foreach (SubtitleTrack track in this.subtitleFileHandler.GetInputSubtitles(subtitleFiles, true))
                 {
                     this.Task.SubtitleTracks.Add(track);
                 }

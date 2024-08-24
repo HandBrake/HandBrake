@@ -15,9 +15,11 @@ namespace HandBrakeWPF.Services.Subtitles
     using HandBrakeWPF.Services.Encode.Model.Models;
     using HandBrakeWPF.Services.Interfaces;
 
+    using Language = HandBrake.Interop.Interop.Interfaces.Model.Language;
+
     public class SubtitleFileHandler : ISubtitleFileHandler
     {
-        public List<SubtitleTrack> FindLocalFiles(string sourcePath)
+        public List<SubtitleTrack> FindLocalFiles(string sourcePath, bool guessLanguage)
         {
                List<string> foundFiles = new List<string>();
 
@@ -43,13 +45,13 @@ namespace HandBrakeWPF.Services.Subtitles
 
             if (foundFiles.Count > 0)
             {
-                return GetInputSubtitles(foundFiles.ToArray());
+                return GetInputSubtitles(foundFiles.ToArray(), guessLanguage);
             }
 
             return new List<SubtitleTrack>();
         }
 
-        public List<SubtitleTrack> GetInputSubtitles(string[] filenames)
+        public List<SubtitleTrack> GetInputSubtitles(string[] filenames, bool guessLanguage)
         {
             List < SubtitleTrack > foundSubtitles = new List<SubtitleTrack>();
 
@@ -61,13 +63,15 @@ namespace HandBrakeWPF.Services.Subtitles
                 }
 
                 string extension = Path.GetExtension(srtFile);
+                Language foundLanguage;
+                foundLanguage = guessLanguage ? this.GuessLanguage(srtFile) : HandBrakeLanguagesHelper.GetByName("English");
 
                 SubtitleTrack track = new SubtitleTrack
                                       {
                                           SrtFileName = Path.GetFileNameWithoutExtension(srtFile),
                                           SrtOffset = 0,
                                           SrtCharCode = "UTF-8",
-                                          SrtLang = HandBrakeLanguagesHelper.GetByName("English"),
+                                          SrtLang = foundLanguage,
                                           SubtitleType = extension.Contains("ass", StringComparison.InvariantCultureIgnoreCase) ? SubtitleType.IMPORTSSA : SubtitleType.IMPORTSRT,
                                           SrtPath = srtFile
                                       };
@@ -75,6 +79,46 @@ namespace HandBrakeWPF.Services.Subtitles
             }
 
             return foundSubtitles;
+        }
+
+        private Language GuessLanguage(string filename)
+        {
+            if (string.IsNullOrEmpty(filename))
+            {
+                return HandBrakeLanguagesHelper.GetByName("English"); // Default
+            }
+
+            filename = Path.GetFileNameWithoutExtension(filename);
+
+            foreach (Language language in HandBrakeLanguagesHelper.AllLanguages)
+            {
+                
+
+                if (language.Code == "und" || language.Code == "any")
+                {
+                    continue;
+                }
+                
+                if (!string.IsNullOrEmpty(language.EnglishName)  && filename.Contains(language.EnglishName))
+                {
+                    return language;
+                }
+
+                if (!string.IsNullOrEmpty(language.NativeName) && filename.Contains(language.NativeName))
+                {
+                    return language;
+                }
+
+                if (!string.IsNullOrEmpty(language.Code) && filename.Contains("." + language.Code + "."))
+                {
+                    // Note, since language codes are 3 letters, we could easily hit a mis-match
+                    // It's common for filenames to be something along the lines of .eng.srt  when using language codes.
+                    // So for now, we'll stick with this to limit false positives. 
+                    return language;
+                }
+            }
+
+            return HandBrakeLanguagesHelper.GetByName("English"); // Default
         }
     }
 
