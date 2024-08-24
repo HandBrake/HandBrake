@@ -10,7 +10,6 @@
 namespace HandBrakeWPF.Services.Encode.Model.Models
 {
     using HandBrake.Interop.Interop.Interfaces.Model;
-    using HandBrake.Interop.Utilities;
 
     using HandBrakeWPF.Services.Scan.Model;
     using HandBrakeWPF.ViewModels;

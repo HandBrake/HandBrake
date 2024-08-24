@@ -17,8 +17,8 @@ namespace HandBrakeWPF.Services.Interfaces
 
     public interface ISubtitleFileHandler
     {
-        List<SubtitleTrack> GetInputSubtitles(string[] filenames);
+        List<SubtitleTrack> GetInputSubtitles(string[] filenames, bool guessLanguage);
 
-        List<SubtitleTrack> FindLocalFiles(string sourcePath);
+        List<SubtitleTrack> FindLocalFiles(string sourcePath, bool guessLanguage);
     }
 }

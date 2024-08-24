@@ -67,7 +67,7 @@ namespace HandBrakeWPF.Services.Subtitles
 
             if (rules.AutoloadExternal)
             {
-                List<SubtitleTrack> tracks = this.subtitleFileHandler.FindLocalFiles(sourcePath);
+                List<SubtitleTrack> tracks = this.subtitleFileHandler.FindLocalFiles(sourcePath, true);
                 outputTracks.AddRange(tracks);
             }
 
