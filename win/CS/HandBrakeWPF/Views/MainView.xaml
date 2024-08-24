@@ -668,10 +668,10 @@
                               VerticalAlignment="Stretch" HorizontalAlignment="Stretch"
                               Panel.ZIndex="10"
                               IsLoading="{Binding ShowStatusWindow}"
-                              Message="Please wait ..."
+                              Message="{x:Static Properties:Resources.MainView_ScanningStatus}"
                               SubMessage="{Binding StatusLabel}"
-                              ActionText="Cancel"
-                              SecondaryActionText="Open Log Window"
+                              ActionText="{x:Static Properties:Resources.MainView_Cancel}"
+                              SecondaryActionText="{x:Static Properties:Resources.MainView_OpenLog}"
                               SecondaryAction="{Binding OpenLogWindowAction}"
                               CancelAction="{Binding CancelAction}"
                               ProgressPercentage="{Binding ProgressAmount}" />
