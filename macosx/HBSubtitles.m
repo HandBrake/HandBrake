@@ -259,13 +259,31 @@
  *
  *  @param index the index of the source track in the subtitlesSourceArray
  */
-- (HBSubtitlesTrack *)trackFromSourceTrackIndex:(NSInteger)index
+- (HBSubtitlesTrack *)trackFromSourceTrackIndex:(NSInteger)trackIndex
 {
-    HBSubtitlesTrack *track = [[HBSubtitlesTrack alloc] initWithTrackIdx:index container:self.container
+    HBSubtitlesTrack *track = [[HBSubtitlesTrack alloc] initWithTrackIdx:trackIndex container:self.container
                                                               dataSource:self delegate:self];
     track.undo = self.undo;
     return track;
 }
+
+- (HBSubtitlesTrack *)trackFromSourceTitleTrackIndex:(NSInteger)trackIndex
+{
+    NSInteger index = 0;
+    for (HBTitleSubtitlesTrack *sourceTrack in self.sourceTracks)
+    {
+        if (sourceTrack.index == trackIndex)
+        {
+            HBSubtitlesTrack *track = [[HBSubtitlesTrack alloc] initWithTrackIdx:index container:self.container
+                                                                      dataSource:self delegate:self];
+            track.undo = self.undo;
+            return track;
+        }
+        index += 1;
+    }
+    return nil;
+}
+
 
 #pragma mark - Defaults
 
@@ -293,12 +311,14 @@
     // Add the tracks
     for (NSDictionary *trackDict in settingsTracks)
     {
-        HBSubtitlesTrack *track = [self trackFromSourceTrackIndex:[trackDict[@"Track"] unsignedIntegerValue] + 2];
+        HBSubtitlesTrack *track = [self trackFromSourceTitleTrackIndex:[trackDict[@"Track"] unsignedIntegerValue]];
+        if (track)
+        {
+            track.burnedIn = [trackDict[@"Burn"] boolValue];
+            track.forcedOnly = [trackDict[@"Forced"] boolValue];
 
-        track.burnedIn = [trackDict[@"Burn"] boolValue];
-        track.forcedOnly = [trackDict[@"Forced"] boolValue];
-
-        [tracks addObject:track];
+            [tracks addObject:track];
+        }
     }
 
     [self insertTracks:tracks atIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, tracks.count)]];
