@@ -1,9 +1,9 @@
 $(eval $(call import.MODULE.defs,SVT-AV1,svt-av1))
 $(eval $(call import.CONTRIB.defs,SVT-AV1))
 
-SVT-AV1.FETCH.url     = https://github.com/HandBrake/HandBrake-contribs/releases/download/contribs2/SVT-AV1-v2.2.0.tar.gz
-SVT-AV1.FETCH.url    += https://gitlab.com/AOMediaCodec/SVT-AV1/-/archive/v2.2.0/SVT-AV1-v2.2.0.tar.gz
-SVT-AV1.FETCH.sha256  = d5b3094b2583eb9c15705efa92a8b413f01d718ca0adce6826ae1f0f1c69b4fd
+SVT-AV1.FETCH.url     = https://github.com/HandBrake/HandBrake-contribs/releases/download/contribs2/SVT-AV1-v2.2.1.tar.gz
+SVT-AV1.FETCH.url    += https://gitlab.com/AOMediaCodec/SVT-AV1/-/archive/v2.2.1/SVT-AV1-v2.2.1.tar.gz
+SVT-AV1.FETCH.sha256  = d02b54685542de0236bce4be1b50912aba68aff997c43b350d84a518df0cf4e5
 
 SVT-AV1.GCC.args.c_std =
 
