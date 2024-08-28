@@ -237,6 +237,9 @@ power_save_cb (GPowerProfileMonitor *monitor, GParamSpec *pspec,
 {
     gboolean power_save;
 
+    if (!ghb_dict_get_bool(ud->prefs, "PauseEncodingOnPowerSave"))
+        return;
+
     int queue_state = ghb_get_queue_state();
 
     g_object_get(monitor, "power-saver-enabled", &power_save, NULL);
