@@ -605,7 +605,7 @@ set_preset_menu_button_label(signal_user_data_t *ud, hb_preset_index_t *path)
 
     dict = hb_preset_get(path);
     type = ghb_dict_get_int(dict, "Type");
-    fullname = preset_get_fullname(path, "  >  ", TRUE);
+    fullname = preset_get_fullname(path, "  >  ", FALSE);
     widget = ghb_builder_widget("presets_menu_button");
     text = g_strdup_printf("%s%s", type == HB_PRESET_TYPE_CUSTOM ?
                                    "Custom" : "Official", fullname);
