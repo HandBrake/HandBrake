@@ -37,6 +37,7 @@
             <accessibility>
               <property name="label" translatable="yes">Chapter Title</property>
             </accessibility>
+            <signal name="changed" handler="chapter_name_changed_cb" object="GhbChapterRow" swapped="true"/>
           </object>
         </child>
       </object>
