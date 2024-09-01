@@ -175,110 +175,108 @@ void hb_avframe_set_video_buffer_flags(hb_buffer_t * buf, AVFrame *frame,
     buf->f.chroma_location = frame->chroma_location;
 }
 
-hb_buffer_t * hb_avframe_to_video_buffer(AVFrame *frame, AVRational time_base, int zero_copy)
+#define HB_BUFFER_WRAP_AVFRAME 1
+
+hb_buffer_t * hb_avframe_to_video_buffer(AVFrame *frame, AVRational time_base)
 {
     hb_buffer_t *buf;
 
-    if (zero_copy || frame->hw_frames_ctx)
+#ifdef HB_BUFFER_WRAP_AVFRAME
+    // Zero-copy path
+    buf = hb_buffer_wrapper_init();
+
+    if (buf == NULL)
     {
-        // Zero-copy path
-        buf = hb_buffer_wrapper_init();
-
-        if (buf == NULL)
-        {
-            return NULL;
-        }
-
-        AVFrame *frame_copy = av_frame_alloc();
-        if (frame_copy == NULL)
-        {
-            hb_buffer_close(&buf);
-            return NULL;
-        }
-
-        int ret;
-        ret = av_frame_ref(frame_copy, frame);
-
-        if (ret < 0)
-        {
-            hb_buffer_close(&buf);
-            av_frame_free(&frame_copy);
-            return NULL;
-        }
-
-        buf->storage_type = AVFRAME;
-        buf->storage = frame_copy;
-
-        buf->s.type = FRAME_BUF;
-        buf->f.width = frame_copy->width;
-        buf->f.height = frame_copy->height;
-        hb_avframe_set_video_buffer_flags(buf, frame_copy, time_base);
-
-        buf->side_data = (void **)frame_copy->side_data;
-        buf->nb_side_data = frame_copy->nb_side_data;
-
-        const AVPixFmtDescriptor *desc = av_pix_fmt_desc_get(frame_copy->format);
-        for (int ii = 0; ii < desc->nb_components; ii++)
-        {
-            int pp = desc->comp[ii].plane;
-            if (pp > buf->f.max_plane)
-            {
-                buf->f.max_plane = pp;
-            }
-        }
-
-        for (int pp = 0; pp <= buf->f.max_plane; pp++)
-        {
-            buf->plane[pp].data          = frame_copy->data[pp];
-            buf->plane[pp].width         = hb_image_width(buf->f.fmt, buf->f.width, pp);
-            buf->plane[pp].height        = hb_image_height(buf->f.fmt, buf->f.height, pp);
-            buf->plane[pp].stride        = frame_copy->linesize[pp];
-            buf->plane[pp].size          = buf->plane[pp].stride * buf->plane[pp].height;
-
-            buf->size += buf->plane[pp].size;
-        }
-
-        return buf;
+        return NULL;
     }
-    else
-    {
-        // Memcpy to a standard hb_buffer_t
-        buf = hb_frame_buffer_init(frame->format, frame->width, frame->height);
-        if (buf == NULL)
-        {
-            return NULL;
-        }
 
-        hb_avframe_set_video_buffer_flags(buf, frame, time_base);
-        int pp;
-        for (pp = 0; pp <= buf->f.max_plane; pp++)
+    AVFrame *frame_copy = av_frame_alloc();
+    if (frame_copy == NULL)
+    {
+        hb_buffer_close(&buf);
+        return NULL;
+    }
+
+    int ret;
+    ret = av_frame_ref(frame_copy, frame);
+
+    if (ret < 0)
+    {
+        hb_buffer_close(&buf);
+        av_frame_free(&frame_copy);
+        return NULL;
+    }
+
+    buf->storage_type = AVFRAME;
+    buf->storage = frame_copy;
+
+    buf->s.type = FRAME_BUF;
+    buf->f.width = frame_copy->width;
+    buf->f.height = frame_copy->height;
+    hb_avframe_set_video_buffer_flags(buf, frame_copy, time_base);
+
+    buf->side_data = (void **)frame_copy->side_data;
+    buf->nb_side_data = frame_copy->nb_side_data;
+
+    const AVPixFmtDescriptor *desc = av_pix_fmt_desc_get(frame_copy->format);
+    for (int ii = 0; ii < desc->nb_components; ii++)
+    {
+        int pp = desc->comp[ii].plane;
+        if (pp > buf->f.max_plane)
         {
-            int yy;
-            int stride    = buf->plane[pp].stride;
-            int height    = buf->plane[pp].height;
-            int linesize  = frame->linesize[pp];
-            int size = linesize < stride ? ABS(linesize) : stride;
-            uint8_t * dst = buf->plane[pp].data;
-            uint8_t * src = frame->data[pp];
-            for (yy = 0; yy < height; yy++)
-            {
-                memcpy(dst, src, size);
-                dst += stride;
-                src += linesize;
-            }
-        }
-        for (int i = 0; i < frame->nb_side_data; i++)
-        {
-            const AVFrameSideData *sd_src = frame->side_data[i];
-            AVBufferRef *ref = av_buffer_ref(sd_src->buf);
-            AVFrameSideData *sd_dst = hb_buffer_new_side_data_from_buf(buf, sd_src->type, ref);
-            if (!sd_dst)
-            {
-                av_buffer_unref(&ref);
-                hb_buffer_wipe_side_data(buf);
-            }
+            buf->f.max_plane = pp;
         }
     }
+
+    for (int pp = 0; pp <= buf->f.max_plane; pp++)
+    {
+        buf->plane[pp].data          = frame_copy->data[pp];
+        buf->plane[pp].width         = hb_image_width(buf->f.fmt, buf->f.width, pp);
+        buf->plane[pp].height        = hb_image_height(buf->f.fmt, buf->f.height, pp);
+        buf->plane[pp].stride        = frame_copy->linesize[pp];
+        buf->plane[pp].size          = buf->plane[pp].stride * buf->plane[pp].height;
+
+        buf->size += buf->plane[pp].size;
+    }
+
+#else
+    // Memcpy to a standard hb_buffer_t
+    buf = hb_frame_buffer_init(frame->format, frame->width, frame->height);
+    if (buf == NULL)
+    {
+        return NULL;
+    }
+
+    hb_avframe_set_video_buffer_flags(buf, frame, time_base);
+    int pp;
+    for (pp = 0; pp <= buf->f.max_plane; pp++)
+    {
+        int yy;
+        int stride    = buf->plane[pp].stride;
+        int height    = buf->plane[pp].height;
+        int linesize  = frame->linesize[pp];
+        int size = linesize < stride ? ABS(linesize) : stride;
+        uint8_t * dst = buf->plane[pp].data;
+        uint8_t * src = frame->data[pp];
+        for (yy = 0; yy < height; yy++)
+        {
+            memcpy(dst, src, size);
+            dst += stride;
+            src += linesize;
+        }
+    }
+    for (int i = 0; i < frame->nb_side_data; i++)
+    {
+        const AVFrameSideData *sd_src = frame->side_data[i];
+        AVBufferRef *ref = av_buffer_ref(sd_src->buf);
+        AVFrameSideData *sd_dst = hb_buffer_new_side_data_from_buf(buf, sd_src->type, ref);
+        if (!sd_dst)
+        {
+            av_buffer_unref(&ref);
+            hb_buffer_wipe_side_data(buf);
+        }
+    }
+#endif
 
     return buf;
 }

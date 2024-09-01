@@ -144,6 +144,7 @@ static int lapsharp_vt_init(hb_filter_object_t *filter,
     pv->mtl = hb_metal_context_init(hb_lapsharp_vt_metallib_data,
                                     hb_lapsharp_vt_metallib_len,
                                     "lapsharp",
+                                    NULL,
                                     sizeof(lapsharp_plane_context_t),
                                     init->geometry.width, init->geometry.height,
                                     init->pix_fmt, init->color_range);

@@ -96,6 +96,7 @@ namespace HandBrakeWPF.ViewModels
         private bool isModifiedPreset;
         private bool updateAvailable;
         private bool isNavigationEnabled;
+        private double progressAmount;
 
         public MainViewModel(
             IUserSettingService userSettingService,
@@ -356,6 +357,21 @@ namespace HandBrakeWPF.ViewModels
                     this.sourceLabel = value;
                     this.NotifyOfPropertyChange(() => SourceLabel);
                 }
+            }
+        }
+
+        public double ProgressAmount
+        {
+            get => this.progressAmount;
+            set
+            {
+                if (value.Equals(this.progressAmount))
+                {
+                    return;
+                }
+
+                this.progressAmount = value;
+                this.NotifyOfPropertyChange(() => this.ProgressAmount);
             }
         }
 
@@ -2309,6 +2325,7 @@ namespace HandBrakeWPF.ViewModels
         {
             this.SourceLabel = string.Format(Resources.Main_ScanningTitleXOfY, e.CurrentTitle, e.Titles, e.Percentage);
             this.StatusLabel = string.Format(Resources.Main_ScanningTitleXOfY, e.CurrentTitle, e.Titles, e.Percentage);
+            this.ProgressAmount = (double)e.Percentage;
         }
 
         private void ScanCompleted(object sender, ScanCompletedEventArgs e)

@@ -9,7 +9,7 @@
     <SolidColorBrush x:Key="ProgressBar.Border" Color="#FFBCBCBC" />
 
     <Style TargetType="{x:Type ProgressBar}">
-        <Setter Property="Foreground" Value="{StaticResource ProgressBar.Progress}" />
+        <Setter Property="Foreground" Value="{StaticResource Ui.BlueBright}" />
         <Setter Property="Background" Value="{StaticResource ProgressBar.Background}" />
         <Setter Property="BorderBrush" Value="{StaticResource ProgressBar.Border}" />
         <Setter Property="BorderThickness" Value="1" />
@@ -37,16 +37,16 @@
                             </VisualStateGroup>
                         </VisualStateManager.VisualStateGroups>
                         <Border 
-                            BorderThickness="{TemplateBinding BorderThickness}" 
+                            BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="2"
                             BorderBrush="{TemplateBinding BorderBrush}" 
                             Background="{TemplateBinding Background}" />
-                        <Rectangle x:Name="PART_Track"/>
+                        <Rectangle x:Name="PART_Track"  RadiusX="6" RadiusY="6"/>
                         <Grid x:Name="PART_Indicator"
                             HorizontalAlignment="Left"
                             ClipToBounds="true">
-                            <Rectangle x:Name="Indicator" 
+                            <Rectangle x:Name="Indicator" RadiusX="2" RadiusY="2"
                                 Fill="{TemplateBinding Foreground}" />
-                            <Rectangle x:Name="Animation" 
+                            <Rectangle x:Name="Animation" RadiusX="6" RadiusY="6"
                                 RenderTransformOrigin="0.5,0.5" 
                                 Fill="{TemplateBinding Foreground}">
                                 <Rectangle.RenderTransform>

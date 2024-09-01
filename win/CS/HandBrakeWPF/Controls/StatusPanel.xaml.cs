@@ -10,7 +10,6 @@
 namespace HandBrakeWPF.Controls
 {
     using System;
-    using System.Runtime.CompilerServices;
     using System.Windows;
     using System.Windows.Controls;
 
@@ -26,21 +25,10 @@ namespace HandBrakeWPF.Controls
         {
             InitializeComponent();
             this.Message = "Message";
-            this.progressRing.IsActive = false;
         }
 
         public static readonly DependencyProperty IsLoadingProperty =
-          DependencyProperty.Register("IsLoading", typeof(bool), typeof(StatusPanel), new UIPropertyMetadata(false, PropertyChangedCallback));
-
-        private static void PropertyChangedCallback(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            StatusPanel p = d as StatusPanel;
-            if (p != null)
-            {
-                bool isLoadingState = (bool)e.NewValue;
-                p.progressRing.IsActive = isLoadingState;
-            }
-        }
+          DependencyProperty.Register("IsLoading", typeof(bool), typeof(StatusPanel), new UIPropertyMetadata(false));
 
         public static readonly DependencyProperty MessageProperty =
             DependencyProperty.Register("Message", typeof(string), typeof(StatusPanel), new UIPropertyMetadata("Loading..."));
@@ -60,6 +48,26 @@ namespace HandBrakeWPF.Controls
         public static readonly DependencyProperty SecondaryActionTextProperty =
             DependencyProperty.Register("SecondaryActionText", typeof(string), typeof(StatusPanel), new UIPropertyMetadata("Open Log Window"));
 
+        public static readonly DependencyProperty ProgressPercentageProperty =
+            DependencyProperty.Register("ProgressPercentage", typeof(double), typeof(StatusPanel), new UIPropertyMetadata(0d, ProgressPercentagePropertyCallback));
+
+        private static void ProgressPercentagePropertyCallback(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            StatusPanel p = d as StatusPanel;
+            if (p != null)
+            {
+                if (e.NewValue is double && (double)e.NewValue > 0)
+                {
+                    p.progressBar.IsIndeterminate = false;
+                    p.IsIndeterminate = false;
+                }
+            }
+        }
+
+        public static readonly DependencyProperty IsIndeterminateProperty =
+            DependencyProperty.Register("IsIndeterminate", typeof(bool), typeof(StatusPanel), new UIPropertyMetadata(true));
+        
+
         /// <summary>
         /// Gets or sets a value indicating whether IsLoading.
         /// </summary>
@@ -67,6 +75,18 @@ namespace HandBrakeWPF.Controls
         {
             get { return (bool)GetValue(IsLoadingProperty); }
             set { SetValue(IsLoadingProperty, value); }
+        }
+
+        public double ProgressPercentage
+        {
+            get { return (double)GetValue(ProgressPercentageProperty); }
+            set { SetValue(ProgressPercentageProperty, value); }
+        }
+
+        public bool IsIndeterminate
+        {
+            get { return (bool)GetValue(IsIndeterminateProperty); }
+            set { SetValue(IsIndeterminateProperty, value); }
         }
 
         /// <summary>

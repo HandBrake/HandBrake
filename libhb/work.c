@@ -1540,6 +1540,16 @@ static void sanitize_dynamic_hdr_metadata_passthru(hb_job_t *job)
         job->passthru_dynamic_hdr_metadata &= ~DOVI;
     }
 
+    if ((job->dovi.dv_profile == 8 || job->dovi.dv_profile == 10) &&
+        job->dovi.dv_bl_signal_compatibility_id == 1)
+    {
+        if (job->mastering.has_primaries == 0 && job->mastering.has_luminance == 0)
+        {
+            hb_log("work: missing mastering metadata, disabling Dolby Vision");
+            job->passthru_dynamic_hdr_metadata &= ~DOVI;
+        }
+    }
+
     if (job->passthru_dynamic_hdr_metadata & DOVI)
     {
 #if HB_PROJECT_FEATURE_LIBDOVI

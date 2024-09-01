@@ -14,6 +14,7 @@
 hb_metal_context_t * hb_metal_context_init(const char *metallib_data,
                                            size_t metallib_len,
                                            const char *function_name,
+                                           MTLFunctionConstantValues *constant_values,
                                            size_t params_buffer_len,
                                            int width, int height,
                                            int pix_fmt, int color_range)
@@ -85,7 +86,7 @@ hb_metal_context_t * hb_metal_context_init(const char *metallib_data,
 
     if (function_name != NULL)
     {
-        if (hb_metal_add_pipeline(ctx, function_name, 0))
+        if (hb_metal_add_pipeline(ctx, function_name, constant_values, 0))
         {
             hb_error("metal: failed to add Metal function");
             goto fail;
@@ -116,15 +117,28 @@ fail:
     return NULL;
 }
 
-int hb_metal_add_pipeline(hb_metal_context_t *ctx, const char *function_name, size_t index)
+int hb_metal_add_pipeline(hb_metal_context_t *ctx, const char *function_name,
+                          MTLFunctionConstantValues *constant_values, size_t index)
 {
-    if (ctx->pipelines_count < index + 1) {
+    if (ctx->pipelines_count < index + 1)
+    {
         ctx->pipelines_count = index + 1;
         ctx->pipelines = av_realloc(ctx->pipelines, (ctx->pipelines_count) * sizeof(id<MTLComputePipelineState>));
         ctx->functions = av_realloc(ctx->functions, (ctx->pipelines_count) * sizeof(id<MTLFunction>));
     }
+    ctx->pipelines[index] = NULL;
+    ctx->functions[index] = NULL;
+
     NSError *err = nil;
-    ctx->functions[index] = [ctx->library newFunctionWithName:@(function_name)];
+
+    if (constant_values)
+    {
+        ctx->functions[index] = [ctx->library newFunctionWithName:@(function_name) constantValues:constant_values error:&err];
+    }
+    else
+    {
+        ctx->functions[index] = [ctx->library newFunctionWithName:@(function_name)];
+    }
     if (!ctx->functions[index])
     {
         hb_error("metal: failed to create Metal function");
@@ -137,6 +151,7 @@ int hb_metal_add_pipeline(hb_metal_context_t *ctx, const char *function_name, si
         return -1;
     }
     return 0;
+
 }
 
 void hb_metal_context_close(hb_metal_context_t **_ctx)

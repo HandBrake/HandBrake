@@ -313,17 +313,12 @@ namespace HandBrakeWPF.Services
             defaults.Add(UserSettingConstants.WhenDoneAudioFile, string.Empty);
 
             // Video
-            GpuInfo info = SystemInfo.GetGPUInfo.FirstOrDefault(s => s.IsIntel);
-            bool intelDefaultSetting = (info != null && info.IsIntelDriverSupported);
-            info = SystemInfo.GetGPUInfo.FirstOrDefault(s => s.IsNvidia);
-            bool nvidiaDefaultSetting = (info != null  && info.IsNvidiaDriverSupported);
+            bool intelDefaultSetting = HandBrakeHardwareEncoderHelper.IsQsvAvailable;
+            bool nvidiaDefaultSetting = HandBrakeHardwareEncoderHelper.IsNVEncH264Available;
 
-            defaults.Add(UserSettingConstants.EnableQuickSyncEncoding, intelDefaultSetting);
             defaults.Add(UserSettingConstants.EnableQuickSyncDecoding, intelDefaultSetting);
             defaults.Add(UserSettingConstants.EnableQuickSyncHyperEncode, intelDefaultSetting);
             defaults.Add(UserSettingConstants.UseQSVDecodeForNonQSVEnc, false);
-            defaults.Add(UserSettingConstants.EnableVceEncoder, true);
-            defaults.Add(UserSettingConstants.EnableNvencEncoder, nvidiaDefaultSetting);
             defaults.Add(UserSettingConstants.EnableNvDecSupport, nvidiaDefaultSetting);
             defaults.Add(UserSettingConstants.EnableQuickSyncLowPower, true);
             defaults.Add(UserSettingConstants.EnableDirectXDecoding, SystemInfo.IsArmDevice);

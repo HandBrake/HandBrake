@@ -17,6 +17,7 @@ namespace HandBrakeWPF.ViewModels
     using System.IO;
     using System.Linq;
     using System.Media;
+    using System.Threading;
     using System.Windows;
     using System.Windows.Documents;
     using System.Windows.Media;
@@ -95,10 +96,7 @@ namespace HandBrakeWPF.ViewModels
         private string whenDoneAudioFile;
         private bool playSoundWhenDone;
         private bool playSoundWhenQueueDone;
-        private bool enableQuickSyncEncoding;
-        private bool enableVceEncoder;    
         private bool enableDirectXDecoding;
-        private bool enableNvencEncoder;
         private InterfaceLanguage selectedLanguage;
         private bool showAddSelectionToQueue;
         private bool showAddAllToQueue;
@@ -942,37 +940,6 @@ namespace HandBrakeWPF.ViewModels
         }
 
         /* Video */
-        public bool EnableQuickSyncEncoding
-        {
-            get => this.enableQuickSyncEncoding && this.IsQuickSyncAvailable;
-            set
-            {
-                if (value == this.enableQuickSyncEncoding)
-                {
-                    return;
-                }
-
-                this.enableQuickSyncEncoding = value;
-                this.NotifyOfPropertyChange(() => this.EnableQuickSyncEncoding);
-                this.NotifyOfPropertyChange(() => this.CanSetQsvDecForOtherEncodes);
-            }
-        }
-
-        public bool EnableVceEncoder
-        {
-            get => this.enableVceEncoder && this.IsVceAvailable;
-            set
-            {
-                if (value == this.enableVceEncoder)
-                {
-                    return;
-                }
-
-                this.enableVceEncoder = value;
-                this.NotifyOfPropertyChange(() => this.EnableVceEncoder);
-            }
-        }
-
         public bool EnableDirectXDecoding
         {
             get => this.enableDirectXDecoding;
@@ -985,22 +952,6 @@ namespace HandBrakeWPF.ViewModels
 
                 this.enableDirectXDecoding = value;
                 this.NotifyOfPropertyChange(() => this.EnableDirectXDecoding);
-            }
-        }
-
-        public bool EnableNvencEncoder
-        {
-            get => this.enableNvencEncoder && this.IsNvencAvailable;
-            set
-            {
-                if (value == this.enableNvencEncoder)
-                {
-                    return;
-                }
-
-                this.enableNvencEncoder = value;
-                this.NotifyOfPropertyChange(() => this.EnableNvencEncoder);
-                this.NotifyOfPropertyChange(() => this.IsNvdecAvailable);
             }
         }
 
@@ -1051,33 +1002,8 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
-        public bool DisplayIntelDriverWarning
-        {
-            get
-            {
-                 GpuInfo info = SystemInfo.GetGPUInfo.FirstOrDefault(s => s.IsIntel);
-                 if (info != null)
-                 {
-                     return !info.IsIntelDriverSupported;
-                 }
-
-                 return false;
-            }
-        }
-
-        public bool DisplayNvidiaDriverWarning
-        {
-            get
-            {
-                GpuInfo info = SystemInfo.GetGPUInfo.FirstOrDefault(s => s.IsNvidia);
-                if (info != null)
-                {
-                    return !info.IsNvidiaDriverSupported;
-                }
-
-                return false;
-            }
-        }
+        public bool DisplayIntelDriverWarning { get; set; }
+        public bool DisplayNvidiaDriverWarning { get; set; }
 
         public VideoScaler SelectedScalingMode { get; set; }
 
@@ -1093,7 +1019,7 @@ namespace HandBrakeWPF.ViewModels
 
         public bool IsUseQsvDecAvailable => this.IsQuickSyncAvailable && this.EnableQuickSyncDecoding;
 
-        public bool IsNvdecAvailable => HandBrakeHardwareEncoderHelper.IsNVDecAvailable && this.EnableNvencEncoder;
+        public bool IsNvdecAvailable => HandBrakeHardwareEncoderHelper.IsNVDecAvailable;
 
         public bool UseQSVDecodeForNonQSVEnc
         {
@@ -1107,7 +1033,7 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
-        public bool CanSetQsvDecForOtherEncodes => this.EnableQuickSyncDecoding && this.IsQuickSyncAvailable && this.EnableQuickSyncEncoding;
+        public bool CanSetQsvDecForOtherEncodes => this.EnableQuickSyncDecoding && this.IsQuickSyncAvailable;
 
         public BindingList<VideoScaler> ScalingOptions { get; } = new BindingList<VideoScaler>(EnumHelper<VideoScaler>.GetEnumList().ToList());
 
@@ -1118,6 +1044,8 @@ namespace HandBrakeWPF.ViewModels
         public bool IsHardwareOptionsVisible => !IsSafeMode && !IsHardwareFallbackMode;
 
         public bool IsAutomaticSafeMode { get; private set; }
+
+        public bool IsARMDevice => SystemInfo.IsArmDevice;
 
         public bool EnableNvDecSupport
         {
@@ -1508,10 +1436,6 @@ namespace HandBrakeWPF.ViewModels
             this.UseQSVDecodeForNonQSVEnc = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.UseQSVDecodeForNonQSVEnc);
             this.EnableQuickSyncLowPower = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.EnableQuickSyncLowPower);
             this.EnableQuickSyncHyperEncode = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.EnableQuickSyncHyperEncode);
-
-            this.EnableQuickSyncEncoding = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.EnableQuickSyncEncoding);
-            this.EnableVceEncoder = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.EnableVceEncoder);
-            this.EnableNvencEncoder = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.EnableNvencEncoder);
             this.EnableNvDecSupport = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.EnableNvDecSupport);
             this.EnableDirectXDecoding = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.EnableDirectXDecoding);
 
@@ -1598,6 +1522,34 @@ namespace HandBrakeWPF.ViewModels
             // #############################
             this.IsAutomaticSafeMode = userSettingService.GetUserSetting<bool>(UserSettingConstants.ForceDisableHardwareSupport);
             this.NotifyOfPropertyChange(() => this.IsAutomaticSafeMode);
+
+
+            // Warnings
+            ThreadPool.QueueUserWorkItem(
+                delegate
+                {
+                    try
+                    {
+                        GpuInfo info = SystemInfo.GetGPUInfo.FirstOrDefault(s => s.IsIntel);
+                        if (info != null)
+                        {
+                            this.DisplayIntelDriverWarning = !info.IsIntelDriverSupported;
+                        }
+
+                        info = SystemInfo.GetGPUInfo.FirstOrDefault(s => s.IsNvidia);
+                        if (info != null)
+                        {
+                            this.DisplayNvidiaDriverWarning = !info.IsNvidiaDriverSupported;
+                        }
+
+                        this.NotifyOfPropertyChange(() => this.DisplayIntelDriverWarning);
+                        this.NotifyOfPropertyChange(() => this.DisplayNvidiaDriverWarning);
+                    }
+                    catch (Exception exc)
+                    {
+                        // Nothing to do. Just don't display the warnings.
+                    }
+                });
         }
 
         public void UpdateSettings()
@@ -1705,9 +1657,6 @@ namespace HandBrakeWPF.ViewModels
             this.userSettingService.SetUserSetting(UserSettingConstants.ScalingMode, this.SelectedScalingMode);
             this.userSettingService.SetUserSetting(UserSettingConstants.UseQSVDecodeForNonQSVEnc, this.UseQSVDecodeForNonQSVEnc);
             this.userSettingService.SetUserSetting(UserSettingConstants.EnableQuickSyncHyperEncode, this.EnableQuickSyncHyperEncode);
-            this.userSettingService.SetUserSetting(UserSettingConstants.EnableQuickSyncEncoding, this.EnableQuickSyncEncoding);
-            this.userSettingService.SetUserSetting(UserSettingConstants.EnableVceEncoder, this.EnableVceEncoder);
-            this.userSettingService.SetUserSetting(UserSettingConstants.EnableNvencEncoder, this.EnableNvencEncoder);
             this.userSettingService.SetUserSetting(UserSettingConstants.EnableNvDecSupport, this.EnableNvDecSupport);
             this.userSettingService.SetUserSetting(UserSettingConstants.EnableDirectXDecoding, this.EnableDirectXDecoding);
             this.userSettingService.SetUserSetting(UserSettingConstants.EnableQuickSyncLowPower, this.EnableQuickSyncLowPower);

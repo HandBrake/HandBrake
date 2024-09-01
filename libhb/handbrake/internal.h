@@ -207,6 +207,8 @@ void          hb_buffer_copy_side_data(hb_buffer_t *dst, const hb_buffer_t *src)
 
 void          hb_buffer_copy_props(hb_buffer_t *dst, const hb_buffer_t *src);
 
+int           hb_buffer_is_writable(const hb_buffer_t *buf);
+
 hb_fifo_t   * hb_fifo_init( int capacity, int thresh );
 void          hb_fifo_register_full_cond( hb_fifo_t * f, hb_cond_t * c );
 int           hb_fifo_size( hb_fifo_t * );

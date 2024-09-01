@@ -94,7 +94,7 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ToolBar}">
-                    <Border x:Name="Border" BorderThickness="0,0,0,1" BorderBrush="{DynamicResource Ui.ContrastLight}" Background="{DynamicResource Ui.Light}">
+                    <Border x:Name="Border" BorderThickness="0,0,0,1" BorderBrush="{DynamicResource Ui.ContrastLight}" Background="{DynamicResource Ui.Light2}">
                         <DockPanel>
                             <ToggleButton DockPanel.Dock="Right" IsEnabled="{TemplateBinding HasOverflowItems}" Style="{StaticResource ToolBarOverflowButtonStyle}" ClickMode="Press" IsChecked="{Binding IsOverflowOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}">
                                 <Popup x:Name="OverflowPopup" AllowsTransparency="true" Placement="Bottom" StaysOpen="false" Focusable="false" PopupAnimation="Slide" IsOpen="{Binding IsOverflowOpen, RelativeSource={RelativeSource TemplatedParent}}">

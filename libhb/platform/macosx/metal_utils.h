@@ -32,6 +32,7 @@ typedef struct hb_metal_context_s hb_metal_context_t;
 hb_metal_context_t * hb_metal_context_init(const char *metallib_data,
                                            size_t metallib_len,
                                            const char *function_name,
+                                           MTLFunctionConstantValues *constant_values,
                                            size_t params_buffer_len,
                                            int width, int height,
                                            int pix_fmt, int color_range);
@@ -56,6 +57,7 @@ CVMetalTextureRef hb_metal_create_texture_from_pixbuf(CVMetalTextureCacheRef tex
                                                int plane,
                                                MTLPixelFormat format);
 
-int hb_metal_add_pipeline(hb_metal_context_t *ctx, const char *function_name, size_t index);
+int hb_metal_add_pipeline(hb_metal_context_t *ctx, const char *function_name,
+                           MTLFunctionConstantValues *constant_values, size_t index);
 
 #endif /* HB_METAL_UTILS_H */

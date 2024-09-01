@@ -442,7 +442,9 @@
                                         </Style>
                                     </StackPanel.Resources>
 
-                                    <Button AutomationProperties.Name="{x:Static Properties:Resources.QueueView_Reset}"  ToolTip="{x:Static Properties:ResourcesTooltips.QueueView_ResetJobStatus}">
+                                    <Button AutomationProperties.Name="{x:Static Properties:Resources.QueueView_Reset}"  ToolTip="{x:Static Properties:ResourcesTooltips.QueueView_ResetJobStatus}"
+                                            Command="{Binding DataContext.RetryCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}" 
+                                            CommandParameter="{Binding SelectedTask}" >
                                         <Button.Content>
                                             <StackPanel Orientation="Horizontal">
                                                 <Image Width="20" Height="20" VerticalAlignment="Center" Margin="0,0,5,0"
@@ -452,14 +454,11 @@
                                             </StackPanel>
 
                                         </Button.Content>
-                                        <i:Interaction.Triggers>
-                                            <i:EventTrigger EventName="Click">
-                                                <i:InvokeCommandAction Command="{Binding DataContext.RetryCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}" CommandParameter="{Binding SelectedTask}" />
-                                            </i:EventTrigger>
-                                        </i:Interaction.Triggers>
                                     </Button>
 
-                                    <Button Margin="10,0,0,0" AutomationProperties.Name="{x:Static Properties:Resources.QueueView_Edit}" ToolTip="{x:Static Properties:ResourcesTooltips.QueueView_SendJobBack}">
+                                    <Button Margin="10,0,0,0" AutomationProperties.Name="{x:Static Properties:Resources.QueueView_Edit}" ToolTip="{x:Static Properties:ResourcesTooltips.QueueView_SendJobBack}"
+                                            Command="{Binding DataContext.EditCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}" 
+                                            CommandParameter="{Binding SelectedTask}" >
                                         <Button.Content>
                                             <StackPanel Orientation="Horizontal">
                                                 <Image Width="20" Margin="0,0,5,0" Height="20" VerticalAlignment="Center"
@@ -468,11 +467,6 @@
                                                 <TextBlock Text="{x:Static Properties:Resources.QueueView_Edit}" VerticalAlignment="Center" />
                                             </StackPanel>
                                         </Button.Content>
-                                        <i:Interaction.Triggers>
-                                            <i:EventTrigger EventName="Click">
-                                                <i:InvokeCommandAction Command="{Binding DataContext.EditCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}" CommandParameter="{Binding SelectedTask}" />
-                                            </i:EventTrigger>
-                                        </i:Interaction.Triggers>
                                     </Button>
 
                                     <Button x:Name="queueOptionsDropButton" Margin="10,0,0,0" Click="QueueOptionsDropButton_OnClick"
