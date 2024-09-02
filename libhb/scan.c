@@ -1517,6 +1517,41 @@ static void LookForAudio(hb_scan_t *scan, hb_title_t * title, hb_audio_t * audio
     audio->config.in.flags = info.flags;
     audio->config.in.mode = info.mode;
 
+    // Under some circumstances, ffmpeg fails to probe the DTS profile
+    // during it's initial scan of DTS audio tracks. The profile gets
+    // picked up during our more indepth scan here.
+    if (audio->config.in.codec == HB_ACODEC_FFMPEG)
+    {
+        switch (audio->config.in.codec_param)
+        {
+            case AV_CODEC_ID_DTS:
+            {
+                switch (info.profile)
+                {
+                    case AV_PROFILE_DTS:
+                    case AV_PROFILE_DTS_ES:
+                    case AV_PROFILE_DTS_96_24:
+                    case AV_PROFILE_DTS_EXPRESS:
+                        audio->config.in.codec = HB_ACODEC_DCA;
+                        break;
+
+                    case AV_PROFILE_DTS_HD_MA:
+                    case AV_PROFILE_DTS_HD_HRA:
+                    case AV_PROFILE_DTS_HD_MA_X:
+                    case AV_PROFILE_DTS_HD_MA_X_IMAX:
+                        audio->config.in.codec = HB_ACODEC_DCA_HD;
+                        break;
+
+                    default:
+                        break;
+                }
+            } break;
+
+            default:
+                break;
+        }
+    }
+
     // now that we have all the info, set the audio description
     const char *codec_name   = NULL;
     const char *profile_name = NULL;
