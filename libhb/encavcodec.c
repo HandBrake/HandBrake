@@ -652,28 +652,28 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
 
     if (job->vcodec == HB_VCODEC_FFMPEG_VCE_H264)
     {
-        context->profile = FF_PROFILE_UNKNOWN;
+        context->profile = AV_PROFILE_UNKNOWN;
         if (job->encoder_profile != NULL && *job->encoder_profile)
         {
             if (!strcasecmp(job->encoder_profile, "baseline"))
-                context->profile = FF_PROFILE_H264_BASELINE;
+                context->profile = AV_PROFILE_H264_BASELINE;
             else if (!strcasecmp(job->encoder_profile, "main"))
-                 context->profile = FF_PROFILE_H264_MAIN;
+                 context->profile = AV_PROFILE_H264_MAIN;
             else if (!strcasecmp(job->encoder_profile, "high"))
-                context->profile = FF_PROFILE_H264_HIGH;
+                context->profile = AV_PROFILE_H264_HIGH;
         }
     }
     else if (job->vcodec == HB_VCODEC_FFMPEG_VCE_H265 || job->vcodec == HB_VCODEC_FFMPEG_VCE_H265_10BIT)
     {
-        context->profile = FF_PROFILE_UNKNOWN;
+        context->profile = AV_PROFILE_UNKNOWN;
         if (job->encoder_profile != NULL && *job->encoder_profile)
         {
             if (!strcasecmp(job->encoder_profile, "main")) {
-                 context->profile = FF_PROFILE_HEVC_MAIN;
+                 context->profile = AV_PROFILE_HEVC_MAIN;
             }
 
             if (!strcasecmp(job->encoder_profile, "main10")) {
-                 context->profile = FF_PROFILE_HEVC_MAIN_10;
+                 context->profile = AV_PROFILE_HEVC_MAIN_10;
             }
         }
 
@@ -682,11 +682,11 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
     }
     else if (job->vcodec == HB_VCODEC_FFMPEG_VCE_AV1)
     {
-        context->profile = FF_PROFILE_UNKNOWN;
+        context->profile = AV_PROFILE_UNKNOWN;
         if (job->encoder_profile != NULL && *job->encoder_profile)
         {
             if (!strcasecmp(job->encoder_profile, "main"))
-                 context->profile = FF_PROFILE_AV1_MAIN;
+                 context->profile = AV_PROFILE_AV1_MAIN;
         }
     }
     else if (job->vcodec == HB_VCODEC_FFMPEG_NVENC_H264 ||
@@ -735,15 +735,15 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
     {
         if (job->vcodec == HB_VCODEC_FFMPEG_MF_H264)
         {
-            context->profile = FF_PROFILE_UNKNOWN;
+            context->profile = AV_PROFILE_UNKNOWN;
             if (job->encoder_profile != NULL && *job->encoder_profile)
             {
                 if (!strcasecmp(job->encoder_profile, "baseline"))
-                    context->profile = FF_PROFILE_H264_BASELINE;
+                    context->profile = AV_PROFILE_H264_BASELINE;
                 else if (!strcasecmp(job->encoder_profile, "main"))
-                    context->profile = FF_PROFILE_H264_MAIN;
+                    context->profile = AV_PROFILE_H264_MAIN;
                 else if (!strcasecmp(job->encoder_profile, "high"))
-                    context->profile = FF_PROFILE_H264_HIGH;
+                    context->profile = AV_PROFILE_H264_HIGH;
             }
         }
         else if (job->vcodec == HB_VCODEC_FFMPEG_MF_H265)
