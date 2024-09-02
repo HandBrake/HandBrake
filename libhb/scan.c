@@ -1568,7 +1568,7 @@ static void LookForAudio(hb_scan_t *scan, hb_title_t * title, hb_audio_t * audio
         const AVCodec *codec = avcodec_find_decoder(audio->config.in.codec_param);
         if (codec != NULL)
         {
-            if (info.profile != FF_PROFILE_UNKNOWN)
+            if (info.profile != AV_PROFILE_UNKNOWN)
             {
                 profile_name = av_get_profile_name(codec, info.profile);
             }

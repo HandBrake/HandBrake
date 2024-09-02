@@ -75,7 +75,7 @@ static int encavcodecaInit(hb_work_object_t *w, hb_job_t *job)
     enum AVCodecID codec_id        = AV_CODEC_ID_NONE;
     enum AVSampleFormat sample_fmt = AV_SAMPLE_FMT_FLTP;
     int bits_per_raw_sample        = 0;
-    int profile                    = FF_PROFILE_UNKNOWN;
+    int profile                    = AV_PROFILE_UNKNOWN;
 
     // override with encoder-specific values
     switch (audio->config.out.codec)
@@ -100,10 +100,10 @@ static int encavcodecaInit(hb_work_object_t *w, hb_job_t *job)
             switch (audio->config.out.codec)
             {
                 case HB_ACODEC_FDK_HAAC:
-                    profile = FF_PROFILE_AAC_HE;
+                    profile = AV_PROFILE_AAC_HE;
                     break;
                 default:
-                    profile = FF_PROFILE_AAC_LOW;
+                    profile = AV_PROFILE_AAC_LOW;
                     break;
             }
             // FFmpeg's libfdk-aac wrapper expects back channels for 5.1
