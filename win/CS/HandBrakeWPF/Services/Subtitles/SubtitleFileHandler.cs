@@ -99,17 +99,17 @@ namespace HandBrakeWPF.Services.Subtitles
                     continue;
                 }
                 
-                if (!string.IsNullOrEmpty(language.EnglishName)  && filename.Contains(language.EnglishName))
+                if (!string.IsNullOrEmpty(language.EnglishName)  && filename.Contains(language.EnglishName, StringComparison.InvariantCultureIgnoreCase))
                 {
                     return language;
                 }
 
-                if (!string.IsNullOrEmpty(language.NativeName) && filename.Contains(language.NativeName))
+                if (!string.IsNullOrEmpty(language.NativeName) && filename.Contains(language.NativeName, StringComparison.InvariantCultureIgnoreCase))
                 {
                     return language;
                 }
 
-                if (!string.IsNullOrEmpty(language.Code) && filename.Contains("." + language.Code + "."))
+                if (!string.IsNullOrEmpty(language.Code) && filename.Contains("." + language.Code + ".", StringComparison.InvariantCultureIgnoreCase))
                 {
                     // Note, since language codes are 3 letters, we could easily hit a mis-match
                     // It's common for filenames to be something along the lines of .eng.srt  when using language codes.
