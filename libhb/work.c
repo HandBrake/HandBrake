@@ -1961,7 +1961,7 @@ static void do_job(hb_job_t *job)
             if ( !(audio->config.out.codec & HB_ACODEC_PASS_FLAG ) )
             {
                 /*
-                * Add the encoder thread if not doing pass through
+                * Add the encoder thread if not doing passthru
                 */
                 w = hb_audio_encoder( job->h, audio->config.out.codec);
                 if (w == NULL)
