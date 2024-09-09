@@ -2219,7 +2219,7 @@ msgstr "Débit binaire : %.4gkbps"
 
 #: src/audiohandler.c:781
 #, c-format
-msgid "<small>Passthrough</small>"
+msgid "<small>Passthru</small>"
 msgstr "<small>Recopie</small>"
 
 #: src/audiohandler.c:790
@@ -3562,7 +3562,7 @@ msgid "Burned Into Video"
 msgstr "Incrusté dans la vidéo"
 
 #: src/subtitlehandler.c:113
-msgid "Passthrough"
+msgid "Passthru"
 msgstr "Recopie"
 
 #: src/subtitlehandler.c:116

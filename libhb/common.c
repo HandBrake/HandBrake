@@ -1422,7 +1422,7 @@ void hb_audio_bitrate_get_limits(uint32_t codec, int samplerate, int mixdown,
             *high = (nchannels + lfe_count) * 256;
             break;
 
-        // Bitrates don't apply to passthrough audio, but may apply if we
+        // Bitrates don't apply to passthru audio, but may apply if we
         // fall back to an encoder when the source can't be passed through.
         default:
             *low  = hb_audio_bitrates_first_item->rate;
@@ -5723,7 +5723,7 @@ int hb_audio_can_apply_drc(uint32_t codec, uint32_t codec_param, int encoder)
 {
     if (encoder & HB_ACODEC_PASS_FLAG)
     {
-        // can't apply DRC to passthrough audio
+        // can't apply DRC to passthru audio
         return 0;
     }
     else if (codec & HB_ACODEC_FF_MASK)

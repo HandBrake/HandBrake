@@ -415,7 +415,7 @@ int decavsubWork( hb_avsub_context_t * ctx,
 
         if (!usable_sub)
         {
-            // Discard accumulated passthrough subtitle data
+            // Discard accumulated passthru subtitle data
             hb_buffer_list_close(&ctx->list_pass);
             avsubtitle_free(&subtitle);
             continue;
@@ -488,7 +488,7 @@ int decavsubWork( hb_avsub_context_t * ctx,
 
         if (ctx->subtitle->format == TEXTSUB)
         {
-            // TEXTSUB && (PASSTHROUGHSUB || RENDERSUB)
+            // TEXTSUB && (PASSTHRUSUB || RENDERSUB)
 
             // Text subtitles are treated the same regardless of
             // whether we are burning or passing through.  They
@@ -521,7 +521,7 @@ int decavsubWork( hb_avsub_context_t * ctx,
         else if (ctx->subtitle->config.dest == PASSTHRUSUB &&
                  hb_subtitle_can_pass(ctx->subtitle->source, ctx->job->mux))
         {
-            // PICTURESUB && PASSTHROUGHSUB
+            // PICTURESUB && PASSTHRUSUB
 
             // subtitles may be spread across multiple packets
             //

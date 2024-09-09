@@ -730,7 +730,7 @@ void hb_display_job_info(hb_job_t *job)
     if (job->indepth_scan)
     {
         hb_log( " * Foreign Audio Search: %s%s%s",
-                job->select_subtitle_config.dest == RENDERSUB ? "Render/Burn-in" : "Passthrough",
+                job->select_subtitle_config.dest == RENDERSUB ? "Render/Burn-in" : "Passthru",
                 job->select_subtitle_config.force ? ", Forced Only" : "",
                 job->select_subtitle_config.default_track ? ", Default" : "" );
     }
@@ -755,7 +755,7 @@ void hb_display_job_info(hb_job_t *job)
                        subtitle->out_track, subtitle->lang, subtitle->track,
                        subtitle->id,
                        subtitle->config.dest == RENDERSUB ? "Render/Burn-in"
-                                                          : "Passthrough",
+                                                          : "Passthru",
                        subtitle->config.default_track ? ", Default" : "",
                        subtitle->config.offset, subtitle->config.src_codeset);
             }
@@ -767,7 +767,7 @@ void hb_display_job_info(hb_job_t *job)
                        subtitle->out_track, subtitle->lang, subtitle->track,
                        subtitle->id,
                        subtitle->config.dest == RENDERSUB ? "Render/Burn-in"
-                                                          : "Passthrough",
+                                                          : "Passthru",
                        subtitle->config.default_track ? ", Default" : "",
                        subtitle->config.offset);
             }
@@ -779,7 +779,7 @@ void hb_display_job_info(hb_job_t *job)
                        subtitle->id,
                        subtitle->format == PICTURESUB ? "Picture" : "Text",
                        subtitle->config.dest == RENDERSUB ? "Render/Burn-in"
-                                                          : "Passthrough",
+                                                          : "Passthru",
                        subtitle->config.force ? ", Forced Only" : "",
                        subtitle->config.default_track ? ", Default" : "" );
             }

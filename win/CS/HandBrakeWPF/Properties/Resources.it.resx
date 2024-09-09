@@ -754,13 +754,13 @@ Suggerimento: le opzioni della sovrascrittura possono essere modificate nelle Pr
     <value>Selezione Traccia Sorgente</value>
   </data>
   <data name="AudioView_AllowPassThruOf" xml:space="preserve">
-    <value>Permetti passthrough di:</value>
+    <value>Permetti passthru di:</value>
   </data>
   <data name="AudioView_AudioDefaultsDescription" xml:space="preserve">
     <value>Configura il modo in cui le Tracce Audio sono selezionate e configurate automaticamente quando viene selezionato un nuovo titolo o sorgente video.</value>
   </data>
   <data name="AudioView_AutoPassthruBehaviour" xml:space="preserve">
-    <value>Comportamento 'Passthrough Automatico':</value>
+    <value>Comportamento 'Passthru Automatico':</value>
   </data>
   <data name="AudioView_Bitrate" xml:space="preserve">
     <value>Bitrate</value>
@@ -802,7 +802,7 @@ Suggerimento: le opzioni della sovrascrittura possono essere modificate nelle Pr
     <value>Per le Tracce Aggiuntive:</value>
   </data>
   <data name="AudioView_WhenAutoPassthru" xml:space="preserve">
-    <value>Se 'Passthrough Automatico' è selezionato come codec audio.</value>
+    <value>Se 'Passthru Automatico' è selezionato come codec audio.</value>
   </data>
   <data name="ChaptersView_ChapterMarkers" xml:space="preserve">
     <value>Marcatori di capitolo</value>

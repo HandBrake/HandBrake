@@ -4612,7 +4612,7 @@ ghb_validate_audio(GhbValue *settings, GtkWindow *parent)
             !(ghb_audio_can_passthru(aconfig->in.codec) &&
               (aconfig->in.codec & codec)))
         {
-            // Not supported.  AC3 is passthrough only, so input must be AC3
+            // Not supported.  AC3 is passthru only, so input must be AC3
             if (!ghb_question_dialog_run(parent, GHB_ACTION_NORMAL,
                     _("Continue"), _("Cancel"), _("Invalid Audio Selection"),
                     _("The source does not support Pass-Thru.\n\n"
