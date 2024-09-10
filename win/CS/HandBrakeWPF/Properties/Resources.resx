@@ -2846,6 +2846,12 @@ To allow multiple simultaneous encodes, turn on "Process Isolation" in Tools Men
   <data name="QueueView_EncodeShutdown" xml:space="preserve">
     <value>Shutting Down Encode ...</value>
   </data>
+  <data name="PictureSettingsView_AllowUpscaling" xml:space="preserve">
+    <value>Allow Upscaling</value>
+  </data>
+  <data name="PictureSettingsView_OptimalSize" xml:space="preserve">
+    <value>Optimal Size</value>
+  </data>
   <data name="OptionsView_Available" xml:space="preserve">
     <value>Available on this system.</value>
   </data>
