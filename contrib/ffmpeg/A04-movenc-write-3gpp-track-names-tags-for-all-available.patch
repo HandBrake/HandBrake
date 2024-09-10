@@ -21,7 +21,7 @@ index f7192002f1..167536de75 100644
  #include "avio_internal.h"
  #include "dovi_isom.h"
  #include "riff.h"
-@@ -3780,7 +3781,14 @@ static int mov_write_3gp_udta_tag(AVIOContext *pb, AVDictionary *metadata,
+@@ -3785,7 +3786,14 @@ static int mov_write_3gp_udta_tag(AVIOContext *pb, AVDictionary *metadata,
      if (!strcmp(tag, "yrrc"))
          avio_wb16(pb, atoi(t->value));
      else {
@@ -37,7 +37,7 @@ index f7192002f1..167536de75 100644
          avio_write(pb, t->value, strlen(t->value) + 1); /* UTF8 string value */
          if (!strcmp(tag, "albm") &&
              (t = av_dict_get(metadata, "track", NULL, 0)))
-@@ -3864,8 +3872,21 @@ static int mov_write_track_udta_tag(AVIOContext *pb, MOVMuxContext *mov,
+@@ -3869,8 +3877,21 @@ static int mov_write_track_udta_tag(AVIOContext *pb, MOVMuxContext *mov,
          return ret;
  
      if (mov->mode & (MODE_MP4|MODE_MOV)) {

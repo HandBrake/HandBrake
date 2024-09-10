@@ -49,6 +49,21 @@
         <Setter Property="Padding" Value="8,2" />
     </Style>
 
+    <Style x:Key="TransparentButtonStyle" TargetType="Button">
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="Width" Value="Auto" />
+        <Setter Property="Margin" Value="0" />
+        <Setter Property="Padding" Value="0" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
     <Style TargetType="{x:Type RadioButton}">
         <Setter Property="Margin" Value="0,0,0,8" />
         <Setter Property="Template">

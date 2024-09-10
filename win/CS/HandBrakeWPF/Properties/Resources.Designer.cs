@@ -3424,6 +3424,15 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Keep duplicate titles on Blu-ray sources (Requires Restart).
+        /// </summary>
+        public static string Options_KeepDuplicateTitles {
+            get {
+                return ResourceManager.GetString("Options_KeepDuplicateTitles", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Logging.
         /// </summary>
         public static string Options_Logging {
@@ -3875,6 +3884,15 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Available on this system..
+        /// </summary>
+        public static string OptionsView_Available {
+            get {
+                return ResourceManager.GetString("OptionsView_Available", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to &lt; Back.
         /// </summary>
         public static string OptionsView_BackButton {
@@ -3889,15 +3907,6 @@ namespace HandBrakeWPF.Properties {
         public static string OptionsView_CheckingForUpdates {
             get {
                 return ResourceManager.GetString("OptionsView_CheckingForUpdates", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Choice of encoder will be made available on the &apos;Video&apos; tab..
-        /// </summary>
-        public static string OptionsView_ChoiceOfEncoderHint {
-            get {
-                return ResourceManager.GetString("OptionsView_ChoiceOfEncoderHint", resourceCulture);
             }
         }
         
@@ -3938,29 +3947,20 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Allow use of DirectX Decoding.
+        /// </summary>
+        public static string OptionsView_EnableDirectXDecoding {
+            get {
+                return ResourceManager.GetString("OptionsView_EnableDirectXDecoding", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Prefer use of Nvidia NVDec for decoding video when using the NVEnc encoder and the hardware is available for use..
         /// </summary>
         public static string OptionsView_EnableNvDecSupport {
             get {
                 return ResourceManager.GetString("OptionsView_EnableNvDecSupport", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Allow use of the Nvidia NVENC Encoders.
-        /// </summary>
-        public static string OptionsView_EnableNvencEncoding {
-            get {
-                return ResourceManager.GetString("OptionsView_EnableNvencEncoding", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Allow use of the Intel QuickSync Encoders.
-        /// </summary>
-        public static string OptionsView_EnableQuicksyncEncoding {
-            get {
-                return ResourceManager.GetString("OptionsView_EnableQuicksyncEncoding", resourceCulture);
             }
         }
         
@@ -3983,20 +3983,20 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Allow use of the AMD VCN Encoders.
-        /// </summary>
-        public static string OptionsView_EnableVceEncoding {
-            get {
-                return ResourceManager.GetString("OptionsView_EnableVceEncoding", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Run each queued job in a separate worker process..
         /// </summary>
         public static string OptionsView_EnableWorkerProcesses {
             get {
                 return ResourceManager.GetString("OptionsView_EnableWorkerProcesses", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Note: Not all hardware encoders have extra preferences. All available and supported hardware encoders on this system will be available for selection on the video tab under the video encoder dropdown..
+        /// </summary>
+        public static string OptionsView_EncodeNotes {
+            get {
+                return ResourceManager.GetString("OptionsView_EncodeNotes", resourceCulture);
             }
         }
         
@@ -4099,6 +4099,15 @@ namespace HandBrakeWPF.Properties {
         public static string OptionsView_MediaFileNotSet {
             get {
                 return ResourceManager.GetString("OptionsView_MediaFileNotSet", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Not available on this system..
+        /// </summary>
+        public static string OptionsView_NotAvailable {
+            get {
+                return ResourceManager.GetString("OptionsView_NotAvailable", resourceCulture);
             }
         }
         
@@ -8053,6 +8062,33 @@ namespace HandBrakeWPF.Properties {
         public static string Yes {
             get {
                 return ResourceManager.GetString("Yes", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Scanning Status
+        /// </summary>
+        public static string MainView_ScanningStatus {
+            get {
+                return ResourceManager.GetString("MainView_ScanningStatus", resourceCulture);
+            }
+        }
+		
+		/// <summary>
+        ///   Looks up a localized string similar to Cancel Scan
+        /// </summary>
+        public static string MainView_Cancel {
+            get {
+                return ResourceManager.GetString("MainView_Cancel", resourceCulture);
+            }
+        }
+        
+		/// <summary>
+        ///   Looks up a localized string similar to Open Log Window
+        /// </summary>
+        public static string MainView_OpenLog {
+            get {
+                return ResourceManager.GetString("MainView_OpenLog", resourceCulture);
             }
         }
     }

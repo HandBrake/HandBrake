@@ -5512,6 +5512,12 @@ Each selected source track will be encoded with all selected encoders.</property
                           </object>
                         </child>
                         <child>
+                          <object class="GtkCheckButton" id="KeepDuplicateTitles">
+                            <property name="label" translatable="yes">Keep duplicate titles</property>
+                            <signal name="toggled" handler="pref_changed_cb" swapped="no" />
+                          </object>
+                        </child>
+                        <child>
                           <object class="GtkCheckButton" id="SyncTitleSettings">
                             <property name="label" translatable="yes">Use the same settings for all titles in a batch</property>
                             <property name="focusable">1</property>

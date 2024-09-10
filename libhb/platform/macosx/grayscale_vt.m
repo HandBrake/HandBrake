@@ -15,27 +15,10 @@
 extern char hb_grayscale_vt_metallib_data[];
 extern unsigned int hb_grayscale_vt_metallib_len;
 
-struct mtl_grayscale_params
-{
-    uint plane;
-    bool biplanar;
-    uint subw;
-    uint subh;
-    uint cb;
-    uint cr;
-    uint size;
-    uint high;
-};
-
 struct hb_filter_private_s
 {
     hb_metal_context_t       *mtl;
     const AVPixFmtDescriptor *desc;
-
-    int cb;
-    int cr;
-    int size;
-    int high;
 
     hb_filter_init_t    input;
     hb_filter_init_t    output;
@@ -87,15 +70,9 @@ static int grayscale_vt_init(hb_filter_object_t *filter,
     hb_dict_extract_double(&size, settings, "size");
     hb_dict_extract_double(&high, settings, "high");
 
-    pv->cb = cb;
-    pv->cr = cr;
-    pv->size = size;
-    pv->high = high;
-
     pv->mtl = hb_metal_context_init(hb_grayscale_vt_metallib_data,
                                     hb_grayscale_vt_metallib_len,
-                                    "monochrome",
-                                    sizeof(struct mtl_grayscale_params),
+                                    NULL, NULL, 0,
                                     init->geometry.width, init->geometry.height,
                                     init->pix_fmt, init->color_range);
     if (pv->mtl == NULL)
@@ -103,6 +80,41 @@ static int grayscale_vt_init(hb_filter_object_t *filter,
         hb_error("grayscale_vt: failed to create Metal device");
         return -1;
     }
+
+    bool biplanar = 1;
+    uint32_t plane = 0;
+    uint32_t subw = pv->desc->log2_chroma_w;
+    uint32_t subh = pv->desc->log2_chroma_h;
+    uint32_t cb_i = cb;
+    uint32_t cr_i = cr;
+    uint32_t size_i = size;
+    uint32_t high_i = high;
+
+    MTLFunctionConstantValues *constant_values = [MTLFunctionConstantValues new];
+
+    [constant_values setConstantValue:&plane    type:MTLDataTypeUInt withName:@"plane"];
+    [constant_values setConstantValue:&biplanar type:MTLDataTypeBool withName:@"biplanar"];
+    [constant_values setConstantValue:&subw     type:MTLDataTypeUInt withName:@"subw"];
+    [constant_values setConstantValue:&subh     type:MTLDataTypeUInt withName:@"subh"];
+    [constant_values setConstantValue:&cb_i     type:MTLDataTypeUInt withName:@"cb"];
+    [constant_values setConstantValue:&cr_i     type:MTLDataTypeUInt withName:@"cr"];
+    [constant_values setConstantValue:&size_i   type:MTLDataTypeUInt withName:@"size"];
+    [constant_values setConstantValue:&high_i   type:MTLDataTypeUInt withName:@"high"];
+
+    if (hb_metal_add_pipeline(pv->mtl, "monochrome", constant_values, pv->mtl->pipelines_count))
+    {
+        return -1;
+    }
+
+    plane = 1;
+    [constant_values setConstantValue:&plane type:MTLDataTypeUInt withName:@"plane"];
+
+    if (hb_metal_add_pipeline(pv->mtl, "monochrome", constant_values, pv->mtl->pipelines_count))
+    {
+        return -1;
+    }
+
+    [constant_values release];
 
     pv->output = *init;
     return 0;
@@ -126,23 +138,10 @@ static void grayscale_vt_close(hb_filter_object_t *filter)
 static void call_kernel(hb_filter_private_t *pv,
                         id<MTLTexture> dst,
                         id<MTLTexture> src[3],
-                        int plane,
-                        int channels)
+                        int plane)
 {
     id<MTLCommandBuffer> buffer = pv->mtl->queue.commandBuffer;
     id<MTLComputeCommandEncoder> encoder = buffer.computeCommandEncoder;
-    struct mtl_grayscale_params *params = (struct mtl_grayscale_params *)pv->mtl->params_buffer.contents;
-    *params = (struct mtl_grayscale_params)
-    {
-        .plane = plane,
-        .biplanar = channels == 2,
-        .subw = pv->desc->log2_chroma_w,
-        .subh = pv->desc->log2_chroma_h,
-        .cb = pv->cb,
-        .cr = pv->cr,
-        .size = pv->size,
-        .high = pv->high,
-    };
 
     [encoder setTexture:dst atIndex:0];
     for (int i = 0; i < 3; i++)
@@ -152,9 +151,8 @@ static void call_kernel(hb_filter_private_t *pv,
             [encoder setTexture:src[i] atIndex:i+1];
         }
     }
-    [encoder setBuffer:pv->mtl->params_buffer offset:0 atIndex:0];
 
-    hb_metal_compute_encoder_dispatch(pv->mtl->device, pv->mtl->pipelines[0], encoder, dst.width, dst.height);
+    hb_metal_compute_encoder_dispatch(pv->mtl->device, pv->mtl->pipelines[plane], encoder, dst.width, dst.height);
 
     [encoder endEncoding];
 
@@ -217,7 +215,7 @@ static hb_buffer_t * filter_frame(hb_filter_private_t *pv, hb_buffer_t *in)
         CVMetalTextureRef dest = hb_metal_create_texture_from_pixbuf(pv->mtl->cache, cv_dest, i, format[i]);
         id<MTLTexture> tex_dest = CVMetalTextureGetTexture(dest);
 
-        call_kernel(pv, tex_dest, tex_src, i, channels);
+        call_kernel(pv, tex_dest, tex_src, i);
 
         CFRelease(dest);
     }

@@ -624,6 +624,23 @@ void hb_buffer_copy_props(hb_buffer_t *dst, const hb_buffer_t *src)
     hb_buffer_copy_side_data(dst, src);
 }
 
+int hb_buffer_is_writable(const hb_buffer_t *buf)
+{
+    switch (buf->storage_type)
+    {
+        case AVFRAME:
+            return av_frame_is_writable((AVFrame *)buf->storage);
+        case STANDARD:
+            return 1;
+#ifdef __APPLE__
+        case COREMEDIA:
+            return CFGetRetainCount(buf->storage);
+#endif
+        default:
+            return 0;
+    }
+}
+
 static int copy_hwframe_to_video_buffer(const AVFrame *frame, hb_buffer_t *buf)
 {
     int ret;
@@ -743,13 +760,6 @@ hb_buffer_t * hb_buffer_dup(const hb_buffer_t *src)
     else if (src->storage_type == COREMEDIA)
     {
         buf = hb_vt_buffer_dup(src);
-    }
-#endif
-
-#if HB_PROJECT_FEATURE_QSV
-    if (buf)
-    {
-        memcpy(&buf->qsv_details, &src->qsv_details, sizeof(src->qsv_details));
     }
 #endif
 
@@ -914,7 +924,7 @@ void hb_frame_buffer_mirror_stride(hb_buffer_t * buf)
     }
 }
 
-// this routine reallocs a buffer for an uncompressed YUV420 video frame
+// this routine reallocs a buffer for an uncompressed video frame
 // with dimensions width x height.
 void hb_video_buffer_realloc( hb_buffer_t * buf, int width, int height )
 {
@@ -969,6 +979,63 @@ void hb_buffer_swap_copy( hb_buffer_t *src, hb_buffer_t *dst )
     src->alloc = alloc;
 }
 
+#if HB_PROJECT_FEATURE_QSV
+static void free_qsv_resources(hb_buffer_t *b)
+{
+    // Reclaim QSV resources before dropping the buffer.
+    // when decoding without QSV, the QSV atom will be NULL.
+    if (b->storage != NULL && b->qsv_details.ctx != NULL)
+    {
+        AVFrame *frame = (AVFrame *)b->storage;
+        mfxFrameSurface1 *surface = (mfxFrameSurface1 *)frame->data[3];
+        if (surface)
+        {
+            hb_qsv_release_surface_from_pool_by_surface_pointer(b->qsv_details.qsv_frames_ctx, surface);
+            frame->data[3] = 0;
+        }
+    }
+    if (b->qsv_details.qsv_atom != NULL && b->qsv_details.ctx != NULL)
+    {
+        hb_qsv_stage *stage = hb_qsv_get_last_stage(b->qsv_details.qsv_atom);
+        if (stage != NULL)
+        {
+            hb_qsv_wait_on_sync(b->qsv_details.ctx, stage);
+            if (stage->out.sync->in_use > 0)
+            {
+                ff_qsv_atomic_dec(&stage->out.sync->in_use);
+            }
+            if (stage->out.p_surface->Data.Locked > 0)
+            {
+                ff_qsv_atomic_dec(&stage->out.p_surface->Data.Locked);
+            }
+        }
+        hb_qsv_flush_stages(b->qsv_details.ctx->pipes,
+                            (hb_qsv_list**)&b->qsv_details.qsv_atom, 1);
+    }
+}
+#endif
+
+
+static void free_buffer_resources(hb_buffer_t *b)
+{
+    if (b->storage_type == AVFRAME)
+    {
+        av_frame_unref((AVFrame *)b->storage);
+        av_frame_free((AVFrame **)&b->storage);
+    }
+#ifdef __APPLE__
+    else if (b->storage_type == COREMEDIA)
+    {
+        CFRelease((CMSampleBufferRef)b->storage);
+    }
+#endif
+    if (b->storage_type != AVFRAME)
+    {
+        hb_buffer_wipe_side_data(b);
+        av_freep(&b->side_data);
+    }
+}
+
 // Frees the specified buffer list.
 void hb_buffer_close( hb_buffer_t ** _b )
 {
@@ -976,39 +1043,6 @@ void hb_buffer_close( hb_buffer_t ** _b )
 
     while( b )
     {
-#if HB_PROJECT_FEATURE_QSV
-        // Reclaim QSV resources before dropping the buffer.
-        // when decoding without QSV, the QSV atom will be NULL.
-        if (b->storage != NULL && b->qsv_details.ctx != NULL)
-        {
-            AVFrame *frame = (AVFrame *)b->storage;
-            mfxFrameSurface1 *surface = (mfxFrameSurface1 *)frame->data[3];
-            if (surface)
-            {
-                hb_qsv_release_surface_from_pool_by_surface_pointer(b->qsv_details.qsv_frames_ctx, surface);
-                frame->data[3] = 0;
-            }
-        }
-        if (b->qsv_details.qsv_atom != NULL && b->qsv_details.ctx != NULL)
-        {
-            hb_qsv_stage *stage = hb_qsv_get_last_stage(b->qsv_details.qsv_atom);
-            if (stage != NULL)
-            {
-                hb_qsv_wait_on_sync(b->qsv_details.ctx, stage);
-                if (stage->out.sync->in_use > 0)
-                {
-                    ff_qsv_atomic_dec(&stage->out.sync->in_use);
-                }
-                if (stage->out.p_surface->Data.Locked > 0)
-                {
-                    ff_qsv_atomic_dec(&stage->out.p_surface->Data.Locked);
-                }
-            }
-            hb_qsv_flush_stages(b->qsv_details.ctx->pipes,
-                                (hb_qsv_list**)&b->qsv_details.qsv_atom, 1);
-        }
-#endif
-
         hb_buffer_t * next = b->next;
         hb_fifo_t *buffer_pool = size_to_pool( b->alloc );
 
@@ -1019,22 +1053,11 @@ void hb_buffer_close( hb_buffer_t ** _b )
         hb_list_rem(buffers.alloc_list, b);
         hb_unlock(buffers.lock);
 #endif
-        if (b->storage_type == AVFRAME)
-        {
-            av_frame_unref((AVFrame *)b->storage);
-            av_frame_free((AVFrame **)&b->storage);
-        }
-#ifdef __APPLE__
-        else if (b->storage_type == COREMEDIA)
-        {
-            CFRelease((CMSampleBufferRef)b->storage);
-        }
+
+#if HB_PROJECT_FEATURE_QSV
+        free_qsv_resources(b);
 #endif
-        if (b->storage_type != AVFRAME)
-        {
-            hb_buffer_wipe_side_data(b);
-            av_freep(&b->side_data);
-        }
+        free_buffer_resources(b);
 
         if (buffer_pool && !hb_fifo_is_full(buffer_pool))
         {

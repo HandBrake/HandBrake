@@ -4,6 +4,7 @@
 
 
     <SolidColorBrush x:Key="Ui.Light" />
+    <SolidColorBrush x:Key="Ui.Light2" />
     <SolidColorBrush x:Key="Ui.ToolbarHover" />
     <SolidColorBrush x:Key="Ui.ContrastLight" />
     <SolidColorBrush x:Key="Ui.Ultralight" />

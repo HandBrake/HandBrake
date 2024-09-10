@@ -178,11 +178,27 @@ NSString *HBAudioEncoderChangedNotification = @"HBAudioEncoderChangedNotificatio
  *
  *  @param index the index of the source track in the sourceTracks array
  */
-- (HBAudioTrack *)trackFromSourceTrackIndex:(NSInteger)index
+- (HBAudioTrack *)trackFromSourceTrackIndex:(NSInteger)trackIndex
 {
-    HBAudioTrack *track = [[HBAudioTrack alloc] initWithTrackIdx:index container:self.container dataSource:self delegate:self];
+    HBAudioTrack *track = [[HBAudioTrack alloc] initWithTrackIdx:trackIndex container:self.container dataSource:self delegate:self];
     track.undo = self.undo;
     return track;
+}
+
+- (HBAudioTrack *)trackFromSourceTitleTrackIndex:(NSInteger)trackIndex
+{
+    NSInteger index = 0;
+    for (HBTitleAudioTrack *sourceTrack in self.sourceTracks)
+    {
+        if (sourceTrack.index == trackIndex)
+        {
+            HBAudioTrack *track = [[HBAudioTrack alloc] initWithTrackIdx:index container:self.container dataSource:self delegate:self];
+            track.undo = self.undo;
+            return track;
+        }
+        index += 1;
+    }
+    return nil;
 }
 
 #pragma mark - Defaults
@@ -198,16 +214,18 @@ NSString *HBAudioEncoderChangedNotification = @"HBAudioEncoderChangedNotificatio
     // Add the tracks
     for (NSDictionary *trackDict in settingsTracks)
     {
-        HBAudioTrack *track = [self trackFromSourceTrackIndex:[trackDict[@"Track"] unsignedIntegerValue] + 1];
+        HBAudioTrack *track = [self trackFromSourceTitleTrackIndex:[trackDict[@"Track"] unsignedIntegerValue]];
+        if (track)
+        {
+            track.drc = [trackDict[@"DRC"] doubleValue];
+            track.gain = [trackDict[@"Gain"] doubleValue];
+            track.mixdown = hb_mixdown_get_from_name([trackDict[@"Mixdown"] UTF8String]);
+            track.sampleRate = [trackDict[@"Samplerate"] intValue] == -1 ? 0 : [trackDict[@"Samplerate"] intValue];
+            track.bitRate = [trackDict[@"Bitrate"] intValue];
+            track.encoder = hb_audio_encoder_get_from_name([trackDict[@"Encoder"] UTF8String]);
 
-        track.drc = [trackDict[@"DRC"] doubleValue];
-        track.gain = [trackDict[@"Gain"] doubleValue];
-        track.mixdown = hb_mixdown_get_from_name([trackDict[@"Mixdown"] UTF8String]);
-        track.sampleRate = [trackDict[@"Samplerate"] intValue] == -1 ? 0 : [trackDict[@"Samplerate"] intValue];
-        track.bitRate = [trackDict[@"Bitrate"] intValue];
-        track.encoder = hb_audio_encoder_get_from_name([trackDict[@"Encoder"] UTF8String]);
-
-        [tracks addObject:track];
+            [tracks addObject:track];
+        }
     }
 
     [self insertTracks:tracks atIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, tracks.count)]];

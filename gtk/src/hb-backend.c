@@ -3545,12 +3545,12 @@ get_path_list(GListModel *files)
 }
 
 void
-ghb_backend_scan_list (GListModel *files, int titleindex, int preview_count, uint64_t min_duration)
+ghb_backend_scan_list (GListModel *files, int titleindex, int preview_count, uint64_t min_duration, gboolean keep_duplicate_titles)
 {
     hb_list_t *path_list = get_path_list(files);
     hb_list_t *extensions = ghb_get_excluded_extensions_list();
     hb_scan(h_scan, path_list, titleindex, preview_count, 1, min_duration,
-                 0, 0, extensions, 0);
+                 0, 0, extensions, 0, keep_duplicate_titles);
     ghb_free_list(path_list);
     ghb_free_list(extensions);
     hb_status.scan.state |= GHB_STATE_SCANNING;
@@ -3564,13 +3564,13 @@ ghb_backend_scan_list (GListModel *files, int titleindex, int preview_count, uin
 }
 
 void
-ghb_backend_scan (const char *path, int titleindex, int preview_count, uint64_t min_duration)
+ghb_backend_scan (const char *path, int titleindex, int preview_count, uint64_t min_duration, gboolean keep_duplicate_titles)
 {
     hb_list_t *path_list = hb_list_init();
     hb_list_add(path_list, (void *)path);
     hb_list_t *extensions = ghb_get_excluded_extensions_list();
     hb_scan(h_scan, path_list, titleindex, preview_count, 1, min_duration,
-                 0, 0, extensions, 0);
+                 0, 0, extensions, 0, keep_duplicate_titles);
     hb_list_close(&path_list);
     ghb_free_list(extensions);
     hb_status.scan.state |= GHB_STATE_SCANNING;
@@ -3581,19 +3581,6 @@ ghb_backend_scan (const char *path, int titleindex, int preview_count, uint64_t 
     hb_status.scan.preview_count = 1;
     hb_status.scan.preview_cur = 0;
     hb_status.scan.progress = 0;
-}
-
-void
-ghb_backend_queue_scan(const gchar *path, gint titlenum)
-{
-    ghb_log_func();
-    hb_list_t *extensions = ghb_get_excluded_extensions_list();
-    hb_list_t *path_list = hb_list_init();
-    hb_list_add(path_list, (void *)path);
-    hb_scan(h_queue, path_list, titlenum, -1, 0, 0, 0, 0, extensions, 0);
-    ghb_free_list(extensions);
-    hb_list_close(&path_list);
-    hb_status.queue.state |= GHB_STATE_SCANNING;
 }
 
 gint

@@ -1662,6 +1662,8 @@ queue_remove_response (GtkWidget *dialog, int response, signal_user_data_t *ud)
 
     if (response != 1 || queue_remove_index < 0)
     {
+        queue_remove_index = -1;
+        queue_remove_unique_id = -1;
         return;
     }
 
@@ -1689,6 +1691,7 @@ queue_remove_response (GtkWidget *dialog, int response, signal_user_data_t *ud)
     }
 
     queue_remove_index = -1;
+    queue_remove_unique_id = -1;
 }
 
 static void
@@ -1721,6 +1724,7 @@ ghb_queue_remove_row_internal (signal_user_data_t *ud, int index)
     queueDict  = ghb_array_get(ud->queue, index);
     uiDict     = ghb_dict_get(queueDict, "uiSettings");
     int status = ghb_dict_get_int(uiDict, "job_status");
+
     if (status == GHB_QUEUE_RUNNING)
     {
         // Ask if wants to stop encode.

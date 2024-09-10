@@ -15,8 +15,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HandBrake.Interop", "HandBr
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HandBrakeWPF", "HandBrakeWPF\HandBrakeWPF.csproj", "{C3A8A5D8-2793-42FD-ADC5-9A296F1C4335}"
 EndProject
-Project("{930C7802-8A8C-48F9-8165-68863BCCD9DD}") = "HandBrake.Installer", "HandBrake.Installer\HandBrake.Installer.wixproj", "{02684A37-C3E0-43F6-A4F0-2465AFEDD6DF}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "NSIS Installer", "NSIS Installer", "{CC58646B-D0A4-469E-B947-A00C5D271103}"
 	ProjectSection(SolutionItems) = preProject
 		HandBrake.Nsis.Installer\Installer64.nsi = HandBrake.Nsis.Installer\Installer64.nsi
@@ -44,8 +42,6 @@ Global
 		{C3A8A5D8-2793-42FD-ADC5-9A296F1C4335}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C3A8A5D8-2793-42FD-ADC5-9A296F1C4335}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C3A8A5D8-2793-42FD-ADC5-9A296F1C4335}.Release|Any CPU.Build.0 = Release|Any CPU
-		{02684A37-C3E0-43F6-A4F0-2465AFEDD6DF}.Debug|Any CPU.ActiveCfg = Debug|x86
-		{02684A37-C3E0-43F6-A4F0-2465AFEDD6DF}.Release|Any CPU.ActiveCfg = Release|x86
 		{F3D54128-F034-4241-BB73-AA7BBE9A47C1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{F3D54128-F034-4241-BB73-AA7BBE9A47C1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F3D54128-F034-4241-BB73-AA7BBE9A47C1}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -58,8 +54,8 @@ Global
 		{CC58646B-D0A4-469E-B947-A00C5D271103} = {5CB7BC74-449C-4E95-98AB-E1E4387E514B}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		RESX_TaskErrorCategory = Message
-		RESX_Rules = {"EnabledRules":["StringFormat"]}
 		SolutionGuid = {F2A9851D-E91D-41D4-9C3C-636A61503FCB}
+		RESX_Rules = {"EnabledRules":["StringFormat"]}
+		RESX_TaskErrorCategory = Message
 	EndGlobalSection
 EndGlobal

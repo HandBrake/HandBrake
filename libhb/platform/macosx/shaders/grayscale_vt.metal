@@ -22,16 +22,14 @@ using namespace metal;
  * Parameters
  */
 
-struct params {
-    uint plane;
-    uint biplanar;
-    uint subw;
-    uint subh;
-    uint cb;
-    uint cr;
-    uint size;
-    uint high;
-};
+constant uint plane    [[function_constant(0)]];
+constant bool biplanar [[function_constant(1)]];
+constant uint subw [[function_constant(2)]];
+constant uint subh [[function_constant(3)]];
+constant uint cb   [[function_constant(4)]];
+constant uint cr   [[function_constant(5)]];
+constant uint size [[function_constant(6)]];
+constant uint high [[function_constant(7)]];
 
 /*
  * Texture access helpers
@@ -90,23 +88,22 @@ float filter_pixel(
     texture2d<float, access::read> src_y,
     texture2d<float, access::read> src_u,
     texture2d<float, access::read> src_v,
-    constant params& p,
     ushort2 pos)
 {
-    const float ihigh = 1.f - p.high;
-    const float size = 1.f / p.size;
-    const float b = p.cb * .5f;
-    const float r = p.cr * .5f;
+    const float ihigh = 1.f - high;
+    const float isize = 1.f / size;
+    const float b = cb * .5f;
+    const float r = cr * .5f;
 
-    const int cx = pos.x >> p.subw;
-    const int cy = pos.y >> p.subh;
+    const int cx = pos.x >> subw;
+    const int cy = pos.y >> subh;
 
     float  y  = tex2D<float>(src_y, pos.x, pos.y);
-    float2 uv = tex2D(src_u, src_v, cx, cy, p.biplanar) - .5f;
+    float2 uv = tex2D(src_u, src_v, cx, cy, biplanar) - .5f;
 
     float tt, t, ny;
 
-    ny = filter_sample(b, r, uv.x, uv.y, size);
+    ny = filter_sample(b, r, uv.x, uv.y, isize);
     tt = envelope(y);
     t = tt + (1.f - tt) * ihigh;
     ny = (1.f - t) * y + t * ny * y;
@@ -123,15 +120,14 @@ kernel void monochrome(
     texture2d<float, access::read>  src_y [[texture(1)]],
     texture2d<float, access::read>  src_u [[texture(2)]],
     texture2d<float, access::read>  src_v [[texture(3)]],
-    constant params& p [[buffer(0)]],
     ushort2 pos [[thread_position_in_grid]])
 {
     if ((pos.x >= dst.get_width()) || (pos.y >= dst.get_height())) {
         return;
     }
 
-    if (p.plane == 0) {
-        float value = filter_pixel(dst, src_y, src_u, src_v, p, pos);
+    if (plane == 0) {
+        float value = filter_pixel(dst, src_y, src_u, src_v, pos);
         dst.write(value, pos);
     } else {
         float half_value = 0.5;

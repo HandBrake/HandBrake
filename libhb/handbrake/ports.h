@@ -79,6 +79,7 @@ enum hb_cpu_platform
     HB_CPU_PLATFORM_INTEL_TGL,
     HB_CPU_PLATFORM_INTEL_ADL,
     HB_CPU_PLATFORM_INTEL_DG2,
+    HB_CPU_PLATFORM_INTEL_LNL,
 };
 int         hb_get_cpu_count(void);
 int         hb_get_cpu_platform(void);

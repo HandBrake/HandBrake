@@ -79,41 +79,69 @@
 
             <TextBlock Text="{x:Static Properties:Resources.Options_Hardware}" Style="{StaticResource subHeader}" Margin="0,10,0,10" />
             <StackPanel Orientation="Vertical" Margin="20,0,0,0">
-                <TextBlock Text="{x:Static Properties:Resources.OptionsView_ChoiceOfEncoderHint}" Margin="0,0,0,10" Style="{StaticResource subText}" />
+                <TextBlock Text="{x:Static Properties:Resources.OptionsView_EncodeNotes}" Margin="0,0,20,10" Style="{StaticResource subText}" TextWrapping="Wrap" />
 
                 <!-- QuickSync -->
-                <StackPanel Orientation="Horizontal">
-                    <CheckBox Content="{x:Static Properties:Resources.OptionsView_EnableQuicksyncEncoding}" x:Name="qsvEncoding" IsEnabled="{Binding IsQuickSyncAvailable}" IsChecked="{Binding EnableQuickSyncEncoding}" />
+                <StackPanel Orientation="Vertical" Visibility="{Binding IsQuickSyncAvailable, Converter={StaticResource boolToVisConverter}}">
+                    <TextBlock Text="Intel QuickSync" Style="{StaticResource subHeader}" />
+                    <StackPanel Orientation="Horizontal">
+                        <Image Source="../Images/warningsmall.png" Margin="25,10,0,5"  Visibility="{Binding DisplayIntelDriverWarning, Converter={StaticResource boolToVisConverter}}" />
+                        <TextBlock Text="{x:Static Properties:Resources.OptionsViewVideo_UnsupportedIntelDriver}" Margin="10,10,0,5"  FontWeight="SemiBold" Visibility="{Binding DisplayIntelDriverWarning, Converter={StaticResource boolToVisConverter}}" />
 
-                    <Image Source="../Images/warningsmall.png" Margin="15,0,0,0" Visibility="{Binding DisplayIntelDriverWarning, Converter={StaticResource boolToVisConverter}}" />
-                    <TextBlock Text="{x:Static Properties:Resources.OptionsViewVideo_UnsupportedIntelDriver}" Margin="5,0,0,0" FontWeight="SemiBold" Visibility="{Binding DisplayIntelDriverWarning, Converter={StaticResource boolToVisConverter}}" />
+                    </StackPanel>
 
+                    <CheckBox Content="{x:Static Properties:Resources.OptionsView_EnableQuicksyncLowPower}" Margin="25,5,0,10" Visibility="{Binding IsQuickSyncAvailable, Converter={StaticResource boolToVisConverter}}" 
+                              IsChecked="{Binding EnableQuickSyncLowPower}" IsEnabled="{Binding IsQuickSyncAvailable}"/>
+                    <CheckBox Content="{x:Static Properties:Resources.OptionsView_EnableQuicksyncHyperEncode}" Margin="25,5,0,0" Visibility="{Binding IsQuickSyncHyperEncodeAvailable, Converter={StaticResource boolToVisConverter}}"
+                              IsEnabled="{Binding IsQuickSyncAvailable}" IsChecked="{Binding EnableQuickSyncHyperEncode}" />
+                    <TextBlock Text="{x:Static Properties:Resources.OptionsView_HyperEncodeDescription}" Margin="50,0,0,10" FontStyle="Italic" TextWrapping="Wrap" Style="{StaticResource DisableTextBlockStyle}"
+                               IsEnabled="{Binding IsQuickSyncAvailable}" Visibility="{Binding IsQuickSyncHyperEncodeAvailable, Converter={StaticResource boolToVisConverter}}" />
+                    <CheckBox Content="{x:Static Properties:Resources.Options_QsvDecode}" Margin="25,2,0,0" 
+                              IsEnabled="{Binding IsQuickSyncAvailable}" Visibility="{Binding IsQuickSyncAvailable, Converter={StaticResource boolToVisConverter}}" IsChecked="{Binding EnableQuickSyncDecoding}" />
+                    <CheckBox Content="{x:Static Properties:Resources.Options_QsvDecodeForNonFullPath}" Margin="50,5,0,0" 
+                              IsEnabled="{Binding CanSetQsvDecForOtherEncodes}" Visibility="{Binding IsQuickSyncAvailable, Converter={StaticResource boolToVisConverter}}" IsChecked="{Binding UseQSVDecodeForNonQSVEnc}" />
+                </StackPanel>
+                <StackPanel Orientation="Vertical" Visibility="{Binding IsQuickSyncAvailable, Converter={StaticResource boolToVisConverter}, ConverterParameter=true}">
+                    <TextBlock Text="Intel QuickSync" Style="{StaticResource subHeader}" Margin="0,15,0,0" />
+                    <TextBlock Text="{x:Static Properties:Resources.OptionsView_NotAvailable}" Margin="25,5,0,0" />
                 </StackPanel>
 
-                <CheckBox Content="{x:Static Properties:Resources.OptionsView_EnableQuicksyncLowPower}" Margin="25,5,0,10" Visibility="{Binding IsQuickSyncAvailable, Converter={StaticResource boolToVisConverter}}" IsChecked="{Binding EnableQuickSyncLowPower}"
-                          IsEnabled="{Binding IsChecked, ElementName=qsvEncoding}"/>
-                <CheckBox Content="{x:Static Properties:Resources.OptionsView_EnableQuicksyncHyperEncode}" Margin="25,5,0,0" Visibility="{Binding IsQuickSyncHyperEncodeAvailable, Converter={StaticResource boolToVisConverter}}"
-                          IsEnabled="{Binding IsChecked, ElementName=qsvEncoding}" IsChecked="{Binding EnableQuickSyncHyperEncode}" />
-                <TextBlock Text="{x:Static Properties:Resources.OptionsView_HyperEncodeDescription}" Margin="50,0,0,10" FontStyle="Italic" TextWrapping="Wrap" Style="{StaticResource DisableTextBlockStyle}"
-                           IsEnabled="{Binding IsChecked, ElementName=qsvEncoding}" Visibility="{Binding IsQuickSyncHyperEncodeAvailable, Converter={StaticResource boolToVisConverter}}" />
-                <CheckBox Content="{x:Static Properties:Resources.Options_QsvDecode}" Margin="25,2,0,0" 
-                          IsEnabled="{Binding IsChecked, ElementName=qsvEncoding}" Visibility="{Binding IsQuickSyncAvailable, Converter={StaticResource boolToVisConverter}}" IsChecked="{Binding EnableQuickSyncDecoding}" />
-                <CheckBox Content="{x:Static Properties:Resources.Options_QsvDecodeForNonFullPath}" Margin="50,5,0,0" 
-                          IsEnabled="{Binding CanSetQsvDecForOtherEncodes}" Visibility="{Binding IsQuickSyncAvailable, Converter={StaticResource boolToVisConverter}}" IsChecked="{Binding UseQSVDecodeForNonQSVEnc}" />
-
-                <!-- VCN -->
-                <CheckBox Content="{x:Static Properties:Resources.OptionsView_EnableVceEncoding}" Margin="0,25,0,0"  IsEnabled="{Binding IsVceAvailable}" IsChecked="{Binding EnableVceEncoder}" />
 
                 <!-- NVENC -->
-                <StackPanel Orientation="Horizontal">
-                    <CheckBox Content="{x:Static Properties:Resources.OptionsView_EnableNvencEncoding}" Margin="0,25,0,0" IsEnabled="{Binding IsNvencAvailable}" IsChecked="{Binding EnableNvencEncoder}" />
+                <StackPanel Orientation="Vertical" Visibility="{Binding IsNvencAvailable, Converter={StaticResource boolToVisConverter}}">
+                    <TextBlock Text="Nvidia NVENC" Style="{StaticResource subHeader}" Margin="0,15,0,0" />
+                    <StackPanel Orientation="Horizontal" >
+                        <Image Source="../Images/warningsmall.png" Margin="25,10,0,5"  Visibility="{Binding DisplayNvidiaDriverWarning, Converter={StaticResource boolToVisConverter}}" />
+                        <TextBlock Text="{x:Static Properties:Resources.OptionsViewVideo_UnsupportedIntelDriver}" Margin="10,10,0,5"  FontWeight="SemiBold" Visibility="{Binding DisplayNvidiaDriverWarning, Converter={StaticResource boolToVisConverter}}" />
+                    </StackPanel>
 
-                    <Image Source="../Images/warningsmall.png" Margin="15,25,0,0" Visibility="{Binding DisplayNvidiaDriverWarning, Converter={StaticResource boolToVisConverter}}" />
-                    <TextBlock Text="{x:Static Properties:Resources.OptionsViewVideo_UnsupportedIntelDriver}" Margin="5,25,0,0" FontWeight="SemiBold" Visibility="{Binding DisplayNvidiaDriverWarning, Converter={StaticResource boolToVisConverter}}" />
+                    <CheckBox Content="{x:Static Properties:Resources.OptionsView_EnableNvDecSupport}" Margin="25,5,0,0" IsEnabled="{Binding IsNvencAvailable}"
+                              Visibility="{Binding IsNvdecAvailable, Converter={StaticResource boolToVisConverter}}" IsChecked="{Binding EnableNvDecSupport}" />
+                </StackPanel>
+                <StackPanel Orientation="Vertical" Visibility="{Binding IsNvencAvailable, Converter={StaticResource boolToVisConverter}, ConverterParameter=true}">
+                    <TextBlock Text="Nvidia NVENC" Style="{StaticResource subHeader}" Margin="0,15,0,0" />
+                    <TextBlock Text="{x:Static Properties:Resources.OptionsView_NotAvailable}" Margin="25,5,0,0" />
                 </StackPanel>
 
-                <CheckBox Content="{x:Static Properties:Resources.OptionsView_EnableNvDecSupport}" Margin="25,5,0,0" IsEnabled="{Binding IsNvencAvailable}"
-                                      Visibility="{Binding IsNvdecAvailable, Converter={StaticResource boolToVisConverter}}" IsChecked="{Binding EnableNvDecSupport}" />
+                <!-- VCN -->
+                <StackPanel Orientation="Vertical" Visibility="{Binding IsVceAvailable, Converter={StaticResource boolToVisConverter}}">
+                    <TextBlock Text="AMD VCN" Style="{StaticResource subHeader}" Margin="0,15,0,0" />
+                    <TextBlock Text="{x:Static Properties:Resources.OptionsView_Available}" Margin="25,5,0,0" />
+                </StackPanel>
+                <StackPanel Orientation="Vertical" Visibility="{Binding IsVceAvailable, Converter={StaticResource boolToVisConverter}, ConverterParameter=true}">
+                    <TextBlock Text="AMD VCN" Style="{StaticResource subHeader}" Margin="0,15,0,0" />
+                    <TextBlock Text="{x:Static Properties:Resources.OptionsView_NotAvailable}" Margin="25,5,0,0" />
+                </StackPanel>
+
+                <!-- DirectX -->
+                <StackPanel Orientation="Vertical" Visibility="{Binding IsARMDevice, Converter={StaticResource boolToVisConverter}}">
+                    <TextBlock Text="Media Foundation (ARM Devices)" Style="{StaticResource subHeader}" Margin="0,15,0,0" />
+                    <CheckBox Content="{x:Static Properties:Resources.OptionsView_EnableDirectXDecoding}" Margin="25,5,0,0" IsEnabled="{Binding IsDirectXAvailable}" IsChecked="{Binding EnableDirectXDecoding}" />
+                </StackPanel>
+                <StackPanel Orientation="Vertical" Visibility="{Binding IsARMDevice, Converter={StaticResource boolToVisConverter}, ConverterParameter=true}">
+                    <TextBlock Text="Media Foundation (ARM Devices)" Style="{StaticResource subHeader}" Margin="0,15,0,0" />
+                    <TextBlock Text="{x:Static Properties:Resources.OptionsView_NotAvailable}" Margin="25,5,0,0" />
+                </StackPanel>
 
             </StackPanel>
 

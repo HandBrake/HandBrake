@@ -93,7 +93,7 @@ static int hb_reader_open( hb_work_private_t * r )
 {
     if ( r->title->type == HB_BD_TYPE )
     {
-        if ( !( r->bd = hb_bd_init( r->h, r->title->path ) ) )
+        if ( !( r->bd = hb_bd_init( r->h, r->title->path, r->job->keep_duplicate_titles ) ) )
             return 1;
         if(!hb_bd_start(r->bd, r->title))
         {

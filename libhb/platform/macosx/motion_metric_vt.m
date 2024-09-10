@@ -54,7 +54,7 @@ static int hb_motion_metric_vt_init(hb_motion_metric_object_t *metric,
 
     pv->mtl = hb_metal_context_init(hb_motion_metric_vt_metallib_data,
                                     hb_motion_metric_vt_metallib_len,
-                                    NULL, 0,
+                                    NULL, NULL, 0,
                                     init->geometry.width, init->geometry.height,
                                     init->pix_fmt, init->color_range);
     if (pv->mtl == NULL)
@@ -72,7 +72,7 @@ static int hb_motion_metric_vt_init(hb_motion_metric_object_t *metric,
             function_name = "motion_metric_simd";
         }
     }
-    hb_metal_add_pipeline(pv->mtl, function_name, 0);
+    hb_metal_add_pipeline(pv->mtl, function_name, NULL, 0);
 
     int w = 16, h = 16;
     NSUInteger length = sizeof(uint32_t) * ((init->geometry.width + w - 1) / w) * ((init->geometry.height + h - 1) / h);

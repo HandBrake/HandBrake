@@ -12,9 +12,9 @@ endif
 $(eval $(call import.MODULE.defs,FFMPEG,ffmpeg,$(__deps__)))
 $(eval $(call import.CONTRIB.defs,FFMPEG))
 
-FFMPEG.FETCH.url    = https://github.com/HandBrake/HandBrake-contribs/releases/download/contribs2/ffmpeg-7.0.1.tar.bz2
-FFMPEG.FETCH.url   += https://ffmpeg.org/releases/ffmpeg-7.0.1.tar.bz2
-FFMPEG.FETCH.sha256 = 5e77e84b6434d656106fafe3bceccc77176449014f3eba24d33db3fbd0939dc9
+FFMPEG.FETCH.url    = https://github.com/HandBrake/HandBrake-contribs/releases/download/contribs2/ffmpeg-7.0.2.tar.bz2
+FFMPEG.FETCH.url   += https://ffmpeg.org/releases/ffmpeg-7.0.2.tar.bz2
+FFMPEG.FETCH.sha256 = 1ed250407ea8f955cca2f1139da3229fbc13032a0802e4b744be195865ff1541
 
 FFMPEG.GCC.args.c_std =
 
@@ -194,6 +194,10 @@ endif
 
 ifeq (1,$(FEATURE.mf))
 FFMPEG.CONFIGURE.extra += \
+      --enable-hwaccel=h264_d3d11va \
+      --enable-hwaccel=hevc_d3d11va \
+      --enable-hwaccel=h264_d3d11va2 \
+      --enable-hwaccel=hevc_d3d11va2 \
       --enable-encoder=h264_mf \
       --enable-encoder=hevc_mf
 endif

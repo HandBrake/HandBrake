@@ -48,6 +48,7 @@ namespace HandBrakeWPF
         public const string PreviewScanCount = "previewScanCount";
         public const string Verbosity = "Verbosity";
         public const string MinScanDuration = "MinTitleScanDuration";
+        public const string KeepDuplicateTitles = "KeepDuplicateTitles";
         public const string ProcessPriorityInt = "ProcessPriorityInt";
         public const string SaveLogToCopyDirectory = "SaveLogToCopyDirectory";
         public const string SaveLogWithVideo = "SaveLogWithVideo";
@@ -62,10 +63,8 @@ namespace HandBrakeWPF
         public const string WhenDoneAudioFile = "WhenDoneAudioFile";
         public const string ProcessIsolationEnabled = "ProcessIsolationEnabled";
         public const string ProcessIsolationPort = "ProcessIsolationPort";
-        public const string EnableQuickSyncEncoding = "EnableQuickSyncEncoding";
         public const string EnableQuickSyncHyperEncode = "EnableQuickSyncHyperEncode";
-        public const string EnableVceEncoder = "EnableVceEncoder";
-        public const string EnableNvencEncoder = "EnableNvencEncoder";
+        public const string EnableDirectXDecoding = "EnableDirectXDecoding";
         public const string UiLanguage = "UiLanguage";
         public const string ShowAddAllToQueue = "ShowAddAllToQueue";
         public const string ShowAddSelectionToQueue = "ShowAddSelectionToQueue";

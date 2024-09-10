@@ -47,6 +47,7 @@ namespace HandBrakeWPF.Services.Queue.Model
         {
             this.SourceTitleInfo = selectedTitle;
             this.Task = task;
+            this.Task.KeepDuplicateTitles = selectedTitle.KeepDuplicateTitles;
             this.Status = QueueItemStatus.Waiting;
             this.ScannedSourcePath = scannedSourcePath;
             if (currentPreset != null)

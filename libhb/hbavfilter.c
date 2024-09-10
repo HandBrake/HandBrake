@@ -331,7 +331,7 @@ hb_buffer_t * hb_avfilter_get_buf(hb_avfilter_graph_t * graph)
         else
 #endif
         {
-            buf = hb_avframe_to_video_buffer(graph->frame, graph->out_time_base, 1);
+            buf = hb_avframe_to_video_buffer(graph->frame, graph->out_time_base);
         }
         av_frame_unref(graph->frame);
         return buf;

@@ -36,15 +36,13 @@ HB_OBJC_DIRECT_MEMBERS
 
 + (NSURL *)appSupportURL
 {
-    NSFileManager *fileManager = [NSFileManager defaultManager];
+    NSFileManager *fileManager = NSFileManager.defaultManager;
     NSURL *appSupportURL = [[[fileManager URLsForDirectory:NSApplicationSupportDirectory inDomains:NSUserDomainMask]
-                             firstObject] URLByAppendingPathComponent:@"HandBrake"];
-
-    if (appSupportURL && ![fileManager fileExistsAtPath:appSupportURL.path])
+                             firstObject] URLByAppendingPathComponent:@"HandBrake" isDirectory:YES];
+    if (appSupportURL)
     {
-        [fileManager createDirectoryAtPath:appSupportURL.path withIntermediateDirectories:YES attributes:nil error:NULL];
+        [fileManager createDirectoryAtURL:appSupportURL withIntermediateDirectories:YES attributes:nil error:NULL];
     }
-
     return appSupportURL;
 }
 

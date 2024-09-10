@@ -156,7 +156,7 @@ static void *HandBrakeXPCServiceContext = &HandBrakeXPCServiceContext;
     });
 }
 
-- (void)scanURL:(NSURL *)url titleIndex:(NSUInteger)index previews:(NSUInteger)previewsNum minDuration:(NSUInteger)seconds keepPreviews:(BOOL)keepPreviews hardwareDecoder:(BOOL)hardwareDecoder withReply:(void (^)(HBCoreResult))reply
+- (void)scanURL:(NSURL *)url titleIndex:(NSUInteger)index previews:(NSUInteger)previewsNum minDuration:(NSUInteger)seconds keepPreviews:(BOOL)keepPreviews hardwareDecoder:(BOOL)hardwareDecoder keepDuplicateTitles:(BOOL)keepDuplicateTitles withReply:(void (^)(HBCoreResult))reply
 {
     dispatch_sync(_queue, ^{
         self.reply = reply;
@@ -166,6 +166,7 @@ static void *HandBrakeXPCServiceContext = &HandBrakeXPCServiceContext;
                 minDuration:seconds
                keepPreviews:keepPreviews
             hardwareDecoder:hardwareDecoder
+            keepDuplicateTitles:keepDuplicateTitles
             progressHandler:self.progressHandler
           completionHandler:self.completionHandler];
     });

@@ -30,6 +30,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (instancetype)initWithDisplayName:(NSString *)displayName;
 
+@property (nonatomic, readonly) int index;
 @property (nonatomic, readonly) NSString *displayName;
 @property (nonatomic, readonly, nullable) NSString *title;
 
@@ -47,6 +48,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (instancetype)initWithDisplayName:(NSString *)displayName type:(int)type fileURL:(nullable NSURL *)fileURL;
 
+@property (nonatomic, readonly) int index;
 @property (nonatomic, readonly) NSString *displayName;
 @property (nonatomic, readonly, nullable) NSString *title;
 
@@ -71,6 +73,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, readonly) NSURL *url;
 
 @property (nonatomic, readonly) int index;
+@property (nonatomic, readonly) BOOL keepDuplicateTitles;
 @property (nonatomic, readonly) int angles;
 @property (nonatomic, readonly) int duration;
 @property (nonatomic, readonly) int frames;

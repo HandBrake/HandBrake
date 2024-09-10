@@ -30,6 +30,33 @@
         <Style TargetType="MenuItem">
             <Setter Property="ToolTipService.InitialShowDelay" Value="1000"/>
         </Style>
+
+        <Style x:Key="toolbarLeft" TargetType="ToolBar" BasedOn="{StaticResource {x:Type ToolBar}}">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding IsLegacyMenuShown}" Value="True">
+                    <Setter Property="Margin" Value="0"/>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding IsLegacyMenuShown}" Value="False">
+                    <Setter Property="Margin" Value="4,4,0,0"/>
+                </DataTrigger>
+            </Style.Triggers>
+
+            <Style.Resources>
+                <Style TargetType="Border">
+                    <Setter Property="CornerRadius" Value="5,0,0,5" />
+                </Style>
+            </Style.Resources>
+        </Style>
+
+        <Style x:Key="toolbarRight" TargetType="ToolBar" BasedOn="{StaticResource {x:Type ToolBar}}">
+            <Setter Property="Margin" Value="0,4,4,0"/>
+            <Style.Resources>
+                <Style TargetType="Border">
+                    <Setter Property="CornerRadius" Value="0,5,5,0" />
+                </Style>
+            </Style.Resources>
+        </Style>
+
     </UserControl.Resources>
 
     <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch" >
@@ -79,6 +106,8 @@
                             <Image Width="16" Source="{Binding Converter={StaticResource themeConverter}, ConverterParameter='Activity.png'}" />
                         </MenuItem.Icon>
                     </MenuItem>
+                    <Separator />
+                    <MenuItem Header="{Binding  ShowHideMenuText}" Command="{Binding RelayCommand}" CommandParameter="ShowHideMenu" />
                     <Separator />
                     <MenuItem Header="{x:Static Properties:Resources.MainView_PreferencesMenu}" Command="{Binding RelayCommand}" CommandParameter="OpenOptionsWindow">
                         <MenuItem.Icon>
@@ -145,6 +174,7 @@
                 </Grid.ColumnDefinitions>
 
                 <ToolBar HorizontalAlignment="Stretch"
+                         Style="{StaticResource toolbarLeft}"
                      VerticalAlignment="Stretch"
                      SnapsToDevicePixels="True"
                      ToolBar.OverflowMode="AsNeeded"
@@ -335,6 +365,7 @@
                 </ToolBar>
 
                 <ToolBar HorizontalAlignment="Stretch" Grid.Column="1" Visibility="{Binding IsLegacyMenuShown, Converter={StaticResource boolToVisConverter}, ConverterParameter=true}"
+                         Style="{StaticResource toolbarRight}"
                   VerticalAlignment="Stretch"
                   SnapsToDevicePixels="True"
                   ToolBar.OverflowMode="AsNeeded"
@@ -637,12 +668,13 @@
                               VerticalAlignment="Stretch" HorizontalAlignment="Stretch"
                               Panel.ZIndex="10"
                               IsLoading="{Binding ShowStatusWindow}"
-                              Message="Please wait ..."
+                              Message="{x:Static Properties:Resources.MainView_ScanningStatus}"
                               SubMessage="{Binding StatusLabel}"
-                              ActionText="Cancel"
-                              SecondaryActionText="Open Log Window"
+                              ActionText="{x:Static Properties:Resources.MainView_Cancel}"
+                              SecondaryActionText="{x:Static Properties:Resources.MainView_OpenLog}"
                               SecondaryAction="{Binding OpenLogWindowAction}"
-                              CancelAction="{Binding CancelAction}" />
+                              CancelAction="{Binding CancelAction}"
+                              ProgressPercentage="{Binding ProgressAmount}" />
 
         <Controls:AlertPanel x:Name="alertPanel"
                              KeyboardNavigation.DirectionalNavigation="Contained"

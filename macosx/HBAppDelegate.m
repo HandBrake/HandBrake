@@ -60,10 +60,10 @@
 
         // we init the HBPresetsManager
         NSURL *appSupportURL = HBUtilities.appSupportURL;
-        _presetsManager = [[HBPresetsManager alloc] initWithURL:[appSupportURL URLByAppendingPathComponent:PRESET_FILE]];
+        _presetsManager = [[HBPresetsManager alloc] initWithURL:[appSupportURL URLByAppendingPathComponent:PRESET_FILE isDirectory:NO]];
 
         // Queue
-        _queue = [[HBQueue alloc] initWithURL:[appSupportURL URLByAppendingPathComponent:QUEUE_FILE]];
+        _queue = [[HBQueue alloc] initWithURL:[appSupportURL URLByAppendingPathComponent:QUEUE_FILE isDirectory:NO]];
         _queueController = [[HBQueueController alloc] initWithQueue:_queue];
         _queueController.delegate = self;
         _queueDockTileController = [[HBQueueDockTileController alloc] initWithQueue:_queue dockTile:NSApplication.sharedApplication.dockTile image:NSApplication.sharedApplication.applicationIconImage];
@@ -223,7 +223,7 @@
  */
 - (void)cleanEncodeLogs
 {
-    NSURL *directoryUrl = [HBUtilities.appSupportURL URLByAppendingPathComponent:@"EncodeLogs"];
+    NSURL *directoryUrl = [HBUtilities.appSupportURL URLByAppendingPathComponent:@"EncodeLogs" isDirectory:YES];
 
     if (directoryUrl)
     {
@@ -252,7 +252,7 @@
 
 - (void)cleanPreviews
 {
-    NSURL *previewDirectory = [HBUtilities.appSupportURL URLByAppendingPathComponent:@"Previews"];
+    NSURL *previewDirectory = [HBUtilities.appSupportURL URLByAppendingPathComponent:@"Previews" isDirectory:YES];
 
     if (previewDirectory)
     {

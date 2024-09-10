@@ -14,6 +14,7 @@ namespace HandBrakeWPF.Utilities
     using System.Globalization;
     using System.Management;
     using System.Runtime.InteropServices;
+    using System.Threading;
 
     using HandBrakeWPF.Model;
 
@@ -25,6 +26,7 @@ namespace HandBrakeWPF.Utilities
     public class SystemInfo
     {
         private static List<GpuInfo> gpuInfoCache;
+        private static readonly object gpuInfoLock = new object();
 
         public static ulong TotalPhysicalMemory
         {
@@ -75,52 +77,72 @@ namespace HandBrakeWPF.Utilities
         {
             get
             {
-                if (gpuInfoCache != null)
+                lock (gpuInfoLock)
                 {
-                    return gpuInfoCache;
-                }
+                    if (gpuInfoCache != null)
+                    {
+                        return gpuInfoCache;
+                    }
 
-                List<GpuInfo> gpuInfo = new List<GpuInfo>();
+                    List<GpuInfo> gpuInfo = new List<GpuInfo>();
 
-                if (IsArmDevice)
-                {
-                    // We don't have .NET Framework on ARM64 devices so cannot use System.Management
-                    // Default to ARM Chipset for now.
-                    gpuInfo.Add(new GpuInfo("Arm Chipset", string.Empty));
+                    if (IsArmDevice)
+                    {
+                        // We don't have .NET Framework on ARM64 devices so cannot use System.Management
+                        // Default to ARM Chipset for now.
+                        gpuInfo.Add(new GpuInfo("Arm Chipset", string.Empty));
+
+                        return gpuInfo;
+                    }
+
+                    try
+                    {
+                        ManagementObjectSearcher searcher =
+                            new ManagementObjectSearcher("select DriverVersion, Name from " + "Win32_VideoController");
+
+                        foreach (ManagementObject share in searcher.Get())
+                        {
+                            string gpu = string.Empty, version = string.Empty;
+
+                            foreach (PropertyData pc in share.Properties)
+                            {
+                                if (!string.IsNullOrEmpty(pc.Name) && pc.Value != null)
+                                {
+                                    if (pc.Name.Equals("DriverVersion")) version = pc.Value.ToString();
+                                    if (pc.Name.Equals("Name")) gpu = pc.Value.ToString();
+                                }
+                            }
+
+                            gpuInfo.Add(new GpuInfo(gpu, version));
+                        }
+                    }
+                    catch (Exception)
+                    {
+                        // Do Nothing. We couldn't get GPU Information.
+                    }
+
+                    gpuInfoCache = gpuInfo;
 
                     return gpuInfo;
                 }
-
-                try
-                {
-                    ManagementObjectSearcher searcher =
-                        new ManagementObjectSearcher("select DriverVersion, Name from " + "Win32_VideoController");
-
-                    foreach (ManagementObject share in searcher.Get())
-                    {
-                        string gpu = string.Empty, version = string.Empty;
-
-                        foreach (PropertyData pc in share.Properties)
-                        {
-                            if (!string.IsNullOrEmpty(pc.Name) && pc.Value != null)
-                            {
-                                if (pc.Name.Equals("DriverVersion")) version = pc.Value.ToString();
-                                if (pc.Name.Equals("Name")) gpu = pc.Value.ToString();
-                            }
-                        }
-
-                        gpuInfo.Add(new GpuInfo(gpu, version));
-                    }
-                }
-                catch (Exception)
-                {
-                    // Do Nothing. We couldn't get GPU Information.
-                }
-
-                gpuInfoCache = gpuInfo;
-
-                return gpuInfo;
             }
+        }
+
+        public static void InitGPUInfo()
+        {
+            // WMI can be slow at times. If we kick this off early in startup on a background thread, it'll aid startup performance. 
+            ThreadPool.QueueUserWorkItem(
+                delegate
+                {
+                    try
+                    {
+                       var result = SystemInfo.GetGPUInfo;
+                    }
+                    catch (Exception exc)
+                    {
+                        // Nothing to do. Just don't display the warnings.
+                    }
+                });
         }
         
         public static bool IsWindows10OrLater()

@@ -51,21 +51,21 @@
 - (void)testSave
 {
     NSURL *tempURL = [NSURL fileURLWithPath:NSTemporaryDirectory()];
-    NSURL *presetsURL = [tempURL URLByAppendingPathComponent:@"test.json"];
+    NSURL *presetsURL = [tempURL URLByAppendingPathComponent:@"test.json" isDirectory:NO];
     HBPresetsManager *manager = [[HBPresetsManager alloc] initWithURL:presetsURL];
     [manager savePresets];
 
-    XCTAssertTrue([[NSFileManager defaultManager] fileExistsAtPath:presetsURL.path]);
+    XCTAssertTrue([presetsURL checkResourceIsReachableAndReturnError:NULL]);
 
     // Remove the temp files.
-    [[NSFileManager defaultManager] removeItemAtURL:presetsURL error:NULL];
+    [NSFileManager.defaultManager removeItemAtURL:presetsURL error:NULL];
 }
 
 - (void)testUpgrade
 {
     NSURL *tempURL = [NSURL fileURLWithPath:NSTemporaryDirectory()];
-    NSURL *presetsURL = [tempURL URLByAppendingPathComponent:@"test.json"];
-    NSURL *modifiedPresetsURL = [tempURL URLByAppendingPathComponent:@"test2.json"];
+    NSURL *presetsURL = [tempURL URLByAppendingPathComponent:@"test.json" isDirectory:NO];
+    NSURL *modifiedPresetsURL = [tempURL URLByAppendingPathComponent:@"test2.json" isDirectory:NO];
 
     // Create a new presets manager with the defaults presets.
     HBPresetsManager *manager = [[HBPresetsManager alloc] initWithURL:presetsURL];
@@ -83,7 +83,7 @@
                             [dict[@"VersionMajor"] intValue],
                             [dict[@"VersionMinor"] intValue],
                             [dict[@"VersionMicro"] intValue]];
-    NSURL *backupURL = [tempURL URLByAppendingPathComponent:backupName];
+    NSURL *backupURL = [tempURL URLByAppendingPathComponent:backupName isDirectory:NO];
 
     NSData *modifiedData = [NSJSONSerialization dataWithJSONObject:dict options:0 error:NULL];
     [modifiedData writeToURL:modifiedPresetsURL atomically:YES];
@@ -92,12 +92,12 @@
     HBPresetsManager *newManager = [[HBPresetsManager alloc] initWithURL:modifiedPresetsURL];
 
     XCTAssert(newManager);
-    XCTAssertTrue([[NSFileManager defaultManager] fileExistsAtPath:backupURL.path]);
+    XCTAssertTrue([backupURL checkResourceIsReachableAndReturnError:NULL]);
 
     // Remove the temp files.
-    [[NSFileManager defaultManager] removeItemAtURL:presetsURL error:NULL];
-    [[NSFileManager defaultManager] removeItemAtURL:modifiedPresetsURL error:NULL];
-    [[NSFileManager defaultManager] removeItemAtURL:backupURL error:NULL];
+    [NSFileManager.defaultManager removeItemAtURL:presetsURL error:NULL];
+    [NSFileManager.defaultManager removeItemAtURL:modifiedPresetsURL error:NULL];
+    [NSFileManager.defaultManager removeItemAtURL:backupURL error:NULL];
 }
 
 @end

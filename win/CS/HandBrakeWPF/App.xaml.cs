@@ -53,6 +53,8 @@ namespace HandBrakeWPF
             AppDomain.CurrentDomain.ProcessExit += this.CurrentDomain_ProcessExit;
             
             ToolTipService.ShowDurationProperty.OverrideMetadata(typeof(DependencyObject), new FrameworkPropertyMetadata(15000));
+
+            SystemInfo.InitGPUInfo(); // Background Thread.
         }
 
         private void Init(StartupEventArgs e)
@@ -176,9 +178,7 @@ namespace HandBrakeWPF
 
             // App Theme
             DarkThemeMode useDarkTheme = (DarkThemeMode)userSettingService.GetUserSetting<int>(UserSettingConstants.DarkThemeMode);
-            ResourceDictionary dark = new ResourceDictionary { Source = new Uri("pack://application:,,,/MahApps.Metro;component/Styles/Themes/Dark.Blue.xaml") };
-            ResourceDictionary light = new ResourceDictionary { Source = new Uri("pack://application:,,,/MahApps.Metro;component/Styles/Themes/Light.Blue.xaml") };
-
+       
             Application.Current.Resources.MergedDictionaries.Add(new ResourceDictionary { Source = new Uri("Themes/Generic.xaml", UriKind.Relative) });
             bool themed = false;
             if (SystemParameters.HighContrast || !Portable.IsThemeEnabled())
@@ -193,24 +193,20 @@ namespace HandBrakeWPF
                 case DarkThemeMode.System:
                     if (SystemInfo.IsAppsUsingDarkTheme())
                     {
-                        Application.Current.Resources.MergedDictionaries.Add(dark);
                         Application.Current.Resources.MergedDictionaries.Add(new ResourceDictionary { Source = new Uri("Themes/Dark.xaml", UriKind.Relative) });
                     }
                     else
                     {
-                        Application.Current.Resources.MergedDictionaries.Add(light);
                         Application.Current.Resources.MergedDictionaries.Add(new ResourceDictionary { Source = new Uri("Themes/Light.xaml", UriKind.Relative) });
                     }
 
                     themed = true;
                     break;
                 case DarkThemeMode.Dark:
-                    Application.Current.Resources.MergedDictionaries.Add(dark);
                     Application.Current.Resources.MergedDictionaries.Add(new ResourceDictionary { Source = new Uri("Themes/Dark.xaml", UriKind.Relative) });
                     themed = true;
                     break;
                 case DarkThemeMode.Light:
-                    Application.Current.Resources.MergedDictionaries.Add(light);
                     Application.Current.Resources.MergedDictionaries.Add(new ResourceDictionary { Source = new Uri("Themes/Light.xaml", UriKind.Relative) });
                     themed = true;
                     break;
