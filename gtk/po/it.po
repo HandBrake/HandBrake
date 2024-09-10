@@ -1542,7 +1542,7 @@ msgstr "Lingue selezionate"
 
 #: src/ui/ghb.ui:4995
 msgid "Auto Passthru:"
-msgstr "Passthru automatico:"
+msgstr "Passthrough automatico:"
 
 #: src/ui/ghb.ui:5004
 msgid "MP2"
@@ -1554,7 +1554,7 @@ msgid ""
 "This permits MP2 passthru to be selected when automatic passthru selection is enabled."
 msgstr ""
 "Abilita questa opzione se il tuo dispositivo di riproduzione supporta MP2.\n"
-"Ciò consente al passthru MP2 di essere selezionato quando la selezione automatica del passthru è abilitata."
+"Ciò consente al passthrough MP2 di essere selezionato quando la selezione automatica del passthrough è abilitata."
 
 #: src/ui/ghb.ui:5019
 msgid "MP3"
@@ -1566,7 +1566,7 @@ msgid ""
 "This permits MP3 passthru to be selected when automatic passthru selection is enabled."
 msgstr ""
 "Abilita questa opzione se il tuo dispositivo di riproduzione supporta MP3.\n"
-"Ciò consente al passthru MP3 di essere selezionato quando la selezione automatica del passthru è abilitata."
+"Ciò consente al passthrough MP3 di essere selezionato quando la selezione automatica del passthrough è abilitata."
 
 #: src/ui/ghb.ui:5034
 msgid "AC-3"
@@ -1578,7 +1578,7 @@ msgid ""
 "This permits AC-3 passthru to be selected when automatic passthru selection is enabled."
 msgstr ""
 "Abilita questa opzione se il tuo dispositivo di riproduzione supporta AC-3.\n"
-"Ciò consente al passthru AC-3 di essere selezionato quando la selezione automatica del passthru è abilitata."
+"Ciò consente al passthrough AC-3 di essere selezionato quando la selezione automatica del passthrough è abilitata."
 
 #: src/ui/ghb.ui:5049
 msgid "EAC-3"
@@ -1590,7 +1590,7 @@ msgid ""
 "This permits EAC-3 passthru to be selected when automatic passthru selection is enabled."
 msgstr ""
 "Abilita questa opzione se il tuo dispositivo di riproduzione supporta EAC-3.\n"
-"Ciò consente al passthru EAC-3 di essere selezionato quando la selezione automatica del passthru è abilitata."
+"Ciò consente al passthrough EAC-3 di essere selezionato quando la selezione automatica del passthrough è abilitata."
 
 #: src/ui/ghb.ui:5064
 msgid "DTS"
@@ -1602,7 +1602,7 @@ msgid ""
 "This permits DTS passthru to be selected when automatic passthru selection is enabled."
 msgstr ""
 "Abilita questa opzione se il tuo dispositivo di riproduzione supporta DTS.\n"
-"Ciò consente al passthru DTS di essere selezionato quando la selezione automatica del passthru è abilitata."
+"Ciò consente al passthrough DTS di essere selezionato quando la selezione automatica del passthrough è abilitata."
 
 #: src/ui/ghb.ui:5079
 msgid "DTS-HD"
@@ -1614,7 +1614,7 @@ msgid ""
 "This permits DTS-HD passthru to be selected when automatic passthru selection is enabled."
 msgstr ""
 "Abilita questa opzione se il tuo dispositivo di riproduzione supporta DTS-HD.\n"
-"Ciò consente al passthru DTS-HD di essere selezionato quando la selezione automatica del passthru è abilitata."
+"Ciò consente al passthrough DTS-HD di essere selezionato quando la selezione automatica del passthrough è abilitata."
 
 #: src/ui/ghb.ui:5094
 msgid "TrueHD"
@@ -1626,7 +1626,7 @@ msgid ""
 "This permits TrueHD passthru to be selected when automatic passthru selection is enabled."
 msgstr ""
 "Abilita questa opzione se il tuo dispositivo di riproduzione supporta TrueHD.\n"
-"Ciò consente al passthru TrueHD di essere selezionato quando la selezione automatica del passthru è abilitata."
+"Ciò consente al passthrough TrueHD di essere selezionato quando la selezione automatica del passthrough è abilitata."
 
 #: src/ui/ghb.ui:5109
 msgid "FLAC"
@@ -1638,7 +1638,7 @@ msgid ""
 "This permits FLAC passthru to be selected when automatic passthru selection is enabled."
 msgstr ""
 "Abilita questa opzione se il tuo dispositivo di riproduzione supporta FLAC.\n"
-"Ciò consente al passthru FLAC di essere selezionato quando la selezione automatica del passthru è abilitata."
+"Ciò consente al passthrough FLAC di essere selezionato quando la selezione automatica del passthrough è abilitata."
 
 #: src/ui/ghb.ui:5124
 msgid "AAC"
@@ -1650,7 +1650,7 @@ msgid ""
 "This permits AAC passthru to be selected when automatic passthru selection is enabled."
 msgstr ""
 "Abilita questa opzione se il tuo dispositivo di riproduzione supporta AAC.\n"
-"Ciò consente al passthru AAC di essere selezionato quando la selezione automatica del passthru è abilitata."
+"Ciò consente al passthrough AAC di essere selezionato quando la selezione automatica del passthrough è abilitata."
 
 #: src/ui/ghb.ui:5139
 msgid "Opus"
@@ -1662,11 +1662,11 @@ msgid ""
 "This permits Opus passthru to be selected when automatic passthru selection is enabled."
 msgstr ""
 "Abilita questa opzione se il tuo dispositivo di riproduzione supporta Opus.\n"
-"Ciò consente al passthru Opus di essere selezionato quando la selezione automatica del passthru è abilitata."
+"Ciò consente al passthrough Opus di essere selezionato quando la selezione automatica del passthrough è abilitata."
 
 #: src/ui/ghb.ui:5162
 msgid "Passthru Fallback:"
-msgstr "Ripiego passthru:"
+msgstr "Ripiego passthrough:"
 
 #: src/ui/ghb.ui:5168
 msgid ""
@@ -1674,7 +1674,7 @@ msgid ""
 "for audio passthru."
 msgstr ""
 "Imposta il codec audio da utilizzare quando non è possibile trovare una "
-"traccia appropriata per il passthru audio."
+"traccia appropriata per il passthrough audio."
 
 #: src/ui/ghb.ui:5184
 msgid "Audio encoder settings for each selected track:"
@@ -2122,8 +2122,8 @@ msgstr "Bitrate:%.4gkbps"
 
 #: src/audiohandler.c:781
 #, c-format
-msgid "<small>Passthru</small>"
-msgstr "<small>Passthru</small>"
+msgid "<small>Passthrough</small>"
+msgstr "<small>Passthrough</small>"
 
 #: src/audiohandler.c:790
 #, c-format
@@ -3005,7 +3005,7 @@ msgid ""
 "You should choose a different audio codec.\n"
 "If you continue, one will be chosen for you."
 msgstr ""
-"La sorgente non supporta il Passthru.\n"
+"La sorgente non supporta il passthrough.\n"
 "\n"
 "Dovresti scegliere un codec audio diverso.\n"
 "Se continui, ne verrà scelto uno per te."
@@ -3453,7 +3453,7 @@ msgid "Burned Into Video"
 msgstr ""
 
 #: src/subtitlehandler.c:113
-msgid "Passthru"
+msgid "Passthrough"
 msgstr ""
 
 #: src/subtitlehandler.c:116

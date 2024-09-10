@@ -1985,7 +1985,7 @@ msgstr "位元速率：%.4gkbps"
 
 #: src/audiohandler.c:781
 #, c-format
-msgid "<small>Passthru</small>"
+msgid "<small>Passthrough</small>"
 msgstr ""
 
 #: src/audiohandler.c:790
@@ -3253,7 +3253,7 @@ msgid "Burned Into Video"
 msgstr ""
 
 #: src/subtitlehandler.c:113
-msgid "Passthru"
+msgid "Passthrough"
 msgstr ""
 
 #: src/subtitlehandler.c:116

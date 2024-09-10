@@ -2136,7 +2136,7 @@ msgstr "Побитова скорост: %.4gkbps"
 
 #: src/audiohandler.c:781
 #, c-format
-msgid "<small>Passthru</small>"
+msgid "<small>Passthrough</small>"
 msgstr "<small>Подаване</small>"
 
 #: src/audiohandler.c:790
@@ -3463,7 +3463,7 @@ msgid "Burned Into Video"
 msgstr "Вградено във видео"
 
 #: src/subtitlehandler.c:113
-msgid "Passthru"
+msgid "Passthrough"
 msgstr "Подаване"
 
 #: src/subtitlehandler.c:116
