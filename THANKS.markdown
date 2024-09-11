@@ -6,6 +6,7 @@ HandBrake uses many cool libraries from the GNU/Linux world. We thank them and t
 
 | Library | License | 
 | ------- | ------- |
+| [AMD AMF](https://github.com/GPUOpen-LibrariesAndSDKs/AMF) | [MIT](https://github.com/GPUOpen-LibrariesAndSDKs/AMF?tab=License-1-ov-file#readme) |
 | [ffmpeg](https://ffmpeg.org/) | [L-GPL v2.1](https://git.ffmpeg.org/gitweb/ffmpeg.git/blob_plain/refs/heads/master:/COPYING.LGPLv2.1) |
 | [libass](https://github.com/libass/libass) | [ISC](https://github.com/libass/libass?tab=ISC-1-ov-file#readme) |
 | [libbluray](https://www.videolan.org/developers/libbluray.html) | [L-GPL v2.1](https://code.videolan.org/videolan/libbluray/-/blob/master/COPYING) |
@@ -20,6 +21,7 @@ HandBrake uses many cool libraries from the GNU/Linux world. We thank them and t
 | [libharfbuzz](https://www.freedesktop.org/wiki/Software/HarfBuzz/) | [MIT Old](https://github.com/harfbuzz/harfbuzz?tab=License-1-ov-file#readme) |
 | [libiconv](https://www.gnu.org/software/libiconv/) | [L-GPL v2.1](https://www.gnu.org/licenses/old-licenses/lgpl-2.1.en.html) |
 | [libjansson](http://www.digip.org/jansson/) | [MIT + Other](https://github.com/akheron/jansson?tab=License-1-ov-file#readme) |
+| [libjpeg-turbo](https://github.com/libjpeg-turbo/libjpeg-turbo) | [BSD 3-Clause](https://github.com/libjpeg-turbo/libjpeg-turbo?tab=License-1-ov-file#readme) |
 | [liblame](http://lame.sourceforge.net/) | [L-GPL](https://lame.sourceforge.io/) |
 | [liblzma (xz)](https://tukaani.org/xz/) | [BSD Zero Clause](https://git.tukaani.org/?p=xz.git;a=blob;f=COPYING.0BSD) |
 | [libmfx](https://github.com/intel/libvpl) | [MIT](https://github.com/intel/libvpl/blob/main/LICENSE) |
@@ -32,11 +34,24 @@ HandBrake uses many cool libraries from the GNU/Linux world. We thank them and t
 | [libx264](https://www.videolan.org/developers/x264.html) | [GPL v2](https://www.videolan.org/developers/x264.html) |
 | [libx265](http://x265.org/) | [GPL v2](https://www.x265.org/x265-licensing-faq/) |
 | [libzlib](http://zlib.net/) | [License](https://zlib.net/zlib_license.html) |
+| [NV-codec-headers](https://git.videolan.org/?p=ffmpeg/nv-codec-headers.git) | MIT |
 | [SVT-AV1](https://gitlab.com/AOMediaCodec/SVT-AV1) | [BSD 3-Clause Clear](https://gitlab.com/AOMediaCodec/SVT-AV1/-/blob/master/LICENSE.md) |
+| [zimg](https://github.com/sekrit-twc/zimg) | [WTFPL](https://github.com/sekrit-twc/zimg?tab=WTFPL-1-ov-file#readme) |
+
+The following additional licenses apply to the Windows UI:
+
+| Library | License | 
+| ------- | ------- |
 | [GongSolutions.WPF.DragDrop](https://github.com/punker76/gong-wpf-dragdrop) | [BSD 3-Clause](https://github.com/punker76/gong-wpf-dragdrop/blob/develop/LICENSE) |
 | [Autofac](https://autofac.org/) | [MIT](https://github.com/autofac/Autofac/blob/develop/LICENSE) | 
 
-Extras
+The following additional licenses apply to the Mac UI:
+
+| Library | License | 
+| ------- | ------- |
+| [Sparkle](https://sparkle-project.org/) | [BSD + MIT](https://github.com/sparkle-project/Sparkle?tab=License-1-ov-file#readme) |
+
+Additional libraries for personal builds:
 
 | Library | License | Notes |
 | ------- | ------- | ----- |
