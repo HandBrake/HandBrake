@@ -16,4 +16,9 @@ If you wish to include fdk-aac in your personal build of HandBrake, you may do
 so by passing --enable-fdk-aac to configure and making sure not to distribute
 any resulting binaries. Please read the fdk-aac license for details.
 
+HandBrake makes use of 3rd party libraries which will be licensed under a GPL-compatible license.
+These are listed in the THANKS file.
+
 Graphic assets are covered by the license(s) specified in graphics/LICENSE.
+
+
