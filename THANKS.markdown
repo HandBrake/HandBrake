@@ -17,7 +17,7 @@ HandBrake uses many cool libraries from the GNU/Linux world. We thank them and t
 | [libdvdread](https://www.videolan.org/developers/libdvdnav.html) | [GPL v2](https://code.videolan.org/videolan/libdvdread/-/blob/master/COPYING) ||
 | [libfontconfig](https://freedesktop.org/wiki/Software/fontconfig/) | [MIT](https://gitlab.freedesktop.org/fontconfig/fontconfig/-/blob/main/COPYING) ||
 | [libfreetype](https://freetype.org/) | [GPL v2](https://freetype.org/license.html) ||
-| [libgnurx](https://sourceforge.net/projects/mingw/files/Other/UserContributed/regex/mingw-regex-2.5.1/) | ||
+| [libgnurx](https://sourceforge.net/projects/mingw/files/Other/UserContributed/regex/mingw-regex-2.5.1/) | L-GPL v2.1 ||
 | [libharfbuzz](https://www.freedesktop.org/wiki/Software/HarfBuzz/) | [MIT Old](https://github.com/harfbuzz/harfbuzz?tab=License-1-ov-file#readme) ||
 | [libiconv](https://www.gnu.org/software/libiconv/) | [L-GPL v2.1](https://www.gnu.org/licenses/old-licenses/lgpl-2.1.en.html) ||
 | [libjansson](http://www.digip.org/jansson/) | [MIT + Other](https://github.com/akheron/jansson?tab=License-1-ov-file#readme) ||
