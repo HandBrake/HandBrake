@@ -31,7 +31,7 @@ Original "Faster" settings:
 #include "handbrake/handbrake.h"
 #include "handbrake/taskset.h"
 
-#if defined(__aarch64__)
+#if defined(__aarch64__) && (_WIN32)
 #include <arm_neon.h>
 #endif
 
@@ -146,7 +146,7 @@ hb_filter_object_t hb_filter_comb_detect =
 #include "templates/comb_detect_template.c"
 #undef BIT_DEPTH
 
-#if defined (__aarch64__)
+#if defined(__aarch64__) && (_WIN32)
 static void check_filtered_combing_mask(hb_filter_private_t *pv, int segment, int start, int stop)
 {
     // Go through the mask in X*Y blocks. If any of these windows
@@ -275,7 +275,7 @@ static void check_filtered_combing_mask(hb_filter_private_t *pv, int segment, in
 }
 #endif
 
-#if defined(__aarch64__)
+#if defined(__aarch64__) && (_WIN32)
 static void check_combing_mask(hb_filter_private_t *pv, int segment, int start, int stop)
 {
     // Go through the mask in X*Y blocks. If any of these windows
@@ -453,7 +453,7 @@ static void check_combing_mask(hb_filter_private_t *pv, int segment, int start, 
 }
 #endif
 
-#if defined(__aarch64__)
+#if defined(__aarch64__) && (_WIN32)
 static void mask_dilate_work(void *thread_args_v)
 {
     comb_detect_thread_arg_t *thread_args = thread_args_v;
@@ -621,7 +621,7 @@ static void mask_dilate_work(void *thread_args_v)
 }
 #endif
 
-#if defined (__aarch64__)
+#if defined(__aarch64__) && (_WIN32)
 static void mask_erode_work(void *thread_args_v)
 {
     comb_detect_thread_arg_t *thread_args = thread_args_v;
@@ -791,7 +791,7 @@ static void mask_erode_work(void *thread_args_v)
 }
 #endif
 
-#if defined (__aarch64__)
+#if defined(__aarch64__) && (_WIN32)
 static void mask_filter_work(void *thread_args_v)
 {
     comb_detect_thread_arg_t *thread_args = thread_args_v;
