@@ -5,8 +5,10 @@ Most files in HandBrake are under the GNU General Public License Version 2
 
 Some files are under the GNU General Public License Version 2 or any later
 version (GPLv2+), the GNU Lesser General Public License Version 2.1 or any later
-version (LGPLv2.1+), or BSD/MIT/X11-style licenses. In combination, the GPLv2
-license applies to HandBrake.
+version (LGPLv2.1+), or BSD/MIT/X11-style licenses. 
+
+In any case, a compiled HandBrake build is licensed under GPLv2 
+and the terms of that license take effect. 
 
 The Fraunhofer AAC library (fdk-aac) is under a license incompatible with the
 GPLv2 license. Since both licenses cannot be satisfied simultaneously, binaries
