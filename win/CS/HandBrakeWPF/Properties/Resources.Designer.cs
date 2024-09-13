@@ -266,6 +266,33 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Automatic.
+        /// </summary>
+        public static string AnamorphicMode_Automatic {
+            get {
+                return ResourceManager.GetString("AnamorphicMode_Automatic", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Custom.
+        /// </summary>
+        public static string AnamorphicMode_Custom {
+            get {
+                return ResourceManager.GetString("AnamorphicMode_Custom", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to None.
+        /// </summary>
+        public static string AnamorphicMode_None {
+            get {
+                return ResourceManager.GetString("AnamorphicMode_None", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Are you sure?.
         /// </summary>
         public static string AreYouSure {
@@ -2143,6 +2170,15 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Cancel.
+        /// </summary>
+        public static string MainView_Cancel {
+            get {
+                return ResourceManager.GetString("MainView_Cancel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Chapters.
         /// </summary>
         public static string MainView_ChaptersTab {
@@ -2368,6 +2404,15 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Open Log Window.
+        /// </summary>
+        public static string MainView_OpenLog {
+            get {
+                return ResourceManager.GetString("MainView_OpenLog", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Options.
         /// </summary>
         public static string MainView_Options {
@@ -2544,6 +2589,15 @@ namespace HandBrakeWPF.Properties {
         public static string MainView_SaveNewPreset {
             get {
                 return ResourceManager.GetString("MainView_SaveNewPreset", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please wait ....
+        /// </summary>
+        public static string MainView_ScanningStatus {
+            get {
+                return ResourceManager.GetString("MainView_ScanningStatus", resourceCulture);
             }
         }
         
@@ -3911,6 +3965,15 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        public static string OptionsView_ChoiceOfEncoderHint {
+            get {
+                return ResourceManager.GetString("OptionsView_ChoiceOfEncoderHint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Are you sure you wish to clear the log file directory?.
         /// </summary>
         public static string OptionsView_ClearLogDirConfirm {
@@ -3965,6 +4028,24 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        public static string OptionsView_EnableNvencEncoding {
+            get {
+                return ResourceManager.GetString("OptionsView_EnableNvencEncoding", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        public static string OptionsView_EnableQuicksyncEncoding {
+            get {
+                return ResourceManager.GetString("OptionsView_EnableQuicksyncEncoding", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Enable QuickSync Deep Link Hyper Encode.
         /// </summary>
         public static string OptionsView_EnableQuicksyncHyperEncode {
@@ -3979,6 +4060,15 @@ namespace HandBrakeWPF.Properties {
         public static string OptionsView_EnableQuicksyncLowPower {
             get {
                 return ResourceManager.GetString("OptionsView_EnableQuicksyncLowPower", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        public static string OptionsView_EnableVceEncoding {
+            get {
+                return ResourceManager.GetString("OptionsView_EnableVceEncoding", resourceCulture);
             }
         }
         
@@ -4718,6 +4808,15 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Allow Upscaling.
+        /// </summary>
+        public static string PictureSettingsView_AllowUpscaling {
+            get {
+                return ResourceManager.GetString("PictureSettingsView_AllowUpscaling", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Anamorphic:.
         /// </summary>
         public static string PictureSettingsView_Anamorphic {
@@ -4831,6 +4930,15 @@ namespace HandBrakeWPF.Properties {
         public static string PictureSettingsView_MaxWidth {
             get {
                 return ResourceManager.GetString("PictureSettingsView_MaxWidth", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Optimal Size.
+        /// </summary>
+        public static string PictureSettingsView_OptimalSize {
+            get {
+                return ResourceManager.GetString("PictureSettingsView_OptimalSize", resourceCulture);
             }
         }
         
@@ -8038,57 +8146,12 @@ namespace HandBrakeWPF.Properties {
             }
         }
         
-		/// <summary>
-        ///   Looks up a localized string similar to Allow Upscaling:.
-        /// </summary>
-        public static string PictureSettingsView_AllowUpscaling {
-            get {
-                return ResourceManager.GetString("PictureSettingsView_AllowUpscaling", resourceCulture);
-            }
-        }
-		
-		/// <summary>
-        ///   Looks up a localized string similar to Optimal Size:.
-        /// </summary>
-        public static string PictureSettingsView_OptimalSize {
-            get {
-                return ResourceManager.GetString("PictureSettingsView_OptimalSize", resourceCulture);
-            }
-        }
-		
         /// <summary>
         ///   Looks up a localized string similar to Yes.
         /// </summary>
         public static string Yes {
             get {
                 return ResourceManager.GetString("Yes", resourceCulture);
-            }
-        }
-
-        /// <summary>
-        ///   Looks up a localized string similar to Scanning Status
-        /// </summary>
-        public static string MainView_ScanningStatus {
-            get {
-                return ResourceManager.GetString("MainView_ScanningStatus", resourceCulture);
-            }
-        }
-		
-		/// <summary>
-        ///   Looks up a localized string similar to Cancel Scan
-        /// </summary>
-        public static string MainView_Cancel {
-            get {
-                return ResourceManager.GetString("MainView_Cancel", resourceCulture);
-            }
-        }
-        
-		/// <summary>
-        ///   Looks up a localized string similar to Open Log Window
-        /// </summary>
-        public static string MainView_OpenLog {
-            get {
-                return ResourceManager.GetString("MainView_OpenLog", resourceCulture);
             }
         }
     }
