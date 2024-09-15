@@ -4653,7 +4653,7 @@ ghb_backend_events(signal_user_data_t *ud)
         if (ghb_dict_get_bool(ud->prefs, "RemoveFinishedJobs") &&
             status.queue.error == GHB_ERROR_NONE)
         {
-            ghb_queue_remove_row(ud, index);
+            ghb_queue_remove_row_at_index(index);
         }
         if (ghb_get_cancel_status() != GHB_CANCEL_ALL &&
             ghb_get_cancel_status() != GHB_CANCEL_FINISH)

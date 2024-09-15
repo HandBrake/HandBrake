@@ -45,11 +45,6 @@ queue_remove_clicked_cb (GtkWidget *widget, signal_user_data_t *ud);
 G_MODULE_EXPORT void
 queue_start_action_cb (GSimpleAction *action, GVariant *param, signal_user_data_t *ud);
 
-G_MODULE_EXPORT gboolean
-queue_row_key_cb (GtkEventControllerKey * keycon, guint keyval,
-                  guint keycode, GdkModifierType state,
-                  signal_user_data_t * ud);
-
 G_MODULE_EXPORT GdkDragAction queue_drag_motion_cb(GtkDropTarget* target,
     double x, double y, GtkListBox *lb);
 G_MODULE_EXPORT void queue_drag_leave_cb(GtkDropTarget *target, GtkListBox *lb);
@@ -1413,11 +1408,6 @@ void ghb_add_to_queue_list (signal_user_data_t *ud, GhbValue *queueDict)
     row  = ghb_queue_row_new(dest, GHB_QUEUE_STATUS_READY);
 
     gtk_list_box_insert(lb, row, -1);
-
-    // connect key event controller to capture "delete" key press on row
-    GtkEventController * econ = gtk_event_controller_key_new();
-    gtk_widget_add_controller(row, econ);
-    g_signal_connect(econ, "key-pressed", G_CALLBACK(queue_row_key_cb), ud);
 }
 
 static void
@@ -1649,39 +1639,42 @@ ghb_reset_disk_space_check (void)
     skip_disk_space_check = FALSE;
 }
 
-static int queue_remove_index     = -1;
-static int queue_remove_unique_id = -1;
-
 static void
-queue_remove_response (GtkWidget *dialog, int response, signal_user_data_t *ud)
+queue_remove_response (GtkWidget *dialog, int response, GhbQueueRow *queue_row)
 {
     if (dialog != NULL)
     {
         gtk_window_destroy(GTK_WINDOW(dialog));
     }
 
-    if (response != 1 || queue_remove_index < 0)
+    if (response != 1 || !GHB_IS_QUEUE_ROW(queue_row))
     {
-        queue_remove_index = -1;
-        queue_remove_unique_id = -1;
         return;
     }
 
-    if (queue_remove_unique_id >= 0)
+    signal_user_data_t *ud = ghb_ud();
+    GtkListBoxRow *row = GTK_LIST_BOX_ROW(queue_row);
+
+    int queue_remove_index = gtk_list_box_row_get_index(row);
+    GhbValue *queueDict  = ghb_array_get(ud->queue, queue_remove_index);
+    GhbValue *uiDict     = ghb_dict_get(queueDict, "uiSettings");
+    int queue_remove_unique_id = ghb_dict_get_int(uiDict, "job_unique_id");
+    int status = ghb_dict_get_int(uiDict, "job_status");
+
+    ghb_array_remove(ud->queue, queue_remove_index);
+
+    if (status == GHB_QUEUE_RUNNING)
     {
         ghb_stop_queue();
         ghb_set_cancel_status(GHB_CANCEL_ALL);
         ghb_remove_job(queue_remove_unique_id);
     }
-    ghb_array_remove(ud->queue, queue_remove_index);
 
     // Update UI
-    GtkListBox    *lb  = GTK_LIST_BOX(ghb_builder_widget("queue_list"));
-    GtkListBoxRow *row = gtk_list_box_get_row_at_index(lb, queue_remove_index);
-
+    GtkListBox *lb = GTK_LIST_BOX(ghb_builder_widget("queue_list"));
     gtk_list_box_remove(lb, GTK_WIDGET(row));
-    row = gtk_list_box_get_row_at_index(lb, queue_remove_index);
-    if (!row && queue_remove_index >= 1)
+
+    if (queue_remove_index >= 1)
     {
         row = gtk_list_box_get_row_at_index(lb, queue_remove_index - 1);
     }
@@ -1689,13 +1682,10 @@ queue_remove_response (GtkWidget *dialog, int response, signal_user_data_t *ud)
     {
         gtk_list_box_select_row(lb, row);
     }
-
-    queue_remove_index = -1;
-    queue_remove_unique_id = -1;
 }
 
 static void
-queue_remove_dialog_show (signal_user_data_t *ud)
+queue_remove_dialog_show (GhbQueueRow *row)
 {
     GtkWidget *dialog;
     GtkWindow *queue_window;
@@ -1705,21 +1695,19 @@ queue_remove_dialog_show (signal_user_data_t *ud)
                 _("Your movie will be lost if you don't continue encoding."),
                 _("Cancel and Remove"), NULL, NULL, _("Continue Encoding"));
 
-    g_signal_connect(dialog, "response", G_CALLBACK(queue_remove_response), ud);
+    g_signal_connect(dialog, "response", G_CALLBACK(queue_remove_response), row);
     gtk_widget_show(dialog);
 }
 
 static void
-ghb_queue_remove_row_internal (signal_user_data_t *ud, int index)
+queue_remove_row_internal (GhbQueueRow *row)
 {
     GhbValue *queueDict, *uiDict;
 
-    if (index < 0 || index >= ghb_array_len(ud->queue))
-    {
-        return;
-    }
+    g_return_if_fail(GHB_IS_QUEUE_ROW(row));
 
-    queue_remove_index = index;
+    signal_user_data_t *ud = ghb_ud();
+    int index = gtk_list_box_row_get_index(GTK_LIST_BOX_ROW(row));
 
     queueDict  = ghb_array_get(ud->queue, index);
     uiDict     = ghb_dict_get(queueDict, "uiSettings");
@@ -1728,21 +1716,22 @@ ghb_queue_remove_row_internal (signal_user_data_t *ud, int index)
     if (status == GHB_QUEUE_RUNNING)
     {
         // Ask if wants to stop encode.
-        queue_remove_unique_id = ghb_dict_get_int(uiDict, "job_unique_id");
-        queue_remove_dialog_show(ud);
+        queue_remove_dialog_show(row);
     }
     else
     {
-        queue_remove_response(NULL, 1, ud);
+        queue_remove_response(NULL, 1, row);
     }
 }
 
 void
-ghb_queue_remove_row (signal_user_data_t *ud, int index)
+ghb_queue_remove_row_at_index (int index)
 {
-    ghb_queue_remove_row_internal(ud, index);
-    ghb_save_queue(ud->queue);
-    ghb_queue_buttons_grey(ud);
+    GtkListBox *lb = GTK_LIST_BOX(ghb_builder_widget("queue_list"));
+    GhbQueueRow *row = GHB_QUEUE_ROW(gtk_list_box_get_row_at_index(lb, index));
+
+    if (GHB_IS_QUEUE_ROW(row))
+        queue_remove_row_internal(row);
 }
 
 void
@@ -2002,26 +1991,6 @@ done:
         queue_start_action_cb(NULL, NULL, ud);
 
     return FALSE;
-}
-
-static gboolean
-queue_row_key (guint keyval, signal_user_data_t * ud)
-{
-    if (keyval != GDK_KEY_Delete)
-        return FALSE;
-
-    g_action_activate(GHB_ACTION("queue-delete"), NULL);
-    return TRUE;
-}
-
-G_MODULE_EXPORT gboolean
-queue_row_key_cb (GtkEventControllerKey *keycon,
-                  guint                  keyval,
-                  guint                  keycode,
-                  GdkModifierType        state,
-                  signal_user_data_t    *ud)
-{
-    return queue_row_key(keyval, ud);
 }
 
 G_MODULE_EXPORT void
@@ -2414,7 +2383,7 @@ queue_delete_all_action_cb (GSimpleAction *action, GVariant *param,
     count = ghb_array_len(ud->queue);
     for (ii = count - 1; ii >= 0; ii--)
     {
-        ghb_queue_remove_row_internal(ud, ii);
+        ghb_queue_remove_row_at_index(ii);
     }
     ghb_save_queue(ud->queue);
     ghb_update_pending(ud);
@@ -2436,7 +2405,7 @@ queue_delete_complete_action_cb (GSimpleAction *action, GVariant *param,
         status = ghb_dict_get_int(uiDict, "job_status");
         if (status == GHB_QUEUE_DONE)
         {
-            ghb_queue_remove_row_internal(ud, ii);
+            ghb_queue_remove_row_at_index(ii);
         }
     }
     ghb_save_queue(ud->queue);
@@ -2507,39 +2476,13 @@ queue_reset_action_cb (GSimpleAction *action, GVariant *param,
 }
 
 G_MODULE_EXPORT void
-queue_delete_action_cb (GSimpleAction *action, GVariant *param,
-                        signal_user_data_t *ud)
+ghb_queue_remove_row (GhbQueueRow *row)
 {
-    GList         * rows, * r;
-    GtkListBox    * lb;
-    GtkListBoxRow * row;
-
-    lb = GTK_LIST_BOX(ghb_builder_widget("queue_list"));
-    rows = r = gtk_list_box_get_selected_rows(lb);
-
-    while (r != NULL)
-    {
-        row = (GtkListBoxRow *)r->data;
-        ghb_queue_remove_row_internal(ud, gtk_list_box_row_get_index(row));
-        r = r->next;
-    }
-
-    ghb_save_queue(ud->queue);
-    ghb_update_pending(ud);
-    ghb_queue_buttons_grey(ud);
-    g_list_free(rows);
-}
-
-G_MODULE_EXPORT void
-ghb_queue_row_remove (GhbQueueRow *row)
-{
+    g_return_if_fail(GHB_IS_QUEUE_ROW(row));
     signal_user_data_t *ud = ghb_ud();
-    if (row != NULL)
-    {
-        int index = gtk_list_box_row_get_index(GTK_LIST_BOX_ROW(row));
-        ghb_queue_remove_row_internal(ud, index);
-        ghb_save_queue(ud->queue);
-    }
+
+    queue_remove_row_internal(row);
+    ghb_save_queue(ud->queue);
     ghb_update_pending(ud);
     ghb_queue_buttons_grey(ud);
 }

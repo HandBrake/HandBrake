@@ -54,6 +54,9 @@ static void ghb_queue_row_get_property(GObject *object, guint prop_id,
                                        GValue *value, GParamSpec *pspec);
 static void ghb_queue_row_set_property(GObject *object, guint prop_id,
                                        const GValue *value, GParamSpec *pspec);
+static gboolean ghb_queue_row_key_cb (GtkEventControllerKey *keycon,
+                                      guint keyval, guint keycode,
+                                      GdkModifierType state, GhbQueueRow *self);
 
 static GActionEntry action_entries[] = {
     {"delete", ghb_queue_row_delete_action, NULL, NULL, NULL},
@@ -234,6 +237,10 @@ ghb_queue_row_new (const char *dest, int status)
     gtk_widget_insert_action_group(GTK_WIDGET(row), "queue",
                                    G_ACTION_GROUP(row->actions));
 
+    GtkEventController *key_con = gtk_event_controller_key_new();
+    gtk_widget_add_controller(GTK_WIDGET(row), key_con);
+    g_signal_connect(key_con, "key-pressed", G_CALLBACK(ghb_queue_row_key_cb), row);
+
     return GTK_WIDGET(row);
 }
 
@@ -315,6 +322,20 @@ ghb_queue_row_set_destination (GhbQueueRow *self, const char *dest)
     gtk_label_set_text(self->dest_label, basename);
 }
 
+static gboolean
+ghb_queue_row_key_cb (GtkEventControllerKey *keycon, guint keyval,
+                      guint keycode, GdkModifierType state, GhbQueueRow *self)
+{
+    if (keyval != GDK_KEY_Delete)
+        return FALSE;
+
+    g_return_val_if_fail(GHB_IS_QUEUE_ROW(self), FALSE);
+
+    GAction *delete_action = g_action_map_lookup_action(self->actions, "delete");
+    g_action_activate(delete_action, NULL);
+    return TRUE;
+}
+
 static void
 ghb_queue_row_delete_action (GSimpleAction *action, GVariant *param,
                              gpointer data)
@@ -323,5 +344,5 @@ ghb_queue_row_delete_action (GSimpleAction *action, GVariant *param,
 
     g_return_if_fail(GHB_IS_QUEUE_ROW(self));
 
-    ghb_queue_row_remove(self);
+    ghb_queue_remove_row(self);
 }
