@@ -407,12 +407,6 @@
         <attribute name="label" translatable="yes">_Reset</attribute>
       </item>
     </section>
-    <section>
-      <item>
-        <attribute name="action">app.queue-delete</attribute>
-        <attribute name="label" translatable="yes">Re_move</attribute>
-      </item>
-    </section>
   </menu>
   <menu id="add-audio-menu">
     <section>

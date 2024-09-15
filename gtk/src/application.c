@@ -392,7 +392,6 @@ GHB_DECLARE_ACTION_CB(queue_open_log_dir_action_cb);
 GHB_DECLARE_ACTION_CB(queue_open_log_action_cb);
 GHB_DECLARE_ACTION_CB(queue_delete_all_action_cb);
 GHB_DECLARE_ACTION_CB(queue_delete_complete_action_cb);
-GHB_DECLARE_ACTION_CB(queue_delete_action_cb);
 GHB_DECLARE_ACTION_CB(queue_reset_fail_action_cb);
 GHB_DECLARE_ACTION_CB(queue_reset_all_action_cb);
 GHB_DECLARE_ACTION_CB(queue_reset_action_cb);
@@ -469,7 +468,6 @@ map_actions (GtkApplication *app, signal_user_data_t *ud)
         { "queue-reset-fail",      queue_reset_fail_action_cb      },
         { "queue-reset-all",       queue_reset_all_action_cb       },
         { "queue-reset",           queue_reset_action_cb           },
-        { "queue-delete",          queue_delete_action_cb          },
         { "queue-delete-complete", queue_delete_complete_action_cb },
         { "queue-delete-all",      queue_delete_all_action_cb      },
         { "queue-export",          queue_export_action_cb          },
