@@ -295,7 +295,7 @@ static void add_subtitle( hb_list_t * list_subtitle, int position,
 /***********************************************************************
  * hb_dvdread_title_scan
  **********************************************************************/
-static hb_title_t * hb_dvdread_title_scan( hb_dvd_t * e, int t, uint64_t min_duration, uint64_t max_duration )
+static hb_title_t * hb_dvdread_title_scan( hb_dvd_t * e, int t, uint64_t min_duration, uint64_t max_duration)
 {
 
     hb_dvdread_t *d = &(e->dvdread);
@@ -1401,7 +1401,7 @@ int hb_dvd_title_count( hb_dvd_t * d )
 
 hb_title_t * hb_dvd_title_scan( hb_dvd_t * d, int t, uint64_t min_duration, uint64_t max_duration )
 {
-    return dvd_methods->title_scan(d, t, min_duration); // TODO
+    return dvd_methods->title_scan(d, t, min_duration, max_duration);
 }
 
 int hb_dvd_start( hb_dvd_t * d, hb_title_t *title, int chapter )
