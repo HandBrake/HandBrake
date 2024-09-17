@@ -1324,7 +1324,7 @@ static void ShowHelp(void)
 "   --json                  Log title, progress, and version info in\n"
 "                           JSON format\n"
 "   -v, --verbose[=number]  Be verbose (optional argument: logging level)\n"
-"   -Z. --preset <string>   Select preset by name (case-sensitive)\n"
+"   -Z, --preset <string>   Select preset by name (case-sensitive)\n"
 "                           Enclose names containing spaces in double quotation\n"
 "                           marks (e.g. \"Preset Name\")\n"
 "   -z, --preset-list       List available presets\n"
