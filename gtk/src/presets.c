@@ -1978,20 +1978,15 @@ ghb_presets_load(signal_user_data_t *ud)
     ghb_update_ui_combo_box(ud, "PresetCategory", NULL, FALSE);
 }
 
-static void
-settings_save(signal_user_data_t *ud, const char * category,
-              const char *name, const char * desc, gboolean set_def)
+static hb_preset_index_t *
+preset_get_folder (signal_user_data_t *ud, const char *name, int type)
 {
-    GhbValue          * preset, * new_preset;
-    hb_preset_index_t * folder_path, * path;
-    char              * fullname;
-
-    folder_path = hb_preset_search_index(category, 0, HB_PRESET_TYPE_CUSTOM);
+    hb_preset_index_t *folder_path = hb_preset_search_index(name, 0, type);
     if (folder_path->depth <= 0)
     {
         GhbValue * new_folder;
         new_folder = ghb_dict_new();
-        ghb_dict_set_string(new_folder, "PresetName", category);
+        ghb_dict_set_string(new_folder, "PresetName", name);
         ghb_dict_set(new_folder, "ChildrenArray", ghb_array_new());
         ghb_dict_set_int(new_folder, "Type", HB_PRESET_TYPE_CUSTOM);
         ghb_dict_set_bool(new_folder, "Folder", TRUE);
@@ -2003,11 +1998,24 @@ settings_save(signal_user_data_t *ud, const char * category,
         }
         else
         {
-            ghb_log("Failed to create category (%s)...", category);
-            return;
+            ghb_log("Failed to create category (%s)...", name);
+            return NULL;
         }
         ghb_value_free(&new_folder);
     }
+    return folder_path;
+}
+
+static void
+settings_save(signal_user_data_t *ud, const char * category,
+              const char *name, const char * desc, gboolean set_def)
+{
+    GhbValue          * preset, * new_preset;
+    hb_preset_index_t * folder_path, * path;
+    char              * fullname;
+
+    folder_path = preset_get_folder(ud, category, HB_PRESET_TYPE_CUSTOM);
+    if (!folder_path) return;
 
     new_preset = ghb_settings_to_preset(ud->settings);
     ghb_dict_set_int(new_preset, "Type", HB_PRESET_TYPE_CUSTOM);
@@ -2086,7 +2094,11 @@ preset_import_response_cb (GtkFileChooser *chooser, GtkResponseType response,
         filename = g_file_get_path(file);
         g_object_unref(file);
         // import the preset
-        index = hb_presets_add_path(filename);
+        hb_preset_index_t *folder_path = preset_get_folder(ud, _("My Presets"), HB_PRESET_TYPE_CUSTOM);
+        GhbValue *imported = hb_presets_read_file(filename);
+        GhbValue *list = hb_dict_get(imported, "PresetList");
+        GhbValue *preset = ghb_array_get(list, 0);
+        index = hb_preset_append(folder_path, preset);
 
         exportDir = ghb_dict_get_string(ud->prefs, "ExportDirectory");
         dir = g_path_get_dirname(filename);
@@ -2102,17 +2114,22 @@ preset_import_response_cb (GtkFileChooser *chooser, GtkResponseType response,
         // Re-init the UI preset list
         ghb_presets_list_reinit(ud);
         ghb_presets_menu_reinit(ud);
-        if (index < 0)
+        if (index < 0 || folder_path->depth < 0)
         {
             ghb_select_default_preset(ud);
         }
         else
         {
             hb_preset_index_t path;
-            path.index[0] = index;
-            path.depth = 1;
+            path.index[1] = index;
+            path.index[0] = folder_path->index[0];
+            path.depth = 2;
             select_preset2(ud, &path);
         }
+        hb_value_free(&imported);
+        hb_value_free(&list);
+        hb_value_free(&preset);
+        g_free(folder_path);
     }
     ghb_file_chooser_destroy(chooser);
 }
