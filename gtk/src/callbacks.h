@@ -45,6 +45,9 @@ void ghb_countdown_dialog_show(const gchar *message, const char *action,
 gboolean ghb_question_dialog_run(GtkWindow *parent, GhbActionStyle accept_style,
      const char *accept_button, const char *cancel_button,
      const char *title, const char *format, ...) G_GNUC_PRINTF(6, 7);
+GtkMessageDialog *ghb_question_dialog_new(GtkWindow *parent, GhbActionStyle accept_style,
+     const char *accept_button, const char *cancel_button,
+     const char *title, const char *format, ...) G_GNUC_PRINTF(6, 7);
 void ghb_alert_dialog_show(GtkMessageType type, const char *title,
                            const char *format, ...) G_GNUC_PRINTF(3, 4);
 GtkWidget *ghb_cancel_dialog_new(GtkWindow *parent,
