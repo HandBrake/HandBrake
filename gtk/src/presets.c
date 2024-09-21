@@ -49,8 +49,17 @@ static gboolean prefs_modified = FALSE;
 static gchar *override_user_config_dir = NULL;
 static gboolean dont_clear_presets = FALSE;
 
+#define GHB_IMPORT_FOLDER (_("My Presets"))
+
+typedef struct {
+    GhbValue *preset;
+    hb_preset_index_t *folder_path;
+} preset_write_data;
+
 static void store_prefs(void);
 static void store_presets(void);
+static void preset_write_response(GtkDialog *dialog, GtkResponseType response,
+                                  preset_write_data *data);
 
 static const char * presets_drag_entries[] = {
     "widget/presets-list-row-drop"
@@ -2064,30 +2073,64 @@ settings_save(signal_user_data_t *ud, const char * category,
     return;
 }
 
+static gboolean
+preset_exists (const char *category, const char *name)
+{
+    hb_preset_index_t *index;
+    char *path;
+    gboolean exists = FALSE;
+
+    path = g_strdup_printf("/%s/%s", category, name);
+    index = hb_preset_search_index(path, FALSE, HB_PRESET_TYPE_ALL);
+
+    if (index != NULL && index->depth > 0)
+        exists = TRUE;
+
+    g_free(index);
+    g_free(path);
+    return exists;
+}
+
 static void
 preset_import_response_cb (GtkFileChooser *chooser, GtkResponseType response,
                            signal_user_data_t *ud)
 {
-    const gchar     *exportDir;
-    GFile           *file;
-    gchar           *filename;
-    gchar           *dir;
-    int              index;
-
-    file = gtk_file_chooser_get_file(chooser);
+    GFile *file = gtk_file_chooser_get_file(chooser);
     if (response == GTK_RESPONSE_ACCEPT && file != NULL)
     {
-        filename = g_file_get_path(file);
+        hb_preset_index_t *folder_path;
+        char *filename = g_file_get_path(file);
         g_object_unref(file);
         // import the preset
-        hb_preset_index_t *folder_path = preset_get_folder(ud, _("My Presets"), HB_PRESET_TYPE_CUSTOM);
+        folder_path = preset_get_folder(ud, GHB_IMPORT_FOLDER, HB_PRESET_TYPE_CUSTOM);
         GhbValue *imported = hb_presets_read_file(filename);
         GhbValue *list = hb_dict_get(imported, "PresetList");
-        GhbValue *preset = ghb_array_get(list, 0);
-        index = hb_preset_append(folder_path, preset);
+        GhbValue *preset = ghb_value_dup(ghb_array_get(list, 0));
+        const char *preset_name = ghb_dict_get_string(preset, "PresetName");
 
-        exportDir = ghb_dict_get_string(ud->prefs, "ExportDirectory");
-        dir = g_path_get_dirname(filename);
+        preset_write_data *data = g_malloc0(sizeof(preset_write_data));
+        data->preset = preset;
+        data->folder_path = folder_path;
+
+        if (preset_exists(GHB_IMPORT_FOLDER, preset_name))
+        {
+            GtkMessageDialog *overwrite_dialog;
+            overwrite_dialog = ghb_question_dialog_new(NULL, GHB_ACTION_DESTRUCTIVE,
+                    _("Overwrite"), _("Cancel"),
+                    _("Overwrite Preset?"),
+                    _("The preset “%s” already exists. Do you want to overwrite it?"),
+                    preset_name);
+            gtk_widget_show(GTK_WIDGET(overwrite_dialog));
+            g_signal_connect(overwrite_dialog, "response", G_CALLBACK(preset_write_response), data);
+        }
+        else
+        {
+            // Skip overwrite confirmation dialog
+            preset_write_response(NULL, GTK_RESPONSE_ACCEPT, data);
+        }
+
+        const char *exportDir = ghb_dict_get_string(ud->prefs, "ExportDirectory");
+        char *dir = g_path_get_dirname(filename);
         if (strcmp(dir, exportDir) != 0)
         {
             ghb_dict_set_string(ud->prefs, "ExportDirectory", dir);
@@ -2095,6 +2138,41 @@ preset_import_response_cb (GtkFileChooser *chooser, GtkResponseType response,
         }
         g_free(filename);
         g_free(dir);
+        hb_value_free(&imported);
+    }
+    ghb_file_chooser_destroy(chooser);
+}
+
+static void
+preset_write_response (GtkDialog *dialog, GtkResponseType response,
+                       preset_write_data *data)
+{
+    signal_user_data_t *ud = ghb_ud();
+    int index = 0;
+
+    if (GTK_IS_DIALOG(dialog))
+        gtk_window_destroy(GTK_WINDOW(dialog));
+
+    if (response == GTK_RESPONSE_ACCEPT)
+    {
+        hb_preset_index_t *folder_path = data->folder_path;
+        GhbValue *preset = data->preset;
+        const char *preset_name = ghb_dict_get_string(preset, "PresetName");
+        char *existing_path = g_strdup_printf("/%s/%s", GHB_IMPORT_FOLDER, preset_name);
+        hb_preset_index_t *existing_index = hb_preset_search_index(existing_path, 0, HB_PRESET_TYPE_CUSTOM);
+        if (existing_index->depth > 0)
+        {
+            int depth = existing_index->depth;
+            index = existing_index->index[depth - 1];
+            GhbValue *array = hb_presets_get_folder_children(folder_path);
+            ghb_array_remove(array, index);
+            ghb_array_insert(array, index, preset);
+        }
+        else
+        {
+            index = hb_preset_append(folder_path, preset);
+        }
+
         store_presets();
 
         // Re-init the UI preset list
@@ -2112,12 +2190,11 @@ preset_import_response_cb (GtkFileChooser *chooser, GtkResponseType response,
             path.depth = 2;
             select_preset2(ud, &path);
         }
-        hb_value_free(&imported);
-        hb_value_free(&list);
-        hb_value_free(&preset);
-        g_free(folder_path);
+        g_free(existing_index);
+        g_free(existing_path);
     }
-    ghb_file_chooser_destroy(chooser);
+    g_free(data->folder_path);
+    g_free(data);
 }
 
 G_MODULE_EXPORT void
