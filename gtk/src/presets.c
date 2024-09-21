@@ -181,7 +181,7 @@ presets_list_show_default(signal_user_data_t *ud)
         {
             gtk_tree_store_set(store, &iter,
                         1, 700,
-                        2, 2 ,
+                        2, 0,
                         -1);
         }
         gtk_tree_path_free(treepath);
@@ -1280,8 +1280,7 @@ ghb_presets_menu_init(signal_user_data_t *ud)
     GMenu              * menu = g_menu_new();
     hb_preset_index_t  * path;
     GhbValue           * presets;
-    int                  menu_count, submenu_count, type, ii, jj, kk;
-    char              ** official_names;
+    int                  menu_count, submenu_count, type, ii, jj;
 
     // Add official presets
     path   = hb_preset_index_init(NULL, 0);
@@ -1294,11 +1293,6 @@ ghb_presets_menu_init(signal_user_data_t *ud)
     }
 
     menu_count = ghb_array_len(presets);
-    // Menus can't contain the same name twice.  Since our preset list
-    // allows official and custom preset categories with the same name
-    // I must modify one of them when duplicates exist :(
-    official_names = calloc(menu_count + 1, sizeof(char*));
-    kk = 0;
     path->depth++;
     // Process Official Presets in first pass, then Custom Presets
     for (type = 0; type < 2; type++)
@@ -1324,12 +1318,6 @@ ghb_presets_menu_init(signal_user_data_t *ud)
             if (folder_type != type)
             {
                 continue;
-            }
-
-            if (type == HB_PRESET_TYPE_OFFICIAL)
-            {
-                // Add folder name to list of official names
-                official_names[kk++] = g_strdup(folder_name);
             }
 
             folder_str = g_string_new("");
@@ -1374,10 +1362,14 @@ ghb_presets_menu_init(signal_user_data_t *ud)
                     g_free(preset_path);
                     g_free(detail_action);
                 }
-                if (type == HB_PRESET_TYPE_CUSTOM &&
-                    g_strv_contains((const char**)official_names, folder_name))
+                // Menus can't contain the same name twice.  Since our preset list
+                // allows official and custom preset categories with the same name
+                // I prepend an underscore to all official categories which is
+                // not displayed but differentiates the two, and allows easier
+                // keyboard access as a bonus.
+                if (type == HB_PRESET_TYPE_OFFICIAL)
                 {
-                    menu_item_name = g_strdup_printf("My %s", folder_name);
+                    menu_item_name = g_strdup_printf("_%s", folder_name);
                 }
                 else
                 {
@@ -1395,7 +1387,6 @@ ghb_presets_menu_init(signal_user_data_t *ud)
                               G_MENU_MODEL(section));
     }
     g_free(path);
-    g_strfreev(official_names);
 
     GtkMenuButton * mb;
 
@@ -1479,7 +1470,7 @@ ghb_presets_list_init(signal_user_data_t *ud, const hb_preset_index_t *path)
         gint         type;
         const gchar *description;
         gboolean     is_folder;
-        gboolean     def;
+        gboolean     is_default;
 
         next_path->index[next_path->depth-1] = ii;
 
@@ -1489,18 +1480,13 @@ ghb_presets_list_init(signal_user_data_t *ud, const hb_preset_index_t *path)
         description = ghb_dict_get_string(dict, "PresetDescription");
         type        = ghb_dict_get_int(dict, "Type");
         is_folder   = ghb_dict_get_bool(dict, "Folder");
-        def         = ghb_dict_get_bool(dict, "Default");
+        is_default  = ghb_dict_get_bool(dict, "Default");
 
         gtk_tree_store_append(store, &iter, piter);
-        if (is_folder && type == HB_PRESET_TYPE_CUSTOM)
-        {
-            custom_name = g_strdup_printf("Custom %s", name);
-            name = custom_name;
-        }
         gtk_tree_store_set(store, &iter,
                             0, name,
-                            1, def ? 700 : 400,
-                            2, def ? 2   : 0,
+                            1, is_default ? 700 : 400,
+                            2, is_folder && type == HB_PRESET_TYPE_CUSTOM ? 2 : 0,
                             3, description,
                             4, type == HB_PRESET_TYPE_OFFICIAL ? 0 : 1,
                             -1);
@@ -1564,7 +1550,7 @@ presets_list_update_item(
     const gchar  *description;
     gint          type;
     gboolean      is_folder;
-    gboolean      def;
+    gboolean      is_default;
 
     dict = hb_preset_get(path);
     if (dict == NULL)
@@ -1580,12 +1566,12 @@ presets_list_update_item(
     description = ghb_dict_get_string(dict, "PresetDescription");
     type        = ghb_dict_get_int(dict, "Type");
     is_folder   = ghb_dict_get_bool(dict, "Folder");
-    def         = ghb_dict_get_bool(dict, "Default");
+    is_default  = ghb_dict_get_bool(dict, "Default");
 
     gtk_tree_store_set(store, &iter,
                         0, name,
-                        1, def ? 700 : 400,
-                        2, def ? 2   : 0,
+                        1, is_default ? 700 : 400,
+                        2, is_folder && type == HB_PRESET_TYPE_CUSTOM ? 2 : 0,
                         3, description,
                         4, type == HB_PRESET_TYPE_OFFICIAL ? 0 : 1,
                         -1);
@@ -1608,7 +1594,7 @@ presets_list_append(signal_user_data_t *ud, const hb_preset_index_t *path)
     const gchar       *description;
     gint               type;
     gboolean           is_folder;
-    gboolean           def;
+    gboolean           is_default;
 
     folder_path = hb_preset_index_dup(path);
     folder_path->depth--;
@@ -1641,13 +1627,13 @@ presets_list_append(signal_user_data_t *ud, const hb_preset_index_t *path)
     description = ghb_dict_get_string(dict, "PresetDescription");
     type        = ghb_dict_get_int(dict, "Type");
     is_folder   = ghb_dict_get_bool(dict, "Folder");
-    def         = ghb_dict_get_bool(dict, "Default");
+    is_default  = ghb_dict_get_bool(dict, "Default");
 
     gtk_tree_store_append(store, &iter, piter);
     gtk_tree_store_set(store, &iter,
                         0, name,
-                        1, def ? 700 : 400,
-                        2, def ? 2   : 0,
+                        1, is_default ? 700 : 400,
+                        2, is_folder && type == HB_PRESET_TYPE_CUSTOM ? 2 : 0,
                         3, description,
                         4, type == HB_PRESET_TYPE_OFFICIAL ? 0 : 1,
                         -1);
