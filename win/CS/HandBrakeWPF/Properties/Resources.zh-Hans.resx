@@ -1114,14 +1114,8 @@ Foreign Audio Preferred, else First：如果存在外语轨道，则会将其烧
   <data name="MetaDataView_Title" xml:space="preserve">
     <value>元数据</value>
   </data>
-  <data name="OptionsView_EnableNvencEncoding" xml:space="preserve">
-    <value>允许使用 Nvidia NVENC 编码器</value>
-  </data>
-  <data name="OptionsView_EnableQuicksyncEncoding" xml:space="preserve">
-    <value>允许使用 Intel QuickSync 编码器</value>
-  </data>
-  <data name="OptionsView_EnableVceEncoding" xml:space="preserve">
-    <value>允许使用 AMD VCE 编码器</value>
+  <data name="OptionsView_EnableDirectXDecoding" xml:space="preserve">
+    <value>允许使用 DirectX 解码</value>
   </data>
   <data name="OptionsView_InvalidFileFormatChars" xml:space="preserve">
     <value>输入的文件格式包含无效的字符。这些字符已被移除。</value>
@@ -1218,6 +1212,9 @@ Foreign Audio Preferred, else First：如果存在外语轨道，则会将其烧
   </data>
   <data name="Options_MinTitleScanLength" xml:space="preserve">
     <value>DVD 和蓝光标题的最短时长（秒）。将跳过较短的标题：</value>
+  </data>
+  <data name="Options_KeepDuplicateTitles" xml:space="preserve">
+    <value>保留蓝光源上的重复标题（需要重新启动）</value>
   </data>
   <data name="Options_MP4FileExtension" xml:space="preserve">
     <value>MP4 文件扩展名：</value>
@@ -1908,8 +1905,8 @@ Foreign Audio Preferred, else First：如果存在外语轨道，则会将其烧
   <data name="FiltersViewAuto_DeblockTune" xml:space="preserve">
     <value>去块效应调优</value>
   </data>
-  <data name="OptionsView_ChoiceOfEncoderHint" xml:space="preserve">
-    <value>编码器的选择将在“视频”选项卡上提供。</value>
+  <data name="OptionsView_EncodeNotes" xml:space="preserve">
+    <value>注意：并非所有硬件编码器都有额外的首选项。该系统上所有可用和受支持的硬件编码器都可在视频选项卡的视频编码器下拉菜单中进行选择。</value>
   </data>
   <data name="Queue_RecoverQueueQuestionPlural" xml:space="preserve">
     <value>HandBrake 检测到多个未完成的队列文件。恢复这些文件将使 HandBrake 运行多个实例。 您想恢复所有未完成的工作吗？</value>
@@ -2812,30 +2809,75 @@ Foreign Audio Preferred, else First：如果存在外语轨道，则会将其烧
     <value>仅无损编码。</value>
   </data>
   <data name="MainView_HideClassicMenu" xml:space="preserve">
-    <value>Hide Classic Menu</value>
+    <value>隐藏经典菜单</value>
   </data>
   <data name="MainView_ShowClassicMenu" xml:space="preserve">
-    <value>Show Classic Menu</value>
+    <value>显示经典菜单</value>
   </data>
   <data name="OptionsViewVideo_UnsupportedIntelDriver" xml:space="preserve">
-    <value>(Warning: Unsupported Driver Detected! - Update Recommended)</value>
+    <value>（警告：检测到不支持的驱动程序！ - 建议更新）</value>
   </data>
   <data name="QueueSelectionView_RangeLimits" xml:space="preserve">
-    <value>Range Limits:</value>
+    <value>范围限制：</value>
   </data>
   <data name="QueueSelectionView_RangeLimitsDesc" xml:space="preserve">
-    <value>Limit the length of the titles added to the queue.</value>
+    <value>限制添加到队列的标题长度。</value>
   </data>
   <data name="QueueSelectionView_RangeLimitsEnable" xml:space="preserve">
-    <value>Enable Range Limits</value>
+    <value>启用范围限制</value>
   </data>
   <data name="AddToQueue_RangeLimitError" xml:space="preserve">
-    <value>Some titles could not be added to the queue due to being outside of the selected range limits.</value>
+    <value>由于超出所选范围的限制，某些标题无法添加到队列中。</value>
   </data>
   <data name="QueueView_StartAtTime" xml:space="preserve">
-    <value>Start Later</value>
+    <value>稍后开始</value>
   </data>
   <data name="QueueView_QueueStartTime" xml:space="preserve">
-    <value>Queue Start Time:</value>
+    <value>队列开始时间：</value>
+  </data>
+  <data name="QueueView_EncodeShutdown" xml:space="preserve">
+    <value>正在关闭编码...</value>
+  </data>
+  <data name="PictureSettingsView_AllowUpscaling" xml:space="preserve">
+    <value>允许放大</value>
+  </data>
+  <data name="PictureSettingsView_OptimalSize" xml:space="preserve">
+    <value>最佳尺寸</value>
+  </data>
+  <data name="OptionsView_Available" xml:space="preserve">
+    <value>在此系统上可用。</value>
+  </data>
+  <data name="OptionsView_NotAvailable" xml:space="preserve">
+    <value>在此系统上不可用。</value>
+  </data>
+  <data name="MainView_ScanningStatus" xml:space="preserve">
+    <value>请稍后 ...</value>
+  </data>
+  <data name="MainView_Cancel" xml:space="preserve">
+    <value>取消</value>
+  </data>
+  <data name="MainView_OpenLog" xml:space="preserve">
+    <value>打开日志窗口</value>
+  </data>
+  <data name="OptionsView_EnableNvencEncoding" xml:space="preserve">
+    <value/>
+  </data>
+  <data name="OptionsView_EnableQuicksyncEncoding" xml:space="preserve">
+    <value/>
+  </data>
+  <data name="OptionsView_EnableVceEncoding" xml:space="preserve">
+    <value/>
+  </data>
+  <data name="OptionsView_ChoiceOfEncoderHint" xml:space="preserve">
+    <value/>
+  </data>
+  <data name="AnamorphicMode_Custom" xml:space="preserve">
+    <value>自定义</value>
+  </data>
+  <data name="AnamorphicMode_None" xml:space="preserve">
+    <value>无</value>
+  </data>
+  <data name="AnamorphicMode_Automatic" xml:space="preserve">
+    <value>自动</value>
   </data>
 </root>
