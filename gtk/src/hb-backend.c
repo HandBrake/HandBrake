@@ -2030,9 +2030,10 @@ preset_category_opts_set(signal_user_data_t *ud, const char *opt_name,
         const char * name;
         hb_value_t * folder = hb_value_array_get(presets, ii);
 
-        if (!hb_value_get_bool(hb_dict_get(folder, "Folder")))
+        if (!hb_value_get_bool(hb_dict_get(folder, "Folder")) ||
+            hb_value_get_int(hb_dict_get(folder, "Type")) != 1)
         {
-            // Only list folders
+            // Only list custom folders
             continue;
         }
 
