@@ -1340,16 +1340,17 @@ ghb_presets_menu_init(signal_user_data_t *ud)
                 submenu_count = ghb_array_len(folder);
                 for (jj = 0; jj < submenu_count; jj++)
                 {
+                    int           preset_type;
                     const gchar * name;
                     GString     * preset_str = g_string_new(folder_str->str);
 
                     dict        = ghb_array_get(folder, jj);
                     name        = ghb_dict_get_string(dict, "PresetName");
-                    type        = ghb_dict_get_int(dict, "Type");
+                    preset_type = ghb_dict_get_int(dict, "Type");
                     is_folder   = ghb_dict_get_bool(dict, "Folder");
 
                     // Sanity check, Preset types must match their folder
-                    if (type != folder_type)
+                    if (preset_type != folder_type)
                     {
                         continue;
                     }
