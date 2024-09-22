@@ -11,23 +11,30 @@ namespace HandBrakeWPF.Model.Filters
 {
     using HandBrake.Interop.Attributes;
 
+    using HandBrakeWPF.Properties;
+
     /// <summary>
     /// The CombDetect Type.
     /// </summary>
     public enum CombDetect
     {
-        [ShortName("off")]
+        [DisplayName(typeof(Resources), "CombDetect_Off")]
+		[ShortName("off")]
         Off,
 
+        [DisplayName(typeof(Resources), "CombDetect_Custom")]
         [ShortName("custom")]
         Custom,
 
+        [DisplayName(typeof(Resources), "CombDetect_Default")]
         [ShortName("default")]
         Default,
 
+        [DisplayName(typeof(Resources), "CombDetect_LessSensitive")]
         [ShortName("permissive")]
         LessSensitive,
 
+        [DisplayName(typeof(Resources), "CombDetect_Fast")]
         [ShortName("fast")]
         Fast
     }

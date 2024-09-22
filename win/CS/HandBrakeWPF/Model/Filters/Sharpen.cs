@@ -11,17 +11,22 @@ namespace HandBrakeWPF.Model.Filters
 {
     using HandBrake.Interop.Attributes;
 
+    using HandBrakeWPF.Properties;
+
     /// <summary>
     /// The Sharpen.
     /// </summary>
     public enum Sharpen
     {
-        [ShortName("off")]
+        [DisplayName(typeof(Resources), "Sharpen_Off")]
+		[ShortName("off")]
         Off,
 
+        [DisplayName(typeof(Resources), "Sharpen_Unsharp")]
         [ShortName("unsharp")]
         UnSharp,
 
+        [DisplayName(typeof(Resources), "Sharpen_LapSharp")]
         [ShortName("lapsharp")]
         LapSharp
     }
