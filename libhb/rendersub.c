@@ -905,15 +905,17 @@ static hb_buffer_t * SubsampleOverlay(const hb_filter_private_t *pv, const hb_bu
 }
 #endif
 
-static void ApplySSASubs( hb_filter_private_t * pv, hb_buffer_t * buf )
+static hb_buffer_t * render_ssa_subs(hb_filter_private_t *pv, int64_t start)
 {
     ASS_Image *frameList;
     int changed;
 
     frameList = ass_render_frame( pv->renderer, pv->ssaTrack,
-                                  buf->s.start / 90, &changed );
+                                  start / 90, &changed );
     if ( !frameList )
-        return;
+    {
+        return NULL;
+    }
 
     // re-use cached overlay, whenever possible
     if ( changed ) {
@@ -950,7 +952,13 @@ static void ApplySSASubs( hb_filter_private_t * pv, hb_buffer_t * buf )
     }
 
     if ( pv->last_render )
-        ApplySub( pv, buf, pv->last_render );
+    {
+        return pv->last_render;
+    }
+    else
+    {
+        return NULL;
+    }
 }
 
 static void ssa_log(int level, const char *fmt, va_list args, void *data)
@@ -1069,7 +1077,9 @@ static int ssa_work( hb_filter_object_t * filter,
 {
     hb_filter_private_t * pv = filter->private_data;
     hb_buffer_t * in = *buf_in;
+    hb_buffer_t * out = in;
     hb_buffer_t * sub;
+    hb_buffer_t * rendered_subs;
 
     if (!pv->script_initialized)
     {
@@ -1109,9 +1119,23 @@ static int ssa_work( hb_filter_object_t * filter,
         hb_buffer_close(&sub);
     }
 
-    ApplySSASubs( pv, in );
-    *buf_in = NULL;
-    *buf_out = in;
+    rendered_subs = render_ssa_subs(pv, in->s.start);
+
+    if (rendered_subs && hb_buffer_is_writable(in) == 0)
+    {
+        out = hb_buffer_dup(in);
+    }
+    else
+    {
+        *buf_in = NULL;
+    }
+
+    if (rendered_subs)
+    {
+        ApplySub(pv, out, rendered_subs);
+    }
+
+    *buf_out = out;
 
     return HB_FILTER_OK;
 }
@@ -1158,7 +1182,9 @@ static int textsub_work(hb_filter_object_t * filter,
 {
     hb_filter_private_t * pv = filter->private_data;
     hb_buffer_t * in = *buf_in;
+    hb_buffer_t * out = in;
     hb_buffer_t * sub;
+    hb_buffer_t * rendered_subs;
 
     if (!pv->script_initialized)
     {
@@ -1248,9 +1274,23 @@ static int textsub_work(hb_filter_object_t * filter,
         process_sub(pv, pv->current_sub);
     }
 
-    ApplySSASubs(pv, in);
-    *buf_in = NULL;
-    *buf_out = in;
+    rendered_subs = render_ssa_subs(pv, in->s.start);
+
+    if (rendered_subs && hb_buffer_is_writable(in) == 0)
+    {
+        out = hb_buffer_dup(in);
+    }
+    else
+    {
+        *buf_in = NULL;
+    }
+
+    if (rendered_subs)
+    {
+        ApplySub(pv, out, rendered_subs);
+    }
+
+    *buf_out = out;
 
     return HB_FILTER_OK;
 }
