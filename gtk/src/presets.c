@@ -2431,25 +2431,28 @@ preset_rename_action_cb(GSimpleAction *action, GVariant *param,
 }
 
 static void
-preset_save_as_response_cb (GtkDialog *dialog, int response,
-                            signal_user_data_t *ud)
+preset_save_as_write_cb (GtkDialog *overwrite_dlg, int response, GtkDialog *dialog)
 {
     const char *name, *category;
     GtkEditable *entry;
     GtkTextView *tv;
+    signal_user_data_t *ud = ghb_ud();
 
-    g_signal_handlers_disconnect_by_data(dialog, ud);
-    gtk_widget_set_visible(GTK_WIDGET(dialog), FALSE);
+    if (overwrite_dlg)
+        gtk_window_destroy(GTK_WINDOW(overwrite_dlg));
 
-    entry = GTK_EDITABLE(ghb_builder_widget("PresetName"));
-    tv = GTK_TEXT_VIEW(ghb_builder_widget("PresetDescription"));
-
-    if (response == GTK_RESPONSE_OK)
+    if (response == GTK_RESPONSE_ACCEPT)
     {
         GtkTextBuffer * buffer;
         GtkTextIter     start, end;
         char          * desc;
         gboolean        def;
+
+        g_signal_handlers_disconnect_by_data(dialog, ud);
+        gtk_widget_set_visible(GTK_WIDGET(dialog), FALSE);
+
+        entry = GTK_EDITABLE(ghb_builder_widget("PresetName"));
+        tv = GTK_TEXT_VIEW(ghb_builder_widget("PresetDescription"));
 
         // save the preset
         name = gtk_editable_get_text(entry);
@@ -2472,6 +2475,48 @@ preset_save_as_response_cb (GtkDialog *dialog, int response,
         free(desc);
     }
 }
+
+static void
+preset_save_as_response_cb (GtkDialog *dialog, int response,
+                            signal_user_data_t *ud)
+{
+    GtkEditable *entry;
+
+    entry = GTK_EDITABLE(ghb_builder_widget("PresetName"));
+
+    if (response == GTK_RESPONSE_OK)
+    {
+        const char *name = gtk_editable_get_text(entry);
+        const char *category = ghb_dict_get_string(ud->settings, "PresetCategory");
+        if (!g_strcmp0(category, "new"))
+        {
+            entry = GTK_EDITABLE(ghb_builder_widget("PresetCategoryName"));
+            category = gtk_editable_get_text(entry);
+        }
+
+        if (preset_exists(category, name))
+        {
+            GtkMessageDialog *overwrite = ghb_question_dialog_new(GTK_WINDOW(dialog),
+                    GHB_ACTION_DESTRUCTIVE,
+                    _("Overwrite"), _("Cancel"),
+                    _("Overwrite Preset?"),
+                    _("The preset “%s” already exists. Do you want to overwrite it?"),
+                    name);
+            g_signal_connect(overwrite, "response", G_CALLBACK(preset_save_as_write_cb), dialog);
+            gtk_widget_show(GTK_WIDGET(overwrite));
+        }
+        else
+        {
+            preset_save_as_write_cb(NULL, GTK_RESPONSE_ACCEPT, dialog);
+        }
+    }
+    else
+    {
+        g_signal_handlers_disconnect_by_data(dialog, ud);
+        gtk_widget_set_visible(GTK_WIDGET(dialog), FALSE);
+    }
+}
+
 
 G_MODULE_EXPORT void
 preset_save_as_action_cb (GSimpleAction *action, GVariant *param,
