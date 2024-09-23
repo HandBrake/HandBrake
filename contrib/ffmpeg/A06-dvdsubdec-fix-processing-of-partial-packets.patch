@@ -1,7 +1,7 @@
-From 839a13d816cf1d499d3f93100124dcc609a55f2f Mon Sep 17 00:00:00 2001
+From c402eb2aa3a3913b51e8be96eab963e4f2cb3296 Mon Sep 17 00:00:00 2001
 From: John Stebbins <jstebbins@jetheaddev.com>
 Date: Wed, 20 Mar 2024 09:11:09 +0100
-Subject: [PATCH 05/16] dvdsubdec: fix processing of partial packets
+Subject: [PATCH 06/16] dvdsubdec: fix processing of partial packets
 
 Wait for a complete dvd subtitle before processing.
 
@@ -11,10 +11,10 @@ If the input packet is large enough to start processing, but does not contain co
  1 file changed, 17 insertions(+), 7 deletions(-)
 
 diff --git a/libavcodec/dvdsubdec.c b/libavcodec/dvdsubdec.c
-index a5da0d7b08..bee42e3c61 100644
+index f8769353a0..68c1f3af53 100644
 --- a/libavcodec/dvdsubdec.c
 +++ b/libavcodec/dvdsubdec.c
-@@ -229,7 +229,10 @@ static int decode_dvd_subtitles(DVDSubContext *ctx, AVSubtitle *sub_header,
+@@ -230,7 +230,10 @@ static int decode_dvd_subtitles(DVDSubContext *ctx, AVSubtitle *sub_header,
      uint32_t size;
      int64_t offset1, offset2;
  
@@ -26,7 +26,7 @@ index a5da0d7b08..bee42e3c61 100644
          return -1;
  
      if (AV_RB16(buf) == 0) {   /* HD subpicture with 4-byte offsets */
-@@ -242,15 +245,22 @@ static int decode_dvd_subtitles(DVDSubContext *ctx, AVSubtitle *sub_header,
+@@ -243,15 +246,22 @@ static int decode_dvd_subtitles(DVDSubContext *ctx, AVSubtitle *sub_header,
          cmd_pos = 2;
      }
  
@@ -56,5 +56,5 @@ index a5da0d7b08..bee42e3c61 100644
  
      while (cmd_pos > 0 && cmd_pos < buf_size - 2 - offset_size) {
 -- 
-2.39.3 (Apple Git-146)
+2.39.5 (Apple Git-154)
 

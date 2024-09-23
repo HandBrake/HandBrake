@@ -1,7 +1,7 @@
-From 2bae41702e2a558ebea370b888e040875ac16779 Mon Sep 17 00:00:00 2001
+From dd99c72343c9dd696b44eac3a91a07b2f944e78e Mon Sep 17 00:00:00 2001
 From: John Stebbins <jstebbins@jetheaddev.com>
 Date: Wed, 20 Mar 2024 09:12:27 +0100
-Subject: [PATCH 07/16] dvdsubdec: use pts of initial packet
+Subject: [PATCH 08/16] dvdsubdec: use pts of initial packet
 
 When the source is DVD, only the initial packet of a subtitle that spans multiple packets will have a pts value.
 ---
@@ -9,10 +9,10 @@ When the source is DVD, only the initial packet of a subtitle that spans multipl
  1 file changed, 9 insertions(+)
 
 diff --git a/libavcodec/dvdsubdec.c b/libavcodec/dvdsubdec.c
-index 146996bc23..2dd10b4d8b 100644
+index 025f3dbd6f..afc88656cf 100644
 --- a/libavcodec/dvdsubdec.c
 +++ b/libavcodec/dvdsubdec.c
-@@ -44,6 +44,7 @@ typedef struct DVDSubContext
+@@ -45,6 +45,7 @@ typedef struct DVDSubContext
    int      buf_size;
    int      forced_subs_only;
    uint8_t  used_color[256];
@@ -20,7 +20,7 @@ index 146996bc23..2dd10b4d8b 100644
  } DVDSubContext;
  
  static void yuv_a_to_rgba(const uint8_t *ycbcr, const uint8_t *alpha, uint32_t *rgba, int num_values)
-@@ -533,10 +534,13 @@ static int dvdsub_decode(AVCodecContext *avctx, AVSubtitle *sub,
+@@ -534,10 +535,13 @@ static int dvdsub_decode(AVCodecContext *avctx, AVSubtitle *sub,
      int appended = 0;
      int is_menu;
  
@@ -34,7 +34,7 @@ index 146996bc23..2dd10b4d8b 100644
              return ret;
          }
          buf = ctx->buf;
-@@ -549,6 +553,7 @@ static int dvdsub_decode(AVCodecContext *avctx, AVSubtitle *sub,
+@@ -550,6 +554,7 @@ static int dvdsub_decode(AVCodecContext *avctx, AVSubtitle *sub,
          *data_size = 0;
          int ret = appended ? 0 : append_to_cached_buf(avctx, buf, buf_size);
          if (ret < 0) {
@@ -42,7 +42,7 @@ index 146996bc23..2dd10b4d8b 100644
              return ret;
          }
          return buf_size;
-@@ -560,6 +565,7 @@ static int dvdsub_decode(AVCodecContext *avctx, AVSubtitle *sub,
+@@ -561,6 +566,7 @@ static int dvdsub_decode(AVCodecContext *avctx, AVSubtitle *sub,
          reset_rects(sub);
          *data_size = 0;
  
@@ -50,7 +50,7 @@ index 146996bc23..2dd10b4d8b 100644
          return buf_size;
      }
      if (!is_menu && find_smallest_bounding_rectangle(ctx, sub) == 0)
-@@ -570,6 +576,8 @@ static int dvdsub_decode(AVCodecContext *avctx, AVSubtitle *sub,
+@@ -571,6 +577,8 @@ static int dvdsub_decode(AVCodecContext *avctx, AVSubtitle *sub,
  
      ctx->buf_size = 0;
      *data_size = 1;
@@ -59,7 +59,7 @@ index 146996bc23..2dd10b4d8b 100644
      return buf_size;
  }
  
-@@ -695,6 +703,7 @@ static av_cold int dvdsub_init(AVCodecContext *avctx)
+@@ -696,6 +704,7 @@ static av_cold int dvdsub_init(AVCodecContext *avctx)
              av_log(avctx, AV_LOG_DEBUG, " 0x%06"PRIx32, ctx->palette[i]);
          av_log(avctx, AV_LOG_DEBUG, "\n");
      }
@@ -68,5 +68,5 @@ index 146996bc23..2dd10b4d8b 100644
      return 1;
  }
 -- 
-2.39.3 (Apple Git-146)
+2.39.5 (Apple Git-154)
 

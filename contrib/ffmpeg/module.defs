@@ -12,9 +12,9 @@ endif
 $(eval $(call import.MODULE.defs,FFMPEG,ffmpeg,$(__deps__)))
 $(eval $(call import.CONTRIB.defs,FFMPEG))
 
-FFMPEG.FETCH.url    = https://github.com/HandBrake/HandBrake-contribs/releases/download/contribs2/ffmpeg-7.0.2.tar.bz2
-FFMPEG.FETCH.url   += https://ffmpeg.org/releases/ffmpeg-7.0.2.tar.bz2
-FFMPEG.FETCH.sha256 = 1ed250407ea8f955cca2f1139da3229fbc13032a0802e4b744be195865ff1541
+FFMPEG.FETCH.url    = https://github.com/HandBrake/HandBrake-contribs/releases/download/contribs2/ffmpeg-7.1.tar.bz2
+FFMPEG.FETCH.url   += https://ffmpeg.org/releases/ffmpeg-7.1.tar.bz2
+FFMPEG.FETCH.sha256 = fd59e6160476095082e94150ada5a6032d7dcc282fe38ce682a00c18e7820528
 
 FFMPEG.GCC.args.c_std =
 
@@ -55,8 +55,6 @@ FFMPEG.CONFIGURE.extra = \
     --enable-encoder=libvpx_vp8 \
     --enable-encoder=libvpx_vp9 \
     --enable-encoder=ffv1 \
-    --enable-demuxer=av1 \
-    --enable-demuxer=obu \
     --enable-decoder=av1 \
     --enable-libdav1d \
     --enable-decoder=libdav1d \

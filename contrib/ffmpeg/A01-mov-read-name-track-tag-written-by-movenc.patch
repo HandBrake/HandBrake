@@ -1,4 +1,4 @@
-From db9aacd530340e44e3202c2aeba0ee18f6b09fe5 Mon Sep 17 00:00:00 2001
+From a7151fbff5325b0d62028c7e921780f83554a56b Mon Sep 17 00:00:00 2001
 From: John Stebbins <jstebbins@jetheaddev.com>
 Date: Wed, 20 Mar 2024 09:07:15 +0100
 Subject: [PATCH 01/16] mov: read 'name' track tag written by movenc.
@@ -8,10 +8,10 @@ Subject: [PATCH 01/16] mov: read 'name' track tag written by movenc.
  1 file changed, 17 insertions(+), 9 deletions(-)
 
 diff --git a/libavformat/mov.c b/libavformat/mov.c
-index 8d1135270c..e91da339ee 100644
+index a2333ac1fd..734de0a294 100644
 --- a/libavformat/mov.c
 +++ b/libavformat/mov.c
-@@ -337,6 +337,7 @@ static int mov_read_udta_string(MOVContext *c, AVIOContext *pb, MOVAtom atom)
+@@ -338,6 +338,7 @@ static int mov_read_udta_string(MOVContext *c, AVIOContext *pb, MOVAtom atom)
      int (*parse)(MOVContext*, AVIOContext*, unsigned, const char*) = NULL;
      int raw = 0;
      int num = 0;
@@ -19,7 +19,7 @@ index 8d1135270c..e91da339ee 100644
  
      switch (atom.type) {
      case MKTAG( '@','P','R','M'): key = "premiere_version"; raw = 1; break;
-@@ -369,6 +370,7 @@ static int mov_read_udta_string(MOVContext *c, AVIOContext *pb, MOVAtom atom)
+@@ -370,6 +371,7 @@ static int mov_read_udta_string(MOVContext *c, AVIOContext *pb, MOVAtom atom)
          return mov_metadata_loci(c, pb, atom.size);
      case MKTAG( 'm','a','n','u'): key = "make"; break;
      case MKTAG( 'm','o','d','l'): key = "model"; break;
@@ -27,7 +27,7 @@ index 8d1135270c..e91da339ee 100644
      case MKTAG( 'p','c','s','t'): key = "podcast";
          parse = mov_metadata_int8_no_padding; break;
      case MKTAG( 'p','g','a','p'): key = "gapless_playback";
-@@ -554,17 +556,23 @@ retry:
+@@ -555,17 +557,23 @@ retry:
              }
              str[str_size] = 0;
          }
@@ -61,5 +61,5 @@ index 8d1135270c..e91da339ee 100644
      }
  
 -- 
-2.39.3 (Apple Git-146)
+2.39.5 (Apple Git-154)
 

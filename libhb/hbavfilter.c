@@ -278,13 +278,6 @@ void hb_avfilter_graph_update_init(hb_avfilter_graph_t * graph,
     init->geometry.par.num = link->sample_aspect_ratio.num;
     init->geometry.par.den = link->sample_aspect_ratio.den;
     init->pix_fmt          = link->format;
-    // avfilter can generate "unknown" framerates.  If this happens
-    // just pass along the source framerate.
-    if (link->frame_rate.num > 0 && link->frame_rate.den > 0)
-    {
-        init->vrate.num        = link->frame_rate.num;
-        init->vrate.den        = link->frame_rate.den;
-    }
 }
 
 int hb_avfilter_add_frame(hb_avfilter_graph_t * graph, AVFrame * frame)

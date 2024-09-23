@@ -745,40 +745,45 @@ uint64_t hb_ff_mixdown_xlat(int hb_mixdown, int *downmix_mode)
 void hb_ff_set_sample_fmt(AVCodecContext *context, const AVCodec *codec,
                           enum AVSampleFormat request_sample_fmt)
 {
-    if (context != NULL && codec != NULL &&
-        codec->type == AVMEDIA_TYPE_AUDIO && codec->sample_fmts != NULL)
+    if (context != NULL && codec != NULL && codec->type == AVMEDIA_TYPE_AUDIO)
     {
-        const enum AVSampleFormat *fmt;
-        enum AVSampleFormat next_best_fmt;
-
-        next_best_fmt = (av_sample_fmt_is_planar(request_sample_fmt)  ?
-                         av_get_packed_sample_fmt(request_sample_fmt) :
-                         av_get_planar_sample_fmt(request_sample_fmt));
-
-        context->request_sample_fmt = AV_SAMPLE_FMT_NONE;
-
-        for (fmt = codec->sample_fmts; *fmt != AV_SAMPLE_FMT_NONE; fmt++)
+        const enum AVSampleFormat *sample_fmts = NULL;
+        if (avcodec_get_supported_config(context, NULL,
+                                         AV_CODEC_CONFIG_SAMPLE_FORMAT,
+                                         0, (const void **)&sample_fmts, NULL) == 0 && sample_fmts != NULL)
         {
-            if (*fmt == request_sample_fmt)
-            {
-                context->request_sample_fmt = request_sample_fmt;
-                break;
-            }
-            else if (*fmt == next_best_fmt)
-            {
-                context->request_sample_fmt = next_best_fmt;
-            }
-        }
+            const enum AVSampleFormat *fmt;
+            enum AVSampleFormat next_best_fmt;
 
-        /*
-         * When encoding and AVCodec.sample_fmts exists, avcodec_open2()
-         * will error out if AVCodecContext.sample_fmt isn't set.
-         */
-        if (context->request_sample_fmt == AV_SAMPLE_FMT_NONE)
-        {
-            context->request_sample_fmt = codec->sample_fmts[0];
+            next_best_fmt = (av_sample_fmt_is_planar(request_sample_fmt)  ?
+                             av_get_packed_sample_fmt(request_sample_fmt) :
+                             av_get_planar_sample_fmt(request_sample_fmt));
+
+            context->request_sample_fmt = AV_SAMPLE_FMT_NONE;
+
+            for (fmt = sample_fmts; *fmt != AV_SAMPLE_FMT_NONE; fmt++)
+            {
+                if (*fmt == request_sample_fmt)
+                {
+                    context->request_sample_fmt = request_sample_fmt;
+                    break;
+                }
+                else if (*fmt == next_best_fmt)
+                {
+                    context->request_sample_fmt = next_best_fmt;
+                }
+            }
+
+            /*
+             * When encoding and AVCodec.sample_fmts exists, avcodec_open2()
+             * will error out if AVCodecContext.sample_fmt isn't set.
+             */
+            if (context->request_sample_fmt == AV_SAMPLE_FMT_NONE)
+            {
+                context->request_sample_fmt = sample_fmts[0];
+            }
+            context->sample_fmt = context->request_sample_fmt;
         }
-        context->sample_fmt = context->request_sample_fmt;
     }
 }
 

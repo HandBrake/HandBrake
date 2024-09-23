@@ -191,6 +191,7 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
     AVCodecContext * context;
     AVRational fps;
     AVDictionary *av_opts = NULL;
+    const AVRational *frame_rates = NULL;
 
     hb_work_private_t * pv = calloc( 1, sizeof( hb_work_private_t ) );
     w->private_data   = pv;
@@ -342,10 +343,11 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
 
     // Check that the framerate is supported.  If not, pick the closest.
     // The mpeg2 codec only supports a specific list of frame rates.
-    if (codec->supported_framerates)
+    if (avcodec_get_supported_config(context, NULL, AV_CODEC_CONFIG_FRAME_RATE,
+                                     0, (const void **)&frame_rates, NULL) == 0 && frame_rates)
     {
         AVRational supported_fps;
-        supported_fps = codec->supported_framerates[av_find_nearest_q_idx(fps, codec->supported_framerates)];
+        supported_fps = frame_rates[av_find_nearest_q_idx(fps, frame_rates)];
         if (supported_fps.num != fps.num || supported_fps.den != fps.den)
         {
             hb_log( "encavcodec: framerate %d / %d is not supported. Using %d / %d.",
@@ -662,6 +664,7 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
             else if (!strcasecmp(job->encoder_profile, "high"))
                 context->profile = AV_PROFILE_H264_HIGH;
         }
+        av_dict_set(&av_opts, "forced_idr", "1", 0);
     }
     else if (job->vcodec == HB_VCODEC_FFMPEG_VCE_H265 || job->vcodec == HB_VCODEC_FFMPEG_VCE_H265_10BIT)
     {
@@ -677,6 +680,7 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
             }
         }
 
+        av_dict_set(&av_opts, "forced_idr", "1", 0);
         // Make VCE h.265 encoder emit an IDR for every GOP
         av_dict_set(&av_opts, "gops_per_idr", "1", 0);
     }
@@ -688,6 +692,7 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
             if (!strcasecmp(job->encoder_profile, "main"))
                  context->profile = AV_PROFILE_AV1_MAIN;
         }
+        av_dict_set(&av_opts, "forced_idr", "1", 0);
     }
     else if (job->vcodec == HB_VCODEC_FFMPEG_NVENC_H264 ||
              job->vcodec == HB_VCODEC_FFMPEG_NVENC_H265 ||
