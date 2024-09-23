@@ -223,7 +223,7 @@ static int avformatInit( hb_mux_object_t * m )
             m->time_base.den = 1000;
             muxer_name = "matroska";
             meta_mux = META_MUX_MKV;
-            av_dict_set(&av_opts, "default_mode", "passthru", 0);
+            av_dict_set(&av_opts, "default_mode", "passthrough", 0);
             break;
 
         case HB_MUX_AV_WEBM:
@@ -233,7 +233,7 @@ static int avformatInit( hb_mux_object_t * m )
             m->time_base.den = 1000;
             muxer_name = "webm";
             meta_mux = META_MUX_WEBM;
-            av_dict_set(&av_opts, "default_mode", "passthru", 0);
+            av_dict_set(&av_opts, "default_mode", "passthrough", 0);
             break;
 
         default:

@@ -10042,7 +10042,7 @@ const char hb_builtin_presets_json[] =
 "            \"Folder\": false,\n"
 "            \"FolderOpen\": false,\n"
 "            \"InlineParameterSets\": false,\n"
-"            \"MetadataPassthru\": true,\n"
+"            \"MetadataPassthrough\": true,\n"
 "            \"Mp4iPodCompatible\": false,\n"
 "            \"Optimize\": false,\n"
 "            \"PictureAllowUpscaling\": false,\n"
