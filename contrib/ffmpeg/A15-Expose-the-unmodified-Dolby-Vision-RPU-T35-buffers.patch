@@ -1,8 +1,20 @@
+From 0f4a6a95ae5b73e4dc51f9ca3f94785fe5056bfc Mon Sep 17 00:00:00 2001
+From: Damiano Galassi <damiog@gmail.com>
+Date: Mon, 30 Sep 2024 13:41:29 +0200
+Subject: [PATCH 15/16] Expose the unmodified Dolby Vision RPU T35 buffers
+
+---
+ libavcodec/av1dec.c   | 14 ++++++++++++++
+ libavcodec/libdav1d.c | 14 ++++++++++++++
+ libavutil/frame.c     |  1 +
+ libavutil/frame.h     |  6 ++++++
+ 4 files changed, 35 insertions(+)
+
 diff --git a/libavcodec/av1dec.c b/libavcodec/av1dec.c
-index 32a795e758..053d342169 100644
+index 1d5b9ef4f4..f0d22af314 100644
 --- a/libavcodec/av1dec.c
 +++ b/libavcodec/av1dec.c
-@@ -1028,6 +1029,8 @@ static int export_itut_t35(AVCodecContext *avctx, AVFrame *frame,
+@@ -1002,6 +1002,8 @@ static int export_itut_t35(AVCodecContext *avctx, AVFrame *frame,
          break;
      }
      case ITU_T_T35_PROVIDER_CODE_DOLBY: {
@@ -11,7 +23,7 @@ index 32a795e758..053d342169 100644
          int provider_oriented_code = bytestream2_get_be32(&gb);
          if (itut_t35->itu_t_t35_country_code != ITU_T_T35_COUNTRY_CODE_US ||
              provider_oriented_code != 0x800)
-@@ -1039,6 +1041,18 @@ static int export_itut_t35(AVCodecContext *avctx, AVFrame *frame,
+@@ -1014,6 +1016,18 @@ static int export_itut_t35(AVCodecContext *avctx, AVFrame *frame,
              break; // ignore
          }
  
@@ -31,7 +43,7 @@ index 32a795e758..053d342169 100644
          if (ret < 0)
              return ret;
 diff --git a/libavcodec/libdav1d.c b/libavcodec/libdav1d.c
-index ddcd0708b4..3bf3577ea9 100644
+index 546b42e9c6..04d0ca4b90 100644
 --- a/libavcodec/libdav1d.c
 +++ b/libavcodec/libdav1d.c
 @@ -562,6 +562,8 @@ static int libdav1d_receive_frame(AVCodecContext *c, AVFrame *frame)
@@ -43,7 +55,7 @@ index ddcd0708b4..3bf3577ea9 100644
              int provider_oriented_code = bytestream2_get_be32(&gb);
              if (itut_t35->country_code != ITU_T_T35_COUNTRY_CODE_US ||
                  provider_oriented_code != 0x800)
-@@ -573,6 +575,18 @@ static int libdav1d_receive_frame(AVCodecContext *c, AVFrame *frame)
+@@ -574,6 +576,18 @@ static int libdav1d_receive_frame(AVCodecContext *c, AVFrame *frame)
                  break; // ignore
              }
  
@@ -63,19 +75,19 @@ index ddcd0708b4..3bf3577ea9 100644
              if (res < 0)
                  goto fail;
 diff --git a/libavutil/frame.c b/libavutil/frame.c
-index eb04a65c90..5b4c0db543 100644
+index f0a0dba018..ab48eaab2b 100644
 --- a/libavutil/frame.c
 +++ b/libavutil/frame.c
-@@ -934,6 +934,7 @@ const char *av_frame_side_data_name(enum AVFrameSideDataType type)
-     case AV_FRAME_DATA_FILM_GRAIN_PARAMS:           return "Film grain parameters";
-     case AV_FRAME_DATA_DETECTION_BBOXES:            return "Bounding boxes for object detection and classification";
-     case AV_FRAME_DATA_DOVI_RPU_BUFFER:             return "Dolby Vision RPU Data";
-+    case AV_FRAME_DATA_DOVI_RPU_BUFFER_T35:         return "Dolby Vision RPU ITU T35 Data";
-     case AV_FRAME_DATA_DOVI_METADATA:               return "Dolby Vision Metadata";
-     case AV_FRAME_DATA_AMBIENT_VIEWING_ENVIRONMENT: return "Ambient viewing environment";
-     }
+@@ -45,6 +45,7 @@ static const AVSideDataDescriptor sd_props[] = {
+     [AV_FRAME_DATA_FILM_GRAIN_PARAMS]           = { "Film grain parameters" },
+     [AV_FRAME_DATA_DETECTION_BBOXES]            = { "Bounding boxes for object detection and classification" },
+     [AV_FRAME_DATA_DOVI_RPU_BUFFER]             = { "Dolby Vision RPU Data" },
++    [AV_FRAME_DATA_DOVI_RPU_BUFFER_T35]         = { "Dolby Vision RPU ITU T35 Data" },
+     [AV_FRAME_DATA_DOVI_METADATA]               = { "Dolby Vision Metadata" },
+     [AV_FRAME_DATA_LCEVC]                       = { "LCEVC NAL data" },
+     [AV_FRAME_DATA_VIEW_ID]                     = { "View ID" },
 diff --git a/libavutil/frame.h b/libavutil/frame.h
-index 8aa05ec127..67798577b1 100644
+index f7806566d5..8f2bbfdf6f 100644
 --- a/libavutil/frame.h
 +++ b/libavutil/frame.h
 @@ -200,6 +200,12 @@ enum AVFrameSideDataType {
@@ -91,3 +103,6 @@ index 8aa05ec127..67798577b1 100644
      /**
       * Parsed Dolby Vision metadata, suitable for passing to a software
       * implementation. The payload is the AVDOVIMetadata struct defined in
+-- 
+2.39.5 (Apple Git-154)
+
