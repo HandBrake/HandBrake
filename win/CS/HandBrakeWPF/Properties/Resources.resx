@@ -2846,13 +2846,19 @@ To allow multiple simultaneous encodes, turn on "Process Isolation" in Tools Men
   <data name="QueueView_EncodeShutdown" xml:space="preserve">
     <value>Shutting Down Encode ...</value>
   </data>
+  <data name="PictureSettingsView_AllowUpscaling" xml:space="preserve">
+    <value>Allow Upscaling</value>
+  </data>
+  <data name="PictureSettingsView_OptimalSize" xml:space="preserve">
+    <value>Optimal Size</value>
+  </data>
   <data name="OptionsView_Available" xml:space="preserve">
     <value>Available on this system.</value>
   </data>
   <data name="OptionsView_NotAvailable" xml:space="preserve">
     <value>Not available on this system.</value>
   </data>
-    <data name="MainView_ScanningStatus" xml:space="preserve">
+  <data name="MainView_ScanningStatus" xml:space="preserve">
     <value>Please wait ...</value>
   </data>
   <data name="MainView_Cancel" xml:space="preserve">
@@ -2860,5 +2866,26 @@ To allow multiple simultaneous encodes, turn on "Process Isolation" in Tools Men
   </data>
   <data name="MainView_OpenLog" xml:space="preserve">
     <value>Open Log Window</value>
+  </data>
+  <data name="OptionsView_EnableNvencEncoding" xml:space="preserve">
+    <value />
+  </data>
+  <data name="OptionsView_EnableQuicksyncEncoding" xml:space="preserve">
+    <value />
+  </data>
+  <data name="OptionsView_EnableVceEncoding" xml:space="preserve">
+    <value />
+  </data>
+  <data name="OptionsView_ChoiceOfEncoderHint" xml:space="preserve">
+    <value />
+  </data>
+  <data name="AnamorphicMode_Custom" xml:space="preserve">
+    <value>Custom</value>
+  </data>
+  <data name="AnamorphicMode_None" xml:space="preserve">
+    <value>None</value>
+  </data>
+  <data name="AnamorphicMode_Automatic" xml:space="preserve">
+    <value>Automatic</value>
   </data>
 </root>

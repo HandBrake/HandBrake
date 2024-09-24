@@ -16,7 +16,7 @@
 
         <Border VerticalAlignment="Center" Grid.Row="0" Width="400" CornerRadius="4" Height="150"
                 BorderBrush="{Binding Background, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}" 
-                Background="White" BorderThickness="1">
+                Background="{StaticResource Ui.Light}" BorderThickness="1">
             <Grid VerticalAlignment="Center"  HorizontalAlignment="Stretch">
 
                 <Grid.RowDefinitions>

@@ -555,4 +555,7 @@ Die Bitrate variiert von Quelle zu Quelle.</value>
   <data name="OptionsView_LaunchsHelp" xml:space="preserve">
     <value>Öffnet die Webseite mit der Dokumentation unter https://handbrake.fr/docs</value>
   </data>
+  <data name="Options_RemovePunctuation" xml:space="preserve">
+    <value>Strich (-), Punkt (.) und Komma (,)</value>
+  </data>
 </root>

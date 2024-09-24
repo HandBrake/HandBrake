@@ -20,6 +20,11 @@
     return self;
 }
 
+- (nullable NSView *)hitTest:(NSPoint)point
+{
+    return nil;
+}
+
 - (void)setBadgeValue:(NSString *)badgeValue
 {
     _badgeValue = [badgeValue copy];
