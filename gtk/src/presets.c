@@ -2107,6 +2107,9 @@ preset_import_response_cb (GtkFileChooser *chooser, GtkResponseType response,
         GhbValue *imported = hb_presets_read_file(filename);
         GhbValue *list = hb_dict_get(imported, "PresetList");
         GhbValue *preset = ghb_value_dup(ghb_array_get(list, 0));
+        // Ensure imported presets have the right type and aren't set as default
+        ghb_dict_set_bool(preset, "Default", FALSE);
+        ghb_dict_set_int(preset, "Type", HB_PRESET_TYPE_CUSTOM);
         const char *preset_name = ghb_dict_get_string(preset, "PresetName");
 
         preset_write_data *data = g_malloc0(sizeof(preset_write_data));
