@@ -1153,28 +1153,31 @@ static OSStatus init_vtsession(hb_work_object_t *w, hb_job_t *job, hb_work_priva
 
     if (__builtin_available(macOS 11.0, *))
     {
-        // VideoToolbox can generate Dolby Vision 8.4 RPUs for HLG video,
-        // however we preserve the RPUs from the source file, so disable it
-        // to avoid having two sets of RPUs per frame.
-        if (supportedProps != NULL && CFDictionaryContainsKey(supportedProps, kVTCompressionPropertyKey_HDRMetadataInsertionMode))
+        if (pv->settings.codec != kCMVideoCodecType_H264)
         {
-            err = VTSessionSetProperty(pv->session,
-                                       kVTCompressionPropertyKey_HDRMetadataInsertionMode,
-                                       kVTHDRMetadataInsertionMode_None);
-            if (err != noErr)
+            // VideoToolbox can generate Dolby Vision 8.4 RPUs for HLG video,
+            // however we preserve the RPUs from the source file, so disable it
+            // to avoid having two sets of RPUs per frame.
+            if (supportedProps != NULL && CFDictionaryContainsKey(supportedProps, kVTCompressionPropertyKey_HDRMetadataInsertionMode))
             {
-                hb_log("VTSessionSetProperty: kVTCompressionPropertyKey_HDRMetadataInsertionMode failed");
+                err = VTSessionSetProperty(pv->session,
+                                           kVTCompressionPropertyKey_HDRMetadataInsertionMode,
+                                           kVTHDRMetadataInsertionMode_None);
+                if (err != noErr)
+                {
+                    hb_log("VTSessionSetProperty: kVTCompressionPropertyKey_HDRMetadataInsertionMode failed");
+                }
             }
-        }
 
-        if (supportedProps != NULL && CFDictionaryContainsKey(supportedProps, kVTCompressionPropertyKey_PreserveDynamicHDRMetadata))
-        {
-            err = VTSessionSetProperty(pv->session,
-                                       kVTCompressionPropertyKey_PreserveDynamicHDRMetadata,
-                                       pv->settings.preserveDynamicHDRMetadata);
-            if (err != noErr)
+            if (supportedProps != NULL && CFDictionaryContainsKey(supportedProps, kVTCompressionPropertyKey_PreserveDynamicHDRMetadata))
             {
-                hb_log("VTSessionSetProperty: kVTCompressionPropertyKey_PreserveDynamicHDRMetadata failed");
+                err = VTSessionSetProperty(pv->session,
+                                           kVTCompressionPropertyKey_PreserveDynamicHDRMetadata,
+                                           pv->settings.preserveDynamicHDRMetadata);
+                if (err != noErr)
+                {
+                    hb_log("VTSessionSetProperty: kVTCompressionPropertyKey_PreserveDynamicHDRMetadata failed");
+                }
             }
         }
     }
