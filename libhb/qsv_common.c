@@ -464,6 +464,7 @@ int qsv_map_mfx_platform_codename(int mfx_platform_codename)
     case MFX_PLATFORM_ALDERLAKE_N:
     case MFX_PLATFORM_KEEMBAY:
     case MFX_PLATFORM_METEORLAKE:
+    case MFX_PLATFORM_BATTLEMAGE:
     case MFX_PLATFORM_ARROWLAKE:
         platform = HB_CPU_PLATFORM_INTEL_DG2;
         break;
