@@ -22,15 +22,12 @@ namespace HandBrakeWPF.Model.Filters
         [ShortName("off")]
         Off = 0,
 
-        [DisplayName(typeof(Resources), "DeinterlaceFilter_Yadif")]
         [ShortName("Yadif")]
         Yadif = 1,
 
-        [DisplayName(typeof(Resources), "DeinterlaceFilter_Decomb")]
         [ShortName("Decomb")]
         Decomb = 2,
 
-        [DisplayName(typeof(Resources), "DeinterlaceFilter_Bwdif")]
         [ShortName("Bwdif")]
         Bwdif = 3,
     }

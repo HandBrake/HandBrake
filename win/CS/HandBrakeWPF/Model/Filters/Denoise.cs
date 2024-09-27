@@ -22,11 +22,9 @@ namespace HandBrakeWPF.Model.Filters
 		[ShortName("off")]
         Off = 0,
 
-        [DisplayName(typeof(Resources), "Denoise_Hqdn3d")]
         [ShortName("hqdn3d")]
         hqdn3d = 1,
 
-        [DisplayName(typeof(Resources), "Denoise_NLMeans")]
         [ShortName("nlmeans")]
         NLMeans = 2,
     }

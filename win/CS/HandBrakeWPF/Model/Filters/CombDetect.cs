@@ -30,11 +30,9 @@ namespace HandBrakeWPF.Model.Filters
         [ShortName("default")]
         Default,
 
-        [DisplayName(typeof(Resources), "CombDetect_LessSensitive")]
         [ShortName("permissive")]
         LessSensitive,
 
-        [DisplayName(typeof(Resources), "CombDetect_Fast")]
         [ShortName("fast")]
         Fast
     }

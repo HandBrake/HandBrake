@@ -22,11 +22,9 @@ namespace HandBrakeWPF.Model.Filters
 		[ShortName("off")]
         Off,
 
-        [DisplayName(typeof(Resources), "Sharpen_Unsharp")]
         [ShortName("unsharp")]
         UnSharp,
 
-        [DisplayName(typeof(Resources), "Sharpen_LapSharp")]
         [ShortName("lapsharp")]
         LapSharp
     }
