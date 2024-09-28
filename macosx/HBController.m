@@ -172,7 +172,7 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
 #else
         _destinationFolderURL = [NSUserDefaults.standardUserDefaults URLForKey:HBLastDestinationDirectoryURL];
 #endif
-        if (!_destinationFolderURL || [NSFileManager.defaultManager fileExistsAtPath:_destinationFolderURL.path isDirectory:nil] == NO)
+        if (!_destinationFolderURL || [_destinationFolderURL checkResourceIsReachableAndReturnError:NULL] == NO)
         {
             _destinationFolderURL = HBUtilities.defaultDestinationFolderURL;
         }
@@ -648,7 +648,7 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
 /**
  * Here we actually tell hb_scan to perform the source scan, using the path to source and title number
  */
-- (void)scanURLs:(NSArray<NSURL *> *)fileURLs titleIndex:(NSUInteger)index completionHandler:(void(^)(NSArray<HBTitle *> *titles))completionHandler
+- (void)scanURLs:(NSArray<NSURL *> *)fileURLs titleIndex:(NSUInteger)index keepDuplicateTitles:(BOOL)keepDuplicateTitles completionHandler:(void(^)(NSArray<HBTitle *> *titles))completionHandler
 {
     [self showWindow:self];
 
@@ -688,6 +688,7 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
                    previews:hb_num_previews minDuration:min_title_duration_seconds
                keepPreviews:YES
             hardwareDecoder:[NSUserDefaults.standardUserDefaults boolForKey:HBUseHardwareDecoder]
+            keepDuplicateTitles:keepDuplicateTitles
             progressHandler:^(HBState state, HBProgress progress, NSString *info)
          {
              self.sourceLabel.stringValue = info;
@@ -825,7 +826,7 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
     NSArray<NSURL *> *subtitlesFileURLs = [HBUtilities extractURLs:expandedFileURLs withExtension:HBUtilities.supportedExtensions];
     NSArray<NSURL *> *trimmedFileURLs   = [HBUtilities trimURLs:expandedFileURLs withExtension:excludedExtensions];
 
-    [self scanURLs:trimmedFileURLs titleIndex:index completionHandler:^(NSArray<HBTitle *> *titles)
+    [self scanURLs:trimmedFileURLs titleIndex:index keepDuplicateTitles:[NSUserDefaults.standardUserDefaults boolForKey:HBKeepDuplicateTitles] completionHandler:^(NSArray<HBTitle *> *titles)
     {
         NSArray<NSURL *> *baseURLs = [HBUtilities baseURLs:trimmedFileURLs];
 
@@ -887,7 +888,7 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
         [job refreshSecurityScopedResources];
         self.fileTokens = @[[HBSecurityAccessToken tokenWithObject:job.fileURL]];
 
-        [self scanURLs:@[job.fileURL] titleIndex:job.titleIdx completionHandler:^(NSArray<HBTitle *> *titles)
+        [self scanURLs:@[job.fileURL] titleIndex:job.titleIdx keepDuplicateTitles:job.keepDuplicateTitles completionHandler:^(NSArray<HBTitle *> *titles)
         {
             if (titles.count)
             {
@@ -1245,7 +1246,7 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
  */
 - (void)runDestinationAlerts:(HBJob *)job completionHandler:(void (^ __nullable)(NSModalResponse returnCode))handler
 {
-    if ([NSFileManager.defaultManager fileExistsAtPath:job.destinationFolderURL.path] == NO)
+    if ([job.destinationFolderURL checkResourceIsReachableAndReturnError:NULL] == NO)
     {
         NSAlert *alert = [[NSAlert alloc] init];
         [alert setMessageText:NSLocalizedString(@"Warning!", @"Invalid destination alert -> message")];
@@ -1262,7 +1263,7 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
         [alert setAlertStyle:NSAlertStyleCritical];
         [alert beginSheetModalForWindow:self.window completionHandler:handler];
     }
-    else if ([NSFileManager.defaultManager fileExistsAtPath:job.destinationURL.path])
+    else if ([job.destinationURL checkResourceIsReachableAndReturnError:NULL])
     {
         NSAlert *alert = [[NSAlert alloc] init];
         [alert setMessageText:NSLocalizedString(@"A file already exists at the selected destination.", @"File already exists alert -> message")];
@@ -1376,14 +1377,14 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
     [self.window beginSheet:self.titlesSelectionController.window completionHandler:nil];
 }
 
-- (void)didSelectTitles:(NSArray<HBTitle *> *)titles
+- (void)didSelectTitles:(NSArray<HBTitle *> *)titles range:(nullable HBTitleSelectionRange *)range
 {
     [self.window endSheet:self.titlesSelectionController.window];
 
-    [self doAddTitlesToQueue:titles];
+    [self doAddTitlesToQueue:titles range:range];
 }
 
-- (void)doAddTitlesToQueue:(NSArray<HBTitle *> *)titles
+- (void)doAddTitlesToQueue:(NSArray<HBTitle *> *)titles range:(nullable HBTitleSelectionRange *)range
 {
     NSMutableArray<HBJob *> *jobs = [[NSMutableArray alloc] init];
     BOOL fileExists = NO;
@@ -1397,13 +1398,14 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
     {
         HBJob *job = [[HBJob alloc] initWithTitle:title preset:preset];
 
-        [job setDestinationFolderURL:self.destinationFolderURL
-                        sameAsSource:useSourceFolderDestination];
-
-        job.destinationFileName = job.defaultName;
-        job.title = nil;
         if (job)
         {
+            [job applySelectionRange:range];
+            [job setDestinationFolderURL:self.destinationFolderURL
+                            sameAsSource:useSourceFolderDestination];
+            job.destinationFileName = job.defaultName;
+            job.title = nil;
+
             [jobs addObject:job];
         }
     }
@@ -1421,7 +1423,7 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
             [destinations addObject:job.destinationURL];
         }
 
-        if ([[NSFileManager defaultManager] fileExistsAtPath:job.destinationURL.path] || [_queue itemExistAtURL:job.destinationURL])
+        if ([job.destinationURL checkResourceIsReachableAndReturnError:NULL] || [_queue itemExistAtURL:job.destinationURL])
         {
             fileExists = YES;
             break;
@@ -1472,7 +1474,7 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
 
 - (IBAction)addAllTitlesToQueue:(id)sender
 {
-    [self doAddTitlesToQueue:self.core.titles];
+    [self doAddTitlesToQueue:self.core.titles range:nil];
 }
 
 #pragma mark - Picture

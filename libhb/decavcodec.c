@@ -598,6 +598,10 @@ static void closePrivData( hb_work_private_t ** ppv )
         }
         if ( pv->context )
         {
+            if (pv->context->hw_device_ctx)
+            {
+                av_buffer_unref(&pv->context->hw_device_ctx);
+            }
             hb_avcodec_free_context(&pv->context);
         }
         av_packet_free(&pv->pkt);
@@ -883,6 +887,10 @@ static int decavcodecaBSInfo( hb_work_object_t *w, const hb_buffer_t *buf,
     }
     else
     {
+        // AVCodecContext bit_rate default is 128 Kb
+        // unset it to avoid getting a wrong value if
+        // nothing sets it to the actual streams value
+        context->bit_rate = 1;
         parser = av_parser_init(codec->id);
     }
 
@@ -913,6 +921,8 @@ static int decavcodecaBSInfo( hb_work_object_t *w, const hb_buffer_t *buf,
         {
             int parse_len;
 
+            // Start with a clean error slate on each parsing iteration
+            avcodec_result = 0;
             if (parser != NULL)
             {
                 parse_len = av_parser_parse2(parser, context,
@@ -938,6 +948,10 @@ static int decavcodecaBSInfo( hb_work_object_t *w, const hb_buffer_t *buf,
             avp->pts  = buf->s.start;
             avp->dts  = AV_NOPTS_VALUE;
 
+            // Note: The first buffer returned by av_parser_parse2() may
+            // not be aligned to start of valid codec data which can cause
+            // the first call to avcodec_send_packet() to fail with
+            // AVERROR_INVALIDDATA.
             avcodec_result = avcodec_send_packet(context, avp);
             if (avcodec_result < 0 && avcodec_result != AVERROR_EOF)
             {
@@ -1019,7 +1033,31 @@ static int decavcodecaBSInfo( hb_work_object_t *w, const hb_buffer_t *buf,
                     }
                     else
                     {
-                        info->channel_layout = frame->ch_layout.u.mask;
+                        if (frame->ch_layout.order == AV_CHANNEL_ORDER_NATIVE)
+                        {
+                            info->channel_layout = frame->ch_layout.u.mask;
+                        }
+                        else if (frame->ch_layout.order == AV_CHANNEL_ORDER_CUSTOM)
+                        {
+                            AVChannelLayout channel_layout;
+                            av_channel_layout_copy(&channel_layout, &frame->ch_layout);
+                            int result = av_channel_layout_retype(&channel_layout,
+                                                                  AV_CHANNEL_ORDER_NATIVE,
+                                                                  0);
+                            if (result == 0)
+                            {
+                                info->channel_layout = channel_layout.u.mask;
+                            }
+                            else
+                            {
+                                hb_deep_log(2, "decavcodec: unsupported custom channel order");
+                            }
+                            av_channel_layout_uninit(&channel_layout);
+                        }
+                        else
+                        {
+                            hb_deep_log(2, "decavcodec: unsupported custom channel order");
+                        }
                     }
 
                     if (info->channel_layout == 0)
@@ -1161,7 +1199,7 @@ static hb_buffer_t *copy_frame( hb_work_private_t *pv )
     else
 #endif
     {
-        out = hb_avframe_to_video_buffer(pv->frame, (AVRational){1,1}, 1);
+        out = hb_avframe_to_video_buffer(pv->frame, (AVRational){1,1});
     }
 
     if (pv->frame->pts != AV_NOPTS_VALUE)
@@ -1537,6 +1575,15 @@ int reinit_video_filters(hb_work_private_t * pv)
 
     enum AVPixelFormat sw_pix_fmt = pv->frame->format;
     enum AVPixelFormat hw_pix_fmt = AV_PIX_FMT_NONE;
+    enum AVColorSpace color_matrix = pv->frame->colorspace;
+
+    if (!pv->job)
+    {
+        // Sanitize the color_matrix when decoding preview images
+        hb_rational_t par = {pv->frame->sample_aspect_ratio.num, pv->frame->sample_aspect_ratio.den};
+        hb_geometry_t geo = {pv->frame->width, pv->frame->height, par};
+        color_matrix = hb_get_color_matrix(pv->frame->colorspace, geo);
+    }
 
     AVHWFramesContext *frames_ctx = NULL;
     if (pv->frame->hw_frames_ctx)
@@ -1555,7 +1602,7 @@ int reinit_video_filters(hb_work_private_t * pv)
     filter_init.geometry.height   = pv->frame->height;
     filter_init.geometry.par.num  = pv->frame->sample_aspect_ratio.num;
     filter_init.geometry.par.den  = pv->frame->sample_aspect_ratio.den;
-    filter_init.color_matrix      = pv->frame->colorspace;
+    filter_init.color_matrix      = color_matrix;
     filter_init.color_range       = pv->frame->color_range;
     filter_init.time_base.num     = 1;
     filter_init.time_base.den     = 1;
@@ -2481,6 +2528,10 @@ static int decavcodecvInfo( hb_work_object_t *w, hb_work_info_t *info )
     else if (pv->context->pix_fmt == AV_PIX_FMT_VIDEOTOOLBOX)
     {
         info->video_decode_support |= HB_DECODE_SUPPORT_VIDEOTOOLBOX;
+    }
+    else if (pv->context->pix_fmt == AV_PIX_FMT_D3D11)
+    {
+        info->video_decode_support |= HB_DECODE_SUPPORT_MF;
     }
 
     return 1;

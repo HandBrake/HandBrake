@@ -421,7 +421,7 @@ Das Aktivitätsprotokoll kann weitere Informationen enthalten.</value>
     <value>Tonspuren</value>
   </data>
   <data name="AudioViewModel_ConfigureDefaults" xml:space="preserve">
-    <value>Auswahlverhalten ...</value>
+    <value>Auswahlverhalten …</value>
   </data>
   <data name="AudioViewModel_SwitchBackToTracks" xml:space="preserve">
     <value>Zu den Spuren zurückkehren</value>
@@ -550,7 +550,7 @@ Soll HandBrake wirklich beendet werden?</value>
     <value>Zu den Spuren zurückkehren</value>
   </data>
   <data name="SubtitlesViewModel_ConfigureDefaults" xml:space="preserve">
-    <value>Auswahlverhalten ...</value>
+    <value>Auswahlverhalten …</value>
   </data>
   <data name="PresetService_ArchiveFile" xml:space="preserve">
     <value>Archivierte Datei:</value>
@@ -1124,14 +1124,8 @@ Hinweis: Das Verhalten beim Überschreiben von Dateien kann in den Einstellungen
   <data name="MetaDataView_Title" xml:space="preserve">
     <value>Metadaten</value>
   </data>
-  <data name="OptionsView_EnableNvencEncoding" xml:space="preserve">
-    <value>Verwendung des Nvidia NVENC-Encoders erlauben</value>
-  </data>
-  <data name="OptionsView_EnableQuicksyncEncoding" xml:space="preserve">
-    <value>Verwendung des Intel QuickSync-Encoders erlauben</value>
-  </data>
-  <data name="OptionsView_EnableVceEncoding" xml:space="preserve">
-    <value>Verwendung des AMD VCN-Encoders erlauben</value>
+  <data name="OptionsView_EnableDirectXDecoding" xml:space="preserve">
+    <value>Verwendung von DirectX-Decodierung erlauben</value>
   </data>
   <data name="OptionsView_InvalidFileFormatChars" xml:space="preserve">
     <value>Das eingegebene Dateiformat enthielt ungültige Zeichen. Diese wurden entfernt.</value>
@@ -1228,6 +1222,9 @@ Hinweis: Das Verhalten beim Überschreiben von Dateien kann in den Einstellungen
   </data>
   <data name="Options_MinTitleScanLength" xml:space="preserve">
     <value>Minimale Länge von DVD- und Blu-ray-Titeln in Sekunden. Kürzere Titel werden übersprungen:</value>
+  </data>
+  <data name="Options_KeepDuplicateTitles" xml:space="preserve">
+    <value>Doppelte Titel auf Blu-ray-Quellen behalten (Neustart erforderlich)</value>
   </data>
   <data name="Options_MP4FileExtension" xml:space="preserve">
     <value>MP4-Dateiendung:</value>
@@ -1918,8 +1915,8 @@ Sie können den Text oben per Drag &amp; Drop ziehen oder eingeben.</value>
   <data name="FiltersViewAuto_DeblockTune" xml:space="preserve">
     <value>Deblock-Abstimmung</value>
   </data>
-  <data name="OptionsView_ChoiceOfEncoderHint" xml:space="preserve">
-    <value>Die Wahl des Encoders wird im Video-Tab verfügbar gemacht.</value>
+  <data name="OptionsView_EncodeNotes" xml:space="preserve">
+    <value>Hinweis: Nicht alle Hardware-Encoder haben zusätzliche Einstellungen. Alle auf diesem System verfügbaren und unterstützten Hardware-Encoder stehen auf der Registerkarte "Video" unter dem Dropdown-Menü "Video-Encoder" zur Auswahl.</value>
   </data>
   <data name="Queue_RecoverQueueQuestionPlural" xml:space="preserve">
     <value>HandBrake hat einige nicht fertiggestellte Warteschlangedateien gefunden. Diese werden von mehreren Instanzen von HandBrake sein. Sollen alle nicht fertig gestellten Aufgaben wiederhergestellt werden?</value>
@@ -2699,7 +2696,7 @@ Alternativ können Sie auch das Kontrollkästchen "Externen Abspieler verwenden"
     <value>Die integrierte Vorschau ist für den WebM-Container nicht verfügbar. Es muss ein externer Player verwendet werden.</value>
   </data>
   <data name="StaticPreview_EncodingPreview" xml:space="preserve">
-    <value>Vorschau encodieren…</value>
+    <value>Vorschau encodieren …</value>
   </data>
   <data name="StaticPreview_Previews" xml:space="preserve">
     <value>Vorschau:</value>
@@ -2821,5 +2818,77 @@ Um mehrere gleichzeitige Encodierungen zu ermöglichen, aktivieren Sie die "Proz
   </data>
   <data name="VideoView_LosslessEncodeOnly" xml:space="preserve">
     <value>Nur verlustfreie Encodierung.</value>
+  </data>
+  <data name="MainView_HideClassicMenu" xml:space="preserve">
+    <value>Menüleiste ausblenden</value>
+  </data>
+  <data name="MainView_ShowClassicMenu" xml:space="preserve">
+    <value>Menüleiste einblenden</value>
+  </data>
+  <data name="OptionsViewVideo_UnsupportedIntelDriver" xml:space="preserve">
+    <value>(Achtung: Nicht unterstützter Treiber! - Aktualisierung empfohlen)</value>
+  </data>
+  <data name="QueueSelectionView_RangeLimits" xml:space="preserve">
+    <value>Bereichsgrenzen:</value>
+  </data>
+  <data name="QueueSelectionView_RangeLimitsDesc" xml:space="preserve">
+    <value>Begrenzt die Länge der Titel, die der Warteschlange hinzugefügt werden.</value>
+  </data>
+  <data name="QueueSelectionView_RangeLimitsEnable" xml:space="preserve">
+    <value>Bereichsgrenzen aktivieren</value>
+  </data>
+  <data name="AddToQueue_RangeLimitError" xml:space="preserve">
+    <value>Einige Titel konnten nicht in die Warteschlange aufgenommen werden, da sie außerhalb der gewählten Bereichsgrenzen lagen.</value>
+  </data>
+  <data name="QueueView_StartAtTime" xml:space="preserve">
+    <value>Später starten</value>
+  </data>
+  <data name="QueueView_QueueStartTime" xml:space="preserve">
+    <value>Warteschlangen-Startzeit:</value>
+  </data>
+  <data name="QueueView_EncodeShutdown" xml:space="preserve">
+    <value>Encodierung beenden …</value>
+  </data>
+  <data name="PictureSettingsView_AllowUpscaling" xml:space="preserve">
+    <value>Hochskalieren zulassen</value>
+  </data>
+  <data name="PictureSettingsView_OptimalSize" xml:space="preserve">
+    <value>Optimale Größe</value>
+  </data>
+  <data name="OptionsView_Available" xml:space="preserve">
+    <value>Auf diesem System verfügbar.</value>
+  </data>
+  <data name="OptionsView_NotAvailable" xml:space="preserve">
+    <value>Auf diesem System nicht verfügbar.</value>
+  </data>
+  <data name="MainView_ScanningStatus" xml:space="preserve">
+    <value>Bitte warten …</value>
+  </data>
+  <data name="MainView_Cancel" xml:space="preserve">
+    <value>Abbrechen</value>
+  </data>
+  <data name="MainView_OpenLog" xml:space="preserve">
+    <value>Aktivitätsprotokoll öffnen</value>
+  </data>
+  <data name="OptionsView_EnableNvencEncoding" xml:space="preserve">
+    <value/>
+  </data>
+  <data name="OptionsView_EnableQuicksyncEncoding" xml:space="preserve">
+    <value/>
+  </data>
+  <data name="OptionsView_EnableVceEncoding" xml:space="preserve">
+    <value/>
+  </data>
+  <data name="OptionsView_ChoiceOfEncoderHint" xml:space="preserve">
+    <value/>
+  </data>
+  <data name="AnamorphicMode_Custom" xml:space="preserve">
+    <value>Eigene</value>
+  </data>
+  <data name="AnamorphicMode_None" xml:space="preserve">
+    <value>Keine</value>
+  </data>
+  <data name="AnamorphicMode_Automatic" xml:space="preserve">
+    <value>Automatisch</value>
   </data>
 </root>

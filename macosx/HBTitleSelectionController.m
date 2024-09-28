@@ -5,17 +5,21 @@
  It may be used under the terms of the GNU General Public License. */
 
 #import "HBTitleSelectionController.h"
+#import "HBTitleSelectionRangeController.h"
 #import "HBTableView.h"
 
 @import HandBrakeKit;
 
 @interface HBTitleSelection : NSObject
+
 @property (nonatomic, readonly) HBTitle *title;
 @property (nonatomic, readonly) BOOL enabled;
 @property (nonatomic, readonly, assign) NSUndoManager *undo;
+
 @end
 
 @implementation HBTitleSelection
+
 - (instancetype)initWithTitle:(HBTitle *)title undo:(NSUndoManager *)undo
 {
     if (self = [super init])
@@ -35,15 +39,21 @@
     }
     _enabled = enabled;
 }
+
 @end
 
 @interface HBTitleSelectionController () <NSTableViewDataSource, NSTableViewDelegate>
 
 @property (nonatomic, weak) IBOutlet HBTableView *tableView;
+@property (nonatomic, weak) IBOutlet NSView *rangeView;
+
 @property (nonatomic, strong) IBOutlet NSArrayController *arrayController;
+
+@property (nonatomic, readonly) HBTitleSelectionRangeController *selectionRangeController;
 
 @property (nonatomic, readwrite) NSArray<HBTitleSelection *> *titles;
 @property (nonatomic, readonly, weak) id<HBTitleSelectionDelegate> delegate;
+
 @property (nonatomic, readonly) NSString *message;
 
 @end
@@ -55,6 +65,7 @@
     self = [super initWithWindowNibName:@"HBTitleSelection"];
     if (self)
     {
+        _selectionRangeController = [[HBTitleSelectionRangeController alloc] initWithTitles:titles];
         _delegate = delegate;
         _message = [NSString stringWithFormat:NSLocalizedString(@"Select the titles to add to the queue using the %@ preset:" , @"Titles selection sheet -> informative text"), presetName];
 
@@ -73,6 +84,12 @@
 {
     NSSortDescriptor *mySortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"title.index" ascending:YES];
     self.arrayController.sortDescriptors = [NSArray arrayWithObject:mySortDescriptor];
+
+    self.selectionRangeController.view.autoresizingMask = NSViewWidthSizable | NSViewHeightSizable;
+    self.selectionRangeController.view.frame = NSMakeRect(0, 0, self.rangeView.frame.size.width, self.rangeView.frame.size.height);
+    [self.rangeView addSubview:self.selectionRangeController.view];
+
+    self.selectionRangeController.range.undo = self.window.undoManager;
 }
 
 - (IBAction)enable:(id)sender
@@ -126,12 +143,16 @@
             [titles addObject:obj.title];
         }
     }];
-    [self.delegate didSelectTitles:titles];
+
+    HBTitleSelectionRange *range = self.selectionRangeController.enabled ?
+                                    [self.selectionRangeController.range copy] : nil;
+
+    [self.delegate didSelectTitles:titles range:range];
 }
 
 - (IBAction)cancel:(id)sender
 {
-    [self.delegate didSelectTitles:@[]];
+    [self.delegate didSelectTitles:@[] range:nil];
 }
 
 - (BOOL)validateMenuItem:(NSMenuItem *)menuItem

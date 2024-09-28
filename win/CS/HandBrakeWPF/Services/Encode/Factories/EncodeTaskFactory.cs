@@ -24,6 +24,7 @@ namespace HandBrakeWPF.Services.Encode.Factories
 
     using HandBrakeWPF.Model.Filters;
     using HandBrakeWPF.Services.Interfaces;
+    using HandBrakeWPF.Utilities;
 
     using AudioEncoderRateType = Model.Models.AudioEncoderRateType;
     using AudioTrack = Model.Models.AudioTrack;
@@ -100,11 +101,17 @@ namespace HandBrakeWPF.Services.Encode.Factories
             }
 
             bool nvdec = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.EnableNvDecSupport);
+            bool directx = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.EnableDirectXDecoding);
 
             int hwDecode = 0;
             if (nvdec)
             {
                 hwDecode = (int)NativeConstants.HB_DECODE_SUPPORT_NVDEC;
+            }
+
+            if (directx && HandBrakeHardwareEncoderHelper.IsDirectXAvailable)
+            {
+                hwDecode = (int)NativeConstants.HB_DECODE_SUPPORT_MF;
             }
 
             bool qsv = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.EnableQuickSyncDecoding);
@@ -119,7 +126,8 @@ namespace HandBrakeWPF.Services.Encode.Factories
                 Range = range,
                 Angle = job.Angle,
                 Path = job.Source,
-                HWDecode = hwDecode
+                HWDecode = hwDecode,
+                KeepDuplicateTitles = job.KeepDuplicateTitles
             };
             return source;
         }
@@ -258,8 +266,8 @@ namespace HandBrakeWPF.Services.Encode.Factories
 
             video.MultiPass = job.MultiPass;
             video.Turbo = job.TurboAnalysisPass;
+            video.Options = job.ExtraAdvancedArguments;
 
-            bool enableQuickSyncEncoding = userSettingService.GetUserSetting<bool>(UserSettingConstants.EnableQuickSyncEncoding);
             bool enableQuickSyncDecoding = userSettingService.GetUserSetting<bool>(UserSettingConstants.EnableQuickSyncDecoding);
             bool useQSVDecodeForNonQSVEnc = userSettingService.GetUserSetting<bool>(UserSettingConstants.UseQSVDecodeForNonQSVEnc);
             bool enableQsvLowPower = userSettingService.GetUserSetting<bool>(UserSettingConstants.EnableQuickSyncLowPower);
@@ -270,12 +278,12 @@ namespace HandBrakeWPF.Services.Encode.Factories
             }
 
             // Allow use of the QSV decoder is configurable for non QSV encoders.
-            if (this.isEncodePath &&  job.VideoEncoder != null && !job.VideoEncoder.IsHardwareEncoder && useQSVDecodeForNonQSVEnc && enableQuickSyncDecoding && enableQuickSyncEncoding)
+            if (this.isEncodePath &&  job.VideoEncoder != null && !job.VideoEncoder.IsHardwareEncoder && useQSVDecodeForNonQSVEnc && enableQuickSyncDecoding)
             {
                 video.QSV.Decode = HandBrakeHardwareEncoderHelper.IsQsvAvailable && useQSVDecodeForNonQSVEnc;
             }
 
-            if (!this.isEncodePath && HandBrakeHardwareEncoderHelper.IsQsvAvailable && (HandBrakeHardwareEncoderHelper.QsvHardwareGeneration > 6) && job.VideoEncoder.IsQuickSync)
+            if (this.isEncodePath && HandBrakeHardwareEncoderHelper.IsQsvAvailable && (HandBrakeHardwareEncoderHelper.QsvHardwareGeneration > 6) && (job.VideoEncoder?.IsQuickSync ?? false))
             {
                 if (enableQsvLowPower && !video.Options.Contains("lowpower"))
                 {
@@ -287,12 +295,16 @@ namespace HandBrakeWPF.Services.Encode.Factories
                 }
             }
 
-            if (!this.isEncodePath && HandBrakeHardwareEncoderHelper.IsNVDecAvailable &&  this.userSettingService.GetUserSetting<bool>(UserSettingConstants.EnableNvDecSupport) && job.VideoEncoder.IsNVEnc)
+            if (this.isEncodePath && HandBrakeHardwareEncoderHelper.IsNVDecAvailable &&  this.userSettingService.GetUserSetting<bool>(UserSettingConstants.EnableNvDecSupport) && job.VideoEncoder.IsNVEnc)
             {
                 video.HardwareDecode = (int)NativeConstants.HB_DECODE_SUPPORT_NVDEC;
             }
 
-            video.Options = job.ExtraAdvancedArguments;
+            if (HandBrakeHardwareEncoderHelper.IsDirectXAvailable && this.userSettingService.GetUserSetting<bool>(UserSettingConstants.EnableDirectXDecoding))
+            {
+                video.HardwareDecode = (int)NativeConstants.HB_DECODE_SUPPORT_MF;
+            }
+
 
             return video;
         }

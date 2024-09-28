@@ -31,7 +31,7 @@ namespace HandBrakeWPF.Services.Logging
             string logDir = DirectoryUtilities.GetLogDirectory();
             string filename = string.Format("activity_log_main.{0}.txt", GeneralUtilities.ProcessId);
             string logFile = Path.Combine(logDir, filename);
-            generalAppLogger.ConfigureLogging(filename, logFile);
+            generalAppLogger.ConfigureLogging(filename, logFile, false);
 
             IoCHelper.Get<ILogInstanceManager>().Register(filename, generalAppLogger, true);
 

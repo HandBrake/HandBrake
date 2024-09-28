@@ -12,6 +12,8 @@ namespace HandBrakeWPF.Services.Scan
     using System;
     using System.Collections.Generic;
     using System.Diagnostics;
+    using System.Drawing;
+    using System.Linq;
     using System.Windows.Media.Imaging;
 
     using HandBrake.Interop.Interop;
@@ -163,10 +165,11 @@ namespace HandBrakeWPF.Services.Scan
         /// <param name="preview">
         /// The preview.
         /// </param>
+        /// <param name="showCropBoundaries">Render crop boundary borders on the preview image.</param>
         /// <returns>
         /// The <see cref="BitmapImage"/>.
         /// </returns>
-        public BitmapImage GetPreview(EncodeTask job, int preview)
+        public BitmapImage GetPreview(EncodeTask job, int preview, bool showCropBoundaries)
         {
             if (this.instance == null)
             {
@@ -176,12 +179,31 @@ namespace HandBrakeWPF.Services.Scan
             BitmapImage bitmapImage = null;
             try
             {
+
                 EncodeTaskFactory factory = new EncodeTaskFactory(this.userSettingService, false);
                 JsonEncodeObject jobDict = factory.Create(job);
+
+                if (showCropBoundaries)
+                {
+                    // We want uncropped image so we can render an overlay on top.
+                    var cropFilter = jobDict.Filters.FilterList.FirstOrDefault(s => s.ID == (int)hb_filter_ids.HB_FILTER_CROP_SCALE);
+                    if (cropFilter != null)
+                    {
+                        jobDict.Filters.FilterList.Remove(cropFilter);
+                    }
+                }
+
+
                 RawPreviewData bitmapData = this.instance.GetPreview(jobDict, preview);
                 if (bitmapData != null)
                 {
-                    bitmapImage = BitmapUtilities.ConvertToBitmapImage(BitmapUtilities.ConvertByteArrayToBitmap(bitmapData));
+                    Bitmap image = BitmapUtilities.ConvertByteArrayToBitmap(bitmapData);
+                    if (showCropBoundaries)
+                    {
+                        image = PreviewManager.RenderCropBorder(image, job.Cropping);
+                    }
+
+                    bitmapImage = BitmapUtilities.ConvertToBitmapImage(image);
                 }
             }
             catch (AccessViolationException e)
@@ -191,7 +213,7 @@ namespace HandBrakeWPF.Services.Scan
 
             return bitmapImage;
         }
-
+        
         /// <summary>
         /// The service log message.
         /// </summary>
@@ -228,15 +250,22 @@ namespace HandBrakeWPF.Services.Scan
                 List<string> excludedExtensions = this.userSettingService.GetUserSetting<List<string>>(UserSettingConstants.ExcludedExtensions);
 
                 bool nvdec = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.EnableNvDecSupport);
+                bool directx = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.EnableDirectXDecoding);
+
                 int hwDecode = 0;
                 if (nvdec && HandBrakeHardwareEncoderHelper.IsNVDecAvailable)
                 {
                     hwDecode = (int)NativeConstants.HB_DECODE_SUPPORT_NVDEC;
                 }
+                if (directx && HandBrakeHardwareEncoderHelper.IsDirectXAvailable)
+                {
+                    hwDecode = (int)NativeConstants.HB_DECODE_SUPPORT_MF;
+                }
 
+                bool keepDuplicateTitles = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.KeepDuplicateTitles);
 
                 this.ServiceLogMessage("Starting Scan ...");
-                this.instance.StartScan(sourcePaths, previewCount, minDuration, title != 0 ? title : 0, excludedExtensions, hwDecode);
+                this.instance.StartScan(sourcePaths, previewCount, minDuration, title != 0 ? title : 0, excludedExtensions, hwDecode, keepDuplicateTitles);
 
                 this.ScanStarted?.Invoke(this, System.EventArgs.Empty);
             }

@@ -188,30 +188,35 @@ static void powerSourceCallback(void *context)
 - (NSMutableArray *)load
 {
     NSError *error;
+    NSArray *loadedItems = nil;
 
-    NSData *queue = [NSData dataWithContentsOfURL:self.fileURL];
-    NSKeyedUnarchiver *unarchiver = [[NSKeyedUnarchiver alloc] initForReadingWithData:queue];
-    unarchiver.requiresSecureCoding = YES;
-
-    NSSet *objectClasses = [NSSet setWithObjects:[NSMutableArray class], [HBQueueJobItem class], [HBQueueActionStopItem class], nil];
-
-    NSArray *loadedItems = [unarchiver decodeTopLevelObjectOfClasses:objectClasses
-                                                              forKey:NSKeyedArchiveRootObjectKey
-                                                               error:&error];
-
-    if (error)
+    NSData *data = [NSData dataWithContentsOfURL:self.fileURL];
+    if (data)
     {
-        [HBUtilities writeErrorToActivityLog:error];
-    }
+        NSSet *objectClasses = [NSSet setWithObjects:[NSMutableArray class], [HBQueueJobItem class], [HBQueueActionStopItem class], nil];
+        loadedItems = [NSKeyedUnarchiver unarchivedObjectOfClasses:objectClasses fromData:data error:&error];
 
-    [unarchiver finishDecoding];
+        if (loadedItems == nil && error)
+        {
+            [HBUtilities writeErrorToActivityLog:error];
+        }
+    }
 
     return loadedItems ? [loadedItems mutableCopy] : [NSMutableArray array];
 }
 
 - (void)save
 {
-    if (![NSKeyedArchiver archiveRootObject:self.itemsInternal toFile:self.fileURL.path])
+    NSError *error = nil;
+    NSData *data = [NSKeyedArchiver archivedDataWithRootObject:self.itemsInternal requiringSecureCoding:YES error:&error];
+    if (data == nil)
+    {
+        [HBUtilities writeToActivityLog:"Failed to archive the queue"];
+        return;
+    }
+
+    BOOL result = [data writeToURL:self.fileURL atomically:YES];
+    if (result == NO)
     {
         [HBUtilities writeToActivityLog:"Failed to write the queue to disk"];
     }

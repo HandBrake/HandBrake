@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="32700.99.1234" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="22505" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="22689"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="22505"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="HBTitleSelectionController">
             <connections>
                 <outlet property="arrayController" destination="Btd-Nt-z41" id="zGL-0Q-Zf6"/>
+                <outlet property="rangeView" destination="IvD-Mu-WFQ" id="BQp-PK-x98"/>
                 <outlet property="tableView" destination="wM9-Ln-dr0" id="7ew-vT-Bjr"/>
                 <outlet property="window" destination="F0z-JX-Cv5" id="gIp-Ho-8D9"/>
             </connections>
@@ -24,15 +25,15 @@
         <window title="Window" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" restorable="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" frameAutosaveName="HBTitleSelectionWindow" animationBehavior="default" id="F0z-JX-Cv5">
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
-            <rect key="contentRect" x="196" y="240" width="554" height="270"/>
-            <rect key="screenRect" x="0.0" y="0.0" width="1920" height="1055"/>
+            <rect key="contentRect" x="196" y="240" width="554" height="294"/>
+            <rect key="screenRect" x="0.0" y="0.0" width="1440" height="875"/>
             <value key="minSize" type="size" width="300" height="200"/>
-            <view key="contentView" id="se5-gp-TjO">
+            <view key="contentView" misplaced="YES" id="se5-gp-TjO">
                 <rect key="frame" x="0.0" y="0.0" width="554" height="270"/>
                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                 <subviews>
                     <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="6000" translatesAutoresizingMaskIntoConstraints="NO" id="5Jw-On-iU3">
-                        <rect key="frame" x="18" y="236" width="518" height="14"/>
+                        <rect key="frame" x="18" y="236" width="208" height="14"/>
                         <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Select the titles to add to the queue:" id="5tD-fg-g4t">
                             <font key="font" metaFont="smallSystemBold"/>
                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -60,13 +61,13 @@ DQ
                         </connections>
                     </button>
                     <scrollView autohidesScrollers="YES" horizontalLineScroll="18" horizontalPageScroll="10" verticalLineScroll="18" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="a1K-L9-fU9">
-                        <rect key="frame" x="20" y="55" width="514" height="173"/>
+                        <rect key="frame" x="20" y="76" width="514" height="152"/>
                         <clipView key="contentView" id="dTc-E7-D15">
-                            <rect key="frame" x="1" y="1" width="512" height="171"/>
+                            <rect key="frame" x="1" y="1" width="512" height="150"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
                                 <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" tableStyle="plain" alternatingRowBackgroundColors="YES" columnReordering="NO" columnSelection="YES" columnResizing="NO" autosaveColumns="NO" autosaveName="HBTitleSelectionTable" rowHeight="14" headerView="sEp-Wn-EWq" viewBased="YES" floatsGroupRows="NO" id="wM9-Ln-dr0" customClass="HBTableView">
-                                    <rect key="frame" x="0.0" y="0.0" width="512" height="148"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="512" height="127"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <size key="intercellSpacing" width="3" height="4"/>
                                     <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -102,9 +103,9 @@ DQ
                                                         </textField>
                                                     </subviews>
                                                     <constraints>
-                                                        <constraint firstAttribute="trailing" secondItem="gLJ-VQ-3cg" secondAttribute="trailing" constant="3" id="Del-Mc-9Ir"/>
-                                                        <constraint firstItem="gLJ-VQ-3cg" firstAttribute="centerY" secondItem="6H6-2e-RPZ" secondAttribute="centerY" id="WKc-QG-4AK"/>
-                                                        <constraint firstItem="gLJ-VQ-3cg" firstAttribute="centerX" secondItem="6H6-2e-RPZ" secondAttribute="centerX" id="ZjF-Mk-ioN"/>
+                                                        <constraint firstAttribute="trailing" secondItem="gLJ-VQ-3cg" secondAttribute="trailing" constant="3" id="ISE-P3-bCL"/>
+                                                        <constraint firstItem="gLJ-VQ-3cg" firstAttribute="leading" secondItem="6H6-2e-RPZ" secondAttribute="leading" constant="3" id="Ig2-zh-fUn"/>
+                                                        <constraint firstItem="gLJ-VQ-3cg" firstAttribute="centerY" secondItem="6H6-2e-RPZ" secondAttribute="centerY" id="OaO-0n-Wax"/>
                                                     </constraints>
                                                     <connections>
                                                         <outlet property="textField" destination="gLJ-VQ-3cg" id="0FP-jj-mZ3"/>
@@ -148,10 +149,10 @@ DQ
                                                         </button>
                                                     </subviews>
                                                     <constraints>
-                                                        <constraint firstItem="LSj-el-4SZ" firstAttribute="top" secondItem="Sil-eA-Flj" secondAttribute="top" id="Frk-C9-GFL"/>
-                                                        <constraint firstAttribute="trailing" secondItem="LSj-el-4SZ" secondAttribute="trailing" constant="3" id="UQ1-pS-50g"/>
-                                                        <constraint firstItem="LSj-el-4SZ" firstAttribute="leading" secondItem="Sil-eA-Flj" secondAttribute="leading" constant="3" id="X6L-8x-emD"/>
-                                                        <constraint firstItem="LSj-el-4SZ" firstAttribute="centerY" secondItem="Sil-eA-Flj" secondAttribute="centerY" id="fFt-qH-NfJ"/>
+                                                        <constraint firstItem="LSj-el-4SZ" firstAttribute="leading" secondItem="Sil-eA-Flj" secondAttribute="leading" constant="3" id="6dp-mX-jt4"/>
+                                                        <constraint firstItem="LSj-el-4SZ" firstAttribute="top" secondItem="Sil-eA-Flj" secondAttribute="top" id="8A2-xZ-F6p"/>
+                                                        <constraint firstAttribute="trailing" secondItem="LSj-el-4SZ" secondAttribute="trailing" constant="3" id="Lqm-d2-G1i"/>
+                                                        <constraint firstItem="LSj-el-4SZ" firstAttribute="centerY" secondItem="Sil-eA-Flj" secondAttribute="centerY" id="bDE-WH-wc7"/>
                                                     </constraints>
                                                 </tableCellView>
                                             </prototypeCellViews>
@@ -188,9 +189,9 @@ DQ
                                                         </textField>
                                                     </subviews>
                                                     <constraints>
-                                                        <constraint firstItem="dTs-ND-Vgf" firstAttribute="centerX" secondItem="eNN-Bb-hW0" secondAttribute="centerX" id="EPE-W5-aeC"/>
-                                                        <constraint firstItem="dTs-ND-Vgf" firstAttribute="leading" secondItem="eNN-Bb-hW0" secondAttribute="leading" constant="2" id="UyN-tC-AaD"/>
-                                                        <constraint firstItem="dTs-ND-Vgf" firstAttribute="centerY" secondItem="eNN-Bb-hW0" secondAttribute="centerY" id="luw-sp-gtq"/>
+                                                        <constraint firstItem="dTs-ND-Vgf" firstAttribute="centerY" secondItem="eNN-Bb-hW0" secondAttribute="centerY" id="QWs-vO-Bxz"/>
+                                                        <constraint firstItem="dTs-ND-Vgf" firstAttribute="centerX" secondItem="eNN-Bb-hW0" secondAttribute="centerX" id="mlK-oP-av7"/>
+                                                        <constraint firstItem="dTs-ND-Vgf" firstAttribute="leading" secondItem="eNN-Bb-hW0" secondAttribute="leading" constant="2" id="q2H-6B-giO"/>
                                                     </constraints>
                                                     <connections>
                                                         <outlet property="textField" destination="dTs-ND-Vgf" id="XHC-5X-yGo"/>
@@ -215,6 +216,9 @@ DQ
                                 </tableView>
                             </subviews>
                         </clipView>
+                        <constraints>
+                            <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="149" id="6Dt-h7-aSM"/>
+                        </constraints>
                         <scroller key="horizontalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="YES" id="KUp-wz-bHB">
                             <rect key="frame" x="1" y="87" width="507" height="15"/>
                             <autoresizingMask key="autoresizingMask"/>
@@ -241,26 +245,37 @@ Gw
                             <action selector="cancel:" target="-2" id="DP7-vq-pVX"/>
                         </connections>
                     </button>
+                    <customView translatesAutoresizingMaskIntoConstraints="NO" id="IvD-Mu-WFQ">
+                        <rect key="frame" x="20" y="44" width="514" height="24"/>
+                        <constraints>
+                            <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="24" id="4Ca-Iz-UP6"/>
+                            <constraint firstAttribute="height" priority="750" constant="24" id="Xgc-fp-JUK"/>
+                        </constraints>
+                    </customView>
                 </subviews>
                 <constraints>
-                    <constraint firstItem="a1K-L9-fU9" firstAttribute="trailing" secondItem="TFh-c7-W2w" secondAttribute="trailing" id="1Rv-qd-d1O"/>
-                    <constraint firstItem="TFh-c7-W2w" firstAttribute="leading" secondItem="t5w-9e-K60" secondAttribute="trailing" constant="8" id="38w-zr-7lu"/>
-                    <constraint firstItem="t5w-9e-K60" firstAttribute="top" secondItem="a1K-L9-fU9" secondAttribute="bottom" constant="19" id="B6W-V1-yyB"/>
-                    <constraint firstAttribute="trailing" secondItem="5Jw-On-iU3" secondAttribute="trailing" constant="20" symbolic="YES" id="DFg-QW-2dB"/>
-                    <constraint firstItem="t5w-9e-K60" firstAttribute="baseline" secondItem="TFh-c7-W2w" secondAttribute="baseline" id="Plr-pR-6oc"/>
-                    <constraint firstItem="a1K-L9-fU9" firstAttribute="top" secondItem="5Jw-On-iU3" secondAttribute="bottom" constant="8" symbolic="YES" id="QDj-yW-Ftj"/>
-                    <constraint firstItem="5Jw-On-iU3" firstAttribute="leading" secondItem="se5-gp-TjO" secondAttribute="leading" constant="20" symbolic="YES" id="Rxc-Wu-Lud"/>
-                    <constraint firstItem="TFh-c7-W2w" firstAttribute="width" secondItem="t5w-9e-K60" secondAttribute="width" id="UCk-Oi-KUJ"/>
-                    <constraint firstItem="5Jw-On-iU3" firstAttribute="trailing" secondItem="a1K-L9-fU9" secondAttribute="trailing" id="ago-Pg-6Pk"/>
-                    <constraint firstItem="5Jw-On-iU3" firstAttribute="leading" secondItem="a1K-L9-fU9" secondAttribute="leading" id="ht2-d9-goW"/>
-                    <constraint firstItem="5Jw-On-iU3" firstAttribute="top" secondItem="se5-gp-TjO" secondAttribute="top" constant="20" symbolic="YES" id="l2E-Pu-aQK"/>
-                    <constraint firstAttribute="bottom" secondItem="t5w-9e-K60" secondAttribute="bottom" constant="20" symbolic="YES" id="nbD-E4-AIy"/>
+                    <constraint firstItem="t5w-9e-K60" firstAttribute="baseline" secondItem="TFh-c7-W2w" secondAttribute="baseline" id="0iU-7y-X0o"/>
+                    <constraint firstItem="t5w-9e-K60" firstAttribute="top" secondItem="IvD-Mu-WFQ" secondAttribute="bottom" constant="8" symbolic="YES" id="5LB-Kb-Qxh"/>
+                    <constraint firstAttribute="trailing" secondItem="IvD-Mu-WFQ" secondAttribute="trailing" constant="20" symbolic="YES" id="7AW-eV-bCc"/>
+                    <constraint firstItem="IvD-Mu-WFQ" firstAttribute="top" secondItem="a1K-L9-fU9" secondAttribute="bottom" constant="8" symbolic="YES" id="MK7-cT-OtV"/>
+                    <constraint firstAttribute="bottom" secondItem="TFh-c7-W2w" secondAttribute="bottom" constant="20" symbolic="YES" id="VqS-Og-Zx4"/>
+                    <constraint firstAttribute="trailing" secondItem="TFh-c7-W2w" secondAttribute="trailing" constant="20" symbolic="YES" id="aGS-mN-aEz"/>
+                    <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="5Jw-On-iU3" secondAttribute="trailing" constant="20" symbolic="YES" id="bEM-FD-d6Y"/>
+                    <constraint firstItem="IvD-Mu-WFQ" firstAttribute="leading" secondItem="se5-gp-TjO" secondAttribute="leading" constant="20" symbolic="YES" id="bsk-5y-f5B"/>
+                    <constraint firstItem="t5w-9e-K60" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="se5-gp-TjO" secondAttribute="leading" constant="20" symbolic="YES" id="ern-Gx-UBu"/>
+                    <constraint firstItem="a1K-L9-fU9" firstAttribute="top" secondItem="5Jw-On-iU3" secondAttribute="bottom" constant="8" symbolic="YES" id="fKk-io-f92"/>
+                    <constraint firstItem="5Jw-On-iU3" firstAttribute="top" secondItem="se5-gp-TjO" secondAttribute="top" constant="20" symbolic="YES" id="fat-a0-cNi"/>
+                    <constraint firstItem="a1K-L9-fU9" firstAttribute="leading" secondItem="se5-gp-TjO" secondAttribute="leading" constant="20" symbolic="YES" id="ilk-cU-gf5"/>
+                    <constraint firstItem="5Jw-On-iU3" firstAttribute="leading" secondItem="se5-gp-TjO" secondAttribute="leading" constant="20" symbolic="YES" id="nCf-Tb-foM"/>
+                    <constraint firstAttribute="trailing" secondItem="a1K-L9-fU9" secondAttribute="trailing" constant="20" symbolic="YES" id="rbQ-69-03A"/>
+                    <constraint firstItem="TFh-c7-W2w" firstAttribute="leading" secondItem="t5w-9e-K60" secondAttribute="trailing" constant="8" symbolic="YES" id="wVs-Xu-U8B"/>
+                    <constraint firstItem="t5w-9e-K60" firstAttribute="width" secondItem="TFh-c7-W2w" secondAttribute="width" id="wn0-S0-NqF"/>
                 </constraints>
             </view>
             <connections>
                 <outlet property="delegate" destination="-2" id="0bl-1N-AYu"/>
             </connections>
-            <point key="canvasLocation" x="61" y="-114"/>
+            <point key="canvasLocation" x="61" y="-90"/>
         </window>
         <menu id="vdO-DI-vks">
             <items>

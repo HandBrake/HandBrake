@@ -12,6 +12,7 @@
     <SolidColorBrush x:Key="Ui.Dark" Color="#252525" />
     <SolidColorBrush x:Key="Ui.Mid" Color="#363636" />
     <SolidColorBrush x:Key="Ui.Light" Color="#464646" />
+    <SolidColorBrush x:Key="Ui.Light2" Color="#464646" />
     <SolidColorBrush x:Key="Ui.Ultralight" Color="#606060" />
     <SolidColorBrush x:Key="Ui.UltraLight2" Color="#acacac" />
     <SolidColorBrush x:Key="Ui.ContrastLight" Color="#C0C0C0" />

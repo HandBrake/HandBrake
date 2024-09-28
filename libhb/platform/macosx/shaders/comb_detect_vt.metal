@@ -22,23 +22,22 @@ using namespace metal;
  * Parameters
  */
 
+constant int   spatial_metric [[function_constant(0)]];
+constant float motion_threshold [[function_constant(1)]];
+constant float spatial_threshold [[function_constant(2)]];
+constant int   block_threshold [[function_constant(3)]];
+constant int   block_width [[function_constant(4)]];
+constant int   block_height [[function_constant(5)]];
+
+constant float gamma_motion_threshold [[function_constant(6)]];
+constant float gamma_spatial_threshold [[function_constant(7)]];
+constant float gamma_spatial_threshold6 [[function_constant(8)]];
+constant float spatial_threshold_squared [[function_constant(9)]];
+constant float spatial_threshold6 [[function_constant(10)]];
+constant float comb32detect_min [[function_constant(11)]];
+constant float comb32detect_max [[function_constant(12)]];
+
 struct params {
-    int spatial_metric;
-
-    float motion_threshold;
-    float spatial_threshold;
-    int   block_threshold;
-    int   block_width;
-    int   block_height;
-
-    float gamma_motion_threshold;
-    float gamma_spatial_threshold;
-    float gamma_spatial_threshold6;
-    float spatial_threshold_squared;
-    float spatial_threshold6;
-    float comb32detect_min;
-    float comb32detect_max;
-
     bool  force_exaustive_check;
 };
 
@@ -139,11 +138,6 @@ void detect_gamma_combed_segment(
     // AviSynth and tritical's IsCombedT and
     // IsCombedTIVTC plugins.
 
-    // Comb scoring algorithm
-    const float mthresh  = p.gamma_motion_threshold;
-    const float athresh  = p.gamma_spatial_threshold;
-    const float athresh6 = p.gamma_spatial_threshold6;
-
     // These are just to make the buffer locations easier to read.
     const short2 up_2    = short2(pos.x, pos.y -2);
     const short2 up_1    = short2(pos.x, pos.y -1);
@@ -155,21 +149,21 @@ void detect_gamma_combed_segment(
 
     mask.write(0, pos);
 
-    if ((up_diff >  athresh && down_diff >  athresh) ||
-        (up_diff < -athresh && down_diff < -athresh)) {
+    if ((up_diff >  gamma_spatial_threshold && down_diff >  gamma_spatial_threshold) ||
+        (up_diff < -gamma_spatial_threshold && down_diff < -gamma_spatial_threshold)) {
         // The pixel above and below are different,
         // and they change in the same "direction" too.
         bool motion = false;
-        if (mthresh > 0) {
+        if (gamma_motion_threshold > 0) {
             // Make sure there's sufficient motion between frame t-1 to frame t+1.
-            if (abs(gamma(tex2D<T>(prev, pos))   - gamma(tex2D<T>(cur, pos)))     > mthresh &&
-                abs(gamma(tex2D<T>(cur, up_1))   - gamma(tex2D<T>(next, up_1)))   > mthresh &&
-                abs(gamma(tex2D<T>(cur, down_1)) - gamma(tex2D<T>(next, down_1))) > mthresh) {
+            if (abs(gamma(tex2D<T>(prev, pos))   - gamma(tex2D<T>(cur, pos)))     > gamma_motion_threshold &&
+                abs(gamma(tex2D<T>(cur, up_1))   - gamma(tex2D<T>(next, up_1)))   > gamma_motion_threshold &&
+                abs(gamma(tex2D<T>(cur, down_1)) - gamma(tex2D<T>(next, down_1))) > gamma_motion_threshold) {
                 motion = true;
             }
-            if (abs(gamma(tex2D<T>(next, pos))    - gamma(tex2D<T>(cur, pos)))    > mthresh &&
-                abs(gamma(tex2D<T>(prev, up_1))   - gamma(tex2D<T>(cur, up_1)))   > mthresh &&
-                abs(gamma(tex2D<T>(prev, down_1)) - gamma(tex2D<T>(cur, down_1))) > mthresh) {
+            if (abs(gamma(tex2D<T>(next, pos))    - gamma(tex2D<T>(cur, pos)))    > gamma_motion_threshold &&
+                abs(gamma(tex2D<T>(prev, up_1))   - gamma(tex2D<T>(cur, up_1)))   > gamma_motion_threshold &&
+                abs(gamma(tex2D<T>(prev, down_1)) - gamma(tex2D<T>(cur, down_1))) > gamma_motion_threshold) {
                 motion = true;
             }
         } else {
@@ -190,7 +184,7 @@ void detect_gamma_combed_segment(
 
             // If the frame is sufficiently combed,
             // then mark it down on the mask as 1.
-            if (combing > athresh6) {
+            if (combing > gamma_spatial_threshold6) {
                 mask.write(1, pos);
             }
         }
@@ -211,12 +205,6 @@ void detect_combed_segment(
     // AviSynth and tritical's IsCombedT and
     // IsCombedTIVTC plugins.
 
-    // Comb scoring algorithm
-    const float mthresh         = p.motion_threshold;
-    const float athresh         = p.spatial_threshold;
-    const float athresh_squared = p.spatial_threshold_squared;
-    const float athresh6        = p.spatial_threshold6;
-
     // These are just to make the buffer locations easier to read.
     const short2 up_2    = short2(pos.x, pos.y -2);
     const short2 up_1    = short2(pos.x, pos.y -1);
@@ -228,21 +216,21 @@ void detect_combed_segment(
 
     mask.write(0, pos);
 
-    if ((up_diff >  athresh && down_diff >  athresh) ||
-        (up_diff < -athresh && down_diff < -athresh)) {
+    if ((up_diff >  spatial_threshold && down_diff >  spatial_threshold) ||
+        (up_diff < -spatial_threshold && down_diff < -spatial_threshold)) {
         // The pixel above and below are different,
         // and they change in the same "direction" too.
         bool motion = false;
-        if (mthresh > 0) {
+        if (motion_threshold > 0) {
             // Make sure there's sufficient motion between frame t-1 to frame t+1.
-            if (abs(tex2D<T>(prev, pos)   - tex2D<T>(cur, pos))     > mthresh &&
-                abs(tex2D<T>(cur, up_1)   - tex2D<T>(next, up_1))   > mthresh &&
-                abs(tex2D<T>(cur, down_1) - tex2D<T>(next, down_1)) > mthresh) {
+            if (abs(tex2D<T>(prev, pos)   - tex2D<T>(cur, pos))     > motion_threshold &&
+                abs(tex2D<T>(cur, up_1)   - tex2D<T>(next, up_1))   > motion_threshold &&
+                abs(tex2D<T>(cur, down_1) - tex2D<T>(next, down_1)) > motion_threshold) {
                 motion = true;
             }
-            if (abs(tex2D<T>(next, pos)    - tex2D<T>(cur, pos))    > mthresh &&
-                abs(tex2D<T>(prev, up_1)   - tex2D<T>(cur, up_1))   > mthresh &&
-                abs(tex2D<T>(prev, down_1) - tex2D<T>(cur, down_1)) > mthresh) {
+            if (abs(tex2D<T>(next, pos)    - tex2D<T>(cur, pos))    > motion_threshold &&
+                abs(tex2D<T>(prev, up_1)   - tex2D<T>(cur, up_1))   > motion_threshold &&
+                abs(tex2D<T>(prev, down_1) - tex2D<T>(cur, down_1)) > motion_threshold) {
                 motion = true;
             }
         } else {
@@ -255,22 +243,22 @@ void detect_combed_segment(
         if (motion || p.force_exaustive_check) {
             // That means it's time for the spatial check
             // We've got several options here
-            if (p.spatial_metric == 0) {
+            if (spatial_metric == 0) {
                 // Simple 32detect style comb detection.
-                if ((abs(tex2D<T>(cur, pos) - tex2D<T>(cur, down_2)) < p.comb32detect_min) &&
-                    (abs(tex2D<T>(cur, pos) - tex2D<T>(cur, down_1)) > p.comb32detect_max)) {
+                if ((abs(tex2D<T>(cur, pos) - tex2D<T>(cur, down_2)) < comb32detect_min) &&
+                    (abs(tex2D<T>(cur, pos) - tex2D<T>(cur, down_1)) > comb32detect_max)) {
                     mask.write(1, pos);
                 }
-            } else if (p.spatial_metric == 1) {
+            } else if (spatial_metric == 1) {
                 // This, for comparison, is what IsCombed uses
                 // It's better, but still noise sensitive
                 const T combing = (tex2D<T>(cur, up_1)   - tex2D<T>(cur, pos)) *
                                   (tex2D<T>(cur, down_1) - tex2D<T>(cur, pos));
 
-                if (combing > athresh_squared) {
+                if (combing > spatial_threshold_squared) {
                     mask.write(1, pos);
                 }
-            } else if (p.spatial_metric == 2) {
+            } else if (spatial_metric == 2) {
                 // Tritical's noise-resistant combing scorer
                 // The check is done on a bob+blur convolution
                 const T combing = abs(tex2D<T>(cur, up_2)
@@ -281,7 +269,7 @@ void detect_combed_segment(
 
                 // If the frame is sufficiently combed,
                 // then mark it down on the mask as 1.
-                if (combing > athresh6) {
+                if (combing > spatial_threshold6) {
                     mask.write(1, pos);
                 }
             }
@@ -323,7 +311,7 @@ kernel void check_filtered_combing_mask_simd(
         for (uchar i = 0; i < w; i++) {
             block_score += partial_score[i];
         }
-        write_result(combed, p.block_threshold, block_score);
+        write_result(combed, block_threshold, block_score);
     }
 }
 
@@ -348,7 +336,7 @@ kernel void check_filtered_combing_mask_quad(
         for (uchar i = 0; i < w; i++) {
             block_score += partial_score[i];
         }
-        write_result(combed, p.block_threshold, block_score);
+        write_result(combed, block_threshold, block_score);
     }
 }
 
@@ -358,20 +346,20 @@ kernel void check_filtered_combing_mask(
     constant params& p         [[buffer(1)]],
     ushort2 pos [[thread_position_in_grid]])
 {
-    if (pos.x % p.block_width > 0 || pos.y % p.block_height > 0) {
+    if (pos.x % block_width > 0 || pos.y % block_height > 0) {
         return;
     }
 
     ushort block_score = 0;
 
-    for (uchar x = 0; x < p.block_width; x++) {
-        for (uchar y = 0; y < p.block_height; y++) {
+    for (uchar x = 0; x < block_width; x++) {
+        for (uchar y = 0; y < block_height; y++) {
             ushort2 block_pos = ushort2(pos.x + x, pos.y + y);
             block_score += tex2Dc<ushort>(mask, block_pos);
         }
     }
 
-    write_result(combed, p.block_threshold, block_score);
+    write_result(combed, block_threshold, block_score);
 }
 
 kernel void check_combing_mask_simd(
@@ -397,7 +385,7 @@ kernel void check_combing_mask_simd(
         for (uchar i = 0; i < w; i++) {
             block_score += partial_score[i];
         }
-        write_result(combed, p.block_threshold, block_score);
+        write_result(combed, block_threshold, block_score);
     }
 }
 
@@ -424,7 +412,7 @@ kernel void check_combing_mask_quad(
         for (uchar i = 0; i < w; i++) {
             block_score += partial_score[i];
         }
-        write_result(combed, p.block_threshold, block_score);
+        write_result(combed, block_threshold, block_score);
     }
 }
 
@@ -434,21 +422,21 @@ kernel void check_combing_mask(
     constant params& p         [[buffer(1)]],
     ushort2 pos [[thread_position_in_grid]])
 {
-    if (pos.x % p.block_width > 0 || pos.y % p.block_height > 0) {
+    if (pos.x % block_width > 0 || pos.y % block_height > 0) {
         return;
     }
 
     ushort block_score = 0;
 
-    for (uchar x = 0; x < p.block_width; x++) {
-        for (uchar y = 0; y < p.block_height; y++) {
+    for (uchar x = 0; x < block_width; x++) {
+        for (uchar y = 0; y < block_height; y++) {
             const ushort2 block_pos = ushort2(pos.x + x, pos.y + y);
             const short2 left  = short2(pos.x -1 +x, pos.y +y);
             const short2 right = short2(pos.x +1 +x, pos.y +y);
             block_score += tex2Dc<ushort>(mask, left) & tex2Dc<ushort>(mask, block_pos) & tex2Dc<ushort>(mask, right);
         }
     }
-    write_result(combed, p.block_threshold, block_score);
+    write_result(combed, block_threshold, block_score);
 }
 
 kernel void dilate_mask(

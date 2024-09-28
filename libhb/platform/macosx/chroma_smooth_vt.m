@@ -134,6 +134,7 @@ static int chroma_smooth_vt_init(hb_filter_object_t *filter,
     pv->mtl = hb_metal_context_init(hb_chroma_smooth_vt_metallib_data,
                                     hb_chroma_smooth_vt_metallib_len,
                                     function_name,
+                                    NULL,
                                     sizeof(struct mtl_chroma_smooth_params),
                                     init->geometry.width, init->geometry.height,
                                     init->pix_fmt, init->color_range);

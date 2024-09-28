@@ -2814,4 +2814,31 @@ Per permette parechje cudificazioni simultanee, attivate st’ozzione in u listi
   <data name="VideoView_LosslessEncodeOnly" xml:space="preserve">
     <value>Solu cudificazione senza perdita.</value>
   </data>
+  <data name="MainView_HideClassicMenu" xml:space="preserve">
+    <value>Piattà u listinu classicu</value>
+  </data>
+  <data name="MainView_ShowClassicMenu" xml:space="preserve">
+    <value>Affissà u listinu classicu</value>
+  </data>
+  <data name="OptionsViewVideo_UnsupportedIntelDriver" xml:space="preserve">
+    <value>(Avertimentu : Scuperta d’un pilotu micca accettatu ; messa à livellu ricumandata)</value>
+  </data>
+  <data name="QueueSelectionView_RangeLimits" xml:space="preserve">
+    <value>Cunfine d’intervallu :</value>
+  </data>
+  <data name="QueueSelectionView_RangeLimitsDesc" xml:space="preserve">
+    <value>Limità a longhezza di i tituli aghjunti à a fila d’attesa.</value>
+  </data>
+  <data name="QueueSelectionView_RangeLimitsEnable" xml:space="preserve">
+    <value>Attivà e cunfine d’intervallu</value>
+  </data>
+  <data name="AddToQueue_RangeLimitError" xml:space="preserve">
+    <value>Certi tituli puderianu ùn esse micca aghjunti à a fila d’attesa per via ch’elli sianu fora di e cunfine d’intervallu scelte.</value>
+  </data>
+  <data name="QueueView_StartAtTime" xml:space="preserve">
+    <value>Principià dopu</value>
+  </data>
+  <data name="QueueView_QueueStartTime" xml:space="preserve">
+    <value>Ora di principiu :</value>
+  </data>
 </root>

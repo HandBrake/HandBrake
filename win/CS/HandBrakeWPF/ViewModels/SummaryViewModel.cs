@@ -734,7 +734,7 @@ namespace HandBrakeWPF.ViewModels
             BitmapSource image = null;
             try
             {
-                image = this.scanService.GetPreview(this.Task, this.selectedPreview - 1); 
+                image = this.scanService.GetPreview(this.Task, this.selectedPreview - 1, false); 
             }
             catch (Exception exc)
             {

@@ -1,0 +1,71 @@
+From 01c7f68f7aecafba64037ce47a757a058306c8d3 Mon Sep 17 00:00:00 2001
+From: Fei Wang <fei.w.wang@intel.com>
+Date: Mon, 20 May 2024 10:05:53 +0800
+Subject: [PATCH] lavc/qsvdec: Use coded_w/h for frame resolution when use
+ system memory
+
+Fix output mismatch when decode clip with crop(conf_win_*offset in
+syntax) info by using system memory:
+
+$ ffmpeg -c:v hevc_qsv -i conf_win_offet.bit -y out.yuv
+
+Signed-off-by: Fei Wang <fei.w.wang@intel.com>
+---
+ libavcodec/qsvdec.c | 16 ++++++++--------
+ 1 file changed, 8 insertions(+), 8 deletions(-)
+
+diff --git a/libavcodec/qsvdec.c b/libavcodec/qsvdec.c
+index 1895698c3caea..768968fd7bca0 100644
+--- a/libavcodec/qsvdec.c
++++ b/libavcodec/qsvdec.c
+@@ -137,26 +137,26 @@ static int qsv_get_continuous_buffer(AVCodecContext *avctx, AVFrame *frame,
+     if (ret < 0)
+         return ret;
+ 
+-    frame->width       = avctx->width;
+-    frame->height      = avctx->height;
++    frame->width       = avctx->coded_width;
++    frame->height      = avctx->coded_height;
+ 
+     switch (avctx->pix_fmt) {
+     case AV_PIX_FMT_NV12:
+-        frame->linesize[0] = FFALIGN(avctx->width, 128);
++        frame->linesize[0] = FFALIGN(avctx->coded_width, 128);
+         break;
+     case AV_PIX_FMT_P010:
+     case AV_PIX_FMT_P012:
+     case AV_PIX_FMT_YUYV422:
+-        frame->linesize[0] = 2 * FFALIGN(avctx->width, 128);
++        frame->linesize[0] = 2 * FFALIGN(avctx->coded_width, 128);
+         break;
+     case AV_PIX_FMT_Y210:
+     case AV_PIX_FMT_VUYX:
+     case AV_PIX_FMT_XV30:
+     case AV_PIX_FMT_Y212:
+-        frame->linesize[0] = 4 * FFALIGN(avctx->width, 128);
++        frame->linesize[0] = 4 * FFALIGN(avctx->coded_width, 128);
+         break;
+     case AV_PIX_FMT_XV36:
+-        frame->linesize[0] = 8 * FFALIGN(avctx->width, 128);
++        frame->linesize[0] = 8 * FFALIGN(avctx->coded_width, 128);
+         break;
+     default:
+         av_log(avctx, AV_LOG_ERROR, "Unsupported pixel format.\n");
+@@ -173,7 +173,7 @@ static int qsv_get_continuous_buffer(AVCodecContext *avctx, AVFrame *frame,
+         avctx->pix_fmt == AV_PIX_FMT_P012) {
+         frame->linesize[1] = frame->linesize[0];
+         frame->data[1] = frame->data[0] +
+-            frame->linesize[0] * FFALIGN(avctx->height, 64);
++            frame->linesize[0] * FFALIGN(avctx->coded_height, 64);
+     }
+ 
+     ret = ff_attach_decode_data(frame);
+@@ -413,7 +413,7 @@ static int qsv_decode_init_context(AVCodecContext *avctx, QSVContext *q, mfxVide
+     q->frame_info = param->mfx.FrameInfo;
+ 
+     if (!avctx->hw_frames_ctx) {
+-        ret = av_image_get_buffer_size(avctx->pix_fmt, FFALIGN(avctx->width, 128), FFALIGN(avctx->height, 64), 1);
++        ret = av_image_get_buffer_size(avctx->pix_fmt, FFALIGN(avctx->coded_width, 128), FFALIGN(avctx->coded_height, 64), 1);
+         if (ret < 0)
+             return ret;
+         q->pool = av_buffer_pool_init(ret, av_buffer_allocz);

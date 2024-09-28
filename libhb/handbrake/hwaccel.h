@@ -12,6 +12,8 @@
 
 #include "handbrake/hbffmpeg.h"
 
+int hb_directx_available();
+
 enum AVPixelFormat hw_hwaccel_get_hw_format(AVCodecContext *ctx, const enum AVPixelFormat *pix_fmts);
 
 int hb_hwaccel_hw_ctx_init(int codec_id, int hw_decode, void **hw_device_ctx);

@@ -160,7 +160,9 @@
                                       Content="{x:Static Properties:Resources.SubtitlesView_ForcedOnly}" FontWeight="Bold" />
 
                             <CheckBox Grid.Column="4" Margin="5,1,5,0" IsChecked="{Binding Burned}" x:Name="burnInCheckbox" Content="{x:Static Properties:Resources.SubtitlesView_BurnIn}" FontWeight="Bold"
-                                      ToolTip="{x:Static Properties:ResourcesTooltips.SubtitlesView_BurnIn}">
+                                      ToolTip="{x:Static Properties:ResourcesTooltips.SubtitlesView_BurnIn}"
+                                      Command="{Binding DataContext.SetBurnedToFalseForAllExceptCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"          
+                                      CommandParameter="{Binding}">
                                 <CheckBox.IsEnabled>
                                     <MultiBinding Converter="{StaticResource canBurnSubtitleConverter}">
                                         <Binding Path="CanBeBurned" />
@@ -168,21 +170,12 @@
                                         <Binding ElementName="subtitleListBox" Path="DataContext.Task"  />
                                     </MultiBinding>
                                 </CheckBox.IsEnabled>
-                                <i:Interaction.Triggers>
-                                    <i:EventTrigger EventName="Click">
-                                        <i:InvokeCommandAction Command="{Binding DataContext.SetBurnedToFalseForAllExceptCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}" CommandParameter="{Binding}" />
-                                    </i:EventTrigger>
-                                </i:Interaction.Triggers>
                             </CheckBox>
 
                             <CheckBox Grid.Column="5" Margin="5,1,5,0" IsChecked="{Binding Default}" Content="{x:Static Properties:Resources.SubtitlesView_Default}" FontWeight="Bold"
-                                      IsEnabled="{Binding DataContext.IsBurnableOnly, Converter={StaticResource booleanConverter}, ConverterParameter=true, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}">
-                                <i:Interaction.Triggers>
-                                    <i:EventTrigger EventName="Click">
-                                        <i:InvokeCommandAction Command="{Binding DataContext.SelectDefaultTrackCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}" CommandParameter="{Binding}" />
-                                    </i:EventTrigger>
-                                </i:Interaction.Triggers>
-                            </CheckBox>
+                                      IsEnabled="{Binding DataContext.IsBurnableOnly, Converter={StaticResource booleanConverter}, ConverterParameter=true, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
+                                      Command="{Binding DataContext.SelectDefaultTrackCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"          
+                                      CommandParameter="{Binding}" />
 
                             <StackPanel Orientation="Horizontal" Grid.Column="6" Margin="10,0,0,0">
                                 <TextBlock Text="Name: " FontWeight="Bold" Margin="0,0,5,0" VerticalAlignment="Center" />
@@ -233,23 +226,14 @@
                             <controls:NumberBox Grid.Column="7" Width="58" Margin="5,0,5,0" Minimum="-9000000" Maximum="900000" 
                                                 IsEnabled="{Binding IsSrtSubtitle}" Number="{Binding SrtOffset, Mode=TwoWay}" />
 
-                            <CheckBox Grid.Column="8" Margin="5,1,5,0" VerticalAlignment="Center" VerticalContentAlignment="Center"  IsChecked="{Binding Burned}" IsEnabled="{Binding CanBeBurned}" Content="Burn In" FontWeight="Bold">
-                                <i:Interaction.Triggers>
-                                    <i:EventTrigger EventName="Click">
-                                        <i:InvokeCommandAction Command="{Binding DataContext.SetBurnedToFalseForAllExceptCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}" CommandParameter="{Binding}" />
-                                    </i:EventTrigger>
-                                </i:Interaction.Triggers>
-                            </CheckBox>
+                            <CheckBox Grid.Column="8" Margin="5,1,5,0" VerticalAlignment="Center" VerticalContentAlignment="Center"  IsChecked="{Binding Burned}" IsEnabled="{Binding CanBeBurned}" Content="Burn In" FontWeight="Bold"
+                                      Command="{Binding DataContext.SetBurnedToFalseForAllExceptCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}" 
+                                      CommandParameter="{Binding}" />
 
                             <CheckBox Grid.Column="9" Margin="0,1,5,0" VerticalAlignment="Center"  IsChecked="{Binding Default}" Content="Default" FontWeight="Bold" VerticalContentAlignment="Center"
-                                      IsEnabled="{Binding DataContext.IsBurnableOnly, Converter={StaticResource booleanConverter}, ConverterParameter=true, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}">
-                                <i:Interaction.Triggers>
-                                    <i:EventTrigger EventName="Click">
-                                        <i:InvokeCommandAction Command="{Binding DataContext.SelectDefaultTrackCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}" CommandParameter="{Binding}" />
-
-                                    </i:EventTrigger>
-                                </i:Interaction.Triggers>
-                            </CheckBox>
+                                      IsEnabled="{Binding DataContext.IsBurnableOnly, Converter={StaticResource booleanConverter}, ConverterParameter=true, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
+                                      Command="{Binding DataContext.SelectDefaultTrackCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}" 
+                                      CommandParameter="{Binding}" />
 
                             <StackPanel Orientation="Horizontal" Grid.Column="10" Margin="5,0,0,0">
                                 <TextBlock Text="Name: " FontWeight="Bold" Margin="0,0,5,0" />
@@ -259,21 +243,16 @@
                         </Grid>
 
                         <!--  Delete  -->
-                        <Image Grid.Column="2"
-                               Width="16"
-                               Height="16"
-                               Margin="5,0,10,0"
-                               Source="Images/close64.png">
-                            <i:Interaction.Triggers>
-                                <i:EventTrigger EventName="MouseDown">
-                                    <i:InvokeCommandAction Command="{Binding DataContext.RemoveTrackCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}" CommandParameter="{Binding}" />
-                                </i:EventTrigger>
-                            </i:Interaction.Triggers>
-                        </Image>
+                        <Button Style="{StaticResource TransparentButtonStyle}" 
+                                Grid.Column="2"
+                                Command="{Binding DataContext.RemoveTrackCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}" 
+                                CommandParameter="{Binding}">
+                            <Button.Content>
+                                <Image Width="16" Height="16" Margin="10,0,10,0" Source="Images/close64.png" />
+                            </Button.Content>
+                        </Button>
 
                     </Grid>
-
-
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>

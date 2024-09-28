@@ -35,5 +35,7 @@ namespace HandBrake.Interop.Interop.Json.Encode
         public string Path { get; set; }
 
         public int HWDecode { get; set; }
+
+        public bool KeepDuplicateTitles { get; set; }
     }
 }

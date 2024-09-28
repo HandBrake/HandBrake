@@ -40,6 +40,7 @@ extern NSString * const HBUseHardwareDecoder;
 extern NSString * const HBAlwaysUseHardwareDecoder;
 extern NSString * const HBMinTitleScanSeconds;
 extern NSString * const HBPreviewsNumber;
+extern NSString * const HBKeepDuplicateTitles;
 
 extern NSString * const HBLoggingLevel;
 extern NSString * const HBEncodeLogLocation;

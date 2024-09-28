@@ -562,4 +562,7 @@ op te bouwen
   <data name="OptionsView_LaunchsHelp" xml:space="preserve">
     <value>Opent de documetatiewebsite op https://handbrake.fr/docs</value>
   </data>
+  <data name="Options_RemovePunctuation" xml:space="preserve">
+    <value>Streep (-), punt (.) en komma (,)</value>
+  </data>
 </root>

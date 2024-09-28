@@ -5,6 +5,7 @@
     <SolidColorBrush x:Key="Ui.Dark" Color="WhiteSmoke" />
     <SolidColorBrush x:Key="Ui.ToolbarHover" Color="#D8D8D8" />
     <SolidColorBrush x:Key="Ui.Light" Color="WhiteSmoke" />
+    <SolidColorBrush x:Key="Ui.Light2" Color="#f2f2f2" />
     <SolidColorBrush x:Key="Ui.ContrastLight" Color="#C0C0C0" />
     <SolidColorBrush x:Key="Ui.UltraLight2" Color="AliceBlue" />
     <SolidColorBrush x:Key="Ui.Ultralight" Color="AliceBlue" />

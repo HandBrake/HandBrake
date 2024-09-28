@@ -207,6 +207,8 @@ void          hb_buffer_copy_side_data(hb_buffer_t *dst, const hb_buffer_t *src)
 
 void          hb_buffer_copy_props(hb_buffer_t *dst, const hb_buffer_t *src);
 
+int           hb_buffer_is_writable(const hb_buffer_t *buf);
+
 hb_fifo_t   * hb_fifo_init( int capacity, int thresh );
 void          hb_fifo_register_full_cond( hb_fifo_t * f, hb_cond_t * c );
 int           hb_fifo_size( hb_fifo_t * );
@@ -269,7 +271,7 @@ hb_thread_t * hb_scan_init( hb_handle_t *, volatile int * die,
                             hb_title_set_t * title_set, int preview_count,
                             int store_previews, uint64_t min_duration,
                             int crop_auto_switch_threshold, int crop_median_threshold,
-                            hb_list_t * exclude_extensions, int hw_decode);
+                            hb_list_t * exclude_extensions, int hw_decode, int keep_duplicate_titles);
 hb_thread_t * hb_work_init( hb_list_t * jobs,
                             volatile int * die, hb_error_code * error, hb_job_t ** job );
 void ReadLoop( void * _w );
@@ -338,7 +340,7 @@ int          hb_dvd_angle_count( hb_dvd_t * d );
 void         hb_dvd_set_angle( hb_dvd_t * d, int angle );
 int          hb_dvd_main_feature( hb_dvd_t * d, hb_list_t * list_title );
 
-hb_bd_t     * hb_bd_init( hb_handle_t *h, const char * path );
+hb_bd_t     * hb_bd_init( hb_handle_t *h, const char * path, int keep_duplicate_titles );
 int           hb_bd_title_count( hb_bd_t * d );
 hb_title_t  * hb_bd_title_scan( hb_bd_t * d, int t, uint64_t min_duration );
 int           hb_bd_start( hb_bd_t * d, hb_title_t *title );

@@ -5,7 +5,6 @@
              xmlns:Converters="clr-namespace:HandBrakeWPF.Converters"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:dd="clr-namespace:GongSolutions.Wpf.DragDrop;assembly=GongSolutions.Wpf.DragDrop"
-             xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:controls="clr-namespace:HandBrakeWPF.Controls"
              xmlns:Properties="clr-namespace:HandBrakeWPF.Properties"
@@ -276,14 +275,13 @@
 
                         <!--  Delete  -->
                         <StackPanel Grid.Column="2" Grid.Row="0" VerticalAlignment="Center">
-                            <Image Width="16" Height="16" Margin="10,0,10,0" Source="Images/close64.png"
-                                   AutomationProperties.Name="{x:Static Properties:Resources.AudioView_DeleteTrack}">
-                                <i:Interaction.Triggers>
-                                    <i:EventTrigger EventName="MouseDown">
-                                        <i:InvokeCommandAction Command="{Binding DataContext.RemoveCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}" CommandParameter="{Binding}" />
-                                    </i:EventTrigger>
-                                </i:Interaction.Triggers>
-                            </Image>
+
+                            <Button Style="{StaticResource TransparentButtonStyle}" Command="{Binding DataContext.RemoveCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"          
+                                    CommandParameter="{Binding}">
+                                <Button.Content>
+                                    <Image Width="16" Height="16" Margin="10,0,10,0" Source="Images/close64.png" />
+                                </Button.Content>
+                            </Button>                                                        
                         </StackPanel>
 
                         <!-- Hidden Row -->

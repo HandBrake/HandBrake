@@ -1,6 +1,5 @@
 ﻿<UserControl xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
              x:Class="HandBrakeWPF.Controls.StatusPanel"
              >
 
@@ -15,9 +14,9 @@
 
         <StackPanel Grid.Row="0" Background="Black" Opacity="0.75" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"/>
 
-        <Border VerticalAlignment="Center" Grid.Row="0" Width="620"  CornerRadius="4" 
+        <Border VerticalAlignment="Center" Grid.Row="0" Width="400" CornerRadius="4" Height="150"
                 BorderBrush="{Binding Background, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}" 
-                Background="{DynamicResource Ui.Light}" BorderThickness="1">
+                Background="{StaticResource Ui.Light}" BorderThickness="1">
             <Grid VerticalAlignment="Center"  HorizontalAlignment="Stretch">
 
                 <Grid.RowDefinitions>
@@ -26,7 +25,6 @@
                 </Grid.RowDefinitions>
 
                 <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Row="0" MaxHeight="260" MinHeight="220">
-                    <mah:ProgressRing Foreground="#00589f" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,45,0" x:Name="progressRing" />
                     <StackPanel VerticalAlignment="Center" Orientation="Vertical" >
                         <StackPanel VerticalAlignment="Center" MinWidth="300">
                             <TextBlock SnapsToDevicePixels="True" VerticalAlignment="Top" Style="{StaticResource pageHeader}" Margin="0,11,0,0" HorizontalAlignment="Left"
@@ -35,6 +33,10 @@
                             <TextBlock SnapsToDevicePixels="True" VerticalAlignment="Top" FontSize="16" FontFamily="Segoe UI" Margin="0,5" HorizontalAlignment="Left"
 						               Text="{Binding SubMessage, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}" TextWrapping="WrapWithOverflow" />
                         </StackPanel>
+
+                        <ProgressBar x:Name="progressBar" Value="{Binding ProgressPercentage, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"  
+                                     VerticalAlignment="Center" Height="10" 
+                                     IsIndeterminate="{Binding IsIndeterminate, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"  />
 
                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
 

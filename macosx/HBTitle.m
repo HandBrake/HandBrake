@@ -56,6 +56,7 @@
     self = [super init];
     if (self)
     {
+        _index = -1;
         _displayName = [displayName copy];
         _title = @"";
         _isoLanguageCode = @"";
@@ -68,6 +69,7 @@
     self = [super init];
     if (self)
     {
+        _index = audio->index;
         _displayName = [NSString stringWithFormat: @"%d: %@", index, @(audio->lang.description)];
         _title = audio->in.name ? @(audio->in.name) : nil;
         _bitRate = audio->in.bitrate / 1000;
@@ -85,6 +87,7 @@
 
 - (void)encodeWithCoder:(nonnull NSCoder *)coder
 {
+    encodeInt(_index);
     encodeObject(_displayName);
     encodeObject(_title);
     encodeInt(_bitRate);
@@ -101,6 +104,7 @@
     self = [super init];
     if (self)
     {
+        decodeInt(_index);
         decodeObjectOrFail(_displayName, NSString);
         decodeObject(_title, NSString);
         decodeInt(_bitRate);
@@ -134,6 +138,7 @@ fail:
     self = [super init];
     if (self)
     {
+        _index = -1;
         _displayName = [displayName copy];
         _type = type;
         _isoLanguageCode = @"und";
@@ -147,6 +152,7 @@ fail:
     self = [super init];
     if (self)
     {
+        _index = index;
         _displayName = [NSString stringWithFormat:@"%d: %@", index, @(subtitle->lang)];
         _title = subtitle->name ? @(subtitle->name) : nil;
         _type = subtitle->source;
@@ -200,6 +206,7 @@ fail:
 
 - (void)encodeWithCoder:(nonnull NSCoder *)coder
 {
+    encodeInt(_index);
     encodeObject(_displayName);
     encodeObject(_title);
     encodeInt(_type);
@@ -223,6 +230,7 @@ fail:
     self = [super init];
     if (self)
     {
+        decodeInt(_index);
         decodeObjectOrFail(_displayName, NSString);
         decodeObject(_title, NSString);
         decodeInt(_type);
@@ -427,6 +435,11 @@ fail:
 - (int)index
 {
     return self.hb_title->index;
+}
+
+- (BOOL)keepDuplicateTitles
+{
+    return self.hb_title->keep_duplicate_titles;
 }
 
 - (int)angles

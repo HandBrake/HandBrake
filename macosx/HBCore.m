@@ -239,7 +239,7 @@ HB_OBJC_DIRECT_MEMBERS
         __unused HBSecurityAccessToken *token = [HBSecurityAccessToken tokenWithObject:url];
 #endif
 
-        if (![NSFileManager.defaultManager fileExistsAtPath:url.path])
+        if (![url checkResourceIsReachableAndReturnError:NULL])
         {
             if (error)
             {
@@ -308,7 +308,7 @@ HB_OBJC_DIRECT_MEMBERS
     return YES;
 }
 
-- (void)scanURLs:(NSArray<NSURL *> *)urls titleIndex:(NSUInteger)index previews:(NSUInteger)previewsNum minDuration:(NSUInteger)seconds keepPreviews:(BOOL)keepPreviews hardwareDecoder:(BOOL)hardwareDecoder progressHandler:(HBCoreProgressHandler)progressHandler completionHandler:(HBCoreCompletionHandler)completionHandler
+- (void)scanURLs:(NSArray<NSURL *> *)urls titleIndex:(NSUInteger)index previews:(NSUInteger)previewsNum minDuration:(NSUInteger)seconds keepPreviews:(BOOL)keepPreviews hardwareDecoder:(BOOL)hardwareDecoder keepDuplicateTitles:(BOOL)keepDuplicateTitles progressHandler:(HBCoreProgressHandler)progressHandler completionHandler:(HBCoreCompletionHandler)completionHandler
 {
     NSAssert(self.state == HBStateIdle, @"[HBCore scanURL:] called while another scan or encode already in progress");
     NSAssert(urls, @"[HBCore scanURL:] called with nil url.");
@@ -361,7 +361,7 @@ HB_OBJC_DIRECT_MEMBERS
     hb_scan(_hb_handle, files_list,
               (int)index, (int)previewsNum,
               keepPreviews, min_title_duration_ticks,
-              0, 0, NULL, hardwareDecoder ? HB_DECODE_SUPPORT_VIDEOTOOLBOX : 0);
+              0, 0, NULL, hardwareDecoder ? HB_DECODE_SUPPORT_VIDEOTOOLBOX : 0, keepDuplicateTitles);
 
     hb_list_close(&files_list);
 

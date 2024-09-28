@@ -40,6 +40,7 @@ typedef NS_ENUM(NSUInteger, HBJobHardwareDecoderUsage) {
 
 @property (nonatomic, readwrite, weak, nullable) HBTitle *title;
 @property (nonatomic, readonly) int titleIdx;
+@property (nonatomic, readonly) BOOL keepDuplicateTitles;
 
 // Whether the source is a single file or a DVD-Video/Blu-ray
 @property (nonatomic, readonly, getter=isStream) BOOL stream;

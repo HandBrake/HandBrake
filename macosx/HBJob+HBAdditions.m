@@ -48,8 +48,7 @@ static NSDateFormatter *_releaseDateFormatter = nil;
 
     if (creationDate == nil)
     {
-        NSDictionary *attrs = [NSFileManager.defaultManager attributesOfItemAtPath:self.fileURL.path error:nil];
-        creationDate = attrs[NSFileCreationDate];
+        [self.fileURL getResourceValue:&creationDate forKey:NSURLCreationDateKey error:NULL];
     }
 
     for (NSString *formatKey in [ud objectForKey:HBAutoNamingFormat])
@@ -199,8 +198,8 @@ static NSDateFormatter *_releaseDateFormatter = nil;
         }
         else if ([formatKey isEqualToString:@"{Modification-Date}"])
         {
-            NSDictionary *attrs = [NSFileManager.defaultManager attributesOfItemAtPath:self.fileURL.path error:nil];
-            NSDate *modificationDate = attrs[NSFileModificationDate];
+            NSDate *modificationDate = nil;
+            [self.fileURL getResourceValue:&modificationDate forKey:NSURLContentModificationDateKey error:NULL];
             if (modificationDate)
             {
                 NSString *dateString = [[formatter stringFromDate:modificationDate] stringByReplacingOccurrencesOfString:@"/" withString:@"-"];
@@ -209,8 +208,8 @@ static NSDateFormatter *_releaseDateFormatter = nil;
         }
         else if ([formatKey isEqualToString:@"{Modification-Time}"])
         {
-            NSDictionary *attrs = [NSFileManager.defaultManager attributesOfItemAtPath:self.fileURL.path error:nil];
-            NSDate *modificationDate = attrs[NSFileModificationDate];
+            NSDate *modificationDate = nil;
+            [self.fileURL getResourceValue:&modificationDate forKey:NSURLContentModificationDateKey error:NULL];
             if (modificationDate)
             {
                 [name appendString:[_timeFormatter stringFromDate:modificationDate]];

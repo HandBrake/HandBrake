@@ -33,6 +33,7 @@ NSString * const HBUseHardwareDecoder            = @"HBUseHardwareDecoder";
 NSString * const HBAlwaysUseHardwareDecoder      = @"HBAlwaysUseHardwareDecoder";
 NSString * const HBMinTitleScanSeconds           = @"MinTitleScanSeconds";
 NSString * const HBPreviewsNumber                = @"PreviewsNumber";
+NSString * const HBKeepDuplicateTitles           = @"HBKeepDuplicateTitles";
 
 NSString * const HBLoggingLevel                  = @"LoggingLevel";
 NSString * const HBEncodeLogLocation             = @"EncodeLogLocation";
@@ -184,7 +185,7 @@ static BOOL _hardwareDecoderSupported = NO;
 + (void)registerUserDefaults
 {
     NSUserDefaults *defaults = NSUserDefaults.standardUserDefaults;
-    NSURL *moviesURL = HBUtilities.defaultDestinationFolderURL;
+    NSData *moviesData = [NSKeyedArchiver archivedDataWithRootObject:HBUtilities.defaultDestinationFolderURL requiringSecureCoding:YES error:NULL];
 
     if (@available(macOS 13, *))
     {
@@ -205,8 +206,8 @@ static BOOL _hardwareDecoderSupported = NO;
         HBAlwaysUseHardwareDecoder:         @NO,
         HBRecursiveScan:                    @NO,
         HBExcludedFileExtensions:           @[@"jpg", @"png", @"srt", @"ssa", @"ass", @"txt"],
-        HBLastDestinationDirectoryURL:      [NSKeyedArchiver archivedDataWithRootObject:moviesURL],
-        HBLastSourceDirectoryURL:           [NSKeyedArchiver archivedDataWithRootObject:moviesURL],
+        HBLastDestinationDirectoryURL:      moviesData,
+        HBLastSourceDirectoryURL:           moviesData,
         HBUseSourceFolderDestination:       @NO,
         HBDefaultAutoNaming:                @NO,
         HBAutoNamingFormat:                 @[@"{Source}", @" ", @"{Title}"],

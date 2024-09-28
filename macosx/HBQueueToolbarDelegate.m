@@ -51,23 +51,37 @@
 
     if ([itemIdentifier isEqualToString:TOOLBAR_START])
     {
-        return [NSToolbarItem HB_toolbarItemWithIdentifier:itemIdentifier
+        NSToolbarItem *item = [NSToolbarItem HB_toolbarItemWithIdentifier:itemIdentifier
                                          label:NSLocalizedString(@"Start", @"Main Window Start Toolbar Item")
                                   paletteLabel:NSLocalizedString(@"Start/Stop Encoding", @"Main Window Start Toolbar Item")
                                     symbolName:@"play.fill"
                                          image:@"encode"
                                          style:style
                                         action:@selector(toggleStartCancel:)];
+        if (@available(macOS 13.0, *))
+        {
+            NSSet<NSString *> *labels = [NSSet setWithObjects:NSLocalizedString(@"Start", @"Main Window Start Toolbar Item"),
+                                                              NSLocalizedString(@"Stop", @"Toolbar Start/Stop Item"), nil];
+            item.possibleLabels = labels;
+        }
+        return item;
     }
     else if ([itemIdentifier isEqualToString:TOOLBAR_PAUSE])
     {
-        return [NSToolbarItem HB_toolbarItemWithIdentifier:itemIdentifier
+        NSToolbarItem *item = [NSToolbarItem HB_toolbarItemWithIdentifier:itemIdentifier
                                          label:NSLocalizedString(@"Pause", @"Main Window Pause Toolbar Item")
                                   paletteLabel:NSLocalizedString(@"Pause/Resume Encoding", @"Main Window Pause Toolbar Item")
                                     symbolName:@"pause.fill"
                                          image:@"pauseencode"
                                          style:style
                                         action:@selector(togglePauseResume:)];
+        if (@available(macOS 13.0, *))
+        {
+            NSSet<NSString *> *labels = [NSSet setWithObjects:NSLocalizedString(@"Pause", @"Main Window Pause Toolbar Item"),
+                                                              NSLocalizedString(@"Resume", @"Toolbar Pause Item"), nil];
+            item.possibleLabels = labels;
+        }
+        return item;
     }
     else if ([itemIdentifier isEqualToString:TOOLBAR_WHEN_DONE])
     {

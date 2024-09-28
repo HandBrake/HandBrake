@@ -35,6 +35,7 @@ namespace HandBrakeWPF.ViewModels
     using HandBrakeWPF.Model;
     using HandBrakeWPF.Model.Audio;
     using HandBrakeWPF.Model.Options;
+    using HandBrakeWPF.Model.Queue;
     using HandBrakeWPF.Model.Subtitles;
     using HandBrakeWPF.Properties;
     using HandBrakeWPF.Services.Encode.Model;
@@ -95,6 +96,7 @@ namespace HandBrakeWPF.ViewModels
         private bool isModifiedPreset;
         private bool updateAvailable;
         private bool isNavigationEnabled;
+        private double progressAmount;
 
         public MainViewModel(
             IUserSettingService userSettingService,
@@ -355,6 +357,21 @@ namespace HandBrakeWPF.ViewModels
                     this.sourceLabel = value;
                     this.NotifyOfPropertyChange(() => SourceLabel);
                 }
+            }
+        }
+
+        public double ProgressAmount
+        {
+            get => this.progressAmount;
+            set
+            {
+                if (value.Equals(this.progressAmount))
+                {
+                    return;
+                }
+
+                this.progressAmount = value;
+                this.NotifyOfPropertyChange(() => this.ProgressAmount);
             }
         }
 
@@ -1195,23 +1212,7 @@ namespace HandBrakeWPF.ViewModels
 
             viewModel.Setup(
                 this.ScannedSource,
-                (tasks) =>
-                {
-                    foreach (SelectionTitle title in tasks)
-                    {
-                        this.SelectedTitle = title.Title;
-                        var addError = this.AddToQueue(true);
-                        if (addError != null)
-                        {
-                            MessageBoxResult result = this.errorService.ShowMessageBox(addError.Message + Environment.NewLine + Environment.NewLine + Resources.Main_ContinueAddingToQueue, addError.Header, MessageBoxButton.YesNo, addError.ErrorType);
-
-                            if (result == MessageBoxResult.No)
-                            {
-                                break;
-                            }
-                        }
-                    }
-                },
+                (tasks, limits) => {  this.BatchAddTitles(tasks, limits); },
                 temporaryPreset);
 
             if (window != null)
@@ -1221,6 +1222,73 @@ namespace HandBrakeWPF.ViewModels
             else
             {
                 this.windowManager.ShowWindow<QueueSelectionView>(viewModel);
+            }
+        }
+
+        private void BatchAddTitles(IEnumerable<SelectionTitle> tasks, QueueAddRangeLimit limits)
+        {
+            bool foundOutOfBound = false;
+
+            foreach (SelectionTitle title in tasks)
+            {
+                bool outOfBounds = false;
+                this.SelectedTitle = title.Title;
+                if (limits != null && limits.IsEnabled)
+                {
+                    this.SelectedPointToPoint = limits.SelectedPointToPoint;
+                    if (limits.SelectedPointToPoint == PointToPointMode.Seconds)
+                    {
+                        long totalSeconds = (long)this.SelectedTitle.Duration.TotalSeconds;
+                        if (limits.SelectedStartPoint > totalSeconds)
+                        {
+                            outOfBounds = true;
+                            foundOutOfBound = true;
+                        }
+                        else
+                        {
+                            this.SelectedStartPoint = Math.Max(0, limits.SelectedStartPoint);
+                            this.SelectedEndPoint = Math.Min(limits.SelectedEndPoint, totalSeconds);
+                        }
+                    }
+                    else if (limits.SelectedPointToPoint == PointToPointMode.Frames)
+                    {
+                        this.SelectedStartPoint = Math.Max(0, limits.SelectedStartPoint);
+                        this.SelectedEndPoint = limits.SelectedEndPoint;
+                    }
+                    else
+                    {
+                        if (limits.SelectedStartPoint > this.selectedTitle.Chapters.Count)
+                        {
+                            outOfBounds = true;
+                            foundOutOfBound = true;
+                        }
+                        else
+                        {
+                            // Last chapter only, if the range is out of limits.
+                            this.SelectedStartPoint = Math.Max(0, limits.SelectedStartPoint);
+                            this.SelectedEndPoint = Math.Min(limits.SelectedEndPoint, this.StartEndRangeItems.Last());
+                        }
+                    }
+                }
+
+                if (!outOfBounds)
+                {
+                    var addError = this.AddToQueue(true);
+                    if (addError != null)
+                    {
+                        MessageBoxResult result = this.errorService.ShowMessageBox(addError.Message + Environment.NewLine + Environment.NewLine + Resources.Main_ContinueAddingToQueue, addError.Header, MessageBoxButton.YesNo, addError.ErrorType);
+
+                        if (result == MessageBoxResult.No)
+                        {
+                            break;
+                        }
+                    }
+                }
+            }
+
+            if (foundOutOfBound)
+            {
+                this.errorService.ShowMessageBox(Resources.AddToQueue_RangeLimitError, Resources.Error, MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
@@ -2257,6 +2325,7 @@ namespace HandBrakeWPF.ViewModels
         {
             this.SourceLabel = string.Format(Resources.Main_ScanningTitleXOfY, e.CurrentTitle, e.Titles, e.Percentage);
             this.StatusLabel = string.Format(Resources.Main_ScanningTitleXOfY, e.CurrentTitle, e.Titles, e.Percentage);
+            this.ProgressAmount = (double)e.Percentage;
         }
 
         private void ScanCompleted(object sender, ScanCompletedEventArgs e)

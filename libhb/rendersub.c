@@ -36,6 +36,7 @@ struct hb_filter_private_s
     ASS_Renderer      * renderer;
     ASS_Track         * ssaTrack;
     uint8_t             script_initialized;
+    hb_buffer_t       * last_render;
 
     // SRT
     int                 line;
@@ -43,6 +44,7 @@ struct hb_filter_private_s
 
     void (*blend)(hb_buffer_t *dst, const hb_buffer_t *src,
                   const int left, const int top, const int shift);
+    unsigned            chromaCoeffs[2][4];
 
     hb_filter_init_t    input;
     hb_filter_init_t    output;
@@ -713,37 +715,81 @@ static int vobsub_work( hb_filter_object_t * filter,
     return HB_FILTER_OK;
 }
 
-static uint8_t ssaAlpha(const ASS_Image *frame, const int x, const int y)
+#define ALPHA_BLEND(srcA, srcRGB, dstAc, dstRGB, outA) \
+    (((srcA * srcRGB + dstRGB * dstAc + (outA >> 1)) / outA))
+#define div255(x) (((x + ((x + 128) >> 8)) + 128) >> 8)
+
+static uint8_t inline ssaAlpha(const ASS_Image *frame, const int x, const int y)
 {
     const unsigned frameA = (frame->color) & 0xff;
     const unsigned gliphA = frame->bitmap[y*frame->stride + x];
 
     // Alpha for this pixel is the frame opacity (255 - frameA)
     // multiplied by the gliph alpha (gliphA) for this pixel
-    unsigned alpha = (255 - frameA) * gliphA >> 8;
-
-    return (uint8_t)alpha;
+    return (uint8_t)div255((255 - frameA) * gliphA);
 }
 
-// Returns a subtitle rendered to a YUVA4**P frame
-static hb_buffer_t * RenderSSAFrame(const hb_filter_private_t *pv, const ASS_Image *frame)
+static hb_buffer_t* ComposeSubsampleASS( hb_filter_private_t *pv, const ASS_Image *frameList,
+                                         const unsigned width, const unsigned height,
+                                         const unsigned x, const unsigned y )
 {
-    const unsigned r = (frame->color >> 24) & 0xff;
-    const unsigned g = (frame->color >> 16) & 0xff;
-    const unsigned b = (frame->color >>  8) & 0xff;
+    const ASS_Image *frame = frameList;
+    const unsigned flatStride = width << 2;
+    uint8_t *compo = calloc( flatStride*height, sizeof(uint8_t) );
 
-    const int yuv = hb_rgb2yuv_bt709((r << 16) | (g << 8) | b);
-
-    const unsigned frameY = (yuv >> 16) & 0xff;
-    const unsigned frameV = (yuv >> 8 ) & 0xff;
-    const unsigned frameU = (yuv >> 0 ) & 0xff;
-
-    // Note that subtitle frame buffer has alpha
-    hb_buffer_t *sub = hb_frame_buffer_init(pv->pix_fmt_alpha, frame->w, frame->h);
-    if (sub == NULL)
-    {
+    if ( !compo ) {
         return NULL;
     }
+
+    while ( frame ) {
+        if ( frame->w && frame->h ) {
+            const int yuv = hb_rgb2yuv_bt709( frame->color >> 8 );
+
+            const unsigned frameY = (yuv >> 16) & 0xff;
+            const unsigned frameV = (yuv >> 8 ) & 0xff;
+            const unsigned frameU = (yuv >> 0 ) & 0xff;
+            unsigned frameA, resAlpha, alphaCompo, alphaInScaled;
+
+            const unsigned iniFx = (frame->dst_x - x)*4 + (frame->dst_y - y)*flatStride;
+
+            for ( int yy = 0, fx = iniFx; yy < frame->h; yy++, fx = iniFx + yy*flatStride )
+            {
+                for ( int xx = 0; xx < frame->w; xx++, fx += 4 )
+                {
+                    frameA = ssaAlpha( frame, xx, yy );
+
+                    //skip if transparent
+                    if ( frameA ) {
+                        if ( compo[fx+3] ) {
+                            alphaInScaled = frameA * 255;
+                            alphaCompo = compo[fx+3] * (255 - frameA);
+                            resAlpha = (alphaInScaled + alphaCompo);
+
+                            compo[fx  ] = ALPHA_BLEND( alphaInScaled, frameY, alphaCompo, compo[fx  ], resAlpha );
+                            compo[fx+1] = ALPHA_BLEND( alphaInScaled, frameU, alphaCompo, compo[fx+1], resAlpha );
+                            compo[fx+2] = ALPHA_BLEND( alphaInScaled, frameV, alphaCompo, compo[fx+2], resAlpha );
+                            compo[fx+3] = div255( resAlpha );
+                        } else {
+                            compo[fx  ] = frameY;
+                            compo[fx+1] = frameU;
+                            compo[fx+2] = frameV;
+                            compo[fx+3] = frameA;
+                        }
+                    }
+                }
+            }
+        }
+        frame = frame->next;
+    }
+
+    hb_buffer_t *sub = hb_frame_buffer_init( pv->pix_fmt_alpha, width, height );
+    if ( !sub ) {
+        free(compo);
+        return NULL;
+    }
+
+    sub->f.x = x;
+    sub->f.y = y;
 
     uint8_t *y_out, *u_out, *v_out, *a_out;
     y_out = sub->plane[0].data;
@@ -751,54 +797,167 @@ static hb_buffer_t * RenderSSAFrame(const hb_filter_private_t *pv, const ASS_Ima
     v_out = sub->plane[2].data;
     a_out = sub->plane[3].data;
 
-    for (int yy = 0; yy < frame->h; yy++)
+    unsigned int accuA, accuB, accuC, coeff, isChromaLine;
+
+    for ( int yy = 0, ys = 0, fx = 0; yy < height; yy++, ys = yy >> pv->hshift, fx = yy*flatStride )
     {
-        for (int xx = 0; xx < frame->w; xx++)
+        isChromaLine = yy == ys << pv->hshift;
+        for ( int xx = 0, xs = 0; xx < width; xx++, xs = xx >> pv->wshift, fx += 4 )
         {
-            y_out[xx] = frameY;
-            a_out[xx] = ssaAlpha(frame, xx, yy);
+            y_out[xx] = compo[ fx ];
+            a_out[xx] = compo[fx+3];
+
+            //Are we on a chroma sample?
+            if ( isChromaLine && xx == xs << pv->wshift ) {
+                accuA = accuB = accuC = 0;
+                for ( int yz = 0; yz < (1 << pv->hshift) && (yz + yy < height); yz++ ) {
+                    for ( int xz = 0; xz < (1 << pv->wshift) && (xz + xx < width); xz++ ) {
+                        //Access compo to avoid cache misses with a_out.
+                        coeff = pv->chromaCoeffs[0][xz]*pv->chromaCoeffs[1][yz]*compo[fx + yz*flatStride + 3];
+                        accuA += coeff*compo[fx + yz*flatStride + 1];
+                        accuB += coeff*compo[fx + yz*flatStride + 2];
+                        accuC += coeff;
+                    }
+                }
+                if (accuC) {
+                    u_out[xs] = (accuA + (accuC - 1))/accuC;
+                    v_out[xs] = (accuB + (accuC - 1))/accuC;
+                }
+            }
+        }
+
+        if (isChromaLine) {
+            u_out += sub->plane[1].stride;
+            v_out += sub->plane[2].stride;
         }
         y_out += sub->plane[0].stride;
         a_out += sub->plane[3].stride;
     }
 
-    for (int yy = 0; yy < frame->h >> pv->hshift; yy++)
-    {
-        for (int xx = 0; xx < frame->w >> pv->wshift; xx++)
-        {
-            u_out[xx] = frameU;
-            v_out[xx] = frameV;
-        }
-        u_out += sub->plane[1].stride;
-        v_out += sub->plane[2].stride;
-    }
-
-    sub->f.width = frame->w;
-    sub->f.height = frame->h;
-    sub->f.x = frame->dst_x + pv->crop[2];
-    sub->f.y = frame->dst_y + pv->crop[0];
-
+    free(compo);
     return sub;
 }
 
-static void ApplySSASubs( hb_filter_private_t * pv, hb_buffer_t * buf )
+// To enable and use with bitmap subtitles
+#if 0
+// Output a YUVA4**P frame from a YUVA444P8 frame
+static hb_buffer_t * SubsampleOverlay(const hb_filter_private_t *pv, const hb_buffer_t *overlay)
+{
+    hb_buffer_t *sub = hb_frame_buffer_init( pv->pix_fmt_alpha, overlay->f.width, overlay->f.height );
+    if ( !sub )
+    {
+        return NULL;
+    }
+    sub->f.x = overlay->f.x;
+    sub->f.y = overlay->f.y;
+
+    uint8_t *y_out, *u_out, *v_out, *a_out, *pA_in, *pB_in;
+    y_out = sub->plane[0].data;
+    u_out = sub->plane[1].data;
+    v_out = sub->plane[2].data;
+    a_out = sub->plane[3].data;
+
+    //process YA
+    pA_in = overlay->plane[0].data;
+    pB_in = overlay->plane[3].data;
+    for (int yy = 0; yy < overlay->f.height; yy++)
+    {
+        memcpy(y_out, pA_in, overlay->f.width);
+        memcpy(a_out, pB_in, overlay->f.width);
+        y_out += sub->plane[0].stride;
+        a_out += sub->plane[3].stride;
+        pA_in += overlay->plane[0].stride;
+        pB_in += overlay->plane[3].stride;
+    }
+
+    unsigned int accuA, accuB, accuC;
+    unsigned int coeff;
+
+    //process UV
+    pA_in = overlay->plane[1].data;
+    pB_in = overlay->plane[2].data;
+    a_out = sub->plane[3].data;
+    for (int yy = 0; yy < overlay->f.height >> pv->hshift; yy++)
+    {
+        for (int xx = 0, xo = 0; xx < overlay->f.width >> pv->wshift; xx++, xo = xx << pv->wshift)
+        {
+            accuA = accuB = accuC = 0;
+            for (int yz = 0; yz < (1 << pv->hshift); yz++) {
+                for (int xz = 0; xz < (1 << pv->wshift); xz++) {
+                    coeff = pv->chromaCoeffs[0][xz]*pv->chromaCoeffs[1][yz]*(a_out + yz*sub->plane[3].stride)[xo + xz];
+                    accuA += coeff*(pA_in + yz*overlay->plane[1].stride)[xo + xz];
+                    accuB += coeff*(pB_in + yz*overlay->plane[2].stride)[xo + xz];
+                    accuC += coeff;
+                }
+            }
+            if (accuC) {
+                u_out[xx] = (accuA + (accuC - 1))/accuC;
+                v_out[xx] = (accuB + (accuC - 1))/accuC;
+            }
+        }
+        u_out += sub->plane[1].stride;
+        v_out += sub->plane[2].stride;
+        a_out += sub->plane[3].stride << pv->hshift;
+        pA_in += overlay->plane[1].stride << pv->hshift;
+        pB_in += overlay->plane[2].stride << pv->hshift;
+    }
+    return sub;
+}
+#endif
+
+static hb_buffer_t * render_ssa_subs(hb_filter_private_t *pv, int64_t start)
 {
     ASS_Image *frameList;
-    hb_buffer_t *sub;
+    int changed;
 
     frameList = ass_render_frame( pv->renderer, pv->ssaTrack,
-                                  buf->s.start / 90, NULL );
+                                  start / 90, &changed );
     if ( !frameList )
-        return;
+    {
+        return NULL;
+    }
 
-    ASS_Image *frame;
-    for (frame = frameList; frame; frame = frame->next) {
-        sub = RenderSSAFrame( pv, frame );
-        if( sub )
-        {
-            ApplySub( pv, buf, sub );
-            hb_buffer_close( &sub );
+    // re-use cached overlay, whenever possible
+    if ( changed ) {
+        if ( pv->last_render )
+            hb_buffer_close( &pv->last_render );
+
+        unsigned int x1, y1, x2, y2;
+        x1 = y1 = (unsigned)(-1);
+        x2 = y2 = 0;
+
+        //Find overlay size and pos (faster than composing at the video dimensions)
+        for ( ASS_Image *frame = frameList; frame; frame = frame->next ) {
+            if ( frame->w && frame->h ) {
+                x2 = FFMAX( x2, frame->dst_x + frame->w );
+                y2 = FFMAX( y2, frame->dst_y + frame->h );
+                x1 = FFMIN( x1, frame->dst_x );
+                y1 = FFMIN( y1, frame->dst_y );
+            }
         }
+
+        //don't process empty framelist
+        if (x2 > 0) {
+            //overlay must be aligned to the chroma plane, pad as needed.
+            x1 -= (x1 + pv->crop[2]) & ((1 << pv->wshift) - 1);
+            y1 -= (y1 + pv->crop[0]) & ((1 << pv->hshift) - 1);
+
+            pv->last_render = ComposeSubsampleASS( pv, frameList, x2-x1, y2-y1, x1, y1 );
+
+            if ( pv->last_render ) {
+                pv->last_render->f.x += pv->crop[2];
+                pv->last_render->f.y += pv->crop[0];
+            }
+        }
+    }
+
+    if ( pv->last_render )
+    {
+        return pv->last_render;
+    }
+    else
+    {
+        return NULL;
     }
 }
 
@@ -882,6 +1041,11 @@ static int ssa_post_init( hb_filter_object_t * filter, hb_job_t * job )
     ass_set_frame_size(pv->renderer, width, height);
     ass_set_storage_size(pv->renderer, width, height);
 
+    if ( pv->last_render ) {
+        hb_buffer_close(&pv->last_render);
+        pv->last_render = NULL;
+    }
+
     return 0;
 }
 
@@ -900,6 +1064,8 @@ static void ssa_close( hb_filter_object_t * filter )
         ass_renderer_done( pv->renderer );
     if ( pv->ssa )
         ass_library_done( pv->ssa );
+    if ( pv->last_render )
+        hb_buffer_close( &pv->last_render );
 
     free( pv );
     filter->private_data = NULL;
@@ -911,7 +1077,9 @@ static int ssa_work( hb_filter_object_t * filter,
 {
     hb_filter_private_t * pv = filter->private_data;
     hb_buffer_t * in = *buf_in;
+    hb_buffer_t * out = in;
     hb_buffer_t * sub;
+    hb_buffer_t * rendered_subs;
 
     if (!pv->script_initialized)
     {
@@ -951,9 +1119,23 @@ static int ssa_work( hb_filter_object_t * filter,
         hb_buffer_close(&sub);
     }
 
-    ApplySSASubs( pv, in );
-    *buf_in = NULL;
-    *buf_out = in;
+    rendered_subs = render_ssa_subs(pv, in->s.start);
+
+    if (rendered_subs && hb_buffer_is_writable(in) == 0)
+    {
+        out = hb_buffer_dup(in);
+    }
+    else
+    {
+        *buf_in = NULL;
+    }
+
+    if (rendered_subs)
+    {
+        ApplySub(pv, out, rendered_subs);
+    }
+
+    *buf_out = out;
 
     return HB_FILTER_OK;
 }
@@ -1000,7 +1182,9 @@ static int textsub_work(hb_filter_object_t * filter,
 {
     hb_filter_private_t * pv = filter->private_data;
     hb_buffer_t * in = *buf_in;
+    hb_buffer_t * out = in;
     hb_buffer_t * sub;
+    hb_buffer_t * rendered_subs;
 
     if (!pv->script_initialized)
     {
@@ -1090,9 +1274,23 @@ static int textsub_work(hb_filter_object_t * filter,
         process_sub(pv, pv->current_sub);
     }
 
-    ApplySSASubs(pv, in);
-    *buf_in = NULL;
-    *buf_out = in;
+    rendered_subs = render_ssa_subs(pv, in->s.start);
+
+    if (rendered_subs && hb_buffer_is_writable(in) == 0)
+    {
+        out = hb_buffer_dup(in);
+    }
+    else
+    {
+        *buf_in = NULL;
+    }
+
+    if (rendered_subs)
+    {
+        ApplySub(pv, out, rendered_subs);
+    }
+
+    *buf_out = out;
 
     return HB_FILTER_OK;
 }
@@ -1225,6 +1423,37 @@ static int hb_rendersub_init( hb_filter_object_t * filter,
     pv->depth      = desc->comp[0].depth;
     pv->wshift     = desc->log2_chroma_w;
     pv->hshift     = desc->log2_chroma_h;
+
+    //Compute chroma smoothing coefficients wrt video chroma location
+    int wX, wY;
+    wX = 4 - (1 << desc->log2_chroma_w);
+    wY = 4 - (1 << desc->log2_chroma_h);
+
+    switch (init->chroma_location)
+    {
+    case AVCHROMA_LOC_TOPLEFT:
+        wX += (1 << desc->log2_chroma_w) - 1;
+    case AVCHROMA_LOC_TOP:
+        wY += (1 << desc->log2_chroma_h) - 1;
+        break;
+    case AVCHROMA_LOC_LEFT:
+        wX += (1 << desc->log2_chroma_w) - 1;
+        break;
+    case AVCHROMA_LOC_BOTTOMLEFT:
+        wX += (1 << desc->log2_chroma_w) - 1;
+    case AVCHROMA_LOC_BOTTOM:
+        wY += (1 << desc->log2_chroma_h) - 1;
+    case AVCHROMA_LOC_CENTER:
+    default: //center chroma value for unknown/unsupported
+        break;
+    }
+
+    const unsigned baseCoefficients[] = {1, 3, 9, 27, 9, 3, 1};
+    //If wZ is even, an intermediate value is interpolated for symmetry.
+    for (int x = 0; x < 4; x++) {
+        pv->chromaCoeffs[0][x] = (baseCoefficients[x + wX] + baseCoefficients[x + wX + !(wX & 0x1)]) >> 1;
+        pv->chromaCoeffs[1][x] = (baseCoefficients[x + wY] + baseCoefficients[x + wY + !(wY & 0x1)]) >> 1;
+    }
 
     switch (init->pix_fmt)
     {

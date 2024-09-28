@@ -85,6 +85,10 @@ int hb_hwaccel_hw_ctx_init(int codec_id, int hw_decode, void **hw_device_ctx)
     {
         hw_type = av_hwdevice_find_type_by_name("cuda");
     }
+    else if (hw_decode & HB_DECODE_SUPPORT_MF)
+    {
+        hw_type = av_hwdevice_find_type_by_name("d3d11va");
+    }
 
     if (hw_type != AV_HWDEVICE_TYPE_NONE)
     {
@@ -229,7 +233,7 @@ hb_buffer_t * hb_hwaccel_copy_video_buffer_to_hw_video_buffer(hb_job_t *job, hb_
             goto fail;
         }
 
-        hb_buffer_t *out = hb_avframe_to_video_buffer(hw_frame, (AVRational){1,1}, 1);
+        hb_buffer_t *out = hb_avframe_to_video_buffer(hw_frame, (AVRational){1,1});
 
         av_frame_unref(&frame);
         av_frame_unref(hw_frame);
@@ -313,3 +317,29 @@ int hb_hwaccel_decode_is_enabled(hb_job_t *job)
         return 0;
     }
 }
+
+#if HB_PROJECT_FEATURE_MF
+int hb_directx_available()
+{
+    if (is_hardware_disabled())
+    {
+        return 0;
+    }
+    enum AVHWDeviceType hw_type = av_hwdevice_find_type_by_name("d3d11va");
+    if (hw_type == AV_HWDEVICE_TYPE_NONE)
+    {
+        hb_log("directx: not available on this system");
+        return 0;
+    }
+
+    hb_log("directx: is available");
+    return 1;
+}
+#else // HB_PROJECT_FEATURE_MF
+
+int hb_directx_available()
+{
+    return -1;
+}
+
+#endif // HB_PROJECT_FEATURE_MF

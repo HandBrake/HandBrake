@@ -2,9 +2,9 @@ __deps__ :=
 $(eval $(call import.MODULE.defs,X265_8,x265_8,$(__deps__),x265))
 $(eval $(call import.CONTRIB.defs,X265_8))
 
-X265_8.FETCH.url     = https://github.com/HandBrake/HandBrake-contribs/releases/download/contribs/x265_3.6.tar.gz
-X265_8.FETCH.url    += https://bitbucket.org/multicoreware/x265_git/downloads/x265_3.6.tar.gz
-X265_8.FETCH.sha256  = 663531f341c5389f460d730e62e10a4fcca3428ca2ca109693867bc5fe2e2807
+X265_8.FETCH.url     = https://github.com/HandBrake/HandBrake-contribs/releases/download/contribs2/x265_4.0.tar.gz
+X265_8.FETCH.url    += https://bitbucket.org/multicoreware/x265_git/downloads/x265_4.0.tar.gz
+X265_8.FETCH.sha256  = 75b4d05629e365913de3100b38a459b04e2a217a8f30efaa91b572d8e6d71282
 
 X265_8.build_dir             = 8bit
 X265_8.CONFIGURE.exe         = cmake
@@ -55,7 +55,14 @@ ifeq (1,$(HOST.cross))
         X265_8.CONFIGURE.extra += -DCMAKE_RC_COMPILER=$(HOST.cross.prefix)windres
         X265_8.CONFIGURE.args.host  = -DCMAKE_HOST_SYSTEM="$(X265_8.CONFIGURE.host)"
     endif
+    ifeq (aarch64,$(HOST.machine:arm64=aarch64))
+        X265_8.CONFIGURE.extra += -DCROSS_COMPILE_ARM64=ON -DCROSS_COMPILE_NEON_DOTPROD=ON -DCROSS_COMPILE_NEON_I8MM=ON
+    endif
     X265_8.CONFIGURE.args.build = -DCMAKE_SYSTEM_PROCESSOR=$(HOST.machine)
+else
+    ifeq (arm64-darwin,$(HOST.machine)-$(HOST.system))
+        X265_8.CONFIGURE.extra += -DCPU_HAS_NEON_I8MM=ON
+    endif
 endif
 
 ## find CMakeLists.txt

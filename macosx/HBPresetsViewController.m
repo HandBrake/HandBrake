@@ -196,7 +196,7 @@ static void *HBPresetsViewControllerContext = &HBPresetsViewControllerContext;
             {
                 NSError *error = NULL;
                 NSString *fileName = [self fileNameForPreset:preset];
-                NSURL *url = [panel.URL URLByAppendingPathComponent:fileName];
+                NSURL *url = [panel.URL URLByAppendingPathComponent:fileName isDirectory:NO];
                 BOOL success = [preset writeToURL:url atomically:YES removeRoot:NO error:&error];
                 if (success == NO)
                 {
