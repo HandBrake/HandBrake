@@ -11,12 +11,15 @@ namespace HandBrakeWPF.Model.Filters
 {
     using HandBrake.Interop.Attributes;
 
+    using HandBrakeWPF.Properties;
+
     /// <summary>
     /// The denoise.
     /// </summary>
     public enum Denoise
     {
-        [ShortName("off")]
+        [DisplayName(typeof(Resources), "Denoise_Off")]        
+		[ShortName("off")]
         Off = 0,
 
         [ShortName("hqdn3d")]

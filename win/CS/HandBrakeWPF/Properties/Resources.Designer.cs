@@ -8154,5 +8154,86 @@ namespace HandBrakeWPF.Properties {
                 return ResourceManager.GetString("Yes", resourceCulture);
             }
         }
+		
+		/// <summary>
+        ///   Looks up a localized string similar to CombDetect Off.
+        /// </summary>
+        public static string CombDetect_Off {
+            get {
+                return ResourceManager.GetString("CombDetect_Off", resourceCulture);
+            }
+        }
+		
+		/// <summary>
+        ///   Looks up a localized string similar to CombDetect Custom.
+        /// </summary>
+        public static string CombDetect_Custom {
+            get {
+                return ResourceManager.GetString("CombDetect_Custom", resourceCulture);
+            }
+        }
+		
+		/// <summary>
+        ///   Looks up a localized string similar to CombDetect Default.
+        /// </summary>
+        public static string CombDetect_Default {
+            get {
+                return ResourceManager.GetString("CombDetect_Default", resourceCulture);
+            }
+        }
+				
+		/// <summary>
+        ///   Looks up a localized string similar to DeinterlaceFilter Off.
+        /// </summary>
+        public static string DeinterlaceFilter_Off {
+            get {
+                return ResourceManager.GetString("DeinterlaceFilter_Off", resourceCulture);
+            }
+        }
+				
+		/// <summary>
+        ///   Looks up a localized string similar to Denoise Off.
+        /// </summary>
+        public static string Denoise_Off {
+            get {
+                return ResourceManager.GetString("Denoise_Off", resourceCulture);
+            }
+        }
+				
+		/// <summary>
+        ///   Looks up a localized string similar to Detelecine Off.
+        /// </summary>
+        public static string Detelecine_Off {
+            get {
+                return ResourceManager.GetString("Detelecine_Off", resourceCulture);
+            }
+        }
+		
+		/// <summary>
+        ///   Looks up a localized string similar to Detelecine Default.
+        /// </summary>
+        public static string Detelecine_Default {
+            get {
+                return ResourceManager.GetString("Detelecine_Default", resourceCulture);
+            }
+        }
+		
+		/// <summary>
+        ///   Looks up a localized string similar to Detelecine Custom.
+        /// </summary>
+        public static string Detelecine_Custom {
+            get {
+                return ResourceManager.GetString("Detelecine_Custom", resourceCulture);
+            }
+        }
+		
+		/// <summary>
+        ///   Looks up a localized string similar to Sharpen Off.
+        /// </summary>
+        public static string Sharpen_Off {
+            get {
+                return ResourceManager.GetString("Sharpen_Off", resourceCulture);
+            }
+        }
     }
 }
