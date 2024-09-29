@@ -3550,6 +3550,15 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Maximum DVD and Blu-ray title duration in seconds. Longer titles will be skipped:.
+        /// </summary>
+        public static string Options_MaxTitleScanDuration {
+            get {
+                return ResourceManager.GetString("Options_MaxTitleScanDuration", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Minimize to system tray (Requires Restart).
         /// </summary>
         public static string Options_MinimiseTray {

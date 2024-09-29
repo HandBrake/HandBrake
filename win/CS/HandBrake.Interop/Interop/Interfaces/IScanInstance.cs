@@ -71,6 +71,9 @@ namespace HandBrake.Interop.Interop.Interfaces
         /// <param name="minDuration">
         /// The min Duration.
         /// </param>
+        /// <param name="maxDuration">
+        /// The maximum duration of a title to show up on the scan.
+        /// </param>
         /// <param name="titleIndex">
         /// The title Index.
         /// </param>
@@ -82,7 +85,7 @@ namespace HandBrake.Interop.Interop.Interfaces
         /// <param name="hwDecode">
         /// From NativeConstants, allow for Hardware decode probing during scans.
         /// </param>
-        void StartScan(List<string> paths, int previewCount, TimeSpan minDuration, int titleIndex, List<string> excludedExtensions, int hwDecode, bool keepDuplicateTitles);
+        void StartScan(List<string> paths, int previewCount, TimeSpan minDuration, TimeSpan maxDuration, int titleIndex, List<string> excludedExtensions, int hwDecode, bool keepDuplicateTitles);
 
         /// <summary>
         /// Stop any running scans
