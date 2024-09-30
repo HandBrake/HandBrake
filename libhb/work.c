@@ -100,16 +100,6 @@ static void SetWorkStateInfo(hb_job_t *job)
     hb_set_state( job->h, &state );
 }
 
-static void sanitize_multipass(hb_job_t *job)
-{
-    int bit_depth = hb_get_bit_depth(job->title->pix_fmt);
-    if (job->vcodec == HB_VCODEC_FFMPEG_FFV1 && bit_depth > 8)
-    {
-        hb_log("FFV1 2-pass is not supported for bit depth higher than 8, disabling");
-        job->multipass = 0;
-    }
-}
-
 /**
  * Iterates through job list and calls do_job for each job.
  * @param _work Handle work object.
@@ -165,8 +155,6 @@ static void work_func( void * _work )
         }
 #endif
 
-
-        sanitize_multipass(job);
         hb_job_setup_passes(job->h, job, passes);
         hb_job_close(&job);
 
