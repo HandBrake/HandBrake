@@ -2888,4 +2888,31 @@ To allow multiple simultaneous encodes, turn on "Process Isolation" in Tools Men
   <data name="AnamorphicMode_Automatic" xml:space="preserve">
     <value>Automatic</value>
   </data>
+  <data name="CombDetect_Off" xml:space="preserve">
+    <value>Off</value>
+  </data>
+  <data name="CombDetect_Custom" xml:space="preserve">
+    <value>Custom</value>
+  </data>
+  <data name="CombDetect_Default" xml:space="preserve">
+    <value>Default</value>
+  </data>
+  <data name="DeinterlaceFilter_Off" xml:space="preserve">
+    <value>Off</value>
+  </data>
+  <data name="Denoise_Off" xml:space="preserve">
+    <value>Off</value>
+  </data>
+  <data name="Detelecine_Off" xml:space="preserve">
+    <value>Off</value>
+  </data>
+  <data name="Detelecine_Default" xml:space="preserve">
+    <value>Default</value>
+  </data>
+  <data name="Detelecine_Custom" xml:space="preserve">
+    <value>Custom</value>
+  </data>
+  <data name="Sharpen_Off" xml:space="preserve">
+    <value>Off</value>
+  </data>
 </root>
