@@ -1,10 +1,10 @@
 $(eval $(call import.MODULE.defs,AMF,amf))
 $(eval $(call import.CONTRIB.defs,AMF))
 
-AMF.FETCH.url      = https://github.com/GPUOpen-LibrariesAndSDKs/AMF/archive/refs/tags/v1.4.34.tar.gz
-AMF.FETCH.sha256   = a8f8363ee9b89c7fb93fa8cca521f602d5fd2c083382fc14f05c37d952905cc6
-AMF.FETCH.basename = AMF-1.4.34.tar.gz
-AMF.EXTRACT.tarbase = AMF-1.4.34
+AMF.FETCH.url      = https://github.com/GPUOpen-LibrariesAndSDKs/AMF/archive/refs/tags/v1.4.35.tar.gz
+AMF.FETCH.sha256   = 5d93101eae5895247bea58cff40bb84424158170ae7f931105666157cc187636
+AMF.FETCH.basename = AMF-1.4.35.tar.gz
+AMF.EXTRACT.tarbase = AMF-1.4.35
 
 AMF.CONFIGURE = $(TOUCH.exe) $@
 AMF.BUILD     = $(TOUCH.exe) $@
