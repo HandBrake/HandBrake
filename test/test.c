@@ -3243,6 +3243,12 @@ static int ParseOptions( int argc, char ** argv )
         }
 
     }
+#if HB_PROJECT_FEATURE_MF
+    if (hw_decode == -1 && hb_is_hw_decoding_supported(preset_name, vcodec))
+    {
+        hw_decode = HB_DECODE_SUPPORT_MF;
+    }
+#endif
 
     if (deblock != NULL)
     {

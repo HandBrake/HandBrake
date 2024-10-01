@@ -24,6 +24,7 @@ namespace HandBrakeWPF.ViewModels
     using HandBrakeWPF.Services.Interfaces;
     using HandBrakeWPF.Services.Presets.Model;
     using HandBrakeWPF.Services.Scan.Model;
+    using HandBrakeWPF.Utilities;
     using HandBrakeWPF.ViewModels.Interfaces;
 
     using Clipboard = System.Windows.Clipboard;
@@ -329,6 +330,10 @@ namespace HandBrakeWPF.ViewModels
                     this.HandleRFChange();
                     this.OnTabStatusChanged(null);
 
+                    if (SystemInfo.IsArmDevice)
+                    {
+                        this.userSettingService.SetUserSetting(UserSettingConstants.EnableDirectXDecoding, !value.IsMediaFoundation);
+                    }
                     this.OnTabStatusChanged(new TabStatusEventArgs("filters", ChangedOption.Encoder));
 
                     this.NotifyOfPropertyChange(() => this.IsQualitySupported);

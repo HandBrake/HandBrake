@@ -312,6 +312,33 @@ hb_encoder_internal_t hb_video_encoders[]  =
     { { "Theora",                      "theora",           "Theora (libtheora)",             HB_VCODEC_THEORA,                                             HB_MUX_MASK_MKV, }, NULL, 0, 1, HB_GID_VCODEC_THEORA,     },
 };
 int hb_video_encoders_count = sizeof(hb_video_encoders) / sizeof(hb_video_encoders[0]);
+
+#if HB_PROJECT_FEATURE_MF
+int hb_is_hw_decoding_supported(const char *preset_name, const char *vcodec) 
+{
+    if (!vcodec) {
+        if (strcmp(preset_name, "Very Fast 720p30") == 0 || strcmp(preset_name, "Very Fast 1080p30") == 0)
+        {
+            return 0;
+        }
+        else
+        {
+            return 1;
+        }
+    }
+
+    int vcodec_id = hb_video_encoder_get_from_name(vcodec);
+    switch (vcodec_id)
+    {
+        case HB_VCODEC_FFMPEG_MF_H264:
+        case HB_VCODEC_FFMPEG_MF_H265:
+            return 0;
+        default:
+            return 1;
+    }
+}
+#endif
+
 static int hb_video_encoder_is_enabled(int encoder, int disable_hardware)
 {
     // Hardware Encoders

@@ -1953,6 +1953,12 @@ namespace HandBrakeWPF.ViewModels
                         }
                     }
 
+                    if (SystemInfo.IsArmDevice && (preset.Name == "Very Fast 720p30" || preset.Name == "Very Fast 1080p30"))
+                    {
+                        this.userSettingService.SetUserSetting(UserSettingConstants.EnableDirectXDecoding, false);
+
+                    }
+
                     return true;
                 }
             }
