@@ -2410,7 +2410,7 @@ msgstr "HandBrakeを再起動する必要があります。"
 #: src/callbacks.c:3920
 #, c-format
 msgid "%s in %d seconds…"
-msgstr "%d秒で%s"
+msgstr "%sまで後 %d 秒"
 
 #: src/callbacks.c:4097
 msgid "Stop Encoding?"
@@ -2521,15 +2521,15 @@ msgstr "エンコードが完了しました。"
 
 #: src/callbacks.c:5479
 msgid "Quitting HandBrake"
-msgstr "HandBrakeを閉じています"
+msgstr "HandBrake を終了する"
 
 #: src/callbacks.c:5486
 msgid "Putting computer to sleep"
-msgstr "コンピューターをスリープします"
+msgstr "コンピューターをスリープする"
 
 #: src/callbacks.c:5494
 msgid "Shutting down the computer"
-msgstr "コンピューターをシャットダウンします"
+msgstr "コンピューターをシャットダウンする"
 
 #. Add filters
 #: src/callbacks.c:5608 src/chapters.c:458 src/chapters.c:487
