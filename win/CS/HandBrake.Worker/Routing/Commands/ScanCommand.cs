@@ -22,6 +22,8 @@ namespace HandBrake.Worker.Routing.Commands
 
         public TimeSpan MinDuration { get; set; }
 
+        public TimeSpan MaxDuration { get; set; }
+
         public int TitleIndex { get; set; }
 
         public List<string> FileExclusionList { get; set; }
