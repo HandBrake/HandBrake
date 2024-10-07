@@ -128,7 +128,10 @@ static const char * const h265_mf_profile_name[] =
 {
     "auto", "main",  NULL
 };
-
+static const char * const av1_mf_profile_name[] =
+{
+    "auto", "main",  NULL
+};
 static const char * const ffv1_profile_names[] =
 {
     "auto", NULL
@@ -280,6 +283,10 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
                 case HB_VCODEC_FFMPEG_VCE_AV1:
                     hb_log("encavcodecInit: AV1 (AMD VCE)");
                     codec_name = "av1_amf";
+                    break;
+                case HB_VCODEC_FFMPEG_MF_AV1:
+                    hb_log("encavcodecInit: AV1 (MediaFoundation)");
+                    codec_name = "av1_mf";
                     break;
             }
         }break;
@@ -440,7 +447,8 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
         }
 
         if (job->vcodec == HB_VCODEC_FFMPEG_MF_H264 ||
-            job->vcodec == HB_VCODEC_FFMPEG_MF_H265) {
+            job->vcodec == HB_VCODEC_FFMPEG_MF_H265 ||
+            job->vcodec == HB_VCODEC_FFMPEG_MF_AV1) {
             av_dict_set(&av_opts, "rate_control", "u_vbr", 0); // options are cbr, pc_vbr, u_vbr, ld_vbr, g_vbr, gld_vbr
 
             // On Qualcomm encoders, the VBR modes can easily drop frames if
@@ -588,7 +596,8 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
             hb_log( "encavcodec: GOP Size %d", context->gop_size );
         }
         else if (job->vcodec == HB_VCODEC_FFMPEG_MF_H264 ||
-                 job->vcodec == HB_VCODEC_FFMPEG_MF_H265)
+                 job->vcodec == HB_VCODEC_FFMPEG_MF_H265 ||
+                 job->vcodec == HB_VCODEC_FFMPEG_MF_AV1)
         {
             char quality[7];
             snprintf(quality, 7, "%d", (int)job->vquality);
@@ -736,7 +745,8 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
         context->slices = slices[slice_index];
     }
     else if (job->vcodec == HB_VCODEC_FFMPEG_MF_H264 ||
-             job->vcodec == HB_VCODEC_FFMPEG_MF_H265)
+             job->vcodec == HB_VCODEC_FFMPEG_MF_H265 ||
+             job->vcodec == HB_VCODEC_FFMPEG_MF_AV1)
     {
         if (job->vcodec == HB_VCODEC_FFMPEG_MF_H264)
         {
@@ -1402,6 +1412,7 @@ static int apply_encoder_level(AVCodecContext *context, AVDictionary **av_opts, 
         case HB_VCODEC_FFMPEG_VCE_AV1:
         case HB_VCODEC_FFMPEG_NVENC_AV1:
         case HB_VCODEC_FFMPEG_NVENC_AV1_10BIT:
+        case HB_VCODEC_FFMPEG_MF_AV1:
             level_names = hb_av1_level_names;
             level_values = hb_av1_level_values;
             break;
@@ -1470,6 +1481,7 @@ const char* const* hb_av_preset_get_names(int encoder)
 
         case HB_VCODEC_FFMPEG_MF_H264:
         case HB_VCODEC_FFMPEG_MF_H265:
+        case HB_VCODEC_FFMPEG_MF_AV1:
             return h26x_mf_preset_name;
 
         case HB_VCODEC_FFMPEG_FFV1:
@@ -1506,6 +1518,8 @@ const char* const* hb_av_profile_get_names(int encoder)
             return h264_mf_profile_name;
         case HB_VCODEC_FFMPEG_MF_H265:
             return h265_mf_profile_name;
+        case HB_VCODEC_FFMPEG_MF_AV1:
+            return av1_mf_profile_name;
         case HB_VCODEC_FFMPEG_FFV1:
             return ffv1_profile_names;
 
@@ -1535,6 +1549,7 @@ const char* const* hb_av_level_get_names(int encoder)
         case HB_VCODEC_FFMPEG_VCE_AV1:
         case HB_VCODEC_FFMPEG_NVENC_AV1:
         case HB_VCODEC_FFMPEG_NVENC_AV1_10BIT:
+        case HB_VCODEC_FFMPEG_MF_AV1:
             return hb_av1_level_names;
 
         case HB_VCODEC_FFMPEG_FFV1:
@@ -1551,6 +1566,7 @@ const int* hb_av_get_pix_fmts(int encoder)
     {
         case HB_VCODEC_FFMPEG_MF_H264:
         case HB_VCODEC_FFMPEG_MF_H265:
+        case HB_VCODEC_FFMPEG_MF_AV1:   // NV12 only
             return h26x_mf_pix_fmts;
 
         case HB_VCODEC_FFMPEG_NVENC_H264:

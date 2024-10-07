@@ -322,6 +322,7 @@ static int avformatInit( hb_mux_object_t * m )
         case HB_VCODEC_FFMPEG_NVENC_AV1:
         case HB_VCODEC_FFMPEG_NVENC_AV1_10BIT:
         case HB_VCODEC_FFMPEG_VCE_AV1:
+        case HB_VCODEC_FFMPEG_MF_AV1:
             track->st->codecpar->codec_id = AV_CODEC_ID_AV1;
             break;
 
