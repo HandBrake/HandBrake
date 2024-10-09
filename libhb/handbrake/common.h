@@ -489,6 +489,10 @@ const char*         hb_video_encoder_get_long_name(int encoder);
 const char*         hb_video_encoder_sanitize_name(const char *name);
 const hb_encoder_t* hb_video_encoder_get_next(const hb_encoder_t *last);
 
+#if HB_PROJECT_FEATURE_MF
+int                 hb_is_hw_decoding_supported(const char *preset_name, const char *vcodec);
+#endif
+
 /*
  * hb_audio_encoder_get_fallback_for_passthru() will sanitize a passthru codec
  * to the matching audio encoder (if any is available).
