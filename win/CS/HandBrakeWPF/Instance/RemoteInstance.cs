@@ -291,11 +291,35 @@ namespace HandBrakeWPF.Instance
 
                 initCommand.LogFile = Path.Combine(initCommand.LogDirectory, string.Format("activity_log.worker.{0}.txt", GeneralUtilities.ProcessId));
 
-                string job = JsonSerializer.Serialize(new EncodeCommand { InitialiseCommand = initCommand, EncodeJob = jobToStart }, JsonSettings.Options);
+                bool startRequested = false;
+                try
+                {
+                    string job = JsonSerializer.Serialize(new EncodeCommand { InitialiseCommand = initCommand, EncodeJob = jobToStart }, JsonSettings.Options);
 
-                var task = Task.Run(async () => await this.MakeHttpJsonPostRequest("StartEncode", job));
-                task.Wait();
-                this.MonitorEncodeProgress();
+                    var task = Task.Run(async () => await this.MakeHttpJsonPostRequest("StartEncode", job));
+                    task.Wait();
+                    startRequested = true;
+                }
+                catch (Exception exc)
+                {
+                    startRequested = false;
+                    this.ServiceLogMessage("Unable to start job. HandBrake was unable to communicate with the worker process. This may be getting blocked by security software. Try running without process isolation. See Tools Menu -> Preferences -> Advanced." + Environment.NewLine + exc.ToString());
+                    this.EncodeCompleted?.Invoke(sender: this, e: new EncodeCompletedEventArgs(4));
+                    return;
+                }
+
+                try
+                {
+                    if (startRequested)
+                    {
+                        this.MonitorEncodeProgress();
+                    }
+                }
+                catch (Exception exc)
+                {
+                    this.ServiceLogMessage(exc.ToString());
+                    this.EncodeCompleted?.Invoke(sender: this, e: new EncodeCompletedEventArgs(4));
+                }
             }
         }
     }
