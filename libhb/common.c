@@ -36,6 +36,9 @@
 #include <windows.h>
 #endif
 
+#if HB_PROJECT_FEATURE_MF
+#include "handbrake/mf_common.h"
+#endif
 #if HB_PROJECT_FEATURE_NVENC
 #include "handbrake/nvenc_common.h"
 #endif
@@ -360,11 +363,11 @@ static int hb_video_encoder_is_enabled(int encoder, int disable_hardware)
             // TODO: Try to instantiate a throwaway encoder to see if a suitable MediaFoundation encoder can be found?
             // Alt, implement logic similar to ffmpeg's encoder selection, to see if one would be found.
             case HB_VCODEC_FFMPEG_MF_H264:
-                return 1;
+                return hb_mf_h264_available();
             case HB_VCODEC_FFMPEG_MF_H265:
-                return 1;
+                return hb_mf_h265_available();
             case HB_VCODEC_FFMPEG_MF_AV1:
-                return 1;
+                return hb_mf_av1_available();
 #endif
         }
     }
