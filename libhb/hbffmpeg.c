@@ -791,6 +791,13 @@ int hb_av_can_use_zscale(enum AVPixelFormat pix_fmt,
                          int in_width, int in_height,
                          int out_width, int out_height)
 {
+
+#if defined (__aarch64__) && defined(_WIN32)
+    {
+        return 0;
+    }
+#endif
+
     if ((in_width % 2)  != 0 || (in_height % 2)  != 0 ||
         (out_width % 2) != 0 || (out_height % 2) != 0)
     {
