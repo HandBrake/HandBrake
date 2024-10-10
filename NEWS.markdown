@@ -12,10 +12,52 @@ Download available from Microsoft:
 
 ## HandBrake 1.9.0
 
+### All platforms
+
 #### General
+
 - Added Intel QSV VVC (hardware) video decoder
+- Added an option to enable AV1 screen content coding(SCC) on Intel Lunar Lake QSV AV1 encoder
+- Added hardware decoders on Windows 11 for ARM
+- Added a preference to keep duplicated Blu-ray titles
+- Added support for lossless VP9 encoding
+
+#### Audio
+
+- Improved scan of DTS audio profiles
+
+#### Subtitles
+
+- Improved quality of subtitles burn-in
+- Fixed a rare video corruption issue that could happen when burning-in subtitles
+
+#### Third-party libraries
+
+- Updated libraries
+  - FFmpeg 7.1 (decoding and filters)
+  - FreeType 2.13.3 (subtitles)
+  - Fribidi 1.0.16 (subtitles)
+  - HarfBuzz 10.0.1 (subtitles)
+  - libdovi 3.3.1 (Dolby Vision dynamic metadata)
+  - libjpeg-turbo 3.0.4 (preview image compression)
+  - nv-codec-headers 12.2.72.0 (Nvidia NVENC encoding)
+  - oneVPL 2.13.0 (Intel QSV video encoding/decoding)
+  - SVT-AV1 2.2.1 (AV1 video encoding)
+  - x265 4.0 (H.265/HEVC video encoding)
+
+### Linux
+
+- Fixed the Power Save option to pause the encodes only when enabled
+- Fixed the queue being stopped when removing completed items
+- Fixed chapters names not being saved properly
+
+### Mac
+
+- Add Range Limit controls to the "Add to Queue" selection window. (#4146)
+- Miscellaneous bug fixes and improvements
 
 ### Windows
+
 - Add Range Limit controls to the "Add to Queue" selection window. (#4146)
 - Add support for DirectX based video decoding when using the Media Foundation encoder on ARM devices. 
 - Miscellaneous bug fixes and improvements
@@ -39,12 +81,14 @@ Download available from Microsoft:
   - libvpx 1.14.1 (VP8/VP9 video encoding)
 
 ### Windows
+
 - Fixed an issue where auto name wasn't triggering correctly with preset changes (#6159)
 - Fixed a potential crash when importing presets from the mac version. (#6186)
 - Fixed an issue loading presets where a video encode isn't available on the system. (#6184)
 - Minor startup performance improvement on some Intel based systems.
 
 ### Linux
+
 - Fixed an issue where an encoded file could be output to the wrong filename when using the queue (#6067)
 
 
