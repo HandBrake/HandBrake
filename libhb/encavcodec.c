@@ -426,7 +426,11 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
         {
             av_dict_set( &av_opts, "rc", "vbr_peak", 0 );
 
-            // Work around an ffmpeg issue mentioned in issue #3447
+            // since we do not have scene change detection, set a
+            // relatively short gop size to help avoid stale references
+            context->gop_size = (int)(FFMIN(av_q2d(fps) * 2, 120));
+
+            //Work around an ffmpeg issue mentioned in issue #3447
             if (job->vcodec == HB_VCODEC_FFMPEG_VCE_H265 || job->vcodec == HB_VCODEC_FFMPEG_VCE_H265_10BIT)
             {
                av_dict_set( &av_opts, "qmin",  "0", 0 );
