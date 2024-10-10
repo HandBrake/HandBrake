@@ -2498,7 +2498,7 @@ msgid "Cancel Current, Start Next"
 msgstr "Cancelar o atual, começar um novo"
 
 #: src/callbacks.c:4100
-msgid "Finish Current, Start Next"
+msgid "Finish Current and Stop"
 msgstr "Concluir o atual, iniciar o próximo"
 
 #: src/callbacks.c:4100 src/callbacks.c:4124 src/queuehandler.c:1703
