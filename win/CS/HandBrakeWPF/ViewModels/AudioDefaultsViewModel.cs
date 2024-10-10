@@ -67,7 +67,7 @@ namespace HandBrakeWPF.ViewModels
             this.Title = Resources.AudioViewModel_AudioDefaults;
 
             BindingList<AudioFallbackWrapper> data = new BindingList<AudioFallbackWrapper>();
-            foreach (HBAudioEncoder encoder in HandBrakeEncoderHelpers.AudioEncoders.Where(s => s.IsPassthrough && !s.IsAutoPassthru))
+            foreach (HBAudioEncoder encoder in HandBrakeEncoderHelpers.AudioEncoders.Where(s => s.IsPassthru && !s.IsAutoPassthru))
             {
                 data.Add(new AudioFallbackWrapper(encoder));
             }

@@ -2300,7 +2300,7 @@ Superseded by HandBrake 1.0.5.
 
 #### Audio
 
-- Blu-ray: make TrueHD, DTS-HD and E-AC3 Secondary Audio streams available for decoding and/or passthrough
+- Blu-ray: make TrueHD, DTS-HD and E-AC3 Secondary Audio streams available for decoding and/or passthru
 - bug fix: libavcodec-decoded streams can now be decoded multiple times
   - previously, multiple decodes of the same source tracks weren't possible and audio output tracks had to be dropped
 - bug fix: fix audio screech at beginning of some audio tracks when decoding AC3
@@ -2478,7 +2478,7 @@ Superseded by HandBrake 1.0.5.
   - Allows specifying field parity for detelecine and decomb
 - Better AV sync
 - Support for sources with no audio
-- DTS passthrough for MKV
+- DTS passthru for MKV
 - x264 bumped from r1169 to r1347, which means speed optimizations, new default settings (see r2742 commit comment), the magic of macroblock tree rate control (mbtree), a new CRF curve (meaning you will get different, generally lower bitrates at the same RF, with similar quality metrics), and weighted P-Frames (disabled by default for Baseline encodes and the AppleTV preset).
 - Better sample interleaving
 - Better, optional deinterlacer for decomb (EEDI2)

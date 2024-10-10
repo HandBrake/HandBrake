@@ -110,7 +110,7 @@ subtitle_refresh_list_row_ui(
 
     GString *str = g_string_new("<small>");
     g_string_append(str, burned ? _("Burned Into Video") :
-                                  _("Passthrough"));
+                                  _("Passthru"));
     if (forced)
     {
         g_string_append_printf(str, " (%s)", _("Forced Subtitles Only"));

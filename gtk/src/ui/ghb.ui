@@ -1811,7 +1811,7 @@ sync for broken players that do not honor MP4 edit lists.</property>
                               </object>
                             </child>
                             <child>
-                              <object class="GtkCheckButton" id="MetadataPassthrough">
+                              <object class="GtkCheckButton" id="MetadataPassthru">
                                 <property name="label" translatable="yes">Passthru Common Metadata</property>
                                 <property name="focusable">1</property>
                                 <property name="tooltip-text" translatable="yes">Copy metadata from source to output.</property>
