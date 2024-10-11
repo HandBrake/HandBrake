@@ -15,7 +15,7 @@ static int colorspace_init(hb_filter_object_t * filter,
 
 const char colorspace_template[] =
     "primaries=^"HB_ALL_REG"$:transfer=^"HB_ALL_REG"$:matrix=^"HB_ALL_REG"$:range=^"HB_ALL_REG"$:"
-    "tonemap=^"HB_ALL_REG"$:param=^"HB_FLOAT_REG"$:desat=^"HB_FLOAT_REG"$";
+    "tonemap=^"HB_ALL_REG"$:param=^"HB_FLOAT_REG"$:desat=^"HB_FLOAT_REG"$:npl=^"HB_FLOAT_REG"$";
 
 hb_filter_object_t hb_filter_colorspace =
 {
@@ -71,7 +71,7 @@ static int colorspace_init(hb_filter_object_t * filter, hb_filter_init_t * init)
     char * range = NULL;
     char * primaries = NULL, * transfer = NULL, * matrix = NULL;
     char * tonemap = NULL;
-    double param = 0, desat = 0;
+    double param = 0, desat = 0, npl = 100;
 
     hb_dict_extract_string(&range, settings, "range");
     hb_dict_extract_string(&primaries, settings, "primaries");
@@ -80,6 +80,7 @@ static int colorspace_init(hb_filter_object_t * filter, hb_filter_init_t * init)
     hb_dict_extract_string(&tonemap, settings, "tonemap");
     hb_dict_extract_double(&param, settings, "param");
     hb_dict_extract_double(&desat, settings, "desat");
+    hb_dict_extract_double(&npl, settings, "npl");
 
     if (!(range || primaries || transfer || matrix))
     {
@@ -132,7 +133,7 @@ static int colorspace_init(hb_filter_object_t * filter, hb_filter_init_t * init)
         avsettings = hb_dict_init();
 
         hb_dict_set_string(avsettings, "transfer", "linear");
-        hb_dict_set_string(avsettings, "npl", "100");
+        hb_dict_set_double(avsettings, "npl", npl);
         hb_dict_set(avfilter, "zscale", avsettings);
 
         hb_value_array_append(avfilters, avfilter);
