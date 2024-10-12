@@ -732,7 +732,7 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
     }
 }
 
-- (void)showOpenPanelForDestination:(NSURL *)destinationURL
+- (void)showOpenPanelForDestination:(NSURL *)destinationURL completionHandler:(void (^)(void))handler
 {
     NSOpenPanel *panel = [NSOpenPanel openPanel];
     panel.canChooseFiles = NO;
@@ -748,17 +748,19 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
              self.destinationFolderURL = panel.URL;
              self.destinationFolderToken = [HBSecurityAccessToken tokenWithAlreadyAccessedObject:panel.URL];
          }
+        handler();
      }];
 }
 
-- (void)askForPermissionAndSetDestinationURLs:(NSArray<NSURL *> *)destinationURLs sourceURLs:(NSArray<NSURL *> *)sourceURLs
+- (void)askForPermissionAndSetDestinationURLs:(NSArray<NSURL *> *)destinationURLs sourceURLs:(NSArray<NSURL *> *)sourceURLs completionHandler:(void (^)(void))handler
 {
     if (destinationURLs.count == 0)
     {
+        handler();
         return;
     }
 
-    if (sourceURLs.firstObject)
+    if (sourceURLs.count == 1)
     {
         // There is no need to ask for permission
         // if the source is a already a folder
@@ -770,6 +772,7 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
         {
             self.destinationFolderURL = sourceURL;
             self.destinationFolderToken = [HBSecurityAccessToken tokenWithObject:sourceURL];
+            handler();
             return;
         }
     }
@@ -777,11 +780,18 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
     if (![self.destinationFolderURL isEqualTo:destinationURLs.firstObject])
     {
 #ifdef __SANDBOX_ENABLED__
-            [self showOpenPanelForDestination:destinationURLs.firstObject];
+        [self showOpenPanelForDestination:destinationURLs.firstObject completionHandler:^{
+            handler();
+        }];
 #else
-            self.destinationFolderURL = destinationURLs.firstObject;
+        self.destinationFolderURL = destinationURLs.firstObject;
+        handler();
 #endif
+        return;
     }
+
+    handler();
+    return;
 }
 
 - (void)cleanUp
@@ -848,19 +858,30 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
 
             self.subsURLs = subtitlesFileURLs;
 
-            HBJob *job = [self jobFromTitle:featuredTitle];
-            if (job)
+            void (^completionHandler)(void) = ^(void)
             {
-                self.job = job;
-                if (featuredTitle.isStream && [NSUserDefaults.standardUserDefaults boolForKey:HBUseSourceFolderDestination])
+                HBJob *job = [self jobFromTitle:featuredTitle];
+                if (job)
                 {
-                    [self askForPermissionAndSetDestinationURLs:baseURLs sourceURLs:fileURLs];
+                    self.job = job;
                 }
+                else
+                {
+                    [self cleanUp];
+                    self.sourceLabel.stringValue = NSLocalizedString(@"No Valid Preset", @"Main Window -> Info text");
+                }
+            };
+
+            if (featuredTitle.isStream &&
+                [NSUserDefaults.standardUserDefaults boolForKey:HBUseSourceFolderDestination])
+            {
+                [self askForPermissionAndSetDestinationURLs:baseURLs
+                                                 sourceURLs:fileURLs
+                                          completionHandler:completionHandler];
             }
             else
             {
-                [self cleanUp];
-                self.sourceLabel.stringValue = NSLocalizedString(@"No Valid Preset", @"Main Window -> Info text");
+                completionHandler();
             }
         }
 
@@ -931,7 +952,7 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
     return URLs;
 }
 
-- (HBJob *)jobFromTitle:(HBTitle *)title
+- (nullable HBJob *)jobFromTitle:(HBTitle *)title
 {
     // If there is already a title loaded, save the current settings to a preset
     [self updateCurrentPreset];
@@ -1177,7 +1198,10 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
 {
     HBTitle *title = self.core.titles[sender.indexOfSelectedItem];
     HBJob *job = [self jobFromTitle:title];
-    self.job = job;
+    if (job)
+    {
+        self.job = job;
+    }
 }
 
 - (void)formatChanged:(NSNotification *)notification
@@ -1216,7 +1240,10 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
         {
             HBTitle *title = titles[index + 1];
             HBJob *job = [self jobFromTitle:title];
-            self.job = job;
+            if (job)
+            {
+                self.job = job;
+            }
         }
     }
 }
@@ -1231,7 +1258,10 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
         {
             HBTitle *title = titles[index - 1];
             HBJob *job = [self jobFromTitle:title];
-            self.job = job;
+            if (job)
+            {
+                self.job = job;
+            }
         }
     }
 }
