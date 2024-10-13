@@ -297,7 +297,7 @@
                                         </Image>
 
                                         <!--  Settings  -->
-                                        <Grid Grid.Column="1" Margin="0,3,5,3" VerticalAlignment="Center" MinHeight="27">
+                                        <Grid Grid.Column="1" Margin="0,3,5,3" VerticalAlignment="Center">
                                             <Grid.RowDefinitions>
                                                 <RowDefinition Height="Auto" />
                                             </Grid.RowDefinitions>
