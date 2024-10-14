@@ -10,3 +10,6 @@ GCC.args.g.std  = -g2
 GCC.args.g.max  = -g3
 
 GCC.args.extra += -mno-ms-bitfields
+ifeq (aarch64,$(HOST.machine))
+    GCC.args.extra   += -march=native
+endif
