@@ -791,7 +791,18 @@ namespace HandBrakeWPF.Properties {
                 return ResourceManager.GetString("SubtitleView_SubtitleDefaults", resourceCulture);
             }
         }
-        
+
+        /// <summary>
+        ///   Looks up a localized string similar to Disable Hardware Acceleration in "Tools Menu -&gt; Preferences -&gt; Video" for best performance..
+        /// </summary>
+        public static string VideoView_DisableHwaccelHint
+        {
+            get
+            {
+                return ResourceManager.GetString("VideoView_DisableHwaccelHint", resourceCulture);
+            }
+        }
+
         /// <summary>
         ///   Looks up a localized string similar to Set the average bitrate.
         ///

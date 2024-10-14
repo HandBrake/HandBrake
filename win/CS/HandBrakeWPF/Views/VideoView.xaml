@@ -55,7 +55,29 @@
                     </ComboBox>
 
                 </StackPanel>
-
+                <Border Background="#E3F2FD" 
+                        HorizontalAlignment="Left"
+                        BorderBrush="#64B5F6" 
+                        BorderThickness="1" 
+                        CornerRadius="5" 
+                        Padding="5" 
+                        Margin="0,0,0,10" 
+                        Visibility="{Binding IsHwAccelHintVisible, Converter={StaticResource boolToVisConverter}}" >
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="ℹ️" 
+                                   Foreground="#64B5F6" 
+                                   FontSize="12"
+                                   FontWeight="Bold" 
+                                   VerticalAlignment="Center"
+                                   Margin="0,0,5,0" />
+                        <TextBlock Text="{x:Static Properties:ResourcesTooltips.VideoView_DisableHwaccelHint}"
+                                   MaxWidth="250"
+                                   Foreground="#1E88E5" 
+                                   VerticalAlignment="Center"
+                                   TextWrapping="Wrap"
+                                   FontSize="12" />
+                    </StackPanel>
+                </Border>
                 <StackPanel Orientation="Horizontal">
                     <TextBlock Text="{x:Static Properties:Resources.VideoView_Framerate}" VerticalAlignment="Top" Margin="0,5,0,0" Width="100"/>
                     <StackPanel Orientation="Vertical">

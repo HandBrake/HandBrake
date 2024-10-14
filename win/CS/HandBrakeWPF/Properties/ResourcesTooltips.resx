@@ -560,4 +560,7 @@ Bitrate will vary source to source.</value>
   <data name="Options_RemovePunctuation" xml:space="preserve">
     <value>Dash (-), Period (.) and Comma (,)</value>
   </data>
+  <data name="VideoView_DisableHwaccelHint" xml:space="preserve">
+    <value>Disable DirectX Decoding in "Tools Menu -&gt; Preferences -&gt; Video" for best performance</value>
+  </data>
 </root>

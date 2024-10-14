@@ -24,6 +24,7 @@ namespace HandBrakeWPF.ViewModels
     using HandBrakeWPF.Services.Interfaces;
     using HandBrakeWPF.Services.Presets.Model;
     using HandBrakeWPF.Services.Scan.Model;
+    using HandBrakeWPF.Utilities;
     using HandBrakeWPF.ViewModels.Interfaces;
 
     using Clipboard = System.Windows.Clipboard;
@@ -54,6 +55,7 @@ namespace HandBrakeWPF.ViewModels
         private bool displayTuneControls;
         private bool displayLevelControl;
         private bool displayProfileControl;
+        private bool isHwAccelHintVisible;
         private Dictionary<string, string> encoderOptions = new Dictionary<string, string>();
 
         public VideoViewModel(IUserSettingService userSettingService, IErrorService errorService)
@@ -137,7 +139,17 @@ namespace HandBrakeWPF.ViewModels
         public bool? IsQualitySupported => this.SelectedVideoEncoder?.SupportsQuality;
         public bool? IsQualityAdjustmentSupported => this.SelectedVideoEncoder?.SupportsQualityAdjustment;
         public bool? IsBitrateSupported => this.SelectedVideoEncoder?.SupportsBitrate;
-        
+
+        public bool IsHwAccelHintVisible
+        {
+            get => isHwAccelHintVisible;
+            set
+            {
+                isHwAccelHintVisible = value;
+                NotifyOfPropertyChange(() => IsHwAccelHintVisible);
+            }
+        }
+
         public bool IsPeakFramerate
         {
             get => this.Task.FramerateMode == FramerateMode.PFR;
@@ -329,6 +341,10 @@ namespace HandBrakeWPF.ViewModels
                     this.HandleRFChange();
                     this.OnTabStatusChanged(null);
 
+                    if (SystemInfo.IsArmDevice)
+                    {
+                        IsHwAccelHintVisible = value.IsMediaFoundation && this.UserSettingService.GetUserSetting<bool>(UserSettingConstants.EnableDirectXDecoding);
+                    }
                     this.OnTabStatusChanged(new TabStatusEventArgs("filters", ChangedOption.Encoder));
 
                     this.NotifyOfPropertyChange(() => this.IsQualitySupported);
