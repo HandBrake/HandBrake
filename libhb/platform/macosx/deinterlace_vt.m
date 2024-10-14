@@ -325,7 +325,7 @@ static void process_frame(hb_filter_private_t *pv)
          pv->ref[CURR]->s.combed == HB_COMB_NONE)
     {
         // Input buffer is not combed, just make a dup of it
-        hb_buffer_t *buf = hb_buffer_dup(pv->ref[CURR]);
+        hb_buffer_t *buf = hb_buffer_shallow_dup(pv->ref[CURR]);
         hb_buffer_list_append(&pv->out_list, buf);
     }
     else
