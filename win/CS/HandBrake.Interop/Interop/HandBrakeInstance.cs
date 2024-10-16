@@ -135,6 +135,9 @@ namespace HandBrake.Interop.Interop
         /// <param name="minDuration">
         /// The minimum duration of a title to show up on the scan.
         /// </param>
+        /// <param name="maxDuration">
+        /// The maximum duration of a title to show up on the scan.
+        /// </param>
         /// <param name="titleIndex">
         /// The title index to scan (1-based, 0 for all titles).
         /// </param>
@@ -146,7 +149,7 @@ namespace HandBrake.Interop.Interop
         /// <param name="hwDecode">
         /// Hardware decoding during scans.
         /// </param>
-        public void StartScan(List<string> paths, int previewCount, TimeSpan minDuration, int titleIndex, List<string> excludedExtensions, int hwDecode, bool keepDuplicateTitles)
+        public void StartScan(List<string> paths, int previewCount, TimeSpan minDuration, TimeSpan maxDuration, int titleIndex, List<string> excludedExtensions, int hwDecode, bool keepDuplicateTitles)
         {
             this.PreviewCount = previewCount;
 
@@ -170,7 +173,7 @@ namespace HandBrake.Interop.Interop
 
             // Start the Scan
             IntPtr excludedExtensionsPtr = excludedExtensionsNative?.Ptr ?? IntPtr.Zero;
-            HBFunctions.hb_scan(this.Handle, scanPathsList.Ptr, titleIndex, previewCount, 1, (ulong)(minDuration.TotalSeconds * 90000), 0, 0, excludedExtensionsPtr, hwDecode, Convert.ToInt32(keepDuplicateTitles));
+            HBFunctions.hb_scan(this.Handle, scanPathsList.Ptr, titleIndex, previewCount, 1, (ulong)(minDuration.TotalSeconds * 90000), (ulong)(maxDuration.TotalSeconds * 90000), 0, 0, excludedExtensionsPtr, hwDecode, Convert.ToInt32(keepDuplicateTitles));
 
             this.scanPollTimer = new Timer();
             this.scanPollTimer.Interval = ScanPollIntervalMs;

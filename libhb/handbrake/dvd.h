@@ -100,7 +100,7 @@ struct hb_dvd_func_s
     void          (* close)       ( hb_dvd_t ** );
     char        * (* name)        ( char * );
     int           (* title_count) ( hb_dvd_t * );
-    hb_title_t  * (* title_scan)  ( hb_dvd_t *, int, uint64_t );
+    hb_title_t  * (* title_scan)  ( hb_dvd_t *, int, uint64_t, uint64_t );
     int           (* start)       ( hb_dvd_t *, hb_title_t *, int );
     void          (* stop)        ( hb_dvd_t * );
     int           (* seek)        ( hb_dvd_t *, float );
