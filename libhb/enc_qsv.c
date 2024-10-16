@@ -174,6 +174,7 @@ static int log_encoder_params(const hb_work_private_t *pv, const mfxVideoParam *
 {
     const mfxExtCodingOption  *option1 = NULL;
     const mfxExtCodingOption2 *option2 = NULL;
+    const mfxExtAV1ScreenContentTools *extScreenContentCoding = NULL;
     const mfxExtHyperModeParam *extHyperModeOption = NULL;
 
     for (int i = 0; i < videoParam->NumExtParam; i++)
@@ -186,6 +187,10 @@ static int log_encoder_params(const hb_work_private_t *pv, const mfxVideoParam *
         else if (option->Header.BufferId == MFX_EXTBUFF_CODING_OPTION2)
         {
             option2 = (mfxExtCodingOption2*)videoParam->ExtParam[i];
+        }
+        else if (option->Header.BufferId == MFX_EXTBUFF_AV1_SCREEN_CONTENT_TOOLS)
+        {
+            extScreenContentCoding = (mfxExtAV1ScreenContentTools*)videoParam->ExtParam[i];
         }
         else if (option->Header.BufferId == MFX_EXTBUFF_HYPER_MODE_PARAM)
         {
@@ -215,6 +220,13 @@ static int log_encoder_params(const hb_work_private_t *pv, const mfxVideoParam *
            videoParam->mfx.TargetUsage, videoParam->AsyncDepth);
     hb_log("encqsvInit: GopRefDist %"PRIu16" GopPicSize %"PRIu16" NumRefFrame %"PRIu16" IdrInterval %"PRIu16"",
            videoParam->mfx.GopRefDist, videoParam->mfx.GopPicSize, videoParam->mfx.NumRefFrame, videoParam->mfx.IdrInterval);
+
+    if (extScreenContentCoding && ((extScreenContentCoding->IntraBlockCopy == MFX_CODINGOPTION_ON) || (extScreenContentCoding->Palette == MFX_CODINGOPTION_ON)))
+    {
+        hb_log("encqsvInit: ScreenContentCoding is enabled IBC %s, Palette %s",
+            (extScreenContentCoding->IntraBlockCopy == MFX_CODINGOPTION_ON) ? "on" : "off",
+            (extScreenContentCoding->Palette == MFX_CODINGOPTION_ON) ? "on" : "off");
+    }
 
     if (pv->qsv_info->capabilities & HB_QSV_CAP_B_REF_PYRAMID)
     {
@@ -371,7 +383,6 @@ static int log_encoder_params(const hb_work_private_t *pv, const mfxVideoParam *
         hb_log("encqsvInit: RepeatPPS %s",
             hb_qsv_codingoption_get_name(option2->RepeatPPS));
     }
-
     return 0;
 }
 
@@ -1655,10 +1666,11 @@ int encqsvInit(hb_work_object_t *w, hb_job_t *job)
     mfxStatus sts;
     mfxVersion version;
     mfxVideoParam videoParam;
-    mfxExtBuffer *extParamArray[8];
+    mfxExtBuffer *extParamArray[HB_QSV_ENC_NUM_EXT_PARAM_MAX];
     mfxSession session = (mfxSession)0;
     mfxExtCodingOption  option1_buf, *option1 = &option1_buf;
     mfxExtCodingOption2 option2_buf, *option2 = &option2_buf;
+    mfxExtAV1ScreenContentTools screencont_coding_buf, *screencont_coding = &screencont_coding_buf;
     mfxExtCodingOptionSPSPPS sps_pps_buf, *sps_pps = &sps_pps_buf;
     mfxExtAV1BitstreamParam av1_bitstream_buf, *av1_bitstream = &av1_bitstream_buf;
     mfxExtChromaLocInfo chroma_loc_info_buf, *chroma_loc_info = &chroma_loc_info_buf;
@@ -1782,6 +1794,13 @@ int encqsvInit(hb_work_object_t *w, hb_job_t *job)
     if (pv->qsv_info->capabilities & HB_QSV_CAP_HYPERENCODE)
     {
         videoParam.ExtParam[videoParam.NumExtParam++] = (mfxExtBuffer*)hyper_encode;
+    }
+    memset(screencont_coding, 0, sizeof(mfxExtAV1ScreenContentTools));
+    screencont_coding->Header.BufferId = MFX_EXTBUFF_AV1_SCREEN_CONTENT_TOOLS;
+    screencont_coding->Header.BufferSz = sizeof(mfxExtAV1ScreenContentTools);
+    if (pv->qsv_info->capabilities & HB_QSV_CAP_AV1_SCREENCONTENT)
+    {
+        videoParam.ExtParam[videoParam.NumExtParam++] = (mfxExtBuffer*)screencont_coding;
     }
     /* Query actual encoding parameters after MFXVideoENCODE_Init, some of them could be overridden */
     sts = MFXVideoENCODE_GetVideoParam(session, &videoParam);
