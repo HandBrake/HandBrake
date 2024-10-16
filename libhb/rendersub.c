@@ -133,6 +133,8 @@ static void blend8on1x(const hb_filter_private_t *pv, hb_buffer_t *dst, const hb
     width  = (src->f.width  - x0 <= dst->f.width - left) ? src->f.width  : (dst->f.width - left + x0);
     height = (src->f.height - y0 <= dst->f.height - top) ? src->f.height : (dst->f.height - top + y0);
 
+    const unsigned int ovVertShift = NULL == pv->ssa ? 0 : pv->hshift;
+    const unsigned int ovHorzShift = NULL == pv->ssa ? 0 : pv->wshift;
 
     // This is setting the pointer outside of the array range if y0c < y0
     oy = y0c - y0;
@@ -145,8 +147,8 @@ static void blend8on1x(const hb_filter_private_t *pv, hb_buffer_t *dst, const hb
         v_out = (uint16_t*)(dst->plane[2].data + (yy >> pv->hshift) * dst->plane[2].stride);
 
         y_in = src->plane[0].data + oy * src->plane[0].stride;
-        u_in = src->plane[1].data + oy * src->plane[1].stride;
-        v_in = src->plane[2].data + oy * src->plane[2].stride;
+        u_in = src->plane[1].data + (oy >> ovVertShift) * src->plane[1].stride;
+        v_in = src->plane[2].data + (oy >> ovVertShift) * src->plane[2].stride;
         a_in = src->plane[3].data + oy * src->plane[3].stride;
 
         ox = x0c - x0;
@@ -163,9 +165,9 @@ static void blend8on1x(const hb_filter_private_t *pv, hb_buffer_t *dst, const hb
             {
                 //perform chromaloc-aware subsampling and blending
                 accuA = accuB = accuC = 0;
-                for (int yz = 0, oyz = oy; yz < (1 << pv->hshift) && oy + yz < height; yz++, oyz++)
+                for (int yz = 0, oyz = oy; yz < (1 << (pv->hshift - ovVertShift)) && oy + yz < height; yz++, oyz++)
                 {
-                    for (int xz = 0, oxz = ox; xz < (1 << pv->wshift) && ox + xz < width; xz++, oxz++)
+                    for (int xz = 0, oxz = ox; xz < (1 << (pv->wshift - ovHorzShift)) && ox + xz < width; xz++, oxz++)
                     {
                         //weight of the current chroma sample
                         coeff = pv->chromaCoeffs[0][xz]*pv->chromaCoeffs[1][yz];
@@ -177,10 +179,10 @@ static void blend8on1x(const hb_filter_private_t *pv, hb_buffer_t *dst, const hb
                         {
                             alpha = (uint32_t)a_in[oxz + yz*src->plane[3].stride] << shift;
                             resU *= (maxVal - alpha);
-                            resU = (resU + ((uint32_t)(u_in + yz*src->plane[1].stride)[oxz] << shift) * alpha + (maxVal>>1)) / maxVal;
+                            resU = (resU + ((uint32_t)(u_in + (yz >> ovVertShift)*src->plane[1].stride)[oxz >> ovHorzShift] << shift) * alpha + (maxVal>>1)) / maxVal;
 
                             resV *= (maxVal - alpha);
-                            resV = (resV + ((uint32_t)(v_in + yz*src->plane[2].stride)[oxz] << shift) * alpha + (maxVal>>1)) / maxVal;
+                            resV = (resV + ((uint32_t)(v_in + (yz >> ovVertShift)*src->plane[2].stride)[oxz >> ovHorzShift] << shift) * alpha + (maxVal>>1)) / maxVal;
                         }
 
                         //accumulate
@@ -218,6 +220,9 @@ static void blend8onbi1x(const hb_filter_private_t *pv, hb_buffer_t *dst, const 
     width  = (src->f.width  - x0 <= dst->f.width - left) ? src->f.width  : (dst->f.width - left + x0);
     height = (src->f.height - y0 <= dst->f.height - top) ? src->f.height : (dst->f.height - top + y0);
 
+    const unsigned int ovVertShift = NULL == pv->ssa ? 0 : pv->hshift;
+    const unsigned int ovHorzShift = NULL == pv->ssa ? 0 : pv->wshift;
+
     // This is setting the pointer outside of the array range if y0c < y0
     oy = y0c - y0;
 
@@ -230,8 +235,8 @@ static void blend8onbi1x(const hb_filter_private_t *pv, hb_buffer_t *dst, const 
         v_out = u_out;
 
         y_in = src->plane[0].data + oy * src->plane[0].stride;
-        u_in = src->plane[1].data + oy * src->plane[1].stride;
-        v_in = src->plane[2].data + oy * src->plane[2].stride;
+        u_in = src->plane[1].data + (oy >> ovVertShift) * src->plane[1].stride;
+        v_in = src->plane[2].data + (oy >> ovVertShift) * src->plane[2].stride;
         a_in = src->plane[3].data + oy * src->plane[3].stride;
 
         ox = x0c - x0;
@@ -248,9 +253,9 @@ static void blend8onbi1x(const hb_filter_private_t *pv, hb_buffer_t *dst, const 
             {
                 //perform chromaloc-aware subsampling and blending
                 accuA = accuB = accuC = 0;
-                for (int yz = 0, oyz = oy; yz < (1 << pv->hshift) && oy + yz < height; yz++, oyz++)
+                for (int yz = 0, oyz = oy; yz < (1 << (pv->hshift - ovVertShift)) && oy + yz < height; yz++, oyz++)
                 {
-                    for (int xz = 0, oxz = ox; xz < (1 << pv->wshift) && ox + xz < width; xz++, oxz++)
+                    for (int xz = 0, oxz = ox; xz < (1 << (pv->wshift - ovHorzShift)) && ox + xz < width; xz++, oxz++)
                     {
                         //weight of the current chroma sample
                         coeff = pv->chromaCoeffs[0][xz]*pv->chromaCoeffs[1][yz];
@@ -262,10 +267,10 @@ static void blend8onbi1x(const hb_filter_private_t *pv, hb_buffer_t *dst, const 
                         {
                             alpha = a_in[oxz + yz*src->plane[3].stride] << shift;
                             resU *= (maxVal - alpha);
-                            resU = (resU + av_bswap16((u_in + yz*src->plane[1].stride)[oxz]) * alpha + (maxVal>>1)) / maxVal;
+                            resU = (resU + av_bswap16((u_in + (yz >> ovVertShift)*src->plane[1].stride)[oxz >> ovHorzShift]) * alpha + (maxVal>>1)) / maxVal;
 
                             resV *= (maxVal - alpha);
-                            resV = (resV + av_bswap16((v_in + yz*src->plane[2].stride)[oxz]) * alpha + (maxVal>>1)) / maxVal;
+                            resV = (resV + av_bswap16((v_in + (yz >> ovVertShift)*src->plane[2].stride)[oxz >> ovHorzShift]) * alpha + (maxVal>>1)) / maxVal;
                         }
 
                         //accumulate
@@ -307,6 +312,11 @@ static void blend8on8(const hb_filter_private_t *pv, hb_buffer_t *dst, const hb_
     // This is setting the pointer outside of the array range if y0c < y0
     oy = y0c - y0;
 
+    //ASS overlays are already subsampled to the video pixel format
+    //Adapt condition below to support other formats that are also subsampled.
+    const unsigned int ovVertShift = NULL == pv->ssa ? 0 : pv->hshift;
+    const unsigned int ovHorzShift = NULL == pv->ssa ? 0 : pv->wshift;
+
     unsigned isChromaLine, resU, resV, alpha;
     unsigned accuA, accuB, accuC, coeff;
     for (yy = y0c; oy < height; oy = ++yy - y0)
@@ -316,8 +326,8 @@ static void blend8on8(const hb_filter_private_t *pv, hb_buffer_t *dst, const hb_
         v_out = dst->plane[2].data + (yy >> pv->hshift) * dst->plane[2].stride;
 
         y_in = src->plane[0].data + oy * src->plane[0].stride;
-        u_in = src->plane[1].data + oy * src->plane[1].stride;
-        v_in = src->plane[2].data + oy * src->plane[2].stride;
+        u_in = src->plane[1].data + (oy >> ovVertShift) * src->plane[1].stride;
+        v_in = src->plane[2].data + (oy >> ovVertShift) * src->plane[2].stride;
         a_in = src->plane[3].data + oy * src->plane[3].stride;
 
         ox = x0c - x0;
@@ -333,9 +343,9 @@ static void blend8on8(const hb_filter_private_t *pv, hb_buffer_t *dst, const hb_
             {
                 //perform chromaloc-aware subsampling and blending
                 accuA = accuB = accuC = 0;
-                for (int yz = 0, oyz = oy; yz < (1 << pv->hshift) && oy + yz < height; yz++, oyz++)
+                for (int yz = 0, oyz = oy; yz < (1 << (pv->hshift - ovVertShift)) && oy + yz < height; yz++, oyz++)
                 {
-                    for (int xz = 0, oxz = ox; xz < (1 << pv->wshift) && ox + xz < width; xz++, oxz++)
+                    for (int xz = 0, oxz = ox; xz < (1 << (pv->wshift - ovHorzShift)) && ox + xz < width; xz++, oxz++)
                     {
                         //weight of the current chroma sample
                         coeff = pv->chromaCoeffs[0][xz]*pv->chromaCoeffs[1][yz];
@@ -347,10 +357,10 @@ static void blend8on8(const hb_filter_private_t *pv, hb_buffer_t *dst, const hb_
                         {
                             alpha = a_in[oxz + yz*src->plane[3].stride];
                             resU *= (255 - alpha);
-                            resU = (resU + (u_in + yz*src->plane[1].stride)[oxz] * alpha + 127) / 255;
+                            resU = (resU + (u_in + (yz >> ovVertShift)*src->plane[1].stride)[oxz >> ovHorzShift] * alpha + 127) / 255;
 
                             resV *= (255 - alpha);
-                            resV = (resV + (v_in + yz*src->plane[2].stride)[oxz] * alpha + 127) / 255;
+                            resV = (resV + (v_in + (yz >> ovVertShift)*src->plane[2].stride)[oxz >> ovHorzShift] * alpha + 127) / 255;
                         }
 
                         //accumulate
@@ -389,6 +399,9 @@ static void blend8onbi8(const hb_filter_private_t *pv, hb_buffer_t *dst, const h
     width  = (src->f.width  - x0 <= dst->f.width - left) ? src->f.width  : (dst->f.width - left + x0);
     height = (src->f.height - y0 <= dst->f.height - top) ? src->f.height : (dst->f.height - top + y0);
 
+    const unsigned int ovVertShift = NULL == pv->ssa ? 0 : pv->hshift;
+    const unsigned int ovHorzShift = NULL == pv->ssa ? 0 : pv->wshift;
+
     // This is setting the pointer outside of the array range if y0c < y0
     oy = y0c - y0;
 
@@ -401,8 +414,8 @@ static void blend8onbi8(const hb_filter_private_t *pv, hb_buffer_t *dst, const h
         v_out = u_out;
 
         y_in = src->plane[0].data + oy * src->plane[0].stride;
-        u_in = src->plane[1].data + oy * src->plane[1].stride;
-        v_in = src->plane[2].data + oy * src->plane[2].stride;
+        u_in = src->plane[1].data + (oy >> ovVertShift) * src->plane[1].stride;
+        v_in = src->plane[2].data + (oy >> ovVertShift) * src->plane[2].stride;
         a_in = src->plane[3].data + oy * src->plane[3].stride;
 
         ox = x0c - x0;
@@ -418,9 +431,9 @@ static void blend8onbi8(const hb_filter_private_t *pv, hb_buffer_t *dst, const h
             {
                 //perform chromaloc-aware subsampling and blending
                 accuA = accuB = accuC = 0;
-                for (int yz = 0, oyz = oy; yz < (1 << pv->hshift); yz++, oyz++)
+                for (int yz = 0, oyz = oy; yz < (1 << (pv->hshift - ovVertShift)); yz++, oyz++)
                 {
-                    for (int xz = 0, oxz = ox; xz < (1 << pv->wshift); xz++, oxz++)
+                    for (int xz = 0, oxz = ox; xz < (1 << (pv->wshift - ovHorzShift)); xz++, oxz++)
                     {
                         //weight of the current chroma sample
                         coeff = pv->chromaCoeffs[0][xz]*pv->chromaCoeffs[1][yz];
@@ -432,10 +445,10 @@ static void blend8onbi8(const hb_filter_private_t *pv, hb_buffer_t *dst, const h
                         {
                             alpha = a_in[oxz + yz*src->plane[3].stride];
                             resU *= (255 - alpha);
-                            resU = (resU + (u_in + yz*src->plane[1].stride)[oxz] * alpha + 127) / 255;
+                            resU = (resU + (u_in + (yz >> ovVertShift)*src->plane[1].stride)[oxz >> ovHorzShift] * alpha + 127) / 255;
 
                             resV *= (255 - alpha);
-                            resV = (resV + (v_in + yz*src->plane[2].stride)[oxz] * alpha + 127) / 255;
+                            resV = (resV + (v_in + (yz >> ovVertShift)*src->plane[2].stride)[oxz >> ovHorzShift] * alpha + 127) / 255;
                         }
 
                         //accumulate
@@ -811,8 +824,8 @@ static hb_buffer_t* ComposeSubsampleASS( hb_filter_private_t *pv, const ASS_Imag
                     }
                 }
                 if (accuC) {
-                    u_out[xs] = (accuA + (accuC - 1))/accuC;
-                    v_out[xs] = (accuB + (accuC - 1))/accuC;
+                    u_out[xs] = (accuA + (accuC >> 1))/accuC;
+                    v_out[xs] = (accuB + (accuC >> 1))/accuC;
                 }
             }
         }
