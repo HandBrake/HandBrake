@@ -732,7 +732,7 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
     }
 }
 
-- (void)showOpenPanelForDestination:(NSURL *)destinationURL completionHandler:(void (^)(void))handler
+- (void)showOpenPanelForDestination:(NSURL *)destinationURL
 {
     NSOpenPanel *panel = [NSOpenPanel openPanel];
     panel.canChooseFiles = NO;
@@ -747,16 +747,20 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
          {
              self.destinationFolderURL = panel.URL;
              self.destinationFolderToken = [HBSecurityAccessToken tokenWithAlreadyAccessedObject:panel.URL];
+             if (self.job)
+             {
+                 [self.job setDestinationFolderURL:self.destinationFolderURL
+                                      sameAsSource:[NSUserDefaults.standardUserDefaults boolForKey:HBUseSourceFolderDestination]];
+                 [self.window.undoManager removeAllActions];
+             }
          }
-        handler();
      }];
 }
 
-- (void)askForPermissionAndSetDestinationURLs:(NSArray<NSURL *> *)destinationURLs sourceURLs:(NSArray<NSURL *> *)sourceURLs completionHandler:(void (^)(void))handler
+- (void)askForPermissionAndSetDestinationURLs:(NSArray<NSURL *> *)destinationURLs sourceURLs:(NSArray<NSURL *> *)sourceURLs
 {
     if (destinationURLs.count == 0)
     {
-        handler();
         return;
     }
 
@@ -772,7 +776,6 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
         {
             self.destinationFolderURL = sourceURL;
             self.destinationFolderToken = [HBSecurityAccessToken tokenWithObject:sourceURL];
-            handler();
             return;
         }
     }
@@ -780,18 +783,11 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
     if (![self.destinationFolderURL isEqualTo:destinationURLs.firstObject])
     {
 #ifdef __SANDBOX_ENABLED__
-        [self showOpenPanelForDestination:destinationURLs.firstObject completionHandler:^{
-            handler();
-        }];
+            [self showOpenPanelForDestination:destinationURLs.firstObject];
 #else
-        self.destinationFolderURL = destinationURLs.firstObject;
-        handler();
+            self.destinationFolderURL = destinationURLs.firstObject;
 #endif
-        return;
     }
-
-    handler();
-    return;
 }
 
 - (void)cleanUp
@@ -858,30 +854,19 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
 
             self.subsURLs = subtitlesFileURLs;
 
-            void (^completionHandler)(void) = ^(void)
+            HBJob *job = [self jobFromTitle:featuredTitle];
+            if (job)
             {
-                HBJob *job = [self jobFromTitle:featuredTitle];
-                if (job)
+                self.job = job;
+                if (featuredTitle.isStream && [NSUserDefaults.standardUserDefaults boolForKey:HBUseSourceFolderDestination])
                 {
-                    self.job = job;
+                    [self askForPermissionAndSetDestinationURLs:baseURLs sourceURLs:fileURLs];
                 }
-                else
-                {
-                    [self cleanUp];
-                    self.sourceLabel.stringValue = NSLocalizedString(@"No Valid Preset", @"Main Window -> Info text");
-                }
-            };
-
-            if (featuredTitle.isStream &&
-                [NSUserDefaults.standardUserDefaults boolForKey:HBUseSourceFolderDestination])
-            {
-                [self askForPermissionAndSetDestinationURLs:baseURLs
-                                                 sourceURLs:fileURLs
-                                          completionHandler:completionHandler];
             }
             else
             {
-                completionHandler();
+                [self cleanUp];
+                self.sourceLabel.stringValue = NSLocalizedString(@"No Valid Preset", @"Main Window -> Info text");
             }
         }
 
