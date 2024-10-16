@@ -116,7 +116,7 @@ NSString *HBChaptersChangedNotification  = @"HBChaptersChangedNotification";
         self.alignAVStart = [preset[@"AlignAVStart"] boolValue];
 
         self.chaptersEnabled = [preset[@"ChapterMarkers"] boolValue];
-        self.metadataPassthru = [preset[@"MetadataPassthrough"] boolValue];
+        self.metadataPassthru = [preset[@"MetadataPassthru"] boolValue];
 
         [self.audio applyPreset:preset jobSettings:jobSettings];
         [self.subtitles applyPreset:preset jobSettings:jobSettings];
@@ -150,7 +150,7 @@ NSString *HBChaptersChangedNotification  = @"HBChaptersChangedNotification";
     preset[@"Mp4iPodCompatible"] = @(self.mp4iPodCompatible);
 
     preset[@"ChapterMarkers"] = @(self.chaptersEnabled);
-    preset[@"MetadataPassthrough"] = @(self.metadataPassthru);
+    preset[@"MetadataPassthru"] = @(self.metadataPassthru);
 
     [@[self.video, self.filters, self.picture, self.audio, self.subtitles] makeObjectsPerformSelector:@selector(writeToPreset:)
                                                                                                            withObject:preset];

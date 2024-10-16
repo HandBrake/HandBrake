@@ -322,7 +322,7 @@ namespace HandBrakeWPF.Services.Encode.Model.Models
         {
             get
             {
-                if (this.Encoder != null && this.Encoder.IsPassthrough)
+                if (this.Encoder != null && this.Encoder.IsPassthru)
                 {
                     return "Auto";
                 }
@@ -398,7 +398,7 @@ namespace HandBrakeWPF.Services.Encode.Model.Models
         }
 
         [JsonIgnore]
-        public bool IsPassthru => this.Encoder != null && this.Encoder.IsPassthrough;
+        public bool IsPassthru => this.Encoder != null && this.Encoder.IsPassthru;
 
         [JsonIgnore]
         public IEnumerable<int> Bitrates

@@ -1535,9 +1535,9 @@ static void ShowHelp(void)
         fprintf(out, "                               %s\n", encoder->short_name);
     }
     fprintf(out,
-"                           \"copy:<type>\" will pass through the corresponding\n"
-"                           audio track without modification, if pass through\n"
-"                           is supported for the audio type.\n"
+"                           \"copy:<type>\" will enable passthru of the \n"
+"                           corresponding audio track without modification\n"
+"                           if passthru is supported for the audio type.\n"
 "                           Separate tracks by commas.\n"
 "                           Defaults:\n");
     container = NULL;
