@@ -2956,6 +2956,12 @@ static void und_to_any(hb_value_array_t * list)
     }
 }
 
+static void import_passthru_preset_settings_57_0_0(hb_value_t *preset)
+{
+    int passthru = hb_dict_get_bool(preset, "MetadataPassthrough");
+    hb_dict_set_bool(preset, "MetadataPassthru", passthru);
+}
+
 static void import_av1_preset_settings_55_0_0(hb_value_t *preset)
 {
     const char *enc = hb_dict_get_string(preset, "VideoEncoder");
@@ -3701,9 +3707,16 @@ static void import_video_0_0_0(hb_value_t *preset)
     }
 }
 
+static void import_57_0_0(hb_value_t *preset)
+{
+    import_passthru_preset_settings_57_0_0(preset);
+}
+
 static void import_55_0_0(hb_value_t *preset)
 {
     import_av1_preset_settings_55_0_0(preset);
+
+    import_57_0_0(preset);
 }
 
 static void import_53_0_0(hb_value_t *preset)
@@ -3905,6 +3918,11 @@ static int preset_import(hb_value_t *preset, int major, int minor, int micro)
         else if (cmpVersion(major, minor, micro, 55, 0, 0) <= 0)
         {
             import_55_0_0(preset);
+            result = 1;
+        }
+        else if (cmpVersion(major, minor, micro, 57, 0, 0) <= 0)
+        {
+            import_57_0_0(preset);
             result = 1;
         }
 
