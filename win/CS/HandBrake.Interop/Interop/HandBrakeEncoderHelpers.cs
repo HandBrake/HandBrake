@@ -379,7 +379,7 @@ namespace HandBrake.Interop.Interop
         /// <returns>
         /// True if the subtitle type can be passed through with the given muxer.
         /// </returns>
-        public static bool SubtitleCanPassthrough(int subtitleSourceType, int muxer)
+        public static bool SubtitleCanPassthru(int subtitleSourceType, int muxer)
         {
             return HBFunctions.hb_subtitle_can_pass(subtitleSourceType, muxer) > 0;
         }
@@ -432,7 +432,7 @@ namespace HandBrake.Interop.Interop
         /// True if the given encoder is compatible with the given audio track.
         /// </returns>
         /// <remarks>
-        /// Only works with passthrough encoders.
+        /// Only works with passthru encoders.
         /// </remarks>
         public static bool AudioEncoderIsCompatible(int codecId, HBAudioEncoder encoder)
         {
@@ -518,7 +518,7 @@ namespace HandBrake.Interop.Interop
         /// <returns>
         /// True if the codec can be passed through.
         /// </returns>
-        public static bool CanPassthroughAudio(int codecId)
+        public static bool CanPassthruAudio(int codecId)
         {
             return (codecId & NativeConstants.HB_ACODEC_PASS_MASK) > 0;
         }
