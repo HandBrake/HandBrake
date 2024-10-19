@@ -1,0 +1,30 @@
+From 9d5ef6ed5f21ccfb746667106fa1df3fdeef1a80 Mon Sep 17 00:00:00 2001
+From: Damiano Galassi <damiog@gmail.com>
+Date: Sat, 19 Oct 2024 09:50:44 +0200
+Subject: [PATCH] Revert "avcodec/amfenc: GPU driver version check"
+
+This reverts commit eda3fc60534c4a30f49c930611d4130427d08ff1.
+
+There is hardware with HEVC 10-bit encoders that has no updated drivers yet.
+---
+ libavcodec/amfenc.c | 4 ----
+ 1 file changed, 4 deletions(-)
+
+diff --git a/libavcodec/amfenc.c b/libavcodec/amfenc.c
+index a83f5b2013..95fce9ac96 100644
+--- a/libavcodec/amfenc.c
++++ b/libavcodec/amfenc.c
+@@ -415,10 +415,6 @@ static int amf_init_encoder(AVCodecContext *avctx)
+     else
+         pix_fmt = avctx->pix_fmt;
+ 
+-    if (pix_fmt == AV_PIX_FMT_P010) {
+-        AMF_RETURN_IF_FALSE(ctx, ctx->version >= AMF_MAKE_FULL_VERSION(1, 4, 32, 0), AVERROR_UNKNOWN, "10-bit encoder is not supported by AMD GPU drivers versions lower than 23.30.\n");
+-    }
+-
+     ctx->format = amf_av_to_amf_format(pix_fmt);
+     AMF_RETURN_IF_FALSE(ctx, ctx->format != AMF_SURFACE_UNKNOWN, AVERROR(EINVAL),
+                         "Format %s is not supported\n", av_get_pix_fmt_name(pix_fmt));
+-- 
+2.39.5 (Apple Git-154)
+
