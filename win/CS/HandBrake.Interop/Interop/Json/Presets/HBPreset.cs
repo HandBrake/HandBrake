@@ -408,6 +408,6 @@ namespace HandBrake.Interop.Interop.Json.Presets
 
         public bool PresetDisabled { get; set; }
 
-        public bool MetadataPassthrough { get; set; }
+        public bool MetadataPassthru { get; set; }
     }
 }

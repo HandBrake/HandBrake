@@ -39,7 +39,7 @@ namespace HandBrakeWPF.Converters.Audio
             HBAudioEncoder audioEncoder = values[0] is HBAudioEncoder ? (HBAudioEncoder)values[0] : HBAudioEncoder.None;
             HBAudioEncoder fallbackEncoder = values[1] is HBAudioEncoder ? (HBAudioEncoder)values[1] : HBAudioEncoder.None;
             
-            if (audioEncoder != null && audioEncoder.IsPassthrough)
+            if (audioEncoder != null && audioEncoder.IsPassthru)
             {
                 if (fallbackEncoder != null && !fallbackEncoder.SupportsQuality)
                 {

@@ -778,7 +778,7 @@ audio_refresh_list_row_ui(
 
     if (ghb_audio_is_passthru(encoder->codec))
     {
-        info_dst = g_strdup_printf(_("<small>Passthrough</small>"));
+        info_dst = g_strdup_printf(_("<small>Passthru</small>"));
     }
     else
     {

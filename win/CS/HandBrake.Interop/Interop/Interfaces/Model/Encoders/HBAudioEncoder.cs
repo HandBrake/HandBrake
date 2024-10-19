@@ -71,9 +71,9 @@ namespace HandBrake.Interop.Interop.Interfaces.Model.Encoders
         public int Id { get; private set; }
 
         /// <summary>
-        /// Gets a value indicating whether the encoder is passthrough.
+        /// Gets a value indicating whether the encoder is passthru.
         /// </summary>
-        public bool IsPassthrough
+        public bool IsPassthru
         {
             get
             {

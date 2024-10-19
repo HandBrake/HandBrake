@@ -1435,11 +1435,11 @@ def createCLI( cross = None ):
     h = 'Nvidia NVENC video encoder' if nvenc_supported else argparse.SUPPRESS
     grp.add_argument( '--enable-nvenc', dest="enable_nvenc", default=True, action='store_true', help=(( 'enable %s' %h ) if h != argparse.SUPPRESS else h) )
     grp.add_argument( '--disable-nvenc', dest="enable_nvenc", action='store_false', help=(( 'disable %s' %h ) if h != argparse.SUPPRESS else h) )
-    
+
     h = 'Nvidia NVDEC video decoder' if nvenc_supported else argparse.SUPPRESS
     grp.add_argument( '--enable-nvdec', dest="enable_nvdec", default=False, action='store_true', help=(( 'enable %s' %h ) if h != argparse.SUPPRESS else h) )
     grp.add_argument( '--disable-nvdec', dest="enable_nvdec", action='store_false', help=(( 'disable %s' %h ) if h != argparse.SUPPRESS else h) )
-    
+
     h = 'Intel QSV video encoder/decoder' if qsv_supported else argparse.SUPPRESS
     grp.add_argument( '--enable-qsv', dest="enable_qsv", default=IfHost(True, "x86_64-w64-mingw32*", none=False).value, action='store_true', help=(( 'enable %s' %h ) if h != argparse.SUPPRESS else h) )
     grp.add_argument( '--disable-qsv', dest="enable_qsv", action='store_false', help=(( 'disable %s' %h ) if h != argparse.SUPPRESS else h) )
@@ -2217,7 +2217,7 @@ int main()
     print(f'Enable GTK GUI:     {options.enable_gtk}' + ('' if gtk_supported else note_unsupported))
 
     if len(targets) > 0:
-        print( print_blue('Note:'), 'passthrough arguments:', *targets)
+        print( print_blue('Note:'), 'passthru arguments:', *targets)
 
     if len(exports) > 0:
         print( print_blue('Note:'), 'exported variables:', end = ' ')
