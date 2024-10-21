@@ -88,6 +88,11 @@ typedef void (^HBCoreCompletionHandler)(HBCoreResult result);
 + (void)closeGlobal;
 
 /**
+ *  Clear temporary files (for example analyze pass stats).
+ */
++ (void)cleanTemporaryFiles;
+
+/**
  *  Registers a global error handler block.
  *
  *  @param handler a block called with the error message.
@@ -169,7 +174,7 @@ typedef void (^HBCoreCompletionHandler)(HBCoreResult result);
  *  @param progressHandler     a block called periodically with the progress information.
  *  @param completionHandler   a block called with the scan result.
  */
-- (void)scanURLs:(NSArray<NSURL *> *)urls titleIndex:(NSUInteger)index previews:(NSUInteger)previewsNum minDuration:(NSUInteger)seconds keepPreviews:(BOOL)keepPreviews hardwareDecoder:(BOOL)hardwareDecoder progressHandler:(HBCoreProgressHandler)progressHandler completionHandler:(HBCoreCompletionHandler)completionHandler;
+- (void)scanURLs:(NSArray<NSURL *> *)urls titleIndex:(NSUInteger)index previews:(NSUInteger)previewsNum minDuration:(NSUInteger)seconds keepPreviews:(BOOL)keepPreviews hardwareDecoder:(BOOL)hardwareDecoder keepDuplicateTitles:(BOOL)keepDuplicateTitles progressHandler:(HBCoreProgressHandler)progressHandler completionHandler:(HBCoreCompletionHandler)completionHandler;
 
 /**
  *  Cancels the scan execution.

@@ -10,9 +10,6 @@
 /* Class = "NSTableColumn"; headerCell.title = "Language"; ObjectID = "9ka-9O-WDj"; */
 "9ka-9O-WDj.headerCell.title" = "Langue";
 
-/* Class = "NSMenu"; title = "OtherViews"; ObjectID = "ABd-Ec-K2L"; */
-"ABd-Ec-K2L.title" = "AutresVues";
-
 /* Class = "NSTextField"; ibExternalAccessibilityDescription = "SRT/SSA Offset"; ObjectID = "aJi-zQ-0cg"; */
 "aJi-zQ-0cg.ibExternalAccessibilityDescription" = "Décalage SRT/SSA";
 
@@ -33,9 +30,6 @@
 
 /* Class = "NSTableColumn"; headerCell.title = "Burned In"; ObjectID = "fIe-Fg-ufj"; */
 "fIe-Fg-ufj.headerCell.title" = "Incrustés";
-
-/* Class = "NSMenu"; title = "OtherViews"; ObjectID = "Fr7-eG-NuL"; */
-"Fr7-eG-NuL.title" = "AutresVues";
 
 /* Class = "NSTableColumn"; headerCell.title = "Default"; ObjectID = "fvq-pE-sOC"; */
 "fvq-pE-sOC.headerCell.title" = "Défaut";
@@ -147,12 +141,6 @@
 
 /* Class = "NSMenuItem"; title = "Tracks"; ObjectID = "TJO-RZ-jgb"; */
 "TJO-RZ-jgb.title" = "Pistes";
-
-/* Class = "NSMenu"; title = "OtherViews"; ObjectID = "Umu-1b-U1Z"; */
-"Umu-1b-U1Z.title" = "AutresVues";
-
-/* Class = "NSMenu"; title = "OtherViews"; ObjectID = "UOP-xa-WpP"; */
-"UOP-xa-WpP.title" = "AutresVues";
 
 /* Class = "NSMenuItem"; title = "Pop Up"; ObjectID = "vHW-fn-RSG"; */
 "vHW-fn-RSG.title" = "Fenêtre surgissante";

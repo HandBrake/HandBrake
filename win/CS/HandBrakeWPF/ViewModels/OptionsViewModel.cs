@@ -16,6 +16,8 @@ namespace HandBrakeWPF.ViewModels
     using System.Globalization;
     using System.IO;
     using System.Linq;
+    using System.Media;
+    using System.Threading;
     using System.Windows;
     using System.Windows.Documents;
     using System.Windows.Media;
@@ -94,9 +96,7 @@ namespace HandBrakeWPF.ViewModels
         private string whenDoneAudioFile;
         private bool playSoundWhenDone;
         private bool playSoundWhenQueueDone;
-        private bool enableQuickSyncEncoding;
-        private bool enableVceEncoder;    
-        private bool enableNvencEncoder;
+        private bool enableDirectXDecoding;
         private InterfaceLanguage selectedLanguage;
         private bool showAddSelectionToQueue;
         private bool showAddAllToQueue;
@@ -120,6 +120,7 @@ namespace HandBrakeWPF.ViewModels
         private bool useIsoDateFormat;
         private BindingList<string> excludedFileExtensions;
         private bool recursiveFolderScan;
+        private bool keepDuplicateTitles;
 
         public OptionsViewModel(
             IUserSettingService userSettingService,
@@ -605,6 +606,20 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
+
+        public BindingList<PlaceHolderBucket> WhenDoneArguments
+        {
+            get
+            {
+                return new BindingList<PlaceHolderBucket>
+                       {
+                           new PlaceHolderBucket { Name = Constants.SourceArg },
+                           new PlaceHolderBucket { Name = Constants.DestinationArg },
+                           new PlaceHolderBucket { Name = Constants.ExitCodeArg }
+                       };
+            }
+        }
+        
         public bool UseIsoDateFormat
         {
             get => this.useIsoDateFormat;
@@ -913,51 +928,30 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
+        public bool KeepDuplicateTitles
+        {
+            get => this.keepDuplicateTitles;
+            set
+            {
+                if (value == this.keepDuplicateTitles) return;
+                this.keepDuplicateTitles = value;
+                this.NotifyOfPropertyChange(() => this.KeepDuplicateTitles);
+            }
+        }
+
         /* Video */
-        public bool EnableQuickSyncEncoding
+        public bool EnableDirectXDecoding
         {
-            get => this.enableQuickSyncEncoding && this.IsQuickSyncAvailable;
+            get => this.enableDirectXDecoding;
             set
             {
-                if (value == this.enableQuickSyncEncoding)
+                if (value == this.enableDirectXDecoding)
                 {
                     return;
                 }
 
-                this.enableQuickSyncEncoding = value;
-                this.NotifyOfPropertyChange(() => this.EnableQuickSyncEncoding);
-                this.NotifyOfPropertyChange(() => this.CanSetQsvDecForOtherEncodes);
-            }
-        }
-
-        public bool EnableVceEncoder
-        {
-            get => this.enableVceEncoder && this.IsVceAvailable;
-            set
-            {
-                if (value == this.enableVceEncoder)
-                {
-                    return;
-                }
-
-                this.enableVceEncoder = value;
-                this.NotifyOfPropertyChange(() => this.EnableVceEncoder);
-            }
-        }
-
-        public bool EnableNvencEncoder
-        {
-            get => this.enableNvencEncoder && this.IsNvencAvailable;
-            set
-            {
-                if (value == this.enableNvencEncoder)
-                {
-                    return;
-                }
-
-                this.enableNvencEncoder = value;
-                this.NotifyOfPropertyChange(() => this.EnableNvencEncoder);
-                this.NotifyOfPropertyChange(() => this.IsNvdecAvailable);
+                this.enableDirectXDecoding = value;
+                this.NotifyOfPropertyChange(() => this.EnableDirectXDecoding);
             }
         }
 
@@ -1008,6 +1002,9 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
+        public bool DisplayIntelDriverWarning { get; set; }
+        public bool DisplayNvidiaDriverWarning { get; set; }
+
         public VideoScaler SelectedScalingMode { get; set; }
 
         public bool IsQuickSyncAvailable { get; } = HandBrakeHardwareEncoderHelper.IsQsvAvailable;
@@ -1018,9 +1015,11 @@ namespace HandBrakeWPF.ViewModels
 
         public bool IsNvencAvailable { get; } = HandBrakeHardwareEncoderHelper.IsNVEncH264Available;
 
+        public bool IsDirectXAvailable { get; } = HandBrakeHardwareEncoderHelper.IsDirectXAvailable;
+
         public bool IsUseQsvDecAvailable => this.IsQuickSyncAvailable && this.EnableQuickSyncDecoding;
 
-        public bool IsNvdecAvailable => HandBrakeHardwareEncoderHelper.IsNVDecAvailable && this.EnableNvencEncoder;
+        public bool IsNvdecAvailable => HandBrakeHardwareEncoderHelper.IsNVDecAvailable;
 
         public bool UseQSVDecodeForNonQSVEnc
         {
@@ -1034,7 +1033,7 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
-        public bool CanSetQsvDecForOtherEncodes => this.EnableQuickSyncDecoding && this.IsQuickSyncAvailable && this.EnableQuickSyncEncoding;
+        public bool CanSetQsvDecForOtherEncodes => this.EnableQuickSyncDecoding && this.IsQuickSyncAvailable;
 
         public BindingList<VideoScaler> ScalingOptions { get; } = new BindingList<VideoScaler>(EnumHelper<VideoScaler>.GetEnumList().ToList());
 
@@ -1045,6 +1044,8 @@ namespace HandBrakeWPF.ViewModels
         public bool IsHardwareOptionsVisible => !IsSafeMode && !IsHardwareFallbackMode;
 
         public bool IsAutomaticSafeMode { get; private set; }
+
+        public bool IsARMDevice => SystemInfo.IsArmDevice;
 
         public bool EnableNvDecSupport
         {
@@ -1183,7 +1184,7 @@ namespace HandBrakeWPF.ViewModels
 
         public void BrowseAutoNamePath()
         {
-            FolderBrowserDialog dialog = new FolderBrowserDialog { Description = Resources.OptionsView_SelectFolder, UseDescriptionForTitle = true, SelectedPath = this.AutoNameDefaultPath };
+            FolderBrowserDialog dialog = new FolderBrowserDialog { Description = Resources.OptionsView_SelectFolder, SelectedPath = this.AutoNameDefaultPath };
             bool? dialogResult = dialog.ShowDialog();
             if (dialogResult.HasValue && dialogResult.Value)
             {
@@ -1203,7 +1204,7 @@ namespace HandBrakeWPF.ViewModels
 
         public void BrowseLogPath()
         {
-            FolderBrowserDialog dialog = new FolderBrowserDialog { Description = Resources.OptionsView_SelectFolder, UseDescriptionForTitle = true, SelectedPath = this.LogDirectory };
+            FolderBrowserDialog dialog = new FolderBrowserDialog { Description = Resources.OptionsView_SelectFolder, SelectedPath = this.LogDirectory };
             bool? dialogResult = dialog.ShowDialog();
             if (dialogResult.HasValue && dialogResult.Value)
             {
@@ -1262,14 +1263,15 @@ namespace HandBrakeWPF.ViewModels
         {
             if (!string.IsNullOrEmpty(this.WhenDoneAudioFileFullPath) && File.Exists(this.WhenDoneAudioFileFullPath))
             {
-                var uri = new Uri(this.WhenDoneAudioFileFullPath, UriKind.RelativeOrAbsolute);
-                var player = new MediaPlayer();
-                player.Open(uri);
-                player.Play();
-                player.MediaFailed += (object sender, ExceptionEventArgs e) =>
+                try
                 {
-                    this.logService.LogMessage(string.Format("{1} # {0}{1}", e?.ErrorException, Environment.NewLine));
-                };
+                    var player = new SoundPlayer(this.WhenDoneAudioFileFullPath);
+                    player.Play();
+                }
+                catch (Exception exc)
+                {
+                    this.logService.LogMessage(string.Format("{1} # {0}{1}", exc, Environment.NewLine));
+                }
             }
             else
             {
@@ -1434,11 +1436,8 @@ namespace HandBrakeWPF.ViewModels
             this.UseQSVDecodeForNonQSVEnc = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.UseQSVDecodeForNonQSVEnc);
             this.EnableQuickSyncLowPower = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.EnableQuickSyncLowPower);
             this.EnableQuickSyncHyperEncode = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.EnableQuickSyncHyperEncode);
-
-            this.EnableQuickSyncEncoding = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.EnableQuickSyncEncoding);
-            this.EnableVceEncoder = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.EnableVceEncoder);
-            this.EnableNvencEncoder = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.EnableNvencEncoder);
             this.EnableNvDecSupport = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.EnableNvDecSupport);
+            this.EnableDirectXDecoding = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.EnableDirectXDecoding);
 
             // #############################
             // Process
@@ -1497,6 +1496,8 @@ namespace HandBrakeWPF.ViewModels
             this.PreviewPicturesToScan.Add(60);
             this.SelectedPreviewCount = this.userSettingService.GetUserSetting<int>(UserSettingConstants.PreviewScanCount);
 
+            this.KeepDuplicateTitles = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.KeepDuplicateTitles);
+
             // x264 step
             this.ConstantQualityGranularity.Clear();
             this.ConstantQualityGranularity.Add("1.00");
@@ -1521,6 +1522,34 @@ namespace HandBrakeWPF.ViewModels
             // #############################
             this.IsAutomaticSafeMode = userSettingService.GetUserSetting<bool>(UserSettingConstants.ForceDisableHardwareSupport);
             this.NotifyOfPropertyChange(() => this.IsAutomaticSafeMode);
+
+
+            // Warnings
+            ThreadPool.QueueUserWorkItem(
+                delegate
+                {
+                    try
+                    {
+                        GpuInfo info = SystemInfo.GetGPUInfo.FirstOrDefault(s => s.IsIntel);
+                        if (info != null)
+                        {
+                            this.DisplayIntelDriverWarning = !info.IsIntelDriverSupported;
+                        }
+
+                        info = SystemInfo.GetGPUInfo.FirstOrDefault(s => s.IsNvidia);
+                        if (info != null)
+                        {
+                            this.DisplayNvidiaDriverWarning = !info.IsNvidiaDriverSupported;
+                        }
+
+                        this.NotifyOfPropertyChange(() => this.DisplayIntelDriverWarning);
+                        this.NotifyOfPropertyChange(() => this.DisplayNvidiaDriverWarning);
+                    }
+                    catch (Exception exc)
+                    {
+                        // Nothing to do. Just don't display the warnings.
+                    }
+                });
         }
 
         public void UpdateSettings()
@@ -1628,10 +1657,8 @@ namespace HandBrakeWPF.ViewModels
             this.userSettingService.SetUserSetting(UserSettingConstants.ScalingMode, this.SelectedScalingMode);
             this.userSettingService.SetUserSetting(UserSettingConstants.UseQSVDecodeForNonQSVEnc, this.UseQSVDecodeForNonQSVEnc);
             this.userSettingService.SetUserSetting(UserSettingConstants.EnableQuickSyncHyperEncode, this.EnableQuickSyncHyperEncode);
-            this.userSettingService.SetUserSetting(UserSettingConstants.EnableQuickSyncEncoding, this.EnableQuickSyncEncoding);
-            this.userSettingService.SetUserSetting(UserSettingConstants.EnableVceEncoder, this.EnableVceEncoder);
-            this.userSettingService.SetUserSetting(UserSettingConstants.EnableNvencEncoder, this.EnableNvencEncoder);
             this.userSettingService.SetUserSetting(UserSettingConstants.EnableNvDecSupport, this.EnableNvDecSupport);
+            this.userSettingService.SetUserSetting(UserSettingConstants.EnableDirectXDecoding, this.EnableDirectXDecoding);
             this.userSettingService.SetUserSetting(UserSettingConstants.EnableQuickSyncLowPower, this.EnableQuickSyncLowPower);
 
             /* System and Logging */
@@ -1649,6 +1676,7 @@ namespace HandBrakeWPF.ViewModels
             this.userSettingService.SetUserSetting(UserSettingConstants.MainWindowMinimize, this.MinimiseToTray);
             this.userSettingService.SetUserSetting(UserSettingConstants.ClearCompletedFromQueue, this.ClearQueueOnEncodeCompleted);
             this.userSettingService.SetUserSetting(UserSettingConstants.PreviewScanCount, this.SelectedPreviewCount);
+            this.userSettingService.SetUserSetting(UserSettingConstants.KeepDuplicateTitles, this.KeepDuplicateTitles);
             this.userSettingService.SetUserSetting(UserSettingConstants.X264Step, double.Parse(this.SelectedGranularity, CultureInfo.InvariantCulture));
             this.userSettingService.SetUserSetting(UserSettingConstants.ExcludedExtensions, new List<string>(this.ExcludedFileExtensions));
             this.userSettingService.SetUserSetting(UserSettingConstants.RecursiveFolderScan, this.RecursiveFolderScan);

@@ -67,14 +67,13 @@
 - (BOOL)pathHasVideoTS
 {
     // Check one level under the path
-    if( [[NSFileManager defaultManager] fileExistsAtPath:
-        [path stringByAppendingPathComponent:@"VIDEO_TS"]] )
+    if ([NSFileManager.defaultManager fileExistsAtPath:[path stringByAppendingPathComponent:@"VIDEO_TS"]])
     {
         return YES;
     }
 
     // Now check above the path
-    return [[path pathComponents] containsObject:@"VIDEO_TS"];
+    return [path.pathComponents containsObject:@"VIDEO_TS"];
 }
 
 
@@ -88,14 +87,13 @@
 - (BOOL)pathHasBDMV
 {
     // Check one level under the path
-    if( [[NSFileManager defaultManager] fileExistsAtPath:
-         [path stringByAppendingPathComponent:@"BDMV"]] )
+    if ([NSFileManager.defaultManager fileExistsAtPath:[path stringByAppendingPathComponent:@"BDMV"]])
     {
         return YES;
     }
 
     // Now check above the path
-    return [[path pathComponents] containsObject:@"BDMV"];
+    return [path.pathComponents containsObject:@"BDMV"];
 }
 
 

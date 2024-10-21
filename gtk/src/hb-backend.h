@@ -1,32 +1,31 @@
-/*
- * hb-backend.h
- * Copyright (C) John Stebbins 2008-2022 <stebbins@stebbins>
+/* hb-backend.h
  *
- * hb-backend.h is free software.
+ * Copyright (C) 2008-2024 John Stebbins <stebbins@stebbins>
  *
- * You may redistribute it and/or modify it under the terms of the
- * GNU General Public License version 2, as published by the Free Software
- * Foundation.
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2,
+ * as published by the Free Software Foundation.
  *
- * hb-backend.h is distributed in the hope that it will be useful,
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
- * See the GNU General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with callbacks.h.  If not, write to:
- *  The Free Software Foundation, Inc.,
- *  51 Franklin Street, Fifth Floor
- *  Boston, MA  02110-1301, USA.
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ *
+ * SPDX-License-Identifier: GPL-2.0-only
  */
 
-#if !defined(_HBBACKEND_H_)
-#define _HBBACKEND_H_
+#pragma once
 
-#include "values.h"
-#include "settings.h"
+#include "common.h"
 #include "handbrake/handbrake.h"
 #include "handbrake/lang.h"
+#include "settings.h"
+#include "values.h"
+
+G_BEGIN_DECLS
 
 enum
 {
@@ -99,6 +98,8 @@ void ghb_combo_init(signal_user_data_t *ud);
 void ghb_backend_init(gint debug);
 void ghb_log_level_set(int level);
 void ghb_backend_close(void);
+hb_list_t *ghb_get_excluded_extensions_list(void);
+void ghb_free_list(hb_list_t *list);
 int  ghb_add_job(hb_handle_t *h, GhbValue *js);
 void ghb_remove_job(gint unique_id);
 void ghb_start_queue(void);
@@ -123,15 +124,17 @@ gint ghb_get_scan_state(void);
 gint ghb_get_queue_state(void);
 void ghb_get_status(ghb_status_t *status);
 void ghb_track_status(void);
-void ghb_backend_scan(const char *path, int titleindex, int preview_count, uint64_t min_duration);
+void ghb_backend_scan(const char *path, int titleindex, int preview_count, uint64_t min_duration, gboolean keep_duplicate_titles);
+void ghb_backend_scan_list(GListModel *files, int titleindex, int preview_count, uint64_t min_duration, gboolean keep_duplicate_titles);
 void ghb_backend_scan_stop(void);
-void ghb_backend_queue_scan(const gchar *path, gint titleindex);
 hb_list_t * ghb_get_title_list(void);
 void ghb_par_init(signal_user_data_t *ud);
 void ghb_apply_crop(GhbValue *settings, const hb_geometry_crop_t * geo, const hb_title_t * title);
 void ghb_set_scale(signal_user_data_t *ud, gint mode);
 void ghb_set_scale_settings(signal_user_data_t * ud,
                             GhbValue *settings, gint mode);
+
+void ghb_set_scale_busy(gboolean busy);
 void ghb_picture_settings_deps(signal_user_data_t *ud);
 gint64 ghb_get_chapter_duration(const hb_title_t *title, gint chap);
 gint64 ghb_get_chapter_start(const hb_title_t *title, gint chap);
@@ -169,7 +172,7 @@ gint ghb_lookup_combo_int(const gchar *name, const GhbValue *gval);
 gdouble ghb_lookup_combo_double(const gchar *name, const GhbValue *gval);
 gchar* ghb_lookup_combo_option(const gchar *name, const GhbValue *gval);
 const char* ghb_lookup_filter_name(int filter_id, const char *short_name, int preset);
-gchar* ghb_get_tmp_dir(void);
+const char* ghb_get_tmp_dir(void);
 gint ghb_find_closest_audio_samplerate(gint rate);
 
 void ghb_init_lang_list_model(GtkTreeView *tv);
@@ -192,11 +195,9 @@ const iso639_lang_t* ghb_iso639_lookup_by_int(int idx);
 // libhb lookup helpers
 const hb_title_t* ghb_lookup_title(int title_id, int *index);
 int ghb_lookup_title_index(int title_id);
-const hb_title_t* ghb_lookup_title(int title_id, int *index);
 GhbValue* ghb_get_title_dict(int title_id);
 int ghb_lookup_queue_title_index(int title_id);
 const hb_title_t* ghb_lookup_queue_title(int title_id, int *index);
-GhbValue* ghb_get_title_dict(int title_id);
 const hb_container_t* ghb_lookup_container_by_name(const gchar *name);
 const hb_encoder_t* ghb_lookup_audio_encoder(const char *name);
 int ghb_lookup_audio_encoder_codec(const char *name);
@@ -248,4 +249,4 @@ int ghb_lookup_resolution_limit_dimensions(const gchar * opt,
                                            int * width, int * height);
 const gchar * ghb_get_filter_name(hb_filter_object_t *filter);
 
-#endif // _HBBACKEND_H_
+G_END_DECLS

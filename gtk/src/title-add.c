@@ -1,52 +1,46 @@
-/* -*- Mode: C; indent-tabs-mode: nil; c-basic-offset: 4; tab-width: 4 -*- */
-/*
- * title-add.c
- * Copyright (C) John Stebbins 2008-2022 <stebbins@stebbins>
+/* title-add.c
  *
- * title-add.c is free software.
+ * Copyright (C) 2008-2024 John Stebbins <stebbins@stebbins>
  *
- * You may redistribute it and/or modify it under the terms of the
- * GNU General Public License version 2, as published by the Free Software
- * Foundation.
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2,
+ * as published by the Free Software Foundation.
  *
- * title-add.c is distributed in the hope that it will be useful,
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
- * See the GNU General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with title-add.c.  If not, write to:
- *  The Free Software Foundation, Inc.,
- *  51 Franklin Street, Fifth Floor
- *  Boston, MA  02110-1301, USA.
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ *
+ * SPDX-License-Identifier: GPL-2.0-only
  */
 
-#include "ghbcompat.h"
-#include <glib/gstdio.h>
-#include <glib/gi18n.h>
-#include <gio/gio.h>
-#include "handbrake/handbrake.h"
-#include "settings.h"
-#include "jobdict.h"
-#include "titledict.h"
-#include "hb-backend.h"
-#include "values.h"
-#include "callbacks.h"
-#include "presets.h"
-#include "audiohandler.h"
-#include "ghb-dvd.h"
-#include "queuehandler.h"
 #include "title-add.h"
+
+#include "application.h"
+#include "audiohandler.h"
+#include "callbacks.h"
+#include "ghb-file-button.h"
+#include "handbrake/handbrake.h"
+#include "hb-dvd.h"
+#include "jobdict.h"
+#include "presets.h"
+#include "queuehandler.h"
+#include "titledict.h"
+#include "values.h"
 
 G_MODULE_EXPORT void
 title_selected_cb (GtkWidget *widget, signal_user_data_t *ud);
 G_MODULE_EXPORT void
 title_dest_file_cb (GtkWidget *widget, signal_user_data_t *ud);
 G_MODULE_EXPORT void
-title_dest_dir_cb (GtkWidget *widget, signal_user_data_t *ud);
+title_dest_dir_cb (GtkWidget *widget, GParamSpec *spec, signal_user_data_t *ud);
 
 
-static GtkWidget *find_widget (GtkWidget *widget, gchar *name)
+static GtkWidget *
+find_widget (GtkWidget *widget, const char *name)
 {
     const char *wname;
     GtkWidget *result = NULL;
@@ -59,18 +53,12 @@ static GtkWidget *find_widget (GtkWidget *widget, gchar *name)
     {
         return widget;
     }
-    if (GTK_IS_CONTAINER(widget))
+    GtkWidget *child = gtk_widget_get_first_child(widget);
+    while (child != NULL)
     {
-        GList *list, *link;
-        link = list = gtk_container_get_children(GTK_CONTAINER(widget));
-        while (link)
-        {
-            result = find_widget(GTK_WIDGET(link->data), name);
-            if (result != NULL)
-                break;
-            link = link->next;
-        }
-        g_list_free(list);
+        result = find_widget(child, name);
+        if (result != NULL) break;
+        child = gtk_widget_get_next_sibling(child);
     }
     return result;
 }
@@ -80,14 +68,15 @@ validate_settings (signal_user_data_t *ud, GhbValue *settings, gint batch)
 {
     // Check to see if the dest file exists or is
     // already in the queue
-    gchar *message;
     const gchar *dest;
     gint count, ii;
     gint title_id, titleindex;
     const hb_title_t *title;
     GtkWindow *hb_window;
+    gboolean dest_in_queue = FALSE;
+    gboolean dest_exists = FALSE;
 
-    hb_window = GTK_WINDOW(GHB_WIDGET(ud->builder, "hb_window"));
+    hb_window = GTK_WINDOW(ghb_builder_widget("hb_window"));
 
     title_id = ghb_dict_get_int(settings, "title");
     title = ghb_lookup_title(title_id, &titleindex);
@@ -104,33 +93,15 @@ validate_settings (signal_user_data_t *ud, GhbValue *settings, gint batch)
         filename = ghb_dict_get_string(uiDict, "destination");
         if (g_strcmp0(dest, filename) == 0)
         {
-            message = g_strdup_printf(
-                        _("Destination: %s\n\n"
-                        "Another queued job has specified the same destination.\n"
-                        "Do you want to overwrite?"),
-                        dest);
-            if (!ghb_title_message_dialog(hb_window, GTK_MESSAGE_QUESTION,
-                                          _("Overwrite File?"),
-                                          message, _("Cancel"), _("Overwrite")))
-            {
-                g_free(message);
-                return FALSE;
-            }
-            g_free(message);
+            dest_in_queue = TRUE;
             break;
         }
     }
     gchar *destdir = g_path_get_dirname(dest);
     if (!g_file_test(destdir, G_FILE_TEST_IS_DIR))
     {
-        message = g_strdup_printf(
-                    _("Destination: %s\n\n"
-                    "This is not a valid directory."),
-                    destdir);
-        ghb_title_message_dialog(hb_window, GTK_MESSAGE_ERROR,
-                                 _("Invalid Destination"),
-                                 message, _("Cancel"), NULL);
-        g_free(message);
+        ghb_alert_dialog_show(GTK_MESSAGE_ERROR, _("Invalid Destination"),
+                              _("“%s” is is not a valid directory."), destdir);
         g_free(destdir);
         return FALSE;
     }
@@ -138,34 +109,35 @@ validate_settings (signal_user_data_t *ud, GhbValue *settings, gint batch)
     // This doesn't work properly on windows
     if (g_access(destdir, R_OK|W_OK) != 0)
     {
-        message = g_strdup_printf(
-                    _("Destination: %s\n\n"
-                    "Can not read or write the directory."),
-                    destdir);
-        ghb_title_message_dialog(hb_window, GTK_MESSAGE_ERROR,
-                                 _("Invalid Destination"),
-                                 message, _("Cancel"), NULL);
-        g_free(message);
+        ghb_alert_dialog_show(GTK_MESSAGE_ERROR, _("Invalid Destination"),
+                              _("“%s” is not a writable directory."), destdir);
         g_free(destdir);
         return FALSE;
     }
 #endif
     g_free(destdir);
-    if (g_file_test(dest, G_FILE_TEST_EXISTS))
+    dest_exists = g_file_test(dest, G_FILE_TEST_EXISTS);
+
+    if (dest_exists)
     {
-        message = g_strdup_printf(
-                    _("Destination: %s\n\n"
-                    "File already exists.\n"
-                    "Do you want to overwrite?"),
-                    dest);
-        if (!ghb_title_message_dialog(hb_window, GTK_MESSAGE_WARNING,
-                                      _("Overwrite File?"),
-                                      message, _("Cancel"), _("Overwrite")))
+        if (!ghb_question_dialog_run(hb_window, GHB_ACTION_DESTRUCTIVE,
+            _("Overwrite"), _("Cancel"), _("Overwrite File?"),
+            _("The file “%s” already exists.\n"
+              "Do you want to overwrite it?"), dest))
         {
-            g_free(message);
             return FALSE;
         }
-        g_free(message);
+    }
+    else if (dest_in_queue)
+    {
+        if (!ghb_question_dialog_run(hb_window, GHB_ACTION_NORMAL,
+            _("Overwrite"), _("Cancel"), _("Overwrite File?"),
+            _("Destination: %s\n\n"
+              "Another queued job has specified the same destination.\n"
+              "Do you want to overwrite?"), dest))
+        {
+            return FALSE;
+        }
     }
     // Validate audio settings
     if (!ghb_validate_audio(settings, hb_window))
@@ -347,7 +319,7 @@ title_add_are_conflicts (signal_user_data_t *ud)
     GtkWidget *row;
     gint count, ii;
 
-    list = GTK_LIST_BOX(GHB_WIDGET(ud->builder, "title_add_multiple_list"));
+    list = GTK_LIST_BOX(ghb_builder_widget("title_add_multiple_list"));
     count = ghb_array_len(ud->settings_array);
     for (ii = 0; ii < count; ii++)
     {
@@ -371,32 +343,18 @@ title_add_set_error_text (signal_user_data_t *ud, gboolean are_conflicts)
 
     if (are_conflicts)
     {
-        msg =
-            "<span foreground='black' weight='bold'>"
-            "Duplicate destination files detected.\n"
-            "Duplicates will not be added to the queue."
-            "</span>";
+        msg = _("Duplicate destination files detected. Duplicates will not be added to the queue.");
             msg_type = GTK_MESSAGE_WARNING;
     }
     else
     {
-        msg =
-            "Destination files OK.  No duplicates detected.";
+        msg = _("Destination files OK.  No duplicates detected.");
             msg_type = GTK_MESSAGE_INFO;
     }
     if (are_conflicts ^ conflict_showing)
     {
-        GtkInfoBar *info;
-        GtkContainer *content_area;
-        GList *list;
-        GtkLabel *label;
-
-        info = GTK_INFO_BAR(GHB_WIDGET(ud->builder,
-                                       "title_add_multiple_infobar"));
-        content_area = GTK_CONTAINER(gtk_info_bar_get_content_area(info));
-        list = gtk_container_get_children(content_area);
-        // Label is first in list
-        label = GTK_LABEL(list->data);
+        GtkInfoBar *info = GTK_INFO_BAR(ghb_builder_widget("title_add_multiple_infobar"));
+        GtkLabel *label = GTK_LABEL(ghb_builder_widget("title_add_multiple_label1"));
         gtk_label_set_markup(label, msg);
         gtk_info_bar_set_message_type(info, msg_type);
         conflict_showing = are_conflicts;
@@ -409,21 +367,21 @@ static void title_add_check_conflicts (signal_user_data_t *ud)
     GhbValue *settings;
     GtkWidget *row;
     GtkListBox *list;
-    GtkToggleButton *selected;
+    GtkWidget *selected;
     gboolean can_select;
     gboolean are_conflicts = FALSE;
 
-    list = GTK_LIST_BOX(GHB_WIDGET(ud->builder, "title_add_multiple_list"));
+    list = GTK_LIST_BOX(ghb_builder_widget("title_add_multiple_list"));
     count = ghb_array_len(ud->settings_array);
     for (ii = 0; ii < count; ii++)
     {
         row = GTK_WIDGET(gtk_list_box_get_row_at_index(list, ii));
-        selected = GTK_TOGGLE_BUTTON(find_widget(row, "title_selected"));
+        selected = find_widget(row, "title_selected");
 
         settings = ghb_array_get(ud->settings_array, ii);
         can_select = title_destination_is_unique(ud->settings_array, ii);
         ghb_dict_set_bool(settings, "title_selected", FALSE);
-        gtk_toggle_button_set_active(selected, FALSE);
+        gtk_check_button_set_active(GTK_CHECK_BUTTON(selected), FALSE);
         title_add_set_sensitive(GTK_WIDGET(row), can_select);
         are_conflicts |= !can_select;
     }
@@ -465,22 +423,25 @@ static GtkWidget *title_create_row (signal_user_data_t *ud)
     GtkBox *hbox, *vbox_dest;
     GtkCheckButton *selected;
     GtkLabel *title;
-    GtkEntry *dest_file;
-    GtkFileChooserButton *dest_dir;
+    GtkWidget *dest_file;
+    GhbFileButton *dest_dir;
 
     hbox = GTK_BOX(gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0));
     gtk_box_set_spacing(hbox, 6);
+    gtk_widget_set_margin_start(GTK_WIDGET(hbox), 6);
+    gtk_widget_set_margin_end(GTK_WIDGET(hbox), 6);
     gtk_widget_show(GTK_WIDGET(hbox));
 
     // Select checkbox
     selected = GTK_CHECK_BUTTON(gtk_check_button_new());
+    gtk_widget_add_css_class(GTK_WIDGET(selected), "selection-mode");
     gtk_widget_set_tooltip_markup(GTK_WIDGET(selected),
       _("Select this title for adding to the queue.\n"));
     gtk_widget_set_valign(GTK_WIDGET(selected), GTK_ALIGN_CENTER);
     gtk_widget_set_name(GTK_WIDGET(selected), "title_selected");
     gtk_widget_show(GTK_WIDGET(selected));
     g_signal_connect(selected, "toggled", (GCallback)title_selected_cb, ud);
-    ghb_box_append_child(hbox, GTK_WIDGET(selected));
+    gtk_box_append(hbox, GTK_WIDGET(selected));
 
     // Title label
     title = GTK_LABEL(gtk_label_new(_("No Title")));
@@ -489,7 +450,7 @@ static GtkWidget *title_create_row (signal_user_data_t *ud)
     gtk_widget_set_valign(GTK_WIDGET(title), GTK_ALIGN_CENTER);
     gtk_widget_set_name(GTK_WIDGET(title), "title_label");
     gtk_widget_show(GTK_WIDGET(title));
-    ghb_box_append_child(hbox, GTK_WIDGET(title));
+    gtk_box_append(hbox, GTK_WIDGET(title));
 
     default_title_attrs = gtk_label_get_attributes(title);
     gtk_widget_set_tooltip_text(GTK_WIDGET(title),
@@ -498,29 +459,27 @@ static GtkWidget *title_create_row (signal_user_data_t *ud)
         "the output file name.\n"));
     gtk_widget_set_has_tooltip(GTK_WIDGET(title), FALSE);
 
-    // Destination entry and file chooser
+    // Destination entry and file button
     vbox_dest = GTK_BOX(gtk_box_new(GTK_ORIENTATION_VERTICAL, 0));
     gtk_widget_set_hexpand(GTK_WIDGET(vbox_dest), TRUE);
     gtk_widget_set_halign(GTK_WIDGET(vbox_dest), GTK_ALIGN_FILL);
     //gtk_widget_set_hexpand(GTK_WIDGET(vbox_dest), TRUE);
-    dest_file = GTK_ENTRY(gtk_entry_new());
-    ghb_entry_set_width_chars(dest_file, 40);
-    gtk_widget_set_name(GTK_WIDGET(dest_file), "title_file");
-    //gtk_widget_set_hexpand(GTK_WIDGET(dest_file), TRUE);
-    gtk_widget_show(GTK_WIDGET(dest_file));
+    dest_file = gtk_entry_new();
+    gtk_editable_set_width_chars(GTK_EDITABLE(dest_file), 40);
+    gtk_widget_set_name(dest_file, "title_file");
+    //gtk_widget_set_hexpand(dest_file, TRUE);
+    gtk_widget_show(dest_file);
     g_signal_connect(dest_file, "changed", (GCallback)title_dest_file_cb, ud);
-    ghb_box_append_child(vbox_dest, GTK_WIDGET(dest_file));
-    dest_dir = GTK_FILE_CHOOSER_BUTTON(
-            gtk_file_chooser_button_new(_("Destination Directory"),
-                                        GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER));
-    g_signal_connect(dest_dir, "selection-changed",
-                    (GCallback)title_dest_dir_cb, ud);
+    gtk_box_append(vbox_dest, dest_file);
+    dest_dir = ghb_file_button_new(_("Destination Directory"), GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER);
+    g_signal_connect(dest_dir, "notify::file",
+                     G_CALLBACK(title_dest_dir_cb), ud);
     gtk_widget_set_name(GTK_WIDGET(dest_dir), "title_dir");
     gtk_widget_set_hexpand(GTK_WIDGET(dest_dir), TRUE);
     gtk_widget_show(GTK_WIDGET(dest_dir));
-    ghb_box_append_child(vbox_dest, GTK_WIDGET(dest_dir));
+    gtk_box_append(vbox_dest, GTK_WIDGET(dest_dir));
     gtk_widget_show(GTK_WIDGET(vbox_dest));
-    ghb_box_append_child(hbox, GTK_WIDGET(vbox_dest));
+    gtk_box_append(hbox, GTK_WIDGET(vbox_dest));
 
     return GTK_WIDGET(hbox);
 }
@@ -528,78 +487,80 @@ static GtkWidget *title_create_row (signal_user_data_t *ud)
 static gboolean clear_select_all_busy = FALSE;
 
 G_MODULE_EXPORT void
-title_add_select_all_cb (GtkWidget *widget, signal_user_data_t *ud)
+title_add_select_all_cb (GSimpleAction *action, GVariant *param, gpointer data)
 {
     gint count, ii;
     GhbValue *settings;
     GtkWidget *row;
     GtkListBox *list;
-    GtkToggleButton *selected;
     gboolean can_select;
-    GtkToggleButton *clear_all;
-    GtkToggleButton *select_all;
-
-    if (!ghb_widget_boolean(widget))
-        return;
+    GtkWidget *selected;
+    signal_user_data_t *ud = (signal_user_data_t *)data;
 
     clear_select_all_busy = TRUE;
 
-    clear_all = GTK_TOGGLE_BUTTON(GHB_WIDGET(ud->builder,
-                                           "title_add_multiple_clear_all"));
-    select_all = GTK_TOGGLE_BUTTON(GHB_WIDGET(ud->builder,
-                                           "title_add_multiple_select_all"));
-    gtk_toggle_button_set_active(clear_all, FALSE);
-    gtk_widget_set_sensitive(GTK_WIDGET(select_all), FALSE);
-    gtk_widget_set_sensitive(GTK_WIDGET(clear_all), TRUE);
-
-    list = GTK_LIST_BOX(GHB_WIDGET(ud->builder, "title_add_multiple_list"));
+    list = GTK_LIST_BOX(ghb_builder_widget("title_add_multiple_list"));
     count = ghb_array_len(ud->settings_array);
     for (ii = 0; ii < count; ii++)
     {
         row = GTK_WIDGET(gtk_list_box_get_row_at_index(list, ii));
-        selected = GTK_TOGGLE_BUTTON(find_widget(row, "title_selected"));
+        selected = find_widget(row, "title_selected");
         settings = ghb_array_get(ud->settings_array, ii);
         can_select = title_destination_is_unique(ud->settings_array, ii);
         ghb_dict_set_bool(settings, "title_selected", can_select);
-        gtk_toggle_button_set_active(selected, TRUE);
+        gtk_check_button_set_active(GTK_CHECK_BUTTON(selected), TRUE);
         title_add_set_sensitive(GTK_WIDGET(row), can_select);
     }
     clear_select_all_busy = FALSE;
 }
 
 G_MODULE_EXPORT void
-title_add_clear_all_cb (GtkWidget *widget, signal_user_data_t *ud)
+title_add_clear_all_cb (GSimpleAction *action, GVariant *param, gpointer data)
 {
     gint count, ii;
     GhbValue *settings;
     GtkWidget *row;
     GtkListBox *list;
-    GtkToggleButton *selected;
-    GtkToggleButton *clear_all;
-    GtkToggleButton *select_all;
-
-    if (!ghb_widget_boolean(widget))
-        return;
+    GtkWidget *selected;
+    signal_user_data_t *ud = (signal_user_data_t *)data;
 
     clear_select_all_busy = TRUE;
 
-    clear_all = GTK_TOGGLE_BUTTON(GHB_WIDGET(ud->builder,
-                                           "title_add_multiple_clear_all"));
-    select_all = GTK_TOGGLE_BUTTON(GHB_WIDGET(ud->builder,
-                                           "title_add_multiple_select_all"));
-    gtk_toggle_button_set_active(select_all, FALSE);
-    gtk_widget_set_sensitive(GTK_WIDGET(select_all), TRUE);
-    gtk_widget_set_sensitive(GTK_WIDGET(clear_all), FALSE);
-
-    list = GTK_LIST_BOX(GHB_WIDGET(ud->builder, "title_add_multiple_list"));
+    list = GTK_LIST_BOX(ghb_builder_widget("title_add_multiple_list"));
     count = ghb_array_len(ud->settings_array);
     for (ii = 0; ii < count; ii++)
     {
         row = GTK_WIDGET(gtk_list_box_get_row_at_index(list, ii));
-        selected = GTK_TOGGLE_BUTTON(find_widget(row, "title_selected"));
+        selected = find_widget(row, "title_selected");
         settings = ghb_array_get(ud->settings_array, ii);
         ghb_dict_set_bool(settings, "title_selected", FALSE);
-        gtk_toggle_button_set_active(selected, FALSE);
+        gtk_check_button_set_active(GTK_CHECK_BUTTON(selected), FALSE);
+    }
+    clear_select_all_busy = FALSE;
+}
+
+G_MODULE_EXPORT void
+title_add_invert_cb (GSimpleAction *action, GVariant *param, gpointer data)
+{
+    gint count, ii;
+    GhbValue *settings;
+    GtkWidget *row;
+    GtkListBox *list;
+    GtkWidget *selected;
+    signal_user_data_t *ud = (signal_user_data_t *)data;
+
+    clear_select_all_busy = TRUE;
+
+    list = GTK_LIST_BOX(ghb_builder_widget("title_add_multiple_list"));
+    count = ghb_array_len(ud->settings_array);
+    for (ii = 0; ii < count; ii++)
+    {
+        row = GTK_WIDGET(gtk_list_box_get_row_at_index(list, ii));
+        selected = find_widget(row, "title_selected");
+        settings = ghb_array_get(ud->settings_array, ii);
+        gboolean is_selected = ghb_dict_get_bool(settings, "title_selected");
+        ghb_dict_set_bool(settings, "title_selected", !is_selected);
+        gtk_check_button_set_active(GTK_CHECK_BUTTON(selected), !is_selected);
     }
     clear_select_all_busy = FALSE;
 }
@@ -609,8 +570,6 @@ title_selected_cb (GtkWidget *widget, signal_user_data_t *ud)
 {
     GhbValue *settings;
     gboolean selected;
-    GtkToggleButton *select_all;
-    GtkToggleButton *clear_all;
     gboolean can_select;
 
     if (clear_select_all_busy)
@@ -619,15 +578,6 @@ title_selected_cb (GtkWidget *widget, signal_user_data_t *ud)
     GtkListBoxRow * row = list_box_get_row(widget);
     if (row == NULL)
         return;
-
-    clear_all = GTK_TOGGLE_BUTTON(GHB_WIDGET(ud->builder,
-                                           "title_add_multiple_clear_all"));
-    select_all = GTK_TOGGLE_BUTTON(GHB_WIDGET(ud->builder,
-                                           "title_add_multiple_select_all"));
-    gtk_toggle_button_set_active(select_all, FALSE);
-    gtk_toggle_button_set_active(clear_all, FALSE);
-    gtk_widget_set_sensitive(GTK_WIDGET(clear_all), TRUE);
-    gtk_widget_set_sensitive(GTK_WIDGET(select_all), TRUE);
 
     gint index = gtk_list_box_row_get_index(row);
     selected = ghb_widget_boolean(widget);
@@ -678,7 +628,7 @@ title_dest_file_cb (GtkWidget *widget, signal_user_data_t *ud)
 }
 
 G_MODULE_EXPORT void
-title_dest_dir_cb (GtkWidget *widget, signal_user_data_t *ud)
+title_dest_dir_cb (GtkWidget *widget, GParamSpec *spec, signal_user_data_t *ud)
 {
     GhbValue *settings;
     const gchar *dest_file;
@@ -727,6 +677,18 @@ title_add_action_cb (GSimpleAction *action, GVariant *param,
     ghb_audio_list_refresh_all(ud);
 }
 
+static void
+title_add_multiple_response_cb (GtkDialog *dialog, int response,
+                                signal_user_data_t *ud)
+{
+    g_signal_handlers_disconnect_by_data(dialog, ud);
+    gtk_widget_set_visible(GTK_WIDGET(dialog), FALSE);
+    if (response == GTK_RESPONSE_OK)
+    {
+        add_multiple_titles(ud);
+    }
+}
+
 G_MODULE_EXPORT void
 title_add_multiple_action_cb (GSimpleAction *action, GVariant *param,
                               signal_user_data_t *ud)
@@ -737,7 +699,9 @@ title_add_multiple_action_cb (GSimpleAction *action, GVariant *param,
     gint max_title_len = 0;
     GhbValue * preset = NULL;
 
-    list = GTK_LIST_BOX(GHB_WIDGET(ud->builder, "title_add_multiple_list"));
+    list = GTK_LIST_BOX(ghb_builder_widget("title_add_multiple_list"));
+    // Clear title list
+    ghb_list_box_remove_all(list);
 
     if (ghb_dict_get_bool(ud->prefs, "SyncTitleSettings"))
     {
@@ -750,8 +714,8 @@ title_add_multiple_action_cb (GSimpleAction *action, GVariant *param,
     {
         GhbValue *settings;
         GtkLabel *label;
-        GtkEntry *entry;
-        GtkFileChooser *chooser;
+        GtkEditable *entry;
+        GhbFileButton *button;
         gchar *title_label;
         const gchar *dest_dir, *dest_file;
         gint title_id, titleindex;
@@ -759,8 +723,8 @@ title_add_multiple_action_cb (GSimpleAction *action, GVariant *param,
 
         row = title_create_row(ud);
         label = GTK_LABEL(find_widget(row, "title_label"));
-        entry = GTK_ENTRY(find_widget(row, "title_file"));
-        chooser = GTK_FILE_CHOOSER(find_widget(row, "title_dir"));
+        entry = GTK_EDITABLE(find_widget(row, "title_file"));
+        button = GHB_FILE_BUTTON(find_widget(row, "title_dir"));
 
         settings = ghb_array_get(ud->settings_array, ii);
         if (preset != NULL)
@@ -783,14 +747,20 @@ title_add_multiple_action_cb (GSimpleAction *action, GVariant *param,
             dest_dir = ghb_dict_get_string(settings, "dest_dir");
 
             gtk_label_set_markup(label, title_label);
-            ghb_editable_set_text(entry, dest_file);
-            gtk_file_chooser_set_filename(chooser, dest_dir);
+            gtk_editable_set_text(entry, dest_file);
+            ghb_file_button_set_filename(button, dest_dir);
 
             g_free(title_label);
         }
 
         gtk_list_box_insert(list, row, -1);
     }
+
+    if (preset != NULL)
+    {
+        ghb_value_free(&preset);
+    }
+
     // Now we need to set the width of the title label since it
     // can vary on each row
     if (max_title_len > 60)
@@ -806,34 +776,14 @@ title_add_multiple_action_cb (GSimpleAction *action, GVariant *param,
         gtk_label_set_ellipsize(label, PANGO_ELLIPSIZE_END);
     }
 
-    // Clear "select all" and "clear all" options
-    GtkToggleButton *select_all;
-    GtkToggleButton *clear_all;
-
-    clear_all = GTK_TOGGLE_BUTTON(GHB_WIDGET(ud->builder,
-                                           "title_add_multiple_clear_all"));
-    select_all = GTK_TOGGLE_BUTTON(GHB_WIDGET(ud->builder,
-                                           "title_add_multiple_select_all"));
-    gtk_toggle_button_set_active(clear_all, FALSE);
-    gtk_toggle_button_set_active(select_all, FALSE);
-    gtk_widget_set_sensitive(GTK_WIDGET(select_all), TRUE);
-    gtk_widget_set_sensitive(GTK_WIDGET(clear_all), TRUE);
-
     // Disable selection of files with duplicate file names.
     title_add_check_conflicts(ud);
 
     // Pop up the title multiple selections dialog
-    GtkResponseType response;
-    GtkWidget *dialog = GHB_WIDGET(ud->builder, "title_add_multiple_dialog");
-    response = gtk_dialog_run(GTK_DIALOG(dialog));
-    gtk_widget_hide(dialog);
-    if (response == GTK_RESPONSE_OK)
-    {
-        add_multiple_titles(ud);
-    }
-
-    // Clear title list
-    ghb_container_empty(GTK_CONTAINER(list));
+    GtkWidget *dialog = ghb_builder_widget("title_add_multiple_dialog");
+    g_signal_connect(dialog, "response",
+                     G_CALLBACK(title_add_multiple_response_cb), ud);
+    gtk_widget_set_visible(dialog, TRUE);
 }
 
 G_MODULE_EXPORT void
@@ -863,15 +813,19 @@ title_add_all_action_cb (GSimpleAction *action, GVariant *param,
         ghb_dict_set_bool(settings, "title_selected", TRUE);
     }
 
+    if (preset != NULL)
+    {
+        ghb_value_free(&preset);
+    }
+
     for (ii = 0; ii < count; ii++)
     {
         if (!title_destination_is_unique(ud->settings_array, ii))
         {
-            ghb_title_message_dialog(GTK_WINDOW(GHB_WIDGET(ud->builder, "hb_window")),
-                                     GTK_MESSAGE_ERROR, _("Cannot Add Titles"),
-                                     _("The filenames are not unique. Please choose\n"
-                                       "a unique destination filename for each title."),
-                                     _("OK"), NULL);
+            ghb_question_dialog_run(GTK_WINDOW(ghb_builder_widget("hb_window")),
+                GHB_ACTION_NORMAL, _("OK"), NULL, _("Cannot Add Titles"),
+                _("The filenames are not unique. Please choose\n"
+                  "a unique destination filename for each title."));
             title_add_multiple_action_cb(action, param, ud);
             return;
         }

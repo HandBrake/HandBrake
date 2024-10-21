@@ -22,23 +22,14 @@
 /* Class = "NSTextField"; ibExternalAccessibilityDescription = "Size summary"; ObjectID = "Jaw-pH-rhf"; */
 "Jaw-pH-rhf.ibExternalAccessibilityDescription" = "大小概要";
 
-/* Class = "NSButton"; ibShadowedToolTip = "Optimize MP4 for progressive download. After encoding, data is reorganized and rewritten to allow immediate playback over a network, without needing to download the entire file."; ObjectID = "JNB-kV-52S"; */
-"JNB-kV-52S.ibShadowedToolTip" = "优化 MP4 使其可以渐进式下载。编码后，数据将重新组织和重写以允许通过网络立即播放，而无需下载整个文件。";
-
-/* Class = "NSButton"; ibShadowedToolTip = "Optimize MP4 for progressive download. After encoding, data is reorganized and rewritten to allow immediate playback over a network, without needing to download the entire file."; ObjectID = "lUi-Oc-208"; */
+/* Class = "NSButton"; ibShadowedToolTip = "Optimize for progressive download. After encoding, data is reorganized and rewritten to allow immediate playback over a network, without needing to download the entire file."; ObjectID = "lUi-Oc-208"; */
 "lUi-Oc-208.ibShadowedToolTip" = "优化 MP4 使其可以渐进式下载。编码后，数据将重新组织和重写以允许通过网络立即播放，而无需下载整个文件。";
 
 /* Class = "NSView"; ibExternalAccessibilityDescription = "Preview"; ObjectID = "m5a-0z-QQ4"; */
 "m5a-0z-QQ4.ibExternalAccessibilityDescription" = "预览";
 
-/* Class = "NSButtonCell"; title = "Web Optimized"; ObjectID = "ma8-UR-dx2"; */
-"ma8-UR-dx2.title" = "Web 优化";
-
 /* Class = "NSTextFieldCell"; title = "Filters:"; ObjectID = "OCw-f6-uA0"; */
 "OCw-f6-uA0.title" = "滤镜：";
-
-/* Class = "NSMenu"; title = "OtherViews"; ObjectID = "Q1Z-yT-7iY"; */
-"Q1Z-yT-7iY.title" = "其他视图";
 
 /* Class = "NSButton"; ibShadowedToolTip = "Add a special MP4 marker to allow playback on vintage iPod 5th Generation devices circa 2006. Other settings may affect compatibility."; ObjectID = "QKv-GR-d2g"; */
 "QKv-GR-d2g.ibShadowedToolTip" = "添加一个特殊的 MP4 标记，可以允许在 2006 年左右的老式第 5 代 iPod 设备上播放。其他设置可能会受其影响。";

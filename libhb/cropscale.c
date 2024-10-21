@@ -1,6 +1,6 @@
 /* cropscale.c
 
-   Copyright (c) 2003-2015 HandBrake Team
+   Copyright (c) 2003-2024 HandBrake Team
    This file is part of the HandBrake source code
    Homepage: <http://handbrake.fr/>.
    It may be used under the terms of the GNU General Public License v2.
@@ -9,6 +9,7 @@
 
 #include "handbrake/common.h"
 #include "handbrake/avfilter_priv.h"
+#include "handbrake/hbffmpeg.h"
 #if HB_PROJECT_FEATURE_QSV && (defined( _WIN32 ) || defined( __MINGW32__ ))
 #include "handbrake/qsv_common.h"
 #include "libavutil/hwcontext_qsv.h"
@@ -120,16 +121,22 @@ static int crop_scale_init(hb_filter_object_t * filter, hb_filter_init_t * init)
 
         hb_dict_set_int(avsettings, "w", width);
         hb_dict_set_int(avsettings, "h", height);
+        hb_dict_set_int(avsettings, "async_depth", init->job->qsv.async_depth);
+        int hw_generation = hb_qsv_hardware_generation(hb_qsv_get_platform(hb_qsv_get_adapter_index()));
         if (init->job->qsv.ctx->vpp_scale_mode)
         {
             hb_dict_set_string(avsettings, "scale_mode", init->job->qsv.ctx->vpp_scale_mode);
+            hb_log("qsv: scaling filter mode %s", init->job->qsv.ctx->vpp_scale_mode);
+        }
+        else if (hw_generation >= QSV_G8)
+        {
+            hb_dict_set_string(avsettings, "scale_mode", "compute");
+            hb_log("qsv: scaling filter mode %s", "compute");
         }
         if (init->job->qsv.ctx->vpp_interpolation_method)
         {
             hb_dict_set_string(avsettings, "method", init->job->qsv.ctx->vpp_interpolation_method);
         }
-        hb_log("qsv: scaling filter mode %s", init->job->qsv.ctx->vpp_scale_mode ? init->job->qsv.ctx->vpp_scale_mode : "default");
-        hb_log("qsv: scaling filter interpolation method %s", init->job->qsv.ctx->vpp_interpolation_method ? init->job->qsv.ctx->vpp_interpolation_method : "default");
         hb_dict_set(avfilter, "vpp_qsv", avsettings);
     }
     else
@@ -143,8 +150,9 @@ static int crop_scale_init(hb_filter_object_t * filter, hb_filter_init_t * init)
             hb_dict_set_string(avsettings, "format", av_get_pix_fmt_name(init->pix_fmt));
             hb_dict_set(avfilter, "scale_cuda", avsettings);
         }
-        else if ((width % 2) == 0 && (height % 2) == 0 &&
-            (cropped_width % 2) == 0 && (cropped_height % 2) == 0)
+        else if (hb_av_can_use_zscale(init->pix_fmt,
+                                      init->geometry.width, init->geometry.height,
+                                      width, height))
         {
             hb_dict_set_int(avsettings, "width", width);
             hb_dict_set_int(avsettings, "height", height);
@@ -161,32 +169,6 @@ static int crop_scale_init(hb_filter_object_t * filter, hb_filter_init_t * init)
     }
     
     hb_value_array_append(avfilters, avfilter);
-
-    avfilter   = hb_dict_init();
-    avsettings = hb_dict_init();
-
-#if HB_PROJECT_FEATURE_QSV && (defined( _WIN32 ) || defined( __MINGW32__ ))
-    if (!(hb_qsv_hw_filters_via_video_memory_are_enabled(init->job) || hb_qsv_hw_filters_via_system_memory_are_enabled(init->job)))
-#endif
-    {
-        char * out_pix_fmt = NULL;
-
-        // "out_pix_fmt" is a private option used internally by
-        // handbrake for preview generation
-        hb_dict_extract_string(&out_pix_fmt, settings, "out_pix_fmt");
-        if (out_pix_fmt != NULL)
-        {
-            hb_dict_set_string(avsettings, "pix_fmts", out_pix_fmt);
-            free(out_pix_fmt);
-        }
-        else
-        {
-            hb_dict_set_string(avsettings, "pix_fmts",
-                av_get_pix_fmt_name(init->pix_fmt));
-        }
-        hb_dict_set(avfilter, "format", avsettings);
-        hb_value_array_append(avfilters, avfilter);
-    }
 
     init->crop[0] = top;
     init->crop[1] = bottom;

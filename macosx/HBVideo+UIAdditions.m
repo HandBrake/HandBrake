@@ -100,7 +100,7 @@
 
 + (NSSet<NSString *> *)keyPathsForValuesAffectingTurboMultiPassSupported
 {
-    return [NSSet setWithObjects:@"encoder", nil];
+    return [NSSet setWithObjects:@"encoder", @"qualityType", nil];
 }
 
 - (BOOL)turboMultiPassSupported
@@ -111,12 +111,12 @@
 
 + (NSSet<NSString *> *)keyPathsForValuesAffectingMultiPassSupported
 {
-    return [NSSet setWithObjects:@"encoder", nil];
+    return [NSSet setWithObjects:@"encoder", @"qualityType", nil];
 }
 
 - (BOOL)multiPassSupported
 {
-    return hb_video_multipass_is_supported(self.encoder);
+    return hb_video_multipass_is_supported(self.encoder, self.qualityType != 0);
 }
 
 + (NSSet<NSString *> *)keyPathsForValuesAffectingConstantQualityLabel
@@ -137,6 +137,16 @@
 - (BOOL)isConstantQualitySupported
 {
     return hb_video_quality_is_supported(self.encoder);
+}
+
++ (NSSet<NSString *> *)keyPathsForValuesAffectingIsAverageBitrateSupported
+{
+    return [NSSet setWithObjects:@"encoder", nil];
+}
+
+- (BOOL)isAverageBitrateSupported
+{
+    return hb_video_bitrate_is_supported(self.encoder);
 }
 
 + (NSSet<NSString *> *)keyPathsForValuesAffectingUnparseOptions
@@ -370,14 +380,15 @@
     BOOL _reverse;
     double _min;
     double _max;
+    double _granularity;
 }
 
 - (instancetype)init
 {
-    return [self initWithReversedDirection:NO min:0 max:50];
+    return [self initWithReversedDirection:NO min:0 max:50 granularity:1];
 }
 
-- (instancetype)initWithReversedDirection:(BOOL)reverse min:(double)min max:(double)max
+- (instancetype)initWithReversedDirection:(BOOL)reverse min:(double)min max:(double)max granularity:(float)granularity
 {
     self = [super init];
     if (self)
@@ -385,6 +396,7 @@
         _reverse = reverse;
         _min = min;
         _max = max;
+        _granularity = granularity > 0 ? granularity : 1;
     }
 
     return self;
@@ -418,11 +430,14 @@
     if (_reverse)
     {
         double inverseValue = _min + _max - [value doubleValue];
+        inverseValue = round(inverseValue / _granularity) * _granularity;
         return @(inverseValue);
     }
     else
     {
-        return value;
+        double doubleValue = [value doubleValue];
+        doubleValue = round(doubleValue / _granularity) * _granularity;
+        return @(doubleValue);
     }
 }
 

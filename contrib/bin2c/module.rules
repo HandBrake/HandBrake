@@ -1,0 +1,24 @@
+$(eval $(call import.MODULE.rules,BIN2C))
+
+build: bin2c.build
+clean: bin2c.clean
+xclean: bin2c.xclean
+
+bin2c.build: $(BIN2C.exe)
+
+########################################
+
+bin2c.clean:
+	$(RM.exe) -f $(BIN2C.out)
+
+bin2c.xclean: bin2c.clean
+
+########################################
+
+$(BIN2C.exe): | $(dir $(BIN2C.exe))
+$(BIN2C.exe): $(BIN2C.c.o)
+	$(call BIN2C.GCC.EXE++,$@,$^ $(BIN2C.libs))
+
+$(BIN2C.c.o): | $(dir $(BIN2C.c.o))
+$(BIN2C.c.o): $(BUILD/)%.o: $(SRC/)%.c
+	$(call BIN2C.GCC.C_O,$@,$<)

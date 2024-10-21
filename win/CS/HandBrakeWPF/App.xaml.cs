@@ -41,6 +41,8 @@ namespace HandBrakeWPF
     /// </summary>
     public partial class App
     {
+        private bool isStarted = false;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="App"/> class.
         /// </summary>
@@ -51,16 +53,20 @@ namespace HandBrakeWPF
             AppDomain.CurrentDomain.ProcessExit += this.CurrentDomain_ProcessExit;
             
             ToolTipService.ShowDurationProperty.OverrideMetadata(typeof(DependencyObject), new FrameworkPropertyMetadata(15000));
+
+            SystemInfo.InitGPUInfo(); // Background Thread.
         }
 
-        /// <summary>
-        /// Override the startup behavior to handle files dropped on the app icon.
-        /// </summary>
-        /// <param name="e">
-        /// The StartupEventArgs.
-        /// </param>
-        protected override void OnStartup(StartupEventArgs e)
+        private void Init(StartupEventArgs e)
         {
+            if (!File.Exists("hb.dll") && !File.Exists(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "hb.dll")))
+            {
+                MessageBox.Show("hb.dll file not found. Application will not run correctly without this. Please re-install HandBrake.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                this.Shutdown();
+                Environment.Exit(-1);
+                return;
+            }
+
             // We don't support Windows earlier than 10.
             if (!SystemInfo.IsWindows10OrLater())
             {
@@ -93,7 +99,7 @@ namespace HandBrakeWPF
                     StartupOptions.QueueRecoveryIds = processIds;
                 }
             }
-            
+
             if (e.Args.Any(f => f.Equals("--auto-start-queue")))
             {
                 StartupOptions.AutoRestartQueue = true;
@@ -130,11 +136,15 @@ namespace HandBrakeWPF
                                 MessageBoxImage.Error);
                             break;
                     }
-                    
+
                     Application.Current.Shutdown();
                     return;
                 }
             }
+
+            // Setup the UI
+            this.StartupUri = new Uri("Views/ShellView.xaml", UriKind.Relative);
+            this.isStarted = true;
 
             // Setup the UI Language
             IUserSettingService userSettingService = IoCHelper.Get<IUserSettingService>();
@@ -168,9 +178,7 @@ namespace HandBrakeWPF
 
             // App Theme
             DarkThemeMode useDarkTheme = (DarkThemeMode)userSettingService.GetUserSetting<int>(UserSettingConstants.DarkThemeMode);
-            ResourceDictionary dark = new ResourceDictionary { Source = new Uri("pack://application:,,,/MahApps.Metro;component/Styles/Themes/Dark.Blue.xaml") };
-            ResourceDictionary light = new ResourceDictionary { Source = new Uri("pack://application:,,,/MahApps.Metro;component/Styles/Themes/Light.Blue.xaml") };
-
+       
             Application.Current.Resources.MergedDictionaries.Add(new ResourceDictionary { Source = new Uri("Themes/Generic.xaml", UriKind.Relative) });
             bool themed = false;
             if (SystemParameters.HighContrast || !Portable.IsThemeEnabled())
@@ -179,30 +187,26 @@ namespace HandBrakeWPF
                 Application.Current.Resources["Ui.ContrastLight"] = new SolidColorBrush(SystemColors.ActiveBorderBrush.Color);
                 useDarkTheme = DarkThemeMode.None;
             }
-            
+
             switch (useDarkTheme)
             {
                 case DarkThemeMode.System:
                     if (SystemInfo.IsAppsUsingDarkTheme())
                     {
-                        Application.Current.Resources.MergedDictionaries.Add(dark);
                         Application.Current.Resources.MergedDictionaries.Add(new ResourceDictionary { Source = new Uri("Themes/Dark.xaml", UriKind.Relative) });
                     }
                     else
                     {
-                        Application.Current.Resources.MergedDictionaries.Add(light);
                         Application.Current.Resources.MergedDictionaries.Add(new ResourceDictionary { Source = new Uri("Themes/Light.xaml", UriKind.Relative) });
                     }
 
                     themed = true;
                     break;
                 case DarkThemeMode.Dark:
-                    Application.Current.Resources.MergedDictionaries.Add(dark);
                     Application.Current.Resources.MergedDictionaries.Add(new ResourceDictionary { Source = new Uri("Themes/Dark.xaml", UriKind.Relative) });
-                    themed = true;                    
+                    themed = true;
                     break;
                 case DarkThemeMode.Light:
-                    Application.Current.Resources.MergedDictionaries.Add(light);
                     Application.Current.Resources.MergedDictionaries.Add(new ResourceDictionary { Source = new Uri("Themes/Light.xaml", UriKind.Relative) });
                     themed = true;
                     break;
@@ -228,9 +232,6 @@ namespace HandBrakeWPF
             Services.Logging.GlobalLoggingManager.Init();
             HandBrakeInstanceManager.Init(noHardware, userSettingService);
 
-            // Initialise the GUI
-            base.OnStartup(e);
-
             // If we have a file dropped on the icon, try scanning it.
             string[] args = e.Args;
             if (args.Any() && (File.Exists(args[0]) || Directory.Exists(args[0])))
@@ -239,7 +240,7 @@ namespace HandBrakeWPF
                 mvm.StartScan(new List<string> { args[0] }, 0);
             }
         }
-
+        
         private static void CheckForUpdateCheckPermission(IUserSettingService userSettingService)
         {
             if (Portable.IsPortable() && !Portable.IsUpdateCheckEnabled())
@@ -254,7 +255,10 @@ namespace HandBrakeWPF
 
         private void CurrentDomain_ProcessExit(object sender, System.EventArgs e)
         {
-            HandBrakeUtils.DisposeGlobal();
+            if (this.isStarted)
+            {
+                HandBrakeUtils.DisposeGlobal();
+            }
         }
 
         /// <summary>
@@ -275,7 +279,7 @@ namespace HandBrakeWPF
                 {
                     GeneralApplicationException exception = new GeneralApplicationException(
                         "A file appears to be missing.",
-                        "Try re-installing Microsoft .NET 6 Desktop Runtime",
+                        "Try re-installing Microsoft .NET 8 Desktop Runtime",
                         (Exception)e.ExceptionObject);
                     this.ShowError(exception);
                 }
@@ -300,7 +304,7 @@ namespace HandBrakeWPF
         {
             if (e.Exception.GetType() == typeof(FileNotFoundException))
             {
-                GeneralApplicationException exception = new GeneralApplicationException("A file appears to be missing.", "Try re-installing Microsoft .NET 6 Desktop Runtime", e.Exception);
+                GeneralApplicationException exception = new GeneralApplicationException("A file appears to be missing.", "Try re-installing Microsoft .NET 8 Desktop Runtime", e.Exception);
                 this.ShowError(exception);
             }
             else if (e.Exception.GetType() == typeof(GeneralApplicationException))
@@ -375,6 +379,17 @@ namespace HandBrakeWPF
             {
                 MessageBox.Show("An Unknown Error has occurred. \n\n Exception:" + exception, "Unhandled Exception", MessageBoxButton.OK, MessageBoxImage.Error);
             }
+        }
+
+        /// <summary>
+        /// Override the startup behavior to handle files dropped on the app icon.
+        /// </summary>
+        /// <param name="e">
+        /// The StartupEventArgs.
+        /// </param>
+        private void App_OnStartup(object sender, StartupEventArgs e)
+        {
+            this.Init(e);
         }
     }
 }

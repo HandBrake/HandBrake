@@ -17,6 +17,7 @@ namespace HandBrakeWPF.Helpers
 
     using HandBrakeWPF.Model.Options;
     using HandBrakeWPF.Properties;
+    using HandBrakeWPF.Services.Encode.Model.Models;
     using HandBrakeWPF.Services.Interfaces;
     using HandBrakeWPF.Services.Presets.Model;
 
@@ -41,7 +42,8 @@ namespace HandBrakeWPF.Helpers
                 task.Destination = string.Empty;
             }
 
-            string sourceOrLabelName = !string.IsNullOrEmpty(titleName) ? titleName : sourceDisplayName;
+
+            string sourceOrLabelName = !string.IsNullOrEmpty(titleName) ? titleName.Trim() : sourceDisplayName?.Trim();
 
             if (task.Title != 0)
             {
@@ -306,12 +308,16 @@ namespace HandBrakeWPF.Helpers
 
         private static DateTime ObtainCreateDateObject(EncodeTask task)
         {
-            var rd = task.MetaData.ReleaseDate;
-            if (DateTime.TryParse(rd, out var d))
-            {
-                return d;
-            }
 
+            MetaDataValue dateMetadata = task.MetaData.FirstOrDefault(m => m.Annotation == "ReleaseDate");
+            if (dateMetadata != null)
+            {
+                if (DateTime.TryParse(dateMetadata.Value, out var d))
+                {
+                    return d;
+                }
+            }
+            
             try
             {
                 return File.GetCreationTime(task.Source);
@@ -330,10 +336,13 @@ namespace HandBrakeWPF.Helpers
 
         private static DateTime GetFileModificationDate(EncodeTask task)
         {
-            var rd = task.MetaData.ReleaseDate;
-            if (DateTime.TryParse(rd, out var d))
+            MetaDataValue dateMetadata = task.MetaData.FirstOrDefault(m => m.Annotation == "ReleaseDate");
+            if (dateMetadata != null)
             {
-                return d;
+                if (DateTime.TryParse(dateMetadata.Value, out var d))
+                {
+                    return d;
+                }
             }
 
             try

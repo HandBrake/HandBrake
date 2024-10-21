@@ -1,46 +1,35 @@
-/* -*- Mode: C; indent-tabs-mode: nil; c-basic-offset: 4; tab-width: 4 -*- */
-/*
- * settings.c
- * Copyright (C) John Stebbins 2008-2022 <stebbins@stebbins>
+/* settings.c
  *
- * settings.c is free software.
+ * Copyright (C) 2008-2024 John Stebbins <stebbins@stebbins>
  *
- * You may redistribute it and/or modify it under the terms of the
- * GNU General Public License version 2, as published by the Free Software
- * Foundation.
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2,
+ * as published by the Free Software Foundation.
  *
- * settings.c is distributed in the hope that it will be useful,
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
- * See the GNU General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with main.c.  If not, write to:
- *  The Free Software Foundation, Inc.,
- *  51 Franklin Street, Fifth Floor
- *  Boston, MA  02110-1301, USA.
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ *
+ * SPDX-License-Identifier: GPL-2.0-only
  */
 
-#include "ghbcompat.h"
+#include "settings.h"
+
+#include "application.h"
+#include "ghb-file-button.h"
+#include "ghb-string-list.h"
+#include "hb-backend.h"
 
 #include <fcntl.h>
-#include <unistd.h>
-#include <glib.h>
-#include <glib/gstdio.h>
 #include <string.h>
-#include "settings.h"
-#include "hb-backend.h"
-#include "values.h"
+#include <unistd.h>
 
 void dump_settings(GhbValue *settings);
 void ghb_pref_audio_init(signal_user_data_t *ud);
-
-GObject*
-debug_get_object(GtkBuilder* b, const gchar *n)
-{
-    g_debug("name %s\n", n);
-    return gtk_builder_get_object(b, n);
-}
 
 gint
 ghb_settings_combo_int(const GhbValue *settings, const gchar *key)
@@ -71,7 +60,7 @@ ghb_get_setting_key(GtkWidget *widget)
     ghb_log_func();
     if (widget == NULL) return NULL;
     g_return_val_if_fail(GTK_IS_WIDGET(widget), NULL);
-    name = gtk_buildable_get_name(GTK_BUILDABLE(widget));
+    name = gtk_buildable_get_buildable_id(GTK_BUILDABLE(widget));
 
     if (name == NULL || !strncmp(name, "Gtk", 3))
     {
@@ -103,47 +92,19 @@ ghb_widget_value(GtkWidget *widget)
     name = ghb_get_setting_key(widget);
     if (type == GTK_TYPE_ENTRY)
     {
-        const gchar *str = ghb_editable_get_text(widget);
+        const gchar *str = gtk_editable_get_text(GTK_EDITABLE(widget));
         value = ghb_string_value_new(str);
-    }
-    else if (type == GTK_TYPE_RADIO_BUTTON)
-    {
-        gboolean bval;
-#if !GTK_CHECK_VERSION(4, 4, 0)
-        bval = gtk_toggle_button_get_inconsistent(GTK_TOGGLE_BUTTON(widget));
-        if (bval)
-        {
-            value = ghb_bool_value_new(FALSE);
-        }
-        else
-#endif
-        {
-            bval = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
-            value = ghb_bool_value_new(bval);
-        }
     }
     else if (type == GTK_TYPE_CHECK_BUTTON)
     {
         gboolean bval;
-        bval = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
-        value = ghb_bool_value_new(bval);
-    }
-    else if (type == GTK_TYPE_TOGGLE_TOOL_BUTTON)
-    {
-        gboolean bval;
-        bval = gtk_toggle_tool_button_get_active(GTK_TOGGLE_TOOL_BUTTON(widget));
+        bval = gtk_check_button_get_active(GTK_CHECK_BUTTON(widget));
         value = ghb_bool_value_new(bval);
     }
     else if (type == GTK_TYPE_TOGGLE_BUTTON)
     {
         gboolean bval;
         bval = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
-        value = ghb_bool_value_new(bval);
-    }
-    else if (type == GTK_TYPE_CHECK_MENU_ITEM)
-    {
-        gboolean bval;
-        bval = gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(widget));
         value = ghb_bool_value_new(bval);
     }
     else if (type == GTK_TYPE_COMBO_BOX)
@@ -161,8 +122,10 @@ ghb_widget_value(GtkWidget *widget)
         }
         else if (gtk_combo_box_get_has_entry(GTK_COMBO_BOX(widget)))
         {
-            const gchar *str;
-            str = ghb_editable_get_text(gtk_bin_get_child(GTK_BIN(widget)));
+            const char *str;
+            GtkWidget *entry = gtk_combo_box_get_child(GTK_COMBO_BOX(widget));
+            str = gtk_editable_get_text(GTK_EDITABLE(entry));
+
             if (str == NULL) str = "";
             value = ghb_string_value_new(str);
         }
@@ -218,17 +181,23 @@ ghb_widget_value(GtkWidget *widget)
         str = gtk_label_get_text (GTK_LABEL(widget));
         value = ghb_string_value_new(str);
     }
-    else if (type == GTK_TYPE_FILE_CHOOSER_BUTTON)
+    else if (type == GHB_TYPE_FILE_BUTTON)
     {
-        gchar *str = NULL;
-        str = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER(widget));
-        if (str == NULL)
-        {
-            str = gtk_file_chooser_get_current_folder(GTK_FILE_CHOOSER(widget));
-        }
+        char *str = ghb_file_button_get_filename (GHB_FILE_BUTTON(widget));
         value = ghb_string_value_new(str);
-        if (str != NULL)
-            g_free(str);
+        g_free(str);
+
+    }
+    else if (type == GHB_TYPE_STRING_LIST)
+    {
+        char **strings = ghb_string_list_get_items(GHB_STRING_LIST(widget));
+        value = ghb_array_new();
+        for (guint i = 0; i < g_strv_length(strings); i++)
+        {
+            GhbValue *ival = ghb_string_value_new(strings[i]);
+            ghb_array_append(value, ival);
+        }
+        g_strfreev(strings);
     }
     else
     {
@@ -331,7 +300,7 @@ ghb_update_widget(GtkWidget *widget, const GhbValue *value)
 
     const char *name = ghb_get_setting_key(widget);
     type = ghb_value_type(value);
-    if (type == GHB_ARRAY || type == GHB_DICT)
+    if (type == GHB_DICT)
         return;
     if (value == NULL) return;
     str = tmp = ghb_value_get_string_xform(value);
@@ -340,32 +309,19 @@ ghb_update_widget(GtkWidget *widget, const GhbValue *value)
     type = G_OBJECT_TYPE(widget);
 
     if (str == NULL)
-        str = "";
+        str = g_strdup("");
 
     if (type == GTK_TYPE_ENTRY)
     {
-        ghb_editable_set_text(widget, str);
-    }
-    else if (type == GTK_TYPE_RADIO_BUTTON)
-    {
-        if (ival)
-            gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), !!ival);
+        gtk_editable_set_text(GTK_EDITABLE(widget), str);
     }
     else if (type == GTK_TYPE_CHECK_BUTTON)
     {
-        gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), ival);
-    }
-    else if (type == GTK_TYPE_TOGGLE_TOOL_BUTTON)
-    {
-        gtk_toggle_tool_button_set_active(GTK_TOGGLE_TOOL_BUTTON(widget), ival);
+        gtk_check_button_set_active(GTK_CHECK_BUTTON(widget), ival);
     }
     else if (type == GTK_TYPE_TOGGLE_BUTTON)
     {
         gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), ival);
-    }
-    else if (type == GTK_TYPE_CHECK_MENU_ITEM)
-    {
-        gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(widget), ival);
     }
     else if (type == GTK_TYPE_COMBO_BOX)
     {
@@ -410,10 +366,10 @@ ghb_update_widget(GtkWidget *widget, const GhbValue *value)
         {
             if (gtk_combo_box_get_has_entry(GTK_COMBO_BOX(widget)))
             {
-                GtkEntry *entry = GTK_ENTRY(gtk_bin_get_child(GTK_BIN(widget)));
+                GtkWidget *entry = gtk_combo_box_get_child(GTK_COMBO_BOX(widget));
                 if (entry)
                 {
-                    ghb_editable_set_text(entry, str);
+                    gtk_editable_set_text(GTK_EDITABLE(entry), str);
                 }
                 else
                 {
@@ -454,47 +410,23 @@ ghb_update_widget(GtkWidget *widget, const GhbValue *value)
     {
         gtk_label_set_markup (GTK_LABEL(widget), str);
     }
-    else if (type == GTK_TYPE_FILE_CHOOSER_BUTTON)
+    else if (type == GHB_TYPE_FILE_BUTTON)
     {
-        GtkFileChooserAction act;
-        act = gtk_file_chooser_get_action(GTK_FILE_CHOOSER(widget));
-
-        if (str[0] == 0)
+        if (str[0] != 0)
         {
-            // Do nothing
-            ;
+            ghb_file_button_set_filename(GHB_FILE_BUTTON(widget), str);
         }
-        else if (act == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER ||
-                 act == GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER)
+    }
+    else if (type == GHB_TYPE_STRING_LIST)
+    {
+        const char **strings = g_malloc0_n(ghb_array_len(value) + 1, sizeof(char *));
+        for (int j = 0; j < ghb_array_len(value); j++)
         {
-            gtk_file_chooser_set_filename (GTK_FILE_CHOOSER(widget), str);
+            GhbValue *item = ghb_array_get(value, j);
+            strings[j] = ghb_value_get_string(item);
         }
-        else if (act == GTK_FILE_CHOOSER_ACTION_SAVE)
-        {
-            gtk_file_chooser_set_filename (GTK_FILE_CHOOSER(widget), str);
-        }
-        else
-        {
-            if (g_file_test(str, G_FILE_TEST_IS_DIR))
-            {
-                gtk_file_chooser_set_current_folder(
-                    GTK_FILE_CHOOSER(widget), str);
-            }
-            else if (g_file_test(str, G_FILE_TEST_EXISTS))
-            {
-                gtk_file_chooser_set_filename (GTK_FILE_CHOOSER(widget), str);
-            }
-            else
-            {
-                gchar * dirname;
-
-                dirname = g_path_get_dirname(str);
-                gtk_file_chooser_set_current_folder(
-                    GTK_FILE_CHOOSER(widget), dirname);
-                gtk_file_chooser_unselect_all(GTK_FILE_CHOOSER(widget));
-                g_free(dirname);
-            }
-        }
+        ghb_string_list_set_items(GHB_STRING_LIST(widget), strings);
+        g_free(strings);
     }
     else
     {
@@ -504,10 +436,11 @@ ghb_update_widget(GtkWidget *widget, const GhbValue *value)
 }
 
 int
-ghb_ui_update_from_settings(signal_user_data_t *ud, const gchar *name, const GhbValue *settings)
+ghb_ui_update_from_settings (const char *name, const GhbValue *settings)
 {
     GObject *object;
     GhbValue * value;
+    signal_user_data_t *ud = ghb_ud();
 
     ghb_log_func_str(name);
     if (name == NULL)
@@ -515,7 +448,7 @@ ghb_ui_update_from_settings(signal_user_data_t *ud, const gchar *name, const Ghb
     value = ghb_dict_get_value(settings, name);
     if (value == NULL)
         return 0;
-    object = GHB_OBJECT(ud->builder, name);
+    object = ghb_builder_object(name);
     if (object == NULL)
     {
         g_debug("Failed to find widget for key: %s", name);
@@ -529,14 +462,15 @@ ghb_ui_update_from_settings(signal_user_data_t *ud, const gchar *name, const Ghb
 }
 
 int
-ghb_ui_update(signal_user_data_t *ud, const gchar *name, const GhbValue *value)
+ghb_ui_update (const gchar *name, const GhbValue *value)
 {
     GObject *object;
+    signal_user_data_t *ud = ghb_ud();
 
     ghb_log_func_str(name);
     if (name == NULL || value == NULL)
         return 0;
-    object = GHB_OBJECT(ud->builder, name);
+    object = ghb_builder_object(name);
     if (object == NULL)
     {
         g_debug("Failed to find widget for key: %s", name);
@@ -561,7 +495,7 @@ ghb_ui_settings_update(
     ghb_log_func_str(name);
     if (name == NULL || value == NULL)
         return 0;
-    object = GHB_OBJECT(ud->builder, name);
+    object = ghb_builder_object(name);
     if (object == NULL)
     {
         g_debug("Failed to find widget for key: %s", name);

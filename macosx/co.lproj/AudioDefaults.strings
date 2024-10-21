@@ -115,9 +115,6 @@
 /* Class = "NSWindow"; title = "Audio Selection Behaviour"; ObjectID = "kwM-lz-5lG"; */
 "kwM-lz-5lG.title" = "Cumpurtamentu di a selezzione audio";
 
-/* Class = "NSMenu"; title = "OtherViews"; ObjectID = "Kwy-lU-VuU"; */
-"Kwy-lU-VuU.title" = "Altre viste";
-
 /* Class = "NSPopUpButton"; ibShadowedToolTip = "Audio encoder to use when a track suitable for passthru is unavailable."; ObjectID = "LdN-Cx-ZJY"; */
 "LdN-Cx-ZJY.ibShadowedToolTip" = "Cudificatore audio à impiegà quandu una traccia adattata à a ricopia hè indispunibule.";
 
@@ -159,9 +156,6 @@
 
 /* Class = "NSTableColumn"; headerCell.title = "Codec"; ObjectID = "pR9-d4-SNf"; */
 "pR9-d4-SNf.headerCell.title" = "Cudecu";
-
-/* Class = "NSMenu"; title = "OtherViews"; ObjectID = "PtB-Wp-B9X"; */
-"PtB-Wp-B9X.title" = "Altre viste";
 
 /* Class = "NSPopUpButton"; ibExternalAccessibilityDescription = "Samplerate"; ObjectID = "r80-yv-59n"; */
 "r80-yv-59n.ibExternalAccessibilityDescription" = "Frequenza di campiunariu";

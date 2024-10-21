@@ -1,6 +1,6 @@
 /* hb.c
 
-   Copyright (c) 2003-2022 HandBrake Team
+   Copyright (c) 2003-2024 HandBrake Team
    This file is part of the HandBrake source code
    Homepage: <http://handbrake.fr/>.
    It may be used under the terms of the GNU General Public License v2.
@@ -76,10 +76,6 @@ int disable_hardware = 0;
 
 static void thread_func( void * );
 
-void hb_avcodec_init()
-{
-}
-
 int hb_avcodec_open(AVCodecContext *avctx, const AVCodec *codec,
                     AVDictionary **av_opts, int thread_count)
 {
@@ -128,7 +124,7 @@ int hb_picture_fill(uint8_t *data[], int stride[], hb_buffer_t *buf)
         stride[ii] = stride[ii - 1];
 
     ret = av_image_fill_pointers(data, buf->f.fmt,
-                                 buf->plane[0].height_stride,
+                                 buf->plane[0].height,
                                  buf->data, stride);
     if (ret != buf->size)
     {
@@ -315,7 +311,7 @@ int hb_get_build( hb_handle_t * h )
 void hb_remove_previews( hb_handle_t * h )
 {
     char          * filename;
-    char          * dirname;
+    const char    * dirname;
     hb_title_t    * title;
     int             i, count, len;
     DIR           * dir;
@@ -325,7 +321,6 @@ void hb_remove_previews( hb_handle_t * h )
     dir = opendir( dirname );
     if (dir == NULL)
     {
-        free(dirname);
         return;
     }
 
@@ -355,22 +350,7 @@ void hb_remove_previews( hb_handle_t * h )
             free(filename);
         }
     }
-    free(dirname);
     closedir( dir );
-}
-
-void hb_scan( hb_handle_t * h, const char * path, int title_index,
-              int preview_count, int store_previews, uint64_t min_duration,
-              int crop_threshold_frames, int crop_threshold_pixels,
-              hb_list_t * exclude_extensions, int hw_decode)
-{
-    // TODO: Compatibility later for the other UI's.  Remove when they are updated.
-    hb_list_t *file_paths = hb_list_init();
-    hb_list_add(file_paths, (char *)path);
-
-    hb_scan_list(h, file_paths, title_index, preview_count, store_previews, min_duration, crop_threshold_frames, crop_threshold_pixels, exclude_extensions, hw_decode);
-
-    hb_list_close(&file_paths);
 }
 
 /**
@@ -385,11 +365,12 @@ void hb_scan( hb_handle_t * h, const char * path, int title_index,
  * @param crop_threshold_pixels The variance in pixels detected that are allowed for.
  * @param exclude_extensions A list of extensions to exclude for this scan.
  * @param hw_decode  The preferred hardware decoder to use..
+ * @param keep_duplicate_titles
  */
-void hb_scan_list( hb_handle_t * h, hb_list_t * paths, int title_index,
+void hb_scan( hb_handle_t * h, hb_list_t * paths, int title_index,
               int preview_count, int store_previews, uint64_t min_duration,
               int crop_threshold_frames, int crop_threshold_pixels,
-              hb_list_t * exclude_extensions, int hw_decode)
+              hb_list_t * exclude_extensions, int hw_decode, int keep_duplicate_titles)
 {
     hb_title_t * title;
 
@@ -477,7 +458,7 @@ void hb_scan_list( hb_handle_t * h, hb_list_t * paths, int title_index,
                                    &h->title_set, preview_count,
                                    store_previews, min_duration,
                                    crop_threshold_frames, crop_threshold_pixels,
-                                   exclude_extensions, hw_decode);
+                                   exclude_extensions, hw_decode, keep_duplicate_titles);
 }
 
 void hb_force_rescan( hb_handle_t * h )
@@ -765,113 +746,6 @@ done:
     return buf;
 }
 
-hb_image_t* hb_get_preview2(hb_handle_t * h, int title_idx, int picture,
-                            hb_geometry_settings_t *geo, int deinterlace)
-{
-    char                 filename[1024];
-    hb_buffer_t        * in_buf = NULL, * deint_buf = NULL;
-    hb_buffer_t        * preview_buf = NULL;
-    uint32_t             swsflags;
-    uint8_t            * preview_data[4], * crop_data[4];
-    int                  preview_stride[4], crop_stride[4];
-    struct SwsContext  * context;
-
-    int width = geo->geometry.width *
-                geo->geometry.par.num / geo->geometry.par.den;
-    int height = geo->geometry.height;
-
-    // Set min/max dimensions to prevent failure to initialize
-    // sws context and absurd sizes.
-    //
-    // This means output image size may not match requested image size!
-    int ww = width, hh = height;
-    width  = MIN(MAX(width,                HB_MIN_WIDTH),  HB_MAX_WIDTH);
-    height = MIN(MAX(height * width  / ww, HB_MIN_HEIGHT), HB_MAX_HEIGHT);
-    width  = MIN(MAX(width  * height / hh, HB_MIN_WIDTH),  HB_MAX_WIDTH);
-
-    swsflags = SWS_LANCZOS | SWS_ACCURATE_RND;
-
-    preview_buf = hb_frame_buffer_init(AV_PIX_FMT_RGB32, width, height);
-    // fill in AVPicture
-    hb_picture_fill( preview_data, preview_stride, preview_buf );
-
-
-    memset( filename, 0, 1024 );
-
-    hb_title_t * title;
-    title = hb_find_title_by_index(h, title_idx);
-    if (title == NULL)
-    {
-        hb_error( "hb_get_preview2: invalid title (%d)", title_idx );
-        goto fail;
-    }
-
-    in_buf = hb_read_preview( h, title, picture, HB_PREVIEW_FORMAT_JPG );
-    if ( in_buf == NULL )
-    {
-        goto fail;
-    }
-
-    if (deinterlace)
-    {
-        // Deinterlace and crop
-        deint_buf = hb_frame_buffer_init( AV_PIX_FMT_YUV420P,
-                              title->geometry.width, title->geometry.height );
-        hb_deinterlace(deint_buf, in_buf);
-        hb_picture_crop(crop_data, crop_stride, deint_buf,
-                        geo->crop[0], geo->crop[2] );
-    }
-    else
-    {
-        // Crop
-        hb_picture_crop(crop_data, crop_stride, in_buf,
-                        geo->crop[0], geo->crop[2] );
-    }
-
-    int colorspace = hb_sws_get_colorspace(title->color_matrix);
-
-    // Get scaling context
-    context = hb_sws_get_context(
-                title->geometry.width  - (geo->crop[2] + geo->crop[3]),
-                title->geometry.height - (geo->crop[0] + geo->crop[1]),
-                AV_PIX_FMT_YUV420P, AVCOL_RANGE_MPEG,
-                width, height, AV_PIX_FMT_RGB32, AVCOL_RANGE_MPEG,
-                swsflags, colorspace);
-
-    if (context == NULL)
-    {
-        // if by chance hb_sws_get_context fails, don't crash in sws_scale
-        goto fail;
-    }
-
-    // Scale
-    sws_scale(context,
-              (const uint8_t * const *)crop_data, crop_stride,
-              0, title->geometry.height - (geo->crop[0] + geo->crop[1]),
-              preview_data, preview_stride);
-
-    // Free context
-    sws_freeContext( context );
-
-    hb_image_t *image = hb_buffer_to_image(preview_buf);
-
-    // Clean up
-    hb_buffer_close( &in_buf );
-    hb_buffer_close( &deint_buf );
-    hb_buffer_close( &preview_buf );
-
-    return image;
-
-fail:
-
-    hb_buffer_close( &in_buf );
-    hb_buffer_close( &deint_buf );
-    hb_buffer_close( &preview_buf );
-
-    image = hb_image_init(AV_PIX_FMT_RGB32, width, height);
-    return image;
-}
-
 static void process_filter(hb_filter_object_t * filter)
 {
     hb_buffer_t * in, * out;
@@ -1028,8 +902,21 @@ hb_image_t * hb_get_preview3(hb_handle_t * h, int picture,
     }
     hb_dict_set_int(filter->settings, "width", scaled_width);
     hb_dict_set_int(filter->settings, "height", scaled_height);
-    hb_dict_set_string(filter->settings, "out_pix_fmt", av_get_pix_fmt_name(AV_PIX_FMT_RGB32));
     hb_list_add(job->list_filter, filter);
+
+    if (filter->init != NULL && filter->init(filter, &init))
+    {
+        hb_error("hb_get_preview3: Failure to initialize filter '%s'",
+                 filter->name);
+        hb_list_rem(list_filter, filter);
+        hb_filter_close(&filter);
+    }
+
+    filter = hb_filter_init(HB_FILTER_FORMAT);
+    filter->settings = hb_dict_init();
+    hb_dict_set_string(filter->settings, "format", av_get_pix_fmt_name(AV_PIX_FMT_RGB32));
+    hb_list_add(job->list_filter, filter);
+
     if (filter->init != NULL && filter->init(filter, &init))
     {
         hb_error("hb_get_preview3: Failure to initialize filter '%s'",
@@ -2014,7 +1901,7 @@ int hb_add( hb_handle_t * h, hb_job_t * job )
 
 void hb_job_setup_passes(hb_handle_t * h, hb_job_t * job, hb_list_t * list_pass)
 {
-    if (job->vquality > HB_INVALID_VIDEO_QUALITY)
+    if (job->vquality > HB_INVALID_VIDEO_QUALITY && ! hb_video_multipass_is_supported(job->vcodec, 1))
     {
         job->multipass = 0;
     }
@@ -2234,9 +2121,6 @@ int hb_global_init()
         return -1;
     }
 
-    /* libavcodec */
-    hb_avcodec_init();
-
     /* HB work objects */
     hb_register(&hb_muxer);
     hb_register(&hb_reader);
@@ -2267,7 +2151,6 @@ int hb_global_init()
 #if HB_PROJECT_FEATURE_QSV
     if (!disable_hardware)
     {
-        hb_qsv_available();
         hb_register(&hb_encqsv);
     }
 #endif
@@ -2291,7 +2174,7 @@ int hb_global_init()
  */
 void hb_global_close()
 {
-    char          * dirname;
+    const char    * dirname;
     DIR           * dir;
     struct dirent * entry;
 
@@ -2317,7 +2200,6 @@ void hb_global_close()
         closedir( dir );
         rmdir( dirname );
     }
-    free(dirname);
 }
 
 /**
@@ -2329,7 +2211,7 @@ void hb_global_close()
 static void thread_func( void * _h )
 {
     hb_handle_t * h = (hb_handle_t *) _h;
-    char * dirname;
+    const char * dirname;
 
     h->pid = getpid();
 
@@ -2337,7 +2219,6 @@ static void thread_func( void * _h )
     dirname = hb_get_temporary_directory();
 
     hb_mkdir( dirname );
-    free(dirname);
 
     while( !h->die )
     {
@@ -2416,11 +2297,15 @@ static void redirect_thread_func(void * _data)
     if (pipe(pfd))
        return;
 #if defined( SYS_MINGW )
-    // dup2 doesn't work on windows for some stupid reason
-    stderr->_file = pfd[1];
+    // Non-console windows apps do not have a stderr->_file
+    // assigned properly
+    (void) freopen("NUL", "w", stderr);
+    _dup2(pfd[1], _fileno(stderr));
 #else
-    dup2(pfd[1], /*stderr*/ 2);
+    dup2(pfd[1], STDERR_FILENO);
 #endif
+    setvbuf(stderr, NULL, _IONBF, 0);
+
     FILE * log_f = fdopen(pfd[0], "rb");
 
     char line_buffer[500];

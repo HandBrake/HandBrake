@@ -22,7 +22,7 @@
 #import "HBLocalizationUtilities.h"
 
 #import "HBRange.h"
-#import "HBVideo.h"
+#import "HBVideo+UIAdditions.h"
 #import "HBPicture.h"
 #import "HBFilters.h"
 #import "HBAudio.h"
@@ -166,7 +166,7 @@ static HBMixdownTransformer    *mixdownTransformer;
     {
         [passesString appendString:HBKitLocalizedString(@"1 Foreign Language Search Pass - ", @"Title description")];
     }
-    if (self.video.qualityType != 1 && self.video.multiPass == YES)
+    if (self.video.multiPassSupported && self.video.multiPass == YES)
     {
         if (self.video.turboMultiPass == YES)
         {
@@ -248,7 +248,7 @@ static HBMixdownTransformer    *mixdownTransformer;
         [options appendString:HBKitLocalizedString(@", Chapter Markers", @"Format description")];
     }
 
-    if ((self.container & HB_MUX_MASK_MP4) && self.mp4HttpOptimize)
+    if ((self.container & HB_MUX_MASK_MP4) && self.optimize)
     {
         [options appendString:HBKitLocalizedString(@", Web Optimized", @"Format description")];
     }

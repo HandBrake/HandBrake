@@ -110,7 +110,6 @@ namespace HandBrakeWPF.AttachedProperties
     /// <summary>
     /// An object we can store as JSON against a user setting key.
     /// </summary>
-    [SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1402:FileMayOnlyContainASingleClass", Justification = "Reviewed. Suppression is OK here.")]
     public class WindowInformation
     {
         public WindowInformation(string windowName, WindowState windowState, Rect location)

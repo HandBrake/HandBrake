@@ -2,12 +2,14 @@ __deps__ :=
 $(eval $(call import.MODULE.defs,X265_8,x265_8,$(__deps__),x265))
 $(eval $(call import.CONTRIB.defs,X265_8))
 
-X265_8.FETCH.url     = https://github.com/HandBrake/HandBrake-contribs/releases/download/contribs/x265-snapshot-20230403-12776.tar.gz
-X265_8.FETCH.sha256  = 23898695c5520e9e971d12e88125d5ad03ad67f462fc8ecaa016b48adad7cb20
+X265_8.FETCH.url     = https://github.com/HandBrake/HandBrake-contribs/releases/download/contribs2/x265_4.0.tar.gz
+X265_8.FETCH.url    += https://bitbucket.org/multicoreware/x265_git/downloads/x265_4.0.tar.gz
+X265_8.FETCH.sha256  = 75b4d05629e365913de3100b38a459b04e2a217a8f30efaa91b572d8e6d71282
 
 X265_8.build_dir             = 8bit
 X265_8.CONFIGURE.exe         = cmake
 X265_8.CONFIGURE.args.prefix = -DCMAKE_INSTALL_PREFIX="$(X265_8.CONFIGURE.prefix)"
+X265_8.CONFIGURE.args.host   = -DCMAKE_HOST_SYSTEM="$(X265_8.CONFIGURE.build)"
 X265_8.CONFIGURE.deps        =
 X265_8.CONFIGURE.static      =
 X265_8.CONFIGURE.shared      = -DENABLE_SHARED=OFF
@@ -49,16 +51,18 @@ ifeq (1,$(HOST.cross))
         X265_8.CONFIGURE.extra += -DWIN32=ON
         X265_8.CONFIGURE.extra += -DCMAKE_SYSTEM_NAME=Windows
         X265_8.CONFIGURE.extra += -DCMAKE_C_COMPILER=$(X265_8.GCC.gcc)
-        X265_8.CONFIGURE.extra += -DCMAKE_C_FLAGS="-static-libgcc -static-libstdc++ -static"
-        X265_8.CONFIGURE.extra += -DCMAKE_SHARED_LIBRARY_LINK_C_FLAGS="-static-libgcc -static-libstdc++ -static"
         X265_8.CONFIGURE.extra += -DCMAKE_CXX_COMPILER=$(X265_8.GCC.gxx)
-        X265_8.CONFIGURE.extra += -DCMAKE_CXX_FLAGS="-static-libgcc -static-libstdc++ -static"
-        X265_8.CONFIGURE.extra += -DCMAKE_SHARED_LIBRARY_LINK_CXX_FLAGS="-static-libgcc -static-libstdc++ -static"
         X265_8.CONFIGURE.extra += -DCMAKE_RC_COMPILER=$(HOST.cross.prefix)windres
         X265_8.CONFIGURE.args.host  = -DCMAKE_HOST_SYSTEM="$(X265_8.CONFIGURE.host)"
     endif
-    X265_8.CONFIGURE.args.build = -DCMAKE_HOST_SYSTEM="$(X265_8.CONFIGURE.build)"
-    X265_8.CONFIGURE.extra     += -DCMAKE_SYSTEM_PROCESSOR=$(HOST.machine)
+    ifeq (aarch64,$(HOST.machine:arm64=aarch64))
+        X265_8.CONFIGURE.extra += -DCROSS_COMPILE_ARM64=ON -DCROSS_COMPILE_NEON_DOTPROD=ON -DCROSS_COMPILE_NEON_I8MM=ON
+    endif
+    X265_8.CONFIGURE.args.build = -DCMAKE_SYSTEM_PROCESSOR=$(HOST.machine)
+else
+    ifeq (arm64-darwin,$(HOST.machine)-$(HOST.system))
+        X265_8.CONFIGURE.extra += -DCPU_HAS_NEON_I8MM=ON
+    endif
 endif
 
 ## find CMakeLists.txt

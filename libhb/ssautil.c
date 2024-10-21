@@ -1,6 +1,6 @@
 /* ssautil.c
 
-   Copyright (c) 2003-2022 HandBrake Team
+   Copyright (c) 2003-2024 HandBrake Team
    This file is part of the HandBrake source code
    Homepage: <http://handbrake.fr/>.
    It may be used under the terms of the GNU General Public License v2.
@@ -116,6 +116,11 @@ static int ssa_update_style(const char *ssa, hb_subtitle_style_context_t *ctx)
         // Skip any malformed markup junk
         while (strchr("\\}", ssa[pos]) == NULL) pos++;
         pos++;
+        // Early exit if there is no tag
+        if (ssa[pos] == '\0')
+        {
+            break;
+        }
         // Check for an index that is in some markup (e.g. font color)
         if (isdigit(ssa[pos]))
         {

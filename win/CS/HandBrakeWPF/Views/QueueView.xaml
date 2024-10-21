@@ -9,11 +9,12 @@
         xmlns:Audio="clr-namespace:HandBrakeWPF.Converters.Audio"
         xmlns:Subtitles="clr-namespace:HandBrakeWPF.Converters.Subtitles"
         xmlns:video="clr-namespace:HandBrakeWPF.Converters.Video"
-        xmlns:commands="clr-namespace:HandBrakeWPF.Commands"
         xmlns:helpers="clr-namespace:HandBrakeWPF.Helpers"
         xmlns:Properties="clr-namespace:HandBrakeWPF.Properties"
         xmlns:queue="clr-namespace:HandBrakeWPF.Converters.Queue"
         xmlns:main="clr-namespace:HandBrakeWPF.Converters.Main"
+        xmlns:model="clr-namespace:HandBrakeWPF.Services.Queue.Model"
+        xmlns:controls="clr-namespace:HandBrakeWPF.Controls"
         Title="{Binding Title}"
         Width="975"
         Height="600"
@@ -37,6 +38,7 @@
         <queue:FilterSettingsDescConverter x:Key="filterSettingsDescConverter" />
         <Converters:ThemeImageConverter x:Key="themeConverter" />
         <main:PointToPointConverter x:Key="PointToPointConverter" />
+        <Converters:EnumToVisibilityConverter x:Key="EnumToVisibilityConverter" />
 
         <Style x:Key="LongToolTipHolder" TargetType="FrameworkElement">
             <Setter Property="ToolTipService.ShowDuration" Value="10000" />
@@ -103,12 +105,13 @@
 
         <Grid Grid.Row="2" Margin="0,15,0,0">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="3*" MaxWidth="750" x:Name="leftTabPanel" />
-                <ColumnDefinition Width="4*" x:Name="rightTabPanel"  />
+                <ColumnDefinition Width="*" x:Name="leftTabPanel" />
+                <ColumnDefinition Width="Auto" x:Name="rightTabPanel"  />
             </Grid.ColumnDefinitions>
 
             <Grid>
                 <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="*" />
                     <RowDefinition Height="Auto" />
@@ -127,13 +130,28 @@
                         <ColumnDefinition Width="Auto" />
                     </Grid.ColumnDefinitions>
 
-                    <Button Name="Start" AutomationProperties.Name="Start Queue" Command="{Binding RelayCommand}" CommandParameter="StartQueue" Grid.Column="0"
-                                IsEnabled="{Binding IsQueueRunning, Converter={StaticResource notBooleanConverter}}"
+                    <Button Name="Start" AutomationProperties.Name="Start Queue" Grid.Column="0"
+                                IsEnabled="{Binding IsQueueRunning, Converter={StaticResource notBooleanConverter}}" ContextMenuService.IsEnabled="False" PreviewMouseLeftButtonDown="Start_OnPreviewMouseLeftButtonDown"
                                 Visibility="{Binding IsQueueRunning, Converter={StaticResource boolToVisConverter}, ConverterParameter=true}">
+
                         <StackPanel Orientation="Horizontal">
-                            <Image Width="16" Height="16" Margin="2,0,0,0" Source="Images/Play.png"  />
-                            <Label Margin="5,0,5,0" VerticalAlignment="Center" Content="{x:Static Properties:Resources.QueueView_Start}" />
+                            <StackPanel Orientation="Horizontal">
+                                <Image Width="16" Height="16" Margin="2,0,0,0" Source="Images/Play.png"  />
+                                <Label Margin="5,0,5,0" VerticalAlignment="Center" Content="{x:Static Properties:Resources.QueueView_Start}" />
+                            </StackPanel>
+
+                            <Grid x:Name="dropdown" Background="Transparent" >
+                                <Path Height="5" Margin="4,2,2,0" VerticalAlignment="Center" HorizontalAlignment="Center"
+                                  Data="M 0 0 L 4 4 L 8 0 Z"
+                                  Fill="{DynamicResource ButtonGlyphBrush}" x:Name="dropdownArrow" />
+                            </Grid>
+
                         </StackPanel>
+                        <Button.ContextMenu>
+                            <ContextMenu>
+                                <MenuItem Header="{x:Static Properties:Resources.QueueView_StartAtTime}" Command="{Binding RelayCommand}" CommandParameter="StartQueueAtTime"/>
+                            </ContextMenu>
+                        </Button.ContextMenu>
                     </Button>
 
                     <StackPanel Grid.Column="1" Orientation="Horizontal">
@@ -181,8 +199,8 @@
                             <Separator />
                             <MenuItem Command="{Binding RelayCommand}" CommandParameter="ExportCli" Header="{x:Static Properties:Resources.QueueView_ExportCLI}" />
                             <Separator />
-                            <MenuItem Command="{Binding RelayCommand}" CommandParameter="ChangeQueueDisplay" x:Name="extendedQueueDisplay" 
-                                      Header="{x:Static Properties:Resources.QueueView_ExtendedQueueDisplay}" />
+                            <MenuItem Command="{Binding RelayCommand}" CommandParameter="ChangeQueueDisplay" x:Name="extendedQueueDisplay" Header="{x:Static Properties:Resources.QueueView_ExtendedQueueDisplay}" />
+                            <MenuItem Command="{Binding RelayCommand}" CommandParameter="ToggleSimpleQueueDisplay" x:Name="simpleQueueDisplay" Header="{x:Static Properties:Resources.QueueView_SimpleQueueDisplay}" />
 
                             <Separator Visibility="{Binding IsNightly, Converter={StaticResource boolToVisConverter}}" />
                             <MenuItem Header="Debug" Visibility="{Binding IsNightly, Converter={StaticResource boolToVisConverter}}">
@@ -192,7 +210,26 @@
                     </Menu>
                 </Grid>
 
-                <ListBox Tag="{Binding}" x:Name="queueJobs" Grid.Row="1" Margin="10,0,5,0"
+                <Border BorderThickness="1,1,1,0" BorderBrush="DarkGray" Grid.Row="1" Margin="10,0,5,0" SnapsToDevicePixels="True" Visibility="{Binding IsStartTimeEnabled, Converter={StaticResource boolToVisConverter}}" >
+                    <Grid HorizontalAlignment="Center" >
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+
+                        <!--  Settings  -->
+                        <StackPanel Orientation="Horizontal" Grid.Column="0" Margin="0,3,5,3" VerticalAlignment="Center" MinHeight="27">
+
+                            <TextBlock Text="{x:Static Properties:Resources.QueueView_QueueStartTime}" HorizontalAlignment="Left" Margin="0,0,10,0" VerticalAlignment="Center" />
+
+                            <controls:SimpleTimeControl Hour="{Binding StartHour, Mode=TwoWay}" Minute="{Binding StartMinute, Mode=TwoWay}" DataContext="{Binding}" Width="90" />
+
+                            <Button Content="{x:Static Properties:Resources.Generic_Cancel}" Margin="10,0,0,0" Command="{Binding RelayCommand}" CommandParameter="CancelDelayedStart" />
+                        </StackPanel>
+                    </Grid>
+                </Border>
+
+                <ListBox Tag="{Binding}" x:Name="queueJobs" Grid.Row="2" Margin="10,0,5,0"
                              dd:DragDrop.DropHandler="{Binding}"
                              dd:DragDrop.IsDragSource="True"
                              dd:DragDrop.IsDropTarget="True"
@@ -209,18 +246,18 @@
 
                     <ListBox.ContextMenu>
                         <ContextMenu Opened="ContextMenu_OnOpened">
-                            <MenuItem Header="{x:Static Properties:Resources.QueueView_PlayMediaFile}" Command="{Binding RelayCommand}" CommandParameter="PlayFile" />
+                            <MenuItem Header="{x:Static Properties:Resources.QueueView_PlayMediaFile}" Command="{Binding RelayCommand}" CommandParameter="PlayFile" InputGestureText="Ctrl + P" />
                             <Separator />
-                            <MenuItem Header="{x:Static Properties:Resources.QueueView_MoveToTop}" x:Name="moveToTopMenuItem" Command="{Binding RelayCommand}" CommandParameter="MoveToTop" />
-                            <MenuItem Header="{x:Static Properties:Resources.QueueView_MoveToBottom}" x:Name="moveToBottomMenuItem" Command="{Binding RelayCommand}" CommandParameter="MoveToBottom" />
+                            <MenuItem Header="{x:Static Properties:Resources.QueueView_MoveToTop}" x:Name="moveToTopMenuItem" Command="{Binding RelayCommand}" CommandParameter="MoveToTop" InputGestureText="Ctrl + T"  />
+                            <MenuItem Header="{x:Static Properties:Resources.QueueView_MoveToBottom}" x:Name="moveToBottomMenuItem" Command="{Binding RelayCommand}" CommandParameter="MoveToBottom" InputGestureText="Ctrl + B"  />
                             <Separator />
-                            <MenuItem Header="{x:Static Properties:Resources.QueueView_Reset}" x:Name="ResetMenuItem" Click="QueueItem_Retry" />
-                            <MenuItem Header="{x:Static Properties:Resources.QueueView_Delete}" x:Name="DeleteMenuItem" Click="QueueItem_Delete" />
+                            <MenuItem Header="{x:Static Properties:Resources.QueueView_Reset}" x:Name="ResetMenuItem" Click="QueueItem_Retry"  InputGestureText="Ctrl + R"/>
+                            <MenuItem Header="{x:Static Properties:Resources.QueueView_Delete}" x:Name="DeleteMenuItem" Click="QueueItem_Delete" InputGestureText="Del" />
                             <Separator />
-                            <MenuItem Header="{x:Static Properties:Resources.QueueView_Edit}" x:Name="EditMenuItem" Click="QueueItem_Edit" />
+                            <MenuItem Header="{x:Static Properties:Resources.QueueView_Edit}" x:Name="EditMenuItem" Click="QueueItem_Edit" InputGestureText="Ctrl + E" />
                             <Separator />
-                            <MenuItem Header="{x:Static Properties:Resources.QueueView_OpenSourceDir}" x:Name="openSourceDir" Click="OpenSourceDir_OnClick" />
-                            <MenuItem Header="{x:Static Properties:Resources.QueueView_OpenDestDir}" x:Name="openDestDir" Click="OpenDestDir_OnClick" />
+                            <MenuItem Header="{x:Static Properties:Resources.QueueView_OpenSourceDir}" x:Name="openSourceDir" Click="OpenSourceDir_OnClick" InputGestureText="Ctrl + I" />
+                            <MenuItem Header="{x:Static Properties:Resources.QueueView_OpenDestDir}" x:Name="openDestDir" Click="OpenDestDir_OnClick" InputGestureText="Ctrl + D" />
 
                         </ContextMenu>
                     </ListBox.ContextMenu>
@@ -239,72 +276,98 @@
                                     <RowDefinition Height="Auto" />
                                 </Grid.RowDefinitions>
 
-                                <Grid Visibility="{Binding IsBreakpointTask, Converter={StaticResource boolToVisConverter}, ConverterParameter=true}">
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="40" />
-                                        <ColumnDefinition Width="*" />
-                                        <ColumnDefinition Width="Auto" />
-                                    </Grid.ColumnDefinitions>
-
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition Height="Auto" />
-                                        <RowDefinition Height="Auto" />
-                                    </Grid.RowDefinitions>
-
-                                    <!--  Marker  -->
-                                    <Image Grid.Column="0" Width="16" Height="16" SnapsToDevicePixels="True" Style="{StaticResource RotatingImageStyle}">
-                                        <Image.LayoutTransform>
-                                            <RotateTransform CenterX="8" CenterY="8" Angle="0"/>
-                                        </Image.LayoutTransform>
-                                    </Image>
-
-                                    <!--  Settings  -->
-                                    <Grid Grid.Column="1" Margin="0,3,5,3" VerticalAlignment="Center" MinHeight="27">
-                                        <Grid.RowDefinitions>
-                                            <RowDefinition Height="Auto" />
-                                        </Grid.RowDefinitions>
-
+                                <Grid  Visibility="{Binding TaskType, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter={x:Static model:QueueTaskType.EncodeTask}}" >
+                                    <Grid Visibility="{Binding IsShuttingDown, Converter={StaticResource boolToVisConverter}, ConverterParameter=true}">
                                         <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="40" />
                                             <ColumnDefinition Width="*" />
                                             <ColumnDefinition Width="Auto" />
                                         </Grid.ColumnDefinitions>
 
-                                        <StackPanel Grid.Row="0" Grid.Column="0"  VerticalAlignment="Center">
-                                            <TextBlock Text="{Binding Task.Destination, Converter={StaticResource filePathToFilenameConverter}}"
-                                                   TextWrapping="Wrap" VerticalAlignment="Center" Margin="0,0,5,0"
-                                                   Style="{StaticResource subHeaderSmall}"/>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto" />
+                                            <RowDefinition Height="Auto" />
+                                        </Grid.RowDefinitions>
 
-                                            <ProgressBar Minimum="0" Height="4" Maximum="100" Name="pbStatus" HorizontalAlignment="Stretch" Margin="0,8,10,0"
-                                                     Value="{Binding JobProgress.ProgressValue}" IsIndeterminate="{Binding JobProgress.IntermediateProgress}"
-                                                     Visibility="{Binding ShowEncodeProgress, Converter={StaticResource boolToVisConverter}}" />
+                                        <!--  Marker  -->
+                                        <Image Grid.Column="0" Width="16" Height="16" SnapsToDevicePixels="True" Style="{StaticResource RotatingImageStyle}">
+                                            <Image.LayoutTransform>
+                                                <RotateTransform CenterX="8" CenterY="8" Angle="0"/>
+                                            </Image.LayoutTransform>
+                                        </Image>
 
-                                            <!-- Extended Info -->
-                                            <Grid Visibility="{Binding DataContext.ExtendedQueueDisplay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}, Converter={StaticResource boolToVisConverter}}" >
+                                        <!--  Settings  -->
+                                        <Grid Grid.Column="1" Margin="0,2,5,2" VerticalAlignment="Center">
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="Auto" />
+                                            </Grid.RowDefinitions>
 
-                                                <TextBlock Text="{Binding JobProgress.JobStatusShort}" TextWrapping="WrapWithOverflow" VerticalAlignment="Top" TextTrimming="CharacterEllipsis"
-                                                           Visibility="{Binding ShowEncodeProgress, Converter={StaticResource boolToVisConverter}}"
-                                                           Margin="0,4,0,2" Style="{StaticResource subTextSmall}" />
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="*" />
+                                                <ColumnDefinition Width="Auto" />
+                                            </Grid.ColumnDefinitions>
 
-                                                <TextBlock Text="{Binding Statistics.SummaryCompleteStats}" TextWrapping="WrapWithOverflow" VerticalAlignment="Top" TextTrimming="CharacterEllipsis"
-                                                           Visibility="{Binding ShowJobCompleteInfo, Converter={StaticResource boolToVisConverter}}"
-                                                           Margin="0,4,0,2" Style="{StaticResource subTextSmall}" />
+                                            <Grid Grid.Row="0" Grid.Column="0"  VerticalAlignment="Center">
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition Height="Auto" />
+                                                    <RowDefinition Height="Auto" />
+                                                    <RowDefinition Height="Auto" />
+                                                </Grid.RowDefinitions>
+                                                <TextBlock Text="{Binding Task.Destination, Converter={StaticResource filePathToFilenameConverter}}" TextWrapping="Wrap" VerticalAlignment="Center" Margin="0,0,5,0" Grid.Row="0" 
+                                                           Style="{StaticResource subHeaderSmall}"/>
+
+                                                <ProgressBar Minimum="0" Height="4" Maximum="100" Grid.Row="1" Name="pbStatus" HorizontalAlignment="Stretch" Margin="0,5,10,0"
+                                                             Value="{Binding JobProgress.ProgressValue}" IsIndeterminate="{Binding JobProgress.IntermediateProgress}"
+                                                             Visibility="{Binding Status, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter={x:Static model:QueueItemStatus.InProgress}}" />
+
+                                                <!-- Extended Info -->
+                                                <Grid Visibility="{Binding DataContext.ExtendedQueueDisplay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}, Converter={StaticResource boolToVisConverter}}"
+                                                      Grid.Row="2">
+
+                                                    <TextBlock Text="{Binding JobProgress.JobStatusShort}" TextWrapping="WrapWithOverflow" VerticalAlignment="Top" TextTrimming="CharacterEllipsis"
+                                                               Visibility="{Binding Status, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter={x:Static model:QueueItemStatus.InProgress}}"
+                                                               Margin="0,3,0,2" Style="{StaticResource subTextSmall}" />
+
+                                                    <TextBlock Text="{Binding Statistics.SummaryCompleteStats}" TextWrapping="WrapWithOverflow" VerticalAlignment="Top" TextTrimming="CharacterEllipsis"
+                                                               Visibility="{Binding Status, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter={x:Static model:QueueItemStatus.Completed}}"
+                                                               Margin="0,3,0,2" Style="{StaticResource subTextSmall}" />
+                                                </Grid>
                                             </Grid>
-                                        </StackPanel>
 
-                                        <Button Grid.Row="0" Grid.Column="1" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="0,0,0,0" Click="QueueDeleteJob_OnClick"
-                                            AutomationProperties.Name="{x:Static Properties:ResourcesTooltips.QueueView_DeleteJob}" ToolTip="{x:Static Properties:ResourcesTooltips.QueueView_DeleteJob}" >
-                                            <Button.Template>
-                                                <ControlTemplate>
-                                                    <Image Width="16" Height="16" VerticalAlignment="Center" Source="Images/close64.png" />
-                                                </ControlTemplate>
-                                            </Button.Template>
-                                        </Button>
+                                            <Button Grid.Row="0" Grid.Column="1" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="0,0,0,0" Click="QueueDeleteJob_OnClick"
+                                                    AutomationProperties.Name="{x:Static Properties:ResourcesTooltips.QueueView_DeleteJob}" ToolTip="{x:Static Properties:ResourcesTooltips.QueueView_DeleteJob}" >
+                                                <Button.Template>
+                                                    <ControlTemplate>
+                                                        <Image Width="16" Height="16" VerticalAlignment="Center" Source="Images/close64.png" />
+                                                    </ControlTemplate>
+                                                </Button.Template>
+                                            </Button>
+                                        </Grid>
                                     </Grid>
 
-                  
+                                    <Grid Visibility="{Binding IsShuttingDown, Converter={StaticResource boolToVisConverter}, ConverterParameter=false}">
+
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="40" />
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="Auto" />
+                                        </Grid.ColumnDefinitions>
+
+
+                                        <!--  Marker  -->
+                                        <Image Grid.Column="0" Width="16" Height="16" Source="Images/information.png" SnapsToDevicePixels="True">
+                                            <Image.LayoutTransform>
+                                                <RotateTransform CenterX="8" CenterY="8" Angle="0"/>
+                                            </Image.LayoutTransform>
+                                        </Image>
+
+                                        <TextBlock Text="{x:Static Properties:Resources.QueueView_EncodeShutdown}" Margin="10" Grid.Column="1" />
+                                    </Grid>
+
+
                                 </Grid>
 
-                                <Grid Visibility="{Binding IsBreakpointTask, Converter={StaticResource boolToVisConverter}, ConverterParameter=false}">
+                                <Grid Visibility="{Binding TaskType, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter={x:Static model:QueueTaskType.Breakpoint}}" >
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="40" />
                                         <ColumnDefinition Width="*" />
@@ -315,7 +378,7 @@
                                     <Image Source="Images/stop.png" Grid.Column="0" Width="16" Height="16" SnapsToDevicePixels="True" />
 
                                     <!--  Settings  -->
-                                    <Grid Grid.Column="1" Margin="0,3,5,3" VerticalAlignment="Center" MinHeight="27">
+                                    <Grid Grid.Column="1" Margin="0,3,5,3" VerticalAlignment="Center" MinHeight="23">
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition Width="*" />
                                             <ColumnDefinition Width="Auto" />
@@ -329,7 +392,7 @@
                     </ListBox.ItemTemplate>
                 </ListBox>
 
-                <Border BorderThickness="1,0,1,1" BorderBrush="DarkGray" Grid.Row="2" Margin="10,0,5,10" SnapsToDevicePixels="True" >
+                <Border BorderThickness="1,0,1,1" BorderBrush="DarkGray" Grid.Row="3" Margin="10,0,5,10" SnapsToDevicePixels="True" >
                     <Menu HorizontalAlignment="Center" VerticalAlignment="Center" Background="Transparent"   
                               AutomationProperties.Name="{x:Static Properties:Resources.QueueView_WhenDone}">
                         <MenuItem>
@@ -360,7 +423,9 @@
                 </Border>
             </Grid>
 
-            <TabControl x:Name="summaryTabControl"  Grid.Column="1"  Margin="5,0,10,10" SelectedIndex="{Binding SelectedTabIndex}" >
+            <TabControl x:Name="summaryTabControl"  Grid.Column="1"  Margin="5,0,10,10" SelectedIndex="{Binding SelectedTabIndex}" 
+                        MinWidth="550" Width="550"
+                        Visibility="{Binding IsSimpleView, Converter={StaticResource boolToVisConverter}, ConverterParameter=true}" >
                 <TabItem Header="{x:Static Properties:Resources.QueueView_Summary}" IsEnabled="{Binding JobInfoVisible}" >
                     <ScrollViewer VerticalScrollBarVisibility="Auto" Margin="5,5,0,5">
 
@@ -378,7 +443,9 @@
                                         </Style>
                                     </StackPanel.Resources>
 
-                                    <Button AutomationProperties.Name="{x:Static Properties:Resources.QueueView_Reset}"  ToolTip="{x:Static Properties:ResourcesTooltips.QueueView_ResetJobStatus}">
+                                    <Button AutomationProperties.Name="{x:Static Properties:Resources.QueueView_Reset}"  ToolTip="{x:Static Properties:ResourcesTooltips.QueueView_ResetJobStatus}"
+                                            Command="{Binding DataContext.RetryCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}" 
+                                            CommandParameter="{Binding SelectedTask}" >
                                         <Button.Content>
                                             <StackPanel Orientation="Horizontal">
                                                 <Image Width="20" Height="20" VerticalAlignment="Center" Margin="0,0,5,0"
@@ -388,14 +455,11 @@
                                             </StackPanel>
 
                                         </Button.Content>
-                                        <i:Interaction.Triggers>
-                                            <i:EventTrigger EventName="Click">
-                                                <i:InvokeCommandAction Command="{Binding DataContext.RetryCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}" CommandParameter="{Binding SelectedTask}" />
-                                            </i:EventTrigger>
-                                        </i:Interaction.Triggers>
                                     </Button>
 
-                                    <Button Margin="10,0,0,0" AutomationProperties.Name="{x:Static Properties:Resources.QueueView_Edit}" ToolTip="{x:Static Properties:ResourcesTooltips.QueueView_SendJobBack}">
+                                    <Button Margin="10,0,0,0" AutomationProperties.Name="{x:Static Properties:Resources.QueueView_Edit}" ToolTip="{x:Static Properties:ResourcesTooltips.QueueView_SendJobBack}"
+                                            Command="{Binding DataContext.EditCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}" 
+                                            CommandParameter="{Binding SelectedTask}" >
                                         <Button.Content>
                                             <StackPanel Orientation="Horizontal">
                                                 <Image Width="20" Margin="0,0,5,0" Height="20" VerticalAlignment="Center"
@@ -404,11 +468,6 @@
                                                 <TextBlock Text="{x:Static Properties:Resources.QueueView_Edit}" VerticalAlignment="Center" />
                                             </StackPanel>
                                         </Button.Content>
-                                        <i:Interaction.Triggers>
-                                            <i:EventTrigger EventName="Click">
-                                                <i:InvokeCommandAction Command="{Binding DataContext.EditCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}" CommandParameter="{Binding SelectedTask}" />
-                                            </i:EventTrigger>
-                                        </i:Interaction.Triggers>
                                     </Button>
 
                                     <Button x:Name="queueOptionsDropButton" Margin="10,0,0,0" Click="QueueOptionsDropButton_OnClick"

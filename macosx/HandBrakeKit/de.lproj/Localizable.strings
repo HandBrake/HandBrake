@@ -51,7 +51,7 @@
 ", Web Optimized" = ", Web-optimiert";
 
 /* HBStateFormatter -> work pass type format */
-"(subtitle scan)" = "(Untertitelscan)";
+"(subtitle scan)" = "(Untertitel einlesen)";
 
 /* Title short description -> video format */
 "%.6g FPS" = "%.6g BpS";

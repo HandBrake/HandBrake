@@ -12,6 +12,7 @@ namespace HandBrake.Worker.Watcher
     using System.Diagnostics;
     using System.Timers;
 
+    using HandBrake.Worker.Logging;
     using HandBrake.Worker.Routing;
 
     public class InstanceWatcher
@@ -43,6 +44,7 @@ namespace HandBrake.Worker.Watcher
             Process[] uiProcesses = Process.GetProcessesByName("HandBrake");
             if (uiProcesses.Length == 0)
             {
+                ConsoleOutput.WriteLine("HandBrake.exe appears to no longer be running. Terminating child process ...");
                 this.routerInstance.StopEncode(null);
                 this.routerInstance.OnTerminationEvent();
             }

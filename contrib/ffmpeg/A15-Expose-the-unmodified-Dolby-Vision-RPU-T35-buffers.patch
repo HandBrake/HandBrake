@@ -1,0 +1,108 @@
+From 0f4a6a95ae5b73e4dc51f9ca3f94785fe5056bfc Mon Sep 17 00:00:00 2001
+From: Damiano Galassi <damiog@gmail.com>
+Date: Mon, 30 Sep 2024 13:41:29 +0200
+Subject: [PATCH 15/16] Expose the unmodified Dolby Vision RPU T35 buffers
+
+---
+ libavcodec/av1dec.c   | 14 ++++++++++++++
+ libavcodec/libdav1d.c | 14 ++++++++++++++
+ libavutil/frame.c     |  1 +
+ libavutil/frame.h     |  6 ++++++
+ 4 files changed, 35 insertions(+)
+
+diff --git a/libavcodec/av1dec.c b/libavcodec/av1dec.c
+index 1d5b9ef4f4..f0d22af314 100644
+--- a/libavcodec/av1dec.c
++++ b/libavcodec/av1dec.c
+@@ -1002,6 +1002,8 @@ static int export_itut_t35(AVCodecContext *avctx, AVFrame *frame,
+         break;
+     }
+     case ITU_T_T35_PROVIDER_CODE_DOLBY: {
++        AVBufferRef *rpu_buf;
++        AVFrameSideData *rpu;
+         int provider_oriented_code = bytestream2_get_be32(&gb);
+         if (itut_t35->itu_t_t35_country_code != ITU_T_T35_COUNTRY_CODE_US ||
+             provider_oriented_code != 0x800)
+@@ -1014,6 +1016,18 @@ static int export_itut_t35(AVCodecContext *avctx, AVFrame *frame,
+             break; // ignore
+         }
+ 
++        rpu_buf = av_buffer_alloc(itut_t35->payload_size);
++        if (rpu_buf) {
++            memcpy(rpu_buf->data, itut_t35->payload, itut_t35->payload_size);
++            rpu = av_frame_new_side_data_from_buf(frame, AV_FRAME_DATA_DOVI_RPU_BUFFER_T35, rpu_buf);
++            if (!rpu) {
++                av_buffer_unref(&rpu_buf);
++                return AVERROR(ENOMEM);
++            }
++        } else {
++            return AVERROR(ENOMEM);
++        }
++
+         ret = ff_dovi_attach_side_data(&s->dovi, frame);
+         if (ret < 0)
+             return ret;
+diff --git a/libavcodec/libdav1d.c b/libavcodec/libdav1d.c
+index 546b42e9c6..04d0ca4b90 100644
+--- a/libavcodec/libdav1d.c
++++ b/libavcodec/libdav1d.c
+@@ -562,6 +562,8 @@ static int libdav1d_receive_frame(AVCodecContext *c, AVFrame *frame)
+             break;
+         }
+         case ITU_T_T35_PROVIDER_CODE_DOLBY: {
++            AVBufferRef *rpu_buf;
++            AVFrameSideData *rpu;
+             int provider_oriented_code = bytestream2_get_be32(&gb);
+             if (itut_t35->country_code != ITU_T_T35_COUNTRY_CODE_US ||
+                 provider_oriented_code != 0x800)
+@@ -574,6 +576,18 @@ static int libdav1d_receive_frame(AVCodecContext *c, AVFrame *frame)
+                 break; // ignore
+             }
+ 
++            rpu_buf = av_buffer_alloc(itut_t35->payload_size);
++            if (rpu_buf) {
++                memcpy(rpu_buf->data, itut_t35->payload, itut_t35->payload_size);
++                rpu = av_frame_new_side_data_from_buf(frame, AV_FRAME_DATA_DOVI_RPU_BUFFER_T35, rpu_buf);
++                if (!rpu) {
++                    av_buffer_unref(&rpu_buf);
++                    goto fail;
++                }
++            } else {
++                goto fail;
++            }
++
+             res = ff_dovi_attach_side_data(&dav1d->dovi, frame);
+             if (res < 0)
+                 goto fail;
+diff --git a/libavutil/frame.c b/libavutil/frame.c
+index f0a0dba018..ab48eaab2b 100644
+--- a/libavutil/frame.c
++++ b/libavutil/frame.c
+@@ -45,6 +45,7 @@ static const AVSideDataDescriptor sd_props[] = {
+     [AV_FRAME_DATA_FILM_GRAIN_PARAMS]           = { "Film grain parameters" },
+     [AV_FRAME_DATA_DETECTION_BBOXES]            = { "Bounding boxes for object detection and classification" },
+     [AV_FRAME_DATA_DOVI_RPU_BUFFER]             = { "Dolby Vision RPU Data" },
++    [AV_FRAME_DATA_DOVI_RPU_BUFFER_T35]         = { "Dolby Vision RPU ITU T35 Data" },
+     [AV_FRAME_DATA_DOVI_METADATA]               = { "Dolby Vision Metadata" },
+     [AV_FRAME_DATA_LCEVC]                       = { "LCEVC NAL data" },
+     [AV_FRAME_DATA_VIEW_ID]                     = { "View ID" },
+diff --git a/libavutil/frame.h b/libavutil/frame.h
+index f7806566d5..8f2bbfdf6f 100644
+--- a/libavutil/frame.h
++++ b/libavutil/frame.h
+@@ -200,6 +200,12 @@ enum AVFrameSideDataType {
+      */
+     AV_FRAME_DATA_DOVI_RPU_BUFFER,
+ 
++    /**
++     * Dolby Vision RPU ITU T35 raw data, suitable for passing to SVT-AV1
++     * or other libraries. Array of uint8_t.
++     */
++    AV_FRAME_DATA_DOVI_RPU_BUFFER_T35,
++
+     /**
+      * Parsed Dolby Vision metadata, suitable for passing to a software
+      * implementation. The payload is the AVDOVIMetadata struct defined in
+-- 
+2.39.5 (Apple Git-154)
+

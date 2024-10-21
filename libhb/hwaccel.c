@@ -1,6 +1,6 @@
 /* hwaccel.c
  *
- * Copyright (c) 2003-2023 HandBrake Team
+ * Copyright (c) 2003-2024 HandBrake Team
  * This file is part of the HandBrake source code.
  * Homepage: <http://handbrake.fr/>.
  * It may be used under the terms of the GNU General Public License v2.
@@ -84,6 +84,10 @@ int hb_hwaccel_hw_ctx_init(int codec_id, int hw_decode, void **hw_device_ctx)
     else if (hw_decode & HB_DECODE_SUPPORT_NVDEC)
     {
         hw_type = av_hwdevice_find_type_by_name("cuda");
+    }
+    else if (hw_decode & HB_DECODE_SUPPORT_MF)
+    {
+        hw_type = av_hwdevice_find_type_by_name("d3d11va");
     }
 
     if (hw_type != AV_HWDEVICE_TYPE_NONE)
@@ -229,7 +233,7 @@ hb_buffer_t * hb_hwaccel_copy_video_buffer_to_hw_video_buffer(hb_job_t *job, hb_
             goto fail;
         }
 
-        hb_buffer_t *out = hb_avframe_to_video_buffer(hw_frame, (AVRational){1,1}, 1);
+        hb_buffer_t *out = hb_avframe_to_video_buffer(hw_frame, (AVRational){1,1});
 
         av_frame_unref(&frame);
         av_frame_unref(hw_frame);
@@ -243,23 +247,6 @@ hb_buffer_t * hb_hwaccel_copy_video_buffer_to_hw_video_buffer(hb_job_t *job, hb_
     }
 
     return NULL;
-}
-
-const char * hb_hwaccel_get_codec_name(enum AVCodecID codec_id)
-{
-    switch (codec_id)
-    {
-        case AV_CODEC_ID_H264:
-            return "h264_hwaccel";
-        case AV_CODEC_ID_HEVC:
-            return "hevc_hwaccel";
-        case AV_CODEC_ID_AV1:
-            return "av1_hwaccel";
-        case AV_CODEC_ID_PRORES:
-            return "prores_hwaccel";
-        default:
-            return "hwaccel";
-    }
 }
 
 static int is_encoder_supported(int encoder_id)
@@ -330,3 +317,29 @@ int hb_hwaccel_decode_is_enabled(hb_job_t *job)
         return 0;
     }
 }
+
+#if HB_PROJECT_FEATURE_MF
+int hb_directx_available()
+{
+    if (is_hardware_disabled())
+    {
+        return 0;
+    }
+    enum AVHWDeviceType hw_type = av_hwdevice_find_type_by_name("d3d11va");
+    if (hw_type == AV_HWDEVICE_TYPE_NONE)
+    {
+        hb_log("directx: not available on this system");
+        return 0;
+    }
+
+    hb_log("directx: is available");
+    return 1;
+}
+#else // HB_PROJECT_FEATURE_MF
+
+int hb_directx_available()
+{
+    return -1;
+}
+
+#endif // HB_PROJECT_FEATURE_MF

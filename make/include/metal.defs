@@ -1,0 +1,42 @@
+METAL.cc = xcrun metal
+METAL.ar = xcrun metal-ar
+METAL.ld = xcrun metallib
+METAL.bin2c = ./bin2c
+
+METAL.args.extra = -O2 -std=macos-metal2.4
+
+###############################################################################
+
+define import.METAL
+    $(1).METAL.cc = $$(METAL.cc)
+    $(1).METAL.ar = $$(METAL.ar)
+    $(1).METAL.ld = $$(METAL.ld)
+    $(1).METAL.bin2c = $$(METAL.bin2c)
+
+    $(1).METAL.args.extra = $$(METAL.args.extra)
+
+    ###########################################################################
+
+    $(1).METAL.c = -c -frecord-sources $$(4)
+    $(1).METAL.o = -o $$(3);
+
+    $(1).METAL.ld.c = $$(4)
+    $(1).METAL.ld.o = -o $$(3);
+    $(1).METAL.C_METALLIB.args = !ld !ld.c !ld.o
+
+    $(1).METAL.bin2c.c = $$(4)
+    $(1).METAL.bin2c.o = $$(3);
+    $(1).METAL.C_BIN2C.args = !bin2c !bin2c.c !bin2c.o
+
+    # FUNCTION: Metal compile source
+    $(1).METAL.C_O.args = !cc !args.extra !c !o
+    define $(1).METAL.C_O
+        $$(call fn.ARGS,$(1).METAL,$$($(1).METAL.C_O.args),$$(1).air,$$(2))
+        $$(call fn.ARGS,$(1).METAL,$$($(1).METAL.C_METALLIB.args),$$(1).metallib,$$(1).air)
+        $$(call fn.ARGS,$(1).METAL,$$($(1).METAL.C_BIN2C.args),$$(1).c,$$(1).metallib)
+        $$(call fn.ARGS,$(1).GCC,$$($(1).GCC.C_O.args),$$(1).o,$$(1).c)
+    endef
+
+    ###########################################################################
+
+endef

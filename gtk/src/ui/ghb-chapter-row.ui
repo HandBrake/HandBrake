@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <requires lib="gtk" version="4.0"/>
+  <template class="GhbChapterRow" parent="GtkListBoxRow">
+    <property name="activatable">0</property>
+    <property name="child">
+      <object class="GtkBox" id="hbox1">
+        <property name="spacing">6</property>
+        <child>
+          <object class="GtkLabel" id="index_label">
+            <property name="width-chars">3</property>
+            <property name="xalign">1.0</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkLabel" id="dummy_label">
+            <property name="width-chars">1</property>
+            <property name="xalign">1.0</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkLabel" id="start_label">
+            <property name="width-chars">10</property>
+            <property name="xalign">1.0</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkLabel" id="duration_label">
+            <property name="width-chars">10</property>
+            <property name="xalign">1.0</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkEntry" id="chapter_entry">
+            <property name="margin-start">12</property>
+            <property name="hexpand">1</property>
+            <accessibility>
+              <property name="label" translatable="yes">Chapter Title</property>
+            </accessibility>
+            <signal name="changed" handler="chapter_name_changed_cb" object="GhbChapterRow" swapped="true"/>
+          </object>
+        </child>
+      </object>
+    </property>
+  </template>
+</interface>

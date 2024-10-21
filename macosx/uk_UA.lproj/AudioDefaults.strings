@@ -1,0 +1,216 @@
+/* Class = "NSButton"; ibShadowedToolTip = "Enable this if your playback device supports FLAC. This permits FLAC passthru to be selected when automatic passthru selecion is enabled."; ObjectID = "0HY-xB-cvO"; */
+"0HY-xB-cvO.ibShadowedToolTip" = "Увімкніть, якщо ваш пристрій підтримує відтворення FLAC. Це дозволить вибрати FLAC, коли увімкнено автоматичний вибір.";
+
+/* Class = "NSTableColumn"; headerCell.title = "Mixdown"; ObjectID = "0kT-0J-3k2"; */
+"0kT-0J-3k2.headerCell.title" = "Мікшування";
+
+/* Class = "NSTextFieldCell"; title = "Text Cell"; ObjectID = "1XC-VS-X3g"; */
+"1XC-VS-X3g.title" = "Text Cell";
+
+/* Class = "NSTextFieldCell"; title = "Text Cell"; ObjectID = "3o5-Gn-Vao"; */
+"3o5-Gn-Vao.title" = "Text Cell";
+
+/* Class = "NSPopUpButton"; ibExternalAccessibilityDescription = "Codec"; ObjectID = "6lx-af-rBL"; */
+"6lx-af-rBL.ibExternalAccessibilityDescription" = "Кодек";
+
+/* Class = "NSPopUpButton"; ibShadowedToolTip = "Audio encoder."; ObjectID = "6lx-af-rBL"; */
+"6lx-af-rBL.ibShadowedToolTip" = "Перетворювач аудіо.";
+
+/* Class = "NSTextFieldCell"; title = "Audio encoder settings for each selected track:"; ObjectID = "007-WM-RmC"; */
+"007-WM-RmC.title" = "Налаштування перетворювача аудіо для кожної вибраної доріжки:";
+
+/* Class = "NSTextFieldCell"; title = "Text Cell"; ObjectID = "7sl-o7-pUh"; */
+"7sl-o7-pUh.title" = "Text Cell";
+
+/* Class = "NSButtonCell"; title = "DTS"; ObjectID = "8mC-Wx-myL"; */
+"8mC-Wx-myL.title" = "DTS";
+
+/* Class = "NSButtonCell"; title = "Use only first encoder for secondary audio"; ObjectID = "66v-2g-DHn"; */
+"66v-2g-DHn.title" = "Використовувати лише перший перетворювач для другорядного аудіо";
+
+/* Class = "NSTextFieldCell"; title = "Passthru Fallback:"; ObjectID = "AQe-Sg-Qgh"; */
+"AQe-Sg-Qgh.title" = "Запасний варіант для передачі сигналу:";
+
+/* Class = "NSScrollView"; ibExternalAccessibilityDescription = "Audio Track Languages"; ObjectID = "aTC-39-h6S"; */
+"aTC-39-h6S.ibExternalAccessibilityDescription" = "Мови для аудіо доріжок";
+
+/* Class = "NSScrollView"; ibShadowedToolTip = "Select the languages to use with the Track Selection Behavior setting."; ObjectID = "aTC-39-h6S"; */
+"aTC-39-h6S.ibShadowedToolTip" = "Оберіть мови для використання з увімкненим налаштуванням Поведінка Вибору Доріжки.";
+
+/* Class = "NSTextField"; ibExternalAccessibilityDescription = "DRC"; ObjectID = "BaY-Lo-8xn"; */
+"BaY-Lo-8xn.ibExternalAccessibilityDescription" = "DRC";
+
+/* Class = "NSTextField"; ibShadowedToolTip = "Dynamic Range Compression. Reduces the volume difference between loud and quiet sounds. Only applies to AC-3 source tracks when encoding to another format.\n\n0: Do not apply DRC.\n1: Apply DRC according to the compression hints embedded in the source track.\n\nValues greater than 1 further increase the volume of quiet sounds. Values greater than 2.5 are typically unnecessary and may introduce audible distortion."; ObjectID = "BaY-Lo-8xn"; */
+"BaY-Lo-8xn.ibShadowedToolTip" = "DRC (Стиснення Динамічного Діапазону). Зменшує різницю в звуці між гучними і тихими звуками. Застосовується лише до аудіо-джерел AC-3 при кодуванні в інші формати.\n\n0: Не застосовувати DRC.\n1:  Застосувати DRC згідно вбудованим підказкам в вихідній доріжці.\n\nЗначення, більші за 1 можуть збільшити гучність тихих звуків. Значення, більші за 2.5 зазвичай не доцільні, тому що вони можуть призвести до появи звукових спотворень.";
+
+/* Class = "NSButton"; ibShadowedToolTip = "Enable this if your playback device supports E-AC3. This permits E-AC3 passthru to be selected when automatic passthru selecion is enabled."; ObjectID = "BK7-c4-kkk"; */
+"BK7-c4-kkk.ibShadowedToolTip" = "Увімкніть це, якщо ваш пристрій відтворення підтримує E-AC3. Це дозволяє обирати передачу сигналу в E-AC3, якщо увімкнено автоматичний вибір передачі сигналу.";
+
+/* Class = "NSButtonCell"; title = "AAC"; ObjectID = "cUX-iP-UAs"; */
+"cUX-iP-UAs.title" = "AAC";
+
+/* Class = "NSSlider"; ibExternalAccessibilityDescription = "Gain"; ObjectID = "DbI-6O-BzA"; */
+"DbI-6O-BzA.ibExternalAccessibilityDescription" = "Підсилення";
+
+/* Class = "NSSlider"; ibShadowedToolTip = "Audio gain in decibels (dB). Increases or decreases audio volume."; ObjectID = "DbI-6O-BzA"; */
+"DbI-6O-BzA.ibShadowedToolTip" = "Підсилення аудіо в децибелах (дБ). Збільшує або зменшує гучність аудіо";
+
+/* Class = "NSSlider"; ibExternalAccessibilityDescription = "DRC"; ObjectID = "DGi-Dl-5nh"; */
+"DGi-Dl-5nh.ibExternalAccessibilityDescription" = "DRC";
+
+/* Class = "NSSlider"; ibShadowedToolTip = "Dynamic Range Compression. Reduces the volume difference between loud and quiet sounds. Only applies to AC-3 source tracks when encoding to another format.\n\n0: Do not apply DRC.\n1: Apply DRC according to the compression hints embedded in the source track.\n\nValues greater than 1 further increase the volume of quiet sounds. Values greater than 2.5 are typically unnecessary and may introduce audible distortion."; ObjectID = "DGi-Dl-5nh"; */
+"DGi-Dl-5nh.ibShadowedToolTip" = "DRC (Стиснення Динамічного Діапазону). Зменшує різницю в звуці між гучними і тихими звуками. Застосовується лише до аудіо-джерел AC-3 при кодуванні в інші формати.\n\n0: Не застосовувати DRC.\n1:  Застосувати DRC згідно вбудованим підказкам в вихідній доріжці.\n\nЗначення, більші за 1 можуть збільшити гучність тихих звуків. Значення, більші за 2.5 зазвичай не доцільні, тому що вони можуть призвести до появи звукових спотворень.";
+
+/* Class = "NSTextFieldCell"; title = "Text Cell"; ObjectID = "dpw-He-8eZ"; */
+"dpw-He-8eZ.title" = "Text Cell";
+
+/* Class = "CocoaBindingsConnection"; ibShadowedIsNilPlaceholder = "Auto"; ObjectID = "DxT-bF-prJ"; */
+"DxT-bF-prJ.ibShadowedIsNilPlaceholder" = "Авто";
+
+/* Class = "NSButton"; ibShadowedToolTip = "Enable this if your playback device supports DTS. This permits DTS passthru to be selected when automatic passthru selecion is enabled."; ObjectID = "E93-Md-aWa"; */
+"E93-Md-aWa.ibShadowedToolTip" = "Увімкніть це, якщо ваш пристрій відтворення підтримує DTS. Це дозволяє обирати передачу сигналу в DTS, якщо увімкнено автоматичний вибір передачі сигналу.";
+
+/* Class = "NSButton"; ibShadowedToolTip = "Enable this if your playback device supports AC3. This permits AC3 passthru to be selected when automatic passthru selecion is enabled."; ObjectID = "fgl-Ev-ELt"; */
+"fgl-Ev-ELt.ibShadowedToolTip" = "Увімкніть це, якщо ваш пристрій відтворення підтримує AC3. Це дозволяє обирати передачу сигналу в AC3, якщо увімкнено автоматичний вибір передачі сигналу.";
+
+/* Class = "NSTextFieldCell"; title = "Text Cell"; ObjectID = "fH9-oV-QdJ"; */
+"fH9-oV-QdJ.title" = "Text Cell";
+
+/* Class = "NSButton"; ibShadowedToolTip = "Enable this if your playback device supports AAC. This permits AAC passthru to be selected when automatic passthru selecion is enabled."; ObjectID = "fzd-MO-xaB"; */
+"fzd-MO-xaB.ibShadowedToolTip" = "Увімкніть це, якщо ваш пристрій відтворення підтримує AAC. Це дозволяє обирати передачу сигналу в AAC, якщо увімкнено автоматичний вибір передачі сигналу.";
+
+/* Class = "NSTextFieldCell"; title = "Track Selection Behavior:"; ObjectID = "GbM-vm-RC2"; */
+"GbM-vm-RC2.title" = "Поведінка Вибору Доріжки";
+
+/* Class = "NSButton"; ibShadowedToolTip = "Enable this if your playback device supports MP2. This permits MP2 passthru to be selected when automatic passthru selecion is enabled."; ObjectID = "GHJ-25-kZl"; */
+"GHJ-25-kZl.ibShadowedToolTip" = "Увімкніть це, якщо ваш пристрій відтворення підтримує MP2. Це дозволяє обирати передачу сигналу в MP2, якщо увімкнено автоматичний вибір передачі сигналу.";
+
+/* Class = "NSMenuItem"; title = "All Matching Selected Languages"; ObjectID = "GZP-q7-SYy"; */
+"GZP-q7-SYy.title" = "Усі Відповідні До Обраних Мов";
+
+/* Class = "NSPopUpButton"; ibExternalAccessibilityDescription = "Bitrate"; ObjectID = "hHP-dw-nba"; */
+"hHP-dw-nba.ibExternalAccessibilityDescription" = "Бітрейт";
+
+/* Class = "NSPopUpButton"; ibShadowedToolTip = "Audio bit rate in kilobits per second (kbps). Smaller values reduce audio quality. Larger values use more data and may be less compatible."; ObjectID = "hHP-dw-nba"; */
+"hHP-dw-nba.ibShadowedToolTip" = "Бітрейт аудіо в кілобітах за секунду (кбіт/с). Чим менше значення, тим гірша якість аудіо. Більші значення призводять до збільшення розміру файлу (і відповідно якості аудіо), проте можуть бути менш сумісними.";
+
+/* Class = "NSPopUpButton"; ibExternalAccessibilityDescription = "Mixdown"; ObjectID = "igm-hS-rrD"; */
+"igm-hS-rrD.ibExternalAccessibilityDescription" = "Мікшування";
+
+/* Class = "NSPopUpButton"; ibShadowedToolTip = "Mixdown type. Controls how multi-channel audio is mixed into fewer channels, or whether the original channels are preserved.\n\nDolby Surround and Dolby Pro Logic II convert multi-channel audio to stereo and matrix encode additional channels for surround reproduction on compatible equipment, while maintaining stereo compatibility."; ObjectID = "igm-hS-rrD"; */
+"igm-hS-rrD.ibShadowedToolTip" = "Тип мікшування. Визначає, чи мікшується багатоканальне аудіо в менше число каналів або оригінальні канали зберігаються.\n\nDolby Surround та Dolby Pro Logic II конвертують багатоканальне аудіо в стерео і матрично кодують додаткові канали для об’ємного звучання на підтримуваних пристроях, зберігаючи при цьому сумісність зі стерео.";
+
+/* Class = "NSButton"; ibShadowedToolTip = "Enable this if your playback device supports DTS-HD. This permits DTS-HD passthru to be selected when automatic passthru selecion is enabled."; ObjectID = "IxI-o9-jMs"; */
+"IxI-o9-jMs.ibShadowedToolTip" = "Увімкніть це, якщо ваш пристрій відтворення підтримує DTS-HD. Це дозволяє обирати передачу сигналу в DTS-HD, якщо увімкнено автоматичний вибір передачі сигналу.";
+
+/* Class = "NSMenuItem"; title = "First Matching Selected Languages"; ObjectID = "jDd-Ji-7Sm"; */
+"jDd-Ji-7Sm.title" = "Найперша Відповідна До Обраних Мов";
+
+/* Class = "NSButtonCell"; title = "Cancel"; ObjectID = "Jn4-1L-J1g"; */
+"Jn4-1L-J1g.title" = "Скасувати";
+
+/* Class = "NSButtonCell"; title = "OK"; ObjectID = "kDe-1L-VkD"; */
+"kDe-1L-VkD.title" = "ОК";
+
+/* Class = "NSWindow"; title = "Audio Selection Behaviour"; ObjectID = "kwM-lz-5lG"; */
+"kwM-lz-5lG.title" = "Поведінка Вибору Аудіо";
+
+/* Class = "NSPopUpButton"; ibShadowedToolTip = "Audio encoder to use when a track suitable for passthru is unavailable."; ObjectID = "LdN-Cx-ZJY"; */
+"LdN-Cx-ZJY.ibShadowedToolTip" = "Аудіокодер для використання, коли доріжка, що підходить для передачі сигналу, недоступна.";
+
+/* Class = "NSButtonCell"; title = "DTS-HD"; ObjectID = "LX6-kc-5vq"; */
+"LX6-kc-5vq.title" = "DTS-HD";
+
+/* Class = "NSTableColumn"; headerCell.title = "Samplerate"; ObjectID = "LxC-Qx-psh"; */
+"LxC-Qx-psh.headerCell.title" = "Частота дискретизації";
+
+/* Class = "NSTextFieldCell"; title = "Languages:"; ObjectID = "mAT-Jp-SG1"; */
+"mAT-Jp-SG1.title" = "Мови:";
+
+/* Class = "NSTextFieldCell"; title = "0"; ObjectID = "MiI-OV-waZ"; */
+"MiI-OV-waZ.title" = "0";
+
+/* Class = "NSMenuItem"; title = "None"; ObjectID = "mvw-Hg-JFM"; */
+"mvw-Hg-JFM.title" = "Відсутня";
+
+/* Class = "NSTableColumn"; headerCell.title = "Gain"; ObjectID = "N7h-CJ-quV"; */
+"N7h-CJ-quV.headerCell.title" = "Підсилення";
+
+/* Class = "NSButtonCell"; title = "FLAC"; ObjectID = "naS-No-CdV"; */
+"naS-No-CdV.title" = "FLAC";
+
+/* Class = "NSPopUpButton"; ibShadowedToolTip = "Track Selection Behavior.\n\nNone will not select any audio tracks by default.\n\nFirst Matching Selected Languages adds the first audio track matching each of the selected languages present in the source.\n\nAll Matching Selected Languages adds all audio tracks matching each of the selected languages present in the source."; ObjectID = "oiD-QI-wly"; */
+"oiD-QI-wly.ibShadowedToolTip" = "Поведінка Вибору Доріжки\n\nВідсутня не буде обирати жодного аудіо треку за замовчуванням.\n\nНайперша Відповідна До Обраних Мов додає найпершу звукову доріжку, що відповідає кожній з вибраних мов, які є у джерелі.\n\nУсі Відповідні До Обраних Мов додає всі звукові доріжки, що відповідають кожній з вибраних мов, які є у джерелі.";
+
+/* Class = "NSButton"; ibShadowedToolTip = "Enable this if your playback device supports TrueHD. This permits TrueHD passthru to be selected when automatic passthru selecion is enabled."; ObjectID = "os0-Jl-OXF"; */
+"os0-Jl-OXF.ibShadowedToolTip" = "Увімкніть це, якщо ваш пристрій відтворення підтримує TrueHD. Це дозволяє обирати передачу сигналу в TrueHD, якщо увімкнено автоматичний вибір передачі сигналу.";
+
+/* Class = "NSSegmentedCell"; otA-K4-TxM.ibShadowedToolTips[0] = "Add Audio Track"; ObjectID = "otA-K4-TxM"; */
+"otA-K4-TxM.ibShadowedToolTips[0]" = "Додати Аудіо Доріжку";
+
+/* Class = "NSSegmentedCell"; otA-K4-TxM.ibShadowedToolTips[1] = "Remove Selected Audio Track"; ObjectID = "otA-K4-TxM"; */
+"otA-K4-TxM.ibShadowedToolTips[1]" = "Видалити Обрану Аудіо Доріжку";
+
+/* Class = "NSTextFieldCell"; title = "0"; ObjectID = "OVr-Jm-VrK"; */
+"OVr-Jm-VrK.title" = "0";
+
+/* Class = "NSTableColumn"; headerCell.title = "Codec"; ObjectID = "pR9-d4-SNf"; */
+"pR9-d4-SNf.headerCell.title" = "Кодек";
+
+/* Class = "NSPopUpButton"; ibExternalAccessibilityDescription = "Samplerate"; ObjectID = "r80-yv-59n"; */
+"r80-yv-59n.ibExternalAccessibilityDescription" = "Частота дискретизації";
+
+/* Class = "NSPopUpButton"; ibShadowedToolTip = "Audio sample rate in kilohertz (kHz). Auto is recommended."; ObjectID = "r80-yv-59n"; */
+"r80-yv-59n.ibShadowedToolTip" = "Частота дискретизації аудіо в кілогерцах (кГц). Рекомендується опція 'Авто'.";
+
+/* Class = "NSButton"; ibShadowedToolTip = "Enable this if your playback device supports Opus. This permits Opus passthru to be selected when automatic passthru selecion is enabled."; ObjectID = "Ry1-gA-ns4"; */
+"Ry1-gA-ns4.ibShadowedToolTip" = "Увімкніть це, якщо ваш пристрій відтворення підтримує Opus. Це дозволяє вибирати пряму передачу Opus, коли включено автоматичний вибір прямої передачі.";
+
+/* Class = "NSTextFieldCell"; title = "Auto Passthru:"; ObjectID = "s6s-EH-5CB"; */
+"s6s-EH-5CB.title" = "Автоматичне Passthru:";
+
+/* Class = "NSButtonCell"; title = "MP3"; ObjectID = "sdZ-Rx-JoG"; */
+"sdZ-Rx-JoG.title" = "MP3";
+
+/* Class = "NSButtonCell"; title = "E-AC3"; ObjectID = "u9h-dn-wcK"; */
+"u9h-dn-wcK.title" = "E-AC3";
+
+/* Class = "NSButton"; ibShadowedToolTip = "Only the primary audio track will be encoded with the full encoder list. All additional audio tracks will be encoded with first encoder only."; ObjectID = "uF5-6E-EIe"; */
+"uF5-6E-EIe.ibShadowedToolTip" = "Тільки основна звукова доріжка буде закодована за допомогою повного списку кодувальників. Усі додаткові звукові доріжки будуть закодовані лише першим кодувальником.";
+
+/* Class = "NSTextFieldCell"; title = "Text Cell"; ObjectID = "uFK-z7-8Yj"; */
+"uFK-z7-8Yj.title" = "Text Cell";
+
+/* Class = "NSMenuItem"; title = "Item"; ObjectID = "UJy-A2-Bb1"; */
+"UJy-A2-Bb1.title" = "Елемент";
+
+/* Class = "NSTableColumn"; headerCell.title = "Bitrate"; ObjectID = "vhn-7C-4aZ"; */
+"vhn-7C-4aZ.headerCell.title" = "Бітрейт";
+
+/* Class = "NSButtonCell"; title = "AC3"; ObjectID = "VnE-3R-bUf"; */
+"VnE-3R-bUf.title" = "AC3";
+
+/* Class = "NSButton"; ibShadowedToolTip = "Enable this if your playback device supports MP3. This permits MP3 passthru to be selected when automatic passthru selecion is enabled."; ObjectID = "vUx-OV-W5T"; */
+"vUx-OV-W5T.ibShadowedToolTip" = "Увімкніть це, якщо ваш пристрій відтворення підтримує MP3. Це дозволяє обирати передачу сигналу в MP3, якщо увімкнено автоматичний вибір передачі сигналу.";
+
+/* Class = "NSButtonCell"; title = "Opus"; ObjectID = "wAh-LS-JzG"; */
+"wAh-LS-JzG.title" = "Opus";
+
+/* Class = "NSTextFieldCell"; title = "Table View Cell"; ObjectID = "XKL-2e-Dlv"; */
+"XKL-2e-Dlv.title" = "Table View Cell";
+
+/* Class = "NSTextField"; ibExternalAccessibilityDescription = "Gain"; ObjectID = "xnA-03-Bul"; */
+"xnA-03-Bul.ibExternalAccessibilityDescription" = "Підсилення";
+
+/* Class = "NSTextField"; ibShadowedToolTip = "Audio gain in decibels (dB). Increases or decreases audio volume."; ObjectID = "xnA-03-Bul"; */
+"xnA-03-Bul.ibShadowedToolTip" = "Підсилення аудіо в децибелах (дБ). Збільшує або зменшує гучність аудіо";
+
+/* Class = "NSButtonCell"; title = "MP2"; ObjectID = "Z8O-AS-UdA"; */
+"Z8O-AS-UdA.title" = "MP2";
+
+/* Class = "NSButtonCell"; title = "TrueHD"; ObjectID = "z9d-P3-6UP"; */
+"z9d-P3-6UP.title" = "TrueHD";
+
+/* Class = "NSTableColumn"; headerCell.title = "DRC"; ObjectID = "zX9-T9-wKy"; */
+"zX9-T9-wKy.headerCell.title" = "DRC";
+

@@ -23,11 +23,12 @@
 - (instancetype)initWithFrame:(NSRect)frame
 {
     self = [super initWithFrame:frame];
-    if (self) {
+    if (self)
+    {
         [[self cell] setBezelStyle:NSBezelStyleRounded];
         _textAttributes = [self textAttributesWithFontSize:DOCK_TEXTFIELD_FONTSIZE];
         _smallTextAttributes = [self textAttributesWithFontSize:DOCK_TEXTFIELD_FONTSIZE - 2];
-        [self changeGradientColors:[NSColor grayColor] endColor:[NSColor blackColor]];
+        [self changeGradientColors:NSColor.grayColor endColor:NSColor.blackColor];
     }
 
     return self;
@@ -36,13 +37,13 @@
 - (NSDictionary *)textAttributesWithFontSize:(CGFloat)fontSize
 {
     NSShadow *shadow = [[NSShadow alloc] init];
-    shadow.shadowColor = [NSColor blackColor];
+    shadow.shadowColor = NSColor.blackColor;
     shadow.shadowOffset = NSMakeSize(2, -2);
     shadow.shadowBlurRadius = 6;
 
     NSFont *font = [NSFont monospacedDigitSystemFontOfSize:fontSize weight:NSFontWeightBold];
 
-    return @{ NSForegroundColorAttributeName: [NSColor whiteColor],
+    return @{ NSForegroundColorAttributeName: NSColor.whiteColor,
               NSFontAttributeName: font,
               NSShadowAttributeName: shadow};
 }
@@ -57,13 +58,17 @@
 - (void)drawRect:(NSRect)dirtyRect
 {
     if (self.isHidden)
+    {
         return;
+    }
 
-    NSSize size = self.bounds.size;
-    NSRect blackOutlineFrame = NSMakeRect(0.0, 0.0, size.width, size.height - 1.0);
-    double radius = self.bounds.size.height / 2;
+    const NSSize size = self.bounds.size;
+    const NSRect blackOutlineFrame = NSMakeRect(0.0, 0.0, size.width, size.height - 1.0);
+    const double radius = size.height / 2;
+    NSBezierPath *bezierPath = [NSBezierPath bezierPathWithRoundedRect:blackOutlineFrame
+                                                               xRadius:radius yRadius:radius];
 
-    [self.gradient drawInBezierPath:[NSBezierPath bezierPathWithRoundedRect:blackOutlineFrame xRadius:radius yRadius:radius] angle:90];
+    [self.gradient drawInBezierPath:bezierPath angle:90];
 
     NSDictionary *attributes = self.textAttributes;
     NSString *budgetString = self.stringValue;
@@ -76,8 +81,8 @@
     }
 
 	NSPoint centerPoint;
-	centerPoint.x = (dirtyRect.size.width / 2) - (stringSize.width / 2);
-	centerPoint.y = dirtyRect.size.height / 2 - (stringSize.height / 2) - 2;
+	centerPoint.x = (size.width / 2) - (stringSize.width / 2);
+	centerPoint.y = size.height / 2 - (stringSize.height / 2) - 2;
 
 	[budgetString drawAtPoint:centerPoint withAttributes:attributes];
 }

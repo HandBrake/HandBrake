@@ -1,6 +1,6 @@
 /* decavsub.c
 
-   Copyright (c) 2003-2022 HandBrake Team
+   Copyright (c) 2003-2024 HandBrake Team
    This file is part of the HandBrake source code
    Homepage: <http://handbrake.fr/>.
    It may be used under the terms of the GNU General Public License v2.
@@ -10,6 +10,7 @@
 #include "handbrake/handbrake.h"
 #include "handbrake/hbffmpeg.h"
 #include "handbrake/decavsub.h"
+#include "handbrake/extradata.h"
 
 struct hb_avsub_context_s
 {
@@ -91,6 +92,15 @@ hb_avsub_context_t * decavsubInit( hb_work_object_t * w, hb_job_t * job )
             hb_yuv2rgb(ctx->subtitle->palette[15]));
         av_dict_set( &av_opts, "palette", palette, 0 );
         free(palette);
+
+        // Make the decoder output empty and fully transparent
+        // subtitles, to avoid collecting valid packets together.
+        // There is no way to distinguish a partial packet from a zero
+        // rect packet with the info returned by avcodec_decode_subtitle2()
+        if (ctx->subtitle->config.dest == PASSTHRUSUB)
+        {
+            av_dict_set(&av_opts, "output_empty_rects", "1", 0);
+        }
     }
 
     if (hb_avcodec_open(ctx->context, codec, &av_opts, 0))
@@ -123,14 +133,14 @@ hb_avsub_context_t * decavsubInit( hb_work_object_t * w, hb_job_t * job )
             case AV_CODEC_ID_EIA_608:
             {
                 // Mono font for CC
-                hb_subtitle_add_ssa_header(ctx->subtitle, HB_FONT_MONO,
-                    20, 384, 288);
+                hb_set_ssa_extradata(&ctx->subtitle->extradata,
+                                     HB_FONT_MONO, 20, 384, 288);
             } break;
 
             default:
             {
-                hb_subtitle_add_ssa_header(ctx->subtitle, HB_FONT_SANS,
-                    .066 * job->title->geometry.height, width, height);
+                hb_set_ssa_extradata(&ctx->subtitle->extradata, HB_FONT_SANS,
+                                     .066 * job->title->geometry.height, width, height);
             } break;
         }
     }
@@ -405,7 +415,7 @@ int decavsubWork( hb_avsub_context_t * ctx,
 
         if (!usable_sub)
         {
-            // Discard accumulated passthrough subtitle data
+            // Discard accumulated passthru subtitle data
             hb_buffer_list_close(&ctx->list_pass);
             avsubtitle_free(&subtitle);
             continue;
@@ -478,7 +488,7 @@ int decavsubWork( hb_avsub_context_t * ctx,
 
         if (ctx->subtitle->format == TEXTSUB)
         {
-            // TEXTSUB && (PASSTHROUGHSUB || RENDERSUB)
+            // TEXTSUB && (PASSTHRUSUB || RENDERSUB)
 
             // Text subtitles are treated the same regardless of
             // whether we are burning or passing through.  They
@@ -511,7 +521,7 @@ int decavsubWork( hb_avsub_context_t * ctx,
         else if (ctx->subtitle->config.dest == PASSTHRUSUB &&
                  hb_subtitle_can_pass(ctx->subtitle->source, ctx->job->mux))
         {
-            // PICTURESUB && PASSTHROUGHSUB
+            // PICTURESUB && PASSTHRUSUB
 
             // subtitles may be spread across multiple packets
             //

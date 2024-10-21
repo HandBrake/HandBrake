@@ -54,6 +54,18 @@ $(info $(foreach v,$(sort $(filter GCC.%,$(.VARIABLES))),$(call fn.PRINTVAR,$v))
 $(info )
 endif
 
+## report: metal
+##
+ifeq (metal,$(REPORT))
+$(info ###############################################################################)
+$(info ##)
+$(info ## METAL)
+$(info ##)
+$(info ###############################################################################)
+$(info $(foreach v,$(sort $(filter METAL.%,$(.VARIABLES))),$(call fn.PRINTVAR,$v)))
+$(info )
+endif
+
 ## report: var
 ##
 ifeq (var,$(REPORT))

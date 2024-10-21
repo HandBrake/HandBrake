@@ -1,6 +1,6 @@
 /* encvorbis.c
 
-   Copyright (c) 2003-2022 HandBrake Team
+   Copyright (c) 2003-2024 HandBrake Team
    This file is part of the HandBrake source code
    Homepage: <http://handbrake.fr/>.
    It may be used under the terms of the GNU General Public License v2.
@@ -8,7 +8,7 @@
  */
 
 #include "handbrake/hbffmpeg.h"
-
+#include "handbrake/extradata.h"
 #include "handbrake/handbrake.h"
 #include "handbrake/audio_remap.h"
 
@@ -31,7 +31,7 @@ hb_work_object_t hb_encvorbis =
 
 struct hb_work_private_s
 {
-    uint8_t   *buf;
+    float     *buf;
     hb_job_t  *job;
     hb_list_t *list;
 
@@ -60,18 +60,8 @@ int encvorbisInit(hb_work_object_t *w, hb_job_t *job)
     w->private_data = pv;
     pv->job = job;
 
-    int i;
-    ogg_packet header[3];
-
     hb_log("encvorbis: opening libvorbis");
 
-    /* init */
-    for (i = 0; i < 3; i++)
-    {
-        // Zero vorbis headers so that we don't crash in mk_laceXiph
-        // when vorbis_encode_setup_managed fails.
-        memset(w->config->vorbis.headers[i], 0, sizeof(ogg_packet));
-    }
     vorbis_info_init(&pv->vi);
 
     pv->out_discrete_channels =
@@ -109,23 +99,27 @@ int encvorbisInit(hb_work_object_t *w, hb_job_t *job)
     /* add a comment */
     vorbis_comment_init(&pv->vc);
     vorbis_comment_add_tag(&pv->vc, "Encoder", "HandBrake");
-    vorbis_comment_add_tag(&pv->vc, "LANGUAGE", w->config->vorbis.language);
+    vorbis_comment_add_tag(&pv->vc, "LANGUAGE", audio->config.lang.simple);
 
     /* set up the analysis state and auxiliary encoding storage */
     vorbis_analysis_init(&pv->vd, &pv->vi);
     vorbis_block_init(&pv->vd, &pv->vb);
 
     /* get the 3 headers */
+    ogg_packet header[3];
     vorbis_analysis_headerout(&pv->vd, &pv->vc,
                               &header[0], &header[1], &header[2]);
-    ogg_packet *pheader;
-    for (i = 0; i < 3; i++)
+
+    uint8_t headers[3][HB_CONFIG_MAX_SIZE];
+    for (int i = 0; i < 3; i++)
     {
-        pheader = (ogg_packet*)w->config->vorbis.headers[i];
+        ogg_packet *pheader = (ogg_packet *)headers[i];
         memcpy(pheader, &header[i], sizeof(ogg_packet));
-        pheader->packet = w->config->vorbis.headers[i] + sizeof(ogg_packet);
+        pheader->packet = headers[i] + sizeof(ogg_packet);
         memcpy(pheader->packet, header[i].packet, header[i].bytes );
     }
+
+    hb_set_xiph_extradata(w->extradata, headers);
 
     pv->input_samples = pv->out_discrete_channels * OGGVORBIS_FRAME_SIZE;
     audio->config.out.samples_per_frame = OGGVORBIS_FRAME_SIZE;
@@ -235,7 +229,7 @@ static hb_buffer_t* Encode(hb_work_object_t *w)
     }
 
     /* Process more samples */
-    hb_list_getbytes(pv->list, pv->buf, pv->input_samples * sizeof(float),
+    hb_list_getbytes(pv->list, (uint8_t *)pv->buf, pv->input_samples * sizeof(float),
                      &pv->pts, NULL);
     buffer = vorbis_analysis_buffer(&pv->vd, OGGVORBIS_FRAME_SIZE);
     for (i = 0; i < OGGVORBIS_FRAME_SIZE; i++)

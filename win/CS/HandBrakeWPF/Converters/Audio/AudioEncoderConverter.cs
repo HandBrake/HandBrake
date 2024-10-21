@@ -70,6 +70,10 @@ namespace HandBrakeWPF.Converters.Audio
                     {
                         encoders.Remove(encoder);
                     }
+                    else if (outputFormat == OutputFormat.Mkv && !encoder.SupportsMkv)
+                    {
+                        encoders.Remove(encoder);
+                    }
                     else if (outputFormat == OutputFormat.WebM && !encoder.SupportsWebM)
                     {
                         encoders.Remove(encoder);
@@ -81,7 +85,7 @@ namespace HandBrakeWPF.Converters.Audio
                 {
                     foreach (HBAudioEncoder encoder in HandBrakeEncoderHelpers.AudioEncoders)
                     {
-                        if (encoder.IsPassthrough)
+                        if (encoder.IsPassthru)
                         {
                             encoders.Remove(encoder);
                         }
@@ -97,7 +101,7 @@ namespace HandBrakeWPF.Converters.Audio
                     Audio sourceTrack = values[2] as Audio;
                     foreach (HBAudioEncoder encoder in HandBrakeEncoderHelpers.AudioEncoders)
                     {
-                        if (encoder.IsPassthrough)
+                        if (encoder.IsPassthru)
                         {
                             RemoveIfNotSupported(encoder, sourceTrack, encoders);
                         }

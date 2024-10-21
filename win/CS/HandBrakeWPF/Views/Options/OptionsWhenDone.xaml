@@ -26,6 +26,17 @@
         </Style>
 
         <converters:EnumComboConverter x:Key="enumComboConverter" />
+
+
+        <DataTemplate x:Key="PlaceholderItemTemplate">
+            <StackPanel Orientation="Horizontal" Height="Auto" Width="Auto">
+                <StackPanel VerticalAlignment="Center" >
+                    <Border Background="{StaticResource Ui.Blue}" CornerRadius="9" BorderThickness="1" VerticalAlignment="Center" >
+                        <TextBlock Text="{Binding Name}" VerticalAlignment="Center" Foreground="White" HorizontalAlignment="Center" Margin="5,2" />
+                    </Border>
+                </StackPanel>
+            </StackPanel>
+        </DataTemplate>
     </UserControl.Resources>
 
     <StackPanel Name="WhenDone" Orientation="Vertical" Margin="10,5,0,0">
@@ -75,9 +86,26 @@
 
                 <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
                     <TextBlock VerticalAlignment="Center"  Margin="25,0,5,0" Text="{x:Static Properties:Resources.Options_Arguments}" />
-                    <TextBox Name="SendToArguments" Text="{Binding Arguments}" Width="250" ToolTip="{x:Static Properties:ResourcesTooltips.OptionsView_SendFileToArguments}" />
+                    <TextBox Name="SendToArguments" Text="{Binding Arguments}" Width="250" ToolTip="{x:Static Properties:ResourcesTooltips.OptionsView_SendFileToArguments}"
+                             DragEnter="SendToArguments_OnDragEnter" />
                 </StackPanel>
-                <TextBlock Text="{x:Static Properties:Resources.OptionsView_SendFileToArgPlaceholders}" Margin="91,1,0,0" Style="{StaticResource subText}"/>
+
+                <TextBlock Text="{x:Static Properties:Resources.OptionsView_FormatOptions}"  Margin="91,1,0,0" Style="{StaticResource subText}" TextWrapping="Wrap" />
+
+                <ListView x:Name="WhenDoneArguments" ItemsSource="{Binding WhenDoneArguments}"  Background="Transparent"
+                          ItemTemplate="{StaticResource PlaceholderItemTemplate}" BorderThickness="0" Margin="91,1,0,0"
+                          MaxWidth="400" HorizontalAlignment="Left"
+                          ScrollViewer.HorizontalScrollBarVisibility="Disabled" Panel.ZIndex="1"
+                          ScrollViewer.VerticalScrollBarVisibility="Disabled"
+                          PreviewMouseDown="WhenDoneArguments_OnPreviewMouseDown">
+
+                    <ListView.ItemsPanel>
+                        <ItemsPanelTemplate >
+                            <WrapPanel  />
+                        </ItemsPanelTemplate>
+                    </ListView.ItemsPanel>
+                </ListView>
+
             </StackPanel>
 
             <TextBlock Text="{x:Static Properties:Resources.Options_Notifications}" Style="{StaticResource subHeader}" Margin="0,10,0,10" />

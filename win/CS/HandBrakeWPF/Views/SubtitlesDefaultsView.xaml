@@ -9,6 +9,8 @@
              xmlns:Properties="clr-namespace:HandBrakeWPF.Properties"
              d:DesignHeight="350"
              d:DesignWidth="550"
+             MinWidth="620"
+             Width="620"
              ResizeMode="NoResize"
              SizeToContent="WidthAndHeight"
              WindowStartupLocation="CenterScreen"
@@ -81,9 +83,9 @@
 
                         <StackPanel Orientation="Vertical" Grid.Column="0">
                             <TextBlock Text="{x:Static Properties:Resources.Shared_AvailableLanguages}" Margin="0,0,0,5"/>
-                            <ListBox Name="availableLanguages" ItemsSource="{Binding AvailableLanguages}" 
+                            <ListBox Name="availableLanguages" ItemsSource="{Binding AvailableLanguages}" DisplayMemberPath="DisplayNative"
                                      helpers:ListBoxHelper.SelectedItems="{Binding SelectedAvailableToMove}" 
-                                             SelectionMode="Extended" Width="140" Height="120" />
+                                             SelectionMode="Extended" Width="225" Height="120" />
                         </StackPanel>
 
                         <DockPanel Grid.Column="1" Margin="10,0,10,0">
@@ -98,7 +100,7 @@
                             <TextBlock Text="{x:Static Properties:Resources.Shared_ChosenLanguages}"  Margin="0,0,0,5"/>
                             <ListBox Name="selectedLanguages" ItemsSource="{Binding SubtitleBehaviours.SelectedLanguages}" 
                                      helpers:ListBoxHelper.SelectedItems="{Binding SelectedLanguagesToMove}" 
-                                             SelectionMode="Extended" Width="140" Height="120"
+                                             SelectionMode="Extended" Width="225" Height="120" DisplayMemberPath="DisplayNative"
                                              dd:DragDrop.DropHandler="{Binding}"
                                              dd:DragDrop.IsDragSource="True"
                                              dd:DragDrop.IsDropTarget="True"/>

@@ -1,8 +1,8 @@
-diff -ur opus-1.2.1.orig/configure.ac opus-1.2.1/configure.ac
---- opus-1.2.1.orig/configure.ac	2017-06-26 11:06:46.000000000 -0700
-+++ opus-1.2.1/configure.ac	2018-06-01 17:00:15.140159087 -0700
-@@ -812,6 +812,13 @@
-   AC_DEFINE([ENABLE_UPDATE_DRAFT], [1], [Enable bitstream changes from draft-ietf-codec-opus-update])
+diff -ur opus-1.5.1.orig/configure.ac opus-1.5.1/configure.ac
+--- opus-1.5.1.orig/configure.ac	2024-03-04 18:09:13.000000000 +0100
++++ opus-1.5.1/configure.ac	2024-04-02 18:05:44.754597300 +0200
+@@ -962,6 +962,13 @@
+        AC_DEFINE([DISABLE_UPDATE_DRAFT], [1], [Disable bitstream fixes from RFC 8251])
  ])
  
 +AS_IF([test "$enable_shared" = "no"], [
@@ -15,7 +15,7 @@ diff -ur opus-1.2.1.orig/configure.ac opus-1.2.1/configure.ac
  
  saved_CFLAGS="$CFLAGS"
  CFLAGS="$CFLAGS -fvisibility=hidden"
-@@ -843,6 +850,8 @@
+@@ -1035,6 +1042,8 @@
  AC_CHECK_FUNCS([__malloc_hook])
  
  AC_SUBST([PC_BUILD])
@@ -24,9 +24,9 @@ diff -ur opus-1.2.1.orig/configure.ac opus-1.2.1/configure.ac
  
  AC_CONFIG_FILES([
      Makefile
-diff -ur opus-1.2.1.orig/opus.pc.in opus-1.2.1/opus.pc.in
---- opus-1.2.1.orig/opus.pc.in	2017-06-15 15:24:07.000000000 -0700
-+++ opus-1.2.1/opus.pc.in	2018-06-01 17:00:26.500350502 -0700
+diff -ur opus-1.5.1.orig/opus.pc.in opus-1.5.1/opus.pc.in
+--- opus-1.5.1.orig/opus.pc.in	2024-01-12 20:55:26.000000000 +0100
++++ opus-1.5.1/opus.pc.in	2024-04-02 18:07:59.951941700 +0200
 @@ -11,6 +11,6 @@
  Version: @VERSION@
  Requires:

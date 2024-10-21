@@ -2,8 +2,9 @@ __deps__ := X265_8
 $(eval $(call import.MODULE.defs,X265_10,x265_10,$(__deps__),x265))
 $(eval $(call import.CONTRIB.defs,X265_10))
 
-X265_10.FETCH.url     = https://github.com/HandBrake/HandBrake-contribs/releases/download/contribs/x265-snapshot-20230403-12776.tar.gz
-X265_10.FETCH.sha256  = 23898695c5520e9e971d12e88125d5ad03ad67f462fc8ecaa016b48adad7cb20
+X265_10.FETCH.url     = https://github.com/HandBrake/HandBrake-contribs/releases/download/contribs2/x265_4.0.tar.gz
+X265_10.FETCH.url    += https://bitbucket.org/multicoreware/x265_git/downloads/x265_4.0.tar.gz
+X265_10.FETCH.sha256  = 75b4d05629e365913de3100b38a459b04e2a217a8f30efaa91b572d8e6d71282
 
 # Silence "warning: overriding recipe for target" messages
 X265_10.FETCH.target =
@@ -11,6 +12,7 @@ X265_10.FETCH.target =
 X265_10.build_dir             = 10bit
 X265_10.CONFIGURE.exe         = cmake
 X265_10.CONFIGURE.args.prefix = -DCMAKE_INSTALL_PREFIX="$(X265_10.CONFIGURE.prefix)"
+X265_10.CONFIGURE.args.host   = -DCMAKE_HOST_SYSTEM="$(X265_10.CONFIGURE.build)"
 X265_10.CONFIGURE.deps        =
 X265_10.CONFIGURE.static      =
 X265_10.CONFIGURE.shared      = -DENABLE_SHARED=OFF
@@ -51,22 +53,18 @@ ifeq (1,$(HOST.cross))
         X265_10.CONFIGURE.extra += -DWIN32=ON
         X265_10.CONFIGURE.extra += -DCMAKE_SYSTEM_NAME=Windows
         X265_10.CONFIGURE.extra += -DCMAKE_C_COMPILER=$(X265_10.GCC.gcc)
-        X265_10.CONFIGURE.extra += -DCMAKE_C_FLAGS="-static-libgcc -static-libstdc++ -static"
-        X265_10.CONFIGURE.extra += -DCMAKE_SHARED_LIBRARY_LINK_C_FLAGS="-static-libgcc -static-libstdc++ -static"
         X265_10.CONFIGURE.extra += -DCMAKE_CXX_COMPILER=$(X265_10.GCC.gxx)
-        X265_10.CONFIGURE.extra += -DCMAKE_CXX_FLAGS="-static-libgcc -static-libstdc++ -static"
-        X265_10.CONFIGURE.extra += -DCMAKE_SHARED_LIBRARY_LINK_CXX_FLAGS="-static-libgcc -static-libstdc++ -static"
         X265_10.CONFIGURE.extra += -DCMAKE_RC_COMPILER=$(HOST.cross.prefix)windres
         X265_10.CONFIGURE.args.host  = -DCMAKE_HOST_SYSTEM="$(X265_10.CONFIGURE.host)"
-    else ifeq ($(HOST.system),darwin)
-        X265_10.CONFIGURE.args.host  = -DCMAKE_HOST_SYSTEM="$(X265_10.CONFIGURE.host)"
-    else
-        X265_10.CONFIGURE.args.host = -DCMAKE_SYSTEM_NAME="$(X265_10.CONFIGURE.host)"
     endif
-    X265_10.CONFIGURE.args.build = -DCMAKE_HOST_SYSTEM="$(X265_10.CONFIGURE.build)"
-    X265_10.CONFIGURE.extra     += -DCMAKE_SYSTEM_PROCESSOR=$(HOST.machine)
+    ifeq (aarch64,$(HOST.machine:arm64=aarch64))
+        X265_10.CONFIGURE.extra += -DCROSS_COMPILE_ARM64=ON -DCROSS_COMPILE_NEON_DOTPROD=ON -DCROSS_COMPILE_NEON_I8MM=ON
+    endif
+    X265_10.CONFIGURE.args.build = -DCMAKE_SYSTEM_PROCESSOR=$(HOST.machine)
 else
-    X265_10.CONFIGURE.args.host  = -DCMAKE_HOST_SYSTEM="$(X265_10.CONFIGURE.host)"
+    ifeq (arm64-darwin,$(HOST.machine)-$(HOST.system))
+        X265_10.CONFIGURE.extra += -DCPU_HAS_NEON_I8MM=ON
+    endif
 endif
 
 ## find CMakeLists.txt

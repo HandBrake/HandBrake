@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="18122" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="22154" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="18122"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="22154"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -46,18 +46,18 @@
                                                 </textField>
                                                 <popUpButton toolTip="Container format. Video, audio, and other tracks are combined into a single file of this type. Affects compatibility." verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="txV-1R-WoD">
                                                     <rect key="frame" x="45" y="-4" width="177" height="22"/>
-                                                    <constraints>
-                                                        <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="140" id="em9-IL-zmS"/>
-                                                    </constraints>
                                                     <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="clipping" state="on" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="4NR-1i-weK" id="tqd-2J-YTU">
                                                         <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                                                         <font key="font" metaFont="smallSystem"/>
-                                                        <menu key="menu" title="OtherViews" id="Q1Z-yT-7iY">
+                                                        <menu key="menu" id="Q1Z-yT-7iY">
                                                             <items>
                                                                 <menuItem state="on" id="4NR-1i-weK"/>
                                                             </items>
                                                         </menu>
                                                     </popUpButtonCell>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="140" id="em9-IL-zmS"/>
+                                                    </constraints>
                                                     <connections>
                                                         <accessibilityConnection property="title" destination="bpr-UY-4al" id="2Lk-cn-fRD"/>
                                                         <binding destination="-2" name="enabled" keyPath="self.job" id="vIZ-WQ-JdM">
@@ -103,23 +103,23 @@
                                                 </button>
                                                 <button translatesAutoresizingMaskIntoConstraints="NO" id="lUi-Oc-208">
                                                     <rect key="frame" x="-1" y="39" width="102" height="16"/>
-                                                    <string key="toolTip">Optimize MP4 for progressive download. After encoding, data is reorganized and rewritten to allow immediate playback over a network, without needing to download the entire file.</string>
+                                                    <string key="toolTip">Optimize for progressive download. After encoding, data is reorganized and rewritten to allow immediate playback over a network, without needing to download the entire file.</string>
                                                     <buttonCell key="cell" type="check" title="Web Optimized" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" inset="2" id="wcc-5d-Dgj">
                                                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                         <font key="font" metaFont="smallSystem"/>
                                                     </buttonCell>
                                                     <connections>
+                                                        <binding destination="-2" name="hidden" keyPath="self.job.mp4OptionsEnabled" previousBinding="IF3-Zz-8Fc" id="yl3-Tj-GIQ">
+                                                            <dictionary key="options">
+                                                                <string key="NSValueTransformerName">NSNegateBoolean</string>
+                                                            </dictionary>
+                                                        </binding>
                                                         <binding destination="-2" name="enabled" keyPath="self.job" id="IF3-Zz-8Fc">
                                                             <dictionary key="options">
                                                                 <string key="NSValueTransformerName">NSIsNotNil</string>
                                                             </dictionary>
                                                         </binding>
-                                                        <binding destination="-2" name="value" keyPath="self.job.mp4HttpOptimize" id="LYj-Km-ze0"/>
-                                                        <binding destination="-2" name="hidden" keyPath="self.job.mp4OptionsEnabled" previousBinding="IF3-Zz-8Fc" id="PQl-de-g6C">
-                                                            <dictionary key="options">
-                                                                <string key="NSValueTransformerName">NSNegateBoolean</string>
-                                                            </dictionary>
-                                                        </binding>
+                                                        <binding destination="-2" name="value" keyPath="self.job.optimize" id="E5v-QJ-Bhj"/>
                                                     </connections>
                                                 </button>
                                                 <button translatesAutoresizingMaskIntoConstraints="NO" id="fPv-Vw-I89">
@@ -346,28 +346,5 @@
             </constraints>
             <point key="canvasLocation" x="-88.5" y="-145"/>
         </customView>
-        <button id="JNB-kV-52S">
-            <rect key="frame" x="0.0" y="0.0" width="102" height="16"/>
-            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-            <string key="toolTip">Optimize MP4 for progressive download. After encoding, data is reorganized and rewritten to allow immediate playback over a network, without needing to download the entire file.</string>
-            <buttonCell key="cell" type="check" title="Web Optimized" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" inset="2" id="ma8-UR-dx2">
-                <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                <font key="font" metaFont="smallSystem"/>
-            </buttonCell>
-            <connections>
-                <binding destination="-2" name="enabled" keyPath="self.job" id="GM1-ep-4mM">
-                    <dictionary key="options">
-                        <string key="NSValueTransformerName">NSIsNotNil</string>
-                    </dictionary>
-                </binding>
-                <binding destination="-2" name="value" keyPath="self.job.mp4HttpOptimize" id="oQw-Gl-n8O"/>
-                <binding destination="-2" name="hidden" keyPath="self.job.mp4OptionsEnabled" previousBinding="GM1-ep-4mM" id="JOB-2s-UOH">
-                    <dictionary key="options">
-                        <string key="NSValueTransformerName">NSNegateBoolean</string>
-                    </dictionary>
-                </binding>
-            </connections>
-            <point key="canvasLocation" x="-211" y="-402"/>
-        </button>
     </objects>
 </document>

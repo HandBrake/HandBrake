@@ -1,0 +1,11 @@
+[Desktop Entry]
+Name=HandBrake
+GenericName=Media Transcoder
+Comment=Transcodes DVD, Blu-ray, and other media
+Exec=ghb %f
+Icon=fr.handbrake.ghb
+Terminal=false
+Type=Application
+Categories=GTK;AudioVideo;Video;
+Keywords=Format Converter;Video Encoder;
+MimeType=application/ogg;application/x-extension-mp4;application/x-flac;application/x-matroska;application/x-ogg;audio/ac3;audio/mp4;audio/mpeg;audio/ogg;audio/x-flac;audio/x-matroska;audio/x-mp2;audio/x-mp3;audio/x-mpeg;audio/x-vorbis;video/mp4;video/mp4v-es;video/mpeg;video/msvideo;video/quicktime;video/vnd.divx;video/x-avi;video/x-m4v;video/x-matroska;video/x-mpeg;video/x-ms-wmv;video/ogg;video/x-ogm+ogg;video/x-theora+ogg;x-content/video-dvd;x-content/video-vcd;x-content/video-svcd;

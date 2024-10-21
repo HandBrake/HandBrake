@@ -1,0 +1,562 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" id="root">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace"/>
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0"/>
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string"/>
+              <xsd:attribute name="type" type="xsd:string"/>
+              <xsd:attribute name="mimetype" type="xsd:string"/>
+              <xsd:attribute ref="xml:space"/>
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string"/>
+              <xsd:attribute name="name" type="xsd:string"/>
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2"/>
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1"/>
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3"/>
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4"/>
+              <xsd:attribute ref="xml:space"/>
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required"/>
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="FilterView_Deblock" xml:space="preserve">
+    <value>Deblock reduces blocky artifacts caused by low quality video compression.</value>
+  </data>
+  <data name="FilterView_DecombDeinterlace" xml:space="preserve">
+    <value>Aseta kamman- tai lomituksenpoistosuodattimen valintoja.
+
+Kammanpoistosuodatin poistaa valikoiden lomituksen kuvista, jotka vaikuttavat
+lomitetuilta. Lomittamattomien kuvien laatu säilyy.
+
+Perinteinen lomituksenpoistosuodatin vaikuttaa kaikkiin kuviin.
+Lomittamattomien kuvien laatu kärsii hieman.</value>
+  </data>
+  <data name="FilterView_Denoise" xml:space="preserve">
+    <value>Kohinanpoisto vähentää tai poistaa kohinan tai rakeisuuden vaikutelmaa. Se voi parantaa pakkaustehokkuutta tuottaa parempilaatuisen videon pienemmässä tiedostokoossa.
+Liian jyrkkä kohinanpoistoasetus voi vahingoittaa kuvan laatua häivyttämällä yksityiskohtia.
+
+NLMeans on hyvälaatuinen mutta hitaahko kohinanpoistosuodatin. Käytä sitä, milloin laatu on nopeutta tärkeämpää.
+
+HQDN3D on mukautuva matalapäästäsuodatin, joka on NLMeansiä nopeampi mutta huonompi säilyttämään pieniä yksityiskohtia.</value>
+  </data>
+  <data name="FilterView_Detelecine" xml:space="preserve">
+    <value>Detelecine-suodatin poistaa kuvasta telecine-prosessin (jota käytetään muunnettaessa filmiä television kuvanopeuteen) kampamaisia virheitä.</value>
+  </data>
+  <data name="FilterView_Grayscale" xml:space="preserve">
+    <value>Harmaasävytys poistaa videon värikomponentin ja tuottaa usein mustavalkoiseksi kutsutun videon.</value>
+  </data>
+  <data name="MainView_Destination" xml:space="preserve">
+    <value>Kohdesijainti kansioineen ja tiedostonimineen. Tämä on paikka, jonne uusi video luodaan, samoin kuin mitä sille annetaan nimeksi.</value>
+  </data>
+  <data name="MainView_IpodAtom" xml:space="preserve">
+    <value>Lisää erityinen MP4-merkki mahdollistaaksesi toiston vanhoissa viidennen sukupolven iPodeissa noin vuodelta 2006. Muutkin asetukset voivat vaikuttaa yhteensopivuuteen.</value>
+  </data>
+  <data name="MainView_Mux" xml:space="preserve">
+    <value>Säilömuoto. Video-, ääni- ja muut raidat yhdistetään yksittäiseksi tämän tyyppiseksi tiedostoksi. Vaikuttaa yhteensopivuuteen.</value>
+  </data>
+  <data name="MainView_Optimise" xml:space="preserve">
+    <value>Optimoi MP4 etenevään lataukseen. Koodauksen jälkeen data järjestetään ja kirjoitetaan uudelleen välitöntä verkkotoistoa varten, jossa koko tiedostoa ei tarvitse ladata.</value>
+  </data>
+  <data name="MainView_Range" xml:space="preserve">
+    <value>Lähdealueen valinta. Oletuksena valitaan kaikki luvut, ja koko lähde koodataan.</value>
+  </data>
+  <data name="MainView_Title" xml:space="preserve">
+    <value>Koodattava nimike tai videoleike.
+Bluray- ja DVD-lähteissä on usein useampia nimikkeitä, joista varsinainen elokuva on tyypillisesti pisin.</value>
+  </data>
+  <data name="PictureSettingsView_Anamorphic" xml:space="preserve">
+    <value>Anamorphic allows arbitrary storage dimensions while preserving the original aspect during playback.
+
+None disables anamorphic. Video storage dimensions and display dimensions will be identical. Only useful for compatibility with certain legacy devices.
+
+Automatic maximizes storage resolution while preserving the original display aspect ratio. Recommended.
+
+Loose is similar to Auto, but attempts to preserve the storage aspect ratio. This can result in a slight storage resolution loss compared to Auto.
+
+Custom allows manually setting all parameters. Useful for correcting an incorrect source display aspect and for professionals needing advanced control in post-production.</value>
+  </data>
+  <data name="PictureSettingsView_AutoCrop" xml:space="preserve">
+    <value>Rajaa automaattisesti mustat reunat videon laidoilta.</value>
+  </data>
+  <data name="PictureSettingsView_CropBottom" xml:space="preserve">
+    <value>Rajaa video alareunasta.</value>
+  </data>
+  <data name="PictureSettingsView_CropLeft" xml:space="preserve">
+    <value>Rajaa video vasemmasta reunasta.</value>
+  </data>
+  <data name="PictureSettingsView_CropRight" xml:space="preserve">
+    <value>Rajaa video oikeasta reunasta.</value>
+  </data>
+  <data name="PictureSettingsView_CropTop" xml:space="preserve">
+    <value>Rajaa video yläreunasta.</value>
+  </data>
+  <data name="PictureSettingsView_Height" xml:space="preserve">
+    <value>Tämä on kuvakorkeus, johon video talletetaan.
+Todelliset näyttömitat voivat erota, ellei kuvapistesuhde ole 1 : 1.</value>
+  </data>
+  <data name="PictureSettingsView_ManualCrop" xml:space="preserve">
+    <value>Rajaa videota käsin.</value>
+  </data>
+  <data name="PictureSettingsView_Modulus" xml:space="preserve">
+    <value>Tasaa talletusmitat tämän arvon monikertoihin.
+
+Asetus on tarpeen vain yhteensopivuussyistä joidenkin laitteiden kanssa.
+Käytä arvoa 2, ellei vastaan tulee yhteensopivuusongelmia.</value>
+  </data>
+  <data name="PictureSettingsView_PAR" xml:space="preserve">
+    <value>Kuvapistesuhde määrittää kuvapisteiden muodon.
+1 : 1 -suhde määrittää neliömäisen kuvapisteen, muut arvot nelikulmaisia.
+Toistimet skaalaavat kuvaa saavuttaakseen tietyn kuvasuhteen.</value>
+  </data>
+  <data name="PictureSettingsView_Width" xml:space="preserve">
+    <value>Tämä on kuvaleveys, johon video talletetaan.
+Todelliset näyttömitat voivat erota, ellei kuvapistesuhde ole 1 : 1.</value>
+  </data>
+  <data name="QueueView_DeleteJob" xml:space="preserve">
+    <value>Poista työ jonosta.</value>
+  </data>
+  <data name="QueueView_ResetJobStatus" xml:space="preserve">
+    <value>Palauta työn tila odottavaksi.</value>
+  </data>
+  <data name="QueueView_SendJobBack" xml:space="preserve">
+    <value>Lähetä työ takaisin pääikkunaan muokattavaksi.</value>
+  </data>
+  <data name="Video_AvgBitrate" xml:space="preserve">
+    <value>Aseta keskimääräinen bittinopeus.
+
+Välitön bittinopeus tietyllä hetkellä voi olla pienempi tai suurempi, mutta
+pitkässä aikajaksossa keskimäärin tämän arvon mukainen. Jos välitöntä
+bittinopeutta pitää rajata, katso x264:n vbv-bufsize- ja vbv-maxrate-asetuksia.</value>
+  </data>
+  <data name="Video_ConstantFramerate" xml:space="preserve">
+    <value>Ottaa käyttöön vakiokuvanopeustulosteen.</value>
+  </data>
+  <data name="Video_Encoders" xml:space="preserve">
+    <value>Käytettävissä olevat videokoodaimet.</value>
+  </data>
+  <data name="Video_EncoderTune" xml:space="preserve">
+    <value>Hienosäädä asetuksia yleisten tilanteiden optimointia varten.
+
+Tämä voi parantaa tiettyjen lähteiden suorituskykyä tai tulostiedoston
+ominaisuuksia. Muutoksia käytetään esiasetuksen jälkeen mutta ennen
+muita parametreja.</value>
+  </data>
+  <data name="Video_ExtraOpts" xml:space="preserve">
+    <value>Koodaimen lisäasetukset.
+
+Kaksoispistein erotettu koodainvalintojen luettelo.</value>
+  </data>
+  <data name="Video_FastDecode" xml:space="preserve">
+    <value>Vähennä koodaimen suoritinkäyttöä.
+
+Aseta tämä, jos laitteella on vaikeuksia toistaa tulosta (kuvia jää pois).</value>
+  </data>
+  <data name="Video_Framerate" xml:space="preserve">
+    <value>Tuloskuvanopeus.
+
+”Sama kuin lähteessä” on suositeltu. Jos lähdevideon kuvanopeus on vaihteleva, ”Sama kuin lähteessä” säästää sen.</value>
+  </data>
+  <data name="Video_Level" xml:space="preserve">
+    <value>Asettaa ja varmistaa yhteensopivuuden annetun tason kanssa.
+
+Ohittaa kaikki muut asetukset.</value>
+  </data>
+  <data name="Video_PeakFramerate" xml:space="preserve">
+    <value>Ottaa käyttöön vaihtelevan kuvanopeuden tulosteen, jonka huippunopeuden määrittää kuvanopeusasetus.</value>
+  </data>
+  <data name="Video_Presets" xml:space="preserve">
+    <value>Adjusts encoder settings to trade off compression efficiency against encoding speed.
+
+This establishes your default encoder settings.
+Tunes, profiles, levels and advanced option string will be applied to this.
+You should generally set this option to the slowest you can bear since slower
+settings will result in better quality or smaller files.</value>
+  </data>
+  <data name="Video_Profile" xml:space="preserve">
+    <value>Asettaa ja varmistaa yhteensopivuuden annetun profiilin kanssa.
+
+Ohittaa kaikki muut asetukset.</value>
+  </data>
+  <data name="Video_Quality" xml:space="preserve">
+    <value>Set the desired quality factor.
+The encoder targets a certain quality.
+The scale used by each video encoder is different.
+
+x264's scale is logarithmic and lower values correspond to higher quality.
+So small decreases in value will result in progressively larger increases
+in the resulting file size.  A value of 0 means lossless and will result
+in a file size that is larger than the original source, unless the source
+was also lossless.
+Suggested values are: 18 to 20 for standard definition sources and 20 to 23 for high definition sources.
+
+FFMpeg's and Theora's scale is more linear.
+These encoders do not have a lossless mode.</value>
+  </data>
+  <data name="Video_TurboAnalysisPass" xml:space="preserve">
+    <value>During the analysis pass of a multi pass encode, use settings that speed things along.</value>
+  </data>
+  <data name="Video_MultiPass" xml:space="preserve">
+    <value>Perform Multi Pass Encoding.
+
+The 'Bitrate' option is prerequisite. During the analysis passes, statistics about
+the video are collected. Then in the final pass, those statistics are used
+to make bitrate allocation decisions.</value>
+  </data>
+  <data name="Video_VariableFramerate" xml:space="preserve">
+    <value>Ottaa käyttöön vaihtelevan kuvanopeuden tulosteen (VFR).
+
+VFR ei ole yhteensopiva kaikkien toistinten kanssa.</value>
+  </data>
+  <data name="MainView_WhenDone" xml:space="preserve">
+    <value>Kun HandBrake on päässyt loppuun nykyisen jonon tai koodauksen, tehdään tämä toimenpide.</value>
+  </data>
+  <data name="MainView_Browse" xml:space="preserve">
+    <value>Selaa ja valitse koodauksen uusi kohdesijainti tai -tiedostonimi.</value>
+  </data>
+  <data name="MainView_Angle" xml:space="preserve">
+    <value>Koodattava videokulma. Vaikuttaa vain useampikulmaisiin DVD- ja Bluray-levyihin.</value>
+  </data>
+  <data name="MainView_AddPreset" xml:space="preserve">
+    <value>Lisää uusi esiasetus.</value>
+  </data>
+  <data name="MainView_PresetAdditionalOptions" xml:space="preserve">
+    <value>Esiasetuksen lisävalinnat.</value>
+  </data>
+  <data name="MainView_Presets" xml:space="preserve">
+    <value>Presets are groups of encode settings tailored for specific scenarios. Select the one closest matching your intent.
+ 
+ Overrides all encode settings. Settings may be further adjusted after selecting a preset.</value>
+  </data>
+  <data name="MainView_RemovePreset" xml:space="preserve">
+    <value>Poista valittu esiasetus.</value>
+  </data>
+  <data name="SourceSelection_TitleSpecific" xml:space="preserve">
+    <value>Some Sources may contain more than one video clip, or a collection of Titles. Blu-ray and DVD Sources often have multiple Titles.
+
+If you know the specific title you wish to encode you can enter it here and HandBrake will scan only that title rather than every title in the source file. Otherwise, leave the field blank.</value>
+  </data>
+  <data name="FilterView_CustomDenoiseParams" xml:space="preserve">
+    <value>Custom Denoise parameters.
+ 
+NLMeans syntax: y-strength=y:y-origin-tune=y:y-patch-size=y:y-range=y:y-frame-count=y:y-prefilter=y:cb-strength=c:cb-origin-tune=c:cb-patch-size=c:cb-range=c:cb-frame-count=c:cb-prefilter=c:cr-strength=c:cr-origin-tune=c:cr-patch-size=c:cr-range=c:cr-frame-count=c:cr-prefilter=c:threads=t
+
+NLMeans default: y-strength=6:y-origin-tune=1:y-patch-size=7:y-range=3:y-frame-count=2:y-prefilter=0:cb-strength=6:cb-origin-tune=1:cb-patch-size=7:cb-range=3:cb-frame-count=2:cb-prefilter=0
+
+HQDN3D syntax: y-spatial=y:cb-spatial=c:cr-spatial=c:y-temporal=y:cb-temporal=c:cr-temporal=c
+
+HQDN3D default: y-spatial=3:cb-spatial=2:cr-spatial=2:y-temporal=2:cb-temporal=3:cr-temporal=3</value>
+  </data>
+  <data name="FilterView_DenoisePreset" xml:space="preserve">
+    <value>Kohinanpoistosuodatitimen esiasetus. Asettaa suodattimen voimakkuuden.</value>
+  </data>
+  <data name="FilterView_DenoiseTune" xml:space="preserve">
+    <value>Denoise tune. Further adjusts the Denoise preset to optimize settings for specific scenarios.
+ 
+- None uses the default preset settings.
+ 
+- Film refines settings for use with most live action content.
+ 
+- Grain only processes color channels. Useful for preserving the film-like look of luminance grain while reducing or removing color noise.
+
+- High Motion reduces color smearing in high motion scenes by avoiding temporal processing for color channels. Useful for sports and action videos.
+
+- Animation is useful for cel animation such as anime and cartoons.
+
+- Tape is useful for low-detail analog tape sources such as VHS, where Film does not produce a desirable result.
+
+- Sprite is useful for 1-/4-/8-/16-bit 2-dimensional games. Sprite is not designed for high definition video.</value>
+  </data>
+  <data name="FilterView_Deinterlace" xml:space="preserve">
+    <value>Deinterlace removes comb artifacts from the picture.
+
+Bwdif and Yadif are two popular and fast deinterlacers.
+
+Decomb switches between multiple interpolation algorithms for speed and quality.</value>
+  </data>
+  <data name="FilterView_DeinterlaceCustom" xml:space="preserve">
+    <value>Custom Deinterlace parameters.
+ 
+ Bwdif and Yadif syntax: mode=m:parity=p
+ 
+ Bwdif and Yadif default: mode=3
+ 
+ Decomb syntax: mode=m:magnitude-thresh=m:variance-thresh=v:laplacian-thresh=l:dilation-thresh=d:erosion-thresh=e:noise-thresh=n:search-distance=s:postproc=p:parity=p
+ 
+ Decomb default: mode=7</value>
+  </data>
+  <data name="FilterView_DeinterlacePreset" xml:space="preserve">
+    <value>Deinterlace filter preset.
+
+Default is well balanced for speed and quality.
+
+Skip Spatial Check lets Yadif skip correcting certain avoidable artifacts for a slight speed boost.
+
+EEDI2 uses a slower, higher quality interpolation algorithm for Decomb. Useful for the most difficult sources.
+
+Bob attempts to better preserve motion for a slight penalty to perceived resolution.</value>
+  </data>
+  <data name="FilterView_Flip" xml:space="preserve">
+    <value>Kääntää (peilaa) kuvan vaaka-akselilla.</value>
+  </data>
+  <data name="FilterView_InterlaceDetection" xml:space="preserve">
+    <value>Lomituksen tunnistus, kun käytössä, mahdollistaa, että lomituksenpoistosuodatin käsittelee vain lomitetut kuvat.</value>
+  </data>
+  <data name="FilterView_InterlaceDetectionCustom" xml:space="preserve">
+    <value>Custom Interlace Detection parameters.
+ 
+ Syntax: mode=m:spatial-metric=s:motion-thresh=m:spatial-thresh=s:filter-mode=f:block-thresh=b:block-width=b:block-height=b:disable=d
+ 
+ Default: mode=3:spatial-metric=2:motion-thresh=1:spatial-thresh=1:filter-mode=2:block-thresh=40:block-width=16:block-height=16</value>
+  </data>
+  <data name="FilterView_Rotate" xml:space="preserve">
+    <value>Kierrä kuvaa myötäpäivään 90° askelin.</value>
+  </data>
+  <data name="MainView_Duration" xml:space="preserve">
+    <value>Valitun lähdealueen kesto tunteina:minuutteina:sekunteina</value>
+  </data>
+  <data name="PictureSettingsView_KeepAR" xml:space="preserve">
+    <value>”Säilytä kuvasuhde” säilyttää lähteen alkuperäisen kuvasuhteen. Jos tämä poistetaan käytöstä, kuva voi näyttää venyneeltä tai litistyneeltä.</value>
+  </data>
+  <data name="FilterView_CustomSharpenParams" xml:space="preserve">
+    <value>Custom Sharpen parameters.
+
+Unsharp syntax: y-strength=y:y-size=y:cb-strength=c:cb-size=c:cr-strength=c:cr-size=c
+
+Unsharp default: y-strength=0.25:y-size=7:cb-strength=0.25:cb-size=7
+
+Lapsharp syntax: y-strength=y:y-kernel=y:cb-strength=c:cb-kernel=c:cr-strength=c:cr-kernel=c
+
+Lapsharp default: y-strength=0.2:y-kernel=isolap:cb-strength=0.2:cb-kernel=isolap</value>
+  </data>
+  <data name="FilterView_Sharpen" xml:space="preserve">
+    <value>Sharpening enhances the appearance of detail, especially edges. Overly strong Sharpen settings may damage picture quality by creating ringing artifacts and enhancing noise, which can reduce compression efficiency.
+
+Unsharp is a general purpose unsharp masking filter. It sharpens by blurring, then calculating the difference between the blurred picture and the original.
+
+Lapsharp sharpens using convolution kernels approximating Laplacian edge filters, sometimes producing higher quality results than unsharp masking.</value>
+  </data>
+  <data name="FilterView_SharpenPreset" xml:space="preserve">
+    <value>Terävöityssuodattimen esiasetus. Asettaa suodattimen voimakkuuden.</value>
+  </data>
+  <data name="FilterView_SharpenTune" xml:space="preserve">
+    <value>Sharpen tune. Further adjusts the Sharpen preset to optimize settings for specific scenarios.
+
+None uses the default preset settings.
+
+Unsharp can be tuned for Ultrafine, Fine, Medium, Coarse, or Very Coarse sharpening. Select one based on the output picture resolution and fineness of detail to enhance.
+
+Lapsharp's Film tune refines settings for use with most live action content. Film uses an isotropic Laplacian kernel to sharpen all edges similarly, and luminance (brightness) information is sharpened more than chrominance (color) information.
+
+Lapsharp's Grain tune is similar to Film, but uses an isotropic Laplacian of Gaussian kernel to reduce the effect on noise and grain. Useful for preserving grain and as a general alternative to the Film tune.
+
+Lapsharp's Animation tune is useful for cel animation such as anime and cartoons. Animation is identical to Film, but overall strength is reduced to avoid creating artifacts.
+
+Lapsharp's Sprite tune is useful for 1-/4-/8-/16-bit 2-dimensional games. Sprite uses a 4-neighbor Laplacian kernel that enhances vertical and horizontal edges more than diagonal edges.</value>
+  </data>
+  <data name="MainView_AlignAVStart" xml:space="preserve">
+    <value>Tasaa kaikkien ääni- ja videovirtojen alkuaikaleimat joko lisäämällä tyhjiä kuvia tai jättämällä kuvia pois. Voi parantaa äänen ja kuvan tahdistusta viallisissa toistimissa, jotka eivät kunnioita MP4-muokkauslistoja.</value>
+  </data>
+  <data name="MainView_PresetOptionsContextMenu" xml:space="preserve">
+    <value>Esiasetuksiin vaikuttavat valinnat.</value>
+  </data>
+  <data name="MainView_EndPoint" xml:space="preserve">
+    <value>Tämän alueen päätepiste.</value>
+  </data>
+  <data name="MainView_StartPoint" xml:space="preserve">
+    <value>Tämän alueen alkupiste.</value>
+  </data>
+  <data name="OptionsView_AlwaysUseDefaultPath" xml:space="preserve">
+    <value>When enabled the auto name system will always use the default path. 
+When disabled, it will use the path in the destination box on the main window if populated, otherwise it will use the default path.</value>
+  </data>
+  <data name="FiltersView_ColourSpace" xml:space="preserve">
+    <value>Väriavaruussuodatin.</value>
+  </data>
+  <data name="FiltersView_ChromaSmooth" xml:space="preserve">
+    <value>Chroma Smooth Filter</value>
+  </data>
+  <data name="PictureSettingsView_PaddingCustomColourTooltip" xml:space="preserve">
+    <value>Kenttä hyväksyy RGB-arvot kuten ”0xFF0000” tai englanninkieliset värinimet kuten ”red”. Täysi värinimien luettelo löytyy täytesuodattimen ohjeista.</value>
+  </data>
+  <data name="SubtitlesView_BurnIn" xml:space="preserve">
+    <value>Polta tekstitykset videovirtaan.
+
+Huomaa, että tämä valitaan automaattisesti, ellei tulostiedoston tyyppi tue
+lähteen tekstitysraidan muotoa.
+
+Esimerkiksi MP4 ei tue PGS-tekstitystä</value>
+  </data>
+  <data name="OptionsView_PresetDisplayModes" xml:space="preserve">
+    <value>Flat - Presets are displayed as a flat list.
+Partially Flat - The last 8 user presets are displayed as a flat list followed by all presets being shown in category listing.
+Categories - All presets are shown under a sub menu per category.</value>
+  </data>
+  <data name="AudioView_AudioDefaults" xml:space="preserve">
+    <value>Asettaa, miten tämä välilehti automaattisesti lisää ääniraidat uutta lähdettä tai nimikettä valittaessa.</value>
+  </data>
+  <data name="BehavioursReload" xml:space="preserve">
+    <value>Virkistä alla oleva luettelo määritettyjen toimintojen pohjalta.</value>
+  </data>
+  <data name="SubtitleView_SubtitleDefaults" xml:space="preserve">
+    <value>Asettaa, miten tämä välilehti automaattisesti lisää tekstitysraidat uutta lähdettä tai nimikettä valittaessa.</value>
+  </data>
+  <data name="OptionsView_SendFileToArguments" xml:space="preserve">
+    <value>Seuraavat ympäristömuuttujat asetetaan aina:
+HB_SOURCE
+HB_DESTINATION
+HB_EXIT_CODE
+
+Mahdolliset lopetuskoodit ovat:
+0: onnistui
+2: virhe syöteparametreissa
+3: valmistelu epäonnistui
+4: tuntematon virhe
+5: virhe luettaessa lähdetiedostoa.
+
+Huomaa, että virhekoodit ovat sinne päin eivätkä aina tarkkoja.
+Tulostiedosto suositellaan varmistamaan ennen sille tehtäviä toimenpiteitä.</value>
+  </data>
+  <data name="Options_AdditionalFormatOptions" xml:space="preserve">
+    <value>The format of the output file. In addition to any supported file system character, you can use the any of the placeholders that will be replaced when you change title or scan a source or update certain settings.
+
+{source} - Name of the source file.
+{title} - Integer value. This is representative of a disc title number.
+{chapters} - The range of chapters selected.
+{creation-date} - The date that the source file was created on (if available).
+{creation-time} - The time that the source file was created on (if available).
+{modification-date} - The date that the source file was last modified on (if available).
+{modification-time} - The time that the source file was last modified on (if available).
+{date} - Today. Set at time of adding to the queue.
+{time} - Today. Set at time of adding to the queue.
+{quality_bitrate} - The RF/CQ number, or bitrate
+{quality_type} - Prints "kbps" or "Q" depending on the quality mode selected on the video tab.
+{preset} - Name of the preset selected.
+{encode_bit_depth} - Integer value. i.e. 8, 10 or 12
+{width} - The output storage width
+{height} - The output storage height
+{codec} - Display the video format.
+{encoder} - Display the short format key of the encoder used.
+
+Any illegal path characters will be removed automatically.</value>
+  </data>
+  <data name="OptionsView_RightToleftMode" xml:space="preserve">
+    <value>Oikealta vasemmalle kirjoitettavissa kielissä voi valita jommankumman tavan. ”Vain teksti” hahmontaa tekstin oikealta vasemmalle, ”koko käyttöliittymä” hahmontaa kaikki säätimet oikealta vasemmalle.
+
+Huomaa, että käyttöliittymäasettelussa voi olla virheitä näitä tapoja käytettäessä. Kielittäin voi kokeilla kumpaakin tapaa parhaan löytämiseksi.</value>
+  </data>
+  <data name="AudioView_Quality" xml:space="preserve">
+    <value>Tavoittele tiettyä äänen laatutasoa.
+1 on heikoin ja 5 paras laatu.
+
+Bittinopeus vaihtelee lähteittäin.</value>
+  </data>
+  <data name="OptionsView_DestinationReplacementOptions" xml:space="preserve">
+    <value>Seuraavia voi käyttää kohdesijainnin rakentamisessa yksin tai yhdessä:
+
+
+{source_path} – sama kuin lähdesijainnin kansio (jos mahdollista)
+{source_folder_name} – lähdetiedoston kansion nimi ilman koko polkua
+{source} – lähdetiedoston nimi.</value>
+  </data>
+  <data name="OptionsView_LaunchsHelp" xml:space="preserve">
+    <value>Avaa ohjeet verkon sivulta https://handbrake.fr/docs</value>
+  </data>
+</root>

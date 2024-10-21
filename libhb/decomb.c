@@ -1,6 +1,6 @@
 /* decomb.c
 
-   Copyright (c) 2003-2022 HandBrake Team
+   Copyright (c) 2003-2024 HandBrake Team
    This file is part of the HandBrake source code
    Homepage: <http://handbrake.fr/>.
    It may be used under the terms of the GNU General Public License v2.
@@ -52,7 +52,6 @@ which will feed EEDI2 interpolations to yadif.
 */
 
 #include "handbrake/handbrake.h"
-#include "handbrake/hbffmpeg.h"
 #include "handbrake/eedi2.h"
 #include "handbrake/taskset.h"
 #include "handbrake/decomb.h"
@@ -359,8 +358,7 @@ static int hb_decomb_init(hb_filter_object_t *filter,
             {
                 // Final segment
                 thread_args->segment_height[pp] =
-                    ((hb_image_height(init->pix_fmt, init->geometry.height, pp)
-                     + 3) & ~3) - thread_args->segment_start[pp];
+                    (hb_image_height(init->pix_fmt, init->geometry.height, pp)) - thread_args->segment_start[pp];
             }
             else
             {
@@ -413,6 +411,10 @@ static int hb_decomb_init(hb_filter_object_t *filter,
             eedi2_thread_args->arg.segment = ii;
         }
     }
+    if (pv->mode & MODE_DECOMB_BOB)
+    {
+        init->vrate.num *= 2;
+    }
 
     pv->output = *init;
 
@@ -440,6 +442,8 @@ static void hb_decomb_close(hb_filter_object_t *filter)
     {
         taskset_fini(&pv->eedi2_taskset);
     }
+
+    hb_buffer_list_close(&pv->out_list);
 
     // Cleanup reference buffers
     for (int ii = 0; ii < 3; ii++)
@@ -480,26 +484,6 @@ static void hb_decomb_close(hb_filter_object_t *filter)
     filter->private_data = NULL;
 }
 
-// Fill rows above height with copy of last row to prevent color distortion
-// during blending
-static void fill_stride(hb_buffer_t *buf)
-{
-    for (int pp = 0; pp < 3; pp++)
-    {
-        uint8_t *src, *dst;
-
-        src = buf->plane[pp].data + (buf->plane[pp].height - 1) *
-              buf->plane[pp].stride;
-        dst = buf->plane[pp].data + buf->plane[pp].height *
-              buf->plane[pp].stride;
-        for (int ii = 0; ii < 3; ii++)
-        {
-            memcpy(dst, src, buf->plane[pp].stride);
-            dst += buf->plane[pp].stride;
-        }
-    }
-}
-
 static void process_frame(hb_filter_private_t *pv)
 {
     if ((pv->mode & MODE_DECOMB_SELECTIVE) &&
@@ -517,7 +501,9 @@ static void process_frame(hb_filter_private_t *pv)
         int tff;
         if (pv->parity < 0)
         {
-            tff = !!(pv->ref[1]->s.flags & PIC_FLAG_TOP_FIELD_FIRST);
+            uint16_t flags = pv->ref[1]->s.flags;
+            tff = ((flags & PIC_FLAG_PROGRESSIVE_FRAME) == 0) ?
+                  !!(flags & PIC_FLAG_TOP_FIELD_FIRST) : 1;
         }
         else
         {
@@ -578,15 +564,6 @@ static int hb_decomb_work(hb_filter_object_t *filter,
     hb_filter_private_t *pv = filter->private_data;
     hb_buffer_t *in = *buf_in;
 
-    // TODO: eliminate extra buffer copies in decomb
-    if (in->plane[0].height_stride - in->plane[0].height < 3)
-    {
-        // Decomb requires some additional rows
-        // to work on.
-        in = hb_buffer_dup(in);
-        hb_buffer_close(buf_in);
-    }
-
     // Input buffer is always consumed.
     *buf_in = NULL;
     if (in->s.flags & HB_BUF_FLAG_EOF)
@@ -601,8 +578,6 @@ static int hb_decomb_work(hb_filter_object_t *filter,
         *buf_out = hb_buffer_list_clear(&pv->out_list);
         return HB_FILTER_DONE;
     }
-
-    fill_stride(in);
 
     // yadif requires 3 buffers, prev, cur, and next.  For the first
     // frame, there can be no prev, so we duplicate the first frame.
@@ -622,45 +597,3 @@ static int hb_decomb_work(hb_filter_object_t *filter,
     *buf_out = hb_buffer_list_clear(&pv->out_list);
     return HB_FILTER_OK;
 }
-
-void hb_deinterlace(hb_buffer_t *dst, hb_buffer_t *src)
-{
-    void *crop_table;
-    init_crop_table_8(&crop_table, 255);
-
-    filter_param_t filter;
-
-    filter.tap[0] = -1;
-    filter.tap[1] = 4;
-    filter.tap[2] = 2;
-    filter.tap[3] = 4;
-    filter.tap[4] = -1;
-    filter.normalize = 3;
-
-    fill_stride(src);
-    for (int pp = 0; pp < 3; pp++)
-    {
-        int width  = src->plane[pp].width;
-        int stride = src->plane[pp].stride;
-        int height = src->plane[pp].height_stride;
-
-        // Filter parity lines
-        uint8_t *pdst = &dst->plane[pp].data[0];
-        uint8_t *psrc = &src->plane[pp].data[0];
-
-        // These will be useful if we ever do temporal blending.
-        for (int yy = 0; yy < height - 1; yy += 2)
-        {
-            // This line gets blend filtered, not yadif filtered.
-            memcpy(pdst, psrc, width);
-            pdst += stride;
-            psrc += stride;
-            blend_filter_line_8(&filter, crop_table, pdst, psrc, width, height, stride, yy + 1);
-            pdst += stride;
-            psrc += stride;
-        }
-    }
-
-    free(crop_table);
-}
-

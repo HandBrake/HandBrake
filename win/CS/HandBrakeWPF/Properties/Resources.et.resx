@@ -1,0 +1,2849 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" id="root">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace"/>
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0"/>
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string"/>
+              <xsd:attribute name="type" type="xsd:string"/>
+              <xsd:attribute name="mimetype" type="xsd:string"/>
+              <xsd:attribute ref="xml:space"/>
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string"/>
+              <xsd:attribute name="name" type="xsd:string"/>
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2"/>
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1"/>
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3"/>
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4"/>
+              <xsd:attribute ref="xml:space"/>
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required"/>
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Video_EncoderExtraArgs" xml:space="preserve">
+    <value>Kodeerija parameetrite täielik nimekiri: 
+{0}</value>
+  </data>
+  <data name="Video_x264FastDecode" xml:space="preserve">
+    <value>Reduce decoder CPU usage.
+
+Set this if your device is struggling to play the output. (i.e. dropped frames)</value>
+  </data>
+  <data name="Video_LosslessWarning" xml:space="preserve">
+    <value>Hoiatus: RF 0 on kadudeta!</value>
+  </data>
+  <data name="Video_LosslessWarningTooltip" xml:space="preserve">
+    <value>A value of 0 means lossless and will result in a file size that is larger than the original source, 
+unless the source was also lossless. 
+
+x264 and x265's scale is logarithmic and lower values correspond to higher quality. 
+
+So small increases in value will result in progressively larger increases in the resulting file size.</value>
+  </data>
+  <data name="AddPreset_PictureSizeMode" xml:space="preserve">
+    <value>You can optionally store a picture settings with this preset. There are 3 modes:
+
+None:  Picture settings are not stored in the preset. When loading a source, they will remain as-is within the bounds of the source resolution. This also affects Anamorphic, modulus, cropping etc.
+
+Custom: You can optionally set a Maximum width and Height. When doing this an encode will be less than or equal to these values. Keep Aspect Ratio will be automatically turned on.
+
+Source Maximum:  Always encode at the sources resolution where possible.</value>
+  </data>
+  <data name="About_GPL" xml:space="preserve">
+    <value>This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+as published by the Free Software Foundation; either version 2
+of the License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.</value>
+  </data>
+  <data name="QueueSelection_AutoNameWarning" xml:space="preserve">
+    <value>HOIATUS: Automaatne failide ümbernimetamine pole sisse lülitatud. Palun lülita see valikutest sisse.</value>
+  </data>
+  <data name="QueueSelection_AutoTrackSelectionWarning" xml:space="preserve">
+    <value>HOIATUS: Automaatne heli- ja subtiitrite raja valimine pole seadistatud. Vaikimisi radade käitumist saad seadistada valikutes.</value>
+  </data>
+  <data name="Presets_ResetComplete" xml:space="preserve">
+    <value>Sisseehitatud eelseadistused on nullitud.</value>
+  </data>
+  <data name="Presets_ResetHeader" xml:space="preserve">
+    <value>Nullimine on lõpetatud</value>
+  </data>
+  <data name="Video_HigherQuality" xml:space="preserve">
+    <value>Kõrgem kvaliteet |</value>
+  </data>
+  <data name="Video_LowQuality" xml:space="preserve">
+    <value>| Madalam kvaliteet</value>
+  </data>
+  <data name="Video_PlaceboQuality" xml:space="preserve">
+    <value>Platsebo kvaliteet |</value>
+  </data>
+  <data name="Error" xml:space="preserve">
+    <value>Tõrge</value>
+  </data>
+  <data name="Main_TurnOnAutoFileNaming" xml:space="preserve">
+    <value>You must turn on automatic file naming AND set a default path in preferences before you can add to the queue.</value>
+  </data>
+  <data name="Warning" xml:space="preserve">
+    <value>Hoiatus</value>
+  </data>
+  <data name="AreYouSure" xml:space="preserve">
+    <value>Oled sa kindel?</value>
+  </data>
+  <data name="HandBrake_Title" xml:space="preserve">
+    <value>HandBrake</value>
+  </data>
+  <data name="Main_AlreadyEncoding" xml:space="preserve">
+    <value>HandBrake juba tegeleb kodeerimisega.</value>
+  </data>
+  <data name="Main_DuplicateDestinationOnQueue" xml:space="preserve">
+    <value>There are jobs on the queue with the same destination path. Please choose a different path for this job.
+ 
+You may wish to configure the automatic file naming options in "Tools Menu -&gt; Preferences -&gt; Output Files"
+</value>
+  </data>
+  <data name="Main_JobsPending_addon" xml:space="preserve">
+    <value>   Ootel olevad tööd {0}</value>
+  </data>
+  <data name="Main_NewDefaultPreset" xml:space="preserve">
+    <value>Uus vaikimisi eelseadistuste komplekt: {0}</value>
+  </data>
+  <data name="Main_NewUpdate" xml:space="preserve">
+    <value>Saadaval on värskendus. Paigaldamiseks mine menüüd valikusse Tööriistad &gt; Valikud</value>
+  </data>
+  <data name="Main_NoPresetSelected" xml:space="preserve">
+    <value>Eelseadistust pole valitud.</value>
+  </data>
+  <data name="Main_NoUpdateOfBuiltInPresets" xml:space="preserve">
+    <value>Sisseehitatud eelseadeid ei saa muuta. Palun vali mõni enda eelseadistus.</value>
+  </data>
+  <data name="Main_PleaseSelectFolder" xml:space="preserve">
+    <value>Palun vali kaust</value>
+  </data>
+  <data name="Main_PreparingToEncode" xml:space="preserve">
+    <value>Kodeerimiseks valmistumine ...</value>
+  </data>
+  <data name="Main_PresetErrorBuiltInName" xml:space="preserve">
+    <value>Ei saa importida eelseadistust, millel on sama nimi, kui sisseehitatud eelseadistusel.</value>
+  </data>
+  <data name="Main_PresetOverwriteWarning" xml:space="preserve">
+    <value>Eelseadistus "{0}"  on juba olemas. Kas soovid selle üle kirjutada?</value>
+  </data>
+  <data name="Main_Presets" xml:space="preserve">
+    <value>Eelseaded</value>
+  </data>
+  <data name="Main_PresetUpdateConfirmation" xml:space="preserve">
+    <value>Oled sa kindel, et soovid valitud eelseadeid uuendada?</value>
+  </data>
+  <data name="Main_PresetUpdated" xml:space="preserve">
+    <value>Eelseaded on uuendatud vastavalt sinu eelistustele.</value>
+  </data>
+  <data name="Main_PresetUpdateNotification" xml:space="preserve">
+    <value>HandBrake has determined your built-in presets are out of date... These presets will now be updated.
+Your custom presets have not been updated so you may have to re-create these by deleting and re-adding them. 
+The previous user_presets.xml file was backed up.</value>
+  </data>
+  <data name="Main_QueueFinished" xml:space="preserve">
+    <value>Järjekord on lõpetatud</value>
+  </data>
+  <data name="Main_ScanCancelled" xml:space="preserve">
+    <value>Skännimine tühistati.</value>
+  </data>
+  <data name="Main_ScanCompleted" xml:space="preserve">
+    <value>Skännimine lõpetati</value>
+  </data>
+  <data name="Main_ScanFailed_NoReason" xml:space="preserve">
+    <value>Skännimine ebaõnnestus:</value>
+  </data>
+  <data name="Main_ScanFailed_CheckLog" xml:space="preserve">
+    <value>Skännimine ebaõnnestus... Palun vaata lisainfot toimingute logist.</value>
+  </data>
+  <data name="Main_ScanningPleaseWait" xml:space="preserve">
+    <value>Allika skännimine, palun oota...</value>
+  </data>
+  <data name="Main_ScanningTitleXOfY" xml:space="preserve">
+    <value>Scanning Title {0} of {1} ({2}%)</value>
+  </data>
+  <data name="Main_ScanSource" xml:space="preserve">
+    <value>You must first scan a source and setup your job before starting an encode. Click the 'Source' button on the toolbar to continue.</value>
+  </data>
+  <data name="Main_SelectPreset" xml:space="preserve">
+    <value>Please make sure you have selected one of your own presets. Please note that you cannot export built-in presets.</value>
+  </data>
+  <data name="Main_SelectPresetForUpdate" xml:space="preserve">
+    <value>Palun vali eelseadistus, mida uuendada.</value>
+  </data>
+  <data name="Main_SelectSource" xml:space="preserve">
+    <value>Vali jätkamiseks 'Allikas'</value>
+  </data>
+  <data name="Main_XEncodesPending" xml:space="preserve">
+    <value>{0} tööd järjekorras</value>
+  </data>
+  <data name="Notice" xml:space="preserve">
+    <value>Teavitus</value>
+  </data>
+  <data name="Overwrite" xml:space="preserve">
+    <value>Kirjutada üle?</value>
+  </data>
+  <data name="Question" xml:space="preserve">
+    <value>Küsimus</value>
+  </data>
+  <data name="State_Ready" xml:space="preserve">
+    <value>Valmis</value>
+  </data>
+  <data name="Updated" xml:space="preserve">
+    <value>Uuendatud</value>
+  </data>
+  <data name="Preset_OldVersion_Header" xml:space="preserve">
+    <value>Eelseade versioon</value>
+  </data>
+  <data name="Preset_OldVersion_Message" xml:space="preserve">
+    <value>Eelseadistus, mida proovid importida on teise HandBrake-i versiooni jaoks. 
+ Võimalik, et kõiki väärtusi ei saa sellest eelseadistusest importida. 
+
+Kas soovid jätkata?</value>
+  </data>
+  <data name="Preset_UnableToImport_Header" xml:space="preserve">
+    <value>Eelseade importimine ebaõnnestus!</value>
+  </data>
+  <data name="Preset_UnableToImport_Message" xml:space="preserve">
+    <value>Eelseadistuse importimine ebaõnnestus, kuna see näib olevat kahjustunud või vanemast HandBrake-i versioonist.</value>
+  </data>
+  <data name="Main_SetDestination" xml:space="preserve">
+    <value>Enne faili töösse panemist pead valima väljundfailile sihtkausta.</value>
+  </data>
+  <data name="Main_InvalidDestination" xml:space="preserve">
+    <value>Sisestatud sihtkaustas on keelatud märke ning seda ei uuendata.</value>
+  </data>
+  <data name="Preview" xml:space="preserve">
+    <value>Eelvaade {0}</value>
+  </data>
+  <data name="Preview_Scaled" xml:space="preserve">
+    <value>Eelvaade (skaleeritud)</value>
+  </data>
+  <data name="PictureSettings_OutputResolution" xml:space="preserve">
+    <value>Väljund: {0}</value>
+  </data>
+  <data name="Main_MatchingFileOverwriteWarning" xml:space="preserve">
+    <value>Faili ei saa kodeerida sama failinimega ja samasse kausta, kus on algne fail. Palu muuda sihtkoha failinime, nii, et see poleks sama, mis algsel failil.</value>
+  </data>
+  <data name="Main_UnableToLoadHelpMessage" xml:space="preserve">
+    <value>Sinu süsteem takistas HandBrake-i käivitamise veebibrauserist.</value>
+  </data>
+  <data name="Main_UnableToLoadHelpSolution" xml:space="preserve">
+    <value>Abiinfo lehekülgi näed otse meie veebisaidilt: https://handbrake.fr</value>
+  </data>
+  <data name="Main_PresetImportFailed" xml:space="preserve">
+    <value>Valitud eelseade importimine ebaõnnestus.</value>
+  </data>
+  <data name="Main_PresetImportFailedSolution" xml:space="preserve">
+    <value>The preset may be corrupted or from an older version of HandBrake which is not supported. 
+Presets from older versions must be re-created in the current version.</value>
+  </data>
+  <data name="Video_EncoderExtraArgsTooltip" xml:space="preserve">
+    <value>Lisaparameetrid, mida saab video kodeerijale edastada.</value>
+  </data>
+  <data name="Subtitles_BurnInBehaviourModes" xml:space="preserve">
+    <value>None - Only tracks where the container does not support the format will be burned in.
+Foreign Audio Track - The Foreign Audio track will be burned in if available. 
+First Track - The first track will be burned in.
+Foreign Audio Preferred, else First - If the foreign audio track exists, it will be burned in, otherwise the first track will be chosen.</value>
+  </data>
+  <data name="Subtitles_WebmSubtitleIncompatibilityHeader" xml:space="preserve">
+    <value>Ühilduvus WebM subtiitritega</value>
+  </data>
+  <data name="Subtitles_WebmSubtitleIncompatibilityError" xml:space="preserve">
+    <value>WebM in HandBrake only supports burned subtitles.
+
+You should change your subtitle selections.
+
+If you continue, your non-burned subtitles will be lost.</value>
+  </data>
+  <data name="Main_ScanNoTitlesFound" xml:space="preserve">
+    <value>Korrektset allikat või pealkirju ei leitud.</value>
+  </data>
+  <data name="Main_ScanNoTitlesFoundMessage" xml:space="preserve">
+    <value>HandBrake will not be able to encode the selected source as it did not find a valid source with titles to encode. This could be due to one of the following reasons:
+
+- The duration of each source title is below the "Minimum Title Duration" threshold option in 'Preferences &gt; Advanced'. 
+- The source file is not a valid video file or is in a format that HandBrake does not support.
+- You may not have read access to the file or another application may have a lock on the file. 
+- The source may be copy protected or include DRM. Please note that HandBrake does not support the removal of copy protections.
+
+The Activity log may have further information.</value>
+  </data>
+  <data name="Main_QueueLabel" xml:space="preserve">
+    <value>Järjekord{0}</value>
+  </data>
+  <data name="Main_Start" xml:space="preserve">
+    <value>Alusta kodeerimist</value>
+  </data>
+  <data name="Main_StartQueue" xml:space="preserve">
+    <value>Käivita järjekord</value>
+  </data>
+  <data name="MainViewModel_CanNotDeleteDefaultPreset" xml:space="preserve">
+    <value>Vaikimisi eelseadistust ei saa kustutada. Palun tee esmalt mõni teine eelseadistus vaikimisi eelseadistuseks.</value>
+  </data>
+  <data name="MainViewModel_PresetRemove_AreYouSure" xml:space="preserve">
+    <value>Oled sa kindel, et soovid selle eelseadistuse kustutada:</value>
+  </data>
+  <data name="MainViewModel_EncodeStatusChanged_StatusLabel" xml:space="preserve">
+    <value>Encoding: Pass {0} of {1},  {2:00.00}%, FPS: {3:000.0},  Avg FPS: {4:000.0},  Time Remaining: {5},  Elapsed: {6} {7}</value>
+  </data>
+  <data name="AddPresetViewModel_PresetMustProvideName" xml:space="preserve">
+    <value>Eelseadistusel peab olema nimi. Palun täida eelseadistuse nime lahter.</value>
+  </data>
+  <data name="AddPresetViewModel_PresetWithSameNameOverwriteWarning" xml:space="preserve">
+    <value>Selle nimega eelseadistus on juba olemas. Kas sa soovid seda üle kirjutada?</value>
+  </data>
+  <data name="AddPresetViewModel_YouMustFirstScanSource" xml:space="preserve">
+    <value>You must first scan a source to use the 'Source Maximum' Option.</value>
+  </data>
+  <data name="AddPresetViewModel_CustomWidthHeightFieldsRequired" xml:space="preserve">
+    <value>'Kohandatud' valikus peavad olema määratud kohandatud kõrgus või laius.</value>
+  </data>
+  <data name="AddPresetViewModel_UnableToAddPreset" xml:space="preserve">
+    <value>Eelsadistuse lisamine ebaõnnestus</value>
+  </data>
+  <data name="UnknownError" xml:space="preserve">
+    <value>Tundmatu tõrge</value>
+  </data>
+  <data name="AudioViewModel_AudioDefaults" xml:space="preserve">
+    <value>Heli vaikeseaded</value>
+  </data>
+  <data name="AudioViewModel_AudioTracks" xml:space="preserve">
+    <value>Helirajad</value>
+  </data>
+  <data name="AudioViewModel_ConfigureDefaults" xml:space="preserve">
+    <value>Valimise käitumine ...</value>
+  </data>
+  <data name="AudioViewModel_SwitchBackToTracks" xml:space="preserve">
+    <value>Lülitu tagasi radadele</value>
+  </data>
+  <data name="ChaptersViewModel_UnableToExportChaptersWarning" xml:space="preserve">
+    <value>Peatüki markerite faili salvestamine ebaõnnestus!</value>
+  </data>
+  <data name="ChaptersViewModel_UnableToExportChaptersMsg" xml:space="preserve">
+    <value>Peatüki markerite nimesid sinu kodeeritud failis EI salvestata.</value>
+  </data>
+  <data name="CountdownAlertViewModel_NoticeMessage" xml:space="preserve">
+    <value>{1} sekundi pärast toimub järgmine toiming: {0}.</value>
+  </data>
+  <data name="ErrorViewModel_IfTheProblemPersists" xml:space="preserve">
+    <value>Kui probleem püsib, siis taaskäivita HandBrake.</value>
+  </data>
+  <data name="ErrorViewModel_NoFurtherInformation" xml:space="preserve">
+    <value>Selle vea kohta pole lisainfot saadaval.</value>
+  </data>
+  <data name="ErrorViewModel_UnknownError" xml:space="preserve">
+    <value>Tekkis tundmatu tõrge.</value>
+  </data>
+  <data name="OptionsViewModel_NewUpdate" xml:space="preserve">
+    <value>Saadaval on uuendus! Tehtud muudatuste nägemiseks vaata infot veebisaidilt.</value>
+  </data>
+  <data name="OptionsViewModel_64bitAvailable" xml:space="preserve">
+    <value>Your system supports the 64bit version of HandBrake! This offers performance and stability improvements over this 32bit version.
+    Please check the website for release notes.</value>
+  </data>
+  <data name="OptionsViewModel_NoNewUpdates" xml:space="preserve">
+    <value>Hetkel pole saadaval ühtegi uuendust.</value>
+  </data>
+  <data name="OptionsViewModel_UpdateDownloaded" xml:space="preserve">
+    <value>Uuendus on alla laaditud</value>
+  </data>
+  <data name="OptionsViewModel_UpdateServiceUnavailable" xml:space="preserve">
+    <value>Uuenduste teenus pole saadaval. Proovi see laadida alla saidilt https://handbrake.fr</value>
+  </data>
+  <data name="OptionsViewModel_UpdateFailed" xml:space="preserve">
+    <value>Uuendamine ebaõnnestus. Proovi see laadida alla saidilt https://handbrake.fr</value>
+  </data>
+  <data name="PictureSettingsViewModel_StorageDisplayLabel" xml:space="preserve">
+    <value>Salvestusruumi suurus: {0}x{1}</value>
+  </data>
+  <data name="QueueSelectionViewModel_AddToQueue" xml:space="preserve">
+    <value>Lisa järjekorda</value>
+  </data>
+  <data name="QueueViewModel_NoEncodesPending" xml:space="preserve">
+    <value>Ühtegi kodeerimist pole ootel</value>
+  </data>
+  <data name="QueueViewModel_NoJobsPending" xml:space="preserve">
+    <value>Ükski töö pole praegu kodeerimisel</value>
+  </data>
+  <data name="QueueViewModel_Queue" xml:space="preserve">
+    <value>Järjekord</value>
+  </data>
+  <data name="QueueViewModel_ClearQueueConfirmation" xml:space="preserve">
+    <value>Oled sa kindel, et soovid järjekorda tühjendada?</value>
+  </data>
+  <data name="Confirm" xml:space="preserve">
+    <value>Kinnita</value>
+  </data>
+  <data name="QueueViewModel_JobsPending" xml:space="preserve">
+    <value>{0} tööd järjekorras</value>
+  </data>
+  <data name="QueueViewModel_QueuePending" xml:space="preserve">
+    <value>Järjekord on pandud pausile</value>
+  </data>
+  <data name="QueueViewModel_DelSelectedJobConfirmation" xml:space="preserve">
+    <value>Oled sa kindel, et soovid valitud tööd kustutada?
+Selle tegevusega ei kustutata ühtegi kodeeritud faili.</value>
+  </data>
+  <data name="QueueViewModel_JobCurrentlyRunningWarning" xml:space="preserve">
+    <value>See kodeerimine on praegu pooleli. Kui sa selle kustutad, siis kodeerimine peatatakse. Oled sa kindel, et soovid jätkata?</value>
+  </data>
+  <data name="QueueViewModel_NoPendingJobs" xml:space="preserve">
+    <value>Ühtegi tööd pole ootel.</value>
+  </data>
+  <data name="QueueViewModel_EditConfirmation" xml:space="preserve">
+    <value>Kas sa soovid seda tööd muuta? See eemaldatakse tööde järjekorrast ja liigutatakse peaaknasse.</value>
+  </data>
+  <data name="QueueViewModel_QueueReady" xml:space="preserve">
+    <value>Järjekord on valmis</value>
+  </data>
+  <data name="QueueViewModel_QueueNotRunning" xml:space="preserve">
+    <value>Järjekord pole töös</value>
+  </data>
+  <data name="QueueViewModel_QueueCompleted" xml:space="preserve">
+    <value>Järjekord on lõpetatud</value>
+  </data>
+  <data name="QueueViewModel_LastJobFinished" xml:space="preserve">
+    <value>Viimane järjekorras olnud töö on lõpetatud</value>
+  </data>
+  <data name="QueueViewModel_QueueStarted" xml:space="preserve">
+    <value>Järjekord pandi tööle</value>
+  </data>
+  <data name="QueueViewModel_QueueStatusDisplay" xml:space="preserve">
+    <value>Encoding: Pass {0} of {1},  {2:00.00}%, FPS: {3:000.0},  Avg FPS: {4:000.0},  Time Remaining: {5},  Elapsed: {6:d\:hh\:mm\:ss}</value>
+  </data>
+  <data name="ShellViewModel_CanClose" xml:space="preserve">
+    <value>Praegu on käimas kodeerimine. HandBrake-i sulgemine peatab selle kodeerimise.
+Oled sa kindel, et soovid HandBrake-i kinni panna?</value>
+  </data>
+  <data name="StaticPreviewViewModel_Title" xml:space="preserve">
+    <value>Pildi eelvaade</value>
+  </data>
+  <data name="StaticPreview_UnableToDeletePreview" xml:space="preserve">
+    <value>Eelmise eelvaate faili kustutamine ebaõnnestus. Võimalik, et sul on eelvaade veel meediapleieris avatud. Palun pane see kinni.</value>
+  </data>
+  <data name="StaticPreviewViewModel_ScanFirst" xml:space="preserve">
+    <value>Enne eelvaate loomist pead allikat skännima ning seadistama kooderi.</value>
+  </data>
+  <data name="StaticPreviewViewModel_UnableToPlayFile" xml:space="preserve">
+    <value>Unable to find the preview file. Either the file was deleted or the encode failed. Check the activity log for details.</value>
+  </data>
+  <data name="StaticPreviewViewModel_AlreadyEncoding" xml:space="preserve">
+    <value>Handbrake juba kodeerib videot! Korraga saab kodeerida ainult ühte videot.</value>
+  </data>
+  <data name="SubtitlesViewModel_SubDefaults" xml:space="preserve">
+    <value>Subtiitrite vaikeväärtused</value>
+  </data>
+  <data name="SubtitlesViewModel_SubTracks" xml:space="preserve">
+    <value>Subtiitrite rajad</value>
+  </data>
+  <data name="SubtitlesViewModel_SwitchToTracks" xml:space="preserve">
+    <value>Lülitu tagasi radadele</value>
+  </data>
+  <data name="SubtitlesViewModel_ConfigureDefaults" xml:space="preserve">
+    <value>Valimise käitumine ...</value>
+  </data>
+  <data name="PresetService_ArchiveFile" xml:space="preserve">
+    <value>Arhiveeritud fail:</value>
+  </data>
+  <data name="PresetService_UnableToLoad" xml:space="preserve">
+    <value>Eelseadistuste laadimine ebaõnnestus.</value>
+  </data>
+  <data name="PresetService_UnableToLoadPresets" xml:space="preserve">
+    <value>HandBrake was unable to load your presets file. It may have been from an older unsupported version of HandBrake or corrupted. 
+
+Your old presets file was archived to:</value>
+  </data>
+  <data name="Main_QueueFinishedErrors" xml:space="preserve">
+    <value> with {0} errors detected. Check Queue window for details.</value>
+  </data>
+  <data name="MainViewModel_LowDiskSpace" xml:space="preserve">
+    <value>Kettaruumi on vähe</value>
+  </data>
+  <data name="MainViewModel_LowDiskSpaceWarning" xml:space="preserve">
+    <value>Hoiatus, kettaruum hakkab otsa saama. Kui vaba ruum saab otsa, ei saa HandBrake seda kodeerimist lõpetada.</value>
+  </data>
+  <data name="ChaptersViewModel_UnableToImportChaptersMalformedLineMsg" xml:space="preserve">
+    <value>Rida {0} on vigane. Midagi ei impordita.</value>
+  </data>
+  <data name="ChaptersViewModel_UnableToImportChaptersWarning" xml:space="preserve">
+    <value>Peatükifaili importimine ebaõnnestus</value>
+  </data>
+  <data name="ChaptersViewModel_UnableToImportChaptersLineDoesNotHaveAtLeastTwoColumns" xml:space="preserve">
+    <value>Peatüki failis peab igal real olema vähemalt 2 veergu andmeid</value>
+  </data>
+  <data name="ChaptersViewModel_UnableToImportChaptersFirstColumnMustContainOnlyIntegerNumber" xml:space="preserve">
+    <value>First column in chapters file must only contain a integer number value higher than zero (0)</value>
+  </data>
+  <data name="ChaptersViewModel_UnsupportedFileFormatMsg" xml:space="preserve">
+    <value>Peatüki faili liik '{0}' pole praegu toetatud.</value>
+  </data>
+  <data name="ChaptersViewModel_UnsupportedFileFormatWarning" xml:space="preserve">
+    <value>Mittetoetatud peatüki failitüüp</value>
+  </data>
+  <data name="ChaptersViewModel_ValidationFailedWarning" xml:space="preserve">
+    <value>Vigane algse meedia peatüki info</value>
+  </data>
+  <data name="ChaptersViewModel_ValidateImportedChapters_ChapterCountMismatch" xml:space="preserve">
+    <value>The number of chapters on the source media 
+and the number of chapters in the input file do not match ({0} vs {1}).
+
+Do you still want to import the chapter names?</value>
+  </data>
+  <data name="ChaptersViewModel_ValidateImportedChapters_ChapterCountMismatchMsg" xml:space="preserve">
+    <value>The number of chapters on the source media 
+and the number of chapters in the input file do not match ({0} vs {1}).
+
+Do you still want to import the chapter names?</value>
+  </data>
+  <data name="ChaptersViewModel_ValidateImportedChapters_ChapterCountMismatchWarning" xml:space="preserve">
+    <value>Allika ja sisendfaili peatükkide arv ei kattu</value>
+  </data>
+  <data name="ChaptersViewModel_ValidateImportedChapters_ChapterDurationMismatchMsg" xml:space="preserve">
+    <value>The reported duration of the chapters on the source media 
+and the duration of chapters in the input file differ greatly.
+
+It is very likely that this chapter file was produced from a different source media.
+
+Are you sure you want to import the chapter names?</value>
+  </data>
+  <data name="ChaptersViewModel_ValidateImportedChapters_ChapterDurationMismatchWarning" xml:space="preserve">
+    <value>Allika ja sisendfaili peatüki pikkus ei näi kattuvat</value>
+  </data>
+  <data name="ScanService_ScanStopFailed" xml:space="preserve">
+    <value>Skännimise peatamisel tekkis tõrge. Palun taaskäivita HandBrake.</value>
+  </data>
+  <data name="Presets_PresetForceReset" xml:space="preserve">
+    <value>HandBrake ei suuda sinu eelseadistusi uude versiooni vormingusse uuendada.
+Sinu eelseadistuste fail arhiveeritakse ja luuakse uus. Sa pead oma eelseadistused uuesti looma.</value>
+  </data>
+  <data name="SettingService_SaveErrorReset" xml:space="preserve">
+    <value>Kui tegid seadetes mingeid muudatusi, siis võimalik, et järgmisel HandBrake-i käivitamisel tuleb need nullida.</value>
+  </data>
+  <data name="UserSettings_AnErrorOccurred" xml:space="preserve">
+    <value>Sinu eelistuste salvestamisel tekkis tõrge.</value>
+  </data>
+  <data name="UserSettings_YourSettingsHaveBeenReset" xml:space="preserve">
+    <value>Hoiatus, sinu seaded on nullitud!</value>
+  </data>
+  <data name="UserSettings_YourSettingsAreCorrupt" xml:space="preserve">
+    <value>Sinu kasutajaseadete fail on viga saanud või see pole ligipääsetav. Taastati vaikeseaded.</value>
+  </data>
+  <data name="UserSettings_UnableToLoad" xml:space="preserve">
+    <value>Kasutaja seadetefaili laadimine ebaõnnestus: {0}</value>
+  </data>
+  <data name="UserSettings_UnableToLoadSolution" xml:space="preserve">
+    <value>Sinu kasutaja seadete fail pole ligipääsetav või see on vigane. Võimalik, et pead selle faili kustutama ning laskma HandBrake-il uue genereerida.</value>
+  </data>
+  <data name="Main_NoPermissionsOrMissingDirectory" xml:space="preserve">
+    <value>Sinu poolt valitud väljundkausta pole olemas või sul pole luba sinna kirjutada.</value>
+  </data>
+  <data name="DirectoryUtils_CreateFolder" xml:space="preserve">
+    <value>Kas luua kaust?</value>
+  </data>
+  <data name="DirectoryUtils_CreateFolderMsg" xml:space="preserve">
+    <value>Kasuta, millesse sa proovid kirjutada, pole olemas. Kas soovid, et HandBrake looks sulle selle kausta?
+{0}</value>
+  </data>
+  <data name="MainViewModel_UnableToLaunchDestDir" xml:space="preserve">
+    <value>Sihtkausta avamine ebaõnnestus.</value>
+  </data>
+  <data name="MainViewModel_UnableToLaunchDestDirSolution" xml:space="preserve">
+    <value>Palun veendu, et sihtkaust oleks korrektne.</value>
+  </data>
+  <data name="MainViewModel_EncodeStatusChanged_SubScan_StatusLabel" xml:space="preserve">
+    <value>Processing Pass {0} of {1}, (Subtitle Scan)  {2:00.00}%, Scan Time Remaining: {3},  Elapsed: {4}</value>
+  </data>
+  <data name="NoAdditionalInformation" xml:space="preserve">
+    <value>Lisainfot pole</value>
+  </data>
+  <data name="WindowTitleStatus" xml:space="preserve">
+    <value>{0} - ({1}%, Pass {2} of {3})</value>
+  </data>
+  <data name="TaskTrayStatusTitle" xml:space="preserve">
+    <value>{0}
+Encoding 1 Job</value>
+  </data>
+  <data name="PauseOnLowDiskspace" xml:space="preserve">
+    <value>Queue Paused.  Warning, the drive you are encoding to is low on disk space. Please free up some space and press start to continue. You can also adjust the minimum space level in preferences.</value>
+  </data>
+  <data name="Main_QueuePaused" xml:space="preserve">
+    <value>Järjekord on pandud pausile</value>
+  </data>
+  <data name="QueueViewModel_QueuePaused" xml:space="preserve">
+    <value>Järjekord on pandud pausile</value>
+  </data>
+  <data name="Main_LowDiskspace" xml:space="preserve">
+    <value>Sinu sihtkaustas hakkab kettaruum otsa saama. 
+
+Selle hoiatuse andmise taaset saad muuta eelistustest. 
+
+Kas sa soovid jätkata? </value>
+  </data>
+  <data name="Queue_UnableToResetJob" xml:space="preserve">
+    <value>Töö staatust ei saa nullida, kuna selle staatuseks pole veateade ning see pole veel lõpetatud</value>
+  </data>
+  <data name="Queue_UnableToRestoreFile" xml:space="preserve">
+    <value>Järjekorra faili taastamine ebaõnnestus.</value>
+  </data>
+  <data name="Queue_UnableToRestoreFileExtended" xml:space="preserve">
+    <value>Fail näib olevat kahjustunud või vanemast mitteühilduvast HandBrake-i versioonist</value>
+  </data>
+  <data name="Queue_AlreadyEncoding" xml:space="preserve">
+    <value>HandBrake juba kodeerib faili.</value>
+  </data>
+  <data name="Queue_AlreadyEncodingSolution" xml:space="preserve">
+    <value>Palun peata praegune kodeerimine. Kui probleem püsib, siis taaskäivita HandBrake.</value>
+  </data>
+  <data name="StaticPreviewView_Title" xml:space="preserve">
+    <value>Eelvaade ({0}% tegelikust suurusest)</value>
+  </data>
+  <data name="OsBitnessWarning" xml:space="preserve">
+    <value>HandBrake requires a 64bit version of Windows 10 or later to run.</value>
+  </data>
+  <data name="OsVersionWarning" xml:space="preserve">
+    <value>HandBrake requires Windows 10 or later to run. Version 0.9.9 (XP), 0.10.5 (Vista), 1.3.3 (7 and 8.x) were the last versions to support these older operating systems.</value>
+  </data>
+  <data name="Main_ContinueAddingToQueue" xml:space="preserve">
+    <value>Kas soovid jätkata ja proovida lisada ülejäänud?</value>
+  </data>
+  <data name="Main_QueueOverwritePrompt" xml:space="preserve">
+    <value>The file '{0}' already exists!
+Would you like to overwrite it?
+
+Hint: File overwrite behaviour can be controlled in preferences. </value>
+  </data>
+  <data name="Clipboard_Unavailable" xml:space="preserve">
+    <value>Süsteemi lõikelaud pole praegu saadaval.</value>
+  </data>
+  <data name="Clipboard_Unavailable_Solution" xml:space="preserve">
+    <value>Põhjuseks võib olla mõni teine programm, mis jälgis või lukustas lõikelaua endale kasutamiseks. Sa ei saa enne lõikelaua avamist seda kasutada.</value>
+  </data>
+  <data name="AboutView_License" xml:space="preserve">
+    <value>Litsents:</value>
+  </data>
+  <data name="AboutView_Version" xml:space="preserve">
+    <value>Versioon:</value>
+  </data>
+  <data name="AddPresetView_AddNewCategory" xml:space="preserve">
+    <value>-- Lis auus kategooria --</value>
+  </data>
+  <data name="AddPresetView_AddPreset" xml:space="preserve">
+    <value>Lisa eelseadistus</value>
+  </data>
+  <data name="AddPresetView_Category" xml:space="preserve">
+    <value>Kategooria:</value>
+  </data>
+  <data name="AddPresetView_Description" xml:space="preserve">
+    <value>Kirjeldus:</value>
+  </data>
+  <data name="AddPresetView_Name" xml:space="preserve">
+    <value>Nimi:</value>
+  </data>
+  <data name="AddPresetView_SavePictureSize" xml:space="preserve">
+    <value>Mõõdud:</value>
+  </data>
+  <data name="AudioDefaultView_Behaviours" xml:space="preserve">
+    <value>Allika raja valimine</value>
+  </data>
+  <data name="AudioView_AllowPassThruOf" xml:space="preserve">
+    <value>Allow passthru of:</value>
+  </data>
+  <data name="AudioView_AudioDefaultsDescription" xml:space="preserve">
+    <value>Seadista, kudias heliradasid automaatselt valitakse ja seadistatakse, kui valid uue allika video.</value>
+  </data>
+  <data name="AudioView_AutoPassthruBehaviour" xml:space="preserve">
+    <value>'Auto Passthru' Behaviour:</value>
+  </data>
+  <data name="AudioView_Bitrate" xml:space="preserve">
+    <value>Bitikiirus</value>
+  </data>
+  <data name="AudioView_Codec" xml:space="preserve">
+    <value>Koodek</value>
+  </data>
+  <data name="AudioView_DRC" xml:space="preserve">
+    <value>DRC</value>
+  </data>
+  <data name="AudioView_Gain" xml:space="preserve">
+    <value>Võimendus</value>
+  </data>
+  <data name="AudioView_Hide" xml:space="preserve">
+    <value>Peida</value>
+  </data>
+  <data name="AudioView_Mixdown" xml:space="preserve">
+    <value>Mixdown</value>
+  </data>
+  <data name="AudioView_OtherwiseFallbackEncoder" xml:space="preserve">
+    <value>Tagavara kooder:</value>
+  </data>
+  <data name="AudioView_ReloadDefaults" xml:space="preserve">
+    <value>Laadi uuesti</value>
+  </data>
+  <data name="AudioView_Samplerate" xml:space="preserve">
+    <value>Diskreetimissagedus</value>
+  </data>
+  <data name="AudioView_Show" xml:space="preserve">
+    <value>Näita</value>
+  </data>
+  <data name="AudioView_TrackName" xml:space="preserve">
+    <value>Raja nimi</value>
+  </data>
+  <data name="AudioView_TrackSelectionBehaviour" xml:space="preserve">
+    <value>Raja valiku käitumine:</value>
+  </data>
+  <data name="AudioView_TrackSettingDefaultBehaviour" xml:space="preserve">
+    <value>Lisa radade jaoks:</value>
+  </data>
+  <data name="AudioView_WhenAutoPassthru" xml:space="preserve">
+    <value>When 'Auto Passthru' is selected as the audio codec.</value>
+  </data>
+  <data name="ChaptersView_ChapterMarkers" xml:space="preserve">
+    <value>Peatüki markerid</value>
+  </data>
+  <data name="ChaptersView_ChapterName" xml:space="preserve">
+    <value>Peatüki nimi</value>
+  </data>
+  <data name="ChaptersView_ChapterNumber" xml:space="preserve">
+    <value>Peatükk</value>
+  </data>
+  <data name="ChaptersView_CreateChapterMarkers" xml:space="preserve">
+    <value>Loo peatüki markerid</value>
+  </data>
+  <data name="ChaptersView_Duration" xml:space="preserve">
+    <value>Kestus</value>
+  </data>
+  <data name="ChaptersView_Export" xml:space="preserve">
+    <value>Ekspordi</value>
+  </data>
+  <data name="ChaptersView_Import" xml:space="preserve">
+    <value>Impordi</value>
+  </data>
+  <data name="ChapterView_ExportNames" xml:space="preserve">
+    <value>Ekspordi nimed</value>
+  </data>
+  <data name="ChapterView_ImportNames" xml:space="preserve">
+    <value>Impordi nimed</value>
+  </data>
+  <data name="ChapterView_ResetChapterNames" xml:space="preserve">
+    <value>Nulli peatükkide nimed</value>
+  </data>
+  <data name="CountdownAlterView_CancelAction" xml:space="preserve">
+    <value>Tühista toiming</value>
+  </data>
+  <data name="CountdownAlterView_Proceed" xml:space="preserve">
+    <value>Jätka</value>
+  </data>
+  <data name="CountdownAlterView_WhenDoneAction" xml:space="preserve">
+    <value>Kui toimingud on tehtud</value>
+  </data>
+  <data name="ErrorView_ErrorDetails" xml:space="preserve">
+    <value>Tõrke üksikasjad:</value>
+  </data>
+  <data name="FiltersView_Custom" xml:space="preserve">
+    <value>Kohandatud:</value>
+  </data>
+  <data name="FiltersView_Deblock" xml:space="preserve">
+    <value>Deblock:</value>
+  </data>
+  <data name="FiltersView_Decomb" xml:space="preserve">
+    <value>Decomb</value>
+  </data>
+  <data name="FiltersView_Deinterlace" xml:space="preserve">
+    <value>Eemalda ülerealaotus:</value>
+  </data>
+  <data name="FiltersView_DeinterlacePreset" xml:space="preserve">
+    <value>Eelseadistus:</value>
+  </data>
+  <data name="FiltersView_DeinterlacePresetAuto" xml:space="preserve">
+    <value>Ülerealaotuse eemaldamise eelseadistus</value>
+  </data>
+  <data name="FiltersView_Denoise" xml:space="preserve">
+    <value>Müra vähendamine:</value>
+  </data>
+  <data name="FiltersView_DenoisePresetAuto" xml:space="preserve">
+    <value>Müraeemalduse eelseadistus</value>
+  </data>
+  <data name="FiltersView_DenoiseTuneAuto" xml:space="preserve">
+    <value>Müraeemalduse tuunimine</value>
+  </data>
+  <data name="FiltersView_Detelecine" xml:space="preserve">
+    <value>Detelecine:</value>
+  </data>
+  <data name="FiltersView_Filters" xml:space="preserve">
+    <value>Filtrid</value>
+  </data>
+  <data name="FiltersView_FlipVideo" xml:space="preserve">
+    <value>Horisontaalne</value>
+  </data>
+  <data name="FiltersView_Grayscale" xml:space="preserve">
+    <value>Hallskaalas</value>
+  </data>
+  <data name="FiltersView_InterlaceDetection" xml:space="preserve">
+    <value>Ülerealaotuse tuvastamine:</value>
+  </data>
+  <data name="FiltersView_Preset" xml:space="preserve">
+    <value>Eelseadistus:</value>
+  </data>
+  <data name="FiltersView_Rotate" xml:space="preserve">
+    <value>Pööramine:</value>
+  </data>
+  <data name="FiltersView_Sharpen" xml:space="preserve">
+    <value>Sharpen:</value>
+  </data>
+  <data name="FiltersView_SharpenPresetAuto" xml:space="preserve">
+    <value>Teravdamise eelseadistus</value>
+  </data>
+  <data name="FiltersView_SharpenTuneAuto" xml:space="preserve">
+    <value>Teravdamise tuunimine</value>
+  </data>
+  <data name="FiltersView_Tune" xml:space="preserve">
+    <value>Tuuni:</value>
+  </data>
+  <data name="Generic_Add" xml:space="preserve">
+    <value>Lisa</value>
+  </data>
+  <data name="Generic_Cancel" xml:space="preserve">
+    <value>Loobu</value>
+  </data>
+  <data name="Generic_Clear" xml:space="preserve">
+    <value>Tühjenda</value>
+  </data>
+  <data name="Generic_Close" xml:space="preserve">
+    <value>Sulge</value>
+  </data>
+  <data name="Generic_CopyToClipboard" xml:space="preserve">
+    <value>Kopeeri lõikelauale</value>
+  </data>
+  <data name="Generic_MoveLeft" xml:space="preserve">
+    <value>Liiguta vasakule</value>
+  </data>
+  <data name="Generic_MoveRight" xml:space="preserve">
+    <value>Liiguta paremale</value>
+  </data>
+  <data name="Generic_Save" xml:space="preserve">
+    <value>Salvesta</value>
+  </data>
+  <data name="LogView_CopyClipboard" xml:space="preserve">
+    <value>Kopeeri lõikelauale</value>
+  </data>
+  <data name="LogView_EncodeLog" xml:space="preserve">
+    <value>Kodeerimise logi</value>
+  </data>
+  <data name="LogView_OpenLogDir" xml:space="preserve">
+    <value>Ava logi kaust</value>
+  </data>
+  <data name="LogView_ScanLog" xml:space="preserve">
+    <value>ScanLog</value>
+  </data>
+  <data name="MainView_ActivityLog" xml:space="preserve">
+    <value>Toimingute logi</value>
+  </data>
+  <data name="MainView_AddAll" xml:space="preserve">
+    <value>Lisa kõik</value>
+  </data>
+  <data name="MainView_AddCurrent" xml:space="preserve">
+    <value>Lisa praegune</value>
+  </data>
+  <data name="MainView_AddSelection" xml:space="preserve">
+    <value>Lisa valik</value>
+  </data>
+  <data name="MainView_AddToQueue" xml:space="preserve">
+    <value>Lisa järjekorda</value>
+  </data>
+  <data name="MainView_AdvancedTab" xml:space="preserve">
+    <value>Lisavalikud</value>
+  </data>
+  <data name="MainView_AlignAVStart" xml:space="preserve">
+    <value>Ühtlusta A/V algus</value>
+  </data>
+  <data name="MainView_Angle" xml:space="preserve">
+    <value>Nurk:</value>
+  </data>
+  <data name="MainView_AudioTab" xml:space="preserve">
+    <value>Heli</value>
+  </data>
+  <data name="MainView_AudioTrackCount" xml:space="preserve">
+    <value>Helirajad</value>
+  </data>
+  <data name="MainView_Browser" xml:space="preserve">
+    <value>Sirvi</value>
+  </data>
+  <data name="MainView_ChaptersTab" xml:space="preserve">
+    <value>Peatükid</value>
+  </data>
+  <data name="MainView_Container" xml:space="preserve">
+    <value>Konteiner</value>
+  </data>
+  <data name="MainView_Destination" xml:space="preserve">
+    <value>Sihtkoht</value>
+  </data>
+  <data name="MainView_Duration" xml:space="preserve">
+    <value>Kestus:</value>
+  </data>
+  <data name="MainView_File" xml:space="preserve">
+    <value>Salvesta kui:</value>
+  </data>
+  <data name="MainView_FiltersTab" xml:space="preserve">
+    <value>Filtrid</value>
+  </data>
+  <data name="MainView_Format" xml:space="preserve">
+    <value>Vorming:</value>
+  </data>
+  <data name="MainView_Help" xml:space="preserve">
+    <value>Abiinfo</value>
+  </data>
+  <data name="MainView_iPod5G" xml:space="preserve">
+    <value>iPod 5G tugi</value>
+  </data>
+  <data name="MainView_MetaDataTab" xml:space="preserve">
+    <value>META-andmed</value>
+  </data>
+  <data name="MainView_ModifiedPreset" xml:space="preserve">
+    <value>(muudetud)</value>
+  </data>
+  <data name="MainView_Muxing" xml:space="preserve">
+    <value>Liitmine: See võib aega võtta...</value>
+  </data>
+  <data name="MainView_Options" xml:space="preserve">
+    <value>Valikud</value>
+  </data>
+  <data name="MainView_OutputSettings" xml:space="preserve">
+    <value>Väljundi seaded</value>
+  </data>
+  <data name="MainView_Pause" xml:space="preserve">
+    <value>Paus</value>
+  </data>
+  <data name="MainView_PictureTab" xml:space="preserve">
+    <value>Mõõdud</value>
+  </data>
+  <data name="MainView_PresetManage" xml:space="preserve">
+    <value>Muuda eelseadistust</value>
+  </data>
+  <data name="MainView_PresetOptionsContextMenu" xml:space="preserve">
+    <value>Eelseadistuse valikute konteksimenüü</value>
+  </data>
+  <data name="MainView_PresetRemove" xml:space="preserve">
+    <value>Kustuta eelseadistus</value>
+  </data>
+  <data name="MainView_Presets" xml:space="preserve">
+    <value>Eelseaded</value>
+  </data>
+  <data name="MainView_Preview" xml:space="preserve">
+    <value>Eelvaade</value>
+  </data>
+  <data name="MainView_ProgressStatusWithTask" xml:space="preserve">
+    <value>Kodeerimine: {0}, {1:00.00}%, Aega läheb veel: {2}, {3}</value>
+  </data>
+  <data name="MainView_Range" xml:space="preserve">
+    <value>Ulatus:</value>
+  </data>
+  <data name="MainView_Reload" xml:space="preserve">
+    <value>Laadi uuesti</value>
+  </data>
+  <data name="MainView_Remove" xml:space="preserve">
+    <value>Eemalda</value>
+  </data>
+  <data name="MainView_ResetBuiltInPresets" xml:space="preserve">
+    <value>Nulli sisseehitatud eelseadistused</value>
+  </data>
+  <data name="MainView_SaveNewPreset" xml:space="preserve">
+    <value>Salvesta uus eelseadistus</value>
+  </data>
+  <data name="MainView_Searching" xml:space="preserve">
+    <value>Algusaja otsimine</value>
+  </data>
+  <data name="MainView_SetDefault" xml:space="preserve">
+    <value>Tee vaikeväärtuseks</value>
+  </data>
+  <data name="MainView_ShowPreview" xml:space="preserve">
+    <value>Eelvaade</value>
+  </data>
+  <data name="MainView_ShowQueue" xml:space="preserve">
+    <value>Järjekord</value>
+  </data>
+  <data name="MainView_Source" xml:space="preserve">
+    <value>Allikas:</value>
+  </data>
+  <data name="MainView_SourceOpen" xml:space="preserve">
+    <value>Ava allikas</value>
+  </data>
+  <data name="MainView_StartEncode" xml:space="preserve">
+    <value>Alusta kodeerimist</value>
+  </data>
+  <data name="MainView_StartQueue" xml:space="preserve">
+    <value>Käivita järjekord</value>
+  </data>
+  <data name="MainView_Stop" xml:space="preserve">
+    <value>Peata</value>
+  </data>
+  <data name="MainView_StopEncode" xml:space="preserve">
+    <value>Peata kodeerimine</value>
+  </data>
+  <data name="MainView_StopEncodeConfirm" xml:space="preserve">
+    <value>Oled sa kindel, et soovid seda kodeerimist peatada?</value>
+  </data>
+  <data name="MainView_SubtitleBeforeScanError" xml:space="preserve">
+    <value>Palun vali enne subtiitrifaili importimist allikas, mida kodeerida.</value>
+  </data>
+  <data name="MainView_SubtitlesTab" xml:space="preserve">
+    <value>Subtiitrid</value>
+  </data>
+  <data name="MainView_SubtitleTracksCount" xml:space="preserve">
+    <value>Subtiitrite rajad</value>
+  </data>
+  <data name="MainView_SummaryTab" xml:space="preserve">
+    <value>Kokkuvõte</value>
+  </data>
+  <data name="MainView_through" xml:space="preserve">
+    <value> - </value>
+  </data>
+  <data name="MainView_Title" xml:space="preserve">
+    <value>Pealkiri:</value>
+  </data>
+  <data name="MainView_UpdateSelectedPreset" xml:space="preserve">
+    <value>Update Current Preset</value>
+  </data>
+  <data name="MainView_VideoTab" xml:space="preserve">
+    <value>Video</value>
+  </data>
+  <data name="MainView_WebOptimized" xml:space="preserve">
+    <value>Veebi jaoks optimiseeritud</value>
+  </data>
+  <data name="ManagePresetView_ManagePreset" xml:space="preserve">
+    <value>Eelseadete haldamine</value>
+  </data>
+  <data name="MetaDataView_Title" xml:space="preserve">
+    <value>META-andmed</value>
+  </data>
+  <data name="OptionsView_EnableNvencEncoding" xml:space="preserve">
+    <value>Luba Nvidia NVENC kodeerija kasutamine</value>
+  </data>
+  <data name="OptionsView_EnableQuicksyncEncoding" xml:space="preserve">
+    <value>Luba Inteli QuickSync kodeerija kasutamine</value>
+  </data>
+  <data name="OptionsView_EnableVceEncoding" xml:space="preserve">
+    <value>Allow use of the AMD VCN Encoders</value>
+  </data>
+  <data name="OptionsView_InvalidFileFormatChars" xml:space="preserve">
+    <value>Sisestatud failivormingus olid vigased märgid. Need on eemaldatud. </value>
+  </data>
+  <data name="OptionsView_PlaySoundWhenDone" xml:space="preserve">
+    <value>Esita heli iga kodeerimise lõpus</value>
+  </data>
+  <data name="OptionsView_PlaySoundWhenQueueDone" xml:space="preserve">
+    <value>Esita heli kui kõik tööd on tehtud</value>
+  </data>
+  <data name="OptionsView_ShowPreviewOnSummaryTab" xml:space="preserve">
+    <value>Näita kokkuvõtte kaardil eelvaateid.</value>
+  </data>
+  <data name="OptionsView_ShowStatusInTitleBar" xml:space="preserve">
+    <value>Näita kodeerimise staatust rakenduse tiitliribal.</value>
+  </data>
+  <data name="Options_7DayLogClear" xml:space="preserve">
+    <value>Eemalda logifailid, mis on vanemad kui 7 päeva</value>
+  </data>
+  <data name="Options_About" xml:space="preserve">
+    <value>HandBrake info</value>
+  </data>
+  <data name="Options_Advanced" xml:space="preserve">
+    <value>Lisavalikud</value>
+  </data>
+  <data name="Options_AdvancedOptions" xml:space="preserve">
+    <value>Lisavalikud</value>
+  </data>
+  <data name="Options_Arguments" xml:space="preserve">
+    <value>Argumendid:</value>
+  </data>
+  <data name="Options_AutomaticFileNaming" xml:space="preserve">
+    <value>Automaatne failide nimetamine</value>
+  </data>
+  <data name="Options_AutoNameOutput" xml:space="preserve">
+    <value>Pane väljundfailidele nimed automaatselt</value>
+  </data>
+  <data name="Options_CheckForUpdates" xml:space="preserve">
+    <value>Kontrolli uuendusi</value>
+  </data>
+  <data name="Options_ClearCompleted" xml:space="preserve">
+    <value>Eemalda lõpetatud töö alati tööde nimekirjast</value>
+  </data>
+  <data name="Options_ClearLogs" xml:space="preserve">
+    <value>Tühjenda logi ajalugu</value>
+  </data>
+  <data name="Options_CopyLogToDir" xml:space="preserve">
+    <value>Pane koopia üksiku kodeerimise logist määratud asukohta:</value>
+  </data>
+  <data name="Options_CopyLogToEncDir" xml:space="preserve">
+    <value>Pane koopia üksiku kodeerimise logist samasse kohta, kus on kodeeritud video</value>
+  </data>
+  <data name="Options_CurVersion" xml:space="preserve">
+    <value>Praegune versioon</value>
+  </data>
+  <data name="Options_Decoding" xml:space="preserve">
+    <value>Dekodeerimine</value>
+  </data>
+  <data name="Options_DefaultPath" xml:space="preserve">
+    <value>Vaikimisi asukoht:</value>
+  </data>
+  <data name="Options_DownloadUpdates" xml:space="preserve">
+    <value>Laadi uuendus alla</value>
+  </data>
+  <data name="Options_DVD" xml:space="preserve">
+    <value>DVD lugemine</value>
+  </data>
+  <data name="Options_DvdRead" xml:space="preserve">
+    <value>Ära kasuta LibDVDNav-i. (selle asemel kasutatakse teeki libdvdread)</value>
+  </data>
+  <data name="Options_Encoding" xml:space="preserve">
+    <value>Kodeerimine</value>
+  </data>
+  <data name="Options_Format" xml:space="preserve">
+    <value>Failivorming:</value>
+  </data>
+  <data name="Options_General" xml:space="preserve">
+    <value>Üldine</value>
+  </data>
+  <data name="Options_Logging" xml:space="preserve">
+    <value>Logimine</value>
+  </data>
+  <data name="Options_LogLevel" xml:space="preserve">
+    <value>Logi infokülluse tase:</value>
+  </data>
+  <data name="Options_LogPath" xml:space="preserve">
+    <value>Asukoht:</value>
+  </data>
+  <data name="Options_LowDiskspaceSize" xml:space="preserve">
+    <value>Peata järjekord, kui kettaruumi on liiga vähe</value>
+  </data>
+  <data name="Options_MinimiseTray" xml:space="preserve">
+    <value>Minimeeri süsteemi saalealale (nõuab taaskäivitamist)</value>
+  </data>
+  <data name="Options_MinTitleScanLength" xml:space="preserve">
+    <value>Minimaalne DVD ja Blu-ray peatüki pikkus sekundites. Lühemad jäetakse vahele:</value>
+  </data>
+  <data name="Options_MP4FileExtension" xml:space="preserve">
+    <value>MP4 faili laiend:</value>
+  </data>
+  <data name="Options_OnStartup" xml:space="preserve">
+    <value>Käivitamisel</value>
+  </data>
+  <data name="Options_Output" xml:space="preserve">
+    <value>Väljundfailid</value>
+  </data>
+  <data name="Options_Path" xml:space="preserve">
+    <value>Asukoht:</value>
+  </data>
+  <data name="Options_PathToMediaPlayer" xml:space="preserve">
+    <value>Meediapleieri asukoht</value>
+  </data>
+  <data name="Options_PreventSleep" xml:space="preserve">
+    <value>Keela süsteemil magama minemine kodeerimise ajal</value>
+  </data>
+  <data name="Options_PreviewScanCount" xml:space="preserve">
+    <value>Eelvaate piltide arv, mida skännida:</value>
+  </data>
+  <data name="Options_PriorityLevel" xml:space="preserve">
+    <value>Work Priority Level:</value>
+  </data>
+  <data name="Options_QsvDecode" xml:space="preserve">
+    <value>Prefer use of Intel QuickSync for decoding video when using the QuickSync encoder and the hardware is available for use.</value>
+  </data>
+  <data name="Options_QsvDecodeForNonFullPath" xml:space="preserve">
+    <value>Also use QuickSync decoding when not using a QuickSync encoder. (i.e. x265) </value>
+  </data>
+  <data name="Options_RemovePunctuation" xml:space="preserve">
+    <value>Eemalda tavapärased kirjavahemärgid</value>
+  </data>
+  <data name="Options_ReplaceUnderscores" xml:space="preserve">
+    <value>Asenda allkriipsud tühikutega</value>
+  </data>
+  <data name="Options_ResetDoNothing" xml:space="preserve">
+    <value>Taasta 'Ära tee midagi', kui rakendus taaskäivitatakse.</value>
+  </data>
+  <data name="Options_Scaler" xml:space="preserve">
+    <value>Vali skaleerija:</value>
+  </data>
+  <data name="Options_Scaling" xml:space="preserve">
+    <value>Skaleerimine</value>
+  </data>
+  <data name="Options_SendFileTo" xml:space="preserve">
+    <value>Saada fail:</value>
+  </data>
+  <data name="Options_TitleCase" xml:space="preserve">
+    <value>Tee Kõigi Sõnade Esimesed Tähed Suureks</value>
+  </data>
+  <data name="Options_Updates" xml:space="preserve">
+    <value>Uuendused</value>
+  </data>
+  <data name="Options_UserInterface" xml:space="preserve">
+    <value>Kasutajaliides</value>
+  </data>
+  <data name="Options_Version" xml:space="preserve">
+    <value>Versioon:</value>
+  </data>
+  <data name="Options_Video" xml:space="preserve">
+    <value>Video</value>
+  </data>
+  <data name="Options_VideoPreviewPath" xml:space="preserve">
+    <value>This path is used for the video preview feature only.
+VLC and MPC-HC are supported. Other players may also work but are not validated.</value>
+  </data>
+  <data name="Options_ViewLogDirectory" xml:space="preserve">
+    <value>Vaata logide kausta</value>
+  </data>
+  <data name="Options_WhenDone" xml:space="preserve">
+    <value>Kui on valmis</value>
+  </data>
+  <data name="Options_x264" xml:space="preserve">
+    <value>x264/5 seaded</value>
+  </data>
+  <data name="Options_x264Granularity" xml:space="preserve">
+    <value>Constant quality fractional granularity:</value>
+  </data>
+  <data name="PictureSettingsView_Anamorphic" xml:space="preserve">
+    <value>Anamorfne:</value>
+  </data>
+  <data name="PictureSettingsView_Automatic" xml:space="preserve">
+    <value>Automaatne</value>
+  </data>
+  <data name="PictureSettingsView_Bottom" xml:space="preserve">
+    <value>All</value>
+  </data>
+  <data name="PictureSettingsView_Cropping" xml:space="preserve">
+    <value>Kärpimine:</value>
+  </data>
+  <data name="PictureSettingsView_Custom" xml:space="preserve">
+    <value>Kohandatud</value>
+  </data>
+  <data name="PictureSettingsView_DisplayWidth" xml:space="preserve">
+    <value>Vaate suurus:</value>
+  </data>
+  <data name="PictureSettingsView_Height" xml:space="preserve">
+    <value>Kõrgus:</value>
+  </data>
+  <data name="PictureSettingsView_KeepAR" xml:space="preserve">
+    <value>Automaatne</value>
+  </data>
+  <data name="PictureSettingsView_Left" xml:space="preserve">
+    <value>Vasakul</value>
+  </data>
+  <data name="PictureSettingsView_Output" xml:space="preserve">
+    <value>Lõplikud mõõdud:</value>
+  </data>
+  <data name="PictureSettingsView_PAR" xml:space="preserve">
+    <value>Pixel Aspect:</value>
+  </data>
+  <data name="PictureSettingsView_Right" xml:space="preserve">
+    <value>Paremal</value>
+  </data>
+  <data name="PictureSettingsView_Size" xml:space="preserve">
+    <value>Suurus</value>
+  </data>
+  <data name="PictureSettingsView_Top" xml:space="preserve">
+    <value>Üleval</value>
+  </data>
+  <data name="PictureSettingsView_Width" xml:space="preserve">
+    <value>Skaleeritud suurus:</value>
+  </data>
+  <data name="Preset_Custom" xml:space="preserve">
+    <value>Kohandatud</value>
+  </data>
+  <data name="Preset_Export" xml:space="preserve">
+    <value>Ekspordi faili</value>
+  </data>
+  <data name="Preset_Import" xml:space="preserve">
+    <value>Impordi failist</value>
+  </data>
+  <data name="Preset_Official" xml:space="preserve">
+    <value>Ametlik</value>
+  </data>
+  <data name="QueueSelectionView_ChooseTitles" xml:space="preserve">
+    <value>Vali pealkirjad:</value>
+  </data>
+  <data name="QueueSelectionView_Title" xml:space="preserve">
+    <value>Lisa järjekorda</value>
+  </data>
+  <data name="QueueSelection_UsingPreset" xml:space="preserve">
+    <value>The selected titles will be added using the  "{0}"  preset.</value>
+  </data>
+  <data name="QueueView_Advanced" xml:space="preserve">
+    <value>Video valikud:</value>
+  </data>
+  <data name="QueueView_Audio" xml:space="preserve">
+    <value>Heli:</value>
+  </data>
+  <data name="QueueView_ClearAll" xml:space="preserve">
+    <value>Eemalda kõik</value>
+  </data>
+  <data name="QueueView_ClearCompleted" xml:space="preserve">
+    <value>Eemalda lõpetatud</value>
+  </data>
+  <data name="QueueView_ClearQueue" xml:space="preserve">
+    <value>Tühjenda järjekord</value>
+  </data>
+  <data name="QueueView_ClearSelected" xml:space="preserve">
+    <value>Eemalda valitud</value>
+  </data>
+  <data name="QueueView_Delete" xml:space="preserve">
+    <value>Kustuta</value>
+  </data>
+  <data name="QueueView_Destination" xml:space="preserve">
+    <value>Sihtkoht:</value>
+  </data>
+  <data name="WhenDone_DoNothing" xml:space="preserve">
+    <value>Ära tee midagi</value>
+  </data>
+  <data name="QueueView_Duration" xml:space="preserve">
+    <value>Encode Duration:</value>
+  </data>
+  <data name="QueueView_Edit" xml:space="preserve">
+    <value>Muuda</value>
+  </data>
+  <data name="QueueView_EndTime" xml:space="preserve">
+    <value>Lõpu aeg:</value>
+  </data>
+  <data name="QueueView_Export" xml:space="preserve">
+    <value>Ekspordi järjekord</value>
+  </data>
+  <data name="QueueView_FileSize" xml:space="preserve">
+    <value>Väljundi failisuurus:</value>
+  </data>
+  <data name="WhenDone_Hibernate" xml:space="preserve">
+    <value>Talveuni</value>
+  </data>
+  <data name="WhenDone_LockSystem" xml:space="preserve">
+    <value>Lukusta süsteem</value>
+  </data>
+  <data name="QueueView_LogNotAvailableYet" xml:space="preserve">
+    <value>The log will be available after the encode completes.</value>
+  </data>
+  <data name="WhenDone_Logoff" xml:space="preserve">
+    <value>Logi välja</value>
+  </data>
+  <data name="QueueView_OpenDestDir" xml:space="preserve">
+    <value>Ava sihtkaust</value>
+  </data>
+  <data name="QueueView_OpenSourceDir" xml:space="preserve">
+    <value>Ava allikkaust</value>
+  </data>
+  <data name="QueueView_Options" xml:space="preserve">
+    <value>Valikud</value>
+  </data>
+  <data name="QueueView_Pause" xml:space="preserve">
+    <value>Paus</value>
+  </data>
+  <data name="QueueView_PausedDuration" xml:space="preserve">
+    <value>Paused Duration:</value>
+  </data>
+  <data name="QueueView_PictureSettings" xml:space="preserve">
+    <value>Pildi seaded:</value>
+  </data>
+  <data name="WhenDone_QuitHandBrake" xml:space="preserve">
+    <value>Sulge HandBrake</value>
+  </data>
+  <data name="QueueView_ResetAllJobs" xml:space="preserve">
+    <value>Proovi kõiki töid uuesti</value>
+  </data>
+  <data name="QueueView_ResetFailed" xml:space="preserve">
+    <value>Uuesti proovimine ebaõnnestus</value>
+  </data>
+  <data name="QueueView_ResetSelectedJobs" xml:space="preserve">
+    <value>Nulli valitud tööd</value>
+  </data>
+  <data name="QueueView_Reset" xml:space="preserve">
+    <value>Nulli</value>
+  </data>
+  <data name="WhenDone_Shutdown" xml:space="preserve">
+    <value>Lülita välja</value>
+  </data>
+  <data name="QueueView_Source" xml:space="preserve">
+    <value>Allikas:</value>
+  </data>
+  <data name="QueueView_Start" xml:space="preserve">
+    <value>Käivita järjekord</value>
+  </data>
+  <data name="QueueView_StartTime" xml:space="preserve">
+    <value>Alguse aeg:</value>
+  </data>
+  <data name="QueueView_Statistics" xml:space="preserve">
+    <value>Statistika</value>
+  </data>
+  <data name="QueueView_Subtitles" xml:space="preserve">
+    <value>Subtiitrid:</value>
+  </data>
+  <data name="QueueView_Summary" xml:space="preserve">
+    <value>Kokkuvõte</value>
+  </data>
+  <data name="WhenDone_Suspend" xml:space="preserve">
+    <value>Magama</value>
+  </data>
+  <data name="QueueView_Video" xml:space="preserve">
+    <value>Video:</value>
+  </data>
+  <data name="QueueView_WhenDone" xml:space="preserve">
+    <value>Kui on valmis:</value>
+  </data>
+  <data name="Shared_AddAllForSelected" xml:space="preserve">
+    <value>Lisa kõik ülejäänud keeled</value>
+  </data>
+  <data name="Shared_AddAllRemaining" xml:space="preserve">
+    <value>Lisa kõik ülejäänud rajad</value>
+  </data>
+  <data name="Shared_AddNewTrack" xml:space="preserve">
+    <value>Lisa uus rada</value>
+  </data>
+  <data name="Shared_AddTrack" xml:space="preserve">
+    <value>Rajad</value>
+  </data>
+  <data name="Shared_AvailableLanguages" xml:space="preserve">
+    <value>Saadaolevad keeled:</value>
+  </data>
+  <data name="Shared_ChooseLanguages" xml:space="preserve">
+    <value>Vali keeled:</value>
+  </data>
+  <data name="Shared_ChosenLanguages" xml:space="preserve">
+    <value>Valitud keeled:</value>
+  </data>
+  <data name="Shared_ConfigureDefaultBehaviours" xml:space="preserve">
+    <value>Seadista vaikimisi käitumist</value>
+  </data>
+  <data name="Shared_ReloadDefaults" xml:space="preserve">
+    <value>Laadi uuesti</value>
+  </data>
+  <data name="SourceSelection_ChooseDisc" xml:space="preserve">
+    <value>Vali ketas, mida skännida</value>
+  </data>
+  <data name="SourceSelection_ChooseFile" xml:space="preserve">
+    <value>Vali fail, mida skännida</value>
+  </data>
+  <data name="SourceSelection_ChooseFolder" xml:space="preserve">
+    <value>Vali kaust, mida skännida</value>
+  </data>
+  <data name="SourceSelection_ChooseSpecificTitle" xml:space="preserve">
+    <value>Vali soovi korral konkreetne pealkiri:</value>
+  </data>
+  <data name="SourceSelection_ChooseVideo" xml:space="preserve">
+    <value>Seejärel vali video(d), mida soovid kodeerida:</value>
+  </data>
+  <data name="SourceSelection_File" xml:space="preserve">
+    <value>Fail</value>
+  </data>
+  <data name="SourceSelection_FolderBatchScan" xml:space="preserve">
+    <value>Kaust (hulgitöötlus)</value>
+  </data>
+  <data name="SourceSelection_OpenDVDBluray" xml:space="preserve">
+    <value>Ava see DVD või Bluray seade</value>
+  </data>
+  <data name="SourceSelection_OpenFolderWIth" xml:space="preserve">
+    <value>Ava ühe või mitme failiga kaust.</value>
+  </data>
+  <data name="SourceSelection_QueueArchiveRecovery" xml:space="preserve">
+    <value>Taasta tööde järjekorra fail</value>
+  </data>
+  <data name="SourceSelection_QueueArchiveRecoveryDesc" xml:space="preserve">
+    <value>Eelmise tööde järjekorra arhiiv pole saadaval.</value>
+  </data>
+  <data name="SourceSelection_SingleVideoFile" xml:space="preserve">
+    <value>Ava videofail(id).</value>
+  </data>
+  <data name="SourceSelection_SourceSelection" xml:space="preserve">
+    <value>Allika valimine</value>
+  </data>
+  <data name="StaticPreviewView_Duration" xml:space="preserve">
+    <value>Kestus:</value>
+  </data>
+  <data name="StaticPreviewView_LivePreview" xml:space="preserve">
+    <value>Encode Preview</value>
+  </data>
+  <data name="StaticPreviewView_SelectPreviewImage" xml:space="preserve">
+    <value>Vali eelvaate pilt</value>
+  </data>
+  <data name="StaticPreviewView_UseExternalPlayer" xml:space="preserve">
+    <value>Kasuta välist meediapleierit</value>
+  </data>
+  <data name="SubtitlesView_AddCC" xml:space="preserve">
+    <value>Add Closed Captions when available</value>
+  </data>
+  <data name="SubtitlesView_AddForeignAudioSearch" xml:space="preserve">
+    <value>Add 'Foreign Audio Scan'</value>
+  </data>
+  <data name="SubtitlesView_BurnInBehaviour" xml:space="preserve">
+    <value>Burn-In Behaviour:</value>
+  </data>
+  <data name="SubtitlesView_ImportSubtitle" xml:space="preserve">
+    <value>Impordi subtiiter</value>
+  </data>
+  <data name="SubtitlesView_TrackSelectionBehaviour" xml:space="preserve">
+    <value>Raja valiku käitumine:</value>
+  </data>
+  <data name="SubtitleView_AddAllCC" xml:space="preserve">
+    <value>Add All Remaining Closed Captions</value>
+  </data>
+  <data name="SubtitleView_SubtitleDefaultsDescription" xml:space="preserve">
+    <value>Configure how the Subtitle Tracks are automatically selected and configured when you select a new title or source video.</value>
+  </data>
+  <data name="SummaryView_AdditionalAudioTracks" xml:space="preserve">
+    <value>Lisarada audiole</value>
+  </data>
+  <data name="SummaryView_AdditionalSubtitleTracks" xml:space="preserve">
+    <value>Lisarada subtiitrite jaoks</value>
+  </data>
+  <data name="SummaryView_Burned" xml:space="preserve">
+    <value>Burned</value>
+  </data>
+  <data name="SummaryView_Chapters" xml:space="preserve">
+    <value>Peatüki markerid</value>
+  </data>
+  <data name="SummaryView_Deblock" xml:space="preserve">
+    <value>Deblokeeri</value>
+  </data>
+  <data name="SummaryView_Detelecine" xml:space="preserve">
+    <value>Detelecine</value>
+  </data>
+  <data name="SummaryView_display" xml:space="preserve">
+    <value>vaade</value>
+  </data>
+  <data name="SummaryView_Grayscale" xml:space="preserve">
+    <value>Hallskaalas</value>
+  </data>
+  <data name="SummaryView_NoAudioTracks" xml:space="preserve">
+    <value>Heliradasid pole</value>
+  </data>
+  <data name="SummaryView_NoChapters" xml:space="preserve">
+    <value>Peatüki markereid pole</value>
+  </data>
+  <data name="SummaryView_NoFilters" xml:space="preserve">
+    <value>Filtreid pole</value>
+  </data>
+  <data name="SummaryView_NoSource" xml:space="preserve">
+    <value>Allikat pole</value>
+  </data>
+  <data name="SummaryView_NoSubtitleTracks" xml:space="preserve">
+    <value>Subtiitrite rada pole</value>
+  </data>
+  <data name="SummaryView_NoTracks" xml:space="preserve">
+    <value>Radasid pole</value>
+  </data>
+  <data name="SummaryView_PreviewInfo" xml:space="preserve">
+    <value>Eelvaade {0} / {1}</value>
+  </data>
+  <data name="SummaryView_Rotation" xml:space="preserve">
+    <value>Pööramine</value>
+  </data>
+  <data name="SummaryView_storage" xml:space="preserve">
+    <value>salvestusruum</value>
+  </data>
+  <data name="VideoView_MultiPass" xml:space="preserve">
+    <value>Multi-Pass Encoding</value>
+  </data>
+  <data name="VideoView_AverageBitrate" xml:space="preserve">
+    <value>Keskmine bitikiirus (kbps):</value>
+  </data>
+  <data name="VideoView_Codec" xml:space="preserve">
+    <value>Video Encoder:</value>
+  </data>
+  <data name="VideoView_ConstantFramerate" xml:space="preserve">
+    <value>Püsiv kaadrisagedus</value>
+  </data>
+  <data name="VideoView_ConstantQuality" xml:space="preserve">
+    <value>Püsiv kvaliteet:</value>
+  </data>
+  <data name="VideoView_EncoderLevel" xml:space="preserve">
+    <value>Dekodeerija tase:</value>
+  </data>
+  <data name="VideoView_EncoderPreset" xml:space="preserve">
+    <value>Dekodeerija eelseadistus:</value>
+  </data>
+  <data name="VideoView_EncoderProfile" xml:space="preserve">
+    <value>Dekodeerija profiil:</value>
+  </data>
+  <data name="VideoView_EncodeTune" xml:space="preserve">
+    <value>Kooderi tuunimine:</value>
+  </data>
+  <data name="VideoView_ExtraOptions" xml:space="preserve">
+    <value>Lisavalikud:</value>
+  </data>
+  <data name="VideoView_FastDecode" xml:space="preserve">
+    <value>Kiide kodeerimine</value>
+  </data>
+  <data name="VideoView_Framerate" xml:space="preserve">
+    <value>Kaadrisagedus (FPS):</value>
+  </data>
+  <data name="VideoView_OptimiseVideo" xml:space="preserve">
+    <value>Encoder Options: </value>
+  </data>
+  <data name="VideoView_PeakFramerate" xml:space="preserve">
+    <value>Peak Framerate</value>
+  </data>
+  <data name="VideoView_Quality" xml:space="preserve">
+    <value>Kvaliteet:</value>
+  </data>
+  <data name="VideoView_TurboAnalysisPass" xml:space="preserve">
+    <value>Turbo analysis pass</value>
+  </data>
+  <data name="VideoView_VariableFramerate" xml:space="preserve">
+    <value>Muutuv kaadrisagedus</value>
+  </data>
+  <data name="VideoView_Video" xml:space="preserve">
+    <value>Video:</value>
+  </data>
+  <data name="OptionsView_Language" xml:space="preserve">
+    <value>Keel:</value>
+  </data>
+  <data name="Language_UseSystem" xml:space="preserve">
+    <value>Kasuta süsteemikeelt</value>
+  </data>
+  <data name="SourceSelection_AboutHandBrake" xml:space="preserve">
+    <value>HandBrake info</value>
+  </data>
+  <data name="SourceSelection_DropFileHere" xml:space="preserve">
+    <value>Or drop a file, set of files or folder here ...</value>
+  </data>
+  <data name="SourceSelection_Help" xml:space="preserve">
+    <value>Abiinfo</value>
+  </data>
+  <data name="Preferences" xml:space="preserve">
+    <value>Eelistused</value>
+  </data>
+  <data name="AudioDefaultsView_AddTrack" xml:space="preserve">
+    <value>Lisa rada</value>
+  </data>
+  <data name="AudioDefaultsView_AutoAddTracks" xml:space="preserve">
+    <value>Audio encoder settings for each chosen track:</value>
+  </data>
+  <data name="AudioDefaultsView_Clear" xml:space="preserve">
+    <value>Tühjenda</value>
+  </data>
+  <data name="SubtitlesView_BurnIn" xml:space="preserve">
+    <value>Burn In</value>
+  </data>
+  <data name="SubtitlesView_Default" xml:space="preserve">
+    <value>Vaikimisi</value>
+  </data>
+  <data name="SubtitlesView_ForcedOnly" xml:space="preserve">
+    <value>Ainult sunnitud</value>
+  </data>
+  <data name="MainView_About" xml:space="preserve">
+    <value>_Info...</value>
+  </data>
+  <data name="MainView_ActivityLogMenu" xml:space="preserve">
+    <value>_Toimingute logi</value>
+  </data>
+  <data name="MainView_CheckForUpdates" xml:space="preserve">
+    <value>_Kontrolli uuendusi</value>
+  </data>
+  <data name="MainView_Exit" xml:space="preserve">
+    <value>_Välju</value>
+  </data>
+  <data name="MainView_ExportToFile" xml:space="preserve">
+    <value>_Ekspordi faili</value>
+  </data>
+  <data name="MainView_FileMenu" xml:space="preserve">
+    <value>_Fail</value>
+  </data>
+  <data name="MainView_HandBrakeDocs" xml:space="preserve">
+    <value>_HandBrake-i dokumentatsioon (HTTPS)</value>
+  </data>
+  <data name="MainView_HelpMenu" xml:space="preserve">
+    <value>_Abiinfo</value>
+  </data>
+  <data name="MainView_ImportFromFile" xml:space="preserve">
+    <value>_Impordi failist</value>
+  </data>
+  <data name="MainView_PreferencesMenu" xml:space="preserve">
+    <value>_Eelistused</value>
+  </data>
+  <data name="MainView_PresetsMenu" xml:space="preserve">
+    <value>_Eelseadistused</value>
+  </data>
+  <data name="MainView_QueueMenu" xml:space="preserve">
+    <value>_Järjekord</value>
+  </data>
+  <data name="MainView_ResetPresets" xml:space="preserve">
+    <value>_Nulli sisseehitatud eelseadistused</value>
+  </data>
+  <data name="MainView_SetCurrentAsDefault" xml:space="preserve">
+    <value>_Tee vaikeväärtuseks</value>
+  </data>
+  <data name="MainView_ShowPresetPanel" xml:space="preserve">
+    <value>_Näita eelseadistuste paneeli</value>
+  </data>
+  <data name="MainView_ShowQueueMenu" xml:space="preserve">
+    <value>_Näita tööde järjekorda</value>
+  </data>
+  <data name="MainView_ToolsMenu" xml:space="preserve">
+    <value>_Tööriistad</value>
+  </data>
+  <data name="OptionsView_CheckingForUpdates" xml:space="preserve">
+    <value>Uuenduste kontrollimine ...</value>
+  </data>
+  <data name="OptionsView_ClearLogDirConfirm" xml:space="preserve">
+    <value>Oled sa kindel, et soovid logide kausta tühjendada?</value>
+  </data>
+  <data name="OptionsView_ClearLogs" xml:space="preserve">
+    <value>Tühjenda logid</value>
+  </data>
+  <data name="OptionsView_Downloading" xml:space="preserve">
+    <value>Allalaadimine...</value>
+  </data>
+  <data name="OptionsView_LogsCleared" xml:space="preserve">
+    <value>HandBrake logifailide kaust on tühjendatud!</value>
+  </data>
+  <data name="OptionsView_Notice" xml:space="preserve">
+    <value>Teavitus</value>
+  </data>
+  <data name="OptionsView_PreparingUpdate" xml:space="preserve">
+    <value>Uuendamiseks ettevalmistumine ...</value>
+  </data>
+  <data name="OptionsView_SelectFolder" xml:space="preserve">
+    <value>Palun vali kaust</value>
+  </data>
+  <data name="OptionsView_SetDefaultLocationOutputFIle" xml:space="preserve">
+    <value>Kliki 'Sirvi', et määrata vaikimisi asukoht</value>
+  </data>
+  <data name="MainView_Hide" xml:space="preserve">
+    <value>Peida</value>
+  </data>
+  <data name="MainView_Show" xml:space="preserve">
+    <value>Näita</value>
+  </data>
+  <data name="MainView_ShowAddAllToQueue" xml:space="preserve">
+    <value>'Lisa kõik' tööde järjekorda</value>
+  </data>
+  <data name="MainView_ShowAddSelectionToQueue" xml:space="preserve">
+    <value>'Lisa valik' tööde järjekorda</value>
+  </data>
+  <data name="QueueView_PlayMediaFile" xml:space="preserve">
+    <value>Esita fail</value>
+  </data>
+  <data name="Options_ApplicationToolbar" xml:space="preserve">
+    <value>Rakenduse tööriistariba</value>
+  </data>
+  <data name="Options_ShowToolbarAddAll" xml:space="preserve">
+    <value>Näita tööriistaribal *Lisa kõik järjekorda'</value>
+  </data>
+  <data name="Options_ShowToolbarAddSelection" xml:space="preserve">
+    <value>Näita tööriistaribal 'Lisa valik järjekorda'</value>
+  </data>
+  <data name="OptionsView_HardwareDetectFailed" xml:space="preserve">
+    <value>Hardware encoding support is currently disabled. If you did not start HandBrake with the "--no-hardware" option, please make sure you are running up-to-date drivers for all graphics adaptors in this system.
+
+This will not impact any of the software encoders.</value>
+  </data>
+  <data name="Main_PleaseFixSubtitleSettings" xml:space="preserve">
+    <value>Please correct your subtitle settings before continuing. </value>
+  </data>
+  <data name="Generic_Apply" xml:space="preserve">
+    <value>Rakenda</value>
+  </data>
+  <data name="Main_ResumeEncode" xml:space="preserve">
+    <value>Jätka dekodeerimist</value>
+  </data>
+  <data name="QueueView_Actions" xml:space="preserve">
+    <value>Toimingud</value>
+  </data>
+  <data name="QueueView_Import" xml:space="preserve">
+    <value>Impordi tööde nimekiri</value>
+  </data>
+  <data name="QueueViewModel_EncodeStatusChanged_StatusLabel" xml:space="preserve">
+    <value>Encoding: Pass {0} of {1},  {2:00.00}%, FPS: {3:000.0},  Avg FPS: {4:000.0}
+Time Remaining: {5},  Elapsed: {6} {7}</value>
+  </data>
+  <data name="QueueView_DeleteSelected" xml:space="preserve">
+    <value>Kustuta valitud</value>
+  </data>
+  <data name="Portable_TmpNotWritable" xml:space="preserve">
+    <value>Portable Mode: Unable to create TMP directory. Please check the path is correct and is writable.</value>
+  </data>
+  <data name="Portable_StorageNotWritable" xml:space="preserve">
+    <value>Portable Mode: Unable to create Storage directory. Please check the path is correct and is writable.</value>
+  </data>
+  <data name="Portable_IniFileError" xml:space="preserve">
+    <value>Portable Mode: Unable to read portable.ini. There may be an error in this file. Please retry using portable.ini.template as a guide.</value>
+  </data>
+  <data name="OptionsView_FormatOptions" xml:space="preserve">
+    <value>Replacement Options:
+You can drag/drop or enter the text above.</value>
+  </data>
+  <data name="FileOverwriteBehaviours_Ask" xml:space="preserve">
+    <value>Küsi faili ülekirjutamist</value>
+  </data>
+  <data name="FileOverwriteBehaviours_Autoname" xml:space="preserve">
+    <value>Proovi faili automaatselt ümber nimetada</value>
+  </data>
+  <data name="FileOverwriteBehaviours_Overwrite" xml:space="preserve">
+    <value>Kirjuta fail üle</value>
+  </data>
+  <data name="Options_UIBehaviour" xml:space="preserve">
+    <value>Kasutajaliidese käitumine</value>
+  </data>
+  <data name="OptionsView_FileOverwriteBehaviour" xml:space="preserve">
+    <value>Faili ülekirjutamise käitumine:</value>
+  </data>
+  <data name="Options_EncodeCompleted" xml:space="preserve">
+    <value>Kodeerimine on lõpetatud</value>
+  </data>
+  <data name="Options_Notifications" xml:space="preserve">
+    <value>Teavituste helid</value>
+  </data>
+  <data name="Options_QueueCompleted" xml:space="preserve">
+    <value>Järjekord on lõpetatud</value>
+  </data>
+  <data name="Options_WhenDoneColon" xml:space="preserve">
+    <value>Kui on valmis:</value>
+  </data>
+  <data name="OptionsView_FileCollisionBehaviour" xml:space="preserve">
+    <value>Käitumine failinimede konflikti korral:</value>
+  </data>
+  <data name="CollisionBehaviour_Post" xml:space="preserve">
+    <value>Järeltöötlused</value>
+  </data>
+  <data name="CollisionBehaviour_Pre" xml:space="preserve">
+    <value>Eesliide</value>
+  </data>
+  <data name="CollisionBehaviour_AppendNumber" xml:space="preserve">
+    <value>Lisa number</value>
+  </data>
+  <data name="FiltersViewAuto_DeblockPreset" xml:space="preserve">
+    <value>FiltersView_DeblockPreset</value>
+  </data>
+  <data name="FiltersViewAuto_DeblockTune" xml:space="preserve">
+    <value>Deblock Tune</value>
+  </data>
+  <data name="OptionsView_ChoiceOfEncoderHint" xml:space="preserve">
+    <value>Choice of encoder will be made available on the 'Video' tab.</value>
+  </data>
+  <data name="Queue_RecoverQueueQuestionPlural" xml:space="preserve">
+    <value>HandBrake has detected multiple unfinished queue files. These will be from multiple instances of HandBrake running. Would you like to recover all unfinished jobs?</value>
+  </data>
+  <data name="Queue_RecoverQueueQuestionSingular" xml:space="preserve">
+    <value>HandBrake tuvastas, et eelmisest rakenduse kasutamise korrast on jäänud tööde nimekirja lõpetamata kirjeid. Kas soovid neid taastada?</value>
+  </data>
+  <data name="Queue_RecoveryPossible" xml:space="preserve">
+    <value>Tööde nimekirja taastamine on võimalik</value>
+  </data>
+  <data name="PresetService_ImportingBuiltInWarning" xml:space="preserve">
+    <value>Your presets file contained built-in presets. The import function does not support importing these. Please use 'Presets Menu -&gt; Reset Built In-Presets' to restore the standard presets.
+
+Where supported, any user presets will have been imported.</value>
+  </data>
+  <data name="Options_PromptBeforeAction" xml:space="preserve">
+    <value>Perform action immediately. (This will disable the 60 second confirmation dialog)</value>
+  </data>
+  <data name="Browse" xml:space="preserve">
+    <value>Sirvi</value>
+  </data>
+  <data name="OptionsView_MediaFileNotSet" xml:space="preserve">
+    <value>Helifaili pole määratud. Palun kliki 'Sirvi', et valida wav või mp3 fail, mida esitada.</value>
+  </data>
+  <data name="OptionsView_Play" xml:space="preserve">
+    <value>Esita</value>
+  </data>
+  <data name="QueueView_ExportCLI" xml:space="preserve">
+    <value>Ekspordi järjekord (ainult CLI)</value>
+  </data>
+  <data name="Options_DarkTheme" xml:space="preserve">
+    <value>Kasuta tumedat teemat. (Nõuab taaskäivitamist, ainult Windows 10-le)</value>
+  </data>
+  <data name="QueueView_NotAvailable" xml:space="preserve">
+    <value>Pole saadaval</value>
+  </data>
+  <data name="Options_LowDiskspaceSizeGB" xml:space="preserve">
+    <value>GB</value>
+  </data>
+  <data name="SystemService_ACMains" xml:space="preserve">
+    <value>Tuvastati võrgutoide. Kodeerimist jätkatakse... ({0} %)</value>
+  </data>
+  <data name="SystemService_CriticalBattery" xml:space="preserve">
+    <value>Süsteemi akutase on kriitiline! ({0} %)</value>
+  </data>
+  <data name="SystemService_LowBatteryLog" xml:space="preserve">
+    <value>Süsteemi akutase on madal! ({0} %). Töö pandi pausile.</value>
+  </data>
+  <data name="SystemService_LowDiskSpaceLog" xml:space="preserve">
+    <value>Remaining drive storage has dropped below {0} GB on the destination drive. Pausing encode...</value>
+  </data>
+  <data name="AudioDefaultsView_PaneTitle" xml:space="preserve">
+    <value>Automatic Audio Selections</value>
+  </data>
+  <data name="SubtitlesDefaultsView_PaneTitle" xml:space="preserve">
+    <value>Automatic Subtitle Selections</value>
+  </data>
+  <data name="Options_SystemOptions" xml:space="preserve">
+    <value>Süstem</value>
+  </data>
+  <data name="MetadataView_Actors" xml:space="preserve">
+    <value>Näitlejad:</value>
+  </data>
+  <data name="MetadataView_Comments" xml:space="preserve">
+    <value>Kommentaarid:</value>
+  </data>
+  <data name="MetadataView_Description" xml:space="preserve">
+    <value>Kirjeldus:</value>
+  </data>
+  <data name="MetadataView_Director" xml:space="preserve">
+    <value>Režissöör</value>
+  </data>
+  <data name="MetadataView_Genre" xml:space="preserve">
+    <value>Žanr:</value>
+  </data>
+  <data name="MetadataView_Plot" xml:space="preserve">
+    <value>Sisu:</value>
+  </data>
+  <data name="MetadataView_ReleaseDate" xml:space="preserve">
+    <value>Väljalaske kuupäev:</value>
+  </data>
+  <data name="MetadataView_TitleTag" xml:space="preserve">
+    <value>Pealkiri:</value>
+  </data>
+  <data name="LogViewModel_Title" xml:space="preserve">
+    <value>Logide näitaja</value>
+  </data>
+  <data name="MainView_Aspect" xml:space="preserve">
+    <value>Aspekt:</value>
+  </data>
+  <data name="MainView_Filters" xml:space="preserve">
+    <value>Filtrid:</value>
+  </data>
+  <data name="MainView_Size" xml:space="preserve">
+    <value>uurus:</value>
+  </data>
+  <data name="MainView_Tracks" xml:space="preserve">
+    <value>Rajad:</value>
+  </data>
+  <data name="OptionsTab_General" xml:space="preserve">
+    <value>Üldine</value>
+  </data>
+  <data name="OptionsViewModel_CheckForUpdatesMsg" xml:space="preserve">
+    <value>Uute versioonide otsimiseks kliki 'Kontrolli uuendusi'</value>
+  </data>
+  <data name="OptionsView_BackButton" xml:space="preserve">
+    <value>&lt; Tagasi</value>
+  </data>
+  <data name="QueueView_CurrentlyPaused" xml:space="preserve">
+    <value>Praegu pausil</value>
+  </data>
+  <data name="Options_OutputFiles" xml:space="preserve">
+    <value>Väljundfailid</value>
+  </data>
+  <data name="PointToPointMode_Chapters" xml:space="preserve">
+    <value>Peatükid</value>
+  </data>
+  <data name="PointToPointMode_Frames" xml:space="preserve">
+    <value>Kaadrid</value>
+  </data>
+  <data name="PointToPointMode_Preview" xml:space="preserve">
+    <value>Eelvaade</value>
+  </data>
+  <data name="PointToPointMode_Seconds" xml:space="preserve">
+    <value>Sekundit</value>
+  </data>
+  <data name="SubtitleBehaviourModes_AllMatching" xml:space="preserve">
+    <value>Kõik kattuvad valitud keeled</value>
+  </data>
+  <data name="SubtitleBehaviourModes_FirstMatching" xml:space="preserve">
+    <value>Esimene valitud keelega kattuv</value>
+  </data>
+  <data name="SubtitleBehaviourModes_None" xml:space="preserve">
+    <value>Pole</value>
+  </data>
+  <data name="SubtitleBurnInBehaviourModes_FirstTrack" xml:space="preserve">
+    <value>Esimene rada</value>
+  </data>
+  <data name="SubtitleBurnInBehaviourModes_ForeignAudioPreferredElseFirst" xml:space="preserve">
+    <value>Foreign Audio Preferred, else First</value>
+  </data>
+  <data name="SubtitleBurnInBehaviourModes_ForeignAudioTrack" xml:space="preserve">
+    <value>Võõrkeelse heli rada</value>
+  </data>
+  <data name="SubtitleBurnInBehaviourModes_None" xml:space="preserve">
+    <value>Pole</value>
+  </data>
+  <data name="SubtitleViewModel_ForeignAudioSearch" xml:space="preserve">
+    <value>Võõrkeelse heli otsimine</value>
+  </data>
+  <data name="Subtitle_ForeignAudioScan" xml:space="preserve">
+    <value>Võõrkeelse heli skännimine</value>
+  </data>
+  <data name="AudioBehaviourModes_AllMatching" xml:space="preserve">
+    <value>Kõik kattuvad valitud keeled</value>
+  </data>
+  <data name="AudioBehaviourModes_AllTracks" xml:space="preserve">
+    <value>Kasuta kõiki radasid mallina</value>
+  </data>
+  <data name="AudioBehaviourModes_FirstMatch" xml:space="preserve">
+    <value>Esimene valitud keelega kattuv</value>
+  </data>
+  <data name="AudioBehaviourModes_FirstTrack" xml:space="preserve">
+    <value>Kasuta esimest rada mallina</value>
+  </data>
+  <data name="AudioBehaviourModes_None" xml:space="preserve">
+    <value>Heli pole</value>
+  </data>
+  <data name="ChapterViewModel_Chapter" xml:space="preserve">
+    <value>Peatükk {0}</value>
+  </data>
+  <data name="Mp4Behaviour_Auto" xml:space="preserve">
+    <value>Automaatne</value>
+  </data>
+  <data name="Mp4Behaviour_UseM4v" xml:space="preserve">
+    <value>Kasuta alati M4V-d</value>
+  </data>
+  <data name="Mp4Behaviour_UseMp4" xml:space="preserve">
+    <value>Kasuta alati MP4</value>
+  </data>
+  <data name="PresetPictureSettingsMode_Custom" xml:space="preserve">
+    <value>Kohandatud</value>
+  </data>
+  <data name="PresetPictureSettingsMode_None" xml:space="preserve">
+    <value>Pole</value>
+  </data>
+  <data name="PresetPictureSettingsMode_SourceMaximum" xml:space="preserve">
+    <value>Kasuta alati allika resolutsiooni</value>
+  </data>
+  <data name="ProcessPriority_AboveNormal" xml:space="preserve">
+    <value>Kõrgem kui tavaline</value>
+  </data>
+  <data name="ProcessPriority_BelowNormal" xml:space="preserve">
+    <value>Alla tavapärase</value>
+  </data>
+  <data name="ProcessPriority_High" xml:space="preserve">
+    <value>Kõrge</value>
+  </data>
+  <data name="ProcessPriority_Low" xml:space="preserve">
+    <value>Madal</value>
+  </data>
+  <data name="ProcessPriority_Normal" xml:space="preserve">
+    <value>Tavaline</value>
+  </data>
+  <data name="UpdateCheck_Monthly" xml:space="preserve">
+    <value>Igakuiselt</value>
+  </data>
+  <data name="UpdateCheck_Weekly" xml:space="preserve">
+    <value>Iganädalane</value>
+  </data>
+  <data name="OptionsView_AlwaysUseDefaultPath" xml:space="preserve">
+    <value>Kasuta iga genereeritud nime jaoks alati vaikimisi kaustateed.</value>
+  </data>
+  <data name="OptionsView_RemotePortLimit" xml:space="preserve">
+    <value>Port peab olema vahemikus 5000 kuni 32767</value>
+  </data>
+  <data name="SourceSelection_UpdateAvailable" xml:space="preserve">
+    <value>Saadaval on uus versioon!</value>
+  </data>
+  <data name="About_Copyright" xml:space="preserve">
+    <value>Autoriõigused (C) 2003-2024 HandBrake meeskond</value>
+  </data>
+  <data name="Options_LowBatteryLevel" xml:space="preserve">
+    <value>adal akutase:</value>
+  </data>
+  <data name="Options_PauseOnLowBattery" xml:space="preserve">
+    <value>Peata kõik käimas olevad tööd, kui akutase on madal.</value>
+  </data>
+  <data name="SubtitleView_AddRemainingCC" xml:space="preserve">
+    <value>Add All Remaining Closed Captions</value>
+  </data>
+  <data name="QueueService_DuplicatesQuestion" xml:space="preserve">
+    <value>Duplicate jobs were detected in the queue file that you are trying to import. Do you wish to overwrite the existing records? 
+This will also stop any existing running jobs.</value>
+  </data>
+  <data name="QueueService_DuplicatesTitle" xml:space="preserve">
+    <value>Tuvastati topeltfailid</value>
+  </data>
+  <data name="OptionsView_EnableQuicksyncLowPower" xml:space="preserve">
+    <value>Kasuta Low Power QuickSync riistvada (kui on toetatud).</value>
+  </data>
+  <data name="QueueView_JobInformationNotAvailable" xml:space="preserve">
+    <value>Palun vali üks töö, et vaadata kokkuvõtet.</value>
+  </data>
+  <data name="OptionsView_EnableWorkerProcesses" xml:space="preserve">
+    <value>Run each queued job in a separate worker process.</value>
+  </data>
+  <data name="OptionsView_WorkerDefaultPort" xml:space="preserve">
+    <value>Töötaja vaikimisi võrguport:</value>
+  </data>
+  <data name="Presets_NotAvailableForUse" xml:space="preserve">
+    <value>The preset you have selected is not available for use on this system.
+
+This is typically an indication that your system does not support the hardware required to utilise it.
+
+Please choose a different preset.</value>
+  </data>
+  <data name="OptionsView_ProcessIsolation" xml:space="preserve">
+    <value>Protsessi isoleerimine</value>
+  </data>
+  <data name="OptionsView_ProcessIsolation_Warning1" xml:space="preserve">
+    <value>Please note, using this feature will start an HTTP server bound to 127.0.0.1 on the port stated.</value>
+  </data>
+  <data name="OptionsView_ProcessIsolation_Warning2" xml:space="preserve">
+    <value>If the set port is in use, it will find the first free port within +100 from the defined port.</value>
+  </data>
+  <data name="OptionsView_SimultaneousEncodes" xml:space="preserve">
+    <value>Maksimaalne arv samaaegseid kodeerimisi:</value>
+  </data>
+  <data name="StaticPreviewView_CancelPreview" xml:space="preserve">
+    <value>Loobu</value>
+  </data>
+  <data name="MainView_SelectedPresets" xml:space="preserve">
+    <value>Eelseadistus:</value>
+  </data>
+  <data name="SummaryView_SameAsSource" xml:space="preserve">
+    <value>Sama kui allikas</value>
+  </data>
+  <data name="OptionsViewModel_ResetHandBrake" xml:space="preserve">
+    <value>Taasta seaded</value>
+  </data>
+  <data name="OptionsViewModel_ResetHandBrakeQuestion" xml:space="preserve">
+    <value>Oled sa kindel, et soovid taastada HandBrake vaikimisi seaded?</value>
+  </data>
+  <data name="PaddingMode_Custom" xml:space="preserve">
+    <value>Kohandatud (piiramata)</value>
+  </data>
+  <data name="PaddingMode_Fill" xml:space="preserve">
+    <value>Fill (Surround)</value>
+  </data>
+  <data name="PaddingMode_Height" xml:space="preserve">
+    <value>Height (Pillarbox)</value>
+  </data>
+  <data name="PaddingMode_None" xml:space="preserve">
+    <value>Pole</value>
+  </data>
+  <data name="PaddingMode_Width" xml:space="preserve">
+    <value>Width (Letterbox)</value>
+  </data>
+  <data name="PictureSettingsView_Padding" xml:space="preserve">
+    <value>Täide:</value>
+  </data>
+  <data name="PictureSettingsView_PaddingColour" xml:space="preserve">
+    <value>Värv:</value>
+  </data>
+  <data name="PictureSettingsView_Borders" xml:space="preserve">
+    <value>Piirjooned:</value>
+  </data>
+  <data name="PictureSettingsView_ResAndScaling" xml:space="preserve">
+    <value>Resolutsioon ja skaleerimine</value>
+  </data>
+  <data name="PictureSettingsView_RotateAndCrop" xml:space="preserve">
+    <value>Suund ja kärpimine:</value>
+  </data>
+  <data name="QueueView_FilterSettings" xml:space="preserve">
+    <value>Filtrid:</value>
+  </data>
+  <data name="SummaryView_Default" xml:space="preserve">
+    <value>Vaikimisi</value>
+  </data>
+  <data name="SummaryView_Forced" xml:space="preserve">
+    <value>Jõuga</value>
+  </data>
+  <data name="PictureSettingsResLimitModes_1080p" xml:space="preserve">
+    <value>1080p HD</value>
+  </data>
+  <data name="PictureSettingsResLimitModes_480p" xml:space="preserve">
+    <value>480p NTSC SD</value>
+  </data>
+  <data name="PictureSettingsResLimitModes_4K" xml:space="preserve">
+    <value>2160p 4K Ultra HD</value>
+  </data>
+  <data name="PictureSettingsResLimitModes_576p" xml:space="preserve">
+    <value>576p PAL SD</value>
+  </data>
+  <data name="PictureSettingsResLimitModes_720p" xml:space="preserve">
+    <value>720p HD</value>
+  </data>
+  <data name="PictureSettingsResLimitModes_8K" xml:space="preserve">
+    <value>4320p 8K Ultra HD</value>
+  </data>
+  <data name="PictureSettingsResLimitModes_custom" xml:space="preserve">
+    <value>Kohandatud</value>
+  </data>
+  <data name="PictureSettingsView_MaxSize" xml:space="preserve">
+    <value>Maksimaalne suurus:</value>
+  </data>
+  <data name="PictureSettingsView_ResLimit" xml:space="preserve">
+    <value>Resolutsiooni limiit:</value>
+  </data>
+  <data name="PictureSettingsResLimitModes_none" xml:space="preserve">
+    <value>Pole</value>
+  </data>
+  <data name="PresetManger_Title" xml:space="preserve">
+    <value>Eelseadete haldamine</value>
+  </data>
+  <data name="ManagePresetView_DeleteBuiltIn" xml:space="preserve">
+    <value>Kustuta sisseehitatud eelseadistused</value>
+  </data>
+  <data name="ManagePresetView_Export" xml:space="preserve">
+    <value>Ekspordi valitud eelseadistused</value>
+  </data>
+  <data name="ManagePresetView_Import" xml:space="preserve">
+    <value>Impordi eelseadistus(ed) failist</value>
+  </data>
+  <data name="ManagePresetView_PresetInfo" xml:space="preserve">
+    <value>Eelseadistuse info:</value>
+  </data>
+  <data name="ManagePresetView_RestrictedPreset" xml:space="preserve">
+    <value>Built in presets can not be modified.</value>
+  </data>
+  <data name="ManagePresetView_SetDefault" xml:space="preserve">
+    <value>Tee valitud eeliseadistus vaikeväärtuseks.</value>
+  </data>
+  <data name="PresetManagerView_Delete" xml:space="preserve">
+    <value>Kustuta eelseadistus</value>
+  </data>
+  <data name="OptionsView_NotSupported" xml:space="preserve">
+    <value>(pole selle süsteemi poolt toetatud)</value>
+  </data>
+  <data name="QueueView_Stop" xml:space="preserve">
+    <value>Peata</value>
+  </data>
+  <data name="String1" xml:space="preserve">
+    <value/>
+  </data>
+  <data name="PresetService_CategoryAlreadyExists" xml:space="preserve">
+    <value>Sisestatud kategooria nimi on juba olemas. Palun vali teine nimi.</value>
+  </data>
+  <data name="PresetService_CategoryNameEmpty" xml:space="preserve">
+    <value>Kategooria nimi oli tühi. Palun sisesta nimi.</value>
+  </data>
+  <data name="TextEntryView_EnterName" xml:space="preserve">
+    <value>Sisesta nimi:</value>
+  </data>
+  <data name="ManagePresetView_NoPresetSelected" xml:space="preserve">
+    <value>Ühtegi eelseadistust pole valitud.</value>
+  </data>
+  <data name="ManagePresetView_ExportUserPresets" xml:space="preserve">
+    <value>Ekspordi kõik kasutaja eelseadistused</value>
+  </data>
+  <data name="Options_LowDiskspaceLevelText" xml:space="preserve">
+    <value>Mis tasemel madala kettaruumi hoiatust näidatakse:</value>
+  </data>
+  <data name="OptionsView_SimultaneousHardwareLimitNotice" xml:space="preserve">
+    <value>Notice: This is the upper limit of simultaneous jobs. Hardware limitations may take effect which lowers the actual number of simultaneous jobs during encoding. Setting will only take affect on the next queue batch or app restart.</value>
+  </data>
+  <data name="Preset_NotAvailable" xml:space="preserve">
+    <value>(Pole saadaval)</value>
+  </data>
+  <data name="AddPresetView_IsDefault" xml:space="preserve">
+    <value>On vaikeväärtus:</value>
+  </data>
+  <data name="No" xml:space="preserve">
+    <value>Ei</value>
+  </data>
+  <data name="Yes" xml:space="preserve">
+    <value>Jah</value>
+  </data>
+  <data name="StaticPreviewView_FineTuning" xml:space="preserve">
+    <value>Pildiseadete täppishäälestamine</value>
+  </data>
+  <data name="StaticPreviewView_ShowPictureSettingsAdjustment" xml:space="preserve">
+    <value>Show crop adjustment controls.</value>
+  </data>
+  <data name="DarkTheme_dark" xml:space="preserve">
+    <value>Kasuta tumedat</value>
+  </data>
+  <data name="DarkTheme_light" xml:space="preserve">
+    <value>Kasuta heledat</value>
+  </data>
+  <data name="DarkTheme_system" xml:space="preserve">
+    <value>Süsteemiseaded</value>
+  </data>
+  <data name="OptionsView_DarkThemeMode" xml:space="preserve">
+    <value>Teema:</value>
+  </data>
+  <data name="OptionsView_RequiresRestart" xml:space="preserve">
+    <value>(Vajab restarti)</value>
+  </data>
+  <data name="FiltersView_ChromaSmooth" xml:space="preserve">
+    <value>Chroma Smooth:</value>
+  </data>
+  <data name="FiltersView_ColourSpace" xml:space="preserve">
+    <value>Värviruum:</value>
+  </data>
+  <data name="SummaryView_Colourspace" xml:space="preserve">
+    <value>Värviruum</value>
+  </data>
+  <data name="PictureSettingsView_SeePreview" xml:space="preserve">
+    <value>Ava eelvaade</value>
+  </data>
+  <data name="SummaryView_SourcePreview" xml:space="preserve">
+    <value>Allika eelvaade:</value>
+  </data>
+  <data name="QueueView_JobStatus" xml:space="preserve">
+    <value>Töö staatus:</value>
+  </data>
+  <data name="QueueView_JobStatus_Cancelled" xml:space="preserve">
+    <value>Tühistatud</value>
+  </data>
+  <data name="QueueView_JobStatus_Complete" xml:space="preserve">
+    <value>Valmis</value>
+  </data>
+  <data name="QueueView_JobStatus_InitFailed" xml:space="preserve">
+    <value>Vigased seaded. Vaata üksikasju logist.</value>
+  </data>
+  <data name="QueueView_JobStatus_InvalidInput" xml:space="preserve">
+    <value>Vigane sisend. Vaata üksikasju logist.</value>
+  </data>
+  <data name="QueueView_JobStatus_NoErrorCode" xml:space="preserve">
+    <value>Tundmatu staatus. Vaata üksikasju logist.</value>
+  </data>
+  <data name="QueueView_JobStatus_ReadError" xml:space="preserve">
+    <value>Errors detected while trying to read source.</value>
+  </data>
+  <data name="QueueView_JobStatus_Unknown" xml:space="preserve">
+    <value>Tundmatu tõrge. Vaata üksikasju logist.</value>
+  </data>
+  <data name="QueueView_JobStatus_WorkerCrash" xml:space="preserve">
+    <value>Kokkujooksmine. Vaata üksikasju logist.</value>
+  </data>
+  <data name="Startup_HbDllMissing" xml:space="preserve">
+    <value>Fail "hb.dll" puudub. Palun paigalda programm uuesti.</value>
+  </data>
+  <data name="OptionsView_SafeMode" xml:space="preserve">
+    <value>Warning: Please note that this is a "Safe Mode" build of HandBrake that does not include support for hardware encoders. If you wish to use hardware encoder support, please download a non-"Safe Mode" build from the website.</value>
+  </data>
+  <data name="PadColour_Black" xml:space="preserve">
+    <value>Must</value>
+  </data>
+  <data name="PadColour_Custom" xml:space="preserve">
+    <value>Kohandatud</value>
+  </data>
+  <data name="PadColour_White" xml:space="preserve">
+    <value>Valge</value>
+  </data>
+  <data name="PictureSettingsView_PaddingCustomColour" xml:space="preserve">
+    <value>RGB väärtus:</value>
+  </data>
+  <data name="SummaryView_Padded" xml:space="preserve">
+    <value>(padded)</value>
+  </data>
+  <data name="FiltersView_Flip" xml:space="preserve">
+    <value>Peegelda:</value>
+  </data>
+  <data name="PictureSettingsView_SourceDimensions" xml:space="preserve">
+    <value>Allika mõõdud:</value>
+  </data>
+  <data name="PictureSettingsViewModel_SourceInfo" xml:space="preserve">
+    <value>Storage Size: {0}x{1}     Display Size: {2}x{3}      Aspect Ratio: {4}</value>
+  </data>
+  <data name="MainViewModel_FilePathSelectError" xml:space="preserve">
+    <value>An error was detected in the File Browser Dialog. 
+
+- Please note, long file paths are not fully supported. Please keep file paths shorter than 255 characters. 
+- The last used directory for this window, has been reset to prevent errors the next time you try to scan a file.</value>
+  </data>
+  <data name="PictureSettingsView_MaxHeight" xml:space="preserve">
+    <value>Maks. kõrgus:</value>
+  </data>
+  <data name="PictureSettingsView_MaxWidth" xml:space="preserve">
+    <value>Maks. laius</value>
+  </data>
+  <data name="PictureSettingsViewModel_AspectRatioLabel" xml:space="preserve">
+    <value>Külgede suhe: {0}</value>
+  </data>
+  <data name="SummaryView_MetadataPassthru" xml:space="preserve">
+    <value>Passthru Common Metadata</value>
+  </data>
+  <data name="OptionsViewModel_InvalidAutonamePath" xml:space="preserve">
+    <value>The default auto name path was not valid. {0} must not be before {1}</value>
+  </data>
+  <data name="FirstRun_EnableUpdateCheck" xml:space="preserve">
+    <value>Would you like to allow HandBrake to automatically check for updates?
+
+You can change your choice at any time by changing the options in Preferences -&gt; General -&gt; Check for Updates</value>
+  </data>
+  <data name="FirstRun_EnableUpdateCheckHeader" xml:space="preserve">
+    <value>Kas kontrollida uuendusi?</value>
+  </data>
+  <data name="OptionsViewModel_UpdateNotice" xml:space="preserve">
+    <value>Before Updating:
+- Make sure there are no pending encodes in the queue. 
+- Backup or make a note of any custom presets you have created as they may not be fully compatible with newer versions.</value>
+  </data>
+  <data name="Preset_Default" xml:space="preserve">
+    <value>(Vaikeväärtus)</value>
+  </data>
+  <data name="PresetDisplayMode_Category" xml:space="preserve">
+    <value>Kategooriad</value>
+  </data>
+  <data name="PresetDisplayMode_Flat" xml:space="preserve">
+    <value>Flat</value>
+  </data>
+  <data name="PresetDisplayMode_Partial" xml:space="preserve">
+    <value>Partially Flat</value>
+  </data>
+  <data name="OptionsView_PresetDisplayMode" xml:space="preserve">
+    <value>Choose how presets are displayed in menus:</value>
+  </data>
+  <data name="QueueView_SelectedPresets" xml:space="preserve">
+    <value>Eelseadistus:</value>
+  </data>
+  <data name="LogViewModel_Complete" xml:space="preserve">
+    <value>[Lõpetatud]</value>
+  </data>
+  <data name="QueueViewModel_EditJob" xml:space="preserve">
+    <value>Muuta tööd?</value>
+  </data>
+  <data name="QueueView_Length" xml:space="preserve">
+    <value>Väljundi pikkus:</value>
+  </data>
+  <data name="QueueView_MoveToBottom" xml:space="preserve">
+    <value>Liiguta alla</value>
+  </data>
+  <data name="QueueView_MoveToTop" xml:space="preserve">
+    <value>Liiguta üles</value>
+  </data>
+  <data name="QueueView_VideoOutputBitrate" xml:space="preserve">
+    <value>Väljundi bitikiirus:</value>
+  </data>
+  <data name="QueueView_AverageEncodeSpeed" xml:space="preserve">
+    <value>Keskmine kodeerimise kiirus:</value>
+  </data>
+  <data name="QueueViewModel_DifferenceText" xml:space="preserve">
+    <value> of source file</value>
+  </data>
+  <data name="QueueViewModel_NotAvailable" xml:space="preserve">
+    <value>Pole saadaval</value>
+  </data>
+  <data name="QueueView_SourceLength" xml:space="preserve">
+    <value>Allika pikkus:</value>
+  </data>
+  <data name="Options_Reset" xml:space="preserve">
+    <value>Nulli</value>
+  </data>
+  <data name="OptionsViewModel_ResetHandBrakePresetsQuestion" xml:space="preserve">
+    <value>Are you sure you wish to reset all built-in presets?</value>
+  </data>
+  <data name="OptionsView_ResetBuildInPresets" xml:space="preserve">
+    <value>Reset all built-in presets to HandBrake defaults:</value>
+  </data>
+  <data name="OptionsView_ResetBuildInPresetsNotice" xml:space="preserve">
+    <value>(User presets will not be reset)</value>
+  </data>
+  <data name="OptionsView_ResetSettingsToDefaults" xml:space="preserve">
+    <value>Reset all HandBrake settings back to defaults:</value>
+  </data>
+  <data name="Options_BuiltInPresets" xml:space="preserve">
+    <value>Built In Presets</value>
+  </data>
+  <data name="Options_UserSettings" xml:space="preserve">
+    <value>Kasutaja seaded</value>
+  </data>
+  <data name="PresetDisplayMode_FloatingPanel" xml:space="preserve">
+    <value>Hõljuv puuvaade</value>
+  </data>
+  <data name="QueueViewModel_PlayFileErrorSolution" xml:space="preserve">
+    <value>Please make sure you have appropriate file associations setup in Windows to allow it to open this file with a supported video player</value>
+  </data>
+  <data name="QueueViewModel_ImportFail" xml:space="preserve">
+    <value>Unable to read the queue file.</value>
+  </data>
+  <data name="QueueViewModel_ImportFailSolution" xml:space="preserve">
+    <value>The file may be corrupted or from an earlier version of HandBrake. 
+Only queue files from the current version are supported.</value>
+  </data>
+  <data name="Notifications_EncodeDone" xml:space="preserve">
+    <value>Your HandBrake encode is done!</value>
+  </data>
+  <data name="Notifications_QueueDone" xml:space="preserve">
+    <value>Your HandBrake queue is done!</value>
+  </data>
+  <data name="OptionsView_NotificationRemovalSubText" xml:space="preserve">
+    <value>This will also disable the show windows taskbar notifications options on the 'When Done' tab. Re-enable these if you want to re-activate this feature.</value>
+  </data>
+  <data name="OptionsView_NotificationRemovalText" xml:space="preserve">
+    <value>Remove HandBrake from the Windows notifications control panel.</value>
+  </data>
+  <data name="OptionsView_UninstallMessageBoxHeader" xml:space="preserve">
+    <value>Eemaldatud</value>
+  </data>
+  <data name="OptionsView_UninstallMessageBoxText" xml:space="preserve">
+    <value>Teavituste seaded on eemaldatud.</value>
+  </data>
+  <data name="OptionsView_UninstallToast" xml:space="preserve">
+    <value>Tühjenda ja eemalda</value>
+  </data>
+  <data name="OptionsView_WindowsNotification" xml:space="preserve">
+    <value>Send a notification to the Windows Taskbar.</value>
+  </data>
+  <data name="OptionsView_WindowsNotificationsBanner" xml:space="preserve">
+    <value>Windowsi teavitused</value>
+  </data>
+  <data name="Main_QueueMultiJobStatus" xml:space="preserve">
+    <value>{0} jobs completed. {1}Working on {2} jobs with {3} waiting to be processed.</value>
+  </data>
+  <data name="MainView_AutonameRegenerate" xml:space="preserve">
+    <value>Regenerate (Autoname)</value>
+  </data>
+  <data name="MainView_OpenDirectory" xml:space="preserve">
+    <value>Ava see kaust</value>
+  </data>
+  <data name="Shared_CollapseAll" xml:space="preserve">
+    <value>Sulge kõik</value>
+  </data>
+  <data name="Shared_ExpandAll" xml:space="preserve">
+    <value>Ava kõik</value>
+  </data>
+  <data name="OptionsView_RightToleftMode" xml:space="preserve">
+    <value>Paremalt vasakule tekstisuund:</value>
+  </data>
+  <data name="RightToLeft_Off" xml:space="preserve">
+    <value>Väljas</value>
+  </data>
+  <data name="RightToLeft_TextOnly" xml:space="preserve">
+    <value>Ainult tekst</value>
+  </data>
+  <data name="RightToLeft_WholeInterface" xml:space="preserve">
+    <value>Kogu kasutajaliides</value>
+  </data>
+  <data name="SourceSelection_NightlyUpdate" xml:space="preserve">
+    <value>The current development build you are running is getting old. You may wish to update!</value>
+  </data>
+  <data name="SourceSelection_NightlyUpdateUrl" xml:space="preserve">
+    <value>Laadi alla Githubist</value>
+  </data>
+  <data name="MainView_NightlyBuildsUpdate" xml:space="preserve">
+    <value>Download Development Builds (HTTPS)</value>
+  </data>
+  <data name="OptionsView_EnableQuicksyncHyperEncode" xml:space="preserve">
+    <value>Enable QuickSync Deep Link Hyper Encode</value>
+  </data>
+  <data name="OptionsView_HyperEncodeDescription" xml:space="preserve">
+    <value>Prefers the use of multiple media engines to speed up a single encode where supported. Disable to allow load balancing multiple parallel encodes across media engines.</value>
+  </data>
+  <data name="MainView_OpenHandBrake" xml:space="preserve">
+    <value>Ava HandBrake</value>
+  </data>
+  <data name="Startup_UnableToStartInfo" xml:space="preserve">
+    <value>Hardware encoding support has been disabled as it is a common cause of start-up issues.
+- Please try restarting HandBrake. 
+- If the problem persists, it may be an out-of-date graphics card driver (onboard or discrete) that is causing the problem.
+
+Hardware encoding support can be re-enabled in preferences. </value>
+  </data>
+  <data name="Startup_UnableToStart" xml:space="preserve">
+    <value>HandBrake was unable to start.</value>
+  </data>
+  <data name="OptionsView_ResetSafeMode" xml:space="preserve">
+    <value>Reset Safe Mode</value>
+  </data>
+  <data name="OptionsView_ResetSafeModeMessage" xml:space="preserve">
+    <value>Palun taaskäivita HandBrake.</value>
+  </data>
+  <data name="Debug_QueueDataExport" xml:space="preserve">
+    <value>Ekspordi järjekorra statistika andmed (csv)</value>
+  </data>
+  <data name="Debug_QueueExportDataDone" xml:space="preserve">
+    <value>Eksporditud!</value>
+  </data>
+  <data name="Debug_QueueSweep_NotSetup" xml:space="preserve">
+    <value>You must first scan a source and have an initial destination directory set</value>
+  </data>
+  <data name="OptionsView_FileCollisionNotice" xml:space="preserve">
+    <value>Ainult siis, kui fail on kettal juba olemas.</value>
+  </data>
+  <data name="Info" xml:space="preserve">
+    <value>Info</value>
+  </data>
+  <data name="SubtitleView_NoSubtitlesAdded" xml:space="preserve">
+    <value>There were no subtitle tracks added. 
+
+This may be due to limitations of the file container you have selected. Please see our subtitle help documentation for more information.</value>
+  </data>
+  <data name="DarkTheme_None" xml:space="preserve">
+    <value>Pole</value>
+  </data>
+  <data name="SourceSelection_UpdateNow" xml:space="preserve">
+    <value>Uuenda kohe!</value>
+  </data>
+  <data name="CropMode_Auto" xml:space="preserve">
+    <value>Automaatne</value>
+  </data>
+  <data name="CropMode_Loose" xml:space="preserve">
+    <value>Konservatiivne</value>
+  </data>
+  <data name="CropMode_None" xml:space="preserve">
+    <value>Pole</value>
+  </data>
+  <data name="CropMode_Custom" xml:space="preserve">
+    <value>Kohandatud</value>
+  </data>
+  <data name="OptionsView_EnableNvDecSupport" xml:space="preserve">
+    <value>Prefer use of Nvidia NVDec for decoding video when using the NVEnc encoder and the hardware is available for use.</value>
+  </data>
+  <data name="Options_Hardware" xml:space="preserve">
+    <value>Riistvara tugi</value>
+  </data>
+  <data name="StaticPreviewViewModel_MediaError" xml:space="preserve">
+    <value>The system was unable to play this file. 
+
+Please note certain codecs such as AV1 or HEVC require the Microsoft AV1 or HEVC codec plugins from the Microsoft Store to play.
+Alternatively, check the "Use External Player" checkbox below.</value>
+  </data>
+  <data name="StaticPreviewView_ClosePlayer" xml:space="preserve">
+    <value>Sulge pleier</value>
+  </data>
+  <data name="StaticPreviewView_Play" xml:space="preserve">
+    <value>Esita</value>
+  </data>
+  <data name="StaticPreviewView_VideoPreview" xml:space="preserve">
+    <value>Video eelvaade</value>
+  </data>
+  <data name="StaticPreviewViewModel_WebmNotSupported" xml:space="preserve">
+    <value>The Built-in preview is not available for the WebM container. An External player must be used.</value>
+  </data>
+  <data name="StaticPreview_EncodingPreview" xml:space="preserve">
+    <value>Kodeerimise eelvaade...</value>
+  </data>
+  <data name="StaticPreview_Previews" xml:space="preserve">
+    <value>Eelvaated:</value>
+  </data>
+  <data name="StaticPreview_Volume" xml:space="preserve">
+    <value>Helitugevus: 0</value>
+  </data>
+  <data name="Reset" xml:space="preserve">
+    <value>Nulli</value>
+  </data>
+  <data name="OptionsView_IsoDateFormat" xml:space="preserve">
+    <value>Use ISO Date Formats (YYYY-MM-DD) instead of system format.</value>
+  </data>
+  <data name="QueueViewModel_ShortEncodeStatus" xml:space="preserve">
+    <value>Pass {0} of {1}, {2:00.00}%, {3:000.0} fps, avg {4:000.0} fps, ETA: {5}</value>
+  </data>
+  <data name="QueueViewModel_ShortSubScanStatus" xml:space="preserve">
+    <value>Scanning for Subtitles {0:00.00}%, ETA: {1}</value>
+  </data>
+  <data name="QueueView_ExtendedQueueDisplay" xml:space="preserve">
+    <value>Laienda järjekorra infot</value>
+  </data>
+  <data name="QueueView_MinimalQueueDisplay" xml:space="preserve">
+    <value>Minimeeri järjekorra infot</value>
+  </data>
+  <data name="QueueStats_ShortOutputStats" xml:space="preserve">
+    <value>Väljund: {0}, keskm {1} fps</value>
+  </data>
+  <data name="PresetPane_Desc" xml:space="preserve">
+    <value>Eelseadistuse kirjeldus:</value>
+  </data>
+  <data name="PresetPane_HidePresetDesc" xml:space="preserve">
+    <value>Peida eelvaate kirjeldus</value>
+  </data>
+  <data name="PresetPane_ShowPresetDesc" xml:space="preserve">
+    <value>Näita eelvaate kirjeldust</value>
+  </data>
+  <data name="TaskTrayStatusManyTitle" xml:space="preserve">
+    <value>{0}
+Kodeerimine {1} tööd</value>
+  </data>
+  <data name="StaticPreviewViewModel_MultipleEncodes" xml:space="preserve">
+    <value>Unable to encode a preview. The application is currently busy encoding another file.
+
+To allow multiple simultaneous encodes, turn on "Process Isolation" in Tools Menu -&gt; Preferences -&gt; Advanced -&gt; Process Isolation -&gt; "Run each queued job in a separate worker process".</value>
+  </data>
+  <data name="AudioView_Quality" xml:space="preserve">
+    <value>Kvaliteet</value>
+  </data>
+  <data name="AudioView_Source" xml:space="preserve">
+    <value>Allikas</value>
+  </data>
+  <data name="AboutView_Documentation" xml:space="preserve">
+    <value>Dokumentatsioon:</value>
+  </data>
+  <data name="AboutView_GithubTracker" xml:space="preserve">
+    <value>Githubi probleemide jälgija:</value>
+  </data>
+  <data name="AboutView_Website" xml:space="preserve">
+    <value>Veebisait:</value>
+  </data>
+  <data name="MainView_PresetClone" xml:space="preserve">
+    <value>Klooni eelseadistus</value>
+  </data>
+  <data name="PresetPane_MoveDown" xml:space="preserve">
+    <value>Liiguta alla</value>
+  </data>
+  <data name="PresetPane_MoveToBottom" xml:space="preserve">
+    <value>Liiguta viimaseks</value>
+  </data>
+  <data name="PresetPane_MoveToTop" xml:space="preserve">
+    <value>Liiguta kõige ülemiseks</value>
+  </data>
+  <data name="PresetPane_MoveUp" xml:space="preserve">
+    <value>Liiguta üles</value>
+  </data>
+  <data name="QueueViewModel_StopButContinueJob" xml:space="preserve">
+    <value>There are currently jobs running. Would you like to complete the current jobs before stopping the queue?</value>
+  </data>
+  <data name="Options_AddExt" xml:space="preserve">
+    <value>Lisa laiendus</value>
+  </data>
+  <data name="Options_ExcludeExtensions" xml:space="preserve">
+    <value>Jäta vahele faililaiendid:</value>
+  </data>
+  <data name="Options_ExcludeExtensionsInfo" xml:space="preserve">
+    <value>The following file extensions will be ignored when scanning a folder. The list is case insensitive. "." is not required.</value>
+  </data>
+  <data name="Options_ExtensionExists" xml:space="preserve">
+    <value>This file extension already exists in the list.</value>
+  </data>
+  <data name="Options_FileHandling" xml:space="preserve">
+    <value>Failide käsitlemine (Skännimine)</value>
+  </data>
+  <data name="Options_RecursiveFolderScan" xml:space="preserve">
+    <value>Recursively scan directories when using the folder scan mode.</value>
+  </data>
+  <data name="AudioView_AudioQuality" xml:space="preserve">
+    <value>Heliraja kvaliteet</value>
+  </data>
+  <data name="AudioView_AudioTrackName" xml:space="preserve">
+    <value>Heliraja nimi</value>
+  </data>
+  <data name="AudioView_BitrateSelection" xml:space="preserve">
+    <value>Heliraja bitikiirus</value>
+  </data>
+  <data name="AudioView_DeleteTrack" xml:space="preserve">
+    <value>Kustuta see helirada</value>
+  </data>
+  <data name="AudioView_QualityMode" xml:space="preserve">
+    <value>Audio Encoder Quality Mode</value>
+  </data>
+  <data name="QueueView_AdvancedQueueDisplay" xml:space="preserve">
+    <value>Use Advanced Queue View</value>
+  </data>
+  <data name="QueueView_SimpleQueueDisplay" xml:space="preserve">
+    <value>Use Simple Queue View</value>
+  </data>
+  <data name="VideoView_LosslessEncodeOnly" xml:space="preserve">
+    <value>Lossless encoding only.</value>
+  </data>
+  <data name="MainView_HideClassicMenu" xml:space="preserve">
+    <value>Hide Classic Menu</value>
+  </data>
+  <data name="MainView_ShowClassicMenu" xml:space="preserve">
+    <value>Show Classic Menu</value>
+  </data>
+  <data name="OptionsViewVideo_UnsupportedIntelDriver" xml:space="preserve">
+    <value>(Warning: Unsupported Driver Detected! - Update Recommended)</value>
+  </data>
+  <data name="QueueSelectionView_RangeLimits" xml:space="preserve">
+    <value>Range Limits:</value>
+  </data>
+  <data name="QueueSelectionView_RangeLimitsDesc" xml:space="preserve">
+    <value>Limit the length of the titles added to the queue.</value>
+  </data>
+  <data name="QueueSelectionView_RangeLimitsEnable" xml:space="preserve">
+    <value>Enable Range Limits</value>
+  </data>
+  <data name="AddToQueue_RangeLimitError" xml:space="preserve">
+    <value>Some titles could not be added to the queue due to being outside of the selected range limits.</value>
+  </data>
+  <data name="QueueView_StartAtTime" xml:space="preserve">
+    <value>Start Later</value>
+  </data>
+  <data name="QueueView_QueueStartTime" xml:space="preserve">
+    <value>Queue Start Time:</value>
+  </data>
+</root>

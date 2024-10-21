@@ -9,13 +9,13 @@ concurrency:
 jobs:
   build_mingw:
     name: CLI / LibHB
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
 
     - name: Cargo-C Toolchain Cache
       id: windows-cargo-c-toolchain
-      uses: actions/cache@v3
+      uses: actions/cache@v4
       with:
         path: |
           ~/.cargo/bin/cargo-capi
@@ -25,24 +25,23 @@ jobs:
 
     - name: Setup Environment
       run: |
-        sudo apt-get purge cmake -y
-        sudo apt-get install automake autoconf build-essential libtool libtool-bin make nasm patch tar yasm zlib1g-dev ninja-build gzip pax cmake libssl-dev
+        sudo apt-get install automake autoconf build-essential libtool libtool-bin make nasm patch tar yasm zlib1g-dev ninja-build gzip pax libssl-dev
         sudo pip3 install meson
         rustup target add x86_64-pc-windows-gnu
 
     - name: Setup Toolchain
       run: |
-        wget https://github.com/bradleysepos/mingw-w64-build/releases/download/9.2.0/mingw-w64-toolchain-9.2.0-linux-x86_64.tar.gz
-        SHA=$(sha1sum mingw-w64-toolchain-9.2.0-linux-x86_64.tar.gz)
-        EXPECTED="560ceb85cdf2783c68226d3761f865c42101c3f6  mingw-w64-toolchain-9.2.0-linux-x86_64.tar.gz"
+        wget https://github.com/bradleysepos/mingw-w64-build/releases/download/10.0.0/mingw-w64-toolchain-10.0.0-msvcrt-linux-x86_64.tar.gz
+        SHA=$(sha1sum mingw-w64-toolchain-10.0.0-msvcrt-linux-x86_64.tar.gz)
+        EXPECTED="f7250d140a72bdfdda2d4cd01d84e9a3938132b1  mingw-w64-toolchain-10.0.0-msvcrt-linux-x86_64.tar.gz"
         if [ "$SHA" == "$EXPECTED" ];
         then
             echo "Toolchain Verified. Extracting ..."
             mkdir toolchains
-            mv mingw-w64-toolchain-9.2.0-linux-x86_64.tar.gz toolchains
+            mv mingw-w64-toolchain-10.0.0-msvcrt-linux-x86_64.tar.gz toolchains
             cd toolchains
-            tar xvf mingw-w64-toolchain-9.2.0-linux-x86_64.tar.gz
-            cd mingw-w64-toolchain-9.2.0-linux-x86_64/mingw-w64-x86_64/
+            tar xvf mingw-w64-toolchain-10.0.0-msvcrt-linux-x86_64.tar.gz
+            cd mingw-w64-toolchain-10.0.0-msvcrt-linux-x86_64/mingw-w64-x86_64/
             pwd
         else
             echo "Toolchain Verification FAILED. Exiting!"
@@ -56,20 +55,20 @@ jobs:
 
     - name: Build CLI and LibHB
       run: |
-        export PATH="/home/runner/work/HandBrake/HandBrake/toolchains/mingw-w64-toolchain-9.2.0-linux-x86_64/mingw-w64-x86_64/bin:${PATH}"
+        export PATH="/home/runner/work/HandBrake/HandBrake/toolchains/mingw-w64-toolchain-10.0.0-msvcrt-linux-x86_64/mingw-w64-x86_64/bin:${PATH}"
         export PATH=/usr/bin:$PATH
         ./configure --cross=x86_64-w64-mingw32 --enable-qsv --enable-vce --enable-nvenc --enable-nvdec --enable-fdk-aac --launch-jobs=0 --launch
         cd build
         make pkg.create.zip
 
     - name: Upload HandBrakeCLI
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: HandBrakeCLI
         path: ./build/HandBrakeCLI.exe
 
     - name: Upload LibHB
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: LibHandBrake
         path: ./build/libhb/hb.dll
@@ -83,10 +82,10 @@ jobs:
       SigningCertificate: ${{ secrets.HandBrakeTeam_SignFile }}
 
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
 
     - name: Download LibHandBrake
-      uses: actions/download-artifact@v3
+      uses: actions/download-artifact@v4
       with:
        name: LibHandBrake
        path: win/CS/HandBrakeWPF/bin/publish
@@ -109,13 +108,13 @@ jobs:
         msbuild win\cs\build.xml /t:x64 /p:PfxFile=$env:SigningCertificate /p:PfxPwd=${{ secrets.HandBrakeTeam_pfx_pwd }} /p:SignTimestampServer=http://time.certum.pl/
 
     - name: Upload HandBrake exe Installer
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: HandBrake-x86_64-Win_GUI-EXE
         path: win/CS/HandBrakeWPF/bin/publish/HandBrake-Nightly-x86_64-Win_GUI.exe
 
     - name: Upload HandBrake msi Installer
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name:  HandBrake-x86_64-Win_GUI-MSI
         path: win/CS/HandBrakeWPF/bin/publish/HandBrake-Nightly-x86_64-Win_GUI.msi

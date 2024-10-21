@@ -42,6 +42,7 @@ namespace HandBrakeWPF.Instance
         private Timer encodePollTimer;
         private int retryCount;
         private bool encodeCompleteFired;
+        private object lockObject = new object();
 
         public RemoteInstance(ILog logService, IUserSettingService userSettingService, IPortService portService) : base(logService, userSettingService, portService)
         {
@@ -92,18 +93,7 @@ namespace HandBrakeWPF.Instance
 
         public JsonState GetProgress()
         {
-            Task<ServerResponse> response = this.MakeHttpGetRequest("PollEncodeProgress");
-            response.Wait();
-
-            if (!response.Result.WasSuccessful)
-            {
-                return null;
-            }
-
-            string statusJson = response.Result?.JsonResponse;
-
-            JsonState state = JsonSerializer.Deserialize<JsonState>(statusJson, JsonSettings.Options);
-            return state;
+            throw new NotImplementedException("Not Used");
         }
 
         private void MonitorEncodeProgress()
@@ -116,7 +106,10 @@ namespace HandBrakeWPF.Instance
                 {
                     try
                     {
-                        this.PollEncodeProgress();
+                        lock (lockObject)
+                        {
+                            this.PollEncodeProgress();
+                        }
                     }
                     catch (Exception exc)
                     {
@@ -189,9 +182,14 @@ namespace HandBrakeWPF.Instance
 
                 response = await this.MakeHttpGetRequest("PollEncodeProgress");
             }
-            catch (Exception)
+            catch (Exception e)
             {
                 retryCount = this.retryCount + 1;
+
+                if (retryCount > 5)
+                {
+                    this.ServiceLogMessage("Worker: Final attempt to communicate failed: " + e);
+                }
             }
 
             if (response == null || !response.WasSuccessful)
@@ -210,6 +208,8 @@ namespace HandBrakeWPF.Instance
 
             if (string.IsNullOrEmpty(statusJson))
             {
+                retryCount = this.retryCount + 1;
+                this.encodePollTimer?.Start(); // Reset and try again.
                 return;
             }
 
@@ -291,11 +291,35 @@ namespace HandBrakeWPF.Instance
 
                 initCommand.LogFile = Path.Combine(initCommand.LogDirectory, string.Format("activity_log.worker.{0}.txt", GeneralUtilities.ProcessId));
 
-                string job = JsonSerializer.Serialize(new EncodeCommand { InitialiseCommand = initCommand, EncodeJob = jobToStart }, JsonSettings.Options);
+                bool startRequested = false;
+                try
+                {
+                    string job = JsonSerializer.Serialize(new EncodeCommand { InitialiseCommand = initCommand, EncodeJob = jobToStart }, JsonSettings.Options);
 
-                var task = Task.Run(async () => await this.MakeHttpJsonPostRequest("StartEncode", job));
-                task.Wait();
-                this.MonitorEncodeProgress();
+                    var task = Task.Run(async () => await this.MakeHttpJsonPostRequest("StartEncode", job));
+                    task.Wait();
+                    startRequested = true;
+                }
+                catch (Exception exc)
+                {
+                    startRequested = false;
+                    this.ServiceLogMessage("Unable to start job. HandBrake was unable to communicate with the worker process. This may be getting blocked by security software. Try running without process isolation. See Tools Menu -> Preferences -> Advanced." + Environment.NewLine + exc.ToString());
+                    this.EncodeCompleted?.Invoke(sender: this, e: new EncodeCompletedEventArgs(4));
+                    return;
+                }
+
+                try
+                {
+                    if (startRequested)
+                    {
+                        this.MonitorEncodeProgress();
+                    }
+                }
+                catch (Exception exc)
+                {
+                    this.ServiceLogMessage(exc.ToString());
+                    this.EncodeCompleted?.Invoke(sender: this, e: new EncodeCompletedEventArgs(4));
+                }
             }
         }
     }

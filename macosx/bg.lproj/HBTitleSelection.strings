@@ -1,0 +1,42 @@
+/* Class = "NSTableColumn"; headerCell.title = "Title"; ObjectID = "4XY-C0-SwE"; */
+"4XY-C0-SwE.headerCell.title" = "Заглавие";
+
+/* Class = "NSTextFieldCell"; title = "Select the titles to add to the queue:"; ObjectID = "5tD-fg-g4t"; */
+"5tD-fg-g4t.title" = "Изберете заглавия за добавяне на опашката:";
+
+/* Class = "NSTableColumn"; headerCell.title = "Duration"; ObjectID = "a6r-ky-REh"; */
+"a6r-ky-REh.headerCell.title" = "Продължителност";
+
+/* Class = "NSTextFieldCell"; title = "Table View Cell"; ObjectID = "dsG-Ho-vsT"; */
+"dsG-Ho-vsT.title" = "Клетка от табличен изглед";
+
+/* Class = "NSWindow"; title = "Window"; ObjectID = "F0z-JX-Cv5"; */
+"F0z-JX-Cv5.title" = "Прозорец";
+
+/* Class = "NSTextFieldCell"; title = "Text Cell"; ObjectID = "Fcv-FE-8Fv"; */
+"Fcv-FE-8Fv.title" = "Текстова клетка";
+
+/* Class = "NSTableColumn"; headerCell.title = "Name"; ObjectID = "FQY-Ye-g0f"; */
+"FQY-Ye-g0f.headerCell.title" = "Име";
+
+/* Class = "NSTextFieldCell"; title = "0"; ObjectID = "hQc-RA-phB"; */
+"hQc-RA-phB.title" = "0";
+
+/* Class = "NSButtonCell"; title = "Cancel"; ObjectID = "jHg-nh-9NJ"; */
+"jHg-nh-9NJ.title" = "Отмяна";
+
+/* Class = "NSButtonCell"; title = "Check"; ObjectID = "JqJ-5C-Yhw"; */
+"JqJ-5C-Yhw.title" = "Проверка";
+
+/* Class = "NSButtonCell"; title = "Check"; ObjectID = "k84-a6-eZ7"; */
+"k84-a6-eZ7.title" = "Проверка";
+
+/* Class = "NSButtonCell"; title = "Add"; ObjectID = "mOe-XL-tl1"; */
+"mOe-XL-tl1.title" = "Добави";
+
+/* Class = "CocoaBindingsConnection"; ibShadowedDisplayPattern = "%{value1}@"; ObjectID = "xTt-zi-wf0"; */
+"xTt-zi-wf0.ibShadowedDisplayPattern" = "%{value1}@";
+
+/* Class = "NSTextFieldCell"; title = "Text Cell"; ObjectID = "zwi-rc-q6x"; */
+"zwi-rc-q6x.title" = "Текстова клетка";
+

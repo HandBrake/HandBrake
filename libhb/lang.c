@@ -1,6 +1,6 @@
 /* lang.c
 
-   Copyright (c) 2003-2022 HandBrake Team
+   Copyright (c) 2003-2024 HandBrake Team
    This file is part of the HandBrake source code
    Homepage: <http://handbrake.fr/>.
    It may be used under the terms of the GNU General Public License v2.
@@ -51,7 +51,12 @@ static const iso639_lang_t languages[] =
   { "Cornish", "kernewek", "kw", "cor" },
   { "Corsican", "Corsu", "co", "cos" },
   { "Cree", "", "cr", "cre" },
-  { "Croatian", "hrvatski", "hr", "hrv", "scr" },
+  { "Croatian", "hrvatski", "hr", "hrv" },
+  // Deprecated version of Croatian code 'scr'
+  // When used, HB will record the latest iso639_2 'hrv' as the code in titles
+  // and write the correct code to the output since the line above that has
+  // no 2b variant will be used when generating output.
+  { "Croatian", "hrvatski", NULL, "hrv", "scr" },
   { "Czech", "čeština", "cs", "ces", "cze" },
   { "Danish", "dansk", "da", "dan" },
   { "Divehi", "ދިވެހިބަސް", "dv", "div" },
@@ -65,6 +70,7 @@ static const iso639_lang_t languages[] =
   { "Fijian", "Na Vosa Vakaviti", "fj", "fij" },
   { "Finnish", "suomi", "fi", "fin" },
   { "French", "Francais", "fr", "fra", "fre" },
+  { "Filipino", "Wikang Filipino", NULL, "fil" },
   { "Western Frisian", "Frysk", "fy", "fry" },
   { "Fulah", "Fulah", "ff", "ful" },
   { "Georgian", "ქართული", "ka", "kat", "geo" },
@@ -122,7 +128,7 @@ static const iso639_lang_t languages[] =
   { "Malayalam", "മലയാളം", "ml", "mal" },
   { "Maori", "Reo Māori", "mi", "mri", "mao" },
   { "Marathi", "मराठी", "mr", "mar" },
-  { "Malay", "Bahasa Melayu", "ms", "msa", "msa" },
+  { "Malay", "Bahasa Melayu", "ms", "msa", "may" },
   { "Malagasy", "Malagasy", "mg", "mlg" },
   { "Maltese", "Malti", "mt", "mlt" },
   { "Moldavian", "limba moldovenească", "mo", "mol" },

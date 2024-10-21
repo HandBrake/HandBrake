@@ -20,6 +20,7 @@ static void *HBAudioDefaultsContext = &HBAudioDefaultsContext;
 @property (nonatomic, unsafe_unretained) IBOutlet HBLanguageArrayController *tableController;
 
 @property (nonatomic, unsafe_unretained) IBOutlet NSArrayController *tracksController;
+@property (nonatomic, weak) IBOutlet NSSegmentedControl *tracksControl;
 
 @end
 
@@ -36,6 +37,30 @@ static void *HBAudioDefaultsContext = &HBAudioDefaultsContext;
         _languagesList.undo = self.window.undoManager;
     }
     return self;
+}
+
+- (void)windowDidLoad
+{
+    [self.tracksController addObserver:self
+                            forKeyPath:@"selectedObjects"
+                               options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionInitial
+                               context:HBAudioDefaultsContext];
+}
+
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
+{
+    if (context == HBAudioDefaultsContext)
+    {
+        if ([keyPath isEqualToString:@"selectedObjects"])
+        {
+            BOOL selected = self.tracksController.selectedObjects.count > 0;
+            [self.tracksControl setEnabled:selected forSegment:1];
+        }
+    }
+    else
+    {
+        [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
+    }
 }
 
 - (IBAction)addTrack:(id)sender

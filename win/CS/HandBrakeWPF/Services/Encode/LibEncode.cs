@@ -55,7 +55,7 @@ namespace HandBrakeWPF.Services.Encode
             this.logInstanceManager = logInstanceManager;
             this.encodeCounter = encodeCounter;
             this.portService = portService;
-            this.encodeTaskFactory = new EncodeTaskFactory(this.userSettingService);
+            this.encodeTaskFactory = new EncodeTaskFactory(this.userSettingService, true);
         }
 
         public event EventHandler EncodeStarted;
@@ -323,7 +323,7 @@ namespace HandBrakeWPF.Services.Encode
                 string fullLogPath = Path.Combine(DirectoryUtilities.GetLogDirectory(), logFileName);
 
                 this.encodeLogService = new LogService();
-                this.encodeLogService.ConfigureLogging(logFileName, fullLogPath);
+                this.encodeLogService.ConfigureLogging(logFileName, fullLogPath, true);
                 this.encodeLogService.SetId(this.encodeCounter);
                 this.logInstanceManager.Register(logFileName, this.encodeLogService, false);
                 this.isLoggingInitialised = true;

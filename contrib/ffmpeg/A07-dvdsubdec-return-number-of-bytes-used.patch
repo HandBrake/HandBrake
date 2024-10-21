@@ -1,0 +1,30 @@
+From ce11d719d86ce35afaf342f8302d0ccb0bed83e6 Mon Sep 17 00:00:00 2001
+From: John Stebbins <jstebbins@jetheaddev.com>
+Date: Wed, 20 Mar 2024 09:11:51 +0100
+Subject: [PATCH 07/16] dvdsubdec: return number of bytes used
+
+Documentation says avcodec_decode_subtitle2 returns the number of bytes used.
+---
+ libavcodec/dvdsubdec.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
+
+diff --git a/libavcodec/dvdsubdec.c b/libavcodec/dvdsubdec.c
+index 68c1f3af53..025f3dbd6f 100644
+--- a/libavcodec/dvdsubdec.c
++++ b/libavcodec/dvdsubdec.c
+@@ -548,7 +548,11 @@ static int dvdsub_decode(AVCodecContext *avctx, AVSubtitle *sub,
+     is_menu = decode_dvd_subtitles(ctx, sub, buf, buf_size);
+     if (is_menu == AVERROR(EAGAIN)) {
+         *data_size = 0;
+-        return appended ? 0 : append_to_cached_buf(avctx, buf, buf_size);
++        int ret = appended ? 0 : append_to_cached_buf(avctx, buf, buf_size);
++        if (ret < 0) {
++            return ret;
++        }
++        return buf_size;
+     }
+ 
+     if (is_menu < 0) {
+-- 
+2.39.5 (Apple Git-154)
+

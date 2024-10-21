@@ -31,12 +31,6 @@
 /* Class = "NSSlider"; ibShadowedToolTip = "Drag to change volume."; ObjectID = "gzA-no-jdv"; */
 "gzA-no-jdv.ibShadowedToolTip" = "Trascina per modificare il volume.";
 
-/* Class = "NSButton"; ibExternalAccessibilityDescription = "Full Volume"; ObjectID = "Kiv-cL-wYI"; */
-"Kiv-cL-wYI.ibExternalAccessibilityDescription" = "Volume massimo";
-
-/* Class = "NSButton"; ibShadowedToolTip = "Full Volume"; ObjectID = "Kiv-cL-wYI"; */
-"Kiv-cL-wYI.ibShadowedToolTip" = "Volume massimo";
-
 /* Class = "NSSlider"; ibExternalAccessibilityDescription = "Timeline"; ObjectID = "lBp-JT-ehn"; */
 "lBp-JT-ehn.ibExternalAccessibilityDescription" = "Sequenza temporale";
 
@@ -44,10 +38,10 @@
 "lBp-JT-ehn.ibShadowedToolTip" = "Trascina per modificare la posizione nella sequenza temporale.";
 
 /* Class = "NSButton"; ibExternalAccessibilityDescription = "Play/Pause"; ObjectID = "mLA-ei-4sK"; */
-"mLA-ei-4sK.ibExternalAccessibilityDescription" = "Riproduci/Pausa";
+"mLA-ei-4sK.ibExternalAccessibilityDescription" = "Riproduci/Sospendi";
 
 /* Class = "NSButton"; ibShadowedToolTip = "Toggle Play/Pause"; ObjectID = "mLA-ei-4sK"; */
-"mLA-ei-4sK.ibShadowedToolTip" = "Riproduci/Pausa";
+"mLA-ei-4sK.ibShadowedToolTip" = "Riproduci/Sospendi";
 
 /* Class = "NSTextField"; ibExternalAccessibilityDescription = "Time Remaining"; ObjectID = "PVD-pq-1ZG"; */
 "PVD-pq-1ZG.ibExternalAccessibilityDescription" = "Tempo rimanente";

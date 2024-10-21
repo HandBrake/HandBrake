@@ -289,13 +289,13 @@ namespace HandBrake.Interop.Interop
             return Containers.SingleOrDefault(c => c.ShortName == shortName);
         }
 
-        public static bool VideoEncoderSupportsMultiPass(string encoderShortName)
+        public static bool VideoEncoderSupportsMultiPass(string encoderShortName, bool constantQuality)
         {
             HBVideoEncoder encoder = GetVideoEncoder(encoderShortName);
 
             if (encoder != null)
             {
-                return VideoEncoderSupportsMultiPass(encoder.Id);
+                return VideoEncoderSupportsMultiPass(encoder.Id, constantQuality);
             }
 
             return false;
@@ -310,9 +310,33 @@ namespace HandBrake.Interop.Interop
         /// <returns>
         /// True if the given video encoder supports multi-pass mode.
         /// </returns>
-        public static bool VideoEncoderSupportsMultiPass(int encoderId)
+        public static bool VideoEncoderSupportsMultiPass(int encoderId, bool constantQuality)
         {
-            return HBFunctions.hb_video_multipass_is_supported((uint)encoderId) > 0;
+            return HBFunctions.hb_video_multipass_is_supported((uint)encoderId, Convert.ToInt32(constantQuality)) > 0;
+        }
+
+        public static bool VideoEncoderSupportsQualityMode(string encoderShortName)
+        {
+            HBVideoEncoder encoder = GetVideoEncoder(encoderShortName);
+
+            if (encoder != null)
+            {
+                return HBFunctions.hb_video_quality_is_supported(encoder.Id) > 0;
+            }
+
+            return false;
+        }
+
+        public static bool VideoEncoderSupportsBitrateMode(string encoderShortName)
+        {
+            HBVideoEncoder encoder = GetVideoEncoder(encoderShortName);
+
+            if (encoder != null)
+            {
+                return HBFunctions.hb_video_bitrate_is_supported(encoder.Id) > 0;
+            }
+
+            return false;
         }
 
         /// <summary>
@@ -355,7 +379,7 @@ namespace HandBrake.Interop.Interop
         /// <returns>
         /// True if the subtitle type can be passed through with the given muxer.
         /// </returns>
-        public static bool SubtitleCanPassthrough(int subtitleSourceType, int muxer)
+        public static bool SubtitleCanPassthru(int subtitleSourceType, int muxer)
         {
             return HBFunctions.hb_subtitle_can_pass(subtitleSourceType, muxer) > 0;
         }
@@ -408,7 +432,7 @@ namespace HandBrake.Interop.Interop
         /// True if the given encoder is compatible with the given audio track.
         /// </returns>
         /// <remarks>
-        /// Only works with passthrough encoders.
+        /// Only works with passthru encoders.
         /// </remarks>
         public static bool AudioEncoderIsCompatible(int codecId, HBAudioEncoder encoder)
         {
@@ -494,7 +518,7 @@ namespace HandBrake.Interop.Interop
         /// <returns>
         /// True if the codec can be passed through.
         /// </returns>
-        public static bool CanPassthroughAudio(int codecId)
+        public static bool CanPassthruAudio(int codecId)
         {
             return (codecId & NativeConstants.HB_ACODEC_PASS_MASK) > 0;
         }

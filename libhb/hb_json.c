@@ -1,6 +1,6 @@
 /* json.c
 
-   Copyright (c) 2003-2022 HandBrake Team
+   Copyright (c) 2003-2024 HandBrake Team
    This file is part of the HandBrake source code
    Homepage: <http://handbrake.fr/>.
    It may be used under the terms of the GNU General Public License v2.
@@ -238,8 +238,8 @@ static hb_dict_t* hb_title_to_dict_internal( hb_title_t *title )
 
     dict = json_pack_ex(&error, 0,
     "{"
-        // Type, Path, Name, Index, Playlist, AngleCount
-        "s:o, s:o, s:o, s:o, s:o, s:o,"
+        // Type, Path, Name, Index, KeepDuplicateTitles, Playlist, AngleCount
+        "s:o, s:o, s:o, s:o, s:o, s:o, s:o,"
         // Duration {Ticks, Hours, Minutes, Seconds}
         "s:{s:o, s:o, s:o, s:o},"
         // Geometry {Width, Height, PAR {Num, Den},
@@ -261,6 +261,7 @@ static hb_dict_t* hb_title_to_dict_internal( hb_title_t *title )
     "Path",                 hb_value_string(title->path),
     "Name",                 hb_value_string(title->name),
     "Index",                hb_value_int(title->index),
+    "KeepDuplicateTitles",  hb_value_bool(title->keep_duplicate_titles),
     "Playlist",             hb_value_int(title->playlist),
     "AngleCount",           hb_value_int(title->angle_count),
     "Duration",
@@ -594,8 +595,8 @@ hb_dict_t* hb_job_to_dict( const hb_job_t * job )
     // Destination {Mux, InlineParameterSets, AlignAVStart,
     //              ChapterMarkers, ChapterList}
     "s:{s:o, s:o, s:o, s:o, s:[]},"
-    // Source {Path, Title, Angle, HWDecode}
-    "s:{s:o, s:o, s:o, s:o},"
+    // Source {Path, Title, Angle, HWDecode, KeepDuplicateTitles}
+    "s:{s:o, s:o, s:o, s:o, s:o},"
     // PAR {Num, Den}
     "s:{s:o, s:o},"
     // Video {Encoder, HardwareDecode, QSV {Decode, AsyncDepth, AdapterIndex}}
@@ -621,6 +622,7 @@ hb_dict_t* hb_job_to_dict( const hb_job_t * job )
             "Title",            hb_value_int(job->title->index),
             "Angle",            hb_value_int(job->angle),
             "HWDecode",         hb_value_int(job->hw_decode),
+            "KeepDuplicateTitles", hb_value_bool(job->keep_duplicate_titles),
         "PAR",
             "Num",              hb_value_int(job->par.num),
             "Den",              hb_value_int(job->par.den),
@@ -656,13 +658,13 @@ hb_dict_t* hb_job_to_dict( const hb_job_t * job )
     {
         hb_dict_set(dest_dict, "File", hb_value_string(job->file));
     }
-    if (job->mux & HB_MUX_MASK_MP4)
+    if (job->mux)
     {
-        hb_dict_t *mp4_dict;
-        mp4_dict = json_pack_ex(&error, 0, "{s:o, s:o}",
-            "Mp4Optimize",      hb_value_bool(job->mp4_optimize),
+        hb_dict_t *options_dict;
+        options_dict = json_pack_ex(&error, 0, "{s:o, s:o}",
+            "Optimize",         hb_value_bool(job->optimize),
             "IpodAtom",         hb_value_bool(job->ipod_atom));
-        hb_dict_set(dest_dict, "Mp4Options", mp4_dict);
+        hb_dict_set(dest_dict, "Options", options_dict);
     }
     hb_dict_t *source_dict = hb_dict_get(dict, "Source");
     hb_dict_t *range_dict;
@@ -910,7 +912,7 @@ hb_dict_t* hb_job_to_dict( const hb_job_t * job )
 
         audio_dict = json_pack_ex(&error, 0,
             "{s:o, s:o, s:o, s:o, s:o, s:o, s:o, s:o, s:o, s:o, s:o}",
-            "Track",                hb_value_int(audio->config.in.track),
+            "Track",                hb_value_int(audio->config.index),
             "Encoder",              hb_value_int(audio->config.out.codec),
             "Gain",                 hb_value_double(audio->config.out.gain),
             "DRC",                  hb_value_double(audio->config.out.dynamic_range_compression),
@@ -1014,14 +1016,15 @@ void hb_json_job_scan( hb_handle_t * h, const char * json_job )
 
     dict = hb_value_json(json_job);
 
-    int title_index, hw_decode;
+    int title_index, hw_decode, keep_duplicate_titles;
     const char *path = NULL;
 
-    result = json_unpack_ex(dict, &error, 0, "{s:{s:s, s:i, s?i}}",
+    result = json_unpack_ex(dict, &error, 0, "{s:{s:s, s:i, s?i, s?b}}",
                             "Source",
                                 "Path",     unpack_s(&path),
                                 "Title",    unpack_i(&title_index),
-                                "HWDecode", unpack_i(&hw_decode)
+                                "HWDecode", unpack_i(&hw_decode),
+                                "KeepDuplicateTitles", unpack_b(&keep_duplicate_titles)
                            );
     if (result < 0)
     {
@@ -1031,8 +1034,11 @@ void hb_json_job_scan( hb_handle_t * h, const char * json_job )
     }
 
     // If the job wants to use Hardware decode, it must also be
-    // enabled during scan.  So enable it here.                      
-    hb_scan(h, path, title_index, -1, 0, 0, 0, 0, NULL, hw_decode);
+    // enabled during scan.  So enable it here.
+    hb_list_t *file_paths = hb_list_init();
+    hb_list_add(file_paths, (char *)path);
+    hb_scan(h, file_paths, title_index, -1, 0, 0, 0, 0, NULL, hw_decode, keep_duplicate_titles);
+    hb_list_close(&file_paths);
 
     // Wait for scan to complete
     hb_state_t state;
@@ -1122,10 +1128,10 @@ hb_job_t* hb_dict_to_job( hb_handle_t * h, hb_dict_t *dict )
     "s:i,"
     // Destination {File, Mux, InlineParameterSets, AlignAVStart,
     //              ChapterMarkers, ChapterList,
-    //              Mp4Options {Mp4Optimize, IpodAtom}}
+    //              Options {Optimize, IpodAtom}}
     "s:{s?s, s:o, s?b, s?b, s:b, s?o s?{s?b, s?b}},"
-    // Source {Angle, Range {Type, Start, End, SeekPoints}}
-    "s:{s?i, s?{s:s, s?I, s?I, s?I}},"
+    // Source {Angle, KeepDuplicateTitles, Range {Type, Start, End, SeekPoints}}
+    "s:{s?i, s?b, s?{s:s, s?I, s?I, s?I}},"
     // PAR {Num, Den}
     "s?{s:i, s:i},"
     // Video {Codec, Quality, Bitrate, Preset, Tune, Profile, Level, Options
@@ -1165,11 +1171,12 @@ hb_job_t* hb_dict_to_job( hb_handle_t * h, hb_dict_t *dict )
             "AlignAVStart",         unpack_b(&job->align_av_start),
             "ChapterMarkers",       unpack_b(&job->chapter_markers),
             "ChapterList",          unpack_o(&chapter_list),
-            "Mp4Options",
-                "Mp4Optimize",      unpack_b(&job->mp4_optimize),
+            "Options",
+                "Optimize",         unpack_b(&job->optimize),
                 "IpodAtom",         unpack_b(&job->ipod_atom),
         "Source",
             "Angle",                unpack_i(&job->angle),
+            "KeepDuplicateTitles",  unpack_b(&job->keep_duplicate_titles),
             "Range",
                 "Type",             unpack_s(&range_type),
                 "Start",            unpack_I(&range_start),
@@ -1535,7 +1542,7 @@ hb_job_t* hb_dict_to_job( hb_handle_t * h, hb_dict_t *dict )
             hb_audio_config_init(&audio);
             result = json_unpack_ex(audio_dict, &error, 0,
                 "{s:i, s?s, s?o, s?F, s?F, s?o, s?b, s?o, s?o, s?i, s?F, s?F}",
-                "Track",                unpack_i(&audio.in.track),
+                "Track",                unpack_i(&audio.index),
                 "Name",                 unpack_s(&name),
                 "Encoder",              unpack_o(&acodec),
                 "Gain",                 unpack_f(&audio.out.gain),
@@ -1607,7 +1614,7 @@ hb_job_t* hb_dict_to_job( hb_handle_t * h, hb_dict_t *dict )
             {
                 audio.out.name = name;
             }
-            if (audio.in.track >= 0)
+            if (audio.index >= 0)
             {
                 audio.out.track = ii;
                 hb_audio_add(job, &audio);
@@ -1891,118 +1898,6 @@ char* hb_set_anamorphic_size_json(const char * json_param)
         hb_error("hb_set_anamorphic_size_json: pack failure: %s", error.text);
         return NULL;
     }
-    char *result = hb_value_get_json(dict);
-    hb_value_free(&dict);
-
-    return result;
-}
-
-char* hb_get_preview_json(hb_handle_t * h, const char *json_param)
-{
-    hb_image_t *image;
-    int ii, title_idx, preview_idx, deinterlace = 0;
-
-    int json_result;
-    json_error_t error;
-    hb_dict_t * dict;
-    hb_geometry_settings_t settings;
-
-    // Clear dest geometry since some fields are optional.
-    memset(&settings, 0, sizeof(settings));
-
-    dict = hb_value_json(json_param);
-    json_result = json_unpack_ex(dict, &error, 0,
-    "{"
-    // Title, Preview, Deinterlace
-    "s:i, s:i, s?b,"
-    // DestSettings
-    "s:{"
-    //   Geometry {Width, Height, PAR {Num, Den}},
-    "s:{s:i, s:i, s:{s:i, s:i}},"
-    //   AnamorphicMode, Keep, ItuPAR, Modulus, MaxWidth, MaxHeight,
-    "s:i, s?i, s?b, s:i, s:i, s:i,"
-    //   Crop [Top, Bottom, Left, Right]
-    "s?[iiii]"
-    "  }"
-    "}",
-    "Title",                    unpack_i(&title_idx),
-    "Preview",                  unpack_i(&preview_idx),
-    "Deinterlace",              unpack_b(&deinterlace),
-    "DestSettings",
-        "Geometry",
-            "Width",            unpack_i(&settings.geometry.width),
-            "Height",           unpack_i(&settings.geometry.height),
-            "PAR",
-                "Num",          unpack_i(&settings.geometry.par.num),
-                "Den",          unpack_i(&settings.geometry.par.den),
-        "AnamorphicMode",       unpack_i(&settings.mode),
-        "Keep",                 unpack_i(&settings.keep),
-        "ItuPAR",               unpack_b(&settings.itu_par),
-        "Modulus",              unpack_i(&settings.modulus),
-        "MaxWidth",             unpack_i(&settings.maxWidth),
-        "MaxHeight",            unpack_i(&settings.maxHeight),
-        "Crop",                 unpack_i(&settings.crop[0]),
-                                unpack_i(&settings.crop[1]),
-                                unpack_i(&settings.crop[2]),
-                                unpack_i(&settings.crop[3])
-    );
-    hb_value_free(&dict);
-
-    if (json_result < 0)
-    {
-        hb_error("preview params: json unpack failure: %s", error.text);
-        return NULL;
-    }
-
-    image = hb_get_preview2(h, title_idx, preview_idx, &settings, deinterlace);
-    if (image == NULL)
-    {
-        return NULL;
-    }
-
-    dict = json_pack_ex(&error, 0,
-        "{s:o, s:o, s:o}",
-            "Format",       hb_value_int(image->format),
-            "Width",        hb_value_int(image->width),
-            "Height",       hb_value_int(image->height));
-    if (dict == NULL)
-    {
-        hb_error("hb_get_preview_json: pack failure: %s", error.text);
-        return NULL;
-    }
-
-    hb_value_array_t * planes = hb_value_array_init();
-    for (ii = 0; ii < 4; ii++)
-    {
-        int base64size = AV_BASE64_SIZE(image->plane[ii].size);
-        if (image->plane[ii].size <= 0 || base64size <= 0)
-            continue;
-
-        char *plane_base64 = calloc(base64size, 1);
-        av_base64_encode(plane_base64, base64size,
-                         image->plane[ii].data, image->plane[ii].size);
-
-        base64size = strlen(plane_base64);
-        hb_dict_t *plane_dict;
-        plane_dict = json_pack_ex(&error, 0,
-            "{s:o, s:o, s:o, s:o, s:o, s:o}",
-            "Width",        hb_value_int(image->plane[ii].width),
-            "Height",       hb_value_int(image->plane[ii].height),
-            "Stride",       hb_value_int(image->plane[ii].stride),
-            "HeightStride", hb_value_int(image->plane[ii].height_stride),
-            "Size",         hb_value_int(base64size),
-            "Data",         hb_value_string(plane_base64)
-        );
-        if (plane_dict == NULL)
-        {
-            hb_error("plane_dict: json pack failure: %s", error.text);
-            return NULL;
-        }
-        hb_value_array_append(planes, plane_dict);
-    }
-    hb_dict_set(dict, "Planes", planes);
-    hb_image_close(&image);
-
     char *result = hb_value_get_json(dict);
     hb_value_free(&dict);
 

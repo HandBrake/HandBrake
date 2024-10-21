@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="22152" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="32700.99.1234" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="22152"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="22689"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -14,17 +14,12 @@
                 <outlet property="destinationPathControl" destination="PJi-21-hie" id="AwZ-Ws-K0u"/>
                 <outlet property="filtersTab" destination="0UB-bG-kwS" id="8wc-MY-h6a"/>
                 <outlet property="mainTabView" destination="1474" id="LnD-zT-6M5"/>
-                <outlet property="openSourceToolbarItem" destination="8r8-nZ-dYs" id="cEL-nv-D9F"/>
                 <outlet property="openTitleView" destination="lZQ-gl-3wX" id="Wh6-fB-pWi"/>
-                <outlet property="pauseToolbarItem" destination="wTQ-KF-5KW" id="htw-tK-A0X"/>
                 <outlet property="pictureTab" destination="eij-Sn-QmJ" id="8Ww-MT-bhs"/>
-                <outlet property="presetsItem" destination="qhv-9l-2FH" id="bEZ-nH-M9d"/>
                 <outlet property="presetsPopup" destination="bWH-Lp-mKY" id="vot-gQ-hLV"/>
                 <outlet property="progressField" destination="XL7-L5-bkf" id="DCJ-FQ-VIv"/>
-                <outlet property="ripToolbarItem" destination="byg-kj-sEM" id="C7B-wO-F1Q"/>
                 <outlet property="scanHorizontalLine" destination="3205" id="9af-9F-Sst"/>
                 <outlet property="scanIndicator" destination="3203" id="dh4-U8-kDp"/>
-                <outlet property="showQueueToolbarItem" destination="HCx-ku-nF7" id="CC6-Yu-j7N"/>
                 <outlet property="sourceLabel" destination="1539" id="C8K-CB-tqm"/>
                 <outlet property="statusField" destination="1123" id="ujy-WJ-FLy"/>
                 <outlet property="subtitlesTab" destination="5194" id="G40-yx-m4P"/>
@@ -36,12 +31,12 @@
         </customObject>
         <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
         <customObject id="-3" userLabel="Application" customClass="NSObject"/>
-        <window title="HandBrake" allowsToolTipsWhenApplicationIsInactive="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" frameAutosaveName="HBMainWindow" animationBehavior="default" id="21" userLabel="MainWindow">
+        <window title="HandBrake" allowsToolTipsWhenApplicationIsInactive="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" frameAutosaveName="HBMainWindow" animationBehavior="default" toolbarStyle="expanded" id="21" userLabel="MainWindow">
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
             <windowCollectionBehavior key="collectionBehavior" fullScreenPrimary="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
             <rect key="contentRect" x="81" y="385" width="885" height="600"/>
-            <rect key="screenRect" x="0.0" y="0.0" width="1440" height="875"/>
+            <rect key="screenRect" x="0.0" y="0.0" width="1920" height="1055"/>
             <view key="contentView" id="2" customClass="HBFocusRingView">
                 <rect key="frame" x="0.0" y="0.0" width="885" height="600"/>
                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -124,7 +119,7 @@
                         <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="clipping" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" id="5514">
                             <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                             <font key="font" metaFont="message" size="11"/>
-                            <menu key="menu" title="OtherViews" id="5515"/>
+                            <menu key="menu" id="5515"/>
                         </popUpButtonCell>
                         <constraints>
                             <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="78" id="Zs8-pX-H7V"/>
@@ -368,7 +363,7 @@
                         <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="clipping" state="on" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="1547" id="4910">
                             <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                             <font key="font" metaFont="message" size="11"/>
-                            <menu key="menu" title="OtherViews" id="1546">
+                            <menu key="menu" id="1546">
                                 <items>
                                     <menuItem state="on" id="1547"/>
                                 </items>
@@ -393,7 +388,7 @@
                         <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="clipping" state="on" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="1550" id="4911">
                             <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                             <font key="font" metaFont="message" size="11"/>
-                            <menu key="menu" title="OtherViews" id="1549">
+                            <menu key="menu" id="1549">
                                 <items>
                                     <menuItem state="on" id="1550"/>
                                 </items>
@@ -418,7 +413,7 @@
                         <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="clipping" state="on" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="5184" id="5182">
                             <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                             <font key="font" metaFont="message" size="11"/>
-                            <menu key="menu" title="OtherViews" id="5183">
+                            <menu key="menu" id="5183">
                                 <items>
                                     <menuItem state="on" id="5184"/>
                                 </items>
@@ -463,7 +458,7 @@ Blu-ray and DVD sources often have multiple titles, the longest of which is typi
                         <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="clipping" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" id="4908">
                             <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                             <font key="font" metaFont="message" size="11"/>
-                            <menu key="menu" title="OtherViews" id="1542"/>
+                            <menu key="menu" id="1542"/>
                             <connections>
                                 <accessibilityConnection property="title" destination="1540" id="8YI-Kk-J0w"/>
                             </connections>
@@ -727,136 +722,10 @@ Blu-ray and DVD sources often have multiple titles, the longest of which is typi
                     <constraint firstItem="1545" firstAttribute="baseline" secondItem="5505" secondAttribute="baseline" id="xx3-IJ-4pD"/>
                 </constraints>
             </view>
-            <toolbar key="toolbar" implicitIdentifier="E92CA47A-01F7-432A-A61C-28FE4D58C2CD" explicitIdentifier="HBMainWindowToolbar" displayMode="iconAndLabel" sizeMode="regular" id="7g3-gy-bUl">
-                <allowedToolbarItems>
-                    <toolbarItem implicitItemIdentifier="NSToolbarSpaceItem" id="ZEH-cS-zXY"/>
-                    <toolbarItem implicitItemIdentifier="NSToolbarFlexibleSpaceItem" id="wjB-Tl-5qq"/>
-                    <toolbarItem implicitItemIdentifier="DE791733-5430-4B2F-B91D-ACAA95BAF7F0" label="Open Source" paletteLabel="Open Source" toolTip="Open Source" tag="-1" image="source" sizingBehavior="auto" id="8r8-nZ-dYs">
-                        <connections>
-                            <action selector="browseSources:" target="-2" id="zi1-Tk-0YL"/>
-                        </connections>
-                    </toolbarItem>
-                    <toolbarItem implicitItemIdentifier="10063EA1-C821-4363-8F59-7840853EB568" label="Start" paletteLabel="Start Encoding" toolTip="Start Encoding" tag="-1" image="encode" sizingBehavior="auto" id="byg-kj-sEM">
-                        <connections>
-                            <action selector="toggleStartCancel:" target="-2" id="6gH-Cz-Nuo"/>
-                        </connections>
-                    </toolbarItem>
-                    <toolbarItem implicitItemIdentifier="B4A5CE50-6CD5-4CD0-B639-E1516E1C85C1" label="Pause" paletteLabel="Pause Encoding" toolTip="Pause Encoding" tag="-1" image="pauseencode" sizingBehavior="auto" id="wTQ-KF-5KW">
-                        <connections>
-                            <action selector="togglePauseResume:" target="-2" id="AN1-8V-lc1"/>
-                        </connections>
-                    </toolbarItem>
-                    <toolbarItem implicitItemIdentifier="E1B0B8C6-5C5C-460A-B432-3AB62BC9AB73" label="Add To Queue" paletteLabel="Add To Queue" tag="-1" title="Box" sizingBehavior="auto" id="Qoa-tj-Rj2">
-                        <nil key="toolTip"/>
-                        <box key="view" misplaced="YES" boxType="custom" borderType="none" cornerRadius="4" title="Box" titlePosition="noTitle" id="zcd-K2-F7w">
-                            <rect key="frame" x="41" y="14" width="0.0" height="0.0"/>
-                            <autoresizingMask key="autoresizingMask"/>
-                            <view key="contentView" id="NhD-WW-G5l">
-                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                <subviews>
-                                    <button toolTip="Add To Queue" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="3xl-Xh-n9j">
-                                        <rect key="frame" x="0.0" y="0.0" width="32" height="32"/>
-                                        <buttonCell key="cell" type="bevel" bezelStyle="rounded" image="addqueue" imagePosition="only" alignment="center" imageScaling="proportionallyDown" inset="2" id="yzg-VQ-SnB">
-                                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                            <font key="font" metaFont="system"/>
-                                        </buttonCell>
-                                        <connections>
-                                            <action selector="addToQueue:" target="-2" id="wLI-1P-AYf"/>
-                                            <binding destination="-2" name="enabled" keyPath="self.job" id="tDb-Oc-lDY">
-                                                <dictionary key="options">
-                                                    <string key="NSValueTransformerName">NSIsNotNil</string>
-                                                </dictionary>
-                                            </binding>
-                                        </connections>
-                                    </button>
-                                    <box horizontalHuggingPriority="750" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="kRL-I4-HJp">
-                                        <rect key="frame" x="33" y="6" width="5" height="22"/>
-                                    </box>
-                                    <popUpButton translatesAutoresizingMaskIntoConstraints="NO" id="gwb-YP-xyr">
-                                        <rect key="frame" x="32" y="7" width="20" height="20"/>
-                                        <popUpButtonCell key="cell" type="bevel" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" imageScaling="proportionallyDown" inset="2" pullsDown="YES" id="g0i-2U-hqb">
-                                            <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
-                                            <font key="font" metaFont="menu"/>
-                                            <menu key="menu" id="0Xl-pO-QOe">
-                                                <items>
-                                                    <menuItem state="on" hidden="YES" id="JOe-MY-c1i"/>
-                                                    <menuItem title="Add Titles To Queue…" id="iVg-1G-9ym">
-                                                        <connections>
-                                                            <action selector="addTitlesToQueue:" target="-2" id="0po-as-L9y"/>
-                                                        </connections>
-                                                    </menuItem>
-                                                    <menuItem title="Add All Titles To Queue" id="a37-Yd-bYR">
-                                                        <connections>
-                                                            <action selector="addAllTitlesToQueue:" target="-2" id="mL6-rG-Pkm"/>
-                                                        </connections>
-                                                    </menuItem>
-                                                </items>
-                                            </menu>
-                                        </popUpButtonCell>
-                                    </popUpButton>
-                                </subviews>
-                                <constraints>
-                                    <constraint firstItem="kRL-I4-HJp" firstAttribute="top" secondItem="NhD-WW-G5l" secondAttribute="top" constant="4" id="FO4-89-5ce"/>
-                                    <constraint firstItem="gwb-YP-xyr" firstAttribute="top" secondItem="NhD-WW-G5l" secondAttribute="top" constant="5" id="LBD-Qe-eLI"/>
-                                    <constraint firstItem="kRL-I4-HJp" firstAttribute="centerY" secondItem="gwb-YP-xyr" secondAttribute="centerY" id="PxS-5j-xiL"/>
-                                    <constraint firstAttribute="trailing" secondItem="gwb-YP-xyr" secondAttribute="trailing" id="R7W-Eg-nl2"/>
-                                    <constraint firstAttribute="bottom" secondItem="gwb-YP-xyr" secondAttribute="bottom" constant="7" id="RZN-uF-6Cx"/>
-                                    <constraint firstAttribute="bottom" secondItem="3xl-Xh-n9j" secondAttribute="bottom" id="RjM-ni-SFx"/>
-                                    <constraint firstItem="kRL-I4-HJp" firstAttribute="leading" secondItem="3xl-Xh-n9j" secondAttribute="trailing" constant="3" id="dw2-v1-fKy"/>
-                                    <constraint firstItem="gwb-YP-xyr" firstAttribute="leading" secondItem="kRL-I4-HJp" secondAttribute="trailing" constant="1" id="fib-zk-9gL"/>
-                                    <constraint firstItem="3xl-Xh-n9j" firstAttribute="top" secondItem="NhD-WW-G5l" secondAttribute="top" id="kub-fW-5rb"/>
-                                    <constraint firstItem="3xl-Xh-n9j" firstAttribute="leading" secondItem="NhD-WW-G5l" secondAttribute="leading" id="sJy-TP-ETa"/>
-                                </constraints>
-                            </view>
-                        </box>
-                    </toolbarItem>
-                    <toolbarItem implicitItemIdentifier="29BB9965-48E8-4B07-97B2-3C3706F3D150" label="Queue" paletteLabel="Show Queue Window" toolTip="Show Queue Window" tag="-1" image="showqueue" sizingBehavior="auto" id="HCx-ku-nF7" customClass="HBToolbarBadgedItem">
-                        <connections>
-                            <action selector="showQueueWindow:" target="-1" id="vZB-dY-DbD"/>
-                        </connections>
-                    </toolbarItem>
-                    <toolbarItem implicitItemIdentifier="90131A42-4120-458B-A63F-04A8D7486202" label="Preview" paletteLabel="Show Preview Window" toolTip="Show Preview Window" tag="-1" image="preview" sizingBehavior="auto" id="dK4-jt-v4K">
-                        <connections>
-                            <action selector="showPreviewWindow:" target="-2" id="uci-BT-5bQ"/>
-                        </connections>
-                    </toolbarItem>
-                    <toolbarItem implicitItemIdentifier="AC64166E-55C9-431A-8085-74C960AAF1D5" label="Activity" paletteLabel="Show Activity Window" toolTip="Show Activity Window" tag="-1" image="activity" sizingBehavior="auto" id="p7Q-L3-zcW">
-                        <connections>
-                            <action selector="showOutputPanel:" target="-1" id="TxI-PX-wlm"/>
-                        </connections>
-                    </toolbarItem>
-                    <toolbarItem implicitItemIdentifier="27166A18-3AC0-4FD9-B76C-B1702BA05D47" label="Presets" paletteLabel="Show Presets List" toolTip="Show Presets List" image="presets" sizingBehavior="auto" id="qhv-9l-2FH">
-                        <button key="view" verticalHuggingPriority="750" id="kdj-uK-UE0">
-                            <rect key="frame" x="35" y="14" width="32" height="32"/>
-                            <autoresizingMask key="autoresizingMask"/>
-                            <buttonCell key="cell" type="bevel" bezelStyle="rounded" image="presets" imagePosition="only" alignment="center" imageScaling="proportionallyDown" inset="2" id="b1r-Ra-EmB">
-                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                <font key="font" metaFont="system"/>
-                            </buttonCell>
-                        </button>
-                        <connections>
-                            <action selector="togglePresets:" target="-2" id="mhX-ic-osi"/>
-                        </connections>
-                    </toolbarItem>
-                </allowedToolbarItems>
-                <defaultToolbarItems>
-                    <toolbarItem reference="8r8-nZ-dYs"/>
-                    <toolbarItem reference="ZEH-cS-zXY"/>
-                    <toolbarItem reference="Qoa-tj-Rj2"/>
-                    <toolbarItem reference="ZEH-cS-zXY"/>
-                    <toolbarItem reference="byg-kj-sEM"/>
-                    <toolbarItem reference="wTQ-KF-5KW"/>
-                    <toolbarItem reference="wjB-Tl-5qq"/>
-                    <toolbarItem reference="qhv-9l-2FH"/>
-                    <toolbarItem reference="dK4-jt-v4K"/>
-                    <toolbarItem reference="HCx-ku-nF7"/>
-                    <toolbarItem reference="p7Q-L3-zcW"/>
-                </defaultToolbarItems>
-            </toolbar>
             <connections>
                 <outlet property="delegate" destination="-2" id="M3v-Rc-7Ca"/>
             </connections>
-            <point key="canvasLocation" x="2330" y="-1079"/>
+            <point key="canvasLocation" x="2379" y="-1201"/>
         </window>
         <userDefaultsController representsSharedInstance="YES" id="5676"/>
         <customView id="lZQ-gl-3wX" userLabel="Open Panel View">
@@ -913,13 +782,13 @@ Blu-ray and DVD sources often have multiple titles, the longest of which is typi
                     </subviews>
                     <constraints>
                         <constraint firstItem="DN4-48-aOI" firstAttribute="leading" secondItem="nHs-z7-brO" secondAttribute="leading" constant="20" id="13C-tG-GpU"/>
-                        <constraint firstAttribute="trailing" secondItem="5hE-Ri-tcZ" secondAttribute="trailing" constant="23" id="3Pd-gv-dX6"/>
+                        <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="5hE-Ri-tcZ" secondAttribute="trailing" constant="20" id="3Pd-gv-dX6"/>
                         <constraint firstItem="DN4-48-aOI" firstAttribute="top" secondItem="nHs-z7-brO" secondAttribute="top" constant="16" id="JZd-2D-fiA"/>
                         <constraint firstItem="DN4-48-aOI" firstAttribute="baseline" secondItem="3w9-Iu-3u2" secondAttribute="baseline" id="MeM-fz-C5e"/>
                         <constraint firstItem="5hE-Ri-tcZ" firstAttribute="leading" secondItem="DN4-48-aOI" secondAttribute="leading" id="TYH-fs-MNL"/>
                         <constraint firstItem="5hE-Ri-tcZ" firstAttribute="top" secondItem="DN4-48-aOI" secondAttribute="bottom" constant="6" symbolic="YES" id="aYS-1K-UMW"/>
                         <constraint firstAttribute="bottom" secondItem="5hE-Ri-tcZ" secondAttribute="bottom" constant="16" id="dVl-WN-Aut"/>
-                        <constraint firstAttribute="trailing" secondItem="3w9-Iu-3u2" secondAttribute="trailing" constant="20" id="tAR-eN-FSk"/>
+                        <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="3w9-Iu-3u2" secondAttribute="trailing" constant="20" id="tAR-eN-FSk"/>
                         <constraint firstItem="3w9-Iu-3u2" firstAttribute="leading" secondItem="DN4-48-aOI" secondAttribute="trailing" constant="8" id="txm-vt-aJ8"/>
                     </constraints>
                 </customView>
@@ -932,7 +801,7 @@ Blu-ray and DVD sources often have multiple titles, the longest of which is typi
                 <constraint firstAttribute="bottom" secondItem="nHs-z7-brO" secondAttribute="bottom" id="kh1-nj-FYU"/>
                 <constraint firstItem="nHs-z7-brO" firstAttribute="centerX" secondItem="lZQ-gl-3wX" secondAttribute="centerX" id="mKh-Iz-BGz"/>
             </constraints>
-            <point key="canvasLocation" x="458" y="-558.5"/>
+            <point key="canvasLocation" x="255" y="-617"/>
         </customView>
         <menu id="my5-n7-OFP">
             <items>
@@ -946,14 +815,4 @@ Blu-ray and DVD sources often have multiple titles, the longest of which is typi
             <point key="canvasLocation" x="2190" y="-1537"/>
         </menu>
     </objects>
-    <resources>
-        <image name="activity" width="32" height="32"/>
-        <image name="addqueue" width="32" height="32"/>
-        <image name="encode" width="32" height="32"/>
-        <image name="pauseencode" width="32" height="32"/>
-        <image name="presets" width="32" height="32"/>
-        <image name="preview" width="32" height="32"/>
-        <image name="showqueue" width="32" height="32"/>
-        <image name="source" width="32" height="32"/>
-    </resources>
 </document>

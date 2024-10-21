@@ -21,10 +21,10 @@
     {
         NSError *error;
         BOOL result;
-        result = [[NSFileManager defaultManager] createDirectoryAtPath:url.URLByDeletingLastPathComponent.path
-                                           withIntermediateDirectories:YES
-                                                            attributes:nil
-                                                                 error:&error];
+        result = [NSFileManager.defaultManager createDirectoryAtURL:url.URLByDeletingLastPathComponent
+                                        withIntermediateDirectories:YES
+                                                         attributes:nil
+                                                              error:&error];
         if (!result)
         {
             [HBUtilities writeToActivityLog:"Error: couldn't open activity log file, %@", error];

@@ -98,12 +98,15 @@ namespace HandBrake.Worker.Routing
             if (this.handbrakeInstance != null)
             {
                 JsonState statusJson = this.handbrakeInstance.GetProgress();
-                string json = JsonSerializer.Serialize(statusJson, JsonSettings.Options);
+                if (statusJson != null)
+                {
+                    return JsonSerializer.Serialize(statusJson, JsonSettings.Options);
+                }
 
-                return json;
+                return "";
             }
 
-            return null;
+            return "";
         }
 
 
@@ -119,7 +122,7 @@ namespace HandBrake.Worker.Routing
 
                 this.Initialise(command.InitialiseCommand);
 
-                this.handbrakeInstance.StartScan(command.Paths, command.PreviewCount, command.MinDuration, command.TitleIndex, command.InitialiseCommand.ExcludeExtnesionList, command.HwDecode);
+                this.handbrakeInstance.StartScan(command.Paths, command.PreviewCount, command.MinDuration, command.TitleIndex, command.InitialiseCommand.ExcludeExtnesionList, command.HwDecode, command.InitialiseCommand.KeepDuplicateTitles);
 
                 return JsonSerializer.Serialize(new CommandResult() { WasSuccessful = true }, JsonSettings.Options);
             }

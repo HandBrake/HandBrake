@@ -280,9 +280,6 @@
 /* Class = "CocoaBindingsConnection"; ibShadowedIsNilPlaceholder = "0"; ObjectID = "QSp-61-LWu"; */
 "QSp-61-LWu.ibShadowedIsNilPlaceholder" = "0";
 
-/* Class = "NSMenu"; title = "OtherViews"; ObjectID = "qSV-uB-Iup"; */
-"qSV-uB-Iup.title" = "OutrosViews";
-
 /* Class = "NSMenuItem"; title = "1080p HD"; ObjectID = "qzy-K8-2tY"; */
 "qzy-K8-2tY.title" = "1080p HD";
 

@@ -53,8 +53,6 @@ static void *HandBrakeXPCServiceContext = &HandBrakeXPCServiceContext;
 
 - (void)setUpWithLogLevel:(NSInteger)level name:(NSString *)name
 {
-    [HBCore initGlobal];
-
     _core = [[HBCore alloc] initWithLogLevel:level queue:_queue];
     _core.name = name;
 
@@ -71,6 +69,7 @@ static void *HandBrakeXPCServiceContext = &HandBrakeXPCServiceContext;
 
     void (^completionHandler)(HBCoreResult result) = ^(HBCoreResult result)
     {
+        [HBCore cleanTemporaryFiles];
         [self stopAccessingSecurityScopedResources];
         self.reply(result);
         self.reply = nil;
@@ -83,9 +82,13 @@ static void *HandBrakeXPCServiceContext = &HandBrakeXPCServiceContext;
                    context:HandBrakeXPCServiceContext];
 }
 
-- (void)tearDown
+- (void)initGlobal
 {
-    _core = nil;
+    [HBCore initGlobal];
+}
+
+- (void)closeGlobal
+{
     [HBCore closeGlobal];
 }
 
@@ -153,7 +156,7 @@ static void *HandBrakeXPCServiceContext = &HandBrakeXPCServiceContext;
     });
 }
 
-- (void)scanURL:(NSURL *)url titleIndex:(NSUInteger)index previews:(NSUInteger)previewsNum minDuration:(NSUInteger)seconds keepPreviews:(BOOL)keepPreviews hardwareDecoder:(BOOL)hardwareDecoder withReply:(void (^)(HBCoreResult))reply
+- (void)scanURL:(NSURL *)url titleIndex:(NSUInteger)index previews:(NSUInteger)previewsNum minDuration:(NSUInteger)seconds keepPreviews:(BOOL)keepPreviews hardwareDecoder:(BOOL)hardwareDecoder keepDuplicateTitles:(BOOL)keepDuplicateTitles withReply:(void (^)(HBCoreResult))reply
 {
     dispatch_sync(_queue, ^{
         self.reply = reply;
@@ -163,6 +166,7 @@ static void *HandBrakeXPCServiceContext = &HandBrakeXPCServiceContext;
                 minDuration:seconds
                keepPreviews:keepPreviews
             hardwareDecoder:hardwareDecoder
+            keepDuplicateTitles:keepDuplicateTitles
             progressHandler:self.progressHandler
           completionHandler:self.completionHandler];
     });

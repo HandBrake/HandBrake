@@ -20,7 +20,6 @@ It may be used under the terms of the GNU General Public License. */
 @property (nonatomic) NSInteger selectedIndex;
 @property (nonatomic) BOOL visible;
 
-@property (nonatomic) NSTimer *hudTimer;
 @property (nonatomic) BOOL mouseInView;
 
 @end

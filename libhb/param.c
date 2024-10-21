@@ -1,6 +1,6 @@
 /* param.c
  *
- * Copyright (c) 2003-2022 HandBrake Team
+ * Copyright (c) 2003-2024 HandBrake Team
  * This file is part of the HandBrake source code
  * Homepage: <http://handbrake.fr/>.
  * It may be used under the terms of the GNU General Public License v2.
@@ -1243,9 +1243,7 @@ hb_generate_filter_settings(int filter_id, const char *preset, const char *tune,
     {
         case HB_FILTER_PAD:
         case HB_FILTER_ROTATE:
-        case HB_FILTER_ROTATE_VT:
         case HB_FILTER_CROP_SCALE:
-        case HB_FILTER_CROP_SCALE_VT:
         case HB_FILTER_VFR:
         case HB_FILTER_RENDER_SUB:
         case HB_FILTER_GRAYSCALE:

@@ -1,7 +1,7 @@
 {
     "app-id": "fr.handbrake.ghb",
     "runtime": "org.gnome.Platform",
-    "runtime-version": "43",
+    "runtime-version": "46",
     "sdk": "org.gnome.Sdk",
     "command": "ghb",
     "finish-args": [
@@ -12,7 +12,6 @@
         "--filesystem=host",
         "--filesystem=xdg-run/gvfs",
         "--filesystem=xdg-run/gvfsd",
-        "--filesystem=xdg-config/gtk-3.0",
         "--talk-name=org.gtk.vfs.*",
         "--system-talk-name=org.freedesktop.login1",
         "--system-talk-name=org.freedesktop.UPower",
@@ -40,13 +39,22 @@
                 {
                     "type": "git",
                     "url": "https://github.com/numactl/numactl.git",
-                    "tag": "v2.0.16",
-                    "commit": "10285f1a1bad49306839b2c463936460b604e3ea",
+                    "tag": "v2.0.18",
+                    "commit": "3871b1c42fc71bceadafd745d2eff5dddfc2d67e",
                     "x-checker-data": {
                         "type": "git",
                         "tag-pattern": "^v([\\d.]+)$"
                     }
                 }
+            ],
+            "rm-configure": true,
+            "cleanup": [
+                "/include",
+                "/lib/pkgconfig",
+                "/lib/*.a",
+                "/lib/*.la",
+                "/lib/*.so",
+                "/share/man"
             ]
         },
         {
@@ -55,6 +63,8 @@
             "config-opts": [
                 "--flatpak"
             ],
+            "build-options": {
+            },
             "builddir": true,
             "post-install": ["install -d /app/extensions"],
             "sources": [
@@ -70,6 +80,15 @@
                 }
             ],
             "modules": [
+            ],
+            "cleanup": [
+                "/etc",
+                "/include",
+                "/lib/cmake",
+                "/lib/pkgconfig",
+                "/lib/*.a",
+                "/lib/*.la",
+                "/lib/*.so"
             ]
         }
     ]

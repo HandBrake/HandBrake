@@ -1,11 +1,13 @@
 $(eval $(call import.MODULE.defs,ZLIB,zlib))
 $(eval $(call import.CONTRIB.defs,ZLIB))
 
-ZLIB.FETCH.url     = https://github.com/HandBrake/HandBrake-contribs/releases/download/contribs/zlib-1.2.12.tar.gz
-ZLIB.FETCH.url    += https://zlib.net/zlib-1.2.12.tar.gz
-ZLIB.FETCH.sha256  = 91844808532e5ce316b3c010929493c0244f3d37593afd6de04f71821d5136d9
+ZLIB.FETCH.url     = https://github.com/HandBrake/HandBrake-contribs/releases/download/contribs/zlib-1.3.1.tar.gz
+ZLIB.FETCH.url    += https://www.zlib.net/fossils/zlib-1.3.1.tar.gz
+ZLIB.FETCH.sha256  = 9a93b2b7dfdac77ceba5a558a580e74667dd6fede4585b91eefb60f03b72df23
 
 ZLIB.CONFIGURE.args = !sete @dir !env !exe @prefix !extra
+
+ZLIB.GCC.args.extra += $(ZLIB.GCC.args.O.$(ZLIB.GCC.O))
 
 ifeq (1-mingw,$(HOST.cross)-$(HOST.system))
     ZLIB.CONFIGURE.env.AR      = AR="$(AR.exe)"

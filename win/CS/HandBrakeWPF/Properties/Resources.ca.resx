@@ -1,0 +1,2845 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" id="root">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace"/>
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0"/>
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string"/>
+              <xsd:attribute name="type" type="xsd:string"/>
+              <xsd:attribute name="mimetype" type="xsd:string"/>
+              <xsd:attribute ref="xml:space"/>
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string"/>
+              <xsd:attribute name="name" type="xsd:string"/>
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2"/>
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1"/>
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3"/>
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4"/>
+              <xsd:attribute ref="xml:space"/>
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required"/>
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Video_EncoderExtraArgs" xml:space="preserve">
+    <value>La llista completa dels paràmetres del codificador:
+{0}</value>
+  </data>
+  <data name="Video_x264FastDecode" xml:space="preserve">
+    <value>Redueix l'ús de CPU del descodificador.
+
+Activeu-ho si al dispositiu li costa reproduir el fitxer de sortida. (p. ex. perd fotogrames)</value>
+  </data>
+  <data name="Video_LosslessWarning" xml:space="preserve">
+    <value>Avís: l'RF 0 és sense pèrdua.</value>
+  </data>
+  <data name="Video_LosslessWarningTooltip" xml:space="preserve">
+    <value>Un valor de 0 significa que el fitxer serà sense pèrdua i que tindrà una mida superior a l'original,
+tret que l'original també fos sense pèrdua.
+
+Les escales de x264 i x265 són logarítmiques i els valors inferiors corresponen a qualitats superiors.
+
+Així doncs, petits increments de valor provocaran increments progressivament més grans en la mida del fitxer final.</value>
+  </data>
+  <data name="AddPreset_PictureSizeMode" xml:space="preserve">
+    <value>De manera opcional, podeu desar els paràmetres d'imatge amb aquesta configuració predefinida. N'hi ha 3 modes:
+
+Cap: Els paràmetres d'imatge no es desen amb aquesta configuració predefinida. Quan carregueu un fitxer, restarà igual dins dels límits de la resolució d'origen. Això també afecta l'anamorfisme, els mòduls, l'escapçament, etc.
+
+Personalitzat: De manera opcional, podeu establir una amplada i alçada màximes. Quan trieu aquesta opció, la codificació tindrà valors inferiors o iguals. Mantén la relació d'aspecte s'activarà automàticament.
+
+Origen al màxim: Sempre que sigui possible es codificarà amb la resolució del fitxer d'origen.</value>
+  </data>
+  <data name="About_GPL" xml:space="preserve">
+    <value>Aquest programa és programari lliure; el podeu redistribuir i/o
+modificar sota els termes de la Llicència General Pública de GNU
+tal com l'ha publicada la Free Software Foundation, ja sigui la versió 2
+com (a elecció vostra) qualsevol versió posterior.
+
+Aquest programa es distribueix amb l'esperança que serà útil,
+però SENSE CAP GARANTIA; sense ni tan sols la garantia implícita
+de MERCANTIBILITAT o ADEQUACIÓ A UNA FINALITAT DETERMINADA. 
+En trobareu més detalls a la Llicència General Pública de GNU.
+
+Heu d'haver rebut una còpia de la Llicència General Pública de GNU
+amb aquest programa; si no és així, escriviu a la
+Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, EUA. </value>
+  </data>
+  <data name="QueueSelection_AutoNameWarning" xml:space="preserve">
+    <value>Avís: no teniu activats els noms de fitxer automàtics. Activeu-los a les opcions.</value>
+  </data>
+  <data name="QueueSelection_AutoTrackSelectionWarning" xml:space="preserve">
+    <value>Avís: ara mateix no teniu la selecció automàtica de pistes d'àudio i subtítols activada. Podeu configurar les pistes per defecte a les opcions.</value>
+  </data>
+  <data name="Presets_ResetComplete" xml:space="preserve">
+    <value>Les configuracions predefinides originals s'han restablert.</value>
+  </data>
+  <data name="Presets_ResetHeader" xml:space="preserve">
+    <value>S'ha restablert correctament</value>
+  </data>
+  <data name="Video_HigherQuality" xml:space="preserve">
+    <value>Qualitat superior |</value>
+  </data>
+  <data name="Video_LowQuality" xml:space="preserve">
+    <value>| Qualitat inferior</value>
+  </data>
+  <data name="Video_PlaceboQuality" xml:space="preserve">
+    <value>Qualitat placebo |</value>
+  </data>
+  <data name="Error" xml:space="preserve">
+    <value>Error</value>
+  </data>
+  <data name="Main_TurnOnAutoFileNaming" xml:space="preserve">
+    <value>Heu d'activar els noms de fitxer automàtics i establir un camí predeterminat a les preferències abans de poder afegir elements a la cua.</value>
+  </data>
+  <data name="Warning" xml:space="preserve">
+    <value>Avís</value>
+  </data>
+  <data name="AreYouSure" xml:space="preserve">
+    <value>N'esteu segur?</value>
+  </data>
+  <data name="HandBrake_Title" xml:space="preserve">
+    <value>HandBrake</value>
+  </data>
+  <data name="Main_AlreadyEncoding" xml:space="preserve">
+    <value>El HandBrake ja està codificant.</value>
+  </data>
+  <data name="Main_DuplicateDestinationOnQueue" xml:space="preserve">
+    <value>Hi ha tasques a la cua amb el mateix camí de destinació. Seleccioneu un camí diferent per a la tasca.
+
+Podeu configurar les opcions dels noms de fitxer automàtics a «Eines -&gt; Preferències -&gt; Fitxers de sortida»
+</value>
+  </data>
+  <data name="Main_JobsPending_addon" xml:space="preserve">
+    <value>Tasques pendents {0}</value>
+  </data>
+  <data name="Main_NewDefaultPreset" xml:space="preserve">
+    <value>Configuració predefinida per defecte nova: {0}</value>
+  </data>
+  <data name="Main_NewUpdate" xml:space="preserve">
+    <value>Hi ha una nova actualització disponible. Instal·leu-la anant a Eines &gt; Opcions</value>
+  </data>
+  <data name="Main_NoPresetSelected" xml:space="preserve">
+    <value>No s'ha seleccionat cap configuració predefinida.</value>
+  </data>
+  <data name="Main_NoUpdateOfBuiltInPresets" xml:space="preserve">
+    <value>No podeu modificar les configuracions predefinides originals. Seleccioneu una configuració predefinida pròpia.</value>
+  </data>
+  <data name="Main_PleaseSelectFolder" xml:space="preserve">
+    <value>Seleccioneu una carpeta.</value>
+  </data>
+  <data name="Main_PreparingToEncode" xml:space="preserve">
+    <value>S'està preparant la codificació...</value>
+  </data>
+  <data name="Main_PresetErrorBuiltInName" xml:space="preserve">
+    <value>No podeu importar una configuració predefinida que tingui el mateix nom que una configuració predefinida original.</value>
+  </data>
+  <data name="Main_PresetOverwriteWarning" xml:space="preserve">
+    <value>La configuració predefinida «{0}» ja existeix. La voleu sobreescriure?</value>
+  </data>
+  <data name="Main_Presets" xml:space="preserve">
+    <value>Configuracions predefinides</value>
+  </data>
+  <data name="Main_PresetUpdateConfirmation" xml:space="preserve">
+    <value>Segur que voleu actualitzar la configuració predefinida seleccionada?</value>
+  </data>
+  <data name="Main_PresetUpdated" xml:space="preserve">
+    <value>La configuració predefinida s'ha actualitzat amb els paràmetres actuals.</value>
+  </data>
+  <data name="Main_PresetUpdateNotification" xml:space="preserve">
+    <value>El HandBrake ha determinat que teniu les configuracions predefinides obsoletes i s'han d'actualitzar.
+Les vostres configuracions predefinides personalitzades no estan actualitzades i és possible que les hàgiu de recrear esborrant-les i tornant-les a afegir.
+S'ha fet una còpia de seguretat del fitxer user_presets.xml anterior.</value>
+  </data>
+  <data name="Main_QueueFinished" xml:space="preserve">
+    <value>S'ha finalitzat la cua</value>
+  </data>
+  <data name="Main_ScanCancelled" xml:space="preserve">
+    <value>S'ha cancel·lat l'escaneig</value>
+  </data>
+  <data name="Main_ScanCompleted" xml:space="preserve">
+    <value>S'ha completat l'escaneig</value>
+  </data>
+  <data name="Main_ScanFailed_NoReason" xml:space="preserve">
+    <value>No s'ha pogut escanejar:</value>
+  </data>
+  <data name="Main_ScanFailed_CheckLog" xml:space="preserve">
+    <value>No s'ha pogut escanejar. Vegeu el registre d'activitat per a obtenir-ne més detalls.</value>
+  </data>
+  <data name="Main_ScanningPleaseWait" xml:space="preserve">
+    <value>S'està escanejant el fitxer d'origen, espereu...</value>
+  </data>
+  <data name="Main_ScanningTitleXOfY" xml:space="preserve">
+    <value>S'està escanejant el títol {0} de {1} ({2} %)</value>
+  </data>
+  <data name="Main_ScanSource" xml:space="preserve">
+    <value>Cal que escanegeu un fitxer d'origen i configureu la tasca per començar a codificar. Feu clic al botó «Fitxer d'origen» de la barra d'eines per continuar.</value>
+  </data>
+  <data name="Main_SelectPreset" xml:space="preserve">
+    <value>Assegureu-vos de seleccionar una configuració predefinida pròpia. Tingueu en compte que no podeu exportar les configuracions predeterminades originals.</value>
+  </data>
+  <data name="Main_SelectPresetForUpdate" xml:space="preserve">
+    <value>Seleccioneu la configuració predefinida que vulgueu actualitzar.</value>
+  </data>
+  <data name="Main_SelectSource" xml:space="preserve">
+    <value>Seleccioneu «Fitxer d'origen» per a continuar</value>
+  </data>
+  <data name="Main_XEncodesPending" xml:space="preserve">
+    <value>{0} tasques pendents</value>
+  </data>
+  <data name="Notice" xml:space="preserve">
+    <value>Avís</value>
+  </data>
+  <data name="Overwrite" xml:space="preserve">
+    <value>Voleu sobreescriure-ho?</value>
+  </data>
+  <data name="Question" xml:space="preserve">
+    <value>Pregunta</value>
+  </data>
+  <data name="State_Ready" xml:space="preserve">
+    <value>Llest</value>
+  </data>
+  <data name="Updated" xml:space="preserve">
+    <value>Actualitzat</value>
+  </data>
+  <data name="Preset_OldVersion_Header" xml:space="preserve">
+    <value>Versió de la configuració predefinida</value>
+  </data>
+  <data name="Preset_OldVersion_Message" xml:space="preserve">
+    <value>La configuració predefinida que voleu importar és d'una versió diferent del HandBrake.
+És possible que no en pugueu importar tots els valors.
+
+Voleu continuar?</value>
+  </data>
+  <data name="Preset_UnableToImport_Header" xml:space="preserve">
+    <value>No s'ha pogut importar la configuració predefinida.</value>
+  </data>
+  <data name="Preset_UnableToImport_Message" xml:space="preserve">
+    <value>No s'ha pogut importar la configuració predefinida atès que s'ha degut corrompre o prové d'una versió antiga del HandBrake.</value>
+  </data>
+  <data name="Main_SetDestination" xml:space="preserve">
+    <value>Heu d'establir el camí de destinació del fitxer de sortida abans d'afegir-lo a la cua.</value>
+  </data>
+  <data name="Main_InvalidDestination" xml:space="preserve">
+    <value>El camí de destinació que heu introduït conté caràcters no vàlids i no s'actualitzarà.</value>
+  </data>
+  <data name="Preview" xml:space="preserve">
+    <value>Previsualització {0}</value>
+  </data>
+  <data name="Preview_Scaled" xml:space="preserve">
+    <value>Previsualització (redimensionada)</value>
+  </data>
+  <data name="PictureSettings_OutputResolution" xml:space="preserve">
+    <value>Fitxer de sortida: {0}</value>
+  </data>
+  <data name="Main_MatchingFileOverwriteWarning" xml:space="preserve">
+    <value>No es pot codificar un fitxer amb la mateixa ubicació i nom que l'original. Canvieu el nom del fitxer de destinació perquè no coincideixi amb el fitxer d'origen.</value>
+  </data>
+  <data name="Main_UnableToLoadHelpMessage" xml:space="preserve">
+    <value>El sistema ha evitat que el HandBrake obri un navegador.</value>
+  </data>
+  <data name="Main_UnableToLoadHelpSolution" xml:space="preserve">
+    <value>També podeu accedir a les pàgines d'ajuda visitant el web directament a: https://handbrake.fr</value>
+  </data>
+  <data name="Main_PresetImportFailed" xml:space="preserve">
+    <value>No s'ha pogut importar la configuració predefinida seleccionada.</value>
+  </data>
+  <data name="Main_PresetImportFailedSolution" xml:space="preserve">
+    <value>És possible que la configuració predefinida s'hagi corromput o que sigui d'una versió anterior del HandBrake ja no compatible.
+S'han de tornar a crear les configuracions predefinides anteriors a la versió actual.</value>
+  </data>
+  <data name="Video_EncoderExtraArgsTooltip" xml:space="preserve">
+    <value>Arguments avançats addicionals que es poden transferir al codificador de vídeo.</value>
+  </data>
+  <data name="Subtitles_BurnInBehaviourModes" xml:space="preserve">
+    <value>Cap: Només s'incrustaran les pistes el contenidor de les quals el format no sigui compatible.
+Pista d'àudio estranger: S'incrustarà la pista d'àudio estranger si està disponible.
+Primera pista: S'incrustarà la primera pista.
+Preferència d'àudio estranger: Si hi ha una pista d'àudio estranger, s'incrustarà, si no, es triarà la primera pista.</value>
+  </data>
+  <data name="Subtitles_WebmSubtitleIncompatibilityHeader" xml:space="preserve">
+    <value>Compatibilitat amb subtítols WebM</value>
+  </data>
+  <data name="Subtitles_WebmSubtitleIncompatibilityError" xml:space="preserve">
+    <value>El format WebM només admet subtítols incrustats.
+Heu de canviar la selecció de subtítols.
+Si procediu, els subtítols no incrustats es perdran.</value>
+  </data>
+  <data name="Main_ScanNoTitlesFound" xml:space="preserve">
+    <value>No s'han trobat títols ni fitxers d'origen vàlids.</value>
+  </data>
+  <data name="Main_ScanNoTitlesFoundMessage" xml:space="preserve">
+    <value>El HandBrake no podrà codificar el fitxer seleccionat atès que no ha trobat un títol vàlid a codificar. Això pot ser a causa de diverses raons:
+- La durada de cada fitxer és inferior a la de l'opció «Durada mínima del títol» establerta a «Preferències &gt; Avançat».
+- El fitxer d'origen no és un fitxer de vídeo vàlid o té un format que el HandBrake no admet.
+- No teniu accés al fitxer o un altre programa el bloca.
+- El fitxer d'origen és una còpia o té DRM. Tingueu en compte que el HandBrake no ofereix l'eliminació de protecció de còpia.
+És possible que el registre d'activitat en tingui informació addicional.</value>
+  </data>
+  <data name="Main_QueueLabel" xml:space="preserve">
+    <value>Cua{0}</value>
+  </data>
+  <data name="Main_Start" xml:space="preserve">
+    <value>Inicia la codificació</value>
+  </data>
+  <data name="Main_StartQueue" xml:space="preserve">
+    <value>Inicia la cua</value>
+  </data>
+  <data name="MainViewModel_CanNotDeleteDefaultPreset" xml:space="preserve">
+    <value>No podeu eliminar la configuració predefinida per defecte. Definiu abans una altra configuració predefinida per defecte.</value>
+  </data>
+  <data name="MainViewModel_PresetRemove_AreYouSure" xml:space="preserve">
+    <value>Segur que voleu eliminar la configuració predefinida:</value>
+  </data>
+  <data name="MainViewModel_EncodeStatusChanged_StatusLabel" xml:space="preserve">
+    <value>Codificació: Passada {0} de {1},  {2:00.00} %, FPS: {3:000.0},  FPS mitj.: {4:000.0}, Temps restant: {5}, Transcorregut: {6} {7}</value>
+  </data>
+  <data name="AddPresetViewModel_PresetMustProvideName" xml:space="preserve">
+    <value>Les configuracions predefinides han de tenir un nom. Poseu-li'n un.</value>
+  </data>
+  <data name="AddPresetViewModel_PresetWithSameNameOverwriteWarning" xml:space="preserve">
+    <value>Ja existeix una configuració predefinida amb aquest nom. La voleu sobreescriure?</value>
+  </data>
+  <data name="AddPresetViewModel_YouMustFirstScanSource" xml:space="preserve">
+    <value>Heu d'escanejar un fitxer d'origen per a utilitzar l'opció «Origen al màxim».</value>
+  </data>
+  <data name="AddPresetViewModel_CustomWidthHeightFieldsRequired" xml:space="preserve">
+    <value>Heu d'emplenar els camps Amplada o Alçada personalitzada a l'opció «Personalitzat».</value>
+  </data>
+  <data name="AddPresetViewModel_UnableToAddPreset" xml:space="preserve">
+    <value>No s'han pogut afegir les configuracions predefinides.</value>
+  </data>
+  <data name="UnknownError" xml:space="preserve">
+    <value>Error desconegut</value>
+  </data>
+  <data name="AudioViewModel_AudioDefaults" xml:space="preserve">
+    <value>Valors per defecte de l'àudio</value>
+  </data>
+  <data name="AudioViewModel_AudioTracks" xml:space="preserve">
+    <value>Pistes d'àudio</value>
+  </data>
+  <data name="AudioViewModel_ConfigureDefaults" xml:space="preserve">
+    <value>Comportament de la selecció...</value>
+  </data>
+  <data name="AudioViewModel_SwitchBackToTracks" xml:space="preserve">
+    <value>Torna a les pistes</value>
+  </data>
+  <data name="ChaptersViewModel_UnableToExportChaptersWarning" xml:space="preserve">
+    <value>No s'ha pogut desar el fitxer de marcadors de capítol.</value>
+  </data>
+  <data name="ChaptersViewModel_UnableToExportChaptersMsg" xml:space="preserve">
+    <value>Els noms dels marcadors de capítol NO es desaran al fitxer codificat.</value>
+  </data>
+  <data name="CountdownAlertViewModel_NoticeMessage" xml:space="preserve">
+    <value>L'acció següent «{0}» es produirà d'aquí {1} segons.</value>
+  </data>
+  <data name="ErrorViewModel_IfTheProblemPersists" xml:space="preserve">
+    <value>Si el problema continua, proveu de reiniciar el HandBrake.</value>
+  </data>
+  <data name="ErrorViewModel_NoFurtherInformation" xml:space="preserve">
+    <value>No hi ha més informació disponible sobre aquest error.</value>
+  </data>
+  <data name="ErrorViewModel_UnknownError" xml:space="preserve">
+    <value>S'ha produït un error desconegut</value>
+  </data>
+  <data name="OptionsViewModel_NewUpdate" xml:space="preserve">
+    <value>Hi ha una nova versió disponible. Visiteu al lloc web per a veure'n les notes de la versió.</value>
+  </data>
+  <data name="OptionsViewModel_64bitAvailable" xml:space="preserve">
+    <value>El sistema és compatible amb la versió 64 bits del HandBrake. Aquesta versió suposa una millora d'estabilitat i rendiment en comparació amb la de 32 bits.
+Visiteu el lloc web per veure'n les notes de la versió.</value>
+  </data>
+  <data name="OptionsViewModel_NoNewUpdates" xml:space="preserve">
+    <value>No hi ha actualitzacions ara mateix.</value>
+  </data>
+  <data name="OptionsViewModel_UpdateDownloaded" xml:space="preserve">
+    <value>S'ha baixat l'actualització</value>
+  </data>
+  <data name="OptionsViewModel_UpdateServiceUnavailable" xml:space="preserve">
+    <value>El servei d'actualitzacions no està disponible. Podeu provar de baixar l'actualització a https://handbrake.fr</value>
+  </data>
+  <data name="OptionsViewModel_UpdateFailed" xml:space="preserve">
+    <value>No s'ha pogut actualitzar. Podeu provar de baixar-la a https://handbrake.fr</value>
+  </data>
+  <data name="PictureSettingsViewModel_StorageDisplayLabel" xml:space="preserve">
+    <value>Mida del contenidor: {0}x{1}</value>
+  </data>
+  <data name="QueueSelectionViewModel_AddToQueue" xml:space="preserve">
+    <value>Afegeix a la cua</value>
+  </data>
+  <data name="QueueViewModel_NoEncodesPending" xml:space="preserve">
+    <value>No hi ha cap codificació pendent</value>
+  </data>
+  <data name="QueueViewModel_NoJobsPending" xml:space="preserve">
+    <value>No hi ha res codificant-se</value>
+  </data>
+  <data name="QueueViewModel_Queue" xml:space="preserve">
+    <value>Cua</value>
+  </data>
+  <data name="QueueViewModel_ClearQueueConfirmation" xml:space="preserve">
+    <value>Segur que voleu esborrar la cua?</value>
+  </data>
+  <data name="Confirm" xml:space="preserve">
+    <value>Confirma</value>
+  </data>
+  <data name="QueueViewModel_JobsPending" xml:space="preserve">
+    <value>{0} tasques pendents</value>
+  </data>
+  <data name="QueueViewModel_QueuePending" xml:space="preserve">
+    <value>S'ha pausat la cua</value>
+  </data>
+  <data name="QueueViewModel_DelSelectedJobConfirmation" xml:space="preserve">
+    <value>Segur que voleu eliminar les tasques seleccionades?
+No s'eliminarà cap fitxer codificat.</value>
+  </data>
+  <data name="QueueViewModel_JobCurrentlyRunningWarning" xml:space="preserve">
+    <value>Actualment s'està codificant. Si esborreu la selecció, s'aturarà la codificació. Segur que voleu continuar?</value>
+  </data>
+  <data name="QueueViewModel_NoPendingJobs" xml:space="preserve">
+    <value>No hi ha tasques pendents.</value>
+  </data>
+  <data name="QueueViewModel_EditConfirmation" xml:space="preserve">
+    <value>Segur que voleu editar la tasca? S'eliminarà de la cua i anirà la finestra principal.</value>
+  </data>
+  <data name="QueueViewModel_QueueReady" xml:space="preserve">
+    <value>La cua està llesta</value>
+  </data>
+  <data name="QueueViewModel_QueueNotRunning" xml:space="preserve">
+    <value>La cua no s'està executant</value>
+  </data>
+  <data name="QueueViewModel_QueueCompleted" xml:space="preserve">
+    <value>S'ha finalitzat la cua</value>
+  </data>
+  <data name="QueueViewModel_LastJobFinished" xml:space="preserve">
+    <value>S'ha completat l'última tasca de la cua</value>
+  </data>
+  <data name="QueueViewModel_QueueStarted" xml:space="preserve">
+    <value>S'ha iniciat la cua</value>
+  </data>
+  <data name="QueueViewModel_QueueStatusDisplay" xml:space="preserve">
+    <value>Codificació: Passada {0} de {1},  {2:00.00} %, FPS: {3:000.0},  FPS mitj.: {4:000.0}, Temps restant: {5}, Transcorregut: {6:d\:hh\:mm\:ss}</value>
+  </data>
+  <data name="ShellViewModel_CanClose" xml:space="preserve">
+    <value>Actualment s'està codificant. Si sortiu del HandBrake, s'aturarà la codificació.
+Segur que voleu sortir-ne?</value>
+  </data>
+  <data name="StaticPreviewViewModel_Title" xml:space="preserve">
+    <value>Previsualització de la imatge</value>
+  </data>
+  <data name="StaticPreview_UnableToDeletePreview" xml:space="preserve">
+    <value>No es pot esborrar el fitxer de previsualització anterior. És possible que tingueu una previsualització oberta al reproductor. Tanqueu-la.</value>
+  </data>
+  <data name="StaticPreviewViewModel_ScanFirst" xml:space="preserve">
+    <value>Heu d'escanejar un fitxer d'origen i configurar la codificació per crear-ne una previsualització.</value>
+  </data>
+  <data name="StaticPreviewViewModel_UnableToPlayFile" xml:space="preserve">
+    <value>No s'ha pogut trobar el fitxer de previsualització. Potser el fitxer s'ha eliminat o bé la codificació ha fallat. Comproveu el registre d'activitat per a obtenir-ne més detalls.</value>
+  </data>
+  <data name="StaticPreviewViewModel_AlreadyEncoding" xml:space="preserve">
+    <value>El HandBrake ja està codificant un vídeo. Només es pot codificar un fitxer a la vegada.</value>
+  </data>
+  <data name="SubtitlesViewModel_SubDefaults" xml:space="preserve">
+    <value>Subtítols per defecte</value>
+  </data>
+  <data name="SubtitlesViewModel_SubTracks" xml:space="preserve">
+    <value>Pistes de subtítols</value>
+  </data>
+  <data name="SubtitlesViewModel_SwitchToTracks" xml:space="preserve">
+    <value>Torna a les pistes</value>
+  </data>
+  <data name="SubtitlesViewModel_ConfigureDefaults" xml:space="preserve">
+    <value>Comportament de la selecció...</value>
+  </data>
+  <data name="PresetService_ArchiveFile" xml:space="preserve">
+    <value>Fitxer arxivat:</value>
+  </data>
+  <data name="PresetService_UnableToLoad" xml:space="preserve">
+    <value>No s'han pogut carregar les configuracions predefinides.</value>
+  </data>
+  <data name="PresetService_UnableToLoadPresets" xml:space="preserve">
+    <value>El HandBrake no ha pogut carregar el fitxer de configuració predefinida. És possible que sigui d'una versió antiga del HandBrake no compatible o que s'hagi corromput.
+
+El fitxer de configuració predefinida antic s'ha arxivat a:</value>
+  </data>
+  <data name="Main_QueueFinishedErrors" xml:space="preserve">
+    <value> amb aquest nombre d'errors: {0}. Comproveu la finestra de la cua per a obtenir-ne més detalls.</value>
+  </data>
+  <data name="MainViewModel_LowDiskSpace" xml:space="preserve">
+    <value>Poc espai al disc</value>
+  </data>
+  <data name="MainViewModel_LowDiskSpaceWarning" xml:space="preserve">
+    <value>Avís: s'està exhaurint l'espai del disc. El HandBrake no podrà acabar de codificar el fitxer si ja no hi teniu espai.</value>
+  </data>
+  <data name="ChaptersViewModel_UnableToImportChaptersMalformedLineMsg" xml:space="preserve">
+    <value>La línia {0} és invàlida. No s'importarà res.</value>
+  </data>
+  <data name="ChaptersViewModel_UnableToImportChaptersWarning" xml:space="preserve">
+    <value>No s'ha pogut importar el fitxer de capítol</value>
+  </data>
+  <data name="ChaptersViewModel_UnableToImportChaptersLineDoesNotHaveAtLeastTwoColumns" xml:space="preserve">
+    <value>Totes les línies del fitxer de capítols han de tenir almenys 2 columnes de dades</value>
+  </data>
+  <data name="ChaptersViewModel_UnableToImportChaptersFirstColumnMustContainOnlyIntegerNumber" xml:space="preserve">
+    <value>La primera columna d'un fitxer de capítols ha de contenir obligatòriament un valor de nombre enter superior a zero (0)</value>
+  </data>
+  <data name="ChaptersViewModel_UnsupportedFileFormatMsg" xml:space="preserve">
+    <value>Els fitxers de capítol del tipus «{0}» actualment no són compatibles.</value>
+  </data>
+  <data name="ChaptersViewModel_UnsupportedFileFormatWarning" xml:space="preserve">
+    <value>El tipus de fitxer de capítol no és compatible</value>
+  </data>
+  <data name="ChaptersViewModel_ValidationFailedWarning" xml:space="preserve">
+    <value>La informació dels capítols del fitxer d'origen és invàlida</value>
+  </data>
+  <data name="ChaptersViewModel_ValidateImportedChapters_ChapterCountMismatch" xml:space="preserve">
+    <value>El nombre de capítols del mitjà d'origen
+i el nombre de capítols del fitxer d'entrada no coincideix ({0} enfront de {1})
+
+Segur que voleu importar els noms de capítol?</value>
+  </data>
+  <data name="ChaptersViewModel_ValidateImportedChapters_ChapterCountMismatchMsg" xml:space="preserve">
+    <value>El nombre de capítols del mitjà d'origen
+i el nombre de capítols del fitxer d'entrada no coincideix ({0} i {1})
+
+Segur que voleu importar els noms de capítol?</value>
+  </data>
+  <data name="ChaptersViewModel_ValidateImportedChapters_ChapterCountMismatchWarning" xml:space="preserve">
+    <value>El nombre de capítols no coincideix entre el fitxer d'origen i el fitxer d'entrada</value>
+  </data>
+  <data name="ChaptersViewModel_ValidateImportedChapters_ChapterDurationMismatchMsg" xml:space="preserve">
+    <value>La durada obtinguda dels capítols del mitjà d'origen
+i la durada dels capítols del fitxer d'entrada difereix molt.
+
+És possible que aquest fitxer de capítols s'hagi produït a partir d'un mitjà d'origen diferent.
+
+Segur que voleu importar els noms de capítol?</value>
+  </data>
+  <data name="ChaptersViewModel_ValidateImportedChapters_ChapterDurationMismatchWarning" xml:space="preserve">
+    <value>La durada dels capítols no coincideix entre el fitxer d'origen i el fitxer d'entrada</value>
+  </data>
+  <data name="ScanService_ScanStopFailed" xml:space="preserve">
+    <value>S'ha produït un error quan s'intentava aturar l'escaneig. Reinicieu el HandBrake.</value>
+  </data>
+  <data name="Presets_PresetForceReset" xml:space="preserve">
+    <value>El HandBrake no pot actualitzar el fitxer de configuració predefinida a una nova versió.
+S'arxivarà la configuració predefinida i se'n crearà una de nova. Per tant, haureu de refer les vostres configuracions predefinides.</value>
+  </data>
+  <data name="SettingService_SaveErrorReset" xml:space="preserve">
+    <value>Si heu canviat alguna opció de la configuració, és possible que s'hagi de reinicialitzar el pròxim cop que s'obri el HandBrake.</value>
+  </data>
+  <data name="UserSettings_AnErrorOccurred" xml:space="preserve">
+    <value>S'ha produït un problema en intentar desar les preferències.</value>
+  </data>
+  <data name="UserSettings_YourSettingsHaveBeenReset" xml:space="preserve">
+    <value>Compte, s'ha restablert la configuració.</value>
+  </data>
+  <data name="UserSettings_YourSettingsAreCorrupt" xml:space="preserve">
+    <value>No es pot accedir al fitxer de configuració de l'usuari o s'ha corromput. La configuració s'ha restablert als valors predefinits.</value>
+  </data>
+  <data name="UserSettings_UnableToLoad" xml:space="preserve">
+    <value>No s'ha pogut carregar el fitxer de configuració de l'usuari: {0}</value>
+  </data>
+  <data name="UserSettings_UnableToLoadSolution" xml:space="preserve">
+    <value>No es pot accedir al fitxer de configuració de l'usuari o s'ha corromput. És possible que hàgiu d'eliminar el fitxer i deixar que el HandBrake en generi un de nou.</value>
+  </data>
+  <data name="Main_NoPermissionsOrMissingDirectory" xml:space="preserve">
+    <value>El directori de sortida que heu triat no existeix, o bé no hi teniu permís d'escriptura.</value>
+  </data>
+  <data name="DirectoryUtils_CreateFolder" xml:space="preserve">
+    <value>Voleu crear una carpeta?</value>
+  </data>
+  <data name="DirectoryUtils_CreateFolderMsg" xml:space="preserve">
+    <value>La carpeta que voleu modificar no existeix. Voleu que el HandBrake creï la següent carpeta?
+{0}</value>
+  </data>
+  <data name="MainViewModel_UnableToLaunchDestDir" xml:space="preserve">
+    <value>No s'ha pogut obrir el directori de destinació.</value>
+  </data>
+  <data name="MainViewModel_UnableToLaunchDestDirSolution" xml:space="preserve">
+    <value>Comproveu que hàgiu establert un directori de destinació vàlid.</value>
+  </data>
+  <data name="MainViewModel_EncodeStatusChanged_SubScan_StatusLabel" xml:space="preserve">
+    <value>Passada de processament {0} de {1}, (Exploració de subtítols)  {2:00.00} %, Temps d'exploració restant: {3}, Transcorregut: {4}</value>
+  </data>
+  <data name="NoAdditionalInformation" xml:space="preserve">
+    <value>No hi ha informació addicional</value>
+  </data>
+  <data name="WindowTitleStatus" xml:space="preserve">
+    <value>{0} - ({1} %, Passada {2} de {3})</value>
+  </data>
+  <data name="TaskTrayStatusTitle" xml:space="preserve">
+    <value>{0}
+S'està codificant 1 tasca</value>
+  </data>
+  <data name="PauseOnLowDiskspace" xml:space="preserve">
+    <value>La cua s'ha pausat. Avís: el disc amb què esteu codificant té poc espai. Allibereu-ne una part i premeu per continuar. També podeu ajustar l'espai mínim a les preferències.</value>
+  </data>
+  <data name="Main_QueuePaused" xml:space="preserve">
+    <value>Cua pausada</value>
+  </data>
+  <data name="QueueViewModel_QueuePaused" xml:space="preserve">
+    <value>Cua pausada</value>
+  </data>
+  <data name="Main_LowDiskspace" xml:space="preserve">
+    <value>El directori de destinació té poc espai.
+
+Podeu configurar quan voleu que aparegui aquesta alerta a «Preferències».
+
+Voleu continuar?</value>
+  </data>
+  <data name="Queue_UnableToResetJob" xml:space="preserve">
+    <value>No s'ha pogut restablir l'estat de la tasca atès que no té l'estat «Error» o «Completat»</value>
+  </data>
+  <data name="Queue_UnableToRestoreFile" xml:space="preserve">
+    <value>No es pot restaurar el fitxer de la cua.</value>
+  </data>
+  <data name="Queue_UnableToRestoreFileExtended" xml:space="preserve">
+    <value>És possible que el fitxer s'hagi corromput o que sigui d'una versió anterior del HandBrake ja no compatible.</value>
+  </data>
+  <data name="Queue_AlreadyEncoding" xml:space="preserve">
+    <value>El HandBrake ja està codificant un fitxer.</value>
+  </data>
+  <data name="Queue_AlreadyEncodingSolution" xml:space="preserve">
+    <value>Atureu la codificació actual. Si el problema persisteix, reinicieu el HandBrake.</value>
+  </data>
+  <data name="StaticPreviewView_Title" xml:space="preserve">
+    <value>Previsualització ({0} % de la mida actual)</value>
+  </data>
+  <data name="OsBitnessWarning" xml:space="preserve">
+    <value>El HandBrake només funciona amb una versió 64 bits de Windows 10 o superior.</value>
+  </data>
+  <data name="OsVersionWarning" xml:space="preserve">
+    <value>El HandBrake només funciona amb Windows 10 o superior. Les versions 0.9.9 (XP), 0.10.5 (Vista), 1.3.3 (7 i 8.x) són les últimes versions del programa en què aquests sistemes operatius eren compatibles.</value>
+  </data>
+  <data name="Main_ContinueAddingToQueue" xml:space="preserve">
+    <value>Segur que voleu continuar i afegir la resta?</value>
+  </data>
+  <data name="Main_QueueOverwritePrompt" xml:space="preserve">
+    <value>El fitxer «{0}» ja existeix!
+El voleu sobreescriure?
+
+Consell: El comportament de la sobreescriptura de fitxers es pot modificar a «Preferències». </value>
+  </data>
+  <data name="Clipboard_Unavailable" xml:space="preserve">
+    <value>El porta-retalls del sistema no està disponible en aquest moment.</value>
+  </data>
+  <data name="Clipboard_Unavailable_Solution" xml:space="preserve">
+    <value>Això pot ser a causa que un altre programa estigui monitorant o blocant el porta-retalls per al seu ús. No podreu fer servir el porta-retalls fins que no es desbloqui.</value>
+  </data>
+  <data name="AboutView_License" xml:space="preserve">
+    <value>Llicència:</value>
+  </data>
+  <data name="AboutView_Version" xml:space="preserve">
+    <value>Versió:</value>
+  </data>
+  <data name="AddPresetView_AddNewCategory" xml:space="preserve">
+    <value>-- Afegeix una categoria nova --</value>
+  </data>
+  <data name="AddPresetView_AddPreset" xml:space="preserve">
+    <value>Afegeix una configuració predefinida</value>
+  </data>
+  <data name="AddPresetView_Category" xml:space="preserve">
+    <value>Categoria:</value>
+  </data>
+  <data name="AddPresetView_Description" xml:space="preserve">
+    <value>Descripció:</value>
+  </data>
+  <data name="AddPresetView_Name" xml:space="preserve">
+    <value>Nom:</value>
+  </data>
+  <data name="AddPresetView_SavePictureSize" xml:space="preserve">
+    <value>Dimensions:</value>
+  </data>
+  <data name="AudioDefaultView_Behaviours" xml:space="preserve">
+    <value>Selecció de pista d'origen</value>
+  </data>
+  <data name="AudioView_AllowPassThruOf" xml:space="preserve">
+    <value>Permet el pas directe de:</value>
+  </data>
+  <data name="AudioView_AudioDefaultsDescription" xml:space="preserve">
+    <value>Configureu com se seleccionen i configuren automàticament les pistes d'àudio quan seleccioneu un títol nou o un vídeo d'origen.</value>
+  </data>
+  <data name="AudioView_AutoPassthruBehaviour" xml:space="preserve">
+    <value>Comportament del «Pas directe automàtic»:</value>
+  </data>
+  <data name="AudioView_Bitrate" xml:space="preserve">
+    <value>Velocitat de transmissió</value>
+  </data>
+  <data name="AudioView_Codec" xml:space="preserve">
+    <value>Còdec</value>
+  </data>
+  <data name="AudioView_DRC" xml:space="preserve">
+    <value>DRC</value>
+  </data>
+  <data name="AudioView_Gain" xml:space="preserve">
+    <value>Guany</value>
+  </data>
+  <data name="AudioView_Hide" xml:space="preserve">
+    <value>Amaga</value>
+  </data>
+  <data name="AudioView_Mixdown" xml:space="preserve">
+    <value>Mescla</value>
+  </data>
+  <data name="AudioView_OtherwiseFallbackEncoder" xml:space="preserve">
+    <value>Codificador alternatiu:</value>
+  </data>
+  <data name="AudioView_ReloadDefaults" xml:space="preserve">
+    <value>Torna a recarregar</value>
+  </data>
+  <data name="AudioView_Samplerate" xml:space="preserve">
+    <value>Freqüència de mostratge</value>
+  </data>
+  <data name="AudioView_Show" xml:space="preserve">
+    <value>Mostra</value>
+  </data>
+  <data name="AudioView_TrackName" xml:space="preserve">
+    <value>Nom de la pista</value>
+  </data>
+  <data name="AudioView_TrackSelectionBehaviour" xml:space="preserve">
+    <value>Comportament de la selecció de pistes:</value>
+  </data>
+  <data name="AudioView_TrackSettingDefaultBehaviour" xml:space="preserve">
+    <value>Pistes addicionals:</value>
+  </data>
+  <data name="AudioView_WhenAutoPassthru" xml:space="preserve">
+    <value>Quan el «Pas directe automàtic» se selecciona com a còdec d'àudio.</value>
+  </data>
+  <data name="ChaptersView_ChapterMarkers" xml:space="preserve">
+    <value>Marcadors de capítol</value>
+  </data>
+  <data name="ChaptersView_ChapterName" xml:space="preserve">
+    <value>Nom del capítol</value>
+  </data>
+  <data name="ChaptersView_ChapterNumber" xml:space="preserve">
+    <value>Capítol</value>
+  </data>
+  <data name="ChaptersView_CreateChapterMarkers" xml:space="preserve">
+    <value>Crea marcadors de capítol</value>
+  </data>
+  <data name="ChaptersView_Duration" xml:space="preserve">
+    <value>Durada</value>
+  </data>
+  <data name="ChaptersView_Export" xml:space="preserve">
+    <value>Exporta</value>
+  </data>
+  <data name="ChaptersView_Import" xml:space="preserve">
+    <value>Importa</value>
+  </data>
+  <data name="ChapterView_ExportNames" xml:space="preserve">
+    <value>Exporta noms</value>
+  </data>
+  <data name="ChapterView_ImportNames" xml:space="preserve">
+    <value>Importa noms</value>
+  </data>
+  <data name="ChapterView_ResetChapterNames" xml:space="preserve">
+    <value>Restableix els noms dels capítols</value>
+  </data>
+  <data name="CountdownAlterView_CancelAction" xml:space="preserve">
+    <value>Cancel·la l'acció</value>
+  </data>
+  <data name="CountdownAlterView_Proceed" xml:space="preserve">
+    <value>Continua</value>
+  </data>
+  <data name="CountdownAlterView_WhenDoneAction" xml:space="preserve">
+    <value>Quan finalitzi l'acció</value>
+  </data>
+  <data name="ErrorView_ErrorDetails" xml:space="preserve">
+    <value>Detalls de l'error:</value>
+  </data>
+  <data name="FiltersView_Custom" xml:space="preserve">
+    <value>Personalitzat:</value>
+  </data>
+  <data name="FiltersView_Deblock" xml:space="preserve">
+    <value>Antiblocs:</value>
+  </data>
+  <data name="FiltersView_Decomb" xml:space="preserve">
+    <value>Desentrellaçament variable</value>
+  </data>
+  <data name="FiltersView_Deinterlace" xml:space="preserve">
+    <value>Desentrellaçament:</value>
+  </data>
+  <data name="FiltersView_DeinterlacePreset" xml:space="preserve">
+    <value>Configuració predefinida:</value>
+  </data>
+  <data name="FiltersView_DeinterlacePresetAuto" xml:space="preserve">
+    <value>Configuració predefinida de desentrellaçament</value>
+  </data>
+  <data name="FiltersView_Denoise" xml:space="preserve">
+    <value>Reducció de soroll:</value>
+  </data>
+  <data name="FiltersView_DenoisePresetAuto" xml:space="preserve">
+    <value>Configuració predefinida de reducció de soroll</value>
+  </data>
+  <data name="FiltersView_DenoiseTuneAuto" xml:space="preserve">
+    <value>Ajustament de la reducció de soroll</value>
+  </data>
+  <data name="FiltersView_Detelecine" xml:space="preserve">
+    <value>Destelecine:</value>
+  </data>
+  <data name="FiltersView_Filters" xml:space="preserve">
+    <value>Filtres</value>
+  </data>
+  <data name="FiltersView_FlipVideo" xml:space="preserve">
+    <value>Horitzontal</value>
+  </data>
+  <data name="FiltersView_Grayscale" xml:space="preserve">
+    <value>Escala de grisos</value>
+  </data>
+  <data name="FiltersView_InterlaceDetection" xml:space="preserve">
+    <value>Detecció d'entrellaçament:</value>
+  </data>
+  <data name="FiltersView_Preset" xml:space="preserve">
+    <value>Configuració predefinida:</value>
+  </data>
+  <data name="FiltersView_Rotate" xml:space="preserve">
+    <value>Rotació:</value>
+  </data>
+  <data name="FiltersView_Sharpen" xml:space="preserve">
+    <value>Nitidesa:</value>
+  </data>
+  <data name="FiltersView_SharpenPresetAuto" xml:space="preserve">
+    <value>Configuració predefinida de nitidesa</value>
+  </data>
+  <data name="FiltersView_SharpenTuneAuto" xml:space="preserve">
+    <value>Ajustament de la nitidesa</value>
+  </data>
+  <data name="FiltersView_Tune" xml:space="preserve">
+    <value>Ajustament:</value>
+  </data>
+  <data name="Generic_Add" xml:space="preserve">
+    <value>Afegeix</value>
+  </data>
+  <data name="Generic_Cancel" xml:space="preserve">
+    <value>Cancel·la</value>
+  </data>
+  <data name="Generic_Clear" xml:space="preserve">
+    <value>Esborra</value>
+  </data>
+  <data name="Generic_Close" xml:space="preserve">
+    <value>Tanca</value>
+  </data>
+  <data name="Generic_CopyToClipboard" xml:space="preserve">
+    <value>Copia al porta-retalls</value>
+  </data>
+  <data name="Generic_MoveLeft" xml:space="preserve">
+    <value>Mou a l'esquerra</value>
+  </data>
+  <data name="Generic_MoveRight" xml:space="preserve">
+    <value>Mou a la dreta</value>
+  </data>
+  <data name="Generic_Save" xml:space="preserve">
+    <value>Desa</value>
+  </data>
+  <data name="LogView_CopyClipboard" xml:space="preserve">
+    <value>Copia al porta-retalls</value>
+  </data>
+  <data name="LogView_EncodeLog" xml:space="preserve">
+    <value>Registre de codificació</value>
+  </data>
+  <data name="LogView_OpenLogDir" xml:space="preserve">
+    <value>Obre el directori del registre</value>
+  </data>
+  <data name="LogView_ScanLog" xml:space="preserve">
+    <value>Escaneig del registre</value>
+  </data>
+  <data name="MainView_ActivityLog" xml:space="preserve">
+    <value>Registre d'activitat</value>
+  </data>
+  <data name="MainView_AddAll" xml:space="preserve">
+    <value>Afegeix-ho tot</value>
+  </data>
+  <data name="MainView_AddCurrent" xml:space="preserve">
+    <value>Afegeix l'element actual</value>
+  </data>
+  <data name="MainView_AddSelection" xml:space="preserve">
+    <value>Afegeix la selecció</value>
+  </data>
+  <data name="MainView_AddToQueue" xml:space="preserve">
+    <value>Afegeix a la cua</value>
+  </data>
+  <data name="MainView_AdvancedTab" xml:space="preserve">
+    <value>Avançat</value>
+  </data>
+  <data name="MainView_AlignAVStart" xml:space="preserve">
+    <value>Inici A/V alineat</value>
+  </data>
+  <data name="MainView_Angle" xml:space="preserve">
+    <value>Angle: </value>
+  </data>
+  <data name="MainView_AudioTab" xml:space="preserve">
+    <value>Àudio</value>
+  </data>
+  <data name="MainView_AudioTrackCount" xml:space="preserve">
+    <value>Pistes d'àudio</value>
+  </data>
+  <data name="MainView_Browser" xml:space="preserve">
+    <value>Explora</value>
+  </data>
+  <data name="MainView_ChaptersTab" xml:space="preserve">
+    <value>Capítols</value>
+  </data>
+  <data name="MainView_Container" xml:space="preserve">
+    <value>Contenidor</value>
+  </data>
+  <data name="MainView_Destination" xml:space="preserve">
+    <value>Destinació</value>
+  </data>
+  <data name="MainView_Duration" xml:space="preserve">
+    <value>Durada:</value>
+  </data>
+  <data name="MainView_File" xml:space="preserve">
+    <value>Anomena i desa:</value>
+  </data>
+  <data name="MainView_FiltersTab" xml:space="preserve">
+    <value>Filtres</value>
+  </data>
+  <data name="MainView_Format" xml:space="preserve">
+    <value>Format:</value>
+  </data>
+  <data name="MainView_Help" xml:space="preserve">
+    <value>Ajuda</value>
+  </data>
+  <data name="MainView_iPod5G" xml:space="preserve">
+    <value>Compatibilitat amb iPod 5G</value>
+  </data>
+  <data name="MainView_MetaDataTab" xml:space="preserve">
+    <value>Metadades</value>
+  </data>
+  <data name="MainView_ModifiedPreset" xml:space="preserve">
+    <value>(Modificat)</value>
+  </data>
+  <data name="MainView_Muxing" xml:space="preserve">
+    <value>S'està multiplexant: pot tardar una estona...</value>
+  </data>
+  <data name="MainView_Options" xml:space="preserve">
+    <value>Opcions</value>
+  </data>
+  <data name="MainView_OutputSettings" xml:space="preserve">
+    <value>Configuració de la sortida</value>
+  </data>
+  <data name="MainView_Pause" xml:space="preserve">
+    <value>Pausa</value>
+  </data>
+  <data name="MainView_PictureTab" xml:space="preserve">
+    <value>Dimensions</value>
+  </data>
+  <data name="MainView_PresetManage" xml:space="preserve">
+    <value>Edita una configuració predefinida</value>
+  </data>
+  <data name="MainView_PresetOptionsContextMenu" xml:space="preserve">
+    <value>Menú contextual de les opcions de configuració predefinida</value>
+  </data>
+  <data name="MainView_PresetRemove" xml:space="preserve">
+    <value>Elimina una configuració predefinida</value>
+  </data>
+  <data name="MainView_Presets" xml:space="preserve">
+    <value>Configuracions predefinides</value>
+  </data>
+  <data name="MainView_Preview" xml:space="preserve">
+    <value>Previsualització</value>
+  </data>
+  <data name="MainView_ProgressStatusWithTask" xml:space="preserve">
+    <value>Codificació: {0}, {1:00.00} %, Temps restant: {2}, {3}</value>
+  </data>
+  <data name="MainView_Range" xml:space="preserve">
+    <value>Interval:</value>
+  </data>
+  <data name="MainView_Reload" xml:space="preserve">
+    <value>Torna a carregar</value>
+  </data>
+  <data name="MainView_Remove" xml:space="preserve">
+    <value>Elimina</value>
+  </data>
+  <data name="MainView_ResetBuiltInPresets" xml:space="preserve">
+    <value>Restableix les configuracions predefinides originals</value>
+  </data>
+  <data name="MainView_SaveNewPreset" xml:space="preserve">
+    <value>Desa una configuració predefinida nova</value>
+  </data>
+  <data name="MainView_Searching" xml:space="preserve">
+    <value>S'està cercant l'hora d'inici</value>
+  </data>
+  <data name="MainView_SetDefault" xml:space="preserve">
+    <value>Estableix un valor per defecte</value>
+  </data>
+  <data name="MainView_ShowPreview" xml:space="preserve">
+    <value>Previsualització</value>
+  </data>
+  <data name="MainView_ShowQueue" xml:space="preserve">
+    <value>Cua</value>
+  </data>
+  <data name="MainView_Source" xml:space="preserve">
+    <value>Fitxer d'origen:</value>
+  </data>
+  <data name="MainView_SourceOpen" xml:space="preserve">
+    <value>Obre un fitxer d'origen</value>
+  </data>
+  <data name="MainView_StartEncode" xml:space="preserve">
+    <value>Inicia la codificació</value>
+  </data>
+  <data name="MainView_StartQueue" xml:space="preserve">
+    <value>Inicia la cua</value>
+  </data>
+  <data name="MainView_Stop" xml:space="preserve">
+    <value>Atura</value>
+  </data>
+  <data name="MainView_StopEncode" xml:space="preserve">
+    <value>Atura la codificació</value>
+  </data>
+  <data name="MainView_StopEncodeConfirm" xml:space="preserve">
+    <value>Segur que voleu aturar la codificació?</value>
+  </data>
+  <data name="MainView_SubtitleBeforeScanError" xml:space="preserve">
+    <value>Trieu el fitxer d'origen que vulgueu codificar abans d'importar un fitxer de subtítols.</value>
+  </data>
+  <data name="MainView_SubtitlesTab" xml:space="preserve">
+    <value>Subtítols</value>
+  </data>
+  <data name="MainView_SubtitleTracksCount" xml:space="preserve">
+    <value>Pistes de subtítols</value>
+  </data>
+  <data name="MainView_SummaryTab" xml:space="preserve">
+    <value>Resum</value>
+  </data>
+  <data name="MainView_through" xml:space="preserve">
+    <value> - </value>
+  </data>
+  <data name="MainView_Title" xml:space="preserve">
+    <value>Títol:</value>
+  </data>
+  <data name="MainView_UpdateSelectedPreset" xml:space="preserve">
+    <value>Actualitza la configuració predefinida actual</value>
+  </data>
+  <data name="MainView_VideoTab" xml:space="preserve">
+    <value>Vídeo</value>
+  </data>
+  <data name="MainView_WebOptimized" xml:space="preserve">
+    <value>Optimitzat per a web</value>
+  </data>
+  <data name="ManagePresetView_ManagePreset" xml:space="preserve">
+    <value>Gestiona les configuracions predefinides</value>
+  </data>
+  <data name="MetaDataView_Title" xml:space="preserve">
+    <value>Metadades</value>
+  </data>
+  <data name="OptionsView_EnableNvencEncoding" xml:space="preserve">
+    <value>Permet l'ús dels codificadors Nvidia NVENC</value>
+  </data>
+  <data name="OptionsView_EnableQuicksyncEncoding" xml:space="preserve">
+    <value>Permet l'ús dels codificadors Intel QuickSync</value>
+  </data>
+  <data name="OptionsView_EnableVceEncoding" xml:space="preserve">
+    <value>Permet l'ús dels codificadors VCN d'AMD</value>
+  </data>
+  <data name="OptionsView_InvalidFileFormatChars" xml:space="preserve">
+    <value>El format del fitxer que heu introduït conté caràcters no vàlids i s'han eliminat.</value>
+  </data>
+  <data name="OptionsView_PlaySoundWhenDone" xml:space="preserve">
+    <value>Reprodueix un so quan finalitzi una codificació</value>
+  </data>
+  <data name="OptionsView_PlaySoundWhenQueueDone" xml:space="preserve">
+    <value>Reprodueix un so quan finalitzi la cua</value>
+  </data>
+  <data name="OptionsView_ShowPreviewOnSummaryTab" xml:space="preserve">
+    <value>Mostra les previsualitzacions a la pestanya de resum.</value>
+  </data>
+  <data name="OptionsView_ShowStatusInTitleBar" xml:space="preserve">
+    <value>Mostra l'estat de la codificació a la barra de títol del programa.</value>
+  </data>
+  <data name="Options_7DayLogClear" xml:space="preserve">
+    <value>Esborra els fitxers de registre de més de 7 dies d'antiguitat</value>
+  </data>
+  <data name="Options_About" xml:space="preserve">
+    <value>Quant al HandBrake</value>
+  </data>
+  <data name="Options_Advanced" xml:space="preserve">
+    <value>Avançat</value>
+  </data>
+  <data name="Options_AdvancedOptions" xml:space="preserve">
+    <value>Opcions avançades</value>
+  </data>
+  <data name="Options_Arguments" xml:space="preserve">
+    <value>Arguments:</value>
+  </data>
+  <data name="Options_AutomaticFileNaming" xml:space="preserve">
+    <value>Noms de fitxer automàtics</value>
+  </data>
+  <data name="Options_AutoNameOutput" xml:space="preserve">
+    <value>Anomena automàticament els fitxers de sortida</value>
+  </data>
+  <data name="Options_CheckForUpdates" xml:space="preserve">
+    <value>Comprova les actualitzacions</value>
+  </data>
+  <data name="Options_ClearCompleted" xml:space="preserve">
+    <value>Esborra sempre els fitxers completats de la cua quan finalitzi una codificació</value>
+  </data>
+  <data name="Options_ClearLogs" xml:space="preserve">
+    <value>Esborra l'historial del registre</value>
+  </data>
+  <data name="Options_CopyLogToDir" xml:space="preserve">
+    <value>Posa una còpia dels registres de codificació individuals en una ubicació específica:</value>
+  </data>
+  <data name="Options_CopyLogToEncDir" xml:space="preserve">
+    <value>Posa una còpia dels registres de codificació individuals a la mateixa ubicació que el vídeo codificat</value>
+  </data>
+  <data name="Options_CurVersion" xml:space="preserve">
+    <value>Versió actual</value>
+  </data>
+  <data name="Options_Decoding" xml:space="preserve">
+    <value>Descodificació</value>
+  </data>
+  <data name="Options_DefaultPath" xml:space="preserve">
+    <value>Camí per defecte:</value>
+  </data>
+  <data name="Options_DownloadUpdates" xml:space="preserve">
+    <value>Baixa l'actualització</value>
+  </data>
+  <data name="Options_DVD" xml:space="preserve">
+    <value>Lectura de DVD</value>
+  </data>
+  <data name="Options_DvdRead" xml:space="preserve">
+    <value>Desactiva el LibDVDNav. (libdvdread s'utilitzarà en lloc seu)</value>
+  </data>
+  <data name="Options_Encoding" xml:space="preserve">
+    <value>Codificació</value>
+  </data>
+  <data name="Options_Format" xml:space="preserve">
+    <value>Format de fitxer:</value>
+  </data>
+  <data name="Options_General" xml:space="preserve">
+    <value>General</value>
+  </data>
+  <data name="Options_Logging" xml:space="preserve">
+    <value>Registre</value>
+  </data>
+  <data name="Options_LogLevel" xml:space="preserve">
+    <value>Nivell de detall del registre:</value>
+  </data>
+  <data name="Options_LogPath" xml:space="preserve">
+    <value>Camí:</value>
+  </data>
+  <data name="Options_LowDiskspaceSize" xml:space="preserve">
+    <value>Pausa la cua si el disc té massa poc espai</value>
+  </data>
+  <data name="Options_MinimiseTray" xml:space="preserve">
+    <value>Minimitza a la safata del sistema (Cal reiniciar)</value>
+  </data>
+  <data name="Options_MinTitleScanLength" xml:space="preserve">
+    <value>Durada mínima dels títols DVD i Blu-ray en segons. S'ometran els títols massa curts:</value>
+  </data>
+  <data name="Options_MP4FileExtension" xml:space="preserve">
+    <value>Extensió de fitxer MP4:</value>
+  </data>
+  <data name="Options_OnStartup" xml:space="preserve">
+    <value>En arrencar</value>
+  </data>
+  <data name="Options_Output" xml:space="preserve">
+    <value>Fitxers de sortida</value>
+  </data>
+  <data name="Options_Path" xml:space="preserve">
+    <value>Camí</value>
+  </data>
+  <data name="Options_PathToMediaPlayer" xml:space="preserve">
+    <value>Camí del reproductor</value>
+  </data>
+  <data name="Options_PreventSleep" xml:space="preserve">
+    <value>Evita la suspensió del sistema durant la codificació</value>
+  </data>
+  <data name="Options_PreviewScanCount" xml:space="preserve">
+    <value>Nombre de previsualitzacions d'imatges a escanejar:</value>
+  </data>
+  <data name="Options_PriorityLevel" xml:space="preserve">
+    <value>Nivell de prioritat de la tasca:</value>
+  </data>
+  <data name="Options_QsvDecode" xml:space="preserve">
+    <value>Prefereix l'ús d'Intel QuickSync per a la decodificació de vídeos quan utilitzis el codificador QuickSync i el maquinari estigui disponible.</value>
+  </data>
+  <data name="Options_QsvDecodeForNonFullPath" xml:space="preserve">
+    <value>Utilitza també la codificació QuickSync tot i no utilitzar el codificador QuickSync. (p. e. x265) </value>
+  </data>
+  <data name="Options_RemovePunctuation" xml:space="preserve">
+    <value>Treu la puntuació comuna</value>
+  </data>
+  <data name="Options_ReplaceUnderscores" xml:space="preserve">
+    <value>Substitueix els guions baixos per espais</value>
+  </data>
+  <data name="Options_ResetDoNothing" xml:space="preserve">
+    <value>Restableix a «No facis res» quan es torni a obrir el programa.</value>
+  </data>
+  <data name="Options_Scaler" xml:space="preserve">
+    <value>Tria un redimensionador:</value>
+  </data>
+  <data name="Options_Scaling" xml:space="preserve">
+    <value>Escala</value>
+  </data>
+  <data name="Options_SendFileTo" xml:space="preserve">
+    <value>Envia el fitxer a:</value>
+  </data>
+  <data name="Options_TitleCase" xml:space="preserve">
+    <value>Posa les inicials en majúscula</value>
+  </data>
+  <data name="Options_Updates" xml:space="preserve">
+    <value>Actualitzacions</value>
+  </data>
+  <data name="Options_UserInterface" xml:space="preserve">
+    <value>Interfície d'usuari</value>
+  </data>
+  <data name="Options_Version" xml:space="preserve">
+    <value>Versió:</value>
+  </data>
+  <data name="Options_Video" xml:space="preserve">
+    <value>Vídeo</value>
+  </data>
+  <data name="Options_VideoPreviewPath" xml:space="preserve">
+    <value>Aquest camí es fa servir únicament per a la previsualització dels vídeos.
+Els reproductors VLC i MPC-HC són compatibles. Potser uns altres reproductors també funcionen, però no han estat validats.</value>
+  </data>
+  <data name="Options_ViewLogDirectory" xml:space="preserve">
+    <value>Visualitza el directori del registre</value>
+  </data>
+  <data name="Options_WhenDone" xml:space="preserve">
+    <value>Acció finalitzada</value>
+  </data>
+  <data name="Options_x264" xml:space="preserve">
+    <value>Opcions de x264/5</value>
+  </data>
+  <data name="Options_x264Granularity" xml:space="preserve">
+    <value>Granularitat fraccionària de qualitat constant:</value>
+  </data>
+  <data name="PictureSettingsView_Anamorphic" xml:space="preserve">
+    <value>Anamorfisme:</value>
+  </data>
+  <data name="PictureSettingsView_Automatic" xml:space="preserve">
+    <value>Automàtic</value>
+  </data>
+  <data name="PictureSettingsView_Bottom" xml:space="preserve">
+    <value>Avall</value>
+  </data>
+  <data name="PictureSettingsView_Cropping" xml:space="preserve">
+    <value>Escapçat:</value>
+  </data>
+  <data name="PictureSettingsView_Custom" xml:space="preserve">
+    <value>Personalitzat</value>
+  </data>
+  <data name="PictureSettingsView_DisplayWidth" xml:space="preserve">
+    <value>Mida de la pantalla:</value>
+  </data>
+  <data name="PictureSettingsView_Height" xml:space="preserve">
+    <value>Alçada:</value>
+  </data>
+  <data name="PictureSettingsView_KeepAR" xml:space="preserve">
+    <value>Automàtic</value>
+  </data>
+  <data name="PictureSettingsView_Left" xml:space="preserve">
+    <value>Esquerra</value>
+  </data>
+  <data name="PictureSettingsView_Output" xml:space="preserve">
+    <value>Dimensions finals:</value>
+  </data>
+  <data name="PictureSettingsView_PAR" xml:space="preserve">
+    <value>Aspecte de píxels:</value>
+  </data>
+  <data name="PictureSettingsView_Right" xml:space="preserve">
+    <value>Dreta</value>
+  </data>
+  <data name="PictureSettingsView_Size" xml:space="preserve">
+    <value>Mida</value>
+  </data>
+  <data name="PictureSettingsView_Top" xml:space="preserve">
+    <value>Amunt</value>
+  </data>
+  <data name="PictureSettingsView_Width" xml:space="preserve">
+    <value>Mida redimensionada:</value>
+  </data>
+  <data name="Preset_Custom" xml:space="preserve">
+    <value>Personalitzat</value>
+  </data>
+  <data name="Preset_Export" xml:space="preserve">
+    <value>Exporta a un fitxer</value>
+  </data>
+  <data name="Preset_Import" xml:space="preserve">
+    <value>Importa d'un fitxer</value>
+  </data>
+  <data name="Preset_Official" xml:space="preserve">
+    <value>Oficial</value>
+  </data>
+  <data name="QueueSelectionView_ChooseTitles" xml:space="preserve">
+    <value>Tria els títols:</value>
+  </data>
+  <data name="QueueSelectionView_Title" xml:space="preserve">
+    <value>Afegeix a la cua</value>
+  </data>
+  <data name="QueueSelection_UsingPreset" xml:space="preserve">
+    <value>Els títols seleccionats s'afegiran amb la configuració predefinida «{0}».</value>
+  </data>
+  <data name="QueueView_Advanced" xml:space="preserve">
+    <value>Opcions de vídeo:</value>
+  </data>
+  <data name="QueueView_Audio" xml:space="preserve">
+    <value>Àudio:</value>
+  </data>
+  <data name="QueueView_ClearAll" xml:space="preserve">
+    <value>Esborra-ho tot</value>
+  </data>
+  <data name="QueueView_ClearCompleted" xml:space="preserve">
+    <value>Esborra els completats</value>
+  </data>
+  <data name="QueueView_ClearQueue" xml:space="preserve">
+    <value>Esborra la cua</value>
+  </data>
+  <data name="QueueView_ClearSelected" xml:space="preserve">
+    <value>Esborra la selecció</value>
+  </data>
+  <data name="QueueView_Delete" xml:space="preserve">
+    <value>Elimina</value>
+  </data>
+  <data name="QueueView_Destination" xml:space="preserve">
+    <value>Destinació:</value>
+  </data>
+  <data name="WhenDone_DoNothing" xml:space="preserve">
+    <value>No facis res</value>
+  </data>
+  <data name="QueueView_Duration" xml:space="preserve">
+    <value>Durada de la codificació:</value>
+  </data>
+  <data name="QueueView_Edit" xml:space="preserve">
+    <value>Edita</value>
+  </data>
+  <data name="QueueView_EndTime" xml:space="preserve">
+    <value>Hora de finalització:</value>
+  </data>
+  <data name="QueueView_Export" xml:space="preserve">
+    <value>Exporta una cua</value>
+  </data>
+  <data name="QueueView_FileSize" xml:space="preserve">
+    <value>Mida del fitxer de sortida:</value>
+  </data>
+  <data name="WhenDone_Hibernate" xml:space="preserve">
+    <value>Hiberna</value>
+  </data>
+  <data name="WhenDone_LockSystem" xml:space="preserve">
+    <value>Bloca l'ordinador</value>
+  </data>
+  <data name="QueueView_LogNotAvailableYet" xml:space="preserve">
+    <value>El registre estarà disponible quan s'hagi acabat de codificar.</value>
+  </data>
+  <data name="WhenDone_Logoff" xml:space="preserve">
+    <value>Tanca la sessió</value>
+  </data>
+  <data name="QueueView_OpenDestDir" xml:space="preserve">
+    <value>Obre el directori de destinació</value>
+  </data>
+  <data name="QueueView_OpenSourceDir" xml:space="preserve">
+    <value>Obre el directori d'origen</value>
+  </data>
+  <data name="QueueView_Options" xml:space="preserve">
+    <value>Opcions</value>
+  </data>
+  <data name="QueueView_Pause" xml:space="preserve">
+    <value>Pausa</value>
+  </data>
+  <data name="QueueView_PausedDuration" xml:space="preserve">
+    <value>Durada de la pausa:</value>
+  </data>
+  <data name="QueueView_PictureSettings" xml:space="preserve">
+    <value>Opcions d'imatge:</value>
+  </data>
+  <data name="WhenDone_QuitHandBrake" xml:space="preserve">
+    <value>Surt del HandBrake</value>
+  </data>
+  <data name="QueueView_ResetAllJobs" xml:space="preserve">
+    <value>Reintenta totes les tasques</value>
+  </data>
+  <data name="QueueView_ResetFailed" xml:space="preserve">
+    <value>No s'ha pogut reintentar</value>
+  </data>
+  <data name="QueueView_ResetSelectedJobs" xml:space="preserve">
+    <value>Restableix les tasques seleccionades</value>
+  </data>
+  <data name="QueueView_Reset" xml:space="preserve">
+    <value>Restabliment</value>
+  </data>
+  <data name="WhenDone_Shutdown" xml:space="preserve">
+    <value>Tanca l'ordinador</value>
+  </data>
+  <data name="QueueView_Source" xml:space="preserve">
+    <value>Fitxer d'origen:</value>
+  </data>
+  <data name="QueueView_Start" xml:space="preserve">
+    <value>Inicia la cua</value>
+  </data>
+  <data name="QueueView_StartTime" xml:space="preserve">
+    <value>Hora d'inici:</value>
+  </data>
+  <data name="QueueView_Statistics" xml:space="preserve">
+    <value>Estadístiques</value>
+  </data>
+  <data name="QueueView_Subtitles" xml:space="preserve">
+    <value>Subtítols:</value>
+  </data>
+  <data name="QueueView_Summary" xml:space="preserve">
+    <value>Resum</value>
+  </data>
+  <data name="WhenDone_Suspend" xml:space="preserve">
+    <value>Suspèn</value>
+  </data>
+  <data name="QueueView_Video" xml:space="preserve">
+    <value>Vídeo:</value>
+  </data>
+  <data name="QueueView_WhenDone" xml:space="preserve">
+    <value>En acabat:</value>
+  </data>
+  <data name="Shared_AddAllForSelected" xml:space="preserve">
+    <value>Afegeix totes les llengües seleccionades restants</value>
+  </data>
+  <data name="Shared_AddAllRemaining" xml:space="preserve">
+    <value>Afegeix totes les pistes restants</value>
+  </data>
+  <data name="Shared_AddNewTrack" xml:space="preserve">
+    <value>Afegeix una pista nova</value>
+  </data>
+  <data name="Shared_AddTrack" xml:space="preserve">
+    <value>Pistes</value>
+  </data>
+  <data name="Shared_AvailableLanguages" xml:space="preserve">
+    <value>Llengües disponibles:</value>
+  </data>
+  <data name="Shared_ChooseLanguages" xml:space="preserve">
+    <value>Tria les llengües:</value>
+  </data>
+  <data name="Shared_ChosenLanguages" xml:space="preserve">
+    <value>Llengües seleccionades:</value>
+  </data>
+  <data name="Shared_ConfigureDefaultBehaviours" xml:space="preserve">
+    <value>Configura els comportaments per defecte</value>
+  </data>
+  <data name="Shared_ReloadDefaults" xml:space="preserve">
+    <value>Torna a carregar</value>
+  </data>
+  <data name="SourceSelection_ChooseDisc" xml:space="preserve">
+    <value>Tria un disc a escanejar</value>
+  </data>
+  <data name="SourceSelection_ChooseFile" xml:space="preserve">
+    <value>Tria un fitxer a escanejar</value>
+  </data>
+  <data name="SourceSelection_ChooseFolder" xml:space="preserve">
+    <value>Tria una carpeta a escanejar</value>
+  </data>
+  <data name="SourceSelection_ChooseSpecificTitle" xml:space="preserve">
+    <value>Podeu triar un títol en específic:</value>
+  </data>
+  <data name="SourceSelection_ChooseVideo" xml:space="preserve">
+    <value>I llavors triar els vídeos que vulgueu codificar:</value>
+  </data>
+  <data name="SourceSelection_File" xml:space="preserve">
+    <value>Fitxer</value>
+  </data>
+  <data name="SourceSelection_FolderBatchScan" xml:space="preserve">
+    <value>Carpeta (escaneig massiu)</value>
+  </data>
+  <data name="SourceSelection_OpenDVDBluray" xml:space="preserve">
+    <value>Obre la unitat de DVD o Blu-ray</value>
+  </data>
+  <data name="SourceSelection_OpenFolderWIth" xml:space="preserve">
+    <value>Obre una carpeta amb un fitxer o més</value>
+  </data>
+  <data name="SourceSelection_QueueArchiveRecovery" xml:space="preserve">
+    <value>Recupera els fitxers de la cua</value>
+  </data>
+  <data name="SourceSelection_QueueArchiveRecoveryDesc" xml:space="preserve">
+    <value>Un arxiu anterior de la cua està disponible.</value>
+  </data>
+  <data name="SourceSelection_SingleVideoFile" xml:space="preserve">
+    <value>Obre un fitxer de vídeo o més.</value>
+  </data>
+  <data name="SourceSelection_SourceSelection" xml:space="preserve">
+    <value>Selecció de fitxer d'origen</value>
+  </data>
+  <data name="StaticPreviewView_Duration" xml:space="preserve">
+    <value>Durada:</value>
+  </data>
+  <data name="StaticPreviewView_LivePreview" xml:space="preserve">
+    <value>Previsualització de la codificació</value>
+  </data>
+  <data name="StaticPreviewView_SelectPreviewImage" xml:space="preserve">
+    <value>Selecciona una imatge de previsualització</value>
+  </data>
+  <data name="StaticPreviewView_UseExternalPlayer" xml:space="preserve">
+    <value>Utilitza un reproductor extern</value>
+  </data>
+  <data name="SubtitlesView_AddCC" xml:space="preserve">
+    <value>Afegeix subtítols descriptius quan sigui possible </value>
+  </data>
+  <data name="SubtitlesView_AddForeignAudioSearch" xml:space="preserve">
+    <value>Afegeix «Escaneig d'àudios estrangers»</value>
+  </data>
+  <data name="SubtitlesView_BurnInBehaviour" xml:space="preserve">
+    <value>Comportament d'incrustació:</value>
+  </data>
+  <data name="SubtitlesView_ImportSubtitle" xml:space="preserve">
+    <value>Importa subtítols</value>
+  </data>
+  <data name="SubtitlesView_TrackSelectionBehaviour" xml:space="preserve">
+    <value>Comportament de la selecció de pista:</value>
+  </data>
+  <data name="SubtitleView_AddAllCC" xml:space="preserve">
+    <value>Afegeix tots els subtítols descriptius restants</value>
+  </data>
+  <data name="SubtitleView_SubtitleDefaultsDescription" xml:space="preserve">
+    <value>Configureu com se seleccionen i configuren automàticament les pistes de subtítols quan seleccioneu un títol nou o un vídeo d'origen.</value>
+  </data>
+  <data name="SummaryView_AdditionalAudioTracks" xml:space="preserve">
+    <value>Pistes d'àudio addicionals</value>
+  </data>
+  <data name="SummaryView_AdditionalSubtitleTracks" xml:space="preserve">
+    <value>Pistes de subtítols addicionals</value>
+  </data>
+  <data name="SummaryView_Burned" xml:space="preserve">
+    <value>Incrustats</value>
+  </data>
+  <data name="SummaryView_Chapters" xml:space="preserve">
+    <value>Marcadors de capítol</value>
+  </data>
+  <data name="SummaryView_Deblock" xml:space="preserve">
+    <value>Antiblocs</value>
+  </data>
+  <data name="SummaryView_Detelecine" xml:space="preserve">
+    <value>Destelecine</value>
+  </data>
+  <data name="SummaryView_display" xml:space="preserve">
+    <value>visualització</value>
+  </data>
+  <data name="SummaryView_Grayscale" xml:space="preserve">
+    <value>Escala de grisos</value>
+  </data>
+  <data name="SummaryView_NoAudioTracks" xml:space="preserve">
+    <value>No hi ha pistes d'àudio</value>
+  </data>
+  <data name="SummaryView_NoChapters" xml:space="preserve">
+    <value>No hi ha marcadors de capítol</value>
+  </data>
+  <data name="SummaryView_NoFilters" xml:space="preserve">
+    <value>No hi ha filtres</value>
+  </data>
+  <data name="SummaryView_NoSource" xml:space="preserve">
+    <value>No hi ha fitxer d'origen</value>
+  </data>
+  <data name="SummaryView_NoSubtitleTracks" xml:space="preserve">
+    <value>No hi ha pistes de subtítols</value>
+  </data>
+  <data name="SummaryView_NoTracks" xml:space="preserve">
+    <value>No hi ha pistes</value>
+  </data>
+  <data name="SummaryView_PreviewInfo" xml:space="preserve">
+    <value>Previsualització {0} de {1}</value>
+  </data>
+  <data name="SummaryView_Rotation" xml:space="preserve">
+    <value>Rotació</value>
+  </data>
+  <data name="SummaryView_storage" xml:space="preserve">
+    <value>emmagatzematge</value>
+  </data>
+  <data name="VideoView_MultiPass" xml:space="preserve">
+    <value>Codificació en multipassada</value>
+  </data>
+  <data name="VideoView_AverageBitrate" xml:space="preserve">
+    <value>Velocitat de transmissió mitjana (kbps):</value>
+  </data>
+  <data name="VideoView_Codec" xml:space="preserve">
+    <value>Codificador de vídeo:</value>
+  </data>
+  <data name="VideoView_ConstantFramerate" xml:space="preserve">
+    <value>Velocitat de fotogrames constants</value>
+  </data>
+  <data name="VideoView_ConstantQuality" xml:space="preserve">
+    <value>Qualitat constant:</value>
+  </data>
+  <data name="VideoView_EncoderLevel" xml:space="preserve">
+    <value>Nivell del codificador:</value>
+  </data>
+  <data name="VideoView_EncoderPreset" xml:space="preserve">
+    <value>Configuració predefinida del codificador:</value>
+  </data>
+  <data name="VideoView_EncoderProfile" xml:space="preserve">
+    <value>Perfil del codificador:</value>
+  </data>
+  <data name="VideoView_EncodeTune" xml:space="preserve">
+    <value>Ajustament del codificador:</value>
+  </data>
+  <data name="VideoView_ExtraOptions" xml:space="preserve">
+    <value>Opcions avançades:</value>
+  </data>
+  <data name="VideoView_FastDecode" xml:space="preserve">
+    <value>Descodificació ràpida</value>
+  </data>
+  <data name="VideoView_Framerate" xml:space="preserve">
+    <value>Velocitat de fotogrames (FPS):</value>
+  </data>
+  <data name="VideoView_OptimiseVideo" xml:space="preserve">
+    <value>Opcions del codificador:</value>
+  </data>
+  <data name="VideoView_PeakFramerate" xml:space="preserve">
+    <value>Velocitat de fotogrames màxima</value>
+  </data>
+  <data name="VideoView_Quality" xml:space="preserve">
+    <value>Qualitat:</value>
+  </data>
+  <data name="VideoView_TurboAnalysisPass" xml:space="preserve">
+    <value>Passada d'anàlisi turbo</value>
+  </data>
+  <data name="VideoView_VariableFramerate" xml:space="preserve">
+    <value>Velocitat de fotogrames variable</value>
+  </data>
+  <data name="VideoView_Video" xml:space="preserve">
+    <value>Vídeo:</value>
+  </data>
+  <data name="OptionsView_Language" xml:space="preserve">
+    <value>Llengua:</value>
+  </data>
+  <data name="Language_UseSystem" xml:space="preserve">
+    <value>Utilitza la llengua del sistema</value>
+  </data>
+  <data name="SourceSelection_AboutHandBrake" xml:space="preserve">
+    <value>Quant al HandBrake</value>
+  </data>
+  <data name="SourceSelection_DropFileHere" xml:space="preserve">
+    <value>O deixeu anar aquí un fitxer, un conjunt de fitxers, una carpeta...</value>
+  </data>
+  <data name="SourceSelection_Help" xml:space="preserve">
+    <value>Ajuda</value>
+  </data>
+  <data name="Preferences" xml:space="preserve">
+    <value>Preferències</value>
+  </data>
+  <data name="AudioDefaultsView_AddTrack" xml:space="preserve">
+    <value>Afegeix una pista</value>
+  </data>
+  <data name="AudioDefaultsView_AutoAddTracks" xml:space="preserve">
+    <value>Opcions del codificador d'àudio de cada pista seleccionada:</value>
+  </data>
+  <data name="AudioDefaultsView_Clear" xml:space="preserve">
+    <value>Esborra</value>
+  </data>
+  <data name="SubtitlesView_BurnIn" xml:space="preserve">
+    <value>Incrusta</value>
+  </data>
+  <data name="SubtitlesView_Default" xml:space="preserve">
+    <value>Per defecte</value>
+  </data>
+  <data name="SubtitlesView_ForcedOnly" xml:space="preserve">
+    <value>Només forçats</value>
+  </data>
+  <data name="MainView_About" xml:space="preserve">
+    <value>_Quant a...</value>
+  </data>
+  <data name="MainView_ActivityLogMenu" xml:space="preserve">
+    <value>_Registre d'activitat</value>
+  </data>
+  <data name="MainView_CheckForUpdates" xml:space="preserve">
+    <value>_Comprova les actualitzacions</value>
+  </data>
+  <data name="MainView_Exit" xml:space="preserve">
+    <value>_Surt</value>
+  </data>
+  <data name="MainView_ExportToFile" xml:space="preserve">
+    <value>_Exporta a un fitxer</value>
+  </data>
+  <data name="MainView_FileMenu" xml:space="preserve">
+    <value>_Fitxer</value>
+  </data>
+  <data name="MainView_HandBrakeDocs" xml:space="preserve">
+    <value>_Documentació del HandBrake (HTTPS)</value>
+  </data>
+  <data name="MainView_HelpMenu" xml:space="preserve">
+    <value>_Ajuda</value>
+  </data>
+  <data name="MainView_ImportFromFile" xml:space="preserve">
+    <value>_Importa d'un fitxer</value>
+  </data>
+  <data name="MainView_PreferencesMenu" xml:space="preserve">
+    <value>_Preferències</value>
+  </data>
+  <data name="MainView_PresetsMenu" xml:space="preserve">
+    <value>_Configuracions predefinides</value>
+  </data>
+  <data name="MainView_QueueMenu" xml:space="preserve">
+    <value>_Cua</value>
+  </data>
+  <data name="MainView_ResetPresets" xml:space="preserve">
+    <value>_Reinicialitza les configuracions predefinides originals</value>
+  </data>
+  <data name="MainView_SetCurrentAsDefault" xml:space="preserve">
+    <value>_Estableix com a predeterminada</value>
+  </data>
+  <data name="MainView_ShowPresetPanel" xml:space="preserve">
+    <value>M_ostra panell de configuracions predefinides</value>
+  </data>
+  <data name="MainView_ShowQueueMenu" xml:space="preserve">
+    <value>_Mostra la cua</value>
+  </data>
+  <data name="MainView_ToolsMenu" xml:space="preserve">
+    <value>_Eines</value>
+  </data>
+  <data name="OptionsView_CheckingForUpdates" xml:space="preserve">
+    <value>S'estan comprovant les actualitzacions...</value>
+  </data>
+  <data name="OptionsView_ClearLogDirConfirm" xml:space="preserve">
+    <value>Segur que voleu esborrar el directori dels fitxers de registre?</value>
+  </data>
+  <data name="OptionsView_ClearLogs" xml:space="preserve">
+    <value>Esborra els registres</value>
+  </data>
+  <data name="OptionsView_Downloading" xml:space="preserve">
+    <value>S'està baixant...</value>
+  </data>
+  <data name="OptionsView_LogsCleared" xml:space="preserve">
+    <value>S'ha esborrat el directori de fitxers de registre del HandBrake!</value>
+  </data>
+  <data name="OptionsView_Notice" xml:space="preserve">
+    <value>Avís</value>
+  </data>
+  <data name="OptionsView_PreparingUpdate" xml:space="preserve">
+    <value>S'està preparant l'actualització...</value>
+  </data>
+  <data name="OptionsView_SelectFolder" xml:space="preserve">
+    <value>Seleccioneu una carpeta.</value>
+  </data>
+  <data name="OptionsView_SetDefaultLocationOutputFIle" xml:space="preserve">
+    <value>Feu clic a «Explora» per definir la ubicació per defecte</value>
+  </data>
+  <data name="MainView_Hide" xml:space="preserve">
+    <value>Amaga</value>
+  </data>
+  <data name="MainView_Show" xml:space="preserve">
+    <value>Mostra</value>
+  </data>
+  <data name="MainView_ShowAddAllToQueue" xml:space="preserve">
+    <value>«Afegeix-ho tot» a la cua</value>
+  </data>
+  <data name="MainView_ShowAddSelectionToQueue" xml:space="preserve">
+    <value>«Afegeix la selecció» a la cua</value>
+  </data>
+  <data name="QueueView_PlayMediaFile" xml:space="preserve">
+    <value>Reprodueix el fitxer</value>
+  </data>
+  <data name="Options_ApplicationToolbar" xml:space="preserve">
+    <value>Barra d'eines del programa</value>
+  </data>
+  <data name="Options_ShowToolbarAddAll" xml:space="preserve">
+    <value>Mostra «Afegeix-ho tot a la cua» a la barra d'eines</value>
+  </data>
+  <data name="Options_ShowToolbarAddSelection" xml:space="preserve">
+    <value>Mostra «Afegeix la selecció a la cua» a la barra d'eines</value>
+  </data>
+  <data name="OptionsView_HardwareDetectFailed" xml:space="preserve">
+    <value>El suport de codificació per maquinari està desactivat. Si no heu obert el HandBrake amb l'opció «--no-hardware», assegureu-vos que tingueu actualitzats els controladors dels adaptadors de gràfics del sistema.
+
+Això no afectarà cap dels codificadors de programari.</value>
+  </data>
+  <data name="Main_PleaseFixSubtitleSettings" xml:space="preserve">
+    <value>Corregiu la configuració dels subtítols abans de continuar.</value>
+  </data>
+  <data name="Generic_Apply" xml:space="preserve">
+    <value>Aplica</value>
+  </data>
+  <data name="Main_ResumeEncode" xml:space="preserve">
+    <value>Reprèn la codificació</value>
+  </data>
+  <data name="QueueView_Actions" xml:space="preserve">
+    <value>Accions</value>
+  </data>
+  <data name="QueueView_Import" xml:space="preserve">
+    <value>Importa una cua</value>
+  </data>
+  <data name="QueueViewModel_EncodeStatusChanged_StatusLabel" xml:space="preserve">
+    <value>Codificació: Passada {0} de {1},  {2:00.00} %, FPS: {3:000.0},  FPS mitj.: {4:000.0}
+Temps restant: {5},  Transcorregut: {6} {7}</value>
+  </data>
+  <data name="QueueView_DeleteSelected" xml:space="preserve">
+    <value>Elimina la selecció</value>
+  </data>
+  <data name="Portable_TmpNotWritable" xml:space="preserve">
+    <value>Mode portàtil: No s'ha pogut crear el directori TMP. Comproveu que el camí és correcte i té permisos d'escriptura.</value>
+  </data>
+  <data name="Portable_StorageNotWritable" xml:space="preserve">
+    <value>Mode portàtil: No s'ha pogut crear el directori d'emmagatzematge. Comproveu que el camí és correcte i té permisos d'escriptura.</value>
+  </data>
+  <data name="Portable_IniFileError" xml:space="preserve">
+    <value>Mode portàtil: No s'ha pogut llegir portable.ini. És possible que el fitxer tingui un error. Proveu d'utilitzar protable.ini.template de guia.</value>
+  </data>
+  <data name="OptionsView_FormatOptions" xml:space="preserve">
+    <value>Opcions de substitució:
+Arrossegueu/deixeu anar o introduïu el text superior.</value>
+  </data>
+  <data name="FileOverwriteBehaviours_Ask" xml:space="preserve">
+    <value>Demana sobreescriure el fitxer</value>
+  </data>
+  <data name="FileOverwriteBehaviours_Autoname" xml:space="preserve">
+    <value>Prova de reanomenar el fitxer automàticament</value>
+  </data>
+  <data name="FileOverwriteBehaviours_Overwrite" xml:space="preserve">
+    <value>Sobreescriu el fitxer</value>
+  </data>
+  <data name="Options_UIBehaviour" xml:space="preserve">
+    <value>Comportament de la interfície d'usuari</value>
+  </data>
+  <data name="OptionsView_FileOverwriteBehaviour" xml:space="preserve">
+    <value>Comportament de sobreescriptura dels fitxers:</value>
+  </data>
+  <data name="Options_EncodeCompleted" xml:space="preserve">
+    <value>Escaneig complet</value>
+  </data>
+  <data name="Options_Notifications" xml:space="preserve">
+    <value>Notificacions de so</value>
+  </data>
+  <data name="Options_QueueCompleted" xml:space="preserve">
+    <value>Cua finalitzada</value>
+  </data>
+  <data name="Options_WhenDoneColon" xml:space="preserve">
+    <value>En acabat:</value>
+  </data>
+  <data name="OptionsView_FileCollisionBehaviour" xml:space="preserve">
+    <value>Comportament del nom del fitxer en cas de conflicte:</value>
+  </data>
+  <data name="CollisionBehaviour_Post" xml:space="preserve">
+    <value>Sufix</value>
+  </data>
+  <data name="CollisionBehaviour_Pre" xml:space="preserve">
+    <value>Prefix</value>
+  </data>
+  <data name="CollisionBehaviour_AppendNumber" xml:space="preserve">
+    <value>Afegeix un número</value>
+  </data>
+  <data name="FiltersViewAuto_DeblockPreset" xml:space="preserve">
+    <value>FiltersView_DeblockPreset</value>
+  </data>
+  <data name="FiltersViewAuto_DeblockTune" xml:space="preserve">
+    <value>Ajustament d'antiblocs</value>
+  </data>
+  <data name="OptionsView_ChoiceOfEncoderHint" xml:space="preserve">
+    <value>L'elecció del codificador estarà disponible a la pestanya «Vídeo».</value>
+  </data>
+  <data name="Queue_RecoverQueueQuestionPlural" xml:space="preserve">
+    <value>El HandBrake ha detectat múltiples fitxers inacabats a la cua, els quals són de diverses instàncies del HandBrake en execució. Voleu recuperar totes les tasques inacabades?</value>
+  </data>
+  <data name="Queue_RecoverQueueQuestionSingular" xml:space="preserve">
+    <value>El HandBrake ha detectat fitxers inacabats a la cua del darrer cop que es va iniciar el programa. Voleu recuperar-los?</value>
+  </data>
+  <data name="Queue_RecoveryPossible" xml:space="preserve">
+    <value>És possible recuperar la cua</value>
+  </data>
+  <data name="PresetService_ImportingBuiltInWarning" xml:space="preserve">
+    <value>El vostre fitxer de configuracions predefinides conté configuracions predefinides originals. La funció d'importació no n'admet la importació. Aneu al menú «Configuracions predefinides -&gt; Restableix les configuracions predefinides originals» per restaurar les configuracions predefinides estàndard.
+
+Quan sigui possible, s'importaran les configuracions predefinides de l'usuari.</value>
+  </data>
+  <data name="Options_PromptBeforeAction" xml:space="preserve">
+    <value>Executa l'acció immediatament. (Això desactivarà el quadre de diàleg de confirmació de 60 segons)</value>
+  </data>
+  <data name="Browse" xml:space="preserve">
+    <value>Explora</value>
+  </data>
+  <data name="OptionsView_MediaFileNotSet" xml:space="preserve">
+    <value>No s'ha definit cap fitxer d'àudio. Feu clic a «Explora» per seleccionar un fitxer .wav o .mp3 a reproduir.</value>
+  </data>
+  <data name="OptionsView_Play" xml:space="preserve">
+    <value>Reprodueix</value>
+  </data>
+  <data name="QueueView_ExportCLI" xml:space="preserve">
+    <value>Exporta la cua (Només CLI)</value>
+  </data>
+  <data name="Options_DarkTheme" xml:space="preserve">
+    <value>Utilitza el tema fosc. (Cal reiniciar, només per a Windows 10)</value>
+  </data>
+  <data name="QueueView_NotAvailable" xml:space="preserve">
+    <value>No disponible</value>
+  </data>
+  <data name="Options_LowDiskspaceSizeGB" xml:space="preserve">
+    <value>GB</value>
+  </data>
+  <data name="SystemService_ACMains" xml:space="preserve">
+    <value>S'ha detectat l'energia de la xarxa elèctrica. Es reprendrà la codificació... ({0} %)</value>
+  </data>
+  <data name="SystemService_CriticalBattery" xml:space="preserve">
+    <value>Bateria molt baixa! ({0} %)</value>
+  </data>
+  <data name="SystemService_LowBatteryLog" xml:space="preserve">
+    <value>Bateria baixa! ({0} %). S'ha pausat la codificació.</value>
+  </data>
+  <data name="SystemService_LowDiskSpaceLog" xml:space="preserve">
+    <value>L'espai d'emmagatzematge de la unitat de destinació ha baixat per sota {0} GB. La codificació es posarà en pausa...</value>
+  </data>
+  <data name="AudioDefaultsView_PaneTitle" xml:space="preserve">
+    <value>Seleccions d'àudio automàtiques</value>
+  </data>
+  <data name="SubtitlesDefaultsView_PaneTitle" xml:space="preserve">
+    <value>Seleccions de subtítols automàtics</value>
+  </data>
+  <data name="Options_SystemOptions" xml:space="preserve">
+    <value>Sistema</value>
+  </data>
+  <data name="MetadataView_Actors" xml:space="preserve">
+    <value>Actors:</value>
+  </data>
+  <data name="MetadataView_Comments" xml:space="preserve">
+    <value>Comentaris:</value>
+  </data>
+  <data name="MetadataView_Description" xml:space="preserve">
+    <value>Descripció:</value>
+  </data>
+  <data name="MetadataView_Director" xml:space="preserve">
+    <value>Director:</value>
+  </data>
+  <data name="MetadataView_Genre" xml:space="preserve">
+    <value>Gènere:</value>
+  </data>
+  <data name="MetadataView_Plot" xml:space="preserve">
+    <value>Sinopsi:</value>
+  </data>
+  <data name="MetadataView_ReleaseDate" xml:space="preserve">
+    <value>Data de publicació:</value>
+  </data>
+  <data name="MetadataView_TitleTag" xml:space="preserve">
+    <value>Títol:</value>
+  </data>
+  <data name="LogViewModel_Title" xml:space="preserve">
+    <value>Visor de registre</value>
+  </data>
+  <data name="MainView_Aspect" xml:space="preserve">
+    <value>Aspecte:</value>
+  </data>
+  <data name="MainView_Filters" xml:space="preserve">
+    <value>Filtres:</value>
+  </data>
+  <data name="MainView_Size" xml:space="preserve">
+    <value>Mida:</value>
+  </data>
+  <data name="MainView_Tracks" xml:space="preserve">
+    <value>Pistes:</value>
+  </data>
+  <data name="OptionsTab_General" xml:space="preserve">
+    <value>General</value>
+  </data>
+  <data name="OptionsViewModel_CheckForUpdatesMsg" xml:space="preserve">
+    <value>Fes clic a «Comprova les actualitzacions» per saber si hi ha versions noves</value>
+  </data>
+  <data name="OptionsView_BackButton" xml:space="preserve">
+    <value>&lt; Enrere</value>
+  </data>
+  <data name="QueueView_CurrentlyPaused" xml:space="preserve">
+    <value>En pausa</value>
+  </data>
+  <data name="Options_OutputFiles" xml:space="preserve">
+    <value>Fitxers de sortida</value>
+  </data>
+  <data name="PointToPointMode_Chapters" xml:space="preserve">
+    <value>Capítols</value>
+  </data>
+  <data name="PointToPointMode_Frames" xml:space="preserve">
+    <value>Fotogrames</value>
+  </data>
+  <data name="PointToPointMode_Preview" xml:space="preserve">
+    <value>Previsualització</value>
+  </data>
+  <data name="PointToPointMode_Seconds" xml:space="preserve">
+    <value>Segons</value>
+  </data>
+  <data name="SubtitleBehaviourModes_AllMatching" xml:space="preserve">
+    <value>Totes les llengües seleccionades coincidents</value>
+  </data>
+  <data name="SubtitleBehaviourModes_FirstMatching" xml:space="preserve">
+    <value>La primera llengua seleccionada coincident</value>
+  </data>
+  <data name="SubtitleBehaviourModes_None" xml:space="preserve">
+    <value>Cap</value>
+  </data>
+  <data name="SubtitleBurnInBehaviourModes_FirstTrack" xml:space="preserve">
+    <value>Primera pista</value>
+  </data>
+  <data name="SubtitleBurnInBehaviourModes_ForeignAudioPreferredElseFirst" xml:space="preserve">
+    <value>Es prefereix l'àudio estranger, si no, el primer</value>
+  </data>
+  <data name="SubtitleBurnInBehaviourModes_ForeignAudioTrack" xml:space="preserve">
+    <value>Pista d'àudio estrangera</value>
+  </data>
+  <data name="SubtitleBurnInBehaviourModes_None" xml:space="preserve">
+    <value>Cap</value>
+  </data>
+  <data name="SubtitleViewModel_ForeignAudioSearch" xml:space="preserve">
+    <value>Cerca un àudio estranger</value>
+  </data>
+  <data name="Subtitle_ForeignAudioScan" xml:space="preserve">
+    <value>Escaneja àudios estrangers</value>
+  </data>
+  <data name="AudioBehaviourModes_AllMatching" xml:space="preserve">
+    <value>Totes les llengües seleccionades coincidents</value>
+  </data>
+  <data name="AudioBehaviourModes_AllTracks" xml:space="preserve">
+    <value>Utilitza totes les pistes de plantilles</value>
+  </data>
+  <data name="AudioBehaviourModes_FirstMatch" xml:space="preserve">
+    <value>La primera llengua seleccionada coincident</value>
+  </data>
+  <data name="AudioBehaviourModes_FirstTrack" xml:space="preserve">
+    <value>Utilitza la primera pista de plantilla</value>
+  </data>
+  <data name="AudioBehaviourModes_None" xml:space="preserve">
+    <value>Sense àudio</value>
+  </data>
+  <data name="ChapterViewModel_Chapter" xml:space="preserve">
+    <value>Capítol {0}</value>
+  </data>
+  <data name="Mp4Behaviour_Auto" xml:space="preserve">
+    <value>Automàtic</value>
+  </data>
+  <data name="Mp4Behaviour_UseM4v" xml:space="preserve">
+    <value>Utilitza sempre M4V</value>
+  </data>
+  <data name="Mp4Behaviour_UseMp4" xml:space="preserve">
+    <value>Utilitza sempre MP4</value>
+  </data>
+  <data name="PresetPictureSettingsMode_Custom" xml:space="preserve">
+    <value>Personalitzat</value>
+  </data>
+  <data name="PresetPictureSettingsMode_None" xml:space="preserve">
+    <value>Cap</value>
+  </data>
+  <data name="PresetPictureSettingsMode_SourceMaximum" xml:space="preserve">
+    <value>Utilitza sempre la resolució d'origen</value>
+  </data>
+  <data name="ProcessPriority_AboveNormal" xml:space="preserve">
+    <value>Per sobre del normal</value>
+  </data>
+  <data name="ProcessPriority_BelowNormal" xml:space="preserve">
+    <value>Per sota del normal</value>
+  </data>
+  <data name="ProcessPriority_High" xml:space="preserve">
+    <value>Superior</value>
+  </data>
+  <data name="ProcessPriority_Low" xml:space="preserve">
+    <value>Inferior</value>
+  </data>
+  <data name="ProcessPriority_Normal" xml:space="preserve">
+    <value>Normal</value>
+  </data>
+  <data name="UpdateCheck_Monthly" xml:space="preserve">
+    <value>Cada mes</value>
+  </data>
+  <data name="UpdateCheck_Weekly" xml:space="preserve">
+    <value>Cada setmana</value>
+  </data>
+  <data name="OptionsView_AlwaysUseDefaultPath" xml:space="preserve">
+    <value>Utilitza sempre el camí per defecte a cada nom nou generat.</value>
+  </data>
+  <data name="OptionsView_RemotePortLimit" xml:space="preserve">
+    <value>L'interval del port ha de ser del 5000 al 32767</value>
+  </data>
+  <data name="SourceSelection_UpdateAvailable" xml:space="preserve">
+    <value>Hi ha una nova versió disponible!</value>
+  </data>
+  <data name="About_Copyright" xml:space="preserve">
+    <value>Drets d'autor © 2003-2024 The HandBrake Team</value>
+  </data>
+  <data name="Options_LowBatteryLevel" xml:space="preserve">
+    <value>Nivell de bateria baix:</value>
+  </data>
+  <data name="Options_PauseOnLowBattery" xml:space="preserve">
+    <value>Pausa les tasques en curs quan la bateria estigui baixa.</value>
+  </data>
+  <data name="SubtitleView_AddRemainingCC" xml:space="preserve">
+    <value>Afegeix tots els subtítols descriptius restants</value>
+  </data>
+  <data name="QueueService_DuplicatesQuestion" xml:space="preserve">
+    <value>S'han detectat tasques duplicades al fitxer de cua que voleu importar. Voleu sobreescriure els registres existents?
+Això també aturarà les tasques en procés que hi hagi.</value>
+  </data>
+  <data name="QueueService_DuplicatesTitle" xml:space="preserve">
+    <value>S'han detectat tasques duplicades</value>
+  </data>
+  <data name="OptionsView_EnableQuicksyncLowPower" xml:space="preserve">
+    <value>Activa el maquinari QuickSync de baix consum (en cas que sigui compatible)</value>
+  </data>
+  <data name="QueueView_JobInformationNotAvailable" xml:space="preserve">
+    <value>Seleccioneu una sola tasca per veure'n un resum.</value>
+  </data>
+  <data name="OptionsView_EnableWorkerProcesses" xml:space="preserve">
+    <value>Executa cada tasca de la cua en un procés diferent.</value>
+  </data>
+  <data name="OptionsView_WorkerDefaultPort" xml:space="preserve">
+    <value>Port de xarxa per defecte del procés de treball.</value>
+  </data>
+  <data name="Presets_NotAvailableForUse" xml:space="preserve">
+    <value>La configuració predefinida que heu seleccionat no està disponible en aquest sistema.
+
+Això normalment vol dir que el vostre sistema no és compatible amb el maquinari necessari per utilitzar-lo.
+
+Seleccioneu una configuració predefinida diferent.</value>
+  </data>
+  <data name="OptionsView_ProcessIsolation" xml:space="preserve">
+    <value>Aïllament de processos</value>
+  </data>
+  <data name="OptionsView_ProcessIsolation_Warning1" xml:space="preserve">
+    <value>Tingueu en compte que aquesta característica iniciarà un servidor HTTP enllaçat a 127.0.0.1 al port indicat.</value>
+  </data>
+  <data name="OptionsView_ProcessIsolation_Warning2" xml:space="preserve">
+    <value>Si el port definit s'està utilitzant, cercarà el primer port lliure en un interval de +100 del port configurat.</value>
+  </data>
+  <data name="OptionsView_SimultaneousEncodes" xml:space="preserve">
+    <value>Nombre màxim de codificacions simultànies:</value>
+  </data>
+  <data name="StaticPreviewView_CancelPreview" xml:space="preserve">
+    <value>Cancel·la</value>
+  </data>
+  <data name="MainView_SelectedPresets" xml:space="preserve">
+    <value>Configuració predefinida:</value>
+  </data>
+  <data name="SummaryView_SameAsSource" xml:space="preserve">
+    <value>Igual que l'origen</value>
+  </data>
+  <data name="OptionsViewModel_ResetHandBrake" xml:space="preserve">
+    <value>Restableix la configuració</value>
+  </data>
+  <data name="OptionsViewModel_ResetHandBrakeQuestion" xml:space="preserve">
+    <value>Segur que voleu restablir el HandBrake a la configuració per defecte?</value>
+  </data>
+  <data name="PaddingMode_Custom" xml:space="preserve">
+    <value>Personalitzat (Sense límit)</value>
+  </data>
+  <data name="PaddingMode_Fill" xml:space="preserve">
+    <value>Emplenament (Envoltant)</value>
+  </data>
+  <data name="PaddingMode_Height" xml:space="preserve">
+    <value>Alçada (enquadrament horitzontal)</value>
+  </data>
+  <data name="PaddingMode_None" xml:space="preserve">
+    <value>Cap</value>
+  </data>
+  <data name="PaddingMode_Width" xml:space="preserve">
+    <value>Amplada (format de bústia)</value>
+  </data>
+  <data name="PictureSettingsView_Padding" xml:space="preserve">
+    <value>Emplenament:</value>
+  </data>
+  <data name="PictureSettingsView_PaddingColour" xml:space="preserve">
+    <value>Color:</value>
+  </data>
+  <data name="PictureSettingsView_Borders" xml:space="preserve">
+    <value>Vores:</value>
+  </data>
+  <data name="PictureSettingsView_ResAndScaling" xml:space="preserve">
+    <value>Resolució i escala:</value>
+  </data>
+  <data name="PictureSettingsView_RotateAndCrop" xml:space="preserve">
+    <value>Orientació i escapçament:</value>
+  </data>
+  <data name="QueueView_FilterSettings" xml:space="preserve">
+    <value>Filtres:</value>
+  </data>
+  <data name="SummaryView_Default" xml:space="preserve">
+    <value>Per defecte</value>
+  </data>
+  <data name="SummaryView_Forced" xml:space="preserve">
+    <value>Forçat</value>
+  </data>
+  <data name="PictureSettingsResLimitModes_1080p" xml:space="preserve">
+    <value>1080p HD</value>
+  </data>
+  <data name="PictureSettingsResLimitModes_480p" xml:space="preserve">
+    <value>480p NTSC SD</value>
+  </data>
+  <data name="PictureSettingsResLimitModes_4K" xml:space="preserve">
+    <value>2160p 4K Ultra HD</value>
+  </data>
+  <data name="PictureSettingsResLimitModes_576p" xml:space="preserve">
+    <value>576p PAL SD</value>
+  </data>
+  <data name="PictureSettingsResLimitModes_720p" xml:space="preserve">
+    <value>720p HD</value>
+  </data>
+  <data name="PictureSettingsResLimitModes_8K" xml:space="preserve">
+    <value>4320p 8K Ultra HD</value>
+  </data>
+  <data name="PictureSettingsResLimitModes_custom" xml:space="preserve">
+    <value>Personalitzat</value>
+  </data>
+  <data name="PictureSettingsView_MaxSize" xml:space="preserve">
+    <value>Mida màxima:</value>
+  </data>
+  <data name="PictureSettingsView_ResLimit" xml:space="preserve">
+    <value>Límit de resolució:</value>
+  </data>
+  <data name="PictureSettingsResLimitModes_none" xml:space="preserve">
+    <value>Cap</value>
+  </data>
+  <data name="PresetManger_Title" xml:space="preserve">
+    <value>Gestiona les configuracions predefinides</value>
+  </data>
+  <data name="ManagePresetView_DeleteBuiltIn" xml:space="preserve">
+    <value>Elimina les configuracions predefinides</value>
+  </data>
+  <data name="ManagePresetView_Export" xml:space="preserve">
+    <value>Exporta la configuració predefinida seleccionada</value>
+  </data>
+  <data name="ManagePresetView_Import" xml:space="preserve">
+    <value>Importa una configuració predefinida d'un fitxer</value>
+  </data>
+  <data name="ManagePresetView_PresetInfo" xml:space="preserve">
+    <value>Informació de la configuració predefinida:</value>
+  </data>
+  <data name="ManagePresetView_RestrictedPreset" xml:space="preserve">
+    <value>Les configuracions predefinides originals no es poden modificar.</value>
+  </data>
+  <data name="ManagePresetView_SetDefault" xml:space="preserve">
+    <value>Defineix la configuració predefinida seleccionada com a predeterminada.</value>
+  </data>
+  <data name="PresetManagerView_Delete" xml:space="preserve">
+    <value>Elimina una configuració predefinida</value>
+  </data>
+  <data name="OptionsView_NotSupported" xml:space="preserve">
+    <value>(No és compatible en aquest sistema)</value>
+  </data>
+  <data name="QueueView_Stop" xml:space="preserve">
+    <value>Atura</value>
+  </data>
+  <data name="String1" xml:space="preserve">
+    <value/>
+  </data>
+  <data name="PresetService_CategoryAlreadyExists" xml:space="preserve">
+    <value>El nom de categoria que heu introduït ja existeix. Trieu un nom diferent.</value>
+  </data>
+  <data name="PresetService_CategoryNameEmpty" xml:space="preserve">
+    <value>El nom de categoria és buit. Poseu-li un nom.</value>
+  </data>
+  <data name="TextEntryView_EnterName" xml:space="preserve">
+    <value>Introduïu un nom:</value>
+  </data>
+  <data name="ManagePresetView_NoPresetSelected" xml:space="preserve">
+    <value>No s'ha seleccionat cap configuració predefinida.</value>
+  </data>
+  <data name="ManagePresetView_ExportUserPresets" xml:space="preserve">
+    <value>Exporta totes les configuracions predefinides de l'usuari</value>
+  </data>
+  <data name="Options_LowDiskspaceLevelText" xml:space="preserve">
+    <value>Avisa quan el disc tingui poc espai a partir de:</value>
+  </data>
+  <data name="OptionsView_SimultaneousHardwareLimitNotice" xml:space="preserve">
+    <value>Alerta: Has arribat al límit superior de tasques simultànies. Es poden produir limitacions de maquinari que disminueixin el nombre de tasques simultànies actuals durant la codificació. Aquest paràmetre tindrà efecte a partir del següent lot de la cua o quan es reiniciï el programa.</value>
+  </data>
+  <data name="Preset_NotAvailable" xml:space="preserve">
+    <value>(No disponible)</value>
+  </data>
+  <data name="AddPresetView_IsDefault" xml:space="preserve">
+    <value>És per defecte:</value>
+  </data>
+  <data name="No" xml:space="preserve">
+    <value>No</value>
+  </data>
+  <data name="Yes" xml:space="preserve">
+    <value>Sí</value>
+  </data>
+  <data name="StaticPreviewView_FineTuning" xml:space="preserve">
+    <value>Ajustaments precisos d'imatge</value>
+  </data>
+  <data name="StaticPreviewView_ShowPictureSettingsAdjustment" xml:space="preserve">
+    <value>Mostra els controls de modificació de l'escapçament.</value>
+  </data>
+  <data name="DarkTheme_dark" xml:space="preserve">
+    <value>Fosc</value>
+  </data>
+  <data name="DarkTheme_light" xml:space="preserve">
+    <value>Clar</value>
+  </data>
+  <data name="DarkTheme_system" xml:space="preserve">
+    <value>Coincideix amb el sistema</value>
+  </data>
+  <data name="OptionsView_DarkThemeMode" xml:space="preserve">
+    <value>Tema:</value>
+  </data>
+  <data name="OptionsView_RequiresRestart" xml:space="preserve">
+    <value>(Cal reiniciar)</value>
+  </data>
+  <data name="FiltersView_ChromaSmooth" xml:space="preserve">
+    <value>Suavització cromàtica:</value>
+  </data>
+  <data name="FiltersView_ColourSpace" xml:space="preserve">
+    <value>Espai de color:</value>
+  </data>
+  <data name="SummaryView_Colourspace" xml:space="preserve">
+    <value>Espai de color</value>
+  </data>
+  <data name="PictureSettingsView_SeePreview" xml:space="preserve">
+    <value>Obre la previsualització</value>
+  </data>
+  <data name="SummaryView_SourcePreview" xml:space="preserve">
+    <value>Previsualització del fitxer d'origen:</value>
+  </data>
+  <data name="QueueView_JobStatus" xml:space="preserve">
+    <value>Estat de la tasca:</value>
+  </data>
+  <data name="QueueView_JobStatus_Cancelled" xml:space="preserve">
+    <value>Cancel·lada</value>
+  </data>
+  <data name="QueueView_JobStatus_Complete" xml:space="preserve">
+    <value>Completada</value>
+  </data>
+  <data name="QueueView_JobStatus_InitFailed" xml:space="preserve">
+    <value>Configuració invàlida. Més detalls al registre.</value>
+  </data>
+  <data name="QueueView_JobStatus_InvalidInput" xml:space="preserve">
+    <value>Entrada invàlida. Més detalls al registre.</value>
+  </data>
+  <data name="QueueView_JobStatus_NoErrorCode" xml:space="preserve">
+    <value>Estat desconegut. Més detalls al registre.</value>
+  </data>
+  <data name="QueueView_JobStatus_ReadError" xml:space="preserve">
+    <value>S'han detectat errors en llegir el fitxer d'origen.</value>
+  </data>
+  <data name="QueueView_JobStatus_Unknown" xml:space="preserve">
+    <value>Error desconegut. Més detalls al registre.</value>
+  </data>
+  <data name="QueueView_JobStatus_WorkerCrash" xml:space="preserve">
+    <value>El procés ha fallat. Més detalls al registre.</value>
+  </data>
+  <data name="Startup_HbDllMissing" xml:space="preserve">
+    <value>Falta el fitxer «hb.dll». Reinstal·leu el programa.</value>
+  </data>
+  <data name="OptionsView_SafeMode" xml:space="preserve">
+    <value>Avís: tingueu en compte que això és una versió «Mode Segur» del HandBrake que no inclou suport per a codificadors de maquinari. Si voleu utilitzar el suport per a codificadors de maquinari, baixeu una versió que no sigui «Mode Segur» del web.</value>
+  </data>
+  <data name="PadColour_Black" xml:space="preserve">
+    <value>Negre</value>
+  </data>
+  <data name="PadColour_Custom" xml:space="preserve">
+    <value>Personalitzat</value>
+  </data>
+  <data name="PadColour_White" xml:space="preserve">
+    <value>Blanc</value>
+  </data>
+  <data name="PictureSettingsView_PaddingCustomColour" xml:space="preserve">
+    <value>Valor RGB:</value>
+  </data>
+  <data name="SummaryView_Padded" xml:space="preserve">
+    <value>(farcit)</value>
+  </data>
+  <data name="FiltersView_Flip" xml:space="preserve">
+    <value>Inversió:</value>
+  </data>
+  <data name="PictureSettingsView_SourceDimensions" xml:space="preserve">
+    <value>Dimensions d'origen:</value>
+  </data>
+  <data name="PictureSettingsViewModel_SourceInfo" xml:space="preserve">
+    <value>Mida del contenidor: {0}x{1}  Mida de la pantalla: {2}x{3}  Relació d'aspecte: {4}</value>
+  </data>
+  <data name="MainViewModel_FilePathSelectError" xml:space="preserve">
+    <value>S'ha detectat un error al quadre de diàleg de l'explorador de fitxers.
+
+- Tingueu en compte que els camins de fitxer llargs no són del tot compatibles. Els camins haurien d'estar per sota dels 255 caràcters.
+- El darrer directori utilitzat d'aquesta finestra ha estat restablert per prevenir errors el pròxim cop que escanegeu un fitxer.</value>
+  </data>
+  <data name="PictureSettingsView_MaxHeight" xml:space="preserve">
+    <value>Alçada màxima:</value>
+  </data>
+  <data name="PictureSettingsView_MaxWidth" xml:space="preserve">
+    <value>Amplada màxima:</value>
+  </data>
+  <data name="PictureSettingsViewModel_AspectRatioLabel" xml:space="preserve">
+    <value>Relació d'aspecte: {0}</value>
+  </data>
+  <data name="SummaryView_MetadataPassthru" xml:space="preserve">
+    <value>Metadades comunes del pas directe</value>
+  </data>
+  <data name="OptionsViewModel_InvalidAutonamePath" xml:space="preserve">
+    <value>El camí de l'anomenament automàtic per defecte no és vàlid. {0} no ha d'anar abans de {1}</value>
+  </data>
+  <data name="FirstRun_EnableUpdateCheck" xml:space="preserve">
+    <value>Voleu permetre que el HandBrake comprovi automàticament les actualitzacions?
+
+Podeu canviar la vostra elecció sempre que vulgueu anant a Preferències -&gt; General -&gt; Comprova les actualitzacions</value>
+  </data>
+  <data name="FirstRun_EnableUpdateCheckHeader" xml:space="preserve">
+    <value>Voleu comprovar les actualitzacions?</value>
+  </data>
+  <data name="OptionsViewModel_UpdateNotice" xml:space="preserve">
+    <value>Abans d'actualitzar:
+- Comproveu que no hi hagi codificacions pendents a la cua.
+- Feu una còpia de seguretat o apunteu-vos les configuracions predefinides personalitzades que hàgiu creat perquè potser no són del tot compatibles amb les versions més noves.</value>
+  </data>
+  <data name="Preset_Default" xml:space="preserve">
+    <value>(Per defecte)</value>
+  </data>
+  <data name="PresetDisplayMode_Category" xml:space="preserve">
+    <value>Categories</value>
+  </data>
+  <data name="PresetDisplayMode_Flat" xml:space="preserve">
+    <value>Pla</value>
+  </data>
+  <data name="PresetDisplayMode_Partial" xml:space="preserve">
+    <value>Parcialment pla</value>
+  </data>
+  <data name="OptionsView_PresetDisplayMode" xml:space="preserve">
+    <value>Decideix com vols que es vegin les configuracions predefinides als menús:</value>
+  </data>
+  <data name="QueueView_SelectedPresets" xml:space="preserve">
+    <value>Configuració predefinida:</value>
+  </data>
+  <data name="LogViewModel_Complete" xml:space="preserve">
+    <value>[Completat]</value>
+  </data>
+  <data name="QueueViewModel_EditJob" xml:space="preserve">
+    <value>Voleu editar la tasca?</value>
+  </data>
+  <data name="QueueView_Length" xml:space="preserve">
+    <value>Durada del fitxer de sortida:</value>
+  </data>
+  <data name="QueueView_MoveToBottom" xml:space="preserve">
+    <value>Mou a baix de tot</value>
+  </data>
+  <data name="QueueView_MoveToTop" xml:space="preserve">
+    <value>Mou a dalt de tot</value>
+  </data>
+  <data name="QueueView_VideoOutputBitrate" xml:space="preserve">
+    <value>Velocitat de transmissió del fitxer de sortida:</value>
+  </data>
+  <data name="QueueView_AverageEncodeSpeed" xml:space="preserve">
+    <value>Velocitat de codificació mitjana:</value>
+  </data>
+  <data name="QueueViewModel_DifferenceText" xml:space="preserve">
+    <value> del fitxer d'origen</value>
+  </data>
+  <data name="QueueViewModel_NotAvailable" xml:space="preserve">
+    <value>No disponible</value>
+  </data>
+  <data name="QueueView_SourceLength" xml:space="preserve">
+    <value>Durada del fitxer d'origen:</value>
+  </data>
+  <data name="Options_Reset" xml:space="preserve">
+    <value>Restabliment</value>
+  </data>
+  <data name="OptionsViewModel_ResetHandBrakePresetsQuestion" xml:space="preserve">
+    <value>Segur que voleu restablir totes les configuracions predefinides originals?</value>
+  </data>
+  <data name="OptionsView_ResetBuildInPresets" xml:space="preserve">
+    <value>Restableix totes les configuracions predefinides al valor original:</value>
+  </data>
+  <data name="OptionsView_ResetBuildInPresetsNotice" xml:space="preserve">
+    <value>(Les configuracions predefinides de l'usuari no es restabliran)</value>
+  </data>
+  <data name="OptionsView_ResetSettingsToDefaults" xml:space="preserve">
+    <value>Restableix tota la configuració del HandBrake al valor original:</value>
+  </data>
+  <data name="Options_BuiltInPresets" xml:space="preserve">
+    <value>Configuracions predefinides originals</value>
+  </data>
+  <data name="Options_UserSettings" xml:space="preserve">
+    <value>Configuració de l'usuari</value>
+  </data>
+  <data name="PresetDisplayMode_FloatingPanel" xml:space="preserve">
+    <value>Vista d'arbre flotant</value>
+  </data>
+  <data name="QueueViewModel_PlayFileErrorSolution" xml:space="preserve">
+    <value>Comproveu que tingueu les associacions de fitxers del Windows ben configurades perquè el sistema pugui obrir aquest fitxer amb un reproductor compatible.</value>
+  </data>
+  <data name="QueueViewModel_ImportFail" xml:space="preserve">
+    <value>No s'ha pogut llegir el fitxer de la cua.</value>
+  </data>
+  <data name="QueueViewModel_ImportFailSolution" xml:space="preserve">
+    <value>És possible que el fitxer estigui corromput o que sigui d'una versió anterior del HandBrake.
+Només són compatibles els fitxers de cua de la versió actual.</value>
+  </data>
+  <data name="Notifications_EncodeDone" xml:space="preserve">
+    <value>HandBrake ha finalitzat la codificació!</value>
+  </data>
+  <data name="Notifications_QueueDone" xml:space="preserve">
+    <value>HandBrake ha completat la cua!</value>
+  </data>
+  <data name="OptionsView_NotificationRemovalSubText" xml:space="preserve">
+    <value>Això també deshabilitarà les opcions per mostrar les notificacions de la barra de tasques del Windows a la pestanya «En acabat». Torneu-les a habilitar si voleu recuperar aquesta característica.</value>
+  </data>
+  <data name="OptionsView_NotificationRemovalText" xml:space="preserve">
+    <value>Elimina el HandBrake del tauler de control de notificacions del Windows.</value>
+  </data>
+  <data name="OptionsView_UninstallMessageBoxHeader" xml:space="preserve">
+    <value>S'ha desinstal·lat</value>
+  </data>
+  <data name="OptionsView_UninstallMessageBoxText" xml:space="preserve">
+    <value>Els paràmetres de les notificacions han estat eliminats.</value>
+  </data>
+  <data name="OptionsView_UninstallToast" xml:space="preserve">
+    <value>Esborra i desinstal·la</value>
+  </data>
+  <data name="OptionsView_WindowsNotification" xml:space="preserve">
+    <value>Envia una notificació a la barra de tasques del Windows.</value>
+  </data>
+  <data name="OptionsView_WindowsNotificationsBanner" xml:space="preserve">
+    <value>Notificacions del Windows</value>
+  </data>
+  <data name="Main_QueueMultiJobStatus" xml:space="preserve">
+    <value>{0} tasques completades. {1}S'estan processant {2} tasques i hi ha {3} tasques en espera.</value>
+  </data>
+  <data name="MainView_AutonameRegenerate" xml:space="preserve">
+    <value>Regenera (anomenament automàtic)</value>
+  </data>
+  <data name="MainView_OpenDirectory" xml:space="preserve">
+    <value>Obre el directori</value>
+  </data>
+  <data name="Shared_CollapseAll" xml:space="preserve">
+    <value>Replega-ho tot</value>
+  </data>
+  <data name="Shared_ExpandAll" xml:space="preserve">
+    <value>Desplega-ho tot</value>
+  </data>
+  <data name="OptionsView_RightToleftMode" xml:space="preserve">
+    <value>Mode de visualització de dreta a esquerra:</value>
+  </data>
+  <data name="RightToLeft_Off" xml:space="preserve">
+    <value>Desactivat</value>
+  </data>
+  <data name="RightToLeft_TextOnly" xml:space="preserve">
+    <value>Només text</value>
+  </data>
+  <data name="RightToLeft_WholeInterface" xml:space="preserve">
+    <value>Tota la interfície d'usuari</value>
+  </data>
+  <data name="SourceSelection_NightlyUpdate" xml:space="preserve">
+    <value>La versió en desenvolupament que esteu fent servir s'està tornant antiquada. Us recomanem que l'actualitzeu!</value>
+  </data>
+  <data name="SourceSelection_NightlyUpdateUrl" xml:space="preserve">
+    <value>Baixa de Github</value>
+  </data>
+  <data name="MainView_NightlyBuildsUpdate" xml:space="preserve">
+    <value>Baixa les versions en desenvolupament (HTTPS)</value>
+  </data>
+  <data name="OptionsView_EnableQuicksyncHyperEncode" xml:space="preserve">
+    <value>Habilita la hipercodificació de QuickSync Deep Link</value>
+  </data>
+  <data name="OptionsView_HyperEncodeDescription" xml:space="preserve">
+    <value>Dona preferència a l'ús de diversos motors multimèdia per accelerar una sola codificació on sigui possible. Desactiveu l'opció per permetre l'equilibri de càrrega de diverses codificacions paral·leles entre els motors multimèdia.</value>
+  </data>
+  <data name="MainView_OpenHandBrake" xml:space="preserve">
+    <value>Obre el HandBrake</value>
+  </data>
+  <data name="Startup_UnableToStartInfo" xml:space="preserve">
+    <value>La codificació per maquinari ha estat desactivada perquè és la causa més comuna dels problemes d'arrencada.
+- Proveu de reiniciar el HandBrake.
+- Si el problema continua, pot ser un controlador de targeta gràfica (integrada o independent) obsolet.
+
+Podeu tornar a activar la codificació de maquinar a les preferències.</value>
+  </data>
+  <data name="Startup_UnableToStart" xml:space="preserve">
+    <value>El HandBrake no s'ha pogut executar.</value>
+  </data>
+  <data name="OptionsView_ResetSafeMode" xml:space="preserve">
+    <value>Restableix el Mode segur</value>
+  </data>
+  <data name="OptionsView_ResetSafeModeMessage" xml:space="preserve">
+    <value>Reinicieu el HandBrake.</value>
+  </data>
+  <data name="Debug_QueueDataExport" xml:space="preserve">
+    <value>Exporta les estadístiques de la cua (csv)</value>
+  </data>
+  <data name="Debug_QueueExportDataDone" xml:space="preserve">
+    <value>S'ha exportat correctament!</value>
+  </data>
+  <data name="Debug_QueueSweep_NotSetup" xml:space="preserve">
+    <value>Primer heu d'escanejar un fitxer d'origen i haver triat un directori de destinació</value>
+  </data>
+  <data name="OptionsView_FileCollisionNotice" xml:space="preserve">
+    <value>Només si el fitxer ja existeix al disc.</value>
+  </data>
+  <data name="Info" xml:space="preserve">
+    <value>Informació</value>
+  </data>
+  <data name="SubtitleView_NoSubtitlesAdded" xml:space="preserve">
+    <value>No s'ha afegit cap pista de subtítols.
+
+Això pot ser a causa de les limitacions del contenidor del fitxer que heu seleccionat. Vegeu la nostra documentació d'ajuda dels subtítols si voleu més informació.</value>
+  </data>
+  <data name="DarkTheme_None" xml:space="preserve">
+    <value>Cap</value>
+  </data>
+  <data name="SourceSelection_UpdateNow" xml:space="preserve">
+    <value>Actualitza ara!</value>
+  </data>
+  <data name="CropMode_Auto" xml:space="preserve">
+    <value>Automàtic</value>
+  </data>
+  <data name="CropMode_Loose" xml:space="preserve">
+    <value>Conservador</value>
+  </data>
+  <data name="CropMode_None" xml:space="preserve">
+    <value>Cap</value>
+  </data>
+  <data name="CropMode_Custom" xml:space="preserve">
+    <value>Personalitzat</value>
+  </data>
+  <data name="OptionsView_EnableNvDecSupport" xml:space="preserve">
+    <value>Dona preferència a l'ús de Nvidia NVDec per a descodificar vídeos quan utilitzeu el codificador NVEnc i el maquinari estigui disponible.</value>
+  </data>
+  <data name="Options_Hardware" xml:space="preserve">
+    <value>Assistència de programari</value>
+  </data>
+  <data name="StaticPreviewViewModel_MediaError" xml:space="preserve">
+    <value>El sistema no ha pogut reproduir el fitxer.
+
+Tingueu en compte que alguns còdecs com AV1 o HEVC necessiten els complements de còdec Microsoft AV1 o HVEC de la Botiga Microsoft per funcionar.
+Altrament, marqueu la casella "Utilitza un reproductor extern" de sota.</value>
+  </data>
+  <data name="StaticPreviewView_ClosePlayer" xml:space="preserve">
+    <value>Tanca el reproductor</value>
+  </data>
+  <data name="StaticPreviewView_Play" xml:space="preserve">
+    <value>Reprodueix</value>
+  </data>
+  <data name="StaticPreviewView_VideoPreview" xml:space="preserve">
+    <value>Previsualització del vídeo</value>
+  </data>
+  <data name="StaticPreviewViewModel_WebmNotSupported" xml:space="preserve">
+    <value>El contenidor WebM no té la previsualització integrada disponible. Utilitzeu un reproductor extern.</value>
+  </data>
+  <data name="StaticPreview_EncodingPreview" xml:space="preserve">
+    <value>Codificació de la previsualització...</value>
+  </data>
+  <data name="StaticPreview_Previews" xml:space="preserve">
+    <value>Previsualitzacions:</value>
+  </data>
+  <data name="StaticPreview_Volume" xml:space="preserve">
+    <value>Volum: 0</value>
+  </data>
+  <data name="Reset" xml:space="preserve">
+    <value>Restabliment</value>
+  </data>
+  <data name="OptionsView_IsoDateFormat" xml:space="preserve">
+    <value>Utilitza el format de data ISO (AAAA-MM-DD) en comptes del format del sistema.</value>
+  </data>
+  <data name="QueueViewModel_ShortEncodeStatus" xml:space="preserve">
+    <value>Passada {0} de {1}, {2:00.00} %, {3:000.0} fps, mitj. {4:000.0} fps, temps estimat: {5}</value>
+  </data>
+  <data name="QueueViewModel_ShortSubScanStatus" xml:space="preserve">
+    <value>S'estan cercant els subtítols {0:00.00} %, temps estimat: {1}</value>
+  </data>
+  <data name="QueueView_ExtendedQueueDisplay" xml:space="preserve">
+    <value>Amplia la informació de la cua</value>
+  </data>
+  <data name="QueueView_MinimalQueueDisplay" xml:space="preserve">
+    <value>Redueix la informació de la cua</value>
+  </data>
+  <data name="QueueStats_ShortOutputStats" xml:space="preserve">
+    <value>Fitxer de sortida. {0}, mitj. {1} fps</value>
+  </data>
+  <data name="PresetPane_Desc" xml:space="preserve">
+    <value>Descripció de la configuració predefinida:</value>
+  </data>
+  <data name="PresetPane_HidePresetDesc" xml:space="preserve">
+    <value>Amaga la descripció de la configuració predefinida</value>
+  </data>
+  <data name="PresetPane_ShowPresetDesc" xml:space="preserve">
+    <value>Mostra la descripció de la configuració predefinida</value>
+  </data>
+  <data name="TaskTrayStatusManyTitle" xml:space="preserve">
+    <value>{0}
+S'estan codificant {1} tasques</value>
+  </data>
+  <data name="StaticPreviewViewModel_MultipleEncodes" xml:space="preserve">
+    <value>No s'ha pogut codificar la previsualització. El programa està ocupat codificant un altre fitxer.
+
+Si voleu permetre múltiples codificacions simultànies, activeu "Aïllament de processos" al menú Eines -&gt; Preferències -&gt; Avançat -&gt; Aïllament de processos -&gt; «Executa cada tasca de la cua en un procés separat».</value>
+  </data>
+  <data name="AudioView_Quality" xml:space="preserve">
+    <value>Qualitat</value>
+  </data>
+  <data name="AudioView_Source" xml:space="preserve">
+    <value>Fitxer d'origen:</value>
+  </data>
+  <data name="AboutView_Documentation" xml:space="preserve">
+    <value>Documentació:</value>
+  </data>
+  <data name="AboutView_GithubTracker" xml:space="preserve">
+    <value>Seguiment d'assumptes de GitHub:</value>
+  </data>
+  <data name="AboutView_Website" xml:space="preserve">
+    <value>Lloc web:</value>
+  </data>
+  <data name="MainView_PresetClone" xml:space="preserve">
+    <value>Clona una configuració predefinida</value>
+  </data>
+  <data name="PresetPane_MoveDown" xml:space="preserve">
+    <value>Mou avall</value>
+  </data>
+  <data name="PresetPane_MoveToBottom" xml:space="preserve">
+    <value>Mou a baix de tot</value>
+  </data>
+  <data name="PresetPane_MoveToTop" xml:space="preserve">
+    <value>Mou a dalt de tot</value>
+  </data>
+  <data name="PresetPane_MoveUp" xml:space="preserve">
+    <value>Mou amunt</value>
+  </data>
+  <data name="QueueViewModel_StopButContinueJob" xml:space="preserve">
+    <value>Hi ha tasques en execució. Voleu completar les tasques actuals abans d'aturar la cua?</value>
+  </data>
+  <data name="Options_AddExt" xml:space="preserve">
+    <value>Afegeix l'extensió</value>
+  </data>
+  <data name="Options_ExcludeExtensions" xml:space="preserve">
+    <value>Exclusió d'extensions:</value>
+  </data>
+  <data name="Options_ExcludeExtensionsInfo" xml:space="preserve">
+    <value>Les extensions de fitxer que hi ha a continuació s'obviaran quan s'escanegi una carpeta. La llista no distingeix entre majúscules i minúscules. El «.» no és necessari.</value>
+  </data>
+  <data name="Options_ExtensionExists" xml:space="preserve">
+    <value>L'extensió de fitxer ja és a la llista.</value>
+  </data>
+  <data name="Options_FileHandling" xml:space="preserve">
+    <value>Gestió dels fitxers (escaneig)</value>
+  </data>
+  <data name="Options_RecursiveFolderScan" xml:space="preserve">
+    <value>Escaneja els directoris de manera recurrent amb el mode escaneig de carpetes.</value>
+  </data>
+  <data name="AudioView_AudioQuality" xml:space="preserve">
+    <value>Qualitat de la pista d'àudio</value>
+  </data>
+  <data name="AudioView_AudioTrackName" xml:space="preserve">
+    <value>Nom de la pista d'àudio</value>
+  </data>
+  <data name="AudioView_BitrateSelection" xml:space="preserve">
+    <value>Velocitat de transmissió de la pista d'àudio</value>
+  </data>
+  <data name="AudioView_DeleteTrack" xml:space="preserve">
+    <value>Elimina la pista d'àudio</value>
+  </data>
+  <data name="AudioView_QualityMode" xml:space="preserve">
+    <value>Mode de qualitat del codificador d'àudio</value>
+  </data>
+  <data name="QueueView_AdvancedQueueDisplay" xml:space="preserve">
+    <value>Utilitza la vista de cua avançada</value>
+  </data>
+  <data name="QueueView_SimpleQueueDisplay" xml:space="preserve">
+    <value>Utilitza la vista de cua simple</value>
+  </data>
+  <data name="VideoView_LosslessEncodeOnly" xml:space="preserve">
+    <value>Només codificació sense pèrdua.</value>
+  </data>
+  <data name="MainView_HideClassicMenu" xml:space="preserve">
+    <value>Hide Classic Menu</value>
+  </data>
+  <data name="MainView_ShowClassicMenu" xml:space="preserve">
+    <value>Show Classic Menu</value>
+  </data>
+  <data name="OptionsViewVideo_UnsupportedIntelDriver" xml:space="preserve">
+    <value>(Warning: Unsupported Driver Detected! - Update Recommended)</value>
+  </data>
+  <data name="QueueSelectionView_RangeLimits" xml:space="preserve">
+    <value>Range Limits:</value>
+  </data>
+  <data name="QueueSelectionView_RangeLimitsDesc" xml:space="preserve">
+    <value>Limit the length of the titles added to the queue.</value>
+  </data>
+  <data name="QueueSelectionView_RangeLimitsEnable" xml:space="preserve">
+    <value>Enable Range Limits</value>
+  </data>
+  <data name="AddToQueue_RangeLimitError" xml:space="preserve">
+    <value>Some titles could not be added to the queue due to being outside of the selected range limits.</value>
+  </data>
+  <data name="QueueView_StartAtTime" xml:space="preserve">
+    <value>Start Later</value>
+  </data>
+  <data name="QueueView_QueueStartTime" xml:space="preserve">
+    <value>Queue Start Time:</value>
+  </data>
+</root>

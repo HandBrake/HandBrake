@@ -9,29 +9,13 @@
 
 namespace HandBrake.Interop.Interop.Json.Scan
 {
+    using System.Collections.Generic;
+
     /// <summary>
     /// The meta data.
     /// </summary>
     public class SourceMetadata
     {
-        public string Name { get; set; }
-
-        public string Artist { get; set; }
-
-        public string Composer { get; set; }
-
-        public string Comment { get; set; }
-
-        public string Genre { get; set; }
-
-        public string Album { get; set; }
-
-        public string AlbumArtist { get; set; }
-
-        public string Description { get; set; }
-
-        public string LongDescription { get; set; }
-
-        public string ReleaseDate { get; set; }
+        public Dictionary<string, string> Metadata { get; set; }
     }
 }

@@ -1,6 +1,6 @@
 /* dvd.c
 
-   Copyright (c) 2003-2022 HandBrake Team
+   Copyright (c) 2003-2024 HandBrake Team
    This file is part of the HandBrake source code
    Homepage: <http://handbrake.fr/>.
    It may be used under the terms of the GNU General Public License v2.
@@ -568,6 +568,7 @@ static hb_title_t * hb_dvdread_title_scan( hb_dvd_t * e, int t, uint64_t min_dur
                audio->config.lang.simple, codec_name,
                audio->config.lang.iso639_2, lang_extension);
 
+        audio->config.index           = hb_list_count(title->list_audio);
         audio->config.in.track        = i;
         audio->config.in.timebase.num = 1;
         audio->config.in.timebase.den = 90000;

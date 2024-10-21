@@ -10,9 +10,6 @@
 /* Class = "NSTableColumn"; headerCell.title = "Language"; ObjectID = "9ka-9O-WDj"; */
 "9ka-9O-WDj.headerCell.title" = "Sprache";
 
-/* Class = "NSMenu"; title = "OtherViews"; ObjectID = "ABd-Ec-K2L"; */
-"ABd-Ec-K2L.title" = "OtherViews";
-
 /* Class = "NSTextField"; ibExternalAccessibilityDescription = "SRT/SSA Offset"; ObjectID = "aJi-zQ-0cg"; */
 "aJi-zQ-0cg.ibExternalAccessibilityDescription" = "SRT/SSA-Versatz";
 
@@ -33,9 +30,6 @@
 
 /* Class = "NSTableColumn"; headerCell.title = "Burned In"; ObjectID = "fIe-Fg-ufj"; */
 "fIe-Fg-ufj.headerCell.title" = "Eingebrannte";
-
-/* Class = "NSMenu"; title = "OtherViews"; ObjectID = "Fr7-eG-NuL"; */
-"Fr7-eG-NuL.title" = "OtherViews";
 
 /* Class = "NSTableColumn"; headerCell.title = "Default"; ObjectID = "fvq-pE-sOC"; */
 "fvq-pE-sOC.headerCell.title" = "Standard";
@@ -147,12 +141,6 @@
 
 /* Class = "NSMenuItem"; title = "Tracks"; ObjectID = "TJO-RZ-jgb"; */
 "TJO-RZ-jgb.title" = "Spuren";
-
-/* Class = "NSMenu"; title = "OtherViews"; ObjectID = "Umu-1b-U1Z"; */
-"Umu-1b-U1Z.title" = "OtherViews";
-
-/* Class = "NSMenu"; title = "OtherViews"; ObjectID = "UOP-xa-WpP"; */
-"UOP-xa-WpP.title" = "OtherViews";
 
 /* Class = "NSMenuItem"; title = "Pop Up"; ObjectID = "vHW-fn-RSG"; */
 "vHW-fn-RSG.title" = "Pop Up";

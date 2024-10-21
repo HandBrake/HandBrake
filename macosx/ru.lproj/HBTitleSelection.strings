@@ -34,9 +34,6 @@
 /* Class = "NSButtonCell"; title = "Add"; ObjectID = "mOe-XL-tl1"; */
 "mOe-XL-tl1.title" = "Добавить";
 
-/* Class = "NSMenuItem"; title = "Deselect All"; ObjectID = "PXF-7D-BKR"; */
-"PXF-7D-BKR.title" = "Снять выделение";
-
 /* Class = "CocoaBindingsConnection"; ibShadowedDisplayPattern = "%{value1}@"; ObjectID = "xTt-zi-wf0"; */
 "xTt-zi-wf0.ibShadowedDisplayPattern" = "%{value1}@";
 

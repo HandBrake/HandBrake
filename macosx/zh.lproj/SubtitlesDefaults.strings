@@ -43,9 +43,6 @@
 /* Class = "NSWindow"; title = "Subtitles Selection Behaviour"; ObjectID = "kwM-lz-5lG"; */
 "kwM-lz-5lG.title" = "选择字幕行为";
 
-/* Class = "NSMenu"; title = "OtherViews"; ObjectID = "Kwy-lU-VuU"; */
-"Kwy-lU-VuU.title" = "其他视图";
-
 /* Class = "NSPopUpButton"; ibShadowedToolTip = "Burn-In Behavior. Select which subtitles to make permanent by overlaying them onto the video track.\n\nOnly one subtitles track can be burned in."; ObjectID = "Lsa-kB-2BP"; */
 "Lsa-kB-2BP.ibShadowedToolTip" = "烧入行为。选择哪些字幕通过叠加到视频轨道上而成为永久字幕。\n\n只能烧入一个字幕轨道。";
 

@@ -11,9 +11,10 @@ NS_ASSUME_NONNULL_BEGIN
 @protocol HBRemoteCoreProtocol
 
 - (void)setDVDNav:(BOOL)enabled;
+- (void)initGlobal;
+- (void)closeGlobal;
 
 - (void)setUpWithLogLevel:(NSInteger)level name:(NSString *)name;
-- (void)tearDown;
 
 - (void)setLogLevel:(NSInteger)logLevel;
 
@@ -24,7 +25,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)preventSleep;
 - (void)allowSleep;
 
-- (void)scanURL:(NSURL *)url titleIndex:(NSUInteger)index previews:(NSUInteger)previewsNum minDuration:(NSUInteger)seconds keepPreviews:(BOOL)keepPreviews hardwareDecoder:(BOOL)hardwareDecoder withReply:(void (^)(HBCoreResult))reply;
+- (void)scanURL:(NSURL *)url titleIndex:(NSUInteger)index previews:(NSUInteger)previewsNum minDuration:(NSUInteger)seconds keepPreviews:(BOOL)keepPreviews hardwareDecoder:(BOOL)hardwareDecoder keepDuplicateTitles:(BOOL)keepDuplicateTitles withReply:(void (^)(HBCoreResult))reply;
 - (void)cancelScan;
 
 - (void)encodeJob:(HBJob *)job withReply:(void (^)(HBCoreResult))reply;

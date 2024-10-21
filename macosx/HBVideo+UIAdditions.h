@@ -56,7 +56,7 @@
 @end
 
 @interface HBQualityTransformer : NSValueTransformer
-- (instancetype)initWithReversedDirection:(BOOL)reverse min:(double)min max:(double)max NS_DESIGNATED_INITIALIZER;
+- (instancetype)initWithReversedDirection:(BOOL)reverse min:(double)min max:(double)max granularity:(float)granularity NS_DESIGNATED_INITIALIZER;
 @end
 
 @interface HBVideo (EncoderAdditions)

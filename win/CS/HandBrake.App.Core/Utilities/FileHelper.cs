@@ -49,6 +49,26 @@ namespace HandBrake.App.Core.Utilities
             return foundFiles;
         }
 
+        public static bool IsDvdOrBluray(string path)
+        {
+            if (path.Contains("VIDEO_TS", StringComparison.InvariantCultureIgnoreCase) || path.Contains("BDMV", StringComparison.InvariantCultureIgnoreCase))
+            {
+                return true;
+            }
+
+            if (Directory.Exists(Path.Combine(path, "VIDEO_TS")))
+            {
+                return true;
+            }
+
+            if (Directory.Exists(Path.Combine(path, "BDMV")))
+            {
+                return true;
+            }
+
+            return false;
+        }
+
         /// <summary>
         /// The file path has invalid chars.
         /// </summary>

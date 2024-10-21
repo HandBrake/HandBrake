@@ -93,6 +93,43 @@ HB_OBJC_DIRECT_MEMBERS
     hb_register_error_handler(&hb_error_handler);
 }
 
++ (nullable NSURL *)temporaryDirectoryURL
+{
+    const char *path = hb_get_temporary_directory();
+    if (path)
+    {
+        return [[NSURL alloc] initFileURLWithFileSystemRepresentation:path isDirectory:YES relativeToURL:nil];
+    }
+    else
+    {
+        return nil;
+    }
+}
+
++ (void)cleanTemporaryFiles
+{
+    NSURL *directory = [HBCore temporaryDirectoryURL];
+
+    if (directory)
+    {
+        NSFileManager *manager = [[NSFileManager alloc] init];
+        NSArray<NSURL *> *contents = [manager contentsOfDirectoryAtURL:directory
+                                            includingPropertiesForKeys:nil
+                                                               options:NSDirectoryEnumerationSkipsSubdirectoryDescendants | NSDirectoryEnumerationSkipsPackageDescendants
+                                                                 error:NULL];
+
+        for (NSURL *url in contents)
+        {
+            NSError *error = nil;
+            BOOL result = [manager removeItemAtURL:url error:&error];
+            if (result == NO && error)
+            {
+                [HBUtilities writeToActivityLog:"Could not remove existing temporary file at: %s", url.lastPathComponent.UTF8String];
+            }
+        }
+    }
+}
+
 - (instancetype)init
 {
     return [self initWithLogLevel:0 queue:dispatch_get_main_queue()];
@@ -118,6 +155,16 @@ HB_OBJC_DIRECT_MEMBERS
         if (!_hb_handle)
         {
             return nil;
+        }
+
+        // macOS Sonoma moved the parent of our temporary folder
+        // to the app sandbox container, and the user might have deleted it,
+        // so ensure the whole path is available to avoid failing later
+        // when trying to write the temp files
+        NSURL *directoryURL = HBCore.temporaryDirectoryURL;
+        if (directoryURL)
+        {
+            [NSFileManager.defaultManager createDirectoryAtURL:directoryURL withIntermediateDirectories:YES attributes:nil error:NULL];
         }
     }
 
@@ -192,7 +239,7 @@ HB_OBJC_DIRECT_MEMBERS
         __unused HBSecurityAccessToken *token = [HBSecurityAccessToken tokenWithObject:url];
 #endif
 
-        if (![NSFileManager.defaultManager fileExistsAtPath:url.path])
+        if (![url checkResourceIsReachableAndReturnError:NULL])
         {
             if (error)
             {
@@ -261,7 +308,7 @@ HB_OBJC_DIRECT_MEMBERS
     return YES;
 }
 
-- (void)scanURLs:(NSArray<NSURL *> *)urls titleIndex:(NSUInteger)index previews:(NSUInteger)previewsNum minDuration:(NSUInteger)seconds keepPreviews:(BOOL)keepPreviews hardwareDecoder:(BOOL)hardwareDecoder progressHandler:(HBCoreProgressHandler)progressHandler completionHandler:(HBCoreCompletionHandler)completionHandler
+- (void)scanURLs:(NSArray<NSURL *> *)urls titleIndex:(NSUInteger)index previews:(NSUInteger)previewsNum minDuration:(NSUInteger)seconds keepPreviews:(BOOL)keepPreviews hardwareDecoder:(BOOL)hardwareDecoder keepDuplicateTitles:(BOOL)keepDuplicateTitles progressHandler:(HBCoreProgressHandler)progressHandler completionHandler:(HBCoreCompletionHandler)completionHandler
 {
     NSAssert(self.state == HBStateIdle, @"[HBCore scanURL:] called while another scan or encode already in progress");
     NSAssert(urls, @"[HBCore scanURL:] called with nil url.");
@@ -281,6 +328,11 @@ HB_OBJC_DIRECT_MEMBERS
     // Copy the progress/completion blocks
     self.progressHandler = progressHandler;
     self.completionHandler = completionHandler;
+
+    // Set the state, so the UI can be update
+    // to reflect the current state instead of
+    // waiting for libhb to set it in a background thread.
+    self.state = HBStateScanning;
 
     // convert minTitleDuration from seconds to the internal HB time
     uint64_t min_title_duration_ticks = 90000LL * seconds;
@@ -306,20 +358,15 @@ HB_OBJC_DIRECT_MEMBERS
         hb_list_add(files_list, (char *)url.fileSystemRepresentation);
     }
 
-    hb_scan_list(_hb_handle, files_list,
+    hb_scan(_hb_handle, files_list,
               (int)index, (int)previewsNum,
               keepPreviews, min_title_duration_ticks,
-              0, 0, NULL, hardwareDecoder ? HB_DECODE_SUPPORT_VIDEOTOOLBOX : 0);
+              0, 0, NULL, hardwareDecoder ? HB_DECODE_SUPPORT_VIDEOTOOLBOX : 0, keepDuplicateTitles);
 
     hb_list_close(&files_list);
 
     // Start the timer to handle libhb state changes
     [self startUpdateTimerWithInterval:0.2];
-
-    // Set the state, so the UI can be update
-    // to reflect the current state instead of
-    // waiting for libhb to set it in a background thread.
-    self.state = HBStateScanning;
 }
 
 /**
@@ -432,6 +479,11 @@ HB_OBJC_DIRECT_MEMBERS
     self.progressHandler = progressHandler;
     self.completionHandler = completionHandler;
 
+    // Set the state, so the UI can be update
+    // to reflect the current state instead of
+    // waiting for libhb to set it in a background thread.
+    self.state = HBStateWorking;
+
 #ifdef __SANDBOX_ENABLED__
     HBJob *jobCopy = [job copy];
     __block HBSecurityAccessToken *token = [HBSecurityAccessToken tokenWithObject:jobCopy];
@@ -452,11 +504,6 @@ HB_OBJC_DIRECT_MEMBERS
 
     // Start the timer to handle libhb state changes
     [self startUpdateTimerWithInterval:0.5];
-
-    // Set the state, so the UI can be update
-    // to reflect the current state instead of
-    // waiting for libhb to set it in a background thread.
-    self.state = HBStateWorking;
 
     [HBUtilities writeToActivityLog:"%s started encoding %s", self.name.UTF8String, job.destinationFileName.UTF8String];
     [HBUtilities writeToActivityLog:"%s with preset %s", self.name.UTF8String, job.presetName.UTF8String];

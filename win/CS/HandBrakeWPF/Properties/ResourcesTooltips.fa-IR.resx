@@ -536,6 +536,8 @@ It is recommended the output file is validated before performing actions on it.<
 {encode_bit_depth} - Integer value. i.e. 8, 10 or 12
 {width} - The output storage width
 {height} - The output storage height
+{codec} - Display the video format.
+{encoder} - Display the short format key of the encoder used.
 
 Any illegal path characters will be removed automatically.</value>
   </data>
@@ -556,5 +558,8 @@ Bitrate will vary source to source.</value>
 {source_path} - In the same folder as the source path (if possible)
 {source_folder_name} – The name of the directory that the source file is in, without the full path.
 {source} - The name of the source file.</value>
+  </data>
+  <data name="OptionsView_LaunchsHelp" xml:space="preserve">
+    <value>Launches the documentation website located at https://handbrake.fr/docs</value>
   </data>
 </root>

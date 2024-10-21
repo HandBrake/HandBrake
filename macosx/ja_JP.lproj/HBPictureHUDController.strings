@@ -7,9 +7,6 @@
 /* Class = "NSPopUpButton"; ibShadowedToolTip = "Duration to encode in seconds."; ObjectID = "ASA-X8-16P"; */
 "ASA-X8-16P.ibShadowedToolTip" = "秒で表されるエンコード時間です。";
 
-/* Class = "NSMenu"; title = "OtherViews"; ObjectID = "KrC-nR-rYk"; */
-"KrC-nR-rYk.title" = "他のビュー";
-
 /* Class = "NSTextFieldCell"; title = "sec"; ObjectID = "ksF-Ma-hB1"; */
 "ksF-Ma-hB1.title" = "秒";
 

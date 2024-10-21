@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <requires lib="gtk" version="4.0"/>
+  <template class="GhbButton" parent="GtkButton">
+    <property name="orientation">vertical</property>
+    <style>
+      <class name="ghb-button"/>
+      <class name="image-button"/>
+    </style>
+    <child>
+      <object class="GtkBox" id="layout_box">
+        <child>
+          <object class="GtkOverlay">
+            <property name="halign">center</property>
+            <property name="valign">center</property>
+            <child type="overlay">
+              <object class="GtkLabel" id="indicator">
+                <property name="visible">False</property>
+                <property name="halign">end</property>
+                <property name="valign">start</property>
+                <property name="css-classes">ghb-indicator</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkImage" id="icon">
+                <property name="halign">center</property>
+                <property name="valign">end</property>
+                <property name="accessible-role">presentation</property>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="GtkLabel" id="label">
+            <property name="halign">center</property>
+            <property name="valign">baseline</property>
+            <property name="xalign">0.5</property>
+            <property name="ellipsize">none</property>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+</interface>
+

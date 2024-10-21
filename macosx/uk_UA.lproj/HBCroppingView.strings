@@ -1,0 +1,51 @@
+/* Class = "NSTextField"; ibExternalAccessibilityDescription = "Crop bottom"; ObjectID = "6Gj-ZU-E1E"; */
+"6Gj-ZU-E1E.ibExternalAccessibilityDescription" = "Обрізати знизу";
+
+/* Class = "NSTextField"; ibShadowedToolTip = "Bottom edge cropping amount in pixels."; ObjectID = "6Gj-ZU-E1E"; */
+"6Gj-ZU-E1E.ibShadowedToolTip" = "Величина обрізання нижнього краю у пікселях.";
+
+/* Class = "NSStepper"; ibExternalAccessibilityDescription = "Crop top"; ObjectID = "8e5-zI-IBg"; */
+"8e5-zI-IBg.ibExternalAccessibilityDescription" = "Обрізати зверху";
+
+/* Class = "NSMenuItem"; title = "Conservative"; ObjectID = "8Vn-fL-hvM"; */
+"8Vn-fL-hvM.title" = "Консервативний";
+
+/* Class = "NSTextField"; ibExternalAccessibilityDescription = "Crop top"; ObjectID = "Cp5-xz-x1h"; */
+"Cp5-xz-x1h.ibExternalAccessibilityDescription" = "Обрізати зверху";
+
+/* Class = "NSTextField"; ibShadowedToolTip = "Top edge cropping amount in pixels."; ObjectID = "Cp5-xz-x1h"; */
+"Cp5-xz-x1h.ibShadowedToolTip" = "Величина обрізання верхнього краю у пікселях.";
+
+/* Class = "NSPopUpButton"; ibShadowedToolTip = "Rotate the picture clockwise in 90 degree increments."; ObjectID = "cWv-q0-EN9"; */
+"cWv-q0-EN9.ibShadowedToolTip" = "Повернути зображення за годинниковою стрілкою з кроком у 90 градусів.";
+
+/* Class = "NSMenuItem"; title = "Custom"; ObjectID = "dD5-og-dxx"; */
+"dD5-og-dxx.title" = "Користувацький";
+
+/* Class = "NSTextField"; ibExternalAccessibilityDescription = "Crop right"; ObjectID = "php-p6-Nz6"; */
+"php-p6-Nz6.ibExternalAccessibilityDescription" = "Обрізати справа";
+
+/* Class = "NSTextField"; ibShadowedToolTip = "Right edge cropping amount in pixels."; ObjectID = "php-p6-Nz6"; */
+"php-p6-Nz6.ibShadowedToolTip" = "Величина обрізання правого краю у пікселях.";
+
+/* Class = "NSMenuItem"; title = "None"; ObjectID = "Pqk-fS-pyy"; */
+"Pqk-fS-pyy.title" = "Відсутня";
+
+/* Class = "NSMenuItem"; title = "Automatic"; ObjectID = "sUG-Cw-nQU"; */
+"sUG-Cw-nQU.title" = "Автоматично";
+
+/* Class = "NSStepper"; ibExternalAccessibilityDescription = "Crop bottom"; ObjectID = "sWf-fq-lvl"; */
+"sWf-fq-lvl.ibExternalAccessibilityDescription" = "Обрізати знизу";
+
+/* Class = "NSTextField"; ibExternalAccessibilityDescription = "Crop left"; ObjectID = "Td7-sa-0TV"; */
+"Td7-sa-0TV.ibExternalAccessibilityDescription" = "Обрізати зліва";
+
+/* Class = "NSTextField"; ibShadowedToolTip = "Left edge cropping amount in pixels."; ObjectID = "Td7-sa-0TV"; */
+"Td7-sa-0TV.ibShadowedToolTip" = "Величина обрізання лівого краю у пікселях.";
+
+/* Class = "NSStepper"; ibExternalAccessibilityDescription = "Crop right"; ObjectID = "y7P-yk-q46"; */
+"y7P-yk-q46.ibExternalAccessibilityDescription" = "Обрізати справа";
+
+/* Class = "NSStepper"; ibExternalAccessibilityDescription = "Crop left"; ObjectID = "Yua-R6-mWU"; */
+"Yua-R6-mWU.ibExternalAccessibilityDescription" = "Обрізати зліва";
+

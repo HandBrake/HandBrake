@@ -1,6 +1,6 @@
 /* encvt.c
 
-   Copyright (c) 2003-2022 HandBrake Team
+   Copyright (c) 2003-2024 HandBrake Team
    This file is part of the HandBrake source code
    Homepage: <http://handbrake.fr/>.
    It may be used under the terms of the GNU General Public License v2.
@@ -13,9 +13,13 @@
 #include "libavutil/avutil.h"
 
 #include "handbrake/handbrake.h"
+#include "handbrake/dovi_common.h"
 #include "handbrake/hdr10plus.h"
-#include "handbrake/hbffmpeg.h"
-#include "vt_common.h"
+#include "handbrake/nal_units.h"
+#include "handbrake/extradata.h"
+#include "handbrake/bitstream.h"
+
+#include "cv_utils.h"
 
 int  encvt_init(hb_work_object_t *, hb_job_t *);
 int  encvt_work(hb_work_object_t *, hb_buffer_t **, hb_buffer_t **);
@@ -59,12 +63,16 @@ struct hb_work_private_s
     const CMTimeRange    *timeRangeArray;
     int                   remainingPasses;
 
+    uint8 nal_length_size;
+
     struct hb_vt_param
     {
         CMVideoCodecType codec;
         uint64_t registryID;
 
-        OSType pixelFormat;
+        OSType inputPixFmt;
+        OSType encoderPixFmt;
+
         int32_t timescale;
 
         double quality;
@@ -74,6 +82,9 @@ struct hb_work_private_s
         int profile;
         CFStringRef profileLevel;
 
+        int maxAllowedFrameQP;
+        int minAllowedFrameQP;
+        int maxReferenceBufferCount;
         int maxFrameDelayCount;
         int maxKeyFrameInterval;
         CFBooleanRef allowFrameReordering;
@@ -127,6 +138,9 @@ void hb_vt_param_default(struct hb_vt_param *param)
     param->quality                  = -1;
     param->vbv.maxrate              = 0;
     param->vbv.bufsize              = 0;
+    param->maxAllowedFrameQP        = -1;
+    param->minAllowedFrameQP        = -1;
+    param->maxReferenceBufferCount  = -1;
     param->maxFrameDelayCount       = kVTUnlimitedFrameDelayCount;
     param->allowFrameReordering     = kCFBooleanTrue;
     param->allowTemporalCompression = kCFBooleanTrue;
@@ -211,181 +225,65 @@ static void compute_dts_offset(hb_work_private_t *pv, hb_buffer_t *buf)
         if ((pv->frameno_in) == pv->job->areBframes)
         {
             pv->dts_delay = buf->s.start;
-            pv->job->config.init_delay = pv->dts_delay;
+            pv->job->init_delay = pv->dts_delay;
         }
     }
 }
 
-static CFStringRef hb_vt_colr_pri_xlat(int color_prim)
+static int hb_vt_get_nal_length_size(CMSampleBufferRef sampleBuffer, CMVideoCodecType codec)
 {
-    switch (color_prim)
+    CMFormatDescriptionRef format = CMSampleBufferGetFormatDescription(sampleBuffer);
+    int isize = 0;
+
+    if (format)
     {
-        case HB_COLR_PRI_BT2020:
-            return kCMFormatDescriptionColorPrimaries_ITU_R_2020;
-        case HB_COLR_PRI_BT709:
-            return kCMFormatDescriptionColorPrimaries_ITU_R_709_2;
-        case HB_COLR_PRI_EBUTECH:
-            return kCMFormatDescriptionColorPrimaries_EBU_3213;
-        case HB_COLR_PRI_SMPTEC:
-            return kCMFormatDescriptionColorPrimaries_SMPTE_C;
-        default:
-            return NULL;
+        if (codec == kCMVideoCodecType_H264)
+        {
+            CMVideoFormatDescriptionGetH264ParameterSetAtIndex(format, 0, NULL, NULL, NULL, &isize);
+        }
+        else if (codec == kCMVideoCodecType_HEVC)
+        {
+            CMVideoFormatDescriptionGetHEVCParameterSetAtIndex(format, 0, NULL, NULL, NULL, &isize);
+        }
     }
+
+    return isize;
 }
 
-static CFStringRef hb_vt_colr_tra_xlat(int color_transfer)
-{
-    switch (color_transfer)
-    {
-        case HB_COLR_TRA_BT709:
-            return kCMFormatDescriptionTransferFunction_ITU_R_709_2;
-        case HB_COLR_TRA_SMPTE240M:
-            return kCMFormatDescriptionTransferFunction_SMPTE_240M_1995;
-        case HB_COLR_TRA_SMPTEST2084:
-            return kCVImageBufferTransferFunction_SMPTE_ST_2084_PQ;
-        case HB_COLR_TRA_LINEAR:
-            if (__builtin_available(macOS 10.14, *)) { return kCVImageBufferTransferFunction_Linear; }
-        case HB_COLR_TRA_IEC61966_2_1:
-            return kCVImageBufferTransferFunction_sRGB;
-        case HB_COLR_TRA_ARIB_STD_B67:
-            return kCVImageBufferTransferFunction_ITU_R_2100_HLG;
-        case HB_COLR_TRA_GAMMA22:
-            return kCVImageBufferTransferFunction_UseGamma;
-        case HB_COLR_TRA_GAMMA28:
-            return kCVImageBufferTransferFunction_UseGamma;
-        case HB_COLR_TRA_BT2020_10:
-        case HB_COLR_TRA_BT2020_12:
-            return kCVImageBufferTransferFunction_ITU_R_2020;
-        default:
-            return NULL;
-    }
-}
-
-static CFNumberRef hb_vt_colr_gamma_xlat(int color_transfer)
-{
-    Float32 gamma = 0;
-    switch (color_transfer)
-    {
-        case HB_COLR_TRA_GAMMA22:
-            gamma = 2.2;
-        case HB_COLR_TRA_GAMMA28:
-            gamma = 2.8;
-    }
-
-    return gamma > 0 ? CFNumberCreate(NULL, kCFNumberFloat32Type, &gamma) : NULL;
-}
-
-static CFStringRef hb_vt_colr_mat_xlat(int color_matrix)
-{
-    switch (color_matrix)
-    {
-        case HB_COLR_MAT_BT2020_NCL:
-            return kCMFormatDescriptionYCbCrMatrix_ITU_R_2020;
-        case HB_COLR_MAT_BT709:
-            return kCMFormatDescriptionYCbCrMatrix_ITU_R_709_2;
-        case HB_COLR_MAT_SMPTE170M:
-            return kCMFormatDescriptionYCbCrMatrix_ITU_R_601_4;
-        case HB_COLR_MAT_SMPTE240M:
-            return kCMFormatDescriptionYCbCrMatrix_SMPTE_240M_1995;
-        default:
-            return NULL;
-    }
-}
-
-static CFStringRef hb_vt_chroma_loc_xlat(int chroma_location)
-{
-    switch (chroma_location)
-    {
-        case AVCHROMA_LOC_LEFT:
-            return kCVImageBufferChromaLocation_Left;
-        case AVCHROMA_LOC_CENTER:
-            return kCVImageBufferChromaLocation_Center;
-        case AVCHROMA_LOC_TOPLEFT:
-            return kCVImageBufferChromaLocation_TopLeft;
-        case AVCHROMA_LOC_TOP:
-            return kCVImageBufferChromaLocation_Top;
-        case AVCHROMA_LOC_BOTTOMLEFT:
-            return kCVImageBufferChromaLocation_BottomLeft;
-        case AVCHROMA_LOC_BOTTOM:
-            return kCVImageBufferChromaLocation_Bottom;
-        default:
-            return NULL;
-    }
-}
-
-static void hb_vt_add_color_tag(CVPixelBufferRef pxbuffer, hb_job_t *job)
-{
-    CFStringRef prim       = hb_vt_colr_pri_xlat(job->color_prim);
-    CFStringRef transfer   = hb_vt_colr_tra_xlat(job->color_transfer);
-    CFNumberRef gamma      = hb_vt_colr_gamma_xlat(job->color_transfer);
-    CFStringRef matrix     = hb_vt_colr_mat_xlat(job->color_matrix);
-    CFStringRef chroma_loc = hb_vt_chroma_loc_xlat(job->chroma_location);
-
-    if (prim)
-    {
-        CVBufferSetAttachment(pxbuffer, kCVImageBufferColorPrimariesKey, prim, kCVAttachmentMode_ShouldPropagate);
-    }
-    if (transfer)
-    {
-        CVBufferSetAttachment(pxbuffer, kCVImageBufferTransferFunctionKey, transfer, kCVAttachmentMode_ShouldPropagate);
-    }
-    if (gamma)
-    {
-        CVBufferSetAttachment(pxbuffer, kCVImageBufferGammaLevelKey, gamma, kCVAttachmentMode_ShouldPropagate);
-        CFRelease(gamma);
-    }
-    if (matrix)
-    {
-        CVBufferSetAttachment(pxbuffer, kCVImageBufferYCbCrMatrixKey, matrix, kCVAttachmentMode_ShouldPropagate);
-    }
-    if (chroma_loc)
-    {
-        CVBufferSetAttachment(pxbuffer, kCVImageBufferChromaLocationTopFieldKey, chroma_loc, kCVAttachmentMode_ShouldPropagate);
-        CVBufferSetAttachment(pxbuffer, kCVImageBufferChromaLocationBottomFieldKey, chroma_loc, kCVAttachmentMode_ShouldPropagate);
-    }
-}
-
-static void hb_vt_add_dynamic_hdr_metadata(CVPixelBufferRef pxbuffer, hb_job_t *job, hb_buffer_t *buf)
+static void hb_vt_add_dynamic_hdr_metadata(CMSampleBufferRef sampleBuffer, hb_buffer_t *buf)
 {
     for (int i = 0; i < buf->nb_side_data; i++)
     {
         const AVFrameSideData *side_data = buf->side_data[i];
-        if (job->passthru_dynamic_hdr_metadata & HDR_10_PLUS &&
-            side_data->type == AV_FRAME_DATA_DYNAMIC_HDR_PLUS)
+        if (side_data->type == AV_FRAME_DATA_DYNAMIC_HDR_PLUS)
         {
-#ifdef MAC_OS_VERSION_13_0
-            if (__builtin_available(macOS 13, *))
+            uint8_t *payload = NULL;
+            uint32_t playload_size = 0;
+
+            hb_dynamic_hdr10_plus_to_itu_t_t35((AVDynamicHDRPlus *)side_data->data, &payload, &playload_size);
+            if (!playload_size)
             {
-                uint8_t *payload = NULL;
-                uint32_t playload_size = 0;
-
-                hb_dynamic_hdr10_plus_to_itu_t_t35((AVDynamicHDRPlus *)side_data->data, &payload, &playload_size);
-                if (!playload_size)
-                {
-                    continue;
-                }
-
-                CFDataRef data = CFDataCreate(kCFAllocatorDefault, payload, playload_size);
-                if (data)
-                {
-                    CVBufferSetAttachment(pxbuffer, kCMSampleAttachmentKey_HDR10PlusPerFrameData, data, kCVAttachmentMode_ShouldPropagate);
-                    CFRelease(data);
-                }
+                continue;
             }
-#endif
+
+            CFDataRef data = CFDataCreate(kCFAllocatorDefault, payload, playload_size);
+            if (data)
+            {
+                CMSetAttachment(sampleBuffer, CFSTR("HB_HDR_PLUS"), data, kCVAttachmentMode_ShouldPropagate);
+                CFRelease(data);
+            }
+            av_freep(&payload);
         }
-        if (job->passthru_dynamic_hdr_metadata & DOVI &&
-            side_data->type == AV_FRAME_DATA_DOVI_RPU_BUFFER)
+        if (side_data->type == AV_FRAME_DATA_DOVI_RPU_BUFFER)
         {
-           // Not supported yet
+            CFDataRef data = CFDataCreate(kCFAllocatorDefault, side_data->data, side_data->size);
+            if (data)
+            {
+                CMSetAttachment(sampleBuffer, CFSTR("HB_DOVI_RPU"), data, kCVAttachmentMode_ShouldPropagate);
+                CFRelease(data);
+            }
         }
     }
-
-}
-
-static inline int64_t rescale(hb_rational_t q, int b)
-{
-    return av_rescale(q.num, b, q.den);
 }
 
 static CFDataRef hb_vt_mastering_display_xlat(hb_mastering_display_metadata_t mastering)
@@ -395,18 +293,18 @@ static CFDataRef hb_vt_mastering_display_xlat(hb_mastering_display_metadata_t ma
     const int chromaDen = 50000;
     const int lumaDen = 10000;
 
-    uint16_t display_primaries_gx = CFSwapInt16HostToBig(rescale(mastering.display_primaries[1][0], chromaDen));
-    uint16_t display_primaries_gy = CFSwapInt16HostToBig(rescale(mastering.display_primaries[1][1], chromaDen));
-    uint16_t display_primaries_bx = CFSwapInt16HostToBig(rescale(mastering.display_primaries[2][0], chromaDen));
-    uint16_t display_primaries_by = CFSwapInt16HostToBig(rescale(mastering.display_primaries[2][1], chromaDen));
-    uint16_t display_primaries_rx = CFSwapInt16HostToBig(rescale(mastering.display_primaries[0][0], chromaDen));
-    uint16_t display_primaries_ry = CFSwapInt16HostToBig(rescale(mastering.display_primaries[0][1], chromaDen));
+    uint16_t display_primaries_gx = CFSwapInt16HostToBig(hb_rescale_rational(mastering.display_primaries[1][0], chromaDen));
+    uint16_t display_primaries_gy = CFSwapInt16HostToBig(hb_rescale_rational(mastering.display_primaries[1][1], chromaDen));
+    uint16_t display_primaries_bx = CFSwapInt16HostToBig(hb_rescale_rational(mastering.display_primaries[2][0], chromaDen));
+    uint16_t display_primaries_by = CFSwapInt16HostToBig(hb_rescale_rational(mastering.display_primaries[2][1], chromaDen));
+    uint16_t display_primaries_rx = CFSwapInt16HostToBig(hb_rescale_rational(mastering.display_primaries[0][0], chromaDen));
+    uint16_t display_primaries_ry = CFSwapInt16HostToBig(hb_rescale_rational(mastering.display_primaries[0][1], chromaDen));
 
-    uint16_t white_point_x = CFSwapInt16HostToBig(rescale(mastering.white_point[0], chromaDen));
-    uint16_t white_point_y = CFSwapInt16HostToBig(rescale(mastering.white_point[1], chromaDen));
+    uint16_t white_point_x = CFSwapInt16HostToBig(hb_rescale_rational(mastering.white_point[0], chromaDen));
+    uint16_t white_point_y = CFSwapInt16HostToBig(hb_rescale_rational(mastering.white_point[1], chromaDen));
 
-    uint32_t max_display_mastering_luminance = CFSwapInt32HostToBig(rescale(mastering.max_luminance, lumaDen));
-    uint32_t min_display_mastering_luminance = CFSwapInt32HostToBig(rescale(mastering.min_luminance, lumaDen));
+    uint32_t max_display_mastering_luminance = CFSwapInt32HostToBig(hb_rescale_rational(mastering.max_luminance, lumaDen));
+    uint32_t min_display_mastering_luminance = CFSwapInt32HostToBig(hb_rescale_rational(mastering.min_luminance, lumaDen));
 
     CFDataAppendBytes(data, (UInt8 *)&display_primaries_gx, 2);
     CFDataAppendBytes(data, (UInt8 *)&display_primaries_gy, 2);
@@ -441,9 +339,9 @@ static CFDataRef hb_vt_ambient_viewing_enviroment_xlat(hb_ambient_viewing_enviro
 {
     CFMutableDataRef data = CFDataCreateMutable(kCFAllocatorDefault, 8);
 
-    uint32_t ambient_illuminance = CFSwapInt32HostToBig(rescale(ambient.ambient_illuminance, 10000));
-    uint16_t ambient_light_x =  CFSwapInt16HostToBig(rescale(ambient.ambient_light_x, 50000));
-    uint16_t ambient_light_y =  CFSwapInt16HostToBig(rescale(ambient.ambient_light_y, 50000));
+    uint32_t ambient_illuminance = CFSwapInt32HostToBig(hb_rescale_rational(ambient.ambient_illuminance, 10000));
+    uint16_t ambient_light_x =  CFSwapInt16HostToBig(hb_rescale_rational(ambient.ambient_light_x, 50000));
+    uint16_t ambient_light_y =  CFSwapInt16HostToBig(hb_rescale_rational(ambient.ambient_light_y, 50000));
 
     CFDataAppendBytes(data, (UInt8 *)&ambient_illuminance, 4);
     CFDataAppendBytes(data, (UInt8 *)&ambient_light_x, 2);
@@ -452,19 +350,48 @@ static CFDataRef hb_vt_ambient_viewing_enviroment_xlat(hb_ambient_viewing_enviro
     return data;
 }
 
+static OSType hb_vt_encoder_pixel_format_xlat(int vcodec, int profile, int color_range)
+{
+    switch (vcodec)
+    {
+        case HB_VCODEC_VT_H264:
+            switch (profile)
+            {
+                case HB_VT_H264_PROFILE_BASELINE:
+                case HB_VT_H264_PROFILE_MAIN:
+                case HB_VT_H264_PROFILE_HIGH:
+                    return hb_cv_get_pixel_format(AV_PIX_FMT_NV12, color_range);
+            }
+        case HB_VCODEC_VT_H265:
+        case HB_VCODEC_VT_H265_10BIT:
+            switch (profile)
+            {
+                case HB_VT_H265_PROFILE_MAIN:
+                    return hb_cv_get_pixel_format(AV_PIX_FMT_NV12, color_range);
+                case HB_VT_H265_PROFILE_MAIN_10:
+                    return hb_cv_get_pixel_format(AV_PIX_FMT_P010, color_range);
+                case HB_VT_H265_PROFILE_MAIN_422_10:
+                    return hb_cv_get_pixel_format(AV_PIX_FMT_P210, color_range);
+            }
+    }
+
+    hb_log("encvt_Init: unknown codec");
+    return hb_cv_get_pixel_format(AV_PIX_FMT_NV12, color_range);
+}
+
 static int hb_vt_settings_xlat(hb_work_private_t *pv, hb_job_t *job)
 {
     /* Set global default values. */
     hb_vt_param_default(&pv->settings);
 
     pv->settings.codec       = job->vcodec == HB_VCODEC_VT_H264 ? kCMVideoCodecType_H264 : kCMVideoCodecType_HEVC;
-    pv->settings.pixelFormat = hb_vt_get_cv_pixel_format(job->output_pix_fmt, job->color_range);
+    pv->settings.inputPixFmt = hb_cv_get_pixel_format(job->output_pix_fmt, job->color_range);
     pv->settings.timescale = 90000;
 
     // set the preset
     if (job->encoder_preset != NULL && *job->encoder_preset != '\0')
     {
-        if (!strcasecmp(job->encoder_profile, "speed"))
+        if (!strcasecmp(job->encoder_preset, "speed"))
         {
             pv->settings.prioritizeEncodingSpeedOverQuality = kCFBooleanTrue;
         }
@@ -540,6 +467,8 @@ static int hb_vt_settings_xlat(hb_work_private_t *pv, hb_job_t *job)
             pv->settings.profile = HB_VT_H265_PROFILE_MAIN_10;
         }
     }
+
+    pv->settings.encoderPixFmt = hb_vt_encoder_pixel_format_xlat(job->vcodec, pv->settings.profile, job->color_range);
 
     if (job->encoder_level != NULL && *job->encoder_level != '\0' && job->vcodec == HB_VCODEC_VT_H264)
     {
@@ -625,11 +554,6 @@ static int hb_vt_settings_xlat(hb_work_private_t *pv, hb_job_t *job)
         pv->settings.color.ambientViewingEnviroment = hb_vt_ambient_viewing_enviroment_xlat(job->ambient);
     }
 
-    if (job->passthru_dynamic_hdr_metadata & HDR_10_PLUS)
-    {
-        pv->settings.preserveDynamicHDRMetadata = kCFBooleanTrue;
-    }
-
     return 0;
 }
 
@@ -707,6 +631,34 @@ static int hb_vt_parse_options(hb_work_private_t *pv, hb_job_t *job)
                 pv->settings.registryID = registryID;
             }
         }
+        else if (!strcmp(key, "qpmin"))
+        {
+            int qpmin = hb_value_get_int(value);
+            if (qpmin >= 0)
+            {
+                pv->settings.minAllowedFrameQP = qpmin;
+            }
+        }
+        else if (!strcmp(key, "qpmax"))
+        {
+            int qpmax = hb_value_get_int(value);
+            if (qpmax >= 0)
+            {
+                pv->settings.maxAllowedFrameQP = qpmax;
+            }
+        }
+        else if (!strcmp(key, "ref"))
+        {
+            int ref = hb_value_get_int(value);
+            if (ref >= 0)
+            {
+                pv->settings.maxReferenceBufferCount = ref;
+            }
+        }
+        else
+        {
+            hb_log("encvt_Init: unknown option '%s'", key);
+        }
 
     }
     hb_dict_free(&opts);
@@ -734,6 +686,33 @@ static int hb_vt_parse_options(hb_work_private_t *pv, hb_job_t *job)
     return 0;
 }
 
+static void set_data_rate_limits(VTCompressionSessionRef session, int bufsize, int maxrate)
+{
+    OSStatus err = 0;
+
+    float seconds = ((float)bufsize / (float)maxrate);
+    int bytes = maxrate * 125 * seconds;
+
+    CFNumberRef size = CFNumberCreate(kCFAllocatorDefault,
+                                      kCFNumberIntType, &bytes);
+    CFNumberRef duration = CFNumberCreate(kCFAllocatorDefault,
+                                          kCFNumberFloatType, &seconds);
+    CFMutableArrayRef dataRateLimits = CFArrayCreateMutable(kCFAllocatorDefault, 2,
+                                                            &kCFTypeArrayCallBacks);
+    CFArrayAppendValue(dataRateLimits, size);
+    CFArrayAppendValue(dataRateLimits, duration);
+    err = VTSessionSetProperty(session,
+                               kVTCompressionPropertyKey_DataRateLimits,
+                               dataRateLimits);
+    CFRelease(size);
+    CFRelease(duration);
+    CFRelease(dataRateLimits);
+    if (err != noErr)
+    {
+        hb_log("VTSessionSetProperty: kVTCompressionPropertyKey_DataRateLimits failed");
+    }
+}
+
 static OSStatus wrap_buf(hb_work_private_t *pv, hb_buffer_t *buf, CVPixelBufferRef *pix_buf)
 {
     OSStatus err = 0;
@@ -757,8 +736,8 @@ static OSStatus wrap_buf(hb_work_private_t *pv, hb_buffer_t *buf, CVPixelBufferR
     }
     else
     {
-        int numberOfPlanes = pv->settings.pixelFormat == kCVPixelFormatType_420YpCbCr8Planar ||
-        pv->settings.pixelFormat == kCVPixelFormatType_420YpCbCr8PlanarFullRange ? 3 : 2;
+        int numberOfPlanes = pv->settings.inputPixFmt == kCVPixelFormatType_420YpCbCr8Planar ||
+        pv->settings.inputPixFmt == kCVPixelFormatType_420YpCbCr8PlanarFullRange ? 3 : 2;
 
         void *planeBaseAddress[3] = {buf->plane[0].data, buf->plane[1].data, buf->plane[2].data};
         size_t planeWidth[3] = {buf->plane[0].width, buf->plane[1].width, buf->plane[2].width};
@@ -769,7 +748,7 @@ static OSStatus wrap_buf(hb_work_private_t *pv, hb_buffer_t *buf, CVPixelBufferR
                                                  kCFAllocatorDefault,
                                                  buf->f.width,
                                                  buf->f.height,
-                                                 pv->settings.pixelFormat,
+                                                 pv->settings.inputPixFmt,
                                                  buf->data,
                                                  0,
                                                  numberOfPlanes,
@@ -785,8 +764,8 @@ static OSStatus wrap_buf(hb_work_private_t *pv, hb_buffer_t *buf, CVPixelBufferR
 
     if (*pix_buf)
     {
-        hb_vt_add_color_tag(*pix_buf, pv->job);
-        hb_vt_add_dynamic_hdr_metadata(*pix_buf, pv->job, buf);
+        hb_cv_add_color_tag(*pix_buf, pv->job->color_prim, pv->job->color_transfer,
+                            pv->job->color_matrix, pv->job->chroma_location);
     }
 
     return err;
@@ -804,6 +783,10 @@ void hb_vt_compression_output_callback(
     if (sourceFrameRefCon)
     {
         hb_buffer_t *buf = (hb_buffer_t *)sourceFrameRefCon;
+        if (sampleBuffer)
+        {
+            hb_vt_add_dynamic_hdr_metadata(sampleBuffer, buf);
+        }
         hb_buffer_close(&buf);
     }
 
@@ -811,7 +794,7 @@ void hb_vt_compression_output_callback(
     {
         hb_log("VTCompressionSession: hb_vt_compression_output_callback called error");
     }
-    else
+    else if (sampleBuffer)
     {
         CFRetain(sampleBuffer);
         CMSimpleQueueRef queue = outputCallbackRefCon;
@@ -820,6 +803,10 @@ void hb_vt_compression_output_callback(
         {
             hb_log("VTCompressionSession: hb_vt_compression_output_callback queue full");
         }
+    }
+    else
+    {
+        hb_log("VTCompressionSession: hb_vt_compression_output_callback sample buffer is NULL");
     }
 }
 
@@ -847,6 +834,18 @@ static OSStatus init_vtsession(hb_work_object_t *w, hb_job_t *job, hb_work_priva
         CFRelease(cfValue);
     }
 
+    OSType cv_pix_fmt = pv->settings.encoderPixFmt;
+    CFNumberRef pix_fmt_num = CFNumberCreate(kCFAllocatorDefault, kCFNumberSInt32Type, &cv_pix_fmt);
+
+    const void *attrs_keys[1] = { kCVPixelBufferPixelFormatTypeKey };
+    const void *attrs_values[1] = { pix_fmt_num };
+
+    CFDictionaryRef imageBufferAttributes = CFDictionaryCreate(kCFAllocatorDefault,
+                                                               attrs_keys, attrs_values, 1,
+                                                               &kCFTypeDictionaryKeyCallBacks,
+                                                               &kCFTypeDictionaryValueCallBacks);
+    CFRelease(pix_fmt_num);
+
     CMSimpleQueueCreate(kCFAllocatorDefault, 200, &pv->queue);
 
     err = VTCompressionSessionCreate(
@@ -855,11 +854,13 @@ static OSStatus init_vtsession(hb_work_object_t *w, hb_job_t *job, hb_work_priva
                                pv->settings.height,
                                pv->settings.codec,
                                encoderSpecifications,
-                               NULL,
+                               imageBufferAttributes,
                                NULL,
                                &hb_vt_compression_output_callback,
                                pv->queue,
                                &pv->session);
+
+    CFRelease(imageBufferAttributes);
 
     if (err != noErr)
     {
@@ -905,8 +906,6 @@ static OSStatus init_vtsession(hb_work_object_t *w, hb_job_t *job, hb_work_priva
     if (err != noErr)
     {
         hb_log("Error retrieving the supported property dictionary err=%"PRId64"", (int64_t)err);
-        CFRelease(encoderSpecifications);
-        return err;
     }
 
     CFRelease(encoderSpecifications);
@@ -921,6 +920,14 @@ static OSStatus init_vtsession(hb_work_object_t *w, hb_job_t *job, hb_work_priva
     }
 
     err = VTSessionSetProperty(pv->session,
+                               kVTCompressionPropertyKey_AllowTemporalCompression,
+                               pv->settings.allowTemporalCompression);
+    if (err != noErr)
+    {
+        hb_log("VTSessionSetProperty: kVTCompressionPropertyKey_AllowTemporalCompression failed");
+    }
+
+    err = VTSessionSetProperty(pv->session,
                                kVTCompressionPropertyKey_AllowFrameReordering,
                                pv->settings.allowFrameReordering);
     if (err != noErr)
@@ -930,7 +937,7 @@ static OSStatus init_vtsession(hb_work_object_t *w, hb_job_t *job, hb_work_priva
 
     if (__builtin_available(macOS 11, *))
     {
-        if (CFDictionaryContainsKey(supportedProps, kVTCompressionPropertyKey_PrioritizeEncodingSpeedOverQuality))
+        if (supportedProps != NULL && CFDictionaryContainsKey(supportedProps, kVTCompressionPropertyKey_PrioritizeEncodingSpeedOverQuality))
         {
             err = VTSessionSetProperty(pv->session,
                                        kVTCompressionPropertyKey_PrioritizeEncodingSpeedOverQuality,
@@ -953,6 +960,54 @@ static OSStatus init_vtsession(hb_work_object_t *w, hb_job_t *job, hb_work_priva
         hb_log("VTSessionSetProperty: kVTCompressionPropertyKey_MaxKeyFrameInterval failed");
     }
 
+    if (__builtin_available(macOS 12, *))
+    {
+        if (pv->settings.maxAllowedFrameQP > -1)
+        {
+            cfValue = CFNumberCreate(kCFAllocatorDefault, kCFNumberIntType,
+                                     &pv->settings.maxAllowedFrameQP);
+            err = VTSessionSetProperty(pv->session,
+                                       kVTCompressionPropertyKey_MaxAllowedFrameQP,
+                                       cfValue);
+            CFRelease(cfValue);
+            if (err != noErr)
+            {
+                hb_log("VTSessionSetProperty: kVTCompressionPropertyKey_MaxAllowedFrameQP failed");
+            }
+        }
+    }
+
+    if (__builtin_available(macOS 13, *))
+    {
+        if (pv->settings.minAllowedFrameQP > -1)
+        {
+            cfValue = CFNumberCreate(kCFAllocatorDefault, kCFNumberIntType,
+                                     &pv->settings.minAllowedFrameQP);
+            err = VTSessionSetProperty(pv->session,
+                                       kVTCompressionPropertyKey_MinAllowedFrameQP,
+                                       cfValue);
+            CFRelease(cfValue);
+            if (err != noErr)
+            {
+                hb_log("VTSessionSetProperty: kVTCompressionPropertyKey_MinAllowedFrameQP failed");
+            }
+        }
+
+        if (pv->settings.maxReferenceBufferCount > -1)
+        {
+            cfValue = CFNumberCreate(kCFAllocatorDefault, kCFNumberIntType,
+                                     &pv->settings.maxReferenceBufferCount);
+            err = VTSessionSetProperty(pv->session,
+                                       kVTCompressionPropertyKey_ReferenceBufferCount,
+                                       cfValue);
+            CFRelease(cfValue);
+            if (err != noErr)
+            {
+                hb_log("VTSessionSetProperty: kVTCompressionPropertyKey_ReferenceBufferCount failed");
+            }
+        }
+    }
+
     if (pv->settings.maxFrameDelayCount >= 0)
     {
         cfValue = CFNumberCreate(kCFAllocatorDefault, kCFNumberIntType,
@@ -967,30 +1022,14 @@ static OSStatus init_vtsession(hb_work_object_t *w, hb_job_t *job, hb_work_priva
         }
     }
 
-    if (pv->settings.vbv.maxrate > 0 &&
+    if (
+#if defined(__aarch64__)
+        job->pass_id == HB_PASS_ENCODE &&
+#endif
+        pv->settings.vbv.maxrate > 0 &&
         pv->settings.vbv.bufsize > 0)
     {
-        float seconds = ((float)pv->settings.vbv.bufsize /
-                         (float)pv->settings.vbv.maxrate);
-        int bytes = pv->settings.vbv.maxrate * 125 * seconds;
-        CFNumberRef size = CFNumberCreate(kCFAllocatorDefault,
-                                          kCFNumberIntType, &bytes);
-        CFNumberRef duration = CFNumberCreate(kCFAllocatorDefault,
-                                              kCFNumberFloatType, &seconds);
-        CFMutableArrayRef dataRateLimits = CFArrayCreateMutable(kCFAllocatorDefault, 2,
-                                                                &kCFTypeArrayCallBacks);
-        CFArrayAppendValue(dataRateLimits, size);
-        CFArrayAppendValue(dataRateLimits, duration);
-        err = VTSessionSetProperty(pv->session,
-                                   kVTCompressionPropertyKey_DataRateLimits,
-                                   dataRateLimits);
-        CFRelease(size);
-        CFRelease(duration);
-        CFRelease(dataRateLimits);
-        if (err != noErr)
-        {
-            hb_log("VTSessionSetProperty: kVTCompressionPropertyKey_DataRateLimits failed");
-        }
+        set_data_rate_limits(pv->session, pv->settings.vbv.bufsize, pv->settings.vbv.maxrate);
     }
 
     if (pv->settings.fieldDetail != HB_VT_FIELDORDER_PROGRESSIVE)
@@ -1029,19 +1068,19 @@ static OSStatus init_vtsession(hb_work_object_t *w, hb_job_t *job, hb_work_priva
 
     err = VTSessionSetProperty(pv->session,
                                kVTCompressionPropertyKey_ColorPrimaries,
-                               hb_vt_colr_pri_xlat(pv->settings.color.prim));
+                               hb_cv_colr_pri_xlat(pv->settings.color.prim));
     if (err != noErr)
     {
         hb_log("VTSessionSetProperty: kVTCompressionPropertyKey_ColorPrimaries failed");
     }
     err = VTSessionSetProperty(pv->session,
                                kVTCompressionPropertyKey_TransferFunction,
-                               hb_vt_colr_tra_xlat(pv->settings.color.transfer));
+                               hb_cv_colr_tra_xlat(pv->settings.color.transfer));
     if (err != noErr)
     {
         hb_log("VTSessionSetProperty: kVTCompressionPropertyKey_TransferFunction failed");
     }
-    CFNumberRef gamma = hb_vt_colr_gamma_xlat(pv->settings.color.transfer);
+    CFNumberRef gamma = hb_cv_colr_gamma_xlat(pv->settings.color.transfer);
     err = VTSessionSetProperty(pv->session,
                                CFSTR("GammaLevel"),
                                gamma);
@@ -1056,27 +1095,27 @@ static OSStatus init_vtsession(hb_work_object_t *w, hb_job_t *job, hb_work_priva
     }
     err = VTSessionSetProperty(pv->session,
                                kVTCompressionPropertyKey_YCbCrMatrix,
-                               hb_vt_colr_mat_xlat(pv->settings.color.matrix));
+                               hb_cv_colr_mat_xlat(pv->settings.color.matrix));
     if (err != noErr)
     {
         hb_log("VTSessionSetProperty: kVTCompressionPropertyKey_YCbCrMatrix failed");
     }
     err = VTSessionSetProperty(pv->session,
                                CFSTR("ChromaLocationTopField"),
-                               hb_vt_chroma_loc_xlat(pv->settings.color.chromaLocation));
+                               hb_cv_chroma_loc_xlat(pv->settings.color.chromaLocation));
     if (err != noErr)
     {
         hb_log("VTSessionSetProperty: ChromaLocationTopField failed");
     }
     err = VTSessionSetProperty(pv->session,
                                    CFSTR("ChromaLocationBottomField"),
-                                   hb_vt_chroma_loc_xlat(pv->settings.color.chromaLocation));
+                                   hb_cv_chroma_loc_xlat(pv->settings.color.chromaLocation));
     if (err != noErr)
     {
         hb_log("VTSessionSetProperty: ChromaLocationBottomField failed");
     }
 
-    if (CFDictionaryContainsKey(supportedProps, kVTCompressionPropertyKey_MasteringDisplayColorVolume) &&
+    if (supportedProps != NULL && CFDictionaryContainsKey(supportedProps, kVTCompressionPropertyKey_MasteringDisplayColorVolume) &&
         pv->settings.color.masteringDisplay != NULL)
     {
         err = VTSessionSetProperty(pv->session,
@@ -1088,7 +1127,7 @@ static OSStatus init_vtsession(hb_work_object_t *w, hb_job_t *job, hb_work_priva
         }
     }
 
-    if (CFDictionaryContainsKey(supportedProps, kVTCompressionPropertyKey_MasteringDisplayColorVolume) &&
+    if (supportedProps != NULL && CFDictionaryContainsKey(supportedProps, kVTCompressionPropertyKey_ContentLightLevelInfo) &&
         pv->settings.color.contentLightLevel != NULL)
     {
         err = VTSessionSetProperty(pv->session,
@@ -1100,7 +1139,7 @@ static OSStatus init_vtsession(hb_work_object_t *w, hb_job_t *job, hb_work_priva
         }
     }
 
-    if (CFDictionaryContainsKey(supportedProps, CFSTR("AmbientViewingEnvironment")) &&
+    if (supportedProps != NULL && CFDictionaryContainsKey(supportedProps, CFSTR("AmbientViewingEnvironment")) &&
         pv->settings.color.ambientViewingEnviroment != NULL)
     {
         err = VTSessionSetProperty(pv->session,
@@ -1114,29 +1153,31 @@ static OSStatus init_vtsession(hb_work_object_t *w, hb_job_t *job, hb_work_priva
 
     if (__builtin_available(macOS 11.0, *))
     {
-        if (CFDictionaryContainsKey(supportedProps, kVTCompressionPropertyKey_HDRMetadataInsertionMode) &&
-            (pv->settings.color.masteringDisplay != NULL || pv->settings.color.contentLightLevel != NULL))
+        if (pv->settings.codec != kCMVideoCodecType_H264)
         {
-            err = VTSessionSetProperty(pv->session,
-                                       kVTCompressionPropertyKey_HDRMetadataInsertionMode,
-                                       kVTHDRMetadataInsertionMode_Auto);
-            if (err != noErr)
+            // VideoToolbox can generate Dolby Vision 8.4 RPUs for HLG video,
+            // however we preserve the RPUs from the source file, so disable it
+            // to avoid having two sets of RPUs per frame.
+            if (supportedProps != NULL && CFDictionaryContainsKey(supportedProps, kVTCompressionPropertyKey_HDRMetadataInsertionMode))
             {
-                hb_log("VTSessionSetProperty: kVTCompressionPropertyKey_HDRMetadataInsertionMode failed");
+                err = VTSessionSetProperty(pv->session,
+                                           kVTCompressionPropertyKey_HDRMetadataInsertionMode,
+                                           kVTHDRMetadataInsertionMode_None);
+                if (err != noErr)
+                {
+                    hb_log("VTSessionSetProperty: kVTCompressionPropertyKey_HDRMetadataInsertionMode failed");
+                }
             }
-        }
-    }
 
-    if (__builtin_available(macOS 13.0, *))
-    {
-        if (CFDictionaryContainsKey(supportedProps, kVTCompressionPropertyKey_PreserveDynamicHDRMetadata))
-        {
-            err = VTSessionSetProperty(pv->session,
-                                       kVTCompressionPropertyKey_PreserveDynamicHDRMetadata,
-                                       pv->settings.preserveDynamicHDRMetadata);
-            if (err != noErr)
+            if (supportedProps != NULL && CFDictionaryContainsKey(supportedProps, kVTCompressionPropertyKey_PreserveDynamicHDRMetadata))
             {
-                hb_log("VTSessionSetProperty: kVTCompressionPropertyKey_PreserveDynamicHDRMetadata failed");
+                err = VTSessionSetProperty(pv->session,
+                                           kVTCompressionPropertyKey_PreserveDynamicHDRMetadata,
+                                           pv->settings.preserveDynamicHDRMetadata);
+                if (err != noErr)
+                {
+                    hb_log("VTSessionSetProperty: kVTCompressionPropertyKey_PreserveDynamicHDRMetadata failed");
+                }
             }
         }
     }
@@ -1249,7 +1290,7 @@ static OSStatus init_vtsession(hb_work_object_t *w, hb_job_t *job, hb_work_priva
     // Multi-pass
     if (job->pass_id == HB_PASS_ENCODE_ANALYSIS && cookieOnly == 0)
     {
-        const char *filename = hb_get_temporary_filename("videotoolbox.log");
+        char *filename = hb_get_temporary_filename("videotoolbox.log");
 
         CFStringRef path = CFStringCreateWithCString(kCFAllocatorDefault, filename, kCFStringEncodingUTF8);
         CFURLRef url = CFURLCreateWithFileSystemPath(NULL, path, kCFURLPOSIXPathStyle, FALSE);
@@ -1276,8 +1317,9 @@ static OSStatus init_vtsession(hb_work_object_t *w, hb_job_t *job, hb_work_priva
             }
         }
 
-        CFRelease(path);
         CFRelease(url);
+        CFRelease(path);
+        free(filename);
     }
 
     err = VTCompressionSessionPrepareToEncodeFrames(pv->session);
@@ -1300,7 +1342,9 @@ static OSStatus init_vtsession(hb_work_object_t *w, hb_job_t *job, hb_work_priva
     {
         if (CFBooleanGetValue(allowFrameReordering))
         {
-            job->areBframes = job->vcodec == HB_VCODEC_VT_H265 || job->vcodec == HB_VCODEC_VT_H265_10BIT ? 2 : 1;
+            // There is no way to know if b-pyramid will be
+            // used or not, to be safe always assume it's enabled
+            job->areBframes = 2;
         }
         CFRelease(allowFrameReordering);
     }
@@ -1308,7 +1352,7 @@ static OSStatus init_vtsession(hb_work_object_t *w, hb_job_t *job, hb_work_priva
     return err;
 }
 
-static void set_h264_cookie(hb_work_object_t *w, CMFormatDescriptionRef format)
+static void set_cookie(hb_work_object_t *w, CMFormatDescriptionRef format)
 {
     CFDictionaryRef extentions = CMFormatDescriptionGetExtensions(format);
     if (!extentions)
@@ -1317,59 +1361,23 @@ static void set_h264_cookie(hb_work_object_t *w, CMFormatDescriptionRef format)
     }
     else
     {
+        CFStringRef key = CMVideoFormatDescriptionGetCodecType(format) == kCMVideoCodecType_H264 ? CFSTR("avcC") : CFSTR("hvcC");
         CFDictionaryRef atoms = CFDictionaryGetValue(extentions, kCMFormatDescriptionExtension_SampleDescriptionExtensionAtoms);
-        CFDataRef magicCookie = CFDictionaryGetValue(atoms, CFSTR("avcC"));
-
-        const uint8_t *avcCAtom = CFDataGetBytePtr(magicCookie);
-
-        SInt64 i;
-        int8_t spsCount = (avcCAtom[5] & 0x1f);
-        uint8_t ptrPos = 6;
-        uint8_t spsPos = 0;
-        for (i = 0; i < spsCount; i++) {
-            uint16_t spsSize = (avcCAtom[ptrPos++] << 8) & 0xff00;
-            spsSize += avcCAtom[ptrPos++] & 0xff;
-            memcpy(w->config->h264.sps + spsPos, avcCAtom+ptrPos, spsSize);;
-            ptrPos += spsSize;
-            spsPos += spsSize;
-        }
-        w->config->h264.sps_length = spsPos;
-
-        int8_t ppsCount = avcCAtom[ptrPos++];
-        uint8_t ppsPos = 0;
-        for (i = 0; i < ppsCount; i++)
+        if (atoms)
         {
-            uint16_t ppsSize = (avcCAtom[ptrPos++] << 8) & 0xff00;
-            ppsSize += avcCAtom[ptrPos++] & 0xff;
-            memcpy(w->config->h264.pps + ppsPos, avcCAtom+ptrPos, ppsSize);;
+            CFDataRef magicCookie = CFDictionaryGetValue(atoms, key);
 
-            ptrPos += ppsSize;
-            ppsPos += ppsSize;
+            if (magicCookie)
+            {
+                const uint8_t *hvcCAtom = CFDataGetBytePtr(magicCookie);
+                CFIndex size = CFDataGetLength(magicCookie);
+                hb_set_extradata(w->extradata, hvcCAtom, size);
+            }
+            else
+            {
+                hb_log("VTCompressionSession: Magic Cookie error");
+            }
         }
-        w->config->h264.pps_length = ppsPos;
-    }
-}
-
-static void set_h265_cookie(hb_work_object_t *w, CMFormatDescriptionRef format)
-{
-    CFDictionaryRef extensions = CMFormatDescriptionGetExtensions(format);
-    if (!extensions)
-    {
-        hb_log("VTCompressionSession: Format Description Extensions error");
-    }
-    else
-    {
-        CFDictionaryRef atoms = CFDictionaryGetValue(extensions, kCMFormatDescriptionExtension_SampleDescriptionExtensionAtoms);
-        CFDataRef magicCookie = CFDictionaryGetValue(atoms, CFSTR("hvcC"));
-        if (!magicCookie)
-        {
-            hb_log("VTCompressionSession: HEVC Magic Cookie error");
-        }
-
-        const uint8_t *hvcCAtom = CFDataGetBytePtr(magicCookie);
-        uint16_t size = CFDataGetLength(magicCookie);
-        memcpy(w->config->h265.headers, hvcCAtom, size);
-        w->config->h265.headers_length = size;
     }
 }
 
@@ -1437,15 +1445,7 @@ static OSStatus create_cookie(hb_work_object_t *w, hb_job_t *job, hb_work_privat
         {
             pv->format = format;
             CFRetain(pv->format);
-
-            if (pv->settings.codec == kCMVideoCodecType_H264)
-            {
-                set_h264_cookie(w, format);
-            }
-            else
-            {
-                set_h265_cookie(w, format);
-            }
+            set_cookie(w, format);
         }
         CFRelease(sampleBuffer);
     }
@@ -1468,18 +1468,12 @@ static OSStatus reuse_vtsession(hb_work_object_t *w, hb_job_t * job, hb_work_pri
     hb_interjob_t *interjob = hb_interjob_get(job->h);
     vt_interjob_t *context = interjob->context;
 
-    if (job->vcodec == HB_VCODEC_VT_H264)
-    {
-        set_h264_cookie(w, context->format);
-    }
-    else
-    {
-        set_h265_cookie(w, context->format);
-    }
+    set_cookie(w, context->format);
 
-    pv->queue = context->queue;
     pv->session = context->session;
     pv->passStorage = context->passStorage;
+    pv->queue = context->queue;
+    pv->format = context->format;
 
     if (err != noErr)
     {
@@ -1525,8 +1519,8 @@ static OSStatus reuse_vtsession(hb_work_object_t *w, hb_job_t * job, hb_work_pri
         CFRelease(allowFrameReordering);
     }
 
-    interjob->context = NULL;
     free(context);
+    interjob->context = NULL;
 
     return err;
 }
@@ -1564,6 +1558,42 @@ int encvt_init(hb_work_object_t *w, hb_job_t *job)
             hb_log("VTCompressionSession: Magic Cookie Error err=%"PRId64"", (int64_t)err);
             *job->die = 1;
             return -1;
+        }
+
+        // Read the actual level and tier and set
+        // the Dolby Vision level and data limits
+        if (job->passthru_dynamic_hdr_metadata & DOVI)
+        {
+            int level_idc, high_tier;
+            hb_parse_h265_extradata(*w->extradata, &level_idc, &high_tier);
+
+            int pps = (double)job->width * job->height * (job->vrate.num / job->vrate.den);
+            int bitrate = job->vquality == HB_INVALID_VIDEO_QUALITY ? job->vbitrate : -1;
+
+            // Dolby Vision requires VBV settings to enable HRD
+            // set the max value for the current level or guess one
+            if (pv->settings.vbv.maxrate == 0 || pv->settings.vbv.bufsize == 0)
+            {
+                int max_rate = hb_dovi_max_rate(job->vcodec, job->width, pps, bitrate * 1.5,
+                                                level_idc, high_tier);
+                pv->settings.vbv.maxrate = max_rate;
+                pv->settings.vbv.bufsize = max_rate;
+            }
+
+            job->dovi.dv_level = hb_dovi_level(job->width, pps, pv->settings.vbv.maxrate, high_tier);
+
+            // VideoToolbox CQ seems to not support data rate limits correctly,
+            // just set a high enough level for now, and reset the vbv settings
+            if (job->vquality != HB_INVALID_VIDEO_QUALITY)
+            {
+                pv->settings.vbv.maxrate = 0;
+                pv->settings.vbv.bufsize = 0;
+                hb_log("encvt_Init: data rate limits not supported in CQ mode, Dolby Vision file might be out of specs");
+            }
+            else
+            {
+                hb_log("encvt_Init: encoding Dolby Vision with automatic data rate limits: %d kbit/s", pv->settings.vbv.maxrate);
+            }
         }
 
         err = init_vtsession(w, job, pv, 0);
@@ -1657,6 +1687,171 @@ void encvt_close(hb_work_object_t * w)
     w->private_data = NULL;
 }
 
+static void insert_dynamic_metadata(hb_work_private_t *pv, CMSampleBufferRef sampleBuffer, hb_buffer_t **buf)
+{
+    if (pv->job->passthru_dynamic_hdr_metadata == 0)
+    {
+        return;
+    }
+
+    if (pv->nal_length_size == 0)
+    {
+        pv->nal_length_size = hb_vt_get_nal_length_size(sampleBuffer, pv->settings.codec);
+    }
+
+    if (pv->nal_length_size > 4)
+    {
+        hb_log("VTCompressionSession: unknown nal length size");
+        return;
+    }
+
+    hb_buffer_t *buf_in = *buf;
+    hb_sei_t seis[4];
+    size_t seis_count = 0;
+
+    if (buf_in->s.frametype == HB_FRAME_IDR)
+    {
+        if (pv->settings.color.contentLightLevel)
+        {
+            const uint8_t *coll_data = CFDataGetBytePtr(pv->settings.color.contentLightLevel);
+            size_t coll_size = CFDataGetLength(pv->settings.color.contentLightLevel);
+
+            seis[seis_count].type = HB_CONTENT_LIGHT_LEVEL_INFO;
+            seis[seis_count].payload = coll_data;
+            seis[seis_count].payload_size = coll_size;
+
+            seis_count += 1;
+        }
+
+        if (pv->settings.color.masteringDisplay)
+        {
+            const uint8_t *mastering_data = CFDataGetBytePtr(pv->settings.color.masteringDisplay);
+            size_t mastering_size = CFDataGetLength(pv->settings.color.masteringDisplay);
+
+            seis[seis_count].type = HB_MASTERING_DISPLAY_INFO;
+            seis[seis_count].payload = mastering_data;
+            seis[seis_count].payload_size = mastering_size;
+
+            seis_count += 1;
+        }
+    }
+
+    if (pv->job->passthru_dynamic_hdr_metadata & HDR_10_PLUS)
+    {
+        CFDataRef hdrPlus = CMGetAttachment(sampleBuffer, CFSTR("HB_HDR_PLUS"), NULL);
+        if (hdrPlus != NULL)
+        {
+            const uint8_t *sei_data = CFDataGetBytePtr(hdrPlus);
+            size_t sei_size = CFDataGetLength(hdrPlus);
+
+            seis[seis_count].type = HB_USER_DATA_REGISTERED_ITU_T_T35;
+            seis[seis_count].payload = sei_data;
+            seis[seis_count].payload_size = sei_size;
+
+            seis_count += 1;
+        }
+    }
+
+    hb_nal_t nals[1];
+    size_t nals_count = 0;
+
+    if (pv->job->passthru_dynamic_hdr_metadata & DOVI)
+    {
+        CFDataRef rpu = CMGetAttachment(sampleBuffer, CFSTR("HB_DOVI_RPU"), NULL);
+        if (rpu != NULL)
+        {
+            const uint8_t *rpu_data = CFDataGetBytePtr(rpu);
+            size_t rpu_size = CFDataGetLength(rpu);
+
+            nals[nals_count].type = HB_HEVC_NAL_UNIT_UNSPECIFIED;
+            nals[nals_count].payload = rpu_data;
+            nals[nals_count].payload_size = rpu_size;
+
+            nals_count += 1;
+        }
+    }
+
+    if (seis_count || nals_count)
+    {
+        hb_buffer_t *out = hb_isomp4_hevc_nal_bitstream_insert_payloads(buf_in->data, buf_in->size,
+                                                                        seis, seis_count,
+                                                                        nals, nals_count,
+                                                                        pv->nal_length_size);
+        if (out)
+        {
+            out->f = buf_in->f;
+            out->s = buf_in->s;
+            hb_buffer_close(buf);
+            *buf = out;
+        }
+    }
+}
+
+static void set_frametype(CMSampleBufferRef sampleBuffer, hb_buffer_t *buf)
+{
+    buf->s.frametype = HB_FRAME_IDR;
+    buf->s.flags |= HB_FLAG_FRAMETYPE_REF;
+
+    CFArrayRef attachmentsArray = CMSampleBufferGetSampleAttachmentsArray(sampleBuffer, 0);
+    if (CFArrayGetCount(attachmentsArray))
+    {
+        CFDictionaryRef dict = CFArrayGetValueAtIndex(attachmentsArray, 0);
+        CFBooleanRef notSync;
+        if (CFDictionaryGetValueIfPresent(dict, kCMSampleAttachmentKey_NotSync,(const void **) &notSync))
+        {
+            Boolean notSyncValue = CFBooleanGetValue(notSync);
+            if (notSyncValue)
+            {
+                CFBooleanRef b;
+                if (CFDictionaryGetValueIfPresent(dict, kCMSampleAttachmentKey_PartialSync, NULL))
+                {
+                    buf->s.frametype = HB_FRAME_I;
+                }
+                else if (CFDictionaryGetValueIfPresent(dict, kCMSampleAttachmentKey_IsDependedOnByOthers,(const void **) &b))
+                {
+                    Boolean bv = CFBooleanGetValue(b);
+                    if (bv)
+                    {
+                        buf->s.frametype = HB_FRAME_P;
+                    }
+                    else
+                    {
+                        buf->s.frametype = HB_FRAME_B;
+                        buf->s.flags &= ~HB_FLAG_FRAMETYPE_REF;
+                    }
+                }
+                else
+                {
+                   buf->s.frametype = HB_FRAME_P;
+                }
+            }
+        }
+    }
+}
+
+static void set_timestamps(hb_work_private_t *pv, CMSampleBufferRef sampleBuffer, hb_buffer_t *buf)
+{
+    CMTime presentationTimeStamp = CMSampleBufferGetPresentationTimeStamp(sampleBuffer);
+    CMTime duration = CMSampleBufferGetDuration(sampleBuffer);
+
+    buf->s.start = presentationTimeStamp.value;
+    buf->s.stop  = presentationTimeStamp.value + buf->s.duration;
+    buf->s.duration = duration.value;
+
+    // Use the cached frame info to get the start time of Nth frame
+    // Note that start Nth frame != start time this buffer since the
+    // output buffers have rearranged start times.
+    if (pv->frameno_out < pv->job->areBframes)
+    {
+        buf->s.renderOffset = get_frame_start(pv, pv->frameno_out) - pv->dts_delay;
+    }
+    else
+    {
+        buf->s.renderOffset = get_frame_start(pv, pv->frameno_out - pv->job->areBframes);
+    }
+    pv->frameno_out++;
+}
+
 static hb_buffer_t * extract_buf(CMSampleBufferRef sampleBuffer, hb_work_object_t *w)
 {
     OSStatus err;
@@ -1702,64 +1897,9 @@ static hb_buffer_t * extract_buf(CMSampleBufferRef sampleBuffer, hb_work_object_
             }
         }
 
-        buf->s.frametype = HB_FRAME_IDR;
-        buf->s.flags |= HB_FLAG_FRAMETYPE_REF;
-
-        CFArrayRef attachmentsArray = CMSampleBufferGetSampleAttachmentsArray(sampleBuffer, 0);
-        if (CFArrayGetCount(attachmentsArray))
-        {
-            CFDictionaryRef dict = CFArrayGetValueAtIndex(attachmentsArray, 0);
-            CFBooleanRef notSync;
-            if (CFDictionaryGetValueIfPresent(dict, kCMSampleAttachmentKey_NotSync,(const void **) &notSync))
-            {
-                Boolean notSyncValue = CFBooleanGetValue(notSync);
-                if (notSyncValue)
-                {
-                    CFBooleanRef b;
-                    if (CFDictionaryGetValueIfPresent(dict, kCMSampleAttachmentKey_PartialSync, NULL))
-                    {
-                        buf->s.frametype = HB_FRAME_I;
-                    }
-                    else if (CFDictionaryGetValueIfPresent(dict, kCMSampleAttachmentKey_IsDependedOnByOthers,(const void **) &b))
-                    {
-                        Boolean bv = CFBooleanGetValue(b);
-                        if (bv)
-                        {
-                            buf->s.frametype = HB_FRAME_P;
-                        }
-                        else
-                        {
-                            buf->s.frametype = HB_FRAME_B;
-                            buf->s.flags &= ~HB_FLAG_FRAMETYPE_REF;
-                        }
-                    }
-                    else
-                    {
-                       buf->s.frametype = HB_FRAME_P;
-                    }
-                }
-            }
-        }
-
-        CMTime presentationTimeStamp = CMSampleBufferGetPresentationTimeStamp(sampleBuffer);
-        CMTime duration = CMSampleBufferGetDuration(sampleBuffer);
-
-        buf->s.start = presentationTimeStamp.value;
-        buf->s.stop  = presentationTimeStamp.value + buf->s.duration;
-        buf->s.duration = duration.value;
-
-        // Use the cached frame info to get the start time of Nth frame
-        // Note that start Nth frame != start time this buffer since the
-        // output buffers have rearranged start times.
-        if (pv->frameno_out < pv->job->areBframes)
-        {
-            buf->s.renderOffset = get_frame_start(pv, pv->frameno_out) - pv->dts_delay;
-        }
-        else
-        {
-            buf->s.renderOffset = get_frame_start(pv, pv->frameno_out - pv->job->areBframes);
-        }
-        pv->frameno_out++;
+        set_frametype(sampleBuffer, buf);
+        set_timestamps(pv, sampleBuffer, buf);
+        insert_dynamic_metadata(pv, sampleBuffer, &buf);
 
         if (buf->s.frametype == HB_FRAME_IDR)
         {
@@ -1790,11 +1930,17 @@ static hb_buffer_t *vt_encode(hb_work_object_t *w, hb_buffer_t *in)
         CFDictionaryRef frameProperties = NULL;
         if (in->s.new_chap && job->chapter_markers)
         {
-            // chapters have to start with an IDR frame
-            const void *keys[1] = { kVTEncodeFrameOptionKey_ForceKeyFrame };
-            const void *values[1] = { kCFBooleanTrue };
+            // macOS Sonoma has got an unfixed bug that makes the whole
+            // system crash and restart on M* Ultra if we force a keyframe
+            // on the first frame. So avoid that.
+            if (pv->frameno_in)
+            {
+                // chapters have to start with an IDR frame
+                const void *keys[1] = { kVTEncodeFrameOptionKey_ForceKeyFrame };
+                const void *values[1] = { kCFBooleanTrue };
 
-            frameProperties = CFDictionaryCreate(NULL, keys, values, 1, &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks);
+                frameProperties = CFDictionaryCreate(NULL, keys, values, 1, &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks);
+            }
 
             hb_chapter_enqueue(pv->chapter_queue, in);
         }
@@ -1895,6 +2041,10 @@ int encvt_work(hb_work_object_t *w, hb_buffer_t **buf_in, hb_buffer_t **buf_out)
             {
                 hb_log("VTCompressionSessionEndPass error");
             }
+            if (furtherPassesRequestedOut == false)
+            {
+                hb_log("VTCompressionSessionEndPass: no additional pass requested");
+            }
 
             // Save the sessions and the related context
             // for the next pass.
@@ -1909,9 +2059,7 @@ int encvt_work(hb_work_object_t *w, hb_buffer_t **buf_in, hb_buffer_t **buf_out)
         }
         else if (job->pass_id == HB_PASS_ENCODE_FINAL)
         {
-            VTCompressionSessionEndPass(pv->session,
-                                        NULL,
-                                        0);
+            VTCompressionSessionEndPass(pv->session, NULL, 0);
         }
 
         return HB_WORK_DONE;

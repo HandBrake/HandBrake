@@ -1,6 +1,6 @@
-__deps__ := A52DEC BZIP2 LIBVPX SVT-AV1 FFMPEG FREETYPE LAME LIBASS LIBDCA \
-    LIBDVDREAD LIBDVDNAV LIBICONV LIBSAMPLERATE LIBTHEORA LIBVORBIS LIBOGG \
-    LIBXML2 X264 X265 ZLIB LIBBLURAY FDKAAC LIBVPL LIBGNURX JANSSON \
+__deps__ := BZIP2 LIBVPX SVT-AV1 FFMPEG FREETYPE LAME LIBASS \
+    LIBDVDREAD LIBDVDNAV LIBICONV LIBTHEORA LIBVORBIS LIBOGG \
+    X264 X265 ZLIB LIBBLURAY FDKAAC LIBVPL LIBGNURX JANSSON \
     HARFBUZZ LIBOPUS LIBSPEEX LIBDAV1D LIBJPEGTURBO LIBDOVI
 
 ifeq (,$(filter $(HOST.system),darwin cygwin mingw))
@@ -12,6 +12,7 @@ endif
 
 $(eval $(call import.MODULE.defs,LIBHB,libhb,$(__deps__)))
 $(eval $(call import.GCC,LIBHB))
+$(eval $(call import.METAL,LIBHB))
 
 ###############################################################################
 
@@ -24,6 +25,7 @@ LIBHB.m4.out = $(patsubst $(LIBHB.src/)%.m4,$(LIBHB.build/)%,$(LIBHB.m4.in))
 LIBHB.c   = $(wildcard $(LIBHB.src/)*.c)
 LIBHB.c.o = $(patsubst $(SRC/)%.c,$(BUILD/)%.o,$(LIBHB.c))
 LIBHB.m.o = $(patsubst $(SRC/)%.m,$(BUILD/)%.o,$(LIBHB.m))
+LIBHB.metal.o = $(patsubst $(SRC/)%.metal,$(BUILD/)%.o,$(LIBHB.metal))
 LIBHB.d   = $(LIBHB.m4.out) $(LIBHB.h.out) \
     $(foreach n,$(LIBHB.prerequisites),$($n.INSTALL.target) )
 
@@ -40,6 +42,7 @@ LIBHB.a = $(LIBHB.build/)$(call TARGET.archive,handbrake)
 LIBHB.out += $(LIBHB.m4.out)
 LIBHB.out += $(LIBHB.c.o)
 LIBHB.out += $(LIBHB.m.o)
+LIBHB.out += $(LIBHB.metal.o)
 LIBHB.out += $(LIBHB.h.out)
 LIBHB.out += $(LIBHB.a)
 
@@ -58,21 +61,6 @@ endif
 
 ifneq (,$(filter $(HOST.system),freebsd netbsd openbsd))
     LIBHB.GCC.I += $(LOCALBASE)/include
-    LIBHB.GCC.I += $(LOCALBASE)/include/libxml2
-else ifneq (,$(filter $(HOST.system),darwin cygwin mingw))
-    LIBHB.GCC.I += $(CONTRIB.build/)include/libxml2
-    LIBHB.GCC.D += LIBXML_STATIC
-else
-    LIBHB.libxml2 := $(shell $(PKGCONFIG.exe) --silence-errors --cflags libxml2)
-    ifeq (,$(LIBHB.libxml2))
-        LIBHB.libxml2 := $(shell $(PKGCONFIG.exe) --silence-errors --cflags libxml-2.0)
-    endif
-    ifneq (,$(LIBHB.libxml2))
-        LIBHB.libxml2 := $(patsubst -I%,%,$(LIBHB.libxml2))
-        LIBHB.GCC.I += $(LIBHB.libxml2)
-    else
-        LIBHB.GCC.I += /usr/include/libxml2
-    endif
 endif
 
 ifeq ($(HOST.system),cygwin)
@@ -81,6 +69,7 @@ else ifeq ($(HOST.system),darwin)
     LIBHB.GCC.D += SYS_DARWIN
     LIBHB.c += $(wildcard $(LIBHB.src/)platform/macosx/*.c)
     LIBHB.m += $(wildcard $(LIBHB.src/)platform/macosx/*.m)
+    LIBHB.metal += $(wildcard $(LIBHB.src/)platform/macosx/shaders/*.metal)
 else ifeq ($(HOST.system),linux)
     LIBHB.GCC.D += SYS_LINUX _LARGEFILE_SOURCE _FILE_OFFSET_BITS=64
 else ifeq ($(HOST.system),freebsd)
@@ -127,8 +116,8 @@ LIBHB.dll = $(LIBHB.build/)hb.dll
 LIBHB.lib = $(LIBHB.build/)hb.lib
 
 LIBHB.dll.libs = $(foreach n, \
-        ass avformat avfilter avcodec avutil swresample postproc dvdnav dvdread \
-        freetype mp3lame swscale vpx theora vorbis vorbisenc ogg x264 xml2 \
+        ass avformat avfilter avcodec avutil swresample dvdnav dvdread \
+        freetype mp3lame swscale vpx theora vorbis vorbisenc ogg x264 \
         bluray jansson harfbuzz opus speex dav1d turbojpeg zimg SvtAv1Enc, \
         $(CONTRIB.build/)lib/lib$(n).a )
 

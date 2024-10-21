@@ -1,6 +1,6 @@
 /* encavcodecaudio.c
 
-   Copyright (c) 2003-2022 HandBrake Team
+   Copyright (c) 2003-2024 HandBrake Team
    This file is part of the HandBrake source code
    Homepage: <http://handbrake.fr/>.
    It may be used under the terms of the GNU General Public License v2.
@@ -9,6 +9,7 @@
 
 #include "handbrake/handbrake.h"
 #include "handbrake/hbffmpeg.h"
+#include "handbrake/extradata.h"
 
 struct hb_work_private_s
 {
@@ -20,8 +21,8 @@ struct hb_work_private_s
     int              samples_per_frame;
     unsigned long    max_output_bytes;
     unsigned long    input_samples;
-    uint8_t        * output_buf;
-    uint8_t        * input_buf;
+    float          * output_buf;
+    float          * input_buf;
     hb_list_t      * list;
 
     SwrContext     * swresample;
@@ -74,7 +75,7 @@ static int encavcodecaInit(hb_work_object_t *w, hb_job_t *job)
     enum AVCodecID codec_id        = AV_CODEC_ID_NONE;
     enum AVSampleFormat sample_fmt = AV_SAMPLE_FMT_FLTP;
     int bits_per_raw_sample        = 0;
-    int profile                    = FF_PROFILE_UNKNOWN;
+    int profile                    = AV_PROFILE_UNKNOWN;
 
     // override with encoder-specific values
     switch (audio->config.out.codec)
@@ -99,10 +100,10 @@ static int encavcodecaInit(hb_work_object_t *w, hb_job_t *job)
             switch (audio->config.out.codec)
             {
                 case HB_ACODEC_FDK_HAAC:
-                    profile = FF_PROFILE_AAC_HE;
+                    profile = AV_PROFILE_AAC_HE;
                     break;
                 default:
-                    profile = FF_PROFILE_AAC_LOW;
+                    profile = AV_PROFILE_AAC_LOW;
                     break;
             }
             // FFmpeg's libfdk-aac wrapper expects back channels for 5.1
@@ -136,6 +137,10 @@ static int encavcodecaInit(hb_work_object_t *w, hb_job_t *job)
             }
             break;
 
+        case HB_ACODEC_FFTRUEHD:
+            codec_id = AV_CODEC_ID_TRUEHD;
+            break;
+
         case HB_ACODEC_LAME:
             codec_name = "libmp3lame";
             break;
@@ -146,6 +151,8 @@ static int encavcodecaInit(hb_work_object_t *w, hb_job_t *job)
             // audio, and will error out unless we translate the layout
             if (channel_layout == AV_CH_LAYOUT_5POINT1)
                 channel_layout  = AV_CH_LAYOUT_5POINT1_BACK;
+            if (hb_layout_get_discrete_channel_count(channel_layout) > 2)
+                av_dict_set(&av_opts, "mapping_family", "1", 0);
             break;
 
         default:
@@ -220,8 +227,7 @@ static int encavcodecaInit(hb_work_object_t *w, hb_job_t *job)
         hb_error("encavcodecaInit: hb_avcodec_open() failed");
         return 1;
     }
-    w->config->init_delay = av_rescale(context->initial_padding,
-                                       90000, context->sample_rate);
+    *w->init_delay = av_rescale(context->initial_padding, 90000, context->sample_rate);
 
     // avcodec_open populates the opts dictionary with the
     // things it didn't recognize.
@@ -257,10 +263,10 @@ static int encavcodecaInit(hb_work_object_t *w, hb_job_t *job)
                        AV_SAMPLE_FMT_FLT, 0);
         av_opt_set_int(pv->swresample, "out_sample_fmt",
                        context->sample_fmt, 0);
-        av_opt_set_int(pv->swresample, "in_channel_layout",
-                       context->ch_layout.u.mask, 0);
-        av_opt_set_int(pv->swresample, "out_channel_layout",
-                       context->ch_layout.u.mask, 0);
+        av_opt_set_chlayout(pv->swresample, "in_chlayout",
+                       &context->ch_layout, 0);
+        av_opt_set_chlayout(pv->swresample, "out_chlayout",
+                       &context->ch_layout, 0);
         av_opt_set_int(pv->swresample, "in_sample_rate",
                        context->sample_rate, 0);
         av_opt_set_int(pv->swresample, "out_sample_rate",
@@ -287,9 +293,7 @@ static int encavcodecaInit(hb_work_object_t *w, hb_job_t *job)
 
     if (context->extradata != NULL)
     {
-        memcpy(w->config->extradata.bytes, context->extradata,
-               context->extradata_size);
-        w->config->extradata.length = context->extradata_size;
+        hb_set_extradata(w->extradata, context->extradata, context->extradata_size);
     }
 
     return 0;
@@ -309,9 +313,8 @@ static void Finalize(hb_work_object_t *w)
     // Then we need to recopy the header since it was modified
     if (pv->context->extradata != NULL)
     {
-        memcpy(w->config->extradata.bytes, pv->context->extradata,
-               pv->context->extradata_size);
-        w->config->extradata.length = pv->context->extradata_size;
+        hb_set_extradata(w->extradata, pv->context->extradata,
+                         pv->context->extradata_size);
     }
 }
 
@@ -417,7 +420,7 @@ static void Encode(hb_work_object_t *w, hb_buffer_list_t *list)
     {
         int ret;
 
-        hb_list_getbytes(pv->list, pv->input_buf,
+        hb_list_getbytes(pv->list, (uint8_t *)pv->input_buf,
                          pv->input_samples * sizeof(float), &pts, &pos);
 
         // Prepare input frame
@@ -433,7 +436,7 @@ static void Encode(hb_work_object_t *w, hb_buffer_list_t *list)
                                               pv->context->sample_fmt, 1);
         avcodec_fill_audio_frame(&frame,
                                  pv->context->ch_layout.nb_channels, pv->context->sample_fmt,
-                                 pv->output_buf, out_size, 1);
+                                 (uint8_t *)pv->output_buf, out_size, 1);
         if (pv->swresample != NULL)
         {
             int out_samples;

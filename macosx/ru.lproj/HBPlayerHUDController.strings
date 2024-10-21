@@ -31,12 +31,6 @@
 /* Class = "NSSlider"; ibShadowedToolTip = "Drag to change volume."; ObjectID = "gzA-no-jdv"; */
 "gzA-no-jdv.ibShadowedToolTip" = "Перетащите для изменения громкости.";
 
-/* Class = "NSButton"; ibExternalAccessibilityDescription = "Full Volume"; ObjectID = "Kiv-cL-wYI"; */
-"Kiv-cL-wYI.ibExternalAccessibilityDescription" = "Полная громкость";
-
-/* Class = "NSButton"; ibShadowedToolTip = "Full Volume"; ObjectID = "Kiv-cL-wYI"; */
-"Kiv-cL-wYI.ibShadowedToolTip" = "Полная громкость";
-
 /* Class = "NSSlider"; ibExternalAccessibilityDescription = "Timeline"; ObjectID = "lBp-JT-ehn"; */
 "lBp-JT-ehn.ibExternalAccessibilityDescription" = "Временная шкала";
 

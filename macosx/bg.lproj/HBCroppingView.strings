@@ -1,0 +1,39 @@
+/* Class = "NSTextField"; ibExternalAccessibilityDescription = "Crop bottom"; ObjectID = "6Gj-ZU-E1E"; */
+"6Gj-ZU-E1E.ibExternalAccessibilityDescription" = "Изрязване отдолу";
+
+/* Class = "NSStepper"; ibExternalAccessibilityDescription = "Crop top"; ObjectID = "8e5-zI-IBg"; */
+"8e5-zI-IBg.ibExternalAccessibilityDescription" = "Изрязване отгоре";
+
+/* Class = "NSMenuItem"; title = "Conservative"; ObjectID = "8Vn-fL-hvM"; */
+"8Vn-fL-hvM.title" = "Консервативно";
+
+/* Class = "NSTextField"; ibExternalAccessibilityDescription = "Crop top"; ObjectID = "Cp5-xz-x1h"; */
+"Cp5-xz-x1h.ibExternalAccessibilityDescription" = "Изрязване отгоре";
+
+/* Class = "NSPopUpButton"; ibShadowedToolTip = "Rotate the picture clockwise in 90 degree increments."; ObjectID = "cWv-q0-EN9"; */
+"cWv-q0-EN9.ibShadowedToolTip" = "Завъртане на изображението в посока на часовниковата стрелка на 90 градусови стъпки.";
+
+/* Class = "NSMenuItem"; title = "Custom"; ObjectID = "dD5-og-dxx"; */
+"dD5-og-dxx.title" = "Персонализиране";
+
+/* Class = "NSTextField"; ibExternalAccessibilityDescription = "Crop right"; ObjectID = "php-p6-Nz6"; */
+"php-p6-Nz6.ibExternalAccessibilityDescription" = "Изрязване вдясно";
+
+/* Class = "NSMenuItem"; title = "None"; ObjectID = "Pqk-fS-pyy"; */
+"Pqk-fS-pyy.title" = "Няма";
+
+/* Class = "NSMenuItem"; title = "Automatic"; ObjectID = "sUG-Cw-nQU"; */
+"sUG-Cw-nQU.title" = "Автоматично";
+
+/* Class = "NSStepper"; ibExternalAccessibilityDescription = "Crop bottom"; ObjectID = "sWf-fq-lvl"; */
+"sWf-fq-lvl.ibExternalAccessibilityDescription" = "Изрязване отдолу";
+
+/* Class = "NSTextField"; ibExternalAccessibilityDescription = "Crop left"; ObjectID = "Td7-sa-0TV"; */
+"Td7-sa-0TV.ibExternalAccessibilityDescription" = "Изрязване вляво";
+
+/* Class = "NSStepper"; ibExternalAccessibilityDescription = "Crop right"; ObjectID = "y7P-yk-q46"; */
+"y7P-yk-q46.ibExternalAccessibilityDescription" = "Изрязване вдясно";
+
+/* Class = "NSStepper"; ibExternalAccessibilityDescription = "Crop left"; ObjectID = "Yua-R6-mWU"; */
+"Yua-R6-mWU.ibExternalAccessibilityDescription" = "Изрязване вляво";
+

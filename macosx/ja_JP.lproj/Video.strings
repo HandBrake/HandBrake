@@ -1,9 +1,6 @@
 /* Class = "CocoaBindingsConnection"; ibShadowedIsNilPlaceholder = "auto"; ObjectID = "4Hq-BG-Ulb"; */
 "4Hq-BG-Ulb.ibShadowedIsNilPlaceholder" = "自動";
 
-/* Class = "NSMenu"; title = "OtherViews"; ObjectID = "6Cs-jo-8Q6"; */
-"6Cs-jo-8Q6.title" = "他のビュー";
-
 /* Class = "NSButtonCell"; title = "Constant Framerate"; ObjectID = "6Dd-IP-Pwt"; */
 "6Dd-IP-Pwt.title" = "固定フレームレート";
 
@@ -15,9 +12,6 @@
 
 /* Class = "NSTextField"; ibShadowedToolTip = "Average Bitrate varies quality to ensure the data rate remains relatively consistent throughout the video."; ObjectID = "A3o-Zx-OfM"; */
 "A3o-Zx-OfM.ibShadowedToolTip" = "平均ビットレートは映像の全てを通して比較的同じデータレートを保つように品質を調整します。";
-
-/* Class = "NSMenu"; title = "OtherViews"; ObjectID = "Aes-nP-7qS"; */
-"Aes-nP-7qS.title" = "他のビュー";
 
 /* Class = "NSButton"; ibShadowedToolTip = "Multi-pass encoding analyzes the entire source video before encoding. The information gathered enables the encoder to make more informed decisions about quality and data rate in Average Bitrate mode."; ObjectID = "bnV-aE-FVh"; */
 "bnV-aE-FVh.ibShadowedToolTip" = "複数エンコードはエンコード前にソース全体を解析します。その情報は平均ビットレートモードでエンコードするときの品質とデータレートの情報として使用されます。";
@@ -55,9 +49,6 @@
 /* Class = "NSTextField"; ibShadowedToolTip = "Additional video encoder options. For advanced use only.\n\nSyntax: option-1=foo:opt2=bar"; ObjectID = "gEp-lv-YUY"; */
 "gEp-lv-YUY.ibShadowedToolTip" = "追加のビデオエンコーダーオプションです。応用的な利用のみ。\n\nSyntax: option-1=foo:opt2=bar";
 
-/* Class = "NSMenu"; title = "OtherViews"; ObjectID = "gIJ-Xs-uVF"; */
-"gIJ-Xs-uVF.title" = "他のビュー";
-
 /* Class = "NSSlider"; ibShadowedToolTip = "Constant Quality varies bitrate to ensure visual quality remains relatively consistent throughout the video.\n\nAdjust the quality slider to the right to increase quality or to the left to decrease quality, in small increments of plus or minus 1-2.\n\nRecommended values for the x264 and x265 encoders are RF 18-28. Higher quality settings may produce extremely large files.\n\nx264 is lossless at RF 0."; ObjectID = "GPu-Ht-bKg"; */
 "GPu-Ht-bKg.ibShadowedToolTip" = "固定品質は映像の全てを通して比較的同じ品質を保つようにビットレートを調整します。\n\n品質スライダーを右に調節すると品質が上がり左では下がり、1から2ごとに増減できます。\n\nx264とx265エンコーダーでの推奨値はRF 18-28です。高い品質の設定は非常に大きなファイルサイズになることがあります。\n\nx264はRF 0でロスレスです。";
 
@@ -66,9 +57,6 @@
 
 /* Class = "NSTextFieldCell"; title = "Additional Options:"; ObjectID = "ja7-Zr-y1P"; */
 "ja7-Zr-y1P.title" = "追加のオプション:";
-
-/* Class = "NSMenu"; title = "OtherViews"; ObjectID = "Jj0-Qw-HF8"; */
-"Jj0-Qw-HF8.title" = "他のビュー";
 
 /* Class = "NSPopUpButton"; ibShadowedToolTip = "Video encoder profile. Sets and ensures compliance with the specified video compression standard profile. Overrides all other settings."; ObjectID = "kh8-d2-hSD"; */
 "kh8-d2-hSD.ibShadowedToolTip" = "ビデオエンコーダーのプロファイルです。指定の圧縮標準プロファイルを設定してそれに従います。他の設定を全て上書きします。";
@@ -93,9 +81,6 @@
 
 /* Class = "NSTextFieldCell"; title = "RF:"; ObjectID = "rRB-9F-pHn"; */
 "rRB-9F-pHn.title" = "RF:";
-
-/* Class = "NSMenu"; title = "OtherViews"; ObjectID = "rXn-NC-pEv"; */
-"rXn-NC-pEv.title" = "他のビュー";
 
 /* Class = "NSTextFieldCell"; title = "Framerate (FPS):"; ObjectID = "SJc-tv-AMH"; */
 "SJc-tv-AMH.title" = "フレームレート (FPS):";

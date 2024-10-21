@@ -22,23 +22,14 @@
 /* Class = "NSTextField"; ibExternalAccessibilityDescription = "Size summary"; ObjectID = "Jaw-pH-rhf"; */
 "Jaw-pH-rhf.ibExternalAccessibilityDescription" = "サイズ概要";
 
-/* Class = "NSButton"; ibShadowedToolTip = "Optimize MP4 for progressive download. After encoding, data is reorganized and rewritten to allow immediate playback over a network, without needing to download the entire file."; ObjectID = "JNB-kV-52S"; */
-"JNB-kV-52S.ibShadowedToolTip" = "MP4 ファイルをプログレッシブダウンロード用に最適化します。エンコード後にデータが再構築され、これによりファイル全体をダウンロードすることなくネットワーク経由で再生を開始できます。";
-
-/* Class = "NSButton"; ibShadowedToolTip = "Optimize MP4 for progressive download. After encoding, data is reorganized and rewritten to allow immediate playback over a network, without needing to download the entire file."; ObjectID = "lUi-Oc-208"; */
-"lUi-Oc-208.ibShadowedToolTip" = "MP4 ファイルをプログレッシブダウンロード用に最適化します。エンコード後にデータが再構築され、これによりファイル全体をダウンロードすることなくネットワーク経由で再生を開始できます。";
+/* Class = "NSButton"; ibShadowedToolTip = "Optimize for progressive download. After encoding, data is reorganized and rewritten to allow immediate playback over a network, without needing to download the entire file."; ObjectID = "lUi-Oc-208"; */
+"lUi-Oc-208.ibShadowedToolTip" = "プログレッシブダウンロードに最適化します。エンコードが終わるとデータの再整理が行われ、ファイル全体をダウンロードすることなくネットワークを通して直ちに再生ができるようになります。";
 
 /* Class = "NSView"; ibExternalAccessibilityDescription = "Preview"; ObjectID = "m5a-0z-QQ4"; */
 "m5a-0z-QQ4.ibExternalAccessibilityDescription" = "プレビュー";
 
-/* Class = "NSButtonCell"; title = "Web Optimized"; ObjectID = "ma8-UR-dx2"; */
-"ma8-UR-dx2.title" = "ウェブ用に最適化";
-
 /* Class = "NSTextFieldCell"; title = "Filters:"; ObjectID = "OCw-f6-uA0"; */
 "OCw-f6-uA0.title" = "フィルター:";
-
-/* Class = "NSMenu"; title = "OtherViews"; ObjectID = "Q1Z-yT-7iY"; */
-"Q1Z-yT-7iY.title" = "他のビュー";
 
 /* Class = "NSButton"; ibShadowedToolTip = "Add a special MP4 marker to allow playback on vintage iPod 5th Generation devices circa 2006. Other settings may affect compatibility."; ObjectID = "QKv-GR-d2g"; */
 "QKv-GR-d2g.ibShadowedToolTip" = "2006年ごろの古い第5世代iPodで再生するために特別なMP4マーカーを追加します。他の設定も互換性に影響します。";

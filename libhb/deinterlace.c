@@ -1,6 +1,6 @@
 /* deinterlace.c
 
-   Copyright (c) 2003-2022 HandBrake Team
+   Copyright (c) 2003-2024 HandBrake Team
    This file is part of the HandBrake source code
    Homepage: <http://handbrake.fr/>.
    It may be used under the terms of the GNU General Public License v2.
@@ -106,6 +106,7 @@ static int deinterlace_init(hb_filter_object_t * filter,
             hb_dict_set(avsettings, "mode",
                         hb_value_string("send_field_nospatial"));
         }
+        init->vrate.num *= 2;
     }
     else
     {

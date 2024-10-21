@@ -79,6 +79,11 @@ NSString * const HBQueueWorkerItemNotificationItemKey = @"HBQueueWorkerItemNotif
     [self.core invalidate];
 }
 
+- (void)invalidate
+{
+    [self.core invalidate];
+}
+
 - (BOOL)canEncode
 {
     return self.item == nil;
@@ -199,6 +204,7 @@ NSString * const HBQueueWorkerItemNotificationItemKey = @"HBQueueWorkerItemNotif
            minDuration:0
           keepPreviews:NO
        hardwareDecoder:[NSUserDefaults.standardUserDefaults boolForKey:HBUseHardwareDecoder]
+       keepDuplicateTitles:item.job.keepDuplicateTitles
        progressHandler:progressHandler
      completionHandler:completionHandler];
 }

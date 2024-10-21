@@ -17,17 +17,15 @@
 /// left in outputTextStorage.
 #define TextStorageLowerSizeLimit 120000
 
-@interface HBOutputPanelController () <HBOutputRedirectListening>
+@interface HBOutputPanelController () <HBOutputRedirectListening, NSWindowDelegate>
 
-/// Textview that displays debug output.
 @property (nonatomic, unsafe_unretained) IBOutlet NSTextView *textView;
 
-/// Text storage for the debug output.
-@property (nonatomic, readonly) NSTextStorage *outputTextStorage;
+@property (nonatomic, readonly) NSMutableString *textBuffer;
 @property (nonatomic, readonly) NSDictionary *textAttributes;
 
-/// Path to log text file.
-@property (nonatomic, copy, readonly) HBOutputFileWriter *outputFile;
+@property (nonatomic, readonly) HBOutputFileWriter *outputWriter;
+@property (nonatomic) NSTimer *timer;
 
 @end
 
@@ -40,24 +38,24 @@
 {
     if( (self = [super initWithWindowNibName:@"OutputPanel"]) )
     {
-        // We initialize the outputTextStorage object for the activity window
-        _outputTextStorage = [[NSTextStorage alloc] init];
-
-        // Text attributes
         _textAttributes = @{NSForegroundColorAttributeName: NSColor.textColor};
+        _textBuffer = [[NSMutableString alloc] init];
 
         // Add ourself as stderr/stdout listener
         [HBOutputRedirect.stderrRedirect addListener:self queue:dispatch_get_main_queue()];
         [HBOutputRedirect.stdoutRedirect addListener:self queue:dispatch_get_main_queue()];
 
         // Redirect the output to a file on the disk.
-        NSURL *outputLogFile = [HBUtilities.appSupportURL URLByAppendingPathComponent:@"HandBrake-activitylog.txt"];
-
-        _outputFile = [[HBOutputFileWriter alloc] initWithFileURL:outputLogFile];
-        if (_outputFile)
+        NSURL *outputLogURL = [HBUtilities.appSupportURL URLByAppendingPathComponent:@"HandBrake-activitylog.txt" isDirectory:NO];
+        if (outputLogURL)
         {
-            [HBOutputRedirect.stderrRedirect addListener:_outputFile queue:dispatch_get_main_queue()];
-            [HBOutputRedirect.stdoutRedirect addListener:_outputFile queue:dispatch_get_main_queue()];
+            _outputWriter = [[HBOutputFileWriter alloc] initWithFileURL:outputLogURL];
+
+            if (_outputWriter)
+            {
+                [HBOutputRedirect.stderrRedirect addListener:_outputWriter queue:dispatch_get_main_queue()];
+                [HBOutputRedirect.stdoutRedirect addListener:_outputWriter queue:dispatch_get_main_queue()];
+            }
         }
 
         [self writeHeader];
@@ -67,25 +65,32 @@
 
 - (void)dealloc
 {
+    [self stopTimer];
     [HBOutputRedirect.stderrRedirect removeListener:self];
     [HBOutputRedirect.stdoutRedirect removeListener:self];
 }
 
 - (void)windowDidLoad
 {
-    [super windowDidLoad];
-
-    [_textView.layoutManager replaceTextStorage:_outputTextStorage];
-    [_textView.enclosingScrollView setLineScroll:10];
-    [_textView.enclosingScrollView setPageScroll:20];
-
-    [_textView scrollToEndOfDocument:self];
+    self.window.tabbingMode = NSWindowTabbingModeDisallowed;
 }
 
 - (IBAction)showWindow:(id)sender
 {
-    [_textView scrollToEndOfDocument:self];
     [super showWindow:sender];
+    [self displayBuffer];
+}
+
+- (void)windowDidChangeOcclusionState:(NSNotification *)notification
+{
+    if (self.window.occlusionState & NSWindowOcclusionStateVisible)
+    {
+        [self startTimer];
+    }
+    else
+    {
+        [self stopTimer];
+    }
 }
 
 /**
@@ -98,25 +103,68 @@
     [HBUtilities writeToActivityLog:"%s", versionStringFull.UTF8String];
 }
 
-/**
- * Displays text received from HBOutputRedirect in the text view
- */
+- (void)appendToTextView:(NSString *)text
+{
+    NSTextStorage *textStorage = self.textView.textStorage;
+    NSAttributedString *attributedString = [[NSAttributedString alloc] initWithString:text attributes:_textAttributes];
+
+    [textStorage appendAttributedString:attributedString];
+
+    // Remove text from outputTextStorage as defined by TextStorageUpperSizeLimit and TextStorageLowerSizeLimit
+    if (textStorage.length > TextStorageUpperSizeLimit)
+    {
+        [textStorage deleteCharactersInRange:NSMakeRange(0, textStorage.length - TextStorageLowerSizeLimit)];
+    }
+
+    [_textView scrollToEndOfDocument:self];
+}
+
+- (void)appendToBuffer:(NSString *)text
+{
+    [_textBuffer appendString:text];
+    if (_textBuffer.length > TextStorageUpperSizeLimit)
+    {
+        [_textBuffer deleteCharactersInRange:NSMakeRange(0, _textBuffer.length - TextStorageLowerSizeLimit)];
+    }
+}
+
+- (void)displayBuffer
+{
+    NSUInteger length = self.textBuffer.length;
+    if (length)
+    {
+        [self appendToTextView:self.textBuffer];
+        [self.textBuffer deleteCharactersInRange:NSMakeRange(0, length)];
+    }
+}
+
 - (void)redirect:(NSString *)text type:(HBRedirectType)type
 {
-    NSAttributedString *attributedString = [[NSAttributedString alloc] initWithString:text attributes:_textAttributes];
-	// Actually write the libhb output to the text view (outputTextStorage)
-    [_outputTextStorage appendAttributedString:attributedString];
+    [self appendToBuffer:text];
+}
 
-	// remove text from outputTextStorage as defined by TextStorageUpperSizeLimit and TextStorageLowerSizeLimit */
-    if (_outputTextStorage.length > TextStorageUpperSizeLimit)
+- (void)startTimer
+{
+    if (self.timer == nil)
     {
-		[_outputTextStorage deleteCharactersInRange:NSMakeRange(0, _outputTextStorage.length - TextStorageLowerSizeLimit)];
+        self.timer = [NSTimer scheduledTimerWithTimeInterval:0.1
+                                                      target:self
+                                                    selector:@selector(timerFired:)
+                                                    userInfo:nil
+                                                     repeats:YES];
+        self.timer.tolerance = 0.1;
     }
+}
 
-    if (self.windowLoaded && self.window.isVisible)
-    {
-        [_textView scrollToEndOfDocument:self];
-    }
+- (void)stopTimer
+{
+    [self.timer invalidate];
+    self.timer = nil;
+}
+
+- (void)timerFired:(NSTimer *)timer
+{
+    [self displayBuffer];
 }
 
 /**
@@ -124,7 +172,7 @@
  */
 - (IBAction)clearOutput:(id)sender
 {
-	[_outputTextStorage deleteCharactersInRange:NSMakeRange(0, _outputTextStorage.length)];
+	[self.textView.textStorage deleteCharactersInRange:NSMakeRange(0, self.textView.textStorage.length)];
     [self writeHeader];
 }
 
@@ -135,7 +183,7 @@
 {
 	NSPasteboard *pboard = NSPasteboard.generalPasteboard;
     [pboard declareTypes:@[NSPasteboardTypeString] owner:nil];
-    [pboard setString:_outputTextStorage.string forType:NSPasteboardTypeString];
+    [pboard setString:self.textView.textStorage.string forType:NSPasteboardTypeString];
 }
 
 /**
@@ -143,7 +191,7 @@
  */
 - (IBAction)openActivityLogFile:(id)sender
 {
-    [NSWorkspace.sharedWorkspace openURL:self.outputFile.url];
+    [NSWorkspace.sharedWorkspace openURL:self.outputWriter.url];
 }
 
 /**
@@ -152,20 +200,19 @@
 - (IBAction)openEncodeLogDirectory:(id)sender
 {
     // Opens the activity window log file in the users default text editor
-    NSURL *encodeLogDirectory = [HBUtilities.appSupportURL URLByAppendingPathComponent:@"EncodeLogs"];
-    if (![NSFileManager.defaultManager fileExistsAtPath:encodeLogDirectory.path])
+    NSURL *encodeLogDirectory = [HBUtilities.appSupportURL URLByAppendingPathComponent:@"EncodeLogs" isDirectory:YES];
+    if (encodeLogDirectory)
     {
-        [NSFileManager.defaultManager createDirectoryAtPath:encodeLogDirectory.path
-                                withIntermediateDirectories:NO
-                                                 attributes:nil
-                                                      error:nil];
+        if ([NSFileManager.defaultManager createDirectoryAtURL:encodeLogDirectory withIntermediateDirectories:YES attributes:nil error:NULL])
+        {
+            [NSWorkspace.sharedWorkspace openURL:encodeLogDirectory];
+        }
     }
-    [NSWorkspace.sharedWorkspace openURL:encodeLogDirectory];
 }
 
 - (IBAction)clearActivityLogFile:(id)sender
 {
-    [self.outputFile clear];
+    [self.outputWriter clear];
 }
 
 @end

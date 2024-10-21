@@ -1,6 +1,6 @@
 /* ports.h
 
-   Copyright (c) 2003-2022 HandBrake Team
+   Copyright (c) 2003-2024 HandBrake Team
    This file is part of the HandBrake source code
    Homepage: <http://handbrake.fr/>.
    It may be used under the terms of the GNU General Public License v2.
@@ -79,6 +79,7 @@ enum hb_cpu_platform
     HB_CPU_PLATFORM_INTEL_TGL,
     HB_CPU_PLATFORM_INTEL_ADL,
     HB_CPU_PLATFORM_INTEL_DG2,
+    HB_CPU_PLATFORM_INTEL_LNL,
 };
 int         hb_get_cpu_count(void);
 int         hb_get_cpu_platform(void);
@@ -116,7 +117,7 @@ HB_DIR* hb_opendir(const char *path);
 int hb_closedir(HB_DIR *dir);
 void hb_rewinddir(HB_DIR *dir);
 struct dirent * hb_readdir(HB_DIR *dir);
-int hb_mkdir(char * name);
+int hb_mkdir(const char *name);
 int hb_stat(const char *path, hb_stat_t *sb);
 FILE * hb_fopen(const char *path, const char *mode);
 char * hb_strr_dir_sep(const char *path);
@@ -129,7 +130,7 @@ char * hb_strndup(const char * src, size_t len);
 /************************************************************************
  * File utils
  ***********************************************************************/
-char * hb_get_temporary_directory(void);
+const char * hb_get_temporary_directory(void);
 char * hb_get_temporary_filename( char *fmt, ... );
 size_t hb_getline(char **lineptr, size_t *n, FILE *fp);
 

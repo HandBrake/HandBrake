@@ -9,35 +9,41 @@ concurrency:
 jobs:
   build:
     name: Build on macOS
-    runs-on: macos-latest
+    runs-on: macos-14
+    env:
+      DEVELOPER_DIR: /Applications/Xcode_15.3.app/Contents/Developer
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
+    - uses: actions/setup-python@v5
+      with:
+        python-version: '3.12.3'
 
     - name: Toolchain Cache
       id: mac-toolchain
-      uses: actions/cache@v3
+      uses: actions/cache@v4
       with:
         path: ~/mac-toolchain
-        key: mac-toolchain
+        key: ${{ runner.os }}-${{ runner.arch }}-toolchain-${{ hashFiles('**/scripts/mac-toolchain-build') }}
 
     - name: Cargo-C Toolchain Cache
       id: mac-cargo-c-toolchain
-      uses: actions/cache@v3
+      uses: actions/cache@v4
       with:
         path: |
           ~/.cargo/bin/cargo-capi
           ~/.cargo/bin/cargo-cbuild
           ~/.cargo/bin/cargo-cinstall
-        key: mac-cargo-c-toolchain
+        key: ${{ runner.os }}-${{ runner.arch }}-cargo-c-toolchain
 
     - name: Setup Environment
       run: |
         echo ~/mac-toolchain/bin >> $GITHUB_PATH
-        rustup target add aarch64-apple-darwin
+        rustup target add x86_64-apple-darwin
 
     - name: Setup Toolchain
       if: steps.mac-toolchain.outputs.cache-hit != 'true'
       run: |
+        pip install setuptools
         scripts/mac-toolchain-build ~/mac-toolchain
 
     - name: Setup Cargo-C Toolchain
@@ -52,7 +58,7 @@ jobs:
         make ub && make pkg.create
 
     - name: Upload Assets
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: HandBrake-macos
         path: ./build/pkg

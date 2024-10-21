@@ -488,7 +488,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.<
     <value>Опашката е паузирана</value>
   </data>
   <data name="QueueViewModel_DelSelectedJobConfirmation" xml:space="preserve">
-    <value>Сигурен ли сте, че искате да изтриете избраните задачи?</value>
+    <value>Are you sure you want to delete the selected jobs?
+No encoded files will be deleted with this operation. </value>
   </data>
   <data name="QueueViewModel_JobCurrentlyRunningWarning" xml:space="preserve">
     <value>Това кодиране тече в момента. Ако го изтриете, кодирането ще спре. Сигурен ли сте, че искате да продължите?</value>
@@ -665,7 +666,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.<
   </data>
   <data name="TaskTrayStatusTitle" xml:space="preserve">
     <value>{0}
-Encoding 1 Job</value>
+Кодира 1 задача</value>
   </data>
   <data name="PauseOnLowDiskspace" xml:space="preserve">
     <value>Опашката е паузирана. Внимание, дялът, в който кодирате, е с ниско дисково пространство. Моля, освободете пространство и натиснете "Започни", за да продължите. Можете и да настроите минималното ниво на пространство в предпочитания.</value>
@@ -711,10 +712,10 @@ Encoding 1 Job</value>
     <value>Желаете ли да продължите с добавянето на останалите?</value>
   </data>
   <data name="Main_QueueOverwritePrompt" xml:space="preserve">
-    <value>The file '{0}' already exists!
-Would you like to overwrite it?
+    <value>Файлът '{0}' вече съществува!
+Бихте ли искали да го презапишете?
 
-Hint: File overwrite behaviour can be controlled in preferences. </value>
+Подсказка: Поведението при презаписване може да се променя в настройките.</value>
   </data>
   <data name="Clipboard_Unavailable" xml:space="preserve">
     <value>Системният клипборд в момента е недостъпен.</value>
@@ -807,7 +808,7 @@ Hint: File overwrite behaviour can be controlled in preferences. </value>
     <value>Име на глава</value>
   </data>
   <data name="ChaptersView_ChapterNumber" xml:space="preserve">
-    <value>Номер на глава</value>
+    <value>Глава</value>
   </data>
   <data name="ChaptersView_CreateChapterMarkers" xml:space="preserve">
     <value>Създай маркери на глави</value>
@@ -1212,7 +1213,7 @@ Hint: File overwrite behaviour can be controlled in preferences. </value>
     <value>Ниво на подробност на дневника:</value>
   </data>
   <data name="Options_LogPath" xml:space="preserve">
-    <value>Path:</value>
+    <value>Път:</value>
   </data>
   <data name="Options_LowDiskspaceSize" xml:space="preserve">
     <value>Паузирай опашката при ниско дисково пространство</value>
@@ -1546,7 +1547,7 @@ VLC и MPC-HC се поддържат. Други плеъри може да р�
     <value>Наличен е архив с предната опашка.</value>
   </data>
   <data name="SourceSelection_SingleVideoFile" xml:space="preserve">
-    <value>Отвори единичен видео файл.</value>
+    <value>Open video file(s).</value>
   </data>
   <data name="SourceSelection_SourceSelection" xml:space="preserve">
     <value>Избор на източник</value>
@@ -1699,7 +1700,7 @@ VLC и MPC-HC се поддържат. Други плеъри може да р�
     <value>Относно HandBrake</value>
   </data>
   <data name="SourceSelection_DropFileHere" xml:space="preserve">
-    <value>Или довлачете файл или папка тук ...</value>
+    <value>Or drop a file, set of files or folder here ...</value>
   </data>
   <data name="SourceSelection_Help" xml:space="preserve">
     <value>Помощ</value>
@@ -2130,15 +2131,11 @@ You can drag/drop or enter the text above.</value>
   <data name="OptionsView_RemotePortLimit" xml:space="preserve">
     <value>Интервалът за портове трябва да е между 5000 и 32767</value>
   </data>
-  <data name="OptionsView_SendFileToArgPlaceholders" xml:space="preserve">
-    <value>Полета за заместване: {source} {destination} {exit_code}</value>
-    <comment>Note: {source}, {destination} and {exit_code} are not translatable. </comment>
-  </data>
   <data name="SourceSelection_UpdateAvailable" xml:space="preserve">
     <value>Налична е нова версия!</value>
   </data>
   <data name="About_Copyright" xml:space="preserve">
-    <value>Copyright (C) 2003-2022 The HandBrake Team</value>
+    <value>Copyright (C) 2003-2024 The HandBrake Team</value>
   </data>
   <data name="Options_LowBatteryLevel" xml:space="preserve">
     <value>Ниско ниво на батерията:</value>
@@ -2393,7 +2390,7 @@ You can drag/drop or enter the text above.</value>
     <value>Неизвестен статус. Проверете дневника за повече подробности.</value>
   </data>
   <data name="QueueView_JobStatus_ReadError" xml:space="preserve">
-    <value>Засечени грешки при четенето на източника.</value>
+    <value>Errors detected while trying to read source.</value>
   </data>
   <data name="QueueView_JobStatus_Unknown" xml:space="preserve">
     <value>Неизвестна грешка. Проверете дневника за повече подробности.</value>
@@ -2686,7 +2683,7 @@ Please note certain codecs such as AV1 or HEVC require the Microsoft AV1 or HEVC
 Alternatively, check the "Use External Player" checkbox below.</value>
   </data>
   <data name="StaticPreviewView_ClosePlayer" xml:space="preserve">
-    <value>Close Player</value>
+    <value>Затвори плеър</value>
   </data>
   <data name="StaticPreviewView_Play" xml:space="preserve">
     <value>Изпълни</value>
@@ -2701,7 +2698,7 @@ Alternatively, check the "Use External Player" checkbox below.</value>
     <value>Encoding Preview ...</value>
   </data>
   <data name="StaticPreview_Previews" xml:space="preserve">
-    <value>Previews:</value>
+    <value>Визуализации:</value>
   </data>
   <data name="StaticPreview_Volume" xml:space="preserve">
     <value>Volume: 0</value>
@@ -2744,5 +2741,107 @@ Encoding {1} jobs</value>
     <value>Unable to encode a preview. The application is currently busy encoding another file.
 
 To allow multiple simultaneous encodes, turn on "Process Isolation" in Tools Menu -&gt; Preferences -&gt; Advanced -&gt; Process Isolation -&gt; "Run each queued job in a separate worker process".</value>
+  </data>
+  <data name="AudioView_Quality" xml:space="preserve">
+    <value>Качество</value>
+  </data>
+  <data name="AudioView_Source" xml:space="preserve">
+    <value>Източник</value>
+  </data>
+  <data name="AboutView_Documentation" xml:space="preserve">
+    <value>Документация:</value>
+  </data>
+  <data name="AboutView_GithubTracker" xml:space="preserve">
+    <value>GitHub Issue Tracker:</value>
+  </data>
+  <data name="AboutView_Website" xml:space="preserve">
+    <value>Уебсайт:</value>
+  </data>
+  <data name="MainView_PresetClone" xml:space="preserve">
+    <value>Клонирай шаблон</value>
+  </data>
+  <data name="PresetPane_MoveDown" xml:space="preserve">
+    <value>Move Down</value>
+  </data>
+  <data name="PresetPane_MoveToBottom" xml:space="preserve">
+    <value>Move to Bottom</value>
+  </data>
+  <data name="PresetPane_MoveToTop" xml:space="preserve">
+    <value>Move to Top</value>
+  </data>
+  <data name="PresetPane_MoveUp" xml:space="preserve">
+    <value>Move Up</value>
+  </data>
+  <data name="QueueViewModel_StopButContinueJob" xml:space="preserve">
+    <value>There are currently jobs running. Would you like to complete the current jobs before stopping the queue?</value>
+  </data>
+  <data name="Options_AddExt" xml:space="preserve">
+    <value>Add Extension</value>
+  </data>
+  <data name="Options_ExcludeExtensions" xml:space="preserve">
+    <value>Exclude File Extensions:</value>
+  </data>
+  <data name="Options_ExcludeExtensionsInfo" xml:space="preserve">
+    <value>The following file extensions will be ignored when scanning a folder. The list is case insensitive. "." is not required.</value>
+  </data>
+  <data name="Options_ExtensionExists" xml:space="preserve">
+    <value>This file extension already exists in the list.</value>
+  </data>
+  <data name="Options_FileHandling" xml:space="preserve">
+    <value>File Handling (Scanning)</value>
+  </data>
+  <data name="Options_RecursiveFolderScan" xml:space="preserve">
+    <value>Recursively scan directories when using the folder scan mode.</value>
+  </data>
+  <data name="AudioView_AudioQuality" xml:space="preserve">
+    <value>Audio Track Quality</value>
+  </data>
+  <data name="AudioView_AudioTrackName" xml:space="preserve">
+    <value>Audio Track Name</value>
+  </data>
+  <data name="AudioView_BitrateSelection" xml:space="preserve">
+    <value>Audio Track Bitrate</value>
+  </data>
+  <data name="AudioView_DeleteTrack" xml:space="preserve">
+    <value>Delete this audio track</value>
+  </data>
+  <data name="AudioView_QualityMode" xml:space="preserve">
+    <value>Audio Encoder Quality Mode</value>
+  </data>
+  <data name="QueueView_AdvancedQueueDisplay" xml:space="preserve">
+    <value>Use Advanced Queue View</value>
+  </data>
+  <data name="QueueView_SimpleQueueDisplay" xml:space="preserve">
+    <value>Use Simple Queue View</value>
+  </data>
+  <data name="VideoView_LosslessEncodeOnly" xml:space="preserve">
+    <value>Lossless encoding only.</value>
+  </data>
+  <data name="MainView_HideClassicMenu" xml:space="preserve">
+    <value>Hide Classic Menu</value>
+  </data>
+  <data name="MainView_ShowClassicMenu" xml:space="preserve">
+    <value>Show Classic Menu</value>
+  </data>
+  <data name="OptionsViewVideo_UnsupportedIntelDriver" xml:space="preserve">
+    <value>(Warning: Unsupported Driver Detected! - Update Recommended)</value>
+  </data>
+  <data name="QueueSelectionView_RangeLimits" xml:space="preserve">
+    <value>Range Limits:</value>
+  </data>
+  <data name="QueueSelectionView_RangeLimitsDesc" xml:space="preserve">
+    <value>Limit the length of the titles added to the queue.</value>
+  </data>
+  <data name="QueueSelectionView_RangeLimitsEnable" xml:space="preserve">
+    <value>Enable Range Limits</value>
+  </data>
+  <data name="AddToQueue_RangeLimitError" xml:space="preserve">
+    <value>Some titles could not be added to the queue due to being outside of the selected range limits.</value>
+  </data>
+  <data name="QueueView_StartAtTime" xml:space="preserve">
+    <value>Start Later</value>
+  </data>
+  <data name="QueueView_QueueStartTime" xml:space="preserve">
+    <value>Queue Start Time:</value>
   </data>
 </root>

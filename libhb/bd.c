@@ -1,6 +1,6 @@
 /* bd.c
 
-   Copyright (c) 2003-2022 HandBrake Team
+   Copyright (c) 2003-2024 HandBrake Team
    This file is part of the HandBrake source code
    Homepage: <http://handbrake.fr/>.
    It may be used under the terms of the GNU General Public License v2.
@@ -25,6 +25,7 @@ struct hb_bd_s
     int                       chapter;
     int                       next_chap;
     hb_handle_t             * h;
+    int                       keep_duplicate_titles;
 };
 
 /***********************************************************************
@@ -38,13 +39,14 @@ static int title_info_compare_mpls(const void *, const void *);
  ***********************************************************************
  *
  **********************************************************************/
-hb_bd_t * hb_bd_init( hb_handle_t *h, const char * path )
+hb_bd_t * hb_bd_init( hb_handle_t *h, const char * path, int keep_duplicate_titles )
 {
     hb_bd_t * d;
     int ii;
 
     d = calloc( sizeof( hb_bd_t ), 1 );
     d->h = h;
+    d->keep_duplicate_titles = keep_duplicate_titles;
 
     /* Open device */
     d->bd = bd_open( path, NULL );
@@ -57,7 +59,12 @@ hb_bd_t * hb_bd_init( hb_handle_t *h, const char * path )
         goto fail;
     }
 
-    d->title_count = bd_get_titles( d->bd, TITLES_RELEVANT, 0 );
+    uint8_t flags = TITLES_FILTER_DUP_CLIP;
+    if (!keep_duplicate_titles)
+    {
+        flags |= TITLES_FILTER_DUP_TITLE;
+    }
+    d->title_count = bd_get_titles( d->bd, flags, 0 );
     if ( d->title_count == 0 )
     {
         hb_log( "bd: not a bd - trying as a stream/file instead" );
@@ -131,7 +138,7 @@ static void add_subtitle(int track, hb_list_t *list_subtitle, BLURAY_STREAM_INFO
     return;
 }
 
-static void add_audio(int track, hb_list_t *list_audio, BLURAY_STREAM_INFO *bdaudio, int substream_type, uint32_t codec, uint32_t codec_param, int attributes)
+static void add_audio(int index, int linked_index, int track, hb_list_t *list_audio, BLURAY_STREAM_INFO *bdaudio, int substream_type, uint32_t codec, uint32_t codec_param, int attributes)
 {
     const char * codec_name;
     hb_audio_t * audio;
@@ -140,6 +147,13 @@ static void add_audio(int track, hb_list_t *list_audio, BLURAY_STREAM_INFO *bdau
     audio = calloc( sizeof( hb_audio_t ), 1 );
 
     audio->id = (substream_type << 16) | bdaudio->pid;
+    audio->config.index = index;
+    if (linked_index >= 0)
+    {
+        audio->config.list_linked_index = hb_list_init();
+        hb_list_add_dup(audio->config.list_linked_index,
+                        &linked_index, sizeof(linked_index));
+    }
     audio->config.in.reg_desc = STR4_TO_UINT32("HDMV");
     audio->config.in.stream_type = bdaudio->coding_type;
     audio->config.in.substream_type = substream_type;
@@ -279,6 +293,7 @@ hb_title_t * hb_bd_title_scan( hb_bd_t * d, int tt, uint64_t min_duration )
     title->demuxer = HB_TS_DEMUXER;
     title->type = HB_BD_TYPE;
     title->reg_desc = STR4_TO_UINT32("HDMV");
+    title->keep_duplicate_titles = d->keep_duplicate_titles;
 
     if (d->disc_info->disc_name != NULL && d->disc_info->disc_name[0] != 0)
     {
@@ -460,64 +475,66 @@ hb_title_t * hb_bd_title_scan( hb_bd_t * d, int tt, uint64_t min_duration )
     for (ii = 0; ii < ti->clips[audio_clip_index].audio_stream_count; ii++)
     {
         BLURAY_STREAM_INFO * bdaudio;
+        int                  index;
 
         bdaudio = &ti->clips[audio_clip_index].audio_streams[ii];
+        index   = hb_list_count(title->list_audio);
 
         switch (bdaudio->coding_type)
         {
             case BLURAY_STREAM_TYPE_AUDIO_TRUHD:
                 // Add 2 audio tracks.  One for TrueHD and one for AC-3
-                add_audio(ii, title->list_audio, bdaudio, HB_SUBSTREAM_BD_AC3,
+                add_audio(index, index + 1, ii, title->list_audio, bdaudio, HB_SUBSTREAM_BD_AC3,
                           HB_ACODEC_AC3, AV_CODEC_ID_AC3, HB_AUDIO_ATTR_NONE);
-                add_audio(ii, title->list_audio, bdaudio, HB_SUBSTREAM_BD_TRUEHD,
+                add_audio(index + 1, index, ii, title->list_audio, bdaudio, HB_SUBSTREAM_BD_TRUEHD,
                           HB_ACODEC_FFTRUEHD, AV_CODEC_ID_TRUEHD,
                           HB_AUDIO_ATTR_NONE);
                 break;
 
             case BLURAY_STREAM_TYPE_AUDIO_DTS:
-                add_audio(ii, title->list_audio, bdaudio, 0,
+                add_audio(index, -1, ii, title->list_audio, bdaudio, 0,
                           HB_ACODEC_DCA, AV_CODEC_ID_DTS, HB_AUDIO_ATTR_NONE);
                 break;
 
             case BLURAY_STREAM_TYPE_AUDIO_MPEG2:
             case BLURAY_STREAM_TYPE_AUDIO_MPEG1:
-                add_audio(ii, title->list_audio, bdaudio, 0,
+                add_audio(index, -1, ii, title->list_audio, bdaudio, 0,
                           HB_ACODEC_FFMPEG, AV_CODEC_ID_MP2,
                           HB_AUDIO_ATTR_NONE);
                 break;
 
             case BLURAY_STREAM_TYPE_AUDIO_AC3PLUS:
-                add_audio(ii, title->list_audio, bdaudio, 0,
+                add_audio(index, -1, ii, title->list_audio, bdaudio, 0,
                           HB_ACODEC_FFEAC3, AV_CODEC_ID_EAC3,
                           HB_AUDIO_ATTR_NONE);
                 break;
 
             case BLURAY_STREAM_TYPE_AUDIO_AC3PLUS_SECONDARY:
-                add_audio(ii, title->list_audio, bdaudio, 0,
+                add_audio(index, -1, ii, title->list_audio, bdaudio, 0,
                           HB_ACODEC_FFEAC3, AV_CODEC_ID_EAC3,
                           HB_AUDIO_ATTR_NONE);
                 break;
 
             case BLURAY_STREAM_TYPE_AUDIO_LPCM:
-                add_audio(ii, title->list_audio, bdaudio, 0,
+                add_audio(index, -1, ii, title->list_audio, bdaudio, 0,
                           HB_ACODEC_FFMPEG, AV_CODEC_ID_PCM_BLURAY,
                           HB_AUDIO_ATTR_NONE);
                 break;
 
             case BLURAY_STREAM_TYPE_AUDIO_AC3:
-                add_audio(ii, title->list_audio, bdaudio, 0,
+                add_audio(index, -1, ii, title->list_audio, bdaudio, 0,
                           HB_ACODEC_AC3, AV_CODEC_ID_AC3, HB_AUDIO_ATTR_NONE);
                 break;
 
             case BLURAY_STREAM_TYPE_AUDIO_DTSHD_MASTER:
             case BLURAY_STREAM_TYPE_AUDIO_DTSHD:
                 // Add 2 audio tracks.  One for DTS-HD and one for DTS
-                add_audio(ii, title->list_audio, bdaudio, HB_SUBSTREAM_BD_DTS,
+                add_audio(index, index + 1, ii, title->list_audio, bdaudio, HB_SUBSTREAM_BD_DTS,
                           HB_ACODEC_DCA, AV_CODEC_ID_DTS, HB_AUDIO_ATTR_NONE);
                 // DTS-HD is special.  The substreams must be concatenated
                 // DTS-core followed by DTS-hd-extensions.  Setting
                 // a substream id of 0 says use all substreams.
-                add_audio(ii, title->list_audio, bdaudio, 0,
+                add_audio(index + 1, index, ii, title->list_audio, bdaudio, 0,
                           HB_ACODEC_DCA_HD, AV_CODEC_ID_DTS,
                           HB_AUDIO_ATTR_NONE);
                 break;
@@ -525,7 +542,7 @@ hb_title_t * hb_bd_title_scan( hb_bd_t * d, int tt, uint64_t min_duration )
             case BLURAY_STREAM_TYPE_AUDIO_DTSHD_SECONDARY:
                 // BD "DTSHD_SECONDARY" is DTS Express which has no
                 // DTS core
-                add_audio(ii, title->list_audio, bdaudio, 0,
+                add_audio(index, -1, ii, title->list_audio, bdaudio, 0,
                           HB_ACODEC_DCA_HD, AV_CODEC_ID_DTS,
                           HB_AUDIO_ATTR_NONE);
                 break;
@@ -541,49 +558,51 @@ hb_title_t * hb_bd_title_scan( hb_bd_t * d, int tt, uint64_t min_duration )
     for (jj = 0; jj < ti->clips[audio_clip_index].sec_audio_stream_count; jj++, ii++)
     {
         BLURAY_STREAM_INFO * bdaudio;
+        int                  index;
 
         bdaudio = &ti->clips[audio_clip_index].sec_audio_streams[jj];
+        index   = hb_list_count(title->list_audio);
 
         switch (bdaudio->coding_type)
         {
             case BLURAY_STREAM_TYPE_AUDIO_TRUHD:
                 // Add 2 audio tracks.  One for TrueHD and one for AC-3
-                add_audio(ii, title->list_audio, bdaudio, HB_SUBSTREAM_BD_AC3,
+                add_audio(index, index + 1, ii, title->list_audio, bdaudio, HB_SUBSTREAM_BD_AC3,
                           HB_ACODEC_AC3, AV_CODEC_ID_AC3,
                           HB_AUDIO_ATTR_SECONDARY);
-                add_audio(ii, title->list_audio, bdaudio, HB_SUBSTREAM_BD_TRUEHD,
+                add_audio(index + 1, index, ii, title->list_audio, bdaudio, HB_SUBSTREAM_BD_TRUEHD,
                           HB_ACODEC_FFTRUEHD, AV_CODEC_ID_TRUEHD,
                           HB_AUDIO_ATTR_SECONDARY);
                 break;
 
             case BLURAY_STREAM_TYPE_AUDIO_DTS:
-                add_audio(ii, title->list_audio, bdaudio, 0,
+                add_audio(index, -1, ii, title->list_audio, bdaudio, 0,
                           HB_ACODEC_DCA, AV_CODEC_ID_DTS,
                           HB_AUDIO_ATTR_SECONDARY);
                 break;
 
             case BLURAY_STREAM_TYPE_AUDIO_MPEG2:
             case BLURAY_STREAM_TYPE_AUDIO_MPEG1:
-                add_audio(ii, title->list_audio, bdaudio, 0,
+                add_audio(index, -1, ii, title->list_audio, bdaudio, 0,
                           HB_ACODEC_FFMPEG, AV_CODEC_ID_MP2,
                           HB_AUDIO_ATTR_SECONDARY);
                 break;
 
             case BLURAY_STREAM_TYPE_AUDIO_AC3PLUS:
             case BLURAY_STREAM_TYPE_AUDIO_AC3PLUS_SECONDARY:
-                add_audio(ii, title->list_audio, bdaudio, 0,
+                add_audio(index, -1, ii, title->list_audio, bdaudio, 0,
                           HB_ACODEC_FFEAC3, AV_CODEC_ID_EAC3,
                           HB_AUDIO_ATTR_SECONDARY);
                 break;
 
             case BLURAY_STREAM_TYPE_AUDIO_LPCM:
-                add_audio(ii, title->list_audio, bdaudio, 0,
+                add_audio(index, -1, ii, title->list_audio, bdaudio, 0,
                           HB_ACODEC_FFMPEG, AV_CODEC_ID_PCM_BLURAY,
                           HB_AUDIO_ATTR_SECONDARY);
                 break;
 
             case BLURAY_STREAM_TYPE_AUDIO_AC3:
-                add_audio(ii, title->list_audio, bdaudio, 0,
+                add_audio(index, -1, ii, title->list_audio, bdaudio, 0,
                           HB_ACODEC_AC3, AV_CODEC_ID_AC3,
                           HB_AUDIO_ATTR_SECONDARY);
                 break;
@@ -591,13 +610,13 @@ hb_title_t * hb_bd_title_scan( hb_bd_t * d, int tt, uint64_t min_duration )
             case BLURAY_STREAM_TYPE_AUDIO_DTSHD_MASTER:
             case BLURAY_STREAM_TYPE_AUDIO_DTSHD:
                 // Add 2 audio tracks.  One for DTS-HD and one for DTS
-                add_audio(ii, title->list_audio, bdaudio, HB_SUBSTREAM_BD_DTS,
+                add_audio(index, index + 1, ii, title->list_audio, bdaudio, HB_SUBSTREAM_BD_DTS,
                           HB_ACODEC_DCA, AV_CODEC_ID_DTS,
                           HB_AUDIO_ATTR_SECONDARY);
                 // DTS-HD is special.  The substreams must be concatenated
                 // DTS-core followed by DTS-hd-extensions.  Setting
                 // a substream id of 0 says use all substreams.
-                add_audio(ii, title->list_audio, bdaudio, 0,
+                add_audio(index + 1, index, ii, title->list_audio, bdaudio, 0,
                           HB_ACODEC_DCA_HD, AV_CODEC_ID_DTS,
                           HB_AUDIO_ATTR_SECONDARY);
                 break;
@@ -605,7 +624,7 @@ hb_title_t * hb_bd_title_scan( hb_bd_t * d, int tt, uint64_t min_duration )
             case BLURAY_STREAM_TYPE_AUDIO_DTSHD_SECONDARY:
                 // BD "DTSHD_SECONDARY" is DTS Express which has no
                 // DTS core
-                add_audio(ii, title->list_audio, bdaudio, 0,
+                add_audio(index, -1, ii, title->list_audio, bdaudio, 0,
                           HB_ACODEC_DCA_HD, AV_CODEC_ID_DTS,
                           HB_AUDIO_ATTR_SECONDARY);
                 break;
@@ -643,10 +662,11 @@ hb_title_t * hb_bd_title_scan( hb_bd_t * d, int tt, uint64_t min_duration )
         char chapter_title[80];
 
         // Sanity check start time of this chapter.
-        // If it is beyond the end of the title, drop it.
-        if (ti->chapters[ii].start > ti->duration)
+        // If the chapter starts within 1.5 seconds of the end of
+        // the title, drop it.
+        if (ti->duration - ti->chapters[ii].start < 90000 * 1.5)
         {
-            hb_log("bd: chapter %d invalid start %"PRIu64", dropping", ii+1,
+            hb_log("bd: chapter %d too short %"PRIu64", dropping", ii+1,
                    ti->chapters[ii].start);
             continue;
         }
@@ -701,7 +721,7 @@ hb_title_t * hb_bd_title_scan( hb_bd_t * d, int tt, uint64_t min_duration )
 
         hb_list_add( title->list_chapter, chapter );
     }
-    hb_log( "bd: title %d has %d chapters", tt, ti->chapter_count );
+    hb_log( "bd: title %d has %d chapters", tt, hb_list_count(title->list_chapter));
 
     /* This title is ok so far */
     goto cleanup;
