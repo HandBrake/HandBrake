@@ -42,6 +42,8 @@ extern NSString * const HBQueueWorkerItemNotificationItemKey;              // HB
 @property (nonatomic, readonly) BOOL canResume;
 - (void)resume;
 
+- (void)invalidate;
+
 @end
 
 NS_ASSUME_NONNULL_END

@@ -1,0 +1,11 @@
+diff -up MediaSDK-intel-mediasdk-22.6.4/api/mfx_dispatch/linux/mfxparser.cpp.gcc13 MediaSDK-intel-mediasdk-22.6.4/api/mfx_dispatch/linux/mfxparser.cpp
+--- MediaSDK-intel-mediasdk-22.6.4/api/mfx_dispatch/linux/mfxparser.cpp.gcc13	2022-11-18 09:02:59.000000000 +0100
++++ MediaSDK-intel-mediasdk-22.6.4/api/mfx_dispatch/linux/mfxparser.cpp	2023-01-17 21:26:56.794562323 +0100
+@@ -23,6 +23,7 @@
+ #include <stdlib.h>
+ #include <string.h>
+
++#include <cstdint>
+ #include <list>
+
+ #include "mfxloader.h"

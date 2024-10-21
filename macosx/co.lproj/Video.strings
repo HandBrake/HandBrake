@@ -1,9 +1,6 @@
 /* Class = "CocoaBindingsConnection"; ibShadowedIsNilPlaceholder = "auto"; ObjectID = "4Hq-BG-Ulb"; */
 "4Hq-BG-Ulb.ibShadowedIsNilPlaceholder" = "autumaticu";
 
-/* Class = "NSMenu"; title = "OtherViews"; ObjectID = "6Cs-jo-8Q6"; */
-"6Cs-jo-8Q6.title" = "Altre viste";
-
 /* Class = "NSButtonCell"; title = "Constant Framerate"; ObjectID = "6Dd-IP-Pwt"; */
 "6Dd-IP-Pwt.title" = "Frequenza di fiure custente";
 
@@ -15,9 +12,6 @@
 
 /* Class = "NSTextField"; ibShadowedToolTip = "Average Bitrate varies quality to ensure the data rate remains relatively consistent throughout the video."; ObjectID = "A3o-Zx-OfM"; */
 "A3o-Zx-OfM.ibShadowedToolTip" = "« Flussu medianu » fà svarià a qualità per assicurassi chì u flussu di dati stà guasi custente a video sana.";
-
-/* Class = "NSMenu"; title = "OtherViews"; ObjectID = "Aes-nP-7qS"; */
-"Aes-nP-7qS.title" = "Altre viste";
 
 /* Class = "NSButton"; ibShadowedToolTip = "Multi-pass encoding analyzes the entire source video before encoding. The information gathered enables the encoder to make more informed decisions about quality and data rate in Average Bitrate mode."; ObjectID = "bnV-aE-FVh"; */
 "bnV-aE-FVh.ibShadowedToolTip" = "A cudificazione à parechji passi analisa a fonte video sana nanzu di cudificà. L’infurmazioni raccolti permettenu à u cudificatore d’accumudà di manera più precisa a qualità è u flussu di dati in u modu « Flussu medianu ».";
@@ -55,9 +49,6 @@
 /* Class = "NSTextField"; ibShadowedToolTip = "Additional video encoder options. For advanced use only.\n\nSyntax: option-1=foo:opt2=bar"; ObjectID = "gEp-lv-YUY"; */
 "gEp-lv-YUY.ibShadowedToolTip" = "Ozzioni addiziunale di u cudificatore video Solu per un impiegu espertu.\n\nSintassa : option-1=mamma:opt2=babbu";
 
-/* Class = "NSMenu"; title = "OtherViews"; ObjectID = "gIJ-Xs-uVF"; */
-"gIJ-Xs-uVF.title" = "Altre viste";
-
 /* Class = "NSSlider"; ibShadowedToolTip = "Constant Quality varies bitrate to ensure visual quality remains relatively consistent throughout the video.\n\nAdjust the quality slider to the right to increase quality or to the left to decrease quality, in small increments of plus or minus 1-2.\n\nRecommended values for the x264 and x265 encoders are RF 18-28. Higher quality settings may produce extremely large files.\n\nx264 is lossless at RF 0."; ObjectID = "GPu-Ht-bKg"; */
 "GPu-Ht-bKg.ibShadowedToolTip" = "« Qualità custente » fà svarià u flussu binariu per assicurassi chì a qualità visuale stà guasi custente a video sana.\n\nAccumudà u cursore di qualità à manu diritta per aumentà a qualità o à manu manca per diminuiscela, in chjuchi passi di più o menu 1-2.\n\nI valori ricumandati per i cudificatori x264 è x265 sò RF 18-28. E preferenze di qualità più alte ponu pruduce schedarii assai vuluminosi.\n\nDefinita à RF 0, a cudificazione x264 hè senza perdita.";
 
@@ -66,9 +57,6 @@
 
 /* Class = "NSTextFieldCell"; title = "Additional Options:"; ObjectID = "ja7-Zr-y1P"; */
 "ja7-Zr-y1P.title" = "Ozzioni addiziunale :";
-
-/* Class = "NSMenu"; title = "OtherViews"; ObjectID = "Jj0-Qw-HF8"; */
-"Jj0-Qw-HF8.title" = "Altre viste";
 
 /* Class = "NSPopUpButton"; ibShadowedToolTip = "Video encoder profile. Sets and ensures compliance with the specified video compression standard profile. Overrides all other settings."; ObjectID = "kh8-d2-hSD"; */
 "kh8-d2-hSD.ibShadowedToolTip" = "Prufilu di u cudificatore video. Definisce è assicureghja a cunfurmità cù u prufilu classicu di cumpressione video specificatu. Supraneghja tutte l’altre preferenze.";
@@ -93,9 +81,6 @@
 
 /* Class = "NSTextFieldCell"; title = "RF:"; ObjectID = "rRB-9F-pHn"; */
 "rRB-9F-pHn.title" = "RF :";
-
-/* Class = "NSMenu"; title = "OtherViews"; ObjectID = "rXn-NC-pEv"; */
-"rXn-NC-pEv.title" = "Altre viste";
 
 /* Class = "NSTextFieldCell"; title = "Framerate (FPS):"; ObjectID = "SJc-tv-AMH"; */
 "SJc-tv-AMH.title" = "Frequenza di fiure (FPS) :";

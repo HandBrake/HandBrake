@@ -5,13 +5,18 @@
     <SolidColorBrush x:Key="Ui.Dark" Color="WhiteSmoke" />
     <SolidColorBrush x:Key="Ui.ToolbarHover" Color="#D8D8D8" />
     <SolidColorBrush x:Key="Ui.Light" Color="WhiteSmoke" />
+    <SolidColorBrush x:Key="Ui.Light2" Color="#f2f2f2" />
     <SolidColorBrush x:Key="Ui.ContrastLight" Color="#C0C0C0" />
     <SolidColorBrush x:Key="Ui.UltraLight2" Color="AliceBlue" />
+    <SolidColorBrush x:Key="Ui.Ultralight" Color="AliceBlue" />
     <SolidColorBrush x:Key="Ui.Arrow" Color="#252525" />
     <SolidColorBrush x:Key="Ui.ListBoxSelect" Color="#D8D8D8" />
+    <SolidColorBrush x:Key="Ui.Background" Color="White" />
+
 
     <SolidColorBrush x:Key="Ui.Blue" Color="#00579f" />
-    
+    <SolidColorBrush x:Key="Ui.BlueBright" Color="#006cc5" />
+
     <!-- StatusBar -->
     <Style TargetType="StatusBar">
         <Setter Property="Background" Value="{DynamicResource Ui.Light}" />

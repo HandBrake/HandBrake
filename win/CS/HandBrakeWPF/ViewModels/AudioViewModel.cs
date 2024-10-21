@@ -15,8 +15,8 @@ namespace HandBrakeWPF.ViewModels
     using System.Linq;
 
     using HandBrake.Interop.Interop;
+    using HandBrake.Interop.Interop.Interfaces.Model;
     using HandBrake.Interop.Interop.Interfaces.Model.Encoders;
-    using HandBrake.Interop.Utilities;
 
     using HandBrakeWPF.Commands;
     using HandBrakeWPF.EventArgs;
@@ -496,7 +496,7 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         private void AddFirstForSelectedLanguages()
         {
-            bool anyLanguageSelected = this.AudioBehaviours.SelectedLanguages.Contains(Constants.Any);
+            bool anyLanguageSelected = this.AudioBehaviours.SelectedLanguages.Any(s => s == HandBrakeLanguagesHelper.AnyLanguage);
 
             if (anyLanguageSelected && this.Task.AudioTracks.Count >= 1)
             {
@@ -582,11 +582,10 @@ namespace HandBrakeWPF.ViewModels
             IEnumerable<Audio> preferredAudioTracks = new List<Audio>();
             if (this.AudioBehaviours.SelectedLanguages.Count > 0)
             {
-                string langName = this.AudioBehaviours.SelectedLanguages.FirstOrDefault(w => !w.Equals(Constants.Any));
-                string langCode = LanguageUtilities.GetLanguageCode(langName);
-                if (!string.IsNullOrEmpty(langCode))
+                Language language = this.AudioBehaviours.SelectedLanguages.FirstOrDefault(w => w != HandBrakeLanguagesHelper.AnyLanguage);
+                if (language != null)
                 {
-                    preferredAudioTracks = this.SourceTracks.Where(item => item.LanguageCode.Contains(langCode));
+                    preferredAudioTracks = this.SourceTracks.Where(item => item.LanguageCode.Contains(language.Code));
                 }
             }
 
@@ -603,14 +602,14 @@ namespace HandBrakeWPF.ViewModels
         {
             // Translate to Iso Codes
             List<string> iso6392Codes = new List<string>();
-            if (this.AudioBehaviours.SelectedLanguages.Contains(Constants.Any))
+            if (this.AudioBehaviours.SelectedLanguages.Any(s => s == HandBrakeLanguagesHelper.AnyLanguage))
             {
-                iso6392Codes = LanguageUtilities.GetIsoCodes();
-                iso6392Codes = LanguageUtilities.OrderIsoCodes(iso6392Codes, this.AudioBehaviours.SelectedLanguages);
+                iso6392Codes = HandBrakeLanguagesHelper.GetIsoCodes();
+                iso6392Codes = HandBrakeLanguagesHelper.OrderIsoCodes(iso6392Codes, this.AudioBehaviours.SelectedLanguages);
             }
             else
             {
-                iso6392Codes = LanguageUtilities.GetLanguageCodes(this.AudioBehaviours.SelectedLanguages.ToArray());
+                iso6392Codes = HandBrakeLanguagesHelper.GetLanguageCodes(this.AudioBehaviours.SelectedLanguages);
             }
             
             List<Audio> orderedTracks = new List<Audio>();

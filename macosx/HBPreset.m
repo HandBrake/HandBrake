@@ -117,7 +117,6 @@
     NSArray *presetsArray;
     NSString *presetsString;
 
-    // Read a json file or the old plists format
     if ([url.pathExtension isEqualToString:@"json"])
     {
         NSData *data = [[NSData alloc] initWithContentsOfURL:url];

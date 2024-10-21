@@ -421,7 +421,7 @@ Das Aktivitätsprotokoll kann weitere Informationen enthalten.</value>
     <value>Tonspuren</value>
   </data>
   <data name="AudioViewModel_ConfigureDefaults" xml:space="preserve">
-    <value>Auswahlverhalten ...</value>
+    <value>Auswahlverhalten …</value>
   </data>
   <data name="AudioViewModel_SwitchBackToTracks" xml:space="preserve">
     <value>Zu den Spuren zurückkehren</value>
@@ -491,7 +491,8 @@ Bitte die Webseite auf Versionshinweise prüfen.</value>
     <value>Warteschlange angehalten</value>
   </data>
   <data name="QueueViewModel_DelSelectedJobConfirmation" xml:space="preserve">
-    <value>Sollen die ausgewählten Aufgaben wirklich gelöscht werden?</value>
+    <value>Soll die ausgewählte Aufgabe wirklich gelöscht werden?
+Mit diesem Vorgang werden keine encodierten Dateien gelöscht.</value>
   </data>
   <data name="QueueViewModel_JobCurrentlyRunningWarning" xml:space="preserve">
     <value>Diese Encodierung ist momentan in Arbeit. Wenn sie gelöscht wird, wird die Encodierung abgebrochen. Soll wirklich fortgefahren werden?</value>
@@ -549,7 +550,7 @@ Soll HandBrake wirklich beendet werden?</value>
     <value>Zu den Spuren zurückkehren</value>
   </data>
   <data name="SubtitlesViewModel_ConfigureDefaults" xml:space="preserve">
-    <value>Auswahlverhalten ...</value>
+    <value>Auswahlverhalten …</value>
   </data>
   <data name="PresetService_ArchiveFile" xml:space="preserve">
     <value>Archivierte Datei:</value>
@@ -1123,14 +1124,8 @@ Hinweis: Das Verhalten beim Überschreiben von Dateien kann in den Einstellungen
   <data name="MetaDataView_Title" xml:space="preserve">
     <value>Metadaten</value>
   </data>
-  <data name="OptionsView_EnableNvencEncoding" xml:space="preserve">
-    <value>Verwendung des Nvidia NVENC-Encoders erlauben</value>
-  </data>
-  <data name="OptionsView_EnableQuicksyncEncoding" xml:space="preserve">
-    <value>Verwendung des Intel QuickSync-Encoders erlauben</value>
-  </data>
-  <data name="OptionsView_EnableVceEncoding" xml:space="preserve">
-    <value>Verwendung des AMD VCN-Encoders erlauben</value>
+  <data name="OptionsView_EnableDirectXDecoding" xml:space="preserve">
+    <value>Verwendung von DirectX-Decodierung erlauben</value>
   </data>
   <data name="OptionsView_InvalidFileFormatChars" xml:space="preserve">
     <value>Das eingegebene Dateiformat enthielt ungültige Zeichen. Diese wurden entfernt.</value>
@@ -1227,6 +1222,9 @@ Hinweis: Das Verhalten beim Überschreiben von Dateien kann in den Einstellungen
   </data>
   <data name="Options_MinTitleScanLength" xml:space="preserve">
     <value>Minimale Länge von DVD- und Blu-ray-Titeln in Sekunden. Kürzere Titel werden übersprungen:</value>
+  </data>
+  <data name="Options_KeepDuplicateTitles" xml:space="preserve">
+    <value>Doppelte Titel auf Blu-ray-Quellen behalten (Neustart erforderlich)</value>
   </data>
   <data name="Options_MP4FileExtension" xml:space="preserve">
     <value>MP4-Dateiendung:</value>
@@ -1917,8 +1915,8 @@ Sie können den Text oben per Drag &amp; Drop ziehen oder eingeben.</value>
   <data name="FiltersViewAuto_DeblockTune" xml:space="preserve">
     <value>Deblock-Abstimmung</value>
   </data>
-  <data name="OptionsView_ChoiceOfEncoderHint" xml:space="preserve">
-    <value>Die Wahl des Encoders wird im Video-Tab verfügbar gemacht.</value>
+  <data name="OptionsView_EncodeNotes" xml:space="preserve">
+    <value>Hinweis: Nicht alle Hardware-Encoder haben zusätzliche Einstellungen. Alle auf diesem System verfügbaren und unterstützten Hardware-Encoder stehen auf der Registerkarte "Video" unter dem Dropdown-Menü "Video-Encoder" zur Auswahl.</value>
   </data>
   <data name="Queue_RecoverQueueQuestionPlural" xml:space="preserve">
     <value>HandBrake hat einige nicht fertiggestellte Warteschlangedateien gefunden. Diese werden von mehreren Instanzen von HandBrake sein. Sollen alle nicht fertig gestellten Aufgaben wiederhergestellt werden?</value>
@@ -2135,15 +2133,11 @@ Falls unterstützt, wird jede benutzerdefinierte Voreinstellung übernommen. </v
   <data name="OptionsView_RemotePortLimit" xml:space="preserve">
     <value>Der Bereich der Ports muss zwischen 5000 und 32767 liegen.</value>
   </data>
-  <data name="OptionsView_SendFileToArgPlaceholders" xml:space="preserve">
-    <value>Austausch-Platzhalter: {source} {destination} {exit_code}</value>
-    <comment>Note: {source}, {destination} and {exit_code} are not translatable. </comment>
-  </data>
   <data name="SourceSelection_UpdateAvailable" xml:space="preserve">
     <value>Eine neue Version ist verfügbar!</value>
   </data>
   <data name="About_Copyright" xml:space="preserve">
-    <value>Copyright (C) 2003-2022 The HandBrake Team</value>
+    <value>Copyright (C) 2003-2024 The HandBrake Team</value>
   </data>
   <data name="Options_LowBatteryLevel" xml:space="preserve">
     <value>Geringe Batteriekapazität:</value>
@@ -2397,7 +2391,7 @@ Bitte eine andere Voreinstellung auswählen.</value>
     <value>Unbekannter Status. Siehe Protokoll für Details.</value>
   </data>
   <data name="QueueView_JobStatus_ReadError" xml:space="preserve">
-    <value>Beim Versuch, die Quelle zu lesen, wurden Fehler entdeckt.</value>
+    <value>Es wurden Fehler während des Einlesens der Quelle festgestellt.</value>
   </data>
   <data name="QueueView_JobStatus_Unknown" xml:space="preserve">
     <value>Unbekannter Fehler. Siehe Protokoll für Details.</value>
@@ -2702,7 +2696,7 @@ Alternativ können Sie auch das Kontrollkästchen "Externen Abspieler verwenden"
     <value>Die integrierte Vorschau ist für den WebM-Container nicht verfügbar. Es muss ein externer Player verwendet werden.</value>
   </data>
   <data name="StaticPreview_EncodingPreview" xml:space="preserve">
-    <value>Vorschau encodieren…</value>
+    <value>Vorschau encodieren …</value>
   </data>
   <data name="StaticPreview_Previews" xml:space="preserve">
     <value>Vorschau:</value>
@@ -2798,6 +2792,103 @@ Um mehrere gleichzeitige Encodierungen zu ermöglichen, aktivieren Sie die "Proz
     <value>Dateiverwaltung (Einlesen)</value>
   </data>
   <data name="Options_RecursiveFolderScan" xml:space="preserve">
-    <value>Beim Hinzufügen von Ordnern rekursives Einlesen aktivieren.</value>
+    <value>Beim Hinzufügen von Ordnern rekursives Einlesen aktivieren.
+(Nur aktiv bei "Quellenauswahl" -&gt; "Ordner (Stapelverarbeitung)"</value>
+  </data>
+  <data name="AudioView_AudioQuality" xml:space="preserve">
+    <value>Qualität Tonspur</value>
+  </data>
+  <data name="AudioView_AudioTrackName" xml:space="preserve">
+    <value>Name Tonspur</value>
+  </data>
+  <data name="AudioView_BitrateSelection" xml:space="preserve">
+    <value>Bitrate Tonspur</value>
+  </data>
+  <data name="AudioView_DeleteTrack" xml:space="preserve">
+    <value>Diese Tonspur löschen</value>
+  </data>
+  <data name="AudioView_QualityMode" xml:space="preserve">
+    <value>Qualitätsmodus Audioencoder</value>
+  </data>
+  <data name="QueueView_AdvancedQueueDisplay" xml:space="preserve">
+    <value>Erweiterte Anzeige der Warteschlange</value>
+  </data>
+  <data name="QueueView_SimpleQueueDisplay" xml:space="preserve">
+    <value>Einfache Anzeige der Warteschlange</value>
+  </data>
+  <data name="VideoView_LosslessEncodeOnly" xml:space="preserve">
+    <value>Nur verlustfreie Encodierung.</value>
+  </data>
+  <data name="MainView_HideClassicMenu" xml:space="preserve">
+    <value>Menüleiste ausblenden</value>
+  </data>
+  <data name="MainView_ShowClassicMenu" xml:space="preserve">
+    <value>Menüleiste einblenden</value>
+  </data>
+  <data name="OptionsViewVideo_UnsupportedIntelDriver" xml:space="preserve">
+    <value>(Achtung: Nicht unterstützter Treiber! - Aktualisierung empfohlen)</value>
+  </data>
+  <data name="QueueSelectionView_RangeLimits" xml:space="preserve">
+    <value>Bereichsgrenzen:</value>
+  </data>
+  <data name="QueueSelectionView_RangeLimitsDesc" xml:space="preserve">
+    <value>Begrenzt die Länge der Titel, die der Warteschlange hinzugefügt werden.</value>
+  </data>
+  <data name="QueueSelectionView_RangeLimitsEnable" xml:space="preserve">
+    <value>Bereichsgrenzen aktivieren</value>
+  </data>
+  <data name="AddToQueue_RangeLimitError" xml:space="preserve">
+    <value>Einige Titel konnten nicht in die Warteschlange aufgenommen werden, da sie außerhalb der gewählten Bereichsgrenzen lagen.</value>
+  </data>
+  <data name="QueueView_StartAtTime" xml:space="preserve">
+    <value>Später starten</value>
+  </data>
+  <data name="QueueView_QueueStartTime" xml:space="preserve">
+    <value>Warteschlangen-Startzeit:</value>
+  </data>
+  <data name="QueueView_EncodeShutdown" xml:space="preserve">
+    <value>Encodierung beenden …</value>
+  </data>
+  <data name="PictureSettingsView_AllowUpscaling" xml:space="preserve">
+    <value>Hochskalieren zulassen</value>
+  </data>
+  <data name="PictureSettingsView_OptimalSize" xml:space="preserve">
+    <value>Optimale Größe</value>
+  </data>
+  <data name="OptionsView_Available" xml:space="preserve">
+    <value>Auf diesem System verfügbar.</value>
+  </data>
+  <data name="OptionsView_NotAvailable" xml:space="preserve">
+    <value>Auf diesem System nicht verfügbar.</value>
+  </data>
+  <data name="MainView_ScanningStatus" xml:space="preserve">
+    <value>Bitte warten …</value>
+  </data>
+  <data name="MainView_Cancel" xml:space="preserve">
+    <value>Abbrechen</value>
+  </data>
+  <data name="MainView_OpenLog" xml:space="preserve">
+    <value>Aktivitätsprotokoll öffnen</value>
+  </data>
+  <data name="OptionsView_EnableNvencEncoding" xml:space="preserve">
+    <value/>
+  </data>
+  <data name="OptionsView_EnableQuicksyncEncoding" xml:space="preserve">
+    <value/>
+  </data>
+  <data name="OptionsView_EnableVceEncoding" xml:space="preserve">
+    <value/>
+  </data>
+  <data name="OptionsView_ChoiceOfEncoderHint" xml:space="preserve">
+    <value/>
+  </data>
+  <data name="AnamorphicMode_Custom" xml:space="preserve">
+    <value>Eigene</value>
+  </data>
+  <data name="AnamorphicMode_None" xml:space="preserve">
+    <value>Keine</value>
+  </data>
+  <data name="AnamorphicMode_Automatic" xml:space="preserve">
+    <value>Automatisch</value>
   </data>
 </root>

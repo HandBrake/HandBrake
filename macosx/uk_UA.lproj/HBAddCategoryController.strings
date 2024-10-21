@@ -1,0 +1,15 @@
+/* Class = "NSWindow"; title = "New Category"; ObjectID = "C4G-OG-ksc"; */
+"C4G-OG-ksc.title" = "Нова Категорія";
+
+/* Class = "NSButtonCell"; title = "Cancel"; ObjectID = "N2f-jz-YyX"; */
+"N2f-jz-YyX.title" = "Скасувати";
+
+/* Class = "NSTextFieldCell"; title = "untitled category"; ObjectID = "NQn-fS-Rbd"; */
+"NQn-fS-Rbd.title" = "Категорія без назви";
+
+/* Class = "NSTextFieldCell"; title = "Name of the new category:"; ObjectID = "Pe0-gr-Yv4"; */
+"Pe0-gr-Yv4.title" = "Ім'я нової категорії:";
+
+/* Class = "NSButtonCell"; title = "Create"; ObjectID = "Z9M-dc-5Ml"; */
+"Z9M-dc-5Ml.title" = "Створити";
+

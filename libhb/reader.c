@@ -1,6 +1,6 @@
 /* reader.c
 
-   Copyright (c) 2003-2022 HandBrake Team
+   Copyright (c) 2003-2024 HandBrake Team
    This file is part of the HandBrake source code
    Homepage: <http://handbrake.fr/>.
    It may be used under the terms of the GNU General Public License v2.
@@ -93,7 +93,7 @@ static int hb_reader_open( hb_work_private_t * r )
 {
     if ( r->title->type == HB_BD_TYPE )
     {
-        if ( !( r->bd = hb_bd_init( r->h, r->title->path ) ) )
+        if ( !( r->bd = hb_bd_init( r->h, r->title->path, r->job->keep_duplicate_titles ) ) )
             return 1;
         if(!hb_bd_start(r->bd, r->title))
         {

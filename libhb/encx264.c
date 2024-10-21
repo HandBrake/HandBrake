@@ -1,6 +1,6 @@
 /* encx264.c
 
-   Copyright (c) 2003-2022 HandBrake Team
+   Copyright (c) 2003-2024 HandBrake Team
    This file is part of the HandBrake source code
    Homepage: <http://handbrake.fr/>.
    It may be used under the terms of the GNU General Public License v2.
@@ -12,6 +12,7 @@
 #include "handbrake/handbrake.h"
 #include "handbrake/hb_dict.h"
 #include "handbrake/encx264.h"
+#include "handbrake/extradata.h"
 
 int  encx264Init( hb_work_object_t *, hb_job_t * );
 int  encx264Work( hb_work_object_t *, hb_buffer_t **, hb_buffer_t ** );
@@ -129,11 +130,6 @@ static void * x264_lib_open_ubuntu_10bit(void)
     return h;
 }
 #endif
-
-static inline int64_t rescale(hb_rational_t q, int b)
-{
-    return av_rescale(q.num, b, q.den);
-}
 
 void hb_x264_global_init(void)
 {
@@ -399,6 +395,7 @@ int encx264Init( hb_work_object_t * w, hb_job_t * job )
     param.vui.i_colorprim = hb_output_color_prim(job);
     param.vui.i_transfer  = hb_output_color_transfer(job);
     param.vui.i_colmatrix = hb_output_color_matrix(job);
+    param.vui.b_fullrange = (job->color_range == AVCOL_RANGE_JPEG);
     if (job->chroma_location != AVCHROMA_LOC_UNSPECIFIED)
     {
         param.vui.i_chroma_loc = job->chroma_location - 1;
@@ -412,16 +409,16 @@ int encx264Init( hb_work_object_t * w, hb_job_t * job )
         if (job->mastering.has_primaries && job->mastering.has_luminance)
         {
             param.mastering_display.b_mastering_display = 1;
-            param.mastering_display.i_red_x   = rescale(job->mastering.display_primaries[0][0], MASTERING_CHROMA_DEN);
-            param.mastering_display.i_red_y   = rescale(job->mastering.display_primaries[0][1], MASTERING_CHROMA_DEN);
-            param.mastering_display.i_green_x = rescale(job->mastering.display_primaries[1][0], MASTERING_CHROMA_DEN);
-            param.mastering_display.i_green_y = rescale(job->mastering.display_primaries[1][1], MASTERING_CHROMA_DEN);
-            param.mastering_display.i_blue_x  = rescale(job->mastering.display_primaries[2][0], MASTERING_CHROMA_DEN);
-            param.mastering_display.i_blue_y  = rescale(job->mastering.display_primaries[2][1], MASTERING_CHROMA_DEN);
-            param.mastering_display.i_white_x = rescale(job->mastering.white_point[0], MASTERING_CHROMA_DEN);
-            param.mastering_display.i_white_y = rescale(job->mastering.white_point[1], MASTERING_CHROMA_DEN);
-            param.mastering_display.i_display_max = rescale(job->mastering.max_luminance, MASTERING_LUMA_DEN);
-            param.mastering_display.i_display_min = rescale(job->mastering.min_luminance, MASTERING_LUMA_DEN);
+            param.mastering_display.i_red_x   = hb_rescale_rational(job->mastering.display_primaries[0][0], MASTERING_CHROMA_DEN);
+            param.mastering_display.i_red_y   = hb_rescale_rational(job->mastering.display_primaries[0][1], MASTERING_CHROMA_DEN);
+            param.mastering_display.i_green_x = hb_rescale_rational(job->mastering.display_primaries[1][0], MASTERING_CHROMA_DEN);
+            param.mastering_display.i_green_y = hb_rescale_rational(job->mastering.display_primaries[1][1], MASTERING_CHROMA_DEN);
+            param.mastering_display.i_blue_x  = hb_rescale_rational(job->mastering.display_primaries[2][0], MASTERING_CHROMA_DEN);
+            param.mastering_display.i_blue_y  = hb_rescale_rational(job->mastering.display_primaries[2][1], MASTERING_CHROMA_DEN);
+            param.mastering_display.i_white_x = hb_rescale_rational(job->mastering.white_point[0], MASTERING_CHROMA_DEN);
+            param.mastering_display.i_white_y = hb_rescale_rational(job->mastering.white_point[1], MASTERING_CHROMA_DEN);
+            param.mastering_display.i_display_max = hb_rescale_rational(job->mastering.max_luminance, MASTERING_LUMA_DEN);
+            param.mastering_display.i_display_min = hb_rescale_rational(job->mastering.min_luminance, MASTERING_LUMA_DEN);
         }
 
         /*  Content light level */
@@ -649,13 +646,15 @@ int encx264Init( hb_work_object_t * w, hb_job_t * job )
 
     pv->api->encoder_headers( pv->x264, &nal, &nal_count );
 
-    /* Sequence Parameter Set */
-    memcpy(w->config->h264.sps, nal[0].p_payload + 4, nal[0].i_payload - 4);
-    w->config->h264.sps_length = nal[0].i_payload - 4;
-
-    /* Picture Parameter Set */
-    memcpy(w->config->h264.pps, nal[1].p_payload + 4, nal[1].i_payload - 4);
-    w->config->h264.pps_length = nal[1].i_payload - 4;
+    if (hb_set_h264_extradata(w->extradata,
+                              nal[0].p_payload + 4, nal[0].i_payload - 4,
+                              nal[1].p_payload + 4, nal[1].i_payload - 4))
+    {
+        hb_error("encx264: set extradata failed.");
+        free( pv );
+        w->private_data = NULL;
+        return 1;
+    }
 
     pv->api->picture_init( &pv->pic_in );
 
@@ -709,9 +708,9 @@ static hb_buffer_t *nal_encode( hb_work_object_t *w, x264_picture_t *pic_out,
     buf->s.start        = pic_out->i_pts;
     buf->s.stop         = AV_NOPTS_VALUE;
     buf->s.renderOffset = pic_out->i_dts;
-    if ( !w->config->init_delay && pic_out->i_dts < 0 )
+    if (!*w->init_delay && pic_out->i_dts < 0)
     {
-        w->config->init_delay = -pic_out->i_dts;
+        *w->init_delay = -pic_out->i_dts;
     }
 
     /* Determine what type of frame we have. */

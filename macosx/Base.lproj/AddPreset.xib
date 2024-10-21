@@ -145,7 +145,7 @@ Gw
                         <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" id="Mi7-V1-sSf">
                             <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                             <font key="font" metaFont="controlContent" size="11"/>
-                            <menu key="menu" title="OtherViews" id="qsA-gt-zdK"/>
+                            <menu key="menu" id="qsA-gt-zdK"/>
                         </popUpButtonCell>
                         <connections>
                             <accessibilityConnection property="title" destination="Wpk-WC-aVk" id="TRg-aM-ebJ"/>
@@ -182,7 +182,7 @@ Source maximum uses the full dimensions of each source.</string>
                         <popUpButtonCell key="cell" type="push" title="New Category…" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="Sf8-HP-mhE" id="mZR-uO-YA8">
                             <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                             <font key="font" metaFont="controlContent" size="11"/>
-                            <menu key="menu" title="OtherViews" id="tQ1-PN-kvh">
+                            <menu key="menu" id="tQ1-PN-kvh">
                                 <items>
                                     <menuItem title="New Category…" state="on" id="Sf8-HP-mhE">
                                         <modifierMask key="keyEquivalentModifierMask"/>

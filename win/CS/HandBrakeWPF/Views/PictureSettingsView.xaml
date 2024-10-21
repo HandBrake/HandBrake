@@ -11,7 +11,10 @@
         <Converters:BooleanToVisibilityConverter x:Key="boolToVisConverter" />
         <picture:ResolutionLimitConverter x:Key="resolutionLimitConverter" />
         <picture:CropModeConverter x:Key="cropModeConverter" />
-        
+        <picture:PadColourConverter x:Key="padColourConverter" />
+        <picture:PaddingModeConverter x:Key="paddingModeConverter" />
+        <picture:AnamorphicConverter x:Key="anamorphicConverter" />
+
         <Style TargetType="controls:NumberBox">
             <Setter Property="Height" Value="24" />
         </Style>
@@ -165,7 +168,7 @@
 
             <!-- Anamorphic -->
             <TextBlock Text="{x:Static Properties:Resources.PictureSettingsView_Anamorphic}" Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" Margin="0,5,0,5" />
-            <ComboBox Width="110" Grid.Row="2" ItemsSource="{Binding AnamorphicModes}" SelectedItem="{Binding SelectedAnamorphicMode}" Grid.Column="1" HorizontalAlignment="Left" Margin="0,5,0,5" Grid.ColumnSpan="3"
+            <ComboBox Width="110" Grid.Row="2" ItemsSource="{Binding AnamorphicModes, Converter={StaticResource anamorphicConverter}}" SelectedItem="{Binding SelectedAnamorphicMode, Converter={StaticResource anamorphicConverter}}" Grid.Column="1" HorizontalAlignment="Left" Margin="0,5,0,5" Grid.ColumnSpan="3"
                       ToolTip="{x:Static Properties:ResourcesTooltips.PictureSettingsView_Anamorphic}"
                       AutomationProperties.Name="{x:Static Properties:Resources.PictureSettingsView_Anamorphic}" />
 
@@ -197,8 +200,8 @@
                                     AutomationProperties.Name="{x:Static Properties:Resources.PictureSettingsView_Height}" />
             </StackPanel>
 
-            <CheckBox Content="Optimal Size" IsChecked="{Binding OptimalSize}" Grid.Row="5" Grid.Column="1" Grid.ColumnSpan="3" Margin="0,5,0,0" VerticalContentAlignment="Center" />
-            <CheckBox Content="Allow Upscaling" IsChecked="{Binding AllowUpscaling}" Grid.Row="6" Grid.Column="1" Grid.ColumnSpan="3" Margin="0,5,0,0" VerticalContentAlignment="Center" />
+            <CheckBox Content="{x:Static Properties:Resources.PictureSettingsView_OptimalSize}" IsChecked="{Binding OptimalSize}" Grid.Row="5" Grid.Column="1" Grid.ColumnSpan="3" Margin="0,5,0,0" VerticalContentAlignment="Center" />
+            <CheckBox Content="{x:Static Properties:Resources.PictureSettingsView_AllowUpscaling}" IsChecked="{Binding AllowUpscaling}" Grid.Row="6" Grid.Column="1" Grid.ColumnSpan="3" Margin="0,5,0,0" VerticalContentAlignment="Center" />
         </Grid>
 
         <!-- Padding Panel -->
@@ -218,7 +221,7 @@
             </Grid.RowDefinitions>
 
             <TextBlock Text="{x:Static Properties:Resources.PictureSettingsView_Padding}" Grid.Row="0" Grid.Column="0" />
-            <ComboBox ItemsSource="{Binding PaddingFilter.PaddingModes}" SelectedItem="{Binding PaddingFilter.Mode}" Grid.Row="0" Grid.Column="1" Width="140" />
+            <ComboBox ItemsSource="{Binding PaddingFilter.PaddingModes, Converter={StaticResource paddingModeConverter}}" SelectedItem="{Binding PaddingFilter.Mode, Converter={StaticResource paddingModeConverter}}" Grid.Row="0" Grid.Column="1" Width="140" />
 
             <Grid Margin="0,5,0,5" Grid.Row="1" Grid.ColumnSpan="2">
                 <Grid.RowDefinitions>
@@ -264,7 +267,7 @@
             </Grid>
 
             <TextBlock Text="{x:Static Properties:Resources.PictureSettingsView_PaddingColour}" Grid.Row="2" Grid.Column="0" />
-            <ComboBox ItemsSource="{Binding PaddingFilter.PaddingColours}" SelectedItem="{Binding PaddingFilter.Colour}" Grid.Row="2" Grid.Column="1" Width="140"
+            <ComboBox ItemsSource="{Binding PaddingFilter.PaddingColours, Converter={StaticResource padColourConverter}}" SelectedItem="{Binding PaddingFilter.Colour, Converter={StaticResource padColourConverter}}" Grid.Row="2" Grid.Column="1" Width="140"
                       IsEnabled="{Binding PaddingFilter.IsCustomPaddingEnabled}" />
 
             <TextBlock Text="{x:Static Properties:Resources.PictureSettingsView_PaddingCustomColour}" Grid.Row="3" Grid.Column="0"  Visibility="{Binding PaddingFilter.IsCustomColourVisible, Converter={StaticResource boolToVisConverter}}" />

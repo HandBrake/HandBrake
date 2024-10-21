@@ -9,31 +9,21 @@
 
 typedef NS_ENUM(NSUInteger, HBDoneAction) {
     HBDoneActionDoNothing = 0,
-    HBDoneActionAlert = 1,
-    HBDoneActionNotification = 2,
-    HBDoneActionAlertAndNotification = 3,
-    HBDoneActionSleep = 4,
-    HBDoneActionShutDown = 5,
-    HBDoneActionQuit = 6,
+    HBDoneActionSleep = 1,
+    HBDoneActionShutDown = 2,
+    HBDoneActionQuit = 3,
 };
 
 extern NSString * const HBShowOpenPanelAtLaunch;
 extern NSString * const HBShowSummaryPreview;
+extern NSString * const HBKeepPresetEdits;
+extern NSString * const HBUseSourceFolderDestination;
 
 extern NSString * const HBRecursiveScan;
+extern NSString * const HBExcludedFileExtensions;
 extern NSString * const HBLastDestinationDirectoryURL;
 extern NSString * const HBLastDestinationDirectoryBookmark;
 extern NSString * const HBLastSourceDirectoryURL;
-
-extern NSString * const HBDefaultMpegExtension;
-
-extern NSString * const HBAlertWhenDone;
-extern NSString * const HBResetWhenDoneOnLaunch;
-extern NSString * const HBAlertWhenDoneSound;
-extern NSString * const HBSendToAppEnabled;
-extern NSString * const HBSendToApp;
-
-extern NSString * const HBUseSourceFolderDestination;
 
 extern NSString * const HBDefaultAutoNaming;
 extern NSString * const HBAutoNamingFormat;
@@ -42,12 +32,15 @@ extern NSString * const HBAutoNamingRemovePunctuation;
 extern NSString * const HBAutoNamingTitleCase;
 extern NSString * const HBAutoNamingISODateFormat;
 
+extern NSString * const HBDefaultMpegExtension;
+
 extern NSString * const HBCqSliderFractional;
 extern NSString * const HBUseDvdNav;
 extern NSString * const HBUseHardwareDecoder;
 extern NSString * const HBAlwaysUseHardwareDecoder;
 extern NSString * const HBMinTitleScanSeconds;
 extern NSString * const HBPreviewsNumber;
+extern NSString * const HBKeepDuplicateTitles;
 
 extern NSString * const HBLoggingLevel;
 extern NSString * const HBEncodeLogLocation;
@@ -55,9 +48,19 @@ extern NSString * const HBClearOldLogs;
 
 extern NSString * const HBQueuePauseIfLowSpace;
 extern NSString * const HBQueueMinFreeSpace;
+extern NSString * const HBQueuePauseOnBatteryPower;
+
 extern NSString * const HBQueueAutoClearCompletedItems;
+extern NSString * const HBQueueAutoClearCompletedItemsAtLaunch;
+
 extern NSString * const HBQueueWorkerCounts;
 
-extern NSString * const HBKeepPresetEdits;
+extern NSString * const HBResetWhenDoneOnLaunch;
+extern NSString * const HBQueueDoneAction;
+extern NSString * const HBQueueNotificationWhenDone;
+extern NSString * const HBQueueNotificationWhenJobDone;
+extern NSString * const HBQueueNotificationPlaySound;
+extern NSString * const HBSendToAppEnabled;
+extern NSString * const HBSendToApp;
 
 #endif /* HBPreferencesKeys_h */

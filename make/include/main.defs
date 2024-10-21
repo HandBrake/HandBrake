@@ -2,6 +2,7 @@ include $(SRC/)make/include/base.defs
 include $(SRC/)make/include/contrib.defs
 include $(SRC/)make/include/function.defs
 include $(SRC/)make/include/gcc.defs
+include $(SRC/)make/include/metal.defs
 include $(SRC/)make/include/target.defs
 include $(SRC/)make/include/tool.defs
 
@@ -17,7 +18,6 @@ ifneq (,$(filter $(HOST.system),darwin cygwin mingw))
     MODULES += contrib/freetype
     MODULES += contrib/fribidi
     MODULES += contrib/harfbuzz
-    MODULES += contrib/libxml2
     MODULES += contrib/libass
     MODULES += contrib/libogg
     MODULES += contrib/libvorbis
@@ -76,6 +76,7 @@ endif
 
 ifneq (,$(filter $(HOST.system),darwin))
     MODULES += contrib/xz
+    MODULES += contrib/bin2c
 endif
 
 ifneq (,$(filter $(HOST.machine),arm64 aarch64))

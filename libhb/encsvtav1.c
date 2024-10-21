@@ -1,6 +1,6 @@
 /* encsvtav1.c
 
-   Copyright (c) 2003-2023 HandBrake Team
+   Copyright (c) 2003-2024 HandBrake Team
    This file is part of the HandBrake source code
    partially based on FFmpeg libsvtav1.c
    Homepage: <http://handbrake.fr/>.
@@ -12,6 +12,9 @@
 #include "handbrake/hb_dict.h"
 #include "handbrake/av1_common.h"
 #include "handbrake/hdr10plus.h"
+#include "handbrake/dovi_common.h"
+#include "handbrake/extradata.h"
+
 #include "libavutil/avutil.h"
 #include "svt-av1/EbSvtAv1ErrorCodes.h"
 #include "svt-av1/EbSvtAv1Enc.h"
@@ -41,8 +44,6 @@ struct hb_work_private_s
     EbSvtAv1EncConfiguration    enc_params;
     EbComponentType            *svt_handle;
     EbBufferHeaderType         *in_buf;
-
-    int eos_flag;
 
     struct {
         int64_t duration;
@@ -183,7 +184,11 @@ int encsvtInit(hb_work_object_t *w, hb_job_t *job)
         }
     }
 
-    if (job->encoder_tune != NULL && strstr("psnr", job->encoder_tune) != NULL)
+    if (job->encoder_tune != NULL && strstr("ssim", job->encoder_tune) != NULL)
+    {
+        param->tune = 2;
+    }
+    else if (job->encoder_tune != NULL && strstr("psnr", job->encoder_tune) != NULL)
     {
         param->tune = 1;
     }
@@ -289,25 +294,9 @@ int encsvtInit(hb_work_object_t *w, hb_job_t *job)
         job->pass_id == HB_PASS_ENCODE_FINAL)
     {
         hb_interjob_t *interjob = hb_interjob_get(job->h);
-
-        if (job->pass_id == HB_PASS_ENCODE_ANALYSIS)
-        {
-            if (interjob->context == NULL)
-            {
-                param->pass = 1;
-            }
-            else
-            {
-                param->pass = 2;
-            }
-        }
-        else
-        {
-            param->pass = 3;
-        }
-
         param->rc_stats_buffer.buf = interjob->context;
         param->rc_stats_buffer.sz  = interjob->context_size;
+        param->pass = job->pass_id == HB_PASS_ENCODE_ANALYSIS ? 1 : 2;
     }
 
     svt_ret = svt_av1_enc_set_parameter(pv->svt_handle, &pv->enc_params);
@@ -333,8 +322,34 @@ int encsvtInit(hb_work_object_t *w, hb_job_t *job)
         return 1;
     }
 
-    w->config->extradata.length = headerPtr->n_filled_len;
-    memcpy(w->config->extradata.bytes, headerPtr->p_buffer, headerPtr->n_filled_len);
+    if (hb_set_extradata(w->extradata, headerPtr->p_buffer, headerPtr->n_filled_len))
+    {
+        hb_error("encsvtav1: error setting extradata");
+        return 1;
+    }
+
+    // Update and set Dolby Vision level
+    if (job->passthru_dynamic_hdr_metadata & DOVI)
+    {
+        int level_idx, high_tier;
+        hb_parse_av1_extradata(*w->extradata, &level_idx, &high_tier);
+
+        int pps = (double)job->width * job->height * (job->vrate.num / job->vrate.den);
+        int bitrate = job->vquality == HB_INVALID_VIDEO_QUALITY ? job->vbitrate : -1;
+
+        // Dolby Vision requires VBV settings to enable HRD
+        // but SVT-AV1 supports max-bit-rate only in CFR mode
+        // so that the Dolby Vision level to something comparable
+        // to the current AV1 level
+        if (param->max_bit_rate == 0)
+        {
+            int max_rate = hb_dovi_max_rate(job->vcodec, job->width, pps, bitrate,
+                                            level_idx, high_tier);
+            param->max_bit_rate = max_rate * 1000;
+        }
+
+        job->dovi.dv_level = hb_dovi_level(job->width, pps, param->max_bit_rate / 1000, high_tier);
+    }
 
     svt_ret = svt_av1_enc_stream_header_release(headerPtr);
     if (svt_ret != EB_ErrorNone)
@@ -371,6 +386,10 @@ void encsvtClose(hb_work_object_t *w)
     }
     if (pv->in_buf)
     {
+        if (pv->in_buf->metadata)
+        {
+            svt_metadata_array_free(&pv->in_buf->metadata);
+        }
         av_free(pv->in_buf->p_buffer);
         av_freep(&pv->in_buf);
     }
@@ -482,12 +501,21 @@ static int send(hb_work_object_t *w, hb_buffer_t *in)
                 svt_add_metadata(headerPtr, EB_AV1_METADATA_TYPE_ITUT_T35, payload, playload_size);
                 av_freep(&payload);
             }
+            else if (job->passthru_dynamic_hdr_metadata & DOVI &&
+                     side_data->type == AV_FRAME_DATA_DOVI_RPU_BUFFER_T35)
+            {
+                svt_add_metadata(headerPtr, EB_AV1_METADATA_TYPE_ITUT_T35, side_data->data, side_data->size);
+            }
+
         }
     }
 
     if (in->s.new_chap > 0 && pv->job->chapter_markers)
     {
-        headerPtr->pic_type = EB_AV1_KEY_PICTURE;
+        if (pv->enc_params.force_key_frames)
+        {
+            headerPtr->pic_type = EB_AV1_KEY_PICTURE;
+        }
         hb_chapter_enqueue(pv->chapter_queue, in);
     }
     else
@@ -500,68 +528,70 @@ static int send(hb_work_object_t *w, hb_buffer_t *in)
     return 0;
 }
 
-static hb_buffer_t * receive(hb_work_object_t *w)
+static int receive(hb_work_object_t *w, hb_buffer_t **out, int done)
 {
     hb_work_private_t  *pv = w->private_data;
     EbBufferHeaderType *headerPtr;
     EbErrorType svt_ret;
-    hb_buffer_t *out;
+    hb_buffer_t *buf;
 
-    if (pv->eos_flag == 1)
-    {
-        return NULL;
-    }
-
-    svt_ret = svt_av1_enc_get_packet(pv->svt_handle, &headerPtr, pv->eos_flag);
+    svt_ret = svt_av1_enc_get_packet(pv->svt_handle, &headerPtr, done);
     if (svt_ret == EB_NoErrorEmptyQueue)
     {
-        return NULL;
+        *out = NULL;
+        return 1;
     }
 
-    out = hb_buffer_init(headerPtr->n_filled_len);
-    if (out == NULL)
+    if (headerPtr->flags & EB_BUFFERFLAG_EOS)
+    {
+        svt_av1_enc_release_out_buffer(&headerPtr);
+        *out = NULL;
+        return 2;
+    }
+
+    buf = hb_buffer_init(headerPtr->n_filled_len);
+    if (buf == NULL)
     {
         hb_error("encsvtav1: failed to allocate output packet");
-        return NULL;
+        svt_av1_enc_release_out_buffer(&headerPtr);
+        *out = NULL;
+        return 2;
     }
 
-    memcpy(out->data, headerPtr->p_buffer, headerPtr->n_filled_len);
+    memcpy(buf->data, headerPtr->p_buffer, headerPtr->n_filled_len);
 
-    out->size            = headerPtr->n_filled_len;
-    out->s.start         = headerPtr->pts;
-    out->s.duration      = get_frame_duration(pv);
-    out->s.stop          = out->s.start + out->s.duration;
-    out->s.renderOffset  = headerPtr->dts;
+    buf->size            = headerPtr->n_filled_len;
+    buf->s.start         = headerPtr->pts;
+    buf->s.duration      = get_frame_duration(pv);
+    buf->s.stop          = buf->s.start + buf->s.duration;
+    buf->s.renderOffset  = headerPtr->dts;
 
     // SVT-AV1 doesn't always respect forced keyframes,
     // so always check for chapters
-    hb_chapter_dequeue(pv->chapter_queue, out);
+    hb_chapter_dequeue(pv->chapter_queue, buf);
 
     switch (headerPtr->pic_type)
     {
         case EB_AV1_KEY_PICTURE:
-            out->s.flags |= HB_FLAG_FRAMETYPE_KEY;
+            buf->s.flags |= HB_FLAG_FRAMETYPE_KEY;
             // fall-through
         case EB_AV1_INTRA_ONLY_PICTURE:
-            out->s.frametype = HB_FRAME_IDR;
+            buf->s.frametype = HB_FRAME_IDR;
             break;
         default:
-            out->s.frametype = HB_FRAME_P;
+            buf->s.frametype = HB_FRAME_P;
             break;
     }
 
     if (headerPtr->pic_type != EB_AV1_NON_REF_PICTURE)
     {
-        out->s.flags |= HB_FLAG_FRAMETYPE_REF;
-    }
-
-    if (headerPtr->flags & EB_BUFFERFLAG_EOS)
-    {
-        pv->eos_flag = 1;
+        buf->s.flags |= HB_FLAG_FRAMETYPE_REF;
     }
 
     svt_av1_enc_release_out_buffer(&headerPtr);
-    return out;
+
+    *out = buf;
+    return 0;
 }
 
 static void encode(hb_work_object_t *w, hb_buffer_t *in, hb_buffer_list_t *list)
@@ -569,7 +599,7 @@ static void encode(hb_work_object_t *w, hb_buffer_t *in, hb_buffer_list_t *list)
     send(w, in);
 
     hb_buffer_t *out;
-    while ((out = receive(w)))
+    while (receive(w, &out, 0) == 0)
     {
         hb_buffer_list_append(list, out);
     }
@@ -583,15 +613,13 @@ static void flush(hb_work_object_t *w, hb_buffer_t *in, hb_buffer_list_t *list)
 
     send(w, in);
 
-    while (pv->eos_flag == 0)
+    hb_buffer_t *out = NULL;
+    while (receive(w, &out, 1) == 0)
     {
-        hb_buffer_t *out = receive(w);
         hb_buffer_list_append(list, out);
     }
 
     // Store the first pass stats for the next
-    // N.B.: this is needed only for the first pass
-    // the second one will reuse the existing buffer
     if (job->pass_id == HB_PASS_ENCODE_ANALYSIS && interjob->context == NULL)
     {
         SvtAv1FixedBuf first_pass_stat;
@@ -613,7 +641,7 @@ static void flush(hb_work_object_t *w, hb_buffer_t *in, hb_buffer_list_t *list)
 int encsvtWork(hb_work_object_t *w, hb_buffer_t **buf_in,
                hb_buffer_t **buf_out)
 {
-    hb_buffer_t       *in = *buf_in;
+    hb_buffer_t      *in = *buf_in;
     hb_buffer_list_t  list;
 
     *buf_out = NULL;
@@ -622,7 +650,7 @@ int encsvtWork(hb_work_object_t *w, hb_buffer_t **buf_in,
     if (in->s.flags & HB_BUF_FLAG_EOF)
     {
         // EOF on input. Flush any frames still in the decoder then
-        // send the eof downstream to tell the muxer we're done.
+        // send the EOF downstream to tell the muxer we're done.
         flush(w, in, &list);
         hb_buffer_list_append(&list, hb_buffer_eof_init());
 

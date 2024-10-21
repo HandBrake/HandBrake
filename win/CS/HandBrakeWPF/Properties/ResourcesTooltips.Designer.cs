@@ -428,7 +428,7 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Optimize MP4 for progressive download. After encoding, data is reorganized and rewritten to allow immediate playback over a network, without needing to download the entire file..
+        ///   Looks up a localized string similar to Optimize for progressive download. After encoding, data is reorganized and rewritten to allow immediate playback over a network, without needing to download the entire file..
         /// </summary>
         public static string MainView_Optimise {
             get {
@@ -954,6 +954,15 @@ namespace HandBrakeWPF.Properties {
             }
         }
         
+		/// <summary>
+        ///   Looks up a localized string similar to Remove common punctuation
+        /// </summary>
+        public static string Options_RemovePunctuation {
+            get {
+                return ResourceManager.GetString("Options_RemovePunctuation", resourceCulture);
+            }
+        }
+		
         /// <summary>
         ///   Looks up a localized string similar to Enables variable framerate output.
         ///

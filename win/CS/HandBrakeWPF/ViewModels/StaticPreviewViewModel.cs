@@ -20,6 +20,7 @@ namespace HandBrakeWPF.ViewModels
 
     using HandBrake.Interop.Interop.Interfaces;
 
+    using HandBrakeWPF.Helpers;
     using HandBrakeWPF.Properties;
     using HandBrakeWPF.Services.Encode.Model.Models;
     using HandBrakeWPF.Services.Interfaces;
@@ -386,7 +387,7 @@ namespace HandBrakeWPF.ViewModels
             BitmapSource image = null;
             try
             {
-                image = this.scanService.GetPreview(this.Task, this.SelectedPreviewImage);
+                image = this.scanService.GetPreview(this.Task, this.SelectedPreviewImage, false);
             }
             catch (Exception exc)
             {
@@ -536,7 +537,7 @@ namespace HandBrakeWPF.ViewModels
                 return;
             }
 
-            QueueTask task = new QueueTask(encodeTask, this.SelectedTitle.SourcePath, null, false, null);
+            QueueTask task = new QueueTask(encodeTask, this.SelectedTitle.SourcePath, null, false, this.SelectedTitle);
             ThreadPool.QueueUserWorkItem(this.CreatePreview, task);
         }
 
@@ -660,7 +661,7 @@ namespace HandBrakeWPF.ViewModels
 
             if (e.ErrorInformation != "1")
             {
-                this.PlayFile();
+                ThreadHelper.OnUIThread(() => this.PlayFile());
             }
         }
     }

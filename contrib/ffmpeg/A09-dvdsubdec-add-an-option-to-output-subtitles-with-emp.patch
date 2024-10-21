@@ -1,0 +1,42 @@
+From 68545e5d08e3726615f58d533c843edcff80d479 Mon Sep 17 00:00:00 2001
+From: Damiano Galassi <damiog@gmail.com>
+Date: Wed, 20 Mar 2024 09:14:19 +0100
+Subject: [PATCH 09/16] dvdsubdec: add an option to output subtitles with empty
+ or fully transparent rects.
+
+---
+ libavcodec/dvdsubdec.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/libavcodec/dvdsubdec.c b/libavcodec/dvdsubdec.c
+index afc88656cf..bd32b7dc2b 100644
+--- a/libavcodec/dvdsubdec.c
++++ b/libavcodec/dvdsubdec.c
+@@ -46,6 +46,7 @@ typedef struct DVDSubContext
+   int      forced_subs_only;
+   uint8_t  used_color[256];
+   int64_t  pts;
++  int      output_empty_rects;
+ } DVDSubContext;
+ 
+ static void yuv_a_to_rgba(const uint8_t *ycbcr, const uint8_t *alpha, uint32_t *rgba, int num_values)
+@@ -569,7 +570,7 @@ static int dvdsub_decode(AVCodecContext *avctx, AVSubtitle *sub,
+         ctx->pts = AV_NOPTS_VALUE;
+         return buf_size;
+     }
+-    if (!is_menu && find_smallest_bounding_rectangle(ctx, sub) == 0)
++    if (!is_menu && !ctx->output_empty_rects && find_smallest_bounding_rectangle(ctx, sub) == 0)
+         goto no_subtitle;
+ 
+     if (ctx->forced_subs_only && !(sub->rects[0]->flags & AV_SUBTITLE_FLAG_FORCED))
+@@ -721,6 +722,7 @@ static const AVOption options[] = {
+     { "palette", "set the global palette", OFFSET(palette_str), AV_OPT_TYPE_STRING, { .str = NULL }, 0, 0, SD },
+     { "ifo_palette", "obtain the global palette from .IFO file", OFFSET(ifo_str), AV_OPT_TYPE_STRING, { .str = NULL }, 0, 0, SD },
+     { "forced_subs_only", "Only show forced subtitles", OFFSET(forced_subs_only), AV_OPT_TYPE_BOOL, {.i64 = 0}, 0, 1, SD},
++    { "output_empty_rects", "Output subtitles with empty or fully transparent rects", OFFSET(output_empty_rects), AV_OPT_TYPE_BOOL, {.i64 = 0}, 0, 1, SD},
+     { NULL }
+ };
+ static const AVClass dvdsub_class = {
+-- 
+2.39.5 (Apple Git-154)
+

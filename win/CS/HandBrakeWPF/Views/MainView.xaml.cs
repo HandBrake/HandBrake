@@ -112,5 +112,23 @@ namespace HandBrakeWPF.Views
                 }
             }
         }
+
+        private void InfoButton_OnPreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            // If we've clicked the dropdown part of the button, display the context menu below the button.
+            Button button = (sender as Button);
+            if (button != null)
+            {
+                HitTestResult result = VisualTreeHelper.HitTest(button, e.GetPosition(button));
+                FrameworkElement element = result.VisualHit as FrameworkElement;
+                if (element != null)
+                {
+                    button.ContextMenu.IsEnabled = true;
+                    button.ContextMenu.PlacementTarget = button;
+                    button.ContextMenu.Placement = System.Windows.Controls.Primitives.PlacementMode.Bottom;
+                    button.ContextMenu.IsOpen = true;
+                }
+            }
+        }
     }
 }

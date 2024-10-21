@@ -1,6 +1,6 @@
 /* rpu.c
 
-   Copyright (c) 2003-2023 HandBrake Team
+   Copyright (c) 2003-2024 HandBrake Team
    This file is part of the HandBrake source code
    Homepage: <http://handbrake.fr/>.
    It may be used under the terms of the GNU General Public License v2.
@@ -8,12 +8,11 @@
  */
 
 #include "handbrake/handbrake.h"
+#include "handbrake/rpu.h"
 
 #if HB_PROJECT_FEATURE_LIBDOVI
 #include "libdovi/rpu_parser.h"
 #endif
-
-#define RPU_DEFAULT_MODE 1
 
 struct hb_filter_private_s
 {
@@ -81,7 +80,7 @@ static int rpu_init(hb_filter_object_t *filter,
 
     pv->input = *init;
 
-    int mode = RPU_DEFAULT_MODE;
+    int mode = RPU_MODE_UPDATE_ACTIVE_AREA | RPU_MODE_EMIT_UNSPECT_62_NAL;
     double scale_factor_x = 1, scale_factor_y = 1;
     int crop_top = 0, crop_bottom = 0, crop_left = 0, crop_right = 0;
     int pad_top = 0, pad_bottom = 0, pad_left = 0, pad_right = 0;
@@ -143,12 +142,15 @@ static void rpu_close(hb_filter_object_t * filter)
 static void apply_rpu_if_needed(hb_filter_private_t *pv, hb_buffer_t *buf)
 {
     int rpu_available = 0;
+    enum AVFrameSideDataType type = AV_FRAME_DATA_DOVI_RPU_BUFFER;
 
     for (int i = 0; i < buf->nb_side_data; i++)
     {
         const AVFrameSideData *side_data = buf->side_data[i];
-        if (side_data->type == AV_FRAME_DATA_DOVI_RPU_BUFFER)
+        if (side_data->type == AV_FRAME_DATA_DOVI_RPU_BUFFER ||
+            side_data->type == AV_FRAME_DATA_DOVI_RPU_BUFFER_T35)
         {
+            type = side_data->type;
             rpu_available = 1;
         }
     }
@@ -158,7 +160,7 @@ static void apply_rpu_if_needed(hb_filter_private_t *pv, hb_buffer_t *buf)
         if (pv->rpu)
         {
             AVBufferRef *ref = av_buffer_ref(pv->rpu);
-            AVFrameSideData *sd_dst = hb_buffer_new_side_data_from_buf(buf, AV_FRAME_DATA_DOVI_RPU_BUFFER, ref);
+            AVFrameSideData *sd_dst = hb_buffer_new_side_data_from_buf(buf, type, ref);
             if (!sd_dst)
             {
                 av_buffer_unref(&ref);
@@ -187,19 +189,41 @@ static int rpu_work(hb_filter_object_t *filter,
     hb_filter_private_t *pv = filter->private_data;
     hb_buffer_t *in = *buf_in;
 
+    if (in->s.flags & HB_BUF_FLAG_EOF)
+    {
+        *buf_out = in;
+        *buf_in = NULL;
+        return HB_FILTER_DONE;
+    }
+
     // libavcodec hevc decoder seems to be missing some rpu
-    // a specific sample file, work around the issue
+    // in a specific sample file, work around the issue
     // by using the last seen rpu
     apply_rpu_if_needed(pv, in);
 
     for (int i = 0; i < in->nb_side_data; i++)
     {
         const AVFrameSideData *side_data = in->side_data[i];
-        if (side_data->type == AV_FRAME_DATA_DOVI_RPU_BUFFER)
+        if (side_data->type == AV_FRAME_DATA_DOVI_RPU_BUFFER ||
+            side_data->type == AV_FRAME_DATA_DOVI_RPU_BUFFER_T35)
         {
-            DoviRpuOpaque *rpu_in = dovi_parse_unspec62_nalu(side_data->data, side_data->size);
+            DoviRpuOpaque *rpu_in = NULL;
+            if (side_data->type == AV_FRAME_DATA_DOVI_RPU_BUFFER)
+            {
+                rpu_in = dovi_parse_unspec62_nalu(side_data->data, side_data->size);
+            }
+            else if (side_data->type == AV_FRAME_DATA_DOVI_RPU_BUFFER_T35)
+            {
+                rpu_in = dovi_parse_itu_t35_dovi_metadata_obu(side_data->data, side_data->size);
+            }
 
-            if (pv->mode & 2)
+            if (rpu_in == NULL)
+            {
+                hb_log("rpu: dovi_parse failed");
+                break;
+            }
+
+            if (pv->mode & RPU_MODE_CONVERT_TO_8_1)
             {
                 const DoviRpuDataHeader *header = dovi_rpu_get_header(rpu_in);
                 if (header && header->guessed_profile == 7)
@@ -218,7 +242,7 @@ static int rpu_work(hb_filter_object_t *filter,
                 }
             }
 
-            if (pv->mode & 1)
+            if (pv->mode & RPU_MODE_UPDATE_ACTIVE_AREA)
             {
                 uint16_t left_offset = 0, right_offset = 0;
                 uint16_t top_offset  = 0, bottom_offset = 0;
@@ -271,15 +295,34 @@ static int rpu_work(hb_filter_object_t *filter,
 
             if (pv->mode)
             {
-                const DoviData *rpu_data = dovi_write_unspec62_nalu(rpu_in);
+                const DoviData *rpu_data = NULL;
+
+                if (pv->mode & RPU_MODE_EMIT_UNSPECT_62_NAL)
+                {
+                    rpu_data = dovi_write_unspec62_nalu(rpu_in);
+                }
+                else if (pv->mode & RPU_MODE_EMIT_T35_OBU)
+                {
+                    rpu_data = dovi_write_av1_rpu_metadata_obu_t35_complete(rpu_in);
+                }
 
                 if (rpu_data)
                 {
-                    hb_frame_remove_side_data(in, side_data->type);
+                    hb_buffer_remove_side_data(in, side_data->type);
+                    const int offset = pv->mode & RPU_MODE_EMIT_UNSPECT_62_NAL ? 2 : 0;
 
-                    AVBufferRef *ref = av_buffer_alloc(rpu_data->len - 2);
-                    memcpy(ref->data, rpu_data->data + 2, rpu_data->len - 2);
-                    AVFrameSideData *sd_dst = hb_buffer_new_side_data_from_buf(in, AV_FRAME_DATA_DOVI_RPU_BUFFER, ref);
+                    AVBufferRef *ref = av_buffer_alloc(rpu_data->len - offset);
+                    memcpy(ref->data, rpu_data->data + offset, rpu_data->len - offset);
+                    AVFrameSideData *sd_dst = NULL;
+
+                    if (pv->mode & RPU_MODE_EMIT_UNSPECT_62_NAL)
+                    {
+                        sd_dst = hb_buffer_new_side_data_from_buf(in, AV_FRAME_DATA_DOVI_RPU_BUFFER, ref);
+                    }
+                    else if (pv->mode & RPU_MODE_EMIT_T35_OBU)
+                    {
+                        sd_dst = hb_buffer_new_side_data_from_buf(in, AV_FRAME_DATA_DOVI_RPU_BUFFER_T35, ref);
+                    }
 
                     if (!sd_dst)
                     {
@@ -290,9 +333,11 @@ static int rpu_work(hb_filter_object_t *filter,
                 }
                 else
                 {
-                    hb_log("dovi_write_unspec62_nalu failed");
+                    hb_log("rpu: dovi_write failed");
                 }
             }
+
+            dovi_rpu_free(rpu_in);
 
             break;
         }

@@ -575,4 +575,7 @@ HB_EXIT_CODE
   <data name="OptionsView_LaunchsHelp" xml:space="preserve">
     <value>启动位于https://handbrake.fr/docs的文档网站</value>
   </data>
+  <data name="Options_RemovePunctuation" xml:space="preserve">
+    <value>破折号 (-)、句号 (.) 和逗号 (,)</value>
+  </data>
 </root>

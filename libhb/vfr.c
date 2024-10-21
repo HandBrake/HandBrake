@@ -1,6 +1,6 @@
 /* vfr.c
 
-   Copyright (c) 2003-2022 HandBrake Team
+   Copyright (c) 2003-2024 HandBrake Team
    This file is part of the HandBrake source code
    Homepage: <http://handbrake.fr/>.
    It may be used under the terms of the GNU General Public License v2.
@@ -39,7 +39,8 @@ struct hb_filter_private_s
     hb_list_t     * frame_rate_list;
     double        * frame_metric;
 
-    unsigned        gamma_lut[256];
+    hb_motion_metric_object_t *metric;
+
 #if defined(HB_DEBUG_CFR_DROPS)
     int64_t         sequence;
 #endif
@@ -71,65 +72,53 @@ hb_filter_object_t hb_filter_vfr =
     .settings_template = hb_vfr_template,
 };
 
-// Create gamma lookup table.
-// Note that we are creating a scaled integer lookup table that will
-// not cause overflows in sse_block16() below.  This results in
-// small values being truncated to 0 which is ok for this usage.
-static void build_gamma_lut( hb_filter_private_t * pv )
+static hb_motion_metric_object_t * hb_motion_metric_init(hb_filter_init_t *init)
 {
-    int i;
-    for( i = 0; i < 256; i++ )
+    hb_motion_metric_object_t *metric;
+    switch (init->hw_pix_fmt)
     {
-        pv->gamma_lut[i] = 4095 * pow( ( (float)i / (float)255 ), 2.2f );
+#if defined(__APPLE__)
+        case AV_PIX_FMT_VIDEOTOOLBOX:
+            metric = &hb_motion_metric_vt;
+            break;
+#endif
+        default:
+            metric = &hb_motion_metric;
+            break;
     }
+
+    hb_motion_metric_object_t *metric_copy = malloc(sizeof(hb_motion_metric_object_t));
+    if (metric_copy == NULL)
+    {
+        hb_error("vfr: motion metric malloc failed");
+        return NULL;
+    }
+
+    memcpy(metric_copy, metric, sizeof(hb_motion_metric_object_t));
+
+    if (metric_copy->init(metric_copy, init))
+    {
+        free(metric_copy);
+        hb_error("vfr: motion metric init failed");
+        return NULL;
+    }
+
+    return metric_copy;
 }
 
-#define DUP_THRESH_SSE 5.0
-
-// Compute the sum of squared errors for a 16x16 block
-// Gamma adjusts pixel values so that less visible differences
-// count less.
-static inline unsigned sse_block16( unsigned *gamma_lut, uint8_t *a, uint8_t *b, int stride )
+void hb_motion_metric_close(hb_motion_metric_object_t **_m)
 {
-    int x, y;
-    unsigned sum = 0;
-    int diff;
+    hb_motion_metric_object_t *m = *_m;
 
-    for( y = 0; y < 16; y++ )
+    if (m == NULL)
     {
-        for( x = 0; x < 16; x++ )
-        {
-            diff =  gamma_lut[a[x]] - gamma_lut[b[x]];
-            sum += diff * diff;
-        }
-        a += stride;
-        b += stride;
+        return;
     }
-    return sum;
-}
 
-// Sum of squared errors.  Computes and sums the SSEs for all
-// 16x16 blocks in the images.  Only checks the Y component.
-static float motion_metric( unsigned * gamma_lut, hb_buffer_t * a, hb_buffer_t * b )
-{
-    int bw = a->f.width / 16;
-    int bh = a->f.height / 16;
-    int stride = a->plane[0].stride;
-    uint8_t * pa = a->plane[0].data;
-    uint8_t * pb = b->plane[0].data;
-    int x, y;
-    uint64_t sum = 0;
+    m->close(m);
 
-    for( y = 0; y < bh; y++ )
-    {
-        for( x = 0; x < bw; x++ )
-        {
-            sum +=  sse_block16( gamma_lut, pa + y * 16 * stride + x * 16,
-                                            pb + y * 16 * stride + x * 16,
-                                            stride );
-        }
-    }
-    return (float)sum / ( a->f.width * a->f.height );;
+    free(m);
+    *_m = NULL;
 }
 
 static void delete_metric(double * metrics, int pos, int size)
@@ -247,8 +236,7 @@ static hb_buffer_t * adjust_frame_rate( hb_filter_private_t * pv,
         penultimate = hb_list_item(pv->frame_rate_list, count - 2);
         ultimate    = hb_list_item(pv->frame_rate_list, count - 1);
 
-        pv->frame_metric[count - 1] = motion_metric(pv->gamma_lut,
-                                                    penultimate, ultimate);
+        pv->frame_metric[count - 1] = pv->metric->work(pv->metric, penultimate, ultimate);
 
         if (count < pv->frame_analysis_depth)
         {
@@ -380,12 +368,20 @@ static int hb_vfr_init(hb_filter_object_t *filter, hb_filter_init_t *init)
 {
     filter->private_data    = calloc(1, sizeof(struct hb_filter_private_s));
     hb_filter_private_t *pv = filter->private_data;
-    build_gamma_lut(pv);
 
     pv->cfr              = init->cfr;
     pv->input_vrate = pv->vrate = init->vrate;
     hb_dict_extract_int(&pv->cfr, filter->settings, "mode");
     hb_dict_extract_rational(&pv->vrate, filter->settings, "rate");
+
+    if (pv->cfr)
+    {
+        pv->metric = hb_motion_metric_init(init);
+        if (pv->metric == NULL)
+        {
+            return -1;
+        }
+    }
 
     // frame-drop analysis always looks at at least 2 buffers
     pv->frame_analysis_depth = 2;
@@ -572,7 +568,16 @@ static void hb_vfr_close( hb_filter_object_t * filter )
         hb_fifo_close( &pv->delay_queue );
     }
     free(pv->frame_metric);
+
+    hb_buffer_t *b;
+    while ((b = hb_list_item(pv->frame_rate_list, 0)))
+    {
+        hb_list_rem(pv->frame_rate_list, b);
+        hb_buffer_close(&b);
+    }
     hb_list_close(&pv->frame_rate_list);
+
+    hb_motion_metric_close(&pv->metric);
 
     /* Cleanup render work structure */
     free( pv );

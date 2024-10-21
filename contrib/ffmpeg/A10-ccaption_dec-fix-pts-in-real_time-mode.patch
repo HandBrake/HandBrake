@@ -1,0 +1,35 @@
+From e4b1555ed0c72377c41c66a5198f5c1bf9c321d0 Mon Sep 17 00:00:00 2001
+From: Damiano Galassi <damiog@gmail.com>
+Date: Wed, 20 Mar 2024 09:14:43 +0100
+Subject: [PATCH 10/16] ccaption_dec: fix pts in real_time mode.
+
+end_display_time and pts changes should be performed only in non real_time mode.
+---
+ libavcodec/ccaption_dec.c | 9 +++++----
+ 1 file changed, 5 insertions(+), 4 deletions(-)
+
+diff --git a/libavcodec/ccaption_dec.c b/libavcodec/ccaption_dec.c
+index d8b992bb94..4a38664875 100644
+--- a/libavcodec/ccaption_dec.c
++++ b/libavcodec/ccaption_dec.c
+@@ -889,12 +889,13 @@ static int decode(AVCodecContext *avctx, AVSubtitle *sub,
+ 
+         if (ctx->buffer[bidx].str[0] || ctx->real_time) {
+             ff_dlog(ctx, "cdp writing data (%s)\n", ctx->buffer[bidx].str);
+-            start_time = ctx->buffer_time[0];
+-            sub->pts = start_time;
+-            end_time = ctx->buffer_time[1];
+-            if (!ctx->real_time)
++            if (!ctx->real_time) {
++                start_time = ctx->buffer_time[0];
++                sub->pts = start_time;
++                end_time = ctx->buffer_time[1];
+                 sub->end_display_time = av_rescale_q(end_time - start_time,
+                                                      AV_TIME_BASE_Q, ms_tb);
++            }
+             else
+                 sub->end_display_time = -1;
+             ret = ff_ass_add_rect2(sub, ctx->buffer[bidx].str, ctx->readorder++, 0, NULL, NULL, &nb_rect_allocated);
+-- 
+2.39.5 (Apple Git-154)
+

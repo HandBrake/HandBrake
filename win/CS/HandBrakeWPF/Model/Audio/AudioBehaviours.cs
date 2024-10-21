@@ -14,6 +14,7 @@ namespace HandBrakeWPF.Model.Audio
     using System.Linq;
 
     using HandBrake.Interop.Interop;
+    using HandBrake.Interop.Interop.Interfaces.Model;
     using HandBrake.Interop.Interop.Interfaces.Model.Encoders;
 
     using HandBrakeWPF.ViewModels;
@@ -21,14 +22,14 @@ namespace HandBrakeWPF.Model.Audio
     public class AudioBehaviours : PropertyChangedBase
     {
         private AudioBehaviourModes selectedBehaviour;
-        private BindingList<string> selectedLanguages;
+        private BindingList<Language> selectedLanguages;
         private AudioTrackDefaultsMode trackDefaultBehaviour;
         
         public AudioBehaviours()
         {
             this.SelectedBehaviour = AudioBehaviourModes.None;
             this.SelectedTrackDefaultBehaviour = AudioTrackDefaultsMode.FirstTrack;
-            this.SelectedLanguages = new BindingList<string>();
+            this.SelectedLanguages = new BindingList<Language>();
             this.BehaviourTracks = new BindingList<AudioBehaviourTrack>();
             this.AllowedPassthruOptions = new BindingList<HBAudioEncoder>();
             this.AudioFallbackEncoder = HandBrakeEncoderHelpers.GetAudioEncoder(HBAudioEncoder.AvAac);
@@ -38,7 +39,7 @@ namespace HandBrakeWPF.Model.Audio
         {
             this.SelectedBehaviour = behaviours.SelectedBehaviour;
             this.SelectedTrackDefaultBehaviour = behaviours.SelectedTrackDefaultBehaviour;
-            this.SelectedLanguages = new BindingList<string>(behaviours.selectedLanguages.ToList());
+            this.SelectedLanguages = new BindingList<Language>(behaviours.selectedLanguages.ToList());
             this.BehaviourTracks = behaviours.BehaviourTracks;
             this.AllowedPassthruOptions = new BindingList<HBAudioEncoder>(behaviours.AllowedPassthruOptions);
             this.AudioFallbackEncoder = behaviours.AudioFallbackEncoder;
@@ -79,7 +80,7 @@ namespace HandBrakeWPF.Model.Audio
             }
         }
 
-        public BindingList<string> SelectedLanguages
+        public BindingList<Language> SelectedLanguages
         {
             get
             {

@@ -32,7 +32,7 @@ namespace HandBrakeWPF.Utilities
                 throw new InvalidOperationException("No Post Values Found.");
             }
 
-            using (HttpClient client = new HttpClient())
+            using (HttpClient client = new HttpClient() { Timeout = TimeSpan.FromSeconds(20) })
             {
                 HttpRequestMessage requestMessage = new HttpRequestMessage(HttpMethod.Post, this.serverUrl + urlPath);
                 if (!string.IsNullOrEmpty(this.base64Token))
@@ -47,7 +47,7 @@ namespace HandBrakeWPF.Utilities
                     if (response != null)
                     {
                         string returnContent = await response.Content.ReadAsStringAsync();
-                        ServerResponse serverResponse = new ServerResponse(response.IsSuccessStatusCode, returnContent);
+                        ServerResponse serverResponse = new ServerResponse(response.IsSuccessStatusCode, returnContent, response.StatusCode.ToString());
 
                         return serverResponse;
                     }
@@ -59,7 +59,7 @@ namespace HandBrakeWPF.Utilities
 
         public async Task<ServerResponse> MakeHttpGetRequest(string urlPath)
         {
-            using (HttpClient client = new HttpClient())
+            using (HttpClient client = new HttpClient { Timeout = TimeSpan.FromSeconds(20) })
             {
                 HttpRequestMessage requestMessage = new HttpRequestMessage(HttpMethod.Get, this.serverUrl + urlPath);
                 if (!string.IsNullOrEmpty(this.base64Token))
@@ -72,8 +72,9 @@ namespace HandBrakeWPF.Utilities
                     if (response != null)
                     {
                         string returnContent = await response.Content.ReadAsStringAsync();
-                        ServerResponse serverResponse = null;
-                        serverResponse = response.StatusCode == HttpStatusCode.Unauthorized ? new ServerResponse(false, returnContent) : new ServerResponse(response.IsSuccessStatusCode, returnContent);
+                        ServerResponse serverResponse = response.StatusCode == HttpStatusCode.Unauthorized 
+                            ? new ServerResponse(false, returnContent, response.StatusCode.ToString()) 
+                            : new ServerResponse(response.IsSuccessStatusCode, returnContent, response.StatusCode.ToString());
 
                         return serverResponse;
                     }

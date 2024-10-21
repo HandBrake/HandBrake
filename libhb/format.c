@@ -1,6 +1,6 @@
 /* format.c
 
-   Copyright (c) 2003-2022 HandBrake Team
+   Copyright (c) 2003-2024 HandBrake Team
    This file is part of the HandBrake source code
    Homepage: <http://handbrake.fr/>.
    It may be used under the terms of the GNU General Public License v2.
@@ -65,6 +65,7 @@ static int format_init(hb_filter_object_t *filter, hb_filter_init_t *init)
     {
         init->job->qsv.ctx->num_hw_filters++;
         hb_dict_set_string(avsettings, "format", format);
+        hb_dict_set_int(avsettings, "async_depth", init->job->qsv.async_depth);
         init->pix_fmt = av_get_pix_fmt(format);
 
         if (init->job->qsv.ctx->out_range != AVCOL_RANGE_UNSPECIFIED)

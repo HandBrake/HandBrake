@@ -71,9 +71,9 @@ namespace HandBrake.Interop.Interop.Interfaces.Model.Encoders
         public int Id { get; private set; }
 
         /// <summary>
-        /// Gets a value indicating whether the encoder is passthrough.
+        /// Gets a value indicating whether the encoder is passthru.
         /// </summary>
-        public bool IsPassthrough
+        public bool IsPassthru
         {
             get
             {
@@ -102,6 +102,14 @@ namespace HandBrake.Interop.Interop.Interfaces.Model.Encoders
             get
             {
                 return (this.CompatibleContainers & NativeConstants.HB_MUX_MASK_WEBM) > 0 || this.CompatibleContainers == -1;
+            }
+        }
+
+        public bool SupportsMkv
+        {
+            get
+            {
+                return (this.CompatibleContainers & NativeConstants.HB_MUX_MASK_MKV) > 0 || this.CompatibleContainers == -1;
             }
         }
 

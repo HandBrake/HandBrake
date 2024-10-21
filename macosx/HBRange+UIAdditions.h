@@ -9,8 +9,8 @@
 
 @interface HBRange (UIAdditions)
 
-@property (nonatomic, readonly) NSArray *chapters;
-@property (nonatomic, readonly) NSArray *types;
+@property (nonatomic, readonly) NSArray<NSString *> *chapters;
+@property (nonatomic, readonly) NSArray<NSString *> *types;
 
 @property (nonatomic, readonly) BOOL chaptersSelected;
 @property (nonatomic, readonly) BOOL secondsSelected;

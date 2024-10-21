@@ -5,116 +5,471 @@
 
 Before updating HandBrake, please make sure there are no pending encodes in the queue, and be sure to make a backup of any custom presets and app preferences you have, as they may not be compatible with newer versions.
 
-Windows users, please make sure to install [Microsoft .NET Desktop Runtime version 6.0.x](https://dotnet.microsoft.com/en-us/download/dotnet/6.0). Read carefully: you need the **DESKTOP** runtime. You must install .NET 6 even if you have installed .NET 7.
+Windows users, please make sure to install [Microsoft .NET Desktop Runtime version 8.0](https://dotnet.microsoft.com/en-us/download/dotnet/8.0/runtime)
+Download available from Microsoft:
+- [For x64 (AMD or Intel CPUs)](https://aka.ms/dotnet/8.0/windowsdesktop-runtime-win-x64.exe)
+- [For Arm64 (Qualcomm or other)](https://aka.ms/dotnet/8.0/windowsdesktop-runtime-win-arm64.exe)
 
+## HandBrake 1.9.0
 
-## HandBrake 1.7
+### All platforms
 
 #### General
 
-- Miscellaneous bug fixes and improvements
+- Added Intel QSV VVC (hardware) video decoder
+- Added an option to enable AV1 screen content coding(SCC) on Intel Lunar Lake QSV AV1 encoder
+- Added hardware decoders on Windows 11 for ARM
+- Added a preference to keep duplicated Blu-ray titles
+- Added support for lossless VP9 encoding
 
-#### Video
+#### Audio
 
-- Improved HDR Passthru. Preserve HDR10+ and Dolby Vision dynamic metadata
-  - Dolby Vision is supported only when using the x265 10-bit encoder, only the following Dolby Vision profiles and cross compatibility IDs are supported:
-    - 5.0
-    - 7.6 (base layer only, converted to 8.1)
-    - 8.1
-    - 8.4
-  - HDR10+ is supported on both x265 10bit and SVT-AV1 encoders
-- Support for SVT-AV1 multi-pass ABR mode
-- Added NVENC AV1 encoder
+- Improved scan of DTS audio profiles
+
+#### Subtitles
+
+- Improved quality of subtitles burn-in
+- Fixed a rare video corruption issue that could happen when burning-in subtitles
 
 #### Third-party libraries
 
 - Updated libraries
-  - AMF 1.4.29 (AMD VCN encoding)
-  - FFmpeg 6.0 (decoding and filters)
-  - libass 0.17.1 (subtitles)
-  - libdav1d 1.2.1 (AV1 decoding)
-  - libopus 1.4 (Opus audio encoding)
-  - libvpx 1.13.0 (VP8/VP9 video encoding)
-  - libxml 2.11.4 (general)
-  - SVT-AV1 1.6 (AV1 encoding)
-  - x265 r12776 (H.265/HEVC video encoding)
-  - zimg 3.0.4 (color conversion)
-  - libjpeg-turbo 3.0.0 (preview image compression)  
-
-- New libraries
-  - libdovi (Dolby Vision metadata)
-  
-### Mac
+  - FFmpeg 7.1 (decoding and filters)
+  - FreeType 2.13.3 (subtitles)
+  - Fribidi 1.0.16 (subtitles)
+  - HarfBuzz 10.0.1 (subtitles)
+  - libdovi 3.3.1 (Dolby Vision dynamic metadata)
+  - libjpeg-turbo 3.0.4 (preview image compression)
+  - nv-codec-headers 12.2.72.0 (Nvidia NVENC encoding)
+  - oneVPL 2.13.0 (Intel QSV video encoding/decoding)
+  - SVT-AV1 2.2.1 (AV1 video encoding)
+  - x265 4.0 (H.265/HEVC video encoding)
 
 ### Linux
 
+- Fixed the Power Save option to pause the encodes only when enabled
+- Fixed the queue being stopped when removing completed items
+- Fixed chapters names not being saved properly
+
+### Mac
+
+- Add Range Limit controls to the "Add to Queue" selection window. (#4146)
+- Miscellaneous bug fixes and improvements
+
 ### Windows
-- Improved File Input Handling
-  - You can now exclude file extensions when scanning in batch mode. By default it will exclude common image, subtitle and text files from scans.
-  - You can now multi-select files in the scan file picker.
-  - You can now drag/drop multiple files from Windows Explorer to scan.
-  - Added support for recursive folder scanning. (Can be enabled in preferences -> Advanced)
-- Improved Preview window with video playback support. (Supports most, but not all codecs/containers. Requires Microsoft Codec Packs from the Microsoft Store for modern codecs)
-- Improved Autoname Preferences UI and added new options: {width} {height} {quality_type} {encoder_bit_depth} {modification-time} {modification-date} {encoder} {encoder_bit_depth} {preset}
-- Improved UI on the queue window. 
-  - The left progress panel now can optionally show additional status information. 
-- Improved Preset Panel. 
-  - Queue Manager button replaced by a drop menu of discrete options for quicker access to functionality. 
-  - Optional display of preset description at the bottom of the preset pane.
-  - Added the ability to clone presets.
-- Improved Add Selection window. Sorting feature is now more discoverable. 
-- Updated Translations 
+
+- Add Range Limit controls to the "Add to Queue" selection window. (#4146)
+- Add support for DirectX based video decoding when using the Media Foundation encoder on ARM devices. 
 - Miscellaneous bug fixes and improvements
 
 
-## HandBrake 1.6.2
+## HandBrake 1.8.2
+
+### All platforms
+
+#### General
+
+- Fixed a potential crash when trying to scan deleted files
+- Fixed scan of broken video that uses reserved color matrix values
+- Fixed an issue that could cause some audio tracks to be dropped
+
+#### Third-party libraries
+
+- Updated libraries
+  - FFmpeg 7.0.2 (decoding and filters)
+  - libass 0.17.3 (subtitles)
+  - libvpx 1.14.1 (VP8/VP9 video encoding)
+
+### Windows
+
+- Fixed an issue where auto name wasn't triggering correctly with preset changes (#6159)
+- Fixed a potential crash when importing presets from the mac version. (#6186)
+- Fixed an issue loading presets where a video encode isn't available on the system. (#6184)
+- Minor startup performance improvement on some Intel based systems.
+
+### Linux
+
+- Fixed an issue where an encoded file could be output to the wrong filename when using the queue (#6067)
+
+
+## HandBrake 1.8.1
 
 ### All platforms
 
 #### Video
 
-- Fixed an issue when scaling video content that is not mod2.
-- Fixed an issue with QSV that could result in the output video being a green screen (#4842)
-- Fixed a green video issue with QuickSync (#4876)
-- Fixed a pixel format conversion issue that could result is slightly different colors when using a 10-bit hardware encoder (#5011)
-- Various fixes and library updates for QuickSync to improve support on Linux (#4958)
-- Switch to using swscale instead of zscale when the resolution isn't mod2. Should fix scan failures in this condition
-- Fixed PAR when reading from a AV1 anamorphic video track
-- Changed NVEnc option to not default to using multipass. This is now a user configurable advanced option. 
-
-#### Command line interface
-
-- Fixed an issue with cropping when using presets / crop arguments (#5055)
-
-#### Audio
-
-- Fixed ac3/eac3 dowmix, volume was too low.
-- Fixed availability of left / right mono mixdowns. 
-- Backported an ffmpeg fix for OPUS LBRR
+- Fixed a warning / misconfiguration when repeat-headers is used with the x265 encoder.(#6061)
+- Fixed an issue where the NVEnc encoder ignored the level option
 
 #### Subtitles
 
-- Fixed a locale issue that could result in the wrong decimal separator in SSA headers.
-- Fixed an issue that caused issues with 0 length subtitles when using SSA. 
+- Fixed an issue where dvd subtitles could be corrupted during rendering.
+
+#### Filters
+
+- Fixed an issue that caused video artefacts to occur when using the eedi2 filter (#6073)
+
+#### Third-party libraries
+
+- Updated libraries
+  - FFmpeg 7.0.1 (decoding and filters)
+  - libdav1d 1.4.3 (AV1 video decoding)
 
 ### Mac
 
-- Fixed Chroma Smooth tune options.
-- Fixed an issue with the Deblock Filter custom string field. 
-- Fixed the file size display on the queue statistics window when file size info is not available 
-- Miscellaneous other fixes.
+- Fixed a stall in the queue that could happen if the encoding process crashes when configuring a job
+- Removed the "Show" button from the notifications when there is nothing to show
 
 ### Windows
 
-- Fixed an issue with automatic file naming when using drive-based sources (#4859)
-- Fixed Title Specific Scan for drive sources. (#4921)
-- Fixed an issue that could cause a preset to show as "modified" when it was not. (#4909, #4908)
-- Fixed an issue where changes to queue order could be lost. (#4922)
-- Fixed an issue on the audio tab where audio tracks could be duplicated when using non fallback encoder. (#5012)
-- Fixed an issue where some hardware presets are incorrectly shown as disabled when swapping graphics cards.
-- Fixed an issue where windows notifications could cause the app to crash on startup where issues exist on the system. (#5097)
-- Some reliability improvements in the Process Isolation Feature. 
-- Miscellaneous other fixes. (#5090, #5091)
+- Hardware decoding is now defaulted to off for new installations. Users can opt-in whilst making sure they are running up-to-date drivers
+- Fixed an issue where hardware decoding could erroneously be used for previews
+- Fixed an issue where auto name was triggering too aggressively (#6079)
+- Removed an erroneous error message when dragging files onto the main window that include a subtitle file.(#6065)
+
+
+## HandBrake 1.8.0
+
+### All platforms
+
+#### General
+
+- Allowed muxing VP9 and FLAC in the MP4 container
+- Removed timestamp jitters when using a constant NTSC frame rate in the MP4 container
+- Removed support for importing legacy plist based presets from much older versions of HandBrake
+- Updated iso639 language codes list
+
+#### Video
+
+- Added support for the FFV1 encoder, including a new preset "Preservation FFV1" under the Professional category
+- Added support for multi-pass CQ with VP9
+- Added support for VP9 tunes
+- Added Dolby Vision dynamic metadata pass through for SVT-AV1
+- Improved Decomb speed by removing unneeded frame copies
+- Improved Framerate Shaper metrics for high depth frames
+
+#### Command line interface
+
+- Fixed subtitle "scan" when not first in --subtitle list
+- Fixed override of subtitle settings
+- Fixed processing audio overrides to preset
+
+#### Audio
+
+- Added TrueHD encoder
+- Added 88.2/96/176.4/192 kHz sample rates for TrueHD and FLAC encoders
+- Improved audio tracks selection by tracking "linked" audio tracks
+- Fixed incorrect channel layout when encoding a 6.1 track to Opus
+
+#### Subtitles
+
+- Fixed passthru of VobSub tracks that contains empty of fully transparent subtitles samples
+- Fixed an issue that prevented decoding VobSub tracks stored inside MP4
+- Fixed burn-in of SSA/ASS subtitles inside MKV that have duplicated Read Orders
+
+#### Build system
+
+- Reviewed and improved compiler optimization options for the third-party libraries
+- Improved libdovi package to make it possible to ship it in Flathub flatpak version
+
+#### Third-party libraries
+
+- Updated libraries
+  - AMF 1.4.33 (AMD VCN video encoding)
+  - FFmpeg 7.0 (decoding and filters)
+  - HarfBuzz 8.4.0 (subtitles)
+  - libass 0.17.2 (subtitles)
+  - libdav1d 1.4.1 (AV1 video decoding)
+  - libdovi 3.3.0 (Dolby Vision dynamic metadata)
+  - libopus 1.5.2 (Opus audio encoding)
+  - libjpeg-turbo 3.0.3 (preview image compression)
+  - libvpx 1.14.0 (VP8/VP9 video encoding)
+  - oneVPL 2.10.1 (Intel QSV video encoding/decoding)
+  - SVT-AV1 2.1.0 (AV1 video encoding)
+  - x264 164 r3186 (H.264/AVC video encoding)
+  - x265 3.6 (H.265/HEVC video encoding)
+  - zlib 1.3.1 (general)
+- Removed libraries
+  - libxml2
+  
+### Linux
+
+- Migrated the UI to GTK 4
+- Added support for resursive file scan
+- Added support for drag/drop/multi-file scanning. (Including subtitle files)
+- Added --clear-queue and --auto-start-queue flags to the linux ui app.
+- Update the "Open Source" button to make the folder/batch mode more discoverable. 
+- Refreshed app icons
+- Miscellaneous bug fixes and improvements
+- Updated existing translations
+
+### Mac
+
+- Added Dolby Vision and HDR10+ dynamic metadata pass through for VideoToolbox H.265 10-bit
+- Added Metal accelerated Comb Detect and Framerate Shaper filters
+- Added ability to drag and drop SRT and ASS subtitles files onto the main window
+- Added support for excluding file extensions when opening files in batch mode
+  - Default exclusions are common image, subtitles, and text file extensions; edit list in Preferences > Advanced
+- Added new preference to pause encodes when switching to battery
+- Added new preference to clear completed jobs at launch option
+- Reworked notification options to allow per encode or per queue control
+- Reworked toolbar to follow macOS UI style
+- Improved performance of the Activity Log window
+- Improved UI performances by avoiding uneeded window resizes and slow AppKit controls
+- Miscellaneous bug fixes and improvements
+- Updated existing translations
+- Added new translations
+  - Ukrainian
+
+### Windows
+
+- Requires Microsoft .NET Desktop Runtime 8.0.x
+- Added Invert Queue option to the Add to Queue Window (#5741)
+- Drag/Drop now supports resursive folder scan mode.
+- Miscellaneous bug fixes and improvements
+- Updated existing translations
+- Added new translations
+  - Catalan (Català)
+
+
+## HandBrake 1.7.3
+
+### All platforms
+
+#### General
+
+- Fixed formatting leading zeros for timestamps in logs
+- Miscellaneous bug fixes and improvements
+
+#### Video
+
+- Fixed an issue that could potentially cause incorrect detection of source FPS value (#5677)
+
+#### Subtitles
+
+- Fixed tx3g to SSA subtitles conversion
+
+### Linux
+
+- Fixed the "All Files" open file dialog filter to really show all files
+- Fixed an issue where adding a new default audio track automatically set the gain to -20 dB
+
+### macOS
+
+- Fixed a regression introduced in HandBrake 1.7.2 by the workaround for VideoToolbox crashes on Sonoma
+- Miscellaneous bug fixes and improvements
+
+### Windows
+
+- Improved security hardening of loading of DLL files within libhb by limiting search scope (#5724)
+- Improved keyboard navigation on Chapters tab (#5679)
+- Fixed an issue that could cause encodes to appear stalled when process isolation is turned on
+- Fixed an issue that could prevent QSV decode from being used when a system also has a non-Intel GPU
+- Fixed an issue where the drive label was not always correctly detected (#5711)
+- Miscellaneous bug fixes and improvements
+
+
+## HandBrake 1.7.2
+
+### All platforms
+
+#### Video
+
+- Improved automatic selection of Dolby Vision Level
+- Fixed an issue in AMD VCN, MPEG-2, MPEG-4, NVIDIA NVENC, and VP9 encoders that could cause the creation of an excessive number of keyframes (#5530)
+- Fixed unintentional automatic pass through of closed caption side data when using NVIDIA NVENC encoder
+- Miscellaneous bug fixes and improvements
+
+### Linux
+
+- Improved performance by removing duplicate graphic assets and reducing file size
+- Fixed Flatpak file chooser opening home directory instead of the previously selected directory
+- Fixed last item in the queue sometimes having the wrong destination path
+- Fixed some memory leaks in the graphical interface
+
+### Mac
+
+- Added a workaround to prevent a system crash when using VideoToolbox encoders with macOS 14 Sonoma on Apple Silicon Ultra
+- Added a workaround to prevent issues decoding H.264 video by disabling VideoToolbox hardware decoding for Level 6.1 and 6.2
+- Fixed a crash opening an empty folder
+
+### Windows
+
+- Added Automation Properties to some controls on the audio tab to assist screen readers
+- Fixed NVIDIA NVDEC option being ignored (#5569)
+- Fixed startup crash related to theme loading (#5567)
+- Fixed subtitle language order not being honoured (#5590)
+
+
+## HandBrake 1.7.1
+
+### All platforms
+
+#### Video
+
+- Fixed Decomb filter producing corrupted frames with 10-bit depth or higher source (#5518)
+- Fixed a potential crash when using the Comb Detect filter on an RGB source
+- Fixed Intel QSV devices enumeration where devices from other vendors are present (#5317, #5177)
+
+#### Mac
+
+- Fixed an issue opening EyeTV sources (#5514)
+
+
+## HandBrake 1.7.0
+
+### All platforms
+
+#### General
+
+- Added Apple VideoToolbox hardware presets
+- Updated Creator presets
+  - Disabled interlacing detection and removal; assume creators are working with progressive sources by default
+- Updated Social presets
+  - Target higher quality and frame rate over shorter durations, without interlacing detection and removal
+  - Better suited for modern social sharing of short live action clips and screen/game captures
+- Removed Email presets in favor of revised Social presets
+  - Please stop sending videos via email or use the new Social presets
+- Miscellaneous bug fixes and improvements
+
+#### Video
+
+- Added AMD VCN AV1 encoder
+- Added NVIDIA NVENC AV1 encoder
+- Added support for SVT-AV1 multi-pass ABR mode
+- Added support for preserving ambient viewing enviroment metadata
+- Added QSV Rotate and Format filters
+- Improved performance on arm64 / aarch64 / Apple Silicon architectures
+  - Latest FFmpeg provides faster HEVC decoding, 30% faster bwdif filter
+  - New SVT-AV1 assembly optimizations provide up to 4x increase in performance
+- Improved video conversion speed by removing unneeded frame copies for better memory efficiency
+- Improved Dolby Vision dynamic range metadata pass through
+  - Supported encoders: x265 10-bit
+  - Supported profiles and cross-compatibility IDs: 8.4, 8.1, 7.6 (base layer only, converted to 8.1), 5.0
+- Improved HDR10+ dynamic range metadata pass through
+  - Supported encoders: x265 10-bit, SVT-AV1
+- Improved QSV support on Linux (#4958)
+- Updated NVENC to not use multi-pass by default; user configurable advanced option
+- Renamed 2-pass encode option to multi-pass (#5019)
+- Fixed Intel QSV encoder outputting green video in some cases (#4842, #4876)
+- Fixed pixel format conversion slightly altering colors when using a 10-bit hardware encoder (#5011)
+- Fixed scan failures by using swscale instead of zscale when source resolution is not mod 2
+- Fixed incorrect PAR when reading from an anamorphic AV1 video track
+- Removed an artificial bitrate limit on VP9 CQ mode
+
+#### Command line interface
+
+- Renamed `--two-pass` to `--multi-pass` and `--no-two-pass` to `--no-multi-pass`, removed `-2` (#5019)
+- Fixed automatic cropping enabled despite using preset with cropping disabled (#5055)
+
+#### Audio
+
+- Fixed low volume level when downmixing ac3 and eac3
+- Fixed left-only and right-only mono mixdowns (#3533, #5054)
+
+#### Subtitles
+
+- Fixed locale settings potentially causing incorrect decimal separator in SSA headers
+- Fixed a potential issue affecting zero-duration subtitles
+
+#### Build system
+
+- Added Meson build system for the Linux GUI
+
+#### Third-party libraries
+
+- New libraries
+  - libdovi 3.2.0 (Dolby Vision dynamic range metadata)
+- Updated libraries
+  - AMF 1.4.30 (AMD VCN video encoding)
+  - FFmpeg 6.1 (decoding and filters)
+  - FreeType 2.13.2 (subtitles)
+  - Fribidi 1.0.13 (subtitles)
+  - HarfBuzz 8.2.2 (subtitles)
+  - libass 0.17.1 (subtitles)
+  - libdav1d 1.3.0 (AV1 video decoding)
+  - liblzma (xz) 5.4.5 (LZMA video decoding, e.g. TIFF)
+  - libopus 1.4 (Opus audio encoding)
+  - libjpeg-turbo 3.0.1 (preview image compression)
+  - libvpx 1.13.1 (VP8/VP9 video encoding)
+  - libxml 2.11.5 (general)
+  - oneVPL 2023.3.1 (Intel QSV video encoding/decoding)
+  - SVT-AV1 1.7 (AV1 video encoding)
+  - x264 164 r3107 (H.264/AVC video encoding)
+  - x265 r12776 (H.265/HEVC video encoding)
+  - zimg 3.0.5 (color conversion)
+  - zlib 1.3 (general)
+
+### Linux
+
+- Added drag and drop support for video scanning
+- Added support for native file choosers via xdg-desktop-portal
+- Added Queue > Add All menu option
+- Added XML chapter import and export
+- Added bit depth and HDR information to video summary
+- Added option to pause encoding when switching to battery power or when power save mode is activated
+- Added automatic file naming options: {codec} {bit-depth} {width} {height} {modification-date} {modification-time}
+- Updated Queue, Activity, and Presets windows to no longer float on top of the main window
+- Updated existing translations
+- Removed obsolete update checker
+- Miscellaneous bug fixes and improvements
+
+### Mac
+
+- Added support for drag and drop of multiple files at once
+- Added support for selecting multiple files at once in the Open Source dialog
+- Added support for recursive folder scanning in the Open Source dialog
+- Added support for VideoToolbox H.265/HEVC, H.264/AVC, ProRes, and VP9 hardware decoders on macOS 13 and later
+  - Enable/disable in the Preferences > Advanced tab always or full path only
+  - Using hardware decoders on modern devices may decrease CPU usage and thus speed up some filters and encoding
+- Added GPU accelerated Crop & Scale, Rotate, Pad, Yadif, Bwdif, Chroma Smooth, Unsharp, Lasharp, Grayscale filters
+- Added "Same as source" destination option that automatically sets the destination path to the source path
+- Improved SVT-AV1 encoding performance by up to 4x on Apple Silicon Macs
+- Improved automatic file naming Preferences UI and added new options: {width} {height} {quality_type} {encoder_bit_depth} {modification-time} {modification-date} {codec} {encoder} {encoder_bit_depth} {preset}
+- Improved handling of security scoped bookmarks
+- Fixed Chroma Smooth tune options
+- Fixed Deblock Filter custom string field
+- Fixed an issue that prevented the VideoToolbox "speed" preset from being used
+- Fixed the file size display on the queue statistics window when file size info is not available
+- Miscellaneous bug fixes and improvements
+- Added new translations
+  - Korean (한국어)
+  - Bulgarian (Български)
+- Updated existing translations
+
+### Windows
+
+- Added support for drag and drop of multiple files at once
+- Added support for selecting multiple files at once in the Open Source dialog
+- Added support for recursive folder scanning in the Open Source dialog
+  - Enable/disable in Preferences > Advanced
+- Added support for excluding file extensions when opening files in batch mode
+  - Default exclusions are common image, subtitles, and text file extensions; edit list in Preferences > Advanced
+- Improved Preview window native video playback to support most containers and codecs
+  - Modern codec support requires Microsoft Codec Packs from the Microsoft Store
+- Improved automatic file naming Preferences UI and added new options: {width} {height} {quality_type} {encoder_bit_depth} {modification-time} {modification-date} {encoder} {encoder_bit_depth} {preset}
+- Improved Queue window UI to optionally show additional status information on the left progress panel
+- Improved Presets panel
+  - Manage Presets button replaced with a menu of discrete options for quicker access to functionality
+  - Added an option to display the description for the selected preset
+  - Added the ability to clone a preset (create a new preset based on an existing one)
+- Improved Add Selection window to make sorting feature more discoverable
+- Improved Process Isolation reliability
+- Fixed automatic file naming when using physical drive sources (#4859)
+- Fixed Title Specific Scan for physical drive sources (#4921)
+- Fixed an potential issue that could cause an unmodified preset to display as "modified" (#4909, #4908)
+- Fixed an potential issue where changes to queue order were not retained (#4922)
+- Fixed an Audio tab issue where using a non-fallback encoder could lead to duplicated tracks (#5012)
+- Fixed an issue where swapping graphics cards might cause hardware presets to be incorrectly shown as disabled
+- Fixed a potential crash on startup related to Windows Notifications Service failures (#5097)
+- Miscellaneous bug fixes and improvements
+- Added new translations
+ - Czech (česky) (partially complete)
+ - Greek (Ελληνικά) (partially complete)
+ - Estonian (Eesti) (partially complete)
+ - Basque (Euskara)
+ - Finnish (Suomi) (partially complete)
+- Updated existing translations
 
 
 ## HandBrake 1.6.1
@@ -1945,7 +2300,7 @@ Superseded by HandBrake 1.0.5.
 
 #### Audio
 
-- Blu-ray: make TrueHD, DTS-HD and E-AC3 Secondary Audio streams available for decoding and/or passthrough
+- Blu-ray: make TrueHD, DTS-HD and E-AC3 Secondary Audio streams available for decoding and/or passthru
 - bug fix: libavcodec-decoded streams can now be decoded multiple times
   - previously, multiple decodes of the same source tracks weren't possible and audio output tracks had to be dropped
 - bug fix: fix audio screech at beginning of some audio tracks when decoding AC3
@@ -2123,7 +2478,7 @@ Superseded by HandBrake 1.0.5.
   - Allows specifying field parity for detelecine and decomb
 - Better AV sync
 - Support for sources with no audio
-- DTS passthrough for MKV
+- DTS passthru for MKV
 - x264 bumped from r1169 to r1347, which means speed optimizations, new default settings (see r2742 commit comment), the magic of macroblock tree rate control (mbtree), a new CRF curve (meaning you will get different, generally lower bitrates at the same RF, with similar quality metrics), and weighted P-Frames (disabled by default for Baseline encodes and the AppleTV preset).
 - Better sample interleaving
 - Better, optional deinterlacer for decomb (EEDI2)
@@ -2829,3 +3184,4 @@ The Universal preset is designed to play on all modern iPods (anything newer tha
 ## HandBrake 0.1-alpha
 
 - First version.
+

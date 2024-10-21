@@ -1,0 +1,42 @@
+/* Class = "NSMenuItem"; title = "Remove All Jobs"; ObjectID = "5AR-we-iHC"; */
+"5AR-we-iHC.title" = "Remove All Jobs";
+
+/* Class = "NSTextFieldCell"; title = "Table View Cell"; ObjectID = "5Rl-P0-bhc"; */
+"5Rl-P0-bhc.title" = "Table View Cell";
+
+/* Class = "NSMenuItem"; title = "Show Destination in Finder"; ObjectID = "c1Z-ZC-b8b"; */
+"c1Z-ZC-b8b.title" = "Show Destination in Finder";
+
+/* Class = "NSMenuItem"; title = "Edit"; ObjectID = "DTF-om-j0l"; */
+"DTF-om-j0l.title" = "Edit";
+
+/* Class = "NSTextFieldCell"; title = "Encoding status"; ObjectID = "eEU-Dr-Qh8"; */
+"eEU-Dr-Qh8.title" = "Encoding status";
+
+/* Class = "NSMenuItem"; title = "Remove"; ObjectID = "egD-8R-PTJ"; */
+"egD-8R-PTJ.title" = "Remove";
+
+/* Class = "NSMenuItem"; title = "Remove Completed Jobs"; ObjectID = "gNj-D1-wa7"; */
+"gNj-D1-wa7.title" = "Remove Completed Jobs";
+
+/* Class = "NSMenuItem"; title = "Move to Bottom"; ObjectID = "HwR-LP-IK8"; */
+"HwR-LP-IK8.title" = "Move to Bottom";
+
+/* Class = "NSTextFieldCell"; title = "Text Cell"; ObjectID = "K6c-HW-um8"; */
+"K6c-HW-um8.title" = "Text Cell";
+
+/* Class = "NSMenuItem"; title = "Move to Top"; ObjectID = "NN5-Yq-Cth"; */
+"NN5-Yq-Cth.title" = "Move to Top";
+
+/* Class = "NSMenuItem"; title = "Show Source in Finder"; ObjectID = "Pps-jm-zcd"; */
+"Pps-jm-zcd.title" = "Show Source in Finder";
+
+/* Class = "NSMenuItem"; title = "Reset"; ObjectID = "xMs-43-lL0"; */
+"xMs-43-lL0.title" = "Reset";
+
+/* Class = "NSTextFieldCell"; title = "Table View Cell"; ObjectID = "xSd-Hl-5Qk"; */
+"xSd-Hl-5Qk.title" = "Table View Cell";
+
+/* Class = "NSMenuItem"; title = "Show Activity Log in Finder"; ObjectID = "zA7-r8-i4L"; */
+"zA7-r8-i4L.title" = "Show Activity Log in Finder";
+

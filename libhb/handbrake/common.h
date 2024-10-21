@@ -1,6 +1,6 @@
 /* common.h
 
-   Copyright (c) 2003-2022 HandBrake Team
+   Copyright (c) 2003-2024 HandBrake Team
    This file is part of the HandBrake source code
    Homepage: <http://handbrake.fr/>.
    It may be used under the terms of the GNU General Public License v2.
@@ -133,6 +133,7 @@ int hb_buffer_list_size(hb_buffer_list_t *list);
 hb_list_t * hb_list_init(void);
 int         hb_list_count( const hb_list_t * );
 void        hb_list_add( hb_list_t *, void * );
+void        hb_list_add_dup( hb_list_t *, void *, int );
 void        hb_list_insert( hb_list_t * l, int pos, void * p );
 void        hb_list_rem( hb_list_t *, void * );
 void      * hb_list_item( const hb_list_t *, int );
@@ -159,8 +160,6 @@ void hb_audio_config_init(hb_audio_config_t * audiocfg);
 int hb_audio_add(const hb_job_t * job, const hb_audio_config_t * audiocfg);
 hb_audio_config_t * hb_list_audio_config_item(hb_list_t * list, int i);
 
-int hb_subtitle_add_ssa_header(hb_subtitle_t *subtitle, const char *font,
-                               int fs, int width, int height);
 hb_subtitle_t *hb_subtitle_copy(const hb_subtitle_t *src);
 hb_list_t *hb_subtitle_list_copy(const hb_list_t *src);
 void hb_subtitle_close( hb_subtitle_t **sub );
@@ -250,9 +249,12 @@ static inline hb_rational_t hb_make_q(int num, int den)
     return r;
 }
 
-static inline double hb_q2d(hb_rational_t a){
+static inline double hb_q2d(hb_rational_t a)
+{
     return a.num / (double) a.den;
 }
+
+int64_t hb_rescale_rational(hb_rational_t q, int b);
 
 struct hb_geometry_s
 {
@@ -314,7 +316,6 @@ struct hb_image_s
         int width;
         int height;
         int stride;
-        int height_stride;
         int size;
     } plane[4];
 };
@@ -431,9 +432,10 @@ const hb_rate_t* hb_audio_bitrate_get_next(const hb_rate_t *last);
 
 void        hb_video_quality_get_limits(uint32_t codec, float *low, float *high, float *granularity, int *direction);
 const char* hb_video_quality_get_name(uint32_t codec);
-int         hb_video_quality_is_supported(uint32_t codec);
 
-int         hb_video_multipass_is_supported(uint32_t codec);
+int         hb_video_quality_is_supported(uint32_t codec);
+int         hb_video_bitrate_is_supported(uint32_t codec);
+int         hb_video_multipass_is_supported(uint32_t codec, int constant_quality);
 
 int                hb_video_encoder_is_supported(int encoder);
 int                hb_video_encoder_get_count_of_analysis_passes(int encoder);
@@ -618,6 +620,7 @@ struct hb_job_s
 #define HB_VCODEC_FFMPEG_VCE_H264           (0x0000000D | HB_VCODEC_FFMPEG_MASK | HB_VCODEC_H264_MASK)
 #define HB_VCODEC_FFMPEG_VCE_H265           (0x0000000E | HB_VCODEC_FFMPEG_MASK | HB_VCODEC_H265_MASK)
 #define HB_VCODEC_FFMPEG_VCE_H265_10BIT     (0x0000000F | HB_VCODEC_FFMPEG_MASK | HB_VCODEC_H265_MASK)
+#define HB_VCODEC_FFMPEG_VCE_AV1            (0x00000010 | HB_VCODEC_FFMPEG_MASK | HB_VCODEC_AV1_MASK)
 
 #define HB_VCODEC_FFMPEG_MF_H264    (0x00000020 | HB_VCODEC_FFMPEG_MASK | HB_VCODEC_H264_MASK)
 #define HB_VCODEC_FFMPEG_MF_H265    (0x00000021 | HB_VCODEC_FFMPEG_MASK | HB_VCODEC_H265_MASK)
@@ -627,6 +630,8 @@ struct hb_job_s
 #define HB_VCODEC_FFMPEG_NVENC_H265_10BIT   (0x00000032 | HB_VCODEC_FFMPEG_MASK | HB_VCODEC_H265_MASK)
 #define HB_VCODEC_FFMPEG_NVENC_AV1          (0x00000033 | HB_VCODEC_FFMPEG_MASK | HB_VCODEC_AV1_MASK)
 #define HB_VCODEC_FFMPEG_NVENC_AV1_10BIT    (0x00000034 | HB_VCODEC_FFMPEG_MASK | HB_VCODEC_AV1_MASK)
+
+#define HB_VCODEC_FFMPEG_FFV1        (0x00000040 | HB_VCODEC_FFMPEG_MASK)
 
 #define HB_VCODEC_SVT_AV1_8BIT       (0x00000041 | HB_VCODEC_SVT_AV1_MASK | HB_VCODEC_AV1_MASK)
 #define HB_VCODEC_SVT_AV1            HB_VCODEC_SVT_AV1_8BIT
@@ -732,6 +737,9 @@ struct hb_job_s
 #define HB_COLR_MAT_CD_CL        13 // chromaticity derived constant lum
 #define HB_COLR_MAT_ICTCP        14 // ITU-R BT.2100-0, ICtCp
 // 0, 3-5, 8, 11-65535: reserved/not implemented
+#define HB_COLR_RANGE_UNSET     -1
+#define HB_COLR_RANGE_LIMITED    1
+#define HB_COLR_RANGE_FULL       2
 
     hb_mastering_display_metadata_t mastering;
     hb_content_light_metadata_t coll;
@@ -793,7 +801,7 @@ struct hb_job_s
                                         // faithful reproduction of the source
                                         // stream and may have blank frames
                                         // added or initial frames dropped.
-    int             mp4_optimize;
+    int             optimize;
     int             ipod_atom;
 
     int                     indepth_scan;
@@ -824,6 +832,7 @@ struct hb_job_s
     } qsv;
 
     int hw_decode;
+    int keep_duplicate_titles;
 
 #ifdef __LIBHB__
     /* Internal data */
@@ -834,6 +843,9 @@ struct hb_job_s
 
     uint64_t        st_paused;
 
+    int             init_delay;
+    hb_data_t     * extradata;
+
     hb_fifo_t     * fifo_mpeg2;   /* MPEG-2 video ES */
     hb_fifo_t     * fifo_raw;     /* Raw pictures */
     hb_fifo_t     * fifo_sync;    /* Raw pictures, framerate corrected */
@@ -841,8 +853,6 @@ struct hb_job_s
     hb_fifo_t     * fifo_mpeg4;   /* MPEG-4 video ES */
 
     hb_list_t     * list_work;
-
-    hb_esconfig_t config;
 
     hb_mux_data_t * mux_data;
 
@@ -856,7 +866,7 @@ struct hb_job_s
 };
 
 /* Audio starts here */
-/* Audio Codecs: Update win/CS/HandBrake.Interop/HandBrakeInterop/HbLib/NativeConstants.cs when changing these consts */
+/* Audio Codecs: Update win/CS/HandBrake.Interop/Interop/HbLib/NativeConstants.cs when changing these consts */
 #define HB_ACODEC_INVALID   0x00000000
 #define HB_ACODEC_NONE      0x00000001
 #define HB_ACODEC_MASK      0x0FFFFF01
@@ -917,6 +927,17 @@ struct hb_job_s
 // Update win/CS/HandBrake.Interop/HandBrakeInterop/HbLib/hb_audio_config_s.cs when changing this struct
 struct hb_audio_config_s
 {
+    // index of this item in title.list_audio
+    int index;
+
+    // index of a "linked" audio item in title.list_audio
+    // a linked audio is *exactly* the same audio encoded differently
+    //
+    // e.g. TrueHD tracks that have embedded AC3 and DTSHD that have
+    // embedded DTS are split into distinct "tracks" by HandBrake but
+    // are actually the exact same source track.
+    hb_list_t * list_linked_index;
+
     /* Output */
     struct
     {
@@ -953,7 +974,7 @@ struct hb_audio_config_s
     /* Input */
     struct
     {
-        int track; /* Input track number */
+        PRIVATE int track; /* Input track number */
         PRIVATE uint32_t codec; /* Input audio codec */
         PRIVATE uint32_t codec_param; /* Per-codec config info */
         PRIVATE uint32_t reg_desc; /* Registration descriptor of source */
@@ -993,15 +1014,19 @@ struct hb_audio_s
 
     hb_audio_config_t config;
 
-    struct {
+    struct
+    {
+        int           init_delay;
+        hb_data_t   * extradata;
+
         hb_fifo_t * fifo_in;   /* AC3/MPEG/LPCM ES */
         hb_fifo_t * fifo_raw;  /* Raw audio */
         hb_fifo_t * fifo_sync; /* Resampled, synced raw audio */
         hb_fifo_t * fifo_out;  /* MP3/AAC/Vorbis ES */
 
-        hb_esconfig_t config;
         hb_mux_data_t * mux_data;
         hb_fifo_t     * scan_cache;
+        int             scan_error_count;
     } priv;
 };
 #endif
@@ -1104,10 +1129,6 @@ struct hb_subtitle_s
     int         width;
     int         height;
 
-    // Codec private data for subtitles originating from FFMPEG sources
-    uint8_t *   extradata;
-    int         extradata_size;
-
     int hits;     /* How many hits/occurrences of this subtitle */
     int forced_hits; /* How many forced hits in this subtitle */
 
@@ -1119,6 +1140,9 @@ struct hb_subtitle_s
     uint32_t        stream_type;    /* stream type from source stream */
     uint32_t        substream_type; /* substream for multiplexed streams */
     hb_rational_t   timebase;
+
+    // Codec private data for subtitles originating from FFMPEG sources
+    hb_data_t   * extradata;
 
     hb_fifo_t     * fifo_in;        /* SPU ES */
     hb_fifo_t     * fifo_raw;       /* Decoded SPU */
@@ -1166,6 +1190,7 @@ struct hb_title_s
     const char    * path;
     const char    * name;
     int             index;
+    int             keep_duplicate_titles;
     int             playlist;
     int             angle_count;
     void          * opaque_priv;
@@ -1209,6 +1234,7 @@ struct hb_title_s
     uint32_t        video_stream_type;      /* stream type from source stream */
     int             video_codec_param;      /* codec specific config */
     char          * video_codec_name;
+    int             video_codec_profile;
     int             video_bitrate;
     hb_rational_t   video_timebase;
     char          * container_name;
@@ -1216,12 +1242,13 @@ struct hb_title_s
 
     // additional supported video decoders (e.g. HW-accelerated implementations)
     int           video_decode_support;
-#define HB_DECODE_SUPPORT_SW             0x01 // software (libavcodec or mpeg2dec)
+#define HB_DECODE_SUPPORT_SW             0x01 // software (libavcodec)
 #define HB_DECODE_SUPPORT_QSV            0x02 // Intel Quick Sync Video
 #define HB_DECODE_SUPPORT_NVDEC          0x04
 #define HB_DECODE_SUPPORT_VIDEOTOOLBOX   0x08
+#define HB_DECODE_SUPPORT_MF             0x10 // Windows Media Foundation
 
-#define HB_DECODE_SUPPORT_HWACCEL        (HB_DECODE_SUPPORT_NVDEC | HB_DECODE_SUPPORT_VIDEOTOOLBOX)
+#define HB_DECODE_SUPPORT_HWACCEL        (HB_DECODE_SUPPORT_NVDEC | HB_DECODE_SUPPORT_VIDEOTOOLBOX | HB_DECODE_SUPPORT_MF)
 #define HB_DECODE_SUPPORT_FORCE_HW       0x80000000
 
     hb_metadata_t * metadata;
@@ -1353,7 +1380,9 @@ struct hb_work_object_s
 
     hb_fifo_t         * fifo_in;
     hb_fifo_t         * fifo_out;
-    hb_esconfig_t     * config;
+
+    int               * init_delay;
+    hb_data_t        ** extradata;
 
     /* Pointer hb_audio_t so we have access to the info in the audio worker threads. */
     hb_audio_t        * audio;
@@ -1477,6 +1506,20 @@ struct hb_filter_object_s
 #endif
 };
 
+struct hb_motion_metric_object_s
+{
+    char                * name;
+
+#ifdef __LIBHB__
+    int                (* init)       ( hb_motion_metric_object_t *, hb_filter_init_t * );
+    float              (* work)       ( hb_motion_metric_object_t *,
+                                        hb_buffer_t *, hb_buffer_t * );
+    void               (* close)      ( hb_motion_metric_object_t * );
+
+    hb_motion_metric_private_t * private_data;
+#endif
+};
+
 // Update win/CS/HandBrake.Interop/HandBrakeInterop/HbLib/hb_filter_ids.cs when changing this enum
 enum
 {
@@ -1487,9 +1530,12 @@ enum
     // First, filters that may change the framerate (drop or dup frames)
     HB_FILTER_DETELECINE,
     HB_FILTER_COMB_DETECT,
+    HB_FILTER_COMB_DETECT_VT,
     HB_FILTER_DECOMB,
     HB_FILTER_YADIF,
+    HB_FILTER_YADIF_VT,
     HB_FILTER_BWDIF,
+    HB_FILTER_BWDIF_VT,
     HB_FILTER_VFR,
     // Filters that must operate on the original source image are next
     HB_FILTER_DEBLOCK,
@@ -1497,15 +1543,20 @@ enum
     HB_FILTER_HQDN3D = HB_FILTER_DENOISE,
     HB_FILTER_NLMEANS,
     HB_FILTER_CHROMA_SMOOTH,
+    HB_FILTER_CHROMA_SMOOTH_VT,
     HB_FILTER_ROTATE,
     HB_FILTER_ROTATE_VT,
     HB_FILTER_RENDER_SUB,
     HB_FILTER_CROP_SCALE,
     HB_FILTER_CROP_SCALE_VT,
     HB_FILTER_LAPSHARP,
+    HB_FILTER_LAPSHARP_VT,
     HB_FILTER_UNSHARP,
+    HB_FILTER_UNSHARP_VT,
     HB_FILTER_GRAYSCALE,
+    HB_FILTER_GRAYSCALE_VT,
     HB_FILTER_PAD,
+    HB_FILTER_PAD_VT,
     HB_FILTER_COLORSPACE,
     HB_FILTER_FORMAT,
     HB_FILTER_RPU,
@@ -1556,6 +1607,7 @@ char ** hb_str_vsplit( const char * str, char delem );
 int hb_yuv2rgb(int yuv);
 int hb_rgb2yuv(int rgb);
 int hb_rgb2yuv_bt709(int rgb);
+int hb_rgb2yuv_bt2020(int rgb);
 
 const char * hb_subsource_name( int source );
 
@@ -1578,6 +1630,10 @@ int hb_output_color_transfer(hb_job_t * job);
 int hb_output_color_matrix(hb_job_t * job);
 
 int hb_get_bit_depth(int format);
+int hb_get_color_prim(int color_primaries, hb_geometry_t geometry, hb_rational_t rate);
+int hb_get_color_transfer(int color_trc);
+int hb_get_color_matrix(int colorspace, hb_geometry_t geometry);
+int hb_get_color_range(int color_range);
 int hb_get_chroma_sub_sample(int format, int *h_shift, int *v_shift);
 int hb_get_best_pix_fmt(hb_job_t * job);
 int hb_get_best_hw_pix_fmt(hb_job_t * job);

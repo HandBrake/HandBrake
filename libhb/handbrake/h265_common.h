@@ -1,6 +1,6 @@
 /* h265_common.h
 
-   Copyright (c) 2003-2022 HandBrake Team
+   Copyright (c) 2003-2024 HandBrake Team
    This file is part of the HandBrake source code
    Homepage: <http://handbrake.fr/>.
    It may be used under the terms of the GNU General Public License v2.
@@ -11,6 +11,7 @@
 #define HANDBRAKE_H265_COMMON_H
 
 #include "handbrake/project.h"
+#include <stdint.h>
 
 // inspired by libavcodec/hevc.h
 // in HEVC, all "random access point" NAL units are keyframes

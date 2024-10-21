@@ -83,7 +83,7 @@ static void hqdn3d_precalc_coef(int16_t *ct, int depth, double dist25)
 
     for (i = -(256<<LUT_BITS); i < 256<<LUT_BITS; i++)
     {
-        double f = ((i<<(9-LUT_BITS)) + (1<<(8-LUT_BITS)) - 1) / 512.0; // midpoint of the bin
+        double f = (i * (1 << (9-LUT_BITS)) + (1<<(8-LUT_BITS)) - 1) / 512.0; // midpoint of the bin
         simil = FFMAX(0, 1.0 - fabs(f) / 255.0);
         C = pow(simil, gamma) * 256.0 * f;
         ct[(256<<LUT_BITS)+i] = lrint(C);
@@ -174,7 +174,7 @@ static void hqdn3d_denoise_depth(uint8_t *frame_src, uint8_t *frame_dst,
     if (!frame_ant)
     {
         uint8_t *src = frame_src;
-        (*frame_ant_ptr) = frame_ant = malloc(w*h*sizeof(uint16_t));
+        (*frame_ant_ptr) = frame_ant = calloc(w * h, sizeof(uint16_t));
         for (y = 0; y < h; y++, frame_src += sstride, frame_ant += w)
         {
             for (x = 0; x < w; x++)

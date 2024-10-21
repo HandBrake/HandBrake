@@ -1,0 +1,108 @@
+/* Class = "CocoaBindingsConnection"; ibShadowedIsNilPlaceholder = "auto"; ObjectID = "4Hq-BG-Ulb"; */
+"4Hq-BG-Ulb.ibShadowedIsNilPlaceholder" = "auto";
+
+/* Class = "NSButtonCell"; title = "Constant Framerate"; ObjectID = "6Dd-IP-Pwt"; */
+"6Dd-IP-Pwt.title" = "Constant Framerate";
+
+/* Class = "NSPopUpButton"; ibShadowedToolTip = "Video encoder level. Sets and ensures compliance with the specified video compression standard level. Overrides all other settings."; ObjectID = "8CM-4G-oId"; */
+"8CM-4G-oId.ibShadowedToolTip" = "Video encoder level. Sets and ensures compliance with the specified video compression standard level. Overrides all other settings.";
+
+/* Class = "NSPopUpButton"; ibShadowedToolTip = "Framerate (Frames Per Second). Number of pictures displayed during each second of video."; ObjectID = "9tc-EO-QMd"; */
+"9tc-EO-QMd.ibShadowedToolTip" = "Framerate (Frames Per Second). Number of pictures displayed during each second of video.";
+
+/* Class = "NSTextField"; ibShadowedToolTip = "Average Bitrate varies quality to ensure the data rate remains relatively consistent throughout the video."; ObjectID = "A3o-Zx-OfM"; */
+"A3o-Zx-OfM.ibShadowedToolTip" = "Average Bitrate varies quality to ensure the data rate remains relatively consistent throughout the video.";
+
+/* Class = "NSButton"; ibShadowedToolTip = "Multi-pass encoding analyzes the entire source video before encoding. The information gathered enables the encoder to make more informed decisions about quality and data rate in Average Bitrate mode."; ObjectID = "bnV-aE-FVh"; */
+"bnV-aE-FVh.ibShadowedToolTip" = "Multi-pass encoding analyzes the entire source video before encoding. The information gathered enables the encoder to make more informed decisions about quality and data rate in Average Bitrate mode.";
+
+/* Class = "NSTextFieldCell"; title = "0"; ObjectID = "bvD-W7-O0N"; */
+"bvD-W7-O0N.title" = "0";
+
+/* Class = "NSTextFieldCell"; title = "Unparse:"; ObjectID = "CLk-dp-1b7"; */
+"CLk-dp-1b7.title" = "Unparse:";
+
+/* Class = "NSTextFieldCell"; title = "Encoder Options:"; ObjectID = "cRF-pz-1jt"; */
+"cRF-pz-1jt.title" = "Encoder Options:";
+
+/* Class = "CocoaBindingsConnection"; ibShadowedIsNilPlaceholder = "auto"; ObjectID = "CRz-On-Jen"; */
+"CRz-On-Jen.ibShadowedIsNilPlaceholder" = "auto";
+
+/* Class = "NSPopUpButton"; ibShadowedToolTip = "Video encoder tune. Further adjusts encoder preset to optimize settings for specific scenarios."; ObjectID = "cXd-X7-OhB"; */
+"cXd-X7-OhB.ibShadowedToolTip" = "Video encoder tune. Further adjusts encoder preset to optimize settings for specific scenarios.";
+
+/* Class = "NSTextField"; ibShadowedToolTip = "Displays all internal video encoder options."; ObjectID = "dwn-bf-Ua0"; */
+"dwn-bf-Ua0.ibShadowedToolTip" = "Displays all internal video encoder options.";
+
+/* Class = "NSButtonCell"; title = "Fast Decode"; ObjectID = "EcY-w1-bc8"; */
+"EcY-w1-bc8.title" = "Fast Decode";
+
+/* Class = "NSTextFieldCell"; title = "Quality:"; ObjectID = "F3s-qR-qeE"; */
+"F3s-qR-qeE.title" = "Quality:";
+
+/* Class = "NSSlider"; ibShadowedToolTip = "Video encoder preset. Adjusts encoder settings to balance compression efficiency and encoding speed. Slower encoder presets may use settings that are less compatible with certain devices."; ObjectID = "fue-2d-Bjn"; */
+"fue-2d-Bjn.ibShadowedToolTip" = "Video encoder preset. Adjusts encoder settings to balance compression efficiency and encoding speed. Slower encoder presets may use settings that are less compatible with certain devices.";
+
+/* Class = "NSTextFieldCell"; title = "Tune:"; ObjectID = "fzT-im-zKN"; */
+"fzT-im-zKN.title" = "Звучання:";
+
+/* Class = "NSTextField"; ibShadowedToolTip = "Additional video encoder options. For advanced use only.\n\nSyntax: option-1=foo:opt2=bar"; ObjectID = "gEp-lv-YUY"; */
+"gEp-lv-YUY.ibShadowedToolTip" = "Additional video encoder options. For advanced use only.\n\nSyntax: option-1=foo:opt2=bar";
+
+/* Class = "NSSlider"; ibShadowedToolTip = "Constant Quality varies bitrate to ensure visual quality remains relatively consistent throughout the video.\n\nAdjust the quality slider to the right to increase quality or to the left to decrease quality, in small increments of plus or minus 1-2.\n\nRecommended values for the x264 and x265 encoders are RF 18-28. Higher quality settings may produce extremely large files.\n\nx264 is lossless at RF 0."; ObjectID = "GPu-Ht-bKg"; */
+"GPu-Ht-bKg.ibShadowedToolTip" = "Constant Quality varies bitrate to ensure visual quality remains relatively consistent throughout the video.\n\nAdjust the quality slider to the right to increase quality or to the left to decrease quality, in small increments of plus or minus 1-2.\n\nRecommended values for the x264 and x265 encoders are RF 18-28. Higher quality settings may produce extremely large files.\n\nx264 is lossless at RF 0.";
+
+/* Class = "NSTextFieldCell"; title = "Profile:"; ObjectID = "Hho-GY-qOR"; */
+"Hho-GY-qOR.title" = "Profile:";
+
+/* Class = "NSTextFieldCell"; title = "Additional Options:"; ObjectID = "ja7-Zr-y1P"; */
+"ja7-Zr-y1P.title" = "Additional Options:";
+
+/* Class = "NSPopUpButton"; ibShadowedToolTip = "Video encoder profile. Sets and ensures compliance with the specified video compression standard profile. Overrides all other settings."; ObjectID = "kh8-d2-hSD"; */
+"kh8-d2-hSD.ibShadowedToolTip" = "Video encoder profile. Sets and ensures compliance with the specified video compression standard profile. Overrides all other settings.";
+
+/* Class = "NSTextFieldCell"; title = "Encoder Options:"; ObjectID = "kPs-u2-fDn"; */
+"kPs-u2-fDn.title" = "Encoder Options:";
+
+/* Class = "NSTextFieldCell"; title = "Video Encoder:"; ObjectID = "Mrb-6Q-0YM"; */
+"Mrb-6Q-0YM.title" = "Video Encoder:";
+
+/* Class = "NSButtonCell"; title = "Multi-pass encoding"; ObjectID = "nPA-nO-Eik"; */
+"nPA-nO-Eik.title" = "Multi-pass encoding";
+
+/* Class = "NSButton"; ibShadowedToolTip = "Turbo first pass speeds up the analysis pass of a multi-pass encode for a slight penalty to analysis."; ObjectID = "olm-zg-k9Y"; */
+"olm-zg-k9Y.ibShadowedToolTip" = "Turbo first pass speeds up the analysis pass of a multi-pass encode for a slight penalty to analysis.";
+
+/* Class = "NSTextFieldCell"; title = "Preset:"; ObjectID = "QWu-rv-zfM"; */
+"QWu-rv-zfM.title" = "Пресет:";
+
+/* Class = "NSTextField"; ibShadowedToolTip = "Additional video encoder options. For advanced use only.\n\nSyntax: option-1=foo:opt2=bar,baz"; ObjectID = "rbo-w6-ENd"; */
+"rbo-w6-ENd.ibShadowedToolTip" = "Additional video encoder options. For advanced use only.\n\nSyntax: option-1=foo:opt2=bar,baz";
+
+/* Class = "NSTextFieldCell"; title = "RF:"; ObjectID = "rRB-9F-pHn"; */
+"rRB-9F-pHn.title" = "RF:";
+
+/* Class = "NSTextFieldCell"; title = "Framerate (FPS):"; ObjectID = "SJc-tv-AMH"; */
+"SJc-tv-AMH.title" = "Framerate (FPS):";
+
+/* Class = "NSTextFieldCell"; title = "Level:"; ObjectID = "sTM-lk-DBC"; */
+"sTM-lk-DBC.title" = "Level:";
+
+/* Class = "NSButton"; ibShadowedToolTip = "Fast Decode uses settings that reduce CPU usage during playback of the encoded video. Useful for devices that struggle to play video without stuttering."; ObjectID = "stU-Fo-Avu"; */
+"stU-Fo-Avu.ibShadowedToolTip" = "Fast Decode uses settings that reduce CPU usage during playback of the encoded video. Useful for devices that struggle to play video without stuttering.";
+
+/* Class = "NSButtonCell"; title = "Average Bitrate (kbps):"; ObjectID = "VQe-CK-YDR"; */
+"VQe-CK-YDR.title" = "Average Bitrate (kbps):";
+
+/* Class = "NSButtonCell"; title = "Turbo analysis pass"; ObjectID = "vSc-VB-NEv"; */
+"vSc-VB-NEv.title" = "Turbo analysis pass";
+
+/* Class = "NSPopUpButton"; ibShadowedToolTip = "Video encoder. Determines video type and settings used during encoding."; ObjectID = "xwK-Yu-a1e"; */
+"xwK-Yu-a1e.ibShadowedToolTip" = "Video encoder. Determines video type and settings used during encoding.";
+
+/* Class = "NSButtonCell"; title = "Constant Quality"; ObjectID = "ZjL-cY-O5f"; */
+"ZjL-cY-O5f.title" = "Constant Quality";
+
+/* Class = "NSButtonCell"; title = "Variable Framerate"; ObjectID = "zZo-75-1WG"; */
+"zZo-75-1WG.title" = "Variable Framerate";
+

@@ -1,0 +1,18 @@
+/* Class = "NSButton"; ibExternalAccessibilityDescription = "Previous Preview Image"; ObjectID = "1o6-MG-Jbu"; */
+"1o6-MG-Jbu.ibExternalAccessibilityDescription" = "Previous Preview Image";
+
+/* Class = "NSButton"; ibShadowedToolTip = "Previous Preview Image"; ObjectID = "1o6-MG-Jbu"; */
+"1o6-MG-Jbu.ibShadowedToolTip" = "Previous Preview Image";
+
+/* Class = "NSButton"; ibExternalAccessibilityDescription = "Next Preview Image"; ObjectID = "5po-M6-Hqa"; */
+"5po-M6-Hqa.ibExternalAccessibilityDescription" = "Next Preview Image";
+
+/* Class = "NSButton"; ibShadowedToolTip = "Next Preview Image"; ObjectID = "5po-M6-Hqa"; */
+"5po-M6-Hqa.ibShadowedToolTip" = "Next Preview Image";
+
+/* Class = "NSButtonCell"; title = "‹"; ObjectID = "EWx-of-C7c"; */
+"EWx-of-C7c.title" = "‹";
+
+/* Class = "NSButtonCell"; title = "›"; ObjectID = "Izx-9B-XA3"; */
+"Izx-9B-XA3.title" = "›";
+

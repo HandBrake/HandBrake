@@ -1,6 +1,6 @@
 /* ports.c
 
-   Copyright (c) 2003-2022 HandBrake Team
+   Copyright (c) 2003-2024 HandBrake Team
    This file is part of the HandBrake source code
    Homepage: <http://handbrake.fr/>.
    It may be used under the terms of the GNU General Public License v2.
@@ -10,7 +10,7 @@
 #include "handbrake/project.h"
 
 #ifdef SYS_MINGW
-#define _WIN32_WINNT 0x600
+#define _WIN32_WINNT 0x0601
 #endif
 
 #ifdef SYS_LINUX
@@ -389,24 +389,30 @@ static void init_cpu_info()
                   &hb_cpu_info.buf4[10],
                   &hb_cpu_info.buf4[11]);
 
-            hb_cpu_info.name    = hb_cpu_info.buf;
-
-            // ensure string is null-terminated and trim trailing whitespace
-            int ii = sizeof(hb_cpu_info.buf) - 1;
-            do {
-                hb_cpu_info.buf[ii] = '\0';
-                ii -= 1;
-            }
-            while (ii > 0 && isspace(hb_cpu_info.buf[ii]));
-
-            while (isspace(*hb_cpu_info.name))
-            {
-                // skip leading whitespace to prettify
-                hb_cpu_info.name++;
-            }
+            hb_cpu_info.name = hb_cpu_info.buf;
         }
     }
-#endif // ARCH_X86_64 || ARCH_X86_32
+#elif defined(SYS_DARWIN)
+    size_t buflen = sizeof(hb_cpu_info.buf);
+    if (sysctlbyname("machdep.cpu.brand_string", &hb_cpu_info.buf, &buflen, NULL, 0) == 0)
+    {
+        hb_cpu_info.name = hb_cpu_info.buf;
+    }
+#endif
+
+    // ensure string is null-terminated and trim trailing whitespace
+    int ii = sizeof(hb_cpu_info.buf) - 1;
+    do {
+        hb_cpu_info.buf[ii] = '\0';
+        ii -= 1;
+    }
+    while (ii > 0 && isspace(hb_cpu_info.buf[ii]));
+
+    while (isspace(*hb_cpu_info.name))
+    {
+        // skip leading whitespace to prettify
+        hb_cpu_info.name++;
+    }
 }
 
 /*
@@ -418,9 +424,7 @@ static int init_cpu_count()
     int cpu_count = 1;
 
 #if defined(SYS_CYGWIN) || defined(SYS_MINGW)
-    SYSTEM_INFO cpuinfo;
-    GetSystemInfo( &cpuinfo );
-    cpu_count = cpuinfo.dwNumberOfProcessors;
+    cpu_count = GetActiveProcessorCount(ALL_PROCESSOR_GROUPS);
 
 #elif defined(SYS_LINUX)
     unsigned int bit;
@@ -594,40 +598,66 @@ void hb_get_user_config_filename( char name[1024], char *fmt, ... )
 }
 
 /************************************************************************
- * Get a temporary directory for HB
+ * Creates a uniquely-named temporary directory for this process. On
+ * POSIX systems, mkdtemp(3) is used to ensure the directory name is
+ * unique even if multiple HandBrake instances have the same PID.
  ***********************************************************************/
-char * hb_get_temporary_directory()
-{
-    char * path, * base, * p;
+static pthread_once_t tmp_control = PTHREAD_ONCE_INIT;
+static char *tmp_dirname = NULL;
 
-    /* Create the base */
+static void
+hb_init_temporary_directory (void)
+{
+    char *path, *base, *p;
+
 #if defined( SYS_CYGWIN ) || defined( SYS_MINGW )
     base = malloc(MAX_PATH);
-    int i_size = GetTempPath( MAX_PATH, base );
-    if( i_size <= 0 || i_size >= MAX_PATH )
+    int i_size = GetTempPath(MAX_PATH, base);
+    if (i_size <= 0 || i_size >= MAX_PATH)
     {
-        if( getcwd( base, MAX_PATH ) == NULL )
-            strcpy( base, "c:" ); /* Bad fallback but ... */
+        if (getcwd(base, MAX_PATH) == NULL)
+            strcpy(base, "c:"); /* Bad fallback but ... */
     }
 
     /* c:/path/ works like a charm under cygwin(win32?) so use it */
-    while( ( p = strchr( base, '\\' ) ) )
+    while ((p = strchr(base, '\\')))
         *p = '/';
+
+    /* I prefer to remove eventual last '/' (for cygwin) */
+    if (base[strlen(base)-1] == '/')
+        base[strlen(base)-1] = '\0';
+
+    path = hb_strdup_printf("%s/HandBrake-%d", base, (int)getpid());
+    hb_mkdir(path);
+    free(base);
 #else
-    if( (p = getenv( "TMPDIR" ) ) != NULL ||
-        (p = getenv( "TEMP" ) )   != NULL )
+    if ((p = getenv("TMPDIR")) != NULL ||
+        (p = getenv("TEMP"))   != NULL)
         base = strdup(p);
     else
         base = strdup("/tmp");
-#endif
-    /* I prefer to remove eventual last '/' (for cygwin) */
-    if( base[strlen(base)-1] == '/' )
+
+    if (base[strlen(base)-1] == '/')
         base[strlen(base)-1] = '\0';
 
-    path = hb_strdup_printf("%s/hb.%d", base, (int)getpid());
+    /* Create a new randomly-named directory from the template */
+    path = hb_strdup_printf("%s/handbrake-XXXXXX", base);
+    if (!mkdtemp(path))
+    {
+        /* We still use the path even if directory creation fails */
+        hb_error("Failed to create a temporary directory at %s\n", path);
+    }
     free(base);
+#endif
+    tmp_dirname = path;
+}
 
-    return path;
+const char *
+hb_get_temporary_directory (void)
+{
+    /* Ensure the directory name is only created once */
+    pthread_once(&tmp_control, hb_init_temporary_directory);
+    return tmp_dirname;
 }
 
 /************************************************************************
@@ -637,14 +667,12 @@ char * hb_get_temporary_filename( char *fmt, ... )
 {
     va_list   args;
     char    * name, * path;
-    char    * dir = hb_get_temporary_directory();
 
     va_start( args, fmt );
     name = hb_strdup_vaprintf(fmt, args);
     va_end( args );
 
-    path = hb_strdup_printf("%s/%s", dir, name);
-    free(dir);
+    path = hb_strdup_printf("%s/%s", hb_get_temporary_directory(), name);
     free(name);
 
     return path;
@@ -776,7 +804,7 @@ char * hb_strr_dir_sep(const char *path)
  * Wrapper to the real mkdir, needed only because it doesn't take a
  * second argument on Win32. Grrr.
  ***********************************************************************/
-int hb_mkdir(char * path)
+int hb_mkdir(const char * path)
 {
 #ifdef SYS_MINGW
     wchar_t path_utf16[MAX_PATH];
@@ -1256,7 +1284,7 @@ void hb_system_sleep_private_disable(void *opaque)
 void * hb_dlopen(const char *name)
 {
 #ifdef SYS_MINGW
-    HMODULE h = LoadLibraryA(name);
+    HMODULE h = LoadLibraryExA(name, NULL, LOAD_LIBRARY_SEARCH_SYSTEM32);
 #else
     void *h = dlopen(name, RTLD_LAZY | RTLD_LOCAL);
 #endif

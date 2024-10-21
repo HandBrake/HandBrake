@@ -1,0 +1,15 @@
+/* Class = "NSWindow"; title = "New Category"; ObjectID = "C4G-OG-ksc"; */
+"C4G-OG-ksc.title" = "새로운 카테고리";
+
+/* Class = "NSButtonCell"; title = "Cancel"; ObjectID = "N2f-jz-YyX"; */
+"N2f-jz-YyX.title" = "취소";
+
+/* Class = "NSTextFieldCell"; title = "untitled category"; ObjectID = "NQn-fS-Rbd"; */
+"NQn-fS-Rbd.title" = "이름없는 카테고리";
+
+/* Class = "NSTextFieldCell"; title = "Name of the new category:"; ObjectID = "Pe0-gr-Yv4"; */
+"Pe0-gr-Yv4.title" = "새 카테고리의 이름:";
+
+/* Class = "NSButtonCell"; title = "Create"; ObjectID = "Z9M-dc-5Ml"; */
+"Z9M-dc-5Ml.title" = "생성";
+

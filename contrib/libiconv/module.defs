@@ -5,6 +5,8 @@ LIBICONV.FETCH.url     = https://github.com/HandBrake/HandBrake-contribs/release
 LIBICONV.FETCH.url    += https://ftp.gnu.org/pub/gnu/libiconv/libiconv-1.17.tar.gz
 LIBICONV.FETCH.sha256  = 8f74213b56238c85a50a5329f77e06198771e70dd9a739779f4c02f65d971313
 
+LIBICONV.GCC.args.extra += $(LIBICONV.GCC.args.O.$(LIBICONV.GCC.O))
+
 ifeq (1,$(HOST.cross))
 # this contrib will not build under MinGW with -std=gnu99
     ifeq (mingw,$(HOST.system))

@@ -49,14 +49,6 @@ namespace HandBrakeWPF.Converters.Video
         {
             if (values.Count() >= 2)
             {
-                IUserSettingService userSettingService = values[2] as IUserSettingService;
-                bool isQsvEnabled = false, isVceEnabled = false, isNvencEnabled = false;
-                if (userSettingService != null)
-                {
-                    isQsvEnabled = userSettingService.GetUserSetting<bool>(UserSettingConstants.EnableQuickSyncEncoding);
-                    isVceEnabled = userSettingService.GetUserSetting<bool>(UserSettingConstants.EnableVceEncoder);
-                    isNvencEnabled = userSettingService.GetUserSetting<bool>(UserSettingConstants.EnableNvencEncoder);
-                }
 
                 IEnumerable<HBVideoEncoder> allEncoders = values[0] as IEnumerable<HBVideoEncoder>;
                 EncodeTask task = values[1] as EncodeTask;
@@ -87,21 +79,6 @@ namespace HandBrakeWPF.Converters.Video
                     }
 
                     if (task.OutputFormat == OutputFormat.WebM && !encoder.SupportsWebM)
-                    {
-                        returnEncoders.Remove(encoder);
-                    }
-
-                    if (!isQsvEnabled && encoder.IsQuickSync)
-                    {
-                        returnEncoders.Remove(encoder);
-                    }
-
-                    if (!isVceEnabled && encoder.IsVCN)
-                    {
-                        returnEncoders.Remove(encoder);
-                    }
-
-                    if (!isNvencEnabled && encoder.IsNVEnc)
                     {
                         returnEncoders.Remove(encoder);
                     }

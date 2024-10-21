@@ -43,9 +43,6 @@
 /* Class = "NSWindow"; title = "Subtitles Selection Behaviour"; ObjectID = "kwM-lz-5lG"; */
 "kwM-lz-5lG.title" = "Comportement de la sélection des sous-titres";
 
-/* Class = "NSMenu"; title = "OtherViews"; ObjectID = "Kwy-lU-VuU"; */
-"Kwy-lU-VuU.title" = "AutresVues";
-
 /* Class = "NSPopUpButton"; ibShadowedToolTip = "Burn-In Behavior. Select which subtitles to make permanent by overlaying them onto the video track.\n\nOnly one subtitles track can be burned in."; ObjectID = "Lsa-kB-2BP"; */
 "Lsa-kB-2BP.ibShadowedToolTip" = "Comportement de l'incrustation. Sélectionne le sous-titre qui sera affiché de façon permanente par superposition sur la piste vidéo. Il n'est possible d'incruster qu'une seule piste de sous-titres.";
 

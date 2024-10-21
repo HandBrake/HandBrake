@@ -1,0 +1,40 @@
+From a6e754b2ace03fbced335184539970212039c745 Mon Sep 17 00:00:00 2001
+From: galinart <artem.galin@intel.com>
+Date: Wed, 20 Mar 2024 09:22:21 +0100
+Subject: [PATCH 14/16] hevc_mp4toannexb.c: fix qsv decode of 10bit hdr.
+
+---
+ libavcodec/bsf/hevc_mp4toannexb.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
+
+diff --git a/libavcodec/bsf/hevc_mp4toannexb.c b/libavcodec/bsf/hevc_mp4toannexb.c
+index f281185769..241fa07a0f 100644
+--- a/libavcodec/bsf/hevc_mp4toannexb.c
++++ b/libavcodec/bsf/hevc_mp4toannexb.c
+@@ -125,6 +125,7 @@ static int hevc_mp4toannexb_filter(AVBSFContext *ctx, AVPacket *out)
+     AVPacket *in;
+     GetByteContext gb;
+ 
++    int has_sps = 0, has_pps = 0;
+     int got_irap = 0;
+     int i, ret = 0;
+ 
+@@ -158,11 +159,14 @@ static int hevc_mp4toannexb_filter(AVBSFContext *ctx, AVPacket *out)
+         }
+ 
+         nalu_type = (bytestream2_peek_byte(&gb) >> 1) & 0x3f;
++        has_sps = (has_sps || nalu_type == HEVC_NAL_SPS);
++        has_pps = (has_pps || nalu_type == HEVC_NAL_PPS);
+ 
+         /* prepend extradata to IRAP frames */
+         is_irap = nalu_type >= HEVC_NAL_BLA_W_LP &&
+                   nalu_type <= HEVC_NAL_RSV_IRAP_VCL23;
+-        add_extradata = is_irap && !got_irap;
++        /* ignore the extradata if IRAP frame has sps and pps */
++        add_extradata = is_irap && !got_irap && !(has_sps && has_pps);
+         extra_size    = add_extradata * ctx->par_out->extradata_size;
+         got_irap     |= is_irap;
+ 
+-- 
+2.39.5 (Apple Git-154)
+

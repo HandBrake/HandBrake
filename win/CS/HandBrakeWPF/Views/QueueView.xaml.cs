@@ -13,9 +13,11 @@ namespace HandBrakeWPF.Views
     using System.Windows.Input;
     using System.Windows.Media;
 
+    using HandBrakeWPF.Commands;
     using HandBrakeWPF.Helpers;
     using HandBrakeWPF.Services.Queue.Model;
     using HandBrakeWPF.ViewModels;
+    using HandBrakeWPF.ViewModels.Interfaces;
 
     public partial class QueueView : Window
     {
@@ -25,6 +27,25 @@ namespace HandBrakeWPF.Views
         {
             this.InitializeComponent();
             this.SizeChanged += this.QueueView_SizeChanged;
+
+            this.InputBindings.Add(new InputBinding(new CloseWindowCommand(this), new KeyGesture(Key.W, ModifierKeys.Control))); // Close Window
+
+            this.InputBindings.Add(new InputBinding(new ProcessQueueShortcutCommand(new KeyGesture(Key.P, ModifierKeys.Control)), new KeyGesture(Key.P, ModifierKeys.Control))); // Play File
+            this.InputBindings.Add(new InputBinding(new ProcessQueueShortcutCommand(new KeyGesture(Key.I, ModifierKeys.Control)), new KeyGesture(Key.I, ModifierKeys.Control))); // Source Dir
+            this.InputBindings.Add(new InputBinding(new ProcessQueueShortcutCommand(new KeyGesture(Key.D, ModifierKeys.Control)), new KeyGesture(Key.D, ModifierKeys.Control))); // Destination Dir
+            this.InputBindings.Add(new InputBinding(new ProcessQueueShortcutCommand(new KeyGesture(Key.E, ModifierKeys.Control)), new KeyGesture(Key.E, ModifierKeys.Control))); // Edit Job
+            this.InputBindings.Add(new InputBinding(new ProcessQueueShortcutCommand(new KeyGesture(Key.R, ModifierKeys.Control)), new KeyGesture(Key.R, ModifierKeys.Control))); // Refresh
+            this.InputBindings.Add(new InputBinding(new ProcessQueueShortcutCommand(new KeyGesture(Key.T, ModifierKeys.Control)), new KeyGesture(Key.T, ModifierKeys.Control))); // Move Up to Top
+            this.InputBindings.Add(new InputBinding(new ProcessQueueShortcutCommand(new KeyGesture(Key.B, ModifierKeys.Control)), new KeyGesture(Key.B, ModifierKeys.Control))); // Move to Bottom
+
+
+            this.DataContextChanged += this.QueueView_DataContextChanged;
+        }
+
+        private void QueueView_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
+        {
+            ((QueueViewModel)this.DataContext).SimpleViewChanged -= this.QueueView_SimpleViewChanged;
+            ((QueueViewModel)this.DataContext).SimpleViewChanged += this.QueueView_SimpleViewChanged;
         }
 
         protected override void OnSourceInitialized(EventArgs e)
@@ -33,16 +54,35 @@ namespace HandBrakeWPF.Views
             WindowHelper.SetDarkMode(this);
         }
 
+        private void QueueView_SimpleViewChanged(object sender, EventArgs e)
+        {
+            if (!((QueueViewModel)this.DataContext).IsSimpleView)
+            {
+                if (Width < 900)
+                {
+                    this.Width = 900;
+                    this.MinWidth = 900;
+                }
+            }
+            else
+            {
+                this.MinWidth = 400;
+            }
+        }
+
         private void QueueView_SizeChanged(object sender, SizeChangedEventArgs e)
         {
             // Make the view adaptive. 
             if (e.WidthChanged)
             {
-                int queueSizeLimit = 745;
-
-                this.summaryTabControl.Visibility = this.ActualWidth < queueSizeLimit ? Visibility.Collapsed : Visibility.Visible;
-                this.leftTabPanel.Width = this.ActualWidth < queueSizeLimit ? new GridLength(this.ActualWidth - 10, GridUnitType.Star) : new GridLength(3, GridUnitType.Star);
-                this.leftTabPanel.MaxWidth = this.ActualWidth < queueSizeLimit ? 750 : 650;
+                if (((QueueViewModel)this.DataContext).IsSimpleView)
+                {
+                    this.MinWidth = 400;
+                }
+                else
+                {
+                    this.MinWidth = 900;
+                }
             }
         }
 
@@ -54,11 +94,11 @@ namespace HandBrakeWPF.Views
             if (menu != null)
             {
                 Point p = Mouse.GetPosition(this);
-                HitTestResult result = VisualTreeHelper.HitTest(this, p);
+                IInputElement result = this.InputHitTest(p);
 
                 if (result != null)
                 {
-                    ListBoxItem listBoxItem = FindParent<ListBoxItem>(result.VisualHit);
+                    ListBoxItem listBoxItem = FindParent2<ListBoxItem>(result);
                     if (listBoxItem != null)
                     {
                         this.mouseActiveQueueTask = listBoxItem.DataContext as QueueTask;
@@ -95,12 +135,35 @@ namespace HandBrakeWPF.Views
             }
 
             this.DeleteMenuItem.Header = this.queueJobs.SelectedItems.Count > 1 ? Properties.Resources.QueueView_DeleteSelected : Properties.Resources.QueueView_Delete;
-            this.DeleteMenuItem.IsEnabled = (this.mouseActiveQueueTask != null || this.queueJobs.SelectedItems.Count >= 1) && (!this.mouseActiveQueueTask?.IsBreakpointTask ?? true);
+            this.DeleteMenuItem.IsEnabled = (this.mouseActiveQueueTask != null || this.queueJobs.SelectedItems.Count >= 1) && (this.mouseActiveQueueTask?.TaskType != QueueTaskType.Breakpoint);
             this.EditMenuItem.IsEnabled = this.mouseActiveQueueTask != null && this.queueJobs.SelectedItems.Count == 1;
             this.openSourceDir.IsEnabled = this.mouseActiveQueueTask != null && this.queueJobs.SelectedItems.Count == 1;
             this.openDestDir.IsEnabled = this.mouseActiveQueueTask != null && this.queueJobs.SelectedItems.Count == 1;
             this.moveToBottomMenuItem.IsEnabled = this.mouseActiveQueueTask != null && this.queueJobs.SelectedItems.Count >= 1;
             this.moveToTopMenuItem.IsEnabled = this.mouseActiveQueueTask != null && this.queueJobs.SelectedItems.Count >= 1;
+        }
+
+        private static T FindParent2<T>(IInputElement from) where T : class
+        {
+            FrameworkElement fromElement = from as FrameworkElement;
+            DependencyObject parent = fromElement?.Parent;
+
+            if (parent == null)
+            {
+                parent = fromElement?.TemplatedParent;
+            }
+            
+            T result = null;
+            if (parent is T)
+            {
+                result = parent as T;
+            }
+            else if (parent != null)
+            {
+                result = FindParent<T>(parent);
+            }
+
+            return result;
         }
 
         private static T FindParent<T>(DependencyObject from) where T : class
@@ -195,11 +258,44 @@ namespace HandBrakeWPF.Views
             {
                 this.extendedQueueDisplay.Header = Properties.Resources.QueueView_ExtendedQueueDisplay;
             }
+
+            if (((QueueViewModel)this.DataContext).IsSimpleView)
+            {
+                this.simpleQueueDisplay.Header = Properties.Resources.QueueView_AdvancedQueueDisplay;
+            }
+            else
+            {
+                this.simpleQueueDisplay.Header = Properties.Resources.QueueView_SimpleQueueDisplay;
+            }
         }
-        
+
         private void QueueView_OnClosing(object sender, CancelEventArgs e)
         {
             ((QueueViewModel)this.DataContext).BackupQueue();
+        }
+
+        private void Start_OnPreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            // If we've clicked the dropdown part of the button, display the context menu below the button.
+            Button button = (sender as Button);
+            if (button != null)
+            {
+                HitTestResult result = VisualTreeHelper.HitTest(button, e.GetPosition(button));
+                FrameworkElement element = result.VisualHit as FrameworkElement;
+                if (element != null)
+                {
+                    if (element.Name == "dropdown" || element.Name == "dropdownArrow")
+                    {
+                        button.ContextMenu.IsEnabled = true;
+                        button.ContextMenu.PlacementTarget = button;
+                        button.ContextMenu.Placement = System.Windows.Controls.Primitives.PlacementMode.Bottom;
+                        button.ContextMenu.IsOpen = true;
+                        return;
+                    }
+                }
+            }
+
+            ((IQueueViewModel)this.DataContext).StartQueue();
         }
     }
 }

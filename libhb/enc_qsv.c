@@ -38,6 +38,7 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "handbrake/qsv_memory.h"
 #include "handbrake/h264_common.h"
 #include "handbrake/h265_common.h"
+#include "handbrake/extradata.h"
 
 #include "libavutil/hwcontext_qsv.h"
 #include "libavutil/hwcontext.h"
@@ -149,11 +150,6 @@ static int64_t get_frame_duration(hb_work_private_t *pv, hb_buffer_t *buf)
 {
     int i = (buf->s.start >> FRAME_INFO_MAX2) & FRAME_INFO_MASK;
     return pv->frame_duration[i];
-}
-
-static inline int64_t rescale(hb_rational_t q, int b)
-{
-    return av_rescale(q.num, b, q.den);
 }
 
 static const char* hyper_encode_name(const int hyper_encode_mode)
@@ -648,7 +644,9 @@ static int qsv_hevc_make_header(hb_work_object_t *w, mfxSession session, const m
     len = bitstream.DataLength;
     buf = bitstream.Data + bitstream.DataOffset;
     end = bitstream.Data + bitstream.DataOffset + bitstream.DataLength;
-    w->config->h265.headers_length = 0;
+
+    size_t extradata_size = 0;
+    uint8_t extradata[HB_CONFIG_MAX_SIZE];
 
     while ((buf = hb_annexb_find_next_nalu(buf, &len)) != NULL)
     {
@@ -665,18 +663,19 @@ static int qsv_hevc_make_header(hb_work_object_t *w, mfxSession session, const m
                 continue;
         }
 
-        size_t size = hb_nal_unit_write_annexb(NULL, buf, len) + w->config->h265.headers_length;
-        if (sizeof(w->config->h265.headers) < size)
+        size_t size = hb_nal_unit_write_annexb(NULL, buf, len) + extradata_size;
+        if (sizeof(extradata) < size)
         {
             /* Will never happen in practice */
             hb_log("qsv_hevc_make_header: header too large (size: %lu, max: %lu)",
-                   size, sizeof(w->config->h265.headers));
+                   size, sizeof(extradata));
         }
 
-        w->config->h265.headers_length += hb_nal_unit_write_annexb(w->config->h265.headers +
-                                                                   w->config->h265.headers_length, buf, len);
+        extradata_size += hb_nal_unit_write_annexb(extradata + extradata_size, buf, len);
         len = end - buf;
     }
+
+    hb_set_extradata(w->extradata, extradata, extradata_size);
 
 end:
     if (bitstream.Data)
@@ -1206,31 +1205,65 @@ int encqsvInit(hb_work_object_t *w, hb_job_t *job)
     /* HDR10 Static metadata */
     if (job->color_transfer == HB_COLR_TRA_SMPTEST2084)
     {
-        const int masteringChromaDen = 50000;
-        const int masteringLumaDen = 10000;
-
-        /* Mastering display metadata */
-        if (job->mastering.has_primaries && job->mastering.has_luminance)
+        if (pv->qsv_info->codec_id == MFX_CODEC_HEVC)
         {
-            pv->param.masteringDisplayColourVolume.InsertPayloadToggle = MFX_PAYLOAD_IDR;
-            pv->param.masteringDisplayColourVolume.DisplayPrimariesX[0] = rescale(job->mastering.display_primaries[0][0], masteringChromaDen);
-            pv->param.masteringDisplayColourVolume.DisplayPrimariesY[0] = rescale(job->mastering.display_primaries[0][1], masteringChromaDen);
-            pv->param.masteringDisplayColourVolume.DisplayPrimariesX[1] = rescale(job->mastering.display_primaries[1][0], masteringChromaDen);
-            pv->param.masteringDisplayColourVolume.DisplayPrimariesY[1] = rescale(job->mastering.display_primaries[1][1], masteringChromaDen);
-            pv->param.masteringDisplayColourVolume.DisplayPrimariesX[2] = rescale(job->mastering.display_primaries[2][0], masteringChromaDen);
-            pv->param.masteringDisplayColourVolume.DisplayPrimariesY[2] = rescale(job->mastering.display_primaries[2][1], masteringChromaDen);
-            pv->param.masteringDisplayColourVolume.WhitePointX = rescale(job->mastering.white_point[0], masteringChromaDen);
-            pv->param.masteringDisplayColourVolume.WhitePointY = rescale(job->mastering.white_point[1], masteringChromaDen);
-            pv->param.masteringDisplayColourVolume.MaxDisplayMasteringLuminance = rescale(job->mastering.max_luminance, masteringLumaDen);
-            pv->param.masteringDisplayColourVolume.MinDisplayMasteringLuminance = rescale(job->mastering.min_luminance, masteringLumaDen);
+            const int masteringChromaDen = 50000;
+            const int masteringLumaDen = 10000;
+
+            /* Mastering display metadata */
+            if (job->mastering.has_primaries && job->mastering.has_luminance)
+            {
+                pv->param.masteringDisplayColourVolume.InsertPayloadToggle = MFX_PAYLOAD_IDR;
+                pv->param.masteringDisplayColourVolume.DisplayPrimariesX[0] = FFMIN(hb_rescale_rational(job->mastering.display_primaries[1][0], masteringChromaDen), masteringChromaDen);
+                pv->param.masteringDisplayColourVolume.DisplayPrimariesY[0] = FFMIN(hb_rescale_rational(job->mastering.display_primaries[1][1], masteringChromaDen), masteringChromaDen);
+                pv->param.masteringDisplayColourVolume.DisplayPrimariesX[1] = FFMIN(hb_rescale_rational(job->mastering.display_primaries[2][0], masteringChromaDen), masteringChromaDen);
+                pv->param.masteringDisplayColourVolume.DisplayPrimariesY[1] = FFMIN(hb_rescale_rational(job->mastering.display_primaries[2][1], masteringChromaDen), masteringChromaDen);
+                pv->param.masteringDisplayColourVolume.DisplayPrimariesX[2] = FFMIN(hb_rescale_rational(job->mastering.display_primaries[0][0], masteringChromaDen), masteringChromaDen);
+                pv->param.masteringDisplayColourVolume.DisplayPrimariesY[2] = FFMIN(hb_rescale_rational(job->mastering.display_primaries[0][1], masteringChromaDen), masteringChromaDen);
+                pv->param.masteringDisplayColourVolume.WhitePointX = FFMIN(hb_rescale_rational(job->mastering.white_point[0], masteringChromaDen), masteringChromaDen);
+                pv->param.masteringDisplayColourVolume.WhitePointY = FFMIN(hb_rescale_rational(job->mastering.white_point[1], masteringChromaDen), masteringChromaDen);
+                pv->param.masteringDisplayColourVolume.MaxDisplayMasteringLuminance = hb_rescale_rational(job->mastering.max_luminance, masteringLumaDen);
+                pv->param.masteringDisplayColourVolume.MinDisplayMasteringLuminance = FFMIN(hb_rescale_rational(job->mastering.min_luminance, masteringLumaDen),
+                    pv->param.masteringDisplayColourVolume.MaxDisplayMasteringLuminance);
+            }
+
+            /*  Content light level */
+            if (job->coll.max_cll && job->coll.max_fall)
+            {
+                pv->param.contentLightLevelInfo.InsertPayloadToggle = MFX_PAYLOAD_IDR;
+                pv->param.contentLightLevelInfo.MaxContentLightLevel  = FFMIN(job->coll.max_cll, 65535);
+                pv->param.contentLightLevelInfo.MaxPicAverageLightLevel = FFMIN(job->coll.max_fall, 65535);
+            }
         }
-
-        /*  Content light level */
-        if (job->coll.max_cll && job->coll.max_fall)
+        else if (pv->qsv_info->codec_id == MFX_CODEC_AV1)
         {
-            pv->param.contentLightLevelInfo.InsertPayloadToggle = MFX_PAYLOAD_IDR;
-            pv->param.contentLightLevelInfo.MaxContentLightLevel  = job->coll.max_cll;
-            pv->param.contentLightLevelInfo.MaxPicAverageLightLevel = job->coll.max_fall;
+            const int masteringChromaDen = 1 << 16;
+            const int max_luma_den = 1 << 8;
+            const int min_luma_den = 1 << 14;
+
+            /* Mastering display metadata */
+            if (job->mastering.has_primaries && job->mastering.has_luminance)
+            {
+                pv->param.masteringDisplayColourVolume.InsertPayloadToggle = MFX_PAYLOAD_IDR;
+                pv->param.masteringDisplayColourVolume.DisplayPrimariesX[0] = hb_rescale_rational(job->mastering.display_primaries[0][0], masteringChromaDen);
+                pv->param.masteringDisplayColourVolume.DisplayPrimariesY[0] = hb_rescale_rational(job->mastering.display_primaries[0][1], masteringChromaDen);
+                pv->param.masteringDisplayColourVolume.DisplayPrimariesX[1] = hb_rescale_rational(job->mastering.display_primaries[1][0], masteringChromaDen);
+                pv->param.masteringDisplayColourVolume.DisplayPrimariesY[1] = hb_rescale_rational(job->mastering.display_primaries[1][1], masteringChromaDen);
+                pv->param.masteringDisplayColourVolume.DisplayPrimariesX[2] = hb_rescale_rational(job->mastering.display_primaries[2][0], masteringChromaDen);
+                pv->param.masteringDisplayColourVolume.DisplayPrimariesY[2] = hb_rescale_rational(job->mastering.display_primaries[2][1], masteringChromaDen);
+                pv->param.masteringDisplayColourVolume.WhitePointX = hb_rescale_rational(job->mastering.white_point[0], masteringChromaDen);
+                pv->param.masteringDisplayColourVolume.WhitePointY = hb_rescale_rational(job->mastering.white_point[1], masteringChromaDen);
+                pv->param.masteringDisplayColourVolume.MaxDisplayMasteringLuminance = hb_rescale_rational(job->mastering.max_luminance, max_luma_den);
+                pv->param.masteringDisplayColourVolume.MinDisplayMasteringLuminance = hb_rescale_rational(job->mastering.min_luminance, min_luma_den);
+            }
+
+            /*  Content light level */
+            if (job->coll.max_cll && job->coll.max_fall)
+            {
+                pv->param.contentLightLevelInfo.InsertPayloadToggle = MFX_PAYLOAD_IDR;
+                pv->param.contentLightLevelInfo.MaxContentLightLevel  = job->coll.max_cll;
+                pv->param.contentLightLevelInfo.MaxPicAverageLightLevel = job->coll.max_fall;
+            }
         }
     }
 
@@ -1622,12 +1655,15 @@ int encqsvInit(hb_work_object_t *w, hb_job_t *job)
     mfxStatus sts;
     mfxVersion version;
     mfxVideoParam videoParam;
-    mfxExtBuffer *extParamArray[5];
+    mfxExtBuffer *extParamArray[8];
     mfxSession session = (mfxSession)0;
     mfxExtCodingOption  option1_buf, *option1 = &option1_buf;
     mfxExtCodingOption2 option2_buf, *option2 = &option2_buf;
     mfxExtCodingOptionSPSPPS sps_pps_buf, *sps_pps = &sps_pps_buf;
     mfxExtAV1BitstreamParam av1_bitstream_buf, *av1_bitstream = &av1_bitstream_buf;
+    mfxExtChromaLocInfo chroma_loc_info_buf, *chroma_loc_info = &chroma_loc_info_buf;
+    mfxExtMasteringDisplayColourVolume mastering_display_color_volume_buf, *mastering_display_color_volume = &mastering_display_color_volume_buf;
+    mfxExtContentLightLevelInfo content_light_level_info_buf, *content_light_level_info = &content_light_level_info_buf;
     mfxExtHyperModeParam hyper_encode_buf, *hyper_encode = &hyper_encode_buf;
     version.Major = HB_QSV_MINVERSION_MAJOR;
     version.Minor = HB_QSV_MINVERSION_MINOR;
@@ -1677,16 +1713,20 @@ int encqsvInit(hb_work_object_t *w, hb_job_t *job)
     memset(&videoParam, 0, sizeof(mfxVideoParam));
     videoParam.ExtParam = extParamArray;
     videoParam.NumExtParam = 0;
+
+    uint8_t sps[HB_CONFIG_MAX_SIZE];
+    uint8_t pps[HB_CONFIG_MAX_SIZE];
+
     // introduced in API 1.3
     memset(sps_pps, 0, sizeof(mfxExtCodingOptionSPSPPS));
     sps_pps->Header.BufferId = MFX_EXTBUFF_CODING_OPTION_SPSPPS;
     sps_pps->Header.BufferSz = sizeof(mfxExtCodingOptionSPSPPS);
     sps_pps->SPSId           = 0;
-    sps_pps->SPSBuffer       = w->config->h264.sps;
-    sps_pps->SPSBufSize      = sizeof(w->config->h264.sps);
+    sps_pps->SPSBuffer       = sps;
+    sps_pps->SPSBufSize      = sizeof(sps);
     sps_pps->PPSId           = 0;
-    sps_pps->PPSBuffer       = w->config->h264.pps;
-    sps_pps->PPSBufSize      = sizeof(w->config->h264.pps);
+    sps_pps->PPSBuffer       = pps;
+    sps_pps->PPSBufSize      = sizeof(pps);
     if (pv->param.videoParam->mfx.CodecId == MFX_CODEC_AVC)
     {
         videoParam.ExtParam[videoParam.NumExtParam++] = (mfxExtBuffer*)sps_pps;
@@ -1715,6 +1755,27 @@ int encqsvInit(hb_work_object_t *w, hb_job_t *job)
     {
         videoParam.ExtParam[videoParam.NumExtParam++] = (mfxExtBuffer*)av1_bitstream;
     }
+    memset(chroma_loc_info, 0, sizeof(mfxExtChromaLocInfo));
+    chroma_loc_info->Header.BufferId = MFX_EXTBUFF_CHROMA_LOC_INFO;
+    chroma_loc_info->Header.BufferSz = sizeof(mfxExtChromaLocInfo);
+    if (pv->qsv_info->capabilities & HB_QSV_CAP_VUI_CHROMALOCINFO)
+    {
+        videoParam.ExtParam[videoParam.NumExtParam++] = (mfxExtBuffer*)chroma_loc_info;
+    }
+    memset(mastering_display_color_volume, 0, sizeof(mfxExtMasteringDisplayColourVolume));
+    mastering_display_color_volume->Header.BufferId = MFX_EXTBUFF_MASTERING_DISPLAY_COLOUR_VOLUME;
+    mastering_display_color_volume->Header.BufferSz = sizeof(mfxExtMasteringDisplayColourVolume);
+    if (pv->qsv_info->capabilities & HB_QSV_CAP_VUI_MASTERINGINFO)
+    {
+        videoParam.ExtParam[videoParam.NumExtParam++] = (mfxExtBuffer*)mastering_display_color_volume;
+    }
+    memset(content_light_level_info, 0, sizeof(mfxExtContentLightLevelInfo));
+    content_light_level_info->Header.BufferId = MFX_EXTBUFF_CONTENT_LIGHT_LEVEL_INFO;
+    content_light_level_info->Header.BufferSz = sizeof(mfxExtContentLightLevelInfo);
+    if (pv->qsv_info->capabilities & HB_QSV_CAP_VUI_CLLINFO)
+    {
+        videoParam.ExtParam[videoParam.NumExtParam++] = (mfxExtBuffer*)content_light_level_info;
+    }
     memset(hyper_encode, 0, sizeof(mfxExtHyperModeParam));
     hyper_encode->Header.BufferId = MFX_EXTBUFF_HYPER_MODE_PARAM;
     hyper_encode->Header.BufferSz = sizeof(mfxExtHyperModeParam);
@@ -1735,12 +1796,9 @@ int encqsvInit(hb_work_object_t *w, hb_job_t *job)
     if (videoParam.mfx.CodecId == MFX_CODEC_AVC)
     {
         // remove 4-byte Annex B NAL unit prefix (0x00 0x00 0x00 0x01)
-        w->config->h264.sps_length = sps_pps->SPSBufSize - 4;
-        memmove(w->config->h264.sps, w->config->h264.sps + 4,
-                w->config->h264.sps_length);
-        w->config->h264.pps_length = sps_pps->PPSBufSize - 4;
-        memmove(w->config->h264.pps, w->config->h264.pps + 4,
-                w->config->h264.pps_length);
+        hb_set_h264_extradata(w->extradata,
+                              sps + 4, sps_pps->SPSBufSize - 4,
+                              pps + 4, sps_pps->PPSBufSize - 4);
     }
     else if (videoParam.mfx.CodecId == MFX_CODEC_HEVC)
     {
@@ -1774,7 +1832,7 @@ int encqsvInit(hb_work_object_t *w, hb_job_t *job)
         {
             case MFX_CODEC_AVC:
             case MFX_CODEC_HEVC:
-                pv->init_delay = &w->config->init_delay;
+                pv->init_delay = w->init_delay;
                 break;
             default:
                 break;

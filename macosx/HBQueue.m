@@ -12,6 +12,7 @@
 #import "NSArray+HBAdditions.h"
 
 #import <IOKit/pwr_mgt/IOPMLib.h>
+#import <IOKit/ps/IOPowerSources.h>
 
 static void *HBQueueContext = &HBQueueContext;
 
@@ -44,6 +45,8 @@ NSString * const HBQueueItemNotificationItemKey = @"HBQueueItemNotificationItemK
 @property (nonatomic, readonly) NSArray<HBQueueWorker *> *workers;
 
 @property (nonatomic) IOPMAssertionID assertionID;
+@property (nonatomic) CFRunLoopSourceRef sourceRunLoop;
+@property (nonatomic) BOOL pausedOnBatteryPower;
 
 @property (nonatomic) NSUInteger pendingItemsCount;
 @property (nonatomic) NSUInteger failedItemsCount;
@@ -118,6 +121,41 @@ NSString * const HBQueueItemNotificationItemKey = @"HBQueueItemNotificationItemK
     }
 }
 
+static void powerSourceCallback(void *context)
+{
+    if ([NSUserDefaults.standardUserDefaults boolForKey:HBQueuePauseOnBatteryPower])
+    {
+        CFTypeRef sourceInfo = IOPSCopyPowerSourcesInfo();
+        if (sourceInfo)
+        {
+            HBQueue *queue = (__bridge HBQueue *)context;
+            CFStringRef powerSourceType = IOPSGetProvidingPowerSourceType(sourceInfo);
+            if ((CFStringCompare(powerSourceType, CFSTR(kIOPMBatteryPowerKey), 0) == kCFCompareEqualTo ||
+                 CFStringCompare(powerSourceType, CFSTR(kIOPMUPSPowerKey), 0) == kCFCompareEqualTo) &&
+                queue.canPause)
+            {
+                [queue pause];
+                queue.pausedOnBatteryPower = YES;
+            }
+            else if (CFStringCompare(powerSourceType, CFSTR(kIOPMACPowerKey), 0) == kCFCompareEqualTo &&
+                     queue.pausedOnBatteryPower)
+            {
+                [queue resume];
+            }
+            CFRelease(sourceInfo);
+        }
+    }
+}
+
+- (void)setUpIOPSNotificationRunLoop
+{
+    self.sourceRunLoop = IOPSCreateLimitedPowerNotification(powerSourceCallback, (__bridge void *)(self));
+    if (self.sourceRunLoop)
+    {
+        CFRunLoopAddSource(CFRunLoopGetCurrent(), self.sourceRunLoop, kCFRunLoopDefaultMode);
+    }
+}
+
 - (instancetype)initWithURL:(NSURL *)fileURL
 {
     self = [super init];
@@ -129,13 +167,20 @@ NSString * const HBQueueItemNotificationItemKey = @"HBQueueItemNotificationItemK
         _assertionID = -1;
 
         [self setEncodingJobsAsPending];
-        [self removeCompletedAndCancelledItems];
-        [self updateStats];
 
         [self setUpWorkers];
         [self setUpObservers];
+        [self setUpIOPSNotificationRunLoop];
     }
     return self;
+}
+
+- (void)dealloc
+{
+    if (self.sourceRunLoop)
+    {
+        CFRunLoopRemoveSource(CFRunLoopGetCurrent(), self.sourceRunLoop, kCFRunLoopDefaultMode);
+    }
 }
 
 #pragma mark - Load and save
@@ -143,30 +188,35 @@ NSString * const HBQueueItemNotificationItemKey = @"HBQueueItemNotificationItemK
 - (NSMutableArray *)load
 {
     NSError *error;
+    NSArray *loadedItems = nil;
 
-    NSData *queue = [NSData dataWithContentsOfURL:self.fileURL];
-    NSKeyedUnarchiver *unarchiver = [[NSKeyedUnarchiver alloc] initForReadingWithData:queue];
-    unarchiver.requiresSecureCoding = YES;
-
-    NSSet *objectClasses = [NSSet setWithObjects:[NSMutableArray class], [HBQueueJobItem class], [HBQueueActionStopItem class], nil];
-
-    NSArray *loadedItems = [unarchiver decodeTopLevelObjectOfClasses:objectClasses
-                                                              forKey:NSKeyedArchiveRootObjectKey
-                                                               error:&error];
-
-    if (error)
+    NSData *data = [NSData dataWithContentsOfURL:self.fileURL];
+    if (data)
     {
-        [HBUtilities writeErrorToActivityLog:error];
-    }
+        NSSet *objectClasses = [NSSet setWithObjects:[NSMutableArray class], [HBQueueJobItem class], [HBQueueActionStopItem class], nil];
+        loadedItems = [NSKeyedUnarchiver unarchivedObjectOfClasses:objectClasses fromData:data error:&error];
 
-    [unarchiver finishDecoding];
+        if (loadedItems == nil && error)
+        {
+            [HBUtilities writeErrorToActivityLog:error];
+        }
+    }
 
     return loadedItems ? [loadedItems mutableCopy] : [NSMutableArray array];
 }
 
 - (void)save
 {
-    if (![NSKeyedArchiver archiveRootObject:self.itemsInternal toFile:self.fileURL.path])
+    NSError *error = nil;
+    NSData *data = [NSKeyedArchiver archivedDataWithRootObject:self.itemsInternal requiringSecureCoding:YES error:&error];
+    if (data == nil)
+    {
+        [HBUtilities writeToActivityLog:"Failed to archive the queue"];
+        return;
+    }
+
+    BOOL result = [data writeToURL:self.fileURL atomically:YES];
+    if (result == NO)
     {
         [HBUtilities writeToActivityLog:"Failed to write the queue to disk"];
     }
@@ -487,21 +537,16 @@ NSString * const HBQueueItemNotificationItemKey = @"HBQueueItemNotificationItemK
  */
 - (void)setEncodingJobsAsPending
 {
-    NSMutableIndexSet *indexes = [NSMutableIndexSet indexSet];
-    NSUInteger idx = 0;
     for (id<HBQueueItem> item in self.itemsInternal)
     {
         // We want to keep any queue item that is pending or was previously being encoded
         if (item.state == HBQueueItemStateWorking || item.state == HBQueueItemStateRescanning)
         {
             item.state = HBQueueItemStateReady;
-            [indexes addIndex:idx];
         }
-        idx++;
     }
 
     [self updateStats];
-    [self save];
 }
 
 - (BOOL)canEncode
@@ -580,6 +625,8 @@ NSString * const HBQueueItemNotificationItemKey = @"HBQueueItemNotificationItemK
             [worker resume];
         }
     }
+
+    self.pausedOnBatteryPower = NO;
     [self preventSleep];
 }
 
@@ -730,6 +777,7 @@ NSString * const HBQueueItemNotificationItemKey = @"HBQueueItemNotificationItemK
     if (self.canEncode)
     {
         [NSNotificationCenter.defaultCenter postNotificationName:HBQueueDidStartNotification object:self];
+        self.pausedOnBatteryPower = NO;
         [self preventSleep];
         [self encodeNextQueueItem];
     }
@@ -876,6 +924,14 @@ NSString * const HBQueueItemNotificationItemKey = @"HBQueueItemNotificationItemK
         }
     }
     return nil;
+}
+
+- (void)invalidateWorkers
+{
+    for (HBQueueWorker *worker in self.workers)
+    {
+        [worker invalidate];
+    }
 }
 
 @end

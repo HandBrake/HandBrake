@@ -8,3 +8,5 @@ LIBDVDREAD.FETCH.sha256  = ce35454997a208cbe50e91232f0e73fb1ac3471965813a13b8730
 ifeq (1-mingw,$(HOST.cross)-$(HOST.system))
     LIBDVDREAD.CONFIGURE.extra = --enable-dlfcn
 endif
+
+LIBDVDREAD.GCC.args.extra += $(LIBDVDREAD.GCC.args.O.$(LIBDVDREAD.GCC.O))

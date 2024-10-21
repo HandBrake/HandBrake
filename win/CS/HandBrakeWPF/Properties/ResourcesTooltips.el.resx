@@ -1,0 +1,559 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" id="root">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace"/>
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0"/>
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string"/>
+              <xsd:attribute name="type" type="xsd:string"/>
+              <xsd:attribute name="mimetype" type="xsd:string"/>
+              <xsd:attribute ref="xml:space"/>
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string"/>
+              <xsd:attribute name="name" type="xsd:string"/>
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2"/>
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1"/>
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3"/>
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4"/>
+              <xsd:attribute ref="xml:space"/>
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required"/>
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="FilterView_Deblock" xml:space="preserve">
+    <value>Το Deblock μειώνει τα μπλοκαρίσματα που προκαλούνται από συμπίεση βίντεο χαμηλής ποιότητας.</value>
+  </data>
+  <data name="FilterView_DecombDeinterlace" xml:space="preserve">
+    <value>Επιλέξτε το φίλτρο decomb ή deinterlace.
+
+Το φίλτρο decomb αποσυμπλέκει επιλεκτικά τα καρέ που φαίνονται να είναι συμπλεγμένα.
+Διατηρείται η ποιότητα της εικόνας για τα καρέ που που δεν συμπλέκονται.
+
+Το κλασικό φίλτρο deinterlace εφαρμόζεται σε όλα τα καρέ.
+Τα καρέ που δεν είναι συμπλεγμένα θα υποστούν κάποια υποβάθμιση της ποιότητας.</value>
+  </data>
+  <data name="FilterView_Denoise" xml:space="preserve">
+    <value>Το Denoise μειώνει ή αφαιρεί την εμφάνιση του θορύβου και κόκκων. Αυτό μπορεί να βελτιώσει την απόδοση συμπίεσης και να δημιουργήσει βίντεο υψηλότερης ποιότητας σε μικρότερα μεγέθη αρχείων.
+Οι υπερβολικά ισχυρές ρυθμίσεις Denoise ενδέχεται να βλάψουν την ποιότητα της εικόνας απορρίπτοντας τις λεπτομέρειες.
+         
+Το NLMeans είναι ένα φίλτρο denoise υψηλής ποιότητας με κόστος στην ταχύτητα. Χρησιμοποιήστε εκεί όπου η ποιότητα είναι πιο σημαντική από την ταχύτητα.
+         
+Το HQDN3D είναι ένα χαμηλοπερατό φίλτρο, ταχύτερο από το NLMeans αλλά λιγότερο αποτελεσματικό στη διατήρηση της λεπτομέρειας.</value>
+  </data>
+  <data name="FilterView_Detelecine" xml:space="preserve">
+    <value>Το Detelecine αφαιρεί τα comb artifacts που είναι αποτέλεσμα της τηλεκίνης, μιας διαδικασίας μετατροπής των καρέ φιλμ σε καρέ τηλεόρασης.</value>
+  </data>
+  <data name="FilterView_Grayscale" xml:space="preserve">
+    <value>Η κλίμακα του γκρι καταργεί το στοιχείο χρώματος του βίντεο. Συχνά αναφέρεται ως Ασπρόμαυρο βίντεο.</value>
+  </data>
+  <data name="MainView_Destination" xml:space="preserve">
+    <value>Διαδρομή προορισμού, συμπεριλαμβανομένων καταλόγου και ονόματος αρχείου. Εδώ θα δημιουργηθεί το νέο βίντεο και η ονομασία του.</value>
+  </data>
+  <data name="MainView_IpodAtom" xml:space="preserve">
+    <value>Προσθέτει έναν ειδικό δείκτη MP4 για να επιτρέπει την αναπαραγωγή σε παλαιότερα iPod 5ης γενιάς γύρω στο 2006. Άλλες ρυθμίσεις ενδέχεται να επηρεάσουν τη συμβατότητα.</value>
+  </data>
+  <data name="MainView_Mux" xml:space="preserve">
+    <value>Μορφή κοντέινερ. Το βίντεο, ο ήχος και άλλα κομμάτια συνδυάζονται σε ένα μόνο αρχείο αυτού του τύπου. Επηρεάζει τη συμβατότητα.</value>
+  </data>
+  <data name="MainView_Optimise" xml:space="preserve">
+    <value>Βελτιστοποιεί το MP4 για σταδιακή λήψη. Μετά την κωδικοποίηση, τα δεδομένα ξαναγράφονται με τέτοιο τρόπο ώστε να μπορούν να αναπαραχθούν απευθείας μέσω του Διαδικτύου χωρίς να χρειάζεται να κατεβάσετε ολόκληρη την ταινία.</value>
+  </data>
+  <data name="MainView_Range" xml:space="preserve">
+    <value>Επιλογή εύρους πηγής. Από προεπιλογή, επιλέγονται όλα τα κεφάλαια και κωδικοποιείται ολόκληρη η πηγή.</value>
+  </data>
+  <data name="MainView_Title" xml:space="preserve">
+    <value>Τίτλος ή βίντεο κλιπ, για κωδικοποίηση.
+Τα Blu-ray και τα DVD έχουν συνήθως πολλούς τίτλους, με τον μεγαλύτερο συνήθως να είναι η κύρια ταινία.</value>
+  </data>
+  <data name="PictureSettingsView_Anamorphic" xml:space="preserve">
+    <value>Το Anamorphic επιτρέπει οποιεσδήποτε διαστάσεις εξόδου, ενώ διατηρεί την αρχική εμφάνιση κατά την αναπαραγωγή.
+
+Απενεργοποιεί το Anamorphic. Οι διαστάσεις αποθήκευσης βίντεο και οι διαστάσεις προβολής θα είναι ίδιες. Χρήσιμο μόνο για συμβατότητα με ορισμένες παλαιού τύπου συσκευές. 
+
+Αυτόματο, μεγιστοποιεί την ανάλυση αποθήκευσης ενώ διατηρεί την αρχική αναλογία διαστάσεων της οθόνης. Συνιστάται. 
+
+Το Χαραλό είναι παρόμοιο με το Αυτόματο, αλλά προσπαθεί να διατηρήσει την αναλογία διαστάσεων της εξόδου. Αυτό μπορεί να οδηγήσει σε ελαφρά απώλεια ανάλυσης σε σύγκριση με το Αυτόματο. 
+
+Προσαρμοσμένο, επιτρέπει τη μη αυτόματη ρύθμιση όλων των παραμέτρων. Χρήσιμο για τη διόρθωση της λανθασμένης εμφάνισης του υλικού πηγής και για επαγγελματίες που χρειάζονται προηγμένο έλεγχο κατά τη μετα-παραγωγή.</value>
+  </data>
+  <data name="PictureSettingsView_AutoCrop" xml:space="preserve">
+    <value>Αυτόματη περικοπή μαύρων περιγραμμάτων γύρω από το βίντεο.</value>
+  </data>
+  <data name="PictureSettingsView_CropBottom" xml:space="preserve">
+    <value>Κόψτε το βίντεο από κάτω.</value>
+  </data>
+  <data name="PictureSettingsView_CropLeft" xml:space="preserve">
+    <value>Κόψτε το βίντεο από αριστερά.</value>
+  </data>
+  <data name="PictureSettingsView_CropRight" xml:space="preserve">
+    <value>Κόψτε το βίντεο από δεξιά.</value>
+  </data>
+  <data name="PictureSettingsView_CropTop" xml:space="preserve">
+    <value>Κόψτε το βίντεο από πάνω.</value>
+  </data>
+  <data name="PictureSettingsView_Height" xml:space="preserve">
+    <value>Αυτό είναι το ύψος στο οποίο θα αποθηκευτεί το βίντεο.
+Οι πραγματικές διαστάσεις της οθόνης θα διαφέρουν εάν η αναλογία πλευρών των εικονοστοιχείων δεν είναι 1:1.</value>
+  </data>
+  <data name="PictureSettingsView_ManualCrop" xml:space="preserve">
+    <value>Χειροκίνητη περικοπή του βίντεο.</value>
+  </data>
+  <data name="PictureSettingsView_Modulus" xml:space="preserve">
+    <value>Προσαρμόζει τις διαστάσεις της εξόδου σε πολλαπλάσιο αυτής της τιμής.
+
+Οι υψηλότερες τιμές έχουν νόημα μόνο για λόγους συμβατότητας με ορισμένες συσκευές.
+Συνιστάται η τιμή 2, εκτός εάν υπάρχουν προβλήματα συμβατότητας.</value>
+  </data>
+  <data name="PictureSettingsView_PAR" xml:space="preserve">
+    <value>Η μορφή εικονοστοιχείων καθορίζει το σχήμα των εικονοστοιχείων.
+Η αναλογία 1:1 ορίζει ένα τετράγωνο εικονοστοιχείο. Άλλες τιμές ορίζουν ορθογώνια σχήματα.
+Οι συσκευές αναπαραγωγής θα κλιμακώσουν την εικόνα ώστε να ταιριάζει στην καθορισμένη μορφή.</value>
+  </data>
+  <data name="PictureSettingsView_Width" xml:space="preserve">
+    <value>Σε αυτό το πλάτος θα αποθηκευτεί το βίντεο.
+Οι πραγματικές διαστάσεις της οθόνης θα διαφέρουν εάν η αναλογία πλευρών των εικονοστοιχείων δεν είναι 1:1.</value>
+  </data>
+  <data name="QueueView_DeleteJob" xml:space="preserve">
+    <value>Διαγραφή εργασίας από την ουρά.</value>
+  </data>
+  <data name="QueueView_ResetJobStatus" xml:space="preserve">
+    <value>Επαναφορά της κατάστασης εργασίας σε Αναμονή.</value>
+  </data>
+  <data name="QueueView_SendJobBack" xml:space="preserve">
+    <value>Στείλτε ξανά την εργασία στο κύριο παράθυρο για επεξεργασία.</value>
+  </data>
+  <data name="Video_AvgBitrate" xml:space="preserve">
+    <value>Ορίστε τον μέσο ρυθμό μετάδοσης bit.
+
+Ο στιγμιαίος ρυθμός bit μπορεί να είναι πολύ υψηλότερος ή χαμηλότερος σε οποιαδήποτε χρονική στιγμή.
+Αλλά ο μέσος όρος για μεγάλη διάρκεια θα είναι η τιμή που ορίζεται εδώ. Αν χρειάζεσαι
+για να περιορίσετε τον στιγμιαίο ρυθμό μετάδοσης bit, ανατρέξτε στις ρυθμίσεις vbv-bufsize και vbv-maxrate του x264.</value>
+  </data>
+  <data name="Video_ConstantFramerate" xml:space="preserve">
+    <value>Ενεργοποιεί σταθερό ρυθμό καρέ.</value>
+  </data>
+  <data name="Video_Encoders" xml:space="preserve">
+    <value>Διαθέσιμοι κωδικοποιητές βίντεο.</value>
+  </data>
+  <data name="Video_EncoderTune" xml:space="preserve">
+    <value>Προσαρμόζει τις ρυθμίσεις για να τις βελτιστοποιήσει για κοινά σενάρια.
+
+Αυτό μπορεί να βελτιώσει την απόδοση για ορισμένα χαρακτηριστικά ή σύνολο
+χαρακτηριστικών της πηγής στο αρχείου εξόδου. Οι αλλαγές θα εφαρμοστούν μετά την
+προεπιλογή αλλά πριν από όλες τις άλλες παραμέτρους.</value>
+  </data>
+  <data name="Video_ExtraOpts" xml:space="preserve">
+    <value>Πρόσθετες ρυθμίσεις κωδικοποιητή.
+
+Λίστα επιλογών κωδικοποιητή διαχωρισμένη με άνω και κάτω τελεία.</value>
+  </data>
+  <data name="Video_FastDecode" xml:space="preserve">
+    <value>Μειώστε τη χρήση της CPU του αποκωδικοποιητή.
+
+Ρυθμίστε το εάν η συσκευή αντιμετωπίζει πρόβλημα με την απόδοση της εξόδου (πεσμένα καρέ).</value>
+  </data>
+  <data name="Video_Framerate" xml:space="preserve">
+    <value>Ρυθμός καρέ εξόδου.
+
+Συνιστάται το 'Ίδιο με την πηγή'. Εάν το βίντεό προέλευσης έχει μεταβλητό ρυθμό καρέ, το 'Ίδιο με  την Πηγή' θα το διατηρήσει.</value>
+  </data>
+  <data name="Video_Level" xml:space="preserve">
+    <value>Ρυθμίζει και προσαρμόζεται σε ένα συγκεκριμένο επίπεδο.
+
+Αντικαθιστά όλες τις άλλες ρυθμίσεις.</value>
+  </data>
+  <data name="Video_PeakFramerate" xml:space="preserve">
+    <value>Ενεργοποιεί την έξοδο μεταβλητού ρυθμού καρέ με ρυθμό που καθορίζεται από τη ρύθμιση του ρυθμού καρέ.</value>
+  </data>
+  <data name="Video_Presets" xml:space="preserve">
+    <value>Προσαρμόζει τις ρυθμίσεις κωδικοποιητή για να αντισταθμίσει την απόδοση συμπίεσης με την ταχύτητα κωδικοποίησης.
+
+Αυτό καθορίζει τις προεπιλεγμένες ρυθμίσεις κωδικοποιητή σας. 
+Οι συντονισμοί, τα προφίλ, τα επίπεδα και οι προηγμένες παράμετροι εφαρμόζονται σε αυτό.
+Γενικά θα πρέπει να ρυθμίσετε αυτήν την επιλογή στο πιο αργό, καθώς οι
+πιο αργές ρυθμίσεις θα οδηγήσουν σε καλύτερη ποιότητα ή μικρότερα αρχεία.</value>
+  </data>
+  <data name="Video_Profile" xml:space="preserve">
+    <value>Ορίζει και συμμορφώνεται με ένα συγκεκριμένο προφίλ.
+
+Αντικαθιστά όλες τις άλλες ρυθμίσεις.</value>
+  </data>
+  <data name="Video_Quality" xml:space="preserve">
+    <value>Ρυθμίστε τον επιθυμητό συντελεστή ποιότητας.
+Ο κωδικοποιητής στοχεύει μια συγκεκριμένη ποιότητα. 
+Η κλίμακα που χρησιμοποιείται από κάθε κωδικοποιητή βίντεο είναι διαφορετική.
+
+Η κλίμακα του x264 είναι λογαριθμική και οι χαμηλότερες τιμές αντιστοιχούν σε υψηλότερη ποιότητα.
+Επομένως, μικρές μειώσεις των τιμών έχουν ως αποτέλεσμα προοδευτικές αυξήσεις
+στο μέγεθος του αρχείου που προκύπτει. Η τιμή 0 σημαίνει χωρίς απώλειες και οδηγεί σε
+μέγεθος αρχείου μεγαλύτερο από την αρχική πηγή, εκτός αν η πηγή ήταν επίσης χωρίς απώλειες.
+Οι συνιστώμενες τιμές είναι: 18 έως 20 για πηγές τυπικής ευκρίνειας και 20 έως 23 για πηγές υψηλής ευκρίνειας.
+
+Η κλίμακα των FFMpeg και Theora είναι πιο γραμμική.
+Αυτοί οι κωδικοποιητές δεν έχουν λειτουργία χωρίς απώλειες.</value>
+  </data>
+  <data name="Video_TurboAnalysisPass" xml:space="preserve">
+    <value>During the analysis pass of a multi pass encode, use settings that speed things along.</value>
+  </data>
+  <data name="Video_MultiPass" xml:space="preserve">
+    <value>Perform Multi Pass Encoding.
+
+The 'Bitrate' option is prerequisite. During the analysis passes, statistics about
+the video are collected. Then in the final pass, those statistics are used
+to make bitrate allocation decisions.</value>
+  </data>
+  <data name="Video_VariableFramerate" xml:space="preserve">
+    <value>Ενεργοποιεί την έξοδο μεταβλητού ρυθμού καρέ.
+
+Το VFR δεν είναι συμβατό με ορισμένες συσκευές αναπαραγωγής.</value>
+  </data>
+  <data name="MainView_WhenDone" xml:space="preserve">
+    <value>Όταν το HandBrake ολοκληρώσει την τρέχουσα ουρά ή κωδικοποίηση, θα εκτελέσει αυτήν την ενέργεια.</value>
+  </data>
+  <data name="MainView_Browse" xml:space="preserve">
+    <value>Περιηγηθείτε για να επιλέξετε μια νέα διαδρομή προορισμού και όνομα αρχείου για κωδικοποίηση.</value>
+  </data>
+  <data name="MainView_Angle" xml:space="preserve">
+    <value>Γωνία βίντεο για κωδικοποίηση. Ισχύει μόνο για DVD και Blu-ray πολλαπλών γωνιών.</value>
+  </data>
+  <data name="MainView_AddPreset" xml:space="preserve">
+    <value>Προσθέστε μια νέα προεπιλογή.</value>
+  </data>
+  <data name="MainView_PresetAdditionalOptions" xml:space="preserve">
+    <value>Πρόσθετες Επιλογές Προεπιλογών.</value>
+  </data>
+  <data name="MainView_Presets" xml:space="preserve">
+    <value>Οι προεπιλογές είναι ομάδες ρυθμίσεων κωδικοποίησης προσαρμοσμένες για συγκεκριμένα σενάριο. Επιλέξτε την προεπιλογή που ταιριάζει καλύτερα στις ανάγκες σας.
+
+Αντικαθιστά όλες τις ρυθμίσεις κωδικοποίησης. Οι ρυθμίσεις μπορούν ακόμα να βελτιωθούν μετά την επιλογή μιας προεπιλογής.</value>
+  </data>
+  <data name="MainView_RemovePreset" xml:space="preserve">
+    <value>Αφαιρέστε την επιλεγμένη προεπιλογή.</value>
+  </data>
+  <data name="SourceSelection_TitleSpecific" xml:space="preserve">
+    <value>Ορισμένες πηγές ενδέχεται να περιέχουν περισσότερα από ένα βίντεο κλιπ ή μια συλλογή τίτλων. Οι πηγές Blu-ray και DVD έχουν συχνά πολλούς τίτλους.
+
+Εάν γνωρίζετε τον συγκεκριμένο τίτλο που θέλετε να κωδικοποιήσετε, μπορείτε να τον εισάγετε εδώ και το HandBrake θα σαρώσει μόνο αυτόν τον τίτλο και όχι κάθε τίτλο στο αρχείο προέλευσης. Διαφορετικά, αφήστε το πεδίο κενό.</value>
+  </data>
+  <data name="FilterView_CustomDenoiseParams" xml:space="preserve">
+    <value>Προσαρμοσμένες παράμετροι Denoise (Απενεργοποίηση Θορύβου).
+
+Σύνταξη NLMeans: y-strength=y:y-origin-tune=y:y-patch-size=y:y-range=y:y-frame-count=y:y-prefilter=y:cb-strength=c:cb-origin-tune=c:cb-patch-size=c:cb-range=c:cb-frame-count=c:cb-prefilter=c:cr-strength=c:cr-origin-tune=c:cr-patch-size=c:cr-range=c:cr-frame-count=c:cr-prefilter=c:threads=t
+
+Προκαθορισμένο NLMeans: y-strength=6:y-origin-tune=1:y-patch-size=7:y-range=3:y-frame-count=2:y-prefilter=0:cb-strength=6:cb-origin-tune=1:cb-patch-size=7:cb-range=3:cb-frame-count=2:cb-prefilter=0
+
+Σύνταξη HQDN3D: y-spatial=y:cb-spatial=c:cr-spatial=c:y-temporal=y:cb-temporal=c:cr-temporal=c
+
+Προκαθορισμένο HQDN3D: y-spatial=3:cb-spatial=2:cr-spatial=2:y-temporal=2:cb-temporal=3:cr-temporal=3</value>
+  </data>
+  <data name="FilterView_DenoisePreset" xml:space="preserve">
+    <value>Προεπιλογή φίλτρου αποθορύβου. Ρυθμίζει την αντοχή του φίλτρου.</value>
+  </data>
+  <data name="FilterView_DenoiseTune" xml:space="preserve">
+    <value>Ρύθμιση Denoise. Προσαρμόζει περαιτέρω την προεπιλογή Denoise για βελτιστοποίηση των ρυθμίσεων για συγκεκριμένα σενάρια.
+ 
+- Κανένα: Χρησιμοποιεί τις προεπιλεγμένες ρυθμίσεις.
+
+- Ταινία: Ρύθμιση για τις περισσότερες ταινίες ζωντανής δράσης.
+
+- Grain: Επεξεργάζεται μόνο το κανάλι χρώματος. Χρήσιμο για να αποκτήσετε την λεπτή όψη με κοκκώδη φωτεινότητα, αλλά αφαιρέστε το θόρυβο χρώματος.
+
+- Υψηλή κίνηση: Μειώνει τα εφέ χρωματικών ραβδώσεων με γρήγορες κινήσεις, χωρίς να επεξεργάζεται προσωρινά το κανάλι χρώματος. Χρήσιμο για αθλητικές ταινίες και ταινίες δράσης.
+
+- Κινούμενα σχέδια: Χρήσιμο για ταινίες κινουμένων σχεδίων όπως anime και κινούμενα σχέδια.
+
+- Κασέτα: Προορίζεται για ταινίες από αναλογικές βιντεοκασέτες με μικρή λεπτομέρεια, όπως το VHS, όταν η ρύθμιση του φιλμ δεν παράγει ένα λογικό αποτέλεσμα.
+
+- Το Sprite είναι χρήσιμο για 2D παιχνίδια 1/4/8/16-bit. Το Sprite δεν είναι κατάλληλο για βίντεο υψηλής ποιότητας.</value>
+  </data>
+  <data name="FilterView_Deinterlace" xml:space="preserve">
+    <value>Το Deinterlace αφαιρεί τα 'comb artifacts' από την εικόνα.
+
+Το Yadif είναι ένα δημοφιλές και γρήγορο deinlacer.
+
+Το Decomb εναλλάσσεται μεταξύ διαφορετικών αλγορίθμων παρεμβολής για ταχύτητα και ποιότητα.</value>
+  </data>
+  <data name="FilterView_DeinterlaceCustom" xml:space="preserve">
+    <value>Προσαρμοσμένες παράμετροι Deinterlace.
+ 
+ Σύνταξη Yadif: mode=m:parity=p
+ 
+ Προκαθορισμένο Yadif: mode=3
+ 
+ Σύνταξη Decomb: mode=m:magnitude-thresh=m:variance-thresh=v:laplacian-thresh=l:dilation-thresh=d:erosion-thresh=e:noise-thresh=n:search-distance=s:postproc=p:parity=p
+ 
+Προκαθορισμένο Decomb: mode=7</value>
+  </data>
+  <data name="FilterView_DeinterlacePreset" xml:space="preserve">
+    <value>Ρυθμίσεις αποσυμπίεσης.
+
+Προεπιλογή: Είναι μια καλή ισορροπία μεταξύ ποιότητας και ταχύτητας.
+
+Παράλειψη χωρικού ελέγχου: Το Yadif παραλείπει ορισμένες διορθώσεις με μικρή αύξηση ταχύτητας.
+
+EEDI2: χρησιμοποιεί έναν πιο αργό, υψηλής ποιότητας αλγόριθμο για την αποκωδικοποίηση. Κατάλληλο για τις πιο δύσκολες πηγές.
+
+Bob: Προσπαθεί να έχει καλύτερη κίνηση με μια μικρή απώλεια ανάλυσης.</value>
+  </data>
+  <data name="FilterView_Flip" xml:space="preserve">
+    <value>Αναστρέφει (κατοπτρίζει) την εικόνα στον οριζόντιο άξονα.</value>
+  </data>
+  <data name="FilterView_InterlaceDetection" xml:space="preserve">
+    <value>Η ανίχνευση διαπλοκής, όταν είναι ενεργοποιημένη, επιτρέπει στο φίλτρο αποσυμπίεσης να επεξεργάζεται μόνο τα επηρεαζόμενα καρέ βίντεο.</value>
+  </data>
+  <data name="FilterView_InterlaceDetectionCustom" xml:space="preserve">
+    <value>Δικές σας παραμέτρους πλεγμένης ανίχνευσης.
+ 
+ Σύνταξη: mode=m:spatial-metric=s:motion-thresh=m:spatial-thresh=s:filter-mode=f:block-thresh=b:block-width=b:block-height=b:disable=d
+ 
+ Προκαθορισμένο: mode=3:spatial-metric=2:motion-thresh=1:spatial-thresh=1:filter-mode=2:block-thresh=40:block-width=16:block-height=16</value>
+  </data>
+  <data name="FilterView_Rotate" xml:space="preserve">
+    <value>Περιστρέψτε την εικόνα δεξιόστροφα κατά 90 μοίρες.</value>
+  </data>
+  <data name="MainView_Duration" xml:space="preserve">
+    <value>Διάρκεια του επιλεγμένου εύρους πηγής σε Ώρες:Λεπτά:Δευτερόλεπτα</value>
+  </data>
+  <data name="PictureSettingsView_KeepAR" xml:space="preserve">
+    <value>Το Keep Aspect Ratio διατηρεί την αρχική όψη εμφάνισης της πηγής. Η απενεργοποίηση αυτού μπορεί να οδηγήσει σε τεντωμένη ή συμπιεσμένη εικόνα.</value>
+  </data>
+  <data name="FilterView_CustomSharpenParams" xml:space="preserve">
+    <value>Προσαρμοσμένες Ρυθμίσεις Ευκρίνειας.
+
+Σύνταξη Unsharp: y-strength=y:y-size=y:cb-strength=c:cb-size=c:cr-strength=c:cr-size=c
+
+Προκαθορισμένο Unsharp: y-strength=0.25:y-size=7:cb-strength=0.25:cb-size=7
+
+Σύνταξη Lapsharp: y-strength=y:y-kernel=y:cb-strength=c:cb-kernel=c:cr-strength=c:cr-kernel=c
+
+Προκαθορισμένο Lapsharp: y-strength=0.2:y-kernel=isolap:cb-strength=0.2:cb-kernel=isolap</value>
+  </data>
+  <data name="FilterView_Sharpen" xml:space="preserve">
+    <value>Το ακόνισμα βελτιώνει την εμφάνιση των λεπτομερειών, ειδικά των άκρων. Οι υπερβολικά ισχυρές ρυθμίσεις Sharpen ενδέχεται να βλάψουν την ποιότητα της εικόνας και μπορεί να μειώσουν την απόδοση συμπίεσης.
+
+Το Unsharp Mask είναι ένα γενικό φίλτρο. Αυξάνει με θόλωση και στη συνέχεια υπολογίζει τη διαφορά μεταξύ της θολής εικόνας και του πρωτοτύπου.
+
+Το Lapsharp "ακονίζει" χρησιμοποιώντας περιέλιξη κοντά στο φίλτρο άκρης του Laplace, δίνοντας συχνά καλύτερα αποτελέσματα από το Unsharp Mask.</value>
+  </data>
+  <data name="FilterView_SharpenPreset" xml:space="preserve">
+    <value>Προεπιλογές φίλτρου ευκρίνειας. Ρυθμίζει την αντοχή του φίλτρου.</value>
+  </data>
+  <data name="FilterView_SharpenTune" xml:space="preserve">
+    <value>Ρύθμιση ευκρίνειας. Ρυθμίσεις επιλογής προηγμένης ευκρίνειας για συγκεκριμένα σενάρια.
+
+Κανένα: Χρησιμοποιεί τις προεπιλεγμένες ρυθμίσεις.
+
+Το Unsharp Mask μπορεί να ρυθμιστεί σε Ultra Fine, Fine, Medium, Coarse ή Very Coarse. Η επιλογή θα πρέπει να γίνει με βάση την ανάλυση του αρχικού υλικού και τη λεπτότητα της λεπτομέρειας που θα βελτιωθεί.
+
+Lapsharp's Vote Movie: Είναι για τις περισσότερες ταινίες ζωντανής δράσης. Το φιλμ χρησιμοποιεί έναν ισότροπο αλγόριθμο Laplace για να ακονίσει όλες τις άκρες πανομοιότυπα. Οι πληροφορίες φωτεινότητας (φωτεινότητα) οξύνονται περισσότερο από τις πληροφορίες χρώματος.
+
+Το Lapsharp's Tuning Grain: Παρόμοιο με το φιλμ, αλλά χρησιμοποιεί έναν ισότροπο αλγόριθμο Laplacian-Gauss για να μειώσει τις επιπτώσεις του θορύβου και των κόκκων. Χρήσιμο για τη λήψη κόκκων ή ως εναλλακτική λύση στο συντονισμό φιλμ.
+
+Lapsharp's Animation Tuning: Είναι χρήσιμο για ταινίες κινουμένων σχεδίων, όπως anime και κινούμενα σχέδια. Το κινούμενο σχέδιο είναι πανομοιότυπο με το φιλμ, αλλά με μειωμένη αντοχή για την αποφυγή ανεπιθύμητων αντικειμένων..
+
+Lapsharp's Tuning Sprite: Χρήσιμο για 2D παιχνίδια 1/4/8/16-bit. Το Sprite χρησιμοποιεί έναν αλγόριθμο Laplacian 4-neighbor που αυξάνει τις κάθετες και οριζόντιες ακμές περισσότερο από τις διαγώνιες.</value>
+  </data>
+  <data name="MainView_AlignAVStart" xml:space="preserve">
+    <value>Ταιριάζει με τη γραμμή χρόνου των κομματιών βίντεο και ήχου προσθέτοντας κενά καρέ ή αφαιρώντας καρέ. Μπορεί να βελτιώσει το συγχρονισμό ήχου/βίντεο σε ορισμένες ξεκλείδωτες συσκευές αναπαραγωγής που δεν τιμούν τις λίστες επεξεργασίας MP4.</value>
+  </data>
+  <data name="MainView_PresetOptionsContextMenu" xml:space="preserve">
+    <value>Επιλογές για έλεγχο προεπιλογών.</value>
+  </data>
+  <data name="MainView_EndPoint" xml:space="preserve">
+    <value>Το τελικό σημείο για αυτό το εύρος.</value>
+  </data>
+  <data name="MainView_StartPoint" xml:space="preserve">
+    <value>Το σημείο εκκίνησης για αυτό το εύρος.</value>
+  </data>
+  <data name="OptionsView_AlwaysUseDefaultPath" xml:space="preserve">
+    <value>Όταν είναι ενεργοποιημένο το αυτόματο σύστημα ονομάτων θα χρησιμοποιεί πάντα την προεπιλεγμένη διαδρομή.
+Όταν είναι απενεργοποιημένο, θα χρησιμοποιεί τη διαδρομή στο πλαίσιο προορισμού στο κύριο παράθυρο, εάν συμπληρωθεί,  διαφορετικά θα χρησιμοποιηθεί η προεπιλεγμένη διαδρομή.</value>
+  </data>
+  <data name="FiltersView_ColourSpace" xml:space="preserve">
+    <value>Φίλτρο χρωμάτων.</value>
+  </data>
+  <data name="FiltersView_ChromaSmooth" xml:space="preserve">
+    <value>Φίλτρο Χρωματικής εξομάλυνσης</value>
+  </data>
+  <data name="PictureSettingsView_PaddingCustomColourTooltip" xml:space="preserve">
+    <value>Αυτό το πεδίο μπορεί να περιέχει τιμές RGB όπως π.χ Π.χ.: "0xFF0000" ή ονόματα χρωμάτων όπως π.χ. "κόκκινο". Για μια πλήρη λίστα με τα ονόματα των χρωμάτων, ανατρέξτε στην τεκμηρίωση του φίλτρου συμπλήρωσης.</value>
+  </data>
+  <data name="SubtitlesView_BurnIn" xml:space="preserve">
+    <value>Εγγραφή υπότιτλων σε βίντεο.
+
+Σημείωση: Αυτό θα επιλεγεί αυτόματα εάν η μορφή του κομματιού υπότιτλων πηγής δεν υποστηρίζεται στον τύπο αρχείου εξόδου.
+
+Για παράδειγμα, οι υπότιτλοι PGS δεν υποστηρίζονται σε MP4.</value>
+  </data>
+  <data name="OptionsView_PresetDisplayModes" xml:space="preserve">
+    <value>Συμπτυγμένο - Οι προεπιλογές εμφανίζονται ως συμπτυγμένη λίστα.
+Μερική σύμπτυξη - Οι τελευταίες 8 προεπιλογές του χρήστη εμφανίζονται ως συμπτυγμένη λίστα, ακολουθούμενη από μια λίστα με όλες τις προεπιλογές σε κατηγορίες.
+Κατηγορίες - Όλες οι προεπιλογές εμφανίζονται σε ένα υπομενού ανά κατηγορία.</value>
+  </data>
+  <data name="AudioView_AudioDefaults" xml:space="preserve">
+    <value>Ρυθμίστε συμπεριφορές που υπαγορεύουν πώς αυτή η καρτέλα προσθέτει αυτόματα κομμάτια ήχου όταν επιλέγετε μια νέα πηγή ή τίτλο.</value>
+  </data>
+  <data name="BehavioursReload" xml:space="preserve">
+    <value>Ανανεώστε την παρακάτω λίστα με βάση τις διαμορφωμένες συμπεριφορές.</value>
+  </data>
+  <data name="SubtitleView_SubtitleDefaults" xml:space="preserve">
+    <value>Ρυθμίστε συμπεριφορές που καθορίζουν πώς αυτή η καρτέλα προσθέτει αυτόματα κομμάτια υπότιτλων όταν επιλέγετε μια νέα πηγή ή τίτλο.</value>
+  </data>
+  <data name="OptionsView_SendFileToArguments" xml:space="preserve">
+    <value>Οι ακόλουθες μεταβλητές περιβάλλοντος ορίζονται πάντα:
+HB_SOURCE
+HB_DESTINATION
+HB_EXIT_CODE
+
+Οι πιθανοί κωδικοί εξόδου είναι οι εξής:
+0 : Επιτυχής
+2 : Σφάλμα κατά την εισαγωγή ορισμάτων
+3 : Η προετοιμασία απέτυχε 
+4 : Άγνωστο σφάλμα
+5 : Σφάλμα ανάγνωσης του αρχείου προέλευσης.
+
+Λάβετε υπόψη ότι οι κωδικοί σφαλμάτων είναι εξ όσων γνωρίζουμε και μπορεί να μην είναι πάντα ακριβείς.
+Συνιστάται η επικύρωση του αρχείου εξόδου πριν από την εκτέλεση ενεργειών σε αυτό.</value>
+  </data>
+  <data name="Options_AdditionalFormatOptions" xml:space="preserve">
+    <value>The format of the output file. In addition to any supported file system character, you can use the any of the placeholders that will be replaced when you change title or scan a source or update certain settings.
+
+{source} - Name of the source file.
+{title} - Integer value. This is representative of a disc title number.
+{chapters} - The range of chapters selected.
+{creation-date} - The date that the source file was created on (if available).
+{creation-time} - The time that the source file was created on (if available).
+{modification-date} - The date that the source file was last modified on (if available).
+{modification-time} - The time that the source file was last modified on (if available).
+{date} - Today. Set at time of adding to the queue.
+{time} - Today. Set at time of adding to the queue.
+{quality_bitrate} - The RF/CQ number, or bitrate
+{quality_type} - Prints "kbps" or "Q" depending on the quality mode selected on the video tab.
+{preset} - Name of the preset selected.
+{encode_bit_depth} - Integer value. i.e. 8, 10 or 12
+{width} - The output storage width
+{height} - The output storage height
+{codec} - Display the video format.
+{encoder} - Display the short format key of the encoder used.
+
+Any illegal path characters will be removed automatically.</value>
+  </data>
+  <data name="OptionsView_RightToleftMode" xml:space="preserve">
+    <value>Για γλώσσες που είναι από δεξιά προς τα αριστερά, μπορείτε να ενεργοποιήσετε μία από τις δύο λειτουργίες. Το "Μόνο Κέιμενο" θα αποδώσει το κείμενο μόνο σε στυλ από δεξιά προς τα αριστερά. Το "Ολόκληρο περιβάλλον εργασίας" θα αποδώσει όλα τα στοιχεία ελέγχου από δεξιά προς τα αριστερά.
+
+Λάβετε υπόψη ότι ενδέχεται να υπάρχουν ατέλειες στη εμφάνιση του προγράμματος κατά τη χρήση αυτών των λειτουργιών. Ανάλογα με τη γλώσσα, ίσως αξίζει να δοκιμάσετε και τις δύο λειτουργίες για να βρείτε την καλύτερη εφαρμογή.</value>
+  </data>
+  <data name="AudioView_Quality" xml:space="preserve">
+    <value>Στοχεύστε ένα συγκεκριμένο επίπεδο ποιότητας για τον ήχο.
+Το 1 είναι η χαμηλότερη ποιότητα και το 5 είναι η υψηλότερη ποιότητα.
+
+Ο ρυθμός bit θα ποικίλλει από πηγή σε πηγή.</value>
+  </data>
+  <data name="OptionsView_DestinationReplacementOptions" xml:space="preserve">
+    <value>The following can be used singularly, or together to build up a destination path
+
+{source_path} - In the same folder as the source path (if possible)
+{source_folder_name} – The name of the directory that the source file is in, without the full path.
+{source} - The name of the source file.</value>
+  </data>
+  <data name="OptionsView_LaunchsHelp" xml:space="preserve">
+    <value>Launches the documentation website located at https://handbrake.fr/docs</value>
+  </data>
+</root>

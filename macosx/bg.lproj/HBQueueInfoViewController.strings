@@ -1,0 +1,24 @@
+/* Class = "NSTextFieldCell"; title = "Statistics"; ObjectID = "aCP-yp-iZy"; */
+"aCP-yp-iZy.title" = "Статистики";
+
+/* Class = "NSTextFieldCell"; title = "Summary"; ObjectID = "cx1-rC-AMC"; */
+"cx1-rC-AMC.title" = "Обобщение";
+
+/* Class = "NSButtonCell"; title = "Edit"; ObjectID = "erY-5X-50l"; */
+"erY-5X-50l.title" = "Редартиране";
+
+/* Class = "NSTextFieldCell"; title = "Summary"; ObjectID = "GaR-qk-UW7"; */
+"GaR-qk-UW7.title" = "Обобщение";
+
+/* Class = "NSButtonCell"; title = "Reset"; ObjectID = "hgl-N3-x4S"; */
+"hgl-N3-x4S.title" = "Възстановяване";
+
+/* Class = "NSButton"; ibShadowedToolTip = "Reset the job state"; ObjectID = "oq4-g0-srt"; */
+"oq4-g0-srt.ibShadowedToolTip" = "Възстановяване състоянието на задачата";
+
+/* Class = "NSTextFieldCell"; title = "Statistics"; ObjectID = "S15-bh-qKU"; */
+"S15-bh-qKU.title" = "Статистики";
+
+/* Class = "NSButton"; ibShadowedToolTip = "Open the job in the main window for editing"; ObjectID = "Z14-gh-hWn"; */
+"Z14-gh-hWn.ibShadowedToolTip" = "Отвори задачата в главния прозорец за редакция";
+

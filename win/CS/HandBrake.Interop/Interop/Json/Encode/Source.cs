@@ -33,5 +33,9 @@ namespace HandBrake.Interop.Interop.Json.Encode
         /// Gets or sets the path.
         /// </summary>
         public string Path { get; set; }
+
+        public int HWDecode { get; set; }
+
+        public bool KeepDuplicateTitles { get; set; }
     }
 }

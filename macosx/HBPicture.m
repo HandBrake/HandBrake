@@ -1632,7 +1632,7 @@ fail:
     else if ([padColor isEqualToString:@"darkslategray"]) { self.padColorMode = HBPicturePadColorModeDarkGray; }
     else if ([padColor isEqualToString:@"slategray"]) { self.padColorMode = HBPicturePadColorModeGray; }
     else if ([padColor isEqualToString:@"white"]) { self.padColorMode = HBPicturePadColorModeWhite; }
-    else if (padColor.length) { self.padMode = HBPicturePadModeCustom; self.padColorCustom = padColor; }
+    else if (padColor.length) { self.padColorMode = HBPicturePadColorModeCustom; self.padColorCustom = padColor; }
     else { self.padColorMode = HBPicturePadColorModeBlack; self.padColorCustom = @""; }
 
     self.padTop    = [pad[@"top"] intValue];

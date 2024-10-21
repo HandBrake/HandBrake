@@ -10,6 +10,7 @@
 
 @interface HBAppDelegate : NSObject <NSApplicationDelegate>
 
+- (IBAction)showQueueWindow:(id)sender;
 - (IBAction)showPreferencesWindow:(id)sender;
 - (IBAction)showOutputPanel:(id)sender;
 

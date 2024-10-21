@@ -100,6 +100,7 @@ namespace HandBrake.Worker
                 ConsoleOutput.WriteLine("Worker: Server Started", ConsoleColor.White, true);
                 manualResetEvent.WaitOne();
                 webServer.Stop();
+                ConsoleOutput.WriteLine("Worker: Server Stopped", ConsoleColor.White, true);
             }
             else
             {

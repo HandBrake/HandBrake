@@ -1,6 +1,6 @@
 /* qsv_common.h
  *
- * Copyright (c) 2003-2022 HandBrake Team
+ * Copyright (c) 2003-2024 HandBrake Team
  * This file is part of the HandBrake source code.
  * Homepage: <http://handbrake.fr/>.
  * It may be used under the terms of the GNU General Public License v2.
@@ -137,6 +137,7 @@ enum
     QSV_G7, // Ice Lake or equivalent
     QSV_G8, // Tiger Lake or equivalent
     QSV_G9, // DG2 or equivalent
+    QSV_G10,// Lunar Lake or equivalent
     QSV_FU, // always last (future processors)
 };
 
@@ -250,6 +251,7 @@ hb_qsv_context* hb_qsv_context_init();
 void hb_qsv_context_uninit(hb_job_t *job);
 int hb_qsv_sanitize_filter_list(hb_job_t *job);
 int hb_qsv_hw_frames_init(AVCodecContext *s);
+int hb_qsv_create_ffmpeg_dec_pool(hb_job_t * job, int width, int height, int sw_pix_fmt);
 int hb_qsv_create_ffmpeg_pool(hb_job_t *job, int coded_width, int coded_height, enum AVPixelFormat sw_pix_fmt, int pool_size, int extra_hw_frames, AVBufferRef **out_hw_frames_ctx);
 int hb_qsv_create_ffmpeg_vpp_pool(hb_filter_init_t *init, int width, int height);
 int hb_qsv_hw_filters_via_system_memory_are_enabled(hb_job_t *job);
@@ -274,6 +276,7 @@ int hb_qsv_decode_h264_is_supported(int adapter_index);
 int hb_qsv_decode_h265_is_supported(int adapter_index);
 int hb_qsv_decode_h265_10_bit_is_supported(int adapter_index);
 int hb_qsv_decode_av1_is_supported(int adapter_index);
+int hb_qsv_decode_vvc_is_supported(int adapter_index);
 int hb_qsv_decode_is_codec_supported(int adapter_index, int video_codec_param, int pix_fmt, int width, int height);
 int hb_qsv_device_init(hb_job_t *job);
 

@@ -1,18 +1,18 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
     <PackageId>HandBrake.Worker</PackageId>
     <Authors>HandBrake Team</Authors>
     <Company>HandBrake Team</Company>
     <Product>HandBrake.Worker</Product>
-    <Copyright>Copyright © 2003-2022 HandBrake Team</Copyright>
+    <Copyright>Copyright © 2003-2024 HandBrake Team</Copyright>
     <Description>HandBrake is an open-source, GPL-licensed, multiplatform,video transcoder.</Description>
     <PackageProjectUrl>https://handbrake.fr</PackageProjectUrl>
     <RepositoryUrl>https://github.com/HandBrake/HandBrake</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
-    <AssemblyVersion>1.6.1.0</AssemblyVersion>
+    <AssemblyVersion>1.8.1.0</AssemblyVersion>
     <Platforms>AnyCPU</Platforms>
     <PlatformTarget>AnyCPU</PlatformTarget>
     <ApplicationIcon>handbrakepineapple.ico</ApplicationIcon>
@@ -20,8 +20,8 @@
     <AssemblyName>HandBrake.Worker</AssemblyName>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
-    <FileVersion>1.6.1.0</FileVersion>
-    <Version>1.6.1</Version>
+    <FileVersion>1.8.1.0</FileVersion>
+    <Version>1.8.1</Version>
   </PropertyGroup>
 
   <ItemGroup>

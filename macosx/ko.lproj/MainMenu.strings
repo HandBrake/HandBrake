@@ -1,0 +1,261 @@
+/* Class = "NSMenu"; title = "Services"; ObjectID = "0te-ai-fgD"; */
+"0te-ai-fgD.title" = "서비스";
+
+/* Class = "NSMenuItem"; title = "Rename…"; ObjectID = "1GQ-n3-jfY"; */
+"1GQ-n3-jfY.title" = "이름바꾸기...";
+
+/* Class = "NSMenuItem"; title = "Filters"; ObjectID = "6rE-SM-AGi"; */
+"6rE-SM-AGi.title" = "필터";
+
+/* Class = "NSMenuItem"; title = "Summary"; ObjectID = "9ie-b7-RaS"; */
+"9ie-b7-RaS.title" = "요약";
+
+/* Class = "NSMenu"; title = "MainMenu"; ObjectID = "29"; */
+"29.title" = "주 메뉴";
+
+/* Class = "NSMenuItem"; title = "HandBrake"; ObjectID = "56"; */
+"56.title" = "HandBrake";
+
+/* Class = "NSMenu"; title = "HandBrake"; ObjectID = "57"; */
+"57.title" = "HandBrake";
+
+/* Class = "NSMenuItem"; title = "About HandBrake"; ObjectID = "58"; */
+"58.title" = "HandBrake 정보";
+
+/* Class = "NSMenuItem"; title = "Quit HandBrake"; ObjectID = "136"; */
+"136.title" = "HandBrake 종료";
+
+/* Class = "NSMenuItem"; title = "Hide HandBrake"; ObjectID = "971"; */
+"971.title" = "HandBrake 숨기기";
+
+/* Class = "NSMenuItem"; title = "Hide Others"; ObjectID = "973"; */
+"973.title" = "다른 프로그램 숨기기";
+
+/* Class = "NSMenuItem"; title = "Window"; ObjectID = "1189"; */
+"1189.title" = "창";
+
+/* Class = "NSMenuItem"; title = "Bring All to Front"; ObjectID = "1190"; */
+"1190.title" = "모든 화면을 앞으로 가져오기";
+
+/* Class = "NSMenuItem"; title = "Minimize"; ObjectID = "1191"; */
+"1191.title" = "최소화";
+
+/* Class = "NSMenu"; title = "Window"; ObjectID = "1192"; */
+"1192.title" = "창";
+
+/* Class = "NSMenuItem"; title = "Open Source…"; ObjectID = "1198"; */
+"1198.title" = "원본 열기...";
+
+/* Class = "NSMenuItem"; title = "File"; ObjectID = "1200"; */
+"1200.title" = "파일";
+
+/* Class = "NSMenu"; title = "File"; ObjectID = "1209"; */
+"1209.title" = "파일";
+
+/* Class = "NSMenu"; title = "Help"; ObjectID = "1429"; */
+"1429.title" = "도움말";
+
+/* Class = "NSMenuItem"; title = "Help"; ObjectID = "1431"; */
+"1431.title" = "도움말";
+
+/* Class = "NSMenuItem"; title = "HandBrake Website"; ObjectID = "1432"; */
+"1432.title" = "HandBrake 웹사이트";
+
+/* Class = "NSMenuItem"; title = "Online Community Forums"; ObjectID = "1433"; */
+"1433.title" = "온라인 커뮤니티 포럼";
+
+/* Class = "NSMenuItem"; title = "Preferences…"; ObjectID = "1445"; */
+"1445.title" = "환경설정...";
+
+/* Class = "NSMenuItem"; title = "Edit"; ObjectID = "1795"; */
+"1795.title" = "편집";
+
+/* Class = "NSMenu"; title = "Edit"; ObjectID = "1796"; */
+"1796.title" = "편집";
+
+/* Class = "NSMenuItem"; title = "Delete"; ObjectID = "1797"; */
+"1797.title" = "삭제";
+
+/* Class = "NSMenuItem"; title = "Select All"; ObjectID = "1798"; */
+"1798.title" = "모두 선택";
+
+/* Class = "NSMenuItem"; title = "Undo"; ObjectID = "1799"; */
+"1799.title" = "되돌리기";
+
+/* Class = "NSMenuItem"; title = "Redo"; ObjectID = "1801"; */
+"1801.title" = "다시하기";
+
+/* Class = "NSMenuItem"; title = "Find"; ObjectID = "1802"; */
+"1802.title" = "찾기";
+
+/* Class = "NSMenu"; title = "Find"; ObjectID = "1803"; */
+"1803.title" = "찾기";
+
+/* Class = "NSMenuItem"; title = "Jump to Selection"; ObjectID = "1804"; */
+"1804.title" = "선택한 곳으로 이동";
+
+/* Class = "NSMenuItem"; title = "Find…"; ObjectID = "1805"; */
+"1805.title" = "찾기...";
+
+/* Class = "NSMenuItem"; title = "Find Next"; ObjectID = "1806"; */
+"1806.title" = "다음 찾기";
+
+/* Class = "NSMenuItem"; title = "Find Previous"; ObjectID = "1807"; */
+"1807.title" = "이전 찾기";
+
+/* Class = "NSMenuItem"; title = "Use Selection for Find"; ObjectID = "1808"; */
+"1808.title" = "선택한 부분을 찾기에 사용";
+
+/* Class = "NSMenuItem"; title = "Spelling"; ObjectID = "1810"; */
+"1810.title" = "맞춤법";
+
+/* Class = "NSMenu"; title = "Spelling"; ObjectID = "1811"; */
+"1811.title" = "맞춤법";
+
+/* Class = "NSMenuItem"; title = "Spelling…"; ObjectID = "1812"; */
+"1812.title" = "맞춤법...";
+
+/* Class = "NSMenuItem"; title = "Check Spelling"; ObjectID = "1813"; */
+"1813.title" = "맞춤법 검사";
+
+/* Class = "NSMenuItem"; title = "Cut"; ObjectID = "1815"; */
+"1815.title" = "자르기";
+
+/* Class = "NSMenuItem"; title = "Copy"; ObjectID = "1816"; */
+"1816.title" = "복사하기";
+
+/* Class = "NSMenuItem"; title = "Speech"; ObjectID = "1817"; */
+"1817.title" = "말하기";
+
+/* Class = "NSMenu"; title = "Speech"; ObjectID = "1818"; */
+"1818.title" = "말하기";
+
+/* Class = "NSMenuItem"; title = "Stop Speaking"; ObjectID = "1819"; */
+"1819.title" = "말하기 중단";
+
+/* Class = "NSMenuItem"; title = "Start Speaking"; ObjectID = "1820"; */
+"1820.title" = "말하기 시작";
+
+/* Class = "NSMenuItem"; title = "Paste"; ObjectID = "1821"; */
+"1821.title" = "붙여넣기";
+
+/* Class = "NSMenuItem"; title = "Presets View"; ObjectID = "1884"; */
+"1884.title" = "사전설정 보기";
+
+/* Class = "NSMenuItem"; title = "Presets"; ObjectID = "1948"; */
+"1948.title" = "사전설정";
+
+/* Class = "NSMenu"; title = "Presets"; ObjectID = "1949"; */
+"1949.title" = "사전설정";
+
+/* Class = "NSMenuItem"; title = "Reset Official Presets"; ObjectID = "1950"; */
+"1950.title" = "공식 사전설정 초기화 ";
+
+/* Class = "NSMenuItem"; title = "New Preset…"; ObjectID = "1955"; */
+"1955.title" = "새 사전설정...";
+
+/* Class = "NSMenuItem"; title = "Online Documentation"; ObjectID = "1985"; */
+"1985.title" = "온라인 문서";
+
+/* Class = "NSMenuItem"; title = "Activity Window"; ObjectID = "2295"; */
+"2295.title" = "작업 창";
+
+/* Class = "NSMenuItem"; title = "HandBrake"; ObjectID = "2368"; */
+"2368.title" = "HandBrake";
+
+/* Class = "NSMenuItem"; title = "Select Default"; ObjectID = "2421"; */
+"2421.title" = "기본값 선택";
+
+/* Class = "NSMenuItem"; title = "Add To Queue"; ObjectID = "2443"; */
+"2443.title" = "대기열에 추가";
+
+/* Class = "NSMenuItem"; title = "Start Encoding"; ObjectID = "2444"; */
+"2444.title" = "인코딩 시작";
+
+/* Class = "NSMenuItem"; title = "Queue"; ObjectID = "2445"; */
+"2445.title" = "대기열";
+
+/* Class = "NSMenuItem"; title = "Pause Encoding"; ObjectID = "2494"; */
+"2494.title" = "인코딩 일시중지";
+
+/* Class = "NSMenuItem"; title = "Close Window"; ObjectID = "2508"; */
+"2508.title" = "창 닫기";
+
+/* Class = "NSMenuItem"; title = "Check for Updates…"; ObjectID = "4964"; */
+"4964.title" = "업데이트 찾기...";
+
+/* Class = "NSMenuItem"; title = "Preview Window"; ObjectID = "5157"; */
+"5157.title" = "미리보기 창";
+
+/* Class = "NSMenuItem"; title = "Export…"; ObjectID = "5188"; */
+"5188.title" = "내보내기...";
+
+/* Class = "NSMenuItem"; title = "Import…"; ObjectID = "5192"; */
+"5192.title" = "가져오기...";
+
+/* Class = "NSMenuItem"; title = "Show All"; ObjectID = "5280"; */
+"5280.title" = "모두 표시";
+
+/* Class = "NSMenuItem"; title = "Add Titles To Queue…"; ObjectID = "5897"; */
+"5897.title" = "대기열에 제목 추가...";
+
+/* Class = "NSMenuItem"; title = "Audio"; ObjectID = "brQ-mu-8JM"; */
+"brQ-mu-8JM.title" = "오디오";
+
+/* Class = "NSMenuItem"; title = "Delete"; ObjectID = "CN3-Rh-gVf"; */
+"CN3-Rh-gVf.title" = "삭제";
+
+/* Class = "NSMenuItem"; title = "Subtitles"; ObjectID = "Csx-2S-iUe"; */
+"Csx-2S-iUe.title" = "자막";
+
+/* Class = "NSMenuItem"; title = "Open Recent"; ObjectID = "fNa-z2-K1i"; */
+"fNa-z2-K1i.title" = "최근 파일 열기";
+
+/* Class = "NSMenuItem"; title = "Make Default"; ObjectID = "frQ-v5-pRa"; */
+"frQ-v5-pRa.title" = "기본값으로 설정";
+
+/* Class = "NSMenuItem"; title = "View"; ObjectID = "Hzp-jb-hme"; */
+"Hzp-jb-hme.title" = "보기";
+
+/* Class = "NSMenuItem"; title = "Show Toolbar"; ObjectID = "IsV-5A-bqx"; */
+"IsV-5A-bqx.title" = "도구모음 표시";
+
+/* Class = "NSMenuItem"; title = "Video"; ObjectID = "Jef-U4-eQT"; */
+"Jef-U4-eQT.title" = "비디오";
+
+/* Class = "NSMenuItem"; title = "Customize Toolbar…"; ObjectID = "KKV-n0-Fmr"; */
+"KKV-n0-Fmr.title" = "툴바 사용자정의...";
+
+/* Class = "NSMenuItem"; title = "Save"; ObjectID = "lab-Ly-3p3"; */
+"lab-Ly-3p3.title" = "저장";
+
+/* Class = "NSMenuItem"; title = "Chapters"; ObjectID = "lCU-PH-gal"; */
+"lCU-PH-gal.title" = "챕터";
+
+/* Class = "NSMenuItem"; title = "Enter Full Screen"; ObjectID = "mGX-7Z-siB"; */
+"mGX-7Z-siB.title" = "전체화면";
+
+/* Class = "NSMenu"; title = "View"; ObjectID = "ndG-Ig-Yol"; */
+"ndG-Ig-Yol.title" = "보기";
+
+/* Class = "NSMenuItem"; title = "Add All Titles To Queue"; ObjectID = "oYh-V7-kbx"; */
+"oYh-V7-kbx.title" = "대기열에 모든 제목 추가";
+
+/* Class = "NSMenu"; title = "Open Recent"; ObjectID = "ukX-HN-SXk"; */
+"ukX-HN-SXk.title" = "최근 파일 열기";
+
+/* Class = "NSMenuItem"; title = "Switch to Next Title"; ObjectID = "viv-aA-SoB"; */
+"viv-aA-SoB.title" = "다음 영상으로 전환";
+
+/* Class = "NSMenuItem"; title = "Clear Menu"; ObjectID = "wPw-Uj-Gxi"; */
+"wPw-Uj-Gxi.title" = "메뉴 정리";
+
+/* Class = "NSMenuItem"; title = "New Category…"; ObjectID = "wvb-60-cWL"; */
+"wvb-60-cWL.title" = "새로운 카테고리...";
+
+/* Class = "NSMenuItem"; title = "Services"; ObjectID = "XcG-Aw-Gdb"; */
+"XcG-Aw-Gdb.title" = "서비스";
+
+/* Class = "NSMenuItem"; title = "Switch to Previous Title"; ObjectID = "zgj-Iv-4xJ"; */
+"zgj-Iv-4xJ.title" = "이전 영상으로 전환";
+

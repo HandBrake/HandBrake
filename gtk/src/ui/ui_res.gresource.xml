@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gresources>
+  <gresource prefix="/fr/handbrake/ghb/ui">
+    <file>ghb.ui</file>
+    <file>ghb-button.ui</file>
+    <file>ghb-chapter-row.ui</file>
+    <file>ghb-file-button.ui</file>
+    <file>ghb-queue-row.ui</file>
+    <file>ghb-string-list.ui</file>
+    <file>menu.ui</file>
+    <file>custom.css</file>
+  </gresource>
+</gresources>
+

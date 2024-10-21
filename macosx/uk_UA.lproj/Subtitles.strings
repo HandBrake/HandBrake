@@ -1,0 +1,162 @@
+/* Class = "NSTableView"; ibExternalAccessibilityDescription = "Subtitles tracks"; ObjectID = "0yM-wE-D2x"; */
+"0yM-wE-D2x.ibExternalAccessibilityDescription" = "Subtitles tracks";
+
+/* Class = "NSTableColumn"; headerCell.title = "Encoding"; ObjectID = "1Qg-We-ltR"; */
+"1Qg-We-ltR.headerCell.title" = "Encoding";
+
+/* Class = "NSMenuItem"; title = "Add All Tracks"; ObjectID = "4PX-In-DpF"; */
+"4PX-In-DpF.title" = "Додати всі доріжки";
+
+/* Class = "NSTableColumn"; headerCell.title = "Language"; ObjectID = "9ka-9O-WDj"; */
+"9ka-9O-WDj.headerCell.title" = "Language";
+
+/* Class = "NSTextField"; ibExternalAccessibilityDescription = "SRT/SSA Offset"; ObjectID = "aJi-zQ-0cg"; */
+"aJi-zQ-0cg.ibExternalAccessibilityDescription" = "SRT/SSA Offset";
+
+/* Class = "NSTextField"; ibShadowedToolTip = "Positive or negative offset in milliseconds (ms) for the selected SRT/SSA format source track. Not applicable to other formats."; ObjectID = "aJi-zQ-0cg"; */
+"aJi-zQ-0cg.ibShadowedToolTip" = "Positive or negative offset in milliseconds (ms) for the selected SRT/SSA format source track. Not applicable to other formats.";
+
+/* Class = "NSMenuItem"; title = "Pop Up"; ObjectID = "cSW-OC-qKA"; */
+"cSW-OC-qKA.title" = "Pop Up";
+
+/* Class = "NSMenuItem"; title = "Item 1"; ObjectID = "dap-ee-kor"; */
+"dap-ee-kor.title" = "Item 1";
+
+/* Class = "NSMenuItem"; title = "Item 3"; ObjectID = "fAW-To-EeP"; */
+"fAW-To-EeP.title" = "Item 3";
+
+/* Class = "NSTableColumn"; headerCell.title = "Offset"; ObjectID = "Fgh-pZ-6uu"; */
+"Fgh-pZ-6uu.headerCell.title" = "Offset";
+
+/* Class = "NSTableColumn"; headerCell.title = "Burned In"; ObjectID = "fIe-Fg-ufj"; */
+"fIe-Fg-ufj.headerCell.title" = "Burned In";
+
+/* Class = "NSTableColumn"; headerCell.title = "Default"; ObjectID = "fvq-pE-sOC"; */
+"fvq-pE-sOC.headerCell.title" = "За замовчуванням";
+
+/* Class = "NSMenuItem"; title = "Add External Subtitles Track…"; ObjectID = "fXD-7h-jMl"; */
+"fXD-7h-jMl.title" = "Add External Subtitles Track…";
+
+/* Class = "NSMenuItem"; title = "Item 2"; ObjectID = "g4b-FM-qX4"; */
+"g4b-FM-qX4.title" = "Item 2";
+
+/* Class = "NSMenuItem"; title = "Item 2"; ObjectID = "gHY-6m-ASb"; */
+"gHY-6m-ASb.title" = "Item 2";
+
+/* Class = "NSTextFieldCell"; title = "Text Cell"; ObjectID = "gYk-0C-2tR"; */
+"gYk-0C-2tR.title" = "Text Cell";
+
+/* Class = "NSButton"; ibExternalAccessibilityDescription = "Forced subtitles only"; ObjectID = "HC5-ql-Vcr"; */
+"HC5-ql-Vcr.ibExternalAccessibilityDescription" = "Forced subtitles only";
+
+/* Class = "NSButton"; ibShadowedToolTip = "Forced Only. Use only subtitles marked as “forced” in the selected source track."; ObjectID = "HC5-ql-Vcr"; */
+"HC5-ql-Vcr.ibShadowedToolTip" = "Forced Only. Use only subtitles marked as “forced” in the selected source track.";
+
+/* Class = "NSTextFieldCell"; title = "0"; ObjectID = "hhH-c3-gD0"; */
+"hhH-c3-gD0.title" = "0";
+
+/* Class = "NSMenuItem"; title = "Item 2"; ObjectID = "HQq-Mp-4sI"; */
+"HQq-Mp-4sI.title" = "Item 2";
+
+/* Class = "NSMenuItem"; ibShadowedToolTip = "Add new SRT/SSA subtitle to the list."; ObjectID = "HW0-PS-t0U"; */
+"HW0-PS-t0U.ibShadowedToolTip" = "Add new SRT/SSA subtitle to the list.";
+
+/* Class = "NSMenuItem"; title = "Add External Subtitles Track…"; ObjectID = "HW0-PS-t0U"; */
+"HW0-PS-t0U.title" = "Add External Subtitles Track…";
+
+/* Class = "NSPopUpButton"; ibExternalAccessibilityDescription = "SRT/SSA Language"; ObjectID = "Inz-O5-B8g"; */
+"Inz-O5-B8g.ibExternalAccessibilityDescription" = "SRT/SSA Language";
+
+/* Class = "NSPopUpButton"; ibShadowedToolTip = "Language of the selected SRT/SSA format source track. Not applicable to other formats."; ObjectID = "Inz-O5-B8g"; */
+"Inz-O5-B8g.ibShadowedToolTip" = "Language of the selected SRT/SSA format source track. Not applicable to other formats.";
+
+/* Class = "NSMenuItem"; title = "Reload"; ObjectID = "jcM-HL-QJ6"; */
+"jcM-HL-QJ6.title" = "Скинути";
+
+/* Class = "NSButtonCell"; title = "Reload"; ObjectID = "jG8-uo-1tv"; */
+"jG8-uo-1tv.title" = "Скинути";
+
+/* Class = "NSButtonCell"; title = "Check"; ObjectID = "JLr-Qi-X0X"; */
+"JLr-Qi-X0X.title" = "Check";
+
+/* Class = "NSTableColumn"; headerCell.title = "Forced Only"; ObjectID = "klV-Gy-igk"; */
+"klV-Gy-igk.headerCell.title" = "Тільки Примусово";
+
+/* Class = "NSButton"; ibExternalAccessibilityDescription = "Default"; ObjectID = "mdO-Qu-3Pb"; */
+"mdO-Qu-3Pb.ibExternalAccessibilityDescription" = "За замовчуванням";
+
+/* Class = "NSButton"; ibShadowedToolTip = "Default flag. Mark the selected subtitles track as the default to be displayed on playback."; ObjectID = "mdO-Qu-3Pb"; */
+"mdO-Qu-3Pb.ibShadowedToolTip" = "Default flag. Mark the selected subtitles track as the default to be displayed on playback.";
+
+/* Class = "NSMenuItem"; title = "Remove All Tracks"; ObjectID = "mVi-zH-KUq"; */
+"mVi-zH-KUq.title" = "Видалити всі доріжки";
+
+/* Class = "NSTableColumn"; headerCell.title = "Track"; ObjectID = "N3S-st-yGv"; */
+"N3S-st-yGv.headerCell.title" = "Доріжка";
+
+/* Class = "NSButtonCell"; title = "Check"; ObjectID = "ooy-Sh-Edm"; */
+"ooy-Sh-Edm.title" = "Check";
+
+/* Class = "NSButtonCell"; title = "Selection Behavior…"; ObjectID = "oxg-bs-1si"; */
+"oxg-bs-1si.title" = "Вибрати поведінку...";
+
+/* Class = "NSMenuItem"; title = "Selection Behavior…"; ObjectID = "pwm-PV-1x4"; */
+"pwm-PV-1x4.title" = "Вибрати поведінку...";
+
+/* Class = "NSTextFieldCell"; title = "Text"; ObjectID = "QRj-KI-a03"; */
+"QRj-KI-a03.title" = "Text";
+
+/* Class = "NSButton"; ibShadowedToolTip = "Configure subtitle tracks Selection Behavior. These settings affect which tracks will be added to the subtitle tracks list, and the settings used for each track."; ObjectID = "QsM-28-Pya"; */
+"QsM-28-Pya.ibShadowedToolTip" = "Налаштування Поведінки Вибору доріжок субтитрів. Ці налаштування впливають на те, які доріжки будуть додані до списку доріжок субтитрів, а також на параметри, що використовуються для кожної доріжки.";
+
+/* Class = "NSPopUpButton"; ibExternalAccessibilityDescription = "SRT/SSA Character Encoding"; ObjectID = "QV0-kE-4yR"; */
+"QV0-kE-4yR.ibExternalAccessibilityDescription" = "SRT/SSA Character Encoding";
+
+/* Class = "NSPopUpButton"; ibShadowedToolTip = "Character encoding/codeset of the selected SRT/SSA format source track. Not applicable to other formats."; ObjectID = "QV0-kE-4yR"; */
+"QV0-kE-4yR.ibShadowedToolTip" = "Character encoding/codeset of the selected SRT/SSA format source track. Not applicable to other formats.";
+
+/* Class = "NSMenuItem"; title = "Remove All Tracks"; ObjectID = "R8a-qg-ASg"; */
+"R8a-qg-ASg.title" = "Видалити всі доріжки";
+
+/* Class = "NSButtonCell"; title = "Check"; ObjectID = "R9w-Bn-CCt"; */
+"R9w-Bn-CCt.title" = "Check";
+
+/* Class = "NSMenuItem"; title = "Item 1"; ObjectID = "Rj8-KI-k4L"; */
+"Rj8-KI-k4L.title" = "Item 1";
+
+/* Class = "NSMenuItem"; title = "Add All Tracks"; ObjectID = "S2I-Jd-Lyg"; */
+"S2I-Jd-Lyg.title" = "Додати всі доріжки";
+
+/* Class = "NSScrollView"; ibShadowedToolTip = "Subtitle tracks list. Track selection behavior and settings are loaded from the selected preset, and may be configured using the subtitle Selection Behavior dialog."; ObjectID = "Syo-rH-vof"; */
+"Syo-rH-vof.ibShadowedToolTip" = "Список доріжок субтитрів. Поведінка вибору треку та налаштування завантажуються з обраного пресету та можуть бути налаштовані за допомогою діалогового вікна \"Поведінка Вибору\" субтитрів.";
+
+/* Class = "NSPopUpButton"; ibExternalAccessibilityDescription = "Selected track"; ObjectID = "Tf3-cP-TGw"; */
+"Tf3-cP-TGw.ibExternalAccessibilityDescription" = "Вибрана доріжка";
+
+/* Class = "NSPopUpButton"; ibShadowedToolTip = "Subtitles language and type."; ObjectID = "Tf3-cP-TGw"; */
+"Tf3-cP-TGw.ibShadowedToolTip" = "Subtitles language and type.";
+
+/* Class = "NSMenuItem"; title = "Item 3"; ObjectID = "ThR-Cn-Vfr"; */
+"ThR-Cn-Vfr.title" = "Item 3";
+
+/* Class = "NSMenuItem"; title = "Tracks"; ObjectID = "TJO-RZ-jgb"; */
+"TJO-RZ-jgb.title" = "Доріжки";
+
+/* Class = "NSMenuItem"; title = "Pop Up"; ObjectID = "vHW-fn-RSG"; */
+"vHW-fn-RSG.title" = "Pop Up";
+
+/* Class = "NSButton"; ibShadowedToolTip = "Reload the subtitles tracks list using the configured Selection Behavior."; ObjectID = "Vxx-gk-9kY"; */
+"Vxx-gk-9kY.ibShadowedToolTip" = "Перезавантажити список доріжок субтитрів використовуючи налаштування з Поведінка Вибору.";
+
+/* Class = "NSMenuItem"; title = "Item 1"; ObjectID = "yDg-DK-z5D"; */
+"yDg-DK-z5D.title" = "Item 1";
+
+/* Class = "NSMenuItem"; title = "Item 3"; ObjectID = "yEC-jb-q8b"; */
+"yEC-jb-q8b.title" = "Item 3";
+
+/* Class = "NSButton"; ibExternalAccessibilityDescription = "Burned In"; ObjectID = "zpm-9Z-Hsq"; */
+"zpm-9Z-Hsq.ibExternalAccessibilityDescription" = "Burned In";
+
+/* Class = "NSButton"; ibShadowedToolTip = "Burned In. Make the selected subtitles permanent by overlaying them onto the video track."; ObjectID = "zpm-9Z-Hsq"; */
+"zpm-9Z-Hsq.ibShadowedToolTip" = "Burned In. Make the selected subtitles permanent by overlaying them onto the video track.";
+

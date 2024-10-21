@@ -122,7 +122,7 @@ class Configure( object ):
         dir = os.path.dirname( args[0] )
         if len(args) > 1 and args[1].find('w') != -1:
             self.mkdirs( dir )
-        m = re.match( '^(.*)\.tmp\..{8}$', args[0] )
+        m = re.match( r'^(.*)\.tmp\..{8}$', args[0] )
         if m:
             self.infof( 'write: %s\n', m.group(1) )
         else:
@@ -844,7 +844,7 @@ class RepoProbe( ShellProbe ):
                 line = line.decode('utf-8')
 
             ## grok fields
-            m = re.match( '([^\=]+)\=(.*)', line )
+            m = re.match( r'([^=]+)=(.*)', line )
             if not m:
                 continue
 
@@ -865,7 +865,7 @@ class RepoProbe( ShellProbe ):
                 self.date = datetime.strptime(value[0:19], "%Y-%m-%d %H:%M:%S")
 
                 # strptime can't handle UTC offset
-                m = re.match( '^([-+]?[0-9]{2})([0-9]{2})$', value[20:])
+                m = re.match(r'^([-+]?[0-9]{2})([0-9]{2})$', value[20:])
                 (hh, mn) = m.groups()
                 utc_off_hour   = int(hh)
                 utc_off_minute = int(mn)
@@ -961,7 +961,7 @@ class Project( Action ):
             raise AbortError( '%s is missing version information it needs to build properly.\nClone the official git repository at %s\nor download an official source archive from %s\n', self.name, self.url_repo, self.url_website )
 
         if repo.tag != '':
-            m = re.match( '^([0-9]+)\.([0-9]+)\.([0-9]+)-?(.+)?$', repo.tag )
+            m = re.match( r'^([0-9]+)\.([0-9]+)\.([0-9]+)-?(.+)?$', repo.tag )
             if not m:
                 raise AbortError( 'Invalid repo tag format %s\n', repo.tag )
             (vmajor, vminor, vpoint, suffix) = m.groups()
@@ -987,7 +987,7 @@ class Project( Action ):
             self.build = time.strftime('%Y%m%d', now) + '01'
             self.title = '%s %s (%s)' % (self.name,self.version,self.build)
         else:
-            m = re.match('^([a-zA-Z]+)\.([0-9]+)$', self.suffix)
+            m = re.match(r'^([a-zA-Z]+)\.([0-9]+)$', self.suffix)
             if not m:
                 # Regular release
                 self.version = '%d.%d.%d' % (self.vmajor,self.vminor,self.vpoint)
@@ -1099,8 +1099,8 @@ class VersionProbe( Action ):
         self.command = command
         self.abort = abort
         self.minversion = minversion
-        self.rexprs = [ '(?P<name>[^.]+)\s+(?P<svers>(?P<i0>\d+)(\.(?P<i1>\d+))?(\.(?P<i2>\d+))?)',
-                        '(?P<svers>(?P<i0>\d+)(\.(?P<i1>\d+))?(\.(?P<i2>\d+))?)' ]
+        self.rexprs = [ r'(?P<name>[^.]+)\s+(?P<svers>(?P<i0>\d+)(\.(?P<i1>\d+))?(\.(?P<i2>\d+))?)',
+                        r'(?P<svers>(?P<i0>\d+)(\.(?P<i1>\d+))?(\.(?P<i2>\d+))?)' ]
         if rexpr:
             self.rexprs.insert(0,rexpr)
 
@@ -1130,7 +1130,7 @@ class VersionProbe( Action ):
         if self.inadequate():
             self.fail = True
             if self.abort is True:
-                stdout.write('(%s) %s\n' % (self.msg_fail,self.svers))
+                print(f'({self.msg_fail}) {self.svers}')
                 raise AbortError( 'minimum required %s version is %s and %s is %s\n' % (self.name,'.'.join([str(i) for i in self.minversion]),self.command[0],self.svers) )
 
     def _dumpSession( self, printf ):
@@ -1408,14 +1408,9 @@ def createCLI( cross = None ):
     h = 'disable GTK GUI' if gtk_supported else argparse.SUPPRESS
     grp.add_argument( '--disable-gtk', dest="enable_gtk", action='store_false', help=h)
 
-    # Option deprecated
+    # Options deprecated
     grp.add_argument( '--disable-gtk-update-checks', default=False, action='store_true', help=argparse.SUPPRESS )
-
-    # Option hidden as GUI is not currently buildable with GTK4
-    grp.add_argument( '--enable-gtk4', default=False, action='store_true', help=argparse.SUPPRESS )
-
-    h='disable GStreamer (GTK live preview)' if gtk_supported else argparse.SUPPRESS
-    grp.add_argument( '--disable-gst', default=False, action='store_true', help=h )
+    grp.add_argument( '--disable-gst', default=False, action='store_true', help=argparse.SUPPRESS )
 
     h = IfHost( 'x265 video encoder', '*-*-*', none=argparse.SUPPRESS ).value
     grp.add_argument( '--enable-x265', dest="enable_x265", default=True, action='store_true', help=(( 'enable %s' %h ) if h != argparse.SUPPRESS else h) )
@@ -1440,11 +1435,11 @@ def createCLI( cross = None ):
     h = 'Nvidia NVENC video encoder' if nvenc_supported else argparse.SUPPRESS
     grp.add_argument( '--enable-nvenc', dest="enable_nvenc", default=True, action='store_true', help=(( 'enable %s' %h ) if h != argparse.SUPPRESS else h) )
     grp.add_argument( '--disable-nvenc', dest="enable_nvenc", action='store_false', help=(( 'disable %s' %h ) if h != argparse.SUPPRESS else h) )
-    
+
     h = 'Nvidia NVDEC video decoder' if nvenc_supported else argparse.SUPPRESS
     grp.add_argument( '--enable-nvdec', dest="enable_nvdec", default=False, action='store_true', help=(( 'enable %s' %h ) if h != argparse.SUPPRESS else h) )
     grp.add_argument( '--disable-nvdec', dest="enable_nvdec", action='store_false', help=(( 'disable %s' %h ) if h != argparse.SUPPRESS else h) )
-    
+
     h = 'Intel QSV video encoder/decoder' if qsv_supported else argparse.SUPPRESS
     grp.add_argument( '--enable-qsv', dest="enable_qsv", default=IfHost(True, "x86_64-w64-mingw32*", none=False).value, action='store_true', help=(( 'enable %s' %h ) if h != argparse.SUPPRESS else h) )
     grp.add_argument( '--disable-qsv', dest="enable_qsv", action='store_false', help=(( 'disable %s' %h ) if h != argparse.SUPPRESS else h) )
@@ -1494,23 +1489,22 @@ class Launcher:
         self.infof( 'time begin: %s\n', time.asctime() )
         self.infof( 'launch: %s\n', cmd )
         if options.launch_quiet:
-            stdout.write( 'building to %s ...\n' % (os.path.abspath( cfg.build_final )))
+            print(f'building to {os.path.abspath(cfg.build_final)} ...')
         else:
-            stdout.write( '%s\n' % ('-' * 79) )
+            print('-' * 79)
 
         ## launch/pipe
         try:
-            pipe = subprocess.Popen(cmd, shell=True, bufsize=1, stdout=subprocess.PIPE, stderr=subprocess.STDOUT )
-            self.returncode = pipe.returncode
+            pipe = subprocess.Popen( cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT )
         except Exception as x:
             raise AbortError( 'launch failure: %s', x )
-            self.returncode = 1
 
         for line in pipe.stdout:
             if not isinstance(line, str):
                 line = line.decode()
             self.echof( '%s', line )
         pipe.wait()
+        self.returncode = pipe.returncode
 
         ## record end
         timeEnd = time.time()
@@ -1547,7 +1541,7 @@ class Launcher:
             segs.append( '%d seconds' % seconds )
 
         if not options.launch_quiet:
-            stdout.write( '%s\n' % ('-' * 79) )
+            print('-' * 79)
         self.infof( 'time end: %s\n', time.asctime() )
         self.infof( 'duration: %s (%.2fs)\n', ', '.join(segs), elapsed )
         self.infof( 'result: %s\n', result )
@@ -1631,31 +1625,31 @@ try:
     cross    = None
     xcode_opts = { 'disabled': False, 'config': None }
     for i in range(len(sys.argv)):
-        if re.compile( '^--arch=(.+)$' ).match( sys.argv[i] ):
+        if re.match( r'^--arch=(.+)$', sys.argv[i] ):
             arch_gcc = sys.argv[i][7:]
             continue
-        elif re.compile( '^--arch$' ).match( sys.argv[i] ) and ((i + 1) < len(sys.argv)):
+        elif re.match( r'^--arch$', sys.argv[i] ) and ((i + 1) < len(sys.argv)):
             arch_gcc = sys.argv[i+1]
             arch_gcc = None if arch_gcc == '' else arch_gcc
             i = i + 1
             continue
-        elif re.compile( '^--cross=(.+)$' ).match( sys.argv[i] ):
+        elif re.match( r'^--cross=(.+)$', sys.argv[i] ):
             cross = sys.argv[i][8:]
             continue
-        elif re.compile( '^--cross$' ).match( sys.argv[i] ) and ((i + 1) < len(sys.argv)):
+        elif re.match( r'^--cross$', sys.argv[i] ) and ((i + 1) < len(sys.argv)):
             cross = sys.argv[i+1]
             cross = None if cross == '' else cross
             i = i + 1
             continue
-        elif re.compile( '^--xcode-config=(.+)$' ).match( sys.argv[i] ):
+        elif re.match( r'^--xcode-config=(.+)$', sys.argv[i] ):
             xcode_opts['config'] = sys.argv[i][15:]
             continue
-        elif re.compile( '^--xcode-config$' ).match( sys.argv[i] ) and ((i + 1) < len(sys.argv)):
+        elif re.match( r'^--xcode-config$', sys.argv[i] ) and ((i + 1) < len(sys.argv)):
             xcode_opts['config'] = sys.argv[i+1]
             xcode_opts['config'] = None if xcode_opts['config'] == '' else xcode_opts['config']
             i = i + 1
             continue
-        elif re.compile( '^--disable-xcode$' ).match( sys.argv[i] ):
+        elif re.match( r'^--disable-xcode$', sys.argv[i] ):
             xcode_opts['disabled'] = True
             continue
 
@@ -1689,7 +1683,7 @@ try:
         libtool    = ToolProbe( 'LIBTOOL.exe',    'libtool',    'libtool', abort=True )
         lipo       = ToolProbe( 'LIPO.exe',       'lipo',       'lipo', abort=False )
         pkgconfig  = ToolProbe( 'PKGCONFIG.exe',  'pkgconfig',  'pkg-config', abort=True, minversion=[0,27,0] )
-        meson      = ToolProbe( 'MESON.exe',      'meson',      'meson', abort=True, minversion=[0,49,0] )
+        meson      = ToolProbe( 'MESON.exe',      'meson',      'meson', abort=True, minversion=[0,51,0] )
         nasm       = ToolProbe( 'NASM.exe',       'asm',        'nasm', abort=True, minversion=[2,13,0] )
         ninja      = ToolProbe( 'NINJA.exe',      'ninja',      'ninja-build', 'ninja', abort=True )
         cargo      = ToolProbe( 'CARGO.exe',      'cargo',        'cargo', abort=False )
@@ -1757,7 +1751,7 @@ try:
     ## prepare list of targets and NAME=VALUE args to pass to make
     targets = []
     exports = []
-    rx_exports = re.compile( '([^=-]+)=(.*)' )
+    rx_exports = re.compile( r'([^=-]+)=(.*)' )
     for arg in args:
         m = rx_exports.match( arg )
         if m:
@@ -1998,7 +1992,7 @@ int main()
     doc.addBlank()
     conf_args = []
     for arg in sys.argv[1:]:
-        if re.match( '^--(force|launch).*$', arg ):
+        if re.match( r'^--(force|launch).*$', arg ):
             continue
         conf_args.append(arg)
     doc.add( 'CONF.args', ' '.join(conf_args).replace('$','$$') )
@@ -2086,9 +2080,7 @@ int main()
     doc.add( 'FEATURE.fdk_aac',    int( options.enable_fdk_aac ))
     doc.add( 'FEATURE.ffmpeg_aac', int( options.enable_ffmpeg_aac ))
     doc.add( 'FEATURE.flatpak',    int( options.flatpak ))
-    doc.add( 'FEATURE.gtk4',       int( options.enable_gtk4 ))
     doc.add( 'FEATURE.gtk',        int( options.enable_gtk ))
-    doc.add( 'FEATURE.gst',        int( not options.disable_gst ))
     doc.add( 'FEATURE.mf',         int( options.enable_mf ))
     doc.add( 'FEATURE.nvenc',      int( options.enable_nvenc ))
     doc.add( 'FEATURE.nvdec',      int( options.enable_nvdec ))
@@ -2205,36 +2197,27 @@ int main()
     doc.write( 'm4' )
     encodeDistfileConfig()
 
-    note_required    = 'required on target platform'
-    note_unsupported = 'not supported on target platform'
+    note_required    = ' (required on target platform)'
+    note_unsupported = ' (not supported on target platform)'
 
-    stdout.write( '%s\n' % ('-' * 79) )
-    stdout.write( 'Build system:       %s\n' % build_tuple.spec.rstrip('-') )
-    stdout.write( 'Host system:        %s\n' % host_tuple.spec.rstrip('-') )
-    stdout.write( 'Target platform:    %s' % host_tuple.system )
-    stdout.write( ' (cross-compile)\n' ) if options.cross or build_tuple.machine != host_tuple.machine else stdout.write( '\n' )
-    stdout.write( 'Harden:             %s\n' % options.enable_harden )
-    stdout.write( 'Sandbox:            %s' % options.enable_sandbox )
-    stdout.write( ' (%s)\n' % note_unsupported ) if host_tuple.system != 'darwin' else stdout.write( '\n' )
-    stdout.write( 'Enable FDK-AAC:     %s\n' % options.enable_fdk_aac )
-    stdout.write( 'Enable FFmpeg AAC:  %s' % options.enable_ffmpeg_aac )
-    stdout.write( '  (%s)\n' % note_required ) if host_tuple.system != 'darwin' else stdout.write( '\n' )
-    stdout.write( 'Enable MediaFound.: %s' % options.enable_mf )
-    stdout.write( ' (%s)\n' % note_unsupported ) if not mf_supported else stdout.write( '\n' )
-    stdout.write( 'Enable NVENC:       %s' % options.enable_nvenc )
-    stdout.write( ' (%s)\n' % note_unsupported ) if not nvenc_supported else stdout.write( '\n' )
-    stdout.write( 'Enable NVDEC:       %s' % options.enable_nvdec )
-    stdout.write( ' (%s)\n' % note_unsupported ) if not nvenc_supported else stdout.write( '\n' )
-    stdout.write( 'Enable QSV:         %s' % options.enable_qsv )
-    stdout.write( ' (%s)\n' % note_unsupported ) if not qsv_supported else stdout.write( '\n' )
-    stdout.write( 'Enable VCE:         %s' % options.enable_vce )
-    stdout.write( ' (%s)\n' % note_unsupported ) if not vce_supported else stdout.write( '\n' )
-    stdout.write( 'Enable libdovi:     %s\n' % options.enable_libdovi )
-    stdout.write( 'Enable GTK GUI:     %s' % options.enable_gtk )
-    stdout.write( ' (%s)\n' % note_unsupported ) if not gtk_supported else stdout.write( '\n' )
+    print('-' * 79)
+    print(f'Build system:       {build_tuple.spec.rstrip("-")}')
+    print(f'Host system:        {host_tuple.spec.rstrip("-")}')
+    print(f'Target platform:    {host_tuple.system}' + (' (cross-compile)' if options.cross or build_tuple.machine != host_tuple.machine else ''))
+    print(f'Harden:             {options.enable_harden}')
+    print(f'Sandbox:            {options.enable_sandbox}' + ('' if host_tuple.system == 'darwin' else note_unsupported))
+    print(f'Enable FDK-AAC:     {options.enable_fdk_aac}')
+    print(f'Enable FFmpeg AAC:  {options.enable_ffmpeg_aac}' + ('' if host_tuple.system == 'darwin' else note_required))
+    print(f'Enable MediaFound.: {options.enable_mf}' + ('' if mf_supported else note_unsupported))
+    print(f'Enable NVENC:       {options.enable_nvenc}' + ('' if nvenc_supported else note_unsupported))
+    print(f'Enable NVDEC:       {options.enable_nvdec}' + ('' if nvenc_supported else note_unsupported))
+    print(f'Enable QSV:         {options.enable_qsv}' + ('' if qsv_supported else note_unsupported))
+    print(f'Enable VCE:         {options.enable_vce}' + ('' if vce_supported else note_unsupported))
+    print(f'Enable libdovi:     {options.enable_libdovi}')
+    print(f'Enable GTK GUI:     {options.enable_gtk}' + ('' if gtk_supported else note_unsupported))
 
     if len(targets) > 0:
-        print( print_blue('Note:'), 'passthrough arguments:', *targets)
+        print( print_blue('Note:'), 'passthru arguments:', *targets)
 
     if len(exports) > 0:
         print( print_blue('Note:'), 'exported variables:', end = ' ')
@@ -2243,7 +2226,7 @@ int main()
         print()
 
     if options.launch:
-        stdout.write( '%s\n' % ('-' * 79) )
+        print('-' * 79)
         launcher = Launcher( targets )
 
     cfg.record_log()
@@ -2253,29 +2236,26 @@ int main()
     else:
         nocd = False
 
-    stdout.write( '%s\n' % ('-' * 79) )
+    print('-' * 79)
     if options.launch:
-        stdout.write( print_bold( 'Build is finished!\n' ) )
+        print(print_bold('Build is finished!'))
         if nocd:
-            stdout.write( 'You may now examine the output.\n' )
+            print('You may now examine the output.')
         else:
-            stdout.write( 'You may now cd into %s and examine the output.\n' % (cfg.build_dir) )
+            print(f'You may now cd into {cfg.build_dir} and examine the output.')
+        sys.exit( launcher.returncode )
     else:
-        stdout.write( print_bold( 'Build is configured!\n' ) )
+        print(print_bold('Build is configured!'))
         if nocd:
-            stdout.write( 'You may now run make (%s).\n' % (Tools.gmake.pathname) )
+            print(f'You may now run make ({Tools.gmake.pathname}).')
         else:
-            stdout.write( 'You may now cd into %s and run make (%s).\n' % (cfg.build_dir,Tools.gmake.pathname) )
+            print(f'You may now cd into {cfg.build_dir} and run make ({Tools.gmake.pathname}).')
+        sys.exit( 0 )
 
 except AbortError as x:
-    stderr.write( '\n%s\n\n' % print_red( 'ERROR: %s' % x ) )
+    stderr.write('\n' + print_red(f'ERROR: {x}') + '\n\n')
     try:
         cfg.record_log()
     except:
         pass
     sys.exit( 1 )
-
-if options.launch:
-    sys.exit( launcher.returncode )
-else:
-    sys.exit( 0 )

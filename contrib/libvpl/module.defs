@@ -1,11 +1,11 @@
 $(eval $(call import.MODULE.defs,LIBVPL,libvpl))
 $(eval $(call import.CONTRIB.defs,LIBVPL))
 
-LIBVPL.FETCH.url       = https://github.com/oneapi-src/oneVPL/archive/refs/tags/v2023.3.1.tar.gz
-LIBVPL.FETCH.url      += https://github.com/HandBrake/HandBrake-contribs/releases/download/contribs/oneVPL-2023.3.1.tar.gz
-LIBVPL.FETCH.sha256    = 4411543519486a2450f6f5af06a077596e7888a551768594e9dfa2a46b23b6f5
-LIBVPL.FETCH.basename  = oneVPL-2023.3.1.tar.gz
-LIBVPL.EXTRACT.tarbase = oneVPL-2023.3.1
+LIBVPL.FETCH.url       = https://github.com/intel/libvpl/archive/refs/tags/v2.13.0.tar.gz
+LIBVPL.FETCH.url      += https://github.com/HandBrake/HandBrake-contribs/releases/download/contribs2/libvpl-2.13.0.tar.gz
+LIBVPL.FETCH.sha256    = 1c740e2b58f7853f56b618bdb7d4a7e5d37f8c1a9b30105a0b79ba80873e1cbd
+LIBVPL.FETCH.basename  = libvpl-2.13.0.tar.gz
+LIBVPL.EXTRACT.tarbase = libvpl-2.13.0
 
 LIBVPL.build_dir             = build
 LIBVPL.CONFIGURE.exe         = cmake
@@ -15,7 +15,7 @@ LIBVPL.CONFIGURE.args.prefix = -DCMAKE_INSTALL_PREFIX="$(LIBVPL.CONFIGURE.prefix
 LIBVPL.CONFIGURE.deps        =
 LIBVPL.CONFIGURE.static      =
 LIBVPL.CONFIGURE.shared      = -DBUILD_SHARED_LIBS=OFF
-LIBVPL.CONFIGURE.extra       = -DBUILD_DISPATCHER_ONEVPL_EXPERIMENTAL=ON -DBUILD_PREVIEW=OFF -DBUILD_TOOLS=OFF -DBUILD_EXAMPLES=OFF
+LIBVPL.CONFIGURE.extra       = -DBUILD_EXPERIMENTAL=ON -DBUILD_TOOLS=OFF -DBUILD_EXAMPLES=OFF
 
 ifeq ($(GCC.O),$(filter $(GCC.O),size size-aggressive))
     LIBVPL.CONFIGURE.extra += -DCMAKE_BUILD_TYPE=MinSizeRel
@@ -32,10 +32,7 @@ ifeq (1,$(HOST.cross))
         LIBVPL.CONFIGURE.extra += -DWIN32=ON -DMINGW=ON
         LIBVPL.CONFIGURE.extra += -DCMAKE_SYSTEM_NAME=Windows
         LIBVPL.CONFIGURE.extra += -DCMAKE_C_COMPILER=$(LIBVPL.GCC.gcc)
-        LIBVPL.CONFIGURE.extra += -DCMAKE_C_FLAGS="-static-libgcc -static-libstdc++ -static"
-        LIBVPL.CONFIGURE.extra += -DCMAKE_SHARED_LIBRARY_LINK_C_FLAGS="-static-libgcc -static-libstdc++ -static"
         LIBVPL.CONFIGURE.extra += -DCMAKE_CXX_COMPILER=$(LIBVPL.GCC.gxx)
-        LIBVPL.CONFIGURE.extra += -DCMAKE_CXX_FLAGS="-static-libgcc -static-libstdc++ -static"
         LIBVPL.CONFIGURE.extra += -DCMAKE_RC_COMPILER=$(HOST.cross.prefix)windres
     endif
     LIBVPL.CONFIGURE.extra     += -DCMAKE_SYSTEM_PROCESSOR=$(HOST.machine)

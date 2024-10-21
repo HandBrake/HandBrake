@@ -1,0 +1,42 @@
+/* Class = "NSSegmentedCell"; 0di-xq-jgi.ibShadowedToolTips[0] = "Create a new custom preset based on the currently selected settings."; ObjectID = "0di-xq-jgi"; */
+"0di-xq-jgi.ibShadowedToolTips[0]" = "현재 선택한 설정을 바탕으로 새로운 사전 설정 생성";
+
+/* Class = "NSSegmentedCell"; 0di-xq-jgi.ibShadowedToolTips[1] = "Delete the selected preset."; ObjectID = "0di-xq-jgi"; */
+"0di-xq-jgi.ibShadowedToolTips[1]" = "선택된 사전설정을 삭제합니다.";
+
+/* Class = "NSTextFieldCell"; title = "Text Cell"; ObjectID = "4tC-UE-40G"; */
+"4tC-UE-40G.title" = "텍스트 셀";
+
+/* Class = "NSMenuItem"; title = "Reset Official Presets"; ObjectID = "cm5-Kl-dB3"; */
+"cm5-Kl-dB3.title" = "공식 사전설정 재설정 ";
+
+/* Class = "NSMenuItem"; title = "Make Default"; ObjectID = "D2t-YG-Frn"; */
+"D2t-YG-Frn.title" = "기본값으로 설정";
+
+/* Class = "NSMenuItem"; title = "New Category"; ObjectID = "Io0-Vm-Qez"; */
+"Io0-Vm-Qez.title" = "새로운 카테고리";
+
+/* Class = "NSMenu"; title = "Presets Action Menu"; ObjectID = "LQk-kD-5sj"; */
+"LQk-kD-5sj.title" = "사전설정 작업 메뉴";
+
+/* Class = "NSMenuItem"; title = "Import…"; ObjectID = "LUl-ag-Iu6"; */
+"LUl-ag-Iu6.title" = "가져오기...";
+
+/* Class = "NSTextFieldCell"; title = "Table View Cell"; ObjectID = "oBC-Nh-TwB"; */
+"oBC-Nh-TwB.title" = "테이블 보기 셀";
+
+/* Class = "NSTextFieldCell"; title = "Presets"; ObjectID = "r4V-6L-SO8"; */
+"r4V-6L-SO8.title" = "사전설정";
+
+/* Class = "NSScrollView"; ibExternalAccessibilityDescription = "Presets"; ObjectID = "uad-bt-uKD"; */
+"uad-bt-uKD.ibExternalAccessibilityDescription" = "사전설정";
+
+/* Class = "NSMenuItem"; title = "Export…"; ObjectID = "xEQ-Un-J0n"; */
+"xEQ-Un-J0n.title" = "내보내기...";
+
+/* Class = "NSPopUpButton"; ibExternalAccessibilityDescription = "Additional Options"; ObjectID = "Ybq-Zt-sta"; */
+"Ybq-Zt-sta.ibExternalAccessibilityDescription" = "추가 옵션";
+
+/* Class = "NSPopUpButton"; ibShadowedToolTip = "Show additional options."; ObjectID = "Ybq-Zt-sta"; */
+"Ybq-Zt-sta.ibShadowedToolTip" = "추가 옵션을 표시합니다.";
+

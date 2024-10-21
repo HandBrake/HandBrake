@@ -36,15 +36,13 @@ HB_OBJC_DIRECT_MEMBERS
 
 + (NSURL *)appSupportURL
 {
-    NSFileManager *fileManager = [NSFileManager defaultManager];
+    NSFileManager *fileManager = NSFileManager.defaultManager;
     NSURL *appSupportURL = [[[fileManager URLsForDirectory:NSApplicationSupportDirectory inDomains:NSUserDomainMask]
-                             firstObject] URLByAppendingPathComponent:@"HandBrake"];
-
-    if (appSupportURL && ![fileManager fileExistsAtPath:appSupportURL.path])
+                             firstObject] URLByAppendingPathComponent:@"HandBrake" isDirectory:YES];
+    if (appSupportURL)
     {
-        [fileManager createDirectoryAtPath:appSupportURL.path withIntermediateDirectories:YES attributes:nil error:NULL];
+        [fileManager createDirectoryAtURL:appSupportURL withIntermediateDirectories:YES attributes:nil error:NULL];
     }
-
     return appSupportURL;
 }
 
@@ -243,6 +241,15 @@ HB_OBJC_DIRECT_MEMBERS
 
         if (isDirectory.boolValue == YES)
         {
+            if ([directoryURL.pathExtension isEqualToString:@"eyetv"])
+            {
+                NSURL *eyetvMediaURL = [HBUtilities eyetvMediaURL:directoryURL];
+                if (eyetvMediaURL)
+                {
+                    return @[eyetvMediaURL];
+                }
+            }
+
             if ([directoryURL.pathExtension isEqualToString:@"dvdmedia"] ||
                 [directoryURL.lastPathComponent isEqualToString:@"VIDEO_TS"])
             {
@@ -285,7 +292,7 @@ HB_OBJC_DIRECT_MEMBERS
             NSURL *eyetvMediaURL = [HBUtilities eyetvMediaURL:url];
             if (eyetvMediaURL)
             {
-                [mutableFileURLs addObject:url];
+                [mutableFileURLs addObject:eyetvMediaURL];
             }
         }
         else if ([url.pathExtension isEqualToString:@"dvdmedia"] ||
@@ -320,10 +327,6 @@ HB_OBJC_DIRECT_MEMBERS
                     {
                         [enumerator skipDescendants];
                     }
-                    else
-                    {
-                        [mutableFileURLs addObject:enumeratorURL];
-                    }
                 }
                 else
                 {
@@ -333,7 +336,69 @@ HB_OBJC_DIRECT_MEMBERS
         }
     }
 
+    [mutableFileURLs sortUsingComparator:^NSComparisonResult(id  _Nonnull obj1, id  _Nonnull obj2) {
+        return [[obj1 path] localizedStandardCompare:[obj2 path]];
+    }];
+
     return mutableFileURLs;
+}
+
++ (NSArray<NSString *> *)supportedExtensions
+{
+    return @[@"srt", @"ssa", @"ass"];
+}
+
++ (NSArray<NSURL *> *)extractURLs:(NSArray<NSURL *> *)fileURLs withExtension:(NSArray<NSString *> *)extensions
+{
+    NSMutableArray<NSURL *> *extractedFileURLs = [NSMutableArray array];
+
+    for (NSURL *fileURL in fileURLs)
+    {
+        BOOL isMatch = NO;
+        for (NSString *extension in extensions)
+        {
+            if ([fileURL.pathExtension caseInsensitiveCompare:extension] == NSOrderedSame)
+            {
+                isMatch = YES;
+                break;
+            }
+        }
+        if (isMatch)
+        {
+            [extractedFileURLs addObject:fileURL];
+        }
+    }
+
+    return extractedFileURLs;
+}
+
++ (NSArray<NSURL *> *)trimURLs:(NSArray<NSURL *> *)fileURLs withExtension:(NSArray<NSString *> *)excludedExtensions
+{
+    NSMutableArray<NSURL *> *trimmedURLs = [NSMutableArray array];
+
+    for (NSURL *fileURL in fileURLs)
+    {
+        BOOL excluded = NO;
+        NSString *extension = fileURL.pathExtension;
+
+        if (extension)
+        {
+            for (NSString *excludedExtension in excludedExtensions)
+            {
+                if ([extension caseInsensitiveCompare:excludedExtension] == NSOrderedSame)
+                {
+                    excluded = YES;
+                    break;
+                }
+            }
+        }
+
+        if (excluded == NO)
+        {
+            [trimmedURLs addObject:fileURL];
+        }
+    }
+    return trimmedURLs;
 }
 
 + (NSString *)isoCodeForNativeLang:(NSString *)language

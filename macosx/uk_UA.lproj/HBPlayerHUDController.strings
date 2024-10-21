@@ -1,0 +1,69 @@
+/* Class = "NSTextFieldCell"; title = "00:00:00"; ObjectID = "6A0-9h-5UY"; */
+"6A0-9h-5UY.title" = "00:00:00";
+
+/* Class = "NSMenuItem"; title = "Tracks"; ObjectID = "6BQ-wU-p2C"; */
+"6BQ-wU-p2C.title" = "Доріжки";
+
+/* Class = "NSButton"; ibExternalAccessibilityDescription = "End Live Preview"; ObjectID = "84p-08-fGK"; */
+"84p-08-fGK.ibExternalAccessibilityDescription" = "End Live Preview";
+
+/* Class = "NSButton"; ibShadowedToolTip = "Exit player and return to still image previews."; ObjectID = "84p-08-fGK"; */
+"84p-08-fGK.ibShadowedToolTip" = "Exit player and return to still image previews.";
+
+/* Class = "NSButton"; ibExternalAccessibilityDescription = "Go To End"; ObjectID = "CQ0-pk-SFk"; */
+"CQ0-pk-SFk.ibExternalAccessibilityDescription" = "Go To End";
+
+/* Class = "NSButton"; ibShadowedToolTip = "Go To End"; ObjectID = "CQ0-pk-SFk"; */
+"CQ0-pk-SFk.ibShadowedToolTip" = "Go To End";
+
+/* Class = "NSTextFieldCell"; title = "00:00:00"; ObjectID = "dGi-LK-P1E"; */
+"dGi-LK-P1E.title" = "00:00:00";
+
+/* Class = "NSButton"; ibExternalAccessibilityDescription = "Mute Volume"; ObjectID = "euL-Tg-dmT"; */
+"euL-Tg-dmT.ibExternalAccessibilityDescription" = "Mute Volume";
+
+/* Class = "NSButton"; ibShadowedToolTip = "Mute Volume"; ObjectID = "euL-Tg-dmT"; */
+"euL-Tg-dmT.ibShadowedToolTip" = "Mute Volume";
+
+/* Class = "NSSlider"; ibExternalAccessibilityDescription = "Volume Control"; ObjectID = "gzA-no-jdv"; */
+"gzA-no-jdv.ibExternalAccessibilityDescription" = "Volume Control";
+
+/* Class = "NSSlider"; ibShadowedToolTip = "Drag to change volume."; ObjectID = "gzA-no-jdv"; */
+"gzA-no-jdv.ibShadowedToolTip" = "Drag to change volume.";
+
+/* Class = "NSSlider"; ibExternalAccessibilityDescription = "Timeline"; ObjectID = "lBp-JT-ehn"; */
+"lBp-JT-ehn.ibExternalAccessibilityDescription" = "Timeline";
+
+/* Class = "NSSlider"; ibShadowedToolTip = "Drag to change timeline position."; ObjectID = "lBp-JT-ehn"; */
+"lBp-JT-ehn.ibShadowedToolTip" = "Drag to change timeline position.";
+
+/* Class = "NSButton"; ibExternalAccessibilityDescription = "Play/Pause"; ObjectID = "mLA-ei-4sK"; */
+"mLA-ei-4sK.ibExternalAccessibilityDescription" = "Play/Pause";
+
+/* Class = "NSButton"; ibShadowedToolTip = "Toggle Play/Pause"; ObjectID = "mLA-ei-4sK"; */
+"mLA-ei-4sK.ibShadowedToolTip" = "Toggle Play/Pause";
+
+/* Class = "NSTextField"; ibExternalAccessibilityDescription = "Time Remaining"; ObjectID = "PVD-pq-1ZG"; */
+"PVD-pq-1ZG.ibExternalAccessibilityDescription" = "Time Remaining";
+
+/* Class = "NSTextField"; ibShadowedToolTip = "Time remaining."; ObjectID = "PVD-pq-1ZG"; */
+"PVD-pq-1ZG.ibShadowedToolTip" = "Time remaining.";
+
+/* Class = "NSTextField"; ibExternalAccessibilityDescription = "Current Timeline Position"; ObjectID = "uYx-2C-8et"; */
+"uYx-2C-8et.ibExternalAccessibilityDescription" = "Current Timeline Position";
+
+/* Class = "NSTextField"; ibShadowedToolTip = "Current timeline position."; ObjectID = "uYx-2C-8et"; */
+"uYx-2C-8et.ibShadowedToolTip" = "Current timeline position.";
+
+/* Class = "NSPopUpButton"; ibExternalAccessibilityDescription = "Tracks Selection"; ObjectID = "Vj1-Za-AUV"; */
+"Vj1-Za-AUV.ibExternalAccessibilityDescription" = "Tracks Selection";
+
+/* Class = "NSPopUpButton"; ibShadowedToolTip = "Enable or disable tracks."; ObjectID = "Vj1-Za-AUV"; */
+"Vj1-Za-AUV.ibShadowedToolTip" = "Enable or disable tracks.";
+
+/* Class = "NSButton"; ibExternalAccessibilityDescription = "Go To Beginning"; ObjectID = "WuP-9l-8AN"; */
+"WuP-9l-8AN.ibExternalAccessibilityDescription" = "Go To Beginning";
+
+/* Class = "NSButton"; ibShadowedToolTip = "Go To Beginning"; ObjectID = "WuP-9l-8AN"; */
+"WuP-9l-8AN.ibShadowedToolTip" = "Go To Beginning";
+

@@ -7,5 +7,3 @@ ZIMG.FETCH.sha256  = a9a0226bf85e0d83c41a8ebe4e3e690e1348682f6a2a7838f1b8cbff1b7
 ZIMG.EXTRACT.tarbase = zimg-release-3.0.5
 
 ZIMG.CONFIGURE.bootstrap = rm -fr aclocal.m4 autom4te.cache configure; autoreconf -fiv;
-
-ZIMG.CONFIGURE.extra += --enable-static --disable-shared

@@ -488,7 +488,8 @@ Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA라고 적으�
     <value>대기열 일시중지됨</value>
   </data>
   <data name="QueueViewModel_DelSelectedJobConfirmation" xml:space="preserve">
-    <value>선택된 작업을 삭제하시겠습니까?</value>
+    <value>Are you sure you want to delete the selected jobs?
+No encoded files will be deleted with this operation. </value>
   </data>
   <data name="QueueViewModel_JobCurrentlyRunningWarning" xml:space="preserve">
     <value>해당 인코딩은 현재 진행 중입니다. 만약 삭제할 경우, 인코딩은 중단될 것입니다. 계속하시겠습니까?</value>
@@ -809,7 +810,7 @@ Encoding 1 Job</value>
     <value>챕터 이름</value>
   </data>
   <data name="ChaptersView_ChapterNumber" xml:space="preserve">
-    <value>챕터 수</value>
+    <value>Chapter</value>
   </data>
   <data name="ChaptersView_CreateChapterMarkers" xml:space="preserve">
     <value>챕터 표시 생성</value>
@@ -1548,7 +1549,7 @@ VLC 및 MPC-HC가 지원됩니다. 다른 재생기들도 작업을 할 수 있�
     <value>이전 대기열 보관 파일을 사용할 수 있습니다.</value>
   </data>
   <data name="SourceSelection_SingleVideoFile" xml:space="preserve">
-    <value>단일 비디오 파일을 엽니다.</value>
+    <value>Open video file(s).</value>
   </data>
   <data name="SourceSelection_SourceSelection" xml:space="preserve">
     <value>원본 파일 선택</value>
@@ -1701,7 +1702,7 @@ VLC 및 MPC-HC가 지원됩니다. 다른 재생기들도 작업을 할 수 있�
     <value>HandBrake에 대해서</value>
   </data>
   <data name="SourceSelection_DropFileHere" xml:space="preserve">
-    <value>파일이나 폴더를 여기에 드롭하십시오...</value>
+    <value>Or drop a file, set of files or folder here ...</value>
   </data>
   <data name="SourceSelection_Help" xml:space="preserve">
     <value>도움말</value>
@@ -2132,15 +2133,11 @@ VLC 및 MPC-HC가 지원됩니다. 다른 재생기들도 작업을 할 수 있�
   <data name="OptionsView_RemotePortLimit" xml:space="preserve">
     <value>포트 범위는 5000에서 32767 사이만 허용됩니다.</value>
   </data>
-  <data name="OptionsView_SendFileToArgPlaceholders" xml:space="preserve">
-    <value>대체 자리표시자: {source} {destination} {exit_code}</value>
-    <comment>Note: {source}, {destination} and {exit_code} are not translatable. </comment>
-  </data>
   <data name="SourceSelection_UpdateAvailable" xml:space="preserve">
     <value>새 버전을 사용할 수 있습니다!</value>
   </data>
   <data name="About_Copyright" xml:space="preserve">
-    <value>Copyright (C) 2003-2022 The HandBrake Team</value>
+    <value>Copyright (C) 2003-2024 The HandBrake Team</value>
   </data>
   <data name="Options_LowBatteryLevel" xml:space="preserve">
     <value>저전력 단계:</value>
@@ -2394,7 +2391,7 @@ VLC 및 MPC-HC가 지원됩니다. 다른 재생기들도 작업을 할 수 있�
     <value>상태를 알 수 없습니다. 자세한 내용은 로그를 확인하십시오.</value>
   </data>
   <data name="QueueView_JobStatus_ReadError" xml:space="preserve">
-    <value>원본을 읽는 동안 오류가 발생했습니다.</value>
+    <value>Errors detected while trying to read source.</value>
   </data>
   <data name="QueueView_JobStatus_Unknown" xml:space="preserve">
     <value>알 수 없는 오류입니다. 자세한 내용은 로그를 확인하십시오.</value>
@@ -2745,5 +2742,107 @@ Encoding {1} jobs</value>
     <value>Unable to encode a preview. The application is currently busy encoding another file.
 
 To allow multiple simultaneous encodes, turn on "Process Isolation" in Tools Menu -&gt; Preferences -&gt; Advanced -&gt; Process Isolation -&gt; "Run each queued job in a separate worker process".</value>
+  </data>
+  <data name="AudioView_Quality" xml:space="preserve">
+    <value>화질</value>
+  </data>
+  <data name="AudioView_Source" xml:space="preserve">
+    <value>Source</value>
+  </data>
+  <data name="AboutView_Documentation" xml:space="preserve">
+    <value>Documentation:</value>
+  </data>
+  <data name="AboutView_GithubTracker" xml:space="preserve">
+    <value>GitHub Issue Tracker:</value>
+  </data>
+  <data name="AboutView_Website" xml:space="preserve">
+    <value>Website: </value>
+  </data>
+  <data name="MainView_PresetClone" xml:space="preserve">
+    <value>Clone Preset</value>
+  </data>
+  <data name="PresetPane_MoveDown" xml:space="preserve">
+    <value>Move Down</value>
+  </data>
+  <data name="PresetPane_MoveToBottom" xml:space="preserve">
+    <value>Move to Bottom</value>
+  </data>
+  <data name="PresetPane_MoveToTop" xml:space="preserve">
+    <value>Move to Top</value>
+  </data>
+  <data name="PresetPane_MoveUp" xml:space="preserve">
+    <value>Move Up</value>
+  </data>
+  <data name="QueueViewModel_StopButContinueJob" xml:space="preserve">
+    <value>There are currently jobs running. Would you like to complete the current jobs before stopping the queue?</value>
+  </data>
+  <data name="Options_AddExt" xml:space="preserve">
+    <value>Add Extension</value>
+  </data>
+  <data name="Options_ExcludeExtensions" xml:space="preserve">
+    <value>Exclude File Extensions:</value>
+  </data>
+  <data name="Options_ExcludeExtensionsInfo" xml:space="preserve">
+    <value>The following file extensions will be ignored when scanning a folder. The list is case insensitive. "." is not required.</value>
+  </data>
+  <data name="Options_ExtensionExists" xml:space="preserve">
+    <value>This file extension already exists in the list.</value>
+  </data>
+  <data name="Options_FileHandling" xml:space="preserve">
+    <value>File Handling (Scanning)</value>
+  </data>
+  <data name="Options_RecursiveFolderScan" xml:space="preserve">
+    <value>Recursively scan directories when using the folder scan mode.</value>
+  </data>
+  <data name="AudioView_AudioQuality" xml:space="preserve">
+    <value>Audio Track Quality</value>
+  </data>
+  <data name="AudioView_AudioTrackName" xml:space="preserve">
+    <value>Audio Track Name</value>
+  </data>
+  <data name="AudioView_BitrateSelection" xml:space="preserve">
+    <value>Audio Track Bitrate</value>
+  </data>
+  <data name="AudioView_DeleteTrack" xml:space="preserve">
+    <value>Delete this audio track</value>
+  </data>
+  <data name="AudioView_QualityMode" xml:space="preserve">
+    <value>Audio Encoder Quality Mode</value>
+  </data>
+  <data name="QueueView_AdvancedQueueDisplay" xml:space="preserve">
+    <value>Use Advanced Queue View</value>
+  </data>
+  <data name="QueueView_SimpleQueueDisplay" xml:space="preserve">
+    <value>Use Simple Queue View</value>
+  </data>
+  <data name="VideoView_LosslessEncodeOnly" xml:space="preserve">
+    <value>Lossless encoding only.</value>
+  </data>
+  <data name="MainView_HideClassicMenu" xml:space="preserve">
+    <value>Hide Classic Menu</value>
+  </data>
+  <data name="MainView_ShowClassicMenu" xml:space="preserve">
+    <value>Show Classic Menu</value>
+  </data>
+  <data name="OptionsViewVideo_UnsupportedIntelDriver" xml:space="preserve">
+    <value>(Warning: Unsupported Driver Detected! - Update Recommended)</value>
+  </data>
+  <data name="QueueSelectionView_RangeLimits" xml:space="preserve">
+    <value>Range Limits:</value>
+  </data>
+  <data name="QueueSelectionView_RangeLimitsDesc" xml:space="preserve">
+    <value>Limit the length of the titles added to the queue.</value>
+  </data>
+  <data name="QueueSelectionView_RangeLimitsEnable" xml:space="preserve">
+    <value>Enable Range Limits</value>
+  </data>
+  <data name="AddToQueue_RangeLimitError" xml:space="preserve">
+    <value>Some titles could not be added to the queue due to being outside of the selected range limits.</value>
+  </data>
+  <data name="QueueView_StartAtTime" xml:space="preserve">
+    <value>Start Later</value>
+  </data>
+  <data name="QueueView_QueueStartTime" xml:space="preserve">
+    <value>Queue Start Time:</value>
   </data>
 </root>

@@ -31,12 +31,6 @@
 /* Class = "NSSlider"; ibShadowedToolTip = "Drag to change volume."; ObjectID = "gzA-no-jdv"; */
 "gzA-no-jdv.ibShadowedToolTip" = "拖动以改变音量大小。";
 
-/* Class = "NSButton"; ibExternalAccessibilityDescription = "Full Volume"; ObjectID = "Kiv-cL-wYI"; */
-"Kiv-cL-wYI.ibExternalAccessibilityDescription" = "音量全开";
-
-/* Class = "NSButton"; ibShadowedToolTip = "Full Volume"; ObjectID = "Kiv-cL-wYI"; */
-"Kiv-cL-wYI.ibShadowedToolTip" = "音量全开";
-
 /* Class = "NSSlider"; ibExternalAccessibilityDescription = "Timeline"; ObjectID = "lBp-JT-ehn"; */
 "lBp-JT-ehn.ibExternalAccessibilityDescription" = "时间轴";
 

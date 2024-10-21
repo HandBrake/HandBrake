@@ -1,6 +1,6 @@
 /* hbffmpeg.h
 
-   Copyright (c) 2003-2022 HandBrake Team
+   Copyright (c) 2003-2024 HandBrake Team
    This file is part of the HandBrake source code
    Homepage: <http://handbrake.fr/>.
    It may be used under the terms of the GNU General Public License v2.
@@ -28,7 +28,6 @@
 
 #define HB_FFMPEG_THREADS_AUTO (-1) // let hb_avcodec_open() decide thread_count
 
-void hb_avcodec_init(void);
 int  hb_avcodec_open(AVCodecContext *, const AVCodec *, AVDictionary **, int);
 void hb_avcodec_free_context(AVCodecContext **avctx);
 const char* const* hb_av_preset_get_names(int encoder);
@@ -63,8 +62,7 @@ static const char* const hb_vce_preset_names[] = { "speed", "balanced", "quality
 
 void            hb_video_buffer_to_avframe(AVFrame *frame, hb_buffer_t **buf);
 hb_buffer_t   * hb_avframe_to_video_buffer(AVFrame *frame,
-                                           AVRational time_base,
-                                           int zero_copy);
+                                           AVRational time_base);
 void            hb_avframe_set_video_buffer_flags(hb_buffer_t * buf,
                                            AVFrame *frame,
                                            AVRational time_base);
@@ -73,5 +71,9 @@ int hb_av_encoder_present(int encoder);
 const char* const* hb_av_profile_get_names(int encoder);
 const char* const* hb_av_level_get_names(int encoder);
 const int* hb_av_get_pix_fmts(int encoder);
+
+int hb_av_can_use_zscale(enum AVPixelFormat pix_fmt,
+                         int in_width, int in_height,
+                         int out_width, int out_height);
 
 #endif // HANDBRAKE_FFMPEG_H

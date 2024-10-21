@@ -1,4 +1,4 @@
-.PHONY: report.main report.gcc report.modules report.var report.true report.help
+.PHONY: report.main report.gcc report.metal report.modules report.var report.true report.help
 .PHONY: shell.run
 
 report.modules::
@@ -8,6 +8,9 @@ report.main:
 
 report.gcc:
 	@$(MAKE) report.true REPORT=gcc
+
+report.metal:
+	@$(MAKE) report.true REPORT=metal
 
 report.var:
 	@$(MAKE) report.true REPORT=var
@@ -28,12 +31,13 @@ endef
 
 REPORT.help.main = global general vars
 REPORT.help.gcc  = global gcc vars (inherited by module GCC)
+REPORT.help.metal = global metal vars (inherited by module Metal)
 REPORT.help.var  = usage: make report.var name=VARNAME
 
 report.help:
 	@echo "  AVAILABLE MAKEFILE VARS REPORTS"
 	@echo "  ----------------------------------------------------------------"
-	$(foreach n,main gcc var,$(call REPORT.help.item.global,$n))
+	$(foreach n,main gcc metal var,$(call REPORT.help.item.global,$n))
 	$(foreach n,$(MODULES.NAMES),$(call REPORT.help.item.module,$n))
 
 ## diagnostic aid when troubleshooting build issues

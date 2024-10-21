@@ -10,6 +10,7 @@
 namespace HandBrakeWPF.Services.Scan.Factories
 {
     using System;
+    using System.Collections.Generic;
     using System.IO;
 
     using HandBrake.App.Core.Model;
@@ -28,18 +29,17 @@ namespace HandBrakeWPF.Services.Scan.Factories
         public Title CreateTitle(SourceTitle title, int mainFeature)
         {
             string driveLabel = null;
-            if ("VIDEO_TS".Equals(title.Name, StringComparison.CurrentCultureIgnoreCase))
+
+            foreach (DriveInformation info in DriveUtilities.GetDrives())
             {
-                foreach (DriveInformation info in DriveUtilities.GetDrives())
+                if (title.Path.StartsWith(info.RootDirectory, StringComparison.CurrentCultureIgnoreCase))
                 {
-                    if (title.Path.StartsWith(info.RootDirectory, StringComparison.CurrentCultureIgnoreCase))
-                    {
-                        driveLabel = info.VolumeLabel;
-                        break;
-                    }
+                    driveLabel = info.VolumeLabel?.Trim();
+                    break;
                 }
             }
-            else if (title.Type == 0 || title.Type == 1)
+
+            if (string.IsNullOrEmpty(driveLabel))
             {
                 driveLabel = Path.GetFileNameWithoutExtension(title.Path) ?? title.Path;
             }
@@ -47,6 +47,7 @@ namespace HandBrakeWPF.Services.Scan.Factories
             Title converted = new Title
             {
                 TitleNumber = title.Index,
+                KeepDuplicateTitles = title.KeepDuplicateTitles,
                 Duration = new TimeSpan(0, title.Duration.Hours, title.Duration.Minutes, title.Duration.Seconds),
                 Resolution = new Size(title.Geometry.Width, title.Geometry.Height),
                 AngleCount = title.AngleCount,
@@ -139,20 +140,10 @@ namespace HandBrakeWPF.Services.Scan.Factories
                 currentSubtitleTrack++;
             }
 
-            SourceMetadata metadata = title.MetaData;
+            Dictionary<string, string> metadata = title.MetaData;
             if (title.MetaData != null)
             {
-                converted.Metadata = new Metadata(
-                    metadata.AlbumArtist,
-                    metadata.Album,
-                    metadata.Artist,
-                    metadata.Comment,
-                    metadata.Composer,
-                    metadata.Description,
-                    metadata.Genre,
-                    metadata.LongDescription,
-                    metadata.Name,
-                    metadata.ReleaseDate);
+                converted.Metadata = metadata;
             }
 
             return converted;

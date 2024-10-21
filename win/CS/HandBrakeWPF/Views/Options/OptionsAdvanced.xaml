@@ -103,14 +103,14 @@
 
                                     <TextBlock Text="{Binding}" />
 
-
-                                    <Image Width="16" Height="16"  Source="../Images/close64.png" Grid.Column="1">
-                                        <b:Interaction.Triggers>
-                                            <b:EventTrigger EventName="MouseDown">
-                                                <b:InvokeCommandAction Command="{Binding DataContext.RemoveExtensionCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListBox}}}" CommandParameter="{Binding}" />
-                                            </b:EventTrigger>
-                                        </b:Interaction.Triggers>
-                                    </Image>
+                                    <Button Style="{StaticResource TransparentButtonStyle}" 
+                                            Grid.Column="1"
+                                            Command="{Binding DataContext.RemoveExtensionCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}" 
+                                            CommandParameter="{Binding}">
+                                        <Button.Content>
+                                            <Image Width="16" Height="16" Margin="10,0,10,0" Source="../Images/close64.png" />
+                                        </Button.Content>
+                                    </Button>
                                 </Grid>
 
                             </DataTemplate>
@@ -145,6 +145,7 @@
                     <TextBox x:Name="MinTitleLength" VerticalAlignment="Center" Text="{Binding MinLength}"  Width="120"/>
                     <!-- Find a control for this-->
                 </StackPanel>
+                <CheckBox Content="{x:Static Properties:Resources.Options_KeepDuplicateTitles}" IsChecked="{Binding KeepDuplicateTitles}" Margin="0,8,0,0" />
             </StackPanel>
         </StackPanel>
 

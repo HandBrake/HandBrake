@@ -1,0 +1,18 @@
+/* Class = "NSButton"; ibExternalAccessibilityDescription = "Previous Preview Image"; ObjectID = "1o6-MG-Jbu"; */
+"1o6-MG-Jbu.ibExternalAccessibilityDescription" = "이전 미리보기 이미지";
+
+/* Class = "NSButton"; ibShadowedToolTip = "Previous Preview Image"; ObjectID = "1o6-MG-Jbu"; */
+"1o6-MG-Jbu.ibShadowedToolTip" = "이전 미리보기 이미지";
+
+/* Class = "NSButton"; ibExternalAccessibilityDescription = "Next Preview Image"; ObjectID = "5po-M6-Hqa"; */
+"5po-M6-Hqa.ibExternalAccessibilityDescription" = "다음 미리보기 이미지";
+
+/* Class = "NSButton"; ibShadowedToolTip = "Next Preview Image"; ObjectID = "5po-M6-Hqa"; */
+"5po-M6-Hqa.ibShadowedToolTip" = "다음 미리보기 이미지";
+
+/* Class = "NSButtonCell"; title = "‹"; ObjectID = "EWx-of-C7c"; */
+"EWx-of-C7c.title" = "‹";
+
+/* Class = "NSButtonCell"; title = "›"; ObjectID = "Izx-9B-XA3"; */
+"Izx-9B-XA3.title" = "›";
+

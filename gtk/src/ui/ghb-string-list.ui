@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <requires lib="gtk" version="4.0"/>
+  <template class="GhbStringList" parent="GtkBox">
+    <property name="hexpand">False</property>
+    <property name="orientation">horizontal</property>
+    <property name="spacing">2</property>
+    <child>
+      <object class="GtkScrolledWindow">
+        <property name="css-classes">frame</property>
+        <property name="hscrollbar-policy">never</property>
+        <property name="height-request">110</property>
+        <property name="width-request">200</property>
+        <child>
+          <object class="GtkListBox" id="list_box">
+            <property name="hexpand">True</property>
+          </object>
+        </child>
+      </object>
+    </child>
+    <child>
+      <object class="GtkBox">
+        <property name="orientation">vertical</property>
+        <child>
+          <object class="GtkButton">
+            <property name="action-name">string-list.add</property>
+            <property name="css-classes">flat</property>
+            <property name="tooltip-text" translatable="yes">Add an item</property>
+            <property name="icon-name">list-add-symbolic</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkButton">
+            <property name="action-name">string-list.remove</property>
+            <property name="css-classes">flat</property>
+            <property name="tooltip-text" translatable="yes">Remove item</property>
+            <property name="icon-name">list-remove-symbolic</property>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+</interface>

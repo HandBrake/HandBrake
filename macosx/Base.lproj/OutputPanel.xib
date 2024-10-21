@@ -1,67 +1,69 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="14295.6" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="32700.99.1234" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="macosx"/>
-        <development version="8000" identifier="xcode"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14295.6"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="22689"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="HBOutputPanelController">
             <connections>
-                <outlet property="textView" destination="20" id="23"/>
+                <outlet property="textView" destination="DNF-4D-vly" id="4Tm-EE-xW4"/>
                 <outlet property="window" destination="5" id="41"/>
             </connections>
         </customObject>
         <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
         <customObject id="-3" userLabel="Application" customClass="NSObject"/>
-        <window title="Activity" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" hidesOnDeactivate="YES" releasedWhenClosed="NO" visibleAtLaunch="NO" frameAutosaveName="OutputPanelFrame" animationBehavior="default" id="5" userLabel="OutputPanel" customClass="NSPanel">
+        <window title="Activity" separatorStyle="line" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" frameAutosaveName="OutputPanelFrame" animationBehavior="default" id="5" userLabel="OutputPanel">
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
             <rect key="contentRect" x="74" y="449" width="378" height="439"/>
-            <rect key="screenRect" x="0.0" y="0.0" width="2560" height="1418"/>
+            <rect key="screenRect" x="0.0" y="0.0" width="1920" height="1055"/>
             <value key="minSize" type="size" width="214.50200000000001" height="107"/>
             <view key="contentView" wantsLayer="YES" id="6">
                 <rect key="frame" x="0.0" y="0.0" width="378" height="439"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <scrollView horizontalLineScroll="0.0" horizontalPageScroll="0.0" verticalLineScroll="0.0" verticalPageScroll="0.0" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" id="19">
-                        <rect key="frame" x="-1" y="-1" width="380" height="441"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <clipView key="contentView" drawsBackground="NO" id="mnc-sf-Cwe">
-                            <rect key="frame" x="1" y="1" width="378" height="439"/>
+                    <scrollView borderType="none" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" translatesAutoresizingMaskIntoConstraints="NO" id="OEX-5a-Fme">
+                        <rect key="frame" x="0.0" y="0.0" width="378" height="439"/>
+                        <clipView key="contentView" drawsBackground="NO" id="XG1-pU-Huf">
+                            <rect key="frame" x="0.0" y="0.0" width="378" height="439"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
-                                <textView editable="NO" importsGraphics="NO" richText="NO" verticallyResizable="YES" findStyle="bar" incrementalSearchingEnabled="YES" allowsNonContiguousLayout="YES" id="20">
+                                <textView wantsLayer="YES" editable="NO" importsGraphics="NO" richText="NO" verticallyResizable="YES" findStyle="bar" allowsCharacterPickerTouchBarItem="NO" textCompletion="NO" id="DNF-4D-vly">
                                     <rect key="frame" x="0.0" y="0.0" width="378" height="439"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                    <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                     <size key="minSize" width="378" height="439"/>
-                                    <size key="maxSize" width="743" height="10000000"/>
-                                    <color key="insertionPointColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                                    <size key="maxSize" width="385" height="10000000"/>
                                     <connections>
-                                        <outlet property="delegate" destination="-2" id="21"/>
-                                        <outlet property="menu" destination="11" id="22"/>
+                                        <outlet property="delegate" destination="-2" id="q2h-MX-SUH"/>
+                                        <outlet property="menu" destination="11" id="42L-4o-gQ6"/>
                                     </connections>
                                 </textView>
                             </subviews>
                         </clipView>
-                        <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="YES" id="40">
-                            <rect key="frame" x="-100" y="-100" width="87" height="18"/>
+                        <scroller key="horizontalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="YES" id="ZLN-1f-zTg">
+                            <rect key="frame" x="-100" y="-100" width="240" height="16"/>
                             <autoresizingMask key="autoresizingMask"/>
                         </scroller>
-                        <scroller key="verticalScroller" verticalHuggingPriority="750" horizontal="NO" id="39">
-                            <rect key="frame" x="363" y="1" width="16" height="439"/>
+                        <scroller key="verticalScroller" wantsLayer="YES" verticalHuggingPriority="750" horizontal="NO" id="aGd-Ly-rdj">
+                            <rect key="frame" x="362" y="0.0" width="16" height="439"/>
                             <autoresizingMask key="autoresizingMask"/>
                         </scroller>
                     </scrollView>
                 </subviews>
+                <constraints>
+                    <constraint firstAttribute="trailing" secondItem="OEX-5a-Fme" secondAttribute="trailing" id="1QG-v4-qe6"/>
+                    <constraint firstAttribute="bottom" secondItem="OEX-5a-Fme" secondAttribute="bottom" id="3w1-jW-OZZ"/>
+                    <constraint firstItem="OEX-5a-Fme" firstAttribute="leading" secondItem="6" secondAttribute="leading" id="Ezc-Gm-NB0"/>
+                    <constraint firstItem="OEX-5a-Fme" firstAttribute="top" secondItem="6" secondAttribute="top" id="xCo-Am-ZbE"/>
+                </constraints>
             </view>
             <connections>
                 <outlet property="delegate" destination="-2" id="17"/>
             </connections>
-            <point key="canvasLocation" x="177" y="441.5"/>
+            <point key="canvasLocation" x="153" y="174.5"/>
         </window>
         <menu title="Menu" id="11" userLabel="ContextMenu">
             <items>
