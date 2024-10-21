@@ -124,6 +124,15 @@
     _allowMP3Passthru = allowMP3Passthru;
 }
 
+- (void)setAllowVorbisPassthru:(BOOL)allowVorbisPassthru
+{
+    if (allowVorbisPassthru != _allowVorbisPassthru)
+    {
+        [[self.undo prepareWithInvocationTarget:self] setAllowVorbisPassthru:_allowVorbisPassthru];
+    }
+    _allowVorbisPassthru = allowVorbisPassthru;
+}
+
 - (void)setAllowOpusPassthru:(BOOL)allowOpusPassthru
 {
     if (allowOpusPassthru != _allowOpusPassthru)
@@ -140,6 +149,15 @@
         [[self.undo prepareWithInvocationTarget:self] setAllowTrueHDPassthru:_allowTrueHDPassthru];
     }
     _allowTrueHDPassthru = allowTrueHDPassthru;
+}
+
+- (void)setAllowALACPassthru:(BOOL)allowALACPassthru
+{
+    if (allowALACPassthru != _allowALACPassthru)
+    {
+        [[self.undo prepareWithInvocationTarget:self] setAllowALACPassthru:_allowALACPassthru];
+    }
+    _allowALACPassthru = allowALACPassthru;
 }
 
 - (void)setAllowFLACPassthru:(BOOL)allowFLACPassthru
@@ -250,6 +268,9 @@
                 case HB_ACODEC_EAC3_PASS:
                     self.allowEAC3Passthru = YES;
                     break;
+                case HB_ACODEC_ALAC_PASS:
+                    self.allowALACPassthru = YES;
+                    break;
                 case HB_ACODEC_FLAC_PASS:
                     self.allowFLACPassthru = YES;
                     break;
@@ -258,6 +279,9 @@
                     break;
                 case HB_ACODEC_MP3_PASS:
                     self.allowMP3Passthru = YES;
+                    break;
+                case HB_ACODEC_VORBIS_PASS:
+                    self.allowVorbisPassthru = YES;
                     break;
                 case HB_ACODEC_OPUS_PASS:
                     self.allowOpusPassthru = YES;
@@ -369,6 +393,10 @@
     {
         [copyMask addObject:@(hb_audio_encoder_get_short_name(HB_ACODEC_MP3_PASS))];
     }
+    if (self.allowVorbisPassthru)
+    {
+        [copyMask addObject:@(hb_audio_encoder_get_short_name(HB_ACODEC_VORBIS_PASS))];
+    }
     if (self.allowOpusPassthru)
     {
         [copyMask addObject:@(hb_audio_encoder_get_short_name(HB_ACODEC_OPUS_PASS))];
@@ -376,6 +404,10 @@
     if (self.allowTrueHDPassthru)
     {
         [copyMask addObject:@(hb_audio_encoder_get_short_name(HB_ACODEC_TRUEHD_PASS))];
+    }
+    if (self.allowALACPassthru)
+    {
+        [copyMask addObject:@(hb_audio_encoder_get_short_name(HB_ACODEC_ALAC_PASS))];
     }
     if (self.allowFLACPassthru)
     {

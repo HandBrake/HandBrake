@@ -489,6 +489,11 @@ ghb_preset_to_settings(GhbValue *settings, GhbValue *preset)
                 case HB_ACODEC_EAC3_PASS:
                     ghb_dict_set_bool(settings, "AudioAllowEAC3Pass", 1);
                     break;
+                case HB_ACODEC_FFALAC:
+                case HB_ACODEC_FFALAC24:
+                case HB_ACODEC_ALAC_PASS:
+                    ghb_dict_set_bool(settings, "AudioAllowALACPass", 1);
+                    break;
                 case HB_ACODEC_FFFLAC:
                 case HB_ACODEC_FFFLAC24:
                 case HB_ACODEC_FLAC_PASS:
@@ -497,6 +502,10 @@ ghb_preset_to_settings(GhbValue *settings, GhbValue *preset)
                 case HB_ACODEC_FFTRUEHD:
                 case HB_ACODEC_TRUEHD_PASS:
                     ghb_dict_set_bool(settings, "AudioAllowTRUEHDPass", 1);
+                    break;
+                case HB_ACODEC_VORBIS:
+                case HB_ACODEC_VORBIS_PASS:
+                    ghb_dict_set_bool(settings, "AudioAllowOPUSPass", 1);
                     break;
                 case HB_ACODEC_OPUS:
                 case HB_ACODEC_OPUS_PASS:
@@ -1730,6 +1739,10 @@ GhbValue* ghb_create_copy_mask(GhbValue *settings)
     {
         ghb_array_append(copy_mask, ghb_string_value_new("copy:eac3"));
     }
+    if (ghb_dict_get_bool(settings, "AudioAllowALACPass"))
+    {
+        ghb_array_append(copy_mask, ghb_string_value_new("copy:alac"));
+    }
     if (ghb_dict_get_bool(settings, "AudioAllowFLACPass"))
     {
         ghb_array_append(copy_mask, ghb_string_value_new("copy:flac"));
@@ -1737,6 +1750,10 @@ GhbValue* ghb_create_copy_mask(GhbValue *settings)
     if (ghb_dict_get_bool(settings, "AudioAllowTRUEHDPass"))
     {
         ghb_array_append(copy_mask, ghb_string_value_new("copy:truehd"));
+    }
+    if (ghb_dict_get_bool(settings, "AudioAllowVORBISPass"))
+    {
+        ghb_array_append(copy_mask, ghb_string_value_new("copy:vorbis"));
     }
     if (ghb_dict_get_bool(settings, "AudioAllowOPUSPass"))
     {

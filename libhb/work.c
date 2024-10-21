@@ -350,18 +350,17 @@ hb_work_object_t* hb_video_encoder(hb_handle_t *h, int vcodec)
 
 hb_work_object_t* hb_audio_encoder(hb_handle_t *h, int codec)
 {
-    if (codec & HB_ACODEC_FF_MASK)
-    {
-        return hb_get_work(h, WORK_ENCAVCODEC_AUDIO);
-    }
     switch (codec)
     {
-        case HB_ACODEC_AC3:
         case HB_ACODEC_LAME:    return hb_get_work(h, WORK_ENCAVCODEC_AUDIO);
         case HB_ACODEC_VORBIS:  return hb_get_work(h, WORK_ENCVORBIS);
         case HB_ACODEC_CA_AAC:  return hb_get_work(h, WORK_ENC_CA_AAC);
         case HB_ACODEC_CA_HAAC: return hb_get_work(h, WORK_ENC_CA_HAAC);
         default:                break;
+    }
+    if (codec & HB_ACODEC_FF_MASK)
+    {
+        return hb_get_work(h, WORK_ENCAVCODEC_AUDIO);
     }
     return NULL;
 }

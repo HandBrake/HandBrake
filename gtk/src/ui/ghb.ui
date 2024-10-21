@@ -5103,6 +5103,21 @@ This permits TrueHD passthru to be selected when automatic passthru selection is
                       </object>
                     </child>
                     <child>
+                      <object class="GtkCheckButton" id="AudioAllowALACPass">
+                        <property name="label" translatable="yes">ALAC</property>
+                        <property name="focusable">1</property>
+                        <property name="tooltip-text" translatable="yes">Enable this if your playback device supports ALAC.
+This permits ALAC passthru to be selected when automatic passthru selection is enabled.</property>
+                        <property name="halign">start</property>
+                        <property name="active">1</property>
+                        <signal name="toggled" handler="audio_passthru_widget_changed_cb" swapped="no"/>
+                        <layout>
+                          <property name="column">2</property>
+                          <property name="row">3</property>
+                        </layout>
+                      </object>
+                    </child>
+                    <child>
                       <object class="GtkCheckButton" id="AudioAllowFLACPass">
                         <property name="label" translatable="yes">FLAC</property>
                         <property name="focusable">1</property>
@@ -5112,8 +5127,8 @@ This permits FLAC passthru to be selected when automatic passthru selection is e
                         <property name="active">1</property>
                         <signal name="toggled" handler="audio_passthru_widget_changed_cb" swapped="no"/>
                         <layout>
-                          <property name="column">2</property>
-                          <property name="row">3</property>
+                          <property name="column">1</property>
+                          <property name="row">4</property>
                         </layout>
                       </object>
                     </child>
@@ -5127,8 +5142,23 @@ This permits AAC passthru to be selected when automatic passthru selection is en
                         <property name="active">1</property>
                         <signal name="toggled" handler="audio_passthru_widget_changed_cb" swapped="no"/>
                         <layout>
-                          <property name="column">1</property>
+                          <property name="column">2</property>
                           <property name="row">4</property>
+                        </layout>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkCheckButton" id="AudioAllowVORBISPass">
+                        <property name="label" translatable="yes">Vorbis</property>
+                        <property name="focusable">1</property>
+                        <property name="tooltip-text" translatable="yes">Enable this if your playback device supports Vorbis.
+This permits Vorbis passthru to be selected when automatic passthru selection is enabled.</property>
+                        <property name="halign">start</property>
+                        <property name="active">1</property>
+                        <signal name="toggled" handler="audio_passthru_widget_changed_cb" swapped="no"/>
+                        <layout>
+                          <property name="column">1</property>
+                          <property name="row">5</property>
                         </layout>
                       </object>
                     </child>
@@ -5143,7 +5173,7 @@ This permits Opus passthru to be selected when automatic passthru selection is e
                         <signal name="toggled" handler="audio_passthru_widget_changed_cb" swapped="no"/>
                         <layout>
                           <property name="column">2</property>
-                          <property name="row">4</property>
+                          <property name="row">5</property>
                         </layout>
                       </object>
                     </child>

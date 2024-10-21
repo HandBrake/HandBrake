@@ -40,6 +40,7 @@ FFMPEG.CONFIGURE.extra = \
     --enable-encoder=aac \
     --enable-encoder=ac3 \
     --enable-encoder=eac3 \
+    --enable-encoder=alac \
     --enable-encoder=flac \
     --enable-encoder=mpeg2video \
     --enable-encoder=mpeg4 \

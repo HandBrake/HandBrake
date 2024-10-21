@@ -579,6 +579,10 @@ static int avformatInit( hb_mux_object_t * m )
             case HB_ACODEC_OPUS:
                 track->st->codecpar->codec_id = AV_CODEC_ID_OPUS;
                 break;
+            case HB_ACODEC_FFALAC:
+            case HB_ACODEC_FFALAC24:
+                track->st->codecpar->codec_id = AV_CODEC_ID_ALAC;
+                break;
             case HB_ACODEC_FFFLAC:
             case HB_ACODEC_FFFLAC24:
                 track->st->codecpar->codec_id = AV_CODEC_ID_FLAC;
