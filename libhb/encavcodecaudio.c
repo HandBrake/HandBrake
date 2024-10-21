@@ -121,6 +121,22 @@ static int encavcodecaInit(hb_work_object_t *w, hb_job_t *job)
                 channel_layout  = AV_CH_LAYOUT_5POINT1_BACK;
             break;
 
+        case HB_ACODEC_FFALAC:
+        case HB_ACODEC_FFALAC24:
+            codec_id = AV_CODEC_ID_ALAC;
+            switch (audio->config.out.codec)
+            {
+                case HB_ACODEC_FFALAC24:
+                    sample_fmt          = AV_SAMPLE_FMT_S32;
+                    bits_per_raw_sample = 24;
+                    break;
+                default:
+                    sample_fmt          = AV_SAMPLE_FMT_S16;
+                    bits_per_raw_sample = 16;
+                    break;
+            }
+            break;
+
         case HB_ACODEC_FFFLAC:
         case HB_ACODEC_FFFLAC24:
             codec_id = AV_CODEC_ID_FLAC;

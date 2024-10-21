@@ -80,6 +80,8 @@ enum
     HB_GID_VCODEC_AV1_NVENC,
     HB_GID_VCODEC_AV1_VCE,
     HB_GID_VCODEC_FFV1,
+    HB_GID_ACODEC_ALAC,
+    HB_GID_ACODEC_ALAC_PASS,
     HB_GID_ACODEC_AAC,
     HB_GID_ACODEC_AAC_HE,
     HB_GID_ACODEC_AAC_PASS,
@@ -446,6 +448,9 @@ hb_encoder_internal_t hb_audio_encoders[]  =
     { { "FLAC 16-bit",        "flac16",     "FLAC 16-bit (libavcodec)",    HB_ACODEC_FFFLAC,      HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 0, 1, HB_GID_ACODEC_FLAC,       },
     { { "FLAC 24-bit",        "flac24",     "FLAC 24-bit (libavcodec)",    HB_ACODEC_FFFLAC24,    HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 0, 1, HB_GID_ACODEC_FLAC,       },
     { { "FLAC Passthru",      "copy:flac",  "FLAC Passthru",               HB_ACODEC_FLAC_PASS,   HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 0, 1, HB_GID_ACODEC_FLAC_PASS,  },
+    { { "ALAC 16-bit",        "alac16",     "ALAC 16-bit (libavcodec)",    HB_ACODEC_FFALAC,      HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 0, 1, HB_GID_ACODEC_ALAC,       },
+    { { "ALAC 24-bit",        "alac24",     "ALAC 24-bit (libavcodec)",    HB_ACODEC_FFALAC24,    HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 0, 1, HB_GID_ACODEC_ALAC,       },
+    { { "ALAC Passthru",      "copy:alac",  "ALAC Passthru",               HB_ACODEC_ALAC_PASS,   HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 0, 1, HB_GID_ACODEC_ALAC_PASS,  },
     { { "Auto Passthru",      "copy",       "Auto Passthru",               HB_ACODEC_AUTO_PASS,   HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 0, 1, HB_GID_ACODEC_AUTO_PASS,  },
 };
 int hb_audio_encoders_count = sizeof(hb_audio_encoders) / sizeof(hb_audio_encoders[0]);
@@ -475,6 +480,10 @@ static int hb_audio_encoder_is_enabled(int encoder)
 
         case HB_ACODEC_AC3:
             return avcodec_find_encoder(AV_CODEC_ID_AC3) != NULL;
+
+        case HB_ACODEC_FFALAC:
+        case HB_ACODEC_FFALAC24:
+            return avcodec_find_encoder(AV_CODEC_ID_ALAC) != NULL;
 
         case HB_ACODEC_FFEAC3:
             return avcodec_find_encoder(AV_CODEC_ID_EAC3) != NULL;
@@ -1134,6 +1143,8 @@ int hb_audio_bitrate_get_default(uint32_t codec, int samplerate, int mixdown)
 
     switch (codec)
     {
+        case HB_ACODEC_FFALAC:
+        case HB_ACODEC_FFALAC24:
         case HB_ACODEC_FFFLAC:
         case HB_ACODEC_FFFLAC24:
         case HB_ACODEC_FFTRUEHD:
@@ -1322,6 +1333,8 @@ void hb_audio_bitrate_get_limits(uint32_t codec, int samplerate, int mixdown,
     switch (codec)
     {
         // Bitrates don't apply to "lossless" audio
+        case HB_ACODEC_FFALAC:
+        case HB_ACODEC_FFALAC24:
         case HB_ACODEC_FFFLAC:
         case HB_ACODEC_FFFLAC24:
         case HB_ACODEC_FFTRUEHD:
@@ -2188,6 +2201,14 @@ void hb_audio_compression_get_limits(uint32_t codec, float *low, float *high,
 {
     switch (codec)
     {
+        case HB_ACODEC_FFALAC:
+        case HB_ACODEC_FFALAC24:
+            *direction   = 0;
+            *granularity = 1.;
+            *high        = 2.;
+            *low         = 0.;
+            break;
+
         case HB_ACODEC_FFFLAC:
         case HB_ACODEC_FFFLAC24:
             *direction   = 0;
@@ -2234,6 +2255,10 @@ float hb_audio_compression_get_default(uint32_t codec)
 {
     switch (codec)
     {
+        case HB_ACODEC_FFALAC:
+        case HB_ACODEC_FFALAC24:
+            return 2.;
+
         case HB_ACODEC_FFFLAC:
         case HB_ACODEC_FFFLAC24:
             return 5.;
@@ -2370,6 +2395,8 @@ int hb_mixdown_has_codec_support(int mixdown, uint32_t codec)
     switch (codec)
     {
         case HB_ACODEC_VORBIS:
+        case HB_ACODEC_FFALAC:
+        case HB_ACODEC_FFALAC24:
         case HB_ACODEC_FFFLAC:
         case HB_ACODEC_FFFLAC24:
         case HB_ACODEC_OPUS:
@@ -2538,6 +2565,8 @@ int hb_mixdown_get_default(uint32_t codec, uint64_t layout)
     switch (codec)
     {
         // the FLAC encoder defaults to the best mixdown up to 7.1
+        case HB_ACODEC_FFALAC:
+        case HB_ACODEC_FFALAC24:
         case HB_ACODEC_FFFLAC:
         case HB_ACODEC_FFFLAC24:
         case HB_ACODEC_OPUS:
@@ -2790,6 +2819,10 @@ int hb_audio_encoder_get_fallback_for_passthru(int passthru)
     const hb_encoder_t *audio_encoder = NULL;
     switch (passthru)
     {
+        case HB_ACODEC_ALAC_PASS:
+            gid = HB_GID_ACODEC_ALAC;
+            break;
+
         case HB_ACODEC_AAC_PASS:
             gid = HB_GID_ACODEC_AAC;
             break;
