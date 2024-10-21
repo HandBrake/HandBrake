@@ -123,6 +123,8 @@ namespace HandBrakeWPF.ViewModels
         private bool recursiveFolderScan;
         private bool keepDuplicateTitles;
 
+        private bool maxDurationEnabled;
+
         public OptionsViewModel(
             IUserSettingService userSettingService,
             IUpdateService updateService,
@@ -838,6 +840,26 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
+        public bool MaxDurationEnabled
+        {
+            get => this.maxDurationEnabled;
+            set
+            {
+                if (value == this.maxDurationEnabled)
+                {
+                    return;
+                }
+
+                if (!value)
+                {
+                    MaxLength = 0;
+                }
+
+                this.maxDurationEnabled = value;
+                this.OnPropertyChanged();
+            }
+        }
+
         public bool MinimiseToTray
         {
             get => this.minimiseToTray;
@@ -1520,6 +1542,10 @@ namespace HandBrakeWPF.ViewModels
             // Min Title Length
             this.MinLength = this.userSettingService.GetUserSetting<int>(UserSettingConstants.MinScanDuration);
             this.MaxLength = this.userSettingService.GetUserSetting<int>(UserSettingConstants.MaxScanDuration);
+            if (this.MaxLength > 0)
+            {
+                this.MaxDurationEnabled = true;
+            }
 
             // Use dvdnav
             this.DisableLibdvdNav = userSettingService.GetUserSetting<bool>(UserSettingConstants.DisableLibDvdNav);
