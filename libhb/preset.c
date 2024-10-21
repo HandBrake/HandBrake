@@ -3624,6 +3624,8 @@ static void import_audio_0_0_0(hb_value_t *preset)
         hb_value_array_append(copy, hb_value_string("copy:mp3"));
     if (hb_value_get_bool(hb_dict_get(preset, "AudioAllowAACPass")))
         hb_value_array_append(copy, hb_value_string("copy:aac"));
+    if (hb_value_get_bool(hb_dict_get(preset, "AudioAllowVORBISPass")))
+        hb_value_array_append(copy, hb_value_string("copy:vorbis"));
     if (hb_value_get_bool(hb_dict_get(preset, "AudioAllowOPUSPass")))
         hb_value_array_append(copy, hb_value_string("copy:opus"));
     if (hb_value_get_bool(hb_dict_get(preset, "AudioAllowAC3Pass")))

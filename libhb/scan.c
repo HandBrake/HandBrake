@@ -1660,6 +1660,9 @@ static void LookForAudio(hb_scan_t *scan, hb_title_t * title, hb_audio_t * audio
                 case HB_ACODEC_MP3:
                     codec_name = "MP3";
                     break;
+                case AV_CODEC_ID_VORBIS:
+                    codec_name = "Vorbis";
+                    break;
                 default:
                     codec_name = "Unknown (libav)";
                     break;
