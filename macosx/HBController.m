@@ -680,12 +680,17 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
 
     if (canScan)
     {
-        NSUInteger hb_num_previews = [NSUserDefaults.standardUserDefaults integerForKey:HBPreviewsNumber];
-        NSUInteger min_title_duration_seconds = [NSUserDefaults.standardUserDefaults integerForKey:HBMinTitleScanSeconds];
+        NSUInteger previewsCount = [NSUserDefaults.standardUserDefaults integerForKey:HBPreviewsNumber];
+        NSUInteger minTitleDuration = [NSUserDefaults.standardUserDefaults boolForKey:HBMinTitleScan] ?
+                                       [NSUserDefaults.standardUserDefaults integerForKey:HBMinTitleScanSeconds] : 0;
+        NSUInteger maxTitleDuration = [NSUserDefaults.standardUserDefaults boolForKey:HBMaxTitleScan] ?
+                                       [NSUserDefaults.standardUserDefaults integerForKey:HBMaxTitleScanSeconds] : 0;
 
         [self.core scanURLs:fileURLs
                  titleIndex:index
-                   previews:hb_num_previews minDuration:min_title_duration_seconds
+                   previews:previewsCount
+                minDuration:minTitleDuration
+                maxDuration:maxTitleDuration
                keepPreviews:YES
             hardwareDecoder:[NSUserDefaults.standardUserDefaults boolForKey:HBUseHardwareDecoder]
             keepDuplicateTitles:keepDuplicateTitles

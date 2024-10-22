@@ -202,6 +202,7 @@ NSString * const HBQueueWorkerItemNotificationItemKey = @"HBQueueWorkerItemNotif
             titleIndex:item.job.titleIdx
               previews:10
            minDuration:0
+           maxDuration:0
           keepPreviews:NO
        hardwareDecoder:[NSUserDefaults.standardUserDefaults boolForKey:HBUseHardwareDecoder]
        keepDuplicateTitles:item.job.keepDuplicateTitles
