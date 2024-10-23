@@ -198,7 +198,8 @@ FFMPEG.CONFIGURE.extra += \
       --enable-hwaccel=h264_d3d11va2 \
       --enable-hwaccel=hevc_d3d11va2 \
       --enable-encoder=h264_mf \
-      --enable-encoder=hevc_mf
+      --enable-encoder=hevc_mf \
+      --enable-encoder=av1_mf
 endif
 
 ## enable compile verbosity
