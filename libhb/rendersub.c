@@ -15,6 +15,21 @@
 
 #define ABS(a) ((a) > 0 ? (a) : (-(a)))
 
+typedef struct hb_rect_s
+{
+    int x;
+    int y;
+    int width;
+    int height;
+} hb_rect_t;
+
+typedef struct hb_rect_vec_s
+{
+    hb_rect_t *rects;
+    int count;
+    int size;
+} hb_rect_vec_t;
+
 struct hb_filter_private_s
 {
     // Common
@@ -36,7 +51,8 @@ struct hb_filter_private_s
     ASS_Renderer      *renderer;
     ASS_Track         *ssa_track;
     uint8_t            script_initialized;
-    hb_buffer_t       *last_render;
+    hb_buffer_list_t   last_renders;
+    hb_rect_vec_t      last_rects;
 
     // SRT
     int                line;
@@ -114,6 +130,112 @@ hb_filter_object_t hb_filter_render_sub =
     .work          = hb_rendersub_work,
     .close         = hb_rendersub_close,
 };
+
+static void hb_rect_vec_resize(hb_rect_vec_t *list, int size)
+{
+    hb_rect_t *rects = realloc(list->rects, size * sizeof(hb_rect_t));
+    if (rects == NULL)
+    {
+        return; // Error.  Should never happen.
+    }
+    list->rects = rects;
+    list->size = size;
+}
+
+static void hb_rect_vec_merge_overlapping_rects(hb_rect_vec_t *list)
+{
+    if (list->count < 2)
+    {
+        return;
+    }
+
+    // Merge nearby rects to avoid
+    // having too many around
+    const int offset = 8;
+    hb_rect_t empty = {0};
+
+    for (int i = 0; i < list->count - 1; i++)
+    {
+        hb_rect_t a = list->rects[i];
+        for (int j = i + 1; j < list->count; j++)
+        {
+            hb_rect_t b = list->rects[j];
+            if (a.x - offset <= b.x + b.width  && a.x + a.width  + offset >= b.x &&
+                a.y - offset <= b.y + b.height && a.y + a.height + offset >= b.y)
+            {
+                int width  = FFMAX(a.width + a.x, b.width + b.x);
+                int height = FFMAX(a.height + a.y, b.height + b.y);
+                a.x      = FFMIN(a.x, b.x);
+                a.y      = FFMIN(a.y, b.y);
+                a.width  = width  - a.x;
+                a.height = height - a.y;
+                list->rects[i] = a;
+                list->rects[j] = empty;
+            }
+        }
+    }
+}
+
+static void hb_rect_vec_compact(hb_rect_vec_t *list)
+{
+    int j = 0, i = 0;
+    while (i < list->count)
+    {
+        hb_rect_t a = list->rects[i];
+        if (a.x == 0 && a.y == 0 && a.width == 0 && a.height == 0)
+        {
+            i++;
+        }
+        else
+        {
+            list->rects[j] = list->rects[i];
+            i++;
+            j++;
+        }
+    }
+    list->count = j;
+}
+
+static void hb_rect_vec_append(hb_rect_vec_t *list, int x, int y, int width, int height)
+{
+    if (width == 0 || height == 0)
+    {
+        return;
+    }
+
+    if (list->size < list->count + 1)
+    {
+        hb_rect_vec_resize(list, list->count + 10);
+    }
+
+    if (list->size < list->count + 1)
+    {
+        return; // Error.  Should never happen.
+    }
+
+    list->rects[list->count].x = x;
+    list->rects[list->count].y = y;
+    list->rects[list->count].width = width;
+    list->rects[list->count].height = height;
+    list->count += 1;
+
+    hb_rect_vec_merge_overlapping_rects(list);
+    hb_rect_vec_compact(list);
+}
+
+static void hb_rect_vec_clear(hb_rect_vec_t *list)
+{
+    memset(list->rects, 0, sizeof(hb_rect_t) * list->size);
+    list->count = 0;
+}
+
+static void hb_rect_vec_close(hb_rect_vec_t *list)
+{
+    free(list->rects);
+    list->rects = NULL;
+    list->count = 0;
+    list->size = 0;
+}
 
 static void blend8on1x(const hb_filter_private_t *pv, hb_buffer_t *dst, const hb_buffer_t *src, const int shift)
 {
@@ -751,7 +873,9 @@ static hb_buffer_t * compose_subsample_ass(hb_filter_private_t *pv, const ASS_Im
 
     while (frame)
     {
-        if (frame->w && frame->h)
+        if (frame->w && frame->h &&
+            x <= frame->dst_x && x + width >= frame->dst_x + frame->w &&
+            y <= frame->dst_y && y + height >= frame->dst_y + frame->h)
         {
             const int yuv = hb_rgb2yuv_bt709(frame->color >> 8);
 
@@ -860,7 +984,7 @@ static hb_buffer_t * compose_subsample_ass(hb_filter_private_t *pv, const ASS_Im
     return sub;
 }
 
-static hb_buffer_t * render_ssa_subs(hb_filter_private_t *pv, int64_t start)
+static hb_buffer_list_t * render_ssa_subs(hb_filter_private_t *pv, int64_t start)
 {
     ASS_Image *frame_list;
     int changed;
@@ -875,47 +999,51 @@ static hb_buffer_t * render_ssa_subs(hb_filter_private_t *pv, int64_t start)
     // Re-use cached overlay, whenever possible
     if (changed)
     {
-        if (pv->last_render)
+        if (hb_buffer_list_count(&pv->last_renders))
         {
-            hb_buffer_close(&pv->last_render);
+            hb_buffer_list_close(&pv->last_renders);
+            hb_rect_vec_clear(&pv->last_rects);
         }
 
-        unsigned int x1, y1, x2, y2;
-        x1 = y1 = (unsigned)(-1);
-        x2 = y2 = 0;
-
-        // Find overlay size and pos (faster than composing at the video dimensions)
+        // Find overlay size and pos of non overlapped rects
+        // (faster than composing at the video dimensions)
         for (ASS_Image *frame = frame_list; frame; frame = frame->next)
         {
-            if (frame->w && frame->h)
-            {
-                x2 = FFMAX(x2, frame->dst_x + frame->w);
-                y2 = FFMAX(y2, frame->dst_y + frame->h);
-                x1 = FFMIN(x1, frame->dst_x);
-                y1 = FFMIN(y1, frame->dst_y);
-            }
+            hb_rect_vec_append(&pv->last_rects,
+                               frame->dst_x, frame->dst_y,
+                               frame->w, frame->h);
         }
 
         // Don't process empty framelist
-        if (x2 > 0)
+        if (pv->last_rects.count)
         {
-            // Overlay must be aligned to the chroma plane, pad as needed.
-            x1 -= (x1 + pv->crop[2]) & ((1 << pv->wshift) - 1);
-            y1 -= (y1 + pv->crop[0]) & ((1 << pv->hshift) - 1);
-
-            pv->last_render = compose_subsample_ass(pv, frame_list, x2 - x1, y2 - y1, x1, y1);
-
-            if (pv->last_render)
+            for (int i = 0; i < pv->last_rects.count; i++)
             {
-                pv->last_render->f.x += pv->crop[2];
-                pv->last_render->f.y += pv->crop[0];
+                hb_rect_t rect = pv->last_rects.rects[i];
+
+                // Overlay must be aligned to the chroma plane, pad as needed.
+                int x2 = rect.x + rect.width;
+                int y2 = rect.y + rect.height;
+                rect.x -= (rect.x + pv->crop[2]) & ((1 << pv->wshift) - 1);
+                rect.y -= (rect.y + pv->crop[0]) & ((1 << pv->hshift) - 1);
+                rect.width  = x2 - rect.x;
+                rect.height = y2 - rect.y;
+
+                hb_buffer_t *sub = compose_subsample_ass(pv, frame_list, rect.width, rect.height, rect.x, rect.y);
+
+                if (sub)
+                {
+                    sub->f.x += pv->crop[2];
+                    sub->f.y += pv->crop[0];
+                    hb_buffer_list_append(&pv->last_renders, sub);
+                }
             }
         }
     }
 
-    if (pv->last_render)
+    if (hb_buffer_list_count(&pv->last_renders))
     {
-        return pv->last_render;
+        return &pv->last_renders;
     }
     else
     {
@@ -1004,12 +1132,6 @@ static int ssa_post_init(hb_filter_object_t *filter, hb_job_t *job)
     ass_set_frame_size(pv->renderer, width, height);
     ass_set_storage_size(pv->renderer, width, height);
 
-    if (pv->last_render)
-    {
-        hb_buffer_close(&pv->last_render);
-        pv->last_render = NULL;
-    }
-
     return 0;
 }
 
@@ -1034,10 +1156,8 @@ static void ssa_close(hb_filter_object_t *filter)
     {
         ass_library_done(pv->ssa);
     }
-    if (pv->last_render)
-    {
-        hb_buffer_close(&pv->last_render);
-    }
+    hb_buffer_list_close(&pv->last_renders);
+    hb_rect_vec_close(&pv->last_rects);
 
     free(pv);
     filter->private_data = NULL;
@@ -1051,7 +1171,7 @@ static int ssa_work(hb_filter_object_t *filter,
     hb_buffer_t *in = *buf_in;
     hb_buffer_t *out = in;
     hb_buffer_t *sub;
-    hb_buffer_t *rendered_subs;
+    hb_buffer_list_t *bitmaps;
 
     if (!pv->script_initialized)
     {
@@ -1091,9 +1211,9 @@ static int ssa_work(hb_filter_object_t *filter,
         hb_buffer_close(&sub);
     }
 
-    rendered_subs = render_ssa_subs(pv, in->s.start);
+    bitmaps = render_ssa_subs(pv, in->s.start);
 
-    if (rendered_subs && hb_buffer_is_writable(in) == 0)
+    if (bitmaps && hb_buffer_is_writable(in) == 0)
     {
         out = hb_buffer_dup(in);
     }
@@ -1102,9 +1222,12 @@ static int ssa_work(hb_filter_object_t *filter,
         *buf_in = NULL;
     }
 
-    if (rendered_subs)
+    if (bitmaps)
     {
-        apply_sub(pv, out, rendered_subs);
+        for (hb_buffer_t *bitmap = hb_buffer_list_head(bitmaps); bitmap; bitmap = bitmap->next)
+        {
+            apply_sub(pv, out, bitmap);
+        }
     }
 
     *buf_out = out;
@@ -1156,7 +1279,7 @@ static int textsub_work(hb_filter_object_t *filter,
     hb_buffer_t *in = *buf_in;
     hb_buffer_t *out = in;
     hb_buffer_t *sub;
-    hb_buffer_t *rendered_subs;
+    hb_buffer_list_t *bitmaps;
 
     if (!pv->script_initialized)
     {
@@ -1246,9 +1369,9 @@ static int textsub_work(hb_filter_object_t *filter,
         process_sub(pv, pv->current_sub);
     }
 
-    rendered_subs = render_ssa_subs(pv, in->s.start);
+    bitmaps = render_ssa_subs(pv, in->s.start);
 
-    if (rendered_subs && hb_buffer_is_writable(in) == 0)
+    if (bitmaps && hb_buffer_is_writable(in) == 0)
     {
         out = hb_buffer_dup(in);
     }
@@ -1257,9 +1380,12 @@ static int textsub_work(hb_filter_object_t *filter,
         *buf_in = NULL;
     }
 
-    if (rendered_subs)
+    if (bitmaps)
     {
-        apply_sub(pv, out, rendered_subs);
+        for (hb_buffer_t *bitmap = hb_buffer_list_head(bitmaps); bitmap; bitmap = bitmap->next)
+        {
+            apply_sub(pv, out, bitmap);
+        }
     }
 
     *buf_out = out;
