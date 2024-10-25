@@ -85,7 +85,7 @@ namespace HandBrakeWPF.Converters.Audio
                 {
                     foreach (HBAudioEncoder encoder in HandBrakeEncoderHelpers.AudioEncoders)
                     {
-                        if (encoder.IsPassthrough)
+                        if (encoder.IsPassthru)
                         {
                             encoders.Remove(encoder);
                         }
@@ -101,7 +101,7 @@ namespace HandBrakeWPF.Converters.Audio
                     Audio sourceTrack = values[2] as Audio;
                     foreach (HBAudioEncoder encoder in HandBrakeEncoderHelpers.AudioEncoders)
                     {
-                        if (encoder.IsPassthrough)
+                        if (encoder.IsPassthru)
                         {
                             RemoveIfNotSupported(encoder, sourceTrack, encoders);
                         }

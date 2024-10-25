@@ -39,7 +39,7 @@
         "Folder": false,
         "FolderOpen": false,
         "InlineParameterSets": false,
-        "MetadataPassthrough": true,
+        "MetadataPassthru": true,
         "Optimize": false,
         "Mp4iPodCompatible": false,
         "PictureAllowUpscaling": false,

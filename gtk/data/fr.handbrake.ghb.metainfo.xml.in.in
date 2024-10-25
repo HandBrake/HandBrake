@@ -121,7 +121,7 @@
     </release>
     <release version="1.7.0" date="2023-11-12">
       <description>
-        <p>Drag and drop support, native file chooser, chapter import and export, Dolby Vision metadata passthrough, and various user interface improvements.</p>
+        <p>Drag and drop support, native file chooser, chapter import and export, Dolby Vision metadata passthru, and various user interface improvements.</p>
       </description>
     </release>
     <release version="1.6.1" date="2023-01-15">

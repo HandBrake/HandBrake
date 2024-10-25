@@ -324,6 +324,10 @@ int ghb_get_copy_mask(GhbValue *settings)
     {
         mask |= HB_ACODEC_EAC3_PASS;
     }
+    if (ghb_dict_get_bool(settings, "AudioAllowALACPass"))
+    {
+        mask |= HB_ACODEC_ALAC_PASS;
+    }
     if (ghb_dict_get_bool(settings, "AudioAllowFLACPass"))
     {
         mask |= HB_ACODEC_FLAC_PASS;
@@ -331,6 +335,10 @@ int ghb_get_copy_mask(GhbValue *settings)
     if (ghb_dict_get_bool(settings, "AudioAllowTRUEHDPass"))
     {
         mask |= HB_ACODEC_TRUEHD_PASS;
+    }
+    if (ghb_dict_get_bool(settings, "AudioAllowVORBISPass"))
+    {
+        mask |= HB_ACODEC_VORBIS_PASS;
     }
     if (ghb_dict_get_bool(settings, "AudioAllowOPUSPass"))
     {
@@ -778,7 +786,7 @@ audio_refresh_list_row_ui(
 
     if (ghb_audio_is_passthru(encoder->codec))
     {
-        info_dst = g_strdup_printf(_("<small>Passthrough</small>"));
+        info_dst = g_strdup_printf(_("<small>Passthru</small>"));
     }
     else
     {

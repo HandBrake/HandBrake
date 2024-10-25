@@ -1582,6 +1582,9 @@ static void LookForAudio(hb_scan_t *scan, hb_title_t * title, hb_audio_t * audio
                 case AV_CODEC_ID_AC3:
                     codec_name = "AC3";
                     break;
+                case AV_CODEC_ID_ALAC:
+                    codec_name = "ALAC";
+                    break;
                 case AV_CODEC_ID_EAC3:
                     codec_name = "E-AC3";
                     break;
@@ -1633,6 +1636,9 @@ static void LookForAudio(hb_scan_t *scan, hb_title_t * title, hb_audio_t * audio
                 case HB_ACODEC_FFEAC3:
                     codec_name = "E-AC3";
                     break;
+                case HB_ACODEC_FFALAC:
+                    codec_name = "ALAC";
+                    break;
                 case HB_ACODEC_FFTRUEHD:
                     codec_name = "TrueHD";
                     break;
@@ -1653,6 +1659,9 @@ static void LookForAudio(hb_scan_t *scan, hb_title_t * title, hb_audio_t * audio
                     break;
                 case HB_ACODEC_MP3:
                     codec_name = "MP3";
+                    break;
+                case AV_CODEC_ID_VORBIS:
+                    codec_name = "Vorbis";
                     break;
                 default:
                     codec_name = "Unknown (libav)";

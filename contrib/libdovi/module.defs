@@ -2,16 +2,17 @@ $(eval $(call import.MODULE.defs,LIBDOVI,libdovi))
 $(eval $(call import.CONTRIB.defs,LIBDOVI))
 
 ifeq (1,$(FEATURE.flatpak))
-    LIBDOVI.FETCH.url      = https://github.com/HandBrake/HandBrake-contribs/releases/download/contribs2/dovi_tool-libdovi-3.3.0_vendor.tar.gz
-    LIBDOVI.FETCH.sha256   = a0b10fcdd51c1268d1ffb210fd5cfe1079db8f349a330be5605e386067d46ed6
-    LIBDOVI.FETCH.basename = dovi_tool-libdovi-3.3.0_vendor.tar.gz
+    LIBDOVI.FETCH.url      = https://github.com/HandBrake/HandBrake-contribs/releases/download/contribs2/dovi_tool-libdovi-3.3.1_vendor.tar.gz
+    LIBDOVI.FETCH.sha256   = 3db5f218545e57e38fb832ec5b5f4cf3475b7a86101e3c96bff0310489635960
+    LIBDOVI.FETCH.basename = dovi_tool-libdovi-3.3.1_vendor.tar.gz
 else
-    LIBDOVI.FETCH.url      = https://github.com/HandBrake/HandBrake-contribs/releases/download/contribs/libdovi-3.3.0.tar.gz
-    LIBDOVI.FETCH.sha256   = 4b7e28322a5b15ea0eff5ed19e626468b17d5fc17aab9befaa9f725e466a7b40
-    LIBDOVI.FETCH.basename = dovi_tool-libdovi-3.3.0.tar.gz
+    LIBDOVI.FETCH.url      = https://github.com/HandBrake/HandBrake-contribs/releases/download/contribs2/dovi_tool-libdovi-3.3.1.tar.gz
+    LIBDOVI.FETCH.url     += https://github.com/quietvoid/dovi_tool/archive/refs/tags/libdovi-3.3.1.tar.gz
+    LIBDOVI.FETCH.sha256   = 4cd7a4c418fd8af1da13278ce7524c15b7fdf61e1fe53663aa291c68c5062777
+    LIBDOVI.FETCH.basename = dovi_tool-libdovi-3.3.1.tar.gz
 endif
 
-LIBDOVI.EXTRACT.tarbase = dovi_tool-libdovi-3.3.0
+LIBDOVI.EXTRACT.tarbase = dovi_tool-libdovi-3.3.1
 
 define LIBDOVI.CONFIGURE
      cd $(LIBDOVI_DV.dir); $(CARGO.exe) fetch

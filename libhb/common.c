@@ -36,6 +36,9 @@
 #include <windows.h>
 #endif
 
+#if HB_PROJECT_FEATURE_MF
+#include "handbrake/mf_common.h"
+#endif
 #if HB_PROJECT_FEATURE_NVENC
 #include "handbrake/nvenc_common.h"
 #endif
@@ -79,7 +82,10 @@ enum
     HB_GID_VCODEC_AV1_QSV,
     HB_GID_VCODEC_AV1_NVENC,
     HB_GID_VCODEC_AV1_VCE,
+    HB_GID_VCODEC_AV1_MF,
     HB_GID_VCODEC_FFV1,
+    HB_GID_ACODEC_ALAC,
+    HB_GID_ACODEC_ALAC_PASS,
     HB_GID_ACODEC_AAC,
     HB_GID_ACODEC_AAC_HE,
     HB_GID_ACODEC_AAC_PASS,
@@ -98,6 +104,7 @@ enum
     HB_GID_ACODEC_TRUEHD,
     HB_GID_ACODEC_TRUEHD_PASS,
     HB_GID_ACODEC_VORBIS,
+    HB_GID_ACODEC_VORBIS_PASS,
     HB_GID_ACODEC_OPUS,
     HB_GID_ACODEC_OPUS_PASS,
     HB_GID_MUX_MKV,
@@ -283,6 +290,7 @@ hb_encoder_internal_t hb_video_encoders[]  =
     { { "AV1 (NVEnc)",                 "nvenc_av1",        "AV1 (NVEnc)",                    HB_VCODEC_FFMPEG_NVENC_AV1,                   HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 0, 1, HB_GID_VCODEC_AV1_NVENC,  },
     { { "AV1 10-bit (NVEnc)",          "nvenc_av1_10bit",  "AV1 10-bit (NVEnc)",             HB_VCODEC_FFMPEG_NVENC_AV1_10BIT,             HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 0, 1, HB_GID_VCODEC_AV1_NVENC,  },
     { { "AV1 (AMD VCE)",               "vce_av1",          "AV1 (AMD VCE)",                  HB_VCODEC_FFMPEG_VCE_AV1,    				   HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 0, 1, HB_GID_VCODEC_AV1_VCE,    },
+    { { "AV1 (MediaFoundation)",       "mf_av1",           "AV1 (MediaFoundation)",          HB_VCODEC_FFMPEG_MF_AV1,                      HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 0, 1, HB_GID_VCODEC_AV1_MF,     },
     { { "FFV1",                        "ffv1",             "FFV1 (libavcodec)",              HB_VCODEC_FFMPEG_FFV1,                                          HB_MUX_MASK_MKV, }, NULL, 0, 1, HB_GID_VCODEC_FFV1,     },
     { { "H.264 (x264)",                "x264",             "H.264 (libx264)",                HB_VCODEC_X264_8BIT,                          HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 0, 1, HB_GID_VCODEC_H264_X264,  },
     { { "H.264 10-bit (x264)",         "x264_10bit",       "H.264 10-bit (libx264)",         HB_VCODEC_X264_10BIT,                         HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 0, 1, HB_GID_VCODEC_H264_X264,  },
@@ -358,9 +366,11 @@ static int hb_video_encoder_is_enabled(int encoder, int disable_hardware)
             // TODO: Try to instantiate a throwaway encoder to see if a suitable MediaFoundation encoder can be found?
             // Alt, implement logic similar to ffmpeg's encoder selection, to see if one would be found.
             case HB_VCODEC_FFMPEG_MF_H264:
-                return 1;
+                return hb_mf_h264_available();
             case HB_VCODEC_FFMPEG_MF_H265:
-                return 1;
+                return hb_mf_h265_available();
+            case HB_VCODEC_FFMPEG_MF_AV1:
+                return hb_mf_av1_available();
 #endif
         }
     }
@@ -443,9 +453,13 @@ hb_encoder_internal_t hb_audio_encoders[]  =
     { { "Opus",               "opus",       "Opus (libopus)",              HB_ACODEC_OPUS,        HB_MUX_MASK_MP4|HB_MUX_MASK_WEBM|HB_MUX_MASK_MKV, }, NULL, 0, 1, HB_GID_ACODEC_OPUS,      },
     { { "Opus Passthru",      "copy:opus",  "Opus Passthru",               HB_ACODEC_OPUS_PASS,   HB_MUX_MASK_MP4|HB_MUX_MASK_WEBM|HB_MUX_MASK_MKV, }, NULL, 0, 1, HB_GID_ACODEC_OPUS_PASS, },
     { { "Vorbis",             "vorbis",     "Vorbis (libvorbis)",          HB_ACODEC_VORBIS,      HB_MUX_MASK_WEBM|HB_MUX_MASK_MKV, }, NULL, 0, 1, HB_GID_ACODEC_VORBIS,    },
+    { { "Vorbis Passthru",    "copy:vorbis","Vorbis Passthru",             HB_ACODEC_VORBIS_PASS, HB_MUX_MASK_WEBM|HB_MUX_MASK_MKV, }, NULL, 0, 1, HB_GID_ACODEC_VORBIS_PASS, },
     { { "FLAC 16-bit",        "flac16",     "FLAC 16-bit (libavcodec)",    HB_ACODEC_FFFLAC,      HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 0, 1, HB_GID_ACODEC_FLAC,       },
     { { "FLAC 24-bit",        "flac24",     "FLAC 24-bit (libavcodec)",    HB_ACODEC_FFFLAC24,    HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 0, 1, HB_GID_ACODEC_FLAC,       },
     { { "FLAC Passthru",      "copy:flac",  "FLAC Passthru",               HB_ACODEC_FLAC_PASS,   HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 0, 1, HB_GID_ACODEC_FLAC_PASS,  },
+    { { "ALAC 16-bit",        "alac16",     "ALAC 16-bit (libavcodec)",    HB_ACODEC_FFALAC,      HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 0, 1, HB_GID_ACODEC_ALAC,       },
+    { { "ALAC 24-bit",        "alac24",     "ALAC 24-bit (libavcodec)",    HB_ACODEC_FFALAC24,    HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 0, 1, HB_GID_ACODEC_ALAC,       },
+    { { "ALAC Passthru",      "copy:alac",  "ALAC Passthru",               HB_ACODEC_ALAC_PASS,   HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 0, 1, HB_GID_ACODEC_ALAC_PASS,  },
     { { "Auto Passthru",      "copy",       "Auto Passthru",               HB_ACODEC_AUTO_PASS,   HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 0, 1, HB_GID_ACODEC_AUTO_PASS,  },
 };
 int hb_audio_encoders_count = sizeof(hb_audio_encoders) / sizeof(hb_audio_encoders[0]);
@@ -475,6 +489,10 @@ static int hb_audio_encoder_is_enabled(int encoder)
 
         case HB_ACODEC_AC3:
             return avcodec_find_encoder(AV_CODEC_ID_AC3) != NULL;
+
+        case HB_ACODEC_FFALAC:
+        case HB_ACODEC_FFALAC24:
+            return avcodec_find_encoder(AV_CODEC_ID_ALAC) != NULL;
 
         case HB_ACODEC_FFEAC3:
             return avcodec_find_encoder(AV_CODEC_ID_EAC3) != NULL;
@@ -1134,6 +1152,8 @@ int hb_audio_bitrate_get_default(uint32_t codec, int samplerate, int mixdown)
 
     switch (codec)
     {
+        case HB_ACODEC_FFALAC:
+        case HB_ACODEC_FFALAC24:
         case HB_ACODEC_FFFLAC:
         case HB_ACODEC_FFFLAC24:
         case HB_ACODEC_FFTRUEHD:
@@ -1322,6 +1342,8 @@ void hb_audio_bitrate_get_limits(uint32_t codec, int samplerate, int mixdown,
     switch (codec)
     {
         // Bitrates don't apply to "lossless" audio
+        case HB_ACODEC_FFALAC:
+        case HB_ACODEC_FFALAC24:
         case HB_ACODEC_FFFLAC:
         case HB_ACODEC_FFFLAC24:
         case HB_ACODEC_FFTRUEHD:
@@ -1422,7 +1444,7 @@ void hb_audio_bitrate_get_limits(uint32_t codec, int samplerate, int mixdown,
             *high = (nchannels + lfe_count) * 256;
             break;
 
-        // Bitrates don't apply to passthrough audio, but may apply if we
+        // Bitrates don't apply to passthru audio, but may apply if we
         // fall back to an encoder when the source can't be passed through.
         default:
             *low  = hb_audio_bitrates_first_item->rate;
@@ -1544,6 +1566,7 @@ void hb_video_quality_get_limits(uint32_t codec, float *low, float *high,
 
         case HB_VCODEC_FFMPEG_MF_H264:
         case HB_VCODEC_FFMPEG_MF_H265:
+        case HB_VCODEC_FFMPEG_MF_AV1:
             *direction   = 0;
             *granularity = 1;
             *low         = 0;
@@ -1608,6 +1631,7 @@ const char* hb_video_quality_get_name(uint32_t codec)
 
         case HB_VCODEC_FFMPEG_MF_H264:
         case HB_VCODEC_FFMPEG_MF_H265:
+        case HB_VCODEC_FFMPEG_MF_AV1:
             return "Quality";
 
         default:
@@ -1656,6 +1680,7 @@ int hb_video_multipass_is_supported(uint32_t codec, int constant_quality)
 
         case HB_VCODEC_FFMPEG_MF_H264:
         case HB_VCODEC_FFMPEG_MF_H265:
+        case HB_VCODEC_FFMPEG_MF_AV1:
         case HB_VCODEC_FFMPEG_VCE_H264:
         case HB_VCODEC_FFMPEG_VCE_H265:
         case HB_VCODEC_FFMPEG_VCE_H265_10BIT:
@@ -1865,6 +1890,7 @@ const char* const* hb_video_encoder_get_profiles(int encoder)
         case HB_VCODEC_FFMPEG_NVENC_H265_10BIT:
         case HB_VCODEC_FFMPEG_MF_H264:
         case HB_VCODEC_FFMPEG_MF_H265:
+        case HB_VCODEC_FFMPEG_MF_AV1:
             return hb_av_profile_get_names(encoder);
 
         case HB_VCODEC_SVT_AV1:
@@ -2188,6 +2214,14 @@ void hb_audio_compression_get_limits(uint32_t codec, float *low, float *high,
 {
     switch (codec)
     {
+        case HB_ACODEC_FFALAC:
+        case HB_ACODEC_FFALAC24:
+            *direction   = 0;
+            *granularity = 1.;
+            *high        = 2.;
+            *low         = 0.;
+            break;
+
         case HB_ACODEC_FFFLAC:
         case HB_ACODEC_FFFLAC24:
             *direction   = 0;
@@ -2234,6 +2268,10 @@ float hb_audio_compression_get_default(uint32_t codec)
 {
     switch (codec)
     {
+        case HB_ACODEC_FFALAC:
+        case HB_ACODEC_FFALAC24:
+            return 2.;
+
         case HB_ACODEC_FFFLAC:
         case HB_ACODEC_FFFLAC24:
             return 5.;
@@ -2370,6 +2408,8 @@ int hb_mixdown_has_codec_support(int mixdown, uint32_t codec)
     switch (codec)
     {
         case HB_ACODEC_VORBIS:
+        case HB_ACODEC_FFALAC:
+        case HB_ACODEC_FFALAC24:
         case HB_ACODEC_FFFLAC:
         case HB_ACODEC_FFFLAC24:
         case HB_ACODEC_OPUS:
@@ -2538,6 +2578,8 @@ int hb_mixdown_get_default(uint32_t codec, uint64_t layout)
     switch (codec)
     {
         // the FLAC encoder defaults to the best mixdown up to 7.1
+        case HB_ACODEC_FFALAC:
+        case HB_ACODEC_FFALAC24:
         case HB_ACODEC_FFFLAC:
         case HB_ACODEC_FFFLAC24:
         case HB_ACODEC_OPUS:
@@ -2790,6 +2832,10 @@ int hb_audio_encoder_get_fallback_for_passthru(int passthru)
     const hb_encoder_t *audio_encoder = NULL;
     switch (passthru)
     {
+        case HB_ACODEC_ALAC_PASS:
+            gid = HB_GID_ACODEC_ALAC;
+            break;
+
         case HB_ACODEC_AAC_PASS:
             gid = HB_GID_ACODEC_AAC;
             break;
@@ -5723,7 +5769,7 @@ int hb_audio_can_apply_drc(uint32_t codec, uint32_t codec_param, int encoder)
 {
     if (encoder & HB_ACODEC_PASS_FLAG)
     {
-        // can't apply DRC to passthrough audio
+        // can't apply DRC to passthru audio
         return 0;
     }
     else if (codec & HB_ACODEC_FF_MASK)

@@ -13,7 +13,10 @@
 
 struct hb_filter_private_s
 {
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wunguarded-availability-new"
     VTPixelRotationSessionRef session;
+#pragma GCC diagnostic pop
     CVPixelBufferPoolRef      pool;
 
     hb_filter_init_t          input;

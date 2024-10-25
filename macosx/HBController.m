@@ -747,6 +747,12 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
          {
              self.destinationFolderURL = panel.URL;
              self.destinationFolderToken = [HBSecurityAccessToken tokenWithAlreadyAccessedObject:panel.URL];
+             if (self.job)
+             {
+                 [self.job setDestinationFolderURL:self.destinationFolderURL
+                                      sameAsSource:[NSUserDefaults.standardUserDefaults boolForKey:HBUseSourceFolderDestination]];
+                 [self.window.undoManager removeAllActions];
+             }
          }
      }];
 }
@@ -758,7 +764,7 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
         return;
     }
 
-    if (sourceURLs.firstObject)
+    if (sourceURLs.count == 1)
     {
         // There is no need to ask for permission
         // if the source is a already a folder
@@ -931,7 +937,7 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
     return URLs;
 }
 
-- (HBJob *)jobFromTitle:(HBTitle *)title
+- (nullable HBJob *)jobFromTitle:(HBTitle *)title
 {
     // If there is already a title loaded, save the current settings to a preset
     [self updateCurrentPreset];
@@ -1177,7 +1183,10 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
 {
     HBTitle *title = self.core.titles[sender.indexOfSelectedItem];
     HBJob *job = [self jobFromTitle:title];
-    self.job = job;
+    if (job)
+    {
+        self.job = job;
+    }
 }
 
 - (void)formatChanged:(NSNotification *)notification
@@ -1216,7 +1225,10 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
         {
             HBTitle *title = titles[index + 1];
             HBJob *job = [self jobFromTitle:title];
-            self.job = job;
+            if (job)
+            {
+                self.job = job;
+            }
         }
     }
 }
@@ -1231,7 +1243,10 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
         {
             HBTitle *title = titles[index - 1];
             HBJob *job = [self jobFromTitle:title];
-            self.job = job;
+            if (job)
+            {
+                self.job = job;
+            }
         }
     }
 }

@@ -297,7 +297,7 @@
                                         </Image>
 
                                         <!--  Settings  -->
-                                        <Grid Grid.Column="1" Margin="0,3,5,3" VerticalAlignment="Center" MinHeight="27">
+                                        <Grid Grid.Column="1" Margin="0,2,5,2" VerticalAlignment="Center">
                                             <Grid.RowDefinitions>
                                                 <RowDefinition Height="Auto" />
                                             </Grid.RowDefinitions>
@@ -316,7 +316,7 @@
                                                 <TextBlock Text="{Binding Task.Destination, Converter={StaticResource filePathToFilenameConverter}}" TextWrapping="Wrap" VerticalAlignment="Center" Margin="0,0,5,0" Grid.Row="0" 
                                                            Style="{StaticResource subHeaderSmall}"/>
 
-                                                <ProgressBar Minimum="0" Height="4" Maximum="100" Grid.Row="1" Name="pbStatus" HorizontalAlignment="Stretch" Margin="0,8,10,0"
+                                                <ProgressBar Minimum="0" Height="4" Maximum="100" Grid.Row="1" Name="pbStatus" HorizontalAlignment="Stretch" Margin="0,5,10,0"
                                                              Value="{Binding JobProgress.ProgressValue}" IsIndeterminate="{Binding JobProgress.IntermediateProgress}"
                                                              Visibility="{Binding Status, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter={x:Static model:QueueItemStatus.InProgress}}" />
 
@@ -326,11 +326,11 @@
 
                                                     <TextBlock Text="{Binding JobProgress.JobStatusShort}" TextWrapping="WrapWithOverflow" VerticalAlignment="Top" TextTrimming="CharacterEllipsis"
                                                                Visibility="{Binding Status, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter={x:Static model:QueueItemStatus.InProgress}}"
-                                                               Margin="0,4,0,2" Style="{StaticResource subTextSmall}" />
+                                                               Margin="0,3,0,2" Style="{StaticResource subTextSmall}" />
 
                                                     <TextBlock Text="{Binding Statistics.SummaryCompleteStats}" TextWrapping="WrapWithOverflow" VerticalAlignment="Top" TextTrimming="CharacterEllipsis"
                                                                Visibility="{Binding Status, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter={x:Static model:QueueItemStatus.Completed}}"
-                                                               Margin="0,4,0,2" Style="{StaticResource subTextSmall}" />
+                                                               Margin="0,3,0,2" Style="{StaticResource subTextSmall}" />
                                                 </Grid>
                                             </Grid>
 
@@ -344,6 +344,7 @@
                                             </Button>
                                         </Grid>
                                     </Grid>
+
                                     <Grid Visibility="{Binding IsShuttingDown, Converter={StaticResource boolToVisConverter}, ConverterParameter=false}">
 
                                         <Grid.ColumnDefinitions>
@@ -377,7 +378,7 @@
                                     <Image Source="Images/stop.png" Grid.Column="0" Width="16" Height="16" SnapsToDevicePixels="True" />
 
                                     <!--  Settings  -->
-                                    <Grid Grid.Column="1" Margin="0,3,5,3" VerticalAlignment="Center" MinHeight="27">
+                                    <Grid Grid.Column="1" Margin="0,3,5,3" VerticalAlignment="Center" MinHeight="23">
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition Width="*" />
                                             <ColumnDefinition Width="Auto" />
