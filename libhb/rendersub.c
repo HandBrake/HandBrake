@@ -15,20 +15,17 @@
 
 #define ABS(a) ((a) > 0 ? (a) : (-(a)))
 
-typedef struct hb_rect_s
+typedef struct hb_box_s
 {
-    int x;
-    int y;
-    int width;
-    int height;
-} hb_rect_t;
+    int x1, y1, x2, y2;
+} hb_box_t;
 
-typedef struct hb_rect_vec_s
+typedef struct hb_box_vec_s
 {
-    hb_rect_t *rects;
+    hb_box_t *boxes;
     int count;
     int size;
-} hb_rect_vec_t;
+} hb_box_vec_t;
 
 struct hb_filter_private_s
 {
@@ -52,7 +49,7 @@ struct hb_filter_private_s
     ASS_Track         *ssa_track;
     uint8_t            script_initialized;
     hb_buffer_list_t   last_renders;
-    hb_rect_vec_t      last_rects;
+    hb_box_vec_t       last_boxes;
 
     // SRT
     int                line;
@@ -131,110 +128,113 @@ hb_filter_object_t hb_filter_render_sub =
     .close         = hb_rendersub_close,
 };
 
-static void hb_rect_vec_resize(hb_rect_vec_t *list, int size)
+static void hb_box_vec_resize(hb_box_vec_t *vec, int size)
 {
-    hb_rect_t *rects = realloc(list->rects, size * sizeof(hb_rect_t));
-    if (rects == NULL)
+    hb_box_t *boxes = realloc(vec->boxes, size * sizeof(hb_box_t));
+    if (boxes == NULL)
     {
-        return; // Error.  Should never happen.
+        return; // Error. Should never happen.
     }
-    list->rects = rects;
-    list->size = size;
+    vec->boxes = boxes;
+    vec->size = size;
 }
 
-static void hb_rect_vec_merge_overlapping_rects(hb_rect_vec_t *list)
+static inline int hb_box_intersect(const hb_box_t *a, const hb_box_t *b, int offset)
 {
-    if (list->count < 2)
+    return ((FFMIN(a->x2, b->x2) + offset - FFMAX(a->x1, b->x1)) >= 0) &&
+           ((FFMIN(a->y2, b->y2) + offset - FFMAX(a->y1, b->y1)) >= 0);
+}
+
+static inline void hb_box_union(hb_box_t *a, const hb_box_t *b)
+{
+    if (a->x1 > b->x1) { a->x1 = b->x1; }
+    if (a->y1 > b->y1) { a->y1 = b->y1; }
+    if (a->x2 < b->x2) { a->x2 = b->x2; }
+    if (a->y2 < b->y2) { a->y2 = b->y2; }
+}
+
+static inline void hb_box_clear(hb_box_t *box)
+{
+    box->x1 = box->y1 = box->x2 = box->y2 = 0;
+}
+
+static void hb_box_vec_merge(hb_box_vec_t *vec)
+{
+    if (vec->count < 2)
     {
         return;
     }
 
-    // Merge nearby rects to avoid
-    // having too many around
-    const int offset = 8;
-    hb_rect_t empty = {0};
-
-    for (int i = 0; i < list->count - 1; i++)
+    for (int i = 0; i < vec->count - 1; i++)
     {
-        hb_rect_t a = list->rects[i];
-        for (int j = i + 1; j < list->count; j++)
+        hb_box_t *a = &vec->boxes[i];
+        for (int j = i + 1; j < vec->count; j++)
         {
-            hb_rect_t b = list->rects[j];
-            if (a.x - offset <= b.x + b.width  && a.x + a.width  + offset >= b.x &&
-                a.y - offset <= b.y + b.height && a.y + a.height + offset >= b.y)
+            hb_box_t *b = &vec->boxes[j];
+            if (hb_box_intersect(a, b, 8))
             {
-                int width  = FFMAX(a.width + a.x, b.width + b.x);
-                int height = FFMAX(a.height + a.y, b.height + b.y);
-                a.x      = FFMIN(a.x, b.x);
-                a.y      = FFMIN(a.y, b.y);
-                a.width  = width  - a.x;
-                a.height = height - a.y;
-                list->rects[i] = a;
-                list->rects[j] = empty;
+                hb_box_union(a, b);
+                hb_box_clear(b);
             }
         }
     }
 }
 
-static void hb_rect_vec_compact(hb_rect_vec_t *list)
+static void hb_box_vec_compact(hb_box_vec_t *vec)
 {
     int j = 0, i = 0;
-    while (i < list->count)
+    while (i < vec->count)
     {
-        hb_rect_t a = list->rects[i];
-        if (a.x == 0 && a.y == 0 && a.width == 0 && a.height == 0)
+        hb_box_t a = vec->boxes[i];
+        if (a.x1 == 0 && a.y1 == 0 &&
+            a.x2 == 0 && a.y2 == 0)
         {
             i++;
         }
         else
         {
-            list->rects[j] = list->rects[i];
+            vec->boxes[j] = vec->boxes[i];
             i++;
             j++;
         }
     }
-    list->count = j;
+    vec->count = j;
 }
 
-static void hb_rect_vec_append(hb_rect_vec_t *list, int x, int y, int width, int height)
+static void hb_box_vec_append(hb_box_vec_t *vec, int x1, int y1, int x2, int y2)
 {
-    if (width == 0 || height == 0)
+    if (vec->size < vec->count + 1)
     {
-        return;
+        hb_box_vec_resize(vec, vec->count + 10);
     }
 
-    if (list->size < list->count + 1)
+    if (vec->size < vec->count + 1)
     {
-        hb_rect_vec_resize(list, list->count + 10);
+        return;  // Error. Should never happen.
     }
 
-    if (list->size < list->count + 1)
-    {
-        return; // Error.  Should never happen.
-    }
+    vec->boxes[vec->count].x1 = x1;
+    vec->boxes[vec->count].y1 = y1;
+    vec->boxes[vec->count].x2 = x2;
+    vec->boxes[vec->count].y2 = y2;
+    vec->count += 1;
 
-    list->rects[list->count].x = x;
-    list->rects[list->count].y = y;
-    list->rects[list->count].width = width;
-    list->rects[list->count].height = height;
-    list->count += 1;
-
-    hb_rect_vec_merge_overlapping_rects(list);
-    hb_rect_vec_compact(list);
+    hb_box_vec_merge(vec);
+    hb_box_vec_compact(vec);
 }
 
-static void hb_rect_vec_clear(hb_rect_vec_t *list)
+static void hb_box_vec_clear(hb_box_vec_t *vec)
 {
-    memset(list->rects, 0, sizeof(hb_rect_t) * list->size);
-    list->count = 0;
+    memset(vec->boxes, 0, sizeof(hb_box_t) * vec->size);
+    vec->count = 0;
 }
 
-static void hb_rect_vec_close(hb_rect_vec_t *list)
+static void hb_box_vec_close(hb_box_vec_t *vec)
 {
-    free(list->rects);
-    list->rects = NULL;
-    list->count = 0;
-    list->size = 0;
+    free(vec->boxes);
+    vec->boxes = NULL;
+    vec->count = 0;
+    vec->size = 0;
 }
 
 static void blend8on1x(const hb_filter_private_t *pv, hb_buffer_t *dst, const hb_buffer_t *src, const int shift)
@@ -986,57 +986,47 @@ static hb_buffer_t * compose_subsample_ass(hb_filter_private_t *pv, const ASS_Im
 
 static hb_buffer_list_t * render_ssa_subs(hb_filter_private_t *pv, int64_t start)
 {
-    ASS_Image *frame_list;
     int changed;
-
-    frame_list = ass_render_frame(pv->renderer, pv->ssa_track,
-                                  start / 90, &changed);
+    ASS_Image *frame_list = ass_render_frame(pv->renderer, pv->ssa_track,
+                                             start / 90, &changed);
     if (!frame_list)
     {
         return NULL;
     }
 
-    // Re-use cached overlay, whenever possible
+    // Re-use cached overlays, whenever possible
     if (changed)
     {
         if (hb_buffer_list_count(&pv->last_renders))
         {
             hb_buffer_list_close(&pv->last_renders);
-            hb_rect_vec_clear(&pv->last_rects);
+            hb_box_vec_clear(&pv->last_boxes);
         }
 
-        // Find overlay size and pos of non overlapped rects
+        // Find overlay size and pos of non overlapped boxes
         // (faster than composing at the video dimensions)
         for (ASS_Image *frame = frame_list; frame; frame = frame->next)
         {
-            hb_rect_vec_append(&pv->last_rects,
+            hb_box_vec_append(&pv->last_boxes,
                                frame->dst_x, frame->dst_y,
-                               frame->w, frame->h);
+                               frame->w + frame->dst_x, frame->h + frame->dst_y);
         }
 
-        // Don't process empty framelist
-        if (pv->last_rects.count)
+        for (int i = 0; i < pv->last_boxes.count; i++)
         {
-            for (int i = 0; i < pv->last_rects.count; i++)
+            // Overlay must be aligned to the chroma plane, pad as needed.
+            hb_box_t box = pv->last_boxes.boxes[i];
+            int x = box.x1 - ((box.x1 + pv->crop[2]) & ((1 << pv->wshift) - 1));
+            int y = box.y1 - ((box.y1 + pv->crop[0]) & ((1 << pv->hshift) - 1));
+            int width  = box.x2 - x;
+            int height = box.y2 - y;
+
+            hb_buffer_t *sub = compose_subsample_ass(pv, frame_list, width, height, x, y);
+            if (sub)
             {
-                hb_rect_t rect = pv->last_rects.rects[i];
-
-                // Overlay must be aligned to the chroma plane, pad as needed.
-                int x2 = rect.x + rect.width;
-                int y2 = rect.y + rect.height;
-                rect.x -= (rect.x + pv->crop[2]) & ((1 << pv->wshift) - 1);
-                rect.y -= (rect.y + pv->crop[0]) & ((1 << pv->hshift) - 1);
-                rect.width  = x2 - rect.x;
-                rect.height = y2 - rect.y;
-
-                hb_buffer_t *sub = compose_subsample_ass(pv, frame_list, rect.width, rect.height, rect.x, rect.y);
-
-                if (sub)
-                {
-                    sub->f.x += pv->crop[2];
-                    sub->f.y += pv->crop[0];
-                    hb_buffer_list_append(&pv->last_renders, sub);
-                }
+                sub->f.x += pv->crop[2];
+                sub->f.y += pv->crop[0];
+                hb_buffer_list_append(&pv->last_renders, sub);
             }
         }
     }
@@ -1157,7 +1147,7 @@ static void ssa_close(hb_filter_object_t *filter)
         ass_library_done(pv->ssa);
     }
     hb_buffer_list_close(&pv->last_renders);
-    hb_rect_vec_close(&pv->last_rects);
+    hb_box_vec_close(&pv->last_boxes);
 
     free(pv);
     filter->private_data = NULL;
