@@ -186,23 +186,23 @@ static void hb_box_vec_compact(hb_box_vec_t *vec)
     while (i < vec->count)
     {
         hb_box_t a = vec->boxes[i];
-        if (a.x1 == 0 && a.y1 == 0 &&
-            a.x2 == 0 && a.y2 == 0)
+        if (a.x2 != 0 || a.y2 != 0)
         {
-            i++;
-        }
-        else
-        {
-            vec->boxes[j] = vec->boxes[i];
-            i++;
+            vec->boxes[j] = a;
             j++;
         }
+        i++;
     }
     vec->count = j;
 }
 
 static void hb_box_vec_append(hb_box_vec_t *vec, int x1, int y1, int x2, int y2)
 {
+    if (x1 == x2 || y1 == y2)
+    {
+        return; // Empty box
+    }
+
     if (vec->size < vec->count + 1)
     {
         hb_box_vec_resize(vec, vec->count + 10);
@@ -210,7 +210,7 @@ static void hb_box_vec_append(hb_box_vec_t *vec, int x1, int y1, int x2, int y2)
 
     if (vec->size < vec->count + 1)
     {
-        return;  // Error. Should never happen.
+        return; // Error. Should never happen.
     }
 
     vec->boxes[vec->count].x1 = x1;
