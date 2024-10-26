@@ -478,9 +478,9 @@ static void FUNC(detect_combed_segment)(hb_filter_private_t *pv,
         {
             uint32x4_t mask_vec = vdupq_n_u32(0);
 
-            uint32x4_t cur_vec = vmovl_u16(vld1_u16(cur));
-            uint32x4_t cur_up1_vec = vmovl_u16(vld1_u16(cur + up_1));
-            uint32x4_t cur_down1_vec = vmovl_u16(vld1_u16(cur + down_1));
+            int32x4_t cur_vec = vreinterpretq_s32_u32(vmovl_u16(vld1_u16(cur)));
+            int32x4_t cur_up1_vec = vreinterpretq_s32_u32(vmovl_u16(vld1_u16(cur + up_1)));
+            int32x4_t cur_down1_vec = vreinterpretq_s32_u32(vmovl_u16(vld1_u16(cur + down_1)));
 
             int32x4_t up_diff_vec = vsubq_s32(cur_vec, cur_up1_vec);
             int32x4_t down_diff_vec = vsubq_s32(cur_vec, cur_down1_vec);
@@ -500,9 +500,9 @@ static void FUNC(detect_combed_segment)(hb_filter_private_t *pv,
                 uint32x4_t motion1 = vdupq_n_u32(0);
                 if (mthresh > 0)
                 {
-                    uint32x4_t prev_vec = vmovl_u16(vld1_u16(prev));
-                    uint32x4_t next_up1_vec = vmovl_u16(vld1_u16(next + up_1_next));
-                    uint32x4_t next_down1_vec = vmovl_u16(vld1_u16(next + down_1_next));
+                    int32x4_t prev_vec = vreinterpretq_s32_u32(vmovl_u16(vld1_u16(prev)));
+                    int32x4_t next_up1_vec = vreinterpretq_s32_u32(vmovl_u16(vld1_u16(next + up_1_next)));
+                    int32x4_t next_down1_vec = vreinterpretq_s32_u32(vmovl_u16(vld1_u16(next + down_1_next)));
                     int32x4_t abs_diff1 = vabsq_s32(vsubq_s32(prev_vec, cur_vec));
                     int32x4_t abs_diff2 = vabsq_s32(vsubq_s32(cur_up1_vec, next_up1_vec));
                     int32x4_t abs_diff3 = vabsq_s32(vsubq_s32(cur_down1_vec, next_down1_vec));
@@ -513,9 +513,9 @@ static void FUNC(detect_combed_segment)(hb_filter_private_t *pv,
 
                     motion = vandq_u32(vandq_u32(motion_cond1, motion_cond2), motion_cond3);
 
-                    uint32x4_t next_vec = vmovl_u16(vld1_u16(next));
-                    uint32x4_t prev_up1_vec = vmovl_u16(vld1_u16(prev + up_1_prev));
-                    uint32x4_t prev_down1_vec = vmovl_u16(vld1_u16(prev + down_1_prev));
+                    int32x4_t next_vec = vreinterpretq_s32_u32(vmovl_u16(vld1_u16(next)));
+                    int32x4_t prev_up1_vec = vreinterpretq_s32_u32(vmovl_u16(vld1_u16(prev + up_1_prev)));
+                    int32x4_t prev_down1_vec = vreinterpretq_s32_u32(vmovl_u16(vld1_u16(prev + down_1_prev)));
                     int32x4_t abs_diff4 = vabsq_s32(vsubq_s32(next_vec, cur_vec));
                     int32x4_t abs_diff5 = vabsq_s32(vsubq_s32(prev_up1_vec, cur_up1_vec));
                     int32x4_t abs_diff6 = vabsq_s32(vsubq_s32(prev_down1_vec, cur_down1_vec));
@@ -534,8 +534,8 @@ static void FUNC(detect_combed_segment)(hb_filter_private_t *pv,
                 uint32x4_t motion_check = vorrq_u32(motion, v_exhaustive_check);
                 motion_check = vcgtq_u32(motion_check, mask_vec);
 
-                uint32x4_t cur_up2_vec = vmovl_u16(vld1_u16(cur + up_2));
-                uint32x4_t cur_down2_vec = vmovl_u16(vld1_u16(cur + down_2));
+                int32x4_t cur_up2_vec = vreinterpretq_s32_u32(vmovl_u16(vld1_u16(cur + up_2)));
+                int32x4_t cur_down2_vec = vreinterpretq_s32_u32(vmovl_u16(vld1_u16(cur + down_2)));
 
 
                 switch(spatial_metric)
@@ -578,7 +578,7 @@ static void FUNC(detect_combed_segment)(hb_filter_private_t *pv,
                     }
                     case 2:
                     {
-                        int32x4_t combing1 = vabsq_s32(vsubq_s32(vaddq_u32(vaddq_u32(cur_up2_vec, vmulq_u32(cur_vec, v_four)),cur_down2_vec), vmulq_u32(vaddq_u32(cur_up1_vec, cur_down1_vec), v_three)));
+                        int32x4_t combing1 = vabsq_s32(vsubq_s32(vaddq_s32(vaddq_s32(cur_up2_vec, vmulq_s32(cur_vec, v_four)),cur_down2_vec), vmulq_s32(vaddq_s32(cur_up1_vec, cur_down1_vec), v_three)));
                         uint32x4_t s_metric_2_vec = vcgtq_s32(combing1, v_athresh6);
 
                         mask_vec = vandq_u32(s_metric_2_vec, motion_check);
@@ -677,9 +677,9 @@ static void FUNC(detect_combed_segment)(hb_filter_private_t *pv,
         {
             uint16x8_t mask_vec = vdupq_n_u16(0);
 
-            uint16x8_t cur_vec = vmovl_u8(vld1_u8((uint8_t*)cur));
-            uint16x8_t cur_up1_vec = vmovl_u8(vld1_u8((uint8_t*)cur + up_1));
-            uint16x8_t cur_down1_vec = vmovl_u8(vld1_u8((uint8_t*)cur + down_1));
+            int16x8_t cur_vec = vreinterpretq_s16_u16(vmovl_u8(vld1_u8((uint8_t*)cur)));
+            int16x8_t cur_up1_vec = vreinterpretq_s16_u16(vmovl_u8(vld1_u8((uint8_t*)cur + up_1)));
+            int16x8_t cur_down1_vec = vreinterpretq_s16_u16(vmovl_u8(vld1_u8((uint8_t*)cur + down_1)));
 
             int16x8_t up_diff_vec = vsubq_s16(cur_vec, cur_up1_vec);
             int16x8_t down_diff_vec = vsubq_s16(cur_vec, cur_down1_vec);
@@ -699,9 +699,9 @@ static void FUNC(detect_combed_segment)(hb_filter_private_t *pv,
                 uint16x8_t motion1 = vdupq_n_u16(0);
                 if (mthresh > 0)
                 {
-                    uint16x8_t prev_vec = vmovl_u8(vld1_u8((uint8_t*)prev));
-                    uint16x8_t next_up1_vec = vmovl_u8(vld1_u8((uint8_t*)next + up_1_next));
-                    uint16x8_t next_down1_vec = vmovl_u8(vld1_u8((uint8_t*)next + down_1_next));
+                    int16x8_t prev_vec = vreinterpretq_s16_u16(vmovl_u8(vld1_u8((uint8_t*)prev)));
+                    int16x8_t next_up1_vec = vreinterpretq_s16_u16(vmovl_u8(vld1_u8((uint8_t*)next + up_1_next)));
+                    int16x8_t next_down1_vec = vreinterpretq_s16_u16(vmovl_u8(vld1_u8((uint8_t*)next + down_1_next)));
                     int16x8_t abs_diff1 = vabsq_s16(vsubq_s16(prev_vec, cur_vec));
                     int16x8_t abs_diff2 = vabsq_s16(vsubq_s16(cur_up1_vec, next_up1_vec));
                     int16x8_t abs_diff3 = vabsq_s16(vsubq_s16(cur_down1_vec, next_down1_vec));
@@ -712,9 +712,9 @@ static void FUNC(detect_combed_segment)(hb_filter_private_t *pv,
 
                     motion = vandq_u16(vandq_u16(motion_cond1, motion_cond2), motion_cond3);
 
-                    uint16x8_t next_vec = vmovl_u8(vld1_u8((uint8_t*)next));
-                    uint16x8_t prev_up1_vec = vmovl_u8(vld1_u8((uint8_t*)prev + up_1_prev));
-                    uint16x8_t prev_down1_vec = vmovl_u8(vld1_u8((uint8_t*)prev + down_1_prev));
+                    int16x8_t next_vec = vreinterpretq_s16_u16(vmovl_u8(vld1_u8((uint8_t*)next)));
+                    int16x8_t prev_up1_vec = vreinterpretq_s16_u16(vmovl_u8(vld1_u8((uint8_t*)prev + up_1_prev)));
+                    int16x8_t prev_down1_vec = vreinterpretq_s16_u16(vmovl_u8(vld1_u8((uint8_t*)prev + down_1_prev)));
                     int16x8_t abs_diff4 = vabsq_s16(vsubq_s16(next_vec, cur_vec));
                     int16x8_t abs_diff5 = vabsq_s16(vsubq_s16(prev_up1_vec, cur_up1_vec));
                     int16x8_t abs_diff6 = vabsq_s16(vsubq_s16(prev_down1_vec, cur_down1_vec));
@@ -733,8 +733,8 @@ static void FUNC(detect_combed_segment)(hb_filter_private_t *pv,
                 uint16x8_t motion_check = vorrq_u16(motion, v_exhaustive_check);
                 motion_check = vcgtq_u16(motion_check, mask_vec);
 
-                uint16x8_t cur_up2_vec = vmovl_u8(vld1_u8((uint8_t*)cur + up_2));
-                uint16x8_t cur_down2_vec = vmovl_u8(vld1_u8((uint8_t*)cur + down_2));
+                int16x8_t cur_up2_vec = vreinterpretq_s16_u16(vmovl_u8(vld1_u8((uint8_t*)cur + up_2)));
+                int16x8_t cur_down2_vec = vreinterpretq_s16_u16(vmovl_u8(vld1_u8((uint8_t*)cur + down_2)));
                 switch(spatial_metric)
                 {
                     case 0:
@@ -765,7 +765,7 @@ static void FUNC(detect_combed_segment)(hb_filter_private_t *pv,
                     }
                     case 2:
                     {
-                        int16x8_t combing1 = vabsq_s16(vsubq_s16(vaddq_u16(vaddq_u16(cur_up2_vec, vmulq_u16(cur_vec, v_four)),cur_down2_vec), vmulq_u16(vaddq_u16(cur_up1_vec, cur_down1_vec), v_three)));
+                        int16x8_t combing1 = vabsq_s16(vsubq_s16(vaddq_s16(vaddq_s16(cur_up2_vec, vmulq_s16(cur_vec, v_four)),cur_down2_vec), vmulq_s16(vaddq_s16(cur_up1_vec, cur_down1_vec), v_three)));
                         uint16x8_t s_metric_2_vec = vcgtq_s16(combing1, v_athresh6);
 
                         mask_vec = vandq_u16(s_metric_2_vec, motion_check);
