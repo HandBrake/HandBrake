@@ -25,9 +25,6 @@ struct hb_work_private_s
     float          * input_buf;
     hb_list_t      * list;
 
-    AVChannelLayout  in_ch_layout;
-    AVChannelLayout  out_ch_layout;
-
     SwrContext     * swresample;
 
     int64_t          last_pts;
@@ -208,15 +205,18 @@ static int encavcodecaInit(hb_work_object_t *w, hb_job_t *job)
         }
     }
 
-    av_channel_layout_from_mask(&pv->in_ch_layout, in_channel_layout);
-    av_channel_layout_from_mask(&pv->out_ch_layout, out_channel_layout);
+    AVChannelLayout in_ch_layout;
+    AVChannelLayout out_ch_layout;
+
+    av_channel_layout_from_mask(&in_ch_layout, in_channel_layout);
+    av_channel_layout_from_mask(&out_ch_layout, out_channel_layout);
 
     // allocate the context and apply the settings
     context                      = avcodec_alloc_context3(codec);
     hb_ff_set_sample_fmt(context, codec, sample_fmt);
     context->bits_per_raw_sample = bits_per_raw_sample;
     context->profile             = profile;
-    context->ch_layout           = pv->out_ch_layout;
+    context->ch_layout           = out_ch_layout;
     context->sample_rate         = audio->config.out.samplerate;
     context->time_base           = (AVRational){1, 90000};
 
@@ -277,7 +277,7 @@ static int encavcodecaInit(hb_work_object_t *w, hb_job_t *job)
                                  av_get_bytes_per_sample(context->sample_fmt)));
 
     int needs_resample = context->sample_fmt != AV_SAMPLE_FMT_FLT;
-    int needs_remap    = av_channel_layout_compare(&pv->in_ch_layout, &pv->out_ch_layout) &&
+    int needs_remap    = av_channel_layout_compare(&in_ch_layout, &out_ch_layout) &&
                           out_channel_layout != AV_CH_LAYOUT_5POINT1_BACK;
 
     // sample_fmt or remap conversion
@@ -295,7 +295,7 @@ static int encavcodecaInit(hb_work_object_t *w, hb_job_t *job)
         av_opt_set_int(pv->swresample, "out_sample_fmt",
                        context->sample_fmt, 0);
         av_opt_set_chlayout(pv->swresample, "in_chlayout",
-                       &pv->in_ch_layout, 0);
+                       &in_ch_layout, 0);
         av_opt_set_chlayout(pv->swresample, "out_chlayout",
                        &context->ch_layout, 0);
         av_opt_set_int(pv->swresample, "in_sample_rate",
@@ -321,6 +321,9 @@ static int encavcodecaInit(hb_work_object_t *w, hb_job_t *job)
         pv->swresample = NULL;
         pv->output_buf = pv->input_buf;
     }
+
+    av_channel_layout_uninit(&in_ch_layout);
+    av_channel_layout_uninit(&out_ch_layout);
 
     if (context->extradata != NULL)
     {
@@ -386,9 +389,6 @@ static void encavcodecaClose(hb_work_object_t * w)
         {
             swr_free(&pv->swresample);
         }
-
-        av_channel_layout_uninit(&pv->in_ch_layout);
-        av_channel_layout_uninit(&pv->out_ch_layout);
 
         free(pv);
         w->private_data = NULL;
@@ -461,7 +461,7 @@ static void Encode(hb_work_object_t *w, hb_buffer_list_t *list)
         int     out_size;
         AVFrame frame = { .nb_samples = pv->samples_per_frame,
                           .format = pv->context->sample_fmt,
-                          .ch_layout = pv->in_ch_layout
+                          .ch_layout = pv->context->ch_layout
         };
 
         out_size = av_samples_get_buffer_size(NULL,
