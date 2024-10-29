@@ -18,12 +18,13 @@ Download available from Microsoft:
 
 - Added Intel QSV VVC (hardware) video decoder
 - Added an option to enable AV1 screen content coding(SCC) on Intel Lunar Lake QSV AV1 encoder
-- Added hardware decoders on Windows 11 for ARM
 - Added a preference to keep duplicated Blu-ray titles
 - Added support for lossless VP9 encoding
 
 #### Audio
 
+- Added ALAC encoder
+- Added Vorbis passthru
 - Improved scan of DTS audio profiles
 
 #### Subtitles
@@ -34,10 +35,12 @@ Download available from Microsoft:
 #### Third-party libraries
 
 - Updated libraries
+  - AMF 1.4.35 (AMD VCN video encoding)
   - FFmpeg 7.1 (decoding and filters)
   - FreeType 2.13.3 (subtitles)
   - Fribidi 1.0.16 (subtitles)
   - HarfBuzz 10.0.1 (subtitles)
+  - libdav1d 1.5.0 (AV1 video decoding)
   - libdovi 3.3.1 (Dolby Vision dynamic metadata)
   - libjpeg-turbo 3.0.4 (preview image compression)
   - nv-codec-headers 12.2.72.0 (Nvidia NVENC encoding)
@@ -53,13 +56,14 @@ Download available from Microsoft:
 
 ### Mac
 
-- Add Range Limit controls to the "Add to Queue" selection window. (#4146)
+- Add Range Limit controls to the "Add to Queue" selection window (#4146)
 - Miscellaneous bug fixes and improvements
 
 ### Windows
 
-- Add Range Limit controls to the "Add to Queue" selection window. (#4146)
-- Add support for DirectX based video decoding when using the Media Foundation encoder on ARM devices. 
+- Added Range Limit controls to the "Add to Queue" selection window (#4146)
+- Added support for DirectX based video decoding when using the Media Foundation encoder on ARM devices
+- Added support for the AV1 Media Foundation encoder on ARM devices
 - Miscellaneous bug fixes and improvements
 
 
