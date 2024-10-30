@@ -137,15 +137,23 @@
                 <CheckBox Content="{x:Static Properties:Resources.Options_DvdRead}" IsChecked="{Binding DisableLibdvdNav}" Margin="0,8,0,0" />
 
                 <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
-                    <TextBlock Text="{x:Static Properties:Resources.Options_PreviewScanCount}" VerticalAlignment="Center" Width="250" />
+                    <TextBlock Text="{x:Static Properties:Resources.Options_PreviewScanCount}" VerticalAlignment="Center" Width="300" />
                     <ComboBox Name="numberOfPreviews" ItemsSource="{Binding PreviewPicturesToScan}" SelectedItem="{Binding SelectedPreviewCount}" Width="120" />
                 </StackPanel>
-                <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
-                    <TextBlock Text="{x:Static Properties:Resources.Options_MinTitleScanLength}" TextWrapping="Wrap" VerticalAlignment="Center" Width="250" />
+
+                <StackPanel Orientation="Horizontal" Margin="0,20,0,0">
+                    <TextBlock Text="{x:Static Properties:Resources.Options_MinTitleScanLength}" TextWrapping="Wrap" VerticalAlignment="Center" Width="300" />
                     <TextBox x:Name="MinTitleLength" VerticalAlignment="Center" Text="{Binding MinLength}"  Width="120"/>
-                    <!-- Find a control for this-->
                 </StackPanel>
-                <CheckBox Content="{x:Static Properties:Resources.Options_KeepDuplicateTitles}" IsChecked="{Binding KeepDuplicateTitles}" Margin="0,8,0,0" />
+
+                <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
+                    <CheckBox IsChecked="{Binding MaxDurationEnabled}" VerticalAlignment="Center" VerticalContentAlignment="Center" Width="300" Margin="0,0,5,0" >
+                        <TextBlock Text="{x:Static Properties:Resources.Options_MaxTitleScanDuration}" TextWrapping="WrapWithOverflow" VerticalAlignment="Center"/>
+                    </CheckBox>
+                    <TextBox x:Name="MaxTitleLength" VerticalAlignment="Center" Text="{Binding MaxLength}" IsEnabled="{Binding MaxDurationEnabled}"  Width="120"/>
+                </StackPanel>
+
+                <CheckBox Content="{x:Static Properties:Resources.Options_KeepDuplicateTitles}" IsChecked="{Binding KeepDuplicateTitles}" Margin="0,20,0,0" />
             </StackPanel>
         </StackPanel>
 

@@ -333,6 +333,7 @@ namespace HandBrakeWPF.Services
             defaults.Add(UserSettingConstants.PauseQueueOnLowDiskspaceLevel, 2000000000L);
             defaults.Add(UserSettingConstants.PreviewScanCount, 10);
             defaults.Add(UserSettingConstants.MinScanDuration, 10);
+            defaults.Add(UserSettingConstants.MaxScanDuration, 0);
             defaults.Add(UserSettingConstants.KeepDuplicateTitles, false);
             defaults.Add(UserSettingConstants.ProcessPriorityInt, 2);
             defaults.Add(UserSettingConstants.X264Step, 0.5);

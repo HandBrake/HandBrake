@@ -1037,7 +1037,7 @@ void hb_json_job_scan( hb_handle_t * h, const char * json_job )
     // enabled during scan.  So enable it here.
     hb_list_t *file_paths = hb_list_init();
     hb_list_add(file_paths, (char *)path);
-    hb_scan(h, file_paths, title_index, -1, 0, 0, 0, 0, NULL, hw_decode, keep_duplicate_titles);
+    hb_scan(h, file_paths, title_index, -1, 0, 0, 0, 0, 0, NULL, hw_decode, keep_duplicate_titles);
     hb_list_close(&file_paths);
 
     // Wait for scan to complete

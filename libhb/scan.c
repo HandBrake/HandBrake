@@ -29,6 +29,7 @@ typedef struct
     int            store_previews;
 
     uint64_t       min_title_duration;
+    uint64_t       max_title_duration;
     int            keep_duplicate_titles;
     
     int            crop_threshold_frames;
@@ -88,7 +89,7 @@ static int is_known_filetype(const char *filename)
 hb_thread_t * hb_scan_init( hb_handle_t * handle, volatile int * die,
                             hb_list_t *  paths, int title_index,
                             hb_title_set_t * title_set, int preview_count,
-                            int store_previews, uint64_t min_duration,
+                            int store_previews, uint64_t min_duration, uint64_t max_duration,
                             int crop_threshold_frames, int crop_threshold_pixels,
                             hb_list_t * exclude_extensions, int hw_decode,
                             int keep_duplicate_titles)
@@ -104,7 +105,8 @@ hb_thread_t * hb_scan_init( hb_handle_t * handle, volatile int * die,
     data->preview_count  = preview_count;
     data->store_previews = store_previews;
     data->min_title_duration = min_duration;
-    
+    data->max_title_duration = max_duration;
+     
     data->crop_threshold_frames = crop_threshold_frames;
     data->crop_threshold_pixels = crop_threshold_pixels;
     data->exclude_extensions    = hb_string_list_copy(exclude_extensions);
@@ -154,7 +156,7 @@ static void ScanFunc( void * _data )
             /* Scan this title only */
             hb_list_add( data->title_set->list_title,
                          hb_bd_title_scan( data->bd,
-                         data->title_index, 0 ) );
+                         data->title_index, 0, 0 ) );
         }
         else
         {
@@ -164,7 +166,7 @@ static void ScanFunc( void * _data )
                 UpdateState1(data, i + 1);
                 hb_list_add( data->title_set->list_title,
                              hb_bd_title_scan( data->bd,
-                             i + 1, data->min_title_duration ) );
+                             i + 1, data->min_title_duration, data->max_title_duration ) );
             }
             feature = hb_bd_main_feature( data->bd,
                                           data->title_set->list_title );
@@ -179,7 +181,7 @@ static void ScanFunc( void * _data )
             /* Scan this title only */
             hb_list_add( data->title_set->list_title,
                          hb_dvd_title_scan( data->dvd,
-                            data->title_index, 0 ) );
+                            data->title_index, 0, 0 ) );
         }
         else
         {
@@ -189,7 +191,7 @@ static void ScanFunc( void * _data )
                 UpdateState1(data, i + 1);
                 hb_list_add( data->title_set->list_title,
                              hb_dvd_title_scan( data->dvd,
-                            i + 1, data->min_title_duration ) );
+                            i + 1, data->min_title_duration, data->max_title_duration ) );
             }
             feature = hb_dvd_main_feature( data->dvd,
                                            data->title_set->list_title );
