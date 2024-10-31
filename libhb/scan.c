@@ -229,30 +229,6 @@ static void ScanFunc( void * _data )
             }
         }
     }
-    else if (hb_list_count(data->paths) > 1) // We have many file paths to process.
-    {
-        // If dragging a batch of files, maybe not, but if the UI's implement a recursive folder maybe?
-        for (i = 0; i < hb_list_count( data->paths ); i++)
-        {
-            if (*data->die)
-            {
-                goto finish;
-            }
-
-            single_path = hb_list_item(data->paths, i);
-
-            UpdateState1(data, i + 1);
-
-            if (hb_is_valid_batch_path(single_path))
-            {
-                title = hb_batch_title_scan_single(data->h, single_path, (int)i + 1);
-                if (title != NULL)
-                {
-                    hb_list_add(data->title_set->list_title, title);
-                }
-            }
-        }
-    }
     else if (single_path != NULL) // Single File.
     {
         // Title index 0 is not a valid title number and means scan all titles.
@@ -276,6 +252,30 @@ static void ScanFunc( void * _data )
             hb_title_close( &title );
             hb_log( "scan: unrecognized file type" );
             goto finish;
+        }
+    }
+    else // We have many file paths to process.
+    {
+        // If dragging a batch of files, maybe not, but if the UI's implement a recursive folder maybe?
+        for (i = 0; i < hb_list_count( data->paths ); i++)
+        {
+            if (*data->die)
+            {
+                goto finish;
+            }
+
+            char *path = hb_list_item(data->paths, i);
+
+            UpdateState1(data, i + 1);
+
+            if (hb_is_valid_batch_path(path))
+            {
+                title = hb_batch_title_scan_single(data->h, path, (int)i + 1);
+                if (title != NULL)
+                {
+                    hb_list_add(data->title_set->list_title, title);
+                }
+            }
         }
     }
 
