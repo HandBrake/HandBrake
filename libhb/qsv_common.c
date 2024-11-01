@@ -995,8 +995,8 @@ static void init_ext_av1screencontent_tools(mfxExtAV1ScreenContentTools *extScre
     memset(extScreenContentTools, 0, sizeof(mfxExtAV1ScreenContentTools));
     extScreenContentTools->Header.BufferId = MFX_EXTBUFF_AV1_SCREEN_CONTENT_TOOLS;
     extScreenContentTools->Header.BufferSz = sizeof(mfxExtAV1ScreenContentTools);
-    extScreenContentTools->IntraBlockCopy  = MFX_CODINGOPTION_ON;
-    extScreenContentTools->Palette         = MFX_CODINGOPTION_ON;
+    extScreenContentTools->IntraBlockCopy  = MFX_CODINGOPTION_OFF;
+    extScreenContentTools->Palette         = MFX_CODINGOPTION_OFF;
 }
 
 static int query_capabilities(mfxSession session, int index, mfxVersion version, hb_qsv_info_t *info, int lowpower)
@@ -1489,7 +1489,7 @@ static int query_capabilities(mfxSession session, int index, mfxVersion version,
             videoParam.NumExtParam = 1;
 
             status = MFXVideoENCODE_Query(session, NULL, &videoParam);
-            if (status >= MFX_ERR_NONE)
+            if (status >= MFX_ERR_NONE && extAV1ScreenContentToolsParam.IntraBlockCopy != 0)
             {
                 info->capabilities |= HB_QSV_CAP_AV1_SCREENCONTENT;
             }
