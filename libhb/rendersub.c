@@ -40,16 +40,17 @@ struct hb_filter_private_s
     int                sws_width;
     int                sws_height;
 
+    hb_buffer_list_t   rendered_sub_list;
+
     // VOBSUB && PGSSUB
-    hb_list_t         *sub_list; // List of active subs
+    hb_buffer_list_t   sub_list; // List of active subs
 
     // SSA
     ASS_Library       *ssa;
     ASS_Renderer      *renderer;
     ASS_Track         *ssa_track;
     uint8_t            script_initialized;
-    hb_buffer_list_t   last_renders;
-    hb_box_vec_t       last_boxes;
+    hb_box_vec_t       boxes;
 
     // SRT
     int                line;
@@ -591,11 +592,29 @@ static void blend8onbi8(const hb_filter_private_t *pv, hb_buffer_t *dst, const h
     }
 }
 
-// Assumes that the input destination buffer has the same dimensions
-// as the original title dimensions
-static void apply_sub(const hb_filter_private_t *pv, hb_buffer_t *buf, const hb_buffer_t *sub)
+static hb_buffer_t * blend_subs(const hb_filter_private_t *pv, hb_buffer_t *in, hb_buffer_list_t *subs)
 {
-    pv->blend(pv, buf, sub, pv->depth - 8);
+    // Assumes that the input destination buffer has
+    // the same dimensions as the original title dimensions
+    hb_buffer_t *out = in;
+
+    if (hb_buffer_list_count(subs) == 0)
+    {
+        return out;
+    }
+
+    if (hb_buffer_is_writable(in) == 0)
+    {
+        out = hb_buffer_dup(in);
+        hb_buffer_close(&in);
+    }
+
+    for (hb_buffer_t *sub = hb_buffer_list_head(subs); sub; sub = sub->next)
+    {
+        pv->blend(pv, out, sub, pv->depth - 8);
+    }
+
+    return out;
 }
 
 static hb_buffer_t * scale_subtitle(hb_filter_private_t *pv,
@@ -737,47 +756,36 @@ static hb_buffer_t * scale_subtitle(hb_filter_private_t *pv,
 
 // Assumes that the input buffer has the same dimensions
 // as the original title dimensions
-static void apply_vobsubs(hb_filter_private_t *pv, hb_buffer_t *buf)
+static void render_vobsubs(hb_filter_private_t *pv, hb_buffer_t *buf)
 {
     hb_buffer_t *sub, *next;
 
     // Note that VOBSUBs can overlap in time.
     // I.e. more than one may be rendered to the screen at once.
-    for (int ii = 0; ii < hb_list_count(pv->sub_list);)
+    for (sub = hb_buffer_list_head(&pv->sub_list); sub; sub = next)
     {
-        sub = hb_list_item(pv->sub_list, ii);
-        if (ii + 1 < hb_list_count(pv->sub_list))
-        {
-            next = hb_list_item(pv->sub_list, ii + 1);
-        }
-        else
-        {
-            next = NULL;
-        }
+        next = sub->next;
 
         if ((sub->s.stop != AV_NOPTS_VALUE && sub->s.stop <= buf->s.start) ||
             (next != NULL && sub->s.stop == AV_NOPTS_VALUE && next->s.start <= buf->s.start))
         {
             // Subtitle stop is in the past, delete it
-            hb_list_rem(pv->sub_list, sub);
+            hb_buffer_list_rem(&pv->sub_list, sub);
             hb_buffer_close(&sub);
         }
         else if (sub->s.start <= buf->s.start)
         {
             // The subtitle has started before this frame and ends
-            // after it.  Render the subtitle into the frame.
-            while (sub)
+            // after it. Render the subtitle into the frame.
+            hb_buffer_t *scaled = scale_subtitle(pv, sub, buf);
+            if (scaled)
             {
-                hb_buffer_t *scaled = scale_subtitle(pv, sub, buf);
-                apply_sub(pv, buf, scaled);
-                hb_buffer_close(&scaled);
-                sub = sub->next;
+                hb_buffer_list_append(&pv->rendered_sub_list, scaled);
             }
-            ii++;
         }
         else
         {
-            // The subtitle starts in the future.  No need to continue.
+            // The subtitle starts in the future. No need to continue.
             break;
         }
     }
@@ -785,10 +793,6 @@ static void apply_vobsubs(hb_filter_private_t *pv, hb_buffer_t *buf)
 
 static int vobsub_post_init(hb_filter_object_t *filter, hb_job_t *job)
 {
-    hb_filter_private_t *pv = filter->private_data;
-
-    pv->sub_list = hb_list_init();
-
     return 0;
 }
 
@@ -801,10 +805,7 @@ static void vobsub_close(hb_filter_object_t *filter)
         return;
     }
 
-    if (pv->sub_list)
-    {
-        hb_list_empty(&pv->sub_list);
-    }
+    hb_buffer_list_close(&pv->sub_list);
 
     free(pv);
     filter->private_data = NULL;
@@ -834,12 +835,15 @@ static int vobsub_work(hb_filter_object_t *filter,
             hb_buffer_close(&sub);
             break;
         }
-        hb_list_add(pv->sub_list, sub);
+        hb_buffer_list_append(&pv->sub_list, sub);
     }
 
-    apply_vobsubs(pv, in);
+    render_vobsubs(pv, in);
+
     *buf_in = NULL;
-    *buf_out = in;
+    *buf_out = blend_subs(pv, in, &pv->rendered_sub_list);
+
+    hb_buffer_list_close(&pv->rendered_sub_list);
 
     return HB_FILTER_OK;
 }
@@ -984,38 +988,42 @@ static hb_buffer_t * compose_subsample_ass(hb_filter_private_t *pv, const ASS_Im
     return sub;
 }
 
-static hb_buffer_list_t * render_ssa_subs(hb_filter_private_t *pv, int64_t start)
+static void clear_ssa_rendered_sub_cache(hb_filter_private_t *pv)
+{
+    if (hb_buffer_list_count(&pv->rendered_sub_list))
+    {
+        hb_buffer_list_close(&pv->rendered_sub_list);
+        hb_box_vec_clear(&pv->boxes);
+    }
+}
+
+static void render_ssa_subs(hb_filter_private_t *pv, int64_t start)
 {
     int changed;
     ASS_Image *frame_list = ass_render_frame(pv->renderer, pv->ssa_track,
                                              start / 90, &changed);
     if (!frame_list)
     {
-        return NULL;
+        clear_ssa_rendered_sub_cache(pv);
     }
-
-    // Re-use cached overlays, whenever possible
-    if (changed)
+    else if (changed)
     {
-        if (hb_buffer_list_count(&pv->last_renders))
-        {
-            hb_buffer_list_close(&pv->last_renders);
-            hb_box_vec_clear(&pv->last_boxes);
-        }
+        // Re-use cached overlays, whenever possible
+        clear_ssa_rendered_sub_cache(pv);
 
         // Find overlay size and pos of non overlapped boxes
         // (faster than composing at the video dimensions)
         for (ASS_Image *frame = frame_list; frame; frame = frame->next)
         {
-            hb_box_vec_append(&pv->last_boxes,
+            hb_box_vec_append(&pv->boxes,
                                frame->dst_x, frame->dst_y,
                                frame->w + frame->dst_x, frame->h + frame->dst_y);
         }
 
-        for (int i = 0; i < pv->last_boxes.count; i++)
+        for (int i = 0; i < pv->boxes.count; i++)
         {
             // Overlay must be aligned to the chroma plane, pad as needed.
-            hb_box_t box = pv->last_boxes.boxes[i];
+            hb_box_t box = pv->boxes.boxes[i];
             int x = box.x1 - ((box.x1 + pv->crop[2]) & ((1 << pv->wshift) - 1));
             int y = box.y1 - ((box.y1 + pv->crop[0]) & ((1 << pv->hshift) - 1));
             int width  = box.x2 - x;
@@ -1026,18 +1034,9 @@ static hb_buffer_list_t * render_ssa_subs(hb_filter_private_t *pv, int64_t start
             {
                 sub->f.x += pv->crop[2];
                 sub->f.y += pv->crop[0];
-                hb_buffer_list_append(&pv->last_renders, sub);
+                hb_buffer_list_append(&pv->rendered_sub_list, sub);
             }
         }
-    }
-
-    if (hb_buffer_list_count(&pv->last_renders))
-    {
-        return &pv->last_renders;
-    }
-    else
-    {
-        return NULL;
     }
 }
 
@@ -1146,8 +1145,7 @@ static void ssa_close(hb_filter_object_t *filter)
     {
         ass_library_done(pv->ssa);
     }
-    hb_buffer_list_close(&pv->last_renders);
-    hb_box_vec_close(&pv->last_boxes);
+    hb_box_vec_close(&pv->boxes);
 
     free(pv);
     filter->private_data = NULL;
@@ -1159,9 +1157,7 @@ static int ssa_work(hb_filter_object_t *filter,
 {
     hb_filter_private_t *pv = filter->private_data;
     hb_buffer_t *in = *buf_in;
-    hb_buffer_t *out = in;
     hb_buffer_t *sub;
-    hb_buffer_list_t *bitmaps;
 
     if (!pv->script_initialized)
     {
@@ -1201,26 +1197,10 @@ static int ssa_work(hb_filter_object_t *filter,
         hb_buffer_close(&sub);
     }
 
-    bitmaps = render_ssa_subs(pv, in->s.start);
+    render_ssa_subs(pv, in->s.start);
 
-    if (bitmaps && hb_buffer_is_writable(in) == 0)
-    {
-        out = hb_buffer_dup(in);
-    }
-    else
-    {
-        *buf_in = NULL;
-    }
-
-    if (bitmaps)
-    {
-        for (hb_buffer_t *bitmap = hb_buffer_list_head(bitmaps); bitmap; bitmap = bitmap->next)
-        {
-            apply_sub(pv, out, bitmap);
-        }
-    }
-
-    *buf_out = out;
+    *buf_in  = NULL;
+    *buf_out = blend_subs(pv, in, &pv->rendered_sub_list);
 
     return HB_FILTER_OK;
 }
@@ -1267,9 +1247,7 @@ static int textsub_work(hb_filter_object_t *filter,
 {
     hb_filter_private_t *pv = filter->private_data;
     hb_buffer_t *in = *buf_in;
-    hb_buffer_t *out = in;
     hb_buffer_t *sub;
-    hb_buffer_list_t *bitmaps;
 
     if (!pv->script_initialized)
     {
@@ -1359,80 +1337,64 @@ static int textsub_work(hb_filter_object_t *filter,
         process_sub(pv, pv->current_sub);
     }
 
-    bitmaps = render_ssa_subs(pv, in->s.start);
+    render_ssa_subs(pv, in->s.start);
 
-    if (bitmaps && hb_buffer_is_writable(in) == 0)
-    {
-        out = hb_buffer_dup(in);
-    }
-    else
-    {
-        *buf_in = NULL;
-    }
-
-    if (bitmaps)
-    {
-        for (hb_buffer_t *bitmap = hb_buffer_list_head(bitmaps); bitmap; bitmap = bitmap->next)
-        {
-            apply_sub(pv, out, bitmap);
-        }
-    }
-
-    *buf_out = out;
+    *buf_in  = NULL;
+    *buf_out = blend_subs(pv, in, &pv->rendered_sub_list);
 
     return HB_FILTER_OK;
 }
 
-static void apply_pgs_subs(hb_filter_private_t *pv, hb_buffer_t *buf)
+static void render_pgs_subs(hb_filter_private_t *pv, hb_buffer_t *buf)
 {
-    int index;
-    hb_buffer_t *old_sub;
-    hb_buffer_t *sub;
+    hb_buffer_t *sub, *next, *active = NULL;
 
     // Each PGS subtitle supersedes anything that preceded it.
     // Find the active subtitle (if there is one), and delete
     // everything before it.
-    for (index = hb_list_count(pv->sub_list) - 1; index > 0; index--)
+    for (sub = hb_buffer_list_head(&pv->sub_list); sub; sub = sub->next)
     {
-        sub = hb_list_item(pv->sub_list, index);
-        if (sub->s.start <= buf->s.start)
+        if (sub->s.start > buf->s.start)
         {
-            while (index > 0)
-            {
-                old_sub = hb_list_item(pv->sub_list, index - 1);
-                hb_list_rem(pv->sub_list, old_sub);
-                hb_buffer_close(&old_sub);
-                index--;
-            }
+            break;
         }
+        active = sub;
+    }
+
+    for (sub = hb_buffer_list_head(&pv->sub_list); sub; sub = next)
+    {
+        if (active == NULL || sub == active)
+        {
+            break;
+        }
+        next = sub->next;
+        hb_buffer_list_rem(&pv->sub_list, sub);
+        hb_buffer_close(&sub);
     }
 
     // Some PGS subtitles have no content and only serve to clear
     // the screen. If any of these are at the front of our list,
     // we can now get rid of them.
-    while (hb_list_count(pv->sub_list) > 0)
+    for (sub = hb_buffer_list_head(&pv->sub_list); sub; sub = next)
     {
-        sub = hb_list_item(pv->sub_list, 0);
         if (sub->f.width != 0 && sub->f.height != 0)
         {
             break;
         }
-
-        hb_list_rem(pv->sub_list, sub);
+        next = sub->next;
+        hb_buffer_list_rem(&pv->sub_list, sub);
         hb_buffer_close(&sub);
     }
 
     // Check to see if there's an active subtitle, and apply it.
-    if (hb_list_count(pv->sub_list) > 0)
+    for (sub = hb_buffer_list_head(&pv->sub_list); sub; sub = sub->next)
     {
-        sub = hb_list_item(pv->sub_list, 0);
         if (sub->s.start <= buf->s.start)
         {
             hb_buffer_t *scaled = scale_subtitle(pv, sub, buf);
             if (scaled)
             {
-                apply_sub(pv, buf, scaled);
-                hb_buffer_close(&scaled);
+                hb_buffer_list_append(&pv->rendered_sub_list, scaled);
             }
         }
     }
@@ -1440,10 +1402,6 @@ static void apply_pgs_subs(hb_filter_private_t *pv, hb_buffer_t *buf)
 
 static int pgssub_post_init(hb_filter_object_t *filter, hb_job_t *job)
 {
-    hb_filter_private_t *pv = filter->private_data;
-
-    pv->sub_list = hb_list_init();
-
     return 0;
 }
 
@@ -1456,10 +1414,7 @@ static void pgssub_close(hb_filter_object_t *filter)
         return;
     }
 
-    if (pv->sub_list)
-    {
-        hb_list_empty(&pv->sub_list);
-    }
+    hb_buffer_list_close(&pv->sub_list);
 
     free(pv);
     filter->private_data = NULL;
@@ -1489,12 +1444,15 @@ static int pgssub_work(hb_filter_object_t *filter,
             hb_buffer_close(&sub);
             break;
         }
-        hb_list_add(pv->sub_list, sub);
+        hb_buffer_list_append(&pv->sub_list, sub);
     }
 
-    apply_pgs_subs(pv, in);
+    render_pgs_subs(pv, in);
+
     *buf_in = NULL;
-    *buf_out = in;
+    *buf_out = blend_subs(pv, in, &pv->rendered_sub_list);
+
+    hb_buffer_list_close(&pv->rendered_sub_list);
 
     return HB_FILTER_OK;
 }
@@ -1732,6 +1690,9 @@ static void hb_rendersub_close(hb_filter_object_t *filter)
     {
         sws_freeContext(pv->sws);
     }
+
+    hb_buffer_list_close(&pv->rendered_sub_list);
+
     switch (pv->type)
     {
         case VOBSUB:
