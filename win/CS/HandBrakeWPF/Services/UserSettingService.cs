@@ -317,7 +317,7 @@ namespace HandBrakeWPF.Services
             bool nvidiaDefaultSetting = HandBrakeHardwareEncoderHelper.IsNVEncH264Available;
 
             defaults.Add(UserSettingConstants.EnableQuickSyncDecoding, intelDefaultSetting);
-            defaults.Add(UserSettingConstants.EnableQuickSyncHyperEncode, intelDefaultSetting);
+            defaults.Add(UserSettingConstants.EnableQuickSyncHyperEncode, false);
             defaults.Add(UserSettingConstants.UseQSVDecodeForNonQSVEnc, false);
             defaults.Add(UserSettingConstants.EnableNvDecSupport, nvidiaDefaultSetting);
             defaults.Add(UserSettingConstants.EnableQuickSyncLowPower, true);
