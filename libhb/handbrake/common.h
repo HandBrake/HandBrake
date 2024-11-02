@@ -1511,20 +1511,6 @@ struct hb_filter_object_s
 #endif
 };
 
-struct hb_motion_metric_object_s
-{
-    char                * name;
-
-#ifdef __LIBHB__
-    int                (* init)       ( hb_motion_metric_object_t *, hb_filter_init_t * );
-    float              (* work)       ( hb_motion_metric_object_t *,
-                                        hb_buffer_t *, hb_buffer_t * );
-    void               (* close)      ( hb_motion_metric_object_t * );
-
-    hb_motion_metric_private_t * private_data;
-#endif
-};
-
 // Update win/CS/HandBrake.Interop/HandBrakeInterop/HbLib/hb_filter_ids.cs when changing this enum
 enum
 {
@@ -1591,6 +1577,34 @@ char               * hb_filter_settings_string(int filter_id,
 char               * hb_filter_settings_string_json(int filter_id,
                                                     const char * json);
 
+struct hb_motion_metric_object_s
+{
+    char                * name;
+
+#ifdef __LIBHB__
+    int                (* init)       ( hb_motion_metric_object_t *, hb_filter_init_t * );
+    float              (* work)       ( hb_motion_metric_object_t *,
+                                        hb_buffer_t *, hb_buffer_t * );
+    void               (* close)      ( hb_motion_metric_object_t * );
+
+    hb_motion_metric_private_t * private_data;
+#endif
+};
+
+struct hb_blend_object_s
+{
+    char                * name;
+
+#ifdef __LIBHB__
+    int                (* init)       ( hb_blend_object_t *, int in_pix_fmt, int in_chroma_location, int sub_pix_fmt );
+    hb_buffer_t *      (* work)       ( hb_blend_object_t *,
+                                        hb_buffer_t *, hb_buffer_list_t * );
+    void               (* close)      ( hb_blend_object_t * );
+
+    hb_blend_private_t * private_data;
+#endif
+};
+
 typedef void hb_error_handler_t( const char *errmsg );
 
 extern void hb_register_error_handler( hb_error_handler_t * handler );
@@ -1613,6 +1627,9 @@ int hb_yuv2rgb(int yuv);
 int hb_rgb2yuv(int rgb);
 int hb_rgb2yuv_bt709(int rgb);
 int hb_rgb2yuv_bt2020(int rgb);
+
+void hb_compute_chroma_smoothing_coefficient(unsigned chroma_coeffs[2][4],
+                                             int pix_fmt, int chroma_location);
 
 const char * hb_subsource_name( int source );
 

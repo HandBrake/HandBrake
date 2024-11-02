@@ -467,6 +467,8 @@ extern hb_motion_metric_object_t hb_motion_metric;
 extern hb_motion_metric_object_t hb_motion_metric_vt;
 #endif
 
+extern hb_blend_object_t hb_blend;
+
 extern hb_work_object_t * hb_objects;
 
 #define HB_WORK_IDLE     0
