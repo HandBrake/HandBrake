@@ -1957,7 +1957,7 @@ msgstr ""
 
 #: src/audiohandler.c:781
 #, c-format
-msgid "<small>Passthrough</small>"
+msgid "<small>Passthru</small>"
 msgstr ""
 
 #: src/audiohandler.c:790
@@ -3241,7 +3241,7 @@ msgid "Burned Into Video"
 msgstr ""
 
 #: src/subtitlehandler.c:113
-msgid "Passthrough"
+msgid "Passthru"
 msgstr ""
 
 #: src/subtitlehandler.c:116

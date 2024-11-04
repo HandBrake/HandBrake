@@ -150,7 +150,7 @@ msgstr "HandBrake para _Dummies"
 
 #: src/ui/menu.ui:204
 msgid "A_bout HandBrake"
-msgstr ""
+msgstr "Acerca de Hand_Brake"
 
 #: src/ui/menu.ui:290 src/ui/menu.ui:369
 msgid "_Play File"
@@ -190,19 +190,19 @@ msgstr "Limpi_ar todos los trabajos"
 
 #: src/ui/menu.ui:346
 msgid "_Add Track"
-msgstr ""
+msgstr "_Añadir pista"
 
 #: src/ui/menu.ui:350 src/ui/menu.ui:425 src/ui/menu.ui:437
 msgid "Add A_ll Tracks"
-msgstr ""
+msgstr "Añadir Todas _las Pistas"
 
 #: src/ui/menu.ui:354 src/ui/menu.ui:441
 msgid "Add _Foreign Audio Scan"
-msgstr ""
+msgstr "Añadir Es_caneo de Audio Extranjero"
 
 #: src/ui/menu.ui:360
 msgid "Add External Subtitle File"
-msgstr ""
+msgstr "Añadir archivo de subtítulos externo"
 
 #: src/ui/menu.ui:393
 msgid "Move to _Top"
@@ -226,7 +226,7 @@ msgstr "Eli_minar"
 
 #: src/ui/menu.ui:421 src/ui/menu.ui:433
 msgid "_Add New Track"
-msgstr ""
+msgstr "_Añadir Nueva Pista"
 
 #: src/ui/ghb.ui:93
 msgid ""
@@ -340,7 +340,7 @@ msgstr "Preajustes"
 
 #: src/ui/ghb.ui:157
 msgid "Save as new preset"
-msgstr ""
+msgstr "Guardar como Nuevo Ajuste preestablecido"
 
 #: src/ui/ghb.ui:166 src/ui/ghb.ui:430
 msgid "Actions"
@@ -388,7 +388,7 @@ msgstr "Cuando termine:"
 
 #: src/ui/ghb.ui:335
 msgid "Show/hide the queue details panel"
-msgstr ""
+msgstr "Mostrar/Ocultar el panel de detalles de la cola"
 
 #: src/ui/ghb.ui:364 src/ui/ghb.ui:1733
 msgid "Summary"
@@ -491,10 +491,12 @@ msgid ""
 "Copyright © 2008-2024 John Stebbins\n"
 "Copyright © 2004-2024, HandBrake Devs"
 msgstr ""
+"Copyright © 2008-2024 John Stebbins\n"
+"Copyright © 2004-2024, Desarrolladores de HandBrake"
 
 #: src/ui/ghb.ui:1305
 msgid "Multithreaded video transcoder"
-msgstr ""
+msgstr "Transcodificador de vídeo multiproceso"
 
 #: src/ui/ghb.ui:1334 data/fr.handbrake.ghb.desktop.in:3
 msgid "HandBrake"
@@ -704,7 +706,7 @@ msgstr "Tamaño:"
 
 #: src/ui/ghb.ui:1987 src/ui/ghb.ui:2006 src/ui/ghb.ui:6229
 msgid "Video Preview"
-msgstr ""
+msgstr "Vista previa de vídeo"
 
 #: src/ui/ghb.ui:2022
 msgid "Dimensions"
@@ -862,7 +864,7 @@ msgstr ""
 
 #: src/ui/ghb.ui:2485 src/ui/ghb.ui:2749
 msgid "×"
-msgstr ""
+msgstr "×"
 
 #: src/ui/ghb.ui:2496
 msgid ""
@@ -1197,6 +1199,10 @@ msgid ""
 "\n"
 "    VFR is not compatible with some players."
 msgstr ""
+"Habilita la salida de velocidad de fotogramas variable con una\n"
+"    velocidad máxima determinada por la configuración de velocidad de fotogramas.\n"
+"\n"
+"    VFR no es compatible con algunos reproductores."
 
 #: src/ui/ghb.ui:3400
 msgid "Variable Framerate"
@@ -1208,6 +1214,9 @@ msgid ""
 "\n"
 "    VFR is not compatible with some players."
 msgstr ""
+"Selecciona una la salida de velocidad de fotogramas variable..\n"
+"\n"
+"    VFR no es compatible con algunos reproductores."
 
 #: src/ui/ghb.ui:3427
 msgid "Constant Quality:"
@@ -1228,6 +1237,18 @@ msgid ""
 "  FFMpeg's and Theora's scale is more linear.\n"
 "  These encoders do not have a lossless mode."
 msgstr ""
+"Establezca el factor de calidad deseado.\n"
+"  El codificador apunta a una cierta calidad.\n"
+"  La escala usada por cada codificador de vídeo es diferente.\n"
+"\n"
+"La escala de x264 es logarítmica y los valores más bajos corresponden a una calidad más alta.\n"
+"Por lo tanto, pequeñas disminuciones en el valor darán lugar a aumentos progresivamente\n"
+"mayores en el tamaño del archivo resultante. Un valor de 0 significa sin pérdidas y dará\n"
+"como resultado un tamaño de archivo mayor que el de la fuente original, a menos que la\n"
+"fuente tampoco tuviera pérdidas.\n"
+"\n"
+"La escala de FFMpeg y Theora es más lineal.\n"
+"Estos codificadores no tienen modo sin pérdidas."
 
 #: src/ui/ghb.ui:3467
 msgid ""
@@ -1327,7 +1348,7 @@ msgstr ""
 
 #: src/ui/ghb.ui:3616
 msgid "Encoder Preset"
-msgstr ""
+msgstr "Preajuste del codificador"
 
 #: src/ui/ghb.ui:3653
 msgid ""
@@ -1407,7 +1428,7 @@ msgstr ""
 
 #: src/ui/ghb.ui:3753
 msgid "Additional Options:"
-msgstr ""
+msgstr "Opciones adicionales:"
 
 #: src/ui/ghb.ui:3793
 msgid "Audio"
@@ -1415,11 +1436,11 @@ msgstr "Audio"
 
 #: src/ui/ghb.ui:3822
 msgid "Show audio default selection options"
-msgstr ""
+msgstr "Mostrar opciones de selección de audio por defecto"
 
 #: src/ui/ghb.ui:3836 src/ui/ghb.ui:3990
 msgid "Selection Behavior…"
-msgstr ""
+msgstr "Modo de selección..."
 
 #: src/ui/ghb.ui:3845
 msgid "Reload all audio settings from defaults"
@@ -1431,7 +1452,7 @@ msgstr "Eliminar"
 
 #: src/ui/ghb.ui:3911 src/ui/ghb.ui:4065
 msgid "Clear"
-msgstr ""
+msgstr "Limpiar"
 
 #: src/ui/ghb.ui:3947
 msgid "Subtitles"
@@ -1439,11 +1460,11 @@ msgstr "Subtitulos"
 
 #: src/ui/ghb.ui:3963
 msgid "Tracks"
-msgstr ""
+msgstr "Pistas"
 
 #: src/ui/ghb.ui:3976
 msgid "Show subtitle default selection options"
-msgstr ""
+msgstr "Mostrar opciones de selección de subtitulo por defecto"
 
 #: src/ui/ghb.ui:4101
 msgid "Chapters"
@@ -1539,15 +1560,15 @@ msgstr "Directorio de destino"
 
 #: src/ui/ghb.ui:4564
 msgid "Subtitle Selection Behavior"
-msgstr ""
+msgstr "Modo de selección de Subtitulo"
 
 #: src/ui/ghb.ui:4833
 msgid "Audio Selection Behavior"
-msgstr ""
+msgstr "Modo de selección de Audio"
 
 #: src/ui/ghb.ui:4863
 msgid "Track Selection Behavior:"
-msgstr ""
+msgstr "Modo de selección de Pista:"
 
 #: src/ui/ghb.ui:4874
 msgid "Choose which audio tracks of the source media are used."
@@ -1711,7 +1732,7 @@ msgstr ""
 
 #: src/ui/ghb.ui:5184
 msgid "Audio encoder settings for each selected track:"
-msgstr ""
+msgstr "Ajustes del codificador de audio para cada pista seleccionada:"
 
 #: src/ui/ghb.ui:5185
 msgid "Each selected source track will be encoded with all selected encoders"
@@ -1745,7 +1766,7 @@ msgstr "DRC"
 
 #: src/ui/ghb.ui:5253
 msgid "Add Track"
-msgstr ""
+msgstr "Añadir Pista"
 
 #: src/ui/ghb.ui:5254
 msgid ""
@@ -1764,6 +1785,8 @@ msgid ""
 "Only the primary audio track will be encoded with the full encoder list.\n"
 "  All other secondary audio output tracks will be encoded with first encoder only."
 msgstr ""
+"Solo la pista de audio principal se codificará con la lista completa de codificadores.\n"
+"Todas las demás pistas de salida de audio secundarias se codificarán solo con el primer codificador."
 
 #: src/ui/ghb.ui:5276
 msgid "Add Multiple Titles"
@@ -1794,7 +1817,7 @@ msgstr "Desmarcar todos los títulos"
 
 #: src/ui/ghb.ui:5328
 msgid "Invert Selection"
-msgstr ""
+msgstr "Invertir selección"
 
 #: src/ui/ghb.ui:5361 src/title-add.c:351
 msgid "Destination files OK.  No duplicates detected."
@@ -1844,7 +1867,7 @@ msgstr "Número de vistas previas"
 
 #: src/ui/ghb.ui:5510
 msgid "Minimum DVD/Blu-ray title duration (seconds)"
-msgstr ""
+msgstr "Duración mínima del título de DVD/Blu-ray (segundos)"
 
 #: src/ui/ghb.ui:5518
 msgid "Use the same settings for all titles in a batch"
@@ -1875,13 +1898,15 @@ msgstr ""
 
 #: src/ui/ghb.ui:5542
 msgid "Excluded File Extensions:"
-msgstr ""
+msgstr "Extensiones de archivos excluidas:"
 
 #: src/ui/ghb.ui:5551
 msgid ""
 "The following file extensions will be ignored when scanning a folder. The "
 "list is case insensitive."
 msgstr ""
+"Las siguientes extensiones de archivo se ignorarán al escanear una carpeta. "
+"La lista no distingue entre mayúsculas y minúsculas."
 
 #: src/ui/ghb.ui:5561
 msgctxt "Queue tab in Preferences window"
@@ -1890,11 +1915,11 @@ msgstr "Cola"
 
 #: src/ui/ghb.ui:5574
 msgid "Pause queue if disk space is lower than:"
-msgstr ""
+msgstr "Pausar la cola si el espacio en disco es inferior a:"
 
 #: src/ui/ghb.ui:5590
 msgid "Disk Free Space Limit"
-msgstr ""
+msgstr "Límite de espacio libre en disco"
 
 #: src/ui/ghb.ui:5598 src/queuehandler.c:803 src/queuehandler.c:1293
 msgid "GB"
@@ -1903,12 +1928,15 @@ msgstr "GB"
 #: src/ui/ghb.ui:5608
 msgid "Clear completed jobs after an encode completes"
 msgstr ""
+"Borrar trabajos completados después de que se complete una codificación"
 
 #: src/ui/ghb.ui:5610
 msgid ""
 "By default, completed jobs remain in the queue and are marked as complete.\n"
 "  Check this if you want the queue to clean itself up by deleting completed jobs."
 msgstr ""
+"De forma predeterminada, los trabajos completados permanecen en la cola y se marcan como completados.\n"
+" Marque esto si desea que la cola se limpie sola eliminando los trabajos completados."
 
 #: src/ui/ghb.ui:5618
 msgid "Power Saving"
@@ -1958,19 +1986,19 @@ msgstr ""
 
 #: src/ui/ghb.ui:5672
 msgid "When Done"
-msgstr ""
+msgstr "Cuando termine"
 
 #: src/ui/ghb.ui:5684
 msgid "Default action when queue is completed:"
-msgstr ""
+msgstr "Acción por defecto cuando se completa la cola:"
 
 #: src/ui/ghb.ui:5697
 msgid "Show notification when queue is completed"
-msgstr ""
+msgstr "Mostrar notificación cuando se complete la cola"
 
 #: src/ui/ghb.ui:5705
 msgid "Show notification when each item is completed"
-msgstr ""
+msgstr "Mostrar notificación cuando se complete cada elemento"
 
 #: src/ui/ghb.ui:5717
 msgid "Advanced"
@@ -1991,6 +2019,13 @@ msgid ""
 "\n"
 "  Flatpak users may need to set this for certain workflows to work properly. The default size of the TEMP directory in a flatpak sandbox is 1/2 physical memory size and may be too small for things like the 2-pass stats file."
 msgstr ""
+"Los archivos temporales que crea HandBrake se colocarán en este directorio.\n"
+"\n"
+"Cambiar esta configuración requerirá reiniciar HandBrake.\n"
+"\n"
+"Esta configuración anula la variable de entorno TEMP que normalmente se utiliza para definir este directorio.\n"
+"\n"
+" Es posible que los usuarios de Flatpak necesiten configurar esto para que ciertos flujos de trabajo funcionen correctamente. El tamaño predeterminado del directorio TEMP en un sandbox flatpak es la mitad del tamaño de la memoria física y puede ser demasiado pequeño para cosas como el archivo de estadísticas de 2 pasadas."
 
 #: src/ui/ghb.ui:5760
 msgid "Temp Directory"
@@ -2092,11 +2127,11 @@ msgstr ""
 
 #: src/ui/ghb.ui:6301
 msgid "Preview Video Position"
-msgstr ""
+msgstr "Posición de la vista previa del vídeo"
 
 #: src/ui/ghb.ui:6314
 msgid "Preview Encode Progress"
-msgstr ""
+msgstr "Vista previa del progreso de codificación"
 
 #: src/ui/ghb.ui:6323
 msgid "Click to toggle full screen mode"
@@ -2121,23 +2156,23 @@ msgstr ""
 
 #: src/ui/ghb-chapter-row.ui:38
 msgid "Chapter Title"
-msgstr ""
+msgstr "Título del capítulo"
 
 #: src/ui/ghb-file-button.ui:23 src/ghb-file-button.c:293
 msgid "(None)"
-msgstr ""
+msgstr "(Ninguno)"
 
 #: src/ui/ghb-queue-row.ui:17 src/ghb-queue-row.c:265 src/ghb-queue-row.c:281
 msgid "Pending Queue Item"
-msgstr ""
+msgstr "Elemento de cola pendiente"
 
 #: src/ui/ghb-queue-row.ui:31
 msgid "Delete this item"
-msgstr ""
+msgstr "Eliminar este elemento"
 
 #: src/ui/ghb-queue-row.ui:52
 msgid "Encode Progress"
-msgstr ""
+msgstr "Progreso de codificación"
 
 #. Audio DRC Label
 #: src/audiohandler.c:419 src/audiohandler.c:764 src/audiohandler.c:1175
@@ -2180,8 +2215,8 @@ msgstr "Tasa de bits: %.4gkbps"
 
 #: src/audiohandler.c:781
 #, c-format
-msgid "<small>Passthrough</small>"
-msgstr "<small>Passthrough</small>"
+msgid "<small>Passthru</small>"
+msgstr "<small>Passthru</small>"
 
 #: src/audiohandler.c:790
 #, c-format
@@ -2270,7 +2305,7 @@ msgstr "Eliminar este codificador de audio"
 
 #: src/callbacks.c:296
 msgid "An encode is in progress."
-msgstr ""
+msgstr "Hay una codificación en progreso."
 
 #: src/callbacks.c:1124 src/callbacks.c:1135 src/callbacks.c:1785
 msgid "Not Selected"
@@ -2308,7 +2343,7 @@ msgstr "_Cancelar"
 
 #: src/callbacks.c:1877
 msgid "Recursively scan directories"
-msgstr ""
+msgstr "Escanear directorios recursivamente"
 
 #: src/callbacks.c:1889
 msgid "Single Title"
@@ -2467,7 +2502,7 @@ msgstr "Cancelar y Comenzar siguiente"
 
 #: src/callbacks.c:4100
 msgid "Finish Current and Stop"
-msgstr "Finalizar y Comenzar siguiente"
+msgstr "Finalizar actual y detener"
 
 #: src/callbacks.c:4100 src/callbacks.c:4124 src/queuehandler.c:1703
 msgid "Continue Encoding"
@@ -2485,9 +2520,9 @@ msgstr "Cancelar todo y Salir"
 #, c-format
 msgid "%d encode pending"
 msgid_plural "%d encodes pending"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "%d codificación pendiente"
+msgstr[1] "%d codificaciones pendientes"
+msgstr[2] "%d codificaciones pendientes"
 
 #: src/callbacks.c:4349 src/callbacks.c:4417
 #, c-format
@@ -2584,35 +2619,35 @@ msgstr "Capítulos (*.xml)"
 
 #: src/ghb-file-button.c:72
 msgid "Select a File"
-msgstr ""
+msgstr "Seleccionar un archivo"
 
 #: src/ghb-file-button.c:217
 msgid "_Select"
-msgstr ""
+msgstr "_Seleccionar"
 
 #: src/ghb-queue-row.c:260
 msgid "Running Queue Item"
-msgstr ""
+msgstr "Ejecutando elemento de cola"
 
 #: src/ghb-queue-row.c:269
 msgid "Failed Queue Item"
-msgstr ""
+msgstr "El elemento de cola ha fallado"
 
 #: src/ghb-queue-row.c:273
 msgid "Cancelled Queue Item"
-msgstr ""
+msgstr "Elemento de cola cancelado"
 
 #: src/ghb-queue-row.c:277
 msgid "Completed Queue Item"
-msgstr ""
+msgstr "Elemento de cola completado"
 
 #: src/hb-backend.c:55 src/hb-backend.c:80
 msgid "First Matching Selected Languages"
-msgstr ""
+msgstr "Primeros idiomas seleccionados que coincidan"
 
 #: src/hb-backend.c:56 src/hb-backend.c:81
 msgid "All Matching Selected Languages"
-msgstr ""
+msgstr "Todos los idiomas seleccionados que coincidan"
 
 #: src/hb-backend.c:67
 msgid "Foreign Audio Subtitle Track"
@@ -3140,21 +3175,21 @@ msgstr "Espacio de Color"
 #, c-format
 msgid "%d item complete, %d failed"
 msgid_plural "%d items complete, %d failed"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "%d elemento completado, %d fallado"
+msgstr[1] "%d elementos completados, %d fallados"
+msgstr[2] "%d elementos completados, %d fallado"
 
 #: src/notifications.c:60
 #, c-format
 msgid "%d item has finished encoding"
 msgid_plural "%d items have finished encoding"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "%d elemento ha terminado de codificarse"
+msgstr[1] "%d  elementos han terminado de codificarse"
+msgstr[2] "%d elementos han terminado de codificarse"
 
 #: src/notifications.c:106
 msgid "Put down that cocktail…"
-msgstr ""
+msgstr "Deja ese cóctel..."
 
 #: src/notifications.c:116
 msgid "Encode Complete"
@@ -3162,24 +3197,24 @@ msgstr "Codificación Completada"
 
 #: src/notifications.c:116
 msgid "Encode Failed"
-msgstr ""
+msgstr "Ha fallado la codificación"
 
 #: src/notifications.c:140
 msgid "Battery level is low."
-msgstr ""
+msgstr "El nivel de la batería es bajo."
 
 #: src/notifications.c:143
 msgid "Charger has been disconnected."
-msgstr ""
+msgstr "El cargador ha sido desconectado."
 
 #: src/notifications.c:146
 msgid "Power Saver mode has been activated."
-msgstr ""
+msgstr "Se ha activado el modo de ahorro de energía."
 
 #: src/notifications.c:153
 #, c-format
 msgid "%d.%d GB free space remaining."
-msgstr ""
+msgstr "%d.%d GB de espacio libre restante."
 
 #: src/notifications.c:165 src/queuehandler.c:1176
 msgid "Encoding Paused"
@@ -3250,23 +3285,25 @@ msgstr ""
 
 #: src/preview.c:154
 msgid "Pause Preview"
-msgstr ""
+msgstr "Pausar vista previa"
 
 #: src/preview.c:158
 msgid "Stop Encoding Preview"
-msgstr ""
+msgstr "Detener codificación vista previa"
 
 #: src/preview.c:162
 msgid "Play Preview"
-msgstr ""
+msgstr "Vista previa de reproducción"
 
 #: src/preview.c:288
 msgid "Playback Error"
-msgstr ""
+msgstr "Error de reproducción"
 
 #: src/preview.c:291
 msgid "The video could not be played. For more details, see the Activity Log."
 msgstr ""
+"Este vídeo no se puede ver. Para obtener más detalles, consulte el Registro "
+"de actividad."
 
 #: src/queuehandler.c:133
 #, c-format
@@ -3311,7 +3348,7 @@ msgstr "%s, Calidad Constante %.4g (%s)"
 #: src/queuehandler.c:309
 #, c-format
 msgid " (Multi Pass)"
-msgstr ""
+msgstr "(Pase múltiple)"
 
 #: src/queuehandler.c:341
 #, c-format
@@ -3524,8 +3561,8 @@ msgid "Burned Into Video"
 msgstr "Incrustado en el Video"
 
 #: src/subtitlehandler.c:113
-msgid "Passthrough"
-msgstr "Pasar por"
+msgid "Passthru"
+msgstr "Passthru"
 
 #: src/subtitlehandler.c:116
 msgid "Forced Subtitles Only"
@@ -3610,6 +3647,8 @@ msgid ""
 "Duplicate destination files detected. Duplicates will not be added to the "
 "queue."
 msgstr ""
+"Se detectaron archivos de destino duplicados. No se añadirán duplicados a la"
+" cola."
 
 #: src/title-add.c:439
 msgid "Select this title for adding to the queue.\n"
@@ -3649,14 +3688,16 @@ msgstr ""
 #: src/videohandler.c:154
 msgid "Additional advanced arguments that can be passed to the video encoder."
 msgstr ""
+"Argumentos avanzados adicionales que se pueden pasar al codificador de "
+"vídeo."
 
 #: src/videohandler.c:227
 msgid "The full list of encoder parameters:"
-msgstr ""
+msgstr "La lista completa de parámetros del codificador:"
 
 #: src/videohandler.c:345
 msgid "Warning: lossless"
-msgstr ""
+msgstr "Aviso: sin pérdidas"
 
 #: data/fr.handbrake.ghb.desktop.in:4
 msgid "Media Transcoder"

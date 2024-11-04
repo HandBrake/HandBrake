@@ -2039,8 +2039,8 @@ msgstr "อัตราบิต: %.4gkbps"
 
 #: src/audiohandler.c:781
 #, c-format
-msgid "<small>Passthrough</small>"
-msgstr "<small>ส่งผ่าน</small>"
+msgid "<small>Passthru</small>"
+msgstr ""
 
 #: src/audiohandler.c:790
 #, c-format
@@ -3325,7 +3325,7 @@ msgid "Burned Into Video"
 msgstr ""
 
 #: src/subtitlehandler.c:113
-msgid "Passthrough"
+msgid "Passthru"
 msgstr ""
 
 #: src/subtitlehandler.c:116

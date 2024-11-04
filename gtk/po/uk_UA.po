@@ -8,6 +8,7 @@
 # Олександр (6c6c6) <6c6c6.ukr@gmail.com>, 2023
 # nikage, 2024
 # Dmytro Svyrydenko, 2024
+# Serhii Starovoitov, 2024
 # 
 #, fuzzy
 msgid ""
@@ -16,7 +17,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-04-16 19:10+0100\n"
 "PO-Revision-Date: 2018-10-10 18:14+0000\n"
-"Last-Translator: Dmytro Svyrydenko, 2024\n"
+"Last-Translator: Serhii Starovoitov, 2024\n"
 "Language-Team: Ukrainian (Ukraine) (https://app.transifex.com/HandBrakeProject/teams/92423/uk_UA/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -87,7 +88,7 @@ msgstr "_Вигляд"
 
 #: src/ui/menu.ui:76
 msgid "Presets _List"
-msgstr "Список _шаблонів"
+msgstr "Список _передвстановлень"
 
 #: src/ui/menu.ui:84
 msgid "_Preview"
@@ -99,7 +100,7 @@ msgstr "Вікно _активності"
 
 #: src/ui/menu.ui:93
 msgid "_Presets"
-msgstr "_Шаблони"
+msgstr "_Передвстановлення"
 
 #: src/ui/menu.ui:97 src/ui/menu.ui:219 src/ui/menu.ui:262
 msgid "Set De_fault"
@@ -107,7 +108,7 @@ msgstr "Встановити _типовим"
 
 #: src/ui/menu.ui:103 src/ui/menu.ui:225
 msgid "_New Preset…"
-msgstr "_Нові попередні налаштування.."
+msgstr "_Нове передвстановлення..."
 
 #: src/ui/menu.ui:107 src/ui/menu.ui:229 src/ui/menu.ui:268 src/ui/ghb.ui:5975
 #: src/ui/ghb.ui:6065 src/callbacks.c:2135 src/chapters.c:455
@@ -125,15 +126,15 @@ msgstr "_Видалити..."
 
 #: src/ui/menu.ui:121 src/ui/menu.ui:243
 msgid "_Import Preset…"
-msgstr "_Імпортувати попередні налаштування..."
+msgstr "_Імпортувати передвстановлення..."
 
 #: src/ui/menu.ui:125 src/ui/menu.ui:247 src/ui/menu.ui:282
 msgid "_Export Preset…"
-msgstr "_Експортувати попередні налаштування..."
+msgstr "_Експортувати передвстановлення..."
 
 #: src/ui/menu.ui:131 src/ui/menu.ui:253
 msgid "Reset _Built-in Presets"
-msgstr "Скинути _вбудовані шаблони"
+msgstr "Скинути _вбудовані передвстановлення"
 
 #: src/ui/menu.ui:140 src/ui/menu.ui:200
 msgid "_Help"
@@ -339,11 +340,11 @@ msgstr "<b>Доріжка</b>"
 
 #: src/ui/ghb.ui:146 src/ui/ghb.ui:1440
 msgid "Presets"
-msgstr "Шаблони"
+msgstr "Передвстановлення"
 
 #: src/ui/ghb.ui:157
 msgid "Save as new preset"
-msgstr ""
+msgstr "Зберегти як нове передвстановлення"
 
 #: src/ui/ghb.ui:166 src/ui/ghb.ui:430
 msgid "Actions"
@@ -375,7 +376,7 @@ msgstr "Призупинити"
 
 #: src/ui/ghb.ui:235 src/ui/ghb.ui:1456
 msgid "Queue"
-msgstr ""
+msgstr "Черга"
 
 #: src/ui/ghb.ui:241
 msgid "0 jobs pending"
@@ -416,7 +417,7 @@ msgstr ""
 #: src/hb-backend.c:4339 src/hb-backend.c:4347 src/hb-backend.c:4375
 #: src/hb-backend.c:4384 src/hb-backend.c:4411 src/hb-backend.c:4436
 msgid "Preset:"
-msgstr ""
+msgstr "Передвстановлення:"
 
 #: src/ui/ghb.ui:483
 msgid "Source:"
@@ -598,11 +599,11 @@ msgstr ""
 
 #: src/ui/ghb.ui:1649
 msgid "<b>Preset:</b>"
-msgstr ""
+msgstr "<b>Передвстановлення:</b>"
 
 #: src/ui/ghb.ui:1666
 msgid "Choose Preset"
-msgstr ""
+msgstr "Обрати передвстановлення"
 
 #: src/ui/ghb.ui:1675
 msgid "<u><i>Modified</i></u>"
@@ -617,14 +618,16 @@ msgid ""
 "Reload the settings for the currently selected preset.\n"
 "Modifications will be discarded."
 msgstr ""
+"Перезавантажити налаштування для поточного передвстановлення.\n"
+"Зміни будуть відкинуті."
 
 #: src/ui/ghb.ui:1693
 msgid "Save New Preset"
-msgstr ""
+msgstr "Зберегти нове передвстановлення"
 
 #: src/ui/ghb.ui:1696
 msgid "Save the current settings to a new Preset."
-msgstr ""
+msgstr "Зберегти поточні налаштування у нове передвстановлення."
 
 #: src/ui/ghb.ui:1746
 msgid "Format:"
@@ -1217,7 +1220,7 @@ msgstr ""
 
 #: src/ui/ghb.ui:3616
 msgid "Encoder Preset"
-msgstr ""
+msgstr "Передвстановлення кодувальника"
 
 #: src/ui/ghb.ui:3653
 msgid ""
@@ -1227,6 +1230,11 @@ msgid ""
 "characteristics of the output file.  Changes will be applied after the\n"
 "preset but before all other parameters."
 msgstr ""
+"Налаштування оптимізації для найпоширеніших сценаріїв.\n"
+"\n"
+"Це може підвищити ефективність для певних характеристик джерела або заданих характеристик\n"
+"вихідного файлу. Зміни будуть застосовані після попередньо встановлених,\n"
+"але перед усіма іншими параметрами."
 
 #: src/ui/ghb.ui:3667
 msgid "Fast Decode"
@@ -1669,22 +1677,26 @@ msgid ""
 " {time} {creation-date} {creation-time} {modification-date} {modification-"
 "time} {codec} {bit-depth} {quality} {bitrate} {width} {height}"
 msgstr ""
+"Доступні опції: {source-path} {source} {title} {preset} {chapters} {date} "
+"{time} {creation-date} {creation-time} {modification-date} {modification-"
+"time} {codec} {bit-depth} {quality} {bitrate} {width} {height}"
 
 #: src/ui/ghb.ui:5464
 msgid "Use iPod/iTunes friendly (.m4v) file extension for MP4"
 msgstr ""
+"Використовувати дружнє до iPod/iTunes розширення (.m4v) для файлів MP4"
 
 #: src/ui/ghb.ui:5487
 msgid "Number of previews"
-msgstr ""
+msgstr "Кількість зображень для попереднього перегляду"
 
 #: src/ui/ghb.ui:5510
 msgid "Minimum DVD/Blu-ray title duration (seconds)"
-msgstr ""
+msgstr "Мінімальна тривалість заголовку DVD/Blu-ray (секунд)"
 
 #: src/ui/ghb.ui:5518
 msgid "Use the same settings for all titles in a batch"
-msgstr ""
+msgstr "Використовувати однакові налаштування для всіх файлів у списку"
 
 #: src/ui/ghb.ui:5520
 msgid ""
@@ -1693,61 +1705,70 @@ msgid ""
 "\n"
 "Uncheck this if you want to allow changing each title's settings independently."
 msgstr ""
+"Якщо позначено - під час додавання групи файлів до черги для кожного з них будуть використовуватися однакові налаштування.\n"
+"\n"
+"Приберіть цю позначку, якщо ви хочете дозволити зміну налаштувань для кожного з них незалежно."
 
 #: src/ui/ghb.ui:5530
 msgid "Show preview image in Summary tab"
-msgstr ""
+msgstr "Показувати зображення попереднього перегляду на вкладці «Зведення»"
 
 #: src/ui/ghb.ui:5533
 msgid ""
 "Uncheck this if you want to hide the video preview image on the Summary tab "
 "for privacy reasons."
 msgstr ""
+"Приберіть цю позначку, якщо ви хочете приховати зображення попереднього "
+"перегляду на вкладці «Зведення» з міркувань конфіденційності."
 
 #: src/ui/ghb.ui:5542
 msgid "Excluded File Extensions:"
-msgstr ""
+msgstr "Розширення файлів, що виключаються:"
 
 #: src/ui/ghb.ui:5551
 msgid ""
 "The following file extensions will be ignored when scanning a folder. The "
 "list is case insensitive."
 msgstr ""
+"Наступні розширення файлів буде проігноровано під час сканування теки. "
+"Список не залежить від регістру."
 
 #: src/ui/ghb.ui:5561
 msgctxt "Queue tab in Preferences window"
 msgid "Queue"
-msgstr ""
+msgstr "Черга"
 
 #: src/ui/ghb.ui:5574
 msgid "Pause queue if disk space is lower than:"
-msgstr ""
+msgstr "Призупинити чергу, якщо місця на диску менше, ніж:"
 
 #: src/ui/ghb.ui:5590
 msgid "Disk Free Space Limit"
-msgstr ""
+msgstr "Обмеження вільного місця на диску"
 
 #: src/ui/ghb.ui:5598 src/queuehandler.c:803 src/queuehandler.c:1293
 msgid "GB"
-msgstr ""
+msgstr "ГБ"
 
 #: src/ui/ghb.ui:5608
 msgid "Clear completed jobs after an encode completes"
-msgstr ""
+msgstr "Очистити виконані завдання після завершення кодування"
 
 #: src/ui/ghb.ui:5610
 msgid ""
 "By default, completed jobs remain in the queue and are marked as complete.\n"
 "  Check this if you want the queue to clean itself up by deleting completed jobs."
 msgstr ""
+"За замовчуванням, завершені завдання залишаються в черзі і позначаються як завершені.\n"
+"Позначте це, якщо ви хочете, щоб ці завдання було автоматично видалено з черги."
 
 #: src/ui/ghb.ui:5618
 msgid "Power Saving"
-msgstr ""
+msgstr "Режим енергозбереження"
 
 #: src/ui/ghb.ui:5632
 msgid "Pause encoding when in Power Saver mode"
-msgstr ""
+msgstr "Призупинити кодування в режимі енергозбереження"
 
 #: src/ui/ghb.ui:5636
 msgid ""
@@ -1755,10 +1776,13 @@ msgid ""
 "enters Power Saver mode. Encoding will resume when\n"
 "Power Saver mode is disabled."
 msgstr ""
+"Якщо позначено, кодування буде призупинено, коли пристрій перейде\n"
+"у режим енергозбереження. Кодування відновиться, коли\n"
+"режим енергозбереження буде вимкнено."
 
 #: src/ui/ghb.ui:5644
 msgid "Pause encoding when on battery power"
-msgstr ""
+msgstr "Призупинити кодування при живленні від батареї"
 
 #: src/ui/ghb.ui:5648
 msgid ""
@@ -1766,10 +1790,13 @@ msgid ""
 "unplugged. Encoding will resume when reconnected to\n"
 "a mains power source."
 msgstr ""
+"Якщо позначено, кодування буде призупинено, коли зарядний пристрій\n"
+"від'єднано від мережі. Кодування відновиться після повторного\n"
+"підключення до джерела живлення."
 
 #: src/ui/ghb.ui:5656
 msgid "Pause encoding when battery is low"
-msgstr ""
+msgstr "Призупинити кодування, коли заряд батареї низький"
 
 #: src/ui/ghb.ui:5660
 msgid ""
@@ -1777,30 +1804,33 @@ msgid ""
 "level is low. Encoding will resume when the\n"
 "battery is charged."
 msgstr ""
+"Якщо позначено, кодування буде призупинено,\n"
+"коли рівень заряду батареї низький. Кодування відновиться,\n"
+"коли батарею буде заряджено."
 
 #: src/ui/ghb.ui:5672
 msgid "When Done"
-msgstr ""
+msgstr "Коли завершено"
 
 #: src/ui/ghb.ui:5684
 msgid "Default action when queue is completed:"
-msgstr ""
+msgstr "Дія за замовчуванням при завершенні черги:"
 
 #: src/ui/ghb.ui:5697
 msgid "Show notification when queue is completed"
-msgstr ""
+msgstr "Показувати сповіщення, коли чергу завершено"
 
 #: src/ui/ghb.ui:5705
 msgid "Show notification when each item is completed"
-msgstr ""
+msgstr "Показувати сповіщення, коли кожен елемент завершено"
 
 #: src/ui/ghb.ui:5717
 msgid "Advanced"
-msgstr ""
+msgstr "Розширені"
 
 #: src/ui/ghb.ui:5733
 msgid "Set a custom directory for Handbrake temporary files"
-msgstr ""
+msgstr "Встановити власний каталог для тимчасових файлів Handbrake"
 
 #: src/ui/ghb.ui:5735 src/ui/ghb.ui:5751
 msgid ""
@@ -1812,112 +1842,122 @@ msgid ""
 "\n"
 "  Flatpak users may need to set this for certain workflows to work properly. The default size of the TEMP directory in a flatpak sandbox is 1/2 physical memory size and may be too small for things like the 2-pass stats file."
 msgstr ""
+"Тимчасові файли, які створює HandBrake, буде розміщено у цьому каталозі.\n"
+"\n"
+"Зміна цього параметра вимагає перезапуску HandBrake.\n"
+"\n"
+"Цей параметр перевизначає змінну середовища TEMP, яка зазвичай використовується для визначення цього каталогу.\n"
+"\n"
+"Користувачам Flatpak може знадобитися встановити цей параметр для правильної роботи певних робочих процесів. За замовчуванням розмір каталогу TEMP у пісочниці flatpak дорівнює 1/2 розміру фізичної пам'яті і може бути замалим для таких речей, як файл статистики 2-х проходів."
 
 #: src/ui/ghb.ui:5760
 msgid "Temp Directory"
-msgstr ""
+msgstr "Тимчасовий каталог"
 
 #: src/ui/ghb.ui:5783
 msgid "Constant Quality fractional granularity"
-msgstr ""
+msgstr "Дробові значення постійної якості"
 
 #: src/ui/ghb.ui:5795
 msgid "Use dvdnav (instead of libdvdread)"
-msgstr ""
+msgstr "Використовувати dvdnav (замість libdvdread)"
 
 #: src/ui/ghb.ui:5813
 msgid "Put individual encode logs in same location as movie"
-msgstr ""
+msgstr "Помістити журнал кодування у те саме місце, що й фільм"
 
 #: src/ui/ghb.ui:5833
 msgid "Activity Log Verbosity Level"
-msgstr ""
+msgstr "Рівень детальності журналу активності"
 
 #: src/ui/ghb.ui:5852
 msgid "Activity Log Longevity"
-msgstr ""
+msgstr "Довговічність журналу активності"
 
 #: src/ui/ghb.ui:5865
 msgid "Scale down High Definition previews"
-msgstr ""
+msgstr "Зменшити масштаб HD попереднього перегляду"
 
 #: src/ui/ghb.ui:5877
 msgid "Automatically Scan DVD when loaded"
-msgstr ""
+msgstr "Автоматично сканувати DVD під час завантаження"
 
 #: src/ui/ghb.ui:5879
 msgid "Scans the DVD whenever a new disc is loaded"
-msgstr ""
+msgstr "Сканувати DVD щоразу, коли завантажується новий диск"
 
 #: src/ui/ghb.ui:5906
 msgid "Activity Window Font Size"
-msgstr ""
+msgstr "Розмір шрифту у вікні активності"
 
 #: src/ui/ghb.ui:5924
 msgid "Allow Tweaks"
-msgstr ""
+msgstr "Дозволити хитрощі"
 
 #: src/ui/ghb.ui:5937
 msgid "Allow HandBrake For Dummies"
-msgstr ""
+msgstr "Дозволити HandBrake для початківців"
 
 #: src/ui/ghb.ui:5961
 msgid "Rename Preset"
-msgstr ""
+msgstr "Перейменувати передвстановлення"
 
 #: src/ui/ghb.ui:6005 src/ui/ghb.ui:6139
 msgid "Preset Name:"
-msgstr ""
+msgstr "Назва передвстановлення:"
 
 #: src/ui/ghb.ui:6051
 msgid "New Preset"
-msgstr ""
+msgstr "Нове передвстановлення"
 
 #: src/ui/ghb.ui:6094
 msgid "Category:"
-msgstr ""
+msgstr "Категорія:"
 
 #: src/ui/ghb.ui:6104
 msgid "Set the category that this preset will be shown under."
-msgstr ""
+msgstr "Встановити категорію, в якій буде показано це передвстановлення."
 
 #: src/ui/ghb.ui:6115
 msgid "Category Name:"
-msgstr ""
+msgstr "Назва категорії:"
 
 #: src/ui/ghb.ui:6164
 msgid "Default Preset"
-msgstr ""
+msgstr "Передвстановлення за замовчуванням"
 
 #: src/ui/ghb.ui:6166
 msgid "Make this the default Preset when HandBrake starts"
 msgstr ""
+"Зробити це передвстановленням за замовчуванням під час запуску HandBrake"
 
 #: src/ui/ghb.ui:6205
 msgid "HandBrake Preview"
-msgstr ""
+msgstr "Попередній перегляд HandBrake"
 
 #: src/ui/ghb.ui:6273
 msgid "Select preview frames."
-msgstr ""
+msgstr "Вибрати кадри для попереднього перегляду."
 
 #: src/ui/ghb.ui:6288 src/preview.c:167
 msgid ""
 "Encode and play a short sequence of video starting from the current preview "
 "position."
 msgstr ""
+"Кодування та відтворення короткої послідовності відео, починаючи з поточної "
+"позиції попереднього перегляду."
 
 #: src/ui/ghb.ui:6301
 msgid "Preview Video Position"
-msgstr ""
+msgstr "Попередній перегляд позиції"
 
 #: src/ui/ghb.ui:6314
 msgid "Preview Encode Progress"
-msgstr ""
+msgstr "Попередній перегляд кодування"
 
 #: src/ui/ghb.ui:6323
 msgid "Click to toggle full screen mode"
-msgstr ""
+msgstr "Натисніть, щоб увімкнути повноекранний режим"
 
 #: src/ui/ghb.ui:6338
 msgid "<b>Duration:</b>"
@@ -1926,34 +1966,37 @@ msgstr "<b>Тривалість:</b>"
 #: src/ui/ghb.ui:6346
 msgid "Set the duration of the live preview in seconds."
 msgstr ""
+"Встановити тривалість попереднього перегляду в реальному часі в секундах."
 
 #: src/ui/ghb.ui:6356
 msgid "Source Resolution"
-msgstr ""
+msgstr "Роздільна здатність джерела"
 
 #: src/ui/ghb.ui:6359
 msgid "Reset preview window to the source video's resolution"
 msgstr ""
+"Повернути вікно попереднього перегляду до роздільної здатності вихідного "
+"відео"
 
 #: src/ui/ghb-chapter-row.ui:38
 msgid "Chapter Title"
-msgstr ""
+msgstr "Назва розділу"
 
 #: src/ui/ghb-file-button.ui:23 src/ghb-file-button.c:293
 msgid "(None)"
-msgstr ""
+msgstr "(Нічого)"
 
 #: src/ui/ghb-queue-row.ui:17 src/ghb-queue-row.c:265 src/ghb-queue-row.c:281
 msgid "Pending Queue Item"
-msgstr ""
+msgstr "Завдання виконується"
 
 #: src/ui/ghb-queue-row.ui:31
 msgid "Delete this item"
-msgstr ""
+msgstr "Видалити це завдання"
 
 #: src/ui/ghb-queue-row.ui:52
 msgid "Encode Progress"
-msgstr ""
+msgstr "Кодування"
 
 #. Audio DRC Label
 #: src/audiohandler.c:419 src/audiohandler.c:764 src/audiohandler.c:1175
@@ -1963,12 +2006,12 @@ msgstr ""
 #: src/hb-backend.c:386
 #, c-format
 msgid "Off"
-msgstr ""
+msgstr "Вимкнено"
 
 #: src/audiohandler.c:431 src/audiohandler.c:760 src/audiohandler.c:1245
 #, c-format
 msgid "%ddB"
-msgstr ""
+msgstr "%dдБ"
 
 #: src/audiohandler.c:736
 msgid "Quality: "
@@ -1977,27 +2020,27 @@ msgstr "Якість:"
 #: src/audiohandler.c:743
 #, c-format
 msgid "Bitrate: %dkbps\n"
-msgstr ""
+msgstr "Бітрейт: %dкбіт/с\n"
 
 #: src/audiohandler.c:755
 #, c-format
 msgid "%.4gkHz"
-msgstr ""
+msgstr "%.4gкГц"
 
 #: src/audiohandler.c:770
 #, c-format
 msgid "<small>%d - %s (%.4gkHz)</small>"
-msgstr ""
+msgstr "<small>%d - %s (%.4gкГц)</small>"
 
 #: src/audiohandler.c:775
 #, c-format
 msgid "Bitrate: %.4gkbps"
-msgstr ""
+msgstr "Бітрейт: %.4gкбіт/с"
 
 #: src/audiohandler.c:781
 #, c-format
-msgid "<small>Passthrough</small>"
-msgstr ""
+msgid "<small>Passthru</small>"
+msgstr "<small>Скопіювати</small>"
 
 #: src/audiohandler.c:790
 #, c-format
@@ -2006,6 +2049,9 @@ msgid ""
 "DRC: %s\n"
 "Track Name: %s"
 msgstr ""
+"%sПосилення: %s\n"
+"Стиснення: %s\n"
+"Назва: %s"
 
 #: src/audiohandler.c:795
 #, c-format
@@ -2013,51 +2059,57 @@ msgid ""
 "%sGain: %s\n"
 "DRC: %s"
 msgstr ""
+"%sПосилення: %s\n"
+"Стиснення: %s"
 
 #: src/audiohandler.c:1401
 msgid "Add Audio Track"
-msgstr ""
+msgstr "Додати аудіодоріжку"
 
 #: src/audiohandler.c:1493
 msgid "Edit Audio Track"
-msgstr ""
+msgstr "Редагувати аудіодоріжку"
 
 #: src/audiohandler.c:1766
 msgid "Set the audio codec to encode this track with."
-msgstr ""
+msgstr "Встановити аудіокодек для кодування цієї доріжки."
 
 #: src/audiohandler.c:1780
 msgid "Bitrate"
-msgstr ""
+msgstr "Бітрейт"
 
 #: src/audiohandler.c:1798
 msgid "Set the bitrate to encode this track with."
-msgstr ""
+msgstr "Встановити бітрейт для кодування цієї доріжки."
 
 #: src/audiohandler.c:1823
 msgid ""
 "<b>Audio Quality:</b>\n"
 "For encoders that support it, adjust the quality of the output."
 msgstr ""
+"<b>Якість звуку:</b>\n"
+"Налаштувати якості вихідного сигналу для кодерів, які це підтримують."
 
 #: src/audiohandler.c:1850
 msgid "Set the mixdown of the output audio track."
-msgstr ""
+msgstr "Встановити змішування вихідної звукової доріжки."
 
 #: src/audiohandler.c:1863
 msgid "Set the sample rate of the output audio track."
-msgstr ""
+msgstr "Встановити частоту дискретизації вихідної аудіодоріжки."
 
 #: src/audiohandler.c:1884
 msgid ""
 "<b>Audio Gain:</b> Adjust the amplification or attenuation of the output "
 "audio track."
 msgstr ""
+"<b>Посилення звуку:</b> Налаштувати посилення або послаблення вихідної "
+"звукової доріжки."
 
 #. Audio Gain Label
 #: src/audiohandler.c:1895
 msgid "0dB"
-msgstr ""
+msgstr "0dB"
 
 #: src/audiohandler.c:1915
 msgid ""
@@ -2066,14 +2118,18 @@ msgid ""
 "For source audio that has a wide dynamic range (very loud and very soft sequences),\n"
 "DRC allows you to 'compress' the range by making loud sounds softer and soft sounds louder."
 msgstr ""
+"<b>Стиснення динамічного діапазону:</b> Налаштувати динамічний діапазон вихідної аудіодоріжки.\n"
+"\n"
+"Для вихідного аудіо з широким динамічним діапазоном (дуже гучні та дуже тихі послідовності),\n"
+"ця опція дає змогу «стиснути» діапазон, роблячи гучні звуки тихішими, а тихі - голоснішими."
 
 #: src/audiohandler.c:1946
 msgid "Remove this audio encoder"
-msgstr ""
+msgstr "Видалити цей аудіо кодер"
 
 #: src/callbacks.c:296
 msgid "An encode is in progress."
-msgstr ""
+msgstr "Триває кодування."
 
 #: src/callbacks.c:1124 src/callbacks.c:1135 src/callbacks.c:1785
 msgid "Not Selected"
@@ -2081,196 +2137,196 @@ msgstr "Не обрано"
 
 #: src/callbacks.c:1133
 msgid "Detected DVD devices:"
-msgstr ""
+msgstr "Виявлені DVD-пристрої:"
 
 #. This needs to be in scanning and working since scanning
 #. happens fast enough that it can be missed
 #: src/callbacks.c:1460 src/callbacks.c:4578
 msgid "Scanning ..."
-msgstr ""
+msgstr "Сканування..."
 
 #: src/callbacks.c:1492 src/callbacks.c:1493 src/callbacks.c:1512
 #: src/callbacks.c:1513
 msgid "Stop Scan"
-msgstr ""
+msgstr "Зупинити сканування"
 
 #: src/callbacks.c:1866
 msgid "Open Source Directory"
-msgstr ""
+msgstr "Відкрити каталог джерела"
 
 #: src/callbacks.c:1869 src/chapters.c:484 src/ghb-file-button.c:222
 #: src/presets.c:2113 src/queuehandler.c:1479
 msgid "_Open"
-msgstr ""
+msgstr "_Відкрити"
 
 #: src/callbacks.c:1870 src/callbacks.c:2136 src/chapters.c:456
 #: src/chapters.c:485 src/presets.c:2114 src/presets.c:2230
 #: src/queuehandler.c:1392 src/queuehandler.c:1480
 msgid "_Cancel"
-msgstr ""
+msgstr "_Скасувати"
 
 #: src/callbacks.c:1877
 msgid "Recursively scan directories"
-msgstr ""
+msgstr "Рекурсивне сканування каталогів"
 
 #: src/callbacks.c:1889
 msgid "Single Title"
-msgstr ""
+msgstr "Один файл"
 
 #: src/callbacks.c:2247 src/callbacks.c:2391
 msgid "FPS"
-msgstr ""
+msgstr "FPS"
 
 #: src/callbacks.c:2251
 #, c-format
 msgid "Dolby Vision %d.%d"
-msgstr ""
+msgstr "Dolby Vision %d.%d"
 
 #: src/callbacks.c:2255 src/callbacks.c:2258
 msgid "HDR10+"
-msgstr ""
+msgstr "HDR10+"
 
 #: src/callbacks.c:2260
 msgid "HDR10"
-msgstr ""
+msgstr "HDR10"
 
 #: src/callbacks.c:2262
 msgid "HDR"
-msgstr ""
+msgstr "HDR"
 
 #: src/callbacks.c:2264
 msgid "SDR"
-msgstr ""
+msgstr "SDR"
 
 #. TRANSLATORS: This is the bit depth of the video
 #: src/callbacks.c:2272
 #, c-format
 msgid "%d-bit"
-msgstr ""
+msgstr "%d-bit"
 
 #: src/callbacks.c:2294
 msgid "Audio Track"
 msgid_plural "Audio Tracks"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
+msgstr[0] "Доріжка аудіо"
+msgstr[1] "Доріжки аудіо"
+msgstr[2] "Доріжок аудіо"
+msgstr[3] "Доріжок аудіо"
 
 #: src/callbacks.c:2297
 msgid "Subtitle Track"
 msgid_plural "Subtitle Tracks"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
+msgstr[0] "Доріжка субтитрів"
+msgstr[1] "Доріжки субтитрів"
+msgstr[2] "Доріжок субтитрів"
+msgstr[3] "Доріжок субтитрів"
 
 #: src/callbacks.c:2395
 msgid "CFR"
-msgstr ""
+msgstr "CFR"
 
 #: src/callbacks.c:2399
 msgid "PFR"
-msgstr ""
+msgstr "PFR"
 
 #: src/callbacks.c:2403
 msgid "VFR"
-msgstr ""
+msgstr "VFR"
 
 #: src/callbacks.c:2445
 #, c-format
 msgid "+ %d more audio track"
 msgid_plural "+ %d more audio tracks"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
+msgstr[0] "+ ще %d доріжка аудіо"
+msgstr[1] "+ ще %d доріжки аудіо"
+msgstr[2] "+ ще %d доріжок аудіо"
+msgstr[3] "+ ще %d доріжок аудіо"
 
 #: src/callbacks.c:2476 src/queuehandler.c:592 src/queuehandler.c:1027
 #: src/subtitlehandler.c:415 src/subtitlehandler.c:1292
 msgid "Foreign Audio Scan"
-msgstr ""
+msgstr "Сканування іномовного аудіо"
 
 #: src/callbacks.c:2479 src/callbacks.c:2511 src/queuehandler.c:595
 #: src/queuehandler.c:632
 #, c-format
 msgid ", Forced Only"
-msgstr ""
+msgstr ", Тільки форсовані"
 
 #: src/callbacks.c:2483 src/callbacks.c:2515 src/queuehandler.c:599
 #: src/queuehandler.c:636
 #, c-format
 msgid ", Burned"
-msgstr ""
+msgstr ", Вбудовані"
 
 #: src/callbacks.c:2487 src/callbacks.c:2519 src/queuehandler.c:603
 #: src/queuehandler.c:640
 #, c-format
 msgid ", Default"
-msgstr ""
+msgstr ", Типово"
 
 #: src/callbacks.c:2525
 #, c-format
 msgid "+ %d more subtitle track"
 msgid_plural "+ %d more subtitle tracks"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
+msgstr[0] "+ ще %d доріжка субтитрів"
+msgstr[1] "+ ще %d доріжки субтитрів"
+msgstr[2] "+ ще %d доріжок субтитрів"
+msgstr[3] "+ ще %d доріжок субтитрів"
 
 #: src/callbacks.c:2680
 msgid "storage"
-msgstr ""
+msgstr "зберігання"
 
 #: src/callbacks.c:2681
 msgid "display"
-msgstr ""
+msgstr "відображення"
 
 #: src/callbacks.c:2682
 msgid "Pixel Aspect Ratio"
-msgstr ""
+msgstr "Співвідношення сторін пікселя"
 
 #: src/callbacks.c:2683
 msgid "Display Aspect Ratio"
-msgstr ""
+msgstr "Співвідношення сторін відображення"
 
 #: src/callbacks.c:2818 src/hb-backend.c:2206 src/hb-backend.c:2327
 #: src/hb-backend.c:2339
 msgid "No Title Found"
-msgstr ""
+msgstr "Заголовок не знайдено"
 
 #: src/callbacks.c:2819
 msgid "New Video"
-msgstr ""
+msgstr "Нове відео"
 
 #: src/callbacks.c:3815
 msgid "Temp Directory Changed"
-msgstr ""
+msgstr "Тимчасовий каталог змінено"
 
 #: src/callbacks.c:3816
 msgid "You must restart HandBrake now."
-msgstr ""
+msgstr "Ви маєте перезапустити HandBrake зараз."
 
 #: src/callbacks.c:3843 src/callbacks.c:3853 src/callbacks.c:3871
 #: src/callbacks.c:3920
 #, c-format
 msgid "%s in %d seconds…"
-msgstr ""
+msgstr "%s за %d секунд…"
 
 #: src/callbacks.c:4097
 msgid "Stop Encoding?"
-msgstr ""
+msgstr "Зупинити кодування?"
 
 #: src/callbacks.c:4098 src/callbacks.c:4123 src/queuehandler.c:1702
 msgid "Your movie will be lost if you don't continue encoding."
-msgstr ""
+msgstr "Ваше відео буде втрачено, якщо ви не продовжите кодування."
 
 #: src/callbacks.c:4099 src/queuehandler.c:1636
 msgid "Cancel Current and Stop"
-msgstr ""
+msgstr "Скасувати поточне і зупинити"
 
 #: src/callbacks.c:4099
 msgid "Cancel Current, Start Next"
-msgstr ""
+msgstr "Скасувати поточне, почати наступне"
 
 #: src/callbacks.c:4100
 msgid "Finish Current and Stop"
@@ -2278,69 +2334,71 @@ msgstr ""
 
 #: src/callbacks.c:4100 src/callbacks.c:4124 src/queuehandler.c:1703
 msgid "Continue Encoding"
-msgstr ""
+msgstr "Продовжити кодування"
 
 #: src/callbacks.c:4122
 msgid "Quit HandBrake?"
-msgstr ""
+msgstr "Вийти з HandBrake?"
 
 #: src/callbacks.c:4124
 msgid "Cancel All and Quit"
-msgstr ""
+msgstr "Скасувати все та вийти"
 
 #: src/callbacks.c:4290
 #, c-format
 msgid "%d encode pending"
 msgid_plural "%d encodes pending"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
+msgstr[0] "%d завдання очікує"
+msgstr[1] "%d завдання очікує"
+msgstr[2] "%d завдань очікують"
+msgstr[3] "%d завдань очікують"
 
 #: src/callbacks.c:4349 src/callbacks.c:4417
 #, c-format
 msgid "job %d of %d, "
-msgstr ""
+msgstr "завдання %d з %d, "
 
 #: src/callbacks.c:4359
 #, c-format
 msgid "pass %d (subtitle scan) of %d, "
-msgstr ""
+msgstr "прохід %d (сканування підзаголовків) з %d, "
 
 #: src/callbacks.c:4364
 #, c-format
 msgid "pass %d of %d, "
-msgstr ""
+msgstr "прохід %d з %d, "
 
 #: src/callbacks.c:4377
 #, c-format
 msgid "Encoding: %s%s%.2f %% (%.2f fps, avg %.2f fps, ETA %02dh%02dm%02ds)"
 msgstr ""
+"Кодування: %s%s%.2f %% (%.2f к/с, в середньому %.2f к/с, орієнтовний час "
+"%02dгод%02dхв%02dсек)"
 
 #: src/callbacks.c:4387 src/callbacks.c:4427
 #, c-format
 msgid "Encoding: %s%s%.2f %% (ETA %02dh%02dm%02ds)"
-msgstr ""
+msgstr "Кодування: %s%s%.2f %% (Орієнтовний час %02dгод%02dхв%02dсек)"
 
 #: src/callbacks.c:4397 src/callbacks.c:4436
 #, c-format
 msgid "Encoding: %s%s%.2f %%"
-msgstr ""
+msgstr "Кодування: %s%s%.2f %%"
 
 #: src/callbacks.c:4423
 #, c-format
 msgid "Searching for start time, "
-msgstr ""
+msgstr "Пошук часу початку,"
 
 #: src/callbacks.c:4498
 #, c-format
 msgid "Scanning title %d of %d..."
-msgstr ""
+msgstr "Сканування заголовків %d з %d..."
 
 #: src/callbacks.c:4502
 #, c-format
 msgid "Scanning title %d of %d preview %d..."
-msgstr ""
+msgstr "Сканування заголовків %d з %d попередній перегляд %d..."
 
 #: src/callbacks.c:4589
 msgid "Paused"
@@ -2348,105 +2406,105 @@ msgstr "Призупинено"
 
 #: src/callbacks.c:4616
 msgid "Encode Done!"
-msgstr ""
+msgstr "Кодування завершено!"
 
 #: src/callbacks.c:4621
 msgid "Encode Canceled."
-msgstr ""
+msgstr "Кодування скасовано."
 
 #: src/callbacks.c:4626
 msgid "Encode Failed."
-msgstr ""
+msgstr "Помилка кодування."
 
 #: src/callbacks.c:4668
 msgid "Muxing: This may take a while..."
-msgstr ""
+msgstr "Мікшування: Це може зайняти деякий час..."
 
 #: src/callbacks.c:5478 src/callbacks.c:5485 src/callbacks.c:5493
 msgid "Your encode is complete."
-msgstr ""
+msgstr "Ваше кодування завершено."
 
 #: src/callbacks.c:5479
 msgid "Quitting HandBrake"
-msgstr ""
+msgstr "Вихід з HandBrake"
 
 #: src/callbacks.c:5486
 msgid "Putting computer to sleep"
-msgstr ""
+msgstr "Переведення комп'ютера в режим сну"
 
 #: src/callbacks.c:5494
 msgid "Shutting down the computer"
-msgstr ""
+msgstr "Вимкнення комп'ютера"
 
 #. Add filters
 #: src/callbacks.c:5608 src/chapters.c:458 src/chapters.c:487
 #: src/presets.c:2116 src/queuehandler.c:1483
 msgid "All Files"
-msgstr ""
+msgstr "Усі файли"
 
 #: src/chapters.c:459 src/chapters.c:488
 msgid "Chapters (*.xml)"
-msgstr ""
+msgstr "Розділи (*.xml)"
 
 #: src/ghb-file-button.c:72
 msgid "Select a File"
-msgstr ""
+msgstr "Вибрати файл"
 
 #: src/ghb-file-button.c:217
 msgid "_Select"
-msgstr ""
+msgstr "_Вибрати"
 
 #: src/ghb-queue-row.c:260
 msgid "Running Queue Item"
-msgstr ""
+msgstr "Запущений елемент черги"
 
 #: src/ghb-queue-row.c:269
 msgid "Failed Queue Item"
-msgstr ""
+msgstr "Провалений елемент черги"
 
 #: src/ghb-queue-row.c:273
 msgid "Cancelled Queue Item"
-msgstr ""
+msgstr "Скасований елемент черги"
 
 #: src/ghb-queue-row.c:277
 msgid "Completed Queue Item"
-msgstr ""
+msgstr "Завершений елемент черги"
 
 #: src/hb-backend.c:55 src/hb-backend.c:80
 msgid "First Matching Selected Languages"
-msgstr ""
+msgstr "Перший збіг з вибраними мовами"
 
 #: src/hb-backend.c:56 src/hb-backend.c:81
 msgid "All Matching Selected Languages"
-msgstr ""
+msgstr "Усі збіги з вибраними мовами"
 
 #: src/hb-backend.c:67
 msgid "Foreign Audio Subtitle Track"
-msgstr ""
+msgstr "Іномовна аудіодоріжка із субтитрами"
 
 #: src/hb-backend.c:68
 msgid "First Selected Track"
-msgstr ""
+msgstr "Перший обраний трек"
 
 #: src/hb-backend.c:69
 msgid "Foreign Audio, then First Selected Track"
-msgstr ""
+msgstr "Іншомовне аудіо, далі - перша вибрана доріжка"
 
 #: src/hb-backend.c:91 src/queuehandler.c:167
 msgid "Chapters:"
-msgstr ""
+msgstr "Розділи:"
 
 #: src/hb-backend.c:92
 msgid "Seconds:"
-msgstr ""
+msgstr "Секунди:"
 
 #: src/hb-backend.c:93 src/queuehandler.c:188
 msgid "Frames:"
-msgstr ""
+msgstr "Кадри:"
 
 #: src/hb-backend.c:103
 msgid "Do Nothing"
-msgstr ""
+msgstr "Не робити нічого"
 
 #: src/hb-backend.c:104
 msgid "Quit Handbrake"
@@ -2454,7 +2512,7 @@ msgstr "Вийти з Handbrake"
 
 #: src/hb-backend.c:105
 msgid "Put Computer To Sleep"
-msgstr ""
+msgstr "Перевести комп'ютер у режим сну"
 
 #: src/hb-backend.c:106
 msgid "Shutdown Computer"
@@ -2463,7 +2521,7 @@ msgstr "Вимкнути комп’ютер"
 #: src/hb-backend.c:118 src/hb-backend.c:220 src/hb-backend.c:251
 #: src/hb-backend.c:265 src/hb-backend.c:376
 msgid "Custom"
-msgstr ""
+msgstr "Користувацьке"
 
 #: src/hb-backend.c:154
 msgid "Week"
@@ -2479,307 +2537,307 @@ msgstr "Рік"
 
 #: src/hb-backend.c:157
 msgid "Immortal"
-msgstr ""
+msgstr "Immortal"
 
 #: src/hb-backend.c:181 src/hb-backend.c:4864
 msgid "Decomb"
-msgstr ""
+msgstr "Decomb"
 
 #: src/hb-backend.c:182
 msgid "Yadif"
-msgstr ""
+msgstr "Yadif"
 
 #: src/hb-backend.c:183
 msgid "Bwdif"
-msgstr ""
+msgstr "Bwdif"
 
 #: src/hb-backend.c:194
 msgid "NLMeans"
-msgstr ""
+msgstr "NLMeans"
 
 #: src/hb-backend.c:195
 msgid "HQDN3D"
-msgstr ""
+msgstr "HQDN3D"
 
 #: src/hb-backend.c:206
 msgid "Unsharp"
-msgstr ""
+msgstr "Unsharp"
 
 #: src/hb-backend.c:207
 msgid "Lapsharp"
-msgstr ""
+msgstr "Lapsharp"
 
 #: src/hb-backend.c:218
 msgid "Conservative"
-msgstr ""
+msgstr "Консервативний"
 
 #: src/hb-backend.c:231
 msgid "90°"
-msgstr ""
+msgstr "90°"
 
 #: src/hb-backend.c:232
 msgid "180°"
-msgstr ""
+msgstr "180°"
 
 #: src/hb-backend.c:233
 msgid "270°"
-msgstr ""
+msgstr "270°"
 
 #: src/hb-backend.c:243
 msgid "4320p 8K Ultra HD"
-msgstr ""
+msgstr "4320p 8K Ultra HD"
 
 #: src/hb-backend.c:244
 msgid "2160p 4K Ultra HD"
-msgstr ""
+msgstr "2160p 4K Ultra HD"
 
 #: src/hb-backend.c:245
 msgid "1440p 2.5K Quad HD"
-msgstr ""
+msgstr "1440p 2.5K Quad HD"
 
 #: src/hb-backend.c:246
 msgid "1080p Full HD"
-msgstr ""
+msgstr "1080p Full HD"
 
 #: src/hb-backend.c:247
 msgid "720p HD"
-msgstr ""
+msgstr "720p HD"
 
 #: src/hb-backend.c:248
 msgid "576p PAL"
-msgstr ""
+msgstr "576p PAL"
 
 #: src/hb-backend.c:249
 msgid "480p NTSC"
-msgstr ""
+msgstr "480p NTSC"
 
 #: src/hb-backend.c:262
 msgid "Height (Letterbox)"
-msgstr ""
+msgstr "Висота (Letterbox)"
 
 #: src/hb-backend.c:263
 msgid "Width (Pillarbox)"
-msgstr ""
+msgstr "Ширина (Pillarbox)"
 
 #: src/hb-backend.c:264
 msgid "Width &amp; Height"
-msgstr ""
+msgstr "Ширина та висота"
 
 #: src/hb-backend.c:275
 msgid "Black"
-msgstr ""
+msgstr "Чорний"
 
 #: src/hb-backend.c:276
 msgid "Dark Gray"
-msgstr ""
+msgstr "Темно-сірий"
 
 #: src/hb-backend.c:277
 msgid "Gray"
-msgstr ""
+msgstr "Сірий"
 
 #: src/hb-backend.c:278
 msgid "White"
-msgstr ""
+msgstr "Білий"
 
 #: src/hb-backend.c:289
 msgid "Spatial"
-msgstr ""
+msgstr "Просторовий"
 
 #: src/hb-backend.c:290
 msgid "Temporal"
-msgstr ""
+msgstr "Часовий"
 
 #: src/hb-backend.c:302
 msgid "Fast"
-msgstr ""
+msgstr "Швидкий"
 
 #: src/hb-backend.c:303
 msgid "Optimal"
-msgstr ""
+msgstr "Оптимальний"
 
 #: src/hb-backend.c:314
 msgid "Strict"
-msgstr ""
+msgstr "Жорсткий"
 
 #: src/hb-backend.c:315
 msgid "Normal"
-msgstr ""
+msgstr "Нормальний"
 
 #: src/hb-backend.c:326
 msgid "Simple"
-msgstr ""
+msgstr "Простий"
 
 #: src/hb-backend.c:327
 msgid "Smart"
-msgstr ""
+msgstr "Розумний"
 
 #: src/hb-backend.c:337
 msgid "Diamond"
-msgstr ""
+msgstr "Діамант"
 
 #: src/hb-backend.c:338
 msgid "Hexagon"
-msgstr ""
+msgstr "Шестикутник"
 
 #: src/hb-backend.c:339
 msgid "Uneven Multi-Hexagon"
-msgstr ""
+msgstr "Нерівномірний мульти-шестикутник"
 
 #: src/hb-backend.c:340
 msgid "Exhaustive"
-msgstr ""
+msgstr "Вичерпний"
 
 #: src/hb-backend.c:341
 msgid "Hadamard Exhaustive"
-msgstr ""
+msgstr "Вичерпний Хадамара"
 
 #: src/hb-backend.c:351
 msgid "0: SAD, no subpel"
-msgstr ""
+msgstr "0: лише fullpel [не рекомендується]"
 
 #: src/hb-backend.c:352
 msgid "1: SAD, qpel"
-msgstr ""
+msgstr "1: SAD, одна qpel ітерація"
 
 #: src/hb-backend.c:353
 msgid "2: SATD, qpel"
-msgstr ""
+msgstr "2: SATD, qpel"
 
 #: src/hb-backend.c:354
 msgid "3: SATD: multi-qpel"
-msgstr ""
+msgstr "3: SATD: multi-qpel"
 
 #: src/hb-backend.c:355
 msgid "4: SATD, qpel on all"
-msgstr ""
+msgstr "4: SATD, qpel для всіх"
 
 #: src/hb-backend.c:356
 msgid "5: SATD, multi-qpel on all"
-msgstr ""
+msgstr "5: SATD, multi-qpel для всіх"
 
 #: src/hb-backend.c:357
 msgid "6: RD in I/P-frames"
-msgstr ""
+msgstr "6: RD для I/P-кадрів"
 
 #: src/hb-backend.c:358
 msgid "7: RD in all frames"
-msgstr ""
+msgstr "7: RD для всіх кадрів"
 
 #: src/hb-backend.c:359
 msgid "8: RD refine in I/P-frames"
-msgstr ""
+msgstr "8: Уточнення RD для I/P-кадрів"
 
 #: src/hb-backend.c:360
 msgid "9: RD refine in all frames"
-msgstr ""
+msgstr "9: Уточнення RD для всіх кадрів"
 
 #: src/hb-backend.c:361
 msgid "10: QPRD in all frames"
-msgstr ""
+msgstr "10: QPRD для всіх кадрів"
 
 #: src/hb-backend.c:362
 msgid "11: No early terminations in analysis"
-msgstr ""
+msgstr "11: Без ранніх переривань в аналізі"
 
 #: src/hb-backend.c:372
 msgid "Most"
-msgstr ""
+msgstr "Більшість"
 
 #: src/hb-backend.c:374
 msgid "Some"
-msgstr ""
+msgstr "Деякі"
 
 #: src/hb-backend.c:375
 msgid "All"
-msgstr ""
+msgstr "Всі"
 
 #: src/hb-backend.c:387
 msgid "Encode only"
-msgstr ""
+msgstr "Тільки кодування"
 
 #: src/hb-backend.c:388
 msgid "Always"
-msgstr ""
+msgstr "Завжди"
 
 #: src/hb-backend.c:1476 src/hb-backend.c:1536 src/hb-backend.c:1615
 msgid "Same as source"
-msgstr ""
+msgstr "Як у джерелі"
 
 #: src/hb-backend.c:1629
 msgid "(NTSC Film)"
-msgstr ""
+msgstr "(Фільм NTSC)"
 
 #: src/hb-backend.c:1633
 msgid "(PAL Film/Video)"
-msgstr ""
+msgstr "(Відео/фільм PAL)"
 
 #: src/hb-backend.c:1637
 msgid "(NTSC Video)"
-msgstr ""
+msgstr "(Відео NTSC)"
 
 #: src/hb-backend.c:2195
 #, c-format
 msgid "%s - (%05d.MPLS)"
-msgstr ""
+msgstr "%s - (%05d.MPLS)"
 
 #: src/hb-backend.c:2346
 #, c-format
 msgid "%3d - %02dh%02dm%02ds - %s"
-msgstr ""
+msgstr "%3d - %02dгод%02dхв%02dсек - %s"
 
 #: src/hb-backend.c:2365
 #, c-format
 msgid "%3d - %02dh%02dm%02ds - (%05d.MPLS)"
-msgstr ""
+msgstr "%3d - %02dгод%02dхв%02dсек - (%05d.MPLS)"
 
 #: src/hb-backend.c:2371
 #, c-format
 msgid "%3d - (%05d.MPLS)"
-msgstr ""
+msgstr "%3d - (%05d.MPLS)"
 
 #: src/hb-backend.c:2377
 #, c-format
 msgid "%3d - %02dh%02dm%02ds"
-msgstr ""
+msgstr "%3d - %02dгод%02dхв%02dсек"
 
 #: src/hb-backend.c:2410
 msgid "No Titles"
-msgstr ""
+msgstr "Без заголовків"
 
 #. No audio. set some default
 #: src/hb-backend.c:2690
 msgid "No Audio"
-msgstr ""
+msgstr "Без аудіо"
 
 #: src/hb-backend.c:4306 src/hb-backend.c:4314
 msgid "Invalid Detelecine Settings"
-msgstr ""
+msgstr "Неналежні параметри видалення розчісування"
 
 #: src/hb-backend.c:4309 src/hb-backend.c:4340 src/hb-backend.c:4376
 #: src/hb-backend.c:4413 src/hb-backend.c:4438
 msgid "Custom:"
-msgstr ""
+msgstr "Користувацькі:"
 
 #: src/hb-backend.c:4337 src/hb-backend.c:4345
 msgid "Invalid Comb Detect Settings"
-msgstr ""
+msgstr "Неналежні параметри виявлення розчісування"
 
 #: src/hb-backend.c:4372 src/hb-backend.c:4381
 msgid "Invalid Deinterlace Settings"
-msgstr ""
+msgstr "Неналежні параметри усування черезрядковості"
 
 #: src/hb-backend.c:4374 src/hb-backend.c:4383 src/hb-backend.c:4410
 #: src/hb-backend.c:4435
 msgid "Filter:"
-msgstr ""
+msgstr "Фільтр:"
 
 #: src/hb-backend.c:4408
 msgid "Invalid Denoise Settings"
-msgstr ""
+msgstr "Неналежні параметри зменшення шуму"
 
 #: src/hb-backend.c:4433
 msgid "Invalid Sharpen Settings"
-msgstr ""
+msgstr "Неналежні параметри підвищення різкості"
 
 #. mp4/theora combination is not supported.
 #: src/hb-backend.c:4462
@@ -2789,6 +2847,10 @@ msgid ""
 "You should choose a different video codec or container.\n"
 "If you continue, FFMPEG will be chosen for you."
 msgstr ""
+"Theora не підтримується в контейнері MP4.\n"
+"\n"
+"Необхідно вибрати інший відеокодек або контейнер.\n"
+"Інакше буде вибрано FFMPEG."
 
 #. webm only supports vp8, vp9 and av1.
 #: src/hb-backend.c:4471
@@ -2798,24 +2860,28 @@ msgid ""
 "You should choose a different video codec or container.\n"
 "If you continue, one will be chosen for you."
 msgstr ""
+"У контейнері WebM підтримуються лише VP8, VP9 та AV1.\n"
+"\n"
+"Необхідно вибрати інший відеокодек або контейнер.\n"
+"Інакше один з них буде вибрано автоматично."
 
 #: src/hb-backend.c:4479 src/hb-backend.c:4530 src/hb-backend.c:4547
 #: src/hb-backend.c:4564 src/hb-backend.c:4621 src/hb-backend.c:4673
 msgid "Continue"
-msgstr ""
+msgstr "Продовжити"
 
 #: src/hb-backend.c:4480
 msgid "Invalid Video Codec"
-msgstr ""
+msgstr "Недопустимий вибір відеокодека"
 
 #. No valid title, stop right there
 #: src/hb-backend.c:4503 src/hb-backend.c:4589
 msgid "No title found.\n"
-msgstr ""
+msgstr "Заголовок не знайдено.\n"
 
 #: src/hb-backend.c:4530 src/hb-backend.c:4547
 msgid "Invalid Subtitle Selection"
-msgstr ""
+msgstr "Недопустимий вибір субтитрів"
 
 #: src/hb-backend.c:4531
 msgid ""
@@ -2824,6 +2890,10 @@ msgid ""
 "You should change your subtitle selections.\n"
 "If you continue, some subtitles will be lost."
 msgstr ""
+"У відео можна вбудувати лише одні субтитри.\n"
+"\n"
+"Необхідно переглянути вибір субтитрів.\n"
+"Інакше деякі субтитри буде втрачено."
 
 #: src/hb-backend.c:4548
 msgid ""
@@ -2832,10 +2902,14 @@ msgid ""
 "You should change your subtitle selections.\n"
 "If you continue, some subtitles will be lost."
 msgstr ""
+"WebM у HandBrake підтримує лише вбудовані субтитри.\n"
+"\n"
+"Необхідно переглянути вибір субтитрів.\n"
+"Інакше деякі субтитри буде втрачено."
 
 #: src/hb-backend.c:4564
 msgid "Subtitle File Not Found"
-msgstr ""
+msgstr "Файл субтитрів не знайдено"
 
 #: src/hb-backend.c:4565
 msgid ""
@@ -2844,10 +2918,14 @@ msgid ""
 "You should choose a valid file.\n"
 "If you continue, this subtitle will be ignored."
 msgstr ""
+"Файл SRT не знайдено або пошкоджено.\n"
+"\n"
+"Необхідно вибрати дійсний файл.\n"
+"Інакше ці субтитри буде проігноровано."
 
 #: src/hb-backend.c:4621 src/hb-backend.c:4673
 msgid "Invalid Audio Selection"
-msgstr ""
+msgstr "Недопустимий вибір аудіо"
 
 #: src/hb-backend.c:4622
 msgid ""
@@ -2856,6 +2934,10 @@ msgid ""
 "You should choose a different audio codec.\n"
 "If you continue, one will be chosen for you."
 msgstr ""
+"Джерело не підтримує перенесення.\n"
+"\n"
+"Необхідно вибрати інший аудіокодек.\n"
+"Інакше кодек буде змінено автоматично."
 
 #: src/hb-backend.c:4674
 #, c-format
@@ -2865,125 +2947,130 @@ msgid ""
 "You should choose a different audio codec.\n"
 "If you continue, one will be chosen for you."
 msgstr ""
+"%s не підтримується у контейнері %s.\n"
+"\n"
+"Необхідно вибрати інший аудіокодек.\n"
+"Інакше кодек буде змінено автоматично."
 
 #: src/hb-backend.c:4856
 msgid "Comb Detect"
-msgstr ""
+msgstr "Виявлення розчісування"
 
 #: src/hb-backend.c:4858
 msgid "Detelecine"
-msgstr ""
+msgstr "Видалення розчісування"
 
 #: src/hb-backend.c:4860
 msgid "Deinterlace (Yadif)"
-msgstr ""
+msgstr "Усування черезрядковості (Yadif)"
 
 #: src/hb-backend.c:4862
 msgid "Deinterlace (Bwdif)"
-msgstr ""
+msgstr "Усування черезрядковості (Bwdif)"
 
 #: src/hb-backend.c:4866
 msgid "Deblock"
-msgstr ""
+msgstr "Зменшення блокування"
 
 #: src/hb-backend.c:4868
 msgid "Denoise (NLMeans)"
-msgstr ""
+msgstr "Зменшення шуму (NLMeans)"
 
 #: src/hb-backend.c:4870
 msgid "Denoise (HQDN3D)"
-msgstr ""
+msgstr "Зменшення шуму (HQDN3D)"
 
 #: src/hb-backend.c:4872
 msgid "Chroma Smooth"
-msgstr ""
+msgstr "Згладжування кольорів"
 
 #: src/hb-backend.c:4874
 msgid "Sharpen (Unsharp)"
-msgstr ""
+msgstr "Підвищення різкості (Unsharp)"
 
 #: src/hb-backend.c:4876
 msgid "Rotate"
-msgstr ""
+msgstr "Поворот"
 
 #: src/hb-backend.c:4878
 msgid "Sharpen (lapsharp)"
-msgstr ""
+msgstr "Підвищення різкості (lapsharp)"
 
 #: src/hb-backend.c:4882
 msgid "Colorspace"
-msgstr ""
+msgstr "Колірний простір"
 
 #: src/notifications.c:54
 #, c-format
 msgid "%d item complete, %d failed"
 msgid_plural "%d items complete, %d failed"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
+msgstr[0] "%d елемент завершено, %d зазнав невдачі"
+msgstr[1] "%d елементи завершено, %d зазнало невдачі"
+msgstr[2] "%d елементів завершено, %d зазнали невдачі"
+msgstr[3] "%d елементів завершено, %d зазнали невдачі"
 
 #: src/notifications.c:60
 #, c-format
 msgid "%d item has finished encoding"
 msgid_plural "%d items have finished encoding"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
+msgstr[0] "Кодування %d елементу завершено"
+msgstr[1] "Кодування %d елементів завершено"
+msgstr[2] "Кодування %d елементів завершено"
+msgstr[3] "Кодування %d елементів завершено"
 
 #: src/notifications.c:106
 msgid "Put down that cocktail…"
-msgstr ""
+msgstr "Постав цей коктейль..."
 
 #: src/notifications.c:116
 msgid "Encode Complete"
-msgstr ""
+msgstr "Кодування завершено"
 
 #: src/notifications.c:116
 msgid "Encode Failed"
-msgstr ""
+msgstr "Помилка кодування"
 
 #: src/notifications.c:140
 msgid "Battery level is low."
-msgstr ""
+msgstr "Низький рівень заряду батареї."
 
 #: src/notifications.c:143
 msgid "Charger has been disconnected."
-msgstr ""
+msgstr "Зарядний пристрій від'єднано."
 
 #: src/notifications.c:146
 msgid "Power Saver mode has been activated."
-msgstr ""
+msgstr "Увімкнено режим енергозбереження."
 
 #: src/notifications.c:153
 #, c-format
 msgid "%d.%d GB free space remaining."
-msgstr ""
+msgstr "Залишилось %d.%d ГБ вільного місця."
 
 #: src/notifications.c:165 src/queuehandler.c:1176
 msgid "Encoding Paused"
-msgstr ""
+msgstr "Кодування призупинено"
 
 #: src/presets.c:78
 msgid "Preset Name"
-msgstr ""
+msgstr "Назва передвстановлення"
 
 #: src/presets.c:1281
 msgid "ghb_presets_menu_init: Failed to find presets folder."
 msgstr ""
+"ghb_presets_menu_init: Не вдалося знайти каталог з передвстановленнями."
 
 #: src/presets.c:1443
 msgid "Failed to find parent folder when adding child."
-msgstr ""
+msgstr "Не вдалося знайти батьківський каталог під час додавання дочірнього."
 
 #: src/presets.c:1927
 msgid "Load backup presets"
-msgstr ""
+msgstr "Завантажити резервні передвстановлення"
 
 #: src/presets.c:1927
 msgid "Get me out of here!"
-msgstr ""
+msgstr "Заберіть мене звідси!"
 
 #: src/presets.c:1928
 msgid ""
@@ -2991,14 +3078,17 @@ msgid ""
 "\n"
 "Would you like to continue?"
 msgstr ""
+"Знайдені передвстановлення новіші, ніж ті, що підтримуються цією версією HandBrake!\n"
+"\n"
+"Бажаєте продовжити?"
 
 #: src/presets.c:2117
 msgid "Presets (*.json)"
-msgstr ""
+msgstr "Передвстановлення (*.json)"
 
 #: src/presets.c:2227
 msgid "Export Preset"
-msgstr ""
+msgstr "Експорт передвстановлення"
 
 #: src/presets.c:2583
 msgid "_Delete"
@@ -3006,11 +3096,11 @@ msgstr "_Видалити"
 
 #: src/presets.c:2584
 msgid "Delete Folder?"
-msgstr ""
+msgstr "Видалити каталог?"
 
 #: src/presets.c:2584
 msgid "Delete Preset?"
-msgstr ""
+msgstr "Видалити передвстановлення?"
 
 #: src/presets.c:2585
 #, c-format
@@ -3018,43 +3108,47 @@ msgid ""
 "Are you sure you want to delete “%s”?\n"
 "Deleted items cannot be recovered."
 msgstr ""
+"Бажаєте видалити \"%s\"?\n"
+"Видалені елементи не можна відновити."
 
 #: src/preview.c:154
 msgid "Pause Preview"
-msgstr ""
+msgstr "Призупинити попередній перегляд"
 
 #: src/preview.c:158
 msgid "Stop Encoding Preview"
-msgstr ""
+msgstr "Зупинити попередній перегляд"
 
 #: src/preview.c:162
 msgid "Play Preview"
-msgstr ""
+msgstr "Попередній перегляд"
 
 #: src/preview.c:288
 msgid "Playback Error"
-msgstr ""
+msgstr "Помилка відтворення"
 
 #: src/preview.c:291
 msgid "The video could not be played. For more details, see the Activity Log."
 msgstr ""
+"Не вдалося відтворити відео. Дивіться журнал активності для детальної "
+"інформації."
 
 #: src/queuehandler.c:133
 #, c-format
 msgid "%s (Modified)"
-msgstr ""
+msgstr "%s (Змінено)"
 
 #: src/queuehandler.c:181
 msgid "Time:"
-msgstr ""
+msgstr "Час:"
 
 #: src/queuehandler.c:225
 msgid "Align A/V"
-msgstr ""
+msgstr "Узгодження аудіо/відео"
 
 #: src/queuehandler.c:235
 msgid "iPod 5G"
-msgstr ""
+msgstr "iPod 5G"
 
 #: src/queuehandler.c:267
 #, c-format
@@ -3064,41 +3158,45 @@ msgid ""
 "%d:%d Pixel Aspect Ratio\n"
 "%s Display Aspect Ratio"
 msgstr ""
+"%d:%d:%d:%d Обрізання\n"
+"%dx%d зберігання, %dx%d відображення\n"
+"%d:%d Співвідношення сторін пікселів\n"
+"%s Співвідношення сторін зображення"
 
 #: src/queuehandler.c:296
 #, c-format
 msgid "%s, Bitrate %dkbps"
-msgstr ""
+msgstr "%s, Бітрейт %dкбіт/с"
 
 #: src/queuehandler.c:302
 #, c-format
 msgid "%s, Constant Quality %.4g(%s)"
-msgstr ""
+msgstr "%s, Постійна якість %.4g(%s)"
 
 #: src/queuehandler.c:309
 #, c-format
 msgid " (Multi Pass)"
-msgstr ""
+msgstr " (Багатопрохідний)"
 
 #: src/queuehandler.c:341
 #, c-format
 msgid "%sPreset %s"
-msgstr ""
+msgstr "%sПередвстановлення %s"
 
 #: src/queuehandler.c:346
 #, c-format
 msgid "%sTune %s"
-msgstr ""
+msgstr "%sНалаштування %s"
 
 #: src/queuehandler.c:351
 #, c-format
 msgid "%sProfile %s"
-msgstr ""
+msgstr "%sПрофіль %s"
 
 #: src/queuehandler.c:356
 #, c-format
 msgid "%sLevel %s"
-msgstr ""
+msgstr "%sРівень %s"
 
 #: src/queuehandler.c:373
 #, c-format
@@ -3106,6 +3204,8 @@ msgid ""
 "\n"
 "Constant Framerate %s fps"
 msgstr ""
+"\n"
+"Постійна частота кадрів %s к/с"
 
 #: src/queuehandler.c:377
 #, c-format
@@ -3113,6 +3213,8 @@ msgid ""
 "\n"
 "Peak Framerate %s fps (may be lower)"
 msgstr ""
+"\n"
+"Пікова частота кадрів %s к/с (може бути нижчою)"
 
 #: src/queuehandler.c:382
 #, c-format
@@ -3120,6 +3222,8 @@ msgid ""
 "\n"
 "Variable Framerate %s fps"
 msgstr ""
+"\n"
+"Змінна частота кадрів %s к/с"
 
 #: src/queuehandler.c:550
 msgid "kbps"
@@ -3127,63 +3231,63 @@ msgstr "кбіт/с"
 
 #: src/queuehandler.c:684 src/queuehandler.c:709
 msgid "Pending"
-msgstr ""
+msgstr "Очікує"
 
 #: src/queuehandler.c:696 src/queuehandler.c:1187
 msgid "Completed"
-msgstr ""
+msgstr "Завершено"
 
 #: src/queuehandler.c:700 src/queuehandler.c:1191
 msgid "Canceled"
-msgstr ""
+msgstr "Скасовано"
 
 #: src/queuehandler.c:704 src/queuehandler.c:1195
 msgid "Failed"
-msgstr ""
+msgstr "Невдало"
 
 #: src/queuehandler.c:745 src/queuehandler.c:773 src/queuehandler.c:1235
 #: src/queuehandler.c:1263
 #, c-format
 msgid "%d Day %02d:%02d:%02d"
-msgstr ""
+msgstr "%d День %02d:%02d:%02d"
 
 #: src/queuehandler.c:748 src/queuehandler.c:776 src/queuehandler.c:1238
 #: src/queuehandler.c:1266
 #, c-format
 msgid "%d Days %02d:%02d:%02d"
-msgstr ""
+msgstr "%d Дні(в) %02d:%02d:%02d"
 
 #: src/queuehandler.c:789 src/queuehandler.c:1279
 msgid "B"
-msgstr ""
+msgstr "Б"
 
 #: src/queuehandler.c:793 src/queuehandler.c:1283
 msgid "KB"
-msgstr ""
+msgstr "КБ"
 
 #: src/queuehandler.c:798 src/queuehandler.c:1288
 msgid "MB"
-msgstr ""
+msgstr "МБ"
 
 #: src/queuehandler.c:814 src/queuehandler.c:1304
 msgid "Not Available"
-msgstr ""
+msgstr "Недоступно"
 
 #: src/queuehandler.c:1139
 msgid "Foreign Audio Search"
-msgstr ""
+msgstr "Пошук іномовного аудіо"
 
 #: src/queuehandler.c:1143
 msgid "Encode"
-msgstr ""
+msgstr "Кодувати"
 
 #: src/queuehandler.c:1147
 msgid "Encode Analysis Pass"
-msgstr ""
+msgstr "Кодувати аналітичний прохід"
 
 #: src/queuehandler.c:1151
 msgid "Encode Final Pass"
-msgstr ""
+msgstr "Кодувати фінальний прохід"
 
 #. Should never happen
 #: src/queuehandler.c:1156
@@ -3196,31 +3300,33 @@ msgid ""
 "pass %d of %d\n"
 "%s"
 msgstr ""
+"пройдено %d з %d\n"
+"%s"
 
 #: src/queuehandler.c:1172
 msgid "Scanning Title"
-msgstr ""
+msgstr "Сканування заголовку"
 
 #: src/queuehandler.c:1180
 msgid "Encoding In Progress"
-msgstr ""
+msgstr "Кодування триває"
 
 #. Should never happen
 #: src/queuehandler.c:1200
 msgid "Unknown"
-msgstr ""
+msgstr "Невідомо"
 
 #: src/queuehandler.c:1388
 msgid "Export Queue"
-msgstr ""
+msgstr "Експорт черги"
 
 #: src/queuehandler.c:1476
 msgid "Import Queue"
-msgstr ""
+msgstr "Імпорт черги"
 
 #: src/queuehandler.c:1627
 msgid "Low Disk Space: Encoding Paused"
-msgstr ""
+msgstr "Мало місця на диску: Кодування призупинено"
 
 #: src/queuehandler.c:1629
 #, c-format
@@ -3229,22 +3335,25 @@ msgid ""
 "Destination: %s\n"
 "Encode may be incomplete if you proceed."
 msgstr ""
+"Накопичувач майже заповнений: вільно %<PRId64> MB.\n"
+"Призначення: %s\n"
+"Кодування може бути неповним, якщо ви продовжите."
 
 #: src/queuehandler.c:1634
 msgid "Resume, I've fixed the problem"
-msgstr ""
+msgstr "Відновити, я виправив проблему"
 
 #: src/queuehandler.c:1635
 msgid "Resume, Don't tell me again"
-msgstr ""
+msgstr "Відновити, не питати знов"
 
 #: src/queuehandler.c:1701
 msgid "Remove Item in Progress?"
-msgstr ""
+msgstr "Видалити незавершене завдання?"
 
 #: src/queuehandler.c:1703
 msgid "Cancel and Remove"
-msgstr ""
+msgstr "Скасувати та видалити"
 
 #: src/queuehandler.c:1843 src/queuehandler.c:1856
 msgid "Stop"
@@ -3273,60 +3382,60 @@ msgstr "_Відновити кодування"
 #: src/subtitlehandler.c:107
 #, c-format
 msgid "Offset: %dms"
-msgstr ""
+msgstr "Зміщення: %dms"
 
 #: src/subtitlehandler.c:112
 msgid "Burned Into Video"
-msgstr ""
+msgstr "Вшити у відео"
 
 #: src/subtitlehandler.c:113
-msgid "Passthrough"
+msgid "Passthru"
 msgstr ""
 
 #: src/subtitlehandler.c:116
 msgid "Forced Subtitles Only"
-msgstr ""
+msgstr "Тільки форсовані субтитри"
 
 #: src/subtitlehandler.c:120
 msgid "Default"
-msgstr ""
+msgstr "Типове"
 
 #: src/subtitlehandler.c:1230
 msgid "Add Subtitles"
-msgstr ""
+msgstr "Додати субтитри"
 
 #: src/subtitlehandler.c:1448
 #, c-format
 msgid "Preferred Language: %s"
-msgstr "Привілейовані мови: %s"
+msgstr "Пріоритетні мови: %s"
 
 #: src/subtitlehandler.c:1461
 #, c-format
 msgid "Add %s subtitle track if default audio is not %s"
-msgstr "Додати %s доріжку субтитрів, якщо типове аудіо не %s"
+msgstr "Додати доріжку субтитрів %s, якщо типове аудіо не є %s"
 
 #: src/subtitlehandler.c:1466
 #, c-format
 msgid "Add subtitle track if default audio is not your preferred language"
-msgstr "Додати доріжку субтитрів, якщо типове аудіо не привілейованою мовою"
+msgstr "Додати доріжку субтитрів, якщо типова мова звуку не є пріоритетною"
 
 #: src/subtitlehandler.c:1806
 msgid "Edit Subtitles"
-msgstr ""
+msgstr "Редагувати субтитри"
 
 #: src/title-add.c:103 src/title-add.c:112
 msgid "Invalid Destination"
-msgstr ""
+msgstr "Недійсне місце призначення"
 
 #: src/title-add.c:104
 #, c-format
 msgid "“%s” is is not a valid directory."
-msgstr ""
+msgstr "\"%s\" є неприпустимим каталогом."
 
 #: src/title-add.c:113
 #, c-format
 msgid "“%s” is not a writable directory."
-msgstr ""
+msgstr "\"%s\" є недоступним для запису каталогом."
 
 #: src/title-add.c:124 src/title-add.c:134
 msgid "Overwrite"
@@ -3334,7 +3443,7 @@ msgstr "Перезаписати"
 
 #: src/title-add.c:124 src/title-add.c:134
 msgid "Overwrite File?"
-msgstr ""
+msgstr "Перезаписати файл?"
 
 #: src/title-add.c:125
 #, c-format
@@ -3342,6 +3451,8 @@ msgid ""
 "The file “%s” already exists.\n"
 "Do you want to overwrite it?"
 msgstr ""
+"Файл \"%s\" вже існує.\n"
+"Бажаєте перезаписати його?"
 
 #: src/title-add.c:135
 #, c-format
@@ -3351,16 +3462,21 @@ msgid ""
 "Another queued job has specified the same destination.\n"
 "Do you want to overwrite?"
 msgstr ""
+"Призначення: %s\n"
+"\n"
+"Інше завдання в черзі має те саме призначення.\n"
+"Бажаєте перезаписати?"
 
 #: src/title-add.c:346
 msgid ""
 "Duplicate destination files detected. Duplicates will not be added to the "
 "queue."
 msgstr ""
+"Виявлено повторювані файли призначення. Ці файли не буде додано до черги."
 
 #: src/title-add.c:439
 msgid "Select this title for adding to the queue.\n"
-msgstr ""
+msgstr "Виберіть цей заголовок для додавання до черги.\n"
 
 #. Title label
 #: src/title-add.c:447
@@ -3373,32 +3489,37 @@ msgid ""
 "This title will not be added to the queue unless you change\n"
 "the output file name.\n"
 msgstr ""
+"Існує інший заголовок з таким самим ім'ям вихідного файлу.\n"
+"Цей заголовок не буде додано до черги, доки ви не зміните\n"
+"ім'я вихідного файлу.\n"
 
 #: src/title-add.c:826
 msgid "OK"
-msgstr ""
+msgstr "ОК"
 
 #: src/title-add.c:826
 msgid "Cannot Add Titles"
-msgstr ""
+msgstr "Не вдається додати заголовки"
 
 #: src/title-add.c:827
 msgid ""
 "The filenames are not unique. Please choose\n"
 "a unique destination filename for each title."
 msgstr ""
+"Назви файлів не є унікальними. Оберіть унікальне\n"
+" ім'я файлу призначення для кожного заголовка."
 
 #: src/videohandler.c:154
 msgid "Additional advanced arguments that can be passed to the video encoder."
-msgstr ""
+msgstr "Додаткові розширені аргументи, які можна передати кодувальнику."
 
 #: src/videohandler.c:227
 msgid "The full list of encoder parameters:"
-msgstr ""
+msgstr "Повний перелік параметрів кодувальника:"
 
 #: src/videohandler.c:345
 msgid "Warning: lossless"
-msgstr ""
+msgstr "Попередження: lossless"
 
 #: data/fr.handbrake.ghb.desktop.in:4
 msgid "Media Transcoder"
