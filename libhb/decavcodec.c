@@ -612,6 +612,9 @@ static void closePrivData( hb_work_private_t ** ppv )
         {
             free(pv->reordered_hash[ii]);
         }
+
+        hb_list_close(&pv->list_subtitle);
+
         free(pv);
     }
     *ppv = NULL;
