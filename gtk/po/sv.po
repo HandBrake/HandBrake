@@ -2207,7 +2207,7 @@ msgstr "Bithastighet: %.4gkbps"
 
 #: src/audiohandler.c:781
 #, c-format
-msgid "<small>Passthrough</small>"
+msgid "<small>Passthru</small>"
 msgstr "<small>Genomströmning</small>"
 
 #: src/audiohandler.c:790
@@ -2490,7 +2490,7 @@ msgstr "Avbryt pågående, starta nästa"
 
 #: src/callbacks.c:4100
 msgid "Finish Current and Stop"
-msgstr "Slutför aktuell, starta nästa"
+msgstr "Avsluta pågående och stoppa"
 
 #: src/callbacks.c:4100 src/callbacks.c:4124 src/queuehandler.c:1703
 msgid "Continue Encoding"
@@ -3538,7 +3538,7 @@ msgid "Burned Into Video"
 msgstr "Inbränd i videon"
 
 #: src/subtitlehandler.c:113
-msgid "Passthrough"
+msgid "Passthru"
 msgstr "Genomströmning"
 
 #: src/subtitlehandler.c:116
