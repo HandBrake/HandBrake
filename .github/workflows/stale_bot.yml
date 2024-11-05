@@ -21,6 +21,7 @@ jobs:
           days-before-issue-close: 5
           days-before-pr-close: 30
           exempt-issue-labels: 'Enhancement,Bug,Upstream-Issue,Upstream-Enhancement,LinuxUI,MacUI,WinUI'
+          exempt-pr-labels: 'Enhancement,Bug,Upstream-Issue,Upstream-Enhancement,LinuxUI,MacUI,WinUI'
           stale-issue-message: |- 
            Hello, 
                        
