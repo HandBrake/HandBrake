@@ -14,14 +14,14 @@ jobs:
     steps:
       - uses: actions/stale@v9
         with:
-          debug-only: true  # Not Live yet. Want to verify functionality. 
+          debug-only: false # Set to true to log only.
           operations-per-run: 200
           days-before-issue-stale: 30
           days-before-pr-stale: 90
           days-before-issue-close: 5
-          days-before-pr-close: 30
-          exempt-issue-labels: 'Enhancement,Bug,Upstream-Issue,Upstream-Enhancement,LinuxUI,MacUI,WinUI'
-          exempt-pr-labels: 'Enhancement,Bug,Upstream-Issue,Upstream-Enhancement,LinuxUI,MacUI,WinUI'
+          days-before-pr-close: 10
+          exempt-issue-labels: 'Enhancement,Bug,Upstream Issue,Upstream Enhancement,LinuxUI,MacUI,WinUI'
+          exempt-pr-labels: 'Enhancement,Bug,Upstream Issue,Upstream Enhancement,LinuxUI,MacUI,WinUI'
           stale-issue-message: |- 
            Hello, 
                        
@@ -38,7 +38,7 @@ jobs:
            Hello, 
                        
             >[!WARNING]
-            > This pull request appears to be inactive and will be automatically closed within 30 days if no further activity is detected. 
+            > This pull request appears to be inactive and will be automatically closed within 10 days if no further activity is detected. 
             > If you wish this issue to remain open, please request the stale label to be removed and an appropriate label assigned. 
 
            Thank You,
