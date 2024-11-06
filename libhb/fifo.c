@@ -694,6 +694,63 @@ static void copy_avframe_to_video_buffer(const AVFrame *frame, hb_buffer_t *buf)
     }
 }
 
+hb_buffer_t * hb_buffer_shallow_dup(const hb_buffer_t *src)
+{
+    hb_buffer_t *buf = NULL;
+
+    if (src == NULL)
+    {
+        return NULL;
+    }
+
+    if (src->storage_type == AVFRAME &&
+        ((AVFrame *)src->storage)->buf[0] != NULL)
+    {
+        buf = hb_buffer_wrapper_init();
+        if (buf)
+        {
+            buf->f = src->f;
+            buf->s = src->s;
+
+            AVFrame *frame_copy = av_frame_alloc();
+            if (frame_copy == NULL)
+            {
+                hb_buffer_close(&buf);
+                return NULL;
+            }
+
+            int ret = av_frame_ref(frame_copy, src->storage);
+            if (ret < 0)
+            {
+                hb_buffer_close(&buf);
+                av_frame_free(&frame_copy);
+                return NULL;
+            }
+
+            buf->storage_type = AVFRAME;
+            buf->storage = frame_copy;
+
+            buf->side_data = (void **)frame_copy->side_data;
+            buf->nb_side_data = frame_copy->nb_side_data;
+
+            for (int pp = 0; pp <= buf->f.max_plane; pp++)
+            {
+                buf->plane[pp].data   = frame_copy->data[pp];
+                buf->plane[pp].width  = src->plane[pp].width;
+                buf->plane[pp].height = src->plane[pp].height;
+                buf->plane[pp].stride = frame_copy->linesize[pp];
+                buf->plane[pp].size   = src->plane[pp].size;
+            }
+        }
+    }
+    else
+    {
+        buf = hb_buffer_dup(src);
+    }
+
+    return buf;
+}
+
 hb_buffer_t * hb_buffer_dup(const hb_buffer_t *src)
 {
     hb_buffer_t *buf = NULL;
