@@ -484,8 +484,8 @@ static void blend8on1x(const hb_blend_private_t *pv, hb_buffer_t *dst, const hb_
     uint16_t *v_out;
     uint16_t alpha;
 
-    const int left = x0 = src->f.x;
-    const int top = y0 = src->f.y;
+    const int left = src->f.x;
+    const int top  = src->f.y;
 
     x0 = y0 = 0;
     if (left < 0)
@@ -572,8 +572,8 @@ static void blend8onbi8(const hb_blend_private_t *pv, hb_buffer_t *dst, const hb
     uint8_t *v_in, *v_out;
     uint8_t *a_in, alpha;
 
-    const int left = x0 = src->f.x;
-    const int top = y0 = src->f.y;
+    const int left = src->f.x;
+    const int top  = src->f.y;
 
     x0 = y0 = 0;
     if (left < 0)
@@ -666,8 +666,8 @@ static void blend8onbi1x(const hb_blend_private_t *pv, hb_buffer_t *dst, const h
     uint16_t *v_out;
     uint16_t alpha;
 
-    const int left = x0 = src->f.x;
-    const int top = y0 = src->f.y;
+    const int left = src->f.x;
+    const int top  = src->f.y;
 
     x0 = y0 = 0;
     if (left < 0)

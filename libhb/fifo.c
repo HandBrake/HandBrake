@@ -1081,7 +1081,7 @@ static void free_buffer_resources(hb_buffer_t *b)
         av_frame_free((AVFrame **)&b->storage);
     }
 #ifdef __APPLE__
-    else if (b->storage_type == COREMEDIA)
+    else if (b->storage_type == COREMEDIA && b->storage != NULL)
     {
         CFRelease((CMSampleBufferRef)b->storage);
     }

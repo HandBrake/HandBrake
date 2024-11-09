@@ -207,6 +207,7 @@ static int comb_detect_vt_init(hb_filter_object_t *filter,
                                     init->pix_fmt, init->color_range);
     if (pv->mtl == NULL)
     {
+        [constant_values release];
         hb_error("comb_detect_vt: failed to create Metal device");
         return -1;
     }
@@ -219,14 +220,17 @@ static int comb_detect_vt_init(hb_filter_object_t *filter,
     if (hb_metal_add_pipeline(pv->mtl, pv->filter_mode == FILTER_ERODE_DILATE ? "filter_erode_dilate" : "filter_classic",
                                constant_values, pv->mtl->pipelines_count))
     {
+        [constant_values release];
         return -1;
     }
     if (hb_metal_add_pipeline(pv->mtl, "erode_mask", NULL, pv->mtl->pipelines_count))
     {
+        [constant_values release];
         return -1;
     }
     if (hb_metal_add_pipeline(pv->mtl, "dilate_mask", NULL, pv->mtl->pipelines_count))
     {
+        [constant_values release];
         return -1;
     }
     char *check_combing_name = pv->mode & MODE_FILTER ? "check_filtered_combing_mask" : "check_combing_mask";
@@ -247,10 +251,12 @@ static int comb_detect_vt_init(hb_filter_object_t *filter,
     }
     if (hb_metal_add_pipeline(pv->mtl,check_combing_name, constant_values, pv->mtl->pipelines_count))
     {
+        [constant_values release];
         return -1;
     }
     if (hb_metal_add_pipeline(pv->mtl, "apply_mask", constant_values, pv->mtl->pipelines_count))
     {
+        [constant_values release];
         return -1;
     }
 
