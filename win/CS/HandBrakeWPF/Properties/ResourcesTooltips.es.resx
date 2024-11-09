@@ -291,14 +291,13 @@ La escala de FFMpeg y Theora es más lineal.
 Estos codificadores no tienen un modo sin pérdidas.</value>
   </data>
   <data name="Video_TurboAnalysisPass" xml:space="preserve">
-    <value>During the analysis pass of a multi pass encode, use settings that speed things along.</value>
+    <value>Durante el paso de análisis de una codificación de múltiples pasadas, use configuraciones que aceleren el proceso.</value>
   </data>
   <data name="Video_MultiPass" xml:space="preserve">
-    <value>Perform Multi Pass Encoding.
+    <value>Realice la codificación de múltiples pasadas.
 
-The 'Bitrate' option is prerequisite. During the analysis passes, statistics about
-the video are collected. Then in the final pass, those statistics are used
-to make bitrate allocation decisions.</value>
+La opción "Velocidad de bits" es un requisito previo. Durante las pasadas de análisis, se recopilan estadísticas sobre el vídeo. Luego, en la pasada final, esas estadísticas se usan
+para tomar decisiones sobre la asignación de la tasa de bits.</value>
   </data>
   <data name="Video_VariableFramerate" xml:space="preserve">
     <value>Habilita la salida de velocidad de fotogramas variable.
@@ -329,9 +328,9 @@ Anula todas las configuraciones de codificación. La configuración se puede aju
     <value>Eliminar el preajuste seleccionado.</value>
   </data>
   <data name="SourceSelection_TitleSpecific" xml:space="preserve">
-    <value>Some Sources may contain more than one video clip, or a collection of Titles. Blu-ray and DVD Sources often have multiple Titles.
+    <value>Algunas fuentes pueden contener más de un videoclip o una colección de títulos. Las fuentes de Blu-ray y DVD suelen tener varios títulos.
 
-If you know the specific title you wish to encode you can enter it here and HandBrake will scan only that title rather than every title in the source file. Otherwise, leave the field blank.</value>
+Si conoce el título específico que desea codificar, puede ingresarlo aquí y HandBrake escaneará solo ese título en lugar de todos los títulos del archivo de origen. De lo contrario, deje el campo en blanco.</value>
   </data>
   <data name="FilterView_CustomDenoiseParams" xml:space="preserve">
     <value>Parámetros personalizados de Denoise.
@@ -365,22 +364,22 @@ HQDN3D default: y-spatial=3:cb-spatial=2:cr-spatial=2:y-temporal=2:cb-temporal=3
 - Sprite es útil para juegos bidimensionales de 1-/4-/8-/16 bits. Sprite no está diseñado para video de alta definición.</value>
   </data>
   <data name="FilterView_Deinterlace" xml:space="preserve">
-    <value>Deinterlace removes comb artifacts from the picture.
+    <value>El desentrelazado elimina los artefactos de interpolación de la imagen.
 
-Bwdif and Yadif are two popular and fast deinterlacers.
+Bwdif y Yadif son dos desentrelazadores populares y rápidos.
 
-Decomb switches between multiple interpolation algorithms for speed and quality.</value>
+El desentrelazado alterna entre varios algoritmos de interpolación para lograr velocidad y calidad.</value>
   </data>
   <data name="FilterView_DeinterlaceCustom" xml:space="preserve">
-    <value>Custom Deinterlace parameters.
- 
- Bwdif and Yadif syntax: mode=m:parity=p
- 
- Bwdif and Yadif default: mode=3
- 
- Decomb syntax: mode=m:magnitude-thresh=m:variance-thresh=v:laplacian-thresh=l:dilation-thresh=d:erosion-thresh=e:noise-thresh=n:search-distance=s:postproc=p:parity=p
- 
- Decomb default: mode=7</value>
+    <value>Parámetros de Desentrelazado personalizados.
+
+Sintaxis de Bwdif y Yadif: mode=m:parity=p
+
+Valor por defecto de Bwdif y Yadif: mode=3
+
+Sintaxis de Desentrelazado: mode=m:magnitude-thresh=m:variance-thresh=v:laplacian-thresh=l:dilation-thresh=d:erosion-thresh=e:noise-thresh=n:search-distance=s:postproc=p:parity=p
+
+Valor por defecto de Desentrelazado: mode=7</value>
   </data>
   <data name="FilterView_DeinterlacePreset" xml:space="preserve">
     <value>Filtro de desentrelazado preestablecido.
@@ -489,72 +488,75 @@ Parcialmente plano - Los últimos 8 preajustes del usuario se muestran como una 
 Categorías - Todos los preajustes se muestran en un submenú por categoría.</value>
   </data>
   <data name="AudioView_AudioDefaults" xml:space="preserve">
-    <value>Setup behaviours that dictate how this tab automatically adds audio tracks when selecting a new source or title.</value>
+    <value>Configure comportamientos que dicten cómo esta pestaña agrega automáticamente pistas de audio al seleccionar una nueva fuente o título.</value>
   </data>
   <data name="BehavioursReload" xml:space="preserve">
     <value>Actualiza la lista de debajo, según la configuración de comportamientos.</value>
   </data>
   <data name="SubtitleView_SubtitleDefaults" xml:space="preserve">
-    <value>Setup behaviours that dictate how this tab automatically adds subtitle tracks when selecting a new source or title.</value>
+    <value>Configure comportamientos que dicten cómo esta pestaña añade automáticamente pistas de subtítulos al seleccionar una nueva fuente o título.</value>
   </data>
   <data name="OptionsView_SendFileToArguments" xml:space="preserve">
-    <value>The following environment variables are always set:
+    <value>Las siguientes variables de entorno siempre están configuradas:
 HB_SOURCE
 HB_DESTINATION
 HB_EXIT_CODE
 
-Possible Exit Codes are as follows:
-0 : Successful
-2 : Input Arguments Error
-3 : Failed to Initialise 
-4 : Unknown Error
-5 : Error reading source file.
+Los posibles códigos de salida son los siguientes:
+0: Correcto
+2: Error de argumentos de entrada
+3: Error al inicializar
+4: Error desconocido
+5: Error al leer el archivo de origen.
 
-Please note, errors codes are best effort and may not always be accurate.
-It is recommended the output file is validated before performing actions on it.</value>
+Tenga en cuenta que los códigos de error son el mejor esfuerzo y es posible que no siempre sean precisos.
+Se recomienda validar el archivo de salida antes de realizar acciones en él.</value>
   </data>
   <data name="Options_AdditionalFormatOptions" xml:space="preserve">
-    <value>The format of the output file. In addition to any supported file system character, you can use the any of the placeholders that will be replaced when you change title or scan a source or update certain settings.
+    <value>El formato del archivo de salida. Además de cualquier carácter compatible con el sistema de archivos, puede usar cualquiera de los marcadores de posición que se reemplazarán cuando cambie el título, escanee una fuente o actualice ciertas configuraciones.
 
-{source} - Name of the source file.
-{title} - Integer value. This is representative of a disc title number.
-{chapters} - The range of chapters selected.
-{creation-date} - The date that the source file was created on (if available).
-{creation-time} - The time that the source file was created on (if available).
-{modification-date} - The date that the source file was last modified on (if available).
-{modification-time} - The time that the source file was last modified on (if available).
-{date} - Today. Set at time of adding to the queue.
-{time} - Today. Set at time of adding to the queue.
-{quality_bitrate} - The RF/CQ number, or bitrate
-{quality_type} - Prints "kbps" or "Q" depending on the quality mode selected on the video tab.
-{preset} - Name of the preset selected.
-{encode_bit_depth} - Integer value. i.e. 8, 10 or 12
-{width} - The output storage width
-{height} - The output storage height
-{codec} - Display the video format.
-{encoder} - Display the short format key of the encoder used.
+{source} - Nombre del archivo de origen.
+{title} - Valor entero. Esto es representativo del número de título de un disco.
+{chapters} - El rango de capítulos seleccionados.
+{creation-date} - La fecha en la que se creó el archivo de origen (si está disponible).
+{creation-time} - La hora en la que se creó el archivo de origen (si está disponible).
+{modification-date} - La fecha en la que se modificó por última vez el archivo de origen (si está disponible).
+{modification-time} - La hora en la que se modificó por última vez el archivo de origen (si está disponible).
+{date} - Hoy. Se establece en el momento de añadir a la cola.
+{time} - Hoy. Se establece en el momento de añadir a la cola.
+{quality_bitrate} - El número RF/CQ o tasa de bits
+{quality_type} - Imprime "kbps" o "Q" según el modo de calidad seleccionado en la pestaña de video.
+{preset} - Nombre del valor preestablecido seleccionado.
+{encode_bit_depth} - Valor entero, es decir, 8, 10 o 12
+{width} - El ancho de almacenamiento de salida
+{height} - La altura de almacenamiento de salida
+{codec} - Muestra el formato de video.
+{encoder} - Muestra la clave de formato corto del codificador utilizado.
 
-Any illegal path characters will be removed automatically.</value>
+Todos los caracteres de ruta ilegales se eliminarán automáticamente.</value>
   </data>
   <data name="OptionsView_RightToleftMode" xml:space="preserve">
-    <value>For languages that are right to left, you can enable one of two modes.   "Text Only" will only render the text in right to left style.  "Entire User Interface" will render all controls in right to left.
+    <value>Para los idiomas que se leen de derecha a izquierda, puede habilitar uno de los dos modos. "Solo texto" solo mostrará el texto de derecha a izquierda. "Toda la interfaz de usuario" mostrará todos los controles de derecha a izquierda.
 
-Please note, there may be inperfections in the UI layout when using these modes. Depending on the language, it may be worth trying both modes to find the best fit.</value>
+Tenga en cuenta que puede haber imperfecciones en el diseño de la interfaz de usuario al usar estos modos. Según el idioma, puede que valga la pena probar ambos modos para encontrar el que mejor se adapte a sus necesidades.</value>
   </data>
   <data name="AudioView_Quality" xml:space="preserve">
-    <value>Target a specific quality level for audio.
-1 is lowest quality and 5 is highest quality.
+    <value>Establezca un nivel de calidad específico para el audio.
+1 es la calidad más baja y 5 es la más alta.
 
-Bitrate will vary source to source.</value>
+La tasa de bits varía de una fuente a otra.</value>
   </data>
   <data name="OptionsView_DestinationReplacementOptions" xml:space="preserve">
-    <value>The following can be used singularly, or together to build up a destination path
+    <value>Los siguientes elementos se pueden usar de forma individual o en conjunto para crear una ruta de destino
 
-{source_path} - In the same folder as the source path (if possible)
-{source_folder_name} – The name of the directory that the source file is in, without the full path.
-{source} - The name of the source file.</value>
+{source_path}: En la misma carpeta que la ruta de origen (si es posible)
+{source_folder_name}: El nombre del directorio en el que se encuentra el archivo de origen, sin la ruta completa.
+{source}: El nombre del archivo de origen.</value>
   </data>
   <data name="OptionsView_LaunchsHelp" xml:space="preserve">
-    <value>Launches the documentation website located at https://handbrake.fr/docs</value>
+    <value>Lanza el sitio web de documentación ubicado en https://handbrake.fr/docs</value>
+  </data>
+  <data name="Options_RemovePunctuation" xml:space="preserve">
+    <value>Guión (-), punto (.) y coma (,)</value>
   </data>
 </root>

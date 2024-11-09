@@ -201,9 +201,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, EE. UU
     <value>HandBrake ya está codificando.</value>
   </data>
   <data name="Main_DuplicateDestinationOnQueue" xml:space="preserve">
-    <value>There are jobs on the queue with the same destination path. Please choose a different path for this job.
- 
-You may wish to configure the automatic file naming options in "Tools Menu -&gt; Preferences -&gt; Output Files"
+    <value>Hay trabajos en la cola con la misma ruta de destino. Elija una ruta diferente para este trabajo.
+
+Es posible que desee configurar las opciones de denominación automática de archivos en "Menú Herramientas -&gt; Preferencias -&gt; Archivos de salida"
 </value>
   </data>
   <data name="Main_JobsPending_addon" xml:space="preserve">
@@ -369,14 +369,14 @@ Los preajustes de versiones anteriores deben volver a crearse en la versión act
     <value>No se han encontrado fuentes o títulos validos.</value>
   </data>
   <data name="Main_ScanNoTitlesFoundMessage" xml:space="preserve">
-    <value>HandBrake will not be able to encode the selected source as it did not find a valid source with titles to encode. This could be due to one of the following reasons:
+    <value>HandBrake no podrá codificar la fuente seleccionada porque no encontró una fuente válida con títulos para codificar. Esto podría deberse a una de las siguientes razones:
 
-- The duration of each source title is below the "Minimum Title Duration" threshold option in 'Preferences &gt; Advanced'. 
-- The source file is not a valid video file or is in a format that HandBrake does not support.
-- You may not have read access to the file or another application may have a lock on the file. 
-- The source may be copy protected or include DRM. Please note that HandBrake does not support the removal of copy protections.
+- La duración de cada título de la fuente está por debajo del umbral de la opción "Duración mínima del título" en 'Preferencias &gt; Avanzadas'.
+- El archivo de origen no es un archivo de video válido o está en un formato que HandBrake no soporta.
+- Es posible que no tenga acceso de lectura al archivo o que otra aplicación tenga bloqueado el archivo.
+- La fuente puede estar protegida contra copia o incluir DRM. Tenga en cuenta que HandBrake no admite la eliminación de protecciones contra copia.
 
-The Activity log may have further information.</value>
+El registro de actividad puede tener más información.</value>
   </data>
   <data name="Main_QueueLabel" xml:space="preserve">
     <value>Cola{0}</value>
@@ -421,7 +421,7 @@ The Activity log may have further information.</value>
     <value>Pistas de audio</value>
   </data>
   <data name="AudioViewModel_ConfigureDefaults" xml:space="preserve">
-    <value>Selection Behavior ...</value>
+    <value>Comportamiento de selección ...</value>
   </data>
   <data name="AudioViewModel_SwitchBackToTracks" xml:space="preserve">
     <value>Volver a las pistas </value>
@@ -491,8 +491,8 @@ The Activity log may have further information.</value>
     <value>Cola pausada</value>
   </data>
   <data name="QueueViewModel_DelSelectedJobConfirmation" xml:space="preserve">
-    <value>Are you sure you want to delete the selected jobs?
-No encoded files will be deleted with this operation. </value>
+    <value>¿Está seguro de que desea eliminar los trabajos seleccionados?
+No se eliminarán archivos codificados con esta operación.</value>
   </data>
   <data name="QueueViewModel_JobCurrentlyRunningWarning" xml:space="preserve">
     <value>La codificación esta en progreso. Si la borra, se detendrá, ¿Está seguro que desea continuar?</value>
@@ -549,7 +549,7 @@ No encoded files will be deleted with this operation. </value>
     <value>Volver a las pistas</value>
   </data>
   <data name="SubtitlesViewModel_ConfigureDefaults" xml:space="preserve">
-    <value>Selection Behavior ...</value>
+    <value>Comportamiento de selección ...</value>
   </data>
   <data name="PresetService_ArchiveFile" xml:space="preserve">
     <value>Archivo Guardado:</value>
@@ -563,7 +563,7 @@ No encoded files will be deleted with this operation. </value>
  Su antiguo archivo de preajustes fue archivado en:</value>
   </data>
   <data name="Main_QueueFinishedErrors" xml:space="preserve">
-    <value> with {0} errors detected. Check Queue window for details.</value>
+    <value>con {0} errores detectados. Consulte la ventana Cola para obtener más detalles.</value>
   </data>
   <data name="MainViewModel_LowDiskSpace" xml:space="preserve">
     <value>Poco espacio en disco</value>
@@ -669,7 +669,7 @@ Su archivo de preajuste se archivará y se creará uno nuevo. Tendrá que volver
   </data>
   <data name="TaskTrayStatusTitle" xml:space="preserve">
     <value>{0}
-Encoding 1 Job</value>
+Codificando 1 trabajo</value>
   </data>
   <data name="PauseOnLowDiskspace" xml:space="preserve">
     <value>Cola pausada. Advertencia, la unidad en la que está codificando tiene poco espacio en disco. Por favor, libere algo de espacio y pulse start para continuar.  También puede ajustar el nivel de espacio mínimo en preferencias.</value>
@@ -706,10 +706,10 @@ Puede configurar el nivel en el que aparece esta alerta en las preferencias.
     <value>Vista previa ({0}% tamaño actual)</value>
   </data>
   <data name="OsBitnessWarning" xml:space="preserve">
-    <value>HandBrake requires a 64bit version of Windows 10 or later to run.</value>
+    <value>HandBrake requiere una versión de 64 bits de Windows 10 o posterior para ejecutarse.</value>
   </data>
   <data name="OsVersionWarning" xml:space="preserve">
-    <value>HandBrake requires Windows 10 or later to run. Version 0.9.9 (XP), 0.10.5 (Vista), 1.3.3 (7 and 8.x) were the last versions to support these older operating systems.</value>
+    <value>HandBrake requiere Windows 10 o posterior para funcionar. Las versiones 0.9.9 (XP), 0.10.5 (Vista) y 1.3.3 (7 y 8.x) fueron las últimas versiones compatibles con estos sistemas operativos más antiguos.</value>
   </data>
   <data name="Main_ContinueAddingToQueue" xml:space="preserve">
     <value>¿Desea continuar intentando agregar el resto?</value>
@@ -1122,14 +1122,8 @@ Hint: File overwrite behaviour can be controlled in preferences. </value>
   <data name="MetaDataView_Title" xml:space="preserve">
     <value>Metadatos</value>
   </data>
-  <data name="OptionsView_EnableNvencEncoding" xml:space="preserve">
-    <value>Permitir el uso de los codificadores Nvidia NVENC</value>
-  </data>
-  <data name="OptionsView_EnableQuicksyncEncoding" xml:space="preserve">
-    <value>Permitir el uso de los codificadores Intel QuickSync</value>
-  </data>
-  <data name="OptionsView_EnableVceEncoding" xml:space="preserve">
-    <value>Allow use of the AMD VCN Encoders</value>
+  <data name="OptionsView_EnableDirectXDecoding" xml:space="preserve">
+    <value>Allow use of DirectX Decoding</value>
   </data>
   <data name="OptionsView_InvalidFileFormatChars" xml:space="preserve">
     <value>El formato de archivo introducido contenía caracteres no válidos. Estos han sido eliminados.</value>
@@ -1226,6 +1220,9 @@ Hint: File overwrite behaviour can be controlled in preferences. </value>
   </data>
   <data name="Options_MinTitleScanLength" xml:space="preserve">
     <value>Duración mínima del título de DVD y Blu-ray en segundos. Se omitirán los títulos más cortos:</value>
+  </data>
+  <data name="Options_KeepDuplicateTitles" xml:space="preserve">
+    <value>Keep duplicate titles on Blu-ray sources (Requires Restart)</value>
   </data>
   <data name="Options_MP4FileExtension" xml:space="preserve">
     <value>Extension de archivo MP4:</value>
@@ -1916,8 +1913,8 @@ You can drag/drop or enter the text above.</value>
   <data name="FiltersViewAuto_DeblockTune" xml:space="preserve">
     <value>Ajuste de Deblock</value>
   </data>
-  <data name="OptionsView_ChoiceOfEncoderHint" xml:space="preserve">
-    <value>La elección del codificador estará disponible en la pestaña "Vídeo".</value>
+  <data name="OptionsView_EncodeNotes" xml:space="preserve">
+    <value>Note: Not all hardware encoders have extra preferences. All available and supported hardware encoders on this system will be available for selection on the video tab under the video encoder dropdown.</value>
   </data>
   <data name="Queue_RecoverQueueQuestionPlural" xml:space="preserve">
     <value>HandBrake ha detectado varios archivos de cola inacabados. Estos son de varias instancias de HandBrake en ejecución. 
@@ -2324,7 +2321,7 @@ Por favor, elija un preajuste diferente.</value>
     <value>Alertar de falta de espacio en disco a partir de:</value>
   </data>
   <data name="OptionsView_SimultaneousHardwareLimitNotice" xml:space="preserve">
-    <value>Notice: This is the upper limit of simultaneous jobs. Hardware limitations may take effect which lowers the actual number of simultaneous jobs during encoding. Setting will only take affect on the next queue batch or app restart.</value>
+    <value>Notice: This is the upper limit of simultaneous jobs. Hardware limitations may take effect which lowers the actual number of simultaneous jobs during encoding. Setting will only take effect on the next queue batch or app restart.</value>
   </data>
   <data name="Preset_NotAvailable" xml:space="preserve">
     <value>(No disponible)</value>
@@ -2846,5 +2843,80 @@ To allow multiple simultaneous encodes, turn on "Process Isolation" in Tools Men
   </data>
   <data name="QueueView_QueueStartTime" xml:space="preserve">
     <value>Queue Start Time:</value>
+  </data>
+  <data name="QueueView_EncodeShutdown" xml:space="preserve">
+    <value>Shutting Down Encode ...</value>
+  </data>
+  <data name="PictureSettingsView_AllowUpscaling" xml:space="preserve">
+    <value>Allow Upscaling</value>
+  </data>
+  <data name="PictureSettingsView_OptimalSize" xml:space="preserve">
+    <value>Optimal Size</value>
+  </data>
+  <data name="OptionsView_Available" xml:space="preserve">
+    <value>Available on this system.</value>
+  </data>
+  <data name="OptionsView_NotAvailable" xml:space="preserve">
+    <value>Not available on this system.</value>
+  </data>
+  <data name="MainView_ScanningStatus" xml:space="preserve">
+    <value>Please wait ...</value>
+  </data>
+  <data name="MainView_Cancel" xml:space="preserve">
+    <value>Cancelar</value>
+  </data>
+  <data name="MainView_OpenLog" xml:space="preserve">
+    <value>Open Log Window</value>
+  </data>
+  <data name="OptionsView_EnableNvencEncoding" xml:space="preserve">
+    <value/>
+  </data>
+  <data name="OptionsView_EnableQuicksyncEncoding" xml:space="preserve">
+    <value/>
+  </data>
+  <data name="OptionsView_EnableVceEncoding" xml:space="preserve">
+    <value/>
+  </data>
+  <data name="OptionsView_ChoiceOfEncoderHint" xml:space="preserve">
+    <value/>
+  </data>
+  <data name="AnamorphicMode_Custom" xml:space="preserve">
+    <value>Personalizado</value>
+  </data>
+  <data name="AnamorphicMode_None" xml:space="preserve">
+    <value>Ninguno</value>
+  </data>
+  <data name="AnamorphicMode_Automatic" xml:space="preserve">
+    <value>Automático</value>
+  </data>
+  <data name="CombDetect_Off" xml:space="preserve">
+    <value>Off</value>
+  </data>
+  <data name="CombDetect_Custom" xml:space="preserve">
+    <value>Personalizado</value>
+  </data>
+  <data name="CombDetect_Default" xml:space="preserve">
+    <value>Por defecto</value>
+  </data>
+  <data name="DeinterlaceFilter_Off" xml:space="preserve">
+    <value>Off</value>
+  </data>
+  <data name="Denoise_Off" xml:space="preserve">
+    <value>Off</value>
+  </data>
+  <data name="Detelecine_Off" xml:space="preserve">
+    <value>Off</value>
+  </data>
+  <data name="Detelecine_Default" xml:space="preserve">
+    <value>Por defecto</value>
+  </data>
+  <data name="Detelecine_Custom" xml:space="preserve">
+    <value>Personalizado</value>
+  </data>
+  <data name="Sharpen_Off" xml:space="preserve">
+    <value>Off</value>
+  </data>
+  <data name="Options_MaxTitleScanDuration" xml:space="preserve">
+    <value>Maximum DVD and Blu-ray title duration in seconds. Longer titles will be skipped:</value>
   </data>
 </root>

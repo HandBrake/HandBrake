@@ -291,14 +291,13 @@ FFMpeg's and Theora's scale is more linear.
 These encoders do not have a lossless mode.</value>
   </data>
   <data name="Video_TurboAnalysisPass" xml:space="preserve">
-    <value>During the analysis pass of a multi pass encode, use settings that speed things along.</value>
+    <value>Käytä monivaiheisen koodauksen analyysivaiheessa toimintaa nopeuttavia asetuksia.</value>
   </data>
   <data name="Video_MultiPass" xml:space="preserve">
-    <value>Perform Multi Pass Encoding.
+    <value>Tee koodaus monivaiheisesti.
 
-The 'Bitrate' option is prerequisite. During the analysis passes, statistics about
-the video are collected. Then in the final pass, those statistics are used
-to make bitrate allocation decisions.</value>
+”Bittinopeus”-asetus vaaditaan. Analyysivaiheissa kootaan videon tilastot,
+joita viimeisessä vaiheessa käytetään päätöksiin bittinopeuden osoittamisesta.</value>
   </data>
   <data name="Video_VariableFramerate" xml:space="preserve">
     <value>Ottaa käyttöön vaihtelevan kuvanopeuden tulosteen (VFR).
@@ -321,17 +320,18 @@ VFR ei ole yhteensopiva kaikkien toistinten kanssa.</value>
     <value>Esiasetuksen lisävalinnat.</value>
   </data>
   <data name="MainView_Presets" xml:space="preserve">
-    <value>Presets are groups of encode settings tailored for specific scenarios. Select the one closest matching your intent.
- 
- Overrides all encode settings. Settings may be further adjusted after selecting a preset.</value>
+    <value>Esiasetukset ovat eri tilanteisiin mukautettuja koodausasetusten ryhmiä. Valitse se,
+joka parhaiten sopii tarkoituksiisi.
+
+Korvaa kaikki koodausasetukset, joita valinnan jälkeen voi vielä hienosäätää.</value>
   </data>
   <data name="MainView_RemovePreset" xml:space="preserve">
     <value>Poista valittu esiasetus.</value>
   </data>
   <data name="SourceSelection_TitleSpecific" xml:space="preserve">
-    <value>Some Sources may contain more than one video clip, or a collection of Titles. Blu-ray and DVD Sources often have multiple Titles.
+    <value>Jotkin lähteet voivat sisältää useamman videoleikkeen tai joukon otsakkeita. Esimerkiksi Bluray- ja DVD-lähteissä on usein useampia otsakkeita.
 
-If you know the specific title you wish to encode you can enter it here and HandBrake will scan only that title rather than every title in the source file. Otherwise, leave the field blank.</value>
+Jos tiedät tarkkaan, minkä otsakkeen haluat koodata, sen voi asettaa tässä, jolloin HandBrake etsii vain sen eikä tutki lähdetiedoston jokaista otsaketta. Muussa tapauksessa jätä kenttä tyhjäksi.</value>
   </data>
   <data name="FilterView_CustomDenoiseParams" xml:space="preserve">
     <value>Custom Denoise parameters.
@@ -365,33 +365,33 @@ HQDN3D default: y-spatial=3:cb-spatial=2:cr-spatial=2:y-temporal=2:cb-temporal=3
 - Sprite is useful for 1-/4-/8-/16-bit 2-dimensional games. Sprite is not designed for high definition video.</value>
   </data>
   <data name="FilterView_Deinterlace" xml:space="preserve">
-    <value>Deinterlace removes comb artifacts from the picture.
+    <value>Lomituksenpoisto poistaa kuvasta kampamaisuutta.
 
-Bwdif and Yadif are two popular and fast deinterlacers.
+Bwdif ja Yadif ovat kaksi suosittua nopeaa lomituksenpoistoalgoritmia.
 
-Decomb switches between multiple interpolation algorithms for speed and quality.</value>
+Kampamaisuuden poisto käyttää nopeus- ja laatusyistä useita interpolointialgoritmeja.</value>
   </data>
   <data name="FilterView_DeinterlaceCustom" xml:space="preserve">
-    <value>Custom Deinterlace parameters.
- 
- Bwdif and Yadif syntax: mode=m:parity=p
- 
- Bwdif and Yadif default: mode=3
- 
- Decomb syntax: mode=m:magnitude-thresh=m:variance-thresh=v:laplacian-thresh=l:dilation-thresh=d:erosion-thresh=e:noise-thresh=n:search-distance=s:postproc=p:parity=p
- 
- Decomb default: mode=7</value>
+    <value>Lomituksen poiston mukautetut parametrit.
+
+Bwdif- ja Yadif-syntaksi: mode=n, parity=p
+
+Bwdifin ja Yadifin oletus: mode=3
+
+Lomituksen poiston syntaksi: mode=m:magnitude-thresh=m:variance-thresh=v:laplacian-thresh=l:dilation-thresh=d:erosion-thresh=e:noise-thresh=n:search-distance=s:postproc=p:parity=p
+
+Lomituksen poiston oletus: mode=7</value>
   </data>
   <data name="FilterView_DeinterlacePreset" xml:space="preserve">
-    <value>Deinterlace filter preset.
+    <value>Lomituksenpoistosuodattimen esiasetus.
 
-Default is well balanced for speed and quality.
+Oletusasetus tasapainottaa hyvin nopeuden ja laadun.
 
-Skip Spatial Check lets Yadif skip correcting certain avoidable artifacts for a slight speed boost.
+”Sivuuta tilatarkistus” saa Yadifin sivuuttamaan jotkin väistämättömät häiriöt, jotta nopeus hieman paranisi.
 
-EEDI2 uses a slower, higher quality interpolation algorithm for Decomb. Useful for the most difficult sources.
+EEDI2 käyttää hitaampaa, parempilaatuista lomituksenpoistoalgoritmia. Se sopii vaikeimpiin lähteisiin.
 
-Bob attempts to better preserve motion for a slight penalty to perceived resolution.</value>
+Bob yrittää säilyttää liikkuvan kuvan laadun havaitun tarkkuuden kustannuksella. </value>
   </data>
   <data name="FilterView_Flip" xml:space="preserve">
     <value>Kääntää (peilaa) kuvan vaaka-akselilla.</value>
@@ -471,7 +471,7 @@ When disabled, it will use the path in the destination box on the main window if
     <value>Väriavaruussuodatin.</value>
   </data>
   <data name="FiltersView_ChromaSmooth" xml:space="preserve">
-    <value>Chroma Smooth Filter</value>
+    <value>Chroma-tasoitussuodatin</value>
   </data>
   <data name="PictureSettingsView_PaddingCustomColourTooltip" xml:space="preserve">
     <value>Kenttä hyväksyy RGB-arvot kuten ”0xFF0000” tai englanninkieliset värinimet kuten ”red”. Täysi värinimien luettelo löytyy täytesuodattimen ohjeista.</value>
@@ -558,5 +558,8 @@ Bittinopeus vaihtelee lähteittäin.</value>
   </data>
   <data name="OptionsView_LaunchsHelp" xml:space="preserve">
     <value>Avaa ohjeet verkon sivulta https://handbrake.fr/docs</value>
+  </data>
+  <data name="Options_RemovePunctuation" xml:space="preserve">
+    <value>Dash (-), Period (.) and Comma (,)</value>
   </data>
 </root>

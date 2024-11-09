@@ -2320,7 +2320,7 @@ Kies een andere voorinstelling.</value>
     <value>Niveau voor waarschuwingen van beperkte schijfruimte:</value>
   </data>
   <data name="OptionsView_SimultaneousHardwareLimitNotice" xml:space="preserve">
-    <value>Opmerking: dit is hat maximum aantal gelijktijdige taken. Beperkingen in de hardware kunnen ertoe leiden dat het werkelijke aantal gelijktijdige taken tijdens codering lager is. De instelling heeft alleen invloed op de volgende wachtrij of app-herstart.</value>
+    <value>Let op: Dit is de bovengrens van gelijktijdige taken. Beperkingen in de hardware kunnen optreden, waardoor het werkelijke aantal gelijktijdige taken tijdens het coderen wordt verlaagd. De instelling wordt pas van kracht bij de volgende wachtrijreeks of het opnieuw opstarten van de app.</value>
   </data>
   <data name="Preset_NotAvailable" xml:space="preserve">
     <value>(Niet beschikbaar)</value>
@@ -2887,5 +2887,35 @@ Om meerdere gelijktijdige coderingen toe te staan dien je "Procesisolatie" in te
   </data>
   <data name="AnamorphicMode_Automatic" xml:space="preserve">
     <value>Automatisch</value>
+  </data>
+  <data name="CombDetect_Off" xml:space="preserve">
+    <value>Uit</value>
+  </data>
+  <data name="CombDetect_Custom" xml:space="preserve">
+    <value>Aangepast</value>
+  </data>
+  <data name="CombDetect_Default" xml:space="preserve">
+    <value>Standaard</value>
+  </data>
+  <data name="DeinterlaceFilter_Off" xml:space="preserve">
+    <value>Uit</value>
+  </data>
+  <data name="Denoise_Off" xml:space="preserve">
+    <value>Uit</value>
+  </data>
+  <data name="Detelecine_Off" xml:space="preserve">
+    <value>Uit</value>
+  </data>
+  <data name="Detelecine_Default" xml:space="preserve">
+    <value>Standaard</value>
+  </data>
+  <data name="Detelecine_Custom" xml:space="preserve">
+    <value>Aangepast</value>
+  </data>
+  <data name="Sharpen_Off" xml:space="preserve">
+    <value>Uit</value>
+  </data>
+  <data name="Options_MaxTitleScanDuration" xml:space="preserve">
+    <value>Maximale duur van DVD- en Blu-ray-titels in seconden. Langere titels worden overgeslagen:</value>
   </data>
 </root>
