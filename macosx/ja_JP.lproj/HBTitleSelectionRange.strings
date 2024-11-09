@@ -1,0 +1,45 @@
+/* Class = "NSButtonCell"; title = "Range:"; ObjectID = "4nB-36-clJ"; */
+"4nB-36-clJ.title" = "範囲:";
+
+/* Class = "NSTextField"; ibExternalAccessibilityDescription = "Start time in seconds"; ObjectID = "5mE-y0-UqZ"; */
+"5mE-y0-UqZ.ibExternalAccessibilityDescription" = "秒で示す開始地点";
+
+/* Class = "NSTextField"; ibShadowedToolTip = "First second to encode."; ObjectID = "5mE-y0-UqZ"; */
+"5mE-y0-UqZ.ibShadowedToolTip" = "エンコードする最初の秒です。";
+
+/* Class = "NSTextField"; ibExternalAccessibilityDescription = "End time in seconds"; ObjectID = "7ug-HX-q9j"; */
+"7ug-HX-q9j.ibExternalAccessibilityDescription" = "秒で示す終了地点";
+
+/* Class = "NSTextField"; ibShadowedToolTip = "Last second to encode."; ObjectID = "7ug-HX-q9j"; */
+"7ug-HX-q9j.ibShadowedToolTip" = "この秒数までエンコードします。";
+
+/* Class = "NSTextField"; ibExternalAccessibilityDescription = "End time in frames"; ObjectID = "aeA-ul-8yt"; */
+"aeA-ul-8yt.ibExternalAccessibilityDescription" = "フレームで示す終了地点";
+
+/* Class = "NSTextField"; ibShadowedToolTip = "Last frame to encode."; ObjectID = "aeA-ul-8yt"; */
+"aeA-ul-8yt.ibShadowedToolTip" = "エンコードする最後のフレームです。";
+
+/* Class = "NSPopUpButton"; ibExternalAccessibilityDescription = "Range Selection"; ObjectID = "aM2-P8-m4w"; */
+"aM2-P8-m4w.ibExternalAccessibilityDescription" = "範囲選択";
+
+/* Class = "NSPopUpButton"; ibShadowedToolTip = "Source range selection. By default, all chapters are selected and the entire source is encoded."; ObjectID = "aM2-P8-m4w"; */
+"aM2-P8-m4w.ibShadowedToolTip" = "ソースの範囲選択です。既定では、全てのチャプターが選択されソース全体がエンコードされます。";
+
+/* Class = "NSPopUpButton"; ibExternalAccessibilityDescription = "Start Chapter"; ObjectID = "eoO-dc-hc3"; */
+"eoO-dc-hc3.ibExternalAccessibilityDescription" = "開始チャプター";
+
+/* Class = "NSPopUpButton"; ibShadowedToolTip = "First chapter to encode."; ObjectID = "eoO-dc-hc3"; */
+"eoO-dc-hc3.ibShadowedToolTip" = "エンコードする最初のチャプターです。";
+
+/* Class = "NSTextField"; ibExternalAccessibilityDescription = "Start time in frames"; ObjectID = "guU-KE-TeY"; */
+"guU-KE-TeY.ibExternalAccessibilityDescription" = "フレームで示す開始地点";
+
+/* Class = "NSTextField"; ibShadowedToolTip = "First frame to encode."; ObjectID = "guU-KE-TeY"; */
+"guU-KE-TeY.ibShadowedToolTip" = "エンコードする最初のフレームです。";
+
+/* Class = "NSPopUpButton"; ibExternalAccessibilityDescription = "End Chapter"; ObjectID = "OHn-dK-gFi"; */
+"OHn-dK-gFi.ibExternalAccessibilityDescription" = "終了チャプター";
+
+/* Class = "NSPopUpButton"; ibShadowedToolTip = "Last chapter to encode."; ObjectID = "OHn-dK-gFi"; */
+"OHn-dK-gFi.ibShadowedToolTip" = "このチャプターまでエンコードします。";
+

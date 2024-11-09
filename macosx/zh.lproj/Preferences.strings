@@ -106,15 +106,6 @@
 /* Class = "NSButtonCell"; title = "Use libdvdnav (instead of libdvdread)"; ObjectID = "399"; */
 "399.title" = "使用 libdvdnav（而不是 libdvdread）";
 
-/* Class = "NSTextField"; ibShadowedToolTip = "Minimum DVD and Blu-ray title duration in seconds. Shorter titles will be skipped."; ObjectID = "463"; */
-"463.ibShadowedToolTip" = "DVD 和 蓝光光盘 标题的最短持续时间（以秒为单位）。小于此时间的短标题将被跳过。";
-
-/* Class = "NSTextFieldCell"; title = "Ignore DVD and Blu-ray titles shorter than:"; ObjectID = "464"; */
-"464.title" = "忽略以下 DVD 和 蓝光光盘 标题：";
-
-/* Class = "NSTextField"; ibShadowedToolTip = "Minimum title duration in seconds. Shorter titles will be skipped."; ObjectID = "480"; */
-"480.ibShadowedToolTip" = "最小标题持续时间（以秒为单位）。短标题将被跳过。";
-
 /* Class = "NSMenuItem"; title = "35"; ObjectID = "514"; */
 "514.title" = "35";
 
@@ -174,6 +165,9 @@
 
 /* Class = "NSButtonCell"; title = "Show notification when each job is completed"; ObjectID = "fdI-zP-r7j"; */
 "fdI-zP-r7j.title" = "每个任务完成后显示通知";
+
+/* Class = "NSButtonCell"; title = "Keep duplicate titles"; ObjectID = "FOr-iY-GVl"; */
+"FOr-iY-GVl.title" = "保留重复的标题";
 
 /* Class = "NSButtonCell"; title = "Play notification sound"; ObjectID = "GFD-Ju-1n9"; */
 "GFD-Ju-1n9.title" = "播放提示音";
@@ -279,6 +273,9 @@
 
 /* Class = "NSButtonCell"; title = "Change case to Title Case"; ObjectID = "Y9B-ue-3sE"; */
 "Y9B-ue-3sE.title" = "更改为标题大小写";
+
+/* Class = "NSTextFieldCell"; title = "seconds"; ObjectID = "zOc-PA-WQr"; */
+"zOc-PA-WQr.title" = "秒";
 
 /* Class = "NSButtonCell"; title = "Browse…"; ObjectID = "zot-Bx-Ch3"; */
 "zot-Bx-Ch3.title" = "浏览…";

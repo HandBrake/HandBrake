@@ -1,0 +1,63 @@
+/* Class = "NSButtonCell"; title = "Range:"; ObjectID = "4nB-36-clJ"; */
+"4nB-36-clJ.title" = "范围：";
+
+/* Class = "NSTextField"; ibExternalAccessibilityDescription = "Start time in seconds"; ObjectID = "5mE-y0-UqZ"; */
+"5mE-y0-UqZ.ibExternalAccessibilityDescription" = "开始时间（秒）";
+
+/* Class = "NSTextField"; ibShadowedToolTip = "First second to encode."; ObjectID = "5mE-y0-UqZ"; */
+"5mE-y0-UqZ.ibShadowedToolTip" = "需要编码的初始秒数。";
+
+/* Class = "NSMenuItem"; title = "To"; ObjectID = "6gI-bi-QlH"; */
+"6gI-bi-QlH.title" = "至";
+
+/* Class = "NSTextField"; ibExternalAccessibilityDescription = "End time in seconds"; ObjectID = "7ug-HX-q9j"; */
+"7ug-HX-q9j.ibExternalAccessibilityDescription" = "结束时间（秒）";
+
+/* Class = "NSTextField"; ibShadowedToolTip = "Last second to encode."; ObjectID = "7ug-HX-q9j"; */
+"7ug-HX-q9j.ibShadowedToolTip" = "需要编码的最后秒数。";
+
+/* Class = "NSMenuItem"; title = "Trim end"; ObjectID = "9A3-Zn-guz"; */
+"9A3-Zn-guz.title" = "裁剪末尾";
+
+/* Class = "NSTextField"; ibExternalAccessibilityDescription = "End time in frames"; ObjectID = "aeA-ul-8yt"; */
+"aeA-ul-8yt.ibExternalAccessibilityDescription" = "需要编码的最后帧";
+
+/* Class = "NSTextField"; ibShadowedToolTip = "Last frame to encode."; ObjectID = "aeA-ul-8yt"; */
+"aeA-ul-8yt.ibShadowedToolTip" = "结束时间（以帧为单位）";
+
+/* Class = "NSPopUpButton"; ibExternalAccessibilityDescription = "Range Selection"; ObjectID = "aM2-P8-m4w"; */
+"aM2-P8-m4w.ibExternalAccessibilityDescription" = "范围选择";
+
+/* Class = "NSPopUpButton"; ibShadowedToolTip = "Source range selection. By default, all chapters are selected and the entire source is encoded."; ObjectID = "aM2-P8-m4w"; */
+"aM2-P8-m4w.ibShadowedToolTip" = "源范围选择。默认情况下将选择所有章节，并对整个源进行编码。";
+
+/* Class = "NSMenuItem"; title = "To"; ObjectID = "eap-Rn-0qW"; */
+"eap-Rn-0qW.title" = "至";
+
+/* Class = "NSPopUpButton"; ibExternalAccessibilityDescription = "Start Chapter"; ObjectID = "eoO-dc-hc3"; */
+"eoO-dc-hc3.ibExternalAccessibilityDescription" = "开始章节";
+
+/* Class = "NSPopUpButton"; ibShadowedToolTip = "First chapter to encode."; ObjectID = "eoO-dc-hc3"; */
+"eoO-dc-hc3.ibShadowedToolTip" = "要编码的第一个章节。";
+
+/* Class = "NSMenuItem"; title = "Trim end"; ObjectID = "gKJ-mm-7Zy"; */
+"gKJ-mm-7Zy.title" = "裁剪末尾";
+
+/* Class = "NSTextField"; ibExternalAccessibilityDescription = "Start time in frames"; ObjectID = "guU-KE-TeY"; */
+"guU-KE-TeY.ibExternalAccessibilityDescription" = "开始时间（以帧为单位）";
+
+/* Class = "NSTextField"; ibShadowedToolTip = "First frame to encode."; ObjectID = "guU-KE-TeY"; */
+"guU-KE-TeY.ibShadowedToolTip" = "需要编码的初始帧";
+
+/* Class = "NSPopUpButton"; ibExternalAccessibilityDescription = "End Chapter"; ObjectID = "OHn-dK-gFi"; */
+"OHn-dK-gFi.ibExternalAccessibilityDescription" = "结束章节";
+
+/* Class = "NSPopUpButton"; ibShadowedToolTip = "Last chapter to encode."; ObjectID = "OHn-dK-gFi"; */
+"OHn-dK-gFi.ibShadowedToolTip" = "要编码的最后一个章节。";
+
+/* Class = "NSMenuItem"; title = "Trim end"; ObjectID = "tOX-Dr-TiC"; */
+"tOX-Dr-TiC.title" = "裁剪末尾";
+
+/* Class = "NSMenuItem"; title = "To"; ObjectID = "YpG-jj-qV2"; */
+"YpG-jj-qV2.title" = "至";
+

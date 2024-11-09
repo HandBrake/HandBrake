@@ -53,7 +53,7 @@
 "4320p 8K Ultra HD" = "4320p 8K Ultra HD";
 
 /* Destination same as source alert -> message
-   File already exists alert -> message */
+File already exists alert -> message */
 "A file already exists at the selected destination." = "A file already exists at the selected destination.";
 
 /* Queue Window Action Toolbar Item */
@@ -84,7 +84,7 @@
 "Add Titles To Queue…" = "Add Titles To Queue…";
 
 /* Main Window Add Toolbar Item
-   Touch bar */
+Touch bar */
 "Add To Queue" = "Add To Queue";
 
 /* Preferences Advanced Toolbar Item */
@@ -118,24 +118,25 @@
 "Bit Depth" = "Bit Depth";
 
 /* Copy Protection Alert -> second button
-   Delete preset alert -> second button
-   File already exists alert -> first button
-   File already exists in queue alert -> first button
-   Preview -> live preview alert alternate button
-   Touch bar */
+Delete preset alert -> second button
+File already exists alert -> first button
+File already exists in queue alert -> first button
+Preview -> live preview alert alternate button
+Touch bar */
 "Cancel" = "Скасувати";
 
 /* Touch bar */
 "Cancel Encoding" = "Cancel Encoding";
 
 /* Toolbar Open/Cancel Item
-   Touch bar */
+Touch bar */
 "Cancel Scan" = "Cancel Scan";
 
 /* Toolbar Open/Cancel Item */
 "Cancel Scanning Source" = "Cancel Scanning Source";
 
-/* Preferences -> Output Name Token */
+/* HBRange -> display name
+Preferences -> Output Name Token */
 "Chapters" = "Розділи";
 
 /* Main Window -> Destination open panel */
@@ -178,7 +179,7 @@
 "Do Nothing" = "Do Nothing";
 
 /* File already exists alert -> informative text
-   File already exists in queue alert -> informative text */
+File already exists in queue alert -> informative text */
 "Do you want to overwrite %@?" = "Do you want to overwrite %@?";
 
 /* Quit Alert -> second button */
@@ -194,7 +195,7 @@
 "Encode complete" = "Encode complete";
 
 /* HBQueueItemView -> Encode state accessibility label
-   Queue done notification failed message */
+Queue done notification failed message */
 "Encode failed" = "Encode failed";
 
 /* HBQueueItemView -> Encode state accessibility label */
@@ -230,6 +231,9 @@
 /* Preferences Output File Name Toolbar Item */
 "File name" = "File name";
 
+/* HBRange -> display name */
+"Frames" = "Кадри";
+
 /* Preferences General Toolbar Item */
 "General" = "General";
 
@@ -261,7 +265,7 @@
 "Invalid chapters CSV file" = "Invalid chapters CSV file";
 
 /* Queue Edit Alert -> stop and edit first button
-   Queue Stop Alert -> stop and remove first button */
+Queue Stop Alert -> stop and remove first button */
 "Keep Encoding" = "Keep Encoding";
 
 /* Touch bar */
@@ -301,7 +305,7 @@
 "None" = "Відсутня";
 
 /* Queue Done Alert -> shut down first button
-   Queue Done Alert -> sleep first button */
+Queue Done Alert -> sleep first button */
 "OK" = "ОК";
 
 /* File already exists alert -> informative text */
@@ -311,25 +315,25 @@
 "Open in external player" = "Open in external player";
 
 /* Main Window Open Toolbar Item
-   Toolbar Open/Cancel Item
-   Touch bar */
+Toolbar Open/Cancel Item
+Touch bar */
 "Open Source" = "Open Source";
 
 /* File already exists alert -> second button
-   File already exists in queue alert -> second button */
+File already exists in queue alert -> second button */
 "Overwrite" = "Overwrite";
 
 /* Main Window Pause Toolbar Item
-   Toolbar Pause Item */
+Toolbar Pause Item */
 "Pause" = "Pause";
 
 /* Queue -> pause/resume menu
-   Toolbar Pause Item
-   Touch bar */
+Toolbar Pause Item
+Touch bar */
 "Pause Encoding" = "Pause Encoding";
 
 /* Main Window Pause Toolbar Item
-   Touch bar */
+Touch bar */
 "Pause/Resume Encoding" = "Pause/Resume Encoding";
 
 /* Job statistics */
@@ -342,14 +346,14 @@
 "Play/Pause" = "Play/Pause";
 
 /* Add preset window -> name alert informative text
-   Rename preset window -> name alert informative text */
+Rename preset window -> name alert informative text */
 "Please enter a name." = "Please enter a name.";
 
 /* Copy Protection Alert -> informative text */
 "Please note that HandBrake does not support the removal of copy-protection from DVD Discs. You can if you wish use any other 3rd party software for this function. This warning will be shown only once each time HandBrake is run." = "Please note that HandBrake does not support the removal of copy-protection from DVD Discs. You can if you wish use any other 3rd party software for this function. This warning will be shown only once each time HandBrake is run.";
 
 /* Queue Done Alert -> shut down second button
-   Queue Done Alert -> sleep second button */
+Queue Done Alert -> sleep second button */
 "Preferences…" = "Preferences…";
 
 /* Preferences -> Output Name Token */
@@ -362,7 +366,7 @@
 "preview" = "preview";
 
 /* Main Window Preview Toolbar Item
-   Preview -> window title */
+Preview -> window title */
 "Preview" = "Preview";
 
 /* Preview -> window title format */
@@ -370,9 +374,6 @@
 
 /* Preview -> accessibility label */
 "Preview Image, Size: %zu x %zu, Scale: %.0f%%" = "Preview Image, Size: %1$zu x %2$zu, Scale: %3$.0f%%";
-
-/* Touch bar */
-"Previews" = "Previews";
 
 /* Queue Window When Done Toolbar Item */
 "Put Computer to Sleep" = "Put Computer to Sleep";
@@ -387,8 +388,8 @@
 "Quality/Bitrate" = "Quality/Bitrate";
 
 /* Main Window Presets Toolbar Item
-   Preferences Queue Toolbar Item
-   Queue window title */
+Preferences Queue Toolbar Item
+Queue window title */
 "Queue" = "Queue";
 
 /* Queue window title */
@@ -434,7 +435,7 @@
 "Resume" = "Resume";
 
 /* Queue -> pause/resume men
-   Toolbar Pause Item */
+Toolbar Pause Item */
 "Resume Encoding" = "Resume Encoding";
 
 /* HBQueueItemView -> Reveal button accessibility label */
@@ -447,8 +448,11 @@
 "Save" = "Save";
 
 /* Picture HUD -> scale button
-   Touch bar */
+Touch bar */
 "Scale To Screen" = "Scale To Screen";
+
+/* HBRange -> display name */
+"Seconds" = "Секунди";
 
 /* Queue Alert -> cancel rip informative text */
 "Select Continue Encoding to dismiss this dialog without making changes." = "Select Continue Encoding to dismiss this dialog without making changes.";
@@ -463,14 +467,14 @@
 "Show" = "Show";
 
 /* Main Window Activity Toolbar Item
-   Touch bar */
+Touch bar */
 "Show Activity Window" = "Show Activity Window";
 
 /* Main Window Presets Toolbar Item */
 "Show Presets List" = "Show Presets List";
 
 /* Main Window Preview Toolbar Item
-   Touch bar */
+Touch bar */
 "Show Preview Window" = "Show Preview Window";
 
 /* Main Window Presets Toolbar Item */
@@ -492,26 +496,26 @@
 "Source" = "Source";
 
 /* Main Window Start Toolbar Item
-   Toolbar Start/Stop Item */
+Toolbar Start/Stop Item */
 "Start" = "Почати";
 
 /* Menu Start/Stop Item
-   Queue -> start/stop menu
-   Toolbar Start/Stop Item */
+Queue -> start/stop menu
+Toolbar Start/Stop Item */
 "Start Encoding" = "Start Encoding";
 
 /* Toolbar Start/Stop Item */
 "Start Queue" = "Start Queue";
 
 /* Main Window Start Toolbar Item
-   Touch bar */
+Touch bar */
 "Start/Stop Encoding" = "Start/Stop Encoding";
 
 /* Job statistics */
 "Started at:" = "Started at:";
 
 /* Queue -> Stop action
-   Toolbar Start/Stop Item */
+Toolbar Start/Stop Item */
 "Stop" = "Stop";
 
 /* Queue -> Stop action */
@@ -524,7 +528,7 @@
 "Stop All" = "Stop All";
 
 /* Queue -> start/stop menu
-   Toolbar Start/Stop Item */
+Toolbar Start/Stop Item */
 "Stop Encoding" = "Stop Encoding";
 
 /* Queue Stop Alert -> stop and remove second button */
@@ -558,7 +562,7 @@
 "The line count in the chapters CSV file does not match the number of chapters in the movie." = "The line count in the chapters CSV file does not match the number of chapters in the movie.";
 
 /* Add preset window -> name alert message
-   Rename preset window -> name alert message */
+Rename preset window -> name alert message */
 "The preset name cannot be empty." = "The preset name cannot be empty.";
 
 /* File already exists in queue alert -> message */
@@ -616,7 +620,7 @@
 "Your encode %@ is done!" = "Your encode %@ is done!";
 
 /* Queue Edit Alert -> stop and edit informative text
-   Queue Stop Alert -> stop and remove informative text */
+Queue Stop Alert -> stop and remove informative text */
 "Your movie will be lost if you don't continue encoding." = "Your movie will be lost if you don't continue encoding.";
 
 /* Queue done notification message */
